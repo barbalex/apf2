@@ -237,6 +237,42 @@ const DeckImage = styled.div`
 `
 const More = styled(Area)`
   grid-area: more;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-column-gap: 5px;
+  grid-template-areas:
+    'moreFlLabel moreFlLabel moreFlLabel moreFlVal moreFlVal moreFlVal moreFlVal moreFlVal moreFlVal moreFlMeasure'
+    'jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0'
+    'jungPflLabel1 jungPflLabel1 jungPflval1 jungPflLabel2 jungPflLabel2 jungPflVal2 . . . .'
+    'veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0';
+  align-items: center;
+`
+const MoreFlLabel = styled.div`
+  grid-area: moreFlLabel;
+`
+const MoreFlVal = styled.div`
+  grid-area: moreFlVal;
+`
+const MoreFlMeasure = styled.div`
+  grid-area: moreFlMeasure;
+`
+const JungPflLabel0 = styled.div`
+  grid-area: jungPflLabel0;
+`
+const JungPflLabel1 = styled.div`
+  grid-area: jungPflLabel1;
+`
+const JungPflVal1 = styled.div`
+  grid-area: jungPflVal1;
+`
+const JungPflLabel2 = styled.div`
+  grid-area: jungPflLabel2;
+`
+const JungPflVal2 = styled.div`
+  grid-area: jungPflVal2;
+`
+const VeghoeheLabel0 = styled.div`
+  grid-area: veghoeheLabel0;
 `
 const Danger = styled(Area)`
   grid-area: danger;
@@ -551,35 +587,62 @@ const Tpopfreiwkontr = ({
                   </DeckImage>
                 </Cover>
                 <More>
-                  <TextField
-                    key={`${row.id}flaecheUeberprueft`}
-                    label="Überprüfte Fläche in m2"
-                    value={row.flaecheUeberprueft}
-                    type="number"
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'flaecheUeberprueft',
-                        value,
-                        updateTpopkontr,
-                      })
-                    }
-                    error={errors.flaecheUeberprueft}
-                  />
-                  <RadioButtonGroup
-                    label="Auch junge Pflanzen vorhanden"
-                    value={row.jungpflanzenVorhanden}
-                    dataSource={jungpflanzenVorhandenDataSource}
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'jungpflanzenVorhanden',
-                        value,
-                        updateTpopkontr,
-                      })
-                    }
-                    error={errors.jungpflanzenVorhanden}
-                  />
+                  <MoreFlLabel>Überprüfte Fläche</MoreFlLabel>
+                  <MoreFlVal>
+                    <TextField
+                      key={`${row.id}flaecheUeberprueft`}
+                      value={row.flaecheUeberprueft}
+                      type="number"
+                      saveToDb={value =>
+                        saveToDb({
+                          row,
+                          field: 'flaecheUeberprueft',
+                          value,
+                          updateTpopkontr,
+                        })
+                      }
+                      error={errors.flaecheUeberprueft}
+                    />
+                  </MoreFlVal>
+                  <MoreFlMeasure>
+                    m<sup>2</sup>
+                  </MoreFlMeasure>
+                  <JungPflLabel0>
+                    Werden junge neben alten Pflanzen beobachtet?
+                  </JungPflLabel0>
+                  <JungPflLabel1>ja</JungPflLabel1>
+                  <JungPflVal1>
+                    <RadioButtonGroup
+                      value={row.jungpflanzenVorhanden}
+                      dataSource={jungpflanzenVorhandenDataSource}
+                      saveToDb={value =>
+                        saveToDb({
+                          row,
+                          field: 'jungpflanzenVorhanden',
+                          value,
+                          updateTpopkontr,
+                        })
+                      }
+                      error={errors.jungpflanzenVorhanden}
+                    />
+                  </JungPflVal1>
+                  <JungPflLabel2>nein</JungPflLabel2>
+                  <JungPflVal2>
+                    <RadioButtonGroup
+                      value={!row.jungpflanzenVorhanden}
+                      dataSource={jungpflanzenVorhandenDataSource}
+                      saveToDb={value =>
+                        saveToDb({
+                          row,
+                          field: 'jungpflanzenVorhanden',
+                          value: !value,
+                          updateTpopkontr,
+                        })
+                      }
+                      error={errors.jungpflanzenVorhanden}
+                    />
+                  </JungPflVal2>
+                  <VeghoeheLabel0>Vegetationshöhe</VeghoeheLabel0>
                   <TextField
                     key={`${row.id}vegetationshoeheMaximum`}
                     label="Maximum der Vegetationshöhe in cm"
