@@ -8,7 +8,6 @@ import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
 
-import TextField from '../../../shared/TextField'
 import StringToCopy from '../../../shared/StringToCopyOnlyButton'
 import dataGql from './data.graphql'
 import updateTpopkontrByIdGql from './updateTpopkontrById.graphql'
@@ -18,16 +17,14 @@ import Date from './Date'
 import Map from './Map'
 import Cover from './Cover'
 import More from './More'
+import Danger from './Danger'
+import Remarks from './Remarks'
 
 const LadeContainer = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
   padding: 10px;
-`
-const Img = styled.img`
-  max-width: 100%;
-  height: auto;
 `
 const Container = styled.div`
   padding: 10px;
@@ -65,10 +62,6 @@ const Title = styled(Area)`
 const Image = styled(Area)`
   grid-area: image;
 `
-const Label = styled.div`
-  font-weight: 700;
-  padding-right: 4px;
-`
 const Count1 = styled(Area)`
   grid-area: count1;
 `
@@ -77,38 +70,6 @@ const Count2 = styled(Area)`
 `
 const Count3 = styled(Area)`
   grid-area: count3;
-`
-const Danger = styled(Area)`
-  grid-area: danger;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-column-gap: 8px;
-  grid-template-areas: 'dangerLabel dangerVal dangerVal dangerVal';
-  align-items: center;
-`
-const DangerLabel = styled(Label)`
-  grid-area: dangerLabel;
-`
-const DangerVal = styled.div`
-  grid-area: dangerVal;
-  > div {
-    margin-bottom: -15px;
-  }
-`
-const RemarksLabel = styled.div`
-  font-weight: 700;
-`
-const RemarksSubLabel = styled.div`
-  padding-top: 10px;
-  font-weight: 700;
-  font-size: 14px;
-`
-const Remarks = styled(Area)`
-  grid-area: remarks;
-  > div {
-    margin-top: 10px;
-    margin-bottom: -20px;
-  }
 `
 
 const enhance = compose(
@@ -274,50 +235,18 @@ const Tpopfreiwkontr = ({
                   data={data}
                   updateTpopkontr={updateTpopkontr}
                 />
-                <Danger>
-                  <DangerLabel>
-                    Andere Gefährdung (Verbuschung, Tritt, Hunde, ...), welche?
-                  </DangerLabel>
-                  <DangerVal>
-                    <TextField
-                      key={`${row.id}gefaehrdung`}
-                      value={row.gefaehrdung}
-                      type="text"
-                      multiLine
-                      saveToDb={value =>
-                        saveToDb({
-                          row,
-                          field: 'gefaehrdung',
-                          value,
-                          updateTpopkontr,
-                        })
-                      }
-                      error={errors.gefaehrdung}
-                    />
-                  </DangerVal>
-                </Danger>
-                <Remarks>
-                  <RemarksLabel>Spezielle Bemerkungen</RemarksLabel>
-                  <RemarksSubLabel>
-                    (z.B. allgemeiner Eindruck, Zunahme / Abnahme Begründung,
-                    spezielle Begebenheiten)
-                  </RemarksSubLabel>
-                  <TextField
-                    key={`${row.id}bemerkungen`}
-                    value={row.bemerkungen}
-                    type="text"
-                    multiLine
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'bemerkungen',
-                        value,
-                        updateTpopkontr,
-                      })
-                    }
-                    error={errors.bemerkungen}
-                  />
-                </Remarks>
+                <Danger
+                  saveToDb={saveToDb}
+                  errors={errors}
+                  data={data}
+                  updateTpopkontr={updateTpopkontr}
+                />
+                <Remarks
+                  saveToDb={saveToDb}
+                  errors={errors}
+                  data={data}
+                  updateTpopkontr={updateTpopkontr}
+                />
               </GridContainer>
               <StringToCopy text={row.id} label="GUID" />
             </Container>
