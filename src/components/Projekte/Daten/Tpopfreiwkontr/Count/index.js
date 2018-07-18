@@ -79,22 +79,30 @@ const GeschaetztVal = styled.div`
 const enhance = compose(
   withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({ refetchTree, setErrors, errors }) => async ({
+    saveToDb: ({ setErrors, errors }) => async ({
       row,
       field,
+      field2,
       value,
+      value2,
       updateTpopkontrzaehl,
     }) => {
       /**
        * only save if value changed
        */
       if (row[field] === value) return
+      // catch case when empty anzahl field blurs
+      if (value === null && field2 && row[field2] !== value2) return
       try {
+        const variables = {
+          id: row.id,
+          [field]: value,
+        }
+        if (field2) {
+          variables[field2] = value2
+        }
         await updateTpopkontrzaehl({
-          variables: {
-            id: row.id,
-            [field]: value,
-          },
+          variables,
           optimisticResponse: {
             __typename: 'Mutation',
             updateTpopkontrzaehlById: {
@@ -102,12 +110,9 @@ const enhance = compose(
                 id: row.id,
                 anzahl: field === 'anzahl' ? value : row.anzahl,
                 einheit: field === 'einheit' ? value : row.einheit,
-                methode: field === 'methode' ? value : row.methode,
+                methode: field2 === 'methode' ? value2 : row.methode,
                 tpopkontrzaehlEinheitWerteByEinheit:
                   row.tpopkontrzaehlEinheitWerteByEinheit,
-                tpopkontrzaehlMethodeWerteByMethode:
-                  row.tpopkontrzaehlMethodeWerteByMethode,
-                tpopkontrByTpopkontrId: row.tpopkontrByTpopkontrId,
                 __typename: 'Tpopkontrzaehl',
               },
               __typename: 'Tpopkontrzaehl',
@@ -118,7 +123,6 @@ const enhance = compose(
         return setErrors({ [field]: error.message })
       }
       setErrors({})
-      if (['einheit', 'methode'].includes(field)) refetchTree()
     },
   }),
   withLifecycle({
@@ -185,32 +189,40 @@ const Count = ({
               <GezaehltVal>
                 <TextField
                   key={`${row.id}anzahl`}
-                  value={row.anzahl}
+                  value={row.methode === 2 ? row.anzahl : null}
                   type="number"
-                  saveToDb={value =>
+                  saveToDb={value => {
+                    // convert to number
+                    const valueNr = !value && value !== 0 ? null : +value
                     saveToDb({
                       row,
                       field: 'anzahl',
-                      value,
+                      value: valueNr,
+                      field2: 'methode',
+                      value2: 2,
                       updateTpopkontrzaehl,
                     })
-                  }
+                  }}
                   error={errors.anzahl}
                 />
               </GezaehltVal>
               <GeschaetztVal>
                 <TextField
                   key={`${row.id}anzahl`}
-                  value={row.anzahl}
+                  value={row.methode === 1 ? row.anzahl : null}
                   type="number"
-                  saveToDb={value =>
+                  saveToDb={value => {
+                    // convert to number
+                    const valueNr = !value && value !== 0 ? null : +value
                     saveToDb({
                       row,
                       field: 'anzahl',
-                      value,
+                      value: valueNr,
+                      field2: 'methode',
+                      value2: 1,
                       updateTpopkontrzaehl,
                     })
-                  }
+                  }}
                   error={errors.anzahl}
                 />
               </GeschaetztVal>
