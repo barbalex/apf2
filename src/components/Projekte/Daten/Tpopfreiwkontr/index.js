@@ -277,11 +277,13 @@ const Tpopfreiwkontr = ({
             {zaehl2ShowNew && (
               <Count
                 id={null}
+                tpopkontrId={id}
                 nr="2"
                 saveToDb={saveToDb}
                 errors={errors}
                 updateTpopkontr={updateTpopkontr}
                 showNew
+                refetch={data.refetch}
               />
             )}
             {zaehl2ShowEmpty && (
@@ -306,11 +308,13 @@ const Tpopfreiwkontr = ({
             {zaehl3ShowNew && (
               <Count
                 id={null}
+                tpopkontrId={id}
                 nr="3"
                 saveToDb={saveToDb}
                 errors={errors}
                 updateTpopkontr={updateTpopkontr}
                 showNew
+                refetch={data.refetch}
               />
             )}
             {zaehl3ShowEmpty && (

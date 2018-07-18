@@ -8,11 +8,14 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
+import Button from '@material-ui/core/Button'
+import app from 'ampersand-app'
 
 import AutoComplete from '../../../../shared/Autocomplete'
 import TextField from '../../../../shared/TextField'
 import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById.graphql'
 import dataGql from './data.graphql'
+import createTpopkontrzaehl from './createTpopkontrzaehl.graphql'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -124,6 +127,14 @@ const enhance = compose(
       }
       setErrors({})
     },
+    createNew: ({ tpopkontrId, refetch }) => () => {
+      app.client
+        .mutate({
+          mutation: createTpopkontrzaehl,
+          variables: { tpopkontrId },
+        })
+        .then(() => refetch())
+    },
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
@@ -136,26 +147,36 @@ const enhance = compose(
 
 const Count = ({
   id,
+  tpopkontrId,
   nr,
   saveToDb,
   errors,
   updateTpopkontr,
   showEmpty,
   showNew,
+  refetch,
+  createNew,
 }: {
   id: String,
+  tpopkontrId: String,
   nr: Number,
   saveToDb: () => void,
   errors: Object,
   updateTpopkontr: () => void,
   showEmpty: Boolean,
   showNew: Boolean,
+  refetch: () => void,
+  createNew: () => void,
 }) => {
   if (showNew)
     return (
       <Container nr={nr}>
         <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
-        <EinheitVal>TODO: New</EinheitVal>
+        <EinheitVal>
+          <Button variant="outlined" onClick={createNew}>
+            Neu
+          </Button>
+        </EinheitVal>
       </Container>
     )
   if (showEmpty)
