@@ -43,6 +43,8 @@ export default graphql(
         tpopkontrzaehlsByTpopkontrId {
           nodes {
             id
+            anzahl
+            einheit
           }
         }
       }

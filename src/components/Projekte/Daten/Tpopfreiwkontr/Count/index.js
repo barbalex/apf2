@@ -27,7 +27,7 @@ const Container = styled(Area)`
     'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
     'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
     'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal';
-  grid-column-gap: 8px;
+  grid-column-gap: 10px;
 `
 const Label = styled.div`
   font-weight: 700;
@@ -140,98 +140,117 @@ const Count = ({
   saveToDb,
   errors,
   updateTpopkontr,
+  showEmpty,
+  showNew,
 }: {
   id: String,
   nr: Number,
   saveToDb: () => void,
   errors: Object,
   updateTpopkontr: () => void,
-}) => (
-  <Query query={dataGql} variables={{ id }}>
-    {({ loading, error, data }) => {
-      if (loading) return <Container>Lade...</Container>
-      if (error) return `Fehler: ${error.message}`
+  showEmpty: Boolean,
+  showNew: Boolean,
+}) => {
+  if (showNew)
+    return (
+      <Container nr={nr}>
+        <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
+        <EinheitVal>TODO: New</EinheitVal>
+      </Container>
+    )
+  if (showEmpty)
+    return (
+      <Container nr={nr}>
+        <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
+      </Container>
+    )
+  return (
+    <Query query={dataGql} variables={{ id }}>
+      {({ loading, error, data }) => {
+        if (loading) return <Container>Lade...</Container>
+        if (error) return `Fehler: ${error.message}`
 
-      const row = get(data, 'tpopkontrzaehlById')
-      let zaehleinheitWerte = get(
-        data,
-        'allTpopkontrzaehlEinheitWertes.nodes',
-        []
-      )
-      zaehleinheitWerte = sortBy(zaehleinheitWerte, 'sort').map(el => ({
-        id: el.code,
-        value: el.text,
-      }))
+        const row = get(data, 'tpopkontrzaehlById')
+        let zaehleinheitWerte = get(
+          data,
+          'allTpopkontrzaehlEinheitWertes.nodes',
+          []
+        )
+        zaehleinheitWerte = sortBy(zaehleinheitWerte, 'sort').map(el => ({
+          id: el.code,
+          value: el.text,
+        }))
 
-      return (
-        <Mutation mutation={updateTpopkontrzaehlByIdGql}>
-          {updateTpopkontrzaehl => (
-            <Container nr={nr}>
-              <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
-              <EinheitVal>
-                <AutoComplete
-                  key={`${row.id}einheit`}
-                  value={get(row, 'tpopkontrzaehlEinheitWerteByEinheit.text')}
-                  objects={zaehleinheitWerte}
-                  saveToDb={value =>
-                    saveToDb({
-                      row,
-                      field: 'einheit',
-                      value,
-                      updateTpopkontrzaehl,
-                    })
-                  }
-                  error={errors.bearbeiter}
-                />
-              </EinheitVal>
-              <GezaehltLabel>gezählt</GezaehltLabel>
-              <GeschaetztLabel>geschätzt</GeschaetztLabel>
-              <GezaehltVal>
-                <TextField
-                  key={`${row.id}anzahl`}
-                  value={row.methode === 2 ? row.anzahl : null}
-                  type="number"
-                  saveToDb={value => {
-                    // convert to number
-                    const valueNr = !value && value !== 0 ? null : +value
-                    saveToDb({
-                      row,
-                      field: 'anzahl',
-                      value: valueNr,
-                      field2: 'methode',
-                      value2: 2,
-                      updateTpopkontrzaehl,
-                    })
-                  }}
-                  error={errors.anzahl}
-                />
-              </GezaehltVal>
-              <GeschaetztVal>
-                <TextField
-                  key={`${row.id}anzahl`}
-                  value={row.methode === 1 ? row.anzahl : null}
-                  type="number"
-                  saveToDb={value => {
-                    // convert to number
-                    const valueNr = !value && value !== 0 ? null : +value
-                    saveToDb({
-                      row,
-                      field: 'anzahl',
-                      value: valueNr,
-                      field2: 'methode',
-                      value2: 1,
-                      updateTpopkontrzaehl,
-                    })
-                  }}
-                  error={errors.anzahl}
-                />
-              </GeschaetztVal>
-            </Container>
-          )}
-        </Mutation>
-      )
-    }}
-  </Query>
-)
+        return (
+          <Mutation mutation={updateTpopkontrzaehlByIdGql}>
+            {updateTpopkontrzaehl => (
+              <Container nr={nr}>
+                <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
+                <EinheitVal>
+                  <AutoComplete
+                    key={`${row.id}einheit`}
+                    value={get(row, 'tpopkontrzaehlEinheitWerteByEinheit.text')}
+                    objects={zaehleinheitWerte}
+                    saveToDb={value =>
+                      saveToDb({
+                        row,
+                        field: 'einheit',
+                        value,
+                        updateTpopkontrzaehl,
+                      })
+                    }
+                    error={errors.bearbeiter}
+                  />
+                </EinheitVal>
+                <GezaehltLabel>gezählt</GezaehltLabel>
+                <GeschaetztLabel>geschätzt</GeschaetztLabel>
+                <GezaehltVal>
+                  <TextField
+                    key={`${row.id}anzahl`}
+                    value={row.methode === 2 ? row.anzahl : null}
+                    type="number"
+                    saveToDb={value => {
+                      // convert to number
+                      const valueNr = !value && value !== 0 ? null : +value
+                      saveToDb({
+                        row,
+                        field: 'anzahl',
+                        value: valueNr,
+                        field2: 'methode',
+                        value2: 2,
+                        updateTpopkontrzaehl,
+                      })
+                    }}
+                    error={errors.anzahl}
+                  />
+                </GezaehltVal>
+                <GeschaetztVal>
+                  <TextField
+                    key={`${row.id}anzahl`}
+                    value={row.methode === 1 ? row.anzahl : null}
+                    type="number"
+                    saveToDb={value => {
+                      // convert to number
+                      const valueNr = !value && value !== 0 ? null : +value
+                      saveToDb({
+                        row,
+                        field: 'anzahl',
+                        value: valueNr,
+                        field2: 'methode',
+                        value2: 1,
+                        updateTpopkontrzaehl,
+                      })
+                    }}
+                    error={errors.anzahl}
+                  />
+                </GeschaetztVal>
+              </Container>
+            )}
+          </Mutation>
+        )
+      }}
+    </Query>
+  )
+}
 
 export default enhance(Count)

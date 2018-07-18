@@ -214,12 +214,17 @@ const Tpopfreiwkontr = ({
   const zaehls1 = zaehls[0]
   const zaehls2 = zaehls[1]
   const zaehls3 = zaehls[2]
-  zaehls.length &&
-    console.log('Tpopfreiwkontr, render, zaehls:', {
-      zaehls1,
-      zaehls2,
-      zaehls3,
-    })
+  const zaehl1WasAttributed =
+    zaehls1 && (zaehls1.anzahl || zaehls1.anzahl === 0 || zaehls1.einheit)
+  const zaehl2ShowNew = zaehl1WasAttributed && !zaehls2
+  const zaehl2ShowEmpty = !zaehl1WasAttributed && !zaehls2
+  const zaehl2WasAttributed =
+    zaehl1WasAttributed &&
+    zaehls2 &&
+    (zaehls2.anzahl || zaehls2.anzahl === 0 || zaehls2.einheit)
+  const zaehl3ShowNew = zaehl2WasAttributed && !zaehls3
+  const zaehl3ShowEmpty = !zaehl2WasAttributed && !zaehls3
+
   return (
     <Mutation mutation={updateTpopkontrByIdGql}>
       {updateTpopkontr => (
@@ -251,7 +256,7 @@ const Tpopfreiwkontr = ({
               updateTpopkontr={updateTpopkontr}
             />
             <Image>Image</Image>
-            {zaehls1 ? (
+            {zaehls1 && (
               <Count
                 id={zaehls1.id}
                 nr="1"
@@ -259,10 +264,8 @@ const Tpopfreiwkontr = ({
                 errors={errors}
                 updateTpopkontr={updateTpopkontr}
               />
-            ) : (
-              <Count1>count1</Count1>
             )}
-            {zaehls2 ? (
+            {zaehls2 && (
               <Count
                 id={zaehls2.id}
                 nr="2"
@@ -270,10 +273,28 @@ const Tpopfreiwkontr = ({
                 errors={errors}
                 updateTpopkontr={updateTpopkontr}
               />
-            ) : (
-              <Count2>count2</Count2>
             )}
-            {zaehls3 ? (
+            {zaehl2ShowNew && (
+              <Count
+                id={null}
+                nr="2"
+                saveToDb={saveToDb}
+                errors={errors}
+                updateTpopkontr={updateTpopkontr}
+                showNew
+              />
+            )}
+            {zaehl2ShowEmpty && (
+              <Count
+                id={null}
+                nr="2"
+                saveToDb={saveToDb}
+                errors={errors}
+                updateTpopkontr={updateTpopkontr}
+                showEmpty
+              />
+            )}
+            {zaehls3 && (
               <Count
                 id={zaehls3.id}
                 nr="3"
@@ -281,8 +302,26 @@ const Tpopfreiwkontr = ({
                 errors={errors}
                 updateTpopkontr={updateTpopkontr}
               />
-            ) : (
-              <Count3>count3</Count3>
+            )}
+            {zaehl3ShowNew && (
+              <Count
+                id={null}
+                nr="3"
+                saveToDb={saveToDb}
+                errors={errors}
+                updateTpopkontr={updateTpopkontr}
+                showNew
+              />
+            )}
+            {zaehl3ShowEmpty && (
+              <Count
+                id={null}
+                nr="3"
+                saveToDb={saveToDb}
+                errors={errors}
+                updateTpopkontr={updateTpopkontr}
+                showEmpty
+              />
             )}
             <Cover
               saveToDb={saveToDb}
