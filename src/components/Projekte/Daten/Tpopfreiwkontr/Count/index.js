@@ -9,13 +9,16 @@ import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
 import Button from '@material-ui/core/Button'
+import DeleteIcon from '@material-ui/icons/DeleteForever'
 import app from 'ampersand-app'
+import { Subscribe } from 'unstated'
 
 import AutoComplete from '../../../../shared/Autocomplete'
 import TextField from '../../../../shared/TextField'
 import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById.graphql'
 import dataGql from './data.graphql'
 import createTpopkontrzaehl from './createTpopkontrzaehl.graphql'
+import DeleteState from '../../../../../state/Delete'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -84,6 +87,11 @@ const GeschaetztVal = styled.div`
 `
 const Delete = styled.div`
   grid-area: delete;
+  justify-self: end;
+  align-self: end;
+`
+const StyledDeleteIcon = styled(DeleteIcon)`
+  cursor: pointer;
 `
 
 const enhance = compose(
@@ -142,6 +150,15 @@ const enhance = compose(
         })
         .then(() => refetch())
     },
+    remove: ({ id }) => ({ deleteState, row }) => {
+      // TODO
+      deleteState.setToDelete({
+        table: 'tpopkontrzaehl',
+        id,
+        label: null,
+        url: 'TODO',
+      })
+    },
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
@@ -163,6 +180,7 @@ const Count = ({
   showNew,
   refetch,
   createNew,
+  remove,
 }: {
   id: String,
   tpopkontrId: String,
@@ -174,6 +192,7 @@ const Count = ({
   showNew: Boolean,
   refetch: () => void,
   createNew: () => void,
+  remove: () => void,
 }) => {
   if (showNew)
     return (
@@ -209,7 +228,6 @@ const Count = ({
           value: el.text,
         }))
         const showDelete = nr > 1
-        // TODO: how to show delete menu?
 
         return (
           <Mutation mutation={updateTpopkontrzaehlByIdGql}>
@@ -274,7 +292,20 @@ const Count = ({
                     error={errors.anzahl}
                   />
                 </GeschaetztVal>
-                {showDelete && <Delete>x</Delete>}
+                {showDelete && (
+                  <Subscribe to={[DeleteState]}>
+                    {deleteState => (
+                      <Delete>
+                        <span title="löschen">
+                          <StyledDeleteIcon
+                            color="error"
+                            onClick={() => remove({ deleteState, row })}
+                          />
+                        </span>
+                      </Delete>
+                    )}
+                  </Subscribe>
+                )}
               </Container>
             )}
           </Mutation>

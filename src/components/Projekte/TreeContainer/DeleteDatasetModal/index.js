@@ -20,11 +20,11 @@ const StyledDialog = styled(Dialog)`
   }
 `
 
-const DatasetDeleteModal = ({ refetchTree }:{ refetchTree: () => void }) =>
+const DatasetDeleteModal = ({ refetchTree }: { refetchTree: () => void }) => (
   <Subscribe to={[DeleteState]}>
-    {deleteState =>
+    {deleteState => (
       <Subscribe to={[ErrorState]}>
-        {errorState =>
+        {errorState => (
           <Query query={dataGql}>
             {({ loading, error, data, client }) => {
               if (error) {
@@ -43,19 +43,19 @@ const DatasetDeleteModal = ({ refetchTree }:{ refetchTree: () => void }) =>
               if (table && table.labelSingular) {
                 tableName = table.labelSingular
               }
+              let question = `${tableName ? `${tableName} "` : ''}${
+                datasetToDelete.label
+              }${tableName ? '"' : ''} löschen?`
+              if (!datasetToDelete.label) {
+                question = `${tableName} löschen?`
+              }
 
               return (
                 <ErrorBoundary>
                   <StyledDialog open={!!datasetToDelete.table}>
-                    {`${tableName ? `${tableName} "` : ''}${datasetToDelete.label}${
-                      tableName ? '"' : ''
-                    } löschen?`}
+                    {question}
                     <DialogActions>
-                      <Button
-                        onClick={() => 
-                          deleteState.emptyToDelete()
-                        }
-                      >
+                      <Button onClick={() => deleteState.emptyToDelete()}>
                         Abbrechen
                       </Button>
                       <Button
@@ -77,9 +77,10 @@ const DatasetDeleteModal = ({ refetchTree }:{ refetchTree: () => void }) =>
               )
             }}
           </Query>
-        }
+        )}
       </Subscribe>
-    }
+    )}
   </Subscribe>
+)
 
 export default DatasetDeleteModal
