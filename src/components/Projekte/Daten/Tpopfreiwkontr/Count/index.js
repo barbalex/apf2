@@ -26,10 +26,14 @@ const Container = styled(Area)`
   grid-area: ${props => `count${props.nr}`};
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  grid-template-areas:
-    'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
+  grid-template-areas: ${props =>
+    props.showdelete
+      ? `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
     'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
-    'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal';
+    'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal delete'`
+      : `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
+    'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
+    'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`};
   grid-column-gap: 10px;
 `
 const Label = styled.div`
@@ -77,6 +81,9 @@ const GeschaetztVal = styled.div`
   > div > div > input {
     text-align: center;
   }
+`
+const Delete = styled.div`
+  grid-area: delete;
 `
 
 const enhance = compose(
@@ -201,11 +208,13 @@ const Count = ({
           id: el.code,
           value: el.text,
         }))
+        const showDelete = nr > 1
+        // TODO: how to show delete menu?
 
         return (
           <Mutation mutation={updateTpopkontrzaehlByIdGql}>
             {updateTpopkontrzaehl => (
-              <Container nr={nr}>
+              <Container nr={nr} showdelete={showDelete}>
                 <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
                 <EinheitVal>
                   <AutoComplete
@@ -265,6 +274,7 @@ const Count = ({
                     error={errors.anzahl}
                   />
                 </GeschaetztVal>
+                {showDelete && <Delete>x</Delete>}
               </Container>
             )}
           </Mutation>

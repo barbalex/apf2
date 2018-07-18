@@ -7,6 +7,7 @@ import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
 import get from 'lodash/get'
+import sortBy from 'lodash/sortBy'
 import app from 'ampersand-app'
 
 import StringToCopy from '../../../shared/StringToCopyOnlyButton'
@@ -58,15 +59,6 @@ const Title = styled(Area)`
 `
 const Image = styled(Area)`
   grid-area: image;
-`
-const Count1 = styled(Area)`
-  grid-area: count1;
-`
-const Count2 = styled(Area)`
-  grid-area: count2;
-`
-const Count3 = styled(Area)`
-  grid-area: count3;
 `
 
 /**
@@ -206,10 +198,9 @@ const Tpopfreiwkontr = ({
   saveToDb: () => void,
   errors: Object,
 }) => {
-  const zaehls = get(
-    data,
-    'tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes',
-    []
+  const zaehls = sortBy(
+    get(data, 'tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes', []),
+    'einheit'
   )
   const zaehls1 = zaehls[0]
   const zaehls2 = zaehls[1]
