@@ -27,10 +27,10 @@ const Container = styled(Area)`
     'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
     'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
     'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal';
+  grid-column-gap: 8px;
 `
 const Label = styled.div`
   font-weight: 700;
-  padding-right: 4px;
 `
 const EinheitLabel = styled(Label)`
   grid-area: einheitLabel;
