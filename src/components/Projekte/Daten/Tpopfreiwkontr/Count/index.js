@@ -90,8 +90,10 @@ const Delete = styled.div`
   justify-self: end;
   align-self: end;
 `
-const StyledDeleteIcon = styled(DeleteIcon)`
-  cursor: pointer;
+const StyledDeleteButton = styled(Button)`
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  min-width: 40px !important;
 `
 
 const enhance = compose(
@@ -298,12 +300,12 @@ const Count = ({
                   <Subscribe to={[DeleteState]}>
                     {deleteState => (
                       <Delete>
-                        <span title="löschen">
-                          <StyledDeleteIcon
-                            color="error"
-                            onClick={() => remove({ deleteState, row })}
-                          />
-                        </span>
+                        <StyledDeleteButton
+                          title="löschen"
+                          onClick={() => remove({ deleteState, row })}
+                        >
+                          <DeleteIcon />
+                        </StyledDeleteButton>
                       </Delete>
                     )}
                   </Subscribe>
