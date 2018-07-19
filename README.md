@@ -100,12 +100,12 @@ Die nachfolgend aufgelisteten Funktionen werden nur von Topos verwendet:
 **Freiwilligen-Erfolgskontrollen vorbereiten: (bald)**
 
 - Aktionsplan-Verantwortliche erfassen, wer welche Teilpopulationen kontrollieren soll...
-- ...und drucken gleich die Feld-Erfassungs-Formulare
+- ...und drucken gleich die Feld-Erfassungs-Formulare aus
 
 **Frewillige erfassen ihre Kontrollen selber: (bald)**
 
 - Melden sich Freiwillige an, sehen sie eine spezifisch für Sie gestaltete Benutzer-Oberfläche
-- Neben der Liste ihrer Erfolgskontrollen können sie im Formular, das genau dem Feld-Formular entspricht, ihre Beobachtungen erfassen
+- Neben der Liste ihrer Erfolgskontrollen erfassen sie im Formular, das genau dem Feld-Formular entspricht, ihre Beobachtungen
 
 **Freiwilligen-Erfolgskontrollen für die Jahres-Berichte nutzen: (bald)**
 
