@@ -238,14 +238,14 @@ const Count = ({
         if (error) return `Fehler: ${error.message}`
 
         const row = get(data, 'tpopkontrzaehlById')
-        // DO list this count's einheit
+        // do list this count's einheit
         const einheitsNotToList = einheitsUsed.filter(e => e !== row.einheit)
         let zaehleinheitWerte = get(
           data,
           'allTpopkontrzaehlEinheitWertes.nodes',
           []
         )
-          // filter already set values
+          // remove already set values
           .filter(e => !einheitsNotToList.includes(e.code))
         zaehleinheitWerte = sortBy(zaehleinheitWerte, 'sort').map(el => ({
           id: el.code,
