@@ -150,13 +150,13 @@ const enhance = compose(
         })
         .then(() => refetch())
     },
-    remove: ({ id }) => ({ deleteState, row }) => {
-      // TODO
+    remove: ({ id, refetch }) => ({ deleteState, row }) => {
       deleteState.setToDelete({
         table: 'tpopkontrzaehl',
         id,
         label: null,
         url: 'TODO',
+        afterDeletionHook: refetch,
       })
     },
   }),

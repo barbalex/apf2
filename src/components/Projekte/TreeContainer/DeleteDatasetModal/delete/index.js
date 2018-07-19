@@ -15,15 +15,21 @@ export default async ({
   deleteState,
   errorState,
   refetchTree,
-}:{
+}: {
   dataPassedIn: Object,
   deleteState: Object,
   errorState: Object,
-  refetchTree: () => void
+  refetchTree: () => void,
 }): Promise<void> => {
   const { client } = app
   // deleteDatasetDemand checks variables
-  const { table: tablePassed, id, url, label } = deleteState.state.toDelete
+  const {
+    table: tablePassed,
+    id,
+    url,
+    label,
+    afterDeletionHook,
+  } = deleteState.state.toDelete
 
   // some tables need to be translated, i.e. tpopfreiwkontr
   const tableMetadata = tables.find(t => t.table === tablePassed)
@@ -51,11 +57,11 @@ export default async ({
     result = await client.query({
       query: await import('./' + queryName + '.graphql'),
       variables: { id },
-    }) 
+    })
   } catch (error) {
     return errorState.add(error)
   }
-  let data = {...get(result, `data.${camelCase(table)}ById`)}
+  let data = { ...get(result, `data.${camelCase(table)}ById`) }
   data = omit(data, '__typename')
 
   // add to datasetsDeleted
@@ -80,7 +86,7 @@ export default async ({
         }
       `,
       variables: { id },
-    }) 
+    })
   } catch (error) {
     return errorState.add(error)
   }
@@ -104,8 +110,8 @@ export default async ({
       variables: {
         value: newActiveNodeArray1,
         tree: 'tree',
-        key: 'activeNodeArray'
-      }
+        key: 'activeNodeArray',
+      },
     })
   }
   const activeNodeArray2 = get(dataPassedIn, 'tree2.activeNodeArray')
@@ -122,8 +128,8 @@ export default async ({
       variables: {
         value: newActiveNodeArray2,
         tree: 'tree2',
-        key: 'activeNodeArray'
-      }
+        key: 'activeNodeArray',
+      },
     })
   }
 
@@ -135,8 +141,8 @@ export default async ({
     variables: {
       value: newOpenNodes1,
       tree: 'tree',
-      key: 'openNodes'
-    }
+      key: 'openNodes',
+    },
   })
   const openNodes2 = get(dataPassedIn, 'tree2.openNodes')
   const newOpenNodes2 = openNodes2.filter(n => !isEqual(n, url))
@@ -145,9 +151,11 @@ export default async ({
     variables: {
       value: newOpenNodes2,
       tree: 'tree2',
-      key: 'openNodes'
-    }
+      key: 'openNodes',
+    },
   })
+
+  if (afterDeletionHook) afterDeletionHook()
 
   // reset datasetToDelete
   deleteState.emptyToDelete()

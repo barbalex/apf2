@@ -254,6 +254,7 @@ const Tpopfreiwkontr = ({
                 saveToDb={saveToDb}
                 errors={errors}
                 updateTpopkontr={updateTpopkontr}
+                refetch={data.refetch}
               />
             )}
             {zaehls2 && (
@@ -263,6 +264,7 @@ const Tpopfreiwkontr = ({
                 saveToDb={saveToDb}
                 errors={errors}
                 updateTpopkontr={updateTpopkontr}
+                refetch={data.refetch}
               />
             )}
             {zaehl2ShowNew && (
@@ -294,6 +296,7 @@ const Tpopfreiwkontr = ({
                 saveToDb={saveToDb}
                 errors={errors}
                 updateTpopkontr={updateTpopkontr}
+                refetch={data.refetch}
               />
             )}
             {zaehl3ShowNew && (
