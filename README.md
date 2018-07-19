@@ -97,6 +97,20 @@ Die nachfolgend aufgelisteten Funktionen werden nur von Topos verwendet:
 - In regelmässigen Abständen werden sie aus der Cloud auf mehrere unabhängige Festplatten gesichert
 - Ihre Wiederherstellung wird im Rahmen der Entwicklung bzw. des Unterhalts regelmässig getestet ([Anleitung](https://github.com/FNSKtZH/apflora/wiki/Daten-wiederherstellen))
 
+**Freiwilligen-Erfolgskontrollen vorbereiten: (bald)**
+
+- Aktionsplan-Verantwortliche erfassen, wer welche Teilpopulationen kontrollieren soll...
+- ...und drucken gleich die Feld-Erfassungs-Formulare
+
+**Frewillige erfassen ihre Kontrollen selber: (bald)**
+
+- Melden sich Freiwillige an, sehen sie eine spezifisch für Sie gestaltete Benutzer-Oberfläche
+- Neben der Liste ihrer Erfolgskontrollen können sie im Formular, das genau dem Feld-Formular entspricht, ihre Beobachtungen erfassen
+
+**Freiwilligen-Erfolgskontrollen für die Jahres-Berichte nutzen: (bald)**
+
+- Aktionsplan-Verantwortliche überprüfen die Kontrollen von Freiwilligen und bestimmen, ob sie in den Jahres-Berichten berücksichtigt werden
+
 <a href="#top">&#8593; top</a>
 
 
