@@ -72,6 +72,7 @@ export default async ({
     url,
     data,
     time: Date.now(),
+    afterDeletionHook,
   })
 
   try {

@@ -150,12 +150,12 @@ const enhance = compose(
         })
         .then(() => refetch())
     },
-    remove: ({ id, refetch }) => ({ deleteState, row }) => {
+    remove: ({ id, refetch, activeNodeArray }) => ({ deleteState, row }) => {
       deleteState.setToDelete({
         table: 'tpopkontrzaehl',
         id,
         label: null,
-        url: 'TODO',
+        url: activeNodeArray,
         afterDeletionHook: refetch,
       })
     },
@@ -181,6 +181,7 @@ const Count = ({
   refetch,
   createNew,
   remove,
+  activeNodeArray,
 }: {
   id: String,
   tpopkontrId: String,
@@ -193,6 +194,7 @@ const Count = ({
   refetch: () => void,
   createNew: () => void,
   remove: () => void,
+  activeNodeArray: Array<String>,
 }) => {
   if (showNew)
     return (

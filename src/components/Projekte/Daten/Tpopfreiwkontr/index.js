@@ -191,12 +191,14 @@ const Tpopfreiwkontr = ({
   dimensions,
   saveToDb,
   errors,
+  activeNodeArray,
 }: {
   id: String,
   data: Object,
   dimensions: Object,
   saveToDb: () => void,
   errors: Object,
+  activeNodeArray: Array<String>,
 }) => {
   const zaehls = sortBy(
     get(data, 'tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes', []),
@@ -255,6 +257,7 @@ const Tpopfreiwkontr = ({
                 errors={errors}
                 updateTpopkontr={updateTpopkontr}
                 refetch={data.refetch}
+                activeNodeArray={activeNodeArray}
               />
             )}
             {zaehls2 && (
@@ -265,6 +268,7 @@ const Tpopfreiwkontr = ({
                 errors={errors}
                 updateTpopkontr={updateTpopkontr}
                 refetch={data.refetch}
+                activeNodeArray={activeNodeArray}
               />
             )}
             {zaehl2ShowNew && (
@@ -297,6 +301,7 @@ const Tpopfreiwkontr = ({
                 errors={errors}
                 updateTpopkontr={updateTpopkontr}
                 refetch={data.refetch}
+                activeNodeArray={activeNodeArray}
               />
             )}
             {zaehl3ShowNew && (

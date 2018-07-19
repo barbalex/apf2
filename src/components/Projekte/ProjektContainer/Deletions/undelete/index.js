@@ -21,7 +21,7 @@ export default async ({
   setShowDeletions,
   deleteState,
   errorState,
-}:{
+}: {
   datasetsDeleted: Array<Object>,
   dataset: Object,
   tree: Object,
@@ -31,22 +31,24 @@ export default async ({
   errorState: Object,
 }) => {
   const { client } = app
-  const { table, url, data } = dataset
+  const { table, url, data, afterDeletionHook } = dataset
   // 1. create new dataset
   const queryName = `create${upperFirst(camelCase(table))}`
   let mutation
   try {
     mutation = await import('./' + queryName + '.graphql')
   } catch (error) {
-    return errorState.add(new Error(
-      `Die Abfrage, um einen Datensatz für die Tabelle ${table} zu erstellen, scheint zu fehlen. Sorry!`
-    ))
+    return errorState.add(
+      new Error(
+        `Die Abfrage, um einen Datensatz für die Tabelle ${table} zu erstellen, scheint zu fehlen. Sorry!`
+      )
+    )
   }
   try {
     await client.mutate({
       mutation,
       variables: data,
-    }) 
+    })
   } catch (error) {
     return errorState.add(error)
   }
@@ -62,13 +64,15 @@ export default async ({
       value1: url,
       key1: 'activeNodeArray',
       value2: newOpenNodes,
-      key2: 'openNodes'
-    }
+      key2: 'openNodes',
+    },
   })
 
   // 2. remove dataset from datasetsDeleted
   if (datasetsDeleted.length === 1) setShowDeletions(false)
   deleteState.removeDataset(dataset.id)
+
+  if (afterDeletionHook) afterDeletionHook()
 
   // refetch tree
   refetchTree()

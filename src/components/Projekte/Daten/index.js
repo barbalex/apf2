@@ -148,10 +148,10 @@ const Daten = ({
   refetchTree: () => void,
   ktZh: Object,
   setKtZh: () => void,
-}) =>
+}) => (
   <Subscribe to={[ErrorState]}>
-    {errorState =>
-      <Query query={dataGql} >
+    {errorState => (
+      <Query query={dataGql}>
         {({ loading, error, data, client }) => {
           // do not show loading but rather last state
           if (error) return `Fehler: ${error.message}`
@@ -160,40 +160,219 @@ const Daten = ({
           const apId = get(data, `${treeName}.activeNodeArray[3]`)
 
           const formObject = {
-            projekt: <Projekt dimensions={dimensions} id={activeNodeArray[1]} refetchTree={refetchTree} />,
-            apberuebersicht: <Apberuebersicht dimensions={dimensions} id={activeNodeArray[3]} refetchTree={refetchTree} />,
-            ap: <Ap dimensions={dimensions} treeName={treeName} refetchTree={refetchTree} />,
-            assozart: <Assozart dimensions={dimensions} id={activeNodeArray[5]} refetchTree={refetchTree} />,
-            apart: <Apart dimensions={dimensions} id={activeNodeArray[5]} refetchTree={refetchTree} />,
-            idealbiotop: <Idealbiotop dimensions={dimensions} id={activeNodeArray[3]} refetchTree={refetchTree} />,
-            erfkrit: <Erfkrit dimensions={dimensions} id={activeNodeArray[5]} refetchTree={refetchTree} />,
-            apber: <Apber dimensions={dimensions} id={activeNodeArray[5]} refetchTree={refetchTree} />,
-            ber: <Ber dimensions={dimensions} id={activeNodeArray[5]} refetchTree={refetchTree} />,
-            ziel: <Ziel dimensions={dimensions} id={activeNodeArray[6]} tree={tree} refetchTree={refetchTree} />,
-            zielber: <Zielber dimensions={dimensions} id={activeNodeArray[8]} refetchTree={refetchTree} />,
-            pop: <Pop dimensions={dimensions} id={activeNodeArray[5]} refetchTree={refetchTree} />,
-            popmassnber: <Popmassnber dimensions={dimensions} id={activeNodeArray[7]} refetchTree={refetchTree} />,
-            popber: <Popber dimensions={dimensions} id={activeNodeArray[7]} refetchTree={refetchTree} />,
-            tpop: <Tpop dimensions={dimensions} id={activeNodeArray[7]} refetchTree={refetchTree} />,
-            tpopber: <Tpopber dimensions={dimensions} id={activeNodeArray[9]} refetchTree={refetchTree} />,
-            tpopmassn: <Tpopmassn dimensions={dimensions} id={activeNodeArray[9]} refetchTree={refetchTree} />,
-            tpopmassnber: <Tpopmassnber dimensions={dimensions} id={activeNodeArray[9]} refetchTree={refetchTree} />,
-            tpopfeldkontr: <Tpopfeldkontr dimensions={dimensions} id={activeNodeArray[9]} refetchTree={refetchTree} />,
-            tpopfreiwkontr: <Tpopfreiwkontr dimensions={dimensions} id={activeNodeArray[9]} refetchTree={refetchTree} />,
-            tpopkontrzaehl: <Tpopkontrzaehl dimensions={dimensions} id={activeNodeArray[11]} refetchTree={refetchTree} />,
-            exporte: <Exporte tree={tree} dimensions={dimensions} treeName={treeName} refetchTree={refetchTree} />,
-            qk: <Qk tree={tree} treeName={treeName} apId={apId} activeNodes={activeNodes} refetchTree={refetchTree} errorState={errorState} ktZh={ktZh} setKtZh={setKtZh} />,
-            beobNichtZuzuordnen: <Beobzuordnung dimensions={dimensions} id={activeNodeArray[activeNodeArray.length -1]} tree={tree} refetchTree={refetchTree} type="nichtZuzuordnen" />,
-            beobNichtBeurteilt: <Beobzuordnung dimensions={dimensions} id={activeNodeArray[activeNodeArray.length -1]} tree={tree} refetchTree={refetchTree} type="nichtBeurteilt" />,
-            beobZugeordnet: <Beobzuordnung dimensions={dimensions} id={activeNodeArray[activeNodeArray.length -1]} tree={tree} refetchTree={refetchTree} type="zugeordnet" />,
-            user: <User dimensions={dimensions} treeName={treeName} refetchTree={refetchTree} />,
-            adresse: <Adresse dimensions={dimensions} treeName={treeName} refetchTree={refetchTree} />,
+            projekt: (
+              <Projekt
+                dimensions={dimensions}
+                id={activeNodeArray[1]}
+                refetchTree={refetchTree}
+              />
+            ),
+            apberuebersicht: (
+              <Apberuebersicht
+                dimensions={dimensions}
+                id={activeNodeArray[3]}
+                refetchTree={refetchTree}
+              />
+            ),
+            ap: (
+              <Ap
+                dimensions={dimensions}
+                treeName={treeName}
+                refetchTree={refetchTree}
+              />
+            ),
+            assozart: (
+              <Assozart
+                dimensions={dimensions}
+                id={activeNodeArray[5]}
+                refetchTree={refetchTree}
+              />
+            ),
+            apart: (
+              <Apart
+                dimensions={dimensions}
+                id={activeNodeArray[5]}
+                refetchTree={refetchTree}
+              />
+            ),
+            idealbiotop: (
+              <Idealbiotop
+                dimensions={dimensions}
+                id={activeNodeArray[3]}
+                refetchTree={refetchTree}
+              />
+            ),
+            erfkrit: (
+              <Erfkrit
+                dimensions={dimensions}
+                id={activeNodeArray[5]}
+                refetchTree={refetchTree}
+              />
+            ),
+            apber: (
+              <Apber
+                dimensions={dimensions}
+                id={activeNodeArray[5]}
+                refetchTree={refetchTree}
+              />
+            ),
+            ber: (
+              <Ber
+                dimensions={dimensions}
+                id={activeNodeArray[5]}
+                refetchTree={refetchTree}
+              />
+            ),
+            ziel: (
+              <Ziel
+                dimensions={dimensions}
+                id={activeNodeArray[6]}
+                tree={tree}
+                refetchTree={refetchTree}
+              />
+            ),
+            zielber: (
+              <Zielber
+                dimensions={dimensions}
+                id={activeNodeArray[8]}
+                refetchTree={refetchTree}
+              />
+            ),
+            pop: (
+              <Pop
+                dimensions={dimensions}
+                id={activeNodeArray[5]}
+                refetchTree={refetchTree}
+              />
+            ),
+            popmassnber: (
+              <Popmassnber
+                dimensions={dimensions}
+                id={activeNodeArray[7]}
+                refetchTree={refetchTree}
+              />
+            ),
+            popber: (
+              <Popber
+                dimensions={dimensions}
+                id={activeNodeArray[7]}
+                refetchTree={refetchTree}
+              />
+            ),
+            tpop: (
+              <Tpop
+                dimensions={dimensions}
+                id={activeNodeArray[7]}
+                refetchTree={refetchTree}
+              />
+            ),
+            tpopber: (
+              <Tpopber
+                dimensions={dimensions}
+                id={activeNodeArray[9]}
+                refetchTree={refetchTree}
+              />
+            ),
+            tpopmassn: (
+              <Tpopmassn
+                dimensions={dimensions}
+                id={activeNodeArray[9]}
+                refetchTree={refetchTree}
+              />
+            ),
+            tpopmassnber: (
+              <Tpopmassnber
+                dimensions={dimensions}
+                id={activeNodeArray[9]}
+                refetchTree={refetchTree}
+              />
+            ),
+            tpopfeldkontr: (
+              <Tpopfeldkontr
+                dimensions={dimensions}
+                id={activeNodeArray[9]}
+                refetchTree={refetchTree}
+              />
+            ),
+            tpopfreiwkontr: (
+              <Tpopfreiwkontr
+                dimensions={dimensions}
+                id={activeNodeArray[9]}
+                activeNodeArray={activeNodeArray}
+                refetchTree={refetchTree}
+              />
+            ),
+            tpopkontrzaehl: (
+              <Tpopkontrzaehl
+                dimensions={dimensions}
+                id={activeNodeArray[11]}
+                refetchTree={refetchTree}
+              />
+            ),
+            exporte: (
+              <Exporte
+                tree={tree}
+                dimensions={dimensions}
+                treeName={treeName}
+                refetchTree={refetchTree}
+              />
+            ),
+            qk: (
+              <Qk
+                tree={tree}
+                treeName={treeName}
+                apId={apId}
+                activeNodes={activeNodes}
+                refetchTree={refetchTree}
+                errorState={errorState}
+                ktZh={ktZh}
+                setKtZh={setKtZh}
+              />
+            ),
+            beobNichtZuzuordnen: (
+              <Beobzuordnung
+                dimensions={dimensions}
+                id={activeNodeArray[activeNodeArray.length - 1]}
+                tree={tree}
+                refetchTree={refetchTree}
+                type="nichtZuzuordnen"
+              />
+            ),
+            beobNichtBeurteilt: (
+              <Beobzuordnung
+                dimensions={dimensions}
+                id={activeNodeArray[activeNodeArray.length - 1]}
+                tree={tree}
+                refetchTree={refetchTree}
+                type="nichtBeurteilt"
+              />
+            ),
+            beobZugeordnet: (
+              <Beobzuordnung
+                dimensions={dimensions}
+                id={activeNodeArray[activeNodeArray.length - 1]}
+                tree={tree}
+                refetchTree={refetchTree}
+                type="zugeordnet"
+              />
+            ),
+            user: (
+              <User
+                dimensions={dimensions}
+                treeName={treeName}
+                refetchTree={refetchTree}
+              />
+            ),
+            adresse: (
+              <Adresse
+                dimensions={dimensions}
+                treeName={treeName}
+                refetchTree={refetchTree}
+              />
+            ),
           }
           let key
-          if (
-            activeNodeArray.length > 2 &&
-            activeNodeArray[2] === 'Exporte'
-          ) {
+          if (activeNodeArray.length > 2 && activeNodeArray[2] === 'Exporte') {
             key = 'exporte'
           } else if (
             activeNodeArray.length > 4 &&
@@ -228,7 +407,8 @@ const Daten = ({
           )
         }}
       </Query>
-    }
+    )}
   </Subscribe>
+)
 
 export default Daten
