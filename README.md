@@ -44,11 +44,18 @@ Web-Applikation zur Verwaltung des [Aktionsplans Flora der Fachstelle Naturschut
 - Teilpopulationen und Beobachtungen im GIS-Browser des Kt. Zürich und auf geo.admin.ch anzeigen
 - Populationen und Teilpopulationen als kml-Datei für Google Earth exportieren
 
+**Über den Erfolg berichten:**
+
+- Für einzelne Aktionspläne...
+- ...oder für alle
+- über Massnahmen, Kontrollen und Entwicklung berichten
+- direkt aus apflora.ch heraus pdf-Berichte erzeugen
+
 **Daten exportieren:**
 
 - Alle Daten exportieren
 - als .xlsx- oder .csv-Datei
-- Auf der Karte beliebige Umrisse zeichnen, um Exporte geographisch zu filtern
+- Auf der Karte beliebige Umrisse zeichnen, um Exporte geografisch zu filtern
 
 **Auf die Plätze, fertig, los!**
 
@@ -66,7 +73,7 @@ Web-Applikation zur Verwaltung des [Aktionsplans Flora der Fachstelle Naturschut
 **Sich anleiten lassen:**
 
 - Informations-Symbole informieren über Felder und Anforderungen an die Datenerfassung
-- Mehrere [Videos](https://www.youtube.com/playlist?list=PLTz8Xt5SOQPS-dbvpJ_DrB4-o3k3yj09J) demonstrieren das Arbeiten mit verschiedenen Teilen der Anwendung
+- [Videos](https://www.youtube.com/playlist?list=PLTz8Xt5SOQPS-dbvpJ_DrB4-o3k3yj09J) demonstrieren das Arbeiten mit verschiedenen Teilen der Anwendung
 - Im [Wiki](https://github.com/FNSKtZH/apflora/wiki) sind wichtige Fragen erklärt
 
 **Effizient arbeiten:**
@@ -77,37 +84,36 @@ Web-Applikation zur Verwaltung des [Aktionsplans Flora der Fachstelle Naturschut
 - Beobachtungen Teilpopulationen zuordnen: In einer nach Abstand zu den Teilpopulationen geordneten Liste im Formular. Oder mit drag and drop auf der Karte
 - Aus einer Beobachtung eine neue Populationen und Teilpopulationen gründen und gleich die Beobachtung zuordnen. Mit einem einzigen Klick
 - Alle Löschungen während einer Sitzung werden aufgelistet und können rückgängig gemacht werden
-- Mit Dutzenden von Kontroll-Listen die Qualität der Daten gewährleisten
+- Mit rund hundert Kontroll-Listen die Qualität der Daten gewährleisten
 
 **Projektdaten verwalten:**
 
 Die nachfolgend aufgelisteten Funktionen werden nur von Topos verwendet:
 
-- pdf-Datei für den Jahresbericht erstellen
 - Adressen verwalten
-- Mit dem GIS auf die Daten zugreifen
 - Logins verwalten und Schreibrechte vergeben
-- Beobachtungen nach [EvAB](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content) exportieren
-- Daten in Tabellenform bearbeiten
-- Beobachtungen aus einem [EvAB](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content) importieren (um sie danach in apflora Teilpopulationen zuzuordnen)
+- Mit dem GIS auf die Daten zugreifen
+- Beobachtungen nach [EvAB](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content) exportieren (separate Access-Anwendung)
+- Beobachtungen aus einem [EvAB](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content) importieren (um sie danach in apflora Teilpopulationen zuzuordnen) (separate Access-Anwendung)
 
 **Daten nach Verlust wiederherstellen:**
 
 - Die Daten werden täglich in der Cloud gesichert
 - In regelmässigen Abständen werden sie aus der Cloud auf mehrere unabhängige Festplatten gesichert
 - Ihre Wiederherstellung wird im Rahmen der Entwicklung bzw. des Unterhalts regelmässig getestet ([Anleitung](https://github.com/FNSKtZH/apflora/wiki/Daten-wiederherstellen))
+- Während einer Sitzung gelöschte Daten können direkt von den Benutzern wiederhergestellt werden
 
-**Freiwilligen-Erfolgskontrollen vorbereiten: (bald)**
+**Freiwilligen-Erfolgskontrollen vorbereiten: (in Entwicklung)**
 
 - Aktionsplan-Verantwortliche erfassen, wer welche Teilpopulationen kontrollieren soll...
 - ...und drucken gleich die Feld-Erfassungs-Formulare aus
 
-**Frewillige erfassen ihre Kontrollen selber: (bald)**
+**Frewillige erfassen ihre Kontrollen selber: (in Entwicklung)**
 
 - Melden sich Freiwillige an, sehen sie eine spezifisch für Sie gestaltete Benutzer-Oberfläche
 - Neben der Liste ihrer Erfolgskontrollen erfassen sie im Formular, das genau dem Feld-Formular entspricht, ihre Beobachtungen
 
-**Freiwilligen-Erfolgskontrollen für die Jahres-Berichte nutzen: (bald)**
+**Freiwilligen-Erfolgskontrollen für die Jahres-Berichte nutzen: (in Entwicklung)**
 
 - Aktionsplan-Verantwortliche überprüfen die Kontrollen von Freiwilligen und bestimmen, ob sie in den Jahres-Berichten berücksichtigt werden
 
