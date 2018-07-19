@@ -250,12 +250,7 @@ const Count = ({
         return (
           <Mutation mutation={updateTpopkontrzaehlByIdGql}>
             {updateTpopkontrzaehl => (
-              <Container
-                nr={nr}
-                showdelete={showDelete}
-                showempty={showEmpty}
-                shownew={showNew}
-              >
+              <Container nr={nr} showdelete={showDelete}>
                 <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
                 <EinheitVal>
                   <AutoComplete

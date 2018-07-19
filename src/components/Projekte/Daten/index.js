@@ -125,6 +125,8 @@ const Container = styled.div`
   border-right-width: 1px;
   border-right-style: solid;
   height: 100%;
+  overflow-x: auto;
+}
   @media print {
     display: none !important;
   }
