@@ -198,6 +198,7 @@ const Count = ({
   createNew,
   remove,
   activeNodeArray,
+  einheitsUsed,
 }: {
   id: String,
   tpopkontrId: String,
@@ -211,6 +212,7 @@ const Count = ({
   createNew: () => void,
   remove: () => void,
   activeNodeArray: Array<String>,
+  einheitsUsed: Array<Number>,
 }) => {
   if (showNew)
     return (
@@ -236,11 +238,15 @@ const Count = ({
         if (error) return `Fehler: ${error.message}`
 
         const row = get(data, 'tpopkontrzaehlById')
+        // DO list this count's einheit
+        const einheitsNotToList = einheitsUsed.filter(e => e !== row.einheit)
         let zaehleinheitWerte = get(
           data,
           'allTpopkontrzaehlEinheitWertes.nodes',
           []
         )
+          // filter already set values
+          .filter(e => !einheitsNotToList.includes(e.code))
         zaehleinheitWerte = sortBy(zaehleinheitWerte, 'sort').map(el => ({
           id: el.code,
           value: el.text,

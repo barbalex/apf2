@@ -217,6 +217,13 @@ const Tpopfreiwkontr = ({
     (zaehls2.anzahl || zaehls2.anzahl === 0 || zaehls2.einheit)
   const zaehl3ShowNew = zaehl2WasAttributed && !zaehls3
   const zaehl3ShowEmpty = !zaehl2WasAttributed && !zaehls3
+  const einheitsUsed = get(
+    data,
+    'tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes',
+    []
+  )
+    .filter(n => !!n.einheit)
+    .map(n => n.einheit)
 
   return (
     <Mutation mutation={updateTpopkontrByIdGql}>
@@ -258,6 +265,7 @@ const Tpopfreiwkontr = ({
                 updateTpopkontr={updateTpopkontr}
                 refetch={data.refetch}
                 activeNodeArray={activeNodeArray}
+                einheitsUsed={einheitsUsed}
               />
             )}
             {zaehls2 && (
@@ -269,6 +277,7 @@ const Tpopfreiwkontr = ({
                 updateTpopkontr={updateTpopkontr}
                 refetch={data.refetch}
                 activeNodeArray={activeNodeArray}
+                einheitsUsed={einheitsUsed}
               />
             )}
             {zaehl2ShowNew && (
@@ -302,6 +311,7 @@ const Tpopfreiwkontr = ({
                 updateTpopkontr={updateTpopkontr}
                 refetch={data.refetch}
                 activeNodeArray={activeNodeArray}
+                einheitsUsed={einheitsUsed}
               />
             )}
             {zaehl3ShowNew && (
