@@ -31,13 +31,20 @@ const Container = styled(Area)`
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   grid-template-areas: ${props =>
-    props.showdelete
-      ? `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
-    'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel .'
-    'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal delete'`
-      : `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
-    'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
-    'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`};
+    props.showempty
+      ? `'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
+         'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
+         'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`
+      : props.shownew
+        ? `'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
+           'showNew showNew showNew showNew showNew showNew showNew showNew'`
+        : props.showdelete
+          ? `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
+             'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel .'
+             'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal delete'`
+          : `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
+             'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
+             'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`};
   grid-column-gap: 10px;
 `
 const Label = styled.div`
@@ -98,6 +105,9 @@ const StyledDeleteButton = styled(Button)`
 `
 const StyledAddIcon = styled(AddIcon)`
   padding-right: 8px;
+`
+const ShowNew = styled.div`
+  grid-area: showNew;
 `
 
 const enhance = compose(
@@ -204,18 +214,18 @@ const Count = ({
 }) => {
   if (showNew)
     return (
-      <Container nr={nr}>
+      <Container nr={nr} shownew={showNew}>
         <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
-        <EinheitVal>
-          <Button variant="outlined" onClick={createNew}>
+        <ShowNew>
+          <Button color="primary" onClick={createNew}>
             <StyledAddIcon /> Neu
           </Button>
-        </EinheitVal>
+        </ShowNew>
       </Container>
     )
   if (showEmpty)
     return (
-      <Container nr={nr}>
+      <Container nr={nr} showempty={showEmpty}>
         <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
       </Container>
     )
@@ -240,7 +250,12 @@ const Count = ({
         return (
           <Mutation mutation={updateTpopkontrzaehlByIdGql}>
             {updateTpopkontrzaehl => (
-              <Container nr={nr} showdelete={showDelete}>
+              <Container
+                nr={nr}
+                showdelete={showDelete}
+                showempty={showEmpty}
+                shownew={showNew}
+              >
                 <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
                 <EinheitVal>
                   <AutoComplete
