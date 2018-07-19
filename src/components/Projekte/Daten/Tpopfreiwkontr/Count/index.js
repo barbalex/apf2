@@ -10,6 +10,7 @@ import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
 import Button from '@material-ui/core/Button'
 import DeleteIcon from '@material-ui/icons/DeleteForever'
+import AddIcon from '@material-ui/icons/AddCircleOutline'
 import app from 'ampersand-app'
 import { Subscribe } from 'unstated'
 
@@ -94,6 +95,9 @@ const StyledDeleteButton = styled(Button)`
   padding-left: 0 !important;
   padding-right: 0 !important;
   min-width: 40px !important;
+`
+const StyledAddIcon = styled(AddIcon)`
+  padding-right: 8px;
 `
 
 const enhance = compose(
@@ -204,7 +208,7 @@ const Count = ({
         <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
         <EinheitVal>
           <Button variant="outlined" onClick={createNew}>
-            Neu
+            <StyledAddIcon /> Neu
           </Button>
         </EinheitVal>
       </Container>

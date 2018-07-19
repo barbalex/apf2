@@ -10,6 +10,9 @@ import app from 'ampersand-app'
 import tables from '../../../../../modules/tables'
 import setTreeKey from './setTreeKey.graphql'
 
+const isFreiwilligenKontrolle = activeNodeArray =>
+  activeNodeArray[activeNodeArray.length - 2] === 'Freiwilligen-Kontrollen'
+
 export default async ({
   dataPassedIn,
   deleteState,
@@ -98,7 +101,10 @@ export default async ({
 
   // set new url if necessary
   const activeNodeArray1 = get(dataPassedIn, 'tree.activeNodeArray')
-  if (isEqual(activeNodeArray1, url)) {
+  if (
+    isEqual(activeNodeArray1, url) &&
+    !isFreiwilligenKontrolle(activeNodeArray1)
+  ) {
     const newActiveNodeArray1 = [...url]
     newActiveNodeArray1.pop()
     // if zieljahr is active, need to pop again,
@@ -116,7 +122,10 @@ export default async ({
     })
   }
   const activeNodeArray2 = get(dataPassedIn, 'tree2.activeNodeArray')
-  if (isEqual(activeNodeArray2, url)) {
+  if (
+    isEqual(activeNodeArray2, url) &&
+    !isFreiwilligenKontrolle(activeNodeArray2)
+  ) {
     const newActiveNodeArray2 = [...url]
     newActiveNodeArray2.pop()
     // if zieljahr is active, need to pop again,
