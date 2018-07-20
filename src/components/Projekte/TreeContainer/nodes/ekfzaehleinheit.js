@@ -32,7 +32,6 @@ export default ({
     data,
     `${treeName}.nodeLabelFilter.ekfzaehleinheit`
   )
-  console.log('nodes, ekfzaehleinheit:', { data, nodeLabelFilterString })
 
   // map through all elements and create array of nodes
   const nodes = ekfzaehleinheits
