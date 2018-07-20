@@ -65,7 +65,7 @@ const Image = styled(Area)`
  * TODO
  * on componentDidMount
  * check number of tpopkontrzaehl
- * if none: create one
+ * if none: create new ones
  * then refetch data
  */
 const enhance = compose(
