@@ -48,6 +48,10 @@ const Assozart = Loadable({
   loader: () => import('./Assozart'),
   loading: Loading,
 })
+const Ekfzaehleinheit = Loadable({
+  loader: () => import('./Ekfzaehleinheit'),
+  loading: Loading,
+})
 const Apart = Loadable({
   loader: () => import('./Apart'),
   loading: Loading,
@@ -185,6 +189,13 @@ const Daten = ({
             ),
             assozart: (
               <Assozart
+                dimensions={dimensions}
+                id={activeNodeArray[5]}
+                refetchTree={refetchTree}
+              />
+            ),
+            ekfzaehleinheit: (
+              <Ekfzaehleinheit
                 dimensions={dimensions}
                 id={activeNodeArray[5]}
                 refetchTree={refetchTree}

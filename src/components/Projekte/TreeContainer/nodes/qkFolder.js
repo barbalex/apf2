@@ -25,21 +25,23 @@ export default ({
     id: projId,
   })
   const apIndex = findIndex(apNodes, {
-    id: apId
+    id: apId,
   })
 
   const url = ['Projekte', projId, 'Aktionspläne', apId, 'Qualitaetskontrollen']
   const allParentsOpen = allParentNodesAreOpen(openNodes, url)
   if (!allParentsOpen) return []
 
-  return [{
-    nodeType: 'folder',
-    menuType: 'qkFolder',
-    id: apId,
-    urlLabel: 'Qualitaetskontrollen',
-    label: 'Qualitätskontrollen',
-    url,
-    sort: [projIndex, 1, apIndex, 11],
-    hasChildren: false,
-  }]
+  return [
+    {
+      nodeType: 'folder',
+      menuType: 'qkFolder',
+      id: apId,
+      urlLabel: 'Qualitaetskontrollen',
+      label: 'Qualitätskontrollen',
+      url,
+      sort: [projIndex, 1, apIndex, 12],
+      hasChildren: false,
+    },
+  ]
 }

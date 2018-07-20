@@ -192,6 +192,14 @@ export default [
     parentIdField: 'ap_id',
   },
   {
+    table: 'ekfzaehleinheit',
+    parentTable: 'ap',
+    label: 'EKF-Zähleinheiten',
+    labelSingular: 'EKF-Zähleinheite',
+    idField: 'id',
+    parentIdField: 'ap_id',
+  },
+  {
     table: 'popber',
     parentTable: 'pop',
     label: 'Kontroll-Berichte',

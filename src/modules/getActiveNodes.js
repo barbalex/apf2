@@ -2,9 +2,11 @@
 export default (activeNodeArray: Array<mixed>): Object => {
   const wlFolder = activeNodeArray[0] === 'Werte-Listen'
   const wlAdresseFolder = wlFolder && activeNodeArray[1] === 'Adressen'
-  const wlAdresse = (wlAdresseFolder && activeNodeArray[2]) ? activeNodeArray[2] : null
+  const wlAdresse =
+    wlAdresseFolder && activeNodeArray[2] ? activeNodeArray[2] : null
   const userFolder = activeNodeArray[0] === 'Benutzer'
-  const user = userFolder && activeNodeArray.length > 1 ? activeNodeArray[1] : null
+  const user =
+    userFolder && activeNodeArray.length > 1 ? activeNodeArray[1] : null
   const projektFolder =
     (activeNodeArray.length > 0 && activeNodeArray[0] === 'Projekte') || false
   const projekt =
@@ -34,6 +36,11 @@ export default (activeNodeArray: Array<mixed>): Object => {
       activeNodeArray.length > 4 &&
       activeNodeArray[4] === 'assoziierte-Arten') ||
     false
+  const ekfzaehleinheitFolder =
+    (ap &&
+      activeNodeArray.length > 4 &&
+      activeNodeArray[4] === 'EKF-Zähleinheiten') ||
+    false
   const apArtFolder =
     (ap && activeNodeArray.length > 4 && activeNodeArray[4] === 'AP-Arten') ||
     false
@@ -44,6 +51,10 @@ export default (activeNodeArray: Array<mixed>): Object => {
     false
   const assozart =
     assozartFolder && activeNodeArray.length > 5 ? activeNodeArray[5] : null
+  const ekfzaehleinheit =
+    ekfzaehleinheitFolder && activeNodeArray.length > 5
+      ? activeNodeArray[5]
+      : null
   const apart =
     apArtFolder && activeNodeArray.length > 5 ? activeNodeArray[5] : null
   const idealbiotopFolder =
@@ -212,8 +223,10 @@ export default (activeNodeArray: Array<mixed>): Object => {
     apFolder,
     ap,
     assozartFolder,
+    ekfzaehleinheitFolder,
     apArtFolder,
     assozart,
+    ekfzaehleinheit,
     apart,
     qk,
     idealbiotopFolder,

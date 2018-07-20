@@ -1,7 +1,6 @@
 // @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
-import format from 'date-fns/format'
 
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 import compareLabel from './compareLabel'
@@ -23,7 +22,7 @@ export default ({
   projId: String,
   apId: String,
 }): Array<Object> => {
-  const beobNichtZuzuordnens = get(data, 'beobNichtZuzuordnens.nodes', [])
+  const ekfzaehleinheits = get(data, 'ekfzaehleinheits.nodes', [])
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
@@ -31,18 +30,19 @@ export default ({
   const apIndex = findIndex(apNodes, { id: apId })
   const nodeLabelFilterString = get(
     data,
-    `${treeName}.nodeLabelFilter.beobNichtZuzuordnen`
+    `${treeName}.nodeLabelFilter.ekfzaehleinheit`
   )
 
   // map through all elements and create array of nodes
-  const nodes = beobNichtZuzuordnens
+  const nodes = ekfzaehleinheits
     .filter(el => el.apId === apId)
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
-        return `${
-          el.datum ? format(el.datum, 'YYYY.MM.DD') : '(kein Datum)'
-        }: ${el.autor || '(kein Autor)'} (${el.quelle})`
+        const artname =
+          get(el, 'tpopkontrzaehlEinheitWerteByZaehleinheitId.text') ||
+          '(keine Zähleinheit gewählt)'
+        return artname
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
       }
@@ -50,19 +50,21 @@ export default ({
     })
     .map(el => ({
       nodeType: 'table',
-      menuType: 'beobNichtZuzuordnen',
+      menuType: 'ekfzaehleinheit',
       id: el.id,
       parentId: apId,
       urlLabel: el.id,
-      label: `${
-        el.datum ? format(el.datum, 'YYYY.MM.DD') : '(kein Datum)'
-      }: ${el.autor || '(kein Autor)'} (${el.quelle})`,
+      label: get(
+        el,
+        'tpopkontrzaehlEinheitWerteByZaehleinheitId.text',
+        '(keine Zähleinheit gewählt)'
+      ),
       url: [
         'Projekte',
         projId,
         'Aktionspläne',
         apId,
-        'nicht-zuzuordnende-Beobachtungen',
+        'EKF-Zähleinheiten',
         el.id,
       ],
       hasChildren: false,
@@ -71,7 +73,7 @@ export default ({
     // sort by label
     .sort(compareLabel)
     .map((el, index) => {
-      el.sort = [projIndex, 1, apIndex, 11, index]
+      el.sort = [projIndex, 1, apIndex, 9, index]
       return el
     })
 

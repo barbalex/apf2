@@ -29,7 +29,10 @@ export default ({
     id: projId,
   })
   const apIndex = findIndex(apNodes, { id: apId })
-  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.beobNichtBeurteilt`)
+  const nodeLabelFilterString = get(
+    data,
+    `${treeName}.nodeLabelFilter.beobNichtBeurteilt`
+  )
 
   // map through all elements and create array of nodes
   const nodes = beobNichtBeurteilts
@@ -68,7 +71,7 @@ export default ({
     // sort by label
     .sort(compareLabel)
     .map((el, index) => {
-      el.sort = [projIndex, 1, apIndex, 9, index]
+      el.sort = [projIndex, 1, apIndex, 10, index]
       return el
     })
 

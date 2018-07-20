@@ -293,6 +293,19 @@ query TreeDataQuery(
       }
     }
   }
+  ekfzaehleinheits: allEkfzaehleinheits(filter: { apId: { in: $ap } })
+    @include(if: $isAp) {
+    nodes {
+      id
+      apId
+      zaehleinheitId
+      bemerkungen
+      tpopkontrzaehlEinheitWerteByZaehleinheitId {
+        id
+        text
+      }
+    }
+  }
   beobNichtBeurteilts: allVApbeobs(
     filter: {
       nichtZuordnen: { equalTo: false }

@@ -1,7 +1,6 @@
 // @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
-import format from 'date-fns/format'
 
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 
@@ -24,7 +23,7 @@ export default ({
   openNodes: Array<String>,
   apId: String,
 }): Array<Object> => {
-  const beobNichtZuzuordnens = get(data, 'beobNichtZuzuordnens.nodes', [])
+  const ekfzaehleinheits = get(data, 'ekfzaehleinheits.nodes', [])
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
@@ -35,50 +34,43 @@ export default ({
   })
   const nodeLabelFilterString = get(
     data,
-    `${treeName}.nodeLabelFilter.beobNichtZuzuordnen`
+    `${treeName}.nodeLabelFilter.ekfzaehleinheit`
   )
 
-  const beobNichtZuzuordnenNodesLength = beobNichtZuzuordnens
+  const ekfzaehleinheitNodesLength = ekfzaehleinheits
     .filter(el => el.apId === apId)
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
-        return `${
-          el.datum ? format(el.datum, 'YYYY.MM.DD') : '(kein Datum)'
-        }: ${el.autor || '(kein Autor)'} (${el.quelle})`
+        const artname =
+          get(el, 'tpopkontrzaehlEinheitWerteByZaehleinheitId.text') ||
+          '(keine Zähleinheit gewählt)'
+        return artname
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
       }
       return true
     }).length
   let message =
-    loading && !beobNichtZuzuordnenNodesLength
-      ? '...'
-      : beobNichtZuzuordnenNodesLength
+    loading && !ekfzaehleinheitNodesLength ? '...' : ekfzaehleinheitNodesLength
   if (nodeLabelFilterString) {
-    message = `${beobNichtZuzuordnenNodesLength} gefiltert`
+    message = `${ekfzaehleinheitNodesLength} gefiltert`
   }
 
-  const url = [
-    'Projekte',
-    projId,
-    'Aktionspläne',
-    apId,
-    'nicht-zuzuordnende-Beobachtungen',
-  ]
+  const url = ['Projekte', projId, 'Aktionspläne', apId, 'EKF-Zähleinheiten']
   const allParentsOpen = allParentNodesAreOpen(openNodes, url)
   if (!allParentsOpen) return []
 
   return [
     {
       nodeType: 'folder',
-      menuType: 'beobNichtZuzuordnenFolder',
+      menuType: 'ekfzaehleinheitFolder',
       id: apId,
-      urlLabel: 'nicht-zuzuordnende-Beobachtungen',
-      label: `Beobachtungen nicht zuzuordnen (${message})`,
+      urlLabel: 'EKF-Zähleinheiten',
+      label: `EKF-Zähleinheiten (${message})`,
       url,
-      sort: [projIndex, 1, apIndex, 11],
-      hasChildren: beobNichtZuzuordnenNodesLength > 0,
+      sort: [projIndex, 1, apIndex, 9],
+      hasChildren: ekfzaehleinheitNodesLength > 0,
     },
   ]
 }

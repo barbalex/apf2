@@ -31,9 +31,12 @@ export default ({
     id: projId,
   })
   const apIndex = findIndex(apNodes, {
-    id: apId
+    id: apId,
   })
-  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.beobNichtBeurteilt`)
+  const nodeLabelFilterString = get(
+    data,
+    `${treeName}.nodeLabelFilter.beobNichtBeurteilt`
+  )
 
   const beobNichtBeurteiltNodesLength = beobNichtBeurteilts
     .filter(el => el.apId === apId)
@@ -48,7 +51,10 @@ export default ({
       }
       return true
     }).length
-  let message = (loading && !beobNichtBeurteiltNodesLength) ? '...' : beobNichtBeurteiltNodesLength
+  let message =
+    loading && !beobNichtBeurteiltNodesLength
+      ? '...'
+      : beobNichtBeurteiltNodesLength
   if (nodeLabelFilterString) {
     message = `${beobNichtBeurteiltNodesLength} gefiltert`
   }
@@ -63,14 +69,16 @@ export default ({
   const allParentsOpen = allParentNodesAreOpen(openNodes, url)
   if (!allParentsOpen) return []
 
-  return [{
-    nodeType: 'folder',
-    menuType: 'beobNichtBeurteiltFolder',
-    id: apId,
-    urlLabel: 'nicht-beurteilte-Beobachtungen',
-    label: `Beobachtungen nicht beurteilt (${message})`,
-    url,
-    sort: [projIndex, 1, apIndex, 9],
-    hasChildren: beobNichtBeurteiltNodesLength > 0,
-  }]
+  return [
+    {
+      nodeType: 'folder',
+      menuType: 'beobNichtBeurteiltFolder',
+      id: apId,
+      urlLabel: 'nicht-beurteilte-Beobachtungen',
+      label: `Beobachtungen nicht beurteilt (${message})`,
+      url,
+      sort: [projIndex, 1, apIndex, 10],
+      hasChildren: beobNichtBeurteiltNodesLength > 0,
+    },
+  ]
 }

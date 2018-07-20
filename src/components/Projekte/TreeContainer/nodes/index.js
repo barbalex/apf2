@@ -17,6 +17,7 @@ import qkFolderNodes from './qkFolder'
 import buildBeobNichtZuzuordnenFolderNodes from './beobNichtZuzuordnenFolder'
 import buildBeobNichtBeurteiltFolderNodes from './beobNichtBeurteiltFolder'
 import buildAssozartFolderNodes from './assozartFolder'
+import buildEkfzaehleinheitFolderNodes from './ekfzaehleinheitFolder'
 import buildApartFolderNodes from './apartFolder'
 import buildIdealbiotopFolderNodes from './idealbiotopFolder'
 import buildBerFolderNodes from './berFolder'
@@ -31,6 +32,7 @@ import buildPopNodes from './pop'
 import buildBeobNichtZuzuordnenNodes from './beobNichtZuzuordnen'
 import buildBeobNichtBeurteiltNodes from './beobNichtBeurteilt'
 import buildAssozartNodes from './assozart'
+import buildEkfzaehleinheitNodes from './ekfzaehleinheit'
 import buildApartNodes from './apart'
 import buildBerNodes from './ber'
 import buildApberNodes from './apber'
@@ -245,6 +247,16 @@ export default ({
             projId,
             apId,
           }),
+          ...buildEkfzaehleinheitFolderNodes({
+            data,
+            treeName,
+            loading,
+            apNodes,
+            openNodes,
+            projektNodes,
+            projId,
+            apId,
+          }),
           ...buildApartFolderNodes({
             data,
             treeName,
@@ -434,6 +446,25 @@ export default ({
         nodes = [
           ...nodes,
           ...buildAssozartNodes({
+            data,
+            treeName,
+            loading,
+            apNodes,
+            openNodes,
+            projektNodes,
+            projId,
+            apId: nodeUrl[3],
+          }),
+        ]
+      }
+      if (
+        nodeUrl.length === 5 &&
+        nodeUrl[4] === 'EKF-Zähleinheiten' &&
+        allParentNodesAreOpen(openNodes, nodeUrl)
+      ) {
+        nodes = [
+          ...nodes,
+          ...buildEkfzaehleinheitNodes({
             data,
             treeName,
             loading,
