@@ -26,6 +26,9 @@ import Count from './Count'
 
 const Container = styled.div`
   padding: 10px;
+  @media print {
+    font-size: 11px;
+  }
 `
 const GridContainer = styled.div`
   display: grid;
@@ -56,6 +59,9 @@ const Title = styled(Area)`
   grid-area: title;
   font-weight: 700;
   font-size: 22px;
+  @media print {
+    font-size: 16px;
+  }
 `
 const Image = styled(Area)`
   grid-area: image;
