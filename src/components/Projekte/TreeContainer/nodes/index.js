@@ -54,9 +54,7 @@ import buildTpopfeldkontrNodes from './tpopfeldkontr'
 import buildTpopmassnberNodes from './tpopmassnber'
 import buildTpopmassnNodes from './tpopmassn'
 import buildTpopfeldkontrzaehlFolderNodes from './tpopfeldkontrzaehlFolder'
-import buildTpopfreiwkontrzaehlFolderNodes from './tpopfreiwkontrzaehlFolder'
 import buildTpopfeldkontrzaehlNodes from './tpopfeldkontrzaehl'
-import buildTpopfreiwkontrzaehlNodes from './tpopfreiwkontrzaehl'
 import sort from '../sort'
 
 const compare = (a, b) => {
@@ -83,16 +81,18 @@ export default ({
     // need to sort so folders are added in correct order
     // because every lower folder gets previous nodes passed
     .sort(sort)
-    
+
   const projektNodes = [...buildProjektNodes({ data, treeName })]
-  const userFolderNode = buildUserFolderNode({ data, treeName, projektNodes, loading })
+  const userFolderNode = buildUserFolderNode({
+    data,
+    treeName,
+    projektNodes,
+    loading,
+  })
 
   let nodes = [...projektNodes, userFolderNode]
   if (role === 'apflora_manager') {
-    nodes = [
-      ...nodes,
-      buildWlFolderNode({ projektNodes }),
-    ]
+    nodes = [...nodes, buildWlFolderNode({ projektNodes })]
   }
   let apNodes
   let popNodes
@@ -101,7 +101,7 @@ export default ({
   let tpopfreiwkontrNodes
   let apzieljahrFolderNodes
   let apzielNodes
-  
+
   /**
    * We ALWAYS add an array of nodes,
    * never a single one
@@ -118,10 +118,7 @@ export default ({
       nodeUrl.length > 1
     ) {
       const projId = nodeUrl[1]
-      if (
-        nodeUrl.length === 2 &&
-        nodeUrl[0] === 'Projekte'
-      ) {
+      if (nodeUrl.length === 2 && nodeUrl[0] === 'Projekte') {
         nodes = [
           ...nodes,
           ...buildApFolderNodes({
@@ -129,7 +126,7 @@ export default ({
             treeName,
             loading,
             projektNodes,
-            projId
+            projId,
           }),
           ...buildApberuebersichtFolderNodes({
             data,
@@ -152,7 +149,7 @@ export default ({
             treeName,
             loading,
             projektNodes,
-            projId
+            projId,
           }),
         ]
       }
@@ -166,12 +163,9 @@ export default ({
           treeName,
           loading,
           projektNodes,
-          projId
+          projId,
         })
-        nodes = [
-          ...nodes,
-          ...apNodes,
-        ]
+        nodes = [...nodes, ...apNodes]
       }
       if (
         nodeUrl.length === 4 &&
@@ -309,10 +303,7 @@ export default ({
           projId,
           apId: nodeUrl[3],
         })
-        nodes = [
-          ...nodes,
-          ...apzieljahrFolderNodes,
-        ]
+        nodes = [...nodes, ...apzieljahrFolderNodes]
       }
       if (
         nodeUrl.length === 6 &&
@@ -331,10 +322,7 @@ export default ({
           jahr: +nodeUrl[5],
           apzieljahrFolderNodes,
         })
-        nodes = [
-          ...nodes,
-          ...apzielNodes,
-        ]
+        nodes = [...nodes, ...apzielNodes]
       }
       if (
         nodeUrl.length === 7 &&
@@ -891,33 +879,6 @@ export default ({
         nodeUrl.length === 10 &&
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
-        nodeUrl[8] === 'Freiwilligen-Kontrollen' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
-      ) {
-        nodes = [
-          ...nodes,
-          ...buildTpopfreiwkontrzaehlFolderNodes({
-            data,
-            treeName,
-            loading,
-            projId,
-            projektNodes,
-            apId: nodeUrl[3],
-            apNodes,
-            openNodes,
-            popId: nodeUrl[5],
-            popNodes,
-            tpopId: nodeUrl[7],
-            tpopNodes,
-            tpopkontrId: nodeUrl[9],
-            tpopfreiwkontrNodes,
-          }),
-        ]
-      }
-      if (
-        nodeUrl.length === 10 &&
-        nodeUrl[4] === 'Populationen' &&
-        nodeUrl[6] === 'Teil-Populationen' &&
         nodeUrl[8] === 'Feld-Kontrollen' &&
         allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
@@ -968,44 +929,14 @@ export default ({
           }),
         ]
       }
-      if (
-        nodeUrl.length === 11 &&
-        nodeUrl[4] === 'Populationen' &&
-        nodeUrl[6] === 'Teil-Populationen' &&
-        nodeUrl[8] === 'Freiwilligen-Kontrollen' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
-      ) {
-        nodes = [
-          ...nodes,
-          ...buildTpopfreiwkontrzaehlNodes({
-            data,
-            treeName,
-            loading,
-            projId,
-            projektNodes,
-            apId: nodeUrl[3],
-            apNodes,
-            openNodes,
-            popId: nodeUrl[5],
-            popNodes,
-            tpopId: nodeUrl[7],
-            tpopNodes,
-            tpopkontrId: nodeUrl[9],
-            tpopfreiwkontrNodes,
-          }),
-        ]
-      }
     }
-    if (
-      nodeUrl.length === 1 &&
-      nodeUrl[0] === 'Benutzer'
-    ) {
+    if (nodeUrl.length === 1 && nodeUrl[0] === 'Benutzer') {
       nodes = [
         ...nodes,
         ...buildUserNodes({
           data,
           treeName,
-          projektNodes
+          projektNodes,
         }),
       ]
     }
@@ -1021,7 +952,7 @@ export default ({
           treeName,
           loading,
           projektNodes,
-        })
+        }),
       ]
     }
     if (
@@ -1038,7 +969,7 @@ export default ({
           treeName,
           loading,
           projektNodes,
-        })
+        }),
       ]
     }
   })
@@ -1063,16 +994,16 @@ export default ({
    */
   return nodes.sort(
     (a, b) =>
-    compare(a.sort[0], b.sort[0]) ||
-    compare(a.sort[1], b.sort[1]) ||
-    compare(a.sort[2], b.sort[2]) ||
-    compare(a.sort[3], b.sort[3]) ||
-    compare(a.sort[4], b.sort[4]) ||
-    compare(a.sort[5], b.sort[5]) ||
-    compare(a.sort[6], b.sort[6]) ||
-    compare(a.sort[7], b.sort[7]) ||
-    compare(a.sort[8], b.sort[8]) ||
-    compare(a.sort[9], b.sort[9]) ||
-    compare(a.sort[10], b.sort[10])
+      compare(a.sort[0], b.sort[0]) ||
+      compare(a.sort[1], b.sort[1]) ||
+      compare(a.sort[2], b.sort[2]) ||
+      compare(a.sort[3], b.sort[3]) ||
+      compare(a.sort[4], b.sort[4]) ||
+      compare(a.sort[5], b.sort[5]) ||
+      compare(a.sort[6], b.sort[6]) ||
+      compare(a.sort[7], b.sort[7]) ||
+      compare(a.sort[8], b.sort[8]) ||
+      compare(a.sort[9], b.sort[9]) ||
+      compare(a.sort[10], b.sort[10])
   )
 }

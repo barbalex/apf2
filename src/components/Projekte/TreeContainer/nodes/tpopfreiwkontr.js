@@ -37,7 +37,10 @@ export default ({
   const apIndex = findIndex(apNodes, { id: apId })
   const popIndex = findIndex(popNodes, { id: popId })
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
-  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.tpopfreiwkontr`)
+  const nodeLabelFilterString = get(
+    data,
+    `${treeName}.nodeLabelFilter.tpopfreiwkontr`
+  )
 
   // map through all elements and create array of nodes
   let nodes = get(data, 'tpopfreiwkontrs.nodes', [])
@@ -75,15 +78,13 @@ export default ({
         'Freiwilligen-Kontrollen',
         el.id,
       ],
-      hasChildren: true,
+      hasChildren: false,
     }))
     .filter(el => allParentNodesAreOpen(openNodes, el.url))
-    .map(
-      (el, index) => {
-        el.sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 4, index]
-        return el
-      }
-    )
+    .map((el, index) => {
+      el.sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 4, index]
+      return el
+    })
 
   return nodes
 }
