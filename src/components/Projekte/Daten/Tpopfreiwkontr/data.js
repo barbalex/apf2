@@ -38,6 +38,19 @@ export default graphql(
             apId
             nr
             name
+            apByApId {
+              id
+              ekfzaehleinheitsByApId {
+                nodes {
+                  id
+                  tpopkontrzaehlEinheitWerteByZaehleinheitId {
+                    id
+                    code
+                    text
+                  }
+                }
+              }
+            }
           }
         }
         tpopkontrzaehlsByTpopkontrId {
@@ -70,6 +83,5 @@ export default graphql(
         id,
       },
     }),
-    name: 'data',
   }
 )

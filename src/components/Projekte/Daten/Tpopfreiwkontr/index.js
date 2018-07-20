@@ -159,7 +159,7 @@ const enhance = compose(
     },
   }),
   withLifecycle({
-    onDidUpdate(prevProps, props) {
+    async onDidUpdate(prevProps, props) {
       if (prevProps.data.loading && !props.data.loading) {
         // loading data just finished
         // check if tpopkontr exist
@@ -169,12 +169,31 @@ const enhance = compose(
           []
         ).length
         if (tpopkontrCount === 0) {
-          app.client
-            .mutate({
-              mutation: createTpopkontrzaehl,
-              variables: { tpopkontrId: props.id, einheit: 1 },
-            })
-            .then(() => props.data.refetch())
+          // add counts for all ekfzaehleinheit
+          const ekfzaehleinheits = get(
+            props.data,
+            'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekfzaehleinheitsByApId.nodes'
+          )
+          try {
+            await Promise.all(
+              ekfzaehleinheits.map(z =>
+                app.client.mutate({
+                  mutation: createTpopkontrzaehl,
+                  variables: {
+                    tpopkontrId: props.id,
+                    einheit: get(
+                      z,
+                      'tpopkontrzaehlEinheitWerteByZaehleinheitId.code',
+                      null
+                    ),
+                  },
+                })
+              )
+            )
+          } catch (error) {
+            props.errorState.add(error)
+          }
+          props.data.refetch()
         }
       }
       if (prevProps.id !== props.id) {

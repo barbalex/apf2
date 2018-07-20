@@ -313,6 +313,7 @@ const Daten = ({
                 id={activeNodeArray[9]}
                 activeNodeArray={activeNodeArray}
                 refetchTree={refetchTree}
+                errorState={errorState}
               />
             ),
             tpopkontrzaehl: (
