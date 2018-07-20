@@ -1,9 +1,5 @@
-mutation treeNodeLabelFilterResetExceptAp(
-  $tree: String!
-) {
-  treeNodeLabelFilterResetExceptAp(
-    tree: $tree
-  ) @client {
+mutation treeNodeLabelFilterResetExceptAp($tree: String!) {
+  treeNodeLabelFilterResetExceptAp(tree: $tree) @client {
     tree @client {
       name
       activeNodeArray
@@ -26,6 +22,7 @@ mutation treeNodeLabelFilterResetExceptAp(
         ber
         idealbiotop
         assozart
+        ekfzaehleinheit
         popber
         popmassnber
         tpopber
@@ -63,6 +60,7 @@ mutation treeNodeLabelFilterResetExceptAp(
         ber
         idealbiotop
         assozart
+        ekfzaehleinheit
         popber
         popmassnber
         tpopber

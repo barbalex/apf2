@@ -11,27 +11,27 @@ export default {
     treeNodeLabelFilterResetExceptAp: (_, { tree }, { cache }) => {
       const data = cache.readQuery({
         query: gql`
-            query Query {
-              tree @client {
-                name
-                activeNodeArray
-                openNodes
-                apFilter
-                nodeLabelFilter {
-                  ap
-                }
-              }
-              tree2 @client {
-                name
-                activeNodeArray
-                openNodes
-                apFilter
-                nodeLabelFilter {
-                  ap
-                }
+          query Query {
+            tree @client {
+              name
+              activeNodeArray
+              openNodes
+              apFilter
+              nodeLabelFilter {
+                ap
               }
             }
-          `
+            tree2 @client {
+              name
+              activeNodeArray
+              openNodes
+              apFilter
+              nodeLabelFilter {
+                ap
+              }
+            }
+          }
+        `,
       })
       cache.writeData({
         data: {
@@ -57,6 +57,7 @@ export default {
               ber: null,
               idealbiotop: null,
               assozart: null,
+              ekfzaehleinheit: null,
               popber: null,
               popmassnber: null,
               tpopber: null,
@@ -70,9 +71,9 @@ export default {
               user: null,
               __typename: 'NodeLabelFilter',
             },
-            __typename: upperFirst(tree)
-          }
-        } 
+            __typename: upperFirst(tree),
+          },
+        },
       })
       return null
     },

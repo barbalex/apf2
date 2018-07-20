@@ -32,6 +32,7 @@ export default ({
     data,
     `${treeName}.nodeLabelFilter.ekfzaehleinheit`
   )
+  console.log('nodes, ekfzaehleinheit:', { data, nodeLabelFilterString })
 
   // map through all elements and create array of nodes
   const nodes = ekfzaehleinheits
@@ -39,10 +40,10 @@ export default ({
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
-        const artname =
+        const zaehleinheit =
           get(el, 'tpopkontrzaehlEinheitWerteByZaehleinheitId.text') ||
           '(keine Zähleinheit gewählt)'
-        return artname
+        return zaehleinheit
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
       }

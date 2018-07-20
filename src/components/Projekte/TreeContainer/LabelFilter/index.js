@@ -31,15 +31,15 @@ const enhance = compose(
     onChange: ({ treeName }: { treeName: String }) => ({
       event,
       client,
-      tableName
+      tableName,
     }) => {
       client.mutate({
         mutation: setTreeNodeLabelFilterKey,
         variables: {
           value: event.target.value,
           tree: treeName,
-          key: tableName
-        }
+          key: tableName,
+        },
       })
     },
   })
@@ -54,9 +54,9 @@ const LabelFilter = ({
   treeName: String,
   activeNode: Object,
   onChange: () => void,
-  nodes: Array<Object>
-}) =>
-  <Query query={dataGql} >
+  nodes: Array<Object>,
+}) => (
+  <Query query={dataGql}>
     {({ error, data, client }) => {
       if (error) {
         if (
@@ -73,7 +73,10 @@ const LabelFilter = ({
       // because: /projekte has no nodes!
       let tableName = 'projekt'
       if (activeNode) {
-        tableName = activeNode.nodeType === 'table' ? activeNode.menuType : activeNode.menuType.replace('Folder', '')
+        tableName =
+          activeNode.nodeType === 'table'
+            ? activeNode.menuType
+            : activeNode.menuType.replace('Folder', '')
       }
 
       let labelText = '(filtern nicht möglich)'
@@ -95,11 +98,12 @@ const LabelFilter = ({
           <StyledInput
             id={labelText}
             value={filterValue}
-            onChange={(event) => onChange({ event, client, tableName })}
+            onChange={event => onChange({ event, client, tableName })}
           />
         </StyledFormControl>
       )
     }}
   </Query>
+)
 
 export default enhance(LabelFilter)

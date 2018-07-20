@@ -11,47 +11,48 @@ export default {
     cloneTree2From1: (_, props, { cache }) => {
       const data = cache.readQuery({
         query: gql`
-            query Query {
-              tree @client {
-                name
-                activeNodeArray
-                openNodes
-                apFilter
-                nodeLabelFilter {
-                  ap
-                  pop
-                  tpop
-                  tpopkontr
-                  tpopfeldkontr
-                  tpopfreiwkontr
-                  tpopkontrzaehl
-                  tpopmassn
-                  ziel
-                  zielber
-                  erfkrit
-                  apber
-                  apberuebersicht
-                  ber
-                  idealbiotop
-                  assozart
-                  popber
-                  popmassnber
-                  tpopber
-                  tpopmassnber
-                  apart
-                  projekt
-                  beob
-                  beobprojekt
-                  adresse
-                  gemeinde
-                  user
-                }
-                map {
-                  detailplaene
-                }
+          query Query {
+            tree @client {
+              name
+              activeNodeArray
+              openNodes
+              apFilter
+              nodeLabelFilter {
+                ap
+                pop
+                tpop
+                tpopkontr
+                tpopfeldkontr
+                tpopfreiwkontr
+                tpopkontrzaehl
+                tpopmassn
+                ziel
+                zielber
+                erfkrit
+                apber
+                apberuebersicht
+                ber
+                idealbiotop
+                assozart
+                ekfzaehleinheit
+                popber
+                popmassnber
+                tpopber
+                tpopmassnber
+                apart
+                projekt
+                beob
+                beobprojekt
+                adresse
+                gemeinde
+                user
+              }
+              map {
+                detailplaene
               }
             }
-          `
+          }
+        `,
       })
       // only write if changed
       cache.writeData({
@@ -74,10 +75,17 @@ export default {
               zielber: get(data, 'tree.nodeLabelFilter.zielber'),
               erfkrit: get(data, 'tree.nodeLabelFilter.erfkrit'),
               apber: get(data, 'tree.nodeLabelFilter.apber'),
-              apberuebersicht: get(data, 'tree.nodeLabelFilter.apberuebersicht'),
+              apberuebersicht: get(
+                data,
+                'tree.nodeLabelFilter.apberuebersicht'
+              ),
               ber: get(data, 'tree.nodeLabelFilter.ber'),
               idealbiotop: get(data, 'tree.nodeLabelFilter.idealbiotop'),
               assozart: get(data, 'tree.nodeLabelFilter.assozart'),
+              ekfzaehleinheit: get(
+                data,
+                'tree.nodeLabelFilter.ekfzaehleinheit'
+              ),
               popber: get(data, 'tree.nodeLabelFilter.popber'),
               popmassnber: get(data, 'tree.nodeLabelFilter.popmassnber'),
               tpopber: get(data, 'tree.nodeLabelFilter.tpopber'),
@@ -89,15 +97,15 @@ export default {
               adresse: get(data, 'tree.nodeLabelFilter.adresse'),
               gemeinde: get(data, 'tree.nodeLabelFilter.gemeinde'),
               user: get(data, 'tree.nodeLabelFilter.user'),
-              __typename: 'NodeLabelFilter'
+              __typename: 'NodeLabelFilter',
             },
             map: {
               detailplaene: get(data, 'tree.map.detailplaene'),
-              __typename: 'Map'
+              __typename: 'Map',
             },
-            __typename: 'Tree2'
-          }
-        } 
+            __typename: 'Tree2',
+          },
+        },
       })
       return null
     },

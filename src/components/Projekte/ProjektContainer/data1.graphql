@@ -29,6 +29,7 @@ query Query {
       ber
       idealbiotop
       assozart
+      ekfzaehleinheit
       popber
       popmassnber
       tpopber
@@ -67,6 +68,7 @@ query Query {
       ber
       idealbiotop
       assozart
+      ekfzaehleinheit
       popber
       popmassnber
       tpopber
