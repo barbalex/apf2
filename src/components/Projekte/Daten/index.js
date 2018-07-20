@@ -130,9 +130,9 @@ const Container = styled.div`
   border-right-style: solid;
   height: 100%;
   overflow-x: auto;
-}
   @media print {
-    display: none !important;
+    overflow-y: hidden;
+    height: unset;
   }
 `
 

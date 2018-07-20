@@ -46,6 +46,7 @@ const LogoutButton = styled(Button)`
 `
 
 const enhance = compose(
+  withState('isPrint', 'setIsPrint', false),
   withState('apfloraLayers', 'setApfloraLayers', apfloraLayers),
   withState('activeApfloraLayers', 'setActiveApfloraLayers', []),
   withState('overlays', 'setOverlays', overlays),
@@ -57,10 +58,13 @@ const enhance = compose(
   withState('tpopLabelUsingNr', 'setTpopLabelUsingNr', true),
   withState('popLabelUsingNr', 'setPopLabelUsingNr', true),
   withState('bounds', 'setBounds', [[47.159, 8.354], [47.696, 8.984]]),
-  withState('mapFilter', 'setMapFilter', { features: [], type: 'FeatureCollection' }),
+  withState('mapFilter', 'setMapFilter', {
+    features: [],
+    type: 'FeatureCollection',
+  }),
   withState('detailplaene', 'setDetailplaene', null),
   withState('markierungen', 'setMarkierungen', null),
-  withState('ktZh', 'setKtZh', null),
+  withState('ktZh', 'setKtZh', null)
 )
 
 const ProjekteContainer = ({
@@ -95,6 +99,8 @@ const ProjekteContainer = ({
   setKtZh,
   markierungen,
   setMarkierungen,
+  isPrint,
+  setIsPrint,
 }: {
   treeName: String,
   tabs: Array<String>,
@@ -127,10 +133,12 @@ const ProjekteContainer = ({
   setKtZh: () => void,
   markierungen: Object,
   setMarkierungen: () => void,
-}) =>
+  isPrint: Boolean,
+  setIsPrint: () => void,
+}) => (
   <Subscribe to={[ErrorState]}>
-    {errorState =>
-      <Query query={data1Gql} >
+    {errorState => (
+      <Query query={data1Gql}>
         {({ error, data: data1 }) => {
           if (error) return `Fehler: ${error.message}`
           const activeNodeArray = get(data1, `${treeName}.activeNodeArray`)
@@ -184,14 +192,17 @@ const ProjekteContainer = ({
                 const nodes = buildNodes({ data, treeName, loading, role })
                 const tree = get(data, treeName)
                 const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
-                const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))
+                const activeNode = nodes.find(n =>
+                  isEqual(n.url, activeNodeArray)
+                )
                 // remove 2 to treat all same
                 const tabs = [...tabsPassed].map(t => t.replace('2', ''))
-                const treeFlex = (projekteTabs.length === 2 && tabs.length === 2) ?
-                                  0.33 :
-                                    tabs.length === 0 ?
-                                    1 :
-                                      (1 / tabs.length)
+                const treeFlex =
+                  projekteTabs.length === 2 && tabs.length === 2
+                    ? 0.33
+                    : tabs.length === 0
+                      ? 1
+                      : 1 / tabs.length
                 const assigning = get(data, 'assigningBeob')
                 const mapPopIdsFiltered = idsInsideFeatureCollection({
                   mapFilter,
@@ -208,18 +219,24 @@ const ProjekteContainer = ({
                   mapFilter,
                   data: mapTpopsData,
                 })
-                const mapBeobNichtBeurteiltIdsFiltered = idsInsideFeatureCollection({
-                  mapFilter,
-                  data: get(data, `beobNichtBeurteiltForMap.nodes`, []),
-                })
-                const mapBeobNichtZuzuordnenIdsFiltered = idsInsideFeatureCollection({
-                  mapFilter,
-                  data: get(data, `beobNichtZuzuordnenForMap.nodes`, []),
-                })
-                const mapBeobZugeordnetIdsFiltered = idsInsideFeatureCollection({
-                  mapFilter,
-                  data: get(data, `beobZugeordnetForMap.nodes`, []),
-                })
+                const mapBeobNichtBeurteiltIdsFiltered = idsInsideFeatureCollection(
+                  {
+                    mapFilter,
+                    data: get(data, `beobNichtBeurteiltForMap.nodes`, []),
+                  }
+                )
+                const mapBeobNichtZuzuordnenIdsFiltered = idsInsideFeatureCollection(
+                  {
+                    mapFilter,
+                    data: get(data, `beobNichtZuzuordnenForMap.nodes`, []),
+                  }
+                )
+                const mapBeobZugeordnetIdsFiltered = idsInsideFeatureCollection(
+                  {
+                    mapFilter,
+                    data: get(data, `beobZugeordnetForMap.nodes`, []),
+                  }
+                )
                 // when no map filter exists nodes in activeNodeArray should be highlighted
                 let mapIdsFiltered = activeNodeArray
                 if (activeApfloraLayers.includes('mapFilter')) {
@@ -232,15 +249,42 @@ const ProjekteContainer = ({
                     ...mapBeobZugeordnetIdsFiltered,
                   ]
                 }
-                const aparts = get(data, 'projektById.apsByProjId.nodes[0].apartsByApId.nodes', [])
-                const beobs = flatten(aparts.map(a => get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', [])))
+                const aparts = get(
+                  data,
+                  'projektById.apsByProjId.nodes[0].apartsByApId.nodes',
+                  []
+                )
+                const beobs = flatten(
+                  aparts.map(a =>
+                    get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', [])
+                  )
+                )
+                window.matchMedia('print').addListener(function(mql) {
+                  if (mql.matches) {
+                    setIsPrint(true)
+                  } else {
+                    setIsPrint(false)
+                  }
+                })
+
+                if (isPrint)
+                  return (
+                    <Daten
+                      tree={tree}
+                      treeName={treeName}
+                      activeNode={activeNode}
+                      activeNodes={activeNodes}
+                      refetchTree={refetch}
+                      ktZh={ktZh}
+                      setKtZh={setKtZh}
+                    />
+                  )
 
                 return (
                   <Container data-loading={loading}>
                     <ErrorBoundary>
                       <ReflexContainer orientation="vertical">
-                        { 
-                          tabs.includes('tree') &&
+                        {tabs.includes('tree') && (
                           <ReflexElement flex={treeFlex}>
                             <TreeContainer
                               treeName={treeName}
@@ -257,7 +301,9 @@ const ProjekteContainer = ({
                               activeOverlays={activeOverlays}
                               setActiveOverlays={setActiveOverlays}
                               refetchTree={refetch}
-                              setIdOfTpopBeingLocalized={setIdOfTpopBeingLocalized}
+                              setIdOfTpopBeingLocalized={
+                                setIdOfTpopBeingLocalized
+                              }
                               tpopLabelUsingNr={tpopLabelUsingNr}
                               popLabelUsingNr={popLabelUsingNr}
                               setTpopLabelUsingNr={setTpopLabelUsingNr}
@@ -266,13 +312,10 @@ const ProjekteContainer = ({
                               mapIdsFiltered={mapIdsFiltered}
                             />
                           </ReflexElement>
-                        }
-                        {
-                          tabs.includes('tree') && tabs.includes('daten') &&
-                          <ReflexSplitter />
-                        }
-                        {
-                          tabs.includes('daten') &&
+                        )}
+                        {tabs.includes('tree') &&
+                          tabs.includes('daten') && <ReflexSplitter />}
+                        {tabs.includes('daten') && (
                           <ReflexElement
                             propagateDimensions={true}
                             renderOnResizeRate={100}
@@ -288,14 +331,12 @@ const ProjekteContainer = ({
                               setKtZh={setKtZh}
                             />
                           </ReflexElement>
-                        }
-                        {
-                          tabs.includes('karte') &&
-                          (tabs.includes('tree') || tabs.includes('daten')) &&
-                          <ReflexSplitter />
-                        }
-                        {
-                          tabs.includes('karte') &&
+                        )}
+                        {tabs.includes('karte') &&
+                          (tabs.includes('tree') || tabs.includes('daten')) && (
+                            <ReflexSplitter />
+                          )}
+                        {tabs.includes('karte') && (
                           <ReflexElement
                             className="karte"
                             propagateDimensions={true}
@@ -328,12 +369,20 @@ const ProjekteContainer = ({
                               mapIdsFiltered={mapIdsFiltered}
                               mapPopIdsFiltered={mapPopIdsFiltered}
                               mapTpopIdsFiltered={mapTpopIdsFiltered}
-                              mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
-                              mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
-                              mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
+                              mapBeobNichtBeurteiltIdsFiltered={
+                                mapBeobNichtBeurteiltIdsFiltered
+                              }
+                              mapBeobNichtZuzuordnenIdsFiltered={
+                                mapBeobNichtZuzuordnenIdsFiltered
+                              }
+                              mapBeobZugeordnetIdsFiltered={
+                                mapBeobZugeordnetIdsFiltered
+                              }
                               beobZugeordnetAssigning={assigning}
                               idOfTpopBeingLocalized={idOfTpopBeingLocalized}
-                              setIdOfTpopBeingLocalized={setIdOfTpopBeingLocalized}
+                              setIdOfTpopBeingLocalized={
+                                setIdOfTpopBeingLocalized
+                              }
                               tpopLabelUsingNr={tpopLabelUsingNr}
                               popLabelUsingNr={popLabelUsingNr}
                               bounds={bounds}
@@ -351,28 +400,26 @@ const ProjekteContainer = ({
                               beobsString={beobs.toString()}
                             />
                           </ReflexElement>
-                        }
-                        {
-                          tabs.includes('exporte') && (tabs.includes('tree') || tabs.includes('daten') || tabs.includes('karte')) &&
-                          <ReflexSplitter />
-                        }
-                        {
-                          tabs.includes('exporte') &&
+                        )}
+                        {tabs.includes('exporte') &&
+                          (tabs.includes('tree') ||
+                            tabs.includes('daten') ||
+                            tabs.includes('karte')) && <ReflexSplitter />}
+                        {tabs.includes('exporte') && (
                           <ReflexElement>
                             <Exporte mapFilter={mapFilter} />
                           </ReflexElement>
-                        }
+                        )}
                       </ReflexContainer>
                     </ErrorBoundary>
-                    {
-                      showDeletions &&
+                    {showDeletions && (
                       <Deletions
                         showDeletions={showDeletions}
                         setShowDeletions={setShowDeletions}
                         tree={tree}
                         refetchTree={refetch}
                       />
-                    }
+                    )}
                   </Container>
                 )
               }}
@@ -380,7 +427,8 @@ const ProjekteContainer = ({
           )
         }}
       </Query>
-    }
+    )}
   </Subscribe>
+)
 
 export default enhance(ProjekteContainer)
