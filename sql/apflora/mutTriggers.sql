@@ -452,3 +452,16 @@ $zielber_on_update_set_mut$ LANGUAGE plpgsql;
 
 CREATE TRIGGER zielber_on_update_set_mut BEFORE UPDATE OR INSERT ON apflora.zielber
   FOR EACH ROW EXECUTE PROCEDURE zielber_on_update_set_mut();
+
+DROP TRIGGER IF EXISTS ekfzaehleinheit_on_update_set_mut ON apflora.ekfzaehleinheit;
+DROP FUNCTION IF EXISTS ekfzaehleinheit_on_update_set_mut();
+CREATE FUNCTION ekfzaehleinheit_on_update_set_mut() RETURNS trigger AS $ekfzaehleinheit_on_update_set_mut$
+  BEGIN
+    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+    NEW.changed = NOW();
+    RETURN NEW;
+  END;
+$ekfzaehleinheit_on_update_set_mut$ LANGUAGE plpgsql;
+
+CREATE TRIGGER ekfzaehleinheit_on_update_set_mut BEFORE UPDATE OR INSERT ON apflora.ekfzaehleinheit
+  FOR EACH ROW EXECUTE PROCEDURE ekfzaehleinheit_on_update_set_mut();
