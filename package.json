@@ -12,7 +12,7 @@
   "devDependencies": {
     "flow-bin": "0.76.0",
     "postgraphile": "4.0.0-rc.2",
-    "postgraphile-plugin-connection-filter": "1.0.0-beta.13",
+    "postgraphile-plugin-connection-filter": "1.0.0-beta.14",
     "react-scripts": "2.0.0-next.3e165448",
     "serve": "9.2.0",
     "source-map-explorer": "1.5.0"
