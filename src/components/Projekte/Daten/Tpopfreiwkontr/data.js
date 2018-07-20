@@ -61,18 +61,18 @@ export default graphql(
           }
         }
       }
-      allAdresses {
-        nodes {
-          id
-          name
-        }
-      }
       allTpopkontrzaehlEinheitWertes {
         nodes {
           id
           code
           text
           sort
+        }
+      }
+      allAdresses {
+        nodes {
+          id
+          name
         }
       }
     }

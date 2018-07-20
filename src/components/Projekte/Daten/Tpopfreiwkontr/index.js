@@ -11,7 +11,7 @@ import sortBy from 'lodash/sortBy'
 import app from 'ampersand-app'
 
 import StringToCopy from '../../../shared/StringToCopyOnlyButton'
-import data from './data'
+import dataGql from './data'
 import updateTpopkontrByIdGql from './updateTpopkontrById.graphql'
 import createTpopkontrzaehl from './createTpopkontrzaehl.graphql'
 import Headdata from './Headdata'
@@ -69,7 +69,7 @@ const Image = styled(Area)`
  * then refetch data
  */
 const enhance = compose(
-  data,
+  dataGql,
   withState('errors', 'setErrors', {}),
   withHandlers({
     saveToDb: ({ setErrors, errors }) => async ({
