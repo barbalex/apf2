@@ -29,15 +29,6 @@ CREATE POLICY reader_writer ON apflora.user
   );
 
 DROP TABLE IF EXISTS _variable;
-CREATE TABLE apflora._variable (
-  "KonstId" SERIAL PRIMARY KEY,
-  apber_jahr smallint DEFAULT NULL,
-  ap_id integer DEFAULT NULL
-);
-COMMENT ON COLUMN apflora._variable.apber_jahr IS 'Von Access aus ein Berichtsjahr wählen, um die Erstellung des Jahresberichts zu beschleunigen';
-COMMENT ON COLUMN apflora._variable.ap_id IS 'Von Access aus eine Art wählen, um views zu beschleunigen';
-CREATE INDEX ON apflora._variable USING btree (apber_jahr);
-CREATE INDEX ON apflora._variable USING btree (ap_id);
 
 DROP TABLE IF EXISTS adresse;
 CREATE TABLE apflora.adresse (
@@ -186,7 +177,7 @@ DROP TABLE IF EXISTS apflora.apber;
 CREATE TABLE apflora.apber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer,
-  ap_id integer NOT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  ap_id UUID NOT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   situation text,
   vergleich_vorjahr_gesamtziel text,
@@ -259,7 +250,7 @@ DROP TABLE IF EXISTS apflora.assozart;
 CREATE TABLE apflora.assozart (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer DEFAULT NULL,
-  ap_id integer DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  ap_id UUID DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   ae_id UUID DEFAULT NULL REFERENCES apflora.ae_eigenschaften (id) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
   changed date DEFAULT NOW(),
@@ -293,7 +284,7 @@ DROP TABLE IF EXISTS apflora.ber;
 CREATE TABLE apflora.ber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer DEFAULT NULL,
-  ap_id integer DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  ap_id UUID DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   autor varchar(150) DEFAULT NULL,
   jahr smallint DEFAULT NULL,
   titel text DEFAULT NULL,
@@ -317,7 +308,7 @@ DROP TABLE IF EXISTS apflora.erfkrit;
 CREATE TABLE apflora.erfkrit (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer DEFAULT NULL,
-  ap_id integer NOT NULL DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  ap_id UUID NOT NULL DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   erfolg integer DEFAULT NULL REFERENCES apflora.ap_erfkrit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   kriterien text DEFAULT NULL,
   changed date DEFAULT NOW(),
@@ -345,7 +336,7 @@ CREATE INDEX ON apflora.gemeinde USING btree (name);
 DROP TABLE IF EXISTS apflora.idealbiotop;
 CREATE TABLE apflora.idealbiotop (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  ap_id integer UNIQUE DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  ap_id UUID UNIQUE DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   erstelldatum date DEFAULT NULL,
   hoehenlage text,
   region text,
@@ -396,7 +387,7 @@ DROP TABLE IF EXISTS apflora.pop;
 CREATE TABLE apflora.pop (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer,
-  ap_id integer DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  ap_id UUID DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   nr integer DEFAULT NULL,
   name varchar(150) DEFAULT NULL,
   status integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -956,7 +947,7 @@ DROP TABLE IF EXISTS apflora.ziel;
 CREATE TABLE apflora.ziel (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer,
-  ap_id integer NOT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  ap_id UUID NOT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   typ integer DEFAULT NULL REFERENCES apflora.ziel_typ_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   bezeichnung text,
@@ -1141,7 +1132,7 @@ CREATE TABLE apflora.apart (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer,
   art_id UUID DEFAULT NULL REFERENCES apflora.ae_eigenschaften (id) ON DELETE SET NULL ON UPDATE CASCADE,
-  ap_id integer DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  ap_id UUID DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   changed date DEFAULT NULL,
   changed_by varchar(20) DEFAULT NULL
   --UNIQUE (art_id) --no, maybe after beob were rearranged
@@ -1155,3 +1146,29 @@ COMMENT ON COLUMN apflora.apart.art_id IS 'Zugehörige Art. Aus der Tabelle "ae_
 COMMENT ON COLUMN apflora.apart.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
 COMMENT ON COLUMN apflora.apart.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.apart.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
+
+DROP TABLE IF EXISTS apflora.ekfzaehleinheit;
+CREATE TABLE apflora.ekfzaehleinheit (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  ap_id UUID DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  zaehleinheit_id UUID DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  bemerkungen text,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+);
+CREATE INDEX ON apflora.ekfzaehleinheit USING btree (id);
+CREATE INDEX ON apflora.ekfzaehleinheit USING btree (ap_id);
+CREATE INDEX ON apflora.ekfzaehleinheit USING btree (zaehleinheit_id);
+COMMENT ON COLUMN apflora.ekfzaehleinheit.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.ekfzaehleinheit.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
+COMMENT ON COLUMN apflora.ekfzaehleinheit.zaehleinheit_id IS 'Zugehörige Zähleinheit. Fremdschlüssel aus der Tabelle "tpopkontrzaehl_einheit_werte"';
+COMMENT ON COLUMN apflora.ekfzaehleinheit.bemerkungen IS 'Bemerkungen zur EKF-Zaehleinheit';
+COMMENT ON COLUMN apflora.ekfzaehleinheit.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.ekfzaehleinheit.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
+DROP POLICY IF EXISTS writer ON apflora.adresse;
+CREATE POLICY writer ON apflora.ekfzaehleinheit
+  USING (true)
+  WITH CHECK (
+    current_user = 'apflora_manager'
+    OR current_user = 'apflora_artverantwortlich'
+  );
