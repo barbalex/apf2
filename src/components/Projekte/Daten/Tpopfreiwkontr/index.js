@@ -71,6 +71,10 @@ const Title = styled(Area)`
 const Image = styled(Area)`
   grid-area: image;
 `
+const CountHint = styled.div`
+  grid-area: count2;
+  color: red;
+`
 
 /**
  * TODO
@@ -309,7 +313,12 @@ const Tpopfreiwkontr = ({
                 ekfzaehleinheits={ekfzaehleinheits}
               />
             )}
-            {zaehl1ShowEmpty && <Count nr="1" showEmpty />}
+            {zaehl1ShowEmpty && (
+              <CountHint>
+                Sie müssen EKF-Zähleinheiten definieren, um hier Zählungen
+                erfassen zu können
+              </CountHint>
+            )}
             {zaehls2 && (
               <Count
                 id={zaehls2.id}
@@ -335,7 +344,7 @@ const Tpopfreiwkontr = ({
                 refetch={data.refetch}
               />
             )}
-            {zaehl2ShowEmpty && <Count nr="2" showEmpty />}
+            {zaehl2ShowEmpty && !zaehl1ShowEmpty && <Count nr="2" showEmpty />}
             {zaehls3 && (
               <Count
                 id={zaehls3.id}
@@ -361,7 +370,7 @@ const Tpopfreiwkontr = ({
                 refetch={data.refetch}
               />
             )}
-            {zaehl3ShowEmpty && <Count nr="3" showEmpty />}
+            {zaehl3ShowEmpty && !zaehl2ShowEmpty && <Count nr="3" showEmpty />}
             <Cover
               saveToDb={saveToDb}
               errors={errors}
