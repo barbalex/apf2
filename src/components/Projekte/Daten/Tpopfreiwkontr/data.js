@@ -47,6 +47,7 @@ export default graphql(
                     id
                     code
                     text
+                    sort
                   }
                 }
               }

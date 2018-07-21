@@ -254,6 +254,11 @@ const Tpopfreiwkontr = ({
   )
     .filter(n => !!n.einheit)
     .map(n => n.einheit)
+  const ekfzaehleinheits = get(
+    data,
+    'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekfzaehleinheitsByApId.nodes',
+    []
+  ).map(n => get(n, 'tpopkontrzaehlEinheitWerteByZaehleinheitId', {}))
 
   return (
     <Mutation mutation={updateTpopkontrByIdGql}>
@@ -296,6 +301,7 @@ const Tpopfreiwkontr = ({
                 refetch={data.refetch}
                 activeNodeArray={activeNodeArray}
                 einheitsUsed={einheitsUsed}
+                ekfzaehleinheits={ekfzaehleinheits}
               />
             )}
             {zaehls2 && (
@@ -308,6 +314,7 @@ const Tpopfreiwkontr = ({
                 refetch={data.refetch}
                 activeNodeArray={activeNodeArray}
                 einheitsUsed={einheitsUsed}
+                ekfzaehleinheits={ekfzaehleinheits}
               />
             )}
             {zaehl2ShowNew && (
@@ -342,6 +349,7 @@ const Tpopfreiwkontr = ({
                 refetch={data.refetch}
                 activeNodeArray={activeNodeArray}
                 einheitsUsed={einheitsUsed}
+                ekfzaehleinheits={ekfzaehleinheits}
               />
             )}
             {zaehl3ShowNew && (

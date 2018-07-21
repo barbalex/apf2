@@ -9,12 +9,4 @@ query TpopkontrzaehlQuery($id: UUID!) {
       text
     }
   }
-  allTpopkontrzaehlEinheitWertes {
-    nodes {
-      id
-      code
-      text
-      sort
-    }
-  }
 }
