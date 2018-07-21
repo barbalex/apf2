@@ -72,12 +72,14 @@ const Image = styled(Area)`
   grid-area: image;
 `
 const CountHint = styled.div`
-  grid-area: count2;
+  grid-area: 5 / 1 / 5 / 7;
   color: red;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 6px;
+  padding: 10px;
 `
 
 /**
- * TODO
  * on componentDidMount
  * check number of tpopkontrzaehl
  * if none: create new ones
@@ -315,8 +317,8 @@ const Tpopfreiwkontr = ({
             )}
             {zaehl1ShowEmpty && (
               <CountHint>
-                Sie müssen EKF-Zähleinheiten definieren, um hier Zählungen
-                erfassen zu können
+                Sie müssen auf Ebene Aktionsplan EKF-Zähleinheiten definieren,
+                um hier Zählungen erfassen zu können.
               </CountHint>
             )}
             {zaehls2 && (
