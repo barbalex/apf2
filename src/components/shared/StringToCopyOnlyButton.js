@@ -11,6 +11,9 @@ import ErrorBoundary from './ErrorBoundary'
 
 const Container = styled.div`
   padding-top: 10px;
+  @media print {
+    dispay: none;
+  }
 `
 
 const enhance = compose(

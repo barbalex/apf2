@@ -46,6 +46,7 @@ const Container = styled(Area)`
              'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
              'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`};
   grid-column-gap: 10px;
+  break-inside: avoid;
 `
 const Label = styled.div`
   font-weight: 700;
@@ -59,6 +60,11 @@ const EinheitVal = styled.div`
   > div {
     margin-top: -5px;
     padding-bottom: 0;
+  }
+  @media print {
+    input {
+      font-size: 11px;
+    }
   }
 `
 const GezaehltLabel = styled.div`
