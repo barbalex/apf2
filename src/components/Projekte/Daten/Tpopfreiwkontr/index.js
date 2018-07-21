@@ -28,6 +28,16 @@ const Container = styled.div`
   padding: 10px;
   @media print {
     font-size: 11px;
+    /* this is when it is actually printed */
+    height: auto;
+    width: inherit;
+
+    margin: 0 !important;
+    padding: 0.5cm !important;
+    overflow-y: hidden !important;
+
+    box-shadow: unset;
+    overflow: visible;
   }
 `
 const GridContainer = styled.div`
@@ -387,6 +397,13 @@ const Tpopfreiwkontr = ({
             />
           </GridContainer>
           <StringToCopy text={id} label="GUID" />
+          <div>another div</div>
+          <div>another div</div>
+          <div>another div</div>
+          <div>another div</div>
+          <div>another div</div>
+          <div>another div</div>
+          <div>another div</div>
         </Container>
       )}
     </Mutation>

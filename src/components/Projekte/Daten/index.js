@@ -131,10 +131,10 @@ const Container = styled.div`
   height: 100%;
   overflow-x: auto;
   @media print {
-    overflow-y: hidden;
-    height: unset;
+    height: auto;
     border-left: none;
     border-right: none;
+    overflow: visible;
   }
 `
 

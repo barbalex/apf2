@@ -12,6 +12,9 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  @media print {
+    height: auto;
+  }
 `
 
 const AppBar = Loadable({
@@ -39,9 +42,7 @@ const Messages = Loadable({
   loading: Loading,
 })
 
-const enhance = compose(
-  withState('showDeletions', 'setShowDeletions', false),
-)
+const enhance = compose(withState('showDeletions', 'setShowDeletions', false))
 
 const MyAppBar = ({
   showDeletions,
@@ -49,7 +50,7 @@ const MyAppBar = ({
 }: {
   showDeletions: Boolean,
   setShowDeletions: () => void,
-}) =>
+}) => (
   <ErrorBoundary>
     <Container>
       <AppBar setShowDeletions={setShowDeletions} />
@@ -63,5 +64,6 @@ const MyAppBar = ({
       <Messages />
     </Container>
   </ErrorBoundary>
+)
 
 export default enhance(MyAppBar)

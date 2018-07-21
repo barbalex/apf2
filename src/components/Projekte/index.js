@@ -16,6 +16,9 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: calc(100% - 49.3px);
+  @media print {
+    height: auto;
+  }
 `
 const treeTabValues = ['tree', 'daten', 'karte', 'exporte']
 const tree2TabValues = ['tree2', 'daten2', 'karte2', 'exporte2']
