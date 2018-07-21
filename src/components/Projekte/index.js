@@ -38,7 +38,8 @@ const Projekte = ({
       const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
       const treeTabs = intersection(treeTabValues, projekteTabs)
       const tree2Tabs = intersection(tree2TabValues, projekteTabs)
-      if (tree2Tabs.length === 0) {
+      const isPrint = get(data, 'isPrint')
+      if (tree2Tabs.length === 0 || isPrint) {
         return (
           <ProjektContainer
             treeName="tree"

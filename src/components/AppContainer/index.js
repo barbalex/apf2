@@ -50,7 +50,6 @@ const enhance = compose(
   withState('showDeletions', 'setShowDeletions', false),
   withLifecycle({
     onDidMount(prevProps, props) {
-      console.log('AppCountainer did mount')
       window.matchMedia('print').addListener(mql => {
         if (mql.matches) {
           app.client.mutate({
