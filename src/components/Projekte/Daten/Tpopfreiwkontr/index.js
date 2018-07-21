@@ -56,6 +56,17 @@ const GridContainer = styled.div`
   justify-content: stretch;
   box-sizing: border-box;
   border-collapse: collapse;
+  @media print {
+    grid-template-areas:
+      'title title title image image image'
+      'headdata headdata headdata image image image'
+      'besttime besttime besttime image image image'
+      'date date map image image image'
+      'count1 count1 count2 count2 count3 count3'
+      'cover cover cover more more more'
+      'danger danger danger danger danger danger'
+      'remarks remarks remarks remarks remarks remarks';
+  }
 `
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -272,6 +283,8 @@ const Tpopfreiwkontr = ({
   )
     .filter(n => !!n.einheit)
     .map(n => n.einheit)
+  const isPrint = get(data, 'isPrint', false)
+  console.log('isPrint:', isPrint)
 
   return (
     <Mutation mutation={updateTpopkontrByIdGql}>
@@ -399,12 +412,14 @@ const Tpopfreiwkontr = ({
               data={data}
               updateTpopkontr={updateTpopkontr}
             />
-            <Verification
-              saveToDb={saveToDb}
-              errors={errors}
-              data={data}
-              updateTpopkontr={updateTpopkontr}
-            />
+            {!isPrint && (
+              <Verification
+                saveToDb={saveToDb}
+                errors={errors}
+                data={data}
+                updateTpopkontr={updateTpopkontr}
+              />
+            )}
           </GridContainer>
           <StringToCopy text={id} label="GUID" />
         </Container>
