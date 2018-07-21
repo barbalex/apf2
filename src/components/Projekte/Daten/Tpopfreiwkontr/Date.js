@@ -32,6 +32,11 @@ const DateVal = styled.div`
     margin-top: 5px;
     padding-bottom: 0 !important;
   }
+  @media print {
+    input {
+      font-size: 11px;
+    }
+  }
 `
 
 const Date = ({
