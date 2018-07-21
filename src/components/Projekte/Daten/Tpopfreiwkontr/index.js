@@ -246,6 +246,7 @@ const Tpopfreiwkontr = ({
     zaehls1 && (zaehls1.anzahl || zaehls1.anzahl === 0 || zaehls1.einheit)
   const zaehl2ShowNew =
     zaehl1WasAttributed && !zaehls2 && ekfzaehleinheits.length > 1
+  const zaehl1ShowEmpty = ekfzaehleinheits.length < 1
   const zaehl2ShowEmpty =
     (!zaehl1WasAttributed && !zaehls2) || ekfzaehleinheits.length < 2
   const zaehl2WasAttributed =
@@ -308,6 +309,7 @@ const Tpopfreiwkontr = ({
                 ekfzaehleinheits={ekfzaehleinheits}
               />
             )}
+            {zaehl1ShowEmpty && <Count nr="1" showEmpty />}
             {zaehls2 && (
               <Count
                 id={zaehls2.id}
@@ -333,16 +335,7 @@ const Tpopfreiwkontr = ({
                 refetch={data.refetch}
               />
             )}
-            {zaehl2ShowEmpty && (
-              <Count
-                id={null}
-                nr="2"
-                saveToDb={saveToDb}
-                errors={errors}
-                updateTpopkontr={updateTpopkontr}
-                showEmpty
-              />
-            )}
+            {zaehl2ShowEmpty && <Count nr="2" showEmpty />}
             {zaehls3 && (
               <Count
                 id={zaehls3.id}
@@ -368,16 +361,7 @@ const Tpopfreiwkontr = ({
                 refetch={data.refetch}
               />
             )}
-            {zaehl3ShowEmpty && (
-              <Count
-                id={null}
-                nr="3"
-                saveToDb={saveToDb}
-                errors={errors}
-                updateTpopkontr={updateTpopkontr}
-                showEmpty
-              />
-            )}
+            {zaehl3ShowEmpty && <Count nr="3" showEmpty />}
             <Cover
               saveToDb={saveToDb}
               errors={errors}
