@@ -230,6 +230,11 @@ const Tpopfreiwkontr = ({
   errors: Object,
   activeNodeArray: Array<String>,
 }) => {
+  const ekfzaehleinheits = get(
+    data,
+    'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekfzaehleinheitsByApId.nodes',
+    []
+  ).map(n => get(n, 'tpopkontrzaehlEinheitWerteByZaehleinheitId', {}))
   const zaehls = sortBy(
     get(data, 'tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes', []),
     'einheit'
@@ -239,14 +244,18 @@ const Tpopfreiwkontr = ({
   const zaehls3 = zaehls[2]
   const zaehl1WasAttributed =
     zaehls1 && (zaehls1.anzahl || zaehls1.anzahl === 0 || zaehls1.einheit)
-  const zaehl2ShowNew = zaehl1WasAttributed && !zaehls2
-  const zaehl2ShowEmpty = !zaehl1WasAttributed && !zaehls2
+  const zaehl2ShowNew =
+    zaehl1WasAttributed && !zaehls2 && ekfzaehleinheits.length > 1
+  const zaehl2ShowEmpty =
+    (!zaehl1WasAttributed && !zaehls2) || ekfzaehleinheits.length < 2
   const zaehl2WasAttributed =
     zaehl1WasAttributed &&
     zaehls2 &&
     (zaehls2.anzahl || zaehls2.anzahl === 0 || zaehls2.einheit)
-  const zaehl3ShowNew = zaehl2WasAttributed && !zaehls3
-  const zaehl3ShowEmpty = !zaehl2WasAttributed && !zaehls3
+  const zaehl3ShowNew =
+    zaehl2WasAttributed && !zaehls3 && ekfzaehleinheits.length > 2
+  const zaehl3ShowEmpty =
+    (!zaehl2WasAttributed && !zaehls3) || ekfzaehleinheits.length < 3
   const einheitsUsed = get(
     data,
     'tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes',
@@ -254,11 +263,6 @@ const Tpopfreiwkontr = ({
   )
     .filter(n => !!n.einheit)
     .map(n => n.einheit)
-  const ekfzaehleinheits = get(
-    data,
-    'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekfzaehleinheitsByApId.nodes',
-    []
-  ).map(n => get(n, 'tpopkontrzaehlEinheitWerteByZaehleinheitId', {}))
 
   return (
     <Mutation mutation={updateTpopkontrByIdGql}>
