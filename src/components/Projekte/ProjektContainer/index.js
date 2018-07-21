@@ -37,6 +37,10 @@ const Container = styled.div`
   flex-direction: column;
   height: 100%;
   cursor: ${props => (props['data-loading'] ? 'wait' : 'inherit')};
+  @media print {
+    display: block;
+    height: auto !important;
+  }
 `
 const ErrorContainer = styled.div`
   padding: 15px;

@@ -11,8 +11,9 @@ body {
 }
 
 @media print {
+  html,
   body {
-    background-color: white;
+    background-color: white !important;
     height: auto !important;
   }
   #root {

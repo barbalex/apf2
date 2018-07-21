@@ -16,7 +16,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   @media print {
-    height: auto;
+    height: auto !important;
     display: block;
   }
 `

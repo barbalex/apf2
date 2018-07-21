@@ -32,7 +32,6 @@ const Container = styled.div`
   box-shadow: 0 4px 5px rgba(75, 75, 75, 0.2);
 
   /* set dimensions */
-  /*height: 29.7cm;*/
   width: 21cm;
 
   overflow-y: visible;
@@ -49,7 +48,7 @@ const Container = styled.div`
     page-break-inside: avoid !important;
     page-break-before: avoid !important;
     page-break-after: avoid !important;
-    
+
     box-shadow: unset;
     overflow: hidden;
   }
@@ -106,16 +105,16 @@ const SecondPageText = styled.p`
 
 const ApberForYear = ({
   activeNodeArray,
-}:{
+}: {
   activeNodeArray: Array<String>,
 }) => {
-  const { projekt: projektId, apberuebersicht: apberuebersichtId } = getActiveNodes(activeNodeArray)
+  const {
+    projekt: projektId,
+    apberuebersicht: apberuebersichtId,
+  } = getActiveNodes(activeNodeArray)
 
   return (
-    <Query
-      query={data1Gql}
-      variables={{ apberuebersichtId }}
-    >
+    <Query query={data1Gql} variables={{ apberuebersichtId }}>
       {({ loading, error, data: data1 }) => {
         if (loading)
           return (
@@ -128,10 +127,7 @@ const ApberForYear = ({
         const jahr = get(data1, 'apberuebersichtById.jahr', 0)
 
         return (
-          <Query
-            query={data2Gql}
-            variables={{ projektId, jahr }}
-          >
+          <Query query={data2Gql} variables={{ projektId, jahr }}>
             {({ loading, error, data: data2 }) => {
               if (loading)
                 return (
@@ -144,11 +140,11 @@ const ApberForYear = ({
               const data = merge(data1, data2)
               const apberuebersicht = get(data, 'apberuebersichtById')
               const aps = sortBy(
-                get(data, 'projektById.apsByProjId.nodes', [])
-                  .filter(ap =>
+                get(data, 'projektById.apsByProjId.nodes', []).filter(
+                  ap =>
                     !!get(ap, 'apbersByApId.nodes[0]', null) &&
                     !!get(ap, 'apbersByApId.nodes[0].id')
-                  ),
+                ),
                 ap => get(ap, 'aeEigenschaftenByArtId.artname')
               )
               const jahr = get(data, 'apberuebersichtById.jahr')
@@ -157,33 +153,39 @@ const ApberForYear = ({
                 <ErrorBoundary>
                   <Container>
                     <ContentContainer>
-                      <FirstPageTitle>Umsetzung der Aktionspläne Flora<br/>im Kanton Zürich</FirstPageTitle>
-                      <FirstPageSubTitle>{`Jahresbericht ${jahr}`}</FirstPageSubTitle>
+                      <FirstPageTitle>
+                        Umsetzung der Aktionspläne Flora<br />im Kanton Zürich
+                      </FirstPageTitle>
+                      <FirstPageSubTitle
+                      >{`Jahresbericht ${jahr}`}</FirstPageSubTitle>
                       <FirstPageFnsLogo src={fnslogo} alt="FNS" width="350" />
-                      <FirstPageDate>{format(new Date(), 'DD.MM.YYYY')}</FirstPageDate>
-                      <FirstPageBearbeiter>Karin Marti, topos</FirstPageBearbeiter>
-                      {
-                        !!apberuebersicht.bemerkungen &&
+                      <FirstPageDate>
+                        {format(new Date(), 'DD.MM.YYYY')}
+                      </FirstPageDate>
+                      <FirstPageBearbeiter>
+                        Karin Marti, topos
+                      </FirstPageBearbeiter>
+                      {!!apberuebersicht.bemerkungen && (
                         <SecondPage>
                           <SecondPageTop />
                           <SecondPageTitle>Zusammenfassung</SecondPageTitle>
-                          <SecondPageText>{apberuebersicht.bemerkungen}</SecondPageText>
+                          <SecondPageText>
+                            {apberuebersicht.bemerkungen}
+                          </SecondPageText>
                         </SecondPage>
-                      }
+                      )}
                       <AvList data={data} />
                       <ErfolgList jahr={jahr} data={data} />
                       <AktPopList data={data} />
-                      {
-                        aps.map(ap =>
-                          <ApberForAp
-                            key={ap.id}
-                            apId={ap.id}
-                            jahr={jahr}
-                            apData={ap}
-                            isSubReport={true}
-                          />
-                        )
-                      }
+                      {aps.map(ap => (
+                        <ApberForAp
+                          key={ap.id}
+                          apId={ap.id}
+                          jahr={jahr}
+                          apData={ap}
+                          isSubReport={true}
+                        />
+                      ))}
                     </ContentContainer>
                   </Container>
                 </ErrorBoundary>
