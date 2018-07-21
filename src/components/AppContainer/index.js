@@ -60,7 +60,7 @@ const enhance = compose(
         } else {
           app.client.mutate({
             mutation: setIsPrint,
-            variables: { value: true },
+            variables: { value: false },
           })
         }
       })
