@@ -22,21 +22,26 @@ const StyledDatePicker = styled(DatePicker)`
   > div:before {
     border-bottom-color: rgba(0, 0, 0, 0.1) !important;
   }
+  @media print {
+    button {
+      display: none;
+    }
+  }
 `
 
 const enhance = compose(
   withState(
     'stateValue',
     'setStateValue',
-    ({ value: propsValue }) => isValid(propsValue) ? propsValue : null
+    ({ value: propsValue }) => (isValid(propsValue) ? propsValue : null)
   ),
   withHandlers({
-    onChange: ({ setStateValue, saveToDb }) => value =>{
+    onChange: ({ setStateValue, saveToDb }) => value => {
       /**
-      * change happens when data is picked in picker
-      * so is never null or otherwise invalid
-      * oops: it is null if clear button is clicked!
-      */
+       * change happens when data is picked in picker
+       * so is never null or otherwise invalid
+       * oops: it is null if clear button is clicked!
+       */
       //console.log('DateFieldWithPicker, onChange:', {value})
       if (!isValid(value)) {
         saveToDb(null)
@@ -46,7 +51,12 @@ const enhance = compose(
       saveToDb(newValue)
       setStateValue(newValue)
     },
-    onBlur: ({ saveToDb, stateValue, setStateValue, value: propsValue }) => event => {
+    onBlur: ({
+      saveToDb,
+      stateValue,
+      setStateValue,
+      value: propsValue,
+    }) => event => {
       const { value } = event.target
       //console.log('DateFieldWithPicker, onBlur:', {value})
       // do not change anything of there are no values
@@ -61,7 +71,7 @@ const enhance = compose(
       const newValue = format(date, 'YYYY-MM-DD')
       saveToDb(newValue)
       setStateValue(newValue)
-      },
+    },
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
@@ -70,7 +80,7 @@ const enhance = compose(
         props.setStateValue(props.value)
       }
     },
-  }),
+  })
 )
 
 const DateFieldWithPicker = ({
@@ -81,7 +91,7 @@ const DateFieldWithPicker = ({
   onChange,
   onBlur,
   error,
-}:{
+}: {
   label: String,
   value?: String | Number,
   stateValue?: String | Number,
@@ -113,13 +123,11 @@ const DateFieldWithPicker = ({
         okLabel="speichern"
         fullWidth
       />
-      {
-        !!error &&
+      {!!error && (
         <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
-      }
+      )}
     </Fragment>
   )
 }
-
 
 export default enhance(DateFieldWithPicker)

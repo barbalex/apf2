@@ -47,6 +47,23 @@ const Container = styled(Area)`
              'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`};
   grid-column-gap: 10px;
   break-inside: avoid;
+  @media print {
+    grid-template-areas: ${props =>
+      props.showempty
+        ? `'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
+         'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
+         'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`
+        : props.shownew
+          ? `'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
+           'showNew showNew showNew showNew showNew showNew showNew showNew'`
+          : props.showdelete
+            ? `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
+             'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
+             'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`
+            : `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
+             'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
+             'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`};
+  }
 `
 const Label = styled.div`
   font-weight: 700;
@@ -103,6 +120,12 @@ const Delete = styled.div`
   grid-area: delete;
   justify-self: end;
   align-self: end;
+  @media print {
+    grid-area: geschaetztVal;
+    button {
+      display: none;
+    }
+  }
 `
 const StyledDeleteButton = styled(Button)`
   padding-left: 0 !important;
@@ -114,6 +137,11 @@ const StyledAddIcon = styled(AddIcon)`
 `
 const ShowNew = styled.div`
   grid-area: showNew;
+  @media print {
+    button {
+      display: none;
+    }
+  }
 `
 
 const enhance = compose(
