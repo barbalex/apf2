@@ -13,9 +13,14 @@ body {
 @media print {
   body {
     background-color: white;
+    height: auto !important;
   }
   #root {
     background-color: white !important;
+    height: auto !important;
+  }
+  #root>div {
+    height: auto !important;
   }
 }
 

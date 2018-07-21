@@ -34,10 +34,9 @@ const Container = styled.div`
 
     margin: 0 !important;
     padding: 0.5cm !important;
-    overflow-y: hidden !important;
 
     box-shadow: unset;
-    overflow: visible;
+    overflow: hidden;
   }
 `
 const GridContainer = styled.div`

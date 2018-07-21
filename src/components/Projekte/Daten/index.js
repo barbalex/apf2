@@ -134,7 +134,7 @@ const Container = styled.div`
     height: auto;
     border-left: none;
     border-right: none;
-    overflow: visible;
+    overflow: hidden;
   }
 `
 
