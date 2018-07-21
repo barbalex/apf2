@@ -91,13 +91,6 @@ const Headdata = ({
     ? 'angesiedelt'
     : 'natürlich'
 
-  console.log('Headdata:', {
-    data,
-    adressenWerteOriginal: get(data, 'allAdresses.nodes', []),
-    row,
-    bearbeiter: get(row, 'adresseByBearbeiter.name', ''),
-  })
-
   return (
     <Container>
       <PopLabel>Population</PopLabel>
