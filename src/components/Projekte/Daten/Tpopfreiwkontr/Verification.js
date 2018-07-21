@@ -12,30 +12,30 @@ const Area = styled.div`
   break-inside: avoid;
 `
 const Container = styled(Area)`
-  grid-area: map;
+  grid-area: verification;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 260px 45px 50px;
   grid-template-areas:
-    'mapLabel0 mapLabel1 mapVal1'
-    'mapLabel0 mapLabel2 mapVal2';
+    'verifLabel0 verifLabel1 verifVal1'
+    'verifLabel0 verifLabel2 verifVal2';
   align-items: center;
 `
 const Label = styled.div`
   font-weight: 700;
   padding-right: 4px;
 `
-const MapLabel0 = styled(Label)`
-  grid-area: mapLabel0;
+const VerifLabel0 = styled(Label)`
+  grid-area: verifLabel0;
   padding-right: 15px;
 `
-const MapLabel1 = styled(Label)`
-  grid-area: mapLabel1;
+const VerifLabel1 = styled(Label)`
+  grid-area: verifLabel1;
 `
-const MapLabel2 = styled(Label)`
-  grid-area: mapLabel2;
+const VerifLabel2 = styled(Label)`
+  grid-area: verifLabel2;
 `
-const MapVal1 = styled(Label)`
-  grid-area: mapVal1;
+const VerifVal1 = styled(Label)`
+  grid-area: verifVal1;
   > fieldset {
     margin-top: -5px;
     padding-bottom: 0 !important;
@@ -44,8 +44,8 @@ const MapVal1 = styled(Label)`
     padding-top: 0 !important;
   }
 `
-const MapVal2 = styled(Label)`
-  grid-area: mapVal2;
+const VerifVal2 = styled(Label)`
+  grid-area: verifVal2;
   > fieldset {
     margin-top: -5px;
     padding-bottom: 0 !important;
@@ -55,7 +55,7 @@ const MapVal2 = styled(Label)`
   }
 `
 
-const Map = ({
+const Verification = ({
   saveToDb,
   errors,
   data,
@@ -70,41 +70,41 @@ const Map = ({
 
   return (
     <Container>
-      <MapLabel0>Plan ergänzt</MapLabel0>
-      <MapLabel1>ja</MapLabel1>
-      <MapVal1>
+      <VerifLabel0>Im Jahresbericht berücksichtigen</VerifLabel0>
+      <VerifLabel1>ja</VerifLabel1>
+      <VerifVal1>
         <RadioButton
-          key={`${row.id}planVorhanden`}
-          value={row.planVorhanden}
+          key={`${row.id}ekfVerifiziert`}
+          value={row.ekfVerifiziert}
           saveToDb={value =>
             saveToDb({
               row,
-              field: 'planVorhanden',
+              field: 'ekfVerifiziert',
               value,
               updateTpopkontr,
             })
           }
-          error={errors.planVorhanden}
+          error={errors.ekfVerifiziert}
         />
-      </MapVal1>
-      <MapLabel2>nein</MapLabel2>
-      <MapVal2>
+      </VerifVal1>
+      <VerifLabel2>nein</VerifLabel2>
+      <VerifVal2>
         <RadioButton
-          key={`${row.id}planVorhanden2`}
-          value={!row.planVorhanden}
+          key={`${row.id}ekfVerifiziert2`}
+          value={!row.ekfVerifiziert && row.ekfVerifiziert !== null}
           saveToDb={value =>
             saveToDb({
               row,
-              field: 'planVorhanden',
+              field: 'ekfVerifiziert',
               value: !value,
               updateTpopkontr,
             })
           }
-          error={errors.planVorhanden}
+          error={errors.ekfVerifiziert}
         />
-      </MapVal2>
+      </VerifVal2>
     </Container>
   )
 }
 
-export default Map
+export default Verification

@@ -8,6 +8,7 @@ export default graphql(
       tpopkontrById(id: $id) {
         id
         typ
+        ekfVerifiziert
         datum
         jahr
         bemerkungen

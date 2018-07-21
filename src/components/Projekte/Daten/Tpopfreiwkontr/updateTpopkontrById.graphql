@@ -15,6 +15,7 @@ mutation updateTpopkontr(
   $bearbeiter: UUID
   $planVorhanden: Boolean
   $jungpflanzenVorhanden: Boolean
+  $ekfVerifiziert: Boolean
 ) {
   updateTpopkontrById(
     input: {
@@ -35,6 +36,7 @@ mutation updateTpopkontr(
         bearbeiter: $bearbeiter
         planVorhanden: $planVorhanden
         jungpflanzenVorhanden: $jungpflanzenVorhanden
+        ekfVerifiziert: $ekfVerifiziert
       }
     }
   ) {
@@ -59,6 +61,7 @@ mutation updateTpopkontr(
       }
       planVorhanden
       jungpflanzenVorhanden
+      ekfVerifiziert
       tpopByTpopId {
         id
         popByPopId {

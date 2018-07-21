@@ -23,6 +23,7 @@ import More from './More'
 import Danger from './Danger'
 import Remarks from './Remarks'
 import Count from './Count'
+import Verification from './Verification'
 
 const Container = styled.div`
   padding: 10px;
@@ -46,7 +47,8 @@ const GridContainer = styled.div`
     'count1 count1 count2 count2 count3 count3'
     'cover cover cover more more more'
     'danger danger danger danger danger danger'
-    'remarks remarks remarks remarks remarks remarks';
+    'remarks remarks remarks remarks remarks remarks'
+    'verification verification verification verification verification verification';
   grid-column-gap: 10px;
   grid-row-gap: 10px;
   justify-items: stretch;
@@ -392,6 +394,12 @@ const Tpopfreiwkontr = ({
               updateTpopkontr={updateTpopkontr}
             />
             <Remarks
+              saveToDb={saveToDb}
+              errors={errors}
+              data={data}
+              updateTpopkontr={updateTpopkontr}
+            />
+            <Verification
               saveToDb={saveToDb}
               errors={errors}
               data={data}
