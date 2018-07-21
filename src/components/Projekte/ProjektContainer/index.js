@@ -46,7 +46,6 @@ const LogoutButton = styled(Button)`
 `
 
 const enhance = compose(
-  withState('isPrint', 'setIsPrint', false),
   withState('apfloraLayers', 'setApfloraLayers', apfloraLayers),
   withState('activeApfloraLayers', 'setActiveApfloraLayers', []),
   withState('overlays', 'setOverlays', overlays),
@@ -99,8 +98,6 @@ const ProjekteContainer = ({
   setKtZh,
   markierungen,
   setMarkierungen,
-  isPrint,
-  setIsPrint,
 }: {
   treeName: String,
   tabs: Array<String>,
@@ -133,8 +130,6 @@ const ProjekteContainer = ({
   setKtZh: () => void,
   markierungen: Object,
   setMarkierungen: () => void,
-  isPrint: Boolean,
-  setIsPrint: () => void,
 }) => (
   <Subscribe to={[ErrorState]}>
     {errorState => (
@@ -259,13 +254,7 @@ const ProjekteContainer = ({
                     get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', [])
                   )
                 )
-                window.matchMedia('print').addListener(function(mql) {
-                  if (mql.matches) {
-                    setIsPrint(true)
-                  } else {
-                    setIsPrint(false)
-                  }
-                })
+                const isPrint = get(data, 'isPrint')
 
                 if (isPrint)
                   return (

@@ -4,9 +4,12 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import Loadable from 'react-loadable'
+import withLifecycle from '@hocs/with-lifecycle'
+import app from 'ampersand-app'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import Loading from '../shared/Loading'
+import setIsPrint from './setIsPrint.graphql'
 
 const Container = styled.div`
   height: 100%;
@@ -14,6 +17,7 @@ const Container = styled.div`
   flex-direction: column;
   @media print {
     height: auto;
+    display: block;
   }
 `
 
@@ -42,7 +46,30 @@ const Messages = Loadable({
   loading: Loading,
 })
 
-const enhance = compose(withState('showDeletions', 'setShowDeletions', false))
+const enhance = compose(
+  withState('showDeletions', 'setShowDeletions', false),
+  withLifecycle({
+    onDidMount(prevProps, props) {
+      console.log('AppCountainer did mount')
+      window.matchMedia('print').addListener(mql => {
+        if (mql.matches) {
+          app.client.mutate({
+            mutation: setIsPrint,
+            variables: { value: true },
+          })
+        } else {
+          app.client.mutate({
+            mutation: setIsPrint,
+            variables: { value: true },
+          })
+        }
+      })
+    },
+    onWillUnmount() {
+      window.matchMedia('print').removeListener()
+    },
+  })
+)
 
 const MyAppBar = ({
   showDeletions,

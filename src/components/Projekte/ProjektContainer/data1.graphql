@@ -1,5 +1,6 @@
 query Query {
   assigningBeob @client
+  isPrint @client
   user @client {
     name
     token

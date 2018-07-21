@@ -1,0 +1,5 @@
+mutation setIsPrint($value: Boolean) {
+  setIsPrint(value: $value) @client {
+    isPrint @client
+  }
+}

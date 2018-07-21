@@ -12,6 +12,7 @@ import login from './login'
 import moving from './moving'
 import copying from './copying'
 import updateAvailable from './updateAvailable'
+import isPrint from './isPrint'
 import assigningBeob from './assigningBeob'
 import mapMouseCoordinates from './mapMouseCoordinates'
 import copyingBiotop from './copyingBiotop'
@@ -30,9 +31,10 @@ export default merge(
   moving,
   copying,
   updateAvailable,
+  isPrint,
   assigningBeob,
   mapMouseCoordinates,
   copyingBiotop,
   user,
-  cloneTree2From1,
+  cloneTree2From1
 )

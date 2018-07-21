@@ -18,6 +18,7 @@ const Container = styled.div`
   height: calc(100% - 49.3px);
   @media print {
     height: auto !important;
+    display: block;
   }
 `
 const treeTabValues = ['tree', 'daten', 'karte', 'exporte']

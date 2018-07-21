@@ -28,15 +28,11 @@ const Container = styled.div`
   padding: 10px;
   @media print {
     font-size: 11px;
-    /* this is when it is actually printed */
     height: auto;
     width: inherit;
-
     margin: 0 !important;
     padding: 0.5cm !important;
-
-    box-shadow: unset;
-    overflow: hidden;
+    overflow: visible;
   }
 `
 const GridContainer = styled.div`

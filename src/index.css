@@ -18,9 +18,11 @@ body {
   #root {
     background-color: white !important;
     height: auto !important;
+    min-height: auto !important;
   }
   #root>div {
     height: auto !important;
+    display: block !important;
   }
 }
 

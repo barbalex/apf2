@@ -132,9 +132,8 @@ const Container = styled.div`
   overflow-x: auto;
   @media print {
     height: auto;
-    border-left: none;
-    border-right: none;
-    overflow: hidden;
+    border: none;
+    overflow: visible;
   }
 `
 

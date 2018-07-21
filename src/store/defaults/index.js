@@ -5,12 +5,12 @@ import treeNodeLabelFilter from './tree/nodeLabelFilter'
 import treeMap from './tree/map'
 
 export default async idb => {
-
   // fetch user from idb
   const users = await idb.currentUser.toArray()
-  
+
   const defaults = {
     updateAvailable: false,
+    isPrint: false,
     tree: {
       name: 'tree',
       activeNodeArray: [],
@@ -18,7 +18,7 @@ export default async idb => {
       apFilter: false,
       nodeLabelFilter: treeNodeLabelFilter,
       map: treeMap,
-      __typename: 'Tree'
+      __typename: 'Tree',
     },
     tree2: {
       name: 'tree2',
@@ -27,7 +27,7 @@ export default async idb => {
       apFilter: false,
       nodeLabelFilter: treeNodeLabelFilter,
       map: treeMap,
-      __typename: 'Tree2'
+      __typename: 'Tree2',
     },
     /**
      * urlQueries are used to control tabs
@@ -36,7 +36,7 @@ export default async idb => {
     urlQuery: {
       projekteTabs: ['tree', 'daten'],
       feldkontrTab: 'entwicklung',
-      __typename: 'UrlQuery'
+      __typename: 'UrlQuery',
     },
     assigningBeob: false,
     mapMouseCoordinates: {
@@ -48,7 +48,7 @@ export default async idb => {
       // gql needs an id
       id: 'copyingBiotop',
       label: null,
-      __typename: 'CopyingBiotop'
+      __typename: 'CopyingBiotop',
     },
     login: {
       token: '',
@@ -62,25 +62,25 @@ export default async idb => {
       // give token a temporary value to prevent login form from opening
       // before login has been fetched
       token: get(users, '[0].token', null),
-      __typename: 'User'
+      __typename: 'User',
     },
     export: {
       applyMapFilterToExport: false,
       fileType: 'xlsx',
-      __typename: 'Export'
+      __typename: 'Export',
     },
     moving: {
       table: null,
       id: null,
       label: null,
-      __typename: 'Moving'
+      __typename: 'Moving',
     },
     copying: {
       table: null,
       id: null,
       label: null,
       withNextLevel: false,
-      __typename: 'Copying'
+      __typename: 'Copying',
     },
   }
   return defaults
