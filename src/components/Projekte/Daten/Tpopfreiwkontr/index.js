@@ -175,6 +175,8 @@ const enhance = compose(
                     ? value
                     : row.jungpflanzenVorhanden,
                 adresseByBearbeiter: row.adresseByBearbeiter,
+                ekfVerifiziert:
+                  field === 'ekfVerifiziert' ? value : row.ekfVerifiziert,
                 tpopByTpopId: row.tpopByTpopId,
                 __typename: 'Tpopkontr',
               },
@@ -284,7 +286,6 @@ const Tpopfreiwkontr = ({
     .filter(n => !!n.einheit)
     .map(n => n.einheit)
   const isPrint = get(data, 'isPrint', false)
-  console.log('isPrint:', isPrint)
 
   return (
     <Mutation mutation={updateTpopkontrByIdGql}>

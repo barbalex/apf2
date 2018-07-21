@@ -8,6 +8,7 @@ import RadioButton from '../../../shared/RadioButton'
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
   border-radius: 6px;
+  border-color: red;
   padding: 10px;
   break-inside: avoid;
 `
