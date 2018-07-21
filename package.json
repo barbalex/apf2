@@ -78,8 +78,7 @@
     "recompose": "0.27.1",
     "styled-components": "3.3.3",
     "typeface-roboto": "0.0.54",
-    "unstated": "2.1.1",
-    "yup": "0.26.0"
+    "unstated": "2.1.1"
   },
   "resolutions": {
     "graphql": "0.13.2"
