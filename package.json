@@ -10,11 +10,11 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "flow-bin": "0.76.0",
+    "flow-bin": "0.77.0",
     "postgraphile": "4.0.0-rc.2",
     "postgraphile-plugin-connection-filter": "1.0.0-beta.14",
     "react-scripts": "2.0.0-next.3e165448",
-    "serve": "9.2.0",
+    "serve": "9.3.0",
     "source-map-explorer": "1.5.0"
   },
   "dependencies": {
@@ -79,7 +79,7 @@
     "styled-components": "3.3.3",
     "typeface-roboto": "0.0.54",
     "unstated": "2.1.1",
-    "yup": "0.25.1"
+    "yup": "0.26.0"
   },
   "resolutions": {
     "graphql": "0.13.2"
