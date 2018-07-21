@@ -290,6 +290,10 @@ CREATE FUNCTION tpopkontr_on_update_set_mut() RETURNS trigger AS $tpopkontr_on_u
   BEGIN
     NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
+    IF OLD.ekf_verifiziert <> NEW.ekf_verifiziert THEN
+      NEW.ekf_verifiziert_durch = current_setting('request.jwt.claim.username', true);
+      NEW.ekf_verifiziert_datum = NOW();
+    END IF;
     RETURN NEW;
   END;
 $tpopkontr_on_update_set_mut$ LANGUAGE plpgsql;

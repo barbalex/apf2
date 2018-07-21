@@ -656,10 +656,16 @@ CREATE TABLE apflora.tpopkontr (
   vegetationshoehe_maximum smallint DEFAULT NULL,
   vegetationshoehe_mittel smallint DEFAULT NULL,
   gefaehrdung text DEFAULT NULL,
+  ekf_verifiziert boolean DEFAULT null,
+  ekf_verifiziert_durch varchar(20) DEFAULT null,
+  ekf_verifiziert_datum date DEFAULT null,
   zeit_id UUID DEFAULT uuid_generate_v1mc(),
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
+ALTER TABLE apflora.tpopkontr ADD COLUMN ekf_verifiziert boolean DEFAULT null;
+ALTER TABLE apflora.tpopkontr ADD COLUMN ekf_verifiziert_durch varchar(20) DEFAULT null;
+ALTER TABLE apflora.tpopkontr ADD COLUMN ekf_verifiziert_datum date DEFAULT null;
 CREATE INDEX ON apflora.tpopkontr USING btree (id);
 CREATE INDEX ON apflora.tpopkontr USING btree (tpop_id);
 CREATE INDEX ON apflora.tpopkontr USING btree (bearbeiter);
