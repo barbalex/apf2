@@ -289,7 +289,6 @@ const Tpopfreiwkontr = ({
     .map(n => n.einheit)
   const isPrint = get(data, 'isPrint', false)
   const isFreiwillig = role === 'apflora_freiwillig'
-  console.log('Tpopfreiwkontr:', { role, isFreiwillig })
 
   return (
     <Mutation mutation={updateTpopkontrByIdGql}>
