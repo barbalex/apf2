@@ -269,7 +269,7 @@ const Tpopfreiwkontr = ({
     zaehls1 && (zaehls1.anzahl || zaehls1.anzahl === 0 || zaehls1.einheit)
   const zaehl2ShowNew =
     zaehl1WasAttributed && !zaehls2 && ekfzaehleinheits.length > 1
-  const zaehl1ShowEmpty = ekfzaehleinheits.length < 1
+  const zaehl1ShowEmpty = ekfzaehleinheits.length === 0 && zaehls.length === 0
   const zaehl2ShowEmpty =
     (!zaehl1WasAttributed && !zaehls2) || ekfzaehleinheits.length < 2
   const zaehl2WasAttributed =
