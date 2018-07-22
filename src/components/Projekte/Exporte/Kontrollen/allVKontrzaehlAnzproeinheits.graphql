@@ -76,9 +76,9 @@ query view {
       kontr_gefaehrdung: kontrGefaehrdung
       kontr_changed: kontrChanged
       kontr_changed_by: kontrChangedBy
-      ekf_verifiziert: ekfVerifiziert
-      ekf_verifiziert_durch: ekfVerifiziertDurch
-      ekf_verifiziert_datum: ekfVerifiziertDatum
+      ekf_verifiziert: kontrEkfVerifiziert
+      ekf_verifiziert_durch: kontrEkfVerifiziertDurch
+      ekf_verifiziert_datum: kontrEkfVerifiziertDatum
       id
       einheit
       methode
