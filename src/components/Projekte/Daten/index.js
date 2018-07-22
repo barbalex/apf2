@@ -146,6 +146,7 @@ const Daten = ({
   refetchTree,
   ktZh,
   setKtZh,
+  role,
 }: {
   tree: Object,
   treeName: String,
@@ -155,6 +156,7 @@ const Daten = ({
   refetchTree: () => void,
   ktZh: Object,
   setKtZh: () => void,
+  role: String,
 }) => (
   <Subscribe to={[ErrorState]}>
     {errorState => (
@@ -315,6 +317,7 @@ const Daten = ({
                 activeNodeArray={activeNodeArray}
                 refetchTree={refetchTree}
                 errorState={errorState}
+                role={role}
               />
             ),
             tpopkontrzaehl: (

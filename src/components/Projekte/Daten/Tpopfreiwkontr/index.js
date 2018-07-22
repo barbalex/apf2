@@ -243,6 +243,7 @@ const Tpopfreiwkontr = ({
   saveToDb,
   errors,
   activeNodeArray,
+  role,
 }: {
   id: String,
   data: Object,
@@ -250,6 +251,7 @@ const Tpopfreiwkontr = ({
   saveToDb: () => void,
   errors: Object,
   activeNodeArray: Array<String>,
+  role: String,
 }) => {
   const ekfzaehleinheits = get(
     data,
@@ -286,6 +288,8 @@ const Tpopfreiwkontr = ({
     .filter(n => !!n.einheit)
     .map(n => n.einheit)
   const isPrint = get(data, 'isPrint', false)
+  const isFreiwillig = role === 'apflora_freiwillig'
+  console.log('Tpopfreiwkontr:', { role, isFreiwillig })
 
   return (
     <Mutation mutation={updateTpopkontrByIdGql}>
@@ -413,14 +417,15 @@ const Tpopfreiwkontr = ({
               data={data}
               updateTpopkontr={updateTpopkontr}
             />
-            {!isPrint && (
-              <Verification
-                saveToDb={saveToDb}
-                errors={errors}
-                data={data}
-                updateTpopkontr={updateTpopkontr}
-              />
-            )}
+            {!isPrint &&
+              !isFreiwillig && (
+                <Verification
+                  saveToDb={saveToDb}
+                  errors={errors}
+                  data={data}
+                  updateTpopkontr={updateTpopkontr}
+                />
+              )}
           </GridContainer>
           <StringToCopy text={id} label="GUID" />
         </Container>

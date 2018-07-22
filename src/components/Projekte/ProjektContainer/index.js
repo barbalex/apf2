@@ -270,6 +270,7 @@ const ProjekteContainer = ({
                       refetchTree={refetch}
                       ktZh={ktZh}
                       setKtZh={setKtZh}
+                      role={role}
                     />
                   )
 
@@ -322,6 +323,7 @@ const ProjekteContainer = ({
                               refetchTree={refetch}
                               ktZh={ktZh}
                               setKtZh={setKtZh}
+                              role={role}
                             />
                           </ReflexElement>
                         )}
