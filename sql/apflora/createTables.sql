@@ -7,10 +7,15 @@ CREATE TABLE apflora.user (
   -- so names and roles can be set beforehand by topos
   email text UNIQUE default null,
   -- is role still used?
-  role name DEFAULT NULL check (length(role) < 512),
-  pass text DEFAULT NULL check (length(pass) > 5),
+  role name DEFAULT NULL check role_length_maximum_512 (length(role) < 512),
+  pass text DEFAULT NULL check pass_length_minimum_6 (length(pass) > 5),
   CONSTRAINT proper_email CHECK (email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$')
 );
+alter table apflora.user drop constraint if exists user_pass_check;
+alter table apflora.user drop constraint if exists pass_length_minimum_6;
+alter table apflora.user add constraint password_length_minimum_6 check (length(pass) > 5);
+alter table apflora.user drop constraint if exists user_role_check;
+alter table apflora.user add constraint role_length_maximum_512 check (length(role) < 512);
 CREATE INDEX ON apflora.user USING btree (id);
 CREATE INDEX ON apflora.user USING btree (name);
 
