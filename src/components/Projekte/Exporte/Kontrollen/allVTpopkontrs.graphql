@@ -78,6 +78,9 @@ query view {
       gefaehrdung
       changed
       changed_by: changedBy
+      ekf_verifiziert: ekfVerifiziert
+      ekf_verifiziert_durch: ekfVerifiziertDurch
+      ekf_verifiziert_datum: ekfVerifiziertDatum
       zaehlung_anzahlen: zaehlungAnzahlen
       zaehlung_einheiten: zaehlungEinheiten
       zaehlung_methoden: zaehlungMethoden
