@@ -427,7 +427,7 @@ const Tpopfreiwkontr = ({
                 />
               )}
           </GridContainer>
-          <StringToCopy text={id} label="GUID" />
+          {!isFreiwillig && <StringToCopy text={id} label="GUID" />}
         </Container>
       )}
     </Mutation>
