@@ -697,6 +697,9 @@ SELECT
   apflora.v_tpopkontr.gefaehrdung as kontr_gefaehrdung,
   apflora.v_tpopkontr.changed as kontr_changed,
   apflora.v_tpopkontr.changed_by as kontr_changed_by,
+  apflora.v_tpopkontr.ekf_verifiziert as kontr_ekf_verifiziert,
+  apflora.v_tpopkontr.ekf_verifiziert_durch as kontr_ekf_verifiziert_durch,
+  apflora.v_tpopkontr.ekf_verifiziert_datum as kontr_ekf_verifiziert_datum,
   apflora.v_tpopkontr.zaehlung_anzahlen as zaehlung_anzahlen,
   apflora.v_tpopkontr.zaehlung_einheiten AS zaehlung_einheiten,
   apflora.v_tpopkontr.zaehlung_methoden AS zaehlung_methoden
