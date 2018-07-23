@@ -1,6 +1,7 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
+import get from 'lodash/get'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -26,23 +27,17 @@ const BesttimeVal = styled.div`
   grid-area: besttimeVal;
 `
 
-const Besttime = ({
-  saveToDb,
-  errors,
-  data,
-  updateTpopkontr,
-}: {
-  saveToDb: () => void,
-  errors: Object,
-  data: Object,
-  updateTpopkontr: () => void,
-}) => {
-  //const row = get(data, 'tpopkontrById')
+const Besttime = ({ data }: { data: Object }) => {
+  const bestTime = get(
+    data,
+    'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekfBeobachtungszeitpunkt',
+    ''
+  )
 
   return (
     <Container>
       <BesttimeLabel>bester Beobachtungs-Zeitpunkt</BesttimeLabel>
-      <BesttimeVal>August</BesttimeVal>
+      <BesttimeVal>{bestTime}</BesttimeVal>
     </Container>
   )
 }

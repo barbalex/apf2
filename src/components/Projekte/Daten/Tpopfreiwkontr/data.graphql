@@ -36,6 +36,7 @@ query tpopkontrByIdQuery($id: UUID!) {
         name
         apByApId {
           id
+          ekfBeobachtungszeitpunkt
           ekfzaehleinheitsByApId {
             nodes {
               id

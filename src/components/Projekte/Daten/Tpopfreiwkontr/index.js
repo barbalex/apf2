@@ -302,12 +302,7 @@ const Tpopfreiwkontr = ({
               data={data}
               updateTpopkontr={updateTpopkontr}
             />
-            <Besttime
-              saveToDb={saveToDb}
-              errors={errors}
-              data={data}
-              updateTpopkontr={updateTpopkontr}
-            />
+            <Besttime data={data} />
             <Date
               saveToDb={saveToDb}
               errors={errors}

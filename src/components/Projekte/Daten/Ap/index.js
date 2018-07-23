@@ -89,6 +89,10 @@ const enhance = compose(
                 umsetzung: field === 'umsetzung' ? value : row.umsetzung,
                 artId: field === 'artId' ? value : row.artId,
                 bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
+                ekfBeobachtungszeitpunkt:
+                  field === 'ekfBeobachtungszeitpunkt'
+                    ? value
+                    : row.ekfBeobachtungszeitpunkt,
                 projId: field === 'projId' ? value : row.projId,
                 adresseByBearbeiter: row.adresseByBearbeiter,
                 aeEigenschaftenByArtId: row.aeEigenschaftenByArtId,

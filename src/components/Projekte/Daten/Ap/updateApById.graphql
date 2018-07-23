@@ -5,6 +5,7 @@ mutation updateAp(
   $umsetzung: Int
   $artId: UUID
   $bearbeiter: UUID
+  $ekfBeobachtungszeitpunkt: String
   $projId: UUID
 ) {
   updateApById(
@@ -17,6 +18,7 @@ mutation updateAp(
         umsetzung: $umsetzung
         artId: $artId
         bearbeiter: $bearbeiter
+        ekfBeobachtungszeitpunkt: $ekfBeobachtungszeitpunkt
         projId: $projId
       }
     }
@@ -28,6 +30,7 @@ mutation updateAp(
       umsetzung
       artId
       bearbeiter
+      ekfBeobachtungszeitpunkt
       adresseByBearbeiter {
         id
         name
