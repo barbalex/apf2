@@ -1176,7 +1176,7 @@ COMMENT ON COLUMN apflora.ekfzaehleinheit.zaehleinheit_id IS 'Zugehörige Zähle
 COMMENT ON COLUMN apflora.ekfzaehleinheit.bemerkungen IS 'Bemerkungen zur EKF-Zaehleinheit';
 COMMENT ON COLUMN apflora.ekfzaehleinheit.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ekfzaehleinheit.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
-DROP POLICY IF EXISTS writer ON apflora.adresse;
+DROP POLICY IF EXISTS writer ON apflora.ekfzaehleinheit;
 CREATE POLICY writer ON apflora.ekfzaehleinheit
   USING (true)
   WITH CHECK (
