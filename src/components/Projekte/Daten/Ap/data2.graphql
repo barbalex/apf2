@@ -6,6 +6,7 @@ query apByIdQuery($id: UUID!) {
     umsetzung
     artId
     bearbeiter
+    ekfBeobachtungszeitpunkt
     adresseByBearbeiter {
       id
       name

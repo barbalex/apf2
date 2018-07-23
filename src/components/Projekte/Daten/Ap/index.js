@@ -61,17 +61,13 @@ const LabelPopoverRowColumnRight = styled.div`
 `
 
 const enhance = compose(
-  withState('errors', 'setErrors', ({})),
+  withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({
-      refetchTree,
-      setErrors,
-      errors
-    }) => async ({
+    saveToDb: ({ refetchTree, setErrors, errors }) => async ({
       row,
       field,
       value,
-      updateAp
+      updateAp,
     }) => {
       /**
        * only save if value changed
@@ -105,17 +101,17 @@ const enhance = compose(
       } catch (error) {
         return setErrors({ [field]: error.message })
       }
-      setErrors(({}))
+      setErrors({})
       if (['artId'].includes(field)) refetchTree()
     },
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
       if (prevProps.id !== props.id) {
-        props.setErrors(({}))
+        props.setErrors({})
       }
     },
-  }),
+  })
 )
 
 const Ap = ({
@@ -197,12 +193,19 @@ const Ap = ({
                           value={row.bearbeitung}
                           dataSource={bearbeitungWerte}
                           saveToDb={value =>
-                            saveToDb({ row, field: 'bearbeitung', value, updateAp })
+                            saveToDb({
+                              row,
+                              field: 'bearbeitung',
+                              value,
+                              updateAp,
+                            })
                           }
                           error={errors.bearbeitung}
                           popover={
                             <Fragment>
-                              <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
+                              <LabelPopoverTitleRow>
+                                Legende
+                              </LabelPopoverTitleRow>
                               <LabelPopoverContentRow>
                                 <LabelPopoverRowColumnLeft>
                                   keiner:
@@ -229,7 +232,12 @@ const Ap = ({
                           value={row.startJahr}
                           type="number"
                           saveToDb={value =>
-                            saveToDb({ row, field: 'startJahr', value, updateAp })
+                            saveToDb({
+                              row,
+                              field: 'startJahr',
+                              value,
+                              updateAp,
+                            })
                           }
                           error={errors.startJahr}
                         />
@@ -249,7 +257,9 @@ const Ap = ({
                             error={errors.umsetzung}
                             popover={
                               <Fragment>
-                                <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
+                                <LabelPopoverTitleRow>
+                                  Legende
+                                </LabelPopoverTitleRow>
                                 <LabelPopoverContentRow>
                                   <LabelPopoverRowColumnLeft>
                                     noch keine<br />Umsetzung:
@@ -263,8 +273,8 @@ const Ap = ({
                                     in Umsetzung:
                                   </LabelPopoverRowColumnLeft>
                                   <LabelPopoverRowColumnRight>
-                                    bereits Massnahmen ausgeführt (auch wenn AP noch
-                                    nicht erstellt)
+                                    bereits Massnahmen ausgeführt (auch wenn AP
+                                    noch nicht erstellt)
                                   </LabelPopoverRowColumnRight>
                                 </LabelPopoverContentRow>
                               </Fragment>
@@ -278,10 +288,29 @@ const Ap = ({
                           value={get(row, 'adresseByBearbeiter.name', null)}
                           objects={adressenWerte}
                           saveToDb={value =>
-                            saveToDb({ row, field: 'bearbeiter', value, updateAp })
+                            saveToDb({
+                              row,
+                              field: 'bearbeiter',
+                              value,
+                              updateAp,
+                            })
                           }
                           error={errors.bearbeiter}
                           openabove
+                        />
+                        <TextField
+                          key={`${row.id}ekfBeobachtungszeitpunkt`}
+                          label="Bester Beobachtungszeitpunkt für EKF (Freiwilligen-Kontrollen)"
+                          value={row.ekfBeobachtungszeitpunkt}
+                          saveToDb={value =>
+                            saveToDb({
+                              row,
+                              field: 'ekfBeobachtungszeitpunkt',
+                              value,
+                              updateAp,
+                            })
+                          }
+                          error={errors.ekfBeobachtungszeitpunkt}
                         />
                         <TextFieldNonUpdatable
                           key={`${row.id}artwert`}
