@@ -174,7 +174,7 @@ const enhance = compose(
                   field === 'jungpflanzenVorhanden'
                     ? value
                     : row.jungpflanzenVorhanden,
-                adresseByBearbeiter: row.adresseByBearbeiter,
+                //adresseByBearbeiter: row.adresseByBearbeiter,
                 ekfVerifiziert:
                   field === 'ekfVerifiziert' ? value : row.ekfVerifiziert,
                 tpopByTpopId: row.tpopByTpopId,
