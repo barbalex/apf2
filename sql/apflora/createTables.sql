@@ -81,6 +81,7 @@ CREATE TABLE apflora.ap (
   start_jahr smallint DEFAULT NULL,
   umsetzung integer DEFAULT NULL REFERENCES apflora.ap_umsetzung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   bearbeiter integer DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  ekf_beobachtungszeitpunkt text default null,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
@@ -99,8 +100,10 @@ COMMENT ON COLUMN apflora.ap.bearbeitung IS 'In welchem Bearbeitungsstand befind
 COMMENT ON COLUMN apflora.ap.start_jahr IS 'Wann wurde mit der Umsetzung des Aktionsplans begonnen?';
 COMMENT ON COLUMN apflora.ap.umsetzung IS 'In welchem Umsetzungsstand befindet sich der AP?';
 COMMENT ON COLUMN apflora.ap.bearbeiter IS 'Verantwortliche(r) für die Art';
+COMMENT ON COLUMN apflora.ap.ekf_beobachtungszeitpunkt IS 'bester Beobachtungszeitpunkt';
 COMMENT ON COLUMN apflora.ap.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+alter table apflora.ap add column ekf_beobachtungszeitpunkt text default null;
 
 -- this table is NOT YET IN USE
 DROP TABLE IF EXISTS apflora.userprojekt;
