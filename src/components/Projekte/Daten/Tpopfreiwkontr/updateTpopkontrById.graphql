@@ -43,6 +43,7 @@ mutation updateTpopkontr(
     tpopkontr {
       id
       typ
+      ekfVerifiziert
       datum
       jahr
       bemerkungen
@@ -61,12 +62,39 @@ mutation updateTpopkontr(
       }
       planVorhanden
       jungpflanzenVorhanden
-      ekfVerifiziert
       tpopByTpopId {
         id
+        nr
+        flurname
+        x
+        y
+        status
         popByPopId {
           id
           apId
+          nr
+          name
+          apByApId {
+            id
+            ekfzaehleinheitsByApId {
+              nodes {
+                id
+                tpopkontrzaehlEinheitWerteByZaehleinheitId {
+                  id
+                  code
+                  text
+                  sort
+                }
+              }
+            }
+          }
+        }
+      }
+      tpopkontrzaehlsByTpopkontrId {
+        nodes {
+          id
+          anzahl
+          einheit
         }
       }
     }
