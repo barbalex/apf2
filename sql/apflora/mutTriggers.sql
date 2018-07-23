@@ -298,8 +298,21 @@ CREATE FUNCTION tpopkontr_on_update_set_mut() RETURNS trigger AS $tpopkontr_on_u
   END;
 $tpopkontr_on_update_set_mut$ LANGUAGE plpgsql;
 
-CREATE TRIGGER tpopkontr_on_update_set_mut BEFORE UPDATE OR INSERT ON apflora.tpopkontr
+CREATE TRIGGER tpopkontr_on_update_set_mut BEFORE UPDATE ON apflora.tpopkontr
   FOR EACH ROW EXECUTE PROCEDURE tpopkontr_on_update_set_mut();
+
+DROP TRIGGER IF EXISTS tpopkontr_on_insert_set_mut ON apflora.tpopkontr;
+DROP FUNCTION IF EXISTS tpopkontr_on_insert_set_mut();
+CREATE FUNCTION tpopkontr_on_insert_set_mut() RETURNS trigger AS $tpopkontr_on_insert_set_mut$
+  BEGIN
+    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+    NEW.changed = NOW();
+    RETURN NEW;
+  END;
+$tpopkontr_on_insert_set_mut$ LANGUAGE plpgsql;
+
+CREATE TRIGGER tpopkontr_on_insert_set_mut BEFORE INSERT ON apflora.tpopkontr
+  FOR EACH ROW EXECUTE PROCEDURE tpopkontr_on_insert_set_mut();
 
 DROP TRIGGER IF EXISTS tpopkontr_idbiotuebereinst_werte_on_update_set_mut ON apflora.tpopkontr_idbiotuebereinst_werte;
 DROP FUNCTION IF EXISTS tpopkontr_idbiotuebereinst_werte_on_update_set_mut();
