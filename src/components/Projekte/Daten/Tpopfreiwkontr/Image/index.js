@@ -23,9 +23,14 @@ const Title = styled.div`
 `
 const Img = styled.img`
   max-width: 100%;
-  height: 360px;
+  height: 350px;
+  max-height: 350px;
   display: block;
   margin: 0 auto;
+  @media print {
+    height: 300px;
+    max-height: 300px;
+  }
 `
 
 const enhance = compose(
