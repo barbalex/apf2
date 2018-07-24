@@ -45,6 +45,7 @@ CREATE TABLE apflora.adresse (
   telefon text DEFAULT NULL,
   email text DEFAULT NULL,
   freiw_erfko boolean DEFAULT false,
+  user_id uuid DEFAULT NULL REFERENCES apflora.user (id) ON DELETE SET NULL ON UPDATE CASCADE,
   evab_id_person UUID DEFAULT NULL,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
@@ -52,6 +53,7 @@ CREATE TABLE apflora.adresse (
 CREATE INDEX ON apflora.adresse USING btree (id);
 CREATE INDEX ON apflora.adresse USING btree (name);
 CREATE INDEX ON apflora.adresse USING btree (freiw_erfko);
+CREATE INDEX ON apflora.adresse USING btree (user_id);
 COMMENT ON COLUMN apflora.adresse.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.adresse.id_old IS 'Frühere id';
 COMMENT ON COLUMN apflora.adresse.name IS 'Vor- und Nachname';
@@ -59,9 +61,11 @@ COMMENT ON COLUMN apflora.adresse.adresse IS 'Strasse, PLZ und Ort';
 COMMENT ON COLUMN apflora.adresse.telefon IS 'Telefonnummer';
 COMMENT ON COLUMN apflora.adresse.email IS 'Email';
 COMMENT ON COLUMN apflora.adresse.freiw_erfko IS 'Ist die Person freiwillige(r) Kontrolleur(in)';
+COMMENT ON COLUMN apflora.adresse.user_id IS 'Datenbank-User. Fremdschlüssel aus der Tabelle "user". Wird benutzt, damit die EKF-Kontrollen von Freiwilligen-Kontrolleurinnen gefiltert werden können';
 COMMENT ON COLUMN apflora.adresse.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.adresse.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.adresse.evab_id_person IS 'Personen werden in EvAB separat und mit eigener ID erfasst. Daher muss die passende Person hier gewählt werden';
+alter table apflora.adresse add column user_id uuid DEFAULT NULL REFERENCES apflora.user (id) ON DELETE SET NULL ON UPDATE CASCADE;
 
 ALTER TABLE apflora.adresse ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS writer ON apflora.adresse;
