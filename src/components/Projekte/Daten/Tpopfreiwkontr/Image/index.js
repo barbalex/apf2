@@ -10,6 +10,7 @@ const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
   border-radius: 6px;
   padding: 10px;
+  padding-bottom: 0;
   break-inside: avoid;
 `
 const Container = styled(Area)`
@@ -22,7 +23,7 @@ const Title = styled.div`
 `
 const Img = styled.img`
   max-width: 100%;
-  height: 365px;
+  height: 360px;
   display: block;
   margin: 0 auto;
 `
@@ -37,12 +38,11 @@ const enhance = compose(
           data,
           'tpopkontrById.tpopByTpopId.popByPopId.apByApId.id'
         )
-        console.log('Image, onDidMount:', { props, apId })
         let image
         try {
           image = await import(`./${apId}.png`)
         } catch (error) {
-          return console.log('no image found')
+          return
         }
         setImage(image)
       }
@@ -56,7 +56,6 @@ const Image = ({ data, image }: { data: Object, image: Object }) => {
     'tpopkontrById.tpopByTpopId.popByPopId.apByApId.aeEigenschaftenByArtId.artname',
     ''
   )
-  console.log('Image, render, image:', image)
 
   return (
     <Container>
