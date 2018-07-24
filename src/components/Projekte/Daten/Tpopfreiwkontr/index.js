@@ -24,6 +24,7 @@ import Danger from './Danger'
 import Remarks from './Remarks'
 import Count from './Count'
 import Verification from './Verification'
+import Image from './Image'
 
 const Container = styled.div`
   padding: 10px;
@@ -80,9 +81,6 @@ const Title = styled(Area)`
   @media print {
     font-size: 16px;
   }
-`
-const Image = styled(Area)`
-  grid-area: image;
 `
 const CountHint = styled.div`
   grid-area: 5 / 1 / 5 / 7;
@@ -315,7 +313,7 @@ const Tpopfreiwkontr = ({
               data={data}
               updateTpopkontr={updateTpopkontr}
             />
-            <Image>Image</Image>
+            <Image data={data} />
             {zaehls1 && (
               <Count
                 id={zaehls1.id}

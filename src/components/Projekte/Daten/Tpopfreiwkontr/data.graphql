@@ -37,6 +37,10 @@ query tpopkontrByIdQuery($id: UUID!) {
         apByApId {
           id
           ekfBeobachtungszeitpunkt
+          aeEigenschaftenByArtId {
+            id
+            artname
+          }
           ekfzaehleinheitsByApId {
             nodes {
               id
