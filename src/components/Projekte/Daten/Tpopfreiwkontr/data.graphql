@@ -19,6 +19,9 @@ query tpopkontrByIdQuery($id: UUID!) {
     adresseByBearbeiter {
       id
       name
+      usersByAdresseId {
+        totalCount
+      }
     }
     planVorhanden
     jungpflanzenVorhanden
@@ -75,6 +78,9 @@ query tpopkontrByIdQuery($id: UUID!) {
     nodes {
       id
       name
+      usersByAdresseId {
+        totalCount
+      }
     }
   }
 }

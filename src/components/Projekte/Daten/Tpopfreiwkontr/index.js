@@ -144,7 +144,7 @@ const enhance = compose(
   dataGql,
   withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({ setErrors, errors }) => async ({
+    saveToDb: ({ setErrors, errors, data }) => async ({
       row,
       field,
       value,
@@ -165,6 +165,10 @@ const enhance = compose(
         [field]: value,
       }
       if (field2) variables[field2] = value2
+      const adresseByBearbeiter =
+        field === 'bearbeiter'
+          ? row.adresseByBearbeiter
+          : get(data, 'allAdresses.nodes', []).find(r => r.id === value)
       try {
         await updateTpopkontr({
           variables,
@@ -216,10 +220,11 @@ const enhance = compose(
                   field === 'jungpflanzenVorhanden'
                     ? value
                     : row.jungpflanzenVorhanden,
-                //adresseByBearbeiter: row.adresseByBearbeiter,
+                adresseByBearbeiter,
                 ekfVerifiziert:
                   field === 'ekfVerifiziert' ? value : row.ekfVerifiziert,
                 tpopByTpopId: row.tpopByTpopId,
+                tpopkontrzaehlsByTpopkontrId: row.tpopkontrzaehlsByTpopkontrId,
                 __typename: 'Tpopkontr',
               },
               __typename: 'Tpopkontr',
@@ -273,6 +278,20 @@ const enhance = compose(
       if (prevProps.id !== props.id) {
         props.setErrors({})
       }
+      // check if adresse is choosen but no registered user exists
+      const { data, setErrors, errors } = props
+      const row = get(data, 'tpopkontrById')
+      const bearbeiter = get(row, 'bearbeiter')
+      const userCount = get(
+        row,
+        'adresseByBearbeiter.usersByAdresseId.totalCount'
+      )
+      if (bearbeiter && !userCount && !errors.bearbeiter) {
+        setErrors({
+          bearbeiter:
+            'Es ist kein Benutzer mit dieser Adresse verbunden. Damit dieser Benutzer Kontrollen erfassen kann, muss er ein Benutzerkonto haben, in dem die soeben gewählte Adresse als zugehörig erfasst wurde.',
+        })
+      }
     },
   })
 )
@@ -284,6 +303,7 @@ const Tpopfreiwkontr = ({
   dimensions,
   saveToDb,
   errors,
+  setErrors,
   activeNodeArray,
   role,
 }: {
@@ -292,6 +312,7 @@ const Tpopfreiwkontr = ({
   dimensions: Object,
   saveToDb: () => void,
   errors: Object,
+  setErrors: () => void,
   activeNodeArray: Array<String>,
   role: String,
 }) => {
@@ -342,6 +363,7 @@ const Tpopfreiwkontr = ({
             <Headdata
               saveToDb={saveToDb}
               errors={errors}
+              setErrors={setErrors}
               data={data}
               updateTpopkontr={updateTpopkontr}
             />

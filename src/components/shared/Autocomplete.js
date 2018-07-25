@@ -41,6 +41,9 @@ const StyledTextField = styled(TextField)`
   > div:before {
     border-bottom-color: rgba(0, 0, 0, 0.1);
   }
+  > p {
+    white-space: normal !important;
+  }
 `
 
 function renderSuggestion(suggestion, { query, isHighlighted }) {
