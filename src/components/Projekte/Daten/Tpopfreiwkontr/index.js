@@ -39,17 +39,61 @@ const Container = styled.div`
 `
 const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  grid-template-areas:
-    'title title title image image image'
-    'headdata headdata headdata image image image'
-    'besttime besttime besttime image image image'
-    'date date map image image image'
-    'count1 count1 count2 count2 count3 count3'
-    'cover cover cover more more more'
-    'danger danger danger danger danger danger'
-    'remarks remarks remarks remarks remarks remarks'
-    'verification verification verification verification verification verification';
+  grid-template-areas: ${props => {
+    const { width } = props
+    if (width < 600) {
+      return `
+        'title'
+        'image'
+        'headdata'
+        'besttime'
+        'date'
+        'map'
+        'count1'
+        'count2'
+        'count3'
+        'cover'
+        'more'
+        'danger'
+        'remarks'
+        'verification'
+      `
+    }
+    if (width < 800) {
+      return `
+        'title title'
+        'image image'
+        'headdata headdata'
+        'besttime besttime'
+        'date map'
+        'count1 count1'
+        'count2 count2'
+        'count3 count3'
+        'cover cover'
+        'more more'
+        'danger danger'
+        'remarks remarks'
+        'verification verification'
+      `
+    }
+    return `
+      'title title title image image image'
+      'headdata headdata headdata image image image'
+      'besttime besttime besttime image image image'
+      'date date map image image image'
+      'count1 count1 count2 count2 count3 count3'
+      'cover cover cover more more more'
+      'danger danger danger danger danger danger'
+      'remarks remarks remarks remarks remarks remarks'
+      'verification verification verification verification verification verification'
+    `
+  }};
+  grid-template-columns: ${props => {
+    const { width } = props
+    if (width < 600) return '1fr'
+    if (width < 800) return 'repeat(2, 1fr)'
+    return 'repeat(6, 1fr)'
+  }};
   grid-column-gap: 10px;
   grid-row-gap: 10px;
   justify-items: stretch;
@@ -287,12 +331,13 @@ const Tpopfreiwkontr = ({
     .map(n => n.einheit)
   const isPrint = get(data, 'isPrint', false)
   const isFreiwillig = role === 'apflora_freiwillig'
+  const { width } = dimensions
 
   return (
     <Mutation mutation={updateTpopkontrByIdGql}>
       {updateTpopkontr => (
         <Container>
-          <GridContainer>
+          <GridContainer width={width}>
             <Title>Erfolgskontrolle Artenschutz Flora</Title>
             <Headdata
               saveToDb={saveToDb}
@@ -313,7 +358,7 @@ const Tpopfreiwkontr = ({
               data={data}
               updateTpopkontr={updateTpopkontr}
             />
-            <Image data={data} />
+            <Image data={data} width={width} />
             {zaehls1 && (
               <Count
                 id={zaehls1.id}

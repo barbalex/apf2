@@ -14,11 +14,11 @@ const Container = styled(Area)`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-areas: 'besttimeLabel besttimeVal besttimeVal';
+  grid-column-gap: 10px;
   align-items: center;
 `
 const Label = styled.div`
   font-weight: 700;
-  padding-right: 4px;
 `
 const BesttimeLabel = styled(Label)`
   grid-area: besttimeLabel;

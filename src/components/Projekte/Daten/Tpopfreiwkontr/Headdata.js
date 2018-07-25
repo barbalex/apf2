@@ -22,13 +22,13 @@ const Container = styled(Area)`
     'koordLabel koordVal koordVal'
     'tpopNrLabel tpopNrVal statusVal'
     'bearbLabel bearbVal bearbVal';
+  grid-column-gap: 10px;
   div:nth-child(n + 3) {
     padding-top: 10px;
   }
 `
 const Label = styled.div`
   font-weight: 700;
-  padding-right: 4px;
 `
 const PopLabel = styled(Label)`
   grid-area: popLabel;

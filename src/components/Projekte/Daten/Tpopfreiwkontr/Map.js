@@ -18,21 +18,22 @@ const Container = styled(Area)`
   grid-template-areas:
     'mapLabel0 mapLabel1 mapVal1'
     'mapLabel0 mapLabel2 mapVal2';
+  grid-column-gap: 10px;
   align-items: center;
 `
 const Label = styled.div`
   font-weight: 700;
-  padding-right: 4px;
 `
 const MapLabel0 = styled(Label)`
   grid-area: mapLabel0;
-  padding-right: 15px;
 `
 const MapLabel1 = styled(Label)`
   grid-area: mapLabel1;
+  justify-self: end;
 `
 const MapLabel2 = styled(Label)`
   grid-area: mapLabel2;
+  justify-self: end;
 `
 const MapVal1 = styled(Label)`
   grid-area: mapVal1;

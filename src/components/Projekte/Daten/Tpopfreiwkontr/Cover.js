@@ -15,15 +15,15 @@ const Area = styled.div`
 const Container = styled(Area)`
   grid-area: cover;
   display: grid;
-  grid-template-columns: 4fr 3fr 1fr;
+  grid-template-columns: 4fr 3fr 15px;
   grid-template-areas:
     'deckApArtLabel deckApArtVal deckApArtMass'
     'deckNaBoLabel deckNaBoVal deckNaBoMass'
     'deckImage deckImage deckImage';
+  grid-column-gap: 10px;
 `
 const Label = styled.div`
   font-weight: 700;
-  padding-right: 4px;
 `
 const DeckApArtLabel = styled(Label)`
   grid-area: deckApArtLabel;

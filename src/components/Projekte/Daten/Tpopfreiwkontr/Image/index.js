@@ -6,7 +6,8 @@ import withLifecycle from '@hocs/with-lifecycle'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 
-const Area = styled.div`
+const Container = styled.div`
+  grid-area: image;
   border: 1px solid rgba(0, 0, 0, 0.5);
   border-radius: 6px;
   padding: 10px;
@@ -17,10 +18,8 @@ const Area = styled.div`
   grid-template-areas:
     'title'
     'myImage';
-`
-const Container = styled(Area)`
-  grid-area: image;
   max-height: 370px;
+  max-height: ${props => (props.width > 1013 ? '370px' : '390px')};
   @media print {
     max-height: 325px;
   }
@@ -59,7 +58,15 @@ const enhance = compose(
   })
 )
 
-const Image = ({ data, image }: { data: Object, image: Object }) => {
+const Image = ({
+  data,
+  image,
+  width,
+}: {
+  data: Object,
+  image: Object,
+  width: Number,
+}) => {
   const artname = get(
     data,
     'tpopkontrById.tpopByTpopId.popByPopId.apByApId.aeEigenschaftenByArtId.artname',
@@ -67,7 +74,7 @@ const Image = ({ data, image }: { data: Object, image: Object }) => {
   )
 
   return (
-    <Container>
+    <Container width={width}>
       <Title>{artname}</Title>
       {!!image && <ImageContainer image={image} />}
     </Container>

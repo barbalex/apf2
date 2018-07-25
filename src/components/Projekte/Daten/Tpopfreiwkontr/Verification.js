@@ -19,21 +19,22 @@ const Container = styled(Area)`
   grid-template-areas:
     'verifLabel0 verifLabel1 verifVal1'
     'verifLabel0 verifLabel2 verifVal2';
+  grid-column-gap: 10px;
   align-items: center;
 `
 const Label = styled.div`
   font-weight: 700;
-  padding-right: 4px;
 `
 const VerifLabel0 = styled(Label)`
   grid-area: verifLabel0;
-  padding-right: 15px;
 `
 const VerifLabel1 = styled(Label)`
   grid-area: verifLabel1;
+  justify-self: end;
 `
 const VerifLabel2 = styled(Label)`
   grid-area: verifLabel2;
+  justify-self: end;
 `
 const VerifVal1 = styled(Label)`
   grid-area: verifVal1;

@@ -17,11 +17,11 @@ const Container = styled(Area)`
   grid-template-columns: repeat(4, 1fr);
   grid-column-gap: 8px;
   grid-template-areas: 'dangerLabel dangerVal dangerVal dangerVal';
+  grid-column-gap: 10px;
   align-items: center;
 `
 const Label = styled.div`
   font-weight: 700;
-  padding-right: 4px;
 `
 const DangerLabel = styled(Label)`
   grid-area: dangerLabel;
