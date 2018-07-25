@@ -4,6 +4,7 @@ mutation updateUser(
   $email: String
   $role: String
   $pass: String
+  $adresseId: UUID
 ) {
   updateUserById(
     input: {
@@ -14,6 +15,7 @@ mutation updateUser(
         email: $email
         role: $role
         pass: $pass
+        adresseId: $adresseId
       }
     }
   ) {
@@ -23,6 +25,7 @@ mutation updateUser(
       email
       role
       pass
+      adresseId
     }
   }
 }

@@ -25,6 +25,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import data1Gql from './data1.graphql'
 import data2Gql from './data2.graphql'
 import updateUserByIdGql from './updateUserById.graphql'
+import AutoComplete from '../../../shared/Autocomplete'
 
 const Container = styled.div`
   height: 100%;
@@ -46,7 +47,7 @@ const PasswordMessage = styled.div`
 `
 
 const enhance = compose(
-  withState('errors', 'setErrors', ({})),
+  withState('errors', 'setErrors', {}),
   withState('editPassword', 'setEditPassword', false),
   withState('password', 'setPassword', ''),
   withState('password2', 'setPassword2', ''),
@@ -56,15 +57,11 @@ const enhance = compose(
   withState('password2ErrorText', 'setPassword2ErrorText', ''),
   withState('passwordMessage', 'setPasswordMessage', ''),
   withHandlers({
-    saveToDb: ({
-      refetchTree,
-      setErrors,
-      errors
-    }) => async ({
+    saveToDb: ({ refetchTree, setErrors, errors }) => async ({
       row,
       field,
       value,
-      updateUser
+      updateUser,
     }) => {
       /**
        * only save if value changed
@@ -85,6 +82,7 @@ const enhance = compose(
                 email: field === 'email' ? value : row.email,
                 role: field === 'role' ? value : row.role,
                 pass: field === 'pass' ? value : row.pass,
+                adresseId: field === 'adresseId' ? value : row.adresseId,
                 __typename: 'User',
               },
               __typename: 'User',
@@ -94,7 +92,7 @@ const enhance = compose(
       } catch (error) {
         return setErrors({ [field]: error.message })
       }
-      setErrors(({}))
+      setErrors({})
       if (['name', 'role'].includes(field)) refetchTree()
     },
   }),
@@ -145,7 +143,9 @@ const enhance = compose(
         } catch (error) {
           return setPasswordMessage(error.message)
         }
-        setPasswordMessage('Passwort gespeichert. Ihre aktuelle Anmeldung bleibt aktiv.')
+        setPasswordMessage(
+          'Passwort gespeichert. Ihre aktuelle Anmeldung bleibt aktiv.'
+        )
         setTimeout(() => {
           setPasswordMessage('')
         }, 5000)
@@ -160,10 +160,10 @@ const enhance = compose(
   withLifecycle({
     onDidUpdate(prevProps, props) {
       if (prevProps.id !== props.id) {
-        props.setErrors(({}))
+        props.setErrors({})
       }
     },
-  }),
+  })
 )
 
 const User = ({
@@ -245,6 +245,11 @@ const User = ({
               ],
               'sort'
             )
+            let adresses = sortBy(get(data, 'allAdresses.nodes', []), 'name')
+            adresses = adresses.map(el => ({
+              id: el.id,
+              value: el.name,
+            }))
 
             return (
               <ErrorBoundary>
@@ -284,27 +289,40 @@ const User = ({
                           label="Rolle"
                           helperText="Nur von Managern veränderbar"
                         />
-                        {
-                          !!passwordMessage &&
+                        <AutoComplete
+                          key={`${row.id}adresseId`}
+                          label="Zugehörige Adresse"
+                          value={get(row, 'adresseByAdresseId.name', '')}
+                          objects={adresses}
+                          saveToDb={value =>
+                            saveToDb({
+                              row,
+                              field: 'adresseId',
+                              value,
+                              updateUser,
+                            })
+                          }
+                          error={errors.artId}
+                        />
+                        {!!passwordMessage && (
                           <PasswordMessage>{passwordMessage}</PasswordMessage>
-                        }
-                        {
-                          !editPassword && !passwordMessage &&
-                          <div>
-                            <Button
-                              variant="outlined"
-                              color="primary"
-                              onClick={() => {
-                                setEditPassword(true)
-                                setPasswordMessage('')
-                              }}
-                            >
-                              Passwort ändern
-                            </Button>
-                          </div>
-                        }
-                        {
-                          editPassword &&
+                        )}
+                        {!editPassword &&
+                          !passwordMessage && (
+                            <div>
+                              <Button
+                                variant="outlined"
+                                color="primary"
+                                onClick={() => {
+                                  setEditPassword(true)
+                                  setPasswordMessage('')
+                                }}
+                              >
+                                Passwort ändern
+                              </Button>
+                            </div>
+                          )}
+                        {editPassword && (
                           <FormControl
                             error={!!passwordErrorText}
                             fullWidth
@@ -331,7 +349,11 @@ const User = ({
                                     onMouseDown={e => e.preventDefault()}
                                     title={showPass ? 'verstecken' : 'anzeigen'}
                                   >
-                                    {showPass ? <VisibilityOff /> : <Visibility />}
+                                    {showPass ? (
+                                      <VisibilityOff />
+                                    ) : (
+                                      <Visibility />
+                                    )}
                                   </IconButton>
                                 </InputAdornment>
                               }
@@ -340,46 +362,54 @@ const User = ({
                               {passwordErrorText}
                             </FormHelperText>
                           </FormControl>
-  
-                        }
-                        {
-                          editPassword && !!password &&
-                          <FormControl
-                            error={!!password2ErrorText}
-                            fullWidth
-                            aria-describedby="passwortHelper"
-                          >
-                            <InputLabel htmlFor="passwort">Passwort wiederholen</InputLabel>
-                            <StyledInput
-                              id="passwort2"
-                              type={showPass2 ? 'text' : 'password'}
-                              defaultValue={password2}
-                              onBlur={e => onBlurPassword2(e, row, updateUser)}
-                              onKeyPress={e => {
-                                if (e.key === 'Enter') {
-                                  onBlurPassword(e, client)
+                        )}
+                        {editPassword &&
+                          !!password && (
+                            <FormControl
+                              error={!!password2ErrorText}
+                              fullWidth
+                              aria-describedby="passwortHelper"
+                            >
+                              <InputLabel htmlFor="passwort">
+                                Passwort wiederholen
+                              </InputLabel>
+                              <StyledInput
+                                id="passwort2"
+                                type={showPass2 ? 'text' : 'password'}
+                                defaultValue={password2}
+                                onBlur={e =>
+                                  onBlurPassword2(e, row, updateUser)
                                 }
-                              }}
-                              autoCorrect="off"
-                              spellCheck="false"
-                              endAdornment={
-                                <InputAdornment position="end">
-                                  <IconButton
-                                    onClick={() => setShowPass2(!showPass2)}
-                                    onMouseDown={e => e.preventDefault()}
-                                    title={showPass2 ? 'verstecken' : 'anzeigen'}
-                                  >
-                                    {showPass2 ? <VisibilityOff /> : <Visibility />}
-                                  </IconButton>
-                                </InputAdornment>
-                              }
-                            />
-                            <FormHelperText id="passwortHelper">
-                              {password2ErrorText}
-                            </FormHelperText>
-                          </FormControl>
-  
-                        }
+                                onKeyPress={e => {
+                                  if (e.key === 'Enter') {
+                                    onBlurPassword(e, client)
+                                  }
+                                }}
+                                autoCorrect="off"
+                                spellCheck="false"
+                                endAdornment={
+                                  <InputAdornment position="end">
+                                    <IconButton
+                                      onClick={() => setShowPass2(!showPass2)}
+                                      onMouseDown={e => e.preventDefault()}
+                                      title={
+                                        showPass2 ? 'verstecken' : 'anzeigen'
+                                      }
+                                    >
+                                      {showPass2 ? (
+                                        <VisibilityOff />
+                                      ) : (
+                                        <Visibility />
+                                      )}
+                                    </IconButton>
+                                  </InputAdornment>
+                                }
+                              />
+                              <FormHelperText id="passwortHelper">
+                                {password2ErrorText}
+                              </FormHelperText>
+                            </FormControl>
+                          )}
                       </FieldsContainer>
                     )}
                   </Mutation>
