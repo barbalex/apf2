@@ -49,14 +49,10 @@ const enhance = compose(
           data,
           'tpopkontrById.tpopByTpopId.popByPopId.apByApId.id'
         )
-        console.log('Image, onDidUpdate, apId:', apId)
         let image
         try {
           image = await import(`./${apId}.png`)
-          console.log('Image, onDidUpdate, image:', image)
-        } catch (error) {
-          return console.log('Image, error loading image:', error.message)
-        }
+        } catch (error) {}
         if (image && image.default) setImage(image)
       }
     },
@@ -69,7 +65,6 @@ const Image = ({ data, image }: { data: Object, image: Object }) => {
     'tpopkontrById.tpopByTpopId.popByPopId.apByApId.aeEigenschaftenByArtId.artname',
     ''
   )
-  console.log('Image, render:', { image })
 
   return (
     <Container>
