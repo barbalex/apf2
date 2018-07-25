@@ -9,6 +9,7 @@ CREATE TABLE apflora.user (
   -- is role still used?
   role name DEFAULT NULL check role_length_maximum_512 (length(role) < 512),
   pass text DEFAULT NULL check pass_length_minimum_6 (length(pass) > 5),
+  adresse_id uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT proper_email CHECK (email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$')
 );
 alter table apflora.user drop constraint if exists user_pass_check;
@@ -18,6 +19,9 @@ alter table apflora.user drop constraint if exists user_role_check;
 alter table apflora.user add constraint role_length_maximum_512 check (length(role) < 512);
 CREATE INDEX ON apflora.user USING btree (id);
 CREATE INDEX ON apflora.user USING btree (name);
+CREATE INDEX ON apflora.user USING btree (adresse_id);
+COMMENT ON COLUMN apflora.user.adresse_id IS 'Datensatz bzw. Fremdschlüssel des Users in der Tabelle "adresse". Wird benutzt, damit die EKF-Kontrollen von Freiwilligen-Kontrolleurinnen gefiltert werden können';
+alter table apflora.user add column adresse_id uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE;
 
 create or replace function current_user_name() returns text as $$
   select nullif(current_setting('jwt.claims.username', true), '')::text;
@@ -45,7 +49,6 @@ CREATE TABLE apflora.adresse (
   telefon text DEFAULT NULL,
   email text DEFAULT NULL,
   freiw_erfko boolean DEFAULT false,
-  user_id uuid DEFAULT NULL REFERENCES apflora.user (id) ON DELETE SET NULL ON UPDATE CASCADE,
   evab_id_person UUID DEFAULT NULL,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
@@ -61,11 +64,9 @@ COMMENT ON COLUMN apflora.adresse.adresse IS 'Strasse, PLZ und Ort';
 COMMENT ON COLUMN apflora.adresse.telefon IS 'Telefonnummer';
 COMMENT ON COLUMN apflora.adresse.email IS 'Email';
 COMMENT ON COLUMN apflora.adresse.freiw_erfko IS 'Ist die Person freiwillige(r) Kontrolleur(in)';
-COMMENT ON COLUMN apflora.adresse.user_id IS 'Datenbank-User. Fremdschlüssel aus der Tabelle "user". Wird benutzt, damit die EKF-Kontrollen von Freiwilligen-Kontrolleurinnen gefiltert werden können';
 COMMENT ON COLUMN apflora.adresse.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.adresse.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.adresse.evab_id_person IS 'Personen werden in EvAB separat und mit eigener ID erfasst. Daher muss die passende Person hier gewählt werden';
-alter table apflora.adresse add column user_id uuid DEFAULT NULL REFERENCES apflora.user (id) ON DELETE SET NULL ON UPDATE CASCADE;
 
 ALTER TABLE apflora.adresse ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS writer ON apflora.adresse;

@@ -5,5 +5,11 @@ query userById($id: UUID!) {
     email
     role
     pass
+    adressesByUserId {
+      nodes {
+        id
+        name
+      }
+    }
   }
 }
