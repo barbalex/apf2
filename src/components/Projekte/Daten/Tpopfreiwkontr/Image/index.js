@@ -11,10 +11,6 @@ const Area = styled.div`
   border-radius: 6px;
   padding: 10px;
   break-inside: avoid;
-  align-self: stretch;
-  justify-self: stretch;
-  justify-content: stretch;
-  align-content: stretch;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr 20fr;
@@ -24,21 +20,23 @@ const Area = styled.div`
 `
 const Container = styled(Area)`
   grid-area: image;
+  max-height: 370px;
+  @media print {
+    max-height: 325px;
+  }
 `
 const Title = styled.div`
   grid-area: title;
   font-weight: 700;
   justify-self: center;
 `
-const Img = styled.img`
-  max-width: 100%;
-  display: block;
-  margin: 0 auto;
-  max-height: 100%;
-`
 const ImageContainer = styled.div`
   grid-area: myImage;
-  align-self: stretch;
+  background-image: ${props => `url("${props.image.default}")`};
+  background-origin: border-box;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 `
 
 const enhance = compose(
@@ -73,11 +71,7 @@ const Image = ({ data, image }: { data: Object, image: Object }) => {
   return (
     <Container>
       <Title>{artname}</Title>
-      {!!image && (
-        <ImageContainer>
-          <Img src={image.default} alt={artname} />
-        </ImageContainer>
-      )}
+      {!!image && <ImageContainer image={image} />}
     </Container>
   )
 }
