@@ -299,7 +299,6 @@ const enhance = compose(
 const Tpopfreiwkontr = ({
   id,
   data,
-  // TODO: use dimensions to show in one row on narrow screens
   dimensions,
   saveToDb,
   errors,
