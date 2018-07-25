@@ -289,7 +289,7 @@ const enhance = compose(
       if (bearbeiter && !userCount && !errors.bearbeiter) {
         setErrors({
           bearbeiter:
-            'Es ist kein Benutzer mit dieser Adresse verbunden. Damit dieser Benutzer Kontrollen erfassen kann, muss er ein Benutzerkonto haben, in dem die soeben gewählte Adresse als zugehörig erfasst wurde.',
+            'Es ist kein Benutzer mit dieser Adresse verbunden. Damit dieser Benutzer Kontrollen erfassen kann, muss er ein Benutzerkonto haben, in dem die oben gwählte Adresse als zugehörig erfasst wurde.',
         })
       }
     },
