@@ -49,6 +49,10 @@ const Messages = Loadable({
   loader: () => import('../Messages'),
   loading: Loading,
 })
+const Ekf = Loadable({
+  loader: () => import('../Ekf'),
+  loading: Loading,
+})
 
 const enhance = compose(
   withState('showDeletions', 'setShowDeletions', false),
@@ -90,7 +94,7 @@ const MyAppBar = ({
         <ErrorBoundary>
           <Container>
             <AppBar setShowDeletions={setShowDeletions} />
-            {view === 'ekf' && <div>ekf</div>}
+            {view === 'ekf' && <Ekf />}
             {view === 'normal' && <Projekte />}
             <User />
             <Errors />

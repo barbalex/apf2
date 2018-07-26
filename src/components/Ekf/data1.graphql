@@ -1,0 +1,11 @@
+query Query {
+  isPrint @client
+  user @client {
+    name
+    token
+  }
+  urlQuery @client {
+    projekteTabs
+    feldkontrTab
+  }
+}

@@ -57,8 +57,6 @@ const enhance = compose(
   withState('popLabelUsingNr', 'setPopLabelUsingNr', true),
   withState('tpopLabelUsingNr', 'setTpopLabelUsingNr', true),
   withState('idOfTpopBeingLocalized', 'setIdOfTpopBeingLocalized', null),
-  withState('tpopLabelUsingNr', 'setTpopLabelUsingNr', true),
-  withState('popLabelUsingNr', 'setPopLabelUsingNr', true),
   withState('bounds', 'setBounds', [[47.159, 8.354], [47.696, 8.984]]),
   withState('mapFilter', 'setMapFilter', {
     features: [],
