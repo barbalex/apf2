@@ -14,6 +14,7 @@ import get from 'lodash/get'
 import clone from 'lodash/clone'
 import gql from 'graphql-tag'
 import app from 'ampersand-app'
+import jwtDecode from 'jwt-decode'
 
 import isMobilePhone from '../../modules/isMobilePhone'
 import ErrorBoundary from '../shared/ErrorBoundary'
@@ -90,6 +91,12 @@ const enhance = compose(
         variables: { value: 'normal' },
       })
     },
+    setViewEkf: () => () => {
+      app.client.mutate({
+        mutation: setView,
+        variables: { value: 'ekf' },
+      })
+    },
   })
 )
 
@@ -99,12 +106,14 @@ const MyAppBar = ({
   setAnchorEl,
   setShowDeletions,
   setViewNormal,
+  setViewEkf,
 }: {
   onClickButton: () => void,
   anchorEl: Object,
   setAnchorEl: () => void,
   setShowDeletions: () => void,
   setViewNormal: () => void,
+  setViewEkf: () => void,
 }) => (
   <Query query={dataGql}>
     {({ loading, error, data, client }) => {
@@ -119,6 +128,11 @@ const MyAppBar = ({
       const exporteIsActive = !!activeNodes.projekt
       const isMobile = isMobilePhone()
       const view = get(data, 'view')
+
+      const token = get(data, 'user.token')
+      const tokenDecoded = token ? jwtDecode(token) : null
+      const role = tokenDecoded ? tokenDecoded.role : null
+      const isFreiwillig = role === 'apflora_freiwillig'
 
       return (
         <ErrorBoundary>
@@ -135,6 +149,11 @@ const MyAppBar = ({
                 )}
                 {view === 'normal' && (
                   <Fragment>
+                    {isFreiwillig && (
+                      <NormalViewButton onClick={setViewEkf}>
+                        EKF-Ansicht
+                      </NormalViewButton>
+                    )}
                     <StyledButton
                       variant={
                         projekteTabs.includes('tree') ? 'outlined' : 'text'
