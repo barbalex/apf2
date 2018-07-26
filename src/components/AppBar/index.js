@@ -33,6 +33,7 @@ const StyledAppBar = styled(AppBar)`
 const StyledToolbar = styled(Toolbar)`
   justify-content: space-between;
 `
+/*
 const StyledButton = styled(Button)`
   color: white !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
@@ -44,7 +45,19 @@ const StyledButton = styled(Button)`
   border-bottom-right-radius: ${props =>
     props.followed ? '0' : '4px'} !important;
   margin-right: ${props => (props.followed ? '-1px' : 'unset')} !important;
-`
+`*/
+const StyledButton = ({ preceded, followed, ...rest }) => {
+  const StyledButton = styled(Button)`
+    color: white !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    border-top-left-radius: ${props => (preceded ? '0' : '4px')} !important;
+    border-bottom-left-radius: ${props => (preceded ? '0' : '4px')} !important;
+    border-top-right-radius: ${props => (followed ? '0' : '4px')} !important;
+    border-bottom-right-radius: ${props => (followed ? '0' : '4px')} !important;
+    margin-right: ${props => (followed ? '-1px' : 'unset')} !important;
+  `
+  return <StyledButton {...rest} />
+}
 const MenuDiv = styled.div`
   display: flex;
   flex-wrap: wrap;
