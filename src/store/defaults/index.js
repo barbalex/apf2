@@ -1,5 +1,6 @@
 // @flow
 import get from 'lodash/get'
+import jwtDecode from 'jwt-decode'
 
 import treeNodeLabelFilter from './tree/nodeLabelFilter'
 import treeMap from './tree/map'
@@ -7,10 +8,18 @@ import treeMap from './tree/map'
 export default async idb => {
   // fetch user from idb
   const users = await idb.currentUser.toArray()
+  const token = get(users, '[0].token', null)
+  const tokenDecoded = token ? jwtDecode(token) : null
+  const userIsFreiw =
+    tokenDecoded &&
+    tokenDecoded.role &&
+    tokenDecoded.role === 'apflora_freiwillig'
+  const view = userIsFreiw ? 'ekf' : 'normal'
 
   const defaults = {
     updateAvailable: false,
     isPrint: false,
+    view,
     tree: {
       name: 'tree',
       activeNodeArray: [],
@@ -56,12 +65,8 @@ export default async idb => {
       __typename: 'Login',
     },
     user: {
-      // gql needs an id?
       name: get(users, '[0].name', ''),
-      // TODO: add freiwillig, computed from role
-      // give token a temporary value to prevent login form from opening
-      // before login has been fetched
-      token: get(users, '[0].token', null),
+      token,
       __typename: 'User',
     },
     export: {
