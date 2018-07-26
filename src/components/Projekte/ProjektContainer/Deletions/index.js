@@ -62,7 +62,6 @@ const enhance = compose(
       setChoosenDeletions,
       setShowDeletions,
       tree,
-      refetchTree,
     }) => async ({ datasetsDeleted, deleteState, errorState }) => {
       // loop through all choosenDeletions
       await Promise.all(
@@ -72,7 +71,6 @@ const enhance = compose(
               datasetsDeleted,
               dataset: datasetsDeleted.find(d => d.id === id),
               tree,
-              refetchTree,
               setShowDeletions,
               deleteState,
               errorState,
@@ -108,7 +106,6 @@ const Deletions = ({
   showDeletions,
   setShowDeletions,
   tree,
-  refetchTree,
 }: {
   onClickUndo: () => void,
   choosenDeletions: Array<string>,
@@ -116,7 +113,6 @@ const Deletions = ({
   showDeletions: Boolean,
   setShowDeletions: () => void,
   tree: Object,
-  refetchTree: () => void,
 }) => (
   <Subscribe to={[DeleteState]}>
     {deleteState => {

@@ -412,7 +412,6 @@ const ProjekteContainer = ({
                         showDeletions={showDeletions}
                         setShowDeletions={setShowDeletions}
                         tree={tree}
-                        refetchTree={refetch}
                       />
                     )}
                   </Container>

@@ -17,12 +17,10 @@ export default async ({
   dataPassedIn,
   deleteState,
   errorState,
-  refetchTree,
 }: {
   dataPassedIn: Object,
   deleteState: Object,
   errorState: Object,
-  refetchTree: () => void,
 }): Promise<void> => {
   const { client } = app
   // deleteDatasetDemand checks variables
@@ -169,6 +167,4 @@ export default async ({
 
   // reset datasetToDelete
   deleteState.emptyToDelete()
-
-  refetchTree()
 }

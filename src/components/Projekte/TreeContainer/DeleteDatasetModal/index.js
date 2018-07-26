@@ -20,7 +20,7 @@ const StyledDialog = styled(Dialog)`
   }
 `
 
-const DatasetDeleteModal = ({ refetchTree }: { refetchTree: () => void }) => (
+const DatasetDeleteModal = () => (
   <Subscribe to={[DeleteState]}>
     {deleteState => (
       <Subscribe to={[ErrorState]}>
@@ -65,7 +65,6 @@ const DatasetDeleteModal = ({ refetchTree }: { refetchTree: () => void }) => (
                             dataPassedIn: data,
                             deleteState,
                             errorState,
-                            refetchTree,
                           })
                         }
                       >

@@ -260,6 +260,7 @@ const enhance = compose(
             id,
             label,
             url: baseUrl,
+            afterDeletionHook: refetchTree,
           })
         },
         showBeobOnMap() {
@@ -495,7 +496,6 @@ class TreeContainer extends Component<Props> {
       loading,
       moving,
       copying,
-      refetchTree,
       popLabelUsingNr,
       tpopLabelUsingNr,
       mapFilter,
@@ -518,11 +518,7 @@ class TreeContainer extends Component<Props> {
                 <ErrorBoundary>
                   <Container>
                     {deleteDatasetModalIsVisible && (
-                      <DeleteDatasetModal
-                        tree={tree}
-                        token={token}
-                        refetchTree={refetchTree}
-                      />
+                      <DeleteDatasetModal tree={tree} token={token} />
                     )}
                     <LabelFilterContainer>
                       <LabelFilter

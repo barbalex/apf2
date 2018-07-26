@@ -17,7 +17,6 @@ export default async ({
   datasetsDeleted,
   dataset,
   tree,
-  refetchTree,
   setShowDeletions,
   deleteState,
   errorState,
@@ -25,7 +24,6 @@ export default async ({
   datasetsDeleted: Array<Object>,
   dataset: Object,
   tree: Object,
-  refetchTree: () => void,
   setShowDeletions: () => void,
   deleteState: Object,
   errorState: Object,
@@ -73,7 +71,4 @@ export default async ({
   deleteState.removeDataset(dataset.id)
 
   if (afterDeletionHook) afterDeletionHook()
-
-  // refetch tree
-  refetchTree()
 }
