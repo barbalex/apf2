@@ -39,6 +39,7 @@ const Projekte = ({
       const treeTabs = intersection(treeTabValues, projekteTabs)
       const tree2Tabs = intersection(tree2TabValues, projekteTabs)
       const isPrint = get(data, 'isPrint')
+
       if (tree2Tabs.length === 0 || isPrint) {
         return (
           <ProjektContainer

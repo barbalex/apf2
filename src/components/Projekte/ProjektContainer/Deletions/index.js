@@ -32,8 +32,7 @@ const Row = styled.div`
   display: flex;
   border-top: ${props =>
     props['data-withtopline'] ? '1px solid rgba(0,0,0,0.1)' : 'none'};
-  padding-top: ${props =>
-    props['data-withtopline'] ? '10px' : 'unset'};
+  padding-top: ${props => (props['data-withtopline'] ? '10px' : 'unset')};
 `
 const TextContainer = styled.div`
   display: flex;
@@ -64,23 +63,20 @@ const enhance = compose(
       setShowDeletions,
       tree,
       refetchTree,
-    }) => async ({
-      datasetsDeleted,
-      deleteState,
-      errorState,
-    }) => {
+    }) => async ({ datasetsDeleted, deleteState, errorState }) => {
       // loop through all choosenDeletions
       await Promise.all(
-        choosenDeletions.map(async id =>
-          await undelete({
-            datasetsDeleted,
-            dataset: datasetsDeleted.find(d => d.id === id),
-            tree,
-            refetchTree,
-            setShowDeletions,
-            deleteState,
-            errorState,
-          })
+        choosenDeletions.map(
+          async id =>
+            await undelete({
+              datasetsDeleted,
+              dataset: datasetsDeleted.find(d => d.id === id),
+              tree,
+              refetchTree,
+              setShowDeletions,
+              deleteState,
+              errorState,
+            })
         )
       )
       setChoosenDeletions([])
@@ -88,7 +84,10 @@ const enhance = compose(
         setShowDeletions(false)
       }
     },
-    toggleChoosenDeletions: ({ choosenDeletions, setChoosenDeletions }) => event => {
+    toggleChoosenDeletions: ({
+      choosenDeletions,
+      setChoosenDeletions,
+    }) => event => {
       let id = event.target.value
       let newChoosenDeletions
       if (choosenDeletions.includes(id)) {
@@ -98,7 +97,7 @@ const enhance = compose(
       }
       setChoosenDeletions(newChoosenDeletions)
     },
-  }),
+  })
 )
 
 const Deletions = ({
@@ -118,21 +117,22 @@ const Deletions = ({
   setShowDeletions: () => void,
   tree: Object,
   refetchTree: () => void,
-}) =>
+}) => (
   <Subscribe to={[DeleteState]}>
     {deleteState => {
       const datasetsDeleted = deleteState.state.datasets
-      console.log('Deletions, render:', {datasetsDeleted})
 
       return (
         <Subscribe to={[ErrorState]}>
-          {errorState =>
+          {errorState => (
             <ErrorBoundary>
               <Dialog
                 aria-labelledby="dialog-title"
                 open={showDeletions && datasetsDeleted.length > 0}
               >
-                <DialogTitle id="dialog-title">gelöschte Datensätze</DialogTitle>
+                <DialogTitle id="dialog-title">
+                  gelöschte Datensätze
+                </DialogTitle>
                 <DialogContent>
                   <List>
                     {datasetsDeleted.map((ds, index) => {
@@ -142,13 +142,13 @@ const Deletions = ({
                       Object.keys(dataset).forEach(
                         key => dataset[key] == null && delete dataset[key]
                       )
-                      const time = format(new Date(ds.time), 'YYYY.MM.DD HH:mm:ss')
+                      const time = format(
+                        new Date(ds.time),
+                        'YYYY.MM.DD HH:mm:ss'
+                      )
 
                       return (
-                        <Row
-                          key={ds.id}
-                          data-withtopline={index > 0}
-                        >
+                        <Row key={ds.id} data-withtopline={index > 0}>
                           <StyledFormControlLabel
                             control={
                               <StyledCheckbox
@@ -160,8 +160,16 @@ const Deletions = ({
                             }
                           />
                           <TextContainer>
-                            <StyledTextField label="Lösch-Zeitpunkt" value={time} fullWidth />
-                            <StyledTextField label="Tabelle" value={ds.table} fullWidth />
+                            <StyledTextField
+                              label="Lösch-Zeitpunkt"
+                              value={time}
+                              fullWidth
+                            />
+                            <StyledTextField
+                              label="Tabelle"
+                              value={ds.table}
+                              fullWidth
+                            />
                             <StyledTextField
                               label="Daten"
                               value={JSON.stringify(dataset, null, 2)}
@@ -192,10 +200,11 @@ const Deletions = ({
                 </DialogActions>
               </Dialog>
             </ErrorBoundary>
-          }
+          )}
         </Subscribe>
-      )}
-    }
+      )
+    }}
   </Subscribe>
+)
 
 export default enhance(Deletions)

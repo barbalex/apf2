@@ -6,10 +6,13 @@ import withState from 'recompose/withState'
 import Loadable from 'react-loadable'
 import withLifecycle from '@hocs/with-lifecycle'
 import app from 'ampersand-app'
+import { Query } from 'react-apollo'
+import get from 'lodash/get'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import Loading from '../shared/Loading'
 import setIsPrint from './setIsPrint.graphql'
+import dataGql from './data.graphql'
 
 const Container = styled.div`
   height: 100%;
@@ -77,19 +80,31 @@ const MyAppBar = ({
   showDeletions: Boolean,
   setShowDeletions: () => void,
 }) => (
-  <ErrorBoundary>
-    <Container>
-      <AppBar setShowDeletions={setShowDeletions} />
-      <Projekte
-        showDeletions={showDeletions}
-        setShowDeletions={setShowDeletions}
-      />
-      <User />
-      <Errors />
-      <UpdateAvailable />
-      <Messages />
-    </Container>
-  </ErrorBoundary>
+  <Query query={dataGql}>
+    {({ loading, error, data, client }) => {
+      if (error) return `Fehler: ${error.message}`
+      const view = get(data, 'view')
+
+      return (
+        <ErrorBoundary>
+          <Container>
+            <AppBar setShowDeletions={setShowDeletions} />
+            {view === 'ekf' && <div>ekf</div>}
+            {view === 'normal' && (
+              <Projekte
+                showDeletions={showDeletions}
+                setShowDeletions={setShowDeletions}
+              />
+            )}
+            <User />
+            <Errors />
+            <UpdateAvailable />
+            <Messages />
+          </Container>
+        </ErrorBoundary>
+      )
+    }}
+  </Query>
 )
 
 export default enhance(MyAppBar)
