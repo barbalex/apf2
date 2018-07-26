@@ -91,12 +91,7 @@ const MyAppBar = ({
           <Container>
             <AppBar setShowDeletions={setShowDeletions} />
             {view === 'ekf' && <div>ekf</div>}
-            {view === 'normal' && (
-              <Projekte
-                showDeletions={showDeletions}
-                setShowDeletions={setShowDeletions}
-              />
-            )}
+            {view === 'normal' && <Projekte />}
             <User />
             <Errors />
             <UpdateAvailable />
