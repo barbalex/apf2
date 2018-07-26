@@ -13,6 +13,7 @@ import moving from './moving'
 import copying from './copying'
 import updateAvailable from './updateAvailable'
 import isPrint from './isPrint'
+import view from './view'
 import assigningBeob from './assigningBeob'
 import mapMouseCoordinates from './mapMouseCoordinates'
 import copyingBiotop from './copyingBiotop'
@@ -32,6 +33,7 @@ export default merge(
   copying,
   updateAvailable,
   isPrint,
+  view,
   assigningBeob,
   mapMouseCoordinates,
   copyingBiotop,

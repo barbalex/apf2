@@ -1,0 +1,5 @@
+mutation setView($value: String) {
+  setView(value: $value) @client {
+    view @client
+  }
+}

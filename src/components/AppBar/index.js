@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { Fragment } from 'react'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
@@ -13,6 +13,7 @@ import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import clone from 'lodash/clone'
 import gql from 'graphql-tag'
+import app from 'ampersand-app'
 
 import isMobilePhone from '../../modules/isMobilePhone'
 import ErrorBoundary from '../shared/ErrorBoundary'
@@ -20,6 +21,7 @@ import dataGql from './data.graphql'
 import setUrlQueryValue from '../../modules/setUrlQueryValue'
 import getActiveNodes from '../../modules/getActiveNodes'
 import More from './More'
+import setView from './setView.graphql'
 
 const StyledAppBar = styled(AppBar)`
   @media print {
@@ -48,6 +50,10 @@ const StyledButton = ({ preceded, followed, ...rest }) => {
   `
   return <StyledButton {...rest} />
 }
+const NormalViewButton = styled(Button)`
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+`
 const MenuDiv = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -78,6 +84,12 @@ const enhance = compose(
         setUrlQueryValue({ key: 'projekteTabs', value: projekteTabs })
       }
     },
+    setViewNormal: () => () => {
+      app.client.mutate({
+        mutation: setView,
+        variables: { value: 'normal' },
+      })
+    },
   })
 )
 
@@ -86,11 +98,13 @@ const MyAppBar = ({
   anchorEl,
   setAnchorEl,
   setShowDeletions,
+  setViewNormal,
 }: {
   onClickButton: () => void,
   anchorEl: Object,
   setAnchorEl: () => void,
   setShowDeletions: () => void,
+  setViewNormal: () => void,
 }) => (
   <Query query={dataGql}>
     {({ loading, error, data, client }) => {
@@ -104,6 +118,7 @@ const MyAppBar = ({
       const projekteTabs = clone(get(data, 'urlQuery.projekteTabs', []))
       const exporteIsActive = !!activeNodes.projekt
       const isMobile = isMobilePhone()
+      const view = get(data, 'view')
 
       return (
         <ErrorBoundary>
@@ -113,79 +128,105 @@ const MyAppBar = ({
                 {isMobile ? '' : 'AP Flora'}
               </Typography>
               <MenuDiv>
-                <StyledButton
-                  variant={projekteTabs.includes('tree') ? 'outlined' : 'text'}
-                  followed={projekteTabs.includes('daten')}
-                  onClick={() => onClickButton('tree', client, projekteTabs)}
-                >
-                  Strukturbaum
-                </StyledButton>
-                <StyledButton
-                  variant={projekteTabs.includes('daten') ? 'outlined' : 'text'}
-                  preceded={projekteTabs.includes('tree')}
-                  followed={projekteTabs.includes('karte')}
-                  onClick={() => onClickButton('daten', client, projekteTabs)}
-                >
-                  Daten
-                </StyledButton>
-                <StyledButton
-                  variant={projekteTabs.includes('karte') ? 'outlined' : 'text'}
-                  preceded={projekteTabs.includes('daten')}
-                  followed={
-                    (!isMobile &&
-                      exporteIsActive &&
-                      projekteTabs.includes('exporte')) ||
-                    (!isMobile &&
-                      !exporteIsActive &&
-                      projekteTabs.includes('tree2'))
-                  }
-                  onClick={() => onClickButton('karte', client, projekteTabs)}
-                >
-                  Karte
-                </StyledButton>
-                {!isMobile &&
-                  exporteIsActive && (
+                {view === 'ekf' && (
+                  <NormalViewButton onClick={setViewNormal}>
+                    Normal-Ansicht
+                  </NormalViewButton>
+                )}
+                {view === 'normal' && (
+                  <Fragment>
                     <StyledButton
                       variant={
-                        projekteTabs.includes('exporte') ? 'outlined' : 'text'
+                        projekteTabs.includes('tree') ? 'outlined' : 'text'
                       }
-                      preceded={projekteTabs.includes('karte')}
-                      followed={projekteTabs.includes('tree2')}
-                      onClick={() => {
-                        setAnchorEl(null)
-                        onClickButton('exporte', client, projekteTabs)
-                      }}
+                      followed={projekteTabs.includes('daten')}
+                      onClick={() =>
+                        onClickButton('tree', client, projekteTabs)
+                      }
                     >
-                      Exporte
+                      Strukturbaum
                     </StyledButton>
-                  )}
-                {!isMobile && (
-                  <StyledButton
-                    variant={
-                      projekteTabs.includes('tree2') ? 'outlined' : 'text'
-                    }
-                    preceded={
-                      (exporteIsActive && projekteTabs.includes('exporte')) ||
-                      (!exporteIsActive && projekteTabs.includes('karte'))
-                    }
-                    followed={projekteTabs.includes('daten2')}
-                    onClick={() => onClickButton('tree2', client, projekteTabs)}
-                  >
-                    Strukturbaum 2
-                  </StyledButton>
-                )}
-                {!isMobile && (
-                  <StyledButton
-                    variant={
-                      projekteTabs.includes('daten2') ? 'outlined' : 'text'
-                    }
-                    preceded={projekteTabs.includes('tree2')}
-                    onClick={() =>
-                      onClickButton('daten2', client, projekteTabs)
-                    }
-                  >
-                    Daten 2
-                  </StyledButton>
+                    <StyledButton
+                      variant={
+                        projekteTabs.includes('daten') ? 'outlined' : 'text'
+                      }
+                      preceded={projekteTabs.includes('tree')}
+                      followed={projekteTabs.includes('karte')}
+                      onClick={() =>
+                        onClickButton('daten', client, projekteTabs)
+                      }
+                    >
+                      Daten
+                    </StyledButton>
+                    <StyledButton
+                      variant={
+                        projekteTabs.includes('karte') ? 'outlined' : 'text'
+                      }
+                      preceded={projekteTabs.includes('daten')}
+                      followed={
+                        (!isMobile &&
+                          exporteIsActive &&
+                          projekteTabs.includes('exporte')) ||
+                        (!isMobile &&
+                          !exporteIsActive &&
+                          projekteTabs.includes('tree2'))
+                      }
+                      onClick={() =>
+                        onClickButton('karte', client, projekteTabs)
+                      }
+                    >
+                      Karte
+                    </StyledButton>
+                    {!isMobile &&
+                      exporteIsActive && (
+                        <StyledButton
+                          variant={
+                            projekteTabs.includes('exporte')
+                              ? 'outlined'
+                              : 'text'
+                          }
+                          preceded={projekteTabs.includes('karte')}
+                          followed={projekteTabs.includes('tree2')}
+                          onClick={() => {
+                            setAnchorEl(null)
+                            onClickButton('exporte', client, projekteTabs)
+                          }}
+                        >
+                          Exporte
+                        </StyledButton>
+                      )}
+                    {!isMobile && (
+                      <StyledButton
+                        variant={
+                          projekteTabs.includes('tree2') ? 'outlined' : 'text'
+                        }
+                        preceded={
+                          (exporteIsActive &&
+                            projekteTabs.includes('exporte')) ||
+                          (!exporteIsActive && projekteTabs.includes('karte'))
+                        }
+                        followed={projekteTabs.includes('daten2')}
+                        onClick={() =>
+                          onClickButton('tree2', client, projekteTabs)
+                        }
+                      >
+                        Strukturbaum 2
+                      </StyledButton>
+                    )}
+                    {!isMobile && (
+                      <StyledButton
+                        variant={
+                          projekteTabs.includes('daten2') ? 'outlined' : 'text'
+                        }
+                        preceded={projekteTabs.includes('tree2')}
+                        onClick={() =>
+                          onClickButton('daten2', client, projekteTabs)
+                        }
+                      >
+                        Daten 2
+                      </StyledButton>
+                    )}
+                  </Fragment>
                 )}
                 <More
                   onClickButton={onClickButton}

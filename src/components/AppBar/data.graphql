@@ -1,11 +1,11 @@
 query AppBarQuery {
+  view @client
   user @client {
     name
     token
   }
   urlQuery @client {
     projekteTabs
-    
   }
   tree @client {
     activeNodeArray
