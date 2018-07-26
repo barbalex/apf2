@@ -13,6 +13,7 @@ import ErrorBoundary from '../shared/ErrorBoundary'
 import Loading from '../shared/Loading'
 import setIsPrint from './setIsPrint.graphql'
 import dataGql from './data.graphql'
+import Deletions from '../Deletions'
 
 const Container = styled.div`
   height: 100%;
@@ -100,6 +101,12 @@ const MyAppBar = ({
             <Errors />
             <UpdateAvailable />
             <Messages />
+            {showDeletions && (
+              <Deletions
+                showDeletions={showDeletions}
+                setShowDeletions={setShowDeletions}
+              />
+            )}
           </Container>
         </ErrorBoundary>
       )

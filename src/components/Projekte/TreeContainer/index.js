@@ -76,6 +76,7 @@ import moveTo from '../../../modules/moveTo'
 import copyTo from '../../../modules/copyTo'
 import createNewPopFromBeob from '../../../modules/createNewPopFromBeob'
 import setTreeKeyGql from './setTreeKey.graphql'
+import setTreeKey2Gql from './setTreeKey2.graphql'
 import copyBeobZugeordnetKoordToPop from '../../../modules/copyBeobZugeordnetKoordToPop'
 import copyTpopKoordToPop from '../../../modules/copyTpopKoordToPop'
 import setCopyingBiotop from './setCopyingBiotop.graphql'
@@ -255,12 +256,36 @@ const enhance = compose(
           })
         },
         delete() {
+          const addNodeToOpenNodes = (openNodes, url) => {
+            if (url.length === 0) return
+            if (url.length === 1) return openNodes.push(url)
+            const newUrl = [...url].pop()
+            openNodes.push(newUrl)
+            addNodeToOpenNodes(openNodes, newUrl)
+          }
+          const afterDeletionHook = async () => {
+            // set it as new activeNodeArray and open node
+            const { openNodes } = tree
+            const newOpenNodes = [...openNodes]
+            addNodeToOpenNodes(newOpenNodes, baseUrl)
+            await client.mutate({
+              mutation: setTreeKey2Gql,
+              variables: {
+                tree: tree.name,
+                value1: baseUrl,
+                key1: 'activeNodeArray',
+                value2: newOpenNodes,
+                key2: 'openNodes',
+              },
+            })
+            refetchTree()
+          }
           deleteState.setToDelete({
             table,
             id,
             label,
             url: baseUrl,
-            afterDeletionHook: refetchTree,
+            afterDeletionHook,
           })
         },
         showBeobOnMap() {

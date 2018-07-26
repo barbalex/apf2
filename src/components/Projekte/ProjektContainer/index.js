@@ -25,7 +25,6 @@ import Exporte from '../Exporte'
 import getActiveNodes from '../../../modules/getActiveNodes'
 import buildVariables from './variables'
 import buildNodes from '../TreeContainer/nodes'
-import Deletions from './Deletions'
 import apfloraLayers from '../Karte/apfloraLayers'
 import overlays from '../Karte/overlays'
 import idsInsideFeatureCollection from '../../../modules/idsInsideFeatureCollection'
@@ -407,13 +406,6 @@ const ProjekteContainer = ({
                         )}
                       </ReflexContainer>
                     </ErrorBoundary>
-                    {showDeletions && (
-                      <Deletions
-                        showDeletions={showDeletions}
-                        setShowDeletions={setShowDeletions}
-                        tree={tree}
-                      />
-                    )}
                   </Container>
                 )
               }}

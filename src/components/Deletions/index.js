@@ -15,10 +15,10 @@ import format from 'date-fns/format'
 import TextField from '@material-ui/core/TextField'
 import { Subscribe } from 'unstated'
 
-import ErrorBoundary from '../../../shared/ErrorBoundary'
+import ErrorBoundary from '../shared/ErrorBoundary'
 import undelete from './undelete'
-import DeleteState from '../../../../state/Delete'
-import ErrorState from '../../../../state/Error'
+import DeleteState from '../../state/Delete'
+import ErrorState from '../../state/Error'
 
 const List = styled.div`
   padding-left: 24px;
@@ -61,7 +61,6 @@ const enhance = compose(
       choosenDeletions,
       setChoosenDeletions,
       setShowDeletions,
-      tree,
     }) => async ({ datasetsDeleted, deleteState, errorState }) => {
       // loop through all choosenDeletions
       await Promise.all(
@@ -70,7 +69,6 @@ const enhance = compose(
             await undelete({
               datasetsDeleted,
               dataset: datasetsDeleted.find(d => d.id === id),
-              tree,
               setShowDeletions,
               deleteState,
               errorState,
@@ -105,14 +103,12 @@ const Deletions = ({
   toggleChoosenDeletions,
   showDeletions,
   setShowDeletions,
-  tree,
 }: {
   onClickUndo: () => void,
   choosenDeletions: Array<string>,
   toggleChoosenDeletions: () => void,
   showDeletions: Boolean,
   setShowDeletions: () => void,
-  tree: Object,
 }) => (
   <Subscribe to={[DeleteState]}>
     {deleteState => {
