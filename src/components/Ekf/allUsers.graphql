@@ -1,0 +1,22 @@
+query allUsersQuery {
+  allUsers {
+    nodes {
+      id
+      name
+      adresseId
+      #adresseByAdresseId {
+      #  id
+      #  tpopkontrsByBearbeiter(
+      #    filter: {
+      #      typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+      #      jahr: { equalTo: "2018" }
+      #    }
+      #  ) {
+      #    nodes {
+      #      id
+      #    }
+      #  }
+      #}
+    }
+  }
+}
