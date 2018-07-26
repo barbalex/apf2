@@ -1,16 +1,19 @@
 query EkfListQuery($userName: String!, $jahr: Int!) {
-  userByName(name: $userName) {
-    id
-    adresseByAdresseId {
+  allUsers(filter: { name: { equalTo: $userName } }) {
+    nodes {
       id
-      tpopkontrsByBearbeiter(
-        filter: {
-          typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
-          jahr: { equalTo: $jahr }
-        }
-      ) {
-        nodes {
-          id
+      name
+      adresseByAdresseId {
+        id
+        tpopkontrsByBearbeiter(
+          filter: {
+            typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+            jahr: { equalTo: $jahr }
+          }
+        ) {
+          nodes {
+            id
+          }
         }
       }
     }

@@ -32,7 +32,6 @@ DROP POLICY IF EXISTS reader_writer ON apflora.user;
 CREATE POLICY reader_writer ON apflora.user
   USING (
     name = current_user_name()
-    -- TODO: this only for USING, not for CHECK?
     OR current_user = 'anon'
     or current_user = 'apflora_manager'
   );

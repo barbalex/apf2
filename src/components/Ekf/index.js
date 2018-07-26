@@ -52,6 +52,10 @@ const EkfContainer = () => (
           // TODO
           const jahr = 2018
           const variables = { userName, jahr }
+          console.log('ProjektContainer:', {
+            data1,
+            userName,
+          })
 
           return (
             <Query query={data2Gql} variables={variables}>
@@ -85,6 +89,7 @@ const EkfContainer = () => (
                 }
 
                 const data = merge(data1, data2)
+                console.log('data:', data)
                 // remove 2 to treat all same
                 const treeFlex =
                   projekteTabs.length === 2 && tabs.length === 2
