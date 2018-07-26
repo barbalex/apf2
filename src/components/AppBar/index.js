@@ -3,11 +3,9 @@ import React from 'react'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
-import MoreVertIcon from '@material-ui/icons/MoreVert'
 import remove from 'lodash/remove'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -36,17 +34,20 @@ const StyledToolbar = styled(Toolbar)`
   justify-content: space-between;
 `
 const StyledButton = styled(Button)`
-  color: ${props =>
-    props['data-visible']
-      ? 'rgb(255, 255, 255) !important'
-      : 'rgba(255, 255, 255, 0.298039) !important'};
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  border-top-left-radius: ${props => (props.preceded ? '0' : '4px')} !important;
+  border-bottom-left-radius: ${props =>
+    props.preceded ? '0' : '4px'} !important;
+  border-top-right-radius: ${props =>
+    props.followed ? '0' : '4px'} !important;
+  border-bottom-right-radius: ${props =>
+    props.followed ? '0' : '4px'} !important;
+  margin-right: ${props => (props.followed ? '-1px' : 'unset')} !important;
 `
 const MenuDiv = styled.div`
   display: flex;
   flex-wrap: wrap;
-`
-const StyledMoreVertIcon = styled(MoreVertIcon)`
-  color: white !important;
 `
 const Version = styled.div`
   padding: 12px 16px;
@@ -69,10 +70,10 @@ const enhance = compose(
           if (name === 'tree2') {
             client.mutate({
               mutation: gql`
-                 mutation cloneTree2From1 {
+                mutation cloneTree2From1 {
                   cloneTree2From1 @client
                 }
-              `
+              `,
             })
           }
         }
@@ -89,7 +90,7 @@ const enhance = compose(
       setAnchorEl(null)
       setShowDeletions(true)
     },
-  }),
+  })
 )
 
 const MyAppBar = ({
@@ -106,10 +107,10 @@ const MyAppBar = ({
   anchorEl: Object,
   setAnchorEl: () => void,
   setShowDeletions: () => void,
-}) =>
+}) => (
   <Subscribe to={[DeleteState]}>
     {deleteState => (
-      <Query query={dataGql} >
+      <Query query={dataGql}>
         {({ loading, error, data, client }) => {
           if (error) return `Fehler: ${error.message}`
           const activeNodeArray = get(data, 'tree.activeNodeArray')
@@ -132,27 +133,58 @@ const MyAppBar = ({
                   </Typography>
                   <MenuDiv>
                     <StyledButton
-                      data-visible={projekteTabs.includes('tree')}
-                      onClick={() => onClickButton('tree', client, projekteTabs)}
+                      color="primary"
+                      variant={
+                        projekteTabs.includes('tree') ? 'outlined' : 'text'
+                      }
+                      followed={projekteTabs.includes('daten')}
+                      onClick={() =>
+                        onClickButton('tree', client, projekteTabs)
+                      }
                     >
                       Strukturbaum
                     </StyledButton>
                     <StyledButton
-                      data-visible={projekteTabs.includes('daten')}
-                      onClick={() => onClickButton('daten', client, projekteTabs)}
+                      variant={
+                        projekteTabs.includes('daten') ? 'outlined' : 'text'
+                      }
+                      preceded={projekteTabs.includes('tree')}
+                      followed={projekteTabs.includes('karte')}
+                      onClick={() =>
+                        onClickButton('daten', client, projekteTabs)
+                      }
                     >
                       Daten
                     </StyledButton>
                     <StyledButton
-                      data-visible={projekteTabs.includes('karte')}
-                      onClick={() => onClickButton('karte', client, projekteTabs)}
+                      variant={
+                        projekteTabs.includes('karte') ? 'outlined' : 'text'
+                      }
+                      preceded={projekteTabs.includes('daten')}
+                      followed={
+                        (!isMobile &&
+                          exporteIsActive &&
+                          projekteTabs.includes('exporte')) ||
+                        (!isMobile &&
+                          !exporteIsActive &&
+                          projekteTabs.includes('tree2'))
+                      }
+                      onClick={() =>
+                        onClickButton('karte', client, projekteTabs)
+                      }
                     >
                       Karte
                     </StyledButton>
                     {!isMobile &&
                       exporteIsActive && (
                         <StyledButton
-                          data-visible={projekteTabs.includes('exporte')}
+                          variant={
+                            projekteTabs.includes('exporte')
+                              ? 'outlined'
+                              : 'text'
+                          }
+                          preceded={projekteTabs.includes('karte')}
+                          followed={projekteTabs.includes('tree2')}
                           onClick={() => {
                             setAnchorEl(null)
                             onClickButton('exporte', client, projekteTabs)
@@ -160,34 +192,48 @@ const MyAppBar = ({
                         >
                           Exporte
                         </StyledButton>
-                      )
-                    }
+                      )}
                     {!isMobile && (
                       <StyledButton
-                        data-visible={projekteTabs.includes('tree2')}
-                        onClick={() => onClickButton('tree2', client, projekteTabs)}
+                        variant={
+                          projekteTabs.includes('tree2') ? 'outlined' : 'text'
+                        }
+                        preceded={
+                          (exporteIsActive &&
+                            projekteTabs.includes('exporte')) ||
+                          (!exporteIsActive && projekteTabs.includes('karte'))
+                        }
+                        followed={projekteTabs.includes('daten2')}
+                        onClick={() =>
+                          onClickButton('tree2', client, projekteTabs)
+                        }
                       >
                         Strukturbaum 2
                       </StyledButton>
                     )}
                     {!isMobile && (
                       <StyledButton
-                        data-visible={projekteTabs.includes('daten2')}
-                        onClick={() => onClickButton('daten2', client, projekteTabs)}
+                        variant={
+                          projekteTabs.includes('daten2') ? 'outlined' : 'text'
+                        }
+                        preceded={projekteTabs.includes('tree2')}
+                        onClick={() =>
+                          onClickButton('daten2', client, projekteTabs)
+                        }
                       >
                         Daten 2
                       </StyledButton>
                     )}
 
                     <div>
-                      <IconButton
+                      <StyledButton
                         aria-label="Mehr"
                         aria-owns={anchorEl ? 'long-menu' : null}
                         aria-haspopup="true"
                         onClick={event => setAnchorEl(event.currentTarget)}
                       >
-                        <StyledMoreVertIcon />
-                      </IconButton>
+                        Mehr
+                      </StyledButton>
                       <Menu
                         id="long-menu"
                         anchorEl={anchorEl}
@@ -212,7 +258,9 @@ const MyAppBar = ({
                         >
                           gelöschte Datensätze wiederherstellen
                         </MenuItem>
-                        <MenuItem onClick={watchVideos}>Video-Anleitungen</MenuItem>
+                        <MenuItem onClick={watchVideos}>
+                          Video-Anleitungen
+                        </MenuItem>
                         <MenuItem
                           onClick={() => {
                             setAnchorEl(null)
@@ -233,5 +281,6 @@ const MyAppBar = ({
       </Query>
     )}
   </Subscribe>
+)
 
 export default enhance(MyAppBar)
