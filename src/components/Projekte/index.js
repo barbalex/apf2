@@ -24,13 +24,7 @@ const Container = styled.div`
 const treeTabValues = ['tree', 'daten', 'karte', 'exporte']
 const tree2TabValues = ['tree2', 'daten2', 'karte2', 'exporte2']
 
-const Projekte = ({
-  showDeletions,
-  setShowDeletions,
-}: {
-  showDeletions: Boolean,
-  setShowDeletions: () => void,
-}) => (
+const Projekte = () => (
   <Query query={dataGql}>
     {({ loading, error, data, client }) => {
       if (error) return `Fehler: ${error.message}`
@@ -46,8 +40,6 @@ const Projekte = ({
             treeName="tree"
             tabs={treeTabs}
             projekteTabs={projekteTabs}
-            showDeletions={showDeletions}
-            setShowDeletions={setShowDeletions}
           />
         )
       }
@@ -61,8 +53,6 @@ const Projekte = ({
                   treeName="tree"
                   tabs={treeTabs}
                   projekteTabs={projekteTabs}
-                  showDeletions={showDeletions}
-                  setShowDeletions={setShowDeletions}
                 />
               </ReflexElement>
               <ReflexSplitter />
@@ -71,8 +61,6 @@ const Projekte = ({
                   treeName="tree2"
                   tabs={tree2Tabs}
                   projekteTabs={projekteTabs}
-                  showDeletions={showDeletions}
-                  setShowDeletions={setShowDeletions}
                 />
               </ReflexElement>
             </ReflexContainer>
