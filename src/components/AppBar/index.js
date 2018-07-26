@@ -38,6 +38,12 @@ const StyledButton = ({ preceded, followed, ...rest }) => {
   const StyledButton = styled(Button)`
     color: white !important;
     border-color: rgba(255, 255, 255, 0.5) !important;
+    border-right-color: ${followed
+      ? ' rgba(255, 255, 255, 0.25)'
+      : ' rgba(255, 255, 255, 0.5)'} !important;
+    border-left-color: ${preceded
+      ? ' rgba(255, 255, 255, 0.25)'
+      : ' rgba(255, 255, 255, 0.5)'} !important;
     border-top-left-radius: ${preceded ? '0' : '4px'} !important;
     border-bottom-left-radius: ${preceded ? '0' : '4px'} !important;
     border-top-right-radius: ${followed ? '0' : '4px'} !important;
@@ -137,7 +143,6 @@ const MyAppBar = ({
                   </Typography>
                   <MenuDiv>
                     <StyledButton
-                      color="primary"
                       variant={
                         projekteTabs.includes('tree') ? 'outlined' : 'text'
                       }
