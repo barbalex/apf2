@@ -7,7 +7,6 @@ import treeNodeLabelFilterResetExceptAp from './treeNodeLabelFilterResetExceptAp
 
 export default async ({ tree, node }: { tree: Object, node: Object }) => {
   const { client } = app
-  console.log('openNode:', { tree, node })
   // make sure this node's url is not yet contained
   // otherwise same nodes will be added multiple times!
   if (isNodeOpen(tree.openNodes, node.url)) return
