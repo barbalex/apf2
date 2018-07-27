@@ -14,7 +14,8 @@ import jwtDecode from 'jwt-decode'
 // but only in production!
 import ErrorBoundary from '../shared/ErrorBoundary'
 import data1Gql from './data1.graphql'
-import allUsersGql from './allUsers.graphql'
+import dataGql from './data.graphql'
+import dataWithDateGql from './dataWithDate.graphql'
 import ErrorState from '../../state/Error'
 import EkfList from './List'
 import Loading from '../shared/Loading'
@@ -62,9 +63,12 @@ const EkfContainer = () => (
           const token = get(data1, 'user.token')
           const tokenDecoded = token ? jwtDecode(token) : null
           const role = tokenDecoded ? tokenDecoded.role : null
+          const ekfRefDate = new Date().setMonth(new Date().getMonth() - 2)
+          const ekfRefYear = new Date(ekfRefDate).getFullYear()
+          const query = ekfRefYear === jahr ? dataGql : dataWithDateGql
 
           return (
-            <Query query={allUsersGql} variables={variables}>
+            <Query query={query} variables={variables}>
               {({ error, data: data2, refetch, loading }) => {
                 if (error) return `Fehler: ${error.message}`
                 const data = merge(data1, data2)

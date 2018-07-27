@@ -1,4 +1,4 @@
-query allUsersQuery($userName: String!, $jahr: Int!) {
+query ekfDataQuery($userName: String!, $jahr: Int!) {
   userByName(name: $userName) {
     id
     adresseByAdresseId {
@@ -6,7 +6,7 @@ query allUsersQuery($userName: String!, $jahr: Int!) {
       tpopkontrsByBearbeiter(
         filter: {
           typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
-          or: [{ jahr: { equalTo: $jahr } }, { jahr: { isNull: true } }]
+          jahr: { equalTo: $jahr }
         }
       ) {
         nodes {

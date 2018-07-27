@@ -97,7 +97,7 @@ const EkfList = ({
         {`Für das Jahr ${get(
           data,
           'ekfYear'
-        )} wurden offenbar für Sie keine Erfolgskontrollen vorbereitet`}
+        )} existieren offenbar keine Erfolgskontrollen mit Ihnen als BearbeiterIn`}
       </NoDataContainer>
     )
 
