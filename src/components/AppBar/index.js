@@ -20,9 +20,11 @@ import isMobilePhone from '../../modules/isMobilePhone'
 import ErrorBoundary from '../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import setUrlQueryValue from '../../modules/setUrlQueryValue'
+import setEkfYear from './setEkfYear.graphql'
 import getActiveNodes from '../../modules/getActiveNodes'
 import More from './More'
 import setView from './setView.graphql'
+import EkfYear from './EkfYear'
 
 const StyledAppBar = styled(AppBar)`
   @media print {
@@ -62,6 +64,7 @@ const MenuDiv = styled.div`
 
 const enhance = compose(
   withState('anchorEl', 'setAnchorEl', null),
+  withState('ekfYearState', 'setEkfYearState', null),
   withHandlers({
     onClickButton: () => (name, client, projekteTabs) => {
       if (isMobilePhone()) {
@@ -97,6 +100,14 @@ const enhance = compose(
         variables: { value: 'ekf' },
       })
     },
+    setEkfYear: () => value => {
+      const ekfRefDate = new Date().setMonth(new Date().getMonth() - 2)
+      const ekfRefYear = new Date(ekfRefDate).getFullYear()
+      app.client.mutate({
+        mutation: setEkfYear,
+        variables: { value: value ? +value : ekfRefYear },
+      })
+    },
   })
 )
 
@@ -107,6 +118,7 @@ const MyAppBar = ({
   setShowDeletions,
   setViewNormal,
   setViewEkf,
+  setEkfYear,
 }: {
   onClickButton: () => void,
   anchorEl: Object,
@@ -114,6 +126,7 @@ const MyAppBar = ({
   setShowDeletions: () => void,
   setViewNormal: () => void,
   setViewEkf: () => void,
+  setEkfYear: () => void,
 }) => (
   <Query query={dataGql}>
     {({ loading, error, data, client }) => {
@@ -143,9 +156,15 @@ const MyAppBar = ({
               </Typography>
               <MenuDiv>
                 {view === 'ekf' && (
-                  <NormalViewButton onClick={setViewNormal}>
-                    Normal-Ansicht
-                  </NormalViewButton>
+                  <Fragment>
+                    <EkfYear
+                      value={get(data, 'ekfYear')}
+                      setEkfYear={setEkfYear}
+                    />
+                    <NormalViewButton onClick={setViewNormal}>
+                      Normal-Ansicht
+                    </NormalViewButton>
+                  </Fragment>
                 )}
                 {view === 'normal' && (
                   <Fragment>
