@@ -35,6 +35,11 @@ const Container = styled.div`
     height: auto !important;
   }
 `
+const ReflexElementForEKF = styled(ReflexElement)`
+  > div {
+    border-left: 1px solid rgb(46, 125, 50);
+  }
+`
 const treeTabValues = ['tree', 'daten', 'karte', 'exporte']
 
 const enhance = compose()
@@ -98,7 +103,7 @@ const EkfContainer = () => (
                         {tabs.includes('tree') &&
                           tabs.includes('daten') && <ReflexSplitter />}
                         {tabs.includes('daten') && (
-                          <ReflexElement
+                          <ReflexElementForEKF
                             propagateDimensions={true}
                             renderOnResizeRate={100}
                             renderOnResize={true}
@@ -112,7 +117,7 @@ const EkfContainer = () => (
                                 role={role}
                               />
                             )}
-                          </ReflexElement>
+                          </ReflexElementForEKF>
                         )}
                       </ReflexContainer>
                     </ErrorBoundary>
