@@ -5,6 +5,7 @@ import compose from 'recompose/compose'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
+import merge from 'lodash/merge'
 import intersection from 'lodash/intersection'
 import { Subscribe } from 'unstated'
 
@@ -12,7 +13,7 @@ import { Subscribe } from 'unstated'
 // but only in production!
 import ErrorBoundary from '../shared/ErrorBoundary'
 import data1Gql from './data1.graphql'
-import allUsersFuck from './allUsersData'
+import allUsersGql from './allUsers.graphql'
 import ErrorState from '../../state/Error'
 import EkfList from './List'
 
@@ -28,64 +29,69 @@ const Container = styled.div`
 `
 const treeTabValues = ['tree', 'daten', 'karte', 'exporte']
 
-const enhance = compose(allUsersFuck)
+const enhance = compose()
 
-const EkfContainer = ({ allUsersData }: { allUsersData: Object }) => {
-  console.log('allUsersData:', allUsersData)
-  if (allUsersData.loading) return null
+const EkfContainer = () => (
+  <Subscribe to={[ErrorState]}>
+    {errorState => (
+      <Query query={data1Gql}>
+        {({ error, data: data1 }) => {
+          if (error) return `Fehler: ${error.message}`
+          const userName = get(data1, 'user.name')
+          const projekteTabs = [...get(data1, 'urlQuery.projekteTabs', [])]
+          const tabs = intersection(treeTabValues, projekteTabs)
+          const treeFlex =
+            projekteTabs.length === 2 && tabs.length === 2
+              ? 0.33
+              : tabs.length === 0
+                ? 1
+                : 1 / tabs.length
+          const isPrint = get(data1, 'isPrint')
+          const jahr = get(data1, 'ekfYear')
+          const variables = { userName, jahr }
 
-  return (
-    <Subscribe to={[ErrorState]}>
-      {errorState => (
-        <Query query={data1Gql}>
-          {({ error, data: data1 }) => {
-            if (error) return `Fehler: ${error.message}`
-            const userName = get(data1, 'user.name')
-            const projekteTabs = [...get(data1, 'urlQuery.projekteTabs', [])]
-            const tabs = intersection(treeTabValues, projekteTabs)
-            // TODO
-            console.log('EkfContainer:', {
-              data1,
-              userName,
-            })
-            const treeFlex =
-              projekteTabs.length === 2 && tabs.length === 2
-                ? 0.33
-                : tabs.length === 0
-                  ? 1
-                  : 1 / tabs.length
-            const isPrint = get(data1, 'isPrint')
-            if (isPrint) return <div>print ekf</div>
+          return (
+            <Query query={allUsersGql} variables={variables}>
+              {({ error, data: data2 }) => {
+                if (error) return `Fehler: ${error.message}`
+                const data = merge(data1, data2)
+                console.log('EkfContainer:', {
+                  data,
+                })
 
-            return (
-              <Container data-loading={false}>
-                <ErrorBoundary>
-                  <ReflexContainer orientation="vertical">
-                    {tabs.includes('tree') && (
-                      <ReflexElement flex={treeFlex}>
-                        <EkfList />
-                      </ReflexElement>
-                    )}
-                    {tabs.includes('tree') &&
-                      tabs.includes('daten') && <ReflexSplitter />}
-                    {tabs.includes('daten') && (
-                      <ReflexElement
-                        propagateDimensions={true}
-                        renderOnResizeRate={100}
-                        renderOnResize={true}
-                      >
-                        <div>ekf</div>
-                      </ReflexElement>
-                    )}
-                  </ReflexContainer>
-                </ErrorBoundary>
-              </Container>
-            )
-          }}
-        </Query>
-      )}
-    </Subscribe>
-  )
-}
+                if (isPrint) return <div>print ekf</div>
+
+                return (
+                  <Container data-loading={false}>
+                    <ErrorBoundary>
+                      <ReflexContainer orientation="vertical">
+                        {tabs.includes('tree') && (
+                          <ReflexElement flex={treeFlex}>
+                            <EkfList />
+                          </ReflexElement>
+                        )}
+                        {tabs.includes('tree') &&
+                          tabs.includes('daten') && <ReflexSplitter />}
+                        {tabs.includes('daten') && (
+                          <ReflexElement
+                            propagateDimensions={true}
+                            renderOnResizeRate={100}
+                            renderOnResize={true}
+                          >
+                            <div>ekf</div>
+                          </ReflexElement>
+                        )}
+                      </ReflexContainer>
+                    </ErrorBoundary>
+                  </Container>
+                )
+              }}
+            </Query>
+          )
+        }}
+      </Query>
+    )}
+  </Subscribe>
+)
 
 export default enhance(EkfContainer)

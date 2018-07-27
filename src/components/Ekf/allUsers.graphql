@@ -1,22 +1,43 @@
-query allUsersQuery {
-  allUsers {
-    nodes {
+query allUsersQuery($userName: String!, $jahr: Int!) {
+  userByName(name: $userName) {
+    id
+    name
+    adresseId
+    adresseByAdresseId {
       id
-      name
-      adresseId
-      #adresseByAdresseId {
-      #  id
-      #  tpopkontrsByBearbeiter(
-      #    filter: {
-      #      typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
-      #      jahr: { equalTo: "2018" }
-      #    }
-      #  ) {
-      #    nodes {
-      #      id
-      #    }
-      #  }
-      #}
+      tpopkontrsByBearbeiter(
+        filter: {
+          typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+          jahr: { equalTo: $jahr }
+        }
+      ) {
+        nodes {
+          id
+          datum
+          tpopByTpopId {
+            id
+            nr
+            flurname
+            gemeinde
+            popByPopId {
+              id
+              nr
+              name
+              apByApId {
+                id
+                aeEigenschaftenByArtId {
+                  id
+                  artname
+                }
+                projektByProjId {
+                  id
+                  name
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

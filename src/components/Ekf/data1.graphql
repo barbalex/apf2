@@ -1,5 +1,6 @@
 query Query {
   isPrint @client
+  ekfYear @client
   user @client {
     name
     token

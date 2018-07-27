@@ -13,6 +13,7 @@ import moving from './moving'
 import copying from './copying'
 import updateAvailable from './updateAvailable'
 import isPrint from './isPrint'
+import ekfYear from './ekfYear'
 import view from './view'
 import assigningBeob from './assigningBeob'
 import mapMouseCoordinates from './mapMouseCoordinates'
@@ -33,6 +34,7 @@ export default merge(
   copying,
   updateAvailable,
   isPrint,
+  ekfYear,
   view,
   assigningBeob,
   mapMouseCoordinates,
