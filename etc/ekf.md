@@ -1,20 +1,37 @@
-# Erfolgs-Kontrollen Freiwlillige (EKF)
+# Erfolgs-Kontrollen Freiwillige (EKF)
 
-## 1. Vorbereiten
+## Das Formular
+- Nur Benutzer mit der Rolle "artverantwortich" oder "manager" können neue Freiwilligen-Kontrollen erstellen. Benutzer mit der Rolle "freiwillig" können nur die darin enthaltenen Felder ausfüllen
+- Im Gegensatz zum Feldkontroll-Formular sind die Zählungen hier integriert
+- Erstellt man eine neue Freiwilligen-Kontrolle, werden die im Strukturbaum unter dem Knoten "EKF-Zähleinheiten" aufgelisteten maximal 3 Zähleinheiten erzeugt
+- Man Zähleinheiten entfernen, aber keine wählen, die nicht unter "EKF-Zähleinheiten" aufgelistet sind
+- Das Formular kann gedruckt werden. Das funktioniert aber vermutlich nur auf Chrome richtig. Unter "Weitere Einstellungen" muss man "Hintergrundgrafiken" wählen, damit das Bild auch im Druck erscheint
+- Einige der Funktionen sind nur für Benutzer mit der Rolle "artverantwortich" oder "manager" sichtbar: GUID kopieren, Im Jahresbericht berücksichtigen.
+
+## Die Arbeitsabläufe
+
+### 1. Artverantwortliche oder Managerin bereitet Freiwilligen-Feldarbeit vor
 
 Beispiel: Charlotte bereitet die Arbeit der Freiwilligen "A" vor:
 
-1. Charlotte erfasst A als Benutzerin mit der Rolle "freiwillig", falls es diese Benutzerin nicht schon gibt.
-2. Wichtig: Die zugehörige Adresse von A ist im Formular "Benutzer" zu wählen. Nur so kann apflora.ch die richtigen Kontrollen anzeigen, wenn A einloggt. 
+1. Charlotte erfasst A als Benutzerin mit der Rolle "freiwillig", falls es diese Benutzerin nicht schon gibt
+2. Wichtig: Die zugehörige Adresse von A ist im Formular "Benutzer" zu wählen. Nur so kann apflora.ch die richtigen Kontrollen anzeigen, wenn A einloggt 
 3. Wählt man im EKF-Formular eine Beobachterin, die nicht wie oben beschrieben mit einem Benutzer verbunden wurde, wird man darauf hingewiesen
-2. Anstatt den bisherigen Papier-Formularen schafft Charlotte bei jeder von A zu kontrollierenden Teilpopulation für eine Freiwilligen-Kontrolle. Sie wählt A als Beobachterin
+4. Charlotte erstellt bei jeder von A zu kontrollierenden Teilpopulation eine neue Freiwilligen-Kontrolle. Darin wählt sie A als Beobachterin
 3. Das so erstellte Formular kann für die Feldarbeit gedruckt werden
-4. Wenn nun A von Charlotte die Formulare bekommt, sind in apflora.ch alle EKF erfasst, die von ihr ausgefüllt werden sollen
+4. Wenn nun A von Charlotte die Formulare bekommt, sind in apflora.ch alle ihre EKF erfasst
 
-## 2. EKF erfassen
-5. Loggt nun A nach der Feldarbeit in apflora.ch ein, um ihre Feld-Formulare zu übertragen, öffnet sich die `EKF-Ansicht`: A sieht die Liste aller EKF dieses Jahres oder noch ohne Datum, bei denen sie als Beobachterin erfasst ist
-6. A kann hier die Feld-Formulare ins jeweilige apflora-Formular übertragen
-7. In der Titelliste wird das aktuelle Erfassungs-Jahr angezeigt. Es dauert von März bis Februar. D.h., loggt man im Januar ein, sieht man die Liste für das vorhergehende Feld-Jahr. Ab März sieht man die Liste für das aktuelle Feldjahr
-8. Man kann ein anderes Jahr wählen. In diesem Fall werden die Freiwilligen-Kontrollen der angemeldeten Benutzerin aus dem betreffenden Jahr angezeigt. Nicht aber die Kontrollen ohne Datum  
-7. A _kann_ in die "normale" Ansicht wechseln. Zum Beispiel, wenn sie Feld-Kontrollen sehen will 
+### 2. Freiwillige digitalisiert ihre Feld-Formulare
+5. Loggt A nach der Feldarbeit in apflora.ch ein, um ihre Feld-Formulare zu übertragen, öffnet sich die `EKF-Ansicht`: A sieht die Liste aller EKF dieses Jahres (bzw. noch ohne Datum), bei denen sie als Beobachterin erfasst ist
+6. Die Liste ist sortiert nach: Projekt, Aktionsplan, Population, Teilpopulation (Projekt würde nur angezeigt, wenn in mehreren Projekten EKF für diese Mitarbeiterin existierten)
+6. A wählt in der Liste die gewünschte Kontrolle. Und überträgt rechts daneben ihr Feld-Formular ins apflora-Formular
+7. In der Titelleiste wird das aktuelle Erfassungs-Jahr angezeigt. Es dauert von März bis Februar. Loggt man also im Januar ein, sieht man die Liste für das vorhergehende Feld-Jahr. Ab März sieht man die Liste für das aktuelle Feld-Jahr
+8. Man kann ein anderes Jahr wählen. In diesem Fall werden die Freiwilligen-Kontrollen der angemeldeten Benutzerin aus dem betreffenden Jahr angezeigt. Nicht aber die Kontrollen ohne Datum (die werden nur angezeigt, wenn das gewählte Jahr dem aktuellen Feld-Jahr entspricht)
+7. A kann in die "normale" Ansicht wechseln. Zum Beispiel, wenn sie Feld-Kontrollen sehen will
+
+### 3. Artverantwortliche oder Managerin überprüft die Feld-Arbeit
+1. Vielleicht müssen wir dafür ermöglichen, dass sie die EKF-Ansicht für eine bestimmte Freiwilligen-Kontrolleurin öffnen kann?
+2. Im Feld "Im Jahresbericht berücksichtigen" kann man "nein" setzten, wenn man dokumentieren will, dass die Kontrolle bei der Erstellung von Kontroll-Berichten nicht berücksichtigt werden soll
+3. Damit eine Freiwilligen-Kontrolle sich im Jahresbericht ausdruckt, muss wie bei den Feld-Kontrollen, ein entsprechender Kontroll-Bericht erfasst werden
+4. Die Zahlen im Jahresbericht basieren auf den Kontroll-Berichten, nicht auf den Kontrollen. Eine zweifelhafte Kontrolle wird daher nicht im Jahresbericht sichtbar, wenn für sie kein Kontroll-Bericht erfasst wurde
 
