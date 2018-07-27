@@ -1,8 +1,6 @@
 query allUsersQuery($userName: String!, $jahr: Int!) {
   userByName(name: $userName) {
     id
-    name
-    adresseId
     adresseByAdresseId {
       id
       tpopkontrsByBearbeiter(
