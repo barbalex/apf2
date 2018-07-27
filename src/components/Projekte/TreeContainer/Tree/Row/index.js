@@ -208,8 +208,9 @@ const Row = ({
   const tree2 = get(data, treeName)
   const openNodes = get(data, `${treeName}.openNodes`)
   const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
-  const onClickNode = event => toggleNode({ tree: tree2, node, client })
-  const onClickNodeSymbol = event => toggleNodeSymbol({ tree: tree2, node, client })
+  const onClickNode = event => toggleNode({ tree: tree2, node })
+  const onClickNodeSymbol = event =>
+    toggleNodeSymbol({ tree: tree2, node, client })
   const myProps = { key: index }
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, activeNodeArray)
   const nodeIsOpen = isNodeOpen(openNodes, node.url)
@@ -234,9 +235,13 @@ const Row = ({
   ) {
     showPrintIcon = true
   }
-  const printIconTitle = node.menuType === 'apberuebersicht' ? 'Druckversion. Achtung: braucht Minuten, um vollständig zu laden' : 'Druckversion'
+  const printIconTitle =
+    node.menuType === 'apberuebersicht'
+      ? 'Druckversion. Achtung: braucht Minuten, um vollständig zu laden'
+      : 'Druckversion'
   const dataUrl = JSON.stringify(node.url)
-  const level = node.url[0] === 'Projekte' ? node.url.length - 1 : node.url.length
+  const level =
+    node.url[0] === 'Projekte' ? node.url.length - 1 : node.url.length
   const isMoving =
     node.nodeType === 'table' &&
     node.menuType === moving.table &&
@@ -294,126 +299,111 @@ const Row = ({
               {'-'}
             </SymbolSpan>
           )}
-          {
-            node.menuType === 'ap' &&
+          {node.menuType === 'ap' &&
             node.id === activeNodes.ap &&
-            activeApfloraLayers.includes('pop') &&
-            <div title="in Karte sichtbar">
-              <PopMapIcon />
-            </div>
-          }
-          {
-            node.menuType === 'ap' &&
+            activeApfloraLayers.includes('pop') && (
+              <div title="in Karte sichtbar">
+                <PopMapIcon />
+              </div>
+            )}
+          {node.menuType === 'ap' &&
             node.id === activeNodes.ap &&
-            activeApfloraLayers.includes('tpop') &&
-            <div title="in Karte sichtbar">
-              <TpopMapIcon />
-            </div>
-          }
-          {
-            node.menuType === 'beobNichtBeurteiltFolder' &&
+            activeApfloraLayers.includes('tpop') && (
+              <div title="in Karte sichtbar">
+                <TpopMapIcon />
+              </div>
+            )}
+          {node.menuType === 'beobNichtBeurteiltFolder' &&
             node.id === activeNodes.ap &&
-            activeApfloraLayers.includes('beobNichtBeurteilt') &&
-            <div title="in Karte sichtbar">
-              <BeobNichtBeurteiltMapIcon />
-            </div>
-          }
-          {
-            node.menuType === 'beobNichtZuzuordnenFolder' &&
+            activeApfloraLayers.includes('beobNichtBeurteilt') && (
+              <div title="in Karte sichtbar">
+                <BeobNichtBeurteiltMapIcon />
+              </div>
+            )}
+          {node.menuType === 'beobNichtZuzuordnenFolder' &&
             node.id === activeNodes.ap &&
-            activeApfloraLayers.includes('beobNichtZuzuordnen') &&
-            <div title="in Karte sichtbar">
-              <BeobNichtZuzuordnenMapIcon />
-            </div>
-          }
-          {
-            node.menuType === 'beobZugeordnetFolder' &&
+            activeApfloraLayers.includes('beobNichtZuzuordnen') && (
+              <div title="in Karte sichtbar">
+                <BeobNichtZuzuordnenMapIcon />
+              </div>
+            )}
+          {node.menuType === 'beobZugeordnetFolder' &&
             node.id === activeNodes.tpop &&
-            activeApfloraLayers.includes('beobZugeordnet') &&
-            <div title="in Karte sichtbar">
-              <BeobZugeordnetMapIcon />
-            </div>
-          }
-          {
-            node.menuType === 'pop' &&
+            activeApfloraLayers.includes('beobZugeordnet') && (
+              <div title="in Karte sichtbar">
+                <BeobZugeordnetMapIcon />
+              </div>
+            )}
+          {node.menuType === 'pop' &&
             activeApfloraLayers.includes('pop') &&
-            !mapIdsFiltered.includes(node.id) &&
-            <div title="in Karte sichtbar">
-              <PopMapIcon />
-            </div>
-          }
-          {
-            node.menuType === 'pop' &&
+            !mapIdsFiltered.includes(node.id) && (
+              <div title="in Karte sichtbar">
+                <PopMapIcon />
+              </div>
+            )}
+          {node.menuType === 'pop' &&
             activeApfloraLayers.includes('pop') &&
-            mapIdsFiltered.includes(node.id) &&
-            <div title="in Karte hervorgehoben">
-              <PopFilteredMapIcon />
-            </div>
-          }
-          {
-            node.menuType === 'tpop' &&
+            mapIdsFiltered.includes(node.id) && (
+              <div title="in Karte hervorgehoben">
+                <PopFilteredMapIcon />
+              </div>
+            )}
+          {node.menuType === 'tpop' &&
             activeApfloraLayers.includes('tpop') &&
-            !mapIdsFiltered.includes(node.id) && 
-            <div title="in Karte sichtbar">
-              <TpopMapIcon />
-            </div>
-          }
-          {
-            node.menuType === 'tpop' &&
+            !mapIdsFiltered.includes(node.id) && (
+              <div title="in Karte sichtbar">
+                <TpopMapIcon />
+              </div>
+            )}
+          {node.menuType === 'tpop' &&
             activeApfloraLayers.includes('tpop') &&
-            mapIdsFiltered.includes(node.id) && 
-            <div title="in Karte hervorgehoben">
-              <TpopFilteredMapIcon />
-            </div>
-          }
-          {
-            node.menuType === 'beobNichtBeurteilt' &&
+            mapIdsFiltered.includes(node.id) && (
+              <div title="in Karte hervorgehoben">
+                <TpopFilteredMapIcon />
+              </div>
+            )}
+          {node.menuType === 'beobNichtBeurteilt' &&
             activeApfloraLayers.includes('beobNichtBeurteilt') &&
-            !mapIdsFiltered.includes(node.id) && 
-            <div title="in Karte sichtbar">
-              <BeobNichtBeurteiltMapIcon />
-            </div>
-          }
-          {
-            node.menuType === 'beobNichtBeurteilt' &&
+            !mapIdsFiltered.includes(node.id) && (
+              <div title="in Karte sichtbar">
+                <BeobNichtBeurteiltMapIcon />
+              </div>
+            )}
+          {node.menuType === 'beobNichtBeurteilt' &&
             activeApfloraLayers.includes('beobNichtBeurteilt') &&
-            mapIdsFiltered.includes(node.id) && 
-            <div title="in Karte hervorgehoben">
-              <BeobNichtBeurteiltFilteredMapIcon />
-            </div>
-          }
-          {
-            node.menuType === 'beobNichtZuzuordnen' &&
+            mapIdsFiltered.includes(node.id) && (
+              <div title="in Karte hervorgehoben">
+                <BeobNichtBeurteiltFilteredMapIcon />
+              </div>
+            )}
+          {node.menuType === 'beobNichtZuzuordnen' &&
             activeApfloraLayers.includes('beobNichtZuzuordnen') &&
-            !mapIdsFiltered.includes(node.id) && 
-            <div title="in Karte sichtbar">
-              <BeobNichtZuzuordnenMapIcon />
-            </div>
-          }
-          {
-            node.menuType === 'beobNichtZuzuordnen' &&
+            !mapIdsFiltered.includes(node.id) && (
+              <div title="in Karte sichtbar">
+                <BeobNichtZuzuordnenMapIcon />
+              </div>
+            )}
+          {node.menuType === 'beobNichtZuzuordnen' &&
             activeApfloraLayers.includes('beobNichtZuzuordnen') &&
-            mapIdsFiltered.includes(node.id) && 
-            <div title="in Karte hervorgehoben">
-              <BeobNichtZuzuordnenFilteredMapIcon />
-            </div>
-          }
-          {
-            activeApfloraLayers.includes('beobZugeordnet') &&
+            mapIdsFiltered.includes(node.id) && (
+              <div title="in Karte hervorgehoben">
+                <BeobNichtZuzuordnenFilteredMapIcon />
+              </div>
+            )}
+          {activeApfloraLayers.includes('beobZugeordnet') &&
             node.menuType === 'beobZugeordnet' &&
-            !mapIdsFiltered.includes(node.id) &&
-            <div title="in Karte sichtbar">
-              <BeobZugeordnetMapIcon />
-            </div>
-          }
-          {
-            activeApfloraLayers.includes('beobZugeordnet') &&
+            !mapIdsFiltered.includes(node.id) && (
+              <div title="in Karte sichtbar">
+                <BeobZugeordnetMapIcon />
+              </div>
+            )}
+          {activeApfloraLayers.includes('beobZugeordnet') &&
             node.menuType === 'beobZugeordnet' &&
-            mapIdsFiltered.includes(node.id) &&
-            <div title="in Karte hervorgehoben">
-              <BeobZugeordnetFilteredMapIcon />
-            </div>
-          }
+            mapIdsFiltered.includes(node.id) && (
+              <div title="in Karte hervorgehoben">
+                <BeobZugeordnetFilteredMapIcon />
+              </div>
+            )}
           <TextSpan
             data-nodeisinactivenodepath={nodeIsInActiveNodePath}
             node={node}
@@ -445,8 +435,8 @@ const Row = ({
                   variables: {
                     value: [...node.url, 'print'],
                     tree: tree.name,
-                    key: 'activeNodeArray'
-                  }
+                    key: 'activeNodeArray',
+                  },
                 })
               }
             >

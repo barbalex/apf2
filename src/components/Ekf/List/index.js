@@ -6,6 +6,8 @@ import uniq from 'lodash/uniq'
 import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
 
+import initiateDataFromUrl from '../../../modules/initiateDataFromUrl'
+
 const Container = styled.div`
   height: 100%;
   border-right: 1px solid rgb(46, 125, 50);
@@ -13,6 +15,9 @@ const Container = styled.div`
 const OuterContainer = styled.div`
   border-bottom: 1px solid rgba(46, 125, 50, 0.5);
   cursor: pointer;
+  background-color: ${props => (props.active ? 'rgb(255, 250, 198)' : 'unset')};
+  border-top: ${props =>
+    props.active ? '1px solid rgba(46, 125, 50, 0.5)' : 'unset'};
   &:hover {
     background-color: rgb(255, 250, 198);
     border-top: 1px solid rgba(46, 125, 50, 0.5);
@@ -49,23 +54,28 @@ const EkfList = ({
       'tpopByTpopId.popByPopId.apByApId.projektByProjId.name',
       ''
     ),
+    projId: get(e, 'tpopByTpopId.popByPopId.apByApId.projektByProjId.id'),
     art: get(
       e,
       'tpopByTpopId.popByPopId.apByApId.aeEigenschaftenByArtId.artname',
       ''
     ),
+    apId: get(e, 'tpopByTpopId.popByPopId.apByApId.id'),
     pop: `${get(e, 'tpopByTpopId.popByPopId.nr', '(keine Nr)')}: ${get(
       e,
       'tpopByTpopId.popByPopId.name',
       '(kein Name)'
     )}`,
+    popId: get(e, 'tpopByTpopId.popByPopId.id'),
     popSort: get(e, 'tpopByTpopId.popByPopId.nr', '(keine Nr)'),
     tpop: `${get(e, 'tpopByTpopId.nr', '(keine Nr)')}: ${get(
       e,
       'tpopByTpopId.flurname',
       '(kein Flurname)'
     )}`,
+    tpopId: get(e, 'tpopByTpopId.id'),
     tpopSort: get(e, 'tpopByTpopId.nr', '(keine Nr)'),
+    id: e.id,
   }))
   ekf = sortBy(ekf, ['projekt', 'art', 'popSort', 'tpopSort'])
   const height = isNaN(dimensions.height) ? 250 : dimensions.height
@@ -73,6 +83,14 @@ const EkfList = ({
   const projektCount = uniq(ekf.map(e => e.projekt)).length
   const itemSize = projektCount > 1 ? 110 : 91
   const innerContainerHeight = projektCount > 1 ? 81 : 62
+  const activeNodeArray = get(data, 'tree.activeNodeArray')
+  const activeTpopkontrId = activeNodeArray[9]
+  /**
+   * on click set url
+   * run modules/openNode
+   * pass it tree and node
+   * build node like it is done in TreeContainer/nodes/pop.js
+   */
 
   return (
     <Container>
@@ -84,9 +102,25 @@ const EkfList = ({
       >
         {({ index, style }) => {
           const row = ekf[index]
+          const url = [
+            'Projekte',
+            row.projId,
+            'Aktionspläne',
+            row.apId,
+            'Populationen',
+            row.popId,
+            'Teil-Populationen',
+            row.tpopId,
+            'Freiwilligen-Kontrollen',
+            row.id,
+          ]
 
           return (
-            <OuterContainer style={style}>
+            <OuterContainer
+              style={style}
+              onClick={() => initiateDataFromUrl(url)}
+              active={activeTpopkontrId === row.id}
+            >
               <InnerContainer height={innerContainerHeight}>
                 {projektCount > 1 && <div>{row.projekt}</div>}
                 <div>{row.art}</div>

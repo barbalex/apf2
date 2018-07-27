@@ -19,7 +19,6 @@ import allUsersGql from './allUsers.graphql'
 import ErrorState from '../../state/Error'
 import EkfList from './List'
 import Loading from '../shared/Loading'
-import getActiveNodeArrayFromPathname from '../../modules/getActiveNodeArrayFromPathname'
 
 const Tpopfreiwkontr = Loadable({
   loader: () => import('../Projekte/Daten/Tpopfreiwkontr'),
@@ -67,7 +66,7 @@ const EkfContainer = () => (
               {({ error, data: data2, refetch }) => {
                 if (error) return `Fehler: ${error.message}`
                 const data = merge(data1, data2)
-                const activeNodeArray = getActiveNodeArrayFromPathname()
+                const activeNodeArray = get(data, 'tree.activeNodeArray')
                 const tpopkontrId = activeNodeArray[9]
 
                 if (isPrint) return <div>print ekf</div>

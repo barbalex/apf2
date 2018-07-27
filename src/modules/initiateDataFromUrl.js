@@ -8,9 +8,10 @@ import isMobilePhone from '../modules/isMobilePhone'
 import setUrlQueryValue from '../modules/setUrlQueryValue'
 import setOpenNodesFromActiveNodeArray from '../modules/setOpenNodesFromActiveNodeArray'
 
-export default async () => {
+export default async activeNodeArrayPassed => {
   const { client } = app
-  const activeNodeArrayFromPathname = getActiveNodeArrayFromPathname()
+  const activeNodeArrayFromPathname =
+    activeNodeArrayPassed || getActiveNodeArrayFromPathname()
   let initialActiveNodeArray = [...activeNodeArrayFromPathname]
   // fetch query here, BEFORE mutating active node array
   const urlQuery = getUrlQuery()

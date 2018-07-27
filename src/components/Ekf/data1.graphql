@@ -9,4 +9,9 @@ query Query {
     projekteTabs
     feldkontrTab
   }
+  tree @client {
+    name
+    activeNodeArray
+    openNodes
+  }
 }

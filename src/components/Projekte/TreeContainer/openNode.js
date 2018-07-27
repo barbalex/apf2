@@ -5,20 +5,15 @@ import app from 'ampersand-app'
 import isNodeOpen from './isNodeOpen'
 import treeNodeLabelFilterResetExceptAp from './treeNodeLabelFilterResetExceptAp.graphql'
 
-export default async ({
-  tree,
-  node,
-}: {
-  tree: Object,
-  node: Object,
-}) => {
+export default async ({ tree, node }: { tree: Object, node: Object }) => {
   const { client } = app
+  console.log('openNode:', { tree, node })
   // make sure this node's url is not yet contained
   // otherwise same nodes will be added multiple times!
   if (isNodeOpen(tree.openNodes, node.url)) return
 
   let newOpenNodes = [...tree.openNodes, node.url]
-  if (['tpopfeldkontr', 'tpopfreiwkontr'].includes(node.menuType)) {
+  if (['tpopfeldkontr'].includes(node.menuType)) {
     // automatically open zaehlFolder of tpopfeldkontr or tpopfreiwkontr
     newOpenNodes.push([...node.url, 'Zaehlungen'])
   }
@@ -45,8 +40,8 @@ export default async ({
     variables: {
       value: newOpenNodes,
       tree: tree.name,
-      key: 'openNodes'
-    }
+      key: 'openNodes',
+    },
   })
 
   if (node.menuType === 'ap') {
@@ -54,7 +49,7 @@ export default async ({
     // with exception of the ap key
     await client.mutate({
       mutation: treeNodeLabelFilterResetExceptAp,
-      variables: { tree: tree.name }
+      variables: { tree: tree.name },
     })
   }
 }
