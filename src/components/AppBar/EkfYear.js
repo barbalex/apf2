@@ -11,8 +11,11 @@ const StyledInput = styled(Input)`
   width: 60px;
   color: white !important;
   padding-left: 20px;
+  > input {
+    padding-top: 9px;
+  }
   &:before {
-    border-color: white !important;
+    border: none !important;
   }
 `
 
