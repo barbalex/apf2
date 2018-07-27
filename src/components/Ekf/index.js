@@ -1,7 +1,6 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
@@ -41,8 +40,6 @@ const ReflexElementForEKF = styled(ReflexElement)`
   }
 `
 const treeTabValues = ['tree', 'daten', 'karte', 'exporte']
-
-const enhance = compose()
 
 const EkfContainer = () => (
   <Subscribe to={[ErrorState]}>
@@ -132,4 +129,4 @@ const EkfContainer = () => (
   </Subscribe>
 )
 
-export default enhance(EkfContainer)
+export default EkfContainer
