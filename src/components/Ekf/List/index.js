@@ -12,8 +12,8 @@ const Container = styled.div`
   height: 100%;
   border-right: 1px solid rgb(46, 125, 50);
 `
-const NoDataContainer = styled(Container)`
-padding 15px;
+const NoDataContainer = styled.div`
+  padding 15px;
 `
 const OuterContainer = styled.div`
   border-bottom: 1px solid rgba(46, 125, 50, 0.5);

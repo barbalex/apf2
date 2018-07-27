@@ -7,6 +7,8 @@ import withHandlers from 'recompose/withHandlers'
 import withLifecycle from '@hocs/with-lifecycle'
 import styled from 'styled-components'
 
+import initiateDataFromUrl from '../../modules/initiateDataFromUrl'
+
 const StyledInput = styled(Input)`
   width: 60px;
   color: white !important;
@@ -27,7 +29,10 @@ const enhance = compose(
   ),
   withHandlers({
     onChange: ({ setStateValue }) => event => setStateValue(event.target.value),
-    onBlur: ({ setEkfYear }) => event => setEkfYear(event.target.value || null),
+    onBlur: ({ setEkfYear, value, stateValue }) => event => {
+      setEkfYear(event.target.value || null)
+      if (value !== stateValue) initiateDataFromUrl(['Projekte'])
+    },
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
