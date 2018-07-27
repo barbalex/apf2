@@ -55,9 +55,6 @@ const EkfContainer = () => (
               {({ error, data: data2 }) => {
                 if (error) return `Fehler: ${error.message}`
                 const data = merge(data1, data2)
-                console.log('EkfContainer:', {
-                  data,
-                })
 
                 if (isPrint) return <div>print ekf</div>
 
@@ -66,8 +63,13 @@ const EkfContainer = () => (
                     <ErrorBoundary>
                       <ReflexContainer orientation="vertical">
                         {tabs.includes('tree') && (
-                          <ReflexElement flex={treeFlex}>
-                            <EkfList />
+                          <ReflexElement
+                            flex={treeFlex}
+                            propagateDimensions={true}
+                            renderOnResizeRate={200}
+                            renderOnResize={true}
+                          >
+                            <EkfList data={data} />
                           </ReflexElement>
                         )}
                         {tabs.includes('tree') &&

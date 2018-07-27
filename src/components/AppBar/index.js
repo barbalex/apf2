@@ -152,7 +152,11 @@ const MyAppBar = ({
           <StyledAppBar position="static">
             <StyledToolbar>
               <Typography variant="title" color="inherit">
-                {isMobile ? '' : 'AP Flora'}
+                {isMobile
+                  ? ''
+                  : view === 'ekf'
+                    ? 'AP Flora: Erfolgs-Kontrolle Freiwillige'
+                    : 'AP Flora'}
               </Typography>
               <MenuDiv>
                 {view === 'ekf' && (
