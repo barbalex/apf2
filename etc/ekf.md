@@ -1,11 +1,11 @@
 # Erfolgs-Kontrollen Freiwillige (EKF)
 
 ## Das Formular
-- Nur Benutzer mit der Rolle "artverantwortich" oder "manager" können neue Freiwilligen-Kontrollen erstellen. Benutzer mit der Rolle "freiwillig" können nur die darin enthaltenen Felder ausfüllen
+- Benutzer mit der Rolle "artverantwortich" oder "manager" können neue Freiwilligen-Kontrollen erstellen. Benutzer mit der Rolle "freiwillig" können nur die darin enthaltenen Felder ausfüllen
 - Im Gegensatz zum Feldkontroll-Formular sind die Zählungen hier integriert
 - Erstellt man eine neue Freiwilligen-Kontrolle, werden die im Strukturbaum unter dem Knoten "EKF-Zähleinheiten" aufgelisteten maximal 3 Zähleinheiten erzeugt
-- Man Zähleinheiten entfernen, aber keine wählen, die nicht unter "EKF-Zähleinheiten" aufgelistet sind
-- Das Formular kann gedruckt werden. Das funktioniert aber vermutlich nur auf Chrome richtig. Unter "Weitere Einstellungen" muss man "Hintergrundgrafiken" wählen, damit das Bild auch im Druck erscheint
+- Man kann Zähleinheiten entfernen, aber keine hinzufügen, die nicht unter "EKF-Zähleinheiten" aufgelistet sind
+- Das Formular kann gedruckt werden. Das funktioniert aber vermutlich nur auf Chrome (hoffentlich) richtig. Unter "Weitere Einstellungen" muss man "Hintergrundgrafiken" wählen, damit das Bild auch im Druck erscheint
 - Einige der Funktionen sind nur für Benutzer mit der Rolle "artverantwortich" oder "manager" sichtbar: GUID kopieren, Im Jahresbericht berücksichtigen.
 
 ## Die Arbeitsabläufe
