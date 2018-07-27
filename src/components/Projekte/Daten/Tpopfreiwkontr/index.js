@@ -14,6 +14,7 @@ import StringToCopy from '../../../shared/StringToCopyOnlyButton'
 import dataGql from './data'
 import updateTpopkontrByIdGql from './updateTpopkontrById.graphql'
 import createTpopkontrzaehl from './createTpopkontrzaehl.graphql'
+import Title from './Title'
 import Headdata from './Headdata'
 import Besttime from './Besttime'
 import Date from './Date'
@@ -113,19 +114,6 @@ const GridContainer = styled.div`
       'remarks remarks remarks remarks remarks remarks';
   }
 `
-const Area = styled.div`
-  border: 1px solid rgba(0, 0, 0, 0.5);
-  border-radius: 6px;
-  padding: 10px;
-`
-const Title = styled(Area)`
-  grid-area: title;
-  font-weight: 700;
-  font-size: 22px;
-  @media print {
-    font-size: 16px;
-  }
-`
 const CountHint = styled.div`
   grid-area: 5 / 1 / 5 / 7;
   color: red;
@@ -143,6 +131,10 @@ const CountHint = styled.div`
 const enhance = compose(
   dataGql,
   withState('errors', 'setErrors', {}),
+  withState('titleHeight', 'setTitleHeight', 184),
+  withState('headdataHeight', 'setHeaddataHeight', 184),
+  withState('besttimeHeight', 'setBesttimeHeight', 79),
+  withState('dateHeight', 'setDateHeight', 86),
   withHandlers({
     saveToDb: ({ setErrors, errors, data }) => async ({
       row,
@@ -305,6 +297,8 @@ const Tpopfreiwkontr = ({
   setErrors,
   activeNodeArray,
   role,
+  titleHeight,
+  setTitleHeight,
 }: {
   id: String,
   data: Object,
@@ -314,6 +308,8 @@ const Tpopfreiwkontr = ({
   setErrors: () => void,
   activeNodeArray: Array<String>,
   role: String,
+  titleHeight: Number,
+  setTitleHeight: () => void,
 }) => {
   const ekfzaehleinheits = get(
     data,
@@ -352,13 +348,14 @@ const Tpopfreiwkontr = ({
   const isPrint = get(data, 'isPrint', false)
   const isFreiwillig = role === 'apflora_freiwillig'
   const { width } = dimensions
+  console.log('titleHeight:', titleHeight)
 
   return (
     <Mutation mutation={updateTpopkontrByIdGql}>
       {updateTpopkontr => (
         <Container>
           <GridContainer width={width}>
-            <Title>Erfolgskontrolle Artenschutz Flora</Title>
+            <Title setTitleHeight={setTitleHeight} />
             <Headdata
               saveToDb={saveToDb}
               errors={errors}
