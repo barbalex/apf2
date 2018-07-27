@@ -22,16 +22,16 @@ Beispiel: Charlotte bereitet die Arbeit der Freiwilligen "A" vor:
 4. Wenn nun A von Charlotte die Formulare bekommt, sind in apflora.ch alle ihre EKF erfasst
 
 ### 2. Freiwillige digitalisiert ihre Feld-Formulare
-5. Loggt A nach der Feldarbeit in apflora.ch ein, um ihre Feld-Formulare zu übertragen, öffnet sich die `EKF-Ansicht`: A sieht die Liste aller EKF dieses Jahres (bzw. noch ohne Datum), bei denen sie als Beobachterin erfasst ist
-6. Die Liste ist sortiert nach: Projekt, Aktionsplan, Population, Teilpopulation (Projekt würde nur angezeigt, wenn in mehreren Projekten EKF für diese Mitarbeiterin existierten)
-6. A wählt in der Liste die gewünschte Kontrolle. Und überträgt rechts daneben ihr Feld-Formular ins apflora-Formular
-7. In der Titelleiste wird das aktuelle Erfassungs-Jahr angezeigt. Es dauert von März bis Februar. Loggt man also im Januar ein, sieht man die Liste für das vorhergehende Feld-Jahr. Ab März sieht man die Liste für das aktuelle Feld-Jahr
-8. Man kann ein anderes Jahr wählen. In diesem Fall werden die Freiwilligen-Kontrollen der angemeldeten Benutzerin aus dem betreffenden Jahr angezeigt. Nicht aber die Kontrollen ohne Datum (die werden nur angezeigt, wenn das gewählte Jahr dem aktuellen Feld-Jahr entspricht)
-7. A kann in die "normale" Ansicht wechseln. Zum Beispiel, wenn sie Feld-Kontrollen sehen will
+1. Loggt A nach der Feldarbeit in apflora.ch ein, um ihre Feld-Formulare zu übertragen, öffnet sich die `EKF-Ansicht`: A sieht die Liste aller EKF dieses Jahres (bzw. noch ohne Datum), bei denen sie als Beobachterin erfasst ist
+2. Die Liste ist sortiert nach: Projekt, Aktionsplan, Population, Teilpopulation (Projekt würde nur angezeigt, wenn in mehreren Projekten EKF für diese Mitarbeiterin existierten)
+3. A wählt in der Liste die gewünschte Kontrolle. Und überträgt rechts daneben ihr Feld-Formular ins apflora-Formular
+4. In der Titelleiste wird das aktuelle Erfassungs-Jahr angezeigt. Es dauert von März bis Februar. Loggt man also im Januar ein, sieht man die Liste für das vorhergehende Feld-Jahr. Ab März sieht man die Liste für das aktuelle Feld-Jahr
+5. Man kann ein anderes Jahr wählen. In diesem Fall werden die Freiwilligen-Kontrollen der angemeldeten Benutzerin aus dem betreffenden Jahr angezeigt. Nicht aber die Kontrollen ohne Datum (die werden nur angezeigt, wenn das gewählte Jahr dem aktuellen Feld-Jahr entspricht)
+6. A kann in die "normale" Ansicht wechseln. Zum Beispiel, wenn sie Feld-Kontrollen sehen will
 
 ### 3. Artverantwortliche oder Managerin überprüft die Feld-Arbeit
 1. Vielleicht müssen wir dafür ermöglichen, dass sie die EKF-Ansicht für eine bestimmte Freiwilligen-Kontrolleurin öffnen kann?
 2. Im Feld "Im Jahresbericht berücksichtigen" kann man "nein" setzten, wenn man dokumentieren will, dass die Kontrolle bei der Erstellung von Kontroll-Berichten nicht berücksichtigt werden soll
 3. Damit eine Freiwilligen-Kontrolle sich im Jahresbericht ausdruckt, muss wie bei den Feld-Kontrollen, ein entsprechender Kontroll-Bericht erfasst werden
-4. Die Zahlen im Jahresbericht basieren auf den Kontroll-Berichten, nicht auf den Kontrollen. Eine zweifelhafte Kontrolle wird daher nicht im Jahresbericht sichtbar, wenn für sie kein Kontroll-Bericht erfasst wurde
+4. Die Zahlen im Jahresbericht basieren auf den Kontroll-Berichten, nicht auf den Kontrollen. Eine zweifelhafte Kontrolle wird daher nicht im Jahresbericht sichtbar, wenn für sie kein Kontroll-Bericht erfasst wird
 
