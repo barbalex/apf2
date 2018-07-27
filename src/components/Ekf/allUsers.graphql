@@ -6,7 +6,7 @@ query allUsersQuery($userName: String!, $jahr: Int!) {
       tpopkontrsByBearbeiter(
         filter: {
           typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
-          jahr: { equalTo: $jahr }
+          or: [{ jahr: { equalTo: $jahr } }, { jahr: { isNull: true } }]
         }
       ) {
         nodes {
