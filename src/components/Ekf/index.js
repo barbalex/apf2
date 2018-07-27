@@ -8,6 +8,8 @@ import get from 'lodash/get'
 import merge from 'lodash/merge'
 import intersection from 'lodash/intersection'
 import { Subscribe } from 'unstated'
+import Loadable from 'react-loadable'
+import jwtDecode from 'jwt-decode'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
@@ -16,6 +18,13 @@ import data1Gql from './data1.graphql'
 import allUsersGql from './allUsers.graphql'
 import ErrorState from '../../state/Error'
 import EkfList from './List'
+import Loading from '../shared/Loading'
+import getActiveNodeArrayFromPathname from '../../modules/getActiveNodeArrayFromPathname'
+
+const Tpopfreiwkontr = Loadable({
+  loader: () => import('../Projekte/Daten/Tpopfreiwkontr'),
+  loading: Loading,
+})
 
 const Container = styled.div`
   display: flex;
@@ -49,12 +58,17 @@ const EkfContainer = () => (
           const isPrint = get(data1, 'isPrint')
           const jahr = get(data1, 'ekfYear')
           const variables = { userName, jahr }
+          const token = get(data1, 'user.token')
+          const tokenDecoded = token ? jwtDecode(token) : null
+          const role = tokenDecoded ? tokenDecoded.role : null
 
           return (
             <Query query={allUsersGql} variables={variables}>
-              {({ error, data: data2 }) => {
+              {({ error, data: data2, refetch }) => {
                 if (error) return `Fehler: ${error.message}`
                 const data = merge(data1, data2)
+                const activeNodeArray = getActiveNodeArrayFromPathname()
+                const tpopkontrId = activeNodeArray[9]
 
                 if (isPrint) return <div>print ekf</div>
 
@@ -80,7 +94,15 @@ const EkfContainer = () => (
                             renderOnResizeRate={100}
                             renderOnResize={true}
                           >
-                            <div>ekf</div>
+                            {tpopkontrId && (
+                              <Tpopfreiwkontr
+                                id={activeNodeArray[9]}
+                                activeNodeArray={activeNodeArray}
+                                refetchTree={refetch}
+                                errorState={errorState}
+                                role={role}
+                              />
+                            )}
                           </ReflexElement>
                         )}
                       </ReflexContainer>

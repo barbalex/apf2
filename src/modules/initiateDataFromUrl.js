@@ -10,9 +10,7 @@ import setOpenNodesFromActiveNodeArray from '../modules/setOpenNodesFromActiveNo
 
 export default async () => {
   const { client } = app
-  const activeNodeArrayFromPathname = getActiveNodeArrayFromPathname(
-    window.location.pathname.replace('/', '')
-  )
+  const activeNodeArrayFromPathname = getActiveNodeArrayFromPathname()
   let initialActiveNodeArray = [...activeNodeArrayFromPathname]
   // fetch query here, BEFORE mutating active node array
   const urlQuery = getUrlQuery()
@@ -21,7 +19,7 @@ export default async () => {
   if (activeNodeArrayFromPathname.length === 0) {
     initialActiveNodeArray.push('Projekte')
   }
-  
+
   await client.mutate({
     mutation: gql`
       mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
@@ -40,30 +38,34 @@ export default async () => {
     variables: {
       value: initialActiveNodeArray,
       tree: 'tree',
-      key: 'activeNodeArray'
-    }
+      key: 'activeNodeArray',
+    },
   })
   // need to set openNodes
-  setOpenNodesFromActiveNodeArray({ client, activeNodeArray: initialActiveNodeArray })
+  setOpenNodesFromActiveNodeArray({
+    client,
+    activeNodeArray: initialActiveNodeArray,
+  })
   // clone tree2 in case tree2 is open
   await client.mutate({
     mutation: gql`
-       mutation cloneTree2From1 {
+      mutation cloneTree2From1 {
         cloneTree2From1 @client
       }
-    `
+    `,
   })
   const { projekteTabs, feldkontrTab } = urlQuery
   await client.mutate({
     mutation: gql`
       mutation setUrlQuery($projekteTabs: Array!, $feldkontrTab: String!) {
-        setUrlQuery(projekteTabs: $projekteTabs, feldkontrTab: $feldkontrTab) @client {
+        setUrlQuery(projekteTabs: $projekteTabs, feldkontrTab: $feldkontrTab)
+          @client {
           projekteTabs
           feldkontrTab
         }
       }
     `,
-    variables: { projekteTabs, feldkontrTab }
+    variables: { projekteTabs, feldkontrTab },
   })
 
   // set projekte tabs of not yet existing

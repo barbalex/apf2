@@ -1,9 +1,8 @@
 // @flow
-export default (pathName): Array<Number | String> => {
+export default (pathNamePassed): Array<Number | String> => {
+  const pathName = pathNamePassed || window.location.pathname.replace('/', '')
   // need to decode because of Umlaute in Aktionspläne
-  const pathElements = pathName
-    .split('/')
-    .map(e => decodeURIComponent(e))
+  const pathElements = pathName.split('/').map(e => decodeURIComponent(e))
   if (pathElements[0] === '') {
     // get rid of empty element(s) at start
     pathElements.shift()
