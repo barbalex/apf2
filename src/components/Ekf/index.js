@@ -69,7 +69,17 @@ const EkfContainer = () => (
                 const activeNodeArray = get(data, 'tree.activeNodeArray')
                 const tpopkontrId = activeNodeArray[9]
 
-                if (isPrint) return <div>print ekf</div>
+                if (isPrint && tpopkontrId)
+                  return (
+                    <Tpopfreiwkontr
+                      id={activeNodeArray[9]}
+                      activeNodeArray={activeNodeArray}
+                      refetchTree={refetch}
+                      errorState={errorState}
+                      role={role}
+                      dimensions={{ width: 1000 }}
+                    />
+                  )
 
                 return (
                   <Container data-loading={loading}>
