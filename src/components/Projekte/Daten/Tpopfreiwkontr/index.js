@@ -391,7 +391,7 @@ const Tpopfreiwkontr = ({
               data={data}
               updateTpopkontr={updateTpopkontr}
             />
-            <Image data={data} width={width} height={imageHeight} />
+            <Image data={data} parentwidth={width} height={imageHeight} />
             {zaehls1 && (
               <Count
                 id={zaehls1.id}

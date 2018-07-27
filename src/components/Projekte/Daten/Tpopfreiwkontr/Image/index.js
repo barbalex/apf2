@@ -43,14 +43,7 @@ const enhance = compose(
   withState('heightInternal', 'setHeightInternal', 370),
   withLifecycle({
     async onDidUpdate(prevProps, props) {
-      const {
-        data,
-        setImage,
-        image,
-        height,
-        heightInternal,
-        setHeightInternal,
-      } = props
+      const { data, setImage, image, height, setHeightInternal } = props
       if (!image) {
         const apId = get(
           data,
@@ -63,9 +56,7 @@ const enhance = compose(
         if (image && image.default) setImage(image)
       }
       const debounceSetHeightInternal = debounce(setHeightInternal, 400)
-      if (Math.abs(height - heightInternal) > 1) {
-        debounceSetHeightInternal(height)
-      }
+      debounceSetHeightInternal(height)
     },
   })
 )
@@ -73,17 +64,17 @@ const enhance = compose(
 const Image = ({
   data,
   image,
-  width,
+  parentwidth,
   height,
   heightInternal,
 }: {
   data: Object,
   image: Object,
-  width: Number,
+  parentwidth: Number,
   height: Number,
   heightInternal: Number,
 }) => (
-  <Container width={width} height={heightInternal}>
+  <Container height={parentwidth >= 800 ? heightInternal : 370}>
     <Title>
       {get(
         data,
