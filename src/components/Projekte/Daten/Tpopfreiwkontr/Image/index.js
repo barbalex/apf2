@@ -2,6 +2,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
+import debounce from 'lodash/debounce'
 import withLifecycle from '@hocs/with-lifecycle'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
@@ -18,11 +19,10 @@ const Container = styled.div`
   grid-template-areas:
     'title'
     'myImage';
-  max-height: 370px;
-  max-height: ${props => (props.width > 1013 ? '370px' : '390px')};
-  @media print {
+  max-height: ${props => (props.height ? props.height : 370)}px;
+  /*@media print {
     max-height: 325px;
-  }
+  }*/
 `
 const Title = styled.div`
   grid-area: title;
@@ -40,9 +40,17 @@ const ImageContainer = styled.div`
 
 const enhance = compose(
   withState('image', 'setImage', null),
+  withState('heightInternal', 'setHeightInternal', 370),
   withLifecycle({
     async onDidUpdate(prevProps, props) {
-      const { data, setImage, image } = props
+      const {
+        data,
+        setImage,
+        image,
+        height,
+        heightInternal,
+        setHeightInternal,
+      } = props
       if (!image) {
         const apId = get(
           data,
@@ -54,6 +62,10 @@ const enhance = compose(
         } catch (error) {}
         if (image && image.default) setImage(image)
       }
+      const debounceSetHeightInternal = debounce(setHeightInternal, 400)
+      if (Math.abs(height - heightInternal) > 1) {
+        debounceSetHeightInternal(height)
+      }
     },
   })
 )
@@ -62,23 +74,25 @@ const Image = ({
   data,
   image,
   width,
+  height,
+  heightInternal,
 }: {
   data: Object,
   image: Object,
   width: Number,
-}) => {
-  const artname = get(
-    data,
-    'tpopkontrById.tpopByTpopId.popByPopId.apByApId.aeEigenschaftenByArtId.artname',
-    ''
-  )
-
-  return (
-    <Container width={width}>
-      <Title>{artname}</Title>
-      {!!image && <ImageContainer image={image} />}
-    </Container>
-  )
-}
+  height: Number,
+  heightInternal: Number,
+}) => (
+  <Container width={width} height={heightInternal}>
+    <Title>
+      {get(
+        data,
+        'tpopkontrById.tpopByTpopId.popByPopId.apByApId.aeEigenschaftenByArtId.artname',
+        ''
+      )}
+    </Title>
+    {!!image && <ImageContainer image={image} />}
+  </Container>
+)
 
 export default enhance(Image)

@@ -3,6 +3,7 @@ import React from 'react'
 import styled from 'styled-components'
 import format from 'date-fns/format'
 import get from 'lodash/get'
+import Measure from 'react-measure'
 
 import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
 
@@ -44,35 +45,46 @@ const Date = ({
   errors,
   data,
   updateTpopkontr,
+  setDateHeight,
 }: {
   saveToDb: () => void,
   errors: Object,
   data: Object,
   updateTpopkontr: () => void,
+  setDateHeight: () => void,
 }) => {
   const row = get(data, 'tpopkontrById', {})
 
   return (
-    <Container>
-      <DateLabel>Aufnahme-datum</DateLabel>
-      <DateVal>
-        <DateFieldWithPicker
-          key={`${row.id}datum`}
-          value={row.datum}
-          saveToDb={value => {
-            saveToDb({
-              row,
-              field: 'datum',
-              value,
-              field2: 'jahr',
-              value2: !!value ? format(value, 'YYYY') : null,
-              updateTpopkontr,
-            })
-          }}
-          error={errors.datum}
-        />
-      </DateVal>
-    </Container>
+    <Measure
+      bounds
+      onResize={contentRect => {
+        setDateHeight(contentRect.bounds.height)
+      }}
+    >
+      {({ measureRef }) => (
+        <Container innerRef={measureRef}>
+          <DateLabel>Aufnahme-datum</DateLabel>
+          <DateVal>
+            <DateFieldWithPicker
+              key={`${row.id}datum`}
+              value={row.datum}
+              saveToDb={value => {
+                saveToDb({
+                  row,
+                  field: 'datum',
+                  value,
+                  field2: 'jahr',
+                  value2: !!value ? format(value, 'YYYY') : null,
+                  updateTpopkontr,
+                })
+              }}
+              error={errors.datum}
+            />
+          </DateVal>
+        </Container>
+      )}
+    </Measure>
   )
 }
 

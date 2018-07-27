@@ -299,6 +299,12 @@ const Tpopfreiwkontr = ({
   role,
   titleHeight,
   setTitleHeight,
+  headdataHeight,
+  setHeaddataHeight,
+  besttimeHeight,
+  setBesttimeHeight,
+  dateHeight,
+  setDateHeight,
 }: {
   id: String,
   data: Object,
@@ -310,6 +316,12 @@ const Tpopfreiwkontr = ({
   role: String,
   titleHeight: Number,
   setTitleHeight: () => void,
+  headdataHeight: Number,
+  setHeaddataHeight: () => void,
+  besttimeHeight: Number,
+  setBesttimeHeight: () => void,
+  dateHeight: Number,
+  setDateHeight: () => void,
 }) => {
   const ekfzaehleinheits = get(
     data,
@@ -348,7 +360,8 @@ const Tpopfreiwkontr = ({
   const isPrint = get(data, 'isPrint', false)
   const isFreiwillig = role === 'apflora_freiwillig'
   const { width } = dimensions
-  console.log('titleHeight:', titleHeight)
+  const imageHeight =
+    titleHeight + headdataHeight + besttimeHeight + dateHeight + 30
 
   return (
     <Mutation mutation={updateTpopkontrByIdGql}>
@@ -362,13 +375,15 @@ const Tpopfreiwkontr = ({
               setErrors={setErrors}
               data={data}
               updateTpopkontr={updateTpopkontr}
+              setHeaddataHeight={setHeaddataHeight}
             />
-            <Besttime data={data} />
+            <Besttime data={data} setBesttimeHeight={setBesttimeHeight} />
             <Date
               saveToDb={saveToDb}
               errors={errors}
               data={data}
               updateTpopkontr={updateTpopkontr}
+              setDateHeight={setDateHeight}
             />
             <Map
               saveToDb={saveToDb}
@@ -376,7 +391,7 @@ const Tpopfreiwkontr = ({
               data={data}
               updateTpopkontr={updateTpopkontr}
             />
-            <Image data={data} width={width} />
+            <Image data={data} width={width} height={imageHeight} />
             {zaehls1 && (
               <Count
                 id={zaehls1.id}

@@ -3,6 +3,7 @@ import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
+import Measure from 'react-measure'
 
 import AutoComplete from '../../../shared/Autocomplete'
 
@@ -73,11 +74,13 @@ const Headdata = ({
   errors,
   data,
   updateTpopkontr,
+  setHeaddataHeight,
 }: {
   saveToDb: () => void,
   errors: Object,
   data: Object,
   updateTpopkontr: () => void,
+  setHeaddataHeight: () => void,
 }) => {
   const row = get(data, 'tpopkontrById', {})
   let adressenWerte = get(data, 'allAdresses.nodes', [])
@@ -92,41 +95,50 @@ const Headdata = ({
     : 'natürlich'
 
   return (
-    <Container>
-      <PopLabel>Population</PopLabel>
-      <PopVal>{get(row, 'tpopByTpopId.popByPopId.name', '')}</PopVal>
-      <TpopLabel>Teilpopulation</TpopLabel>
-      <TpopVal>{get(row, 'tpopByTpopId.flurname', '')}</TpopVal>
-      <KoordLabel>Koordinaten</KoordLabel>
-      <KoordVal>{`${get(row, 'tpopByTpopId.x', '')} / ${get(
-        row,
-        'tpopByTpopId.y'
-      )}`}</KoordVal>
-      <TpopNrLabel>Teilpop.Nr.</TpopNrLabel>
-      <TpopNrVal>{`${get(row, 'tpopByTpopId.popByPopId.nr', '')}.${get(
-        row,
-        'tpopByTpopId.nr'
-      )}`}</TpopNrVal>
-      <BearbLabel>BeobachterIn</BearbLabel>
-      <BearbVal>
-        <AutoComplete
-          key={`${row.id}bearbeiter`}
-          label=""
-          value={get(row, 'adresseByBearbeiter.name', '')}
-          objects={adressenWerte}
-          saveToDb={value =>
-            saveToDb({
-              row,
-              field: 'bearbeiter',
-              value,
-              updateTpopkontr,
-            })
-          }
-          error={errors.bearbeiter}
-        />
-      </BearbVal>
-      <StatusLabel>{status}</StatusLabel>
-    </Container>
+    <Measure
+      bounds
+      onResize={contentRect => {
+        setHeaddataHeight(contentRect.bounds.height)
+      }}
+    >
+      {({ measureRef }) => (
+        <Container innerRef={measureRef}>
+          <PopLabel>Population</PopLabel>
+          <PopVal>{get(row, 'tpopByTpopId.popByPopId.name', '')}</PopVal>
+          <TpopLabel>Teilpopulation</TpopLabel>
+          <TpopVal>{get(row, 'tpopByTpopId.flurname', '')}</TpopVal>
+          <KoordLabel>Koordinaten</KoordLabel>
+          <KoordVal>{`${get(row, 'tpopByTpopId.x', '')} / ${get(
+            row,
+            'tpopByTpopId.y'
+          )}`}</KoordVal>
+          <TpopNrLabel>Teilpop.Nr.</TpopNrLabel>
+          <TpopNrVal>{`${get(row, 'tpopByTpopId.popByPopId.nr', '')}.${get(
+            row,
+            'tpopByTpopId.nr'
+          )}`}</TpopNrVal>
+          <BearbLabel>BeobachterIn</BearbLabel>
+          <BearbVal>
+            <AutoComplete
+              key={`${row.id}bearbeiter`}
+              label=""
+              value={get(row, 'adresseByBearbeiter.name', '')}
+              objects={adressenWerte}
+              saveToDb={value =>
+                saveToDb({
+                  row,
+                  field: 'bearbeiter',
+                  value,
+                  updateTpopkontr,
+                })
+              }
+              error={errors.bearbeiter}
+            />
+          </BearbVal>
+          <StatusLabel>{status}</StatusLabel>
+        </Container>
+      )}
+    </Measure>
   )
 }
 

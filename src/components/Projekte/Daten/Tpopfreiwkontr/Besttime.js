@@ -2,6 +2,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
+import Measure from 'react-measure'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -27,7 +28,13 @@ const BesttimeVal = styled.div`
   grid-area: besttimeVal;
 `
 
-const Besttime = ({ data }: { data: Object }) => {
+const Besttime = ({
+  data,
+  setBesttimeHeight,
+}: {
+  data: Object,
+  setBesttimeHeight: () => void,
+}) => {
   const bestTime = get(
     data,
     'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekfBeobachtungszeitpunkt',
@@ -35,10 +42,19 @@ const Besttime = ({ data }: { data: Object }) => {
   )
 
   return (
-    <Container>
-      <BesttimeLabel>bester Beobachtungs-Zeitpunkt</BesttimeLabel>
-      <BesttimeVal>{bestTime}</BesttimeVal>
-    </Container>
+    <Measure
+      bounds
+      onResize={contentRect => {
+        setBesttimeHeight(contentRect.bounds.height)
+      }}
+    >
+      {({ measureRef }) => (
+        <Container innerRef={measureRef}>
+          <BesttimeLabel>bester Beobachtungs-Zeitpunkt</BesttimeLabel>
+          <BesttimeVal>{bestTime}</BesttimeVal>
+        </Container>
+      )}
+    </Measure>
   )
 }
 
