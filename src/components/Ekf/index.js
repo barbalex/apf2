@@ -63,7 +63,7 @@ const EkfContainer = () => (
 
           return (
             <Query query={allUsersGql} variables={variables}>
-              {({ error, data: data2, refetch }) => {
+              {({ error, data: data2, refetch, loading }) => {
                 if (error) return `Fehler: ${error.message}`
                 const data = merge(data1, data2)
                 const activeNodeArray = get(data, 'tree.activeNodeArray')
@@ -72,7 +72,7 @@ const EkfContainer = () => (
                 if (isPrint) return <div>print ekf</div>
 
                 return (
-                  <Container data-loading={false}>
+                  <Container data-loading={loading}>
                     <ErrorBoundary>
                       <ReflexContainer orientation="vertical">
                         {tabs.includes('tree') && (
@@ -82,7 +82,7 @@ const EkfContainer = () => (
                             renderOnResizeRate={200}
                             renderOnResize={true}
                           >
-                            <EkfList data={data} />
+                            <EkfList data={data} loading={loading} />
                           </ReflexElement>
                         )}
                         {tabs.includes('tree') &&

@@ -12,6 +12,9 @@ const Container = styled.div`
   height: 100%;
   border-right: 1px solid rgb(46, 125, 50);
 `
+const NoDataContainer = styled(Container)`
+padding 15px;
+`
 const OuterContainer = styled.div`
   border-bottom: 1px solid rgba(46, 125, 50, 0.5);
   cursor: pointer;
@@ -39,9 +42,11 @@ const InnerContainer = styled.div`
 
 const EkfList = ({
   data,
+  loading,
   dimensions,
 }: {
   data: Object,
+  loading: Boolean,
   dimensions: Object,
 }) => {
   let ekf = get(
@@ -85,12 +90,16 @@ const EkfList = ({
   const innerContainerHeight = projektCount > 1 ? 81 : 62
   const activeNodeArray = get(data, 'tree.activeNodeArray')
   const activeTpopkontrId = activeNodeArray[9]
-  /**
-   * on click set url
-   * run modules/openNode
-   * pass it tree and node
-   * build node like it is done in TreeContainer/nodes/pop.js
-   */
+
+  if (!loading && ekf.length === 0)
+    return (
+      <NoDataContainer>
+        {`Für das Jahr ${get(
+          data,
+          'ekfYear'
+        )} wurden offenbar für Sie keine Erfolgskontrollen vorbereitet`}
+      </NoDataContainer>
+    )
 
   return (
     <Container>
