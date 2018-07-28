@@ -118,6 +118,7 @@ type Props = {
   saveToDb: () => void,
   classes: Object,
   openabove: Boolean,
+  suggestionsListMaxHeight: Number,
 }
 
 type State = {
@@ -200,7 +201,7 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
   }
 
   render() {
-    const { classes, openabove } = this.props
+    const { classes, openabove, suggestionsListMaxHeight } = this.props
     const { suggestions } = this.state
 
     return (
@@ -215,7 +216,17 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
             right: 0,
             bottom: openabove ? '27px' : 'unset',
           },
-          suggestionsList: classes.suggestionsList,
+          suggestionsList: {
+            margin: 0,
+            padding: 0,
+            listStyleType: 'none',
+            maxHeight: suggestionsListMaxHeight
+              ? `${suggestionsListMaxHeight}px`
+              : '200px',
+            overflow: 'auto',
+            zIndex: 1000,
+            breakInside: 'avoid',
+          },
           suggestion: classes.suggestion,
         }}
         renderInputComponent={this.renderInput}

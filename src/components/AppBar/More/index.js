@@ -17,6 +17,7 @@ import dataGql from '../data.graphql'
 import logout from '../../../modules/logout'
 import getActiveNodes from '../../../modules/getActiveNodes'
 import DeleteState from '../../../state/Delete'
+import EkfAdresse from './EkfAdresse'
 
 const MehrButton = styled(Button)`
   color: white !important;
@@ -112,7 +113,7 @@ const MyAppBar = ({
                   </MenuItem>
                   {['apflora_manager', 'apflora_artverantwortlich'].includes(
                     role
-                  ) && <MenuItem>EKF sehen als:</MenuItem>}
+                  ) && <EkfAdresse />}
                   <MenuItem onClick={watchVideos}>Video-Anleitungen</MenuItem>
                   <MenuItem
                     onClick={() => {
