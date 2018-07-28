@@ -113,7 +113,7 @@ Die nachfolgend aufgelisteten Funktionen werden nur von Topos verwendet:
 - Melden sich Freiwillige an, sehen sie eine spezifisch für Sie gestaltete Benutzer-Oberfläche
 - Neben der Liste ihrer Erfolgskontrollen erfassen sie im Formular, das genau dem Feld-Formular entspricht, ihre Beobachtungen
 
-**Freiwilligen-Erfolgskontrollen für die Jahres-Berichte nutzen:**
+**Freiwilligen-Erfolgskontrollen für Jahres-Berichte nutzen:**
 
 - Aktionsplan-Verantwortliche überprüfen die Kontrollen von Freiwilligen und bestimmen, ob sie in den Jahres-Berichten berücksichtigt werden
 
