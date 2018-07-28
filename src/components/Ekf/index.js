@@ -14,7 +14,7 @@ import jwtDecode from 'jwt-decode'
 // but only in production!
 import ErrorBoundary from '../shared/ErrorBoundary'
 import data1Gql from './data1.graphql'
-import dataGql from './data.graphql'
+import dataByUserNameGql from './dataByUserName.graphql'
 import dataWithDateGql from './dataWithDate.graphql'
 import ErrorState from '../../state/Error'
 import EkfList from './List'
@@ -65,7 +65,7 @@ const EkfContainer = () => (
           const role = tokenDecoded ? tokenDecoded.role : null
           const ekfRefDate = new Date().setMonth(new Date().getMonth() - 2)
           const ekfRefYear = new Date(ekfRefDate).getFullYear()
-          const query = ekfRefYear === jahr ? dataGql : dataWithDateGql
+          const query = ekfRefYear === jahr ? dataByUserNameGql : dataWithDateGql
 
           return (
             <Query query={query} variables={variables}>
