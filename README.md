@@ -103,17 +103,17 @@ Die nachfolgend aufgelisteten Funktionen werden nur von Topos verwendet:
 - Ihre Wiederherstellung wird im Rahmen der Entwicklung bzw. des Unterhalts regelmässig getestet ([Anleitung](https://github.com/FNSKtZH/apflora/wiki/Daten-wiederherstellen))
 - Während einer Sitzung gelöschte Daten können direkt von den Benutzern wiederhergestellt werden
 
-**Freiwilligen-Erfolgskontrollen vorbereiten: (in Entwicklung)**
+**Freiwilligen-Erfolgskontrollen vorbereiten:**
 
 - Aktionsplan-Verantwortliche erfassen, wer welche Teilpopulationen kontrollieren soll...
 - ...und drucken gleich die Feld-Erfassungs-Formulare aus
 
-**Frewillige erfassen ihre Kontrollen selber: (in Entwicklung)**
+**Frewillige erfassen ihre Kontrollen selber:**
 
 - Melden sich Freiwillige an, sehen sie eine spezifisch für Sie gestaltete Benutzer-Oberfläche
 - Neben der Liste ihrer Erfolgskontrollen erfassen sie im Formular, das genau dem Feld-Formular entspricht, ihre Beobachtungen
 
-**Freiwilligen-Erfolgskontrollen für die Jahres-Berichte nutzen: (in Entwicklung)**
+**Freiwilligen-Erfolgskontrollen für die Jahres-Berichte nutzen:**
 
 - Aktionsplan-Verantwortliche überprüfen die Kontrollen von Freiwilligen und bestimmen, ob sie in den Jahres-Berichten berücksichtigt werden
 
