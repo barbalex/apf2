@@ -15,7 +15,7 @@ import jwtDecode from 'jwt-decode'
 import ErrorBoundary from '../shared/ErrorBoundary'
 import data1Gql from './data1.graphql'
 import dataByUserNameGql from './dataByUserName.graphql'
-import dataByAdresseId from './dataByAdresseId.graphql'
+import dataByAdresseIdGql from './dataByAdresseId.graphql'
 import dataWithDateByUserNameGql from './dataWithDateByUserName.graphql'
 import dataWithDateByAdresseIdGql from './dataWithDateByAdresseId.graphql'
 import ErrorState from '../../state/Error'
@@ -68,14 +68,21 @@ const EkfContainer = () => (
                 : 1 / tabs.length
           const isPrint = get(data1, 'isPrint')
           const jahr = get(data1, 'ekfYear')
-          const variables = { userName, jahr }
+          const ekfAdresseId = get(data1, 'ekfAdresseId')
+          const variables = ekfAdresseId
+            ? { id: ekfAdresseId, jahr }
+            : { userName, jahr }
           const token = get(data1, 'user.token')
           const tokenDecoded = token ? jwtDecode(token) : null
           const role = tokenDecoded ? tokenDecoded.role : null
           const ekfRefDate = new Date().setMonth(new Date().getMonth() - 2)
           const ekfRefYear = new Date(ekfRefDate).getFullYear()
-          const query =
-            ekfRefYear === jahr ? dataByUserNameGql : dataWithDateByUserNameGql
+          let query = !!ekfAdresseId ? dataByAdresseIdGql : dataByUserNameGql
+          if (ekfRefYear !== jahr) {
+            query = !!ekfAdresseId
+              ? dataWithDateByAdresseIdGql
+              : dataWithDateByUserNameGql
+          }
 
           return (
             <Query query={query} variables={variables}>

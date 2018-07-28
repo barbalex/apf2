@@ -49,11 +49,15 @@ const EkfList = ({
   loading: Boolean,
   dimensions: Object,
 }) => {
-  let ekf = get(
-    data,
-    'userByName.adresseByAdresseId.tpopkontrsByBearbeiter.nodes',
-    []
-  ).map(e => ({
+  const ekfAdresseId = get(data, 'ekfAdresseId')
+  const ekfNodes = !!ekfAdresseId
+    ? get(data, 'adresseByAdresseId.tpopkontrsByBearbeiter.nodes', [])
+    : get(
+        data,
+        'userByName.adresseByAdresseId.tpopkontrsByBearbeiter.nodes',
+        []
+      )
+  let ekf = ekfNodes.map(e => ({
     projekt: get(
       e,
       'tpopByTpopId.popByPopId.apByApId.projektByProjId.name',
