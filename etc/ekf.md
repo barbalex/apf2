@@ -6,7 +6,8 @@
 - Erstellt man eine neue Freiwilligen-Kontrolle, werden die im Strukturbaum unter dem Knoten "EKF-Zähleinheiten" aufgelisteten maximal 3 Zähleinheiten erzeugt
 - Man kann Zähleinheiten entfernen, aber keine hinzufügen, die nicht unter "EKF-Zähleinheiten" aufgelistet sind
 - Das Formular kann gedruckt werden. Das funktioniert aber vermutlich nur auf Chrome (hoffentlich) richtig. Unter "Weitere Einstellungen" muss man "Hintergrundgrafiken" wählen, damit das Bild auch im Druck erscheint
-- Einige der Funktionen sind nur für Benutzer mit der Rolle "artverantwortich" oder "manager" sichtbar: GUID kopieren, Im Jahresbericht berücksichtigen.
+- Einige der Funktionen sind nur für Benutzer mit der Rolle "artverantwortich" oder "manager" sichtbar: GUID kopieren, Im Jahresbericht berücksichtigen
+- Das Formular passt sich an schmale Bildschirme an
 
 ## Die Arbeitsabläufe
 
