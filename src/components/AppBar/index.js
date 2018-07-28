@@ -275,6 +275,7 @@ const MyAppBar = ({
                   anchorEl={anchorEl}
                   setAnchorEl={setAnchorEl}
                   setShowDeletions={setShowDeletions}
+                  role={role}
                 />
               </MenuDiv>
             </StyledToolbar>
