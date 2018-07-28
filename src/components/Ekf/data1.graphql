@@ -7,7 +7,6 @@ query Query {
   }
   urlQuery @client {
     projekteTabs
-    feldkontrTab
   }
   tree @client {
     name
