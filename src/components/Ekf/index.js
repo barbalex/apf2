@@ -22,6 +22,13 @@ import ErrorState from '../../state/Error'
 import EkfList from './List'
 import Loading from '../shared/Loading'
 
+/**
+ * TODO:
+ * on mount
+ * check if ekfAdresseId exists
+ * if so: use byAdresse queries
+ */
+
 const Tpopfreiwkontr = Loadable({
   loader: () => import('../Projekte/Daten/Tpopfreiwkontr'),
   loading: Loading,
