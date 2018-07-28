@@ -14,6 +14,7 @@ import copying from './copying'
 import updateAvailable from './updateAvailable'
 import isPrint from './isPrint'
 import ekfYear from './ekfYear'
+import ekfAdresseId from './ekfAdresseId'
 import view from './view'
 import assigningBeob from './assigningBeob'
 import mapMouseCoordinates from './mapMouseCoordinates'
@@ -35,6 +36,7 @@ export default merge(
   updateAvailable,
   isPrint,
   ekfYear,
+  ekfAdresseId,
   view,
   assigningBeob,
   mapMouseCoordinates,

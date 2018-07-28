@@ -24,6 +24,7 @@ export default async idb => {
     isPrint: false,
     view,
     ekfYear,
+    ekfAdresseId,
     tree: {
       name: 'tree',
       activeNodeArray: [],
