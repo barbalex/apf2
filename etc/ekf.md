@@ -19,8 +19,9 @@ Beispiel: Charlotte bereitet die Arbeit der Freiwilligen "A" vor:
 2. Wichtig: Die zugehörige Adresse von A ist im Formular "Benutzer" zu wählen. Nur so kann apflora.ch die richtigen Kontrollen anzeigen, wenn A einloggt 
 3. Wählt man im EKF-Formular eine Beobachterin, die nicht wie oben beschrieben mit einem Benutzer verbunden wurde, wird man darauf hingewiesen
 4. Charlotte erstellt bei jeder von A zu kontrollierenden Teilpopulation eine neue Freiwilligen-Kontrolle. Darin wählt sie A als Beobachterin
-3. Das so erstellte Formular kann für die Feldarbeit gedruckt werden
-4. Wenn nun A von Charlotte die Formulare bekommt, sind in apflora.ch alle ihre EKF erfasst
+5. Das so erstellte Formular kann für die Feldarbeit gedruckt werden
+6. Charlotte kann die `EKF-Ansicht` von A wählen: Menu "Mehr" > "EKF sehen als" (und hier A wählen)
+7. Wenn nun A von Charlotte die Formulare bekommt, sind in apflora.ch alle ihre EKF erfasst
 
 ### 2. Freiwillige digitalisiert ihre Feld-Formulare
 1. Loggt A nach der Feldarbeit in apflora.ch ein, um ihre Feld-Formulare zu übertragen, öffnet sich die `EKF-Ansicht`: A sieht die Liste aller EKF dieses Jahres (bzw. noch ohne Datum), bei denen sie als Beobachterin erfasst ist
@@ -31,8 +32,8 @@ Beispiel: Charlotte bereitet die Arbeit der Freiwilligen "A" vor:
 6. A kann in die "normale" Ansicht wechseln. Zum Beispiel, wenn sie Feld-Kontrollen sehen will
 
 ### 3. Artverantwortliche oder Managerin überprüft die Feld-Arbeit
-1. Vielleicht müssen wir dafür ermöglichen, dass sie die EKF-Ansicht für eine bestimmte Freiwilligen-Kontrolleurin öffnen kann?
-2. Im Feld "Im Jahresbericht berücksichtigen" kann man "nein" setzten, wenn man dokumentieren will, dass die Kontrolle bei der Erstellung von Kontroll-Berichten nicht berücksichtigt werden soll
+1. Die Artverantwortliche kann die `EKF-Ansicht` einer Bestimmten Freiwilligen-Kontrolleurin wählen: Menu "Mehr" > "EKF sehen als" (und hier die Kontrolleurin wählen)
+2. Im Feld "Im Jahresbericht berücksichtigen" kann sie "nein" setzten, wenn sie dokumentieren will, dass die Kontrolle bei der Erstellung von Kontroll-Berichten nicht berücksichtigt werden soll
 3. Damit eine Freiwilligen-Kontrolle sich im Jahresbericht ausdruckt, muss wie bei den Feld-Kontrollen, ein entsprechender Kontroll-Bericht erfasst werden
 4. Die Zahlen im Jahresbericht basieren auf den Kontroll-Berichten, nicht auf den Kontrollen. Eine zweifelhafte Kontrolle wird daher nicht im Jahresbericht sichtbar, wenn für sie kein Kontroll-Bericht erfasst wird
 
