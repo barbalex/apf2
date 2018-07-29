@@ -113,7 +113,7 @@ const MyAppBar = ({
                   </MenuItem>
                   {['apflora_manager', 'apflora_artverantwortlich'].includes(
                     role
-                  ) && <EkfAdresse />}
+                  ) && <EkfAdresse setAnchorEl={setAnchorEl} />}
                   <MenuItem onClick={watchVideos}>Video-Anleitungen</MenuItem>
                   <MenuItem
                     onClick={() => {

@@ -19,16 +19,17 @@ const Container = styled.div`
 
 const enhance = compose(
   withHandlers({
-    choose: () => async id => {
+    choose: ({ setAnchorEl }: { setAnchorEl: () => void }) => async id => {
       const { client } = app
       await client.mutate({
         mutation: setEkfAdresseIdGql,
         variables: { value: id },
       })
-      client.mutate({
+      await client.mutate({
         mutation: setViewGql,
         variables: { value: 'ekf' },
       })
+      setAnchorEl(null)
     },
   })
 )

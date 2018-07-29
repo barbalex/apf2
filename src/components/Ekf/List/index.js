@@ -51,7 +51,7 @@ const EkfList = ({
 }) => {
   const ekfAdresseId = get(data, 'ekfAdresseId')
   const ekfNodes = !!ekfAdresseId
-    ? get(data, 'adresseByAdresseId.tpopkontrsByBearbeiter.nodes', [])
+    ? get(data, 'adresseById.tpopkontrsByBearbeiter.nodes', [])
     : get(
         data,
         'userByName.adresseByAdresseId.tpopkontrsByBearbeiter.nodes',

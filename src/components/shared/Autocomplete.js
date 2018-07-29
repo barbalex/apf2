@@ -235,6 +235,15 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
         onSuggestionsClearRequested={this.handleSuggestionsClearRequested}
         renderSuggestionsContainer={renderSuggestionsContainer}
         getSuggestionValue={getSuggestionValue}
+        onSuggestionSelected={(a, b) => {
+          const value = b.suggestionValue
+          const { objects, saveToDb } = this.props
+          const object = objects.find(o => trimStart(o.value) === value)
+          // check if value is in values
+          if (object) {
+            return saveToDb(object.id)
+          }
+        }}
         renderSuggestion={renderSuggestion}
         shouldRenderSuggestions={shouldRenderSuggestions}
         inputProps={{
