@@ -6,9 +6,12 @@ import styled from 'styled-components'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
+import app from 'ampersand-app'
 
 import Autocomplete from '../../../shared/Autocomplete'
 import dataGql from './data.graphql'
+import setViewGql from './setView.graphql'
+import setEkfAdresseIdGql from './setEkfAdresseId.graphql'
 
 const Container = styled.div`
   padding: 0 16px;
@@ -16,13 +19,23 @@ const Container = styled.div`
 
 const enhance = compose(
   withHandlers({
-    choose: ({ setStateValue }) => event => setStateValue(event.target.value),
+    choose: () => async id => {
+      const { client } = app
+      await client.mutate({
+        mutation: setEkfAdresseIdGql,
+        variables: { value: id },
+      })
+      client.mutate({
+        mutation: setViewGql,
+        variables: { value: 'ekf' },
+      })
+    },
   })
 )
 
 const EkfAdresse = ({ choose }: { choose: () => void }) => (
   <Query query={dataGql}>
-    {({ loading, error, data, client }) => {
+    {({ loading, error, data }) => {
       if (loading) return '...'
       if (error) return `Fehler: ${error.message}`
       let adressenWerte = get(data, 'allAdresses.nodes', [])
@@ -38,7 +51,7 @@ const EkfAdresse = ({ choose }: { choose: () => void }) => (
             label="EKF sehen als"
             value={''}
             objects={adressenWerte}
-            saveToDb={value => console.log('TODO, value:', value)}
+            saveToDb={choose}
             suggestionsListMaxHeight={150}
           />
         </Container>
