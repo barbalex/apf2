@@ -13,21 +13,19 @@ const Area = styled.div`
 `
 const Container = styled(Area)`
   grid-area: danger;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-column-gap: 8px;
-  grid-template-areas: 'dangerLabel dangerVal dangerVal dangerVal';
-  grid-column-gap: 10px;
-  align-items: center;
 `
-const Label = styled.div`
+const DangerLabel = styled.div`
   font-weight: 700;
 `
-const DangerLabel = styled(Label)`
-  grid-area: dangerLabel;
+const DangerSubLabel = styled.span`
+  padding-left: 5px;
+  font-weight: 700;
+  font-size: 14px;
+  @media print {
+    font-size: 11px;
+  }
 `
 const DangerVal = styled.div`
-  grid-area: dangerVal;
   > div {
     margin-bottom: -15px;
   }
@@ -49,7 +47,10 @@ const Danger = ({
   return (
     <Container>
       <DangerLabel>
-        Andere Gefährdung (Verbuschung, Tritt, Hunde, ...), welche?
+        Gefährdung{' '}
+        <DangerSubLabel>
+          (Problemarten, Verbuschung, Tritt, Hunde, ...), welche?
+        </DangerSubLabel>
       </DangerLabel>
       <DangerVal>
         <TextField

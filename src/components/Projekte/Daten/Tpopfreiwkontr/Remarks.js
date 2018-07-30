@@ -21,8 +21,8 @@ const Container = styled(Area)`
 const RemarksLabel = styled.div`
   font-weight: 700;
 `
-const RemarksSubLabel = styled.div`
-  padding-top: 10px;
+const RemarksSubLabel = styled.span`
+  padding-left: 5px;
   font-weight: 700;
   font-size: 14px;
   @media print {
@@ -45,11 +45,13 @@ const Remarks = ({
 
   return (
     <Container>
-      <RemarksLabel>Spezielle Bemerkungen</RemarksLabel>
-      <RemarksSubLabel>
-        (z.B. allgemeiner Eindruck, Zunahme / Abnahme Begründung, spezielle
-        Begebenheiten)
-      </RemarksSubLabel>
+      <RemarksLabel>
+        Spezielle Bemerkungen
+        <RemarksSubLabel>
+          (z.B. allgemeiner Eindruck, Zunahme / Abnahme Begründung, spezielle
+          Begebenheiten)
+        </RemarksSubLabel>
+      </RemarksLabel>
       <TextField
         key={`${row.id}bemerkungen`}
         value={row.bemerkungen}
