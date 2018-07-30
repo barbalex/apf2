@@ -44,6 +44,11 @@ const StyledTextField = styled(TextField)`
   > p {
     white-space: normal !important;
   }
+  input {
+    @media print {
+      font-size: 11px !important;
+    }
+  }
 `
 
 function renderSuggestion(suggestion, { query, isHighlighted }) {
