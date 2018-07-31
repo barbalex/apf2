@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { Component } from 'react'
 import { FixedSizeList as List } from 'react-window'
 import get from 'lodash/get'
 import uniq from 'lodash/uniq'
@@ -40,15 +40,7 @@ const InnerContainer = styled.div`
   }
 `
 
-const EkfList = ({
-  data,
-  loading,
-  dimensions,
-}: {
-  data: Object,
-  loading: Boolean,
-  dimensions: Object,
-}) => {
+const getEkfFromData = data => {
   const ekfAdresseId = get(data, 'ekfAdresseId')
   const ekfNodes = !!ekfAdresseId
     ? get(data, 'adresseById.tpopkontrsByBearbeiter.nodes', [])
@@ -86,66 +78,115 @@ const EkfList = ({
     tpopSort: get(e, 'tpopByTpopId.nr', '(keine Nr)'),
     id: e.id,
   }))
-  ekf = sortBy(ekf, ['projekt', 'art', 'popSort', 'tpopSort'])
-  const height = isNaN(dimensions.height) ? 250 : dimensions.height
-  const width = isNaN(dimensions.width) ? 250 : dimensions.width - 1
-  const projektCount = uniq(ekf.map(e => e.projekt)).length
-  const itemSize = projektCount > 1 ? 110 : 91
-  const innerContainerHeight = projektCount > 1 ? 81 : 62
-  const activeNodeArray = get(data, 'tree.activeNodeArray')
-  const activeTpopkontrId = activeNodeArray[9]
+  return sortBy(ekf, ['projekt', 'art', 'popSort', 'tpopSort'])
+}
 
-  if (!loading && ekf.length === 0)
+type Props = {
+  data: Object,
+  loading: Boolean,
+  dimensions: Object,
+}
+
+class EkfList extends Component<Props> {
+  constructor(props) {
+    super(props)
+    this.state = { initialKontrId: null }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    // set initial kontrId so form is shown for forst ekf
+    // IF none is choosen yet
+    const ekf = getEkfFromData(this.props.data)
+    const activeNodeArray = get(this.props.data, 'tree.activeNodeArray')
+    const activeTpopkontrId = activeNodeArray[9]
+    if (
+      ekf &&
+      ekf.length &&
+      ekf.length > 0 &&
+      !activeTpopkontrId &&
+      !prevState.initialKontrId
+    ) {
+      const row = ekf[0]
+      const url = [
+        'Projekte',
+        row.projId,
+        'Aktionspläne',
+        row.apId,
+        'Populationen',
+        row.popId,
+        'Teil-Populationen',
+        row.tpopId,
+        'Freiwilligen-Kontrollen',
+        row.id,
+      ]
+      initiateDataFromUrl(url)
+      this.setState({ initialKontrId: row.id })
+    }
+  }
+
+  render() {
+    const { data, loading, dimensions } = this.props
+    const ekf = getEkfFromData(data)
+    const height = isNaN(dimensions.height) ? 250 : dimensions.height
+    const width = isNaN(dimensions.width) ? 250 : dimensions.width - 1
+    const projektCount = uniq(ekf.map(e => e.projekt)).length
+    const itemSize = projektCount > 1 ? 110 : 91
+    const innerContainerHeight = projektCount > 1 ? 81 : 62
+    const activeNodeArray = get(data, 'tree.activeNodeArray')
+    const activeTpopkontrId = activeNodeArray[9]
+
+    if (!loading && ekf.length === 0)
+      return (
+        <NoDataContainer>
+          {`Für das Jahr ${get(
+            data,
+            'ekfYear'
+          )} existieren offenbar keine Erfolgskontrollen mit Ihnen als BearbeiterIn`}
+        </NoDataContainer>
+      )
+
     return (
-      <NoDataContainer>
-        {`Für das Jahr ${get(
-          data,
-          'ekfYear'
-        )} existieren offenbar keine Erfolgskontrollen mit Ihnen als BearbeiterIn`}
-      </NoDataContainer>
+      <Container>
+        <List
+          height={height}
+          itemCount={ekf.length}
+          itemSize={itemSize}
+          width={width}
+        >
+          {({ index, style }) => {
+            const row = ekf[index]
+            const url = [
+              'Projekte',
+              row.projId,
+              'Aktionspläne',
+              row.apId,
+              'Populationen',
+              row.popId,
+              'Teil-Populationen',
+              row.tpopId,
+              'Freiwilligen-Kontrollen',
+              row.id,
+            ]
+
+            return (
+              <OuterContainer
+                style={style}
+                onClick={() => initiateDataFromUrl(url)}
+                active={activeTpopkontrId === row.id}
+              >
+                <InnerContainer height={innerContainerHeight}>
+                  {projektCount > 1 && <div>{row.projekt}</div>}
+                  <div>{row.art}</div>
+                  <div>{row.pop}</div>
+                  <div>{row.tpop}</div>
+                </InnerContainer>
+              </OuterContainer>
+            )
+          }}
+        </List>
+      </Container>
     )
-
-  return (
-    <Container>
-      <List
-        height={height}
-        itemCount={ekf.length}
-        itemSize={itemSize}
-        width={width}
-      >
-        {({ index, style }) => {
-          const row = ekf[index]
-          const url = [
-            'Projekte',
-            row.projId,
-            'Aktionspläne',
-            row.apId,
-            'Populationen',
-            row.popId,
-            'Teil-Populationen',
-            row.tpopId,
-            'Freiwilligen-Kontrollen',
-            row.id,
-          ]
-
-          return (
-            <OuterContainer
-              style={style}
-              onClick={() => initiateDataFromUrl(url)}
-              active={activeTpopkontrId === row.id}
-            >
-              <InnerContainer height={innerContainerHeight}>
-                {projektCount > 1 && <div>{row.projekt}</div>}
-                <div>{row.art}</div>
-                <div>{row.pop}</div>
-                <div>{row.tpop}</div>
-              </InnerContainer>
-            </OuterContainer>
-          )
-        }}
-      </List>
-    </Container>
-  )
+  }
 }
 
 export default EkfList
