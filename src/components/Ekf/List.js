@@ -6,7 +6,7 @@ import uniq from 'lodash/uniq'
 import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
 
-import initiateDataFromUrl from '../../../modules/initiateDataFromUrl'
+import initiateDataFromUrl from '../../modules/initiateDataFromUrl'
 
 const Container = styled.div`
   height: 100%;
