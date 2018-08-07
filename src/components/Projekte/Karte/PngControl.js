@@ -9,7 +9,7 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import getContext from 'recompose/getContext'
 import { MuiThemeProvider } from '@material-ui/core/styles'
-import FileDownloadIcon from '@material-ui/icons/FileDownload'
+import FileDownloadIcon from '@material-ui/icons/GetApp'
 
 import theme from '../../../theme'
 
@@ -32,7 +32,7 @@ const enhance = compose(
   getContext({ map: PropTypes.object.isRequired }),
   withState('printPlugin', 'changePrintPlugin', {}),
   withHandlers({
-    savePng: ({ printPlugin }) => (event) => {
+    savePng: ({ printPlugin }) => event => {
       event.preventDefault()
       printPlugin.printMap('CurrentSize', 'apfloraKarte')
     },
@@ -70,9 +70,9 @@ class PrintControl extends Component {
      * click events
      * see: https://github.com/LiveBy/react-leaflet-control/issues/22
      */
-    window.L.DomEvent
-      .disableClickPropagation(this.container.current)
-      .disableScrollPropagation(this.container.current)
+    window.L.DomEvent.disableClickPropagation(
+      this.container.current
+    ).disableScrollPropagation(this.container.current)
   }
 
   render() {

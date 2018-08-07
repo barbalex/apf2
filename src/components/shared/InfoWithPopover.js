@@ -2,7 +2,7 @@
 import React, { Fragment } from 'react'
 import Popover from '@material-ui/core/Popover'
 
-import InfoOutlineIcon from '@material-ui/icons/InfoOutline'
+import InfoOutlineIcon from '@material-ui/icons/InfoOutlined'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
@@ -18,7 +18,7 @@ const enhance = compose(
       props.changePopupAnchorEl(event.currentTarget)
     },
     onRequestClosePopover: props => () => props.changePopupOpen(false),
-  }),
+  })
 )
 
 const StyledInfoOutlineIcon = styled(InfoOutlineIcon)`

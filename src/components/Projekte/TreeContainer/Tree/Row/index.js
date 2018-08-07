@@ -3,7 +3,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import SwapVerticalCircleIcon from '@material-ui/icons/SwapVerticalCircle'
-import ContentCopyIcon from '@material-ui/icons/ContentCopy'
+import FileCopyIcon from '@material-ui/icons/FileCopy'
 import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary'
 import LocalFloristIcon from '@material-ui/icons/LocalFlorist'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
@@ -152,7 +152,7 @@ const MovingIcon = styled(SwapVerticalCircleIcon)`
   height: 20px !important;
   color: rgb(255, 90, 0) !important;
 `
-const CopyingIcon = styled(ContentCopyIcon)`
+const CopyingIcon = styled(FileCopyIcon)`
   padding-left: 0.2em;
   height: 20px !important;
   color: rgb(255, 90, 0) !important;

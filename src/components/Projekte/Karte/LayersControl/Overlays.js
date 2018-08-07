@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
 import DragHandleIcon from '@material-ui/icons/DragHandle'
-import InfoOutlineIcon from '@material-ui/icons/InfoOutline'
+import InfoOutlineIcon from '@material-ui/icons/InfoOutlined'
 import {
   SortableContainer,
   SortableElement,
@@ -72,66 +72,62 @@ const DragHandle = SortableHandle(() => (
   </StyledIconButton>
 ))
 
-const SortableItem = SortableElement(({
-  overlay,
-  activeOverlays,
-  setActiveOverlays,
-}) => (
-  <LayerDiv>
-    <Checkbox
-      value={overlay.value}
-      label={overlay.label}
-      checked={activeOverlays.includes(overlay.value)}
-      onChange={() => {
-        if (activeOverlays.includes(overlay.value)) {
-          return setActiveOverlays(
-            activeOverlays.filter(o => o !== overlay.value)
-          )
-        }
-        return setActiveOverlays([...activeOverlays, overlay.value])
-      }}
-    />
-    <IconsDivs>
-      {!!layerLegends[overlay.value] && (
+const SortableItem = SortableElement(
+  ({ overlay, activeOverlays, setActiveOverlays }) => (
+    <LayerDiv>
+      <Checkbox
+        value={overlay.value}
+        label={overlay.label}
+        checked={activeOverlays.includes(overlay.value)}
+        onChange={() => {
+          if (activeOverlays.includes(overlay.value)) {
+            return setActiveOverlays(
+              activeOverlays.filter(o => o !== overlay.value)
+            )
+          }
+          return setActiveOverlays([...activeOverlays, overlay.value])
+        }}
+      />
+      <IconsDivs>
+        {!!layerLegends[overlay.value] && (
+          <IconsDiv>
+            <div>
+              <StyledIconButton
+                title="Legende öffnen"
+                onClick={() => {
+                  window.open(layerLegends[overlay.value])
+                }}
+              >
+                <StyledLegendIcon />
+              </StyledIconButton>
+            </div>
+          </IconsDiv>
+        )}
         <IconsDiv>
           <div>
-            <StyledIconButton
-              title="Legende öffnen"
-              onClick={() => {
-                window.open(layerLegends[overlay.value])
-              }}
-            >
-              <StyledLegendIcon />
-            </StyledIconButton>
+            <DragHandle />
           </div>
         </IconsDiv>
-      )}
-      <IconsDiv>
-        <div>
-          <DragHandle />
-        </div>
-      </IconsDiv>
-    </IconsDivs>
-  </LayerDiv>
-))
+      </IconsDivs>
+    </LayerDiv>
+  )
+)
 
-const SortableList = SortableContainer(({
-  items,
-  activeOverlays,
-  setActiveOverlays,
-}) => (
-  <div>
-    {items.map((overlay, index) => (
-      <SortableItem
-        key={index}
-        index={index}
-        overlay={overlay}
-        activeOverlays={activeOverlays}
-        setActiveOverlays={setActiveOverlays}
-      />
-    ))}
-  </div>
-))
+const SortableList = SortableContainer(
+  ({ items, activeOverlays, setActiveOverlays }) => (
+    <div>
+      {items.map((overlay, index) => (
+        <SortableItem
+          key={index}
+          index={index}
+          overlay={overlay}
+          activeOverlays={activeOverlays}
+          setActiveOverlays={setActiveOverlays}
+        />
+      ))}
+    </div>
+  )
+)
 
 const Overlays = ({
   overlays,
