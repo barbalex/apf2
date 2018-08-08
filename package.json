@@ -11,7 +11,7 @@
   "private": true,
   "devDependencies": {
     "flow-bin": "0.78.0",
-    "postgraphile": "4.0.0-rc.2",
+    "postgraphile": "4.0.0-rc.3",
     "postgraphile-plugin-connection-filter": "1.0.0-beta.14",
     "react-scripts": "2.0.0-next.3e165448",
     "serve": "9.4.0",
@@ -78,7 +78,7 @@
     "react-virtualized": "9.20.1",
     "react-window": "1.1.1",
     "recompose": "0.28.2",
-    "styled-components": "3.4.1",
+    "styled-components": "3.4.2",
     "typeface-roboto": "0.0.54",
     "unstated": "2.1.1"
   },
