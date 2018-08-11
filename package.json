@@ -14,7 +14,7 @@
     "postgraphile": "4.0.0-rc.3",
     "postgraphile-plugin-connection-filter": "1.0.0-beta.14",
     "react-scripts": "2.0.0-next.3e165448",
-    "serve": "9.4.0",
+    "serve": "9.4.2",
     "source-map-explorer": "1.5.0"
   },
   "dependencies": {
@@ -27,8 +27,8 @@
     "@turf/nearest-point": "6.0.1",
     "@turf/points-within-polygon": "5.1.5",
     "ampersand-app": "2.0.0",
-    "apollo-cache-inmemory": "1.2.6",
-    "apollo-client": "2.3.7",
+    "apollo-cache-inmemory": "1.2.7",
+    "apollo-client": "2.3.8",
     "apollo-link": "1.2.2",
     "apollo-link-context": "1.0.8",
     "apollo-link-http": "1.5.4",
@@ -62,7 +62,7 @@
     "prop-types": "15.6.2",
     "query-string": "6.1.0",
     "react": "16.4.2",
-    "react-apollo": "2.1.9",
+    "react-apollo": "2.1.11",
     "react-autosuggest": "9.3.4",
     "react-contextmenu": "2.9.3",
     "react-copy-to-clipboard": "5.0.1",
@@ -71,7 +71,7 @@
     "react-leaflet-bing": "3.1.0",
     "react-leaflet-control": "1.4.1",
     "react-linkify": "0.2.2",
-    "react-loadable": "5.4.0",
+    "react-loadable": "5.5.0",
     "react-measure": "2.1.0",
     "react-reflex": "2.2.8",
     "react-sortable-hoc": "0.8.3",
@@ -84,7 +84,7 @@
   },
   "resolutions": {
     "graphql": "0.13.2",
-    "@babel/runtime": "7.0.0-beta.55"
+    "@babel/runtime": "^7.0.0-beta.55"
   },
   "scripts": {
     "start": "react-scripts start",
