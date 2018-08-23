@@ -11,9 +11,8 @@ import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
-import AutoCompleteFromArray from '../../../shared/AutocompleteFromArray'
 import TextField from '../../../shared/TextField'
-import AutoComplete from '../../../shared/Autocomplete'
+import Select from '../../../shared/Select'
 import RadioButton from '../../../shared/RadioButton'
 import StringToCopy from '../../../shared/StringToCopy'
 import FormTitle from '../../../shared/FormTitle'
@@ -39,19 +38,15 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withState('errors', 'setErrors', ({})),
+  withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({
-      refetchTree,
-      setErrors,
-      errors
-    }) => async ({
+    saveToDb: ({ refetchTree, setErrors, errors }) => async ({
       row,
       field,
       value,
       field2,
       value2,
-      updateTpopmassn
+      updateTpopmassn,
     }) => {
       /**
        * only save if value changed
@@ -75,13 +70,20 @@ const enhance = compose(
               tpopmassn: {
                 id: row.id,
                 typ: field === 'typ' ? value : row.typ,
-                beschreibung: field === 'beschreibung' ? value : row.beschreibung,
-                jahr: field === 'jahr' ? value :
-                    field2 === 'jahr' ? value2 :
-                    row.jahr,
-                datum: field === 'datum' ? value :
-                  field2 === 'datum' ? value2 :
-                  row.datum,
+                beschreibung:
+                  field === 'beschreibung' ? value : row.beschreibung,
+                jahr:
+                  field === 'jahr'
+                    ? value
+                    : field2 === 'jahr'
+                      ? value2
+                      : row.jahr,
+                datum:
+                  field === 'datum'
+                    ? value
+                    : field2 === 'datum'
+                      ? value2
+                      : row.datum,
                 bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
                 planBezeichnung:
                   field === 'planBezeichnung' ? value : row.planBezeichnung,
@@ -91,7 +93,8 @@ const enhance = compose(
                 anzPflanzen: field === 'anzPflanzen' ? value : row.anzPflanzen,
                 anzPflanzstellen:
                   field === 'anzPflanzstellen' ? value : row.anzPflanzstellen,
-                wirtspflanze: field === 'wirtspflanze' ? value : row.wirtspflanze,
+                wirtspflanze:
+                  field === 'wirtspflanze' ? value : row.wirtspflanze,
                 herkunftPop: field === 'herkunftPop' ? value : row.herkunftPop,
                 sammeldatum: field === 'sammeldatum' ? value : row.sammeldatum,
                 form: field === 'form' ? value : row.form,
@@ -113,7 +116,7 @@ const enhance = compose(
       } catch (error) {
         return setErrors({ [field]: error.message })
       }
-      setErrors(({}))
+      setErrors({})
       if (['typ'].includes(field)) refetchTree()
     },
   }),
@@ -124,7 +127,7 @@ const enhance = compose(
        * (but same form rerenders)
        */
       if (prevProps.id !== props.id) {
-        props.setErrors(({}))
+        props.setErrors({})
       }
     },
   }),
@@ -146,12 +149,7 @@ class Tpopmassn extends Component<Props> {
   }
 
   render() {
-    const {
-      id,
-      dimensions = { width: 380 },
-      saveToDb,
-      errors,
-    } = this.props
+    const { id, dimensions = { width: 380 }, saveToDb, errors } = this.props
 
     return (
       <Query query={dataGql} variables={{ id }}>
@@ -169,8 +167,8 @@ class Tpopmassn extends Component<Props> {
           let adressenWerte = get(data, 'allAdresses.nodes', [])
           adressenWerte = sortBy(adressenWerte, 'name')
           adressenWerte = adressenWerte.map(el => ({
-            id: el.id,
-            value: el.name,
+            value: el.id,
+            label: el.name,
           }))
           let tpopmasstypWerte = get(data, 'allTpopmassnTypWertes.nodes', [])
           tpopmasstypWerte = sortBy(tpopmasstypWerte, 'sort')
@@ -181,6 +179,7 @@ class Tpopmassn extends Component<Props> {
           const artWerte = get(data, 'allAeEigenschaftens.nodes', [])
             .map(o => o.artname)
             .sort()
+            .map(o => ({ value: o, label: o }))
 
           return (
             <ErrorBoundary>
@@ -204,7 +203,7 @@ class Tpopmassn extends Component<Props> {
                             value,
                             field2: 'datum',
                             value2: null,
-                            updateTpopmassn
+                            updateTpopmassn,
                           })
                         }}
                         error={errors.jahr}
@@ -231,7 +230,12 @@ class Tpopmassn extends Component<Props> {
                         value={row.typ}
                         dataSource={tpopmasstypWerte}
                         saveToDb={value =>
-                          saveToDb({ row, field: 'typ', value, updateTpopmassn })
+                          saveToDb({
+                            row,
+                            field: 'typ',
+                            value,
+                            updateTpopmassn,
+                          })
                         }
                         error={errors.typ}
                       />
@@ -250,11 +254,12 @@ class Tpopmassn extends Component<Props> {
                         }
                         error={errors.beschreibung}
                       />
-                      <AutoComplete
+                      <Select
                         key={`${row.id}bearbeiter`}
+                        value={row.bearbeiter}
+                        field="bearbeiter"
                         label="BearbeiterIn"
-                        value={get(row, 'adresseByBearbeiter.name')}
-                        objects={adressenWerte}
+                        options={adressenWerte}
                         saveToDb={value =>
                           saveToDb({
                             row,
@@ -331,7 +336,12 @@ class Tpopmassn extends Component<Props> {
                         value={row.form}
                         type="text"
                         saveToDb={value =>
-                          saveToDb({ row, field: 'form', value, updateTpopmassn })
+                          saveToDb({
+                            row,
+                            field: 'form',
+                            value,
+                            updateTpopmassn,
+                          })
                         }
                         error={errors.form}
                       />
@@ -410,11 +420,12 @@ class Tpopmassn extends Component<Props> {
                         }
                         error={errors.anzPflanzstellen}
                       />
-                      <AutoCompleteFromArray
+                      <Select
                         key={`${row.id}wirtspflanze`}
-                        label="Wirtspflanze"
                         value={row.wirtspflanze}
-                        values={artWerte}
+                        field="wirtspflanze"
+                        label="Wirtspflanze"
+                        options={artWerte}
                         saveToDb={value =>
                           saveToDb({
                             row,
