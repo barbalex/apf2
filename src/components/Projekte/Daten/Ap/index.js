@@ -12,6 +12,7 @@ import withLifecycle from '@hocs/with-lifecycle'
 import AutoComplete from '../../../shared/Autocomplete'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import TextField from '../../../shared/TextField'
+import Select from '../../../shared/Select'
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -115,7 +116,7 @@ const enhance = compose(
         props.setErrors({})
       }
     },
-  })
+  }),
 )
 
 const Ap = ({
@@ -159,8 +160,8 @@ const Ap = ({
             let adressenWerte = get(data, 'allAdresses.nodes', [])
             adressenWerte = sortBy(adressenWerte, 'name')
             adressenWerte = adressenWerte.map(el => ({
-              id: el.id,
-              value: el.name,
+              label: el.name,
+              value: el.id,
             }))
             // list all ap-Arten BUT the active one
             const apArten = get(data, 'allAps.nodes', [])
@@ -266,7 +267,9 @@ const Ap = ({
                                 </LabelPopoverTitleRow>
                                 <LabelPopoverContentRow>
                                   <LabelPopoverRowColumnLeft>
-                                    noch keine<br />Umsetzung:
+                                    noch keine
+                                    <br />
+                                    Umsetzung:
                                   </LabelPopoverRowColumnLeft>
                                   <LabelPopoverRowColumnRight>
                                     noch keine Massnahmen ausgeführt
@@ -286,11 +289,12 @@ const Ap = ({
                             label="Stand Umsetzung"
                           />
                         </FieldContainer>
-                        <AutoComplete
+                        <Select
                           key={`${row.id}bearbeiter`}
+                          value={row.bearbeiter}
+                          field="bearbeiter"
                           label="Verantwortlich"
-                          value={get(row, 'adresseByBearbeiter.name', null)}
-                          objects={adressenWerte}
+                          options={adressenWerte}
                           saveToDb={value =>
                             saveToDb({
                               row,
@@ -299,8 +303,6 @@ const Ap = ({
                               updateAp,
                             })
                           }
-                          error={errors.bearbeiter}
-                          openabove
                         />
                         <TextField
                           key={`${row.id}ekfBeobachtungszeitpunkt`}
@@ -322,7 +324,7 @@ const Ap = ({
                           value={get(
                             row,
                             'aeEigenschaftenByArtId.artwert',
-                            'Diese Art hat keinen Artwert'
+                            'Diese Art hat keinen Artwert',
                           )}
                         />
                       </FieldsContainer>
