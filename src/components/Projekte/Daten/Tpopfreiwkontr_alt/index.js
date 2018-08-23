@@ -38,12 +38,9 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withState('errors', 'setErrors', ({})),
+  withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({
-      setErrors,
-      errors,
-    }) => async ({
+    saveToDb: ({ setErrors, errors }) => async ({
       row,
       field,
       value,
@@ -73,22 +70,31 @@ const enhance = compose(
               tpopkontr: {
                 id: row.id,
                 typ: field === 'typ' ? value : row.typ,
-                jahr: field === 'jahr' ? value :
-                    field2 === 'jahr' ? value2 :
-                    row.jahr,
-                datum: field === 'datum' ? value :
-                  field2 === 'datum' ? value2 :
-                  row.datum,
+                jahr:
+                  field === 'jahr'
+                    ? value
+                    : field2 === 'jahr'
+                      ? value2
+                      : row.jahr,
+                datum:
+                  field === 'datum'
+                    ? value
+                    : field2 === 'datum'
+                      ? value2
+                      : row.datum,
                 bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
                 flaecheUeberprueft:
-                  field === 'flaecheUeberprueft' ? value : row.flaecheUeberprueft,
+                  field === 'flaecheUeberprueft'
+                    ? value
+                    : row.flaecheUeberprueft,
                 deckungVegetation:
                   field === 'deckungVegetation' ? value : row.deckungVegetation,
                 deckungNackterBoden:
                   field === 'deckungNackterBoden'
                     ? value
                     : row.deckungNackterBoden,
-                deckungApArt: field === 'deckungApArt' ? value : row.deckungApArt,
+                deckungApArt:
+                  field === 'deckungApArt' ? value : row.deckungApArt,
                 vegetationshoeheMaximum:
                   field === 'vegetationshoeheMaximum'
                     ? value
@@ -117,13 +123,13 @@ const enhance = compose(
       } catch (error) {
         return setErrors({ [field]: error.message })
       }
-      setErrors(({}))
+      setErrors({})
     },
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
       if (prevProps.id !== props.id) {
-        props.setErrors(({}))
+        props.setErrors({})
       }
     },
   }),
@@ -148,12 +154,7 @@ class Tpopfreiwkontr extends Component<Props> {
   }
 
   render() {
-    const {
-      id,
-      saveToDb,
-      dimensions = { width: 380 },
-      errors,
-    } = this.props
+    const { id, saveToDb, dimensions = { width: 380 }, errors } = this.props
 
     return (
       <Query query={dataGql} variables={{ id }}>
@@ -171,8 +172,8 @@ class Tpopfreiwkontr extends Component<Props> {
           let adressenWerte = get(data, 'allAdresses.nodes', [])
           adressenWerte = sortBy(adressenWerte, 'name')
           adressenWerte = adressenWerte.map(el => ({
-            id: el.id,
-            value: el.name,
+            value: el.id,
+            label: el.name,
           }))
 
           return (
@@ -193,11 +194,11 @@ class Tpopfreiwkontr extends Component<Props> {
                         saveToDb={value => {
                           saveToDb({
                             row,
-                            field:
-                            'jahr', value,
+                            field: 'jahr',
+                            value,
                             field2: 'datum',
                             value2: null,
-                            updateTpopkontr
+                            updateTpopkontr,
                           })
                         }}
                         error={errors.jahr}
