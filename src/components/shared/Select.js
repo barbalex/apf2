@@ -65,7 +65,7 @@ const SharedSelect = ({
   onChange: () => void,
 }) => (
   <Container>
-    <Label>{label}</Label>
+    {label && <Label>{label}</Label>}
     <StyledSelect
       id={field}
       name={field}
