@@ -281,8 +281,8 @@ class Tpopfeldkontr extends Component<Props> {
           let adressenWerte = get(data, 'allAdresses.nodes', [])
           adressenWerte = sortBy(adressenWerte, 'name')
           adressenWerte = adressenWerte.map(el => ({
-            id: el.id,
-            value: el.name,
+            value: el.id,
+            label: el.name,
           }))
           let idbiotopuebereinstWerte = get(
             data,
