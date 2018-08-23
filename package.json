@@ -63,7 +63,6 @@
     "query-string": "6.1.0",
     "react": "16.4.2",
     "react-apollo": "2.1.11",
-    "react-autosuggest": "9.4.0",
     "react-contextmenu": "2.9.3",
     "react-copy-to-clipboard": "5.0.1",
     "react-dom": "16.4.2",
