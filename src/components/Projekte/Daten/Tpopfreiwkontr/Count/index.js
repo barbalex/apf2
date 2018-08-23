@@ -78,6 +78,9 @@ const EinheitVal = styled.div`
   > div {
     margin-top: -5px;
     padding-bottom: 0;
+    @media print {
+      margin-bottom: 0;
+    }
   }
   @media print {
     input {
@@ -99,6 +102,10 @@ const GezaehltVal = styled.div`
   }
   > div > div > input {
     text-align: center;
+    @media print {
+      padding-top: 3px;
+      padding-bottom: 2px;
+    }
   }
 `
 const GeschaetztLabel = styled.div`
@@ -115,6 +122,10 @@ const GeschaetztVal = styled.div`
   }
   > div > div > input {
     text-align: center;
+    @media print {
+      padding-top: 3px;
+      padding-bottom: 2px;
+    }
   }
 `
 const Delete = styled.div`

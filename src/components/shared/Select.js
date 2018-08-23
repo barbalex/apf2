@@ -46,6 +46,12 @@ const StyledSelect = styled(Select)`
   > div:hover {
     border-bottom-width: 2px;
   }
+  input {
+    @media print {
+      padding-top: 3px;
+      padding-bottom: 0;
+    }
+  }
   .react-select__menu,
   .react-select__menu-list {
     height: 130px;
