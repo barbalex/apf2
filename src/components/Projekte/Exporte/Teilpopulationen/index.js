@@ -14,7 +14,6 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { Query } from 'react-apollo'
 import { Subscribe } from 'unstated'
-import gql from 'graphql-tag'
 
 import Select from '../../../shared/Select'
 import exportModule from '../../../../modules/export'
@@ -48,6 +47,7 @@ const StyledCardContent = styled(CardContent)`
   align-items: stretch;
   justify-content: stretch;
   align-content: stretch;
+  overflow: auto;
 `
 const DownloadCardButton = styled(Button)`
   flex-basis: 450px;
