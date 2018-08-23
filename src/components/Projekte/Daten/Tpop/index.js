@@ -9,11 +9,10 @@ import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
 
-
 import TextField from '../../../shared/TextField'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
 import Status from '../../../shared/Status'
-import AutoCompleteFromArray from '../../../shared/AutocompleteFromArray'
+import Select from '../../../shared/Select'
 import RadioButton from '../../../shared/RadioButton'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import FormTitle from '../../../shared/FormTitle'
@@ -39,12 +38,9 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withState('errors', 'setErrors', ({})),
+  withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({
-      setErrors,
-      errors,
-    }) => async ({
+    saveToDb: ({ setErrors, errors }) => async ({
       row,
       field,
       value,
@@ -76,7 +72,8 @@ const enhance = compose(
                 exposition: field === 'exposition' ? value : row.exposition,
                 klima: field === 'klima' ? value : row.klima,
                 neigung: field === 'neigung' ? value : row.neigung,
-                beschreibung: field === 'beschreibung' ? value : row.beschreibung,
+                beschreibung:
+                  field === 'beschreibung' ? value : row.beschreibung,
                 katasterNr: field === 'katasterNr' ? value : row.katasterNr,
                 status: field === 'status' ? value : row.status,
                 statusUnklarGrund:
@@ -86,13 +83,15 @@ const enhance = compose(
                 bekanntSeit: field === 'bekanntSeit' ? value : row.bekanntSeit,
                 eigentuemer: field === 'eigentuemer' ? value : row.eigentuemer,
                 kontakt: field === 'kontakt' ? value : row.kontakt,
-                nutzungszone: field === 'nutzungszone' ? value : row.nutzungszone,
+                nutzungszone:
+                  field === 'nutzungszone' ? value : row.nutzungszone,
                 bewirtschafter:
                   field === 'bewirtschafter' ? value : row.bewirtschafter,
                 bewirtschaftung:
                   field === 'bewirtschaftung' ? value : row.bewirtschaftung,
                 bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-                statusUnklar: field === 'statusUnklar' ? value : row.statusUnklar,
+                statusUnklar:
+                  field === 'statusUnklar' ? value : row.statusUnklar,
                 popStatusWerteByStatus: row.popStatusWerteByStatus,
                 tpopApberrelevantWerteByApberRelevant:
                   row.tpopApberrelevantWerteByApberRelevant,
@@ -106,13 +105,13 @@ const enhance = compose(
       } catch (error) {
         return setErrors({ [field]: error.message })
       }
-      setErrors(({}))
+      setErrors({})
     },
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
       if (prevProps.id !== props.id) {
-        props.setErrors(({}))
+        props.setErrors({})
       }
     },
   }),
@@ -133,12 +132,7 @@ class Tpop extends Component<Props> {
   }
 
   render() {
-    const {
-      id,
-      saveToDb,
-      errors,
-      dimensions = { width: 380 },
-    } = this.props
+    const { id, saveToDb, errors, dimensions = { width: 380 } } = this.props
 
     return (
       <Query query={dataGql} variables={{ id }}>
@@ -153,10 +147,21 @@ class Tpop extends Component<Props> {
           if (error) return `Fehler: ${error.message}`
 
           const row = get(data, 'tpopById')
-          const apJahr = get(data, 'tpopById.popByPopId.apByApId.startJahr', null)
+          const apJahr = get(
+            data,
+            'tpopById.popByPopId.apByApId.startJahr',
+            null,
+          )
           let gemeindeWerte = get(data, 'allGemeindes.nodes', [])
-          gemeindeWerte = gemeindeWerte.map(el => el.name).sort()
-          let apberrelevantWerte = get(data, 'allTpopApberrelevantWertes.nodes', [])
+          gemeindeWerte = gemeindeWerte
+            .map(el => el.name)
+            .sort()
+            .map(o => ({ label: o, value: o }))
+          let apberrelevantWerte = get(
+            data,
+            'allTpopApberrelevantWertes.nodes',
+            [],
+          )
           apberrelevantWerte = sortBy(apberrelevantWerte, 'sort')
           apberrelevantWerte = apberrelevantWerte.map(el => ({
             value: el.code,
@@ -173,7 +178,9 @@ class Tpop extends Component<Props> {
                 <Mutation mutation={updateTpopByIdGql}>
                   {(updateTpop, { data }) => (
                     <FieldsContainer
-                      data-width={isNaN(dimensions.width) ? 380 : dimensions.width}
+                      data-width={
+                        isNaN(dimensions.width) ? 380 : dimensions.width
+                      }
                     >
                       <TextField
                         key={`${row.id}nr`}
@@ -191,7 +198,12 @@ class Tpop extends Component<Props> {
                         value={row.flurname}
                         type="text"
                         saveToDb={value =>
-                          saveToDb({ row, field: 'flurname', value, updateTpop })
+                          saveToDb({
+                            row,
+                            field: 'flurname',
+                            value,
+                            updateTpop,
+                          })
                         }
                         popover="Dieses Feld möglichst immer ausfüllen"
                         error={errors.flurname}
@@ -283,13 +295,19 @@ class Tpop extends Component<Props> {
                         }
                         error={errors.y}
                       />
-                      <AutoCompleteFromArray
+                      <Select
                         key={`${row.id}gemeinde`}
-                        label="Gemeinde"
                         value={row.gemeinde}
-                        values={gemeindeWerte}
+                        field="gemeinde"
+                        label="Gemeinde"
+                        options={gemeindeWerte}
                         saveToDb={value =>
-                          saveToDb({ row, field: 'gemeinde', value, updateTpop })
+                          saveToDb({
+                            row,
+                            field: 'gemeinde',
+                            value,
+                            updateTpop,
+                          })
                         }
                         error={errors.gemeinde}
                       />
@@ -319,7 +337,12 @@ class Tpop extends Component<Props> {
                         value={row.exposition}
                         type="text"
                         saveToDb={value =>
-                          saveToDb({ row, field: 'exposition', value, updateTpop })
+                          saveToDb({
+                            row,
+                            field: 'exposition',
+                            value,
+                            updateTpop,
+                          })
                         }
                         error={errors.exposition}
                       />
@@ -365,7 +388,12 @@ class Tpop extends Component<Props> {
                         value={row.katasterNr}
                         type="text"
                         saveToDb={value =>
-                          saveToDb({ row, field: 'katasterNr', value, updateTpop })
+                          saveToDb({
+                            row,
+                            field: 'katasterNr',
+                            value,
+                            updateTpop,
+                          })
                         }
                         error={errors.katasterNr}
                       />
@@ -375,7 +403,12 @@ class Tpop extends Component<Props> {
                         value={row.eigentuemer}
                         type="text"
                         saveToDb={value =>
-                          saveToDb({ row, field: 'eigentuemer', value, updateTpop })
+                          saveToDb({
+                            row,
+                            field: 'eigentuemer',
+                            value,
+                            updateTpop,
+                          })
                         }
                         error={errors.eigentuemer}
                       />
@@ -441,7 +474,12 @@ class Tpop extends Component<Props> {
                         type="text"
                         multiline
                         saveToDb={value =>
-                          saveToDb({ row, field: 'bemerkungen', value, updateTpop })
+                          saveToDb({
+                            row,
+                            field: 'bemerkungen',
+                            value,
+                            updateTpop,
+                          })
                         }
                         error={errors.bemerkungen}
                       />
