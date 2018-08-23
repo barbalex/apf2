@@ -112,6 +112,7 @@ const GridContainer = styled.div`
       'cover cover cover more more more'
       'danger danger danger danger danger danger'
       'remarks remarks remarks remarks remarks remarks';
+    grid-template-columns: repeat(6, 1fr);
   }
 `
 const CountHint = styled.div`
