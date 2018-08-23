@@ -14,8 +14,9 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { Query } from 'react-apollo'
 import { Subscribe } from 'unstated'
+import gql from 'graphql-tag'
 
-import AutoComplete from '../Autocomplete'
+import Select from '../../../shared/Select'
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
 import dataGql from './data.graphql'
@@ -68,6 +69,7 @@ const isRemoteHost = window.location.hostname !== 'localhost'
 const enhance = compose(
   withState('expanded', 'setExpanded', false),
   withState('message', 'setMessage', null),
+  withState('ewmMessage', 'setEwmMessage', ''),
 )
 
 const Teilpopulationen = ({
@@ -77,7 +79,9 @@ const Teilpopulationen = ({
   expanded,
   setExpanded,
   message,
+  ewmMessage,
   setMessage,
+  setEwmMessage,
 }: {
   fileType: String,
   mapFilter: Object,
@@ -85,18 +89,20 @@ const Teilpopulationen = ({
   expanded: Boolean,
   setExpanded: () => void,
   message: String,
+  ewmMessage: String,
   setMessage: () => void,
+  setEwmMessage: () => void,
 }) => (
   <Subscribe to={[ErrorState]}>
-    {errorState =>
+    {errorState => (
       <Query query={dataGql}>
         {({ loading, error, data, client }) => {
           if (error) return `Fehler: ${error.message}`
           const artList = get(data, 'allAeEigenschaftens.nodes', [])
             .filter(n => !!get(n, 'apByArtId.id'))
             .map(n => ({
-              id: get(n, 'apByArtId.id'),
-              value: n.artname
+              value: get(n, 'apByArtId.id'),
+              label: n.artname,
             }))
 
           return (
@@ -120,29 +126,34 @@ const Teilpopulationen = ({
                 <StyledCardContent>
                   <DownloadCardButton
                     onClick={async () => {
-                      setMessage('Export "Teilpopulationen" wird vorbereitet...')
+                      setMessage(
+                        'Export "Teilpopulationen" wird vorbereitet...',
+                      )
                       try {
                         const { data } = await client.query({
-                          query: await import('./allVTpops.graphql')
+                          query: await import('./allVTpops.graphql'),
                         })
-                        const enrichedData = get(data, 'allVTpops.nodes', [])
-                          .map(oWithout => {
-                            let o = {...oWithout}
-                            let nachBeginnAp = null
-                            if (
-                              o.ap_start_jahr &&
-                              o.bekannt_seit &&
-                              [200, 201, 202].includes(o.status)
-                            ) {
-                              if (o.ap_start_jahr <= o.bekannt_seit) {
-                                nachBeginnAp = true
-                              } else {
-                                nachBeginnAp = false
-                              }
+                        const enrichedData = get(
+                          data,
+                          'allVTpops.nodes',
+                          [],
+                        ).map(oWithout => {
+                          let o = { ...oWithout }
+                          let nachBeginnAp = null
+                          if (
+                            o.ap_start_jahr &&
+                            o.bekannt_seit &&
+                            [200, 201, 202].includes(o.status)
+                          ) {
+                            if (o.ap_start_jahr <= o.bekannt_seit) {
+                              nachBeginnAp = true
+                            } else {
+                              nachBeginnAp = false
                             }
-                            o.angesiedelt_nach_beginn_ap = nachBeginnAp
-                            return o
-                          })
+                          }
+                          o.angesiedelt_nach_beginn_ap = nachBeginnAp
+                          return o
+                        })
                         exportModule({
                           data: enrichedData,
                           fileName: 'Teilpopulationen',
@@ -154,7 +165,7 @@ const Teilpopulationen = ({
                           yKey: 'y',
                           errorState,
                         })
-                      } catch(error) {
+                      } catch (error) {
                         errorState.add(error)
                       }
                       setMessage(null)
@@ -164,10 +175,12 @@ const Teilpopulationen = ({
                   </DownloadCardButton>
                   <DownloadCardButton
                     onClick={async () => {
-                      setMessage('Export "TeilpopulationenWebGisBun" wird vorbereitet...')
+                      setMessage(
+                        'Export "TeilpopulationenWebGisBun" wird vorbereitet...',
+                      )
                       try {
                         const { data } = await client.query({
-                          query: await import('./allVTpopWebgisbuns.graphql')
+                          query: await import('./allVTpopWebgisbuns.graphql'),
                         })
                         exportModule({
                           data: get(data, 'allVTpopWebgisbuns.nodes', []),
@@ -180,7 +193,7 @@ const Teilpopulationen = ({
                           yKey: 'TPOP_Y',
                           errorState,
                         })
-                      } catch(error) {
+                      } catch (error) {
                         errorState.add(error)
                       }
                       setMessage(null)
@@ -190,19 +203,24 @@ const Teilpopulationen = ({
                   </DownloadCardButton>
                   <DownloadCardButton
                     onClick={async () => {
-                      setMessage('Export "Teilpopulationen" wird vorbereitet...')
+                      setMessage(
+                        'Export "Teilpopulationen" wird vorbereitet...',
+                      )
                       try {
                         const { data } = await client.query({
-                          query: await import('./allVTpopKmls.graphql')
+                          query: await import('./allVTpopKmls.graphql'),
                         })
-                        const enrichedData = get(data, 'allVTpopKmls.nodes', [])
-                          .map(oWithout => {
-                            let o = {...oWithout}
-                            const [bg, lg] = epsg2056to4326(o.x, o.y)
-                            o.laengengrad = lg
-                            o.breitengrad = bg
-                            return o
-                          })
+                        const enrichedData = get(
+                          data,
+                          'allVTpopKmls.nodes',
+                          [],
+                        ).map(oWithout => {
+                          let o = { ...oWithout }
+                          const [bg, lg] = epsg2056to4326(o.x, o.y)
+                          o.laengengrad = lg
+                          o.breitengrad = bg
+                          return o
+                        })
                         exportModule({
                           data: enrichedData,
                           fileName: 'Teilpopulationen',
@@ -215,7 +233,7 @@ const Teilpopulationen = ({
                           errorState,
                           kml: true,
                         })
-                      } catch(error) {
+                      } catch (error) {
                         errorState.add(error)
                       }
                       setMessage(null)
@@ -226,19 +244,24 @@ const Teilpopulationen = ({
                   </DownloadCardButton>
                   <DownloadCardButton
                     onClick={async () => {
-                      setMessage('Export "TeilpopulationenNachNamen" wird vorbereitet...')
+                      setMessage(
+                        'Export "TeilpopulationenNachNamen" wird vorbereitet...',
+                      )
                       try {
                         const { data } = await client.query({
-                          query: await import('./allVTpopKmlnamen.graphql')
+                          query: await import('./allVTpopKmlnamen.graphql'),
                         })
-                        const enrichedData = get(data, 'allVTpopKmlnamen.nodes', [])
-                          .map(oWithout => {
-                            let o = {...oWithout}
-                            const [bg, lg] = epsg2056to4326(o.x, o.y)
-                            o.laengengrad = lg
-                            o.breitengrad = bg
-                            return o
-                          })
+                        const enrichedData = get(
+                          data,
+                          'allVTpopKmlnamen.nodes',
+                          [],
+                        ).map(oWithout => {
+                          let o = { ...oWithout }
+                          const [bg, lg] = epsg2056to4326(o.x, o.y)
+                          o.laengengrad = lg
+                          o.breitengrad = bg
+                          return o
+                        })
                         exportModule({
                           data: enrichedData,
                           fileName: 'TeilpopulationenNachNamen',
@@ -251,7 +274,7 @@ const Teilpopulationen = ({
                           errorState,
                           kml: true,
                         })
-                      } catch(error) {
+                      } catch (error) {
                         errorState.add(error)
                       }
                       setMessage(null)
@@ -262,10 +285,12 @@ const Teilpopulationen = ({
                   </DownloadCardButton>
                   <DownloadCardButton
                     onClick={async () => {
-                      setMessage('Export "TeilpopulationenVonApArtenOhneBekanntSeit" wird vorbereitet...')
+                      setMessage(
+                        'Export "TeilpopulationenVonApArtenOhneBekanntSeit" wird vorbereitet...',
+                      )
                       try {
                         const { data } = await client.query({
-                          query: await import('./allVTpopOhnebekanntseits.graphql')
+                          query: await import('./allVTpopOhnebekanntseits.graphql'),
                         })
                         exportModule({
                           data: get(data, 'allVTpopOhnebekanntseits.nodes', []),
@@ -278,7 +303,7 @@ const Teilpopulationen = ({
                           yKey: 'y',
                           errorState,
                         })
-                      } catch(error) {
+                      } catch (error) {
                         errorState.add(error)
                       }
                       setMessage(null)
@@ -289,13 +314,19 @@ const Teilpopulationen = ({
                   </DownloadCardButton>
                   <DownloadCardButton
                     onClick={async () => {
-                      setMessage('Export "TeilpopulationenOhneApBerichtRelevant" wird vorbereitet...')
+                      setMessage(
+                        'Export "TeilpopulationenOhneApBerichtRelevant" wird vorbereitet...',
+                      )
                       try {
                         const { data } = await client.query({
-                          query: await import('./allVTpopOhneapberichtrelevants.graphql')
+                          query: await import('./allVTpopOhneapberichtrelevants.graphql'),
                         })
                         exportModule({
-                          data: get(data, 'allVTpopOhneapberichtrelevants.nodes', []),
+                          data: get(
+                            data,
+                            'allVTpopOhneapberichtrelevants.nodes',
+                            [],
+                          ),
                           fileName: 'TeilpopulationenOhneApBerichtRelevant',
                           fileType,
                           applyMapFilterToExport,
@@ -305,7 +336,7 @@ const Teilpopulationen = ({
                           yKey: 'y',
                           errorState,
                         })
-                      } catch(error) {
+                      } catch (error) {
                         errorState.add(error)
                       }
                       setMessage(null)
@@ -316,10 +347,12 @@ const Teilpopulationen = ({
                   </DownloadCardButton>
                   <DownloadCardButton
                     onClick={async () => {
-                      setMessage('Export "TeilpopulationenAnzahlMassnahmen" wird vorbereitet...')
+                      setMessage(
+                        'Export "TeilpopulationenAnzahlMassnahmen" wird vorbereitet...',
+                      )
                       try {
                         const { data } = await client.query({
-                          query: await import('./allVTpopAnzmassns.graphql')
+                          query: await import('./allVTpopAnzmassns.graphql'),
                         })
                         exportModule({
                           data: get(data, 'allVTpopAnzmassns.nodes', []),
@@ -332,7 +365,7 @@ const Teilpopulationen = ({
                           yKey: 'y',
                           errorState,
                         })
-                      } catch(error) {
+                      } catch (error) {
                         errorState.add(error)
                       }
                       setMessage(null)
@@ -342,14 +375,21 @@ const Teilpopulationen = ({
                   </DownloadCardButton>
                   <DownloadCardButton
                     onClick={async () => {
-                      setMessage('Export "TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht" wird vorbereitet...')
+                      setMessage(
+                        'Export "TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht" wird vorbereitet...',
+                      )
                       try {
                         const { data } = await client.query({
-                          query: await import('./allVTpopAnzkontrinklletzterundletztertpopbers.graphql')
+                          query: await import('./allVTpopAnzkontrinklletzterundletztertpopbers.graphql'),
                         })
                         exportModule({
-                          data: get(data, 'allVTpopAnzkontrinklletzterundletztertpopbers.nodes', []),
-                          fileName: 'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht',
+                          data: get(
+                            data,
+                            'allVTpopAnzkontrinklletzterundletztertpopbers.nodes',
+                            [],
+                          ),
+                          fileName:
+                            'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht',
                           fileType,
                           applyMapFilterToExport,
                           mapFilter,
@@ -358,14 +398,16 @@ const Teilpopulationen = ({
                           yKey: 'y',
                           errorState,
                         })
-                      } catch(error) {
+                      } catch (error) {
                         errorState.add(error)
                       }
                       setMessage(null)
                     }}
                     disabled={isRemoteHost}
                     title={
-                      isRemoteHost ? 'nur aktiv, wenn apflora lokal installiert wird' : ''
+                      isRemoteHost
+                        ? 'nur aktiv, wenn apflora lokal installiert wird'
+                        : ''
                     }
                   >
                     <div>Teilpopulationen mit:</div>
@@ -384,22 +426,54 @@ const Teilpopulationen = ({
                     <div>{'= "Eier legende Wollmilchsau"'}</div>
                   </DownloadCardButton>
                   <AutocompleteContainer>
-                    <AutoComplete
+                    <Select
+                      value=""
+                      field="ewm"
                       label={`"Eier legende Wollmilchsau" für eine Art`}
-                      objects={artList}
-                      openabove
-                      mapFilter={mapFilter}
+                      options={artList}
+                      saveToDb={async apId => {
+                        if (apId === null) return
+                        setEwmMessage(
+                          'Export "anzkontrinklletzterundletztertpopber" wird vorbereitet...',
+                        )
+                        try {
+                          const { data } = await client.query({
+                            query: await import('./allVTpopAnzkontrinklletzterundletztertpopbersFiltered.graphql'),
+                            variables: { apId },
+                          })
+                          exportModule({
+                            data: get(
+                              data,
+                              'allVTpopAnzkontrinklletzterundletztertpopbers.nodes',
+                              [],
+                            ),
+                            fileName: 'anzkontrinklletzterundletztertpopber',
+                            mapFilter,
+                            errorState,
+                          })
+                        } catch (error) {
+                          errorState.add(error)
+                        }
+                        setEwmMessage('')
+                      }}
+                      error={ewmMessage}
                     />
                   </AutocompleteContainer>
                   <DownloadCardButton
                     onClick={async () => {
-                      setMessage('Export "TeilpopulationenTPopUndMassnBerichte" wird vorbereitet...')
+                      setMessage(
+                        'Export "TeilpopulationenTPopUndMassnBerichte" wird vorbereitet...',
+                      )
                       try {
                         const { data } = await client.query({
-                          query: await import('./allVTpopPopberundmassnbers.graphql')
+                          query: await import('./allVTpopPopberundmassnbers.graphql'),
                         })
                         exportModule({
-                          data: get(data, 'allVTpopPopberundmassnbers.nodes', []),
+                          data: get(
+                            data,
+                            'allVTpopPopberundmassnbers.nodes',
+                            [],
+                          ),
                           fileName: 'TeilpopulationenTPopUndMassnBerichte',
                           fileType,
                           applyMapFilterToExport,
@@ -409,25 +483,23 @@ const Teilpopulationen = ({
                           yKey: 'tpop_y',
                           errorState,
                         })
-                      } catch(error) {
+                      } catch (error) {
                         errorState.add(error)
                       }
                       setMessage(null)
                     }}
                   >
-                    Teilpopulationen inklusive Teilpopulations- und Massnahmen-Berichten
+                    Teilpopulationen inklusive Teilpopulations- und
+                    Massnahmen-Berichten
                   </DownloadCardButton>
                 </StyledCardContent>
               </Collapse>
-              {
-                !!message &&
-                <Message message={message} />
-              }
+              {!!message && <Message message={message} />}
             </StyledCard>
           )
         }}
       </Query>
-    }
+    )}
   </Subscribe>
 )
 
