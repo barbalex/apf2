@@ -237,13 +237,13 @@ const enhance = compose(
         const tpopkontrCount = get(
           props.data,
           'tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes',
-          []
+          [],
         ).length
         if (tpopkontrCount === 0) {
           // add counts for all ekfzaehleinheit
           const ekfzaehleinheits = get(
             props.data,
-            'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekfzaehleinheitsByApId.nodes'
+            'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekfzaehleinheitsByApId.nodes',
           )
           try {
             await Promise.all(
@@ -255,11 +255,11 @@ const enhance = compose(
                     einheit: get(
                       z,
                       'tpopkontrzaehlEinheitWerteByZaehleinheitId.code',
-                      null
+                      null,
                     ),
                   },
-                })
-              )
+                }),
+              ),
             )
           } catch (error) {
             props.errorState.add(error)
@@ -276,7 +276,8 @@ const enhance = compose(
       const bearbeiter = get(row, 'bearbeiter')
       const userCount = get(
         row,
-        'adresseByBearbeiter.usersByAdresseId.totalCount'
+        'adresseByBearbeiter.usersByAdresseId.totalCount',
+        0,
       )
       if (bearbeiter && !userCount && !errors.bearbeiter) {
         setErrors({
@@ -285,7 +286,7 @@ const enhance = compose(
         })
       }
     },
-  })
+  }),
 )
 
 const Tpopfreiwkontr = ({
@@ -326,11 +327,11 @@ const Tpopfreiwkontr = ({
   const ekfzaehleinheits = get(
     data,
     'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekfzaehleinheitsByApId.nodes',
-    []
+    [],
   ).map(n => get(n, 'tpopkontrzaehlEinheitWerteByZaehleinheitId', {}))
   const zaehls = sortBy(
     get(data, 'tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes', []),
-    'einheit'
+    'einheit',
   )
   const zaehls1 = zaehls[0]
   const zaehls2 = zaehls[1]
@@ -353,11 +354,12 @@ const Tpopfreiwkontr = ({
   const einheitsUsed = get(
     data,
     'tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes',
-    []
+    [],
   )
     .filter(n => !!n.einheit)
     .map(n => n.einheit)
   const isPrint = get(data, 'isPrint', false)
+  const view = get(data, 'view')
   const isFreiwillig = role === 'apflora_freiwillig'
   const { width } = dimensions
   const imageHeight =
@@ -488,7 +490,8 @@ const Tpopfreiwkontr = ({
               updateTpopkontr={updateTpopkontr}
             />
             {!isPrint &&
-              !isFreiwillig && (
+              !isFreiwillig &&
+              !(view === 'ekf') && (
                 <Verification
                   saveToDb={saveToDb}
                   errors={errors}
@@ -497,7 +500,9 @@ const Tpopfreiwkontr = ({
                 />
               )}
           </GridContainer>
-          {!isFreiwillig && <StringToCopy text={id} label="GUID" />}
+          {!isPrint &&
+            !isFreiwillig &&
+            !(view === 'ekf') && <StringToCopy text={id} label="GUID" />}
         </Container>
       )}
     </Mutation>

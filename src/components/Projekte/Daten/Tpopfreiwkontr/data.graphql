@@ -1,5 +1,6 @@
 query tpopkontrByIdQuery($id: UUID!) {
   isPrint @client
+  view @client
   tpopkontrById(id: $id) {
     id
     typ
