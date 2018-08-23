@@ -12,7 +12,7 @@ import withLifecycle from '@hocs/with-lifecycle'
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
-import AutoComplete from '../../../shared/Autocomplete'
+import Select from '../../../shared/Select'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById.graphql'
@@ -29,13 +29,9 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withState('errors', 'setErrors', ({})),
+  withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({
-      refetchTree,
-      setErrors,
-      errors,
-    }) => async ({
+    saveToDb: ({ refetchTree, setErrors, errors }) => async ({
       row,
       field,
       value,
@@ -61,7 +57,8 @@ const enhance = compose(
                 methode: field === 'methode' ? value : row.methode,
                 tpopkontrzaehlEinheitWerteByEinheit:
                   row.tpopkontrzaehlEinheitWerteByEinheit,
-                  tpopkontrzaehlMethodeWerteByMethode: row.tpopkontrzaehlMethodeWerteByMethode,
+                tpopkontrzaehlMethodeWerteByMethode:
+                  row.tpopkontrzaehlMethodeWerteByMethode,
                 tpopkontrByTpopkontrId: row.tpopkontrByTpopkontrId,
                 __typename: 'Tpopkontrzaehl',
               },
@@ -72,14 +69,14 @@ const enhance = compose(
       } catch (error) {
         return setErrors({ [field]: error.message })
       }
-      setErrors(({}))
+      setErrors({})
       if (['einheit', 'methode'].includes(field)) refetchTree()
     },
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
       if (prevProps.id !== props.id) {
-        props.setErrors(({}))
+        props.setErrors({})
       }
     },
   }),
@@ -108,11 +105,11 @@ const Tpopkontrzaehl = ({
       let zaehleinheitWerte = get(
         data,
         'allTpopkontrzaehlEinheitWertes.nodes',
-        []
+        [],
       )
       zaehleinheitWerte = sortBy(zaehleinheitWerte, 'sort').map(el => ({
-        id: el.code,
-        value: el.text,
+        value: el.code,
+        label: el.text,
       }))
       let methodeWerte = get(data, 'allTpopkontrzaehlMethodeWertes.nodes', [])
       methodeWerte = sortBy(methodeWerte, 'sort')
@@ -127,18 +124,19 @@ const Tpopkontrzaehl = ({
             <FormTitle
               apId={get(
                 data,
-                'tpopkontrzaehlById.tpopkontrByTpopkontrId.tpopByTpopId.popByPopId.apId'
+                'tpopkontrzaehlById.tpopkontrByTpopkontrId.tpopByTpopId.popByPopId.apId',
               )}
               title="Zählung"
             />
             <Mutation mutation={updateTpopkontrzaehlByIdGql}>
               {(updateTpopkontrzaehl, { data }) => (
                 <FieldsContainer>
-                  <AutoComplete
+                  <Select
                     key={`${row.id}einheit`}
+                    value={row.einheit}
+                    field="einheit"
                     label="Einheit"
-                    value={get(row, 'tpopkontrzaehlEinheitWerteByEinheit.text')}
-                    objects={zaehleinheitWerte}
+                    options={zaehleinheitWerte}
                     saveToDb={value =>
                       saveToDb({
                         row,
