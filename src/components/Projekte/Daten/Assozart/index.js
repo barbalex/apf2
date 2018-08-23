@@ -10,7 +10,7 @@ import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
 
 import TextField from '../../../shared/TextField'
-import AutoComplete from '../../../shared/Autocomplete'
+import Select from '../../../shared/Select'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
@@ -28,13 +28,9 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withState('errors', 'setErrors', ({})),
+  withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({
-      refetchTree,
-      setErrors,
-      errors,
-    }) => async ({
+    saveToDb: ({ refetchTree, setErrors, errors }) => async ({
       row,
       field,
       value,
@@ -69,14 +65,14 @@ const enhance = compose(
       } catch (error) {
         return setErrors({ [field]: error.message })
       }
-      setErrors(({}))
+      setErrors({})
       if (['aeId'].includes(field)) refetchTree()
     },
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
       if (prevProps.id !== props.id) {
-        props.setErrors(({}))
+        props.setErrors({})
       }
     },
   }),
@@ -103,12 +99,9 @@ const Assozart = ({
 
       const row = get(data, 'assozartById')
       const assozartenOfAp = get(row, 'apByApId.assozartsByApId.nodes', []).map(
-        o => o.aeId
+        o => o.aeId,
       )
-      const artenNotToShow = [
-        ...assozartenOfAp,
-        get(row, 'apByApId.artId', null),
-      ]
+      const artenNotToShow = assozartenOfAp.filter(a => a !== row.aeId)
       let artWerte = get(data, 'allAeEigenschaftens.nodes', [])
       // filter ap arten but the active one
       artWerte = artWerte.filter(o => !artenNotToShow.includes(o.id))
@@ -125,13 +118,22 @@ const Assozart = ({
             <Mutation mutation={updateAssozartByIdGql}>
               {(updateAssozart, { data }) => (
                 <FieldsContainer>
-                  <AutoComplete
+                  <Select
                     key={`${row.id}aeId`}
+                    value={row.aeId}
+                    field="aeId"
                     label="Art"
-                    value={get(row, 'aeEigenschaftenByAeId.artname', '')}
-                    objects={artWerte}
+                    options={artWerte.map(a => ({
+                      label: a.value,
+                      value: a.id,
+                    }))}
                     saveToDb={value =>
-                      saveToDb({ row, field: 'aeId', value, updateAssozart })
+                      saveToDb({
+                        row,
+                        field: 'aeId',
+                        value,
+                        updateAssozart,
+                      })
                     }
                     error={errors.aeId}
                   />
