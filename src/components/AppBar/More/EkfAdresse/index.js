@@ -8,7 +8,7 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import app from 'ampersand-app'
 
-import Autocomplete from '../../../shared/Autocomplete'
+import Select from '../../../shared/Select'
 import dataGql from './data.graphql'
 import setViewGql from './setView.graphql'
 import setEkfAdresseIdGql from './setEkfAdresseId.graphql'
@@ -31,7 +31,7 @@ const enhance = compose(
       })
       setAnchorEl(null)
     },
-  })
+  }),
 )
 
 const EkfAdresse = ({ choose }: { choose: () => void }) => (
@@ -42,18 +42,18 @@ const EkfAdresse = ({ choose }: { choose: () => void }) => (
       let adressenWerte = get(data, 'allAdresses.nodes', [])
       adressenWerte = sortBy(adressenWerte, 'name')
       adressenWerte = adressenWerte.map(el => ({
-        id: el.id,
-        value: el.name,
+        value: el.id,
+        label: el.name,
       }))
 
       return (
         <Container>
-          <Autocomplete
-            label="EKF sehen als"
+          <Select
             value={''}
-            objects={adressenWerte}
+            label="EKF sehen als"
+            options={adressenWerte}
             saveToDb={choose}
-            suggestionsListMaxHeight={150}
+            maxHeight={130}
           />
         </Container>
       )
