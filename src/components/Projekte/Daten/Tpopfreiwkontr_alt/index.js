@@ -13,7 +13,7 @@ import withLifecycle from '@hocs/with-lifecycle'
 import RadioButton from '../../../shared/RadioButton'
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
-import AutoComplete from '../../../shared/Autocomplete'
+import Select from '../../../shared/Select'
 import StringToCopy from '../../../shared/StringToCopy'
 import FormTitle from '../../../shared/FormTitle'
 import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
@@ -219,11 +219,12 @@ class Tpopfreiwkontr extends Component<Props> {
                         }}
                         error={errors.datum}
                       />
-                      <AutoComplete
+                      <Select
                         key={`${row.id}bearbeiter`}
+                        value={row.bearbeiter}
+                        field="bearbeiter"
                         label="BearbeiterIn"
-                        value={get(row, 'adresseByBearbeiter.name')}
-                        objects={adressenWerte}
+                        options={adressenWerte}
                         saveToDb={value =>
                           saveToDb({
                             row,
