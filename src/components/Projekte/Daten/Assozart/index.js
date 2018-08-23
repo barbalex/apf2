@@ -107,8 +107,8 @@ const Assozart = ({
       artWerte = artWerte.filter(o => !artenNotToShow.includes(o.id))
       artWerte = sortBy(artWerte, 'artname')
       artWerte = artWerte.map(el => ({
-        id: el.id,
-        value: el.artname,
+        value: el.id,
+        label: el.artname,
       }))
 
       return (
