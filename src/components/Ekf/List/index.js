@@ -6,7 +6,7 @@ import uniq from 'lodash/uniq'
 import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
 
-import initiateDataFromUrl from '../../modules/initiateDataFromUrl'
+import initiateDataFromUrl from './initiateDataFromUrl'
 
 const Container = styled.div`
   height: 100%;
@@ -47,32 +47,32 @@ const getEkfFromData = data => {
     : get(
         data,
         'userByName.adresseByAdresseId.tpopkontrsByBearbeiter.nodes',
-        []
+        [],
       )
   let ekf = ekfNodes.map(e => ({
     projekt: get(
       e,
       'tpopByTpopId.popByPopId.apByApId.projektByProjId.name',
-      ''
+      '',
     ),
     projId: get(e, 'tpopByTpopId.popByPopId.apByApId.projektByProjId.id'),
     art: get(
       e,
       'tpopByTpopId.popByPopId.apByApId.aeEigenschaftenByArtId.artname',
-      ''
+      '',
     ),
     apId: get(e, 'tpopByTpopId.popByPopId.apByApId.id'),
     pop: `${get(e, 'tpopByTpopId.popByPopId.nr', '(keine Nr)')}: ${get(
       e,
       'tpopByTpopId.popByPopId.name',
-      '(kein Name)'
+      '(kein Name)',
     )}`,
     popId: get(e, 'tpopByTpopId.popByPopId.id'),
     popSort: get(e, 'tpopByTpopId.popByPopId.nr', '(keine Nr)'),
     tpop: `${get(e, 'tpopByTpopId.nr', '(keine Nr)')}: ${get(
       e,
       'tpopByTpopId.flurname',
-      '(kein Flurname)'
+      '(kein Flurname)',
     )}`,
     tpopId: get(e, 'tpopByTpopId.id'),
     tpopSort: get(e, 'tpopByTpopId.nr', '(keine Nr)'),
@@ -140,7 +140,7 @@ class EkfList extends Component<Props> {
         <NoDataContainer>
           {`Für das Jahr ${get(
             data,
-            'ekfYear'
+            'ekfYear',
           )} existieren offenbar keine Erfolgskontrollen mit Ihnen als BearbeiterIn`}
         </NoDataContainer>
       )
@@ -171,7 +171,7 @@ class EkfList extends Component<Props> {
             return (
               <OuterContainer
                 style={style}
-                onClick={() => initiateDataFromUrl(url)}
+                onClick={initiateDataFromUrl.bind(this, url)}
                 active={activeTpopkontrId === row.id}
               >
                 <InnerContainer height={innerContainerHeight}>
