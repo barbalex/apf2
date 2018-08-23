@@ -10,7 +10,7 @@ import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
 
 import TextField from '../../../shared/TextField'
-import AutoComplete from '../../../shared/Autocomplete'
+import Select from '../../../shared/Select'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
@@ -77,7 +77,7 @@ const enhance = compose(
         props.setErrors({})
       }
     },
-  })
+  }),
 )
 
 const Ekfzaehleinheit = ({
@@ -103,25 +103,25 @@ const Ekfzaehleinheit = ({
       const ekfzaehleinheitenOfAp = get(
         row,
         'apByApId.ekfzaehleinheitsByApId.nodes',
-        []
+        [],
       ).map(o => o.zaehleinheitId)
-      const notToShow = [
-        ...ekfzaehleinheitenOfAp,
-        get(row, 'tpopkontrzaehlEinheitWerteByZaehleinheitId.id', null),
-      ]
+      // re-add this ones id
+      const notToShow = ekfzaehleinheitenOfAp.filter(
+        o => o !== row.zaehleinheitId,
+      )
       let zaehleinheitWerte = get(
         data,
         'allTpopkontrzaehlEinheitWertes.nodes',
-        []
+        [],
       )
       // filter ap arten but the active one
       zaehleinheitWerte = zaehleinheitWerte.filter(
-        o => !notToShow.includes(o.id)
+        o => !notToShow.includes(o.id),
       )
       zaehleinheitWerte = sortBy(zaehleinheitWerte, 'text')
       zaehleinheitWerte = zaehleinheitWerte.map(el => ({
-        id: el.id,
-        value: el.text,
+        value: el.id,
+        label: el.text,
       }))
 
       return (
@@ -131,15 +131,12 @@ const Ekfzaehleinheit = ({
             <Mutation mutation={updateEkfzaehleinheitByIdGql}>
               {(updateEkfzaehleinheit, { data }) => (
                 <FieldsContainer>
-                  <AutoComplete
+                  <Select
                     key={`${row.id}zaehleinheitId`}
+                    value={row.zaehleinheitId}
+                    field="zaehleinheitId"
                     label="Zähleinheit"
-                    value={get(
-                      row,
-                      'tpopkontrzaehlEinheitWerteByZaehleinheitId.text',
-                      ''
-                    )}
-                    objects={zaehleinheitWerte}
+                    options={zaehleinheitWerte}
                     saveToDb={value =>
                       saveToDb({
                         row,
