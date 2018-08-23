@@ -15,7 +15,6 @@ import withLifecycle from '@hocs/with-lifecycle'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
-import AutoCompleteFromArray from '../../../shared/AutocompleteFromArray'
 import Select from '../../../shared/Select'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import StringToCopy from '../../../shared/StringToCopy'
@@ -307,10 +306,14 @@ class Tpopfeldkontr extends Component<Props> {
           }))
           let aeLrWerte = get(data, 'allAeLrdelarzes.nodes', [])
           aeLrWerte = sortBy(aeLrWerte, 'sort')
-          aeLrWerte = aeLrWerte.map(
-            e =>
-              `${e.label}: ${e.einheit ? e.einheit.replace(/  +/g, ' ') : ''}`,
-          )
+          aeLrWerte = aeLrWerte
+            .map(
+              e =>
+                `${e.label}: ${
+                  e.einheit ? e.einheit.replace(/  +/g, ' ') : ''
+                }`,
+            )
+            .map(o => ({ value: o, label: o }))
 
           return (
             <ErrorBoundary>
@@ -561,11 +564,12 @@ class Tpopfeldkontr extends Component<Props> {
                             error={errors.flaeche}
                           />
                           <Section>Vegetation</Section>
-                          <AutoCompleteFromArray
+                          <Select
                             key={`${row.id}lrDelarze`}
-                            label="Lebensraum nach Delarze"
                             value={row.lrDelarze}
-                            values={aeLrWerte}
+                            field="lrDelarze"
+                            label="Lebensraum nach Delarze"
+                            options={aeLrWerte}
                             saveToDb={value =>
                               saveToDb({
                                 row,
@@ -576,11 +580,12 @@ class Tpopfeldkontr extends Component<Props> {
                             }
                             error={errors.lrDelarze}
                           />
-                          <AutoCompleteFromArray
+                          <Select
                             key={`${row.id}lrUmgebungDelarze`}
-                            label="Umgebung nach Delarze"
                             value={row.lrUmgebungDelarze}
-                            values={aeLrWerte}
+                            field="lrUmgebungDelarze"
+                            label="Umgebung nach Delarze"
+                            options={aeLrWerte}
                             saveToDb={value =>
                               saveToDb({
                                 row,
