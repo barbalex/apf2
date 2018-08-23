@@ -9,7 +9,7 @@ import flatten from 'lodash/flatten'
 import FormTitle from '../../../shared/FormTitle'
 import TextField from '../../../shared/TextField'
 import CheckboxWithInfo from '../../../shared/CheckboxWithInfo'
-import AutoComplete from '../../../shared/Autocomplete'
+import Select from '../../../shared/Select'
 import Beob from '../Beob'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
@@ -84,7 +84,7 @@ const getTpopZuordnenSource = (row: Object): Array<Object> => {
   const popList = get(
     row,
     'aeEigenschaftenByArtId.apByArtId.popsByApId.nodes',
-    []
+    [],
   )
   // get all tpop
   let tpopList = flatten(popList.map(p => get(p, 'tpopsByPopId.nodes', [])))
@@ -95,7 +95,7 @@ const getTpopZuordnenSource = (row: Object): Array<Object> => {
       const dX = Math.abs(row.x - t.x)
       const dY = Math.abs(row.y - t.y)
       const distance = Math.round((dX ** 2 + dY ** 2) ** 0.5).toLocaleString(
-        'de-ch'
+        'de-ch',
       )
       // build label
       const tpopStatus = get(t, 'popStatusWerteByStatus.text', 'ohne Status')
@@ -112,8 +112,8 @@ const getTpopZuordnenSource = (row: Object): Array<Object> => {
   tpopList = sortBy(tpopList, 'distance')
   // return array of id, label
   return tpopList.map(t => ({
-    id: t.id,
-    value: t.label,
+    value: t.id,
+    label: t.label,
   }))
 }
 
@@ -122,13 +122,13 @@ const Beobzuordnung = ({
   tree,
   type,
   dimensions = { width: 380 },
-  refetchTree
+  refetchTree,
 }: {
   id: String,
   tree: Object,
   type: String,
   dimensions: Object,
-  refetchTree: () => void
+  refetchTree: () => void,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data, client, refetch }) => {
@@ -141,16 +141,23 @@ const Beobzuordnung = ({
       if (error) return `Fehler: ${error.message}`
 
       const row = get(data, 'beobById')
-      const tpop = get(row, 'aeEigenschaftenByArtId.apByArtId.popsByApId.tpopsByPopId')
+      const tpop = get(
+        row,
+        'aeEigenschaftenByArtId.apByArtId.popsByApId.tpopsByPopId',
+      )
       let tpopLabel
       if (tpop) {
         const dX = Math.abs(tpop.x - row.x)
         const dY = Math.abs(tpop.y - row.y)
         const distance = Math.round((dX ** 2 + dY ** 2) ** 0.5).toLocaleString(
-          'de-ch'
+          'de-ch',
         )
         // build label
-        const tpopStatus = get(tpop, 'popStatusWerteByStatus.text', 'ohne Status')
+        const tpopStatus = get(
+          tpop,
+          'popStatusWerteByStatus.text',
+          'ohne Status',
+        )
         const popNr = get(tpop, 'popByPopId.nr', '(keine Nr)')
         const tpopNr = tpop.nr || '(keine Nr)'
         tpopLabel = `${distance}m: ${popNr}/${tpopNr} (${tpopStatus})`
@@ -169,7 +176,7 @@ const Beobzuordnung = ({
                   <FieldsContainer>
                     <div>{`Beobachtete Art: ${get(
                       row,
-                      'aeEigenschaftenByArtId.artname'
+                      'aeEigenschaftenByArtId.artname',
                     )}`}</div>
                     <CheckboxWithInfo
                       key={`${row.id}nichtZuordnen`}
@@ -183,21 +190,22 @@ const Beobzuordnung = ({
                           tree,
                           client,
                           refetch,
-                          refetchTree
+                          refetchTree,
                         })
                       }
                       popover={nichtZuordnenPopover}
                     />
                     <ZuordnenDiv>
-                      <AutoComplete
+                      <Select
                         key={`${row.id}tpopId`}
+                        value={tpop ? tpopLabel : ''}
+                        field="bearbeiter"
                         label={
                           !!row.tpopId
                             ? 'Einer anderen Teilpopulation zuordnen'
                             : 'Einer Teilpopulation zuordnen'
                         }
-                        value={tpop ? tpopLabel : ''}
-                        objects={getTpopZuordnenSource(row)}
+                        options={getTpopZuordnenSource(row)}
                         saveToDb={value =>
                           saveTpopIdToDb({
                             value,
@@ -206,7 +214,7 @@ const Beobzuordnung = ({
                             tree,
                             client,
                             refetchTree,
-                            type
+                            type,
                           })
                         }
                       />
@@ -232,7 +240,7 @@ const Beobzuordnung = ({
               <Title>{`Informationen aus ${get(
                 row,
                 'beobQuelleWerteByQuelleId.name',
-                '?'
+                '?',
               )} (nicht veränderbar)`}</Title>
               <Beob id={id} dimensions={dimensions} />
             </DataContainer>
