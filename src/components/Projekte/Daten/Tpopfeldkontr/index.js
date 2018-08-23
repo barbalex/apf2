@@ -16,7 +16,7 @@ import withLifecycle from '@hocs/with-lifecycle'
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
 import AutoCompleteFromArray from '../../../shared/AutocompleteFromArray'
-import AutoComplete from '../../../shared/Autocomplete'
+import Select from '../../../shared/Select'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import StringToCopy from '../../../shared/StringToCopy'
 import FormTitle from '../../../shared/FormTitle'
@@ -73,31 +73,23 @@ const tpopkontrTypWerte = [
 ]
 
 const enhance = compose(
-  withState('errors', 'setErrors', ({})),
+  withState('errors', 'setErrors', {}),
   withApollo,
-  withState(
-    'value',
-    'setValue',
-    ({ client }) => {
-      const { data } = client.query({
-        query: gql`
-            query Query {
-              urlQuery @client {
-                projekteTabs
-                feldkontrTab
-              }
-            }
-          `
-      })
-      return get(data, 'urlQuery.feldkontrTab', 'entwicklung')
-    }
-  ),
+  withState('value', 'setValue', ({ client }) => {
+    const { data } = client.query({
+      query: gql`
+        query Query {
+          urlQuery @client {
+            projekteTabs
+            feldkontrTab
+          }
+        }
+      `,
+    })
+    return get(data, 'urlQuery.feldkontrTab', 'entwicklung')
+  }),
   withHandlers({
-    saveToDb: ({
-      refetchTree,
-      setErrors,
-      errors,
-    }) => async ({
+    saveToDb: ({ refetchTree, setErrors, errors }) => async ({
       row,
       field,
       value,
@@ -127,21 +119,31 @@ const enhance = compose(
               tpopkontr: {
                 id: row.id,
                 typ: field === 'typ' ? value : row.typ,
-                jahr: field === 'jahr' ? value :
-                    field2 === 'jahr' ? value2 :
-                    row.jahr,
-                datum: field === 'datum' ? value :
-                  field2 === 'datum' ? value2 :
-                  row.datum,
+                jahr:
+                  field === 'jahr'
+                    ? value
+                    : field2 === 'jahr'
+                      ? value2
+                      : row.jahr,
+                datum:
+                  field === 'datum'
+                    ? value
+                    : field2 === 'datum'
+                      ? value2
+                      : row.datum,
                 jungpflanzenAnzahl:
-                  field === 'jungpflanzenAnzahl' ? value : row.jungpflanzenAnzahl,
+                  field === 'jungpflanzenAnzahl'
+                    ? value
+                    : row.jungpflanzenAnzahl,
                 vitalitaet: field === 'vitalitaet' ? value : row.vitalitaet,
                 ueberlebensrate:
                   field === 'ueberlebensrate' ? value : row.ueberlebensrate,
                 entwicklung: field === 'entwicklung' ? value : row.entwicklung,
                 ursachen: field === 'ursachen' ? value : row.ursachen,
                 erfolgsbeurteilung:
-                  field === 'erfolgsbeurteilung' ? value : row.erfolgsbeurteilung,
+                  field === 'erfolgsbeurteilung'
+                    ? value
+                    : row.erfolgsbeurteilung,
                 umsetzungAendern:
                   field === 'umsetzungAendern' ? value : row.umsetzungAendern,
                 kontrolleAendern:
@@ -155,7 +157,8 @@ const enhance = compose(
                   field === 'vegetationstyp' ? value : row.vegetationstyp,
                 konkurrenz: field === 'konkurrenz' ? value : row.konkurrenz,
                 moosschicht: field === 'moosschicht' ? value : row.moosschicht,
-                krautschicht: field === 'krautschicht' ? value : row.krautschicht,
+                krautschicht:
+                  field === 'krautschicht' ? value : row.krautschicht,
                 strauchschicht:
                   field === 'strauchschicht' ? value : row.strauchschicht,
                 baumschicht: field === 'baumschicht' ? value : row.baumschicht,
@@ -181,14 +184,17 @@ const enhance = compose(
                 handlungsbedarf:
                   field === 'handlungsbedarf' ? value : row.handlungsbedarf,
                 flaecheUeberprueft:
-                  field === 'flaecheUeberprueft' ? value : row.flaecheUeberprueft,
+                  field === 'flaecheUeberprueft'
+                    ? value
+                    : row.flaecheUeberprueft,
                 deckungVegetation:
                   field === 'deckungVegetation' ? value : row.deckungVegetation,
                 deckungNackterBoden:
                   field === 'deckungNackterBoden'
                     ? value
                     : row.deckungNackterBoden,
-                deckungApArt: field === 'deckungApArt' ? value : row.deckungApArt,
+                deckungApArt:
+                  field === 'deckungApArt' ? value : row.deckungApArt,
                 vegetationshoeheMaximum:
                   field === 'vegetationshoeheMaximum'
                     ? value
@@ -217,7 +223,7 @@ const enhance = compose(
       } catch (error) {
         return setErrors({ [field]: error.message })
       }
-      setErrors(({}))
+      setErrors({})
       if (['typ'].includes(field)) refetchTree()
     },
     onChangeTab: ({ setValue }) => (event, value) => {
@@ -228,7 +234,7 @@ const enhance = compose(
   withLifecycle({
     onDidUpdate(prevProps, props) {
       if (prevProps.id !== props.id) {
-        props.setErrors(({}))
+        props.setErrors({})
       }
     },
   }),
@@ -282,7 +288,7 @@ class Tpopfeldkontr extends Component<Props> {
           let idbiotopuebereinstWerte = get(
             data,
             'allTpopkontrIdbiotuebereinstWertes.nodes',
-            []
+            [],
           )
           idbiotopuebereinstWerte = sortBy(idbiotopuebereinstWerte, 'sort')
           idbiotopuebereinstWerte = idbiotopuebereinstWerte.map(el => ({
@@ -292,7 +298,7 @@ class Tpopfeldkontr extends Component<Props> {
           let tpopEntwicklungWerte = get(
             data,
             'allTpopEntwicklungWertes.nodes',
-            []
+            [],
           )
           tpopEntwicklungWerte = sortBy(tpopEntwicklungWerte, 'sort')
           tpopEntwicklungWerte = tpopEntwicklungWerte.map(el => ({
@@ -302,7 +308,8 @@ class Tpopfeldkontr extends Component<Props> {
           let aeLrWerte = get(data, 'allAeLrdelarzes.nodes', [])
           aeLrWerte = sortBy(aeLrWerte, 'sort')
           aeLrWerte = aeLrWerte.map(
-            e => `${e.label}: ${e.einheit ? e.einheit.replace(/  +/g, ' ') : ''}`
+            e =>
+              `${e.label}: ${e.einheit ? e.einheit.replace(/  +/g, ' ') : ''}`,
           )
 
           return (
@@ -375,11 +382,12 @@ class Tpopfeldkontr extends Component<Props> {
                             }
                             error={errors.typ}
                           />
-                          <AutoComplete
+                          <Select
                             key={`${row.id}bearbeiter`}
+                            value={row.bearbeiter}
+                            field="bearbeiter"
                             label="BearbeiterIn"
-                            value={get(row, 'adresseByBearbeiter.name')}
-                            objects={adressenWerte}
+                            options={adressenWerte}
                             saveToDb={value =>
                               saveToDb({
                                 row,
