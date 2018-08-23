@@ -30,6 +30,12 @@ const StyledSelect = styled(Select)`
   > div > div {
     padding-left: 0;
   }
+  > div > div:last-of-type {
+    /* hide symbols when printing */
+    @media print {
+      display: none;
+    }
+  }
   > div > div > div {
     margin-left: 0;
   }
