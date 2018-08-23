@@ -14,7 +14,7 @@ import AddIcon from '@material-ui/icons/AddCircleOutline'
 import app from 'ampersand-app'
 import { Subscribe } from 'unstated'
 
-import AutoComplete from '../../../../shared/Autocomplete'
+import Select from '../../../../shared/Select'
 import TextField from '../../../../shared/TextField'
 import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById.graphql'
 import dataGql from './data.graphql'
@@ -71,6 +71,7 @@ const Label = styled.div`
 const EinheitLabel = styled(Label)`
   grid-area: einheitLabel;
   hyphens: auto;
+  margin-top: 5px;
 `
 const EinheitVal = styled.div`
   grid-area: einheitVal;
@@ -216,7 +217,7 @@ const enhance = compose(
         props.setErrors({})
       }
     },
-  })
+  }),
 )
 
 const Count = ({
@@ -280,8 +281,8 @@ const Count = ({
           // remove already set values
           .filter(e => !einheitsNotToList.includes(e.code))
         zaehleinheitWerte = sortBy(zaehleinheitWerte, 'sort').map(el => ({
-          id: el.code,
-          value: el.text,
+          value: el.code,
+          label: el.text,
         }))
         const showDelete = nr > 1
 
@@ -291,10 +292,11 @@ const Count = ({
               <Container nr={nr} showdelete={showDelete}>
                 <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
                 <EinheitVal>
-                  <AutoComplete
+                  <Select
                     key={`${row.id}einheit`}
-                    value={get(row, 'tpopkontrzaehlEinheitWerteByEinheit.text')}
-                    objects={zaehleinheitWerte}
+                    value={row.einheit}
+                    field="einheit"
+                    options={zaehleinheitWerte}
                     saveToDb={value =>
                       saveToDb({
                         row,
@@ -303,7 +305,7 @@ const Count = ({
                         updateTpopkontrzaehl,
                       })
                     }
-                    error={errors.bearbeiter}
+                    error={errors.einheit}
                   />
                 </EinheitVal>
                 <GezaehltLabel>gezählt</GezaehltLabel>
