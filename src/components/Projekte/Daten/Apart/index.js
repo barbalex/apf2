@@ -9,7 +9,7 @@ import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
 
-import AutoComplete from '../../../shared/Autocomplete'
+import Select from '../../../shared/Select'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
@@ -27,13 +27,9 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withState('errors', 'setErrors', ({})),
+  withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({
-      refetchTree,
-      setErrors,
-      errors,
-    }) => async ({
+    saveToDb: ({ refetchTree, setErrors, errors }) => async ({
       row,
       field,
       value,
@@ -66,14 +62,14 @@ const enhance = compose(
       } catch (error) {
         return setErrors({ [field]: error.message })
       }
-      setErrors(({}))
+      setErrors({})
       if (['artId'].includes(field)) refetchTree()
     },
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
       if (prevProps.id !== props.id) {
-        props.setErrors(({}))
+        props.setErrors({})
       }
     },
   }),
@@ -106,8 +102,8 @@ const ApArt = ({
       let artWerte = get(data, 'allAeEigenschaftens.nodes', [])
       artWerte = sortBy(artWerte, 'artname')
       artWerte = artWerte.map(el => ({
-        id: el.id,
-        value: el.artname,
+        value: el.id,
+        label: el.artname,
       }))
 
       return (
@@ -138,25 +134,32 @@ const ApArt = ({
                   <div>
                     Beobachtungen aller AP-Arten stehen im Ordner "Beobachtungen
                     nicht beurteilt" zur Verfügung und können Teilpopulationen
-                    zugeordnet werden.<br />
+                    zugeordnet werden.
+                    <br />
                     <br />
                   </div>
                   <div>
                     Die im Aktionsplan gewählte namensgebende Art gibt dem
                     Aktionsplan nicht nur den Namen. Unter ihrer id werden auch
-                    die Kontrollen an InfoFlora geliefert.<br />
+                    die Kontrollen an InfoFlora geliefert.
+                    <br />
                     <br />
                   </div>
-                  <AutoComplete
+                  <Select
                     key={`${row.id}artId`}
+                    value={row.artId}
+                    field="artId"
                     label="Art"
-                    value={get(row, 'aeEigenschaftenByArtId.artname', '')}
-                    objects={artWerte}
+                    options={artWerte}
                     saveToDb={value =>
-                      saveToDb({ row, field: 'artId', value, updateApart })
+                      saveToDb({
+                        row,
+                        field: 'artId',
+                        value,
+                        updateApart,
+                      })
                     }
                     error={errors.artId}
-                    openabove
                   />
                 </FieldsContainer>
               )}
