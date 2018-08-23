@@ -40,6 +40,11 @@ const StyledSelect = styled(Select)`
   > div:hover {
     border-bottom-width: 2px;
   }
+  .react-select__menu,
+  .react-select__menu-list {
+    height: 130px;
+    height: ${props => (props.maxheight ? `${props.maxheight}px` : 'unset')};
+  }
 `
 
 const enhance = compose(
@@ -51,18 +56,20 @@ const enhance = compose(
 
 const SharedSelect = ({
   value,
-  field,
+  field = '',
   label,
   error,
   options,
   onChange,
+  maxHeight = null,
 }: {
   value?: ?number | ?string,
-  field: string,
+  field?: string,
   label: string,
   error: string,
   options: Array<Object>,
   onChange: () => void,
+  maxHeight?: number,
 }) => (
   <Container>
     {label && <Label>{label}</Label>}
@@ -77,6 +84,8 @@ const SharedSelect = ({
       isClearable
       isSearchable
       noOptionsMessage={() => '(keine)'}
+      maxheight={maxHeight}
+      classNamePrefix="react-select"
     />
     {error && <Error>{error}</Error>}
   </Container>
