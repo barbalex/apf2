@@ -8,13 +8,17 @@ import styled from 'styled-components'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  margin-bottom: 12px;
 `
 const Label = styled.div`
   font-size: 12px;
   color: rgb(0, 0, 0, 0.54);
 `
+const Error = styled.div`
+  font-size: 12px;
+  color: red;
+`
 const StyledSelect = styled(Select)`
-  margin-bottom: 12px;
   > div {
     background-color: rgba(0, 0, 0, 0) !important;
     border-bottom-color: rgba(0, 0, 0, 0.1);
@@ -49,12 +53,14 @@ const SharedSelect = ({
   value,
   field,
   label,
+  error,
   options,
   onChange,
 }: {
   value?: ?number | ?string,
   field: string,
   label: string,
+  error: string,
   options: Array<Object>,
   onChange: () => void,
 }) => (
@@ -72,6 +78,7 @@ const SharedSelect = ({
       isSearchable
       noOptionsMessage={() => '(keine)'}
     />
+    {error && <Error>{error}</Error>}
   </Container>
 )
 

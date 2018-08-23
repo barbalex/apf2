@@ -9,7 +9,6 @@ import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
 
-import AutoComplete from '../../../shared/Autocomplete'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import TextField from '../../../shared/TextField'
 import Select from '../../../shared/Select'
@@ -172,8 +171,8 @@ const Ap = ({
             artWerte = artWerte.filter(o => !apArten.includes(o.id))
             artWerte = sortBy(artWerte, 'artname')
             artWerte = artWerte.map(el => ({
-              id: el.id,
-              value: el.artname,
+              value: el.id,
+              label: el.artname,
             }))
 
             return (
@@ -183,13 +182,19 @@ const Ap = ({
                   <Mutation mutation={updateApByIdGql}>
                     {(updateAp, { data }) => (
                       <FieldsContainer>
-                        <AutoComplete
+                        <Select
                           key={`${row.id}artId`}
+                          value={row.artId}
+                          field="artId"
                           label="Art (gibt dem Aktionsplan den Namen)"
-                          value={get(row, 'aeEigenschaftenByArtId.artname', '')}
-                          objects={artWerte}
+                          options={artWerte}
                           saveToDb={value =>
-                            saveToDb({ row, field: 'artId', value, updateAp })
+                            saveToDb({
+                              row,
+                              field: 'artId',
+                              value,
+                              updateAp,
+                            })
                           }
                           error={errors.artId}
                         />
@@ -303,6 +308,7 @@ const Ap = ({
                               updateAp,
                             })
                           }
+                          error={errors.bearbeiter}
                         />
                         <TextField
                           key={`${row.id}ekfBeobachtungszeitpunkt`}
