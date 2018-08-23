@@ -5,7 +5,7 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import Measure from 'react-measure'
 
-import AutoComplete from '../../../shared/Autocomplete'
+import Select from '../../../shared/Select'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -57,6 +57,7 @@ const TpopNrVal = styled.div`
 `
 const BearbLabel = styled(Label)`
   grid-area: bearbLabel;
+  margin-top: 5px;
 `
 const BearbVal = styled.div`
   grid-area: bearbVal;
@@ -86,8 +87,8 @@ const Headdata = ({
   let adressenWerte = get(data, 'allAdresses.nodes', [])
   adressenWerte = sortBy(adressenWerte, 'name')
   adressenWerte = adressenWerte.map(el => ({
-    id: el.id,
-    value: el.name,
+    value: el.id,
+    label: el.name,
   }))
   const statusValue = get(row, 'tpopByTpopId.status', '')
   const status = [200, 201, 202].includes(statusValue)
@@ -110,20 +111,20 @@ const Headdata = ({
           <KoordLabel>Koordinaten</KoordLabel>
           <KoordVal>{`${get(row, 'tpopByTpopId.x', '')} / ${get(
             row,
-            'tpopByTpopId.y'
+            'tpopByTpopId.y',
           )}`}</KoordVal>
           <TpopNrLabel>Teilpop.Nr.</TpopNrLabel>
           <TpopNrVal>{`${get(row, 'tpopByTpopId.popByPopId.nr', '')}.${get(
             row,
-            'tpopByTpopId.nr'
+            'tpopByTpopId.nr',
           )}`}</TpopNrVal>
           <BearbLabel>BeobachterIn</BearbLabel>
           <BearbVal>
-            <AutoComplete
+            <Select
               key={`${row.id}bearbeiter`}
-              label=""
-              value={get(row, 'adresseByBearbeiter.name', '')}
-              objects={adressenWerte}
+              value={row.bearbeiter}
+              field="bearbeiter"
+              options={adressenWerte}
               saveToDb={value =>
                 saveToDb({
                   row,
