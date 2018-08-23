@@ -105,6 +105,7 @@ const GezaehltVal = styled.div`
     @media print {
       padding-top: 3px;
       padding-bottom: 2px;
+      font-size: 11px;
     }
   }
 `
@@ -125,6 +126,7 @@ const GeschaetztVal = styled.div`
     @media print {
       padding-top: 3px;
       padding-bottom: 2px;
+      font-size: 11px;
     }
   }
 `
