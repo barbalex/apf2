@@ -20,7 +20,6 @@ export default async activeNodeArrayPassed => {
   if (activeNodeArrayFromPathname.length === 0) {
     initialActiveNodeArray.push('Projekte')
   }
-
   await client.mutate({
     mutation: gql`
       mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
@@ -43,10 +42,7 @@ export default async activeNodeArrayPassed => {
     },
   })
   // need to set openNodes
-  setOpenNodesFromActiveNodeArray({
-    client,
-    activeNodeArray: initialActiveNodeArray,
-  })
+  setOpenNodesFromActiveNodeArray(initialActiveNodeArray)
   // clone tree2 in case tree2 is open
   await client.mutate({
     mutation: gql`
