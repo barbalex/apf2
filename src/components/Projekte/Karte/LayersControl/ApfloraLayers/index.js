@@ -96,19 +96,19 @@ const MapIcon = styled(LocalFloristIcon)`
   stroke-width: 1px;
   stroke: black;
 `
-const PopMapIcon = MapIcon.extend`
+const PopMapIcon = styled(MapIcon)`
   color: #947500 !important;
 `
-const TpopMapIcon = MapIcon.extend`
+const TpopMapIcon = styled(MapIcon)`
   color: #016f19 !important;
 `
-const BeobNichtBeurteiltMapIcon = MapIcon.extend`
+const BeobNichtBeurteiltMapIcon = styled(MapIcon)`
   color: #9a009a !important;
 `
-const BeobNichtZuzuordnenMapIcon = MapIcon.extend`
+const BeobNichtZuzuordnenMapIcon = styled(MapIcon)`
   color: #ffe4ff !important;
 `
-const BeobZugeordnetMapIcon = MapIcon.extend`
+const BeobZugeordnetMapIcon = styled(MapIcon)`
   color: #ff00ff !important;
 `
 const BeobZugeordnetAssignPolylinesIcon = styled(RemoveIcon)`
