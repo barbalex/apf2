@@ -6,13 +6,12 @@ import withState from 'recompose/withState'
 import Loadable from 'react-loadable'
 import withLifecycle from '@hocs/with-lifecycle'
 import app from 'ampersand-app'
-import { Query } from 'react-apollo'
 import get from 'lodash/get'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import Loading from '../shared/Loading'
 import setIsPrint from './setIsPrint.graphql'
-import dataGql from './data.graphql'
+import appContainerData from './data'
 import Deletions from '../Deletions'
 
 const Container = styled.div`
@@ -56,6 +55,7 @@ const Ekf = Loadable({
 
 const enhance = compose(
   withState('showDeletions', 'setShowDeletions', false),
+  appContainerData,
   withLifecycle({
     onDidMount(prevProps, props) {
       window.matchMedia('print').addListener(mql => {
@@ -75,42 +75,40 @@ const enhance = compose(
     onWillUnmount() {
       window.matchMedia('print').removeListener()
     },
-  })
+  }),
 )
 
 const MyAppBar = ({
   showDeletions,
   setShowDeletions,
+  data,
 }: {
   showDeletions: Boolean,
   setShowDeletions: () => void,
-}) => (
-  <Query query={dataGql}>
-    {({ loading, error, data, client }) => {
-      if (error) return `Fehler: ${error.message}`
-      const view = get(data, 'view')
+  data: Object,
+}) => {
+  const view = get(data, 'view')
+  console.log('AppContainer, view:', view)
 
-      return (
-        <ErrorBoundary>
-          <Container>
-            <AppBar setShowDeletions={setShowDeletions} />
-            {view === 'ekf' && <Ekf />}
-            {view === 'normal' && <Projekte />}
-            <User />
-            <Errors />
-            <UpdateAvailable />
-            <Messages />
-            {showDeletions && (
-              <Deletions
-                showDeletions={showDeletions}
-                setShowDeletions={setShowDeletions}
-              />
-            )}
-          </Container>
-        </ErrorBoundary>
-      )
-    }}
-  </Query>
-)
+  return (
+    <ErrorBoundary>
+      <Container>
+        <AppBar setShowDeletions={setShowDeletions} />
+        {view === 'ekf' && <Ekf />}
+        {view === 'normal' && <Projekte />}
+        <User />
+        <Errors />
+        <UpdateAvailable />
+        <Messages />
+        {showDeletions && (
+          <Deletions
+            showDeletions={showDeletions}
+            setShowDeletions={setShowDeletions}
+          />
+        )}
+      </Container>
+    </ErrorBoundary>
+  )
+}
 
 export default enhance(MyAppBar)
