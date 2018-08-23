@@ -25,7 +25,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import data1Gql from './data1.graphql'
 import data2Gql from './data2.graphql'
 import updateUserByIdGql from './updateUserById.graphql'
-import AutoComplete from '../../../shared/Autocomplete'
+import Select from '../../../shared/Select'
 
 const Container = styled.div`
   height: 100%;
@@ -144,7 +144,7 @@ const enhance = compose(
           return setPasswordMessage(error.message)
         }
         setPasswordMessage(
-          'Passwort gespeichert. Ihre aktuelle Anmeldung bleibt aktiv.'
+          'Passwort gespeichert. Ihre aktuelle Anmeldung bleibt aktiv.',
         )
         setTimeout(() => {
           setPasswordMessage('')
@@ -163,7 +163,7 @@ const enhance = compose(
         props.setErrors({})
       }
     },
-  })
+  }),
 )
 
 const User = ({
@@ -243,12 +243,12 @@ const User = ({
                   sort: 4,
                 },
               ],
-              'sort'
+              'sort',
             )
             let adresses = sortBy(get(data, 'allAdresses.nodes', []), 'name')
             adresses = adresses.map(el => ({
-              id: el.id,
-              value: el.name,
+              value: el.id,
+              label: el.name,
             }))
 
             return (
@@ -289,11 +289,12 @@ const User = ({
                           label="Rolle"
                           helperText="Nur von Managern veränderbar"
                         />
-                        <AutoComplete
+                        <Select
                           key={`${row.id}adresseId`}
+                          value={row.adresseId}
+                          field="adresseId"
                           label="Zugehörige Adresse"
-                          value={get(row, 'adresseByAdresseId.name', '')}
-                          objects={adresses}
+                          options={adresses}
                           saveToDb={value =>
                             saveToDb({
                               row,
@@ -302,7 +303,7 @@ const User = ({
                               updateUser,
                             })
                           }
-                          error={errors.artId}
+                          error={errors.adresseId}
                         />
                         {!!passwordMessage && (
                           <PasswordMessage>{passwordMessage}</PasswordMessage>
