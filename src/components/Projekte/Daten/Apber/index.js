@@ -11,7 +11,7 @@ import withLifecycle from '@hocs/with-lifecycle'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
-import AutoComplete from '../../../shared/Autocomplete'
+import Select from '../../../shared/Select'
 import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
 import FormTitle from '../../../shared/FormTitle'
 import constants from '../../../../modules/constants'
@@ -35,12 +35,9 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withState('errors', 'setErrors', ({})),
+  withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({
-      setErrors,
-      errors,
-    }) => async ({
+    saveToDb: ({ setErrors, errors }) => async ({
       row,
       field,
       value,
@@ -72,7 +69,8 @@ const enhance = compose(
                   field === 'veraenderungZumVorjahr'
                     ? value
                     : row.veraenderungZumVorjahr,
-                apberAnalyse: field === 'apberAnalyse' ? value : row.apberAnalyse,
+                apberAnalyse:
+                  field === 'apberAnalyse' ? value : row.apberAnalyse,
                 konsequenzenUmsetzung:
                   field === 'konsequenzenUmsetzung'
                     ? value
@@ -110,13 +108,13 @@ const enhance = compose(
       } catch (error) {
         return setErrors({ [field]: error.message })
       }
-      setErrors(({}))
+      setErrors({})
     },
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
       if (prevProps.id !== props.id) {
-        props.setErrors(({}))
+        props.setErrors({})
       }
     },
   }),
@@ -136,12 +134,7 @@ class Apber extends Component<Props> {
   }
 
   render() {
-    const {
-      id,
-      dimensions = { width: 380 },
-      saveToDb,
-      errors,
-    } = this.props
+    const { id, dimensions = { width: 380 }, saveToDb, errors } = this.props
 
     return (
       <Query query={dataGql} variables={{ id }}>
@@ -169,8 +162,8 @@ class Apber extends Component<Props> {
           let adressenWerte = get(data, 'allAdresses.nodes', [])
           adressenWerte = sortBy(adressenWerte, 'name')
           adressenWerte = adressenWerte.map(el => ({
-            id: el.id,
-            value: el.name,
+            value: el.id,
+            label: el.name,
           }))
 
           return (
@@ -389,11 +382,12 @@ class Apber extends Component<Props> {
                         }
                         error={errors.datum}
                       />
-                      <AutoComplete
+                      <Select
                         key={`${row.id}bearbeiter`}
+                        value={row.bearbeiter}
+                        field="bearbeiter"
                         label="BearbeiterIn"
-                        value={get(row, 'adresseByBearbeiter.name', '')}
-                        objects={adressenWerte}
+                        options={adressenWerte}
                         saveToDb={value =>
                           saveToDb({
                             row,
@@ -403,7 +397,6 @@ class Apber extends Component<Props> {
                           })
                         }
                         error={errors.bearbeiter}
-                        openabove
                       />
                     </FieldsContainer>
                   )}
