@@ -38,6 +38,11 @@ const MoreFlLabel = styled.div`
 `
 const MoreFlVal = styled.div`
   grid-area: moreFlVal;
+  > div > div > input {
+    @media print {
+      font-size: 11px !important;
+    }
+  }
 `
 const MoreFlMeasure = styled.div`
   grid-area: moreFlMeasure;
@@ -71,6 +76,11 @@ const VeghoeheMaxVal = styled.div`
   grid-area: veghoeheMaxVal;
   align-self: start;
   margin-top: -11px;
+  > div > div > input {
+    @media print {
+      font-size: 11px !important;
+    }
+  }
 `
 const VeghoeheMittLabel = styled.div`
   grid-area: veghoeheMittLabel;
@@ -81,6 +91,11 @@ const VeghoeheMittVal = styled.div`
   grid-area: veghoeheMittVal;
   align-self: start;
   margin-top: 8px;
+  > div > div > input {
+    @media print {
+      font-size: 11px !important;
+    }
+  }
 `
 const VeghoeheMinLabel = styled.div`
   grid-area: veghoeheMinLabel;

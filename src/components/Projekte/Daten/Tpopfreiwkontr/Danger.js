@@ -5,17 +5,16 @@ import get from 'lodash/get'
 
 import TextField from '../../../shared/TextField'
 
-const Area = styled.div`
+const Container = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
   border-radius: 6px;
   padding: 10px;
   break-inside: avoid;
-`
-const Container = styled(Area)`
   grid-area: danger;
 `
 const DangerLabel = styled.div`
   font-weight: 700;
+  margin-bottom: -10px;
 `
 const DangerSubLabel = styled.span`
   padding-left: 5px;
@@ -28,6 +27,11 @@ const DangerSubLabel = styled.span`
 const DangerVal = styled.div`
   > div {
     margin-bottom: -15px;
+  }
+  > div > div > div > textarea {
+    @media print {
+      font-size: 11px !important;
+    }
   }
 `
 

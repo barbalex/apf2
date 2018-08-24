@@ -32,6 +32,12 @@ const DeckApArtVal = styled.div`
   grid-area: deckApArtVal;
   > div {
     margin-top: -25px;
+    padding-bottom: 5px !important;
+  }
+  > div > div > input {
+    @media print {
+      font-size: 11px !important;
+    }
   }
 `
 const DeckApArtMass = styled.div`
@@ -44,6 +50,12 @@ const DeckNaBoVal = styled.div`
   grid-area: deckNaBoVal;
   > div {
     margin-top: -25px;
+    padding-bottom: 5px !important;
+  }
+  > div > div > input {
+    @media print {
+      font-size: 11px !important;
+    }
   }
 `
 const DeckNaBoMass = styled.div`
