@@ -23,26 +23,24 @@ export default ({
     .filter(el => {
       if (nodeLabelFilterString) {
         const name = get(el, 'name') || ''
-        return name
-          .toLowerCase()
-          .includes(nodeLabelFilterString.toLowerCase())
+        return name.toLowerCase().includes(nodeLabelFilterString.toLowerCase())
       }
       return true
-    })
-    .length
-  let message = (loading && !userNodesLength) ? '...' : userNodesLength
+    }).length
+  let message = loading && !userNodesLength ? '...' : userNodesLength
   if (nodeLabelFilterString) {
     message = `${userNodesLength} gefiltert`
   }
 
-  return ({
+  return {
     nodeType: 'folder',
     menuType: 'userFolder',
+    filterTable: 'user',
     id: userIndex,
     urlLabel: 'Benutzer',
     label: `Benutzer (${message})`,
     url: ['Benutzer'],
     sort: [userIndex],
     hasChildren: userNodesLength > 0,
-  })
+  }
 }

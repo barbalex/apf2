@@ -21,7 +21,10 @@ export default ({
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
-  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.apberuebersicht`)
+  const nodeLabelFilterString = get(
+    data,
+    `${treeName}.nodeLabelFilter.apberuebersicht`,
+  )
 
   const apberuebersichtNodesLength = apberuebersichts
     .filter(el => el.projId === projId)
@@ -32,7 +35,8 @@ export default ({
       }
       return true
     }).length
-  let message = (loading && !apberuebersichtNodesLength) ? '...' : apberuebersichtNodesLength
+  let message =
+    loading && !apberuebersichtNodesLength ? '...' : apberuebersichtNodesLength
   if (nodeLabelFilterString) {
     message = `${apberuebersichtNodesLength} gefiltert`
   }
@@ -40,6 +44,7 @@ export default ({
   return [
     {
       menuType: 'apberuebersichtFolder',
+      filterTable: 'apberuebersicht',
       id: projId,
       urlLabel: 'AP-Berichte',
       label: `AP-Berichte (${message})`,

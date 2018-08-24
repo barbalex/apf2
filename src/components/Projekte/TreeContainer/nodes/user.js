@@ -24,24 +24,23 @@ export default ({
     .filter(el => {
       if (nodeLabelFilterString) {
         const name = get(el, 'name') || ''
-        return name
-          .toLowerCase()
-          .includes(nodeLabelFilterString.toLowerCase())
+        return name.toLowerCase().includes(nodeLabelFilterString.toLowerCase())
       }
       return true
     })
     .map(el => {
       const message = el.role ? el.role.replace('apflora_', '') : 'keine Rolle'
       const label = el.name ? `${el.name} (${message})` : '(kein Name)'
-      return ({
+      return {
         nodeType: 'table',
         menuType: 'user',
+        filterTable: 'user',
         id: el.id,
         urlLabel: el.id,
         label,
         url: ['Benutzer', el.id],
         hasChildren: false,
-      })
+      }
     })
     // sort by label
     .sort(compareLabel)

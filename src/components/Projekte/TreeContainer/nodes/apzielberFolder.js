@@ -38,9 +38,12 @@ export default ({
     id: projId,
   })
   const apIndex = findIndex(apNodes, {
-    id: apId
+    id: apId,
   })
-  const zieljahrIndex = findIndex(apzieljahrFolderNodes, el => el.jahr === zielJahr)
+  const zieljahrIndex = findIndex(
+    apzieljahrFolderNodes,
+    el => el.jahr === zielJahr,
+  )
   const zielIndex = findIndex(apzielNodes, el => el.id === zielId)
   const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.zielber`)
   const zielberNodesLength = zielbers
@@ -55,7 +58,7 @@ export default ({
       }
       return true
     }).length
-  let message = (loading && !zielberNodesLength) ? '...' : zielberNodesLength
+  let message = loading && !zielberNodesLength ? '...' : zielberNodesLength
   if (nodeLabelFilterString) {
     message = `${zielberNodesLength} gefiltert`
   }
@@ -73,14 +76,17 @@ export default ({
   const allParentsOpen = allParentNodesAreOpen(openNodes, url)
   if (!allParentsOpen) return []
 
-  return [{
-    nodeType: 'folder',
-    menuType: 'zielberFolder',
-    id: zielId,
-    urlLabel: 'Berichte',
-    label: `Berichte (${message})`,
-    url,
-    sort: [projIndex, 1, apIndex, 2, zieljahrIndex, zielIndex, 1],
-    hasChildren: zielberNodesLength > 0,
-  }, ]
+  return [
+    {
+      nodeType: 'folder',
+      menuType: 'zielberFolder',
+      filterTable: 'zielber',
+      id: zielId,
+      urlLabel: 'Berichte',
+      label: `Berichte (${message})`,
+      url,
+      sort: [projIndex, 1, apIndex, 2, zieljahrIndex, zielIndex, 1],
+      hasChildren: zielberNodesLength > 0,
+    },
+  ]
 }

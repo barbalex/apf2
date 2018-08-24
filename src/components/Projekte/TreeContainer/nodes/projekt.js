@@ -3,7 +3,7 @@ import get from 'lodash/get'
 
 export default ({
   data,
-  treeName
+  treeName,
 }: {
   data: Object,
   treeName: String,
@@ -17,9 +17,7 @@ export default ({
     .filter(el => {
       if (nodeLabelFilterString) {
         const name = el.name || ''
-        return name
-          .toLowerCase()
-          .includes(nodeLabelFilterString.toLowerCase())
+        return name.toLowerCase().includes(nodeLabelFilterString.toLowerCase())
       }
       return true
     })
@@ -27,6 +25,7 @@ export default ({
     .map((el, index) => ({
       nodeType: 'table',
       menuType: 'projekt',
+      filterTable: 'projekt',
       id: el.id,
       urlLabel: el.id,
       label: el.name || '(kein Name)',

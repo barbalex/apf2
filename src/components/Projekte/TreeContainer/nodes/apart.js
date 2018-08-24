@@ -36,16 +36,16 @@ export default ({
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
-        const apart = get(el, 'aeEigenschaftenByArtId.artname') || '(keine Art gewählt)'
-        return apart
-          .toLowerCase()
-          .includes(nodeLabelFilterString.toLowerCase())
+        const apart =
+          get(el, 'aeEigenschaftenByArtId.artname') || '(keine Art gewählt)'
+        return apart.toLowerCase().includes(nodeLabelFilterString.toLowerCase())
       }
       return true
     })
     .map(el => ({
       nodeType: 'table',
       menuType: 'apart',
+      filterTable: 'apart',
       id: el.id,
       parentId: apId,
       urlLabel: el.id,

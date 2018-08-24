@@ -48,6 +48,7 @@ export default ({
     .map((el, index) => ({
       nodeType: 'table',
       menuType: 'tpop',
+      filterTable: 'tpop',
       id: el.id,
       parentId: el.popId,
       urlLabel: el.id,

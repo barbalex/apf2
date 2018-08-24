@@ -22,15 +22,14 @@ export default ({
     .filter(el => {
       if (nodeLabelFilterString) {
         const name = el.name || '(kein Name)'
-        return name
-          .toLowerCase()
-          .includes(nodeLabelFilterString.toLowerCase())
+        return name.toLowerCase().includes(nodeLabelFilterString.toLowerCase())
       }
       return true
     })
     .map(el => ({
       nodeType: 'table',
       menuType: 'adresse',
+      filterTable: 'adresse',
       id: el.id,
       parentId: 'adresseFolder',
       urlLabel: el.id,

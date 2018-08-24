@@ -58,6 +58,7 @@ import buildTpopmassnNodes from './tpopmassn'
 import buildTpopfeldkontrzaehlFolderNodes from './tpopfeldkontrzaehlFolder'
 import buildTpopfeldkontrzaehlNodes from './tpopfeldkontrzaehl'
 import sort from '../sort'
+import allParentNodesExist from '../allParentNodesExist'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -124,6 +125,7 @@ export default ({
         nodes = [
           ...nodes,
           ...buildApFolderNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -131,6 +133,7 @@ export default ({
             projId,
           }),
           ...buildApberuebersichtFolderNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -147,6 +150,7 @@ export default ({
         nodes = [
           ...nodes,
           ...buildApberuebersichtNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -161,6 +165,7 @@ export default ({
         allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         apNodes = buildApNodes({
+          nodes,
           data,
           treeName,
           loading,
@@ -178,6 +183,7 @@ export default ({
         nodes = [
           ...nodes,
           ...buildPopFolderNode({
+            nodes,
             data,
             treeName,
             loading,
@@ -188,6 +194,7 @@ export default ({
             apId,
           }),
           ...buildApzielFolderNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -198,6 +205,7 @@ export default ({
             apId,
           }),
           ...buildAperfkritFolderNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -208,6 +216,7 @@ export default ({
             apId,
           }),
           ...buildApberFolderNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -218,6 +227,7 @@ export default ({
             apId,
           }),
           ...buildBerFolderNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -228,6 +238,7 @@ export default ({
             apId,
           }),
           ...buildIdealbiotopFolderNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -238,6 +249,7 @@ export default ({
             apId,
           }),
           ...buildAssozartFolderNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -248,6 +260,7 @@ export default ({
             apId,
           }),
           ...buildEkfzaehleinheitFolderNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -258,6 +271,7 @@ export default ({
             apId,
           }),
           ...buildApartFolderNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -268,6 +282,7 @@ export default ({
             apId,
           }),
           ...buildBeobNichtBeurteiltFolderNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -278,6 +293,7 @@ export default ({
             apId,
           }),
           ...buildBeobNichtZuzuordnenFolderNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -288,6 +304,7 @@ export default ({
             apId,
           }),
           ...qkFolderNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -306,6 +323,7 @@ export default ({
         allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         apzieljahrFolderNodes = buildApzieljahrFolderNodes({
+          nodes,
           data,
           treeName,
           loading,
@@ -323,6 +341,7 @@ export default ({
         allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         apzielNodes = buildApzielNodes({
+          nodes,
           data,
           treeName,
           loading,
@@ -344,6 +363,7 @@ export default ({
         nodes = [
           ...nodes,
           ...buildApzielberFolderNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -368,6 +388,7 @@ export default ({
         nodes = [
           ...nodes,
           ...buildApzielberNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -389,6 +410,7 @@ export default ({
         allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         popNodes = buildPopNodes({
+          nodes,
           data,
           treeName,
           loading,
@@ -408,6 +430,7 @@ export default ({
         nodes = [
           ...nodes,
           ...buildBeobNichtZuzuordnenNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -427,6 +450,7 @@ export default ({
         nodes = [
           ...nodes,
           ...buildBeobNichtBeurteiltNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -446,6 +470,7 @@ export default ({
         nodes = [
           ...nodes,
           ...buildAssozartNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -465,6 +490,7 @@ export default ({
         nodes = [
           ...nodes,
           ...buildEkfzaehleinheitNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -484,6 +510,7 @@ export default ({
         nodes = [
           ...nodes,
           ...buildApartNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -503,6 +530,7 @@ export default ({
         nodes = [
           ...nodes,
           ...buildBerNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -522,6 +550,7 @@ export default ({
         nodes = [
           ...nodes,
           ...buildApberNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -541,6 +570,7 @@ export default ({
         nodes = [
           ...nodes,
           ...buildAperfkritNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -562,6 +592,7 @@ export default ({
         nodes = [
           ...nodes,
           ...buildTpopFolderNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -574,6 +605,7 @@ export default ({
             popId,
           }),
           ...buildPopberFolderNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -586,6 +618,7 @@ export default ({
             popId,
           }),
           ...buildPopmassnberFolderNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -608,6 +641,7 @@ export default ({
         nodes = [
           ...nodes,
           ...buildPopmassnberNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -630,6 +664,7 @@ export default ({
         nodes = [
           ...nodes,
           ...buildPopberNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -650,6 +685,7 @@ export default ({
         allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         tpopNodes = buildTpopNodes({
+          nodes,
           data,
           treeName,
           loading,
@@ -675,6 +711,7 @@ export default ({
         nodes = [
           ...nodes,
           ...tpopmassnFolderNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -689,6 +726,7 @@ export default ({
             tpopNodes,
           }),
           ...buildTpopmassnberFolderNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -703,6 +741,7 @@ export default ({
             tpopNodes,
           }),
           ...buildTpopfeldkontrFolderNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -717,6 +756,7 @@ export default ({
             tpopNodes,
           }),
           ...buildTpopfreiwkontrFolderNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -731,6 +771,7 @@ export default ({
             tpopNodes,
           }),
           ...buildTpopberFolderNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -745,6 +786,7 @@ export default ({
             tpopNodes,
           }),
           ...buildBeobZugeordnetFolderNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -770,6 +812,7 @@ export default ({
         nodes = [
           ...nodes,
           ...buildBeobZugeordnetNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -795,6 +838,7 @@ export default ({
         nodes = [
           ...nodes,
           ...buildTpopberNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -818,6 +862,7 @@ export default ({
         allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         tpopfreiwkontrNodes = buildTpopfreiwkontrNodes({
+          nodes,
           data,
           treeName,
           loading,
@@ -841,6 +886,7 @@ export default ({
         allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         tpopfeldkontrNodes = buildTpopfeldkontrNodes({
+          nodes,
           data,
           treeName,
           loading,
@@ -866,6 +912,7 @@ export default ({
         nodes = [
           ...nodes,
           ...buildTpopmassnberNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -891,6 +938,7 @@ export default ({
         nodes = [
           ...nodes,
           ...buildTpopmassnNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -916,6 +964,7 @@ export default ({
         nodes = [
           ...nodes,
           ...buildTpopfeldkontrzaehlFolderNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -943,6 +992,7 @@ export default ({
         nodes = [
           ...nodes,
           ...buildTpopfeldkontrzaehlNodes({
+            nodes,
             data,
             treeName,
             loading,
@@ -965,6 +1015,7 @@ export default ({
       nodes = [
         ...nodes,
         ...buildUserNodes({
+          nodes,
           data,
           treeName,
           projektNodes,
@@ -979,6 +1030,7 @@ export default ({
       nodes = [
         ...nodes,
         buildAdresseFolderNode({
+          nodes,
           data,
           treeName,
           loading,
@@ -996,6 +1048,7 @@ export default ({
       nodes = [
         ...nodes,
         ...buildAdresseNodes({
+          nodes,
           data,
           treeName,
           loading,
@@ -1004,6 +1057,8 @@ export default ({
       ]
     }
   })
+
+  nodes = nodes.filter(n => allParentNodesExist(nodes, n))
 
   /**
    * As all nodes are now in one flat list,
@@ -1035,6 +1090,6 @@ export default ({
       compare(a.sort[7], b.sort[7]) ||
       compare(a.sort[8], b.sort[8]) ||
       compare(a.sort[9], b.sort[9]) ||
-      compare(a.sort[10], b.sort[10])
+      compare(a.sort[10], b.sort[10]),
   )
 }

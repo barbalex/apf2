@@ -34,7 +34,7 @@ export default ({
   })
   const nodeLabelFilterString = get(
     data,
-    `${treeName}.nodeLabelFilter.ekfzaehleinheit`
+    `${treeName}.nodeLabelFilter.ekfzaehleinheit`,
   )
 
   const ekfzaehleinheitNodesLength = ekfzaehleinheits
@@ -65,6 +65,7 @@ export default ({
     {
       nodeType: 'folder',
       menuType: 'ekfzaehleinheitFolder',
+      filterTable: 'ekfzaehleinheit',
       id: apId,
       urlLabel: 'EKF-Zähleinheiten',
       label: `EKF-Zähleinheiten (${message})`,

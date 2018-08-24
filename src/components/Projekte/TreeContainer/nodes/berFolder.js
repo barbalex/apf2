@@ -30,7 +30,7 @@ export default ({
     id: projId,
   })
   const apIndex = findIndex(apNodes, {
-    id: apId
+    id: apId,
   })
   const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.ber`)
 
@@ -45,7 +45,7 @@ export default ({
       }
       return true
     }).length
-  let message = (loading && !berNodesLength) ? '...' : berNodesLength
+  let message = loading && !berNodesLength ? '...' : berNodesLength
   if (nodeLabelFilterString) {
     message = `${berNodesLength} gefiltert`
   }
@@ -54,14 +54,17 @@ export default ({
   const allParentsOpen = allParentNodesAreOpen(openNodes, url)
   if (!allParentsOpen) return []
 
-  return [{
-    nodeType: 'folder',
-    menuType: 'berFolder',
-    id: apId,
-    urlLabel: 'Berichte',
-    label: `Berichte (${message})`,
-    url,
-    sort: [projIndex, 1, apIndex, 5],
-    hasChildren: berNodesLength > 0,
-  }, ]
+  return [
+    {
+      nodeType: 'folder',
+      menuType: 'berFolder',
+      filterTable: 'ber',
+      id: apId,
+      urlLabel: 'Berichte',
+      label: `Berichte (${message})`,
+      url,
+      sort: [projIndex, 1, apIndex, 5],
+      hasChildren: berNodesLength > 0,
+    },
+  ]
 }

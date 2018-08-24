@@ -29,10 +29,7 @@ export default ({
     id: projId,
   })
   const apIndex = findIndex(apNodes, { id: apId })
-  const nodeLabelFilterString = get(
-    data,
-    `${treeName}.nodeLabelFilter.beobNichtZuzuordnen`
-  )
+  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.beob`)
 
   // map through all elements and create array of nodes
   const nodes = beobNichtZuzuordnens
@@ -51,6 +48,7 @@ export default ({
     .map(el => ({
       nodeType: 'table',
       menuType: 'beobNichtZuzuordnen',
+      filterTable: 'beob',
       id: el.id,
       parentId: apId,
       urlLabel: el.id,

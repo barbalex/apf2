@@ -43,7 +43,7 @@ export default ({
       }
       return true
     }).length
-  let message = (loading && !apNodesLength) ? '...' : apNodesLength
+  let message = loading && !apNodesLength ? '...' : apNodesLength
   if (nodeLabelFilterString) {
     message = `${apNodesLength} gefiltert`
   }
@@ -52,6 +52,7 @@ export default ({
     {
       nodeType: 'folder',
       menuType: 'apFolder',
+      filterTable: 'ap',
       id: projId,
       urlLabel: 'Aktionspläne',
       label: `Aktionspläne (${message})`,

@@ -30,7 +30,7 @@ export default ({
   const apIndex = findIndex(apNodes, { id: apId })
   const nodeLabelFilterString = get(
     data,
-    `${treeName}.nodeLabelFilter.ekfzaehleinheit`
+    `${treeName}.nodeLabelFilter.ekfzaehleinheit`,
   )
 
   // map through all elements and create array of nodes
@@ -51,13 +51,14 @@ export default ({
     .map(el => ({
       nodeType: 'table',
       menuType: 'ekfzaehleinheit',
+      filterTable: 'ekfzaehleinheit',
       id: el.id,
       parentId: apId,
       urlLabel: el.id,
       label: get(
         el,
         'tpopkontrzaehlEinheitWerteByZaehleinheitId.text',
-        '(keine Zähleinheit gewählt)'
+        '(keine Zähleinheit gewählt)',
       ),
       url: [
         'Projekte',

@@ -46,7 +46,7 @@ export default ({
       return true
     }).length
 
-  let message = (loading && !childrenLength) ? '...' : childrenLength
+  let message = loading && !childrenLength ? '...' : childrenLength
   if (nodeLabelFilterString) {
     message = `${childrenLength} gefiltert`
   }
@@ -67,6 +67,7 @@ export default ({
     {
       nodeType: 'folder',
       menuType: 'tpopFolder',
+      filterTable: 'tpop',
       id: popId,
       urlLabel: 'Teil-Populationen',
       label: `Teil-Populationen (${message})`,

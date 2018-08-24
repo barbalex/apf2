@@ -37,7 +37,10 @@ export default ({
   const apIndex = findIndex(apNodes, { id: apId })
   const popIndex = findIndex(popNodes, { id: popId })
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
-  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.tpopfreiwkontr`)
+  const nodeLabelFilterString = get(
+    data,
+    `${treeName}.nodeLabelFilter.tpopfreiwkontr`,
+  )
 
   const childrenLength = get(data, 'tpopfreiwkontrs.nodes', [])
     .filter(el => el.tpopId === tpopId)
@@ -51,7 +54,7 @@ export default ({
       return true
     }).length
 
-  let message = (loading && !childrenLength) ? '...' : childrenLength
+  let message = loading && !childrenLength ? '...' : childrenLength
   if (nodeLabelFilterString) {
     message = `${childrenLength} gefiltert`
   }
@@ -74,6 +77,7 @@ export default ({
     {
       nodeType: 'folder',
       menuType: 'tpopfreiwkontrFolder',
+      filterTable: 'tpopkontr',
       id: tpopId,
       urlLabel: 'Freiwilligen-Kontrollen',
       label: `Freiwilligen-Kontrollen (${message})`,

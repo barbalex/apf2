@@ -14,7 +14,7 @@ export default ({
   projId,
   apId,
   jahr,
-  apzieljahrFolderNodes
+  apzieljahrFolderNodes,
 }: {
   data: Object,
   treeName: String,
@@ -24,7 +24,7 @@ export default ({
   projId: String,
   apId: String,
   jahr: Number,
-  apzieljahrFolderNodes: Array<Object>
+  apzieljahrFolderNodes: Array<Object>,
 }): Array<Object> => {
   const ziels = get(data, 'ziels.nodes', [])
   // fetch sorting indexes of parents
@@ -32,7 +32,7 @@ export default ({
     id: projId,
   })
   const apIndex = findIndex(apNodes, {
-    id: apId
+    id: apId,
   })
   const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.ziel`)
   const zieljahrIndex = findIndex(apzieljahrFolderNodes, el => el.jahr === jahr)
@@ -45,7 +45,9 @@ export default ({
     .filter(el => {
       if (nodeLabelFilterString) {
         const label = `${el.bezeichnung || '(kein Ziel)'} (${get(
-          el, 'zielTypWerteByTyp.text') || '(kein Typ)'})`
+          el,
+          'zielTypWerteByTyp.text',
+        ) || '(kein Typ)'})`
         return label.toLowerCase().includes(nodeLabelFilterString.toLowerCase())
       }
       return true
@@ -53,13 +55,14 @@ export default ({
     .map(el => ({
       nodeType: 'table',
       menuType: 'ziel',
+      filterTable: 'ziel',
       id: el.id,
       parentId: el.apId,
       urlLabel: el.id,
       label: `${el.bezeichnung || '(kein Ziel)'} (${get(
         el,
         'zielTypWerteByTyp.text',
-        'kein Typ'
+        'kein Typ',
       )})`,
       url: [
         'Projekte',

@@ -37,7 +37,7 @@ export default ({
   const apIndex = findIndex(apNodes, { id: apId })
   const popIndex = findIndex(popNodes, { id: popId })
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
-  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.beobZugeordnet`)
+  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.beob`)
 
   const childrenLength = get(data, 'beobZugeordnets.nodes', [])
     .filter(el => el.tpopId === tpopId)
@@ -53,7 +53,7 @@ export default ({
       return true
     }).length
 
-  let message = (loading && !childrenLength) ? '...' : childrenLength
+  let message = loading && !childrenLength ? '...' : childrenLength
   if (nodeLabelFilterString) {
     message = `${childrenLength} gefiltert`
   }
@@ -76,6 +76,7 @@ export default ({
     {
       nodeType: 'folder',
       menuType: 'beobZugeordnetFolder',
+      filterTable: 'beob',
       id: tpopId,
       urlLabel: 'Beobachtungen',
       label: `Beobachtungen zugeordnet (${message})`,

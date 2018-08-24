@@ -32,7 +32,7 @@ export default ({
     id: projId,
   })
   const apIndex = findIndex(apNodes, {
-    id: apId
+    id: apId,
   })
   const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.apart`)
 
@@ -41,26 +41,30 @@ export default ({
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
-        const artname = get(el, 'aeEigenschaftenByArtId.artname') || '(keine Art gewählt)'
+        const artname =
+          get(el, 'aeEigenschaftenByArtId.artname') || '(keine Art gewählt)'
         return artname
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
       }
       return true
     }).length
-  let message = (loading && !apartNodesLength) ? '...' : apartNodesLength
+  let message = loading && !apartNodesLength ? '...' : apartNodesLength
   if (nodeLabelFilterString) {
     message = `${apartNodesLength} gefiltert`
   }
 
-  return [{
-    nodeType: 'folder',
-    menuType: 'apartFolder',
-    id: apId,
-    urlLabel: 'AP-Arten',
-    label: `AP-Arten (${message})`,
-    url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Arten'],
-    sort: [projIndex, 1, apIndex, 7],
-    hasChildren: apartNodesLength > 0,
-  }, ]
+  return [
+    {
+      nodeType: 'folder',
+      menuType: 'apartFolder',
+      filterTable: 'apart',
+      id: apId,
+      urlLabel: 'AP-Arten',
+      label: `AP-Arten (${message})`,
+      url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Arten'],
+      sort: [projIndex, 1, apIndex, 7],
+      hasChildren: apartNodesLength > 0,
+    },
+  ]
 }

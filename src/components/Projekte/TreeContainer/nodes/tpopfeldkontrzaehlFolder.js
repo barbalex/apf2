@@ -42,17 +42,20 @@ export default ({
   const popIndex = findIndex(popNodes, { id: popId })
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
   const tpopkontrIndex = findIndex(tpopfeldkontrNodes, { id: tpopkontrId })
-  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.tpopkontrzaehl`)
+  const nodeLabelFilterString = get(
+    data,
+    `${treeName}.nodeLabelFilter.tpopkontrzaehl`,
+  )
 
   const childrenLength = get(data, 'tpopkontrzaehls.nodes', [])
     .filter(el => el.tpopkontrId === tpopkontrId)
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
-        return `${get(
-          el, 'tpopkontrzaehlEinheitWerteByEinheit.text'
-        ) || '(keine Einheit)'}: ${el.anzahl} ${get(
-          el, 'tpopkontrzaehlMethodeWerteByMethode.text'
+        return `${get(el, 'tpopkontrzaehlEinheitWerteByEinheit.text') ||
+          '(keine Einheit)'}: ${el.anzahl} ${get(
+          el,
+          'tpopkontrzaehlMethodeWerteByMethode.text',
         ) || '(keine Methode)'}`
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
@@ -60,7 +63,7 @@ export default ({
       return true
     }).length
 
-  let message = (loading && !childrenLength) ? '...' : childrenLength
+  let message = loading && !childrenLength ? '...' : childrenLength
   if (nodeLabelFilterString) {
     message = `${childrenLength} gefiltert`
   }
@@ -85,6 +88,7 @@ export default ({
     {
       nodeType: 'folder',
       menuType: 'tpopfeldkontrzaehlFolder',
+      filterTable: 'tpopkontrzaehl',
       id: tpopkontrId,
       urlLabel: 'Zaehlungen',
       label: `Zählungen (${message})`,

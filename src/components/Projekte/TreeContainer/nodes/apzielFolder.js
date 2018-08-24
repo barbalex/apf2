@@ -31,7 +31,7 @@ export default ({
     id: projId,
   })
   const apIndex = findIndex(apNodes, {
-    id: apId
+    id: apId,
   })
   const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.ziel`)
 
@@ -43,7 +43,7 @@ export default ({
         return `${el.bezeichnung || '(kein Ziel)'} (${get(
           el,
           'zielTypWerteByTyp.text',
-          '(kein Typ)'
+          '(kein Typ)',
         )})`.includes(nodeLabelFilterString.toLowerCase())
       }
       return true
@@ -51,7 +51,10 @@ export default ({
     // reduce to distinct years
     .reduce((a, el, index) => union(a, [el.jahr]), [])
   const zieljahreLength = zieljahre.length
-  let message = (loading && !zieljahreLength) ? '...' : `${zieljahreLength} ${zieljahreLength === 1 ? 'Jahr' : 'Jahre'}`
+  let message =
+    loading && !zieljahreLength
+      ? '...'
+      : `${zieljahreLength} ${zieljahreLength === 1 ? 'Jahr' : 'Jahre'}`
   if (nodeLabelFilterString) {
     message = `${zieljahreLength} ${
       zieljahreLength === 1 ? 'Jahr' : 'Jahre'
@@ -62,14 +65,17 @@ export default ({
   const allParentsOpen = allParentNodesAreOpen(openNodes, url)
   if (!allParentsOpen) return []
 
-  return [{
-    nodeType: 'folder',
-    menuType: 'zielFolder',
-    id: apId,
-    urlLabel: 'AP-Ziele',
-    label: `AP-Ziele (${message})`,
-    url,
-    sort: [projIndex, 1, apIndex, 2],
-    hasChildren: zieljahreLength > 0,
-  }]
+  return [
+    {
+      nodeType: 'folder',
+      menuType: 'zielFolder',
+      filterTable: 'ziel',
+      id: apId,
+      urlLabel: 'AP-Ziele',
+      label: `AP-Ziele (${message})`,
+      url,
+      sort: [projIndex, 1, apIndex, 2],
+      hasChildren: zieljahreLength > 0,
+    },
+  ]
 }

@@ -28,7 +28,10 @@ export default ({
     id: projId,
   })
   const apIndex = findIndex(apNodes, { id: apId })
-  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.assozart`)
+  const nodeLabelFilterString = get(
+    data,
+    `${treeName}.nodeLabelFilter.assozart`,
+  )
 
   // map through all elements and create array of nodes
   const nodes = assozarts
@@ -36,7 +39,8 @@ export default ({
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
-        const artname = get(el, 'aeEigenschaftenByAeId.artname') || '(keine Art gewählt)'
+        const artname =
+          get(el, 'aeEigenschaftenByAeId.artname') || '(keine Art gewählt)'
         return artname
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
@@ -46,6 +50,7 @@ export default ({
     .map(el => ({
       nodeType: 'table',
       menuType: 'assozart',
+      filterTable: 'assozart',
       id: el.id,
       parentId: apId,
       urlLabel: el.id,

@@ -32,7 +32,10 @@ export default ({
   })
   const apIndex = findIndex(apNodes, { id: apId })
   const popIndex = findIndex(popNodes, { id: popId })
-  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.popmassnber`)
+  const nodeLabelFilterString = get(
+    data,
+    `${treeName}.nodeLabelFilter.popmassnber`,
+  )
 
   // map through all elements and create array of nodes
   const nodes = get(data, 'popmassnbers.nodes', [])
@@ -42,7 +45,7 @@ export default ({
       if (nodeLabelFilterString) {
         return `${el.jahr || '(kein Jahr)'}: ${get(
           el,
-          'tpopmassnErfbeurtWerteByBeurteilung.text'
+          'tpopmassnErfbeurtWerteByBeurteilung.text',
         ) || '(nicht beurteilt)'}`
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
@@ -52,13 +55,14 @@ export default ({
     .map(el => ({
       nodeType: 'table',
       menuType: 'popmassnber',
+      filterTable: 'popmassnber',
       id: el.id,
       parentId: popId,
       urlLabel: el.id,
       label: `${el.jahr || '(kein Jahr)'}: ${get(
         el,
         'tpopmassnErfbeurtWerteByBeurteilung.text',
-        '(nicht beurteilt)'
+        '(nicht beurteilt)',
       )}`,
       url: [
         'Projekte',

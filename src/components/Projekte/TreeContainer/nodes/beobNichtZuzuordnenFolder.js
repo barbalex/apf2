@@ -33,10 +33,7 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString = get(
-    data,
-    `${treeName}.nodeLabelFilter.beobNichtZuzuordnen`
-  )
+  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.beob`)
 
   const beobNichtZuzuordnenNodesLength = beobNichtZuzuordnens
     .filter(el => el.apId === apId)
@@ -73,6 +70,7 @@ export default ({
     {
       nodeType: 'folder',
       menuType: 'beobNichtZuzuordnenFolder',
+      filterTable: 'beob',
       id: apId,
       urlLabel: 'nicht-zuzuordnende-Beobachtungen',
       label: `Beobachtungen nicht zuzuordnen (${message})`,

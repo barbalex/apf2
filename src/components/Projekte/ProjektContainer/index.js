@@ -187,20 +187,6 @@ const ProjekteContainer = ({
                 const activeNode = nodes.find(n =>
                   isEqual(n.url, activeNodeArray),
                 )
-                /*
-                if (!activeNode) {
-                  // probably the person is filtering and the active node's label
-                  // is excluded by the filter
-                  // so make it's parent active
-                  activeNode = nodes.find(n =>
-                    isEqual(n.url, [...activeNodeArray.pop()]),
-                  )
-                }*/
-                console.log('ProjektContainer', {
-                  activeNode,
-                  nodes,
-                  activeNodeArray,
-                })
                 // remove 2 to treat all same
                 const tabs = [...tabsPassed].map(t => t.replace('2', ''))
                 const treeFlex =

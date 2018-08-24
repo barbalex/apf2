@@ -46,7 +46,8 @@ export default ({
     .filter(el => {
       if (nodeLabelFilterString) {
         return `${el.jahr || '(kein Jahr)'}: ${get(
-          el, 'tpopEntwicklungWerteByEntwicklung.text'
+          el,
+          'tpopEntwicklungWerteByEntwicklung.text',
         ) || '(nicht beurteilt)'}`
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
@@ -56,13 +57,14 @@ export default ({
     .map((el, index) => ({
       nodeType: 'table',
       menuType: 'tpopber',
+      filterTable: 'tpopber',
       parentId: tpopId,
       id: el.id,
       urlLabel: el.id,
       label: `${el.jahr || '(kein Jahr)'}: ${get(
         el,
         'tpopEntwicklungWerteByEntwicklung.text',
-        '(nicht beurteilt)'
+        '(nicht beurteilt)',
       )}`,
       url: [
         'Projekte',

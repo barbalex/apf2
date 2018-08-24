@@ -31,7 +31,7 @@ export default ({
     id: projId,
   })
   const apIndex = findIndex(apNodes, {
-    id: apId
+    id: apId,
   })
   const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.pop`)
 
@@ -51,7 +51,7 @@ export default ({
       }
       return true
     }).length
-  let message = (loading && !popNodesLength) ? '...' : popNodesLength
+  let message = loading && !popNodesLength ? '...' : popNodesLength
   if (nodeLabelFilterString) {
     message = `${popNodesLength} gefiltert`
   }
@@ -60,14 +60,17 @@ export default ({
   const allParentsOpen = allParentNodesAreOpen(openNodes, url)
   if (!allParentsOpen) return []
 
-  return [({
-    nodeType: 'folder',
-    menuType: 'popFolder',
-    id: apId,
-    urlLabel: 'Populationen',
-    label: `Populationen (${message})`,
-    url,
-    sort: [projIndex, 1, apIndex, 1],
-    hasChildren: popNodesLength > 0,
-  })]
+  return [
+    {
+      nodeType: 'folder',
+      menuType: 'popFolder',
+      filterTable: 'pop',
+      id: apId,
+      urlLabel: 'Populationen',
+      label: `Populationen (${message})`,
+      url,
+      sort: [projIndex, 1, apIndex, 1],
+      hasChildren: popNodesLength > 0,
+    },
+  ]
 }

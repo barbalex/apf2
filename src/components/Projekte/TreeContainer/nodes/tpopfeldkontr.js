@@ -37,7 +37,10 @@ export default ({
   const apIndex = findIndex(apNodes, { id: apId })
   const popIndex = findIndex(popNodes, { id: popId })
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
-  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.tpopfeldkontr`)
+  const nodeLabelFilterString = get(
+    data,
+    `${treeName}.nodeLabelFilter.tpopfeldkontr`,
+  )
 
   // map through all elements and create array of nodes
   let nodes = get(data, 'tpopfeldkontrs.nodes', [])
@@ -46,7 +49,8 @@ export default ({
     .filter(el => {
       if (nodeLabelFilterString) {
         return `${el.jahr || '(kein Jahr)'}: ${get(
-          el, 'tpopkontrTypWerteByTyp.text'
+          el,
+          'tpopkontrTypWerteByTyp.text',
         ) || '(kein Typ)'}`
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
@@ -61,11 +65,13 @@ export default ({
     .map(el => ({
       nodeType: 'table',
       menuType: 'tpopfeldkontr',
+      filterTable: 'tpopkontr',
       id: el.id,
       parentId: tpopId,
       urlLabel: el.id,
       label: `${el.jahr || '(kein Jahr)'}: ${get(
-        el, 'tpopkontrTypWerteByTyp.text'
+        el,
+        'tpopkontrTypWerteByTyp.text',
       ) || '(kein Typ)'}`,
       url: [
         'Projekte',
@@ -82,12 +88,10 @@ export default ({
       hasChildren: true,
     }))
     .filter(el => allParentNodesAreOpen(openNodes, el.url))
-    .map(
-      (el, index) => {
-        el.sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 3, index]
-        return el
-      }
-    )
+    .map((el, index) => {
+      el.sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 3, index]
+      return el
+    })
 
   return nodes
 }

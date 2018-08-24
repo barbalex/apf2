@@ -42,7 +42,8 @@ export default ({
     .filter(el => {
       if (nodeLabelFilterString) {
         return `${el.jahr || '(kein Jahr)'}: ${get(
-          el, 'tpopEntwicklungWerteByEntwicklung.text'
+          el,
+          'tpopEntwicklungWerteByEntwicklung.text',
         ) || '(nicht beurteilt)'}`
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
@@ -50,7 +51,7 @@ export default ({
       return true
     }).length
 
-  let message = (loading && !childrenLength) ? '...' : childrenLength
+  let message = loading && !childrenLength ? '...' : childrenLength
   if (nodeLabelFilterString) {
     message = `${childrenLength} gefiltert`
   }
@@ -59,6 +60,7 @@ export default ({
     {
       nodeType: 'folder',
       menuType: 'popberFolder',
+      filterTable: 'popber',
       id: popId,
       urlLabel: 'Kontroll-Berichte',
       label: `Kontroll-Berichte (${message})`,

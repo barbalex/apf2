@@ -36,9 +36,12 @@ export default ({
     id: projId,
   })
   const apIndex = findIndex(apNodes, {
-    id: apId
+    id: apId,
   })
-  const zieljahrIndex = findIndex(apzieljahrFolderNodes, el => el.jahr === zielJahr)
+  const zieljahrIndex = findIndex(
+    apzieljahrFolderNodes,
+    el => el.jahr === zielJahr,
+  )
   const zielIndex = findIndex(apzielNodes, el => el.id === zielId)
   const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.zielber`)
 
@@ -49,13 +52,16 @@ export default ({
     .filter(el => {
       if (nodeLabelFilterString) {
         return `${el.jahr || '(kein Jahr)'}: ${el.erreichung ||
-          '(nicht beurteilt)'}`.toLowerCase().includes(nodeLabelFilterString.toLowerCase())
+          '(nicht beurteilt)'}`
+          .toLowerCase()
+          .includes(nodeLabelFilterString.toLowerCase())
       }
       return true
     })
     .map(el => ({
       nodeType: 'table',
       menuType: 'zielber',
+      filterTable: 'zielber',
       id: el.id,
       parentId: el.zielId,
       urlLabel: el.id,

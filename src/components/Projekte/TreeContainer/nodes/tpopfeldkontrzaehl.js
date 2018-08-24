@@ -42,7 +42,10 @@ export default ({
   const popIndex = findIndex(popNodes, { id: popId })
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
   const tpopkontrIndex = findIndex(tpopfeldkontrNodes, { id: tpopkontrId })
-  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.tpopkontrzaehl`)
+  const nodeLabelFilterString = get(
+    data,
+    `${treeName}.nodeLabelFilter.tpopkontrzaehl`,
+  )
 
   // map through all elements and create array of nodes
   let nodes = get(data, 'tpopkontrzaehls.nodes', [])
@@ -50,10 +53,10 @@ export default ({
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
-        return `${get(
-          el, 'tpopkontrzaehlEinheitWerteByEinheit.text'
-        ) || '(keine Einheit)'}: ${el.anzahl} ${get(
-          el, 'tpopkontrzaehlMethodeWerteByMethode.text'
+        return `${get(el, 'tpopkontrzaehlEinheitWerteByEinheit.text') ||
+          '(keine Einheit)'}: ${el.anzahl} ${get(
+          el,
+          'tpopkontrzaehlMethodeWerteByMethode.text',
         ) || '(keine Methode)'}`
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
@@ -63,13 +66,14 @@ export default ({
     .map(el => ({
       nodeType: 'table',
       menuType: 'tpopfeldkontrzaehl',
+      filterTable: 'tpopkontrzaehl',
       id: el.id,
       parentId: tpopkontrId,
       urlLabel: el.id,
-      label: `${get(
-        el, 'tpopkontrzaehlEinheitWerteByEinheit.text'
-      ) || '(keine Einheit)'}: ${el.anzahl} ${get(
-        el, 'tpopkontrzaehlMethodeWerteByMethode.text'
+      label: `${get(el, 'tpopkontrzaehlEinheitWerteByEinheit.text') ||
+        '(keine Einheit)'}: ${el.anzahl} ${get(
+        el,
+        'tpopkontrzaehlMethodeWerteByMethode.text',
       ) || '(keine Methode)'}`,
       url: [
         'Projekte',

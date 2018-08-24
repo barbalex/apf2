@@ -39,7 +39,7 @@ export default ({
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
   const nodeLabelFilterString = get(
     data,
-    `${treeName}.nodeLabelFilter.tpopfreiwkontr`
+    `${treeName}.nodeLabelFilter.tpopfreiwkontr`,
   )
 
   // map through all elements and create array of nodes
@@ -62,6 +62,7 @@ export default ({
     .map(el => ({
       nodeType: 'table',
       menuType: 'tpopfreiwkontr',
+      filterTable: 'tpopkontr',
       id: el.id,
       parentId: tpopId,
       urlLabel: el.id,

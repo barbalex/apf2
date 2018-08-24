@@ -27,7 +27,7 @@ export default ({
     id: projId,
   })
   const apIndex = findIndex(apNodes, {
-    id: apId
+    id: apId,
   })
   const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.erfkrit`)
 
@@ -40,9 +40,9 @@ export default ({
         return `${get(
           el,
           'apErfkritWerteByErfolg.text',
-          '(nicht beurteilt)'
+          '(nicht beurteilt)',
         )}: ${el.kriterien || '(keine Kriterien erfasst)'}`.includes(
-          nodeLabelFilterString.toLowerCase()
+          nodeLabelFilterString.toLowerCase(),
         )
       }
       return true
@@ -50,13 +50,14 @@ export default ({
     .map(el => ({
       nodeType: 'table',
       menuType: 'erfkrit',
+      filterTable: 'erfkrit',
       id: el.id,
       parentId: el.apId,
       urlLabel: el.id,
       label: `${get(
         el,
         'apErfkritWerteByErfolg.text',
-        '(nicht beurteilt)'
+        '(nicht beurteilt)',
       )}: ${el.kriterien || '(keine Kriterien erfasst)'}`,
       url: [
         'Projekte',
@@ -72,8 +73,8 @@ export default ({
     // sort by label
     .sort(
       (a, b) =>
-      get(b, 'apErfkritWerteByErfolg.sort', 0) -
-      get(a, 'apErfkritWerteByErfolg.sort', 0)
+        get(b, 'apErfkritWerteByErfolg.sort', 0) -
+        get(a, 'apErfkritWerteByErfolg.sort', 0),
     )
     .map((el, index) => {
       el.sort = [projIndex, 1, apIndex, 3, index]

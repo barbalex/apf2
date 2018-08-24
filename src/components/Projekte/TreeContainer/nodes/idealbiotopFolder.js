@@ -25,21 +25,23 @@ export default ({
     id: projId,
   })
   const apIndex = findIndex(apNodes, {
-    id: apId
+    id: apId,
   })
 
   const url = ['Projekte', projId, 'Aktionspläne', apId, 'Idealbiotop']
   const allParentsOpen = allParentNodesAreOpen(openNodes, url)
   if (!allParentsOpen) return []
 
-  return [{
-    nodeType: 'folder',
-    menuType: 'idealbiotopFolder',
-    id: apId,
-    urlLabel: 'Idealbiotop',
-    label: 'Idealbiotop',
-    url,
-    sort: [projIndex, 1, apIndex, 6],
-    hasChildren: false,
-  }, ]
+  return [
+    {
+      nodeType: 'folder',
+      menuType: 'idealbiotopFolder',
+      id: apId,
+      urlLabel: 'Idealbiotop',
+      label: 'Idealbiotop',
+      url,
+      sort: [projIndex, 1, apIndex, 6],
+      hasChildren: false,
+    },
+  ]
 }

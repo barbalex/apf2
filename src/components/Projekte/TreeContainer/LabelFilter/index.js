@@ -13,7 +13,6 @@ import app from 'ampersand-app'
 import tables from '../../../../modules/tables'
 import labelFilterData from './data'
 import setTreeNodeLabelFilterKey from './setTreeNodeLabelFilterKey.graphql'
-import getTableNameFromActiveNode from '../../../../modules/getTableNameFromActiveNode'
 import setTreeKeyGql from './setTreeKey.graphql'
 
 const StyledFormControl = styled(FormControl)`
@@ -40,34 +39,20 @@ const enhance = compose(
       activeNode: Object,
       data: Object,
     }) => async event => {
-      const tableName = getTableNameFromActiveNode(activeNode)
+      const { filterTable, url, label } = activeNode
       const { value } = event.target
       const openNodes = get(data, `${treeName}.openNodes`, [])
-      // TODO: only pop if is not folder
-      console.log('LabelFilter, onChange:', {
-        openNodes,
-      })
+      // pop if is not folder and label does not comply to filter
       if (
-        !activeNode.label.includes(
+        activeNode.nodeType === 'table' &&
+        !label.includes(
           value && value.toLowerCase ? value.toLowerCase() : value,
         )
       ) {
-        const newActiveNodeArray = [...activeNode.url]
-        const newActiveUrl = [...activeNode.url]
+        const newActiveNodeArray = [...url]
+        const newActiveUrl = [...url]
         newActiveNodeArray.pop()
         let newOpenNodes = openNodes.filter(n => n !== newActiveUrl)
-        if (activeNode.nodeType === 'folder') {
-          newActiveNodeArray.pop()
-          newActiveUrl.pop()
-          newOpenNodes = openNodes.filter(n => n !== newActiveUrl)
-        }
-        console.log('LabelFilter, onChange, DANGER:', {
-          activeNode,
-          tableName,
-          newActiveNodeArray,
-          anUrl: activeNode.url,
-          openNodes,
-        })
         await app.client.mutate({
           mutation: setTreeKeyGql,
           variables: {
@@ -84,7 +69,7 @@ const enhance = compose(
         variables: {
           value,
           tree: treeName,
-          key: tableName,
+          key: filterTable,
         },
       })
     },
@@ -104,7 +89,7 @@ const LabelFilter = ({
   nodes: Array<Object>,
   data: Object,
 }) => {
-  const tableName = getTableNameFromActiveNode(activeNode)
+  const tableName = activeNode ? activeNode.filterTable : null
 
   let labelText = '(filtern nicht möglich)'
   let filterValue = ''
@@ -118,11 +103,6 @@ const LabelFilter = ({
       labelText = `${tableLabel} filtern`
     }
   }
-  console.log('LabelFilter:', {
-    activeNode,
-    tableName,
-    nodeLabelFilter: get(data, `${treeName}.nodeLabelFilter`, ''),
-  })
 
   return (
     <StyledFormControl fullWidth>

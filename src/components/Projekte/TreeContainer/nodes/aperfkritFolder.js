@@ -30,7 +30,7 @@ export default ({
     id: projId,
   })
   const apIndex = findIndex(apNodes, {
-    id: apId
+    id: apId,
   })
   const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.erfkrit`)
 
@@ -42,14 +42,14 @@ export default ({
         return `${get(
           el,
           'apErfkritWerteByErfolg.text',
-          '(nicht beurteilt)'
+          '(nicht beurteilt)',
         )}: ${el.kriterien || '(keine Kriterien erfasst)'}`.includes(
-          nodeLabelFilterString.toLowerCase()
+          nodeLabelFilterString.toLowerCase(),
         )
       }
       return true
     }).length
-  let message = (loading && !erfkritNodesLength) ? '...' : erfkritNodesLength
+  let message = loading && !erfkritNodesLength ? '...' : erfkritNodesLength
   if (nodeLabelFilterString) {
     message = `${erfkritNodesLength} gefiltert`
   }
@@ -58,14 +58,17 @@ export default ({
   const allParentsOpen = allParentNodesAreOpen(openNodes, url)
   if (!allParentsOpen) return []
 
-  return [{
-    nodeType: 'folder',
-    menuType: 'erfkritFolder',
-    id: apId,
-    urlLabel: 'AP-Erfolgskriterien',
-    label: `AP-Erfolgskriterien (${message})`,
-    url,
-    sort: [projIndex, 1, apIndex, 3],
-    hasChildren: erfkritNodesLength > 0,
-  }, ]
+  return [
+    {
+      nodeType: 'folder',
+      menuType: 'erfkritFolder',
+      filterTable: 'erfkrit',
+      id: apId,
+      urlLabel: 'AP-Erfolgskriterien',
+      label: `AP-Erfolgskriterien (${message})`,
+      url,
+      sort: [projIndex, 1, apIndex, 3],
+      hasChildren: erfkritNodesLength > 0,
+    },
+  ]
 }

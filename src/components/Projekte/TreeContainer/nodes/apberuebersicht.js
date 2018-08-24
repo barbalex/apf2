@@ -13,7 +13,10 @@ export default ({
   projektNodes: Array<Object>,
   projId: String,
 }): Array<Object> => {
-  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.apberuebersicht`)
+  const nodeLabelFilterString = get(
+    data,
+    `${treeName}.nodeLabelFilter.apberuebersicht`,
+  )
   const apberuebersichts = get(data, 'apberuebersichts.nodes', [])
 
   // fetch sorting indexes of parents
@@ -35,6 +38,7 @@ export default ({
     .map(el => ({
       nodeType: 'table',
       menuType: 'apberuebersicht',
+      filterTable: 'apberuebersicht',
       id: el.id,
       parentId: el.projId,
       urlLabel: el.jahr,

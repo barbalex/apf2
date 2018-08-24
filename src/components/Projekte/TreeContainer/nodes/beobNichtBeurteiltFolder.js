@@ -33,10 +33,7 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString = get(
-    data,
-    `${treeName}.nodeLabelFilter.beobNichtBeurteilt`
-  )
+  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.beob`)
 
   const beobNichtBeurteiltNodesLength = beobNichtBeurteilts
     .filter(el => el.apId === apId)
@@ -73,6 +70,7 @@ export default ({
     {
       nodeType: 'folder',
       menuType: 'beobNichtBeurteiltFolder',
+      filterTable: 'beob',
       id: apId,
       urlLabel: 'nicht-beurteilte-Beobachtungen',
       label: `Beobachtungen nicht beurteilt (${message})`,

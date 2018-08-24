@@ -37,15 +37,14 @@ export default ({
     .filter(el => {
       if (nodeLabelFilterString) {
         const jahr = el.jahr || '(kein Jahr)'
-        return jahr
-          .toString()
-          .includes(nodeLabelFilterString.toLowerCase())
+        return jahr.toString().includes(nodeLabelFilterString.toLowerCase())
       }
       return true
     })
     .map(el => ({
       nodeType: 'table',
       menuType: 'apber',
+      filterTable: 'apber',
       id: el.id,
       parentId: el.apId,
       urlLabel: el.id,

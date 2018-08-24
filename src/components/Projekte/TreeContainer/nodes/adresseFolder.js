@@ -21,27 +21,27 @@ export default ({
     .filter(el => {
       if (nodeLabelFilterString) {
         const name = el.name || '(kein Name)'
-        return name
-          .toLowerCase()
-          .includes(nodeLabelFilterString.toLowerCase())
+        return name.toLowerCase().includes(nodeLabelFilterString.toLowerCase())
       }
       return true
     }).length
   // before Adressen folder is active, only total count was fetched, not yet any adressen nodes
-  if (adresses.length === 0) adresseNodesLength = get(data, 'adresses.totalCount')
-  let message = (loading && !adresseNodesLength) ? '...' : adresseNodesLength
+  if (adresses.length === 0)
+    adresseNodesLength = get(data, 'adresses.totalCount')
+  let message = loading && !adresseNodesLength ? '...' : adresseNodesLength
   if (nodeLabelFilterString) {
     message = `${adresseNodesLength} gefiltert`
   }
 
-  return ({
+  return {
     nodeType: 'folder',
     menuType: 'adresseFolder',
+    filterTable: 'adresse',
     id: 'adresseFolder',
     urlLabel: 'Adressen',
     label: `Adressen (${message})`,
     url: ['Werte-Listen', 'Adressen'],
     sort: [wlIndex, 1],
     hasChildren: adresseNodesLength > 0,
-  })
+  }
 }

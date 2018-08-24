@@ -29,7 +29,7 @@ export default ({
     id: projId,
   })
   const apIndex = findIndex(apNodes, {
-    id: apId
+    id: apId,
   })
   const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.ziel`)
 
@@ -41,13 +41,22 @@ export default ({
         return `${el.bezeichnung || '(kein Ziel)'} (${get(
           el,
           'zielTypWerteByTyp.text',
-          '(kein Typ)'
+          '(kein Typ)',
         )})`.includes(nodeLabelFilterString.toLowerCase())
       }
       return true
     })
     .reduce((a, el, index) => union(a, [el.jahr]), [])
-    .filter(jahr => allParentNodesAreOpen(openNodes, ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele', jahr]))
+    .filter(jahr =>
+      allParentNodesAreOpen(openNodes, [
+        'Projekte',
+        projId,
+        'Aktionspläne',
+        apId,
+        'AP-Ziele',
+        jahr,
+      ]),
+    )
     .sort()
 
   return zieljahre.map((jahr, index) => {
@@ -58,27 +67,28 @@ export default ({
       .filter(el => {
         if (nodeLabelFilterString) {
           return `${el.bezeichnung || '(kein Ziel)'} (${get(
-          el,
-          'zielTypWerteByTyp.text',
-          '(kein Typ)'
-        )})`.includes(nodeLabelFilterString.toLowerCase())
+            el,
+            'zielTypWerteByTyp.text',
+            '(kein Typ)',
+          )})`.includes(nodeLabelFilterString.toLowerCase())
         }
         return true
       })
 
-    return ({
+    return {
       nodeType: 'folder',
       menuType: 'zieljahrFolder',
+      filterTable: 'ziel',
       id: jahr || 'keinJahr',
       jahr,
       parentId: apId,
       urlLabel: `${jahr === null || jahr === undefined ? 'kein Jahr' : jahr}`,
       label: `${jahr === null || jahr === undefined ? 'kein Jahr' : jahr} (${
         zieleOfJahr.length
-    })`,
+      })`,
       url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele', jahr],
       sort: [projIndex, 1, apIndex, 2, index],
       hasChildren: true,
-    })
+    }
   })
 }

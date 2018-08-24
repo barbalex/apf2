@@ -34,7 +34,10 @@ export default ({
   })
   const apIndex = findIndex(apNodes, { id: apId })
   const popIndex = findIndex(popNodes, { id: popId })
-  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.popmassnber`)
+  const nodeLabelFilterString = get(
+    data,
+    `${treeName}.nodeLabelFilter.popmassnber`,
+  )
 
   const childrenLength = get(data, 'popmassnbers.nodes', [])
     .filter(el => el.popId === popId)
@@ -42,7 +45,8 @@ export default ({
     .filter(el => {
       if (nodeLabelFilterString) {
         return `${el.jahr || '(kein Jahr)'}: ${get(
-          el, 'tpopmassnErfbeurtWerteByBeurteilung.text'
+          el,
+          'tpopmassnErfbeurtWerteByBeurteilung.text',
         ) || '(nicht beurteilt)'}`
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
@@ -50,7 +54,7 @@ export default ({
       return true
     }).length
 
-  let message = (loading && !childrenLength) ? '...' : childrenLength
+  let message = loading && !childrenLength ? '...' : childrenLength
   if (nodeLabelFilterString) {
     message = `${childrenLength} gefiltert`
   }
@@ -59,6 +63,7 @@ export default ({
     {
       nodeType: 'folder',
       menuType: 'popmassnberFolder',
+      filterTable: 'popmassnber',
       id: popId,
       urlLabel: 'Massnahmen-Berichte',
       label: `Massnahmen-Berichte (${message})`,

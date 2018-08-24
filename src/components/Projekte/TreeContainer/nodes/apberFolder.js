@@ -30,7 +30,7 @@ export default ({
     id: projId,
   })
   const apIndex = findIndex(apNodes, {
-    id: apId
+    id: apId,
   })
   const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.apber`)
 
@@ -40,13 +40,11 @@ export default ({
     .filter(el => {
       if (nodeLabelFilterString) {
         const jahr = get(el, 'jahr') || '(kein Jahr)'
-        return jahr
-          .toString()
-          .includes(nodeLabelFilterString.toLowerCase())
+        return jahr.toString().includes(nodeLabelFilterString.toLowerCase())
       }
       return true
     }).length
-  let message = (loading && !apberNodesLength) ? '...' : apberNodesLength
+  let message = loading && !apberNodesLength ? '...' : apberNodesLength
   if (nodeLabelFilterString) {
     message = `${apberNodesLength} gefiltert`
   }
@@ -55,14 +53,17 @@ export default ({
   const allParentsOpen = allParentNodesAreOpen(openNodes, url)
   if (!allParentsOpen) return []
 
-  return [{
-    nodeType: 'folder',
-    menuType: 'apberFolder',
-    id: apId,
-    urlLabel: 'AP-Berichte',
-    label: `AP-Berichte (${message})`,
-    url,
-    sort: [projIndex, 1, apIndex, 4],
-    hasChildren: apberNodesLength > 0,
-  }, ]
+  return [
+    {
+      nodeType: 'folder',
+      menuType: 'apberFolder',
+      filterTable: 'apber',
+      id: apId,
+      urlLabel: 'AP-Berichte',
+      label: `AP-Berichte (${message})`,
+      url,
+      sort: [projIndex, 1, apIndex, 4],
+      hasChildren: apberNodesLength > 0,
+    },
+  ]
 }
