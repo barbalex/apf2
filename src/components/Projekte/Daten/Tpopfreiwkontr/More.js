@@ -27,6 +27,16 @@ const Container = styled(Area)`
     'veghoeheImg veghoeheImg veghoeheImg veghoeheImg veghoeheImg veghoeheImg veghoeheImg veghoeheMittLabel veghoeheMittLabel veghoeheMittLabel veghoeheMittVal veghoeheMittVal'
     'veghoeheImg veghoeheImg veghoeheImg veghoeheImg veghoeheImg veghoeheImg veghoeheImg veghoeheMinLabel veghoeheMinLabel veghoeheMinLabel . .';
   align-items: center;
+  @media print {
+    grid-template-areas:
+      'moreFlLabel moreFlLabel moreFlLabel moreFlVal moreFlVal moreFlVal moreFlVal moreFlVal moreFlVal moreFlVal moreFlVal moreFlMeasure'
+      'jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0'
+      'jungPflLabel1 jungPflVal1 jungPflLabel2 jungPflVal2 . . . . . . . .'
+      'veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0'
+      'veghoeheImg veghoeheImg veghoeheImg veghoeheImg veghoeheMaxLabel veghoeheMaxLabel veghoeheMaxLabel veghoeheMaxLabel veghoeheMaxLabel veghoeheMaxVal veghoeheMaxVal veghoeheMaxVal'
+      'veghoeheImg veghoeheImg veghoeheImg veghoeheImg veghoeheMittLabel veghoeheMittLabel veghoeheMittLabel veghoeheMittLabel veghoeheMittLabel veghoeheMittVal veghoeheMittVal veghoeheMittVal'
+      'veghoeheImg veghoeheImg veghoeheImg veghoeheImg veghoeheMinLabel veghoeheMinLabel veghoeheMinLabel veghoeheMinLabel veghoeheMinLabel . . .';
+  }
 `
 const Img = styled.img`
   max-width: 100%;
@@ -71,11 +81,17 @@ const VeghoeheMaxLabel = styled.div`
   grid-area: veghoeheMaxLabel;
   align-self: start;
   margin-top: 10px;
+  @media print {
+    margin-top: 5px;
+  }
 `
 const VeghoeheMaxVal = styled.div`
   grid-area: veghoeheMaxVal;
   align-self: start;
   margin-top: -11px;
+  @media print {
+    margin-top: -16px;
+  }
   > div > div > input {
     @media print {
       font-size: 11px !important;
@@ -86,11 +102,17 @@ const VeghoeheMittLabel = styled.div`
   grid-area: veghoeheMittLabel;
   align-self: start;
   margin-top: 30px;
+  @media print {
+    margin-top: 3px;
+  }
 `
 const VeghoeheMittVal = styled.div`
   grid-area: veghoeheMittVal;
   align-self: start;
   margin-top: 8px;
+  @media print {
+    margin-top: -19px;
+  }
   > div > div > input {
     @media print {
       font-size: 11px !important;
@@ -101,6 +123,9 @@ const VeghoeheMinLabel = styled.div`
   grid-area: veghoeheMinLabel;
   align-self: start;
   margin-top: -11px;
+  @media print {
+    margin-top: -13px;
+  }
 `
 const VeghoeheImg = styled.div`
   grid-area: veghoeheImg;
