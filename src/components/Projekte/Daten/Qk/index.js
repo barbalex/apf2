@@ -45,8 +45,7 @@ const Title = styled.div`
 const LoadingIndicator = styled.div`
   margin-bottom: 15px;
   margin-top: -5px;
-  color: ${props =>
-    props.loading ? '#D84315' : 'rgb(46, 125, 50)'};
+  color: ${props => (props.loading ? '#D84315' : 'rgb(46, 125, 50)')};
 `
 const StyledA = styled.a`
   color: inherit;
@@ -69,8 +68,7 @@ const enhance = compose(
   withHandlers({
     onChangeBerichtjahr: ({ setBerichtjahr }) => event =>
       setBerichtjahr(+event.target.value),
-    onChangeFilter: ({ setFilter }) => event =>
-      setFilter(event.target.value),
+    onChangeFilter: ({ setFilter }) => event => setFilter(event.target.value),
   }),
   withLifecycle({
     onDidMount({ ktZh, setKtZh, errorState }) {
@@ -103,45 +101,47 @@ const Qk = ({
   errorState: Object,
   ktZh: Object,
   setKtZh: () => void,
-}) =>
+}) => (
   <Query query={data1Gql}>
     {({ loading, error, data: data1 }) => {
       if (error) return `Fehler: ${error.message}`
       const projId = get(data1, `${treeName}.activeNodeArray[1]`)
+      console.log('QK', { ktZh })
 
       return (
         <Query
           query={data2Gql}
-          variables={{ berichtjahr, isBerichtjahr: !!berichtjahr, apId, projId }}
+          variables={{
+            berichtjahr,
+            isBerichtjahr: !!berichtjahr,
+            apId,
+            projId,
+          }}
         >
           {({ loading, error, data, refetch }) => {
             if (error) return `Fehler: ${error.message}`
-            const gqlMessageGroups = sortBy(
-              qk({ berichtjahr, data }),
-              'title'
-            )
+            const gqlMessageGroups = sortBy(qk({ berichtjahr, data }), 'title')
               .filter(q => !q.query)
               .filter(q => q.messages.length)
+            if (ktZh) {
+              const outsideZhMessageGroup = checkTpopOutsideZh({ data, ktZh })
+              if (outsideZhMessageGroup.messages.length)
+                gqlMessageGroups.push(outsideZhMessageGroup)
+            }
 
-            const messageGroups = sortBy(
-              [
-                ...gqlMessageGroups,
-                checkTpopOutsideZh({ data, ktZh })
-              ],
-              'title'
-            )
-            const messageGroupsFiltered = messageGroups.filter(
-              messageGroup => {
-                if (
-                  !!filter &&
-                  messageGroup.title &&
-                  messageGroup.title.toLowerCase
-                ) {
-                  return messageGroup.title.toLowerCase().includes(filter.toLowerCase())
-                }
-                return true
+            const messageGroups = sortBy([...gqlMessageGroups], 'title')
+            const messageGroupsFiltered = messageGroups.filter(messageGroup => {
+              if (
+                !!filter &&
+                messageGroup.title &&
+                messageGroup.title.toLowerCase
+              ) {
+                return messageGroup.title
+                  .toLowerCase()
+                  .includes(filter.toLowerCase())
               }
-            )
+              return true
+            })
 
             return (
               <ErrorBoundary>
@@ -161,33 +161,33 @@ const Qk = ({
                       <InputLabel htmlFor="filter">
                         nach Abschnitts-Titel filtern
                       </InputLabel>
-                      <Input id="filter" value={filter} onChange={onChangeFilter} />
+                      <Input
+                        id="filter"
+                        value={filter}
+                        onChange={onChangeFilter}
+                      />
                     </StyledFormControl>
                     <LoadingLine>
                       <LoadingIndicator loading={loading}>
-                        {
-                          loading
+                        {loading
                           ? 'Die Daten werden analysiert...'
-                          : 'Analyse abgeschlossen'
-                        }
+                          : 'Analyse abgeschlossen'}
                       </LoadingIndicator>
                       {/*<Button onClick={() => refetch()}>neu analysieren</Button>*/}
                     </LoadingLine>
                     {messageGroupsFiltered.map((messageGroup, index) => (
                       <StyledPaper key={index}>
                         <Title>{messageGroup.title}</Title>
-                        {
-                          messageGroup.messages.map(m => (
-                            <div key={m.url.join()}>
-                              <StyledA
-                                href={`${appBaseUrl}/${m.url.join('/')}`}
-                                target="_blank"
-                              >
-                                {m.text}
-                              </StyledA>
-                            </div>
-                          ))
-                        }
+                        {messageGroup.messages.map(m => (
+                          <div key={m.url.join()}>
+                            <StyledA
+                              href={`${appBaseUrl}/${m.url.join('/')}`}
+                              target="_blank"
+                            >
+                              {m.text}
+                            </StyledA>
+                          </div>
+                        ))}
                       </StyledPaper>
                     ))}
                   </FieldsContainer>
@@ -199,5 +199,6 @@ const Qk = ({
       )
     }}
   </Query>
+)
 
 export default enhance(Qk)
