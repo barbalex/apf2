@@ -33,14 +33,14 @@ const enhance = compose(
     watchVideos: ({ setAnchorEl }) => () => {
       setAnchorEl(null)
       window.open(
-        'https://www.youtube.com/playlist?list=PLTz8Xt5SOQPS-dbvpJ_DrB4-o3k3yj09J'
+        'https://www.youtube.com/playlist?list=PLTz8Xt5SOQPS-dbvpJ_DrB4-o3k3yj09J',
       )
     },
     showDeletedDatasets: ({ setAnchorEl, setShowDeletions }) => () => {
       setAnchorEl(null)
       setShowDeletions(true)
     },
-  })
+  }),
 )
 
 const MyAppBar = ({
@@ -112,7 +112,7 @@ const MyAppBar = ({
                     gelöschte Datensätze wiederherstellen
                   </MenuItem>
                   {['apflora_manager', 'apflora_artverantwortlich'].includes(
-                    role
+                    role,
                   ) && <EkfAdresse setAnchorEl={setAnchorEl} />}
                   <MenuItem onClick={watchVideos}>Video-Anleitungen</MenuItem>
                   <MenuItem
@@ -123,7 +123,7 @@ const MyAppBar = ({
                   >
                     {`${get(data, 'user.name')} abmelden`}
                   </MenuItem>
-                  <Version>Version: 1.1.0 vom 8.7.2018</Version>
+                  <Version>Version: 1.1.1 vom 24.8.2018</Version>
                 </Menu>
               </div>
             </ErrorBoundary>
