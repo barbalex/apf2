@@ -106,7 +106,6 @@ const Qk = ({
     {({ loading, error, data: data1 }) => {
       if (error) return `Fehler: ${error.message}`
       const projId = get(data1, `${treeName}.activeNodeArray[1]`)
-      console.log('QK', { ktZh })
 
       return (
         <Query
