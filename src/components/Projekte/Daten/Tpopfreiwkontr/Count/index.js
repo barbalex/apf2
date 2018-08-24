@@ -319,6 +319,7 @@ const Count = ({
                       })
                     }
                     error={errors.einheit}
+                    noCaret
                   />
                 </EinheitVal>
                 <GezaehltLabel>gezählt</GezaehltLabel>

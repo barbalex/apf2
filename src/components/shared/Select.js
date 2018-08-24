@@ -36,6 +36,18 @@ const StyledSelect = styled(Select)`
       display: none;
     }
   }
+  > div > div:last-of-type > div:first-of-type {
+    /* ability to hide caret when not enough space */
+    padding-right: ${props => (props.nocaret ? '0' : '8px')};
+  }
+  > div > div:last-of-type > div:last-of-type {
+    /* ability to hide caret when not enough space */
+    display: ${props => (props.nocaret ? 'none' : 'flex')};
+  }
+  > div > div:last-of-type > span {
+    /* ability to hide caret when not enough space */
+    width: ${props => (props.nocaret ? '0' : '1px')};
+  }
   > div > div > div {
     margin-left: 0;
   }
@@ -74,6 +86,7 @@ const SharedSelect = ({
   options,
   onChange,
   maxHeight = null,
+  noCaret = false,
 }: {
   value?: ?number | ?string,
   field?: string,
@@ -82,6 +95,7 @@ const SharedSelect = ({
   options: Array<Object>,
   onChange: () => void,
   maxHeight?: number,
+  noCaret: boolean,
 }) => (
   <Container>
     {label && <Label>{label}</Label>}
@@ -98,6 +112,7 @@ const SharedSelect = ({
       noOptionsMessage={() => '(keine)'}
       maxheight={maxHeight}
       classNamePrefix="react-select"
+      nocaret={noCaret}
     />
     {error && <Error>{error}</Error>}
   </Container>
