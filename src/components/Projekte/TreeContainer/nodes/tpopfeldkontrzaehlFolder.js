@@ -2,8 +2,10 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
+import allParentNodesExist from '../allParentNodesExist'
 
 export default ({
+  nodes: nodesPassed,
   data,
   treeName,
   loading,
@@ -19,6 +21,7 @@ export default ({
   tpopId,
   tpopkontrId,
 }: {
+  nodes: Array<Object>,
   data: Object,
   treeName: String,
   loading: Boolean,
@@ -107,5 +110,5 @@ export default ({
       ],
       hasChildren: childrenLength > 0,
     },
-  ]
+  ].filter(n => allParentNodesExist(nodesPassed, n))
 }

@@ -2,9 +2,11 @@
 import get from 'lodash/get'
 
 export default ({
+  nodes: nodesPassed,
   data,
   treeName,
 }: {
+  nodes: Array<Object>,
   data: Object,
   treeName: String,
 }): Array<Object> => {

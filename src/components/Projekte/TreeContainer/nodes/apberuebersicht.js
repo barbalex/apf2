@@ -2,12 +2,16 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
+import allParentNodesExist from '../allParentNodesExist'
+
 export default ({
+  nodes: nodesPassed,
   data,
   treeName,
   projektNodes,
   projId,
 }: {
+  nodes: Array<Object>,
   data: Object,
   treeName: String,
   projektNodes: Array<Object>,
@@ -46,6 +50,7 @@ export default ({
       url: ['Projekte', el.projId, 'AP-Berichte', el.id],
       hasChildren: false,
     }))
+    .filter(n => allParentNodesExist(nodesPassed, n))
     // sort by Jahr
     //.sort((a, b) => (a.jahr || 0) - (b.jahr || 0))
     .map((el, index) => {

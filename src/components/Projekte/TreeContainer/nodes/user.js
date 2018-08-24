@@ -2,12 +2,15 @@
 import get from 'lodash/get'
 
 import compareLabel from './compareLabel'
+import allParentNodesExist from '../allParentNodesExist'
 
 export default ({
+  nodes: nodesPassed,
   data,
   treeName,
   projektNodes,
 }: {
+  nodes: Array<Object>,
   data: Object,
   treeName: String,
   projektNodes: Array<Object>,
@@ -42,6 +45,7 @@ export default ({
         hasChildren: false,
       }
     })
+    .filter(n => allParentNodesExist(nodesPassed, n))
     // sort by label
     .sort(compareLabel)
     .map((el, index) => {

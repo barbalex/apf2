@@ -2,11 +2,13 @@
 import get from 'lodash/get'
 
 export default ({
+  nodes: nodesPassed,
   data,
   treeName,
   loading,
   projektNodes,
 }: {
+  nodes: Array<Object>,
   data: Object,
   treeName: String,
   loading: Boolean,

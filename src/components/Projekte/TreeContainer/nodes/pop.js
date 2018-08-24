@@ -3,8 +3,10 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
+import allParentNodesExist from '../allParentNodesExist'
 
 export default ({
+  nodes: nodesPassed,
   data,
   treeName,
   projektNodes,
@@ -13,6 +15,7 @@ export default ({
   projId,
   apId,
 }: {
+  nodes: Array<Object>,
   data: Object,
   treeName: String,
   projektNodes: Array<Object>,
@@ -54,6 +57,7 @@ export default ({
       nr: el.nr || 0,
     }))
     .filter(el => allParentNodesAreOpen(openNodes, el.url))
+    .filter(n => allParentNodesExist(nodesPassed, n))
     // sort again to sort (keine Nr) on top
     .sort((a, b) => a.nr - b.nr)
     .map((el, index) => {

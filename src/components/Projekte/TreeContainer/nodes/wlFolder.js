@@ -1,15 +1,16 @@
 // @flow
 
 export default ({
+  nodes: nodesPassed,
   projektNodes,
 }: {
+  nodes: Array<Object>,
   projektNodes: Array<Object>,
 }): Array<Object> => {
-
   // fetch sorting indexes of parents
   const wlIndex = projektNodes.length + 2
 
-  return ({
+  return {
     nodeType: 'folder',
     menuType: 'wlFolder',
     id: wlIndex,
@@ -18,5 +19,5 @@ export default ({
     url: ['Werte-Listen'],
     sort: [wlIndex],
     hasChildren: true,
-  })
+  }
 }

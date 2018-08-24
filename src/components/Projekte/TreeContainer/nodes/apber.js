@@ -4,8 +4,10 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
+import allParentNodesExist from '../allParentNodesExist'
 
 export default ({
+  nodes: nodesPassed,
   data,
   treeName,
   projektNodes,
@@ -14,6 +16,7 @@ export default ({
   projId,
   apId,
 }: {
+  nodes: Array<Object>,
   data: Object,
   treeName: String,
   projektNodes: Array<Object>,
@@ -53,6 +56,7 @@ export default ({
       hasChildren: false,
     }))
     .filter(el => allParentNodesAreOpen(openNodes, el.url))
+    .filter(n => allParentNodesExist(nodesPassed, n))
     .map((el, index) => {
       el.sort = [projIndex, 1, apIndex, 4, index]
       return el

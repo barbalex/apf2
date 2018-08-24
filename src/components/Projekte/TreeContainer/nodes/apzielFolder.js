@@ -4,8 +4,10 @@ import get from 'lodash/get'
 import union from 'lodash/union'
 
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
+import allParentNodesExist from '../allParentNodesExist'
 
 export default ({
+  nodes: nodesPassed,
   data,
   treeName,
   loading,
@@ -15,6 +17,7 @@ export default ({
   openNodes,
   apId,
 }: {
+  nodes: Array<Object>,
   data: Object,
   treeName: String,
   loading: Boolean,
@@ -77,5 +80,5 @@ export default ({
       sort: [projIndex, 1, apIndex, 2],
       hasChildren: zieljahreLength > 0,
     },
-  ]
+  ].filter(n => allParentNodesExist(nodesPassed, n))
 }

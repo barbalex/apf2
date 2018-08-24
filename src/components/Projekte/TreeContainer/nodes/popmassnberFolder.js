@@ -1,7 +1,10 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
+import allParentNodesExist from '../allParentNodesExist'
+
 export default ({
+  nodes: nodesPassed,
   data,
   treeName,
   loading,
@@ -12,6 +15,7 @@ export default ({
   apId,
   popId,
 }: {
+  nodes: Array<Object>,
   data: Object,
   treeName: String,
   loading: Boolean,
@@ -79,5 +83,5 @@ export default ({
       sort: [projIndex, 1, apIndex, 1, popIndex, 3],
       hasChildren: childrenLength > 0,
     },
-  ]
+  ].filter(n => allParentNodesExist(nodesPassed, n))
 }
