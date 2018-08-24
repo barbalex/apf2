@@ -1,9 +1,11 @@
 //@flow
 import tables from './tables'
 
-export default (activeNode:Object): String => {
+export default (activeNode: Object): String => {
   if (!activeNode) return null
-  let tableName = null
+  // name it projekt
+  // because: /projekte has no nodes!
+  let tableName = 'projekt'
   if (activeNode.nodeType === 'table') {
     tableName = activeNode.menuType
     // need to convert feldkontrzaehl and freiwkontrzaehl to kontrzaehl

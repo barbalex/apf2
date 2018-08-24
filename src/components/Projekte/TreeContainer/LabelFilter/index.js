@@ -7,12 +7,14 @@ import FormControl from '@material-ui/core/FormControl'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
-import { Query } from 'react-apollo'
 import get from 'lodash/get'
+import app from 'ampersand-app'
 
 import tables from '../../../../modules/tables'
-import dataGql from './data.graphql'
+import labelFilterData from './data'
 import setTreeNodeLabelFilterKey from './setTreeNodeLabelFilterKey.graphql'
+import getTableNameFromActiveNode from '../../../../modules/getTableNameFromActiveNode'
+import setTreeKeyGql from './setTreeKey.graphql'
 
 const StyledFormControl = styled(FormControl)`
   padding-right: 0.8em !important;
@@ -27,22 +29,66 @@ const StyledInput = styled(Input)`
 `
 
 const enhance = compose(
+  labelFilterData,
   withHandlers({
-    onChange: ({ treeName }: { treeName: String }) => ({
-      event,
-      client,
-      tableName,
-    }) => {
-      client.mutate({
+    onChange: ({
+      treeName,
+      activeNode,
+      data,
+    }: {
+      treeName: String,
+      activeNode: Object,
+      data: Object,
+    }) => async event => {
+      const tableName = getTableNameFromActiveNode(activeNode)
+      const { value } = event.target
+      const openNodes = get(data, `${treeName}.openNodes`, [])
+      // TODO: only pop if is not folder
+      console.log('LabelFilter, onChange:', {
+        openNodes,
+      })
+      if (
+        !activeNode.label.includes(
+          value && value.toLowerCase ? value.toLowerCase() : value,
+        )
+      ) {
+        const newActiveNodeArray = [...activeNode.url]
+        const newActiveUrl = [...activeNode.url]
+        newActiveNodeArray.pop()
+        let newOpenNodes = openNodes.filter(n => n !== newActiveUrl)
+        if (activeNode.nodeType === 'folder') {
+          newActiveNodeArray.pop()
+          newActiveUrl.pop()
+          newOpenNodes = openNodes.filter(n => n !== newActiveUrl)
+        }
+        console.log('LabelFilter, onChange, DANGER:', {
+          activeNode,
+          tableName,
+          newActiveNodeArray,
+          anUrl: activeNode.url,
+          openNodes,
+        })
+        await app.client.mutate({
+          mutation: setTreeKeyGql,
+          variables: {
+            tree: treeName,
+            value1: newActiveNodeArray,
+            key1: 'activeNodeArray',
+            value2: newOpenNodes,
+            key2: 'openNodes',
+          },
+        })
+      }
+      app.client.mutate({
         mutation: setTreeNodeLabelFilterKey,
         variables: {
-          value: event.target.value,
+          value,
           tree: treeName,
           key: tableName,
         },
       })
     },
-  })
+  }),
 )
 
 const LabelFilter = ({
@@ -50,60 +96,40 @@ const LabelFilter = ({
   activeNode,
   onChange,
   nodes,
+  data,
 }: {
   treeName: String,
   activeNode: Object,
   onChange: () => void,
   nodes: Array<Object>,
-}) => (
-  <Query query={dataGql}>
-    {({ error, data, client }) => {
-      if (error) {
-        if (
-          error.message.includes('permission denied') ||
-          error.message.includes('keine Berechtigung')
-        ) {
-          // ProjektContainer returns helpful screen
-          return null
-        }
-        return `Fehler: ${error.message}`
-      }
+  data: Object,
+}) => {
+  const tableName = getTableNameFromActiveNode(activeNode)
 
-      // name it projekt
-      // because: /projekte has no nodes!
-      let tableName = 'projekt'
-      if (activeNode) {
-        tableName =
-          activeNode.nodeType === 'table'
-            ? activeNode.menuType
-            : activeNode.menuType.replace('Folder', '')
-      }
+  let labelText = '(filtern nicht möglich)'
+  let filterValue = ''
+  if (tableName) {
+    filterValue = get(data, `${treeName}.nodeLabelFilter.${tableName}`, '')
+    // make sure 0 is kept
+    if (!filterValue && filterValue !== 0) filterValue = ''
+    const table = tables.find(t => t.table === tableName)
+    const tableLabel = table ? table.label : null
+    if (tableLabel) {
+      labelText = `${tableLabel} filtern`
+    }
+  }
+  console.log('LabelFilter:', {
+    activeNode,
+    tableName,
+    nodeLabelFilter: get(data, `${treeName}.nodeLabelFilter`, ''),
+  })
 
-      let labelText = '(filtern nicht möglich)'
-      let filterValue = ''
-      if (tableName) {
-        filterValue = get(data, `${treeName}.nodeLabelFilter.${tableName}`, '')
-        // make sure 0 is kept
-        if (!filterValue && filterValue !== 0) filterValue = ''
-        const table = tables.find(t => t.table === tableName)
-        const tableLabel = table ? table.label : null
-        if (tableLabel) {
-          labelText = `${tableLabel} filtern`
-        }
-      }
-
-      return (
-        <StyledFormControl fullWidth>
-          <InputLabel htmlFor={labelText}>{labelText}</InputLabel>
-          <StyledInput
-            id={labelText}
-            value={filterValue}
-            onChange={event => onChange({ event, client, tableName })}
-          />
-        </StyledFormControl>
-      )
-    }}
-  </Query>
-)
+  return (
+    <StyledFormControl fullWidth>
+      <InputLabel htmlFor={labelText}>{labelText}</InputLabel>
+      <StyledInput id={labelText} value={filterValue} onChange={onChange} />
+    </StyledFormControl>
+  )
+}
 
 export default enhance(LabelFilter)

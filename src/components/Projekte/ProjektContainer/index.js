@@ -64,7 +64,7 @@ const enhance = compose(
   }),
   withState('detailplaene', 'setDetailplaene', null),
   withState('markierungen', 'setMarkierungen', null),
-  withState('ktZh', 'setKtZh', null)
+  withState('ktZh', 'setKtZh', null),
 )
 
 const ProjekteContainer = ({
@@ -185,8 +185,22 @@ const ProjekteContainer = ({
                 const tree = get(data, treeName)
                 const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
                 const activeNode = nodes.find(n =>
-                  isEqual(n.url, activeNodeArray)
+                  isEqual(n.url, activeNodeArray),
                 )
+                /*
+                if (!activeNode) {
+                  // probably the person is filtering and the active node's label
+                  // is excluded by the filter
+                  // so make it's parent active
+                  activeNode = nodes.find(n =>
+                    isEqual(n.url, [...activeNodeArray.pop()]),
+                  )
+                }*/
+                console.log('ProjektContainer', {
+                  activeNode,
+                  nodes,
+                  activeNodeArray,
+                })
                 // remove 2 to treat all same
                 const tabs = [...tabsPassed].map(t => t.replace('2', ''))
                 const treeFlex =
@@ -205,7 +219,7 @@ const ProjekteContainer = ({
                 })
                 const pops = get(data, 'popForMap.nodes', [])
                 const mapTpopsData = flatten(
-                  pops.map(n => get(n, 'tpopsByPopId.nodes'))
+                  pops.map(n => get(n, 'tpopsByPopId.nodes')),
                 )
                 const mapTpopIdsFiltered = idsInsideFeatureCollection({
                   mapFilter,
@@ -215,19 +229,19 @@ const ProjekteContainer = ({
                   {
                     mapFilter,
                     data: get(data, `beobNichtBeurteiltForMap.nodes`, []),
-                  }
+                  },
                 )
                 const mapBeobNichtZuzuordnenIdsFiltered = idsInsideFeatureCollection(
                   {
                     mapFilter,
                     data: get(data, `beobNichtZuzuordnenForMap.nodes`, []),
-                  }
+                  },
                 )
                 const mapBeobZugeordnetIdsFiltered = idsInsideFeatureCollection(
                   {
                     mapFilter,
                     data: get(data, `beobZugeordnetForMap.nodes`, []),
-                  }
+                  },
                 )
                 // when no map filter exists nodes in activeNodeArray should be highlighted
                 let mapIdsFiltered = activeNodeArray
@@ -244,12 +258,12 @@ const ProjekteContainer = ({
                 const aparts = get(
                   data,
                   'projektById.apsByProjId.nodes[0].apartsByApId.nodes',
-                  []
+                  [],
                 )
                 const beobs = flatten(
                   aparts.map(a =>
-                    get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', [])
-                  )
+                    get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []),
+                  ),
                 )
                 const isPrint = get(data, 'isPrint')
 
