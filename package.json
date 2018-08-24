@@ -13,7 +13,7 @@
     "flow-bin": "0.79.1",
     "postgraphile": "4.0.0-rc.3",
     "postgraphile-plugin-connection-filter": "1.0.0-beta.14",
-    "react-scripts": "2.0.0-next.3e165448",
+    "react-scripts": "2.0.0-next.a671462c",
     "serve": "10.0.0",
     "source-map-explorer": "1.6.0"
   },
