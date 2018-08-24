@@ -7,13 +7,15 @@ query QkQuery(
   projektById(id: $projId) {
     id
     name
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
           nodes {
             id
-            tpopsByPopId(filter: {x: {isNull: false}, y: {isNull: false}}) {
+            tpopsByPopId(
+              filter: { x: { isNull: false }, y: { isNull: false } }
+            ) {
               nodes {
                 id
                 nr
@@ -39,10 +41,12 @@ query QkQuery(
   }
   zielOhneJahr: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
-        zielsByApId(filter: {or: [{jahr: {equalTo: 1}}, {jahr: {isNull: true}}]}) {
+        zielsByApId(
+          filter: { or: [{ jahr: { equalTo: 1 } }, { jahr: { isNull: true } }] }
+        ) {
           nodes {
             id
             jahr
@@ -53,10 +57,12 @@ query QkQuery(
   }
   zielOhneTyp: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
-        zielsByApId(filter: {typ: {isNull: true}}) {
+        zielsByApId(
+          filter: { typ: { isNull: true }, jahr: { equalTo: $berichtjahr } }
+        ) {
           nodes {
             id
             jahr
@@ -67,10 +73,15 @@ query QkQuery(
   }
   zielOhneZiel: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
-        zielsByApId(filter: {bezeichnung: {isNull: true}}) {
+        zielsByApId(
+          filter: {
+            bezeichnung: { isNull: true }
+            jahr: { equalTo: $berichtjahr }
+          }
+        ) {
           nodes {
             id
             jahr
@@ -81,14 +92,14 @@ query QkQuery(
   }
   zielberOhneJahr: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
-        zielsByApId {
+        zielsByApId(filter: { jahr: { equalTo: $berichtjahr } }) {
           nodes {
             id
             jahr
-            zielbersByZielId(filter: {jahr: {isNull: true}}) {
+            zielbersByZielId(filter: { jahr: { isNull: true } }) {
               nodes {
                 id
                 zielByZielId {
@@ -104,14 +115,19 @@ query QkQuery(
   }
   zielberOhneEntwicklung: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
-        zielsByApId {
+        zielsByApId(filter: { jahr: { equalTo: $berichtjahr } }) {
           nodes {
             id
             jahr
-            zielbersByZielId(filter: {erreichung: {isNull: true}}) {
+            zielbersByZielId(
+              filter: {
+                erreichung: { isNull: true }
+                jahr: { equalTo: $berichtjahr }
+              }
+            ) {
               nodes {
                 id
                 jahr
@@ -128,10 +144,10 @@ query QkQuery(
   }
   erfkritOhneBeurteilung: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
-        erfkritsByApId(filter: {erfolg: {isNull: true}}) {
+        erfkritsByApId(filter: { erfolg: { isNull: true } }) {
           nodes {
             id
           }
@@ -141,10 +157,10 @@ query QkQuery(
   }
   erfkritOhneKriterien: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
-        erfkritsByApId(filter: {kriterien: {isNull: true}}) {
+        erfkritsByApId(filter: { kriterien: { isNull: true } }) {
           nodes {
             id
           }
@@ -154,10 +170,10 @@ query QkQuery(
   }
   apberOhneJahr: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
-        apbersByApId(filter: {jahr: {isNull: true}}) {
+        apbersByApId(filter: { jahr: { isNull: true } }) {
           nodes {
             id
           }
@@ -167,10 +183,15 @@ query QkQuery(
   }
   apberOhneVergleichVorjahrGesamtziel: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
-        apbersByApId(filter: {vergleichVorjahrGesamtziel: {isNull: true}}) {
+        apbersByApId(
+          filter: {
+            vergleichVorjahrGesamtziel: { isNull: true }
+            jahr: { equalTo: $berichtjahr }
+          }
+        ) {
           nodes {
             id
             jahr
@@ -181,10 +202,15 @@ query QkQuery(
   }
   apberOhneBeurteilung: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
-        apbersByApId(filter: {beurteilung: {isNull: true}}) {
+        apbersByApId(
+          filter: {
+            beurteilung: { isNull: true }
+            jahr: { equalTo: $berichtjahr }
+          }
+        ) {
           nodes {
             id
             jahr
@@ -195,10 +221,10 @@ query QkQuery(
   }
   assozartOhneArt: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
-        assozartsByApId(filter: {aeId: {isNull: true}}) {
+        assozartsByApId(filter: { aeId: { isNull: true } }) {
           nodes {
             id
           }
@@ -208,10 +234,10 @@ query QkQuery(
   }
   popOhneNr: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
-        popsByApId(filter: {nr: {isNull: true}}) {
+        popsByApId(filter: { nr: { isNull: true } }) {
           nodes {
             id
             name
@@ -222,10 +248,10 @@ query QkQuery(
   }
   popOhneName: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
-        popsByApId(filter: {name: {isNull: true}}) {
+        popsByApId(filter: { name: { isNull: true } }) {
           nodes {
             id
             nr
@@ -236,10 +262,10 @@ query QkQuery(
   }
   popOhneStatus: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
-        popsByApId(filter: {status: {isNull: true}}) {
+        popsByApId(filter: { status: { isNull: true } }) {
           nodes {
             id
             nr
@@ -250,10 +276,10 @@ query QkQuery(
   }
   popOhneBekanntSeit: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
-        popsByApId(filter: {bekanntSeit: {isNull: true}}) {
+        popsByApId(filter: { bekanntSeit: { isNull: true } }) {
           nodes {
             id
             nr
@@ -264,10 +290,12 @@ query QkQuery(
   }
   popOhneKoord: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
-        popsByApId(filter: {or: [{x: {isNull: true}}, {y: {isNull: true}}]}) {
+        popsByApId(
+          filter: { or: [{ x: { isNull: true } }, { y: { isNull: true } }] }
+        ) {
           nodes {
             id
             nr
@@ -279,7 +307,7 @@ query QkQuery(
   # need to filter totalCount = 0 from this result
   popOhneTpop: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
@@ -296,13 +324,15 @@ query QkQuery(
   }
   popMitStatusUnklarOhneBegruendung: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
-        popsByApId(filter: {
-          statusUnklar: {equalTo: true},
-          statusUnklarBegruendung: {isNull: true}
-        }) {
+        popsByApId(
+          filter: {
+            statusUnklar: { equalTo: true }
+            statusUnklarBegruendung: { isNull: true }
+          }
+        ) {
           nodes {
             id
             nr
@@ -311,7 +341,9 @@ query QkQuery(
       }
     }
   }
-  popMitMehrdeutigerNr: allVQPopPopnrmehrdeutigs(filter: {apId: {equalTo: $apId}}) {
+  popMitMehrdeutigerNr: allVQPopPopnrmehrdeutigs(
+    filter: { apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -319,7 +351,11 @@ query QkQuery(
       nr
     }
   }
-  popOhnePopber: qPopOhnePopber(berichtjahr: $berichtjahr, apid: $apId, projid: $projId) @include(if: $isBerichtjahr) {
+  popOhnePopber: qPopOhnePopber(
+    berichtjahr: $berichtjahr
+    apid: $apId
+    projid: $projId
+  ) @include(if: $isBerichtjahr) {
     nodes {
       projId
       apId
@@ -328,12 +364,13 @@ query QkQuery(
     }
   }
   # Bericht-Stati kontrollieren
-  popMitBerZunehmendOhneTpopberZunehmend: allVQPopMitBerZunehmendOhneTpopberZunehmends(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId},
-      berichtjahr: {equalTo: $berichtjahr}
-    })
-    @include(if: $isBerichtjahr) {
+  popMitBerZunehmendOhneTpopberZunehmend: allVQPopMitBerZunehmendOhneTpopberZunehmends(
+    filter: {
+      projId: { equalTo: $projId }
+      apId: { equalTo: $apId }
+      berichtjahr: { equalTo: $berichtjahr }
+    }
+  ) @include(if: $isBerichtjahr) {
     nodes {
       projId
       apId
@@ -342,12 +379,13 @@ query QkQuery(
       berichtjahr
     }
   }
-  popMitBerAbnehmendOhneTpopberAbnehmend: allVQPopMitBerAbnehmendOhneTpopberAbnehmends(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId},
-      berichtjahr: {equalTo: $berichtjahr}
-    })
-    @include(if: $isBerichtjahr) {
+  popMitBerAbnehmendOhneTpopberAbnehmend: allVQPopMitBerAbnehmendOhneTpopberAbnehmends(
+    filter: {
+      projId: { equalTo: $projId }
+      apId: { equalTo: $apId }
+      berichtjahr: { equalTo: $berichtjahr }
+    }
+  ) @include(if: $isBerichtjahr) {
     nodes {
       projId
       apId
@@ -356,12 +394,13 @@ query QkQuery(
       berichtjahr
     }
   }
-  popMitBerErloschenOhneTpopberErloschen: allVQPopMitBerErloschenOhneTpopberErloschens(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId},
-      berichtjahr: {equalTo: $berichtjahr}
-    })
-    @include(if: $isBerichtjahr) {
+  popMitBerErloschenOhneTpopberErloschen: allVQPopMitBerErloschenOhneTpopberErloschens(
+    filter: {
+      projId: { equalTo: $projId }
+      apId: { equalTo: $apId }
+      berichtjahr: { equalTo: $berichtjahr }
+    }
+  ) @include(if: $isBerichtjahr) {
     nodes {
       projId
       apId
@@ -370,12 +409,13 @@ query QkQuery(
       berichtjahr
     }
   }
-  popMitBerErloschenUndTpopberNichtErloschen: allVQPopMitBerErloschenUndTpopberNichtErloschens(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId},
-      berichtjahr: {equalTo: $berichtjahr}
-    })
-    @include(if: $isBerichtjahr) {
+  popMitBerErloschenUndTpopberNichtErloschen: allVQPopMitBerErloschenUndTpopberNichtErloschens(
+    filter: {
+      projId: { equalTo: $projId }
+      apId: { equalTo: $apId }
+      berichtjahr: { equalTo: $berichtjahr }
+    }
+  ) @include(if: $isBerichtjahr) {
     nodes {
       projId
       apId
@@ -384,10 +424,9 @@ query QkQuery(
       berichtjahr
     }
   }
-  popOhneTpopMitGleichemStatus: allVQPopOhnetpopmitgleichemstatuses(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  popOhneTpopMitGleichemStatus: allVQPopOhnetpopmitgleichemstatuses(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -395,10 +434,9 @@ query QkQuery(
       nr
     }
   }
-  popStatus300TpopStatusAnders: allVQPopStatus300Tpopstatusanders(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  popStatus300TpopStatusAnders: allVQPopStatus300Tpopstatusanders(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -406,10 +444,9 @@ query QkQuery(
       nr
     }
   }
-  popStatus201TpopStatusUnzulaessig: allVQPopStatus201Tpopstatusunzulaessigs(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  popStatus201TpopStatusUnzulaessig: allVQPopStatus201Tpopstatusunzulaessigs(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -417,10 +454,9 @@ query QkQuery(
       nr
     }
   }
-  popStatus202TpopStatusAnders: allVQPopStatus202Tpopstatusanders(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  popStatus202TpopStatusAnders: allVQPopStatus202Tpopstatusanders(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -428,10 +464,9 @@ query QkQuery(
       nr
     }
   }
-  popStatus200TpopStatusUnzulaessig: allVQPopStatus200Tpopstatusunzulaessigs(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  popStatus200TpopStatusUnzulaessig: allVQPopStatus200Tpopstatusunzulaessigs(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -439,10 +474,9 @@ query QkQuery(
       nr
     }
   }
-  popStatus101TpopStatusAnders: allVQPopStatus101Tpopstatusanders(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  popStatus101TpopStatusAnders: allVQPopStatus101Tpopstatusanders(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -450,10 +484,9 @@ query QkQuery(
       nr
     }
   }
-  popStatusErloschenLetzterPopberZunehmend: allVQPopStatuserloschenletzterpopberzunehmends(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  popStatusErloschenLetzterPopberZunehmend: allVQPopStatuserloschenletzterpopberzunehmends(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -461,10 +494,9 @@ query QkQuery(
       nr
     }
   }
-  popStatusErloschenLetzterPopberStabil: allVQPopStatuserloschenletzterpopberstabils(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  popStatusErloschenLetzterPopberStabil: allVQPopStatuserloschenletzterpopberstabils(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -472,10 +504,9 @@ query QkQuery(
       nr
     }
   }
-  popStatusErloschenLetzterPopberAbnehmend: allVQPopStatuserloschenletzterpopberabnehmends(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  popStatusErloschenLetzterPopberAbnehmend: allVQPopStatuserloschenletzterpopberabnehmends(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -483,10 +514,9 @@ query QkQuery(
       nr
     }
   }
-  popStatusErloschenLetzterPopberUnsicher: allVQPopStatuserloschenletzterpopberunsichers(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  popStatusErloschenLetzterPopberUnsicher: allVQPopStatuserloschenletzterpopberunsichers(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -494,7 +524,11 @@ query QkQuery(
       nr
     }
   }
-  popOhnePopmassnber: qPopOhnePopmassnber(berichtjahr: $berichtjahr, apid: $apId, projid: $projId) @include(if: $isBerichtjahr) {
+  popOhnePopmassnber: qPopOhnePopmassnber(
+    berichtjahr: $berichtjahr
+    apid: $apId
+    projid: $projId
+  ) @include(if: $isBerichtjahr) {
     nodes {
       projId
       apId
@@ -502,10 +536,9 @@ query QkQuery(
       nr
     }
   }
-  popKoordEntsprechenKeinerTpop: allVQPopKoordentsprechenkeinertpops(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  popKoordEntsprechenKeinerTpop: allVQPopKoordentsprechenkeinertpops(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -513,10 +546,9 @@ query QkQuery(
       nr
     }
   }
-  popStatusAnsaatversuchTpopAktuell: allVQPopStatusansaatversuchmitaktuellentpops(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  popStatusAnsaatversuchTpopAktuell: allVQPopStatusansaatversuchmitaktuellentpops(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -524,10 +556,9 @@ query QkQuery(
       nr
     }
   }
-  popStatusAnsaatversuchAlleTpopErloschen: allVQPopStatusansaatversuchalletpoperloschens(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  popStatusAnsaatversuchAlleTpopErloschen: allVQPopStatusansaatversuchalletpoperloschens(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -535,10 +566,9 @@ query QkQuery(
       nr
     }
   }
-  popStatusAnsaatversuchMitTpopUrspruenglichErloschen: allVQPopStatusansaatversuchmittpopursprerloschens(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  popStatusAnsaatversuchMitTpopUrspruenglichErloschen: allVQPopStatusansaatversuchmittpopursprerloschens(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -546,10 +576,9 @@ query QkQuery(
       nr
     }
   }
-  popStatusErloschenMitTpopAktuell: allVQPopStatuserloschenmittpopaktuells(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  popStatusErloschenMitTpopAktuell: allVQPopStatuserloschenmittpopaktuells(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -557,10 +586,9 @@ query QkQuery(
       nr
     }
   }
-  popStatusErloschenMitTpopAnsaatversuch: allVQPopStatuserloschenmittpopansaatversuches(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  popStatusErloschenMitTpopAnsaatversuch: allVQPopStatuserloschenmittpopansaatversuches(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -568,10 +596,9 @@ query QkQuery(
       nr
     }
   }
-  popStatusAngesiedeltMitTpopUrspruenglich: allVQPopStatusangesiedeltmittpopurspruengliches(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  popStatusAngesiedeltMitTpopUrspruenglich: allVQPopStatusangesiedeltmittpopurspruengliches(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -579,10 +606,9 @@ query QkQuery(
       nr
     }
   }
-  popStatusAktuellLetzterPopberErloschen: allVQPopStatusaktuellletzterpopbererloschens(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  popStatusAktuellLetzterPopberErloschen: allVQPopStatusaktuellletzterpopbererloschens(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -590,10 +616,9 @@ query QkQuery(
       nr
     }
   }
-  popStatusErloschenLetzterPopberAktuell: allVQPopStatuserloschenletzterpopberaktuells(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  popStatusErloschenLetzterPopberAktuell: allVQPopStatuserloschenletzterpopberaktuells(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -601,10 +626,9 @@ query QkQuery(
       nr
     }
   }
-  popStatusErloschenLetzterPopberErloschenMitAnsiedlung: allVQPopStatuserloschenletzterpopbererloschenmitansiedlungs(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  popStatusErloschenLetzterPopberErloschenMitAnsiedlung: allVQPopStatuserloschenletzterpopbererloschenmitansiedlungs(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -614,13 +638,13 @@ query QkQuery(
   }
   popberOhneJahr: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
           nodes {
             id
-            popbersByPopId(filter: {jahr: {isNull: true}}) {
+            popbersByPopId(filter: { jahr: { isNull: true } }) {
               nodes {
                 id
                 popByPopId {
@@ -636,13 +660,18 @@ query QkQuery(
   }
   popberOhneEntwicklung: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
           nodes {
             id
-            popbersByPopId(filter: {entwicklung: {isNull: true}}) {
+            popbersByPopId(
+              filter: {
+                entwicklung: { isNull: true }
+                jahr: { equalTo: $berichtjahr }
+              }
+            ) {
               nodes {
                 id
                 jahr
@@ -659,13 +688,13 @@ query QkQuery(
   }
   popmassnberOhneJahr: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
           nodes {
             id
-            popmassnbersByPopId(filter: {jahr: {isNull: true}}) {
+            popmassnbersByPopId(filter: { jahr: { isNull: true } }) {
               nodes {
                 id
                 popByPopId {
@@ -681,13 +710,18 @@ query QkQuery(
   }
   popmassnberOhneEntwicklung: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
           nodes {
             id
-            popmassnbersByPopId(filter: {beurteilung: {isNull: true}}) {
+            popmassnbersByPopId(
+              filter: {
+                beurteilung: { isNull: true }
+                jahr: { equalTo: $berichtjahr }
+              }
+            ) {
               nodes {
                 id
                 jahr
@@ -702,7 +736,11 @@ query QkQuery(
       }
     }
   }
-  tpopOhneTpopber: qTpopOhneTpopber(berichtjahr: $berichtjahr, apid: $apId, projid: $projId) @include(if: $isBerichtjahr) {
+  tpopOhneTpopber: qTpopOhneTpopber(
+    berichtjahr: $berichtjahr
+    apid: $apId
+    projid: $projId
+  ) @include(if: $isBerichtjahr) {
     nodes {
       projId
       apId
@@ -712,7 +750,11 @@ query QkQuery(
       nr
     }
   }
-  tpopOhneMassnber: qTpopOhneMassnber(berichtjahr: $berichtjahr, apid: $apId, projid: $projId) @include(if: $isBerichtjahr) {
+  tpopOhneMassnber: qTpopOhneMassnber(
+    berichtjahr: $berichtjahr
+    apid: $apId
+    projid: $projId
+  ) @include(if: $isBerichtjahr) {
     nodes {
       projId
       apId
@@ -722,10 +764,9 @@ query QkQuery(
       nr
     }
   }
-  tpopStatusAktuellLetzterTpopberErloschen: allVQTpopStatusaktuellletztertpopbererloschens(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  tpopStatusAktuellLetzterTpopberErloschen: allVQTpopStatusaktuellletztertpopbererloschens(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -735,10 +776,9 @@ query QkQuery(
       nr
     }
   }
-  tpopStatusErloschenLetzterTpopberStabil: allVQTpopStatuserloschenletztertpopberstabils(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  tpopStatusErloschenLetzterTpopberStabil: allVQTpopStatuserloschenletztertpopberstabils(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -748,10 +788,9 @@ query QkQuery(
       nr
     }
   }
-  tpopStatusErloschenLetzterTpopberAbnehmend: allVQTpopStatuserloschenletztertpopberabnehmends(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  tpopStatusErloschenLetzterTpopberAbnehmend: allVQTpopStatuserloschenletztertpopberabnehmends(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -761,10 +800,9 @@ query QkQuery(
       nr
     }
   }
-  tpopStatusErloschenLetzterTpopberUnsicher: allVQTpopStatuserloschenletztertpopberunsichers(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  tpopStatusErloschenLetzterTpopberUnsicher: allVQTpopStatuserloschenletztertpopberunsichers(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -774,10 +812,9 @@ query QkQuery(
       nr
     }
   }
-  tpopStatusErloschenLetzterTpopberZunehmend: allVQTpopStatuserloschenletztertpopberzunehmends(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  tpopStatusErloschenLetzterTpopberZunehmend: allVQTpopStatuserloschenletztertpopberzunehmends(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -787,10 +824,9 @@ query QkQuery(
       nr
     }
   }
-  tpopStatusErloschenLetzterTpopberAktuell: allVQTpopStatuserloschenletzterpopberaktuells(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  tpopStatusErloschenLetzterTpopberAktuell: allVQTpopStatuserloschenletzterpopberaktuells(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -800,10 +836,9 @@ query QkQuery(
       nr
     }
   }
-  tpopStatusErloschenLetzterTpopberErloschenMitAnsiedlung: allVQTpopStatuserloschenletztertpopbererloschenmitansiedlungs(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  tpopStatusErloschenLetzterTpopberErloschenMitAnsiedlung: allVQTpopStatuserloschenletztertpopbererloschenmitansiedlungs(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -815,13 +850,13 @@ query QkQuery(
   }
   tpopOhneNr: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
           nodes {
             id
-            tpopsByPopId(filter: {nr: {isNull: true}}) {
+            tpopsByPopId(filter: { nr: { isNull: true } }) {
               nodes {
                 id
                 popByPopId {
@@ -837,13 +872,13 @@ query QkQuery(
   }
   tpopOhneFlurname: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
           nodes {
             id
-            tpopsByPopId(filter: {flurname: {isNull: true}}) {
+            tpopsByPopId(filter: { flurname: { isNull: true } }) {
               nodes {
                 id
                 popByPopId {
@@ -859,13 +894,13 @@ query QkQuery(
   }
   tpopOhneStatus: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
           nodes {
             id
-            tpopsByPopId(filter: {status: {isNull: true}}) {
+            tpopsByPopId(filter: { status: { isNull: true } }) {
               nodes {
                 id
                 popByPopId {
@@ -881,13 +916,13 @@ query QkQuery(
   }
   tpopOhneBekanntSeit: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
           nodes {
             id
-            tpopsByPopId(filter: {bekanntSeit: {isNull: true}}) {
+            tpopsByPopId(filter: { bekanntSeit: { isNull: true } }) {
               nodes {
                 id
                 popByPopId {
@@ -903,13 +938,13 @@ query QkQuery(
   }
   tpopOhneApberRelevant: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
           nodes {
             id
-            tpopsByPopId(filter: {apberRelevant: {isNull: true}}) {
+            tpopsByPopId(filter: { apberRelevant: { isNull: true } }) {
               nodes {
                 id
                 popByPopId {
@@ -925,13 +960,15 @@ query QkQuery(
   }
   tpopOhneKoord: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
           nodes {
             id
-            tpopsByPopId(filter: {or: [{x: {isNull: true}}, {y: {isNull: true}}]}) {
+            tpopsByPopId(
+              filter: { or: [{ x: { isNull: true } }, { y: { isNull: true } }] }
+            ) {
               nodes {
                 id
                 popByPopId {
@@ -947,13 +984,18 @@ query QkQuery(
   }
   tpopStatusPotentiellApberrelevant: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
           nodes {
             id
-            tpopsByPopId(filter: {status: {equalTo: 300}, apberRelevant: {equalTo: 1}}) {
+            tpopsByPopId(
+              filter: {
+                status: { equalTo: 300 }
+                apberRelevant: { equalTo: 1 }
+              }
+            ) {
               nodes {
                 id
                 popByPopId {
@@ -967,10 +1009,9 @@ query QkQuery(
       }
     }
   }
-  tpopErloschenUndRelevantLetzteBeobVor1950: allVQTpopErloschenundrelevantaberletztebeobvor1950S(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  tpopErloschenUndRelevantLetzteBeobVor1950: allVQTpopErloschenundrelevantaberletztebeobvor1950S(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -982,13 +1023,18 @@ query QkQuery(
   }
   tpopStatusUnklarOhneBegruendung: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
           nodes {
             id
-            tpopsByPopId(filter: {statusUnklar: {equalTo: true}, statusUnklarGrund: {isNull: true}}) {
+            tpopsByPopId(
+              filter: {
+                statusUnklar: { equalTo: true }
+                statusUnklarGrund: { isNull: true }
+              }
+            ) {
               nodes {
                 id
                 popByPopId {
@@ -1002,10 +1048,9 @@ query QkQuery(
       }
     }
   }
-  tpopPopnrTponrMehrdeutig: allVQTpopPopnrtpopnrmehrdeutigs(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  tpopPopnrTponrMehrdeutig: allVQTpopPopnrtpopnrmehrdeutigs(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -1015,10 +1060,9 @@ query QkQuery(
       nr
     }
   }
-  tpopMitStatusAnsaatversuchUndZaehlungMitAnzahl: allVQTpopMitstatusansaatversuchundzaehlungmitanzahls(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  tpopMitStatusAnsaatversuchUndZaehlungMitAnzahl: allVQTpopMitstatusansaatversuchundzaehlungmitanzahls(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -1028,10 +1072,9 @@ query QkQuery(
       nr
     }
   }
-  tpopMitStatusPotentiellUndZaehlungMitAnzahl: allVQTpopMitstatuspotentiellundzaehlungmitanzahls(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  tpopMitStatusPotentiellUndZaehlungMitAnzahl: allVQTpopMitstatuspotentiellundzaehlungmitanzahls(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -1041,10 +1084,9 @@ query QkQuery(
       nr
     }
   }
-  tpopMitStatusPotentiellUndAnsiedlung: allVQTpopMitstatuspotentiellundmassnansiedlungs(filter: {
-      projId: {equalTo: $projId},
-      apId: {equalTo: $apId}
-    }) {
+  tpopMitStatusPotentiellUndAnsiedlung: allVQTpopMitstatuspotentiellundmassnansiedlungs(
+    filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+  ) {
     nodes {
       projId
       apId
@@ -1056,7 +1098,7 @@ query QkQuery(
   }
   tpopberOhneJahr: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
@@ -1065,7 +1107,7 @@ query QkQuery(
             tpopsByPopId {
               nodes {
                 id
-                tpopbersByTpopId(filter: {jahr: {isNull: true}}) {
+                tpopbersByTpopId(filter: { jahr: { isNull: true } }) {
                   nodes {
                     id
                     tpopByTpopId {
@@ -1087,7 +1129,7 @@ query QkQuery(
   }
   tpopberOhneEntwicklung: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
@@ -1096,7 +1138,7 @@ query QkQuery(
             tpopsByPopId {
               nodes {
                 id
-                tpopbersByTpopId(filter: {entwicklung: {isNull: true}}) {
+                tpopbersByTpopId(filter: { entwicklung: { isNull: true } }) {
                   nodes {
                     id
                     tpopByTpopId {
@@ -1118,7 +1160,7 @@ query QkQuery(
   }
   tpopmassnOhneJahr: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
@@ -1127,7 +1169,7 @@ query QkQuery(
             tpopsByPopId {
               nodes {
                 id
-                tpopmassnsByTpopId(filter: {jahr: {isNull: true}}) {
+                tpopmassnsByTpopId(filter: { jahr: { isNull: true } }) {
                   nodes {
                     id
                     jahr
@@ -1150,7 +1192,7 @@ query QkQuery(
   }
   tpopmassnOhneBearb: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
@@ -1159,7 +1201,12 @@ query QkQuery(
             tpopsByPopId {
               nodes {
                 id
-                tpopmassnsByTpopId(filter: {bearbeiter: {isNull: true}}) {
+                tpopmassnsByTpopId(
+                  filter: {
+                    bearbeiter: { isNull: true }
+                    jahr: { equalTo: $berichtjahr }
+                  }
+                ) {
                   nodes {
                     id
                     jahr
@@ -1182,7 +1229,7 @@ query QkQuery(
   }
   tpopmassnOhneTyp: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
@@ -1191,7 +1238,12 @@ query QkQuery(
             tpopsByPopId {
               nodes {
                 id
-                tpopmassnsByTpopId(filter: {typ: {isNull: true}}) {
+                tpopmassnsByTpopId(
+                  filter: {
+                    typ: { isNull: true }
+                    jahr: { equalTo: $berichtjahr }
+                  }
+                ) {
                   nodes {
                     id
                     jahr
@@ -1214,7 +1266,7 @@ query QkQuery(
   }
   tpopmassnberOhneJahr: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
@@ -1223,7 +1275,7 @@ query QkQuery(
             tpopsByPopId {
               nodes {
                 id
-                tpopmassnbersByTpopId(filter: {jahr: {isNull: true}}) {
+                tpopmassnbersByTpopId(filter: { jahr: { isNull: true } }) {
                   nodes {
                     id
                     jahr
@@ -1246,7 +1298,7 @@ query QkQuery(
   }
   tpopmassnberOhneBeurteilung: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
@@ -1255,7 +1307,12 @@ query QkQuery(
             tpopsByPopId {
               nodes {
                 id
-                tpopmassnbersByTpopId(filter: {beurteilung: {isNull: true}}) {
+                tpopmassnbersByTpopId(
+                  filter: {
+                    beurteilung: { isNull: true }
+                    jahr: { equalTo: $berichtjahr }
+                  }
+                ) {
                   nodes {
                     id
                     jahr
@@ -1278,7 +1335,7 @@ query QkQuery(
   }
   tpopfeldkontrOhneJahr: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
@@ -1287,7 +1344,12 @@ query QkQuery(
             tpopsByPopId {
               nodes {
                 id
-                tpopkontrsByTpopId(filter: {jahr: {isNull: true}, typ: {notEqualTo: "Freiwilligen-Erfolgskontrolle"}}) {
+                tpopkontrsByTpopId(
+                  filter: {
+                    jahr: { isNull: true }
+                    typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
+                  }
+                ) {
                   nodes {
                     id
                     jahr
@@ -1310,7 +1372,7 @@ query QkQuery(
   }
   tpopfreiwkontrOhneJahr: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
@@ -1319,7 +1381,12 @@ query QkQuery(
             tpopsByPopId {
               nodes {
                 id
-                tpopkontrsByTpopId(filter: {jahr: {isNull: true}, typ: {equalTo: "Freiwilligen-Erfolgskontrolle"}}) {
+                tpopkontrsByTpopId(
+                  filter: {
+                    jahr: { isNull: true }
+                    typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+                  }
+                ) {
                   nodes {
                     id
                     jahr
@@ -1342,7 +1409,7 @@ query QkQuery(
   }
   tpopfeldkontrOhneBearb: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
@@ -1351,7 +1418,13 @@ query QkQuery(
             tpopsByPopId {
               nodes {
                 id
-                tpopkontrsByTpopId(filter: {bearbeiter: {isNull: true}, typ: {notEqualTo: "Freiwilligen-Erfolgskontrolle"}}) {
+                tpopkontrsByTpopId(
+                  filter: {
+                    bearbeiter: { isNull: true }
+                    typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
+                    jahr: { equalTo: $berichtjahr }
+                  }
+                ) {
                   nodes {
                     id
                     jahr
@@ -1374,7 +1447,7 @@ query QkQuery(
   }
   tpopfreiwkontrOhneBearb: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
@@ -1383,7 +1456,13 @@ query QkQuery(
             tpopsByPopId {
               nodes {
                 id
-                tpopkontrsByTpopId(filter: {bearbeiter: {isNull: true}, typ: {equalTo: "Freiwilligen-Erfolgskontrolle"}}) {
+                tpopkontrsByTpopId(
+                  filter: {
+                    bearbeiter: { isNull: true }
+                    typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+                    jahr: { equalTo: $berichtjahr }
+                  }
+                ) {
                   nodes {
                     id
                     jahr
@@ -1406,7 +1485,7 @@ query QkQuery(
   }
   tpopfeldkontrOhneZaehlung: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
@@ -1415,7 +1494,12 @@ query QkQuery(
             tpopsByPopId {
               nodes {
                 id
-                tpopkontrsByTpopId(filter: {typ: {notEqualTo: "Freiwilligen-Erfolgskontrolle"}}) {
+                tpopkontrsByTpopId(
+                  filter: {
+                    typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
+                    jahr: { equalTo: $berichtjahr }
+                  }
+                ) {
                   nodes {
                     id
                     jahr
@@ -1441,7 +1525,7 @@ query QkQuery(
   }
   tpopfreiwkontrOhneZaehlung: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
@@ -1450,7 +1534,12 @@ query QkQuery(
             tpopsByPopId {
               nodes {
                 id
-                tpopkontrsByTpopId(filter: {typ: {equalTo: "Freiwilligen-Erfolgskontrolle"}}) {
+                tpopkontrsByTpopId(
+                  filter: {
+                    typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+                    jahr: { equalTo: $berichtjahr }
+                  }
+                ) {
                   nodes {
                     id
                     jahr
@@ -1476,7 +1565,7 @@ query QkQuery(
   }
   freiwkontrzaehlungOhneEinheit: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
@@ -1485,11 +1574,18 @@ query QkQuery(
             tpopsByPopId {
               nodes {
                 id
-                tpopkontrsByTpopId(filter: {typ: {equalTo: "Freiwilligen-Erfolgskontrolle"}}) {
+                tpopkontrsByTpopId(
+                  filter: {
+                    typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+                    jahr: { equalTo: $berichtjahr }
+                  }
+                ) {
                   nodes {
                     id
                     jahr
-                    tpopkontrzaehlsByTpopkontrId(filter: {einheit: {isNull: true}}) {
+                    tpopkontrzaehlsByTpopkontrId(
+                      filter: { einheit: { isNull: true } }
+                    ) {
                       nodes {
                         id
                         tpopkontrByTpopkontrId {
@@ -1517,7 +1613,7 @@ query QkQuery(
   }
   feldkontrzaehlungOhneEinheit: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
@@ -1526,11 +1622,18 @@ query QkQuery(
             tpopsByPopId {
               nodes {
                 id
-                tpopkontrsByTpopId(filter: {typ: {notEqualTo: "Freiwilligen-Erfolgskontrolle"}}) {
+                tpopkontrsByTpopId(
+                  filter: {
+                    typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
+                    jahr: { equalTo: $berichtjahr }
+                  }
+                ) {
                   nodes {
                     id
                     jahr
-                    tpopkontrzaehlsByTpopkontrId(filter: {einheit: {isNull: true}}) {
+                    tpopkontrzaehlsByTpopkontrId(
+                      filter: { einheit: { isNull: true } }
+                    ) {
                       nodes {
                         id
                         tpopkontrByTpopkontrId {
@@ -1558,7 +1661,7 @@ query QkQuery(
   }
   freiwkontrzaehlungOhneMethode: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
@@ -1567,11 +1670,18 @@ query QkQuery(
             tpopsByPopId {
               nodes {
                 id
-                tpopkontrsByTpopId(filter: {typ: {equalTo: "Freiwilligen-Erfolgskontrolle"}}) {
+                tpopkontrsByTpopId(
+                  filter: {
+                    typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+                    jahr: { equalTo: $berichtjahr }
+                  }
+                ) {
                   nodes {
                     id
                     jahr
-                    tpopkontrzaehlsByTpopkontrId(filter: {methode: {isNull: true}}) {
+                    tpopkontrzaehlsByTpopkontrId(
+                      filter: { methode: { isNull: true } }
+                    ) {
                       nodes {
                         id
                         tpopkontrByTpopkontrId {
@@ -1599,7 +1709,7 @@ query QkQuery(
   }
   feldkontrzaehlungOhneMethode: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
@@ -1608,11 +1718,18 @@ query QkQuery(
             tpopsByPopId {
               nodes {
                 id
-                tpopkontrsByTpopId(filter: {typ: {notEqualTo: "Freiwilligen-Erfolgskontrolle"}}) {
+                tpopkontrsByTpopId(
+                  filter: {
+                    typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
+                    jahr: { equalTo: $berichtjahr }
+                  }
+                ) {
                   nodes {
                     id
                     jahr
-                    tpopkontrzaehlsByTpopkontrId(filter: {methode: {isNull: true}}) {
+                    tpopkontrzaehlsByTpopkontrId(
+                      filter: { methode: { isNull: true } }
+                    ) {
                       nodes {
                         id
                         tpopkontrByTpopkontrId {
@@ -1640,7 +1757,7 @@ query QkQuery(
   }
   freiwkontrzaehlungOhneAnzahl: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
@@ -1649,11 +1766,18 @@ query QkQuery(
             tpopsByPopId {
               nodes {
                 id
-                tpopkontrsByTpopId(filter: {typ: {equalTo: "Freiwilligen-Erfolgskontrolle"}}) {
+                tpopkontrsByTpopId(
+                  filter: {
+                    typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+                    jahr: { equalTo: $berichtjahr }
+                  }
+                ) {
                   nodes {
                     id
                     jahr
-                    tpopkontrzaehlsByTpopkontrId(filter: {anzahl: {isNull: true}}) {
+                    tpopkontrzaehlsByTpopkontrId(
+                      filter: { anzahl: { isNull: true } }
+                    ) {
                       nodes {
                         id
                         tpopkontrByTpopkontrId {
@@ -1681,7 +1805,7 @@ query QkQuery(
   }
   feldkontrzaehlungOhneAnzahl: projektById(id: $projId) {
     id
-    apsByProjId(filter: {id: {equalTo: $apId}}) {
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
         popsByApId {
@@ -1690,11 +1814,18 @@ query QkQuery(
             tpopsByPopId {
               nodes {
                 id
-                tpopkontrsByTpopId(filter: {typ: {notEqualTo: "Freiwilligen-Erfolgskontrolle"}}) {
+                tpopkontrsByTpopId(
+                  filter: {
+                    typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
+                    jahr: { equalTo: $berichtjahr }
+                  }
+                ) {
                   nodes {
                     id
                     jahr
-                    tpopkontrzaehlsByTpopkontrId(filter: {anzahl: {isNull: true}}) {
+                    tpopkontrzaehlsByTpopkontrId(
+                      filter: { anzahl: { isNull: true } }
+                    ) {
                       nodes {
                         id
                         tpopkontrByTpopkontrId {
