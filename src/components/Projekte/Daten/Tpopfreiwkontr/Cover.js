@@ -84,7 +84,7 @@ const Date = ({
 
   return (
     <Container>
-      <DeckApArtLabel>Deckung üperprüfte Art</DeckApArtLabel>
+      <DeckApArtLabel>Deckung überprüfte Art</DeckApArtLabel>
       <DeckApArtVal>
         <TextField
           key={`${row.id}deckungApArt`}
