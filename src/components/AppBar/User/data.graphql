@@ -1,0 +1,20 @@
+query userByName($name: String!) {
+  userByName(name: $name) {
+    id
+    name
+    email
+    role
+    pass
+    adresseId
+    adresseByAdresseId {
+      id
+      name
+    }
+  }
+  allAdresses {
+    nodes {
+      id
+      name
+    }
+  }
+}

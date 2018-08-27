@@ -25,6 +25,7 @@ import getActiveNodes from '../../modules/getActiveNodes'
 import More from './More'
 import setView from './setView.graphql'
 import EkfYear from './EkfYear'
+import User from './User'
 
 const StyledAppBar = styled(AppBar)`
   @media print {
@@ -65,6 +66,7 @@ const MenuDiv = styled.div`
 const enhance = compose(
   withState('anchorEl', 'setAnchorEl', null),
   withState('ekfYearState', 'setEkfYearState', null),
+  withState('userOpen', 'setUserOpen', false),
   withHandlers({
     onClickButton: () => (name, client, projekteTabs) => {
       if (isMobilePhone()) {
@@ -108,7 +110,8 @@ const enhance = compose(
         variables: { value: value ? +value : ekfRefYear },
       })
     },
-  })
+    toggleUserOpen: ({ userOpen, setUserOpen }) => () => setUserOpen(!userOpen),
+  }),
 )
 
 const MyAppBar = ({
@@ -119,6 +122,8 @@ const MyAppBar = ({
   setViewNormal,
   setViewEkf,
   setEkfYear,
+  userOpen,
+  toggleUserOpen,
 }: {
   onClickButton: () => void,
   anchorEl: Object,
@@ -127,6 +132,8 @@ const MyAppBar = ({
   setViewNormal: () => void,
   setViewEkf: () => void,
   setEkfYear: () => void,
+  userOpen: boolean,
+  toggleUserOpen: () => void,
 }) => (
   <Query query={dataGql}>
     {({ loading, error, data, client }) => {
@@ -146,6 +153,7 @@ const MyAppBar = ({
       const tokenDecoded = token ? jwtDecode(token) : null
       const role = tokenDecoded ? tokenDecoded.role : null
       const isFreiwillig = role === 'apflora_freiwillig'
+      const username = get(data, 'user.name')
 
       return (
         <ErrorBoundary>
@@ -165,11 +173,26 @@ const MyAppBar = ({
                       value={get(data, 'ekfYear')}
                       setEkfYear={setEkfYear}
                     />
-                    <NormalViewButton onClick={setViewNormal}>
-                      Normal-Ansicht
-                    </NormalViewButton>
+                    {!isFreiwillig && (
+                      <NormalViewButton onClick={setViewNormal}>
+                        Normal-Ansicht
+                      </NormalViewButton>
+                    )}
                   </Fragment>
                 )}
+                {view === 'ekf' &&
+                  isFreiwillig && (
+                    <Fragment>
+                      <NormalViewButton onClick={toggleUserOpen}>
+                        {username}
+                      </NormalViewButton>
+                      <User
+                        username={username}
+                        userOpen={userOpen}
+                        toggleUserOpen={toggleUserOpen}
+                      />
+                    </Fragment>
+                  )}
                 {view === 'normal' && (
                   <Fragment>
                     {isFreiwillig && (
