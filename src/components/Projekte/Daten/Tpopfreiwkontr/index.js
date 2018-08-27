@@ -251,6 +251,7 @@ const enhance = compose(
           const ekfzaehleinheits = get(
             props.data,
             'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekfzaehleinheitsByApId.nodes',
+            [],
           )
           try {
             await Promise.all(
