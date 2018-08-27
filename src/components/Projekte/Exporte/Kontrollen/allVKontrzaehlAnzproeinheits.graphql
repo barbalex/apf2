@@ -77,6 +77,7 @@ query view {
       kontr_changed: kontrChanged
       kontr_changed_by: kontrChangedBy
       ekf_verifiziert: kontrEkfVerifiziert
+      ekf_bemerkungen: kontrEkfBemerkungen
       ekf_verifiziert_durch: kontrEkfVerifiziertDurch
       ekf_verifiziert_datum: kontrEkfVerifiziertDatum
       id

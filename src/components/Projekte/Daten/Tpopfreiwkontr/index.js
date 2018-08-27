@@ -23,6 +23,7 @@ import Cover from './Cover'
 import More from './More'
 import Danger from './Danger'
 import Remarks from './Remarks'
+import EkfRemarks from './EkfRemarks'
 import Count from './Count'
 import Verification from './Verification'
 import Image from './Image'
@@ -58,6 +59,7 @@ const GridContainer = styled.div`
         'danger'
         'remarks'
         'verification'
+        'ekfRemarks'
       `
     }
     if (width < 800) {
@@ -75,6 +77,7 @@ const GridContainer = styled.div`
         'danger danger'
         'remarks remarks'
         'verification verification'
+        'ekfRemarks ekfRemarks'
       `
     }
     return `
@@ -87,6 +90,7 @@ const GridContainer = styled.div`
       'danger danger danger danger danger danger'
       'remarks remarks remarks remarks remarks remarks'
       'verification verification verification verification verification verification'
+      'ekfRemarks ekfRemarks ekfRemarks ekfRemarks ekfRemarks ekfRemarks'
     `
   }};
   grid-template-columns: ${props => {
@@ -216,6 +220,8 @@ const enhance = compose(
                 adresseByBearbeiter,
                 ekfVerifiziert:
                   field === 'ekfVerifiziert' ? value : row.ekfVerifiziert,
+                ekfBemerkungen:
+                  field === 'ekfBemerkungen' ? value : row.ekfBemerkungen,
                 tpopByTpopId: row.tpopByTpopId,
                 tpopkontrzaehlsByTpopkontrId: row.tpopkontrzaehlsByTpopkontrId,
                 __typename: 'Tpopkontr',
@@ -500,6 +506,14 @@ const Tpopfreiwkontr = ({
                   updateTpopkontr={updateTpopkontr}
                 />
               )}
+            {!isPrint && (
+              <EkfRemarks
+                saveToDb={saveToDb}
+                errors={errors}
+                data={data}
+                updateTpopkontr={updateTpopkontr}
+              />
+            )}
           </GridContainer>
           {!isPrint &&
             !isFreiwillig &&

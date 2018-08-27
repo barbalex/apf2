@@ -79,6 +79,7 @@ query view {
       changed
       changed_by: changedBy
       ekf_verifiziert: ekfVerifiziert
+      ekf_bemerkungen: ekfBemerkungen
       ekf_verifiziert_durch: ekfVerifiziertDurch
       ekf_verifiziert_datum: ekfVerifiziertDatum
       zaehlung_anzahlen: zaehlungAnzahlen

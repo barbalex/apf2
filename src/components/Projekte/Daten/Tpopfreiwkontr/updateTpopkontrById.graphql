@@ -16,6 +16,7 @@ mutation updateTpopkontr(
   $planVorhanden: Boolean
   $jungpflanzenVorhanden: Boolean
   $ekfVerifiziert: Boolean
+  $ekfBemerkungen: String
 ) {
   updateTpopkontrById(
     input: {
@@ -37,6 +38,7 @@ mutation updateTpopkontr(
         planVorhanden: $planVorhanden
         jungpflanzenVorhanden: $jungpflanzenVorhanden
         ekfVerifiziert: $ekfVerifiziert
+        ekfBemerkungen: $ekfBemerkungen
       }
     }
   ) {
@@ -44,6 +46,7 @@ mutation updateTpopkontr(
       id
       typ
       ekfVerifiziert
+      ekfBemerkungen
       datum
       jahr
       bemerkungen
