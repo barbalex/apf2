@@ -168,23 +168,22 @@ const MyAppBar = ({
               </Typography>
               <MenuDiv>
                 {view === 'ekf' && (
-                  <Fragment>
-                    <EkfYear
-                      value={get(data, 'ekfYear')}
-                      setEkfYear={setEkfYear}
-                    />
-                    {!isFreiwillig && (
-                      <NormalViewButton onClick={setViewNormal}>
-                        Normal-Ansicht
-                      </NormalViewButton>
-                    )}
-                  </Fragment>
+                  <EkfYear
+                    value={get(data, 'ekfYear')}
+                    setEkfYear={setEkfYear}
+                  />
                 )}
+                {view === 'ekf' &&
+                  !isFreiwillig && (
+                    <NormalViewButton onClick={setViewNormal}>
+                      Normal-Ansicht
+                    </NormalViewButton>
+                  )}
                 {view === 'ekf' &&
                   isFreiwillig && (
                     <Fragment>
                       <NormalViewButton onClick={toggleUserOpen}>
-                        {username}
+                        {`Benutzer: ${username}`}
                       </NormalViewButton>
                       <User
                         username={username}

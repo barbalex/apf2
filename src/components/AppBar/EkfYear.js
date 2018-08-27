@@ -12,7 +12,7 @@ import initiateDataFromUrl from '../../modules/initiateDataFromUrl'
 const StyledInput = styled(Input)`
   width: 60px;
   color: white !important;
-  padding-left: 20px;
+  padding-left: 5px;
   > input {
     padding-top: 9px;
   }
@@ -20,12 +20,20 @@ const StyledInput = styled(Input)`
     border: none !important;
   }
 `
+const Container = styled.div`
+  display: flex;
+  padding-left: 20px;
+`
+const Jahr = styled.p`
+  margin-top: auto;
+  margin-bottom: auto;
+`
 
 const enhance = compose(
   withState(
     'stateValue',
     'setStateValue',
-    ({ value }) => (value || value === 0 ? value : '')
+    ({ value }) => (value || value === 0 ? value : ''),
   ),
   withHandlers({
     onChange: ({ setStateValue }) => event => setStateValue(event.target.value),
@@ -41,7 +49,7 @@ const enhance = compose(
         props.setStateValue(value)
       }
     },
-  })
+  }),
 )
 
 const EkfYear = ({
@@ -55,13 +63,16 @@ const EkfYear = ({
   onChange: () => void,
   onBlur: () => void,
 }) => (
-  <StyledInput
-    value={stateValue}
-    type="number"
-    onChange={onChange}
-    onBlur={onBlur}
-    placeholder="Jahr"
-  />
+  <Container>
+    <Jahr>Jahr:</Jahr>
+    <StyledInput
+      value={stateValue}
+      type="number"
+      onChange={onChange}
+      onBlur={onBlur}
+      placeholder="Jahr"
+    />
+  </Container>
 )
 
 export default enhance(EkfYear)

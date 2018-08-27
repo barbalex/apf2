@@ -3,13 +3,13 @@ import React from 'react'
 import styled from 'styled-components'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
-import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import DialogActions from '@material-ui/core/DialogActions'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import InputAdornment from '@material-ui/core/InputAdornment'
@@ -21,11 +21,9 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import Button from '@material-ui/core/Button'
 
 import dataGql from './data.graphql'
-import RadioButtonGroup from '../../shared/RadioButtonGroup'
 import TextField from '../../shared/TextField'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import updateUserByIdGql from './updateUserById.graphql'
-import Select from '../../shared/Select'
 
 const Container = styled.div`
   height: 100%;
@@ -33,7 +31,8 @@ const Container = styled.div`
   flex-direction: column;
 `
 const FieldsContainer = styled.div`
-  padding: 10px;
+  padding: 24px;
+  padding-top: 0;
   overflow: auto !important;
   height: 100%;
 `
@@ -212,7 +211,7 @@ const User = ({
     onClose={toggleUserOpen}
     aria-labelledby="simple-dialog-title"
   >
-    <DialogTitle id="simple-dialog-title">Benutzer</DialogTitle>
+    <DialogTitle id="simple-dialog-title">{`Benutzer: ${username}`}</DialogTitle>
     <Query query={dataGql} variables={{ name: username }}>
       {({ loading, error, data, client }) => {
         if (loading)
@@ -223,37 +222,7 @@ const User = ({
           )
         if (error) return `Fehler: ${error.message}`
 
-        const row = get(data, 'userById')
-        let roleWerte = sortBy(
-          [
-            {
-              value: 'apflora_reader',
-              label: 'reader',
-              sort: 1,
-            },
-            {
-              value: 'apflora_freiwillig',
-              label: 'freiwillig',
-              sort: 2,
-            },
-            {
-              value: 'apflora_artverantwortlich',
-              label: 'artverantwortlich',
-              sort: 3,
-            },
-            {
-              value: 'apflora_manager',
-              label: 'manager',
-              sort: 4,
-            },
-          ],
-          'sort',
-        )
-        let adresses = sortBy(get(data, 'allAdresses.nodes', []), 'name')
-        adresses = adresses.map(el => ({
-          value: el.id,
-          label: el.name,
-        }))
+        const row = get(data, 'userByName')
 
         return (
           <ErrorBoundary>
@@ -261,21 +230,6 @@ const User = ({
               <Mutation mutation={updateUserByIdGql}>
                 {(updateUser, { data }) => (
                   <FieldsContainer>
-                    <TextField
-                      key={`${row.id}name`}
-                      label="Name"
-                      value={row.name}
-                      saveToDb={value =>
-                        saveToDb({
-                          row,
-                          field: 'name',
-                          value,
-                          updateUser,
-                        })
-                      }
-                      error={errors.name}
-                      helperText="Nur von Managern veränderbar"
-                    />
                     <TextField
                       key={`${row.id}email`}
                       label="Email"
@@ -290,38 +244,6 @@ const User = ({
                       }
                       error={errors.email}
                       helperText="Bitte aktuell halten, damit wir Sie bei Bedarf kontaktieren können"
-                    />
-                    <RadioButtonGroup
-                      key={`${row.id}role`}
-                      value={row.role}
-                      dataSource={roleWerte}
-                      saveToDb={value =>
-                        saveToDb({
-                          row,
-                          field: 'role',
-                          value,
-                          updateUser,
-                        })
-                      }
-                      error={errors.role}
-                      label="Rolle"
-                      helperText="Nur von Managern veränderbar"
-                    />
-                    <Select
-                      key={`${row.id}adresseId`}
-                      value={row.adresseId}
-                      field="adresseId"
-                      label="Zugehörige Adresse"
-                      options={adresses}
-                      saveToDb={value =>
-                        saveToDb({
-                          row,
-                          field: 'adresseId',
-                          value,
-                          updateUser,
-                        })
-                      }
-                      error={errors.adresseId}
                     />
                     {!!passwordMessage && (
                       <PasswordMessage>{passwordMessage}</PasswordMessage>
@@ -429,6 +351,9 @@ const User = ({
         )
       }}
     </Query>
+    <DialogActions>
+      <Button onClick={toggleUserOpen}>schliessen</Button>
+    </DialogActions>
   </Dialog>
 )
 

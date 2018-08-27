@@ -6,15 +6,5 @@ query userByName($name: String!) {
     role
     pass
     adresseId
-    adresseByAdresseId {
-      id
-      name
-    }
-  }
-  allAdresses {
-    nodes {
-      id
-      name
-    }
   }
 }
