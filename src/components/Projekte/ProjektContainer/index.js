@@ -205,7 +205,7 @@ const ProjekteContainer = ({
                 })
                 const pops = get(data, 'popForMap.nodes', [])
                 const mapTpopsData = flatten(
-                  pops.map(n => get(n, 'tpopsByPopId.nodes')),
+                  pops.map(n => get(n, 'tpopsByPopId.nodes', [])),
                 )
                 const mapTpopIdsFiltered = idsInsideFeatureCollection({
                   mapFilter,

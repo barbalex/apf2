@@ -58,12 +58,14 @@ const enhance = compose(
       refetch()
     },
     onClickReadAll: () => async (unreadMessages, userName, client, refetch) => {
-      await Promise.all(unreadMessages.map(async message => {
-        client.mutate({
-          mutation: createUsermessage,
-          variables: { userName, id: message.id }
-        })
-      }))
+      await Promise.all(
+        unreadMessages.map(async message => {
+          client.mutate({
+            mutation: createUsermessage,
+            variables: { userName, id: message.id },
+          })
+        }),
+      )
       refetch()
     },
   }),
@@ -77,7 +79,7 @@ const UserMessages = ({
   open: Boolean,
   onClickRead: () => {},
   onClickReadAll: () => {},
-}) =>
+}) => (
   <Query query={userGql}>
     {({ error, data: userData }) => {
       if (error) return `Fehler: ${error.message}`
@@ -86,14 +88,16 @@ const UserMessages = ({
 
       return (
         <Query query={messagesGql} variables={{ name: userName }}>
-          {({ loading, error, data: messagesData, client, refetch  }) => {
+          {({ loading, error, data: messagesData, client, refetch }) => {
             if (error) {
               if (error.message.includes('keine Berechtigung')) return null
               return `Fehler: ${error.message}`
             }
 
             const allMessages = get(messagesData, 'allMessages.nodes', [])
-            const unreadMessages = allMessages.filter(m => get(m, 'usermessagesByMessageId.nodes').length === 0)
+            const unreadMessages = allMessages.filter(
+              m => get(m, 'usermessagesByMessageId.nodes', []).length === 0,
+            )
             const updateAvailable = get(messagesData, 'updateAvailable')
 
             return (
@@ -110,10 +114,17 @@ const UserMessages = ({
                   aria-labelledby="dialog-title"
                 >
                   <TitleRow>
-                    <DialogTitle id="dialog-title">Letzte Anpassungen:</DialogTitle>
+                    <DialogTitle id="dialog-title">
+                      Letzte Anpassungen:
+                    </DialogTitle>
                     <AllOkButton
                       onClick={() =>
-                        onClickReadAll(unreadMessages, userName, client, refetch)
+                        onClickReadAll(
+                          unreadMessages,
+                          userName,
+                          client,
+                          refetch,
+                        )
                       }
                     >
                       alle o.k.
@@ -125,7 +136,13 @@ const UserMessages = ({
                       return (
                         <MessageRow key={m.id} paddBottom={paddBottom}>
                           <MessageDiv>{m.message}</MessageDiv>
-                          <OkButton onClick={() => onClickRead(m, userName, client, refetch)}>o.k.</OkButton>
+                          <OkButton
+                            onClick={() =>
+                              onClickRead(m, userName, client, refetch)
+                            }
+                          >
+                            o.k.
+                          </OkButton>
                         </MessageRow>
                       )
                     })}
@@ -138,5 +155,6 @@ const UserMessages = ({
       )
     }}
   </Query>
+)
 
 export default enhance(UserMessages)

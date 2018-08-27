@@ -145,16 +145,10 @@ const SortableItem = SortableElement(
     const assigning = get(data, 'assigningBeob')
     const assigningispossible =
       activeApfloraLayers.includes('tpop') &&
-      (
-        (
-          activeApfloraLayers.includes('beobNichtBeurteilt') &&
-          apfloraLayer.value === 'beobNichtBeurteilt'
-        ) ||
-        (
-          activeApfloraLayers.includes('beobZugeordnet') &&
-          apfloraLayer.value === 'beobZugeordnet'
-        )
-      )
+      ((activeApfloraLayers.includes('beobNichtBeurteilt') &&
+        apfloraLayer.value === 'beobNichtBeurteilt') ||
+        (activeApfloraLayers.includes('beobZugeordnet') &&
+          apfloraLayer.value === 'beobZugeordnet'))
     const activeNodeArray = get(data, `${tree.name}.activeNodeArray`)
     const getZuordnenIconTitle = () => {
       if (assigning) return 'Zuordnung beenden'
@@ -166,9 +160,7 @@ const SortableItem = SortableElement(
     if (apfloraLayer.value === 'tpop') {
       // but tpop is special...
       const pops = get(data, 'pop.nodes', [])
-      layerData = flatten(
-        pops.map(n => get(n, 'tpopsByPopId.nodes'))
-      )
+      layerData = flatten(pops.map(n => get(n, 'tpopsByPopId.nodes', [])))
     }
     let highlightedIdsOfLayer = activeNodeArray
     if (activeApfloraLayers.includes('mapFilter')) {
@@ -190,10 +182,12 @@ const SortableItem = SortableElement(
           highlightedIdsOfLayer = mapBeobZugeordnetIdsFiltered
           break
         default:
-          // do nothing
+        // do nothing
       }
     }
-    const layerDataHighlighted = layerData.filter(o => mapIdsFiltered.includes(o.id))
+    const layerDataHighlighted = layerData.filter(o =>
+      mapIdsFiltered.includes(o.id),
+    )
 
     return (
       <LayerDiv>
@@ -204,15 +198,18 @@ const SortableItem = SortableElement(
           onChange={() => {
             if (activeApfloraLayers.includes(apfloraLayer.value)) {
               return setActiveApfloraLayers(
-                activeApfloraLayers.filter(l => l !== apfloraLayer.value)
+                activeApfloraLayers.filter(l => l !== apfloraLayer.value),
               )
             }
-            return setActiveApfloraLayers([...activeApfloraLayers, apfloraLayer.value])
+            return setActiveApfloraLayers([
+              ...activeApfloraLayers,
+              apfloraLayer.value,
+            ])
           }}
         />
         <IconsDiv>
           {['beobNichtBeurteilt', 'beobZugeordnet'].includes(
-            apfloraLayer.value
+            apfloraLayer.value,
           ) && (
             <ZuordnenDiv>
               <StyledIconButton
@@ -221,7 +218,7 @@ const SortableItem = SortableElement(
                   if (activeApfloraLayers.includes('tpop')) {
                     client.mutate({
                       mutation: setAssigningBeob,
-                      variables: { value: !assigning }
+                      variables: { value: !assigning },
                     })
                   }
                 }}
@@ -293,24 +290,23 @@ const SortableItem = SortableElement(
                   onClick={() => {
                     if (activeApfloraLayers.includes('mapFilter')) {
                       return setActiveApfloraLayers(
-                        activeApfloraLayers.filter(l => l !== 'mapFilter')
+                        activeApfloraLayers.filter(l => l !== 'mapFilter'),
                       )
                     }
-                    setActiveApfloraLayers([...activeApfloraLayers, 'mapFilter'])
+                    setActiveApfloraLayers([
+                      ...activeApfloraLayers,
+                      'mapFilter',
+                    ])
                     // this does not work, see: https://github.com/Leaflet/Leaflet.draw/issues/708
                     //window.L.Draw.Rectangle.initialize()
                   }}
                 >
                   <FilterIcon
                     style={{
-                      color: activeApfloraLayers.includes(
-                        apfloraLayer.value
-                      )
+                      color: activeApfloraLayers.includes(apfloraLayer.value)
                         ? 'black'
                         : '#e2e2e2',
-                      cursor: activeApfloraLayers.includes(
-                        apfloraLayer.value
-                      )
+                      cursor: activeApfloraLayers.includes(apfloraLayer.value)
                         ? 'pointer'
                         : 'not-allowed',
                     }}
@@ -376,13 +372,13 @@ const SortableItem = SortableElement(
           </ZoomToDiv>
           <div>
             {!['beobZugeordnetAssignPolylines', 'mapFilter'].includes(
-              apfloraLayer.value
+              apfloraLayer.value,
             ) && <DragHandle />}
           </div>
         </IconsDiv>
       </LayerDiv>
     )
-  }
+  },
 )
 const SortableList = SortableContainer(
   ({
@@ -403,31 +399,29 @@ const SortableList = SortableContainer(
     mapBeobNichtZuzuordnenIdsFiltered,
   }) => (
     <div>
-      {
-        items.map((apfloraLayer, index) => (
-          <SortableItem
-            key={index}
-            index={index}
-            apfloraLayer={apfloraLayer}
-            activeApfloraLayers={activeApfloraLayers}
-            setActiveApfloraLayers={setActiveApfloraLayers}
-            data={data}
-            tree={tree}
-            client={client}
-            bounds={bounds}
-            setBounds={setBounds}
-            mapFilter={mapFilter}
-            mapIdsFiltered={mapIdsFiltered}
-            mapPopIdsFiltered={mapPopIdsFiltered}
-            mapTpopIdsFiltered={mapTpopIdsFiltered}
-            mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
-            mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
-            mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
-          />
-        ))
-      }
+      {items.map((apfloraLayer, index) => (
+        <SortableItem
+          key={index}
+          index={index}
+          apfloraLayer={apfloraLayer}
+          activeApfloraLayers={activeApfloraLayers}
+          setActiveApfloraLayers={setActiveApfloraLayers}
+          data={data}
+          tree={tree}
+          client={client}
+          bounds={bounds}
+          setBounds={setBounds}
+          mapFilter={mapFilter}
+          mapIdsFiltered={mapIdsFiltered}
+          mapPopIdsFiltered={mapPopIdsFiltered}
+          mapTpopIdsFiltered={mapTpopIdsFiltered}
+          mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
+          mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
+          mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
+        />
+      ))}
     </div>
-  )
+  ),
 )
 
 const ApfloraLayers = ({
@@ -502,8 +496,12 @@ const ApfloraLayers = ({
               mapIdsFiltered={mapIdsFiltered}
               mapPopIdsFiltered={mapPopIdsFiltered}
               mapTpopIdsFiltered={mapTpopIdsFiltered}
-              mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
-              mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
+              mapBeobNichtBeurteiltIdsFiltered={
+                mapBeobNichtBeurteiltIdsFiltered
+              }
+              mapBeobNichtZuzuordnenIdsFiltered={
+                mapBeobNichtZuzuordnenIdsFiltered
+              }
               mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
             />
           </CardContent>

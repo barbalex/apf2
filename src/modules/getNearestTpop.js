@@ -15,10 +15,10 @@ import epsg2056to4326 from './epsg2056to4326'
 
 export default async ({
   activeNodes,
-  latLng
-}:{
+  latLng,
+}: {
   activeNodes: Array<Object>,
-  latLng: Object
+  latLng: Object,
 }): String => {
   const { client } = app
   const { lat, lng } = latLng
@@ -37,7 +37,9 @@ export default async ({
           popsByApId {
             nodes {
               id
-              tpopsByPopId(filter: {x: {isNull: false}, y: {isNull: false}}) {
+              tpopsByPopId(
+                filter: { x: { isNull: false }, y: { isNull: false } }
+              ) {
                 nodes {
                   id
                   popId
@@ -50,29 +52,29 @@ export default async ({
         }
       }
     `,
-    variables: { apId: activeNodes.ap }
+    variables: { apId: activeNodes.ap },
   })
-  const pops = get(data, 'apById.popsByApId.nodes')
+  const pops = get(data, 'apById.popsByApId.nodes', [])
   const tpops = flatten(
     pops.map(p =>
-      get(p, 'tpopsByPopId.nodes')
-        .filter(t => isFinite(t.x) && isFinite(t.y))
-    )
+      get(p, 'tpopsByPopId.nodes', []).filter(
+        t => isFinite(t.x) && isFinite(t.y),
+      ),
+    ),
   )
-  const tpopFeatures = tpops
-    .map(t => {
-      return ({
-        type: 'Feature',
-        properties: {
-          id: t.id,
-          popId: t.popId
-        },
-        geometry: {
-          type: 'Point',
-          coordinates: epsg2056to4326(+t.x, +t.y)
-        },
-      })
-    })
+  const tpopFeatures = tpops.map(t => {
+    return {
+      type: 'Feature',
+      properties: {
+        id: t.id,
+        popId: t.popId,
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: epsg2056to4326(+t.x, +t.y),
+      },
+    }
+  })
   const against = {
     type: 'FeatureCollection',
     features: tpopFeatures,

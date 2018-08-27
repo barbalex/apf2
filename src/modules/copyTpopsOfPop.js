@@ -8,27 +8,27 @@ export default async ({
   popIdFrom,
   popIdTo,
   client,
-  refetch
+  refetch,
 }: {
   popIdFrom: String,
   popIdTo: String,
   client: Object,
-  refetch: () => void
+  refetch: () => void,
 }) => {
   // 1. fetch all tpops
   const { data } = await client.query({
     query: gql`
       query myquery($popId: UUID!) {
-        allTpops(filter: {popId: {equalTo: $popId}}) {
+        allTpops(filter: { popId: { equalTo: $popId } }) {
           nodes {
             id
           }
         }
       }
     `,
-    variables: { popId: popIdFrom }
+    variables: { popId: popIdFrom },
   })
-  const tpops = get(data, 'allTpops.nodes')
+  const tpops = get(data, 'allTpops.nodes', [])
 
   // 2. add tpops to new pop
   tpops.forEach(tpop =>
@@ -37,7 +37,7 @@ export default async ({
       table: 'tpop',
       id: tpop.id,
       client,
-      refetch
-    })
+      refetch,
+    }),
   )
 }

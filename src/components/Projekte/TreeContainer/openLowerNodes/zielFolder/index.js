@@ -1,10 +1,10 @@
 //@flow
 /**
-   * 1. load all data
-   * 2. add activeNodeArrays for all data to openNodes
-   * 3. update openNodes
-   * 4. refresh tree
-   */
+ * 1. load all data
+ * 2. add activeNodeArrays for all data to openNodes
+ * 3. update openNodes
+ * 4. refresh tree
+ */
 import app from 'ampersand-app'
 import get from 'lodash/get'
 import groupBy from 'lodash/groupBy'
@@ -17,7 +17,7 @@ export default async ({
   activeNodes,
   id,
   refetch,
-}:{
+}: {
   tree: Object,
   activeNodes: Object,
   id: String,
@@ -29,9 +29,12 @@ export default async ({
   // 1. load all data
   const { data } = await client.query({
     query: dataGql,
-    variables: { id }
+    variables: { id },
   })
-  const zielsGrouped = groupBy(get(data, 'apById.zielsByApId.nodes'), 'jahr')
+  const zielsGrouped = groupBy(
+    get(data, 'apById.zielsByApId.nodes', []),
+    'jahr',
+  )
 
   // 2. add activeNodeArrays for all data to openNodes
   let newOpenNodes = [
@@ -49,13 +52,32 @@ export default async ({
       newOpenNodes = [
         ...newOpenNodes,
         ['Projekte', projekt, 'Aktionspläne', id, 'AP-Ziele', +jahr, ziel.id],
-        ['Projekte', projekt, 'Aktionspläne', id, 'AP-Ziele', +jahr, ziel.id, 'Berichte'],
+        [
+          'Projekte',
+          projekt,
+          'Aktionspläne',
+          id,
+          'AP-Ziele',
+          +jahr,
+          ziel.id,
+          'Berichte',
+        ],
       ]
-      const zielbers = get(ziel, 'zielbersByZielId.nodes')
+      const zielbers = get(ziel, 'zielbersByZielId.nodes', [])
       zielbers.forEach(zielber => {
         newOpenNodes = [
           ...newOpenNodes,
-          ['Projekte', projekt, 'Aktionspläne', id, 'AP-Ziele', +jahr, ziel.id, 'Berichte', zielber.id],
+          [
+            'Projekte',
+            projekt,
+            'Aktionspläne',
+            id,
+            'AP-Ziele',
+            +jahr,
+            ziel.id,
+            'Berichte',
+            zielber.id,
+          ],
         ]
       })
     })
@@ -68,7 +90,7 @@ export default async ({
       tree: tree.name,
       value: newOpenNodes,
       key: 'openNodes',
-    }
+    },
   })
 
   // 4. refresh tree

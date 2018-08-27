@@ -1,10 +1,10 @@
 //@flow
 /**
-   * 1. load all data
-   * 2. add activeNodeArrays for all data to openNodes
-   * 3. update openNodes
-   * 4. refresh tree
-   */
+ * 1. load all data
+ * 2. add activeNodeArrays for all data to openNodes
+ * 3. update openNodes
+ * 4. refresh tree
+ */
 import app from 'ampersand-app'
 import get from 'lodash/get'
 
@@ -16,7 +16,7 @@ export default async ({
   activeNodes,
   id,
   refetch,
-}:{
+}: {
   tree: Object,
   activeNodes: Object,
   id: String,
@@ -28,31 +28,111 @@ export default async ({
   // 1. load all data
   const { data } = await client.query({
     query: dataGql,
-    variables: { id }
+    variables: { id },
   })
-  const tpopmassns = get(data, 'tpopById.tpopmassnsByTpopId.nodes')
-  const tpopmassnbers = get(data, 'tpopById.tpopmassnbersByTpopId.nodes')
-  const tpopfeldkontrs = get(data, 'tpopById.tpopfeldkontrs.nodes')
-  const tpopfreiwkontrs = get(data, 'tpopById.tpopfreiwkontrs.nodes')
-  const tpopbers = get(data, 'tpopById.tpopbersByTpopId.nodes')
-  const tpopbeobs = get(data, 'tpopById.beobsByTpopId.nodes')
+  const tpopmassns = get(data, 'tpopById.tpopmassnsByTpopId.nodes', [])
+  const tpopmassnbers = get(data, 'tpopById.tpopmassnbersByTpopId.nodes', [])
+  const tpopfeldkontrs = get(data, 'tpopById.tpopfeldkontrs.nodes', [])
+  const tpopfreiwkontrs = get(data, 'tpopById.tpopfreiwkontrs.nodes', [])
+  const tpopbers = get(data, 'tpopById.tpopbersByTpopId.nodes', [])
+  const tpopbeobs = get(data, 'tpopById.beobsByTpopId.nodes', [])
   // 2. add activeNodeArrays for all data to openNodes
   // 2.0 add all folders
   let newOpenNodes = [
     ...openNodes,
-    ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', pop, 'Teil-Populationen', id],
-    ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', pop, 'Teil-Populationen', id, 'Massnahmen'],
-    ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', pop, 'Teil-Populationen', id, 'Massnahmen-Berichte'],
-    ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', pop, 'Teil-Populationen', id, 'Feld-Kontrollen'],
-    ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', pop, 'Teil-Populationen', id, 'Freiwilligen-Kontrollen'],
-    ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', pop, 'Teil-Populationen', id, 'Kontroll-Berichte'],
-    ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', pop, 'Teil-Populationen', id, 'Beobachtungen'],
+    [
+      'Projekte',
+      projekt,
+      'Aktionspläne',
+      ap,
+      'Populationen',
+      pop,
+      'Teil-Populationen',
+      id,
+    ],
+    [
+      'Projekte',
+      projekt,
+      'Aktionspläne',
+      ap,
+      'Populationen',
+      pop,
+      'Teil-Populationen',
+      id,
+      'Massnahmen',
+    ],
+    [
+      'Projekte',
+      projekt,
+      'Aktionspläne',
+      ap,
+      'Populationen',
+      pop,
+      'Teil-Populationen',
+      id,
+      'Massnahmen-Berichte',
+    ],
+    [
+      'Projekte',
+      projekt,
+      'Aktionspläne',
+      ap,
+      'Populationen',
+      pop,
+      'Teil-Populationen',
+      id,
+      'Feld-Kontrollen',
+    ],
+    [
+      'Projekte',
+      projekt,
+      'Aktionspläne',
+      ap,
+      'Populationen',
+      pop,
+      'Teil-Populationen',
+      id,
+      'Freiwilligen-Kontrollen',
+    ],
+    [
+      'Projekte',
+      projekt,
+      'Aktionspläne',
+      ap,
+      'Populationen',
+      pop,
+      'Teil-Populationen',
+      id,
+      'Kontroll-Berichte',
+    ],
+    [
+      'Projekte',
+      projekt,
+      'Aktionspläne',
+      ap,
+      'Populationen',
+      pop,
+      'Teil-Populationen',
+      id,
+      'Beobachtungen',
+    ],
   ]
   // 2.1: tpopmassns
   tpopmassns.forEach(k => {
     newOpenNodes = [
       ...newOpenNodes,
-      ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', pop, 'Teil-Populationen', id, 'Massnahmen', k.id],
+      [
+        'Projekte',
+        projekt,
+        'Aktionspläne',
+        ap,
+        'Populationen',
+        pop,
+        'Teil-Populationen',
+        id,
+        'Massnahmen',
+        k.id,
+      ],
     ]
   })
 
@@ -60,7 +140,18 @@ export default async ({
   tpopmassnbers.forEach(k => {
     newOpenNodes = [
       ...newOpenNodes,
-      ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', pop, 'Teil-Populationen', id, 'Massnahmen-Berichte', k.id],
+      [
+        'Projekte',
+        projekt,
+        'Aktionspläne',
+        ap,
+        'Populationen',
+        pop,
+        'Teil-Populationen',
+        id,
+        'Massnahmen-Berichte',
+        k.id,
+      ],
     ]
   })
 
@@ -68,14 +159,50 @@ export default async ({
   tpopfeldkontrs.forEach(k => {
     newOpenNodes = [
       ...newOpenNodes,
-      ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', pop, 'Teil-Populationen', id, 'Feld-Kontrollen', k.id],
-      ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', pop, 'Teil-Populationen', id, 'Feld-Kontrollen', k.id, 'Zaehlungen'],
+      [
+        'Projekte',
+        projekt,
+        'Aktionspläne',
+        ap,
+        'Populationen',
+        pop,
+        'Teil-Populationen',
+        id,
+        'Feld-Kontrollen',
+        k.id,
+      ],
+      [
+        'Projekte',
+        projekt,
+        'Aktionspläne',
+        ap,
+        'Populationen',
+        pop,
+        'Teil-Populationen',
+        id,
+        'Feld-Kontrollen',
+        k.id,
+        'Zaehlungen',
+      ],
     ]
-    const zaehls = get(k, 'tpopkontrzaehlsByTpopkontrId.nodes')
+    const zaehls = get(k, 'tpopkontrzaehlsByTpopkontrId.nodes', [])
     zaehls.forEach(z => {
       newOpenNodes = [
         ...newOpenNodes,
-        ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', pop, 'Teil-Populationen', id, 'Feld-Kontrollen', k.id, 'Zaehlungen', z.id],
+        [
+          'Projekte',
+          projekt,
+          'Aktionspläne',
+          ap,
+          'Populationen',
+          pop,
+          'Teil-Populationen',
+          id,
+          'Feld-Kontrollen',
+          k.id,
+          'Zaehlungen',
+          z.id,
+        ],
       ]
     })
   })
@@ -84,14 +211,50 @@ export default async ({
   tpopfreiwkontrs.forEach(k => {
     newOpenNodes = [
       ...newOpenNodes,
-      ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', pop, 'Teil-Populationen', id, 'Freiwilligen-Kontrollen', k.id],
-      ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', pop, 'Teil-Populationen', id, 'Freiwilligen-Kontrollen', k.id, 'Zaehlungen'],
+      [
+        'Projekte',
+        projekt,
+        'Aktionspläne',
+        ap,
+        'Populationen',
+        pop,
+        'Teil-Populationen',
+        id,
+        'Freiwilligen-Kontrollen',
+        k.id,
+      ],
+      [
+        'Projekte',
+        projekt,
+        'Aktionspläne',
+        ap,
+        'Populationen',
+        pop,
+        'Teil-Populationen',
+        id,
+        'Freiwilligen-Kontrollen',
+        k.id,
+        'Zaehlungen',
+      ],
     ]
-    const zaehls = get(k, 'tpopkontrzaehlsByTpopkontrId.nodes')
+    const zaehls = get(k, 'tpopkontrzaehlsByTpopkontrId.nodes', [])
     zaehls.forEach(z => {
       newOpenNodes = [
         ...newOpenNodes,
-        ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', pop, 'Teil-Populationen', id, 'Freiwilligen-Kontrollen', k.id, 'Zaehlungen', z.id],
+        [
+          'Projekte',
+          projekt,
+          'Aktionspläne',
+          ap,
+          'Populationen',
+          pop,
+          'Teil-Populationen',
+          id,
+          'Freiwilligen-Kontrollen',
+          k.id,
+          'Zaehlungen',
+          z.id,
+        ],
       ]
     })
   })
@@ -100,7 +263,18 @@ export default async ({
   tpopbers.forEach(k => {
     newOpenNodes = [
       ...newOpenNodes,
-      ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', pop, 'Teil-Populationen', id, 'Kontroll-Berichte', k.id],
+      [
+        'Projekte',
+        projekt,
+        'Aktionspläne',
+        ap,
+        'Populationen',
+        pop,
+        'Teil-Populationen',
+        id,
+        'Kontroll-Berichte',
+        k.id,
+      ],
     ]
   })
 
@@ -108,7 +282,18 @@ export default async ({
   tpopbeobs.forEach(k => {
     newOpenNodes = [
       ...newOpenNodes,
-      ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', pop, 'Teil-Populationen', id, 'Beobachtungen', k.id],
+      [
+        'Projekte',
+        projekt,
+        'Aktionspläne',
+        ap,
+        'Populationen',
+        pop,
+        'Teil-Populationen',
+        id,
+        'Beobachtungen',
+        k.id,
+      ],
     ]
   })
 
@@ -119,7 +304,7 @@ export default async ({
       tree: tree.name,
       value: newOpenNodes,
       key: 'openNodes',
-    }
+    },
   })
 
   // 4. refresh tree

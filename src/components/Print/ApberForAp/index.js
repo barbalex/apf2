@@ -131,10 +131,10 @@ const ApberForAp = ({
   const artname = get(apData, 'aeEigenschaftenByArtId.artname', '(Art fehlt)')
   const apber = get(apData, 'apbersByApId.nodes[0]', {})
   const apberDatum = get(apber, 'datum')
-  const erfkrit = sortBy(get(apData, 'erfkritsByApId.nodes'), e =>
-    get(e, 'apErfkritWerteByErfolg.sort')
+  const erfkrit = sortBy(get(apData, 'erfkritsByApId.nodes', []), e =>
+    get(e, 'apErfkritWerteByErfolg.sort'),
   )
-  const ziele = sortBy(get(apData, 'zielsByApId.nodes'), e => [
+  const ziele = sortBy(get(apData, 'zielsByApId.nodes', []), e => [
     get(e, 'zielTypWerteByTyp.sort'),
     e.bezeichnung,
   ])
@@ -148,16 +148,16 @@ const ApberForAp = ({
       get(m, 'datum'),
       get(m, 'tpopmassnTypWerteByTyp.text'),
       get(m, 'beschreibung'),
-    ]
+    ],
   )
   const firstMassn = minBy(
     flatten(tpops.map(t => get(t, 'firstTpopmassn.nodes[0]', []))),
-    'datum'
+    'datum',
   )
   const yearOfFirstMassn = !!firstMassn ? format(firstMassn.datum, 'YYYY') : 0
   const firstTpopber = minBy(
     flatten(tpops.map(t => get(t, 'firstTpopber.nodes[0]', []))),
-    'jahr'
+    'jahr',
   )
   const yearOfFirstTpopber = !!firstTpopber ? firstTpopber.jahr : 0
   const startJahr = get(apData, 'startJahr', 0)
@@ -188,7 +188,7 @@ const ApberForAp = ({
             <p>{`Start Programm: ${get(
               apData,
               'startJahr',
-              '(Start-Jahr fehlt)'
+              '(Start-Jahr fehlt)',
             )}`}</p>
             <p>{`Erste Massnahme: ${yearOfFirstMassn}`}</p>
             <p>{`Erste Kontrolle: ${yearOfFirstTpopber}`}</p>
@@ -261,7 +261,7 @@ const ApberForAp = ({
                     <ErfkritErfolg>{`${get(
                       e,
                       'apErfkritWerteByErfolg.text',
-                      '(fehlt)'
+                      '(fehlt)',
                     )}:`}</ErfkritErfolg>
                     <ErfkritKriterium>
                       {e.kriterien || '(fehlt)'}
