@@ -4,6 +4,7 @@ import { Query, Mutation } from 'react-apollo'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
+import uniqBy from 'lodash/uniqBy'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
@@ -288,11 +289,24 @@ const Count = ({
         if (error) return `Fehler: ${error.message}`
 
         const row = get(data, 'tpopkontrzaehlById')
+        const allEinheits = get(
+          data,
+          'allTpopkontrzaehlEinheitWertes.nodes',
+          [],
+        )
         // do list this count's einheit
         const einheitsNotToList = einheitsUsed.filter(e => e !== row.einheit)
         let zaehleinheitWerte = ekfzaehleinheits
           // remove already set values
           .filter(e => !einheitsNotToList.includes(e.code))
+        // add this zaehleineits value if missing
+        // so as to show values input in earlier years that shall not be input any more
+        const thisRowsEinheit = allEinheits.find(e => e.code === row.einheit)
+        if (thisRowsEinheit)
+          zaehleinheitWerte = uniqBy(
+            [thisRowsEinheit, ...zaehleinheitWerte],
+            'id',
+          )
         zaehleinheitWerte = sortBy(zaehleinheitWerte, 'sort').map(el => ({
           value: el.code,
           label: el.text,
