@@ -93,6 +93,7 @@ SELECT
   apflora.v_tpop_anzkontrinklletzter.kontr_ekf_verifiziert,
   apflora.v_tpop_anzkontrinklletzter.kontr_ekf_verifiziert_durch,
   apflora.v_tpop_anzkontrinklletzter.kontr_ekf_verifiziert_datum,
+  apflora.v_tpop_anzkontrinklletzter.kontr_ekf_bemerkungen,
   apflora.v_tpop_anzkontrinklletzter.zaehlung_anzahlen,
   apflora.v_tpop_anzkontrinklletzter.zaehlung_einheiten,
   apflora.v_tpop_anzkontrinklletzter.zaehlung_methoden,

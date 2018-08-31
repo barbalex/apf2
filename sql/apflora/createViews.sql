@@ -2445,6 +2445,7 @@ SELECT
   apflora.tpopkontr.ekf_verifiziert,
   apflora.tpopkontr.ekf_verifiziert_durch,
   apflora.tpopkontr.ekf_verifiziert_datum,
+  apflora.tpopkontr.ekf_bemerkungen,
   array_to_string(array_agg(apflora.tpopkontrzaehl.anzahl), ', ') AS zaehlung_anzahlen,
   string_agg(apflora.tpopkontrzaehl_einheit_werte.text, ', ') AS zaehlung_einheiten,
   string_agg(apflora.tpopkontrzaehl_methode_werte.text, ', ') AS zaehlung_methoden
@@ -2584,7 +2585,8 @@ GROUP BY
   apflora.tpopkontr.changed_by,
   apflora.tpopkontr.ekf_verifiziert,
   apflora.tpopkontr.ekf_verifiziert_durch,
-  apflora.tpopkontr.ekf_verifiziert_datum
+  apflora.tpopkontr.ekf_verifiziert_datum,
+  apflora.tpopkontr.ekf_bemerkungen
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop.nr,
