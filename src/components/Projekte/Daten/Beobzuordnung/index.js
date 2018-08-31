@@ -94,9 +94,8 @@ const getTpopZuordnenSource = (row: Object): Array<Object> => {
       // calculate their distance to this beob
       const dX = Math.abs(row.x - t.x)
       const dY = Math.abs(row.y - t.y)
-      const distance = Math.round((dX ** 2 + dY ** 2) ** 0.5).toLocaleString(
-        'de-ch',
-      )
+      const distNr = Math.round((dX ** 2 + dY ** 2) ** 0.5)
+      const distance = distNr.toLocaleString('de-ch')
       // build label
       const tpopStatus = get(t, 'popStatusWerteByStatus.text', 'ohne Status')
       const popNr = get(t, 'popByPopId.nr', '(keine Nr)')
@@ -104,12 +103,12 @@ const getTpopZuordnenSource = (row: Object): Array<Object> => {
 
       return {
         id: t.id,
-        distance,
+        distNr,
         label: `${distance}m: ${popNr}/${tpopNr} (${tpopStatus})`,
       }
     })
   // order them by distance
-  tpopList = sortBy(tpopList, 'distance')
+  tpopList = sortBy(tpopList, 'distNr')
   // return array of id, label
   return tpopList.map(t => ({
     value: t.id,
