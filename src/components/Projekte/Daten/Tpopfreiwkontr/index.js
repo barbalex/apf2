@@ -248,11 +248,21 @@ const enhance = compose(
         ).length
         if (tpopkontrCount === 0) {
           // add counts for all ekfzaehleinheit
+          // BUT DANGER: only for ekfzaehleinheit with zaehleinheit_id
           const ekfzaehleinheits = get(
             props.data,
             'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekfzaehleinheitsByApId.nodes',
             [],
           )
+            // remove ekfzaehleinheits without zaehleinheit_id
+            .filter(
+              z =>
+                !!get(
+                  z,
+                  'tpopkontrzaehlEinheitWerteByZaehleinheitId.code',
+                  null,
+                ),
+            )
           try {
             await Promise.all(
               ekfzaehleinheits.map(z =>
@@ -336,7 +346,10 @@ const Tpopfreiwkontr = ({
     data,
     'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekfzaehleinheitsByApId.nodes',
     [],
-  ).map(n => get(n, 'tpopkontrzaehlEinheitWerteByZaehleinheitId', {}))
+  )
+    .map(n => get(n, 'tpopkontrzaehlEinheitWerteByZaehleinheitId', {}))
+    // remove null values stemming from efkzaehleinheit without zaehleinheit_id
+    .filter(n => n !== null)
   const zaehls = sortBy(
     get(data, 'tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes', []),
     'einheit',
