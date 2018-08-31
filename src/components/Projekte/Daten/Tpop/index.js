@@ -12,7 +12,7 @@ import withLifecycle from '@hocs/with-lifecycle'
 import TextField from '../../../shared/TextField'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
 import Status from '../../../shared/Status'
-import Select from '../../../shared/Select'
+import SelectCreatable from '../../../shared/SelectCreatable'
 import RadioButton from '../../../shared/RadioButton'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import FormTitle from '../../../shared/FormTitle'
@@ -295,7 +295,7 @@ class Tpop extends Component<Props> {
                         }
                         error={errors.y}
                       />
-                      <Select
+                      <SelectCreatable
                         key={`${row.id}gemeinde`}
                         value={row.gemeinde}
                         field="gemeinde"
