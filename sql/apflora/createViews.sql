@@ -3870,6 +3870,7 @@ SELECT
   apflora.tpopkontr.ekf_verifiziert as kontr_ekf_verifiziert,
   apflora.tpopkontr.ekf_verifiziert_durch as kontr_ekf_verifiziert_durch,
   apflora.tpopkontr.ekf_verifiziert_datum as kontr_ekf_verifiziert_datum,
+  apflora.tpopkontr.ekf_bemerkungen as kontr_ekf_bemerkungen,
   apflora.tpopkontrzaehl.id,
   apflora.tpopkontrzaehl_einheit_werte.text AS einheit,
   apflora.tpopkontrzaehl_methode_werte.text AS methode,
