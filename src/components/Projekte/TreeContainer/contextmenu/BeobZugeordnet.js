@@ -8,26 +8,25 @@ import userIsReadOnly from '../../../../modules/userIsReadOnly'
 const BeobZugeordnet = ({
   tree,
   onClick,
-  token
+  token,
 }: {
   tree: Object,
   onClick: () => void,
-  token: String
+  token: String,
 }) => (
   <ErrorBoundary>
     <ContextMenu id={`${tree.name}beobZugeordnet`}>
       <div className="react-contextmenu-title">Beobachtung</div>
-      {
-        !userIsReadOnly(token) &&
+      {!userIsReadOnly(token) && (
         <MenuItem
           onClick={onClick}
           data={{
-            action: 'copyBeobZugeordnetKoordToPop',
+            action: 'copyBeobZugeordnetKoordToTpop',
           }}
         >
           Koordinaten auf die Teilpopulation übertragen
         </MenuItem>
-      }
+      )}
       <MenuItem
         onClick={onClick}
         data={{

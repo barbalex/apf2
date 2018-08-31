@@ -77,7 +77,7 @@ import copyTo from '../../../modules/copyTo'
 import createNewPopFromBeob from '../../../modules/createNewPopFromBeob'
 import setTreeKeyGql from './setTreeKey.graphql'
 import setTreeKey2Gql from './setTreeKey2.graphql'
-import copyBeobZugeordnetKoordToPop from '../../../modules/copyBeobZugeordnetKoordToPop'
+import copyBeobZugeordnetKoordToTpop from '../../../modules/copyBeobZugeordnetKoordToTpop'
 import copyTpopKoordToPop from '../../../modules/copyTpopKoordToPop'
 import setCopyingBiotop from './setCopyingBiotop.graphql'
 import setCopying from './setCopying.graphql'
@@ -134,8 +134,8 @@ const getAndValidateCoordinatesOfTpop = async ({ id, errorState }) => {
   if (!x || !y) {
     errorState.add(
       new Error(
-        `Die Teilpopulation mit der ID ${id} kat keine (vollständigen) Koordinaten`
-      )
+        `Die Teilpopulation mit der ID ${id} kat keine (vollständigen) Koordinaten`,
+      ),
     )
     return { x: null, y: null }
   }
@@ -158,8 +158,8 @@ const getAndValidateCoordinatesOfBeob = async ({ id, errorState }) => {
   if (!x || !y) {
     errorState.add(
       new Error(
-        `Die Teilpopulation mit der ID ${id} kat keine (vollständigen) Koordinaten`
-      )
+        `Die Teilpopulation mit der ID ${id} kat keine (vollständigen) Koordinaten`,
+      ),
     )
     return { x: null, y: null }
   }
@@ -208,7 +208,7 @@ const enhance = compose(
       const { firstElementChild } = element
       if (!firstElementChild)
         return errorState.add(
-          new Error('no firstElementChild passed with click')
+          new Error('no firstElementChild passed with click'),
         )
       let id = firstElementChild.getAttribute('data-id')
       const parentId = firstElementChild.getAttribute('data-parentid')
@@ -379,8 +379,8 @@ const enhance = compose(
             errorState,
           })
         },
-        copyBeobZugeordnetKoordToPop() {
-          copyBeobZugeordnetKoordToPop({ id, errorState })
+        copyBeobZugeordnetKoordToTpop() {
+          copyBeobZugeordnetKoordToTpop({ id, errorState })
         },
         async showCoordOfTpopOnMapsZhCh() {
           const { x, y } = await getAndValidateCoordinatesOfTpop({
@@ -390,7 +390,7 @@ const enhance = compose(
           if (x && y) {
             window.open(
               `https://maps.zh.ch/?x=${x}&y=${y}&scale=3000&markers=ring`,
-              'target="_blank"'
+              'target="_blank"',
             )
           }
         },
@@ -402,7 +402,7 @@ const enhance = compose(
           if (x && y) {
             window.open(
               `https://map.geo.admin.ch/?bgLayer=ch.swisstopo.pixelkarte-farbe&Y=${x}&X=${y}&zoom=10&crosshair=circle`,
-              'target="_blank"'
+              'target="_blank"',
             )
           }
         },
@@ -414,7 +414,7 @@ const enhance = compose(
           if (x && y) {
             window.open(
               `https://maps.zh.ch/?x=${x}&y=${y}&scale=3000&markers=ring`,
-              'target="_blank"'
+              'target="_blank"',
             )
           }
         },
@@ -426,7 +426,7 @@ const enhance = compose(
           if (x && y) {
             window.open(
               `https://map.geo.admin.ch/?bgLayer=ch.swisstopo.pixelkarte-farbe&Y=${x}&X=${y}&zoom=10&crosshair=circle`,
-              'target="_blank"'
+              'target="_blank"',
             )
           }
         },
@@ -435,7 +435,7 @@ const enhance = compose(
         actions[action]()
       } else {
         errorState.add(
-          new Error(`action "${action}" unknown, therefore not executed`)
+          new Error(`action "${action}" unknown, therefore not executed`),
         )
       }
     },
@@ -478,7 +478,7 @@ const enhance = compose(
         })
       }
     },
-  })
+  }),
 )
 
 type Props = {

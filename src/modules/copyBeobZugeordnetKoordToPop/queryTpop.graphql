@@ -1,6 +1,0 @@
-query Query($id: UUID!) {
-  tpopById(id: $id) {
-    id
-    popId
-  }
-}

@@ -3,14 +3,13 @@ import get from 'lodash/get'
 import app from 'ampersand-app'
 
 import queryBeob from './queryBeob.graphql'
-import queryTpop from './queryTpop.graphql'
-import updatePopById from './updatePopById.graphql'
+import updateTpopById from './updateTpopById.graphql'
 
 export default async ({
-  id, 
+  id,
   errorState,
-}:{
-  id: String, 
+}: {
+  id: String,
   errorState: Object,
 }): Promise<void> => {
   const { client } = app
@@ -19,45 +18,33 @@ export default async ({
   try {
     beobResult = await client.query({
       query: queryBeob,
-      variables: { id }
+      variables: { id },
     })
-  } catch(error) {
+  } catch (error) {
     return errorState.add(error)
   }
   const beob = get(beobResult, 'data.beobById')
   const { x, y, tpopId } = beob
 
-  // fetch popId
-  let tpopResult
-  try {
-    tpopResult = await client.query({
-      query: queryTpop,
-      variables: { id: tpopId }
-    })
-  } catch (error) {
-    return errorState.add(error)
-  }
-  const popId = get(tpopResult, 'data.tpopById.popId')
-
-  // set pop coordinates
+  // set tpop coordinates
   try {
     await client.mutate({
-      mutation: updatePopById,
+      mutation: updateTpopById,
       variables: {
-        id: popId,
+        id: tpopId,
         x,
-        y
+        y,
       },
       optimisticResponse: {
         __typename: 'Mutation',
-        updatePopById: {
-          pop: {
-            id: popId,
+        updateTpopById: {
+          tpop: {
+            id: tpopId,
             x,
             y,
-            __typename: 'Pop',
+            __typename: 'Tpop',
           },
-          __typename: 'Pop',
+          __typename: 'Tpop',
         },
       },
     })
