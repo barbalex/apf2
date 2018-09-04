@@ -2,6 +2,7 @@ query TreeDataQuery(
   $projekt: [UUID!]
   $projId: UUID!
   $isProjekt: Boolean!
+  $apFilter: ApFilter!
   $ap: [UUID!]
   $apId: UUID
   $isAp: Boolean!
@@ -33,17 +34,13 @@ query TreeDataQuery(
       jahr
     }
   }
-  aps: allAps(filter: { projId: { in: $projekt } }) @include(if: $isProjekt) {
+  aps: allAps(filter: $apFilter) @include(if: $isProjekt) {
     totalCount
     nodes {
       id
       projId
       artId
       bearbeitung
-      startJahr
-      umsetzung
-      bearbeiter
-      ekfBeobachtungszeitpunkt
       aeEigenschaftenByArtId {
         id
         artname

@@ -1,13 +1,40 @@
 // @flow
 import { Container } from 'unstated'
-import { apType, initialAp } from './ap'
+import { initial as ap } from './ap'
 
 type NodeFilterState = {
-  ap: apType,
+  ap: Object,
+  pop: Object,
+  tpop: Object,
+  tpopkontr: Object,
+  tpopfeldkontr: Object,
+  tpopfreiwkontr: Object,
+  tpopkontrzaehl: Object,
+  tpopmassn: Object,
+  ziel: Object,
+  zielber: Object,
+  erfkrit: Object,
+  apber: Object,
+  apberuebersicht: Object,
+  ber: Object,
+  idealbiotop: Object,
+  assozart: Object,
+  ekfzaehleinheit: Object,
+  popber: Object,
+  popmassnber: Object,
+  tpopber: Object,
+  tpopmassnber: Object,
+  apart: Object,
+  projekt: Object,
+  beob: Object,
+  beobprojekt: Object,
+  adresse: Object,
+  gemeinde: Object,
+  user: Object,
 }
 
 const initialState = {
-  ap: initialAp,
+  ap,
   pop: null,
   tpop: null,
   tpopkontr: null,

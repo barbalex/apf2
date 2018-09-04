@@ -145,8 +145,12 @@ const ProjekteContainer = ({
       const tokenDecoded = token ? jwtDecode(token) : null
       const role = tokenDecoded ? tokenDecoded.role : null
       const projekteTabs = [...get(data1, 'urlQuery.projekteTabs', [])]
-      const variables = buildVariables(data1, treeName)
-      /*
+      const variables = buildVariables({
+        data: data1,
+        treeName,
+        nodeFilter: treeNodeFilterState.state,
+      })
+
       setTimeout(() => {
         if (treeNodeFilterState.state.ap.startJahr !== 2000)
           treeNodeFilterState.setValue({
@@ -154,7 +158,7 @@ const ProjekteContainer = ({
             key: 'startJahr',
             value: 2006,
           })
-      }, 5000)*/
+      }, 5000)
 
       return (
         <Query query={data2Gql} variables={variables}>

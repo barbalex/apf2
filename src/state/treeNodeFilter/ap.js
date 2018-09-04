@@ -1,15 +1,15 @@
 // @flow
 
-export type apType = {
-  artId?: string,
-  bearbeitung?: number,
-  startJahr?: number,
-  umsetzung?: number,
-  bearbeiter?: number,
-  ekfBeobachtungszeitpunkt?: string,
+export const type = {
+  artId: 'string',
+  bearbeitung: 'number',
+  startJahr: 'number',
+  umsetzung: 'number',
+  bearbeiter: 'number',
+  ekfBeobachtungszeitpunkt: 'string',
 }
 
-export const initialAp = {
+export const initial = {
   artId: null,
   bearbeitung: null,
   startJahr: null,
