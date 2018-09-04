@@ -44,7 +44,7 @@ export default ({
     const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
     apFilter[key] = { [expression]: value }
   })
-  // for unknown reason this only works belated, so not
+  // for unknown reason the following only works belated, so not
   /*
   if (apFilterSet) {
     apFilter.bearbeitung = { in: [1, 2, 3] }
