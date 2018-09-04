@@ -3,34 +3,67 @@ import { Container } from 'unstated'
 import { initial as ap } from './ap'
 
 type NodeFilterState = {
-  ap: Object,
-  pop: Object,
-  tpop: Object,
-  tpopkontr: Object,
-  tpopfeldkontr: Object,
-  tpopfreiwkontr: Object,
-  tpopkontrzaehl: Object,
-  tpopmassn: Object,
-  ziel: Object,
-  zielber: Object,
-  erfkrit: Object,
-  apber: Object,
-  apberuebersicht: Object,
-  ber: Object,
-  idealbiotop: Object,
-  assozart: Object,
-  ekfzaehleinheit: Object,
-  popber: Object,
-  popmassnber: Object,
-  tpopber: Object,
-  tpopmassnber: Object,
-  apart: Object,
-  projekt: Object,
-  beob: Object,
-  beobprojekt: Object,
-  adresse: Object,
-  gemeinde: Object,
-  user: Object,
+  show: Boolean,
+  tree: {
+    ap: Object,
+    pop: Object,
+    tpop: Object,
+    tpopkontr: Object,
+    tpopfeldkontr: Object,
+    tpopfreiwkontr: Object,
+    tpopkontrzaehl: Object,
+    tpopmassn: Object,
+    ziel: Object,
+    zielber: Object,
+    erfkrit: Object,
+    apber: Object,
+    apberuebersicht: Object,
+    ber: Object,
+    idealbiotop: Object,
+    assozart: Object,
+    ekfzaehleinheit: Object,
+    popber: Object,
+    popmassnber: Object,
+    tpopber: Object,
+    tpopmassnber: Object,
+    apart: Object,
+    projekt: Object,
+    beob: Object,
+    beobprojekt: Object,
+    adresse: Object,
+    gemeinde: Object,
+    user: Object,
+  },
+  tree2: {
+    ap: Object,
+    pop: Object,
+    tpop: Object,
+    tpopkontr: Object,
+    tpopfeldkontr: Object,
+    tpopfreiwkontr: Object,
+    tpopkontrzaehl: Object,
+    tpopmassn: Object,
+    ziel: Object,
+    zielber: Object,
+    erfkrit: Object,
+    apber: Object,
+    apberuebersicht: Object,
+    ber: Object,
+    idealbiotop: Object,
+    assozart: Object,
+    ekfzaehleinheit: Object,
+    popber: Object,
+    popmassnber: Object,
+    tpopber: Object,
+    tpopmassnber: Object,
+    apart: Object,
+    projekt: Object,
+    beob: Object,
+    beobprojekt: Object,
+    adresse: Object,
+    gemeinde: Object,
+    user: Object,
+  },
 }
 
 const initialTreeState = {
@@ -66,9 +99,11 @@ const initialTreeState = {
 
 class NodeFilterContainer extends Container<NodeFilterState> {
   state = { tree: initialTreeState, tree2: initialTreeState, show: false }
+
   set({ treeName, nodeFilter }) {
     this.setState(state => ({ ...state, ...{ [treeName]: nodeFilter } }))
   }
+
   setValue({ treeName, table, key, value }) {
     this.setState(state => ({
       ...state,
@@ -80,9 +115,11 @@ class NodeFilterContainer extends Container<NodeFilterState> {
       },
     }))
   }
+
   empty(treeName) {
     this.setState(state => ({ ...state, ...{ [treeName]: initialTreeState } }))
   }
+
   toggleShow() {
     this.setState(state => ({ ...state, ...{ show: !state.show } }))
   }

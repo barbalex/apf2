@@ -11,14 +11,12 @@ export default ({
   treeName,
   projektNodes,
   projId,
-  nodeFilter,
 }: {
   nodes: Array<Object>,
   data: Object,
   treeName: String,
   projektNodes: Array<Object>,
   projId: String,
-  nodeFilter: Object,
 }): Array<Object> => {
   const apFilter = get(data, `${treeName}.apFilter`)
   const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.ap`)

@@ -153,20 +153,22 @@ const ProjekteContainer = ({
       /*
       setTimeout(() => {
         if (nodeFilterState.state[treeName].ap.startJahr !== 2007)
+          console.log('setting startJahr to 2006')
+        nodeFilterState.setValue({
+          treeName,
+          table: 'ap',
+          key: 'startJahr',
+          value: 2006,
+        })
+        setTimeout(() => {
+          if (nodeFilterState.state[treeName].ap.startJahr === 2006)
+            console.log('setting startJahr to 2007')
           nodeFilterState.setValue({
             treeName,
             table: 'ap',
             key: 'startJahr',
-            value: 2006,
+            value: 2007,
           })
-        setTimeout(() => {
-          if (nodeFilterState.state[treeName].ap.startJahr === 2006)
-            nodeFilterState.setValue({
-              treeName,
-              table: 'ap',
-              key: 'startJahr',
-              value: 2007,
-            })
         }, 5000)
       }, 5000)*/
 
@@ -204,7 +206,6 @@ const ProjekteContainer = ({
             const data = merge(data1, data2)
             const nodes = buildNodes({
               data,
-              nodeFilter: nodeFilterState.state[treeName],
               treeName,
               loading,
               role,

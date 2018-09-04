@@ -9,7 +9,7 @@ import { Subscribe } from 'unstated'
 
 import nodeFilterState from './nodeFilter'
 
-export default function withTreeNodeFilterState(WrappedComponent) {
+export default function withNodeFilterState(WrappedComponent) {
   return props => (
     <Subscribe to={[nodeFilterState]}>
       {value => <WrappedComponent nodeFilterState={value} {...props} />}
