@@ -29,7 +29,7 @@ import overlays from '../Karte/overlays'
 import idsInsideFeatureCollection from '../../../modules/idsInsideFeatureCollection'
 import withErrorState from '../../../state/withErrorState'
 import logout from '../../../modules/logout'
-import withTreeNodeFilterState from '../../../state/withTreeNodeFilter'
+import withTreeNodeFilterState from '../../../state/withNodeFilter'
 
 const Container = styled.div`
   display: flex;
@@ -100,7 +100,7 @@ const ProjekteContainer = ({
   markierungen,
   setMarkierungen,
   errorState,
-  treeNodeFilterState,
+  nodeFilterState,
 }: {
   treeName: String,
   tabs: Array<String>,
@@ -132,7 +132,7 @@ const ProjekteContainer = ({
   markierungen: Object,
   setMarkierungen: () => void,
   errorState: Object,
-  treeNodeFilterState: Object,
+  nodeFilterState: Object,
 }) => (
   <Query query={data1Gql}>
     {({ error, data: data1 }) => {
@@ -148,12 +148,13 @@ const ProjekteContainer = ({
       const variables = buildVariables({
         data: data1,
         treeName,
-        nodeFilter: treeNodeFilterState.state,
+        nodeFilter: nodeFilterState.state[treeName],
       })
 
       setTimeout(() => {
-        if (treeNodeFilterState.state.ap.startJahr !== 2000)
-          treeNodeFilterState.setValue({
+        if (nodeFilterState.state[treeName].ap.startJahr !== 2000)
+          nodeFilterState.setValue({
+            treeName,
             table: 'ap',
             key: 'startJahr',
             value: 2006,
@@ -194,7 +195,7 @@ const ProjekteContainer = ({
             const data = merge(data1, data2)
             const nodes = buildNodes({
               data,
-              nodeFilter: treeNodeFilterState.state,
+              nodeFilter: nodeFilterState.state[treeName],
               treeName,
               loading,
               role,

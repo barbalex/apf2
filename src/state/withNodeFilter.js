@@ -7,12 +7,12 @@
 import React from 'react'
 import { Subscribe } from 'unstated'
 
-import TreeNodeFilterState from './treeNodeFilter'
+import nodeFilterState from './nodeFilter'
 
 export default function withTreeNodeFilterState(WrappedComponent) {
   return props => (
-    <Subscribe to={[TreeNodeFilterState]}>
-      {value => <WrappedComponent treeNodeFilterState={value} {...props} />}
+    <Subscribe to={[nodeFilterState]}>
+      {value => <WrappedComponent nodeFilterState={value} {...props} />}
     </Subscribe>
   )
 }

@@ -65,18 +65,23 @@ const initialState = {
 }
 
 class NodeFilterContainer extends Container<NodeFilterState> {
-  state = initialState
-  set(nodeFilter) {
-    this.setState(() => nodeFilter)
+  state = { tree: initialState, tree2: initialState }
+  set({ treeName, nodeFilter }) {
+    this.setState(state => ({ ...state, ...{ [treeName]: nodeFilter } }))
   }
-  setValue({ table, key, value }) {
+  setValue({ treeName, table, key, value }) {
     this.setState(state => ({
       ...state,
-      ...{ [table]: { ...state[table], ...{ [key]: value } } },
+      ...{
+        [treeName]: {
+          ...state[treeName],
+          ...{ [table]: { ...state[table], ...{ [key]: value } } },
+        },
+      },
     }))
   }
-  empty() {
-    this.setState(state => initialState)
+  empty(treeName) {
+    this.setState(state => ({ ...state, ...{ [treeName]: initialState } }))
   }
 }
 
