@@ -20,8 +20,8 @@
   "dependencies": {
     "@hocs/debounce-handler": "0.5.0",
     "@hocs/with-lifecycle": "0.5.0",
-    "@material-ui/core": "1.5.1",
-    "@material-ui/icons": "2.0.3",
+    "@material-ui/core": "3.0.2",
+    "@material-ui/icons": "3.0.1",
     "@turf/boolean-point-in-polygon": "6.0.1",
     "@turf/nearest": "4.7.3",
     "@turf/nearest-point": "6.0.1",
