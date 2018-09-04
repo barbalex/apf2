@@ -68,5 +68,6 @@ export default ({
       el.sort = [projIndex, 1, index]
       return el
     })
+  console.log('nodes, ap, length:', nodes.length)
   return nodes
 }

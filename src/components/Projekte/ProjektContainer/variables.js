@@ -3,7 +3,7 @@ import uniq from 'lodash/uniq'
 import get from 'lodash/get'
 
 import getActiveNodes from '../../../modules/getActiveNodes'
-import { type as apType } from '../../../state/treeNodeFilter/ap'
+import { type as apType } from '../../../state/nodeFilter/ap'
 
 export default ({
   data,
@@ -15,6 +15,7 @@ export default ({
   nodeFilter: Object,
 }): Object => {
   const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
+  const apFilterSet = get(data, `${treeName}.apFilter`)
   const activeNodes = getActiveNodes(activeNodeArray)
   const openNodes = get(data, `${treeName}.openNodes`)
   const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
@@ -43,6 +44,12 @@ export default ({
     const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
     apFilter[key] = { [expression]: value }
   })
+  // for unknown reason this only works belated, so not
+  /*
+  if (apFilterSet) {
+    apFilter.bearbeitung = { in: [1, 2, 3] }
+  }
+  console.log('variables:', { apFilter, apFilterSet })*/
   const ap = uniq(
     openNodes
       .map(

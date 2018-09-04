@@ -151,6 +151,7 @@ const ProjekteContainer = ({
         nodeFilter: nodeFilterState.state[treeName],
       })
 
+      /*
       setTimeout(() => {
         if (nodeFilterState.state[treeName].ap.startJahr !== 2000)
           nodeFilterState.setValue({
@@ -159,7 +160,7 @@ const ProjekteContainer = ({
             key: 'startJahr',
             value: 2006,
           })
-      }, 5000)
+      }, 5000)*/
 
       return (
         <Query query={data2Gql} variables={variables}>
@@ -200,6 +201,7 @@ const ProjekteContainer = ({
               loading,
               role,
             })
+            console.log('ProjektContainer, nodes.length:', nodes.length)
             const tree = get(data, treeName)
             const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
             const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))
