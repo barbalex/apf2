@@ -13,11 +13,10 @@ import withState from 'recompose/withState'
 import styled from 'styled-components'
 import { ApolloConsumer } from 'react-apollo'
 import get from 'lodash/get'
-import { Subscribe } from 'unstated'
 
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
-import ErrorState from '../../../../state/Error'
+import withErrorState from '../../../../state/withErrorState'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -58,6 +57,7 @@ const DownloadCardButton = styled(Button)`
 `
 
 const enhance = compose(
+  withErrorState,
   withState('expanded', 'setExpanded', false),
   withState('message', 'setMessage', null),
 )
@@ -71,6 +71,7 @@ const Massnahmen = ({
   setExpanded,
   message,
   setMessage,
+  errorState,
 }: {
   fileType: String,
   applyMapFilterToExport: Boolean,
@@ -80,92 +81,86 @@ const Massnahmen = ({
   setExpanded: () => void,
   message: String,
   setMessage: () => void,
+  errorState: Object,
 }) => (
-  <Subscribe to={[ErrorState]}>
-    {errorState =>
-      <ApolloConsumer>
-        {client =>
-          <StyledCard>
-            <StyledCardActions
-              disableActionSpacing
-              onClick={() => setExpanded(!expanded)}
+  <ApolloConsumer>
+    {client => (
+      <StyledCard>
+        <StyledCardActions
+          disableActionSpacing
+          onClick={() => setExpanded(!expanded)}
+        >
+          <CardActionTitle>Massnahmen</CardActionTitle>
+          <CardActionIconButton
+            data-expanded={expanded}
+            aria-expanded={expanded}
+            aria-label="öffnen"
+          >
+            <Icon title={expanded ? 'schliessen' : 'öffnen'}>
+              <ExpandMoreIcon />
+            </Icon>
+          </CardActionIconButton>
+        </StyledCardActions>
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <StyledCardContent>
+            <DownloadCardButton
+              onClick={async () => {
+                setMessage('Export "Massnahmen" wird vorbereitet...')
+                try {
+                  const { data } = await client.query({
+                    query: await import('./allVMassns.graphql'),
+                  })
+                  exportModule({
+                    data: get(data, 'allVMassns.nodes', []),
+                    fileName: 'Massnahmen',
+                    fileType,
+                    applyMapFilterToExport,
+                    mapFilter,
+                    idKey: 'tpop_id',
+                    xKey: 'tpop_x',
+                    yKey: 'tpop_y',
+                    errorState,
+                  })
+                } catch (error) {
+                  errorState.add(error)
+                }
+                setMessage(null)
+              }}
             >
-              <CardActionTitle>Massnahmen</CardActionTitle>
-              <CardActionIconButton
-                data-expanded={expanded}
-                aria-expanded={expanded}
-                aria-label="öffnen"
-              >
-                <Icon title={expanded ? 'schliessen' : 'öffnen'}>
-                  <ExpandMoreIcon />
-                </Icon>
-              </CardActionIconButton>
-            </StyledCardActions>
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
-              <StyledCardContent>
-                <DownloadCardButton
-                      onClick={async () => {
-                        setMessage('Export "Massnahmen" wird vorbereitet...')
-                        try {
-                          const { data } = await client.query({
-                            query: await import('./allVMassns.graphql')
-                          })
-                          exportModule({
-                            data: get(data, 'allVMassns.nodes', []),
-                            fileName: 'Massnahmen',
-                            fileType,
-                            applyMapFilterToExport,
-                            mapFilter,
-                            idKey: 'tpop_id',
-                            xKey: 'tpop_x',
-                            yKey: 'tpop_y',
-                            errorState,
-                          })
-                        } catch(error) {
-                          errorState.add(error)
-                        }
-                        setMessage(null)
-                      }}
-                >
-                  Massnahmen
-                </DownloadCardButton>
-                <DownloadCardButton
-                      onClick={async () => {
-                        setMessage('Export "MassnahmenWebGisBun" wird vorbereitet...')
-                        try {
-                          const { data } = await client.query({
-                            query: await import('./allVMassnWebgisbuns.graphql')
-                          })
-                          exportModule({
-                            data: get(data, 'allVMassnWebgisbuns.nodes', []),
-                            fileName: 'MassnahmenWebGisBun',
-                            fileType,
-                            applyMapFilterToExport,
-                            mapFilter,
-                            idKey: 'TPOPGUID',
-                            xKey: 'TPOP_X',
-                            yKey: 'TPOP_Y',
-                            errorState,
-                          })
-                        } catch(error) {
-                          errorState.add(error)
-                        }
-                        setMessage(null)
-                      }}
-                >
-                  Massnahmen für WebGIS BUN
-                </DownloadCardButton>
-              </StyledCardContent>
-            </Collapse>
-            {
-              !!message &&
-              <Message message={message} />
-            }
-          </StyledCard>
-        }
-      </ApolloConsumer>
-    }
-  </Subscribe>
+              Massnahmen
+            </DownloadCardButton>
+            <DownloadCardButton
+              onClick={async () => {
+                setMessage('Export "MassnahmenWebGisBun" wird vorbereitet...')
+                try {
+                  const { data } = await client.query({
+                    query: await import('./allVMassnWebgisbuns.graphql'),
+                  })
+                  exportModule({
+                    data: get(data, 'allVMassnWebgisbuns.nodes', []),
+                    fileName: 'MassnahmenWebGisBun',
+                    fileType,
+                    applyMapFilterToExport,
+                    mapFilter,
+                    idKey: 'TPOPGUID',
+                    xKey: 'TPOP_X',
+                    yKey: 'TPOP_Y',
+                    errorState,
+                  })
+                } catch (error) {
+                  errorState.add(error)
+                }
+                setMessage(null)
+              }}
+            >
+              Massnahmen für WebGIS BUN
+            </DownloadCardButton>
+          </StyledCardContent>
+        </Collapse>
+        {!!message && <Message message={message} />}
+      </StyledCard>
+    )}
+  </ApolloConsumer>
 )
 
 export default enhance(Massnahmen)

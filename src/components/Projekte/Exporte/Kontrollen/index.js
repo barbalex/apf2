@@ -13,11 +13,10 @@ import withState from 'recompose/withState'
 import styled from 'styled-components'
 import { ApolloConsumer } from 'react-apollo'
 import get from 'lodash/get'
-import { Subscribe } from 'unstated'
 
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
-import ErrorState from '../../../../state/Error'
+import withErrorState from '../../../../state/withErrorState'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -58,6 +57,7 @@ const DownloadCardButton = styled(Button)`
 `
 
 const enhance = compose(
+  withErrorState,
   withState('expanded', 'setExpanded', false),
   withState('message', 'setMessage', null),
 )
@@ -71,6 +71,7 @@ const Kontrollen = ({
   setExpanded,
   message,
   setMessage,
+  errorState,
 }: {
   fileType: String,
   applyMapFilterToExport: Boolean,
@@ -80,118 +81,114 @@ const Kontrollen = ({
   setExpanded: () => void,
   message: String,
   setMessage: () => void,
+  errorState: Object,
 }) => (
-  <Subscribe to={[ErrorState]}>
-    {errorState =>
-      <ApolloConsumer>
-        {client =>
-          <StyledCard>
-            <StyledCardActions
-              disableActionSpacing
-              onClick={() => setExpanded(!expanded)}
+  <ApolloConsumer>
+    {client => (
+      <StyledCard>
+        <StyledCardActions
+          disableActionSpacing
+          onClick={() => setExpanded(!expanded)}
+        >
+          <CardActionTitle>Kontrollen</CardActionTitle>
+          <CardActionIconButton
+            data-expanded={expanded}
+            aria-expanded={expanded}
+            aria-label="öffnen"
+          >
+            <Icon title={expanded ? 'schliessen' : 'öffnen'}>
+              <ExpandMoreIcon />
+            </Icon>
+          </CardActionIconButton>
+        </StyledCardActions>
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <StyledCardContent>
+            <DownloadCardButton
+              onClick={async () => {
+                setMessage('Export "Kontrollen" wird vorbereitet...')
+                try {
+                  const { data } = await client.query({
+                    query: await import('./allVTpopkontrs.graphql'),
+                  })
+                  exportModule({
+                    data: get(data, 'allVTpopkontrs.nodes', []),
+                    fileName: 'Kontrollen',
+                    fileType,
+                    applyMapFilterToExport,
+                    mapFilter,
+                    idKey: 'tpop_id',
+                    xKey: 'tpop_x',
+                    yKey: 'tpop_y',
+                    errorState,
+                  })
+                } catch (error) {
+                  errorState.add(error)
+                }
+                setMessage(null)
+              }}
             >
-              <CardActionTitle>Kontrollen</CardActionTitle>
-              <CardActionIconButton
-                data-expanded={expanded}
-                aria-expanded={expanded}
-                aria-label="öffnen"
-              >
-                <Icon title={expanded ? 'schliessen' : 'öffnen'}>
-                  <ExpandMoreIcon />
-                </Icon>
-              </CardActionIconButton>
-            </StyledCardActions>
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
-              <StyledCardContent>
-                <DownloadCardButton
-                  onClick={async () => {
-                    setMessage('Export "Kontrollen" wird vorbereitet...')
-                    try {
-                      const { data } = await client.query({
-                        query: await import('./allVTpopkontrs.graphql')
-                      })
-                      exportModule({
-                        data: get(data, 'allVTpopkontrs.nodes', []),
-                        fileName: 'Kontrollen',
-                        fileType,
-                        applyMapFilterToExport,
-                        mapFilter,
-                        idKey: 'tpop_id',
-                        xKey: 'tpop_x',
-                        yKey: 'tpop_y',
-                        errorState,
-                      })
-                    } catch(error) {
-                      errorState.add(error)
-                    }
-                    setMessage(null)
-                  }}
-                >
-                  Kontrollen
-                </DownloadCardButton>
-                <DownloadCardButton
-                  onClick={async () => {
-                    setMessage('Export "KontrollenWebGisBun" wird vorbereitet...')
-                    try {
-                      const { data } = await client.query({
-                        query: await import('./allVTpopkontrWebgisbuns.graphql')
-                      })
-                      exportModule({
-                        data: get(data, 'allVTpopkontrWebgisbuns.nodes', []),
-                        fileName: 'KontrollenWebGisBun',
-                        fileType,
-                        applyMapFilterToExport,
-                        mapFilter,
-                        idKey: 'TPOPGUID',
-                        xKey: 'KONTR_X',
-                        yKey: 'KONTR_Y',
-                        errorState,
-                      })
-                    } catch(error) {
-                      errorState.add(error)
-                    }
-                    setMessage(null)
-                  }}
-                >
-                  Kontrollen für WebGIS BUN
-                </DownloadCardButton>
-                <DownloadCardButton
-                  onClick={async () => {
-                    setMessage('Export "KontrollenAnzahlProZaehleinheit" wird vorbereitet...')
-                    try {
-                      const { data } = await client.query({
-                        query: await import('./allVKontrzaehlAnzproeinheits.graphql')
-                      })
-                      exportModule({
-                        data: get(data, 'allVKontrzaehlAnzproeinheits.nodes', []),
-                        fileName: 'KontrollenAnzahlProZaehleinheit',
-                        fileType,
-                        applyMapFilterToExport,
-                        mapFilter,
-                        idKey: 'tpop_id',
-                        xKey: 'tpop_x',
-                        yKey: 'tpop_y',
-                        errorState,
-                      })
-                    } catch(error) {
-                      errorState.add(error)
-                    }
-                    setMessage(null)
-                  }}
-                >
-                  Kontrollen: Anzahl pro Zähleinheit
-                </DownloadCardButton>
-              </StyledCardContent>
-            </Collapse>
-            {
-              !!message &&
-              <Message message={message} />
-            }
-          </StyledCard>
-        }
-      </ApolloConsumer>
-    }
-  </Subscribe>
+              Kontrollen
+            </DownloadCardButton>
+            <DownloadCardButton
+              onClick={async () => {
+                setMessage('Export "KontrollenWebGisBun" wird vorbereitet...')
+                try {
+                  const { data } = await client.query({
+                    query: await import('./allVTpopkontrWebgisbuns.graphql'),
+                  })
+                  exportModule({
+                    data: get(data, 'allVTpopkontrWebgisbuns.nodes', []),
+                    fileName: 'KontrollenWebGisBun',
+                    fileType,
+                    applyMapFilterToExport,
+                    mapFilter,
+                    idKey: 'TPOPGUID',
+                    xKey: 'KONTR_X',
+                    yKey: 'KONTR_Y',
+                    errorState,
+                  })
+                } catch (error) {
+                  errorState.add(error)
+                }
+                setMessage(null)
+              }}
+            >
+              Kontrollen für WebGIS BUN
+            </DownloadCardButton>
+            <DownloadCardButton
+              onClick={async () => {
+                setMessage(
+                  'Export "KontrollenAnzahlProZaehleinheit" wird vorbereitet...',
+                )
+                try {
+                  const { data } = await client.query({
+                    query: await import('./allVKontrzaehlAnzproeinheits.graphql'),
+                  })
+                  exportModule({
+                    data: get(data, 'allVKontrzaehlAnzproeinheits.nodes', []),
+                    fileName: 'KontrollenAnzahlProZaehleinheit',
+                    fileType,
+                    applyMapFilterToExport,
+                    mapFilter,
+                    idKey: 'tpop_id',
+                    xKey: 'tpop_x',
+                    yKey: 'tpop_y',
+                    errorState,
+                  })
+                } catch (error) {
+                  errorState.add(error)
+                }
+                setMessage(null)
+              }}
+            >
+              Kontrollen: Anzahl pro Zähleinheit
+            </DownloadCardButton>
+          </StyledCardContent>
+        </Collapse>
+        {!!message && <Message message={message} />}
+      </StyledCard>
+    )}
+  </ApolloConsumer>
 )
 
 export default enhance(Kontrollen)

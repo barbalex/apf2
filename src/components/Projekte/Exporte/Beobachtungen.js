@@ -12,13 +12,12 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import styled from 'styled-components'
 import { ApolloConsumer } from 'react-apollo'
-import gql from "graphql-tag"
+import gql from 'graphql-tag'
 import get from 'lodash/get'
-import { Subscribe } from 'unstated'
 
 import exportModule from '../../../modules/export'
 import Message from './Message'
-import ErrorState from '../../../state/Error'
+import withErrorState from '../../../state/withErrorState'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -59,6 +58,7 @@ const DownloadCardButton = styled(Button)`
 `
 
 const enhance = compose(
+  withErrorState,
   withState('expanded', 'setExpanded', false),
   withState('message', 'setMessage', null),
 )
@@ -72,6 +72,7 @@ const Beobachtungen = ({
   setExpanded,
   message,
   setMessage,
+  errorState,
 }: {
   fileType: String,
   applyMapFilterToExport: Boolean,
@@ -81,92 +82,87 @@ const Beobachtungen = ({
   setExpanded: () => void,
   message: String,
   setMessage: () => void,
+  errorState: Object,
 }) => (
-  <Subscribe to={[ErrorState]}>
-    {errorState =>
-      <ApolloConsumer>
-        {client =>
-          <StyledCard>
-            <StyledCardActions
-              disableActionSpacing
-              onClick={() => setExpanded(!expanded)}
+  <ApolloConsumer>
+    {client => (
+      <StyledCard>
+        <StyledCardActions
+          disableActionSpacing
+          onClick={() => setExpanded(!expanded)}
+        >
+          <CardActionTitle>Beobachtungen</CardActionTitle>
+          <CardActionIconButton
+            data-expanded={expanded}
+            aria-expanded={expanded}
+            aria-label="öffnen"
+          >
+            <Icon title={expanded ? 'schliessen' : 'öffnen'}>
+              <ExpandMoreIcon />
+            </Icon>
+          </CardActionIconButton>
+        </StyledCardActions>
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <StyledCardContent>
+            <DownloadCardButton
+              onClick={async () => {
+                setMessage('Export "Beobachtungen" wird vorbereitet...')
+                try {
+                  const { data } = await client.query({
+                    query: gql`
+                      query view {
+                        allVBeobs {
+                          nodes {
+                            id
+                            quelle
+                            id_field: idField
+                            original_id: originalId
+                            art_id: artId
+                            artname
+                            pop_id: popId
+                            pop_nr: popNr
+                            tpop_id: tpopId
+                            tpop_nr: tpopNr
+                            x
+                            y
+                            distanz_zur_teilpopulation: distanzZurTeilpopulation
+                            datum
+                            autor
+                            nicht_zuordnen: nichtZuordnen
+                            bemerkungen
+                            changed
+                            changed_by: changedBy
+                          }
+                        }
+                      }
+                    `,
+                  })
+                  exportModule({
+                    data: get(data, 'allVBeobs.nodes', []),
+                    fileName: 'Beobachtungen',
+                    fileType,
+                    applyMapFilterToExport,
+                    mapFilter,
+                    idKey: 'id',
+                    xKey: 'x',
+                    yKey: 'y',
+                    errorState,
+                  })
+                } catch (error) {
+                  errorState.add(error)
+                }
+                setMessage(null)
+              }}
             >
-              <CardActionTitle>Beobachtungen</CardActionTitle>
-              <CardActionIconButton
-                data-expanded={expanded}
-                aria-expanded={expanded}
-                aria-label="öffnen"
-              >
-                <Icon title={expanded ? 'schliessen' : 'öffnen'}>
-                  <ExpandMoreIcon />
-                </Icon>
-              </CardActionIconButton>
-            </StyledCardActions>
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
-              <StyledCardContent>
-                <DownloadCardButton
-                  onClick={async () => {
-                    setMessage('Export "Beobachtungen" wird vorbereitet...')
-                    try {
-                      const { data } = await client.query({
-                        query: gql`
-                          query view {
-                            allVBeobs {
-                              nodes {
-                                id
-                                quelle
-                                id_field: idField
-                                original_id: originalId
-                                art_id: artId
-                                artname
-                                pop_id: popId
-                                pop_nr: popNr
-                                tpop_id: tpopId
-                                tpop_nr: tpopNr
-                                x
-                                y
-                                distanz_zur_teilpopulation: distanzZurTeilpopulation
-                                datum
-                                autor
-                                nicht_zuordnen: nichtZuordnen
-                                bemerkungen
-                                changed
-                                changed_by: changedBy
-                              }
-                            }
-                          }`
-                      })
-                      exportModule({
-                        data: get(data, 'allVBeobs.nodes', []),
-                        fileName: 'Beobachtungen',
-                        fileType,
-                        applyMapFilterToExport,
-                        mapFilter,
-                        idKey: 'id',
-                        xKey: 'x',
-                        yKey: 'y',
-                        errorState,
-                      })
-                    } catch(error) {
-                      errorState.add(error)
-                    }
-                    setMessage(null)
-                  }}
-                >
-                  <div>Alle Beobachtungen von Arten aus apflora.ch</div>
-                  <div>Nutzungsbedingungen der FNS beachten</div>
-                </DownloadCardButton>
-              </StyledCardContent>
-            </Collapse>
-            {
-              !!message &&
-              <Message message={message} />
-            }
-          </StyledCard>
-        }
-      </ApolloConsumer>
-    }
-  </Subscribe>
+              <div>Alle Beobachtungen von Arten aus apflora.ch</div>
+              <div>Nutzungsbedingungen der FNS beachten</div>
+            </DownloadCardButton>
+          </StyledCardContent>
+        </Collapse>
+        {!!message && <Message message={message} />}
+      </StyledCard>
+    )}
+  </ApolloConsumer>
 )
 
 export default enhance(Beobachtungen)

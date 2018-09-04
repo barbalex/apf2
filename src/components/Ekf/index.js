@@ -6,7 +6,7 @@ import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import merge from 'lodash/merge'
 import intersection from 'lodash/intersection'
-import { Subscribe } from 'unstated'
+import compose from 'recompose/compose'
 import Loadable from 'react-loadable'
 import jwtDecode from 'jwt-decode'
 
@@ -18,7 +18,7 @@ import dataByUserNameGql from './dataByUserName.graphql'
 import dataByAdresseIdGql from './dataByAdresseId.graphql'
 import dataWithDateByUserNameGql from './dataWithDateByUserName.graphql'
 import dataWithDateByAdresseIdGql from './dataWithDateByAdresseId.graphql'
-import ErrorState from '../../state/Error'
+import withErrorState from '../../state/withErrorState'
 import EkfList from './List'
 import Loading from '../shared/Loading'
 
@@ -51,103 +51,101 @@ const ReflexElementForEKF = styled(ReflexElement)`
 `
 const treeTabValues = ['tree', 'daten', 'karte', 'exporte']
 
-const EkfContainer = () => (
-  <Subscribe to={[ErrorState]}>
-    {errorState => (
-      <Query query={data1Gql}>
-        {({ error, data: data1 }) => {
-          if (error) return `Fehler: ${error.message}`
-          const userName = get(data1, 'user.name')
-          const projekteTabs = [...get(data1, 'urlQuery.projekteTabs', [])]
-          const tabs = intersection(treeTabValues, projekteTabs)
-          const treeFlex =
-            projekteTabs.length === 2 && tabs.length === 2
-              ? 0.33
-              : tabs.length === 0
-                ? 1
-                : 1 / tabs.length
-          const isPrint = get(data1, 'isPrint')
-          const jahr = get(data1, 'ekfYear')
-          const ekfAdresseId = get(data1, 'ekfAdresseId')
-          const variables = ekfAdresseId
-            ? { id: ekfAdresseId, jahr }
-            : { userName, jahr }
-          const token = get(data1, 'user.token')
-          const tokenDecoded = token ? jwtDecode(token) : null
-          const role = tokenDecoded ? tokenDecoded.role : null
-          const ekfRefDate = new Date().setMonth(new Date().getMonth() - 2)
-          const ekfRefYear = new Date(ekfRefDate).getFullYear()
-          let query = !!ekfAdresseId ? dataByAdresseIdGql : dataByUserNameGql
-          if (ekfRefYear !== jahr) {
-            query = !!ekfAdresseId
-              ? dataWithDateByAdresseIdGql
-              : dataWithDateByUserNameGql
-          }
+const enhance = compose(withErrorState)
 
-          return (
-            <Query query={query} variables={variables}>
-              {({ error, data: data2, refetch, loading }) => {
-                if (error) return `Fehler: ${error.message}`
-                const data = merge(data1, data2)
-                const activeNodeArray = get(data, 'tree.activeNodeArray')
-                const tpopkontrId = activeNodeArray[9]
+const EkfContainer = ({ errorState }: { errorState: Object }) => (
+  <Query query={data1Gql}>
+    {({ error, data: data1 }) => {
+      if (error) return `Fehler: ${error.message}`
+      const userName = get(data1, 'user.name')
+      const projekteTabs = [...get(data1, 'urlQuery.projekteTabs', [])]
+      const tabs = intersection(treeTabValues, projekteTabs)
+      const treeFlex =
+        projekteTabs.length === 2 && tabs.length === 2
+          ? 0.33
+          : tabs.length === 0
+            ? 1
+            : 1 / tabs.length
+      const isPrint = get(data1, 'isPrint')
+      const jahr = get(data1, 'ekfYear')
+      const ekfAdresseId = get(data1, 'ekfAdresseId')
+      const variables = ekfAdresseId
+        ? { id: ekfAdresseId, jahr }
+        : { userName, jahr }
+      const token = get(data1, 'user.token')
+      const tokenDecoded = token ? jwtDecode(token) : null
+      const role = tokenDecoded ? tokenDecoded.role : null
+      const ekfRefDate = new Date().setMonth(new Date().getMonth() - 2)
+      const ekfRefYear = new Date(ekfRefDate).getFullYear()
+      let query = !!ekfAdresseId ? dataByAdresseIdGql : dataByUserNameGql
+      if (ekfRefYear !== jahr) {
+        query = !!ekfAdresseId
+          ? dataWithDateByAdresseIdGql
+          : dataWithDateByUserNameGql
+      }
 
-                if (isPrint && tpopkontrId)
-                  return (
-                    <Tpopfreiwkontr
-                      id={activeNodeArray[9]}
-                      activeNodeArray={activeNodeArray}
-                      refetchTree={refetch}
-                      errorState={errorState}
-                      role={role}
-                      dimensions={{ width: 1000 }}
-                    />
-                  )
+      return (
+        <Query query={query} variables={variables}>
+          {({ error, data: data2, refetch, loading }) => {
+            if (error) return `Fehler: ${error.message}`
+            const data = merge(data1, data2)
+            const activeNodeArray = get(data, 'tree.activeNodeArray')
+            const tpopkontrId = activeNodeArray[9]
 
-                return (
-                  <Container data-loading={loading}>
-                    <ErrorBoundary>
-                      <ReflexContainer orientation="vertical">
-                        {tabs.includes('tree') && (
-                          <ReflexElement
-                            flex={treeFlex}
-                            propagateDimensions={true}
-                            renderOnResizeRate={200}
-                            renderOnResize={true}
-                          >
-                            <EkfList data={data} loading={loading} />
-                          </ReflexElement>
+            if (isPrint && tpopkontrId)
+              return (
+                <Tpopfreiwkontr
+                  id={activeNodeArray[9]}
+                  activeNodeArray={activeNodeArray}
+                  refetchTree={refetch}
+                  errorState={errorState}
+                  role={role}
+                  dimensions={{ width: 1000 }}
+                />
+              )
+
+            return (
+              <Container data-loading={loading}>
+                <ErrorBoundary>
+                  <ReflexContainer orientation="vertical">
+                    {tabs.includes('tree') && (
+                      <ReflexElement
+                        flex={treeFlex}
+                        propagateDimensions={true}
+                        renderOnResizeRate={200}
+                        renderOnResize={true}
+                      >
+                        <EkfList data={data} loading={loading} />
+                      </ReflexElement>
+                    )}
+                    {tabs.includes('tree') &&
+                      tabs.includes('daten') && <ReflexSplitter />}
+                    {tabs.includes('daten') && (
+                      <ReflexElementForEKF
+                        propagateDimensions={true}
+                        renderOnResizeRate={100}
+                        renderOnResize={true}
+                      >
+                        {tpopkontrId && (
+                          <Tpopfreiwkontr
+                            id={activeNodeArray[9]}
+                            activeNodeArray={activeNodeArray}
+                            refetchTree={refetch}
+                            errorState={errorState}
+                            role={role}
+                          />
                         )}
-                        {tabs.includes('tree') &&
-                          tabs.includes('daten') && <ReflexSplitter />}
-                        {tabs.includes('daten') && (
-                          <ReflexElementForEKF
-                            propagateDimensions={true}
-                            renderOnResizeRate={100}
-                            renderOnResize={true}
-                          >
-                            {tpopkontrId && (
-                              <Tpopfreiwkontr
-                                id={activeNodeArray[9]}
-                                activeNodeArray={activeNodeArray}
-                                refetchTree={refetch}
-                                errorState={errorState}
-                                role={role}
-                              />
-                            )}
-                          </ReflexElementForEKF>
-                        )}
-                      </ReflexContainer>
-                    </ErrorBoundary>
-                  </Container>
-                )
-              }}
-            </Query>
-          )
-        }}
-      </Query>
-    )}
-  </Subscribe>
+                      </ReflexElementForEKF>
+                    )}
+                  </ReflexContainer>
+                </ErrorBoundary>
+              </Container>
+            )
+          }}
+        </Query>
+      )
+    }}
+  </Query>
 )
 
-export default EkfContainer
+export default enhance(EkfContainer)

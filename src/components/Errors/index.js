@@ -1,10 +1,10 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
-import { Subscribe } from 'unstated'
+import compose from 'recompose/compose'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
-import ErrorState from '../../state/Error'
+import withErrorState from '../../state/withErrorState'
 
 const Container = styled.div`
   position: absolute;
@@ -26,17 +26,16 @@ const ErrorDiv = styled.div`
   font-size: 14px;
 `
 
-const Errors = () =>
-  <Subscribe to={[ErrorState]}>
-    {errorState =>
-      <ErrorBoundary>
-        <Container>
-          {errorState.state.errors.map((error, index) => (
-            <ErrorDiv key={index}>{error.message}</ErrorDiv>
-          ))}
-        </Container>
-      </ErrorBoundary>
-    }
-  </Subscribe>
+const enhance = compose(withErrorState)
 
-export default Errors
+const Errors = ({ errorState }: { errorState: Object }) => (
+  <ErrorBoundary>
+    <Container>
+      {errorState.state.errors.map((error, index) => (
+        <ErrorDiv key={index}>{error.message}</ErrorDiv>
+      ))}
+    </Container>
+  </ErrorBoundary>
+)
+
+export default enhance(Errors)
