@@ -13,12 +13,11 @@ import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import format from 'date-fns/format'
 import TextField from '@material-ui/core/TextField'
-import { Subscribe } from 'unstated'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import undelete from './undelete'
-import DeleteState from '../../state/Delete'
-import ErrorState from '../../state/Error'
+import withDeleteState from '../../state/withDeleteState'
+import withErrorState from '../../state/withErrorState'
 
 const List = styled.div`
   padding-left: 24px;
@@ -55,6 +54,8 @@ const StyledCheckbox = styled(Checkbox)`
 `
 
 const enhance = compose(
+  withDeleteState,
+  withErrorState,
   withState('choosenDeletions', 'setChoosenDeletions', []),
   withHandlers({
     onClickUndo: ({
@@ -72,8 +73,8 @@ const enhance = compose(
               setShowDeletions,
               deleteState,
               errorState,
-            })
-        )
+            }),
+        ),
       )
       setChoosenDeletions([])
       if (choosenDeletions.length === datasetsDeleted.length) {
@@ -93,7 +94,7 @@ const enhance = compose(
       }
       setChoosenDeletions(newChoosenDeletions)
     },
-  })
+  }),
 )
 
 const Deletions = ({
@@ -103,100 +104,88 @@ const Deletions = ({
   toggleChoosenDeletions,
   showDeletions,
   setShowDeletions,
+  deleteState,
+  errorState,
 }: {
   onClickUndo: () => void,
   choosenDeletions: Array<string>,
   toggleChoosenDeletions: () => void,
   showDeletions: Boolean,
   setShowDeletions: () => void,
-}) => (
-  <Subscribe to={[DeleteState]}>
-    {deleteState => {
-      const datasetsDeleted = deleteState.state.datasets
+  deleteState: Object,
+  errorState: Object,
+}) => {
+  const datasetsDeleted = deleteState.state.datasets
 
-      return (
-        <Subscribe to={[ErrorState]}>
-          {errorState => (
-            <ErrorBoundary>
-              <Dialog
-                aria-labelledby="dialog-title"
-                open={showDeletions && datasetsDeleted.length > 0}
-              >
-                <DialogTitle id="dialog-title">
-                  gelöschte Datensätze
-                </DialogTitle>
-                <DialogContent>
-                  <List>
-                    {datasetsDeleted.map((ds, index) => {
-                      // clone to remove keys _only_ for presentation
-                      const dataset = { ...ds.data }
-                      // remove null values
-                      Object.keys(dataset).forEach(
-                        key => dataset[key] == null && delete dataset[key]
-                      )
-                      const time = format(
-                        new Date(ds.time),
-                        'YYYY.MM.DD HH:mm:ss'
-                      )
+  return (
+    <ErrorBoundary>
+      <Dialog
+        aria-labelledby="dialog-title"
+        open={showDeletions && datasetsDeleted.length > 0}
+      >
+        <DialogTitle id="dialog-title">gelöschte Datensätze</DialogTitle>
+        <DialogContent>
+          <List>
+            {datasetsDeleted.map((ds, index) => {
+              // clone to remove keys _only_ for presentation
+              const dataset = { ...ds.data }
+              // remove null values
+              Object.keys(dataset).forEach(
+                key => dataset[key] == null && delete dataset[key],
+              )
+              const time = format(new Date(ds.time), 'YYYY.MM.DD HH:mm:ss')
 
-                      return (
-                        <Row key={ds.id} data-withtopline={index > 0}>
-                          <StyledFormControlLabel
-                            control={
-                              <StyledCheckbox
-                                checked={choosenDeletions.includes(ds.id)}
-                                onChange={toggleChoosenDeletions}
-                                value={ds.id}
-                                color="primary"
-                              />
-                            }
-                          />
-                          <TextContainer>
-                            <StyledTextField
-                              label="Lösch-Zeitpunkt"
-                              value={time}
-                              fullWidth
-                            />
-                            <StyledTextField
-                              label="Tabelle"
-                              value={ds.table}
-                              fullWidth
-                            />
-                            <StyledTextField
-                              label="Daten"
-                              value={JSON.stringify(dataset, null, 2)}
-                              multiline
-                              fullWidth
-                            />
-                          </TextContainer>
-                        </Row>
-                      )
-                    })}
-                  </List>
-                </DialogContent>
-                <DialogActions>
-                  <Button
-                    onClick={() =>
-                      onClickUndo({ datasetsDeleted, deleteState, errorState })
+              return (
+                <Row key={ds.id} data-withtopline={index > 0}>
+                  <StyledFormControlLabel
+                    control={
+                      <StyledCheckbox
+                        checked={choosenDeletions.includes(ds.id)}
+                        onChange={toggleChoosenDeletions}
+                        value={ds.id}
+                        color="primary"
+                      />
                     }
-                    disabled={choosenDeletions.length === 0}
-                  >
-                    wiederherstellen
-                  </Button>
-                  <Button
-                    color="primary"
-                    onClick={() => setShowDeletions(false)}
-                  >
-                    schliessen
-                  </Button>
-                </DialogActions>
-              </Dialog>
-            </ErrorBoundary>
-          )}
-        </Subscribe>
-      )
-    }}
-  </Subscribe>
-)
+                  />
+                  <TextContainer>
+                    <StyledTextField
+                      label="Lösch-Zeitpunkt"
+                      value={time}
+                      fullWidth
+                    />
+                    <StyledTextField
+                      label="Tabelle"
+                      value={ds.table}
+                      fullWidth
+                    />
+                    <StyledTextField
+                      label="Daten"
+                      value={JSON.stringify(dataset, null, 2)}
+                      multiline
+                      fullWidth
+                    />
+                  </TextContainer>
+                </Row>
+              )
+            })}
+          </List>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() =>
+              onClickUndo({ datasetsDeleted, deleteState, errorState })
+            }
+            disabled={choosenDeletions.length === 0}
+          >
+            wiederherstellen
+          </Button>
+          <Button color="primary" onClick={() => setShowDeletions(false)}>
+            schliessen
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </ErrorBoundary>
+  )
+}
 
 export default enhance(Deletions)

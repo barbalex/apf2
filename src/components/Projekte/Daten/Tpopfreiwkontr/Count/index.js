@@ -13,14 +13,13 @@ import Button from '@material-ui/core/Button'
 import DeleteIcon from '@material-ui/icons/DeleteForever'
 import AddIcon from '@material-ui/icons/AddCircleOutline'
 import app from 'ampersand-app'
-import { Subscribe } from 'unstated'
 
 import Select from '../../../../shared/Select'
 import TextField from '../../../../shared/TextField'
 import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById.graphql'
 import dataGql from './data.graphql'
 import createTpopkontrzaehl from './createTpopkontrzaehl.graphql'
-import DeleteState from '../../../../../state/Delete'
+import withDeleteState from '../../../../../state/withDeleteState'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -160,6 +159,7 @@ const ShowNew = styled.div`
 `
 
 const enhance = compose(
+  withDeleteState,
   withState('errors', 'setErrors', {}),
   withHandlers({
     saveToDb: ({ setErrors, errors }) => async ({
@@ -215,7 +215,7 @@ const enhance = compose(
         })
         .then(() => refetch())
     },
-    remove: ({ id, refetch, activeNodeArray }) => ({ deleteState, row }) => {
+    remove: ({ id, refetch, activeNodeArray, deleteState }) => ({ row }) => {
       deleteState.setToDelete({
         table: 'tpopkontrzaehl',
         id,
@@ -249,6 +249,7 @@ const Count = ({
   activeNodeArray,
   einheitsUsed,
   ekfzaehleinheits,
+  deleteState,
 }: {
   id: String,
   tpopkontrId: String,
@@ -264,6 +265,7 @@ const Count = ({
   activeNodeArray: Array<String>,
   einheitsUsed: Array<Number>,
   ekfzaehleinheits: Array<Object>,
+  deleteState: Object,
 }) => {
   if (showNew)
     return (
@@ -379,18 +381,14 @@ const Count = ({
                   />
                 </GeschaetztVal>
                 {showDelete && (
-                  <Subscribe to={[DeleteState]}>
-                    {deleteState => (
-                      <Delete>
-                        <StyledDeleteButton
-                          title="löschen"
-                          onClick={() => remove({ deleteState, row })}
-                        >
-                          <DeleteIcon />
-                        </StyledDeleteButton>
-                      </Delete>
-                    )}
-                  </Subscribe>
+                  <Delete>
+                    <StyledDeleteButton
+                      title="löschen"
+                      onClick={() => remove({ row })}
+                    >
+                      <DeleteIcon />
+                    </StyledDeleteButton>
+                  </Delete>
                 )}
               </Container>
             )}

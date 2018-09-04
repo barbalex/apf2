@@ -9,14 +9,13 @@ import withHandlers from 'recompose/withHandlers'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import clone from 'lodash/clone'
-import { Subscribe } from 'unstated'
 
 import isMobilePhone from '../../../modules/isMobilePhone'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import dataGql from '../data.graphql'
 import logout from '../../../modules/logout'
 import getActiveNodes from '../../../modules/getActiveNodes'
-import DeleteState from '../../../state/Delete'
+import withDeleteState from '../../../state/withDeleteState'
 import EkfAdresse from './EkfAdresse'
 
 const MehrButton = styled(Button)`
@@ -29,6 +28,7 @@ const Version = styled.div`
 `
 
 const enhance = compose(
+  withDeleteState,
   withHandlers({
     watchVideos: ({ setAnchorEl }) => () => {
       setAnchorEl(null)
@@ -51,6 +51,7 @@ const MyAppBar = ({
   setAnchorEl,
   setShowDeletions,
   role,
+  deleteState,
 }: {
   onClickButton: () => void,
   showDeletedDatasets: () => void,
@@ -59,79 +60,76 @@ const MyAppBar = ({
   setAnchorEl: () => void,
   setShowDeletions: () => void,
   role: String,
+  deleteState: Object,
 }) => (
-  <Subscribe to={[DeleteState]}>
-    {deleteState => (
-      <Query query={dataGql}>
-        {({ loading, error, data, client }) => {
-          if (error) return `Fehler: ${error.message}`
-          const activeNodeArray = get(data, 'tree.activeNodeArray')
-          const activeNodes = getActiveNodes(activeNodeArray)
-          /**
-           * need to clone projekteTabs
-           * because otherwise removing elements errors out (because elements are sealed)
-           */
-          const projekteTabs = clone(get(data, 'urlQuery.projekteTabs', []))
-          const exporteIsActive = !!activeNodes.projekt
-          const isMobile = isMobilePhone()
-          const datasetsDeleted = deleteState.state.datasets
+  <Query query={dataGql}>
+    {({ loading, error, data, client }) => {
+      if (error) return `Fehler: ${error.message}`
+      const activeNodeArray = get(data, 'tree.activeNodeArray')
+      const activeNodes = getActiveNodes(activeNodeArray)
+      /**
+       * need to clone projekteTabs
+       * because otherwise removing elements errors out (because elements are sealed)
+       */
+      const projekteTabs = clone(get(data, 'urlQuery.projekteTabs', []))
+      const exporteIsActive = !!activeNodes.projekt
+      const isMobile = isMobilePhone()
+      const datasetsDeleted = deleteState.state.datasets
 
-          return (
-            <ErrorBoundary>
-              <div>
-                <MehrButton
-                  aria-label="Mehr"
-                  aria-owns={anchorEl ? 'long-menu' : null}
-                  aria-haspopup="true"
-                  onClick={event => setAnchorEl(event.currentTarget)}
-                >
-                  Mehr
-                </MehrButton>
-                <Menu
-                  id="long-menu"
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
-                  onClose={() => setAnchorEl(null)}
-                >
-                  {isMobile &&
-                    exporteIsActive && (
-                      <MenuItem
-                        onClick={() => {
-                          setAnchorEl(null)
-                          onClickButton('exporte', client, projekteTabs)
-                        }}
-                        disabled={projekteTabs.includes('exporte')}
-                      >
-                        Exporte
-                      </MenuItem>
-                    )}
-                  <MenuItem
-                    onClick={showDeletedDatasets}
-                    disabled={datasetsDeleted.length === 0}
-                  >
-                    gelöschte Datensätze wiederherstellen
-                  </MenuItem>
-                  {['apflora_manager', 'apflora_artverantwortlich'].includes(
-                    role,
-                  ) && <EkfAdresse setAnchorEl={setAnchorEl} />}
-                  <MenuItem onClick={watchVideos}>Video-Anleitungen</MenuItem>
+      return (
+        <ErrorBoundary>
+          <div>
+            <MehrButton
+              aria-label="Mehr"
+              aria-owns={anchorEl ? 'long-menu' : null}
+              aria-haspopup="true"
+              onClick={event => setAnchorEl(event.currentTarget)}
+            >
+              Mehr
+            </MehrButton>
+            <Menu
+              id="long-menu"
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={() => setAnchorEl(null)}
+            >
+              {isMobile &&
+                exporteIsActive && (
                   <MenuItem
                     onClick={() => {
                       setAnchorEl(null)
-                      logout()
+                      onClickButton('exporte', client, projekteTabs)
                     }}
+                    disabled={projekteTabs.includes('exporte')}
                   >
-                    {`${get(data, 'user.name')} abmelden`}
+                    Exporte
                   </MenuItem>
-                  <Version>Version: 1.1.1 vom 24.8.2018</Version>
-                </Menu>
-              </div>
-            </ErrorBoundary>
-          )
-        }}
-      </Query>
-    )}
-  </Subscribe>
+                )}
+              <MenuItem
+                onClick={showDeletedDatasets}
+                disabled={datasetsDeleted.length === 0}
+              >
+                gelöschte Datensätze wiederherstellen
+              </MenuItem>
+              {['apflora_manager', 'apflora_artverantwortlich'].includes(
+                role,
+              ) && <EkfAdresse setAnchorEl={setAnchorEl} />}
+              <MenuItem onClick={watchVideos}>Video-Anleitungen</MenuItem>
+              <MenuItem
+                onClick={() => {
+                  setAnchorEl(null)
+                  logout()
+                }}
+              >
+                {`${get(data, 'user.name')} abmelden`}
+              </MenuItem>
+              <Version>Version: 1.1.1 vom 24.8.2018</Version>
+            </Menu>
+          </div>
+        </ErrorBoundary>
+      )
+    }}
+  </Query>
 )
 
 export default enhance(MyAppBar)

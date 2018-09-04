@@ -9,7 +9,7 @@ import { Subscribe } from 'unstated'
 
 import ErrorState from './Error'
 
-export function withErrorState(WrappedComponent) {
+export default function withErrorState(WrappedComponent) {
   return props => (
     <Subscribe to={[ErrorState]}>
       {value => <WrappedComponent errorState={value} {...props} />}

@@ -9,7 +9,7 @@ import { Subscribe } from 'unstated'
 
 import DeleteState from './Delete'
 
-export function withDeleteState(WrappedComponent) {
+export default function withDeleteState(WrappedComponent) {
   return props => (
     <Subscribe to={[DeleteState]}>
       {value => <WrappedComponent deleteState={value} {...props} />}
