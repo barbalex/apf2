@@ -2,7 +2,8 @@
 import get from 'lodash/get'
 import jwtDecode from 'jwt-decode'
 
-import treeNodeLabelFilter from './tree/nodeLabelFilter'
+import nodeLabelFilter from './tree/nodeLabelFilter'
+import nodeFilter from './tree/nodeFilter'
 import treeMap from './tree/map'
 
 export default async idb => {
@@ -31,7 +32,8 @@ export default async idb => {
       activeNodeArray: [],
       openNodes: [],
       apFilter: false,
-      nodeLabelFilter: treeNodeLabelFilter,
+      nodeLabelFilter,
+      nodeFilter,
       map: treeMap,
       __typename: 'Tree',
     },
@@ -40,7 +42,8 @@ export default async idb => {
       activeNodeArray: [],
       openNodes: [],
       apFilter: false,
-      nodeLabelFilter: treeNodeLabelFilter,
+      nodeLabelFilter,
+      nodeFilter,
       map: treeMap,
       __typename: 'Tree2',
     },
