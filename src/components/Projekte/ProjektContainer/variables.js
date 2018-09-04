@@ -15,7 +15,7 @@ export default ({
   nodeFilter: Object,
 }): Object => {
   const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
-  const apFilterSet = get(data, `${treeName}.apFilter`)
+  //const apFilterSet = get(data, `${treeName}.apFilter`)
   const activeNodes = getActiveNodes(activeNodeArray)
   const openNodes = get(data, `${treeName}.openNodes`)
   const projekteTabs = get(data, 'urlQuery.projekteTabs', [])

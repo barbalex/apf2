@@ -33,7 +33,7 @@ type NodeFilterState = {
   user: Object,
 }
 
-const initialState = {
+const initialTreeState = {
   ap,
   pop: null,
   tpop: null,
@@ -65,7 +65,7 @@ const initialState = {
 }
 
 class NodeFilterContainer extends Container<NodeFilterState> {
-  state = { tree: initialState, tree2: initialState }
+  state = { tree: initialTreeState, tree2: initialTreeState, show: false }
   set({ treeName, nodeFilter }) {
     this.setState(state => ({ ...state, ...{ [treeName]: nodeFilter } }))
   }
@@ -81,7 +81,10 @@ class NodeFilterContainer extends Container<NodeFilterState> {
     }))
   }
   empty(treeName) {
-    this.setState(state => ({ ...state, ...{ [treeName]: initialState } }))
+    this.setState(state => ({ ...state, ...{ [treeName]: initialTreeState } }))
+  }
+  toggleShow() {
+    this.setState(state => ({ ...state, ...{ show: !state.show } }))
   }
 }
 

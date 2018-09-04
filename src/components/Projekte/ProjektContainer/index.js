@@ -150,16 +150,24 @@ const ProjekteContainer = ({
         treeName,
         nodeFilter: nodeFilterState.state[treeName],
       })
-
       /*
       setTimeout(() => {
-        if (nodeFilterState.state[treeName].ap.startJahr !== 2000)
+        if (nodeFilterState.state[treeName].ap.startJahr !== 2007)
           nodeFilterState.setValue({
             treeName,
             table: 'ap',
             key: 'startJahr',
             value: 2006,
           })
+        setTimeout(() => {
+          if (nodeFilterState.state[treeName].ap.startJahr === 2006)
+            nodeFilterState.setValue({
+              treeName,
+              table: 'ap',
+              key: 'startJahr',
+              value: 2007,
+            })
+        }, 5000)
       }, 5000)*/
 
       return (
@@ -201,7 +209,6 @@ const ProjekteContainer = ({
               loading,
               role,
             })
-            console.log('ProjektContainer, nodes.length:', nodes.length)
             const tree = get(data, treeName)
             const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
             const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))
