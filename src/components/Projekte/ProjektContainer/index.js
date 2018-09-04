@@ -146,34 +146,16 @@ const ProjekteContainer = ({
       const role = tokenDecoded ? tokenDecoded.role : null
       const projekteTabs = [...get(data1, 'urlQuery.projekteTabs', [])]
       const variables = buildVariables(data1, treeName)
-      //const {projekt,isProjekt,projId,isAp} = variables
-      //console.log('ProjektContainer:', {data1,projekt,isProjekt,projId,isAp})
-      console.log('ProjectContainer:', {
-        treeNodeFilterState: treeNodeFilterState.state,
-        ap: treeNodeFilterState.state.ap.state,
-      })
-      /**
-       * get data based on openNodes, not activeNodes
-       * reason: multiple open nodes should recieve own data
-       */
-      /*setTimeout(
-        () => treeNodeFilterState.state.ap.setValue({ startJahr: 1 }),
-        1000,
-      )*/
+      /*
       setTimeout(() => {
-        console.log('setting state')
-        treeNodeFilterState.setValue({
-          table: 'ap',
-          key: 'startJahr',
-          value: 1,
-        })
-      }, 1000)
-      setTimeout(() => {
-        console.log('ProjectContainer:', {
-          treeNodeFilterState: treeNodeFilterState.state,
-          ap: treeNodeFilterState.state.ap.state,
-        })
-      }, 2000)
+        if (treeNodeFilterState.state.ap.startJahr !== 2000)
+          treeNodeFilterState.setValue({
+            table: 'ap',
+            key: 'startJahr',
+            value: 2006,
+          })
+      }, 5000)*/
+
       return (
         <Query query={data2Gql} variables={variables}>
           {({ loading, error, data: data2, client, refetch }) => {
@@ -206,7 +188,13 @@ const ProjekteContainer = ({
             }
 
             const data = merge(data1, data2)
-            const nodes = buildNodes({ data, treeName, loading, role })
+            const nodes = buildNodes({
+              data,
+              nodeFilter: treeNodeFilterState.state,
+              treeName,
+              loading,
+              role,
+            })
             const tree = get(data, treeName)
             const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
             const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))

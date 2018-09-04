@@ -40,6 +40,10 @@ query TreeDataQuery(
       projId
       artId
       bearbeitung
+      startJahr
+      umsetzung
+      bearbeiter
+      ekfBeobachtungszeitpunkt
       aeEigenschaftenByArtId {
         id
         artname

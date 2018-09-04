@@ -1,5 +1,4 @@
 // @flow
-import { Container } from 'unstated'
 
 export type apType = {
   artId?: string,
@@ -10,7 +9,7 @@ export type apType = {
   ekfBeobachtungszeitpunkt?: string,
 }
 
-const initialState = {
+export const initialAp = {
   artId: null,
   bearbeitung: null,
   startJahr: null,
@@ -18,18 +17,3 @@ const initialState = {
   bearbeiter: null,
   ekfBeobachtungszeitpunkt: null,
 }
-
-class ApContainer extends Container<apType> {
-  state = initialState
-  set(newState) {
-    this.setState(() => newState)
-  }
-  setValue({ key, value }) {
-    this.setState(state => ({ ...state, [key]: value }))
-  }
-  empty() {
-    this.setState(() => initialState)
-  }
-}
-
-export default ApContainer
