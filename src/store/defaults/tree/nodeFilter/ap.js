@@ -2,7 +2,6 @@
 
 export default {
   artId: null,
-  projId: null,
   bearbeitung: null,
   startJahr: null,
   umsetzung: null,

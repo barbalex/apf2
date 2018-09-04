@@ -29,6 +29,7 @@ import overlays from '../Karte/overlays'
 import idsInsideFeatureCollection from '../../../modules/idsInsideFeatureCollection'
 import withErrorState from '../../../state/withErrorState'
 import logout from '../../../modules/logout'
+import withTreeNodeFilterState from '../../../state/withTreeNodeFilter'
 
 const Container = styled.div`
   display: flex;
@@ -49,6 +50,7 @@ const LogoutButton = styled(Button)`
 
 const enhance = compose(
   withErrorState,
+  withTreeNodeFilterState,
   withState('apfloraLayers', 'setApfloraLayers', apfloraLayers),
   withState('activeApfloraLayers', 'setActiveApfloraLayers', []),
   withState('overlays', 'setOverlays', overlays),
@@ -98,6 +100,7 @@ const ProjekteContainer = ({
   markierungen,
   setMarkierungen,
   errorState,
+  treeNodeFilterState,
 }: {
   treeName: String,
   tabs: Array<String>,
@@ -129,6 +132,7 @@ const ProjekteContainer = ({
   markierungen: Object,
   setMarkierungen: () => void,
   errorState: Object,
+  treeNodeFilterState: Object,
 }) => (
   <Query query={data1Gql}>
     {({ error, data: data1 }) => {
@@ -144,11 +148,32 @@ const ProjekteContainer = ({
       const variables = buildVariables(data1, treeName)
       //const {projekt,isProjekt,projId,isAp} = variables
       //console.log('ProjektContainer:', {data1,projekt,isProjekt,projId,isAp})
+      console.log('ProjectContainer:', {
+        treeNodeFilterState: treeNodeFilterState.state,
+        ap: treeNodeFilterState.state.ap.state,
+      })
       /**
        * get data based on openNodes, not activeNodes
        * reason: multiple open nodes should recieve own data
        */
-
+      /*setTimeout(
+        () => treeNodeFilterState.state.ap.setValue({ startJahr: 1 }),
+        1000,
+      )*/
+      setTimeout(() => {
+        console.log('setting state')
+        treeNodeFilterState.setValue({
+          table: 'ap',
+          key: 'startJahr',
+          value: 1,
+        })
+      }, 1000)
+      setTimeout(() => {
+        console.log('ProjectContainer:', {
+          treeNodeFilterState: treeNodeFilterState.state,
+          ap: treeNodeFilterState.state.ap.state,
+        })
+      }, 2000)
       return (
         <Query query={data2Gql} variables={variables}>
           {({ loading, error, data: data2, client, refetch }) => {
