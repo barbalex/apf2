@@ -12,7 +12,7 @@ import setTreeKey from './setTreeKey.graphql'
 import apById from './apById.graphql'
 import Label from '../../../shared/Label'
 import ErrorBoundary from '../../../shared/ErrorBoundarySingleChild'
-import getActiveNodes from '../../../../modules/getActiveNodes';
+import getActiveNodes from '../../../../modules/getActiveNodes'
 
 const NurApDiv = styled.div`
   display: flex;
@@ -33,7 +33,7 @@ const enhance = compose(
       apFilter,
       activeNodeArray,
       openNodes,
-    }:{
+    }: {
       client: Object,
       apFilter: Boolean,
       activeNodeArray: Array<String>,
@@ -45,8 +45,8 @@ const enhance = compose(
         variables: {
           value: !apFilter,
           tree: treeName,
-          key: 'apFilter'
-        }
+          key: 'apFilter',
+        },
       })
       if (!previousApFilter) {
         // apFilter was set to true
@@ -57,14 +57,11 @@ const enhance = compose(
           // check if this is real ap
           result = await client.query({
             query: apById,
-            variables: { id: apId }
+            variables: { id: apId },
           })
         }
         const isAp = [1, 2, 3].includes(get(result, 'data.apById.bearbeitung'))
-        if (
-          !isAp &&
-          activeNodeArray[2] === 'Aktionspläne'
-        ) {
+        if (!isAp && activeNodeArray[2] === 'Aktionspläne') {
           // not a real ap
           // shorten active node array to Aktionspläne
           const newActiveNodeArray = [
@@ -77,8 +74,8 @@ const enhance = compose(
             variables: {
               value: newActiveNodeArray,
               tree: treeName,
-              key: 'activeNodeArray'
-            }
+              key: 'activeNodeArray',
+            },
           })
           // remove from openNodes
           const newOpenNodes = openNodes.filter(n => {
@@ -87,7 +84,8 @@ const enhance = compose(
               n[0] === newActiveNodeArray[0] &&
               n[1] === newActiveNodeArray[1] &&
               n[2] === newActiveNodeArray[2]
-            ) return false
+            )
+              return false
             return true
           })
           await client.mutate({
@@ -95,13 +93,13 @@ const enhance = compose(
             variables: {
               value: newOpenNodes,
               tree: treeName,
-              key: 'openNodes'
-            }
+              key: 'openNodes',
+            },
           })
         }
       }
     },
-  })
+  }),
 )
 
 const ApFilter = ({
@@ -110,8 +108,8 @@ const ApFilter = ({
 }: {
   treeName: String,
   onChange: () => void,
-}) =>
-  <Query query={dataGql} >
+}) => (
+  <Query query={dataGql}>
     {({ error, data, client }) => {
       if (error) {
         if (
@@ -134,7 +132,9 @@ const ApFilter = ({
             <Label label="nur AP" />
             <StyledSwitch
               checked={apFilter}
-              onChange={() => onChange({ client, apFilter, activeNodeArray, openNodes })}
+              onChange={() =>
+                onChange({ client, apFilter, activeNodeArray, openNodes })
+              }
               color="primary"
             />
           </NurApDiv>
@@ -142,5 +142,6 @@ const ApFilter = ({
       )
     }}
   </Query>
+)
 
 export default enhance(ApFilter)

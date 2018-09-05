@@ -19,7 +19,6 @@ export default ({
   if (!node.url) throw new Error('passed node has no url')
 
   // TODO: always set showFilter false if is true
-  console.log('toggleNode', { nodeFilterState })
   if (nodeFilterState) {
     const { show } = nodeFilterState.state
     if (show) {

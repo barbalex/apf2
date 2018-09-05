@@ -15,7 +15,7 @@ export default ({
   nodeFilter: Object,
 }): Object => {
   const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
-  //const apFilterSet = get(data, `${treeName}.apFilter`)
+  const apFilterSet = get(data, `${treeName}.apFilter`)
   const activeNodes = getActiveNodes(activeNodeArray)
   const openNodes = get(data, `${treeName}.openNodes`)
   const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
@@ -46,11 +46,10 @@ export default ({
   })
   console.log('variables, apFilter:', apFilter)
   // for unknown reason the following only works belated, so not
-  /*
   if (apFilterSet) {
     apFilter.bearbeitung = { in: [1, 2, 3] }
   }
-  console.log('variables:', { apFilter, apFilterSet })*/
+  console.log('variables:', { apFilter, apFilterSet })
   const ap = uniq(
     openNodes
       .map(

@@ -225,7 +225,6 @@ const Ap = ({
             } else {
               row = get(data, 'apById')
             }
-            console.log('Ap, row:', row)
 
             return (
               <ErrorBoundary>
@@ -313,14 +312,14 @@ const Ap = ({
                             key={`${row.id}umsetzung`}
                             value={row.umsetzung}
                             dataSource={umsetzungWerte}
-                            saveToDb={value =>
-                              updateAp({
-                                variables: {
-                                  id,
-                                  umsetzung: value,
-                                },
+                            saveToDb={value => {
+                              saveToDb({
+                                row,
+                                field: 'umsetzung',
+                                value,
+                                updateAp,
                               })
-                            }
+                            }}
                             error={errors.umsetzung}
                             popover={
                               <Fragment>

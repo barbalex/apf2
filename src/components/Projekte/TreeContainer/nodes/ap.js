@@ -42,12 +42,12 @@ export default ({
       return true
     })
     // filter by apFilter
-    .filter(el => {
+    /*.filter(el => {
       if (apFilter) {
         return [1, 2, 3].includes(el.bearbeitung)
       }
       return true
-    })
+    })*/
     .map(el => ({
       nodeType: 'table',
       menuType: 'ap',

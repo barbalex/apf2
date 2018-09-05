@@ -176,8 +176,6 @@ const Daten = ({
       const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
       const apId = get(data, `${treeName}.activeNodeArray[3]`)
 
-      console.log('Daten', { activeNode })
-
       const formObject = {
         projekt: (
           <Projekt
