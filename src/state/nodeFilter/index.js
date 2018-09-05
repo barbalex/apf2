@@ -105,6 +105,7 @@ class NodeFilterContainer extends Container<NodeFilterState> {
   }
 
   setValue({ treeName, table, key, value }) {
+    console.log('nodeFilter, setting value:', { treeName, table, key, value })
     this.setState(state => ({
       ...state,
       ...{

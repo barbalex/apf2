@@ -18,6 +18,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import data1Gql from './data1.graphql'
 import data2Gql from './data2.graphql'
 import updateApByIdGql from './updateApById.graphql'
+import withNodeFilter from '../../../../state/withNodeFilter'
 
 const Container = styled.div`
   height: 100%;
@@ -61,52 +62,65 @@ const LabelPopoverRowColumnRight = styled.div`
 `
 
 const enhance = compose(
+  withNodeFilter,
   withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({ refetchTree, setErrors, errors }) => async ({
-      row,
-      field,
-      value,
-      updateAp,
-    }) => {
+    saveToDb: ({
+      refetchTree,
+      setErrors,
+      errors,
+      nodeFilterState,
+      treeName,
+    }) => async ({ row, field, value, updateAp }) => {
       /**
        * only save if value changed
        */
       if (row[field] === value) return
-      try {
-        await updateAp({
-          variables: {
-            id: row.id,
-            [field]: value,
-          },
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateApById: {
-              ap: {
-                id: row.id,
-                startJahr: field === 'startJahr' ? value : row.startJahr,
-                bearbeitung: field === 'bearbeitung' ? value : row.bearbeitung,
-                umsetzung: field === 'umsetzung' ? value : row.umsetzung,
-                artId: field === 'artId' ? value : row.artId,
-                bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
-                ekfBeobachtungszeitpunkt:
-                  field === 'ekfBeobachtungszeitpunkt'
-                    ? value
-                    : row.ekfBeobachtungszeitpunkt,
-                projId: field === 'projId' ? value : row.projId,
-                adresseByBearbeiter: row.adresseByBearbeiter,
-                aeEigenschaftenByArtId: row.aeEigenschaftenByArtId,
+      const { show: showFilter } = nodeFilterState.state
+      console.log('Ap, saveToDb', {
+        showFilter,
+        nodeFilterState,
+        state: nodeFilterState.state.tree,
+      })
+      if (showFilter) {
+        nodeFilterState.setValue({ treeName, table: 'ap', key: field, value })
+      } else {
+        try {
+          await updateAp({
+            variables: {
+              id: row.id,
+              [field]: value,
+            },
+            optimisticResponse: {
+              __typename: 'Mutation',
+              updateApById: {
+                ap: {
+                  id: row.id,
+                  startJahr: field === 'startJahr' ? value : row.startJahr,
+                  bearbeitung:
+                    field === 'bearbeitung' ? value : row.bearbeitung,
+                  umsetzung: field === 'umsetzung' ? value : row.umsetzung,
+                  artId: field === 'artId' ? value : row.artId,
+                  bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
+                  ekfBeobachtungszeitpunkt:
+                    field === 'ekfBeobachtungszeitpunkt'
+                      ? value
+                      : row.ekfBeobachtungszeitpunkt,
+                  projId: field === 'projId' ? value : row.projId,
+                  adresseByBearbeiter: row.adresseByBearbeiter,
+                  aeEigenschaftenByArtId: row.aeEigenschaftenByArtId,
+                  __typename: 'Ap',
+                },
                 __typename: 'Ap',
               },
-              __typename: 'Ap',
             },
-          },
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
+          })
+        } catch (error) {
+          return setErrors({ [field]: error.message })
+        }
+        setErrors({})
+        if (['artId'].includes(field)) refetchTree()
       }
-      setErrors({})
-      if (['artId'].includes(field)) refetchTree()
     },
   }),
   withLifecycle({

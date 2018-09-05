@@ -3,12 +3,12 @@ import React from 'react'
 import styled from 'styled-components'
 import FilterIcon from '@material-ui/icons/FilterList'
 import EditIcon from '@material-ui/icons/Edit'
+import IconButton from '@material-ui/core/IconButton'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 
 import TestdataMessage from './TestdataMessage'
 import withNodeFilterState from '../../state/withNodeFilter'
-import { Icon } from '@material-ui/core'
 
 const Container = styled.div`
   background-color: #388e3c;
@@ -26,24 +26,22 @@ const Title = styled.div`
   color: white;
   font-weight: bold;
 `
-const IconDiv = styled.div``
+const StyledIconButton = styled(IconButton)`
+  height: 30px !important;
+  width: 30px !important;
+  margin-right: 5px !important;
+`
 const StyledFilterIcon = styled(FilterIcon)`
   cursor: pointer;
   pointer-events: auto;
   padding-top: 5px;
-  padding-right: 10px;
-  padding-bottom: 0;
   color: white;
-  vertical-align: middle;
 `
 const StyledEditIcon = styled(EditIcon)`
   cursor: pointer;
   pointer-events: auto;
   padding-top: 5px;
-  padding-right: 10px;
-  padding-bottom: 0;
   color: white;
-  vertical-align: middle;
 `
 
 const enhance = compose(
@@ -70,13 +68,19 @@ const FormTitle = ({
     <TitleRow>
       <Title>{title}</Title>
       {nodeFilterState.state.show ? (
-        <IconDiv title="Daten anzeigen und bearbeiten">
+        <StyledIconButton
+          aria-label="Daten anzeigen und bearbeiten"
+          title="Daten anzeigen und bearbeiten"
+        >
           <StyledEditIcon onClick={onToggleShow} />
-        </IconDiv>
+        </StyledIconButton>
       ) : (
-        <IconDiv title="Daten filtern (TODO)">
+        <StyledIconButton
+          aria-label="Daten filtern (TODO)"
+          title="Daten filtern (TODO)"
+        >
           <StyledFilterIcon onClick={onToggleShow} />
-        </IconDiv>
+        </StyledIconButton>
       )}
     </TitleRow>
     <TestdataMessage tree={tree} apId={apId} />
