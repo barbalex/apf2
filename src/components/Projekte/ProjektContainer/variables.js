@@ -44,6 +44,7 @@ export default ({
     const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
     apFilter[key] = { [expression]: value }
   })
+  console.log('variables, apFilter:', apFilter)
   // for unknown reason the following only works belated, so not
   /*
   if (apFilterSet) {

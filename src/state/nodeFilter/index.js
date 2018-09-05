@@ -1,5 +1,7 @@
 // @flow
 import { Container } from 'unstated'
+import cloneDeep from 'lodash/cloneDeep'
+
 import { initial as ap } from './ap'
 
 type NodeFilterState = {
@@ -101,28 +103,37 @@ class NodeFilterContainer extends Container<NodeFilterState> {
   state = { tree: initialTreeState, tree2: initialTreeState, show: false }
 
   set({ treeName, nodeFilter }) {
-    this.setState(state => ({ ...state, ...{ [treeName]: nodeFilter } }))
+    this.setState(state => {
+      const newState = cloneDeep(state)
+      newState[treeName] = nodeFilter
+      return newState
+    })
   }
 
   setValue({ treeName, table, key, value }) {
     console.log('nodeFilter, setting value:', { treeName, table, key, value })
-    this.setState(state => ({
-      ...state,
-      ...{
-        [treeName]: {
-          ...state[treeName],
-          ...{ [table]: { ...state[table], ...{ [key]: value } } },
-        },
-      },
-    }))
+    this.setState(state => {
+      const newState = cloneDeep(state)
+      newState[treeName][table][key] = value
+      console.log('nodeFilter, newState:', newState)
+      return newState
+    })
   }
 
   empty(treeName) {
-    this.setState(state => ({ ...state, ...{ [treeName]: initialTreeState } }))
+    this.setState(state => {
+      const newState = cloneDeep(state)
+      newState[treeName] = initialTreeState
+      return newState
+    })
   }
 
   toggleShow() {
-    this.setState(state => ({ ...state, ...{ show: !state.show } }))
+    this.setState(state => {
+      const newState = cloneDeep(state)
+      newState.show = !state.show
+      return newState
+    })
   }
 }
 
