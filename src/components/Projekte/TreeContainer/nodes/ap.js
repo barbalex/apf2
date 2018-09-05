@@ -42,12 +42,14 @@ export default ({
       return true
     })
     // filter by apFilter
-    /*.filter(el => {
+    // TODO: would be much better to filter this in query
+    // but unfortunately query does not immediatly update
+    .filter(el => {
       if (apFilter) {
         return [1, 2, 3].includes(el.bearbeitung)
       }
       return true
-    })*/
+    })
     .map(el => ({
       nodeType: 'table',
       menuType: 'ap',
