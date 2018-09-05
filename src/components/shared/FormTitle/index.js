@@ -100,8 +100,8 @@ const FormTitle = ({
           </StyledIconButton>
         ) : (
           <StyledIconButton
-            aria-label="Daten filtern (TODO)"
-            title="Daten filtern (TODO)"
+            aria-label="Daten filtern"
+            title="Daten filtern (BAUSTELLE)"
           >
             <StyledFilterIcon onClick={onToggleShow} />
           </StyledIconButton>

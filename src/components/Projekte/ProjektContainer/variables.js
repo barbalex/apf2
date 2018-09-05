@@ -4,6 +4,7 @@ import get from 'lodash/get'
 
 import getActiveNodes from '../../../modules/getActiveNodes'
 import { type as apType } from '../../../state/nodeFilter/ap'
+import { type as popType } from '../../../state/nodeFilter/pop'
 
 export default ({
   data,
@@ -97,6 +98,14 @@ export default ({
   )
   const isPop =
     isAp && openNodes.some(nArray => nArray[4] === 'Populationen' && nArray[5])
+  const popFilter = { apId: { in: ap } }
+  const popFilterValues = Object.entries(nodeFilter.pop).filter(
+    e => e[1] || e[1] === 0,
+  )
+  popFilterValues.forEach(([key, value]) => {
+    const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
+    apFilter[key] = { [expression]: value }
+  })
   const tpop = uniq(
     openNodes
       .map(
@@ -148,6 +157,7 @@ export default ({
     isZiel,
     pop,
     isPop,
+    popFilter,
     tpop,
     isTpop,
     tpopkontr,

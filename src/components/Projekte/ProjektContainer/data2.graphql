@@ -8,6 +8,7 @@ query TreeDataQuery(
   $isAp: Boolean!
   $pop: [UUID!]
   $isPop: Boolean!
+  $popFilter: PopFilter!
   $tpop: [UUID!]
   $isTpop: Boolean!
   $ziel: [UUID!]
@@ -53,8 +54,7 @@ query TreeDataQuery(
       }
     }
   }
-  pops: allPops(filter: { apId: { in: $ap } }, orderBy: NR_ASC)
-    @include(if: $isAp) {
+  pops: allPops(filter: $popFilter, orderBy: NR_ASC) @include(if: $isAp) {
     nodes {
       id
       apId
