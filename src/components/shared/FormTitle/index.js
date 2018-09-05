@@ -6,9 +6,12 @@ import EditIcon from '@material-ui/icons/Edit'
 import IconButton from '@material-ui/core/IconButton'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import isUuid from 'is-uuid'
+import app from 'ampersand-app'
 
 import TestdataMessage from './TestdataMessage'
-import withNodeFilterState from '../../state/withNodeFilter'
+import withNodeFilterState from '../../../state/withNodeFilter'
+import setTreeKeyGql from './setTreeKey.graphql'
 
 const Container = styled.div`
   background-color: #388e3c;
@@ -47,7 +50,27 @@ const StyledEditIcon = styled(EditIcon)`
 const enhance = compose(
   withNodeFilterState,
   withHandlers({
-    onToggleShow: ({ nodeFilterState }) => () => nodeFilterState.toggleShow(),
+    onToggleShow: ({ nodeFilterState, activeNodeArray, treeName }) => () => {
+      nodeFilterState.toggleShow()
+      // TODO:
+      // if active node is id, pop
+      // check if last element of activeNodeArray is uuid
+      if (
+        activeNodeArray &&
+        treeName &&
+        isUuid.anyNonNil(activeNodeArray[activeNodeArray.length - 1])
+      ) {
+        const newActiveNodeArray = activeNodeArray.slice(0, -1)
+        app.client.mutate({
+          mutation: setTreeKeyGql,
+          variables: {
+            value: newActiveNodeArray,
+            tree: treeName,
+            key: 'activeNodeArray',
+          },
+        })
+      }
+    },
   }),
 )
 

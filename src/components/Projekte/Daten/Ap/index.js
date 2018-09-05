@@ -77,11 +77,6 @@ const enhance = compose(
        */
       if (row[field] === value) return
       const { show: showFilter } = nodeFilterState.state
-      console.log('Ap, saveToDb', {
-        showFilter,
-        nodeFilterState,
-        state: nodeFilterState.state.tree,
-      })
       if (showFilter) {
         nodeFilterState.setValue({ treeName, table: 'ap', key: field, value })
       } else {
@@ -136,15 +131,18 @@ const Ap = ({
   treeName,
   saveToDb,
   errors,
+  nodeFilterState,
 }: {
   treeName: String,
   saveToDb: () => void,
   errors: Object,
+  nodeFilterState: Object,
 }) => (
   <Query query={data1Gql}>
     {({ loading, error, data }) => {
       if (error) return `Fehler: ${error.message}`
       const id = get(data, `${treeName}.activeNodeArray[3]`)
+      const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
 
       return (
         <Query query={data2Gql} variables={{ id }}>
@@ -157,7 +155,6 @@ const Ap = ({
               )
             if (error) return `Fehler: ${error.message}`
 
-            const row = get(data, 'apById')
             let bearbeitungWerte = get(data, 'allApBearbstandWertes.nodes', [])
             bearbeitungWerte = sortBy(bearbeitungWerte, 'sort')
             bearbeitungWerte = bearbeitungWerte.map(el => ({
@@ -189,10 +186,24 @@ const Ap = ({
               label: el.artname,
             }))
 
+            const { show: showFilter } = nodeFilterState.state
+            let row
+            if (showFilter) {
+              row = nodeFilterState.state[treeName].ap
+            } else {
+              row = get(data, 'apById')
+            }
+            console.log('Ap, row:', row)
+
             return (
               <ErrorBoundary>
                 <Container>
-                  <FormTitle apId={id} title="Aktionsplan" />
+                  <FormTitle
+                    apId={id}
+                    title="Aktionsplan"
+                    activeNodeArray={activeNodeArray}
+                    treeName={treeName}
+                  />
                   <Mutation mutation={updateApByIdGql}>
                     {(updateAp, { data }) => (
                       <FieldsContainer>
