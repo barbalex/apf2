@@ -16,6 +16,7 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updatePopByIdGql from './updatePopById.graphql'
+import withNodeFilter from '../../../../state/withNodeFilter'
 
 const Container = styled.div`
   height: 100%;
@@ -29,12 +30,10 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withState('errors', 'setErrors', ({})),
+  withNodeFilter,
+  withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({
-      setErrors,
-      errors,
-    }) => async ({
+    saveToDb: ({ setErrors, errors, nodeFilterState, treeName }) => async ({
       row,
       field,
       value,
@@ -44,46 +43,59 @@ const enhance = compose(
        * only save if value changed
        */
       if (row[field] === value) return
-      try {
-        updatePop({
-          variables: {
-            id: row.id,
-            [field]: value,
-          },
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updatePopById: {
-              pop: {
-                id: row.id,
-                apId: field === 'apId' ? value : row.apId,
-                nr: field === 'nr' ? value : row.nr,
-                name: field === 'name' ? value : row.name,
-                status: field === 'status' ? value : row.status,
-                statusUnklar: field === 'statusUnklar' ? value : row.statusUnklar,
-                statusUnklarBegruendung:
-                  field === 'statusUnklarBegruendung'
-                    ? value
-                    : row.statusUnklarBegruendung,
-                bekanntSeit: field === 'bekanntSeit' ? value : row.bekanntSeit,
-                x: field === 'x' ? value : row.x,
-                y: field === 'y' ? value : row.y,
-                apByApId: row.apByApId,
+      const { show: showFilter } = nodeFilterState.state
+      if (showFilter) {
+        nodeFilterState.setValue({
+          treeName,
+          table: 'pop',
+          key: field,
+          value,
+        })
+        //refetchTree()
+      } else {
+        try {
+          updatePop({
+            variables: {
+              id: row.id,
+              [field]: value,
+            },
+            optimisticResponse: {
+              __typename: 'Mutation',
+              updatePopById: {
+                pop: {
+                  id: row.id,
+                  apId: field === 'apId' ? value : row.apId,
+                  nr: field === 'nr' ? value : row.nr,
+                  name: field === 'name' ? value : row.name,
+                  status: field === 'status' ? value : row.status,
+                  statusUnklar:
+                    field === 'statusUnklar' ? value : row.statusUnklar,
+                  statusUnklarBegruendung:
+                    field === 'statusUnklarBegruendung'
+                      ? value
+                      : row.statusUnklarBegruendung,
+                  bekanntSeit:
+                    field === 'bekanntSeit' ? value : row.bekanntSeit,
+                  x: field === 'x' ? value : row.x,
+                  y: field === 'y' ? value : row.y,
+                  apByApId: row.apByApId,
+                  __typename: 'Pop',
+                },
                 __typename: 'Pop',
               },
-              __typename: 'Pop',
             },
-          },
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
+          })
+        } catch (error) {
+          return setErrors({ [field]: error.message })
+        }
+        setErrors({})
       }
-      setErrors(({}))
     },
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
       if (prevProps.id !== props.id) {
-        props.setErrors(({}))
+        props.setErrors({})
       }
     },
   }),
@@ -93,10 +105,14 @@ const Pop = ({
   id,
   saveToDb,
   errors,
+  nodeFilterState,
+  treeName,
 }: {
-  id: String,
+  id: string,
   saveToDb: () => void,
   errors: Object,
+  nodeFilterState: Object,
+  treeName: string,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
@@ -108,7 +124,13 @@ const Pop = ({
         )
       if (error) return `Fehler: ${error.message}`
 
-      const row = get(data, 'popById')
+      const { show: showFilter } = nodeFilterState.state
+      let row
+      if (showFilter) {
+        row = nodeFilterState.state[treeName].ap
+      } else {
+        row = get(data, 'popById')
+      }
 
       return (
         <ErrorBoundary>
