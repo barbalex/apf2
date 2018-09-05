@@ -14,7 +14,7 @@ import withNodeFilterState from '../../../state/withNodeFilter'
 import setTreeKeyGql from './setTreeKey.graphql'
 
 const Container = styled.div`
-  background-color: #388e3c;
+  background-color: ${props => (props.showfilter ? '#D84315' : '#388e3c')};
   padding-bottom: 10px;
   flex-shrink: 0;
   display: flex;
@@ -85,28 +85,31 @@ const FormTitle = ({
   apId: String,
   nodeFilterState: Object,
   onToggleShow: () => void,
-}) => (
-  <Container>
-    <TitleRow>
-      <Title>{title}</Title>
-      {nodeFilterState.state.show ? (
-        <StyledIconButton
-          aria-label="Daten anzeigen und bearbeiten"
-          title="Daten anzeigen und bearbeiten"
-        >
-          <StyledEditIcon onClick={onToggleShow} />
-        </StyledIconButton>
-      ) : (
-        <StyledIconButton
-          aria-label="Daten filtern (TODO)"
-          title="Daten filtern (TODO)"
-        >
-          <StyledFilterIcon onClick={onToggleShow} />
-        </StyledIconButton>
-      )}
-    </TitleRow>
-    <TestdataMessage tree={tree} apId={apId} />
-  </Container>
-)
+}) => {
+  const showFilter = nodeFilterState.state.show
+  return (
+    <Container showfilter={showFilter}>
+      <TitleRow>
+        <Title>{`${title}${showFilter ? ' Filterkriterien' : ''}`}</Title>
+        {showFilter ? (
+          <StyledIconButton
+            aria-label="Daten anzeigen und bearbeiten"
+            title="Daten anzeigen und bearbeiten"
+          >
+            <StyledEditIcon onClick={onToggleShow} />
+          </StyledIconButton>
+        ) : (
+          <StyledIconButton
+            aria-label="Daten filtern (TODO)"
+            title="Daten filtern (TODO)"
+          >
+            <StyledFilterIcon onClick={onToggleShow} />
+          </StyledIconButton>
+        )}
+      </TitleRow>
+      <TestdataMessage tree={tree} apId={apId} />
+    </Container>
+  )
+}
 
 export default enhance(FormTitle)

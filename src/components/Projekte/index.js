@@ -5,12 +5,14 @@ import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import intersection from 'lodash/intersection'
+import compose from 'recompose/compose'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
 import ErrorBoundary from '../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import ProjektContainer from './ProjektContainer'
+import withNodeFilterState from '../../state/withNodeFilter'
 
 const Container = styled.div`
   display: flex;

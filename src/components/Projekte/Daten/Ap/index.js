@@ -24,6 +24,7 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -78,7 +79,17 @@ const enhance = compose(
       if (row[field] === value) return
       const { show: showFilter } = nodeFilterState.state
       if (showFilter) {
-        nodeFilterState.setValue({ treeName, table: 'ap', key: field, value })
+        nodeFilterState.setValue({
+          treeName,
+          table: 'ap',
+          key: field,
+          value,
+        })
+        refetchTree()
+        setTimeout(() => {
+          console.log('refetching tree')
+          refetchTree()
+        }, 500)
       } else {
         try {
           await updateAp({
@@ -218,7 +229,7 @@ const Ap = ({
 
             return (
               <ErrorBoundary>
-                <Container>
+                <Container showfilter={showFilter}>
                   <FormTitle
                     apId={id}
                     title="Aktionsplan"
@@ -370,15 +381,17 @@ const Ap = ({
                           }
                           error={errors.ekfBeobachtungszeitpunkt}
                         />
-                        <TextFieldNonUpdatable
-                          key={`${row.id}artwert`}
-                          label="Artwert"
-                          value={get(
-                            row,
-                            'aeEigenschaftenByArtId.artwert',
-                            'Diese Art hat keinen Artwert',
-                          )}
-                        />
+                        {!showFilter && (
+                          <TextFieldNonUpdatable
+                            key={`${row.id}artwert`}
+                            label="Artwert"
+                            value={get(
+                              row,
+                              'aeEigenschaftenByArtId.artwert',
+                              'Diese Art hat keinen Artwert',
+                            )}
+                          />
+                        )}
                       </FieldsContainer>
                     )}
                   </Mutation>

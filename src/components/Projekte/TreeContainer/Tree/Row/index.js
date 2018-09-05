@@ -215,7 +215,7 @@ const Row = ({
   const openNodes = get(data, `${treeName}.openNodes`)
   const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
   const onClickNode = event =>
-    toggleNode({ tree: tree2, node, nodeFilterState: nodeFilterState.state })
+    toggleNode({ tree: tree2, node, nodeFilterState })
   const onClickNodeSymbol = event =>
     toggleNodeSymbol({ tree: tree2, node, client })
   const myProps = { key: index }
