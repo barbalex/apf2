@@ -86,10 +86,6 @@ const enhance = compose(
           value,
         })
         refetchTree()
-        setTimeout(() => {
-          console.log('refetching tree')
-          refetchTree()
-        }, 500)
       } else {
         try {
           await updateAp({
