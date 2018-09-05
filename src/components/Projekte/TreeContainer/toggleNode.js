@@ -7,8 +7,18 @@ import isNodeOpen from './isNodeOpen'
 import isNodeInActiveNodePath from './isNodeInActiveNodePath'
 import openNode from './openNode'
 
-export default ({ tree, node }: { tree: Object, node: Object }): any => {
+export default ({
+  tree,
+  node,
+  nodeFilterState,
+}: {
+  tree: Object,
+  node: Object,
+  nodeFilterState: Object,
+}): any => {
   if (!node.url) throw new Error('passed node has no url')
+
+  // TODO: always set showFilter false if is true
 
   const newActiveNodeArray = clone(node.url)
   const nodeIsOpen = isNodeOpen(tree.openNodes, node.url)

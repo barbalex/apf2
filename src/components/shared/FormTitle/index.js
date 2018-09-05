@@ -52,7 +52,6 @@ const enhance = compose(
   withHandlers({
     onToggleShow: ({ nodeFilterState, activeNodeArray, treeName }) => () => {
       nodeFilterState.toggleShow()
-      // TODO:
       // if active node is id, pop
       // check if last element of activeNodeArray is uuid
       if (

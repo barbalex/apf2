@@ -1,7 +1,7 @@
 // @flow
 
 export const type = {
-  artId: 'string',
+  artId: 'uuid',
   bearbeitung: 'number',
   startJahr: 'number',
   umsetzung: 'number',

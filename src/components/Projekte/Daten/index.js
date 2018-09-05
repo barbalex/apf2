@@ -11,6 +11,7 @@ import Loading from '../../shared/Loading'
 import dataGql from './data.graphql'
 import getTableNameFromActiveNode from '../../../modules/getTableNameFromActiveNode'
 import withErrorState from '../../../state/withErrorState'
+import withNodeFilterState from '../../../state/withNodeFilter'
 
 const Projekt = Loadable({
   loader: () => import('./Projekt'),
@@ -137,7 +138,10 @@ const Container = styled.div`
   }
 `
 
-const enhance = compose(withErrorState)
+const enhance = compose(
+  withErrorState,
+  withNodeFilterState,
+)
 
 const Daten = ({
   tree,
@@ -150,6 +154,7 @@ const Daten = ({
   setKtZh,
   role,
   errorState,
+  nodeFilterState,
 }: {
   tree: Object,
   treeName: String,
@@ -161,6 +166,7 @@ const Daten = ({
   setKtZh: () => void,
   role: String,
   errorState: Object,
+  nodeFilterState: Object,
 }) => (
   <Query query={dataGql}>
     {({ loading, error, data, client }) => {
@@ -169,6 +175,8 @@ const Daten = ({
 
       const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
       const apId = get(data, `${treeName}.activeNodeArray[3]`)
+
+      console.log('Daten', { activeNode })
 
       const formObject = {
         projekt: (
@@ -416,7 +424,7 @@ const Daten = ({
       ) {
         key = 'beobZugeordnet'
       } else {
-        key = getTableNameFromActiveNode(activeNode)
+        key = getTableNameFromActiveNode(activeNode, nodeFilterState.state.show)
       }
       const form = key ? formObject[key] : ''
 

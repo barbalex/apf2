@@ -141,7 +141,13 @@ const Ap = ({
   <Query query={data1Gql}>
     {({ loading, error, data }) => {
       if (error) return `Fehler: ${error.message}`
-      const id = get(data, `${treeName}.activeNodeArray[3]`)
+      const id = get(
+        data,
+        `${treeName}.activeNodeArray[3]`,
+        // pass in fake id to avoid error when filter is shown
+        // which means there is no id
+        '99999999-9999-9999-9999-999999999999',
+      )
       const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
 
       return (
@@ -173,20 +179,35 @@ const Ap = ({
               label: el.name,
               value: el.id,
             }))
-            // list all ap-Arten BUT the active one
-            const apArten = get(data, 'allAps.nodes', [])
-              .filter(o => o.id !== id)
-              .map(o => o.artId)
-            let artWerte = get(data, 'allAeEigenschaftens.nodes', [])
-            // filter ap arten but the active one
-            artWerte = artWerte.filter(o => !apArten.includes(o.id))
-            artWerte = sortBy(artWerte, 'artname')
-            artWerte = artWerte.map(el => ({
-              value: el.id,
-              label: el.artname,
-            }))
 
             const { show: showFilter } = nodeFilterState.state
+            let apArten
+            let artWerte
+            if (showFilter) {
+              apArten = get(data, 'allAps.nodes', []).map(o => o.artId)
+              artWerte = get(data, 'allAeEigenschaftens.nodes', [])
+              // only list ap arten
+              artWerte = artWerte.filter(o => apArten.includes(o.id))
+              artWerte = sortBy(artWerte, 'artname')
+              artWerte = artWerte.map(el => ({
+                value: el.id,
+                label: el.artname,
+              }))
+            } else {
+              // list all ap-Arten BUT the active one
+              apArten = get(data, 'allAps.nodes', [])
+                .filter(o => o.id !== id)
+                .map(o => o.artId)
+              artWerte = get(data, 'allAeEigenschaftens.nodes', [])
+              // filter ap arten but the active one
+              artWerte = artWerte.filter(o => !apArten.includes(o.id))
+              artWerte = sortBy(artWerte, 'artname')
+              artWerte = artWerte.map(el => ({
+                value: el.id,
+                label: el.artname,
+              }))
+            }
+
             let row
             if (showFilter) {
               row = nodeFilterState.state[treeName].ap

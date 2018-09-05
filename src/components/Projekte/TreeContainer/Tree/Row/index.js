@@ -12,12 +12,14 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 //import PrintIcon from '@material-ui/icons/LibraryBooks'
 import PrintIcon from '@material-ui/icons/PictureAsPdf'
 import get from 'lodash/get'
+import compose from 'recompose/compose'
 
 import isNodeInActiveNodePath from '../../isNodeInActiveNodePath'
 import isNodeOpen from '../../isNodeOpen'
 import toggleNode from '../../toggleNode'
 import toggleNodeSymbol from '../../toggleNodeSymbol'
 import setTreeKey from './setTreeKey.graphql'
+import withNodeFilterState from '../../../../../state/withNodeFilter'
 
 const singleRowHeight = 23
 const StyledNode = styled.div`
@@ -175,6 +177,8 @@ const PrintIconContainer = styled.div`
   }
 `
 
+const enhance = compose(withNodeFilterState)
+
 const Row = ({
   index,
   style,
@@ -189,6 +193,7 @@ const Row = ({
   activeApfloraLayers,
   mapFilter,
   mapIdsFiltered,
+  nodeFilterState,
 }: {
   index: Number,
   style: Object,
@@ -203,12 +208,14 @@ const Row = ({
   activeApfloraLayers: Array<String>,
   mapFilter: Object,
   mapIdsFiltered: Array<String>,
+  nodeFilterState: Object,
 }) => {
   const node = nodes[index]
   const tree2 = get(data, treeName)
   const openNodes = get(data, `${treeName}.openNodes`)
   const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
-  const onClickNode = event => toggleNode({ tree: tree2, node })
+  const onClickNode = event =>
+    toggleNode({ tree: tree2, node, nodeFilterState: nodeFilterState.state })
   const onClickNodeSymbol = event =>
     toggleNodeSymbol({ tree: tree2, node, client })
   const myProps = { key: index }
@@ -449,4 +456,4 @@ const Row = ({
   )
 }
 
-export default Row
+export default enhance(Row)
