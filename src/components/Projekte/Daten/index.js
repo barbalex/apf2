@@ -181,6 +181,7 @@ const Daten = ({
           <Projekt
             dimensions={dimensions}
             id={activeNodeArray[1]}
+            treeName={treeName}
             refetchTree={refetchTree}
           />
         ),
@@ -188,6 +189,7 @@ const Daten = ({
           <Apberuebersicht
             dimensions={dimensions}
             id={activeNodeArray[3]}
+            treeName={treeName}
             refetchTree={refetchTree}
           />
         ),
@@ -202,6 +204,7 @@ const Daten = ({
           <Assozart
             dimensions={dimensions}
             id={activeNodeArray[5]}
+            treeName={treeName}
             refetchTree={refetchTree}
           />
         ),
@@ -209,6 +212,7 @@ const Daten = ({
           <Ekfzaehleinheit
             dimensions={dimensions}
             id={activeNodeArray[5]}
+            treeName={treeName}
             refetchTree={refetchTree}
           />
         ),
@@ -216,6 +220,7 @@ const Daten = ({
           <Apart
             dimensions={dimensions}
             id={activeNodeArray[5]}
+            treeName={treeName}
             refetchTree={refetchTree}
           />
         ),
@@ -223,6 +228,7 @@ const Daten = ({
           <Idealbiotop
             dimensions={dimensions}
             id={activeNodeArray[3]}
+            treeName={treeName}
             refetchTree={refetchTree}
           />
         ),
@@ -230,6 +236,7 @@ const Daten = ({
           <Erfkrit
             dimensions={dimensions}
             id={activeNodeArray[5]}
+            treeName={treeName}
             refetchTree={refetchTree}
           />
         ),
@@ -237,6 +244,7 @@ const Daten = ({
           <Apber
             dimensions={dimensions}
             id={activeNodeArray[5]}
+            treeName={treeName}
             refetchTree={refetchTree}
           />
         ),
@@ -244,6 +252,7 @@ const Daten = ({
           <Ber
             dimensions={dimensions}
             id={activeNodeArray[5]}
+            treeName={treeName}
             refetchTree={refetchTree}
           />
         ),
@@ -259,6 +268,7 @@ const Daten = ({
           <Zielber
             dimensions={dimensions}
             id={activeNodeArray[8]}
+            treeName={treeName}
             refetchTree={refetchTree}
           />
         ),
@@ -274,6 +284,7 @@ const Daten = ({
           <Popmassnber
             dimensions={dimensions}
             id={activeNodeArray[7]}
+            treeName={treeName}
             refetchTree={refetchTree}
           />
         ),
@@ -281,6 +292,7 @@ const Daten = ({
           <Popber
             dimensions={dimensions}
             id={activeNodeArray[7]}
+            treeName={treeName}
             refetchTree={refetchTree}
           />
         ),
@@ -288,6 +300,7 @@ const Daten = ({
           <Tpop
             dimensions={dimensions}
             id={activeNodeArray[7]}
+            treeName={treeName}
             refetchTree={refetchTree}
           />
         ),
@@ -295,6 +308,7 @@ const Daten = ({
           <Tpopber
             dimensions={dimensions}
             id={activeNodeArray[9]}
+            treeName={treeName}
             refetchTree={refetchTree}
           />
         ),
@@ -302,6 +316,7 @@ const Daten = ({
           <Tpopmassn
             dimensions={dimensions}
             id={activeNodeArray[9]}
+            treeName={treeName}
             refetchTree={refetchTree}
           />
         ),
@@ -309,6 +324,7 @@ const Daten = ({
           <Tpopmassnber
             dimensions={dimensions}
             id={activeNodeArray[9]}
+            treeName={treeName}
             refetchTree={refetchTree}
           />
         ),
@@ -316,6 +332,7 @@ const Daten = ({
           <Tpopfeldkontr
             dimensions={dimensions}
             id={activeNodeArray[9]}
+            treeName={treeName}
             refetchTree={refetchTree}
           />
         ),
@@ -333,6 +350,7 @@ const Daten = ({
           <Tpopkontrzaehl
             dimensions={dimensions}
             id={activeNodeArray[11]}
+            treeName={treeName}
             refetchTree={refetchTree}
           />
         ),
