@@ -13,6 +13,7 @@ import withState from 'recompose/withState'
 
 import Label from './Label'
 import InfoWithPopover from './InfoWithPopover'
+import withNodeFilter from '../../state/withNodeFilter'
 
 const FieldWithInfoContainer = styled.div`
   display: flex;
@@ -59,13 +60,30 @@ const StyledRadio = styled(Radio)`
 `
 
 const enhance = compose(
+  withNodeFilter,
   withState(
     'bekanntSeitStateValue',
     'setBekanntSeitStateValue',
     ({ bekanntSeitValue }) =>
-      bekanntSeitValue || bekanntSeitValue === 0 ? bekanntSeitValue : ''
+      bekanntSeitValue || bekanntSeitValue === 0 ? bekanntSeitValue : '',
   ),
   withHandlers({
+    onClickButton: ({ herkunftValue, saveToDbStatus }) => event => {
+      /**
+       * if clicked element is active value: set null
+       * Problem: does not work on change event on RadioGroup
+       * because that only fires on changes
+       * Solution: do this in click event of button
+       */
+      const targetValue = event.target.value
+      console.log('Status', { targetValue, herkunftValue, saveToDbStatus })
+      // eslint-disable-next-line eqeqeq
+      if (targetValue !== undefined && targetValue == herkunftValue) {
+        // an already active option was clicked
+        // set value null
+        return saveToDbStatus(null)
+      }
+    },
     onChangeStatus: ({ herkunftValue, saveToDbStatus }) => event => {
       const { value: valuePassed } = event.target
       // if clicked element is active herkunftValue: set null
@@ -91,6 +109,8 @@ const Status = ({
   onChangeStatus,
   onChangeBekanntSeit,
   onBlurBekanntSeit,
+  nodeFilterState,
+  onClickButton,
 }: {
   apJahr?: Number,
   herkunftValue?: Number,
@@ -100,6 +120,8 @@ const Status = ({
   onChangeStatus: () => void,
   onChangeBekanntSeit: () => void,
   onBlurBekanntSeit: () => void,
+  nodeFilterState: () => void,
+  onClickButton: () => void,
 }) => {
   const valueSelected =
     herkunftValue !== null && herkunftValue !== undefined ? herkunftValue : ''
@@ -111,7 +133,9 @@ const Status = ({
       angesiedeltLabel = 'angesiedelt (vor Beginn AP):'
     }
   }
-  const disabled = !bekanntSeitStateValue && bekanntSeitStateValue !== 0
+  const { show: showFilter } = nodeFilterState.state
+  const disabled =
+    !bekanntSeitStateValue && bekanntSeitStateValue !== 0 && !showFilter
 
   return (
     <div>
@@ -149,12 +173,14 @@ const Status = ({
                 control={<StyledRadio color="primary" />}
                 label="aktuell"
                 disabled={disabled}
+                onClick={onClickButton}
               />
               <FormControlLabel
                 value="101"
                 control={<StyledRadio color="primary" />}
                 label="erloschen"
                 disabled={disabled}
+                onClick={onClickButton}
               />
             </RadioGroup>
           </HerkunftColumnContainer>
@@ -170,18 +196,21 @@ const Status = ({
                 control={<StyledRadio color="primary" />}
                 label="aktuell"
                 disabled={disabled}
+                onClick={onClickButton}
               />
               <FormControlLabel
                 value="201"
                 control={<StyledRadio color="primary" />}
                 label="Ansaatversuch"
                 disabled={disabled}
+                onClick={onClickButton}
               />
               <FormControlLabel
                 value="202"
                 control={<StyledRadio color="primary" />}
                 label="erloschen / nicht etabliert"
                 disabled={disabled}
+                onClick={onClickButton}
               />
             </RadioGroup>
           </HerkunftColumnContainer>
@@ -191,12 +220,14 @@ const Status = ({
               aria-label="Status"
               value={valueSelected.toString()}
               onChange={onChangeStatus}
+              onClick={onClickButton}
             >
               <FormControlLabel
                 value="300"
                 control={<StyledRadio color="primary" />}
                 label="potenzieller Wuchs-/Ansiedlungsort"
                 disabled={disabled}
+                onClick={onClickButton}
               />
             </RadioGroup>
           </HerkunftColumnContainerLast>

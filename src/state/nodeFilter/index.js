@@ -112,6 +112,7 @@ class NodeFilterContainer extends Container<NodeFilterState> {
   }
 
   setValue({ treeName, table, key, value }) {
+    console.log('state, nodeFilter', { treeName, table, key, value })
     this.setState(state => {
       const newState = cloneDeep(state)
       newState[treeName][table][key] = value

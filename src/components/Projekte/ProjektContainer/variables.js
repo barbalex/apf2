@@ -50,7 +50,6 @@ export default ({
   if (apFilterSet) {
     apFilter.bearbeitung = { in: [1, 2, 3] }
   }
-  console.log('variables:', { apFilter, apFilterSet })
   const ap = uniq(
     openNodes
       .map(
@@ -106,6 +105,7 @@ export default ({
     const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
     popFilter[key] = { [expression]: value }
   })
+  console.log('variables:', { apFilter, popFilter })
   const tpop = uniq(
     openNodes
       .map(

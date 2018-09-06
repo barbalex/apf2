@@ -22,6 +22,7 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -44,6 +45,7 @@ const enhance = compose(
        */
       if (row[field] === value) return
       const { show: showFilter } = nodeFilterState.state
+      console.log('Pop, saveToDb', { showFilter, nodeFilterState })
       if (showFilter) {
         nodeFilterState.setValue({
           treeName,
@@ -138,7 +140,7 @@ const Pop = ({
 
       return (
         <ErrorBoundary>
-          <Container>
+          <Container showfilter={showFilter}>
             <FormTitle
               apId={get(data, 'popById.apId')}
               title="Population"
@@ -170,24 +172,15 @@ const Pop = ({
                     popover="Dieses Feld möglichst immer ausfüllen"
                   />
                   <Status
+                    key={`${row.id}status`}
                     apJahr={get(row, 'apByApId.startJahr')}
                     herkunftValue={row.status}
                     bekanntSeitValue={row.bekanntSeit}
                     saveToDbBekanntSeit={value =>
-                      updatePop({
-                        variables: {
-                          id,
-                          bekanntSeit: value,
-                        },
-                      })
+                      saveToDb({ row, field: 'bekanntSeit', value, updatePop })
                     }
                     saveToDbStatus={value =>
-                      updatePop({
-                        variables: {
-                          id,
-                          status: value,
-                        },
-                      })
+                      saveToDb({ row, field: 'status', value, updatePop })
                     }
                   />
                   <RadioButton
