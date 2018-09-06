@@ -102,7 +102,9 @@ const enhance = compose(
 )
 
 const Pop = ({
-  id,
+  // pass in fake id to avoid error when filter is shown
+  // which means there is no id
+  id = '99999999-9999-9999-9999-999999999999',
   saveToDb,
   errors,
   nodeFilterState,
@@ -127,15 +129,22 @@ const Pop = ({
       const { show: showFilter } = nodeFilterState.state
       let row
       if (showFilter) {
-        row = nodeFilterState.state[treeName].ap
+        console.log('Pop', { treeName, nodeFilterState })
+        row = nodeFilterState.state[treeName].pop
       } else {
         row = get(data, 'popById')
       }
+      const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
 
       return (
         <ErrorBoundary>
           <Container>
-            <FormTitle apId={get(data, 'popById.apId')} title="Population" />
+            <FormTitle
+              apId={get(data, 'popById.apId')}
+              title="Population"
+              activeNodeArray={activeNodeArray}
+              treeName={treeName}
+            />
             <Mutation mutation={updatePopByIdGql}>
               {(updatePop, { data }) => (
                 <FieldsContainer>

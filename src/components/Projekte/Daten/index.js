@@ -266,6 +266,7 @@ const Daten = ({
           <Pop
             dimensions={dimensions}
             id={activeNodeArray[5]}
+            treeName={treeName}
             refetchTree={refetchTree}
           />
         ),

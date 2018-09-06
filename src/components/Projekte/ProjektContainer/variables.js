@@ -104,7 +104,7 @@ export default ({
   )
   popFilterValues.forEach(([key, value]) => {
     const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
-    apFilter[key] = { [expression]: value }
+    popFilter[key] = { [expression]: value }
   })
   const tpop = uniq(
     openNodes
