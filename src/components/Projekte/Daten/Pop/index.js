@@ -45,7 +45,6 @@ const enhance = compose(
        */
       if (row[field] === value) return
       const { show: showFilter } = nodeFilterState.state
-      console.log('Pop, saveToDb', { showFilter, nodeFilterState })
       if (showFilter) {
         nodeFilterState.setValue({
           treeName,
@@ -131,7 +130,6 @@ const Pop = ({
       const { show: showFilter } = nodeFilterState.state
       let row
       if (showFilter) {
-        console.log('Pop', { treeName, nodeFilterState })
         row = nodeFilterState.state[treeName].pop
       } else {
         row = get(data, 'popById')
