@@ -4,6 +4,7 @@ import get from 'lodash/get'
 
 import compareLabel from './compareLabel'
 import allParentNodesExist from '../allParentNodesExist'
+import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
 
 export default ({
   nodes: nodesPassed,
@@ -11,16 +12,21 @@ export default ({
   treeName,
   projektNodes,
   projId,
+  nodeFilter,
 }: {
   nodes: Array<Object>,
   data: Object,
   treeName: String,
   projektNodes: Array<Object>,
   projId: String,
+  nodeFilter: Object,
 }): Array<Object> => {
   const apFilter = get(data, `${treeName}.apFilter`)
   const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.ap`)
   const aps = get(data, 'aps.nodes', [])
+  const nodeFilterArray = Object.entries(nodeFilter.ap).filter(
+    ([key, value]) => value || value === 0,
+  )
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
@@ -43,6 +49,7 @@ export default ({
     })
     // filter by apFilter
     // TODO: would be much better to filter this in query
+    // this is done
     // but unfortunately query does not immediatly update
     .filter(el => {
       if (apFilter) {
@@ -50,6 +57,11 @@ export default ({
       }
       return true
     })
+    // filter by nodeFilter
+    // TODO: would be much better to filter this in query
+    // this is done
+    // but unfortunately query does not immediatly update
+    .filter(node => filterNodesByNodeFilterArray({ node, nodeFilterArray }))
     .map(el => ({
       nodeType: 'table',
       menuType: 'ap',

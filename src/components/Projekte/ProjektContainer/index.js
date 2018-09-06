@@ -150,10 +150,6 @@ const ProjekteContainer = ({
         treeName,
         nodeFilter: nodeFilterState.state[treeName],
       })
-      console.log(
-        'ProjektContainer rendering, nodeFilter:',
-        nodeFilterState.state[treeName],
-      )
 
       return (
         <Query query={data2Gql} variables={variables}>
@@ -187,12 +183,12 @@ const ProjekteContainer = ({
             }
 
             const data = merge(data1, data2)
-            console.log('ProjektContainer rendering, data:', data)
             const nodes = buildNodes({
               data,
               treeName,
               loading,
               role,
+              nodeFilter: nodeFilterState.state[treeName],
             })
             const tree = get(data, treeName)
             const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
