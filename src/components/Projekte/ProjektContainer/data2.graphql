@@ -64,6 +64,12 @@ query TreeDataQuery(
       apId
       nr
       name
+      status
+      statusUnklar
+      statusUnklarBegruendung
+      bekanntSeit
+      x
+      y
       apByApId {
         id
         bearbeitung

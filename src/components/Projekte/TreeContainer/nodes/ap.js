@@ -5,6 +5,7 @@ import get from 'lodash/get'
 import compareLabel from './compareLabel'
 import allParentNodesExist from '../allParentNodesExist'
 import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
+import filterNodesByApFilter from '../filterNodesByApFilter'
 
 export default ({
   nodes: nodesPassed,
@@ -51,12 +52,7 @@ export default ({
     // TODO: would be much better to filter this in query
     // this is done
     // but unfortunately query does not immediatly update
-    .filter(el => {
-      if (apFilter) {
-        return [1, 2, 3].includes(el.bearbeitung)
-      }
-      return true
-    })
+    .filter(node => filterNodesByApFilter({ node, apFilter }))
     // filter by nodeFilter
     // TODO: would be much better to filter this in query
     // this is done

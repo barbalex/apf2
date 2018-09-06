@@ -1,9 +1,11 @@
 // @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
+import uniqBy from 'lodash/uniqBy'
 
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 import allParentNodesExist from '../allParentNodesExist'
+import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
 
 export default ({
   nodes: nodesPassed,
@@ -15,6 +17,7 @@ export default ({
   apNodes,
   openNodes,
   apId,
+  nodeFilter,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -25,9 +28,13 @@ export default ({
   apNodes: Array<Object>,
   openNodes: Array<String>,
   apId: String,
+  nodeFilter: Object,
 }): Array<Object> => {
   const pops = get(data, 'pops.nodes', [])
   const apFilter = get(data, `${treeName}.apFilter`)
+  const nodeFilterArray = Object.entries(nodeFilter.pop).filter(
+    ([key, value]) => value || value === 0,
+  )
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
@@ -38,7 +45,7 @@ export default ({
   })
   const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.pop`)
 
-  const popNodesLength = pops
+  let popNodes = pops
     .filter(el => el.apId === apId)
     // return empty if ap is not a real ap and apFilter is set
     .filter(el => {
@@ -53,7 +60,19 @@ export default ({
           .includes(nodeLabelFilterString.toLowerCase())
       }
       return true
-    }).length
+    })
+    // filter by nodeFilter
+    // TODO: would be much better to filter this in query
+    // this is done
+    // but unfortunately query does not immediatly update
+    .filter(node => filterNodesByNodeFilterArray({ node, nodeFilterArray }))
+  /**
+   * There is something weird happening when filtering data
+   * that leads to duplicate nodes
+   * Need to solve that but in the meantime use uniqBy
+   */
+  popNodes = uniqBy(popNodes, 'id')
+  const popNodesLength = popNodes.length
   let message = loading && !popNodesLength ? '...' : popNodesLength
   if (nodeLabelFilterString) {
     message = `${popNodesLength} gefiltert`

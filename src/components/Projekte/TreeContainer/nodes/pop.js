@@ -4,6 +4,7 @@ import get from 'lodash/get'
 
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 import allParentNodesExist from '../allParentNodesExist'
+import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
 
 export default ({
   nodes: nodesPassed,
@@ -14,6 +15,7 @@ export default ({
   openNodes,
   projId,
   apId,
+  nodeFilter,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -23,6 +25,7 @@ export default ({
   openNodes: Array<String>,
   projId: String,
   apId: String,
+  nodeFilter: Object,
 }): Array<Object> => {
   const pops = get(data, 'pops.nodes', [])
   // fetch sorting indexes of parents
@@ -31,6 +34,9 @@ export default ({
   })
   const apIndex = findIndex(apNodes, { id: apId })
   const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.pop`)
+  const nodeFilterArray = Object.entries(nodeFilter.pop).filter(
+    ([key, value]) => value || value === 0,
+  )
 
   // map through all elements and create array of nodes
   const nodes = pops
@@ -44,6 +50,11 @@ export default ({
       }
       return true
     })
+    // filter by nodeFilter
+    // TODO: would be much better to filter this in query
+    // this is done
+    // but unfortunately query does not immediatly update
+    .filter(node => filterNodesByNodeFilterArray({ node, nodeFilterArray }))
     .map(el => ({
       nodeType: 'table',
       menuType: 'pop',
