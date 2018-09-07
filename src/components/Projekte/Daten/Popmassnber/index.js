@@ -28,13 +28,9 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withState('errors', 'setErrors', ({})),
+  withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({
-      refetchTree,
-      setErrors,
-      errors,
-    }) => async ({
+    saveToDb: ({ refetchTree, setErrors, errors }) => async ({
       row,
       field,
       value,
@@ -71,14 +67,14 @@ const enhance = compose(
       } catch (error) {
         return setErrors({ [field]: error.message })
       }
-      setErrors(({}))
+      setErrors({})
       if (['beurteilung'].includes(field)) refetchTree()
     },
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
       if (prevProps.id !== props.id) {
-        props.setErrors(({}))
+        props.setErrors({})
       }
     },
   }),
@@ -88,10 +84,12 @@ const Popmassnber = ({
   id,
   saveToDb,
   errors,
+  treeName,
 }: {
-  id: String,
+  id: string,
   saveToDb: () => void,
   errors: Object,
+  treeName: string,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
@@ -107,7 +105,7 @@ const Popmassnber = ({
       let popbeurteilungWerte = get(
         data,
         'allTpopmassnErfbeurtWertes.nodes',
-        []
+        [],
       )
       popbeurteilungWerte = sortBy(popbeurteilungWerte, 'sort')
       popbeurteilungWerte = popbeurteilungWerte.map(el => ({
@@ -121,6 +119,9 @@ const Popmassnber = ({
             <FormTitle
               apId={get(data, 'popmassnberById.popByPopId.apId')}
               title="Massnahmen-Bericht Population"
+              activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
+              treeName={treeName}
+              table="popmassnber"
             />
             <Mutation mutation={updatePopmassnberByIdGql}>
               {(updatePopmassnber, { data }) => (

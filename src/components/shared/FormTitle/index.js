@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { Fragment } from 'react'
 import styled from 'styled-components'
 import FilterIcon from '@material-ui/icons/FilterList'
 import EditIcon from '@material-ui/icons/Edit'
@@ -79,32 +79,39 @@ const FormTitle = ({
   apId,
   nodeFilterState,
   onToggleShow,
+  table,
 }: {
   tree: Object,
-  title: String,
-  apId: String,
+  title: string,
+  apId: string,
   nodeFilterState: Object,
   onToggleShow: () => void,
+  table: string,
 }) => {
   const showFilter = nodeFilterState.state.show
+  console.log({ nodeFilterState })
   return (
     <Container showfilter={showFilter}>
       <TitleRow>
         <Title>{`${title}${showFilter ? ' Filter' : ''}`}</Title>
-        {showFilter ? (
-          <StyledIconButton
-            aria-label="Daten anzeigen und bearbeiten"
-            title="Daten anzeigen und bearbeiten"
-          >
-            <StyledEditIcon onClick={onToggleShow} />
-          </StyledIconButton>
-        ) : (
-          <StyledIconButton
-            aria-label="Daten filtern"
-            title="Daten filtern (BAUSTELLE)"
-          >
-            <StyledFilterIcon onClick={onToggleShow} />
-          </StyledIconButton>
+        {table && (
+          <Fragment>
+            {showFilter ? (
+              <StyledIconButton
+                aria-label="Daten anzeigen und bearbeiten"
+                title="Daten anzeigen und bearbeiten"
+              >
+                <StyledEditIcon onClick={onToggleShow} />
+              </StyledIconButton>
+            ) : (
+              <StyledIconButton
+                aria-label="Daten filtern"
+                title="Daten filtern (BAUSTELLE)"
+              >
+                <StyledFilterIcon onClick={onToggleShow} />
+              </StyledIconButton>
+            )}
+          </Fragment>
         )}
       </TitleRow>
       <TestdataMessage tree={tree} apId={apId} />

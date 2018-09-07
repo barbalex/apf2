@@ -141,10 +141,11 @@ const jungpflanzenVorhandenDataSource = [
 ]
 
 type Props = {
-  id: String,
+  id: string,
   saveToDb: () => void,
   dimensions: Number,
   errors: Object,
+  treeName: string,
 }
 
 class Tpopfreiwkontr extends Component<Props> {
@@ -154,7 +155,13 @@ class Tpopfreiwkontr extends Component<Props> {
   }
 
   render() {
-    const { id, saveToDb, dimensions = { width: 380 }, errors } = this.props
+    const {
+      id,
+      saveToDb,
+      dimensions = { width: 380 },
+      errors,
+      treeName,
+    } = this.props
 
     return (
       <Query query={dataGql} variables={{ id }}>
@@ -182,6 +189,9 @@ class Tpopfreiwkontr extends Component<Props> {
                 <FormTitle
                   apId={get(data, 'tpopkontrById.tpopByTpopId.popByPopId.apId')}
                   title="Freiwilligen-Kontrolle"
+                  activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
+                  treeName={treeName}
+                  table="tpopfreiwkontr"
                 />
                 <Mutation mutation={updateTpopkontrByIdGql}>
                   {(updateTpopkontr, { data }) => (

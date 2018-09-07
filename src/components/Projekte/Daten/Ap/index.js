@@ -230,6 +230,7 @@ const Ap = ({
                     title="Aktionsplan"
                     activeNodeArray={activeNodeArray}
                     treeName={treeName}
+                    table="ap"
                   />
                   <Mutation mutation={updateApByIdGql}>
                     {(updateAp, { data }) => (

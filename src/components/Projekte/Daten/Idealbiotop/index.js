@@ -112,14 +112,15 @@ const enhance = compose(
         props.setErrors({})
       }
     },
-  })
+  }),
 )
 
 type Props = {
-  id: String,
+  id: string,
   saveToDb: () => void,
   dimensions: Object,
   errors: Object,
+  treeName: string,
 }
 
 class Idealbiotop extends Component<Props> {
@@ -129,7 +130,13 @@ class Idealbiotop extends Component<Props> {
   }
 
   render() {
-    const { id, saveToDb, dimensions = { width: 380 }, errors } = this.props
+    const {
+      id,
+      saveToDb,
+      dimensions = { width: 380 },
+      errors,
+      treeName,
+    } = this.props
 
     return (
       <Query query={dataGql} variables={{ id }}>
@@ -147,7 +154,13 @@ class Idealbiotop extends Component<Props> {
           return (
             <ErrorBoundary>
               <Container innerRef={this.container}>
-                <FormTitle apId={row.apId} title="Idealbiotop" />
+                <FormTitle
+                  apId={row.apId}
+                  title="Idealbiotop"
+                  activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
+                  treeName={treeName}
+                  table="idealbiotop"
+                />
                 <Mutation mutation={updateIdealbiotopByIdGql}>
                   {(updateIdealbiotop, { data }) => (
                     <FieldsContainer

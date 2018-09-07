@@ -31,14 +31,9 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withState('errors', 'setErrors', ({})),
+  withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({
-      tree,
-      refetchTree,
-      setErrors,
-      errors,
-    }) => async ({
+    saveToDb: ({ tree, refetchTree, setErrors, errors }) => async ({
       row,
       field,
       value,
@@ -73,7 +68,7 @@ const enhance = compose(
       } catch (error) {
         return setErrors({ [field]: error.message })
       }
-      setErrors(({}))
+      setErrors({})
       // if jahr of ziel is updated, activeNodeArray und openNodes need to change
       if (field === 'jahr') {
         const { activeNodeArray, openNodes } = tree
@@ -95,8 +90,8 @@ const enhance = compose(
             value1: newActiveNodeArray,
             key1: 'activeNodeArray',
             value2: newOpenNodes,
-            key2: 'openNodes'
-          }
+            key2: 'openNodes',
+          },
         })
         if (['typ'].includes(field)) refetchTree()
       }
@@ -105,7 +100,7 @@ const enhance = compose(
   withLifecycle({
     onDidUpdate(prevProps, props) {
       if (prevProps.id !== props.id) {
-        props.setErrors(({}))
+        props.setErrors({})
       }
     },
   }),
@@ -116,12 +111,14 @@ const Ziel = ({
   tree,
   saveToDb,
   errors,
+  treeName,
 }: {
-  id: String,
+  id: string,
   tree: Object,
   saveToDb: () => void,
   errors: Object,
-}) =>
+  treeName: string,
+}) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data, client }) => {
       if (loading)
@@ -143,7 +140,13 @@ const Ziel = ({
       return (
         <ErrorBoundary>
           <Container>
-            <FormTitle apId={row.apId} title="Ziel" />
+            <FormTitle
+              apId={row.apId}
+              title="Ziel"
+              activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
+              treeName={treeName}
+              table="ziel"
+            />
             <Mutation mutation={updateZielByIdGql}>
               {(updateZiel, { data }) => (
                 <FieldsContainer>
@@ -153,7 +156,13 @@ const Ziel = ({
                     value={row.jahr}
                     type="number"
                     saveToDb={value =>
-                      saveToDb({ row, field: 'jahr', value, updateZiel, client })
+                      saveToDb({
+                        row,
+                        field: 'jahr',
+                        value,
+                        updateZiel,
+                        client,
+                      })
                     }
                     error={errors.jahr}
                   />
@@ -186,5 +195,6 @@ const Ziel = ({
       )
     }}
   </Query>
+)
 
 export default enhance(Ziel)

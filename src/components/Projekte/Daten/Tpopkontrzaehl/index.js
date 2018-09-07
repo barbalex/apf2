@@ -86,10 +86,12 @@ const Tpopkontrzaehl = ({
   id,
   saveToDb,
   errors,
+  treeName,
 }: {
-  id: String,
+  id: string,
   saveToDb: () => void,
   errors: Object,
+  treeName: string,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
@@ -127,6 +129,9 @@ const Tpopkontrzaehl = ({
                 'tpopkontrzaehlById.tpopkontrByTpopkontrId.tpopByTpopId.popByPopId.apId',
               )}
               title="Zählung"
+              activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
+              treeName={treeName}
+              table="tpopkontrzaehl"
             />
             <Mutation mutation={updateTpopkontrzaehlByIdGql}>
               {(updateTpopkontrzaehl, { data }) => (

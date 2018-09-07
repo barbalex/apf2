@@ -27,12 +27,9 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withState('errors', 'setErrors', ({})),
+  withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({
-      setErrors,
-      errors,
-    }) => async ({
+    saveToDb: ({ setErrors, errors }) => async ({
       row,
       field,
       value,
@@ -67,13 +64,13 @@ const enhance = compose(
       } catch (error) {
         return setErrors({ [field]: error.message })
       }
-      setErrors(({}))
+      setErrors({})
     },
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
       if (prevProps.id !== props.id) {
-        props.setErrors(({}))
+        props.setErrors({})
       }
     },
   }),
@@ -83,10 +80,12 @@ const Ber = ({
   id,
   saveToDb,
   errors,
+  treeName,
 }: {
-  id: String,
+  id: string,
   saveToDb: () => void,
   errors: Object,
+  treeName: string,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
@@ -103,7 +102,13 @@ const Ber = ({
       return (
         <ErrorBoundary>
           <Container>
-            <FormTitle apId={row.apId} title="Bericht" />
+            <FormTitle
+              apId={row.apId}
+              title="Bericht"
+              activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
+              treeName={treeName}
+              table="ber"
+            />
             <Mutation mutation={updateBerByIdGql}>
               {(updateBer, { data }) => (
                 <FieldsContainer>

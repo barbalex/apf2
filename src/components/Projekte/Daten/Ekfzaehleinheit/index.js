@@ -84,10 +84,12 @@ const Ekfzaehleinheit = ({
   id,
   saveToDb,
   errors,
+  treeName,
 }: {
-  id: String,
+  id: string,
   saveToDb: () => void,
   errors: Object,
+  treeName: string,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
@@ -127,7 +129,13 @@ const Ekfzaehleinheit = ({
       return (
         <ErrorBoundary>
           <Container>
-            <FormTitle apId={row.apId} title="EKF-Zähleinheit" />
+            <FormTitle
+              apId={row.apId}
+              title="EKF-Zähleinheit"
+              activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
+              treeName={treeName}
+              table="ekfzaehleinheit"
+            />
             <Mutation mutation={updateEkfzaehleinheitByIdGql}>
               {(updateEkfzaehleinheit, { data }) => (
                 <FieldsContainer>

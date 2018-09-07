@@ -254,7 +254,13 @@ const User = ({
             return (
               <ErrorBoundary>
                 <Container>
-                  <FormTitle apId={id} title="Benutzer" />
+                  <FormTitle
+                    apId={id}
+                    title="Benutzer"
+                    activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
+                    treeName={treeName}
+                    table="user"
+                  />
                   <Mutation mutation={updateUserByIdGql}>
                     {(updateUser, { data }) => (
                       <FieldsContainer>

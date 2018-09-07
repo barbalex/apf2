@@ -121,10 +121,11 @@ const enhance = compose(
 )
 
 type Props = {
-  id: String,
+  id: string,
   dimensions: Object,
   saveToDb: () => void,
   errors: Object,
+  treeName: string,
 }
 
 class Apber extends Component<Props> {
@@ -134,7 +135,13 @@ class Apber extends Component<Props> {
   }
 
   render() {
-    const { id, dimensions = { width: 380 }, saveToDb, errors } = this.props
+    const {
+      id,
+      dimensions = { width: 380 },
+      saveToDb,
+      errors,
+      treeName,
+    } = this.props
 
     return (
       <Query query={dataGql} variables={{ id }}>
@@ -169,7 +176,13 @@ class Apber extends Component<Props> {
           return (
             <ErrorBoundary>
               <Container innerRef={this.container}>
-                <FormTitle apId={row.apId} title="AP-Bericht" />
+                <FormTitle
+                  apId={row.apId}
+                  title="AP-Bericht"
+                  activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
+                  treeName={treeName}
+                  table="apber"
+                />
                 <Mutation mutation={updateApberByIdGql}>
                   {(updateApber, { data }) => (
                     <FieldsContainer width={width}>

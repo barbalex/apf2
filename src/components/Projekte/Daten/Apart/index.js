@@ -79,10 +79,12 @@ const ApArt = ({
   id,
   saveToDb,
   errors,
+  treeName,
 }: {
   id: String,
   saveToDb: () => void,
   errors: Object,
+  treeName: string,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
@@ -105,11 +107,18 @@ const ApArt = ({
         value: el.id,
         label: el.artname,
       }))
+      const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
 
       return (
         <ErrorBoundary>
           <Container>
-            <FormTitle apId={row.apId} title="Aktionsplan-Art" />
+            <FormTitle
+              apId={row.apId}
+              title="Aktionsplan-Art"
+              activeNodeArray={activeNodeArray}
+              treeName={treeName}
+              table="apart"
+            />
             <Mutation mutation={updateApartByIdGql}>
               {(updateApart, { data }) => (
                 <FieldsContainer>

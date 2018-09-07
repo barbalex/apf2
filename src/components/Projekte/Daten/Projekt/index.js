@@ -26,12 +26,9 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withState('errors', 'setErrors', ({})),
+  withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({
-      setErrors,
-      errors,
-    }) => async ({
+    saveToDb: ({ setErrors, errors }) => async ({
       row,
       field,
       value,
@@ -62,13 +59,13 @@ const enhance = compose(
       } catch (error) {
         return setErrors({ [field]: error.message })
       }
-      setErrors(({}))
-    }
+      setErrors({})
+    },
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
       if (prevProps.id !== props.id) {
-        props.setErrors(({}))
+        props.setErrors({})
       }
     },
   }),
@@ -78,10 +75,12 @@ const Projekt = ({
   saveToDb,
   id,
   errors,
+  treeName,
 }: {
   saveToDb: () => void,
-  id: String,
+  id: string,
   errors: Object,
+  treeName: string,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
@@ -98,7 +97,12 @@ const Projekt = ({
       return (
         <ErrorBoundary>
           <Container>
-            <FormTitle title="Projekt" />
+            <FormTitle
+              title="Projekt"
+              activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
+              treeName={treeName}
+              table="projekt"
+            />
             <Mutation mutation={updateProjektByIdGql}>
               {(updateProjekt, { data }) => (
                 <FieldsContainer>
@@ -107,7 +111,7 @@ const Projekt = ({
                     label="Name"
                     value={row.name}
                     type="text"
-                    saveToDb={value => 
+                    saveToDb={value =>
                       saveToDb({ row, field: 'name', value, updateProjekt })
                     }
                     error={errors.name}

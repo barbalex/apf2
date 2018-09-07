@@ -28,13 +28,9 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withState('errors', 'setErrors', ({})),
+  withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({
-      refetchTree,
-      setErrors,
-      errors,
-    }) => async ({
+    saveToDb: ({ refetchTree, setErrors, errors }) => async ({
       row,
       field,
       value,
@@ -67,14 +63,14 @@ const enhance = compose(
       } catch (error) {
         return setErrors({ [field]: error.message })
       }
-      setErrors(({}))
+      setErrors({})
       if (['erfolg'].includes(field)) refetchTree()
     },
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
       if (prevProps.id !== props.id) {
-        props.setErrors(({}))
+        props.setErrors({})
       }
     },
   }),
@@ -84,10 +80,12 @@ const Erfkrit = ({
   id,
   saveToDb,
   errors,
+  treeName,
 }: {
-  id: String,
+  id: string,
   saveToDb: () => void,
   errors: Object,
+  treeName: string,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
@@ -110,7 +108,13 @@ const Erfkrit = ({
       return (
         <ErrorBoundary>
           <Container>
-            <FormTitle apId={row.apId} title="Erfolgs-Kriterium" />
+            <FormTitle
+              apId={row.apId}
+              title="Erfolgs-Kriterium"
+              activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
+              treeName={treeName}
+              table="erfkrit"
+            />
             <Mutation mutation={updateErfkritByIdGql}>
               {(updateErfkrit, { data }) => (
                 <FieldsContainer>

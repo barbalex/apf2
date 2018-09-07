@@ -122,12 +122,14 @@ const Beobzuordnung = ({
   type,
   dimensions = { width: 380 },
   refetchTree,
+  treeName,
 }: {
-  id: String,
+  id: string,
   tree: Object,
-  type: String,
+  type: string,
   dimensions: Object,
   refetchTree: () => void,
+  treeName: string,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data, client, refetch }) => {
@@ -168,6 +170,9 @@ const Beobzuordnung = ({
             <FormTitle
               apId={get(row, 'aeEigenschaftenByArtId.apByArtId.id', null)}
               title="Beobachtung"
+              activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
+              treeName={treeName}
+              table="beob"
             />
             <DataContainer>
               <Mutation mutation={updateBeobByIdGql}>

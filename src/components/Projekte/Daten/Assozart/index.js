@@ -82,10 +82,12 @@ const Assozart = ({
   id,
   saveToDb,
   errors,
+  treeName,
 }: {
-  id: String,
+  id: string,
   saveToDb: () => void,
   errors: Object,
+  treeName: string,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
@@ -114,7 +116,13 @@ const Assozart = ({
       return (
         <ErrorBoundary>
           <Container>
-            <FormTitle apId={row.apId} title="assoziierte Art" />
+            <FormTitle
+              apId={row.apId}
+              title="assoziierte Art"
+              activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
+              treeName={treeName}
+              table="assozart"
+            />
             <Mutation mutation={updateAssozartByIdGql}>
               {(updateAssozart, { data }) => (
                 <FieldsContainer>

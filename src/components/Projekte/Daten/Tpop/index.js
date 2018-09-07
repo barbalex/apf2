@@ -203,7 +203,6 @@ class Tpop extends Component<Props> {
             value: el.code,
             label: el.text,
           }))
-          const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
 
           return (
             <ErrorBoundary>
@@ -211,8 +210,9 @@ class Tpop extends Component<Props> {
                 <FormTitle
                   apId={get(data, 'tpopById.popByPopId.apId')}
                   title="Teil-Population"
-                  activeNodeArray={activeNodeArray}
+                  activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
                   treeName={treeName}
+                  table="tpop"
                 />
                 <Mutation mutation={updateTpopByIdGql}>
                   {(updateTpop, { data }) => (

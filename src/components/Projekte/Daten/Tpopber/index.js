@@ -28,13 +28,9 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withState('errors', 'setErrors', ({})),
+  withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({
-      refetchTree,
-      setErrors,
-      errors,
-    }) => async ({
+    saveToDb: ({ refetchTree, setErrors, errors }) => async ({
       row,
       field,
       value,
@@ -82,14 +78,14 @@ const enhance = compose(
         }, 1000 * 10)
         */
       }
-      setErrors(({}))
+      setErrors({})
       if (['entwicklung'].includes(field)) refetchTree()
     },
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
       if (prevProps.id !== props.id) {
-        props.setErrors(({}))
+        props.setErrors({})
       }
     },
   }),
@@ -99,11 +95,13 @@ const Tpopber = ({
   id,
   saveToDb,
   errors,
+  treeName,
 }: {
-  id: String,
+  id: string,
   saveToDb: () => void,
   errors: Object,
-}) =>
+  treeName: string,
+}) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
       if (loading)
@@ -128,6 +126,9 @@ const Tpopber = ({
             <FormTitle
               apId={get(data, 'tpopberById.tpopByTpopId.popByPopId.apId')}
               title="Kontroll-Bericht Teil-Population"
+              activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
+              treeName={treeName}
+              table="tpopber"
             />
             <Mutation mutation={updateTpopberByIdGql}>
               {(updateTpopber, { data }) => (
@@ -186,5 +187,6 @@ const Tpopber = ({
       )
     }}
   </Query>
+)
 
 export default enhance(Tpopber)

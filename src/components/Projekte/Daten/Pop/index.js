@@ -144,6 +144,7 @@ const Pop = ({
               title="Population"
               activeNodeArray={activeNodeArray}
               treeName={treeName}
+              table="pop"
             />
             <Mutation mutation={updatePopByIdGql}>
               {(updatePop, { data }) => (

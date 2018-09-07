@@ -134,12 +134,13 @@ const enhance = compose(
 )
 
 type Props = {
-  id: String,
+  id: string,
   onNewRequestWirtspflanze: () => void,
   onBlurWirtspflanze: () => void,
   dimensions: number,
   saveToDb: () => void,
   errors: Object,
+  treeName: string,
 }
 
 class Tpopmassn extends Component<Props> {
@@ -149,7 +150,13 @@ class Tpopmassn extends Component<Props> {
   }
 
   render() {
-    const { id, dimensions = { width: 380 }, saveToDb, errors } = this.props
+    const {
+      id,
+      dimensions = { width: 380 },
+      saveToDb,
+      errors,
+      treeName,
+    } = this.props
 
     return (
       <Query query={dataGql} variables={{ id }}>
@@ -187,6 +194,9 @@ class Tpopmassn extends Component<Props> {
                 <FormTitle
                   apId={get(data, 'tpopmassnById.tpopByTpopId.popByPopId.apId')}
                   title="Massnahme"
+                  activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
+                  treeName={treeName}
+                  table="tpopmassn"
                 />
                 <Mutation mutation={updateTpopmassnByIdGql}>
                   {(updateTpopmassn, { data }) => (

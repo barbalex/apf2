@@ -27,12 +27,9 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withState('errors', 'setErrors', ({})),
+  withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({
-      setErrors,
-      errors,
-    }) => async ({
+    saveToDb: ({ setErrors, errors }) => async ({
       row,
       field,
       value,
@@ -65,13 +62,13 @@ const enhance = compose(
       } catch (error) {
         return setErrors({ [field]: error.message })
       }
-      setErrors(({}))
+      setErrors({})
     },
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
       if (prevProps.id !== props.id) {
-        props.setErrors(({}))
+        props.setErrors({})
       }
     },
   }),
@@ -81,10 +78,12 @@ const Apberuebersicht = ({
   id,
   saveToDb,
   errors,
+  treeName,
 }: {
-  id: String,
+  id: string,
   saveToDb: () => void,
   errors: Object,
+  treeName: string,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
@@ -101,7 +100,12 @@ const Apberuebersicht = ({
       return (
         <ErrorBoundary>
           <Container>
-            <FormTitle title="AP-Bericht Jahresübersicht" />
+            <FormTitle
+              title="AP-Bericht Jahresübersicht"
+              activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
+              treeName={treeName}
+              table="apberuebersicht"
+            />
             <Mutation mutation={updateApberuebersichtByIdGql}>
               {(updateApberuebersicht, { data }) => (
                 <FieldsContainer>

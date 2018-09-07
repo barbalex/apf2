@@ -240,13 +240,14 @@ const enhance = compose(
 )
 
 type Props = {
-  id: String,
+  id: string,
   onChangeTab: () => void,
   dimensions: Object,
-  value: String,
+  value: string,
   setValue: () => void,
   saveToDb: () => void,
   errors: Object,
+  treeName: string,
 }
 
 class Tpopfeldkontr extends Component<Props> {
@@ -263,6 +264,7 @@ class Tpopfeldkontr extends Component<Props> {
       value,
       saveToDb,
       errors,
+      treeName,
     } = this.props
 
     return (
@@ -321,6 +323,9 @@ class Tpopfeldkontr extends Component<Props> {
                 <FormTitle
                   apId={get(data, 'tpopkontrById.tpopByTpopId.popByPopId.apId')}
                   title="Feld-Kontrolle"
+                  activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
+                  treeName={treeName}
+                  table="tpopfeldkontr"
                 />
                 <Mutation mutation={updateTpopkontrByIdGql}>
                   {(updateTpopkontr, { data }) => (

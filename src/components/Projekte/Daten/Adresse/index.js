@@ -28,17 +28,13 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withState('errors', 'setErrors', ({})),
+  withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({
-      refetchTree,
-      setErrors,
-      errors
-    }) => async ({
+    saveToDb: ({ refetchTree, setErrors, errors }) => async ({
       row,
       field,
       value,
-      updateAdresse
+      updateAdresse,
     }) => {
       /**
        * only save if value changed
@@ -57,12 +53,13 @@ const enhance = compose(
                 id: row.id,
                 name: field === 'name' ? value : row.name,
                 email: field === 'email' ? value : row.email,
-                adresse: field === 'adresse' ? value: row.adresse,
-                telefon: field === 'telefon' ? value: row.telefon,
-                freiwErfko: field === 'freiwErfko' ? value: row.freiwErfko,
-                evabVorname: field === 'evabVorname' ? value: row.evabVorname,
-                evabNachname: field === 'evabNachname' ? value: row.evabNachname,
-                evabOrt: field === 'evabOrt' ? value: row.evabOrt,
+                adresse: field === 'adresse' ? value : row.adresse,
+                telefon: field === 'telefon' ? value : row.telefon,
+                freiwErfko: field === 'freiwErfko' ? value : row.freiwErfko,
+                evabVorname: field === 'evabVorname' ? value : row.evabVorname,
+                evabNachname:
+                  field === 'evabNachname' ? value : row.evabNachname,
+                evabOrt: field === 'evabOrt' ? value : row.evabOrt,
                 __typename: 'Adresse',
               },
               __typename: 'Adresse',
@@ -72,14 +69,14 @@ const enhance = compose(
       } catch (error) {
         return setErrors({ [field]: error.message })
       }
-      setErrors(({}))
+      setErrors({})
       if (['name', 'role'].includes(field)) refetchTree()
     },
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
       if (prevProps.id !== props.id) {
-        props.setErrors(({}))
+        props.setErrors({})
       }
     },
   }),
@@ -111,11 +108,18 @@ const Adresse = ({
             if (error) return `Fehler: ${error.message}`
 
             const row = get(data, 'adresseById')
+            const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
 
             return (
               <ErrorBoundary>
                 <Container>
-                  <FormTitle apId={id} title="Adresse" />
+                  <FormTitle
+                    apId={id}
+                    title="Adresse"
+                    activeNodeArray={activeNodeArray}
+                    treeName={treeName}
+                    table="adresse"
+                  />
                   <Mutation mutation={updateAdresseByIdGql}>
                     {(updateAdresse, { data }) => (
                       <FieldsContainer>
@@ -124,7 +128,12 @@ const Adresse = ({
                           label="Name"
                           value={row.name}
                           saveToDb={value =>
-                            saveToDb({ row, field: 'name', value, updateAdresse })
+                            saveToDb({
+                              row,
+                              field: 'name',
+                              value,
+                              updateAdresse,
+                            })
                           }
                           error={errors.name}
                         />
@@ -133,7 +142,12 @@ const Adresse = ({
                           label="Adresse"
                           value={row.adresse}
                           saveToDb={value =>
-                            saveToDb({ row, field: 'adresse', value, updateAdresse })
+                            saveToDb({
+                              row,
+                              field: 'adresse',
+                              value,
+                              updateAdresse,
+                            })
                           }
                           error={errors.adresse}
                         />
@@ -142,7 +156,12 @@ const Adresse = ({
                           label="Telefon"
                           value={row.telefon}
                           saveToDb={value =>
-                            saveToDb({ row, field: 'telefon', value, updateAdresse })
+                            saveToDb({
+                              row,
+                              field: 'telefon',
+                              value,
+                              updateAdresse,
+                            })
                           }
                           error={errors.telefon}
                         />
@@ -151,7 +170,12 @@ const Adresse = ({
                           label="Email"
                           value={row.email}
                           saveToDb={value =>
-                            saveToDb({ row, field: 'email', value, updateAdresse })
+                            saveToDb({
+                              row,
+                              field: 'email',
+                              value,
+                              updateAdresse,
+                            })
                           }
                           error={errors.email}
                         />
@@ -160,7 +184,12 @@ const Adresse = ({
                           label="freiwillige ErfolgskontrolleurIn"
                           value={row.freiwErfko}
                           saveToDb={value =>
-                            saveToDb({ row, field: 'freiwErfko', value, updateAdresse })
+                            saveToDb({
+                              row,
+                              field: 'freiwErfko',
+                              value,
+                              updateAdresse,
+                            })
                           }
                           error={errors.freiwErfko}
                         />
@@ -169,7 +198,12 @@ const Adresse = ({
                           label="EvAB Vorname"
                           value={row.evabVorname}
                           saveToDb={value =>
-                            saveToDb({ row, field: 'evabVorname', value, updateAdresse })
+                            saveToDb({
+                              row,
+                              field: 'evabVorname',
+                              value,
+                              updateAdresse,
+                            })
                           }
                           error={errors.evabVorname}
                           helperText="Wird für den Export in EvAB benötigt"
@@ -179,7 +213,12 @@ const Adresse = ({
                           label="EvAB Nachname"
                           value={row.evabNachname}
                           saveToDb={value =>
-                            saveToDb({ row, field: 'evabNachname', value, updateAdresse })
+                            saveToDb({
+                              row,
+                              field: 'evabNachname',
+                              value,
+                              updateAdresse,
+                            })
                           }
                           error={errors.evabNachname}
                           helperText="Wird für den Export in EvAB benötigt"
@@ -189,7 +228,12 @@ const Adresse = ({
                           label="EvAB Ort"
                           value={row.evabOrt}
                           saveToDb={value =>
-                            saveToDb({ row, field: 'evabOrt', value, updateAdresse })
+                            saveToDb({
+                              row,
+                              field: 'evabOrt',
+                              value,
+                              updateAdresse,
+                            })
                           }
                           error={errors.evabOrt}
                           helperText="Wird für den Export in EvAB benötigt. Muss immer einen Wert enthalten. Ist keine Ort bekannt, bitte - eintragen"
