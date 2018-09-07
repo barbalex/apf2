@@ -90,7 +90,7 @@ const FormTitle = ({
   return (
     <Container showfilter={showFilter}>
       <TitleRow>
-        <Title>{`${title}${showFilter ? ' Filterkriterien' : ''}`}</Title>
+        <Title>{`${title}${showFilter ? ' Filter' : ''}`}</Title>
         {showFilter ? (
           <StyledIconButton
             aria-label="Daten anzeigen und bearbeiten"

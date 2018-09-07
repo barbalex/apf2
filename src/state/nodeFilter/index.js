@@ -4,6 +4,7 @@ import cloneDeep from 'lodash/cloneDeep'
 
 import { initial as ap } from './ap'
 import { initial as pop } from './pop'
+import { initial as tpop } from './tpop'
 
 type NodeFilterState = {
   show: Boolean,
@@ -72,7 +73,7 @@ type NodeFilterState = {
 const initialTreeState = {
   ap,
   pop,
-  tpop: null,
+  tpop,
   tpopkontr: null,
   tpopfeldkontr: null,
   tpopfreiwkontr: null,

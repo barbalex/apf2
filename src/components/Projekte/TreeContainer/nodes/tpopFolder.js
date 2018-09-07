@@ -1,8 +1,10 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
+import uniqBy from 'lodash/uniqBy'
 
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 import allParentNodesExist from '../allParentNodesExist'
+import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
 
 export default ({
   nodes: nodesPassed,
@@ -16,6 +18,7 @@ export default ({
   projId,
   apId,
   popId,
+  nodeFilter,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -28,6 +31,7 @@ export default ({
   projId: String,
   apId: String,
   popId: String,
+  nodeFilter: Object,
 }): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
@@ -36,8 +40,11 @@ export default ({
   const apIndex = findIndex(apNodes, { id: apId })
   const popIndex = findIndex(popNodes, { id: popId })
   const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.tpop`)
+  const nodeFilterArray = Object.entries(nodeFilter.tpop).filter(
+    ([key, value]) => value || value === 0,
+  )
 
-  const childrenLength = get(data, 'tpops.nodes', [])
+  let children = get(data, 'tpops.nodes', [])
     .filter(el => el.popId === popId)
     // filter by nodeLabelFilter
     .filter(el => {
@@ -47,7 +54,20 @@ export default ({
           .includes(nodeLabelFilterString.toLowerCase())
       }
       return true
-    }).length
+    })
+    // filter by nodeFilter
+    // TODO: would be much better to filter this in query
+    // this is done
+    // but unfortunately query does not immediatly update
+    .filter(node => filterNodesByNodeFilterArray({ node, nodeFilterArray }))
+  /**
+   * There is something weird happening when filtering data
+   * that leads to duplicate nodes
+   * Need to solve that but in the meantime use uniqBy
+   */
+  children = uniqBy(children, 'id')
+
+  const childrenLength = children.length
 
   let message = loading && !childrenLength ? '...' : childrenLength
   if (nodeLabelFilterString) {

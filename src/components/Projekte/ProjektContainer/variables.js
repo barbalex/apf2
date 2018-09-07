@@ -5,6 +5,7 @@ import get from 'lodash/get'
 import getActiveNodes from '../../../modules/getActiveNodes'
 import { type as apType } from '../../../state/nodeFilter/ap'
 import { type as popType } from '../../../state/nodeFilter/pop'
+import { type as tpopType } from '../../../state/nodeFilter/tpop'
 
 export default ({
   data,
@@ -45,7 +46,6 @@ export default ({
     const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
     apFilter[key] = { [expression]: value }
   })
-  console.log('variables, apFilter:', apFilter)
   // for unknown reason the following only works belated, so not
   if (apFilterSet) {
     apFilter.bearbeitung = { in: [1, 2, 3] }
@@ -105,7 +105,6 @@ export default ({
     const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
     popFilter[key] = { [expression]: value }
   })
-  console.log('variables:', { apFilter, popFilter })
   const tpop = uniq(
     openNodes
       .map(
@@ -123,6 +122,15 @@ export default ({
   const isTpop =
     isPop &&
     openNodes.some(nArray => nArray[6] === 'Teil-Populationen' && nArray[7])
+  const tpopFilter = { popId: { in: pop } }
+  const tpopFilterValues = Object.entries(nodeFilter.tpop).filter(
+    e => e[1] || e[1] === 0,
+  )
+  tpopFilterValues.forEach(([key, value]) => {
+    const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
+    tpopFilter[key] = { [expression]: value }
+  })
+
   const tpopkontr = uniq(
     openNodes
       .map(
@@ -160,6 +168,7 @@ export default ({
     popFilter,
     tpop,
     isTpop,
+    tpopFilter,
     tpopkontr,
     isTpopkontr,
     apIsActiveInMap: mapIsActive && isAp,

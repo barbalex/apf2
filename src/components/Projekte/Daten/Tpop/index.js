@@ -21,11 +21,13 @@ import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateTpopByIdGql from './updateTpopById.graphql'
+import withNodeFilter from '../../../../state/withNodeFilter'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -38,9 +40,10 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withNodeFilter,
   withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({ setErrors, errors }) => async ({
+    saveToDb: ({ setErrors, errors, nodeFilterState, treeName }) => async ({
       row,
       field,
       value,
@@ -50,62 +53,78 @@ const enhance = compose(
        * only save if value changed
        */
       if (row[field] === value) return
-      try {
-        await updateTpop({
-          variables: {
-            id: row.id,
-            [field]: value,
-          },
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateTpopById: {
-              tpop: {
-                id: row.id,
-                popId: field === 'popId' ? value : row.popId,
-                nr: field === 'nr' ? value : row.nr,
-                gemeinde: field === 'gemeinde' ? value : row.gemeinde,
-                flurname: field === 'flurname' ? value : row.flurname,
-                x: field === 'x' ? value : row.x,
-                y: field === 'y' ? value : row.y,
-                radius: field === 'radius' ? value : row.radius,
-                hoehe: field === 'hoehe' ? value : row.hoehe,
-                exposition: field === 'exposition' ? value : row.exposition,
-                klima: field === 'klima' ? value : row.klima,
-                neigung: field === 'neigung' ? value : row.neigung,
-                beschreibung:
-                  field === 'beschreibung' ? value : row.beschreibung,
-                katasterNr: field === 'katasterNr' ? value : row.katasterNr,
-                status: field === 'status' ? value : row.status,
-                statusUnklarGrund:
-                  field === 'statusUnklarGrund' ? value : row.statusUnklarGrund,
-                apberRelevant:
-                  field === 'apberRelevant' ? value : row.apberRelevant,
-                bekanntSeit: field === 'bekanntSeit' ? value : row.bekanntSeit,
-                eigentuemer: field === 'eigentuemer' ? value : row.eigentuemer,
-                kontakt: field === 'kontakt' ? value : row.kontakt,
-                nutzungszone:
-                  field === 'nutzungszone' ? value : row.nutzungszone,
-                bewirtschafter:
-                  field === 'bewirtschafter' ? value : row.bewirtschafter,
-                bewirtschaftung:
-                  field === 'bewirtschaftung' ? value : row.bewirtschaftung,
-                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-                statusUnklar:
-                  field === 'statusUnklar' ? value : row.statusUnklar,
-                popStatusWerteByStatus: row.popStatusWerteByStatus,
-                tpopApberrelevantWerteByApberRelevant:
-                  row.tpopApberrelevantWerteByApberRelevant,
-                popByPopId: row.popByPopId,
+      const { show: showFilter } = nodeFilterState.state
+      if (showFilter) {
+        nodeFilterState.setValue({
+          treeName,
+          table: 'tpop',
+          key: field,
+          value,
+        })
+        //refetchTree()
+      } else {
+        try {
+          await updateTpop({
+            variables: {
+              id: row.id,
+              [field]: value,
+            },
+            optimisticResponse: {
+              __typename: 'Mutation',
+              updateTpopById: {
+                tpop: {
+                  id: row.id,
+                  popId: field === 'popId' ? value : row.popId,
+                  nr: field === 'nr' ? value : row.nr,
+                  gemeinde: field === 'gemeinde' ? value : row.gemeinde,
+                  flurname: field === 'flurname' ? value : row.flurname,
+                  x: field === 'x' ? value : row.x,
+                  y: field === 'y' ? value : row.y,
+                  radius: field === 'radius' ? value : row.radius,
+                  hoehe: field === 'hoehe' ? value : row.hoehe,
+                  exposition: field === 'exposition' ? value : row.exposition,
+                  klima: field === 'klima' ? value : row.klima,
+                  neigung: field === 'neigung' ? value : row.neigung,
+                  beschreibung:
+                    field === 'beschreibung' ? value : row.beschreibung,
+                  katasterNr: field === 'katasterNr' ? value : row.katasterNr,
+                  status: field === 'status' ? value : row.status,
+                  statusUnklarGrund:
+                    field === 'statusUnklarGrund'
+                      ? value
+                      : row.statusUnklarGrund,
+                  apberRelevant:
+                    field === 'apberRelevant' ? value : row.apberRelevant,
+                  bekanntSeit:
+                    field === 'bekanntSeit' ? value : row.bekanntSeit,
+                  eigentuemer:
+                    field === 'eigentuemer' ? value : row.eigentuemer,
+                  kontakt: field === 'kontakt' ? value : row.kontakt,
+                  nutzungszone:
+                    field === 'nutzungszone' ? value : row.nutzungszone,
+                  bewirtschafter:
+                    field === 'bewirtschafter' ? value : row.bewirtschafter,
+                  bewirtschaftung:
+                    field === 'bewirtschaftung' ? value : row.bewirtschaftung,
+                  bemerkungen:
+                    field === 'bemerkungen' ? value : row.bemerkungen,
+                  statusUnklar:
+                    field === 'statusUnklar' ? value : row.statusUnklar,
+                  popStatusWerteByStatus: row.popStatusWerteByStatus,
+                  tpopApberrelevantWerteByApberRelevant:
+                    row.tpopApberrelevantWerteByApberRelevant,
+                  popByPopId: row.popByPopId,
+                  __typename: 'Tpop',
+                },
                 __typename: 'Tpop',
               },
-              __typename: 'Tpop',
             },
-          },
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
+          })
+        } catch (error) {
+          return setErrors({ [field]: error.message })
+        }
+        setErrors({})
       }
-      setErrors({})
     },
   }),
   withLifecycle({
@@ -122,6 +141,8 @@ type Props = {
   saveToDb: () => void,
   errors: Object,
   dimensions: Object,
+  nodeFilterState: Object,
+  treeName: string,
 }
 
 class Tpop extends Component<Props> {
@@ -132,7 +153,16 @@ class Tpop extends Component<Props> {
   }
 
   render() {
-    const { id, saveToDb, errors, dimensions = { width: 380 } } = this.props
+    const {
+      // pass in fake id to avoid error when filter is shown
+      // which means there is no id
+      id = '99999999-9999-9999-9999-999999999999',
+      saveToDb,
+      errors,
+      dimensions = { width: 380 },
+      nodeFilterState,
+      treeName,
+    } = this.props
 
     return (
       <Query query={dataGql} variables={{ id }}>
@@ -146,7 +176,13 @@ class Tpop extends Component<Props> {
           }
           if (error) return `Fehler: ${error.message}`
 
-          const row = get(data, 'tpopById')
+          const { show: showFilter } = nodeFilterState.state
+          let row
+          if (showFilter) {
+            row = nodeFilterState.state[treeName].tpop
+          } else {
+            row = get(data, 'tpopById')
+          }
           const apJahr = get(
             data,
             'tpopById.popByPopId.apByApId.startJahr',
@@ -167,13 +203,16 @@ class Tpop extends Component<Props> {
             value: el.code,
             label: el.text,
           }))
+          const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
 
           return (
             <ErrorBoundary>
-              <Container innerRef={this.container}>
+              <Container innerRef={this.container} showfilter={showFilter}>
                 <FormTitle
                   apId={get(data, 'tpopById.popByPopId.apId')}
                   title="Teil-Population"
+                  activeNodeArray={activeNodeArray}
+                  treeName={treeName}
                 />
                 <Mutation mutation={updateTpopByIdGql}>
                   {(updateTpop, { data }) => (
@@ -214,20 +253,15 @@ class Tpop extends Component<Props> {
                         herkunftValue={row.status}
                         bekanntSeitValue={row.bekanntSeit}
                         saveToDbBekanntSeit={value =>
-                          updateTpop({
-                            variables: {
-                              id,
-                              bekanntSeit: value,
-                            },
+                          saveToDb({
+                            row,
+                            field: 'bekanntSeit',
+                            value,
+                            updateTpop,
                           })
                         }
                         saveToDbStatus={value =>
-                          updateTpop({
-                            variables: {
-                              id,
-                              status: value,
-                            },
-                          })
+                          saveToDb({ row, field: 'status', value, updateTpop })
                         }
                       />
                       <RadioButton

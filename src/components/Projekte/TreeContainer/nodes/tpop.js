@@ -4,6 +4,7 @@ import get from 'lodash/get'
 
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 import allParentNodesExist from '../allParentNodesExist'
+import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
 
 export default ({
   nodes: nodesPassed,
@@ -16,6 +17,7 @@ export default ({
   projId,
   apId,
   popId,
+  nodeFilter,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -27,6 +29,7 @@ export default ({
   projId: String,
   apId: String,
   popId: String,
+  nodeFilter: Object,
 }): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
@@ -35,6 +38,9 @@ export default ({
   const apIndex = findIndex(apNodes, { id: apId })
   const popIndex = findIndex(popNodes, { id: popId })
   const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.tpop`)
+  const nodeFilterArray = Object.entries(nodeFilter.tpop).filter(
+    ([key, value]) => value || value === 0,
+  )
 
   // map through all elements and create array of nodes
   const nodes = get(data, 'tpops.nodes', [])
@@ -48,6 +54,11 @@ export default ({
       }
       return true
     })
+    // filter by nodeFilter
+    // TODO: would be much better to filter this in query
+    // this is done
+    // but unfortunately query does not immediatly update
+    .filter(node => filterNodesByNodeFilterArray({ node, nodeFilterArray }))
     .map((el, index) => ({
       nodeType: 'table',
       menuType: 'tpop',

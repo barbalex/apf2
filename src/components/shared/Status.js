@@ -76,7 +76,6 @@ const enhance = compose(
        * Solution: do this in click event of button
        */
       const targetValue = event.target.value
-      console.log('Status', { targetValue, herkunftValue, saveToDbStatus })
       // eslint-disable-next-line eqeqeq
       if (targetValue !== undefined && targetValue == herkunftValue) {
         // an already active option was clicked
