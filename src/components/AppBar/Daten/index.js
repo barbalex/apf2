@@ -81,7 +81,7 @@ const enhance = compose(
       event.stopPropagation()
       event.preventDefault()
     },
-    onClose: ({ setAnchorEl }) => () => setAnchorEl(null),
+    onCloseFilter: ({ setAnchorEl }) => () => setAnchorEl(null),
     onClickTable: ({ setAnchorEl }) => event => {
       setAnchorEl(null)
       const table = event.target.dataset
@@ -94,14 +94,14 @@ const MyAppBar = ({
   onClickButton,
   anchorEl,
   onClickFilterButton,
-  onClose,
+  onCloseFilter,
   onClickTable,
   data,
 }: {
   onClickButton: () => void,
   anchorEl: Object,
   onClickFilterButton: () => void,
-  onClose: () => void,
+  onCloseFilter: () => void,
   onClickTable: () => void,
   data: Object,
 }) => {
@@ -130,7 +130,7 @@ const MyAppBar = ({
             id="filterTable-menu"
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
-            onClose={onClose}
+            onClose={onCloseFilter}
           >
             <MenuItem data-table="ap" onClick={onClickTable}>
               Aktionspläne
