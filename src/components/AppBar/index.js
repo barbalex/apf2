@@ -83,7 +83,6 @@ const MenuDiv = styled.div`
 `
 
 const enhance = compose(
-  withState('moreButtonAnchorEl', 'setMoreButtonAnchorEl', null),
   withState('ekfYearState', 'setEkfYearState', null),
   withState('userOpen', 'setUserOpen', false),
   withHandlers({
@@ -135,8 +134,6 @@ const enhance = compose(
 
 const MyAppBar = ({
   onClickButton,
-  moreButtonAnchorEl,
-  setMoreButtonAnchorEl,
   setShowDeletions,
   setViewNormal,
   setViewEkf,
@@ -145,8 +142,6 @@ const MyAppBar = ({
   toggleUserOpen,
 }: {
   onClickButton: () => void,
-  moreButtonAnchorEl: Object,
-  setMoreButtonAnchorEl: () => void,
   setShowDeletions: () => void,
   setViewNormal: () => void,
   setViewEkf: () => void,
@@ -259,10 +254,9 @@ const MyAppBar = ({
                           }
                           preceded={projekteTabs.includes('karte')}
                           followed={projekteTabs.includes('tree2')}
-                          onClick={() => {
-                            setMoreButtonAnchorEl(null)
+                          onClick={() =>
                             onClickButton('exporte', client, projekteTabs)
-                          }}
+                          }
                         >
                           Exporte
                         </StyledButton>
@@ -302,8 +296,6 @@ const MyAppBar = ({
                 )}
                 <More
                   onClickButton={onClickButton}
-                  anchorEl={moreButtonAnchorEl}
-                  setAnchorEl={setMoreButtonAnchorEl}
                   setShowDeletions={setShowDeletions}
                   role={role}
                 />
