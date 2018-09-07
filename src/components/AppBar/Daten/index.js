@@ -53,7 +53,7 @@ const StyledButton = ({ preceded, followed, ...rest }) => {
 }
 
 const enhance = compose(
-  withState('anchorEl', 'setAnchorEl', null),
+  withState('datenFilterAnchorEl', 'setDatenFilterAnchorEl', null),
   withHandlers({
     onClickButton: ({ data }) => event => {
       // catch case when filter button was clicked
@@ -71,19 +71,20 @@ const enhance = compose(
         setUrlQueryValue({ key: 'projekteTabs', value: projekteTabs })
       }
     },
-    onClickFilterButton: ({ setAnchorEl }) => event => {
+    onClickFilterButton: ({ setDatenFilterAnchorEl }) => event => {
       console.log('onClickFilterButton', {
         event,
         currentTarget: event.currentTarget,
         target: event.target,
       })
-      setAnchorEl(event.currentTarget)
+      setDatenFilterAnchorEl(event.currentTarget)
       event.stopPropagation()
       event.preventDefault()
     },
-    onCloseFilter: ({ setAnchorEl }) => () => setAnchorEl(null),
-    onClickFilterTable: ({ setAnchorEl }) => event => {
-      setAnchorEl(null)
+    onCloseFilter: ({ setDatenFilterAnchorEl }) => () =>
+      setDatenFilterAnchorEl(null),
+    onClickFilterTable: ({ setDatenFilterAnchorEl }) => event => {
+      setDatenFilterAnchorEl(null)
       const table = event.target.dataset
       console.log(`TODO: show ${table} filter`)
     },
@@ -92,14 +93,14 @@ const enhance = compose(
 
 const MyAppBar = ({
   onClickButton,
-  anchorEl,
+  datenFilterAnchorEl,
   onClickFilterButton,
   onCloseFilter,
   onClickFilterTable,
   data,
 }: {
   onClickButton: () => void,
-  anchorEl: Object,
+  datenFilterAnchorEl: Object,
   onClickFilterButton: () => void,
   onCloseFilter: () => void,
   onClickFilterTable: () => void,
@@ -120,7 +121,7 @@ const MyAppBar = ({
           <StyledIconButton
             aria-label="Daten filtern"
             title="Daten filtern (BAUSTELLE)"
-            aria-owns={anchorEl ? 'filterTable-menu' : null}
+            aria-owns={datenFilterAnchorEl ? 'filterTable-menu' : null}
             aria-haspopup="true"
             onClick={onClickFilterButton}
           >
@@ -128,8 +129,8 @@ const MyAppBar = ({
           </StyledIconButton>
           <Menu
             id="filterTable-menu"
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
+            anchorEl={datenFilterAnchorEl}
+            open={Boolean(datenFilterAnchorEl)}
             onClose={onCloseFilter}
           >
             <MenuItem data-table="ap" onClick={onClickFilterTable}>
