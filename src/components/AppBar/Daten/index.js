@@ -1,8 +1,5 @@
 // @flow
-import React, { Fragment } from 'react'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
+import React from 'react'
 import Button from '@material-ui/core/Button'
 import FilterIcon from '@material-ui/icons/FilterList'
 import remove from 'lodash/remove'
@@ -10,32 +7,12 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
-import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import clone from 'lodash/clone'
-import gql from 'graphql-tag'
-import app from 'ampersand-app'
-import jwtDecode from 'jwt-decode'
 
-import isMobilePhone from '../../modules/isMobilePhone'
-import ErrorBoundary from '../shared/ErrorBoundary'
-import dataGql from './data.graphql'
-import setUrlQueryValue from '../../modules/setUrlQueryValue'
-import setEkfYear from './setEkfYear.graphql'
-import getActiveNodes from '../../modules/getActiveNodes'
-import More from './More'
-import setView from './setView.graphql'
-import EkfYear from './EkfYear'
-import User from './User'
+import isMobilePhone from '../../../modules/isMobilePhone'
+import setUrlQueryValue from '../../../modules/setUrlQueryValue'
 
-const StyledAppBar = styled(AppBar)`
-  @media print {
-    display: none !important;
-  }
-`
-const StyledToolbar = styled(Toolbar)`
-  justify-content: space-between;
-`
 const StyledIconButton = styled.div`
   height: 30px !important;
   width: 30px !important;
@@ -72,63 +49,25 @@ const StyledButton = ({ preceded, followed, ...rest }) => {
   `
   return <StyledButton {...rest} />
 }
-const NormalViewButton = styled(Button)`
-  color: white !important;
-  border-color: rgba(255, 255, 255, 0.5) !important;
-`
-const MenuDiv = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-`
 
 const enhance = compose(
   withState('anchorEl', 'setAnchorEl', null),
   withState('ekfYearState', 'setEkfYearState', null),
-  withState('userOpen', 'setUserOpen', false),
   withHandlers({
-    onClickButton: () => (name, client, projekteTabs) => {
+    onClickButton: ({ data }) => () => {
+      const projekteTabs = clone(get(data, 'urlQuery.projekteTabs', []))
       if (isMobilePhone()) {
         // show one tab only
-        setUrlQueryValue({ key: 'projekteTabs', value: [name] })
+        setUrlQueryValue({ key: 'projekteTabs', value: ['daten'] })
       } else {
-        if (projekteTabs.includes(name)) {
-          remove(projekteTabs, el => el === name)
+        if (projekteTabs.includes('daten')) {
+          remove(projekteTabs, el => el === 'daten')
         } else {
-          projekteTabs.push(name)
-          if (name === 'tree2') {
-            client.mutate({
-              mutation: gql`
-                mutation cloneTree2From1 {
-                  cloneTree2From1 @client
-                }
-              `,
-            })
-          }
+          projekteTabs.push('daten')
         }
         setUrlQueryValue({ key: 'projekteTabs', value: projekteTabs })
       }
     },
-    setViewNormal: () => () => {
-      app.client.mutate({
-        mutation: setView,
-        variables: { value: 'normal' },
-      })
-    },
-    setViewEkf: () => () => {
-      app.client.mutate({
-        mutation: setView,
-        variables: { value: 'ekf' },
-      })
-    },
-    setEkfYear: () => value => {
-      const ekfRefDate = new Date().setMonth(new Date().getMonth() - 2)
-      const ekfRefYear = new Date(ekfRefDate).getFullYear()
-      app.client.mutate({
-        mutation: setEkfYear,
-        variables: { value: value ? +value : ekfRefYear },
-      })
-    },
-    toggleUserOpen: ({ userOpen, setUserOpen }) => () => setUserOpen(!userOpen),
   }),
 )
 
@@ -136,59 +75,38 @@ const MyAppBar = ({
   onClickButton,
   anchorEl,
   setAnchorEl,
-  setShowDeletions,
-  setViewNormal,
-  setViewEkf,
-  setEkfYear,
-  userOpen,
-  toggleUserOpen,
+  data,
 }: {
   onClickButton: () => void,
   anchorEl: Object,
   setAnchorEl: () => void,
-  setShowDeletions: () => void,
-  setViewNormal: () => void,
-  setViewEkf: () => void,
-  setEkfYear: () => void,
-  userOpen: boolean,
-  toggleUserOpen: () => void,
-}) => (
-  <Query query={dataGql}>
-    {({ loading, error, data, client }) => {
-      if (error) return `Fehler: ${error.message}`
-      /**
-       * need to clone projekteTabs
-       * because otherwise removing elements errors out (because elements are sealed)
-       */
-      const projekteTabs = clone(get(data, 'urlQuery.projekteTabs', []))
+  data: Object,
+}) => {
+  const projekteTabs = clone(get(data, 'urlQuery.projekteTabs', []))
 
-      return (
-        <ErrorBoundary>
-          <StyledButton
-            variant={projekteTabs.includes('daten') ? 'outlined' : 'text'}
-            preceded={projekteTabs.includes('tree')}
-            followed={projekteTabs.includes('karte')}
-            onClick={() => onClickButton('daten', client, projekteTabs)}
-          >
-            Daten
-            {projekteTabs.includes('daten') && (
-              <StyledIconButton
-                aria-label="Daten filtern"
-                title="Daten filtern (BAUSTELLE)"
-              >
-                <StyledFilterIcon
-                  onClick={e => {
-                    console.log('TODO')
-                    e.stopPropagation()
-                  }}
-                />
-              </StyledIconButton>
-            )}
-          </StyledButton>
-        </ErrorBoundary>
-      )
-    }}
-  </Query>
-)
+  return (
+    <StyledButton
+      variant={projekteTabs.includes('daten') ? 'outlined' : 'text'}
+      preceded={projekteTabs.includes('tree')}
+      followed={projekteTabs.includes('karte')}
+      onClick={onClickButton}
+    >
+      Daten
+      {projekteTabs.includes('daten') && (
+        <StyledIconButton
+          aria-label="Daten filtern"
+          title="Daten filtern (BAUSTELLE)"
+        >
+          <StyledFilterIcon
+            onClick={e => {
+              console.log('TODO')
+              e.stopPropagation()
+            }}
+          />
+        </StyledIconButton>
+      )}
+    </StyledButton>
+  )
+}
 
 export default enhance(MyAppBar)

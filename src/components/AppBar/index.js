@@ -27,6 +27,7 @@ import More from './More'
 import setView from './setView.graphql'
 import EkfYear from './EkfYear'
 import User from './User'
+import Daten from './Daten'
 
 const StyledAppBar = styled(AppBar)`
   @media print {
@@ -228,31 +229,7 @@ const MyAppBar = ({
                     >
                       Strukturbaum
                     </StyledButton>
-                    <StyledButton
-                      variant={
-                        projekteTabs.includes('daten') ? 'outlined' : 'text'
-                      }
-                      preceded={projekteTabs.includes('tree')}
-                      followed={projekteTabs.includes('karte')}
-                      onClick={() =>
-                        onClickButton('daten', client, projekteTabs)
-                      }
-                    >
-                      Daten
-                      {projekteTabs.includes('daten') && (
-                        <StyledIconButton
-                          aria-label="Daten filtern"
-                          title="Daten filtern (BAUSTELLE)"
-                        >
-                          <StyledFilterIcon
-                            onClick={e => {
-                              console.log('TODO')
-                              e.stopPropagation()
-                            }}
-                          />
-                        </StyledIconButton>
-                      )}
-                    </StyledButton>
+                    <Daten data={data} />
                     <StyledButton
                       variant={
                         projekteTabs.includes('karte') ? 'outlined' : 'text'
