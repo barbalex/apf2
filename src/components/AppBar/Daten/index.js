@@ -82,7 +82,7 @@ const enhance = compose(
       event.preventDefault()
     },
     onCloseFilter: ({ setAnchorEl }) => () => setAnchorEl(null),
-    onClickTable: ({ setAnchorEl }) => event => {
+    onClickFilterTable: ({ setAnchorEl }) => event => {
       setAnchorEl(null)
       const table = event.target.dataset
       console.log(`TODO: show ${table} filter`)
@@ -95,14 +95,14 @@ const MyAppBar = ({
   anchorEl,
   onClickFilterButton,
   onCloseFilter,
-  onClickTable,
+  onClickFilterTable,
   data,
 }: {
   onClickButton: () => void,
   anchorEl: Object,
   onClickFilterButton: () => void,
   onCloseFilter: () => void,
-  onClickTable: () => void,
+  onClickFilterTable: () => void,
   data: Object,
 }) => {
   const projekteTabs = clone(get(data, 'urlQuery.projekteTabs', []))
@@ -132,7 +132,7 @@ const MyAppBar = ({
             open={Boolean(anchorEl)}
             onClose={onCloseFilter}
           >
-            <MenuItem data-table="ap" onClick={onClickTable}>
+            <MenuItem data-table="ap" onClick={onClickFilterTable}>
               Aktionspläne
             </MenuItem>
           </Menu>
