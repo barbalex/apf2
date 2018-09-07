@@ -74,16 +74,10 @@ const StyledSelect = styled(CreatableSelect)`
 const enhance = compose(
   withState('stateValue', 'setStateValue', null),
   withHandlers({
-    onChange: ({ saveToDb }) => option => {
-      console.log('onChange', { option })
-      saveToDb(option ? option.value : null)
-    },
-    onInputChange: ({ setStateValue }) => value => {
-      console.log('onInputChange', { value })
-      setStateValue(value)
-    },
+    onChange: ({ saveToDb }) => option =>
+      saveToDb(option ? option.value : null),
+    onInputChange: ({ setStateValue }) => value => setStateValue(value),
     onBlur: ({ saveToDb, stateValue }) => event => {
-      console.log('onBlur', { stateValue })
       if (stateValue) {
         saveToDb(stateValue)
       }
