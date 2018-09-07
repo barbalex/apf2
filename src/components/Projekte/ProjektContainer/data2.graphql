@@ -377,6 +377,13 @@ query TreeDataQuery(
   ) @include(if: $apIsActiveInMap) {
     nodes {
       id
+      apId
+      nr
+      name
+      status
+      statusUnklar
+      statusUnklarBegruendung
+      bekanntSeit
       x
       y
       tpopsByPopId(filter: { x: { isNull: false }, y: { isNull: false } }) {
@@ -403,10 +410,30 @@ query TreeDataQuery(
             ) {
               nodes {
                 id
+                popId
                 nr
+                gemeinde
                 flurname
                 x
                 y
+                radius
+                hoehe
+                exposition
+                klima
+                neigung
+                beschreibung
+                katasterNr
+                status
+                statusUnklar
+                statusUnklarGrund
+                apberRelevant
+                bekanntSeit
+                eigentuemer
+                kontakt
+                nutzungszone
+                bewirtschafter
+                bewirtschaftung
+                bemerkungen
                 popByPopId {
                   id
                   nr
