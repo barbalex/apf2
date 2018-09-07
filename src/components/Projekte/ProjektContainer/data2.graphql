@@ -606,8 +606,13 @@ query TreeDataQuery(
         popsByApId(filter: { x: { isNull: false }, y: { isNull: false } }) {
           nodes {
             id
+            apId
             nr
             name
+            status
+            statusUnklar
+            statusUnklarBegruendung
+            bekanntSeit
             x
             y
           }
