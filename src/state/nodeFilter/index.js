@@ -74,31 +74,31 @@ const initialTreeState = {
   ap,
   pop,
   tpop,
-  tpopkontr: null,
-  tpopfeldkontr: null,
-  tpopfreiwkontr: null,
-  tpopkontrzaehl: null,
-  tpopmassn: null,
-  ziel: null,
-  zielber: null,
-  erfkrit: null,
-  apber: null,
-  apberuebersicht: null,
-  ber: null,
-  idealbiotop: null,
-  assozart: null,
-  ekfzaehleinheit: null,
-  popber: null,
-  popmassnber: null,
-  tpopber: null,
-  tpopmassnber: null,
-  apart: null,
-  projekt: null,
-  beob: null,
-  beobprojekt: null,
-  adresse: null,
-  gemeinde: null,
-  user: null,
+  tpopkontr: {},
+  tpopfeldkontr: {},
+  tpopfreiwkontr: {},
+  tpopkontrzaehl: {},
+  tpopmassn: {},
+  ziel: {},
+  zielber: {},
+  erfkrit: {},
+  apber: {},
+  apberuebersicht: {},
+  ber: {},
+  idealbiotop: {},
+  assozart: {},
+  ekfzaehleinheit: {},
+  popber: {},
+  popmassnber: {},
+  tpopber: {},
+  tpopmassnber: {},
+  apart: {},
+  projekt: {},
+  beob: {},
+  beobprojekt: {},
+  adresse: {},
+  gemeinde: {},
+  user: {},
 }
 
 class NodeFilterContainer extends Container<NodeFilterState> {
@@ -135,6 +135,19 @@ class NodeFilterContainer extends Container<NodeFilterState> {
       newState.show = !state.show
       return newState
     })
+  }
+
+  tableIsFiltered({ treeName, table }) {
+    console.log('tableIsFiltered', { treeName, table })
+    const tableFilter = this.state[treeName][table]
+    console.log('tableIsFiltered', { tableFilter })
+    return Object.values(tableFilter).filter(v => v || v === 0).length > 0
+  }
+
+  treeIsFiltered(treeName) {
+    const tables = Object.keys(this.state[treeName])
+    console.log('treeIsFiltered', { treeName, tables })
+    return tables.some(table => this.tableIsFiltered({ treeName, table }))
   }
 }
 

@@ -1,7 +1,9 @@
 // @flow
-import React, { Fragment } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import FilterIcon from '@material-ui/icons/FilterList'
+import DeleteFilterIcon from '@material-ui/icons/DeleteSweep'
+import DeleteFilterIcon2 from '@material-ui/icons/DeleteSweepOutlined'
 import EditIcon from '@material-ui/icons/Edit'
 import IconButton from '@material-ui/core/IconButton'
 import compose from 'recompose/compose'
@@ -46,6 +48,9 @@ const StyledEditIcon = styled(EditIcon)`
   padding-top: 5px;
   color: white;
 `
+const Symbols = styled.div`
+  display: flex;
+`
 
 const enhance = compose(
   withNodeFilterState,
@@ -80,6 +85,7 @@ const FormTitle = ({
   nodeFilterState,
   onToggleShow,
   table,
+  treeName,
 }: {
   tree: Object,
   title: string,
@@ -87,15 +93,27 @@ const FormTitle = ({
   nodeFilterState: Object,
   onToggleShow: () => void,
   table: string,
+  treeName: string,
 }) => {
   const showFilter = nodeFilterState.state.show
-  console.log({ nodeFilterState })
+  let existsTableFilter
+  let existsTreeFilter
+  const doFilter = table && treeName
+  if (doFilter) {
+    existsTableFilter = nodeFilterState.tableIsFiltered({
+      treeName,
+      table,
+    })
+    existsTreeFilter = nodeFilterState.treeIsFiltered(treeName)
+  }
+  console.log('FormTitle', { existsTableFilter, existsTreeFilter })
+
   return (
     <Container showfilter={showFilter}>
       <TitleRow>
         <Title>{`${title}${showFilter ? ' Filter' : ''}`}</Title>
-        {table && (
-          <Fragment>
+        {doFilter && (
+          <Symbols>
             {showFilter ? (
               <StyledIconButton
                 aria-label="Daten anzeigen und bearbeiten"
@@ -111,7 +129,7 @@ const FormTitle = ({
                 <StyledFilterIcon onClick={onToggleShow} />
               </StyledIconButton>
             )}
-          </Fragment>
+          </Symbols>
         )}
       </TitleRow>
       <TestdataMessage tree={tree} apId={apId} />
