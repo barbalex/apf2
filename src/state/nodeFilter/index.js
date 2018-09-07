@@ -121,10 +121,18 @@ class NodeFilterContainer extends Container<NodeFilterState> {
     })
   }
 
-  empty(treeName) {
+  emptyTree(treeName) {
     this.setState(state => {
       const newState = cloneDeep(state)
       newState[treeName] = initialTreeState
+      return newState
+    })
+  }
+
+  emptyTable({ treeName, table }) {
+    this.setState(state => {
+      const newState = cloneDeep(state)
+      newState[treeName][table] = initialTreeState[table]
       return newState
     })
   }
@@ -138,15 +146,12 @@ class NodeFilterContainer extends Container<NodeFilterState> {
   }
 
   tableIsFiltered({ treeName, table }) {
-    console.log('tableIsFiltered', { treeName, table })
     const tableFilter = this.state[treeName][table]
-    console.log('tableIsFiltered', { tableFilter })
     return Object.values(tableFilter).filter(v => v || v === 0).length > 0
   }
 
   treeIsFiltered(treeName) {
     const tables = Object.keys(this.state[treeName])
-    console.log('treeIsFiltered', { treeName, tables })
     return tables.some(table => this.tableIsFiltered({ treeName, table }))
   }
 }

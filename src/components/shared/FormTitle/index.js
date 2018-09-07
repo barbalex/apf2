@@ -48,6 +48,18 @@ const StyledEditIcon = styled(EditIcon)`
   padding-top: 5px;
   color: white;
 `
+const StyledDeleteFilterIcon = styled(DeleteFilterIcon)`
+  cursor: pointer;
+  pointer-events: auto;
+  padding-top: 5px;
+  color: white;
+`
+const StyledDeleteFilterIcon2 = styled(DeleteFilterIcon2)`
+  cursor: pointer;
+  pointer-events: auto;
+  padding-top: 5px;
+  color: white;
+`
 const Symbols = styled.div`
   display: flex;
 `
@@ -75,6 +87,10 @@ const enhance = compose(
         })
       }
     },
+    onEmptyTable: ({ nodeFilterState, treeName, table }) => () =>
+      nodeFilterState.emptyTable({ treeName, table }),
+    onEmptyTree: ({ nodeFilterState, treeName }) => () =>
+      nodeFilterState.emptyTree(treeName),
   }),
 )
 
@@ -84,6 +100,8 @@ const FormTitle = ({
   apId,
   nodeFilterState,
   onToggleShow,
+  onEmptyTable,
+  onEmptyTree,
   table,
   treeName,
 }: {
@@ -92,6 +110,8 @@ const FormTitle = ({
   apId: string,
   nodeFilterState: Object,
   onToggleShow: () => void,
+  onEmptyTable: () => void,
+  onEmptyTree: () => void,
   table: string,
   treeName: string,
 }) => {
@@ -106,7 +126,6 @@ const FormTitle = ({
     })
     existsTreeFilter = nodeFilterState.treeIsFiltered(treeName)
   }
-  console.log('FormTitle', { existsTableFilter, existsTreeFilter })
 
   return (
     <Container showfilter={showFilter}>
@@ -127,6 +146,22 @@ const FormTitle = ({
                 title="Daten filtern (BAUSTELLE)"
               >
                 <StyledFilterIcon onClick={onToggleShow} />
+              </StyledIconButton>
+            )}
+            {existsTableFilter && (
+              <StyledIconButton
+                aria-label={`${title}-Filter entfernen`}
+                title={`${title}-Filter entfernen`}
+              >
+                <StyledDeleteFilterIcon2 onClick={onEmptyTable} />
+              </StyledIconButton>
+            )}
+            {existsTreeFilter && (
+              <StyledIconButton
+                aria-label="Alle Filter entfernen"
+                title="Alle Filter entfernen"
+              >
+                <StyledDeleteFilterIcon onClick={onEmptyTree} />
               </StyledIconButton>
             )}
           </Symbols>
