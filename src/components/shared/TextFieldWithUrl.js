@@ -11,12 +11,6 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import withLifecycle from '@hocs/with-lifecycle'
-/**
- * DO NOT UPDATE get-urls
- * before create-react-app moves to using babili
- * see: https://github.com/facebookincubator/create-react-app/issues/984#issuecomment-257105773
- * and: https://github.com/sindresorhus/get-urls/issues/17
- */
 import getUrls from 'get-urls'
 
 const Container = styled.div`
@@ -43,18 +37,17 @@ const enhance = compose(
     'stateValue',
     'setStateValue',
     ({ value: propsValue }) =>
-      (propsValue || propsValue === 0) ? propsValue : ''
+      propsValue || propsValue === 0 ? propsValue : '',
   ),
   withHandlers({
-    onChange: ({ setStateValue }) => event =>
-      setStateValue(event.target.value),
-    onBlur: ({ saveToDb }) => event =>
-      saveToDb(event.target.value || null),
+    onChange: ({ setStateValue }) => event => setStateValue(event.target.value),
+    onBlur: ({ saveToDb }) => event => saveToDb(event.target.value || null),
+    onOpen: () => e => window.open(e.target.dataset.url, '_blank'),
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
       if (props.value !== prevProps.value) {
-        const value = (props.value || props.value === 0) ? props.value : ''
+        const value = props.value || props.value === 0 ? props.value : ''
         props.setStateValue(value)
       }
     },
@@ -73,6 +66,7 @@ const TextFieldWithUrl = ({
   saveToDb,
   onChange,
   onBlur,
+  onOpen,
 }: {
   value: Number | String,
   stateValue: Number | String,
@@ -85,6 +79,7 @@ const TextFieldWithUrl = ({
   saveToDb: () => void,
   onChange: () => void,
   onBlur: () => void,
+  onOpen: () => void,
 }) => {
   const urls = stateValue ? getUrls(stateValue) : []
 
@@ -97,7 +92,7 @@ const TextFieldWithUrl = ({
         aria-describedby={`${label}ErrorText`}
       >
         <InputLabel htmlFor={label}>
-          {`${label} (bitte "www." statt "https://" eingeben)`}
+          {`${label} (gültige URL's beginnen mit "https://", "//" oder "www.")`}
         </InputLabel>
         <Input
           id={label}
@@ -111,14 +106,13 @@ const TextFieldWithUrl = ({
           autoCapitalize="off"
           spellCheck="false"
         />
-        {
-          !!error &&
+        {!!error && (
           <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
-        }
+        )}
       </StyledFormControl>
       {Array.from(urls).map((url, index) => (
         <div key={index} title={`${url} öffnen`}>
-          <StyledOpenInNewIcon onClick={() => window.open(url, '_blank')} />
+          <StyledOpenInNewIcon onClick={onOpen} data-url={url} />
         </div>
       ))}
     </Container>
