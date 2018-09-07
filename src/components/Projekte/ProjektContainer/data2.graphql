@@ -405,6 +405,16 @@ query TreeDataQuery(
         popsByApId {
           nodes {
             id
+            id
+            apId
+            nr
+            name
+            status
+            statusUnklar
+            statusUnklarBegruendung
+            bekanntSeit
+            x
+            y
             tpopsByPopId(
               filter: { x: { isNull: false }, y: { isNull: false } }
             ) {

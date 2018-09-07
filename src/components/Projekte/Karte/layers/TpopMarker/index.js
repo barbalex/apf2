@@ -44,6 +44,7 @@ const TpopMarkerMarker = ({
   const tpopNodeFilterArray = Object.entries(
     nodeFilterState.state[tree.name].tpop,
   ).filter(([key, value]) => value || value === 0)
+  console.log('TpopMarker 1', { popNodeFilterArray })
   const pops = get(data, 'tpopForMap.apsByProjId.nodes[0].popsByApId.nodes', [])
     // filter them by nodeLabelFilter
     .filter(p => {
@@ -62,6 +63,7 @@ const TpopMarkerMarker = ({
         nodeFilterArray: popNodeFilterArray,
       }),
     )
+  console.log('TpopMarker 2', { pops })
   const tpops = flatten(pops.map(pop => get(pop, 'tpopsByPopId.nodes', [])))
     // filter them by nodeLabelFilter
     .filter(el => {

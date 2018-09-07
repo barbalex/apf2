@@ -12,7 +12,7 @@ export default ({
 }) => {
   if (nodeFilterArray.length === 0) return true
   return nodeFilterArray.every(([key, value]) => {
-    if (node[key] === null) return false
+    if (node[key] === null || node[key] === undefined) return false
     return node[key]
       .toString()
       .toLowerCase()
