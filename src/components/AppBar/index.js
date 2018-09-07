@@ -37,23 +37,6 @@ const StyledAppBar = styled(AppBar)`
 const StyledToolbar = styled(Toolbar)`
   justify-content: space-between;
 `
-const StyledIconButton = styled.div`
-  height: 30px !important;
-  width: 30px !important;
-  margin-right: -5px !important;
-  margin-left: 8px !important;
-  margin-bottom: 3px !important;
-  border-radius: 4px;
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-  }
-`
-const StyledFilterIcon = styled(FilterIcon)`
-  cursor: pointer;
-  pointer-events: auto;
-  padding-top: 5px;
-  color: white;
-`
 // need to prevent boolean props from being passed to dom
 const StyledButton = ({ preceded, followed, ...rest }) => {
   const StyledButton = styled(Button)`

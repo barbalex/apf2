@@ -1,6 +1,8 @@
 // @flow
-import React from 'react'
+import React, { Fragment } from 'react'
 import Button from '@material-ui/core/Button'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
 import FilterIcon from '@material-ui/icons/FilterList'
 import remove from 'lodash/remove'
 import styled from 'styled-components'
@@ -52,9 +54,10 @@ const StyledButton = ({ preceded, followed, ...rest }) => {
 
 const enhance = compose(
   withState('anchorEl', 'setAnchorEl', null),
-  withState('ekfYearState', 'setEkfYearState', null),
   withHandlers({
-    onClickButton: ({ data }) => () => {
+    onClickButton: ({ data }) => event => {
+      // catch case when filter button was clicked
+      if (event.target.localName === 'div') return
       const projekteTabs = clone(get(data, 'urlQuery.projekteTabs', []))
       if (isMobilePhone()) {
         // show one tab only
@@ -68,18 +71,38 @@ const enhance = compose(
         setUrlQueryValue({ key: 'projekteTabs', value: projekteTabs })
       }
     },
+    onClickFilterButton: ({ setAnchorEl }) => event => {
+      console.log('onClickFilterButton', {
+        event,
+        currentTarget: event.currentTarget,
+        target: event.target,
+      })
+      setAnchorEl(event.currentTarget)
+      event.stopPropagation()
+      event.preventDefault()
+    },
+    onClose: ({ setAnchorEl }) => () => setAnchorEl(null),
+    onClickTable: ({ setAnchorEl }) => event => {
+      setAnchorEl(null)
+      const table = event.target.dataset
+      console.log(`TODO: show ${table} filter`)
+    },
   }),
 )
 
 const MyAppBar = ({
   onClickButton,
   anchorEl,
-  setAnchorEl,
+  onClickFilterButton,
+  onClose,
+  onClickTable,
   data,
 }: {
   onClickButton: () => void,
   anchorEl: Object,
-  setAnchorEl: () => void,
+  onClickFilterButton: () => void,
+  onClose: () => void,
+  onClickTable: () => void,
   data: Object,
 }) => {
   const projekteTabs = clone(get(data, 'urlQuery.projekteTabs', []))
@@ -93,17 +116,27 @@ const MyAppBar = ({
     >
       Daten
       {projekteTabs.includes('daten') && (
-        <StyledIconButton
-          aria-label="Daten filtern"
-          title="Daten filtern (BAUSTELLE)"
-        >
-          <StyledFilterIcon
-            onClick={e => {
-              console.log('TODO')
-              e.stopPropagation()
-            }}
-          />
-        </StyledIconButton>
+        <Fragment>
+          <StyledIconButton
+            aria-label="Daten filtern"
+            title="Daten filtern (BAUSTELLE)"
+            aria-owns={anchorEl ? 'filterTable-menu' : null}
+            aria-haspopup="true"
+            onClick={onClickFilterButton}
+          >
+            <StyledFilterIcon />
+          </StyledIconButton>
+          <Menu
+            id="filterTable-menu"
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={onClose}
+          >
+            <MenuItem data-table="ap" onClick={onClickTable}>
+              Aktionspläne
+            </MenuItem>
+          </Menu>
+        </Fragment>
       )}
     </StyledButton>
   )
