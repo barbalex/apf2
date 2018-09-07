@@ -18,6 +18,10 @@ import getActiveNodes from '../../../modules/getActiveNodes'
 import withDeleteState from '../../../state/withDeleteState'
 import EkfAdresse from './EkfAdresse'
 
+const Container = styled.div`
+  margin-top: auto;
+  margin-bottom: auto;
+`
 const MehrButton = styled(Button)`
   color: white !important;
 `
@@ -40,6 +44,9 @@ const enhance = compose(
       setAnchorEl(null)
       setShowDeletions(true)
     },
+    onClickMehrButton: ({ setAnchorEl }) => event =>
+      setAnchorEl(event.currentTarget),
+    onClose: ({ setAnchorEl }) => () => setAnchorEl(null),
   }),
 )
 
@@ -52,6 +59,8 @@ const MyAppBar = ({
   setShowDeletions,
   role,
   deleteState,
+  onClickMehrButton,
+  onClose,
 }: {
   onClickButton: () => void,
   showDeletedDatasets: () => void,
@@ -61,6 +70,8 @@ const MyAppBar = ({
   setShowDeletions: () => void,
   role: String,
   deleteState: Object,
+  onClickMehrButton: () => void,
+  onClose: () => void,
 }) => (
   <Query query={dataGql}>
     {({ loading, error, data, client }) => {
@@ -78,12 +89,12 @@ const MyAppBar = ({
 
       return (
         <ErrorBoundary>
-          <div>
+          <Container>
             <MehrButton
               aria-label="Mehr"
               aria-owns={anchorEl ? 'long-menu' : null}
               aria-haspopup="true"
-              onClick={event => setAnchorEl(event.currentTarget)}
+              onClick={onClickMehrButton}
             >
               Mehr
             </MehrButton>
@@ -91,13 +102,13 @@ const MyAppBar = ({
               id="long-menu"
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
-              onClose={() => setAnchorEl(null)}
+              onClose={onClose}
             >
               {isMobile &&
                 exporteIsActive && (
                   <MenuItem
                     onClick={() => {
-                      setAnchorEl(null)
+                      onClose()
                       onClickButton('exporte', client, projekteTabs)
                     }}
                     disabled={projekteTabs.includes('exporte')}
@@ -117,7 +128,7 @@ const MyAppBar = ({
               <MenuItem onClick={watchVideos}>Video-Anleitungen</MenuItem>
               <MenuItem
                 onClick={() => {
-                  setAnchorEl(null)
+                  onClose()
                   logout()
                 }}
               >
@@ -125,7 +136,7 @@ const MyAppBar = ({
               </MenuItem>
               <Version>Version: 1.1.1 vom 24.8.2018</Version>
             </Menu>
-          </div>
+          </Container>
         </ErrorBoundary>
       )
     }}

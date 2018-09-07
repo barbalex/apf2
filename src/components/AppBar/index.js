@@ -4,6 +4,7 @@ import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
+import FilterIcon from '@material-ui/icons/FilterList'
 import remove from 'lodash/remove'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -35,6 +36,23 @@ const StyledAppBar = styled(AppBar)`
 const StyledToolbar = styled(Toolbar)`
   justify-content: space-between;
 `
+const StyledIconButton = styled.div`
+  height: 30px !important;
+  width: 30px !important;
+  margin-right: -5px !important;
+  margin-left: 8px !important;
+  margin-bottom: 3px !important;
+  border-radius: 4px;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+`
+const StyledFilterIcon = styled(FilterIcon)`
+  cursor: pointer;
+  pointer-events: auto;
+  padding-top: 5px;
+  color: white;
+`
 // need to prevent boolean props from being passed to dom
 const StyledButton = ({ preceded, followed, ...rest }) => {
   const StyledButton = styled(Button)`
@@ -64,7 +82,7 @@ const MenuDiv = styled.div`
 `
 
 const enhance = compose(
-  withState('anchorEl', 'setAnchorEl', null),
+  withState('moreButtonAnchorEl', 'setMoreButtonAnchorEl', null),
   withState('ekfYearState', 'setEkfYearState', null),
   withState('userOpen', 'setUserOpen', false),
   withHandlers({
@@ -116,8 +134,8 @@ const enhance = compose(
 
 const MyAppBar = ({
   onClickButton,
-  anchorEl,
-  setAnchorEl,
+  moreButtonAnchorEl,
+  setMoreButtonAnchorEl,
   setShowDeletions,
   setViewNormal,
   setViewEkf,
@@ -126,8 +144,8 @@ const MyAppBar = ({
   toggleUserOpen,
 }: {
   onClickButton: () => void,
-  anchorEl: Object,
-  setAnchorEl: () => void,
+  moreButtonAnchorEl: Object,
+  setMoreButtonAnchorEl: () => void,
   setShowDeletions: () => void,
   setViewNormal: () => void,
   setViewEkf: () => void,
@@ -221,6 +239,19 @@ const MyAppBar = ({
                       }
                     >
                       Daten
+                      {projekteTabs.includes('daten') && (
+                        <StyledIconButton
+                          aria-label="Daten filtern"
+                          title="Daten filtern (BAUSTELLE)"
+                        >
+                          <StyledFilterIcon
+                            onClick={e => {
+                              console.log('TODO')
+                              e.stopPropagation()
+                            }}
+                          />
+                        </StyledIconButton>
+                      )}
                     </StyledButton>
                     <StyledButton
                       variant={
@@ -252,7 +283,7 @@ const MyAppBar = ({
                           preceded={projekteTabs.includes('karte')}
                           followed={projekteTabs.includes('tree2')}
                           onClick={() => {
-                            setAnchorEl(null)
+                            setMoreButtonAnchorEl(null)
                             onClickButton('exporte', client, projekteTabs)
                           }}
                         >
@@ -294,8 +325,8 @@ const MyAppBar = ({
                 )}
                 <More
                   onClickButton={onClickButton}
-                  anchorEl={anchorEl}
-                  setAnchorEl={setAnchorEl}
+                  anchorEl={moreButtonAnchorEl}
+                  setAnchorEl={setMoreButtonAnchorEl}
                   setShowDeletions={setShowDeletions}
                   role={role}
                 />
