@@ -132,7 +132,6 @@ const Ekfzaehleinheit = ({
             <FormTitle
               apId={row.apId}
               title="EKF-Zähleinheit"
-              activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
               treeName={treeName}
               table="ekfzaehleinheit"
             />

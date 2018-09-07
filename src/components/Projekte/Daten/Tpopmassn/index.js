@@ -194,7 +194,6 @@ class Tpopmassn extends Component<Props> {
                 <FormTitle
                   apId={get(data, 'tpopmassnById.tpopByTpopId.popByPopId.apId')}
                   title="Massnahme"
-                  activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
                   treeName={treeName}
                   table="tpopmassn"
                 />

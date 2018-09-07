@@ -179,7 +179,6 @@ class Apber extends Component<Props> {
                 <FormTitle
                   apId={row.apId}
                   title="AP-Bericht"
-                  activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
                   treeName={treeName}
                   table="apber"
                 />

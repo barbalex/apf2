@@ -323,7 +323,6 @@ class Tpopfeldkontr extends Component<Props> {
                 <FormTitle
                   apId={get(data, 'tpopkontrById.tpopByTpopId.popByPopId.apId')}
                   title="Feld-Kontrolle"
-                  activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
                   treeName={treeName}
                   table="tpopfeldkontr"
                 />

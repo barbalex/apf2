@@ -115,7 +115,6 @@ const Popber = ({
             <FormTitle
               apId={get(data, 'popberById.popByPopId.apId')}
               title="Kontroll-Bericht Population"
-              activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
               treeName={treeName}
               table="popber"
             />

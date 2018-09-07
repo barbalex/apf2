@@ -170,7 +170,6 @@ const Beobzuordnung = ({
             <FormTitle
               apId={get(row, 'aeEigenschaftenByArtId.apByArtId.id', null)}
               title="Beobachtung"
-              activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
               treeName={treeName}
               table="beob"
             />

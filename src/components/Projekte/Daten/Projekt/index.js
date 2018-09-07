@@ -97,12 +97,7 @@ const Projekt = ({
       return (
         <ErrorBoundary>
           <Container>
-            <FormTitle
-              title="Projekt"
-              activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
-              treeName={treeName}
-              table="projekt"
-            />
+            <FormTitle title="Projekt" treeName={treeName} table="projekt" />
             <Mutation mutation={updateProjektByIdGql}>
               {(updateProjekt, { data }) => (
                 <FieldsContainer>

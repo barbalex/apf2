@@ -210,7 +210,6 @@ class Tpop extends Component<Props> {
                 <FormTitle
                   apId={get(data, 'tpopById.popByPopId.apId')}
                   title="Teil-Population"
-                  activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
                   treeName={treeName}
                   table="tpop"
                 />

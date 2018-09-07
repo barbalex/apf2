@@ -104,7 +104,6 @@ const Zielber = ({
             <FormTitle
               apId={get(row, 'zielByZielId.apId')}
               title="Ziel-Bericht"
-              activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
               treeName={treeName}
               table="zielber"
             />

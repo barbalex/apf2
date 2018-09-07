@@ -119,7 +119,6 @@ const Assozart = ({
             <FormTitle
               apId={row.apId}
               title="assoziierte Art"
-              activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
               treeName={treeName}
               table="assozart"
             />

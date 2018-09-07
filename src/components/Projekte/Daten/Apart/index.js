@@ -107,7 +107,6 @@ const ApArt = ({
         value: el.id,
         label: el.artname,
       }))
-      const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
 
       return (
         <ErrorBoundary>
@@ -115,7 +114,6 @@ const ApArt = ({
             <FormTitle
               apId={row.apId}
               title="Aktionsplan-Art"
-              activeNodeArray={activeNodeArray}
               treeName={treeName}
               table="apart"
             />

@@ -102,7 +102,6 @@ const Apberuebersicht = ({
           <Container>
             <FormTitle
               title="AP-Bericht Jahresübersicht"
-              activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
               treeName={treeName}
               table="apberuebersicht"
             />

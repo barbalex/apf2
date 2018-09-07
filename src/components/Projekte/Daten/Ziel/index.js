@@ -143,7 +143,6 @@ const Ziel = ({
             <FormTitle
               apId={row.apId}
               title="Ziel"
-              activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
               treeName={treeName}
               table="ziel"
             />

@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { Fragment } from 'react'
 import styled from 'styled-components'
 import FilterIcon from '@material-ui/icons/FilterList'
 import DeleteFilterIcon from '@material-ui/icons/DeleteSweep'
@@ -10,10 +10,12 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import isUuid from 'is-uuid'
 import app from 'ampersand-app'
+import get from 'lodash/get'
 
 import TestdataMessage from './TestdataMessage'
 import withNodeFilterState from '../../../state/withNodeFilter'
 import setTreeKeyGql from './setTreeKey.graphql'
+import data from './data'
 
 const Container = styled.div`
   background-color: ${props => (props.showfilter ? '#D84315' : '#388e3c')};
@@ -65,12 +67,13 @@ const Symbols = styled.div`
 `
 
 const enhance = compose(
+  data,
   withNodeFilterState,
   withHandlers({
-    onToggleShow: ({ nodeFilterState, activeNodeArray, treeName }) => () => {
+    onToggleShow: ({ nodeFilterState, data, treeName }) => () => {
+      const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
       nodeFilterState.toggleShow()
       // if active node is id, pop
-      // check if last element of activeNodeArray is uuid
       if (
         activeNodeArray &&
         treeName &&
@@ -104,6 +107,7 @@ const FormTitle = ({
   onEmptyTree,
   table,
   treeName,
+  data,
 }: {
   tree: Object,
   title: string,
@@ -114,8 +118,10 @@ const FormTitle = ({
   onEmptyTree: () => void,
   table: string,
   treeName: string,
+  data: Object,
 }) => {
   const showFilter = nodeFilterState.state.show
+  const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
   let existsTableFilter
   let existsTreeFilter
   const doFilter = table && treeName
@@ -126,6 +132,9 @@ const FormTitle = ({
     })
     existsTreeFilter = nodeFilterState.treeIsFiltered(treeName)
   }
+  const activeNodeArrayIsThisFiltersObject =
+    activeNodeArray &&
+    isUuid.anyNonNil(activeNodeArray[activeNodeArray.length - 1])
 
   return (
     <Container showfilter={showFilter}>
@@ -134,12 +143,16 @@ const FormTitle = ({
         {doFilter && (
           <Symbols>
             {showFilter ? (
-              <StyledIconButton
-                aria-label="Daten anzeigen und bearbeiten"
-                title="Daten anzeigen und bearbeiten"
-              >
-                <StyledEditIcon onClick={onToggleShow} />
-              </StyledIconButton>
+              <Fragment>
+                {activeNodeArrayIsThisFiltersObject && (
+                  <StyledIconButton
+                    aria-label="Daten anzeigen und bearbeiten"
+                    title="Daten anzeigen und bearbeiten"
+                  >
+                    <StyledEditIcon onClick={onToggleShow} />
+                  </StyledIconButton>
+                )}
+              </Fragment>
             ) : (
               <StyledIconButton
                 aria-label="Daten filtern"

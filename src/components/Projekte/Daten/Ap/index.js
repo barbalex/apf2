@@ -155,7 +155,6 @@ const Ap = ({
         // which means there is no id
         '99999999-9999-9999-9999-999999999999',
       )
-      const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
 
       return (
         <Query query={data2Gql} variables={{ id }}>
@@ -228,7 +227,6 @@ const Ap = ({
                   <FormTitle
                     apId={id}
                     title="Aktionsplan"
-                    activeNodeArray={activeNodeArray}
                     treeName={treeName}
                     table="ap"
                   />

@@ -126,7 +126,6 @@ const Tpopber = ({
             <FormTitle
               apId={get(data, 'tpopberById.tpopByTpopId.popByPopId.apId')}
               title="Kontroll-Bericht Teil-Population"
-              activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
               treeName={treeName}
               table="tpopber"
             />

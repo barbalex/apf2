@@ -129,7 +129,6 @@ const Tpopkontrzaehl = ({
                 'tpopkontrzaehlById.tpopkontrByTpopkontrId.tpopByTpopId.popByPopId.apId',
               )}
               title="Zählung"
-              activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
               treeName={treeName}
               table="tpopkontrzaehl"
             />

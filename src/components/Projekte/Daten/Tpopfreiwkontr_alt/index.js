@@ -189,7 +189,6 @@ class Tpopfreiwkontr extends Component<Props> {
                 <FormTitle
                   apId={get(data, 'tpopkontrById.tpopByTpopId.popByPopId.apId')}
                   title="Freiwilligen-Kontrolle"
-                  activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
                   treeName={treeName}
                   table="tpopfreiwkontr"
                 />

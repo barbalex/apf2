@@ -157,7 +157,6 @@ class Idealbiotop extends Component<Props> {
                 <FormTitle
                   apId={row.apId}
                   title="Idealbiotop"
-                  activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
                   treeName={treeName}
                   table="idealbiotop"
                 />

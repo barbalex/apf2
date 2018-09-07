@@ -108,7 +108,6 @@ const Adresse = ({
             if (error) return `Fehler: ${error.message}`
 
             const row = get(data, 'adresseById')
-            const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
 
             return (
               <ErrorBoundary>
@@ -116,7 +115,6 @@ const Adresse = ({
                   <FormTitle
                     apId={id}
                     title="Adresse"
-                    activeNodeArray={activeNodeArray}
                     treeName={treeName}
                     table="adresse"
                   />

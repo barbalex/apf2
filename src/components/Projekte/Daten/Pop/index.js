@@ -134,7 +134,6 @@ const Pop = ({
       } else {
         row = get(data, 'popById')
       }
-      const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
 
       return (
         <ErrorBoundary>
@@ -142,7 +141,6 @@ const Pop = ({
             <FormTitle
               apId={get(data, 'popById.apId')}
               title="Population"
-              activeNodeArray={activeNodeArray}
               treeName={treeName}
               table="pop"
             />

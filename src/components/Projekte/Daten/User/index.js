@@ -257,7 +257,6 @@ const User = ({
                   <FormTitle
                     apId={id}
                     title="Benutzer"
-                    activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
                     treeName={treeName}
                     table="user"
                   />

@@ -105,7 +105,6 @@ const Ber = ({
             <FormTitle
               apId={row.apId}
               title="Bericht"
-              activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
               treeName={treeName}
               table="ber"
             />

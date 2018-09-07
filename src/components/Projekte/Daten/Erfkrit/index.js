@@ -111,7 +111,6 @@ const Erfkrit = ({
             <FormTitle
               apId={row.apId}
               title="Erfolgs-Kriterium"
-              activeNodeArray={get(data, `${treeName}.activeNodeArray`)}
               treeName={treeName}
               table="erfkrit"
             />
