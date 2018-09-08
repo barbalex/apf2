@@ -35,28 +35,33 @@ const StyledFilterIcon = styled(FilterIcon)`
   margin-top: 2px;
   color: white;
 `
-// need to prevent boolean props from being passed to dom
-const StyledButton = ({ preceded, followed, ...rest }) => {
-  const StyledButton = styled(Button)`
-    color: white !important;
-    border-color: rgba(255, 255, 255, 0.5) !important;
-    border-right-color: ${followed
+const StyledButton = styled(Button)`
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  border-right-color: ${props =>
+    props.followed === 'true'
       ? ' rgba(255, 255, 255, 0.25)'
       : ' rgba(255, 255, 255, 0.5)'} !important;
-    border-left-color: ${preceded
+  border-left-color: ${props =>
+    props.preceded === 'true'
       ? ' rgba(255, 255, 255, 0.25)'
       : ' rgba(255, 255, 255, 0.5)'} !important;
-    border-top-left-radius: ${preceded ? '0' : '4px'} !important;
-    border-bottom-left-radius: ${preceded ? '0' : '4px'} !important;
-    border-top-right-radius: ${followed ? '0' : '4px'} !important;
-    border-bottom-right-radius: ${followed ? '0' : '4px'} !important;
-    margin-right: ${followed ? '-1px' : 'unset'} !important;
-  `
-  return <StyledButton {...rest} />
-}
+  border-top-left-radius: ${props =>
+    props.preceded === 'true' ? '0' : '4px'} !important;
+  border-bottom-left-radius: ${props =>
+    props.preceded === 'true' ? '0' : '4px'} !important;
+  border-top-right-radius: ${props =>
+    props.followed === 'true' ? '0' : '4px'} !important;
+  border-bottom-right-radius: ${props =>
+    props.followed === 'true' ? '0' : '4px'} !important;
+  margin-right: ${props =>
+    props.followed === 'true' ? '-1px' : 'unset'} !important;
+`
 const StyledMenuItem = styled(MenuItem)`
   padding-left: ${props =>
-    props.level ? 16 + props.level * 10 : 16}px !important;
+    props.level ? 16 + (props.level - 1) * 18 : 16}px !important;
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
 `
 
 const enhance = compose(
@@ -133,8 +138,8 @@ const MyAppBar = ({
   return (
     <StyledButton
       variant={isDaten ? 'outlined' : 'text'}
-      preceded={isTree}
-      followed={isKarte}
+      preceded={isTree.toString()}
+      followed={isKarte.toString()}
       onClick={onClickButton}
     >
       Daten
@@ -163,22 +168,22 @@ const MyAppBar = ({
               onClick={onClickFilterTable}
               level={1}
             >
-              Populationen
+              └─ Populationen
             </StyledMenuItem>
             <StyledMenuItem
               data-table="tpop"
               onClick={onClickFilterTable}
               level={2}
             >
-              Teil-Populationen
+              └─ Teil-Populationen
             </StyledMenuItem>
             <Divider />
-            <MenuItem
+            <StyledMenuItem
               onClick={onClickEmptyFilter}
               disabled={!nodeFilterState.treeIsFiltered('tree')}
             >
               Alle Filter entfernen
-            </MenuItem>
+            </StyledMenuItem>
           </Menu>
         </Fragment>
       )}
