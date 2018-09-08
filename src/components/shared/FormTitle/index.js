@@ -1,10 +1,9 @@
 // @flow
-import React, { Fragment } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import FilterIcon from '@material-ui/icons/FilterList'
 import DeleteFilterIcon from '@material-ui/icons/DeleteSweep'
 import DeleteFilterIcon2 from '@material-ui/icons/DeleteSweepOutlined'
-import EditIcon from '@material-ui/icons/Edit'
 import IconButton from '@material-ui/core/IconButton'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
@@ -39,12 +38,6 @@ const StyledIconButton = styled(IconButton)`
   margin-right: 5px !important;
 `
 const StyledFilterIcon = styled(FilterIcon)`
-  cursor: pointer;
-  pointer-events: auto;
-  padding-top: 5px;
-  color: white;
-`
-const StyledEditIcon = styled(EditIcon)`
   cursor: pointer;
   pointer-events: auto;
   padding-top: 5px;
