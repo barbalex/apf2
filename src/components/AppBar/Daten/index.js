@@ -14,6 +14,7 @@ import withHandlers from 'recompose/withHandlers'
 
 import isMobilePhone from '../../../modules/isMobilePhone'
 import setUrlQueryValue from '../../../modules/setUrlQueryValue'
+import withNodeFilter from '../../../state/withNodeFilter'
 
 const StyledIconButton = styled.div`
   height: 30px !important;
@@ -54,6 +55,7 @@ const StyledButton = ({ preceded, followed, ...rest }) => {
 }
 
 const enhance = compose(
+  withNodeFilter,
   withState('datenFilterAnchorEl', 'setDatenFilterAnchorEl', null),
   withHandlers({
     onClickButton: ({ data }) => event => {
@@ -84,10 +86,13 @@ const enhance = compose(
     },
     onCloseFilter: ({ setDatenFilterAnchorEl }) => () =>
       setDatenFilterAnchorEl(null),
-    onClickFilterTable: ({ setDatenFilterAnchorEl }) => event => {
+    onClickFilterTable: ({
+      setDatenFilterAnchorEl,
+      nodeFilterState,
+    }) => event => {
       setDatenFilterAnchorEl(null)
       const { table } = event.target.dataset
-      console.log(`TODO: show ${table} filter`)
+      nodeFilterState.setActiveTable({ treeName: 'tree', activeTable: table })
     },
   }),
 )
@@ -99,6 +104,7 @@ const MyAppBar = ({
   onCloseFilter,
   onClickFilterTable,
   data,
+  nodeFilterState,
 }: {
   onClickButton: () => void,
   datenFilterAnchorEl: Object,
@@ -106,6 +112,7 @@ const MyAppBar = ({
   onCloseFilter: () => void,
   onClickFilterTable: () => void,
   data: Object,
+  nodeFilterState: Object,
 }) => {
   const projekteTabs = clone(get(data, 'urlQuery.projekteTabs', []))
 
