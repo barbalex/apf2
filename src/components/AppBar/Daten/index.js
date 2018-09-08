@@ -5,6 +5,7 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import Divider from '@material-ui/core/Divider'
 import FilterIcon from '@material-ui/icons/FilterList'
+import DeleteFilterIcon from '@material-ui/icons/DeleteSweep'
 import remove from 'lodash/remove'
 import get from 'lodash/get'
 import clone from 'lodash/clone'
@@ -34,6 +35,10 @@ const StyledFilterIcon = styled(FilterIcon)`
   pointer-events: auto;
   margin-top: 2px;
   color: white;
+`
+const StyledDeleteFilterIcon = styled(DeleteFilterIcon)`
+  margin-top: -4px;
+  padding-right: 5px;
 `
 const StyledButton = styled(Button)`
   color: white !important;
@@ -182,6 +187,7 @@ const MyAppBar = ({
               onClick={onClickEmptyFilter}
               disabled={!nodeFilterState.treeIsFiltered('tree')}
             >
+              <StyledDeleteFilterIcon />
               Alle Filter entfernen
             </StyledMenuItem>
           </Menu>
