@@ -123,17 +123,20 @@ const MyAppBar = ({
   data: Object,
   nodeFilterState: Object,
 }) => {
-  const projekteTabs = clone(get(data, 'urlQuery.projekteTabs', []))
+  const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
+  const isDaten = projekteTabs.includes('daten')
+  const isTree = projekteTabs.includes('tree')
+  const isKarte = projekteTabs.includes('karte')
 
   return (
     <StyledButton
-      variant={projekteTabs.includes('daten') ? 'outlined' : 'text'}
-      preceded={projekteTabs.includes('tree')}
-      followed={projekteTabs.includes('karte')}
+      variant={isDaten ? 'outlined' : 'text'}
+      preceded={isTree}
+      followed={isKarte}
       onClick={onClickButton}
     >
       Daten
-      {projekteTabs.includes('daten') && (
+      {isDaten && (
         <Fragment>
           <StyledIconButton
             aria-label="Daten filtern"
