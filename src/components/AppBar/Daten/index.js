@@ -59,7 +59,7 @@ const StyledButton = styled(Button)`
 `
 const StyledMenuItem = styled(MenuItem)`
   padding-left: ${props =>
-    props.level ? 16 + (props.level - 1) * 18 : 16}px !important;
+    props.level ? 12 + (props.level - 1) * 23 : 16}px !important;
   padding-top: 3px !important;
   padding-bottom: 3px !important;
 `
