@@ -6,6 +6,8 @@ import compareLabel from './compareLabel'
 import allParentNodesExist from '../allParentNodesExist'
 import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
 import filterNodesByApFilter from '../filterNodesByApFilter'
+import filterExistsBelowAp from '../../../../modules/filterExistsBelowAp'
+import popOrLowerIsFiltered from '../../../../modules/popOrLowerIsFiltered'
 
 export default ({
   nodes: nodesPassed,
@@ -13,27 +15,39 @@ export default ({
   treeName,
   projektNodes,
   projId,
-  nodeFilter,
+  nodeFilterState,
 }: {
   nodes: Array<Object>,
   data: Object,
   treeName: String,
   projektNodes: Array<Object>,
   projId: String,
-  nodeFilter: Object,
+  nodeFilterState: Object,
 }): Array<Object> => {
+  const nodeFilter = nodeFilterState.state[treeName]
   const apFilter = get(data, `${treeName}.apFilter`)
   const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.ap`)
   const aps = get(data, 'aps.nodes', [])
   const nodeFilterArray = Object.entries(nodeFilter.ap).filter(
     ([key, value]) => value || value === 0,
   )
-  const popOrLowerAreFiltered = 'TODO'
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
+  const _filterExistsBelowAp = filterExistsBelowAp({
+    nodeFilterState,
+    treeName,
+  })
+  const _popOrLowerIsFiltered = popOrLowerIsFiltered({
+    nodeFilterState,
+    treeName,
+  })
+  const apIdsOfOwnPops = _popOrLowerIsFiltered
+    ? nodesPassed.filter(n => n.table === 'pop').map(n => n.id)
+    : null
+  console.log('nodes, ap:', { apIdsOfOwnPops, nodesPassed })
 
   // map through all elements and create array of nodes
   const nodes = aps
@@ -66,6 +80,17 @@ export default ({
        * and tpop are filtered
        * do not return
        */
+      if (_filterExistsBelowAp) {
+        if (apIdsOfOwnPops && apIdsOfOwnPops.length) {
+          // TODO
+          // filter pop in nodesPassed
+          // return only ap of those pop
+          // DOES NOT WORK
+          // because pop nodes do not yet exist as their data was not fetched yet
+          return apIdsOfOwnPops.includes(node.id)
+        }
+        return true
+      }
       return true
     })
     .map(el => ({

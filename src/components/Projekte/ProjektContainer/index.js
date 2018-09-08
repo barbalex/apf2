@@ -188,7 +188,7 @@ const ProjekteContainer = ({
               treeName,
               loading,
               role,
-              nodeFilter: nodeFilterState.state[treeName],
+              nodeFilterState,
             })
             const tree = get(data, treeName)
             const activeNodeArray = get(data, `${treeName}.activeNodeArray`)

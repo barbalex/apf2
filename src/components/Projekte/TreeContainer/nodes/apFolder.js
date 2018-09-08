@@ -14,7 +14,7 @@ export default ({
   loading,
   projektNodes,
   projId,
-  nodeFilter,
+  nodeFilterState,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -22,8 +22,9 @@ export default ({
   loading: Boolean,
   projektNodes: Array<Object>,
   projId: String,
-  nodeFilter: Object,
+  nodeFilterState: Object,
 }): Array<Object> => {
+  const nodeFilter = nodeFilterState.state[treeName]
   const aps = get(data, 'aps.nodes', [])
   const nodeFilterArray = Object.entries(nodeFilter.ap).filter(
     ([key, value]) => value || value === 0,

@@ -103,30 +103,6 @@ const initialTreeState = {
   user: {},
 }
 
-const apChildTables = [
-  'popber',
-  'popmassnber',
-  'apart',
-  'assozart',
-  'ekfzaehleinheit',
-  'idealbiotop',
-  'ber',
-  'apber',
-  'erfkrit',
-  'ziel',
-  'pop',
-]
-const zielChildTables = ['zielber']
-const popChildTables = ['popmassnber', 'popber', 'tpop']
-const tpopChildTables = [
-  'tpopmassn',
-  'tpopmassnber',
-  'tpopkontr',
-  'tpopfeldkontr',
-  'tpopfreiwkontr',
-  'tpopber',
-]
-
 class NodeFilterContainer extends Container<NodeFilterState> {
   state = { tree: initialTreeState, tree2: initialTreeState }
 
@@ -139,7 +115,6 @@ class NodeFilterContainer extends Container<NodeFilterState> {
   }
 
   setValue({ treeName, table, key, value }) {
-    //console.log('state, nodeFilter', { treeName, table, key, value })
     this.setState(state => {
       const newState = cloneDeep(state)
       newState[treeName][table][key] = value
@@ -174,15 +149,6 @@ class NodeFilterContainer extends Container<NodeFilterState> {
   tableIsFiltered({ treeName, table }) {
     const tableFilter = this.state[treeName][table]
     return Object.values(tableFilter).filter(v => v || v === 0).length > 0
-  }
-
-  filterExistsBelowAp(treeName) {
-    return [
-      ...apChildTables,
-      ...zielChildTables,
-      ...popChildTables,
-      ...tpopChildTables,
-    ].some(table => this.tableIsFiltered({ treeName, table }))
   }
 
   treeIsFiltered(treeName) {

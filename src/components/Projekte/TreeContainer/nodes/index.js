@@ -75,14 +75,15 @@ export default ({
   treeName,
   loading,
   role,
-  nodeFilter,
+  nodeFilterState,
 }: {
   data: Object,
   treeName: string,
   loading: boolean,
   role: string,
-  nodeFilter: Object,
+  nodeFilterState: Object,
 }): Array<Object> => {
+  const nodeFilter = nodeFilterState.state[treeName]
   const openNodes = [...get(data, `${treeName}.openNodes`)]
     // need to sort so folders are added in correct order
     // because every lower folder gets previous nodes passed
@@ -134,7 +135,7 @@ export default ({
             loading,
             projektNodes,
             projId,
-            nodeFilter,
+            nodeFilterState,
           }),
           ...buildApberuebersichtFolderNodes({
             nodes,
@@ -175,7 +176,7 @@ export default ({
           loading,
           projektNodes,
           projId,
-          nodeFilter,
+          nodeFilterState,
         })
         nodes = [...nodes, ...apNodes]
       }
