@@ -64,7 +64,7 @@ const enhance = compose(
   withState('datenFilterAnchorEl', 'setDatenFilterAnchorEl', null),
   withHandlers({
     onClickButton: ({ data }) => event => {
-      // catch case when filter button was clicked
+      // catch case when inner filter button was clicked
       if (event.target.localName !== 'span') return
       const projekteTabs = clone(get(data, 'urlQuery.projekteTabs', []))
       if (isMobilePhone()) {
