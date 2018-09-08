@@ -54,6 +54,10 @@ const StyledButton = ({ preceded, followed, ...rest }) => {
   `
   return <StyledButton {...rest} />
 }
+const StyledMenuItem = styled(MenuItem)`
+  padding-left: ${props =>
+    props.level ? 16 + props.level * 10 : 16}px !important;
+`
 
 const enhance = compose(
   withNodeFilter,
@@ -146,15 +150,23 @@ const MyAppBar = ({
             open={Boolean(datenFilterAnchorEl)}
             onClose={onCloseFilter}
           >
-            <MenuItem data-table="ap" onClick={onClickFilterTable}>
+            <StyledMenuItem data-table="ap" onClick={onClickFilterTable}>
               Aktionspläne
-            </MenuItem>
-            <MenuItem data-table="pop" onClick={onClickFilterTable}>
+            </StyledMenuItem>
+            <StyledMenuItem
+              data-table="pop"
+              onClick={onClickFilterTable}
+              level={1}
+            >
               Populationen
-            </MenuItem>
-            <MenuItem data-table="tpop" onClick={onClickFilterTable}>
+            </StyledMenuItem>
+            <StyledMenuItem
+              data-table="tpop"
+              onClick={onClickFilterTable}
+              level={2}
+            >
               Teil-Populationen
-            </MenuItem>
+            </StyledMenuItem>
             <Divider />
             <MenuItem
               onClick={onClickEmptyFilter}
