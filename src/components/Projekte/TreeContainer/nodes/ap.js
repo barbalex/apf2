@@ -6,8 +6,6 @@ import compareLabel from './compareLabel'
 import allParentNodesExist from '../allParentNodesExist'
 import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
 import filterNodesByApFilter from '../filterNodesByApFilter'
-import filterExistsBelowAp from '../../../../modules/filterExistsBelowAp'
-import popOrLowerIsFiltered from '../../../../modules/popOrLowerIsFiltered'
 
 export default ({
   nodes: nodesPassed,
@@ -36,18 +34,6 @@ export default ({
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
-  const _filterExistsBelowAp = filterExistsBelowAp({
-    nodeFilterState,
-    treeName,
-  })
-  const _popOrLowerIsFiltered = popOrLowerIsFiltered({
-    nodeFilterState,
-    treeName,
-  })
-  const apIdsOfOwnPops = _popOrLowerIsFiltered
-    ? nodesPassed.filter(n => n.table === 'pop').map(n => n.id)
-    : null
-  console.log('nodes, ap:', { apIdsOfOwnPops, nodesPassed })
 
   // map through all elements and create array of nodes
   const nodes = aps
@@ -73,26 +59,6 @@ export default ({
     // this is done
     // but unfortunately query does not immediatly update
     .filter(node => filterNodesByNodeFilterArray({ node, nodeFilterArray }))
-    .filter(node => {
-      /**
-       * TODO
-       * if has no tpop
-       * and tpop are filtered
-       * do not return
-       */
-      if (_filterExistsBelowAp) {
-        if (apIdsOfOwnPops && apIdsOfOwnPops.length) {
-          // TODO
-          // filter pop in nodesPassed
-          // return only ap of those pop
-          // DOES NOT WORK
-          // because pop nodes do not yet exist as their data was not fetched yet
-          return apIdsOfOwnPops.includes(node.id)
-        }
-        return true
-      }
-      return true
-    })
     .map(el => ({
       nodeType: 'table',
       menuType: 'ap',
