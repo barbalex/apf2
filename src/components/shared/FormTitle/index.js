@@ -70,7 +70,7 @@ const enhance = compose(
   data,
   withNodeFilterState,
   withHandlers({
-    onToggleShow: ({ nodeFilterState, data, treeName, table }) => () => {
+    onFilter: ({ nodeFilterState, data, treeName, table }) => () => {
       const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
       nodeFilterState.setActiveTable({ treeName, activeTable: table })
       // if active node is id, pop
@@ -102,26 +102,23 @@ const FormTitle = ({
   title,
   apId,
   nodeFilterState,
-  onToggleShow,
+  onFilter,
   onEmptyTable,
   onEmptyTree,
   table,
   treeName,
-  data,
 }: {
   tree: Object,
   title: string,
   apId: string,
   nodeFilterState: Object,
-  onToggleShow: () => void,
+  onFilter: () => void,
   onEmptyTable: () => void,
   onEmptyTree: () => void,
   table: string,
   treeName: string,
-  data: Object,
 }) => {
   const showFilter = !!nodeFilterState.state[treeName].activeTable
-  const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
   let existsTableFilter
   let existsTreeFilter
   const doFilter = table && treeName
@@ -132,9 +129,6 @@ const FormTitle = ({
     })
     existsTreeFilter = nodeFilterState.treeIsFiltered(treeName)
   }
-  const activeNodeArrayIsThisFiltersObject =
-    activeNodeArray &&
-    isUuid.anyNonNil(activeNodeArray[activeNodeArray.length - 1])
 
   return (
     <Container showfilter={showFilter}>
@@ -142,23 +136,12 @@ const FormTitle = ({
         <Title>{`${title}${showFilter ? ' Filter' : ''}`}</Title>
         {doFilter && (
           <Symbols>
-            {showFilter ? (
-              <Fragment>
-                {activeNodeArrayIsThisFiltersObject && (
-                  <StyledIconButton
-                    aria-label="Daten anzeigen und bearbeiten"
-                    title="Daten anzeigen und bearbeiten"
-                  >
-                    <StyledEditIcon onClick={onToggleShow} />
-                  </StyledIconButton>
-                )}
-              </Fragment>
-            ) : (
+            {!showFilter && (
               <StyledIconButton
                 aria-label="Daten filtern"
                 title="Daten filtern (BAUSTELLE)"
               >
-                <StyledFilterIcon onClick={onToggleShow} />
+                <StyledFilterIcon onClick={onFilter} />
               </StyledIconButton>
             )}
             {existsTableFilter && (
