@@ -1,14 +1,12 @@
 //@flow
 import tables from './tables'
 
-export default (activeNode: Object, showFilter: boolean): String => {
+export default (activeNode: Object): string => {
   if (!activeNode) return null
   // name it projekt
   // because: /projekte has no nodes!
   let tableName = 'projekt'
-  if (showFilter) {
-    tableName = activeNode.menuType.replace('Folder', '')
-  } else if (activeNode.nodeType === 'table') {
+  if (activeNode.nodeType === 'table') {
     tableName = activeNode.menuType
     // need to convert feldkontrzaehl and freiwkontrzaehl to kontrzaehl
     if (['tpopfreiwkontrzaehl', 'tpopfeldkontrzaehl'].includes(tableName)) {

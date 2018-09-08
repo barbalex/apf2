@@ -7,8 +7,8 @@ import { initial as pop } from './pop'
 import { initial as tpop } from './tpop'
 
 type NodeFilterState = {
-  show: Boolean,
   tree: {
+    activeTable: string,
     ap: Object,
     pop: Object,
     tpop: Object,
@@ -39,6 +39,7 @@ type NodeFilterState = {
     user: Object,
   },
   tree2: {
+    activeTable: string,
     ap: Object,
     pop: Object,
     tpop: Object,
@@ -71,6 +72,7 @@ type NodeFilterState = {
 }
 
 const initialTreeState = {
+  activeTable: null,
   ap,
   pop,
   tpop,
@@ -102,7 +104,7 @@ const initialTreeState = {
 }
 
 class NodeFilterContainer extends Container<NodeFilterState> {
-  state = { tree: initialTreeState, tree2: initialTreeState, show: false }
+  state = { tree: initialTreeState, tree2: initialTreeState }
 
   set({ treeName, nodeFilter }) {
     this.setState(state => {
@@ -137,10 +139,10 @@ class NodeFilterContainer extends Container<NodeFilterState> {
     })
   }
 
-  toggleShow() {
+  setActiveTable({ treeName, activeTable }) {
     this.setState(state => {
       const newState = cloneDeep(state)
-      newState.show = !state.show
+      newState[treeName].activeTable = activeTable
       return newState
     })
   }
@@ -151,7 +153,9 @@ class NodeFilterContainer extends Container<NodeFilterState> {
   }
 
   treeIsFiltered(treeName) {
-    const tables = Object.keys(this.state[treeName])
+    const tables = Object.keys(this.state[treeName]).filter(
+      t => t !== 'activeTable',
+    )
     return tables.some(table => this.tableIsFiltered({ treeName, table }))
   }
 }

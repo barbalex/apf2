@@ -183,6 +183,7 @@ const Daten = ({
             id={activeNodeArray[1]}
             treeName={treeName}
             refetchTree={refetchTree}
+            activeNodeArray={activeNodeArray}
           />
         ),
         apberuebersicht: (
@@ -441,9 +442,14 @@ const Daten = ({
       ) {
         key = 'beobZugeordnet'
       } else {
-        key = getTableNameFromActiveNode(activeNode, nodeFilterState.state.show)
+        key = getTableNameFromActiveNode(activeNode)
       }
-      const form = key ? formObject[key] : ''
+      let form
+      if (nodeFilterState.state[treeName].activeTable) {
+        form = formObject[nodeFilterState.state[treeName].activeTable]
+      } else {
+        form = key ? formObject[key] : ''
+      }
 
       return (
         <ErrorBoundary>

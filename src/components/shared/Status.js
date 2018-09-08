@@ -110,10 +110,11 @@ const Status = ({
   onBlurBekanntSeit,
   nodeFilterState,
   onClickButton,
+  treeName,
 }: {
-  apJahr?: Number,
-  herkunftValue?: Number,
-  bekanntSeitStateValue: Number,
+  apJahr?: nmumber,
+  herkunftValue?: number,
+  bekanntSeitStateValue: number,
   saveToDbBekanntSeit: () => void,
   saveToDbStatus: () => void,
   onChangeStatus: () => void,
@@ -121,6 +122,7 @@ const Status = ({
   onBlurBekanntSeit: () => void,
   nodeFilterState: () => void,
   onClickButton: () => void,
+  treeName: string,
 }) => {
   const valueSelected =
     herkunftValue !== null && herkunftValue !== undefined ? herkunftValue : ''
@@ -132,7 +134,7 @@ const Status = ({
       angesiedeltLabel = 'angesiedelt (vor Beginn AP):'
     }
   }
-  const { show: showFilter } = nodeFilterState.state
+  const showFilter = !!nodeFilterState.state[treeName].activeTable
   const disabled =
     !bekanntSeitStateValue && bekanntSeitStateValue !== 0 && !showFilter
 

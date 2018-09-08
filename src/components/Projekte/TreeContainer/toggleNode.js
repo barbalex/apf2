@@ -20,9 +20,9 @@ export default ({
 
   // TODO: always set showFilter false if is true
   if (nodeFilterState) {
-    const { show } = nodeFilterState.state
+    const show = !!nodeFilterState.state[tree.name].activeTable
     if (show) {
-      nodeFilterState.toggleShow()
+      nodeFilterState.setActiveTable({ treeName: tree.name, activeTable: null })
     }
   }
 

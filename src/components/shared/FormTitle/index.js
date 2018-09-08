@@ -70,9 +70,9 @@ const enhance = compose(
   data,
   withNodeFilterState,
   withHandlers({
-    onToggleShow: ({ nodeFilterState, data, treeName }) => () => {
+    onToggleShow: ({ nodeFilterState, data, treeName, table }) => () => {
       const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
-      nodeFilterState.toggleShow()
+      nodeFilterState.setActiveTable({ treeName, activeTable: table })
       // if active node is id, pop
       if (
         activeNodeArray &&
@@ -120,7 +120,7 @@ const FormTitle = ({
   treeName: string,
   data: Object,
 }) => {
-  const showFilter = nodeFilterState.state.show
+  const showFilter = !!nodeFilterState.state[treeName].activeTable
   const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
   let existsTableFilter
   let existsTreeFilter

@@ -76,11 +76,13 @@ const Projekt = ({
   id,
   errors,
   treeName,
+  activeNodeArray,
 }: {
   saveToDb: () => void,
   id: string,
   errors: Object,
   treeName: string,
+  activeNodeArray: Array<string>,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
@@ -93,11 +95,16 @@ const Projekt = ({
       if (error) return `Fehler: ${error.message}`
 
       const row = get(data, 'projektById')
+      const filterTable = activeNodeArray.length === 2 ? 'projekt' : 'ap'
 
       return (
         <ErrorBoundary>
           <Container>
-            <FormTitle title="Projekt" treeName={treeName} table="projekt" />
+            <FormTitle
+              title="Projekt"
+              treeName={treeName}
+              table={filterTable}
+            />
             <Mutation mutation={updateProjektByIdGql}>
               {(updateProjekt, { data }) => (
                 <FieldsContainer>

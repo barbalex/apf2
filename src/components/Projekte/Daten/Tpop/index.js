@@ -53,7 +53,7 @@ const enhance = compose(
        * only save if value changed
        */
       if (row[field] === value) return
-      const { show: showFilter } = nodeFilterState.state
+      const showFilter = !!nodeFilterState.state[treeName].activeTable
       if (showFilter) {
         nodeFilterState.setValue({
           treeName,
@@ -176,7 +176,7 @@ class Tpop extends Component<Props> {
           }
           if (error) return `Fehler: ${error.message}`
 
-          const { show: showFilter } = nodeFilterState.state
+          const showFilter = !!nodeFilterState.state[treeName].activeTable
           let row
           if (showFilter) {
             row = nodeFilterState.state[treeName].tpop
@@ -262,6 +262,7 @@ class Tpop extends Component<Props> {
                         saveToDbStatus={value =>
                           saveToDb({ row, field: 'status', value, updateTpop })
                         }
+                        treeName={treeName}
                       />
                       <RadioButton
                         key={`${row.id}statusUnklar`}

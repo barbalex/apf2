@@ -44,7 +44,7 @@ const enhance = compose(
        * only save if value changed
        */
       if (row[field] === value) return
-      const { show: showFilter } = nodeFilterState.state
+      const showFilter = !!nodeFilterState.state[treeName].activeTable
       if (showFilter) {
         nodeFilterState.setValue({
           treeName,
@@ -127,7 +127,7 @@ const Pop = ({
         )
       if (error) return `Fehler: ${error.message}`
 
-      const { show: showFilter } = nodeFilterState.state
+      const showFilter = !!nodeFilterState.state[treeName].activeTable
       let row
       if (showFilter) {
         row = nodeFilterState.state[treeName].pop
@@ -179,6 +179,7 @@ const Pop = ({
                     saveToDbStatus={value =>
                       saveToDb({ row, field: 'status', value, updatePop })
                     }
+                    treeName={treeName}
                   />
                   <RadioButton
                     key={`${row.id}statusUnklar`}

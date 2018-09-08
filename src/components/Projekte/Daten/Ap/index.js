@@ -77,7 +77,7 @@ const enhance = compose(
        * only save if value changed
        */
       if (row[field] === value) return
-      const { show: showFilter } = nodeFilterState.state
+      const showFilter = !!nodeFilterState.state[treeName].activeTable
       if (showFilter) {
         nodeFilterState.setValue({
           treeName,
@@ -186,7 +186,7 @@ const Ap = ({
               value: el.id,
             }))
 
-            const { show: showFilter } = nodeFilterState.state
+            const showFilter = !!nodeFilterState.state[treeName].activeTable
             let apArten
             let artWerte
             if (showFilter) {
