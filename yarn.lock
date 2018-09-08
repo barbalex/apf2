@@ -2388,7 +2388,7 @@ babel-plugin-emotion@^9.2.8:
 
 babel-plugin-istanbul@^4.1.5:
   version "4.1.6"
-  resolved "https://registry.yarnpkg.com/babel-plugin-istanbul/-/babel-plugin-istanbul-4.1.6.tgz#36c59b2192efce81c5b378321b74175add1c9a45"
+  resolved "http://registry.npmjs.org/babel-plugin-istanbul/-/babel-plugin-istanbul-4.1.6.tgz#36c59b2192efce81c5b378321b74175add1c9a45"
   dependencies:
     babel-plugin-syntax-object-rest-spread "^6.13.0"
     find-up "^2.1.0"
@@ -4023,8 +4023,8 @@ ee-first@1.1.1:
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
 
 electron-to-chromium@^1.2.7, electron-to-chromium@^1.3.42, electron-to-chromium@^1.3.47, electron-to-chromium@^1.3.62:
-  version "1.3.63"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.63.tgz#6485f5f4f3375358aa8fa23c2029ada208483b8d"
+  version "1.3.64"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.64.tgz#39f5a93bf84ab7e10cfbb7522ccfc3f1feb756cf"
 
 elliptic@^6.0.0:
   version "6.4.1"
@@ -5061,7 +5061,7 @@ graceful-fs@^4.1.0, graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6,
   version "4.1.11"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.11.tgz#0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
 
-graphile-build-pg@4.0.0-rc.10, graphile-build-pg@^4.0.0-beta.6:
+graphile-build-pg@4.0.0-rc.10:
   version "4.0.0-rc.10"
   resolved "https://registry.yarnpkg.com/graphile-build-pg/-/graphile-build-pg-4.0.0-rc.10.tgz#111f1ecdab3b6d0076c265605360e00699373a98"
   dependencies:
@@ -8208,11 +8208,9 @@ postgraphile-core@4.0.0-rc.10:
     graphile-build "4.0.0-rc.10"
     graphile-build-pg "4.0.0-rc.10"
 
-postgraphile-plugin-connection-filter@1.0.0-beta.14:
-  version "1.0.0-beta.14"
-  resolved "https://registry.yarnpkg.com/postgraphile-plugin-connection-filter/-/postgraphile-plugin-connection-filter-1.0.0-beta.14.tgz#74241e2ce20ce1c9c5ac3da1f1a4dccb75fdeed9"
-  dependencies:
-    graphile-build-pg "^4.0.0-beta.6"
+postgraphile-plugin-connection-filter@1.0.0-beta.15:
+  version "1.0.0-beta.15"
+  resolved "https://registry.yarnpkg.com/postgraphile-plugin-connection-filter/-/postgraphile-plugin-connection-filter-1.0.0-beta.15.tgz#8a5dc7f8c32c3b6430cc920f3c7e0640df7b7037"
 
 postgraphile@4.0.0-rc.4.1:
   version "4.0.0-rc.4.1"
@@ -9623,8 +9621,8 @@ spdx-expression-parse@^3.0.0:
     spdx-license-ids "^3.0.0"
 
 spdx-license-ids@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/spdx-license-ids/-/spdx-license-ids-3.0.0.tgz#7a7cd28470cc6d3a1cfe6d66886f6bc430d3ac87"
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/spdx-license-ids/-/spdx-license-ids-3.0.1.tgz#e2a303236cac54b04031fa7a5a79c7e701df852f"
 
 spdy-transport@^2.0.18:
   version "2.1.0"

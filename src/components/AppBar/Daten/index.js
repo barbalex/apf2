@@ -5,12 +5,12 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import FilterIcon from '@material-ui/icons/FilterList'
 import remove from 'lodash/remove'
+import get from 'lodash/get'
+import clone from 'lodash/clone'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
-import get from 'lodash/get'
-import clone from 'lodash/clone'
 
 import isMobilePhone from '../../../modules/isMobilePhone'
 import setUrlQueryValue from '../../../modules/setUrlQueryValue'
@@ -20,7 +20,8 @@ const StyledIconButton = styled.div`
   width: 30px !important;
   margin-right: -5px !important;
   margin-left: 8px !important;
-  margin-bottom: 3px !important;
+  margin-top: -11px !important;
+  margin-bottom: -11px !important;
   border-radius: 4px;
   &:hover {
     background-color: rgba(0, 0, 0, 0.1);
@@ -29,7 +30,7 @@ const StyledIconButton = styled.div`
 const StyledFilterIcon = styled(FilterIcon)`
   cursor: pointer;
   pointer-events: auto;
-  padding-top: 5px;
+  margin-top: 2px;
   color: white;
 `
 // need to prevent boolean props from being passed to dom
@@ -57,7 +58,7 @@ const enhance = compose(
   withHandlers({
     onClickButton: ({ data }) => event => {
       // catch case when filter button was clicked
-      if (event.target.localName === 'div') return
+      if (event.target.localName !== 'span') return
       const projekteTabs = clone(get(data, 'urlQuery.projekteTabs', []))
       if (isMobilePhone()) {
         // show one tab only
