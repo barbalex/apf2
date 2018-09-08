@@ -79,7 +79,7 @@ export default ({
   const allParentsOpen = allParentNodesAreOpen(openNodes, url)
   if (!allParentsOpen) return []
 
-  return [
+  const nodes = [
     {
       nodeType: 'folder',
       menuType: 'tpopmassnFolder',
@@ -92,4 +92,5 @@ export default ({
       hasChildren: childrenLength > 0,
     },
   ].filter(n => allParentNodesExist(nodesPassed, n))
+  return nodes
 }

@@ -91,8 +91,10 @@ const enhance = compose(
       nodeFilterState,
     }) => event => {
       setDatenFilterAnchorEl(null)
-      const { table } = event.target.dataset
-      nodeFilterState.setActiveTable({ treeName: 'tree', activeTable: table })
+      nodeFilterState.setActiveTable({
+        treeName: 'tree',
+        activeTable: event.target.dataset.table,
+      })
     },
     onClickEmptyFilter: ({
       setDatenFilterAnchorEl,

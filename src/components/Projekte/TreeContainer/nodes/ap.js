@@ -28,6 +28,7 @@ export default ({
   const nodeFilterArray = Object.entries(nodeFilter.ap).filter(
     ([key, value]) => value || value === 0,
   )
+  const popOrLowerAreFiltered = 'TODO'
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
@@ -58,6 +59,15 @@ export default ({
     // this is done
     // but unfortunately query does not immediatly update
     .filter(node => filterNodesByNodeFilterArray({ node, nodeFilterArray }))
+    .filter(node => {
+      /**
+       * TODO
+       * if has no tpop
+       * and tpop are filtered
+       * do not return
+       */
+      return true
+    })
     .map(el => ({
       nodeType: 'table',
       menuType: 'ap',

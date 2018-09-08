@@ -1116,7 +1116,7 @@ export default ({
    * that leads to duplicate nodes
    * Need to solve that but in the meantime use uniqBy
    */
-  nodes = uniqBy(nodes, 'urlLabel')
+  nodes = uniqBy(nodes, n => n.url.join())
 
   /**
    * As all nodes are now in one flat list,
