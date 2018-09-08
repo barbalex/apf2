@@ -86,7 +86,7 @@ const enhance = compose(
       setDatenFilterAnchorEl(null),
     onClickFilterTable: ({ setDatenFilterAnchorEl }) => event => {
       setDatenFilterAnchorEl(null)
-      const table = event.target.dataset
+      const { table } = event.target.dataset
       console.log(`TODO: show ${table} filter`)
     },
   }),
@@ -136,6 +136,12 @@ const MyAppBar = ({
           >
             <MenuItem data-table="ap" onClick={onClickFilterTable}>
               Aktionspläne
+            </MenuItem>
+            <MenuItem data-table="pop" onClick={onClickFilterTable}>
+              Populationen
+            </MenuItem>
+            <MenuItem data-table="tpop" onClick={onClickFilterTable}>
+              Teil-Populationen
             </MenuItem>
           </Menu>
         </Fragment>
