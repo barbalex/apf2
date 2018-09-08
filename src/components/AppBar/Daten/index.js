@@ -3,6 +3,7 @@ import React, { Fragment } from 'react'
 import Button from '@material-ui/core/Button'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
+import Divider from '@material-ui/core/Divider'
 import FilterIcon from '@material-ui/icons/FilterList'
 import remove from 'lodash/remove'
 import get from 'lodash/get'
@@ -75,11 +76,6 @@ const enhance = compose(
       }
     },
     onClickFilterButton: ({ setDatenFilterAnchorEl }) => event => {
-      console.log('onClickFilterButton', {
-        event,
-        currentTarget: event.currentTarget,
-        target: event.target,
-      })
       setDatenFilterAnchorEl(event.currentTarget)
       event.stopPropagation()
       event.preventDefault()
@@ -94,6 +90,13 @@ const enhance = compose(
       const { table } = event.target.dataset
       nodeFilterState.setActiveTable({ treeName: 'tree', activeTable: table })
     },
+    onClickEmptyFilter: ({
+      setDatenFilterAnchorEl,
+      nodeFilterState,
+    }) => event => {
+      setDatenFilterAnchorEl(null)
+      nodeFilterState.emptyTree('tree')
+    },
   }),
 )
 
@@ -103,6 +106,7 @@ const MyAppBar = ({
   onClickFilterButton,
   onCloseFilter,
   onClickFilterTable,
+  onClickEmptyFilter,
   data,
   nodeFilterState,
 }: {
@@ -111,6 +115,7 @@ const MyAppBar = ({
   onClickFilterButton: () => void,
   onCloseFilter: () => void,
   onClickFilterTable: () => void,
+  onClickEmptyFilter: () => void,
   data: Object,
   nodeFilterState: Object,
 }) => {
@@ -149,6 +154,13 @@ const MyAppBar = ({
             </MenuItem>
             <MenuItem data-table="tpop" onClick={onClickFilterTable}>
               Teil-Populationen
+            </MenuItem>
+            <Divider />
+            <MenuItem
+              onClick={onClickEmptyFilter}
+              disabled={!nodeFilterState.treeIsFiltered('tree')}
+            >
+              Alle Filter entfernen
             </MenuItem>
           </Menu>
         </Fragment>
