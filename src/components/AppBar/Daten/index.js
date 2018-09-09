@@ -190,7 +190,21 @@ const MyAppBar = ({
               onClick={onClickFilterTable}
               level={3}
             >
-              └─ Massnahmen
+              ─ Massnahmen
+            </StyledMenuItem>
+            <StyledMenuItem
+              data-table="tpopfeldkontr"
+              onClick={onClickFilterTable}
+              level={3}
+            >
+              ─ Feld-Kontrollen
+            </StyledMenuItem>
+            <StyledMenuItem
+              data-table="tpopfreiwkontr"
+              onClick={onClickFilterTable}
+              level={3}
+            >
+              ─ Freiwilligen-Kontrollen
             </StyledMenuItem>
             <Divider />
             <RemoveMenuItem

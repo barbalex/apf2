@@ -2,6 +2,8 @@ query tpopkontrByIdQuery($id: UUID!) {
   tpopkontrById(id: $id) {
     id
     typ
+    ekfVerifiziert
+    ekfBemerkungen
     datum
     jahr
     bemerkungen

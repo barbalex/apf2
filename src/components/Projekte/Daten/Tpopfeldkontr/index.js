@@ -26,11 +26,13 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateTpopkontrByIdGql from './updateTpopkontrById.graphql'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
+import withNodeFilter from '../../../../state/withNodeFilter'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
 const FieldsContainer = styled.div`
   display: flex;
@@ -72,6 +74,7 @@ const tpopkontrTypWerte = [
 ]
 
 const enhance = compose(
+  withNodeFilter,
   withState('errors', 'setErrors', {}),
   withApollo,
   withState('value', 'setValue', ({ client }) => {
@@ -88,142 +91,162 @@ const enhance = compose(
     return get(data, 'urlQuery.feldkontrTab', 'entwicklung')
   }),
   withHandlers({
-    saveToDb: ({ refetchTree, setErrors, errors }) => async ({
-      row,
-      field,
-      value,
-      field2,
-      value2,
-      updateTpopkontr,
-    }) => {
+    saveToDb: ({
+      refetchTree,
+      setErrors,
+      errors,
+      nodeFilterState,
+      treeName,
+    }) => async ({ row, field, value, field2, value2, updateTpopkontr }) => {
       /**
        * only save if value changed
        */
       if (row[field] === value) return
-      /**
-       * enable passing two values
-       * with same update
-       */
-      const variables = {
-        id: row.id,
-        [field]: value,
-      }
-      if (field2) variables[field2] = value2
-      try {
-        await updateTpopkontr({
-          variables,
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateTpopkontrById: {
-              tpopkontr: {
-                id: row.id,
-                typ: field === 'typ' ? value : row.typ,
-                jahr:
-                  field === 'jahr'
-                    ? value
-                    : field2 === 'jahr'
-                      ? value2
-                      : row.jahr,
-                datum:
-                  field === 'datum'
-                    ? value
-                    : field2 === 'datum'
-                      ? value2
-                      : row.datum,
-                jungpflanzenAnzahl:
-                  field === 'jungpflanzenAnzahl'
-                    ? value
-                    : row.jungpflanzenAnzahl,
-                vitalitaet: field === 'vitalitaet' ? value : row.vitalitaet,
-                ueberlebensrate:
-                  field === 'ueberlebensrate' ? value : row.ueberlebensrate,
-                entwicklung: field === 'entwicklung' ? value : row.entwicklung,
-                ursachen: field === 'ursachen' ? value : row.ursachen,
-                erfolgsbeurteilung:
-                  field === 'erfolgsbeurteilung'
-                    ? value
-                    : row.erfolgsbeurteilung,
-                umsetzungAendern:
-                  field === 'umsetzungAendern' ? value : row.umsetzungAendern,
-                kontrolleAendern:
-                  field === 'kontrolleAendern' ? value : row.kontrolleAendern,
-                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-                lrDelarze: field === 'lrDelarze' ? value : row.lrDelarze,
-                flaeche: field === 'flaeche' ? value : row.flaeche,
-                lrUmgebungDelarze:
-                  field === 'lrUmgebungDelarze' ? value : row.lrUmgebungDelarze,
-                vegetationstyp:
-                  field === 'vegetationstyp' ? value : row.vegetationstyp,
-                konkurrenz: field === 'konkurrenz' ? value : row.konkurrenz,
-                moosschicht: field === 'moosschicht' ? value : row.moosschicht,
-                krautschicht:
-                  field === 'krautschicht' ? value : row.krautschicht,
-                strauchschicht:
-                  field === 'strauchschicht' ? value : row.strauchschicht,
-                baumschicht: field === 'baumschicht' ? value : row.baumschicht,
-                bodenTyp: field === 'bodenTyp' ? value : row.bodenTyp,
-                bodenKalkgehalt:
-                  field === 'bodenKalkgehalt' ? value : row.bodenKalkgehalt,
-                bodenDurchlaessigkeit:
-                  field === 'bodenDurchlaessigkeit'
-                    ? value
-                    : row.bodenDurchlaessigkeit,
-                bodenHumus: field === 'bodenHumus' ? value : row.bodenHumus,
-                bodenNaehrstoffgehalt:
-                  field === 'bodenNaehrstoffgehalt'
-                    ? value
-                    : row.bodenNaehrstoffgehalt,
-                bodenAbtrag: field === 'bodenAbtrag' ? value : row.bodenAbtrag,
-                wasserhaushalt:
-                  field === 'wasserhaushalt' ? value : row.wasserhaushalt,
-                idealbiotopUebereinstimmung:
-                  field === 'idealbiotopUebereinstimmung'
-                    ? value
-                    : row.idealbiotopUebereinstimmung,
-                handlungsbedarf:
-                  field === 'handlungsbedarf' ? value : row.handlungsbedarf,
-                flaecheUeberprueft:
-                  field === 'flaecheUeberprueft'
-                    ? value
-                    : row.flaecheUeberprueft,
-                deckungVegetation:
-                  field === 'deckungVegetation' ? value : row.deckungVegetation,
-                deckungNackterBoden:
-                  field === 'deckungNackterBoden'
-                    ? value
-                    : row.deckungNackterBoden,
-                deckungApArt:
-                  field === 'deckungApArt' ? value : row.deckungApArt,
-                vegetationshoeheMaximum:
-                  field === 'vegetationshoeheMaximum'
-                    ? value
-                    : row.vegetationshoeheMaximum,
-                vegetationshoeheMittel:
-                  field === 'vegetationshoeheMittel'
-                    ? value
-                    : row.vegetationshoeheMittel,
-                gefaehrdung: field === 'gefaehrdung' ? value : row.gefaehrdung,
-                tpopId: field === 'tpopId' ? value : row.tpopId,
-                bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
-                planVorhanden:
-                  field === 'planVorhanden' ? value : row.planVorhanden,
-                jungpflanzenVorhanden:
-                  field === 'jungpflanzenVorhanden'
-                    ? value
-                    : row.jungpflanzenVorhanden,
-                adresseByBearbeiter: row.adresseByBearbeiter,
-                tpopByTpopId: row.tpopByTpopId,
+      const showFilter = !!nodeFilterState.state[treeName].activeTable
+      if (showFilter) {
+        nodeFilterState.setValue({
+          treeName,
+          table: 'tpopfeldkontr',
+          key: field,
+          value,
+        })
+        //refetchTree()
+      } else {
+        /**
+         * enable passing two values
+         * with same update
+         */
+        const variables = {
+          id: row.id,
+          [field]: value,
+        }
+        if (field2) variables[field2] = value2
+        try {
+          await updateTpopkontr({
+            variables,
+            optimisticResponse: {
+              __typename: 'Mutation',
+              updateTpopkontrById: {
+                tpopkontr: {
+                  id: row.id,
+                  typ: field === 'typ' ? value : row.typ,
+                  jahr:
+                    field === 'jahr'
+                      ? value
+                      : field2 === 'jahr'
+                        ? value2
+                        : row.jahr,
+                  datum:
+                    field === 'datum'
+                      ? value
+                      : field2 === 'datum'
+                        ? value2
+                        : row.datum,
+                  jungpflanzenAnzahl:
+                    field === 'jungpflanzenAnzahl'
+                      ? value
+                      : row.jungpflanzenAnzahl,
+                  vitalitaet: field === 'vitalitaet' ? value : row.vitalitaet,
+                  ueberlebensrate:
+                    field === 'ueberlebensrate' ? value : row.ueberlebensrate,
+                  entwicklung:
+                    field === 'entwicklung' ? value : row.entwicklung,
+                  ursachen: field === 'ursachen' ? value : row.ursachen,
+                  erfolgsbeurteilung:
+                    field === 'erfolgsbeurteilung'
+                      ? value
+                      : row.erfolgsbeurteilung,
+                  umsetzungAendern:
+                    field === 'umsetzungAendern' ? value : row.umsetzungAendern,
+                  kontrolleAendern:
+                    field === 'kontrolleAendern' ? value : row.kontrolleAendern,
+                  bemerkungen:
+                    field === 'bemerkungen' ? value : row.bemerkungen,
+                  lrDelarze: field === 'lrDelarze' ? value : row.lrDelarze,
+                  flaeche: field === 'flaeche' ? value : row.flaeche,
+                  lrUmgebungDelarze:
+                    field === 'lrUmgebungDelarze'
+                      ? value
+                      : row.lrUmgebungDelarze,
+                  vegetationstyp:
+                    field === 'vegetationstyp' ? value : row.vegetationstyp,
+                  konkurrenz: field === 'konkurrenz' ? value : row.konkurrenz,
+                  moosschicht:
+                    field === 'moosschicht' ? value : row.moosschicht,
+                  krautschicht:
+                    field === 'krautschicht' ? value : row.krautschicht,
+                  strauchschicht:
+                    field === 'strauchschicht' ? value : row.strauchschicht,
+                  baumschicht:
+                    field === 'baumschicht' ? value : row.baumschicht,
+                  bodenTyp: field === 'bodenTyp' ? value : row.bodenTyp,
+                  bodenKalkgehalt:
+                    field === 'bodenKalkgehalt' ? value : row.bodenKalkgehalt,
+                  bodenDurchlaessigkeit:
+                    field === 'bodenDurchlaessigkeit'
+                      ? value
+                      : row.bodenDurchlaessigkeit,
+                  bodenHumus: field === 'bodenHumus' ? value : row.bodenHumus,
+                  bodenNaehrstoffgehalt:
+                    field === 'bodenNaehrstoffgehalt'
+                      ? value
+                      : row.bodenNaehrstoffgehalt,
+                  bodenAbtrag:
+                    field === 'bodenAbtrag' ? value : row.bodenAbtrag,
+                  wasserhaushalt:
+                    field === 'wasserhaushalt' ? value : row.wasserhaushalt,
+                  idealbiotopUebereinstimmung:
+                    field === 'idealbiotopUebereinstimmung'
+                      ? value
+                      : row.idealbiotopUebereinstimmung,
+                  handlungsbedarf:
+                    field === 'handlungsbedarf' ? value : row.handlungsbedarf,
+                  flaecheUeberprueft:
+                    field === 'flaecheUeberprueft'
+                      ? value
+                      : row.flaecheUeberprueft,
+                  deckungVegetation:
+                    field === 'deckungVegetation'
+                      ? value
+                      : row.deckungVegetation,
+                  deckungNackterBoden:
+                    field === 'deckungNackterBoden'
+                      ? value
+                      : row.deckungNackterBoden,
+                  deckungApArt:
+                    field === 'deckungApArt' ? value : row.deckungApArt,
+                  vegetationshoeheMaximum:
+                    field === 'vegetationshoeheMaximum'
+                      ? value
+                      : row.vegetationshoeheMaximum,
+                  vegetationshoeheMittel:
+                    field === 'vegetationshoeheMittel'
+                      ? value
+                      : row.vegetationshoeheMittel,
+                  gefaehrdung:
+                    field === 'gefaehrdung' ? value : row.gefaehrdung,
+                  tpopId: field === 'tpopId' ? value : row.tpopId,
+                  bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
+                  planVorhanden:
+                    field === 'planVorhanden' ? value : row.planVorhanden,
+                  jungpflanzenVorhanden:
+                    field === 'jungpflanzenVorhanden'
+                      ? value
+                      : row.jungpflanzenVorhanden,
+                  adresseByBearbeiter: row.adresseByBearbeiter,
+                  tpopByTpopId: row.tpopByTpopId,
+                  __typename: 'Tpopkontr',
+                },
                 __typename: 'Tpopkontr',
               },
-              __typename: 'Tpopkontr',
             },
-          },
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
+          })
+        } catch (error) {
+          return setErrors({ [field]: error.message })
+        }
+        setErrors({})
+        if (['typ'].includes(field)) refetchTree()
       }
-      setErrors({})
-      if (['typ'].includes(field)) refetchTree()
     },
     onChangeTab: ({ setValue }) => (event, value) => {
       setUrlQueryValue({ key: 'feldkontrTab', value })
@@ -248,6 +271,7 @@ type Props = {
   saveToDb: () => void,
   errors: Object,
   treeName: string,
+  nodeFilterState: Object,
 }
 
 class Tpopfeldkontr extends Component<Props> {
@@ -258,13 +282,16 @@ class Tpopfeldkontr extends Component<Props> {
 
   render() {
     const {
-      id,
+      // pass in fake id to avoid error when filter is shown
+      // which means there is no id
+      id = '99999999-9999-9999-9999-999999999999',
       onChangeTab,
       dimensions = { width: 380 },
       value,
       saveToDb,
       errors,
       treeName,
+      nodeFilterState,
     } = this.props
 
     return (
@@ -279,7 +306,15 @@ class Tpopfeldkontr extends Component<Props> {
           if (error) return `Fehler: ${error.message}`
 
           const width = isNaN(dimensions.width) ? 380 : dimensions.width
-          const row = get(data, 'tpopkontrById')
+
+          const showFilter = !!nodeFilterState.state[treeName].activeTable
+          let row
+          if (showFilter) {
+            row = nodeFilterState.state[treeName].tpopmassn
+          } else {
+            row = get(data, 'tpopkontrById')
+          }
+
           let adressenWerte = get(data, 'allAdresses.nodes', [])
           adressenWerte = sortBy(adressenWerte, 'name')
           adressenWerte = adressenWerte.map(el => ({
@@ -319,7 +354,7 @@ class Tpopfeldkontr extends Component<Props> {
 
           return (
             <ErrorBoundary>
-              <Container innerRef={this.container}>
+              <Container innerRef={this.container} showfilter={showFilter}>
                 <FormTitle
                   apId={get(data, 'tpopkontrById.tpopByTpopId.popByPopId.apId')}
                   title="Feld-Kontrolle"

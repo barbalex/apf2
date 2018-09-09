@@ -5,6 +5,7 @@ import sortBy from 'lodash/sortBy'
 
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 import allParentNodesExist from '../allParentNodesExist'
+import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
 
 export default ({
   nodes: nodesPassed,
@@ -19,6 +20,7 @@ export default ({
   apId,
   popId,
   tpopId,
+  nodeFilterState,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -32,6 +34,7 @@ export default ({
   apId: String,
   popId: String,
   tpopId: String,
+  nodeFilterState: Object,
 }): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
@@ -43,6 +46,10 @@ export default ({
   const nodeLabelFilterString = get(
     data,
     `${treeName}.nodeLabelFilter.tpopfeldkontr`,
+  )
+  const nodeFilter = nodeFilterState.state[treeName]
+  const nodeFilterArray = Object.entries(nodeFilter.tpopfeldkontr).filter(
+    ([key, value]) => value || value === 0,
   )
 
   // map through all elements and create array of nodes
@@ -60,6 +67,11 @@ export default ({
       }
       return true
     })
+    // filter by nodeFilter
+    // TODO: would be much better to filter this in query
+    // this is done
+    // but unfortunately query does not immediatly update
+    .filter(node => filterNodesByNodeFilterArray({ node, nodeFilterArray }))
   nodes = sortBy(nodes, n => {
     if (n.datum) return n.datum
     if (n.jahr) return `${n.jahr}-01-01`

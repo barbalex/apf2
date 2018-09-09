@@ -15,6 +15,8 @@ mutation updateTpopkontr(
   $bearbeiter: UUID
   $planVorhanden: Boolean
   $jungpflanzenVorhanden: Boolean
+  $ekfVerifiziert: Boolean
+  $ekfBemerkungen: String
 ) {
   updateTpopkontrById(
     input: {
@@ -35,12 +37,16 @@ mutation updateTpopkontr(
         bearbeiter: $bearbeiter
         planVorhanden: $planVorhanden
         jungpflanzenVorhanden: $jungpflanzenVorhanden
+        ekfVerifiziert: $ekfVerifiziert
+        ekfBemerkungen: $ekfBemerkungen
       }
     }
   ) {
     tpopkontr {
       id
       typ
+      ekfVerifiziert
+      ekfBemerkungen
       datum
       jahr
       bemerkungen
@@ -61,9 +67,37 @@ mutation updateTpopkontr(
       jungpflanzenVorhanden
       tpopByTpopId {
         id
+        nr
+        flurname
+        x
+        y
+        status
         popByPopId {
           id
           apId
+          nr
+          name
+          apByApId {
+            id
+            ekfzaehleinheitsByApId {
+              nodes {
+                id
+                tpopkontrzaehlEinheitWerteByZaehleinheitId {
+                  id
+                  code
+                  text
+                  sort
+                }
+              }
+            }
+          }
+        }
+      }
+      tpopkontrzaehlsByTpopkontrId {
+        nodes {
+          id
+          anzahl
+          einheit
         }
       }
     }

@@ -105,6 +105,10 @@ const Tpopfreiwkontr = Loadable({
   loader: () => import('./Tpopfreiwkontr'),
   loading: Loading,
 })
+const TpopfreiwkontrAlt = Loadable({
+  loader: () => import('./TpopfreiwkontrAlt'),
+  loading: Loading,
+})
 const Tpopkontrzaehl = Loadable({
   loader: () => import('./Tpopkontrzaehl'),
   loading: Loading,
@@ -337,6 +341,14 @@ const Daten = ({
             refetchTree={refetchTree}
           />
         ),
+        tpopfreiwkontrAlt: (
+          <TpopfreiwkontrAlt
+            dimensions={dimensions}
+            id={activeNodeArray[9]}
+            treeName={treeName}
+            refetchTree={refetchTree}
+          />
+        ),
         tpopfreiwkontr: (
           <Tpopfreiwkontr
             dimensions={dimensions}
@@ -447,6 +459,9 @@ const Daten = ({
       let form
       if (nodeFilterState.state[treeName].activeTable) {
         form = formObject[nodeFilterState.state[treeName].activeTable]
+        if (nodeFilterState.state[treeName].activeTable === 'tpopfreiwkontr') {
+          form = formObject.tpopfreiwkontrAlt
+        }
       } else {
         form = key ? formObject[key] : ''
       }

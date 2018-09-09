@@ -21,11 +21,13 @@ import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateTpopkontrByIdGql from './updateTpopkontrById.graphql'
+import withNodeFilter from '../../../../state/withNodeFilter'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -38,9 +40,10 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withNodeFilter,
   withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({ setErrors, errors }) => async ({
+    saveToDb: ({ setErrors, errors, nodeFilterState, treeName }) => async ({
       row,
       field,
       value,
@@ -52,78 +55,93 @@ const enhance = compose(
        * only save if value changed
        */
       if (row[field] === value) return
-      /**
-       * enable passing two values
-       * with same update
-       */
-      const variables = {
-        id: row.id,
-        [field]: value,
-      }
-      if (field2) variables[field2] = value2
-      try {
-        await updateTpopkontr({
-          variables,
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateTpopkontrById: {
-              tpopkontr: {
-                id: row.id,
-                typ: field === 'typ' ? value : row.typ,
-                jahr:
-                  field === 'jahr'
-                    ? value
-                    : field2 === 'jahr'
-                      ? value2
-                      : row.jahr,
-                datum:
-                  field === 'datum'
-                    ? value
-                    : field2 === 'datum'
-                      ? value2
-                      : row.datum,
-                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-                flaecheUeberprueft:
-                  field === 'flaecheUeberprueft'
-                    ? value
-                    : row.flaecheUeberprueft,
-                deckungVegetation:
-                  field === 'deckungVegetation' ? value : row.deckungVegetation,
-                deckungNackterBoden:
-                  field === 'deckungNackterBoden'
-                    ? value
-                    : row.deckungNackterBoden,
-                deckungApArt:
-                  field === 'deckungApArt' ? value : row.deckungApArt,
-                vegetationshoeheMaximum:
-                  field === 'vegetationshoeheMaximum'
-                    ? value
-                    : row.vegetationshoeheMaximum,
-                vegetationshoeheMittel:
-                  field === 'vegetationshoeheMittel'
-                    ? value
-                    : row.vegetationshoeheMittel,
-                gefaehrdung: field === 'gefaehrdung' ? value : row.gefaehrdung,
-                tpopId: field === 'tpopId' ? value : row.tpopId,
-                bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
-                planVorhanden:
-                  field === 'planVorhanden' ? value : row.planVorhanden,
-                jungpflanzenVorhanden:
-                  field === 'jungpflanzenVorhanden'
-                    ? value
-                    : row.jungpflanzenVorhanden,
-                adresseByBearbeiter: row.adresseByBearbeiter,
-                tpopByTpopId: row.tpopByTpopId,
+      const showFilter = !!nodeFilterState.state[treeName].activeTable
+      if (showFilter) {
+        nodeFilterState.setValue({
+          treeName,
+          table: 'tpopfeldkontr',
+          key: field,
+          value,
+        })
+        //refetchTree()
+      } else {
+        /**
+         * enable passing two values
+         * with same update
+         */
+        const variables = {
+          id: row.id,
+          [field]: value,
+        }
+        if (field2) variables[field2] = value2
+        try {
+          await updateTpopkontr({
+            variables,
+            optimisticResponse: {
+              __typename: 'Mutation',
+              updateTpopkontrById: {
+                tpopkontr: {
+                  id: row.id,
+                  typ: field === 'typ' ? value : row.typ,
+                  jahr:
+                    field === 'jahr'
+                      ? value
+                      : field2 === 'jahr'
+                        ? value2
+                        : row.jahr,
+                  datum:
+                    field === 'datum'
+                      ? value
+                      : field2 === 'datum'
+                        ? value2
+                        : row.datum,
+                  bemerkungen:
+                    field === 'bemerkungen' ? value : row.bemerkungen,
+                  flaecheUeberprueft:
+                    field === 'flaecheUeberprueft'
+                      ? value
+                      : row.flaecheUeberprueft,
+                  deckungVegetation:
+                    field === 'deckungVegetation'
+                      ? value
+                      : row.deckungVegetation,
+                  deckungNackterBoden:
+                    field === 'deckungNackterBoden'
+                      ? value
+                      : row.deckungNackterBoden,
+                  deckungApArt:
+                    field === 'deckungApArt' ? value : row.deckungApArt,
+                  vegetationshoeheMaximum:
+                    field === 'vegetationshoeheMaximum'
+                      ? value
+                      : row.vegetationshoeheMaximum,
+                  vegetationshoeheMittel:
+                    field === 'vegetationshoeheMittel'
+                      ? value
+                      : row.vegetationshoeheMittel,
+                  gefaehrdung:
+                    field === 'gefaehrdung' ? value : row.gefaehrdung,
+                  tpopId: field === 'tpopId' ? value : row.tpopId,
+                  bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
+                  planVorhanden:
+                    field === 'planVorhanden' ? value : row.planVorhanden,
+                  jungpflanzenVorhanden:
+                    field === 'jungpflanzenVorhanden'
+                      ? value
+                      : row.jungpflanzenVorhanden,
+                  adresseByBearbeiter: row.adresseByBearbeiter,
+                  tpopByTpopId: row.tpopByTpopId,
+                  __typename: 'Tpopkontr',
+                },
                 __typename: 'Tpopkontr',
               },
-              __typename: 'Tpopkontr',
             },
-          },
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
+          })
+        } catch (error) {
+          return setErrors({ [field]: error.message })
+        }
+        setErrors({})
       }
-      setErrors({})
     },
   }),
   withLifecycle({
@@ -146,6 +164,7 @@ type Props = {
   dimensions: Number,
   errors: Object,
   treeName: string,
+  nodeFilterState: Object,
 }
 
 class Tpopfreiwkontr extends Component<Props> {
@@ -156,11 +175,14 @@ class Tpopfreiwkontr extends Component<Props> {
 
   render() {
     const {
-      id,
+      // pass in fake id to avoid error when filter is shown
+      // which means there is no id
+      id = '99999999-9999-9999-9999-999999999999',
       saveToDb,
       dimensions = { width: 380 },
       errors,
       treeName,
+      nodeFilterState,
     } = this.props
 
     return (
@@ -175,7 +197,15 @@ class Tpopfreiwkontr extends Component<Props> {
           if (error) return `Fehler: ${error.message}`
 
           const width = isNaN(dimensions.width) ? 380 : dimensions.width
-          const row = get(data, 'tpopkontrById')
+
+          const showFilter = !!nodeFilterState.state[treeName].activeTable
+          let row
+          if (showFilter) {
+            row = nodeFilterState.state[treeName].tpopmassn
+          } else {
+            row = get(data, 'tpopkontrById')
+          }
+
           let adressenWerte = get(data, 'allAdresses.nodes', [])
           adressenWerte = sortBy(adressenWerte, 'name')
           adressenWerte = adressenWerte.map(el => ({
@@ -185,7 +215,7 @@ class Tpopfreiwkontr extends Component<Props> {
 
           return (
             <ErrorBoundary>
-              <Container innerRef={this.container}>
+              <Container innerRef={this.container} showfilter={showFilter}>
                 <FormTitle
                   apId={get(data, 'tpopkontrById.tpopByTpopId.popByPopId.apId')}
                   title="Freiwilligen-Kontrolle"
