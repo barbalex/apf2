@@ -198,7 +198,7 @@ export default ({
             apNodes,
             openNodes,
             apId,
-            nodeFilter,
+            nodeFilterState,
           }),
           ...buildApzielFolderNodes({
             nodes,
@@ -440,7 +440,7 @@ export default ({
           projektNodes,
           projId,
           apId: nodeUrl[3],
-          nodeFilter,
+          nodeFilterState,
         })
         nodes = [...nodes, ...popNodes]
       }

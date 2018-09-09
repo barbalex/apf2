@@ -17,7 +17,7 @@ export default ({
   apNodes,
   openNodes,
   apId,
-  nodeFilter,
+  nodeFilterState,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -28,10 +28,11 @@ export default ({
   apNodes: Array<Object>,
   openNodes: Array<String>,
   apId: String,
-  nodeFilter: Object,
+  nodeFilterState: Object,
 }): Array<Object> => {
   const pops = get(data, 'pops.nodes', [])
   const apFilter = get(data, `${treeName}.apFilter`)
+  const nodeFilter = nodeFilterState.state[treeName]
   const nodeFilterArray = Object.entries(nodeFilter.pop).filter(
     ([key, value]) => value || value === 0,
   )
