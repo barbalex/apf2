@@ -68,6 +68,9 @@ const StyledMenuItem = styled(MenuItem)`
   padding-top: 3px !important;
   padding-bottom: 3px !important;
 `
+const RemoveMenuItem = styled(StyledMenuItem)`
+  padding-top: 6px !important;
+`
 
 const enhance = compose(
   withNodeFilter,
@@ -183,13 +186,13 @@ const MyAppBar = ({
               └─ Teil-Populationen
             </StyledMenuItem>
             <Divider />
-            <StyledMenuItem
+            <RemoveMenuItem
               onClick={onClickEmptyFilter}
               disabled={!nodeFilterState.treeIsFiltered('tree')}
             >
               <StyledDeleteFilterIcon />
               Alle Filter entfernen
-            </StyledMenuItem>
+            </RemoveMenuItem>
           </Menu>
         </Fragment>
       )}
