@@ -83,7 +83,6 @@ export default ({
   role: string,
   nodeFilterState: Object,
 }): Array<Object> => {
-  const nodeFilter = nodeFilterState.state[treeName]
   const openNodes = [...get(data, `${treeName}.openNodes`)]
     // need to sort so folders are added in correct order
     // because every lower folder gets previous nodes passed
@@ -210,7 +209,7 @@ export default ({
             projektNodes,
             projId,
             apId,
-            nodeFilter,
+            nodeFilterState,
           }),
           ...buildAperfkritFolderNodes({
             nodes,
@@ -222,7 +221,7 @@ export default ({
             projektNodes,
             projId,
             apId,
-            nodeFilter,
+            nodeFilterState,
           }),
           ...buildApberFolderNodes({
             nodes,
@@ -234,7 +233,7 @@ export default ({
             projektNodes,
             projId,
             apId,
-            nodeFilter,
+            nodeFilterState,
           }),
           ...buildBerFolderNodes({
             nodes,
@@ -246,7 +245,7 @@ export default ({
             projektNodes,
             projId,
             apId,
-            nodeFilter,
+            nodeFilterState,
           }),
           ...buildIdealbiotopFolderNodes({
             nodes,
@@ -258,7 +257,7 @@ export default ({
             projektNodes,
             projId,
             apId,
-            nodeFilter,
+            nodeFilterState,
           }),
           ...buildAssozartFolderNodes({
             nodes,
@@ -270,7 +269,7 @@ export default ({
             projektNodes,
             projId,
             apId,
-            nodeFilter,
+            nodeFilterState,
           }),
           ...buildEkfzaehleinheitFolderNodes({
             nodes,
@@ -282,7 +281,7 @@ export default ({
             projektNodes,
             projId,
             apId,
-            nodeFilter,
+            nodeFilterState,
           }),
           ...buildApartFolderNodes({
             nodes,
@@ -294,7 +293,7 @@ export default ({
             projektNodes,
             projId,
             apId,
-            nodeFilter,
+            nodeFilterState,
           }),
           ...buildBeobNichtBeurteiltFolderNodes({
             nodes,
@@ -306,7 +305,7 @@ export default ({
             projektNodes,
             projId,
             apId,
-            nodeFilter,
+            nodeFilterState,
           }),
           ...buildBeobNichtZuzuordnenFolderNodes({
             nodes,
@@ -318,7 +317,7 @@ export default ({
             projektNodes,
             projId,
             apId,
-            nodeFilter,
+            nodeFilterState,
           }),
           ...qkFolderNodes({
             nodes,
@@ -349,7 +348,7 @@ export default ({
           projektNodes,
           projId,
           apId: nodeUrl[3],
-          nodeFilter,
+          nodeFilterState,
         })
         nodes = [...nodes, ...apzieljahrFolderNodes]
       }
@@ -370,7 +369,7 @@ export default ({
           apId: nodeUrl[3],
           jahr: +nodeUrl[5],
           apzieljahrFolderNodes,
-          nodeFilter,
+          nodeFilterState,
         })
         nodes = [...nodes, ...apzielNodes]
       }
@@ -395,7 +394,7 @@ export default ({
             apzieljahrFolderNodes,
             zielId: nodeUrl[6],
             apzielNodes,
-            nodeFilter,
+            nodeFilterState,
           }),
         ]
       }
@@ -421,7 +420,7 @@ export default ({
             apzieljahrFolderNodes,
             zielId: nodeUrl[6],
             apzielNodes,
-            nodeFilter,
+            nodeFilterState,
           }),
         ]
       }
@@ -461,7 +460,7 @@ export default ({
             projektNodes,
             projId,
             apId: nodeUrl[3],
-            nodeFilter,
+            nodeFilterState,
           }),
         ]
       }
@@ -482,7 +481,7 @@ export default ({
             projektNodes,
             projId,
             apId: nodeUrl[3],
-            nodeFilter,
+            nodeFilterState,
           }),
         ]
       }
@@ -503,7 +502,7 @@ export default ({
             projektNodes,
             projId,
             apId: nodeUrl[3],
-            nodeFilter,
+            nodeFilterState,
           }),
         ]
       }
@@ -524,7 +523,7 @@ export default ({
             projektNodes,
             projId,
             apId: nodeUrl[3],
-            nodeFilter,
+            nodeFilterState,
           }),
         ]
       }
@@ -545,7 +544,7 @@ export default ({
             projektNodes,
             projId,
             apId: nodeUrl[3],
-            nodeFilter,
+            nodeFilterState,
           }),
         ]
       }
@@ -566,7 +565,7 @@ export default ({
             projektNodes,
             projId,
             apId: nodeUrl[3],
-            nodeFilter,
+            nodeFilterState,
           }),
         ]
       }
@@ -587,7 +586,7 @@ export default ({
             projektNodes,
             projId,
             apId: nodeUrl[3],
-            nodeFilter,
+            nodeFilterState,
           }),
         ]
       }
@@ -608,7 +607,7 @@ export default ({
             projektNodes,
             projId,
             apId: nodeUrl[3],
-            nodeFilter,
+            nodeFilterState,
           }),
         ]
       }
@@ -647,7 +646,7 @@ export default ({
             apId,
             popNodes,
             popId,
-            nodeFilter,
+            nodeFilterState,
           }),
           ...buildPopmassnberFolderNodes({
             nodes,
@@ -661,7 +660,7 @@ export default ({
             apId,
             popNodes,
             popId,
-            nodeFilter,
+            nodeFilterState,
           }),
         ]
       }
@@ -685,7 +684,7 @@ export default ({
             openNodes,
             popId: nodeUrl[5],
             popNodes,
-            nodeFilter,
+            nodeFilterState,
           }),
         ]
       }
@@ -709,7 +708,7 @@ export default ({
             openNodes,
             popId: nodeUrl[5],
             popNodes,
-            nodeFilter,
+            nodeFilterState,
           }),
         ]
       }
@@ -760,7 +759,7 @@ export default ({
             popNodes,
             tpopId,
             tpopNodes,
-            nodeFilter,
+            nodeFilterState,
           }),
           ...buildTpopmassnberFolderNodes({
             nodes,
@@ -776,7 +775,7 @@ export default ({
             popNodes,
             tpopId,
             tpopNodes,
-            nodeFilter,
+            nodeFilterState,
           }),
           ...buildTpopfeldkontrFolderNodes({
             nodes,
@@ -792,7 +791,7 @@ export default ({
             popNodes,
             tpopId,
             tpopNodes,
-            nodeFilter,
+            nodeFilterState,
           }),
           ...buildTpopfreiwkontrFolderNodes({
             nodes,
@@ -808,7 +807,7 @@ export default ({
             popNodes,
             tpopId,
             tpopNodes,
-            nodeFilter,
+            nodeFilterState,
           }),
           ...buildTpopberFolderNodes({
             nodes,
@@ -824,7 +823,7 @@ export default ({
             popNodes,
             tpopId,
             tpopNodes,
-            nodeFilter,
+            nodeFilterState,
           }),
           ...buildBeobZugeordnetFolderNodes({
             nodes,
@@ -840,7 +839,7 @@ export default ({
             popNodes,
             tpopId,
             tpopNodes,
-            nodeFilter,
+            nodeFilterState,
           }),
         ]
       }
@@ -867,7 +866,7 @@ export default ({
             popNodes,
             tpopId: nodeUrl[7],
             tpopNodes,
-            nodeFilter,
+            nodeFilterState,
           }),
         ]
       }
@@ -894,7 +893,7 @@ export default ({
             popNodes,
             tpopId: nodeUrl[7],
             tpopNodes,
-            nodeFilter,
+            nodeFilterState,
           }),
         ]
       }
@@ -919,7 +918,7 @@ export default ({
           popNodes,
           tpopId: nodeUrl[7],
           tpopNodes,
-          nodeFilter,
+          nodeFilterState,
         })
         nodes = [...nodes, ...tpopfreiwkontrNodes]
       }
@@ -944,7 +943,7 @@ export default ({
           popNodes,
           tpopId: nodeUrl[7],
           tpopNodes,
-          nodeFilter,
+          nodeFilterState,
         })
         nodes = [...nodes, ...tpopfeldkontrNodes]
       }
@@ -971,7 +970,7 @@ export default ({
             popNodes,
             tpopId: nodeUrl[7],
             tpopNodes,
-            nodeFilter,
+            nodeFilterState,
           }),
         ]
       }
@@ -998,7 +997,7 @@ export default ({
             popNodes,
             tpopId: nodeUrl[7],
             tpopNodes,
-            nodeFilter,
+            nodeFilterState,
           }),
         ]
       }
@@ -1027,7 +1026,7 @@ export default ({
             tpopNodes,
             tpopkontrId: nodeUrl[9],
             tpopfeldkontrNodes,
-            nodeFilter,
+            nodeFilterState,
           }),
         ]
       }
@@ -1056,7 +1055,7 @@ export default ({
             tpopNodes,
             tpopkontrId: nodeUrl[9],
             tpopfeldkontrNodes,
-            nodeFilter,
+            nodeFilterState,
           }),
         ]
       }
@@ -1069,7 +1068,7 @@ export default ({
           data,
           treeName,
           projektNodes,
-          nodeFilter,
+          nodeFilterState,
         }),
       ]
     }
@@ -1086,7 +1085,7 @@ export default ({
           treeName,
           loading,
           projektNodes,
-          nodeFilter,
+          nodeFilterState,
         }),
       ]
     }
@@ -1105,7 +1104,7 @@ export default ({
           treeName,
           loading,
           projektNodes,
-          nodeFilter,
+          nodeFilterState,
         }),
       ]
     }
