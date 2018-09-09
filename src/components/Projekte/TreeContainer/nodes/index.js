@@ -633,7 +633,7 @@ export default ({
             apId,
             popNodes,
             popId,
-            nodeFilter,
+            nodeFilterState,
           }),
           ...buildPopberFolderNodes({
             nodes,
@@ -731,7 +731,7 @@ export default ({
           openNodes,
           popId: nodeUrl[5],
           popNodes,
-          nodeFilter,
+          nodeFilterState,
         })
         nodes = [...nodes, ...tpopNodes]
       }

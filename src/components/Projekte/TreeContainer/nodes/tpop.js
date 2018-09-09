@@ -17,7 +17,7 @@ export default ({
   projId,
   apId,
   popId,
-  nodeFilter,
+  nodeFilterState,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -29,7 +29,7 @@ export default ({
   projId: String,
   apId: String,
   popId: String,
-  nodeFilter: Object,
+  nodeFilterState: Object,
 }): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
@@ -38,6 +38,7 @@ export default ({
   const apIndex = findIndex(apNodes, { id: apId })
   const popIndex = findIndex(popNodes, { id: popId })
   const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.tpop`)
+  const nodeFilter = nodeFilterState.state[treeName]
   const nodeFilterArray = Object.entries(nodeFilter.tpop).filter(
     ([key, value]) => value || value === 0,
   )
