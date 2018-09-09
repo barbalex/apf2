@@ -27,6 +27,7 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -218,7 +219,7 @@ class Tpopmassn extends Component<Props> {
 
           return (
             <ErrorBoundary>
-              <Container innerRef={this.container}>
+              <Container innerRef={this.container} showfilter={showFilter}>
                 <FormTitle
                   apId={get(data, 'tpopmassnById.tpopByTpopId.popByPopId.apId')}
                   title="Massnahme"
