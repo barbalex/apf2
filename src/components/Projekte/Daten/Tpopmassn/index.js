@@ -21,6 +21,7 @@ import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateTpopmassnByIdGql from './updateTpopmassnById.graphql'
+import withNodeFilter from '../../../../state/withNodeFilter'
 
 const Container = styled.div`
   height: 100%;
@@ -38,86 +39,101 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withNodeFilter,
   withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({ refetchTree, setErrors, errors }) => async ({
-      row,
-      field,
-      value,
-      field2,
-      value2,
-      updateTpopmassn,
-    }) => {
+    saveToDb: ({
+      refetchTree,
+      setErrors,
+      errors,
+      nodeFilterState,
+      treeName,
+    }) => async ({ row, field, value, field2, value2, updateTpopmassn }) => {
       /**
        * only save if value changed
        */
       if (row[field] === value) return
-      /**
-       * enable passing two values
-       * with same update
-       */
-      const variables = {
-        id: row.id,
-        [field]: value,
-      }
-      if (field2) variables[field2] = value2
-      try {
-        await updateTpopmassn({
-          variables,
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateTpopmassnById: {
-              tpopmassn: {
-                id: row.id,
-                typ: field === 'typ' ? value : row.typ,
-                beschreibung:
-                  field === 'beschreibung' ? value : row.beschreibung,
-                jahr:
-                  field === 'jahr'
-                    ? value
-                    : field2 === 'jahr'
-                      ? value2
-                      : row.jahr,
-                datum:
-                  field === 'datum'
-                    ? value
-                    : field2 === 'datum'
-                      ? value2
-                      : row.datum,
-                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-                planBezeichnung:
-                  field === 'planBezeichnung' ? value : row.planBezeichnung,
-                flaeche: field === 'flaeche' ? value : row.flaeche,
-                markierung: field === 'markierung' ? value : row.markierung,
-                anzTriebe: field === 'anzTriebe' ? value : row.anzTriebe,
-                anzPflanzen: field === 'anzPflanzen' ? value : row.anzPflanzen,
-                anzPflanzstellen:
-                  field === 'anzPflanzstellen' ? value : row.anzPflanzstellen,
-                wirtspflanze:
-                  field === 'wirtspflanze' ? value : row.wirtspflanze,
-                herkunftPop: field === 'herkunftPop' ? value : row.herkunftPop,
-                sammeldatum: field === 'sammeldatum' ? value : row.sammeldatum,
-                form: field === 'form' ? value : row.form,
-                pflanzanordnung:
-                  field === 'pflanzanordnung' ? value : row.pflanzanordnung,
-                tpopId: field === 'tpopId' ? value : row.tpopId,
-                bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
-                planVorhanden:
-                  field === 'planVorhanden' ? value : row.planVorhanden,
-                tpopmassnTypWerteByTyp: row.tpopmassnTypWerteByTyp,
-                adresseByBearbeiter: row.adresseByBearbeiter,
-                tpopByTpopId: row.tpopByTpopId,
+      const showFilter = !!nodeFilterState.state[treeName].activeTable
+      if (showFilter) {
+        nodeFilterState.setValue({
+          treeName,
+          table: 'tpopmassn',
+          key: field,
+          value,
+        })
+        //refetchTree()
+      } else {
+        /**
+         * enable passing two values
+         * with same update
+         */
+        const variables = {
+          id: row.id,
+          [field]: value,
+        }
+        if (field2) variables[field2] = value2
+        try {
+          await updateTpopmassn({
+            variables,
+            optimisticResponse: {
+              __typename: 'Mutation',
+              updateTpopmassnById: {
+                tpopmassn: {
+                  id: row.id,
+                  typ: field === 'typ' ? value : row.typ,
+                  beschreibung:
+                    field === 'beschreibung' ? value : row.beschreibung,
+                  jahr:
+                    field === 'jahr'
+                      ? value
+                      : field2 === 'jahr'
+                        ? value2
+                        : row.jahr,
+                  datum:
+                    field === 'datum'
+                      ? value
+                      : field2 === 'datum'
+                        ? value2
+                        : row.datum,
+                  bemerkungen:
+                    field === 'bemerkungen' ? value : row.bemerkungen,
+                  planBezeichnung:
+                    field === 'planBezeichnung' ? value : row.planBezeichnung,
+                  flaeche: field === 'flaeche' ? value : row.flaeche,
+                  markierung: field === 'markierung' ? value : row.markierung,
+                  anzTriebe: field === 'anzTriebe' ? value : row.anzTriebe,
+                  anzPflanzen:
+                    field === 'anzPflanzen' ? value : row.anzPflanzen,
+                  anzPflanzstellen:
+                    field === 'anzPflanzstellen' ? value : row.anzPflanzstellen,
+                  wirtspflanze:
+                    field === 'wirtspflanze' ? value : row.wirtspflanze,
+                  herkunftPop:
+                    field === 'herkunftPop' ? value : row.herkunftPop,
+                  sammeldatum:
+                    field === 'sammeldatum' ? value : row.sammeldatum,
+                  form: field === 'form' ? value : row.form,
+                  pflanzanordnung:
+                    field === 'pflanzanordnung' ? value : row.pflanzanordnung,
+                  tpopId: field === 'tpopId' ? value : row.tpopId,
+                  bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
+                  planVorhanden:
+                    field === 'planVorhanden' ? value : row.planVorhanden,
+                  tpopmassnTypWerteByTyp: row.tpopmassnTypWerteByTyp,
+                  adresseByBearbeiter: row.adresseByBearbeiter,
+                  tpopByTpopId: row.tpopByTpopId,
+                  __typename: 'Tpopmassn',
+                },
                 __typename: 'Tpopmassn',
               },
-              __typename: 'Tpopmassn',
             },
-          },
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
+          })
+        } catch (error) {
+          return setErrors({ [field]: error.message })
+        }
+        setErrors({})
+        if (['typ'].includes(field)) refetchTree()
       }
-      setErrors({})
-      if (['typ'].includes(field)) refetchTree()
     },
   }),
   withLifecycle({
@@ -141,6 +157,7 @@ type Props = {
   saveToDb: () => void,
   errors: Object,
   treeName: string,
+  nodeFilterState: Object,
 }
 
 class Tpopmassn extends Component<Props> {
@@ -151,11 +168,14 @@ class Tpopmassn extends Component<Props> {
 
   render() {
     const {
-      id,
+      // pass in fake id to avoid error when filter is shown
+      // which means there is no id
+      id = '99999999-9999-9999-9999-999999999999',
       dimensions = { width: 380 },
       saveToDb,
       errors,
       treeName,
+      nodeFilterState,
     } = this.props
 
     return (
@@ -170,7 +190,15 @@ class Tpopmassn extends Component<Props> {
           if (error) return `Fehler: ${error.message}`
 
           const width = isNaN(dimensions.width) ? 380 : dimensions.width
-          const row = get(data, 'tpopmassnById')
+
+          const showFilter = !!nodeFilterState.state[treeName].activeTable
+          let row
+          if (showFilter) {
+            row = nodeFilterState.state[treeName].tpopmassn
+          } else {
+            row = get(data, 'tpopmassnById')
+          }
+
           let adressenWerte = get(data, 'allAdresses.nodes', [])
           adressenWerte = sortBy(adressenWerte, 'name')
           adressenWerte = adressenWerte.map(el => ({

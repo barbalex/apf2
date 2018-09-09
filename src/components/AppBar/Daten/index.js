@@ -185,6 +185,13 @@ const MyAppBar = ({
             >
               └─ Teil-Populationen
             </StyledMenuItem>
+            <StyledMenuItem
+              data-table="tpopmassn"
+              onClick={onClickFilterTable}
+              level={3}
+            >
+              └─ Massnahmen
+            </StyledMenuItem>
             <Divider />
             <RemoveMenuItem
               onClick={onClickEmptyFilter}
