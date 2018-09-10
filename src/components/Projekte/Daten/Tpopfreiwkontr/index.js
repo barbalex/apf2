@@ -144,99 +144,114 @@ const enhance = compose(
   withState('besttimeHeight', 'setBesttimeHeight', 79),
   withState('dateHeight', 'setDateHeight', 86),
   withHandlers({
-    saveToDb: ({ setErrors, errors, data }) => async ({
-      row,
-      field,
-      value,
-      field2,
-      value2,
-      updateTpopkontr,
-    }) => {
+    saveToDb: ({
+      setErrors,
+      errors,
+      data,
+      nodeFilterState,
+      treeName,
+    }) => async ({ row, field, value, field2, value2, updateTpopkontr }) => {
       /**
        * only save if value changed
        */
       if (row[field] === value) return
-      /**
-       * enable passing two values
-       * with same update
-       */
-      const variables = {
-        id: row.id,
-        [field]: value,
-      }
-      if (field2) variables[field2] = value2
-      const adresseByBearbeiter =
-        field === 'bearbeiter'
-          ? row.adresseByBearbeiter
-          : get(data, 'allAdresses.nodes', []).find(r => r.id === value)
-      try {
-        await updateTpopkontr({
-          variables,
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateTpopkontrById: {
-              tpopkontr: {
-                id: row.id,
-                typ: field === 'typ' ? value : row.typ,
-                jahr:
-                  field === 'jahr'
-                    ? value
-                    : field2 === 'jahr'
-                      ? value2
-                      : row.jahr,
-                datum:
-                  field === 'datum'
-                    ? value
-                    : field2 === 'datum'
-                      ? value2
-                      : row.datum,
-                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-                flaecheUeberprueft:
-                  field === 'flaecheUeberprueft'
-                    ? value
-                    : row.flaecheUeberprueft,
-                deckungVegetation:
-                  field === 'deckungVegetation' ? value : row.deckungVegetation,
-                deckungNackterBoden:
-                  field === 'deckungNackterBoden'
-                    ? value
-                    : row.deckungNackterBoden,
-                deckungApArt:
-                  field === 'deckungApArt' ? value : row.deckungApArt,
-                vegetationshoeheMaximum:
-                  field === 'vegetationshoeheMaximum'
-                    ? value
-                    : row.vegetationshoeheMaximum,
-                vegetationshoeheMittel:
-                  field === 'vegetationshoeheMittel'
-                    ? value
-                    : row.vegetationshoeheMittel,
-                gefaehrdung: field === 'gefaehrdung' ? value : row.gefaehrdung,
-                tpopId: field === 'tpopId' ? value : row.tpopId,
-                bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
-                planVorhanden:
-                  field === 'planVorhanden' ? value : row.planVorhanden,
-                jungpflanzenVorhanden:
-                  field === 'jungpflanzenVorhanden'
-                    ? value
-                    : row.jungpflanzenVorhanden,
-                adresseByBearbeiter,
-                ekfVerifiziert:
-                  field === 'ekfVerifiziert' ? value : row.ekfVerifiziert,
-                ekfBemerkungen:
-                  field === 'ekfBemerkungen' ? value : row.ekfBemerkungen,
-                tpopByTpopId: row.tpopByTpopId,
-                tpopkontrzaehlsByTpopkontrId: row.tpopkontrzaehlsByTpopkontrId,
+      const showFilter = !!nodeFilterState.state[treeName].activeTable
+      if (showFilter) {
+        nodeFilterState.setValue({
+          treeName,
+          table: 'tpopfreiwkontr',
+          key: field,
+          value,
+        })
+        //refetchTree()
+      } else {
+        /**
+         * enable passing two values
+         * with same update
+         */
+        const variables = {
+          id: row.id,
+          [field]: value,
+        }
+        if (field2) variables[field2] = value2
+        const adresseByBearbeiter =
+          field === 'bearbeiter'
+            ? row.adresseByBearbeiter
+            : get(data, 'allAdresses.nodes', []).find(r => r.id === value)
+        try {
+          await updateTpopkontr({
+            variables,
+            optimisticResponse: {
+              __typename: 'Mutation',
+              updateTpopkontrById: {
+                tpopkontr: {
+                  id: row.id,
+                  typ: field === 'typ' ? value : row.typ,
+                  jahr:
+                    field === 'jahr'
+                      ? value
+                      : field2 === 'jahr'
+                        ? value2
+                        : row.jahr,
+                  datum:
+                    field === 'datum'
+                      ? value
+                      : field2 === 'datum'
+                        ? value2
+                        : row.datum,
+                  bemerkungen:
+                    field === 'bemerkungen' ? value : row.bemerkungen,
+                  flaecheUeberprueft:
+                    field === 'flaecheUeberprueft'
+                      ? value
+                      : row.flaecheUeberprueft,
+                  deckungVegetation:
+                    field === 'deckungVegetation'
+                      ? value
+                      : row.deckungVegetation,
+                  deckungNackterBoden:
+                    field === 'deckungNackterBoden'
+                      ? value
+                      : row.deckungNackterBoden,
+                  deckungApArt:
+                    field === 'deckungApArt' ? value : row.deckungApArt,
+                  vegetationshoeheMaximum:
+                    field === 'vegetationshoeheMaximum'
+                      ? value
+                      : row.vegetationshoeheMaximum,
+                  vegetationshoeheMittel:
+                    field === 'vegetationshoeheMittel'
+                      ? value
+                      : row.vegetationshoeheMittel,
+                  gefaehrdung:
+                    field === 'gefaehrdung' ? value : row.gefaehrdung,
+                  tpopId: field === 'tpopId' ? value : row.tpopId,
+                  bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
+                  planVorhanden:
+                    field === 'planVorhanden' ? value : row.planVorhanden,
+                  jungpflanzenVorhanden:
+                    field === 'jungpflanzenVorhanden'
+                      ? value
+                      : row.jungpflanzenVorhanden,
+                  adresseByBearbeiter,
+                  ekfVerifiziert:
+                    field === 'ekfVerifiziert' ? value : row.ekfVerifiziert,
+                  ekfBemerkungen:
+                    field === 'ekfBemerkungen' ? value : row.ekfBemerkungen,
+                  tpopByTpopId: row.tpopByTpopId,
+                  tpopkontrzaehlsByTpopkontrId:
+                    row.tpopkontrzaehlsByTpopkontrId,
+                  __typename: 'Tpopkontr',
+                },
                 __typename: 'Tpopkontr',
               },
-              __typename: 'Tpopkontr',
             },
-          },
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
+          })
+        } catch (error) {
+          return setErrors({ [field]: error.message })
+        }
+        setErrors({})
       }
-      setErrors({})
     },
   }),
   withLifecycle({
