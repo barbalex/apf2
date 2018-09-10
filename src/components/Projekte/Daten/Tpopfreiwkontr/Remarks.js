@@ -38,44 +38,40 @@ const RemarksVal = styled.div`
 const Remarks = ({
   saveToDb,
   errors,
-  data,
+  row,
   updateTpopkontr,
 }: {
   saveToDb: () => void,
   errors: Object,
-  data: Object,
+  row: Object,
   updateTpopkontr: () => void,
-}) => {
-  const row = get(data, 'tpopkontrById', {})
-
-  return (
-    <Container>
-      <RemarksLabel>
-        Spezielle Bemerkungen
-        <RemarksSubLabel>
-          (z.B. allgemeiner Eindruck, Zunahme / Abnahme Begründung, spezielle
-          Begebenheiten)
-        </RemarksSubLabel>
-      </RemarksLabel>
-      <RemarksVal>
-        <TextField
-          key={`${row.id}bemerkungen`}
-          value={row.bemerkungen}
-          type="text"
-          multiLine
-          saveToDb={value =>
-            saveToDb({
-              row,
-              field: 'bemerkungen',
-              value,
-              updateTpopkontr,
-            })
-          }
-          error={errors.bemerkungen}
-        />
-      </RemarksVal>
-    </Container>
-  )
-}
+}) => (
+  <Container>
+    <RemarksLabel>
+      Spezielle Bemerkungen
+      <RemarksSubLabel>
+        (z.B. allgemeiner Eindruck, Zunahme / Abnahme Begründung, spezielle
+        Begebenheiten)
+      </RemarksSubLabel>
+    </RemarksLabel>
+    <RemarksVal>
+      <TextField
+        key={`${row.id}bemerkungen`}
+        value={row.bemerkungen}
+        type="text"
+        multiLine
+        saveToDb={value =>
+          saveToDb({
+            row,
+            field: 'bemerkungen',
+            value,
+            updateTpopkontr,
+          })
+        }
+        error={errors.bemerkungen}
+      />
+    </RemarksVal>
+  </Container>
+)
 
 export default Remarks

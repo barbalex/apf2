@@ -29,16 +29,16 @@ const BesttimeVal = styled.div`
 `
 
 const Besttime = ({
-  data,
+  row,
   setBesttimeHeight,
 }: {
-  data: Object,
+  row: Object,
   setBesttimeHeight: () => void,
 }) => {
   const bestTime = get(
-    data,
-    'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekfBeobachtungszeitpunkt',
-    ''
+    row,
+    'tpopByTpopId.popByPopId.apByApId.ekfBeobachtungszeitpunkt',
+    '',
   )
 
   return (

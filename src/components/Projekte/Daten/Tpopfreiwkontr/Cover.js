@@ -72,59 +72,55 @@ const Img = styled.img`
 const Date = ({
   saveToDb,
   errors,
-  data,
+  row,
   updateTpopkontr,
 }: {
   saveToDb: () => void,
   errors: Object,
-  data: Object,
+  row: Object,
   updateTpopkontr: () => void,
-}) => {
-  const row = get(data, 'tpopkontrById', {})
-
-  return (
-    <Container>
-      <DeckApArtLabel>Deckung überprüfte Art</DeckApArtLabel>
-      <DeckApArtVal>
-        <TextField
-          key={`${row.id}deckungApArt`}
-          value={row.deckungApArt}
-          type="number"
-          saveToDb={value =>
-            saveToDb({
-              row,
-              field: 'deckungApArt',
-              value,
-              updateTpopkontr,
-            })
-          }
-          error={errors.deckungApArt}
-        />
-      </DeckApArtVal>
-      <DeckApArtMass>%</DeckApArtMass>
-      <DeckNaBoLabel>Flächenanteil nackter Boden</DeckNaBoLabel>
-      <DeckNaBoVal>
-        <TextField
-          key={`${row.id}deckungNackterBoden`}
-          value={row.deckungNackterBoden}
-          type="number"
-          saveToDb={value =>
-            saveToDb({
-              row,
-              field: 'deckungNackterBoden',
-              value,
-              updateTpopkontr,
-            })
-          }
-          error={errors.deckungNackterBoden}
-        />
-      </DeckNaBoVal>
-      <DeckNaBoMass>%</DeckNaBoMass>
-      <DeckImage>
-        <Img src={anteilImg} alt="Flächen-Anteile" />
-      </DeckImage>
-    </Container>
-  )
-}
+}) => (
+  <Container>
+    <DeckApArtLabel>Deckung überprüfte Art</DeckApArtLabel>
+    <DeckApArtVal>
+      <TextField
+        key={`${row.id}deckungApArt`}
+        value={row.deckungApArt}
+        type="number"
+        saveToDb={value =>
+          saveToDb({
+            row,
+            field: 'deckungApArt',
+            value,
+            updateTpopkontr,
+          })
+        }
+        error={errors.deckungApArt}
+      />
+    </DeckApArtVal>
+    <DeckApArtMass>%</DeckApArtMass>
+    <DeckNaBoLabel>Flächenanteil nackter Boden</DeckNaBoLabel>
+    <DeckNaBoVal>
+      <TextField
+        key={`${row.id}deckungNackterBoden`}
+        value={row.deckungNackterBoden}
+        type="number"
+        saveToDb={value =>
+          saveToDb({
+            row,
+            field: 'deckungNackterBoden',
+            value,
+            updateTpopkontr,
+          })
+        }
+        error={errors.deckungNackterBoden}
+      />
+    </DeckNaBoVal>
+    <DeckNaBoMass>%</DeckNaBoMass>
+    <DeckImage>
+      <Img src={anteilImg} alt="Flächen-Anteile" />
+    </DeckImage>
+  </Container>
+)
 
 export default Date

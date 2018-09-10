@@ -419,14 +419,15 @@ const Tpopfreiwkontr = ({
               errors={errors}
               setErrors={setErrors}
               data={data}
+              row={row}
               updateTpopkontr={updateTpopkontr}
               setHeaddataHeight={setHeaddataHeight}
             />
-            <Besttime data={data} setBesttimeHeight={setBesttimeHeight} />
+            <Besttime row={row} setBesttimeHeight={setBesttimeHeight} />
             <Date
               saveToDb={saveToDb}
               errors={errors}
-              data={data}
+              row={row}
               updateTpopkontr={updateTpopkontr}
               setDateHeight={setDateHeight}
             />
@@ -436,7 +437,7 @@ const Tpopfreiwkontr = ({
               data={data}
               updateTpopkontr={updateTpopkontr}
             />
-            <Image data={data} parentwidth={width} height={imageHeight} />
+            <Image row={row} parentwidth={width} height={imageHeight} />
             {!showFilter &&
               zaehls1 && (
                 <Count
@@ -521,25 +522,25 @@ const Tpopfreiwkontr = ({
             <Cover
               saveToDb={saveToDb}
               errors={errors}
-              data={data}
+              row={row}
               updateTpopkontr={updateTpopkontr}
             />
             <More
               saveToDb={saveToDb}
               errors={errors}
-              data={data}
+              row={row}
               updateTpopkontr={updateTpopkontr}
             />
             <Danger
               saveToDb={saveToDb}
               errors={errors}
-              data={data}
+              row={row}
               updateTpopkontr={updateTpopkontr}
             />
             <Remarks
               saveToDb={saveToDb}
               errors={errors}
-              data={data}
+              row={row}
               updateTpopkontr={updateTpopkontr}
             />
             {!isPrint &&
@@ -556,7 +557,7 @@ const Tpopfreiwkontr = ({
               <EkfRemarks
                 saveToDb={saveToDb}
                 errors={errors}
-                data={data}
+                row={row}
                 updateTpopkontr={updateTpopkontr}
               />
             )}

@@ -38,41 +38,37 @@ const RemarksVal = styled.div`
 const EkfRemarks = ({
   saveToDb,
   errors,
-  data,
+  row,
   updateTpopkontr,
 }: {
   saveToDb: () => void,
   errors: Object,
-  data: Object,
+  row: Object,
   updateTpopkontr: () => void,
-}) => {
-  const row = get(data, 'tpopkontrById', {})
-
-  return (
-    <Container>
-      <RemarksLabel>
-        Bemerkungen über diese Kontrolle
-        <RemarksSubLabel>(nicht Teil der Datenerfassung)</RemarksSubLabel>
-      </RemarksLabel>
-      <RemarksVal>
-        <TextField
-          key={`${row.id}ekfBemerkungen`}
-          value={row.ekfBemerkungen}
-          type="text"
-          multiLine
-          saveToDb={value =>
-            saveToDb({
-              row,
-              field: 'ekfBemerkungen',
-              value,
-              updateTpopkontr,
-            })
-          }
-          error={errors.ekfBemerkungen}
-        />
-      </RemarksVal>
-    </Container>
-  )
-}
+}) => (
+  <Container>
+    <RemarksLabel>
+      Bemerkungen über diese Kontrolle
+      <RemarksSubLabel>(nicht Teil der Datenerfassung)</RemarksSubLabel>
+    </RemarksLabel>
+    <RemarksVal>
+      <TextField
+        key={`${row.id}ekfBemerkungen`}
+        value={row.ekfBemerkungen}
+        type="text"
+        multiLine
+        saveToDb={value =>
+          saveToDb({
+            row,
+            field: 'ekfBemerkungen',
+            value,
+            updateTpopkontr,
+          })
+        }
+        error={errors.ekfBemerkungen}
+      />
+    </RemarksVal>
+  </Container>
+)
 
 export default EkfRemarks

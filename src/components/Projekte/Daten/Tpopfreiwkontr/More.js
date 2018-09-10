@@ -134,114 +134,108 @@ const VeghoeheImg = styled.div`
 const More = ({
   saveToDb,
   errors,
-  data,
+  row,
   updateTpopkontr,
 }: {
   saveToDb: () => void,
   errors: Object,
-  data: Object,
+  row: Object,
   updateTpopkontr: () => void,
-}) => {
-  const row = get(data, 'tpopkontrById', {})
-
-  return (
-    <Container>
-      <MoreFlLabel>Überprüfte Fläche</MoreFlLabel>
-      <MoreFlVal>
-        <TextField
-          key={`${row.id}flaecheUeberprueft`}
-          value={row.flaecheUeberprueft}
-          type="number"
-          saveToDb={value =>
-            saveToDb({
-              row,
-              field: 'flaecheUeberprueft',
-              value,
-              updateTpopkontr,
-            })
-          }
-          error={errors.flaecheUeberprueft}
-        />
-      </MoreFlVal>
-      <MoreFlMeasure>
-        m<sup>2</sup>
-      </MoreFlMeasure>
-      <JungPflLabel0>
-        Werden junge neben alten Pflanzen beobachtet?
-      </JungPflLabel0>
-      <JungPflLabel1>ja</JungPflLabel1>
-      <JungPflVal1>
-        <RadioButton
-          key={`${row.id}jungpflanzenVorhanden1`}
-          value={row.jungpflanzenVorhanden}
-          saveToDb={value =>
-            saveToDb({
-              row,
-              field: 'jungpflanzenVorhanden',
-              value,
-              updateTpopkontr,
-            })
-          }
-          error={errors.jungpflanzenVorhanden}
-        />
-      </JungPflVal1>
-      <JungPflLabel2>nein</JungPflLabel2>
-      <JungPflVal2>
-        <RadioButton
-          key={`${row.id}jungpflanzenVorhanden2`}
-          value={!row.jungpflanzenVorhanden}
-          saveToDb={value =>
-            saveToDb({
-              row,
-              field: 'jungpflanzenVorhanden',
-              value: !value,
-              updateTpopkontr,
-            })
-          }
-          error={errors.jungpflanzenVorhanden}
-        />
-      </JungPflVal2>
-      <VeghoeheLabel0>Vegetationshöhe</VeghoeheLabel0>
-      <VeghoeheImg>
-        <Img src={veghoeheImg} alt="Flächen-Anteile" />
-      </VeghoeheImg>
-      <VeghoeheMaxLabel>Maximum (cm)</VeghoeheMaxLabel>
-      <VeghoeheMaxVal>
-        <TextField
-          key={`${row.id}vegetationshoeheMaximum`}
-          value={row.vegetationshoeheMaximum}
-          type="number"
-          saveToDb={value =>
-            saveToDb({
-              row,
-              field: 'vegetationshoeheMaximum',
-              value,
-              updateTpopkontr,
-            })
-          }
-          error={errors.vegetationshoeheMaximum}
-        />
-      </VeghoeheMaxVal>
-      <VeghoeheMittLabel>Mittel (cm)</VeghoeheMittLabel>
-      <VeghoeheMittVal>
-        <TextField
-          key={`${row.id}vegetationshoeheMittel`}
-          value={row.vegetationshoeheMittel}
-          type="number"
-          saveToDb={value =>
-            saveToDb({
-              row,
-              field: 'vegetationshoeheMittel',
-              value,
-              updateTpopkontr,
-            })
-          }
-          error={errors.vegetationshoeheMittel}
-        />
-      </VeghoeheMittVal>
-      <VeghoeheMinLabel>(Minimum)</VeghoeheMinLabel>
-    </Container>
-  )
-}
+}) => (
+  <Container>
+    <MoreFlLabel>Überprüfte Fläche</MoreFlLabel>
+    <MoreFlVal>
+      <TextField
+        key={`${row.id}flaecheUeberprueft`}
+        value={row.flaecheUeberprueft}
+        type="number"
+        saveToDb={value =>
+          saveToDb({
+            row,
+            field: 'flaecheUeberprueft',
+            value,
+            updateTpopkontr,
+          })
+        }
+        error={errors.flaecheUeberprueft}
+      />
+    </MoreFlVal>
+    <MoreFlMeasure>
+      m<sup>2</sup>
+    </MoreFlMeasure>
+    <JungPflLabel0>Werden junge neben alten Pflanzen beobachtet?</JungPflLabel0>
+    <JungPflLabel1>ja</JungPflLabel1>
+    <JungPflVal1>
+      <RadioButton
+        key={`${row.id}jungpflanzenVorhanden1`}
+        value={row.jungpflanzenVorhanden}
+        saveToDb={value =>
+          saveToDb({
+            row,
+            field: 'jungpflanzenVorhanden',
+            value,
+            updateTpopkontr,
+          })
+        }
+        error={errors.jungpflanzenVorhanden}
+      />
+    </JungPflVal1>
+    <JungPflLabel2>nein</JungPflLabel2>
+    <JungPflVal2>
+      <RadioButton
+        key={`${row.id}jungpflanzenVorhanden2`}
+        value={!row.jungpflanzenVorhanden}
+        saveToDb={value =>
+          saveToDb({
+            row,
+            field: 'jungpflanzenVorhanden',
+            value: !value,
+            updateTpopkontr,
+          })
+        }
+        error={errors.jungpflanzenVorhanden}
+      />
+    </JungPflVal2>
+    <VeghoeheLabel0>Vegetationshöhe</VeghoeheLabel0>
+    <VeghoeheImg>
+      <Img src={veghoeheImg} alt="Flächen-Anteile" />
+    </VeghoeheImg>
+    <VeghoeheMaxLabel>Maximum (cm)</VeghoeheMaxLabel>
+    <VeghoeheMaxVal>
+      <TextField
+        key={`${row.id}vegetationshoeheMaximum`}
+        value={row.vegetationshoeheMaximum}
+        type="number"
+        saveToDb={value =>
+          saveToDb({
+            row,
+            field: 'vegetationshoeheMaximum',
+            value,
+            updateTpopkontr,
+          })
+        }
+        error={errors.vegetationshoeheMaximum}
+      />
+    </VeghoeheMaxVal>
+    <VeghoeheMittLabel>Mittel (cm)</VeghoeheMittLabel>
+    <VeghoeheMittVal>
+      <TextField
+        key={`${row.id}vegetationshoeheMittel`}
+        value={row.vegetationshoeheMittel}
+        type="number"
+        saveToDb={value =>
+          saveToDb({
+            row,
+            field: 'vegetationshoeheMittel',
+            value,
+            updateTpopkontr,
+          })
+        }
+        error={errors.vegetationshoeheMittel}
+      />
+    </VeghoeheMittVal>
+    <VeghoeheMinLabel>(Minimum)</VeghoeheMinLabel>
+  </Container>
+)
 
 export default More

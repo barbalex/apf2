@@ -38,43 +38,39 @@ const DangerVal = styled.div`
 const Danger = ({
   saveToDb,
   errors,
-  data,
+  row,
   updateTpopkontr,
 }: {
   saveToDb: () => void,
   errors: Object,
-  data: Object,
+  row: Object,
   updateTpopkontr: () => void,
-}) => {
-  const row = get(data, 'tpopkontrById', {})
-
-  return (
-    <Container>
-      <DangerLabel>
-        Gefährdung{' '}
-        <DangerSubLabel>
-          (Problemarten, Verbuschung, Tritt, Hunde, ...), welche?
-        </DangerSubLabel>
-      </DangerLabel>
-      <DangerVal>
-        <TextField
-          key={`${row.id}gefaehrdung`}
-          value={row.gefaehrdung}
-          type="text"
-          multiLine
-          saveToDb={value =>
-            saveToDb({
-              row,
-              field: 'gefaehrdung',
-              value,
-              updateTpopkontr,
-            })
-          }
-          error={errors.gefaehrdung}
-        />
-      </DangerVal>
-    </Container>
-  )
-}
+}) => (
+  <Container>
+    <DangerLabel>
+      Gefährdung{' '}
+      <DangerSubLabel>
+        (Problemarten, Verbuschung, Tritt, Hunde, ...), welche?
+      </DangerSubLabel>
+    </DangerLabel>
+    <DangerVal>
+      <TextField
+        key={`${row.id}gefaehrdung`}
+        value={row.gefaehrdung}
+        type="text"
+        multiLine
+        saveToDb={value =>
+          saveToDb({
+            row,
+            field: 'gefaehrdung',
+            value,
+            updateTpopkontr,
+          })
+        }
+        error={errors.gefaehrdung}
+      />
+    </DangerVal>
+  </Container>
+)
 
 export default Danger

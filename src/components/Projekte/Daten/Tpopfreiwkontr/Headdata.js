@@ -74,16 +74,17 @@ const Headdata = ({
   saveToDb,
   errors,
   data,
+  row,
   updateTpopkontr,
   setHeaddataHeight,
 }: {
   saveToDb: () => void,
   errors: Object,
   data: Object,
+  row: Object,
   updateTpopkontr: () => void,
   setHeaddataHeight: () => void,
 }) => {
-  const row = get(data, 'tpopkontrById', {})
   let adressenWerte = get(data, 'allAdresses.nodes', [])
   adressenWerte = sortBy(adressenWerte, 'name')
   adressenWerte = adressenWerte.map(el => ({

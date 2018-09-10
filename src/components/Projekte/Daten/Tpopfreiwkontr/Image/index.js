@@ -43,12 +43,9 @@ const enhance = compose(
   withState('heightInternal', 'setHeightInternal', 370),
   withLifecycle({
     async onDidUpdate(prevProps, props) {
-      const { data, setImage, image, height, setHeightInternal } = props
+      const { row, setImage, image, height, setHeightInternal } = props
       if (!image) {
-        const apId = get(
-          data,
-          'tpopkontrById.tpopByTpopId.popByPopId.apByApId.id'
-        )
+        const apId = get(row, 'tpopByTpopId.popByPopId.apByApId.id')
         let image
         try {
           image = await import(`./${apId}.png`)
@@ -58,17 +55,17 @@ const enhance = compose(
       const debounceSetHeightInternal = debounce(setHeightInternal, 400)
       debounceSetHeightInternal(height)
     },
-  })
+  }),
 )
 
 const Image = ({
-  data,
+  row,
   image,
   parentwidth,
   height,
   heightInternal,
 }: {
-  data: Object,
+  row: Object,
   image: Object,
   parentwidth: Number,
   height: Number,
@@ -77,9 +74,9 @@ const Image = ({
   <Container height={parentwidth >= 800 ? heightInternal : 370}>
     <Title>
       {get(
-        data,
-        'tpopkontrById.tpopByTpopId.popByPopId.apByApId.aeEigenschaftenByArtId.artname',
-        ''
+        row,
+        'tpopByTpopId.popByPopId.apByApId.aeEigenschaftenByArtId.artname',
+        '',
       )}
     </Title>
     {!!image && <ImageContainer image={image} />}

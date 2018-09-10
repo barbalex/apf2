@@ -43,49 +43,45 @@ const DateVal = styled.div`
 const Date = ({
   saveToDb,
   errors,
-  data,
+  row,
   updateTpopkontr,
   setDateHeight,
 }: {
   saveToDb: () => void,
   errors: Object,
-  data: Object,
+  row: Object,
   updateTpopkontr: () => void,
   setDateHeight: () => void,
-}) => {
-  const row = get(data, 'tpopkontrById', {})
-
-  return (
-    <Measure
-      bounds
-      onResize={contentRect => {
-        setDateHeight(contentRect.bounds.height)
-      }}
-    >
-      {({ measureRef }) => (
-        <Container innerRef={measureRef}>
-          <DateLabel>Aufnahme-datum</DateLabel>
-          <DateVal>
-            <DateFieldWithPicker
-              key={`${row.id}datum`}
-              value={row.datum}
-              saveToDb={value => {
-                saveToDb({
-                  row,
-                  field: 'datum',
-                  value,
-                  field2: 'jahr',
-                  value2: !!value ? format(value, 'YYYY') : null,
-                  updateTpopkontr,
-                })
-              }}
-              error={errors.datum}
-            />
-          </DateVal>
-        </Container>
-      )}
-    </Measure>
-  )
-}
+}) => (
+  <Measure
+    bounds
+    onResize={contentRect => {
+      setDateHeight(contentRect.bounds.height)
+    }}
+  >
+    {({ measureRef }) => (
+      <Container innerRef={measureRef}>
+        <DateLabel>Aufnahme-datum</DateLabel>
+        <DateVal>
+          <DateFieldWithPicker
+            key={`${row.id}datum`}
+            value={row.datum}
+            saveToDb={value => {
+              saveToDb({
+                row,
+                field: 'datum',
+                value,
+                field2: 'jahr',
+                value2: !!value ? format(value, 'YYYY') : null,
+                updateTpopkontr,
+              })
+            }}
+            error={errors.datum}
+          />
+        </DateVal>
+      </Container>
+    )}
+  </Measure>
+)
 
 export default Date
