@@ -67,6 +67,7 @@ const PmcComponent = ({
       filterNodesByNodeFilterArray({
         node,
         nodeFilterArray,
+        table: 'pop',
       }),
     )
   const tpopFilterString = get(tree, 'nodeLabelFilter.tpop')
@@ -87,6 +88,7 @@ const PmcComponent = ({
       filterNodesByNodeFilterArray({
         node,
         nodeFilterArray: tpopNodeFilterArray,
+        table: 'tpop',
       }),
     )
   const popIdsOfTpops = tpops.map(t => t.popId)

@@ -57,6 +57,7 @@ const TpopMarkerMarker = ({
       filterNodesByNodeFilterArray({
         node,
         nodeFilterArray: popNodeFilterArray,
+        table: 'pop',
       }),
     )
   const tpops = flatten(pops.map(pop => get(pop, 'tpopsByPopId.nodes', [])))
@@ -72,6 +73,7 @@ const TpopMarkerMarker = ({
       filterNodesByNodeFilterArray({
         node,
         nodeFilterArray: tpopNodeFilterArray,
+        table: 'tpop',
       }),
     )
 

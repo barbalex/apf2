@@ -60,7 +60,13 @@ export default ({
     // TODO: would be much better to filter this in query
     // this is done
     // but unfortunately query does not immediatly update
-    .filter(node => filterNodesByNodeFilterArray({ node, nodeFilterArray }))
+    .filter(node =>
+      filterNodesByNodeFilterArray({
+        node,
+        nodeFilterArray,
+        table: 'tpop',
+      }),
+    )
   /**
    * There is something weird happening when filtering data
    * that leads to duplicate nodes
