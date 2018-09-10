@@ -3,8 +3,6 @@
 // TODO: would be much better to filter this in query
 // this is done
 // but unfortunately query does not immediatly update
-// TODO:
-// if key is of type number or boolean, do not cast to string
 
 import types from '../../../state/nodeFilter/types'
 
@@ -24,13 +22,6 @@ export default ({
     if (table && types[table] && types[table][key]) {
       type = types[table][key]
     }
-    console.log('filterNodesByNodeFilterArray', {
-      table,
-      types,
-      type,
-      node,
-      value,
-    })
     if (['number', 'uuid', 'boolean'].includes(type)) {
       // eslint-disable-next-line eqeqeq
       return node[key] == value
