@@ -115,6 +115,23 @@ query TreeDataQuery(
       tpopId
       jahr
       typ
+      beschreibung
+      jahr
+      datum
+      bearbeiter
+      bemerkungen
+      planVorhanden
+      planBezeichnung
+      flaeche
+      markierung
+      anzTriebe
+      anzPflanzen
+      anzPflanzstellen
+      wirtspflanze
+      herkunftPop
+      sammeldatum
+      form
+      pflanzanordnung
       tpopmassnTypWerteByTyp {
         id
         text
@@ -150,6 +167,43 @@ query TreeDataQuery(
       tpopId
       datum
       jahr
+      bearbeiter
+      jungpflanzenAnzahl
+      vitalitaet
+      ueberlebensrate
+      entwicklung
+      ursachen
+      erfolgsbeurteilung
+      umsetzungAendern
+      kontrolleAendern
+      bemerkungen
+      lrDelarze
+      flaeche
+      lrUmgebungDelarze
+      vegetationstyp
+      konkurrenz
+      moosschicht
+      krautschicht
+      strauchschicht
+      baumschicht
+      bodenTyp
+      bodenKalkgehalt
+      bodenDurchlaessigkeit
+      bodenHumus
+      bodenNaehrstoffgehalt
+      bodenAbtrag
+      wasserhaushalt
+      idealbiotopUebereinstimmung
+      handlungsbedarf
+      flaecheUeberprueft
+      planVorhanden
+      deckungVegetation
+      deckungNackterBoden
+      deckungApArt
+      jungpflanzenVorhanden
+      vegetationshoeheMaximum
+      vegetationshoeheMittel
+      gefaehrdung
       tpopkontrTypWerteByTyp {
         id
         text
@@ -168,6 +222,43 @@ query TreeDataQuery(
       tpopId
       datum
       jahr
+      bearbeiter
+      jungpflanzenAnzahl
+      vitalitaet
+      ueberlebensrate
+      entwicklung
+      ursachen
+      erfolgsbeurteilung
+      umsetzungAendern
+      kontrolleAendern
+      bemerkungen
+      lrDelarze
+      flaeche
+      lrUmgebungDelarze
+      vegetationstyp
+      konkurrenz
+      moosschicht
+      krautschicht
+      strauchschicht
+      baumschicht
+      bodenTyp
+      bodenKalkgehalt
+      bodenDurchlaessigkeit
+      bodenHumus
+      bodenNaehrstoffgehalt
+      bodenAbtrag
+      wasserhaushalt
+      idealbiotopUebereinstimmung
+      handlungsbedarf
+      flaecheUeberprueft
+      planVorhanden
+      deckungVegetation
+      deckungNackterBoden
+      deckungApArt
+      jungpflanzenVorhanden
+      vegetationshoeheMaximum
+      vegetationshoeheMittel
+      gefaehrdung
       tpopkontrTypWerteByTyp {
         id
         text
