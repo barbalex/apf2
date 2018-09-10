@@ -1,7 +1,6 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 
 import RadioButton from '../../../shared/RadioButton'
 
@@ -59,53 +58,49 @@ const MapVal2 = styled(Label)`
 const Map = ({
   saveToDb,
   errors,
-  data,
+  row,
   updateTpopkontr,
 }: {
   saveToDb: () => void,
   errors: Object,
-  data: Object,
+  row: Object,
   updateTpopkontr: () => void,
-}) => {
-  const row = get(data, 'tpopkontrById', {})
-
-  return (
-    <Container>
-      <MapLabel0>Plan ergänzt</MapLabel0>
-      <MapLabel1>ja</MapLabel1>
-      <MapVal1>
-        <RadioButton
-          key={`${row.id}planVorhanden`}
-          value={row.planVorhanden}
-          saveToDb={value =>
-            saveToDb({
-              row,
-              field: 'planVorhanden',
-              value,
-              updateTpopkontr,
-            })
-          }
-          error={errors.planVorhanden}
-        />
-      </MapVal1>
-      <MapLabel2>nein</MapLabel2>
-      <MapVal2>
-        <RadioButton
-          key={`${row.id}planVorhanden2`}
-          value={!row.planVorhanden}
-          saveToDb={value =>
-            saveToDb({
-              row,
-              field: 'planVorhanden',
-              value: !value,
-              updateTpopkontr,
-            })
-          }
-          error={errors.planVorhanden}
-        />
-      </MapVal2>
-    </Container>
-  )
-}
+}) => (
+  <Container>
+    <MapLabel0>Plan ergänzt</MapLabel0>
+    <MapLabel1>ja</MapLabel1>
+    <MapVal1>
+      <RadioButton
+        key={`${row.id}planVorhanden`}
+        value={row.planVorhanden}
+        saveToDb={value =>
+          saveToDb({
+            row,
+            field: 'planVorhanden',
+            value,
+            updateTpopkontr,
+          })
+        }
+        error={errors.planVorhanden}
+      />
+    </MapVal1>
+    <MapLabel2>nein</MapLabel2>
+    <MapVal2>
+      <RadioButton
+        key={`${row.id}planVorhanden2`}
+        value={!row.planVorhanden}
+        saveToDb={value =>
+          saveToDb({
+            row,
+            field: 'planVorhanden',
+            value: !value,
+            updateTpopkontr,
+          })
+        }
+        error={errors.planVorhanden}
+      />
+    </MapVal2>
+  </Container>
+)
 
 export default Map

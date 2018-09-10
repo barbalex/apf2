@@ -1,7 +1,6 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 
 import TextField from '../../../shared/TextField'
 import anteilImg from './anteil.png'

@@ -449,7 +449,7 @@ const Tpopfreiwkontr = ({
             <Map
               saveToDb={saveToDb}
               errors={errors}
-              data={data}
+              row={row}
               updateTpopkontr={updateTpopkontr}
             />
             <Image row={row} parentwidth={width} height={imageHeight} />
@@ -577,7 +577,8 @@ const Tpopfreiwkontr = ({
               />
             )}
           </GridContainer>
-          {!isPrint &&
+          {!showFilter &&
+            !isPrint &&
             !isFreiwillig &&
             !(view === 'ekf') && <StringToCopy text={id} label="GUID" />}
         </Container>

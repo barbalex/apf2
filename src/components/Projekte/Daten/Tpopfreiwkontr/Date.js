@@ -2,7 +2,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import format from 'date-fns/format'
-import get from 'lodash/get'
 import Measure from 'react-measure'
 
 import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
