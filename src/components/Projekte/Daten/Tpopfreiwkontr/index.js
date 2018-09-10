@@ -437,6 +437,7 @@ const Tpopfreiwkontr = ({
               row={row}
               updateTpopkontr={updateTpopkontr}
               setHeaddataHeight={setHeaddataHeight}
+              showFilter={showFilter}
             />
             <Besttime row={row} setBesttimeHeight={setBesttimeHeight} />
             <Date

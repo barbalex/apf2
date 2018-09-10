@@ -77,6 +77,7 @@ const Headdata = ({
   row,
   updateTpopkontr,
   setHeaddataHeight,
+  showFilter,
 }: {
   saveToDb: () => void,
   errors: Object,
@@ -84,6 +85,7 @@ const Headdata = ({
   row: Object,
   updateTpopkontr: () => void,
   setHeaddataHeight: () => void,
+  showFilter: boolean,
 }) => {
   let adressenWerte = get(data, 'allAdresses.nodes', [])
   adressenWerte = sortBy(adressenWerte, 'name')
@@ -113,11 +115,13 @@ const Headdata = ({
           <KoordVal>{`${get(row, 'tpopByTpopId.x', '')} / ${get(
             row,
             'tpopByTpopId.y',
+            '',
           )}`}</KoordVal>
           <TpopNrLabel>Teilpop.Nr.</TpopNrLabel>
           <TpopNrVal>{`${get(row, 'tpopByTpopId.popByPopId.nr', '')}.${get(
             row,
             'tpopByTpopId.nr',
+            '',
           )}`}</TpopNrVal>
           <BearbLabel>BeobachterIn</BearbLabel>
           <BearbVal>
