@@ -4,7 +4,7 @@ export const type = {
   typ: 'number',
   beschreibung: 'string',
   jahr: 'number',
-  datum: 'string',
+  datum: 'date',
   bearbeiter: 'uuid',
   bemerkungen: 'string',
   planVorhanden: 'number',
