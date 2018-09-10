@@ -24,9 +24,18 @@ export default ({
     if (table && types[table] && types[table][key]) {
       type = types[table][key]
     }
+    console.log('filterNodesByNodeFilterArray', {
+      table,
+      types,
+      type,
+      node,
+      value,
+    })
     if (['number', 'uuid', 'boolean'].includes(type)) {
-      return node[key] === value
+      // eslint-disable-next-line eqeqeq
+      return node[key] == value
     }
+    // must be string or date
     return node[key]
       .toString()
       .toLowerCase()
