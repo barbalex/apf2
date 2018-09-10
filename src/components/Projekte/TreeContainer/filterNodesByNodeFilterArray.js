@@ -15,14 +15,17 @@ export default ({
   nodeFilterArray: Array<Object>,
   table: string,
 }) => {
+  console.log('filterNodesByNodeFilterArray', { node, nodeFilterArray, table })
   if (nodeFilterArray.length === 0) return true
   let type = 'string'
   return nodeFilterArray.every(([key, value]) => {
+    console.log('filterNodesByNodeFilterArray', { key, value })
     if (node[key] === null || node[key] === undefined) return false
     if (table && types[table] && types[table][key]) {
       type = types[table][key]
     }
     if (['number', 'uuid', 'boolean'].includes(type)) {
+      console.log('filterNodesByNodeFilterArray', { key, value })
       // eslint-disable-next-line eqeqeq
       return node[key] == value
     }
