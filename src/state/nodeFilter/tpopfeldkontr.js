@@ -3,7 +3,7 @@
 export const type = {
   datum: 'date',
   jahr: 'number',
-  bearbeiter: 'string',
+  bearbeiter: 'uuid',
   jungpflanzenAnzahl: 'number',
   vitalitaet: 'string',
   ueberlebensrate: 'number',

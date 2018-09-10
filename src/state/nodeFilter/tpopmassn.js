@@ -5,7 +5,7 @@ export const type = {
   beschreibung: 'string',
   jahr: 'number',
   datum: 'string',
-  bearbeiter: 'number',
+  bearbeiter: 'uuid',
   bemerkungen: 'string',
   planVorhanden: 'number',
   planBezeichnung: 'string',
