@@ -40,36 +40,32 @@ const VerifVal1 = styled(Label)`
 const Verification = ({
   saveToDb,
   errors,
-  data,
+  row,
   updateTpopkontr,
 }: {
   saveToDb: () => void,
   errors: Object,
-  data: Object,
+  row: Object,
   updateTpopkontr: () => void,
-}) => {
-  const row = get(data, 'tpopkontrById', {})
-
-  return (
-    <Container>
-      <VerifLabel1>Im Jahresbericht nicht berücksichtigen</VerifLabel1>
-      <VerifVal1>
-        <RadioButton
-          key={`${row.id}ekfVerifiziert2`}
-          value={!row.ekfVerifiziert && row.ekfVerifiziert !== null}
-          saveToDb={value =>
-            saveToDb({
-              row,
-              field: 'ekfVerifiziert',
-              value: !value,
-              updateTpopkontr,
-            })
-          }
-          error={errors.ekfVerifiziert}
-        />
-      </VerifVal1>
-    </Container>
-  )
-}
+}) => (
+  <Container>
+    <VerifLabel1>Im Jahresbericht nicht berücksichtigen</VerifLabel1>
+    <VerifVal1>
+      <RadioButton
+        key={`${row.id}ekfVerifiziert2`}
+        value={!row.ekfVerifiziert && row.ekfVerifiziert !== null}
+        saveToDb={value =>
+          saveToDb({
+            row,
+            field: 'ekfVerifiziert',
+            value: !value,
+            updateTpopkontr,
+          })
+        }
+        error={errors.ekfVerifiziert}
+      />
+    </VerifVal1>
+  </Container>
+)
 
 export default Verification

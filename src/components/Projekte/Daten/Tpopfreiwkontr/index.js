@@ -27,9 +27,11 @@ import EkfRemarks from './EkfRemarks'
 import Count from './Count'
 import Verification from './Verification'
 import Image from './Image'
+import withNodeFilter from '../../../../state/withNodeFilter'
 
 const Container = styled.div`
   padding: 10px;
+  background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
   @media print {
     font-size: 11px;
     height: auto;
@@ -134,6 +136,7 @@ const CountHint = styled.div`
  * then refetch data
  */
 const enhance = compose(
+  withNodeFilter,
   dataGql,
   withState('errors', 'setErrors', {}),
   withState('titleHeight', 'setTitleHeight', 184),
@@ -289,26 +292,33 @@ const enhance = compose(
         props.setErrors({})
       }
       // check if adresse is choosen but no registered user exists
-      const { data, setErrors, errors } = props
-      const row = get(data, 'tpopkontrById')
-      const bearbeiter = get(row, 'bearbeiter')
-      const userCount = get(
-        row,
-        'adresseByBearbeiter.usersByAdresseId.totalCount',
-        0,
-      )
-      if (bearbeiter && !userCount && !errors.bearbeiter) {
-        setErrors({
-          bearbeiter:
-            'Es ist kein Benutzer mit dieser Adresse verbunden. Damit dieser Benutzer Kontrollen erfassen kann, muss er ein Benutzerkonto haben, in dem obige Adresse als zugehörig erfasst wurde.',
-        })
+      const { data, setErrors, errors, nodeFilterState, treeName } = props
+
+      const showFilter = !!nodeFilterState.state[treeName].activeTable
+      let row
+      if (!showFilter) {
+        row = get(data, 'tpopkontrById')
+        const bearbeiter = get(row, 'bearbeiter')
+        const userCount = get(
+          row,
+          'adresseByBearbeiter.usersByAdresseId.totalCount',
+          0,
+        )
+        if (bearbeiter && !userCount && !errors.bearbeiter) {
+          setErrors({
+            bearbeiter:
+              'Es ist kein Benutzer mit dieser Adresse verbunden. Damit dieser Benutzer Kontrollen erfassen kann, muss er ein Benutzerkonto haben, in dem obige Adresse als zugehörig erfasst wurde.',
+          })
+        }
       }
     },
   }),
 )
 
 const Tpopfreiwkontr = ({
-  id,
+  // pass in fake id to avoid error when filter is shown
+  // which means there is no id
+  id = '99999999-9999-9999-9999-999999999999',
   data,
   dimensions,
   saveToDb,
@@ -324,24 +334,29 @@ const Tpopfreiwkontr = ({
   setBesttimeHeight,
   dateHeight,
   setDateHeight,
+  nodeFilterState,
+  treeName,
 }: {
-  id: String,
+  id: string,
   data: Object,
   dimensions: Object,
   saveToDb: () => void,
   errors: Object,
   setErrors: () => void,
-  activeNodeArray: Array<String>,
-  role: String,
-  titleHeight: Number,
+  activeNodeArray: Array<string>,
+  role: string,
+  titleHeight: number,
   setTitleHeight: () => void,
-  headdataHeight: Number,
+  headdataHeight: number,
   setHeaddataHeight: () => void,
-  besttimeHeight: Number,
+  besttimeHeight: number,
   setBesttimeHeight: () => void,
-  dateHeight: Number,
+  dateHeight: number,
   setDateHeight: () => void,
+  nodeFilterState: Object,
+  treeName: string,
 }) => {
+  const showFilter = !!nodeFilterState.state[treeName].activeTable
   const ekfzaehleinheits = get(
     data,
     'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekfzaehleinheitsByApId.nodes',
@@ -386,10 +401,17 @@ const Tpopfreiwkontr = ({
   const imageHeight =
     titleHeight + headdataHeight + besttimeHeight + dateHeight + 30
 
+  let row
+  if (showFilter) {
+    row = nodeFilterState.state[treeName].tpopmassn
+  } else {
+    row = get(data, 'tpopkontrById', {})
+  }
+
   return (
     <Mutation mutation={updateTpopkontrByIdGql}>
       {updateTpopkontr => (
-        <Container>
+        <Container showfilter={showFilter}>
           <GridContainer width={width}>
             <Title setTitleHeight={setTitleHeight} />
             <Headdata
@@ -415,77 +437,87 @@ const Tpopfreiwkontr = ({
               updateTpopkontr={updateTpopkontr}
             />
             <Image data={data} parentwidth={width} height={imageHeight} />
-            {zaehls1 && (
-              <Count
-                id={zaehls1.id}
-                nr="1"
-                saveToDb={saveToDb}
-                errors={errors}
-                updateTpopkontr={updateTpopkontr}
-                refetch={data.refetch}
-                activeNodeArray={activeNodeArray}
-                einheitsUsed={einheitsUsed}
-                ekfzaehleinheits={ekfzaehleinheits}
-              />
-            )}
-            {zaehl1ShowEmpty && (
-              <CountHint>
-                Sie müssen auf Ebene Aktionsplan EKF-Zähleinheiten definieren,
-                um hier Zählungen erfassen zu können.
-              </CountHint>
-            )}
-            {zaehls2 && (
-              <Count
-                id={zaehls2.id}
-                nr="2"
-                saveToDb={saveToDb}
-                errors={errors}
-                updateTpopkontr={updateTpopkontr}
-                refetch={data.refetch}
-                activeNodeArray={activeNodeArray}
-                einheitsUsed={einheitsUsed}
-                ekfzaehleinheits={ekfzaehleinheits}
-              />
-            )}
-            {zaehl2ShowNew && (
-              <Count
-                id={null}
-                tpopkontrId={id}
-                nr="2"
-                saveToDb={saveToDb}
-                errors={errors}
-                updateTpopkontr={updateTpopkontr}
-                showNew
-                refetch={data.refetch}
-              />
-            )}
-            {zaehl2ShowEmpty && !zaehl1ShowEmpty && <Count nr="2" showEmpty />}
-            {zaehls3 && (
-              <Count
-                id={zaehls3.id}
-                nr="3"
-                saveToDb={saveToDb}
-                errors={errors}
-                updateTpopkontr={updateTpopkontr}
-                refetch={data.refetch}
-                activeNodeArray={activeNodeArray}
-                einheitsUsed={einheitsUsed}
-                ekfzaehleinheits={ekfzaehleinheits}
-              />
-            )}
-            {zaehl3ShowNew && (
-              <Count
-                id={null}
-                tpopkontrId={id}
-                nr="3"
-                saveToDb={saveToDb}
-                errors={errors}
-                updateTpopkontr={updateTpopkontr}
-                showNew
-                refetch={data.refetch}
-              />
-            )}
-            {zaehl3ShowEmpty && !zaehl2ShowEmpty && <Count nr="3" showEmpty />}
+            {!showFilter &&
+              zaehls1 && (
+                <Count
+                  id={zaehls1.id}
+                  nr="1"
+                  saveToDb={saveToDb}
+                  errors={errors}
+                  updateTpopkontr={updateTpopkontr}
+                  refetch={data.refetch}
+                  activeNodeArray={activeNodeArray}
+                  einheitsUsed={einheitsUsed}
+                  ekfzaehleinheits={ekfzaehleinheits}
+                />
+              )}
+            {!showFilter &&
+              zaehl1ShowEmpty && (
+                <CountHint>
+                  Sie müssen auf Ebene Aktionsplan EKF-Zähleinheiten definieren,
+                  um hier Zählungen erfassen zu können.
+                </CountHint>
+              )}
+            {!showFilter &&
+              zaehls2 && (
+                <Count
+                  id={zaehls2.id}
+                  nr="2"
+                  saveToDb={saveToDb}
+                  errors={errors}
+                  updateTpopkontr={updateTpopkontr}
+                  refetch={data.refetch}
+                  activeNodeArray={activeNodeArray}
+                  einheitsUsed={einheitsUsed}
+                  ekfzaehleinheits={ekfzaehleinheits}
+                />
+              )}
+            {!showFilter &&
+              zaehl2ShowNew && (
+                <Count
+                  id={null}
+                  tpopkontrId={id}
+                  nr="2"
+                  saveToDb={saveToDb}
+                  errors={errors}
+                  updateTpopkontr={updateTpopkontr}
+                  showNew
+                  refetch={data.refetch}
+                />
+              )}
+            {!showFilter &&
+              zaehl2ShowEmpty &&
+              !zaehl1ShowEmpty && <Count nr="2" showEmpty />}
+            {!showFilter &&
+              zaehls3 && (
+                <Count
+                  id={zaehls3.id}
+                  nr="3"
+                  saveToDb={saveToDb}
+                  errors={errors}
+                  updateTpopkontr={updateTpopkontr}
+                  refetch={data.refetch}
+                  activeNodeArray={activeNodeArray}
+                  einheitsUsed={einheitsUsed}
+                  ekfzaehleinheits={ekfzaehleinheits}
+                />
+              )}
+            {!showFilter &&
+              zaehl3ShowNew && (
+                <Count
+                  id={null}
+                  tpopkontrId={id}
+                  nr="3"
+                  saveToDb={saveToDb}
+                  errors={errors}
+                  updateTpopkontr={updateTpopkontr}
+                  showNew
+                  refetch={data.refetch}
+                />
+              )}
+            {!showFilter &&
+              zaehl3ShowEmpty &&
+              !zaehl2ShowEmpty && <Count nr="3" showEmpty />}
             <Cover
               saveToDb={saveToDb}
               errors={errors}
@@ -516,7 +548,7 @@ const Tpopfreiwkontr = ({
                 <Verification
                   saveToDb={saveToDb}
                   errors={errors}
-                  data={data}
+                  row={row}
                   updateTpopkontr={updateTpopkontr}
                 />
               )}
