@@ -423,7 +423,7 @@ const Tpopfreiwkontr = ({
     <Mutation mutation={updateTpopkontrByIdGql}>
       {updateTpopkontr => (
         <Container showfilter={showFilter}>
-          {!isFreiwillig && (
+          {!(view === 'ekf') && (
             <FormTitle
               apId={get(data, 'tpopkontrById.tpopByTpopId.popByPopId.apId')}
               title="Freiwilligen-Kontrolle"
