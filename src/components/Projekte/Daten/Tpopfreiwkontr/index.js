@@ -412,6 +412,7 @@ const Tpopfreiwkontr = ({
   let row
   if (showFilter) {
     row = nodeFilterState.state[treeName].tpopfreiwkontr
+    console.log('Tpopfreiwkontr', { row })
   } else {
     row = get(data, 'tpopkontrById', {})
   }
@@ -445,6 +446,7 @@ const Tpopfreiwkontr = ({
               errors={errors}
               row={row}
               updateTpopkontr={updateTpopkontr}
+              showFilter={showFilter}
             />
             <Image row={row} parentwidth={width} height={imageHeight} />
             {!showFilter &&

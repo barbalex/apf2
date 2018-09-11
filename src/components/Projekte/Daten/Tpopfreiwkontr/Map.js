@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { Fragment } from 'react'
 import styled from 'styled-components'
 
 import RadioButton from '../../../shared/RadioButton'
@@ -60,16 +60,17 @@ const Map = ({
   errors,
   row,
   updateTpopkontr,
+  showFilter,
 }: {
   saveToDb: () => void,
   errors: Object,
   row: Object,
   updateTpopkontr: () => void,
+  showFilter: boolean,
 }) => (
   <Container>
     <MapLabel0>Plan ergänzt</MapLabel0>
-    <MapLabel1>ja</MapLabel1>
-    <MapVal1>
+    {showFilter ? (
       <RadioButton
         key={`${row.id}planVorhanden`}
         value={row.planVorhanden}
@@ -83,23 +84,42 @@ const Map = ({
         }
         error={errors.planVorhanden}
       />
-    </MapVal1>
-    <MapLabel2>nein</MapLabel2>
-    <MapVal2>
-      <RadioButton
-        key={`${row.id}planVorhanden2`}
-        value={!row.planVorhanden}
-        saveToDb={value =>
-          saveToDb({
-            row,
-            field: 'planVorhanden',
-            value: !value,
-            updateTpopkontr,
-          })
-        }
-        error={errors.planVorhanden}
-      />
-    </MapVal2>
+    ) : (
+      <Fragment>
+        <MapLabel1>ja</MapLabel1>
+        <MapVal1>
+          <RadioButton
+            key={`${row.id}planVorhanden`}
+            value={row.planVorhanden}
+            saveToDb={value =>
+              saveToDb({
+                row,
+                field: 'planVorhanden',
+                value,
+                updateTpopkontr,
+              })
+            }
+            error={errors.planVorhanden}
+          />
+        </MapVal1>
+        <MapLabel2>nein</MapLabel2>
+        <MapVal2>
+          <RadioButton
+            key={`${row.id}planVorhanden2`}
+            value={!row.planVorhanden}
+            saveToDb={value =>
+              saveToDb({
+                row,
+                field: 'planVorhanden',
+                value: !value,
+                updateTpopkontr,
+              })
+            }
+            error={errors.planVorhanden}
+          />
+        </MapVal2>
+      </Fragment>
+    )}
   </Container>
 )
 
