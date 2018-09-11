@@ -1,6 +1,7 @@
 // @flow
 
 export const type = {
+  typ: 'string',
   datum: 'date',
   jahr: 'number',
   bearbeiter: 'uuid',
@@ -43,6 +44,7 @@ export const type = {
 }
 
 export const initial = {
+  typ: null,
   datum: null,
   jahr: null,
   bearbeiter: null,
