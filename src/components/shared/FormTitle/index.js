@@ -23,6 +23,9 @@ const Container = styled.div`
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
+  @media print {
+    display: none !important;
+  }
 `
 const TitleRow = styled.div`
   display: flex;

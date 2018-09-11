@@ -28,9 +28,9 @@ import Count from './Count'
 import Verification from './Verification'
 import Image from './Image'
 import withNodeFilter from '../../../../state/withNodeFilter'
+import FormTitle from '../../../shared/FormTitle'
 
 const Container = styled.div`
-  padding: 10px;
   background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
   @media print {
     font-size: 11px;
@@ -40,6 +40,9 @@ const Container = styled.div`
     padding: 0.5cm !important;
     overflow: hidden;
   }
+`
+const InnerContainer = styled.div`
+  padding: 10px;
 `
 const GridContainer = styled.div`
   display: grid;
@@ -420,162 +423,170 @@ const Tpopfreiwkontr = ({
     <Mutation mutation={updateTpopkontrByIdGql}>
       {updateTpopkontr => (
         <Container showfilter={showFilter}>
-          <GridContainer width={width}>
-            <Title setTitleHeight={setTitleHeight} />
-            <Headdata
-              saveToDb={saveToDb}
-              errors={errors}
-              setErrors={setErrors}
-              data={data}
-              row={row}
-              updateTpopkontr={updateTpopkontr}
-              setHeaddataHeight={setHeaddataHeight}
-              showFilter={showFilter}
-            />
-            <Besttime row={row} setBesttimeHeight={setBesttimeHeight} />
-            <Date
-              saveToDb={saveToDb}
-              errors={errors}
-              row={row}
-              updateTpopkontr={updateTpopkontr}
-              setDateHeight={setDateHeight}
-            />
-            <Map
-              saveToDb={saveToDb}
-              errors={errors}
-              row={row}
-              updateTpopkontr={updateTpopkontr}
-              showFilter={showFilter}
-            />
-            <Image row={row} parentwidth={width} height={imageHeight} />
-            {!showFilter &&
-              zaehls1 && (
-                <Count
-                  id={zaehls1.id}
-                  nr="1"
-                  saveToDb={saveToDb}
-                  errors={errors}
-                  updateTpopkontr={updateTpopkontr}
-                  refetch={data.refetch}
-                  activeNodeArray={activeNodeArray}
-                  einheitsUsed={einheitsUsed}
-                  ekfzaehleinheits={ekfzaehleinheits}
-                />
-              )}
-            {!showFilter &&
-              zaehl1ShowEmpty && (
-                <CountHint>
-                  Sie müssen auf Ebene Aktionsplan EKF-Zähleinheiten definieren,
-                  um hier Zählungen erfassen zu können.
-                </CountHint>
-              )}
-            {!showFilter &&
-              zaehls2 && (
-                <Count
-                  id={zaehls2.id}
-                  nr="2"
-                  saveToDb={saveToDb}
-                  errors={errors}
-                  updateTpopkontr={updateTpopkontr}
-                  refetch={data.refetch}
-                  activeNodeArray={activeNodeArray}
-                  einheitsUsed={einheitsUsed}
-                  ekfzaehleinheits={ekfzaehleinheits}
-                />
-              )}
-            {!showFilter &&
-              zaehl2ShowNew && (
-                <Count
-                  id={null}
-                  tpopkontrId={id}
-                  nr="2"
-                  saveToDb={saveToDb}
-                  errors={errors}
-                  updateTpopkontr={updateTpopkontr}
-                  showNew
-                  refetch={data.refetch}
-                />
-              )}
-            {!showFilter &&
-              zaehl2ShowEmpty &&
-              !zaehl1ShowEmpty && <Count nr="2" showEmpty />}
-            {!showFilter &&
-              zaehls3 && (
-                <Count
-                  id={zaehls3.id}
-                  nr="3"
-                  saveToDb={saveToDb}
-                  errors={errors}
-                  updateTpopkontr={updateTpopkontr}
-                  refetch={data.refetch}
-                  activeNodeArray={activeNodeArray}
-                  einheitsUsed={einheitsUsed}
-                  ekfzaehleinheits={ekfzaehleinheits}
-                />
-              )}
-            {!showFilter &&
-              zaehl3ShowNew && (
-                <Count
-                  id={null}
-                  tpopkontrId={id}
-                  nr="3"
-                  saveToDb={saveToDb}
-                  errors={errors}
-                  updateTpopkontr={updateTpopkontr}
-                  showNew
-                  refetch={data.refetch}
-                />
-              )}
-            {!showFilter &&
-              zaehl3ShowEmpty &&
-              !zaehl2ShowEmpty && <Count nr="3" showEmpty />}
-            <Cover
-              saveToDb={saveToDb}
-              errors={errors}
-              row={row}
-              updateTpopkontr={updateTpopkontr}
-            />
-            <More
-              saveToDb={saveToDb}
-              errors={errors}
-              row={row}
-              updateTpopkontr={updateTpopkontr}
-            />
-            <Danger
-              saveToDb={saveToDb}
-              errors={errors}
-              row={row}
-              updateTpopkontr={updateTpopkontr}
-            />
-            <Remarks
-              saveToDb={saveToDb}
-              errors={errors}
-              row={row}
-              updateTpopkontr={updateTpopkontr}
-            />
-            {!isPrint &&
-              !isFreiwillig &&
-              !(view === 'ekf') && (
-                <Verification
+          <FormTitle
+            apId={get(data, 'tpopkontrById.tpopByTpopId.popByPopId.apId')}
+            title="Freiwilligen-Kontrolle"
+            treeName={treeName}
+            table="tpopfreiwkontr"
+          />
+          <InnerContainer>
+            <GridContainer width={width}>
+              <Title setTitleHeight={setTitleHeight} />
+              <Headdata
+                saveToDb={saveToDb}
+                errors={errors}
+                setErrors={setErrors}
+                data={data}
+                row={row}
+                updateTpopkontr={updateTpopkontr}
+                setHeaddataHeight={setHeaddataHeight}
+                showFilter={showFilter}
+              />
+              <Besttime row={row} setBesttimeHeight={setBesttimeHeight} />
+              <Date
+                saveToDb={saveToDb}
+                errors={errors}
+                row={row}
+                updateTpopkontr={updateTpopkontr}
+                setDateHeight={setDateHeight}
+              />
+              <Map
+                saveToDb={saveToDb}
+                errors={errors}
+                row={row}
+                updateTpopkontr={updateTpopkontr}
+                showFilter={showFilter}
+              />
+              <Image row={row} parentwidth={width} height={imageHeight} />
+              {!showFilter &&
+                zaehls1 && (
+                  <Count
+                    id={zaehls1.id}
+                    nr="1"
+                    saveToDb={saveToDb}
+                    errors={errors}
+                    updateTpopkontr={updateTpopkontr}
+                    refetch={data.refetch}
+                    activeNodeArray={activeNodeArray}
+                    einheitsUsed={einheitsUsed}
+                    ekfzaehleinheits={ekfzaehleinheits}
+                  />
+                )}
+              {!showFilter &&
+                zaehl1ShowEmpty && (
+                  <CountHint>
+                    Sie müssen auf Ebene Aktionsplan EKF-Zähleinheiten
+                    definieren, um hier Zählungen erfassen zu können.
+                  </CountHint>
+                )}
+              {!showFilter &&
+                zaehls2 && (
+                  <Count
+                    id={zaehls2.id}
+                    nr="2"
+                    saveToDb={saveToDb}
+                    errors={errors}
+                    updateTpopkontr={updateTpopkontr}
+                    refetch={data.refetch}
+                    activeNodeArray={activeNodeArray}
+                    einheitsUsed={einheitsUsed}
+                    ekfzaehleinheits={ekfzaehleinheits}
+                  />
+                )}
+              {!showFilter &&
+                zaehl2ShowNew && (
+                  <Count
+                    id={null}
+                    tpopkontrId={id}
+                    nr="2"
+                    saveToDb={saveToDb}
+                    errors={errors}
+                    updateTpopkontr={updateTpopkontr}
+                    showNew
+                    refetch={data.refetch}
+                  />
+                )}
+              {!showFilter &&
+                zaehl2ShowEmpty &&
+                !zaehl1ShowEmpty && <Count nr="2" showEmpty />}
+              {!showFilter &&
+                zaehls3 && (
+                  <Count
+                    id={zaehls3.id}
+                    nr="3"
+                    saveToDb={saveToDb}
+                    errors={errors}
+                    updateTpopkontr={updateTpopkontr}
+                    refetch={data.refetch}
+                    activeNodeArray={activeNodeArray}
+                    einheitsUsed={einheitsUsed}
+                    ekfzaehleinheits={ekfzaehleinheits}
+                  />
+                )}
+              {!showFilter &&
+                zaehl3ShowNew && (
+                  <Count
+                    id={null}
+                    tpopkontrId={id}
+                    nr="3"
+                    saveToDb={saveToDb}
+                    errors={errors}
+                    updateTpopkontr={updateTpopkontr}
+                    showNew
+                    refetch={data.refetch}
+                  />
+                )}
+              {!showFilter &&
+                zaehl3ShowEmpty &&
+                !zaehl2ShowEmpty && <Count nr="3" showEmpty />}
+              <Cover
+                saveToDb={saveToDb}
+                errors={errors}
+                row={row}
+                updateTpopkontr={updateTpopkontr}
+              />
+              <More
+                saveToDb={saveToDb}
+                errors={errors}
+                row={row}
+                updateTpopkontr={updateTpopkontr}
+              />
+              <Danger
+                saveToDb={saveToDb}
+                errors={errors}
+                row={row}
+                updateTpopkontr={updateTpopkontr}
+              />
+              <Remarks
+                saveToDb={saveToDb}
+                errors={errors}
+                row={row}
+                updateTpopkontr={updateTpopkontr}
+              />
+              {!isPrint &&
+                !isFreiwillig &&
+                !(view === 'ekf') && (
+                  <Verification
+                    saveToDb={saveToDb}
+                    errors={errors}
+                    row={row}
+                    updateTpopkontr={updateTpopkontr}
+                  />
+                )}
+              {!isPrint && (
+                <EkfRemarks
                   saveToDb={saveToDb}
                   errors={errors}
                   row={row}
                   updateTpopkontr={updateTpopkontr}
                 />
               )}
-            {!isPrint && (
-              <EkfRemarks
-                saveToDb={saveToDb}
-                errors={errors}
-                row={row}
-                updateTpopkontr={updateTpopkontr}
-              />
-            )}
-          </GridContainer>
-          {!showFilter &&
-            !isPrint &&
-            !isFreiwillig &&
-            !(view === 'ekf') && <StringToCopy text={id} label="GUID" />}
+            </GridContainer>
+            {!showFilter &&
+              !isPrint &&
+              !isFreiwillig &&
+              !(view === 'ekf') && <StringToCopy text={id} label="GUID" />}
+          </InnerContainer>
         </Container>
       )}
     </Mutation>
