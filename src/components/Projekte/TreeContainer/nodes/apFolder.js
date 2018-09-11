@@ -27,7 +27,7 @@ export default ({
   const nodeFilter = nodeFilterState.state[treeName]
   const aps = get(data, 'aps.nodes', [])
   const nodeFilterArray = Object.entries(nodeFilter.ap).filter(
-    ([key, value]) => value || value === 0,
+    ([key, value]) => value || value === 0 || value === false,
   )
 
   // fetch sorting indexes of parents

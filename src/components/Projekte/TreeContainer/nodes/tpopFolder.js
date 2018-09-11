@@ -42,7 +42,7 @@ export default ({
   const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.tpop`)
   const nodeFilter = nodeFilterState.state[treeName]
   const nodeFilterArray = Object.entries(nodeFilter.tpop).filter(
-    ([key, value]) => value || value === 0,
+    ([key, value]) => value || value === 0 || value === false,
   )
 
   let children = get(data, 'tpops.nodes', [])

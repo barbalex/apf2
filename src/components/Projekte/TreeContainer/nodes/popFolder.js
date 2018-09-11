@@ -34,7 +34,7 @@ export default ({
   const apFilter = get(data, `${treeName}.apFilter`)
   const nodeFilter = nodeFilterState.state[treeName]
   const nodeFilterArray = Object.entries(nodeFilter.pop).filter(
-    ([key, value]) => value || value === 0,
+    ([key, value]) => value || value === 0 || value === false,
   )
 
   // fetch sorting indexes of parents

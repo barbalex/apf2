@@ -50,7 +50,7 @@ export default ({
   )
   const nodeFilter = nodeFilterState.state[treeName]
   const nodeFilterArray = Object.entries(nodeFilter.tpopmassn).filter(
-    ([key, value]) => value || value === 0,
+    ([key, value]) => value || value === 0 || value === false,
   )
 
   let children = get(data, 'tpopmassns.nodes', [])

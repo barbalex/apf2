@@ -36,7 +36,7 @@ export default ({
   const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.pop`)
   const nodeFilter = nodeFilterState.state[treeName]
   const nodeFilterArray = Object.entries(nodeFilter.pop).filter(
-    ([key, value]) => value || value === 0,
+    ([key, value]) => value || value === 0 || value === false,
   )
 
   // map through all elements and create array of nodes

@@ -39,11 +39,11 @@ const TpopMarkerMarker = ({
   const popFilterString = get(tree, 'nodeLabelFilter.pop')
   const popNodeFilterArray = Object.entries(
     nodeFilterState.state[tree.name].pop,
-  ).filter(([key, value]) => value || value === 0)
+  ).filter(([key, value]) => value || value === 0 || value === false)
   const tpopFilterString = get(tree, 'nodeLabelFilter.tpop')
   const tpopNodeFilterArray = Object.entries(
     nodeFilterState.state[tree.name].tpop,
-  ).filter(([key, value]) => value || value === 0)
+  ).filter(([key, value]) => value || value === 0 || value === false)
   const pops = get(data, 'tpopForMap.apsByProjId.nodes[0].popsByApId.nodes', [])
     // filter them by nodeLabelFilter
     .filter(p => {

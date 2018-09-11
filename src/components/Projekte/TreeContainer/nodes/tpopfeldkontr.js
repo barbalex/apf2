@@ -49,7 +49,7 @@ export default ({
   )
   const nodeFilter = nodeFilterState.state[treeName]
   const nodeFilterArray = Object.entries(nodeFilter.tpopfeldkontr).filter(
-    ([key, value]) => value || value === 0,
+    ([key, value]) => value || value === 0 || value === false,
   )
 
   // map through all elements and create array of nodes

@@ -168,14 +168,14 @@ const More = ({
       <RadioButton
         key={`${row.id}jungpflanzenVorhanden1`}
         value={row.jungpflanzenVorhanden}
-        saveToDb={value =>
+        saveToDb={value => {
           saveToDb({
             row,
             field: 'jungpflanzenVorhanden',
-            value,
+            value: value === true ? true : null,
             updateTpopkontr,
           })
-        }
+        }}
         error={errors.jungpflanzenVorhanden}
       />
     </JungPflVal1>
@@ -183,15 +183,15 @@ const More = ({
     <JungPflVal2>
       <RadioButton
         key={`${row.id}jungpflanzenVorhanden2`}
-        value={!row.jungpflanzenVorhanden}
-        saveToDb={value =>
+        value={row.jungpflanzenVorhanden === false}
+        saveToDb={value => {
           saveToDb({
             row,
             field: 'jungpflanzenVorhanden',
-            value: !value,
+            value: value === true ? false : null,
             updateTpopkontr,
           })
-        }
+        }}
         error={errors.jungpflanzenVorhanden}
       />
     </JungPflVal2>

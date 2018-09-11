@@ -32,7 +32,7 @@ const PmcComponent = ({
   const popFilterString = get(tree, 'nodeLabelFilter.pop')
   const nodeFilterArray = Object.entries(
     nodeFilterState.state[tree.name].pop,
-  ).filter(([key, value]) => value || value === 0)
+  ).filter(([key, value]) => value || value === 0 || value === false)
   let pops = get(
     data,
     'popForMapMarkers.apsByProjId.nodes[0].popsByApId.nodes',
@@ -73,7 +73,7 @@ const PmcComponent = ({
   const tpopFilterString = get(tree, 'nodeLabelFilter.tpop')
   const tpopNodeFilterArray = Object.entries(
     nodeFilterState.state[tree.name].tpop,
-  ).filter(([key, value]) => value || value === 0)
+  ).filter(([key, value]) => value || value === 0 || value === false)
   const tpops = flatten(
     popsForTpops.map(pop => get(pop, 'tpopsByPopId.nodes', [])),
   )

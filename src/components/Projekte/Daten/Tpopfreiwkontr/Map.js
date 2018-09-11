@@ -1,5 +1,5 @@
 // @flow
-import React, { Fragment } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import RadioButton from '../../../shared/RadioButton'
@@ -70,7 +70,8 @@ const Map = ({
 }) => (
   <Container>
     <MapLabel0>Plan ergänzt</MapLabel0>
-    {showFilter ? (
+    <MapLabel1>ja</MapLabel1>
+    <MapVal1>
       <RadioButton
         key={`${row.id}planVorhanden`}
         value={row.planVorhanden}
@@ -78,48 +79,29 @@ const Map = ({
           saveToDb({
             row,
             field: 'planVorhanden',
-            value,
+            value: value === true ? true : null,
             updateTpopkontr,
           })
         }
         error={errors.planVorhanden}
       />
-    ) : (
-      <Fragment>
-        <MapLabel1>ja</MapLabel1>
-        <MapVal1>
-          <RadioButton
-            key={`${row.id}planVorhanden`}
-            value={row.planVorhanden}
-            saveToDb={value =>
-              saveToDb({
-                row,
-                field: 'planVorhanden',
-                value,
-                updateTpopkontr,
-              })
-            }
-            error={errors.planVorhanden}
-          />
-        </MapVal1>
-        <MapLabel2>nein</MapLabel2>
-        <MapVal2>
-          <RadioButton
-            key={`${row.id}planVorhanden2`}
-            value={!row.planVorhanden}
-            saveToDb={value =>
-              saveToDb({
-                row,
-                field: 'planVorhanden',
-                value: !value,
-                updateTpopkontr,
-              })
-            }
-            error={errors.planVorhanden}
-          />
-        </MapVal2>
-      </Fragment>
-    )}
+    </MapVal1>
+    <MapLabel2>nein</MapLabel2>
+    <MapVal2>
+      <RadioButton
+        key={`${row.id}planVorhanden2`}
+        value={row.planVorhanden === false}
+        saveToDb={value =>
+          saveToDb({
+            row,
+            field: 'planVorhanden',
+            value: value === true ? false : null,
+            updateTpopkontr,
+          })
+        }
+        error={errors.planVorhanden}
+      />
+    </MapVal2>
   </Container>
 )
 

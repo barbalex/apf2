@@ -43,7 +43,7 @@ class Beob extends Component<Props> {
           if (!row) return null
 
           const beobFields = Object.entries(JSON.parse(row.data)).filter(
-            ([key, value]) => value || value === 0
+            ([key, value]) => value || value === 0 || value === false
           )
           if (!beobFields || beobFields.length === 0) return null
 
