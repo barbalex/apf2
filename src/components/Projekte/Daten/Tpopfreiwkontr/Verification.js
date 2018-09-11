@@ -52,12 +52,12 @@ const Verification = ({
     <VerifVal1>
       <RadioButton
         key={`${row.id}ekfVerifiziert2`}
-        value={!row.ekfVerifiziert && row.ekfVerifiziert !== null}
+        value={row.ekfVerifiziert === false}
         saveToDb={value =>
           saveToDb({
             row,
             field: 'ekfVerifiziert',
-            value: !value,
+            value: value === true ? false : null,
             updateTpopkontr,
           })
         }

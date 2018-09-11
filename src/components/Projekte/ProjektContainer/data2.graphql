@@ -261,6 +261,8 @@ query TreeDataQuery(
       vegetationshoeheMaximum
       vegetationshoeheMittel
       gefaehrdung
+      ekfVerifiziert
+      ekfBemerkungen
       tpopkontrTypWerteByTyp {
         id
         text

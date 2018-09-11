@@ -41,6 +41,8 @@ export const type = {
   vegetationshoeheMaximum: 'number',
   vegetationshoeheMittel: 'number',
   gefaehrdung: 'string',
+  ekfVerifiziert: 'boolean',
+  ekfBemerkungen: 'string',
 }
 
 export const initial = {
@@ -84,4 +86,6 @@ export const initial = {
   vegetationshoeheMaximum: null,
   vegetationshoeheMittel: null,
   gefaehrdung: null,
+  ekfVerifiziert: null,
+  ekfBemerkungen: null,
 }
