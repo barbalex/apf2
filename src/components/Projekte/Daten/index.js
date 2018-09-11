@@ -460,9 +460,6 @@ const Daten = ({
       let form
       if (nodeFilterState.state[treeName].activeTable) {
         form = formObject[nodeFilterState.state[treeName].activeTable]
-        /*if (nodeFilterState.state[treeName].activeTable === 'tpopfreiwkontr') {
-          form = formObject.tpopfreiwkontrAlt
-        }*/
       } else {
         form = key ? formObject[key] : ''
       }
