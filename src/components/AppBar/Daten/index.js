@@ -155,7 +155,7 @@ const MyAppBar = ({
         <Fragment>
           <StyledIconButton
             aria-label="Daten filtern"
-            title="Daten filtern (BAUSTELLE)"
+            title="Daten filtern"
             aria-owns={datenFilterAnchorEl ? 'filterTable-menu' : null}
             aria-haspopup="true"
             onClick={onClickFilterButton}

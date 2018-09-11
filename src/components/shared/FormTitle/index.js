@@ -138,7 +138,7 @@ const FormTitle = ({
               typesExist && (
                 <StyledIconButton
                   aria-label="Daten filtern"
-                  title="Daten filtern (BAUSTELLE)"
+                  title={`${table ? table : 'Daten'} filtern`}
                 >
                   <StyledFilterIcon onClick={onFilter} />
                 </StyledIconButton>
