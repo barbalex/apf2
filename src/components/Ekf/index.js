@@ -91,12 +91,14 @@ const EkfContainer = ({ errorState }: { errorState: Object }) => (
             const data = merge(data1, data2)
             const activeNodeArray = get(data, 'tree.activeNodeArray')
             const tpopkontrId = activeNodeArray[9]
+            const treeName = 'tree'
 
             if (isPrint && tpopkontrId)
               return (
                 <Tpopfreiwkontr
                   id={activeNodeArray[9]}
                   activeNodeArray={activeNodeArray}
+                  treeName={treeName}
                   refetchTree={refetch}
                   errorState={errorState}
                   role={role}
@@ -130,6 +132,7 @@ const EkfContainer = ({ errorState }: { errorState: Object }) => (
                           <Tpopfreiwkontr
                             id={activeNodeArray[9]}
                             activeNodeArray={activeNodeArray}
+                            treeName={treeName}
                             refetchTree={refetch}
                             errorState={errorState}
                             role={role}
