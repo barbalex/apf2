@@ -13,6 +13,7 @@ import get from 'lodash/get'
 
 import TestdataMessage from './TestdataMessage'
 import withNodeFilterState from '../../../state/withNodeFilter'
+import types from '../../../state/nodeFilter/types'
 import setTreeKeyGql from './setTreeKey.graphql'
 import data from './data'
 
@@ -111,6 +112,7 @@ const FormTitle = ({
   table: string,
   treeName: string,
 }) => {
+  const typesExist = !!types[table]
   const showFilter = !!nodeFilterState.state[treeName].activeTable
   let existsTableFilter
   let existsTreeFilter
@@ -129,14 +131,15 @@ const FormTitle = ({
         <Title>{`${title}${showFilter ? ' Filter' : ''}`}</Title>
         {doFilter && (
           <Symbols>
-            {!showFilter && (
-              <StyledIconButton
-                aria-label="Daten filtern"
-                title="Daten filtern (BAUSTELLE)"
-              >
-                <StyledFilterIcon onClick={onFilter} />
-              </StyledIconButton>
-            )}
+            {!showFilter &&
+              typesExist && (
+                <StyledIconButton
+                  aria-label="Daten filtern"
+                  title="Daten filtern (BAUSTELLE)"
+                >
+                  <StyledFilterIcon onClick={onFilter} />
+                </StyledIconButton>
+              )}
             {existsTableFilter && (
               <StyledIconButton
                 aria-label={`${title}-Filter entfernen`}
