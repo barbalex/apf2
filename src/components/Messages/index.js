@@ -8,6 +8,7 @@ import withHandlers from 'recompose/withHandlers'
 import styled from 'styled-components'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
+import Linkify from 'react-linkify'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import userGql from './user.graphql'
@@ -135,7 +136,9 @@ const UserMessages = ({
                       const paddBottom = index === unreadMessages.length - 1
                       return (
                         <MessageRow key={m.id} paddBottom={paddBottom}>
-                          <MessageDiv>{m.message}</MessageDiv>
+                          <Linkify>
+                            <MessageDiv>{m.message}</MessageDiv>
+                          </Linkify>
                           <OkButton
                             onClick={() =>
                               onClickRead(m, userName, client, refetch)
