@@ -423,12 +423,14 @@ const Tpopfreiwkontr = ({
     <Mutation mutation={updateTpopkontrByIdGql}>
       {updateTpopkontr => (
         <Container showfilter={showFilter}>
-          <FormTitle
-            apId={get(data, 'tpopkontrById.tpopByTpopId.popByPopId.apId')}
-            title="Freiwilligen-Kontrolle"
-            treeName={treeName}
-            table="tpopfreiwkontr"
-          />
+          {!isFreiwillig && (
+            <FormTitle
+              apId={get(data, 'tpopkontrById.tpopByTpopId.popByPopId.apId')}
+              title="Freiwilligen-Kontrolle"
+              treeName={treeName}
+              table="tpopfreiwkontr"
+            />
+          )}
           <InnerContainer>
             <GridContainer width={width}>
               <Title setTitleHeight={setTitleHeight} />
