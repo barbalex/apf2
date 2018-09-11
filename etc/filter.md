@@ -36,3 +36,5 @@ Eine Möglichkeit: In der Karte nur einen bestimmten Status-Typ von Populationen
 Im "Strukturbaum-Filter" kann man (nur) nach den Bezeichungen der Strukturbaum-Elemente der gerade aktiven Ebene filtern.
 
 Das ist zwar weniger mächtig, dafür aber einfach und schnell. Daher wird der Strukturbaum-Filter beibehalten.
+
+Zuletzt aktualisiert am: 11.9.2018
