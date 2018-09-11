@@ -310,7 +310,7 @@ class Tpopfeldkontr extends Component<Props> {
           const showFilter = !!nodeFilterState.state[treeName].activeTable
           let row
           if (showFilter) {
-            row = nodeFilterState.state[treeName].tpopmassn
+            row = nodeFilterState.state[treeName].tpopfeldkontr
           } else {
             row = get(data, 'tpopkontrById')
           }

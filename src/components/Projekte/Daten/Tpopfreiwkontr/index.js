@@ -411,7 +411,7 @@ const Tpopfreiwkontr = ({
 
   let row
   if (showFilter) {
-    row = nodeFilterState.state[treeName].tpopmassn
+    row = nodeFilterState.state[treeName].tpopfreiwkontr
   } else {
     row = get(data, 'tpopkontrById', {})
   }
