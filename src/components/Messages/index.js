@@ -136,7 +136,7 @@ const UserMessages = ({
                       const paddBottom = index === unreadMessages.length - 1
                       return (
                         <MessageRow key={m.id} paddBottom={paddBottom}>
-                          <Linkify>
+                          <Linkify properties={{ target: '_blank' }}>
                             <MessageDiv>{m.message}</MessageDiv>
                           </Linkify>
                           <OkButton
