@@ -120,6 +120,14 @@ class NodeFilterContainer extends Container<NodeFilterState> {
     })
   }
 
+  clone1To2() {
+    this.setState(state => {
+      const newState = cloneDeep(state)
+      newState.tree2 = cloneDeep(newState.tree)
+      return newState
+    })
+  }
+
   setValue({ treeName, table, key, value }) {
     this.setState(state => {
       const newState = cloneDeep(state)

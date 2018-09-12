@@ -78,7 +78,7 @@ const enhance = compose(
   withNodeFilter,
   withState('datenFilterAnchorEl', 'setDatenFilterAnchorEl', null),
   withHandlers({
-    onClickButton: ({ data, treeNr = '' }) => event => {
+    onClickButton: ({ data, treeNr = '', nodeFilterState }) => event => {
       // catch case when inner filter button was clicked
       if (event.target.localName !== 'span') return
       const projekteTabs = clone(get(data, 'urlQuery.projekteTabs', []))
@@ -98,7 +98,7 @@ const enhance = compose(
                 }
               `,
             })
-            // TODO: clone nodeFilterState?
+            nodeFilterState.clone1To2()
           }
         }
         setUrlQueryValue({ key: 'projekteTabs', value: projekteTabs })

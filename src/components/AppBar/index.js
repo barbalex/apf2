@@ -27,6 +27,7 @@ import setView from './setView.graphql'
 import EkfYear from './EkfYear'
 import User from './User'
 import Daten from './Daten'
+import withNodeFilter from '../../state/withNodeFilter'
 
 const StyledAppBar = styled(AppBar)`
   @media print {
@@ -65,10 +66,11 @@ const MenuDiv = styled.div`
 `
 
 const enhance = compose(
+  withNodeFilter,
   withState('ekfYearState', 'setEkfYearState', null),
   withState('userOpen', 'setUserOpen', false),
   withHandlers({
-    onClickButton: () => (name, client, projekteTabs) => {
+    onClickButton: ({ nodeFilterState }) => (name, client, projekteTabs) => {
       if (isMobilePhone()) {
         // show one tab only
         setUrlQueryValue({ key: 'projekteTabs', value: [name] })
@@ -85,6 +87,7 @@ const enhance = compose(
                 }
               `,
             })
+            nodeFilterState.clone1To2()
           }
         }
         setUrlQueryValue({ key: 'projekteTabs', value: projekteTabs })
