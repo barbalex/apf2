@@ -151,8 +151,8 @@ const SharedSelectCreatable = ({
           nocaret={noCaret}
         />
         <StyledIconButton
-          aria-label="Aufgrund Koordinaten setzen"
-          title="Aufgrund Koordinaten setzen"
+          aria-label="Mit Hilfe der Koordinaten automatisch setzen"
+          title="Mit Hilfe der Koordinaten automatisch setzen"
           onClick={() => onClickLocate(setStateValue)}
         >
           <AddLocation />
