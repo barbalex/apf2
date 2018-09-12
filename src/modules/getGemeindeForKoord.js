@@ -19,6 +19,5 @@ export default async ({
     errorState.add(error)
     return null
   }
-  console.log('getGemeindeForKoord, result:', result)
   return get(result, 'data.results[0].attributes.gemeindename', null)
 }

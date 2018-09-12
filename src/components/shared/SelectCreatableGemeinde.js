@@ -8,8 +8,6 @@ import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import AddLocation from '@material-ui/icons/AddLocationOutlined'
 
-import getGemeindeForKoord from '../../modules/getGemeindeForKoord'
-
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -77,6 +75,9 @@ const StyledSelect = styled(CreatableSelect)`
     height: ${props => (props.maxheight ? `${props.maxheight}px` : 'unset')};
   }
 `
+const StyledIconButton = styled(IconButton)`
+  margin-top: -4px !important;
+`
 
 const enhance = compose(
   withState('stateValue', 'setStateValue', null),
@@ -99,9 +100,11 @@ const SharedSelectCreatable = ({
   error,
   options: optionsIn,
   stateValue,
+  setStateValue,
   onChange,
   onInputChange,
   onBlur,
+  onClickLocate,
   maxHeight = null,
   noCaret = false,
 }: {
@@ -110,10 +113,12 @@ const SharedSelectCreatable = ({
   label: string,
   error: string,
   options: Array<Object>,
-  stateValue: Number | String,
+  stateValue: number | string,
+  setStateValue: () => void,
   onChange: () => void,
   onInputChange: () => void,
   onBlur: () => void,
+  onClickLocate: () => void,
   maxHeight?: number,
   noCaret: boolean,
 }) => {
@@ -123,6 +128,7 @@ const SharedSelectCreatable = ({
   if (value && !valuesArray.includes(value)) {
     options.push({ label: value, value })
   }
+
   return (
     <Container>
       {label && <Label>{label}</Label>}
@@ -144,18 +150,13 @@ const SharedSelectCreatable = ({
           classNamePrefix="react-select"
           nocaret={noCaret}
         />
-        <IconButton
-          aria-label="Automatisch setzen"
-          onClick={async () => {
-            const gemeinde = await getGemeindeForKoord({
-              x: 2681671,
-              y: 1267675,
-            })
-            console.log('todo', { gemeinde })
-          }}
+        <StyledIconButton
+          aria-label="Aufgrund Koordinaten setzen"
+          title="Aufgrund Koordinaten setzen"
+          onClick={() => onClickLocate(setStateValue)}
         >
           <AddLocation />
-        </IconButton>
+        </StyledIconButton>
       </Field>
       {error && <Error>{error}</Error>}
     </Container>

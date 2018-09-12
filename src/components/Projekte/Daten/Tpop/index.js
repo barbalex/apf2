@@ -22,6 +22,8 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateTpopByIdGql from './updateTpopById.graphql'
 import withNodeFilter from '../../../../state/withNodeFilter'
+import getGemeindeForKoord from '../../../../modules/getGemeindeForKoord'
+import withErrorState from '../../../../state/withErrorState'
 
 const Container = styled.div`
   height: 100%;
@@ -40,6 +42,7 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withErrorState,
   withNodeFilter,
   withState('errors', 'setErrors', {}),
   withHandlers({
@@ -143,6 +146,7 @@ type Props = {
   dimensions: Object,
   nodeFilterState: Object,
   treeName: string,
+  errorState: Object,
 }
 
 class Tpop extends Component<Props> {
@@ -159,14 +163,16 @@ class Tpop extends Component<Props> {
       id = '99999999-9999-9999-9999-999999999999',
       saveToDb,
       errors,
+      setErrors,
       dimensions = { width: 380 },
       nodeFilterState,
       treeName,
+      errorState,
     } = this.props
 
     return (
       <Query query={dataGql} variables={{ id }}>
-        {({ loading, error, data }) => {
+        {({ loading, error, data, refetch }) => {
           if (loading) {
             return (
               <Container>
@@ -343,6 +349,28 @@ class Tpop extends Component<Props> {
                             updateTpop,
                           })
                         }
+                        onClickLocate={async setStateValue => {
+                          if (!row.x || !row.y) {
+                            return setErrors({
+                              gemeinde: 'Es fehlen Koordinaten',
+                            })
+                          }
+                          const gemeinde = await getGemeindeForKoord({
+                            x: row.x,
+                            y: row.y,
+                            errorState,
+                          })
+                          if (gemeinde) {
+                            saveToDb({
+                              row,
+                              field: 'gemeinde',
+                              value: gemeinde,
+                              updateTpop,
+                            })
+                            setStateValue({ value: gemeinde, label: gemeinde })
+                            refetch()
+                          }
+                        }}
                         error={errors.gemeinde}
                       />
                       <TextField
