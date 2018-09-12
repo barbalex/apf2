@@ -361,13 +361,13 @@ class Tpop extends Component<Props> {
                             errorState,
                           })
                           if (gemeinde) {
-                            saveToDb({
+                            setStateValue({ value: gemeinde, label: gemeinde })
+                            await saveToDb({
                               row,
                               field: 'gemeinde',
                               value: gemeinde,
                               updateTpop,
                             })
-                            setStateValue({ value: gemeinde, label: gemeinde })
                             refetch()
                           }
                         }}
