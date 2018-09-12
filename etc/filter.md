@@ -14,11 +14,11 @@ Die Filter-Formulare entsprechen (fast) genau den normalen Formularen. Sie sind 
 
 Erfasst man in einem Filter-Feld Daten, wird der entsprechende Filter nach Verlassen des Feldes angewendet (bei Auswahl-Feldern sofort).
 
-Filtern kann man im `Strukturbaum` _und_ im `Strukturbaum 2`. Öffnet man den `Strukturbaum 2`, entspricht er genau dem `Strukturbaum`, d.h. es wird auch ein allfälliger Filter kopiert.
+Filtern kann man im `Strukturbaum` _und_ im `Strukturbaum 2`. Öffnet man den `Strukturbaum 2`, entspricht er genau dem `Strukturbaum`, d.h. es wird auch ein allfälliger Filter kopiert. Danach sind die Filter unabhängig.
 
 ## Wie öffnet man ein Filter-Formular?
 1. Mit dem neuen Filter-Menu im rechten Teil des Daten-Menüs
-2. Mit dem Filter-Symbol im rechten Teil des Formular-Titels, wenn ein entsprechendes Formular geöffnet ist
+2. Mit dem Filter-Symbol im rechten Teil des Formular-Titels (dunkelgrüner Bereich zuoberst im Formular), wenn ein entsprechendes Formular geöffnet ist
 
 ## Wo wird der Filter angewendet?
 - Im Strukturbaum auf der gefilterten Ebene.<br/>
@@ -30,8 +30,8 @@ Filtern kann man im `Strukturbaum` _und_ im `Strukturbaum 2`. Öffnet man den `S
 ## Wie werden Filter entfernt?
 1. Mit dem untersten Eintrag im neuen Filter-Menu im rechten Teil des Daten-Menüs
 2. Im Formular-Titel erscheinen zwei Symbole, sobald ein Filter angewendet wird:
-  - Mit dem linken Symbol kann man den Filter in der aktiven Ebene entfernen (z.B. Population). Dabei bleiben Filter in anderen Ebenen erhalten (z.B. Aktionsplan)
-  - Mit dem rechten Symbol kann man alle angewendeten Filter entfernen (wie im Filter-Menu im Daten-Menu)
+   - Mit dem linken Symbol kann man den Filter in der aktiven Ebene entfernen (z.B. Population). Dabei bleiben Filter in anderen Ebenen erhalten (z.B. Aktionsplan)
+   - Mit dem rechten Symbol kann man alle angewendeten Filter entfernen (wie im Filter-Menu im Daten-Menu)
 
 ## Welche neuen Möglichkeiten eröffnet mir das?
 
