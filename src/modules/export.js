@@ -7,7 +7,7 @@ import exportCsv from './exportCsv'
 import exportKml from './exportKml'
 
 export default async ({
-  data:dataPassed,
+  data: dataPassed,
   fileName,
   fileType,
   applyMapFilterToExport,
@@ -17,7 +17,7 @@ export default async ({
   xKey,
   yKey,
   errorState,
-}:{
+}: {
   data: Array<Object>,
   fileName: String,
   fileType: String,
@@ -29,13 +29,16 @@ export default async ({
   yKey: String,
   errorState: Object,
 }) => {
-  let data = dataPassed.map(d=> omit(d, ['__typename', 'Symbol(id)']))
+  console.log({ dataPassed })
+  let data = dataPassed.map(d => omit(d, ['__typename', 'Symbol(id)']))
   // now we could manipulate the data, for instance apply mapFilter
   const filterFeatures = mapFilter.features
   if (
     filterFeatures.length > 0 &&
     applyMapFilterToExport &&
-    idKey && xKey && yKey
+    idKey &&
+    xKey &&
+    yKey
   ) {
     // filter data
     const ids = idsInsideFeatureCollection({
@@ -47,8 +50,16 @@ export default async ({
     })
     data = data.filter(d => ids.includes(d[idKey]))
   }
+  // TODO: filter by nodeFilterState
+  // 1. add field to choose to filter by nodeFilterState
+  // 2. depending on typename check if this table is filtered
+  // 3. if yes: filter by nodeFilterState by converting camelCase to lower_case
   if (data.length === 0) {
-    return errorState.add(new Error('Es gibt offenbar keine Daten, welche exportiert werden können'))
+    return errorState.add(
+      new Error(
+        'Es gibt offenbar keine Daten, welche exportiert werden können',
+      ),
+    )
   }
   if (kml) {
     exportKml({
