@@ -116,7 +116,7 @@ const FormTitle = ({
   treeName: string,
 }) => {
   const typesExist = !!types[table]
-  const showFilter = !!nodeFilterState.state[treeName].activeTable
+  const showFilter = !!treeName && !!nodeFilterState.state[treeName].activeTable
   let existsTableFilter
   let existsTreeFilter
   const doFilter = table && treeName
