@@ -13,6 +13,8 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
+import app from 'ampersand-app'
+import gql from 'graphql-tag'
 
 import isMobilePhone from '../../../modules/isMobilePhone'
 import setUrlQueryValue from '../../../modules/setUrlQueryValue'
@@ -76,18 +78,28 @@ const enhance = compose(
   withNodeFilter,
   withState('datenFilterAnchorEl', 'setDatenFilterAnchorEl', null),
   withHandlers({
-    onClickButton: ({ data }) => event => {
+    onClickButton: ({ data, treeNr = '' }) => event => {
       // catch case when inner filter button was clicked
       if (event.target.localName !== 'span') return
       const projekteTabs = clone(get(data, 'urlQuery.projekteTabs', []))
       if (isMobilePhone()) {
         // show one tab only
-        setUrlQueryValue({ key: 'projekteTabs', value: ['daten'] })
+        setUrlQueryValue({ key: 'projekteTabs', value: [`daten${treeNr}`] })
       } else {
-        if (projekteTabs.includes('daten')) {
-          remove(projekteTabs, el => el === 'daten')
+        if (projekteTabs.includes(`daten${treeNr}`)) {
+          remove(projekteTabs, el => el === `daten${treeNr}`)
         } else {
-          projekteTabs.push('daten')
+          projekteTabs.push(`daten${treeNr}`)
+          if (treeNr === '2') {
+            app.client.mutate({
+              mutation: gql`
+                mutation cloneTree2From1 {
+                  cloneTree2From1 @client
+                }
+              `,
+            })
+            // TODO: clone nodeFilterState?
+          }
         }
         setUrlQueryValue({ key: 'projekteTabs', value: projekteTabs })
       }
@@ -102,19 +114,21 @@ const enhance = compose(
     onClickFilterTable: ({
       setDatenFilterAnchorEl,
       nodeFilterState,
+      treeNr = '',
     }) => event => {
       setDatenFilterAnchorEl(null)
       nodeFilterState.setActiveTable({
-        treeName: 'tree',
+        treeName: `tree${treeNr}`,
         activeTable: event.target.dataset.table,
       })
     },
     onClickEmptyFilter: ({
       setDatenFilterAnchorEl,
       nodeFilterState,
+      treeNr = '',
     }) => event => {
       setDatenFilterAnchorEl(null)
-      nodeFilterState.emptyTree('tree')
+      nodeFilterState.emptyTree(`tree${treeNr}`)
     },
   }),
 )
@@ -128,6 +142,7 @@ const MyAppBar = ({
   onClickEmptyFilter,
   data,
   nodeFilterState,
+  treeNr = '',
 }: {
   onClickButton: () => void,
   datenFilterAnchorEl: Object,
@@ -137,20 +152,21 @@ const MyAppBar = ({
   onClickEmptyFilter: () => void,
   data: Object,
   nodeFilterState: Object,
+  treeNr: string,
 }) => {
   const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
-  const isDaten = projekteTabs.includes('daten')
-  const isTree = projekteTabs.includes('tree')
+  const isDaten = projekteTabs.includes(`daten${treeNr}`)
+  const isTree = projekteTabs.includes(`tree${treeNr}`)
   const isKarte = projekteTabs.includes('karte')
 
   return (
     <StyledButton
       variant={isDaten ? 'outlined' : 'text'}
       preceded={isTree.toString()}
-      followed={isKarte.toString()}
+      followed={treeNr === '2' ? 'false' : isKarte.toString()}
       onClick={onClickButton}
     >
-      Daten
+      {`Daten${treeNr === '2' ? ' 2' : ''}`}
       {isDaten && (
         <Fragment>
           <StyledIconButton
@@ -209,7 +225,7 @@ const MyAppBar = ({
             <Divider />
             <RemoveMenuItem
               onClick={onClickEmptyFilter}
-              disabled={!nodeFilterState.treeIsFiltered('tree')}
+              disabled={!nodeFilterState.treeIsFiltered(`tree${treeNr}`)}
             >
               <StyledDeleteFilterIcon />
               Alle Filter entfernen

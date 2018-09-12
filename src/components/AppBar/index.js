@@ -261,19 +261,7 @@ const MyAppBar = ({
                         Strukturbaum 2
                       </StyledButton>
                     )}
-                    {!isMobile && (
-                      <StyledButton
-                        variant={
-                          projekteTabs.includes('daten2') ? 'outlined' : 'text'
-                        }
-                        preceded={projekteTabs.includes('tree2')}
-                        onClick={() =>
-                          onClickButton('daten2', client, projekteTabs)
-                        }
-                      >
-                        Daten 2
-                      </StyledButton>
-                    )}
+                    {!isMobile && <Daten data={data} treeNr="2" />}
                   </Fragment>
                 )}
                 <More

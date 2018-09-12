@@ -107,7 +107,10 @@ const initialTreeState = {
 }
 
 class NodeFilterContainer extends Container<NodeFilterState> {
-  state = { tree: initialTreeState, tree2: initialTreeState }
+  state = {
+    tree: cloneDeep(initialTreeState),
+    tree2: cloneDeep(initialTreeState),
+  }
 
   set({ treeName, nodeFilter }) {
     this.setState(state => {

@@ -217,6 +217,10 @@ const Ap = ({
             let row
             if (showFilter) {
               row = nodeFilterState.state[treeName].ap
+              console.log('Daten', {
+                treeName,
+                thisTreeState: nodeFilterState.state[treeName],
+              })
             } else {
               row = get(data, 'apById')
             }
