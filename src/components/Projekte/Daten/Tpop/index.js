@@ -172,7 +172,7 @@ class Tpop extends Component<Props> {
 
     return (
       <Query query={dataGql} variables={{ id }}>
-        {({ loading, error, data, refetch }) => {
+        {({ loading, error, data }) => {
           if (loading) {
             return (
               <Container>
@@ -361,14 +361,12 @@ class Tpop extends Component<Props> {
                             errorState,
                           })
                           if (gemeinde) {
-                            setStateValue({ value: gemeinde, label: gemeinde })
-                            await saveToDb({
+                            saveToDb({
                               row,
                               field: 'gemeinde',
                               value: gemeinde,
                               updateTpop,
                             })
-                            refetch()
                           }
                         }}
                         error={errors.gemeinde}

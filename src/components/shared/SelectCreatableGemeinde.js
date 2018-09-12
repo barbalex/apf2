@@ -7,6 +7,7 @@ import CreatableSelect from 'react-select/lib/Creatable'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import AddLocation from '@material-ui/icons/AddLocationOutlined'
+import withLifecycle from '@hocs/with-lifecycle'
 
 const Container = styled.div`
   display: flex;
@@ -91,6 +92,18 @@ const enhance = compose(
       }
     },
   }),
+  withLifecycle({
+    onDidUpdate(prevProps, props) {
+      console.log('SelectCreatableGemeinde, onDidUpdate', {
+        props: props.value,
+        prevProps: prevProps.value,
+      })
+      if (props.value !== prevProps.value) {
+        const value = props.value || props.value === 0 ? props.value : ''
+        props.setStateValue(value)
+      }
+    },
+  }),
 )
 
 const SharedSelectCreatable = ({
@@ -125,9 +138,11 @@ const SharedSelectCreatable = ({
   // need to add value to options list if it is not yet included
   const valuesArray = optionsIn.map(o => o.value)
   const options = [...optionsIn]
+  console.log('SelectCreatableGemeinde', { optionsIn, value })
   if (value && !valuesArray.includes(value)) {
     options.push({ label: value, value })
   }
+  console.log('SelectCreatableGemeinde', { options, value, stateValue })
 
   return (
     <Container>
@@ -136,7 +151,7 @@ const SharedSelectCreatable = ({
         <StyledSelect
           id={field}
           name={field}
-          defaultValue={options.find(o => o.value === value)}
+          value={options.find(o => o.value === value)}
           options={options}
           onChange={onChange}
           onBlur={onBlur}
@@ -153,7 +168,7 @@ const SharedSelectCreatable = ({
         <StyledIconButton
           aria-label="Mit Hilfe der Koordinaten automatisch setzen"
           title="Mit Hilfe der Koordinaten automatisch setzen"
-          onClick={() => onClickLocate(setStateValue)}
+          onClick={onClickLocate}
         >
           <AddLocation />
         </StyledIconButton>
