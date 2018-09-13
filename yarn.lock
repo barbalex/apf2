@@ -8630,11 +8630,9 @@ react-leaflet-bing@3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/react-leaflet-bing/-/react-leaflet-bing-3.1.0.tgz#5cdaaa84ee159147b6b161f6ebf1733ee148d14a"
 
-react-leaflet-control@1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/react-leaflet-control/-/react-leaflet-control-1.4.1.tgz#5da234621682d9c50657b65af042398512bda0fb"
-  dependencies:
-    prop-types "^15.5.7"
+react-leaflet-control@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-leaflet-control/-/react-leaflet-control-2.0.0.tgz#3d9ac4c67e86032520bf581b7a1a0dc7b450f682"
 
 react-leaflet@^1.9.1:
   version "1.9.1"
