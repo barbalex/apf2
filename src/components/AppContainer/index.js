@@ -88,7 +88,7 @@ const MyAppBar = ({
   data: Object,
 }) => {
   const view = get(data, 'view')
-  console.log('AppContainer, view:', view)
+  //console.log('AppContainer, view:', view)
 
   return (
     <ErrorBoundary>
