@@ -29,7 +29,7 @@ const baseLayers = [
     value: 'SwisstopoDufour',
   },
   { label: 'ZH Übersichtsplan', value: 'ZhUep' },
-  { label: 'Bing Luftbild', value: 'BingAerial' },
+  // { label: 'Bing Luftbild', value: 'BingAerial' },
   { label: 'ZH Orthofoto Sommer RGB', value: 'ZhOrtho' },
   { label: 'ZH Orthofoto Sommer infrarot', value: 'ZhOrthoIr' },
   { label: 'ZH Orthofoto Frühjahr 2015/16 RGB', value: 'ZhOrtho2015' },
@@ -42,16 +42,16 @@ const BaseLayers = ({
 }: {
   activeBaseLayer: String,
   setActiveBaseLayer: () => void,
-}) =>
+}) => (
   <CardContent>
     {baseLayers.map((l, index) => (
       <LayerDiv
         key={index}
-        onClick={(event) => {
+        onClick={event => {
           if (l.value === activeBaseLayer) {
             setActiveBaseLayer(null)
             // prevent click bubbling to Radio
-            // then triggering change... 
+            // then triggering change...
             event.preventDefault()
           }
         }}
@@ -66,5 +66,6 @@ const BaseLayers = ({
       </LayerDiv>
     ))}
   </CardContent>
+)
 
 export default BaseLayers

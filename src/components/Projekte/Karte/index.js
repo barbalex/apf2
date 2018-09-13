@@ -27,7 +27,7 @@ import SwissTopoPixelFarbe from './layers/SwisstopoPixelFarbe'
 import SwissTopoPixelGrau from './layers/SwisstopoPixelGrau'
 import SwisstopoSiegfried from './layers/SwisstopoSiegfried'
 import SwisstopoDufour from './layers/SwisstopoDufour'
-import BingAerial from './layers/BingAerial'
+//import BingAerial from './layers/BingAerial'
 import ZhOrtho from './layers/ZhOrtho'
 import ZhOrthoIr from './layers/ZhOrthoIr'
 import ZhOrtho2015 from './layers/ZhOrtho2015'
@@ -76,7 +76,6 @@ const crs = new window.L.Proj.CRS(
   }
 )*/
 
-
 const StyledMap = styled(Map)`
   height: 100%;
   @media print {
@@ -108,7 +107,7 @@ const Container = styled.div`
 
 const enhance = compose(
   withHandlers({
-    onMouseMove: ({ setMouseCoordinates }) => (e) => {
+    onMouseMove: ({ setMouseCoordinates }) => e => {
       const { client } = app
       const [x, y] = epsg4326to2056(e.latlng.lng, e.latlng.lat)
       client.mutate({
@@ -120,9 +119,9 @@ const enhance = compose(
             }
           }
         `,
-        variables: { x, y }
+        variables: { x, y },
       })
-    }
+    },
   }),
   debounceHandler('onMouseMove', 15),
 )
@@ -174,7 +173,8 @@ class Karte extends Component {
     // DANGER: first width is '100%'!
     if (Number.isInteger(prevWidth)) {
       const width = this.props.dimensions.width
-      const widthHasChangedByOver20Percent = (prevWidth / width > 1.2) || (prevWidth / width < 0.8)
+      const widthHasChangedByOver20Percent =
+        prevWidth / width > 1.2 || prevWidth / width < 0.8
       if (widthHasChangedByOver20Percent) {
         /**
          * need to redraw map, when tabs changed
@@ -224,9 +224,13 @@ class Karte extends Component {
       setMarkierungen,
       errorState,
     } = this.props
-    const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
+    const MapElement = !!idOfTpopBeingLocalized
+      ? StyledMapLocalizing
+      : StyledMap
     const assigning = get(data, 'assigningBeob')
-    const clustered = !(assigning || activeApfloraLayers.includes('beobZugeordnetAssignPolylines'))
+    const clustered = !(
+      assigning || activeApfloraLayers.includes('beobZugeordnetAssignPolylines')
+    )
     /**
      * need an object whose methods return overlays
      * in order to dynamically display and sort active overlays
@@ -295,24 +299,24 @@ class Karte extends Component {
           activeNodes={activeNodes}
           mapIdsFiltered={mapIdsFiltered}
         />
-      )
+      ),
     }
     const OverlayComponents = {
       ZhUep: () => <ZhUepOverlay />,
-      Detailplaene: () =>
+      Detailplaene: () => (
         <Detailplaene
           detailplaene={detailplaene}
           setDetailplaene={setDetailplaene}
           errorState={errorState}
         />
-      ,
-      Markierungen: () =>
-        <Markierungen 
+      ),
+      Markierungen: () => (
+        <Markierungen
           markierungen={markierungen}
           setMarkierungen={setMarkierungen}
           errorState={errorState}
         />
-      ,
+      ),
       ZhGemeindegrenzen: () => <ZhGemeindegrenzen />,
       ZhSvoColor: () => <ZhSvoColor />,
       ZhSvoGrey: () => <ZhSvoGrey />,
@@ -329,22 +333,24 @@ class Karte extends Component {
       SwisstopoSiegfried: () => <SwisstopoSiegfried />,
       SwisstopoDufour: () => <SwisstopoDufour />,
       ZhUep: () => <ZhUep />,
-      BingAerial: () => <BingAerial />,
+      //BingAerial: () => <BingAerial />,
       ZhOrtho: () => <ZhOrtho />,
       ZhOrthoIr: () => <ZhOrthoIr />,
       ZhOrtho2015: () => <ZhOrtho2015 />,
       ZhOrtho2015Ir: () => <ZhOrtho2015Ir />,
     }
     const BaseLayerComponent = BaseLayerComponents[activeBaseLayer]
-    const activeApfloraLayersSorted = sortBy(activeApfloraLayers, activeApfloraLayer =>
-      apfloraLayers.findIndex(
-        apfloraLayer => apfloraLayer.value === activeApfloraLayer
-      )
+    const activeApfloraLayersSorted = sortBy(
+      activeApfloraLayers,
+      activeApfloraLayer =>
+        apfloraLayers.findIndex(
+          apfloraLayer => apfloraLayer.value === activeApfloraLayer,
+        ),
     )
     const activeOverlaysSorted = sortBy(activeOverlays, activeOverlay =>
-      overlays.findIndex(o => o.value === activeOverlay)
+      overlays.findIndex(o => o.value === activeOverlay),
     )
-  
+
     return (
       <Container>
         <ErrorBoundary>
@@ -376,7 +382,7 @@ class Karte extends Component {
                     variables: {
                       id: idOfTpopBeingLocalized,
                       x,
-                      y
+                      y,
                     },
                     optimisticResponse: {
                       __typename: 'Mutation',
@@ -427,11 +433,11 @@ class Karte extends Component {
               .reverse()}
             {activeApfloraLayersSorted
               .map((apfloraLayerName, index) => {
-                const ApfloraLayerComponent = ApfloraLayerComponents[apfloraLayerName]
+                const ApfloraLayerComponent =
+                  ApfloraLayerComponents[apfloraLayerName]
                 return <ApfloraLayerComponent key={index} />
               })
-              .reverse()
-            }
+              .reverse()}
             <ScaleControl imperial={false} />
             <LayersControl
               data={data}
@@ -453,8 +459,12 @@ class Karte extends Component {
               mapIdsFiltered={mapIdsFiltered}
               mapPopIdsFiltered={mapPopIdsFiltered}
               mapTpopIdsFiltered={mapTpopIdsFiltered}
-              mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
-              mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
+              mapBeobNichtBeurteiltIdsFiltered={
+                mapBeobNichtBeurteiltIdsFiltered
+              }
+              mapBeobNichtZuzuordnenIdsFiltered={
+                mapBeobNichtZuzuordnenIdsFiltered
+              }
               mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
               // this enforces rerendering when sorting changes
               activeOverlaysString={activeOverlays.join()}
@@ -462,10 +472,9 @@ class Karte extends Component {
             />
             <MeasureControl />
             <FullScreenControl />
-            {
-              activeApfloraLayers.includes('mapFilter') &&
+            {activeApfloraLayers.includes('mapFilter') && (
               <DrawControl setStoreMapFilter={setMapFilter} />
-              }
+            )}
             {/*
             need to get background maps to show when printing A4
             <PrintControl />
