@@ -12,6 +12,7 @@ const LoadingComponent = ({ isLoading, loading, error }) => {
   } else if (error) {
     // uncomment following when researching errors
     // throw error
+    console.log('Loading, error:', error)
     return (
       <Container>
         {`Entschuldigung, die Seite konnte nicht geladen werden. Fehler: ${

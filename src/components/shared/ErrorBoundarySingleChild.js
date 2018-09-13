@@ -30,6 +30,7 @@ class ErrorBoundary extends Component {
   render() {
     const { errorInfo } = this.state
     if (errorInfo) {
+      console.log('errorInfo:', errorInfo)
       return (
         <Container>
           <ErrorTitle>

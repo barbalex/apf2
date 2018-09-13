@@ -30,6 +30,7 @@ class ErrorBoundary extends Component {
   render() {
     const { errorInfo } = this.state
     if (errorInfo) {
+      console.log('errorInfo:', errorInfo)
       return (
         <Container>
           <ErrorTitle>
@@ -49,7 +50,7 @@ class ErrorBoundary extends Component {
     }
     const { children } = this.props
     var childrenWithProps = React.Children.map(children, child =>
-      React.cloneElement(child, { ...this.props })
+      React.cloneElement(child, { ...this.props }),
     )
 
     // Normally, just render children
