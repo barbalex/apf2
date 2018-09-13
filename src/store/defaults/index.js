@@ -15,7 +15,7 @@ export default async idb => {
     tokenDecoded.role &&
     tokenDecoded.role === 'apflora_freiwillig'
   const view = userIsFreiw ? 'ekf' : 'normal'
-  console.log('store, defaults, set view to:', view)
+  //console.log('store, defaults, set view to:', view)
   // substract 3 Months to now so user sees previous year in February
   const ekfRefDate = new Date().setMonth(new Date().getMonth() - 2)
   const ekfYear = new Date(ekfRefDate).getFullYear()
