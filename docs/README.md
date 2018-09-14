@@ -1,9 +1,8 @@
-# Über apflora.ch
+# apflora.ch
 
 Web-Applikation zur Verwaltung der [Aktionspläne Flora der Fachstelle Naturschutz des Kantons Zürich](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/artenfoerderung/ap_fl.html).
 
-<a name="machen"></a>
-## Was kann man mit ApFloraDb machen?
+## Was kann man mit apflora.ch machen?
 
 **Aktionspläne verwalten**
 
