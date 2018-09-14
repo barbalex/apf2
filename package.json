@@ -10,6 +10,7 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
+    "docsify-cli": "^4.2.1",
     "flow-bin": "0.80.0",
     "postgraphile": "4.0.0-rc.5",
     "postgraphile-plugin-connection-filter": "1.0.0-beta.15",
@@ -96,7 +97,8 @@
     "flow": "flow",
     "serve": "node ecosystem.config.js",
     "serveBuild": "npx serve -s build",
-    "analyze": "npx source-map-explorer build/static/js/main.*"
+    "analyze": "npx source-map-explorer build/static/js/main.*",
+    "startDocs": "yarn docsify serve ./docs --port 8000"
   },
   "eslintConfig": {
     "extends": "react-app"
