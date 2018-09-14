@@ -36,6 +36,10 @@ const enhance = compose(
   withDeleteState,
   withState('anchorEl', 'setAnchorEl', null),
   withHandlers({
+    openDocs: ({ setAnchorEl }) => () => {
+      setAnchorEl(null)
+      window.open('https://barbalex.github.io/apf2')
+    },
     watchVideos: ({ setAnchorEl }) => () => {
       setAnchorEl(null)
       window.open(
@@ -56,6 +60,7 @@ const MyAppBar = ({
   onClickButton,
   showDeletedDatasets,
   watchVideos,
+  openDocs,
   anchorEl,
   setAnchorEl,
   setShowDeletions,
@@ -67,6 +72,7 @@ const MyAppBar = ({
   onClickButton: () => void,
   showDeletedDatasets: () => void,
   watchVideos: () => void,
+  openDocs: () => void,
   anchorEl: Object,
   setAnchorEl: () => void,
   setShowDeletions: () => void,
@@ -127,6 +133,7 @@ const MyAppBar = ({
               {['apflora_manager', 'apflora_artverantwortlich'].includes(
                 role,
               ) && <EkfAdresse setAnchorEl={setAnchorEl} />}
+              <MenuItem onClick={openDocs}>Dokumentation öffnen</MenuItem>
               <MenuItem onClick={watchVideos}>Video-Anleitungen</MenuItem>
               <MenuItem
                 onClick={() => {
@@ -136,7 +143,7 @@ const MyAppBar = ({
               >
                 {`${get(data, 'user.name')} abmelden`}
               </MenuItem>
-              <Version>Version: 1.1.1 vom 24.8.2018</Version>
+              <Version>Version: 1.2.0 vom 14.9.2018</Version>
             </Menu>
           </Container>
         </ErrorBoundary>
