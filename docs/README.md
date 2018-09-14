@@ -69,6 +69,7 @@ Web-Applikation zur Verwaltung des [Aktionsplans Flora der Fachstelle Naturschut
 **Effizient arbeiten:**
 
 - Im Strukturbaum in jeder Ebene filtern
+- [Fomular-basierte Filter](https://barbalex.github.io/apf2/#/./docs/filter) anwenden
 - Strukturelemente wie z.B. Teilpopulationen im Baum zu anderen Strukturelementen desselben Typs verschieben oder kopieren
 - Für übersichtliches Kopieren/Verschieben zweites Strukturbaum-Formular-Paar einblenden
 - Beobachtungen Teilpopulationen zuordnen: In einer nach Abstand zu den Teilpopulationen geordneten Liste im Formular. Oder mit drag and drop auf der Karte
@@ -97,6 +98,7 @@ Die nachfolgend aufgelisteten Funktionen werden nur von Topos verwendet:
 
 - Aktionsplan-Verantwortliche erfassen, wer welche Teilpopulationen kontrollieren soll...
 - ...und drucken gleich die Feld-Erfassungs-Formulare aus
+- [Anleitung](https://barbalex.github.io/apf2/#/./docs/ekf)
 
 **Frewillige erfassen ihre Kontrollen selber:**
 
@@ -136,7 +138,7 @@ Dazu werden die Feld- und Freiwilligenkontrollen (ausser solche von soeben anges
   Andere Kantone bzw. Ökobüros können ähnliche Projekte verwalten. Damit würden Fixkosten geteilt bzw. die Weiterentwicklung finanziert
 - Grundlage schaffen, um Berichte direkt aus der Webanwendung heraus produzieren zu können.<br/>
   Artverantwortliche sollen Jahresberichte für ihre Arten selber erzeugen und kontrollieren können
-- Grundlage schaffen, um auf das Access-Admin-Tool verzichten zu können
+- Grundlage schaffen, um auf das Access-Admin-Tool verzichten zu können (umgesetzt)
 - Grundlage schaffen, um allenfalls später netzunabhängig (im Feld) arbeiten zu können
 - Sicherheit erhöhen
 
@@ -159,11 +161,11 @@ Dazu werden die Feld- und Freiwilligenkontrollen (ausser solche von soeben anges
 
 ### 2018 geplant
 
-- Login steuert, welche Projekte sichtbar sind
-- Berichte direkt in apflora.ch erstellen (statt wie bisher in Access)
-- Freiwilligen-Erfolgskontrollen: Internet-Eingabeformular entsprechend dem Feld-Formular schaffen. Ziel: Freiwillige erfassen ihre Kontrollen selber. Sie fliessen in die Auswertung ein, wenn sie von Mitarbeiterinnen von Topos geprüft wurden
+- Login steuert, welche Projekte sichtbar sind (umgesetzt)
+- Berichte direkt in apflora.ch erstellen (statt wie bisher in Access) (umgesetzt)
+- Freiwilligen-Erfolgskontrollen: Internet-Eingabeformular entsprechend dem Feld-Formular schaffen. Ziel: Freiwillige erfassen ihre Kontrollen selber. Sie fliessen in die Auswertung ein, wenn sie von Mitarbeiterinnen von Topos geprüft wurden (umgesetzt)
 - Von InfoFlora bezogene Beobachtungen können korrigiert und die Änderung per mail an InfoFlora gemeldet werden
-- Filter-Funktionen ausbauen
+- Filter-Funktionen ausbauen (umgesetzt)
 - Diverse kleinere Optimierungen, um die Effizienz für die BenutzerInnen zu steigern
 
 ### Langfristige Vision
@@ -179,7 +181,7 @@ Die Anwendung wird auf einem virtuellen Server mit der jeweils aktuellen Ubuntu 
 Serverseitig wird sie mit [node.js](//nodejs.org) gesteuert. Als Datenbank dient [PostgreSQL](//postgresql.org/). Hier ein [Diagramm der Beziehungen](//raw.githubusercontent.com/barbalex/apf2/master/src/etc/beziehungen.png).
 
 Die Anwendung ist zweigeteilt:
-- das Backend bietet die API (Daten) auf [apflora.ch/api](//apflora.ch/api) an
+- das Backend bietet die API (Daten) auf [apflora.ch/graphql](//apflora.ch/graphql) und [apflora.ch/api](//apflora.ch/api) an
 - das Frontend / die App bzw. die Benutzeroberfläche ist über [apflora.ch](//apflora.ch) erreichbar
 
 Die wichtigsten verwendeten Technologien sind:
@@ -188,7 +190,7 @@ Die wichtigsten verwendeten Technologien sind:
 - [GraphQL](https://github.com/facebook/graphql) in Form von [PostGraphile](https://github.com/graphile/postgraphile)
   - API-Server mit einer Zeile bauen und konfigurieren. Das sind _tausende_ weniger als bisher!
   - Daten-Logik und Rechte-Verwaltung obliegen der Datenbank - wie es sein sollte<br/>
-  - GraphQL ist die kommende API-Technologie. Verglichen mit REST ist GraphQL einfach zu verstehen, und extrem flexibel. Somit steht ein aussergewöhnlich benutzerfreundlicher API-Server zur Verfügung
+  - GraphQL ist die kommende API-Technologie. Verglichen mit REST ist GraphQL einfach zu verstehen und extrem flexibel. Somit steht ein aussergewöhnlich benutzerfreundlicher API-Server zur Verfügung
 - [Apollo](https://www.apollodata.com). Komponenten definieren, welche Daten sie brauchen. GraphQL und Apollo kümmern sich um die Bereitstellung. React (siehe unten), GraphQL und Apollo haben die Entwicklung von Anwendungen revolutioniert
 - [React](//facebook.github.io/react): Deklarative Benutzer-Oberfläche. Aufgebaut aus Komponenten
 - [styled-components](https://github.com/styled-components/styled-components): modular stylen
