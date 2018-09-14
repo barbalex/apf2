@@ -20,11 +20,10 @@ Web-Applikation zur Verwaltung der [Aktionspläne Flora der Fachstelle Naturschu
 
 - Alle Beobachtungen der Info Flora innerhalb des Kantons Zürich und im nahen Umfeld
 - Alle Beobachtungen aus Projekten der Fachstelle Naturschutz des Kantons Zürich
-- Eigene Beobachtungen aus [EvAB](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content) (vorgängig mit Access uploaden)
+- Eigene Beobachtungen aus [EvAB](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content)
 - Grundsätzlich alle verfügbaren Beobachtungen, unabhängig von ihrer Datenstruktur
 - Beobachtungen von beliebigen (synonymen) Arten im selben Aktionsplan zuordnen
-
-[Anleitung](./docs/beobZuordnen)
+- [Anleitung](./docs/beobZuordnen)
 
 **Auf Karten darstellen**
 
@@ -39,8 +38,8 @@ Web-Applikation zur Verwaltung der [Aktionspläne Flora der Fachstelle Naturschu
 **Über den Erfolg berichten**
 
 - Für einzelne Aktionspläne...
-- ...oder für alle
-- über Massnahmen, Kontrollen und Entwicklung berichten
+- ...oder für alle...
+- ...über Massnahmen, Kontrollen und Entwicklung berichten
 - direkt aus apflora.ch heraus pdf-Berichte erzeugen
 
 **Daten exportieren**
@@ -53,7 +52,7 @@ Web-Applikation zur Verwaltung der [Aktionspläne Flora der Fachstelle Naturschu
 
 - Keine Installation, automatische Updates
 - Von ausserhalb (Auftragnehmer) und innerhalb der Fachstelle Naturschutz arbeiten
-- Ein moderner Browser wird vorausgesetzt. Entwickelt für Google Chrome. Funktioniert auch auf Firefox und Safari für PC sowie Chrome für Android und Safari auf iOS
+- Ein moderner Browser wird vorausgesetzt. Entwickelt für Google Chrome. Funktioniert auch auf Firefox und Safari für PC (vermutlich auch auf Edge) sowie Chrome für Android und Safari auf iOS
 - Wer keinen modernen Browser einsetzen darf (wie z.B. die Fachstelle Naturschutz Kt. Zürich) oder aus einem anderen Grund lieber will, kann [hier](https://www.dropbox.com/sh/5ar4f0fu5uqvhar/AADJmUo_9pakOnjL_U27EpQMa?dl=0) die lokal installierbare Version beziehen. Für die Installation auf Windows den aktuellsten `apflora-win32-x64`-Ordner in den eigenen Benutzer-Ordner kopieren (oder irgendwo sonst, wo Sie über die Rechte verfügen, eine .exe-Datei auszuführen). Dann die darin enthaltene `apflora.exe` starten
 
 **Sich rasch zurechtfinden**
@@ -64,9 +63,9 @@ Web-Applikation zur Verwaltung der [Aktionspläne Flora der Fachstelle Naturschu
 
 **Sich anleiten lassen**
 
-- Informations-Symbole informieren über Felder und Anforderungen an die Datenerfassung
+- Informations-Symbole informieren direkt in den Formularen über Anforderungen an die Datenerfassung
 - [Videos](https://www.youtube.com/playlist?list=PLTz8Xt5SOQPS-dbvpJ_DrB4-o3k3yj09J) demonstrieren das Arbeiten mit verschiedenen Teilen der Anwendung
-- Im [Wiki](https://github.com/FNSKtZH/apflora/wiki) sind wichtige Fragen erklärt
+- Hier, in dieser Dokumentations-Webseite sind wichtige Fragen erklärt bzw. werden künftig alle neuen Features bechrieben
 
 **Effizient arbeiten**
 
@@ -93,7 +92,7 @@ Die nachfolgend aufgelisteten Funktionen werden nur von Topos verwendet:
 
 - Die Daten werden täglich in der Cloud gesichert
 - In regelmässigen Abständen werden sie aus der Cloud auf mehrere unabhängige Festplatten gesichert
-- Ihre Wiederherstellung wird im Rahmen der Entwicklung bzw. des Unterhalts regelmässig getestet ([Anleitung](https://github.com/FNSKtZH/apflora/wiki/Daten-wiederherstellen))
+- Ihre Wiederherstellung wird im Rahmen der Entwicklung bzw. des Unterhalts regelmässig getestet
 - Während einer Sitzung gelöschte Daten können direkt von den Benutzern wiederhergestellt werden
 
 **Freiwilligen-Erfolgskontrollen vorbereiten**
@@ -102,7 +101,7 @@ Die nachfolgend aufgelisteten Funktionen werden nur von Topos verwendet:
 - ...und drucken gleich die Feld-Erfassungs-Formulare aus
 - [Anleitung](https://barbalex.github.io/apf2/#/./docs/ekf)
 
-**Frewillige erfassen ihre Kontrollen selber**
+**Freiwillige erfassen ihre Kontrollen selber**
 
 - Melden sich Freiwillige an, sehen sie eine spezifisch für Sie gestaltete Benutzer-Oberfläche
 - Neben der Liste ihrer Erfolgskontrollen erfassen sie im Formular, das genau dem Feld-Formular entspricht, ihre Beobachtungen
@@ -117,7 +116,7 @@ Die FNS erhält aus apflora folgende Produkte:
 
 - Den Jahresbericht (pdf oder Ausdruck)
 - Artbeobachtungen<br>
-Dazu werden die Feld- und Freiwilligenkontrollen (ausser solche von soeben angesäten, noch nicht etablierten Teilpopulationen) in [EvAB](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content) importiert
+Dazu werden die Feld- und Freiwilligenkontrollen (ausser solche von soeben angesäten, noch nicht etablierten Teilpopulationen) nach [EvAB](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content) importiert
 - Teilpopulationen, Kontrollen und Massnahmen für die Anzeige in GIS und [Web-GIS BUN](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/web_gis.html)
 
 
@@ -164,8 +163,8 @@ Dazu werden die Feld- und Freiwilligenkontrollen (ausser solche von soeben anges
 - Login steuert, welche Projekte sichtbar sind (umgesetzt)
 - Berichte direkt in apflora.ch erstellen (statt wie bisher in Access) (umgesetzt)
 - Freiwilligen-Erfolgskontrollen: Internet-Eingabeformular entsprechend dem Feld-Formular schaffen. Ziel: Freiwillige erfassen ihre Kontrollen selber. Sie fliessen in die Auswertung ein, wenn sie von Mitarbeiterinnen von Topos geprüft wurden (umgesetzt)
-- Von InfoFlora bezogene Beobachtungen können korrigiert und die Änderung per mail an InfoFlora gemeldet werden
 - Filter-Funktionen ausbauen (umgesetzt)
+- Von InfoFlora bezogene Beobachtungen können korrigiert und die Änderung per mail an InfoFlora gemeldet werden
 - Diverse kleinere Optimierungen, um die Effizienz für die BenutzerInnen zu steigern
 
 ### Langfristige Vision
