@@ -6,7 +6,7 @@ Ihr findet es unten links auf der Karte, oberhalb des Werkzeugs, dass eine Dista
 
 Was kann es?
 
-- Es zeigt immer den ungefähren aktuellen Massstab der Karte an
+- Es zeigt immer den ungefähren aktuellen Massstab der Karte an<br/>
   Wieso ungefähr?
     - Es wird der nächste Massstab aus der Auswahlliste angezeigt (siehe unten)
     - Weil der Massstab von sehr vielen Faktoren abhängt (u.a. Tile-Grösse der Hintergrundkarte, geographische Höhe, Bildschirm-Auflösung...) ist er grundsätzlich nicht sehr genau.
