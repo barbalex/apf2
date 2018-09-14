@@ -8613,8 +8613,8 @@ react-input-autosize@^2.2.1:
     prop-types "^15.5.8"
 
 react-is@^16.3.1:
-  version "16.5.0"
-  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.5.0.tgz#2ec7c192709698591efe13722fab3ef56144ba55"
+  version "16.5.1"
+  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.5.1.tgz#c6e8734fd548a22e1cef4fd0833afbeb433b85ee"
 
 react-jss@^8.1.0:
   version "8.6.1"
@@ -8630,9 +8630,11 @@ react-leaflet-bing@3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/react-leaflet-bing/-/react-leaflet-bing-3.1.0.tgz#5cdaaa84ee159147b6b161f6ebf1733ee148d14a"
 
-react-leaflet-control@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/react-leaflet-control/-/react-leaflet-control-2.0.0.tgz#3d9ac4c67e86032520bf581b7a1a0dc7b450f682"
+react-leaflet-control@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/react-leaflet-control/-/react-leaflet-control-1.4.1.tgz#5da234621682d9c50657b65af042398512bda0fb"
+  dependencies:
+    prop-types "^15.5.7"
 
 react-leaflet@^1.9.1:
   version "1.9.1"
@@ -8646,7 +8648,7 @@ react-lifecycles-compat@^3.0.2, react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
 
-react-linkify@^0.2.2:
+react-linkify@0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/react-linkify/-/react-linkify-0.2.2.tgz#55b99b1cc7244446a0f9bdebbe13b2c30f789e65"
   dependencies:
@@ -8858,13 +8860,12 @@ readable-stream@~2.0.6:
     util-deprecate "~1.0.1"
 
 readdirp@^2.0.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/readdirp/-/readdirp-2.1.0.tgz#4ed0ad060df3073300c48440373f72d1cc642d78"
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/readdirp/-/readdirp-2.2.1.tgz#0e87622a3325aa33e892285caf8b4e846529a525"
   dependencies:
-    graceful-fs "^4.1.2"
-    minimatch "^3.0.2"
+    graceful-fs "^4.1.11"
+    micromatch "^3.1.10"
     readable-stream "^2.0.2"
-    set-immediate-shim "^1.0.1"
 
 realpath-native@^1.0.0:
   version "1.0.2"
@@ -9411,10 +9412,6 @@ serviceworker-cache-polyfill@^4.0.0:
 set-blocking@^2.0.0, set-blocking@~2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/set-blocking/-/set-blocking-2.0.0.tgz#045f9782d011ae9a6803ddd382b24392b3d890f7"
-
-set-immediate-shim@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/set-immediate-shim/-/set-immediate-shim-1.0.1.tgz#4b2b1b27eb808a9f8dcc481a58e5e56f599f3f61"
 
 set-value@^0.4.3:
   version "0.4.3"
