@@ -8,13 +8,13 @@ Web-Applikation zur Verwaltung des [Aktionsplans Flora der Fachstelle Naturschut
 **Aktionspläne verwalten:**
 
 - Aktionspläne, Populationen und Teilpopulationen beschreiben
-- Ideale Umweltfaktoren beschreiben
-- Assoziierte Arten auflisten
 - Ziele und Erfolgskriterien bestimmen
 - Kontrollen der Teilpopulationen und...
 - ...Massnahmen zur Förderung dokumentieren
 - Die Entwicklung der Teilpopulationen, den Erfolg der Massnahmen und die Erreichung der Ziele beurteilen...
 - ...und darüber berichten
+- Ideale Umweltfaktoren beschreiben
+- Assoziierte Arten auflisten
 
 **Beobachtungen den Teilpopulationen zuordnen:** ([Anleitung](https://github.com/FNSKtZH/apflora/wiki/Beobachtungen-einer-Teilpopulation-zuordnen))
 
