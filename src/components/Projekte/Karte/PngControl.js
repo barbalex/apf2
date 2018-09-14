@@ -36,8 +36,18 @@ const enhance = compose(
       event.preventDefault()
       printPlugin.printMap('CurrentSize', 'apfloraKarte')
     },
-  })
+  }),
 )
+
+const options = {
+  hidden: true,
+  position: 'topright',
+  // sizeModes may not be needed?
+  sizeModes: ['Current'],
+  exportOnly: true,
+  filename: 'apfloraKarte',
+  hideControlContainer: true,
+}
 
 class PrintControl extends Component {
   constructor(props) {
@@ -54,15 +64,6 @@ class PrintControl extends Component {
 
   componentDidMount() {
     const { map, changePrintPlugin } = this.props
-    const options = {
-      hidden: true,
-      position: 'topright',
-      // sizeModes may not be needed?
-      sizeModes: ['Current'],
-      exportOnly: true,
-      filename: 'apfloraKarte',
-      hideControlContainer: true,
-    }
     const pp = window.L.easyPrint(options).addTo(map)
     changePrintPlugin(pp)
     /**
@@ -71,7 +72,7 @@ class PrintControl extends Component {
      * see: https://github.com/LiveBy/react-leaflet-control/issues/22
      */
     window.L.DomEvent.disableClickPropagation(
-      this.container.current
+      this.container.current,
     ).disableScrollPropagation(this.container.current)
   }
 

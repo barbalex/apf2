@@ -55,6 +55,7 @@ import BeobZugeordnet from './layers/BeobZugeordnet'
 import BeobZugeordnetAssignPolylines from './layers/BeobZugeordnetAssignPolylines'
 import MeasureControl from './MeasureControl'
 import FullScreenControl from './FullScreenControl'
+import SwitchScaleControl from './ScaleControl'
 import DrawControl from './DrawControl'
 // import PrintControl from './PrintControl'
 import PngControl from './PngControl'
@@ -471,6 +472,7 @@ class Karte extends Component {
               activeApfloraLayersString={activeApfloraLayers.join()}
             />
             <MeasureControl />
+            <SwitchScaleControl />
             <FullScreenControl />
             {activeApfloraLayers.includes('mapFilter') && (
               <DrawControl setStoreMapFilter={setMapFilter} />

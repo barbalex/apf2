@@ -11,16 +11,19 @@ body {
 }
 
 @media print {
+
   html,
   body {
     background-color: white !important;
     height: auto !important;
   }
+
   #root {
     background-color: white !important;
     height: auto !important;
     min-height: auto !important;
   }
+
   #root>div {
     height: auto !important;
     display: block !important;
@@ -391,6 +394,57 @@ body {
   background-color: #fff59d !important;
   border-right: 1px solid #fff59d !important;
   border-left: 1px solid #fff59d !important;
+}
+
+/*
+ * leaflet-switch-scale-control
+ */
+.map-control-scalebar-scale-item {
+  cursor: pointer;
+  padding: 2px 5px;
+}
+
+.map-control-scalebar-scale-item:hover {
+  background: lightgray;
+}
+
+.map-control-scalebar-text {
+  cursor: pointer;
+  height: 20px;
+  border: 2px solid #777;
+  border-top: none;
+  padding: 2px 5px 1px;
+  background: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  width: 5em;
+}
+
+.map-control-scalebar-custom-scale {
+  padding: 0.2em;
+  width: 10em;
+}
+
+.map-control-scalebar-dropdown {
+  border: 2px solid #777;
+  border-bottom: none;
+  background: white;
+  max-height: 30em;
+  overflow-y: hidden;
+  -webkit-transition: max-height 0.2s ease-in-out;
+  -moz-transition: max-height 0.2s ease-in-out;
+  -o-transition: max-height 0.2s ease-in-out;
+  transition: max-height 0.2s ease-in-out;
+}
+
+.map-control-scalebar-custom-scale {
+  font-size: 11px;
+}
+
+/*
+ * leaflet-control-scale-line
+ */
+.leaflet-control-scale-line {
+  background: rgba(255, 255, 255, 0.9) !important;
 }
 
 /*

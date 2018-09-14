@@ -6638,6 +6638,12 @@ leaflet-measure@3.1.0:
     "@turf/length" "^5.1.5"
     lodash "^4.17.5"
 
+"leaflet-switch-scale-control@https://github.com/victorzinho/leaflet-switch-scale-control":
+  version "0.1.0"
+  resolved "https://github.com/victorzinho/leaflet-switch-scale-control#2d5b1d5701b98d3c9171b077b4eb1b429f49d428"
+  dependencies:
+    leaflet "^1.0.0"
+
 leaflet.fullscreen@1.4.5:
   version "1.4.5"
   resolved "https://registry.yarnpkg.com/leaflet.fullscreen/-/leaflet.fullscreen-1.4.5.tgz#3b558dece24d9b51ce762b2e00fe902727f47272"
@@ -6646,7 +6652,7 @@ leaflet.markercluster@1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/leaflet.markercluster/-/leaflet.markercluster-1.4.1.tgz#b53f2c4f2ca7306ddab1dbb6f1861d5e8aa6c5e5"
 
-leaflet@1.3.4:
+leaflet@1.3.4, leaflet@^1.0.0:
   version "1.3.4"
   resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.3.4.tgz#7f006ea5832603b53d7269ef5c595fd773060a40"
 
