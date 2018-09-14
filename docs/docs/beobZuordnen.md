@@ -6,7 +6,7 @@ Verworfen werden Beobachtungen in der Regel, wenn:
 - sie nicht (genau genug) lokalisiert werden können oder
 - die Artbestimmung (zu) unsicher ist
 
-## 1. So wird's gemacht:
+## 1. So wird's gemacht
 Im Formular:
 
 1. Aktionsplan wählen
@@ -20,7 +20,7 @@ oder in Karten (Anleitung ausstehend)
 - Im September 2017 wurden zuletzt alle Beobachtungen der [Info Spezies](http://www.infoflora.ch/de/allgemeines/info-species.html) und der Fachstelle Naturschutz für den Kanton Zürich integriert.
 - Im April 2017 wurden die Beobachtungen des Projekts Floz integriert.
 
-## 3. Datenstruktur
+## 3. Datenstruktur (veraltet, Aktualisierung ausstehend)
 
 **3.1 Original-Beobachtungen nach Herkunft separat gespeichert**
 
