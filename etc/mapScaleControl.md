@@ -3,6 +3,7 @@
 Wurde am 14.09.2018 eingeführt.
 
 Ihr findet es unten links auf der Karte, oberhalb des Werkzeugs, dass eine Distanz anzeigt.
+![Massstab-Werkzeug](./mapScale.png)
 
 Was kann es?
 
