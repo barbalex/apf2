@@ -2,7 +2,7 @@
 
 Am 12.09.2018 wurden `Formular-Filter` eingeführt.
 
-## In diesen Formularen kann man filtern:
+## In diesen Formularen kann man filtern
 - Aktionsplan
 - Population
 - Teil-Population
