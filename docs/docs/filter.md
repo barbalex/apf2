@@ -1,6 +1,7 @@
 # Formular-Filter
 
-Am 12.09.2018 wurden `Formular-Filter` eingeführt.
+Am 12.09.2018 wurden `Formular-Filter` eingeführt.<br/>
+![Filter-Formular](./_media/filterForm.png)
 
 ## In diesen Formularen kann man filtern
 - Aktionsplan
@@ -17,8 +18,10 @@ Erfasst man in einem Filter-Feld Daten, wird der entsprechende Filter nach Verla
 Filtern kann man im `Strukturbaum` _und_ im `Strukturbaum 2`. Öffnet man den `Strukturbaum 2`, entspricht er genau dem `Strukturbaum`, d.h. es wird auch ein allfälliger Filter kopiert. Danach sind die Filter unabhängig.
 
 ## Wie öffnet man ein Filter-Formular?
-1. Mit dem neuen Filter-Menu im rechten Teil des Daten-Menüs
-2. Mit dem Filter-Symbol im rechten Teil des Formular-Titels (dunkelgrüner Bereich zuoberst im Formular), wenn ein entsprechendes Formular geöffnet ist
+1. Mit dem neuen Filter-Menu im rechten Teil des Daten-Menüs<br/>
+   ![Filter-Menü](./_media/filterMenu1.png)
+2. Mit dem Filter-Symbol im rechten Teil des Formular-Titels (dunkelgrüner Bereich zuoberst im Formular), wenn ein entsprechendes Formular geöffnet ist<br/>
+   ![Filter-Menü](./_media/filterMenu2.png)
 
 ## Wo wird der Filter angewendet?
 - Im Strukturbaum auf der gefilterten Ebene.<br/>
@@ -28,10 +31,12 @@ Filtern kann man im `Strukturbaum` _und_ im `Strukturbaum 2`. Öffnet man den `S
 - Nicht realisiert aber als Erweiterung denkbar: In Exporten der entsprechenden Ebene
 
 ## Wie werden Filter entfernt?
-1. Mit dem untersten Eintrag im neuen Filter-Menu im rechten Teil des Daten-Menüs
+1. Mit dem untersten Eintrag im neuen Filter-Menu im rechten Teil des Daten-Menüs<br/>
+   ![Filter entfernen](./_media/filterRemove1.png)
 2. Im Formular-Titel erscheinen zwei Symbole, sobald ein Filter angewendet wird:
    - Mit dem linken Symbol kann man den Filter in der aktiven Ebene entfernen (z.B. Population). Dabei bleiben Filter in anderen Ebenen erhalten (z.B. Aktionsplan)
-   - Mit dem rechten Symbol kann man alle angewendeten Filter entfernen (wie im Filter-Menu im Daten-Menu)
+   - Mit dem rechten Symbol kann man alle angewendeten Filter entfernen (wie im Filter-Menu im Daten-Menu)<br/>
+   ![Filter entfernen](./_media/filterRemove2.png)
 
 ## Welche neuen Möglichkeiten eröffnet mir das?
 
@@ -41,7 +46,8 @@ Eine Möglichkeit: In der Karte nur einen bestimmten Status-Typ von Populationen
 
 ## Was ist der Unterschied zum Filter-Feld im Strukturbaum?
 
-Im `Strukturbaum-Filter` kann man (nur) nach den Bezeichungen der Strukturbaum-Elemente der gerade aktiven Ebene filtern.
+Im `Strukturbaum-Filter` kann man (nur) nach den Bezeichungen der Strukturbaum-Elemente der gerade aktiven Ebene filtern.<br/>
+![Strukturbaum-Filter](./_media/filterTree.png)
 
 Das ist zwar weniger mächtig, dafür aber einfach und schnell. Daher wird der `Strukturbaum-Filter` beibehalten.
 
