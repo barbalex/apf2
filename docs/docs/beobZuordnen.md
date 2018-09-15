@@ -18,11 +18,9 @@ oder in Karten (Anleitung ausstehend)
 ## 2. Verfügbare Beobachtungen
 
 - Im September 2017 wurden zuletzt alle Beobachtungen der [Info Spezies](http://www.infoflora.ch/de/allgemeines/info-species.html) und der Fachstelle Naturschutz für den Kanton Zürich integriert.
-- Im April 2017 wurden die Beobachtungen des Projekts Floz integriert.
+- Im April 2017 wurden die Beobachtungen des Projekts [Floz](http://www.floz.zbg.ch/) integriert.
 
 ## 3. Datenstruktur
-
-(veraltet, Aktualisierung ausstehend)
 
 Beobachtungen werden in der Tabelle `beob` gespeichert:<br/>
 ![Tabelle beob](./_media/beobTable.png)
@@ -41,27 +39,20 @@ Zweck dieser Datenstruktur:
 * Mit Hilfe der abgeleiteten Felder können gebaut werden:
   * der Strukturbaum
   * das Beobachtungs-Formular
+  * die Funktion für Meldungen an Info Spezies
 
-
-**3.3 Infos der ApFloraDb zu Beobachtungen werden in einer eigenen Tabelle gespeichert** und zwar in der Tabelle "beobzuordnung".
-
-Zweck: 
-* Werden die Originaltabellen "beob_infospezies" und "beob_evab" aktualisiert, können sie einfach ersetzt werden, da die Arbeit der ApFlora in der Tabelle "beobzuordnung" steckt
-
-Struktur von "beobzuordnung":
-* NO_NOTE (indiziert, ID aus Info Spezies oder ID aus EvAB)
-* TPopId: dieser Teilpopulation wurde die Beobachtung zugeordnet (indiziert)
-* BeobNichtZuordnen: Ja oder nein. Wird ja gesetzt, wenn eine Beobachtung keiner Teilpopulation zugeordnet werden kann. Sollte im Bemerkungsfeld begründet werden. In der Regel ist die Artbestimmung zweifelhaft. Oder die Beobachtung ist nicht (genau genug) lokalisierbar
-* BeobBemerkungen: Bemerkungen zur Zuordnung
-* MutWer, MutWann: Dokumentiert die letzte Änderung
-
-**3.4 Nicht bearbeitete Originaldaten liegen in separater Datenbank**
-
-Beobachtungen von Info Spezies ("beob_infospezies") und EvAB ("beob_evab") sowie die bereitgestellten Daten ("beob_bereitgestellt") liegen in der Datenbank "apflora_beob". Alle Daten von AP Flora selbst liegen in der Datenbank "apflora".
-
-Zweck: 
-* Klare Trennung der Daten nach Zuständigkeit
-* Kleinere, einfachere und schnellere Datensicherung bzw. -wiederherstellung, da die Beobachtungen nicht mit gesichert werden müssen (da es sich um hunderttausende Datensätze handelt, würde das die Sicherungsdateien massiv aufblähen)
+Struktur von "beob":
+* id: id dieser Tabelle. Ohne Bezug zu id's in den Beobachtungsdaten
+* data: Unveränderte Originaldaten im JSONB Format
+* id_field: Feld in den Originaldaten, welches die Original-ID enthält. Dient dazu, gemeinsam mit dem Feld `quelle_id` jederzeit mit neuen Versionen von Originaldaten verbinden zu können
+* quelle_id: Woher die Beobachtung stammt (z.B. Info Spezies). Fremdschlüssel aus der Tabelle `beob_quelle_werte`
+* art_id: beschreibt die Art. Fremdschlüssel aus Tabelle `ae_eigenschaften`
+* autor: Autor der Beobachtung
+* datum: Datum der Beobachtung
+* tpop_id: dieser Teilpopulation wird die Beobachtung zugeordnet
+* nicht_zuordnen: Ja oder nein. Wird ja gesetzt, wenn eine Beobachtung keiner Teilpopulation zugeordnet werden kann. Sollte im Bemerkungsfeld begründet werden. In der Regel ist die Artbestimmung zweifelhaft. Oder die Beobachtung ist nicht (genau genug) lokalisierbar
+* bemerkungen: Bemerkungen zur Zuordnung
+* changed, changed_by: Dokumentiert die letzte Änderung am Datensatz
 
 ## 4. Neuere Beobachtungen aus EvAB bereitstellen
 
@@ -70,6 +61,7 @@ Beobachtungen aus [EvAB-GeoDB's](http://www.aln.zh.ch/internet/baudirektion/aln/
 Mithilfe der in EvAB enthaltenen View "vExportZDSF" wird die Tabelle erstellt, die importiert wird. Wichtig: Dabei werden im GUID (NO_NOTE_PROJET) die von Access gesetzten geschweiften Klammern entfernt, z.B. in der Tabellenerstellungsabfrage mit: `NO_NOTE_PROJET: Teil([NO_NOTE_PROJET];2;36)`
 
 ## 5. Neuere Beobachtungen der Info Flora bereitstellen
+(Dieser Abschnitt ist vermutlich teilweise veraltet. TODO: beim nächsten Import genauer beschreiben)
 
 geht so:
 
@@ -78,6 +70,5 @@ geht so:
     
 1. Neue und alte Beobachtungen vergleichen: Gibt es alte, die in den neuen nicht mehr vorkommen? Wenn ja: Wieso? Es kann z.B. sein, dass Beobachtungen im Umfeld des Kt. Zürich bei einer Lieferung nicht mit geliefert wurden! Müssen diese alten behalten werden? Wurden solche Beobachtungen schon Teilpopulationen zugewiesen oder verworfen? Falls ja: Diese Beobachtungen in separate Tabelle auslagern und nach dem Import wieder anfügen
 
-1. Es empfiehlt sich auch, die Beobachtungen aus dem Projekt der AP Flora NICHT zu importieren (bisher sind die offenbar noch nicht enthalten?)
+1. Beobachtungen aus apflora.ch selbst NICHT importieren (bisher sind die offenbar noch nicht enthalten?)
 
-TODO: beim nächsten Import genauer beschreiben
