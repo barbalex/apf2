@@ -1,4 +1,4 @@
-* [Über apflora.ch](README.md)
+* [Über apflora.ch](/)
 
 * Dokumentation
   * [Tipps für den Einstieg](./docs/einstieg.md)
