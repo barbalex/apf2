@@ -1,4 +1,4 @@
-# Über apflora.ch
+# Projektbeschreibung
 
 Web-Applikation zur Verwaltung der [Aktionspläne Flora der Fachstelle Naturschutz des Kantons Zürich](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/artenfoerderung/ap_fl.html).
 
@@ -77,23 +77,6 @@ Web-Applikation zur Verwaltung der [Aktionspläne Flora der Fachstelle Naturschu
 - Alle Löschungen während einer Sitzung werden aufgelistet und können rückgängig gemacht werden
 - Mit rund hundert Kontroll-Listen die Qualität der Daten gewährleisten
 
-**Projektdaten verwalten**
-
-Die nachfolgend aufgelisteten Funktionen werden nur von Topos verwendet:
-
-- Adressen verwalten
-- Logins verwalten und Schreibrechte vergeben
-- Mit dem GIS auf die Daten zugreifen
-- Beobachtungen nach [EvAB](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content) exportieren (separate Access-Anwendung)
-- Beobachtungen aus einem [EvAB](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content) importieren (um sie danach in apflora Teilpopulationen zuzuordnen) (separate Access-Anwendung)
-
-**Daten nach Verlust wiederherstellen**
-
-- Die Daten werden täglich in der Cloud gesichert
-- In regelmässigen Abständen werden sie aus der Cloud auf mehrere unabhängige Festplatten gesichert
-- Ihre Wiederherstellung wird im Rahmen der Entwicklung bzw. des Unterhalts regelmässig getestet
-- Während einer Sitzung gelöschte Daten können direkt von den Benutzern wiederhergestellt werden
-
 **Freiwilligen-Erfolgskontrollen vorbereiten**
 
 - Aktionsplan-Verantwortliche erfassen, wer welche Teilpopulationen kontrollieren soll...
@@ -109,6 +92,22 @@ Die nachfolgend aufgelisteten Funktionen werden nur von Topos verwendet:
 
 - Aktionsplan-Verantwortliche überprüfen die Kontrollen von Freiwilligen und bestimmen, ob sie in den Jahres-Berichten berücksichtigt werden
 
+**Daten nach Verlust wiederherstellen**
+
+- Die Daten werden täglich in der Cloud gesichert
+- In regelmässigen Abständen werden sie aus der Cloud auf mehrere unabhängige Festplatten gesichert
+- Ihre Wiederherstellung wird im Rahmen der Entwicklung bzw. des Unterhalts regelmässig getestet
+- Während einer Sitzung gelöschte Daten können direkt von den Benutzern wiederhergestellt werden
+
+**Projektdaten verwalten**
+
+Die nachfolgend aufgelisteten Funktionen werden nur von Topos verwendet:
+
+- Adressen verwalten
+- Logins verwalten und Schreibrechte vergeben
+- Mit dem GIS auf die Daten zugreifen
+- Beobachtungen nach [EvAB](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content) exportieren (separate Access-Anwendung)
+- Beobachtungen aus einem [EvAB](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content) importieren (um sie danach in apflora Teilpopulationen zuzuordnen) (separate Access-Anwendung)
 
 ## Produkte für die Fachstelle Naturschutz
 Die FNS erhält aus apflora folgende Produkte:

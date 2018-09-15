@@ -1,4 +1,4 @@
-* [Über apflora.ch](/)
+* [Projektbeschreibung](/)
 
 * Benutzer-Dokumentation
   * [Technische Voraussetzungen](./docs/browser.md)
