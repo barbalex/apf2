@@ -1,6 +1,6 @@
-# Daten sichern
+# Daten-Sicherung
 
-Täglich nach Mitternacht wird von der Datenbank ein Dumpfile erstellt und in Alex's persönliche Dropbox übermittelt. Diese wird zusätzlich mehrfach auf Festplatten gesichert.
+Täglich nach Mitternacht wird von der Datenbank ein SQL-Dumpfile erstellt und in Alex's persönliche Dropbox übermittelt. Diese wird mehrfach auf Festplatten gesichert.
 
 Alle paar Tage wird der gesammte virtuelle Server auf [digitalocean.com](https://digitalocean.com) gesichert.
 
