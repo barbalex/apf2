@@ -9,6 +9,6 @@
   * [Karte: Massstab-Werkzeug](./docs/mapScaleControl.md)
   * [Fehler, Ideen und Vorschläge melden](./docs/melden.md)
 
-* Hintergrund-Dokumentation
+* Technische Dokumentation
   * [Daten-Sicherung](./docs/sichern.md)
   * [Beobachtungen verwalten](./docs/beobVerwalten.md)
