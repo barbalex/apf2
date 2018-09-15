@@ -24,34 +24,24 @@ oder in Karten (Anleitung ausstehend)
 
 (veraltet, Aktualisierung ausstehend)
 
-**3.1 Original-Beobachtungen nach Herkunft separat gespeichert**
+Beobachtungen werden in der Tabelle `beob` gespeichert:<br/>
+![Tabelle beob](./_media/beobTable.png)
 
-Beobachtungen von Info Spezies ("beob_infospezies") und EvAB ("beob_evab") werden getrennt gespeichert.
-EvAB-Beobachtungen in der Struktur, in der sie von EvabGeoDB_Master.mdb an die nationalen Zentren exportiert werden (Abfrage "vExportZDSF"). Die Daten von Info Spezies in der Struktur, die von der FNS (Andreas Baumann) aufbereitet wurde. 
+Ein Datensatz besteht aus jeweils zwei Teilen:
 
-Zweck: 
-* Die Beobachtungen können einfach mit aktuelleren ersetzt werden
-* Es ist rasch ersichtlich, wenn an der Datenstruktur etwas geändert hat
-* Bei Bedarf können zusätzlich auch Beobachtungen aus einer einzelnen EvAB-DB angefügt werden
+1. Den unveränderten Originaldaten der Beobachtung, enthalten im JSONB-Feld `data`
+2. Extrahierten bzw. abgeleiteteten Daten, welche für das effiziente Funktionieren von apflora.ch benötigt werden, in den übrigen Feldern
 
-**3.2 Beobachtungen werden "bereitgestellt"**
+Zur Extraktion der Originaldaten aus EvAB wird die in EvAB enthaltene Abfrage `vExportZDSF` verwendet. Daten von Info Spezies werden in derjenigen Struktur importiert, wie sie von der FNS aufbereitet wurden. 
 
-Dabei werden grundlegende Felder aus Info Spezies und EvAB in der Tabelle "beob_bereitgestellt" vereinigt. Benötigte Felder:
-* NO_NOTE (indiziert) (nur in der alten Version von apflora benutzt)
-* NO_NOTE_PROJET (= ID aus EvAB) (indiziert) (nur in der alten Version von apflora benutzt)
-* BeobId (= ID aus EvAB oder Info Spezies, in Text umgewandelt, indiziert)
-* QuelleId (1 für EvAB, 2 für Info Spezies)
-* NO_ISFS (indiziert)
-* Datum (indiziert)
-* Autor
+Zweck dieser Datenstruktur: 
+* Die Struktur von Beobachtungsdaten ist im Prinzip unerheblich. Änderungen daran auch nicht. Wichtig ist einzig, dass zum Zeitpunkt des Imports klar ist, wie aus den Beobachtungsdaten die abgeleiteten Felder in Tabelle `beob` generiert werden können
+* Somit können jederzeit Beobachtungen unabhängig von ihrer Datenstruktur importiert werden
+* Schon vorhandene Beobachtungen können bei erneutem Import mit aktuelleren ersetzt werden (`quelle_id` und `id_field` vergleichen)
+* Mit Hilfe der abgeleiteten Felder können gebaut werden:
+  * der Strukturbaum
+  * das Beobachtungs-Formular
 
-Zweck:
-* Mit dieser Tabelle werden die Darstellungen der Beobachtungen im Strukturbaum aufgebaut (bei: Teilpopulationen, nicht beurteilte, nicht zuzuordnende)
-* Da nur die Daten der für die Anzeige in einer Liste benötigten Felder enthalten sind, ist die Tabelle viel kleiner und die Arbeitsgeschwindigkeit entsprechend höher
-* Die Felder Autor und Datum sind schon aus mehreren Originalfeldern zusammengesetzt, d.h. sie müssen nicht bei jeder Abfrage zusammengesetzt werden
-* Einfaches Arbeiten, da die Beobachtungen von EvAB und von Info Spezies in einer Liste enthalten sind
-
-Um die Darstellung im Formular aufzubauen (wo alle Infos angezeigt werden sollen), wird dann direkt auf die Originaldaten in "beob_infospezies" und "beob_evab" zugegriffen.
 
 **3.3 Infos der ApFloraDb zu Beobachtungen werden in einer eigenen Tabelle gespeichert** und zwar in der Tabelle "beobzuordnung".
 
