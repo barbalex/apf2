@@ -1,9 +1,14 @@
 * [Über apflora.ch](/)
 
-* Dokumentation
+* Benutzer-Dokumentation
+  * [Technische Voraussetzungen](./docs/browser.md)
   * [Tipps für den Einstieg](./docs/einstieg.md)
-  * [Beobachtungen einer Teilpopulation zuordnen](./docs/beobZuordnen.md)
+  * [Beobachtungen zuordnen](./docs/beobZuordnen.md)
   * [Erfolgs-Kontrollen Freiwillige](./docs/ekf.md)
   * [Formular-Filter](./docs/filter.md)
   * [Karte: Massstab-Werkzeug](./docs/mapScaleControl.md)
+  * [Fehler, Ideen und Vorschläge melden](./docs/melden.md)
+
+* Hintergrund-Dokumentation
   * [Daten-Sicherung](./docs/sichern.md)
+  * [Beobachtungen verwalten](./docs/beobVerwalten.md)
