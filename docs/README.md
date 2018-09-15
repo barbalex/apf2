@@ -92,13 +92,6 @@ Web-Applikation zur Verwaltung der [Aktionspläne Flora der Fachstelle Naturschu
 
 - Aktionsplan-Verantwortliche überprüfen die Kontrollen von Freiwilligen und bestimmen, ob sie in den Jahres-Berichten berücksichtigt werden
 
-**Daten nach Verlust wiederherstellen**
-
-- Die Daten werden täglich in der Cloud gesichert
-- In regelmässigen Abständen werden sie aus der Cloud auf mehrere unabhängige Festplatten gesichert
-- Ihre Wiederherstellung wird im Rahmen der Entwicklung bzw. des Unterhalts regelmässig getestet
-- Während einer Sitzung gelöschte Daten können direkt von den Benutzern wiederhergestellt werden
-
 **Projektdaten verwalten**
 
 Die nachfolgend aufgelisteten Funktionen werden nur von Topos verwendet:
@@ -108,6 +101,13 @@ Die nachfolgend aufgelisteten Funktionen werden nur von Topos verwendet:
 - Mit dem GIS auf die Daten zugreifen
 - Beobachtungen nach [EvAB](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content) exportieren (separate Access-Anwendung)
 - Beobachtungen aus einem [EvAB](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content) importieren (um sie danach in apflora Teilpopulationen zuzuordnen) (separate Access-Anwendung)
+
+**Daten nach Verlust wiederherstellen**
+
+- Die Daten werden täglich in der Cloud gesichert
+- In regelmässigen Abständen werden sie aus der Cloud auf mehrere unabhängige Festplatten gesichert
+- Ihre Wiederherstellung wird im Rahmen der Entwicklung bzw. des Unterhalts regelmässig getestet
+- Während einer Sitzung gelöschte Daten können direkt von den Benutzern wiederhergestellt werden
 
 ## Produkte für die Fachstelle Naturschutz
 Die FNS erhält aus apflora folgende Produkte:
@@ -195,6 +195,6 @@ Die wichtigsten verwendeten Technologien sind:
 
 ## Open source
 
-[![js-standard-style](https://img.shields.io/badge/license-ISC-brightgreen.svg)](https://github.com/FNSKtZH/apflora/blob/master/License.md)
+[![js-standard-style](https://img.shields.io/badge/license-ISC-brightgreen.svg)](https://github.com/barbalex/apf2/blob/master/license.md)
 
 Die verwendete [Lizenz](https://github.com/barbalex/apf2/blob/master/license.md) ist sehr freizügig. Neben dem Code steht auch die [Datenstruktur](https://github.com/barbalex/apf2/tree/master/sql/apflora) zur Verfügung. Die eigentlichen Daten aber, mit denen gearbeitet wird, gehören der Fachstelle Naturschutz des Kantons Zürich und stehen nicht zur freien Verfügung. Die Beobachtungen werden an [Info Spezies](//www.infoflora.ch/de/allgemeines/info-species.html) geliefert.
