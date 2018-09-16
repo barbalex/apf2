@@ -7,6 +7,8 @@ import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import Button from '@material-ui/core/Button'
 import SendIcon from '@material-ui/icons/EmailOutlined'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 
 import FormTitle from '../../../shared/FormTitle'
 import TextField from '../../../shared/TextField'
@@ -20,6 +22,7 @@ import saveNichtZuordnenToDb from './saveNichtZuordnenToDb'
 import saveArtIdToDb from './saveArtIdToDb'
 import saveTpopIdToDb from './saveTpopIdToDb'
 import sendMail from '../../../../modules/sendMail'
+import { stringify } from 'postcss'
 
 const Container = styled.div`
   height: 100%;
@@ -125,6 +128,8 @@ const getTpopZuordnenSource = (row: Object): Array<Object> => {
     label: t.label,
   }))
 }
+
+const enhance = compose(withHandlers({ onSendEmail: () => () => {} }))
 
 const Beobzuordnung = ({
   id,
@@ -274,11 +279,42 @@ const Beobzuordnung = ({
                     <Button
                       variant="outlined"
                       onClick={() => {
-                        console.log('TODO')
+                        const origArt = `Art gemäss Beobachtung: SISF-Nr: ${get(
+                          row,
+                          'aeEigenschaftenByArtId.taxid',
+                        )}, Artname: ${get(
+                          row,
+                          'aeEigenschaftenByArtId.artname',
+                        )}`
+                        const neueArt = `Korrigierte Art: SISF-Nr: ${get(
+                          row,
+                          'aeEigenschaftenByArtIdOriginal.taxid',
+                        )}, Artname: ${get(
+                          row,
+                          'aeEigenschaftenByArtIdOriginal.artname',
+                        )}`
+                        const bemerkungen = row.bemerkungen
+                        // remove all keys with null
+                        const dataArray = Object.entries(
+                          JSON.parse(row.data),
+                        ).filter(a => !!a[1] || a[1] === 0 || a[1] === false)
+                        let data = ''
+                        dataArray.forEach(d => {
+                          data = `${data ? `${data}` : ''}${d[0]}: ${d[1]};\r\n`
+                        })
+                        const body = `${origArt}\r\n${neueArt}${
+                          bemerkungen
+                            ? `${
+                                bemerkungen
+                                  ? `\r\nBemerkungen: ${bemerkungen}`
+                                  : ''
+                              }`
+                            : ''
+                        }\r\n\r\nOriginal-Beobachtungs-Daten:\r\n${data}`
                         sendMail({
                           to: 'info@infoflora.ch',
                           subject: 'Flora-Beobachtung',
-                          body: 'TODO',
+                          body,
                         })
                       }}
                     >

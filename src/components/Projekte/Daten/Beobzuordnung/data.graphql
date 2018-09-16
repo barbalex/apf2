@@ -15,6 +15,7 @@ query beobByIdQuery($id: UUID!) {
     quelleId
     aeEigenschaftenByArtId {
       id
+      taxid
       artname
       apByArtId {
         id
@@ -43,6 +44,7 @@ query beobByIdQuery($id: UUID!) {
     }
     aeEigenschaftenByArtIdOriginal {
       id
+      taxid
       artname
     }
     beobQuelleWerteByQuelleId {
