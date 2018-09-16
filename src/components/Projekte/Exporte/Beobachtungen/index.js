@@ -12,12 +12,13 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import styled from 'styled-components'
 import { ApolloConsumer } from 'react-apollo'
-import gql from 'graphql-tag'
 import get from 'lodash/get'
 
-import exportModule from '../../../modules/export'
-import Message from './Message'
-import withErrorState from '../../../state/withErrorState'
+import exportModule from '../../../../modules/export'
+import Message from '../Message'
+import withErrorState from '../../../../state/withErrorState'
+import allVBeobs from './allVBeobs.graphql'
+import allVBeobArtChangeds from './allVBeobArtChangeds.graphql'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -109,33 +110,33 @@ const Beobachtungen = ({
                 setMessage('Export "Beobachtungen" wird vorbereitet...')
                 try {
                   const { data } = await client.query({
-                    query: gql`
-                      query view {
-                        allVBeobs {
-                          nodes {
-                            id
-                            quelle
-                            id_field: idField
-                            original_id: originalId
-                            art_id: artId
-                            artname
-                            pop_id: popId
-                            pop_nr: popNr
-                            tpop_id: tpopId
-                            tpop_nr: tpopNr
-                            x
-                            y
-                            distanz_zur_teilpopulation: distanzZurTeilpopulation
-                            datum
-                            autor
-                            nicht_zuordnen: nichtZuordnen
-                            bemerkungen
-                            changed
-                            changed_by: changedBy
-                          }
-                        }
-                      }
-                    `,
+                    query: allVBeobArtChangeds,
+                  })
+                  exportModule({
+                    data: get(data, 'allVBeobArtChangeds.nodes', []),
+                    fileName: 'BeobachtungenArtVeraendert',
+                    fileType,
+                    applyMapFilterToExport,
+                    mapFilter,
+                    idKey: 'id',
+                    xKey: 'x',
+                    yKey: 'y',
+                    errorState,
+                  })
+                } catch (error) {
+                  errorState.add(error)
+                }
+                setMessage(null)
+              }}
+            >
+              <div>Alle Beobachtungen, bei denen die Art verändert wurde</div>
+            </DownloadCardButton>
+            <DownloadCardButton
+              onClick={async () => {
+                setMessage('Export "Beobachtungen" wird vorbereitet...')
+                try {
+                  const { data } = await client.query({
+                    query: allVBeobs,
                   })
                   exportModule({
                     data: get(data, 'allVBeobs.nodes', []),

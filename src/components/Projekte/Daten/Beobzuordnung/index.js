@@ -201,12 +201,13 @@ const Beobzuordnung = ({
               <Mutation mutation={updateBeobByIdGql}>
                 {(updateBeob, { data }) => (
                   <FieldsContainer>
-                    {row.artId !== row.artIdOriginal && (
-                      <OriginalArtDiv>{`Art gemäss Original-Meldung: ${get(
-                        row,
-                        'aeEigenschaftenByArtIdOriginal.artname',
-                      )}`}</OriginalArtDiv>
-                    )}
+                    {row &&
+                      row.artId !== row.artIdOriginal && (
+                        <OriginalArtDiv>{`Art gemäss Original-Meldung: ${get(
+                          row,
+                          'aeEigenschaftenByArtIdOriginal.artname',
+                        )}`}</OriginalArtDiv>
+                      )}
                     <Select
                       key={`${row.id}artId`}
                       value={row.artId}

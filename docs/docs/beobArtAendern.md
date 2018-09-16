@@ -5,7 +5,7 @@ Es ist geplant, bei falsch bestimmten Beobachtungen
 - die Beobachtung bei der richtigen Art zuzuordnen
 - ein Email an Infoflora zu schicken, um sie auf die falsche Bestimmung hinzuweisen
 
-Das macht ihr so:
+Das geht so:
 
 1. Formular der Beobachtung öffnen
 2. Art korrigieren
@@ -15,4 +15,4 @@ Das macht ihr so:
 6. Mit der entsprechenden Schaltfläche könnt ihr ein Mail an Info Flora generieren. Mitgeliefert werden dabei die wesentlichen Informationen zur Beobachtung
 7. Nun könnt ihr das Email ergänzen und abschicken
 
-Es gibt einen Export, mit der man alle Beobachtungen auflisten kann, deren Art verändert wurde.
+Es gibt einen passenden Export, genannt: "Alle Beobachtungen, bei denen die Art verändert wurde".
