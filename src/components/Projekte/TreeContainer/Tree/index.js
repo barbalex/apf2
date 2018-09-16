@@ -87,14 +87,13 @@ class Tree extends Component<Props> {
         style={style}
         index={index}
         tree={tree}
-        openNodes={tree.openNodes}
+        openNodes={openNodes}
         activeNodes={activeNodes}
         nodes={nodes}
         data={data}
         treeName={treeName}
         client={client}
         moving={moving}
-        openNodes={openNodes}
         copying={copying}
         activeApfloraLayers={activeApfloraLayers}
         mapFilter={mapFilter}
