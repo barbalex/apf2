@@ -1,8 +1,8 @@
 # Umgang mit falsch bestimmten Beobachtungen
 
-Es ist geplant, bei falsch bestimmten Beobachtungen
+Es ist vorgesehen, bei falsch bestimmten Beobachtungen:
 - die richtige Art anzugeben
-- die Beobachtung bei der richtigen Art zuzuordnen
+- die Beobachtung einer Teil-Population der richtigen Art zuzuordnen
 - ein Email an Infoflora zu schicken, um sie auf die falsche Bestimmung hinzuweisen
 
 Das geht so:
