@@ -8,6 +8,7 @@ query beobByIdQuery($id: UUID!) {
     y
     data
     artId
+    artIdOriginal
     tpopId
     nichtZuordnen
     bemerkungen
@@ -40,9 +41,19 @@ query beobByIdQuery($id: UUID!) {
         }
       }
     }
+    aeEigenschaftenByArtIdOriginal {
+      id
+      artname
+    }
     beobQuelleWerteByQuelleId {
       id
       name
+    }
+  }
+  allAeEigenschaftens {
+    nodes {
+      id
+      artname
     }
   }
 }

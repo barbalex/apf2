@@ -7,6 +7,7 @@ mutation updateBeob(
   $y: Int
   $data: JSON
   $artId: UUID
+  $artIdOriginal: UUID
   $tpopId: UUID
   $nichtZuordnen: Boolean
   $bemerkungen: String
@@ -24,6 +25,7 @@ mutation updateBeob(
         y: $y
         data: $data
         artId: $artId
+        artIdOriginal: $artIdOriginal
         tpopId: $tpopId
         nichtZuordnen: $nichtZuordnen
         bemerkungen: $bemerkungen
@@ -40,6 +42,7 @@ mutation updateBeob(
       y
       data
       artId
+      artIdOriginal
       tpopId
       nichtZuordnen
       bemerkungen
@@ -71,6 +74,10 @@ mutation updateBeob(
             }
           }
         }
+      }
+      aeEigenschaftenByArtIdOriginal {
+        id
+        artname
       }
       beobQuelleWerteByQuelleId {
         id

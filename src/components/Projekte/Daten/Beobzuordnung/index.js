@@ -15,6 +15,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateBeobByIdGql from './updateBeobById.graphql'
 import saveNichtZuordnenToDb from './saveNichtZuordnenToDb'
+import saveArtIdToDb from './saveArtIdToDb'
 import saveTpopIdToDb from './saveTpopIdToDb'
 
 const Container = styled.div`
@@ -65,6 +66,9 @@ const LabelPopoverContentRow = styled(LabelPopoverRow)`
     border-bottom-right-radius: 4px;
     border-bottom-left-radius: 4px;
   }
+`
+const OriginalArtDiv = styled.div`
+  margin-bottom: 10px;
 `
 const nichtZuordnenPopover = (
   <Container>
@@ -163,6 +167,12 @@ const Beobzuordnung = ({
         const tpopNr = tpop.nr || '(keine Nr)'
         tpopLabel = `${distance}m: ${popNr}/${tpopNr} (${tpopStatus})`
       }
+      let artWerte = get(data, 'allAeEigenschaftens.nodes', [])
+      artWerte = sortBy(artWerte, 'artname')
+      artWerte = artWerte.map(el => ({
+        value: el.id,
+        label: el.artname,
+      }))
 
       return (
         <ErrorBoundary>
@@ -177,10 +187,30 @@ const Beobzuordnung = ({
               <Mutation mutation={updateBeobByIdGql}>
                 {(updateBeob, { data }) => (
                   <FieldsContainer>
-                    <div>{`Beobachtete Art: ${get(
-                      row,
-                      'aeEigenschaftenByArtId.artname',
-                    )}`}</div>
+                    {row.artId !== row.artIdOriginal && (
+                      <OriginalArtDiv>{`Art gemäss Original-Meldung: ${get(
+                        row,
+                        'aeEigenschaftenByArtIdOriginal.artname',
+                      )}`}</OriginalArtDiv>
+                    )}
+                    <Select
+                      key={`${row.id}artId`}
+                      value={row.artId}
+                      field="artId"
+                      label="Art"
+                      options={artWerte}
+                      saveToDb={value => {
+                        saveArtIdToDb({
+                          value,
+                          row,
+                          updateBeob,
+                          tree,
+                          client,
+                          refetch,
+                          refetchTree,
+                        })
+                      }}
+                    />
                     <CheckboxWithInfo
                       key={`${row.id}nichtZuordnen`}
                       label="Nicht zuordnen"
@@ -202,7 +232,7 @@ const Beobzuordnung = ({
                       <Select
                         key={`${row.id}tpopId`}
                         value={tpop ? tpopLabel : ''}
-                        field="bearbeiter"
+                        field="tpopId"
                         label={
                           !!row.tpopId
                             ? 'Einer anderen Teilpopulation zuordnen'
