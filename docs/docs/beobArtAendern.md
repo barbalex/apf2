@@ -1,6 +1,6 @@
 # Umgang mit falsch bestimmten Beobachtungen
 
-Es ist vorgesehen, bei falsch bestimmten Beobachtungen von AP-Arten:
+Bei AP-Arten ist vorgesehen:
 - die richtige Art anzugeben
 - die Beobachtung einer Teil-Population der richtigen Art zuzuordnen
 - ein Email an Infoflora zu schicken, um sie auf die falsche Bestimmung hinzuweisen
