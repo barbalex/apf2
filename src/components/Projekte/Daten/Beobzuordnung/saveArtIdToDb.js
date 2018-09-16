@@ -55,11 +55,6 @@ export default async ({
     // - new apNode
     // - new beobNichtBeurteiltFolderNode
     // - new beobNode
-    console.log('saveArtIdToDb done:', {
-      aNA,
-      oldParentNodeUrl,
-      oldGParentNodeUrl,
-    })
     const newOpenNodes = [
       ...openNodes.filter(
         n =>
@@ -81,14 +76,14 @@ export default async ({
         key2: 'openNodes',
       },
     })
-    console.log('saveArtIdToDb done:', {
+    /*console.log('saveArtIdToDb done:', {
       aNA,
       openNodes,
       row,
       newApId,
       newANA,
       newOpenNodes,
-    })
-    await refetchTree()
+    })*/
+    //refetchTree()
   }
 }
