@@ -1092,6 +1092,8 @@ CREATE TABLE apflora.beob (
   -- SISF Nr.
   art_id_old integer DEFAULT NULL,
   art_id UUID DEFAULT NULL REFERENCES apflora.ae_eigenschaften(id) on delete set null on update cascade,
+  -- art_id can be changed. art_id_original documents this change
+  art_id_original UUID DEFAULT NULL REFERENCES apflora.ae_eigenschaften(id) on delete set null on update cascade,
   -- data without year is not imported
   -- when no month exists: month = 01
   -- when no day exists: day = 01
@@ -1113,6 +1115,7 @@ CREATE TABLE apflora.beob (
 CREATE INDEX ON apflora.beob USING btree (id);
 CREATE INDEX ON apflora.beob USING btree (quelle_id);
 CREATE INDEX ON apflora.beob USING btree (art_id);
+CREATE INDEX ON apflora.beob USING btree (art_id_original);
 CREATE INDEX ON apflora.beob USING btree (x);
 CREATE INDEX ON apflora.beob USING btree (y);
 CREATE INDEX ON apflora.beob USING btree (quelle_id);
@@ -1126,6 +1129,10 @@ COMMENT ON COLUMN apflora.beob.nicht_zuordnen IS 'Wird ja gesetzt, wenn eine Beo
 COMMENT ON COLUMN apflora.beob.bemerkungen IS 'Bemerkungen zur Zuordnung';
 COMMENT ON COLUMN apflora.beob.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.beob.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+-- alter table add art_id_original:
+--alter table apflora.beob add column art_id_original UUID DEFAULT NULL REFERENCES apflora.ae_eigenschaften(id) on delete set null on update cascade;
+--update apflora.beob set art_id_original = art_id;
+--CREATE INDEX ON apflora.beob USING btree (art_id_original);
 
 -- beobprojekt is used to control
 -- what beob are seen in what projekt
