@@ -139,6 +139,7 @@ const ProjekteContainer = ({
       if (error) return `Fehler: ${error.message}`
       const activeNodeArray = get(data1, `${treeName}.activeNodeArray`)
       const activeNodes = getActiveNodes(activeNodeArray)
+      const openNodes = get(data1, `${treeName}.openNodes`)
       const moving = get(data1, 'moving')
       const copying = get(data1, 'copying')
       const token = get(data1, 'user.token')
@@ -286,6 +287,7 @@ const ProjekteContainer = ({
                           client={client}
                           loading={loading}
                           moving={moving}
+                          openNodes={openNodes}
                           copying={copying}
                           activeApfloraLayers={activeApfloraLayers}
                           setActiveApfloraLayers={setActiveApfloraLayers}

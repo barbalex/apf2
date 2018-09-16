@@ -57,6 +57,7 @@ type Props = {
   mapTpopVisible: boolean,
   activeNodeArray: Array<Object>,
   moving: Object,
+  openNodes: Array<string>,
   copying: Object,
   activeApfloraLayers: Array<String>,
   mapIdsFiltered: Array<String>,
@@ -64,7 +65,6 @@ type Props = {
 }
 
 class Tree extends Component<Props> {
-
   rowRenderer = ({ key, index, style }) => {
     const {
       tree,
@@ -74,12 +74,13 @@ class Tree extends Component<Props> {
       client,
       activeNodes,
       moving,
+      openNodes,
       copying,
       activeApfloraLayers,
       mapFilter,
       mapIdsFiltered,
     } = this.props
-    
+
     return (
       <Row
         key={key}
@@ -93,19 +94,18 @@ class Tree extends Component<Props> {
         treeName={treeName}
         client={client}
         moving={moving}
+        openNodes={openNodes}
         copying={copying}
         activeApfloraLayers={activeApfloraLayers}
         mapFilter={mapFilter}
         mapIdsFiltered={mapIdsFiltered}
       />
     )
-}
+  }
 
   noRowsRenderer = () => (
     <Container>
-      <LoadingDiv>
-        lade Daten...
-      </LoadingDiv>
+      <LoadingDiv>lade Daten...</LoadingDiv>
     </Container>
   )
 
@@ -117,9 +117,14 @@ class Tree extends Component<Props> {
       loading,
       copying,
       moving,
+      openNodes,
       mapFilter,
       data,
     } = this.props
+    // TODO:
+    // when beob.artId is changed, saveArtIdToDb changes openNodes
+    // problem is: Tree renders AFTERWARDS with OLD openNodes !!!???
+    console.log('Tree', { openNodes })
 
     return (
       <ErrorBoundary>
@@ -133,7 +138,7 @@ class Tree extends Component<Props> {
                 rowRenderer={this.rowRenderer}
                 noRowsRenderer={this.noRowsRenderer}
                 scrollToIndex={findIndex(nodes, node =>
-                  isEqual(node.url, activeNodeArray)
+                  isEqual(node.url, activeNodeArray),
                 )}
                 width={width}
                 // force rerender when:
@@ -142,6 +147,7 @@ class Tree extends Component<Props> {
                 // ...after copying and moving
                 copying={copying}
                 moving={moving}
+                openNodes={openNodes}
                 // ...map filter changes
                 mapFilterString={mapFilter.features.toString()}
                 // ...active apflora layers change

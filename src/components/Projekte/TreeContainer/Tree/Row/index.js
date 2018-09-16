@@ -189,6 +189,7 @@ const Row = ({
   data,
   client,
   moving,
+  openNodes,
   copying,
   activeApfloraLayers,
   mapFilter,
@@ -204,6 +205,7 @@ const Row = ({
   data: Object,
   client: Object,
   moving: Object,
+  openNodes: Array<string>,
   copying: Object,
   activeApfloraLayers: Array<String>,
   mapFilter: Object,
@@ -212,7 +214,6 @@ const Row = ({
 }) => {
   const node = nodes[index]
   const tree2 = get(data, treeName)
-  const openNodes = get(data, `${treeName}.openNodes`)
   const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
   const onClickNode = event =>
     toggleNode({ tree: tree2, node, nodeFilterState })

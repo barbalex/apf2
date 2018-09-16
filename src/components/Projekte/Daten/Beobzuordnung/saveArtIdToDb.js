@@ -45,8 +45,6 @@ export default async ({
     oldParentNodeUrl.pop()
     const oldGParentNodeUrl = clone(oldParentNodeUrl)
     oldGParentNodeUrl.pop()
-    const oldGGParentNodeUrl = clone(oldGParentNodeUrl)
-    oldGGParentNodeUrl.pop()
 
     // need to close:
     // - beobNode
@@ -57,26 +55,22 @@ export default async ({
     // - new apNode
     // - new beobNichtBeurteiltFolderNode
     // - new beobNode
+    console.log('saveArtIdToDb done:', {
+      aNA,
+      oldParentNodeUrl,
+      oldGParentNodeUrl,
+    })
     const newOpenNodes = [
       ...openNodes.filter(
         n =>
           !isEqual(n, aNA) &&
           !isEqual(n, oldParentNodeUrl) &&
-          !isEqual(n, oldGParentNodeUrl) &&
-          !isEqual(n, oldGGParentNodeUrl),
+          !isEqual(n, oldGParentNodeUrl),
       ),
       [aNA[0], aNA[1], aNA[2], newApId],
       [aNA[0], aNA[1], aNA[2], newApId, aNA[4]],
       [aNA[0], aNA[1], aNA[2], newApId, aNA[4], aNA[5]],
     ]
-    console.log('saveArtIdToDb', {
-      aNA,
-      openNodes,
-      row,
-      newApId,
-      newANA,
-      newOpenNodes,
-    })
     await client.mutate({
       mutation: setTreeKeyGql,
       variables: {
@@ -87,6 +81,14 @@ export default async ({
         key2: 'openNodes',
       },
     })
-    setTimeout(() => refetchTree())
+    console.log('saveArtIdToDb done:', {
+      aNA,
+      openNodes,
+      row,
+      newApId,
+      newANA,
+      newOpenNodes,
+    })
+    await refetchTree()
   }
 }

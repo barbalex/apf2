@@ -494,6 +494,7 @@ type Props = {
   client: Object,
   loading: Boolean,
   moving: Object,
+  openNodes: Array<string>,
   copying: Object,
   refetchTree: () => void,
   popLabelUsingNr: Boolean,
@@ -523,6 +524,7 @@ class TreeContainer extends Component<Props> {
       client,
       loading,
       moving,
+      openNodes,
       copying,
       popLabelUsingNr,
       tpopLabelUsingNr,
@@ -533,7 +535,6 @@ class TreeContainer extends Component<Props> {
     } = this.props
     const datasetToDelete = deleteState.state.toDelete
     const deleteDatasetModalIsVisible = !!datasetToDelete.id
-    const openNodes = get(data, `${treeName}.openNodes`)
     const tree = get(data, treeName)
     const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
     const token = get(data, 'user.token', null)
