@@ -5,6 +5,8 @@ import sortBy from 'lodash/sortBy'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
+import Button from '@material-ui/core/Button'
+import SendIcon from '@material-ui/icons/EmailOutlined'
 
 import FormTitle from '../../../shared/FormTitle'
 import TextField from '../../../shared/TextField'
@@ -17,6 +19,7 @@ import updateBeobByIdGql from './updateBeobById.graphql'
 import saveNichtZuordnenToDb from './saveNichtZuordnenToDb'
 import saveArtIdToDb from './saveArtIdToDb'
 import saveTpopIdToDb from './saveTpopIdToDb'
+import sendMail from '../../../../modules/sendMail'
 
 const Container = styled.div`
   height: 100%;
@@ -69,6 +72,9 @@ const LabelPopoverContentRow = styled(LabelPopoverRow)`
 `
 const OriginalArtDiv = styled.div`
   margin-bottom: 10px;
+`
+const StyledSendIcon = styled(SendIcon)`
+  margin-right: 8px;
 `
 const nichtZuordnenPopover = (
   <Container>
@@ -265,6 +271,20 @@ const Beobzuordnung = ({
                         })
                       }
                     />
+                    <Button
+                      variant="outlined"
+                      onClick={() => {
+                        console.log('TODO')
+                        sendMail({
+                          to: 'info@infoflora.ch',
+                          subject: 'Flora-Beobachtung',
+                          body: 'TODO',
+                        })
+                      }}
+                    >
+                      <StyledSendIcon />
+                      Email an Info Flora senden
+                    </Button>
                   </FieldsContainer>
                 )}
               </Mutation>
