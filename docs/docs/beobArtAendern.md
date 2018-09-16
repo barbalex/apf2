@@ -12,7 +12,7 @@ Das macht ihr so:
 3. Es erscheint nun oberhalb ein Feld, dass die Art gemäss Original-Meldung anzeigt...
 4. ...und die Beobachtung wurde zu der gewählten Art verschoben
 5. Ihr könnt sie nun einer Teil-Population dieser Art zuordnen
-4. Mit der entsprechenden Schaltfläche könnt ihr ein Mail an Info Flora generieren. Mitgeliefert werden dabei Informationen zur Beobachtung und der neu gewählten Art
-5. Mail ergänzen und abschicken
+6. Mit der entsprechenden Schaltfläche könnt ihr ein Mail an Info Flora generieren. Mitgeliefert werden dabei die wesentlichen Informationen zur Beobachtung
+7. Nun könnt ihr das Email ergänzen und abschicken
 
 Es gibt einen Export, mit der man alle Beobachtungen auflisten kann, deren Art verändert wurde.
