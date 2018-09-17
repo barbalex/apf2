@@ -8,6 +8,7 @@
   <meta name="description" content="Aktionspläne für Flora-Projekte">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
   <link rel="shortcut icon" href="_media/favicon.ico">
 </head>
 
@@ -32,14 +33,15 @@
   </script>
   <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
   <script src="//unpkg.com/docsify/lib/plugins/search.min.js"></script>
-  <script src="//unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script src="//unpkg.com/docsify/lib/plugins/gitalk.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
   <script>
     const gitalk = new Gitalk({
-      clientID: 'Github Application Client ID',
-      clientSecret: 'Github Application Client Secret',
-      repo: 'Github repo',
-      owner: 'Github repo owner',
-      admin: ['Github repo collaborators, only these guys can initialize github issues'],
+      clientID: 'Iv1.c9264d4ec6f9e2d0',
+      clientSecret: '9bf77f1bcfd33ede39ab4c66d7b4a84a02c98978',
+      repo: 'https://github.com/barbalex/apf2',
+      owner: 'barbalex',
+      admin: ['barbalex'],
       // facebook-like distraction free mode
       distractionFreeMode: false
     })
