@@ -4,26 +4,10 @@ query TreeDataQuery(
   $ap: [UUID!]
   $apId: UUID
   $isAp: Boolean!
-  $pop: [UUID!]
-  $isPop: Boolean!
   $ziel: [UUID!]
   $isZiel: Boolean!
   $apIsActiveInMap: Boolean!
 ) {
-  popmassnbers: allPopmassnbers(
-    filter: { popId: { in: $pop } }
-    orderBy: JAHR_ASC
-  ) @include(if: $isPop) {
-    nodes {
-      id
-      popId
-      jahr
-      tpopmassnErfbeurtWerteByBeurteilung {
-        id
-        text
-      }
-    }
-  }
   ziels: allZiels(filter: { apId: { in: $ap } }) @include(if: $isAp) {
     nodes {
       id
