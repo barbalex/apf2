@@ -12,19 +12,6 @@ query TreeDataQuery(
   $isZiel: Boolean!
   $apIsActiveInMap: Boolean!
 ) {
-  tpopbers: allTpopbers(filter: { tpopId: { in: $tpop } }, orderBy: JAHR_ASC)
-    @include(if: $isTpop) {
-    nodes {
-      id
-      tpopId
-      jahr
-      entwicklung
-      tpopEntwicklungWerteByEntwicklung {
-        id
-        text
-      }
-    }
-  }
   beobZugeordnets: allVApbeobs(
     filter: { tpopId: { in: $tpop } }
     orderBy: DATUM_DESC
