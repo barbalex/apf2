@@ -14,38 +14,6 @@ query TreeDataQuery(
   $isTpopkontr: Boolean!
   $apIsActiveInMap: Boolean!
 ) {
-  tpopmassns: allTpopmassns(
-    filter: { tpopId: { in: $tpop } }
-    orderBy: JAHR_ASC
-  ) @include(if: $isTpop) {
-    nodes {
-      id
-      tpopId
-      jahr
-      typ
-      beschreibung
-      jahr
-      datum
-      bearbeiter
-      bemerkungen
-      planVorhanden
-      planBezeichnung
-      flaeche
-      markierung
-      anzTriebe
-      anzPflanzen
-      anzPflanzstellen
-      wirtspflanze
-      herkunftPop
-      sammeldatum
-      form
-      pflanzanordnung
-      tpopmassnTypWerteByTyp {
-        id
-        text
-      }
-    }
-  }
   tpopmassnbers: allTpopmassnbers(
     filter: { tpopId: { in: $tpop } }
     orderBy: JAHR_ASC
