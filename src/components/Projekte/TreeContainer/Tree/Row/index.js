@@ -13,6 +13,8 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import PrintIcon from '@material-ui/icons/PictureAsPdf'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
+import app from 'ampersand-app'
 
 import isNodeInActiveNodePath from '../../isNodeInActiveNodePath'
 import isNodeOpen from '../../isNodeOpen'
@@ -177,7 +179,22 @@ const PrintIconContainer = styled.div`
   }
 `
 
-const enhance = compose(withNodeFilterState)
+const enhance = compose(
+  withNodeFilterState,
+  withHandlers({
+    onClickPrint: ({ nodes, index, tree }) => () => {
+      const node = nodes[index]
+      app.client.mutate({
+        mutation: setTreeKey,
+        variables: {
+          value: [...node.url, 'print'],
+          tree: tree.name,
+          key: 'activeNodeArray',
+        },
+      })
+    },
+  }),
+)
 
 const Row = ({
   index,
@@ -195,6 +212,7 @@ const Row = ({
   mapFilter,
   mapIdsFiltered,
   nodeFilterState,
+  onClickPrint,
 }: {
   index: Number,
   style: Object,
@@ -211,6 +229,7 @@ const Row = ({
   mapFilter: Object,
   mapIdsFiltered: Array<String>,
   nodeFilterState: Object,
+  onClickPrint: () => void,
 }) => {
   const node = nodes[index]
   const tree2 = get(data, treeName)
@@ -435,19 +454,7 @@ const Row = ({
             </div>
           )}
           {showPrintIcon && (
-            <PrintIconContainer
-              title={printIconTitle}
-              onClick={() =>
-                client.mutate({
-                  mutation: setTreeKey,
-                  variables: {
-                    value: [...node.url, 'print'],
-                    tree: tree.name,
-                    key: 'activeNodeArray',
-                  },
-                })
-              }
-            >
+            <PrintIconContainer title={printIconTitle} onClick={onClickPrint}>
               <PrintIcon />
             </PrintIconContainer>
           )}
