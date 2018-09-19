@@ -674,165 +674,61 @@ class TreeContainer extends Component<Props> {
             copying={copying}
           />
           <CmTpopfreiwkontrzaehlFolder
-            onClick={(e, data, element) =>
-              handleClick({
-                data,
-                element,
-                nodes,
-              })
-            }
+            onClick={handleClick}
             tree={tree}
             token={token}
           />
           <CmTpopfreiwkontrzaehl
-            onClick={(e, data, element) =>
-              handleClick({
-                data,
-                element,
-                nodes,
-              })
-            }
+            onClick={handleClick}
             tree={tree}
             token={token}
           />
           <CmTpopfeldkontrFolder
-            onClick={(e, data, element) =>
-              handleClick({
-                data,
-                element,
-                nodes,
-              })
-            }
+            onClick={handleClick}
             tree={tree}
             token={token}
             moving={moving}
             copying={copying}
           />
           <CmTpopfeldkontr
-            onClick={(e, data, element) =>
-              handleClick({
-                data,
-                element,
-                nodes,
-              })
-            }
+            onClick={handleClick}
             tree={tree}
             token={token}
             copying={copying}
           />
           <CmTpopfeldkontrzaehlFolder
-            onClick={(e, data, element) =>
-              handleClick({
-                data,
-                element,
-                nodes,
-              })
-            }
+            onClick={handleClick}
             tree={tree}
             token={token}
           />
           <CmTpopfeldkontrzaehl
-            onClick={(e, data, element) =>
-              handleClick({
-                data,
-                element,
-                nodes,
-              })
-            }
+            onClick={handleClick}
             tree={tree}
             token={token}
           />
           <CmTpopmassnberFolder
-            onClick={(e, data, element) =>
-              handleClick({
-                data,
-                element,
-                nodes,
-              })
-            }
+            onClick={handleClick}
             tree={tree}
             token={token}
           />
-          <CmTpopmassnber
-            onClick={(e, data, element) =>
-              handleClick({
-                data,
-                element,
-                nodes,
-              })
-            }
-            tree={tree}
-            token={token}
-          />
+          <CmTpopmassnber onClick={handleClick} tree={tree} token={token} />
           <CmTpopmassnFolder
-            onClick={(e, data, element) =>
-              handleClick({
-                data,
-                element,
-                nodes,
-              })
-            }
+            onClick={handleClick}
             tree={tree}
             token={token}
             moving={moving}
             copying={copying}
           />
           <CmTpopmassn
-            onClick={(e, data, element) =>
-              handleClick({
-                data,
-                element,
-                nodes,
-              })
-            }
+            onClick={handleClick}
             tree={tree}
             token={token}
             copying={copying}
           />
-          <CmUserFolder
-            onClick={(e, data, element) =>
-              handleClick({
-                data,
-                element,
-                nodes,
-              })
-            }
-            tree={tree}
-            token={token}
-          />
-          <CmUser
-            onClick={(e, data, element) =>
-              handleClick({
-                data,
-                element,
-                nodes,
-              })
-            }
-            tree={tree}
-            token={token}
-          />
-          <CmAdresseFolder
-            onClick={(e, data, element) =>
-              handleClick({
-                data,
-                element,
-                nodes,
-              })
-            }
-            tree={tree}
-            token={token}
-          />
-          <CmAdresse
-            onClick={(e, data, element) =>
-              handleClick({
-                data,
-                element,
-                nodes,
-              })
-            }
-            tree={tree}
-            token={token}
-          />
+          <CmUserFolder onClick={handleClick} tree={tree} token={token} />
+          <CmUser onClick={handleClick} tree={tree} token={token} />
+          <CmAdresseFolder onClick={handleClick} tree={tree} token={token} />
+          <CmAdresse onClick={handleClick} tree={tree} token={token} />
         </Container>
       </ErrorBoundary>
     )

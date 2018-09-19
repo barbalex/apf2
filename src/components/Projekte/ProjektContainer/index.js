@@ -58,13 +58,12 @@ import TreeContainer from '../TreeContainer'
 import Daten from '../Daten'
 import Exporte from '../Exporte'
 import getActiveNodes from '../../../modules/getActiveNodes'
-import buildVariables from './variables'
 import buildNodes from '../TreeContainer/nodes'
 import apfloraLayers from '../Karte/apfloraLayers'
 import overlays from '../Karte/overlays'
 import idsInsideFeatureCollection from '../../../modules/idsInsideFeatureCollection'
 import withErrorState from '../../../state/withErrorState'
-//import logout from '../../../modules/logout'
+import logout from '../../../modules/logout'
 import withTreeNodeFilterState from '../../../state/withNodeFilter'
 
 const Container = styled.div`
@@ -77,13 +76,12 @@ const Container = styled.div`
     height: auto !important;
   }
 `
-/*
 const ErrorContainer = styled.div`
   padding: 15px;
 `
 const LogoutButton = styled(Button)`
   margin-top: 10px !important;
-`*/
+`
 
 const enhance = compose(
   withLocalData,
@@ -292,13 +290,23 @@ const ProjekteContainer = ({
   const loading = false
   // TODO:
   const refetch = () => console.log('refetchTree')
-  // TODO:
-  /*
-  if (error) {
-    console.log('ProjektContainer, error:', error.message)
+  const activeNodeArray = get(dataLocal, `${treeName}.activeNodeArray`)
+  const activeNodes = getActiveNodes(activeNodeArray)
+  const openNodes = get(dataLocal, `${treeName}.openNodes`)
+  const moving = get(dataLocal, 'moving')
+  const copying = get(dataLocal, 'copying')
+  const token = get(dataLocal, 'user.token')
+  const tokenDecoded = token ? jwtDecode(token) : null
+  const role = tokenDecoded ? tokenDecoded.role : null
+  // TODO: which query to check for error?
+  if (dataAdresses.error) {
+    console.log(
+      'ProjektContainer, dataAdresses.error:',
+      dataAdresses.error.message,
+    )
     if (
-      error.message.includes('permission denied') ||
-      error.message.includes('keine Berechtigung')
+      dataAdresses.error.message.includes('permission denied') ||
+      dataAdresses.error.message.includes('keine Berechtigung')
     ) {
       console.log('ProjektContainer, token:', token)
       // during login don't show permission error
@@ -319,16 +327,8 @@ const ProjekteContainer = ({
         </ErrorContainer>
       )
     }
-    return `Fehler: ${error.message}`
-  }*/
-  const activeNodeArray = get(dataLocal, `${treeName}.activeNodeArray`)
-  const activeNodes = getActiveNodes(activeNodeArray)
-  const openNodes = get(dataLocal, `${treeName}.openNodes`)
-  const moving = get(dataLocal, 'moving')
-  const copying = get(dataLocal, 'copying')
-  const token = get(dataLocal, 'user.token')
-  const tokenDecoded = token ? jwtDecode(token) : null
-  const role = tokenDecoded ? tokenDecoded.role : null
+    return `Fehler: ${dataAdresses.error.message}`
+  }
 
   //console.log('ProjektContainer rendered', { dataLocal })
 
@@ -376,9 +376,46 @@ const ProjekteContainer = ({
   const nodes = buildNodes({
     data,
     treeName,
-    loading,
     role,
     nodeFilterState,
+    dataAdresses,
+    dataUsers,
+    dataProjekts,
+    dataApberuebersichts,
+    dataAps,
+    dataPops,
+    dataPopbers,
+    dataPopmassnbers,
+    dataTpops,
+    dataTpopmassns,
+    dataTpopmassnbers,
+    dataTpopfeldkontrs,
+    dataTpopfreiwkontrs,
+    dataTpopkontrzaehls,
+    dataTpopbers,
+    dataBeobZugeordnets,
+    dataZiels,
+    dataZielbers,
+    dataErfkrits,
+    dataApbers,
+    dataBers,
+    dataIdealbiotops,
+    dataAparts,
+    dataAssozarts,
+    dataEkfzaehleinheits,
+    dataBeobNichtBeurteilts,
+    dataBeobNichtZuzuordnens,
+    dataPopForMap,
+    dataTpopForMap,
+    dataBeobNichtBeurteiltForMap,
+    dataBeobNichtZuzuordnenForMap,
+    dataBeobZugeordnetForMap,
+    dataBeobZugeordnetForMapMarkers,
+    dataBeobNichtBeurteiltForMapMarkers,
+    dataBeobNichtZuzuordnenForMapMarkers,
+    dataBeobZugeordnetAssignPolylinesForMap,
+    dataPopForMapMarkers,
+    dataBeobAssignLines,
   })
   const tree = get(data, treeName)
   const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))
