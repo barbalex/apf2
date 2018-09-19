@@ -6,19 +6,6 @@ query TreeDataQuery(
   $isAp: Boolean!
   $apIsActiveInMap: Boolean!
 ) {
-  erfkrits: allErfkrits(filter: { apId: { in: $ap } }) @include(if: $isAp) {
-    nodes {
-      id
-      apId
-      kriterien
-      erfolg
-      apErfkritWerteByErfolg {
-        id
-        text
-        sort
-      }
-    }
-  }
   apbers: allApbers(filter: { apId: { in: $ap } }, orderBy: JAHR_ASC)
     @include(if: $isAp) {
     nodes {
