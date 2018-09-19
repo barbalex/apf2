@@ -47,6 +47,7 @@ import withBeobNichtZuzuordnens from './withBeobNichtZuzuordnens'
 import withPopForMap from './withPopForMap'
 import withTpopForMap from './withTpopForMap'
 import withBeobNichtBeurteiltForMap from './withBeobNichtBeurteiltForMap'
+import withBeobNichtZuzuordnenForMap from './withBeobNichtZuzuordnenForMap'
 import data2Gql from './data2.graphql'
 import TreeContainer from '../TreeContainer'
 import Daten from '../Daten'
@@ -111,6 +112,7 @@ const enhance = compose(
   withPopForMap,
   withTpopForMap,
   withBeobNichtBeurteiltForMap,
+  withBeobNichtZuzuordnenForMap,
   withErrorState,
   withState('apfloraLayers', 'setApfloraLayers', apfloraLayers),
   withState('activeApfloraLayers', 'setActiveApfloraLayers', []),
@@ -162,6 +164,7 @@ const ProjekteContainer = ({
   dataPopForMap,
   dataTpopForMap,
   dataBeobNichtBeurteiltForMap,
+  dataBeobNichtZuzuordnenForMap,
   treeName,
   tabs: tabsPassed,
   projekteTabs,
@@ -225,6 +228,7 @@ const ProjekteContainer = ({
   dataPopForMap: Object,
   dataTpopForMap: Object,
   dataBeobNichtBeurteiltForMap: Object,
+  dataBeobNichtZuzuordnenForMap: Object,
   treeName: String,
   tabs: Array<String>,
   projekteTabs: Array<String>,
@@ -336,6 +340,7 @@ const ProjekteContainer = ({
           dataPopForMap,
           dataTpopForMap,
           dataBeobNichtBeurteiltForMap,
+          dataBeobNichtZuzuordnenForMap,
         )
         const nodes = buildNodes({
           data,
