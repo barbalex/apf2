@@ -4,19 +4,8 @@ query TreeDataQuery(
   $ap: [UUID!]
   $apId: UUID
   $isAp: Boolean!
-  $ziel: [UUID!]
-  $isZiel: Boolean!
   $apIsActiveInMap: Boolean!
 ) {
-  zielbers: allZielbers(filter: { zielId: { in: $ziel } }, orderBy: JAHR_ASC)
-    @include(if: $isZiel) {
-    nodes {
-      id
-      zielId
-      jahr
-      erreichung
-    }
-  }
   erfkrits: allErfkrits(filter: { apId: { in: $ap } }) @include(if: $isAp) {
     nodes {
       id
