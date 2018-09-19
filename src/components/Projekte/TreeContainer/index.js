@@ -274,7 +274,7 @@ const enhance = compose(
                 key2: 'openNodes',
               },
             })
-            refetchTree()
+            refetchTree(`${menuType}s`)
           }
           deleteState.setToDelete({
             table,

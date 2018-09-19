@@ -9,9 +9,9 @@ export default async ({
   id,
   errorState,
   refetchTree,
-}:{
+}: {
   id: String,
-  errorState:Object,
+  errorState: Object,
   refetchTree: () => void,
 }): Promise<void> => {
   const { client } = app
@@ -21,7 +21,7 @@ export default async ({
   try {
     tpopResult = await client.query({
       query: queryTpop,
-      variables: { id }
+      variables: { id },
     })
   } catch (error) {
     return errorState.add(error)
@@ -36,7 +36,7 @@ export default async ({
       variables: {
         id: popId,
         x,
-        y
+        y,
       },
       optimisticResponse: {
         __typename: 'Mutation',
@@ -54,5 +54,5 @@ export default async ({
   } catch (error) {
     return errorState.add(error)
   }
-  refetchTree()
+  //refetchTree()
 }

@@ -27,7 +27,7 @@ export default ({
   data,
   refetchTree,
   mapIdsFiltered,
-}:{
+}: {
   beobs: Array<Object>,
   tree: Object,
   activeNodes: Array<Object>,
@@ -57,30 +57,34 @@ export default ({
       icon,
       draggable: assigning,
       zIndexOffset: -apfloraLayers.findIndex(
-        apfloraLayer => apfloraLayer.value === 'beobNichtBeurteilt'
+        apfloraLayer => apfloraLayer.value === 'beobNichtBeurteilt',
       ),
     })
       .bindPopup(
         ReactDOMServer.renderToStaticMarkup(
           <Fragment>
-            <div>{`Beobachtung von ${get(beob, 'aeEigenschaftenByArtId.artname', '')}`}</div>
-            <StyledH3>
-              {label}
-            </StyledH3>
+            <div>{`Beobachtung von ${get(
+              beob,
+              'aeEigenschaftenByArtId.artname',
+              '',
+            )}`}</div>
+            <StyledH3>{label}</StyledH3>
             <div>
               {`Koordinaten: ${beob.x.toLocaleString(
-                'de-ch'
+                'de-ch',
               )} / ${beob.y.toLocaleString('de-ch')}`}
             </div>
             <a
-              href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/nicht-beurteilte-Beobachtungen/${beob.id}`}
+              href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/nicht-beurteilte-Beobachtungen/${
+                beob.id
+              }`}
               target="_blank"
               rel="noopener noreferrer"
             >
               Formular in neuem Tab öffnen
             </a>
-          </Fragment>
-        )
+          </Fragment>,
+        ),
       )
       .on('moveend', async event => {
         /**
@@ -90,7 +94,7 @@ export default ({
          */
         const nearestTpop = await getNearestTpop({
           activeNodes,
-          latLng: event.target._latlng
+          latLng: event.target._latlng,
         })
         const newActiveNodeArray = [
           'Projekte',
@@ -109,17 +113,20 @@ export default ({
           variables: {
             value: newActiveNodeArray,
             tree: tree.name,
-            key: 'activeNodeArray'
-          }
+            key: 'activeNodeArray',
+          },
         })
         await client.mutate({
           mutation: updateBeobByIdGql,
           variables: {
             id: beob.id,
             tpopId: nearestTpop.id,
-          }
+          },
         })
-        refetchTree()
+        refetchTree('beobNichtBeurteiltForMap')
+        refetchTree('beobNichtBeurteiltForMapMarkers')
+        refetchTree('beobZugeordnetForMapMarkers')
+        refetchTree('beobAssignLines')
       })
   })
 }

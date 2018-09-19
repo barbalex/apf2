@@ -28,7 +28,7 @@ export default ({
   refetchTree,
   mapIdsFiltered,
   map,
-}:{
+}: {
   beobs: Array<Object>,
   tree: Object,
   activeNodes: Array<Object>,
@@ -59,33 +59,45 @@ export default ({
       icon,
       draggable: assigning,
       zIndexOffset: -apfloraLayers.findIndex(
-        apfloraLayer => apfloraLayer.value === 'beobZugeordnet'
+        apfloraLayer => apfloraLayer.value === 'beobZugeordnet',
       ),
     })
       .bindPopup(
         ReactDOMServer.renderToStaticMarkup(
           <Fragment>
-            <div>{`Beobachtung von ${get(beob, 'aeEigenschaftenByArtId.artname', '')}`}</div>
-            <StyledH3>
-              {label}
-            </StyledH3>
+            <div>{`Beobachtung von ${get(
+              beob,
+              'aeEigenschaftenByArtId.artname',
+              '',
+            )}`}</div>
+            <StyledH3>{label}</StyledH3>
             <div>
               {`Koordinaten: ${beob.x.toLocaleString(
-                'de-ch'
+                'de-ch',
               )} / ${beob.y.toLocaleString('de-ch')}`}
             </div>
-            <div>{`Teil-Population: ${get(beob, 'tpopByTpopId.nr', '(keine Nr)')}: ${get(beob, 'tpopByTpopId.flurname', '(kein Flurname)')}`}</div>
+            <div>{`Teil-Population: ${get(
+              beob,
+              'tpopByTpopId.nr',
+              '(keine Nr)',
+            )}: ${get(beob, 'tpopByTpopId.flurname', '(kein Flurname)')}`}</div>
             <a
-              href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${get(beob, 'tpopByTpopId.popId', '')}/Teil-Populationen/${get(beob, 'tpopByTpopId.id', '')}/Beobachtungen/${
-                beob.id
-              }`}
+              href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${get(
+                beob,
+                'tpopByTpopId.popId',
+                '',
+              )}/Teil-Populationen/${get(
+                beob,
+                'tpopByTpopId.id',
+                '',
+              )}/Beobachtungen/${beob.id}`}
               target="_blank"
               rel="noopener noreferrer"
             >
               Formular in neuem Tab öffnen
             </a>
-          </Fragment>
-        )
+          </Fragment>,
+        ),
       )
       .on('moveend', async event => {
         /**
@@ -95,7 +107,7 @@ export default ({
          */
         const nearestTpop = await getNearestTpop({
           activeNodes,
-          latLng: event.target._latlng
+          latLng: event.target._latlng,
         })
         const newActiveNodeArray = [
           'Projekte',
@@ -114,17 +126,20 @@ export default ({
           variables: {
             value: newActiveNodeArray,
             tree: tree.name,
-            key: 'activeNodeArray'
-          }
+            key: 'activeNodeArray',
+          },
         })
         await client.mutate({
           mutation: updateBeobByIdGql,
           variables: {
             id: beob.id,
             tpopId: nearestTpop.id,
-          }
+          },
         })
-        refetchTree()
+        refetchTree('beobNichtBeurteiltForMap')
+        refetchTree('beobNichtBeurteiltForMapMarkers')
+        refetchTree('beobZugeordnetForMapMarkers')
+        refetchTree('beobAssignLines')
         map.redraw()
       })
   })

@@ -396,7 +396,7 @@ class Karte extends Component {
                     },
                   })
                   // refetch so it appears on map
-                  refetchTree()
+                  refetchTree('tpopForMap')
                 } catch (error) {
                   errorState.add(error)
                 }
