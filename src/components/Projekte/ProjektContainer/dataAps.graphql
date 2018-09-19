@@ -1,4 +1,4 @@
-query TreeDataQuery($isProjekt: Boolean!, $apFilter: ApFilter!) {
+query ApsDataQuery($isProjekt: Boolean!, $apFilter: ApFilter!) {
   aps: allAps(filter: $apFilter) @include(if: $isProjekt) {
     totalCount
     nodes {

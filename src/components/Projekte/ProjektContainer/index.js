@@ -18,6 +18,7 @@ import Karte from '../Karte'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import withData1 from './data1'
 import withDataAps from './dataAps'
+import withDataPops from './dataPops'
 import data2Gql from './data2.graphql'
 import TreeContainer from '../TreeContainer'
 import Daten from '../Daten'
@@ -53,6 +54,7 @@ const enhance = compose(
   withData1,
   withTreeNodeFilterState,
   withDataAps,
+  withDataPops,
   withErrorState,
   withState('apfloraLayers', 'setApfloraLayers', apfloraLayers),
   withState('activeApfloraLayers', 'setActiveApfloraLayers', []),
@@ -75,6 +77,7 @@ const enhance = compose(
 const ProjekteContainer = ({
   data1,
   dataAps,
+  dataPops,
   treeName,
   tabs: tabsPassed,
   projekteTabs,
@@ -109,6 +112,7 @@ const ProjekteContainer = ({
 }: {
   data1: Object,
   dataAps: Object,
+  dataPops: Object,
   treeName: String,
   tabs: Array<String>,
   projekteTabs: Array<String>,
@@ -187,7 +191,7 @@ const ProjekteContainer = ({
         }
         //console.log('ProjektContainer rendered', { data1 })
 
-        const data = merge(data1, data2, dataAps)
+        const data = merge(data1, data2, dataAps, dataPops)
         const nodes = buildNodes({
           data,
           treeName,
