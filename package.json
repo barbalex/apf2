@@ -10,7 +10,7 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "docsify-cli": "^4.2.1",
+    "docsify-cli": "4.2.1",
     "flow-bin": "0.81.0",
     "postgraphile": "4.0.0-rc.5",
     "postgraphile-plugin-connection-filter": "1.0.0-beta.15",
@@ -81,7 +81,7 @@
     "react-virtualized": "9.20.1",
     "react-window": "1.1.2",
     "recompose": "0.30.0",
-    "styled-components": "3.4.6",
+    "styled-components": "3.4.9",
     "typeface-roboto": "0.0.54",
     "unstated": "2.1.1"
   },
