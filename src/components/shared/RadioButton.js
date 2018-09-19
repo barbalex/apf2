@@ -24,13 +24,13 @@ const StyledFormLabel = styled(FormLabel)`
   pointer-events: none;
 `
 const StyledRadio = styled(Radio)`
-  height: 26px !important;
+  height: 2px !important;
 `
 
 const enhance = compose(
   withHandlers({
     onClickButton: ({ saveToDb, value }) => () => saveToDb(!value),
-  })
+  }),
 )
 
 const RadioButton = ({

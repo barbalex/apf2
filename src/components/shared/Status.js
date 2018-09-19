@@ -55,8 +55,7 @@ const StyledInput = styled(Input)`
   }
 `
 const StyledRadio = styled(Radio)`
-  height: 26px !important;
-  max-height: 26px !important;
+  height: 2px !important;
 `
 
 const enhance = compose(

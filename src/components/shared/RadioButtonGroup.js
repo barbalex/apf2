@@ -25,8 +25,7 @@ const StyledFormLabel = styled(FormLabel)`
   padding-bottom: 8px !important;
 `
 const StyledRadio = styled(Radio)`
-  height: 26px !important;
-  max-height: 26px !important;
+  height: 2px !important;
 `
 
 const enhance = compose(
@@ -60,7 +59,7 @@ const enhance = compose(
               : +targetValue
       saveToDb(valueToUse)
     },
-  })
+  }),
 )
 
 const RadioButtonGroup = ({
@@ -90,7 +89,11 @@ const RadioButtonGroup = ({
       aria-describedby={`${label}ErrorText`}
     >
       <StyledFormLabel component="legend">{label}</StyledFormLabel>
-      <RadioGroup aria-label={label} value={valueSelected} onChange={onChangeGroup}>
+      <RadioGroup
+        aria-label={label}
+        value={valueSelected}
+        onChange={onChangeGroup}
+      >
         {dataSource.map((e, index) => (
           <FormControlLabel
             key={index}
@@ -101,14 +104,12 @@ const RadioButtonGroup = ({
           />
         ))}
       </RadioGroup>
-      {
-        !!error &&
+      {!!error && (
         <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
-      }
-      {
-        !!helperText &&
+      )}
+      {!!helperText && (
         <FormHelperText id={`${label}HelperText`}>{helperText}</FormHelperText>
-      }
+      )}
     </StyledFormControl>
   )
 }
