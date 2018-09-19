@@ -196,7 +196,7 @@ const enhance = compose(
     },
     onClickNodeSymbol: ({ node, index, data, treeName }) => event => {
       const tree2 = get(data, treeName)
-      toggleNodeSymbol({ tree: tree2, node, client: app.client })
+      toggleNodeSymbol({ tree: tree2, node })
     },
     onClickPrint: ({ node, index, tree }) => () => {
       app.client.mutate({
@@ -222,7 +222,6 @@ const Row = ({
   activeNodes,
   treeName,
   data,
-  client,
   moving,
   openNodes,
   copying,
@@ -241,7 +240,6 @@ const Row = ({
   activeNodes: Array<Object>,
   treeName: String,
   data: Object,
-  client: Object,
   moving: Object,
   openNodes: Array<string>,
   copying: Object,

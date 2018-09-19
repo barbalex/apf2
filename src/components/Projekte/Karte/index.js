@@ -109,9 +109,8 @@ const Container = styled.div`
 const enhance = compose(
   withHandlers({
     onMouseMove: ({ setMouseCoordinates }) => e => {
-      const { client } = app
       const [x, y] = epsg4326to2056(e.latlng.lng, e.latlng.lat)
-      client.mutate({
+      app.client.mutate({
         mutation: gql`
           mutation setMapMouseCoordinates($x: Number!, $y: Number!) {
             setMapMouseCoordinates(x: $x, y: $y) @client {
@@ -143,7 +142,6 @@ class Karte extends Component {
     setOverlays: () => void,
     activeOverlays: Array<String>,
     setActiveOverlays: () => void,
-    client: Object,
     refetchTree: () => void,
     idOfTpopBeingLocalized: String,
     setIdOfTpopBeingLocalized: () => void,
@@ -203,7 +201,6 @@ class Karte extends Component {
       setOverlays,
       activeOverlays,
       setActiveOverlays,
-      client,
       refetchTree,
       idOfTpopBeingLocalized,
       setIdOfTpopBeingLocalized,
@@ -378,7 +375,7 @@ class Karte extends Component {
                 const { lat, lng } = event.latlng
                 const [x, y] = epsg4326to2056(lng, lat)
                 try {
-                  await client.mutate({
+                  await app.client.mutate({
                     mutation: updateTpopById,
                     variables: {
                       id: idOfTpopBeingLocalized,

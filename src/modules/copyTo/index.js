@@ -5,6 +5,7 @@
  */
 import get from 'lodash/get'
 import gql from 'graphql-tag'
+import app from 'ampersand-app'
 
 import tables from '../tables'
 import copyTpopsOfPop from '../copyTpopsOfPop'
@@ -23,34 +24,31 @@ import createPop from './createPop.graphql'
 //import queryTpopfreiwkontr from './queryTpopfreiwkontr.graphql'
 
 // copyTpopsOfPop can pass table and id separately
-export default async (
-  {
-    parentId,
-    table: tablePassed,
-    id: idPassed,
-    client,
-    refetch,
-    errorState,
-  }:{
-    parentId: String,
-    tablePassed: ?String,
-    idPassed: ?String,
-    client: Object,
-    refetch: () => void,
-    errorState: Object,
-  }
-): Promise<void> => {
+export default async ({
+  parentId,
+  table: tablePassed,
+  id: idPassed,
+  refetch,
+  errorState,
+}: {
+  parentId: String,
+  tablePassed: ?String,
+  idPassed: ?String,
+  refetch: () => void,
+  errorState: Object,
+}): Promise<void> => {
+  const { client } = app
   const { data } = await client.query({
     query: gql`
-        query Query {
-          copying @client {
-            table
-            id
-            label
-            withNextLevel
-          }
+      query Query {
+        copying @client {
+          table
+          id
+          label
+          withNextLevel
         }
-      `
+      }
+    `,
   })
   let table = tablePassed || get(data, 'copying.table')
   const id = idPassed || get(data, 'copying.id')
@@ -62,54 +60,56 @@ export default async (
   if (tabelle && tabelle.dbTable) {
     table = tabelle.dbTable
   }
-  
+
   // get data
   let row
   switch (table) {
     case 'tpopkontrzaehl':
       const { data: data0 } = await client.query({
         query: queryTpopKontrzaehlById,
-          variables: { id }
+        variables: { id },
       })
       row = get(data0, 'tpopkontrzaehlById')
-      break;
+      break
     case 'tpopkontr':
       const { data: data1 } = await client.query({
         query: queryTpopKontrById,
-          variables: { id }
+        variables: { id },
       })
       row = get(data1, 'tpopkontrById')
-      break;
+      break
     case 'tpopmassn':
       const { data: data2 } = await client.query({
         query: queryTpopmassnById,
-          variables: { id }
+        variables: { id },
       })
       row = get(data2, 'tpopmassnById')
-      break;
+      break
     case 'tpop':
       const { data: data3 } = await client.query({
         query: queryTpopById,
-          variables: { id }
+        variables: { id },
       })
       row = get(data3, 'tpopById')
-      break;
+      break
     case 'pop':
       const { data: data4 } = await client.query({
         query: queryPopById,
-          variables: { id }
+        variables: { id },
       })
       row = get(data4, 'popById')
-      break;
+      break
     default:
       // do nothing
-      break;
+      break
   }
 
   if (!row) {
-    return errorState.add(new Error('change was not saved because dataset was not found in store'))
+    return errorState.add(
+      new Error('change was not saved because dataset was not found in store'),
+    )
   }
-  
+
   // insert
   let response
   let newId
@@ -125,7 +125,7 @@ export default async (
         },
       })
       newId = get(response, 'data.createTpopkontrzaehl.tpopkontrzaehl.id')
-      break;
+      break
     case 'tpopkontr':
       response = await client.mutate({
         mutation: createTpopkontr,
@@ -253,7 +253,7 @@ export default async (
         }*/
       })
       newId = get(response, 'data.createTpopkontr.tpopkontr.id')
-      break;
+      break
     case 'tpopmassn':
       response = await client.mutate({
         mutation: createTpopmassn,
@@ -280,7 +280,7 @@ export default async (
         },
       })
       newId = get(response, 'data.createTpopmassn.tpopmassn.id')
-      break;
+      break
     case 'tpop':
       response = await client.mutate({
         mutation: createTpop,
@@ -312,7 +312,7 @@ export default async (
         },
       })
       newId = get(response, 'data.createTpop.tpop.id')
-      break;
+      break
     case 'pop':
       response = await client.mutate({
         mutation: createPop,
@@ -329,10 +329,10 @@ export default async (
         },
       })
       newId = get(response, 'data.createPop.pop.id')
-      break;
+      break
     default:
       // do nothing
-      break;
+      break
   }
 
   refetch()
@@ -343,7 +343,7 @@ export default async (
       popIdFrom: id,
       popIdTo: newId,
       client,
-      refetch
+      refetch,
     })
   }
   if (table === 'tpopkontr') {
@@ -352,7 +352,7 @@ export default async (
       tpopkontrIdFrom: id,
       tpopkontrIdTo: newId,
       client,
-      refetch
+      refetch,
     })
   }
 }

@@ -1,8 +1,10 @@
 // @flow
 import get from 'lodash/get'
-import gql from "graphql-tag"
+import gql from 'graphql-tag'
+import app from 'ampersand-app'
 
-export default async ({ id, client }:{ id: String, client: Object }): Promise<void> => {
+export default async (id: String): Promise<void> => {
+  const { client } = app
   // fetch previous id from copyingBiotop
   const { data: data1 } = await client.query({
     query: gql`
@@ -10,7 +12,8 @@ export default async ({ id, client }:{ id: String, client: Object }): Promise<vo
         copyingBiotop @client {
           id
         }
-      }`
+      }
+    `,
   })
   const previousId = get(data1, 'copyingBiotop.id')
   const { data: dataFrom } = await client.query({
@@ -39,7 +42,7 @@ export default async ({ id, client }:{ id: String, client: Object }): Promise<vo
         }
       }
     `,
-    variables: { id: previousId }
+    variables: { id: previousId },
   })
   const from = get(dataFrom, 'tpopkontrById')
   await client.mutate({
@@ -67,9 +70,9 @@ export default async ({ id, client }:{ id: String, client: Object }): Promise<vo
       ) {
         updateTpopkontrById(
           input: {
-            id: $id,
+            id: $id
             tpopkontrPatch: {
-              id: $id,
+              id: $id
               flaeche: $flaeche
               lrDelarze: $lrDelarze
               lrUmgebungDelarze: $lrUmgebungDelarze
@@ -88,7 +91,7 @@ export default async ({ id, client }:{ id: String, client: Object }): Promise<vo
               wasserhaushalt: $wasserhaushalt
               handlungsbedarf: $handlungsbedarf
               idealbiotopUebereinstimmung: $idealbiotopUebereinstimmung
-            } 
+            }
           }
         ) {
           tpopkontr {
@@ -134,8 +137,11 @@ export default async ({ id, client }:{ id: String, client: Object }): Promise<vo
       bodenAbtrag: get(from, 'bodenAbtrag', null),
       wasserhaushalt: get(from, 'wasserhaushalt', null),
       handlungsbedarf: get(from, 'handlungsbedarf', null),
-      idealbiotopUebereinstimmung: get(from, 'idealbiotopUebereinstimmung', null),
-    }
+      idealbiotopUebereinstimmung: get(
+        from,
+        'idealbiotopUebereinstimmung',
+        null,
+      ),
+    },
   })
-  
 }

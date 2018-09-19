@@ -1,32 +1,9 @@
-query TreeDataQuery(
+query BeobAssignLinesQuery(
   $projId: UUID!
   $isProjekt: Boolean!
   $apId: UUID
   $isAp: Boolean!
-  $apIsActiveInMap: Boolean!
 ) {
-  popForMapMarkers: projektById(id: $projId) @include(if: $apIsActiveInMap) {
-    id
-    apsByProjId(filter: { id: { equalTo: $apId } }) {
-      nodes {
-        id
-        popsByApId(filter: { x: { isNull: false }, y: { isNull: false } }) {
-          nodes {
-            id
-            apId
-            nr
-            name
-            status
-            statusUnklar
-            statusUnklarBegruendung
-            bekanntSeit
-            x
-            y
-          }
-        }
-      }
-    }
-  }
   beobAssignLines: projektById(id: $projId) @include(if: $isProjekt) {
     id
     apsByProjId(filter: { id: { equalTo: $apId } }) @include(if: $isAp) {

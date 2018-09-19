@@ -118,10 +118,9 @@ const InnerTreeContainer = styled.div`
 `
 
 const getAndValidateCoordinatesOfTpop = async ({ id, errorState }) => {
-  const { client } = app
   let tpopResult
   try {
-    tpopResult = await client.query({
+    tpopResult = await app.client.query({
       query: tpopById,
       variables: { id },
     })
@@ -142,10 +141,9 @@ const getAndValidateCoordinatesOfTpop = async ({ id, errorState }) => {
 }
 
 const getAndValidateCoordinatesOfBeob = async ({ id, errorState }) => {
-  const { client } = app
   let beobResult
   try {
-    beobResult = await client.query({
+    beobResult = await app.client.query({
       query: beobById,
       variables: { id },
     })
@@ -165,13 +163,7 @@ const getAndValidateCoordinatesOfBeob = async ({ id, errorState }) => {
   return { x, y }
 }
 
-const showMapIfNotYetVisible = ({
-  client,
-  projekteTabs,
-}: {
-  client: Object,
-  projekteTabs: Array<String>,
-}) => {
+const showMapIfNotYetVisible = (projekteTabs: Array<String>) => {
   const isVisible = projekteTabs.includes('karte')
   if (!isVisible) {
     setUrlQueryValue({
@@ -200,7 +192,7 @@ const enhance = compose(
       setPopLabelUsingNr,
       tpopLabelUsingNr,
       setTpopLabelUsingNr,
-    }) => ({ data, element, nodes, client, deleteState, errorState }) => {
+    }) => ({ data, element, nodes, deleteState, errorState }) => {
       const tree = get(dbData, treeName)
       if (!data) return errorState.add('no data passed with click')
       if (!element)
@@ -269,7 +261,7 @@ const enhance = compose(
             const { openNodes } = tree
             const newOpenNodes = [...openNodes]
             addNodeToOpenNodes(newOpenNodes, baseUrl)
-            await client.mutate({
+            await app.client.mutate({
               mutation: setTreeKey2Gql,
               variables: {
                 tree: tree.name,
@@ -292,7 +284,7 @@ const enhance = compose(
         showBeobOnMap() {
           const projekteTabs = get(dbData, 'urlQuery.projekteTabs', [])
           // 1. open map if not yet open
-          showMapIfNotYetVisible({ client, projekteTabs })
+          showMapIfNotYetVisible(projekteTabs)
           // 2 add layer for actionTable
           if (activeOverlays.includes(actionTable)) {
             setActiveOverlays(activeOverlays.filter(o => o !== actionTable))
@@ -315,11 +307,11 @@ const enhance = compose(
         localizeOnMap() {
           const projekteTabs = get(dbData, 'urlQuery.projekteTabs', [])
           setIdOfTpopBeingLocalized(id)
-          showMapIfNotYetVisible({ client, projekteTabs })
+          showMapIfNotYetVisible(projekteTabs)
           setActiveApfloraLayers(uniq([...activeApfloraLayers, 'tpop']))
         },
         markForMoving() {
-          client.mutate({
+          app.client.mutate({
             mutation: setMoving,
             variables: { table, id, label },
           })
@@ -328,19 +320,19 @@ const enhance = compose(
           moveTo({ id, errorState })
         },
         markForCopying() {
-          client.mutate({
+          app.client.mutate({
             mutation: setCopying,
             variables: { table, id, label, withNextLevel: false },
           })
         },
         markForCopyingWithNextLevel() {
-          client.mutate({
+          app.client.mutate({
             mutation: setCopying,
             variables: { table, id, label, withNextLevel: true },
           })
         },
         resetCopying() {
-          client.mutate({
+          app.client.mutate({
             mutation: setCopying,
             variables: {
               table: null,
@@ -351,22 +343,22 @@ const enhance = compose(
           })
         },
         copy() {
-          copyTo({ parentId: id, client, refetch: refetchTree, errorState })
+          copyTo({ parentId: id, refetch: refetchTree, errorState })
         },
         markForCopyingBiotop() {
-          client.mutate({
+          app.client.mutate({
             mutation: setCopyingBiotop,
             variables: { id, label },
           })
         },
         resetCopyingBiotop() {
-          client.mutate({
+          app.client.mutate({
             mutation: setCopyingBiotop,
             variables: { id: 'copyingBiotop', label: null },
           })
         },
         copyBiotop() {
-          copyBiotopTo({ id, client })
+          copyBiotopTo(id)
         },
         copyTpopKoordToPop() {
           copyTpopKoordToPop({ id, errorState, refetchTree })
@@ -442,13 +434,14 @@ const enhance = compose(
     },
   }),
   withLifecycle({
-    onDidUpdate(prevProps, { nodes, activeNodes, treeName, data, client }) {
+    onDidUpdate(prevProps, { nodes, activeNodes, treeName, data }) {
       /**
        * if activeNodeArray.length === 1
        * and there is only one projekt
        * open it
        * dont do this in render!
        */
+      const { client } = app
       const openNodes = get(data, `${treeName}.openNodes`)
       const projekteNodes = nodes.filter(n => n.menuType === 'projekt')
       const existsOnlyOneProjekt = projekteNodes.length === 1
@@ -491,7 +484,6 @@ type Props = {
   activeNodes: Object,
   activeNode: Object,
   activeApfloraLayers: Array<String>,
-  client: Object,
   loading: Boolean,
   moving: Object,
   openNodes: Array<string>,
@@ -521,7 +513,6 @@ class TreeContainer extends Component<Props> {
       activeNodes,
       activeNode,
       activeApfloraLayers,
-      client,
       loading,
       moving,
       openNodes,
@@ -559,7 +550,6 @@ class TreeContainer extends Component<Props> {
             innerRef={this.tree}
           >
             <Tree
-              client={client}
               treeName={treeName}
               data={data}
               tree={tree}
@@ -583,7 +573,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -597,7 +586,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -615,7 +603,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -629,7 +616,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -643,7 +629,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -657,7 +642,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -671,7 +655,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -685,7 +668,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -699,7 +681,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -713,7 +694,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -727,7 +707,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -742,7 +721,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -756,7 +734,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -770,7 +747,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -784,7 +760,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -798,7 +773,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -812,7 +786,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -826,7 +799,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -840,7 +812,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -854,7 +825,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -868,7 +838,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -882,7 +851,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -896,7 +864,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -912,7 +879,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -928,7 +894,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -942,7 +907,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -956,7 +920,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -970,7 +933,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -984,7 +946,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -998,7 +959,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -1014,7 +974,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -1030,7 +989,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -1044,7 +1002,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -1058,7 +1015,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -1072,7 +1028,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -1086,7 +1041,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -1100,7 +1054,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -1116,7 +1069,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -1131,7 +1083,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -1145,7 +1096,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -1159,7 +1109,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -1175,7 +1124,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -1190,7 +1138,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -1204,7 +1151,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -1218,7 +1164,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -1232,7 +1177,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -1246,7 +1190,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -1262,7 +1205,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -1277,7 +1219,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -1291,7 +1232,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -1305,7 +1245,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}
@@ -1319,7 +1258,6 @@ class TreeContainer extends Component<Props> {
                 nodes,
                 deleteState,
                 errorState,
-                client,
               })
             }
             tree={tree}

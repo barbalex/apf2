@@ -2,18 +2,11 @@
 import isEqual from 'lodash/isEqual'
 import clone from 'lodash/clone'
 import gql from 'graphql-tag'
+import app from 'ampersand-app'
 
 import isNodeOpen from './isNodeOpen'
 
-export default ({
-  tree,
-  node,
-  client
-}:{
-  tree: Object,
-  node: Object,
-  client: Object
-}): any => {
+export default ({ tree, node }: { tree: Object, node: Object }): any => {
   if (!node.url) throw new Error('passed node has no url')
 
   let newOpenNodes = clone(tree.openNodes)
@@ -22,7 +15,7 @@ export default ({
   } else {
     newOpenNodes.push(node.url)
   }
-  client.mutate({
+  app.client.mutate({
     mutation: gql`
       mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
         setTreeKey(tree: $tree, key: $key, value: $value) @client {
@@ -40,7 +33,7 @@ export default ({
     variables: {
       value: newOpenNodes,
       tree: tree.name,
-      key: 'openNodes'
-    }
+      key: 'openNodes',
+    },
   })
 }

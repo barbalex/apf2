@@ -43,7 +43,6 @@ const LoadingDiv = styled.div`
 `
 
 type Props = {
-  client: Object,
   treeName: String,
   data: Object,
   tree: Object,
@@ -71,7 +70,6 @@ class Tree extends Component<Props> {
       nodes,
       data,
       treeName,
-      client,
       activeNodes,
       moving,
       openNodes,
@@ -93,7 +91,6 @@ class Tree extends Component<Props> {
         node={node}
         data={data}
         treeName={treeName}
-        client={client}
         moving={moving}
         copying={copying}
         activeApfloraLayers={activeApfloraLayers}
