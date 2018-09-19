@@ -10,27 +10,8 @@ query TreeDataQuery(
   $isTpop: Boolean!
   $ziel: [UUID!]
   $isZiel: Boolean!
-  $tpopkontr: [UUID!]
-  $isTpopkontr: Boolean!
   $apIsActiveInMap: Boolean!
 ) {
-  tpopkontrzaehls: allTpopkontrzaehls(
-    filter: { tpopkontrId: { in: $tpopkontr } }
-  ) @include(if: $isTpopkontr) {
-    nodes {
-      id
-      tpopkontrId
-      anzahl
-      tpopkontrzaehlEinheitWerteByEinheit {
-        id
-        text
-      }
-      tpopkontrzaehlMethodeWerteByMethode {
-        id
-        text
-      }
-    }
-  }
   tpopbers: allTpopbers(filter: { tpopId: { in: $tpop } }, orderBy: JAHR_ASC)
     @include(if: $isTpop) {
     nodes {
