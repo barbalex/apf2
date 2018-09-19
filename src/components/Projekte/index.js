@@ -32,7 +32,7 @@ const Projekte = ({ data }: { data: Object }) => {
   const treeTabs = intersection(treeTabValues, projekteTabs)
   const tree2Tabs = intersection(tree2TabValues, projekteTabs)
   const isPrint = get(data, 'isPrint')
-  console.log('Projekte rendering')
+  //console.log('Projekte rendering')
 
   if (tree2Tabs.length === 0 || isPrint) {
     return (

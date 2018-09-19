@@ -1,7 +1,7 @@
 import { ApolloClient } from 'apollo-client'
 import { createHttpLink } from 'apollo-link-http'
 import { setContext } from 'apollo-link-context'
-import { InMemoryCache  } from 'apollo-cache-inmemory'
+import { InMemoryCache } from 'apollo-cache-inmemory'
 import { withClientState } from 'apollo-link-state'
 import { ApolloLink } from 'apollo-link'
 import jwtDecode from 'jwt-decode'
@@ -13,7 +13,7 @@ import graphQlUri from './modules/graphQlUri'
 import resolvers from './store/resolvers'
 import defaults from './store/defaults'
 
-export default async (idb) => {
+export default async idb => {
   const authLink = setContext(async (_, { headers }) => {
     const users = await idb.currentUser.toArray()
     let token = get(users, '[0].token', null)
@@ -27,7 +27,7 @@ export default async (idb) => {
               token
             }
           }
-        `
+        `,
       })
       tokenFromStore = get(result, 'data.user.token')
     }
@@ -56,7 +56,7 @@ export default async (idb) => {
   const cache = new InMemoryCache({
     dataIdFromObject: object => {
       return object.id
-    }
+    },
   })
   const myDefaults = await defaults(idb)
   const stateLink = withClientState({
@@ -69,7 +69,7 @@ export default async (idb) => {
   })
   const client = new ApolloClient({
     link: ApolloLink.from([stateLink, authLink, httpLink]),
-    cache
+    cache,
   })
   return client
 }

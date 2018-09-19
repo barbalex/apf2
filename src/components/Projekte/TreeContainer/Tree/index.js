@@ -124,7 +124,7 @@ class Tree extends Component<Props> {
     // TODO:
     // when beob.artId is changed, saveArtIdToDb changes openNodes
     // problem is: Tree renders AFTERWARDS with OLD openNodes !!!???
-    console.log('Tree rendering')
+    //console.log('Tree rendering')
 
     return (
       <ErrorBoundary>

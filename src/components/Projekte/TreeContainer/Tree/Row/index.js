@@ -13,6 +13,7 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import PrintIcon from '@material-ui/icons/PictureAsPdf'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
+//import shouldUpdate from 'recompose/shouldUpdate'
 import withHandlers from 'recompose/withHandlers'
 import app from 'ampersand-app'
 
@@ -22,6 +23,7 @@ import toggleNode from '../../toggleNode'
 import toggleNodeSymbol from '../../toggleNodeSymbol'
 import setTreeKey from './setTreeKey.graphql'
 import withNodeFilterState from '../../../../../state/withNodeFilter'
+//import shouldRowUpdate from './shouldRowUpdate'
 
 const singleRowHeight = 23
 const StyledNode = styled.div`
@@ -207,6 +209,9 @@ const enhance = compose(
       })
     },
   }),
+  // not implemented because seemed not to be faster
+  // but surely more complex
+  //shouldUpdate(shouldRowUpdate),
 )
 
 const Row = ({
@@ -290,7 +295,7 @@ const Row = ({
     node.id === copying.id
   const copyingBiotop =
     node.nodeType === 'table' && node.id === get(data, 'copyingBiotop.id')
-  console.log('Row rendering')
+  //console.log('Row rendering')
 
   return (
     <div style={style}>

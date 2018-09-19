@@ -181,7 +181,7 @@ const ProjekteContainer = ({
           }
           return `Fehler: ${error.message}`
         }
-        console.log('ProjektContainer rendered', { data1 })
+        //console.log('ProjektContainer rendered', { data1 })
 
         const data = merge(data1, data2)
         const nodes = buildNodes({
