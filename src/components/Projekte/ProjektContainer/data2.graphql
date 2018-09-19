@@ -6,13 +6,6 @@ query TreeDataQuery(
   $isAp: Boolean!
   $apIsActiveInMap: Boolean!
 ) {
-  idealbiotops: allIdealbiotops(filter: { apId: { in: $ap } })
-    @include(if: $isAp) {
-    nodes {
-      id
-      apId
-    }
-  }
   aparts: allAparts(filter: { apId: { in: $ap } }) @include(if: $isAp) {
     nodes {
       id
