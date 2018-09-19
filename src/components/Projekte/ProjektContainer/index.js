@@ -49,6 +49,7 @@ import withTpopForMap from './withTpopForMap'
 import withBeobNichtBeurteiltForMap from './withBeobNichtBeurteiltForMap'
 import withBeobNichtZuzuordnenForMap from './withBeobNichtZuzuordnenForMap'
 import withBeobZugeordnetForMap from './withBeobZugeordnetForMap'
+import withBeobZugeordnetForMapMarkers from './withBeobZugeordnetForMapMarkers'
 import data2Gql from './data2.graphql'
 import TreeContainer from '../TreeContainer'
 import Daten from '../Daten'
@@ -115,6 +116,7 @@ const enhance = compose(
   withBeobNichtBeurteiltForMap,
   withBeobNichtZuzuordnenForMap,
   withBeobZugeordnetForMap,
+  withBeobZugeordnetForMapMarkers,
   withErrorState,
   withState('apfloraLayers', 'setApfloraLayers', apfloraLayers),
   withState('activeApfloraLayers', 'setActiveApfloraLayers', []),
@@ -168,6 +170,7 @@ const ProjekteContainer = ({
   dataBeobNichtBeurteiltForMap,
   dataBeobNichtZuzuordnenForMap,
   dataBeobZugeordnetForMap,
+  dataBeobZugeordnetForMapMarkers,
   treeName,
   tabs: tabsPassed,
   projekteTabs,
@@ -233,6 +236,7 @@ const ProjekteContainer = ({
   dataBeobNichtBeurteiltForMap: Object,
   dataBeobNichtZuzuordnenForMap: Object,
   dataBeobZugeordnetForMap: Object,
+  dataBeobZugeordnetForMapMarkers: Object,
   treeName: String,
   tabs: Array<String>,
   projekteTabs: Array<String>,
@@ -346,6 +350,7 @@ const ProjekteContainer = ({
           dataBeobNichtBeurteiltForMap,
           dataBeobNichtZuzuordnenForMap,
           dataBeobZugeordnetForMap,
+          dataBeobZugeordnetForMapMarkers,
         )
         const nodes = buildNodes({
           data,
