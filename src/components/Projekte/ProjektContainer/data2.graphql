@@ -6,17 +6,6 @@ query TreeDataQuery(
   $isAp: Boolean!
   $apIsActiveInMap: Boolean!
 ) {
-  assozarts: allAssozarts(filter: { apId: { in: $ap } }) @include(if: $isAp) {
-    nodes {
-      id
-      apId
-      aeId
-      aeEigenschaftenByAeId {
-        id
-        artname
-      }
-    }
-  }
   ekfzaehleinheits: allEkfzaehleinheits(filter: { apId: { in: $ap } })
     @include(if: $isAp) {
     nodes {
