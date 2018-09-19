@@ -14,21 +14,6 @@ query TreeDataQuery(
   $isTpopkontr: Boolean!
   $apIsActiveInMap: Boolean!
 ) {
-  tpopmassnbers: allTpopmassnbers(
-    filter: { tpopId: { in: $tpop } }
-    orderBy: JAHR_ASC
-  ) @include(if: $isTpop) {
-    nodes {
-      id
-      tpopId
-      jahr
-      beurteilung
-      tpopmassnErfbeurtWerteByBeurteilung {
-        id
-        text
-      }
-    }
-  }
   tpopfeldkontrs: allTpopkontrs(
     filter: {
       or: [
