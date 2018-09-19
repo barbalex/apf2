@@ -19,8 +19,9 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import withLocalData from './withLocalData'
 import withAdresses from './withAdresses'
 import withUsers from './withUsers'
-import withAps from './withAps'
 import withProjekts from './withProjekts'
+import withApberuebersichts from './withApberuebersichts'
+import withAps from './withAps'
 import withPops from './withPops'
 import data2Gql from './data2.graphql'
 import TreeContainer from '../TreeContainer'
@@ -59,6 +60,7 @@ const enhance = compose(
   withAdresses,
   withUsers,
   withProjekts,
+  withApberuebersichts,
   withAps,
   withPops,
   withErrorState,
@@ -85,6 +87,7 @@ const ProjekteContainer = ({
   dataAdresses,
   dataUsers,
   dataProjekts,
+  dataApberuebersichts,
   dataAps,
   dataPops,
   treeName,
@@ -123,6 +126,7 @@ const ProjekteContainer = ({
   dataAdresses: Object,
   dataUsers: Object,
   dataProjekts: Object,
+  dataApberuebersichts: Object,
   dataAps: Object,
   dataPops: Object,
   treeName: String,
@@ -209,6 +213,7 @@ const ProjekteContainer = ({
           dataAdresses,
           dataUsers,
           dataProjekts,
+          dataApberuebersichts,
           dataAps,
           dataPops,
         )

@@ -1,5 +1,4 @@
 query TreeDataQuery(
-  $projekt: [UUID!]
   $projId: UUID!
   $isProjekt: Boolean!
   $ap: [UUID!]
@@ -16,16 +15,6 @@ query TreeDataQuery(
   $isTpopkontr: Boolean!
   $apIsActiveInMap: Boolean!
 ) {
-  apberuebersichts: allApberuebersichts(
-    filter: { projId: { in: $projekt } }
-    orderBy: JAHR_ASC
-  ) @include(if: $isProjekt) {
-    nodes {
-      id
-      projId
-      jahr
-    }
-  }
   tpops: allTpops(filter: $tpopFilter, orderBy: NR_ASC) @include(if: $isPop) {
     nodes {
       id
