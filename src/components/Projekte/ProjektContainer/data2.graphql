@@ -8,42 +8,12 @@ query TreeDataQuery(
   $isPop: Boolean!
   $tpop: [UUID!]
   $isTpop: Boolean!
-  $tpopFilter: TpopFilter!
   $ziel: [UUID!]
   $isZiel: Boolean!
   $tpopkontr: [UUID!]
   $isTpopkontr: Boolean!
   $apIsActiveInMap: Boolean!
 ) {
-  tpops: allTpops(filter: $tpopFilter, orderBy: NR_ASC) @include(if: $isPop) {
-    nodes {
-      id
-      popId
-      nr
-      gemeinde
-      flurname
-      x
-      y
-      radius
-      hoehe
-      exposition
-      klima
-      neigung
-      beschreibung
-      katasterNr
-      status
-      statusUnklar
-      statusUnklarGrund
-      apberRelevant
-      bekanntSeit
-      eigentuemer
-      kontakt
-      nutzungszone
-      bewirtschafter
-      bewirtschaftung
-      bemerkungen
-    }
-  }
   tpopmassns: allTpopmassns(
     filter: { tpopId: { in: $tpop } }
     orderBy: JAHR_ASC
