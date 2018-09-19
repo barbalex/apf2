@@ -2,7 +2,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
-import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import intersection from 'lodash/intersection'
 import compose from 'recompose/compose'
