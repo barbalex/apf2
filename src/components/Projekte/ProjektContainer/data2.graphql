@@ -6,16 +6,6 @@ query TreeDataQuery(
   $isAp: Boolean!
   $apIsActiveInMap: Boolean!
 ) {
-  aparts: allAparts(filter: { apId: { in: $ap } }) @include(if: $isAp) {
-    nodes {
-      id
-      apId
-      aeEigenschaftenByArtId {
-        id
-        artname
-      }
-    }
-  }
   assozarts: allAssozarts(filter: { apId: { in: $ap } }) @include(if: $isAp) {
     nodes {
       id
