@@ -182,6 +182,22 @@ const PrintIconContainer = styled.div`
 const enhance = compose(
   withNodeFilterState,
   withHandlers({
+    onClickNode: ({
+      nodes,
+      index,
+      data,
+      treeName,
+      nodeFilterState,
+    }) => event => {
+      const node = nodes[index]
+      const tree2 = get(data, treeName)
+      toggleNode({ tree: tree2, node, nodeFilterState })
+    },
+    onClickNodeSymbol: ({ nodes, index, data, treeName }) => event => {
+      const node = nodes[index]
+      const tree2 = get(data, treeName)
+      toggleNodeSymbol({ tree: tree2, node, client: app.client })
+    },
     onClickPrint: ({ nodes, index, tree }) => () => {
       const node = nodes[index]
       app.client.mutate({
@@ -213,6 +229,8 @@ const Row = ({
   mapIdsFiltered,
   nodeFilterState,
   onClickPrint,
+  onClickNode,
+  onClickNodeSymbol,
 }: {
   index: Number,
   style: Object,
@@ -230,14 +248,11 @@ const Row = ({
   mapIdsFiltered: Array<String>,
   nodeFilterState: Object,
   onClickPrint: () => void,
+  onClickNode: () => void,
+  onClickNodeSymbol: () => void,
 }) => {
   const node = nodes[index]
-  const tree2 = get(data, treeName)
   const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
-  const onClickNode = event =>
-    toggleNode({ tree: tree2, node, nodeFilterState })
-  const onClickNodeSymbol = event =>
-    toggleNodeSymbol({ tree: tree2, node, client })
   const myProps = { key: index }
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, activeNodeArray)
   const nodeIsOpen = isNodeOpen(openNodes, node.url)
@@ -280,11 +295,6 @@ const Row = ({
   const copyingBiotop =
     node.nodeType === 'table' && node.id === get(data, 'copyingBiotop.id')
 
-  /**
-   * Why a div with style passed from Row?
-   * Would it not be better to use a Fragment?
-   * without styled div, list "flimmert"
-   */
   return (
     <div style={style}>
       <ContextMenuTrigger
@@ -293,7 +303,6 @@ const Row = ({
         nodeId={node.id}
         nodeLabel={node.label}
         key={`${node.menuType}${node.id}`}
-        // seems that react-virtualized wants this style here...
       >
         <StyledNode
           data-level={level}
