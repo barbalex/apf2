@@ -1,0 +1,11 @@
+query UsersQuery {
+  users: allUsers {
+    nodes {
+      id
+      name
+      email
+      role
+      pass
+    }
+  }
+}

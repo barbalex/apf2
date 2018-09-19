@@ -1,4 +1,4 @@
-query ApsDataQuery($isProjekt: Boolean!, $apFilter: ApFilter!) {
+query ApsQuery($isProjekt: Boolean!, $apFilter: ApFilter!) {
   aps: allAps(filter: $apFilter) @include(if: $isProjekt) {
     totalCount
     nodes {

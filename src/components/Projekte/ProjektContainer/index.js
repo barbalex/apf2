@@ -16,10 +16,12 @@ import jwtDecode from 'jwt-decode'
 // but only in production!
 import Karte from '../Karte'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import withData1 from './data1'
-import withDataAdresses from './dataAdresses'
-import withDataAps from './dataAps'
-import withDataPops from './dataPops'
+import withLocalData from './withLocalData'
+import withAdresses from './withAdresses'
+import withUsers from './withUsers'
+import withAps from './withAps'
+import withProjekts from './withProjekts'
+import withPops from './withPops'
 import data2Gql from './data2.graphql'
 import TreeContainer from '../TreeContainer'
 import Daten from '../Daten'
@@ -52,11 +54,13 @@ const LogoutButton = styled(Button)`
 `
 
 const enhance = compose(
-  withData1,
+  withLocalData,
   withTreeNodeFilterState,
-  withDataAdresses,
-  withDataAps,
-  withDataPops,
+  withAdresses,
+  withUsers,
+  withProjekts,
+  withAps,
+  withPops,
   withErrorState,
   withState('apfloraLayers', 'setApfloraLayers', apfloraLayers),
   withState('activeApfloraLayers', 'setActiveApfloraLayers', []),
@@ -77,8 +81,10 @@ const enhance = compose(
 )
 
 const ProjekteContainer = ({
-  data1,
+  dataLocal,
   dataAdresses,
+  dataUsers,
+  dataProjekts,
   dataAps,
   dataPops,
   treeName,
@@ -113,8 +119,10 @@ const ProjekteContainer = ({
   errorState,
   nodeFilterState,
 }: {
-  data1: Object,
+  dataLocal: Object,
   dataAdresses: Object,
+  dataUsers: Object,
+  dataProjekts: Object,
   dataAps: Object,
   dataPops: Object,
   treeName: String,
@@ -149,16 +157,16 @@ const ProjekteContainer = ({
   errorState: Object,
   nodeFilterState: Object,
 }) => {
-  const activeNodeArray = get(data1, `${treeName}.activeNodeArray`)
+  const activeNodeArray = get(dataLocal, `${treeName}.activeNodeArray`)
   const activeNodes = getActiveNodes(activeNodeArray)
-  const openNodes = get(data1, `${treeName}.openNodes`)
-  const moving = get(data1, 'moving')
-  const copying = get(data1, 'copying')
-  const token = get(data1, 'user.token')
+  const openNodes = get(dataLocal, `${treeName}.openNodes`)
+  const moving = get(dataLocal, 'moving')
+  const copying = get(dataLocal, 'copying')
+  const token = get(dataLocal, 'user.token')
   const tokenDecoded = token ? jwtDecode(token) : null
   const role = tokenDecoded ? tokenDecoded.role : null
   const variables = buildVariables({
-    data: data1,
+    data: dataLocal,
     treeName,
     nodeFilter: nodeFilterState.state[treeName],
   })
@@ -193,9 +201,17 @@ const ProjekteContainer = ({
           }
           return `Fehler: ${error.message}`
         }
-        //console.log('ProjektContainer rendered', { data1 })
+        //console.log('ProjektContainer rendered', { dataLocal })
 
-        const data = merge(data1, data2, dataAdresses, dataAps, dataPops)
+        const data = merge(
+          dataLocal,
+          data2,
+          dataAdresses,
+          dataUsers,
+          dataProjekts,
+          dataAps,
+          dataPops,
+        )
         const nodes = buildNodes({
           data,
           treeName,

@@ -1,4 +1,4 @@
-query Query {
+query LocalDataQuery {
   assigningBeob @client
   isPrint @client
   user @client {

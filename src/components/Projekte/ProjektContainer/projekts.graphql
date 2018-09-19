@@ -1,0 +1,8 @@
+query ProjektsQuery {
+  projekts: allProjekts(orderBy: NAME_ASC) {
+    nodes {
+      id
+      name
+    }
+  }
+}

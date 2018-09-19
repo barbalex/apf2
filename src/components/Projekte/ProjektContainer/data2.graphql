@@ -16,12 +16,6 @@ query TreeDataQuery(
   $isTpopkontr: Boolean!
   $apIsActiveInMap: Boolean!
 ) {
-  projekts: allProjekts(orderBy: NAME_ASC) {
-    nodes {
-      id
-      name
-    }
-  }
   apberuebersichts: allApberuebersichts(
     filter: { projId: { in: $projekt } }
     orderBy: JAHR_ASC
@@ -754,15 +748,6 @@ query TreeDataQuery(
           }
         }
       }
-    }
-  }
-  users: allUsers {
-    nodes {
-      id
-      name
-      email
-      role
-      pass
     }
   }
 }

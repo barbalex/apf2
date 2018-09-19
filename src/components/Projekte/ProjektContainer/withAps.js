@@ -1,13 +1,13 @@
 // @flow
 import { graphql } from 'react-apollo'
 
-import query from './dataAps.graphql'
+import query from './aps.graphql'
 import buildVariables from './variables'
 
 export default graphql(query, {
-  options: ({ data1, treeName, nodeFilterState }) => {
+  options: ({ dataLocal, treeName, nodeFilterState }) => {
     const variables = buildVariables({
-      data: data1,
+      data: dataLocal,
       treeName,
       nodeFilter: nodeFilterState.state[treeName],
     })

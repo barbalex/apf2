@@ -1,4 +1,4 @@
-query PopDataQuery($isAp: Boolean!, $popFilter: PopFilter!) {
+query PopsQuery($isAp: Boolean!, $popFilter: PopFilter!) {
   pops: allPops(filter: $popFilter, orderBy: NR_ASC) @include(if: $isAp) {
     nodes {
       id
