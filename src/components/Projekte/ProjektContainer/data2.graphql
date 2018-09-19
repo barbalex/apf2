@@ -6,38 +6,6 @@ query TreeDataQuery(
   $isAp: Boolean!
   $apIsActiveInMap: Boolean!
 ) {
-  beobNichtBeurteilts: allVApbeobs(
-    filter: {
-      nichtZuordnen: { equalTo: false }
-      apId: { in: $ap }
-      tpopId: { isNull: true }
-    }
-    orderBy: DATUM_DESC
-  ) @include(if: $isAp) {
-    nodes {
-      id
-      apId
-      nichtZuordnen
-      artId
-      datum
-      autor
-      quelle
-    }
-  }
-  beobNichtZuzuordnens: allVApbeobs(
-    filter: { nichtZuordnen: { equalTo: true }, apId: { in: $ap } }
-    orderBy: DATUM_DESC
-  ) @include(if: $isAp) {
-    nodes {
-      id
-      apId
-      nichtZuordnen
-      artId
-      datum
-      autor
-      quelle
-    }
-  }
   # these are used in Rows
   # to extract data for map layers
   popForMap: allPops(

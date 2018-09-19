@@ -42,6 +42,8 @@ import withIdealbiotops from './withIdealbiotops'
 import withAparts from './withAparts'
 import withAssozarts from './withAssozarts'
 import withEkfzaehleinheits from './withEkfzaehleinheits'
+import withBeobNichtBeurteilts from './withBeobNichtBeurteilts'
+import withBeobNichtZuzuordnens from './withBeobNichtZuzuordnens'
 import data2Gql from './data2.graphql'
 import TreeContainer from '../TreeContainer'
 import Daten from '../Daten'
@@ -101,6 +103,8 @@ const enhance = compose(
   withAparts,
   withAssozarts,
   withEkfzaehleinheits,
+  withBeobNichtBeurteilts,
+  withBeobNichtZuzuordnens,
   withErrorState,
   withState('apfloraLayers', 'setApfloraLayers', apfloraLayers),
   withState('activeApfloraLayers', 'setActiveApfloraLayers', []),
@@ -147,6 +151,8 @@ const ProjekteContainer = ({
   dataAparts,
   dataAssozarts,
   dataEkfzaehleinheits,
+  dataBeobNichtBeurteilts,
+  dataBeobNichtZuzuordnens,
   treeName,
   tabs: tabsPassed,
   projekteTabs,
@@ -205,6 +211,8 @@ const ProjekteContainer = ({
   dataAparts: Object,
   dataAssozarts: Object,
   dataEkfzaehleinheits: Object,
+  dataBeobNichtBeurteilts: Object,
+  dataBeobNichtZuzuordnens: Object,
   treeName: String,
   tabs: Array<String>,
   projekteTabs: Array<String>,
@@ -311,6 +319,8 @@ const ProjekteContainer = ({
           dataAparts,
           dataAssozarts,
           dataEkfzaehleinheits,
+          dataBeobNichtBeurteilts,
+          dataBeobNichtZuzuordnens,
         )
         const nodes = buildNodes({
           data,
