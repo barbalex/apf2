@@ -6,19 +6,6 @@ query TreeDataQuery(
   $isAp: Boolean!
   $apIsActiveInMap: Boolean!
 ) {
-  beobZugeordnetForMap: allVApbeobs(
-    filter: {
-      apId: { in: $ap }
-      nichtZuordnen: { equalTo: false }
-      tpopId: { isNull: false }
-    }
-  ) @include(if: $apIsActiveInMap) {
-    nodes {
-      id
-      x
-      y
-    }
-  }
   beobZugeordnetForMapMarkers: projektById(id: $projId)
     @include(if: $apIsActiveInMap) {
     id
