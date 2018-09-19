@@ -15,8 +15,6 @@ query TreeDataQuery(
   $tpopkontr: [UUID!]
   $isTpopkontr: Boolean!
   $apIsActiveInMap: Boolean!
-  $isWerteListen: Boolean!
-  $isAdresse: Boolean!
 ) {
   projekts: allProjekts(orderBy: NAME_ASC) {
     nodes {
@@ -765,13 +763,6 @@ query TreeDataQuery(
       email
       role
       pass
-    }
-  }
-  adresses: allAdresses @include(if: $isWerteListen) {
-    totalCount
-    nodes @include(if: $isAdresse) {
-      id
-      name
     }
   }
 }

@@ -17,6 +17,7 @@ import jwtDecode from 'jwt-decode'
 import Karte from '../Karte'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import withData1 from './data1'
+import withDataAdresses from './dataAdresses'
 import withDataAps from './dataAps'
 import withDataPops from './dataPops'
 import data2Gql from './data2.graphql'
@@ -53,6 +54,7 @@ const LogoutButton = styled(Button)`
 const enhance = compose(
   withData1,
   withTreeNodeFilterState,
+  withDataAdresses,
   withDataAps,
   withDataPops,
   withErrorState,
@@ -76,6 +78,7 @@ const enhance = compose(
 
 const ProjekteContainer = ({
   data1,
+  dataAdresses,
   dataAps,
   dataPops,
   treeName,
@@ -111,6 +114,7 @@ const ProjekteContainer = ({
   nodeFilterState,
 }: {
   data1: Object,
+  dataAdresses: Object,
   dataAps: Object,
   dataPops: Object,
   treeName: String,
@@ -191,7 +195,7 @@ const ProjekteContainer = ({
         }
         //console.log('ProjektContainer rendered', { data1 })
 
-        const data = merge(data1, data2, dataAps, dataPops)
+        const data = merge(data1, data2, dataAdresses, dataAps, dataPops)
         const nodes = buildNodes({
           data,
           treeName,
