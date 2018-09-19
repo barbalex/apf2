@@ -5,11 +5,12 @@ import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import intersection from 'lodash/intersection'
+import compose from 'recompose/compose'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
 import ErrorBoundary from '../shared/ErrorBoundary'
-import dataGql from './data.graphql'
+import withData from './withData'
 import ProjektContainer from './ProjektContainer'
 
 const Container = styled.div`
@@ -24,51 +25,49 @@ const Container = styled.div`
 const treeTabValues = ['tree', 'daten', 'karte', 'exporte']
 const tree2TabValues = ['tree2', 'daten2', 'karte2', 'exporte2']
 
-const Projekte = () => (
-  <Query query={dataGql}>
-    {({ loading, error, data, client }) => {
-      if (error) return `Fehler: ${error.message}`
+const enhance = compose(withData)
 
-      const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
-      const treeTabs = intersection(treeTabValues, projekteTabs)
-      const tree2Tabs = intersection(tree2TabValues, projekteTabs)
-      const isPrint = get(data, 'isPrint')
+const Projekte = ({ data }: { data: Object }) => {
+  if (data.error) return `Fehler: ${data.error.message}`
+  const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
+  const treeTabs = intersection(treeTabValues, projekteTabs)
+  const tree2Tabs = intersection(tree2TabValues, projekteTabs)
+  const isPrint = get(data, 'isPrint')
+  console.log('Projekte rendering')
 
-      if (tree2Tabs.length === 0 || isPrint) {
-        return (
-          <ProjektContainer
-            treeName="tree"
-            tabs={treeTabs}
-            projekteTabs={projekteTabs}
-          />
-        )
-      }
+  if (tree2Tabs.length === 0 || isPrint) {
+    return (
+      <ProjektContainer
+        treeName="tree"
+        tabs={treeTabs}
+        projekteTabs={projekteTabs}
+      />
+    )
+  }
 
-      return (
-        <Container>
-          <ErrorBoundary>
-            <ReflexContainer orientation="vertical">
-              <ReflexElement flex={treeTabs.length / projekteTabs.length}>
-                <ProjektContainer
-                  treeName="tree"
-                  tabs={treeTabs}
-                  projekteTabs={projekteTabs}
-                />
-              </ReflexElement>
-              <ReflexSplitter />
-              <ReflexElement>
-                <ProjektContainer
-                  treeName="tree2"
-                  tabs={tree2Tabs}
-                  projekteTabs={projekteTabs}
-                />
-              </ReflexElement>
-            </ReflexContainer>
-          </ErrorBoundary>
-        </Container>
-      )
-    }}
-  </Query>
-)
+  return (
+    <Container>
+      <ErrorBoundary>
+        <ReflexContainer orientation="vertical">
+          <ReflexElement flex={treeTabs.length / projekteTabs.length}>
+            <ProjektContainer
+              treeName="tree"
+              tabs={treeTabs}
+              projekteTabs={projekteTabs}
+            />
+          </ReflexElement>
+          <ReflexSplitter />
+          <ReflexElement>
+            <ProjektContainer
+              treeName="tree2"
+              tabs={tree2Tabs}
+              projekteTabs={projekteTabs}
+            />
+          </ReflexElement>
+        </ReflexContainer>
+      </ErrorBoundary>
+    </Container>
+  )
+}
 
-export default Projekte
+export default enhance(Projekte)
