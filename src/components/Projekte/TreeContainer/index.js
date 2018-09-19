@@ -538,6 +538,7 @@ class TreeContainer extends Component<Props> {
     const tree = get(data, treeName)
     const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
     const token = get(data, 'user.token', null)
+    console.log('TreeContainer rendering')
 
     return (
       <ErrorBoundary>
