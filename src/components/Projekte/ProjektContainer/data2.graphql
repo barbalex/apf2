@@ -6,27 +6,10 @@ query TreeDataQuery(
   $isAp: Boolean!
   $pop: [UUID!]
   $isPop: Boolean!
-  $tpop: [UUID!]
-  $isTpop: Boolean!
   $ziel: [UUID!]
   $isZiel: Boolean!
   $apIsActiveInMap: Boolean!
 ) {
-  beobZugeordnets: allVApbeobs(
-    filter: { tpopId: { in: $tpop } }
-    orderBy: DATUM_DESC
-  ) @include(if: $isTpop) {
-    nodes {
-      id
-      tpopId
-      nichtZuordnen
-      artId
-      datum
-      autor
-      quelle
-      tpopId
-    }
-  }
   popbers: allPopbers(filter: { popId: { in: $pop } }, orderBy: JAHR_ASC)
     @include(if: $isPop) {
     nodes {
