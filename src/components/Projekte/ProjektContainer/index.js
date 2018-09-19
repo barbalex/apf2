@@ -23,6 +23,7 @@ import withProjekts from './withProjekts'
 import withApberuebersichts from './withApberuebersichts'
 import withAps from './withAps'
 import withPops from './withPops'
+import withPopbers from './withPopbers'
 import withTpops from './withTpops'
 import withTpopmassns from './withTpopmassns'
 import withTpopmassnbers from './withTpopmassnbers'
@@ -71,6 +72,7 @@ const enhance = compose(
   withApberuebersichts,
   withAps,
   withPops,
+  withPopbers,
   withTpops,
   withTpopmassns,
   withTpopmassnbers,
@@ -106,6 +108,7 @@ const ProjekteContainer = ({
   dataApberuebersichts,
   dataAps,
   dataPops,
+  dataPopbers,
   dataTpops,
   dataTpopmassns,
   dataTpopmassnbers,
@@ -153,6 +156,7 @@ const ProjekteContainer = ({
   dataApberuebersichts: Object,
   dataAps: Object,
   dataPops: Object,
+  dataPopbers: Object,
   dataTpops: Object,
   dataTpopmassns: Object,
   dataTpopmassnbers: Object,
@@ -248,6 +252,7 @@ const ProjekteContainer = ({
           dataApberuebersichts,
           dataAps,
           dataPops,
+          dataPopbers,
           dataTpops,
           dataTpopmassns,
           dataTpopmassnbers,

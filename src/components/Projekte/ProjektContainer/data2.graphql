@@ -10,18 +10,6 @@ query TreeDataQuery(
   $isZiel: Boolean!
   $apIsActiveInMap: Boolean!
 ) {
-  popbers: allPopbers(filter: { popId: { in: $pop } }, orderBy: JAHR_ASC)
-    @include(if: $isPop) {
-    nodes {
-      id
-      popId
-      jahr
-      tpopEntwicklungWerteByEntwicklung {
-        id
-        text
-      }
-    }
-  }
   popmassnbers: allPopmassnbers(
     filter: { popId: { in: $pop } }
     orderBy: JAHR_ASC
