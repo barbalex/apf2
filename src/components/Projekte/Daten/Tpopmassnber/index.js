@@ -66,7 +66,7 @@ const enhance = compose(
         return setErrors({ [field]: error.message })
       }
       setErrors({})
-      if (['beurteilung'].includes(field)) refetchTree()
+      if (['beurteilung'].includes(field)) refetchTree('tpopmassnbers')
     },
   }),
   withLifecycle({

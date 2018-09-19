@@ -68,7 +68,7 @@ const enhance = compose(
         return setErrors({ [field]: error.message })
       }
       setErrors({})
-      if (['entwicklung'].includes(field)) refetchTree()
+      if (['entwicklung'].includes(field)) refetchTree('popbers')
     },
   }),
   withLifecycle({

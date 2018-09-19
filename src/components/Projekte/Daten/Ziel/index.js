@@ -93,7 +93,7 @@ const enhance = compose(
             key2: 'openNodes',
           },
         })
-        if (['typ'].includes(field)) refetchTree()
+        if (['typ'].includes(field)) refetchTree('ziels')
       }
     },
   }),

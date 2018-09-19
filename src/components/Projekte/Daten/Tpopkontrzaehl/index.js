@@ -70,7 +70,7 @@ const enhance = compose(
         return setErrors({ [field]: error.message })
       }
       setErrors({})
-      if (['einheit', 'methode'].includes(field)) refetchTree()
+      if (['einheit', 'methode'].includes(field)) refetchTree('tpopkontrzaehls')
     },
   }),
   withLifecycle({

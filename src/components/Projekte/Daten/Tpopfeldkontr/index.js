@@ -245,7 +245,7 @@ const enhance = compose(
           return setErrors({ [field]: error.message })
         }
         setErrors({})
-        if (['typ'].includes(field)) refetchTree()
+        if (['typ'].includes(field)) refetchTree('tpopfeldkontrs')
       }
     },
     onChangeTab: ({ setValue }) => (event, value) => {

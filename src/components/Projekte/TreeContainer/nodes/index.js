@@ -458,7 +458,7 @@ export default ({
             nodes,
             data,
             treeName,
-            loading: data.dataZielbers.loading,
+            loading: dataZielbers.loading,
             apNodes,
             openNodes,
             projektNodes,

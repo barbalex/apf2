@@ -64,7 +64,7 @@ const enhance = compose(
         return setErrors({ [field]: error.message })
       }
       setErrors({})
-      if (['erfolg'].includes(field)) refetchTree()
+      if (['erfolg'].includes(field)) refetchTree('erfkrits')
     },
   }),
   withLifecycle({
