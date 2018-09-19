@@ -6,31 +6,6 @@ query TreeDataQuery(
   $isAp: Boolean!
   $apIsActiveInMap: Boolean!
 ) {
-  # these are used in Rows
-  # to extract data for map layers
-  popForMap: allPops(
-    filter: { apId: { in: $ap }, x: { isNull: false }, y: { isNull: false } }
-  ) @include(if: $apIsActiveInMap) {
-    nodes {
-      id
-      apId
-      nr
-      name
-      status
-      statusUnklar
-      statusUnklarBegruendung
-      bekanntSeit
-      x
-      y
-      tpopsByPopId(filter: { x: { isNull: false }, y: { isNull: false } }) {
-        nodes {
-          id
-          x
-          y
-        }
-      }
-    }
-  }
   # this one is used to refetch data when new tpop was localized
   # so that the new marker appears on map
   tpopForMap: projektById(id: $projId) @include(if: $apIsActiveInMap) {
