@@ -80,6 +80,7 @@ class Tree extends Component<Props> {
       mapFilter,
       mapIdsFiltered,
     } = this.props
+    const node = nodes[index]
 
     return (
       <Row
@@ -89,7 +90,7 @@ class Tree extends Component<Props> {
         tree={tree}
         openNodes={openNodes}
         activeNodes={activeNodes}
-        nodes={nodes}
+        node={node}
         data={data}
         treeName={treeName}
         client={client}
@@ -123,7 +124,7 @@ class Tree extends Component<Props> {
     // TODO:
     // when beob.artId is changed, saveArtIdToDb changes openNodes
     // problem is: Tree renders AFTERWARDS with OLD openNodes !!!???
-    //console.log('Tree', { openNodes })
+    console.log('Tree rendering')
 
     return (
       <ErrorBoundary>

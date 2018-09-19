@@ -183,23 +183,20 @@ const enhance = compose(
   withNodeFilterState,
   withHandlers({
     onClickNode: ({
-      nodes,
+      node,
       index,
       data,
       treeName,
       nodeFilterState,
     }) => event => {
-      const node = nodes[index]
       const tree2 = get(data, treeName)
       toggleNode({ tree: tree2, node, nodeFilterState })
     },
-    onClickNodeSymbol: ({ nodes, index, data, treeName }) => event => {
-      const node = nodes[index]
+    onClickNodeSymbol: ({ node, index, data, treeName }) => event => {
       const tree2 = get(data, treeName)
       toggleNodeSymbol({ tree: tree2, node, client: app.client })
     },
-    onClickPrint: ({ nodes, index, tree }) => () => {
-      const node = nodes[index]
+    onClickPrint: ({ node, index, tree }) => () => {
       app.client.mutate({
         mutation: setTreeKey,
         variables: {
@@ -216,7 +213,7 @@ const Row = ({
   index,
   style,
   tree,
-  nodes,
+  node,
   activeNodes,
   treeName,
   data,
@@ -235,7 +232,7 @@ const Row = ({
   index: Number,
   style: Object,
   tree: Object,
-  nodes: Array<Object>,
+  node: Array<Object>,
   activeNodes: Array<Object>,
   treeName: String,
   data: Object,
@@ -251,7 +248,6 @@ const Row = ({
   onClickNode: () => void,
   onClickNodeSymbol: () => void,
 }) => {
-  const node = nodes[index]
   const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
   const myProps = { key: index }
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, activeNodeArray)
@@ -294,6 +290,7 @@ const Row = ({
     node.id === copying.id
   const copyingBiotop =
     node.nodeType === 'table' && node.id === get(data, 'copyingBiotop.id')
+  console.log('Row rendering')
 
   return (
     <div style={style}>
