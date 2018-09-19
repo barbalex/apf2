@@ -63,7 +63,7 @@ const enhance = compose(
         return setErrors({ [field]: error.message })
       }
       setErrors({})
-      if (['artId'].includes(field)) refetchTree()
+      if (['artId'].includes(field)) refetchTree('aparts')
     },
   }),
   withLifecycle({

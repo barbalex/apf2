@@ -150,7 +150,7 @@ const Beobzuordnung = ({
   treeName: string,
 }) => (
   <Query query={dataGql} variables={{ id }}>
-    {({ loading, error, data, client }) => {
+    {({ loading, error, data, client, refetch }) => {
       if (loading)
         return (
           <Container>
@@ -235,7 +235,7 @@ const Beobzuordnung = ({
                           id,
                           updateBeob,
                           tree,
-                          client,
+                          refetch,
                           refetchTree,
                         })
                       }

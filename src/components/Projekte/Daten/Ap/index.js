@@ -85,7 +85,7 @@ const enhance = compose(
           key: field,
           value,
         })
-        refetchTree()
+        refetchTree('aps')
       } else {
         try {
           await updateAp({
@@ -121,7 +121,7 @@ const enhance = compose(
           return setErrors({ [field]: error.message })
         }
         setErrors({})
-        if (['artId'].includes(field)) refetchTree()
+        if (['artId'].includes(field)) refetchTree('aps')
       }
     },
   }),

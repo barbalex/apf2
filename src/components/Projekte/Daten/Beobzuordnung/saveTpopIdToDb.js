@@ -13,17 +13,17 @@ export default async ({
   tree,
   client,
   refetchTree,
-  type
+  type,
 }) => {
   const variables = {
     id,
-    tpopId: value
+    tpopId: value,
   }
   if (value) variables.nichtZuordnen = false
   // if value, set nichtZuordnen false
   if (!!value) variables.nichtZuordnen = false
   updateBeob({ variables })
-  
+
   // need to update activeNodeArray and openNodes
   const { activeNodeArray: aNA, openNodes } = tree
 
@@ -36,13 +36,25 @@ export default async ({
             id
             popId
           }
-        }`,
-        variables: { id: value }
+        }
+      `,
+      variables: { id: value },
     })
     // aNA = activeNodeArray
     const popId = get(result, 'data.tpopById.popId')
     const tpopId = get(result, 'data.tpopById.id')
-    const newANA = [ aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen', popId, 'Teil-Populationen', tpopId, 'Beobachtungen', id ]
+    const newANA = [
+      aNA[0],
+      aNA[1],
+      aNA[2],
+      aNA[3],
+      'Populationen',
+      popId,
+      'Teil-Populationen',
+      tpopId,
+      'Beobachtungen',
+      id,
+    ]
     const oldParentNodeUrl = clone(aNA)
     oldParentNodeUrl.pop()
     const oldGParentNodeUrl = clone(oldParentNodeUrl)
@@ -54,31 +66,107 @@ export default async ({
     let newOpenNodes
     if (['nichtZuzuordnen', 'nichtBeurteilt'].includes(type)) {
       newOpenNodes = [
-        ...openNodes.filter(n => 
-          !isEqual(n, aNA) &&
-          !isEqual(n, oldParentNodeUrl)
+        ...openNodes.filter(
+          n => !isEqual(n, aNA) && !isEqual(n, oldParentNodeUrl),
         ),
-        [ aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen' ],
-        [ aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen', popId ],
-        [ aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen', popId, 'Teil-Populationen' ],
-        [ aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen', popId, 'Teil-Populationen', tpopId ],
-        [ aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen', popId, 'Teil-Populationen', tpopId, 'Beobachtungen' ],
-        [ aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen', popId, 'Teil-Populationen', tpopId, 'Beobachtungen', id ]
+        [aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen'],
+        [aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen', popId],
+        [
+          aNA[0],
+          aNA[1],
+          aNA[2],
+          aNA[3],
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+        ],
+        [
+          aNA[0],
+          aNA[1],
+          aNA[2],
+          aNA[3],
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+        ],
+        [
+          aNA[0],
+          aNA[1],
+          aNA[2],
+          aNA[3],
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+          'Beobachtungen',
+        ],
+        [
+          aNA[0],
+          aNA[1],
+          aNA[2],
+          aNA[3],
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+          'Beobachtungen',
+          id,
+        ],
       ]
     } else {
       newOpenNodes = [
-        ...openNodes.filter(n => 
-          !isEqual(n, aNA) &&
-          !isEqual(n, oldParentNodeUrl) &&
-          !isEqual(n, oldGParentNodeUrl) &&
-          !isEqual(n, oldGParentNodeUrl) &&
-          !isEqual(n, oldGGParentNodeUrl)
+        ...openNodes.filter(
+          n =>
+            !isEqual(n, aNA) &&
+            !isEqual(n, oldParentNodeUrl) &&
+            !isEqual(n, oldGParentNodeUrl) &&
+            !isEqual(n, oldGParentNodeUrl) &&
+            !isEqual(n, oldGGParentNodeUrl),
         ),
-        [ aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen', popId ],
-        [ aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen', popId, 'Teil-Populationen' ],
-        [ aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen', popId, 'Teil-Populationen', tpopId ],
-        [ aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen', popId, 'Teil-Populationen', tpopId, 'Beobachtungen' ],
-        [ aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen', popId, 'Teil-Populationen', tpopId, 'Beobachtungen', id ]
+        [aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen', popId],
+        [
+          aNA[0],
+          aNA[1],
+          aNA[2],
+          aNA[3],
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+        ],
+        [
+          aNA[0],
+          aNA[1],
+          aNA[2],
+          aNA[3],
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+        ],
+        [
+          aNA[0],
+          aNA[1],
+          aNA[2],
+          aNA[3],
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+          'Beobachtungen',
+        ],
+        [
+          aNA[0],
+          aNA[1],
+          aNA[2],
+          aNA[3],
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+          'Beobachtungen',
+          id,
+        ],
       ]
     }
     await client.mutate({
@@ -88,11 +176,18 @@ export default async ({
         value1: newANA,
         key1: 'activeNodeArray',
         value2: newOpenNodes,
-        key2: 'openNodes'
-      }
+        key2: 'openNodes',
+      },
     })
   } else {
-    const newANA = [ aNA[0], aNA[1], aNA[2], aNA[3], 'nicht-beurteilte-Beobachtungen', id ]
+    const newANA = [
+      aNA[0],
+      aNA[1],
+      aNA[2],
+      aNA[3],
+      'nicht-beurteilte-Beobachtungen',
+      id,
+    ]
     const oldParentNodeUrl = clone(aNA)
     oldParentNodeUrl.pop()
     const oldGParentNodeUrl = clone(oldParentNodeUrl)
@@ -106,25 +201,25 @@ export default async ({
     let newOpenNodes
     if (['nichtZuzuordnen', 'nichtBeurteilt'].includes(type)) {
       newOpenNodes = [
-        ...openNodes.filter(n => 
-          !isEqual(n, aNA) &&
-          !isEqual(n, oldParentNodeUrl)
+        ...openNodes.filter(
+          n => !isEqual(n, aNA) && !isEqual(n, oldParentNodeUrl),
         ),
-        [ aNA[0], aNA[1], aNA[2], aNA[3], 'nicht-beurteilte-Beobachtungen' ],
-        [ aNA[0], aNA[1], aNA[2], aNA[3], 'nicht-beurteilte-Beobachtungen', id ],
+        [aNA[0], aNA[1], aNA[2], aNA[3], 'nicht-beurteilte-Beobachtungen'],
+        [aNA[0], aNA[1], aNA[2], aNA[3], 'nicht-beurteilte-Beobachtungen', id],
       ]
     } else {
       newOpenNodes = [
-        ...openNodes.filter(n => 
-          !isEqual(n, aNA) &&
-          !isEqual(n, oldParentNodeUrl) &&
-          !isEqual(n, oldGParentNodeUrl) &&
-          !isEqual(n, oldGParentNodeUrl) &&
-          !isEqual(n, oldGGParentNodeUrl) &&
-          !isEqual(n, oldGGGParentNodeUrl)
+        ...openNodes.filter(
+          n =>
+            !isEqual(n, aNA) &&
+            !isEqual(n, oldParentNodeUrl) &&
+            !isEqual(n, oldGParentNodeUrl) &&
+            !isEqual(n, oldGParentNodeUrl) &&
+            !isEqual(n, oldGGParentNodeUrl) &&
+            !isEqual(n, oldGGGParentNodeUrl),
         ),
-        [ aNA[0], aNA[1], aNA[2], aNA[3], 'nicht-beurteilte-Beobachtungen' ],
-        [ aNA[0], aNA[1], aNA[2], aNA[3], 'nicht-beurteilte-Beobachtungen', id ],
+        [aNA[0], aNA[1], aNA[2], aNA[3], 'nicht-beurteilte-Beobachtungen'],
+        [aNA[0], aNA[1], aNA[2], aNA[3], 'nicht-beurteilte-Beobachtungen', id],
       ]
     }
     await client.mutate({
@@ -134,9 +229,11 @@ export default async ({
         value1: newANA,
         key1: 'activeNodeArray',
         value2: newOpenNodes,
-        key2: 'openNodes'
-      }
+        key2: 'openNodes',
+      },
     })
   }
-  refetchTree()
+  refetchTree('beobZugeordnets')
+  refetchTree('beobNichtBeurteilts')
+  refetchTree('beobNichtZuzuordnens')
 }

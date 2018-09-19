@@ -556,6 +556,7 @@ class TreeContainer extends Component<Props> {
               data={data}
               tree={tree}
               nodes={nodes}
+              // TODO: is this loading needed?
               loading={loading}
               activeNodeArray={activeNodeArray}
               openNodes={openNodes}

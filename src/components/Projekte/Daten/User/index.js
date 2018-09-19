@@ -93,7 +93,7 @@ const enhance = compose(
         return setErrors({ [field]: error.message })
       }
       setErrors({})
-      if (['name', 'role'].includes(field)) refetchTree()
+      if (['name', 'role'].includes(field)) refetchTree('users')
     },
   }),
   withHandlers({

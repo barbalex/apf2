@@ -66,7 +66,7 @@ const enhance = compose(
         return setErrors({ [field]: error.message })
       }
       setErrors({})
-      if (['aeId'].includes(field)) refetchTree()
+      if (['aeId'].includes(field)) refetchTree('assozarts')
     },
   }),
   withLifecycle({
@@ -130,10 +130,7 @@ const Assozart = ({
                     value={row.aeId}
                     field="aeId"
                     label="Art"
-                    options={artWerte.map(a => ({
-                      label: a.value,
-                      value: a.id,
-                    }))}
+                    options={artWerte}
                     saveToDb={value =>
                       saveToDb({
                         row,

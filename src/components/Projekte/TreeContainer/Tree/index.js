@@ -140,6 +140,7 @@ class Tree extends Component<Props> {
                 width={width}
                 // force rerender when:
                 // ...second query finisches
+                // TODO: is this loading needed?
                 loading={loading}
                 // ...after copying and moving
                 copying={copying}

@@ -68,7 +68,7 @@ const enhance = compose(
         return setErrors({ [field]: error.message })
       }
       setErrors({})
-      if (['zaehleinheitId'].includes(field)) refetchTree()
+      if (['zaehleinheitId'].includes(field)) refetchTree('ekfzaehleinheits')
     },
   }),
   withLifecycle({

@@ -1,10 +1,18 @@
 //@flow
 import clone from 'lodash/clone'
 import isEqual from 'lodash/isEqual'
+import app from 'ampersand-app'
 
 import setTreeKeyGql from './setTreeKey.graphql'
 
-export default async ({ value, id, updateBeob, tree, client, refetch, refetchTree }) => {
+export default async ({
+  value,
+  id,
+  updateBeob,
+  tree,
+  refetch,
+  refetchTree,
+}) => {
   const variables = {
     id,
     nichtZuordnen: value,
@@ -29,16 +37,19 @@ export default async ({ value, id, updateBeob, tree, client, refetch, refetchTre
     if (isEqual(n, oldParentNodeUrl)) return newParentNodeUrl
     return n
   })
-  await client.mutate({
+  await app.client.mutate({
     mutation: setTreeKeyGql,
     variables: {
       tree: tree.name,
       value1: newActiveNodeArray,
       key1: 'activeNodeArray',
       value2: newOpenNodes,
-      key2: 'openNodes'
-    }
+      key2: 'openNodes',
+    },
   })
   refetch()
-  refetchTree()
+  refetchTree('local')
+  refetchTree('beobNichtZuzuordnens')
+  refetchTree('beobNichtBeurteilts')
+  refetchTree('beobZugeordnets')
 }
