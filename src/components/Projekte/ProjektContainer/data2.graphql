@@ -1,24 +1,10 @@
 query TreeDataQuery(
   $projId: UUID!
   $isProjekt: Boolean!
-  $ap: [UUID!]
   $apId: UUID
   $isAp: Boolean!
   $apIsActiveInMap: Boolean!
 ) {
-  beobZugeordnetAssignPolylinesForMap: allVApbeobs(
-    filter: {
-      apId: { in: $ap }
-      nichtZuordnen: { equalTo: false }
-      tpopId: { isNull: false }
-    }
-  ) @include(if: $apIsActiveInMap) {
-    nodes {
-      id
-      x
-      y
-    }
-  }
   popForMapMarkers: projektById(id: $projId) @include(if: $apIsActiveInMap) {
     id
     apsByProjId(filter: { id: { equalTo: $apId } }) {
