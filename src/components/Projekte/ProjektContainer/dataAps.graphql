@@ -1,0 +1,25 @@
+query TreeDataQuery($isProjekt: Boolean!, $apFilter: ApFilter!) {
+  aps: allAps(filter: $apFilter) @include(if: $isProjekt) {
+    totalCount
+    nodes {
+      id
+      projId
+      artId
+      bearbeitung
+      startJahr
+      umsetzung
+      bearbeiter
+      ekfBeobachtungszeitpunkt
+      aeEigenschaftenByArtId {
+        id
+        artname
+      }
+      apartsByApId {
+        nodes {
+          id
+          artId
+        }
+      }
+    }
+  }
+}

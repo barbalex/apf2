@@ -2,7 +2,6 @@ query TreeDataQuery(
   $projekt: [UUID!]
   $projId: UUID!
   $isProjekt: Boolean!
-  $apFilter: ApFilter!
   $ap: [UUID!]
   $apId: UUID
   $isAp: Boolean!
@@ -34,29 +33,6 @@ query TreeDataQuery(
       id
       projId
       jahr
-    }
-  }
-  aps: allAps(filter: $apFilter) @include(if: $isProjekt) {
-    totalCount
-    nodes {
-      id
-      projId
-      artId
-      bearbeitung
-      startJahr
-      umsetzung
-      bearbeiter
-      ekfBeobachtungszeitpunkt
-      aeEigenschaftenByArtId {
-        id
-        artname
-      }
-      apartsByApId {
-        nodes {
-          id
-          artId
-        }
-      }
     }
   }
   pops: allPops(filter: $popFilter, orderBy: NR_ASC) @include(if: $isAp) {
