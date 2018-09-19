@@ -26,6 +26,8 @@ import withPops from './withPops'
 import withTpops from './withTpops'
 import withTpopmassns from './withTpopmassns'
 import withTpopmassnbers from './withTpopmassnbers'
+import withTpopfeldkontrs from './withTpopfeldkontrs'
+import withTpopfreiwkontrs from './withTpopfreiwkontrs'
 import data2Gql from './data2.graphql'
 import TreeContainer from '../TreeContainer'
 import Daten from '../Daten'
@@ -69,6 +71,8 @@ const enhance = compose(
   withTpops,
   withTpopmassns,
   withTpopmassnbers,
+  withTpopfeldkontrs,
+  withTpopfreiwkontrs,
   withErrorState,
   withState('apfloraLayers', 'setApfloraLayers', apfloraLayers),
   withState('activeApfloraLayers', 'setActiveApfloraLayers', []),
@@ -99,6 +103,8 @@ const ProjekteContainer = ({
   dataTpops,
   dataTpopmassns,
   dataTpopmassnbers,
+  dataTpopfeldkontrs,
+  dataTpopfreiwkontrs,
   treeName,
   tabs: tabsPassed,
   projekteTabs,
@@ -141,6 +147,8 @@ const ProjekteContainer = ({
   dataTpops: Object,
   dataTpopmassns: Object,
   dataTpopmassnbers: Object,
+  dataTpopfeldkontrs: Object,
+  dataTpopfreiwkontrs: Object,
   treeName: String,
   tabs: Array<String>,
   projekteTabs: Array<String>,
@@ -231,6 +239,8 @@ const ProjekteContainer = ({
           dataTpops,
           dataTpopmassns,
           dataTpopmassnbers,
+          dataTpopfeldkontrs,
+          dataTpopfreiwkontrs,
         )
         const nodes = buildNodes({
           data,
