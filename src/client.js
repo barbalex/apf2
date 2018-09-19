@@ -1,5 +1,6 @@
 import { ApolloClient } from 'apollo-client'
 import { createHttpLink } from 'apollo-link-http'
+import { BatchHttpLink } from 'apollo-link-batch-http'
 import { setContext } from 'apollo-link-context'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { withClientState } from 'apollo-link-state'
@@ -67,8 +68,9 @@ export default async idb => {
   const httpLink = createHttpLink({
     uri: graphQlUri(),
   })
+  const batchHttpLink = new BatchHttpLink({ uri: '/graphql' })
   const client = new ApolloClient({
-    link: ApolloLink.from([stateLink, authLink, httpLink]),
+    link: ApolloLink.from([stateLink, authLink, httpLink, batchHttpLink]),
     cache,
   })
   return client
