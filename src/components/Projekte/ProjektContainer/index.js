@@ -37,6 +37,7 @@ import withZiels from './withZiels'
 import withZielbers from './withZielbers'
 import withErfkrits from './withErfkrits'
 import withApbers from './withApbers'
+import withBers from './withBers'
 import data2Gql from './data2.graphql'
 import TreeContainer from '../TreeContainer'
 import Daten from '../Daten'
@@ -91,6 +92,7 @@ const enhance = compose(
   withZielbers,
   withErfkrits,
   withApbers,
+  withBers,
   withErrorState,
   withState('apfloraLayers', 'setApfloraLayers', apfloraLayers),
   withState('activeApfloraLayers', 'setActiveApfloraLayers', []),
@@ -132,6 +134,7 @@ const ProjekteContainer = ({
   dataZielbers,
   dataErfkrits,
   dataApbers,
+  dataBers,
   treeName,
   tabs: tabsPassed,
   projekteTabs,
@@ -185,6 +188,7 @@ const ProjekteContainer = ({
   dataZielbers: Object,
   dataErfkrits: Object,
   dataApbers: Object,
+  dataBers: Object,
   treeName: String,
   tabs: Array<String>,
   projekteTabs: Array<String>,
@@ -286,6 +290,7 @@ const ProjekteContainer = ({
           dataZielbers,
           dataErfkrits,
           dataApbers,
+          dataBers,
         )
         const nodes = buildNodes({
           data,
