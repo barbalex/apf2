@@ -6,14 +6,6 @@ query TreeDataQuery(
   $isAp: Boolean!
   $apIsActiveInMap: Boolean!
 ) {
-  apbers: allApbers(filter: { apId: { in: $ap } }, orderBy: JAHR_ASC)
-    @include(if: $isAp) {
-    nodes {
-      id
-      apId
-      jahr
-    }
-  }
   bers: allBers(filter: { apId: { in: $ap } }, orderBy: JAHR_ASC)
     @include(if: $isAp) {
     nodes {
