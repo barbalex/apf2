@@ -2,6 +2,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
+import withProps from 'recompose/withProps'
 import withState from 'recompose/withState'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import get from 'lodash/get'
@@ -66,6 +67,7 @@ import idsInsideFeatureCollection from '../../../modules/idsInsideFeatureCollect
 import withErrorState from '../../../state/withErrorState'
 import logout from '../../../modules/logout'
 import withTreeNodeFilterState from '../../../state/withNodeFilter'
+import buildVariables from './variables'
 
 const Container = styled.div`
   display: flex;
@@ -87,6 +89,13 @@ const LogoutButton = styled(Button)`
 const enhance = compose(
   withLocalData,
   withTreeNodeFilterState,
+  withProps(({ dataLocal, treeName, nodeFilterState }) =>
+    buildVariables({
+      data: dataLocal,
+      treeName,
+      nodeFilter: nodeFilterState.state[treeName],
+    }),
+  ),
   withAdresses,
   withUsers,
   withProjekts,
