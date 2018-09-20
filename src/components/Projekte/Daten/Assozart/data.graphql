@@ -18,10 +18,4 @@ query assozartByIdQuery($id: UUID!) {
       }
     }
   }
-  allAeEigenschaftens {
-    nodes {
-      id
-      artname
-    }
-  }
 }

@@ -15,6 +15,7 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateAssozartByIdGql from './updateAssozartById.graphql'
+import withAeEigenschaftens from './withAeEigenschaftens'
 
 const Container = styled.div`
   height: 100%;
@@ -28,6 +29,7 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withAeEigenschaftens,
   withState('errors', 'setErrors', {}),
   withHandlers({
     saveToDb: ({ refetchTree, setErrors, errors }) => async ({
@@ -83,15 +85,17 @@ const Assozart = ({
   saveToDb,
   errors,
   treeName,
+  dataAeEigenschaftens,
 }: {
   id: string,
   saveToDb: () => void,
   errors: Object,
   treeName: string,
+  dataAeEigenschaftens: Object,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
-      if (loading)
+      if (loading || dataAeEigenschaftens.loading)
         return (
           <Container>
             <FieldsContainer>Lade...</FieldsContainer>
@@ -104,7 +108,7 @@ const Assozart = ({
         o => o.aeId,
       )
       const artenNotToShow = assozartenOfAp.filter(a => a !== row.aeId)
-      let artWerte = get(data, 'allAeEigenschaftens.nodes', [])
+      let artWerte = get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])
       // filter ap arten but the active one
       artWerte = artWerte.filter(o => !artenNotToShow.includes(o.id))
       artWerte = sortBy(artWerte, 'artname')
