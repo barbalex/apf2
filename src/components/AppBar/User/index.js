@@ -222,7 +222,7 @@ const User = ({
           )
         if (error) return `Fehler: ${error.message}`
 
-        const row = get(data, 'userByName')
+        const row = get(data, 'userByName', {})
 
         return (
           <ErrorBoundary>

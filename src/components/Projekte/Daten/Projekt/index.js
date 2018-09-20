@@ -94,7 +94,7 @@ const Projekt = ({
         )
       if (error) return `Fehler: ${error.message}`
 
-      const row = get(data, 'projektById')
+      const row = get(data, 'projektById', {})
       const filterTable = activeNodeArray.length === 2 ? 'projekt' : 'ap'
 
       return (

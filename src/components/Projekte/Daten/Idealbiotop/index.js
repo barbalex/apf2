@@ -149,7 +149,7 @@ class Idealbiotop extends Component<Props> {
             )
           if (error) return `Fehler: ${error.message}`
 
-          const row = get(data, 'allIdealbiotops.nodes[0]')
+          const row = get(data, 'allIdealbiotops.nodes[0]', {})
 
           return (
             <ErrorBoundary>

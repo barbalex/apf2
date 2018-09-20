@@ -97,7 +97,7 @@ const Erfkrit = ({
         )
       if (error) return `Fehler: ${error.message}`
 
-      const row = get(data, 'erfkritById')
+      const row = get(data, 'erfkritById', {})
       let erfolgWerte = get(data, 'allApErfkritWertes.nodes', [])
       erfolgWerte = sortBy(erfolgWerte, 'sort')
       erfolgWerte = erfolgWerte.map(el => ({

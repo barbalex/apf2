@@ -132,7 +132,7 @@ const Pop = ({
       if (showFilter) {
         row = nodeFilterState.state[treeName].pop
       } else {
-        row = get(data, 'popById')
+        row = get(data, 'popById', {})
       }
 
       return (

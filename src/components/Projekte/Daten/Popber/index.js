@@ -101,7 +101,7 @@ const Popber = ({
         )
       if (error) return `Fehler: ${error.message}`
 
-      const row = get(data, 'popberById')
+      const row = get(data, 'popberById', {})
       let popentwicklungWerte = get(data, 'allTpopEntwicklungWertes.nodes', [])
       popentwicklungWerte = sortBy(popentwicklungWerte, 'sort')
       popentwicklungWerte = popentwicklungWerte.map(el => ({

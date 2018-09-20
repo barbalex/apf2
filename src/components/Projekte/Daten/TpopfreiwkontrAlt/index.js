@@ -203,7 +203,7 @@ class Tpopfreiwkontr extends Component<Props> {
           if (showFilter) {
             row = nodeFilterState.state[treeName].tpopmassn
           } else {
-            row = get(data, 'tpopkontrById')
+            row = get(data, 'tpopkontrById', {})
           }
 
           let adressenWerte = get(data, 'allAdresses.nodes', [])

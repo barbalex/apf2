@@ -187,7 +187,7 @@ class Tpop extends Component<Props> {
           if (showFilter) {
             row = nodeFilterState.state[treeName].tpop
           } else {
-            row = get(data, 'tpopById')
+            row = get(data, 'tpopById', {})
           }
           const apJahr = get(
             data,

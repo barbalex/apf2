@@ -96,7 +96,7 @@ const ApArt = ({
         )
       if (error) return `Fehler: ${error.message}`
 
-      const row = get(data, 'apartById')
+      const row = get(data, 'apartById', {})
       // do not show any artId's that have been used?
       // Nope: because some species have already been worked as separate ap
       // because apart did not exist...

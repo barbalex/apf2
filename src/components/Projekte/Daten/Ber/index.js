@@ -97,7 +97,7 @@ const Ber = ({
         )
       if (error) return `Fehler: ${error.message}`
 
-      const row = get(data, 'berById')
+      const row = get(data, 'berById', {})
 
       return (
         <ErrorBoundary>

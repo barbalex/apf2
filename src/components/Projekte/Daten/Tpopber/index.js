@@ -112,7 +112,7 @@ const Tpopber = ({
         )
       if (error) return `Fehler: ${error.message}`
 
-      const row = get(data, 'tpopberById')
+      const row = get(data, 'tpopberById', {})
       let tpopentwicklungWerte = get(data, 'allTpopEntwicklungWertes.nodes', [])
       tpopentwicklungWerte = sortBy(tpopentwicklungWerte, 'sort')
       tpopentwicklungWerte = tpopentwicklungWerte.map(el => ({

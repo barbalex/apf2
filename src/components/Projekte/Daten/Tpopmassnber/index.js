@@ -99,7 +99,7 @@ const Tpopmassnber = ({
         )
       if (error) return `Fehler: ${error.message}`
 
-      const row = get(data, 'tpopmassnberById')
+      const row = get(data, 'tpopmassnberById', {})
       let tpopmassnbeurtWerte = get(
         data,
         'allTpopmassnErfbeurtWertes.nodes',

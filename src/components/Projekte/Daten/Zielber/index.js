@@ -96,7 +96,7 @@ const Zielber = ({
         )
       if (error) return `Fehler: ${error.message}`
 
-      const row = get(data, 'zielberById')
+      const row = get(data, 'zielberById', {})
 
       return (
         <ErrorBoundary>

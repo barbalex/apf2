@@ -95,7 +95,7 @@ const Apberuebersicht = ({
         )
       if (error) return `Fehler: ${error.message}`
 
-      const row = get(data, 'apberuebersichtById')
+      const row = get(data, 'apberuebersichtById', {})
 
       return (
         <ErrorBoundary>

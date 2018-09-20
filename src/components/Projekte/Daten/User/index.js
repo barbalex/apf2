@@ -219,7 +219,7 @@ const User = ({
               )
             if (error) return `Fehler: ${error.message}`
 
-            const row = get(data, 'userById')
+            const row = get(data, 'userById', {})
             let roleWerte = sortBy(
               [
                 {

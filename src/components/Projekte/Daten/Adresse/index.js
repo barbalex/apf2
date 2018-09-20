@@ -107,7 +107,7 @@ const Adresse = ({
               )
             if (error) return `Fehler: ${error.message}`
 
-            const row = get(data, 'adresseById')
+            const row = get(data, 'adresseById', {})
 
             return (
               <ErrorBoundary>

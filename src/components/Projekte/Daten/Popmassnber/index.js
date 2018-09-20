@@ -101,7 +101,7 @@ const Popmassnber = ({
         )
       if (error) return `Fehler: ${error.message}`
 
-      const row = get(data, 'popmassnberById')
+      const row = get(data, 'popmassnberById', {})
       let popbeurteilungWerte = get(
         data,
         'allTpopmassnErfbeurtWertes.nodes',

@@ -159,7 +159,7 @@ const Beobzuordnung = ({
         )
       if (error) return `Fehler: ${error.message}`
 
-      const row = get(data, 'beobById')
+      const row = get(data, 'beobById', {})
       const tpop = get(
         row,
         'aeEigenschaftenByArtId.apByArtId.popsByApId.tpopsByPopId',

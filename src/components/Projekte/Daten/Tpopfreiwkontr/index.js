@@ -308,7 +308,7 @@ const enhance = compose(
       const showFilter = !!nodeFilterState.state[treeName].activeTable
       let row
       if (!showFilter) {
-        row = get(data, 'tpopkontrById')
+        row = get(data, 'tpopkontrById', {})
         const bearbeiter = get(row, 'bearbeiter')
         const userCount = get(
           row,

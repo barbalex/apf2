@@ -159,7 +159,7 @@ class Apber extends Component<Props> {
             { value: '-', label: '-' },
           ]
           const width = isNaN(dimensions.width) ? 380 : dimensions.width
-          const row = get(data, 'apberById')
+          const row = get(data, 'apberById', {})
           let beurteilungWerte = get(data, 'allApErfkritWertes.nodes', [])
           beurteilungWerte = sortBy(beurteilungWerte, 'sort')
           beurteilungWerte = beurteilungWerte.map(el => ({

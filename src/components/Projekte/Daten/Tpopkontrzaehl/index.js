@@ -103,7 +103,7 @@ const Tpopkontrzaehl = ({
         )
       if (error) return `Fehler: ${error.message}`
 
-      const row = get(data, 'tpopkontrzaehlById')
+      const row = get(data, 'tpopkontrzaehlById', {})
       let zaehleinheitWerte = get(
         data,
         'allTpopkontrzaehlEinheitWertes.nodes',

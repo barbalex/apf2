@@ -197,7 +197,7 @@ class Tpopmassn extends Component<Props> {
           if (showFilter) {
             row = nodeFilterState.state[treeName].tpopmassn
           } else {
-            row = get(data, 'tpopmassnById')
+            row = get(data, 'tpopmassnById', {})
           }
 
           let adressenWerte = get(data, 'allAdresses.nodes', [])

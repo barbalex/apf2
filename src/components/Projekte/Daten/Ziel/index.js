@@ -129,7 +129,7 @@ const Ziel = ({
         )
       if (error) return `Fehler: ${error.message}`
 
-      const row = get(data, 'zielById')
+      const row = get(data, 'zielById', {})
       let typWerte = get(data, 'allZielTypWertes.nodes', [])
       typWerte = sortBy(typWerte, 'sort')
       typWerte = typWerte.map(el => ({

@@ -312,7 +312,7 @@ class Tpopfeldkontr extends Component<Props> {
           if (showFilter) {
             row = nodeFilterState.state[treeName].tpopfeldkontr
           } else {
-            row = get(data, 'tpopkontrById')
+            row = get(data, 'tpopkontrById', {})
           }
 
           let adressenWerte = get(data, 'allAdresses.nodes', [])

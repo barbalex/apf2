@@ -101,7 +101,7 @@ const Ekfzaehleinheit = ({
         )
       if (error) return `Fehler: ${error.message}`
 
-      const row = get(data, 'ekfzaehleinheitById')
+      const row = get(data, 'ekfzaehleinheitById', {})
       const ekfzaehleinheitenOfAp = get(
         row,
         'apByApId.ekfzaehleinheitsByApId.nodes',

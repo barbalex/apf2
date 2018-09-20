@@ -218,7 +218,7 @@ const Ap = ({
             if (showFilter) {
               row = nodeFilterState.state[treeName].ap
             } else {
-              row = get(data, 'apById')
+              row = get(data, 'apById', {})
             }
 
             return (

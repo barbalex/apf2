@@ -39,11 +39,11 @@ class Beob extends Component<Props> {
           if (loading) return <Container>Lade...</Container>
           if (error) return `Fehler: ${error.message}`
 
-          const row = get(data, 'beobById')
+          const row = get(data, 'beobById', {})
           if (!row) return null
 
           const beobFields = Object.entries(JSON.parse(row.data)).filter(
-            ([key, value]) => value || value === 0 || value === false
+            ([key, value]) => value || value === 0 || value === false,
           )
           if (!beobFields || beobFields.length === 0) return null
 
