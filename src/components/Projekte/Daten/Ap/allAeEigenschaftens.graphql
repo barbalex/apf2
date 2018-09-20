@@ -1,0 +1,8 @@
+query AeEigenschaftensQuery {
+  allAeEigenschaftens {
+    nodes {
+      id
+      artname
+    }
+  }
+}

@@ -58,10 +58,4 @@ query beobByIdQuery($id: UUID!, $apId: UUID!) {
       name
     }
   }
-  allAeEigenschaftens {
-    nodes {
-      id
-      artname
-    }
-  }
 }

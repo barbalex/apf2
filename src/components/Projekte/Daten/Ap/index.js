@@ -17,6 +17,7 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import data1Gql from './data1.graphql'
 import data2Gql from './data2.graphql'
+import withAeEigenschaftens from './withAeEigenschaftens'
 import updateApByIdGql from './updateApById.graphql'
 import withNodeFilter from '../../../../state/withNodeFilter'
 
@@ -63,6 +64,7 @@ const LabelPopoverRowColumnRight = styled.div`
 `
 
 const enhance = compose(
+  withAeEigenschaftens,
   withNodeFilter,
   withState('errors', 'setErrors', {}),
   withHandlers({
@@ -139,11 +141,13 @@ const Ap = ({
   saveToDb,
   errors,
   nodeFilterState,
+  dataAeEigenschaftens,
 }: {
   treeName: String,
   saveToDb: () => void,
   errors: Object,
   nodeFilterState: Object,
+  dataAeEigenschaftens: Object,
 }) => (
   <Query query={data1Gql}>
     {({ loading, error, data }) => {
@@ -159,7 +163,7 @@ const Ap = ({
       return (
         <Query query={data2Gql} variables={{ id }}>
           {({ loading, error, data }) => {
-            if (loading)
+            if (loading || dataAeEigenschaftens.loading)
               return (
                 <Container>
                   <FieldsContainer>Lade...</FieldsContainer>
@@ -191,7 +195,11 @@ const Ap = ({
             let artWerte
             if (showFilter) {
               apArten = get(data, 'allAps.nodes', []).map(o => o.artId)
-              artWerte = get(data, 'allAeEigenschaftens.nodes', [])
+              artWerte = get(
+                dataAeEigenschaftens,
+                'allAeEigenschaftens.nodes',
+                [],
+              )
               // only list ap arten
               artWerte = artWerte.filter(o => apArten.includes(o.id))
               artWerte = sortBy(artWerte, 'artname')
@@ -204,7 +212,11 @@ const Ap = ({
               apArten = get(data, 'allAps.nodes', [])
                 .filter(o => o.id !== id)
                 .map(o => o.artId)
-              artWerte = get(data, 'allAeEigenschaftens.nodes', [])
+              artWerte = get(
+                dataAeEigenschaftens,
+                'allAeEigenschaftens.nodes',
+                [],
+              )
               // filter ap arten but the active one
               artWerte = artWerte.filter(o => !apArten.includes(o.id))
               artWerte = sortBy(artWerte, 'artname')

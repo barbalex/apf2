@@ -16,6 +16,7 @@ import Select from '../../../shared/Select'
 import Beob from '../Beob'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import withData from './withData'
+import withAeEigenschaftens from './withAeEigenschaftens'
 import updateBeobByIdGql from './updateBeobById.graphql'
 import saveNichtZuordnenToDb from './saveNichtZuordnenToDb'
 import saveArtIdToDb from './saveArtIdToDb'
@@ -134,7 +135,10 @@ const getTpopZuordnenSource = (row: Object, apId: string): Array<Object> => {
   }))
 }
 
-const enhance = compose(withData)
+const enhance = compose(
+  withAeEigenschaftens,
+  withData,
+)
 
 const Beobzuordnung = ({
   id,
@@ -145,6 +149,7 @@ const Beobzuordnung = ({
   refetchTree,
   treeName,
   data,
+  dataAeEigenschaftens,
 }: {
   id: string,
   apId: string,
@@ -154,9 +159,10 @@ const Beobzuordnung = ({
   refetchTree: () => void,
   treeName: string,
   data: Object,
+  dataAeEigenschaftens: Object,
 }) => {
-  const { loading, error, refetch } = data
-  if (loading)
+  const { error, refetch } = data
+  if (data.loading || dataAeEigenschaftens.loading)
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
@@ -165,7 +171,7 @@ const Beobzuordnung = ({
   if (error) return `Fehler: ${error.message}`
 
   const row = get(data, 'beobById', {})
-  let artWerte = get(data, 'allAeEigenschaftens.nodes', [])
+  let artWerte = get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])
   artWerte = sortBy(artWerte, 'artname')
   artWerte = artWerte.map(el => ({
     value: el.id,
