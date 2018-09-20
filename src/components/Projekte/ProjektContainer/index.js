@@ -339,11 +339,11 @@ const ProjekteContainer = props => {
     dataBeobAssignLines.loading
   // TODO:
   const refetch = query => {
-    //console.log('refetch', { query, props })
+    console.log('refetch', { query, props })
     if (query) {
       if (query) {
         if (props[`data${upperFirst(query)}`]) {
-          //console.log('refetching')
+          console.log('refetching')
           props[`data${upperFirst(query)}`].refetch()
         }
       }

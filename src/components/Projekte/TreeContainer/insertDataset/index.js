@@ -14,7 +14,7 @@ export default async ({
   parentId,
   id,
   menuType,
-  baseUrl,
+  url,
   refetchTree,
   errorState,
 }: {
@@ -23,7 +23,7 @@ export default async ({
   parentId: String,
   id: String,
   menuType: String,
-  baseUrl: Array<String>,
+  url: Array<String>,
   refetchTree: () => void,
   errorState: Object,
 }): any => {
@@ -169,7 +169,7 @@ export default async ({
     `data.create${upperFirst(camelCase(table))}.${camelCase(table)}`,
   )
   // set new url
-  const newActiveNodeArray = [...baseUrl, row[idField]]
+  const newActiveNodeArray = [...url, row[idField]]
   await client.mutate({
     mutation: setTreeKey,
     variables: {
@@ -182,7 +182,7 @@ export default async ({
   const { openNodes } = tree
   let newOpenNodes = [...openNodes, newActiveNodeArray]
   if (['zielFolder', 'zieljahrFolder'].includes(menuType)) {
-    const urlWithoutJahr = [...baseUrl]
+    const urlWithoutJahr = [...url]
     urlWithoutJahr.pop()
     newOpenNodes = [...openNodes, urlWithoutJahr, newActiveNodeArray]
   }

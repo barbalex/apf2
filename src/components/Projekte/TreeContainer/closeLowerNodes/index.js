@@ -7,15 +7,15 @@ import setTreeKey from './setTreeKey.graphql'
 export default async ({
   tree,
   url,
-  refetch,
+  refetchTree,
 }: {
   tree: Object,
   url: Array<String>,
-  refetch: () => void,
+  refetchTree: () => void,
 }) => {
   const { client } = app
   const { openNodes, activeNodeArray } = tree
-  const newOpenNodes =  openNodes.filter(n => {
+  const newOpenNodes = openNodes.filter(n => {
     const partWithEqualLength = n.slice(0, url.length)
     return !isEqual(partWithEqualLength, url)
   })
@@ -25,7 +25,7 @@ export default async ({
       tree: tree.name,
       value: newOpenNodes,
       key: 'openNodes',
-    }
+    },
   })
   if (isEqual(activeNodeArray.slice(0, url.length), url)) {
     // active node will be closed
@@ -36,8 +36,7 @@ export default async ({
         tree: tree.name,
         value: url,
         key: 'activeNodeArray',
-      }
+      },
     })
   }
-  refetch()
 }

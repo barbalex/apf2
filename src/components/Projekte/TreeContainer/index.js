@@ -9,6 +9,7 @@ import withHandlers from 'recompose/withHandlers'
 import clone from 'lodash/clone'
 import get from 'lodash/get'
 import uniq from 'lodash/uniq'
+import isEqual from 'lodash/isEqual'
 import app from 'ampersand-app'
 import withLifecycle from '@hocs/with-lifecycle'
 
@@ -197,6 +198,7 @@ const enhance = compose(
       nodes,
     }) => (e, data, element) => {
       const tree = get(dbData, treeName)
+      const { openNodes } = tree
       if (!data) return errorState.add('no data passed with click')
       if (!element)
         return errorState.add(new Error('no element passed with click'))
@@ -208,26 +210,26 @@ const enhance = compose(
         )
       let id = firstElementChild.getAttribute('data-id')
       const parentId = firstElementChild.getAttribute('data-parentid')
-      const url = firstElementChild.getAttribute('data-url')
+      const urlPassed = firstElementChild.getAttribute('data-url')
+      const url = JSON.parse(urlPassed)
       const label = firstElementChild.getAttribute('data-label')
-      const baseUrl = JSON.parse(url)
       const nodeType = firstElementChild.getAttribute('data-nodetype')
       const menuType = firstElementChild.getAttribute('data-menutype')
       const actions = {
         insert() {
           if (nodeType === 'table') {
-            baseUrl.pop()
+            url.pop()
           }
           if (menuType === 'zielFolder') {
             // db sets year 1 as standard
-            baseUrl.push(1)
+            url.push(1)
           }
           const idToPass = parentId || id
           insertDataset({
             tree,
             tablePassed: table,
             parentId: idToPass,
-            baseUrl,
+            url,
             menuType,
             id,
             refetchTree,
@@ -241,38 +243,34 @@ const enhance = compose(
             id,
             parentId,
             menuType,
-            refetch: refetchTree,
+            refetchTree,
           })
         },
         closeLowerNodes() {
           closeLowerNodes({
             tree,
-            url: baseUrl,
-            refetch: refetchTree,
+            url,
           })
         },
         delete() {
-          const addNodeToOpenNodes = (openNodes, url) => {
-            if (url.length === 0) return
-            if (url.length === 1) return openNodes.push(url)
-            const newUrl = [...url].pop()
-            openNodes.push(newUrl)
-            addNodeToOpenNodes(openNodes, newUrl)
-          }
           const afterDeletionHook = async () => {
             // set it as new activeNodeArray and open node
-            const { openNodes } = tree
-            const newOpenNodes = [...openNodes]
-            addNodeToOpenNodes(newOpenNodes, baseUrl)
+            const newOpenNodes = openNodes.filter(n => !isEqual(n, url))
             await app.client.mutate({
               mutation: setTreeKey2Gql,
               variables: {
                 tree: tree.name,
-                value1: baseUrl,
+                value1: url,
                 key1: 'activeNodeArray',
                 value2: newOpenNodes,
                 key2: 'openNodes',
               },
+            })
+            console.log('afterDeletionHook', {
+              table,
+              openNodes,
+              newOpenNodes,
+              url,
             })
             refetchTree(`${table}s`)
           }
@@ -280,7 +278,7 @@ const enhance = compose(
             table,
             id,
             label,
-            url: baseUrl,
+            url,
             afterDeletionHook,
           })
         },

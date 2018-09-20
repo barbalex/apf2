@@ -17,13 +17,13 @@ import setMoving from './setMoving.graphql'
 export default async ({
   id: newParentId,
   errorState,
-}:{
+}: {
   newParentId: String,
   errorState: Object,
 }): any => {
   const { client } = app
   const { data } = await client.query({
-    query: movingGql
+    query: movingGql,
   })
   let table = get(data, 'moving.table')
   const id = get(data, 'moving.id')
@@ -41,11 +41,15 @@ export default async ({
   }
   const idField = tabelle ? tabelle.idField : undefined
   if (!idField) {
-    return errorState.add(new Error('change was not saved: Reason: idField was not found'))
+    return errorState.add(
+      new Error('change was not saved: Reason: idField was not found'),
+    )
   }
   const parentIdField = tabelle.parentIdField
   if (!parentIdField) {
-    return errorState.add(new Error('change was not saved: Reason: parentIdField was not found'))
+    return errorState.add(
+      new Error('change was not saved: Reason: parentIdField was not found'),
+    )
   }
 
   // move
@@ -65,7 +69,7 @@ export default async ({
           },
         },
       })
-      break;
+      break
     case 'tpopmassn':
       client.mutate({
         mutation: updateTpopmassnById,
@@ -81,7 +85,7 @@ export default async ({
           },
         },
       })
-      break;
+      break
     case 'tpop':
       client.mutate({
         mutation: updateTpopById,
@@ -97,7 +101,7 @@ export default async ({
           },
         },
       })
-      break;
+      break
     case 'pop':
       client.mutate({
         mutation: updatePopById,
@@ -113,14 +117,18 @@ export default async ({
           },
         },
       })
-      break;
+      break
     default:
       // do nothing
-      break;
+      break
   }
   // reset moving
   client.mutate({
     mutation: setMoving,
-    variables: { table: null, id: null, label: null }
+    variables: {
+      table: null,
+      id: '99999999-9999-9999-9999-999999999999',
+      label: null,
+    },
   })
 }

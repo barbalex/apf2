@@ -16,13 +16,13 @@ export default async ({
   activeNodes,
   id: jahrString,
   parentId: apId,
-  refetch,
+  refetchTree,
 }: {
   tree: Object,
   activeNodes: Object,
   id: String,
   parentId: String,
-  refetch: () => void,
+  refetchTree: () => void,
 }) => {
   const jahr = +jahrString
   const { client } = app
@@ -86,5 +86,5 @@ export default async ({
   })
 
   // 4. refresh tree
-  refetch()
+  refetchTree('ziels')
 }

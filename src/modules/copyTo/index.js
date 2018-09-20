@@ -335,7 +335,10 @@ export default async ({
       break
   }
 
-  refetchTree()
+  refetchTree(`${tablePassed}s`)
+  refetchTree('aps')
+  refetchTree('pops')
+  refetchTree('tpops')
 
   // copy tpop if needed
   if (table === 'pop' && withNextLevel) {

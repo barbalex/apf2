@@ -14,16 +14,16 @@ export default ({
   id,
   parentId,
   menuType,
-  refetch,
+  refetchTree,
 }: {
   tree: Object,
   activeNodes: Object,
-  id: String|Number,
-  parentId: String|Number,
+  id: String | Number,
+  parentId: String | Number,
   menuType: String,
-  refetch: () => void,
+  refetchTree: () => void,
 }) => {
-   /**
+  /**
    * 1. load all data
    * 2. build openNodes for all data using setOpenNodesFromActiveNodeArray
    * 3. add these nodes to existing openNodes
@@ -33,31 +33,31 @@ export default ({
    */
   switch (menuType) {
     case 'popFolder':
-      popFolder({ tree, id, activeNodes, refetch })
-      break;
+      popFolder({ tree, id, activeNodes, refetchTree })
+      break
     case 'pop':
-      pop({ tree, id, activeNodes, refetch })
-      break;
+      pop({ tree, id, activeNodes, refetchTree })
+      break
     case 'tpopFolder':
-      tpopFolder({ tree, id, activeNodes, refetch })
-      break;
+      tpopFolder({ tree, id, activeNodes, refetchTree })
+      break
     case 'tpop':
-      tpop({ tree, id, activeNodes, refetch })
-      break;
+      tpop({ tree, id, activeNodes, refetchTree })
+      break
     case 'tpopfeldkontrFolder':
-      tpopfeldkontrFolder({ tree, id, activeNodes, refetch })
-      break;
+      tpopfeldkontrFolder({ tree, id, activeNodes, refetchTree })
+      break
     case 'tpopfreiwkontrFolder':
-      tpopfreiwkontrFolder({ tree, id, activeNodes, refetch })
-      break;
+      tpopfreiwkontrFolder({ tree, id, activeNodes, refetchTree })
+      break
     case 'zielFolder':
-      zielFolder({ tree, id, activeNodes, refetch })
-      break;
+      zielFolder({ tree, id, activeNodes, refetchTree })
+      break
     case 'zieljahrFolder':
-      zieljahrFolder({ tree, id, parentId, activeNodes, refetch })
-      break;
+      zieljahrFolder({ tree, id, parentId, activeNodes, refetchTree })
+      break
     default:
       // do nothing
-      break;
+      break
   }
 }

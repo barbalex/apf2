@@ -15,12 +15,12 @@ export default async ({
   tree,
   activeNodes,
   id,
-  refetch,
+  refetchTree,
 }: {
   tree: Object,
   activeNodes: Object,
   id: String,
-  refetch: () => void,
+  refetchTree: () => void,
 }) => {
   const { client } = app
   const { projekt, ap } = activeNodes
@@ -326,5 +326,5 @@ export default async ({
   })
 
   // 4. refresh tree
-  refetch()
+  refetchTree('tpops')
 }
