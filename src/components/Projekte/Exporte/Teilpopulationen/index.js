@@ -12,6 +12,7 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import styled from 'styled-components'
 import get from 'lodash/get'
+import sortBy from 'lodash/sortBy'
 import { Query } from 'react-apollo'
 
 import Select from '../../../shared/Select'
@@ -98,12 +99,15 @@ const Teilpopulationen = ({
   <Query query={dataGql}>
     {({ loading, error, data, client }) => {
       if (error) return `Fehler: ${error.message}`
-      const artList = get(data, 'allAeEigenschaftens.nodes', [])
-        .filter(n => !!get(n, 'apByArtId.id'))
-        .map(n => ({
-          value: get(n, 'apByArtId.id'),
-          label: n.artname,
-        }))
+      const artList = sortBy(
+        get(data, 'allAeEigenschaftens.nodes', [])
+          .filter(n => !!get(n, 'apByArtId.id'))
+          .map(n => ({
+            value: get(n, 'apByArtId.id'),
+            label: n.artname,
+          })),
+        'artname',
+      )
 
       return (
         <StyledCard>

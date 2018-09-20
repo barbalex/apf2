@@ -1,5 +1,5 @@
 query Query {
-  allAeEigenschaftens(orderBy: ARTNAME_ASC) {
+  allAeEigenschaftens {
     nodes {
       id
       artname
