@@ -6,7 +6,7 @@ import uniq from 'lodash/uniq'
 import query from './apberuebersichts.graphql'
 
 export default graphql(query, {
-  options: ({ dataLocal, treeName, nodeFilterState }) => {
+  options: ({ dataLocal, treeName }) => {
     const openNodes = get(dataLocal, `${treeName}.openNodes`)
     const isProjekt = openNodes.some(
       nArray => nArray[0] === 'Projekte' && nArray[1],
