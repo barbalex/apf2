@@ -29,6 +29,7 @@ import Verification from './Verification'
 import Image from './Image'
 import withNodeFilter from '../../../../state/withNodeFilter'
 import FormTitle from '../../../shared/FormTitle'
+import withAllAdresses from './withAllAdresses'
 
 const Container = styled.div`
   background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
@@ -139,6 +140,7 @@ const CountHint = styled.div`
  * then refetch data
  */
 const enhance = compose(
+  withAllAdresses,
   withNodeFilter,
   dataGql,
   withState('errors', 'setErrors', {}),
@@ -153,6 +155,7 @@ const enhance = compose(
       data,
       nodeFilterState,
       treeName,
+      dataAllAdresses,
     }) => async ({ row, field, value, field2, value2, updateTpopkontr }) => {
       /**
        * only save if value changed
@@ -179,7 +182,9 @@ const enhance = compose(
       const adresseByBearbeiter =
         field === 'bearbeiter'
           ? row.adresseByBearbeiter
-          : get(data, 'allAdresses.nodes', []).find(r => r.id === value)
+          : get(dataAllAdresses, 'allAdresses.nodes', []).find(
+              r => r.id === value,
+            )
       try {
         await updateTpopkontr({
           variables,
@@ -347,6 +352,7 @@ const Tpopfreiwkontr = ({
   setDateHeight,
   nodeFilterState,
   treeName,
+  dataAllAdresses,
 }: {
   id: string,
   data: Object,
@@ -366,7 +372,11 @@ const Tpopfreiwkontr = ({
   setDateHeight: () => void,
   nodeFilterState: Object,
   treeName: string,
+  dataAllAdresses: Object,
 }) => {
+  if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
+  if (data.loading || dataAllAdresses.loading)
+    return <Container>Lade...</Container>
   const showFilter = !!nodeFilterState.state[treeName].activeTable
   const ekfzaehleinheits = get(
     data,
@@ -438,7 +448,7 @@ const Tpopfreiwkontr = ({
                 saveToDb={saveToDb}
                 errors={errors}
                 setErrors={setErrors}
-                data={data}
+                dataAllAdresses={dataAllAdresses}
                 row={row}
                 updateTpopkontr={updateTpopkontr}
                 setHeaddataHeight={setHeaddataHeight}

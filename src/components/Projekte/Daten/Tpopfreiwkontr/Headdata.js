@@ -73,7 +73,7 @@ const StatusLabel = styled(Label)`
 const Headdata = ({
   saveToDb,
   errors,
-  data,
+  dataAllAdresses,
   row,
   updateTpopkontr,
   setHeaddataHeight,
@@ -81,13 +81,13 @@ const Headdata = ({
 }: {
   saveToDb: () => void,
   errors: Object,
-  data: Object,
+  dataAllAdresses: Object,
   row: Object,
   updateTpopkontr: () => void,
   setHeaddataHeight: () => void,
   showFilter: boolean,
 }) => {
-  let adressenWerte = get(data, 'allAdresses.nodes', [])
+  let adressenWerte = get(dataAllAdresses, 'allAdresses.nodes', [])
   adressenWerte = sortBy(adressenWerte, 'name')
   adressenWerte = adressenWerte.map(el => ({
     value: el.id,

@@ -37,10 +37,4 @@ query apberByIdQuery($id: UUID!) {
       sort
     }
   }
-  allAdresses {
-    nodes {
-      id
-      name
-    }
-  }
 }

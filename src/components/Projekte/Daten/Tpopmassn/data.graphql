@@ -38,12 +38,6 @@ query tpopmassnByIdQuery($id: UUID!) {
       }
     }
   }
-  allAdresses {
-    nodes {
-      id
-      name
-    }
-  }
   allTpopmassnTypWertes {
     nodes {
       id

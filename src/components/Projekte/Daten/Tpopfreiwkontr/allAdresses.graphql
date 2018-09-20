@@ -1,0 +1,11 @@
+query AllAdressesQuery {
+  allAdresses {
+    nodes {
+      id
+      name
+      usersByAdresseId {
+        totalCount
+      }
+    }
+  }
+}

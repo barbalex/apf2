@@ -54,12 +54,6 @@ query tpopkontrByIdQuery($id: UUID!) {
       }
     }
   }
-  allAdresses {
-    nodes {
-      id
-      name
-    }
-  }
   allTpopkontrIdbiotuebereinstWertes {
     nodes {
       id

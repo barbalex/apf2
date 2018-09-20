@@ -11,10 +11,4 @@ query userById($id: UUID!) {
       name
     }
   }
-  allAdresses {
-    nodes {
-      id
-      name
-    }
-  }
 }

@@ -18,6 +18,7 @@ import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateApberByIdGql from './updateApberById.graphql'
+import withAllAdresses from './withAllAdresses'
 
 const Container = styled.div`
   height: 100%;
@@ -35,6 +36,7 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withAllAdresses,
   withState('errors', 'setErrors', {}),
   withHandlers({
     saveToDb: ({ setErrors, errors }) => async ({
@@ -126,6 +128,7 @@ type Props = {
   saveToDb: () => void,
   errors: Object,
   treeName: string,
+  dataAllAdresses: Object,
 }
 
 class Apber extends Component<Props> {
@@ -141,18 +144,21 @@ class Apber extends Component<Props> {
       saveToDb,
       errors,
       treeName,
+      dataAllAdresses,
     } = this.props
 
     return (
       <Query query={dataGql} variables={{ id }}>
         {({ loading, error, data }) => {
-          if (loading)
+          if (loading || dataAllAdresses.loading)
             return (
               <Container>
                 <FieldsContainer>Lade...</FieldsContainer>
               </Container>
             )
           if (error) return `Fehler: ${error.message}`
+          if (dataAllAdresses.error)
+            return `Fehler: ${dataAllAdresses.error.message}`
 
           const veraenGegenVorjahrWerte = [
             { value: '+', label: '+' },
@@ -166,7 +172,7 @@ class Apber extends Component<Props> {
             value: el.code,
             label: el.text,
           }))
-          let adressenWerte = get(data, 'allAdresses.nodes', [])
+          let adressenWerte = get(dataAllAdresses, 'allAdresses.nodes', [])
           adressenWerte = sortBy(adressenWerte, 'name')
           adressenWerte = adressenWerte.map(el => ({
             value: el.id,

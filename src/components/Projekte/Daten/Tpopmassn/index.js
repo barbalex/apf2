@@ -23,6 +23,7 @@ import dataGql from './data.graphql'
 import updateTpopmassnByIdGql from './updateTpopmassnById.graphql'
 import withNodeFilter from '../../../../state/withNodeFilter'
 import withAeEigenschaftens from './withAeEigenschaftens'
+import withAllAdresses from './withAllAdresses'
 
 const Container = styled.div`
   height: 100%;
@@ -41,6 +42,7 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withAllAdresses,
   withAeEigenschaftens,
   withNodeFilter,
   withState('errors', 'setErrors', {}),
@@ -162,6 +164,7 @@ type Props = {
   treeName: string,
   nodeFilterState: Object,
   dataAeEigenschaftens: Object,
+  dataAllAdresses: Object,
 }
 
 class Tpopmassn extends Component<Props> {
@@ -181,18 +184,25 @@ class Tpopmassn extends Component<Props> {
       treeName,
       nodeFilterState,
       dataAeEigenschaftens,
+      dataAllAdresses,
     } = this.props
 
     return (
       <Query query={dataGql} variables={{ id }}>
         {({ loading, error, data }) => {
-          if (loading || dataAeEigenschaftens.loading)
+          if (
+            loading ||
+            dataAeEigenschaftens.loading ||
+            dataAllAdresses.loading
+          )
             return (
               <Container>
                 <FieldsContainer>Lade...</FieldsContainer>
               </Container>
             )
           if (error) return `Fehler: ${error.message}`
+          if (dataAllAdresses.error)
+            return `Fehler: ${dataAllAdresses.error.message}`
 
           const width = isNaN(dimensions.width) ? 380 : dimensions.width
 
@@ -204,7 +214,7 @@ class Tpopmassn extends Component<Props> {
             row = get(data, 'tpopmassnById', {})
           }
 
-          let adressenWerte = get(data, 'allAdresses.nodes', [])
+          let adressenWerte = get(dataAllAdresses, 'allAdresses.nodes', [])
           adressenWerte = sortBy(adressenWerte, 'name')
           adressenWerte = adressenWerte.map(el => ({
             value: el.id,

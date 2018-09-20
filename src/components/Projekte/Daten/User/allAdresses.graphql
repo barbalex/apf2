@@ -1,0 +1,8 @@
+query AllAdressesQuery {
+  allAdresses {
+    nodes {
+      id
+      name
+    }
+  }
+}

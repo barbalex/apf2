@@ -26,6 +26,7 @@ import data1Gql from './data1.graphql'
 import data2Gql from './data2.graphql'
 import updateUserByIdGql from './updateUserById.graphql'
 import Select from '../../../shared/Select'
+import withAllAdresses from './withAllAdresses'
 
 const Container = styled.div`
   height: 100%;
@@ -47,6 +48,7 @@ const PasswordMessage = styled.div`
 `
 
 const enhance = compose(
+  withAllAdresses,
   withState('errors', 'setErrors', {}),
   withState('editPassword', 'setEditPassword', false),
   withState('password', 'setPassword', ''),
@@ -184,6 +186,7 @@ const User = ({
   onBlurPassword2,
   passwordMessage,
   setPasswordMessage,
+  dataAllAdresses,
 }: {
   treeName: String,
   saveToDb: () => void,
@@ -202,6 +205,7 @@ const User = ({
   onBlurPassword2: () => void,
   passwordMessage: String,
   setPasswordMessage: () => void,
+  dataAllAdresses: Object,
 }) => (
   <Query query={data1Gql}>
     {({ loading, error, data }) => {
@@ -211,13 +215,15 @@ const User = ({
       return (
         <Query query={data2Gql} variables={{ id }}>
           {({ loading, error, data, client }) => {
-            if (loading)
+            if (loading || dataAllAdresses.loading)
               return (
                 <Container>
                   <FieldsContainer>Lade...</FieldsContainer>
                 </Container>
               )
             if (error) return `Fehler: ${error.message}`
+            if (dataAllAdresses.error)
+              return `Fehler: ${dataAllAdresses.error.message}`
 
             const row = get(data, 'userById', {})
             let roleWerte = sortBy(
@@ -245,7 +251,10 @@ const User = ({
               ],
               'sort',
             )
-            let adresses = sortBy(get(data, 'allAdresses.nodes', []), 'name')
+            let adresses = sortBy(
+              get(dataAllAdresses, 'allAdresses.nodes', []),
+              'name',
+            )
             adresses = adresses.map(el => ({
               value: el.id,
               label: el.name,
