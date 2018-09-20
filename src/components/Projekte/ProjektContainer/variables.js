@@ -20,6 +20,13 @@ export default ({
   const apFilterSet = get(data, `${treeName}.apFilter`)
   const activeNodes = getActiveNodes(activeNodeArray)
   const openNodes = get(data, `${treeName}.openNodes`)
+
+  const isWerteListen = openNodes.some(
+    nodeArray => nodeArray[0] === 'Werte-Listen',
+  )
+  const isAdresse = openNodes.some(
+    nodeArray => nodeArray[0] === 'Werte-Listen' && nodeArray[1] === 'Adressen',
+  )
   const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
   const mapIsActive =
     projekteTabs.includes('karte') || projekteTabs.includes('karte2')
@@ -166,6 +173,8 @@ export default ({
     tpopkontr,
     isTpopkontr,
     apIsActiveInMap: mapIsActive && isAp,
+    isWerteListen,
+    isAdresse,
   }
   //console.log('variables:', variables)
   return variables
