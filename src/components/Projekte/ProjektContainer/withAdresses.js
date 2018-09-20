@@ -1,21 +1,23 @@
 // @flow
 import { graphql } from 'react-apollo'
+import get from 'lodash/get'
 
 import query from './adresses.graphql'
-import buildVariables from './variables'
 
 export default graphql(query, {
-  options: ({ dataLocal, treeName, nodeFilterState }) => {
-    const variables = buildVariables({
-      data: dataLocal,
-      treeName,
-      nodeFilter: nodeFilterState.state[treeName],
-    })
-
+  options: ({ treeName, dataLocal, nodeFilterState }) => {
+    const openNodes = get(dataLocal, `${treeName}.openNodes`)
+    const isWerteListen = openNodes.some(
+      nodeArray => nodeArray[0] === 'Werte-Listen',
+    )
+    const isAdresse = openNodes.some(
+      nodeArray =>
+        nodeArray[0] === 'Werte-Listen' && nodeArray[1] === 'Adressen',
+    )
     return {
       variables: {
-        isWerteListen: variables.isWerteListen,
-        isAdresse: variables.isAdresse,
+        isWerteListen,
+        isAdresse,
       },
     }
   },

@@ -23,12 +23,6 @@ export default ({
   const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
   const mapIsActive =
     projekteTabs.includes('karte') || projekteTabs.includes('karte2')
-  const isAdresse = openNodes.some(
-    nodeArray => nodeArray[0] === 'Werte-Listen' && nodeArray[1] === 'Adressen',
-  )
-  const isWerteListen = openNodes.some(
-    nodeArray => nodeArray[0] === 'Werte-Listen',
-  )
   const projekt = uniq(
     openNodes
       .map(a => (a.length > 1 && a[0] === 'Projekte' ? a[1] : null))
@@ -172,8 +166,6 @@ export default ({
     tpopkontr,
     isTpopkontr,
     apIsActiveInMap: mapIsActive && isAp,
-    isWerteListen,
-    isAdresse,
   }
   //console.log('variables:', variables)
   return variables
