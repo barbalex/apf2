@@ -3,18 +3,12 @@ import clone from 'lodash/clone'
 import isEqual from 'lodash/isEqual'
 import get from 'lodash/get'
 import gql from 'graphql-tag'
+import app from 'ampersand-app'
 
 import setTreeKeyGql from './setTreeKey.graphql'
 
-export default async ({
-  value,
-  id,
-  updateBeob,
-  tree,
-  client,
-  refetchTree,
-  type,
-}) => {
+export default async ({ value, id, updateBeob, tree, refetchTree, type }) => {
+  const { client } = app
   const variables = {
     id,
     tpopId: value,

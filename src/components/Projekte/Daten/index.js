@@ -395,6 +395,7 @@ const Daten = ({
             tree={tree}
             refetchTree={refetchTree}
             type="nichtZuzuordnen"
+            apId={apId}
           />
         ),
         beobNichtBeurteilt: (
@@ -404,6 +405,7 @@ const Daten = ({
             tree={tree}
             refetchTree={refetchTree}
             type="nichtBeurteilt"
+            apId={apId}
           />
         ),
         beobZugeordnet: (
@@ -413,6 +415,7 @@ const Daten = ({
             tree={tree}
             refetchTree={refetchTree}
             type="zugeordnet"
+            apId={apId}
           />
         ),
         user: (

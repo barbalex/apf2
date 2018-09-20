@@ -4,10 +4,11 @@ import { graphql } from 'react-apollo'
 import query from './data.graphql'
 
 export default graphql(query, {
-  options: ({ id }) => {
+  options: ({ id, apId }) => {
     return {
       variables: {
         id,
+        apId,
       },
     }
   },

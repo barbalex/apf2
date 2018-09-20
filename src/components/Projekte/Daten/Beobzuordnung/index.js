@@ -2,7 +2,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import sortBy from 'lodash/sortBy'
-import { Query, Mutation } from 'react-apollo'
+import { Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import Button from '@material-ui/core/Button'
@@ -98,18 +98,16 @@ const nichtZuordnenPopover = (
   </Container>
 )
 
-const getTpopZuordnenSource = (row: Object): Array<Object> => {
-  console.log('getTpopZuordnenSource', { row })
+const getTpopZuordnenSource = (row: Object, apId: string): Array<Object> => {
   // get all popIds of active ap
-  const popList = get(
-    row,
-    'aeEigenschaftenByArtId.apByArtId.popsByApId.nodes',
-    [],
-  )
+  const apArt = get(row, 'aeEigenschaftenByArtId.apartsByArtId.nodes[0]', [])
+  if (!apArt) return []
+  const popList = get(apArt, 'apByApId.popsByApId.nodes', [])
   // get all tpop
   let tpopList = flatten(popList.map(p => get(p, 'tpopsByPopId.nodes', [])))
     // with coordinates
-    .filter(t => !!t.x && !!t.y)
+    // and also: even keep own tpop if it has no coordinates
+    .filter(t => (!!t.x && !!t.y) || t.id === row.tpopId)
     .map(t => {
       // calculate their distance to this beob
       const dX = Math.abs(row.x - t.x)
@@ -140,6 +138,7 @@ const enhance = compose(withData)
 
 const Beobzuordnung = ({
   id,
+  apId,
   tree,
   type,
   dimensions = { width: 380 },
@@ -148,6 +147,7 @@ const Beobzuordnung = ({
   data,
 }: {
   id: string,
+  apId: string,
   tree: Object,
   type: string,
   dimensions: Object,
@@ -155,7 +155,7 @@ const Beobzuordnung = ({
   treeName: string,
   data: Object,
 }) => {
-  const { loading, error, refetch, client } = data
+  const { loading, error, refetch } = data
   if (loading)
     return (
       <Container>
@@ -165,23 +165,6 @@ const Beobzuordnung = ({
   if (error) return `Fehler: ${error.message}`
 
   const row = get(data, 'beobById', {})
-  const tpop = get(
-    row,
-    'aeEigenschaftenByArtId.apByArtId.popsByApId.tpopsByPopId',
-  )
-  let tpopLabel
-  if (tpop) {
-    const dX = Math.abs(tpop.x - row.x)
-    const dY = Math.abs(tpop.y - row.y)
-    const distance = Math.round((dX ** 2 + dY ** 2) ** 0.5).toLocaleString(
-      'de-ch',
-    )
-    // build label
-    const tpopStatus = get(tpop, 'popStatusWerteByStatus.text', 'ohne Status')
-    const popNr = get(tpop, 'popByPopId.nr', '(keine Nr)')
-    const tpopNr = tpop.nr || '(keine Nr)'
-    tpopLabel = `${distance}m: ${popNr}/${tpopNr} (${tpopStatus})`
-  }
   let artWerte = get(data, 'allAeEigenschaftens.nodes', [])
   artWerte = sortBy(artWerte, 'artname')
   artWerte = artWerte.map(el => ({
@@ -221,7 +204,6 @@ const Beobzuordnung = ({
                       row,
                       updateBeob,
                       tree,
-                      client,
                       refetchTree,
                     })
                   }}
@@ -252,14 +234,13 @@ const Beobzuordnung = ({
                         ? 'Einer anderen Teilpopulation zuordnen'
                         : 'Einer Teilpopulation zuordnen'
                     }
-                    options={getTpopZuordnenSource(row)}
+                    options={getTpopZuordnenSource(row, apId)}
                     saveToDb={value =>
                       saveTpopIdToDb({
                         value,
                         id,
                         updateBeob,
                         tree,
-                        client,
                         refetchTree,
                         type,
                       })

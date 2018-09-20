@@ -1,4 +1,4 @@
-query beobByIdQuery($id: UUID!) {
+query beobByIdQuery($id: UUID!, $apId: UUID!) {
   beobById(id: $id) {
     id
     idField
@@ -17,24 +17,30 @@ query beobByIdQuery($id: UUID!) {
       id
       taxid
       artname
-      apByArtId {
-        id
-        popsByApId {
-          nodes {
+      apartsByArtId(filter: { apId: { equalTo: $apId } }) {
+        nodes {
+          id
+          apId
+          apByApId {
             id
-            tpopsByPopId {
+            popsByApId {
               nodes {
                 id
-                nr
-                x
-                y
-                popStatusWerteByStatus {
-                  id
-                  text
-                }
-                popByPopId {
-                  id
-                  nr
+                tpopsByPopId {
+                  nodes {
+                    id
+                    nr
+                    x
+                    y
+                    popStatusWerteByStatus {
+                      id
+                      text
+                    }
+                    popByPopId {
+                      id
+                      nr
+                    }
+                  }
                 }
               }
             }
