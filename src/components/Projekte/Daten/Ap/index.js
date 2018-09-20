@@ -21,6 +21,7 @@ import withAeEigenschaftens from './withAeEigenschaftens'
 import updateApByIdGql from './updateApById.graphql'
 import withNodeFilter from '../../../../state/withNodeFilter'
 import withAllAdresses from './withAllAdresses'
+import withAllAps from './withAllAps'
 
 const Container = styled.div`
   height: 100%;
@@ -65,6 +66,7 @@ const LabelPopoverRowColumnRight = styled.div`
 `
 
 const enhance = compose(
+  withAllAps,
   withAllAdresses,
   withAeEigenschaftens,
   withNodeFilter,
@@ -145,6 +147,7 @@ const Ap = ({
   nodeFilterState,
   dataAeEigenschaftens,
   dataAllAdresses,
+  dataAllAps,
 }: {
   treeName: String,
   saveToDb: () => void,
@@ -152,6 +155,7 @@ const Ap = ({
   nodeFilterState: Object,
   dataAeEigenschaftens: Object,
   dataAllAdresses: Object,
+  dataAllAps: Object,
 }) => (
   <Query query={data1Gql}>
     {({ loading, error, data }) => {
@@ -170,7 +174,8 @@ const Ap = ({
             if (
               loading ||
               dataAeEigenschaftens.loading ||
-              dataAllAdresses.loading
+              dataAllAdresses.loading ||
+              dataAllAps.loading
             )
               return (
                 <Container>
@@ -178,6 +183,11 @@ const Ap = ({
                 </Container>
               )
             if (error) return `Fehler: ${error.message}`
+            if (dataAeEigenschaftens.error)
+              return `Fehler: ${dataAeEigenschaftens.error.message}`
+            if (dataAllAdresses.error)
+              return `Fehler: ${dataAllAdresses.error.message}`
+            if (dataAllAps.error) return `Fehler: ${dataAllAps.error.message}`
 
             let bearbeitungWerte = get(data, 'allApBearbstandWertes.nodes', [])
             bearbeitungWerte = sortBy(bearbeitungWerte, 'sort')
@@ -202,7 +212,7 @@ const Ap = ({
             let apArten
             let artWerte
             if (showFilter) {
-              apArten = get(data, 'allAps.nodes', []).map(o => o.artId)
+              apArten = get(dataAllAps, 'allAps.nodes', []).map(o => o.artId)
               artWerte = get(
                 dataAeEigenschaftens,
                 'allAeEigenschaftens.nodes',
@@ -217,7 +227,7 @@ const Ap = ({
               }))
             } else {
               // list all ap-Arten BUT the active one
-              apArten = get(data, 'allAps.nodes', [])
+              apArten = get(dataAllAps, 'allAps.nodes', [])
                 .filter(o => o.id !== id)
                 .map(o => o.artId)
               artWerte = get(

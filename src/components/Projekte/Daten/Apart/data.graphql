@@ -8,10 +8,4 @@ query apartByIdQuery($id: UUID!) {
       artname
     }
   }
-  allAeEigenschaftens {
-    nodes {
-      id
-      artname
-    }
-  }
 }

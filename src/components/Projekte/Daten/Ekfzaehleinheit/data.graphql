@@ -18,12 +18,4 @@ query ekfzaehleinheitByIdQuery($id: UUID!) {
       }
     }
   }
-  allTpopkontrzaehlEinheitWertes {
-    nodes {
-      id
-      code
-      text
-      sort
-    }
-  }
 }

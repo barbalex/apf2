@@ -19,6 +19,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateApberByIdGql from './updateApberById.graphql'
 import withAllAdresses from './withAllAdresses'
+import withAllApErfkritWertes from './withAllApErfkritWertes'
 
 const Container = styled.div`
   height: 100%;
@@ -36,6 +37,7 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withAllApErfkritWertes,
   withAllAdresses,
   withState('errors', 'setErrors', {}),
   withHandlers({
@@ -129,6 +131,7 @@ type Props = {
   errors: Object,
   treeName: string,
   dataAllAdresses: Object,
+  dataAllApErfkritWertes: Object,
 }
 
 class Apber extends Component<Props> {
@@ -145,12 +148,17 @@ class Apber extends Component<Props> {
       errors,
       treeName,
       dataAllAdresses,
+      dataAllApErfkritWertes,
     } = this.props
 
     return (
       <Query query={dataGql} variables={{ id }}>
         {({ loading, error, data }) => {
-          if (loading || dataAllAdresses.loading)
+          if (
+            loading ||
+            dataAllAdresses.loading ||
+            dataAllApErfkritWertes.loading
+          )
             return (
               <Container>
                 <FieldsContainer>Lade...</FieldsContainer>
@@ -159,6 +167,8 @@ class Apber extends Component<Props> {
           if (error) return `Fehler: ${error.message}`
           if (dataAllAdresses.error)
             return `Fehler: ${dataAllAdresses.error.message}`
+          if (dataAllApErfkritWertes.error)
+            return `Fehler: ${dataAllApErfkritWertes.error.message}`
 
           const veraenGegenVorjahrWerte = [
             { value: '+', label: '+' },
@@ -166,7 +176,11 @@ class Apber extends Component<Props> {
           ]
           const width = isNaN(dimensions.width) ? 380 : dimensions.width
           const row = get(data, 'apberById', {})
-          let beurteilungWerte = get(data, 'allApErfkritWertes.nodes', [])
+          let beurteilungWerte = get(
+            dataAllApErfkritWertes,
+            'allApErfkritWertes.nodes',
+            [],
+          )
           beurteilungWerte = sortBy(beurteilungWerte, 'sort')
           beurteilungWerte = beurteilungWerte.map(el => ({
             value: el.code,

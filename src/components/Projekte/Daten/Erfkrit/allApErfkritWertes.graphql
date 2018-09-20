@@ -1,0 +1,10 @@
+query AllApErfkritWertesQuery {
+  allApErfkritWertes {
+    nodes {
+      id
+      code
+      text
+      sort
+    }
+  }
+}

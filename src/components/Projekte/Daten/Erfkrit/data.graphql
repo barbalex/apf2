@@ -5,12 +5,4 @@ query erfkritByIdQuery($id: UUID!) {
     erfolg
     kriterien
   }
-  allApErfkritWertes {
-    nodes {
-      id
-      code
-      text
-      sort
-    }
-  }
 }

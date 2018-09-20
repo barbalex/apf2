@@ -22,14 +22,6 @@ query TpopkontrzaehlQuery($id: UUID!) {
       }
     }
   }
-  allTpopkontrzaehlEinheitWertes {
-    nodes {
-      id
-      code
-      text
-      sort
-    }
-  }
   allTpopkontrzaehlMethodeWertes {
     nodes {
       id

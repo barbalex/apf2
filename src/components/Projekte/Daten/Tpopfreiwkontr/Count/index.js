@@ -20,6 +20,7 @@ import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById.graphql'
 import dataGql from './data.graphql'
 import createTpopkontrzaehl from './createTpopkontrzaehl.graphql'
 import withDeleteState from '../../../../../state/withDeleteState'
+import withAllTpopkontrzaehlEinheitWertes from './withAllTpopkontrzaehlEinheitWertes'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -159,6 +160,7 @@ const ShowNew = styled.div`
 `
 
 const enhance = compose(
+  withAllTpopkontrzaehlEinheitWertes,
   withDeleteState,
   withState('errors', 'setErrors', {}),
   withHandlers({
@@ -250,6 +252,7 @@ const Count = ({
   einheitsUsed,
   ekfzaehleinheits,
   deleteState,
+  dataAllTpopkontrzaehlEinheitWertes,
 }: {
   id: String,
   tpopkontrId: String,
@@ -266,6 +269,7 @@ const Count = ({
   einheitsUsed: Array<Number>,
   ekfzaehleinheits: Array<Object>,
   deleteState: Object,
+  dataAllTpopkontrzaehlEinheitWertes: Object,
 }) => {
   if (showNew)
     return (
@@ -287,12 +291,15 @@ const Count = ({
   return (
     <Query query={dataGql} variables={{ id }}>
       {({ loading, error, data }) => {
-        if (loading) return <Container>Lade...</Container>
+        if (loading || dataAllTpopkontrzaehlEinheitWertes.loading)
+          return <Container>Lade...</Container>
         if (error) return `Fehler: ${error.message}`
+        if (dataAllTpopkontrzaehlEinheitWertes.error)
+          return `Fehler: ${dataAllTpopkontrzaehlEinheitWertes.error.message}`
 
         const row = get(data, 'tpopkontrzaehlById', {})
         const allEinheits = get(
-          data,
+          dataAllTpopkontrzaehlEinheitWertes,
           'allTpopkontrzaehlEinheitWertes.nodes',
           [],
         )

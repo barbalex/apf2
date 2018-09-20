@@ -34,10 +34,4 @@ query apByIdQuery($id: UUID!) {
       sort
     }
   }
-  allAps {
-    nodes {
-      id
-      artId
-    }
-  }
 }

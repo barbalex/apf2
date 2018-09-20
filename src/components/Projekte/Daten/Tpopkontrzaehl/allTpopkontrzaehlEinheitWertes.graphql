@@ -1,0 +1,10 @@
+query AllTpopkontrzaehlEinheitWertesQuery {
+  allTpopkontrzaehlEinheitWertes {
+    nodes {
+      id
+      code
+      text
+      sort
+    }
+  }
+}

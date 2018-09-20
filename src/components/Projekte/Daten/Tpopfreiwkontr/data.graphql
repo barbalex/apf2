@@ -68,12 +68,4 @@ query tpopkontrByIdQuery($id: UUID!) {
       }
     }
   }
-  allTpopkontrzaehlEinheitWertes {
-    nodes {
-      id
-      code
-      text
-      sort
-    }
-  }
 }

@@ -16,6 +16,7 @@ import Select from '../../../shared/Select'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById.graphql'
+import withAllTpopkontrzaehlEinheitWertes from './withAllTpopkontrzaehlEinheitWertes'
 
 const Container = styled.div`
   height: 100%;
@@ -29,6 +30,7 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withAllTpopkontrzaehlEinheitWertes,
   withState('errors', 'setErrors', {}),
   withHandlers({
     saveToDb: ({ refetchTree, setErrors, errors }) => async ({
@@ -87,25 +89,29 @@ const Tpopkontrzaehl = ({
   saveToDb,
   errors,
   treeName,
+  dataAllTpopkontrzaehlEinheitWertes,
 }: {
   id: string,
   saveToDb: () => void,
   errors: Object,
   treeName: string,
+  dataAllTpopkontrzaehlEinheitWertes: Object,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
-      if (loading)
+      if (loading || dataAllTpopkontrzaehlEinheitWertes.loading)
         return (
           <Container>
             <FieldsContainer>Lade...</FieldsContainer>
           </Container>
         )
       if (error) return `Fehler: ${error.message}`
+      if (dataAllTpopkontrzaehlEinheitWertes.error)
+        return `Fehler: ${dataAllTpopkontrzaehlEinheitWertes.error.message}`
 
       const row = get(data, 'tpopkontrzaehlById', {})
       let zaehleinheitWerte = get(
-        data,
+        dataAllTpopkontrzaehlEinheitWertes,
         'allTpopkontrzaehlEinheitWertes.nodes',
         [],
       )

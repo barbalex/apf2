@@ -15,6 +15,7 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateErfkritByIdGql from './updateErfkritById.graphql'
+import withAllApErfkritWertes from './withAllApErfkritWertes'
 
 const Container = styled.div`
   height: 100%;
@@ -28,6 +29,7 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withAllApErfkritWertes,
   withState('errors', 'setErrors', {}),
   withHandlers({
     saveToDb: ({ refetchTree, setErrors, errors }) => async ({
@@ -81,24 +83,32 @@ const Erfkrit = ({
   saveToDb,
   errors,
   treeName,
+  dataAllApErfkritWertes,
 }: {
   id: string,
   saveToDb: () => void,
   errors: Object,
   treeName: string,
+  dataAllApErfkritWertes: Object,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
-      if (loading)
+      if (loading || dataAllApErfkritWertes.loading)
         return (
           <Container>
             <FieldsContainer>Lade...</FieldsContainer>
           </Container>
         )
       if (error) return `Fehler: ${error.message}`
+      if (dataAllApErfkritWertes.error)
+        return `Fehler: ${dataAllApErfkritWertes.error.message}`
 
       const row = get(data, 'erfkritById', {})
-      let erfolgWerte = get(data, 'allApErfkritWertes.nodes', [])
+      let erfolgWerte = get(
+        dataAllApErfkritWertes,
+        'allApErfkritWertes.nodes',
+        [],
+      )
       erfolgWerte = sortBy(erfolgWerte, 'sort')
       erfolgWerte = erfolgWerte.map(el => ({
         value: el.code,
