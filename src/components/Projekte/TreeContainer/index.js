@@ -196,6 +196,7 @@ const enhance = compose(
       errorState,
       nodes,
     }) => (e, data, element) => {
+      console.log('TreeContainer, handleClick, refetchTree:', refetchTree)
       const tree = get(dbData, treeName)
       if (!data) return errorState.add('no data passed with click')
       if (!element)
@@ -346,7 +347,7 @@ const enhance = compose(
           })
         },
         copy() {
-          copyTo({ parentId: id, refetch: refetchTree, errorState })
+          copyTo({ parentId: id, refetchTree, errorState })
         },
         markForCopyingBiotop() {
           app.client.mutate({
@@ -364,14 +365,14 @@ const enhance = compose(
           copyBiotopTo(id)
         },
         copyTpopKoordToPop() {
-          copyTpopKoordToPop({ id, errorState, refetchTree })
+          copyTpopKoordToPop({ id, errorState })
         },
         createNewPopFromBeob() {
           createNewPopFromBeob({
             tree,
             activeNodes,
             id,
-            refetch: refetchTree,
+            refetchTree,
             errorState,
           })
         },

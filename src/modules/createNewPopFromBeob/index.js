@@ -8,19 +8,19 @@ import createPop from './createPop.graphql'
 import createTpop from './createTpop.graphql'
 import updateBeobById from './updateBeobById.graphql'
 import setTreeKeyGql from './setTreeKey.graphql'
-import { isEqual } from 'date-fns';
+import { isEqual } from 'date-fns'
 
 export default async ({
   tree,
   activeNodes,
   id,
-  refetch,
+  refetchTree,
   errorState,
 }: {
   tree: Object,
   activeNodes: Object,
   id: String,
-  refetch: () => void,
+  refetchTree: () => void,
   errorState: Object,
 }): Promise<void> => {
   const { client } = app
@@ -29,9 +29,9 @@ export default async ({
   try {
     beobResult = await client.query({
       query: queryBeob,
-      variables: { id }
+      variables: { id },
     })
-  } catch(error) {
+  } catch (error) {
     return errorState.add(error)
   }
   const beob = get(beobResult, 'data.beobById')
@@ -46,8 +46,8 @@ export default async ({
         apId: ap,
         x,
         y,
-        bekanntSeit: format(new Date(datum), 'YYYY')
-      }
+        bekanntSeit: format(new Date(datum), 'YYYY'),
+      },
     })
   } catch (error) {
     return errorState.add(error)
@@ -66,7 +66,7 @@ export default async ({
         bekannt_seit: format(new Date(datum), 'YYYY'),
         gemeinde: data.NOM_COMMUNE ? data.NOM_COMMUNE : null,
         flurname: data.DESC_LOCALITE_ ? data.DESC_LOCALITE_ : null,
-      }
+      },
     })
   } catch (error) {
     return errorState.add(error)
@@ -79,7 +79,7 @@ export default async ({
       variables: {
         id,
         tpopId: tpop.id,
-      }
+      },
     })
   } catch (error) {
     return errorState.add(error)
@@ -102,23 +102,61 @@ export default async ({
   let newOpenNodes = [
     ...tree.openNodes,
     // add Beob and it's not yet existing parents to open nodes
-    [ `Projekte`, projekt, `Aktionspläne`, ap, `Populationen` ],
-    [ `Projekte`, projekt, `Aktionspläne`, ap, `Populationen`, tpop.popId ],
-    [ `Projekte`, projekt, `Aktionspläne`, ap, `Populationen`, tpop.popId, `Teil-Populationen` ],
-    [ `Projekte`, projekt, `Aktionspläne`, ap, `Populationen`, tpop.popId, `Teil-Populationen`, tpop.id ],
-    [ `Projekte`, projekt, `Aktionspläne`, ap, `Populationen`, tpop.popId, `Teil-Populationen`, tpop.id, `Beobachtungen` ],
-    [ `Projekte`, projekt, `Aktionspläne`, ap, `Populationen`, tpop.popId, `Teil-Populationen`, tpop.id, `Beobachtungen`, id ]
+    [`Projekte`, projekt, `Aktionspläne`, ap, `Populationen`],
+    [`Projekte`, projekt, `Aktionspläne`, ap, `Populationen`, tpop.popId],
+    [
+      `Projekte`,
+      projekt,
+      `Aktionspläne`,
+      ap,
+      `Populationen`,
+      tpop.popId,
+      `Teil-Populationen`,
+    ],
+    [
+      `Projekte`,
+      projekt,
+      `Aktionspläne`,
+      ap,
+      `Populationen`,
+      tpop.popId,
+      `Teil-Populationen`,
+      tpop.id,
+    ],
+    [
+      `Projekte`,
+      projekt,
+      `Aktionspläne`,
+      ap,
+      `Populationen`,
+      tpop.popId,
+      `Teil-Populationen`,
+      tpop.id,
+      `Beobachtungen`,
+    ],
+    [
+      `Projekte`,
+      projekt,
+      `Aktionspläne`,
+      ap,
+      `Populationen`,
+      tpop.popId,
+      `Teil-Populationen`,
+      tpop.id,
+      `Beobachtungen`,
+      id,
+    ],
   ]
     // and remove old node
     .filter(n => !isEqual(n, tree.activeNodeArray))
-  
+
   await client.mutate({
     mutation: setTreeKeyGql,
     variables: {
       value: newOpenNodes,
       tree: tree.name,
-      key: 'openNodes'
-    }
+      key: 'openNodes',
+    },
   })
   // set new activeNodeArray
   await client.mutate({
@@ -126,9 +164,15 @@ export default async ({
     variables: {
       value: newActiveNodeArray,
       tree: tree.name,
-      key: 'activeNodeArray'
-    }
+      key: 'activeNodeArray',
+    },
   })
 
-  refetch()
+  refetchTree('local')
+  refetchTree('aps')
+  refetchTree('pops')
+  refetchTree('tpops')
+  refetchTree('beobNichtZuzuordnens')
+  refetchTree('beobNichtBeurteilts')
+  refetchTree('beobZugeordnets')
 }

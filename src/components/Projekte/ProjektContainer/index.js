@@ -340,7 +340,14 @@ const ProjekteContainer = props => {
   // TODO:
   const refetch = query => {
     console.log('refetch', { query, props })
-    props[`data${upperFirst(query)}`].refetch()
+    if (query) {
+      if (query) {
+        if (props[`data${upperFirst(query)}`]) {
+          console.log('refetching')
+          props[`data${upperFirst(query)}`].refetch()
+        }
+      }
+    }
   }
   const activeNodeArray = get(dataLocal, `${treeName}.activeNodeArray`)
   const activeNodes = getActiveNodes(activeNodeArray)

@@ -71,14 +71,12 @@ export default async ({ value, row, updateBeob, tree, refetchTree }) => {
         key2: 'openNodes',
       },
     })
-    /*console.log('saveArtIdToDb done:', {
-      aNA,
-      openNodes,
-      row,
-      newApId,
-      newANA,
-      newOpenNodes,
-    })*/
-    //refetchTree()
+    refetchTree('local')
+    refetchTree('aps')
+    refetchTree('pops')
+    refetchTree('tpops')
+    refetchTree('beobNichtZuzuordnens')
+    refetchTree('beobNichtBeurteilts')
+    refetchTree('beobZugeordnets')
   }
 }

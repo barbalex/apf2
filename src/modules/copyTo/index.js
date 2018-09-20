@@ -28,13 +28,13 @@ export default async ({
   parentId,
   table: tablePassed,
   id: idPassed,
-  refetch,
+  refetchTree,
   errorState,
 }: {
   parentId: String,
   tablePassed: ?String,
   idPassed: ?String,
-  refetch: () => void,
+  refetchTree: () => void,
   errorState: Object,
 }): Promise<void> => {
   const { client } = app
@@ -335,15 +335,14 @@ export default async ({
       break
   }
 
-  refetch()
+  refetchTree()
 
   // copy tpop if needed
   if (table === 'pop' && withNextLevel) {
     copyTpopsOfPop({
       popIdFrom: id,
       popIdTo: newId,
-      client,
-      refetch,
+      refetchTree,
     })
   }
   if (table === 'tpopkontr') {
@@ -351,8 +350,7 @@ export default async ({
     copyZaehlOfTpopKontr({
       tpopkontrIdFrom: id,
       tpopkontrIdTo: newId,
-      client,
-      refetch,
+      refetchTree,
     })
   }
 }

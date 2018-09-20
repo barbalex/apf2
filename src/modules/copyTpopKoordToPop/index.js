@@ -8,11 +8,9 @@ import updatePopById from './updatePopById.graphql'
 export default async ({
   id,
   errorState,
-  refetchTree,
 }: {
   id: String,
   errorState: Object,
-  refetchTree: () => void,
 }): Promise<void> => {
   const { client } = app
 
@@ -54,5 +52,4 @@ export default async ({
   } catch (error) {
     return errorState.add(error)
   }
-  //refetchTree()
 }

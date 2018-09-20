@@ -174,6 +174,7 @@ export default async ({ value, id, updateBeob, tree, refetchTree, type }) => {
       },
     })
   } else {
+    // needs to go to nicht-beurteilte-Beobachtungen
     const newANA = [
       aNA[0],
       aNA[1],
@@ -210,12 +211,14 @@ export default async ({ value, id, updateBeob, tree, refetchTree, type }) => {
             !isEqual(n, oldGParentNodeUrl) &&
             !isEqual(n, oldGParentNodeUrl) &&
             !isEqual(n, oldGGParentNodeUrl) &&
-            !isEqual(n, oldGGGParentNodeUrl),
+            !isEqual(n, oldGGGParentNodeUrl) &&
+            !isEqual(n, oldGGGGParentNodeUrl),
         ),
         [aNA[0], aNA[1], aNA[2], aNA[3], 'nicht-beurteilte-Beobachtungen'],
         [aNA[0], aNA[1], aNA[2], aNA[3], 'nicht-beurteilte-Beobachtungen', id],
       ]
     }
+    console.log({ newOpenNodes, newANA, aNA, openNodes })
     await client.mutate({
       mutation: setTreeKeyGql,
       variables: {
@@ -227,7 +230,18 @@ export default async ({ value, id, updateBeob, tree, refetchTree, type }) => {
       },
     })
   }
-  refetchTree('beobZugeordnets')
-  refetchTree('beobNichtBeurteilts')
+  refetchTree('local')
   refetchTree('beobNichtZuzuordnens')
+  refetchTree('beobNichtBeurteilts')
+  refetchTree('beobZugeordnets')
+  refetchTree('beobNichtBeurteiltForMap')
+  refetchTree('beobZugeordnetForMap')
+  refetchTree('beobZugeordnetForMapMarkers')
+  refetchTree('beobNichtBeurteiltForMapMarkers')
+  refetchTree('beobZugeordnetAssignPolylinesForMap')
+  refetchTree('beobAssignLines')
+  refetchTree('aps')
+  refetchTree('pops')
+  refetchTree('tpops')
+  refetchTree('local')
 }
