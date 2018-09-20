@@ -22,6 +22,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateTpopmassnByIdGql from './updateTpopmassnById.graphql'
 import withNodeFilter from '../../../../state/withNodeFilter'
+import withAeEigenschaftens from './withAeEigenschaftens'
 
 const Container = styled.div`
   height: 100%;
@@ -40,6 +41,7 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withAeEigenschaftens,
   withNodeFilter,
   withState('errors', 'setErrors', {}),
   withHandlers({
@@ -159,6 +161,7 @@ type Props = {
   errors: Object,
   treeName: string,
   nodeFilterState: Object,
+  dataAeEigenschaftens: Object,
 }
 
 class Tpopmassn extends Component<Props> {
@@ -177,12 +180,13 @@ class Tpopmassn extends Component<Props> {
       errors,
       treeName,
       nodeFilterState,
+      dataAeEigenschaftens,
     } = this.props
 
     return (
       <Query query={dataGql} variables={{ id }}>
         {({ loading, error, data }) => {
-          if (loading)
+          if (loading || dataAeEigenschaftens.loading)
             return (
               <Container>
                 <FieldsContainer>Lade...</FieldsContainer>
@@ -212,7 +216,11 @@ class Tpopmassn extends Component<Props> {
             value: el.code,
             label: el.text,
           }))
-          const artWerte = get(data, 'allAeEigenschaftens.nodes', [])
+          const artWerte = get(
+            dataAeEigenschaftens,
+            'allAeEigenschaftens.nodes',
+            [],
+          )
             .map(o => o.artname)
             .sort()
             .map(o => ({ value: o, label: o }))

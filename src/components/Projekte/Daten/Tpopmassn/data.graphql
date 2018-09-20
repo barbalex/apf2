@@ -53,10 +53,4 @@ query tpopmassnByIdQuery($id: UUID!) {
       sort
     }
   }
-  allAeEigenschaftens {
-    nodes {
-      id
-      artname
-    }
-  }
 }
