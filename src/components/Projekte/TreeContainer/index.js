@@ -272,7 +272,13 @@ const enhance = compose(
               newOpenNodes,
               url,
             })
-            refetchTree(`${table}s`)
+            const tableToUse = [
+              'tpopfeldkontrzaehl',
+              'tpopfreiwkontrzaehl',
+            ].includes(table)
+              ? 'tpopkontrzaehl'
+              : table
+            refetchTree(`${tableToUse}s`)
           }
           deleteState.setToDelete({
             table,

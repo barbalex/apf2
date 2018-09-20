@@ -194,5 +194,6 @@ export default async ({
       key: 'openNodes',
     },
   })
-  refetchTree(`${tablePassed}s`)
+  console.log('insertDataset', { tablePassed, table })
+  refetchTree(`${table === 'tpopkontrzaehl' ? table : tablePassed}s`)
 }
