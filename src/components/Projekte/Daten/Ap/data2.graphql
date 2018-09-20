@@ -34,12 +34,6 @@ query apByIdQuery($id: UUID!) {
       sort
     }
   }
-  allAdresses {
-    nodes {
-      id
-      name
-    }
-  }
   allAps {
     nodes {
       id

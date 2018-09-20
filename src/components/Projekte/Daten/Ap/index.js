@@ -20,6 +20,7 @@ import data2Gql from './data2.graphql'
 import withAeEigenschaftens from './withAeEigenschaftens'
 import updateApByIdGql from './updateApById.graphql'
 import withNodeFilter from '../../../../state/withNodeFilter'
+import withAllAdresses from './withAllAdresses'
 
 const Container = styled.div`
   height: 100%;
@@ -64,6 +65,7 @@ const LabelPopoverRowColumnRight = styled.div`
 `
 
 const enhance = compose(
+  withAllAdresses,
   withAeEigenschaftens,
   withNodeFilter,
   withState('errors', 'setErrors', {}),
@@ -142,12 +144,14 @@ const Ap = ({
   errors,
   nodeFilterState,
   dataAeEigenschaftens,
+  dataAllAdresses,
 }: {
   treeName: String,
   saveToDb: () => void,
   errors: Object,
   nodeFilterState: Object,
   dataAeEigenschaftens: Object,
+  dataAllAdresses: Object,
 }) => (
   <Query query={data1Gql}>
     {({ loading, error, data }) => {
@@ -163,7 +167,11 @@ const Ap = ({
       return (
         <Query query={data2Gql} variables={{ id }}>
           {({ loading, error, data }) => {
-            if (loading || dataAeEigenschaftens.loading)
+            if (
+              loading ||
+              dataAeEigenschaftens.loading ||
+              dataAllAdresses.loading
+            )
               return (
                 <Container>
                   <FieldsContainer>Lade...</FieldsContainer>
@@ -183,7 +191,7 @@ const Ap = ({
               value: el.code,
               label: el.text,
             }))
-            let adressenWerte = get(data, 'allAdresses.nodes', [])
+            let adressenWerte = get(dataAllAdresses, 'allAdresses.nodes', [])
             adressenWerte = sortBy(adressenWerte, 'name')
             adressenWerte = adressenWerte.map(el => ({
               label: el.name,
