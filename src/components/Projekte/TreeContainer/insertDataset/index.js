@@ -15,16 +15,16 @@ export default async ({
   id,
   menuType,
   baseUrl,
-  refetch,
+  refetchTree,
   errorState,
-}:{
+}: {
   tree: Object,
   tablePassed: String,
   parentId: String,
   id: String,
   menuType: String,
   baseUrl: Array<String>,
-  refetch: () => void,
+  refetchTree: () => void,
   errorState: Object,
 }): any => {
   const { client } = app
@@ -37,7 +37,7 @@ export default async ({
   } = tables.find(t => t.table === table)
   if (!tableMetadata) {
     return errorState.add(
-      new Error(`no table meta data found for table "${table}"`)
+      new Error(`no table meta data found for table "${table}"`),
     )
   }
   // some tables need to be translated, i.e. tpopfreiwkontr
@@ -48,7 +48,7 @@ export default async ({
   const idField = tableMetadata.idField
   if (!idField) {
     return errorState.add(
-      new Error('new dataset not created as no idField could be found')
+      new Error('new dataset not created as no idField could be found'),
     )
   }
   let mutation = gql`
@@ -120,45 +120,37 @@ export default async ({
   if (['userFolder', 'user'].includes(menuType)) {
     mutation = gql`
       mutation createUser($role: String!) {
-        createUser (
-          input: {
-            user: {
-              role: $role
-            }
+        createUser(input: { user: { role: $role } }) {
+          user {
+            id
+            name
+            email
+            role
           }
-        ) {
-        user {
-          id
-          name
-          email
-          role
         }
       }
-    }`
+    `
     delete variables.parentId
-    variables.role = 'apflora_reader' 
+    variables.role = 'apflora_reader'
   }
   if (['adresseFolder', 'adresse'].includes(menuType)) {
     mutation = gql`
       mutation createAdresse {
-        createAdresse (
-          input: {
-            adresse: {}
+        createAdresse(input: { adresse: {} }) {
+          adresse {
+            id
+            name
+            adresse
+            telefon
+            email
+            freiwErfko
+            evabVorname
+            evabNachname
+            evabOrt
           }
-        ) {
-        adresse {
-          id
-          name
-          adresse
-          telefon
-          email
-          freiwErfko
-          evabVorname
-          evabNachname
-          evabOrt
         }
       }
-    }`
+    `
     delete variables.parentId
   }
 
@@ -172,43 +164,35 @@ export default async ({
   } catch (error) {
     return errorState.add(error)
   }
-  const row = get(result, `data.create${upperFirst(camelCase(table))}.${camelCase(table)}`)
+  const row = get(
+    result,
+    `data.create${upperFirst(camelCase(table))}.${camelCase(table)}`,
+  )
   // set new url
-  const newActiveNodeArray = [
-    ...baseUrl,
-    row[idField]
-  ]
+  const newActiveNodeArray = [...baseUrl, row[idField]]
   await client.mutate({
     mutation: setTreeKey,
     variables: {
       value: newActiveNodeArray,
       tree: tree.name,
-      key: 'activeNodeArray'
-    }
+      key: 'activeNodeArray',
+    },
   })
   // set open nodes
   const { openNodes } = tree
-  let newOpenNodes = [
-    ...openNodes,
-    newActiveNodeArray
-  ]
+  let newOpenNodes = [...openNodes, newActiveNodeArray]
   if (['zielFolder', 'zieljahrFolder'].includes(menuType)) {
     const urlWithoutJahr = [...baseUrl]
     urlWithoutJahr.pop()
-    newOpenNodes = [
-      ...openNodes,
-      urlWithoutJahr,
-      newActiveNodeArray
-    ]
+    newOpenNodes = [...openNodes, urlWithoutJahr, newActiveNodeArray]
   }
   await client.mutate({
     mutation: setTreeKey,
     variables: {
       value: newOpenNodes,
       tree: tree.name,
-      key: 'openNodes'
-    }
+      key: 'openNodes',
+    },
   })
-
-  refetch()
+  refetchTree(`${tablePassed}s`)
 }

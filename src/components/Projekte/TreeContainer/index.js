@@ -196,7 +196,6 @@ const enhance = compose(
       errorState,
       nodes,
     }) => (e, data, element) => {
-      console.log('TreeContainer, handleClick, refetchTree:', refetchTree)
       const tree = get(dbData, treeName)
       if (!data) return errorState.add('no data passed with click')
       if (!element)
@@ -231,7 +230,7 @@ const enhance = compose(
             baseUrl,
             menuType,
             id,
-            refetch: refetchTree,
+            refetchTree,
             errorState,
           })
         },
@@ -275,7 +274,7 @@ const enhance = compose(
                 key2: 'openNodes',
               },
             })
-            refetchTree(`${menuType}s`)
+            refetchTree(`${table}s`)
           }
           deleteState.setToDelete({
             table,

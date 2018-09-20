@@ -108,6 +108,7 @@ const Ekfzaehleinheit = ({
         return `Fehler: ${dataAllTpopkontrzaehlEinheitWertes.error.message}`
 
       const row = get(data, 'ekfzaehleinheitById', {})
+      console.log('Ekfzaehleinheit', { row, data })
       const ekfzaehleinheitenOfAp = get(
         row,
         'apByApId.ekfzaehleinheitsByApId.nodes',

@@ -20,6 +20,8 @@ export default async ({ value, id, updateBeob, tree, refetchTree, type }) => {
 
   // need to update activeNodeArray and openNodes
   const { activeNodeArray: aNA, openNodes } = tree
+  let newANA
+  let newOpenNodes
 
   if (value) {
     let result = {}
@@ -37,7 +39,7 @@ export default async ({ value, id, updateBeob, tree, refetchTree, type }) => {
     // aNA = activeNodeArray
     const popId = get(result, 'data.tpopById.popId')
     const tpopId = get(result, 'data.tpopById.id')
-    const newANA = [
+    newANA = [
       aNA[0],
       aNA[1],
       aNA[2],
@@ -57,7 +59,6 @@ export default async ({ value, id, updateBeob, tree, refetchTree, type }) => {
     oldGGParentNodeUrl.pop()
     const oldGGGParentNodeUrl = clone(oldGGParentNodeUrl)
     oldGGGParentNodeUrl.pop()
-    let newOpenNodes
     if (['nichtZuzuordnen', 'nichtBeurteilt'].includes(type)) {
       newOpenNodes = [
         ...openNodes.filter(
@@ -109,6 +110,7 @@ export default async ({ value, id, updateBeob, tree, refetchTree, type }) => {
         ],
       ]
     } else {
+      // type = zugeordnet?
       newOpenNodes = [
         ...openNodes.filter(
           n =>
@@ -116,7 +118,8 @@ export default async ({ value, id, updateBeob, tree, refetchTree, type }) => {
             !isEqual(n, oldParentNodeUrl) &&
             !isEqual(n, oldGParentNodeUrl) &&
             !isEqual(n, oldGParentNodeUrl) &&
-            !isEqual(n, oldGGParentNodeUrl),
+            !isEqual(n, oldGGParentNodeUrl) &&
+            !isEqual(n, oldGGGParentNodeUrl),
         ),
         [aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen', popId],
         [
@@ -163,19 +166,9 @@ export default async ({ value, id, updateBeob, tree, refetchTree, type }) => {
         ],
       ]
     }
-    await client.mutate({
-      mutation: setTreeKeyGql,
-      variables: {
-        tree: tree.name,
-        value1: newANA,
-        key1: 'activeNodeArray',
-        value2: newOpenNodes,
-        key2: 'openNodes',
-      },
-    })
   } else {
     // needs to go to nicht-beurteilte-Beobachtungen
-    const newANA = [
+    newANA = [
       aNA[0],
       aNA[1],
       aNA[2],
@@ -193,7 +186,6 @@ export default async ({ value, id, updateBeob, tree, refetchTree, type }) => {
     oldGGGParentNodeUrl.pop()
     const oldGGGGParentNodeUrl = clone(oldGGGParentNodeUrl)
     oldGGGGParentNodeUrl.pop()
-    let newOpenNodes
     if (['nichtZuzuordnen', 'nichtBeurteilt'].includes(type)) {
       newOpenNodes = [
         ...openNodes.filter(
@@ -218,18 +210,18 @@ export default async ({ value, id, updateBeob, tree, refetchTree, type }) => {
         [aNA[0], aNA[1], aNA[2], aNA[3], 'nicht-beurteilte-Beobachtungen', id],
       ]
     }
-    console.log({ newOpenNodes, newANA, aNA, openNodes })
-    await client.mutate({
-      mutation: setTreeKeyGql,
-      variables: {
-        tree: tree.name,
-        value1: newANA,
-        key1: 'activeNodeArray',
-        value2: newOpenNodes,
-        key2: 'openNodes',
-      },
-    })
   }
+  //console.log({ newOpenNodes, newANA, aNA, openNodes, type })
+  await client.mutate({
+    mutation: setTreeKeyGql,
+    variables: {
+      tree: tree.name,
+      value1: newANA,
+      key1: 'activeNodeArray',
+      value2: newOpenNodes,
+      key2: 'openNodes',
+    },
+  })
   refetchTree('local')
   refetchTree('beobNichtZuzuordnens')
   refetchTree('beobNichtBeurteilts')
