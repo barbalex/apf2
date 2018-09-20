@@ -8,18 +8,18 @@ import { type as popType } from '../../../state/nodeFilter/pop'
 import { type as tpopType } from '../../../state/nodeFilter/tpop'
 
 export default ({
-  data,
+  dataLocal,
   treeName,
   nodeFilter,
 }: {
-  data: Object,
+  dataLocal: Object,
   treeName: String,
   nodeFilter: Object,
 }): Object => {
-  const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
-  const apFilterSet = get(data, `${treeName}.apFilter`)
+  const activeNodeArray = get(dataLocal, `${treeName}.activeNodeArray`)
+  const apFilterSet = get(dataLocal, `${treeName}.apFilter`)
   const activeNodes = getActiveNodes(activeNodeArray)
-  const openNodes = get(data, `${treeName}.openNodes`)
+  const openNodes = get(dataLocal, `${treeName}.openNodes`)
 
   const isWerteListen = openNodes.some(
     nodeArray => nodeArray[0] === 'Werte-Listen',
@@ -27,7 +27,7 @@ export default ({
   const isAdresse = openNodes.some(
     nodeArray => nodeArray[0] === 'Werte-Listen' && nodeArray[1] === 'Adressen',
   )
-  const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
+  const projekteTabs = get(dataLocal, 'urlQuery.projekteTabs', [])
   const mapIsActive =
     projekteTabs.includes('karte') || projekteTabs.includes('karte2')
   const projekt = uniq(

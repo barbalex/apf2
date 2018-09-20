@@ -67,7 +67,7 @@ import idsInsideFeatureCollection from '../../../modules/idsInsideFeatureCollect
 import withErrorState from '../../../state/withErrorState'
 import logout from '../../../modules/logout'
 import withTreeNodeFilterState from '../../../state/withNodeFilter'
-import buildVariables from './variables'
+import buildVariables from './buildVariables'
 
 const Container = styled.div`
   display: flex;
@@ -91,7 +91,7 @@ const enhance = compose(
   withTreeNodeFilterState,
   withProps(({ dataLocal, treeName, nodeFilterState }) =>
     buildVariables({
-      data: dataLocal,
+      dataLocal,
       treeName,
       nodeFilter: nodeFilterState.state[treeName],
     }),
