@@ -13,12 +13,4 @@ query tpopmassnberByIdQuery($id: UUID!) {
       }
     }
   }
-  allTpopmassnErfbeurtWertes {
-    nodes {
-      id
-      code
-      text
-      sort
-    }
-  }
 }

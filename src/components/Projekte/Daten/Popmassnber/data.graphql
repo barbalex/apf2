@@ -14,12 +14,4 @@ query popmassnberByIdQuery($id: UUID!) {
       apId
     }
   }
-  allTpopmassnErfbeurtWertes {
-    nodes {
-      id
-      code
-      text
-      sort
-    }
-  }
 }

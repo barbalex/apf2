@@ -15,6 +15,7 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateTpopmassnberByIdGql from './updateTpopmassnberById.graphql'
+import withAllTpopmassnErfbeurtWertes from './withAllTpopmassnErfbeurtWertes'
 
 const Container = styled.div`
   height: 100%;
@@ -28,6 +29,7 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withAllTpopmassnErfbeurtWertes,
   withState('errors', 'setErrors', {}),
   withHandlers({
     saveToDb: ({ refetchTree, setErrors, errors }) => async ({
@@ -83,25 +85,29 @@ const Tpopmassnber = ({
   saveToDb,
   errors,
   treeName,
+  dataAllTpopmassnErfbeurtWertes,
 }: {
   id: string,
   saveToDb: () => void,
   errors: Object,
   treeName: string,
+  dataAllTpopmassnErfbeurtWertes: Object,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
-      if (loading)
+      if (loading || dataAllTpopmassnErfbeurtWertes.loading)
         return (
           <Container>
             <FieldsContainer>Lade...</FieldsContainer>
           </Container>
         )
       if (error) return `Fehler: ${error.message}`
+      if (dataAllTpopmassnErfbeurtWertes.error)
+        return `Fehler: ${dataAllTpopmassnErfbeurtWertes.error.message}`
 
       const row = get(data, 'tpopmassnberById', {})
       let tpopmassnbeurtWerte = get(
-        data,
+        dataAllTpopmassnErfbeurtWertes,
         'allTpopmassnErfbeurtWertes.nodes',
         [],
       )

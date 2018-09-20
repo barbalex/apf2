@@ -1,0 +1,10 @@
+query AllTpopmassnErfbeurtWertesQuery {
+  allTpopmassnErfbeurtWertes {
+    nodes {
+      id
+      code
+      text
+      sort
+    }
+  }
+}
