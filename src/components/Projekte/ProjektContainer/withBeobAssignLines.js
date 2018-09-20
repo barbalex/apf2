@@ -5,7 +5,7 @@ import get from 'lodash/get'
 import query from './beobAssignLines.graphql'
 
 export default graphql(query, {
-  options: ({ dataLocal, treeName, nodeFilterState }) => {
+  options: ({ dataLocal, treeName }) => {
     const openNodes = get(dataLocal, `${treeName}.openNodes`)
     const isProjekt = openNodes.some(
       nArray => nArray[0] === 'Projekte' && nArray[1],
