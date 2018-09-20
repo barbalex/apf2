@@ -29,7 +29,6 @@ export default async ({
   yKey: String,
   errorState: Object,
 }) => {
-  console.log({ dataPassed })
   let data = dataPassed.map(d => omit(d, ['__typename', 'Symbol(id)']))
   // now we could manipulate the data, for instance apply mapFilter
   const filterFeatures = mapFilter.features
