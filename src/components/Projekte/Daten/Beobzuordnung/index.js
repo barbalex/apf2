@@ -245,7 +245,7 @@ const Beobzuordnung = ({
                 <ZuordnenDiv>
                   <Select
                     key={`${row.id}tpopId`}
-                    value={tpop ? tpopLabel : ''}
+                    value={row.tpopId ? row.tpopId : ''}
                     field="tpopId"
                     label={
                       !!row.tpopId
