@@ -279,6 +279,8 @@ const enhance = compose(
               ? 'tpopkontrzaehl'
               : table
             refetchTree(`${tableToUse}s`)
+            refetchTree('aps')
+            refetchTree('projekts')
           }
           deleteState.setToDelete({
             table,
