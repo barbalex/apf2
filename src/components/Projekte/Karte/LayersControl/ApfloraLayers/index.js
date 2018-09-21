@@ -297,11 +297,6 @@ const SortableItem = SortableElement(
                 title={`auf alle ${apfloraLayer.label} zoomen`}
                 onClick={() => {
                   // only zoom if there is data to zoom on
-                  console.log('auf alle zoomen: ', {
-                    layerData,
-                    activeApfloraLayers,
-                    bounds: getBounds(layerData),
-                  })
                   if (layerData.length === 0) return
                   if (activeApfloraLayers.includes(apfloraLayer.value)) {
                     setBounds(getBounds(layerData))
@@ -335,11 +330,6 @@ const SortableItem = SortableElement(
               <StyledIconButton
                 title={`auf aktive ${apfloraLayer.label} zoomen`}
                 onClick={() => {
-                  console.log('auf aktive zoomen: ', {
-                    layerDataHighlighted,
-                    activeApfloraLayers,
-                    bounds: getBounds(layerDataHighlighted),
-                  })
                   // only zoom if a tpop is highlighted
                   if (layerDataHighlighted.length === 0) return
                   if (activeApfloraLayers.includes(apfloraLayer.value)) {
@@ -474,7 +464,6 @@ const ApfloraLayers = ({
     >
       {({ loading, error, data, client }) => {
         if (error) return `Fehler: ${error.message}`
-        console.log('1', { data })
 
         return (
           <CardContent>
