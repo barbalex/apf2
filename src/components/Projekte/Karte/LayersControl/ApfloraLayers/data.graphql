@@ -7,22 +7,28 @@ query Query($isAp: Boolean!, $ap: [UUID!]) {
   }
   assigningBeob @client
   pop: allPops(
-    filter: {
-      apId: { in: $ap }
-      x: { isNull: false }
-      y: { isNull: false }
-    }
+    filter: { apId: { in: $ap }, x: { isNull: false }, y: { isNull: false } }
   ) @include(if: $isAp) {
     nodes {
       id
       x
       y
-      tpopsByPopId(
-        filter: {
-          x: { isNull: false }
-          y: { isNull: false }
+      tpopsByPopId(filter: { x: { isNull: false }, y: { isNull: false } }) {
+        nodes {
+          id
+          x
+          y
         }
-      ) {
+      }
+    }
+  }
+  # need to also show tpops with pops that do not have coordinates
+  tpopByPop: allPops(filter: { apId: { in: $ap } }) @include(if: $isAp) {
+    nodes {
+      id
+      x
+      y
+      tpopsByPopId(filter: { x: { isNull: false }, y: { isNull: false } }) {
         nodes {
           id
           x
@@ -45,10 +51,7 @@ query Query($isAp: Boolean!, $ap: [UUID!]) {
     }
   }
   beobNichtZuzuordnen: allVApbeobs(
-    filter: {
-      apId: { in: $ap }
-      nichtZuordnen: { equalTo: true }
-    }
+    filter: { apId: { in: $ap }, nichtZuordnen: { equalTo: true } }
   ) @include(if: $isAp) {
     nodes {
       id

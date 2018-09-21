@@ -149,7 +149,6 @@ const SortableItem = SortableElement(
         apfloraLayer.value === 'beobNichtBeurteilt') ||
         (activeApfloraLayers.includes('beobZugeordnet') &&
           apfloraLayer.value === 'beobZugeordnet'))
-    const activeNodeArray = get(data, `${tree.name}.activeNodeArray`)
     const getZuordnenIconTitle = () => {
       if (assigning) return 'Zuordnung beenden'
       if (assigningispossible) return 'Teil-Populationen zuordnen'
@@ -159,31 +158,8 @@ const SortableItem = SortableElement(
     let layerData = get(data, `${apfloraLayer.value}.nodes`, [])
     if (apfloraLayer.value === 'tpop') {
       // but tpop is special...
-      const pops = get(data, 'pop.nodes', [])
+      const pops = get(data, 'tpopByPop.nodes', [])
       layerData = flatten(pops.map(n => get(n, 'tpopsByPopId.nodes', [])))
-    }
-    let highlightedIdsOfLayer = activeNodeArray
-    if (activeApfloraLayers.includes('mapFilter')) {
-      switch (apfloraLayer.value) {
-        case 'pop':
-          highlightedIdsOfLayer = mapPopIdsFiltered
-          break
-        case 'tpop':
-          highlightedIdsOfLayer = mapTpopIdsFiltered
-          break
-        case 'beobNichtBeurteilt':
-          highlightedIdsOfLayer = mapBeobNichtBeurteiltIdsFiltered
-          break
-        case 'beobNichtZuzuordnen':
-          highlightedIdsOfLayer = mapBeobNichtZuzuordnenIdsFiltered
-          break
-        case 'beobZugeordnet':
-        case 'beobZugeordnetAssignPolylines':
-          highlightedIdsOfLayer = mapBeobZugeordnetIdsFiltered
-          break
-        default:
-        // do nothing
-      }
     }
     const layerDataHighlighted = layerData.filter(o =>
       mapIdsFiltered.includes(o.id),
@@ -318,8 +294,15 @@ const SortableItem = SortableElement(
           <ZoomToDiv>
             {apfloraLayer.value !== 'mapFilter' && (
               <StyledIconButton
-                title={`auf alle '${apfloraLayer.label}' zoomen`}
+                title={`auf alle ${apfloraLayer.label} zoomen`}
                 onClick={() => {
+                  // only zoom if there is data to zoom on
+                  console.log('auf alle zoomen: ', {
+                    layerData,
+                    activeApfloraLayers,
+                    bounds: getBounds(layerData),
+                  })
+                  if (layerData.length === 0) return
                   if (activeApfloraLayers.includes(apfloraLayer.value)) {
                     setBounds(getBounds(layerData))
                   }
@@ -327,12 +310,21 @@ const SortableItem = SortableElement(
               >
                 <ZoomToIcon
                   style={{
-                    color: activeApfloraLayers.includes(apfloraLayer.value)
-                      ? 'black'
-                      : '#e2e2e2',
-                    cursor: activeApfloraLayers.includes(apfloraLayer.value)
-                      ? 'pointer'
-                      : 'not-allowed',
+                    color:
+                      activeApfloraLayers.includes(apfloraLayer.value) &&
+                      layerData.length > 0
+                        ? 'black'
+                        : '#e2e2e2',
+                    fontWeight:
+                      activeApfloraLayers.includes(apfloraLayer.value) &&
+                      layerData.length > 0
+                        ? 'bold'
+                        : 'normal',
+                    cursor:
+                      activeApfloraLayers.includes(apfloraLayer.value) &&
+                      layerData.length > 0
+                        ? 'pointer'
+                        : 'not-allowed',
                   }}
                 />
               </StyledIconButton>
@@ -341,8 +333,15 @@ const SortableItem = SortableElement(
           <ZoomToDiv>
             {apfloraLayer.value !== 'mapFilter' && (
               <StyledIconButton
-                title={`auf aktive '${apfloraLayer.label}' zoomen`}
+                title={`auf aktive ${apfloraLayer.label} zoomen`}
                 onClick={() => {
+                  console.log('auf aktive zoomen: ', {
+                    layerDataHighlighted,
+                    activeApfloraLayers,
+                    bounds: getBounds(layerDataHighlighted),
+                  })
+                  // only zoom if a tpop is highlighted
+                  if (layerDataHighlighted.length === 0) return
                   if (activeApfloraLayers.includes(apfloraLayer.value)) {
                     setBounds(getBounds(layerDataHighlighted))
                   }
@@ -352,17 +351,17 @@ const SortableItem = SortableElement(
                   style={{
                     color:
                       activeApfloraLayers.includes(apfloraLayer.value) &&
-                      highlightedIdsOfLayer.length > 0
+                      layerDataHighlighted.length > 0
                         ? '#fbec04'
                         : '#e2e2e2',
                     fontWeight:
                       activeApfloraLayers.includes(apfloraLayer.value) &&
-                      highlightedIdsOfLayer.length > 0
+                      layerDataHighlighted.length > 0
                         ? 'bold'
                         : 'normal',
                     cursor:
                       activeApfloraLayers.includes(apfloraLayer.value) &&
-                      highlightedIdsOfLayer.length > 0
+                      layerDataHighlighted.length > 0
                         ? 'pointer'
                         : 'not-allowed',
                   }}
@@ -475,6 +474,7 @@ const ApfloraLayers = ({
     >
       {({ loading, error, data, client }) => {
         if (error) return `Fehler: ${error.message}`
+        console.log('1', { data })
 
         return (
           <CardContent>
