@@ -79,14 +79,12 @@ const crs = new window.L.Proj.CRS(
 
 const StyledMap = styled(Map)`
   height: 100%;
+  cursor: ${props => (props.localizing ? 'crosshair' : 'grab')} !important;
   @media print {
     height: 100%;
     width: 100%;
     overflow: visible;
   }
-`
-const StyledMapLocalizing = styled(StyledMap)`
-  cursor: crosshair !important;
 `
 const Container = styled.div`
   border-left-color: rgb(46, 125, 50);
@@ -222,9 +220,6 @@ class Karte extends Component {
       setMarkierungen,
       errorState,
     } = this.props
-    const MapElement = !!idOfTpopBeingLocalized
-      ? StyledMapLocalizing
-      : StyledMap
     const assigning = get(data, 'assigningBeob')
     const clustered = !(
       assigning || activeApfloraLayers.includes('beobZugeordnetAssignPolylines')
@@ -352,7 +347,8 @@ class Karte extends Component {
     return (
       <Container>
         <ErrorBoundary>
-          <MapElement
+          <StyledMap
+            localizing={!!idOfTpopBeingLocalized}
             innerRef={this.mapRef}
             bounds={bounds}
             //preferCanvas
@@ -480,7 +476,7 @@ class Karte extends Component {
             */}
             <PngControl />
             <CoordinatesControl />
-          </MapElement>
+          </StyledMap>
         </ErrorBoundary>
       </Container>
     )
