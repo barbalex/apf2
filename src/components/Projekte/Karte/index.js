@@ -343,6 +343,7 @@ class Karte extends Component {
     const activeOverlaysSorted = sortBy(activeOverlays, activeOverlay =>
       overlays.findIndex(o => o.value === activeOverlay),
     )
+    //console.log('Karte rendering')
 
     return (
       <Container>
@@ -358,7 +359,8 @@ class Karte extends Component {
             // probably clustering function
             maxZoom={22}
             minZoom={0}
-            onClick={async event => {
+            doubleClickZoom={false}
+            onDblclick={async event => {
               /**
                * TODO
                * When clicking on Layertool
@@ -370,6 +372,13 @@ class Karte extends Component {
               if (!!idOfTpopBeingLocalized) {
                 const { lat, lng } = event.latlng
                 const [x, y] = epsg4326to2056(lng, lat)
+                // DANGER:
+                // need to stop propagation of the event
+                // if not it is called a second time
+                // the crazy thing is:
+                // in some areas (not all) the second event
+                // has wrong coordinates!!!!
+                window.L.DomEvent.stopPropagation(event)
                 try {
                   await app.client.mutate({
                     mutation: updateTpopById,
@@ -399,8 +408,8 @@ class Karte extends Component {
                 setIdOfTpopBeingLocalized(null)
               }
             }}
+            // turned off because caused cyclic zooming
             /*
-             * turned off because caused cyclic zooming
             onZoomlevelschange={event => {
               // need to update bounds, otherwise map jumps back
               // when adding new tpop
