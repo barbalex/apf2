@@ -10,24 +10,20 @@ const Tpop = ({
   tree,
   token,
   moving,
-  copying
+  copying,
 }: {
   onClick: () => void,
   tree: Object,
   token: String,
   moving: Object,
-  copying: Object
+  copying: Object,
 }) => {
   const isMoving =
     moving.table &&
-    ['tpopmassn', 'tpopfeldkontr', 'tpopfreiwkontr'].includes(
-      moving.table
-    )
+    ['tpopmassn', 'tpopfeldkontr', 'tpopfreiwkontr'].includes(moving.table)
   const isCopying =
     copying.table &&
-    ['tpopmassn', 'tpopfeldkontr', 'tpopfreiwkontr'].includes(
-      copying.table
-    )
+    ['tpopmassn', 'tpopfeldkontr', 'tpopfreiwkontr'].includes(copying.table)
 
   return (
     <ErrorBoundary>
@@ -49,8 +45,7 @@ const Tpop = ({
         >
           alle schliessen
         </MenuItem>
-        {
-          !userIsReadOnly(token) &&
+        {!userIsReadOnly(token) && (
           <Fragment>
             <MenuItem
               onClick={onClick}
@@ -80,7 +75,7 @@ const Tpop = ({
                   idTable: 'tpop',
                 }}
               >
-                verorte auf Karte
+                verorte auf Karte (mit Doppel-Klick)
               </MenuItem>
             )}
             <MenuItem
@@ -140,7 +135,7 @@ const Tpop = ({
               Kopiere Koordinaten in die Population
             </MenuItem>
           </Fragment>
-        }
+        )}
         <MenuItem
           onClick={onClick}
           data={{
