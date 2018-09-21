@@ -22,5 +22,7 @@ export default (activeNode: Object): string => {
       tableName = childTableName
     }
   }
+  if (['adresseFolder', 'wlFolder', 'userFolder'].includes(activeNode.menuType))
+    return null
   return tableName
 }

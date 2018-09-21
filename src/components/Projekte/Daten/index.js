@@ -466,6 +466,7 @@ const Daten = ({
       } else {
         form = key ? formObject[key] : ''
       }
+      if (!key) return null
 
       return (
         <ErrorBoundary>
