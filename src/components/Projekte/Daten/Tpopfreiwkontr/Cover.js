@@ -62,10 +62,19 @@ const DeckNaBoMass = styled.div`
 `
 const DeckImage = styled.div`
   grid-area: deckImage;
+  display: block;
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  padding-bottom: 59.061%;
 `
 const Img = styled.img`
-  max-width: 100%;
-  height: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  max-width: inherit;
 `
 
 const Date = ({

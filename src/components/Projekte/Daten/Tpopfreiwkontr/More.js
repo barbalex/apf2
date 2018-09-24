@@ -37,10 +37,6 @@ const Container = styled(Area)`
       'veghoeheImg veghoeheImg veghoeheImg veghoeheImg veghoeheMinLabel veghoeheMinLabel veghoeheMinLabel veghoeheMinLabel veghoeheMinLabel . . .';
   }
 `
-const Img = styled.img`
-  max-width: 100%;
-  height: auto;
-`
 const MoreFlLabel = styled.div`
   grid-area: moreFlLabel;
   font-weight: 700;
@@ -128,6 +124,19 @@ const VeghoeheMinLabel = styled.div`
 `
 const VeghoeheImg = styled.div`
   grid-area: veghoeheImg;
+  display: block;
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  padding-bottom: 86.813%;
+`
+const Img = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  max-width: inherit;
 `
 
 const More = ({
