@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import Measure from 'react-measure'
+import compose from 'recompose/compose'
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys'
 
 import Select from '../../../shared/Select'
 
@@ -70,30 +72,48 @@ const StatusLabel = styled(Label)`
   grid-area: statusVal;
 `
 
+const enhance = compose(
+  onlyUpdateForKeys([
+    'id',
+    'bearbeiter',
+    'errorsBearbeiter',
+    'pop',
+    'tpop',
+    'adressenNodes',
+  ]),
+)
+
 const Headdata = ({
+  id,
+  bearbeiter,
+  errorsBearbeiter,
+  pop,
+  tpop,
   saveToDb,
-  errors,
-  dataAllAdresses,
+  adressenNodes,
   row,
   updateTpopkontr,
   setHeaddataHeight,
   showFilter,
 }: {
+  id: string,
+  bearbeiter: string,
+  errorsBearbeiter: string,
+  pop: Object,
+  tpop: Object,
   saveToDb: () => void,
-  errors: Object,
-  dataAllAdresses: Object,
+  adressenNodes: Array<Object>,
   row: Object,
   updateTpopkontr: () => void,
   setHeaddataHeight: () => void,
   showFilter: boolean,
 }) => {
-  let adressenWerte = get(dataAllAdresses, 'allAdresses.nodes', [])
-  adressenWerte = sortBy(adressenWerte, 'name')
+  let adressenWerte = sortBy(adressenNodes, 'name')
   adressenWerte = adressenWerte.map(el => ({
     value: el.id,
     label: el.name,
   }))
-  const statusValue = get(row, 'tpopByTpopId.status', '')
+  const statusValue = get(tpop, 'status', '')
   const status = [200, 201, 202].includes(statusValue)
     ? 'angesiedelt'
     : 'natürlich'
@@ -108,26 +128,22 @@ const Headdata = ({
       {({ measureRef }) => (
         <Container innerRef={measureRef}>
           <PopLabel>Population</PopLabel>
-          <PopVal>{get(row, 'tpopByTpopId.popByPopId.name', '')}</PopVal>
+          <PopVal>{get(pop, 'name', '')}</PopVal>
           <TpopLabel>Teilpopulation</TpopLabel>
-          <TpopVal>{get(row, 'tpopByTpopId.flurname', '')}</TpopVal>
+          <TpopVal>{get(tpop, 'flurname', '')}</TpopVal>
           <KoordLabel>Koordinaten</KoordLabel>
-          <KoordVal>{`${get(row, 'tpopByTpopId.x', '')} / ${get(
-            row,
-            'tpopByTpopId.y',
-            '',
-          )}`}</KoordVal>
+          <KoordVal>{`${get(tpop, 'x', '')} / ${get(tpop, 'y', '')}`}</KoordVal>
           <TpopNrLabel>Teilpop.Nr.</TpopNrLabel>
-          <TpopNrVal>{`${get(row, 'tpopByTpopId.popByPopId.nr', '')}.${get(
-            row,
-            'tpopByTpopId.nr',
+          <TpopNrVal>{`${get(pop, 'nr', '')}.${get(
+            tpop,
+            'nr',
             '',
           )}`}</TpopNrVal>
           <BearbLabel>BeobachterIn</BearbLabel>
           <BearbVal>
             <Select
-              key={`${row.id}bearbeiter`}
-              value={row.bearbeiter}
+              key={`${id}bearbeiter`}
+              value={bearbeiter}
               field="bearbeiter"
               options={adressenWerte}
               saveToDb={value =>
@@ -138,7 +154,7 @@ const Headdata = ({
                   updateTpopkontr,
                 })
               }
-              error={errors.bearbeiter}
+              error={errorsBearbeiter}
             />
           </BearbVal>
           <StatusLabel>{status}</StatusLabel>
@@ -148,4 +164,4 @@ const Headdata = ({
   )
 }
 
-export default Headdata
+export default enhance(Headdata)

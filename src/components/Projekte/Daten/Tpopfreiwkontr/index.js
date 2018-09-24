@@ -440,6 +440,9 @@ const Tpopfreiwkontr = ({
     'tpopByTpopId.popByPopId.apByApId.ekfBeobachtungszeitpunkt',
     '',
   )
+  const pop = get(row, 'tpopByTpopId.popByPopId', {})
+  const tpop = get(row, 'tpopByTpopId', {})
+  const adressenNodes = get(dataAllAdresses, 'allAdresses.nodes', [])
   const {
     gefaehrdung,
     deckungApArt,
@@ -447,6 +450,7 @@ const Tpopfreiwkontr = ({
     datum,
     ekfBemerkungen,
     planVorhanden,
+    bearbeiter,
   } = row
 
   return (
@@ -465,10 +469,15 @@ const Tpopfreiwkontr = ({
             <GridContainer width={width}>
               <Title setTitleHeight={setTitleHeight} />
               <Headdata
+                id={id}
+                bearbeiter={bearbeiter}
+                errorsBearbeiter={errors.bearbeiter}
+                pop={pop}
+                tpop={tpop}
                 saveToDb={saveToDb}
                 errors={errors}
                 setErrors={setErrors}
-                dataAllAdresses={dataAllAdresses}
+                adressenNodes={adressenNodes}
                 row={row}
                 updateTpopkontr={updateTpopkontr}
                 setHeaddataHeight={setHeaddataHeight}
