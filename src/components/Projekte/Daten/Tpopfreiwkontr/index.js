@@ -483,7 +483,7 @@ const Tpopfreiwkontr = ({
                 id={id}
                 datum={datum}
                 saveToDb={saveToDb}
-                errors={errors}
+                errorsDatum={errors.datum}
                 row={row}
                 updateTpopkontr={updateTpopkontr}
                 setDateHeight={setDateHeight}
@@ -604,8 +604,8 @@ const Tpopfreiwkontr = ({
               <Danger
                 id={id}
                 gefaehrdung={gefaehrdung}
+                errorsGefaehrdung={errors.gefaehrdung}
                 saveToDb={saveToDb}
-                errors={errors}
                 row={row}
                 updateTpopkontr={updateTpopkontr}
               />

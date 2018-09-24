@@ -36,20 +36,22 @@ const DangerVal = styled.div`
   }
 `
 
-const enhance = compose(onlyUpdateForKeys(['id', 'gefaehrdung']))
+const enhance = compose(
+  onlyUpdateForKeys(['id', 'gefaehrdung', 'errorsGefaehrdung']),
+)
 
 const Danger = ({
   id,
   gefaehrdung,
   saveToDb,
-  errors,
+  errorsGefaehrdung,
   row,
   updateTpopkontr,
 }: {
   id: string,
   gefaehrdung: string,
   saveToDb: () => void,
-  errors: Object,
+  errorsGefaehrdung: string,
   row: Object,
   updateTpopkontr: () => void,
 }) => (
@@ -74,7 +76,7 @@ const Danger = ({
             updateTpopkontr,
           })
         }
-        error={errors.gefaehrdung}
+        error={errorsGefaehrdung}
       />
     </DangerVal>
   </Container>

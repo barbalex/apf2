@@ -47,7 +47,7 @@ const Date = ({
   id,
   datum,
   saveToDb,
-  errors,
+  errorsDatum,
   row,
   updateTpopkontr,
   setDateHeight,
@@ -55,7 +55,7 @@ const Date = ({
   id: string,
   datum: string,
   saveToDb: () => void,
-  errors: Object,
+  errorsDatum: string,
   row: Object,
   updateTpopkontr: () => void,
   setDateHeight: () => void,
@@ -83,7 +83,7 @@ const Date = ({
                 updateTpopkontr,
               })
             }}
-            error={errors.datum}
+            error={errorsDatum}
           />
         </DateVal>
       </Container>
