@@ -676,10 +676,15 @@ CREATE TABLE apflora.tpopkontr (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
-ALTER TABLE apflora.tpopkontr ADD COLUMN ekf_verifiziert boolean DEFAULT null;
-ALTER TABLE apflora.tpopkontr ADD COLUMN ekf_verifiziert_durch varchar(20) DEFAULT null;
-ALTER TABLE apflora.tpopkontr ADD COLUMN ekf_verifiziert_datum date DEFAULT null;
-ALTER TABLE apflora.tpopkontr ADD COLUMN ekf_bemerkungen text DEFAULT null;
+-- 2018-09-24: remove later
+CREATE INDEX ON apflora.tpopkontr USING btree (ekf_verifiziert);
+ALTER TABLE apflora.tpopkontr ADD COLUMN kontrollfrequenz integer DEFAULT null;
+CREATE INDEX ON apflora.tpopkontr USING btree (kontrollfrequenz);
+COMMENT ON COLUMN apflora.tpopkontr.kontrollfrequenz IS 'Wert aus Tabelle tpopkontr_frequenz_werte. Bestimmt, wie häufig kontrolliert werden soll';
+ALTER TABLE apflora.tpopkontr ADD COLUMN kontrollfrequenz_freiwillige integer DEFAULT null;
+CREATE INDEX ON apflora.tpopkontr USING btree (kontrollfrequenz_freiwillige);
+COMMENT ON COLUMN apflora.tpopkontr.kontrollfrequenz_freiwillige IS 'Wert aus Tabelle tpopkontr_frequenz_werte. Bestimmt, wie häufig durch Freiwillige kontrolliert werden soll';
+-- keep
 CREATE INDEX ON apflora.tpopkontr USING btree (id);
 CREATE INDEX ON apflora.tpopkontr USING btree (tpop_id);
 CREATE INDEX ON apflora.tpopkontr USING btree (bearbeiter);
@@ -689,6 +694,9 @@ CREATE INDEX ON apflora.tpopkontr USING btree (jahr);
 CREATE INDEX ON apflora.tpopkontr USING btree (typ);
 CREATE INDEX ON apflora.tpopkontr USING btree (datum);
 CREATE UNIQUE INDEX ON apflora.tpopkontr USING btree (zeit_id);
+CREATE INDEX ON apflora.tpopkontr USING btree (ekf_verifiziert);
+CREATE INDEX ON apflora.tpopkontr USING btree (kontrollfrequenz);
+CREATE INDEX ON apflora.tpopkontr USING btree (kontrollfrequenz_freiwillige);
 COMMENT ON COLUMN apflora.tpopkontr.id IS 'Primärschlüssel. Wird u.a. verwendet für die Identifikation der Beobachtung im nationalen Beobachtungs-Daten-Kreislauf';
 COMMENT ON COLUMN apflora.tpopkontr.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.tpopkontr.tpop_id IS 'Zugehörige Teilpopulation. Fremdschlüssel aus der Tabelle "tpop"';
