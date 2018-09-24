@@ -3,6 +3,8 @@ import React from 'react'
 import styled from 'styled-components'
 import format from 'date-fns/format'
 import Measure from 'react-measure'
+import compose from 'recompose/compose'
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys'
 
 import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
 
@@ -38,6 +40,8 @@ const DateVal = styled.div`
     }
   }
 `
+
+const enhance = compose(onlyUpdateForKeys(['row']))
 
 const Date = ({
   saveToDb,
@@ -83,4 +87,4 @@ const Date = ({
   </Measure>
 )
 
-export default Date
+export default enhance(Date)
