@@ -29,6 +29,7 @@ const Title = styled.div`
   font-weight: 700;
   justify-self: center;
 `
+// https://www.voorhoede.nl/en/blog/say-no-to-image-reflow/
 const ImageContainer = styled.div`
   grid-area: myImage;
   background-image: ${props => `url("${props.image.default}")`};
@@ -36,6 +37,7 @@ const ImageContainer = styled.div`
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  padding-bottom: 86.774%;
 `
 
 const enhance = compose(
