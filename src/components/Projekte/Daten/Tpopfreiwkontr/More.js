@@ -142,16 +142,44 @@ const Img = styled.img`
   max-width: inherit;
 `
 
-const enhance = compose(onlyUpdateForKeys(['row']))
+const enhance = compose(
+  onlyUpdateForKeys([
+    'id',
+    'flaecheUeberprueft',
+    'errorsFlaecheUeberprueft',
+    'jungpflanzenVorhanden',
+    'errorsJungpflanzenVorhanden',
+    'vegetationshoeheMaximum',
+    'errorsVegetationshoeheMaximum',
+    'vegetationshoeheMittel',
+    'errorsVegetationshoeheMittel',
+  ]),
+)
 
 const More = ({
+  id,
+  flaecheUeberprueft,
+  errorsFlaecheUeberprueft,
+  jungpflanzenVorhanden,
+  errorsJungpflanzenVorhanden,
+  vegetationshoeheMaximum,
+  errorsVegetationshoeheMaximum,
+  vegetationshoeheMittel,
+  errorsVegetationshoeheMittel,
   saveToDb,
-  errors,
   row,
   updateTpopkontr,
 }: {
+  id: string,
+  flaecheUeberprueft: string,
+  errorsFlaecheUeberprueft: string,
+  jungpflanzenVorhanden: string,
+  errorsJungpflanzenVorhanden: string,
+  vegetationshoeheMaximum: string,
+  vegetationshoeheMittel: string,
+  errorsVegetationshoeheMittel: string,
+  errorsVegetationshoeheMaximum: string,
   saveToDb: () => void,
-  errors: Object,
   row: Object,
   updateTpopkontr: () => void,
 }) => (
@@ -159,8 +187,8 @@ const More = ({
     <MoreFlLabel>Überprüfte Fläche</MoreFlLabel>
     <MoreFlVal>
       <TextField
-        key={`${row.id}flaecheUeberprueft`}
-        value={row.flaecheUeberprueft}
+        key={`${id}flaecheUeberprueft`}
+        value={flaecheUeberprueft}
         type="number"
         saveToDb={value =>
           saveToDb({
@@ -170,7 +198,7 @@ const More = ({
             updateTpopkontr,
           })
         }
-        error={errors.flaecheUeberprueft}
+        error={errorsFlaecheUeberprueft}
       />
     </MoreFlVal>
     <MoreFlMeasure>
@@ -180,8 +208,8 @@ const More = ({
     <JungPflLabel1>ja</JungPflLabel1>
     <JungPflVal1>
       <RadioButton
-        key={`${row.id}jungpflanzenVorhanden1`}
-        value={row.jungpflanzenVorhanden}
+        key={`${id}jungpflanzenVorhanden1`}
+        value={jungpflanzenVorhanden}
         saveToDb={value => {
           saveToDb({
             row,
@@ -190,14 +218,13 @@ const More = ({
             updateTpopkontr,
           })
         }}
-        error={errors.jungpflanzenVorhanden}
       />
     </JungPflVal1>
     <JungPflLabel2>nein</JungPflLabel2>
     <JungPflVal2>
       <RadioButton
-        key={`${row.id}jungpflanzenVorhanden2`}
-        value={row.jungpflanzenVorhanden === false}
+        key={`${id}jungpflanzenVorhanden2`}
+        value={jungpflanzenVorhanden === false}
         saveToDb={value => {
           saveToDb({
             row,
@@ -206,7 +233,7 @@ const More = ({
             updateTpopkontr,
           })
         }}
-        error={errors.jungpflanzenVorhanden}
+        error={errorsJungpflanzenVorhanden}
       />
     </JungPflVal2>
     <VeghoeheLabel0>Vegetationshöhe</VeghoeheLabel0>
@@ -216,8 +243,8 @@ const More = ({
     <VeghoeheMaxLabel>Maximum (cm)</VeghoeheMaxLabel>
     <VeghoeheMaxVal>
       <TextField
-        key={`${row.id}vegetationshoeheMaximum`}
-        value={row.vegetationshoeheMaximum}
+        key={`${id}vegetationshoeheMaximum`}
+        value={vegetationshoeheMaximum}
         type="number"
         saveToDb={value =>
           saveToDb({
@@ -227,14 +254,14 @@ const More = ({
             updateTpopkontr,
           })
         }
-        error={errors.vegetationshoeheMaximum}
+        error={errorsVegetationshoeheMaximum}
       />
     </VeghoeheMaxVal>
     <VeghoeheMittLabel>Mittel (cm)</VeghoeheMittLabel>
     <VeghoeheMittVal>
       <TextField
-        key={`${row.id}vegetationshoeheMittel`}
-        value={row.vegetationshoeheMittel}
+        key={`${id}vegetationshoeheMittel`}
+        value={vegetationshoeheMittel}
         type="number"
         saveToDb={value =>
           saveToDb({
@@ -244,7 +271,7 @@ const More = ({
             updateTpopkontr,
           })
         }
-        error={errors.vegetationshoeheMittel}
+        error={errorsVegetationshoeheMittel}
       />
     </VeghoeheMittVal>
     <VeghoeheMinLabel>(Minimum)</VeghoeheMinLabel>

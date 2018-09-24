@@ -451,6 +451,11 @@ const Tpopfreiwkontr = ({
     ekfBemerkungen,
     planVorhanden,
     bearbeiter,
+    flaecheUeberprueft,
+    jungpflanzenVorhanden,
+    vegetationshoeheMaximum,
+    vegetationshoeheMittel,
+    bemerkungen,
   } = row
 
   return (
@@ -605,8 +610,16 @@ const Tpopfreiwkontr = ({
                 updateTpopkontr={updateTpopkontr}
               />
               <More
+                id={id}
+                flaecheUeberprueft={flaecheUeberprueft}
+                errorsFlaecheUeberprueft={errors.flaecheUeberprueft}
+                jungpflanzenVorhanden={jungpflanzenVorhanden}
+                errorsJungpflanzenVorhanden={errors.jungpflanzenVorhanden}
+                vegetationshoeheMaximum={vegetationshoeheMaximum}
+                errorsVegetationshoeheMaximum={errors.vegetationshoeheMaximum}
+                vegetationshoeheMittel={vegetationshoeheMittel}
+                errorsVegetationshoeheMittel={errors.vegetationshoeheMittel}
                 saveToDb={saveToDb}
-                errors={errors}
                 row={row}
                 updateTpopkontr={updateTpopkontr}
               />
@@ -619,8 +632,10 @@ const Tpopfreiwkontr = ({
                 updateTpopkontr={updateTpopkontr}
               />
               <Remarks
+                id={id}
+                bemerkungen={bemerkungen}
+                errorsBemerkungen={errors.bemerkungen}
                 saveToDb={saveToDb}
-                errors={errors}
                 row={row}
                 updateTpopkontr={updateTpopkontr}
               />
