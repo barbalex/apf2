@@ -678,10 +678,10 @@ CREATE TABLE apflora.tpopkontr (
 );
 -- 2018-09-24: remove later
 CREATE INDEX ON apflora.tpopkontr USING btree (ekf_verifiziert);
-ALTER TABLE apflora.tpopkontr ADD COLUMN kontrollfrequenz integer DEFAULT null;
+ALTER TABLE apflora.tpopkontr ADD COLUMN kontrollfrequenz integer DEFAULT null;  -- TODO: reference
 CREATE INDEX ON apflora.tpopkontr USING btree (kontrollfrequenz);
 COMMENT ON COLUMN apflora.tpopkontr.kontrollfrequenz IS 'Wert aus Tabelle tpopkontr_frequenz_werte. Bestimmt, wie häufig kontrolliert werden soll';
-ALTER TABLE apflora.tpopkontr ADD COLUMN kontrollfrequenz_freiwillige integer DEFAULT null;
+ALTER TABLE apflora.tpopkontr ADD COLUMN kontrollfrequenz_freiwillige integer DEFAULT null;  -- TODO: reference
 CREATE INDEX ON apflora.tpopkontr USING btree (kontrollfrequenz_freiwillige);
 COMMENT ON COLUMN apflora.tpopkontr.kontrollfrequenz_freiwillige IS 'Wert aus Tabelle tpopkontr_frequenz_werte. Bestimmt, wie häufig durch Freiwillige kontrolliert werden soll';
 -- keep
