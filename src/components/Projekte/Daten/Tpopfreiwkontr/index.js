@@ -444,18 +444,19 @@ const Tpopfreiwkontr = ({
   const tpop = get(row, 'tpopByTpopId', {})
   const adressenNodes = get(dataAllAdresses, 'allAdresses.nodes', [])
   const {
-    gefaehrdung,
+    bearbeiter,
+    bemerkungen,
+    datum,
     deckungApArt,
     deckungNackterBoden,
-    datum,
     ekfBemerkungen,
-    planVorhanden,
-    bearbeiter,
+    ekfVerifiziert,
     flaecheUeberprueft,
+    gefaehrdung,
     jungpflanzenVorhanden,
+    planVorhanden,
     vegetationshoeheMaximum,
     vegetationshoeheMittel,
-    bemerkungen,
   } = row
 
   return (
@@ -643,8 +644,10 @@ const Tpopfreiwkontr = ({
                 !isFreiwillig &&
                 !(view === 'ekf') && (
                   <Verification
+                    id={id}
+                    ekfVerifiziert={ekfVerifiziert}
+                    errorsEkfVerifiziert={errors.ekfVerifiziert}
                     saveToDb={saveToDb}
-                    errors={errors}
                     row={row}
                     updateTpopkontr={updateTpopkontr}
                   />

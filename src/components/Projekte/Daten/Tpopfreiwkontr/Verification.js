@@ -1,6 +1,8 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
+import compose from 'recompose/compose'
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys'
 
 import RadioButton from '../../../shared/RadioButton'
 
@@ -36,14 +38,22 @@ const VerifVal1 = styled(Label)`
   }
 `
 
+const enhance = compose(
+  onlyUpdateForKeys(['id', 'ekfVerifiziert', 'errorsEkfVerifiziert']),
+)
+
 const Verification = ({
+  id,
+  ekfVerifiziert,
+  errorsEkfVerifiziert,
   saveToDb,
-  errors,
   row,
   updateTpopkontr,
 }: {
+  id: string,
+  ekfVerifiziert: string,
+  errorsEkfVerifiziert: string,
   saveToDb: () => void,
-  errors: Object,
   row: Object,
   updateTpopkontr: () => void,
 }) => (
@@ -51,8 +61,8 @@ const Verification = ({
     <VerifLabel1>Im Jahresbericht nicht berücksichtigen</VerifLabel1>
     <VerifVal1>
       <RadioButton
-        key={`${row.id}ekfVerifiziert2`}
-        value={row.ekfVerifiziert === false}
+        key={`${id}ekfVerifiziert2`}
+        value={ekfVerifiziert === false}
         saveToDb={value =>
           saveToDb({
             row,
@@ -61,10 +71,10 @@ const Verification = ({
             updateTpopkontr,
           })
         }
-        error={errors.ekfVerifiziert}
+        error={errorsEkfVerifiziert}
       />
     </VerifVal1>
   </Container>
 )
 
-export default Verification
+export default enhance(Verification)
