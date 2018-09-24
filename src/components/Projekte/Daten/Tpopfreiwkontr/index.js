@@ -458,6 +458,7 @@ const Tpopfreiwkontr = ({
     vegetationshoeheMaximum,
     vegetationshoeheMittel,
   } = row
+  console.log('Freiwkontr rendering')
 
   return (
     <Mutation mutation={updateTpopkontrByIdGql}>
