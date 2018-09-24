@@ -668,6 +668,8 @@ CREATE TABLE apflora.tpopkontr (
   vegetationshoehe_maximum smallint DEFAULT NULL,
   vegetationshoehe_mittel smallint DEFAULT NULL,
   gefaehrdung text DEFAULT NULL,
+  kontrollfrequenz integer DEFAULT null REFERENCES apflora.tpopkontr_frequenz_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  kontrollfrequenz_freiwillige integer DEFAULT null REFERENCES apflora.tpopkontr_frequenz_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   ekf_verifiziert boolean DEFAULT null,
   ekf_verifiziert_durch varchar(20) DEFAULT null,
   ekf_verifiziert_datum date DEFAULT null,
@@ -678,10 +680,10 @@ CREATE TABLE apflora.tpopkontr (
 );
 -- 2018-09-24: remove later
 CREATE INDEX ON apflora.tpopkontr USING btree (ekf_verifiziert);
-ALTER TABLE apflora.tpopkontr ADD COLUMN kontrollfrequenz integer DEFAULT null;  -- TODO: reference
+ALTER TABLE apflora.tpopkontr ADD COLUMN kontrollfrequenz integer DEFAULT null REFERENCES apflora.tpopkontr_frequenz_werte (code) ON DELETE SET NULL ON UPDATE CASCADE;
 CREATE INDEX ON apflora.tpopkontr USING btree (kontrollfrequenz);
 COMMENT ON COLUMN apflora.tpopkontr.kontrollfrequenz IS 'Wert aus Tabelle tpopkontr_frequenz_werte. Bestimmt, wie häufig kontrolliert werden soll';
-ALTER TABLE apflora.tpopkontr ADD COLUMN kontrollfrequenz_freiwillige integer DEFAULT null;  -- TODO: reference
+ALTER TABLE apflora.tpopkontr ADD COLUMN kontrollfrequenz_freiwillige integer DEFAULT null REFERENCES apflora.tpopkontr_frequenz_werte (code) ON DELETE SET NULL ON UPDATE CASCADE;
 CREATE INDEX ON apflora.tpopkontr USING btree (kontrollfrequenz_freiwillige);
 COMMENT ON COLUMN apflora.tpopkontr.kontrollfrequenz_freiwillige IS 'Wert aus Tabelle tpopkontr_frequenz_werte. Bestimmt, wie häufig durch Freiwillige kontrolliert werden soll';
 -- keep
@@ -743,6 +745,8 @@ COMMENT ON COLUMN apflora.tpopkontr.gefaehrdung IS 'Gefährdung. Nur für Freiwi
 COMMENT ON COLUMN apflora.tpopkontr.zeit_id IS 'GUID für den Export von Zeiten in EvAB';
 COMMENT ON COLUMN apflora.tpopkontr.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontr.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.tpopkontr.kontrollfrequenz IS 'Wert aus Tabelle tpopkontr_frequenz_werte. Bestimmt, wie häufig kontrolliert werden soll';
+COMMENT ON COLUMN apflora.tpopkontr.kontrollfrequenz_freiwillige IS 'Wert aus Tabelle tpopkontr_frequenz_werte. Bestimmt, wie häufig durch Freiwillige kontrolliert werden soll';
 
 DROP TABLE IF EXISTS apflora.tpopkontr_idbiotuebereinst_werte;
 CREATE TABLE apflora.tpopkontr_idbiotuebereinst_werte (
@@ -1207,3 +1211,20 @@ CREATE POLICY writer ON apflora.ekfzaehleinheit
     current_user = 'apflora_manager'
     OR current_user = 'apflora_artverantwortlich'
   );
+
+DROP TABLE IF EXISTS apflora.tpopkontr_frequenz_werte;
+CREATE TABLE apflora.tpopkontr_frequenz_werte (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  code integer UNIQUE DEFAULT NULL,
+  text varchar(50) DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) NOT NULL
+);
+CREATE INDEX ON apflora.tpopkontr_frequenz_werte USING btree (id);
+CREATE INDEX ON apflora.tpopkontr_frequenz_werte USING btree (code);
+CREATE INDEX ON apflora.tpopkontr_frequenz_werte USING btree (sort);
+COMMENT ON COLUMN apflora.tpopkontr_frequenz_werte.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.tpopkontr_frequenz_werte.text IS 'Beschreibung der Kontroll-Frequenz';
+COMMENT ON COLUMN apflora.tpopkontr_frequenz_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.tpopkontr_frequenz_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
