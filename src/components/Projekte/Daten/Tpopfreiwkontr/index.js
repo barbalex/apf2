@@ -435,6 +435,19 @@ const Tpopfreiwkontr = ({
     'tpopByTpopId.popByPopId.apByApId.aeEigenschaftenByArtId.artname',
     '',
   )
+  const ekfBeobachtungszeitpunkt = get(
+    row,
+    'tpopByTpopId.popByPopId.apByApId.ekfBeobachtungszeitpunkt',
+    '',
+  )
+  const {
+    gefaehrdung,
+    deckungApArt,
+    deckungNackterBoden,
+    datum,
+    ekfBemerkungen,
+    planVorhanden,
+  } = row
 
   return (
     <Mutation mutation={updateTpopkontrByIdGql}>
@@ -461,8 +474,14 @@ const Tpopfreiwkontr = ({
                 setHeaddataHeight={setHeaddataHeight}
                 showFilter={showFilter}
               />
-              <Besttime row={row} setBesttimeHeight={setBesttimeHeight} />
+              <Besttime
+                row={row}
+                setBesttimeHeight={setBesttimeHeight}
+                ekfBeobachtungszeitpunkt={ekfBeobachtungszeitpunkt}
+              />
               <Date
+                id={id}
+                datum={datum}
                 saveToDb={saveToDb}
                 errors={errors}
                 row={row}
@@ -470,8 +489,10 @@ const Tpopfreiwkontr = ({
                 setDateHeight={setDateHeight}
               />
               <Map
+                id={id}
+                planVorhanden={planVorhanden}
+                planVorhandenErrors={errors.planVorhanden}
                 saveToDb={saveToDb}
-                errors={errors}
                 row={row}
                 updateTpopkontr={updateTpopkontr}
                 showFilter={showFilter}
@@ -565,8 +586,12 @@ const Tpopfreiwkontr = ({
                 zaehl3ShowEmpty &&
                 !zaehl2ShowEmpty && <Count nr="3" showEmpty />}
               <Cover
+                id={id}
+                deckungApArt={deckungApArt}
+                deckungNackterBoden={deckungNackterBoden}
                 saveToDb={saveToDb}
-                errors={errors}
+                errorsDeckungApArt={errors.deckungApArt}
+                errorsDeckungNackterBoden={errors.deckungNackterBoden}
                 row={row}
                 updateTpopkontr={updateTpopkontr}
               />
@@ -577,6 +602,8 @@ const Tpopfreiwkontr = ({
                 updateTpopkontr={updateTpopkontr}
               />
               <Danger
+                id={id}
+                gefaehrdung={gefaehrdung}
                 saveToDb={saveToDb}
                 errors={errors}
                 row={row}
@@ -600,6 +627,8 @@ const Tpopfreiwkontr = ({
                 )}
               {!isPrint && (
                 <EkfRemarks
+                  id={id}
+                  ekfBemerkungen={ekfBemerkungen}
                   saveToDb={saveToDb}
                   errors={errors}
                   row={row}

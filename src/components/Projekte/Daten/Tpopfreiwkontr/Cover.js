@@ -80,16 +80,32 @@ const Img = styled.img`
   max-width: inherit;
 `
 
-const enhance = compose(onlyUpdateForKeys(['row']))
+const enhance = compose(
+  onlyUpdateForKeys([
+    'id',
+    'deckungApArt',
+    'deckungNackterBoden',
+    'errorsDeckungApArt',
+    'errorsDeckungNackterBoden',
+  ]),
+)
 
 const Date = ({
+  id,
+  deckungApArt,
+  deckungNackterBoden,
+  errorsDeckungApArt,
+  errorsDeckungNackterBoden,
   saveToDb,
-  errors,
   row,
   updateTpopkontr,
 }: {
+  id: string,
+  deckungApArt: string,
+  deckungNackterBoden: string,
+  errorsDeckungApArt: string,
+  errorsDeckungNackterBoden: string,
   saveToDb: () => void,
-  errors: Object,
   row: Object,
   updateTpopkontr: () => void,
 }) => (
@@ -108,7 +124,7 @@ const Date = ({
             updateTpopkontr,
           })
         }
-        error={errors.deckungApArt}
+        error={errorsDeckungApArt}
       />
     </DeckApArtVal>
     <DeckApArtMass>%</DeckApArtMass>
@@ -126,7 +142,7 @@ const Date = ({
             updateTpopkontr,
           })
         }
-        error={errors.deckungNackterBoden}
+        error={errorsDeckungNackterBoden}
       />
     </DeckNaBoVal>
     <DeckNaBoMass>%</DeckNaBoMass>

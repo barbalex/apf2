@@ -41,15 +41,19 @@ const DateVal = styled.div`
   }
 `
 
-const enhance = compose(onlyUpdateForKeys(['row']))
+const enhance = compose(onlyUpdateForKeys(['id', 'datum']))
 
 const Date = ({
+  id,
+  datum,
   saveToDb,
   errors,
   row,
   updateTpopkontr,
   setDateHeight,
 }: {
+  id: string,
+  datum: string,
   saveToDb: () => void,
   errors: Object,
   row: Object,
@@ -67,8 +71,8 @@ const Date = ({
         <DateLabel>Aufnahme-datum</DateLabel>
         <DateVal>
           <DateFieldWithPicker
-            key={`${row.id}datum`}
-            value={row.datum}
+            key={`${id}datum`}
+            value={datum}
             saveToDb={value => {
               saveToDb({
                 row,

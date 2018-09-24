@@ -1,6 +1,8 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
+import compose from 'recompose/compose'
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys'
 
 import RadioButton from '../../../shared/RadioButton'
 
@@ -55,15 +57,23 @@ const MapVal2 = styled(Label)`
   }
 `
 
+const enhance = compose(
+  onlyUpdateForKeys(['id', 'planVorhanden', 'planVorhandenErrors']),
+)
+
 const Map = ({
+  id,
+  planVorhanden,
+  planVorhandenErrors,
   saveToDb,
-  errors,
   row,
   updateTpopkontr,
   showFilter,
 }: {
+  id: string,
+  planVorhanden: string,
+  planVorhandenErrors: string,
   saveToDb: () => void,
-  errors: Object,
   row: Object,
   updateTpopkontr: () => void,
   showFilter: boolean,
@@ -73,8 +83,8 @@ const Map = ({
     <MapLabel1>ja</MapLabel1>
     <MapVal1>
       <RadioButton
-        key={`${row.id}planVorhanden`}
-        value={row.planVorhanden}
+        key={`${id}planVorhanden`}
+        value={planVorhanden}
         saveToDb={value =>
           saveToDb({
             row,
@@ -83,14 +93,13 @@ const Map = ({
             updateTpopkontr,
           })
         }
-        error={errors.planVorhanden}
       />
     </MapVal1>
     <MapLabel2>nein</MapLabel2>
     <MapVal2>
       <RadioButton
-        key={`${row.id}planVorhanden2`}
-        value={row.planVorhanden === false}
+        key={`${id}planVorhanden2`}
+        value={planVorhanden === false}
         saveToDb={value =>
           saveToDb({
             row,
@@ -99,10 +108,10 @@ const Map = ({
             updateTpopkontr,
           })
         }
-        error={errors.planVorhanden}
+        error={planVorhandenErrors}
       />
     </MapVal2>
   </Container>
 )
 
-export default Map
+export default enhance(Map)

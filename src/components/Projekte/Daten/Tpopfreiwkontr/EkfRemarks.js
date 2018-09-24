@@ -1,6 +1,8 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
+import compose from 'recompose/compose'
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys'
 
 import TextField from '../../../shared/TextField'
 
@@ -34,12 +36,18 @@ const RemarksVal = styled.div`
   }
 `
 
+const enhance = compose(onlyUpdateForKeys(['id', 'ekfBemerkungen']))
+
 const EkfRemarks = ({
+  id,
+  ekfBemerkungen,
   saveToDb,
   errors,
   row,
   updateTpopkontr,
 }: {
+  id: string,
+  ekfBemerkungen: string,
   saveToDb: () => void,
   errors: Object,
   row: Object,
@@ -52,8 +60,8 @@ const EkfRemarks = ({
     </RemarksLabel>
     <RemarksVal>
       <TextField
-        key={`${row.id}ekfBemerkungen`}
-        value={row.ekfBemerkungen}
+        key={`${id}ekfBemerkungen`}
+        value={ekfBemerkungen}
         type="text"
         multiLine
         saveToDb={value =>
@@ -70,4 +78,4 @@ const EkfRemarks = ({
   </Container>
 )
 
-export default EkfRemarks
+export default enhance(EkfRemarks)

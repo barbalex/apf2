@@ -1,6 +1,8 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
+import compose from 'recompose/compose'
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys'
 
 import TextField from '../../../shared/TextField'
 
@@ -34,12 +36,18 @@ const DangerVal = styled.div`
   }
 `
 
+const enhance = compose(onlyUpdateForKeys(['id', 'gefaehrdung']))
+
 const Danger = ({
+  id,
+  gefaehrdung,
   saveToDb,
   errors,
   row,
   updateTpopkontr,
 }: {
+  id: string,
+  gefaehrdung: string,
   saveToDb: () => void,
   errors: Object,
   row: Object,
@@ -54,8 +62,8 @@ const Danger = ({
     </DangerLabel>
     <DangerVal>
       <TextField
-        key={`${row.id}gefaehrdung`}
-        value={row.gefaehrdung}
+        key={`${id}gefaehrdung`}
+        value={gefaehrdung}
         type="text"
         multiLine
         saveToDb={value =>
@@ -72,4 +80,4 @@ const Danger = ({
   </Container>
 )
 
-export default Danger
+export default enhance(Danger)

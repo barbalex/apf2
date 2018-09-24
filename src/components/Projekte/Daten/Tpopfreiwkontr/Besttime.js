@@ -3,6 +3,8 @@ import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import Measure from 'react-measure'
+import compose from 'recompose/compose'
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -28,34 +30,30 @@ const BesttimeVal = styled.div`
   grid-area: besttimeVal;
 `
 
+const enhance = compose(onlyUpdateForKeys(['ekfBeobachtungszeitpunkt']))
+
 const Besttime = ({
   row,
   setBesttimeHeight,
+  ekfBeobachtungszeitpunkt,
 }: {
   row: Object,
   setBesttimeHeight: () => void,
-}) => {
-  const bestTime = get(
-    row,
-    'tpopByTpopId.popByPopId.apByApId.ekfBeobachtungszeitpunkt',
-    '',
-  )
+  ekfBeobachtungszeitpunkt: string,
+}) => (
+  <Measure
+    bounds
+    onResize={contentRect => {
+      setBesttimeHeight(contentRect.bounds.height)
+    }}
+  >
+    {({ measureRef }) => (
+      <Container innerRef={measureRef}>
+        <BesttimeLabel>bester Beobachtungs-Zeitpunkt</BesttimeLabel>
+        <BesttimeVal>{ekfBeobachtungszeitpunkt}</BesttimeVal>
+      </Container>
+    )}
+  </Measure>
+)
 
-  return (
-    <Measure
-      bounds
-      onResize={contentRect => {
-        setBesttimeHeight(contentRect.bounds.height)
-      }}
-    >
-      {({ measureRef }) => (
-        <Container innerRef={measureRef}>
-          <BesttimeLabel>bester Beobachtungs-Zeitpunkt</BesttimeLabel>
-          <BesttimeVal>{bestTime}</BesttimeVal>
-        </Container>
-      )}
-    </Measure>
-  )
-}
-
-export default Besttime
+export default enhance(Besttime)
