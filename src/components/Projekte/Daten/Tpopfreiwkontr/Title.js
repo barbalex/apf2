@@ -2,6 +2,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import Measure from 'react-measure'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -18,14 +20,17 @@ const Container = styled(Area)`
   }
 `
 
-const Title = ({ setTitleHeight }: { setTitleHeight: () => void }) => {
+const enhance = compose(
+  withHandlers({
+    onResize: ({ setTitleHeight }) => contentRect => {
+      setTitleHeight(contentRect.bounds.height)
+    },
+  }),
+)
+
+const Title = ({ onResize }: { onResize: () => void }) => {
   return (
-    <Measure
-      bounds
-      onResize={contentRect => {
-        setTitleHeight(contentRect.bounds.height)
-      }}
-    >
+    <Measure bounds onResize={onResize}>
       {({ measureRef }) => (
         <Container innerRef={measureRef}>
           Erfolgskontrolle Artenschutz Flora
@@ -35,4 +40,4 @@ const Title = ({ setTitleHeight }: { setTitleHeight: () => void }) => {
   )
 }
 
-export default Title
+export default enhance(Title)
