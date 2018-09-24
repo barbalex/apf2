@@ -429,13 +429,20 @@ const Tpopfreiwkontr = ({
     row = get(data, 'tpopkontrById', {})
   }
 
+  const apId = get(row, 'tpopByTpopId.popByPopId.apId')
+  const artname = get(
+    row,
+    'tpopByTpopId.popByPopId.apByApId.aeEigenschaftenByArtId.artname',
+    '',
+  )
+
   return (
     <Mutation mutation={updateTpopkontrByIdGql}>
       {updateTpopkontr => (
         <Container showfilter={showFilter}>
           {!(view === 'ekf') && (
             <FormTitle
-              apId={get(data, 'tpopkontrById.tpopByTpopId.popByPopId.apId')}
+              apId={apId}
               title="Freiwilligen-Kontrolle"
               treeName={treeName}
               table="tpopfreiwkontr"
@@ -469,7 +476,13 @@ const Tpopfreiwkontr = ({
                 updateTpopkontr={updateTpopkontr}
                 showFilter={showFilter}
               />
-              <Image row={row} parentwidth={width} height={imageHeight} />
+              <Image
+                apId={apId}
+                row={row}
+                parentwidth={width}
+                height={imageHeight}
+                artname={artname}
+              />
               {!showFilter &&
                 zaehls1 && (
                   <Count

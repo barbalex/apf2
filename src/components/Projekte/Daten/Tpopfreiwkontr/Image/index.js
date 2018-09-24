@@ -5,7 +5,10 @@ import get from 'lodash/get'
 import debounce from 'lodash/debounce'
 import withLifecycle from '@hocs/with-lifecycle'
 import compose from 'recompose/compose'
+import pure from 'recompose/pure'
 import withState from 'recompose/withState'
+
+import padding from './padding'
 
 const Container = styled.div`
   grid-area: image;
@@ -32,12 +35,12 @@ const Title = styled.div`
 // https://www.voorhoede.nl/en/blog/say-no-to-image-reflow/
 const ImageContainer = styled.div`
   grid-area: myImage;
-  background-image: ${props => `url("${props.image.default}")`};
+  background-image: ${props => `url("${props.src}")`};
   background-origin: border-box;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  padding-bottom: 86.774%;
+  padding-bottom: ${props => (props.padding ? props.padding : 85)}%;
 `
 
 const enhance = compose(
@@ -52,37 +55,48 @@ const enhance = compose(
         try {
           image = await import(`./${apId}.png`)
         } catch (error) {}
-        if (image && image.default) setImage(image)
+        if (image && image.default) setImage(image.default)
       }
       const debounceSetHeightInternal = debounce(setHeightInternal, 400)
       debounceSetHeightInternal(height)
     },
   }),
+  pure,
 )
 
 const Image = ({
-  row,
   image,
   parentwidth,
   height,
   heightInternal,
+  artname,
+  apId,
 }: {
-  row: Object,
   image: Object,
-  parentwidth: Number,
-  height: Number,
-  heightInternal: Number,
-}) => (
-  <Container height={parentwidth >= 800 ? heightInternal : 370}>
-    <Title>
-      {get(
-        row,
-        'tpopByTpopId.popByPopId.apByApId.aeEigenschaftenByArtId.artname',
-        '',
-      )}
-    </Title>
-    {!!image && <ImageContainer image={image} />}
-  </Container>
-)
+  parentwidth: number,
+  height: number,
+  heightInternal: number,
+  artname: string,
+  apId: string,
+}) => {
+  const myPadding = padding[apId]
+  const src = image ? image : ''
+  console.log({
+    image,
+    parentwidth,
+    height,
+    heightInternal,
+    artname,
+    apId,
+    myPadding,
+  })
+
+  return (
+    <Container height={parentwidth >= 800 ? heightInternal : 370}>
+      <Title>{artname}</Title>
+      {!!image && <ImageContainer src={src} padding={myPadding} />}
+    </Container>
+  )
+}
 
 export default enhance(Image)
