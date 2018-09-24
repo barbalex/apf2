@@ -81,15 +81,6 @@ const Image = ({
 }) => {
   const myPadding = padding[apId]
   const src = image ? image : ''
-  console.log({
-    image,
-    parentwidth,
-    height,
-    heightInternal,
-    artname,
-    apId,
-    myPadding,
-  })
 
   return (
     <Container height={parentwidth >= 800 ? heightInternal : 370}>

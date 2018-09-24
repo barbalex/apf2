@@ -1,6 +1,8 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
+import compose from 'recompose/compose'
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys'
 
 import TextField from '../../../shared/TextField'
 import anteilImg from './anteil.png'
@@ -78,6 +80,8 @@ const Img = styled.img`
   max-width: inherit;
 `
 
+const enhance = compose(onlyUpdateForKeys(['row']))
+
 const Date = ({
   saveToDb,
   errors,
@@ -132,4 +136,4 @@ const Date = ({
   </Container>
 )
 
-export default Date
+export default enhance(Date)

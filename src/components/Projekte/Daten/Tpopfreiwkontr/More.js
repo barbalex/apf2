@@ -1,6 +1,8 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
+import compose from 'recompose/compose'
+import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys'
 
 import TextField from '../../../shared/TextField'
 import RadioButton from '../../../shared/RadioButton'
@@ -140,6 +142,8 @@ const Img = styled.img`
   max-width: inherit;
 `
 
+const enhance = compose(onlyUpdateForKeys(['row']))
+
 const More = ({
   saveToDb,
   errors,
@@ -247,4 +251,4 @@ const More = ({
   </Container>
 )
 
-export default More
+export default enhance(More)
