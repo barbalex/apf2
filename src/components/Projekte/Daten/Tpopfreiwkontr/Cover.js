@@ -60,6 +60,7 @@ const DeckNaBoVal = styled.div`
 const DeckNaBoMass = styled.div`
   grid-area: deckNaBoMass;
 `
+// https://www.voorhoede.nl/en/blog/say-no-to-image-reflow
 const DeckImage = styled.div`
   grid-area: deckImage;
   display: block;

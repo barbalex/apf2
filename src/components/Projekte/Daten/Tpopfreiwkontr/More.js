@@ -122,6 +122,7 @@ const VeghoeheMinLabel = styled.div`
     margin-top: -13px;
   }
 `
+// https://www.voorhoede.nl/en/blog/say-no-to-image-reflow
 const VeghoeheImg = styled.div`
   grid-area: veghoeheImg;
   display: block;
