@@ -36,20 +36,22 @@ const RemarksVal = styled.div`
   }
 `
 
-const enhance = compose(onlyUpdateForKeys(['id', 'ekfBemerkungen']))
+const enhance = compose(
+  onlyUpdateForKeys(['id', 'ekfBemerkungen', 'errorsEkfBemerkungen']),
+)
 
 const EkfRemarks = ({
   id,
   ekfBemerkungen,
   saveToDb,
-  errors,
+  errorsEkfBemerkungen,
   row,
   updateTpopkontr,
 }: {
   id: string,
   ekfBemerkungen: string,
   saveToDb: () => void,
-  errors: Object,
+  errorsEkfBemerkungen: string,
   row: Object,
   updateTpopkontr: () => void,
 }) => (
@@ -72,7 +74,7 @@ const EkfRemarks = ({
             updateTpopkontr,
           })
         }
-        error={errors.ekfBemerkungen}
+        error={errorsEkfBemerkungen}
       />
     </RemarksVal>
   </Container>

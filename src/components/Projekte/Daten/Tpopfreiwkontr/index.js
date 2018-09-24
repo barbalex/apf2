@@ -630,7 +630,7 @@ const Tpopfreiwkontr = ({
                   id={id}
                   ekfBemerkungen={ekfBemerkungen}
                   saveToDb={saveToDb}
-                  errors={errors}
+                  errorsEkfBemerkungen={errors.ekfBemerkungen}
                   row={row}
                   updateTpopkontr={updateTpopkontr}
                 />

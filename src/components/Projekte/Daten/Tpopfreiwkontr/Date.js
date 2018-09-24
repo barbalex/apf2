@@ -41,7 +41,7 @@ const DateVal = styled.div`
   }
 `
 
-const enhance = compose(onlyUpdateForKeys(['id', 'datum']))
+const enhance = compose(onlyUpdateForKeys(['id', 'datum', 'errorsDatum']))
 
 const Date = ({
   id,
