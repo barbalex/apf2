@@ -5,6 +5,7 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import Measure from 'react-measure'
 import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys'
 
 import Select from '../../../shared/Select'
@@ -73,6 +74,11 @@ const StatusLabel = styled(Label)`
 `
 
 const enhance = compose(
+  withHandlers({
+    onResize: ({ setHeaddataHeight }) => contentRect => {
+      setHeaddataHeight(contentRect.bounds.height)
+    },
+  }),
   onlyUpdateForKeys([
     'id',
     'bearbeiter',
@@ -95,6 +101,7 @@ const Headdata = ({
   updateTpopkontr,
   setHeaddataHeight,
   showFilter,
+  onResize,
 }: {
   id: string,
   bearbeiter: string,
@@ -107,6 +114,7 @@ const Headdata = ({
   updateTpopkontr: () => void,
   setHeaddataHeight: () => void,
   showFilter: boolean,
+  onResize: () => void,
 }) => {
   let adressenWerte = sortBy(adressenNodes, 'name')
   adressenWerte = adressenWerte.map(el => ({
@@ -119,12 +127,7 @@ const Headdata = ({
     : 'natürlich'
 
   return (
-    <Measure
-      bounds
-      onResize={contentRect => {
-        setHeaddataHeight(contentRect.bounds.height)
-      }}
-    >
+    <Measure bounds onResize={onResize}>
       {({ measureRef }) => (
         <Container innerRef={measureRef}>
           <PopLabel>Population</PopLabel>
