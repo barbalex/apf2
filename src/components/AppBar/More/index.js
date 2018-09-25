@@ -143,7 +143,7 @@ const MyAppBar = ({
               >
                 {`${get(data, 'user.name')} abmelden`}
               </MenuItem>
-              <Version>Version: 1.2.0 vom 14.9.2018</Version>
+              <Version>Version: 1.3.0 vom 25.9.2018</Version>
             </Menu>
           </Container>
         </ErrorBoundary>
