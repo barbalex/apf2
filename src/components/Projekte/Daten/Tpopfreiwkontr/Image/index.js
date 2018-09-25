@@ -22,10 +22,6 @@ const Container = styled.div`
   grid-template-areas:
     'title'
     'myImage';
-  max-height: ${props => (props.height ? props.height : 370)}px;
-  /*@media print {
-    max-height: 325px;
-  }*/
 `
 const Title = styled.div`
   grid-area: title;
@@ -66,16 +62,10 @@ const enhance = compose(
 
 const Image = ({
   image,
-  parentwidth,
-  height,
-  heightInternal,
   artname,
   apId,
 }: {
   image: Object,
-  parentwidth: number,
-  height: number,
-  heightInternal: number,
   artname: string,
   apId: string,
 }) => {
@@ -83,7 +73,7 @@ const Image = ({
   const src = image ? image : ''
 
   return (
-    <Container height={parentwidth >= 800 ? heightInternal : 370}>
+    <Container>
       <Title>{artname}</Title>
       {!!image && <ImageContainer src={src} padding={myPadding} />}
     </Container>

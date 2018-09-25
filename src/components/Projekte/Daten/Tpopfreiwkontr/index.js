@@ -5,9 +5,11 @@ import { Mutation } from 'react-apollo'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
+import shouldUpdate from 'recompose/shouldUpdate'
 import withLifecycle from '@hocs/with-lifecycle'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
+import isEqual from 'lodash/isEqual'
 import app from 'ampersand-app'
 
 import StringToCopy from '../../../shared/StringToCopyOnlyButton'
@@ -329,6 +331,62 @@ const enhance = compose(
       }
     },
   }),
+  shouldUpdate((props, nextProps) => {
+    {
+      /**
+       * no need to track any values calculated from data
+       * as rerender happens anyway when data changes
+       */
+      if (props.id !== nextProps.id) {
+        console.log('different: id')
+        return true
+      }
+      if (props.dimensions.width !== nextProps.dimensions.width) {
+        console.log('different: dimensions.width')
+        return true
+      }
+      if (!isEqual(props.errors, nextProps.errors)) {
+        console.log('different: errors')
+        return true
+      }
+      if (props.role !== nextProps.role) {
+        console.log('different: role')
+        return true
+      }
+      if (props.titleHeight !== nextProps.titleHeight) {
+        console.log('different: titleHeight')
+        return true
+      }
+      if (props.headdataHeight !== nextProps.headdataHeight) {
+        console.log('different: headdataHeight')
+        return true
+      }
+      if (props.besttimeHeight !== nextProps.besttimeHeight) {
+        console.log('different: besttimeHeight')
+        return true
+      }
+      if (props.dateHeight !== nextProps.dateHeight) {
+        console.log('different: dateHeight')
+        return true
+      }
+      const propsShowFilter = !!props.nodeFilterState.state[props.treeName]
+        .activeTable
+      const nextPropsShowFilter = !!nextProps.nodeFilterState.state[
+        nextProps.treeName
+      ].activeTable
+      if (propsShowFilter !== nextPropsShowFilter) {
+        console.log('different: showFilter')
+        return true
+      }
+      const propsRow = get(props.data, 'tpopkontrById', {})
+      const nextPropsRow = get(nextProps.data, 'tpopkontrById', {})
+      if (!isEqual(propsRow, nextPropsRow)) {
+        console.log('different: row')
+        return true
+      }
+      return false
+    }
+  }),
 )
 
 const Tpopfreiwkontr = ({
@@ -375,6 +433,7 @@ const Tpopfreiwkontr = ({
   dataAllAdresses: Object,
 }) => {
   if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
+  if (data.error) return `Fehler: ${data.error.message}`
   if (data.loading || dataAllAdresses.loading)
     return <Container>Lade...</Container>
   const showFilter = !!nodeFilterState.state[treeName].activeTable
@@ -419,8 +478,6 @@ const Tpopfreiwkontr = ({
   const view = get(data, 'view')
   const isFreiwillig = role === 'apflora_freiwillig'
   const { width } = dimensions
-  const imageHeight =
-    titleHeight + headdataHeight + besttimeHeight + dateHeight + 30
 
   let row
   if (showFilter) {
@@ -458,7 +515,21 @@ const Tpopfreiwkontr = ({
     vegetationshoeheMaximum,
     vegetationshoeheMittel,
   } = row
-  console.log('Freiwkontr rendering')
+  console.log('Freiwkontr rendering', {
+    width,
+    row,
+    isPrint,
+    view,
+    isFreiwillig,
+    zaehl3ShowEmpty,
+    zaehl3ShowNew,
+    zaehl2ShowEmpty,
+    zaehl2ShowNew,
+    zaehl1ShowEmpty,
+    dataAllAdresses,
+    data,
+    einheitsUsed,
+  })
 
   return (
     <Mutation mutation={updateTpopkontrByIdGql}>
@@ -482,7 +553,6 @@ const Tpopfreiwkontr = ({
                 pop={pop}
                 tpop={tpop}
                 saveToDb={saveToDb}
-                errors={errors}
                 setErrors={setErrors}
                 adressenNodes={adressenNodes}
                 row={row}
@@ -513,13 +583,7 @@ const Tpopfreiwkontr = ({
                 updateTpopkontr={updateTpopkontr}
                 showFilter={showFilter}
               />
-              <Image
-                apId={apId}
-                row={row}
-                parentwidth={width}
-                height={imageHeight}
-                artname={artname}
-              />
+              <Image apId={apId} row={row} artname={artname} />
               {!showFilter &&
                 zaehls1 && (
                   <Count
