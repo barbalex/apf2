@@ -526,10 +526,20 @@ CREATE TABLE apflora.tpop (
   nutzungszone text DEFAULT NULL,
   bewirtschafter text DEFAULT NULL,
   bewirtschaftung text DEFAULT NULL,
+  kontrollfrequenz integer DEFAULT null REFERENCES apflora.tpopkontr_frequenz_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  kontrollfrequenz_freiwillige integer DEFAULT null REFERENCES apflora.tpopkontr_frequenz_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
+-- 2018-09-25, remove later:
+ALTER TABLE apflora.tpop ADD COLUMN kontrollfrequenz integer DEFAULT null REFERENCES apflora.tpopkontr_frequenz_werte (code) ON DELETE SET NULL ON UPDATE CASCADE;
+CREATE INDEX ON apflora.tpop USING btree (kontrollfrequenz);
+COMMENT ON COLUMN apflora.tpop.kontrollfrequenz IS 'Wert aus Tabelle tpopkontr_frequenz_werte. Bestimmt, wie häufig kontrolliert werden soll';
+ALTER TABLE apflora.tpop ADD COLUMN kontrollfrequenz_freiwillige integer DEFAULT null REFERENCES apflora.tpopkontr_frequenz_werte (code) ON DELETE SET NULL ON UPDATE CASCADE;
+CREATE INDEX ON apflora.tpop USING btree (kontrollfrequenz_freiwillige);
+COMMENT ON COLUMN apflora.tpop.kontrollfrequenz_freiwillige IS 'Wert aus Tabelle tpopkontr_frequenz_werte. Bestimmt, wie häufig durch Freiwillige kontrolliert werden soll';
+--
 CREATE INDEX ON apflora.tpop USING btree (id);
 CREATE INDEX ON apflora.tpop USING btree (pop_id);
 CREATE INDEX ON apflora.tpop USING btree (status);
@@ -538,6 +548,8 @@ CREATE INDEX ON apflora.tpop USING btree (x);
 CREATE INDEX ON apflora.tpop USING btree (y);
 CREATE INDEX ON apflora.tpop USING btree (nr);
 CREATE INDEX ON apflora.tpop USING btree (flurname);
+CREATE INDEX ON apflora.tpop USING btree (kontrollfrequenz);
+CREATE INDEX ON apflora.tpop USING btree (kontrollfrequenz_freiwillige);
 COMMENT ON COLUMN apflora.tpop.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpop.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.tpop.pop_id IS 'Zugehörige Population. Fremdschlüssel aus der Tabelle "pop"';
@@ -566,6 +578,8 @@ COMMENT ON COLUMN apflora.tpop.bewirtschaftung IS 'Wie wird die Fläche bewirtsc
 COMMENT ON COLUMN apflora.tpop.bemerkungen IS 'Bemerkungen zur Teilpopulation';
 COMMENT ON COLUMN apflora.tpop.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpop.changed IS 'Von wem wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.tpop.kontrollfrequenz IS 'Wert aus Tabelle tpopkontr_frequenz_werte. Bestimmt, wie häufig kontrolliert werden soll';
+COMMENT ON COLUMN apflora.tpop.kontrollfrequenz_freiwillige IS 'Wert aus Tabelle tpopkontr_frequenz_werte. Bestimmt, wie häufig durch Freiwillige kontrolliert werden soll';
 
 DROP TABLE IF EXISTS apflora.tpop_apberrelevant_werte;
 CREATE TABLE apflora.tpop_apberrelevant_werte (
@@ -668,8 +682,6 @@ CREATE TABLE apflora.tpopkontr (
   vegetationshoehe_maximum smallint DEFAULT NULL,
   vegetationshoehe_mittel smallint DEFAULT NULL,
   gefaehrdung text DEFAULT NULL,
-  kontrollfrequenz integer DEFAULT null REFERENCES apflora.tpopkontr_frequenz_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  kontrollfrequenz_freiwillige integer DEFAULT null REFERENCES apflora.tpopkontr_frequenz_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   ekf_verifiziert boolean DEFAULT null,
   ekf_verifiziert_durch varchar(20) DEFAULT null,
   ekf_verifiziert_datum date DEFAULT null,
@@ -679,13 +691,14 @@ CREATE TABLE apflora.tpopkontr (
   changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
 -- 2018-09-24: remove later
-CREATE INDEX ON apflora.tpopkontr USING btree (ekf_verifiziert);
 ALTER TABLE apflora.tpopkontr ADD COLUMN kontrollfrequenz integer DEFAULT null REFERENCES apflora.tpopkontr_frequenz_werte (code) ON DELETE SET NULL ON UPDATE CASCADE;
 CREATE INDEX ON apflora.tpopkontr USING btree (kontrollfrequenz);
 COMMENT ON COLUMN apflora.tpopkontr.kontrollfrequenz IS 'Wert aus Tabelle tpopkontr_frequenz_werte. Bestimmt, wie häufig kontrolliert werden soll';
 ALTER TABLE apflora.tpopkontr ADD COLUMN kontrollfrequenz_freiwillige integer DEFAULT null REFERENCES apflora.tpopkontr_frequenz_werte (code) ON DELETE SET NULL ON UPDATE CASCADE;
 CREATE INDEX ON apflora.tpopkontr USING btree (kontrollfrequenz_freiwillige);
 COMMENT ON COLUMN apflora.tpopkontr.kontrollfrequenz_freiwillige IS 'Wert aus Tabelle tpopkontr_frequenz_werte. Bestimmt, wie häufig durch Freiwillige kontrolliert werden soll';
+ALTER TABLE apflora.tpopkontr DROP COLUMN kontrollfrequenz;
+ALTER TABLE apflora.tpopkontr DROP COLUMN kontrollfrequenz_freiwillige;
 -- keep
 CREATE INDEX ON apflora.tpopkontr USING btree (id);
 CREATE INDEX ON apflora.tpopkontr USING btree (tpop_id);
@@ -697,8 +710,6 @@ CREATE INDEX ON apflora.tpopkontr USING btree (typ);
 CREATE INDEX ON apflora.tpopkontr USING btree (datum);
 CREATE UNIQUE INDEX ON apflora.tpopkontr USING btree (zeit_id);
 CREATE INDEX ON apflora.tpopkontr USING btree (ekf_verifiziert);
-CREATE INDEX ON apflora.tpopkontr USING btree (kontrollfrequenz);
-CREATE INDEX ON apflora.tpopkontr USING btree (kontrollfrequenz_freiwillige);
 COMMENT ON COLUMN apflora.tpopkontr.id IS 'Primärschlüssel. Wird u.a. verwendet für die Identifikation der Beobachtung im nationalen Beobachtungs-Daten-Kreislauf';
 COMMENT ON COLUMN apflora.tpopkontr.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.tpopkontr.tpop_id IS 'Zugehörige Teilpopulation. Fremdschlüssel aus der Tabelle "tpop"';
@@ -745,8 +756,6 @@ COMMENT ON COLUMN apflora.tpopkontr.gefaehrdung IS 'Gefährdung. Nur für Freiwi
 COMMENT ON COLUMN apflora.tpopkontr.zeit_id IS 'GUID für den Export von Zeiten in EvAB';
 COMMENT ON COLUMN apflora.tpopkontr.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontr.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.tpopkontr.kontrollfrequenz IS 'Wert aus Tabelle tpopkontr_frequenz_werte. Bestimmt, wie häufig kontrolliert werden soll';
-COMMENT ON COLUMN apflora.tpopkontr.kontrollfrequenz_freiwillige IS 'Wert aus Tabelle tpopkontr_frequenz_werte. Bestimmt, wie häufig durch Freiwillige kontrolliert werden soll';
 
 DROP TABLE IF EXISTS apflora.tpopkontr_idbiotuebereinst_werte;
 CREATE TABLE apflora.tpopkontr_idbiotuebereinst_werte (
