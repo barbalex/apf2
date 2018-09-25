@@ -5,11 +5,9 @@ import { Mutation } from 'react-apollo'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
-import shouldUpdate from 'recompose/shouldUpdate'
 import withLifecycle from '@hocs/with-lifecycle'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
-import isEqual from 'lodash/isEqual'
 import app from 'ampersand-app'
 
 import StringToCopy from '../../../shared/StringToCopyOnlyButton'
@@ -146,10 +144,6 @@ const enhance = compose(
   withNodeFilter,
   dataGql,
   withState('errors', 'setErrors', {}),
-  withState('titleHeight', 'setTitleHeight', 184),
-  withState('headdataHeight', 'setHeaddataHeight', 184),
-  withState('besttimeHeight', 'setBesttimeHeight', 79),
-  withState('dateHeight', 'setDateHeight', 86),
   withHandlers({
     saveToDb: ({
       setErrors,
@@ -331,62 +325,6 @@ const enhance = compose(
       }
     },
   }),
-  shouldUpdate((props, nextProps) => {
-    {
-      /**
-       * no need to track any values calculated from data
-       * as rerender happens anyway when data changes
-       */
-      if (props.id !== nextProps.id) {
-        console.log('different: id')
-        return true
-      }
-      if (props.dimensions.width !== nextProps.dimensions.width) {
-        console.log('different: dimensions.width')
-        return true
-      }
-      if (!isEqual(props.errors, nextProps.errors)) {
-        console.log('different: errors')
-        return true
-      }
-      if (props.role !== nextProps.role) {
-        console.log('different: role')
-        return true
-      }
-      if (props.titleHeight !== nextProps.titleHeight) {
-        console.log('different: titleHeight')
-        return true
-      }
-      if (props.headdataHeight !== nextProps.headdataHeight) {
-        console.log('different: headdataHeight')
-        return true
-      }
-      if (props.besttimeHeight !== nextProps.besttimeHeight) {
-        console.log('different: besttimeHeight')
-        return true
-      }
-      if (props.dateHeight !== nextProps.dateHeight) {
-        console.log('different: dateHeight')
-        return true
-      }
-      const propsShowFilter = !!props.nodeFilterState.state[props.treeName]
-        .activeTable
-      const nextPropsShowFilter = !!nextProps.nodeFilterState.state[
-        nextProps.treeName
-      ].activeTable
-      if (propsShowFilter !== nextPropsShowFilter) {
-        console.log('different: showFilter')
-        return true
-      }
-      const propsRow = get(props.data, 'tpopkontrById', {})
-      const nextPropsRow = get(nextProps.data, 'tpopkontrById', {})
-      if (!isEqual(propsRow, nextPropsRow)) {
-        console.log('different: row')
-        return true
-      }
-      return false
-    }
-  }),
 )
 
 const Tpopfreiwkontr = ({
@@ -400,14 +338,6 @@ const Tpopfreiwkontr = ({
   setErrors,
   activeNodeArray,
   role,
-  titleHeight,
-  setTitleHeight,
-  headdataHeight,
-  setHeaddataHeight,
-  besttimeHeight,
-  setBesttimeHeight,
-  dateHeight,
-  setDateHeight,
   nodeFilterState,
   treeName,
   dataAllAdresses,
@@ -420,14 +350,6 @@ const Tpopfreiwkontr = ({
   setErrors: () => void,
   activeNodeArray: Array<string>,
   role: string,
-  titleHeight: number,
-  setTitleHeight: () => void,
-  headdataHeight: number,
-  setHeaddataHeight: () => void,
-  besttimeHeight: number,
-  setBesttimeHeight: () => void,
-  dateHeight: number,
-  setDateHeight: () => void,
   nodeFilterState: Object,
   treeName: string,
   dataAllAdresses: Object,
@@ -515,21 +437,6 @@ const Tpopfreiwkontr = ({
     vegetationshoeheMaximum,
     vegetationshoeheMittel,
   } = row
-  console.log('Freiwkontr rendering', {
-    width,
-    row,
-    isPrint,
-    view,
-    isFreiwillig,
-    zaehl3ShowEmpty,
-    zaehl3ShowNew,
-    zaehl2ShowEmpty,
-    zaehl2ShowNew,
-    zaehl1ShowEmpty,
-    dataAllAdresses,
-    data,
-    einheitsUsed,
-  })
 
   return (
     <Mutation mutation={updateTpopkontrByIdGql}>
@@ -545,7 +452,7 @@ const Tpopfreiwkontr = ({
           )}
           <InnerContainer>
             <GridContainer width={width}>
-              <Title setTitleHeight={setTitleHeight} />
+              <Title />
               <Headdata
                 id={id}
                 bearbeiter={bearbeiter}
@@ -557,14 +464,9 @@ const Tpopfreiwkontr = ({
                 adressenNodes={adressenNodes}
                 row={row}
                 updateTpopkontr={updateTpopkontr}
-                setHeaddataHeight={setHeaddataHeight}
                 showFilter={showFilter}
               />
-              <Besttime
-                row={row}
-                setBesttimeHeight={setBesttimeHeight}
-                ekfBeobachtungszeitpunkt={ekfBeobachtungszeitpunkt}
-              />
+              <Besttime ekfBeobachtungszeitpunkt={ekfBeobachtungszeitpunkt} />
               <Date
                 id={id}
                 datum={datum}
@@ -572,7 +474,6 @@ const Tpopfreiwkontr = ({
                 errorsDatum={errors.datum}
                 row={row}
                 updateTpopkontr={updateTpopkontr}
-                setDateHeight={setDateHeight}
               />
               <Map
                 id={id}

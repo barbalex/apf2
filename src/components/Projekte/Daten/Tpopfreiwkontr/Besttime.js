@@ -1,7 +1,6 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
-import Measure from 'react-measure'
 import compose from 'recompose/compose'
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys'
 
@@ -32,27 +31,14 @@ const BesttimeVal = styled.div`
 const enhance = compose(onlyUpdateForKeys(['ekfBeobachtungszeitpunkt']))
 
 const Besttime = ({
-  row,
-  setBesttimeHeight,
   ekfBeobachtungszeitpunkt,
 }: {
-  row: Object,
-  setBesttimeHeight: () => void,
   ekfBeobachtungszeitpunkt: string,
 }) => (
-  <Measure
-    bounds
-    onResize={contentRect => {
-      setBesttimeHeight(contentRect.bounds.height)
-    }}
-  >
-    {({ measureRef }) => (
-      <Container innerRef={measureRef}>
-        <BesttimeLabel>bester Beobachtungs-Zeitpunkt</BesttimeLabel>
-        <BesttimeVal>{ekfBeobachtungszeitpunkt}</BesttimeVal>
-      </Container>
-    )}
-  </Measure>
+  <Container>
+    <BesttimeLabel>bester Beobachtungs-Zeitpunkt</BesttimeLabel>
+    <BesttimeVal>{ekfBeobachtungszeitpunkt}</BesttimeVal>
+  </Container>
 )
 
 export default enhance(Besttime)

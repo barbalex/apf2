@@ -2,10 +2,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import debounce from 'lodash/debounce'
 import withLifecycle from '@hocs/with-lifecycle'
 import compose from 'recompose/compose'
-import pure from 'recompose/pure'
 import withState from 'recompose/withState'
 
 import padding from './padding'
@@ -40,11 +38,19 @@ const ImageContainer = styled.div`
 `
 
 const enhance = compose(
-  withState('image', 'setImage', null),
-  withState('heightInternal', 'setHeightInternal', 370),
+  withState('image', 'setImage', ''),
   withLifecycle({
+    async onDidMount(props) {
+      const { row, setImage } = props
+      const apId = get(row, 'tpopByTpopId.popByPopId.apByApId.id')
+      let image
+      try {
+        image = await import(`./${apId}.png`)
+      } catch (error) {}
+      if (image && image.default) setImage(image.default)
+    },
     async onDidUpdate(prevProps, props) {
-      const { row, setImage, image, height, setHeightInternal } = props
+      const { row, setImage, image } = props
       if (!image) {
         const apId = get(row, 'tpopByTpopId.popByPopId.apByApId.id')
         let image
@@ -53,11 +59,8 @@ const enhance = compose(
         } catch (error) {}
         if (image && image.default) setImage(image.default)
       }
-      const debounceSetHeightInternal = debounce(setHeightInternal, 400)
-      debounceSetHeightInternal(height)
     },
   }),
-  pure,
 )
 
 const Image = ({
@@ -68,16 +71,11 @@ const Image = ({
   image: Object,
   artname: string,
   apId: string,
-}) => {
-  const myPadding = padding[apId]
-  const src = image ? image : ''
-
-  return (
-    <Container>
-      <Title>{artname}</Title>
-      {!!image && <ImageContainer src={src} padding={myPadding} />}
-    </Container>
-  )
-}
+}) => (
+  <Container>
+    <Title>{artname}</Title>
+    {!!image && <ImageContainer src={image} padding={padding[apId]} />}
+  </Container>
+)
 
 export default enhance(Image)

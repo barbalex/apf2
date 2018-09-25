@@ -2,7 +2,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import format from 'date-fns/format'
-import Measure from 'react-measure'
 import compose from 'recompose/compose'
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys'
 
@@ -50,7 +49,6 @@ const Date = ({
   errorsDatum,
   row,
   updateTpopkontr,
-  setDateHeight,
 }: {
   id: string,
   datum: string,
@@ -58,37 +56,27 @@ const Date = ({
   errorsDatum: string,
   row: Object,
   updateTpopkontr: () => void,
-  setDateHeight: () => void,
 }) => (
-  <Measure
-    bounds
-    onResize={contentRect => {
-      setDateHeight(contentRect.bounds.height)
-    }}
-  >
-    {({ measureRef }) => (
-      <Container innerRef={measureRef}>
-        <DateLabel>Aufnahme-datum</DateLabel>
-        <DateVal>
-          <DateFieldWithPicker
-            key={`${id}datum`}
-            value={datum}
-            saveToDb={value => {
-              saveToDb({
-                row,
-                field: 'datum',
-                value,
-                field2: 'jahr',
-                value2: !!value ? format(value, 'YYYY') : null,
-                updateTpopkontr,
-              })
-            }}
-            error={errorsDatum}
-          />
-        </DateVal>
-      </Container>
-    )}
-  </Measure>
+  <Container>
+    <DateLabel>Aufnahme-datum</DateLabel>
+    <DateVal>
+      <DateFieldWithPicker
+        key={`${id}datum`}
+        value={datum}
+        saveToDb={value => {
+          saveToDb({
+            row,
+            field: 'datum',
+            value,
+            field2: 'jahr',
+            value2: !!value ? format(value, 'YYYY') : null,
+            updateTpopkontr,
+          })
+        }}
+        error={errorsDatum}
+      />
+    </DateVal>
+  </Container>
 )
 
 export default enhance(Date)

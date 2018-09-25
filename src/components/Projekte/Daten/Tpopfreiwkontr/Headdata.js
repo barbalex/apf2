@@ -3,9 +3,7 @@ import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
-import Measure from 'react-measure'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys'
 
 import Select from '../../../shared/Select'
@@ -74,11 +72,6 @@ const StatusLabel = styled(Label)`
 `
 
 const enhance = compose(
-  withHandlers({
-    onResize: ({ setHeaddataHeight }) => contentRect => {
-      setHeaddataHeight(contentRect.bounds.height)
-    },
-  }),
   onlyUpdateForKeys([
     'id',
     'bearbeiter',
@@ -99,9 +92,7 @@ const Headdata = ({
   adressenNodes,
   row,
   updateTpopkontr,
-  setHeaddataHeight,
   showFilter,
-  onResize,
 }: {
   id: string,
   bearbeiter: string,
@@ -112,9 +103,7 @@ const Headdata = ({
   adressenNodes: Array<Object>,
   row: Object,
   updateTpopkontr: () => void,
-  setHeaddataHeight: () => void,
   showFilter: boolean,
-  onResize: () => void,
 }) => {
   let adressenWerte = sortBy(adressenNodes, 'name')
   adressenWerte = adressenWerte.map(el => ({
@@ -127,43 +116,35 @@ const Headdata = ({
     : 'natürlich'
 
   return (
-    <Measure bounds onResize={onResize}>
-      {({ measureRef }) => (
-        <Container innerRef={measureRef}>
-          <PopLabel>Population</PopLabel>
-          <PopVal>{get(pop, 'name', '')}</PopVal>
-          <TpopLabel>Teilpopulation</TpopLabel>
-          <TpopVal>{get(tpop, 'flurname', '')}</TpopVal>
-          <KoordLabel>Koordinaten</KoordLabel>
-          <KoordVal>{`${get(tpop, 'x', '')} / ${get(tpop, 'y', '')}`}</KoordVal>
-          <TpopNrLabel>Teilpop.Nr.</TpopNrLabel>
-          <TpopNrVal>{`${get(pop, 'nr', '')}.${get(
-            tpop,
-            'nr',
-            '',
-          )}`}</TpopNrVal>
-          <BearbLabel>BeobachterIn</BearbLabel>
-          <BearbVal>
-            <Select
-              key={`${id}bearbeiter`}
-              value={bearbeiter}
-              field="bearbeiter"
-              options={adressenWerte}
-              saveToDb={value =>
-                saveToDb({
-                  row,
-                  field: 'bearbeiter',
-                  value,
-                  updateTpopkontr,
-                })
-              }
-              error={errorsBearbeiter}
-            />
-          </BearbVal>
-          <StatusLabel>{status}</StatusLabel>
-        </Container>
-      )}
-    </Measure>
+    <Container>
+      <PopLabel>Population</PopLabel>
+      <PopVal>{get(pop, 'name', '')}</PopVal>
+      <TpopLabel>Teilpopulation</TpopLabel>
+      <TpopVal>{get(tpop, 'flurname', '')}</TpopVal>
+      <KoordLabel>Koordinaten</KoordLabel>
+      <KoordVal>{`${get(tpop, 'x', '')} / ${get(tpop, 'y', '')}`}</KoordVal>
+      <TpopNrLabel>Teilpop.Nr.</TpopNrLabel>
+      <TpopNrVal>{`${get(pop, 'nr', '')}.${get(tpop, 'nr', '')}`}</TpopNrVal>
+      <BearbLabel>BeobachterIn</BearbLabel>
+      <BearbVal>
+        <Select
+          key={`${id}bearbeiter`}
+          value={bearbeiter}
+          field="bearbeiter"
+          options={adressenWerte}
+          saveToDb={value =>
+            saveToDb({
+              row,
+              field: 'bearbeiter',
+              value,
+              updateTpopkontr,
+            })
+          }
+          error={errorsBearbeiter}
+        />
+      </BearbVal>
+      <StatusLabel>{status}</StatusLabel>
+    </Container>
   )
 }
 

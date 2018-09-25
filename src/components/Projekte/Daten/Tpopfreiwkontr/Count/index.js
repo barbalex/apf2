@@ -321,6 +321,7 @@ const Count = ({
           label: el.text,
         }))
         const showDelete = nr > 1
+        console.log('Count rendering')
 
         return (
           <Mutation mutation={updateTpopkontrzaehlByIdGql}>
