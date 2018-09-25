@@ -482,3 +482,17 @@ $ekfzaehleinheit_on_update_set_mut$ LANGUAGE plpgsql;
 
 CREATE TRIGGER ekfzaehleinheit_on_update_set_mut BEFORE UPDATE OR INSERT ON apflora.ekfzaehleinheit
   FOR EACH ROW EXECUTE PROCEDURE ekfzaehleinheit_on_update_set_mut();
+
+
+DROP TRIGGER IF EXISTS tpopkontr_frequenz_werte_set_mut ON apflora.tpopkontr_frequenz_werte;
+DROP FUNCTION IF EXISTS tpopkontr_frequenz_werte_set_mut();
+CREATE FUNCTION tpopkontr_frequenz_werte_set_mut() RETURNS trigger AS $tpopkontr_frequenz_werte_set_mut$
+  BEGIN
+    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+    NEW.changed = NOW();
+    RETURN NEW;
+  END;
+$tpopkontr_frequenz_werte_set_mut$ LANGUAGE plpgsql;
+
+CREATE TRIGGER tpopkontr_frequenz_werte_set_mut BEFORE UPDATE OR INSERT ON apflora.tpopkontr_frequenz_werte
+  FOR EACH ROW EXECUTE PROCEDURE tpopkontr_frequenz_werte_set_mut();

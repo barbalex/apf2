@@ -690,16 +690,6 @@ CREATE TABLE apflora.tpopkontr (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
--- 2018-09-24: remove later
-ALTER TABLE apflora.tpopkontr ADD COLUMN kontrollfrequenz integer DEFAULT null REFERENCES apflora.tpopkontr_frequenz_werte (code) ON DELETE SET NULL ON UPDATE CASCADE;
-CREATE INDEX ON apflora.tpopkontr USING btree (kontrollfrequenz);
-COMMENT ON COLUMN apflora.tpopkontr.kontrollfrequenz IS 'Wert aus Tabelle tpopkontr_frequenz_werte. Bestimmt, wie häufig kontrolliert werden soll';
-ALTER TABLE apflora.tpopkontr ADD COLUMN kontrollfrequenz_freiwillige integer DEFAULT null REFERENCES apflora.tpopkontr_frequenz_werte (code) ON DELETE SET NULL ON UPDATE CASCADE;
-CREATE INDEX ON apflora.tpopkontr USING btree (kontrollfrequenz_freiwillige);
-COMMENT ON COLUMN apflora.tpopkontr.kontrollfrequenz_freiwillige IS 'Wert aus Tabelle tpopkontr_frequenz_werte. Bestimmt, wie häufig durch Freiwillige kontrolliert werden soll';
-ALTER TABLE apflora.tpopkontr DROP COLUMN kontrollfrequenz;
-ALTER TABLE apflora.tpopkontr DROP COLUMN kontrollfrequenz_freiwillige;
--- keep
 CREATE INDEX ON apflora.tpopkontr USING btree (id);
 CREATE INDEX ON apflora.tpopkontr USING btree (tpop_id);
 CREATE INDEX ON apflora.tpopkontr USING btree (bearbeiter);
@@ -1228,7 +1218,7 @@ CREATE TABLE apflora.tpopkontr_frequenz_werte (
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) NOT NULL
+  changed_by varchar(20) DEFAULT NULL
 );
 CREATE INDEX ON apflora.tpopkontr_frequenz_werte USING btree (id);
 CREATE INDEX ON apflora.tpopkontr_frequenz_werte USING btree (code);
@@ -1237,3 +1227,6 @@ COMMENT ON COLUMN apflora.tpopkontr_frequenz_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpopkontr_frequenz_werte.text IS 'Beschreibung der Kontroll-Frequenz';
 COMMENT ON COLUMN apflora.tpopkontr_frequenz_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontr_frequenz_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+insert into apflora.tpopkontr_frequenz_werte (code, text, sort, changed_by) values (0, 'nie', 1, 'alex'), (1, 'jährlich', 2, 'alex'), (2, 'alle 2 Jahre', 3, 'alex'), (3, 'alle 3 Jahre', 4, 'alex');
+ALTER TABLE ONLY apflora.tpopkontr_frequenz_werte ALTER COLUMN changed_by drop default;
+ALTER TABLE ONLY apflora.tpopkontr_frequenz_werte ALTER COLUMN changed_by SET DEFAULT null;
