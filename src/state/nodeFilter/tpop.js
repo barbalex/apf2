@@ -23,6 +23,8 @@ export const type = {
   nutzungszone: 'string',
   bewirtschafter: 'string',
   bewirtschaftung: 'string',
+  kontrollfrequenz: 'number',
+  kontrollfrequenzFreiwillige: 'number',
   bemerkungen: 'string',
 }
 
@@ -49,5 +51,7 @@ export const initial = {
   nutzungszone: null,
   bewirtschafter: null,
   bewirtschaftung: null,
+  kontrollfrequenz: null,
+  kontrollfrequenzFreiwillige: null,
   bemerkungen: null,
 }

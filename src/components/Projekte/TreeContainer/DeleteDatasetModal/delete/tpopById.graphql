@@ -23,6 +23,8 @@ query tpopById($id: UUID!) {
     nutzungszone
     bewirtschafter
     bewirtschaftung
+    kontrollfrequenz
+    kontrollfrequenzFreiwillige
     bemerkungen
     statusUnklar
   }

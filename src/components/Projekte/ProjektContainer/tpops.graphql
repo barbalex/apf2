@@ -25,6 +25,8 @@ query TpopQuery($isPop: Boolean!, $tpopFilter: TpopFilter!) {
       nutzungszone
       bewirtschafter
       bewirtschaftung
+      kontrollfrequenz
+      kontrollfrequenzFreiwillige
       bemerkungen
     }
   }

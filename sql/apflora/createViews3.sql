@@ -45,6 +45,8 @@ SELECT
   apflora.v_tpop_anzkontrinklletzter.nutzungszone,
   apflora.v_tpop_anzkontrinklletzter.bewirtschafter,
   apflora.v_tpop_anzkontrinklletzter.bewirtschaftung,
+  apflora.v_tpop_anzkontrinklletzter.kontrollfrequenz,
+  apflora.v_tpop_anzkontrinklletzter.kontrollfrequenz_freiwillige,
   apflora.v_tpop_anzkontrinklletzter.changed,
   apflora.v_tpop_anzkontrinklletzter.changed_by,
   apflora.v_tpop_anzkontrinklletzter.anzahl_kontrollen,

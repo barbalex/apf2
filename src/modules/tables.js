@@ -293,6 +293,13 @@ export default [
     stammdaten: true,
   },
   {
+    table: 'tpopkontr_frequenz_werte',
+    label: 'Kontroll-Frequenz-Werte',
+    idField: 'id',
+    parentIdField: 'none',
+    stammdaten: true,
+  },
+  {
     table: 'ap_umsetzung_werte',
     label: 'AP-Umsetzung-Werte',
     idField: 'id',

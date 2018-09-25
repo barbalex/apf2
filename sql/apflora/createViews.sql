@@ -168,6 +168,8 @@ SELECT
   apflora.tpop.nutzungszone AS tpop_nutzungszone,
   apflora.tpop.bewirtschafter AS tpop_bewirtschafter,
   apflora.tpop.bewirtschaftung AS tpop_bewirtschaftung,
+  apflora.tpop.kontrollfrequenz AS tpop_kontrollfrequenz,
+  apflora.tpop.kontrollfrequenz_freiwillige AS tpop_kontrollfrequenz_freiwillige,
   apflora.tpopmassn.id,
   apflora.tpopmassn.jahr,
   apflora.tpopmassn.datum,
@@ -471,6 +473,8 @@ SELECT
   apflora.tpop.nutzungszone,
   apflora.tpop.bewirtschafter,
   apflora.tpop.bewirtschaftung,
+  apflora.tpop.kontrollfrequenz,
+  apflora.tpop.kontrollfrequenz_freiwillige,
   count(apflora.tpopmassn.id) AS anzahl_massnahmen
 FROM
   apflora.ae_eigenschaften
@@ -1029,6 +1033,8 @@ SELECT
   apflora.tpop.nutzungszone,
   apflora.tpop.bewirtschafter,
   apflora.tpop.bewirtschaftung,
+  apflora.tpop.kontrollfrequenz,
+  apflora.tpop.kontrollfrequenz_freiwillige,
   apflora.tpop.changed,
   apflora.tpop.changed_by
 FROM
@@ -2400,6 +2406,8 @@ SELECT
   apflora.tpop.nutzungszone AS tpop_nutzungszone,
   apflora.tpop.bewirtschafter AS tpop_bewirtschafter,
   apflora.tpop.bewirtschaftung AS tpop_bewirtschaftung,
+  apflora.tpop.kontrollfrequenz AS tpop_kontrollfrequenz,
+  apflora.tpop.kontrollfrequenz_freiwillige AS tpop_kontrollfrequenz_freiwillige,
   apflora.tpopkontr.id,
   apflora.tpopkontr.jahr,
   apflora.tpopkontr.datum,
@@ -2537,6 +2545,8 @@ GROUP BY
   apflora.tpop.nutzungszone,
   apflora.tpop.bewirtschafter,
   apflora.tpop.bewirtschaftung,
+  apflora.tpop.kontrollfrequenz,
+  apflora.tpop.kontrollfrequenz_freiwillige,
   apflora.tpopkontr.id,
   apflora.tpopkontr.tpop_id,
   apflora.tpopkontr.id,
@@ -3902,6 +3912,8 @@ SELECT
   apflora.tpop.nutzungszone AS tpop_nutzungszone,
   apflora.tpop.bewirtschafter AS tpop_bewirtschafter,
   apflora.tpop.bewirtschaftung AS tpop_bewirtschaftung,
+  apflora.tpop.kontrollfrequenz AS tpop_kontrollfrequenz,
+  apflora.tpop.kontrollfrequenz_freiwillige AS tpop_kontrollfrequenz_freiwillige,
   apflora.tpopkontr.id AS kontr_id,
   apflora.tpopkontr.jahr AS kontr_jahr,
   apflora.tpopkontr.datum AS kontr_datum,

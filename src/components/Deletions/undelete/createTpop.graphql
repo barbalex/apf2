@@ -22,6 +22,8 @@ mutation createTpop(
   $nutzungszone: String
   $bewirtschafter: String
   $bewirtschaftung: String
+  $kontrollfrequenz: Int
+  $bewirtschaftung: String
   $bemerkungen: String
   $statusUnklar: Boolean
 ) {
@@ -51,6 +53,8 @@ mutation createTpop(
         nutzungszone: $nutzungszone
         bewirtschafter: $bewirtschafter
         bewirtschaftung: $bewirtschaftung
+        bewirtschaftung: $bewirtschaftung
+        kontrollfrequenz: $kontrollfrequenz
         bemerkungen: $bemerkungen
         statusUnklar: $statusUnklar
       }
@@ -80,6 +84,8 @@ mutation createTpop(
       nutzungszone
       bewirtschafter
       bewirtschaftung
+      kontrollfrequenz
+      kontrollfrequenzFreiwillige
       bemerkungen
       statusUnklar
     }

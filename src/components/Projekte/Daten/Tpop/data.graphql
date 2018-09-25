@@ -31,6 +31,8 @@ query tpopByIdQuery($id: UUID!) {
     nutzungszone
     bewirtschafter
     bewirtschaftung
+    kontrollfrequenz
+    kontrollfrequenzFreiwillige
     bemerkungen
     statusUnklar
     popByPopId {
@@ -51,6 +53,13 @@ query tpopByIdQuery($id: UUID!) {
     }
   }
   allTpopApberrelevantWertes {
+    nodes {
+      id
+      code
+      text
+    }
+  }
+  allTpopkontrFrequenzWertes {
     nodes {
       id
       code

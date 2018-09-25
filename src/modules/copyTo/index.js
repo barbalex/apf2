@@ -307,6 +307,8 @@ export default async ({
           nutzungszone: row.nutzungszone,
           bewirtschafter: row.bewirtschafter,
           bewirtschaftung: row.bewirtschaftung,
+          kontrollfrequenz: row.kontrollfrequenz,
+          kontrollfrequenzFreiwillige: row.kontrollfrequenzFreiwillige,
           bemerkungen: row.bemerkungen,
           statusUnklar: row.statusUnklar,
         },

@@ -41,6 +41,8 @@ query view($apId: UUID!) {
       nutzungszone
       bewirtschafter
       bewirtschaftung
+      kontrollfrequenz
+      kontrollfrequenz_freiwillige: kontrollfrequenzFreiwillige
       changed
       changed_by: changedBy
       kontr_id: kontrId

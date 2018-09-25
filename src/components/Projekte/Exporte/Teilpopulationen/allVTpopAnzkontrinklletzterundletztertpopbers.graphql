@@ -39,6 +39,8 @@ query view {
       nutzungszone
       bewirtschafter
       bewirtschaftung
+      kontrollfrequenz: kontrollfrequenz
+      kontrollfrequenz_freiwillige: kontrollfrequenzFreiwillige
       changed
       changed_by: changedBy
       kontr_id: kontrId

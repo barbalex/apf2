@@ -15,6 +15,7 @@ import Status from '../../../shared/Status'
 import SelectCreatable from '../../../shared/SelectCreatableGemeinde'
 import RadioButton from '../../../shared/RadioButton'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
+import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import FormTitle from '../../../shared/FormTitle'
 import TpopAbBerRelevantInfoPopover from '../TpopAbBerRelevantInfoPopover'
 import constants from '../../../../modules/constants'
@@ -39,6 +40,9 @@ const FieldsContainer = styled.div`
     props['data-width'] > 2 * constants.columnWidth
       ? `${constants.columnWidth}px`
       : 'auto'};
+  fieldset {
+    padding-right: 30px;
+  }
 `
 
 const enhance = compose(
@@ -109,6 +113,12 @@ const enhance = compose(
                     field === 'bewirtschafter' ? value : row.bewirtschafter,
                   bewirtschaftung:
                     field === 'bewirtschaftung' ? value : row.bewirtschaftung,
+                  kontrollfrequenz:
+                    field === 'kontrollfrequenz' ? value : row.kontrollfrequenz,
+                  kontrollfrequenzFreiwillige:
+                    field === 'kontrollfrequenzFreiwillige'
+                      ? value
+                      : row.kontrollfrequenzFreiwillige,
                   bemerkungen:
                     field === 'bemerkungen' ? value : row.bemerkungen,
                   statusUnklar:
@@ -206,6 +216,16 @@ class Tpop extends Component<Props> {
           )
           apberrelevantWerte = sortBy(apberrelevantWerte, 'sort')
           apberrelevantWerte = apberrelevantWerte.map(el => ({
+            value: el.code,
+            label: el.text,
+          }))
+          let tpopkontrFrequenzWerte = get(
+            data,
+            'allTpopkontrFrequenzWertes.nodes',
+            [],
+          )
+          tpopkontrFrequenzWerte = sortBy(tpopkontrFrequenzWerte, 'sort')
+          tpopkontrFrequenzWerte = tpopkontrFrequenzWerte.map(el => ({
             value: el.code,
             label: el.text,
           }))
@@ -526,6 +546,34 @@ class Tpop extends Component<Props> {
                           })
                         }
                         error={errors.bewirtschaftung}
+                      />
+                      <RadioButtonGroup
+                        value={row.kontrollfrequenz}
+                        dataSource={tpopkontrFrequenzWerte}
+                        label="Frequenz Feld-Kontrollen"
+                        saveToDb={value =>
+                          saveToDb({
+                            row,
+                            field: 'kontrollfrequenz',
+                            value,
+                            updateTpop,
+                          })
+                        }
+                        error={errors.kontrollfrequenz}
+                      />
+                      <RadioButtonGroup
+                        value={row.kontrollfrequenzFreiwillige}
+                        dataSource={tpopkontrFrequenzWerte}
+                        label="Frequenz Freiwilligen-Kontrollen"
+                        saveToDb={value =>
+                          saveToDb({
+                            row,
+                            field: 'kontrollfrequenzFreiwillige',
+                            value,
+                            updateTpop,
+                          })
+                        }
+                        error={errors.kontrollfrequenzFreiwillige}
                       />
                       <TextField
                         key={`${row.id}bemerkungen`}

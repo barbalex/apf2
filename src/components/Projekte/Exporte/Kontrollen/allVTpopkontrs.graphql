@@ -36,6 +36,8 @@ query view {
       tpop_nutzungszone: tpopNutzungszone
       tpop_bewirtschafter: tpopBewirtschafter
       tpop_bewirtschaftung: tpopBewirtschaftung
+      tpop_kontrollfrequenz: tpopKontrollfrequenz
+      tpop_kontrollfrequenz_freiwillige: tpopKontrollfrequenzFreiwillige
       id
       jahr
       datum

@@ -38,7 +38,8 @@ query view {
       kontakt
       nutzungszone
       bewirtschafter
-      bewirtschaftung
+      kontrollfrequenz
+      kontrollfrequenz_freiwillige: kontrollfrequenzFreiwillige
       anzahlMassnahmen
     }
   }

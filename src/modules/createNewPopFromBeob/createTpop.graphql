@@ -42,6 +42,8 @@ mutation createTpop(
       nutzungszone
       bewirtschafter
       bewirtschaftung
+      kontrollfrequenz
+      kontrollfrequenzFreiwillige
       bemerkungen
       statusUnklar
     }
