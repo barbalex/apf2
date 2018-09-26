@@ -68,6 +68,9 @@ import withErrorState from '../../../state/withErrorState'
 import logout from '../../../modules/logout'
 import withTreeNodeFilterState from '../../../state/withNodeFilter'
 import buildVariables from './buildVariables'
+import anyQueryReturnsPermissionError from '../../../modules/anyQueryReturnsPermissionError'
+import anyQueryIsLoading from '../../../modules/anyQueryIsLoading'
+import anyQueryReturnsError from '../../../modules/anyQueryReturnsError'
 
 const Container = styled.div`
   display: flex;
@@ -298,45 +301,50 @@ const ProjekteContainer = props => {
     nodeFilterState: Object,
   } = props
 
-  const loading =
-    dataAdresses.loading ||
-    dataUsers.loading ||
-    dataProjekts.loading ||
-    dataApberuebersichts.loading ||
-    dataAps.loading ||
-    dataPops.loading ||
-    dataPopbers.loading ||
-    dataPopmassnbers.loading ||
-    dataTpops.loading ||
-    dataTpopmassns.loading ||
-    dataTpopmassnbers.loading ||
-    dataTpopfeldkontrs.loading ||
-    dataTpopfreiwkontrs.loading ||
-    dataTpopkontrzaehls.loading ||
-    dataTpopbers.loading ||
-    dataBeobZugeordnets.loading ||
-    dataZiels.loading ||
-    dataZielbers.loading ||
-    dataErfkrits.loading ||
-    dataApbers.loading ||
-    dataBers.loading ||
-    dataIdealbiotops.loading ||
-    dataAparts.loading ||
-    dataAssozarts.loading ||
-    dataEkfzaehleinheits.loading ||
-    dataBeobNichtBeurteilts.loading ||
-    dataBeobNichtZuzuordnens.loading ||
-    dataPopForMap.loading ||
-    dataTpopForMap.loading ||
-    dataBeobNichtBeurteiltForMap.loading ||
-    dataBeobNichtZuzuordnenForMap.loading ||
-    dataBeobZugeordnetForMap.loading ||
-    dataBeobZugeordnetForMapMarkers.loading ||
-    dataBeobNichtBeurteiltForMapMarkers.loading ||
-    dataBeobNichtZuzuordnenForMapMarkers.loading ||
-    dataBeobZugeordnetAssignPolylinesForMap.loading ||
-    dataPopForMapMarkers.loading ||
-    dataBeobAssignLines.loading
+  const queryArray = [
+    dataLocal,
+    dataAdresses,
+    dataUsers,
+    dataProjekts,
+    dataApberuebersichts,
+    dataAps,
+    dataPops,
+    dataPopbers,
+    dataPopmassnbers,
+    dataTpops,
+    dataTpopmassns,
+    dataTpopmassnbers,
+    dataTpopfeldkontrs,
+    dataTpopfreiwkontrs,
+    dataTpopkontrzaehls,
+    dataTpopbers,
+    dataBeobZugeordnets,
+    dataZiels,
+    dataZielbers,
+    dataErfkrits,
+    dataApbers,
+    dataBers,
+    dataIdealbiotops,
+    dataAparts,
+    dataAssozarts,
+    dataEkfzaehleinheits,
+    dataBeobNichtBeurteilts,
+    dataBeobNichtZuzuordnens,
+    dataPopForMap,
+    dataTpopForMap,
+    dataBeobNichtBeurteiltForMap,
+    dataBeobNichtZuzuordnenForMap,
+    dataBeobZugeordnetForMap,
+    dataBeobZugeordnetForMapMarkers,
+    dataBeobNichtBeurteiltForMapMarkers,
+    dataBeobNichtZuzuordnenForMapMarkers,
+    dataBeobZugeordnetAssignPolylinesForMap,
+    dataPopForMapMarkers,
+    dataBeobAssignLines,
+  ]
+
+  const loading = anyQueryIsLoading(queryArray)
+
   // TODO:
   const refetch = query => {
     //console.log('refetch', { query, props })
@@ -358,38 +366,30 @@ const ProjekteContainer = props => {
   const tokenDecoded = token ? jwtDecode(token) : null
   const role = tokenDecoded ? tokenDecoded.role : null
   // TODO: which query to check for error?
-  if (dataAdresses.error) {
-    console.log(
-      'ProjektContainer, dataAdresses.error:',
-      dataAdresses.error.message,
+  if (anyQueryReturnsPermissionError(queryArray)) {
+    console.log('ProjektContainer, token:', token)
+    // during login don't show permission error
+    if (!token) return null
+    // if token is not accepted, ask user to logout
+    return (
+      <ErrorContainer>
+        <div>Ihre Anmeldung ist nicht mehr gültig.</div>
+        <div>Bitte melden Sie sich neu an.</div>
+        <LogoutButton
+          variant="outlined"
+          onClick={() => {
+            logout()
+          }}
+        >
+          Neu anmelden
+        </LogoutButton>
+      </ErrorContainer>
     )
-    if (
-      dataAdresses.error.message.includes('permission denied') ||
-      dataAdresses.error.message.includes('keine Berechtigung')
-    ) {
-      console.log('ProjektContainer, token:', token)
-      // during login don't show permission error
-      if (!token) return null
-      // if token is not accepted, ask user to logout
-      return (
-        <ErrorContainer>
-          <div>Ihre Anmeldung ist nicht mehr gültig.</div>
-          <div>Bitte melden Sie sich neu an.</div>
-          <LogoutButton
-            variant="outlined"
-            onClick={() => {
-              logout()
-            }}
-          >
-            Neu anmelden
-          </LogoutButton>
-        </ErrorContainer>
-      )
-    }
-    return `Fehler: ${dataAdresses.error.message}`
   }
-
-  //console.log('ProjektContainer rendered', { dataLocal })
+  const error = anyQueryReturnsError(queryArray)
+  if (error) {
+    return <ErrorContainer>`Fehler: ${error.message}`</ErrorContainer>
+  }
 
   const data = merge(
     dataLocal,
