@@ -38,7 +38,7 @@ const enhance = compose(
   withHandlers({
     openDocs: ({ setAnchorEl }) => () => {
       setAnchorEl(null)
-      window.open('https://barbalex.github.io/apf2')
+      window.open('https://docs.apflora.ch')
     },
     watchVideos: ({ setAnchorEl }) => () => {
       setAnchorEl(null)
