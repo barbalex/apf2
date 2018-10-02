@@ -12,8 +12,8 @@ import TextField from '../../../shared/TextField'
 import TextFieldWithUrl from '../../../shared/TextFieldWithUrl'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data.graphql'
-import updateBerByIdGql from './updateBerById.graphql'
+import dataGql from './data'
+import updateBerByIdGql from './updateBerById'
 
 const Container = styled.div`
   height: 100%;
