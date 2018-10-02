@@ -22,12 +22,12 @@ export default async ({
   const queryName = `create${upperFirst(camelCase(table))}`
   let mutation
   try {
-    mutation = await import('./' + queryName + '.graphql')
+    mutation = await import(`./${queryName}`)
   } catch (error) {
     return errorState.add(
       new Error(
-        `Die Abfrage, um einen Datensatz für die Tabelle ${table} zu erstellen, scheint zu fehlen. Sorry!`
-      )
+        `Die Abfrage, um einen Datensatz für die Tabelle ${table} zu erstellen, scheint zu fehlen. Sorry!`,
+      ),
     )
   }
   try {
