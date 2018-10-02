@@ -9,7 +9,7 @@ import maxBy from 'lodash/maxBy'
 import groupBy from 'lodash/groupBy'
 import { Query } from 'react-apollo'
 
-import dataGql from './data.graphql'
+import dataGql from './data'
 
 const Container = styled.div`
   padding: 0.2cm 0;
@@ -84,15 +84,12 @@ const BMengen = ({
   apId,
   jahr,
   startJahr,
-}:{
+}: {
   apId: String,
   jahr: Number,
   startJahr: Number,
-}) =>
-  <Query
-    query={dataGql}
-    variables={{ apId, startJahr, jahr }}
-  >
+}) => (
+  <Query query={dataGql} variables={{ apId, startJahr, jahr }}>
     {({ loading, error, data }) => {
       if (error) return `Fehler: ${error.message}`
 
@@ -102,166 +99,121 @@ const BMengen = ({
         .filter(p => get(p, 'popbersByPopId.totalCount') > 0)
       const oneLPop = oneLPop_pop.length
       const oneLPop_popbers = flatten(
-        oneLPop_pop.map(p =>
-          get(p, 'popbersByPopId.nodes', [])
-        )
+        oneLPop_pop.map(p => get(p, 'popbersByPopId.nodes', [])),
       )
 
       const oneLTpop_pop = get(data, 'apById.oneLTpop.nodes', [])
       const oneLTpop_tpop = flatten(
-        oneLTpop_pop.map(p =>
-          get(p, 'tpopsByPopId.nodes', [])
-        )
+        oneLTpop_pop.map(p => get(p, 'tpopsByPopId.nodes', [])),
       )
       const oneLTpop = flatten(
-        oneLTpop_tpop.map(p =>
-          get(p, 'tpopbersByTpopId.totalCount', 0)
-        )
-      )
-        .filter(tpopbersCount => tpopbersCount > 0)
-        .length
+        oneLTpop_tpop.map(p => get(p, 'tpopbersByTpopId.totalCount', 0)),
+      ).filter(tpopbersCount => tpopbersCount > 0).length
       const oneLTpop_tpopbers = flatten(
-        oneLTpop_tpop.map(t =>
-          get(t, 'tpopbersByTpopId.nodes', [])
-        )
+        oneLTpop_tpop.map(t => get(t, 'tpopbersByTpopId.nodes', [])),
       )
 
       const oneRPop = get(data, 'apById.oneRPop.nodes', [])
         .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
-        .filter(p => get(p, 'popbersByPopId.totalCount') > 0)
-        .length
-      const oneRPop_pop = get(data, 'apById.oneRPop.nodes', [])
-        .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
+        .filter(p => get(p, 'popbersByPopId.totalCount') > 0).length
+      const oneRPop_pop = get(data, 'apById.oneRPop.nodes', []).filter(
+        p => get(p, 'tpopsByPopId.totalCount') > 0,
+      )
       const oneRPop_popbers = flatten(
-        oneRPop_pop.map(p =>
-          get(p, 'popbersByPopId.nodes', [])
-        )
+        oneRPop_pop.map(p => get(p, 'popbersByPopId.nodes', [])),
       )
       const oneRPop_popbersByPopId = groupBy(oneRPop_popbers, b => b.popId)
       const oneRPop_lastPopbers = Object.keys(oneRPop_popbersByPopId).map(b =>
-        maxBy(oneRPop_popbersByPopId[b], 'jahr')
+        maxBy(oneRPop_popbersByPopId[b], 'jahr'),
       )
 
       const oneRTpop_pop = get(data, 'apById.oneRTpop.nodes', [])
       const oneRTpop_tpop = flatten(
-        oneRTpop_pop.map(p =>
-          get(p, 'tpopsByPopId.nodes', [])
-        )
+        oneRTpop_pop.map(p => get(p, 'tpopsByPopId.nodes', [])),
       )
       const oneRTpop = flatten(
-        oneRTpop_tpop.map(p =>
-          get(p, 'tpopbersByTpopId.totalCount', 0)
-        )
-      )
-        .filter(tpopbersCount => tpopbersCount > 0)
-        .length
+        oneRTpop_tpop.map(p => get(p, 'tpopbersByTpopId.totalCount', 0)),
+      ).filter(tpopbersCount => tpopbersCount > 0).length
       const oneRTpop_tpopbers = flatten(
-        oneRTpop_tpop.map(p =>
-          get(p, 'tpopbersByTpopId.nodes', [])
-        )
+        oneRTpop_tpop.map(p => get(p, 'tpopbersByTpopId.nodes', [])),
       )
-      const oneRTpop_tpopbersByTpopId = groupBy(oneRTpop_tpopbers, b => b.tpopId)
-      const oneRTpop_lastTpopbers = Object.keys(oneRTpop_tpopbersByTpopId).map(b =>
-        maxBy(oneRTpop_tpopbersByTpopId[b], 'jahr')
+      const oneRTpop_tpopbersByTpopId = groupBy(
+        oneRTpop_tpopbers,
+        b => b.tpopId,
       )
-      const oneRTpop_firstYear = min(
-        oneRTpop_tpopbers.map(b =>
-          b.jahr
-        )
+      const oneRTpop_lastTpopbers = Object.keys(oneRTpop_tpopbersByTpopId).map(
+        b => maxBy(oneRTpop_tpopbersByTpopId[b], 'jahr'),
       )
+      const oneRTpop_firstYear = min(oneRTpop_tpopbers.map(b => b.jahr))
 
       // 2.
-      const twoLPop = oneLPop_popbers
-        .filter(b => b.entwicklung === 3)
+      const twoLPop = oneLPop_popbers.filter(b => b.entwicklung === 3).length
+      const twoLTpop = oneLTpop_tpopbers.filter(b => b.entwicklung === 3).length
+      const twoRPop = oneRPop_lastPopbers.filter(b => b.entwicklung === 3)
         .length
-      const twoLTpop = oneLTpop_tpopbers
-        .filter(b => b.entwicklung === 3)
-        .length
-      const twoRPop = oneRPop_lastPopbers
-        .filter(b => b.entwicklung === 3)
-        .length
-      const twoRTpop = oneRTpop_lastTpopbers
-        .filter(b => b.entwicklung === 3)
+      const twoRTpop = oneRTpop_lastTpopbers.filter(b => b.entwicklung === 3)
         .length
 
       // 3.
-      const threeLPop = oneLPop_popbers
-        .filter(b => b.entwicklung === 2)
+      const threeLPop = oneLPop_popbers.filter(b => b.entwicklung === 2).length
+      const threeLTpop = oneLTpop_tpopbers.filter(b => b.entwicklung === 2)
         .length
-      const threeLTpop = oneLTpop_tpopbers
-        .filter(b => b.entwicklung === 2)
+      const threeRPop = oneRPop_lastPopbers.filter(b => b.entwicklung === 2)
         .length
-      const threeRPop = oneRPop_lastPopbers
-        .filter(b => b.entwicklung === 2)
-        .length
-      const threeRTpop = oneRTpop_lastTpopbers
-        .filter(b => b.entwicklung === 2)
+      const threeRTpop = oneRTpop_lastTpopbers.filter(b => b.entwicklung === 2)
         .length
 
       // 4.
-      const fourLPop = oneLPop_popbers
-        .filter(b => b.entwicklung === 1)
+      const fourLPop = oneLPop_popbers.filter(b => b.entwicklung === 1).length
+      const fourLTpop = oneLTpop_tpopbers.filter(b => b.entwicklung === 1)
         .length
-      const fourLTpop = oneLTpop_tpopbers
-        .filter(b => b.entwicklung === 1)
+      const fourRPop = oneRPop_lastPopbers.filter(b => b.entwicklung === 1)
         .length
-      const fourRPop = oneRPop_lastPopbers
-        .filter(b => b.entwicklung === 1)
-        .length
-      const fourRTpop = oneRTpop_lastTpopbers
-        .filter(b => b.entwicklung === 1)
+      const fourRTpop = oneRTpop_lastTpopbers.filter(b => b.entwicklung === 1)
         .length
 
       // 5.
-      const fiveLPop = oneLPop_popbers
-        .filter(b => b.entwicklung === 4)
+      const fiveLPop = oneLPop_popbers.filter(b => b.entwicklung === 4).length
+      const fiveLTpop = oneLTpop_tpopbers.filter(b => b.entwicklung === 4)
         .length
-      const fiveLTpop = oneLTpop_tpopbers
-        .filter(b => b.entwicklung === 4)
+      const fiveRPop = oneRPop_lastPopbers.filter(b => b.entwicklung === 4)
         .length
-      const fiveRPop = oneRPop_lastPopbers
-        .filter(b => b.entwicklung === 4)
-        .length
-      const fiveRTpop = oneRTpop_lastTpopbers
-        .filter(b => b.entwicklung === 4)
+      const fiveRTpop = oneRTpop_lastTpopbers.filter(b => b.entwicklung === 4)
         .length
 
       // 6.
-      const sixLPop = oneLPop_popbers
-        .filter(b => b.entwicklung === 8)
+      const sixLPop = oneLPop_popbers.filter(b => b.entwicklung === 8).length
+      const sixLTpop = oneLTpop_tpopbers.filter(b => b.entwicklung === 8).length
+      const sixRPop = oneRPop_lastPopbers.filter(b => b.entwicklung === 8)
         .length
-      const sixLTpop = oneLTpop_tpopbers
-        .filter(b => b.entwicklung === 8)
+      const sixRTpop = oneRTpop_lastTpopbers.filter(b => b.entwicklung === 8)
         .length
-      const sixRPop = oneRPop_lastPopbers
-        .filter(b => b.entwicklung === 8)
-        .length
-      const sixRTpop = oneRTpop_lastTpopbers
-        .filter(b => b.entwicklung === 8)
-        .length
-      
-        // 7.
-        const sevenLPop_allPops = get(data, 'apById.sevenLPop.nodes', [])
-          .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
-          .length
-        const sevenLPop = sevenLPop_allPops - oneLPop
-        const sevenLTpop_allTpops = sum(
-          get(data, 'apById.sevenLTpop.nodes', [])
-            .map(p => get(p, 'tpopsByPopId.totalCount'))
-        )
-        const sevenLTpop = sevenLTpop_allTpops - oneLTpop
-        const sevenRPop = sevenLPop_allPops - oneRPop
-        const sevenRTpop = sevenLTpop_allTpops - oneRTpop
+
+      // 7.
+      const sevenLPop_allPops = get(data, 'apById.sevenLPop.nodes', []).filter(
+        p => get(p, 'tpopsByPopId.totalCount') > 0,
+      ).length
+      const sevenLPop = sevenLPop_allPops - oneLPop
+      const sevenLTpop_allTpops = sum(
+        get(data, 'apById.sevenLTpop.nodes', []).map(p =>
+          get(p, 'tpopsByPopId.totalCount'),
+        ),
+      )
+      const sevenLTpop = sevenLTpop_allTpops - oneLTpop
+      const sevenRPop = sevenLPop_allPops - oneRPop
+      const sevenRTpop = sevenLTpop_allTpops - oneRTpop
 
       return (
         <Container>
           <Title>B. Bestandesentwicklung</Title>
           <YearRow>
             <Year>{jahr}</Year>
-            <YearSince>{`Seit ${loading ? '...' : oneRTpop_firstYear}`}</YearSince>
+            <YearSince>{`Seit ${
+              loading ? '...' : oneRTpop_firstYear
+            }`}</YearSince>
           </YearRow>
           <LabelRow>
-            <Label1></Label1>
+            <Label1 />
             <PopBerJahr>Pop</PopBerJahr>
             <TpopBerJahr>TPop</TpopBerJahr>
             <PopSeit>Pop</PopSeit>
@@ -321,6 +273,6 @@ const BMengen = ({
       )
     }}
   </Query>
-  
+)
 
 export default BMengen
