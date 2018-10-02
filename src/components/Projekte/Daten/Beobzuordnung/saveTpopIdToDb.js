@@ -5,7 +5,7 @@ import get from 'lodash/get'
 import gql from 'graphql-tag'
 import app from 'ampersand-app'
 
-import setTreeKeyGql from './setTreeKey.graphql'
+import setTreeKeyGql from './setTreeKey'
 
 export default async ({ value, id, updateBeob, tree, refetchTree, type }) => {
   const { client } = app
