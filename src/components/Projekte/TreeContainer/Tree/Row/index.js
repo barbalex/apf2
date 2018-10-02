@@ -21,7 +21,7 @@ import isNodeInActiveNodePath from '../../isNodeInActiveNodePath'
 import isNodeOpen from '../../isNodeOpen'
 import toggleNode from '../../toggleNode'
 import toggleNodeSymbol from '../../toggleNodeSymbol'
-import setTreeKey from './setTreeKey.graphql'
+import setTreeKey from './setTreeKey'
 import withNodeFilterState from '../../../../../state/withNodeFilter'
 //import shouldRowUpdate from './shouldRowUpdate'
 

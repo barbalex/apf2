@@ -1,6 +1,5 @@
 // @flow
 import get from 'lodash/get'
-import isEqual from 'lodash/isEqual'
 
 import isNodeInActiveNodePath from '../../isNodeInActiveNodePath'
 import isNodeOpen from '../../isNodeOpen'
@@ -15,10 +14,6 @@ export default (props: Object, nextProps: Object) => {
     moving,
     openNodes,
     copying,
-    activeApfloraLayers,
-    mapFilter,
-    mapIdsFiltered,
-    nodeFilterState,
   } = props
   const {
     tree: next_tree,
@@ -29,10 +24,6 @@ export default (props: Object, nextProps: Object) => {
     moving: next_moving,
     openNodes: next_openNodes,
     copying: next_copying,
-    activeApfloraLayers: next_activeApfloraLayers,
-    mapFilter: next_mapFilter,
-    mapIdsFiltered: next_mapIdsFiltered,
-    nodeFilterState: next_nodeFilterState,
   } = nextProps
 
   const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
