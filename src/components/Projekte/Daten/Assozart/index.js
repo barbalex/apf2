@@ -13,8 +13,8 @@ import TextField from '../../../shared/TextField'
 import Select from '../../../shared/Select'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data.graphql'
-import updateAssozartByIdGql from './updateAssozartById.graphql'
+import dataGql from './data'
+import updateAssozartByIdGql from './updateAssozartById'
 import withAeEigenschaftens from './withAeEigenschaftens'
 
 const Container = styled.div`

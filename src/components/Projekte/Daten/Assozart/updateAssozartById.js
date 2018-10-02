@@ -1,0 +1,42 @@
+import gql from 'graphql-tag'
+
+export default gql`
+  mutation updateAssozart(
+    $id: UUID!
+    $bemerkungen: String
+    $aeId: UUID
+    $apId: UUID
+  ) {
+    updateAssozartById(
+      input: {
+        id: $id
+        assozartPatch: {
+          id: $id
+          bemerkungen: $bemerkungen
+          aeId: $aeId
+          apId: $apId
+        }
+      }
+    ) {
+      assozart {
+        id
+        bemerkungen
+        aeId
+        apId
+        aeEigenschaftenByAeId {
+          id
+          artname
+        }
+        apByApId {
+          artId
+          assozartsByApId {
+            nodes {
+              id
+              aeId
+            }
+          }
+        }
+      }
+    }
+  }
+`
