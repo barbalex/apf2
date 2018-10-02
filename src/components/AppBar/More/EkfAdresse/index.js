@@ -9,9 +9,9 @@ import sortBy from 'lodash/sortBy'
 import app from 'ampersand-app'
 
 import Select from '../../../shared/Select'
-import dataGql from './data.graphql'
-import setViewGql from './setView.graphql'
-import setEkfAdresseIdGql from './setEkfAdresseId.graphql'
+import dataGql from './data'
+import setViewGql from './setView'
+import setEkfAdresseIdGql from './setEkfAdresseId'
 
 const Container = styled.div`
   padding: 0 16px;
