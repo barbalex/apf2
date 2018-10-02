@@ -1,5 +1,0 @@
-mutation setEkfYear($value: Boolean) {
-  setEkfYear(value: $value) @client {
-    ekfYear @client
-  }
-}
