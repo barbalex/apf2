@@ -13,8 +13,8 @@ import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data.graphql'
-import updateTpopmassnberByIdGql from './updateTpopmassnberById.graphql'
+import dataGql from './data'
+import updateTpopmassnberByIdGql from './updateTpopmassnberById'
 import withAllTpopmassnErfbeurtWertes from './withAllTpopmassnErfbeurtWertes'
 
 const Container = styled.div`

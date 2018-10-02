@@ -1,0 +1,39 @@
+import gql from 'graphql-tag'
+
+export default gql`
+  mutation updateTpopmassnber(
+    $id: UUID!
+    $tpopId: UUID
+    $jahr: Int
+    $beurteilung: Int
+    $bemerkungen: String
+  ) {
+    updateTpopmassnberById(
+      input: {
+        id: $id
+        tpopmassnberPatch: {
+          id: $id
+          tpopId: $tpopId
+          jahr: $jahr
+          beurteilung: $beurteilung
+          bemerkungen: $bemerkungen
+        }
+      }
+    ) {
+      tpopmassnber {
+        id
+        tpopId
+        jahr
+        beurteilung
+        bemerkungen
+        tpopByTpopId {
+          id
+          popByPopId {
+            id
+            apId
+          }
+        }
+      }
+    }
+  }
+`
