@@ -108,7 +108,7 @@ const AP = ({
                 setMessage('Export "AP" wird vorbereitet...')
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVAps.graphql'),
+                    query: await import('./allVAps'),
                   })
                   exportModule({
                     data: get(data, 'allVAps.nodes', []),
@@ -131,7 +131,7 @@ const AP = ({
                 setMessage('Export "ApOhnePopulationen" wird vorbereitet...')
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVApOhnepops.graphql'),
+                    query: await import('./allVApOhnepops'),
                   })
                   exportModule({
                     data: get(data, 'allVApOhnepops.nodes', []),
@@ -154,7 +154,7 @@ const AP = ({
                 setMessage('Export "ApAnzahlMassnahmen" wird vorbereitet...')
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVApAnzmassns.graphql'),
+                    query: await import('./allVApAnzmassns'),
                   })
                   exportModule({
                     data: get(data, 'allVApAnzmassns.nodes', []),
@@ -177,7 +177,7 @@ const AP = ({
                 setMessage('Export "ApAnzahlKontrollen" wird vorbereitet...')
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVApAnzkontrs.graphql'),
+                    query: await import('./allVApAnzkontrs'),
                   })
                   exportModule({
                     data: get(data, 'allVApAnzkontrs.nodes', []),
@@ -200,7 +200,7 @@ const AP = ({
                 setMessage('Export "Jahresberichte" wird vorbereitet...')
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVApbers.graphql'),
+                    query: await import('./allVApbers'),
                   })
                   exportModule({
                     data: get(data, 'allVApbers.nodes', []),
@@ -225,7 +225,7 @@ const AP = ({
                 )
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVApApberundmassns.graphql'),
+                    query: await import('./allVApApberundmassns'),
                   })
                   exportModule({
                     data: get(data, 'allVApApberundmassns.nodes', []),
@@ -248,7 +248,7 @@ const AP = ({
                 setMessage('Export "ApZiele" wird vorbereitet...')
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVZiels.graphql'),
+                    query: await import('./allVZiels'),
                   })
                   exportModule({
                     data: get(data, 'allVZiels.nodes', []),
@@ -271,7 +271,7 @@ const AP = ({
                 setMessage('Export "Zielberichte" wird vorbereitet...')
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVZielbers.graphql'),
+                    query: await import('./allVZielbers'),
                   })
                   exportModule({
                     data: get(data, 'allVZielbers.nodes', []),
@@ -294,7 +294,7 @@ const AP = ({
                 setMessage('Export "Berichte" wird vorbereitet...')
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVBers.graphql'),
+                    query: await import('./allVBers'),
                   })
                   exportModule({
                     data: get(data, 'allVBers.nodes', []),
@@ -317,7 +317,7 @@ const AP = ({
                 setMessage('Export "Erfolgskriterien" wird vorbereitet...')
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVErfkrits.graphql'),
+                    query: await import('./allVErfkrits'),
                   })
                   exportModule({
                     data: get(data, 'allVErfkrits.nodes', []),
@@ -340,7 +340,7 @@ const AP = ({
                 setMessage('Export "Idealbiotope" wird vorbereitet...')
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVIdealbiotops.graphql'),
+                    query: await import('./allVIdealbiotops'),
                   })
                   exportModule({
                     data: get(data, 'allVIdealbiotops.nodes', []),
@@ -363,7 +363,7 @@ const AP = ({
                 setMessage('Export "AssoziierteArten" wird vorbereitet...')
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVAssozarts.graphql'),
+                    query: await import('./allVAssozarts'),
                   })
                   exportModule({
                     data: get(data, 'allVAssozarts.nodes', []),
