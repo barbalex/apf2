@@ -13,8 +13,8 @@ import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data.graphql'
-import updateErfkritByIdGql from './updateErfkritById.graphql'
+import dataGql from './data'
+import updateErfkritByIdGql from './updateErfkritById'
 import withAllApErfkritWertes from './withAllApErfkritWertes'
 
 const Container = styled.div`
