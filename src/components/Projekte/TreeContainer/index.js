@@ -266,12 +266,6 @@ const enhance = compose(
                 key2: 'openNodes',
               },
             })
-            console.log('afterDeletionHook', {
-              table,
-              openNodes,
-              newOpenNodes,
-              url,
-            })
             const tableToUse = [
               'tpopfeldkontrzaehl',
               'tpopfreiwkontrzaehl',

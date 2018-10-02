@@ -8,7 +8,7 @@ import gql from 'graphql-tag'
 import app from 'ampersand-app'
 
 import tables from '../../../../../modules/tables'
-import setTreeKey from './setTreeKey.graphql'
+import setTreeKey from './setTreeKey'
 
 const isFreiwilligenKontrolle = activeNodeArray =>
   activeNodeArray[activeNodeArray.length - 2] === 'Freiwilligen-Kontrollen'
@@ -37,8 +37,8 @@ export default async ({
   if (!tableMetadata) {
     return errorState.add(
       new Error(
-        `Error in action deleteDatasetDemand: no table meta data found for table "${tablePassed}"`
-      )
+        `Error in action deleteDatasetDemand: no table meta data found for table "${tablePassed}"`,
+      ),
     )
   }
   const table = tableMetadata.dbTable ? tableMetadata.dbTable : tablePassed
@@ -49,14 +49,15 @@ export default async ({
    */
   const queryName = `${camelCase(table)}ById`
   /**
-   * cannot use `./${camelCase(table)}ById.graphql`
+   * cannot use `./${camelCase(table)}ById`
    * because webpack performs static analysis at build time
    * see: https://github.com/webpack/webpack/issues/6680#issuecomment-370800037
    */
   let result
   try {
+    const query = await import(`./${queryName}`)
     result = await client.query({
-      query: await import('./' + queryName + '.graphql'),
+      query: query.default,
       variables: { id },
     })
   } catch (error) {

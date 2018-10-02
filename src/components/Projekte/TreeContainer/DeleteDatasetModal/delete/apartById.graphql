@@ -1,7 +1,0 @@
-query apartById($id: UUID!) {
-  apartById(id: $id) {
-    id
-    apId
-    artId
-  }
-}

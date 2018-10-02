@@ -1,8 +1,0 @@
-query assozartById($id: UUID!) {
-  assozartById(id: $id) {
-    id
-    bemerkungen
-    aeId
-    apId
-  }
-}

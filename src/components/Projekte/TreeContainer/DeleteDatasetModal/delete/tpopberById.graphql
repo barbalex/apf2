@@ -1,9 +1,0 @@
-query tpopberById($id: UUID!) {
-  tpopberById(id: $id) {
-    id
-    tpopId
-    jahr
-    entwicklung
-    bemerkungen
-  }
-}

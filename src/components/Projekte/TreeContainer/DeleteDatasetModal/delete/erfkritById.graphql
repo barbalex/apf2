@@ -1,8 +1,0 @@
-query erfkritById($id: UUID!) {
-  erfkritById(id: $id) {
-    id
-    apId
-    erfolg
-    kriterien
-  }
-}

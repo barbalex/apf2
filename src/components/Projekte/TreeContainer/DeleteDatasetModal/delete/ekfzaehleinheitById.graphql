@@ -1,8 +1,0 @@
-query ekfzaehleinheitById($id: UUID!) {
-  ekfzaehleinheitById(id: $id) {
-    id
-    bemerkungen
-    zaehleinheitId
-    apId
-  }
-}
