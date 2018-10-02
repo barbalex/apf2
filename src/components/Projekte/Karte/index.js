@@ -62,7 +62,7 @@ import PngControl from './PngControl'
 import CoordinatesControl from './CoordinatesControl/index.js'
 import epsg4326to2056 from '../../../modules/epsg4326to2056'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import updateTpopById from './updateTpopById.graphql'
+import updateTpopById from './updateTpopById'
 //import getBounds from '../../../modules/getBounds'
 
 // this does not work
