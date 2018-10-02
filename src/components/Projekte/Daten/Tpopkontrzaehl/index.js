@@ -14,8 +14,8 @@ import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import Select from '../../../shared/Select'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data.graphql'
-import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById.graphql'
+import dataGql from './data'
+import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById'
 import withAllTpopkontrzaehlEinheitWertes from './withAllTpopkontrzaehlEinheitWertes'
 
 const Container = styled.div`
