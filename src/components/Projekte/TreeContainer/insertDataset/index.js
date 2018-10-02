@@ -6,7 +6,7 @@ import camelCase from 'lodash/camelCase'
 import get from 'lodash/get'
 
 import tables from '../../../../modules/tables'
-import setTreeKey from './setTreeKey.graphql'
+import setTreeKey from './setTreeKey'
 
 export default async ({
   tree,

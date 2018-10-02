@@ -9,7 +9,7 @@ import compose from 'recompose/compose'
 
 import tables from '../../../../modules/tables'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data.graphql'
+import dataGql from './data'
 import deleteDataset from './delete'
 import withDeleteState from '../../../../state/withDeleteState'
 import withErrorState from '../../../../state/withErrorState'
