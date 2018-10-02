@@ -8,7 +8,7 @@
 
 // To learn more about the benefits of this model, read https://goo.gl/KwvDNy.
 // This link also includes instructions on opting out of this behavior.
-import setUpdateAvailable from './setUpdateAvailable.graphql'
+import setUpdateAvailable from './setUpdateAvailable'
 
 export default function register(client) {
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
@@ -29,7 +29,7 @@ export default function register(client) {
                   console.log('New content is available; please refresh.')
                   client.mutate({
                     mutation: setUpdateAvailable,
-                    variables: { value: true }
+                    variables: { value: true },
                   })
                 } else {
                   // At this point, everything has been precached.
