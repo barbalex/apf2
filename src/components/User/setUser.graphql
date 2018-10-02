@@ -1,6 +1,0 @@
-mutation setUser($name: String, $token: String) {
-  setUser(name: $name, token: $token) @client {
-    name
-    token
-  }
-}

@@ -1,6 +1,0 @@
-query UserQuery {
-  user @client {
-    name
-    token
-  }
-}

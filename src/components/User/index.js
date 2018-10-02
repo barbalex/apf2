@@ -22,8 +22,8 @@ import gql from 'graphql-tag'
 import app from 'ampersand-app'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
-import dataGql from './data.graphql'
-import setUserGql from './setUser.graphql'
+import dataGql from './data'
+import setUserGql from './setUser'
 
 const StyledDialog = styled(Dialog)`
   > div {
@@ -53,7 +53,7 @@ const enhance = compose(
       setName,
       setPassword,
       name,
-      password
+      password,
     }) => async (client, refetch) => {
       let result
       try {
@@ -110,7 +110,6 @@ const enhance = compose(
       // this is easiest way to make sure everything is correct
       // as client is rebuilt with new settings
       window.location.reload(true)
-  
 
       setTimeout(() => {
         if (name) {
@@ -121,12 +120,11 @@ const enhance = compose(
     },
   }),
   withHandlers({
-    onBlurName: ({
-      password,
-      setName,
-      setNameErrorText,
-      fetchLogin
-    }) => (e, client, refetch) => {
+    onBlurName: ({ password, setName, setNameErrorText, fetchLogin }) => (
+      e,
+      client,
+      refetch,
+    ) => {
       setNameErrorText('')
       const name = e.target.value
       setName(name)
@@ -140,7 +138,7 @@ const enhance = compose(
       name,
       setPassword,
       setPasswordErrorText,
-      fetchLogin
+      fetchLogin,
     }) => (e, client, refetch) => {
       setPasswordErrorText('')
       const password = e.target.value
@@ -180,7 +178,7 @@ const User = ({
   onBlurName: () => void,
   onBlurPassword: () => void,
   fetchLogin: () => void,
-}) => 
+}) => (
   <Query query={dataGql}>
     {({ error, data, client }) => {
       if (error) return `Fehler: ${error.message}`
@@ -189,10 +187,7 @@ const User = ({
 
       return (
         <ErrorBoundary>
-          <StyledDialog
-            aria-labelledby="dialog-title"
-            open={!user.token}
-          >
+          <StyledDialog aria-labelledby="dialog-title" open={!user.token}>
             <DialogTitle id="dialog-title">Anmeldung</DialogTitle>
             <StyledDiv>
               <FormControl
@@ -251,10 +246,7 @@ const User = ({
               </FormControl>
             </StyledDiv>
             <DialogActions>
-              <Button
-                color="primary"
-                onClick={() => fetchLogin(client)}
-              >
+              <Button color="primary" onClick={() => fetchLogin(client)}>
                 anmelden
               </Button>
             </DialogActions>
@@ -263,5 +255,6 @@ const User = ({
       )
     }}
   </Query>
+)
 
 export default enhance(User)
