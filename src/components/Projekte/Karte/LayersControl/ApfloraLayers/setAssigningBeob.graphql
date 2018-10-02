@@ -1,5 +1,0 @@
-mutation setAssigningBeob($value: Boolean) {
-  setAssigningBeob(value: $value) @client {
-    assigningBeob @client
-  }
-}

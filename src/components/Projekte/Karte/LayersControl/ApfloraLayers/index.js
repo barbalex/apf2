@@ -22,8 +22,8 @@ import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 
 import Checkbox from '../shared/Checkbox'
-import dataGql from './data.graphql'
-import setAssigningBeob from './setAssigningBeob.graphql'
+import dataGql from './data'
+import setAssigningBeob from './setAssigningBeob'
 import getBounds from '../../../../../modules/getBounds'
 
 const StyledIconButton = styled(Button)`
@@ -154,7 +154,7 @@ const SortableItem = SortableElement(
       if (assigningispossible) return 'Teil-Populationen zuordnen'
       return 'Teil-Populationen zuordnen (aktivierbar, wenn auch Teil-Populationen eingeblendet werden)'
     }
-    // for each layer there must exist a path in data.graphql!
+    // for each layer there must exist a path in data!
     let layerData = get(data, `${apfloraLayer.value}.nodes`, [])
     if (apfloraLayer.value === 'tpop') {
       // but tpop is special...
