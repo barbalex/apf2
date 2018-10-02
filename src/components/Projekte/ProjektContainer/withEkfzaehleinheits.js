@@ -1,7 +1,7 @@
 // @flow
 import { graphql } from 'react-apollo'
 
-import query from './ekfzaehleinheits.graphql'
+import query from './ekfzaehleinheits'
 
 export default graphql(query, {
   options: ({ isAp, ap }) => ({

@@ -1,7 +1,7 @@
 // @flow
 import { graphql } from 'react-apollo'
 
-import query from './popForMap.graphql'
+import query from './popForMap'
 
 export default graphql(query, {
   options: ({ apIsActiveInMap, ap }) => ({

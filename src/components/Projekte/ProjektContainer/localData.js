@@ -1,0 +1,108 @@
+import gql from 'graphql-tag'
+
+export default gql`
+  query LocalDataQuery {
+    assigningBeob @client
+    isPrint @client
+    user @client {
+      name
+      token
+    }
+    tree @client {
+      name
+      activeNodeArray
+      openNodes
+      apFilter
+      map {
+        detailplaene
+      }
+      nodeLabelFilter {
+        ap
+        pop
+        tpop
+        tpopkontr
+        tpopfeldkontr
+        tpopfreiwkontr
+        tpopkontrzaehl
+        tpopmassn
+        ziel
+        zielber
+        erfkrit
+        apber
+        apberuebersicht
+        ber
+        idealbiotop
+        assozart
+        ekfzaehleinheit
+        popber
+        popmassnber
+        tpopber
+        tpopmassnber
+        apart
+        projekt
+        beob
+        beobprojekt
+        adresse
+        gemeinde
+        user
+      }
+    }
+    tree2 @client {
+      name
+      activeNodeArray
+      openNodes
+      apFilter
+      map {
+        detailplaene
+      }
+      nodeLabelFilter {
+        ap
+        pop
+        tpop
+        tpopkontr
+        tpopfeldkontr
+        tpopfreiwkontr
+        tpopkontrzaehl
+        tpopmassn
+        ziel
+        zielber
+        erfkrit
+        apber
+        apberuebersicht
+        ber
+        idealbiotop
+        assozart
+        ekfzaehleinheit
+        popber
+        popmassnber
+        tpopber
+        tpopmassnber
+        apart
+        projekt
+        beob
+        beobprojekt
+        adresse
+        gemeinde
+        user
+      }
+    }
+    copyingBiotop @client {
+      id
+    }
+    moving @client {
+      table
+      id
+      label
+    }
+    copying @client {
+      table
+      id
+      label
+      withNextLevel
+    }
+    urlQuery @client {
+      projekteTabs
+      feldkontrTab
+    }
+  }
+`

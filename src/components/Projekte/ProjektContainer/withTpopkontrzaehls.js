@@ -1,7 +1,7 @@
 // @flow
 import { graphql } from 'react-apollo'
 
-import query from './tpopkontrzaehls.graphql'
+import query from './tpopkontrzaehls'
 
 export default graphql(query, {
   options: ({ isTpopkontr, tpopkontr }) => ({

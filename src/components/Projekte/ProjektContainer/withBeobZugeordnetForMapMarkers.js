@@ -1,7 +1,7 @@
 // @flow
 import { graphql } from 'react-apollo'
 
-import query from './beobZugeordnetForMapMarkers.graphql'
+import query from './beobZugeordnetForMapMarkers'
 
 export default graphql(query, {
   options: ({ projId, apId, apIsActiveInMap }) => ({

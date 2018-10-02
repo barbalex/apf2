@@ -1,7 +1,7 @@
 // @flow
 import { graphql } from 'react-apollo'
 
-import query from './aparts.graphql'
+import query from './aparts'
 
 export default graphql(query, {
   options: ({ isAp, ap }) => ({

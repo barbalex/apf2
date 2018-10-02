@@ -1,7 +1,7 @@
 // @flow
 import { graphql } from 'react-apollo'
 
-import query from './beobNichtZuzuordnens.graphql'
+import query from './beobNichtZuzuordnens'
 
 export default graphql(query, {
   options: ({ isAp, ap }) => ({

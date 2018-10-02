@@ -1,0 +1,32 @@
+import gql from 'graphql-tag'
+
+export default gql`
+  query PopForMapMarkersQuery(
+    $projId: UUID!
+    $apId: UUID
+    $apIsActiveInMap: Boolean!
+  ) {
+    popForMapMarkers: projektById(id: $projId) @include(if: $apIsActiveInMap) {
+      id
+      apsByProjId(filter: { id: { equalTo: $apId } }) {
+        nodes {
+          id
+          popsByApId(filter: { x: { isNull: false }, y: { isNull: false } }) {
+            nodes {
+              id
+              apId
+              nr
+              name
+              status
+              statusUnklar
+              statusUnklarBegruendung
+              bekanntSeit
+              x
+              y
+            }
+          }
+        }
+      }
+    }
+  }
+`

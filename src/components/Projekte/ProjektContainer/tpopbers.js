@@ -1,0 +1,19 @@
+import gql from 'graphql-tag'
+
+export default gql`
+  query TpopbersQuery($tpop: [UUID!], $isTpop: Boolean!) {
+    tpopbers: allTpopbers(filter: { tpopId: { in: $tpop } }, orderBy: JAHR_ASC)
+      @include(if: $isTpop) {
+      nodes {
+        id
+        tpopId
+        jahr
+        entwicklung
+        tpopEntwicklungWerteByEntwicklung {
+          id
+          text
+        }
+      }
+    }
+  }
+`

@@ -1,0 +1,52 @@
+import gql from 'graphql-tag'
+
+export default gql`
+  query BeobNichtZuzuordnenForMapMarkersQuery(
+    $projId: UUID!
+    $apId: UUID
+    $apIsActiveInMap: Boolean!
+  ) {
+    beobNichtZuzuordnenForMapMarkers: projektById(id: $projId)
+      @include(if: $apIsActiveInMap) {
+      id
+      apsByProjId(filter: { id: { equalTo: $apId } }) {
+        nodes {
+          id
+          apartsByApId {
+            nodes {
+              id
+              artId
+              aeEigenschaftenByArtId {
+                id
+                beobsByArtId(
+                  filter: {
+                    tpopId: { isNull: true }
+                    nichtZuordnen: { equalTo: true }
+                    x: { isNull: false }
+                    y: { isNull: false }
+                  }
+                ) {
+                  nodes {
+                    id
+                    autor
+                    datum
+                    beobQuelleWerteByQuelleId {
+                      id
+                      name
+                    }
+                    x
+                    y
+                    aeEigenschaftenByArtId {
+                      id
+                      artname
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`

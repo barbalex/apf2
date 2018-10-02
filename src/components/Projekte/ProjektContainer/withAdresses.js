@@ -1,7 +1,7 @@
 // @flow
 import { graphql } from 'react-apollo'
 
-import query from './adresses.graphql'
+import query from './adresses'
 
 export default graphql(query, {
   options: ({ isWerteListen, isAdresse }) => ({
