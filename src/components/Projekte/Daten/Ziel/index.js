@@ -15,9 +15,9 @@ import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data.graphql'
-import updateZielByIdGql from './updateZielById.graphql'
-import setTreeKeyGql from './setTreeKey.graphql'
+import dataGql from './data'
+import updateZielByIdGql from './updateZielById'
+import setTreeKeyGql from './setTreeKey'
 
 const Container = styled.div`
   height: 100%;
