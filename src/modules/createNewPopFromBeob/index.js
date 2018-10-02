@@ -3,11 +3,11 @@ import format from 'date-fns/format'
 import app from 'ampersand-app'
 import get from 'lodash/get'
 
-import queryBeob from './queryBeob.graphql'
-import createPop from './createPop.graphql'
-import createTpop from './createTpop.graphql'
-import updateBeobById from './updateBeobById.graphql'
-import setTreeKeyGql from './setTreeKey.graphql'
+import queryBeob from './queryBeob'
+import createPop from './createPop'
+import createTpop from './createTpop'
+import updateBeobById from './updateBeobById'
+import setTreeKeyGql from './setTreeKey'
 import { isEqual } from 'date-fns'
 
 export default async ({
