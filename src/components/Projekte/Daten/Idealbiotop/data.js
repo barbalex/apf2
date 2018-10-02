@@ -1,0 +1,30 @@
+import gql from 'graphql-tag'
+
+export default gql`
+  query idealbiotopByIdQuery($id: UUID!) {
+    allIdealbiotops(filter: { apId: { equalTo: $id } }) {
+      nodes {
+        id
+        apId
+        erstelldatum
+        hoehenlage
+        region
+        exposition
+        besonnung
+        hangneigung
+        bodenTyp
+        bodenKalkgehalt
+        bodenDurchlaessigkeit
+        bodenHumus
+        bodenNaehrstoffgehalt
+        wasserhaushalt
+        konkurrenz
+        moosschicht
+        krautschicht
+        strauchschicht
+        baumschicht
+        bemerkungen
+      }
+    }
+  }
+`

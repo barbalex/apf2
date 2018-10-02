@@ -13,8 +13,8 @@ import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
 import FormTitle from '../../../shared/FormTitle'
 import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data.graphql'
-import updateIdealbiotopByIdGql from './updateIdealbiotopById.graphql'
+import dataGql from './data'
+import updateIdealbiotopByIdGql from './updateIdealbiotopById'
 
 const Container = styled.div`
   height: 100%;
