@@ -1,0 +1,13 @@
+import gql from 'graphql-tag'
+
+export default gql`
+  mutation updatePopById($id: UUID!, $x: Int, $y: Int) {
+    updatePopById(input: { id: $id, popPatch: { x: $x, y: $y } }) {
+      pop {
+        id
+        x
+        y
+      }
+    }
+  }
+`
