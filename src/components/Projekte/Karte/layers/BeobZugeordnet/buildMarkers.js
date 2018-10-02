@@ -11,8 +11,8 @@ import beobIconHighlighted from '../../../../../etc/beobZugeordnetHighlighted.pn
 import getNearestTpop from '../../../../../modules/getNearestTpop'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import epsg2056to4326 from '../../../../../modules/epsg2056to4326'
-import setTreeKeyGql from './setTreeKey.graphql'
-import updateBeobByIdGql from './updateBeobById.graphql'
+import setTreeKeyGql from './setTreeKey'
+import updateBeobByIdGql from './updateBeobById'
 
 const StyledH3 = styled.h3`
   margin: 7px 0;
