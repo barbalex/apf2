@@ -9,8 +9,8 @@ import format from 'date-fns/format'
 
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import getActiveNodes from '../../../modules/getActiveNodes'
-import data1Gql from './data1.graphql'
-import data2Gql from './data2.graphql'
+import data1Gql from './data1'
+import data2Gql from './data2'
 import fnslogo from './fnslogo.png'
 import AvList from './AvList'
 import AktPopList from './AktPopList'
@@ -143,9 +143,9 @@ const ApberForYear = ({
                 get(data, 'projektById.apsByProjId.nodes', []).filter(
                   ap =>
                     !!get(ap, 'apbersByApId.nodes[0]', null) &&
-                    !!get(ap, 'apbersByApId.nodes[0].id')
+                    !!get(ap, 'apbersByApId.nodes[0].id'),
                 ),
-                ap => get(ap, 'aeEigenschaftenByArtId.artname')
+                ap => get(ap, 'aeEigenschaftenByArtId.artname'),
               )
               const jahr = get(data, 'apberuebersichtById.jahr')
 
@@ -154,7 +154,9 @@ const ApberForYear = ({
                   <Container>
                     <ContentContainer>
                       <FirstPageTitle>
-                        Umsetzung der Aktionspläne Flora<br />im Kanton Zürich
+                        Umsetzung der Aktionspläne Flora
+                        <br />
+                        im Kanton Zürich
                       </FirstPageTitle>
                       <FirstPageSubTitle
                       >{`Jahresbericht ${jahr}`}</FirstPageSubTitle>
