@@ -1,0 +1,33 @@
+import gql from 'graphql-tag'
+
+export default gql`
+  mutation updateEkfzaehleinheit(
+    $id: UUID!
+    $bemerkungen: String
+    $apId: UUID
+    $zaehleinheitId: UUID
+  ) {
+    updateEkfzaehleinheitById(
+      input: {
+        id: $id
+        ekfzaehleinheitPatch: {
+          id: $id
+          bemerkungen: $bemerkungen
+          apId: $apId
+          zaehleinheitId: $zaehleinheitId
+        }
+      }
+    ) {
+      ekfzaehleinheit {
+        id
+        bemerkungen
+        apId
+        zaehleinheitId
+        tpopkontrzaehlEinheitWerteByZaehleinheitId {
+          id
+          text
+        }
+      }
+    }
+  }
+`

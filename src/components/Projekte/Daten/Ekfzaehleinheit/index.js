@@ -13,8 +13,8 @@ import TextField from '../../../shared/TextField'
 import Select from '../../../shared/Select'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data.graphql'
-import updateEkfzaehleinheitByIdGql from './updateEkfzaehleinheitById.graphql'
+import dataGql from './data'
+import updateEkfzaehleinheitByIdGql from './updateEkfzaehleinheitById'
 import withAllTpopkontrzaehlEinheitWertes from './withAllTpopkontrzaehlEinheitWertes'
 
 const Container = styled.div`
