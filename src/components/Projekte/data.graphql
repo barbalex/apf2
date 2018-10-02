@@ -1,6 +1,0 @@
-query MyData {
-  isPrint @client
-  urlQuery @client {
-    projekteTabs
-  }
-}
