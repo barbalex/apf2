@@ -6,13 +6,13 @@ import staticFilesBaseUrl from './staticFilesBaseUrl'
 export default async ({
   setMarkierungen,
   errorState,
-}:{
+}: {
   setMarkierungen: () => void,
   errorState: Object,
 }): void => {
   const baseURL = staticFilesBaseUrl
   const url = `/markierungen.json`
-  //const axios = await import('axios')
+  //const axios = await import('axios').then(m => m.default)
   let result
   try {
     result = await axios.get(url, { baseURL })

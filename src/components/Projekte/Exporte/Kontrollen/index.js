@@ -108,7 +108,9 @@ const Kontrollen = ({
                 setMessage('Export "Kontrollen" wird vorbereitet...')
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVTpopkontrs'),
+                    query: await import('./allVTpopkontrs').then(
+                      m => m.default,
+                    ),
                   })
                   exportModule({
                     data: get(data, 'allVTpopkontrs.nodes', []),
@@ -134,7 +136,9 @@ const Kontrollen = ({
                 setMessage('Export "KontrollenWebGisBun" wird vorbereitet...')
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVTpopkontrWebgisbuns'),
+                    query: await import('./allVTpopkontrWebgisbuns').then(
+                      m => m.default,
+                    ),
                   })
                   exportModule({
                     data: get(data, 'allVTpopkontrWebgisbuns.nodes', []),
@@ -162,7 +166,9 @@ const Kontrollen = ({
                 )
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVKontrzaehlAnzproeinheits'),
+                    query: await import('./allVKontrzaehlAnzproeinheits').then(
+                      m => m.default,
+                    ),
                   })
                   exportModule({
                     data: get(data, 'allVKontrzaehlAnzproeinheits.nodes', []),

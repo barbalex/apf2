@@ -55,7 +55,7 @@ export default async ({
    */
   let result
   try {
-    const query = await import(`./${queryName}`)
+    const query = await import(`./${queryName}`).then(m => m.default)
     result = await client.query({
       query: query.default,
       variables: { id },

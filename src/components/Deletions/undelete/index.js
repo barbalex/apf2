@@ -22,7 +22,7 @@ export default async ({
   const queryName = `create${upperFirst(camelCase(table))}`
   let mutation
   try {
-    mutation = await import(`./${queryName}`)
+    mutation = await import(`./${queryName}`).then(m => m.default)
   } catch (error) {
     return errorState.add(
       new Error(

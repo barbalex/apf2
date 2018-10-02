@@ -14,7 +14,7 @@
     "flow-bin": "0.82.0",
     "postgraphile": "4.0.0",
     "postgraphile-plugin-connection-filter": "1.0.0-beta.16",
-    "react-scripts": "2.0.0-next.a671462c",
+    "react-scripts": "2.0.3",
     "serve": "10.0.2",
     "source-map-explorer": "1.6.0"
   },
@@ -104,17 +104,10 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "browserslist": {
-    "development": [
-      "last 2 chrome versions",
-      "last 2 firefox versions",
-      "last 2 edge versions"
-    ],
-    "production": [
-      ">1%",
-      "last 4 versions",
-      "Firefox ESR",
-      "not ie < 11"
-    ]
-  }
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie > 0",
+    "not op_mini all"
+  ]
 }

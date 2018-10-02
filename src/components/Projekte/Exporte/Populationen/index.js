@@ -109,7 +109,7 @@ const Populationen = ({
                 setMessage('Export "Populationen" wird vorbereitet...')
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVPops'),
+                    query: await import('./allVPops').then(m => m.default),
                   })
                   exportModule({
                     data: get(data, 'allVPops.nodes', []),
@@ -135,7 +135,7 @@ const Populationen = ({
                 setMessage('Export "Populationen" wird vorbereitet...')
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVPopKmls'),
+                    query: await import('./allVPopKmls').then(m => m.default),
                   })
                   const enrichedData = get(data, 'allVPopKmls.nodes', []).map(
                     oWithout => {
@@ -171,7 +171,9 @@ const Populationen = ({
                 setMessage('Export "PopulationenNachNamen" wird vorbereitet...')
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVPopKmlnamen'),
+                    query: await import('./allVPopKmlnamen').then(
+                      m => m.default,
+                    ),
                   })
                   const enrichedData = get(
                     data,
@@ -213,7 +215,9 @@ const Populationen = ({
                 )
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVPopVonapohnestatuses'),
+                    query: await import('./allVPopVonapohnestatuses').then(
+                      m => m.default,
+                    ),
                   })
                   exportModule({
                     data: get(data, 'allVPopVonapohnestatuses.nodes', []),
@@ -241,7 +245,9 @@ const Populationen = ({
                 )
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVPopOhnekoords'),
+                    query: await import('./allVPopOhnekoords').then(
+                      m => m.default,
+                    ),
                   })
                   exportModule({
                     data: get(data, 'allVPopOhnekoords.nodes', []),
@@ -266,7 +272,9 @@ const Populationen = ({
                 )
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVPopmassnberAnzmassns'),
+                    query: await import('./allVPopmassnberAnzmassns').then(
+                      m => m.default,
+                    ),
                   })
                   exportModule({
                     data: get(data, 'allVPopmassnberAnzmassns.nodes', []),
@@ -295,7 +303,9 @@ const Populationen = ({
                 )
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVPopAnzmassns'),
+                    query: await import('./allVPopAnzmassns').then(
+                      m => m.default,
+                    ),
                   })
                   exportModule({
                     data: get(data, 'allVPopAnzmassns.nodes', []),
@@ -323,7 +333,9 @@ const Populationen = ({
                 )
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVPopAnzkontrs'),
+                    query: await import('./allVPopAnzkontrs').then(
+                      m => m.default,
+                    ),
                   })
                   exportModule({
                     data: get(data, 'allVPopAnzkontrs.nodes', []),
@@ -351,7 +363,9 @@ const Populationen = ({
                 )
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVPopPopberundmassnbers'),
+                    query: await import('./allVPopPopberundmassnbers').then(
+                      m => m.default,
+                    ),
                   })
                   exportModule({
                     data: get(data, 'allVPopPopberundmassnbers.nodes', []),
@@ -379,7 +393,9 @@ const Populationen = ({
                 )
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVPopMitLetzterPopbers'),
+                    query: await import('./allVPopMitLetzterPopbers').then(
+                      m => m.default,
+                    ),
                   })
                   exportModule({
                     data: get(data, 'allVPopMitLetzterPopbers.nodes', []),
@@ -407,7 +423,9 @@ const Populationen = ({
                 )
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVPopMitLetzterPopmassnbers'),
+                    query: await import('./allVPopMitLetzterPopmassnbers').then(
+                      m => m.default,
+                    ),
                   })
                   exportModule({
                     data: get(data, 'allVPopMitLetzterPopmassnbers.nodes', []),
