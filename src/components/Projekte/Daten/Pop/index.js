@@ -14,8 +14,8 @@ import Status from '../../../shared/Status'
 import RadioButton from '../../../shared/RadioButton'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data.graphql'
-import updatePopByIdGql from './updatePopById.graphql'
+import dataGql from './data'
+import updatePopByIdGql from './updatePopById'
 import withNodeFilter from '../../../../state/withNodeFilter'
 
 const Container = styled.div`
