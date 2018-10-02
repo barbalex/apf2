@@ -16,9 +16,9 @@ import app from 'ampersand-app'
 
 import Select from '../../../../shared/Select'
 import TextField from '../../../../shared/TextField'
-import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById.graphql'
-import dataGql from './data.graphql'
-import createTpopkontrzaehl from './createTpopkontrzaehl.graphql'
+import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById'
+import dataGql from './data'
+import createTpopkontrzaehl from './createTpopkontrzaehl'
 import withDeleteState from '../../../../../state/withDeleteState'
 import withAllTpopkontrzaehlEinheitWertes from './withAllTpopkontrzaehlEinheitWertes'
 
