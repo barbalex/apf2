@@ -1,0 +1,101 @@
+import gql from 'graphql-tag'
+
+export default gql`
+  query view {
+    allVTpopAnzkontrinklletzterundletztertpopbers {
+      nodes {
+        ap_id: apId
+        familie
+        artname
+        ap_bearbeitung: apBearbeitung
+        ap_start_jahr: apStartJahr
+        ap_umsetzung: apUmsetzung
+        pop_id: popId
+        pop_nr: popNr
+        pop_name: popName
+        pop_status: popStatus
+        pop_bekannt_seit: popBekanntSeit
+        pop_status_unklar: popStatusUnklar
+        pop_status_unklar_begruendung: popStatusUnklarBegruendung
+        pop_x: popX
+        pop_y: popY
+        id
+        nr
+        gemeinde
+        flurname
+        status
+        bekannt_seit: bekanntSeit
+        status_unklar: statusUnklar
+        status_unklar_grund: statusUnklarGrund
+        x
+        y
+        radius
+        hoehe
+        exposition
+        klima
+        neigung
+        beschreibung
+        kataster_nr: katasterNr
+        apber_relevant: apberRelevant
+        eigentuemer
+        kontakt
+        nutzungszone
+        bewirtschafter
+        bewirtschaftung
+        kontrollfrequenz: kontrollfrequenz
+        kontrollfrequenz_freiwillige: kontrollfrequenzFreiwillige
+        changed
+        changed_by: changedBy
+        kontr_id: kontrId
+        kontr_jahr: kontrJahr
+        kontr_datum: kontrDatum
+        kontr_typ: kontrTyp
+        kontr_bearbeiter: kontrBearbeiter
+        kontr_ueberlebensrate: kontrUeberlebensrate
+        kontr_vitalitaet: kontrVitalitaet
+        kontr_entwicklung: kontrEntwicklung
+        kontr_ursachen: kontrUrsachen
+        kontr_erfolgsbeurteilung: kontrErfolgsbeurteilung
+        kontr_umsetzung_aendern: kontrUmsetzungAendern
+        kontr_kontrolle_aendern: kontrKontrolleAendern
+        kontr_bemerkungen: kontrBemerkungen
+        kontr_lr_delarze: kontrLrDelarze
+        kontr_lr_umgebung_delarze: kontrLrUmgebungDelarze
+        kontr_vegetationstyp: kontrVegetationstyp
+        kontr_konkurrenz: kontrKonkurrenz
+        kontr_moosschicht: kontrMoosschicht
+        kontr_krautschicht: kontrKrautschicht
+        kontr_strauchschicht: kontrStrauchschicht
+        kontr_baumschicht: kontrBaumschicht
+        kontr_boden_typ: kontrBodenTyp
+        kontr_boden_kalkgehalt: kontrBodenKalkgehalt
+        kontr_boden_durchlaessigkeit: kontrBodenDurchlaessigkeit
+        kontr_boden_humus: kontrBodenHumus
+        kontr_boden_naehrstoffgehalt: kontrBodenNaehrstoffgehalt
+        kontr_boden_abtrag: kontrBodenAbtrag
+        kontr_wasserhaushalt: kontrWasserhaushalt
+        kontr_idealbiotop_uebereinstimmung: kontrIdealbiotopUebereinstimmung
+        kontr_handlungsbedarf: kontrHandlungsbedarf
+        kontr_flaeche_ueberprueft: kontrFlaecheUeberprueft
+        kontr_flaeche: kontrFlaeche
+        kontr_plan_vorhanden: kontrPlanVorhanden
+        kontr_deckung_vegetation: kontrDeckungVegetation
+        kontr_deckung_nackter_boden: kontrDeckungNackterBoden
+        kontr_deckung_ap_art: kontrDeckungApArt
+        kontr_jungpflanzen_vorhanden: kontrJungpflanzenVorhanden
+        kontr_vegetationshoehe_maximum: kontrVegetationshoeheMaximum
+        kontr_vegetationshoehe_mittel: kontrVegetationshoeheMittel
+        kontr_gefaehrdung: kontrGefaehrdung
+        kontr_changed: kontrChanged
+        kontr_changed_by: kontrChangedBy
+        tpopber_anz: tpopberAnz
+        tpopber_id: tpopberId
+        tpopber_jahr: tpopberJahr
+        tpopber_entwicklung: tpopberEntwicklung
+        tpopber_bemerkungen: tpopberBemerkungen
+        tpopber_changed: tpopberChanged
+        tpopber_changed_by: tpopberChangedBy
+      }
+    }
+  }
+`

@@ -18,7 +18,7 @@ import { Query } from 'react-apollo'
 import Select from '../../../shared/Select'
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
-import dataGql from './data.graphql'
+import dataGql from './data'
 import withErrorState from '../../../../state/withErrorState'
 import epsg2056to4326 from '../../../../modules/epsg2056to4326'
 
@@ -133,7 +133,7 @@ const Teilpopulationen = ({
                   setMessage('Export "Teilpopulationen" wird vorbereitet...')
                   try {
                     const { data } = await client.query({
-                      query: await import('./allVTpops.graphql'),
+                      query: await import('./allVTpops'),
                     })
                     const enrichedData = get(data, 'allVTpops.nodes', []).map(
                       oWithout => {
@@ -180,7 +180,7 @@ const Teilpopulationen = ({
                   )
                   try {
                     const { data } = await client.query({
-                      query: await import('./allVTpopWebgisbuns.graphql'),
+                      query: await import('./allVTpopWebgisbuns'),
                     })
                     exportModule({
                       data: get(data, 'allVTpopWebgisbuns.nodes', []),
@@ -206,7 +206,7 @@ const Teilpopulationen = ({
                   setMessage('Export "Teilpopulationen" wird vorbereitet...')
                   try {
                     const { data } = await client.query({
-                      query: await import('./allVTpopKmls.graphql'),
+                      query: await import('./allVTpopKmls'),
                     })
                     const enrichedData = get(
                       data,
@@ -247,7 +247,7 @@ const Teilpopulationen = ({
                   )
                   try {
                     const { data } = await client.query({
-                      query: await import('./allVTpopKmlnamen.graphql'),
+                      query: await import('./allVTpopKmlnamen'),
                     })
                     const enrichedData = get(
                       data,
@@ -288,7 +288,7 @@ const Teilpopulationen = ({
                   )
                   try {
                     const { data } = await client.query({
-                      query: await import('./allVTpopOhnebekanntseits.graphql'),
+                      query: await import('./allVTpopOhnebekanntseits'),
                     })
                     exportModule({
                       data: get(data, 'allVTpopOhnebekanntseits.nodes', []),
@@ -317,7 +317,7 @@ const Teilpopulationen = ({
                   )
                   try {
                     const { data } = await client.query({
-                      query: await import('./allVTpopOhneapberichtrelevants.graphql'),
+                      query: await import('./allVTpopOhneapberichtrelevants'),
                     })
                     exportModule({
                       data: get(
@@ -350,7 +350,7 @@ const Teilpopulationen = ({
                   )
                   try {
                     const { data } = await client.query({
-                      query: await import('./allVTpopAnzmassns.graphql'),
+                      query: await import('./allVTpopAnzmassns'),
                     })
                     exportModule({
                       data: get(data, 'allVTpopAnzmassns.nodes', []),
@@ -378,7 +378,7 @@ const Teilpopulationen = ({
                   )
                   try {
                     const { data } = await client.query({
-                      query: await import('./allVTpopAnzkontrinklletzterundletztertpopbers.graphql'),
+                      query: await import('./allVTpopAnzkontrinklletzterundletztertpopbers'),
                     })
                     exportModule({
                       data: get(
@@ -436,7 +436,7 @@ const Teilpopulationen = ({
                     )
                     try {
                       const { data } = await client.query({
-                        query: await import('./allVTpopAnzkontrinklletzterundletztertpopbersFiltered.graphql'),
+                        query: await import('./allVTpopAnzkontrinklletzterundletztertpopbersFiltered'),
                         variables: { apId },
                       })
                       exportModule({
@@ -464,7 +464,7 @@ const Teilpopulationen = ({
                   )
                   try {
                     const { data } = await client.query({
-                      query: await import('./allVTpopPopberundmassnbers.graphql'),
+                      query: await import('./allVTpopPopberundmassnbers'),
                     })
                     exportModule({
                       data: get(data, 'allVTpopPopberundmassnbers.nodes', []),
