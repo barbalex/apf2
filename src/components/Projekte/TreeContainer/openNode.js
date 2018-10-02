@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import app from 'ampersand-app'
 
 import isNodeOpen from './isNodeOpen'
-import treeNodeLabelFilterResetExceptAp from './treeNodeLabelFilterResetExceptAp.graphql'
+import treeNodeLabelFilterResetExceptAp from './treeNodeLabelFilterResetExceptAp'
 
 export default async ({ tree, node }: { tree: Object, node: Object }) => {
   const { client } = app
