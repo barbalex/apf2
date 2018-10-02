@@ -9,7 +9,7 @@ import groupBy from 'lodash/groupBy'
 import maxBy from 'lodash/maxBy'
 import { Query } from 'react-apollo'
 
-import dataGql from './data.graphql'
+import dataGql from './data'
 
 const Container = styled.div`
   padding: 0.2cm 0;
@@ -86,124 +86,106 @@ const CMengen = ({
   apId,
   jahr,
   startJahr,
-}:{
+}: {
   apId: String,
   jahr: Number,
   startJahr: Number,
-}) =>
-  <Query
-    query={dataGql}
-    variables={{ apId, jahr }}
-  >
+}) => (
+  <Query query={dataGql} variables={{ apId, jahr }}>
     {({ loading, error, data }) => {
       if (error) return `Fehler: ${error.message}`
 
       const oneLTpop_pop = get(data, 'apById.oneLTpop.nodes', [])
       const oneLTpop_tpop = flatten(
-        oneLTpop_pop.map(p =>
-          get(p, 'tpopsByPopId.nodes', [])
-        )
-      ).filter(p =>
-        get(p, 'tpopmassnsByTpopId.totalCount', 0) > 0
-      )
+        oneLTpop_pop.map(p => get(p, 'tpopsByPopId.nodes', [])),
+      ).filter(p => get(p, 'tpopmassnsByTpopId.totalCount', 0) > 0)
       const oneLTpop = oneLTpop_tpop.length
       const oneLPop = uniqBy(oneLTpop_tpop, 'popId').length
 
       const oneRTpop_pop = get(data, 'apById.oneRTpop.nodes', [])
       const oneRTpop_tpop = flatten(
-        oneRTpop_pop.map(p =>
-          get(p, 'tpopsByPopId.nodes', [])
-        )
+        oneRTpop_pop.map(p => get(p, 'tpopsByPopId.nodes', [])),
       )
       const massns = flatten(
-        oneRTpop_tpop.map(p =>
-          get(p, 'tpopmassnsByTpopId.nodes', [])
-        )
+        oneRTpop_tpop.map(p => get(p, 'tpopmassnsByTpopId.nodes', [])),
       )
       const massnbers = flatten(
-        oneRTpop_tpop.map(p =>
-          get(p, 'tpopmassnbersByTpopId.nodes', [])
-        )
+        oneRTpop_tpop.map(p => get(p, 'tpopmassnbersByTpopId.nodes', [])),
       )
-      const oneRTpop_firstYear = min(
-        massns.map(b =>
-          b.jahr
-        )
+      const oneRTpop_firstYear = min(massns.map(b => b.jahr))
+      const oneRPop_massnbersByPopId = groupBy(massnbers, b =>
+        get(b, 'tpopByTpopId.popId'),
       )
-      const oneRPop_massnbersByPopId = groupBy(massnbers, b => get(b, 'tpopByTpopId.popId'))
-      const oneRPop_lastMassnbersByPopId = Object.keys(oneRPop_massnbersByPopId).map(b =>
-        maxBy(oneRPop_massnbersByPopId[b], 'jahr')
+      const oneRPop_lastMassnbersByPopId = Object.keys(
+        oneRPop_massnbersByPopId,
+      ).map(b => maxBy(oneRPop_massnbersByPopId[b], 'jahr'))
+      const oneRPop_massnbersByTpopId = groupBy(massnbers, b =>
+        get(b, 'tpopByTpopId.id'),
       )
-      const oneRPop_massnbersByTpopId = groupBy(massnbers, b => get(b, 'tpopByTpopId.id'))
-      const oneRPop_lastMassnbersByTpopId = Object.keys(oneRPop_massnbersByTpopId).map(b =>
-        maxBy(oneRPop_massnbersByTpopId[b], 'jahr')
-      )
+      const oneRPop_lastMassnbersByTpopId = Object.keys(
+        oneRPop_massnbersByTpopId,
+      ).map(b => maxBy(oneRPop_massnbersByTpopId[b], 'jahr'))
 
       // 1.
-      const oneRPop = uniqBy(massns, b =>
-        get(b, 'tpopByTpopId.popId')
-      ).length
-      const oneRTpop = uniqBy(massns, b =>
-        get(b, 'tpopByTpopId.id')
-      ).length
+      const oneRPop = uniqBy(massns, b => get(b, 'tpopByTpopId.popId')).length
+      const oneRTpop = uniqBy(massns, b => get(b, 'tpopByTpopId.id')).length
 
       // 2.
-      const twoRPop = uniqBy(massnbers, b =>
-        get(b, 'tpopByTpopId.popId')
-      ).length
-      const twoRTpop = uniqBy(massnbers, b =>
-        get(b, 'tpopByTpopId.id')
-      ).length
+      const twoRPop = uniqBy(massnbers, b => get(b, 'tpopByTpopId.popId'))
+        .length
+      const twoRTpop = uniqBy(massnbers, b => get(b, 'tpopByTpopId.id')).length
 
       // 3.
-      const threeRPop = oneRPop_lastMassnbersByPopId
-        .filter(b => b.beurteilung === 1)
-        .length
-      const threeRTpop = oneRPop_lastMassnbersByTpopId
-        .filter(b => b.beurteilung === 1)
-        .length
+      const threeRPop = oneRPop_lastMassnbersByPopId.filter(
+        b => b.beurteilung === 1,
+      ).length
+      const threeRTpop = oneRPop_lastMassnbersByTpopId.filter(
+        b => b.beurteilung === 1,
+      ).length
 
       // 4.
-      const fourRPop = oneRPop_lastMassnbersByPopId
-        .filter(b => b.beurteilung === 2)
-        .length
-      const fourRTpop = oneRPop_lastMassnbersByTpopId
-        .filter(b => b.beurteilung === 2)
-        .length
+      const fourRPop = oneRPop_lastMassnbersByPopId.filter(
+        b => b.beurteilung === 2,
+      ).length
+      const fourRTpop = oneRPop_lastMassnbersByTpopId.filter(
+        b => b.beurteilung === 2,
+      ).length
 
       // 5.
-      const fiveRPop = oneRPop_lastMassnbersByPopId
-        .filter(b => b.beurteilung === 3)
-        .length
-      const fiveRTpop = oneRPop_lastMassnbersByTpopId
-        .filter(b => b.beurteilung === 3)
-        .length
+      const fiveRPop = oneRPop_lastMassnbersByPopId.filter(
+        b => b.beurteilung === 3,
+      ).length
+      const fiveRTpop = oneRPop_lastMassnbersByTpopId.filter(
+        b => b.beurteilung === 3,
+      ).length
 
       // 6.
-      const sixRPop = oneRPop_lastMassnbersByPopId
-        .filter(b => b.beurteilung === 4)
-        .length
-      const sixRTpop = oneRPop_lastMassnbersByTpopId
-        .filter(b => b.beurteilung === 4)
-        .length
+      const sixRPop = oneRPop_lastMassnbersByPopId.filter(
+        b => b.beurteilung === 4,
+      ).length
+      const sixRTpop = oneRPop_lastMassnbersByTpopId.filter(
+        b => b.beurteilung === 4,
+      ).length
 
       // 7.
-      const sevenRPop = oneRPop_lastMassnbersByPopId
-        .filter(b => b.beurteilung === 5)
-        .length
-      const sevenRTpop = oneRPop_lastMassnbersByTpopId
-        .filter(b => b.beurteilung === 5)
-        .length
+      const sevenRPop = oneRPop_lastMassnbersByPopId.filter(
+        b => b.beurteilung === 5,
+      ).length
+      const sevenRTpop = oneRPop_lastMassnbersByTpopId.filter(
+        b => b.beurteilung === 5,
+      ).length
 
       return (
         <Container>
           <Title>C. Zwischenbilanz zur Wirkung von Massnahmen</Title>
           <YearRow>
             <Year>{jahr}</Year>
-            <YearSince>{`Seit ${loading ? '...' : oneRTpop_firstYear}`}</YearSince>
+            <YearSince>{`Seit ${
+              loading ? '...' : oneRTpop_firstYear
+            }`}</YearSince>
           </YearRow>
           <LabelRow>
-            <Label1></Label1>
+            <Label1 />
             <PopBerJahr>Pop</PopBerJahr>
             <TpopBerJahr>TPop</TpopBerJahr>
             <PopSeit>Pop</PopSeit>
@@ -218,44 +200,44 @@ const CMengen = ({
           </Row>
           <Row>
             <Label2>kontrolliert</Label2>
-            <PopBerJahr></PopBerJahr>
-            <TpopBerJahr></TpopBerJahr>
+            <PopBerJahr />
+            <TpopBerJahr />
             <PopSeit>{loading ? '...' : twoRPop}</PopSeit>
             <TpopSeit>{loading ? '...' : twoRTpop}</TpopSeit>
           </Row>
           <Row>
             <Label2Davon>davon:</Label2Davon>
             <Label3AfterDavon>sehr erfolgreich</Label3AfterDavon>
-            <PopBerJahr></PopBerJahr>
-            <TpopBerJahr></TpopBerJahr>
+            <PopBerJahr />
+            <TpopBerJahr />
             <PopSeit>{loading ? '...' : threeRPop}</PopSeit>
             <TpopSeit>{loading ? '...' : threeRTpop}</TpopSeit>
           </Row>
           <Row>
             <Label3>erfolgreich</Label3>
-            <PopBerJahr></PopBerJahr>
-            <TpopBerJahr></TpopBerJahr>
+            <PopBerJahr />
+            <TpopBerJahr />
             <PopSeit>{loading ? '...' : fourRPop}</PopSeit>
             <TpopSeit>{loading ? '...' : fourRTpop}</TpopSeit>
           </Row>
           <Row>
             <Label3>weniger erfolgreich</Label3>
-            <PopBerJahr></PopBerJahr>
-            <TpopBerJahr></TpopBerJahr>
+            <PopBerJahr />
+            <TpopBerJahr />
             <PopSeit>{loading ? '...' : fiveRPop}</PopSeit>
             <TpopSeit>{loading ? '...' : fiveRTpop}</TpopSeit>
           </Row>
           <Row>
             <Label3>nicht erfolgreich</Label3>
-            <PopBerJahr></PopBerJahr>
-            <TpopBerJahr></TpopBerJahr>
+            <PopBerJahr />
+            <TpopBerJahr />
             <PopSeit>{loading ? '...' : sixRPop}</PopSeit>
             <TpopSeit>{loading ? '...' : sixRTpop}</TpopSeit>
           </Row>
           <Row>
             <Label3>mit unsicherer Wirkung</Label3>
-            <PopBerJahr></PopBerJahr>
-            <TpopBerJahr></TpopBerJahr>
+            <PopBerJahr />
+            <TpopBerJahr />
             <PopSeit>{loading ? '...' : sevenRPop}</PopSeit>
             <TpopSeit>{loading ? '...' : sevenRTpop}</TpopSeit>
           </Row>
@@ -263,6 +245,6 @@ const CMengen = ({
       )
     }}
   </Query>
-  
+)
 
 export default CMengen
