@@ -1,0 +1,20 @@
+import gql from 'graphql-tag'
+
+export default gql`
+  query Query($id: UUID!, $jahr: Int!) {
+    apById(id: $id) {
+      id
+      zielsByApId(filter: { jahr: { equalTo: $jahr } }) {
+        nodes {
+          id
+          jahr
+          zielbersByZielId {
+            nodes {
+              id
+            }
+          }
+        }
+      }
+    }
+  }
+`

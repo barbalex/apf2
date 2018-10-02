@@ -8,8 +8,8 @@
 import app from 'ampersand-app'
 import get from 'lodash/get'
 
-import dataGql from './data.graphql'
-import setTreeKeyGql from './setTreeKey.graphql'
+import dataGql from './data'
+import setTreeKeyGql from './setTreeKey'
 
 export default async ({
   tree,
