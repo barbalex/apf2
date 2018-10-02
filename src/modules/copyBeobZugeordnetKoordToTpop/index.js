@@ -2,8 +2,8 @@
 import get from 'lodash/get'
 import app from 'ampersand-app'
 
-import queryBeob from './queryBeob.graphql'
-import updateTpopById from './updateTpopById.graphql'
+import queryBeob from './queryBeob'
+import updateTpopById from './updateTpopById'
 
 export default async ({
   id,
