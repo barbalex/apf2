@@ -1,4 +1,6 @@
-query apById($apId: UUID!, $startJahr: Int!) {
+import gql from 'graphql-tag'
+
+export default gql`query apById($apId: UUID!, $startJahr: Int!) {
   apById(id: $apId) {
     id
     oneLPop: popsByApId(
@@ -233,3 +235,4 @@ query apById($apId: UUID!, $startJahr: Int!) {
     }
   }
 }
+`
