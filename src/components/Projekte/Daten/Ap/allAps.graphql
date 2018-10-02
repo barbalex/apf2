@@ -1,8 +1,0 @@
-query AllApsQuery {
-  allAps {
-    nodes {
-      id
-      artId
-    }
-  }
-}
