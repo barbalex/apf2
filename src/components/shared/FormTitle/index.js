@@ -14,7 +14,7 @@ import get from 'lodash/get'
 import TestdataMessage from './TestdataMessage'
 import withNodeFilterState from '../../../state/withNodeFilter'
 import types from '../../../state/nodeFilter/types'
-import setTreeKeyGql from './setTreeKey.graphql'
+import setTreeKeyGql from './setTreeKey'
 import data from './data'
 
 const Container = styled.div`
