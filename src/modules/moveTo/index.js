@@ -7,12 +7,12 @@ import get from 'lodash/get'
 import app from 'ampersand-app'
 
 import tables from '../tables'
-import movingGql from './moving.graphql'
-import updateTpopkontrById from './updateTpopkontrById.graphql'
-import updateTpopmassnById from './updateTpopmassnById.graphql'
-import updateTpopById from './updateTpopById.graphql'
-import updatePopById from './updatePopById.graphql'
-import setMoving from './setMoving.graphql'
+import movingGql from './moving'
+import updateTpopkontrById from './updateTpopkontrById'
+import updateTpopmassnById from './updateTpopmassnById'
+import updateTpopById from './updateTpopById'
+import updatePopById from './updatePopById'
+import setMoving from './setMoving'
 
 export default async ({
   id: newParentId,
