@@ -18,7 +18,7 @@ import jwtDecode from 'jwt-decode'
 
 import isMobilePhone from '../../modules/isMobilePhone'
 import ErrorBoundary from '../shared/ErrorBoundary'
-import dataGql from './data.graphql'
+import dataGql from './data'
 import setUrlQueryValue from '../../modules/setUrlQueryValue'
 import setEkfYear from './setEkfYear.graphql'
 import getActiveNodes from '../../modules/getActiveNodes'

@@ -13,7 +13,7 @@ import clone from 'lodash/clone'
 
 import isMobilePhone from '../../../modules/isMobilePhone'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import dataGql from '../data.graphql'
+import dataGql from '../data'
 import logout from '../../../modules/logout'
 import getActiveNodes from '../../../modules/getActiveNodes'
 import withDeleteState from '../../../state/withDeleteState'
