@@ -1,6 +1,0 @@
-query Query {
-  export @client {
-    applyMapFilterToExport
-    fileType
-  }
-}

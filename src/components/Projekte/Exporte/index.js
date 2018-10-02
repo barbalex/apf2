@@ -14,7 +14,7 @@ import Beobachtungen from './Beobachtungen'
 import Anwendung from './Anwendung'
 import Optionen from './Optionen'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import dataGql from './data.graphql'
+import dataGql from './data'
 
 const Container = styled.div`
   height: 100%;
@@ -41,7 +41,7 @@ const ExporteContainer = styled.div`
   height: 100%;
 `
 
-const Exporte = ({ mapFilter }:{ mapFilter: Object }) => (
+const Exporte = ({ mapFilter }: { mapFilter: Object }) => (
   <Query query={dataGql}>
     {({ loading, error, data, client }) => {
       if (error) return `Fehler: ${error.message}`

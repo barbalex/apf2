@@ -6,7 +6,7 @@ import { Query } from 'react-apollo'
 import app from 'ampersand-app'
 import get from 'lodash/get'
 
-import dataGql from './data.graphql'
+import dataGql from './data'
 
 const StyledDiv = styled.div`
   background-color: transparent;
@@ -20,9 +20,13 @@ const StyledDiv = styled.div`
   margin-right: 5px !important;
 `
 
-const ShowCoordinates = ({ changeControlType }: { changeControlType: () => void }) => 
+const ShowCoordinates = ({
+  changeControlType,
+}: {
+  changeControlType: () => void,
+}) => (
   <ApolloProvider client={app.client}>
-    <Query query={dataGql} >
+    <Query query={dataGql}>
       {({ loading, error, data }) => {
         if (error) return `Fehler: ${error.message}`
 
@@ -40,5 +44,6 @@ const ShowCoordinates = ({ changeControlType }: { changeControlType: () => void 
       }}
     </Query>
   </ApolloProvider>
+)
 
 export default ShowCoordinates
