@@ -11,8 +11,8 @@ import withLifecycle from '@hocs/with-lifecycle'
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data.graphql'
-import updateProjektByIdGql from './updateProjektById.graphql'
+import dataGql from './data'
+import updateProjektByIdGql from './updateProjektById'
 
 const Container = styled.div`
   height: 100%;
