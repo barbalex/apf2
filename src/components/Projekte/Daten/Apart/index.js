@@ -12,8 +12,8 @@ import withLifecycle from '@hocs/with-lifecycle'
 import Select from '../../../shared/Select'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data.graphql'
-import updateApartByIdGql from './updateApartById.graphql'
+import dataGql from './data'
+import updateApartByIdGql from './updateApartById'
 import withAeEigenschaftens from './withAeEigenschaftens'
 
 const Container = styled.div`

@@ -1,0 +1,19 @@
+import gql from 'graphql-tag'
+
+export default gql`
+  mutation updateApart($id: UUID!, $apId: UUID, $artId: UUID) {
+    updateApartById(
+      input: { id: $id, apartPatch: { id: $id, apId: $apId, artId: $artId } }
+    ) {
+      apart {
+        id
+        apId
+        artId
+        aeEigenschaftenByArtId {
+          id
+          artname
+        }
+      }
+    }
+  }
+`
