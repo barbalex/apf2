@@ -1,0 +1,37 @@
+import gql from 'graphql-tag'
+
+export default gql`
+  query tpopkontrByIdQuery($id: UUID!) {
+    tpopkontrById(id: $id) {
+      id
+      typ
+      ekfVerifiziert
+      ekfBemerkungen
+      datum
+      jahr
+      bemerkungen
+      flaecheUeberprueft
+      deckungVegetation
+      deckungNackterBoden
+      deckungApArt
+      vegetationshoeheMaximum
+      vegetationshoeheMittel
+      gefaehrdung
+      tpopId
+      bearbeiter
+      adresseByBearbeiter {
+        id
+        name
+      }
+      planVorhanden
+      jungpflanzenVorhanden
+      tpopByTpopId {
+        id
+        popByPopId {
+          id
+          apId
+        }
+      }
+    }
+  }
+`
