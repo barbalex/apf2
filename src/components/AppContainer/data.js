@@ -1,6 +1,9 @@
 // @flow
 import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
 
-import dataGql from './data.graphql'
-
-export default graphql(dataGql)
+export default graphql(gql`
+  query MyData {
+    view @client
+  }
+`)

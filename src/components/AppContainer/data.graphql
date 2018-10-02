@@ -1,3 +1,0 @@
-query MyData {
-  view @client
-}

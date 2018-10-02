@@ -10,7 +10,7 @@ import get from 'lodash/get'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import Loading from '../shared/Loading'
-import setIsPrint from './setIsPrint.graphql'
+import setIsPrint from './setIsPrint'
 import appContainerData from './data'
 import Deletions from '../Deletions'
 
