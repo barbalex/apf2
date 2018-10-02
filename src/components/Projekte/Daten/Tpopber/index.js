@@ -13,8 +13,8 @@ import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data.graphql'
-import updateTpopberByIdGql from './updateTpopberById.graphql'
+import dataGql from './data'
+import updateTpopberByIdGql from './updateTpopberById'
 
 const Container = styled.div`
   height: 100%;
