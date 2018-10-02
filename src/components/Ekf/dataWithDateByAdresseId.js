@@ -1,12 +1,13 @@
-query ekfDataQuery($userName: String!, $jahr: Int!) {
-  userByName(name: $userName) {
-    id
-    adresseByAdresseId {
+import gql from 'graphql-tag'
+
+export default gql`
+  query ekfDataQuery($id: UUID!, $jahr: Int!) {
+    adresseById(id: $id) {
       id
       tpopkontrsByBearbeiter(
         filter: {
           typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
-          or: [{ jahr: { equalTo: $jahr } }, { jahr: { isNull: true } }]
+          jahr: { equalTo: $jahr }
         }
       ) {
         nodes {
@@ -38,4 +39,4 @@ query ekfDataQuery($userName: String!, $jahr: Int!) {
       }
     }
   }
-}
+`
