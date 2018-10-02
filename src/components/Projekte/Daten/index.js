@@ -8,7 +8,7 @@ import compose from 'recompose/compose'
 
 import ErrorBoundary from '../../shared/ErrorBoundarySingleChild'
 import Loading from '../../shared/Loading'
-import dataGql from './data.graphql'
+import dataGql from './data'
 import getTableNameFromActiveNode from '../../../modules/getTableNameFromActiveNode'
 import withErrorState from '../../../state/withErrorState'
 import withNodeFilterState from '../../../state/withNodeFilter'
