@@ -20,10 +20,10 @@ import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import Button from '@material-ui/core/Button'
 
-import dataGql from './data.graphql'
+import dataGql from './data'
 import TextField from '../../shared/TextField'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import updateUserByIdGql from './updateUserById.graphql'
+import updateUserByIdGql from './updateUserById'
 
 const Container = styled.div`
   height: 100%;
