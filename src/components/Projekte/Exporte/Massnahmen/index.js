@@ -108,7 +108,7 @@ const Massnahmen = ({
                 setMessage('Export "Massnahmen" wird vorbereitet...')
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVMassns.graphql'),
+                    query: await import('./allVMassns'),
                   })
                   exportModule({
                     data: get(data, 'allVMassns.nodes', []),
@@ -134,7 +134,7 @@ const Massnahmen = ({
                 setMessage('Export "MassnahmenWebGisBun" wird vorbereitet...')
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVMassnWebgisbuns.graphql'),
+                    query: await import('./allVMassnWebgisbuns'),
                   })
                   exportModule({
                     data: get(data, 'allVMassnWebgisbuns.nodes', []),
