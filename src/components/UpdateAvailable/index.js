@@ -17,8 +17,8 @@ import { Query } from 'react-apollo'
 import get from 'lodash/get'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
-import dataGql from './data.graphql'
-import setUpdateAvailable from './setUpdateAvailable.graphql'
+import dataGql from './data'
+import setUpdateAvailable from './setUpdateAvailable'
 
 const StyledSnackbar = styled(Snackbar)`
   > div {
@@ -36,7 +36,9 @@ const UpdateAvailable = () => (
         <ErrorBoundary>
           <StyledSnackbar
             open={updateAvailable}
-            message={<span id="message-id">Ein Update steht zur Verfügung</span>}
+            message={
+              <span id="message-id">Ein Update steht zur Verfügung</span>
+            }
             SnackbarContentProps={{
               'aria-describedby': 'message-id',
             }}
@@ -57,7 +59,7 @@ const UpdateAvailable = () => (
             onClose={() => {
               client.mutate({
                 mutation: setUpdateAvailable,
-                variables: { value: false }
+                variables: { value: false },
               })
             }}
           />
