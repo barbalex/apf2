@@ -17,8 +17,8 @@ import get from 'lodash/get'
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
 import withErrorState from '../../../../state/withErrorState'
-import allVBeobs from './allVBeobs.graphql'
-import allVBeobArtChangeds from './allVBeobArtChangeds.graphql'
+import allVBeobs from './allVBeobs'
+import allVBeobArtChangeds from './allVBeobArtChangeds'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
