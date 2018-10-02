@@ -2,7 +2,7 @@
 import isEqual from 'lodash/isEqual'
 import app from 'ampersand-app'
 
-import setTreeKey from './setTreeKey.graphql'
+import setTreeKey from './setTreeKey'
 
 export default async ({
   tree,
