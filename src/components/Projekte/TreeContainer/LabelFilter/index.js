@@ -12,8 +12,8 @@ import app from 'ampersand-app'
 
 import tables from '../../../../modules/tables'
 import labelFilterData from './data'
-import setTreeNodeLabelFilterKey from './setTreeNodeLabelFilterKey.graphql'
-import setTreeKeyGql from './setTreeKey.graphql'
+import setTreeNodeLabelFilterKey from './setTreeNodeLabelFilterKey'
+import setTreeKeyGql from './setTreeKey'
 
 const StyledFormControl = styled(FormControl)`
   padding-right: 0.8em !important;
