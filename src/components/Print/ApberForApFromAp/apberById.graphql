@@ -1,6 +1,0 @@
-query apberById($apberId: UUID!) {
-  apberById(id: $apberId) {
-    id
-    jahr
-  }
-}

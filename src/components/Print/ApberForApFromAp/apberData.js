@@ -1,14 +1,14 @@
 // @flow
 import { graphql } from 'react-apollo'
 
-import apberById from './apberById.graphql'
+import apberById from './apberById'
 import getActiveNodes from '../../../modules/getActiveNodes'
 
 export default graphql(apberById, {
   options: ({
     activeNodeArray,
     apberId: apberIdPassed,
-  }:{
+  }: {
     activeNodeArray: Array<String>,
     apberId: String,
   }) => {
@@ -23,6 +23,4 @@ export default graphql(apberById, {
     return { variables }
   },
   name: 'apberData',
-}
-)
-
+})
