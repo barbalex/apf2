@@ -3,7 +3,7 @@ import app from 'ampersand-app'
 import isEqual from 'lodash/isEqual'
 import get from 'lodash/get'
 import queryString from 'query-string'
-import gql from "graphql-tag"
+import gql from 'graphql-tag'
 
 export default {
   Mutation: {
@@ -11,16 +11,16 @@ export default {
       const newUrlQuery = { projekteTabs, feldkontrTab }
       const data = cache.readQuery({
         query: gql`
-            query Query {
-              tree @client {
-                activeNodeArray
-              }
-              urlQuery @client {
-                projekteTabs
-                feldkontrTab
-              }
+          query Query {
+            tree @client {
+              activeNodeArray
             }
-          `
+            urlQuery @client {
+              projekteTabs
+              feldkontrTab
+            }
+          }
+        `,
       })
       const urlQuery = get(data, 'urlQuery')
       // only write if changed
@@ -30,12 +30,14 @@ export default {
             urlQuery: {
               projekteTabs,
               feldkontrTab,
-              __typename: 'UrlQuery'
-            } 
-          } 
+              __typename: 'UrlQuery',
+            },
+          },
         })
         const search = queryString.stringify(newUrlQuery)
-        const query = `${Object.keys(newUrlQuery).length > 0 ? `?${search}` : ''}`
+        const query = `${
+          Object.keys(newUrlQuery).length > 0 ? `?${search}` : ''
+        }`
         const activeNodeArray = get(data, 'tree.activeNodeArray')
         app.history.push(`/${activeNodeArray.join('/')}${query}`)
       }

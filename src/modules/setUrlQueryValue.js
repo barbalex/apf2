@@ -1,25 +1,19 @@
 // @flow
-import gql from "graphql-tag"
+import gql from 'graphql-tag'
 import get from 'lodash/get'
 import app from 'ampersand-app'
 
-export default async ({
-  key,
-  value
-}:{
-  key: String,
-  value: String
-}): void => {
+export default async ({ key, value }: { key: String, value: String }): void => {
   const { client } = app
   const { data } = await client.query({
     query: gql`
-        query Query {
-          urlQuery @client {
-            projekteTabs
-            feldkontrTab
-          }
+      query Query {
+        urlQuery @client {
+          projekteTabs
+          feldkontrTab
         }
-      `
+      }
+    `,
   })
   let projekteTabs = get(data, 'urlQuery.projekteTabs')
   let feldkontrTab = get(data, 'urlQuery.feldkontrTab')
@@ -31,12 +25,13 @@ export default async ({
   await client.mutate({
     mutation: gql`
       mutation setUrlQuery($projekteTabs: Array!, $feldkontrTab: String!) {
-        setUrlQuery(projekteTabs: $projekteTabs, feldkontrTab: $feldkontrTab) @client {
+        setUrlQuery(projekteTabs: $projekteTabs, feldkontrTab: $feldkontrTab)
+          @client {
           projekteTabs
           feldkontrTab
         }
       }
     `,
-    variables: { projekteTabs, feldkontrTab }
+    variables: { projekteTabs, feldkontrTab },
   })
 }

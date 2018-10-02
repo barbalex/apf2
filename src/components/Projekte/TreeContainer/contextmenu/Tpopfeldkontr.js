@@ -5,7 +5,7 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import { Query } from 'react-apollo'
-import gql from "graphql-tag"
+import gql from 'graphql-tag'
 import get from 'lodash/get'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -17,7 +17,7 @@ const enhance = compose(
     // according to https://github.com/vkbansal/react-contextmenu/issues/65
     // this is how to pass data from ContextMenuTrigger to ContextMenu
     onShow: props => event => props.changeLabel(event.detail.data.nodeLabel),
-  })
+  }),
 )
 
 const Tpopfeldkontr = ({
@@ -27,7 +27,7 @@ const Tpopfeldkontr = ({
   label,
   onShow,
   token,
-  copying
+  copying,
 }: {
   tree: Object,
   onClick: () => void,
@@ -35,9 +35,8 @@ const Tpopfeldkontr = ({
   label: string | number,
   onShow: () => void,
   token: String,
-  copying: Object
+  copying: Object,
 }) => {
-
   return (
     <Query
       query={gql`
@@ -51,7 +50,7 @@ const Tpopfeldkontr = ({
     >
       {({ loading, error, data }) => {
         if (error) return `Fehler: ${error.message}`
-        const copyingBiotop = get(data, 'copyingBiotop.id') !== "copyingBiotop"
+        const copyingBiotop = get(data, 'copyingBiotop.id') !== 'copyingBiotop'
 
         return (
           <ErrorBoundary>
@@ -61,8 +60,7 @@ const Tpopfeldkontr = ({
               onShow={onShow}
             >
               <div className="react-contextmenu-title">Feld-Kontrolle</div>
-              {
-                !userIsReadOnly(token) &&
+              {!userIsReadOnly(token) && (
                 <Fragment>
                   <MenuItem
                     onClick={onClick}
@@ -127,7 +125,10 @@ const Tpopfeldkontr = ({
                           action: 'copyBiotop',
                         }}
                       >
-                        {`kopiere Biotop von '${get(data, 'copyingBiotop.label')}' hierhin`}
+                        {`kopiere Biotop von '${get(
+                          data,
+                          'copyingBiotop.label',
+                        )}' hierhin`}
                       </MenuItem>
                       <MenuItem
                         onClick={onClick}
@@ -140,7 +141,7 @@ const Tpopfeldkontr = ({
                     </Fragment>
                   )}
                 </Fragment>
-              }
+              )}
             </ContextMenu>
           </ErrorBoundary>
         )
