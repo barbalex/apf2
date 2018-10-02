@@ -12,9 +12,9 @@ import RadioButton from '../../../shared/RadioButton'
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import data1Gql from './data1.graphql'
-import data2Gql from './data2.graphql'
-import updateAdresseByIdGql from './updateAdresseById.graphql'
+import data1Gql from './data1'
+import data2Gql from './data2'
+import updateAdresseByIdGql from './updateAdresseById'
 
 const Container = styled.div`
   height: 100%;
