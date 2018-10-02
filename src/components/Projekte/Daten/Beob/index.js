@@ -7,7 +7,7 @@ import get from 'lodash/get'
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data.graphql'
+import dataGql from './data'
 
 const Container = styled.div`
   padding: 15px 10px 0 10px;
