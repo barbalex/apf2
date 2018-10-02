@@ -1,6 +1,0 @@
-query apByIdQuery($id: UUID!) {
-  apById(id: $id) {
-    id
-    bearbeitung
-  }
-}
