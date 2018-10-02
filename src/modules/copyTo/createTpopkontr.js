@@ -1,0 +1,140 @@
+import gql from 'graphql-tag'
+
+export default gql`
+  mutation createTpopkontr(
+    $typ: String
+    $datum: Date
+    $jahr: Int
+    $jungpflanzenAnzahl: Int
+    $vitalitaet: String
+    $ueberlebensrate: Int
+    $entwicklung: Int
+    $ursachen: String
+    $erfolgsbeurteilung: String
+    $umsetzungAendern: String
+    $kontrolleAendern: String
+    $bemerkungen: String
+    $lrDelarze: String
+    $flaeche: Int
+    $lrUmgebungDelarze: String
+    $vegetationstyp: String
+    $konkurrenz: String
+    $moosschicht: String
+    $krautschicht: String
+    $strauchschicht: String
+    $baumschicht: String
+    $bodenTyp: String
+    $bodenKalkgehalt: String
+    $bodenDurchlaessigkeit: String
+    $bodenHumus: String
+    $bodenNaehrstoffgehalt: String
+    $bodenAbtrag: String
+    $wasserhaushalt: String
+    $idealbiotopUebereinstimmung: Int
+    $handlungsbedarf: String
+    $flaecheUeberprueft: Int
+    $deckungVegetation: Int
+    $deckungNackterBoden: Int
+    $deckungApArt: Int
+    $vegetationshoeheMaximum: Int
+    $vegetationshoeheMittel: Int
+    $gefaehrdung: String
+    $tpopId: UUID
+    $bearbeiter: UUID
+    $planVorhanden: Boolean
+    $jungpflanzenVorhanden: Boolean
+  ) {
+    createTpopkontr(
+      input: {
+        tpopkontr: {
+          typ: $typ
+          datum: $datum
+          jahr: $jahr
+          jungpflanzenAnzahl: $jungpflanzenAnzahl
+          vitalitaet: $vitalitaet
+          ueberlebensrate: $ueberlebensrate
+          entwicklung: $entwicklung
+          ursachen: $ursachen
+          erfolgsbeurteilung: $erfolgsbeurteilung
+          umsetzungAendern: $umsetzungAendern
+          kontrolleAendern: $kontrolleAendern
+          bemerkungen: $bemerkungen
+          lrDelarze: $lrDelarze
+          flaeche: $flaeche
+          lrUmgebungDelarze: $lrUmgebungDelarze
+          vegetationstyp: $vegetationstyp
+          konkurrenz: $konkurrenz
+          moosschicht: $moosschicht
+          krautschicht: $krautschicht
+          strauchschicht: $strauchschicht
+          baumschicht: $baumschicht
+          bodenTyp: $bodenTyp
+          bodenKalkgehalt: $bodenKalkgehalt
+          bodenDurchlaessigkeit: $bodenDurchlaessigkeit
+          bodenHumus: $bodenHumus
+          bodenNaehrstoffgehalt: $bodenNaehrstoffgehalt
+          bodenAbtrag: $bodenAbtrag
+          wasserhaushalt: $wasserhaushalt
+          idealbiotopUebereinstimmung: $idealbiotopUebereinstimmung
+          handlungsbedarf: $handlungsbedarf
+          flaecheUeberprueft: $flaecheUeberprueft
+          deckungVegetation: $deckungVegetation
+          deckungNackterBoden: $deckungNackterBoden
+          deckungApArt: $deckungApArt
+          vegetationshoeheMaximum: $vegetationshoeheMaximum
+          vegetationshoeheMittel: $vegetationshoeheMittel
+          gefaehrdung: $gefaehrdung
+          tpopId: $tpopId
+          bearbeiter: $bearbeiter
+          planVorhanden: $planVorhanden
+          jungpflanzenVorhanden: $jungpflanzenVorhanden
+        }
+      }
+    ) {
+      tpopkontr {
+        id
+        tpopId
+        typ
+        datum
+        jahr
+        jungpflanzenAnzahl
+        vitalitaet
+        ueberlebensrate
+        entwicklung
+        ursachen
+        erfolgsbeurteilung
+        umsetzungAendern
+        kontrolleAendern
+        bemerkungen
+        lrDelarze
+        flaeche
+        lrUmgebungDelarze
+        vegetationstyp
+        konkurrenz
+        moosschicht
+        krautschicht
+        strauchschicht
+        baumschicht
+        bodenTyp
+        bodenKalkgehalt
+        bodenDurchlaessigkeit
+        bodenHumus
+        bodenNaehrstoffgehalt
+        bodenAbtrag
+        wasserhaushalt
+        idealbiotopUebereinstimmung
+        handlungsbedarf
+        flaecheUeberprueft
+        deckungVegetation
+        deckungNackterBoden
+        deckungApArt
+        vegetationshoeheMaximum
+        vegetationshoeheMittel
+        gefaehrdung
+        bearbeiter
+        planVorhanden
+        jungpflanzenVorhanden
+      }
+    }
+  }
+`

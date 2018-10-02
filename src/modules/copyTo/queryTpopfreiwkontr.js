@@ -1,0 +1,23 @@
+import gql from 'graphql-tag'
+
+export default gql`
+  query Query($tpop: UUID!) {
+    allTpopkontrs(
+      filter: {
+        typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+        tpopId: { in: $tpop }
+      }
+    ) {
+      nodes {
+        id
+        tpopId
+        datum
+        jahr
+        tpopkontrTypWerteByTyp {
+          id
+          text
+        }
+      }
+    }
+  }
+`

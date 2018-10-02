@@ -1,9 +1,0 @@
-query Query($id: UUID!) {
-  tpopkontrzaehlById(id: $id) {
-    id
-    tpopkontrId
-    anzahl
-    einheit
-    methode
-  }
-}
