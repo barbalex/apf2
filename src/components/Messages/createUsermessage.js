@@ -1,0 +1,13 @@
+import gql from 'graphql-tag'
+
+export default gql`
+  mutation createUsermessage($id: UUID!, $userName: String!) {
+    createUsermessage(
+      input: { usermessage: { userName: $userName, messageId: $id } }
+    ) {
+      usermessage {
+        id
+      }
+    }
+  }
+`

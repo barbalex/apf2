@@ -11,9 +11,9 @@ import get from 'lodash/get'
 import Linkify from 'react-linkify'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
-import userGql from './user.graphql'
-import messagesGql from './messages.graphql'
-import createUsermessage from './createUsermessage.graphql'
+import userGql from './user'
+import messagesGql from './messages'
+import createUsermessage from './createUsermessage'
 
 const StyledDialog = styled(Dialog)`
   > div {

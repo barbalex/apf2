@@ -1,5 +1,0 @@
-query MyQuery {
-  user @client {
-    name
-  }
-}
