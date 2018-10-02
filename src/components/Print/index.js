@@ -10,8 +10,8 @@ import app from 'ampersand-app'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import Loading from '../shared/Loading'
-import dataGql from './data.graphql'
-import setTreeKey from './setTreeKey.graphql'
+import dataGql from './data'
+import setTreeKey from './setTreeKey'
 
 const Container = styled.div`
   background-color: #eee;
@@ -53,26 +53,27 @@ const ApberForYear = Loadable({
   loading: Loading,
 })
 
-const Print = () =>
-  <Query query={dataGql} >
+const Print = () => (
+  <Query query={dataGql}>
     {({ error, data }) => {
       if (error) return `Fehler: ${error.message}`
 
       const activeNodeArray = get(data, 'tree.activeNodeArray')
-      const showApberForAp = activeNodeArray.length === 7 &&
+      const showApberForAp =
+        activeNodeArray.length === 7 &&
         activeNodeArray[4] === 'AP-Berichte' &&
         activeNodeArray[6] === 'print'
-      const showApberForYear = activeNodeArray.length === 5 &&
+      const showApberForYear =
+        activeNodeArray.length === 5 &&
         activeNodeArray[2] === 'AP-Berichte' &&
         activeNodeArray[4] === 'print'
-        
+
       if (!showApberForAp && !showApberForYear) return null
 
       return (
         <ErrorBoundary>
           <Container>
-            {
-              (showApberForAp || showApberForYear) &&
+            {(showApberForAp || showApberForYear) && (
               <Fragment>
                 <BackButton
                   variant="outlined"
@@ -88,8 +89,8 @@ const Print = () =>
                         variables: {
                           value: newActiveNodeArray,
                           tree: 'tree',
-                          key: 'activeNodeArray'
-                        }
+                          key: 'activeNodeArray',
+                        },
                       })
                       window.location.reload(false)
                     }
@@ -98,24 +99,19 @@ const Print = () =>
                   <StyledArrowBack />
                   zurück
                 </BackButton>
-                {
-                  showApberForAp &&
-                  <ApberForApFromAp
-                    activeNodeArray={activeNodeArray}
-                  />
-                }
-                {
-                  showApberForYear &&
-                  <ApberForYear
-                    activeNodeArray={activeNodeArray}
-                  />
-                }
+                {showApberForAp && (
+                  <ApberForApFromAp activeNodeArray={activeNodeArray} />
+                )}
+                {showApberForYear && (
+                  <ApberForYear activeNodeArray={activeNodeArray} />
+                )}
               </Fragment>
-            }
+            )}
           </Container>
         </ErrorBoundary>
       )
     }}
   </Query>
+)
 
 export default Print
