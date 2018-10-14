@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
 import 'leaflet'
+import { withLeaflet } from 'react-leaflet'
 // eslint-disable-next-line no-unused-vars
 import leafletFullscreen from 'leaflet.fullscreen'
 import compose from 'recompose/compose'
-import getContext from 'recompose/getContext'
-import PropTypes from 'prop-types'
 
-const enhance = compose(getContext({ map: PropTypes.object.isRequired }))
+const enhance = compose(withLeaflet)
 
 const options = {
   position: 'topleft', // change the position of the button can be topleft, topright, bottomright or bottomleft, defaut topleft
@@ -20,9 +19,9 @@ const options = {
 
 class FullScreenControl extends Component {
   componentDidMount() {
-    const { map } = this.props
+    const { leaflet } = this.props
     const fullscreenControl = window.L.control.fullscreen(options)
-    fullscreenControl.addTo(map)
+    fullscreenControl.addTo(leaflet.map)
   }
 
   render() {

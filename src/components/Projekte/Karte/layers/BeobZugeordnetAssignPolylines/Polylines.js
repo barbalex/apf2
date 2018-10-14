@@ -1,24 +1,24 @@
 import React, { Component } from 'react'
 import compose from 'recompose/compose'
-import getContext from 'recompose/getContext'
 import 'leaflet'
-import PropTypes from 'prop-types'
+import { withLeaflet } from 'react-leaflet'
 
-const enhance = compose(getContext({ map: PropTypes.object.isRequired }))
+const enhance = compose(withLeaflet)
 
 class Polylines extends Component {
   props: {
     lines: Array<Object>,
+    leaflet: Object,
   }
 
   componentDidMount() {
-    const { map, lines } = this.props
-    lines.forEach(m => m.addTo(map))
+    const { leaflet, lines } = this.props
+    lines.forEach(m => m.addTo(leaflet.map))
   }
 
   componentWillUnmount() {
-    const { map, lines } = this.props
-    lines.forEach(m => map.removeLayer(m))
+    const { leaflet, lines } = this.props
+    lines.forEach(m => leaflet.map.removeLayer(m))
   }
 
   render() {

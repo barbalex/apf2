@@ -2,19 +2,18 @@ import React, { Component } from 'react'
 import 'leaflet'
 import 'leaflet-draw'
 import compose from 'recompose/compose'
-import getContext from 'recompose/getContext'
+import { withLeaflet } from 'react-leaflet'
 import withState from 'recompose/withState'
-import PropTypes from 'prop-types'
 
 const enhance = compose(
+  withLeaflet,
   withState('mapFilter', 'setMapFilter', null),
   withState('drawControl', 'setDrawControl', null),
-  getContext({ map: PropTypes.object.isRequired }),
 )
 
 class DrawControl extends Component {
   props: {
-    map: Object,
+    leaflet: Object,
     mapFilter?: Object,
     setMapFilter: () => void,
     drawControl?: Object,
@@ -23,7 +22,13 @@ class DrawControl extends Component {
   }
 
   componentDidMount() {
-    const { map, setStoreMapFilter, setMapFilter, setDrawControl } = this.props
+    const {
+      leaflet,
+      setStoreMapFilter,
+      setMapFilter,
+      setDrawControl,
+    } = this.props
+    const { map } = leaflet
     window.L.drawLocal.draw.toolbar.buttons.polygon =
       'Polygon(e) zeichnen, um zu filtern'
     window.L.drawLocal.draw.toolbar.buttons.rectangle =
@@ -81,16 +86,13 @@ class DrawControl extends Component {
       mapFilter.addLayer(e.layer)
       setStoreMapFilter(mapFilter.toGeoJSON())
     })
-    map.on('draw:edited', e =>
-      setStoreMapFilter(mapFilter.toGeoJSON())
-    )
-    map.on('draw:deleted', e => 
-      setStoreMapFilter(mapFilter.toGeoJSON())
-    )
+    map.on('draw:edited', e => setStoreMapFilter(mapFilter.toGeoJSON()))
+    map.on('draw:deleted', e => setStoreMapFilter(mapFilter.toGeoJSON()))
   }
 
   componentWillUnmount() {
-    const { setStoreMapFilter, map, mapFilter, drawControl } = this.props
+    const { setStoreMapFilter, leaflet, mapFilter, drawControl } = this.props
+    const { map } = leaflet
     map.removeLayer(mapFilter)
     map.removeControl(drawControl)
     map.off('draw:created')

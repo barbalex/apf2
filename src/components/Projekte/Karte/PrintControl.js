@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import 'leaflet'
 import 'leaflet-easyprint'
 import compose from 'recompose/compose'
-import getContext from 'recompose/getContext'
+import { withLeaflet } from 'react-leaflet'
 
-const enhance = compose(getContext({ map: PropTypes.object.isRequired }))
+const enhance = compose(withLeaflet)
+
 const options = {
   title: 'drucken',
   position: 'topright',
@@ -16,8 +16,8 @@ const options = {
 
 class PrintControl extends Component {
   componentDidMount() {
-    const { map } = this.props
-    window.L.easyPrint(options).addTo(map)
+    const { leaflet } = this.props
+    window.L.easyPrint(options).addTo(leaflet.map)
   }
 
   render() {

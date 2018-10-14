@@ -1,12 +1,11 @@
 import React from 'react'
 import 'leaflet'
+import { withLeaflet } from 'react-leaflet'
 import Control from 'react-leaflet-control'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
-import getContext from 'recompose/getContext'
 import { MuiThemeProvider } from '@material-ui/core/styles'
-import PropTypes from 'prop-types'
 
 import ShowCoordinates from './ShowCoordinates'
 import PanToCoordinates from './PanToCoordinates'
@@ -28,18 +27,18 @@ const StyledControl = styled(Control)`
 `
 
 const enhance = compose(
-  getContext({ map: PropTypes.object.isRequired }),
+  withLeaflet,
   withState('controlType', 'changeControlType', 'coordinates'),
 )
 
 const CoordinatesControl = ({
   controlType,
   changeControlType,
-  map,
+  leaflet,
 }: {
   controlType: string,
   changeControlType: () => void,
-  map: Object,
+  leaflet: Object,
 }) => (
   <StyledControl position="bottomright">
     <MuiThemeProvider theme={theme}>
@@ -48,7 +47,7 @@ const CoordinatesControl = ({
       ) : (
         <PanToCoordinates
           changeControlType={changeControlType}
-          map={map}
+          map={leaflet.map}
         />
       )}
     </MuiThemeProvider>

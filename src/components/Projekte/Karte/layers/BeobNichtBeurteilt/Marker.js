@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import compose from 'recompose/compose'
-import getContext from 'recompose/getContext'
 import 'leaflet'
-import PropTypes from 'prop-types'
+import { withLeaflet } from 'react-leaflet'
 
-const enhance = compose(getContext({ map: PropTypes.object.isRequired }))
+const enhance = compose(withLeaflet)
 
 class BeobMarker extends Component {
   props: {
@@ -12,8 +11,8 @@ class BeobMarker extends Component {
   }
 
   componentDidMount() {
-    const { map, markers } = this.props
-    markers.forEach(m => m.addTo(map))
+    const { leaflet, markers } = this.props
+    markers.forEach(m => m.addTo(leaflet.map))
   }
 
   /**
@@ -22,8 +21,8 @@ class BeobMarker extends Component {
    */
 
   componentWillUnmount() {
-    const { map, markers } = this.props
-    markers.forEach(m => map.removeLayer(m))
+    const { leaflet, markers } = this.props
+    markers.forEach(m => leaflet.map.removeLayer(m))
   }
 
   render() {

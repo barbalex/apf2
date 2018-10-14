@@ -5756,7 +5756,7 @@ hoist-non-react-statics@^2.3.1, hoist-non-react-statics@^2.5.0:
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-2.5.5.tgz#c5903cf409c0dfd908f388e619d86b9c1174cb47"
   integrity sha512-rqcy4pJo55FTTLWt+bU8ukscqHeE/e9KWvsOW2b/a3afxQZhwkQdT1rPPCJ0rYXdj4vNcasY8zHTH+jF/qStxw==
 
-hoist-non-react-statics@^3.0.0:
+hoist-non-react-statics@^3.0.0, hoist-non-react-statics@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.0.1.tgz#fba3e7df0210eb9447757ca1a7cb607162f0a364"
   integrity sha512-1kXwPsOi0OGQIZNVMPvgWJ9tSnGMiMfJdihqEzrPEXlHOBh9AAHXX/QYmAJTXztnz/K+PQ8ryCb4eGaN6HlGbQ==
@@ -10144,26 +10144,26 @@ react-is@^16.3.1, react-is@^16.3.2:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.5.2.tgz#e2a7b7c3f5d48062eb769fcb123505eb928722e3"
   integrity sha512-hSl7E6l25GTjNEZATqZIuWOgSnpXb3kD0DVCujmg46K5zLxsbiKaaT6VO9slkSBDPZfYs30lwfJwbOFOnoEnKQ==
 
-react-leaflet-bing@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/react-leaflet-bing/-/react-leaflet-bing-3.1.0.tgz#5cdaaa84ee159147b6b161f6ebf1733ee148d14a"
-  integrity sha512-oGkQ9h4io3pdOuY4PNfjbXppM6Qg6HCGofYBshHrxiGosZr2xnSbRCzjdZsGgVPKg+mG7q1kb9jjkYLrjiPuWA==
+react-leaflet-bing@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/react-leaflet-bing/-/react-leaflet-bing-4.1.0.tgz#11142b8b9b9dcafedad1b7512bbcc383143e2af9"
+  integrity sha512-BjAiM5aMPtyFlnsB+mqjZYZADTh/VGorYb0uytD+Ug3rWf0EGVe5BcooGWazeaHV3Npb6jK0hZeFurcCHjcEig==
 
-react-leaflet-control@^1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/react-leaflet-control/-/react-leaflet-control-1.4.1.tgz#5da234621682d9c50657b65af042398512bda0fb"
-  integrity sha512-7Nd3b5/v0sPIEh4hAWGT3R7y7TeFqQtqTMJ5o6RPHTsDFBEdHN1nuvdUTjjLJ9ckjMGp4sMNZ5EuuF/bcmtMpA==
-  dependencies:
-    prop-types "^15.5.7"
+react-leaflet-control@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-leaflet-control/-/react-leaflet-control-2.0.0.tgz#3d9ac4c67e86032520bf581b7a1a0dc7b450f682"
+  integrity sha512-pUJsOJPfAvsI0PV9cjSV7Sj4DNKgaCmpBem9oC2qqyhH54d5HaQR90O45y1gGCX9ps8P1r4yR66TdDhWOlNDnw==
 
-react-leaflet@^1.9.1:
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/react-leaflet/-/react-leaflet-1.9.1.tgz#0a282d8d26f66ea2d719ebb8f4a5fa156b33b8c8"
-  integrity sha512-QiYpjyf1DHy0gLAR2958Mo5Wlu2u7FubIjapPpuUAQNFmjkVSteiDLlEdDpGswTHTyNAfKLS+u9PqvfipMDZKA==
+react-leaflet@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/react-leaflet/-/react-leaflet-2.1.0.tgz#96f01ebceebad8a0043c3edadbe631279d4ba740"
+  integrity sha512-N1sioj0bLQHH+6T+p1j2NayS22O+6puSJZmAhtNfm/LzqTLI6OuYNnH6OM700Vgwhw9zjo3wdKPV4hUGdtAUxA==
   dependencies:
+    "@babel/runtime" "^7.0.0"
+    hoist-non-react-statics "^3.0.1"
     lodash "^4.0.0"
     lodash-es "^4.0.0"
-    warning "^3.0.0"
+    warning "^4.0.0"
 
 react-lifecycles-compat@^3.0.2, react-lifecycles-compat@^3.0.4:
   version "3.0.4"
@@ -12313,7 +12313,7 @@ warning@^3.0.0:
   dependencies:
     loose-envify "^1.0.0"
 
-warning@^4.0.1:
+warning@^4.0.0, warning@^4.0.1:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/warning/-/warning-4.0.2.tgz#aa6876480872116fa3e11d434b0d0d8d91e44607"
   integrity sha512-wbTp09q/9C+jJn4KKJfJfoS6VleK/Dti0yqWSm6KMvJ4MRCXFQNapHuJXutJIrWV0Cf4AhTdeIe4qdKHR1+Hug==

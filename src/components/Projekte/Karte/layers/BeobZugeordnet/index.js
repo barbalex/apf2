@@ -3,15 +3,14 @@ import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
 import compose from 'recompose/compose'
-import getContext from 'recompose/getContext'
-import PropTypes from 'prop-types'
+import { withLeaflet } from 'react-leaflet'
 
 import buildMarkers from './buildMarkers'
 import buildMarkersClustered from './buildMarkersClustered'
 import Marker from './Marker'
 import MarkerCluster from './MarkerCluster'
 
-const enhance = compose(getContext({ map: PropTypes.object.isRequired }))
+const enhance = compose(withLeaflet)
 
 const BeobZugeordnetMarker = ({
   tree,
@@ -21,8 +20,8 @@ const BeobZugeordnetMarker = ({
   clustered,
   refetchTree,
   mapIdsFiltered,
-  map,
-} : {
+  leaflet,
+}: {
   tree: Object,
   data: Object,
   activeNodes: Array<Object>,
@@ -30,12 +29,16 @@ const BeobZugeordnetMarker = ({
   clustered: Boolean,
   refetchTree: () => void,
   mapIdsFiltered: Array<String>,
-  map: Object,
+  leaflet: Object,
 }) => {
   const beobZugeordnetFilterString = get(tree, 'nodeLabelFilter.beobZugeordnet')
-  const aparts = get(data, 'beobZugeordnetForMapMarkers.apsByProjId.nodes[0].apartsByApId.nodes', [])
+  const aparts = get(
+    data,
+    'beobZugeordnetForMapMarkers.apsByProjId.nodes[0].apartsByApId.nodes',
+    [],
+  )
   const beobs = flatten(
-    aparts.map(a => get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []))
+    aparts.map(a => get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', [])),
   )
     // filter them by nodeLabelFilter
     .filter(el => {
@@ -66,7 +69,7 @@ const BeobZugeordnetMarker = ({
     data,
     refetchTree,
     mapIdsFiltered,
-    map,
+    map: leaflet.map,
   })
   return <Marker markers={markers} />
 }

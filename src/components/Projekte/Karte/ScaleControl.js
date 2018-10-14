@@ -4,13 +4,12 @@
 // https://github.com/victorzinho/leaflet-switch-scale-control
 import React, { Component } from 'react'
 import 'leaflet'
+import { withLeaflet } from 'react-leaflet'
 // eslint-disable-next-line no-unused-vars
 import SwitchScaleControl from 'leaflet-switch-scale-control'
 import compose from 'recompose/compose'
-import getContext from 'recompose/getContext'
-import PropTypes from 'prop-types'
 
-const enhance = compose(getContext({ map: PropTypes.object.isRequired }))
+const enhance = compose(withLeaflet)
 
 const options = {
   position: 'bottomleft', // Leaflet control position.
@@ -45,10 +44,10 @@ const options = {
 
 class ScaleControl extends Component {
   componentDidMount() {
-    const { map } = this.props
+    const { leaflet } = this.props
 
     const switchScaleControl = new window.L.Control.SwitchScaleControl(options)
-    switchScaleControl.addTo(map)
+    switchScaleControl.addTo(leaflet.map)
   }
 
   render() {

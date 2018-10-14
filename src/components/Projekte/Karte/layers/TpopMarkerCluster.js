@@ -1,42 +1,42 @@
 import React, { Component } from 'react'
 import compose from 'recompose/compose'
-import getContext from 'recompose/getContext'
 import 'leaflet'
-import PropTypes from 'prop-types'
+import { withLeaflet } from 'react-leaflet'
 import '../../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
 
-const enhance = compose(getContext({ map: PropTypes.object.isRequired }))
+const enhance = compose(withLeaflet)
 
 class TpopMarkerCluster extends Component {
   props: {
     visible: boolean,
     markers: Object,
+    leaflet: Object,
   }
 
   componentDidMount() {
-    const { map, markers, visible } = this.props
+    const { leaflet, markers, visible } = this.props
     if (visible) {
-      map.addLayer(markers)
+      leaflet.map.addLayer(markers)
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const { map, markers } = this.props
+    const { leaflet, markers } = this.props
     if (markers && markers !== nextProps.markers) {
-      map.removeLayer(markers)
+      leaflet.map.removeLayer(markers)
     }
   }
 
   componentDidUpdate() {
-    const { map, markers, visible } = this.props
+    const { leaflet, markers, visible } = this.props
     if (visible) {
-      map.addLayer(markers)
+      leaflet.map.addLayer(markers)
     }
   }
 
   componentWillUnmount() {
-    const { map, markers } = this.props
-    map.removeLayer(markers)
+    const { leaflet, markers } = this.props
+    leaflet.map.removeLayer(markers)
   }
 
   render() {

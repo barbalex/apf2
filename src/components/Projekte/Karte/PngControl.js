@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import 'leaflet'
+import { withLeaflet } from 'react-leaflet'
 import 'leaflet-easyprint'
 import Control from 'react-leaflet-control'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
-import getContext from 'recompose/getContext'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import FileDownloadIcon from '@material-ui/icons/GetApp'
 
@@ -29,7 +28,7 @@ const StyledButton = styled.button`
 `
 
 const enhance = compose(
-  getContext({ map: PropTypes.object.isRequired }),
+  withLeaflet,
   withState('printPlugin', 'changePrintPlugin', {}),
   withHandlers({
     savePng: ({ printPlugin }) => event => {
@@ -63,8 +62,8 @@ class PrintControl extends Component {
   }
 
   componentDidMount() {
-    const { map, changePrintPlugin } = this.props
-    const pp = window.L.easyPrint(options).addTo(map)
+    const { leaflet, changePrintPlugin } = this.props
+    const pp = window.L.easyPrint(options).addTo(leaflet.map)
     changePrintPlugin(pp)
     /**
      * This was trying to prevent the map from taking over
