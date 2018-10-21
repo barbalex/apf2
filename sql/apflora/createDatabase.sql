@@ -4,6 +4,7 @@ CREATE EXTENSION if not exists "uuid-ossp";
 
 -- create role reader in pgAdmin, then:
 create role apflora_reader;
+create role apflora_manager in group apflora_reader;
 create role apflora_artverantwortlich in group apflora_reader;
 create role apflora_freiwillig;
 create role anon;
