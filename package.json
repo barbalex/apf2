@@ -22,7 +22,7 @@
     "@babel/runtime": "7.1.2",
     "@hocs/debounce-handler": "0.5.0",
     "@hocs/with-lifecycle": "0.5.0",
-    "@material-ui/core": "3.2.0",
+    "@material-ui/core": "3.2.2",
     "@material-ui/icons": "3.0.1",
     "@turf/boolean-point-in-polygon": "6.0.1",
     "@turf/nearest": "4.7.3",
