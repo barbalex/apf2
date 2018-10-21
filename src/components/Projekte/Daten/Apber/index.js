@@ -195,7 +195,7 @@ class Apber extends Component<Props> {
 
           return (
             <ErrorBoundary>
-              <Container innerRef={this.container}>
+              <Container ref={this.container}>
                 <FormTitle
                   apId={row.apId}
                   title="AP-Bericht"

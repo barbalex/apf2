@@ -350,7 +350,7 @@ class Karte extends Component {
         <ErrorBoundary>
           <StyledMap
             localizing={!!idOfTpopBeingLocalized}
-            innerRef={this.mapRef}
+            ref={this.mapRef}
             bounds={bounds}
             //preferCanvas
             onMouseMove={onMouseMove}

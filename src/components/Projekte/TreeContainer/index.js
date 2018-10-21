@@ -549,7 +549,7 @@ class TreeContainer extends Component<Props> {
           </LabelFilterContainer>
           <InnerTreeContainer
             // $FlowIssue
-            innerRef={this.tree}
+            ref={this.tree}
           >
             <Tree
               treeName={treeName}

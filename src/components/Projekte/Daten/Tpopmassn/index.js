@@ -237,7 +237,7 @@ class Tpopmassn extends Component<Props> {
 
           return (
             <ErrorBoundary>
-              <Container innerRef={this.container} showfilter={showFilter}>
+              <Container ref={this.container} showfilter={showFilter}>
                 <FormTitle
                   apId={get(data, 'tpopmassnById.tpopByTpopId.popByPopId.apId')}
                   title="Massnahme"

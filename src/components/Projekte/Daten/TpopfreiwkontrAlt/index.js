@@ -221,7 +221,7 @@ class Tpopfreiwkontr extends Component<Props> {
 
           return (
             <ErrorBoundary>
-              <Container innerRef={this.container} showfilter={showFilter}>
+              <Container ref={this.container} showfilter={showFilter}>
                 <FormTitle
                   apId={get(data, 'tpopkontrById.tpopByTpopId.popByPopId.apId')}
                   title="Freiwilligen-Kontrolle"

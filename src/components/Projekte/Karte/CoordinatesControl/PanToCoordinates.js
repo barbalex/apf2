@@ -215,7 +215,7 @@ class PanToCoordinates extends Component<Props> {
             max="2828516"
             onChange={onChangeX}
             onBlur={onBlurX}
-            innerRef={this.xkoordField}
+            ref={this.xkoordField}
           />
           <FormHelperText id="xhelper">{xError}</FormHelperText>
         </FormControl>
