@@ -103,55 +103,6 @@ ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.v_ap_anzmassnprojahr.jahr;
 
-DROP VIEW IF EXISTS apflora.v_tpop_letztermassnber CASCADE;
-CREATE OR REPLACE VIEW apflora.v_tpop_letztermassnber AS
-SELECT
-  apflora.v_tpop_letztermassnber0.ap_id,
-  apflora.v_tpop_letztermassnber0.id,
-  max(apflora.v_tpop_letztermassnber0.jahr) AS jahr
-FROM
-  apflora.v_tpop_letztermassnber0
-GROUP BY
-  apflora.v_tpop_letztermassnber0.ap_id,
-  apflora.v_tpop_letztermassnber0.id;
-
-DROP VIEW IF EXISTS apflora.v_tpop_letztertpopber CASCADE;
-CREATE OR REPLACE VIEW apflora.v_tpop_letztertpopber AS
-SELECT
-  apflora.v_tpop_letztertpopber0.ap_id,
-  apflora.v_tpop_letztertpopber0.id,
-  max(apflora.v_tpop_letztertpopber0.tpopber_jahr) AS jahr
-FROM
-  apflora.v_tpop_letztertpopber0
-GROUP BY
-  apflora.v_tpop_letztertpopber0.ap_id,
-  apflora.v_tpop_letztertpopber0.id;
-
-DROP VIEW IF EXISTS apflora.v_pop_letztermassnber CASCADE;
-CREATE OR REPLACE VIEW apflora.v_pop_letztermassnber AS
-SELECT
-  apflora.v_pop_letztermassnber0.ap_id,
-  apflora.v_pop_letztermassnber0.id,
-  max(apflora.v_pop_letztermassnber0.jahr) AS jahr
-FROM
-  apflora.v_pop_letztermassnber0
-GROUP BY
-  apflora.v_pop_letztermassnber0.ap_id,
-  apflora.v_pop_letztermassnber0.id;
-
--- dieser view ist für den Bericht gedacht - daher letzter popber vor jBerJahr
-DROP VIEW IF EXISTS apflora.v_pop_letzterpopber CASCADE;
-CREATE OR REPLACE VIEW apflora.v_pop_letzterpopber AS
-SELECT
-  apflora.v_pop_letzterpopber0.ap_id,
-  apflora.v_pop_letzterpopber0.id,
-  max(apflora.v_pop_letzterpopber0.jahr) AS jahr
-FROM
-  apflora.v_pop_letzterpopber0
-GROUP BY
-  apflora.v_pop_letzterpopber0.ap_id,
-  apflora.v_pop_letzterpopber0.id;
-
 -- dieser view ist für die Qualitätskontrolle gedacht - daher letzter popber überhaupt
 DROP VIEW IF EXISTS apflora.v_pop_letzterpopber_overall CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_letzterpopber_overall AS
