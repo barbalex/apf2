@@ -5,7 +5,7 @@
  * setting null of cours makes react log errors
  */
 import React, { Fragment } from 'react'
-import DatePicker from 'material-ui-pickers/DatePicker'
+import { DatePicker } from 'material-ui-pickers'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import format from 'date-fns/format'
 import isValid from 'date-fns/isValid'
@@ -33,7 +33,7 @@ const enhance = compose(
   withState(
     'stateValue',
     'setStateValue',
-    ({ value: propsValue }) => (isValid(propsValue) ? propsValue : null)
+    ({ value: propsValue }) => (isValid(propsValue) ? propsValue : null),
   ),
   withHandlers({
     onChange: ({ setStateValue, saveToDb }) => value => {
@@ -80,7 +80,7 @@ const enhance = compose(
         props.setStateValue(props.value)
       }
     },
-  })
+  }),
 )
 
 const DateFieldWithPicker = ({

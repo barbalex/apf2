@@ -17,7 +17,7 @@ import theme from './theme'
 import moment from 'moment'
 import 'moment/locale/de-ch' // this is the important bit, you have to import the locale your'e trying to use.
 import MomentUtils from 'material-ui-pickers/utils/moment-utils'
-import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider'
+import { MuiPickersUtilsProvider } from 'material-ui-pickers'
 import { ApolloProvider } from 'react-apollo'
 import { Provider as StateProvider } from 'unstated'
 
@@ -40,7 +40,6 @@ import Print from './components/Print'
 import historyListen from './modules/historyListen'
 
 import './index.css'
-
 ;(async () => {
   try {
     // prevent changing values in number inputs when scrolling pages!
@@ -51,7 +50,7 @@ import './index.css'
         event.preventDefault()
       }
     })
-    
+
     const idb = initializeIdb()
     const myClient = await client(idb)
     registerServiceWorker(myClient)
@@ -74,7 +73,7 @@ import './index.css'
       historyListen({
         location,
         action,
-      })
+      }),
     )
 
     ReactDOM.render(
@@ -94,7 +93,7 @@ import './index.css'
           </Fragment>
         </ApolloProvider>
       </StateProvider>,
-      document.getElementById('root')
+      document.getElementById('root'),
     )
   } catch (error) {
     console.log('Error in index.js:', error)
