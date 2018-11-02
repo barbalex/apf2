@@ -45,7 +45,7 @@ const enhance = compose(
       const apId = get(row, 'tpopByTpopId.popByPopId.apByApId.id')
       let image
       try {
-        image = await import(`./${apId}.png`).then(m => m.default)
+        image = await import(`./${apId}.png`) //.then(m => m.default)
       } catch (error) {}
       if (image && image.default) setImage(image.default)
     },
@@ -55,7 +55,7 @@ const enhance = compose(
         const apId = get(row, 'tpopByTpopId.popByPopId.apByApId.id')
         let image
         try {
-          image = await import(`./${apId}.png`).then(m => m.default)
+          image = await import(`./${apId}.png`) //.then(m => m.default)
         } catch (error) {}
         if (image && image.default) setImage(image.default)
       }
