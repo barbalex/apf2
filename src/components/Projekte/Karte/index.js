@@ -343,7 +343,6 @@ class Karte extends Component {
     const activeOverlaysSorted = sortBy(activeOverlays, activeOverlay =>
       overlays.findIndex(o => o.value === activeOverlay),
     )
-    //console.log('Karte rendering')
 
     return (
       <Container>
@@ -361,6 +360,9 @@ class Karte extends Component {
             minZoom={0}
             doubleClickZoom={false}
             onDblclick={async event => {
+              // since 2018 10 31 using idOfTpopBeingLocalized directly
+              // returns null, so need to use this.props.idOfTpopBeingLocalized
+              const { idOfTpopBeingLocalized } = this.props
               /**
                * TODO
                * When clicking on Layertool
