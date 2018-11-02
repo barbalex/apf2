@@ -15,7 +15,7 @@ import withDeleteState from '../../../../state/withDeleteState'
 import withErrorState from '../../../../state/withErrorState'
 
 const StyledDialog = styled(Dialog)`
-  > div {
+  > div > div {
     padding: 24px 24px 0 24px;
   }
 `
