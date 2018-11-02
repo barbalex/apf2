@@ -16,11 +16,11 @@ import messagesGql from './messages'
 import createUsermessage from './createUsermessage'
 
 const StyledDialog = styled(Dialog)`
-  > div {
+  > div > div {
     max-width: ${window.innerWidth * 0.8}px !important;
     min-width: 368px !important;
   }
-  > div > div {
+  > div > div > div {
     overflow: auto;
   }
 `
