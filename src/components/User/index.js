@@ -25,10 +25,7 @@ import ErrorBoundary from '../shared/ErrorBoundary'
 import dataGql from './data'
 import setUserGql from './setUser'
 
-const StyledDialog = styled(Dialog)`
-  > div {
-  }
-`
+const StyledDialog = styled(Dialog)``
 const StyledDiv = styled.div`
   display: flex;
   flex-direction: column;
