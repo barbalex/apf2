@@ -19,7 +19,7 @@ class ErrorBoundary extends Component {
     this.state = { error: null, errorInfo: null }
   }
 
-  componentDidCatch(error, errorInfo) {
+  static getDerivedStateFromError(error, errorInfo) {
     // Catch errors in any components below and re-render with error message
     this.setState({
       error: error,
