@@ -11,6 +11,7 @@ import ErrorBoundary from '../shared/ErrorBoundary'
 import setIsPrint from './setIsPrint'
 import appContainerData from './data'
 import Deletions from '../Deletions'
+import Fallback from '../shared/Fallback'
 
 const Container = styled.div`
   height: 100%;
@@ -21,11 +22,6 @@ const Container = styled.div`
     display: block;
   }
 `
-const LoadingContainer = styled.div`
-  padding: 10px;
-`
-
-const Fallback = () => <LoadingContainer>Lade...</LoadingContainer>
 
 const AppBar = lazy(() => import('../AppBar'))
 const Projekte = lazy(() => import('../Projekte'))

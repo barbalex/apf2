@@ -1,130 +1,45 @@
 // @flow
-import React from 'react'
+import React, { lazy, Suspense } from 'react'
 import styled from 'styled-components'
-import Loadable from 'react-loadable'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
 
 import ErrorBoundary from '../../shared/ErrorBoundarySingleChild'
-import Loading from '../../shared/Loading'
+import Fallback from '../../shared/Fallback'
 import dataGql from './data'
 import getTableNameFromActiveNode from '../../../modules/getTableNameFromActiveNode'
 import withErrorState from '../../../state/withErrorState'
 import withNodeFilterState from '../../../state/withNodeFilter'
 
-const Projekt = Loadable({
-  loader: () => import('./Projekt'),
-  loading: Loading,
-})
-const Ap = Loadable({
-  loader: () => import('./Ap'),
-  loading: Loading,
-})
-const User = Loadable({
-  loader: () => import('./User'),
-  loading: Loading,
-})
-const Adresse = Loadable({
-  loader: () => import('./Adresse'),
-  loading: Loading,
-})
-const Apberuebersicht = Loadable({
-  loader: () => import('./Apberuebersicht'),
-  loading: Loading,
-})
-const Erfkrit = Loadable({
-  loader: () => import('./Erfkrit'),
-  loading: Loading,
-})
-const Apber = Loadable({
-  loader: () => import('./Apber'),
-  loading: Loading,
-})
-const Pop = Loadable({
-  loader: () => import('./Pop'),
-  loading: Loading,
-})
-const Assozart = Loadable({
-  loader: () => import('./Assozart'),
-  loading: Loading,
-})
-const Ekfzaehleinheit = Loadable({
-  loader: () => import('./Ekfzaehleinheit'),
-  loading: Loading,
-})
-const Apart = Loadable({
-  loader: () => import('./Apart'),
-  loading: Loading,
-})
-const Idealbiotop = Loadable({
-  loader: () => import('./Idealbiotop'),
-  loading: Loading,
-})
-const Ber = Loadable({
-  loader: () => import('./Ber'),
-  loading: Loading,
-})
-const Ziel = Loadable({
-  loader: () => import('./Ziel'),
-  loading: Loading,
-})
-const Zielber = Loadable({
-  loader: () => import('./Zielber'),
-  loading: Loading,
-})
-const Popmassnber = Loadable({
-  loader: () => import('./Popmassnber'),
-  loading: Loading,
-})
-const Popber = Loadable({
-  loader: () => import('./Popber'),
-  loading: Loading,
-})
-const Tpop = Loadable({
-  loader: () => import('./Tpop'),
-  loading: Loading,
-})
-const Tpopber = Loadable({
-  loader: () => import('./Tpopber'),
-  loading: Loading,
-})
-const Tpopmassn = Loadable({
-  loader: () => import('./Tpopmassn'),
-  loading: Loading,
-})
-const Tpopmassnber = Loadable({
-  loader: () => import('./Tpopmassnber'),
-  loading: Loading,
-})
-const Tpopfeldkontr = Loadable({
-  loader: () => import('./Tpopfeldkontr'),
-  loading: Loading,
-})
-const Tpopfreiwkontr = Loadable({
-  loader: () => import('./Tpopfreiwkontr'),
-  loading: Loading,
-})
-const TpopfreiwkontrAlt = Loadable({
-  loader: () => import('./TpopfreiwkontrAlt'),
-  loading: Loading,
-})
-const Tpopkontrzaehl = Loadable({
-  loader: () => import('./Tpopkontrzaehl'),
-  loading: Loading,
-})
-const Exporte = Loadable({
-  loader: () => import('../Exporte'),
-  loading: Loading,
-})
-const Qk = Loadable({
-  loader: () => import('./Qk'),
-  loading: Loading,
-})
-const Beobzuordnung = Loadable({
-  loader: () => import('./Beobzuordnung'),
-  loading: Loading,
-})
+const Projekt = lazy(() => import('./Projekt'))
+const Ap = lazy(() => import('./Ap'))
+const User = lazy(() => import('./User'))
+const Adresse = lazy(() => import('./Adresse'))
+const Apberuebersicht = lazy(() => import('./Apberuebersicht'))
+const Erfkrit = lazy(() => import('./Erfkrit'))
+const Apber = lazy(() => import('./Apber'))
+const Pop = lazy(() => import('./Pop'))
+const Assozart = lazy(() => import('./Assozart'))
+const Ekfzaehleinheit = lazy(() => import('./Ekfzaehleinheit'))
+const Apart = lazy(() => import('./Apart'))
+const Idealbiotop = lazy(() => import('./Idealbiotop'))
+const Ber = lazy(() => import('./Ber'))
+const Ziel = lazy(() => import('./Ziel'))
+const Zielber = lazy(() => import('./Zielber'))
+const Popmassnber = lazy(() => import('./Popmassnber'))
+const Popber = lazy(() => import('./Popber'))
+const Tpop = lazy(() => import('./Tpop'))
+const Tpopber = lazy(() => import('./Tpopber'))
+const Tpopmassn = lazy(() => import('./Tpopmassn'))
+const Tpopmassnber = lazy(() => import('./Tpopmassnber'))
+const Tpopfeldkontr = lazy(() => import('./Tpopfeldkontr'))
+const Tpopfreiwkontr = lazy(() => import('./Tpopfreiwkontr'))
+const TpopfreiwkontrAlt = lazy(() => import('./TpopfreiwkontrAlt'))
+const Tpopkontrzaehl = lazy(() => import('./Tpopkontrzaehl'))
+const Exporte = lazy(() => import('../Exporte'))
+const Qk = lazy(() => import('./Qk'))
+const Beobzuordnung = lazy(() => import('./Beobzuordnung'))
 
 const Container = styled.div`
   border-left-color: rgb(46, 125, 50);
@@ -470,7 +385,9 @@ const Daten = ({
 
       return (
         <ErrorBoundary>
-          <Container>{form}</Container>
+          <Container>
+            <Suspense fallback={<Fallback />}>{form}</Suspense>
+          </Container>
         </ErrorBoundary>
       )
     }}

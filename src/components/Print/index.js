@@ -1,7 +1,6 @@
 // @flow
-import React, { Fragment } from 'react'
+import React, { lazy, Suspense } from 'react'
 import styled from 'styled-components'
-import Loadable from 'react-loadable'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import Button from '@material-ui/core/Button'
@@ -9,7 +8,7 @@ import ArrowBack from '@material-ui/icons/ArrowBack'
 import app from 'ampersand-app'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
-import Loading from '../shared/Loading'
+import Fallback from '../shared/Fallback'
 import dataGql from './data'
 import setTreeKey from './setTreeKey'
 
@@ -44,14 +43,8 @@ const StyledArrowBack = styled(ArrowBack)`
   padding-right: 4px;
 `
 
-const ApberForApFromAp = Loadable({
-  loader: () => import('./ApberForApFromAp'),
-  loading: Loading,
-})
-const ApberForYear = Loadable({
-  loader: () => import('./ApberForYear'),
-  loading: Loading,
-})
+const ApberForApFromAp = lazy(() => import('./ApberForApFromAp'))
+const ApberForYear = lazy(() => import('./ApberForYear'))
 
 const Print = () => (
   <Query query={dataGql}>
@@ -74,7 +67,7 @@ const Print = () => (
         <ErrorBoundary>
           <Container>
             {(showApberForAp || showApberForYear) && (
-              <Fragment>
+              <Suspense fallback={<Fallback />}>
                 <BackButton
                   variant="outlined"
                   onClick={() => {
@@ -105,7 +98,7 @@ const Print = () => (
                 {showApberForYear && (
                   <ApberForYear activeNodeArray={activeNodeArray} />
                 )}
-              </Fragment>
+              </Suspense>
             )}
           </Container>
         </ErrorBoundary>

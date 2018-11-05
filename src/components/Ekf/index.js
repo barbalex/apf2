@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { lazy, Suspense } from 'react'
 import styled from 'styled-components'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import { Query } from 'react-apollo'
@@ -7,7 +7,6 @@ import get from 'lodash/get'
 import merge from 'lodash/merge'
 import intersection from 'lodash/intersection'
 import compose from 'recompose/compose'
-import Loadable from 'react-loadable'
 import jwtDecode from 'jwt-decode'
 
 // when Karte was loaded async, it did not load,
@@ -20,7 +19,7 @@ import dataWithDateByUserNameGql from './dataWithDateByUserName'
 import dataWithDateByAdresseIdGql from './dataWithDateByAdresseId'
 import withErrorState from '../../state/withErrorState'
 import EkfList from './List'
-import Loading from '../shared/Loading'
+import Fallback from '../shared/Fallback'
 
 /**
  * TODO:
@@ -29,10 +28,7 @@ import Loading from '../shared/Loading'
  * if so: use byAdresse queries
  */
 
-const Tpopfreiwkontr = Loadable({
-  loader: () => import('../Projekte/Daten/Tpopfreiwkontr'),
-  loading: Loading,
-})
+const Tpopfreiwkontr = lazy(() => import('../Projekte/Daten/Tpopfreiwkontr'))
 
 const Container = styled.div`
   display: flex;
@@ -95,15 +91,17 @@ const EkfContainer = ({ errorState }: { errorState: Object }) => (
 
             if (isPrint && tpopkontrId)
               return (
-                <Tpopfreiwkontr
-                  id={activeNodeArray[9]}
-                  activeNodeArray={activeNodeArray}
-                  treeName={treeName}
-                  refetchTree={refetch}
-                  errorState={errorState}
-                  role={role}
-                  dimensions={{ width: 1000 }}
-                />
+                <Suspense fallback={<Fallback />}>
+                  <Tpopfreiwkontr
+                    id={activeNodeArray[9]}
+                    activeNodeArray={activeNodeArray}
+                    treeName={treeName}
+                    refetchTree={refetch}
+                    errorState={errorState}
+                    role={role}
+                    dimensions={{ width: 1000 }}
+                  />
+                </Suspense>
               )
 
             return (
@@ -129,14 +127,16 @@ const EkfContainer = ({ errorState }: { errorState: Object }) => (
                         renderOnResize={true}
                       >
                         {tpopkontrId && (
-                          <Tpopfreiwkontr
-                            id={activeNodeArray[9]}
-                            activeNodeArray={activeNodeArray}
-                            treeName={treeName}
-                            refetchTree={refetch}
-                            errorState={errorState}
-                            role={role}
-                          />
+                          <Suspense fallback={<Fallback />}>
+                            <Tpopfreiwkontr
+                              id={activeNodeArray[9]}
+                              activeNodeArray={activeNodeArray}
+                              treeName={treeName}
+                              refetchTree={refetch}
+                              errorState={errorState}
+                              role={role}
+                            />
+                          </Suspense>
                         )}
                       </ReflexElementForEKF>
                     )}
