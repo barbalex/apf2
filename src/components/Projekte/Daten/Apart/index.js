@@ -2,19 +2,19 @@
 import React from 'react'
 import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
-import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
+import app from 'ampersand-app'
 
 import Select from '../../../shared/Select'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data'
 import updateApartByIdGql from './updateApartById'
 import withAeEigenschaftens from './withAeEigenschaftens'
+import withData from './withData'
 
 const Container = styled.div`
   height: 100%;
@@ -28,21 +28,21 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withData,
   withAeEigenschaftens,
   withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({ refetchTree, setErrors, errors }) => async ({
-      row,
-      field,
-      value,
-      updateApart,
-    }) => {
+    saveToDb: ({ refetchTree, setErrors, errors, data }) => async event => {
+      const field = event.target.name
+      const value = event.target.value || null
+      const row = get(data, 'apartById', {})
       /**
        * only save if value changed
        */
       if (row[field] === value) return
       try {
-        await updateApart({
+        await app.client.mutate({
+          mutation: updateApartByIdGql,
           variables: {
             id: row.id,
             [field]: value,
@@ -83,103 +83,90 @@ const ApArt = ({
   errors,
   treeName,
   dataAeEigenschaftens,
+  data,
 }: {
   id: String,
   saveToDb: () => void,
   errors: Object,
   treeName: string,
   dataAeEigenschaftens: Object,
-}) => (
-  <Query query={dataGql} variables={{ id }}>
-    {({ loading, error, data }) => {
-      if (loading || dataAeEigenschaftens.loading)
-        return (
-          <Container>
-            <FieldsContainer>Lade...</FieldsContainer>
-          </Container>
-        )
-      if (error) return `Fehler: ${error.message}`
+  data: Object,
+}) => {
+  if (data.loading || dataAeEigenschaftens.loading)
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  if (data.error) return `Fehler: ${data.error.message}`
 
-      const row = get(data, 'apartById', {})
-      // do not show any artId's that have been used?
-      // Nope: because some species have already been worked as separate ap
-      // because apart did not exist...
-      // maybe do later
-      let artWerte = get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])
-      artWerte = sortBy(artWerte, 'artname')
-      artWerte = artWerte.map(el => ({
-        value: el.id,
-        label: el.artname,
-      }))
+  const row = get(data, 'apartById', {})
+  // do not show any artId's that have been used?
+  // Nope: because some species have already been worked as separate ap
+  // because apart did not exist...
+  // maybe do later
+  let artWerte = get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])
+  artWerte = sortBy(artWerte, 'artname')
+  artWerte = artWerte.map(el => ({
+    value: el.id,
+    label: el.artname,
+  }))
 
-      return (
-        <ErrorBoundary>
-          <Container>
-            <FormTitle
-              apId={row.apId}
-              title="Aktionsplan-Art"
-              treeName={treeName}
-              table="apart"
-            />
-            <Mutation mutation={updateApartByIdGql}>
-              {(updateApart, { data }) => (
-                <FieldsContainer>
-                  <div>
-                    "Aktionsplan-Arten" sind alle Arten, welche der Aktionsplan
-                    behandelt. Häufig dürfte das bloss eine einzige Art sein.
-                    Folgende Gründe können dazu führen, dass hier mehrere
-                    aufgelistet werden:
-                    <ul>
-                      <li>Die AP-Art hat Synonyme</li>
-                      <li>
-                        Beobachtungen liegen in unterschiedlichen Taxonomien
-                        vor, z.B. SISF 2 und SISF 3 bzw. Checklist 2017
-                      </li>
-                      <li>
-                        Wenn eine Art im Rahmen des Aktionsplans inklusive nicht
-                        synonymer aber eng verwandter Arten gefasst wid (z.B.
-                        Unterarten)
-                      </li>
-                    </ul>
-                  </div>
-                  <div>
-                    Beobachtungen aller AP-Arten stehen im Ordner "Beobachtungen
-                    nicht beurteilt" zur Verfügung und können Teilpopulationen
-                    zugeordnet werden.
-                    <br />
-                    <br />
-                  </div>
-                  <div>
-                    Die im Aktionsplan gewählte namensgebende Art gibt dem
-                    Aktionsplan nicht nur den Namen. Unter ihrer id werden auch
-                    die Kontrollen an InfoFlora geliefert.
-                    <br />
-                    <br />
-                  </div>
-                  <Select
-                    key={`${row.id}artId`}
-                    value={row.artId}
-                    field="artId"
-                    label="Art"
-                    options={artWerte}
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'artId',
-                        value,
-                        updateApart,
-                      })
-                    }
-                    error={errors.artId}
-                  />
-                </FieldsContainer>
-              )}
-            </Mutation>
-          </Container>
-        </ErrorBoundary>
-      )
-    }}
-  </Query>
-)
+  return (
+    <ErrorBoundary>
+      <Container>
+        <FormTitle
+          apId={row.apId}
+          title="Aktionsplan-Art"
+          treeName={treeName}
+          table="apart"
+        />
+        <FieldsContainer>
+          <div>
+            "Aktionsplan-Arten" sind alle Arten, welche der Aktionsplan
+            behandelt. Häufig dürfte das bloss eine einzige Art sein. Folgende
+            Gründe können dazu führen, dass hier mehrere aufgelistet werden:
+            <ul>
+              <li>Die AP-Art hat Synonyme</li>
+              <li>
+                Beobachtungen liegen in unterschiedlichen Taxonomien vor, z.B.
+                SISF 2 und SISF 3 bzw. Checklist 2017
+              </li>
+              <li>
+                Wenn eine Art im Rahmen des Aktionsplans inklusive nicht
+                synonymer aber eng verwandter Arten gefasst wid (z.B.
+                Unterarten)
+              </li>
+            </ul>
+          </div>
+          <div>
+            Beobachtungen aller AP-Arten stehen im Ordner "Beobachtungen nicht
+            beurteilt" zur Verfügung und können Teilpopulationen zugeordnet
+            werden.
+            <br />
+            <br />
+          </div>
+          <div>
+            Die im Aktionsplan gewählte namensgebende Art gibt dem Aktionsplan
+            nicht nur den Namen. Unter ihrer id werden auch die Kontrollen an
+            InfoFlora geliefert.
+            <br />
+            <br />
+          </div>
+          <Select
+            key={`${row.id}artId`}
+            name="artId"
+            value={row.artId}
+            field="artId"
+            label="Art"
+            options={artWerte}
+            saveToDb={saveToDb}
+            error={errors.artId}
+          />
+        </FieldsContainer>
+      </Container>
+    </ErrorBoundary>
+  )
+}
 
 export default enhance(ApArt)
