@@ -72,8 +72,15 @@ const StyledSelect = styled(Select)`
 
 const enhance = compose(
   withHandlers({
-    onChange: ({ saveToDb }) => option =>
-      saveToDb(option ? option.value : null),
+    onChange: ({ saveToDb, name }) => option => {
+      const fakeEvent = {
+        target: {
+          name,
+          value: option ? option.value : null,
+        },
+      }
+      saveToDb(fakeEvent)
+    },
   }),
 )
 
@@ -81,6 +88,7 @@ const SharedSelect = ({
   value,
   field = '',
   label,
+  name,
   error,
   options,
   onChange,
@@ -90,6 +98,7 @@ const SharedSelect = ({
   value?: ?number | ?string,
   field?: string,
   label: string,
+  name: string,
   error: string,
   options: Array<Object>,
   onChange: () => void,

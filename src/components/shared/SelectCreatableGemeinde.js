@@ -83,12 +83,25 @@ const StyledIconButton = styled(IconButton)`
 const enhance = compose(
   withState('stateValue', 'setStateValue', null),
   withHandlers({
-    onChange: ({ saveToDb }) => option =>
-      saveToDb(option ? option.value : null),
+    onChange: ({ saveToDb, name }) => option => {
+      const fakeEvent = {
+        target: {
+          name,
+          value: option ? option.value : null,
+        },
+      }
+      saveToDb(fakeEvent)
+    },
     onInputChange: ({ setStateValue }) => value => setStateValue(value),
-    onBlur: ({ saveToDb, stateValue }) => event => {
+    onBlur: ({ saveToDb, stateValue, name }) => event => {
       if (stateValue) {
-        saveToDb(stateValue)
+        const fakeEvent = {
+          target: {
+            name,
+            value: stateValue,
+          },
+        }
+        saveToDb(fakeEvent)
       }
     },
   }),
@@ -106,6 +119,7 @@ const SharedSelectCreatable = ({
   value,
   field = '',
   label,
+  name,
   error,
   options: optionsIn,
   stateValue,
@@ -120,6 +134,7 @@ const SharedSelectCreatable = ({
   value?: ?number | ?string,
   field?: string,
   label: string,
+  name: string,
   error: string,
   options: Array<Object>,
   stateValue: number | string,

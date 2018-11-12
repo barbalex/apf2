@@ -1,13 +1,13 @@
 // @flow
 import React, { Fragment } from 'react'
 import styled from 'styled-components'
-import { Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
+import app from 'ampersand-app'
 
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import TextField from '../../../shared/TextField'
@@ -80,12 +80,21 @@ const enhance = compose(
       errors,
       nodeFilterState,
       treeName,
-    }) => async ({ row, field, value, updateAp }) => {
+      data,
+    }) => async event => {
+      const field = event.target.name
+      const value = event.target.value || null
+      const showFilter = !!nodeFilterState.state[treeName].activeTable
+      let row
+      if (showFilter) {
+        row = nodeFilterState.state[treeName].ap
+      } else {
+        row = get(data, 'apById', {})
+      }
       /**
        * only save if value changed
        */
       if (row[field] === value) return
-      const showFilter = !!nodeFilterState.state[treeName].activeTable
       if (showFilter) {
         nodeFilterState.setValue({
           treeName,
@@ -96,7 +105,8 @@ const enhance = compose(
         refetchTree('aps')
       } else {
         try {
-          await updateAp({
+          await app.client.mutate({
+            mutation: updateApByIdGql,
             variables: {
               id: row.id,
               [field]: value,
@@ -254,161 +264,119 @@ const Ap = ({
           treeName={treeName}
           table="ap"
         />
-        <Mutation mutation={updateApByIdGql}>
-          {(updateAp, { data }) => (
-            <FieldsContainer>
-              <Select
-                key={`${row.id}artId`}
-                value={row.artId}
-                field="artId"
-                label="Art (gibt dem Aktionsplan den Namen)"
-                options={artWerte}
-                saveToDb={value =>
-                  saveToDb({
-                    row,
-                    field: 'artId',
-                    value,
-                    updateAp,
-                  })
-                }
-                error={errors.artId}
-              />
-              <RadioButtonGroupWithInfo
-                key={`${row.id}bearbeitung`}
-                value={row.bearbeitung}
-                dataSource={bearbeitungWerte}
-                saveToDb={value =>
-                  saveToDb({
-                    row,
-                    field: 'bearbeitung',
-                    value,
-                    updateAp,
-                  })
-                }
-                error={errors.bearbeitung}
-                popover={
-                  <Fragment>
-                    <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
-                    <LabelPopoverContentRow>
-                      <LabelPopoverRowColumnLeft>
-                        keiner:
-                      </LabelPopoverRowColumnLeft>
-                      <LabelPopoverRowColumnRight>
-                        kein Aktionsplan vorgesehen
-                      </LabelPopoverRowColumnRight>
-                    </LabelPopoverContentRow>
-                    <LabelPopoverContentRow>
-                      <LabelPopoverRowColumnLeft>
-                        erstellt:
-                      </LabelPopoverRowColumnLeft>
-                      <LabelPopoverRowColumnRight>
-                        Aktionsplan fertig, auf der Webseite der FNS
-                      </LabelPopoverRowColumnRight>
-                    </LabelPopoverContentRow>
-                  </Fragment>
-                }
-                label="Aktionsplan"
-              />
-              <TextField
-                key={`${row.id}startJahr`}
-                label="Start im Jahr"
-                value={row.startJahr}
-                type="number"
-                saveToDb={value =>
-                  saveToDb({
-                    row,
-                    field: 'startJahr',
-                    value,
-                    updateAp,
-                  })
-                }
-                error={errors.startJahr}
-              />
-              <FieldContainer>
-                <RadioButtonGroupWithInfo
-                  key={`${row.id}umsetzung`}
-                  value={row.umsetzung}
-                  dataSource={umsetzungWerte}
-                  saveToDb={value => {
-                    saveToDb({
-                      row,
-                      field: 'umsetzung',
-                      value,
-                      updateAp,
-                    })
-                  }}
-                  error={errors.umsetzung}
-                  popover={
-                    <Fragment>
-                      <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
-                      <LabelPopoverContentRow>
-                        <LabelPopoverRowColumnLeft>
-                          noch keine
-                          <br />
-                          Umsetzung:
-                        </LabelPopoverRowColumnLeft>
-                        <LabelPopoverRowColumnRight>
-                          noch keine Massnahmen ausgeführt
-                        </LabelPopoverRowColumnRight>
-                      </LabelPopoverContentRow>
-                      <LabelPopoverContentRow>
-                        <LabelPopoverRowColumnLeft>
-                          in Umsetzung:
-                        </LabelPopoverRowColumnLeft>
-                        <LabelPopoverRowColumnRight>
-                          bereits Massnahmen ausgeführt (auch wenn AP noch nicht
-                          erstellt)
-                        </LabelPopoverRowColumnRight>
-                      </LabelPopoverContentRow>
-                    </Fragment>
-                  }
-                  label="Stand Umsetzung"
-                />
-              </FieldContainer>
-              <Select
-                key={`${row.id}bearbeiter`}
-                value={row.bearbeiter}
-                field="bearbeiter"
-                label="Verantwortlich"
-                options={adressenWerte}
-                saveToDb={value =>
-                  saveToDb({
-                    row,
-                    field: 'bearbeiter',
-                    value,
-                    updateAp,
-                  })
-                }
-                error={errors.bearbeiter}
-              />
-              <TextField
-                key={`${row.id}ekfBeobachtungszeitpunkt`}
-                label="Bester Beobachtungszeitpunkt für EKF (Freiwilligen-Kontrollen)"
-                value={row.ekfBeobachtungszeitpunkt}
-                saveToDb={value =>
-                  saveToDb({
-                    row,
-                    field: 'ekfBeobachtungszeitpunkt',
-                    value,
-                    updateAp,
-                  })
-                }
-                error={errors.ekfBeobachtungszeitpunkt}
-              />
-              {!showFilter && (
-                <TextFieldNonUpdatable
-                  key={`${row.id}artwert`}
-                  label="Artwert"
-                  value={get(
-                    row,
-                    'aeEigenschaftenByArtId.artwert',
-                    'Diese Art hat keinen Artwert',
-                  )}
-                />
+        <FieldsContainer>
+          <Select
+            key={`${row.id}artId`}
+            name="artId"
+            value={row.artId}
+            field="artId"
+            label="Art (gibt dem Aktionsplan den Namen)"
+            options={artWerte}
+            saveToDb={saveToDb}
+            error={errors.artId}
+          />
+          <RadioButtonGroupWithInfo
+            key={`${row.id}bearbeitung`}
+            name="bearbeitung"
+            value={row.bearbeitung}
+            dataSource={bearbeitungWerte}
+            saveToDb={saveToDb}
+            error={errors.bearbeitung}
+            popover={
+              <Fragment>
+                <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
+                <LabelPopoverContentRow>
+                  <LabelPopoverRowColumnLeft>keiner:</LabelPopoverRowColumnLeft>
+                  <LabelPopoverRowColumnRight>
+                    kein Aktionsplan vorgesehen
+                  </LabelPopoverRowColumnRight>
+                </LabelPopoverContentRow>
+                <LabelPopoverContentRow>
+                  <LabelPopoverRowColumnLeft>
+                    erstellt:
+                  </LabelPopoverRowColumnLeft>
+                  <LabelPopoverRowColumnRight>
+                    Aktionsplan fertig, auf der Webseite der FNS
+                  </LabelPopoverRowColumnRight>
+                </LabelPopoverContentRow>
+              </Fragment>
+            }
+            label="Aktionsplan"
+          />
+          <TextField
+            key={`${row.id}startJahr`}
+            name="startJahr"
+            label="Start im Jahr"
+            value={row.startJahr}
+            type="number"
+            saveToDb={saveToDb}
+            error={errors.startJahr}
+          />
+          <FieldContainer>
+            <RadioButtonGroupWithInfo
+              key={`${row.id}umsetzung`}
+              name="umsetzung"
+              value={row.umsetzung}
+              dataSource={umsetzungWerte}
+              saveToDb={saveToDb}
+              error={errors.umsetzung}
+              popover={
+                <Fragment>
+                  <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
+                  <LabelPopoverContentRow>
+                    <LabelPopoverRowColumnLeft>
+                      noch keine
+                      <br />
+                      Umsetzung:
+                    </LabelPopoverRowColumnLeft>
+                    <LabelPopoverRowColumnRight>
+                      noch keine Massnahmen ausgeführt
+                    </LabelPopoverRowColumnRight>
+                  </LabelPopoverContentRow>
+                  <LabelPopoverContentRow>
+                    <LabelPopoverRowColumnLeft>
+                      in Umsetzung:
+                    </LabelPopoverRowColumnLeft>
+                    <LabelPopoverRowColumnRight>
+                      bereits Massnahmen ausgeführt (auch wenn AP noch nicht
+                      erstellt)
+                    </LabelPopoverRowColumnRight>
+                  </LabelPopoverContentRow>
+                </Fragment>
+              }
+              label="Stand Umsetzung"
+            />
+          </FieldContainer>
+          <Select
+            key={`${row.id}bearbeiter`}
+            name="bearbeiter"
+            value={row.bearbeiter}
+            field="bearbeiter"
+            label="Verantwortlich"
+            options={adressenWerte}
+            saveToDb={saveToDb}
+            error={errors.bearbeiter}
+          />
+          <TextField
+            key={`${row.id}ekfBeobachtungszeitpunkt`}
+            name="ekfBeobachtungszeitpunkt"
+            label="Bester Beobachtungszeitpunkt für EKF (Freiwilligen-Kontrollen)"
+            value={row.ekfBeobachtungszeitpunkt}
+            saveToDb={saveToDb}
+            error={errors.ekfBeobachtungszeitpunkt}
+          />
+          {!showFilter && (
+            <TextFieldNonUpdatable
+              key={`${row.id}artwert`}
+              label="Artwert"
+              value={get(
+                row,
+                'aeEigenschaftenByArtId.artwert',
+                'Diese Art hat keinen Artwert',
               )}
-            </FieldsContainer>
+            />
           )}
-        </Mutation>
+        </FieldsContainer>
       </Container>
     </ErrorBoundary>
   )

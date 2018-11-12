@@ -1,7 +1,6 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
-import { Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
@@ -157,75 +156,71 @@ const Pop = ({
           treeName={treeName}
           table="pop"
         />
-        <Mutation mutation={updatePopByIdGql}>
-          {(updatePop, { data }) => (
-            <FieldsContainer>
-              <TextField
-                key={`${row.id}nr`}
-                label="Nr."
-                name="nr"
-                value={row.nr}
-                type="number"
-                saveToDb={saveToDb}
-                error={errors.nr}
-              />
-              <TextFieldWithInfo
-                key={`${row.id}name`}
-                label="Name"
-                name="name"
-                value={row.name}
-                type="text"
-                saveToDb={saveToDb}
-                error={errors.name}
-                popover="Dieses Feld möglichst immer ausfüllen"
-              />
-              <Status
-                key={`${row.id}status`}
-                apJahr={get(row, 'apByApId.startJahr')}
-                herkunftValue={row.status}
-                bekanntSeitValue={row.bekanntSeit}
-                saveToDb={saveToDb}
-                treeName={treeName}
-              />
-              <RadioButton
-                key={`${row.id}statusUnklar`}
-                label="Status unklar"
-                name="statusUnklar"
-                value={row.statusUnklar}
-                saveToDb={saveToDb}
-                error={errors.statusUnklar}
-              />
-              <TextField
-                key={`${row.id}statusUnklarBegruendung`}
-                label="Begründung"
-                name="statusUnklarBegruendung"
-                value={row.statusUnklarBegruendung}
-                type="text"
-                multiLine
-                saveToDb={saveToDb}
-                error={errors.statusUnklarBegruendung}
-              />
-              <TextField
-                key={`${row.id}x`}
-                label="X-Koordinaten"
-                name="x"
-                value={row.x}
-                type="number"
-                saveToDb={saveToDb}
-                error={errors.x}
-              />
-              <TextField
-                key={`${row.id}y`}
-                label="Y-Koordinaten"
-                name="y"
-                value={row.y}
-                type="number"
-                saveToDb={saveToDb}
-                error={errors.y}
-              />
-            </FieldsContainer>
-          )}
-        </Mutation>
+        <FieldsContainer>
+          <TextField
+            key={`${row.id}nr`}
+            label="Nr."
+            name="nr"
+            value={row.nr}
+            type="number"
+            saveToDb={saveToDb}
+            error={errors.nr}
+          />
+          <TextFieldWithInfo
+            key={`${row.id}name`}
+            label="Name"
+            name="name"
+            value={row.name}
+            type="text"
+            saveToDb={saveToDb}
+            error={errors.name}
+            popover="Dieses Feld möglichst immer ausfüllen"
+          />
+          <Status
+            key={`${row.id}status`}
+            apJahr={get(row, 'apByApId.startJahr')}
+            herkunftValue={row.status}
+            bekanntSeitValue={row.bekanntSeit}
+            saveToDb={saveToDb}
+            treeName={treeName}
+          />
+          <RadioButton
+            key={`${row.id}statusUnklar`}
+            label="Status unklar"
+            name="statusUnklar"
+            value={row.statusUnklar}
+            saveToDb={saveToDb}
+            error={errors.statusUnklar}
+          />
+          <TextField
+            key={`${row.id}statusUnklarBegruendung`}
+            label="Begründung"
+            name="statusUnklarBegruendung"
+            value={row.statusUnklarBegruendung}
+            type="text"
+            multiLine
+            saveToDb={saveToDb}
+            error={errors.statusUnklarBegruendung}
+          />
+          <TextField
+            key={`${row.id}x`}
+            label="X-Koordinaten"
+            name="x"
+            value={row.x}
+            type="number"
+            saveToDb={saveToDb}
+            error={errors.x}
+          />
+          <TextField
+            key={`${row.id}y`}
+            label="Y-Koordinaten"
+            name="y"
+            value={row.y}
+            type="number"
+            saveToDb={saveToDb}
+            error={errors.y}
+          />
+        </FieldsContainer>
       </Container>
     </ErrorBoundary>
   )
