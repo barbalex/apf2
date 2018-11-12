@@ -30,13 +30,11 @@ const StyledDatePicker = styled(DatePicker)`
 `
 
 const enhance = compose(
-  withState(
-    'stateValue',
-    'setStateValue',
-    ({ value: propsValue }) => (isValid(propsValue) ? propsValue : null),
+  withState('stateValue', 'setStateValue', ({ value: propsValue }) =>
+    isValid(propsValue) ? propsValue : null,
   ),
   withHandlers({
-    onChange: ({ setStateValue, saveToDb }) => value => {
+    onChange: ({ setStateValue, saveToDb, name }) => value => {
       /**
        * change happens when data is picked in picker
        * so is never null or otherwise invalid
@@ -44,11 +42,13 @@ const enhance = compose(
        */
       //console.log('DateFieldWithPicker, onChange:', {value})
       if (!isValid(value)) {
-        saveToDb(null)
+        const fakeEvent = { target: { value: null, name } }
+        saveToDb(fakeEvent)
         return setStateValue(null)
       }
       const newValue = format(value, 'YYYY-MM-DD')
-      saveToDb(newValue)
+      const fakeEvent = { target: { value: newValue, name } }
+      saveToDb(fakeEvent)
       setStateValue(newValue)
     },
     onBlur: ({
@@ -56,20 +56,23 @@ const enhance = compose(
       stateValue,
       setStateValue,
       value: propsValue,
+      name,
     }) => event => {
       const { value } = event.target
       //console.log('DateFieldWithPicker, onBlur:', {value})
       // do not change anything of there are no values
       if (!isValid(value)) {
         //console.log('invalid value, propsValue:', propsValue)
-        saveToDb(null)
+        const fakeEvent = { target: { value: null, name } }
+        saveToDb(fakeEvent)
         return setStateValue(null)
       }
 
       // write a real date to db
       const date = new Date(convertDateToYyyyMmDd(value))
       const newValue = format(date, 'YYYY-MM-DD')
-      saveToDb(newValue)
+      const fakeEvent = { target: { value: newValue, name } }
+      saveToDb(fakeEvent)
       setStateValue(newValue)
     },
   }),
@@ -85,6 +88,7 @@ const enhance = compose(
 
 const DateFieldWithPicker = ({
   label,
+  name,
   value: propsValue,
   stateValue,
   saveToDb,
@@ -93,6 +97,7 @@ const DateFieldWithPicker = ({
   error,
 }: {
   label: String,
+  name: String,
   value?: String | Number,
   stateValue?: String | Number,
   saveToDb: () => void,

@@ -1,13 +1,13 @@
 // @flow
 import React, { Component, createRef } from 'react'
 import styled from 'styled-components'
-import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
+import app from 'ampersand-app'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -16,10 +16,10 @@ import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
 import FormTitle from '../../../shared/FormTitle'
 import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data'
 import updateApberByIdGql from './updateApberById'
 import withAllAdresses from './withAllAdresses'
 import withAllApErfkritWertes from './withAllApErfkritWertes'
+import withData from './withData'
 
 const Container = styled.div`
   height: 100%;
@@ -37,22 +37,22 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withData,
   withAllApErfkritWertes,
   withAllAdresses,
   withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({ setErrors, errors }) => async ({
-      row,
-      field,
-      value,
-      updateApber,
-    }) => {
+    saveToDb: ({ setErrors, errors, data }) => async event => {
+      const field = event.target.name
+      const value = event.target.value || null
+      const row = get(data, 'apberById', {})
       /**
        * only save if value changed
        */
       if (row[field] === value) return
       try {
-        await updateApber({
+        await app.client.mutate({
+          mutation: updateApberByIdGql,
           variables: {
             id: row.id,
             [field]: value,
@@ -132,6 +132,7 @@ type Props = {
   treeName: string,
   dataAllAdresses: Object,
   dataAllApErfkritWertes: Object,
+  data: Object,
 }
 
 class Apber extends Component<Props> {
@@ -142,302 +143,211 @@ class Apber extends Component<Props> {
 
   render() {
     const {
-      id,
       dimensions = { width: 380 },
       saveToDb,
       errors,
       treeName,
       dataAllAdresses,
       dataAllApErfkritWertes,
+      data,
     } = this.props
 
+    if (
+      data.loading ||
+      dataAllAdresses.loading ||
+      dataAllApErfkritWertes.loading
+    )
+      return (
+        <Container>
+          <FieldsContainer>Lade...</FieldsContainer>
+        </Container>
+      )
+    if (data.error) return `Fehler: ${data.error.message}`
+    if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
+    if (dataAllApErfkritWertes.error)
+      return `Fehler: ${dataAllApErfkritWertes.error.message}`
+
+    const veraenGegenVorjahrWerte = [
+      { value: '+', label: '+' },
+      { value: '-', label: '-' },
+    ]
+    const width = isNaN(dimensions.width) ? 380 : dimensions.width
+    const row = get(data, 'apberById', {})
+    let beurteilungWerte = get(
+      dataAllApErfkritWertes,
+      'allApErfkritWertes.nodes',
+      [],
+    )
+    beurteilungWerte = sortBy(beurteilungWerte, 'sort')
+    beurteilungWerte = beurteilungWerte.map(el => ({
+      value: el.code,
+      label: el.text,
+    }))
+    let adressenWerte = get(dataAllAdresses, 'allAdresses.nodes', [])
+    adressenWerte = sortBy(adressenWerte, 'name')
+    adressenWerte = adressenWerte.map(el => ({
+      value: el.id,
+      label: el.name,
+    }))
+
     return (
-      <Query query={dataGql} variables={{ id }}>
-        {({ loading, error, data }) => {
-          if (
-            loading ||
-            dataAllAdresses.loading ||
-            dataAllApErfkritWertes.loading
-          )
-            return (
-              <Container>
-                <FieldsContainer>Lade...</FieldsContainer>
-              </Container>
-            )
-          if (error) return `Fehler: ${error.message}`
-          if (dataAllAdresses.error)
-            return `Fehler: ${dataAllAdresses.error.message}`
-          if (dataAllApErfkritWertes.error)
-            return `Fehler: ${dataAllApErfkritWertes.error.message}`
-
-          const veraenGegenVorjahrWerte = [
-            { value: '+', label: '+' },
-            { value: '-', label: '-' },
-          ]
-          const width = isNaN(dimensions.width) ? 380 : dimensions.width
-          const row = get(data, 'apberById', {})
-          let beurteilungWerte = get(
-            dataAllApErfkritWertes,
-            'allApErfkritWertes.nodes',
-            [],
-          )
-          beurteilungWerte = sortBy(beurteilungWerte, 'sort')
-          beurteilungWerte = beurteilungWerte.map(el => ({
-            value: el.code,
-            label: el.text,
-          }))
-          let adressenWerte = get(dataAllAdresses, 'allAdresses.nodes', [])
-          adressenWerte = sortBy(adressenWerte, 'name')
-          adressenWerte = adressenWerte.map(el => ({
-            value: el.id,
-            label: el.name,
-          }))
-
-          return (
-            <ErrorBoundary>
-              <Container ref={this.container}>
-                <FormTitle
-                  apId={row.apId}
-                  title="AP-Bericht"
-                  treeName={treeName}
-                  table="apber"
-                />
-                <Mutation mutation={updateApberByIdGql}>
-                  {(updateApber, { data }) => (
-                    <FieldsContainer width={width}>
-                      <TextField
-                        key={`${row.id}jahr`}
-                        label="Jahr"
-                        value={row.jahr}
-                        type="number"
-                        saveToDb={value =>
-                          saveToDb({ row, field: 'jahr', value, updateApber })
-                        }
-                        error={errors.jahr}
-                      />
-                      <TextField
-                        key={`${row.id}vergleichVorjahrGesamtziel`}
-                        label="Vergleich Vorjahr - Gesamtziel"
-                        value={row.vergleichVorjahrGesamtziel}
-                        type="text"
-                        multiLine
-                        saveToDb={value =>
-                          saveToDb({
-                            row,
-                            field: 'vergleichVorjahrGesamtziel',
-                            value,
-                            updateApber,
-                          })
-                        }
-                        error={errors.vergleichVorjahrGesamtziel}
-                      />
-                      <RadioButtonGroup
-                        key={`${row.id}beurteilung`}
-                        value={row.beurteilung}
-                        label="Beurteilung"
-                        dataSource={beurteilungWerte}
-                        saveToDb={value =>
-                          saveToDb({
-                            row,
-                            field: 'beurteilung',
-                            value,
-                            updateApber,
-                          })
-                        }
-                        error={errors.beurteilung}
-                      />
-                      <RadioButtonGroup
-                        key={`${row.id}veraenderungZumVorjahr`}
-                        value={row.veraenderungZumVorjahr}
-                        label="Veränderung zum Vorjahr"
-                        dataSource={veraenGegenVorjahrWerte}
-                        saveToDb={value =>
-                          saveToDb({
-                            row,
-                            field: 'veraenderungZumVorjahr',
-                            value,
-                            updateApber,
-                          })
-                        }
-                        error={errors.veraenderungZumVorjahr}
-                      />
-                      <TextField
-                        key={`${row.id}apberAnalyse`}
-                        label="Analyse"
-                        value={row.apberAnalyse}
-                        type="text"
-                        multiLine
-                        saveToDb={value =>
-                          saveToDb({
-                            row,
-                            field: 'apberAnalyse',
-                            value,
-                            updateApber,
-                          })
-                        }
-                        error={errors.apberAnalyse}
-                      />
-                      <TextField
-                        key={`${row.id}konsequenzenUmsetzung`}
-                        label="Konsequenzen für die Umsetzung"
-                        value={row.konsequenzenUmsetzung}
-                        type="text"
-                        multiLine
-                        saveToDb={value =>
-                          saveToDb({
-                            row,
-                            field: 'konsequenzenUmsetzung',
-                            value,
-                            updateApber,
-                          })
-                        }
-                        error={errors.konsequenzenUmsetzung}
-                      />
-                      <TextField
-                        key={`${row.id}konsequenzenErfolgskontrolle`}
-                        label="Konsequenzen für die Erfolgskontrolle"
-                        value={row.konsequenzenErfolgskontrolle}
-                        type="text"
-                        multiLine
-                        saveToDb={value =>
-                          saveToDb({
-                            row,
-                            field: 'konsequenzenErfolgskontrolle',
-                            value,
-                            updateApber,
-                          })
-                        }
-                        error={errors.konsequenzenErfolgskontrolle}
-                      />
-                      <TextField
-                        key={`${row.id}biotopeNeue`}
-                        label="A. Grundmengen: Bemerkungen/Folgerungen für nächstes Jahr: neue Biotope"
-                        value={row.biotopeNeue}
-                        type="text"
-                        multiLine
-                        saveToDb={value =>
-                          saveToDb({
-                            row,
-                            field: 'biotopeNeue',
-                            value,
-                            updateApber,
-                          })
-                        }
-                        error={errors.biotopeNeue}
-                      />
-                      <TextField
-                        key={`${row.id}biotopeOptimieren`}
-                        label="B. Bestandesentwicklung: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Biotope"
-                        value={row.biotopeOptimieren}
-                        type="text"
-                        multiLine
-                        saveToDb={value =>
-                          saveToDb({
-                            row,
-                            field: 'biotopeOptimieren',
-                            value,
-                            updateApber,
-                          })
-                        }
-                        error={errors.biotopeOptimieren}
-                      />
-                      <TextField
-                        key={`${row.id}massnahmenApBearb`}
-                        label="C. Zwischenbilanz zur Wirkung von Massnahmen: Weitere Aktivitäten der Aktionsplan-Verantwortlichen"
-                        value={row.massnahmenApBearb}
-                        type="text"
-                        multiLine
-                        saveToDb={value =>
-                          saveToDb({
-                            row,
-                            field: 'massnahmenApBearb',
-                            value,
-                            updateApber,
-                          })
-                        }
-                        error={errors.massnahmenApBearb}
-                      />
-                      <TextField
-                        key={`${row.id}massnahmenPlanungVsAusfuehrung`}
-                        label="C. Zwischenbilanz zur Wirkung von Massnahmen: Vergleich Ausführung/Planung"
-                        value={row.massnahmenPlanungVsAusfuehrung}
-                        type="text"
-                        multiLine
-                        saveToDb={value =>
-                          saveToDb({
-                            row,
-                            field: 'massnahmenPlanungVsAusfuehrung',
-                            value,
-                            updateApber,
-                          })
-                        }
-                        error={errors.massnahmenPlanungVsAusfuehrung}
-                      />
-                      <TextField
-                        key={`${row.id}massnahmenOptimieren`}
-                        label="C. Zwischenbilanz zur Wirkung von Massnahmen: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Massnahmen"
-                        value={row.massnahmenOptimieren}
-                        type="text"
-                        multiLine
-                        saveToDb={value =>
-                          saveToDb({
-                            row,
-                            field: 'massnahmenOptimieren',
-                            value,
-                            updateApber,
-                          })
-                        }
-                        error={errors.massnahmenOptimieren}
-                      />
-                      <TextField
-                        key={`${row.id}wirkungAufArt`}
-                        label="D. Einschätzung der Wirkung des AP insgesamt auf die Art: Bemerkungen"
-                        value={row.wirkungAufArt}
-                        type="text"
-                        multiLine
-                        saveToDb={value =>
-                          saveToDb({
-                            row,
-                            field: 'wirkungAufArt',
-                            value,
-                            updateApber,
-                          })
-                        }
-                        error={errors.wirkungAufArt}
-                      />
-                      <DateFieldWithPicker
-                        key={`${row.id}datum`}
-                        label="Datum"
-                        value={row.datum}
-                        saveToDb={value =>
-                          saveToDb({ row, field: 'datum', value, updateApber })
-                        }
-                        error={errors.datum}
-                      />
-                      <Select
-                        key={`${row.id}bearbeiter`}
-                        value={row.bearbeiter}
-                        field="bearbeiter"
-                        label="BearbeiterIn"
-                        options={adressenWerte}
-                        saveToDb={value =>
-                          saveToDb({
-                            row,
-                            field: 'bearbeiter',
-                            value,
-                            updateApber,
-                          })
-                        }
-                        error={errors.bearbeiter}
-                      />
-                    </FieldsContainer>
-                  )}
-                </Mutation>
-              </Container>
-            </ErrorBoundary>
-          )
-        }}
-      </Query>
+      <ErrorBoundary>
+        <Container ref={this.container}>
+          <FormTitle
+            apId={row.apId}
+            title="AP-Bericht"
+            treeName={treeName}
+            table="apber"
+          />
+          <FieldsContainer width={width}>
+            <TextField
+              key={`${row.id}jahr`}
+              name="jahr"
+              label="Jahr"
+              value={row.jahr}
+              type="number"
+              saveToDb={saveToDb}
+              error={errors.jahr}
+            />
+            <TextField
+              key={`${row.id}vergleichVorjahrGesamtziel`}
+              name="vergleichVorjahrGesamtziel"
+              label="Vergleich Vorjahr - Gesamtziel"
+              value={row.vergleichVorjahrGesamtziel}
+              type="text"
+              multiLine
+              saveToDb={saveToDb}
+              error={errors.vergleichVorjahrGesamtziel}
+            />
+            <RadioButtonGroup
+              key={`${row.id}beurteilung`}
+              name="beurteilung"
+              value={row.beurteilung}
+              label="Beurteilung"
+              dataSource={beurteilungWerte}
+              saveToDb={saveToDb}
+              error={errors.beurteilung}
+            />
+            <RadioButtonGroup
+              key={`${row.id}veraenderungZumVorjahr`}
+              name="veraenderungZumVorjahr"
+              value={row.veraenderungZumVorjahr}
+              label="Veränderung zum Vorjahr"
+              dataSource={veraenGegenVorjahrWerte}
+              saveToDb={saveToDb}
+              error={errors.veraenderungZumVorjahr}
+            />
+            <TextField
+              key={`${row.id}apberAnalyse`}
+              name="apberAnalyse"
+              label="Analyse"
+              value={row.apberAnalyse}
+              type="text"
+              multiLine
+              saveToDb={saveToDb}
+              error={errors.apberAnalyse}
+            />
+            <TextField
+              key={`${row.id}konsequenzenUmsetzung`}
+              name="konsequenzenUmsetzung"
+              label="Konsequenzen für die Umsetzung"
+              value={row.konsequenzenUmsetzung}
+              type="text"
+              multiLine
+              saveToDb={saveToDb}
+              error={errors.konsequenzenUmsetzung}
+            />
+            <TextField
+              key={`${row.id}konsequenzenErfolgskontrolle`}
+              name="konsequenzenErfolgskontrolle"
+              label="Konsequenzen für die Erfolgskontrolle"
+              value={row.konsequenzenErfolgskontrolle}
+              type="text"
+              multiLine
+              saveToDb={saveToDb}
+              error={errors.konsequenzenErfolgskontrolle}
+            />
+            <TextField
+              key={`${row.id}biotopeNeue`}
+              name="biotopeNeue"
+              label="A. Grundmengen: Bemerkungen/Folgerungen für nächstes Jahr: neue Biotope"
+              value={row.biotopeNeue}
+              type="text"
+              multiLine
+              saveToDb={saveToDb}
+              error={errors.biotopeNeue}
+            />
+            <TextField
+              key={`${row.id}biotopeOptimieren`}
+              name="biotopeOptimieren"
+              label="B. Bestandesentwicklung: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Biotope"
+              value={row.biotopeOptimieren}
+              type="text"
+              multiLine
+              saveToDb={saveToDb}
+              error={errors.biotopeOptimieren}
+            />
+            <TextField
+              key={`${row.id}massnahmenApBearb`}
+              name="massnahmenApBearb"
+              label="C. Zwischenbilanz zur Wirkung von Massnahmen: Weitere Aktivitäten der Aktionsplan-Verantwortlichen"
+              value={row.massnahmenApBearb}
+              type="text"
+              multiLine
+              saveToDb={saveToDb}
+              error={errors.massnahmenApBearb}
+            />
+            <TextField
+              key={`${row.id}massnahmenPlanungVsAusfuehrung`}
+              name="massnahmenPlanungVsAusfuehrung"
+              label="C. Zwischenbilanz zur Wirkung von Massnahmen: Vergleich Ausführung/Planung"
+              value={row.massnahmenPlanungVsAusfuehrung}
+              type="text"
+              multiLine
+              saveToDb={saveToDb}
+              error={errors.massnahmenPlanungVsAusfuehrung}
+            />
+            <TextField
+              key={`${row.id}massnahmenOptimieren`}
+              name="massnahmenOptimieren"
+              label="C. Zwischenbilanz zur Wirkung von Massnahmen: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Massnahmen"
+              value={row.massnahmenOptimieren}
+              type="text"
+              multiLine
+              saveToDb={saveToDb}
+              error={errors.massnahmenOptimieren}
+            />
+            <TextField
+              key={`${row.id}wirkungAufArt`}
+              name="wirkungAufArt"
+              label="D. Einschätzung der Wirkung des AP insgesamt auf die Art: Bemerkungen"
+              value={row.wirkungAufArt}
+              type="text"
+              multiLine
+              saveToDb={saveToDb}
+              error={errors.wirkungAufArt}
+            />
+            <DateFieldWithPicker
+              key={`${row.id}datum`}
+              name="datum"
+              label="Datum"
+              value={row.datum}
+              saveToDb={saveToDb}
+              error={errors.datum}
+            />
+            <Select
+              key={`${row.id}bearbeiter`}
+              name="bearbeiter"
+              value={row.bearbeiter}
+              field="bearbeiter"
+              label="BearbeiterIn"
+              options={adressenWerte}
+              saveToDb={saveToDb}
+              error={errors.bearbeiter}
+            />
+          </FieldsContainer>
+        </Container>
+      </ErrorBoundary>
     )
   }
 }
