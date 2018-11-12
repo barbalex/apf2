@@ -29,17 +29,27 @@ const StyledRadio = styled(Radio)`
 
 const enhance = compose(
   withHandlers({
-    onClickButton: ({ saveToDb, value }) => () => saveToDb(!value),
+    onClickButton: ({ saveToDb, value, name }) => () => {
+      const fakeEvent = {
+        target: {
+          value: !value,
+          name,
+        },
+      }
+      saveToDb(fakeEvent)
+    },
   }),
 )
 
 const RadioButton = ({
   label,
+  name,
   value,
   error,
   onClickButton,
 }: {
   label: String,
+  name: String,
   value: Boolean,
   error: String,
   onClickButton: () => void,

@@ -14,6 +14,7 @@ const Container = styled.div`
 
 const RadioButtonGroupWithInfo = ({
   label,
+  name,
   value,
   error,
   dataSource,
@@ -21,6 +22,7 @@ const RadioButtonGroupWithInfo = ({
   popover,
 }: {
   label: String,
+  name: String,
   value?: ?Number | ?String,
   error: String,
   dataSource: Array<Object>,
@@ -30,6 +32,7 @@ const RadioButtonGroupWithInfo = ({
   <Container>
     <RadioButtonGroup
       value={value}
+      name={name}
       dataSource={dataSource}
       saveToDb={saveToDb}
       label={label}

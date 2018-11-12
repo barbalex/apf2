@@ -98,38 +98,6 @@ const enhance = compose(
               },
             },
           })
-          /*
-          updatePop({
-            variables: {
-              id: row.id,
-              [field]: value,
-            },
-            optimisticResponse: {
-              __typename: 'Mutation',
-              updatePopById: {
-                pop: {
-                  id: row.id,
-                  apId: field === 'apId' ? value : row.apId,
-                  nr: field === 'nr' ? value : row.nr,
-                  name: field === 'name' ? value : row.name,
-                  status: field === 'status' ? value : row.status,
-                  statusUnklar:
-                    field === 'statusUnklar' ? value : row.statusUnklar,
-                  statusUnklarBegruendung:
-                    field === 'statusUnklarBegruendung'
-                      ? value
-                      : row.statusUnklarBegruendung,
-                  bekanntSeit:
-                    field === 'bekanntSeit' ? value : row.bekanntSeit,
-                  x: field === 'x' ? value : row.x,
-                  y: field === 'y' ? value : row.y,
-                  apByApId: row.apByApId,
-                  __typename: 'Pop',
-                },
-                __typename: 'Pop',
-              },
-            },
-          })*/
         } catch (error) {
           return setErrors({ [field]: error.message })
         }
@@ -222,46 +190,37 @@ const Pop = ({
               <RadioButton
                 key={`${row.id}statusUnklar`}
                 label="Status unklar"
+                name="statusUnklar"
                 value={row.statusUnklar}
-                saveToDb={value =>
-                  saveToDb({ row, field: 'statusUnklar', value, updatePop })
-                }
+                saveToDb={saveToDb}
                 error={errors.statusUnklar}
               />
               <TextField
                 key={`${row.id}statusUnklarBegruendung`}
                 label="Begründung"
+                name="statusUnklarBegruendung"
                 value={row.statusUnklarBegruendung}
                 type="text"
                 multiLine
-                saveToDb={value =>
-                  saveToDb({
-                    row,
-                    field: 'statusUnklarBegruendung',
-                    value,
-                    updatePop,
-                  })
-                }
+                saveToDb={saveToDb}
                 error={errors.statusUnklarBegruendung}
               />
               <TextField
                 key={`${row.id}x`}
                 label="X-Koordinaten"
+                name="x"
                 value={row.x}
                 type="number"
-                saveToDb={value =>
-                  saveToDb({ row, field: 'x', value, updatePop })
-                }
+                saveToDb={saveToDb}
                 error={errors.x}
               />
               <TextField
                 key={`${row.id}y`}
                 label="Y-Koordinaten"
+                name="y"
                 value={row.y}
                 type="number"
-                saveToDb={value =>
-                  saveToDb({ row, field: 'y', value, updatePop })
-                }
+                saveToDb={saveToDb}
                 error={errors.y}
               />
             </FieldsContainer>

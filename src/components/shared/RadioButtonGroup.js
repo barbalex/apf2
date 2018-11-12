@@ -30,7 +30,7 @@ const StyledRadio = styled(Radio)`
 
 const enhance = compose(
   withHandlers({
-    onClickButton: ({ value: oldValue, saveToDb }) => event => {
+    onClickButton: ({ value: oldValue, saveToDb, name }) => event => {
       /**
        * if clicked element is active value: set null
        * Problem: does not work on change event on RadioGroup
@@ -42,10 +42,16 @@ const enhance = compose(
       if (targetValue !== undefined && targetValue == oldValue) {
         // an already active option was clicked
         // set value null
-        return saveToDb(null)
+        const fakeEvent = {
+          target: {
+            value: null,
+            name,
+          },
+        }
+        return saveToDb(fakeEvent)
       }
     },
-    onChangeGroup: ({ value: oldValue, saveToDb }) => event => {
+    onChangeGroup: ({ value: oldValue, saveToDb, name }) => event => {
       // group only changes if value changes
       const targetValue = event.target.value
       // values are passed as strings > need to convert
@@ -53,11 +59,17 @@ const enhance = compose(
         targetValue === 'true'
           ? true
           : targetValue === 'false'
-            ? false
-            : isNaN(targetValue)
-              ? targetValue
-              : +targetValue
-      saveToDb(valueToUse)
+          ? false
+          : isNaN(targetValue)
+          ? targetValue
+          : +targetValue
+      const fakeEvent = {
+        target: {
+          value: valueToUse,
+          name,
+        },
+      }
+      saveToDb(fakeEvent)
     },
   }),
 )
@@ -65,6 +77,7 @@ const enhance = compose(
 const RadioButtonGroup = ({
   value,
   label,
+  name,
   error,
   helperText = '',
   dataSource = [],
@@ -73,6 +86,7 @@ const RadioButtonGroup = ({
 }: {
   value: Number | String,
   label: String,
+  name: String,
   error: String,
   helperText: String,
   dataSource: Array<Object>,
