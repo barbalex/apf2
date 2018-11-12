@@ -2,20 +2,20 @@
 import React from 'react'
 import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
-import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
+import app from 'ampersand-app'
 
 import TextField from '../../../shared/TextField'
 import Select from '../../../shared/Select'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data'
 import updateAssozartByIdGql from './updateAssozartById'
 import withAeEigenschaftens from './withAeEigenschaftens'
+import withData from './withData'
 
 const Container = styled.div`
   height: 100%;
@@ -29,21 +29,21 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withData,
   withAeEigenschaftens,
   withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({ refetchTree, setErrors, errors }) => async ({
-      row,
-      field,
-      value,
-      updateAssozart,
-    }) => {
+    saveToDb: ({ refetchTree, setErrors, errors, data }) => async event => {
+      const field = event.target.name
+      const value = event.target.value || null
+      const row = get(data, 'assozartById', {})
       /**
        * only save if value changed
        */
       if (row[field] === value) return
       try {
-        await updateAssozart({
+        await app.client.mutate({
+          mutation: updateAssozartByIdGql,
           variables: {
             id: row.id,
             [field]: value,
@@ -86,89 +86,73 @@ const Assozart = ({
   errors,
   treeName,
   dataAeEigenschaftens,
+  data,
 }: {
   id: string,
   saveToDb: () => void,
   errors: Object,
   treeName: string,
   dataAeEigenschaftens: Object,
-}) => (
-  <Query query={dataGql} variables={{ id }}>
-    {({ loading, error, data }) => {
-      if (loading || dataAeEigenschaftens.loading)
-        return (
-          <Container>
-            <FieldsContainer>Lade...</FieldsContainer>
-          </Container>
-        )
-      if (error) return `Fehler: ${error.message}`
+  data: Object,
+}) => {
+  if (data.loading || dataAeEigenschaftens.loading)
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  if (data.error) return `Fehler: ${data.error.message}`
 
-      const row = get(data, 'assozartById', {})
-      const assozartenOfAp = get(row, 'apByApId.assozartsByApId.nodes', []).map(
-        o => o.aeId,
-      )
-      const artenNotToShow = assozartenOfAp.filter(a => a !== row.aeId)
-      let artWerte = get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])
-      // filter ap arten but the active one
-      artWerte = artWerte.filter(o => !artenNotToShow.includes(o.id))
-      artWerte = sortBy(artWerte, 'artname')
-      artWerte = artWerte.map(el => ({
-        value: el.id,
-        label: el.artname,
-      }))
+  console.log('Assozart rendering')
 
-      return (
-        <ErrorBoundary>
-          <Container>
-            <FormTitle
-              apId={row.apId}
-              title="assoziierte Art"
-              treeName={treeName}
-              table="assozart"
-            />
-            <Mutation mutation={updateAssozartByIdGql}>
-              {(updateAssozart, { data }) => (
-                <FieldsContainer>
-                  <Select
-                    key={`${row.id}aeId`}
-                    value={row.aeId}
-                    field="aeId"
-                    label="Art"
-                    options={artWerte}
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'aeId',
-                        value,
-                        updateAssozart,
-                      })
-                    }
-                    error={errors.aeId}
-                  />
-                  <TextField
-                    key={`${row.id}bemerkungen`}
-                    label="Bemerkungen zur Assoziation"
-                    value={row.bemerkungen}
-                    type="text"
-                    multiLine
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'bemerkungen',
-                        value,
-                        updateAssozart,
-                      })
-                    }
-                    error={errors.bemerkungen}
-                  />
-                </FieldsContainer>
-              )}
-            </Mutation>
-          </Container>
-        </ErrorBoundary>
-      )
-    }}
-  </Query>
-)
+  const row = get(data, 'assozartById', {})
+  const assozartenOfAp = get(row, 'apByApId.assozartsByApId.nodes', []).map(
+    o => o.aeId,
+  )
+  const artenNotToShow = assozartenOfAp.filter(a => a !== row.aeId)
+  let artWerte = get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])
+  // filter ap arten but the active one
+  artWerte = artWerte.filter(o => !artenNotToShow.includes(o.id))
+  artWerte = sortBy(artWerte, 'artname')
+  artWerte = artWerte.map(el => ({
+    value: el.id,
+    label: el.artname,
+  }))
+
+  return (
+    <ErrorBoundary>
+      <Container>
+        <FormTitle
+          apId={row.apId}
+          title="assoziierte Art"
+          treeName={treeName}
+          table="assozart"
+        />
+        <FieldsContainer>
+          <Select
+            key={`${row.id}aeId`}
+            name="aeId"
+            value={row.aeId}
+            field="aeId"
+            label="Art"
+            options={artWerte}
+            saveToDb={saveToDb}
+            error={errors.aeId}
+          />
+          <TextField
+            key={`${row.id}bemerkungen`}
+            name="bemerkungen"
+            label="Bemerkungen zur Assoziation"
+            value={row.bemerkungen}
+            type="text"
+            multiLine
+            saveToDb={saveToDb}
+            error={errors.bemerkungen}
+          />
+        </FieldsContainer>
+      </Container>
+    </ErrorBoundary>
+  )
+}
 
 export default enhance(Assozart)
