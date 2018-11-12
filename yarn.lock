@@ -10112,10 +10112,10 @@ react-measure@2.1.2, react-measure@^2.0.2:
     prop-types "^15.5.10"
     resize-observer-polyfill "^1.4.2"
 
-react-reflex@3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/react-reflex/-/react-reflex-3.0.3.tgz#bf7670aa0c24676f8d77af66ee521576e974f42c"
-  integrity sha512-yYAC4TAkrDddKVWsKIcPh8JhxYCbEWRCzFbuuuhlJd/BBcq1pAylTlOQPo9cJB3Ia8vzXfJhVhNN+oLp2h+VOA==
+react-reflex@3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/react-reflex/-/react-reflex-3.0.4.tgz#88752037dd036466c2843ea6c685c54e6f8d34bd"
+  integrity sha512-9r77c7aN6787Fl9r0UumbRmXbEcbSTAm7v6JDBvLjZTjYMSVNxiYTWjJzy8K/NpzFU037WRSoleUhynOOGVhBw==
   dependencies:
     "@babel/runtime" "^7.0.0"
     lodash.throttle "^4.1.1"
