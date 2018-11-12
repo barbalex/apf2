@@ -16,7 +16,7 @@ import { MuiThemeProvider } from '@material-ui/core/styles'
 import theme from './theme'
 import moment from 'moment'
 import 'moment/locale/de-ch' // this is the important bit, you have to import the locale your'e trying to use.
-import MomentUtils from 'material-ui-pickers/utils/moment-utils'
+import MomentUtils from '@date-io/moment'
 import { MuiPickersUtilsProvider } from 'material-ui-pickers'
 import { ApolloProvider } from 'react-apollo'
 import { Provider as StateProvider } from 'unstated'
