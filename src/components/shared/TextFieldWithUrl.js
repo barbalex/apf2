@@ -33,15 +33,11 @@ const StyledFormControl = styled(FormControl)`
 `
 
 const enhance = compose(
-  withState(
-    'stateValue',
-    'setStateValue',
-    ({ value: propsValue }) =>
-      propsValue || propsValue === 0 ? propsValue : '',
+  withState('stateValue', 'setStateValue', ({ value: propsValue }) =>
+    propsValue || propsValue === 0 ? propsValue : '',
   ),
   withHandlers({
     onChange: ({ setStateValue }) => event => setStateValue(event.target.value),
-    onBlur: ({ saveToDb }) => event => saveToDb(event.target.value || null),
     onOpen: () => e => window.open(e.target.dataset.url, '_blank'),
   }),
   withLifecycle({
@@ -58,6 +54,7 @@ const TextFieldWithUrl = ({
   value: propsValue,
   stateValue,
   label,
+  name,
   type = 'text',
   multiLine = false,
   disabled = false,
@@ -65,12 +62,12 @@ const TextFieldWithUrl = ({
   error,
   saveToDb,
   onChange,
-  onBlur,
   onOpen,
 }: {
   value: Number | String,
   stateValue: Number | String,
   label: String,
+  name: String,
   type: String,
   multiLine: Boolean,
   disabled: Boolean,
@@ -78,7 +75,6 @@ const TextFieldWithUrl = ({
   error: String,
   saveToDb: () => void,
   onChange: () => void,
-  onBlur: () => void,
   onOpen: () => void,
 }) => {
   const urls = stateValue ? getUrls(stateValue) : []
@@ -96,11 +92,12 @@ const TextFieldWithUrl = ({
         </InputLabel>
         <Input
           id={label}
+          name={name}
           value={stateValue}
           type={type}
           multiline={multiLine}
           onChange={onChange}
-          onBlur={onBlur}
+          onBlur={saveToDb}
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="off"

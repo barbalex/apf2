@@ -8,6 +8,7 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
+import app from 'ampersand-app'
 
 import TextField from '../../../shared/TextField'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
@@ -50,17 +51,27 @@ const enhance = compose(
   withNodeFilter,
   withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({ setErrors, errors, nodeFilterState, treeName }) => async ({
-      row,
-      field,
-      value,
-      updateTpop,
-    }) => {
+    saveToDb: ({
+      setErrors,
+      errors,
+      nodeFilterState,
+      treeName,
+      data,
+    }) => async event => {
+      const field = event.target.name
+      const value = event.target.value || null
+
+      const showFilter = !!nodeFilterState.state[treeName].activeTable
+      let row
+      if (showFilter) {
+        row = nodeFilterState.state[treeName].tpop
+      } else {
+        row = get(data, 'tpopById', {})
+      }
       /**
        * only save if value changed
        */
       if (row[field] === value) return
-      const showFilter = !!nodeFilterState.state[treeName].activeTable
       if (showFilter) {
         nodeFilterState.setValue({
           treeName,
@@ -71,7 +82,8 @@ const enhance = compose(
         //refetchTree()
       } else {
         try {
-          await updateTpop({
+          await app.client.mutate({
+            mutation: updateTpopByIdGql,
             variables: {
               id: row.id,
               [field]: value,
@@ -133,6 +145,69 @@ const enhance = compose(
               },
             },
           })
+          /*
+          await updateTpop({
+            variables: {
+              id: row.id,
+              [field]: value,
+            },
+            optimisticResponse: {
+              __typename: 'Mutation',
+              updateTpopById: {
+                tpop: {
+                  id: row.id,
+                  popId: field === 'popId' ? value : row.popId,
+                  nr: field === 'nr' ? value : row.nr,
+                  gemeinde: field === 'gemeinde' ? value : row.gemeinde,
+                  flurname: field === 'flurname' ? value : row.flurname,
+                  x: field === 'x' ? value : row.x,
+                  y: field === 'y' ? value : row.y,
+                  radius: field === 'radius' ? value : row.radius,
+                  hoehe: field === 'hoehe' ? value : row.hoehe,
+                  exposition: field === 'exposition' ? value : row.exposition,
+                  klima: field === 'klima' ? value : row.klima,
+                  neigung: field === 'neigung' ? value : row.neigung,
+                  beschreibung:
+                    field === 'beschreibung' ? value : row.beschreibung,
+                  katasterNr: field === 'katasterNr' ? value : row.katasterNr,
+                  status: field === 'status' ? value : row.status,
+                  statusUnklarGrund:
+                    field === 'statusUnklarGrund'
+                      ? value
+                      : row.statusUnklarGrund,
+                  apberRelevant:
+                    field === 'apberRelevant' ? value : row.apberRelevant,
+                  bekanntSeit:
+                    field === 'bekanntSeit' ? value : row.bekanntSeit,
+                  eigentuemer:
+                    field === 'eigentuemer' ? value : row.eigentuemer,
+                  kontakt: field === 'kontakt' ? value : row.kontakt,
+                  nutzungszone:
+                    field === 'nutzungszone' ? value : row.nutzungszone,
+                  bewirtschafter:
+                    field === 'bewirtschafter' ? value : row.bewirtschafter,
+                  bewirtschaftung:
+                    field === 'bewirtschaftung' ? value : row.bewirtschaftung,
+                  kontrollfrequenz:
+                    field === 'kontrollfrequenz' ? value : row.kontrollfrequenz,
+                  kontrollfrequenzFreiwillige:
+                    field === 'kontrollfrequenzFreiwillige'
+                      ? value
+                      : row.kontrollfrequenzFreiwillige,
+                  bemerkungen:
+                    field === 'bemerkungen' ? value : row.bemerkungen,
+                  statusUnklar:
+                    field === 'statusUnklar' ? value : row.statusUnklar,
+                  popStatusWerteByStatus: row.popStatusWerteByStatus,
+                  tpopApberrelevantWerteByApberRelevant:
+                    row.tpopApberrelevantWerteByApberRelevant,
+                  popByPopId: row.popByPopId,
+                  __typename: 'Tpop',
+                },
+                __typename: 'Tpop',
+              },
+            },
+          })*/
         } catch (error) {
           return setErrors({ [field]: error.message })
         }
@@ -277,17 +352,7 @@ class Tpop extends Component<Props> {
                         apJahr={apJahr}
                         herkunftValue={row.status}
                         bekanntSeitValue={row.bekanntSeit}
-                        saveToDbBekanntSeit={value =>
-                          saveToDb({
-                            row,
-                            field: 'bekanntSeit',
-                            value,
-                            updateTpop,
-                          })
-                        }
-                        saveToDbStatus={value =>
-                          saveToDb({ row, field: 'status', value, updateTpop })
-                        }
+                        saveToDb={saveToDb}
                         treeName={treeName}
                       />
                       <RadioButton

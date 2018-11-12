@@ -7,6 +7,7 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
+import app from 'ampersand-app'
 
 import TextField from '../../../shared/TextField'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
@@ -35,17 +36,26 @@ const enhance = compose(
   withData,
   withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({ setErrors, errors, nodeFilterState, treeName }) => async ({
-      row,
-      field,
-      value,
-      updatePop,
-    }) => {
+    saveToDb: ({
+      setErrors,
+      errors,
+      nodeFilterState,
+      treeName,
+      data,
+    }) => async event => {
+      const field = event.target.name
+      const value = event.target.value || null
+      const showFilter = !!nodeFilterState.state[treeName].activeTable
+      let row
+      if (showFilter) {
+        row = nodeFilterState.state[treeName].pop
+      } else {
+        row = get(data, 'popById', {})
+      }
       /**
        * only save if value changed
        */
       if (row[field] === value) return
-      const showFilter = !!nodeFilterState.state[treeName].activeTable
       if (showFilter) {
         nodeFilterState.setValue({
           treeName,
@@ -56,7 +66,8 @@ const enhance = compose(
         //refetchTree()
       } else {
         try {
-          updatePop({
+          app.client.mutate({
+            mutation: updatePopByIdGql,
             variables: {
               id: row.id,
               [field]: value,
@@ -87,6 +98,38 @@ const enhance = compose(
               },
             },
           })
+          /*
+          updatePop({
+            variables: {
+              id: row.id,
+              [field]: value,
+            },
+            optimisticResponse: {
+              __typename: 'Mutation',
+              updatePopById: {
+                pop: {
+                  id: row.id,
+                  apId: field === 'apId' ? value : row.apId,
+                  nr: field === 'nr' ? value : row.nr,
+                  name: field === 'name' ? value : row.name,
+                  status: field === 'status' ? value : row.status,
+                  statusUnklar:
+                    field === 'statusUnklar' ? value : row.statusUnklar,
+                  statusUnklarBegruendung:
+                    field === 'statusUnklarBegruendung'
+                      ? value
+                      : row.statusUnklarBegruendung,
+                  bekanntSeit:
+                    field === 'bekanntSeit' ? value : row.bekanntSeit,
+                  x: field === 'x' ? value : row.x,
+                  y: field === 'y' ? value : row.y,
+                  apByApId: row.apByApId,
+                  __typename: 'Pop',
+                },
+                __typename: 'Pop',
+              },
+            },
+          })*/
         } catch (error) {
           return setErrors({ [field]: error.message })
         }
@@ -120,6 +163,7 @@ const Pop = ({
   treeName: string,
   data: Object,
 }) => {
+  console.log('Pop rendering')
   if (data.loading)
     return (
       <Container>
@@ -151,21 +195,19 @@ const Pop = ({
               <TextField
                 key={`${row.id}nr`}
                 label="Nr."
+                name="nr"
                 value={row.nr}
                 type="number"
-                saveToDb={value =>
-                  saveToDb({ row, field: 'nr', value, updatePop })
-                }
+                saveToDb={saveToDb}
                 error={errors.nr}
               />
               <TextFieldWithInfo
                 key={`${row.id}name`}
                 label="Name"
+                name="name"
                 value={row.name}
                 type="text"
-                saveToDb={value =>
-                  saveToDb({ row, field: 'name', value, updatePop })
-                }
+                saveToDb={saveToDb}
                 error={errors.name}
                 popover="Dieses Feld möglichst immer ausfüllen"
               />
@@ -174,12 +216,7 @@ const Pop = ({
                 apJahr={get(row, 'apByApId.startJahr')}
                 herkunftValue={row.status}
                 bekanntSeitValue={row.bekanntSeit}
-                saveToDbBekanntSeit={value =>
-                  saveToDb({ row, field: 'bekanntSeit', value, updatePop })
-                }
-                saveToDbStatus={value =>
-                  saveToDb({ row, field: 'status', value, updatePop })
-                }
+                saveToDb={saveToDb}
                 treeName={treeName}
               />
               <RadioButton

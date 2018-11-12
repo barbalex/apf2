@@ -18,19 +18,16 @@ const StyledFormControl = styled(FormControl)`
 `
 
 const enhance = compose(
-  withState(
-    'stateValue',
-    'setStateValue',
-    ({ value }) => (value || value === 0) ? value : ''
+  withState('stateValue', 'setStateValue', ({ value }) =>
+    value || value === 0 ? value : '',
   ),
   withHandlers({
     onChange: ({ setStateValue }) => event => setStateValue(event.target.value),
-    onBlur: ({ saveToDb }) => event => saveToDb(event.target.value || null),
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
       if (props.value !== prevProps.value) {
-        const value = (props.value || props.value === 0) ? props.value : ''
+        const value = props.value || props.value === 0 ? props.value : ''
         props.setStateValue(value)
       }
     },
@@ -40,6 +37,7 @@ const enhance = compose(
 const MyTextField = ({
   stateValue,
   label,
+  name,
   type = 'text',
   multiLine = false,
   disabled = false,
@@ -48,10 +46,10 @@ const MyTextField = ({
   error,
   saveToDb,
   onChange,
-  onBlur,
 }: {
   stateValue: Number | String,
   label: String,
+  name: String,
   type: String,
   multiLine: Boolean,
   disabled: Boolean,
@@ -60,8 +58,7 @@ const MyTextField = ({
   error: String,
   saveToDb: () => void,
   onChange: () => void,
-  onBlur: () => void,
-}) =>
+}) => (
   <StyledFormControl
     fullWidth
     disabled={disabled}
@@ -71,21 +68,21 @@ const MyTextField = ({
     <InputLabel htmlFor={label}>{label}</InputLabel>
     <Input
       id={label}
+      name={name}
       value={stateValue}
       type={type}
       multiline={multiLine}
       onChange={onChange}
-      onBlur={onBlur}
+      onBlur={saveToDb}
       placeholder={hintText}
     />
-    {
-      !!error &&
+    {!!error && (
       <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
-    }
-    {
-      !!helperText &&
+    )}
+    {!!helperText && (
       <FormHelperText id={`${label}HelperText`}>{helperText}</FormHelperText>
-    }
+    )}
   </StyledFormControl>
+)
 
 export default enhance(MyTextField)

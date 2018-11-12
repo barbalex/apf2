@@ -28,22 +28,16 @@ const PopoverContentRow = styled.div`
 `
 
 const enhance = compose(
-  withState(
-    'stateValue',
-    'setStateValue',
-    ({ value: propsValue }) =>
-      (propsValue || propsValue === 0) ? propsValue : ''
+  withState('stateValue', 'setStateValue', ({ value: propsValue }) =>
+    propsValue || propsValue === 0 ? propsValue : '',
   ),
   withHandlers({
-    onChange: ({ setStateValue }) => event =>
-      setStateValue(event.target.value),
-    onBlur: ({ saveToDb }) => event =>
-      saveToDb(event.target.value || null),
+    onChange: ({ setStateValue }) => event => setStateValue(event.target.value),
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
       if (props.value !== prevProps.value) {
-        const value = (props.value || props.value === 0) ? props.value : ''
+        const value = props.value || props.value === 0 ? props.value : ''
         props.setStateValue(value)
       }
     },
@@ -54,6 +48,7 @@ const TextFieldWithInfo = ({
   value: propsValue,
   stateValue,
   label,
+  name,
   type = 'text',
   multiLine = false,
   disabled = false,
@@ -61,12 +56,12 @@ const TextFieldWithInfo = ({
   popover,
   saveToDb,
   onChange,
-  onBlur,
   error,
 }: {
   value: Number | String,
   stateValue: Number | String,
   label: String,
+  name: String,
   type: String,
   multiLine: Boolean,
   disabled: Boolean,
@@ -75,8 +70,7 @@ const TextFieldWithInfo = ({
   popover: Object,
   saveToDb: () => void,
   onChange: () => void,
-  onBlur: () => void,
-}) =>
+}) => (
   <StyledFormControl
     fullWidth
     disabled={disabled}
@@ -86,11 +80,12 @@ const TextFieldWithInfo = ({
     <InputLabel htmlFor={label}>{label}</InputLabel>
     <Input
       id={label}
+      name={name}
       value={stateValue}
       type={type}
       multiline={multiLine}
       onChange={onChange}
-      onBlur={onBlur}
+      onBlur={saveToDb}
       placeholder={hintText}
       endAdornment={
         <InfoWithPopover>
@@ -98,10 +93,10 @@ const TextFieldWithInfo = ({
         </InfoWithPopover>
       }
     />
-    {
-      !!error &&
+    {!!error && (
       <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
-    }
+    )}
   </StyledFormControl>
+)
 
 export default enhance(TextFieldWithInfo)

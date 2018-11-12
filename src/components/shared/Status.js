@@ -82,18 +82,25 @@ const enhance = compose(
         return saveToDbStatus(null)
       }
     },
-    onChangeStatus: ({ herkunftValue, saveToDbStatus }) => event => {
+    onChangeStatus: ({ herkunftValue, saveToDb }) => event => {
       const { value: valuePassed } = event.target
       // if clicked element is active herkunftValue: set null
-      // eslint-disable-next-line eqeqeq
-      const val = valuePassed == herkunftValue ? null : valuePassed
-      saveToDbStatus(val)
+      const fakeEvent = {
+        target: {
+          value: valuePassed == herkunftValue ? null : valuePassed, // eslint-disable-line eqeqeq
+          name: 'status',
+        },
+      }
+      saveToDb(fakeEvent)
     },
     onChangeBekanntSeit: ({ setBekanntSeitStateValue }) => event =>
       setBekanntSeitStateValue(event.target.value ? +event.target.value : ''),
-    onBlurBekanntSeit: ({ saveToDbBekanntSeit }) => event => {
+    onBlurBekanntSeit: ({ saveToDb }) => event => {
       const { value } = event.target
-      saveToDbBekanntSeit(value === '' ? null : value)
+      const fakeEvent = {
+        target: { value: value === '' ? null : value, name: 'bekanntSeit' },
+      }
+      saveToDb(fakeEvent)
     },
   }),
 )
@@ -102,6 +109,7 @@ const Status = ({
   apJahr,
   herkunftValue,
   bekanntSeitStateValue,
+  saveToDb,
   saveToDbBekanntSeit,
   saveToDbStatus,
   onChangeStatus,
@@ -115,6 +123,7 @@ const Status = ({
   herkunftValue?: number,
   bekanntSeitStateValue: number,
   saveToDbBekanntSeit: () => void,
+  saveToDb: () => void,
   saveToDbStatus: () => void,
   onChangeStatus: () => void,
   onChangeBekanntSeit: () => void,
@@ -144,6 +153,7 @@ const Status = ({
           <InputLabel htmlFor="bekanntSeit">bekannt seit</InputLabel>
           <StyledInput
             id="bekanntSeit"
+            name="bekanntSeit"
             value={bekanntSeitStateValue}
             type="number"
             onChange={onChangeBekanntSeit}
