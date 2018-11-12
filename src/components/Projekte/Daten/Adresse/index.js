@@ -12,9 +12,9 @@ import RadioButton from '../../../shared/RadioButton'
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import data1Gql from './data1'
 import data2Gql from './data2'
 import updateAdresseByIdGql from './updateAdresseById'
+import withLocalData from './withLocalData'
 
 const Container = styled.div`
   height: 100%;
@@ -28,6 +28,7 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withLocalData,
   withState('errors', 'setErrors', {}),
   withHandlers({
     saveToDb: ({ refetchTree, setErrors, errors }) => async ({
@@ -86,167 +87,165 @@ const Adresse = ({
   treeName,
   saveToDb,
   errors,
+  localData,
 }: {
   treeName: String,
   saveToDb: () => void,
   errors: Object,
-}) => (
-  <Query query={data1Gql}>
-    {({ loading, error, data }) => {
-      if (error) return `Fehler: ${error.message}`
-      const id = get(data, `${treeName}.activeNodeArray[2]`)
+  localData: Object,
+}) => {
+  if (localData.error) return `Fehler: ${localData.error.message}`
+  const id = get(localData, `${treeName}.activeNodeArray[2]`)
 
-      return (
-        <Query query={data2Gql} variables={{ id }}>
-          {({ loading, error, data, client }) => {
-            if (loading)
-              return (
-                <Container>
-                  <FieldsContainer>Lade...</FieldsContainer>
-                </Container>
-              )
-            if (error) return `Fehler: ${error.message}`
+  return (
+    <Query query={data2Gql} variables={{ id }}>
+      {({ loading, error, data, client }) => {
+        if (loading)
+          return (
+            <Container>
+              <FieldsContainer>Lade...</FieldsContainer>
+            </Container>
+          )
+        if (error) return `Fehler: ${error.message}`
 
-            const row = get(data, 'adresseById', {})
+        const row = get(data, 'adresseById', {})
 
-            return (
-              <ErrorBoundary>
-                <Container>
-                  <FormTitle
-                    apId={id}
-                    title="Adresse"
-                    treeName={treeName}
-                    table="adresse"
-                  />
-                  <Mutation mutation={updateAdresseByIdGql}>
-                    {(updateAdresse, { data }) => (
-                      <FieldsContainer>
-                        <TextField
-                          key={`${row.id}name`}
-                          label="Name"
-                          value={row.name}
-                          saveToDb={value =>
-                            saveToDb({
-                              row,
-                              field: 'name',
-                              value,
-                              updateAdresse,
-                            })
-                          }
-                          error={errors.name}
-                        />
-                        <TextField
-                          key={`${row.id}adresse`}
-                          label="Adresse"
-                          value={row.adresse}
-                          saveToDb={value =>
-                            saveToDb({
-                              row,
-                              field: 'adresse',
-                              value,
-                              updateAdresse,
-                            })
-                          }
-                          error={errors.adresse}
-                        />
-                        <TextField
-                          key={`${row.id}telefon`}
-                          label="Telefon"
-                          value={row.telefon}
-                          saveToDb={value =>
-                            saveToDb({
-                              row,
-                              field: 'telefon',
-                              value,
-                              updateAdresse,
-                            })
-                          }
-                          error={errors.telefon}
-                        />
-                        <TextField
-                          key={`${row.id}email`}
-                          label="Email"
-                          value={row.email}
-                          saveToDb={value =>
-                            saveToDb({
-                              row,
-                              field: 'email',
-                              value,
-                              updateAdresse,
-                            })
-                          }
-                          error={errors.email}
-                        />
-                        <RadioButton
-                          key={`${row.id}freiwErfko`}
-                          label="freiwillige ErfolgskontrolleurIn"
-                          value={row.freiwErfko}
-                          saveToDb={value =>
-                            saveToDb({
-                              row,
-                              field: 'freiwErfko',
-                              value,
-                              updateAdresse,
-                            })
-                          }
-                          error={errors.freiwErfko}
-                        />
-                        <TextField
-                          key={`${row.id}evabVorname`}
-                          label="EvAB Vorname"
-                          value={row.evabVorname}
-                          saveToDb={value =>
-                            saveToDb({
-                              row,
-                              field: 'evabVorname',
-                              value,
-                              updateAdresse,
-                            })
-                          }
-                          error={errors.evabVorname}
-                          helperText="Wird für den Export in EvAB benötigt"
-                        />
-                        <TextField
-                          key={`${row.id}evabNachname`}
-                          label="EvAB Nachname"
-                          value={row.evabNachname}
-                          saveToDb={value =>
-                            saveToDb({
-                              row,
-                              field: 'evabNachname',
-                              value,
-                              updateAdresse,
-                            })
-                          }
-                          error={errors.evabNachname}
-                          helperText="Wird für den Export in EvAB benötigt"
-                        />
-                        <TextField
-                          key={`${row.id}evabOrt`}
-                          label="EvAB Ort"
-                          value={row.evabOrt}
-                          saveToDb={value =>
-                            saveToDb({
-                              row,
-                              field: 'evabOrt',
-                              value,
-                              updateAdresse,
-                            })
-                          }
-                          error={errors.evabOrt}
-                          helperText="Wird für den Export in EvAB benötigt. Muss immer einen Wert enthalten. Ist keine Ort bekannt, bitte - eintragen"
-                        />
-                      </FieldsContainer>
-                    )}
-                  </Mutation>
-                </Container>
-              </ErrorBoundary>
-            )
-          }}
-        </Query>
-      )
-    }}
-  </Query>
-)
+        return (
+          <ErrorBoundary>
+            <Container>
+              <FormTitle
+                apId={id}
+                title="Adresse"
+                treeName={treeName}
+                table="adresse"
+              />
+              <Mutation mutation={updateAdresseByIdGql}>
+                {(updateAdresse, { data }) => (
+                  <FieldsContainer>
+                    <TextField
+                      key={`${row.id}name`}
+                      label="Name"
+                      value={row.name}
+                      saveToDb={value =>
+                        saveToDb({
+                          row,
+                          field: 'name',
+                          value,
+                          updateAdresse,
+                        })
+                      }
+                      error={errors.name}
+                    />
+                    <TextField
+                      key={`${row.id}adresse`}
+                      label="Adresse"
+                      value={row.adresse}
+                      saveToDb={value =>
+                        saveToDb({
+                          row,
+                          field: 'adresse',
+                          value,
+                          updateAdresse,
+                        })
+                      }
+                      error={errors.adresse}
+                    />
+                    <TextField
+                      key={`${row.id}telefon`}
+                      label="Telefon"
+                      value={row.telefon}
+                      saveToDb={value =>
+                        saveToDb({
+                          row,
+                          field: 'telefon',
+                          value,
+                          updateAdresse,
+                        })
+                      }
+                      error={errors.telefon}
+                    />
+                    <TextField
+                      key={`${row.id}email`}
+                      label="Email"
+                      value={row.email}
+                      saveToDb={value =>
+                        saveToDb({
+                          row,
+                          field: 'email',
+                          value,
+                          updateAdresse,
+                        })
+                      }
+                      error={errors.email}
+                    />
+                    <RadioButton
+                      key={`${row.id}freiwErfko`}
+                      label="freiwillige ErfolgskontrolleurIn"
+                      value={row.freiwErfko}
+                      saveToDb={value =>
+                        saveToDb({
+                          row,
+                          field: 'freiwErfko',
+                          value,
+                          updateAdresse,
+                        })
+                      }
+                      error={errors.freiwErfko}
+                    />
+                    <TextField
+                      key={`${row.id}evabVorname`}
+                      label="EvAB Vorname"
+                      value={row.evabVorname}
+                      saveToDb={value =>
+                        saveToDb({
+                          row,
+                          field: 'evabVorname',
+                          value,
+                          updateAdresse,
+                        })
+                      }
+                      error={errors.evabVorname}
+                      helperText="Wird für den Export in EvAB benötigt"
+                    />
+                    <TextField
+                      key={`${row.id}evabNachname`}
+                      label="EvAB Nachname"
+                      value={row.evabNachname}
+                      saveToDb={value =>
+                        saveToDb({
+                          row,
+                          field: 'evabNachname',
+                          value,
+                          updateAdresse,
+                        })
+                      }
+                      error={errors.evabNachname}
+                      helperText="Wird für den Export in EvAB benötigt"
+                    />
+                    <TextField
+                      key={`${row.id}evabOrt`}
+                      label="EvAB Ort"
+                      value={row.evabOrt}
+                      saveToDb={value =>
+                        saveToDb({
+                          row,
+                          field: 'evabOrt',
+                          value,
+                          updateAdresse,
+                        })
+                      }
+                      error={errors.evabOrt}
+                      helperText="Wird für den Export in EvAB benötigt. Muss immer einen Wert enthalten. Ist keine Ort bekannt, bitte - eintragen"
+                    />
+                  </FieldsContainer>
+                )}
+              </Mutation>
+            </Container>
+          </ErrorBoundary>
+        )
+      }}
+    </Query>
+  )
+}
 
 export default enhance(Adresse)
