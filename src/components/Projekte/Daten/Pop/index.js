@@ -1,7 +1,7 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
-import { Query, Mutation } from 'react-apollo'
+import { Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
@@ -14,9 +14,9 @@ import Status from '../../../shared/Status'
 import RadioButton from '../../../shared/RadioButton'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data'
 import updatePopByIdGql from './updatePopById'
 import withNodeFilter from '../../../../state/withNodeFilter'
+import withData from './withData'
 
 const Container = styled.div`
   height: 100%;
@@ -32,6 +32,7 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   withNodeFilter,
+  withData,
   withState('errors', 'setErrors', {}),
   withHandlers({
     saveToDb: ({ setErrors, errors, nodeFilterState, treeName }) => async ({
@@ -110,130 +111,128 @@ const Pop = ({
   errors,
   nodeFilterState,
   treeName,
+  data,
 }: {
   id: string,
   saveToDb: () => void,
   errors: Object,
   nodeFilterState: Object,
   treeName: string,
-}) => (
-  <Query query={dataGql} variables={{ id }}>
-    {({ loading, error, data }) => {
-      if (loading)
-        return (
-          <Container>
-            <FieldsContainer>Lade...</FieldsContainer>
-          </Container>
-        )
-      if (error) return `Fehler: ${error.message}`
+  data: Object,
+}) => {
+  if (data.loading)
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  if (data.error) return `Fehler: ${data.error.message}`
 
-      const showFilter = !!nodeFilterState.state[treeName].activeTable
-      let row
-      if (showFilter) {
-        row = nodeFilterState.state[treeName].pop
-      } else {
-        row = get(data, 'popById', {})
-      }
+  const showFilter = !!nodeFilterState.state[treeName].activeTable
+  let row
+  if (showFilter) {
+    row = nodeFilterState.state[treeName].pop
+  } else {
+    row = get(data, 'popById', {})
+  }
 
-      return (
-        <ErrorBoundary>
-          <Container showfilter={showFilter}>
-            <FormTitle
-              apId={get(data, 'popById.apId')}
-              title="Population"
-              treeName={treeName}
-              table="pop"
-            />
-            <Mutation mutation={updatePopByIdGql}>
-              {(updatePop, { data }) => (
-                <FieldsContainer>
-                  <TextField
-                    key={`${row.id}nr`}
-                    label="Nr."
-                    value={row.nr}
-                    type="number"
-                    saveToDb={value =>
-                      saveToDb({ row, field: 'nr', value, updatePop })
-                    }
-                    error={errors.nr}
-                  />
-                  <TextFieldWithInfo
-                    key={`${row.id}name`}
-                    label="Name"
-                    value={row.name}
-                    type="text"
-                    saveToDb={value =>
-                      saveToDb({ row, field: 'name', value, updatePop })
-                    }
-                    error={errors.name}
-                    popover="Dieses Feld möglichst immer ausfüllen"
-                  />
-                  <Status
-                    key={`${row.id}status`}
-                    apJahr={get(row, 'apByApId.startJahr')}
-                    herkunftValue={row.status}
-                    bekanntSeitValue={row.bekanntSeit}
-                    saveToDbBekanntSeit={value =>
-                      saveToDb({ row, field: 'bekanntSeit', value, updatePop })
-                    }
-                    saveToDbStatus={value =>
-                      saveToDb({ row, field: 'status', value, updatePop })
-                    }
-                    treeName={treeName}
-                  />
-                  <RadioButton
-                    key={`${row.id}statusUnklar`}
-                    label="Status unklar"
-                    value={row.statusUnklar}
-                    saveToDb={value =>
-                      saveToDb({ row, field: 'statusUnklar', value, updatePop })
-                    }
-                    error={errors.statusUnklar}
-                  />
-                  <TextField
-                    key={`${row.id}statusUnklarBegruendung`}
-                    label="Begründung"
-                    value={row.statusUnklarBegruendung}
-                    type="text"
-                    multiLine
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'statusUnklarBegruendung',
-                        value,
-                        updatePop,
-                      })
-                    }
-                    error={errors.statusUnklarBegruendung}
-                  />
-                  <TextField
-                    key={`${row.id}x`}
-                    label="X-Koordinaten"
-                    value={row.x}
-                    type="number"
-                    saveToDb={value =>
-                      saveToDb({ row, field: 'x', value, updatePop })
-                    }
-                    error={errors.x}
-                  />
-                  <TextField
-                    key={`${row.id}y`}
-                    label="Y-Koordinaten"
-                    value={row.y}
-                    type="number"
-                    saveToDb={value =>
-                      saveToDb({ row, field: 'y', value, updatePop })
-                    }
-                    error={errors.y}
-                  />
-                </FieldsContainer>
-              )}
-            </Mutation>
-          </Container>
-        </ErrorBoundary>
-      )
-    }}
-  </Query>
-)
+  return (
+    <ErrorBoundary>
+      <Container showfilter={showFilter}>
+        <FormTitle
+          apId={get(data, 'popById.apId')}
+          title="Population"
+          treeName={treeName}
+          table="pop"
+        />
+        <Mutation mutation={updatePopByIdGql}>
+          {(updatePop, { data }) => (
+            <FieldsContainer>
+              <TextField
+                key={`${row.id}nr`}
+                label="Nr."
+                value={row.nr}
+                type="number"
+                saveToDb={value =>
+                  saveToDb({ row, field: 'nr', value, updatePop })
+                }
+                error={errors.nr}
+              />
+              <TextFieldWithInfo
+                key={`${row.id}name`}
+                label="Name"
+                value={row.name}
+                type="text"
+                saveToDb={value =>
+                  saveToDb({ row, field: 'name', value, updatePop })
+                }
+                error={errors.name}
+                popover="Dieses Feld möglichst immer ausfüllen"
+              />
+              <Status
+                key={`${row.id}status`}
+                apJahr={get(row, 'apByApId.startJahr')}
+                herkunftValue={row.status}
+                bekanntSeitValue={row.bekanntSeit}
+                saveToDbBekanntSeit={value =>
+                  saveToDb({ row, field: 'bekanntSeit', value, updatePop })
+                }
+                saveToDbStatus={value =>
+                  saveToDb({ row, field: 'status', value, updatePop })
+                }
+                treeName={treeName}
+              />
+              <RadioButton
+                key={`${row.id}statusUnklar`}
+                label="Status unklar"
+                value={row.statusUnklar}
+                saveToDb={value =>
+                  saveToDb({ row, field: 'statusUnklar', value, updatePop })
+                }
+                error={errors.statusUnklar}
+              />
+              <TextField
+                key={`${row.id}statusUnklarBegruendung`}
+                label="Begründung"
+                value={row.statusUnklarBegruendung}
+                type="text"
+                multiLine
+                saveToDb={value =>
+                  saveToDb({
+                    row,
+                    field: 'statusUnklarBegruendung',
+                    value,
+                    updatePop,
+                  })
+                }
+                error={errors.statusUnklarBegruendung}
+              />
+              <TextField
+                key={`${row.id}x`}
+                label="X-Koordinaten"
+                value={row.x}
+                type="number"
+                saveToDb={value =>
+                  saveToDb({ row, field: 'x', value, updatePop })
+                }
+                error={errors.x}
+              />
+              <TextField
+                key={`${row.id}y`}
+                label="Y-Koordinaten"
+                value={row.y}
+                type="number"
+                saveToDb={value =>
+                  saveToDb({ row, field: 'y', value, updatePop })
+                }
+                error={errors.y}
+              />
+            </FieldsContainer>
+          )}
+        </Mutation>
+      </Container>
+    </ErrorBoundary>
+  )
+}
 
 export default enhance(Pop)

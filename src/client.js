@@ -71,6 +71,7 @@ export default async idb => {
     uri: graphQlUri(),
   })*/
   const batchHttpLink = new BatchHttpLink({ uri: graphQlUri() })
+  console.log('client.js, creating client')
   const client = new ApolloClient({
     link: ApolloLink.from([stateLink, authLink, batchHttpLink]),
     cache,
