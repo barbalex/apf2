@@ -1,18 +1,18 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
-import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
+import app from 'ampersand-app'
 
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data'
 import updateApberuebersichtByIdGql from './updateApberuebersichtById'
+import withData from './withData'
 
 const Container = styled.div`
   height: 100%;
@@ -27,20 +27,20 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withData,
   withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({ setErrors, errors }) => async ({
-      row,
-      field,
-      value,
-      updateApberuebersicht,
-    }) => {
+    saveToDb: ({ setErrors, errors, data }) => async event => {
+      const field = event.target.name
+      const value = event.target.value || null
+      const row = get(data, 'apberuebersichtById', {})
       /**
        * only save if value changed
        */
       if (row[field] === value) return
       try {
-        await updateApberuebersicht({
+        await app.client.mutate({
+          mutation: updateApberuebersichtByIdGql,
           variables: {
             id: row.id,
             [field]: value,
@@ -79,74 +79,56 @@ const Apberuebersicht = ({
   saveToDb,
   errors,
   treeName,
+  data,
 }: {
   id: string,
   saveToDb: () => void,
   errors: Object,
   treeName: string,
-}) => (
-  <Query query={dataGql} variables={{ id }}>
-    {({ loading, error, data }) => {
-      if (loading)
-        return (
-          <Container>
-            <FieldsContainer>Lade...</FieldsContainer>
-          </Container>
-        )
-      if (error) return `Fehler: ${error.message}`
+  data: object,
+}) => {
+  if (data.loading)
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  if (data.error) return `Fehler: ${data.error.message}`
 
-      const row = get(data, 'apberuebersichtById', {})
+  const row = get(data, 'apberuebersichtById', {})
 
-      return (
-        <ErrorBoundary>
-          <Container>
-            <FormTitle
-              title="AP-Bericht Jahresübersicht"
-              treeName={treeName}
-              table="apberuebersicht"
-            />
-            <Mutation mutation={updateApberuebersichtByIdGql}>
-              {(updateApberuebersicht, { data }) => (
-                <FieldsContainer>
-                  <TextField
-                    key={`${row.id}jahr`}
-                    label="Jahr"
-                    value={row.jahr}
-                    type="number"
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'jahr',
-                        value,
-                        updateApberuebersicht,
-                      })
-                    }
-                    error={errors.jahr}
-                  />
-                  <TextField
-                    key={`${row.id}bemerkungen`}
-                    label="Bemerkungen"
-                    value={row.bemerkungen}
-                    type="text"
-                    multiLine
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'bemerkungen',
-                        value,
-                        updateApberuebersicht,
-                      })
-                    }
-                    error={errors.bemerkungen}
-                  />
-                </FieldsContainer>
-              )}
-            </Mutation>
-          </Container>
-        </ErrorBoundary>
-      )
-    }}
-  </Query>
-)
+  return (
+    <ErrorBoundary>
+      <Container>
+        <FormTitle
+          title="AP-Bericht Jahresübersicht"
+          treeName={treeName}
+          table="apberuebersicht"
+        />
+        <FieldsContainer>
+          <TextField
+            key={`${row.id}jahr`}
+            name="jahr"
+            label="Jahr"
+            value={row.jahr}
+            type="number"
+            saveToDb={saveToDb}
+            error={errors.jahr}
+          />
+          <TextField
+            key={`${row.id}bemerkungen`}
+            name="bemerkungen"
+            label="Bemerkungen"
+            value={row.bemerkungen}
+            type="text"
+            multiLine
+            saveToDb={saveToDb}
+            error={errors.bemerkungen}
+          />
+        </FieldsContainer>
+      </Container>
+    </ErrorBoundary>
+  )
+}
 
 export default enhance(Apberuebersicht)
