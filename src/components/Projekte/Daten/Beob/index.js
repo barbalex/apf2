@@ -1,13 +1,13 @@
 // @flow
 import React, { createRef, Component } from 'react'
 import styled from 'styled-components'
-import { Query } from 'react-apollo'
 import get from 'lodash/get'
+import compose from 'recompose/compose'
 
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data'
+import withData from './withData'
 
 const Container = styled.div`
   padding: 15px 10px 0 10px;
@@ -17,10 +17,13 @@ const Container = styled.div`
       : 'auto'};
 `
 
+const enhance = compose(withData)
+
 type Props = {
   treeName: String,
   id: String,
   dimensions: Object,
+  data: Object,
 }
 
 class Beob extends Component<Props> {
@@ -31,41 +34,35 @@ class Beob extends Component<Props> {
   }
 
   render() {
-    const { id, dimensions = { width: 380 } } = this.props
+    const { data, dimensions = { width: 380 } } = this.props
+
+    if (data.loading) return <Container>Lade...</Container>
+    if (data.error) return `Fehler: ${data.error.message}`
+
+    const row = get(data, 'beobById', {})
+    if (!row) return null
+
+    const beobFields = Object.entries(JSON.parse(row.data)).filter(
+      ([key, value]) => value || value === 0 || value === false,
+    )
+    if (!beobFields || beobFields.length === 0) return null
 
     return (
-      <Query query={dataGql} variables={{ id }}>
-        {({ loading, error, data }) => {
-          if (loading) return <Container>Lade...</Container>
-          if (error) return `Fehler: ${error.message}`
-
-          const row = get(data, 'beobById', {})
-          if (!row) return null
-
-          const beobFields = Object.entries(JSON.parse(row.data)).filter(
-            ([key, value]) => value || value === 0 || value === false,
-          )
-          if (!beobFields || beobFields.length === 0) return null
-
-          return (
-            <ErrorBoundary>
-              <div ref={this.container}>
-                <Container
-                  data-width={isNaN(dimensions.width) ? 380 : dimensions.width}
-                >
-                  {beobFields.map(([key, value]) => (
-                    <div key={key}>
-                      <TextFieldNonUpdatable label={key} value={value} />
-                    </div>
-                  ))}
-                </Container>
+      <ErrorBoundary>
+        <div ref={this.container}>
+          <Container
+            data-width={isNaN(dimensions.width) ? 380 : dimensions.width}
+          >
+            {beobFields.map(([key, value]) => (
+              <div key={key}>
+                <TextFieldNonUpdatable label={key} value={value} />
               </div>
-            </ErrorBoundary>
-          )
-        }}
-      </Query>
+            ))}
+          </Container>
+        </div>
+      </ErrorBoundary>
     )
   }
 }
 
-export default Beob
+export default enhance(Beob)

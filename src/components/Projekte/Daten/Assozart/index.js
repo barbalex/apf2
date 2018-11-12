@@ -103,8 +103,6 @@ const Assozart = ({
     )
   if (data.error) return `Fehler: ${data.error.message}`
 
-  console.log('Assozart rendering')
-
   const row = get(data, 'assozartById', {})
   const assozartenOfAp = get(row, 'apByApId.assozartsByApId.nodes', []).map(
     o => o.aeId,
