@@ -8,12 +8,13 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
+import app from 'ampersand-app'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data'
+import withData from './withData'
 import updatePopmassnberByIdGql from './updatePopmassnberById'
 import withAllTpopmassnErfbeurtWertes from './withAllTpopmassnErfbeurtWertes'
 
@@ -29,21 +30,21 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withData,
   withAllTpopmassnErfbeurtWertes,
   withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({ refetchTree, setErrors, errors }) => async ({
-      row,
-      field,
-      value,
-      updatePopmassnber,
-    }) => {
+    saveToDb: ({ refetchTree, setErrors, errors, data }) => async event => {
+      const field = event.target.name
+      const value = event.target.value || null
+      const row = get(data, 'popmassnberById', {})
       /**
        * only save if value changed
        */
       if (row[field] === value) return
       try {
-        await updatePopmassnber({
+        await app.client.mutate({
+          mutation: updatePopmassnberByIdGql,
           variables: {
             id: row.id,
             [field]: value,
@@ -88,98 +89,79 @@ const Popmassnber = ({
   errors,
   treeName,
   dataAllTpopmassnErfbeurtWertes,
+  data,
 }: {
   id: string,
   saveToDb: () => void,
   errors: Object,
   treeName: string,
   dataAllTpopmassnErfbeurtWertes: Object,
-}) => (
-  <Query query={dataGql} variables={{ id }}>
-    {({ loading, error, data }) => {
-      if (loading || dataAllTpopmassnErfbeurtWertes.loading)
-        return (
-          <Container>
-            <FieldsContainer>Lade...</FieldsContainer>
-          </Container>
-        )
-      if (error) return `Fehler: ${error.message}`
-      if (dataAllTpopmassnErfbeurtWertes.error)
-        return `Fehler: ${dataAllTpopmassnErfbeurtWertes.error.message}`
+  data: Object,
+}) => {
+  if (data.loading || dataAllTpopmassnErfbeurtWertes.loading)
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  if (data.error) return `Fehler: ${data.error.message}`
+  if (dataAllTpopmassnErfbeurtWertes.error)
+    return `Fehler: ${dataAllTpopmassnErfbeurtWertes.error.message}`
 
-      const row = get(data, 'popmassnberById', {})
-      let popbeurteilungWerte = get(
-        dataAllTpopmassnErfbeurtWertes,
-        'allTpopmassnErfbeurtWertes.nodes',
-        [],
-      )
-      popbeurteilungWerte = sortBy(popbeurteilungWerte, 'sort')
-      popbeurteilungWerte = popbeurteilungWerte.map(el => ({
-        value: el.code,
-        label: el.text,
-      }))
+  const row = get(data, 'popmassnberById', {})
+  let popbeurteilungWerte = get(
+    dataAllTpopmassnErfbeurtWertes,
+    'allTpopmassnErfbeurtWertes.nodes',
+    [],
+  )
+  popbeurteilungWerte = sortBy(popbeurteilungWerte, 'sort')
+  popbeurteilungWerte = popbeurteilungWerte.map(el => ({
+    value: el.code,
+    label: el.text,
+  }))
 
-      return (
-        <ErrorBoundary>
-          <Container>
-            <FormTitle
-              apId={get(data, 'popmassnberById.popByPopId.apId')}
-              title="Massnahmen-Bericht Population"
-              treeName={treeName}
-              table="popmassnber"
-            />
-            <Mutation mutation={updatePopmassnberByIdGql}>
-              {(updatePopmassnber, { data }) => (
-                <FieldsContainer>
-                  <TextField
-                    key={`${row.id}jahr`}
-                    label="Jahr"
-                    value={row.jahr}
-                    type="number"
-                    saveToDb={value =>
-                      saveToDb({ row, field: 'jahr', value, updatePopmassnber })
-                    }
-                    error={errors.jahr}
-                  />
-                  <RadioButtonGroup
-                    key={`${row.id}beurteilung`}
-                    label="Entwicklung"
-                    value={row.beurteilung}
-                    dataSource={popbeurteilungWerte}
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'beurteilung',
-                        value,
-                        updatePopmassnber,
-                      })
-                    }
-                    error={errors.beurteilung}
-                  />
-                  <TextField
-                    key={`${row.id}bemerkungen`}
-                    label="Interpretation"
-                    value={row.bemerkungen}
-                    type="text"
-                    multiLine
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'bemerkungen',
-                        value,
-                        updatePopmassnber,
-                      })
-                    }
-                    error={errors.bemerkungen}
-                  />
-                </FieldsContainer>
-              )}
-            </Mutation>
-          </Container>
-        </ErrorBoundary>
-      )
-    }}
-  </Query>
-)
+  return (
+    <ErrorBoundary>
+      <Container>
+        <FormTitle
+          apId={get(data, 'popmassnberById.popByPopId.apId')}
+          title="Massnahmen-Bericht Population"
+          treeName={treeName}
+          table="popmassnber"
+        />
+        <FieldsContainer>
+          <TextField
+            key={`${row.id}jahr`}
+            name="jahr"
+            label="Jahr"
+            value={row.jahr}
+            type="number"
+            saveToDb={saveToDb}
+            error={errors.jahr}
+          />
+          <RadioButtonGroup
+            key={`${row.id}beurteilung`}
+            name="beurteilung"
+            label="Entwicklung"
+            value={row.beurteilung}
+            dataSource={popbeurteilungWerte}
+            saveToDb={saveToDb}
+            error={errors.beurteilung}
+          />
+          <TextField
+            key={`${row.id}bemerkungen`}
+            name="bemerkungen"
+            label="Interpretation"
+            value={row.bemerkungen}
+            type="text"
+            multiLine
+            saveToDb={saveToDb}
+            error={errors.bemerkungen}
+          />
+        </FieldsContainer>
+      </Container>
+    </ErrorBoundary>
+  )
+}
 
 export default enhance(Popmassnber)
