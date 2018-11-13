@@ -1,17 +1,17 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
-import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
+import app from 'ampersand-app'
 
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data'
+import withData from './withData'
 import updateProjektByIdGql from './updateProjektById'
 
 const Container = styled.div`
@@ -26,20 +26,20 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withData,
   withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({ setErrors, errors }) => async ({
-      row,
-      field,
-      value,
-      updateProjekt,
-    }) => {
+    saveToDb: ({ setErrors, errors, data }) => async event => {
+      const field = event.target.name
+      const value = event.target.value || null
+      const row = get(data, 'projektById', {})
       /**
        * only save if value changed
        */
       if (row[field] === value) return
       try {
-        await updateProjekt({
+        await app.client.mutate({
+          mutation: updateProjektByIdGql,
           variables: {
             id: row.id,
             [field]: value,
@@ -77,55 +77,44 @@ const Projekt = ({
   errors,
   treeName,
   activeNodeArray,
+  data,
 }: {
   saveToDb: () => void,
   id: string,
   errors: Object,
   treeName: string,
   activeNodeArray: Array<string>,
-}) => (
-  <Query query={dataGql} variables={{ id }}>
-    {({ loading, error, data }) => {
-      if (loading)
-        return (
-          <Container>
-            <FieldsContainer>Lade...</FieldsContainer>
-          </Container>
-        )
-      if (error) return `Fehler: ${error.message}`
+  data: Object,
+}) => {
+  if (data.loading)
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  if (data.error) return `Fehler: ${data.error.message}`
 
-      const row = get(data, 'projektById', {})
-      const filterTable = activeNodeArray.length === 2 ? 'projekt' : 'ap'
+  const row = get(data, 'projektById', {})
+  const filterTable = activeNodeArray.length === 2 ? 'projekt' : 'ap'
 
-      return (
-        <ErrorBoundary>
-          <Container>
-            <FormTitle
-              title="Projekt"
-              treeName={treeName}
-              table={filterTable}
-            />
-            <Mutation mutation={updateProjektByIdGql}>
-              {(updateProjekt, { data }) => (
-                <FieldsContainer>
-                  <TextField
-                    key={`${row.id}name`}
-                    label="Name"
-                    value={row.name}
-                    type="text"
-                    saveToDb={value =>
-                      saveToDb({ row, field: 'name', value, updateProjekt })
-                    }
-                    error={errors.name}
-                  />
-                </FieldsContainer>
-              )}
-            </Mutation>
-          </Container>
-        </ErrorBoundary>
-      )
-    }}
-  </Query>
-)
+  return (
+    <ErrorBoundary>
+      <Container>
+        <FormTitle title="Projekt" treeName={treeName} table={filterTable} />
+        <FieldsContainer>
+          <TextField
+            key={`${row.id}name`}
+            name="name"
+            label="Name"
+            value={row.name}
+            type="text"
+            saveToDb={saveToDb}
+            error={errors.name}
+          />
+        </FieldsContainer>
+      </Container>
+    </ErrorBoundary>
+  )
+}
 
 export default enhance(Projekt)
