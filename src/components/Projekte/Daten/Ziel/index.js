@@ -1,7 +1,6 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
-import { Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import clone from 'lodash/clone'
 import isEqual from 'lodash/isEqual'
@@ -134,7 +133,12 @@ const Ziel = ({
         <FieldsContainer>Lade...</FieldsContainer>
       </Container>
     )
-  if (data.error) return `Fehler: ${data.error.message}`
+  if (data.error) {
+    console.log('Ziel:', { error: data.error })
+    return `Fehler: ${data.error.message}`
+  }
+
+  console.log('Ziel rendering')
 
   const row = get(data, 'zielById', {})
   let typWerte = get(data, 'allZielTypWertes.nodes', [])
@@ -153,49 +157,36 @@ const Ziel = ({
           treeName={treeName}
           table="ziel"
         />
-        <Mutation mutation={updateZielByIdGql}>
-          {(updateZiel, { data }) => (
-            <FieldsContainer>
-              <TextField
-                key={`${row.id}jahr`}
-                label="Jahr"
-                value={row.jahr}
-                type="number"
-                saveToDb={value =>
-                  saveToDb({
-                    row,
-                    field: 'jahr',
-                    value,
-                    updateZiel,
-                    client,
-                  })
-                }
-                error={errors.jahr}
-              />
-              <RadioButtonGroup
-                key={`${row.id}typ`}
-                label="Zieltyp"
-                value={row.typ}
-                dataSource={typWerte}
-                saveToDb={value =>
-                  saveToDb({ row, field: 'typ', value, updateZiel })
-                }
-                error={errors.typ}
-              />
-              <TextField
-                key={`${row.id}bezeichnung`}
-                label="Ziel"
-                value={row.bezeichnung}
-                type="text"
-                multiLine
-                saveToDb={value =>
-                  saveToDb({ row, field: 'bezeichnung', value, updateZiel })
-                }
-                error={errors.bezeichnung}
-              />
-            </FieldsContainer>
-          )}
-        </Mutation>
+        <FieldsContainer>
+          <TextField
+            key={`${row.id}jahr`}
+            name="jahr"
+            label="Jahr"
+            value={row.jahr}
+            type="number"
+            saveToDb={saveToDb}
+            error={errors.jahr}
+          />
+          <RadioButtonGroup
+            key={`${row.id}typ`}
+            name="typ"
+            label="Zieltyp"
+            value={row.typ}
+            dataSource={typWerte}
+            saveToDb={saveToDb}
+            error={errors.typ}
+          />
+          <TextField
+            key={`${row.id}bezeichnung`}
+            name="bezeichnung"
+            label="Ziel"
+            value={row.bezeichnung}
+            type="text"
+            multiLine
+            saveToDb={saveToDb}
+            error={errors.bezeichnung}
+          />
+        </FieldsContainer>
       </Container>
     </ErrorBoundary>
   )

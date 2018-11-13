@@ -27,7 +27,10 @@ const tree2TabValues = ['tree2', 'daten2', 'karte2', 'exporte2']
 const enhance = compose(withData)
 
 const Projekte = ({ data }: { data: Object }) => {
-  if (data.error) return `Fehler: ${data.error.message}`
+  if (data.error) {
+    console.log('Projekte:', { error: data.error })
+    return `Fehler: ${data.error.message}`
+  }
   const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
   const treeTabs = intersection(treeTabValues, projekteTabs)
   const tree2Tabs = intersection(tree2TabValues, projekteTabs)

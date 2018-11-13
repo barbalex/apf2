@@ -388,6 +388,7 @@ const ProjekteContainer = props => {
   }
   const error = anyQueryReturnsError(queryArray)
   if (error) {
+    console.log('ProjektContainer:', { error, queryArray })
     return <ErrorContainer>`Fehler: ${error.message}`</ErrorContainer>
   }
 
@@ -484,8 +485,8 @@ const ProjekteContainer = props => {
     projekteTabs.length === 2 && tabs.length === 2
       ? 0.33
       : tabs.length === 0
-        ? 1
-        : 1 / tabs.length
+      ? 1
+      : 1 / tabs.length
   const assigning = get(data, 'assigningBeob')
   const mapPopIdsFiltered = idsInsideFeatureCollection({
     mapFilter,
@@ -579,8 +580,9 @@ const ProjekteContainer = props => {
               />
             </ReflexElement>
           )}
-          {tabs.includes('tree') &&
-            tabs.includes('daten') && <ReflexSplitter />}
+          {tabs.includes('tree') && tabs.includes('daten') && (
+            <ReflexSplitter />
+          )}
           {tabs.includes('daten') && (
             <ReflexElement
               propagateDimensions={true}
