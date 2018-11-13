@@ -8,6 +8,7 @@ import flatten from 'lodash/flatten'
 import Button from '@material-ui/core/Button'
 import SendIcon from '@material-ui/icons/EmailOutlined'
 import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 
 import FormTitle from '../../../shared/FormTitle'
 import TextField from '../../../shared/TextField'
@@ -138,6 +139,29 @@ const getTpopZuordnenSource = (row: Object, apId: string): Array<Object> => {
 const enhance = compose(
   withAeEigenschaftens,
   withData,
+  withHandlers({
+    onSaveArtIdToDb: ({ value, row, tree, refetchTree, data }) => event => {
+      const { value } = event.target
+      const row = get(data, 'beobById', {})
+      saveArtIdToDb({ value, row, tree, refetchTree })
+    },
+    onSaveNichtZuordnenToDb: ({
+      value,
+      id,
+      tree,
+      refetch,
+      refetchTree,
+    }) => event => {
+      const { value } = event.target
+      saveNichtZuordnenToDb({
+        value,
+        id,
+        tree,
+        refetch,
+        refetchTree,
+      })
+    },
+  }),
 )
 
 const Beobzuordnung = ({
@@ -150,6 +174,7 @@ const Beobzuordnung = ({
   treeName,
   data,
   dataAeEigenschaftens,
+  onSaveArtIdToDb,
 }: {
   id: string,
   apId: string,
@@ -160,8 +185,9 @@ const Beobzuordnung = ({
   treeName: string,
   data: Object,
   dataAeEigenschaftens: Object,
+  onSaveArtIdToDb: () => void,
 }) => {
-  const { error, refetch } = data
+  const { error } = data
   if (data.loading || dataAeEigenschaftens.loading)
     return (
       <Container>
@@ -191,48 +217,33 @@ const Beobzuordnung = ({
           <Mutation mutation={updateBeobByIdGql}>
             {(updateBeob, { data }) => (
               <FieldsContainer>
-                {row &&
-                  row.artId !== row.artIdOriginal && (
-                    <OriginalArtDiv>{`Art gemäss Original-Meldung: ${get(
-                      row,
-                      'aeEigenschaftenByArtIdOriginal.artname',
-                    )}`}</OriginalArtDiv>
-                  )}
+                {row && row.artId !== row.artIdOriginal && (
+                  <OriginalArtDiv>{`Art gemäss Original-Meldung: ${get(
+                    row,
+                    'aeEigenschaftenByArtIdOriginal.artname',
+                  )}`}</OriginalArtDiv>
+                )}
                 <Select
                   key={`${row.id}artId`}
+                  name="artId"
                   value={row.artId}
                   field="artId"
                   label="Art"
                   options={artWerte}
-                  saveToDb={value => {
-                    saveArtIdToDb({
-                      value,
-                      row,
-                      updateBeob,
-                      tree,
-                      refetchTree,
-                    })
-                  }}
+                  saveToDb={onSaveArtIdToDb}
                 />
                 <CheckboxWithInfo
                   key={`${row.id}nichtZuordnen`}
+                  name="nichtZuordnen"
                   label="Nicht zuordnen"
                   value={row.nichtZuordnen}
-                  saveToDb={value =>
-                    saveNichtZuordnenToDb({
-                      value,
-                      id,
-                      updateBeob,
-                      tree,
-                      refetch,
-                      refetchTree,
-                    })
-                  }
+                  saveToDb={saveNichtZuordnenToDb}
                   popover={nichtZuordnenPopover}
                 />
                 <ZuordnenDiv>
                   <Select
                     key={`${row.id}tpopId`}
+                    name="tpopId"
                     value={row.tpopId ? row.tpopId : ''}
                     field="tpopId"
                     label={
@@ -255,6 +266,7 @@ const Beobzuordnung = ({
                 </ZuordnenDiv>
                 <TextField
                   key={`${row.id}bemerkungen`}
+                  name="bemerkungen"
                   label="Bemerkungen zur Zuordnung"
                   value={row.bemerkungen}
                   type="text"

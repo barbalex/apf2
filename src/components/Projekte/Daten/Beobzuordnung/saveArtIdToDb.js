@@ -6,14 +6,18 @@ import gql from 'graphql-tag'
 import app from 'ampersand-app'
 
 import setTreeKeyGql from './setTreeKey'
+import updateBeobByIdGql from './updateBeobById'
 
-export default async ({ value, row, updateBeob, tree, refetchTree }) => {
+export default async ({ value, row, tree, refetchTree }) => {
   const { client } = app
   const variables = {
     id: row.id,
     artId: value,
   }
-  await updateBeob({ variables })
+  await app.client.mutate({
+    mutation: updateBeobByIdGql,
+    variables,
+  })
 
   // need to update activeNodeArray and openNodes
   const { activeNodeArray: aNA, openNodes } = tree

@@ -4,22 +4,19 @@ import isEqual from 'lodash/isEqual'
 import app from 'ampersand-app'
 
 import setTreeKeyGql from './setTreeKey'
+import updateBeobByIdGql from './updateBeobById'
 
-export default async ({
-  value,
-  id,
-  updateBeob,
-  tree,
-  refetch,
-  refetchTree,
-}) => {
+export default async ({ value, id, tree, refetch, refetchTree }) => {
   const variables = {
     id,
     nichtZuordnen: value,
   }
   // if true, empty tpopId
   if (value) variables.tpopId = null
-  updateBeob({ variables })
+  await app.client.mutate({
+    mutation: updateBeobByIdGql,
+    variables,
+  })
   // need to update activeNodeArray and openNodes
   const { activeNodeArray, openNodes } = tree
   let newActiveNodeArray = clone(activeNodeArray)
