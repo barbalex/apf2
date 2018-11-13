@@ -1,19 +1,19 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
-import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
+import app from 'ampersand-app'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data'
+import withData from './withData'
 import updateErfkritByIdGql from './updateErfkritById'
 import withAllApErfkritWertes from './withAllApErfkritWertes'
 
@@ -29,21 +29,21 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withData,
   withAllApErfkritWertes,
   withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({ refetchTree, setErrors, errors }) => async ({
-      row,
-      field,
-      value,
-      updateErfkrit,
-    }) => {
+    saveToDb: ({ refetchTree, setErrors, errors, data }) => async event => {
+      const field = event.target.name
+      const value = event.target.value || null
+      const row = get(data, 'erfkritById', {})
       /**
        * only save if value changed
        */
       if (row[field] === value) return
       try {
-        await updateErfkrit({
+        await app.client.mutate({
+          mutation: updateErfkritByIdGql,
           variables: {
             id: row.id,
             [field]: value,
@@ -84,83 +84,65 @@ const Erfkrit = ({
   errors,
   treeName,
   dataAllApErfkritWertes,
+  data,
 }: {
   id: string,
   saveToDb: () => void,
   errors: Object,
   treeName: string,
   dataAllApErfkritWertes: Object,
-}) => (
-  <Query query={dataGql} variables={{ id }}>
-    {({ loading, error, data }) => {
-      if (loading || dataAllApErfkritWertes.loading)
-        return (
-          <Container>
-            <FieldsContainer>Lade...</FieldsContainer>
-          </Container>
-        )
-      if (error) return `Fehler: ${error.message}`
-      if (dataAllApErfkritWertes.error)
-        return `Fehler: ${dataAllApErfkritWertes.error.message}`
+  data: Object,
+}) => {
+  if (data.loading || dataAllApErfkritWertes.loading)
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  if (data.error) return `Fehler: ${data.error.message}`
+  if (dataAllApErfkritWertes.error)
+    return `Fehler: ${dataAllApErfkritWertes.error.message}`
+  const row = get(data, 'erfkritById', {})
+  let erfolgWerte = get(dataAllApErfkritWertes, 'allApErfkritWertes.nodes', [])
+  erfolgWerte = sortBy(erfolgWerte, 'sort')
+  erfolgWerte = erfolgWerte.map(el => ({
+    value: el.code,
+    label: el.text,
+  }))
 
-      const row = get(data, 'erfkritById', {})
-      let erfolgWerte = get(
-        dataAllApErfkritWertes,
-        'allApErfkritWertes.nodes',
-        [],
-      )
-      erfolgWerte = sortBy(erfolgWerte, 'sort')
-      erfolgWerte = erfolgWerte.map(el => ({
-        value: el.code,
-        label: el.text,
-      }))
-
-      return (
-        <ErrorBoundary>
-          <Container>
-            <FormTitle
-              apId={row.apId}
-              title="Erfolgs-Kriterium"
-              treeName={treeName}
-              table="erfkrit"
-            />
-            <Mutation mutation={updateErfkritByIdGql}>
-              {(updateErfkrit, { data }) => (
-                <FieldsContainer>
-                  <RadioButtonGroup
-                    key={`${row.id}erfolg`}
-                    label="Beurteilung"
-                    value={row.erfolg}
-                    dataSource={erfolgWerte}
-                    saveToDb={value =>
-                      saveToDb({ row, field: 'erfolg', value, updateErfkrit })
-                    }
-                    error={errors.erfolg}
-                  />
-                  <TextField
-                    key={`${row.id}kriterien`}
-                    label="Kriterien"
-                    value={row.kriterien}
-                    type="text"
-                    multiLine
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'kriterien',
-                        value,
-                        updateErfkrit,
-                      })
-                    }
-                    error={errors.kriterien}
-                  />
-                </FieldsContainer>
-              )}
-            </Mutation>
-          </Container>
-        </ErrorBoundary>
-      )
-    }}
-  </Query>
-)
+  return (
+    <ErrorBoundary>
+      <Container>
+        <FormTitle
+          apId={row.apId}
+          title="Erfolgs-Kriterium"
+          treeName={treeName}
+          table="erfkrit"
+        />
+        <FieldsContainer>
+          <RadioButtonGroup
+            key={`${row.id}erfolg`}
+            name="erfolg"
+            label="Beurteilung"
+            value={row.erfolg}
+            dataSource={erfolgWerte}
+            saveToDb={saveToDb}
+            error={errors.erfolg}
+          />
+          <TextField
+            key={`${row.id}kriterien`}
+            name="kriterien"
+            label="Kriterien"
+            value={row.kriterien}
+            type="text"
+            multiLine
+            saveToDb={saveToDb}
+            error={errors.kriterien}
+          />
+        </FieldsContainer>
+      </Container>
+    </ErrorBoundary>
+  )
+}
 
 export default enhance(Erfkrit)
