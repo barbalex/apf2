@@ -2,18 +2,19 @@
 import React from 'react'
 import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
-import { Query, Mutation } from 'react-apollo'
+import { Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
+import app from 'ampersand-app'
 
 import TextField from '../../../shared/TextField'
 import Select from '../../../shared/Select'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data'
+import withData from './withData'
 import updateEkfzaehleinheitByIdGql from './updateEkfzaehleinheitById'
 import withAllTpopkontrzaehlEinheitWertes from './withAllTpopkontrzaehlEinheitWertes'
 
@@ -29,21 +30,21 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withData,
   withAllTpopkontrzaehlEinheitWertes,
   withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({ refetchTree, setErrors, errors }) => async ({
-      row,
-      field,
-      value,
-      updateEkfzaehleinheit,
-    }) => {
+    saveToDb: ({ refetchTree, setErrors, errors, data }) => async event => {
+      const field = event.target.name
+      const value = event.target.value || null
+      const row = get(data, 'ekfzaehleinheitById', {})
       /**
        * only save if value changed
        */
       if (row[field] === value) return
       try {
-        await updateEkfzaehleinheit({
+        await app.client.mutate({
+          mutation: updateEkfzaehleinheitByIdGql,
           variables: {
             id: row.id,
             [field]: value,
@@ -88,102 +89,84 @@ const Ekfzaehleinheit = ({
   errors,
   treeName,
   dataAllTpopkontrzaehlEinheitWertes,
+  data,
 }: {
   id: string,
   saveToDb: () => void,
   errors: Object,
   treeName: string,
   dataAllTpopkontrzaehlEinheitWertes: Object,
-}) => (
-  <Query query={dataGql} variables={{ id }}>
-    {({ loading, error, data }) => {
-      if (loading || dataAllTpopkontrzaehlEinheitWertes.loading)
-        return (
-          <Container>
-            <FieldsContainer>Lade...</FieldsContainer>
-          </Container>
-        )
-      if (error) return `Fehler: ${error.message}`
-      if (dataAllTpopkontrzaehlEinheitWertes.error)
-        return `Fehler: ${dataAllTpopkontrzaehlEinheitWertes.error.message}`
+  data: Object,
+}) => {
+  if (data.loading || dataAllTpopkontrzaehlEinheitWertes.loading)
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  if (data.error) return `Fehler: ${data.error.message}`
+  if (dataAllTpopkontrzaehlEinheitWertes.error)
+    return `Fehler: ${dataAllTpopkontrzaehlEinheitWertes.error.message}`
 
-      const row = get(data, 'ekfzaehleinheitById', {})
-      const ekfzaehleinheitenOfAp = get(
-        row,
-        'apByApId.ekfzaehleinheitsByApId.nodes',
-        [],
-      ).map(o => o.zaehleinheitId)
-      // re-add this ones id
-      const notToShow = ekfzaehleinheitenOfAp.filter(
-        o => o !== row.zaehleinheitId,
-      )
-      let zaehleinheitWerte = get(
-        dataAllTpopkontrzaehlEinheitWertes,
-        'allTpopkontrzaehlEinheitWertes.nodes',
-        [],
-      )
-      // filter ap arten but the active one
-      zaehleinheitWerte = zaehleinheitWerte.filter(
-        o => !notToShow.includes(o.id),
-      )
-      zaehleinheitWerte = sortBy(zaehleinheitWerte, 'text')
-      zaehleinheitWerte = zaehleinheitWerte.map(el => ({
-        value: el.id,
-        label: el.text,
-      }))
+  const row = get(data, 'ekfzaehleinheitById', {})
+  const ekfzaehleinheitenOfAp = get(
+    row,
+    'apByApId.ekfzaehleinheitsByApId.nodes',
+    [],
+  ).map(o => o.zaehleinheitId)
+  // re-add this ones id
+  const notToShow = ekfzaehleinheitenOfAp.filter(o => o !== row.zaehleinheitId)
+  let zaehleinheitWerte = get(
+    dataAllTpopkontrzaehlEinheitWertes,
+    'allTpopkontrzaehlEinheitWertes.nodes',
+    [],
+  )
+  // filter ap arten but the active one
+  zaehleinheitWerte = zaehleinheitWerte.filter(o => !notToShow.includes(o.id))
+  zaehleinheitWerte = sortBy(zaehleinheitWerte, 'text')
+  zaehleinheitWerte = zaehleinheitWerte.map(el => ({
+    value: el.id,
+    label: el.text,
+  }))
 
-      return (
-        <ErrorBoundary>
-          <Container>
-            <FormTitle
-              apId={row.apId}
-              title="EKF-Zähleinheit"
-              treeName={treeName}
-              table="ekfzaehleinheit"
-            />
-            <Mutation mutation={updateEkfzaehleinheitByIdGql}>
-              {(updateEkfzaehleinheit, { data }) => (
-                <FieldsContainer>
-                  <Select
-                    key={`${row.id}zaehleinheitId`}
-                    value={row.zaehleinheitId}
-                    field="zaehleinheitId"
-                    label="Zähleinheit"
-                    options={zaehleinheitWerte}
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'zaehleinheitId',
-                        value,
-                        updateEkfzaehleinheit,
-                      })
-                    }
-                    error={errors.zaehleinheitId}
-                  />
-                  <TextField
-                    key={`${row.id}bemerkungen`}
-                    label="Bemerkungen"
-                    value={row.bemerkungen}
-                    type="text"
-                    multiLine
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'bemerkungen',
-                        value,
-                        updateEkfzaehleinheit,
-                      })
-                    }
-                    error={errors.bemerkungen}
-                  />
-                </FieldsContainer>
-              )}
-            </Mutation>
-          </Container>
-        </ErrorBoundary>
-      )
-    }}
-  </Query>
-)
+  return (
+    <ErrorBoundary>
+      <Container>
+        <FormTitle
+          apId={row.apId}
+          title="EKF-Zähleinheit"
+          treeName={treeName}
+          table="ekfzaehleinheit"
+        />
+        <Mutation mutation={updateEkfzaehleinheitByIdGql}>
+          {(updateEkfzaehleinheit, { data }) => (
+            <FieldsContainer>
+              <Select
+                key={`${row.id}zaehleinheitId`}
+                name="zaehleinheitId"
+                value={row.zaehleinheitId}
+                field="zaehleinheitId"
+                label="Zähleinheit"
+                options={zaehleinheitWerte}
+                saveToDb={saveToDb}
+                error={errors.zaehleinheitId}
+              />
+              <TextField
+                key={`${row.id}bemerkungen`}
+                name="bemerkungen"
+                label="Bemerkungen"
+                value={row.bemerkungen}
+                type="text"
+                multiLine
+                saveToDb={saveToDb}
+                error={errors.bemerkungen}
+              />
+            </FieldsContainer>
+          )}
+        </Mutation>
+      </Container>
+    </ErrorBoundary>
+  )
+}
 
 export default enhance(Ekfzaehleinheit)
