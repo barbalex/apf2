@@ -1,7 +1,6 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
-import format from 'date-fns/format'
 import compose from 'recompose/compose'
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys'
 
@@ -48,31 +47,21 @@ const Date = ({
   saveToDb,
   errorsDatum,
   row,
-  updateTpopkontr,
 }: {
   id: string,
   datum: string,
   saveToDb: () => void,
   errorsDatum: string,
   row: Object,
-  updateTpopkontr: () => void,
 }) => (
   <Container>
     <DateLabel>Aufnahme-datum</DateLabel>
     <DateVal>
       <DateFieldWithPicker
         key={`${id}datum`}
+        name="datum"
         value={datum}
-        saveToDb={value => {
-          saveToDb({
-            row,
-            field: 'datum',
-            value,
-            field2: 'jahr',
-            value2: !!value ? format(value, 'YYYY') : null,
-            updateTpopkontr,
-          })
-        }}
+        saveToDb={saveToDb}
         error={errorsDatum}
       />
     </DateVal>

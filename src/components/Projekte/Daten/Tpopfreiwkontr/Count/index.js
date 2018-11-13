@@ -1,6 +1,5 @@
 // @flow
 import React from 'react'
-import { Query, Mutation } from 'react-apollo'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
@@ -17,7 +16,7 @@ import app from 'ampersand-app'
 import Select from '../../../../shared/Select'
 import TextField from '../../../../shared/TextField'
 import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById'
-import dataGql from './data'
+import withData from './withData'
 import createTpopkontrzaehl from './createTpopkontrzaehl'
 import withDeleteState from '../../../../../state/withDeleteState'
 import withAllTpopkontrzaehlEinheitWertes from './withAllTpopkontrzaehlEinheitWertes'
@@ -37,13 +36,13 @@ const Container = styled(Area)`
          'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
          'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`
       : props.shownew
-        ? `'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
+      ? `'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
            'showNew showNew showNew showNew showNew showNew showNew showNew'`
-        : props.showdelete
-          ? `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
+      : props.showdelete
+      ? `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
              'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel .'
              'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal delete'`
-          : `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
+      : `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
              'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
              'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`};
   grid-column-gap: 10px;
@@ -55,13 +54,13 @@ const Container = styled(Area)`
          'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
          'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`
         : props.shownew
-          ? `'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
+        ? `'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
            'showNew showNew showNew showNew showNew showNew showNew showNew'`
-          : props.showdelete
-            ? `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
+        : props.showdelete
+        ? `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
              'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
              'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`
-            : `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
+        : `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
              'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
              'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`};
   }
@@ -160,22 +159,34 @@ const ShowNew = styled.div`
 `
 
 const enhance = compose(
+  withData,
   withAllTpopkontrzaehlEinheitWertes,
   withDeleteState,
   withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({ setErrors, errors }) => async ({
-      row,
-      field,
-      field2,
-      value,
-      value2,
-      updateTpopkontrzaehl,
-    }) => {
+    saveToDb: ({ setErrors, errors, data }) => async event => {
+      const fieldPassed = event.target.name
+      const field = ['anzahl1', 'anzahl2'].includes(fieldPassed)
+        ? 'anzahl'
+        : fieldPassed
+      let value = event.target.value
+      if (value === undefined) value = null
+      const row = get(data, 'tpopkontrzaehlById', {})
       /**
        * only save if value changed
        */
       if (row[field] === value) return
+
+      let field2
+      if (['anzahl1', 'anzahl2'].includes(fieldPassed)) {
+        // convert to number
+        value = !value && value !== 0 ? null : +value
+        field2 = 'methode'
+      }
+      let value2
+      if (fieldPassed === 'anzahl1') value2 = 1
+      if (fieldPassed === 'anzahl2') value2 = 2
+
       // catch case when empty anzahl field blurs
       if (value === null && field2 && row[field2] !== value2) return
       try {
@@ -186,7 +197,8 @@ const enhance = compose(
         if (field2) {
           variables[field2] = value2
         }
-        await updateTpopkontrzaehl({
+        await app.client.mutate({
+          mutation: updateTpopkontrzaehlByIdGql,
           variables,
           optimisticResponse: {
             __typename: 'Mutation',
@@ -253,6 +265,7 @@ const Count = ({
   ekfzaehleinheits,
   deleteState,
   dataAllTpopkontrzaehlEinheitWertes,
+  data,
 }: {
   id: String,
   tpopkontrId: String,
@@ -270,6 +283,7 @@ const Count = ({
   ekfzaehleinheits: Array<Object>,
   deleteState: Object,
   dataAllTpopkontrzaehlEinheitWertes: Object,
+  data: Object,
 }) => {
   if (showNew)
     return (
@@ -288,121 +302,79 @@ const Count = ({
         <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
       </Container>
     )
+  if (data.loading || dataAllTpopkontrzaehlEinheitWertes.loading)
+    return <Container>Lade...</Container>
+  if (data.error) return `Fehler: ${data.error.message}`
+  if (dataAllTpopkontrzaehlEinheitWertes.error)
+    return `Fehler: ${dataAllTpopkontrzaehlEinheitWertes.error.message}`
+
+  const row = get(data, 'tpopkontrzaehlById', {})
+  const allEinheits = get(
+    dataAllTpopkontrzaehlEinheitWertes,
+    'allTpopkontrzaehlEinheitWertes.nodes',
+    [],
+  )
+  // do list this count's einheit
+  const einheitsNotToList = einheitsUsed.filter(e => e !== row.einheit)
+  let zaehleinheitWerte = ekfzaehleinheits
+    // remove already set values
+    .filter(e => !einheitsNotToList.includes(e.code))
+  // add this zaehleineits value if missing
+  // so as to show values input in earlier years that shall not be input any more
+  const thisRowsEinheit = allEinheits.find(e => e.code === row.einheit)
+  if (thisRowsEinheit)
+    zaehleinheitWerte = uniqBy([thisRowsEinheit, ...zaehleinheitWerte], 'id')
+  zaehleinheitWerte = sortBy(zaehleinheitWerte, 'sort').map(el => ({
+    value: el.code,
+    label: el.text,
+  }))
+  const showDelete = nr > 1
+
   return (
-    <Query query={dataGql} variables={{ id }}>
-      {({ loading, error, data }) => {
-        if (loading || dataAllTpopkontrzaehlEinheitWertes.loading)
-          return <Container>Lade...</Container>
-        if (error) return `Fehler: ${error.message}`
-        if (dataAllTpopkontrzaehlEinheitWertes.error)
-          return `Fehler: ${dataAllTpopkontrzaehlEinheitWertes.error.message}`
-
-        const row = get(data, 'tpopkontrzaehlById', {})
-        const allEinheits = get(
-          dataAllTpopkontrzaehlEinheitWertes,
-          'allTpopkontrzaehlEinheitWertes.nodes',
-          [],
-        )
-        // do list this count's einheit
-        const einheitsNotToList = einheitsUsed.filter(e => e !== row.einheit)
-        let zaehleinheitWerte = ekfzaehleinheits
-          // remove already set values
-          .filter(e => !einheitsNotToList.includes(e.code))
-        // add this zaehleineits value if missing
-        // so as to show values input in earlier years that shall not be input any more
-        const thisRowsEinheit = allEinheits.find(e => e.code === row.einheit)
-        if (thisRowsEinheit)
-          zaehleinheitWerte = uniqBy(
-            [thisRowsEinheit, ...zaehleinheitWerte],
-            'id',
-          )
-        zaehleinheitWerte = sortBy(zaehleinheitWerte, 'sort').map(el => ({
-          value: el.code,
-          label: el.text,
-        }))
-        const showDelete = nr > 1
-
-        return (
-          <Mutation mutation={updateTpopkontrzaehlByIdGql}>
-            {updateTpopkontrzaehl => (
-              <Container nr={nr} showdelete={showDelete}>
-                <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
-                <EinheitVal>
-                  <Select
-                    key={`${row.id}einheit`}
-                    value={row.einheit}
-                    field="einheit"
-                    options={zaehleinheitWerte}
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'einheit',
-                        value,
-                        updateTpopkontrzaehl,
-                      })
-                    }
-                    error={errors.einheit}
-                    noCaret
-                  />
-                </EinheitVal>
-                <GezaehltLabel>gezählt</GezaehltLabel>
-                <GeschaetztLabel>geschätzt</GeschaetztLabel>
-                <GezaehltVal>
-                  <TextField
-                    key={`${row.id}anzahl`}
-                    value={row.methode === 2 ? row.anzahl : null}
-                    type="number"
-                    saveToDb={value => {
-                      // convert to number
-                      const valueNr = !value && value !== 0 ? null : +value
-                      saveToDb({
-                        row,
-                        field: 'anzahl',
-                        value: valueNr,
-                        field2: 'methode',
-                        value2: 2,
-                        updateTpopkontrzaehl,
-                      })
-                    }}
-                    error={errors.anzahl}
-                  />
-                </GezaehltVal>
-                <GeschaetztVal>
-                  <TextField
-                    key={`${row.id}anzahl`}
-                    value={row.methode === 1 ? row.anzahl : null}
-                    type="number"
-                    saveToDb={value => {
-                      // convert to number
-                      const valueNr = !value && value !== 0 ? null : +value
-                      saveToDb({
-                        row,
-                        field: 'anzahl',
-                        value: valueNr,
-                        field2: 'methode',
-                        value2: 1,
-                        updateTpopkontrzaehl,
-                      })
-                    }}
-                    error={errors.anzahl}
-                  />
-                </GeschaetztVal>
-                {showDelete && (
-                  <Delete>
-                    <StyledDeleteButton
-                      title="löschen"
-                      onClick={() => remove({ row })}
-                    >
-                      <DeleteIcon />
-                    </StyledDeleteButton>
-                  </Delete>
-                )}
-              </Container>
-            )}
-          </Mutation>
-        )
-      }}
-    </Query>
+    <Container nr={nr} showdelete={showDelete}>
+      <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
+      <EinheitVal>
+        <Select
+          key={`${row.id}einheit`}
+          name="einheit"
+          value={row.einheit}
+          field="einheit"
+          options={zaehleinheitWerte}
+          saveToDb={saveToDb}
+          error={errors.einheit}
+          noCaret
+        />
+      </EinheitVal>
+      <GezaehltLabel>gezählt</GezaehltLabel>
+      <GeschaetztLabel>geschätzt</GeschaetztLabel>
+      <GezaehltVal>
+        <TextField
+          key={`${row.id}anzahl`}
+          name="anzahl2"
+          value={row.methode === 2 ? row.anzahl : null}
+          type="number"
+          saveToDb={saveToDb}
+          error={errors.anzahl}
+        />
+      </GezaehltVal>
+      <GeschaetztVal>
+        <TextField
+          key={`${row.id}anzahl`}
+          name="anzahl1"
+          value={row.methode === 1 ? row.anzahl : null}
+          type="number"
+          saveToDb={saveToDb}
+          error={errors.anzahl}
+        />
+      </GeschaetztVal>
+      {showDelete && (
+        <Delete>
+          <StyledDeleteButton title="löschen" onClick={() => remove({ row })}>
+            <DeleteIcon />
+          </StyledDeleteButton>
+        </Delete>
+      )}
+    </Container>
   )
 }
 

@@ -67,7 +67,6 @@ const Map = ({
   planVorhandenErrors,
   saveToDb,
   row,
-  updateTpopkontr,
   showFilter,
 }: {
   id: string,
@@ -75,7 +74,6 @@ const Map = ({
   planVorhandenErrors: string,
   saveToDb: () => void,
   row: Object,
-  updateTpopkontr: () => void,
   showFilter: boolean,
 }) => (
   <Container>
@@ -84,30 +82,18 @@ const Map = ({
     <MapVal1>
       <RadioButton
         key={`${id}planVorhanden`}
+        name="planVorhanden"
         value={planVorhanden}
-        saveToDb={value =>
-          saveToDb({
-            row,
-            field: 'planVorhanden',
-            value: value === true ? true : null,
-            updateTpopkontr,
-          })
-        }
+        saveToDb={saveToDb}
       />
     </MapVal1>
     <MapLabel2>nein</MapLabel2>
     <MapVal2>
       <RadioButton
         key={`${id}planVorhanden2`}
+        name="planVorhanden"
         value={planVorhanden === false}
-        saveToDb={value =>
-          saveToDb({
-            row,
-            field: 'planVorhanden',
-            value: value === true ? false : null,
-            updateTpopkontr,
-          })
-        }
+        saveToDb={saveToDb}
         error={planVorhandenErrors}
       />
     </MapVal2>

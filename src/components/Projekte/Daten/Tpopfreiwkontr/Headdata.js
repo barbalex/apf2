@@ -91,7 +91,6 @@ const Headdata = ({
   saveToDb,
   adressenNodes,
   row,
-  updateTpopkontr,
   showFilter,
 }: {
   id: string,
@@ -102,7 +101,6 @@ const Headdata = ({
   saveToDb: () => void,
   adressenNodes: Array<Object>,
   row: Object,
-  updateTpopkontr: () => void,
   showFilter: boolean,
 }) => {
   let adressenWerte = sortBy(adressenNodes, 'name')
@@ -129,17 +127,11 @@ const Headdata = ({
       <BearbVal>
         <Select
           key={`${id}bearbeiter`}
+          name="bearbeiter"
           value={bearbeiter}
           field="bearbeiter"
           options={adressenWerte}
-          saveToDb={value =>
-            saveToDb({
-              row,
-              field: 'bearbeiter',
-              value,
-              updateTpopkontr,
-            })
-          }
+          saveToDb={saveToDb}
           error={errorsBearbeiter}
         />
       </BearbVal>

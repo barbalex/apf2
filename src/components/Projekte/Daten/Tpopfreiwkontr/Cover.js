@@ -98,7 +98,6 @@ const Date = ({
   errorsDeckungNackterBoden,
   saveToDb,
   row,
-  updateTpopkontr,
 }: {
   id: string,
   deckungApArt: string,
@@ -107,23 +106,16 @@ const Date = ({
   errorsDeckungNackterBoden: string,
   saveToDb: () => void,
   row: Object,
-  updateTpopkontr: () => void,
 }) => (
   <Container>
     <DeckApArtLabel>Deckung überprüfte Art</DeckApArtLabel>
     <DeckApArtVal>
       <TextField
         key={`${row.id}deckungApArt`}
+        name="deckungApArt"
         value={row.deckungApArt}
         type="number"
-        saveToDb={value =>
-          saveToDb({
-            row,
-            field: 'deckungApArt',
-            value,
-            updateTpopkontr,
-          })
-        }
+        saveToDb={saveToDb}
         error={errorsDeckungApArt}
       />
     </DeckApArtVal>
@@ -132,16 +124,10 @@ const Date = ({
     <DeckNaBoVal>
       <TextField
         key={`${row.id}deckungNackterBoden`}
+        name="deckungNackterBoden"
         value={row.deckungNackterBoden}
         type="number"
-        saveToDb={value =>
-          saveToDb({
-            row,
-            field: 'deckungNackterBoden',
-            value,
-            updateTpopkontr,
-          })
-        }
+        saveToDb={saveToDb}
         error={errorsDeckungNackterBoden}
       />
     </DeckNaBoVal>

@@ -46,14 +46,12 @@ const Danger = ({
   saveToDb,
   errorsGefaehrdung,
   row,
-  updateTpopkontr,
 }: {
   id: string,
   gefaehrdung: string,
   saveToDb: () => void,
   errorsGefaehrdung: string,
   row: Object,
-  updateTpopkontr: () => void,
 }) => (
   <Container>
     <DangerLabel>
@@ -65,17 +63,11 @@ const Danger = ({
     <DangerVal>
       <TextField
         key={`${id}gefaehrdung`}
+        name="gefaehrdung"
         value={gefaehrdung}
         type="text"
         multiLine
-        saveToDb={value =>
-          saveToDb({
-            row,
-            field: 'gefaehrdung',
-            value,
-            updateTpopkontr,
-          })
-        }
+        saveToDb={saveToDb}
         error={errorsGefaehrdung}
       />
     </DangerVal>

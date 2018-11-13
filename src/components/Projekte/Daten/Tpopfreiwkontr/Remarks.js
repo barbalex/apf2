@@ -46,14 +46,12 @@ const Remarks = ({
   errorsBemerkungen,
   saveToDb,
   row,
-  updateTpopkontr,
 }: {
   id: string,
   bemerkungen: string,
   errorsBemerkungen: string,
   saveToDb: () => void,
   row: Object,
-  updateTpopkontr: () => void,
 }) => (
   <Container>
     <RemarksLabel>
@@ -66,17 +64,11 @@ const Remarks = ({
     <RemarksVal>
       <TextField
         key={`${id}bemerkungen`}
+        name="bemerkungen"
         value={bemerkungen}
         type="text"
         multiLine
-        saveToDb={value =>
-          saveToDb({
-            row,
-            field: 'bemerkungen',
-            value,
-            updateTpopkontr,
-          })
-        }
+        saveToDb={saveToDb}
         error={errorsBemerkungen}
       />
     </RemarksVal>

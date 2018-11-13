@@ -48,29 +48,21 @@ const Verification = ({
   errorsEkfVerifiziert,
   saveToDb,
   row,
-  updateTpopkontr,
 }: {
   id: string,
   ekfVerifiziert: string,
   errorsEkfVerifiziert: string,
   saveToDb: () => void,
   row: Object,
-  updateTpopkontr: () => void,
 }) => (
   <Container>
     <VerifLabel1>Im Jahresbericht nicht berücksichtigen</VerifLabel1>
     <VerifVal1>
       <RadioButton
         key={`${id}ekfVerifiziert2`}
+        name="ekfVerifiziert"
         value={ekfVerifiziert === false}
-        saveToDb={value =>
-          saveToDb({
-            row,
-            field: 'ekfVerifiziert',
-            value: value === true ? false : null,
-            updateTpopkontr,
-          })
-        }
+        saveToDb={saveToDb}
         error={errorsEkfVerifiziert}
       />
     </VerifVal1>

@@ -168,7 +168,6 @@ const More = ({
   errorsVegetationshoeheMittel,
   saveToDb,
   row,
-  updateTpopkontr,
 }: {
   id: string,
   flaecheUeberprueft: string,
@@ -181,23 +180,16 @@ const More = ({
   errorsVegetationshoeheMaximum: string,
   saveToDb: () => void,
   row: Object,
-  updateTpopkontr: () => void,
 }) => (
   <Container>
     <MoreFlLabel>Überprüfte Fläche</MoreFlLabel>
     <MoreFlVal>
       <TextField
         key={`${id}flaecheUeberprueft`}
+        name="flaecheUeberprueft"
         value={flaecheUeberprueft}
         type="number"
-        saveToDb={value =>
-          saveToDb({
-            row,
-            field: 'flaecheUeberprueft',
-            value,
-            updateTpopkontr,
-          })
-        }
+        saveToDb={saveToDb}
         error={errorsFlaecheUeberprueft}
       />
     </MoreFlVal>
@@ -209,30 +201,18 @@ const More = ({
     <JungPflVal1>
       <RadioButton
         key={`${id}jungpflanzenVorhanden1`}
+        name="jungpflanzenVorhanden"
         value={jungpflanzenVorhanden}
-        saveToDb={value => {
-          saveToDb({
-            row,
-            field: 'jungpflanzenVorhanden',
-            value: value === true ? true : null,
-            updateTpopkontr,
-          })
-        }}
+        saveToDb={saveToDb}
       />
     </JungPflVal1>
     <JungPflLabel2>nein</JungPflLabel2>
     <JungPflVal2>
       <RadioButton
         key={`${id}jungpflanzenVorhanden2`}
+        name="jungpflanzenVorhanden"
         value={jungpflanzenVorhanden === false}
-        saveToDb={value => {
-          saveToDb({
-            row,
-            field: 'jungpflanzenVorhanden',
-            value: value === true ? false : null,
-            updateTpopkontr,
-          })
-        }}
+        saveToDb={saveToDb}
         error={errorsJungpflanzenVorhanden}
       />
     </JungPflVal2>
@@ -244,16 +224,10 @@ const More = ({
     <VeghoeheMaxVal>
       <TextField
         key={`${id}vegetationshoeheMaximum`}
+        name="vegetationshoeheMaximum"
         value={vegetationshoeheMaximum}
         type="number"
-        saveToDb={value =>
-          saveToDb({
-            row,
-            field: 'vegetationshoeheMaximum',
-            value,
-            updateTpopkontr,
-          })
-        }
+        saveToDb={saveToDb}
         error={errorsVegetationshoeheMaximum}
       />
     </VeghoeheMaxVal>
@@ -261,16 +235,10 @@ const More = ({
     <VeghoeheMittVal>
       <TextField
         key={`${id}vegetationshoeheMittel`}
+        name="vegetationshoeheMittel"
         value={vegetationshoeheMittel}
         type="number"
-        saveToDb={value =>
-          saveToDb({
-            row,
-            field: 'vegetationshoeheMittel',
-            value,
-            updateTpopkontr,
-          })
-        }
+        saveToDb={saveToDb}
         error={errorsVegetationshoeheMittel}
       />
     </VeghoeheMittVal>

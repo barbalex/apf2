@@ -46,14 +46,12 @@ const EkfRemarks = ({
   saveToDb,
   errorsEkfBemerkungen,
   row,
-  updateTpopkontr,
 }: {
   id: string,
   ekfBemerkungen: string,
   saveToDb: () => void,
   errorsEkfBemerkungen: string,
   row: Object,
-  updateTpopkontr: () => void,
 }) => (
   <Container>
     <RemarksLabel>
@@ -63,17 +61,11 @@ const EkfRemarks = ({
     <RemarksVal>
       <TextField
         key={`${id}ekfBemerkungen`}
+        name="ekfBemerkungen"
         value={ekfBemerkungen}
         type="text"
         multiLine
-        saveToDb={value =>
-          saveToDb({
-            row,
-            field: 'ekfBemerkungen',
-            value,
-            updateTpopkontr,
-          })
-        }
+        saveToDb={saveToDb}
         error={errorsEkfBemerkungen}
       />
     </RemarksVal>
