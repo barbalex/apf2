@@ -13,7 +13,7 @@ import clone from 'lodash/clone'
 
 import isMobilePhone from '../../../modules/isMobilePhone'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import dataGql from '../data'
+import dataGql from '../localData'
 import logout from '../../../modules/logout'
 import getActiveNodes from '../../../modules/getActiveNodes'
 import withDeleteState from '../../../state/withDeleteState'
@@ -112,18 +112,17 @@ const MyAppBar = ({
               open={Boolean(anchorEl)}
               onClose={onClose}
             >
-              {isMobile &&
-                exporteIsActive && (
-                  <MenuItem
-                    onClick={() => {
-                      onClose()
-                      onClickButton('exporte', client, projekteTabs)
-                    }}
-                    disabled={projekteTabs.includes('exporte')}
-                  >
-                    Exporte
-                  </MenuItem>
-                )}
+              {isMobile && exporteIsActive && (
+                <MenuItem
+                  onClick={() => {
+                    onClose()
+                    onClickButton('exporte')
+                  }}
+                  disabled={projekteTabs.includes('exporte')}
+                >
+                  Exporte
+                </MenuItem>
+              )}
               <MenuItem
                 onClick={showDeletedDatasets}
                 disabled={datasetsDeleted.length === 0}

@@ -18,7 +18,7 @@ import jwtDecode from 'jwt-decode'
 
 import isMobilePhone from '../../modules/isMobilePhone'
 import ErrorBoundary from '../shared/ErrorBoundary'
-import dataGql from './data'
+import withLocalData from './withLocalData'
 import setUrlQueryValue from '../../modules/setUrlQueryValue'
 import setEkfYear from './setEkfYear'
 import getActiveNodes from '../../modules/getActiveNodes'
@@ -66,11 +66,13 @@ const MenuDiv = styled.div`
 `
 
 const enhance = compose(
+  withLocalData,
   withNodeFilter,
   withState('ekfYearState', 'setEkfYearState', null),
   withState('userOpen', 'setUserOpen', false),
   withHandlers({
-    onClickButton: ({ nodeFilterState }) => (name, client, projekteTabs) => {
+    onClickButton: ({ nodeFilterState, localData }) => name => {
+      const projekteTabs = get(localData, 'urlQuery.projekteTabs', [])
       if (isMobilePhone()) {
         // show one tab only
         setUrlQueryValue({ key: 'projekteTabs', value: [name] })
@@ -80,7 +82,7 @@ const enhance = compose(
         } else {
           projekteTabs.push(name)
           if (name === 'tree2') {
-            client.mutate({
+            app.client.mutate({
               mutation: gql`
                 mutation cloneTree2From1 {
                   cloneTree2From1 @client
@@ -125,6 +127,7 @@ const MyAppBar = ({
   setEkfYear,
   userOpen,
   toggleUserOpen,
+  localData,
 }: {
   onClickButton: () => void,
   setShowDeletions: () => void,
@@ -133,152 +136,131 @@ const MyAppBar = ({
   setEkfYear: () => void,
   userOpen: boolean,
   toggleUserOpen: () => void,
-}) => (
-  <Query query={dataGql}>
-    {({ loading, error, data, client }) => {
-      if (error) return `Fehler: ${error.message}`
-      const activeNodeArray = get(data, 'tree.activeNodeArray')
-      const activeNodes = getActiveNodes(activeNodeArray)
-      /**
-       * need to clone projekteTabs
-       * because otherwise removing elements errors out (because elements are sealed)
-       */
-      const projekteTabs = clone(get(data, 'urlQuery.projekteTabs', []))
-      const exporteIsActive = !!activeNodes.projekt
-      const isMobile = isMobilePhone()
-      const view = get(data, 'view')
+  localData: Object,
+}) => {
+  if (localData.error) return `Fehler: ${localData.error.message}`
+  const activeNodeArray = get(localData, 'tree.activeNodeArray')
+  const activeNodes = getActiveNodes(activeNodeArray)
+  /**
+   * need to clone projekteTabs
+   * because otherwise removing elements errors out (because elements are sealed)
+   */
+  const projekteTabs = clone(get(localData, 'urlQuery.projekteTabs', []))
+  const exporteIsActive = !!activeNodes.projekt
+  const isMobile = isMobilePhone()
+  const view = get(localData, 'view')
 
-      const token = get(data, 'user.token')
-      const tokenDecoded = token ? jwtDecode(token) : null
-      const role = tokenDecoded ? tokenDecoded.role : null
-      const isFreiwillig = role === 'apflora_freiwillig'
-      const username = get(data, 'user.name')
+  const token = get(localData, 'user.token')
+  const tokenDecoded = token ? jwtDecode(token) : null
+  const role = tokenDecoded ? tokenDecoded.role : null
+  const isFreiwillig = role === 'apflora_freiwillig'
+  const username = get(localData, 'user.name')
 
-      return (
-        <ErrorBoundary>
-          <StyledAppBar position="static">
-            <StyledToolbar>
-              <Typography variant="title" color="inherit">
-                {isMobile
-                  ? ''
-                  : view === 'ekf'
-                    ? 'AP Flora: Erfolgs-Kontrolle Freiwillige'
-                    : 'AP Flora'}
-              </Typography>
-              <MenuDiv>
-                {view === 'ekf' && (
-                  <EkfYear
-                    value={get(data, 'ekfYear')}
-                    setEkfYear={setEkfYear}
-                  />
-                )}
-                {view === 'ekf' &&
-                  !isFreiwillig && (
-                    <NormalViewButton onClick={setViewNormal}>
-                      Normal-Ansicht
-                    </NormalViewButton>
-                  )}
-                {view === 'ekf' &&
-                  isFreiwillig && (
-                    <Fragment>
-                      <NormalViewButton onClick={toggleUserOpen}>
-                        {`Benutzer: ${username}`}
-                      </NormalViewButton>
-                      <User
-                        username={username}
-                        userOpen={userOpen}
-                        toggleUserOpen={toggleUserOpen}
-                      />
-                    </Fragment>
-                  )}
-                {view === 'normal' && (
-                  <Fragment>
-                    {isFreiwillig && (
-                      <NormalViewButton onClick={setViewEkf}>
-                        EKF-Ansicht
-                      </NormalViewButton>
-                    )}
-                    <StyledButton
-                      variant={
-                        projekteTabs.includes('tree') ? 'outlined' : 'text'
-                      }
-                      followed={projekteTabs.includes('daten')}
-                      onClick={() =>
-                        onClickButton('tree', client, projekteTabs)
-                      }
-                    >
-                      Strukturbaum
-                    </StyledButton>
-                    <Daten data={data} />
-                    <StyledButton
-                      variant={
-                        projekteTabs.includes('karte') ? 'outlined' : 'text'
-                      }
-                      preceded={projekteTabs.includes('daten')}
-                      followed={
-                        (!isMobile &&
-                          exporteIsActive &&
-                          projekteTabs.includes('exporte')) ||
-                        (!isMobile &&
-                          !exporteIsActive &&
-                          projekteTabs.includes('tree2'))
-                      }
-                      onClick={() =>
-                        onClickButton('karte', client, projekteTabs)
-                      }
-                    >
-                      Karte
-                    </StyledButton>
-                    {!isMobile &&
-                      exporteIsActive && (
-                        <StyledButton
-                          variant={
-                            projekteTabs.includes('exporte')
-                              ? 'outlined'
-                              : 'text'
-                          }
-                          preceded={projekteTabs.includes('karte')}
-                          followed={projekteTabs.includes('tree2')}
-                          onClick={() =>
-                            onClickButton('exporte', client, projekteTabs)
-                          }
-                        >
-                          Exporte
-                        </StyledButton>
-                      )}
-                    {!isMobile && (
-                      <StyledButton
-                        variant={
-                          projekteTabs.includes('tree2') ? 'outlined' : 'text'
-                        }
-                        preceded={
-                          (exporteIsActive &&
-                            projekteTabs.includes('exporte')) ||
-                          (!exporteIsActive && projekteTabs.includes('karte'))
-                        }
-                        followed={projekteTabs.includes('daten2')}
-                        onClick={() =>
-                          onClickButton('tree2', client, projekteTabs)
-                        }
-                      >
-                        Strukturbaum 2
-                      </StyledButton>
-                    )}
-                    {!isMobile && <Daten data={data} treeNr="2" />}
-                  </Fragment>
-                )}
-                <More
-                  onClickButton={onClickButton}
-                  setShowDeletions={setShowDeletions}
-                  role={role}
+  return (
+    <ErrorBoundary>
+      <StyledAppBar position="static">
+        <StyledToolbar>
+          <Typography variant="title" color="inherit">
+            {isMobile
+              ? ''
+              : view === 'ekf'
+              ? 'AP Flora: Erfolgs-Kontrolle Freiwillige'
+              : 'AP Flora'}
+          </Typography>
+          <MenuDiv>
+            {view === 'ekf' && (
+              <EkfYear
+                value={get(localData, 'ekfYear')}
+                setEkfYear={setEkfYear}
+              />
+            )}
+            {view === 'ekf' && !isFreiwillig && (
+              <NormalViewButton onClick={setViewNormal}>
+                Normal-Ansicht
+              </NormalViewButton>
+            )}
+            {view === 'ekf' && isFreiwillig && (
+              <Fragment>
+                <NormalViewButton onClick={toggleUserOpen}>
+                  {`Benutzer: ${username}`}
+                </NormalViewButton>
+                <User
+                  username={username}
+                  userOpen={userOpen}
+                  toggleUserOpen={toggleUserOpen}
                 />
-              </MenuDiv>
-            </StyledToolbar>
-          </StyledAppBar>
-        </ErrorBoundary>
-      )
-    }}
-  </Query>
-)
+              </Fragment>
+            )}
+            {view === 'normal' && (
+              <Fragment>
+                {isFreiwillig && (
+                  <NormalViewButton onClick={setViewEkf}>
+                    EKF-Ansicht
+                  </NormalViewButton>
+                )}
+                <StyledButton
+                  variant={projekteTabs.includes('tree') ? 'outlined' : 'text'}
+                  followed={projekteTabs.includes('daten')}
+                  onClick={() => onClickButton('tree')}
+                >
+                  Strukturbaum
+                </StyledButton>
+                <Daten data={localData} />
+                <StyledButton
+                  variant={projekteTabs.includes('karte') ? 'outlined' : 'text'}
+                  preceded={projekteTabs.includes('daten')}
+                  followed={
+                    (!isMobile &&
+                      exporteIsActive &&
+                      projekteTabs.includes('exporte')) ||
+                    (!isMobile &&
+                      !exporteIsActive &&
+                      projekteTabs.includes('tree2'))
+                  }
+                  onClick={() => onClickButton('karte')}
+                >
+                  Karte
+                </StyledButton>
+                {!isMobile && exporteIsActive && (
+                  <StyledButton
+                    variant={
+                      projekteTabs.includes('exporte') ? 'outlined' : 'text'
+                    }
+                    preceded={projekteTabs.includes('karte')}
+                    followed={projekteTabs.includes('tree2')}
+                    onClick={() => onClickButton('exporte')}
+                  >
+                    Exporte
+                  </StyledButton>
+                )}
+                {!isMobile && (
+                  <StyledButton
+                    variant={
+                      projekteTabs.includes('tree2') ? 'outlined' : 'text'
+                    }
+                    preceded={
+                      (exporteIsActive && projekteTabs.includes('exporte')) ||
+                      (!exporteIsActive && projekteTabs.includes('karte'))
+                    }
+                    followed={projekteTabs.includes('daten2')}
+                    onClick={() => onClickButton('tree2')}
+                  >
+                    Strukturbaum 2
+                  </StyledButton>
+                )}
+                {!isMobile && <Daten data={localData} treeNr="2" />}
+              </Fragment>
+            )}
+            <More
+              onClickButton={onClickButton}
+              setShowDeletions={setShowDeletions}
+              role={role}
+            />
+          </MenuDiv>
+        </StyledToolbar>
+      </StyledAppBar>
+    </ErrorBoundary>
+  )
+}
 
 export default enhance(MyAppBar)
