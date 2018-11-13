@@ -3,13 +3,12 @@ import React from 'react'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import styled from 'styled-components'
-import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import app from 'ampersand-app'
 
 import Select from '../../../shared/Select'
-import dataGql from './data'
+import withData from './withData'
 import setViewGql from './setView'
 import setEkfAdresseIdGql from './setEkfAdresseId'
 
@@ -18,8 +17,10 @@ const Container = styled.div`
 `
 
 const enhance = compose(
+  withData,
   withHandlers({
-    choose: ({ setAnchorEl }: { setAnchorEl: () => void }) => async id => {
+    choose: ({ setAnchorEl }: { setAnchorEl: () => void }) => async event => {
+      const id = event.target.value
       const { client } = app
       await client.mutate({
         mutation: setEkfAdresseIdGql,
@@ -34,31 +35,27 @@ const enhance = compose(
   }),
 )
 
-const EkfAdresse = ({ choose }: { choose: () => void }) => (
-  <Query query={dataGql}>
-    {({ loading, error, data }) => {
-      if (loading) return '...'
-      if (error) return `Fehler: ${error.message}`
-      let adressenWerte = get(data, 'allAdresses.nodes', [])
-      adressenWerte = sortBy(adressenWerte, 'name')
-      adressenWerte = adressenWerte.map(el => ({
-        value: el.id,
-        label: el.name,
-      }))
+const EkfAdresse = ({ choose, data }: { choose: () => void, data: Object }) => {
+  if (data.loading) return '...'
+  if (data.error) return `Fehler: ${data.error.message}`
+  let adressenWerte = get(data, 'allAdresses.nodes', [])
+  adressenWerte = sortBy(adressenWerte, 'name')
+  adressenWerte = adressenWerte.map(el => ({
+    value: el.id,
+    label: el.name,
+  }))
 
-      return (
-        <Container>
-          <Select
-            value={''}
-            label="EKF sehen als"
-            options={adressenWerte}
-            saveToDb={choose}
-            maxHeight={130}
-          />
-        </Container>
-      )
-    }}
-  </Query>
-)
+  return (
+    <Container>
+      <Select
+        value={''}
+        label="EKF sehen als"
+        options={adressenWerte}
+        saveToDb={choose}
+        maxHeight={130}
+      />
+    </Container>
+  )
+}
 
 export default enhance(EkfAdresse)

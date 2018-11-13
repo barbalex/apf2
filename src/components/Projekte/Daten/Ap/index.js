@@ -191,8 +191,6 @@ const Ap = ({
   if (localData.error) return `Fehler: ${localData.error.message}`
   if (data.error) return `Fehler: ${data.error.message}`
 
-  console.log('Ap rendering', { data })
-
   const id = get(
     localData,
     `${treeName}.activeNodeArray[3]`,
