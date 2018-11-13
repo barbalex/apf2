@@ -57,7 +57,7 @@ const enhance = compose(
 )
 
 const MyAppBar = ({
-  onClickButton,
+  onClickExporte,
   showDeletedDatasets,
   watchVideos,
   openDocs,
@@ -69,7 +69,7 @@ const MyAppBar = ({
   onClickMehrButton,
   onClose,
 }: {
-  onClickButton: () => void,
+  onClickExporte: () => void,
   showDeletedDatasets: () => void,
   watchVideos: () => void,
   openDocs: () => void,
@@ -116,7 +116,7 @@ const MyAppBar = ({
                 <MenuItem
                   onClick={() => {
                     onClose()
-                    onClickButton('exporte')
+                    onClickExporte()
                   }}
                   disabled={projekteTabs.includes('exporte')}
                 >

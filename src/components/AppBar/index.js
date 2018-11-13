@@ -71,7 +71,7 @@ const enhance = compose(
   withState('ekfYearState', 'setEkfYearState', null),
   withState('userOpen', 'setUserOpen', false),
   withHandlers({
-    onClickButton: ({ nodeFilterState, localData }) => name => {
+    onClickButton: ({ nodeFilterState, localData }) => (name: string) => {
       const projekteTabs = get(localData, 'urlQuery.projekteTabs', [])
       if (isMobilePhone()) {
         // show one tab only
@@ -95,6 +95,12 @@ const enhance = compose(
         setUrlQueryValue({ key: 'projekteTabs', value: projekteTabs })
       }
     },
+  }),
+  withHandlers({
+    onClickTree: ({ onClickButton }) => () => onClickButton('tree'),
+    onClickKarte: ({ onClickButton }) => () => onClickButton('karte'),
+    onClickExporte: ({ onClickButton }) => () => onClickButton('exporte'),
+    onClickTree2: ({ onClickButton }) => () => onClickButton('tree2'),
     setViewNormal: () => () => {
       app.client.mutate({
         mutation: setView,
@@ -120,7 +126,10 @@ const enhance = compose(
 )
 
 const MyAppBar = ({
-  onClickButton,
+  onClickTree,
+  onClickKarte,
+  onClickExporte,
+  onClickTree2,
   setShowDeletions,
   setViewNormal,
   setViewEkf,
@@ -129,7 +138,10 @@ const MyAppBar = ({
   toggleUserOpen,
   localData,
 }: {
-  onClickButton: () => void,
+  onClickTree: () => void,
+  onClickKarte: () => void,
+  onClickExporte: () => void,
+  onClickTree2: () => void,
   setShowDeletions: () => void,
   setViewNormal: () => void,
   setViewEkf: () => void,
@@ -199,9 +211,10 @@ const MyAppBar = ({
                   </NormalViewButton>
                 )}
                 <StyledButton
+                  name="tree"
                   variant={projekteTabs.includes('tree') ? 'outlined' : 'text'}
                   followed={projekteTabs.includes('daten')}
-                  onClick={() => onClickButton('tree')}
+                  onClick={onClickTree}
                 >
                   Strukturbaum
                 </StyledButton>
@@ -217,7 +230,7 @@ const MyAppBar = ({
                       !exporteIsActive &&
                       projekteTabs.includes('tree2'))
                   }
-                  onClick={() => onClickButton('karte')}
+                  onClick={onClickKarte}
                 >
                   Karte
                 </StyledButton>
@@ -228,7 +241,7 @@ const MyAppBar = ({
                     }
                     preceded={projekteTabs.includes('karte')}
                     followed={projekteTabs.includes('tree2')}
-                    onClick={() => onClickButton('exporte')}
+                    onClick={onClickExporte}
                   >
                     Exporte
                   </StyledButton>
@@ -243,7 +256,7 @@ const MyAppBar = ({
                       (!exporteIsActive && projekteTabs.includes('karte'))
                     }
                     followed={projekteTabs.includes('daten2')}
-                    onClick={() => onClickButton('tree2')}
+                    onClick={onClickTree2}
                   >
                     Strukturbaum 2
                   </StyledButton>
@@ -252,7 +265,7 @@ const MyAppBar = ({
               </Fragment>
             )}
             <More
-              onClickButton={onClickButton}
+              onClickExporte={onClickExporte}
               setShowDeletions={setShowDeletions}
               role={role}
             />
