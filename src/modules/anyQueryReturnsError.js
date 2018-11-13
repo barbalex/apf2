@@ -5,7 +5,7 @@
  */
 export default queryArray => {
   const errors = queryArray.map(q => q.error).filter(o => !!o)
-  console.log('anQueryReturnsError, errors.length:', errors.length)
+  //console.log('anQueryReturnsError, errors.length:', errors.length)
   if (errors.length && errors[0]) return errors[0]
   return null
 }

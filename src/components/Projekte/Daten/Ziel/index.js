@@ -138,8 +138,6 @@ const Ziel = ({
     return `Fehler: ${data.error.message}`
   }
 
-  console.log('Ziel rendering')
-
   const row = get(data, 'zielById', {})
   let typWerte = get(data, 'allZielTypWertes.nodes', [])
   typWerte = sortBy(typWerte, 'sort')

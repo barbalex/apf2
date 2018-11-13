@@ -1,17 +1,17 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
-import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
+import app from 'ampersand-app'
 
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data'
+import withData from './withData'
 import updateZielberByIdGql from './updateZielberById'
 
 const Container = styled.div`
@@ -26,20 +26,21 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withData,
   withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({ setErrors, errors }) => async ({
-      row,
-      field,
-      value,
-      updateZielber,
-    }) => {
+    saveToDb: ({ setErrors, errors, data }) => async event => {
+      const field = event.target.name
+      let value = event.target.value
+      if (value === undefined) value = null
+      const row = get(data, 'zielberById', {})
       /**
        * only save if value changed
        */
       if (row[field] === value) return
       try {
-        await updateZielber({
+        await app.client.mutate({
+          mutation: updateZielberByIdGql,
           variables: {
             id: row.id,
             [field]: value,
@@ -80,85 +81,66 @@ const Zielber = ({
   saveToDb,
   errors,
   treeName,
+  data,
 }: {
   id: string,
   saveToDb: () => void,
   errors: Object,
   treeName: string,
-}) => (
-  <Query query={dataGql} variables={{ id }}>
-    {({ loading, error, data }) => {
-      if (loading)
-        return (
-          <Container>
-            <FieldsContainer>Lade...</FieldsContainer>
-          </Container>
-        )
-      if (error) return `Fehler: ${error.message}`
+  data: Object,
+}) => {
+  if (data.loading)
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  if (data.error) return `Fehler: ${data.error.message}`
 
-      const row = get(data, 'zielberById', {})
+  const row = get(data, 'zielberById', {})
 
-      return (
-        <ErrorBoundary>
-          <Container>
-            <FormTitle
-              apId={get(row, 'zielByZielId.apId')}
-              title="Ziel-Bericht"
-              treeName={treeName}
-              table="zielber"
-            />
-            <Mutation mutation={updateZielberByIdGql}>
-              {(updateZielber, { data }) => (
-                <FieldsContainer>
-                  <TextField
-                    key={`${row.id}jahr`}
-                    label="Jahr"
-                    value={row.jahr}
-                    type="number"
-                    saveToDb={value =>
-                      saveToDb({ row, field: 'jahr', value, updateZielber })
-                    }
-                    error={errors.jahr}
-                  />
-                  <TextField
-                    key={`${row.id}erreichung`}
-                    label="Entwicklung"
-                    value={row.erreichung}
-                    type="text"
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'erreichung',
-                        value,
-                        updateZielber,
-                      })
-                    }
-                    error={errors.erreichung}
-                  />
-                  <TextField
-                    key={`${row.id}bemerkungen`}
-                    label="Bemerkungen"
-                    value={row.bemerkungen}
-                    type="text"
-                    multiLine
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'bemerkungen',
-                        value,
-                        updateZielber,
-                      })
-                    }
-                    error={errors.bemerkungen}
-                  />
-                </FieldsContainer>
-              )}
-            </Mutation>
-          </Container>
-        </ErrorBoundary>
-      )
-    }}
-  </Query>
-)
+  return (
+    <ErrorBoundary>
+      <Container>
+        <FormTitle
+          apId={get(row, 'zielByZielId.apId')}
+          title="Ziel-Bericht"
+          treeName={treeName}
+          table="zielber"
+        />
+        <FieldsContainer>
+          <TextField
+            key={`${row.id}jahr`}
+            name="jahr"
+            label="Jahr"
+            value={row.jahr}
+            type="number"
+            saveToDb={saveToDb}
+            error={errors.jahr}
+          />
+          <TextField
+            key={`${row.id}erreichung`}
+            name="erreichung"
+            label="Entwicklung"
+            value={row.erreichung}
+            type="text"
+            saveToDb={saveToDb}
+            error={errors.erreichung}
+          />
+          <TextField
+            key={`${row.id}bemerkungen`}
+            name="bemerkungen"
+            label="Bemerkungen"
+            value={row.bemerkungen}
+            type="text"
+            multiLine
+            saveToDb={saveToDb}
+            error={errors.bemerkungen}
+          />
+        </FieldsContainer>
+      </Container>
+    </ErrorBoundary>
+  )
+}
 
 export default enhance(Zielber)
