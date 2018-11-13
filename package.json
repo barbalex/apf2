@@ -15,7 +15,7 @@
     "postgraphile": "4.0.1",
     "postgraphile-plugin-connection-filter": "1.0.0-beta.19",
     "react-scripts": "2.1.1",
-    "serve": "10.0.2",
+    "serve": "10.1.1",
     "source-map-explorer": "1.6.0"
   },
   "dependencies": {
@@ -23,7 +23,7 @@
     "@date-io/moment": "^0.0.2",
     "@hocs/debounce-handler": "0.5.0",
     "@hocs/with-lifecycle": "0.5.0",
-    "@material-ui/core": "3.4.0",
+    "@material-ui/core": "3.5.1",
     "@material-ui/icons": "3.0.1",
     "@turf/boolean-point-in-polygon": "6.0.1",
     "@turf/nearest": "4.7.3",
@@ -83,7 +83,7 @@
     "react-virtualized": "9.21.0",
     "react-window": "1.2.4",
     "recompose": "0.30.0",
-    "styled-components": "4.0.3",
+    "styled-components": "4.1.1",
     "typeface-roboto": "0.0.54",
     "unstated": "2.1.1"
   },
