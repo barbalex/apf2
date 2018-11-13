@@ -8,12 +8,13 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
+import app from 'ampersand-app'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data'
+import withData from './withData'
 import updateTpopmassnberByIdGql from './updateTpopmassnberById'
 import withAllTpopmassnErfbeurtWertes from './withAllTpopmassnErfbeurtWertes'
 
@@ -29,21 +30,22 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withData,
   withAllTpopmassnErfbeurtWertes,
   withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({ refetchTree, setErrors, errors }) => async ({
-      row,
-      field,
-      value,
-      updateTpopmassnber,
-    }) => {
+    saveToDb: ({ refetchTree, setErrors, errors, data }) => async event => {
+      const field = event.target.name
+      let value = event.target.value
+      if (value === undefined) value = null
+      const row = get(data, 'tpopmassnberById', {})
       /**
        * only save if value changed
        */
       if (row[field] === value) return
       try {
-        await updateTpopmassnber({
+        await app.client.mutate({
+          mutation: updateTpopmassnberByIdGql,
           variables: {
             id: row.id,
             [field]: value,
@@ -86,102 +88,78 @@ const Tpopmassnber = ({
   errors,
   treeName,
   dataAllTpopmassnErfbeurtWertes,
+  data,
 }: {
   id: string,
   saveToDb: () => void,
   errors: Object,
   treeName: string,
   dataAllTpopmassnErfbeurtWertes: Object,
-}) => (
-  <Query query={dataGql} variables={{ id }}>
-    {({ loading, error, data }) => {
-      if (loading || dataAllTpopmassnErfbeurtWertes.loading)
-        return (
-          <Container>
-            <FieldsContainer>Lade...</FieldsContainer>
-          </Container>
-        )
-      if (error) return `Fehler: ${error.message}`
-      if (dataAllTpopmassnErfbeurtWertes.error)
-        return `Fehler: ${dataAllTpopmassnErfbeurtWertes.error.message}`
+  data: Object,
+}) => {
+  if (data.loading || dataAllTpopmassnErfbeurtWertes.loading)
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  if (data.error) return `Fehler: ${data.error.message}`
+  if (dataAllTpopmassnErfbeurtWertes.error)
+    return `Fehler: ${dataAllTpopmassnErfbeurtWertes.error.message}`
 
-      const row = get(data, 'tpopmassnberById', {})
-      let tpopmassnbeurtWerte = get(
-        dataAllTpopmassnErfbeurtWertes,
-        'allTpopmassnErfbeurtWertes.nodes',
-        [],
-      )
-      tpopmassnbeurtWerte = sortBy(tpopmassnbeurtWerte, 'sort')
-      tpopmassnbeurtWerte = tpopmassnbeurtWerte.map(el => ({
-        value: el.code,
-        label: el.text,
-      }))
+  const row = get(data, 'tpopmassnberById', {})
+  let tpopmassnbeurtWerte = get(
+    dataAllTpopmassnErfbeurtWertes,
+    'allTpopmassnErfbeurtWertes.nodes',
+    [],
+  )
+  tpopmassnbeurtWerte = sortBy(tpopmassnbeurtWerte, 'sort')
+  tpopmassnbeurtWerte = tpopmassnbeurtWerte.map(el => ({
+    value: el.code,
+    label: el.text,
+  }))
 
-      return (
-        <ErrorBoundary>
-          <Container>
-            <FormTitle
-              apId={get(data, 'tpopmassnberById.tpopByTpopId.popByPopId.apId')}
-              title="Massnahmen-Bericht Teil-Population"
-              treeName={treeName}
-              table="tpopmassnber"
-            />
-            <Mutation mutation={updateTpopmassnberByIdGql}>
-              {(updateTpopmassnber, { data }) => (
-                <FieldsContainer>
-                  <TextField
-                    key={`${row.id}jahr`}
-                    label="Jahr"
-                    value={row.jahr}
-                    type="number"
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'jahr',
-                        value,
-                        updateTpopmassnber,
-                      })
-                    }
-                    error={errors.jahr}
-                  />
-                  <RadioButtonGroup
-                    label="Entwicklung"
-                    value={row.beurteilung}
-                    dataSource={tpopmassnbeurtWerte}
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'beurteilung',
-                        value,
-                        updateTpopmassnber,
-                      })
-                    }
-                    error={errors.beurteilung}
-                  />
-                  <TextField
-                    key={`${row.id}bemerkungen`}
-                    label="Interpretation"
-                    value={row.bemerkungen}
-                    type="text"
-                    multiLine
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'bemerkungen',
-                        value,
-                        updateTpopmassnber,
-                      })
-                    }
-                    error={errors.bemerkungen}
-                  />
-                </FieldsContainer>
-              )}
-            </Mutation>
-          </Container>
-        </ErrorBoundary>
-      )
-    }}
-  </Query>
-)
+  return (
+    <ErrorBoundary>
+      <Container>
+        <FormTitle
+          apId={get(data, 'tpopmassnberById.tpopByTpopId.popByPopId.apId')}
+          title="Massnahmen-Bericht Teil-Population"
+          treeName={treeName}
+          table="tpopmassnber"
+        />
+        <FieldsContainer>
+          <TextField
+            key={`${row.id}jahr`}
+            name="jahr"
+            label="Jahr"
+            value={row.jahr}
+            type="number"
+            saveToDb={saveToDb}
+            error={errors.jahr}
+          />
+          <RadioButtonGroup
+            label="Entwicklung"
+            name="beurteilung"
+            value={row.beurteilung}
+            dataSource={tpopmassnbeurtWerte}
+            saveToDb={saveToDb}
+            error={errors.beurteilung}
+          />
+          <TextField
+            key={`${row.id}bemerkungen`}
+            name="bemerkungen"
+            label="Interpretation"
+            value={row.bemerkungen}
+            type="text"
+            multiLine
+            saveToDb={saveToDb}
+            error={errors.bemerkungen}
+          />
+        </FieldsContainer>
+      </Container>
+    </ErrorBoundary>
+  )
+}
 
 export default enhance(Tpopmassnber)
