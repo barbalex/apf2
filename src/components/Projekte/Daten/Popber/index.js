@@ -8,12 +8,13 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
+import app from 'ampersand-app'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data'
+import withData from './withData'
 import updatePopberByIdGql from './updatePopberById'
 
 const Container = styled.div`
@@ -28,20 +29,20 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withData,
   withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({ refetchTree, setErrors, errors }) => async ({
-      row,
-      field,
-      value,
-      updatePopber,
-    }) => {
+    saveToDb: ({ refetchTree, setErrors, errors, data }) => async event => {
+      const field = event.target.name
+      const value = event.target.value || null
+      const row = get(data, 'popberById', {})
       /**
        * only save if value changed
        */
       if (row[field] === value) return
       try {
-        await updatePopber({
+        await app.client.mutate({
+          mutation: updatePopberByIdGql,
           variables: {
             id: row.id,
             [field]: value,
@@ -85,91 +86,72 @@ const Popber = ({
   saveToDb,
   errors,
   treeName,
+  data,
 }: {
   id: string,
   saveToDb: () => void,
   errors: Object,
   treeName: string,
-}) => (
-  <Query query={dataGql} variables={{ id }}>
-    {({ loading, error, data }) => {
-      if (loading)
-        return (
-          <Container>
-            <FieldsContainer>Lade...</FieldsContainer>
-          </Container>
-        )
-      if (error) return `Fehler: ${error.message}`
+  data: Object,
+}) => {
+  if (data.loading)
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  if (data.error) return `Fehler: ${data.error.message}`
 
-      const row = get(data, 'popberById', {})
-      let popentwicklungWerte = get(data, 'allTpopEntwicklungWertes.nodes', [])
-      popentwicklungWerte = sortBy(popentwicklungWerte, 'sort')
-      popentwicklungWerte = popentwicklungWerte.map(el => ({
-        value: el.code,
-        label: el.text,
-      }))
+  const row = get(data, 'popberById', {})
+  let popentwicklungWerte = get(data, 'allTpopEntwicklungWertes.nodes', [])
+  popentwicklungWerte = sortBy(popentwicklungWerte, 'sort')
+  popentwicklungWerte = popentwicklungWerte.map(el => ({
+    value: el.code,
+    label: el.text,
+  }))
 
-      return (
-        <ErrorBoundary>
-          <Container>
-            <FormTitle
-              apId={get(data, 'popberById.popByPopId.apId')}
-              title="Kontroll-Bericht Population"
-              treeName={treeName}
-              table="popber"
-            />
-            <Mutation mutation={updatePopberByIdGql}>
-              {(updatePopber, { data }) => (
-                <FieldsContainer>
-                  <TextField
-                    key={`${row.id}jahr`}
-                    label="Jahr"
-                    value={row.jahr}
-                    type="number"
-                    saveToDb={value =>
-                      saveToDb({ row, field: 'jahr', value, updatePopber })
-                    }
-                    error={errors.jahr}
-                  />
-                  <RadioButtonGroup
-                    key={`${row.id}entwicklung`}
-                    label="Entwicklung"
-                    value={row.entwicklung}
-                    dataSource={popentwicklungWerte}
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'entwicklung',
-                        value,
-                        updatePopber,
-                      })
-                    }
-                    error={errors.entwicklung}
-                  />
-                  <TextField
-                    key={`${row.id}bemerkungen`}
-                    label="Bemerkungen"
-                    value={row.bemerkungen}
-                    type="text"
-                    multiLine
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'bemerkungen',
-                        value,
-                        updatePopber,
-                      })
-                    }
-                    error={errors.bemerkungen}
-                  />
-                </FieldsContainer>
-              )}
-            </Mutation>
-          </Container>
-        </ErrorBoundary>
-      )
-    }}
-  </Query>
-)
+  return (
+    <ErrorBoundary>
+      <Container>
+        <FormTitle
+          apId={get(data, 'popberById.popByPopId.apId')}
+          title="Kontroll-Bericht Population"
+          treeName={treeName}
+          table="popber"
+        />
+        <FieldsContainer>
+          <TextField
+            key={`${row.id}jahr`}
+            name="jahr"
+            label="Jahr"
+            value={row.jahr}
+            type="number"
+            saveToDb={saveToDb}
+            error={errors.jahr}
+          />
+          <RadioButtonGroup
+            key={`${row.id}entwicklung`}
+            name="entwicklung"
+            label="Entwicklung"
+            value={row.entwicklung}
+            dataSource={popentwicklungWerte}
+            saveToDb={saveToDb}
+            error={errors.entwicklung}
+          />
+          <TextField
+            key={`${row.id}bemerkungen`}
+            name="bemerkungen"
+            label="Bemerkungen"
+            value={row.bemerkungen}
+            type="text"
+            multiLine
+            saveToDb={saveToDb}
+            error={errors.bemerkungen}
+          />
+        </FieldsContainer>
+      </Container>
+    </ErrorBoundary>
+  )
+}
 
 export default enhance(Popber)

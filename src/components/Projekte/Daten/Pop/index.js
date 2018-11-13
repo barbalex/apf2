@@ -130,7 +130,6 @@ const Pop = ({
   treeName: string,
   data: Object,
 }) => {
-  console.log('Pop rendering')
   if (data.loading)
     return (
       <Container>
