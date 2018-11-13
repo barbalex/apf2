@@ -2,13 +2,13 @@
 import React from 'react'
 import styled from 'styled-components'
 import sortBy from 'lodash/sortBy'
-import { Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import Button from '@material-ui/core/Button'
 import SendIcon from '@material-ui/icons/EmailOutlined'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import app from 'ampersand-app'
 
 import FormTitle from '../../../shared/FormTitle'
 import TextField from '../../../shared/TextField'
@@ -149,16 +149,28 @@ const enhance = compose(
       value,
       id,
       tree,
-      refetch,
+      data,
       refetchTree,
-    }) => event => {
-      const { value } = event.target
+    }) => value => {
       saveNichtZuordnenToDb({
         value,
         id,
         tree,
-        refetch,
+        refetch: data.refetch,
         refetchTree,
+      })
+    },
+    onSaveTpopIdToDb: ({ id, tree, refetchTree, type, data }) => event => {
+      const { value } = event.target
+      saveTpopIdToDb({ value, id, tree, refetchTree, type })
+    },
+    onUpdateBemerkungen: ({ id }) => event => {
+      app.client.mutate({
+        mutation: updateBeobByIdGql,
+        variables: {
+          id,
+          bemerkungen: event.target.value,
+        },
       })
     },
   }),
@@ -175,6 +187,9 @@ const Beobzuordnung = ({
   data,
   dataAeEigenschaftens,
   onSaveArtIdToDb,
+  onSaveNichtZuordnenToDb,
+  onSaveTpopIdToDb,
+  onUpdateBemerkungen,
 }: {
   id: string,
   apId: string,
@@ -186,6 +201,9 @@ const Beobzuordnung = ({
   data: Object,
   dataAeEigenschaftens: Object,
   onSaveArtIdToDb: () => void,
+  onSaveNichtZuordnenToDb: () => void,
+  onSaveTpopIdToDb: () => void,
+  onUpdateBemerkungen: () => void,
 }) => {
   const { error } = data
   if (data.loading || dataAeEigenschaftens.loading)
@@ -214,122 +232,97 @@ const Beobzuordnung = ({
           table="beob"
         />
         <DataContainer>
-          <Mutation mutation={updateBeobByIdGql}>
-            {(updateBeob, { data }) => (
-              <FieldsContainer>
-                {row && row.artId !== row.artIdOriginal && (
-                  <OriginalArtDiv>{`Art gemäss Original-Meldung: ${get(
+          <FieldsContainer>
+            {row && row.artId !== row.artIdOriginal && (
+              <OriginalArtDiv>{`Art gemäss Original-Meldung: ${get(
+                row,
+                'aeEigenschaftenByArtIdOriginal.artname',
+              )}`}</OriginalArtDiv>
+            )}
+            <Select
+              key={`${row.id}artId`}
+              name="artId"
+              value={row.artId}
+              field="artId"
+              label="Art"
+              options={artWerte}
+              saveToDb={onSaveArtIdToDb}
+            />
+            <CheckboxWithInfo
+              key={`${row.id}nichtZuordnen`}
+              name="nichtZuordnen"
+              label="Nicht zuordnen"
+              value={row.nichtZuordnen}
+              saveToDb={onSaveNichtZuordnenToDb}
+              popover={nichtZuordnenPopover}
+            />
+            <ZuordnenDiv>
+              <Select
+                key={`${row.id}tpopId`}
+                name="tpopId"
+                value={row.tpopId ? row.tpopId : ''}
+                field="tpopId"
+                label={
+                  !!row.tpopId
+                    ? 'Einer anderen Teilpopulation zuordnen'
+                    : 'Einer Teilpopulation zuordnen'
+                }
+                options={getTpopZuordnenSource(row, apId)}
+                saveToDb={onSaveTpopIdToDb}
+              />
+            </ZuordnenDiv>
+            <TextField
+              key={`${row.id}bemerkungen`}
+              name="bemerkungen"
+              label="Bemerkungen zur Zuordnung"
+              value={row.bemerkungen}
+              type="text"
+              multiLine
+              saveToDb={onUpdateBemerkungen}
+            />
+            <EmailButtonRow>
+              <EmailButton
+                variant="outlined"
+                onClick={() => {
+                  const origArt = `Art gemäss Beobachtung: SISF-Nr: ${get(
+                    row,
+                    'aeEigenschaftenByArtId.taxid',
+                  )}, Artname: ${get(row, 'aeEigenschaftenByArtId.artname')}`
+                  const neueArt = `Korrigierte Art: SISF-Nr: ${get(
+                    row,
+                    'aeEigenschaftenByArtIdOriginal.taxid',
+                  )}, Artname: ${get(
                     row,
                     'aeEigenschaftenByArtIdOriginal.artname',
-                  )}`}</OriginalArtDiv>
-                )}
-                <Select
-                  key={`${row.id}artId`}
-                  name="artId"
-                  value={row.artId}
-                  field="artId"
-                  label="Art"
-                  options={artWerte}
-                  saveToDb={onSaveArtIdToDb}
-                />
-                <CheckboxWithInfo
-                  key={`${row.id}nichtZuordnen`}
-                  name="nichtZuordnen"
-                  label="Nicht zuordnen"
-                  value={row.nichtZuordnen}
-                  saveToDb={saveNichtZuordnenToDb}
-                  popover={nichtZuordnenPopover}
-                />
-                <ZuordnenDiv>
-                  <Select
-                    key={`${row.id}tpopId`}
-                    name="tpopId"
-                    value={row.tpopId ? row.tpopId : ''}
-                    field="tpopId"
-                    label={
-                      !!row.tpopId
-                        ? 'Einer anderen Teilpopulation zuordnen'
-                        : 'Einer Teilpopulation zuordnen'
-                    }
-                    options={getTpopZuordnenSource(row, apId)}
-                    saveToDb={value =>
-                      saveTpopIdToDb({
-                        value,
-                        id,
-                        updateBeob,
-                        tree,
-                        refetchTree,
-                        type,
-                      })
-                    }
-                  />
-                </ZuordnenDiv>
-                <TextField
-                  key={`${row.id}bemerkungen`}
-                  name="bemerkungen"
-                  label="Bemerkungen zur Zuordnung"
-                  value={row.bemerkungen}
-                  type="text"
-                  multiLine
-                  saveToDb={value =>
-                    updateBeob({
-                      variables: {
-                        id,
-                        bemerkungen: value,
-                      },
-                    })
-                  }
-                />
-                <EmailButtonRow>
-                  <EmailButton
-                    variant="outlined"
-                    onClick={() => {
-                      const origArt = `Art gemäss Beobachtung: SISF-Nr: ${get(
-                        row,
-                        'aeEigenschaftenByArtId.taxid',
-                      )}, Artname: ${get(
-                        row,
-                        'aeEigenschaftenByArtId.artname',
-                      )}`
-                      const neueArt = `Korrigierte Art: SISF-Nr: ${get(
-                        row,
-                        'aeEigenschaftenByArtIdOriginal.taxid',
-                      )}, Artname: ${get(
-                        row,
-                        'aeEigenschaftenByArtIdOriginal.artname',
-                      )}`
-                      const bemerkungen = row.bemerkungen
-                      // remove all keys with null
-                      const dataArray = Object.entries(
-                        JSON.parse(row.data),
-                      ).filter(a => !!a[1] || a[1] === 0 || a[1] === false)
-                      let data = ''
-                      dataArray.forEach(d => {
-                        data = `${data ? `${data}` : ''}${d[0]}: ${d[1]};\r\n`
-                      })
-                      const body = `${origArt}\r\n${neueArt}${
-                        bemerkungen
-                          ? `${
-                              bemerkungen
-                                ? `\r\nBemerkungen: ${bemerkungen}`
-                                : ''
-                            }`
-                          : ''
-                      }\r\n\r\nOriginal-Beobachtungs-Daten:\r\n${data}`
-                      sendMail({
-                        to: 'info@infoflora.ch',
-                        subject: 'Flora-Beobachtung: Verifikation',
-                        body,
-                      })
-                    }}
-                  >
-                    <StyledSendIcon />
-                    Email an Info Flora senden
-                  </EmailButton>
-                </EmailButtonRow>
-              </FieldsContainer>
-            )}
-          </Mutation>
+                  )}`
+                  const bemerkungen = row.bemerkungen
+                  // remove all keys with null
+                  const dataArray = Object.entries(JSON.parse(row.data)).filter(
+                    a => !!a[1] || a[1] === 0 || a[1] === false,
+                  )
+                  let data = ''
+                  dataArray.forEach(d => {
+                    data = `${data ? `${data}` : ''}${d[0]}: ${d[1]};\r\n`
+                  })
+                  const body = `${origArt}\r\n${neueArt}${
+                    bemerkungen
+                      ? `${
+                          bemerkungen ? `\r\nBemerkungen: ${bemerkungen}` : ''
+                        }`
+                      : ''
+                  }\r\n\r\nOriginal-Beobachtungs-Daten:\r\n${data}`
+                  sendMail({
+                    to: 'info@infoflora.ch',
+                    subject: 'Flora-Beobachtung: Verifikation',
+                    body,
+                  })
+                }}
+              >
+                <StyledSendIcon />
+                Email an Info Flora senden
+              </EmailButton>
+            </EmailButtonRow>
+          </FieldsContainer>
           <Title>{`Informationen aus ${get(
             row,
             'beobQuelleWerteByQuelleId.name',
