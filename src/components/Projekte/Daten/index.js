@@ -1,13 +1,12 @@
 // @flow
 import React, { lazy, Suspense } from 'react'
 import styled from 'styled-components'
-import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
 
 import ErrorBoundary from '../../shared/ErrorBoundarySingleChild'
 import Fallback from '../../shared/Fallback'
-import dataGql from './data'
+import withLocalData from './withLocalData'
 import getTableNameFromActiveNode from '../../../modules/getTableNameFromActiveNode'
 import withErrorState from '../../../state/withErrorState'
 import withNodeFilterState from '../../../state/withNodeFilter'
@@ -58,6 +57,7 @@ const Container = styled.div`
 `
 
 const enhance = compose(
+  withLocalData,
   withErrorState,
   withNodeFilterState,
 )
@@ -74,6 +74,7 @@ const Daten = ({
   role,
   errorState,
   nodeFilterState,
+  localData,
 }: {
   tree: Object,
   treeName: String,
@@ -86,312 +87,309 @@ const Daten = ({
   role: String,
   errorState: Object,
   nodeFilterState: Object,
-}) => (
-  <Query query={dataGql}>
-    {({ loading, error, data, client }) => {
-      // do not show loading but rather last state
-      if (error) return `Fehler: ${error.message}`
+  localData: Object,
+}) => {
+  // do not show loading but rather last state
+  if (localData.error) return `Fehler: ${localData.error.message}`
 
-      const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
-      const apId = get(data, `${treeName}.activeNodeArray[3]`)
+  const activeNodeArray = get(localData, `${treeName}.activeNodeArray`)
+  const apId = get(localData, `${treeName}.activeNodeArray[3]`)
 
-      const formObject = {
-        projekt: (
-          <Projekt
-            dimensions={dimensions}
-            id={activeNodeArray[1]}
-            treeName={treeName}
-            refetchTree={refetchTree}
-            activeNodeArray={activeNodeArray}
-          />
-        ),
-        apberuebersicht: (
-          <Apberuebersicht
-            dimensions={dimensions}
-            id={activeNodeArray[3]}
-            treeName={treeName}
-            refetchTree={refetchTree}
-          />
-        ),
-        ap: (
-          <Ap
-            dimensions={dimensions}
-            treeName={treeName}
-            refetchTree={refetchTree}
-          />
-        ),
-        assozart: (
-          <Assozart
-            dimensions={dimensions}
-            id={activeNodeArray[5]}
-            treeName={treeName}
-            refetchTree={refetchTree}
-          />
-        ),
-        ekfzaehleinheit: (
-          <Ekfzaehleinheit
-            dimensions={dimensions}
-            id={activeNodeArray[5]}
-            treeName={treeName}
-            refetchTree={refetchTree}
-          />
-        ),
-        apart: (
-          <Apart
-            dimensions={dimensions}
-            id={activeNodeArray[5]}
-            treeName={treeName}
-            refetchTree={refetchTree}
-          />
-        ),
-        idealbiotop: (
-          <Idealbiotop
-            dimensions={dimensions}
-            id={activeNodeArray[3]}
-            treeName={treeName}
-            refetchTree={refetchTree}
-          />
-        ),
-        erfkrit: (
-          <Erfkrit
-            dimensions={dimensions}
-            id={activeNodeArray[5]}
-            treeName={treeName}
-            refetchTree={refetchTree}
-          />
-        ),
-        apber: (
-          <Apber
-            dimensions={dimensions}
-            id={activeNodeArray[5]}
-            treeName={treeName}
-            refetchTree={refetchTree}
-          />
-        ),
-        ber: (
-          <Ber
-            dimensions={dimensions}
-            id={activeNodeArray[5]}
-            treeName={treeName}
-            refetchTree={refetchTree}
-          />
-        ),
-        ziel: (
-          <Ziel
-            dimensions={dimensions}
-            id={activeNodeArray[6]}
-            tree={tree}
-            refetchTree={refetchTree}
-          />
-        ),
-        zielber: (
-          <Zielber
-            dimensions={dimensions}
-            id={activeNodeArray[8]}
-            treeName={treeName}
-            refetchTree={refetchTree}
-          />
-        ),
-        pop: (
-          <Pop
-            dimensions={dimensions}
-            id={activeNodeArray[5]}
-            treeName={treeName}
-            refetchTree={refetchTree}
-          />
-        ),
-        popmassnber: (
-          <Popmassnber
-            dimensions={dimensions}
-            id={activeNodeArray[7]}
-            treeName={treeName}
-            refetchTree={refetchTree}
-          />
-        ),
-        popber: (
-          <Popber
-            dimensions={dimensions}
-            id={activeNodeArray[7]}
-            treeName={treeName}
-            refetchTree={refetchTree}
-          />
-        ),
-        tpop: (
-          <Tpop
-            dimensions={dimensions}
-            id={activeNodeArray[7]}
-            treeName={treeName}
-            refetchTree={refetchTree}
-          />
-        ),
-        tpopber: (
-          <Tpopber
-            dimensions={dimensions}
-            id={activeNodeArray[9]}
-            treeName={treeName}
-            refetchTree={refetchTree}
-          />
-        ),
-        tpopmassn: (
-          <Tpopmassn
-            dimensions={dimensions}
-            id={activeNodeArray[9]}
-            treeName={treeName}
-            refetchTree={refetchTree}
-          />
-        ),
-        tpopmassnber: (
-          <Tpopmassnber
-            dimensions={dimensions}
-            id={activeNodeArray[9]}
-            treeName={treeName}
-            refetchTree={refetchTree}
-          />
-        ),
-        tpopfeldkontr: (
-          <Tpopfeldkontr
-            dimensions={dimensions}
-            id={activeNodeArray[9]}
-            treeName={treeName}
-            refetchTree={refetchTree}
-          />
-        ),
-        tpopfreiwkontrAlt: (
-          <TpopfreiwkontrAlt
-            dimensions={dimensions}
-            id={activeNodeArray[9]}
-            treeName={treeName}
-            refetchTree={refetchTree}
-          />
-        ),
-        tpopfreiwkontr: (
-          <Tpopfreiwkontr
-            dimensions={dimensions}
-            id={activeNodeArray[9]}
-            activeNodeArray={activeNodeArray}
-            treeName={treeName}
-            refetchTree={refetchTree}
-            errorState={errorState}
-            role={role}
-          />
-        ),
-        tpopkontrzaehl: (
-          <Tpopkontrzaehl
-            dimensions={dimensions}
-            id={activeNodeArray[11]}
-            treeName={treeName}
-            refetchTree={refetchTree}
-          />
-        ),
-        exporte: (
-          <Exporte
-            tree={tree}
-            dimensions={dimensions}
-            treeName={treeName}
-            refetchTree={refetchTree}
-          />
-        ),
-        qk: (
-          <Qk
-            tree={tree}
-            treeName={treeName}
-            apId={apId}
-            activeNodes={activeNodes}
-            refetchTree={refetchTree}
-            errorState={errorState}
-            ktZh={ktZh}
-            setKtZh={setKtZh}
-          />
-        ),
-        beobNichtZuzuordnen: (
-          <Beobzuordnung
-            dimensions={dimensions}
-            id={activeNodeArray[activeNodeArray.length - 1]}
-            tree={tree}
-            refetchTree={refetchTree}
-            type="nichtZuzuordnen"
-            apId={apId}
-          />
-        ),
-        beobNichtBeurteilt: (
-          <Beobzuordnung
-            dimensions={dimensions}
-            id={activeNodeArray[activeNodeArray.length - 1]}
-            tree={tree}
-            refetchTree={refetchTree}
-            type="nichtBeurteilt"
-            apId={apId}
-          />
-        ),
-        beobZugeordnet: (
-          <Beobzuordnung
-            dimensions={dimensions}
-            id={activeNodeArray[activeNodeArray.length - 1]}
-            tree={tree}
-            refetchTree={refetchTree}
-            type="zugeordnet"
-            apId={apId}
-          />
-        ),
-        user: (
-          <User
-            dimensions={dimensions}
-            treeName={treeName}
-            refetchTree={refetchTree}
-          />
-        ),
-        adresse: (
-          <Adresse
-            dimensions={dimensions}
-            treeName={treeName}
-            refetchTree={refetchTree}
-          />
-        ),
-      }
-      let key
-      if (activeNodeArray.length > 2 && activeNodeArray[2] === 'Exporte') {
-        key = 'exporte'
-      } else if (
-        activeNodeArray.length > 4 &&
-        activeNodeArray[4] === 'Qualitaetskontrollen'
-      ) {
-        key = 'qk'
-      } else if (
-        activeNodeArray.length > 5 &&
-        activeNodeArray[4] === 'nicht-zuzuordnende-Beobachtungen'
-      ) {
-        key = 'beobNichtZuzuordnen'
-      } else if (
-        activeNodeArray.length > 5 &&
-        activeNodeArray[4] === 'nicht-beurteilte-Beobachtungen'
-      ) {
-        key = 'beobNichtBeurteilt'
-      } else if (
-        activeNodeArray.length > 9 &&
-        activeNodeArray[6] === 'Teil-Populationen' &&
-        activeNodeArray[8] === 'Beobachtungen'
-      ) {
-        key = 'beobZugeordnet'
-      } else {
-        key = getTableNameFromActiveNode(activeNode)
-      }
-      let form
-      if (nodeFilterState.state[treeName].activeTable) {
-        form = formObject[nodeFilterState.state[treeName].activeTable]
-      } else {
-        form = key ? formObject[key] : ''
-      }
-      if (!key) return null
+  const formObject = {
+    projekt: (
+      <Projekt
+        dimensions={dimensions}
+        id={activeNodeArray[1]}
+        treeName={treeName}
+        refetchTree={refetchTree}
+        activeNodeArray={activeNodeArray}
+      />
+    ),
+    apberuebersicht: (
+      <Apberuebersicht
+        dimensions={dimensions}
+        id={activeNodeArray[3]}
+        treeName={treeName}
+        refetchTree={refetchTree}
+      />
+    ),
+    ap: (
+      <Ap
+        dimensions={dimensions}
+        treeName={treeName}
+        refetchTree={refetchTree}
+      />
+    ),
+    assozart: (
+      <Assozart
+        dimensions={dimensions}
+        id={activeNodeArray[5]}
+        treeName={treeName}
+        refetchTree={refetchTree}
+      />
+    ),
+    ekfzaehleinheit: (
+      <Ekfzaehleinheit
+        dimensions={dimensions}
+        id={activeNodeArray[5]}
+        treeName={treeName}
+        refetchTree={refetchTree}
+      />
+    ),
+    apart: (
+      <Apart
+        dimensions={dimensions}
+        id={activeNodeArray[5]}
+        treeName={treeName}
+        refetchTree={refetchTree}
+      />
+    ),
+    idealbiotop: (
+      <Idealbiotop
+        dimensions={dimensions}
+        id={activeNodeArray[3]}
+        treeName={treeName}
+        refetchTree={refetchTree}
+      />
+    ),
+    erfkrit: (
+      <Erfkrit
+        dimensions={dimensions}
+        id={activeNodeArray[5]}
+        treeName={treeName}
+        refetchTree={refetchTree}
+      />
+    ),
+    apber: (
+      <Apber
+        dimensions={dimensions}
+        id={activeNodeArray[5]}
+        treeName={treeName}
+        refetchTree={refetchTree}
+      />
+    ),
+    ber: (
+      <Ber
+        dimensions={dimensions}
+        id={activeNodeArray[5]}
+        treeName={treeName}
+        refetchTree={refetchTree}
+      />
+    ),
+    ziel: (
+      <Ziel
+        dimensions={dimensions}
+        id={activeNodeArray[6]}
+        tree={tree}
+        refetchTree={refetchTree}
+      />
+    ),
+    zielber: (
+      <Zielber
+        dimensions={dimensions}
+        id={activeNodeArray[8]}
+        treeName={treeName}
+        refetchTree={refetchTree}
+      />
+    ),
+    pop: (
+      <Pop
+        dimensions={dimensions}
+        id={activeNodeArray[5]}
+        treeName={treeName}
+        refetchTree={refetchTree}
+      />
+    ),
+    popmassnber: (
+      <Popmassnber
+        dimensions={dimensions}
+        id={activeNodeArray[7]}
+        treeName={treeName}
+        refetchTree={refetchTree}
+      />
+    ),
+    popber: (
+      <Popber
+        dimensions={dimensions}
+        id={activeNodeArray[7]}
+        treeName={treeName}
+        refetchTree={refetchTree}
+      />
+    ),
+    tpop: (
+      <Tpop
+        dimensions={dimensions}
+        id={activeNodeArray[7]}
+        treeName={treeName}
+        refetchTree={refetchTree}
+      />
+    ),
+    tpopber: (
+      <Tpopber
+        dimensions={dimensions}
+        id={activeNodeArray[9]}
+        treeName={treeName}
+        refetchTree={refetchTree}
+      />
+    ),
+    tpopmassn: (
+      <Tpopmassn
+        dimensions={dimensions}
+        id={activeNodeArray[9]}
+        treeName={treeName}
+        refetchTree={refetchTree}
+      />
+    ),
+    tpopmassnber: (
+      <Tpopmassnber
+        dimensions={dimensions}
+        id={activeNodeArray[9]}
+        treeName={treeName}
+        refetchTree={refetchTree}
+      />
+    ),
+    tpopfeldkontr: (
+      <Tpopfeldkontr
+        dimensions={dimensions}
+        id={activeNodeArray[9]}
+        treeName={treeName}
+        refetchTree={refetchTree}
+      />
+    ),
+    tpopfreiwkontrAlt: (
+      <TpopfreiwkontrAlt
+        dimensions={dimensions}
+        id={activeNodeArray[9]}
+        treeName={treeName}
+        refetchTree={refetchTree}
+      />
+    ),
+    tpopfreiwkontr: (
+      <Tpopfreiwkontr
+        dimensions={dimensions}
+        id={activeNodeArray[9]}
+        activeNodeArray={activeNodeArray}
+        treeName={treeName}
+        refetchTree={refetchTree}
+        errorState={errorState}
+        role={role}
+      />
+    ),
+    tpopkontrzaehl: (
+      <Tpopkontrzaehl
+        dimensions={dimensions}
+        id={activeNodeArray[11]}
+        treeName={treeName}
+        refetchTree={refetchTree}
+      />
+    ),
+    exporte: (
+      <Exporte
+        tree={tree}
+        dimensions={dimensions}
+        treeName={treeName}
+        refetchTree={refetchTree}
+      />
+    ),
+    qk: (
+      <Qk
+        tree={tree}
+        treeName={treeName}
+        apId={apId}
+        activeNodes={activeNodes}
+        refetchTree={refetchTree}
+        errorState={errorState}
+        ktZh={ktZh}
+        setKtZh={setKtZh}
+      />
+    ),
+    beobNichtZuzuordnen: (
+      <Beobzuordnung
+        dimensions={dimensions}
+        id={activeNodeArray[activeNodeArray.length - 1]}
+        tree={tree}
+        refetchTree={refetchTree}
+        type="nichtZuzuordnen"
+        apId={apId}
+      />
+    ),
+    beobNichtBeurteilt: (
+      <Beobzuordnung
+        dimensions={dimensions}
+        id={activeNodeArray[activeNodeArray.length - 1]}
+        tree={tree}
+        refetchTree={refetchTree}
+        type="nichtBeurteilt"
+        apId={apId}
+      />
+    ),
+    beobZugeordnet: (
+      <Beobzuordnung
+        dimensions={dimensions}
+        id={activeNodeArray[activeNodeArray.length - 1]}
+        tree={tree}
+        refetchTree={refetchTree}
+        type="zugeordnet"
+        apId={apId}
+      />
+    ),
+    user: (
+      <User
+        dimensions={dimensions}
+        treeName={treeName}
+        refetchTree={refetchTree}
+      />
+    ),
+    adresse: (
+      <Adresse
+        dimensions={dimensions}
+        treeName={treeName}
+        refetchTree={refetchTree}
+      />
+    ),
+  }
+  let key
+  if (activeNodeArray.length > 2 && activeNodeArray[2] === 'Exporte') {
+    key = 'exporte'
+  } else if (
+    activeNodeArray.length > 4 &&
+    activeNodeArray[4] === 'Qualitaetskontrollen'
+  ) {
+    key = 'qk'
+  } else if (
+    activeNodeArray.length > 5 &&
+    activeNodeArray[4] === 'nicht-zuzuordnende-Beobachtungen'
+  ) {
+    key = 'beobNichtZuzuordnen'
+  } else if (
+    activeNodeArray.length > 5 &&
+    activeNodeArray[4] === 'nicht-beurteilte-Beobachtungen'
+  ) {
+    key = 'beobNichtBeurteilt'
+  } else if (
+    activeNodeArray.length > 9 &&
+    activeNodeArray[6] === 'Teil-Populationen' &&
+    activeNodeArray[8] === 'Beobachtungen'
+  ) {
+    key = 'beobZugeordnet'
+  } else {
+    key = getTableNameFromActiveNode(activeNode)
+  }
+  let form
+  if (nodeFilterState.state[treeName].activeTable) {
+    form = formObject[nodeFilterState.state[treeName].activeTable]
+  } else {
+    form = key ? formObject[key] : ''
+  }
+  if (!key) return null
 
-      return (
-        <ErrorBoundary>
-          <Container>
-            <Suspense fallback={<Fallback />}>{form}</Suspense>
-          </Container>
-        </ErrorBoundary>
-      )
-    }}
-  </Query>
-)
+  return (
+    <ErrorBoundary>
+      <Container>
+        <Suspense fallback={<Fallback />}>{form}</Suspense>
+      </Container>
+    </ErrorBoundary>
+  )
+}
 
 export default enhance(Daten)
