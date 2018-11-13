@@ -9,8 +9,6 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
-import { Query } from 'react-apollo'
-import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 
 import FormTitle from '../../../shared/FormTitle'
@@ -18,8 +16,8 @@ import appBaseUrl from '../../../../modules/appBaseUrl'
 import standardQkYear from '../../../../modules/standardQkYear'
 import fetchKtZh from '../../../../modules/fetchKtZh'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import data1Gql from './data1'
-import data2Gql from './data2'
+import withLocalData from './withLocalData'
+import withData from './withData'
 import qk from './qk'
 import checkTpopOutsideZh from './checkTpopOutsideZh'
 
@@ -62,6 +60,8 @@ const LoadingLine = styled.div`
 `
 
 const enhance = compose(
+  withLocalData,
+  withData,
   withState('berichtjahr', 'setBerichtjahr', standardQkYear()),
   withState('filter', 'setFilter', ''),
   withHandlers({
@@ -88,6 +88,8 @@ const Qk = ({
   errorState,
   ktZh,
   setKtZh,
+  localData,
+  data,
 }: {
   tree: Object,
   apId: String,
@@ -100,103 +102,76 @@ const Qk = ({
   errorState: Object,
   ktZh: Object,
   setKtZh: () => void,
-}) => (
-  <Query query={data1Gql}>
-    {({ loading, error, data: data1 }) => {
-      if (error) return `Fehler: ${error.message}`
-      const projId = get(data1, `${treeName}.activeNodeArray[1]`)
+  localData: Object,
+  data: Object,
+}) => {
+  if (localData.error) return `Fehler: ${localData.error.message}`
+  if (data.error) return `Fehler: ${data.error.message}`
 
-      return (
-        <Query
-          query={data2Gql}
-          variables={{
-            berichtjahr,
-            isBerichtjahr: !!berichtjahr,
-            apId,
-            projId,
-          }}
-        >
-          {({ loading, error, data, refetch }) => {
-            if (error) return `Fehler: ${error.message}`
-            const gqlMessageGroups = sortBy(qk({ berichtjahr, data }), 'title')
-              .filter(q => !q.query)
-              .filter(q => q.messages.length)
-            if (ktZh) {
-              const outsideZhMessageGroup = checkTpopOutsideZh({ data, ktZh })
-              if (outsideZhMessageGroup.messages.length)
-                gqlMessageGroups.push(outsideZhMessageGroup)
-            }
+  const gqlMessageGroups = sortBy(qk({ berichtjahr, data }), 'title')
+    .filter(q => !q.query)
+    .filter(q => q.messages.length)
+  if (ktZh) {
+    const outsideZhMessageGroup = checkTpopOutsideZh({ data, ktZh })
+    if (outsideZhMessageGroup.messages.length)
+      gqlMessageGroups.push(outsideZhMessageGroup)
+  }
 
-            const messageGroups = sortBy([...gqlMessageGroups], 'title')
-            const messageGroupsFiltered = messageGroups.filter(messageGroup => {
-              if (
-                !!filter &&
-                messageGroup.title &&
-                messageGroup.title.toLowerCase
-              ) {
-                return messageGroup.title
-                  .toLowerCase()
-                  .includes(filter.toLowerCase())
-              }
-              return true
-            })
+  const messageGroups = sortBy([...gqlMessageGroups], 'title')
+  const messageGroupsFiltered = messageGroups.filter(messageGroup => {
+    if (!!filter && messageGroup.title && messageGroup.title.toLowerCase) {
+      return messageGroup.title.toLowerCase().includes(filter.toLowerCase())
+    }
+    return true
+  })
 
-            return (
-              <ErrorBoundary>
-                <Container>
-                  <FormTitle title="Qualitätskontrollen" />
-                  <FieldsContainer>
-                    <StyledFormControl fullWidth>
-                      <InputLabel htmlFor="berichtjahr">Berichtjahr</InputLabel>
-                      <Input
-                        id="berichtjahr"
-                        value={berichtjahr}
-                        type="number"
-                        onChange={onChangeBerichtjahr}
-                      />
-                    </StyledFormControl>
-                    <StyledFormControl fullWidth>
-                      <InputLabel htmlFor="filter">
-                        nach Abschnitts-Titel filtern
-                      </InputLabel>
-                      <Input
-                        id="filter"
-                        value={filter}
-                        onChange={onChangeFilter}
-                      />
-                    </StyledFormControl>
-                    <LoadingLine>
-                      <LoadingIndicator loading={loading}>
-                        {loading
-                          ? 'Die Daten werden analysiert...'
-                          : 'Analyse abgeschlossen'}
-                      </LoadingIndicator>
-                      {/*<Button onClick={() => refetch()}>neu analysieren</Button>*/}
-                    </LoadingLine>
-                    {messageGroupsFiltered.map((messageGroup, index) => (
-                      <StyledPaper key={index}>
-                        <Title>{messageGroup.title}</Title>
-                        {messageGroup.messages.map(m => (
-                          <div key={m.url.join()}>
-                            <StyledA
-                              href={`${appBaseUrl}/${m.url.join('/')}`}
-                              target="_blank"
-                            >
-                              {m.text}
-                            </StyledA>
-                          </div>
-                        ))}
-                      </StyledPaper>
-                    ))}
-                  </FieldsContainer>
-                </Container>
-              </ErrorBoundary>
-            )
-          }}
-        </Query>
-      )
-    }}
-  </Query>
-)
+  return (
+    <ErrorBoundary>
+      <Container>
+        <FormTitle title="Qualitätskontrollen" />
+        <FieldsContainer>
+          <StyledFormControl fullWidth>
+            <InputLabel htmlFor="berichtjahr">Berichtjahr</InputLabel>
+            <Input
+              id="berichtjahr"
+              value={berichtjahr}
+              type="number"
+              onChange={onChangeBerichtjahr}
+            />
+          </StyledFormControl>
+          <StyledFormControl fullWidth>
+            <InputLabel htmlFor="filter">
+              nach Abschnitts-Titel filtern
+            </InputLabel>
+            <Input id="filter" value={filter} onChange={onChangeFilter} />
+          </StyledFormControl>
+          <LoadingLine>
+            <LoadingIndicator loading={data.loading}>
+              {data.loading
+                ? 'Die Daten werden analysiert...'
+                : 'Analyse abgeschlossen'}
+            </LoadingIndicator>
+            {/*<Button onClick={() => data.refetch()}>neu analysieren</Button>*/}
+          </LoadingLine>
+          {messageGroupsFiltered.map((messageGroup, index) => (
+            <StyledPaper key={index}>
+              <Title>{messageGroup.title}</Title>
+              {messageGroup.messages.map(m => (
+                <div key={m.url.join()}>
+                  <StyledA
+                    href={`${appBaseUrl}/${m.url.join('/')}`}
+                    target="_blank"
+                  >
+                    {m.text}
+                  </StyledA>
+                </div>
+              ))}
+            </StyledPaper>
+          ))}
+        </FieldsContainer>
+      </Container>
+    </ErrorBoundary>
+  )
+}
 
 export default enhance(Qk)
