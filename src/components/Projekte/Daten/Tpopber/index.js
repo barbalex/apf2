@@ -1,19 +1,19 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
-import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
+import app from 'ampersand-app'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data'
+import withData from './withData'
 import updateTpopberByIdGql from './updateTpopberById'
 
 const Container = styled.div`
@@ -28,20 +28,21 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withData,
   withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({ refetchTree, setErrors, errors }) => async ({
-      row,
-      field,
-      value,
-      updateTpopber,
-    }) => {
+    saveToDb: ({ refetchTree, setErrors, errors, data }) => async event => {
+      const field = event.target.name
+      let value = event.target.value
+      if (value === undefined) value = null
+      const row = get(data, 'tpopberById', {})
       /**
        * only save if value changed
        */
       if (row[field] === value) return
       try {
-        await updateTpopber({
+        await app.client.mutate({
+          mutation: updateTpopberByIdGql,
           variables: {
             id: row.id,
             [field]: value,
@@ -96,96 +97,72 @@ const Tpopber = ({
   saveToDb,
   errors,
   treeName,
+  data,
 }: {
   id: string,
   saveToDb: () => void,
   errors: Object,
   treeName: string,
-}) => (
-  <Query query={dataGql} variables={{ id }}>
-    {({ loading, error, data }) => {
-      if (loading)
-        return (
-          <Container>
-            <FieldsContainer>Lade...</FieldsContainer>
-          </Container>
-        )
-      if (error) return `Fehler: ${error.message}`
+  data: Object,
+}) => {
+  if (data.loading)
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  if (data.error) return `Fehler: ${data.error.message}`
 
-      const row = get(data, 'tpopberById', {})
-      let tpopentwicklungWerte = get(data, 'allTpopEntwicklungWertes.nodes', [])
-      tpopentwicklungWerte = sortBy(tpopentwicklungWerte, 'sort')
-      tpopentwicklungWerte = tpopentwicklungWerte.map(el => ({
-        value: el.code,
-        label: el.text,
-      }))
+  const row = get(data, 'tpopberById', {})
+  let tpopentwicklungWerte = get(data, 'allTpopEntwicklungWertes.nodes', [])
+  tpopentwicklungWerte = sortBy(tpopentwicklungWerte, 'sort')
+  tpopentwicklungWerte = tpopentwicklungWerte.map(el => ({
+    value: el.code,
+    label: el.text,
+  }))
 
-      return (
-        <ErrorBoundary>
-          <Container>
-            <FormTitle
-              apId={get(data, 'tpopberById.tpopByTpopId.popByPopId.apId')}
-              title="Kontroll-Bericht Teil-Population"
-              treeName={treeName}
-              table="tpopber"
-            />
-            <Mutation mutation={updateTpopberByIdGql}>
-              {(updateTpopber, { data }) => (
-                <FieldsContainer>
-                  <TextField
-                    key={`${row.id}jahr`}
-                    label="Jahr"
-                    value={row.jahr}
-                    type="number"
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'jahr',
-                        value,
-                        updateTpopber,
-                      })
-                    }
-                    error={errors.jahr}
-                  />
-                  <RadioButtonGroup
-                    key={`${row.id}entwicklung`}
-                    label="Entwicklung"
-                    value={row.entwicklung}
-                    dataSource={tpopentwicklungWerte}
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'entwicklung',
-                        value,
-                        updateTpopber,
-                      })
-                    }
-                    error={errors.entwicklung}
-                  />
-                  <TextField
-                    key={`${row.id}bemerkungen`}
-                    label="Bemerkungen"
-                    value={row.bemerkungen}
-                    type="text"
-                    multiLine
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'bemerkungen',
-                        value,
-                        updateTpopber,
-                      })
-                    }
-                    error={errors.bemerkungen}
-                  />
-                </FieldsContainer>
-              )}
-            </Mutation>
-          </Container>
-        </ErrorBoundary>
-      )
-    }}
-  </Query>
-)
+  return (
+    <ErrorBoundary>
+      <Container>
+        <FormTitle
+          apId={get(data, 'tpopberById.tpopByTpopId.popByPopId.apId')}
+          title="Kontroll-Bericht Teil-Population"
+          treeName={treeName}
+          table="tpopber"
+        />
+        <FieldsContainer>
+          <TextField
+            key={`${row.id}jahr`}
+            name="jahr"
+            label="Jahr"
+            value={row.jahr}
+            type="number"
+            saveToDb={saveToDb}
+            error={errors.jahr}
+          />
+          <RadioButtonGroup
+            key={`${row.id}entwicklung`}
+            name="entwicklung"
+            label="Entwicklung"
+            value={row.entwicklung}
+            dataSource={tpopentwicklungWerte}
+            saveToDb={saveToDb}
+            error={errors.entwicklung}
+          />
+          <TextField
+            key={`${row.id}bemerkungen`}
+            name="bemerkungen"
+            label="Bemerkungen"
+            value={row.bemerkungen}
+            type="text"
+            multiLine
+            saveToDb={saveToDb}
+            error={errors.bemerkungen}
+          />
+        </FieldsContainer>
+      </Container>
+    </ErrorBoundary>
+  )
+}
 
 export default enhance(Tpopber)

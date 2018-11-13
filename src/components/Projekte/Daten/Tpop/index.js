@@ -182,9 +182,6 @@ class Tpop extends Component<Props> {
 
   render() {
     const {
-      // pass in fake id to avoid error when filter is shown
-      // which means there is no id
-      id = '99999999-9999-9999-9999-999999999999',
       saveToDb,
       errors,
       setErrors,
