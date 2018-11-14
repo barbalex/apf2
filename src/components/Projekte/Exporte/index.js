@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Query } from 'react-apollo'
 import get from 'lodash/get'
+import compose from 'recompose/compose'
 
 import FormTitle from '../../shared/FormTitle'
 import Tipps from './Tipps'
@@ -14,7 +14,7 @@ import Beobachtungen from './Beobachtungen'
 import Anwendung from './Anwendung'
 import Optionen from './Optionen'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import dataGql from './data'
+import withLocalData from './withLocalData'
 
 const Container = styled.div`
   height: 100%;
@@ -41,70 +41,68 @@ const ExporteContainer = styled.div`
   height: 100%;
 `
 
-const Exporte = ({ mapFilter }: { mapFilter: Object }) => (
-  <Query query={dataGql}>
-    {({ loading, error, data, client }) => {
-      if (error) return `Fehler: ${error.message}`
+const enhance = compose(withLocalData)
 
-      const applyMapFilterToExport = get(data, 'export.applyMapFilterToExport')
-      const fileType = get(data, 'export.fileType')
+const Exporte = ({
+  mapFilter,
+  localData,
+}: {
+  mapFilter: Object,
+  localData: Object,
+}) => {
+  if (localData.error) return `Fehler: ${localData.error.message}`
 
-      return (
-        <ExporteContainer>
-          <ErrorBoundary>
-            <Container>
-              <FormTitle title="Exporte" />
-              <FieldsContainer>
-                <Optionen
-                  mapFilter={mapFilter}
-                  applyMapFilterToExport={applyMapFilterToExport}
-                  fileType={fileType}
-                  client={client}
-                />
-                <Tipps />
-                <Ap
-                  applyMapFilterToExport={applyMapFilterToExport}
-                  fileType={fileType}
-                  client={client}
-                  mapFilter={mapFilter}
-                />
-                <Populationen
-                  mapFilter={mapFilter}
-                  applyMapFilterToExport={applyMapFilterToExport}
-                  fileType={fileType}
-                  client={client}
-                />
-                <Teilpopulationen
-                  mapFilter={mapFilter}
-                  applyMapFilterToExport={applyMapFilterToExport}
-                  fileType={fileType}
-                />
-                <Kontrollen
-                  mapFilter={mapFilter}
-                  applyMapFilterToExport={applyMapFilterToExport}
-                  fileType={fileType}
-                  client={client}
-                />
-                <Massnahmen
-                  mapFilter={mapFilter}
-                  applyMapFilterToExport={applyMapFilterToExport}
-                  fileType={fileType}
-                  client={client}
-                />
-                <Beobachtungen
-                  mapFilter={mapFilter}
-                  applyMapFilterToExport={applyMapFilterToExport}
-                  fileType={fileType}
-                  client={client}
-                />
-                <Anwendung />
-              </FieldsContainer>
-            </Container>
-          </ErrorBoundary>
-        </ExporteContainer>
-      )
-    }}
-  </Query>
-)
+  const applyMapFilterToExport = get(localData, 'export.applyMapFilterToExport')
+  const fileType = get(localData, 'export.fileType')
 
-export default Exporte
+  return (
+    <ExporteContainer>
+      <ErrorBoundary>
+        <Container>
+          <FormTitle title="Exporte" />
+          <FieldsContainer>
+            <Optionen
+              mapFilter={mapFilter}
+              applyMapFilterToExport={applyMapFilterToExport}
+              fileType={fileType}
+            />
+            <Tipps />
+            <Ap
+              applyMapFilterToExport={applyMapFilterToExport}
+              fileType={fileType}
+              mapFilter={mapFilter}
+            />
+            <Populationen
+              mapFilter={mapFilter}
+              applyMapFilterToExport={applyMapFilterToExport}
+              fileType={fileType}
+            />
+            <Teilpopulationen
+              mapFilter={mapFilter}
+              applyMapFilterToExport={applyMapFilterToExport}
+              fileType={fileType}
+            />
+            <Kontrollen
+              mapFilter={mapFilter}
+              applyMapFilterToExport={applyMapFilterToExport}
+              fileType={fileType}
+            />
+            <Massnahmen
+              mapFilter={mapFilter}
+              applyMapFilterToExport={applyMapFilterToExport}
+              fileType={fileType}
+            />
+            <Beobachtungen
+              mapFilter={mapFilter}
+              applyMapFilterToExport={applyMapFilterToExport}
+              fileType={fileType}
+            />
+            <Anwendung />
+          </FieldsContainer>
+        </Container>
+      </ErrorBoundary>
+    </ExporteContainer>
+  )
+}
+
+export default enhance(Exporte)

@@ -34,7 +34,6 @@ const Tpopmassn = lazy(() => import('./Tpopmassn'))
 const Tpopmassnber = lazy(() => import('./Tpopmassnber'))
 const Tpopfeldkontr = lazy(() => import('./Tpopfeldkontr'))
 const Tpopfreiwkontr = lazy(() => import('./Tpopfreiwkontr'))
-const TpopfreiwkontrAlt = lazy(() => import('./TpopfreiwkontrAlt'))
 const Tpopkontrzaehl = lazy(() => import('./Tpopkontrzaehl'))
 const Exporte = lazy(() => import('../Exporte'))
 const Qk = lazy(() => import('./Qk'))
@@ -250,14 +249,6 @@ const Daten = ({
     ),
     tpopfeldkontr: (
       <Tpopfeldkontr
-        dimensions={dimensions}
-        id={activeNodeArray[9]}
-        treeName={treeName}
-        refetchTree={refetchTree}
-      />
-    ),
-    tpopfreiwkontrAlt: (
-      <TpopfreiwkontrAlt
         dimensions={dimensions}
         id={activeNodeArray[9]}
         treeName={treeName}

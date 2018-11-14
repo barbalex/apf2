@@ -11,8 +11,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import styled from 'styled-components'
-import { ApolloConsumer } from 'react-apollo'
 import get from 'lodash/get'
+import app from 'ampersand-app'
 
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
@@ -68,7 +68,6 @@ const Beobachtungen = ({
   fileType,
   applyMapFilterToExport,
   mapFilter,
-  client,
   expanded,
   setExpanded,
   message,
@@ -78,92 +77,87 @@ const Beobachtungen = ({
   fileType: String,
   applyMapFilterToExport: Boolean,
   mapFilter: Object,
-  client: Object,
   expanded: Boolean,
   setExpanded: () => void,
   message: String,
   setMessage: () => void,
   errorState: Object,
 }) => (
-  <ApolloConsumer>
-    {client => (
-      <StyledCard>
-        <StyledCardActions
-          disableActionSpacing
-          onClick={() => setExpanded(!expanded)}
+  <StyledCard>
+    <StyledCardActions
+      disableActionSpacing
+      onClick={() => setExpanded(!expanded)}
+    >
+      <CardActionTitle>Beobachtungen</CardActionTitle>
+      <CardActionIconButton
+        data-expanded={expanded}
+        aria-expanded={expanded}
+        aria-label="öffnen"
+      >
+        <Icon title={expanded ? 'schliessen' : 'öffnen'}>
+          <ExpandMoreIcon />
+        </Icon>
+      </CardActionIconButton>
+    </StyledCardActions>
+    <Collapse in={expanded} timeout="auto" unmountOnExit>
+      <StyledCardContent>
+        <DownloadCardButton
+          onClick={async () => {
+            setMessage('Export "Beobachtungen" wird vorbereitet...')
+            try {
+              const { data } = await app.client.query({
+                query: allVBeobArtChangeds,
+              })
+              exportModule({
+                data: get(data, 'allVBeobArtChangeds.nodes', []),
+                fileName: 'BeobachtungenArtVeraendert',
+                fileType,
+                applyMapFilterToExport,
+                mapFilter,
+                idKey: 'id',
+                xKey: 'x',
+                yKey: 'y',
+                errorState,
+              })
+            } catch (error) {
+              errorState.add(error)
+            }
+            setMessage(null)
+          }}
         >
-          <CardActionTitle>Beobachtungen</CardActionTitle>
-          <CardActionIconButton
-            data-expanded={expanded}
-            aria-expanded={expanded}
-            aria-label="öffnen"
-          >
-            <Icon title={expanded ? 'schliessen' : 'öffnen'}>
-              <ExpandMoreIcon />
-            </Icon>
-          </CardActionIconButton>
-        </StyledCardActions>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <StyledCardContent>
-            <DownloadCardButton
-              onClick={async () => {
-                setMessage('Export "Beobachtungen" wird vorbereitet...')
-                try {
-                  const { data } = await client.query({
-                    query: allVBeobArtChangeds,
-                  })
-                  exportModule({
-                    data: get(data, 'allVBeobArtChangeds.nodes', []),
-                    fileName: 'BeobachtungenArtVeraendert',
-                    fileType,
-                    applyMapFilterToExport,
-                    mapFilter,
-                    idKey: 'id',
-                    xKey: 'x',
-                    yKey: 'y',
-                    errorState,
-                  })
-                } catch (error) {
-                  errorState.add(error)
-                }
-                setMessage(null)
-              }}
-            >
-              <div>Alle Beobachtungen, bei denen die Art verändert wurde</div>
-            </DownloadCardButton>
-            <DownloadCardButton
-              onClick={async () => {
-                setMessage('Export "Beobachtungen" wird vorbereitet...')
-                try {
-                  const { data } = await client.query({
-                    query: allVBeobs,
-                  })
-                  exportModule({
-                    data: get(data, 'allVBeobs.nodes', []),
-                    fileName: 'Beobachtungen',
-                    fileType,
-                    applyMapFilterToExport,
-                    mapFilter,
-                    idKey: 'id',
-                    xKey: 'x',
-                    yKey: 'y',
-                    errorState,
-                  })
-                } catch (error) {
-                  errorState.add(error)
-                }
-                setMessage(null)
-              }}
-            >
-              <div>Alle Beobachtungen von Arten aus apflora.ch</div>
-              <div>Nutzungsbedingungen der FNS beachten</div>
-            </DownloadCardButton>
-          </StyledCardContent>
-        </Collapse>
-        {!!message && <Message message={message} />}
-      </StyledCard>
-    )}
-  </ApolloConsumer>
+          <div>Alle Beobachtungen, bei denen die Art verändert wurde</div>
+        </DownloadCardButton>
+        <DownloadCardButton
+          onClick={async () => {
+            setMessage('Export "Beobachtungen" wird vorbereitet...')
+            try {
+              const { data } = await app.client.query({
+                query: allVBeobs,
+              })
+              exportModule({
+                data: get(data, 'allVBeobs.nodes', []),
+                fileName: 'Beobachtungen',
+                fileType,
+                applyMapFilterToExport,
+                mapFilter,
+                idKey: 'id',
+                xKey: 'x',
+                yKey: 'y',
+                errorState,
+              })
+            } catch (error) {
+              errorState.add(error)
+            }
+            setMessage(null)
+          }}
+        >
+          <div>Alle Beobachtungen von Arten aus apflora.ch</div>
+          <div>Nutzungsbedingungen der FNS beachten</div>
+        </DownloadCardButton>
+      </StyledCardContent>
+    </Collapse>
+    {!!message && <Message message={message} />}
+  </StyledCard>
 )
 
 export default enhance(Beobachtungen)

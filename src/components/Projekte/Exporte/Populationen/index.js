@@ -11,8 +11,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import styled from 'styled-components'
-import { ApolloConsumer } from 'react-apollo'
 import get from 'lodash/get'
+import app from 'ampersand-app'
 
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
@@ -67,7 +67,6 @@ const Populationen = ({
   fileType,
   mapFilter,
   applyMapFilterToExport,
-  client,
   expanded,
   setExpanded,
   message,
@@ -77,381 +76,366 @@ const Populationen = ({
   fileType: String,
   applyMapFilterToExport: Boolean,
   mapFilter: Object,
-  client: Object,
   expanded: Boolean,
   setExpanded: () => void,
   message: String,
   setMessage: () => void,
   errorState: Object,
 }) => (
-  <ApolloConsumer>
-    {client => (
-      <StyledCard>
-        <StyledCardActions
-          disableActionSpacing
-          onClick={() => setExpanded(!expanded)}
+  <StyledCard>
+    <StyledCardActions
+      disableActionSpacing
+      onClick={() => setExpanded(!expanded)}
+    >
+      <CardActionTitle>Populationen</CardActionTitle>
+      <CardActionIconButton
+        data-expanded={expanded}
+        aria-expanded={expanded}
+        aria-label="öffnen"
+      >
+        <Icon title={expanded ? 'schliessen' : 'öffnen'}>
+          <ExpandMoreIcon />
+        </Icon>
+      </CardActionIconButton>
+    </StyledCardActions>
+    <Collapse in={expanded} timeout="auto" unmountOnExit>
+      <StyledCardContent>
+        <DownloadCardButton
+          onClick={async () => {
+            setMessage('Export "Populationen" wird vorbereitet...')
+            try {
+              const { data } = await app.client.query({
+                query: await import('./allVPops').then(m => m.default),
+              })
+              exportModule({
+                data: get(data, 'allVPops.nodes', []),
+                fileName: 'Populationen',
+                fileType,
+                mapFilter,
+                applyMapFilterToExport,
+                idKey: 'id',
+                xKey: 'x',
+                yKey: 'y',
+                errorState,
+              })
+            } catch (error) {
+              errorState.add(error)
+            }
+            setMessage(null)
+          }}
         >
-          <CardActionTitle>Populationen</CardActionTitle>
-          <CardActionIconButton
-            data-expanded={expanded}
-            aria-expanded={expanded}
-            aria-label="öffnen"
-          >
-            <Icon title={expanded ? 'schliessen' : 'öffnen'}>
-              <ExpandMoreIcon />
-            </Icon>
-          </CardActionIconButton>
-        </StyledCardActions>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <StyledCardContent>
-            <DownloadCardButton
-              onClick={async () => {
-                setMessage('Export "Populationen" wird vorbereitet...')
-                try {
-                  const { data } = await client.query({
-                    query: await import('./allVPops').then(m => m.default),
-                  })
-                  exportModule({
-                    data: get(data, 'allVPops.nodes', []),
-                    fileName: 'Populationen',
-                    fileType,
-                    mapFilter,
-                    applyMapFilterToExport,
-                    idKey: 'id',
-                    xKey: 'x',
-                    yKey: 'y',
-                    errorState,
-                  })
-                } catch (error) {
-                  errorState.add(error)
-                }
-                setMessage(null)
-              }}
-            >
-              Populationen
-            </DownloadCardButton>
-            <DownloadCardButton
-              onClick={async () => {
-                setMessage('Export "Populationen" wird vorbereitet...')
-                try {
-                  const { data } = await client.query({
-                    query: await import('./allVPopKmls').then(m => m.default),
-                  })
-                  const enrichedData = get(data, 'allVPopKmls.nodes', []).map(
-                    oWithout => {
-                      let o = { ...oWithout }
-                      const [bg, lg] = epsg2056to4326(o.x, o.y)
-                      o.laengengrad = lg
-                      o.breitengrad = bg
-                      return o
-                    },
-                  )
-                  exportModule({
-                    data: enrichedData,
-                    fileName: 'Populationen',
-                    fileType,
-                    mapFilter,
-                    applyMapFilterToExport,
-                    idKey: 'id',
-                    xKey: 'x',
-                    yKey: 'y',
-                    errorState,
-                    kml: true,
-                  })
-                } catch (error) {
-                  errorState.add(error)
-                }
-                setMessage(null)
-              }}
-            >
-              <div>Populationen für Google Earth (beschriftet mit PopNr)</div>
-            </DownloadCardButton>
-            <DownloadCardButton
-              onClick={async () => {
-                setMessage('Export "PopulationenNachNamen" wird vorbereitet...')
-                try {
-                  const { data } = await client.query({
-                    query: await import('./allVPopKmlnamen').then(
-                      m => m.default,
-                    ),
-                  })
-                  const enrichedData = get(
-                    data,
-                    'allVPopKmlnamen.nodes',
-                    [],
-                  ).map(oWithout => {
-                    let o = { ...oWithout }
-                    const [bg, lg] = epsg2056to4326(o.x, o.y)
-                    o.laengengrad = lg
-                    o.breitengrad = bg
-                    return o
-                  })
-                  exportModule({
-                    data: enrichedData,
-                    fileName: 'PopulationenNachNamen',
-                    fileType,
-                    mapFilter,
-                    applyMapFilterToExport,
-                    idKey: 'id',
-                    xKey: 'x',
-                    yKey: 'y',
-                    errorState,
-                    kml: true,
-                  })
-                } catch (error) {
-                  errorState.add(error)
-                }
-                setMessage(null)
-              }}
-            >
-              <div>
-                Populationen für Google Earth (beschriftet mit Artname, PopNr)
-              </div>
-            </DownloadCardButton>
-            <DownloadCardButton
-              onClick={async () => {
-                setMessage(
-                  'Export "PopulationenVonApArtenOhneStatus" wird vorbereitet...',
-                )
-                try {
-                  const { data } = await client.query({
-                    query: await import('./allVPopVonapohnestatuses').then(
-                      m => m.default,
-                    ),
-                  })
-                  exportModule({
-                    data: get(data, 'allVPopVonapohnestatuses.nodes', []),
-                    fileName: 'PopulationenVonApArtenOhneStatus',
-                    fileType,
-                    mapFilter,
-                    applyMapFilterToExport,
-                    idKey: 'id',
-                    xKey: 'x',
-                    yKey: 'y',
-                    errorState,
-                  })
-                } catch (error) {
-                  errorState.add(error)
-                }
-                setMessage(null)
-              }}
-            >
-              Populationen von AP-Arten ohne Status
-            </DownloadCardButton>
-            <DownloadCardButton
-              onClick={async () => {
-                setMessage(
-                  'Export "PopulationenOhneKoordinaten" wird vorbereitet...',
-                )
-                try {
-                  const { data } = await client.query({
-                    query: await import('./allVPopOhnekoords').then(
-                      m => m.default,
-                    ),
-                  })
-                  exportModule({
-                    data: get(data, 'allVPopOhnekoords.nodes', []),
-                    fileName: 'PopulationenOhneKoordinaten',
-                    fileType,
-                    mapFilter,
-                    applyMapFilterToExport,
-                    errorState,
-                  })
-                } catch (error) {
-                  errorState.add(error)
-                }
-                setMessage(null)
-              }}
-            >
-              Populationen ohne Koordinaten
-            </DownloadCardButton>
-            <DownloadCardButton
-              onClick={async () => {
-                setMessage(
-                  'Export "PopulationenAnzMassnProMassnber" wird vorbereitet...',
-                )
-                try {
-                  const { data } = await client.query({
-                    query: await import('./allVPopmassnberAnzmassns').then(
-                      m => m.default,
-                    ),
-                  })
-                  exportModule({
-                    data: get(data, 'allVPopmassnberAnzmassns.nodes', []),
-                    fileName: 'PopulationenAnzMassnProMassnber',
-                    fileType,
-                    mapFilter,
-                    applyMapFilterToExport,
-                    idKey: 'pop_id',
-                    xKey: 'pop_x',
-                    yKey: 'pop_y',
-                    errorState,
-                  })
-                } catch (error) {
-                  errorState.add(error)
-                }
-                setMessage(null)
-              }}
-            >
-              Populationen mit Massnahmen-Berichten: Anzahl Massnahmen im
-              Berichtsjahr
-            </DownloadCardButton>
-            <DownloadCardButton
-              onClick={async () => {
-                setMessage(
-                  'Export "PopulationenAnzahlMassnahmen" wird vorbereitet...',
-                )
-                try {
-                  const { data } = await client.query({
-                    query: await import('./allVPopAnzmassns').then(
-                      m => m.default,
-                    ),
-                  })
-                  exportModule({
-                    data: get(data, 'allVPopAnzmassns.nodes', []),
-                    fileName: 'PopulationenAnzahlMassnahmen',
-                    fileType,
-                    mapFilter,
-                    applyMapFilterToExport,
-                    idKey: 'id',
-                    xKey: 'x',
-                    yKey: 'y',
-                    errorState,
-                  })
-                } catch (error) {
-                  errorState.add(error)
-                }
-                setMessage(null)
-              }}
-            >
-              Anzahl Massnahmen pro Population
-            </DownloadCardButton>
-            <DownloadCardButton
-              onClick={async () => {
-                setMessage(
-                  'Export "PopulationenAnzahlKontrollen" wird vorbereitet...',
-                )
-                try {
-                  const { data } = await client.query({
-                    query: await import('./allVPopAnzkontrs').then(
-                      m => m.default,
-                    ),
-                  })
-                  exportModule({
-                    data: get(data, 'allVPopAnzkontrs.nodes', []),
-                    fileName: 'PopulationenAnzahlKontrollen',
-                    fileType,
-                    mapFilter,
-                    applyMapFilterToExport,
-                    idKey: 'id',
-                    xKey: 'x',
-                    yKey: 'y',
-                    errorState,
-                  })
-                } catch (error) {
-                  errorState.add(error)
-                }
-                setMessage(null)
-              }}
-            >
-              Anzahl Kontrollen pro Population
-            </DownloadCardButton>
-            <DownloadCardButton
-              onClick={async () => {
-                setMessage(
-                  'Export "PopulationenPopUndMassnBerichte" wird vorbereitet...',
-                )
-                try {
-                  const { data } = await client.query({
-                    query: await import('./allVPopPopberundmassnbers').then(
-                      m => m.default,
-                    ),
-                  })
-                  exportModule({
-                    data: get(data, 'allVPopPopberundmassnbers.nodes', []),
-                    fileName: 'PopulationenPopUndMassnBerichte',
-                    fileType,
-                    mapFilter,
-                    applyMapFilterToExport,
-                    idKey: 'pop_id',
-                    xKey: 'pop_x',
-                    yKey: 'pop_y',
-                    errorState,
-                  })
-                } catch (error) {
-                  errorState.add(error)
-                }
-                setMessage(null)
-              }}
-            >
-              Populationen inkl. Populations- und Massnahmen-Berichte
-            </DownloadCardButton>
-            <DownloadCardButton
-              onClick={async () => {
-                setMessage(
-                  'Export "PopulationenMitLetzemPopBericht" wird vorbereitet...',
-                )
-                try {
-                  const { data } = await client.query({
-                    query: await import('./allVPopMitLetzterPopbers').then(
-                      m => m.default,
-                    ),
-                  })
-                  exportModule({
-                    data: get(data, 'allVPopMitLetzterPopbers.nodes', []),
-                    fileName: 'PopulationenMitLetzemPopBericht',
-                    fileType,
-                    mapFilter,
-                    applyMapFilterToExport,
-                    idKey: 'pop_id',
-                    xKey: 'pop_x',
-                    yKey: 'pop_y',
-                    errorState,
-                  })
-                } catch (error) {
-                  errorState.add(error)
-                }
-                setMessage(null)
-              }}
-            >
-              Populationen mit dem letzten Populations-Bericht
-            </DownloadCardButton>
-            <DownloadCardButton
-              onClick={async () => {
-                setMessage(
-                  'Export "PopulationenMitLetztemMassnBericht" wird vorbereitet...',
-                )
-                try {
-                  const { data } = await client.query({
-                    query: await import('./allVPopMitLetzterPopmassnbers').then(
-                      m => m.default,
-                    ),
-                  })
-                  exportModule({
-                    data: get(data, 'allVPopMitLetzterPopmassnbers.nodes', []),
-                    fileName: 'allVPopMitLetzterPopmassnbers',
-                    fileType,
-                    mapFilter,
-                    applyMapFilterToExport,
-                    idKey: 'pop_id',
-                    xKey: 'pop_x',
-                    yKey: 'pop_y',
-                    errorState,
-                  })
-                } catch (error) {
-                  errorState.add(error)
-                }
-                setMessage(null)
-              }}
-            >
-              Populationen mit dem letzten Massnahmen-Bericht
-            </DownloadCardButton>
-          </StyledCardContent>
-        </Collapse>
-        {!!message && <Message message={message} />}
-      </StyledCard>
-    )}
-  </ApolloConsumer>
+          Populationen
+        </DownloadCardButton>
+        <DownloadCardButton
+          onClick={async () => {
+            setMessage('Export "Populationen" wird vorbereitet...')
+            try {
+              const { data } = await app.client.query({
+                query: await import('./allVPopKmls').then(m => m.default),
+              })
+              const enrichedData = get(data, 'allVPopKmls.nodes', []).map(
+                oWithout => {
+                  let o = { ...oWithout }
+                  const [bg, lg] = epsg2056to4326(o.x, o.y)
+                  o.laengengrad = lg
+                  o.breitengrad = bg
+                  return o
+                },
+              )
+              exportModule({
+                data: enrichedData,
+                fileName: 'Populationen',
+                fileType,
+                mapFilter,
+                applyMapFilterToExport,
+                idKey: 'id',
+                xKey: 'x',
+                yKey: 'y',
+                errorState,
+                kml: true,
+              })
+            } catch (error) {
+              errorState.add(error)
+            }
+            setMessage(null)
+          }}
+        >
+          <div>Populationen für Google Earth (beschriftet mit PopNr)</div>
+        </DownloadCardButton>
+        <DownloadCardButton
+          onClick={async () => {
+            setMessage('Export "PopulationenNachNamen" wird vorbereitet...')
+            try {
+              const { data } = await app.client.query({
+                query: await import('./allVPopKmlnamen').then(m => m.default),
+              })
+              const enrichedData = get(data, 'allVPopKmlnamen.nodes', []).map(
+                oWithout => {
+                  let o = { ...oWithout }
+                  const [bg, lg] = epsg2056to4326(o.x, o.y)
+                  o.laengengrad = lg
+                  o.breitengrad = bg
+                  return o
+                },
+              )
+              exportModule({
+                data: enrichedData,
+                fileName: 'PopulationenNachNamen',
+                fileType,
+                mapFilter,
+                applyMapFilterToExport,
+                idKey: 'id',
+                xKey: 'x',
+                yKey: 'y',
+                errorState,
+                kml: true,
+              })
+            } catch (error) {
+              errorState.add(error)
+            }
+            setMessage(null)
+          }}
+        >
+          <div>
+            Populationen für Google Earth (beschriftet mit Artname, PopNr)
+          </div>
+        </DownloadCardButton>
+        <DownloadCardButton
+          onClick={async () => {
+            setMessage(
+              'Export "PopulationenVonApArtenOhneStatus" wird vorbereitet...',
+            )
+            try {
+              const { data } = await app.client.query({
+                query: await import('./allVPopVonapohnestatuses').then(
+                  m => m.default,
+                ),
+              })
+              exportModule({
+                data: get(data, 'allVPopVonapohnestatuses.nodes', []),
+                fileName: 'PopulationenVonApArtenOhneStatus',
+                fileType,
+                mapFilter,
+                applyMapFilterToExport,
+                idKey: 'id',
+                xKey: 'x',
+                yKey: 'y',
+                errorState,
+              })
+            } catch (error) {
+              errorState.add(error)
+            }
+            setMessage(null)
+          }}
+        >
+          Populationen von AP-Arten ohne Status
+        </DownloadCardButton>
+        <DownloadCardButton
+          onClick={async () => {
+            setMessage(
+              'Export "PopulationenOhneKoordinaten" wird vorbereitet...',
+            )
+            try {
+              const { data } = await app.client.query({
+                query: await import('./allVPopOhnekoords').then(m => m.default),
+              })
+              exportModule({
+                data: get(data, 'allVPopOhnekoords.nodes', []),
+                fileName: 'PopulationenOhneKoordinaten',
+                fileType,
+                mapFilter,
+                applyMapFilterToExport,
+                errorState,
+              })
+            } catch (error) {
+              errorState.add(error)
+            }
+            setMessage(null)
+          }}
+        >
+          Populationen ohne Koordinaten
+        </DownloadCardButton>
+        <DownloadCardButton
+          onClick={async () => {
+            setMessage(
+              'Export "PopulationenAnzMassnProMassnber" wird vorbereitet...',
+            )
+            try {
+              const { data } = await app.client.query({
+                query: await import('./allVPopmassnberAnzmassns').then(
+                  m => m.default,
+                ),
+              })
+              exportModule({
+                data: get(data, 'allVPopmassnberAnzmassns.nodes', []),
+                fileName: 'PopulationenAnzMassnProMassnber',
+                fileType,
+                mapFilter,
+                applyMapFilterToExport,
+                idKey: 'pop_id',
+                xKey: 'pop_x',
+                yKey: 'pop_y',
+                errorState,
+              })
+            } catch (error) {
+              errorState.add(error)
+            }
+            setMessage(null)
+          }}
+        >
+          Populationen mit Massnahmen-Berichten: Anzahl Massnahmen im
+          Berichtsjahr
+        </DownloadCardButton>
+        <DownloadCardButton
+          onClick={async () => {
+            setMessage(
+              'Export "PopulationenAnzahlMassnahmen" wird vorbereitet...',
+            )
+            try {
+              const { data } = await app.client.query({
+                query: await import('./allVPopAnzmassns').then(m => m.default),
+              })
+              exportModule({
+                data: get(data, 'allVPopAnzmassns.nodes', []),
+                fileName: 'PopulationenAnzahlMassnahmen',
+                fileType,
+                mapFilter,
+                applyMapFilterToExport,
+                idKey: 'id',
+                xKey: 'x',
+                yKey: 'y',
+                errorState,
+              })
+            } catch (error) {
+              errorState.add(error)
+            }
+            setMessage(null)
+          }}
+        >
+          Anzahl Massnahmen pro Population
+        </DownloadCardButton>
+        <DownloadCardButton
+          onClick={async () => {
+            setMessage(
+              'Export "PopulationenAnzahlKontrollen" wird vorbereitet...',
+            )
+            try {
+              const { data } = await app.client.query({
+                query: await import('./allVPopAnzkontrs').then(m => m.default),
+              })
+              exportModule({
+                data: get(data, 'allVPopAnzkontrs.nodes', []),
+                fileName: 'PopulationenAnzahlKontrollen',
+                fileType,
+                mapFilter,
+                applyMapFilterToExport,
+                idKey: 'id',
+                xKey: 'x',
+                yKey: 'y',
+                errorState,
+              })
+            } catch (error) {
+              errorState.add(error)
+            }
+            setMessage(null)
+          }}
+        >
+          Anzahl Kontrollen pro Population
+        </DownloadCardButton>
+        <DownloadCardButton
+          onClick={async () => {
+            setMessage(
+              'Export "PopulationenPopUndMassnBerichte" wird vorbereitet...',
+            )
+            try {
+              const { data } = await app.client.query({
+                query: await import('./allVPopPopberundmassnbers').then(
+                  m => m.default,
+                ),
+              })
+              exportModule({
+                data: get(data, 'allVPopPopberundmassnbers.nodes', []),
+                fileName: 'PopulationenPopUndMassnBerichte',
+                fileType,
+                mapFilter,
+                applyMapFilterToExport,
+                idKey: 'pop_id',
+                xKey: 'pop_x',
+                yKey: 'pop_y',
+                errorState,
+              })
+            } catch (error) {
+              errorState.add(error)
+            }
+            setMessage(null)
+          }}
+        >
+          Populationen inkl. Populations- und Massnahmen-Berichte
+        </DownloadCardButton>
+        <DownloadCardButton
+          onClick={async () => {
+            setMessage(
+              'Export "PopulationenMitLetzemPopBericht" wird vorbereitet...',
+            )
+            try {
+              const { data } = await app.client.query({
+                query: await import('./allVPopMitLetzterPopbers').then(
+                  m => m.default,
+                ),
+              })
+              exportModule({
+                data: get(data, 'allVPopMitLetzterPopbers.nodes', []),
+                fileName: 'PopulationenMitLetzemPopBericht',
+                fileType,
+                mapFilter,
+                applyMapFilterToExport,
+                idKey: 'pop_id',
+                xKey: 'pop_x',
+                yKey: 'pop_y',
+                errorState,
+              })
+            } catch (error) {
+              errorState.add(error)
+            }
+            setMessage(null)
+          }}
+        >
+          Populationen mit dem letzten Populations-Bericht
+        </DownloadCardButton>
+        <DownloadCardButton
+          onClick={async () => {
+            setMessage(
+              'Export "PopulationenMitLetztemMassnBericht" wird vorbereitet...',
+            )
+            try {
+              const { data } = await app.client.query({
+                query: await import('./allVPopMitLetzterPopmassnbers').then(
+                  m => m.default,
+                ),
+              })
+              exportModule({
+                data: get(data, 'allVPopMitLetzterPopmassnbers.nodes', []),
+                fileName: 'allVPopMitLetzterPopmassnbers',
+                fileType,
+                mapFilter,
+                applyMapFilterToExport,
+                idKey: 'pop_id',
+                xKey: 'pop_x',
+                yKey: 'pop_y',
+                errorState,
+              })
+            } catch (error) {
+              errorState.add(error)
+            }
+            setMessage(null)
+          }}
+        >
+          Populationen mit dem letzten Massnahmen-Bericht
+        </DownloadCardButton>
+      </StyledCardContent>
+    </Collapse>
+    {!!message && <Message message={message} />}
+  </StyledCard>
 )
 
 export default enhance(Populationen)

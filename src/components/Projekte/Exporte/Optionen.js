@@ -13,6 +13,7 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
+import app from 'ampersand-app'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -48,21 +49,17 @@ const StyledCheckbox = styled(Checkbox)`
   height: 30px !important;
 `
 
-const enhance = compose(
-  withState('expanded', 'setExpanded', true),
-)
+const enhance = compose(withState('expanded', 'setExpanded', true))
 
 const Optionen = ({
   fileType,
   applyMapFilterToExport,
-  client,
   expanded,
   setExpanded,
   mapFilter,
 }: {
   fileType: String,
   applyMapFilterToExport: Boolean,
-  client: Object,
   expanded: Boolean,
   setExpanded: () => void,
   mapFilter: Object,
@@ -90,7 +87,7 @@ const Optionen = ({
             <StyledCheckbox
               checked={fileType === 'csv'}
               onChange={() => {
-                client.mutate({
+                app.client.mutate({
                   mutation: gql`
                     mutation setExportKey($key: String!, $value: Array!) {
                       setExportKey(key: $key, value: $value) @client {
@@ -104,8 +101,8 @@ const Optionen = ({
                   `,
                   variables: {
                     value: fileType === 'csv' ? 'xlsx' : 'csv',
-                    key: 'fileType'
-                  }
+                    key: 'fileType',
+                  },
                 })
               }}
               value={fileType}
@@ -119,7 +116,7 @@ const Optionen = ({
             <StyledCheckbox
               checked={applyMapFilterToExport}
               onChange={() => {
-                client.mutate({
+                app.client.mutate({
                   mutation: gql`
                     mutation setExportKey($key: String!, $value: Array!) {
                       setExportKey(key: $key, value: $value) @client {
@@ -133,8 +130,8 @@ const Optionen = ({
                   `,
                   variables: {
                     value: !applyMapFilterToExport,
-                    key: 'applyMapFilterToExport'
-                  }
+                    key: 'applyMapFilterToExport',
+                  },
                 })
               }}
               value={applyMapFilterToExport.toString()}
