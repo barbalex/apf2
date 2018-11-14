@@ -33,7 +33,7 @@ const Tpopfreiwkontr = lazy(() => import('../Projekte/Daten/Tpopfreiwkontr'))
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 100vh;
   cursor: ${props => (props['data-loading'] ? 'wait' : 'inherit')};
   @media print {
     display: block;
@@ -125,7 +125,6 @@ const EkfContainer = ({ errorState }: { errorState: Object }) => (
                     {tabs.includes('daten') && (
                       <ReflexElementForEKF
                         flex={1 - treeFlex}
-                        orientation="vertical"
                         propagateDimensions={true}
                         renderOnResizeRate={100}
                         renderOnResize={true}
