@@ -60,8 +60,8 @@ const EkfContainer = ({ errorState }: { errorState: Object }) => (
         projekteTabs.length === 2 && tabs.length === 2
           ? 0.33
           : tabs.length === 0
-            ? 1
-            : 1 / tabs.length
+          ? 1
+          : 1 / tabs.length
       const isPrint = get(data1, 'isPrint')
       const jahr = get(data1, 'ekfYear')
       const ekfAdresseId = get(data1, 'ekfAdresseId')
@@ -118,8 +118,9 @@ const EkfContainer = ({ errorState }: { errorState: Object }) => (
                         <EkfList data={data} loading={loading} />
                       </ReflexElement>
                     )}
-                    {tabs.includes('tree') &&
-                      tabs.includes('daten') && <ReflexSplitter />}
+                    {tabs.includes('tree') && tabs.includes('daten') && (
+                      <ReflexSplitter />
+                    )}
                     {tabs.includes('daten') && (
                       <ReflexElementForEKF
                         propagateDimensions={true}
@@ -135,6 +136,7 @@ const EkfContainer = ({ errorState }: { errorState: Object }) => (
                               refetchTree={refetch}
                               errorState={errorState}
                               role={role}
+                              dimensions={{ width: 1000 }}
                             />
                           </Suspense>
                         )}
