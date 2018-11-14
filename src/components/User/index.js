@@ -16,13 +16,12 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
-import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import gql from 'graphql-tag'
 import app from 'ampersand-app'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
-import dataGql from './data'
+import withLocalData from './withLocalData'
 import setUserGql from './setUser'
 
 const StyledDialog = styled(Dialog)``
@@ -38,6 +37,7 @@ const StyledInput = styled(Input)`
 `
 
 const enhance = compose(
+  withLocalData,
   withState('name', 'setName', ''),
   withState('password', 'setPassword', ''),
   withState('showPass', 'setShowPass', false),
@@ -51,10 +51,10 @@ const enhance = compose(
       setPassword,
       name,
       password,
-    }) => async (client, refetch) => {
+    }) => async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await app.client.mutate({
           mutation: gql`
             mutation logIn($name: String, $password: String) {
               login(input: { username: $name, pass: $password }) {
@@ -92,7 +92,7 @@ const enhance = compose(
       // refresh currentUser in idb
       app.db.currentUser.clear()
       await app.db.currentUser.put({ name, token })
-      await client.mutate({
+      await app.client.mutate({
         mutation: setUserGql,
         variables: { name, token },
         optimisticResponse: {
@@ -117,18 +117,14 @@ const enhance = compose(
     },
   }),
   withHandlers({
-    onBlurName: ({ password, setName, setNameErrorText, fetchLogin }) => (
-      e,
-      client,
-      refetch,
-    ) => {
+    onBlurName: ({ password, setName, setNameErrorText, fetchLogin }) => e => {
       setNameErrorText('')
       const name = e.target.value
       setName(name)
       if (!name) {
         setNameErrorText('Geben Sie den Ihnen zugeteilten Benutzernamen ein')
       } else if (password) {
-        setTimeout(() => fetchLogin(client, refetch))
+        setTimeout(() => fetchLogin())
       }
     },
     onBlurPassword: ({
@@ -136,14 +132,14 @@ const enhance = compose(
       setPassword,
       setPasswordErrorText,
       fetchLogin,
-    }) => (e, client, refetch) => {
+    }) => e => {
       setPasswordErrorText('')
       const password = e.target.value
       setPassword(password)
       if (!password) {
         setPasswordErrorText('Bitte Passwort eingeben')
       } else if (name) {
-        setTimeout(() => fetchLogin(client, refetch))
+        setTimeout(() => fetchLogin())
       }
     },
   }),
@@ -161,6 +157,7 @@ const User = ({
   onBlurName,
   onBlurPassword,
   fetchLogin,
+  localData,
 }: {
   name: string,
   showPass: Boolean,
@@ -175,83 +172,80 @@ const User = ({
   onBlurName: () => void,
   onBlurPassword: () => void,
   fetchLogin: () => void,
-}) => (
-  <Query query={dataGql}>
-    {({ error, data, client }) => {
-      if (error) return `Fehler: ${error.message}`
+  localData: Object,
+}) => {
+  if (localData.error) return `Fehler: ${localData.error.message}`
 
-      const user = get(data, 'user', {})
+  const user = get(localData, 'user', {})
 
-      return (
-        <ErrorBoundary>
-          <StyledDialog aria-labelledby="dialog-title" open={!user.token}>
-            <DialogTitle id="dialog-title">Anmeldung</DialogTitle>
-            <StyledDiv>
-              <FormControl
-                error={!!nameErrorText}
-                fullWidth
-                aria-describedby="nameHelper"
-              >
-                <InputLabel htmlFor="name">Name</InputLabel>
-                <StyledInput
-                  id="name"
-                  defaultValue={name}
-                  onBlur={e => onBlurName(e, client)}
-                  autoFocus
-                  onKeyPress={e => {
-                    if (e.key === 'Enter') {
-                      onBlurName(e, client)
-                    }
-                  }}
-                />
-                <FormHelperText id="nameHelper">{nameErrorText}</FormHelperText>
-              </FormControl>
-              <FormControl
-                error={!!passwordErrorText}
-                fullWidth
-                aria-describedby="passwortHelper"
-              >
-                <InputLabel htmlFor="passwort">Passwort</InputLabel>
-                <StyledInput
-                  id="passwort"
-                  type={showPass ? 'text' : 'password'}
-                  defaultValue={password}
-                  onBlur={e => onBlurPassword(e, client)}
-                  onKeyPress={e => {
-                    if (e.key === 'Enter') {
-                      onBlurPassword(e, client)
-                    }
-                  }}
-                  autoComplete="current-password"
-                  autoCorrect="off"
-                  spellCheck="false"
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => setShowPass(!showPass)}
-                        onMouseDown={e => e.preventDefault()}
-                        title={showPass ? 'verstecken' : 'anzeigen'}
-                      >
-                        {showPass ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                />
-                <FormHelperText id="passwortHelper">
-                  {passwordErrorText}
-                </FormHelperText>
-              </FormControl>
-            </StyledDiv>
-            <DialogActions>
-              <Button color="primary" onClick={() => fetchLogin(client)}>
-                anmelden
-              </Button>
-            </DialogActions>
-          </StyledDialog>
-        </ErrorBoundary>
-      )
-    }}
-  </Query>
-)
+  return (
+    <ErrorBoundary>
+      <StyledDialog aria-labelledby="dialog-title" open={!user.token}>
+        <DialogTitle id="dialog-title">Anmeldung</DialogTitle>
+        <StyledDiv>
+          <FormControl
+            error={!!nameErrorText}
+            fullWidth
+            aria-describedby="nameHelper"
+          >
+            <InputLabel htmlFor="name">Name</InputLabel>
+            <StyledInput
+              id="name"
+              defaultValue={name}
+              onBlur={onBlurName}
+              autoFocus
+              onKeyPress={e => {
+                if (e.key === 'Enter') {
+                  onBlurName(e)
+                }
+              }}
+            />
+            <FormHelperText id="nameHelper">{nameErrorText}</FormHelperText>
+          </FormControl>
+          <FormControl
+            error={!!passwordErrorText}
+            fullWidth
+            aria-describedby="passwortHelper"
+          >
+            <InputLabel htmlFor="passwort">Passwort</InputLabel>
+            <StyledInput
+              id="passwort"
+              type={showPass ? 'text' : 'password'}
+              defaultValue={password}
+              onBlur={onBlurPassword}
+              onKeyPress={e => {
+                if (e.key === 'Enter') {
+                  onBlurPassword(e)
+                }
+              }}
+              autoComplete="current-password"
+              autoCorrect="off"
+              spellCheck="false"
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowPass(!showPass)}
+                    onMouseDown={e => e.preventDefault()}
+                    title={showPass ? 'verstecken' : 'anzeigen'}
+                  >
+                    {showPass ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+            />
+            <FormHelperText id="passwortHelper">
+              {passwordErrorText}
+            </FormHelperText>
+          </FormControl>
+        </StyledDiv>
+        <DialogActions>
+          <Button color="primary" onClick={fetchLogin}>
+            anmelden
+          </Button>
+        </DialogActions>
+      </StyledDialog>
+    </ErrorBoundary>
+  )
+}
 
 export default enhance(User)
