@@ -167,8 +167,6 @@ const MyAppBar = ({
   const isFreiwillig = role === 'apflora_freiwillig'
   const username = get(localData, 'user.name')
 
-  console.log('AppBar', { view, isFreiwillig })
-
   return (
     <ErrorBoundary>
       <StyledAppBar position="static">
