@@ -5,9 +5,9 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import Switch from '@material-ui/core/Switch'
 import get from 'lodash/get'
-import { Query } from 'react-apollo'
+import app from 'ampersand-app'
 
-import dataGql from './data'
+import withLocalData from './withLocalData'
 import setTreeKey from './setTreeKey'
 import apById from './apById'
 import Label from '../../../shared/Label'
@@ -27,20 +27,14 @@ const StyledSwitch = styled(Switch)`
 `
 
 const enhance = compose(
+  withLocalData,
   withHandlers({
-    onChange: ({ treeName }) => async ({
-      client,
-      apFilter,
-      activeNodeArray,
-      openNodes,
-    }: {
-      client: Object,
-      apFilter: Boolean,
-      activeNodeArray: Array<String>,
-      openNodes: Array<Array<String>>,
-    }) => {
+    onChange: ({ treeName, localData }) => async () => {
+      const apFilter = get(localData, `${treeName}.apFilter`)
+      const activeNodeArray = get(localData, `${treeName}.activeNodeArray`)
+      const openNodes = get(localData, `${treeName}.openNodes`)
       const previousApFilter = apFilter
-      client.mutate({
+      app.client.mutate({
         mutation: setTreeKey,
         variables: {
           value: !apFilter,
@@ -55,7 +49,7 @@ const enhance = compose(
         let result
         if (apId) {
           // check if this is real ap
-          result = await client.query({
+          result = await app.client.query({
             query: apById,
             variables: { id: apId },
           })
@@ -69,7 +63,7 @@ const enhance = compose(
             activeNodeArray[1],
             activeNodeArray[2],
           ]
-          await client.mutate({
+          await app.client.mutate({
             mutation: setTreeKey,
             variables: {
               value: newActiveNodeArray,
@@ -88,7 +82,7 @@ const enhance = compose(
               return false
             return true
           })
-          await client.mutate({
+          await app.client.mutate({
             mutation: setTreeKey,
             variables: {
               value: newOpenNodes,
@@ -105,43 +99,33 @@ const enhance = compose(
 const ApFilter = ({
   treeName,
   onChange,
+  localData,
 }: {
   treeName: String,
   onChange: () => void,
-}) => (
-  <Query query={dataGql}>
-    {({ error, data, client }) => {
-      if (error) {
-        if (
-          error.message.includes('permission denied') ||
-          error.message.includes('keine Berechtigung')
-        ) {
-          // ProjektContainer returns helpful screen
-          return null
-        }
-        return `Fehler: ${error.message}`
-      }
+  localData: Object,
+}) => {
+  if (localData.error) {
+    if (
+      localData.error.message.includes('permission denied') ||
+      localData.error.message.includes('keine Berechtigung')
+    ) {
+      // ProjektContainer returns helpful screen
+      return null
+    }
+    return `Fehler: ${localData.error.message}`
+  }
 
-      const apFilter = get(data, `${treeName}.apFilter`)
-      const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
-      const openNodes = get(data, `${treeName}.openNodes`)
+  const apFilter = get(localData, `${treeName}.apFilter`)
 
-      return (
-        <ErrorBoundary>
-          <NurApDiv>
-            <Label label="nur AP" />
-            <StyledSwitch
-              checked={apFilter}
-              onChange={() =>
-                onChange({ client, apFilter, activeNodeArray, openNodes })
-              }
-              color="primary"
-            />
-          </NurApDiv>
-        </ErrorBoundary>
-      )
-    }}
-  </Query>
-)
+  return (
+    <ErrorBoundary>
+      <NurApDiv>
+        <Label label="nur AP" />
+        <StyledSwitch checked={apFilter} onChange={onChange} color="primary" />
+      </NurApDiv>
+    </ErrorBoundary>
+  )
+}
 
 export default enhance(ApFilter)
