@@ -11,6 +11,7 @@ import Select from '../../../shared/Select'
 import withData from './withData'
 import setViewGql from './setView'
 import setEkfAdresseIdGql from './setEkfAdresseId'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   padding: 0 16px;
@@ -22,11 +23,11 @@ const enhance = compose(
     choose: ({ setAnchorEl }: { setAnchorEl: () => void }) => async event => {
       const id = event.target.value
       const { client } = app
-      await client.mutate({
+      client.mutate({
         mutation: setEkfAdresseIdGql,
         variables: { value: id },
       })
-      await client.mutate({
+      client.mutate({
         mutation: setViewGql,
         variables: { value: 'ekf' },
       })
@@ -47,13 +48,15 @@ const EkfAdresse = ({ choose, data }: { choose: () => void, data: Object }) => {
 
   return (
     <Container>
-      <Select
-        value={''}
-        label="EKF sehen als"
-        options={adressenWerte}
-        saveToDb={choose}
-        maxHeight={130}
-      />
+      <ErrorBoundary>
+        <Select
+          value={''}
+          label="EKF sehen als"
+          options={adressenWerte}
+          saveToDb={choose}
+          maxHeight={130}
+        />
+      </ErrorBoundary>
     </Container>
   )
 }
