@@ -16,32 +16,30 @@ const ReloadButton = styled(Button)`
 class ErrorBoundary extends Component {
   constructor(props) {
     super(props)
-    this.state = { error: null, errorInfo: null }
+    this.state = { error: null }
   }
 
-  static getDerivedStateFromError(error, errorInfo) {
+  static getDerivedStateFromError(error) {
     // Catch errors in any components below and re-render with error message
-    this.setState({
-      error: error,
-      errorInfo: errorInfo,
-    })
+    return {
+      error,
+    }
   }
 
   render() {
-    const { errorInfo } = this.state
-    if (errorInfo) {
-      console.log('errorInfo:', errorInfo)
+    const { error } = this.state
+
+    if (error) {
+      console.log('error:', error)
       return (
         <Container>
           <ErrorTitle>
             Oh je, es ist ein Fehler aufgetreten! Bericht:
           </ErrorTitle>
-          <div>{errorInfo.componentStack}</div>
+          <div>{error.message}</div>
           <ReloadButton
             variant="outlined"
-            onClick={() => {
-              window.location.reload(false)
-            }}
+            onClick={() => window.location.reload(false)}
           >
             Neu laden
           </ReloadButton>
