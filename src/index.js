@@ -40,7 +40,8 @@ import Print from './components/Print'
 import historyListen from './modules/historyListen'
 
 import './index.css'
-;(async () => {
+
+const run = async () => {
   try {
     // prevent changing values in number inputs when scrolling pages!
     // see: http://stackoverflow.com/a/38589039/712005
@@ -98,4 +99,6 @@ import './index.css'
   } catch (error) {
     console.log('Error in index.js:', error)
   }
-})()
+}
+
+run()
