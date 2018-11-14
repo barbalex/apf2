@@ -7,9 +7,9 @@ import min from 'lodash/min'
 import sum from 'lodash/sum'
 import maxBy from 'lodash/maxBy'
 import groupBy from 'lodash/groupBy'
-import { Query } from 'react-apollo'
+import compose from 'recompose/compose'
 
-import dataGql from './data'
+import withData from './withData'
 
 const Container = styled.div`
   padding: 0.2cm 0;
@@ -80,199 +80,186 @@ const TpopBerJahr = styled(Number)`
 const PopSeit = styled(Number)``
 const TpopSeit = styled(Number)``
 
+const enhance = compose(withData)
+
 const BMengen = ({
   apId,
   jahr,
   startJahr,
+  data,
 }: {
   apId: String,
   jahr: Number,
   startJahr: Number,
-}) => (
-  <Query query={dataGql} variables={{ apId, startJahr, jahr }}>
-    {({ loading, error, data }) => {
-      if (error) return `Fehler: ${error.message}`
+  data: Object,
+}) => {
+  if (data.error) return `Fehler: ${data.error.message}`
 
-      // 1.
-      const oneLPop_pop = get(data, 'apById.oneLPop.nodes', [])
-        .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
-        .filter(p => get(p, 'popbersByPopId.totalCount') > 0)
-      const oneLPop = oneLPop_pop.length
-      const oneLPop_popbers = flatten(
-        oneLPop_pop.map(p => get(p, 'popbersByPopId.nodes', [])),
-      )
+  // 1.
+  const oneLPop_pop = get(data, 'apById.oneLPop.nodes', [])
+    .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
+    .filter(p => get(p, 'popbersByPopId.totalCount') > 0)
+  const oneLPop = oneLPop_pop.length
+  const oneLPop_popbers = flatten(
+    oneLPop_pop.map(p => get(p, 'popbersByPopId.nodes', [])),
+  )
 
-      const oneLTpop_pop = get(data, 'apById.oneLTpop.nodes', [])
-      const oneLTpop_tpop = flatten(
-        oneLTpop_pop.map(p => get(p, 'tpopsByPopId.nodes', [])),
-      )
-      const oneLTpop = flatten(
-        oneLTpop_tpop.map(p => get(p, 'tpopbersByTpopId.totalCount', 0)),
-      ).filter(tpopbersCount => tpopbersCount > 0).length
-      const oneLTpop_tpopbers = flatten(
-        oneLTpop_tpop.map(t => get(t, 'tpopbersByTpopId.nodes', [])),
-      )
+  const oneLTpop_pop = get(data, 'apById.oneLTpop.nodes', [])
+  const oneLTpop_tpop = flatten(
+    oneLTpop_pop.map(p => get(p, 'tpopsByPopId.nodes', [])),
+  )
+  const oneLTpop = flatten(
+    oneLTpop_tpop.map(p => get(p, 'tpopbersByTpopId.totalCount', 0)),
+  ).filter(tpopbersCount => tpopbersCount > 0).length
+  const oneLTpop_tpopbers = flatten(
+    oneLTpop_tpop.map(t => get(t, 'tpopbersByTpopId.nodes', [])),
+  )
 
-      const oneRPop = get(data, 'apById.oneRPop.nodes', [])
-        .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
-        .filter(p => get(p, 'popbersByPopId.totalCount') > 0).length
-      const oneRPop_pop = get(data, 'apById.oneRPop.nodes', []).filter(
-        p => get(p, 'tpopsByPopId.totalCount') > 0,
-      )
-      const oneRPop_popbers = flatten(
-        oneRPop_pop.map(p => get(p, 'popbersByPopId.nodes', [])),
-      )
-      const oneRPop_popbersByPopId = groupBy(oneRPop_popbers, b => b.popId)
-      const oneRPop_lastPopbers = Object.keys(oneRPop_popbersByPopId).map(b =>
-        maxBy(oneRPop_popbersByPopId[b], 'jahr'),
-      )
+  const oneRPop = get(data, 'apById.oneRPop.nodes', [])
+    .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
+    .filter(p => get(p, 'popbersByPopId.totalCount') > 0).length
+  const oneRPop_pop = get(data, 'apById.oneRPop.nodes', []).filter(
+    p => get(p, 'tpopsByPopId.totalCount') > 0,
+  )
+  const oneRPop_popbers = flatten(
+    oneRPop_pop.map(p => get(p, 'popbersByPopId.nodes', [])),
+  )
+  const oneRPop_popbersByPopId = groupBy(oneRPop_popbers, b => b.popId)
+  const oneRPop_lastPopbers = Object.keys(oneRPop_popbersByPopId).map(b =>
+    maxBy(oneRPop_popbersByPopId[b], 'jahr'),
+  )
 
-      const oneRTpop_pop = get(data, 'apById.oneRTpop.nodes', [])
-      const oneRTpop_tpop = flatten(
-        oneRTpop_pop.map(p => get(p, 'tpopsByPopId.nodes', [])),
-      )
-      const oneRTpop = flatten(
-        oneRTpop_tpop.map(p => get(p, 'tpopbersByTpopId.totalCount', 0)),
-      ).filter(tpopbersCount => tpopbersCount > 0).length
-      const oneRTpop_tpopbers = flatten(
-        oneRTpop_tpop.map(p => get(p, 'tpopbersByTpopId.nodes', [])),
-      )
-      const oneRTpop_tpopbersByTpopId = groupBy(
-        oneRTpop_tpopbers,
-        b => b.tpopId,
-      )
-      const oneRTpop_lastTpopbers = Object.keys(oneRTpop_tpopbersByTpopId).map(
-        b => maxBy(oneRTpop_tpopbersByTpopId[b], 'jahr'),
-      )
-      const oneRTpop_firstYear = min(oneRTpop_tpopbers.map(b => b.jahr))
+  const oneRTpop_pop = get(data, 'apById.oneRTpop.nodes', [])
+  const oneRTpop_tpop = flatten(
+    oneRTpop_pop.map(p => get(p, 'tpopsByPopId.nodes', [])),
+  )
+  const oneRTpop = flatten(
+    oneRTpop_tpop.map(p => get(p, 'tpopbersByTpopId.totalCount', 0)),
+  ).filter(tpopbersCount => tpopbersCount > 0).length
+  const oneRTpop_tpopbers = flatten(
+    oneRTpop_tpop.map(p => get(p, 'tpopbersByTpopId.nodes', [])),
+  )
+  const oneRTpop_tpopbersByTpopId = groupBy(oneRTpop_tpopbers, b => b.tpopId)
+  const oneRTpop_lastTpopbers = Object.keys(oneRTpop_tpopbersByTpopId).map(b =>
+    maxBy(oneRTpop_tpopbersByTpopId[b], 'jahr'),
+  )
+  const oneRTpop_firstYear = min(oneRTpop_tpopbers.map(b => b.jahr))
 
-      // 2.
-      const twoLPop = oneLPop_popbers.filter(b => b.entwicklung === 3).length
-      const twoLTpop = oneLTpop_tpopbers.filter(b => b.entwicklung === 3).length
-      const twoRPop = oneRPop_lastPopbers.filter(b => b.entwicklung === 3)
-        .length
-      const twoRTpop = oneRTpop_lastTpopbers.filter(b => b.entwicklung === 3)
-        .length
+  // 2.
+  const twoLPop = oneLPop_popbers.filter(b => b.entwicklung === 3).length
+  const twoLTpop = oneLTpop_tpopbers.filter(b => b.entwicklung === 3).length
+  const twoRPop = oneRPop_lastPopbers.filter(b => b.entwicklung === 3).length
+  const twoRTpop = oneRTpop_lastTpopbers.filter(b => b.entwicklung === 3).length
 
-      // 3.
-      const threeLPop = oneLPop_popbers.filter(b => b.entwicklung === 2).length
-      const threeLTpop = oneLTpop_tpopbers.filter(b => b.entwicklung === 2)
-        .length
-      const threeRPop = oneRPop_lastPopbers.filter(b => b.entwicklung === 2)
-        .length
-      const threeRTpop = oneRTpop_lastTpopbers.filter(b => b.entwicklung === 2)
-        .length
+  // 3.
+  const threeLPop = oneLPop_popbers.filter(b => b.entwicklung === 2).length
+  const threeLTpop = oneLTpop_tpopbers.filter(b => b.entwicklung === 2).length
+  const threeRPop = oneRPop_lastPopbers.filter(b => b.entwicklung === 2).length
+  const threeRTpop = oneRTpop_lastTpopbers.filter(b => b.entwicklung === 2)
+    .length
 
-      // 4.
-      const fourLPop = oneLPop_popbers.filter(b => b.entwicklung === 1).length
-      const fourLTpop = oneLTpop_tpopbers.filter(b => b.entwicklung === 1)
-        .length
-      const fourRPop = oneRPop_lastPopbers.filter(b => b.entwicklung === 1)
-        .length
-      const fourRTpop = oneRTpop_lastTpopbers.filter(b => b.entwicklung === 1)
-        .length
+  // 4.
+  const fourLPop = oneLPop_popbers.filter(b => b.entwicklung === 1).length
+  const fourLTpop = oneLTpop_tpopbers.filter(b => b.entwicklung === 1).length
+  const fourRPop = oneRPop_lastPopbers.filter(b => b.entwicklung === 1).length
+  const fourRTpop = oneRTpop_lastTpopbers.filter(b => b.entwicklung === 1)
+    .length
 
-      // 5.
-      const fiveLPop = oneLPop_popbers.filter(b => b.entwicklung === 4).length
-      const fiveLTpop = oneLTpop_tpopbers.filter(b => b.entwicklung === 4)
-        .length
-      const fiveRPop = oneRPop_lastPopbers.filter(b => b.entwicklung === 4)
-        .length
-      const fiveRTpop = oneRTpop_lastTpopbers.filter(b => b.entwicklung === 4)
-        .length
+  // 5.
+  const fiveLPop = oneLPop_popbers.filter(b => b.entwicklung === 4).length
+  const fiveLTpop = oneLTpop_tpopbers.filter(b => b.entwicklung === 4).length
+  const fiveRPop = oneRPop_lastPopbers.filter(b => b.entwicklung === 4).length
+  const fiveRTpop = oneRTpop_lastTpopbers.filter(b => b.entwicklung === 4)
+    .length
 
-      // 6.
-      const sixLPop = oneLPop_popbers.filter(b => b.entwicklung === 8).length
-      const sixLTpop = oneLTpop_tpopbers.filter(b => b.entwicklung === 8).length
-      const sixRPop = oneRPop_lastPopbers.filter(b => b.entwicklung === 8)
-        .length
-      const sixRTpop = oneRTpop_lastTpopbers.filter(b => b.entwicklung === 8)
-        .length
+  // 6.
+  const sixLPop = oneLPop_popbers.filter(b => b.entwicklung === 8).length
+  const sixLTpop = oneLTpop_tpopbers.filter(b => b.entwicklung === 8).length
+  const sixRPop = oneRPop_lastPopbers.filter(b => b.entwicklung === 8).length
+  const sixRTpop = oneRTpop_lastTpopbers.filter(b => b.entwicklung === 8).length
 
-      // 7.
-      const sevenLPop_allPops = get(data, 'apById.sevenLPop.nodes', []).filter(
-        p => get(p, 'tpopsByPopId.totalCount') > 0,
-      ).length
-      const sevenLPop = sevenLPop_allPops - oneLPop
-      const sevenLTpop_allTpops = sum(
-        get(data, 'apById.sevenLTpop.nodes', []).map(p =>
-          get(p, 'tpopsByPopId.totalCount'),
-        ),
-      )
-      const sevenLTpop = sevenLTpop_allTpops - oneLTpop
-      const sevenRPop = sevenLPop_allPops - oneRPop
-      const sevenRTpop = sevenLTpop_allTpops - oneRTpop
+  // 7.
+  const sevenLPop_allPops = get(data, 'apById.sevenLPop.nodes', []).filter(
+    p => get(p, 'tpopsByPopId.totalCount') > 0,
+  ).length
+  const sevenLPop = sevenLPop_allPops - oneLPop
+  const sevenLTpop_allTpops = sum(
+    get(data, 'apById.sevenLTpop.nodes', []).map(p =>
+      get(p, 'tpopsByPopId.totalCount'),
+    ),
+  )
+  const sevenLTpop = sevenLTpop_allTpops - oneLTpop
+  const sevenRPop = sevenLPop_allPops - oneRPop
+  const sevenRTpop = sevenLTpop_allTpops - oneRTpop
 
-      return (
-        <Container>
-          <Title>B. Bestandesentwicklung</Title>
-          <YearRow>
-            <Year>{jahr}</Year>
-            <YearSince>{`Seit ${
-              loading ? '...' : oneRTpop_firstYear
-            }`}</YearSince>
-          </YearRow>
-          <LabelRow>
-            <Label1 />
-            <PopBerJahr>Pop</PopBerJahr>
-            <TpopBerJahr>TPop</TpopBerJahr>
-            <PopSeit>Pop</PopSeit>
-            <TpopSeit>TPop</TpopSeit>
-          </LabelRow>
-          <Row>
-            <Label1>kontrolliert (inkl. Ansaatversuche)</Label1>
-            <PopBerJahr>{loading ? '...' : oneLPop}</PopBerJahr>
-            <TpopBerJahr>{loading ? '...' : oneLTpop}</TpopBerJahr>
-            <PopSeit>{loading ? '...' : oneRPop}</PopSeit>
-            <TpopSeit>{loading ? '...' : oneRTpop}</TpopSeit>
-          </Row>
-          <Row>
-            <Label2Davon>davon:</Label2Davon>
-            <Label3AfterDavon>zunehmend</Label3AfterDavon>
-            <PopBerJahr>{loading ? '...' : twoLPop}</PopBerJahr>
-            <TpopBerJahr>{loading ? '...' : twoLTpop}</TpopBerJahr>
-            <PopSeit>{loading ? '...' : twoRPop}</PopSeit>
-            <TpopSeit>{loading ? '...' : twoRTpop}</TpopSeit>
-          </Row>
-          <Row>
-            <Label3>stabil</Label3>
-            <PopBerJahr>{loading ? '...' : threeLPop}</PopBerJahr>
-            <TpopBerJahr>{loading ? '...' : threeLTpop}</TpopBerJahr>
-            <PopSeit>{loading ? '...' : threeRPop}</PopSeit>
-            <TpopSeit>{loading ? '...' : threeRTpop}</TpopSeit>
-          </Row>
-          <Row>
-            <Label3>abnehmend</Label3>
-            <PopBerJahr>{loading ? '...' : fourLPop}</PopBerJahr>
-            <TpopBerJahr>{loading ? '...' : fourLTpop}</TpopBerJahr>
-            <PopSeit>{loading ? '...' : fourRPop}</PopSeit>
-            <TpopSeit>{loading ? '...' : fourRTpop}</TpopSeit>
-          </Row>
-          <Row>
-            <Label3>unsicher</Label3>
-            <PopBerJahr>{loading ? '...' : fiveLPop}</PopBerJahr>
-            <TpopBerJahr>{loading ? '...' : fiveLTpop}</TpopBerJahr>
-            <PopSeit>{loading ? '...' : fiveRPop}</PopSeit>
-            <TpopSeit>{loading ? '...' : fiveRTpop}</TpopSeit>
-          </Row>
-          <Row>
-            <Label3>erloschen</Label3>
-            <PopBerJahr>{loading ? '...' : sixLPop}</PopBerJahr>
-            <TpopBerJahr>{loading ? '...' : sixLTpop}</TpopBerJahr>
-            <PopSeit>{loading ? '...' : sixRPop}</PopSeit>
-            <TpopSeit>{loading ? '...' : sixRTpop}</TpopSeit>
-          </Row>
-          <NkRow>
-            <Label1>nicht kontrolliert (inkl. Ansaatversuche)</Label1>
-            <PopBerJahr>{loading ? '...' : sevenLPop}</PopBerJahr>
-            <TpopBerJahr>{loading ? '...' : sevenLTpop}</TpopBerJahr>
-            <PopSeit>{loading ? '...' : sevenRPop}</PopSeit>
-            <TpopSeit>{loading ? '...' : sevenRTpop}</TpopSeit>
-          </NkRow>
-        </Container>
-      )
-    }}
-  </Query>
-)
+  return (
+    <Container>
+      <Title>B. Bestandesentwicklung</Title>
+      <YearRow>
+        <Year>{jahr}</Year>
+        <YearSince>{`Seit ${
+          data.loading ? '...' : oneRTpop_firstYear
+        }`}</YearSince>
+      </YearRow>
+      <LabelRow>
+        <Label1 />
+        <PopBerJahr>Pop</PopBerJahr>
+        <TpopBerJahr>TPop</TpopBerJahr>
+        <PopSeit>Pop</PopSeit>
+        <TpopSeit>TPop</TpopSeit>
+      </LabelRow>
+      <Row>
+        <Label1>kontrolliert (inkl. Ansaatversuche)</Label1>
+        <PopBerJahr>{data.loading ? '...' : oneLPop}</PopBerJahr>
+        <TpopBerJahr>{data.loading ? '...' : oneLTpop}</TpopBerJahr>
+        <PopSeit>{data.loading ? '...' : oneRPop}</PopSeit>
+        <TpopSeit>{data.loading ? '...' : oneRTpop}</TpopSeit>
+      </Row>
+      <Row>
+        <Label2Davon>davon:</Label2Davon>
+        <Label3AfterDavon>zunehmend</Label3AfterDavon>
+        <PopBerJahr>{data.loading ? '...' : twoLPop}</PopBerJahr>
+        <TpopBerJahr>{data.loading ? '...' : twoLTpop}</TpopBerJahr>
+        <PopSeit>{data.loading ? '...' : twoRPop}</PopSeit>
+        <TpopSeit>{data.loading ? '...' : twoRTpop}</TpopSeit>
+      </Row>
+      <Row>
+        <Label3>stabil</Label3>
+        <PopBerJahr>{data.loading ? '...' : threeLPop}</PopBerJahr>
+        <TpopBerJahr>{data.loading ? '...' : threeLTpop}</TpopBerJahr>
+        <PopSeit>{data.loading ? '...' : threeRPop}</PopSeit>
+        <TpopSeit>{data.loading ? '...' : threeRTpop}</TpopSeit>
+      </Row>
+      <Row>
+        <Label3>abnehmend</Label3>
+        <PopBerJahr>{data.loading ? '...' : fourLPop}</PopBerJahr>
+        <TpopBerJahr>{data.loading ? '...' : fourLTpop}</TpopBerJahr>
+        <PopSeit>{data.loading ? '...' : fourRPop}</PopSeit>
+        <TpopSeit>{data.loading ? '...' : fourRTpop}</TpopSeit>
+      </Row>
+      <Row>
+        <Label3>unsicher</Label3>
+        <PopBerJahr>{data.loading ? '...' : fiveLPop}</PopBerJahr>
+        <TpopBerJahr>{data.loading ? '...' : fiveLTpop}</TpopBerJahr>
+        <PopSeit>{data.loading ? '...' : fiveRPop}</PopSeit>
+        <TpopSeit>{data.loading ? '...' : fiveRTpop}</TpopSeit>
+      </Row>
+      <Row>
+        <Label3>erloschen</Label3>
+        <PopBerJahr>{data.loading ? '...' : sixLPop}</PopBerJahr>
+        <TpopBerJahr>{data.loading ? '...' : sixLTpop}</TpopBerJahr>
+        <PopSeit>{data.loading ? '...' : sixRPop}</PopSeit>
+        <TpopSeit>{data.loading ? '...' : sixRTpop}</TpopSeit>
+      </Row>
+      <NkRow>
+        <Label1>nicht kontrolliert (inkl. Ansaatversuche)</Label1>
+        <PopBerJahr>{data.loading ? '...' : sevenLPop}</PopBerJahr>
+        <TpopBerJahr>{data.loading ? '...' : sevenLTpop}</TpopBerJahr>
+        <PopSeit>{data.loading ? '...' : sevenRPop}</PopSeit>
+        <TpopSeit>{data.loading ? '...' : sevenRTpop}</TpopSeit>
+      </NkRow>
+    </Container>
+  )
+}
 
-export default BMengen
+export default enhance(BMengen)
