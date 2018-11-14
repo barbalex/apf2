@@ -13,12 +13,12 @@ import withState from 'recompose/withState'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
-import { Query } from 'react-apollo'
+import app from 'ampersand-app'
 
 import Select from '../../../shared/Select'
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
-import dataGql from './data'
+import withData from './withData'
 import withErrorState from '../../../../state/withErrorState'
 import epsg2056to4326 from '../../../../modules/epsg2056to4326'
 
@@ -67,6 +67,7 @@ const AutocompleteContainer = styled.div`
 const isRemoteHost = window.location.hostname !== 'localhost'
 
 const enhance = compose(
+  withData,
   withErrorState,
   withState('expanded', 'setExpanded', false),
   withState('message', 'setMessage', null),
@@ -84,6 +85,7 @@ const Teilpopulationen = ({
   setMessage,
   setEwmMessage,
   errorState,
+  data,
 }: {
   fileType: String,
   mapFilter: Object,
@@ -95,422 +97,410 @@ const Teilpopulationen = ({
   setMessage: () => void,
   setEwmMessage: () => void,
   errorState: Object,
-}) => (
-  <Query query={dataGql}>
-    {({ loading, error, data, client }) => {
-      if (error) return `Fehler: ${error.message}`
-      const artList = sortBy(
-        get(data, 'allAeEigenschaftens.nodes', [])
-          .filter(n => !!get(n, 'apByArtId.id'))
-          .map(n => ({
-            value: get(n, 'apByArtId.id'),
-            label: n.artname,
-          })),
-        'artname',
-      )
+  data: Object,
+}) => {
+  if (data.error) return `Fehler: ${data.error.message}`
+  const artList = sortBy(
+    get(data, 'allAeEigenschaftens.nodes', [])
+      .filter(n => !!get(n, 'apByArtId.id'))
+      .map(n => ({
+        value: get(n, 'apByArtId.id'),
+        label: n.artname,
+      })),
+    'artname',
+  )
 
-      return (
-        <StyledCard>
-          <StyledCardActions
-            disableActionSpacing
-            onClick={() => setExpanded(!expanded)}
-          >
-            <CardActionTitle>Teilpopulationen</CardActionTitle>
-            <CardActionIconButton
-              data-expanded={expanded}
-              aria-expanded={expanded}
-              aria-label="öffnen"
-            >
-              <Icon title={expanded ? 'schliessen' : 'öffnen'}>
-                <ExpandMoreIcon />
-              </Icon>
-            </CardActionIconButton>
-          </StyledCardActions>
-          <Collapse in={expanded} timeout="auto" unmountOnExit>
-            <StyledCardContent>
-              <DownloadCardButton
-                onClick={async () => {
-                  setMessage('Export "Teilpopulationen" wird vorbereitet...')
-                  try {
-                    const { data } = await client.query({
-                      query: await import('./allVTpops').then(m => m.default),
-                    })
-                    const enrichedData = get(data, 'allVTpops.nodes', []).map(
-                      oWithout => {
-                        let o = { ...oWithout }
-                        let nachBeginnAp = null
-                        if (
-                          o.ap_start_jahr &&
-                          o.bekannt_seit &&
-                          [200, 201, 202].includes(o.status)
-                        ) {
-                          if (o.ap_start_jahr <= o.bekannt_seit) {
-                            nachBeginnAp = true
-                          } else {
-                            nachBeginnAp = false
-                          }
-                        }
-                        o.angesiedelt_nach_beginn_ap = nachBeginnAp
-                        return o
-                      },
-                    )
-                    exportModule({
-                      data: enrichedData,
-                      fileName: 'Teilpopulationen',
-                      fileType,
-                      mapFilter,
-                      applyMapFilterToExport,
-                      idKey: 'id',
-                      xKey: 'x',
-                      yKey: 'y',
-                      errorState,
-                    })
-                  } catch (error) {
-                    errorState.add(error)
-                  }
-                  setMessage(null)
-                }}
-              >
-                Teilpopulationen
-              </DownloadCardButton>
-              <DownloadCardButton
-                onClick={async () => {
-                  setMessage(
-                    'Export "TeilpopulationenWebGisBun" wird vorbereitet...',
-                  )
-                  try {
-                    const { data } = await client.query({
-                      query: await import('./allVTpopWebgisbuns').then(
-                        m => m.default,
-                      ),
-                    })
-                    exportModule({
-                      data: get(data, 'allVTpopWebgisbuns.nodes', []),
-                      fileName: 'TeilpopulationenWebGisBun',
-                      fileType,
-                      applyMapFilterToExport,
-                      mapFilter,
-                      idKey: 'TPOPID',
-                      xKey: 'TPOP_X',
-                      yKey: 'TPOP_Y',
-                      errorState,
-                    })
-                  } catch (error) {
-                    errorState.add(error)
-                  }
-                  setMessage(null)
-                }}
-              >
-                Teilpopulationen für WebGIS BUN
-              </DownloadCardButton>
-              <DownloadCardButton
-                onClick={async () => {
-                  setMessage('Export "Teilpopulationen" wird vorbereitet...')
-                  try {
-                    const { data } = await client.query({
-                      query: await import('./allVTpopKmls').then(
-                        m => m.default,
-                      ),
-                    })
-                    const enrichedData = get(
-                      data,
-                      'allVTpopKmls.nodes',
-                      [],
-                    ).map(oWithout => {
-                      let o = { ...oWithout }
-                      const [bg, lg] = epsg2056to4326(o.x, o.y)
-                      o.laengengrad = lg
-                      o.breitengrad = bg
-                      return o
-                    })
-                    exportModule({
-                      data: enrichedData,
-                      fileName: 'Teilpopulationen',
-                      fileType,
-                      applyMapFilterToExport,
-                      mapFilter,
-                      idKey: 'id',
-                      xKey: 'x',
-                      yKey: 'y',
-                      errorState,
-                      kml: true,
-                    })
-                  } catch (error) {
-                    errorState.add(error)
-                  }
-                  setMessage(null)
-                }}
-              >
-                <div>Teilpopulationen für Google Earth</div>
-                <div>(beschriftet mit PopNr/TPopNr)</div>
-              </DownloadCardButton>
-              <DownloadCardButton
-                onClick={async () => {
-                  setMessage(
-                    'Export "TeilpopulationenNachNamen" wird vorbereitet...',
-                  )
-                  try {
-                    const { data } = await client.query({
-                      query: await import('./allVTpopKmlnamen').then(
-                        m => m.default,
-                      ),
-                    })
-                    const enrichedData = get(
-                      data,
-                      'allVTpopKmlnamen.nodes',
-                      [],
-                    ).map(oWithout => {
-                      let o = { ...oWithout }
-                      const [bg, lg] = epsg2056to4326(o.x, o.y)
-                      o.laengengrad = lg
-                      o.breitengrad = bg
-                      return o
-                    })
-                    exportModule({
-                      data: enrichedData,
-                      fileName: 'TeilpopulationenNachNamen',
-                      fileType,
-                      applyMapFilterToExport,
-                      mapFilter,
-                      idKey: 'id',
-                      xKey: 'x',
-                      yKey: 'y',
-                      errorState,
-                      kml: true,
-                    })
-                  } catch (error) {
-                    errorState.add(error)
-                  }
-                  setMessage(null)
-                }}
-              >
-                <div>Teilpopulationen für Google Earth</div>
-                <div>(beschriftet mit Artname, PopNr/TPopNr)</div>
-              </DownloadCardButton>
-              <DownloadCardButton
-                onClick={async () => {
-                  setMessage(
-                    'Export "TeilpopulationenVonApArtenOhneBekanntSeit" wird vorbereitet...',
-                  )
-                  try {
-                    const { data } = await client.query({
-                      query: await import('./allVTpopOhnebekanntseits').then(
-                        m => m.default,
-                      ),
-                    })
-                    exportModule({
-                      data: get(data, 'allVTpopOhnebekanntseits.nodes', []),
-                      fileName: 'TeilpopulationenVonApArtenOhneBekanntSeit',
-                      fileType,
-                      applyMapFilterToExport,
-                      mapFilter,
-                      idKey: 'id',
-                      xKey: 'x',
-                      yKey: 'y',
-                      errorState,
-                    })
-                  } catch (error) {
-                    errorState.add(error)
-                  }
-                  setMessage(null)
-                }}
-              >
-                <div>Teilpopulationen von AP-Arten</div>
-                <div>{'ohne "Bekannt seit"'}</div>
-              </DownloadCardButton>
-              <DownloadCardButton
-                onClick={async () => {
-                  setMessage(
-                    'Export "TeilpopulationenOhneApBerichtRelevant" wird vorbereitet...',
-                  )
-                  try {
-                    const { data } = await client.query({
-                      query: await import('./allVTpopOhneapberichtrelevants').then(
-                        m => m.default,
-                      ),
-                    })
-                    exportModule({
-                      data: get(
-                        data,
-                        'allVTpopOhneapberichtrelevants.nodes',
-                        [],
-                      ),
-                      fileName: 'TeilpopulationenOhneApBerichtRelevant',
-                      fileType,
-                      applyMapFilterToExport,
-                      mapFilter,
-                      idKey: 'id',
-                      xKey: 'x',
-                      yKey: 'y',
-                      errorState,
-                    })
-                  } catch (error) {
-                    errorState.add(error)
-                  }
-                  setMessage(null)
-                }}
-              >
-                <div>Teilpopulationen ohne Eintrag</div>
-                <div>{'im Feld "Für AP-Bericht relevant"'}</div>
-              </DownloadCardButton>
-              <DownloadCardButton
-                onClick={async () => {
-                  setMessage(
-                    'Export "TeilpopulationenAnzahlMassnahmen" wird vorbereitet...',
-                  )
-                  try {
-                    const { data } = await client.query({
-                      query: await import('./allVTpopAnzmassns').then(
-                        m => m.default,
-                      ),
-                    })
-                    exportModule({
-                      data: get(data, 'allVTpopAnzmassns.nodes', []),
-                      fileName: 'TeilpopulationenAnzahlMassnahmen',
-                      fileType,
-                      applyMapFilterToExport,
-                      mapFilter,
-                      idKey: 'id',
-                      xKey: 'x',
-                      yKey: 'y',
-                      errorState,
-                    })
-                  } catch (error) {
-                    errorState.add(error)
-                  }
-                  setMessage(null)
-                }}
-              >
-                Anzahl Massnahmen pro Teilpopulation
-              </DownloadCardButton>
-              <DownloadCardButton
-                onClick={async () => {
-                  setMessage(
-                    'Export "TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht" wird vorbereitet...',
-                  )
-                  try {
-                    const { data } = await client.query({
-                      query: await import('./allVTpopAnzkontrinklletzterundletztertpopbers').then(
-                        m => m.default,
-                      ),
-                    })
-                    exportModule({
-                      data: get(
-                        data,
-                        'allVTpopAnzkontrinklletzterundletztertpopbers.nodes',
-                        [],
-                      ),
-                      fileName:
-                        'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht',
-                      fileType,
-                      applyMapFilterToExport,
-                      mapFilter,
-                      idKey: 'id',
-                      xKey: 'x',
-                      yKey: 'y',
-                      errorState,
-                    })
-                  } catch (error) {
-                    errorState.add(error)
-                  }
-                  setMessage(null)
-                }}
-                disabled={isRemoteHost}
-                title={
-                  isRemoteHost
-                    ? 'nur aktiv, wenn apflora lokal installiert wird'
-                    : ''
-                }
-              >
-                <div>Teilpopulationen mit:</div>
-                <ul
-                  style={{
-                    paddingLeft: '18px',
-                    marginTop: '5px',
-                    marginBottom: '10px',
-                  }}
-                >
-                  <li>Anzahl Kontrollen</li>
-                  <li>letzte Kontrolle</li>
-                  <li>letzter Teilpopulationsbericht</li>
-                  <li>letzte Zählung</li>
-                </ul>
-                <div>{'= "Eier legende Wollmilchsau"'}</div>
-              </DownloadCardButton>
-              <AutocompleteContainer>
-                <Select
-                  value=""
-                  field="ewm"
-                  label={`"Eier legende Wollmilchsau" für eine Art`}
-                  options={artList}
-                  saveToDb={async apId => {
-                    if (apId === null) return
-                    setEwmMessage(
-                      'Export "anzkontrinklletzterundletztertpopber" wird vorbereitet...',
-                    )
-                    try {
-                      const { data } = await client.query({
-                        query: await import('./allVTpopAnzkontrinklletzterundletztertpopbersFiltered').then(
-                          m => m.default,
-                        ),
-                        variables: { apId },
-                      })
-                      exportModule({
-                        data: get(
-                          data,
-                          'allVTpopAnzkontrinklletzterundletztertpopbers.nodes',
-                          [],
-                        ),
-                        fileName: 'anzkontrinklletzterundletztertpopber',
-                        mapFilter,
-                        errorState,
-                      })
-                    } catch (error) {
-                      errorState.add(error)
+  return (
+    <StyledCard>
+      <StyledCardActions
+        disableActionSpacing
+        onClick={() => setExpanded(!expanded)}
+      >
+        <CardActionTitle>Teilpopulationen</CardActionTitle>
+        <CardActionIconButton
+          data-expanded={expanded}
+          aria-expanded={expanded}
+          aria-label="öffnen"
+        >
+          <Icon title={expanded ? 'schliessen' : 'öffnen'}>
+            <ExpandMoreIcon />
+          </Icon>
+        </CardActionIconButton>
+      </StyledCardActions>
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <StyledCardContent>
+          <DownloadCardButton
+            onClick={async () => {
+              setMessage('Export "Teilpopulationen" wird vorbereitet...')
+              try {
+                const { data } = await app.client.query({
+                  query: await import('./allVTpops').then(m => m.default),
+                })
+                const enrichedData = get(data, 'allVTpops.nodes', []).map(
+                  oWithout => {
+                    let o = { ...oWithout }
+                    let nachBeginnAp = null
+                    if (
+                      o.ap_start_jahr &&
+                      o.bekannt_seit &&
+                      [200, 201, 202].includes(o.status)
+                    ) {
+                      if (o.ap_start_jahr <= o.bekannt_seit) {
+                        nachBeginnAp = true
+                      } else {
+                        nachBeginnAp = false
+                      }
                     }
-                    setEwmMessage('')
-                  }}
-                  error={ewmMessage}
-                />
-              </AutocompleteContainer>
-              <DownloadCardButton
-                onClick={async () => {
-                  setMessage(
-                    'Export "TeilpopulationenTPopUndMassnBerichte" wird vorbereitet...',
-                  )
-                  try {
-                    const { data } = await client.query({
-                      query: await import('./allVTpopPopberundmassnbers').then(
-                        m => m.default,
-                      ),
-                    })
-                    exportModule({
-                      data: get(data, 'allVTpopPopberundmassnbers.nodes', []),
-                      fileName: 'TeilpopulationenTPopUndMassnBerichte',
-                      fileType,
-                      applyMapFilterToExport,
-                      mapFilter,
-                      idKey: 'tpop_id',
-                      xKey: 'tpop_x',
-                      yKey: 'tpop_y',
-                      errorState,
-                    })
-                  } catch (error) {
-                    errorState.add(error)
-                  }
-                  setMessage(null)
-                }}
-              >
-                Teilpopulationen inklusive Teilpopulations- und
-                Massnahmen-Berichten
-              </DownloadCardButton>
-            </StyledCardContent>
-          </Collapse>
-          {!!message && <Message message={message} />}
-        </StyledCard>
-      )
-    }}
-  </Query>
-)
+                    o.angesiedelt_nach_beginn_ap = nachBeginnAp
+                    return o
+                  },
+                )
+                exportModule({
+                  data: enrichedData,
+                  fileName: 'Teilpopulationen',
+                  fileType,
+                  mapFilter,
+                  applyMapFilterToExport,
+                  idKey: 'id',
+                  xKey: 'x',
+                  yKey: 'y',
+                  errorState,
+                })
+              } catch (error) {
+                errorState.add(error)
+              }
+              setMessage(null)
+            }}
+          >
+            Teilpopulationen
+          </DownloadCardButton>
+          <DownloadCardButton
+            onClick={async () => {
+              setMessage(
+                'Export "TeilpopulationenWebGisBun" wird vorbereitet...',
+              )
+              try {
+                const { data } = await app.client.query({
+                  query: await import('./allVTpopWebgisbuns').then(
+                    m => m.default,
+                  ),
+                })
+                exportModule({
+                  data: get(data, 'allVTpopWebgisbuns.nodes', []),
+                  fileName: 'TeilpopulationenWebGisBun',
+                  fileType,
+                  applyMapFilterToExport,
+                  mapFilter,
+                  idKey: 'TPOPID',
+                  xKey: 'TPOP_X',
+                  yKey: 'TPOP_Y',
+                  errorState,
+                })
+              } catch (error) {
+                errorState.add(error)
+              }
+              setMessage(null)
+            }}
+          >
+            Teilpopulationen für WebGIS BUN
+          </DownloadCardButton>
+          <DownloadCardButton
+            onClick={async () => {
+              setMessage('Export "Teilpopulationen" wird vorbereitet...')
+              try {
+                const { data } = await app.client.query({
+                  query: await import('./allVTpopKmls').then(m => m.default),
+                })
+                const enrichedData = get(data, 'allVTpopKmls.nodes', []).map(
+                  oWithout => {
+                    let o = { ...oWithout }
+                    const [bg, lg] = epsg2056to4326(o.x, o.y)
+                    o.laengengrad = lg
+                    o.breitengrad = bg
+                    return o
+                  },
+                )
+                exportModule({
+                  data: enrichedData,
+                  fileName: 'Teilpopulationen',
+                  fileType,
+                  applyMapFilterToExport,
+                  mapFilter,
+                  idKey: 'id',
+                  xKey: 'x',
+                  yKey: 'y',
+                  errorState,
+                  kml: true,
+                })
+              } catch (error) {
+                errorState.add(error)
+              }
+              setMessage(null)
+            }}
+          >
+            <div>Teilpopulationen für Google Earth</div>
+            <div>(beschriftet mit PopNr/TPopNr)</div>
+          </DownloadCardButton>
+          <DownloadCardButton
+            onClick={async () => {
+              setMessage(
+                'Export "TeilpopulationenNachNamen" wird vorbereitet...',
+              )
+              try {
+                const { data } = await app.client.query({
+                  query: await import('./allVTpopKmlnamen').then(
+                    m => m.default,
+                  ),
+                })
+                const enrichedData = get(
+                  data,
+                  'allVTpopKmlnamen.nodes',
+                  [],
+                ).map(oWithout => {
+                  let o = { ...oWithout }
+                  const [bg, lg] = epsg2056to4326(o.x, o.y)
+                  o.laengengrad = lg
+                  o.breitengrad = bg
+                  return o
+                })
+                exportModule({
+                  data: enrichedData,
+                  fileName: 'TeilpopulationenNachNamen',
+                  fileType,
+                  applyMapFilterToExport,
+                  mapFilter,
+                  idKey: 'id',
+                  xKey: 'x',
+                  yKey: 'y',
+                  errorState,
+                  kml: true,
+                })
+              } catch (error) {
+                errorState.add(error)
+              }
+              setMessage(null)
+            }}
+          >
+            <div>Teilpopulationen für Google Earth</div>
+            <div>(beschriftet mit Artname, PopNr/TPopNr)</div>
+          </DownloadCardButton>
+          <DownloadCardButton
+            onClick={async () => {
+              setMessage(
+                'Export "TeilpopulationenVonApArtenOhneBekanntSeit" wird vorbereitet...',
+              )
+              try {
+                const { data } = await app.client.query({
+                  query: await import('./allVTpopOhnebekanntseits').then(
+                    m => m.default,
+                  ),
+                })
+                exportModule({
+                  data: get(data, 'allVTpopOhnebekanntseits.nodes', []),
+                  fileName: 'TeilpopulationenVonApArtenOhneBekanntSeit',
+                  fileType,
+                  applyMapFilterToExport,
+                  mapFilter,
+                  idKey: 'id',
+                  xKey: 'x',
+                  yKey: 'y',
+                  errorState,
+                })
+              } catch (error) {
+                errorState.add(error)
+              }
+              setMessage(null)
+            }}
+          >
+            <div>Teilpopulationen von AP-Arten</div>
+            <div>{'ohne "Bekannt seit"'}</div>
+          </DownloadCardButton>
+          <DownloadCardButton
+            onClick={async () => {
+              setMessage(
+                'Export "TeilpopulationenOhneApBerichtRelevant" wird vorbereitet...',
+              )
+              try {
+                const { data } = await app.client.query({
+                  query: await import('./allVTpopOhneapberichtrelevants').then(
+                    m => m.default,
+                  ),
+                })
+                exportModule({
+                  data: get(data, 'allVTpopOhneapberichtrelevants.nodes', []),
+                  fileName: 'TeilpopulationenOhneApBerichtRelevant',
+                  fileType,
+                  applyMapFilterToExport,
+                  mapFilter,
+                  idKey: 'id',
+                  xKey: 'x',
+                  yKey: 'y',
+                  errorState,
+                })
+              } catch (error) {
+                errorState.add(error)
+              }
+              setMessage(null)
+            }}
+          >
+            <div>Teilpopulationen ohne Eintrag</div>
+            <div>{'im Feld "Für AP-Bericht relevant"'}</div>
+          </DownloadCardButton>
+          <DownloadCardButton
+            onClick={async () => {
+              setMessage(
+                'Export "TeilpopulationenAnzahlMassnahmen" wird vorbereitet...',
+              )
+              try {
+                const { data } = await app.client.query({
+                  query: await import('./allVTpopAnzmassns').then(
+                    m => m.default,
+                  ),
+                })
+                exportModule({
+                  data: get(data, 'allVTpopAnzmassns.nodes', []),
+                  fileName: 'TeilpopulationenAnzahlMassnahmen',
+                  fileType,
+                  applyMapFilterToExport,
+                  mapFilter,
+                  idKey: 'id',
+                  xKey: 'x',
+                  yKey: 'y',
+                  errorState,
+                })
+              } catch (error) {
+                errorState.add(error)
+              }
+              setMessage(null)
+            }}
+          >
+            Anzahl Massnahmen pro Teilpopulation
+          </DownloadCardButton>
+          <DownloadCardButton
+            onClick={async () => {
+              setMessage(
+                'Export "TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht" wird vorbereitet...',
+              )
+              try {
+                const { data } = await app.client.query({
+                  query: await import('./allVTpopAnzkontrinklletzterundletztertpopbers').then(
+                    m => m.default,
+                  ),
+                })
+                exportModule({
+                  data: get(
+                    data,
+                    'allVTpopAnzkontrinklletzterundletztertpopbers.nodes',
+                    [],
+                  ),
+                  fileName:
+                    'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht',
+                  fileType,
+                  applyMapFilterToExport,
+                  mapFilter,
+                  idKey: 'id',
+                  xKey: 'x',
+                  yKey: 'y',
+                  errorState,
+                })
+              } catch (error) {
+                errorState.add(error)
+              }
+              setMessage(null)
+            }}
+            disabled={isRemoteHost}
+            title={
+              isRemoteHost
+                ? 'nur aktiv, wenn apflora lokal installiert wird'
+                : ''
+            }
+          >
+            <div>Teilpopulationen mit:</div>
+            <ul
+              style={{
+                paddingLeft: '18px',
+                marginTop: '5px',
+                marginBottom: '10px',
+              }}
+            >
+              <li>Anzahl Kontrollen</li>
+              <li>letzte Kontrolle</li>
+              <li>letzter Teilpopulationsbericht</li>
+              <li>letzte Zählung</li>
+            </ul>
+            <div>{'= "Eier legende Wollmilchsau"'}</div>
+          </DownloadCardButton>
+          <AutocompleteContainer>
+            <Select
+              value=""
+              field="ewm"
+              label={`"Eier legende Wollmilchsau" für eine Art`}
+              options={artList}
+              saveToDb={async apId => {
+                if (apId === null) return
+                setEwmMessage(
+                  'Export "anzkontrinklletzterundletztertpopber" wird vorbereitet...',
+                )
+                try {
+                  const { data } = await app.client.query({
+                    query: await import('./allVTpopAnzkontrinklletzterundletztertpopbersFiltered').then(
+                      m => m.default,
+                    ),
+                    variables: { apId },
+                  })
+                  exportModule({
+                    data: get(
+                      data,
+                      'allVTpopAnzkontrinklletzterundletztertpopbers.nodes',
+                      [],
+                    ),
+                    fileName: 'anzkontrinklletzterundletztertpopber',
+                    mapFilter,
+                    errorState,
+                  })
+                } catch (error) {
+                  errorState.add(error)
+                }
+                setEwmMessage('')
+              }}
+              error={ewmMessage}
+            />
+          </AutocompleteContainer>
+          <DownloadCardButton
+            onClick={async () => {
+              setMessage(
+                'Export "TeilpopulationenTPopUndMassnBerichte" wird vorbereitet...',
+              )
+              try {
+                const { data } = await app.client.query({
+                  query: await import('./allVTpopPopberundmassnbers').then(
+                    m => m.default,
+                  ),
+                })
+                exportModule({
+                  data: get(data, 'allVTpopPopberundmassnbers.nodes', []),
+                  fileName: 'TeilpopulationenTPopUndMassnBerichte',
+                  fileType,
+                  applyMapFilterToExport,
+                  mapFilter,
+                  idKey: 'tpop_id',
+                  xKey: 'tpop_x',
+                  yKey: 'tpop_y',
+                  errorState,
+                })
+              } catch (error) {
+                errorState.add(error)
+              }
+              setMessage(null)
+            }}
+          >
+            Teilpopulationen inklusive Teilpopulations- und Massnahmen-Berichten
+          </DownloadCardButton>
+        </StyledCardContent>
+      </Collapse>
+      {!!message && <Message message={message} />}
+    </StyledCard>
+  )
+}
 
 export default enhance(Teilpopulationen)
