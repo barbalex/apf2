@@ -1,16 +1,15 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
-import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import merge from 'lodash/merge'
 import format from 'date-fns/format'
+import compose from 'recompose/compose'
 
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import getActiveNodes from '../../../modules/getActiveNodes'
-import data1Gql from './data1'
-import data2Gql from './data2'
+import withData1 from './withData1'
+import withData2 from './withData2'
 import fnslogo from './fnslogo.png'
 import AvList from './AvList'
 import AktPopList from './AktPopList'
@@ -103,101 +102,85 @@ const SecondPageText = styled.p`
   hyphens: auto;
 `
 
+const enhance = compose(
+  withData1,
+  withData2,
+)
+
 const ApberForYear = ({
   activeNodeArray,
+  data1,
+  data2,
 }: {
   activeNodeArray: Array<String>,
+  data1: Object,
+  data2: Object,
 }) => {
-  const {
-    projekt: projektId,
-    apberuebersicht: apberuebersichtId,
-  } = getActiveNodes(activeNodeArray)
+  if (data1.loading)
+    return (
+      <Container>
+        <LoadingContainer>Lade...</LoadingContainer>
+      </Container>
+    )
+  if (data1.error) return `Fehler: ${data1.error.message}`
+
+  const jahr = get(data1, 'apberuebersichtById.jahr', 0)
+
+  if (data2.loading)
+    return (
+      <Container>
+        <LoadingContainer>Lade...</LoadingContainer>
+      </Container>
+    )
+  if (data2.error) return `Fehler: ${data2.error.message}`
+
+  const data = merge(data1, data2)
+  const apberuebersicht = get(data, 'apberuebersichtById')
+  const aps = sortBy(
+    get(data, 'projektById.apsByProjId.nodes', []).filter(
+      ap =>
+        !!get(ap, 'apbersByApId.nodes[0]', null) &&
+        !!get(ap, 'apbersByApId.nodes[0].id'),
+    ),
+    ap => get(ap, 'aeEigenschaftenByArtId.artname'),
+  )
 
   return (
-    <Query query={data1Gql} variables={{ apberuebersichtId }}>
-      {({ loading, error, data: data1 }) => {
-        if (loading)
-          return (
-            <Container>
-              <LoadingContainer>Lade...</LoadingContainer>
-            </Container>
-          )
-        if (error) return `Fehler: ${error.message}`
-
-        const jahr = get(data1, 'apberuebersichtById.jahr', 0)
-
-        return (
-          <Query query={data2Gql} variables={{ projektId, jahr }}>
-            {({ loading, error, data: data2 }) => {
-              if (loading)
-                return (
-                  <Container>
-                    <LoadingContainer>Lade...</LoadingContainer>
-                  </Container>
-                )
-              if (error) return `Fehler: ${error.message}`
-
-              const data = merge(data1, data2)
-              const apberuebersicht = get(data, 'apberuebersichtById')
-              const aps = sortBy(
-                get(data, 'projektById.apsByProjId.nodes', []).filter(
-                  ap =>
-                    !!get(ap, 'apbersByApId.nodes[0]', null) &&
-                    !!get(ap, 'apbersByApId.nodes[0].id'),
-                ),
-                ap => get(ap, 'aeEigenschaftenByArtId.artname'),
-              )
-              const jahr = get(data, 'apberuebersichtById.jahr')
-
-              return (
-                <ErrorBoundary>
-                  <Container>
-                    <ContentContainer>
-                      <FirstPageTitle>
-                        Umsetzung der Aktionspläne Flora
-                        <br />
-                        im Kanton Zürich
-                      </FirstPageTitle>
-                      <FirstPageSubTitle
-                      >{`Jahresbericht ${jahr}`}</FirstPageSubTitle>
-                      <FirstPageFnsLogo src={fnslogo} alt="FNS" width="350" />
-                      <FirstPageDate>
-                        {format(new Date(), 'DD.MM.YYYY')}
-                      </FirstPageDate>
-                      <FirstPageBearbeiter>
-                        Karin Marti, topos
-                      </FirstPageBearbeiter>
-                      {!!apberuebersicht.bemerkungen && (
-                        <SecondPage>
-                          <SecondPageTop />
-                          <SecondPageTitle>Zusammenfassung</SecondPageTitle>
-                          <SecondPageText>
-                            {apberuebersicht.bemerkungen}
-                          </SecondPageText>
-                        </SecondPage>
-                      )}
-                      <AvList data={data} />
-                      <ErfolgList jahr={jahr} data={data} />
-                      <AktPopList data={data} />
-                      {aps.map(ap => (
-                        <ApberForAp
-                          key={ap.id}
-                          apId={ap.id}
-                          jahr={jahr}
-                          apData={ap}
-                          isSubReport={true}
-                        />
-                      ))}
-                    </ContentContainer>
-                  </Container>
-                </ErrorBoundary>
-              )
-            }}
-          </Query>
-        )
-      }}
-    </Query>
+    <ErrorBoundary>
+      <Container>
+        <ContentContainer>
+          <FirstPageTitle>
+            Umsetzung der Aktionspläne Flora
+            <br />
+            im Kanton Zürich
+          </FirstPageTitle>
+          <FirstPageSubTitle>{`Jahresbericht ${jahr}`}</FirstPageSubTitle>
+          <FirstPageFnsLogo src={fnslogo} alt="FNS" width="350" />
+          <FirstPageDate>{format(new Date(), 'DD.MM.YYYY')}</FirstPageDate>
+          <FirstPageBearbeiter>Karin Marti, topos</FirstPageBearbeiter>
+          {!!apberuebersicht.bemerkungen && (
+            <SecondPage>
+              <SecondPageTop />
+              <SecondPageTitle>Zusammenfassung</SecondPageTitle>
+              <SecondPageText>{apberuebersicht.bemerkungen}</SecondPageText>
+            </SecondPage>
+          )}
+          <AvList data={data} />
+          <ErfolgList jahr={jahr} data={data} />
+          <AktPopList data={data} />
+          {aps.map(ap => (
+            <ApberForAp
+              key={ap.id}
+              apId={ap.id}
+              jahr={jahr}
+              apData={ap}
+              isSubReport={true}
+            />
+          ))}
+        </ContentContainer>
+      </Container>
+    </ErrorBoundary>
   )
 }
 
-export default ApberForYear
+export default enhance(ApberForYear)
