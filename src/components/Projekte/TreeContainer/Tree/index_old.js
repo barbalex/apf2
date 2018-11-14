@@ -2,7 +2,7 @@
 /**
  * need to keep class because of ref
  */
-import React, { Component, useEffect } from 'react'
+import React, { createRef, Component } from 'react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
@@ -478,24 +478,7 @@ const enhance = compose(
   }),
 )
 
-const TreeContainer = ({
-  treeName,
-  handleClick,
-  data,
-  nodes,
-  activeNodes,
-  activeNode,
-  activeApfloraLayers,
-  loading,
-  moving,
-  openNodes,
-  copying,
-  popLabelUsingNr,
-  tpopLabelUsingNr,
-  mapFilter,
-  mapIdsFiltered,
-  deleteState,
-}: {
+type Props = {
   treeName: String,
   flex: Number,
   handleClick: () => void,
@@ -515,195 +498,242 @@ const TreeContainer = ({
   mapIdsFiltered: Array<String>,
   deleteState: Object,
   errorState: Object,
-}) => {
-  const datasetToDelete = deleteState.state.toDelete
-  const deleteDatasetModalIsVisible = !!datasetToDelete.id
-  const tree = get(data, treeName)
-  const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
-  const token = get(data, 'user.token', null)
-  //console.log('TreeContainer rendering')
+}
 
-  return (
-    <ErrorBoundary>
-      <Container>
-        {deleteDatasetModalIsVisible && (
-          <DeleteDatasetModal tree={tree} token={token} />
-        )}
-        <LabelFilterContainer>
-          <LabelFilter
-            treeName={treeName}
-            nodes={nodes}
-            activeNode={activeNode}
-          />
-          {!!activeNodes.projekt && <ApFilter treeName={treeName} />}
-        </LabelFilterContainer>
-        <InnerTreeContainer>
-          <Tree
-            treeName={treeName}
-            data={data}
+class TreeContainer extends Component<Props> {
+  constructor(props) {
+    super(props)
+    // TODO: what is this ref used for?
+    this.tree = createRef()
+  }
+
+  render() {
+    const {
+      treeName,
+      handleClick,
+      data,
+      nodes,
+      activeNodes,
+      activeNode,
+      activeApfloraLayers,
+      loading,
+      moving,
+      openNodes,
+      copying,
+      popLabelUsingNr,
+      tpopLabelUsingNr,
+      mapFilter,
+      mapIdsFiltered,
+      deleteState,
+    } = this.props
+    const datasetToDelete = deleteState.state.toDelete
+    const deleteDatasetModalIsVisible = !!datasetToDelete.id
+    const tree = get(data, treeName)
+    const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
+    const token = get(data, 'user.token', null)
+    //console.log('TreeContainer rendering')
+
+    return (
+      <ErrorBoundary>
+        <Container>
+          {deleteDatasetModalIsVisible && (
+            <DeleteDatasetModal tree={tree} token={token} />
+          )}
+          <LabelFilterContainer>
+            <LabelFilter
+              treeName={treeName}
+              nodes={nodes}
+              activeNode={activeNode}
+            />
+            {!!activeNodes.projekt && <ApFilter treeName={treeName} />}
+          </LabelFilterContainer>
+          <InnerTreeContainer
+            // $FlowIssue
+            ref={this.tree}
+          >
+            <Tree
+              treeName={treeName}
+              data={data}
+              tree={tree}
+              nodes={nodes}
+              // TODO: is this loading needed?
+              loading={loading}
+              activeNodeArray={activeNodeArray}
+              openNodes={openNodes}
+              activeNodes={activeNodes}
+              activeApfloraLayers={activeApfloraLayers}
+              moving={moving}
+              copying={copying}
+              mapFilter={mapFilter}
+              mapIdsFiltered={mapIdsFiltered}
+            />
+          </InnerTreeContainer>
+          <CmApFolder onClick={handleClick} tree={tree} token={token} />
+          <CmAp
+            onClick={handleClick}
             tree={tree}
-            nodes={nodes}
-            // TODO: is this loading needed?
-            loading={loading}
-            activeNodeArray={activeNodeArray}
-            openNodes={openNodes}
-            activeNodes={activeNodes}
+            token={token}
+            moving={moving}
             activeApfloraLayers={activeApfloraLayers}
+            popLabelUsingNr={popLabelUsingNr}
+            tpopLabelUsingNr={tpopLabelUsingNr}
+          />
+          <CmApberuebersichtFolder
+            onClick={handleClick}
+            tree={tree}
+            token={token}
+          />
+          <CmApberuebersicht onClick={handleClick} tree={tree} token={token} />
+          <CmAssozartFolder onClick={handleClick} tree={tree} token={token} />
+          <CmEkfzaehleinheitFolder
+            onClick={handleClick}
+            tree={tree}
+            token={token}
+          />
+          <CmAssozart onClick={handleClick} tree={tree} token={token} />
+          <CmEkfzaehleinheit onClick={handleClick} tree={tree} token={token} />
+          <CmApartFolder onClick={handleClick} tree={tree} token={token} />
+          <CmApart onClick={handleClick} tree={tree} token={token} />
+          <CmBeobZugeordnetFolder
+            onClick={handleClick}
+            tree={tree}
+            token={token}
+            activeApfloraLayers={activeApfloraLayers}
+          />
+          <CmBerFolder onClick={handleClick} tree={tree} token={token} />
+          <CmBer onClick={handleClick} tree={tree} token={token} />
+          <CmApberFolder onClick={handleClick} tree={tree} token={token} />
+          <CmApber onClick={handleClick} tree={tree} token={token} />
+          <CmErfkritFolder onClick={handleClick} tree={tree} token={token} />
+          <CmErfkrit onClick={handleClick} tree={tree} token={token} />
+          <CmZielFolder onClick={handleClick} tree={tree} token={token} />
+          <CmZielJahrFolder onClick={handleClick} tree={tree} token={token} />
+          <CmZiel onClick={handleClick} tree={tree} token={token} />
+          <CmZielBerFolder onClick={handleClick} tree={tree} token={token} />
+          <CmZielBer onClick={handleClick} tree={tree} token={token} />
+          <CmPopFolder
+            onClick={handleClick}
+            tree={tree}
+            token={token}
             moving={moving}
             copying={copying}
-            mapFilter={mapFilter}
-            mapIdsFiltered={mapIdsFiltered}
           />
-        </InnerTreeContainer>
-        <CmApFolder onClick={handleClick} tree={tree} token={token} />
-        <CmAp
-          onClick={handleClick}
-          tree={tree}
-          token={token}
-          moving={moving}
-          activeApfloraLayers={activeApfloraLayers}
-          popLabelUsingNr={popLabelUsingNr}
-          tpopLabelUsingNr={tpopLabelUsingNr}
-        />
-        <CmApberuebersichtFolder
-          onClick={handleClick}
-          tree={tree}
-          token={token}
-        />
-        <CmApberuebersicht onClick={handleClick} tree={tree} token={token} />
-        <CmAssozartFolder onClick={handleClick} tree={tree} token={token} />
-        <CmEkfzaehleinheitFolder
-          onClick={handleClick}
-          tree={tree}
-          token={token}
-        />
-        <CmAssozart onClick={handleClick} tree={tree} token={token} />
-        <CmEkfzaehleinheit onClick={handleClick} tree={tree} token={token} />
-        <CmApartFolder onClick={handleClick} tree={tree} token={token} />
-        <CmApart onClick={handleClick} tree={tree} token={token} />
-        <CmBeobZugeordnetFolder
-          onClick={handleClick}
-          tree={tree}
-          token={token}
-          activeApfloraLayers={activeApfloraLayers}
-        />
-        <CmBerFolder onClick={handleClick} tree={tree} token={token} />
-        <CmBer onClick={handleClick} tree={tree} token={token} />
-        <CmApberFolder onClick={handleClick} tree={tree} token={token} />
-        <CmApber onClick={handleClick} tree={tree} token={token} />
-        <CmErfkritFolder onClick={handleClick} tree={tree} token={token} />
-        <CmErfkrit onClick={handleClick} tree={tree} token={token} />
-        <CmZielFolder onClick={handleClick} tree={tree} token={token} />
-        <CmZielJahrFolder onClick={handleClick} tree={tree} token={token} />
-        <CmZiel onClick={handleClick} tree={tree} token={token} />
-        <CmZielBerFolder onClick={handleClick} tree={tree} token={token} />
-        <CmZielBer onClick={handleClick} tree={tree} token={token} />
-        <CmPopFolder
-          onClick={handleClick}
-          tree={tree}
-          token={token}
-          moving={moving}
-          copying={copying}
-        />
-        <CmPop
-          onClick={handleClick}
-          tree={tree}
-          token={token}
-          moving={moving}
-          copying={copying}
-        />
-        <CmPopmassnberFolder onClick={handleClick} tree={tree} token={token} />
-        <CmPopmassnber onClick={handleClick} tree={tree} token={token} />
-        <CmPopberFolder onClick={handleClick} tree={tree} token={token} />
-        <CmPopber onClick={handleClick} tree={tree} token={token} />
-        <CmProjekt onClick={handleClick} tree={tree} token={token} />
-        <CmTpopFolder
-          onClick={handleClick}
-          tree={tree}
-          token={token}
-          moving={moving}
-          copying={copying}
-        />
-        <CmTpop
-          onClick={handleClick}
-          tree={tree}
-          token={token}
-          moving={moving}
-          copying={copying}
-        />
-        <CmTpopberFolder onClick={handleClick} tree={tree} token={token} />
-        <CmTpopber onClick={handleClick} tree={tree} token={token} />
-        <CmBeobZugeordnet onClick={handleClick} tree={tree} token={token} />
-        <CmBeobnichtbeurteilt onClick={handleClick} tree={tree} token={token} />
-        <CmBeobNichtZuzuordnen
-          onClick={handleClick}
-          tree={tree}
-          token={token}
-        />
-        <CmTpopfreiwkontrFolder
-          onClick={handleClick}
-          tree={tree}
-          token={token}
-          moving={moving}
-          copying={copying}
-        />
-        <CmTpopfreiwkontr
-          onClick={handleClick}
-          tree={tree}
-          token={token}
-          copying={copying}
-        />
-        <CmTpopfreiwkontrzaehlFolder
-          onClick={handleClick}
-          tree={tree}
-          token={token}
-        />
-        <CmTpopfreiwkontrzaehl
-          onClick={handleClick}
-          tree={tree}
-          token={token}
-        />
-        <CmTpopfeldkontrFolder
-          onClick={handleClick}
-          tree={tree}
-          token={token}
-          moving={moving}
-          copying={copying}
-        />
-        <CmTpopfeldkontr
-          onClick={handleClick}
-          tree={tree}
-          token={token}
-          copying={copying}
-        />
-        <CmTpopfeldkontrzaehlFolder
-          onClick={handleClick}
-          tree={tree}
-          token={token}
-        />
-        <CmTpopfeldkontrzaehl onClick={handleClick} tree={tree} token={token} />
-        <CmTpopmassnberFolder onClick={handleClick} tree={tree} token={token} />
-        <CmTpopmassnber onClick={handleClick} tree={tree} token={token} />
-        <CmTpopmassnFolder
-          onClick={handleClick}
-          tree={tree}
-          token={token}
-          moving={moving}
-          copying={copying}
-        />
-        <CmTpopmassn
-          onClick={handleClick}
-          tree={tree}
-          token={token}
-          copying={copying}
-        />
-        <CmUserFolder onClick={handleClick} tree={tree} token={token} />
-        <CmUser onClick={handleClick} tree={tree} token={token} />
-        <CmAdresseFolder onClick={handleClick} tree={tree} token={token} />
-        <CmAdresse onClick={handleClick} tree={tree} token={token} />
-      </Container>
-    </ErrorBoundary>
-  )
+          <CmPop
+            onClick={handleClick}
+            tree={tree}
+            token={token}
+            moving={moving}
+            copying={copying}
+          />
+          <CmPopmassnberFolder
+            onClick={handleClick}
+            tree={tree}
+            token={token}
+          />
+          <CmPopmassnber onClick={handleClick} tree={tree} token={token} />
+          <CmPopberFolder onClick={handleClick} tree={tree} token={token} />
+          <CmPopber onClick={handleClick} tree={tree} token={token} />
+          <CmProjekt onClick={handleClick} tree={tree} token={token} />
+          <CmTpopFolder
+            onClick={handleClick}
+            tree={tree}
+            token={token}
+            moving={moving}
+            copying={copying}
+          />
+          <CmTpop
+            onClick={handleClick}
+            tree={tree}
+            token={token}
+            moving={moving}
+            copying={copying}
+          />
+          <CmTpopberFolder onClick={handleClick} tree={tree} token={token} />
+          <CmTpopber onClick={handleClick} tree={tree} token={token} />
+          <CmBeobZugeordnet onClick={handleClick} tree={tree} token={token} />
+          <CmBeobnichtbeurteilt
+            onClick={handleClick}
+            tree={tree}
+            token={token}
+          />
+          <CmBeobNichtZuzuordnen
+            onClick={handleClick}
+            tree={tree}
+            token={token}
+          />
+          <CmTpopfreiwkontrFolder
+            onClick={handleClick}
+            tree={tree}
+            token={token}
+            moving={moving}
+            copying={copying}
+          />
+          <CmTpopfreiwkontr
+            onClick={handleClick}
+            tree={tree}
+            token={token}
+            copying={copying}
+          />
+          <CmTpopfreiwkontrzaehlFolder
+            onClick={handleClick}
+            tree={tree}
+            token={token}
+          />
+          <CmTpopfreiwkontrzaehl
+            onClick={handleClick}
+            tree={tree}
+            token={token}
+          />
+          <CmTpopfeldkontrFolder
+            onClick={handleClick}
+            tree={tree}
+            token={token}
+            moving={moving}
+            copying={copying}
+          />
+          <CmTpopfeldkontr
+            onClick={handleClick}
+            tree={tree}
+            token={token}
+            copying={copying}
+          />
+          <CmTpopfeldkontrzaehlFolder
+            onClick={handleClick}
+            tree={tree}
+            token={token}
+          />
+          <CmTpopfeldkontrzaehl
+            onClick={handleClick}
+            tree={tree}
+            token={token}
+          />
+          <CmTpopmassnberFolder
+            onClick={handleClick}
+            tree={tree}
+            token={token}
+          />
+          <CmTpopmassnber onClick={handleClick} tree={tree} token={token} />
+          <CmTpopmassnFolder
+            onClick={handleClick}
+            tree={tree}
+            token={token}
+            moving={moving}
+            copying={copying}
+          />
+          <CmTpopmassn
+            onClick={handleClick}
+            tree={tree}
+            token={token}
+            copying={copying}
+          />
+          <CmUserFolder onClick={handleClick} tree={tree} token={token} />
+          <CmUser onClick={handleClick} tree={tree} token={token} />
+          <CmAdresseFolder onClick={handleClick} tree={tree} token={token} />
+          <CmAdresse onClick={handleClick} tree={tree} token={token} />
+        </Container>
+      </ErrorBoundary>
+    )
+  }
 }
 
 export default enhance(TreeContainer)
