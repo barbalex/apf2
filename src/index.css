@@ -379,10 +379,10 @@ body {
   border-left: 0 !important;
 }
 
-/*
-.reflex-element:not(.karte) > div {
-  overflow: hidden;
-}*/
+
+.reflex-element:not(.karte) {
+  overflow-x: hidden;
+}
 
 .reflex-splitter {
   background-color: #fffde7 !important;
