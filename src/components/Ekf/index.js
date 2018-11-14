@@ -79,6 +79,7 @@ const EkfContainer = ({ errorState }: { errorState: Object }) => (
           ? dataWithDateByAdresseIdGql
           : dataWithDateByUserNameGql
       }
+      console.log('Ekf', { tabs, treeFlex })
 
       return (
         <Query query={query} variables={variables}>
@@ -123,11 +124,13 @@ const EkfContainer = ({ errorState }: { errorState: Object }) => (
                     )}
                     {tabs.includes('daten') && (
                       <ReflexElementForEKF
+                        flex={1 - treeFlex}
+                        orientation="vertical"
                         propagateDimensions={true}
                         renderOnResizeRate={100}
                         renderOnResize={true}
                       >
-                        {tpopkontrId && (
+                        {tpopkontrId ? (
                           <Suspense fallback={<Fallback />}>
                             <Tpopfreiwkontr
                               id={activeNodeArray[9]}
@@ -139,6 +142,8 @@ const EkfContainer = ({ errorState }: { errorState: Object }) => (
                               dimensions={{ width: 1000 }}
                             />
                           </Suspense>
+                        ) : (
+                          <div />
                         )}
                       </ReflexElementForEKF>
                     )}
