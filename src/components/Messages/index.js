@@ -6,13 +6,13 @@ import Button from '@material-ui/core/Button'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import styled from 'styled-components'
-import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import Linkify from 'react-linkify'
+import app from 'ampersand-app'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
-import userGql from './user'
-import messagesGql from './messages'
+import withLocalData from './withLocalData'
+import withData from './withData'
 import createUsermessage from './createUsermessage'
 
 const StyledDialog = styled(Dialog)`
@@ -50,24 +50,32 @@ const OkButton = styled(Button)`
 `
 
 const enhance = compose(
+  withLocalData,
+  withData,
   withHandlers({
-    onClickRead: () => async (message, userName, client, refetch) => {
-      await client.mutate({
+    onClickRead: ({ data, localData }) => async message => {
+      const userName = get(localData, 'user.name')
+      await app.client.mutate({
         mutation: createUsermessage,
         variables: { userName, id: message.id },
       })
-      refetch()
+      data.refetch()
     },
-    onClickReadAll: () => async (unreadMessages, userName, client, refetch) => {
+    onClickReadAll: ({ data, localData }) => async () => {
+      const userName = get(localData, 'user.name')
+      const allMessages = get(data, 'allMessages.nodes', [])
+      const unreadMessages = allMessages.filter(
+        m => get(m, 'usermessagesByMessageId.nodes', []).length === 0,
+      )
       await Promise.all(
         unreadMessages.map(async message => {
-          client.mutate({
+          await app.client.mutate({
             mutation: createUsermessage,
             variables: { userName, id: message.id },
           })
         }),
       )
-      refetch()
+      return data.refetch()
     },
   }),
 )
@@ -76,88 +84,63 @@ const UserMessages = ({
   open,
   onClickRead,
   onClickReadAll,
+  localData,
+  data,
 }: {
   open: Boolean,
   onClickRead: () => {},
   onClickReadAll: () => {},
-}) => (
-  <Query query={userGql}>
-    {({ error, data: userData }) => {
-      if (error) return `Fehler: ${error.message}`
+  localData: Object,
+  data: Object,
+}) => {
+  if (localData.error) return `Fehler: ${localData.error.message}`
 
-      const userName = get(userData, 'user.name')
+  const userName = get(localData, 'user.name')
 
-      return (
-        <Query query={messagesGql} variables={{ name: userName }}>
-          {({ loading, error, data: messagesData, client, refetch }) => {
-            if (error) {
-              if (error.message.includes('keine Berechtigung')) return null
-              return `Fehler: ${error.message}`
-            }
+  if (data.error) {
+    if (data.error.message.includes('keine Berechtigung')) return null
+    return `Fehler: ${data.error.message}`
+  }
 
-            const allMessages = get(messagesData, 'allMessages.nodes', [])
-            const unreadMessages = allMessages.filter(
-              m => get(m, 'usermessagesByMessageId.nodes', []).length === 0,
-            )
-            const updateAvailable = get(messagesData, 'updateAvailable')
+  const allMessages = get(data, 'allMessages.nodes', [])
+  const unreadMessages = allMessages.filter(
+    m => get(m, 'usermessagesByMessageId.nodes', []).length === 0,
+  )
+  const updateAvailable = get(data, 'updateAvailable')
 
+  return (
+    <ErrorBoundary>
+      <StyledDialog
+        open={
+          unreadMessages.length > 0 &&
+          !!userName &&
+          // do not open if update is available
+          updateAvailable === false &&
+          // don't show while loading data
+          !data.loading
+        }
+        aria-labelledby="dialog-title"
+      >
+        <TitleRow>
+          <DialogTitle id="dialog-title">Letzte Anpassungen:</DialogTitle>
+          <AllOkButton onClick={onClickReadAll}>alle o.k.</AllOkButton>
+        </TitleRow>
+        <div>
+          {unreadMessages.map((m, index) => {
+            const paddBottom = index === unreadMessages.length - 1
             return (
-              <ErrorBoundary>
-                <StyledDialog
-                  open={
-                    unreadMessages.length > 0 &&
-                    !!userName &&
-                    // do not open if update is available
-                    updateAvailable === false &&
-                    // don't show while loading data
-                    !loading
-                  }
-                  aria-labelledby="dialog-title"
-                >
-                  <TitleRow>
-                    <DialogTitle id="dialog-title">
-                      Letzte Anpassungen:
-                    </DialogTitle>
-                    <AllOkButton
-                      onClick={() =>
-                        onClickReadAll(
-                          unreadMessages,
-                          userName,
-                          client,
-                          refetch,
-                        )
-                      }
-                    >
-                      alle o.k.
-                    </AllOkButton>
-                  </TitleRow>
-                  <div>
-                    {unreadMessages.map((m, index) => {
-                      const paddBottom = index === unreadMessages.length - 1
-                      return (
-                        <MessageRow key={m.id} paddBottom={paddBottom}>
-                          <Linkify properties={{ target: '_blank' }}>
-                            <MessageDiv>{m.message}</MessageDiv>
-                          </Linkify>
-                          <OkButton
-                            onClick={() =>
-                              onClickRead(m, userName, client, refetch)
-                            }
-                          >
-                            o.k.
-                          </OkButton>
-                        </MessageRow>
-                      )
-                    })}
-                  </div>
-                </StyledDialog>
-              </ErrorBoundary>
+              <MessageRow key={m.id} paddBottom={paddBottom}>
+                <Linkify properties={{ target: '_blank' }}>
+                  <MessageDiv>{m.message}</MessageDiv>
+                </Linkify>
+                <OkButton onClick={() => onClickRead(m)}>o.k.</OkButton>
+              </MessageRow>
             )
-          }}
-        </Query>
-      )
-    }}
-  </Query>
-)
+          })}
+        </div>
+      </StyledDialog>
+    </ErrorBoundary>
+  )
+}
 
 export default enhance(UserMessages)
