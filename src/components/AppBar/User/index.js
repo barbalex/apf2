@@ -1,7 +1,7 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
-import { Query, Mutation } from 'react-apollo'
+import { Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
@@ -234,119 +234,107 @@ const User = ({
       <DialogTitle id="simple-dialog-title">{`Benutzer: ${username}`}</DialogTitle>
       <ErrorBoundary>
         <Container>
-          <Mutation mutation={updateUserByIdGql}>
-            {(updateUser, { data }) => (
-              <FieldsContainer>
-                <TextField
-                  key={`${row.id}email`}
-                  label="Email"
-                  value={row.email}
-                  saveToDb={value =>
-                    saveToDb({
-                      row,
-                      field: 'email',
-                      value,
-                      updateUser,
-                    })
-                  }
-                  error={errors.email}
-                  helperText="Bitte aktuell halten, damit wir Sie bei Bedarf kontaktieren können"
-                />
-                {!!passwordMessage && (
-                  <PasswordMessage>{passwordMessage}</PasswordMessage>
-                )}
-                {!editPassword && !passwordMessage && (
-                  <div>
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      onClick={() => {
-                        setEditPassword(true)
-                        setPasswordMessage('')
-                      }}
-                    >
-                      Passwort ändern
-                    </Button>
-                  </div>
-                )}
-                {editPassword && (
-                  <FormControl
-                    error={!!passwordErrorText}
-                    fullWidth
-                    aria-describedby="passwortHelper"
-                  >
-                    <InputLabel htmlFor="passwort">Passwort</InputLabel>
-                    <StyledInput
-                      id="passwort"
-                      type={showPass ? 'text' : 'password'}
-                      defaultValue={password}
-                      onBlur={onBlurPassword}
-                      onKeyPress={e => {
-                        if (e.key === 'Enter') {
-                          onBlurPassword(e)
-                        }
-                      }}
-                      autoComplete="current-password"
-                      autoCorrect="off"
-                      spellCheck="false"
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={() => setShowPass(!showPass)}
-                            onMouseDown={e => e.preventDefault()}
-                            title={showPass ? 'verstecken' : 'anzeigen'}
-                          >
-                            {showPass ? <VisibilityOff /> : <Visibility />}
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                    />
-                    <FormHelperText id="passwortHelper">
-                      {passwordErrorText}
-                    </FormHelperText>
-                  </FormControl>
-                )}
-                {editPassword && !!password && (
-                  <FormControl
-                    error={!!password2ErrorText}
-                    fullWidth
-                    aria-describedby="passwortHelper"
-                  >
-                    <InputLabel htmlFor="passwort">
-                      Passwort wiederholen
-                    </InputLabel>
-                    <StyledInput
-                      id="passwort2"
-                      type={showPass2 ? 'text' : 'password'}
-                      defaultValue={password2}
-                      onBlur={onBlurPassword2}
-                      onKeyPress={e => {
-                        if (e.key === 'Enter') {
-                          onBlurPassword(e)
-                        }
-                      }}
-                      autoCorrect="off"
-                      spellCheck="false"
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={() => setShowPass2(!showPass2)}
-                            onMouseDown={e => e.preventDefault()}
-                            title={showPass2 ? 'verstecken' : 'anzeigen'}
-                          >
-                            {showPass2 ? <VisibilityOff /> : <Visibility />}
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                    />
-                    <FormHelperText id="passwortHelper">
-                      {password2ErrorText}
-                    </FormHelperText>
-                  </FormControl>
-                )}
-              </FieldsContainer>
+          <FieldsContainer>
+            <TextField
+              key={`${row.id}email`}
+              name="email"
+              label="Email"
+              value={row.email}
+              saveToDb={saveToDb}
+              error={errors.email}
+              helperText="Bitte aktuell halten, damit wir Sie bei Bedarf kontaktieren können"
+            />
+            {!!passwordMessage && (
+              <PasswordMessage>{passwordMessage}</PasswordMessage>
             )}
-          </Mutation>
+            {!editPassword && !passwordMessage && (
+              <div>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={() => {
+                    setEditPassword(true)
+                    setPasswordMessage('')
+                  }}
+                >
+                  Passwort ändern
+                </Button>
+              </div>
+            )}
+            {editPassword && (
+              <FormControl
+                error={!!passwordErrorText}
+                fullWidth
+                aria-describedby="passwortHelper"
+              >
+                <InputLabel htmlFor="passwort">Passwort</InputLabel>
+                <StyledInput
+                  id="passwort"
+                  type={showPass ? 'text' : 'password'}
+                  defaultValue={password}
+                  onBlur={onBlurPassword}
+                  onKeyPress={e => {
+                    if (e.key === 'Enter') {
+                      onBlurPassword(e)
+                    }
+                  }}
+                  autoComplete="current-password"
+                  autoCorrect="off"
+                  spellCheck="false"
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowPass(!showPass)}
+                        onMouseDown={e => e.preventDefault()}
+                        title={showPass ? 'verstecken' : 'anzeigen'}
+                      >
+                        {showPass ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                />
+                <FormHelperText id="passwortHelper">
+                  {passwordErrorText}
+                </FormHelperText>
+              </FormControl>
+            )}
+            {editPassword && !!password && (
+              <FormControl
+                error={!!password2ErrorText}
+                fullWidth
+                aria-describedby="passwortHelper"
+              >
+                <InputLabel htmlFor="passwort">Passwort wiederholen</InputLabel>
+                <StyledInput
+                  id="passwort2"
+                  type={showPass2 ? 'text' : 'password'}
+                  defaultValue={password2}
+                  onBlur={onBlurPassword2}
+                  onKeyPress={e => {
+                    if (e.key === 'Enter') {
+                      onBlurPassword(e)
+                    }
+                  }}
+                  autoCorrect="off"
+                  spellCheck="false"
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowPass2(!showPass2)}
+                        onMouseDown={e => e.preventDefault()}
+                        title={showPass2 ? 'verstecken' : 'anzeigen'}
+                      >
+                        {showPass2 ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                />
+                <FormHelperText id="passwortHelper">
+                  {password2ErrorText}
+                </FormHelperText>
+              </FormControl>
+            )}
+          </FieldsContainer>
         </Container>
       </ErrorBoundary>
       <DialogActions>

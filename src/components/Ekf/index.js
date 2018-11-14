@@ -79,7 +79,6 @@ const EkfContainer = ({ errorState }: { errorState: Object }) => (
           ? dataWithDateByAdresseIdGql
           : dataWithDateByUserNameGql
       }
-      console.log('Ekf', { tabs, treeFlex })
 
       return (
         <Query query={query} variables={variables}>
