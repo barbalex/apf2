@@ -2,16 +2,14 @@
 /**
  * need to keep class because of ref
  */
-import React, { Component, useEffect } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
 import clone from 'lodash/clone'
 import get from 'lodash/get'
 import uniq from 'lodash/uniq'
 import isEqual from 'lodash/isEqual'
 import app from 'ampersand-app'
-import withLifecycle from '@hocs/with-lifecycle'
 
 import LabelFilter from './LabelFilter'
 import ApFilter from './ApFilter'
@@ -177,26 +175,102 @@ const showMapIfNotYetVisible = (projekteTabs: Array<String>) => {
 const enhance = compose(
   withDeleteState,
   withErrorState,
-  withHandlers({
-    handleClick: ({
-      data: dbData,
-      treeName,
-      activeNode,
-      activeNodes,
-      refetchTree,
-      activeApfloraLayers,
-      setActiveApfloraLayers,
-      activeOverlays,
-      setActiveOverlays,
-      setIdOfTpopBeingLocalized,
-      popLabelUsingNr,
-      setPopLabelUsingNr,
-      tpopLabelUsingNr,
-      setTpopLabelUsingNr,
-      deleteState,
-      errorState,
-      nodes,
-    }) => (e, data, element) => {
+)
+
+const TreeContainer = ({
+  data: dbData,
+  treeName,
+  activeNode,
+  activeNodes,
+  refetchTree,
+  activeApfloraLayers,
+  setActiveApfloraLayers,
+  activeOverlays,
+  setActiveOverlays,
+  setIdOfTpopBeingLocalized,
+  popLabelUsingNr,
+  setPopLabelUsingNr,
+  tpopLabelUsingNr,
+  setTpopLabelUsingNr,
+  deleteState,
+  errorState,
+  nodes,
+  data,
+  loading,
+  moving,
+  openNodes,
+  copying,
+  mapFilter,
+  mapIdsFiltered,
+}: {
+  treeName: String,
+  flex: Number,
+  handleClick: () => void,
+  data: Object,
+  nodes: Array<Object>,
+  activeNodes: Object,
+  activeNode: Object,
+  activeApfloraLayers: Array<String>,
+  loading: Boolean,
+  moving: Object,
+  openNodes: Array<string>,
+  copying: Object,
+  refetchTree: () => void,
+  popLabelUsingNr: Boolean,
+  tpopLabelUsingNr: Boolean,
+  mapFilter: Object,
+  mapIdsFiltered: Array<String>,
+  deleteState: Object,
+  errorState: Object,
+}) => {
+  const datasetToDelete = deleteState.state.toDelete
+  const deleteDatasetModalIsVisible = !!datasetToDelete.id
+  const tree = get(data, treeName)
+  const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
+  const token = get(data, 'user.token', null)
+  //console.log('TreeContainer rendering')
+
+  useEffect(() => {
+    /**
+     * if activeNodeArray.length === 1
+     * and there is only one projekt
+     * open it
+     * dont do this in render!
+     */
+    const { client } = app
+    const openNodes = get(data, `${treeName}.openNodes`)
+    const projekteNodes = nodes.filter(n => n.menuType === 'projekt')
+    const existsOnlyOneProjekt = projekteNodes.length === 1
+    const projektNode = projekteNodes[0]
+    if (
+      activeNodes.projektFolder &&
+      !activeNodes.projekt &&
+      existsOnlyOneProjekt &&
+      projektNode
+    ) {
+      const projektUrl = clone(projektNode.url)
+      client.mutate({
+        mutation: setTreeKeyGql,
+        variables: {
+          value: projektUrl,
+          tree: treeName,
+          key: 'activeNodeArray',
+        },
+      })
+      // add projekt to open nodes
+      client.mutate({
+        mutation: setTreeKeyGql,
+        variables: {
+          value: [...openNodes, projektUrl],
+          tree: treeName,
+          key: 'openNodes',
+        },
+      })
+    }
+  })
+
+  const handleClick = useCallback(
+    (e, data, element) => {
       const tree = get(dbData, treeName)
       const { openNodes } = tree
       if (!data) return errorState.add('no data passed with click')
@@ -435,93 +509,26 @@ const enhance = compose(
         )
       }
     },
-  }),
-  withLifecycle({
-    onDidUpdate(prevProps, { nodes, activeNodes, treeName, data }) {
-      /**
-       * if activeNodeArray.length === 1
-       * and there is only one projekt
-       * open it
-       * dont do this in render!
-       */
-      const { client } = app
-      const openNodes = get(data, `${treeName}.openNodes`)
-      const projekteNodes = nodes.filter(n => n.menuType === 'projekt')
-      const existsOnlyOneProjekt = projekteNodes.length === 1
-      const projektNode = projekteNodes[0]
-      if (
-        activeNodes.projektFolder &&
-        !activeNodes.projekt &&
-        existsOnlyOneProjekt &&
-        projektNode
-      ) {
-        const projektUrl = clone(projektNode.url)
-        client.mutate({
-          mutation: setTreeKeyGql,
-          variables: {
-            value: projektUrl,
-            tree: treeName,
-            key: 'activeNodeArray',
-          },
-        })
-        // add projekt to open nodes
-        client.mutate({
-          mutation: setTreeKeyGql,
-          variables: {
-            value: [...openNodes, projektUrl],
-            tree: treeName,
-            key: 'openNodes',
-          },
-        })
-      }
-    },
-  }),
-)
-
-const TreeContainer = ({
-  treeName,
-  handleClick,
-  data,
-  nodes,
-  activeNodes,
-  activeNode,
-  activeApfloraLayers,
-  loading,
-  moving,
-  openNodes,
-  copying,
-  popLabelUsingNr,
-  tpopLabelUsingNr,
-  mapFilter,
-  mapIdsFiltered,
-  deleteState,
-}: {
-  treeName: String,
-  flex: Number,
-  handleClick: () => void,
-  data: Object,
-  nodes: Array<Object>,
-  activeNodes: Object,
-  activeNode: Object,
-  activeApfloraLayers: Array<String>,
-  loading: Boolean,
-  moving: Object,
-  openNodes: Array<string>,
-  copying: Object,
-  refetchTree: () => void,
-  popLabelUsingNr: Boolean,
-  tpopLabelUsingNr: Boolean,
-  mapFilter: Object,
-  mapIdsFiltered: Array<String>,
-  deleteState: Object,
-  errorState: Object,
-}) => {
-  const datasetToDelete = deleteState.state.toDelete
-  const deleteDatasetModalIsVisible = !!datasetToDelete.id
-  const tree = get(data, treeName)
-  const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
-  const token = get(data, 'user.token', null)
-  //console.log('TreeContainer rendering')
+    [
+      data,
+      treeName,
+      activeNode,
+      activeNodes,
+      refetchTree,
+      activeApfloraLayers,
+      setActiveApfloraLayers,
+      activeOverlays,
+      setActiveOverlays,
+      setIdOfTpopBeingLocalized,
+      popLabelUsingNr,
+      setPopLabelUsingNr,
+      tpopLabelUsingNr,
+      setTpopLabelUsingNr,
+      deleteState,
+      errorState,
+      nodes,
+    ],
+  )
 
   return (
     <ErrorBoundary>
