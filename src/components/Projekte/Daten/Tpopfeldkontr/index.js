@@ -7,7 +7,6 @@ import compose from 'recompose/compose'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
-import gql from 'graphql-tag'
 import app from 'ampersand-app'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
