@@ -7,7 +7,6 @@ import flatten from 'lodash/flatten'
 import Button from '@material-ui/core/Button'
 import SendIcon from '@material-ui/icons/EmailOutlined'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
 import app from 'ampersand-app'
 
 import FormTitle from '../../../shared/FormTitle'
