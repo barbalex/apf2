@@ -90,15 +90,20 @@ const PanToCoordinates = ({
     [marker, map],
   )
   const onBlurGotoContainer = useCallback(
-    () => {
-      console.log('onBlurGotoContainer')
-      const timeoutId = setTimeout(() => {
+    event => {
+      console.log('onBlurGotoContainer', {
+        oldTimeoutId: timeoutId,
+        gotoFocused,
+        eventTarget: event.target,
+        event,
+      })
+      const newTimeoutId = setTimeout(() => {
         if (gotoFocused) {
           changeGotoFocused(false)
           changeControlType('coordinates')
         }
       })
-      changeTimeoutId(timeoutId)
+      changeTimeoutId(newTimeoutId)
     },
     [gotoFocused],
   )
@@ -148,7 +153,8 @@ const PanToCoordinates = ({
     if (yIsValid(value)) changeYError('')
   })
   const onBlurX = useCallback(
-    () => {
+    event => {
+      event.stopPropagation()
       console.log('onBlurX', { x })
       if (xIsValid(x)) return changeXError('')
       changeXError(`x muss zwischen 2'485'071 und 2'828'515 liegen`)
@@ -156,7 +162,8 @@ const PanToCoordinates = ({
     [x],
   )
   const onBlurY = useCallback(
-    () => {
+    event => {
+      event.stopPropagation()
       console.log('onBlurY', { y })
       if (yIsValid(y)) return changeYError('')
       changeYError(`y muss zwischen 1'075'346 und 1'299'941 liegen`)
