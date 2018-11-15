@@ -488,7 +488,6 @@ const ProjekteContainer = props => {
       ? 1
       : 1 / tabs.length
   const assigning = get(data, 'assigningBeob')
-  console.log('ProjektContainer', { mapFilter })
   const mapPopIdsFiltered = idsInsideFeatureCollection({
     mapFilter,
     data: get(data, `popForMap.nodes`, []),
@@ -536,7 +535,7 @@ const ProjekteContainer = props => {
   )
   const isPrint = get(data, 'isPrint')
 
-  if (isPrint)
+  if (isPrint) {
     return (
       <Daten
         tree={tree}
@@ -549,6 +548,9 @@ const ProjekteContainer = props => {
         role={role}
       />
     )
+  }
+
+  console.log('ProjektContainer rendering')
 
   return (
     <Container data-loading={loading}>
