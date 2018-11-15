@@ -212,7 +212,12 @@ const More = ({
         key={`${id}jungpflanzenVorhanden2`}
         name="jungpflanzenVorhanden"
         value={jungpflanzenVorhanden === false}
-        saveToDb={saveToDb}
+        saveToDb={() => {
+          const fakeEvent = {
+            target: { name: 'jungpflanzenVorhanden', value: false },
+          }
+          saveToDb(fakeEvent)
+        }}
         error={errorsJungpflanzenVorhanden}
       />
     </JungPflVal2>

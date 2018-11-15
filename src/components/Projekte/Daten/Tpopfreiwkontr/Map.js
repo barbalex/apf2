@@ -93,7 +93,12 @@ const Map = ({
         key={`${id}planVorhanden2`}
         name="planVorhanden"
         value={planVorhanden === false}
-        saveToDb={saveToDb}
+        saveToDb={() => {
+          const fakeEvent = {
+            target: { name: 'planVorhanden', value: false },
+          }
+          saveToDb(fakeEvent)
+        }}
         error={planVorhandenErrors}
       />
     </MapVal2>
