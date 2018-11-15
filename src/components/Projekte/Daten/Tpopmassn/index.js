@@ -5,9 +5,6 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
-import withState from 'recompose/withState'
-import withLifecycle from '@hocs/with-lifecycle'
 import app from 'ampersand-app'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
@@ -46,26 +43,55 @@ const enhance = compose(
   withAllAdresses,
   withAeEigenschaftens,
   withNodeFilter,
-  withState('errors', 'setErrors', {}),
-  withHandlers({
-    saveToDb: ({
-      refetchTree,
-      setErrors,
-      errors,
-      nodeFilterState,
-      treeName,
-      data,
-    }) => async event => {
+)
+
+const Tpopmassn = ({
+  id,
+  dimensions = { width: 380 },
+  treeName,
+  nodeFilterState,
+  dataAeEigenschaftens,
+  dataAllAdresses,
+  data,
+  refetchTree,
+}: {
+  id: string,
+  onNewRequestWirtspflanze: () => void,
+  onBlurWirtspflanze: () => void,
+  dimensions: number,
+  treeName: string,
+  nodeFilterState: Object,
+  dataAeEigenschaftens: Object,
+  dataAllAdresses: Object,
+  data: Object,
+  refetchTree: () => void,
+}) => {
+  if (data.loading || dataAeEigenschaftens.loading || dataAllAdresses.loading)
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  if (data.error) return `Fehler: ${data.error.message}`
+  if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
+
+  const [errors, setErrors] = useState({})
+
+  useEffect(() => setErrors({}), [id])
+
+  const showFilter = !!nodeFilterState.state[treeName].activeTable
+  let row
+  if (showFilter) {
+    row = nodeFilterState.state[treeName].tpopmassn
+  } else {
+    row = get(data, 'tpopmassnById', {})
+  }
+
+  const saveToDb = useCallback(
+    async event => {
       const field = event.target.name
       let value = event.target.value
       if (value === undefined) value = null
-      const showFilter = !!nodeFilterState.state[treeName].activeTable
-      let row
-      if (showFilter) {
-        row = nodeFilterState.state[treeName].tpopmassn
-      } else {
-        row = get(data, 'tpopmassnById', {})
-      }
       /**
        * only save if value changed
        */
@@ -99,57 +125,57 @@ const enhance = compose(
             mutation: updateTpopmassnByIdGql,
             variables,
             /*optimisticResponse: {
-              __typename: 'Mutation',
-              updateTpopmassnById: {
-                tpopmassn: {
-                  id: row.id,
-                  typ: field === 'typ' ? value : row.typ,
-                  beschreibung:
-                    field === 'beschreibung' ? value : row.beschreibung,
-                  jahr:
-                    field === 'jahr'
-                      ? value
-                      : field2 === 'jahr'
-                      ? value2
-                      : row.jahr,
-                  datum:
-                    field === 'datum'
-                      ? value
-                      : field2 === 'datum'
-                      ? value2
-                      : row.datum,
-                  bemerkungen:
-                    field === 'bemerkungen' ? value : row.bemerkungen,
-                  planBezeichnung:
-                    field === 'planBezeichnung' ? value : row.planBezeichnung,
-                  flaeche: field === 'flaeche' ? value : row.flaeche,
-                  markierung: field === 'markierung' ? value : row.markierung,
-                  anzTriebe: field === 'anzTriebe' ? value : row.anzTriebe,
-                  anzPflanzen:
-                    field === 'anzPflanzen' ? value : row.anzPflanzen,
-                  anzPflanzstellen:
-                    field === 'anzPflanzstellen' ? value : row.anzPflanzstellen,
-                  wirtspflanze:
-                    field === 'wirtspflanze' ? value : row.wirtspflanze,
-                  herkunftPop:
-                    field === 'herkunftPop' ? value : row.herkunftPop,
-                  sammeldatum:
-                    field === 'sammeldatum' ? value : row.sammeldatum,
-                  form: field === 'form' ? value : row.form,
-                  pflanzanordnung:
-                    field === 'pflanzanordnung' ? value : row.pflanzanordnung,
-                  tpopId: field === 'tpopId' ? value : row.tpopId,
-                  bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
-                  planVorhanden:
-                    field === 'planVorhanden' ? value : row.planVorhanden,
-                  tpopmassnTypWerteByTyp: row.tpopmassnTypWerteByTyp,
-                  adresseByBearbeiter: row.adresseByBearbeiter,
-                  tpopByTpopId: row.tpopByTpopId,
-                  __typename: 'Tpopmassn',
-                },
+            __typename: 'Mutation',
+            updateTpopmassnById: {
+              tpopmassn: {
+                id: row.id,
+                typ: field === 'typ' ? value : row.typ,
+                beschreibung:
+                  field === 'beschreibung' ? value : row.beschreibung,
+                jahr:
+                  field === 'jahr'
+                    ? value
+                    : field2 === 'jahr'
+                    ? value2
+                    : row.jahr,
+                datum:
+                  field === 'datum'
+                    ? value
+                    : field2 === 'datum'
+                    ? value2
+                    : row.datum,
+                bemerkungen:
+                  field === 'bemerkungen' ? value : row.bemerkungen,
+                planBezeichnung:
+                  field === 'planBezeichnung' ? value : row.planBezeichnung,
+                flaeche: field === 'flaeche' ? value : row.flaeche,
+                markierung: field === 'markierung' ? value : row.markierung,
+                anzTriebe: field === 'anzTriebe' ? value : row.anzTriebe,
+                anzPflanzen:
+                  field === 'anzPflanzen' ? value : row.anzPflanzen,
+                anzPflanzstellen:
+                  field === 'anzPflanzstellen' ? value : row.anzPflanzstellen,
+                wirtspflanze:
+                  field === 'wirtspflanze' ? value : row.wirtspflanze,
+                herkunftPop:
+                  field === 'herkunftPop' ? value : row.herkunftPop,
+                sammeldatum:
+                  field === 'sammeldatum' ? value : row.sammeldatum,
+                form: field === 'form' ? value : row.form,
+                pflanzanordnung:
+                  field === 'pflanzanordnung' ? value : row.pflanzanordnung,
+                tpopId: field === 'tpopId' ? value : row.tpopId,
+                bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
+                planVorhanden:
+                  field === 'planVorhanden' ? value : row.planVorhanden,
+                tpopmassnTypWerteByTyp: row.tpopmassnTypWerteByTyp,
+                adresseByBearbeiter: row.adresseByBearbeiter,
+                tpopByTpopId: row.tpopByTpopId,
                 __typename: 'Tpopmassn',
               },
-            },*/
+              __typename: 'Tpopmassn',
+            },
+          },*/
           })
         } catch (error) {
           return setErrors({ [field]: error.message })
@@ -158,60 +184,10 @@ const enhance = compose(
         if (['typ'].includes(field)) refetchTree('tpopmassns')
       }
     },
-  }),
-  withLifecycle({
-    onDidUpdate(prevProps, props) {
-      /**
-       * reset errors if dataset was changed
-       * (but same form rerenders)
-       */
-      if (prevProps.id !== props.id) {
-        props.setErrors({})
-      }
-    },
-  }),
-)
-
-const Tpopmassn = ({
-  dimensions = { width: 380 },
-  saveToDb,
-  errors,
-  treeName,
-  nodeFilterState,
-  dataAeEigenschaftens,
-  dataAllAdresses,
-  data,
-}: {
-  id: string,
-  onNewRequestWirtspflanze: () => void,
-  onBlurWirtspflanze: () => void,
-  dimensions: number,
-  saveToDb: () => void,
-  errors: Object,
-  treeName: string,
-  nodeFilterState: Object,
-  dataAeEigenschaftens: Object,
-  dataAllAdresses: Object,
-  data: Object,
-}) => {
-  if (data.loading || dataAeEigenschaftens.loading || dataAllAdresses.loading)
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  if (data.error) return `Fehler: ${data.error.message}`
-  if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
+    [id, showFilter],
+  )
 
   const width = isNaN(dimensions.width) ? 380 : dimensions.width
-
-  const showFilter = !!nodeFilterState.state[treeName].activeTable
-  let row
-  if (showFilter) {
-    row = nodeFilterState.state[treeName].tpopmassn
-  } else {
-    row = get(data, 'tpopmassnById', {})
-  }
 
   let adressenWerte = get(dataAllAdresses, 'allAdresses.nodes', [])
   adressenWerte = sortBy(adressenWerte, 'name')
