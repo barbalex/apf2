@@ -188,12 +188,12 @@ const enhance = compose(
       let value2
       if (field === 'datum') value2 = !!value ? format(value, 'YYYY') : null
       if (field2) variables[field2] = value2
-      const adresseByBearbeiter =
+      /*const adresseByBearbeiter =
         field === 'bearbeiter'
           ? row.adresseByBearbeiter
           : get(dataAllAdresses, 'allAdresses.nodes', []).find(
               r => r.id === value,
-            )
+          )*/
       try {
         await app.client.mutate({
           mutation: updateTpopkontrByIdGql,
