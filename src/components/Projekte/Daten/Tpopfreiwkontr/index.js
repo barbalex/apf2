@@ -370,8 +370,13 @@ const Tpopfreiwkontr = ({
 }) => {
   if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
   if (data.error) return `Fehler: ${data.error.message}`
-  if (data.loading || dataAllAdresses.loading)
-    return <Container>Lade...</Container>
+  if (data.loading || dataAllAdresses.loading) {
+    return (
+      <Container>
+        <InnerContainer>Lade...</InnerContainer>
+      </Container>
+    )
+  }
   const showFilter = !!nodeFilterState.state[treeName].activeTable
   const ekfzaehleinheits = get(
     data,
