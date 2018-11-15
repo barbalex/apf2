@@ -1,34 +1,21 @@
-import React, { Component } from 'react'
+import React, { useEffect } from 'react'
 import 'leaflet'
 import 'leaflet-draw'
 import compose from 'recompose/compose'
 import { withLeaflet } from 'react-leaflet'
-import withState from 'recompose/withState'
 
-const enhance = compose(
-  withLeaflet,
-  withState('mapFilter', 'setMapFilter', null),
-  withState('drawControl', 'setDrawControl', null),
-)
+const enhance = compose(withLeaflet)
 
-class DrawControl extends Component {
-  props: {
-    leaflet: Object,
-    mapFilter?: Object,
-    setMapFilter: () => void,
-    drawControl?: Object,
-    setDrawControl: () => void,
-    setStoreMapFilter: () => void,
-  }
+const DrawControl = ({
+  leaflet,
+  setStoreMapFilter,
+}: {
+  leaflet: Object,
+  setStoreMapFilter: () => void,
+}) => {
+  const { map } = leaflet
 
-  componentDidMount() {
-    const {
-      leaflet,
-      setStoreMapFilter,
-      setMapFilter,
-      setDrawControl,
-    } = this.props
-    const { map } = leaflet
+  useEffect(() => {
     window.L.drawLocal.draw.toolbar.buttons.polygon =
       'Polygon(e) zeichnen, um zu filtern'
     window.L.drawLocal.draw.toolbar.buttons.rectangle =
@@ -66,7 +53,6 @@ class DrawControl extends Component {
       'Punkte ziehen, um Filter-Umriss(e) zu verändern'
     window.L.drawLocal.edit.handlers.remove.tooltip.text = `zum Löschen auf Filter-Umriss klicken, dann auf 'speichern'`
     const mapFilter = new window.L.FeatureGroup()
-    setMapFilter(mapFilter)
     map.addLayer(mapFilter)
     const drawControl = new window.L.Control.Draw({
       draw: {
@@ -81,29 +67,27 @@ class DrawControl extends Component {
     })
 
     map.addControl(drawControl)
-    setDrawControl(drawControl)
     map.on('draw:created', e => {
       mapFilter.addLayer(e.layer)
       setStoreMapFilter(mapFilter.toGeoJSON())
     })
     map.on('draw:edited', e => setStoreMapFilter(mapFilter.toGeoJSON()))
     map.on('draw:deleted', e => setStoreMapFilter(mapFilter.toGeoJSON()))
-  }
 
-  componentWillUnmount() {
-    const { setStoreMapFilter, leaflet, mapFilter, drawControl } = this.props
-    const { map } = leaflet
-    map.removeLayer(mapFilter)
-    map.removeControl(drawControl)
-    map.off('draw:created')
-    map.off('draw:edited')
-    map.off('draw:deleted')
-    setStoreMapFilter(null)
-  }
+    return () => {
+      map.removeLayer(mapFilter)
+      map.removeControl(drawControl)
+      map.off('draw:created')
+      map.off('draw:edited')
+      map.off('draw:deleted')
+      setStoreMapFilter({
+        features: [],
+        type: 'FeatureCollection',
+      })
+    }
+  }, [])
 
-  render() {
-    return <div style={{ display: 'none' }} />
-  }
+  return <div style={{ display: 'none' }} />
 }
 
 export default enhance(DrawControl)

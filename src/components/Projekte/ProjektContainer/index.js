@@ -488,6 +488,7 @@ const ProjekteContainer = props => {
       ? 1
       : 1 / tabs.length
   const assigning = get(data, 'assigningBeob')
+  console.log('ProjektContainer', { mapFilter })
   const mapPopIdsFiltered = idsInsideFeatureCollection({
     mapFilter,
     data: get(data, `popForMap.nodes`, []),
