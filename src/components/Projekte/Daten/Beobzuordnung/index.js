@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import sortBy from 'lodash/sortBy'
 import get from 'lodash/get'
@@ -139,41 +139,6 @@ const getTpopZuordnenSource = (row: Object, apId: string): Array<Object> => {
 const enhance = compose(
   withAeEigenschaftens,
   withData,
-  withHandlers({
-    onSaveArtIdToDb: ({ value, row, tree, refetchTree, data }) => event => {
-      const { value } = event.target
-      const row = get(data, 'beobById', {})
-      saveArtIdToDb({ value, row, tree, refetchTree })
-    },
-    onSaveNichtZuordnenToDb: ({
-      value,
-      id,
-      tree,
-      data,
-      refetchTree,
-    }) => value => {
-      saveNichtZuordnenToDb({
-        value,
-        id,
-        tree,
-        refetch: data.refetch,
-        refetchTree,
-      })
-    },
-    onSaveTpopIdToDb: ({ id, tree, refetchTree, type, data }) => event => {
-      const { value } = event.target
-      saveTpopIdToDb({ value, id, tree, refetchTree, type })
-    },
-    onUpdateBemerkungen: ({ id }) => event => {
-      app.client.mutate({
-        mutation: updateBeobByIdGql,
-        variables: {
-          id,
-          bemerkungen: event.target.value,
-        },
-      })
-    },
-  }),
 )
 
 const Beobzuordnung = ({
@@ -186,10 +151,6 @@ const Beobzuordnung = ({
   treeName,
   data,
   dataAeEigenschaftens,
-  onSaveArtIdToDb,
-  onSaveNichtZuordnenToDb,
-  onSaveTpopIdToDb,
-  onUpdateBemerkungen,
 }: {
   id: string,
   apId: string,
@@ -200,10 +161,6 @@ const Beobzuordnung = ({
   treeName: string,
   data: Object,
   dataAeEigenschaftens: Object,
-  onSaveArtIdToDb: () => void,
-  onSaveNichtZuordnenToDb: () => void,
-  onSaveTpopIdToDb: () => void,
-  onUpdateBemerkungen: () => void,
 }) => {
   const { error } = data
   if (data.loading || dataAeEigenschaftens.loading)
@@ -215,6 +172,43 @@ const Beobzuordnung = ({
   if (error) return `Fehler: ${error.message}`
 
   const row = get(data, 'beobById', {})
+
+  const onSaveArtIdToDb = useCallback(
+    event => {
+      const { value } = event.target
+      saveArtIdToDb({ value, row, tree, refetchTree })
+    },
+    [row, tree],
+  )
+  const onSaveNichtZuordnenToDb = useCallback(
+    value => {
+      saveNichtZuordnenToDb({
+        value,
+        id,
+        tree,
+        refetch: data.refetch,
+        refetchTree,
+      })
+    },
+    [id, tree],
+  )
+  const onSaveTpopIdToDb = useCallback(
+    event => {
+      const { value } = event.target
+      saveTpopIdToDb({ value, id, tree, refetchTree, type })
+    },
+    [id, tree, type],
+  )
+  const onUpdateBemerkungen = useCallback(event => {
+    app.client.mutate({
+      mutation: updateBeobByIdGql,
+      variables: {
+        id,
+        bemerkungen: event.target.value,
+      },
+    })
+  })
+
   let artWerte = get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])
   artWerte = sortBy(artWerte, 'artname')
   artWerte = artWerte.map(el => ({
