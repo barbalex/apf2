@@ -1,5 +1,5 @@
 // @flow
-import React, { Component, createRef } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
@@ -172,7 +172,16 @@ const enhance = compose(
   }),
 )
 
-type Props = {
+const Tpopmassn = ({
+  dimensions = { width: 380 },
+  saveToDb,
+  errors,
+  treeName,
+  nodeFilterState,
+  dataAeEigenschaftens,
+  dataAllAdresses,
+  data,
+}: {
   id: string,
   onNewRequestWirtspflanze: () => void,
   onBlurWirtspflanze: () => void,
@@ -184,236 +193,221 @@ type Props = {
   dataAeEigenschaftens: Object,
   dataAllAdresses: Object,
   data: Object,
-}
-
-class Tpopmassn extends Component<Props> {
-  render() {
-    const {
-      dimensions = { width: 380 },
-      saveToDb,
-      errors,
-      treeName,
-      nodeFilterState,
-      dataAeEigenschaftens,
-      dataAllAdresses,
-      data,
-    } = this.props
-
-    if (data.loading || dataAeEigenschaftens.loading || dataAllAdresses.loading)
-      return (
-        <Container>
-          <FieldsContainer>Lade...</FieldsContainer>
-        </Container>
-      )
-    if (data.error) return `Fehler: ${data.error.message}`
-    if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
-
-    const width = isNaN(dimensions.width) ? 380 : dimensions.width
-
-    const showFilter = !!nodeFilterState.state[treeName].activeTable
-    let row
-    if (showFilter) {
-      row = nodeFilterState.state[treeName].tpopmassn
-    } else {
-      row = get(data, 'tpopmassnById', {})
-    }
-
-    let adressenWerte = get(dataAllAdresses, 'allAdresses.nodes', [])
-    adressenWerte = sortBy(adressenWerte, 'name')
-    adressenWerte = adressenWerte.map(el => ({
-      value: el.id,
-      label: el.name,
-    }))
-    let tpopmasstypWerte = get(data, 'allTpopmassnTypWertes.nodes', [])
-    tpopmasstypWerte = sortBy(tpopmasstypWerte, 'sort')
-    tpopmasstypWerte = tpopmasstypWerte.map(el => ({
-      value: el.code,
-      label: el.text,
-    }))
-    const artWerte = get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])
-      .map(o => o.artname)
-      .sort()
-      .map(o => ({ value: o, label: o }))
-
+}) => {
+  if (data.loading || dataAeEigenschaftens.loading || dataAllAdresses.loading)
     return (
-      <ErrorBoundary>
-        <Container showfilter={showFilter}>
-          <FormTitle
-            apId={get(data, 'tpopmassnById.tpopByTpopId.popByPopId.apId')}
-            title="Massnahme"
-            treeName={treeName}
-            table="tpopmassn"
-          />
-          <FieldsContainer data-width={width}>
-            <TextField
-              key={`${row.id}jahr`}
-              name="jahr"
-              label="Jahr"
-              value={row.jahr}
-              type="number"
-              saveToDb={saveToDb}
-              error={errors.jahr}
-            />
-            <DateFieldWithPicker
-              key={`${row.id}datum`}
-              name="datum"
-              label="Datum"
-              value={row.datum}
-              saveToDb={saveToDb}
-              error={errors.datum}
-            />
-            <RadioButtonGroup
-              key={`${row.id}typ`}
-              name="typ"
-              label="Typ"
-              value={row.typ}
-              dataSource={tpopmasstypWerte}
-              saveToDb={saveToDb}
-              error={errors.typ}
-            />
-            <TextField
-              key={`${row.id}beschreibung`}
-              name="beschreibung"
-              label="Massnahme"
-              value={row.beschreibung}
-              type="text"
-              saveToDb={saveToDb}
-              error={errors.beschreibung}
-            />
-            <Select
-              key={`${row.id}bearbeiter`}
-              name="bearbeiter"
-              value={row.bearbeiter}
-              field="bearbeiter"
-              label="BearbeiterIn"
-              options={adressenWerte}
-              saveToDb={saveToDb}
-              error={errors.bearbeiter}
-            />
-            <TextField
-              key={`${row.id}bemerkungen`}
-              name="bemerkungen"
-              label="Bemerkungen"
-              value={row.bemerkungen}
-              type="text"
-              multiLine
-              saveToDb={saveToDb}
-              error={errors.bemerkungen}
-            />
-            <RadioButton
-              key={`${row.id}planVorhanden`}
-              name="planVorhanden"
-              label="Plan vorhanden"
-              value={row.planVorhanden}
-              saveToDb={saveToDb}
-              error={errors.planVorhanden}
-            />
-            <TextField
-              key={`${row.id}planBezeichnung`}
-              name="planBezeichnung"
-              label="Plan Bezeichnung"
-              value={row.planBezeichnung}
-              type="text"
-              saveToDb={saveToDb}
-              error={errors.planBezeichnung}
-            />
-            <TextField
-              key={`${row.id}flaeche`}
-              name="flaeche"
-              label="Fläche (m2)"
-              value={row.flaeche}
-              type="number"
-              saveToDb={saveToDb}
-              error={errors.flaeche}
-            />
-            <TextField
-              key={`${row.id}form`}
-              name="form"
-              label="Form der Ansiedlung"
-              value={row.form}
-              type="text"
-              saveToDb={saveToDb}
-              error={errors.form}
-            />
-            <TextField
-              key={`${row.id}pflanzanordnung`}
-              name="pflanzanordnung"
-              label="Pflanzanordnung"
-              value={row.pflanzanordnung}
-              type="text"
-              saveToDb={saveToDb}
-              error={errors.pflanzanordnung}
-            />
-            <TextField
-              key={`${row.id}markierung`}
-              name="markierung"
-              label="Markierung"
-              value={row.markierung}
-              type="text"
-              saveToDb={saveToDb}
-              error={errors.markierung}
-            />
-            <TextField
-              key={`${row.id}anzTriebe`}
-              name="anzTriebe"
-              label="Anzahl Triebe"
-              value={row.anzTriebe}
-              type="number"
-              saveToDb={saveToDb}
-              error={errors.anzTriebe}
-            />
-            <TextField
-              key={`${row.id}anzPflanzen`}
-              name="anzPflanzen"
-              label="Anzahl Pflanzen"
-              value={row.anzPflanzen}
-              type="number"
-              saveToDb={saveToDb}
-              error={errors.anzPflanzen}
-            />
-            <TextField
-              key={`${row.id}anzPflanzstellen`}
-              name="anzPflanzstellen"
-              label="Anzahl Pflanzstellen"
-              value={row.anzPflanzstellen}
-              type="number"
-              saveToDb={saveToDb}
-              error={errors.anzPflanzstellen}
-            />
-            <Select
-              key={`${row.id}wirtspflanze`}
-              name="wirtspflanze"
-              value={row.wirtspflanze}
-              field="wirtspflanze"
-              label="Wirtspflanze"
-              options={artWerte}
-              saveToDb={saveToDb}
-              error={errors.wirtspflanze}
-            />
-            <TextField
-              key={`${row.id}herkunftPop`}
-              name="herkunftPop"
-              label="Herkunftspopulation"
-              value={row.herkunftPop}
-              type="text"
-              saveToDb={saveToDb}
-              error={errors.herkunftPop}
-            />
-            <TextField
-              key={`${row.id}sammeldatum`}
-              name="sammeldatum"
-              label="Sammeldatum"
-              value={row.sammeldatum}
-              type="text"
-              saveToDb={saveToDb}
-              error={errors.sammeldatum}
-            />
-            <StringToCopy text={row.id} label="id" />
-          </FieldsContainer>
-        </Container>
-      </ErrorBoundary>
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
     )
+  if (data.error) return `Fehler: ${data.error.message}`
+  if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
+
+  const width = isNaN(dimensions.width) ? 380 : dimensions.width
+
+  const showFilter = !!nodeFilterState.state[treeName].activeTable
+  let row
+  if (showFilter) {
+    row = nodeFilterState.state[treeName].tpopmassn
+  } else {
+    row = get(data, 'tpopmassnById', {})
   }
+
+  let adressenWerte = get(dataAllAdresses, 'allAdresses.nodes', [])
+  adressenWerte = sortBy(adressenWerte, 'name')
+  adressenWerte = adressenWerte.map(el => ({
+    value: el.id,
+    label: el.name,
+  }))
+  let tpopmasstypWerte = get(data, 'allTpopmassnTypWertes.nodes', [])
+  tpopmasstypWerte = sortBy(tpopmasstypWerte, 'sort')
+  tpopmasstypWerte = tpopmasstypWerte.map(el => ({
+    value: el.code,
+    label: el.text,
+  }))
+  const artWerte = get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])
+    .map(o => o.artname)
+    .sort()
+    .map(o => ({ value: o, label: o }))
+
+  return (
+    <ErrorBoundary>
+      <Container showfilter={showFilter}>
+        <FormTitle
+          apId={get(data, 'tpopmassnById.tpopByTpopId.popByPopId.apId')}
+          title="Massnahme"
+          treeName={treeName}
+          table="tpopmassn"
+        />
+        <FieldsContainer data-width={width}>
+          <TextField
+            key={`${row.id}jahr`}
+            name="jahr"
+            label="Jahr"
+            value={row.jahr}
+            type="number"
+            saveToDb={saveToDb}
+            error={errors.jahr}
+          />
+          <DateFieldWithPicker
+            key={`${row.id}datum`}
+            name="datum"
+            label="Datum"
+            value={row.datum}
+            saveToDb={saveToDb}
+            error={errors.datum}
+          />
+          <RadioButtonGroup
+            key={`${row.id}typ`}
+            name="typ"
+            label="Typ"
+            value={row.typ}
+            dataSource={tpopmasstypWerte}
+            saveToDb={saveToDb}
+            error={errors.typ}
+          />
+          <TextField
+            key={`${row.id}beschreibung`}
+            name="beschreibung"
+            label="Massnahme"
+            value={row.beschreibung}
+            type="text"
+            saveToDb={saveToDb}
+            error={errors.beschreibung}
+          />
+          <Select
+            key={`${row.id}bearbeiter`}
+            name="bearbeiter"
+            value={row.bearbeiter}
+            field="bearbeiter"
+            label="BearbeiterIn"
+            options={adressenWerte}
+            saveToDb={saveToDb}
+            error={errors.bearbeiter}
+          />
+          <TextField
+            key={`${row.id}bemerkungen`}
+            name="bemerkungen"
+            label="Bemerkungen"
+            value={row.bemerkungen}
+            type="text"
+            multiLine
+            saveToDb={saveToDb}
+            error={errors.bemerkungen}
+          />
+          <RadioButton
+            key={`${row.id}planVorhanden`}
+            name="planVorhanden"
+            label="Plan vorhanden"
+            value={row.planVorhanden}
+            saveToDb={saveToDb}
+            error={errors.planVorhanden}
+          />
+          <TextField
+            key={`${row.id}planBezeichnung`}
+            name="planBezeichnung"
+            label="Plan Bezeichnung"
+            value={row.planBezeichnung}
+            type="text"
+            saveToDb={saveToDb}
+            error={errors.planBezeichnung}
+          />
+          <TextField
+            key={`${row.id}flaeche`}
+            name="flaeche"
+            label="Fläche (m2)"
+            value={row.flaeche}
+            type="number"
+            saveToDb={saveToDb}
+            error={errors.flaeche}
+          />
+          <TextField
+            key={`${row.id}form`}
+            name="form"
+            label="Form der Ansiedlung"
+            value={row.form}
+            type="text"
+            saveToDb={saveToDb}
+            error={errors.form}
+          />
+          <TextField
+            key={`${row.id}pflanzanordnung`}
+            name="pflanzanordnung"
+            label="Pflanzanordnung"
+            value={row.pflanzanordnung}
+            type="text"
+            saveToDb={saveToDb}
+            error={errors.pflanzanordnung}
+          />
+          <TextField
+            key={`${row.id}markierung`}
+            name="markierung"
+            label="Markierung"
+            value={row.markierung}
+            type="text"
+            saveToDb={saveToDb}
+            error={errors.markierung}
+          />
+          <TextField
+            key={`${row.id}anzTriebe`}
+            name="anzTriebe"
+            label="Anzahl Triebe"
+            value={row.anzTriebe}
+            type="number"
+            saveToDb={saveToDb}
+            error={errors.anzTriebe}
+          />
+          <TextField
+            key={`${row.id}anzPflanzen`}
+            name="anzPflanzen"
+            label="Anzahl Pflanzen"
+            value={row.anzPflanzen}
+            type="number"
+            saveToDb={saveToDb}
+            error={errors.anzPflanzen}
+          />
+          <TextField
+            key={`${row.id}anzPflanzstellen`}
+            name="anzPflanzstellen"
+            label="Anzahl Pflanzstellen"
+            value={row.anzPflanzstellen}
+            type="number"
+            saveToDb={saveToDb}
+            error={errors.anzPflanzstellen}
+          />
+          <Select
+            key={`${row.id}wirtspflanze`}
+            name="wirtspflanze"
+            value={row.wirtspflanze}
+            field="wirtspflanze"
+            label="Wirtspflanze"
+            options={artWerte}
+            saveToDb={saveToDb}
+            error={errors.wirtspflanze}
+          />
+          <TextField
+            key={`${row.id}herkunftPop`}
+            name="herkunftPop"
+            label="Herkunftspopulation"
+            value={row.herkunftPop}
+            type="text"
+            saveToDb={saveToDb}
+            error={errors.herkunftPop}
+          />
+          <TextField
+            key={`${row.id}sammeldatum`}
+            name="sammeldatum"
+            label="Sammeldatum"
+            value={row.sammeldatum}
+            type="text"
+            saveToDb={saveToDb}
+            error={errors.sammeldatum}
+          />
+          <StringToCopy text={row.id} label="id" />
+        </FieldsContainer>
+      </Container>
+    </ErrorBoundary>
+  )
 }
 
 export default enhance(Tpopmassn)
