@@ -214,12 +214,7 @@ const User = ({
   setPasswordMessage: () => void,
   data: Object,
 }) => {
-  if (data.loading)
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
+  if (data.loading) return null
   if (data.error) return `Fehler: ${data.error.message}`
 
   const row = get(data, 'userByName', {})
