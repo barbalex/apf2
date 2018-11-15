@@ -187,11 +187,6 @@ type Props = {
 }
 
 class Tpopmassn extends Component<Props> {
-  constructor(props) {
-    super(props)
-    this.container = createRef()
-  }
-
   render() {
     const {
       dimensions = { width: 380 },
@@ -242,7 +237,7 @@ class Tpopmassn extends Component<Props> {
 
     return (
       <ErrorBoundary>
-        <Container ref={this.container} showfilter={showFilter}>
+        <Container showfilter={showFilter}>
           <FormTitle
             apId={get(data, 'tpopmassnById.tpopByTpopId.popByPopId.apId')}
             title="Massnahme"
