@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useEffect } from 'react'
 import 'leaflet'
 import { withLeaflet } from 'react-leaflet'
 // eslint-disable-next-line no-unused-vars
@@ -17,16 +17,13 @@ const options = {
   fullscreenElement: false, // Dom element to render in full screen, false by default, fallback to map._container
 }
 
-class FullScreenControl extends Component {
-  componentDidMount() {
-    const { leaflet } = this.props
+const FullScreenControl = ({ leaflet }: { leaflet: Object }) => {
+  useEffect(() => {
     const fullscreenControl = window.L.control.fullscreen(options)
     fullscreenControl.addTo(leaflet.map)
-  }
+  }, [])
 
-  render() {
-    return <div style={{ display: 'none' }} />
-  }
+  return <div style={{ display: 'none' }} />
 }
 
 export default enhance(FullScreenControl)
