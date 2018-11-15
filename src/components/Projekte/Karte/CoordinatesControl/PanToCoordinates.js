@@ -1,17 +1,7 @@
-import React, {
-  Component,
-  createRef,
-  useState,
-  useCallback,
-  useEffect,
-  useRef,
-} from 'react'
+import React, { useState, useCallback, useEffect, useRef } from 'react'
 import ReactDOM from 'react-dom'
 import 'leaflet'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
-import withState from 'recompose/withState'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
@@ -53,47 +43,55 @@ const StyledInput = styled(Input)`
 const xIsValid = (x: ?number) => !x || (x >= 2485071 && x < 2828516)
 const yIsValid = (y: ?number) => !y || (y >= 1075346 && y < 1299942)
 
-const enhance = compose(
-  withState('x', 'setX', ''),
-  withState('y', 'setY', ''),
-  withState('marker', 'setMarker', null),
-  withState('xError', 'changeXError', ''),
-  withState('yError', 'changeYError', ''),
+const PanToCoordinates = ({
+  changeControlType,
+  map,
+}: {
+  changeControlType: () => void,
+  map: Object,
+}) => {
+  const xkoordField = useRef(null)
+
+  useEffect(() => {
+    ReactDOM.findDOMNode(xkoordField.current)
+      .getElementsByTagName('input')[0]
+      .focus()
+  }, [])
+
+  const [x, setX] = useState('')
+  const [y, setY] = useState('')
+  const [marker, setMarker] = useState(null)
+  const [xError, changeXError] = useState('')
+  const [yError, changeYError] = useState('')
   // on dealing with focus of div with children, see:
   // https://medium.com/@jessebeach/dealing-with-focus-and-blur-in-a-composite-widget-in-react-90d3c3b49a9b
-  withState('timeoutId', 'changeTimeoutId', ''),
-  withState('gotoFocused', 'changeGotoFocused', false),
-  withHandlers({
-    onFocusGotoContainer: ({
-      timeoutId,
-      gotoFocused,
-      changeGotoFocused,
-    }) => () => {
+  const [timeoutId, changeTimeoutId] = useState('')
+  const [gotoFocused, changeGotoFocused] = useState(false)
+
+  const onFocusGotoContainer = useCallback(
+    () => {
+      console.log('onFocusGotoContainer', { timeoutId, gotoFocused })
       clearTimeout(timeoutId)
       if (!gotoFocused) {
         changeGotoFocused(true)
       }
     },
-    onClickClear: ({
-      map,
-      changeControlType,
-      setX,
-      setY,
-      marker,
-      setMarker,
-    }) => () => {
+    [gotoFocused],
+  )
+  const onClickClear = useCallback(
+    () => {
+      console.log('onClickClear')
       setMarker(null)
       if (marker) map.removeLayer(marker)
       setX('')
       setY('')
       changeControlType('coordinates')
     },
-    onBlurGotoContainer: ({
-      changeTimeoutId,
-      gotoFocused,
-      changeGotoFocused,
-      changeControlType,
-    }) => () => {
+    [marker, map],
+  )
+  const onBlurGotoContainer = useCallback(
+    () => {
+      console.log('onBlurGotoContainer')
       const timeoutId = setTimeout(() => {
         if (gotoFocused) {
           changeGotoFocused(false)
@@ -102,14 +100,18 @@ const enhance = compose(
       })
       changeTimeoutId(timeoutId)
     },
-    /**
-     * for unknown reason
-     * onClickGoto happens TWICE
-     * which means marker passed first time
-     * is added to the map
-     * but marker passed second time is saved in state...
-     */
-    onClickGoto: ({ xError, yError, map, x, y, marker, setMarker }) => () => {
+    [gotoFocused],
+  )
+  /**
+   * for unknown reason
+   * onClickGoto happens TWICE
+   * which means marker passed first time
+   * is added to the map
+   * but marker passed second time is saved in state...
+   */
+  const onClickGoto = useCallback(
+    () => {
+      console.log('onClickGoto', { y, x })
       if (x && y && !xError && !yError) {
         const latLng = new window.L.LatLng(...epsg2056to4326(x, y))
         map.flyTo(latLng)
@@ -125,72 +127,42 @@ const enhance = compose(
         setMarker(newMarker)
       }
     },
-    onChangeX: ({ changeXError, setX }) => event => {
-      let { value } = event.target
-      // convert string to number
-      value = value ? +value : value
-      setX(value)
-      // immediately cancel possible existing error
-      if (xIsValid(value)) changeXError('')
-    },
-    onChangeY: ({ changeYError, setY }) => event => {
-      let { value } = event.target
-      // convert string to number
-      value = value ? +value : value
-      setY(value)
-      // immediately cancel possible existing error
-      if (yIsValid(value)) changeYError('')
-    },
-    onBlurX: ({ changeXError, x }) => () => {
+    [x, y, xError, yError, map, marker],
+  )
+  const onChangeX = useCallback(event => {
+    let { value } = event.target
+    // convert string to number
+    value = value ? +value : value
+    console.log('onChangeX', { x })
+    setX(value)
+    // immediately cancel possible existing error
+    if (xIsValid(value)) changeXError('')
+  })
+  const onChangeY = useCallback(event => {
+    let { value } = event.target
+    // convert string to number
+    value = value ? +value : value
+    console.log('onChangeY', { y })
+    setY(value)
+    // immediately cancel possible existing error
+    if (yIsValid(value)) changeYError('')
+  })
+  const onBlurX = useCallback(
+    () => {
+      console.log('onBlurX', { x })
       if (xIsValid(x)) return changeXError('')
       changeXError(`x muss zwischen 2'485'071 und 2'828'515 liegen`)
     },
-    onBlurY: ({ changeYError, y }) => () => {
+    [x],
+  )
+  const onBlurY = useCallback(
+    () => {
+      console.log('onBlurY', { y })
       if (yIsValid(y)) return changeYError('')
       changeYError(`y muss zwischen 1'075'346 und 1'299'941 liegen`)
     },
-  }),
-)
-
-const PanToCoordinates = ({
-  onClickGoto,
-  onChangeX,
-  onChangeY,
-  x,
-  y,
-  xError,
-  yError,
-  onBlurX,
-  onBlurY,
-  onBlurGotoContainer,
-  onFocusGotoContainer,
-  onClickClear,
-}: {
-  controlType: string,
-  onClickCoordinates: () => void,
-  onClickGoto: () => void,
-  onChangeX: () => void,
-  onChangeY: () => void,
-  x: string,
-  y: string,
-  xError: string,
-  yError: string,
-  onBlurX: () => void,
-  onBlurY: () => void,
-  setX: () => void,
-  setY: () => void,
-  onBlurGotoContainer: () => void,
-  onFocusGotoContainer: () => void,
-  onClickClear: () => void,
-  changeControlType: () => void,
-}) => {
-  const xkoordField = useRef(null)
-
-  useEffect(() => {
-    ReactDOM.findDOMNode(xkoordField.current)
-      .getElementsByTagName('input')[0]
-      .focus()
-  }, [])
+    [y],
+  )
 
   return (
     <Container onBlur={onBlurGotoContainer} onFocus={onFocusGotoContainer}>
@@ -240,4 +212,4 @@ const PanToCoordinates = ({
   )
 }
 
-export default enhance(PanToCoordinates)
+export default PanToCoordinates
