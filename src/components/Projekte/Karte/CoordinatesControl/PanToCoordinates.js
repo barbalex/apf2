@@ -1,4 +1,11 @@
-import React, { Component, createRef } from 'react'
+import React, {
+  Component,
+  createRef,
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+} from 'react'
 import ReactDOM from 'react-dom'
 import 'leaflet'
 import styled from 'styled-components'
@@ -60,7 +67,7 @@ const enhance = compose(
     onFocusGotoContainer: ({
       timeoutId,
       gotoFocused,
-      changeGotoFocused
+      changeGotoFocused,
     }) => () => {
       clearTimeout(timeoutId)
       if (!gotoFocused) {
@@ -73,7 +80,7 @@ const enhance = compose(
       setX,
       setY,
       marker,
-      setMarker
+      setMarker,
     }) => () => {
       setMarker(null)
       if (marker) map.removeLayer(marker)
@@ -102,15 +109,7 @@ const enhance = compose(
      * is added to the map
      * but marker passed second time is saved in state...
      */
-    onClickGoto: ({
-      xError,
-      yError,
-      map,
-      x,
-      y,
-      marker,
-      setMarker
-    }) => () => {
+    onClickGoto: ({ xError, yError, map, x, y, marker, setMarker }) => () => {
       if (x && y && !xError && !yError) {
         const latLng = new window.L.LatLng(...epsg2056to4326(x, y))
         map.flyTo(latLng)
@@ -150,10 +149,23 @@ const enhance = compose(
       if (yIsValid(y)) return changeYError('')
       changeYError(`y muss zwischen 1'075'346 und 1'299'941 liegen`)
     },
-  })
+  }),
 )
 
-type Props = {
+const PanToCoordinates = ({
+  onClickGoto,
+  onChangeX,
+  onChangeY,
+  x,
+  y,
+  xError,
+  yError,
+  onBlurX,
+  onBlurY,
+  onBlurGotoContainer,
+  onFocusGotoContainer,
+  onClickClear,
+}: {
   controlType: string,
   onClickCoordinates: () => void,
   onClickGoto: () => void,
@@ -171,87 +183,61 @@ type Props = {
   onFocusGotoContainer: () => void,
   onClickClear: () => void,
   changeControlType: () => void,
-}
+}) => {
+  const xkoordField = useRef(null)
 
-class PanToCoordinates extends Component<Props> {
-  constructor(props) {
-    super(props)
-    this.xkoordField = createRef()
-  }
-
-  xkoordField: ?HTMLDivElement
-
-  componentDidMount() {
-    ReactDOM.findDOMNode(this.xkoordField.current)
+  useEffect(() => {
+    ReactDOM.findDOMNode(xkoordField.current)
       .getElementsByTagName('input')[0]
       .focus()
-  }
+  }, [])
 
-  render() {
-    const {
-      onClickGoto,
-      onChangeX,
-      onChangeY,
-      x,
-      y,
-      xError,
-      yError,
-      onBlurX,
-      onBlurY,
-      onBlurGotoContainer,
-      onFocusGotoContainer,
-      onClickClear,
-    } = this.props
-
-    return (
-      <Container onBlur={onBlurGotoContainer} onFocus={onFocusGotoContainer}>
-        <FormControl error={!!xError} fullWidth aria-describedby="xhelper">
-          <InputLabel htmlFor="XKoordinate">X-Koordinate</InputLabel>
-          <StyledInput
-            id="XKoordinate"
-            value={x}
-            type="number"
-            min="2485071"
-            max="2828516"
-            onChange={onChangeX}
-            onBlur={onBlurX}
-            ref={this.xkoordField}
-          />
-          <FormHelperText id="xhelper">{xError}</FormHelperText>
-        </FormControl>
-        <FormControl error={!!yError} fullWidth aria-describedby="yhelper">
-          <InputLabel htmlFor="YKoordinate">Y-Koordinate</InputLabel>
-          <StyledInput
-            id="YKoordinate"
-            value={y}
-            type="number"
-            min="1075346"
-            max="1299942"
-            onChange={onChangeY}
-            onBlur={onBlurY}
-          />
-          <FormHelperText id="yhelper">{yError}</FormHelperText>
-        </FormControl>
-        <StyledIconButton
-          title="auf Koordinaten zentrieren"
-          aria-label="auf Koordinaten zentrieren"
-          onClick={onClickGoto}
-          disabled={!(!!x && !!y && xIsValid(x) && yIsValid(y))}
-        >
-          <StyledPanIcon
-            disabled={!(!!x && !!y && xIsValid(x) && yIsValid(y))}
-          />
-        </StyledIconButton>
-        <StyledIconButton
-          title="schliessen"
-          aria-label="schliessen"
-          onClick={onClickClear}
-        >
-          <StyledClearIcon />
-        </StyledIconButton>
-      </Container>
-    )
-  }
+  return (
+    <Container onBlur={onBlurGotoContainer} onFocus={onFocusGotoContainer}>
+      <FormControl error={!!xError} fullWidth aria-describedby="xhelper">
+        <InputLabel htmlFor="XKoordinate">X-Koordinate</InputLabel>
+        <StyledInput
+          id="XKoordinate"
+          value={x}
+          type="number"
+          min="2485071"
+          max="2828516"
+          onChange={onChangeX}
+          onBlur={onBlurX}
+          ref={xkoordField}
+        />
+        <FormHelperText id="xhelper">{xError}</FormHelperText>
+      </FormControl>
+      <FormControl error={!!yError} fullWidth aria-describedby="yhelper">
+        <InputLabel htmlFor="YKoordinate">Y-Koordinate</InputLabel>
+        <StyledInput
+          id="YKoordinate"
+          value={y}
+          type="number"
+          min="1075346"
+          max="1299942"
+          onChange={onChangeY}
+          onBlur={onBlurY}
+        />
+        <FormHelperText id="yhelper">{yError}</FormHelperText>
+      </FormControl>
+      <StyledIconButton
+        title="auf Koordinaten zentrieren"
+        aria-label="auf Koordinaten zentrieren"
+        onClick={onClickGoto}
+        disabled={!(!!x && !!y && xIsValid(x) && yIsValid(y))}
+      >
+        <StyledPanIcon disabled={!(!!x && !!y && xIsValid(x) && yIsValid(y))} />
+      </StyledIconButton>
+      <StyledIconButton
+        title="schliessen"
+        aria-label="schliessen"
+        onClick={onClickClear}
+      >
+        <StyledClearIcon />
+      </StyledIconButton>
+    </Container>
+  )
 }
 
 export default enhance(PanToCoordinates)
