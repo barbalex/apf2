@@ -55,9 +55,9 @@ export default async idb => {
   })
 
   const cache = new InMemoryCache({
-    dataIdFromObject: object => {
+    /*dataIdFromObject: object => {
       return object.id
-    },
+    },*/
   })
   const myDefaults = await defaults(idb)
   const stateLink = withClientState({
@@ -71,10 +71,11 @@ export default async idb => {
     uri: graphQlUri(),
   })*/
   const batchHttpLink = new BatchHttpLink({ uri: graphQlUri() })
-  console.log('client.js, creating client')
+  const defaultOptions = { fetchPolicy: 'network-only' }
   const client = new ApolloClient({
     link: ApolloLink.from([stateLink, authLink, batchHttpLink]),
     cache,
+    defaultOptions,
   })
   return client
 }

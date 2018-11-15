@@ -66,8 +66,7 @@ const enhance = compose(
             name,
             password,
           },
-          /*
-          optimisticResponse: {
+          /*optimisticResponse: {
             login: {
               username: name,
               jwtToken: '',
@@ -95,14 +94,14 @@ const enhance = compose(
       await app.client.mutate({
         mutation: setUserGql,
         variables: { name, token },
-        optimisticResponse: {
+        /*optimisticResponse: {
           setUser: {
             name,
             token,
             __typename: 'User',
           },
           __typename: 'Mutation',
-        },
+        },*/
       })
       // this is easiest way to make sure everything is correct
       // as client is rebuilt with new settings

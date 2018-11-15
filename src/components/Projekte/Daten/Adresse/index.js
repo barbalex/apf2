@@ -47,7 +47,7 @@ const enhance = compose(
             id: row.id,
             [field]: value,
           },
-          optimisticResponse: {
+          /*optimisticResponse: {
             __typename: 'Mutation',
             updateAdresseById: {
               adresse: {
@@ -65,7 +65,7 @@ const enhance = compose(
               },
               __typename: 'Adresse',
             },
-          },
+          },*/
         })
       } catch (error) {
         return setErrors({ [field]: error.message })

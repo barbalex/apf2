@@ -175,8 +175,7 @@ export default async ({
         /**
          * update does not work because query contains filter
          */
-        /*
-        optimisticResponse: {
+        /*optimisticResponse: {
           __typename: 'Mutation',
           updateTpopkontrById: {
             tpopkontr: {

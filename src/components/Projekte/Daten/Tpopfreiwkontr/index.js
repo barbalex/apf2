@@ -198,7 +198,7 @@ const enhance = compose(
         await app.client.mutate({
           mutation: updateTpopkontrByIdGql,
           variables,
-          optimisticResponse: {
+          /*optimisticResponse: {
             __typename: 'Mutation',
             updateTpopkontrById: {
               tpopkontr: {
@@ -257,7 +257,7 @@ const enhance = compose(
               },
               __typename: 'Tpopkontr',
             },
-          },
+          },*/
         })
       } catch (error) {
         return setErrors({ [field]: error.message })

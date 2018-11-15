@@ -78,7 +78,7 @@ const Apber = ({
           id: row.id,
           [field]: value,
         },
-        optimisticResponse: {
+        /*optimisticResponse: {
           __typename: 'Mutation',
           updateApberById: {
             apber: {
@@ -127,7 +127,7 @@ const Apber = ({
             },
             __typename: 'Apber',
           },
-        },
+        },*/
       })
     } catch (error) {
       return setErrors({ [field]: error.message })
