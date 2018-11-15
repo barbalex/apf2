@@ -69,18 +69,16 @@ const PanToCoordinates = ({
   const [gotoFocused, changeGotoFocused] = useState(false)
 
   const onFocusGotoContainer = useCallback(
-    () => {
-      console.log('onFocusGotoContainer', { timeoutId, gotoFocused })
+    event => {
       clearTimeout(timeoutId)
       if (!gotoFocused) {
         changeGotoFocused(true)
       }
     },
-    [gotoFocused],
+    [gotoFocused, timeoutId],
   )
   const onClickClear = useCallback(
     () => {
-      console.log('onClickClear')
       setMarker(null)
       if (marker) map.removeLayer(marker)
       setX('')
@@ -91,12 +89,6 @@ const PanToCoordinates = ({
   )
   const onBlurGotoContainer = useCallback(
     event => {
-      console.log('onBlurGotoContainer', {
-        oldTimeoutId: timeoutId,
-        gotoFocused,
-        eventTarget: event.target,
-        event,
-      })
       const newTimeoutId = setTimeout(() => {
         if (gotoFocused) {
           changeGotoFocused(false)
@@ -105,7 +97,7 @@ const PanToCoordinates = ({
       })
       changeTimeoutId(newTimeoutId)
     },
-    [gotoFocused],
+    [gotoFocused, timeoutId],
   )
   /**
    * for unknown reason
@@ -116,7 +108,6 @@ const PanToCoordinates = ({
    */
   const onClickGoto = useCallback(
     () => {
-      console.log('onClickGoto', { y, x })
       if (x && y && !xError && !yError) {
         const latLng = new window.L.LatLng(...epsg2056to4326(x, y))
         map.flyTo(latLng)
@@ -138,7 +129,6 @@ const PanToCoordinates = ({
     let { value } = event.target
     // convert string to number
     value = value ? +value : value
-    console.log('onChangeX', { x })
     setX(value)
     // immediately cancel possible existing error
     if (xIsValid(value)) changeXError('')
@@ -147,15 +137,14 @@ const PanToCoordinates = ({
     let { value } = event.target
     // convert string to number
     value = value ? +value : value
-    console.log('onChangeY', { y })
     setY(value)
     // immediately cancel possible existing error
     if (yIsValid(value)) changeYError('')
   })
   const onBlurX = useCallback(
     event => {
+      // prevent onBlurGotoContainer
       event.stopPropagation()
-      console.log('onBlurX', { x })
       if (xIsValid(x)) return changeXError('')
       changeXError(`x muss zwischen 2'485'071 und 2'828'515 liegen`)
     },
@@ -163,8 +152,8 @@ const PanToCoordinates = ({
   )
   const onBlurY = useCallback(
     event => {
+      // prevent onBlurGotoContainer
       event.stopPropagation()
-      console.log('onBlurY', { y })
       if (yIsValid(y)) return changeYError('')
       changeYError(`y muss zwischen 1'075'346 und 1'299'941 liegen`)
     },
