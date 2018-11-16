@@ -62,7 +62,6 @@ import Daten from '../Daten'
 import Exporte from '../Exporte'
 import getActiveNodes from '../../../modules/getActiveNodes'
 import buildNodes from '../TreeContainer/nodes'
-import overlays from '../Karte/overlays'
 import idsInsideFeatureCollection from '../../../modules/idsInsideFeatureCollection'
 import withErrorState from '../../../state/withErrorState'
 import logout from '../../../modules/logout'
@@ -139,7 +138,6 @@ const enhance = compose(
   withBeobAssignLines,
   withPopForMapMarkers,
   withErrorState,
-  withState('overlays', 'setOverlays', overlays),
   withState('activeOverlays', 'setActiveOverlays', []),
   withState('activeBaseLayer', 'setActiveBaseLayer', 'OsmColor'),
   withState('popLabelUsingNr', 'setPopLabelUsingNr', true),
@@ -200,8 +198,6 @@ const ProjekteContainer = props => {
     treeName,
     tabs: tabsPassed,
     projekteTabs,
-    overlays,
-    setOverlays,
     activeOverlays,
     setActiveOverlays,
     activeBaseLayer,
@@ -619,8 +615,6 @@ const ProjekteContainer = props => {
                 data={data}
                 activeBaseLayer={activeBaseLayer}
                 setActiveBaseLayer={setActiveBaseLayer}
-                overlays={overlays}
-                setOverlays={setOverlays}
                 activeOverlays={activeOverlays}
                 setActiveOverlays={setActiveOverlays}
                 activeNodes={activeNodes}

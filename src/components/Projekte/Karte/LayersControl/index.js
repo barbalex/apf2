@@ -124,8 +124,6 @@ const LayersControl = ({
   onToggleBaseLayersExpanded,
   onToggleOverlaysExpanded,
   onToggleApfloraLayersExpanded,
-  overlays,
-  setOverlays,
   activeOverlays,
   setActiveOverlays,
   activeBaseLayer,
@@ -149,8 +147,6 @@ const LayersControl = ({
   toggleOverlaysExpanded: () => void,
   onToggleBaseLayersExpanded: () => void,
   onToggleOverlaysExpanded: () => void,
-  overlays: Array<Object>,
-  setOverlays: () => void,
   activeOverlays: Array<String>,
   setActiveOverlays: () => void,
   activeBaseLayer: String,
@@ -166,7 +162,7 @@ const LayersControl = ({
   mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { apfloraLayers } = mobxStore
+  const { apfloraLayers, overlays } = mobxStore
 
   const assigning = get(data, 'assigningBeob')
   const getApfloraLayersTitle = () => {
@@ -234,8 +230,6 @@ const LayersControl = ({
             </CardHeader>
             {overlaysExpanded && (
               <Overlays
-                overlays={overlays}
-                setOverlays={setOverlays}
                 activeOverlays={activeOverlays}
                 setActiveOverlays={setActiveOverlays}
                 /**

@@ -136,8 +136,6 @@ const Karte = ({
   data,
   activeBaseLayer,
   setActiveBaseLayer,
-  overlays,
-  setOverlays,
   activeOverlays,
   setActiveOverlays,
   refetchTree,
@@ -168,8 +166,6 @@ const Karte = ({
   data: Object,
   activeBaseLayer: String,
   setActiveBaseLayer: () => void,
-  overlays: Array<Object>,
-  setOverlays: () => void,
   activeOverlays: Array<String>,
   setActiveOverlays: () => void,
   refetchTree: () => void,
@@ -195,7 +191,7 @@ const Karte = ({
   dimensions: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { apfloraLayers, activeApfloraLayers } = mobxStore
+  const { apfloraLayers, activeApfloraLayers, overlays } = mobxStore
   const mapRef = useRef(null)
   const prevDimensions = usePrevious(dimensions) || {}
   useEffect(
@@ -444,8 +440,6 @@ const Karte = ({
             activeNodes={activeNodes}
             activeBaseLayer={activeBaseLayer}
             setActiveBaseLayer={setActiveBaseLayer}
-            overlays={overlays}
-            setOverlays={setOverlays}
             activeOverlays={activeOverlays}
             setActiveOverlays={setActiveOverlays}
             bounds={bounds}

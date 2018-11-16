@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
 import DragHandleIcon from '@material-ui/icons/DragHandle'
@@ -11,6 +11,7 @@ import {
 } from 'react-sortable-hoc'
 
 import Checkbox from './shared/Checkbox'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const CardContent = styled.div`
   color: rgb(48, 48, 48);
@@ -82,7 +83,7 @@ const SortableItem = SortableElement(
         onChange={() => {
           if (activeOverlays.includes(overlay.value)) {
             return setActiveOverlays(
-              activeOverlays.filter(o => o !== overlay.value)
+              activeOverlays.filter(o => o !== overlay.value),
             )
           }
           return setActiveOverlays([...activeOverlays, overlay.value])
@@ -110,7 +111,7 @@ const SortableItem = SortableElement(
         </IconsDiv>
       </IconsDivs>
     </LayerDiv>
-  )
+  ),
 )
 
 const SortableList = SortableContainer(
@@ -126,32 +127,33 @@ const SortableList = SortableContainer(
         />
       ))}
     </div>
-  )
+  ),
 )
 
 const Overlays = ({
-  overlays,
-  setOverlays,
   activeOverlays,
   setActiveOverlays,
 }: {
-  overlays: Array<Object>,
-  setOverlays: () => void,
   activeOverlays: Array<String>,
   setActiveOverlays: () => void,
-}) => (
-  <CardContent>
-    <SortableList
-      items={overlays}
-      onSortEnd={({ oldIndex, newIndex }) =>
-        setOverlays(arrayMove(overlays, oldIndex, newIndex))
-      }
-      useDragHandle
-      lockAxis="y"
-      activeOverlays={activeOverlays}
-      setActiveOverlays={setActiveOverlays}
-    />
-  </CardContent>
-)
+}) => {
+  const mobxStore = useContext(mobxStoreContext)
+  const { overlays, setOverlays } = mobxStore
+
+  return (
+    <CardContent>
+      <SortableList
+        items={overlays}
+        onSortEnd={({ oldIndex, newIndex }) =>
+          setOverlays(arrayMove(overlays, oldIndex, newIndex))
+        }
+        useDragHandle
+        lockAxis="y"
+        activeOverlays={activeOverlays}
+        setActiveOverlays={setActiveOverlays}
+      />
+    </CardContent>
+  )
+}
 
 export default Overlays
