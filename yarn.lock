@@ -831,7 +831,7 @@
   resolved "https://registry.yarnpkg.com/@date-io/core/-/core-0.0.2.tgz#35be27d26eb652e752ccfbffe624c95169200dbd"
   integrity sha512-rkanRee2Agpw3tZLaCGJxkNRzi7FdyqueQDmEZAgZfIQaPo0MoOrO0gcTGwhTNREV8+OBKiZLpbaHK79dsU/Wg==
 
-"@date-io/moment@^0.0.2":
+"@date-io/moment@0.0.2":
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/@date-io/moment/-/moment-0.0.2.tgz#2020055c214fe5da7a6fc4741ebcb6a622ead6da"
   integrity sha512-YrLDOHAZygZChOwXcr3D6W7Dusp7wLi3Y/pt6ZgxDOnX1iNlO+M7qjZ3PdD+vH0v2xlzEg2n2rZ67QschAIiKQ==
@@ -1250,9 +1250,9 @@
   integrity sha512-A2TAGbTFdBw9azHbpVd+/FkdW2T6msN1uct1O9bH3vTerEHKZhTXJUQXy+hNq1B0RagfU8U+KBdqiZpxjhOUQA==
 
 "@types/node@*":
-  version "10.12.8"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.8.tgz#d0a3ab5a6e61458c492304e2776ac136b81db927"
-  integrity sha512-INamyRZG4rW3lDCUmwVd5Xho/bXvQm/v1yP8V0UN1RuInU7RoWoaO570b+yLX4Ia/0szsx1wa8VzcsVlsvbWLA==
+  version "10.12.9"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.9.tgz#a07bfa74331471e1dc22a47eb72026843f7b95c8"
+  integrity sha512-eajkMXG812/w3w4a1OcBlaTwsFPO5F7fJ/amy+tieQxEMWBlbV1JGSjkFM+zkHNf81Cad+dfIRA+IBkvmvdAeA==
 
 "@types/pg-types@*":
   version "1.11.4"
@@ -8064,17 +8064,17 @@ mkdirp@0.5.1, mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdi
   dependencies:
     minimist "0.0.8"
 
-mobx-react-lite@^0.2.0:
+mobx-react-lite@0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/mobx-react-lite/-/mobx-react-lite-0.2.0.tgz#b78d49e86c81543bf4166052203158dd6ed70d70"
   integrity sha512-1EnIRQPsqDUxQMpbCVjyesyFzvJ9Ar5o8kvGRUXWUQpu5vjeQQMnSez7i91fj4xvH5wz5+sY/7FHK3bvWXXnYg==
 
-mobx-state-tree@^3.7.1:
+mobx-state-tree@3.7.1:
   version "3.7.1"
   resolved "https://registry.yarnpkg.com/mobx-state-tree/-/mobx-state-tree-3.7.1.tgz#161fc1b46224d3defa28b482914d3aa8e1b80ed7"
   integrity sha512-XJHT4ldB2eoHBOqTsNLOsJHNsClSkAUwNWQm9njat28Md0ymQIpVPpcKywz9I8tbu2RoWlEm1/U4v6SeQEk/sA==
 
-mobx@^5.6.0:
+mobx@5.6.0:
   version "5.6.0"
   resolved "https://registry.yarnpkg.com/mobx/-/mobx-5.6.0.tgz#e381c357e0ed7685a99a896455ecc66ff5ab84ee"
   integrity sha512-xrA0tBnSMANXCDjS2W/6YTasesA8mkg9o+v/Bw/OcbXaRVE6/soVwDMWIh7A6TwMDY4tYQprQJZ5WQN1TRSb3A==
@@ -10000,10 +10000,10 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-apollo@2.2.4:
-  version "2.2.4"
-  resolved "https://registry.yarnpkg.com/react-apollo/-/react-apollo-2.2.4.tgz#05b2a91deb4d5f30d2511fc663abc465b219435e"
-  integrity sha512-haS5R30Qvteb65ZLfWomUZQh47VU4ld4Kof3zlqdbLOrYPt3/DdVZC8ZFPZSxd5zPeIJtZqpUfAxD1WHVoMPIA==
+react-apollo@2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/react-apollo/-/react-apollo-2.3.1.tgz#f3687062f438b9b40e525d7e1ac2bcf0101b4495"
+  integrity sha512-xPteQmCzMJT8wE4v0zq38E6JWLhrNcJENl66fP117lwzU2lZA+qoUDcizqKl0z2OY5b+KklmqnPPD+wcWAdy7w==
   dependencies:
     fbjs "^1.0.0"
     hoist-non-react-statics "^3.0.0"
