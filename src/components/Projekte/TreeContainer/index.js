@@ -186,8 +186,6 @@ const TreeContainer = ({
   activeNode,
   activeNodes,
   refetchTree,
-  activeOverlays,
-  setActiveOverlays,
   setIdOfTpopBeingLocalized,
   popLabelUsingNr,
   setPopLabelUsingNr,
@@ -224,7 +222,12 @@ const TreeContainer = ({
   errorState: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { activeApfloraLayers, setActiveApfloraLayers } = mobxStore
+  const {
+    activeApfloraLayers,
+    setActiveApfloraLayers,
+    activeOverlays,
+    setActiveOverlays,
+  } = mobxStore
 
   const datasetToDelete = deleteState.state.toDelete
   const deleteDatasetModalIsVisible = !!datasetToDelete.id

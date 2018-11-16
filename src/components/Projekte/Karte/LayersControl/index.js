@@ -124,8 +124,6 @@ const LayersControl = ({
   onToggleBaseLayersExpanded,
   onToggleOverlaysExpanded,
   onToggleApfloraLayersExpanded,
-  activeOverlays,
-  setActiveOverlays,
   activeBaseLayer,
   setActiveBaseLayer,
   bounds,
@@ -147,8 +145,6 @@ const LayersControl = ({
   toggleOverlaysExpanded: () => void,
   onToggleBaseLayersExpanded: () => void,
   onToggleOverlaysExpanded: () => void,
-  activeOverlays: Array<String>,
-  setActiveOverlays: () => void,
   activeBaseLayer: String,
   setActiveBaseLayer: () => void,
   bounds: Array<Array<Number>>,
@@ -230,8 +226,6 @@ const LayersControl = ({
             </CardHeader>
             {overlaysExpanded && (
               <Overlays
-                activeOverlays={activeOverlays}
-                setActiveOverlays={setActiveOverlays}
                 /**
                  * overlaysString enforces rererender
                  * even when only the sorting changes

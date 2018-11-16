@@ -136,8 +136,6 @@ const Karte = ({
   data,
   activeBaseLayer,
   setActiveBaseLayer,
-  activeOverlays,
-  setActiveOverlays,
   refetchTree,
   idOfTpopBeingLocalized,
   setIdOfTpopBeingLocalized,
@@ -166,8 +164,6 @@ const Karte = ({
   data: Object,
   activeBaseLayer: String,
   setActiveBaseLayer: () => void,
-  activeOverlays: Array<String>,
-  setActiveOverlays: () => void,
   refetchTree: () => void,
   idOfTpopBeingLocalized: String,
   setIdOfTpopBeingLocalized: () => void,
@@ -191,7 +187,12 @@ const Karte = ({
   dimensions: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { apfloraLayers, activeApfloraLayers, overlays } = mobxStore
+  const {
+    apfloraLayers,
+    activeApfloraLayers,
+    overlays,
+    activeOverlays,
+  } = mobxStore
   const mapRef = useRef(null)
   const prevDimensions = usePrevious(dimensions) || {}
   useEffect(
@@ -440,8 +441,6 @@ const Karte = ({
             activeNodes={activeNodes}
             activeBaseLayer={activeBaseLayer}
             setActiveBaseLayer={setActiveBaseLayer}
-            activeOverlays={activeOverlays}
-            setActiveOverlays={setActiveOverlays}
             bounds={bounds}
             setBounds={setBounds}
             mapFilter={mapFilter}

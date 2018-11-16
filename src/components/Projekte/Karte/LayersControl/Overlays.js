@@ -130,15 +130,9 @@ const SortableList = SortableContainer(
   ),
 )
 
-const Overlays = ({
-  activeOverlays,
-  setActiveOverlays,
-}: {
-  activeOverlays: Array<String>,
-  setActiveOverlays: () => void,
-}) => {
+const Overlays = () => {
   const mobxStore = useContext(mobxStoreContext)
-  const { overlays, setOverlays } = mobxStore
+  const { overlays, setOverlays, activeOverlays, setActiveOverlays } = mobxStore
 
   return (
     <CardContent>

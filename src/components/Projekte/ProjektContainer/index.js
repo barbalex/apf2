@@ -138,7 +138,6 @@ const enhance = compose(
   withBeobAssignLines,
   withPopForMapMarkers,
   withErrorState,
-  withState('activeOverlays', 'setActiveOverlays', []),
   withState('activeBaseLayer', 'setActiveBaseLayer', 'OsmColor'),
   withState('popLabelUsingNr', 'setPopLabelUsingNr', true),
   withState('tpopLabelUsingNr', 'setTpopLabelUsingNr', true),
@@ -198,8 +197,6 @@ const ProjekteContainer = props => {
     treeName,
     tabs: tabsPassed,
     projekteTabs,
-    activeOverlays,
-    setActiveOverlays,
     activeBaseLayer,
     setActiveBaseLayer,
     idOfTpopBeingLocalized,
@@ -263,10 +260,6 @@ const ProjekteContainer = props => {
     treeName: String,
     tabs: Array<String>,
     projekteTabs: Array<String>,
-    overlays: Array<Object>,
-    setActiveOverlays: () => void,
-    activeOverlays: Array<String>,
-    setActiveOverlays: () => void,
     activeBaseLayer: String,
     setActiveBaseLayer: () => void,
     idOfTpopBeingLocalized: String,
@@ -290,7 +283,7 @@ const ProjekteContainer = props => {
   } = props
 
   const mobxStore = useContext(mobxStoreContext)
-  const { activeApfloraLayers } = mobxStore
+  const { activeApfloraLayers, activeOverlays } = mobxStore
 
   const queryArray = [
     dataLocal,
@@ -559,8 +552,6 @@ const ProjekteContainer = props => {
                 moving={moving}
                 openNodes={openNodes}
                 copying={copying}
-                activeOverlays={activeOverlays}
-                setActiveOverlays={setActiveOverlays}
                 refetchTree={refetch}
                 setIdOfTpopBeingLocalized={setIdOfTpopBeingLocalized}
                 tpopLabelUsingNr={tpopLabelUsingNr}
@@ -615,8 +606,6 @@ const ProjekteContainer = props => {
                 data={data}
                 activeBaseLayer={activeBaseLayer}
                 setActiveBaseLayer={setActiveBaseLayer}
-                activeOverlays={activeOverlays}
-                setActiveOverlays={setActiveOverlays}
                 activeNodes={activeNodes}
                 key={tabs.toString()}
                 refetchTree={refetch}
