@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
@@ -7,27 +7,37 @@ import buildMarkers from './buildMarkers'
 import buildMarkersClustered from './buildMarkersClustered'
 import Marker from './Marker'
 import MarkerCluster from './MarkerCluster'
+import mobxStoreContext from '../../../../../mobxStoreContext'
 
 const BeobNichtBeurteiltMarker = ({
   tree,
   data,
   activeNodes,
-  apfloraLayers,
   clustered,
   refetchTree,
   mapIdsFiltered,
-} : {
+}: {
   tree: Object,
   data: Object,
   activeNodes: Array<Object>,
-  apfloraLayers: Array<Object>,
   clustered: Boolean,
   refetchTree: () => void,
   mapIdsFiltered: Array<String>,
 }) => {
-  const beobNichtBeurteiltFilterString = get(tree, 'nodeLabelFilter.beobNichtBeurteilt')
-  const aparts = get(data, 'beobNichtBeurteiltForMapMarkers.apsByProjId.nodes[0].apartsByApId.nodes', [])
-  const beobs = flatten(aparts.map(a => get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', [])))
+  const mobxStore = useContext(mobxStoreContext)
+  const { apfloraLayers } = mobxStore
+  const beobNichtBeurteiltFilterString = get(
+    tree,
+    'nodeLabelFilter.beobNichtBeurteilt',
+  )
+  const aparts = get(
+    data,
+    'beobNichtBeurteiltForMapMarkers.apsByProjId.nodes[0].apartsByApId.nodes',
+    [],
+  )
+  const beobs = flatten(
+    aparts.map(a => get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', [])),
+  )
     // filter them by nodeLabelFilter
     .filter(el => {
       if (!beobNichtBeurteiltFilterString) return true
@@ -60,6 +70,5 @@ const BeobNichtBeurteiltMarker = ({
   })
   return <Marker markers={markers} />
 }
-
 
 export default BeobNichtBeurteiltMarker

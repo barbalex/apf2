@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import compose from 'recompose/compose'
@@ -9,6 +9,7 @@ import Marker from './Marker'
 import MarkerCluster from './MarkerCluster'
 import filterNodesByNodeFilterArray from '../../../TreeContainer/filterNodesByNodeFilterArray'
 import withNodeFilter from '../../../../../state/withNodeFilter'
+import mobxStoreContext from '../../../../../mobxStoreContext'
 
 const enhance = compose(withNodeFilter)
 
@@ -21,7 +22,6 @@ const TpopMarkerMarker = ({
    */
   data,
   activeNodes,
-  apfloraLayers,
   clustered,
   tpopLabelUsingNr,
   mapIdsFiltered,
@@ -30,12 +30,14 @@ const TpopMarkerMarker = ({
   tree: Object,
   data: Object,
   activeNodes: Array<Object>,
-  apfloraLayers: Array<Object>,
   clustered: Boolean,
   tpopLabelUsingNr: Boolean,
   mapIdsFiltered: Array<String>,
   nodeFilterState: Object,
 }) => {
+  const mobxStore = useContext(mobxStoreContext)
+  const { apfloraLayers } = mobxStore
+
   const popFilterString = get(tree, 'nodeLabelFilter.pop')
   const popNodeFilterArray = Object.entries(
     nodeFilterState.state[tree.name].pop,

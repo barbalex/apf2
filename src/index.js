@@ -20,7 +20,7 @@ import MomentUtils from '@date-io/moment'
 import { MuiPickersUtilsProvider } from 'material-ui-pickers'
 import { ApolloProvider } from 'react-apollo'
 import { Provider as StateProvider } from 'unstated'
-import mobxStore from './mobxStore'
+import MobxStore from './mobxStore'
 
 import app from 'ampersand-app'
 import 'typeface-roboto'
@@ -40,9 +40,11 @@ import AppContainer from './components/AppContainer'
 import Print from './components/Print'
 import historyListen from './modules/historyListen'
 
-import { StoreContextProvider } from './storeContext'
+import { StoreContextProvider as MobxStoreContextProvider } from './mobxStoreContext'
 
 import './index.css'
+
+const mobxStore = MobxStore.create()
 
 const run = async () => {
   try {
@@ -82,7 +84,7 @@ const run = async () => {
 
     ReactDOM.render(
       <StateProvider>
-        <StoreContextProvider value={mobxStore}>
+        <MobxStoreContextProvider value={mobxStore}>
           <ApolloProvider client={myClient}>
             <>
               <Print />
@@ -97,7 +99,7 @@ const run = async () => {
               </MuiThemeProvider>
             </>
           </ApolloProvider>
-        </StoreContextProvider>
+        </MobxStoreContextProvider>
       </StateProvider>,
       document.getElementById('root'),
     )

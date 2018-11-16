@@ -6,7 +6,7 @@
  *
  */
 
-import React, { createRef, Component } from 'react'
+import React, { useContext, useRef, useEffect } from 'react'
 import { Map, ScaleControl } from 'react-leaflet'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -63,6 +63,9 @@ import CoordinatesControl from './CoordinatesControl/index.js'
 import epsg4326to2056 from '../../../modules/epsg4326to2056'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import updateTpopById from './updateTpopById'
+
+import mobxStoreContext from '../../../mobxStoreContext'
+import usePrevious from '../../../modules/usePrevious'
 //import getBounds from '../../../modules/getBounds'
 
 // this does not work
@@ -124,272 +127,265 @@ const enhance = compose(
   debounceHandler('onMouseMove', 15),
 )
 
-class Karte extends Component {
-  props: {
-    tree: Object,
-    activeNodes: Object,
-    onMouseMove: () => void,
-    data: Object,
-    activeBaseLayer: String,
-    setActiveBaseLayer: () => void,
-    apfloraLayers: Array<Object>,
-    setApfloraLayers: () => void,
-    activeApfloraLayers: Array<Object>,
-    setActiveApfloraLayers: () => void,
-    overlays: Array<Object>,
-    setOverlays: () => void,
-    activeOverlays: Array<String>,
-    setActiveOverlays: () => void,
-    refetchTree: () => void,
-    idOfTpopBeingLocalized: String,
-    setIdOfTpopBeingLocalized: () => void,
-    tpopLabelUsingNr: Boolean,
-    popLabelUsingNr: Boolean,
-    bounds: Array<Array<Number>>,
-    setBounds: () => void,
-    mapIdsFiltered: Array<String>,
-    mapFilter: Object,
-    setMapFilter: () => void,
-    mapPopIdsFiltered: Array<String>,
-    mapTpopIdsFiltered: Array<String>,
-    mapBeobNichtBeurteiltIdsFiltered: Array<String>,
-    mapBeobZugeordnetIdsFiltered: Array<String>,
-    mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
-    detailplaene: Object,
-    setDetailplaene: () => void,
-    markierungen: Object,
-    setMarkierungen: () => void,
-    errorState: Object,
-    dimensions: Object,
-  }
-
-  mapRef = createRef()
-
-  componentDidUpdate(prevProps) {
-    const prevWidth = prevProps.dimensions.width
-    // DANGER: first width is '100%'!
-    if (Number.isInteger(prevWidth)) {
-      const width = this.props.dimensions.width
-      const widthHasChangedByOver20Percent =
-        prevWidth / width > 1.2 || prevWidth / width < 0.8
-      if (widthHasChangedByOver20Percent) {
-        /**
-         * need to redraw map, when tabs changed
-         * unfortunately, tabs change in previous update, so can't compare tabs
-         */
-        const map = this.mapRef.current.leafletElement
-        map.invalidateSize()
+const Karte = ({
+  tree,
+  activeNodes,
+  onMouseMove,
+  data,
+  activeBaseLayer,
+  setActiveBaseLayer,
+  activeApfloraLayers,
+  setActiveApfloraLayers,
+  overlays,
+  setOverlays,
+  activeOverlays,
+  setActiveOverlays,
+  refetchTree,
+  idOfTpopBeingLocalized,
+  setIdOfTpopBeingLocalized,
+  tpopLabelUsingNr,
+  popLabelUsingNr,
+  bounds,
+  setBounds,
+  mapIdsFiltered,
+  mapFilter,
+  setMapFilter,
+  mapPopIdsFiltered,
+  mapTpopIdsFiltered,
+  mapBeobNichtBeurteiltIdsFiltered,
+  mapBeobZugeordnetIdsFiltered,
+  mapBeobNichtZuzuordnenIdsFiltered,
+  detailplaene,
+  setDetailplaene,
+  markierungen,
+  setMarkierungen,
+  errorState,
+  dimensions,
+}: {
+  tree: Object,
+  activeNodes: Object,
+  onMouseMove: () => void,
+  data: Object,
+  activeBaseLayer: String,
+  setActiveBaseLayer: () => void,
+  activeApfloraLayers: Array<Object>,
+  setActiveApfloraLayers: () => void,
+  overlays: Array<Object>,
+  setOverlays: () => void,
+  activeOverlays: Array<String>,
+  setActiveOverlays: () => void,
+  refetchTree: () => void,
+  idOfTpopBeingLocalized: String,
+  setIdOfTpopBeingLocalized: () => void,
+  tpopLabelUsingNr: Boolean,
+  popLabelUsingNr: Boolean,
+  bounds: Array<Array<Number>>,
+  setBounds: () => void,
+  mapIdsFiltered: Array<String>,
+  mapFilter: Object,
+  setMapFilter: () => void,
+  mapPopIdsFiltered: Array<String>,
+  mapTpopIdsFiltered: Array<String>,
+  mapBeobNichtBeurteiltIdsFiltered: Array<String>,
+  mapBeobZugeordnetIdsFiltered: Array<String>,
+  mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
+  detailplaene: Object,
+  setDetailplaene: () => void,
+  markierungen: Object,
+  setMarkierungen: () => void,
+  errorState: Object,
+  dimensions: Object,
+}) => {
+  const mobxStore = useContext(mobxStoreContext)
+  const { apfloraLayers } = mobxStore
+  const mapRef = useRef(null)
+  const prevDimensions = usePrevious(dimensions) || {}
+  useEffect(
+    () => {
+      const prevWidth = prevDimensions.width || 0
+      // DANGER: first width is '100%'!
+      if (Number.isInteger(prevWidth)) {
+        const width = dimensions.width
+        const widthHasChangedByOver20Percent =
+          prevWidth / width > 1.2 || prevWidth / width < 0.8
+        if (widthHasChangedByOver20Percent) {
+          /**
+           * need to redraw map, when tabs changed
+           * unfortunately, tabs change in previous update, so can't compare tabs
+           */
+          const map = mapRef.current.leafletElement
+          map.invalidateSize()
+        }
       }
-    }
+    },
+    [dimensions.width],
+  )
+
+  const assigning = get(data, 'assigningBeob')
+  const clustered = !(
+    assigning || activeApfloraLayers.includes('beobZugeordnetAssignPolylines')
+  )
+  /**
+   * need an object whose methods return overlays
+   * in order to dynamically display and sort active overlays
+   */
+  const ApfloraLayerComponents = {
+    // MapFilter is used for filtering, need to return null
+    mapFilter: () => null,
+    pop: () => (
+      <Pop
+        tree={tree}
+        data={data}
+        activeNodes={activeNodes}
+        activeApfloraLayers={activeApfloraLayers}
+        popLabelUsingNr={popLabelUsingNr}
+        mapIdsFiltered={mapIdsFiltered}
+      />
+    ),
+    tpop: () => (
+      <Tpop
+        tree={tree}
+        data={data}
+        activeNodes={activeNodes}
+        clustered={clustered}
+        tpopLabelUsingNr={tpopLabelUsingNr}
+        mapIdsFiltered={mapIdsFiltered}
+      />
+    ),
+    beobNichtBeurteilt: () => (
+      <BeobNichtBeurteilt
+        tree={tree}
+        data={data}
+        activeNodes={activeNodes}
+        clustered={clustered}
+        refetchTree={refetchTree}
+        mapIdsFiltered={mapIdsFiltered}
+      />
+    ),
+    beobNichtZuzuordnen: () => (
+      <BeobNichtZuzuordnen
+        tree={tree}
+        data={data}
+        activeNodes={activeNodes}
+        clustered={clustered}
+        mapIdsFiltered={mapIdsFiltered}
+      />
+    ),
+    beobZugeordnet: () => (
+      <BeobZugeordnet
+        tree={tree}
+        data={data}
+        activeNodes={activeNodes}
+        clustered={clustered}
+        refetchTree={refetchTree}
+        mapIdsFiltered={mapIdsFiltered}
+      />
+    ),
+    beobZugeordnetAssignPolylines: () => (
+      <BeobZugeordnetAssignPolylines
+        data={data}
+        tree={tree}
+        activeNodes={activeNodes}
+        mapIdsFiltered={mapIdsFiltered}
+      />
+    ),
   }
+  const OverlayComponents = {
+    ZhUep: () => <ZhUepOverlay />,
+    Detailplaene: () => (
+      <Detailplaene
+        detailplaene={detailplaene}
+        setDetailplaene={setDetailplaene}
+        errorState={errorState}
+      />
+    ),
+    Markierungen: () => (
+      <Markierungen
+        markierungen={markierungen}
+        setMarkierungen={setMarkierungen}
+        errorState={errorState}
+      />
+    ),
+    ZhGemeindegrenzen: () => <ZhGemeindegrenzen />,
+    ZhSvoColor: () => <ZhSvoColor />,
+    ZhSvoGrey: () => <ZhSvoGrey />,
+    ZhPflegeplan: () => <ZhPflegeplan />,
+    ZhLrVegKartierungen: () => <ZhLrVegKartierungen />,
+    ZhLichteWaelder: () => <ZhLichteWaelder />,
+    ZhWaelderVegetation: () => <ZhWaelderVegetation />,
+  }
+  const BaseLayerComponents = {
+    OsmColor: () => <OsmColor />,
+    OsmBw: () => <OsmBw />,
+    SwissTopoPixelFarbe: () => <SwissTopoPixelFarbe />,
+    SwissTopoPixelGrau: () => <SwissTopoPixelGrau />,
+    SwisstopoSiegfried: () => <SwisstopoSiegfried />,
+    SwisstopoDufour: () => <SwisstopoDufour />,
+    ZhUep: () => <ZhUep />,
+    //BingAerial: () => <BingAerial />,
+    ZhOrtho: () => <ZhOrtho />,
+    ZhOrthoIr: () => <ZhOrthoIr />,
+    ZhOrtho2015: () => <ZhOrtho2015 />,
+    ZhOrtho2015Ir: () => <ZhOrtho2015Ir />,
+  }
+  const BaseLayerComponent = BaseLayerComponents[activeBaseLayer]
+  const activeApfloraLayersSorted = sortBy(
+    activeApfloraLayers,
+    activeApfloraLayer =>
+      apfloraLayers.findIndex(
+        apfloraLayer => apfloraLayer.value === activeApfloraLayer,
+      ),
+  )
+  const activeOverlaysSorted = sortBy(activeOverlays, activeOverlay =>
+    overlays.findIndex(o => o.value === activeOverlay),
+  )
 
-  render() {
-    const {
-      tree,
-      activeNodes,
-      onMouseMove,
-      data,
-      activeBaseLayer,
-      setActiveBaseLayer,
-      apfloraLayers,
-      setApfloraLayers,
-      activeApfloraLayers,
-      setActiveApfloraLayers,
-      overlays,
-      setOverlays,
-      activeOverlays,
-      setActiveOverlays,
-      refetchTree,
-      idOfTpopBeingLocalized,
-      setIdOfTpopBeingLocalized,
-      tpopLabelUsingNr,
-      popLabelUsingNr,
-      bounds,
-      setBounds,
-      mapIdsFiltered,
-      mapPopIdsFiltered,
-      mapTpopIdsFiltered,
-      mapBeobNichtBeurteiltIdsFiltered,
-      mapBeobNichtZuzuordnenIdsFiltered,
-      mapBeobZugeordnetIdsFiltered,
-      mapFilter,
-      setMapFilter,
-      detailplaene,
-      setDetailplaene,
-      markierungen,
-      setMarkierungen,
-      errorState,
-    } = this.props
-    const assigning = get(data, 'assigningBeob')
-    const clustered = !(
-      assigning || activeApfloraLayers.includes('beobZugeordnetAssignPolylines')
-    )
-    /**
-     * need an object whose methods return overlays
-     * in order to dynamically display and sort active overlays
-     */
-    const ApfloraLayerComponents = {
-      // MapFilter is used for filtering, need to return null
-      mapFilter: () => null,
-      pop: () => (
-        <Pop
-          tree={tree}
-          data={data}
-          activeNodes={activeNodes}
-          apfloraLayers={apfloraLayers}
-          activeApfloraLayers={activeApfloraLayers}
-          popLabelUsingNr={popLabelUsingNr}
-          mapIdsFiltered={mapIdsFiltered}
-        />
-      ),
-      tpop: () => (
-        <Tpop
-          tree={tree}
-          data={data}
-          activeNodes={activeNodes}
-          apfloraLayers={apfloraLayers}
-          clustered={clustered}
-          tpopLabelUsingNr={tpopLabelUsingNr}
-          mapIdsFiltered={mapIdsFiltered}
-        />
-      ),
-      beobNichtBeurteilt: () => (
-        <BeobNichtBeurteilt
-          tree={tree}
-          data={data}
-          activeNodes={activeNodes}
-          apfloraLayers={apfloraLayers}
-          clustered={clustered}
-          refetchTree={refetchTree}
-          mapIdsFiltered={mapIdsFiltered}
-        />
-      ),
-      beobNichtZuzuordnen: () => (
-        <BeobNichtZuzuordnen
-          tree={tree}
-          data={data}
-          activeNodes={activeNodes}
-          apfloraLayers={apfloraLayers}
-          clustered={clustered}
-          mapIdsFiltered={mapIdsFiltered}
-        />
-      ),
-      beobZugeordnet: () => (
-        <BeobZugeordnet
-          tree={tree}
-          data={data}
-          activeNodes={activeNodes}
-          apfloraLayers={apfloraLayers}
-          clustered={clustered}
-          refetchTree={refetchTree}
-          mapIdsFiltered={mapIdsFiltered}
-        />
-      ),
-      beobZugeordnetAssignPolylines: () => (
-        <BeobZugeordnetAssignPolylines
-          data={data}
-          tree={tree}
-          activeNodes={activeNodes}
-          mapIdsFiltered={mapIdsFiltered}
-        />
-      ),
-    }
-    const OverlayComponents = {
-      ZhUep: () => <ZhUepOverlay />,
-      Detailplaene: () => (
-        <Detailplaene
-          detailplaene={detailplaene}
-          setDetailplaene={setDetailplaene}
-          errorState={errorState}
-        />
-      ),
-      Markierungen: () => (
-        <Markierungen
-          markierungen={markierungen}
-          setMarkierungen={setMarkierungen}
-          errorState={errorState}
-        />
-      ),
-      ZhGemeindegrenzen: () => <ZhGemeindegrenzen />,
-      ZhSvoColor: () => <ZhSvoColor />,
-      ZhSvoGrey: () => <ZhSvoGrey />,
-      ZhPflegeplan: () => <ZhPflegeplan />,
-      ZhLrVegKartierungen: () => <ZhLrVegKartierungen />,
-      ZhLichteWaelder: () => <ZhLichteWaelder />,
-      ZhWaelderVegetation: () => <ZhWaelderVegetation />,
-    }
-    const BaseLayerComponents = {
-      OsmColor: () => <OsmColor />,
-      OsmBw: () => <OsmBw />,
-      SwissTopoPixelFarbe: () => <SwissTopoPixelFarbe />,
-      SwissTopoPixelGrau: () => <SwissTopoPixelGrau />,
-      SwisstopoSiegfried: () => <SwisstopoSiegfried />,
-      SwisstopoDufour: () => <SwisstopoDufour />,
-      ZhUep: () => <ZhUep />,
-      //BingAerial: () => <BingAerial />,
-      ZhOrtho: () => <ZhOrtho />,
-      ZhOrthoIr: () => <ZhOrthoIr />,
-      ZhOrtho2015: () => <ZhOrtho2015 />,
-      ZhOrtho2015Ir: () => <ZhOrtho2015Ir />,
-    }
-    const BaseLayerComponent = BaseLayerComponents[activeBaseLayer]
-    const activeApfloraLayersSorted = sortBy(
-      activeApfloraLayers,
-      activeApfloraLayer =>
-        apfloraLayers.findIndex(
-          apfloraLayer => apfloraLayer.value === activeApfloraLayer,
-        ),
-    )
-    const activeOverlaysSorted = sortBy(activeOverlays, activeOverlay =>
-      overlays.findIndex(o => o.value === activeOverlay),
-    )
-
-    return (
-      <Container>
-        <ErrorBoundary>
-          <StyledMap
-            localizing={!!idOfTpopBeingLocalized}
-            ref={this.mapRef}
-            bounds={bounds}
-            //preferCanvas
-            onMouseMove={onMouseMove}
-            // need max and min zoom because otherwise
-            // something errors
-            // probably clustering function
-            maxZoom={22}
-            minZoom={0}
-            doubleClickZoom={false}
-            onDblclick={async event => {
-              // since 2018 10 31 using idOfTpopBeingLocalized directly
-              // returns null, so need to use this.props.idOfTpopBeingLocalized
-              const { idOfTpopBeingLocalized } = this.props
-              /**
-               * TODO
-               * When clicking on Layertool
-               * somehow Mapelement grabs the click event
-               * although Layertool lies _over_ map element ??!!
-               * So when localizing, if user wants to change base map,
-               * click on Layertool sets new coordinates!
-               */
-              if (!!idOfTpopBeingLocalized) {
-                const { lat, lng } = event.latlng
-                const [x, y] = epsg4326to2056(lng, lat)
-                // DANGER:
-                // need to stop propagation of the event
-                // if not it is called a second time
-                // the crazy thing is:
-                // in some areas (not all) the second event
-                // has wrong coordinates!!!!
-                window.L.DomEvent.stopPropagation(event)
-                try {
-                  await app.client.mutate({
-                    mutation: updateTpopById,
-                    variables: {
-                      id: idOfTpopBeingLocalized,
-                      x,
-                      y,
-                    },
-                    /*optimisticResponse: {
+  return (
+    <Container>
+      <ErrorBoundary>
+        <StyledMap
+          localizing={!!idOfTpopBeingLocalized}
+          ref={mapRef}
+          bounds={bounds}
+          //preferCanvas
+          onMouseMove={onMouseMove}
+          // need max and min zoom because otherwise
+          // something errors
+          // probably clustering function
+          maxZoom={22}
+          minZoom={0}
+          doubleClickZoom={false}
+          onDblclick={async event => {
+            // since 2018 10 31 using idOfTpopBeingLocalized directly
+            // returns null, so need to use this.props.idOfTpopBeingLocalized
+            const { idOfTpopBeingLocalized } = this.props
+            /**
+             * TODO
+             * When clicking on Layertool
+             * somehow Mapelement grabs the click event
+             * although Layertool lies _over_ map element ??!!
+             * So when localizing, if user wants to change base map,
+             * click on Layertool sets new coordinates!
+             */
+            if (!!idOfTpopBeingLocalized) {
+              const { lat, lng } = event.latlng
+              const [x, y] = epsg4326to2056(lng, lat)
+              // DANGER:
+              // need to stop propagation of the event
+              // if not it is called a second time
+              // the crazy thing is:
+              // in some areas (not all) the second event
+              // has wrong coordinates!!!!
+              window.L.DomEvent.stopPropagation(event)
+              try {
+                await app.client.mutate({
+                  mutation: updateTpopById,
+                  variables: {
+                    id: idOfTpopBeingLocalized,
+                    x,
+                    y,
+                  },
+                  /*optimisticResponse: {
                       __typename: 'Mutation',
                       updateTpopById: {
                         tpop: {
@@ -401,17 +397,17 @@ class Karte extends Component {
                         __typename: 'Tpop',
                       },
                     },*/
-                  })
-                  // refetch so it appears on map
-                  refetchTree('tpopForMap')
-                } catch (error) {
-                  errorState.add(error)
-                }
-                setIdOfTpopBeingLocalized(null)
+                })
+                // refetch so it appears on map
+                refetchTree('tpopForMap')
+              } catch (error) {
+                errorState.add(error)
               }
-            }}
-            // turned off because caused cyclic zooming
-            /*
+              setIdOfTpopBeingLocalized(null)
+            }
+          }}
+          // turned off because caused cyclic zooming
+          /*
             onZoomlevelschange={event => {
               // need to update bounds, otherwise map jumps back
               // when adding new tpop
@@ -428,70 +424,65 @@ class Karte extends Component {
               const mapBounds = event.target.getBounds()
               setBounds([mapBounds._southWest, mapBounds._northEast])
             }}*/
-          >
-            {activeBaseLayer && <BaseLayerComponent />}
-            {activeOverlaysSorted
-              .map((overlayName, index) => {
-                const OverlayComponent = OverlayComponents[overlayName]
-                return <OverlayComponent key={index} />
-              })
-              .reverse()}
-            {activeApfloraLayersSorted
-              .map((apfloraLayerName, index) => {
-                const ApfloraLayerComponent =
-                  ApfloraLayerComponents[apfloraLayerName]
-                return <ApfloraLayerComponent key={index} />
-              })
-              .reverse()}
-            <ScaleControl imperial={false} />
-            <LayersControl
-              data={data}
-              tree={tree}
-              activeNodes={activeNodes}
-              activeBaseLayer={activeBaseLayer}
-              setActiveBaseLayer={setActiveBaseLayer}
-              apfloraLayers={apfloraLayers}
-              setApfloraLayers={setApfloraLayers}
-              activeApfloraLayers={activeApfloraLayers}
-              setActiveApfloraLayers={setActiveApfloraLayers}
-              overlays={overlays}
-              setOverlays={setOverlays}
-              activeOverlays={activeOverlays}
-              setActiveOverlays={setActiveOverlays}
-              bounds={bounds}
-              setBounds={setBounds}
-              mapFilter={mapFilter}
-              mapIdsFiltered={mapIdsFiltered}
-              mapPopIdsFiltered={mapPopIdsFiltered}
-              mapTpopIdsFiltered={mapTpopIdsFiltered}
-              mapBeobNichtBeurteiltIdsFiltered={
-                mapBeobNichtBeurteiltIdsFiltered
-              }
-              mapBeobNichtZuzuordnenIdsFiltered={
-                mapBeobNichtZuzuordnenIdsFiltered
-              }
-              mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
-              // this enforces rerendering when sorting changes
-              activeOverlaysString={activeOverlays.join()}
-              activeApfloraLayersString={activeApfloraLayers.join()}
-            />
-            <MeasureControl />
-            <SwitchScaleControl />
-            <FullScreenControl />
-            {activeApfloraLayers.includes('mapFilter') && (
-              <DrawControl setStoreMapFilter={setMapFilter} />
-            )}
-            {/*
+        >
+          {activeBaseLayer && <BaseLayerComponent />}
+          {activeOverlaysSorted
+            .map((overlayName, index) => {
+              const OverlayComponent = OverlayComponents[overlayName]
+              return <OverlayComponent key={index} />
+            })
+            .reverse()}
+          {activeApfloraLayersSorted
+            .map((apfloraLayerName, index) => {
+              const ApfloraLayerComponent =
+                ApfloraLayerComponents[apfloraLayerName]
+              return <ApfloraLayerComponent key={index} />
+            })
+            .reverse()}
+          <ScaleControl imperial={false} />
+          <LayersControl
+            data={data}
+            tree={tree}
+            activeNodes={activeNodes}
+            activeBaseLayer={activeBaseLayer}
+            setActiveBaseLayer={setActiveBaseLayer}
+            activeApfloraLayers={activeApfloraLayers}
+            setActiveApfloraLayers={setActiveApfloraLayers}
+            overlays={overlays}
+            setOverlays={setOverlays}
+            activeOverlays={activeOverlays}
+            setActiveOverlays={setActiveOverlays}
+            bounds={bounds}
+            setBounds={setBounds}
+            mapFilter={mapFilter}
+            mapIdsFiltered={mapIdsFiltered}
+            mapPopIdsFiltered={mapPopIdsFiltered}
+            mapTpopIdsFiltered={mapTpopIdsFiltered}
+            mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
+            mapBeobNichtZuzuordnenIdsFiltered={
+              mapBeobNichtZuzuordnenIdsFiltered
+            }
+            mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
+            // this enforces rerendering when sorting changes
+            activeOverlaysString={activeOverlays.join()}
+            activeApfloraLayersString={activeApfloraLayers.join()}
+          />
+          <MeasureControl />
+          <SwitchScaleControl />
+          <FullScreenControl />
+          {activeApfloraLayers.includes('mapFilter') && (
+            <DrawControl setStoreMapFilter={setMapFilter} />
+          )}
+          {/*
             need to get background maps to show when printing A4
             <PrintControl />
             */}
-            <PngControl />
-            <CoordinatesControl />
-          </StyledMap>
-        </ErrorBoundary>
-      </Container>
-    )
-  }
+          <PngControl />
+          <CoordinatesControl />
+        </StyledMap>
+      </ErrorBoundary>
+    </Container>
+  )
 }
 
 export default enhance(Karte)

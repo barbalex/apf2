@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
 import DragHandleIcon from '@material-ui/icons/DragHandle'
@@ -25,6 +25,7 @@ import Checkbox from '../shared/Checkbox'
 import dataGql from './data'
 import setAssigningBeob from './setAssigningBeob'
 import getBounds from '../../../../../modules/getBounds'
+import mobxStoreContext from '../../../../../mobxStoreContext'
 
 const StyledIconButton = styled(Button)`
   max-width: 18px;
@@ -211,12 +212,11 @@ const SortableItem = SortableElement(
               </StyledIconButton>
             </ZuordnenDiv>
           )}
-          {apfloraLayer.value === 'pop' &&
-            activeApfloraLayers.includes('pop') && (
-              <MapIconDiv>
-                <PopMapIcon id="PopMapIcon" />
-              </MapIconDiv>
-            )}
+          {apfloraLayer.value === 'pop' && activeApfloraLayers.includes('pop') && (
+            <MapIconDiv>
+              <PopMapIcon id="PopMapIcon" />
+            </MapIconDiv>
+          )}
           {apfloraLayer.value === 'tpop' &&
             activeApfloraLayers.includes('tpop') && (
               <MapIconDiv>
@@ -416,8 +416,6 @@ const SortableList = SortableContainer(
 const ApfloraLayers = ({
   tree,
   activeNodes,
-  apfloraLayers,
-  setApfloraLayers,
   activeApfloraLayers,
   setActiveApfloraLayers,
   bounds,
@@ -436,8 +434,6 @@ const ApfloraLayers = ({
 }: {
   tree: Object,
   activeNodes: Object,
-  apfloraLayers: Array<Object>,
-  setApfloraLayers: () => void,
   activeApfloraLayers: Array<Object>,
   setActiveApfloraLayers: () => void,
   bounds: Array<Array<Number>>,
@@ -453,51 +449,56 @@ const ApfloraLayers = ({
   mapBeobNichtBeurteiltIdsFiltered: Array<String>,
   mapBeobZugeordnetIdsFiltered: Array<String>,
   mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
-}) => (
-  <ApolloProvider client={app.client}>
-    <Query
-      query={dataGql}
-      variables={{
-        isAp: !!activeNodes.ap,
-        ap: activeNodes.ap ? [activeNodes.ap] : [],
-      }}
-    >
-      {({ loading, error, data, client }) => {
-        if (error) return `Fehler: ${error.message}`
+}) => {
+  const mobxStore = useContext(mobxStoreContext)
+  const { apfloraLayers, setApfloraLayers } = mobxStore
 
-        return (
-          <CardContent>
-            <SortableList
-              items={apfloraLayers}
-              onSortEnd={({ oldIndex, newIndex }) =>
-                setApfloraLayers(arrayMove(apfloraLayers, oldIndex, newIndex))
-              }
-              useDragHandle
-              lockAxis="y"
-              activeApfloraLayers={activeApfloraLayers}
-              setActiveApfloraLayers={setActiveApfloraLayers}
-              data={data}
-              tree={tree}
-              client={client}
-              bounds={bounds}
-              setBounds={setBounds}
-              mapFilter={mapFilter}
-              mapIdsFiltered={mapIdsFiltered}
-              mapPopIdsFiltered={mapPopIdsFiltered}
-              mapTpopIdsFiltered={mapTpopIdsFiltered}
-              mapBeobNichtBeurteiltIdsFiltered={
-                mapBeobNichtBeurteiltIdsFiltered
-              }
-              mapBeobNichtZuzuordnenIdsFiltered={
-                mapBeobNichtZuzuordnenIdsFiltered
-              }
-              mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
-            />
-          </CardContent>
-        )
-      }}
-    </Query>
-  </ApolloProvider>
-)
+  return (
+    <ApolloProvider client={app.client}>
+      <Query
+        query={dataGql}
+        variables={{
+          isAp: !!activeNodes.ap,
+          ap: activeNodes.ap ? [activeNodes.ap] : [],
+        }}
+      >
+        {({ loading, error, data, client }) => {
+          if (error) return `Fehler: ${error.message}`
+
+          return (
+            <CardContent>
+              <SortableList
+                items={apfloraLayers}
+                onSortEnd={({ oldIndex, newIndex }) =>
+                  setApfloraLayers(arrayMove(apfloraLayers, oldIndex, newIndex))
+                }
+                useDragHandle
+                lockAxis="y"
+                activeApfloraLayers={activeApfloraLayers}
+                setActiveApfloraLayers={setActiveApfloraLayers}
+                data={data}
+                tree={tree}
+                client={client}
+                bounds={bounds}
+                setBounds={setBounds}
+                mapFilter={mapFilter}
+                mapIdsFiltered={mapIdsFiltered}
+                mapPopIdsFiltered={mapPopIdsFiltered}
+                mapTpopIdsFiltered={mapTpopIdsFiltered}
+                mapBeobNichtBeurteiltIdsFiltered={
+                  mapBeobNichtBeurteiltIdsFiltered
+                }
+                mapBeobNichtZuzuordnenIdsFiltered={
+                  mapBeobNichtZuzuordnenIdsFiltered
+                }
+                mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
+              />
+            </CardContent>
+          )
+        }}
+      </Query>
+    </ApolloProvider>
+  )
+}
 
 export default ApfloraLayers

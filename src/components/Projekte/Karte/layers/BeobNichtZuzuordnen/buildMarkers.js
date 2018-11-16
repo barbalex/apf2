@@ -1,5 +1,5 @@
 // @flow
-import React, { Fragment } from 'react'
+import React, { Fragment, useContext } from 'react'
 import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
 import format from 'date-fns/format'
@@ -10,6 +10,7 @@ import beobIcon from '../../../../../etc/beobNichtZuzuordnen.png'
 import beobIconHighlighted from '../../../../../etc/beobNichtZuzuordnenHighlighted.png'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import epsg2056to4326 from '../../../../../modules/epsg2056to4326'
+import mobxStoreContext from '../../../../../mobxStoreContext'
 
 const StyledH3 = styled.h3`
   margin: 7px 0;
@@ -19,17 +20,17 @@ export default ({
   beobs,
   tree,
   activeNodes,
-  apfloraLayers,
   data,
   mapIdsFiltered,
-}:{
+}: {
   beobs: Array<Object>,
   tree: Object,
   activeNodes: Array<Object>,
-  apfloraLayers: Array<Object>,
   data: Object,
   mapIdsFiltered: Array<String>,
 }): Array<Object> => {
+  const mobxStore = useContext(mobxStoreContext)
+  const { apfloraLayers } = mobxStore
   const { ap, projekt } = activeNodes
   const assigning = get(data, 'assigningBeob')
 
@@ -50,30 +51,33 @@ export default ({
       icon,
       draggable: assigning,
       zIndexOffset: -apfloraLayers.findIndex(
-        apfloraLayer => apfloraLayer.value === 'beobNichtZuzuordnen'
+        apfloraLayer => apfloraLayer.value === 'beobNichtZuzuordnen',
       ),
-    })
-      .bindPopup(
-        ReactDOMServer.renderToStaticMarkup(
-          <Fragment>
-            <div>{`Beobachtung von ${get(beob, 'aeEigenschaftenByArtId.artname', '')}`}</div>
-            <StyledH3>
-              {label}
-            </StyledH3>
-            <div>
-              {`Koordinaten: ${beob.x.toLocaleString(
-                'de-ch'
-              )} / ${beob.y.toLocaleString('de-ch')}`}
-            </div>
-            <a
-              href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/nicht-zuzuordnende-Beobachtungen/${beob.id}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Formular in neuem Tab öffnen
-            </a>
-          </Fragment>
-        )
-      )
+    }).bindPopup(
+      ReactDOMServer.renderToStaticMarkup(
+        <Fragment>
+          <div>{`Beobachtung von ${get(
+            beob,
+            'aeEigenschaftenByArtId.artname',
+            '',
+          )}`}</div>
+          <StyledH3>{label}</StyledH3>
+          <div>
+            {`Koordinaten: ${beob.x.toLocaleString(
+              'de-ch',
+            )} / ${beob.y.toLocaleString('de-ch')}`}
+          </div>
+          <a
+            href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/nicht-zuzuordnende-Beobachtungen/${
+              beob.id
+            }`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Formular in neuem Tab öffnen
+          </a>
+        </Fragment>,
+      ),
+    )
   })
 }

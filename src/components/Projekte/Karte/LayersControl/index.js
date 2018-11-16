@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Control from 'react-leaflet-control'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -13,6 +13,7 @@ import get from 'lodash/get'
 import Overlays from './Overlays'
 import ApfloraLayers from './ApfloraLayers'
 import BaseLayers from './BaseLayers'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const CardContainer = styled.div`
   background-color: white;
@@ -65,7 +66,7 @@ const enhance = compose(
       toggleBaseLayersExpanded,
       toggleApfloraLayersExpanded,
       apfloraLayersExpanded,
-    }) => (event) => {
+    }) => event => {
       console.log('hi')
       event.stopPropagation()
       toggleBaseLayersExpanded(!baseLayersExpanded)
@@ -115,8 +116,6 @@ const LayersControl = ({
   data,
   tree,
   activeNodes,
-  apfloraLayers,
-  setApfloraLayers,
   activeApfloraLayers,
   setActiveApfloraLayers,
   baseLayersExpanded,
@@ -144,8 +143,6 @@ const LayersControl = ({
   data: Object,
   tree: Object,
   activeNodes: Object,
-  apfloraLayers: Array<Object>,
-  setApfloraLayers: () => void,
   activeApfloraLayers: Array<Object>,
   setActiveApfloraLayers: () => void,
   baseLayersExpanded: boolean,
@@ -170,6 +167,9 @@ const LayersControl = ({
   mapBeobZugeordnetIdsFiltered: Array<String>,
   mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
 }) => {
+  const mobxStore = useContext(mobxStoreContext)
+  const { apfloraLayers } = mobxStore
+
   const assigning = get(data, 'assigningBeob')
   const getApfloraLayersTitle = () => {
     if (!activeNodes.ap) return 'apflora'
@@ -201,8 +201,6 @@ const LayersControl = ({
               <ApfloraLayers
                 tree={tree}
                 activeNodes={activeNodes}
-                apfloraLayers={apfloraLayers}
-                setApfloraLayers={setApfloraLayers}
                 activeApfloraLayers={activeApfloraLayers}
                 setActiveApfloraLayers={setActiveApfloraLayers}
                 bounds={bounds}
@@ -211,8 +209,12 @@ const LayersControl = ({
                 mapIdsFiltered={mapIdsFiltered}
                 mapPopIdsFiltered={mapPopIdsFiltered}
                 mapTpopIdsFiltered={mapTpopIdsFiltered}
-                mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
-                mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
+                mapBeobNichtBeurteiltIdsFiltered={
+                  mapBeobNichtBeurteiltIdsFiltered
+                }
+                mapBeobNichtZuzuordnenIdsFiltered={
+                  mapBeobNichtZuzuordnenIdsFiltered
+                }
                 mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
                 /**
                  * overlaysString enforces rererender
@@ -260,13 +262,12 @@ const LayersControl = ({
                 )}
               </div>
             </CardHeader>
-            {
-              baseLayersExpanded &&
+            {baseLayersExpanded && (
               <BaseLayers
                 activeBaseLayer={activeBaseLayer}
                 setActiveBaseLayer={setActiveBaseLayer}
               />
-            }
+            )}
           </Card>
         </CardContainer>
       </MuiThemeProvider>

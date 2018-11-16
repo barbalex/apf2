@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
@@ -7,26 +7,34 @@ import buildMarkers from './buildMarkers'
 import buildMarkersClustered from './buildMarkersClustered'
 import Marker from './Marker'
 import MarkerCluster from './MarkerCluster'
+import mobxStoreContext from '../../../../../mobxStoreContext'
 
 const BeobNichtZuzuordnenMarker = ({
   tree,
   data,
   activeNodes,
-  apfloraLayers,
   clustered,
   mapIdsFiltered,
-} : {
+}: {
   tree: Object,
   data: Object,
   activeNodes: Array<Object>,
-  apfloraLayers: Array<Object>,
   clustered: Boolean,
   mapIdsFiltered: Array<String>,
 }) => {
-  const beobNichtZuzuordnenFilterString = get(tree, 'nodeLabelFilter.beobNichtZuzuordnen')
-  const aparts = get(data, 'beobNichtZuzuordnenForMapMarkers.apsByProjId.nodes[0].apartsByApId.nodes', [])
+  const mobxStore = useContext(mobxStoreContext)
+  const { apfloraLayers } = mobxStore
+  const beobNichtZuzuordnenFilterString = get(
+    tree,
+    'nodeLabelFilter.beobNichtZuzuordnen',
+  )
+  const aparts = get(
+    data,
+    'beobNichtZuzuordnenForMapMarkers.apsByProjId.nodes[0].apartsByApId.nodes',
+    [],
+  )
   const beobs = flatten(
-    aparts.map(a => get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []))
+    aparts.map(a => get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', [])),
   )
     // filter them by nodeLabelFilter
     .filter(el => {

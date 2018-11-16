@@ -1,5 +1,5 @@
 // @flow
-import React, { Fragment } from 'react'
+import React, { Fragment, useContext } from 'react'
 import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
 import format from 'date-fns/format'
@@ -13,6 +13,7 @@ import appBaseUrl from '../../../../../modules/appBaseUrl'
 import epsg2056to4326 from '../../../../../modules/epsg2056to4326'
 import setTreeKeyGql from './setTreeKey'
 import updateBeobByIdGql from './updateBeobById'
+import mobxStoreContext from '../../../../../mobxStoreContext'
 
 const StyledH3 = styled.h3`
   margin: 7px 0;
@@ -22,7 +23,6 @@ export default ({
   beobs,
   tree,
   activeNodes,
-  apfloraLayers,
   client,
   data,
   refetchTree,
@@ -32,13 +32,14 @@ export default ({
   beobs: Array<Object>,
   tree: Object,
   activeNodes: Array<Object>,
-  apfloraLayers: Array<Object>,
   client: Object,
   data: Object,
   refetchTree: () => void,
   mapIdsFiltered: Array<String>,
   map: Object,
 }): Array<Object> => {
+  const mobxStore = useContext(mobxStoreContext)
+  const { apfloraLayers } = mobxStore
   const { ap, projekt } = activeNodes
   const assigning = get(data, 'assigningBeob')
 

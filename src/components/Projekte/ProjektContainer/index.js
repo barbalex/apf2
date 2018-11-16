@@ -61,7 +61,6 @@ import Daten from '../Daten'
 import Exporte from '../Exporte'
 import getActiveNodes from '../../../modules/getActiveNodes'
 import buildNodes from '../TreeContainer/nodes'
-import apfloraLayers from '../Karte/apfloraLayers'
 import overlays from '../Karte/overlays'
 import idsInsideFeatureCollection from '../../../modules/idsInsideFeatureCollection'
 import withErrorState from '../../../state/withErrorState'
@@ -138,7 +137,6 @@ const enhance = compose(
   withBeobAssignLines,
   withPopForMapMarkers,
   withErrorState,
-  withState('apfloraLayers', 'setApfloraLayers', apfloraLayers),
   withState('activeApfloraLayers', 'setActiveApfloraLayers', []),
   withState('overlays', 'setOverlays', overlays),
   withState('activeOverlays', 'setActiveOverlays', []),
@@ -200,8 +198,6 @@ const ProjekteContainer = props => {
     treeName,
     tabs: tabsPassed,
     projekteTabs,
-    apfloraLayers,
-    setApfloraLayers,
     activeApfloraLayers,
     setActiveApfloraLayers,
     overlays,
@@ -271,8 +267,6 @@ const ProjekteContainer = props => {
     treeName: String,
     tabs: Array<String>,
     projekteTabs: Array<String>,
-    apfloraLayers: Array<Object>,
-    setApfloraLayers: () => void,
     activeApfloraLayers: Array<Object>,
     setActiveApfloraLayers: () => void,
     overlays: Array<Object>,
@@ -626,8 +620,6 @@ const ProjekteContainer = props => {
                 data={data}
                 activeBaseLayer={activeBaseLayer}
                 setActiveBaseLayer={setActiveBaseLayer}
-                apfloraLayers={apfloraLayers}
-                setApfloraLayers={setApfloraLayers}
                 activeApfloraLayers={activeApfloraLayers}
                 setActiveApfloraLayers={setActiveApfloraLayers}
                 overlays={overlays}

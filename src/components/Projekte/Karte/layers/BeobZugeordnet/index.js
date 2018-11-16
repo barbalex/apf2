@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
@@ -9,6 +9,7 @@ import buildMarkers from './buildMarkers'
 import buildMarkersClustered from './buildMarkersClustered'
 import Marker from './Marker'
 import MarkerCluster from './MarkerCluster'
+import mobxStoreContext from '../../../../../mobxStoreContext'
 
 const enhance = compose(withLeaflet)
 
@@ -16,7 +17,6 @@ const BeobZugeordnetMarker = ({
   tree,
   data,
   activeNodes,
-  apfloraLayers,
   clustered,
   refetchTree,
   mapIdsFiltered,
@@ -25,12 +25,13 @@ const BeobZugeordnetMarker = ({
   tree: Object,
   data: Object,
   activeNodes: Array<Object>,
-  apfloraLayers: Array<Object>,
   clustered: Boolean,
   refetchTree: () => void,
   mapIdsFiltered: Array<String>,
   leaflet: Object,
 }) => {
+  const mobxStore = useContext(mobxStoreContext)
+  const { apfloraLayers } = mobxStore
   const beobZugeordnetFilterString = get(tree, 'nodeLabelFilter.beobZugeordnet')
   const aparts = get(
     data,
