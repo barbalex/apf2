@@ -137,7 +137,6 @@ const Karte = ({
   refetchTree,
   idOfTpopBeingLocalized,
   setIdOfTpopBeingLocalized,
-  tpopLabelUsingNr,
   bounds,
   setBounds,
   mapIdsFiltered,
@@ -162,7 +161,6 @@ const Karte = ({
   refetchTree: () => void,
   idOfTpopBeingLocalized: String,
   setIdOfTpopBeingLocalized: () => void,
-  tpopLabelUsingNr: Boolean,
   bounds: Array<Array<Number>>,
   setBounds: () => void,
   mapIdsFiltered: Array<String>,
@@ -239,7 +237,6 @@ const Karte = ({
         data={data}
         activeNodes={activeNodes}
         clustered={clustered}
-        tpopLabelUsingNr={tpopLabelUsingNr}
         mapIdsFiltered={mapIdsFiltered}
       />
     ),

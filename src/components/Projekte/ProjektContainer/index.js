@@ -138,7 +138,6 @@ const enhance = compose(
   withBeobAssignLines,
   withPopForMapMarkers,
   withErrorState,
-  withState('tpopLabelUsingNr', 'setTpopLabelUsingNr', true),
   withState('idOfTpopBeingLocalized', 'setIdOfTpopBeingLocalized', null),
   withState('bounds', 'setBounds', [[47.159, 8.354], [47.696, 8.984]]),
   withState('mapFilter', 'setMapFilter', {
@@ -197,8 +196,6 @@ const ProjekteContainer = props => {
     projekteTabs,
     idOfTpopBeingLocalized,
     setIdOfTpopBeingLocalized,
-    tpopLabelUsingNr,
-    setTpopLabelUsingNr,
     bounds,
     setBounds,
     mapFilter,
@@ -256,8 +253,6 @@ const ProjekteContainer = props => {
     projekteTabs: Array<String>,
     idOfTpopBeingLocalized: String,
     setIdOfTpopBeingLocalized: () => void,
-    tpopLabelUsingNr: Boolean,
-    setTpopLabelUsingNr: () => void,
     bounds: Array<Array<Number>>,
     setBounds: () => void,
     mapFilter: Object,
@@ -544,8 +539,6 @@ const ProjekteContainer = props => {
                 copying={copying}
                 refetchTree={refetch}
                 setIdOfTpopBeingLocalized={setIdOfTpopBeingLocalized}
-                tpopLabelUsingNr={tpopLabelUsingNr}
-                setTpopLabelUsingNr={setTpopLabelUsingNr}
                 mapFilter={mapFilter}
                 mapIdsFiltered={mapIdsFiltered}
               />
@@ -608,7 +601,6 @@ const ProjekteContainer = props => {
                 beobZugeordnetAssigning={assigning}
                 idOfTpopBeingLocalized={idOfTpopBeingLocalized}
                 setIdOfTpopBeingLocalized={setIdOfTpopBeingLocalized}
-                tpopLabelUsingNr={tpopLabelUsingNr}
                 bounds={bounds}
                 setBounds={setBounds}
                 mapFilter={mapFilter}

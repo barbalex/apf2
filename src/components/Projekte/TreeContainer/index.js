@@ -187,8 +187,6 @@ const TreeContainer = ({
   activeNodes,
   refetchTree,
   setIdOfTpopBeingLocalized,
-  tpopLabelUsingNr,
-  setTpopLabelUsingNr,
   deleteState,
   errorState,
   nodes,
@@ -212,7 +210,6 @@ const TreeContainer = ({
   openNodes: Array<string>,
   copying: Object,
   refetchTree: () => void,
-  tpopLabelUsingNr: Boolean,
   mapFilter: Object,
   mapIdsFiltered: Array<String>,
   deleteState: Object,
@@ -226,6 +223,8 @@ const TreeContainer = ({
     setActiveOverlays,
     popLabelUsingNr,
     setPopLabelUsingNr,
+    tpopLabelUsingNr,
+    setTpopLabelUsingNr,
   } = mobxStore
 
   const datasetToDelete = deleteState.state.toDelete
@@ -527,7 +526,6 @@ const TreeContainer = ({
       setIdOfTpopBeingLocalized,
       popLabelUsingNr,
       tpopLabelUsingNr,
-      setTpopLabelUsingNr,
       deleteState,
       errorState,
       nodes,
@@ -567,14 +565,7 @@ const TreeContainer = ({
           />
         </InnerTreeContainer>
         <CmApFolder onClick={handleClick} tree={tree} token={token} />
-        <CmAp
-          onClick={handleClick}
-          tree={tree}
-          token={token}
-          moving={moving}
-          activeApfloraLayers={activeApfloraLayers}
-          tpopLabelUsingNr={tpopLabelUsingNr}
-        />
+        <CmAp onClick={handleClick} tree={tree} token={token} moving={moving} />
         <CmApberuebersichtFolder
           onClick={handleClick}
           tree={tree}

@@ -12,18 +12,14 @@ const Ap = ({
   tree,
   token,
   moving,
-  activeApfloraLayers,
-  tpopLabelUsingNr,
 }: {
   onClick: () => void,
   tree: Object,
   token: String,
   moving: Object,
-  activeApfloraLayers: Array<String>,
-  tpopLabelUsingNr: Boolean,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { popLabelUsingNr } = mobxStore
+  const { activeApfloraLayers, popLabelUsingNr, tpopLabelUsingNr } = mobxStore
 
   const isMoving = moving.table && moving.table === 'pop'
   const mayWrite = !userIsReadOnly(token)
