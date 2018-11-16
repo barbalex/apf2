@@ -138,7 +138,6 @@ const Karte = ({
   idOfTpopBeingLocalized,
   setIdOfTpopBeingLocalized,
   tpopLabelUsingNr,
-  popLabelUsingNr,
   bounds,
   setBounds,
   mapIdsFiltered,
@@ -164,7 +163,6 @@ const Karte = ({
   idOfTpopBeingLocalized: String,
   setIdOfTpopBeingLocalized: () => void,
   tpopLabelUsingNr: Boolean,
-  popLabelUsingNr: Boolean,
   bounds: Array<Array<Number>>,
   setBounds: () => void,
   mapIdsFiltered: Array<String>,
@@ -189,6 +187,7 @@ const Karte = ({
     overlays,
     activeOverlays,
     activeBaseLayer,
+    popLabelUsingNr,
   } = mobxStore
   const mapRef = useRef(null)
   const prevDimensions = usePrevious(dimensions) || {}

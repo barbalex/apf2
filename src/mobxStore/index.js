@@ -15,6 +15,7 @@ const myTypes = types
     overlays: types.optional(types.array(ApfloraLayer), standardOverlays),
     activeOverlays: types.optional(types.array(types.string), []),
     activeBaseLayer: types.optional(types.string, 'OsmColor'),
+    popLabelUsingNr: types.optional(types.boolean, true),
   })
   .actions(self => ({
     setApfloraLayers(val) {
@@ -31,6 +32,9 @@ const myTypes = types
     },
     setActiveBaseLayer(val) {
       self.activeBaseLayer = val
+    },
+    setPopLabelUsingNr(val) {
+      self.popLabelUsingNr = val
     },
   }))
 

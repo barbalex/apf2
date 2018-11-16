@@ -187,8 +187,6 @@ const TreeContainer = ({
   activeNodes,
   refetchTree,
   setIdOfTpopBeingLocalized,
-  popLabelUsingNr,
-  setPopLabelUsingNr,
   tpopLabelUsingNr,
   setTpopLabelUsingNr,
   deleteState,
@@ -214,7 +212,6 @@ const TreeContainer = ({
   openNodes: Array<string>,
   copying: Object,
   refetchTree: () => void,
-  popLabelUsingNr: Boolean,
   tpopLabelUsingNr: Boolean,
   mapFilter: Object,
   mapIdsFiltered: Array<String>,
@@ -227,6 +224,8 @@ const TreeContainer = ({
     setActiveApfloraLayers,
     activeOverlays,
     setActiveOverlays,
+    popLabelUsingNr,
+    setPopLabelUsingNr,
   } = mobxStore
 
   const datasetToDelete = deleteState.state.toDelete
@@ -527,7 +526,6 @@ const TreeContainer = ({
       setActiveOverlays,
       setIdOfTpopBeingLocalized,
       popLabelUsingNr,
-      setPopLabelUsingNr,
       tpopLabelUsingNr,
       setTpopLabelUsingNr,
       deleteState,
@@ -575,7 +573,6 @@ const TreeContainer = ({
           token={token}
           moving={moving}
           activeApfloraLayers={activeApfloraLayers}
-          popLabelUsingNr={popLabelUsingNr}
           tpopLabelUsingNr={tpopLabelUsingNr}
         />
         <CmApberuebersichtFolder

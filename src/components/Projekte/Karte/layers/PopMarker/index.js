@@ -20,7 +20,6 @@ const PmcComponent = ({
   data,
   activeNodes,
   activeApfloraLayers,
-  popLabelUsingNr,
   mapIdsFiltered,
   nodeFilterState,
 }: {
@@ -28,12 +27,11 @@ const PmcComponent = ({
   data: Object,
   activeNodes: Array<Object>,
   activeApfloraLayers: Array<String>,
-  popLabelUsingNr: Boolean,
   mapIdsFiltered: Array<String>,
   nodeFilterState: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { apfloraLayers } = mobxStore
+  const { apfloraLayers, popLabelUsingNr } = mobxStore
   const popFilterString = get(tree, 'nodeLabelFilter.pop')
   const nodeFilterArray = Object.entries(
     nodeFilterState.state[tree.name].pop,

@@ -9,6 +9,7 @@ import {
   SortableHandle,
   arrayMove,
 } from 'react-sortable-hoc'
+import { observer } from 'mobx-react-lite'
 
 import Checkbox from './shared/Checkbox'
 import mobxStoreContext from '../../../../mobxStoreContext'
@@ -150,4 +151,4 @@ const Overlays = () => {
   )
 }
 
-export default Overlays
+export default observer(Overlays)

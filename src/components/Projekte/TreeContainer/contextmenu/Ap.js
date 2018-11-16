@@ -1,9 +1,11 @@
 // @flow
-import React, { Fragment } from 'react'
+import React, { Fragment, useContext } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
+import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const Ap = ({
   onClick,
@@ -11,7 +13,6 @@ const Ap = ({
   token,
   moving,
   activeApfloraLayers,
-  popLabelUsingNr,
   tpopLabelUsingNr,
 }: {
   onClick: () => void,
@@ -19,9 +20,11 @@ const Ap = ({
   token: String,
   moving: Object,
   activeApfloraLayers: Array<String>,
-  popLabelUsingNr: Boolean,
   tpopLabelUsingNr: Boolean,
 }) => {
+  const mobxStore = useContext(mobxStoreContext)
+  const { popLabelUsingNr } = mobxStore
+
   const isMoving = moving.table && moving.table === 'pop'
   const mayWrite = !userIsReadOnly(token)
 
@@ -37,8 +40,7 @@ const Ap = ({
         >
           alle schliessen
         </MenuItem>
-        {
-          mayWrite &&
+        {mayWrite && (
           <Fragment>
             <MenuItem
               onClick={onClick}
@@ -59,7 +61,7 @@ const Ap = ({
               lösche
             </MenuItem>
           </Fragment>
-        }
+        )}
         {isMoving && (
           <MenuItem
             onClick={onClick}
@@ -108,4 +110,4 @@ const Ap = ({
   )
 }
 
-export default Ap
+export default observer(Ap)
