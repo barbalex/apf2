@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
+import { observer } from 'mobx-react-lite'
 
 import buildMarkers from './buildMarkers'
 import buildMarkersClustered from './buildMarkersClustered'
@@ -71,4 +72,4 @@ const BeobNichtBeurteiltMarker = ({
   return <Marker markers={markers} />
 }
 
-export default BeobNichtBeurteiltMarker
+export default observer(BeobNichtBeurteiltMarker)

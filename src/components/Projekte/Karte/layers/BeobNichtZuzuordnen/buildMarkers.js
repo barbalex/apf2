@@ -1,5 +1,5 @@
 // @flow
-import React, { Fragment, useContext } from 'react'
+import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
 import format from 'date-fns/format'
@@ -10,7 +10,6 @@ import beobIcon from '../../../../../etc/beobNichtZuzuordnen.png'
 import beobIconHighlighted from '../../../../../etc/beobNichtZuzuordnenHighlighted.png'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import epsg2056to4326 from '../../../../../modules/epsg2056to4326'
-import mobxStoreContext from '../../../../../mobxStoreContext'
 
 const StyledH3 = styled.h3`
   margin: 7px 0;
@@ -22,15 +21,15 @@ export default ({
   activeNodes,
   data,
   mapIdsFiltered,
+  apfloraLayers,
 }: {
   beobs: Array<Object>,
   tree: Object,
   activeNodes: Array<Object>,
   data: Object,
   mapIdsFiltered: Array<String>,
+  apfloraLayers: Array<String>,
 }): Array<Object> => {
-  const mobxStore = useContext(mobxStoreContext)
-  const { apfloraLayers } = mobxStore
   const { ap, projekt } = activeNodes
   const assigning = get(data, 'assigningBeob')
 
@@ -55,7 +54,7 @@ export default ({
       ),
     }).bindPopup(
       ReactDOMServer.renderToStaticMarkup(
-        <Fragment>
+        <>
           <div>{`Beobachtung von ${get(
             beob,
             'aeEigenschaftenByArtId.artname',
@@ -76,7 +75,7 @@ export default ({
           >
             Formular in neuem Tab öffnen
           </a>
-        </Fragment>,
+        </>,
       ),
     )
   })

@@ -9,6 +9,7 @@ import theme from '../../../../theme'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import get from 'lodash/get'
+import { observer } from 'mobx-react-lite'
 
 import Overlays from './Overlays'
 import ApfloraLayers from './ApfloraLayers'
@@ -110,14 +111,13 @@ const enhance = compose(
       }
     },
   }),
+  observer,
 )
 
 const LayersControl = ({
   data,
   tree,
   activeNodes,
-  activeApfloraLayers,
-  setActiveApfloraLayers,
   baseLayersExpanded,
   overlaysExpanded,
   apfloraLayersExpanded,
@@ -143,8 +143,6 @@ const LayersControl = ({
   data: Object,
   tree: Object,
   activeNodes: Object,
-  activeApfloraLayers: Array<Object>,
-  setActiveApfloraLayers: () => void,
   baseLayersExpanded: boolean,
   overlaysExpanded: boolean,
   toggleBaseLayersExpanded: () => void,
@@ -201,8 +199,6 @@ const LayersControl = ({
               <ApfloraLayers
                 tree={tree}
                 activeNodes={activeNodes}
-                activeApfloraLayers={activeApfloraLayers}
-                setActiveApfloraLayers={setActiveApfloraLayers}
                 bounds={bounds}
                 setBounds={setBounds}
                 mapFilter={mapFilter}

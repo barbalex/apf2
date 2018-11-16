@@ -2,7 +2,7 @@
 /**
  * need to keep class because of ref
  */
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect, useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import clone from 'lodash/clone'
@@ -10,6 +10,7 @@ import get from 'lodash/get'
 import uniq from 'lodash/uniq'
 import isEqual from 'lodash/isEqual'
 import app from 'ampersand-app'
+import { observer } from 'mobx-react-lite'
 
 import LabelFilter from './LabelFilter'
 import ApFilter from './ApFilter'
@@ -87,6 +88,7 @@ import closeLowerNodes from './closeLowerNodes'
 import insertDataset from './insertDataset'
 import withDeleteState from '../../../state/withDeleteState'
 import withErrorState from '../../../state/withErrorState'
+import mobxStoreContext from '../../../mobxStoreContext'
 
 const Container = styled.div`
   height: 100%;
@@ -175,6 +177,7 @@ const showMapIfNotYetVisible = (projekteTabs: Array<String>) => {
 const enhance = compose(
   withDeleteState,
   withErrorState,
+  observer,
 )
 
 const TreeContainer = ({
@@ -183,8 +186,6 @@ const TreeContainer = ({
   activeNode,
   activeNodes,
   refetchTree,
-  activeApfloraLayers,
-  setActiveApfloraLayers,
   activeOverlays,
   setActiveOverlays,
   setIdOfTpopBeingLocalized,
@@ -210,7 +211,6 @@ const TreeContainer = ({
   nodes: Array<Object>,
   activeNodes: Object,
   activeNode: Object,
-  activeApfloraLayers: Array<String>,
   loading: Boolean,
   moving: Object,
   openNodes: Array<string>,
@@ -223,6 +223,9 @@ const TreeContainer = ({
   deleteState: Object,
   errorState: Object,
 }) => {
+  const mobxStore = useContext(mobxStoreContext)
+  const { activeApfloraLayers, setActiveApfloraLayers } = mobxStore
+
   const datasetToDelete = deleteState.state.toDelete
   const deleteDatasetModalIsVisible = !!datasetToDelete.id
   const tree = get(data, treeName)

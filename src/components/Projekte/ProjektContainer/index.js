@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withProps from 'recompose/withProps'
@@ -12,6 +12,7 @@ import isEqual from 'lodash/isEqual'
 import flatten from 'lodash/flatten'
 import Button from '@material-ui/core/Button'
 import jwtDecode from 'jwt-decode'
+import { observer } from 'mobx-react-lite'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
@@ -70,6 +71,7 @@ import buildVariables from './buildVariables'
 import anyQueryReturnsPermissionError from '../../../modules/anyQueryReturnsPermissionError'
 import anyQueryIsLoading from '../../../modules/anyQueryIsLoading'
 import anyQueryReturnsError from '../../../modules/anyQueryReturnsError'
+import mobxStoreContext from '../../../mobxStoreContext'
 
 const Container = styled.div`
   display: flex;
@@ -137,7 +139,6 @@ const enhance = compose(
   withBeobAssignLines,
   withPopForMapMarkers,
   withErrorState,
-  withState('activeApfloraLayers', 'setActiveApfloraLayers', []),
   withState('overlays', 'setOverlays', overlays),
   withState('activeOverlays', 'setActiveOverlays', []),
   withState('activeBaseLayer', 'setActiveBaseLayer', 'OsmColor'),
@@ -152,6 +153,7 @@ const enhance = compose(
   withState('detailplaene', 'setDetailplaene', null),
   withState('markierungen', 'setMarkierungen', null),
   withState('ktZh', 'setKtZh', null),
+  observer,
 )
 
 const ProjekteContainer = props => {
@@ -198,8 +200,6 @@ const ProjekteContainer = props => {
     treeName,
     tabs: tabsPassed,
     projekteTabs,
-    activeApfloraLayers,
-    setActiveApfloraLayers,
     overlays,
     setOverlays,
     activeOverlays,
@@ -267,8 +267,6 @@ const ProjekteContainer = props => {
     treeName: String,
     tabs: Array<String>,
     projekteTabs: Array<String>,
-    activeApfloraLayers: Array<Object>,
-    setActiveApfloraLayers: () => void,
     overlays: Array<Object>,
     setActiveOverlays: () => void,
     activeOverlays: Array<String>,
@@ -294,6 +292,9 @@ const ProjekteContainer = props => {
     errorState: Object,
     nodeFilterState: Object,
   } = props
+
+  const mobxStore = useContext(mobxStoreContext)
+  const { activeApfloraLayers } = mobxStore
 
   const queryArray = [
     dataLocal,
@@ -562,8 +563,6 @@ const ProjekteContainer = props => {
                 moving={moving}
                 openNodes={openNodes}
                 copying={copying}
-                activeApfloraLayers={activeApfloraLayers}
-                setActiveApfloraLayers={setActiveApfloraLayers}
                 activeOverlays={activeOverlays}
                 setActiveOverlays={setActiveOverlays}
                 refetchTree={refetch}
@@ -620,8 +619,6 @@ const ProjekteContainer = props => {
                 data={data}
                 activeBaseLayer={activeBaseLayer}
                 setActiveBaseLayer={setActiveBaseLayer}
-                activeApfloraLayers={activeApfloraLayers}
-                setActiveApfloraLayers={setActiveApfloraLayers}
                 overlays={overlays}
                 setOverlays={setOverlays}
                 activeOverlays={activeOverlays}

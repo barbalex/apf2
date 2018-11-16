@@ -1,4 +1,6 @@
 import React, { useContext } from 'react'
+import { toJS } from 'mobx'
+import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
 import DragHandleIcon from '@material-ui/icons/DragHandle'
@@ -416,8 +418,6 @@ const SortableList = SortableContainer(
 const ApfloraLayers = ({
   tree,
   activeNodes,
-  activeApfloraLayers,
-  setActiveApfloraLayers,
   bounds,
   setBounds,
   popBounds,
@@ -434,8 +434,6 @@ const ApfloraLayers = ({
 }: {
   tree: Object,
   activeNodes: Object,
-  activeApfloraLayers: Array<Object>,
-  setActiveApfloraLayers: () => void,
   bounds: Array<Array<Number>>,
   setBounds: () => void,
   popBounds: Array<Array<Number>>,
@@ -451,7 +449,12 @@ const ApfloraLayers = ({
   mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { apfloraLayers, setApfloraLayers } = mobxStore
+  const {
+    apfloraLayers,
+    setApfloraLayers,
+    activeApfloraLayers,
+    setActiveApfloraLayers,
+  } = mobxStore
 
   return (
     <ApolloProvider client={app.client}>
@@ -474,7 +477,7 @@ const ApfloraLayers = ({
                 }
                 useDragHandle
                 lockAxis="y"
-                activeApfloraLayers={activeApfloraLayers}
+                activeApfloraLayers={toJS(activeApfloraLayers)}
                 setActiveApfloraLayers={setActiveApfloraLayers}
                 data={data}
                 tree={tree}
@@ -501,4 +504,4 @@ const ApfloraLayers = ({
   )
 }
 
-export default ApfloraLayers
+export default observer(ApfloraLayers)

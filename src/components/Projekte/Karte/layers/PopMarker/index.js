@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import compose from 'recompose/compose'
+import { observer } from 'mobx-react-lite'
 
 import buildMarkers from './buildMarkers'
 import PopMarkerCluster from './Cluster'
@@ -9,7 +10,10 @@ import filterNodesByNodeFilterArray from '../../../TreeContainer/filterNodesByNo
 import withNodeFilter from '../../../../../state/withNodeFilter'
 import mobxStoreContext from '../../../../../mobxStoreContext'
 
-const enhance = compose(withNodeFilter)
+const enhance = compose(
+  withNodeFilter,
+  observer,
+)
 
 const PmcComponent = ({
   tree,

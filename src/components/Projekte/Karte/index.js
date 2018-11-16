@@ -19,6 +19,7 @@ import debounceHandler from '@hocs/debounce-handler'
 import sortBy from 'lodash/sortBy'
 import get from 'lodash/get'
 import app from 'ampersand-app'
+import { observer } from 'mobx-react-lite'
 
 import LayersControl from './LayersControl'
 import OsmColor from './layers/OsmColor'
@@ -125,6 +126,7 @@ const enhance = compose(
     },
   }),
   debounceHandler('onMouseMove', 15),
+  observer,
 )
 
 const Karte = ({
@@ -134,8 +136,6 @@ const Karte = ({
   data,
   activeBaseLayer,
   setActiveBaseLayer,
-  activeApfloraLayers,
-  setActiveApfloraLayers,
   overlays,
   setOverlays,
   activeOverlays,
@@ -168,8 +168,6 @@ const Karte = ({
   data: Object,
   activeBaseLayer: String,
   setActiveBaseLayer: () => void,
-  activeApfloraLayers: Array<Object>,
-  setActiveApfloraLayers: () => void,
   overlays: Array<Object>,
   setOverlays: () => void,
   activeOverlays: Array<String>,
@@ -197,7 +195,7 @@ const Karte = ({
   dimensions: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { apfloraLayers } = mobxStore
+  const { apfloraLayers, activeApfloraLayers } = mobxStore
   const mapRef = useRef(null)
   const prevDimensions = usePrevious(dimensions) || {}
   useEffect(
@@ -446,8 +444,6 @@ const Karte = ({
             activeNodes={activeNodes}
             activeBaseLayer={activeBaseLayer}
             setActiveBaseLayer={setActiveBaseLayer}
-            activeApfloraLayers={activeApfloraLayers}
-            setActiveApfloraLayers={setActiveApfloraLayers}
             overlays={overlays}
             setOverlays={setOverlays}
             activeOverlays={activeOverlays}

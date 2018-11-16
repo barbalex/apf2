@@ -4,6 +4,7 @@ import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
 import compose from 'recompose/compose'
 import { withLeaflet } from 'react-leaflet'
+import { observer } from 'mobx-react-lite'
 
 import buildMarkers from './buildMarkers'
 import buildMarkersClustered from './buildMarkersClustered'
@@ -11,7 +12,10 @@ import Marker from './Marker'
 import MarkerCluster from './MarkerCluster'
 import mobxStoreContext from '../../../../../mobxStoreContext'
 
-const enhance = compose(withLeaflet)
+const enhance = compose(
+  withLeaflet,
+  observer,
+)
 
 const BeobZugeordnetMarker = ({
   tree,

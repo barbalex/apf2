@@ -10,11 +10,14 @@ const myTypes = types
       types.array(ApfloraLayer),
       standardApfloraLayers,
     ),
-    activeApfloraLayers: types.optional(types.array(ApfloraLayer), []),
+    activeApfloraLayers: types.optional(types.array(types.string), []),
   })
   .actions(self => ({
     setApfloraLayers(val) {
       self.apfloraLayers = val
+    },
+    setActiveApfloraLayers(val) {
+      self.activeApfloraLayers = val
     },
   }))
 
