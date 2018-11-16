@@ -134,8 +134,6 @@ const Karte = ({
   activeNodes,
   onMouseMove,
   data,
-  activeBaseLayer,
-  setActiveBaseLayer,
   refetchTree,
   idOfTpopBeingLocalized,
   setIdOfTpopBeingLocalized,
@@ -162,8 +160,6 @@ const Karte = ({
   activeNodes: Object,
   onMouseMove: () => void,
   data: Object,
-  activeBaseLayer: String,
-  setActiveBaseLayer: () => void,
   refetchTree: () => void,
   idOfTpopBeingLocalized: String,
   setIdOfTpopBeingLocalized: () => void,
@@ -192,6 +188,7 @@ const Karte = ({
     activeApfloraLayers,
     overlays,
     activeOverlays,
+    activeBaseLayer,
   } = mobxStore
   const mapRef = useRef(null)
   const prevDimensions = usePrevious(dimensions) || {}
@@ -439,8 +436,6 @@ const Karte = ({
             data={data}
             tree={tree}
             activeNodes={activeNodes}
-            activeBaseLayer={activeBaseLayer}
-            setActiveBaseLayer={setActiveBaseLayer}
             bounds={bounds}
             setBounds={setBounds}
             mapFilter={mapFilter}

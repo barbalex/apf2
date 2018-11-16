@@ -1,19 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import Radio from './shared/Radio'
+import BaseLayer from './BaseLayer'
 
 const CardContent = styled.div`
   color: rgb(48, 48, 48);
   padding-left: 5px;
   padding-right: 5px;
-`
-const LayerDiv = styled.div`
-  border-bottom: 1px solid #ececec;
-  display: flex;
-  justify-content: space-between;
-  padding-top: 4px;
-  padding-bottom: 4px;
 `
 const baseLayers = [
   { label: 'OpenStreetMap farbig', value: 'OsmColor' },
@@ -36,34 +29,10 @@ const baseLayers = [
   { label: 'ZH Orthofoto Frühjahr 2015/16 infrarot', value: 'ZhOrtho2015Ir' },
 ]
 
-const BaseLayers = ({
-  activeBaseLayer,
-  setActiveBaseLayer,
-}: {
-  activeBaseLayer: String,
-  setActiveBaseLayer: () => void,
-}) => (
+const BaseLayers = () => (
   <CardContent>
-    {baseLayers.map((l, index) => (
-      <LayerDiv
-        key={index}
-        onClick={event => {
-          if (l.value === activeBaseLayer) {
-            setActiveBaseLayer(null)
-            // prevent click bubbling to Radio
-            // then triggering change...
-            event.preventDefault()
-          }
-        }}
-      >
-        <Radio
-          name="baseLayers"
-          value={l.value}
-          label={l.label}
-          checked={activeBaseLayer === l.value}
-          onChange={() => setActiveBaseLayer(l.value)}
-        />
-      </LayerDiv>
+    {baseLayers.map((layer, index) => (
+      <BaseLayer key={index} layer={layer} />
     ))}
   </CardContent>
 )

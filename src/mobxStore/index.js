@@ -14,6 +14,7 @@ const myTypes = types
     activeApfloraLayers: types.optional(types.array(types.string), []),
     overlays: types.optional(types.array(ApfloraLayer), standardOverlays),
     activeOverlays: types.optional(types.array(types.string), []),
+    activeBaseLayer: types.optional(types.string, 'OsmColor'),
   })
   .actions(self => ({
     setApfloraLayers(val) {
@@ -27,6 +28,9 @@ const myTypes = types
     },
     setActiveOverlays(val) {
       self.activeOverlays = val
+    },
+    setActiveBaseLayer(val) {
+      self.activeBaseLayer = val
     },
   }))
 

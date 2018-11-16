@@ -124,8 +124,6 @@ const LayersControl = ({
   onToggleBaseLayersExpanded,
   onToggleOverlaysExpanded,
   onToggleApfloraLayersExpanded,
-  activeBaseLayer,
-  setActiveBaseLayer,
   bounds,
   setBounds,
   mapFilter,
@@ -145,8 +143,6 @@ const LayersControl = ({
   toggleOverlaysExpanded: () => void,
   onToggleBaseLayersExpanded: () => void,
   onToggleOverlaysExpanded: () => void,
-  activeBaseLayer: String,
-  setActiveBaseLayer: () => void,
   bounds: Array<Array<Number>>,
   setBounds: () => void,
   mapFilter: Object,
@@ -246,12 +242,7 @@ const LayersControl = ({
                 )}
               </div>
             </CardHeader>
-            {baseLayersExpanded && (
-              <BaseLayers
-                activeBaseLayer={activeBaseLayer}
-                setActiveBaseLayer={setActiveBaseLayer}
-              />
-            )}
+            {baseLayersExpanded && <BaseLayers />}
           </Card>
         </CardContainer>
       </MuiThemeProvider>

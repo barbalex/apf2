@@ -138,7 +138,6 @@ const enhance = compose(
   withBeobAssignLines,
   withPopForMapMarkers,
   withErrorState,
-  withState('activeBaseLayer', 'setActiveBaseLayer', 'OsmColor'),
   withState('popLabelUsingNr', 'setPopLabelUsingNr', true),
   withState('tpopLabelUsingNr', 'setTpopLabelUsingNr', true),
   withState('idOfTpopBeingLocalized', 'setIdOfTpopBeingLocalized', null),
@@ -197,8 +196,6 @@ const ProjekteContainer = props => {
     treeName,
     tabs: tabsPassed,
     projekteTabs,
-    activeBaseLayer,
-    setActiveBaseLayer,
     idOfTpopBeingLocalized,
     setIdOfTpopBeingLocalized,
     tpopLabelUsingNr,
@@ -260,8 +257,6 @@ const ProjekteContainer = props => {
     treeName: String,
     tabs: Array<String>,
     projekteTabs: Array<String>,
-    activeBaseLayer: String,
-    setActiveBaseLayer: () => void,
     idOfTpopBeingLocalized: String,
     setIdOfTpopBeingLocalized: () => void,
     tpopLabelUsingNr: Boolean,
@@ -604,8 +599,6 @@ const ProjekteContainer = props => {
                  */
                 tree={tree}
                 data={data}
-                activeBaseLayer={activeBaseLayer}
-                setActiveBaseLayer={setActiveBaseLayer}
                 activeNodes={activeNodes}
                 key={tabs.toString()}
                 refetchTree={refetch}
