@@ -9,7 +9,7 @@
 
 import 'babel-polyfill'
 
-import React, { Fragment } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
 
 import { MuiThemeProvider } from '@material-ui/core/styles'
@@ -80,7 +80,7 @@ const run = async () => {
     ReactDOM.render(
       <StateProvider>
         <ApolloProvider client={myClient}>
-          <Fragment>
+          <>
             <Print />
             <MuiThemeProvider theme={theme}>
               <MuiPickersUtilsProvider
@@ -91,7 +91,7 @@ const run = async () => {
                 <AppContainer />
               </MuiPickersUtilsProvider>
             </MuiThemeProvider>
-          </Fragment>
+          </>
         </ApolloProvider>
       </StateProvider>,
       document.getElementById('root'),
