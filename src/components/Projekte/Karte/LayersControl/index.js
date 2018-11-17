@@ -124,8 +124,6 @@ const LayersControl = ({
   onToggleBaseLayersExpanded,
   onToggleOverlaysExpanded,
   onToggleApfloraLayersExpanded,
-  bounds,
-  setBounds,
   mapFilter,
   mapIdsFiltered,
   mapPopIdsFiltered,
@@ -143,8 +141,6 @@ const LayersControl = ({
   toggleOverlaysExpanded: () => void,
   onToggleBaseLayersExpanded: () => void,
   onToggleOverlaysExpanded: () => void,
-  bounds: Array<Array<Number>>,
-  setBounds: () => void,
   mapFilter: Object,
   mapIdsFiltered: Array<String>,
   mapPopIdsFiltered: Array<String>,
@@ -187,8 +183,6 @@ const LayersControl = ({
               <ApfloraLayers
                 tree={tree}
                 activeNodes={activeNodes}
-                bounds={bounds}
-                setBounds={setBounds}
                 mapFilter={mapFilter}
                 mapIdsFiltered={mapIdsFiltered}
                 mapPopIdsFiltered={mapPopIdsFiltered}

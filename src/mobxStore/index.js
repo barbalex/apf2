@@ -18,6 +18,10 @@ const myTypes = types
     popLabelUsingNr: types.optional(types.boolean, true),
     tpopLabelUsingNr: types.optional(types.boolean, true),
     idOfTpopBeingLocalized: types.optional(types.maybeNull(types.string), null),
+    bounds: types.optional(types.array(types.array(types.number)), [
+      [47.159, 8.354],
+      [47.696, 8.984],
+    ]),
   })
   .actions(self => ({
     setApfloraLayers(val) {
@@ -43,6 +47,9 @@ const myTypes = types
     },
     setIdOfTpopBeingLocalized(val) {
       self.idOfTpopBeingLocalized = val
+    },
+    setBounds(val) {
+      self.bounds = val
     },
   }))
 

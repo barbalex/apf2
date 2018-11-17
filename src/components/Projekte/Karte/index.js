@@ -135,8 +135,6 @@ const Karte = ({
   onMouseMove,
   data,
   refetchTree,
-  bounds,
-  setBounds,
   mapIdsFiltered,
   mapFilter,
   setMapFilter,
@@ -157,8 +155,6 @@ const Karte = ({
   onMouseMove: () => void,
   data: Object,
   refetchTree: () => void,
-  bounds: Array<Array<Number>>,
-  setBounds: () => void,
   mapIdsFiltered: Array<String>,
   mapFilter: Object,
   setMapFilter: () => void,
@@ -184,6 +180,7 @@ const Karte = ({
     popLabelUsingNr,
     idOfTpopBeingLocalized,
     setIdOfTpopBeingLocalized,
+    bounds,
   } = mobxStore
   const mapRef = useRef(null)
   const prevDimensions = usePrevious(dimensions) || {}
@@ -430,8 +427,6 @@ const Karte = ({
             data={data}
             tree={tree}
             activeNodes={activeNodes}
-            bounds={bounds}
-            setBounds={setBounds}
             mapFilter={mapFilter}
             mapIdsFiltered={mapIdsFiltered}
             mapPopIdsFiltered={mapPopIdsFiltered}

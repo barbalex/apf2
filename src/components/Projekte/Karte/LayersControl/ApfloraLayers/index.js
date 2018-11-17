@@ -418,8 +418,6 @@ const SortableList = SortableContainer(
 const ApfloraLayers = ({
   tree,
   activeNodes,
-  bounds,
-  setBounds,
   popBounds,
   setPopBounds,
   tpopBounds,
@@ -434,8 +432,6 @@ const ApfloraLayers = ({
 }: {
   tree: Object,
   activeNodes: Object,
-  bounds: Array<Array<Number>>,
-  setBounds: () => void,
   popBounds: Array<Array<Number>>,
   setPopBounds: () => void,
   tpopBounds: Array<Array<Number>>,
@@ -454,6 +450,8 @@ const ApfloraLayers = ({
     setApfloraLayers,
     activeApfloraLayers,
     setActiveApfloraLayers,
+    bounds,
+    setBounds,
   } = mobxStore
 
   return (

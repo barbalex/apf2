@@ -138,7 +138,6 @@ const enhance = compose(
   withBeobAssignLines,
   withPopForMapMarkers,
   withErrorState,
-  withState('bounds', 'setBounds', [[47.159, 8.354], [47.696, 8.984]]),
   withState('mapFilter', 'setMapFilter', {
     features: [],
     type: 'FeatureCollection',
@@ -193,8 +192,6 @@ const ProjekteContainer = props => {
     treeName,
     tabs: tabsPassed,
     projekteTabs,
-    bounds,
-    setBounds,
     mapFilter,
     setMapFilter,
     detailplaene,
@@ -248,8 +245,6 @@ const ProjekteContainer = props => {
     treeName: String,
     tabs: Array<String>,
     projekteTabs: Array<String>,
-    bounds: Array<Array<Number>>,
-    setBounds: () => void,
     mapFilter: Object,
     setMapFilter: () => void,
     detailplaene: Object,
@@ -593,8 +588,6 @@ const ProjekteContainer = props => {
                 }
                 mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
                 beobZugeordnetAssigning={assigning}
-                bounds={bounds}
-                setBounds={setBounds}
                 mapFilter={mapFilter}
                 setMapFilter={setMapFilter}
                 errorState={errorState}
