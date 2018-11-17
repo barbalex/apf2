@@ -13,6 +13,7 @@ import flatten from 'lodash/flatten'
 import Button from '@material-ui/core/Button'
 import jwtDecode from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
+import { toJS } from 'mobx'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
@@ -138,10 +139,6 @@ const enhance = compose(
   withBeobAssignLines,
   withPopForMapMarkers,
   withErrorState,
-  withState('mapFilter', 'setMapFilter', {
-    features: [],
-    type: 'FeatureCollection',
-  }),
   withState('detailplaene', 'setDetailplaene', null),
   withState('markierungen', 'setMarkierungen', null),
   withState('ktZh', 'setKtZh', null),
@@ -192,8 +189,6 @@ const ProjekteContainer = props => {
     treeName,
     tabs: tabsPassed,
     projekteTabs,
-    mapFilter,
-    setMapFilter,
     detailplaene,
     setDetailplaene,
     ktZh,
@@ -245,8 +240,6 @@ const ProjekteContainer = props => {
     treeName: String,
     tabs: Array<String>,
     projekteTabs: Array<String>,
-    mapFilter: Object,
-    setMapFilter: () => void,
     detailplaene: Object,
     setDetailplaene: () => void,
     ktZh: Object,
@@ -257,8 +250,13 @@ const ProjekteContainer = props => {
     nodeFilterState: Object,
   } = props
 
-  const mobxStore = useContext(mobxStoreContext)
-  const { activeApfloraLayers, activeOverlays } = mobxStore
+  const {
+    activeApfloraLayers,
+    activeOverlays,
+    mapFilter: mapFilterRaw,
+  } = useContext(mobxStoreContext)
+  const mapFilter = toJS(mapFilterRaw)
+  console.log('ProjektContainer, mapFilter:', mapFilter)
 
   const queryArray = [
     dataLocal,
@@ -588,8 +586,6 @@ const ProjekteContainer = props => {
                 }
                 mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
                 beobZugeordnetAssigning={assigning}
-                mapFilter={mapFilter}
-                setMapFilter={setMapFilter}
                 errorState={errorState}
                 // SortedStrings enforce rerendering when sorting or visibility changes
                 activeOverlaysString={activeOverlays.join()}

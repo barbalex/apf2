@@ -1,19 +1,17 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useContext } from 'react'
 import 'leaflet'
 import 'leaflet-draw'
 import compose from 'recompose/compose'
 import { withLeaflet } from 'react-leaflet'
 
+import mobxStoreContext from '../../../mobxStoreContext'
+
 const enhance = compose(withLeaflet)
 
-const DrawControl = ({
-  leaflet,
-  setStoreMapFilter,
-}: {
-  leaflet: Object,
-  setStoreMapFilter: () => void,
-}) => {
+const DrawControl = ({ leaflet }: { leaflet: Object }) => {
   const { map } = leaflet
+  const mobxStore = useContext(mobxStoreContext)
+  const { setMapFilter } = mobxStore
 
   useEffect(() => {
     window.L.drawLocal.draw.toolbar.buttons.polygon =
@@ -69,10 +67,10 @@ const DrawControl = ({
     map.addControl(drawControl)
     map.on('draw:created', e => {
       mapFilter.addLayer(e.layer)
-      setStoreMapFilter(mapFilter.toGeoJSON())
+      setMapFilter(mapFilter.toGeoJSON())
     })
-    map.on('draw:edited', e => setStoreMapFilter(mapFilter.toGeoJSON()))
-    map.on('draw:deleted', e => setStoreMapFilter(mapFilter.toGeoJSON()))
+    map.on('draw:edited', e => setMapFilter(mapFilter.toGeoJSON()))
+    map.on('draw:deleted', e => setMapFilter(mapFilter.toGeoJSON()))
 
     return () => {
       map.removeLayer(mapFilter)
@@ -80,7 +78,7 @@ const DrawControl = ({
       map.off('draw:created')
       map.off('draw:edited')
       map.off('draw:deleted')
-      setStoreMapFilter({
+      setMapFilter({
         features: [],
         type: 'FeatureCollection',
       })

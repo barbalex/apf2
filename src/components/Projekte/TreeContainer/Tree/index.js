@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react'
+import React, { useContext, useCallback } from 'react'
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer'
 import List from 'react-virtualized/dist/commonjs/List'
 import styled from 'styled-components'
@@ -9,6 +9,7 @@ import isEqual from 'lodash/isEqual'
 import Row from './Row'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const singleRowHeight = 23
 const Container = styled.div`
@@ -58,108 +59,102 @@ type Props = {
   moving: Object,
   openNodes: Array<string>,
   copying: Object,
-  activeApfloraLayers: Array<String>,
   mapIdsFiltered: Array<String>,
-  mapFilter: Object,
 }
 
-class Tree extends Component<Props> {
-  rowRenderer = ({ key, index, style }) => {
-    const {
+const noRowsRenderer = () => (
+  <Container>
+    <LoadingDiv>lade Daten...</LoadingDiv>
+  </Container>
+)
+
+const Tree = ({
+  nodes,
+  activeNodeArray,
+  loading,
+  copying,
+  moving,
+  openNodes,
+  data,
+  tree,
+  treeName,
+  activeNodes,
+  mapIdsFiltered,
+}: Props) => {
+  // TODO:
+  // when beob.artId is changed, saveArtIdToDb changes openNodes
+  // problem is: Tree renders AFTERWARDS with OLD openNodes !!!???
+  //console.log('Tree rendering')
+  const { mapFilter, activeApfloraLayers } = useContext(mobxStoreContext)
+  const rowRenderer = useCallback(
+    ({ key, index, style }) => {
+      const node = nodes[index]
+
+      return (
+        <Row
+          key={key}
+          style={style}
+          index={index}
+          tree={tree}
+          openNodes={openNodes}
+          activeNodes={activeNodes}
+          node={node}
+          data={data}
+          treeName={treeName}
+          moving={moving}
+          copying={copying}
+          mapIdsFiltered={mapIdsFiltered}
+        />
+      )
+    },
+    [
       tree,
-      nodes,
+      openNodes,
+      activeNodes,
       data,
       treeName,
-      activeNodes,
       moving,
-      openNodes,
       copying,
-      activeApfloraLayers,
-      mapFilter,
       mapIdsFiltered,
-    } = this.props
-    const node = nodes[index]
-
-    return (
-      <Row
-        key={key}
-        style={style}
-        index={index}
-        tree={tree}
-        openNodes={openNodes}
-        activeNodes={activeNodes}
-        node={node}
-        data={data}
-        treeName={treeName}
-        moving={moving}
-        copying={copying}
-        activeApfloraLayers={activeApfloraLayers}
-        mapFilter={mapFilter}
-        mapIdsFiltered={mapIdsFiltered}
-      />
-    )
-  }
-
-  noRowsRenderer = () => (
-    <Container>
-      <LoadingDiv>lade Daten...</LoadingDiv>
-    </Container>
+    ],
   )
 
-  render() {
-    const {
-      nodes,
-      activeNodeArray,
-      activeApfloraLayers,
-      loading,
-      copying,
-      moving,
-      openNodes,
-      mapFilter,
-      data,
-    } = this.props
-    // TODO:
-    // when beob.artId is changed, saveArtIdToDb changes openNodes
-    // problem is: Tree renders AFTERWARDS with OLD openNodes !!!???
-    //console.log('Tree rendering')
-
-    return (
-      <ErrorBoundary>
-        <Container>
-          <AutoSizer>
-            {({ height, width }) => (
-              <ListContainer
-                height={height}
-                rowCount={nodes.length}
-                rowHeight={singleRowHeight}
-                rowRenderer={this.rowRenderer}
-                noRowsRenderer={this.noRowsRenderer}
-                scrollToIndex={findIndex(nodes, node =>
-                  isEqual(node.url, activeNodeArray),
-                )}
-                width={width}
-                // force rerender when:
-                // ...second query finisches
-                // TODO: is this loading needed?
-                loading={loading}
-                // ...after copying and moving
-                copying={copying}
-                moving={moving}
-                openNodes={openNodes}
-                // ...map filter changes
-                mapFilterString={mapFilter.features.toString()}
-                // ...active apflora layers change
-                activeApfloraLayersString={activeApfloraLayers.join()}
-                // ...when anything changes in the queried data
-                // without this AP label did not update when Art was changed
-                dataString={JSON.stringify(data)}
-              />
-            )}
-          </AutoSizer>
-        </Container>
-      </ErrorBoundary>
-    )
-  }
+  return (
+    <ErrorBoundary>
+      <Container>
+        <AutoSizer>
+          {({ height, width }) => (
+            <ListContainer
+              height={height}
+              rowCount={nodes.length}
+              rowHeight={singleRowHeight}
+              rowRenderer={rowRenderer}
+              noRowsRenderer={noRowsRenderer}
+              scrollToIndex={findIndex(nodes, node =>
+                isEqual(node.url, activeNodeArray),
+              )}
+              width={width}
+              // force rerender when:
+              // ...second query finisches
+              // TODO: is this loading needed?
+              loading={loading}
+              // ...after copying and moving
+              copying={copying}
+              moving={moving}
+              openNodes={openNodes}
+              // ...map filter changes
+              mapFilterString={mapFilter.features.toString()}
+              // ...active apflora layers change
+              activeApfloraLayersString={activeApfloraLayers.join()}
+              // ...when anything changes in the queried data
+              // without this AP label did not update when Art was changed
+              dataString={JSON.stringify(data)}
+            />
+          )}
+        </AutoSizer>
+      </Container>
+    </ErrorBoundary>
+  )
 }
 
 export default Tree

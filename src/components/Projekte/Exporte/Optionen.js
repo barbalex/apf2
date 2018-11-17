@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
@@ -9,11 +9,11 @@ import Icon from '@material-ui/core/Icon'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
 import app from 'ampersand-app'
+
+import mobxStoreContext from '../../../mobxStoreContext'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -49,105 +49,102 @@ const StyledCheckbox = styled(Checkbox)`
   height: 30px !important;
 `
 
-const enhance = compose(withState('expanded', 'setExpanded', true))
-
 const Optionen = ({
   fileType,
   applyMapFilterToExport,
-  expanded,
-  setExpanded,
-  mapFilter,
 }: {
   fileType: String,
   applyMapFilterToExport: Boolean,
-  expanded: Boolean,
-  setExpanded: () => void,
-  mapFilter: Object,
-}) => (
-  <StyledCard>
-    <StyledCardActions
-      disableActionSpacing
-      onClick={() => setExpanded(!expanded)}
-    >
-      <CardActionTitle>Optionen</CardActionTitle>
-      <CardActionIconButton
-        data-expanded={expanded}
-        aria-expanded={expanded}
-        aria-label="öffnen"
-      >
-        <Icon title={expanded ? 'schliessen' : 'öffnen'}>
-          <ExpandMoreIcon />
-        </Icon>
-      </CardActionIconButton>
-    </StyledCardActions>
-    <Collapse in={expanded} timeout="auto" unmountOnExit>
-      <StyledCardContent>
-        <StyledFormControlLabel
-          control={
-            <StyledCheckbox
-              checked={fileType === 'csv'}
-              onChange={() => {
-                app.client.mutate({
-                  mutation: gql`
-                    mutation setExportKey($key: String!, $value: Array!) {
-                      setExportKey(key: $key, value: $value) @client {
-                        export @client {
-                          applyMapFilterToExport
-                          fileType
-                          __typename: Export
-                        }
-                      }
-                    }
-                  `,
-                  variables: {
-                    value: fileType === 'csv' ? 'xlsx' : 'csv',
-                    key: 'fileType',
-                  },
-                })
-              }}
-              value={fileType}
-              color="primary"
-            />
-          }
-          label="Dateien im .csv-Format exportieren (Standard ist das xlsx-Format von Excel)"
-        />
-        <StyledFormControlLabel
-          control={
-            <StyledCheckbox
-              checked={applyMapFilterToExport}
-              onChange={() => {
-                app.client.mutate({
-                  mutation: gql`
-                    mutation setExportKey($key: String!, $value: Array!) {
-                      setExportKey(key: $key, value: $value) @client {
-                        export @client {
-                          applyMapFilterToExport
-                          fileType
-                          __typename: Export
-                        }
-                      }
-                    }
-                  `,
-                  variables: {
-                    value: !applyMapFilterToExport,
-                    key: 'applyMapFilterToExport',
-                  },
-                })
-              }}
-              value={applyMapFilterToExport.toString()}
-              color="primary"
-            />
-          }
-          label={
-            mapFilter.features.length > 0
-              ? 'Karten-Filter anwenden'
-              : 'Karten-Filter anwenden (verfügbar, wenn ein Karten-Filter erstellt wurde)'
-          }
-          disabled={!(mapFilter.features.length > 0)}
-        />
-      </StyledCardContent>
-    </Collapse>
-  </StyledCard>
-)
+}) => {
+  const { mapFilter } = useContext(mobxStoreContext)
+  const [expanded, setExpanded] = useState(true)
 
-export default enhance(Optionen)
+  return (
+    <StyledCard>
+      <StyledCardActions
+        disableActionSpacing
+        onClick={() => setExpanded(!expanded)}
+      >
+        <CardActionTitle>Optionen</CardActionTitle>
+        <CardActionIconButton
+          data-expanded={expanded}
+          aria-expanded={expanded}
+          aria-label="öffnen"
+        >
+          <Icon title={expanded ? 'schliessen' : 'öffnen'}>
+            <ExpandMoreIcon />
+          </Icon>
+        </CardActionIconButton>
+      </StyledCardActions>
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <StyledCardContent>
+          <StyledFormControlLabel
+            control={
+              <StyledCheckbox
+                checked={fileType === 'csv'}
+                onChange={() => {
+                  app.client.mutate({
+                    mutation: gql`
+                      mutation setExportKey($key: String!, $value: Array!) {
+                        setExportKey(key: $key, value: $value) @client {
+                          export @client {
+                            applyMapFilterToExport
+                            fileType
+                            __typename: Export
+                          }
+                        }
+                      }
+                    `,
+                    variables: {
+                      value: fileType === 'csv' ? 'xlsx' : 'csv',
+                      key: 'fileType',
+                    },
+                  })
+                }}
+                value={fileType}
+                color="primary"
+              />
+            }
+            label="Dateien im .csv-Format exportieren (Standard ist das xlsx-Format von Excel)"
+          />
+          <StyledFormControlLabel
+            control={
+              <StyledCheckbox
+                checked={applyMapFilterToExport}
+                onChange={() => {
+                  app.client.mutate({
+                    mutation: gql`
+                      mutation setExportKey($key: String!, $value: Array!) {
+                        setExportKey(key: $key, value: $value) @client {
+                          export @client {
+                            applyMapFilterToExport
+                            fileType
+                            __typename: Export
+                          }
+                        }
+                      }
+                    `,
+                    variables: {
+                      value: !applyMapFilterToExport,
+                      key: 'applyMapFilterToExport',
+                    },
+                  })
+                }}
+                value={applyMapFilterToExport.toString()}
+                color="primary"
+              />
+            }
+            label={
+              mapFilter.features.length > 0
+                ? 'Karten-Filter anwenden'
+                : 'Karten-Filter anwenden (verfügbar, wenn ein Karten-Filter erstellt wurde)'
+            }
+            disabled={!(mapFilter.features.length > 0)}
+          />
+        </StyledCardContent>
+      </Collapse>
+    </StyledCard>
+  )
+}
+
+export default Optionen

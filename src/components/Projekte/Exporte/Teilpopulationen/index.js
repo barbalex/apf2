@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
@@ -9,7 +9,6 @@ import Icon from '@material-ui/core/Icon'
 import Button from '@material-ui/core/Button'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import compose from 'recompose/compose'
-import withState from 'recompose/withState'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
@@ -21,6 +20,7 @@ import Message from '../Message'
 import withData from './withData'
 import withErrorState from '../../../../state/withErrorState'
 import epsg2056to4326 from '../../../../modules/epsg2056to4326'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -69,33 +69,16 @@ const isRemoteHost = window.location.hostname !== 'localhost'
 const enhance = compose(
   withData,
   withErrorState,
-  withState('expanded', 'setExpanded', false),
-  withState('message', 'setMessage', null),
-  withState('ewmMessage', 'setEwmMessage', ''),
 )
 
 const Teilpopulationen = ({
   fileType,
-  mapFilter,
   applyMapFilterToExport,
-  expanded,
-  setExpanded,
-  message,
-  ewmMessage,
-  setMessage,
-  setEwmMessage,
   errorState,
   data,
 }: {
   fileType: String,
-  mapFilter: Object,
   applyMapFilterToExport: Boolean,
-  expanded: Boolean,
-  setExpanded: () => void,
-  message: String,
-  ewmMessage: String,
-  setMessage: () => void,
-  setEwmMessage: () => void,
   errorState: Object,
   data: Object,
 }) => {
@@ -109,6 +92,12 @@ const Teilpopulationen = ({
       })),
     'artname',
   )
+
+  const { mapFilter } = useContext(mobxStoreContext)
+
+  const [expanded, setExpanded] = useState(false)
+  const [message, setMessage] = useState(null)
+  const [ewmMessage, setEwmMessage] = useState('')
 
   return (
     <StyledCard>

@@ -194,7 +194,6 @@ const TreeContainer = ({
   moving,
   openNodes,
   copying,
-  mapFilter,
   mapIdsFiltered,
 }: {
   treeName: String,
@@ -209,7 +208,6 @@ const TreeContainer = ({
   openNodes: Array<string>,
   copying: Object,
   refetchTree: () => void,
-  mapFilter: Object,
   mapIdsFiltered: Array<String>,
   deleteState: Object,
   errorState: Object,
@@ -560,7 +558,6 @@ const TreeContainer = ({
             activeApfloraLayers={activeApfloraLayers}
             moving={moving}
             copying={copying}
-            mapFilter={mapFilter}
             mapIdsFiltered={mapIdsFiltered}
           />
         </InnerTreeContainer>

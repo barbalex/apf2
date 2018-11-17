@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { useContext } from 'react'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
@@ -19,6 +19,7 @@ import Message from '../Message'
 import withErrorState from '../../../../state/withErrorState'
 import allVBeobs from './allVBeobs'
 import allVBeobArtChangeds from './allVBeobArtChangeds'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -67,7 +68,6 @@ const enhance = compose(
 const Beobachtungen = ({
   fileType,
   applyMapFilterToExport,
-  mapFilter,
   expanded,
   setExpanded,
   message,
@@ -76,88 +76,92 @@ const Beobachtungen = ({
 }: {
   fileType: String,
   applyMapFilterToExport: Boolean,
-  mapFilter: Object,
   expanded: Boolean,
   setExpanded: () => void,
   message: String,
   setMessage: () => void,
   errorState: Object,
-}) => (
-  <StyledCard>
-    <StyledCardActions
-      disableActionSpacing
-      onClick={() => setExpanded(!expanded)}
-    >
-      <CardActionTitle>Beobachtungen</CardActionTitle>
-      <CardActionIconButton
-        data-expanded={expanded}
-        aria-expanded={expanded}
-        aria-label="öffnen"
+}) => {
+  const mobxStore = useContext(mobxStoreContext)
+  const { mapFilter } = mobxStore
+
+  return (
+    <StyledCard>
+      <StyledCardActions
+        disableActionSpacing
+        onClick={() => setExpanded(!expanded)}
       >
-        <Icon title={expanded ? 'schliessen' : 'öffnen'}>
-          <ExpandMoreIcon />
-        </Icon>
-      </CardActionIconButton>
-    </StyledCardActions>
-    <Collapse in={expanded} timeout="auto" unmountOnExit>
-      <StyledCardContent>
-        <DownloadCardButton
-          onClick={async () => {
-            setMessage('Export "Beobachtungen" wird vorbereitet...')
-            try {
-              const { data } = await app.client.query({
-                query: allVBeobArtChangeds,
-              })
-              exportModule({
-                data: get(data, 'allVBeobArtChangeds.nodes', []),
-                fileName: 'BeobachtungenArtVeraendert',
-                fileType,
-                applyMapFilterToExport,
-                mapFilter,
-                idKey: 'id',
-                xKey: 'x',
-                yKey: 'y',
-                errorState,
-              })
-            } catch (error) {
-              errorState.add(error)
-            }
-            setMessage(null)
-          }}
+        <CardActionTitle>Beobachtungen</CardActionTitle>
+        <CardActionIconButton
+          data-expanded={expanded}
+          aria-expanded={expanded}
+          aria-label="öffnen"
         >
-          <div>Alle Beobachtungen, bei denen die Art verändert wurde</div>
-        </DownloadCardButton>
-        <DownloadCardButton
-          onClick={async () => {
-            setMessage('Export "Beobachtungen" wird vorbereitet...')
-            try {
-              const { data } = await app.client.query({
-                query: allVBeobs,
-              })
-              exportModule({
-                data: get(data, 'allVBeobs.nodes', []),
-                fileName: 'Beobachtungen',
-                fileType,
-                applyMapFilterToExport,
-                mapFilter,
-                idKey: 'id',
-                xKey: 'x',
-                yKey: 'y',
-                errorState,
-              })
-            } catch (error) {
-              errorState.add(error)
-            }
-            setMessage(null)
-          }}
-        >
-          <div>Alle Beobachtungen von Arten aus apflora.ch</div>
-          <div>Nutzungsbedingungen der FNS beachten</div>
-        </DownloadCardButton>
-      </StyledCardContent>
-    </Collapse>
-    {!!message && <Message message={message} />}
-  </StyledCard>
-)
+          <Icon title={expanded ? 'schliessen' : 'öffnen'}>
+            <ExpandMoreIcon />
+          </Icon>
+        </CardActionIconButton>
+      </StyledCardActions>
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <StyledCardContent>
+          <DownloadCardButton
+            onClick={async () => {
+              setMessage('Export "Beobachtungen" wird vorbereitet...')
+              try {
+                const { data } = await app.client.query({
+                  query: allVBeobArtChangeds,
+                })
+                exportModule({
+                  data: get(data, 'allVBeobArtChangeds.nodes', []),
+                  fileName: 'BeobachtungenArtVeraendert',
+                  fileType,
+                  applyMapFilterToExport,
+                  mapFilter,
+                  idKey: 'id',
+                  xKey: 'x',
+                  yKey: 'y',
+                  errorState,
+                })
+              } catch (error) {
+                errorState.add(error)
+              }
+              setMessage(null)
+            }}
+          >
+            <div>Alle Beobachtungen, bei denen die Art verändert wurde</div>
+          </DownloadCardButton>
+          <DownloadCardButton
+            onClick={async () => {
+              setMessage('Export "Beobachtungen" wird vorbereitet...')
+              try {
+                const { data } = await app.client.query({
+                  query: allVBeobs,
+                })
+                exportModule({
+                  data: get(data, 'allVBeobs.nodes', []),
+                  fileName: 'Beobachtungen',
+                  fileType,
+                  applyMapFilterToExport,
+                  mapFilter,
+                  idKey: 'id',
+                  xKey: 'x',
+                  yKey: 'y',
+                  errorState,
+                })
+              } catch (error) {
+                errorState.add(error)
+              }
+              setMessage(null)
+            }}
+          >
+            <div>Alle Beobachtungen von Arten aus apflora.ch</div>
+            <div>Nutzungsbedingungen der FNS beachten</div>
+          </DownloadCardButton>
+        </StyledCardContent>
+      </Collapse>
+      {!!message && <Message message={message} />}
+    </StyledCard>
+  )
+}
 
 export default enhance(Beobachtungen)

@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import SwapVerticalCircleIcon from '@material-ui/icons/SwapVerticalCircle'
@@ -23,6 +23,7 @@ import toggleNode from '../../toggleNode'
 import toggleNodeSymbol from '../../toggleNodeSymbol'
 import setTreeKey from './setTreeKey'
 import withNodeFilterState from '../../../../../state/withNodeFilter'
+import mobxStoreContext from '../../../../../mobxStoreContext'
 //import shouldRowUpdate from './shouldRowUpdate'
 
 const singleRowHeight = 23
@@ -225,8 +226,6 @@ const Row = ({
   moving,
   openNodes,
   copying,
-  activeApfloraLayers,
-  mapFilter,
   mapIdsFiltered,
   nodeFilterState,
   onClickPrint,
@@ -243,14 +242,13 @@ const Row = ({
   moving: Object,
   openNodes: Array<string>,
   copying: Object,
-  activeApfloraLayers: Array<String>,
-  mapFilter: Object,
   mapIdsFiltered: Array<String>,
   nodeFilterState: Object,
   onClickPrint: () => void,
   onClickNode: () => void,
   onClickNodeSymbol: () => void,
 }) => {
+  const { activeApfloraLayers } = useContext(mobxStoreContext)
   const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
   const myProps = { key: index }
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, activeNodeArray)

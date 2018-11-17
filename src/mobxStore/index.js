@@ -2,6 +2,7 @@
 import { types } from 'mobx-state-tree'
 
 import ApfloraLayer from './ApfloraLayer'
+import MapFilter from './MapFilter'
 import standardApfloraLayers from '../components/Projekte/Karte/apfloraLayers'
 import standardOverlays from '../components/Projekte/Karte/overlays'
 
@@ -22,6 +23,10 @@ const myTypes = types
       [47.159, 8.354],
       [47.696, 8.984],
     ]),
+    mapFilter: types.optional(MapFilter, {
+      features: [],
+      type: 'FeatureCollection',
+    }),
   })
   .actions(self => ({
     setApfloraLayers(val) {
@@ -50,6 +55,9 @@ const myTypes = types
     },
     setBounds(val) {
       self.bounds = val
+    },
+    setMapFilter(val) {
+      self.mapFilter = val
     },
   }))
 

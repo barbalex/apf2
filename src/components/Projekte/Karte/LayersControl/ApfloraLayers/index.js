@@ -422,7 +422,6 @@ const ApfloraLayers = ({
   setPopBounds,
   tpopBounds,
   setTpopBounds,
-  mapFilter,
   mapIdsFiltered,
   mapPopIdsFiltered,
   mapTpopIdsFiltered,
@@ -436,7 +435,6 @@ const ApfloraLayers = ({
   setPopBounds: () => void,
   tpopBounds: Array<Array<Number>>,
   setTpopBounds: () => void,
-  mapFilter: Object,
   mapIdsFiltered: Array<String>,
   mapPopIdsFiltered: Array<String>,
   mapTpopIdsFiltered: Array<String>,
@@ -452,6 +450,7 @@ const ApfloraLayers = ({
     setActiveApfloraLayers,
     bounds,
     setBounds,
+    mapFilter,
   } = mobxStore
 
   return (

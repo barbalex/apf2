@@ -136,8 +136,6 @@ const Karte = ({
   data,
   refetchTree,
   mapIdsFiltered,
-  mapFilter,
-  setMapFilter,
   mapPopIdsFiltered,
   mapTpopIdsFiltered,
   mapBeobNichtBeurteiltIdsFiltered,
@@ -156,8 +154,6 @@ const Karte = ({
   data: Object,
   refetchTree: () => void,
   mapIdsFiltered: Array<String>,
-  mapFilter: Object,
-  setMapFilter: () => void,
   mapPopIdsFiltered: Array<String>,
   mapTpopIdsFiltered: Array<String>,
   mapBeobNichtBeurteiltIdsFiltered: Array<String>,
@@ -427,7 +423,6 @@ const Karte = ({
             data={data}
             tree={tree}
             activeNodes={activeNodes}
-            mapFilter={mapFilter}
             mapIdsFiltered={mapIdsFiltered}
             mapPopIdsFiltered={mapPopIdsFiltered}
             mapTpopIdsFiltered={mapTpopIdsFiltered}
@@ -443,9 +438,7 @@ const Karte = ({
           <MeasureControl />
           <SwitchScaleControl />
           <FullScreenControl />
-          {activeApfloraLayers.includes('mapFilter') && (
-            <DrawControl setStoreMapFilter={setMapFilter} />
-          )}
+          {activeApfloraLayers.includes('mapFilter') && <DrawControl />}
           {/*
             need to get background maps to show when printing A4
             <PrintControl />

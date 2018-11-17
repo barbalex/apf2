@@ -124,7 +124,6 @@ const LayersControl = ({
   onToggleBaseLayersExpanded,
   onToggleOverlaysExpanded,
   onToggleApfloraLayersExpanded,
-  mapFilter,
   mapIdsFiltered,
   mapPopIdsFiltered,
   mapTpopIdsFiltered,
@@ -141,7 +140,6 @@ const LayersControl = ({
   toggleOverlaysExpanded: () => void,
   onToggleBaseLayersExpanded: () => void,
   onToggleOverlaysExpanded: () => void,
-  mapFilter: Object,
   mapIdsFiltered: Array<String>,
   mapPopIdsFiltered: Array<String>,
   mapTpopIdsFiltered: Array<String>,
@@ -183,7 +181,6 @@ const LayersControl = ({
               <ApfloraLayers
                 tree={tree}
                 activeNodes={activeNodes}
-                mapFilter={mapFilter}
                 mapIdsFiltered={mapIdsFiltered}
                 mapPopIdsFiltered={mapPopIdsFiltered}
                 mapTpopIdsFiltered={mapTpopIdsFiltered}

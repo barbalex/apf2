@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
@@ -15,6 +15,7 @@ import Anwendung from './Anwendung'
 import Optionen from './Optionen'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import withLocalData from './withLocalData'
+import mobxStoreContext from '../../../mobxStoreContext'
 
 const Container = styled.div`
   height: 100%;
@@ -43,14 +44,11 @@ const ExporteContainer = styled.div`
 
 const enhance = compose(withLocalData)
 
-const Exporte = ({
-  mapFilter,
-  localData,
-}: {
-  mapFilter: Object,
-  localData: Object,
-}) => {
+const Exporte = ({ localData }: { localData: Object }) => {
   if (localData.error) return `Fehler: ${localData.error.message}`
+
+  const mobxStore = useContext(mobxStoreContext)
+  const { mapFilter } = mobxStore
 
   const applyMapFilterToExport = get(localData, 'export.applyMapFilterToExport')
   const fileType = get(localData, 'export.fileType')
