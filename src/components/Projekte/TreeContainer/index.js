@@ -186,7 +186,6 @@ const TreeContainer = ({
   activeNode,
   activeNodes,
   refetchTree,
-  setIdOfTpopBeingLocalized,
   deleteState,
   errorState,
   nodes,
@@ -225,6 +224,7 @@ const TreeContainer = ({
     setPopLabelUsingNr,
     tpopLabelUsingNr,
     setTpopLabelUsingNr,
+    setIdOfTpopBeingLocalized,
   } = mobxStore
 
   const datasetToDelete = deleteState.state.toDelete

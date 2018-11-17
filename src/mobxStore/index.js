@@ -17,6 +17,7 @@ const myTypes = types
     activeBaseLayer: types.optional(types.string, 'OsmColor'),
     popLabelUsingNr: types.optional(types.boolean, true),
     tpopLabelUsingNr: types.optional(types.boolean, true),
+    idOfTpopBeingLocalized: types.optional(types.maybeNull(types.string), null),
   })
   .actions(self => ({
     setApfloraLayers(val) {
@@ -39,6 +40,9 @@ const myTypes = types
     },
     setTpopLabelUsingNr(val) {
       self.tpopLabelUsingNr = val
+    },
+    setIdOfTpopBeingLocalized(val) {
+      self.idOfTpopBeingLocalized = val
     },
   }))
 

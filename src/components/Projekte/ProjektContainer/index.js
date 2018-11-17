@@ -138,7 +138,6 @@ const enhance = compose(
   withBeobAssignLines,
   withPopForMapMarkers,
   withErrorState,
-  withState('idOfTpopBeingLocalized', 'setIdOfTpopBeingLocalized', null),
   withState('bounds', 'setBounds', [[47.159, 8.354], [47.696, 8.984]]),
   withState('mapFilter', 'setMapFilter', {
     features: [],
@@ -194,8 +193,6 @@ const ProjekteContainer = props => {
     treeName,
     tabs: tabsPassed,
     projekteTabs,
-    idOfTpopBeingLocalized,
-    setIdOfTpopBeingLocalized,
     bounds,
     setBounds,
     mapFilter,
@@ -251,8 +248,6 @@ const ProjekteContainer = props => {
     treeName: String,
     tabs: Array<String>,
     projekteTabs: Array<String>,
-    idOfTpopBeingLocalized: String,
-    setIdOfTpopBeingLocalized: () => void,
     bounds: Array<Array<Number>>,
     setBounds: () => void,
     mapFilter: Object,
@@ -538,7 +533,6 @@ const ProjekteContainer = props => {
                 openNodes={openNodes}
                 copying={copying}
                 refetchTree={refetch}
-                setIdOfTpopBeingLocalized={setIdOfTpopBeingLocalized}
                 mapFilter={mapFilter}
                 mapIdsFiltered={mapIdsFiltered}
               />
@@ -599,8 +593,6 @@ const ProjekteContainer = props => {
                 }
                 mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
                 beobZugeordnetAssigning={assigning}
-                idOfTpopBeingLocalized={idOfTpopBeingLocalized}
-                setIdOfTpopBeingLocalized={setIdOfTpopBeingLocalized}
                 bounds={bounds}
                 setBounds={setBounds}
                 mapFilter={mapFilter}

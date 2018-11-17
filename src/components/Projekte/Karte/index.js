@@ -135,8 +135,6 @@ const Karte = ({
   onMouseMove,
   data,
   refetchTree,
-  idOfTpopBeingLocalized,
-  setIdOfTpopBeingLocalized,
   bounds,
   setBounds,
   mapIdsFiltered,
@@ -159,8 +157,6 @@ const Karte = ({
   onMouseMove: () => void,
   data: Object,
   refetchTree: () => void,
-  idOfTpopBeingLocalized: String,
-  setIdOfTpopBeingLocalized: () => void,
   bounds: Array<Array<Number>>,
   setBounds: () => void,
   mapIdsFiltered: Array<String>,
@@ -186,6 +182,8 @@ const Karte = ({
     activeOverlays,
     activeBaseLayer,
     popLabelUsingNr,
+    idOfTpopBeingLocalized,
+    setIdOfTpopBeingLocalized,
   } = mobxStore
   const mapRef = useRef(null)
   const prevDimensions = usePrevious(dimensions) || {}
@@ -345,8 +343,8 @@ const Karte = ({
           doubleClickZoom={false}
           onDblclick={async event => {
             // since 2018 10 31 using idOfTpopBeingLocalized directly
-            // returns null, so need to use this.props.idOfTpopBeingLocalized
-            const { idOfTpopBeingLocalized } = this.props
+            // returns null, so need to use mobxStore.idOfTpopBeingLocalized
+            const { idOfTpopBeingLocalized } = mobxStore
             /**
              * TODO
              * When clicking on Layertool
