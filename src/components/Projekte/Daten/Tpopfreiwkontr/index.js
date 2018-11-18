@@ -2,7 +2,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import withLifecycle from '@hocs/with-lifecycle'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import app from 'ampersand-app'
