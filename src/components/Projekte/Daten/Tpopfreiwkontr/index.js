@@ -1,5 +1,5 @@
 // @flow
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withLifecycle from '@hocs/with-lifecycle'
@@ -141,80 +141,6 @@ const enhance = compose(
   withAllAdresses,
   withNodeFilter,
   withData,
-  withLifecycle({
-    async onDidUpdate(prevProps, props) {
-      if (prevProps.data.loading && !props.data.loading) {
-        // loading data just finished
-        // check if tpopkontr exist
-        const tpopkontrCount = get(
-          props.data,
-          'tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes',
-          [],
-        ).length
-        if (tpopkontrCount === 0) {
-          // add counts for all ekfzaehleinheit
-          // BUT DANGER: only for ekfzaehleinheit with zaehleinheit_id
-          const ekfzaehleinheits = get(
-            props.data,
-            'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekfzaehleinheitsByApId.nodes',
-            [],
-          )
-            // remove ekfzaehleinheits without zaehleinheit_id
-            .filter(
-              z =>
-                !!get(
-                  z,
-                  'tpopkontrzaehlEinheitWerteByZaehleinheitId.code',
-                  null,
-                ),
-            )
-          try {
-            await Promise.all(
-              ekfzaehleinheits.map(z =>
-                app.client.mutate({
-                  mutation: createTpopkontrzaehl,
-                  variables: {
-                    tpopkontrId: props.id,
-                    einheit: get(
-                      z,
-                      'tpopkontrzaehlEinheitWerteByZaehleinheitId.code',
-                      null,
-                    ),
-                  },
-                }),
-              ),
-            )
-          } catch (error) {
-            props.errorState.add(error)
-          }
-          props.data.refetch()
-        }
-      }
-      if (prevProps.id !== props.id) {
-        props.setErrors({})
-      }
-      // check if adresse is choosen but no registered user exists
-      const { data, setErrors, errors, nodeFilterState, treeName } = props
-
-      const showFilter = !!nodeFilterState.state[treeName].activeTable
-      let row
-      if (!showFilter) {
-        row = get(data, 'tpopkontrById', {})
-        const bearbeiter = get(row, 'bearbeiter')
-        const userCount = get(
-          row,
-          'adresseByBearbeiter.usersByAdresseId.totalCount',
-          0,
-        )
-        if (bearbeiter && !userCount && !errors.bearbeiter) {
-          setErrors({
-            bearbeiter:
-              'Es ist kein Benutzer mit dieser Adresse verbunden. Damit dieser Benutzer Kontrollen erfassen kann, muss er ein Benutzerkonto haben, in dem obige Adresse als zugehörig erfasst wurde.',
-          })
-        }
-      }
-    },
-  }),
 )
 
 const Tpopfreiwkontr = ({
@@ -228,6 +154,7 @@ const Tpopfreiwkontr = ({
   nodeFilterState,
   treeName,
   dataAllAdresses,
+  errorState,
 }: {
   id: string,
   data: Object,
@@ -237,6 +164,7 @@ const Tpopfreiwkontr = ({
   nodeFilterState: Object,
   treeName: string,
   dataAllAdresses: Object,
+  errorState: Object,
 }) => {
   if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
   if (data.error) return `Fehler: ${data.error.message}`
@@ -438,6 +366,72 @@ const Tpopfreiwkontr = ({
     },
     [showFilter, id],
   )
+
+  useEffect(
+    () => {
+      if (data.loading) return
+      // loading data just finished
+      // check if tpopkontr exist
+      const tpopkontrCount = get(
+        data,
+        'tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes',
+        [],
+      ).length
+      if (tpopkontrCount === 0) {
+        // add counts for all ekfzaehleinheit
+        // BUT DANGER: only for ekfzaehleinheit with zaehleinheit_id
+        const ekfzaehleinheits = get(
+          data,
+          'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekfzaehleinheitsByApId.nodes',
+          [],
+        )
+          // remove ekfzaehleinheits without zaehleinheit_id
+          .filter(
+            z =>
+              !!get(z, 'tpopkontrzaehlEinheitWerteByZaehleinheitId.code', null),
+          )
+
+        Promise.all(
+          ekfzaehleinheits.map(z =>
+            app.client.mutate({
+              mutation: createTpopkontrzaehl,
+              variables: {
+                tpopkontrId: id,
+                einheit: get(
+                  z,
+                  'tpopkontrzaehlEinheitWerteByZaehleinheitId.code',
+                  null,
+                ),
+              },
+            }),
+          ),
+        )
+          .then(() => data.refetch())
+          .catch(error => errorState.add(error))
+      }
+    },
+    [data.loading],
+  )
+
+  useEffect(() => setErrors({}), [id])
+
+  useEffect(() => {
+    // check if adresse is choosen but no registered user exists
+    if (!showFilter) {
+      const bearbeiter = get(row, 'bearbeiter')
+      const userCount = get(
+        row,
+        'adresseByBearbeiter.usersByAdresseId.totalCount',
+        0,
+      )
+      if (bearbeiter && !userCount && !errors.bearbeiter) {
+        setErrors({
+          bearbeiter:
+            'Es ist kein Benutzer mit dieser Adresse verbunden. Damit dieser Benutzer Kontrollen erfassen kann, muss er ein Benutzerkonto haben, in dem obige Adresse als zugehörig erfasst wurde.',
+        })
+      }
+    }
+  })
 
   return (
     <Container showfilter={showFilter}>
