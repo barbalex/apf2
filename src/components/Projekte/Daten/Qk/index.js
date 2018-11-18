@@ -1,14 +1,11 @@
 // @flow
-import React from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 import styled from 'styled-components'
 import Paper from '@material-ui/core/Paper'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
-import withState from 'recompose/withState'
-import withLifecycle from '@hocs/with-lifecycle'
 import sortBy from 'lodash/sortBy'
 
 import FormTitle from '../../../shared/FormTitle'
@@ -62,27 +59,11 @@ const LoadingLine = styled.div`
 const enhance = compose(
   withLocalData,
   withData,
-  withState('berichtjahr', 'setBerichtjahr', standardQkYear()),
-  withState('filter', 'setFilter', ''),
-  withHandlers({
-    onChangeBerichtjahr: ({ setBerichtjahr }) => event =>
-      setBerichtjahr(+event.target.value),
-    onChangeFilter: ({ setFilter }) => event => setFilter(event.target.value),
-  }),
-  withLifecycle({
-    onDidMount({ ktZh, setKtZh, errorState }) {
-      if (!ktZh) fetchKtZh({ setKtZh, errorState })
-    },
-  }),
 )
 
 const Qk = ({
   tree,
   apId,
-  berichtjahr,
-  onChangeBerichtjahr,
-  onChangeFilter,
-  filter,
   treeName,
   activeNodes,
   errorState,
@@ -93,10 +74,6 @@ const Qk = ({
 }: {
   tree: Object,
   apId: String,
-  berichtjahr: Number,
-  onChangeBerichtjahr: () => void,
-  onChangeFilter: () => void,
-  filter: String,
   treeName: String,
   activeNodes: Array<Object>,
   errorState: Object,
@@ -107,6 +84,14 @@ const Qk = ({
 }) => {
   if (localData.error) return `Fehler: ${localData.error.message}`
   if (data.error) return `Fehler: ${data.error.message}`
+
+  const [berichtjahr, setBerichtjahr] = useState(standardQkYear())
+  const [filter, setFilter] = useState('')
+
+  const onChangeBerichtjahr = useCallback(event =>
+    setBerichtjahr(+event.target.value),
+  )
+  const onChangeFilter = useCallback(event => setFilter(event.target.value))
 
   const gqlMessageGroups = sortBy(qk({ berichtjahr, data }), 'title')
     .filter(q => !q.query)
@@ -124,6 +109,10 @@ const Qk = ({
     }
     return true
   })
+
+  useEffect(() => {
+    if (!ktZh) fetchKtZh({ setKtZh, errorState })
+  }, [])
 
   return (
     <ErrorBoundary>
