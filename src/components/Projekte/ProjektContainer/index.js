@@ -139,7 +139,6 @@ const enhance = compose(
   withBeobAssignLines,
   withPopForMapMarkers,
   withErrorState,
-  withState('detailplaene', 'setDetailplaene', null),
   withState('markierungen', 'setMarkierungen', null),
   withState('ktZh', 'setKtZh', null),
   observer,
@@ -189,8 +188,6 @@ const ProjekteContainer = props => {
     treeName,
     tabs: tabsPassed,
     projekteTabs,
-    detailplaene,
-    setDetailplaene,
     ktZh,
     setKtZh,
     markierungen,
@@ -240,8 +237,6 @@ const ProjekteContainer = props => {
     treeName: String,
     tabs: Array<String>,
     projekteTabs: Array<String>,
-    detailplaene: Object,
-    setDetailplaene: () => void,
     ktZh: Object,
     setKtZh: () => void,
     markierungen: Object,
@@ -256,7 +251,6 @@ const ProjekteContainer = props => {
     mapFilter: mapFilterRaw,
   } = useContext(mobxStoreContext)
   const mapFilter = toJS(mapFilterRaw)
-  console.log('ProjektContainer, detailplaene:', detailplaene)
 
   const queryArray = [
     dataLocal,
@@ -590,8 +584,6 @@ const ProjekteContainer = props => {
                 // SortedStrings enforce rerendering when sorting or visibility changes
                 activeOverlaysString={activeOverlays.join()}
                 activeApfloraLayersString={activeApfloraLayers.join()}
-                detailplaene={detailplaene}
-                setDetailplaene={setDetailplaene}
                 markierungen={markierungen}
                 setMarkierungen={setMarkierungen}
                 beobsString={beobs.toString()}

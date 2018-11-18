@@ -16,7 +16,9 @@ export default async ({
   try {
     result = await axios.get(url, { baseURL })
   } catch (error) {
+    console.log('fetchDateilplane, error:', error)
     errorState.add(error)
   }
+  console.log('fetchDetailplaene, will set detailplaene:', result.data)
   setDetailplaene(result.data)
 }

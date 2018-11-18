@@ -141,8 +141,6 @@ const Karte = ({
   mapBeobNichtBeurteiltIdsFiltered,
   mapBeobZugeordnetIdsFiltered,
   mapBeobNichtZuzuordnenIdsFiltered,
-  detailplaene,
-  setDetailplaene,
   markierungen,
   setMarkierungen,
   errorState,
@@ -159,8 +157,6 @@ const Karte = ({
   mapBeobNichtBeurteiltIdsFiltered: Array<String>,
   mapBeobZugeordnetIdsFiltered: Array<String>,
   mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
-  detailplaene: Object,
-  setDetailplaene: () => void,
   markierungen: Object,
   setMarkierungen: () => void,
   errorState: Object,
@@ -271,13 +267,7 @@ const Karte = ({
   }
   const OverlayComponents = {
     ZhUep: () => <ZhUepOverlay />,
-    Detailplaene: () => (
-      <Detailplaene
-        detailplaene={detailplaene}
-        setDetailplaene={setDetailplaene}
-        errorState={errorState}
-      />
-    ),
+    Detailplaene: () => <Detailplaene errorState={errorState} />,
     Markierungen: () => (
       <Markierungen
         markierungen={markierungen}

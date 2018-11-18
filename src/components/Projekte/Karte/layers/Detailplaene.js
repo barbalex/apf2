@@ -1,9 +1,11 @@
 // @flow
-import React from 'react'
+import React, { useContext } from 'react'
 import { GeoJSON } from 'react-leaflet'
+import { observer } from 'mobx-react-lite'
 
 import popupFromProperties from './popupFromProperties'
 import fetchDetailplaene from '../../../../modules/fetchDetailplaene'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const style = () => ({ fill: false, color: 'red', weight: 1 })
 const onEachFeature = (feature, layer) => {
@@ -12,25 +14,19 @@ const onEachFeature = (feature, layer) => {
   }
 }
 
-const DetailplaeneLayer = ({
-  detailplaene,
-  setDetailplaene,
-  errorState,
-}:{
-  detailplaene: Object,
-  setDetailplaene: () => void,
-  errorState: Object,
-}) => {
+const DetailplaeneLayer = ({ errorState }: { errorState: Object }) => {
+  const { detailplaene, setDetailplaene } = useContext(mobxStoreContext)
   !detailplaene && fetchDetailplaene({ setDetailplaene, errorState })
 
   return (
-    detailplaene &&
-    <GeoJSON
-      data={detailplaene}
-      style={style}
-      onEachFeature={onEachFeature}
-    />
+    detailplaene && (
+      <GeoJSON
+        data={detailplaene}
+        style={style}
+        onEachFeature={onEachFeature}
+      />
+    )
   )
 }
 
-export default DetailplaeneLayer
+export default observer(DetailplaeneLayer)

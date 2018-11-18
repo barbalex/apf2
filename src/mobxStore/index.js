@@ -3,7 +3,7 @@ import { types } from 'mobx-state-tree'
 
 import ApfloraLayer from './ApfloraLayer'
 import MapFilter from './MapFilter'
-import Geojson from './Geojson'
+import Detailplan from './Detailplan'
 import standardApfloraLayers from '../components/Projekte/Karte/apfloraLayers'
 import standardOverlays from '../components/Projekte/Karte/overlays'
 
@@ -28,23 +28,12 @@ const myTypes = types
       features: [],
       type: 'FeatureCollection',
     }),
-    detailplaene: types.optional(
-      types.maybeNull(
-        types.model({
-          type: types.string,
-          name: types.string,
-          crs: types.model({
-            type: types.string,
-            properties: types.model({
-              name: types.string,
-            }),
-          }),
-          features: types.array(Geojson),
-        }),
-      ),
-      null,
-    ),
   })
+  // structure of detailplaene is not controlled
+  // so need to define this as volatile
+  .volatile(() => ({
+    detailplaene: null,
+  }))
   .actions(self => ({
     setApfloraLayers(val) {
       self.apfloraLayers = val
@@ -77,6 +66,7 @@ const myTypes = types
       self.mapFilter = val
     },
     setDetailplaene(val) {
+      console.log('mobxStore, setDetailplaene:', val)
       self.detailplaene = val
     },
   }))
