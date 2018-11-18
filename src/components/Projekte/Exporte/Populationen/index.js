@@ -8,14 +8,12 @@ import IconButton from '@material-ui/core/IconButton'
 import Icon from '@material-ui/core/Icon'
 import Button from '@material-ui/core/Button'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import compose from 'recompose/compose'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import app from 'ampersand-app'
 
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
-import withErrorState from '../../../../state/withErrorState'
 import epsg2056to4326 from '../../../../modules/epsg2056to4326'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
@@ -57,18 +55,14 @@ const DownloadCardButton = styled(Button)`
   }
 `
 
-const enhance = compose(withErrorState)
-
 const Populationen = ({
   fileType,
   applyMapFilterToExport,
-  errorState,
 }: {
   fileType: String,
   applyMapFilterToExport: Boolean,
-  errorState: Object,
 }) => {
-  const { mapFilter } = useContext(mobxStoreContext)
+  const { mapFilter, addError } = useContext(mobxStoreContext)
   const [expanded, setExpanded] = useState(false)
   const [message, setMessage] = useState(null)
 
@@ -107,10 +101,10 @@ const Populationen = ({
                   idKey: 'id',
                   xKey: 'x',
                   yKey: 'y',
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -142,11 +136,11 @@ const Populationen = ({
                   idKey: 'id',
                   xKey: 'x',
                   yKey: 'y',
-                  errorState,
+                  addError,
                   kml: true,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -178,11 +172,11 @@ const Populationen = ({
                   idKey: 'id',
                   xKey: 'x',
                   yKey: 'y',
-                  errorState,
+                  addError,
                   kml: true,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -211,10 +205,10 @@ const Populationen = ({
                   idKey: 'id',
                   xKey: 'x',
                   yKey: 'y',
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -238,10 +232,10 @@ const Populationen = ({
                   fileType,
                   mapFilter,
                   applyMapFilterToExport,
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -268,10 +262,10 @@ const Populationen = ({
                   idKey: 'pop_id',
                   xKey: 'pop_x',
                   yKey: 'pop_y',
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -299,10 +293,10 @@ const Populationen = ({
                   idKey: 'id',
                   xKey: 'x',
                   yKey: 'y',
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -329,10 +323,10 @@ const Populationen = ({
                   idKey: 'id',
                   xKey: 'x',
                   yKey: 'y',
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -359,10 +353,10 @@ const Populationen = ({
                   idKey: 'pop_id',
                   xKey: 'pop_x',
                   yKey: 'pop_y',
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -389,10 +383,10 @@ const Populationen = ({
                   idKey: 'pop_id',
                   xKey: 'pop_x',
                   yKey: 'pop_y',
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -419,10 +413,10 @@ const Populationen = ({
                   idKey: 'pop_id',
                   xKey: 'pop_x',
                   yKey: 'pop_y',
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -436,4 +430,4 @@ const Populationen = ({
   )
 }
 
-export default enhance(Populationen)
+export default Populationen

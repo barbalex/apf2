@@ -1,5 +1,5 @@
 // @flow
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useCallback } from 'react'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
@@ -18,7 +18,6 @@ import Select from '../../../shared/Select'
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
 import withData from './withData'
-import withErrorState from '../../../../state/withErrorState'
 import epsg2056to4326 from '../../../../modules/epsg2056to4326'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
@@ -66,23 +65,19 @@ const AutocompleteContainer = styled.div`
 `
 const isRemoteHost = window.location.hostname !== 'localhost'
 
-const enhance = compose(
-  withData,
-  withErrorState,
-)
+const enhance = compose(withData)
 
 const Teilpopulationen = ({
   fileType,
   applyMapFilterToExport,
-  errorState,
   data,
 }: {
   fileType: String,
   applyMapFilterToExport: Boolean,
-  errorState: Object,
   data: Object,
 }) => {
   if (data.error) return `Fehler: ${data.error.message}`
+
   const artList = sortBy(
     get(data, 'allAeEigenschaftens.nodes', [])
       .filter(n => !!get(n, 'apByArtId.id'))
@@ -93,18 +88,59 @@ const Teilpopulationen = ({
     'artname',
   )
 
-  const { mapFilter } = useContext(mobxStoreContext)
+  const { mapFilter, addError } = useContext(mobxStoreContext)
 
   const [expanded, setExpanded] = useState(false)
   const [message, setMessage] = useState(null)
   const [ewmMessage, setEwmMessage] = useState('')
 
+  const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
+  const onClickButton = useCallback(
+    async () => {
+      setMessage('Export "Teilpopulationen" wird vorbereitet...')
+      try {
+        const { data } = await app.client.query({
+          query: await import('./allVTpops').then(m => m.default),
+        })
+        const enrichedData = get(data, 'allVTpops.nodes', []).map(oWithout => {
+          let o = { ...oWithout }
+          let nachBeginnAp = null
+          if (
+            o.ap_start_jahr &&
+            o.bekannt_seit &&
+            [200, 201, 202].includes(o.status)
+          ) {
+            if (o.ap_start_jahr <= o.bekannt_seit) {
+              nachBeginnAp = true
+            } else {
+              nachBeginnAp = false
+            }
+          }
+          o.angesiedelt_nach_beginn_ap = nachBeginnAp
+          return o
+        })
+        exportModule({
+          data: enrichedData,
+          fileName: 'Teilpopulationen',
+          fileType,
+          mapFilter,
+          applyMapFilterToExport,
+          idKey: 'id',
+          xKey: 'x',
+          yKey: 'y',
+          addError,
+        })
+      } catch (error) {
+        addError(error)
+      }
+      setMessage(null)
+    },
+    [fileType, applyMapFilterToExport],
+  )
+
   return (
     <StyledCard>
-      <StyledCardActions
-        disableActionSpacing
-        onClick={() => setExpanded(!expanded)}
-      >
+      <StyledCardActions disableActionSpacing onClick={onClickAction}>
         <CardActionTitle>Teilpopulationen</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}
@@ -118,49 +154,7 @@ const Teilpopulationen = ({
       </StyledCardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <StyledCardContent>
-          <DownloadCardButton
-            onClick={async () => {
-              setMessage('Export "Teilpopulationen" wird vorbereitet...')
-              try {
-                const { data } = await app.client.query({
-                  query: await import('./allVTpops').then(m => m.default),
-                })
-                const enrichedData = get(data, 'allVTpops.nodes', []).map(
-                  oWithout => {
-                    let o = { ...oWithout }
-                    let nachBeginnAp = null
-                    if (
-                      o.ap_start_jahr &&
-                      o.bekannt_seit &&
-                      [200, 201, 202].includes(o.status)
-                    ) {
-                      if (o.ap_start_jahr <= o.bekannt_seit) {
-                        nachBeginnAp = true
-                      } else {
-                        nachBeginnAp = false
-                      }
-                    }
-                    o.angesiedelt_nach_beginn_ap = nachBeginnAp
-                    return o
-                  },
-                )
-                exportModule({
-                  data: enrichedData,
-                  fileName: 'Teilpopulationen',
-                  fileType,
-                  mapFilter,
-                  applyMapFilterToExport,
-                  idKey: 'id',
-                  xKey: 'x',
-                  yKey: 'y',
-                  errorState,
-                })
-              } catch (error) {
-                errorState.add(error)
-              }
-              setMessage(null)
-            }}
-          >
+          <DownloadCardButton onClick={onClickButton}>
             Teilpopulationen
           </DownloadCardButton>
           <DownloadCardButton
@@ -183,10 +177,10 @@ const Teilpopulationen = ({
                   idKey: 'TPOPID',
                   xKey: 'TPOP_X',
                   yKey: 'TPOP_Y',
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -218,11 +212,11 @@ const Teilpopulationen = ({
                   idKey: 'id',
                   xKey: 'x',
                   yKey: 'y',
-                  errorState,
+                  addError,
                   kml: true,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -261,11 +255,11 @@ const Teilpopulationen = ({
                   idKey: 'id',
                   xKey: 'x',
                   yKey: 'y',
-                  errorState,
+                  addError,
                   kml: true,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -293,10 +287,10 @@ const Teilpopulationen = ({
                   idKey: 'id',
                   xKey: 'x',
                   yKey: 'y',
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -324,10 +318,10 @@ const Teilpopulationen = ({
                   idKey: 'id',
                   xKey: 'x',
                   yKey: 'y',
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -355,10 +349,10 @@ const Teilpopulationen = ({
                   idKey: 'id',
                   xKey: 'x',
                   yKey: 'y',
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -390,10 +384,10 @@ const Teilpopulationen = ({
                   idKey: 'id',
                   xKey: 'x',
                   yKey: 'y',
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -445,10 +439,10 @@ const Teilpopulationen = ({
                     ),
                     fileName: 'anzkontrinklletzterundletztertpopber',
                     mapFilter,
-                    errorState,
+                    addError,
                   })
                 } catch (error) {
-                  errorState.add(error)
+                  addError(error)
                 }
                 setEwmMessage('')
               }}
@@ -475,10 +469,10 @@ const Teilpopulationen = ({
                   idKey: 'tpop_id',
                   xKey: 'tpop_x',
                   yKey: 'tpop_y',
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
