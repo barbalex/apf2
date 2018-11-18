@@ -4,10 +4,10 @@ import staticFilesBaseUrl from './staticFilesBaseUrl'
 
 export default async ({
   setKtZh,
-  errorState,
+  addError,
 }: {
   setKtZh: () => void,
-  errorState: Object,
+  addError: Object,
 }): void => {
   const baseURL = staticFilesBaseUrl
   const url = `/ktZh.json`
@@ -16,7 +16,7 @@ export default async ({
   try {
     result = await axios.get(url, { baseURL })
   } catch (error) {
-    errorState.add(error)
+    addError(error)
   }
   setKtZh(result.data)
 }

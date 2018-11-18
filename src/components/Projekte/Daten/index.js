@@ -8,7 +8,6 @@ import ErrorBoundary from '../../shared/ErrorBoundarySingleChild'
 import Fallback from '../../shared/Fallback'
 import withLocalData from './withLocalData'
 import getTableNameFromActiveNode from '../../../modules/getTableNameFromActiveNode'
-import withErrorState from '../../../state/withErrorState'
 import withNodeFilterState from '../../../state/withNodeFilter'
 
 const Projekt = lazy(() => import('./Projekt'))
@@ -57,7 +56,6 @@ const Container = styled.div`
 
 const enhance = compose(
   withLocalData,
-  withErrorState,
   withNodeFilterState,
 )
 
@@ -69,7 +67,6 @@ const Daten = ({
   dimensions = { width: 380 },
   refetchTree,
   role,
-  errorState,
   nodeFilterState,
   localData,
 }: {
@@ -80,7 +77,6 @@ const Daten = ({
   dimensions: Object,
   refetchTree: () => void,
   role: String,
-  errorState: Object,
   nodeFilterState: Object,
   localData: Object,
 }) => {
@@ -258,7 +254,6 @@ const Daten = ({
         activeNodeArray={activeNodeArray}
         treeName={treeName}
         refetchTree={refetchTree}
-        errorState={errorState}
         role={role}
       />
     ),
@@ -285,7 +280,6 @@ const Daten = ({
         apId={apId}
         activeNodes={activeNodes}
         refetchTree={refetchTree}
-        errorState={errorState}
       />
     ),
     beobNichtZuzuordnen: (

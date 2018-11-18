@@ -1,5 +1,5 @@
 // @flow
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import get from 'lodash/get'
@@ -27,6 +27,7 @@ import Image from './Image'
 import withNodeFilter from '../../../../state/withNodeFilter'
 import FormTitle from '../../../shared/FormTitle'
 import withAllAdresses from './withAllAdresses'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const Container = styled.div`
   background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
@@ -153,7 +154,6 @@ const Tpopfreiwkontr = ({
   nodeFilterState,
   treeName,
   dataAllAdresses,
-  errorState,
 }: {
   id: string,
   data: Object,
@@ -163,7 +163,6 @@ const Tpopfreiwkontr = ({
   nodeFilterState: Object,
   treeName: string,
   dataAllAdresses: Object,
-  errorState: Object,
 }) => {
   if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
   if (data.error) return `Fehler: ${data.error.message}`
@@ -174,6 +173,7 @@ const Tpopfreiwkontr = ({
       </Container>
     )
   }
+  const { addError } = useContext(mobxStoreContext)
 
   const [errors, setErrors] = useState({})
 
@@ -406,7 +406,7 @@ const Tpopfreiwkontr = ({
           ),
         )
           .then(() => data.refetch())
-          .catch(error => errorState.add(error))
+          .catch(error => addError(error))
       }
     },
     [data.loading],
