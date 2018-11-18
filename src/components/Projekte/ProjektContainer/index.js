@@ -256,7 +256,7 @@ const ProjekteContainer = props => {
     mapFilter: mapFilterRaw,
   } = useContext(mobxStoreContext)
   const mapFilter = toJS(mapFilterRaw)
-  console.log('ProjektContainer, mapFilter:', mapFilter)
+  console.log('ProjektContainer, detailplaene:', detailplaene)
 
   const queryArray = [
     dataLocal,

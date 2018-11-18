@@ -3,6 +3,7 @@ import { types } from 'mobx-state-tree'
 
 import ApfloraLayer from './ApfloraLayer'
 import MapFilter from './MapFilter'
+import Geojson from './Geojson'
 import standardApfloraLayers from '../components/Projekte/Karte/apfloraLayers'
 import standardOverlays from '../components/Projekte/Karte/overlays'
 
@@ -27,6 +28,22 @@ const myTypes = types
       features: [],
       type: 'FeatureCollection',
     }),
+    detailplaene: types.optional(
+      types.maybeNull(
+        types.model({
+          type: types.string,
+          name: types.string,
+          crs: types.model({
+            type: types.string,
+            properties: types.model({
+              name: types.string,
+            }),
+          }),
+          features: types.array(Geojson),
+        }),
+      ),
+      null,
+    ),
   })
   .actions(self => ({
     setApfloraLayers(val) {
@@ -58,6 +75,9 @@ const myTypes = types
     },
     setMapFilter(val) {
       self.mapFilter = val
+    },
+    setDetailplaene(val) {
+      self.detailplaene = val
     },
   }))
 

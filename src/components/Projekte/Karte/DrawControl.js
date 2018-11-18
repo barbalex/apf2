@@ -1,12 +1,9 @@
 import React, { useEffect, useContext } from 'react'
 import 'leaflet'
 import 'leaflet-draw'
-import compose from 'recompose/compose'
 import { withLeaflet } from 'react-leaflet'
 
 import mobxStoreContext from '../../../mobxStoreContext'
-
-const enhance = compose(withLeaflet)
 
 const DrawControl = ({ leaflet }: { leaflet: Object }) => {
   const { map } = leaflet
@@ -68,10 +65,6 @@ const DrawControl = ({ leaflet }: { leaflet: Object }) => {
     map.on('draw:created', e => {
       mapFilter.addLayer(e.layer)
       setMapFilter(mapFilter.toGeoJSON())
-      console.log('DrawControl, onCreated', {
-        mapFilter,
-        mapFilterToGeoJSON: mapFilter.toGeoJSON(),
-      })
     })
     map.on('draw:edited', e => setMapFilter(mapFilter.toGeoJSON()))
     map.on('draw:deleted', e => setMapFilter(mapFilter.toGeoJSON()))
@@ -93,4 +86,4 @@ const DrawControl = ({ leaflet }: { leaflet: Object }) => {
   return <div style={{ display: 'none' }} />
 }
 
-export default enhance(DrawControl)
+export default withLeaflet(DrawControl)
