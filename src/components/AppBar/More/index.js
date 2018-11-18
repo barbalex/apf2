@@ -1,12 +1,10 @@
 // @flow
-import React from 'react'
+import React, { useContext, useState, useCallback } from 'react'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
-import withState from 'recompose/withState'
 import get from 'lodash/get'
 import clone from 'lodash/clone'
 
@@ -17,6 +15,7 @@ import logout from '../../../modules/logout'
 import getActiveNodes from '../../../modules/getActiveNodes'
 import withDeleteState from '../../../state/withDeleteState'
 import EkfAdresse from './EkfAdresse'
+import mobxStoreContext from '../../../mobxStoreContext'
 
 const Container = styled.div`
   margin-top: auto;
@@ -34,56 +33,25 @@ const Version = styled.div`
 const enhance = compose(
   withLocalData,
   withDeleteState,
-  withState('anchorEl', 'setAnchorEl', null),
-  withHandlers({
-    openDocs: ({ setAnchorEl }) => () => {
-      setAnchorEl(null)
-      window.open('https://docs.apflora.ch')
-    },
-    watchVideos: ({ setAnchorEl }) => () => {
-      setAnchorEl(null)
-      window.open(
-        'https://www.youtube.com/playlist?list=PLTz8Xt5SOQPS-dbvpJ_DrB4-o3k3yj09J',
-      )
-    },
-    showDeletedDatasets: ({ setAnchorEl, setShowDeletions }) => () => {
-      setAnchorEl(null)
-      setShowDeletions(true)
-    },
-    onClickMehrButton: ({ setAnchorEl }) => event =>
-      setAnchorEl(event.currentTarget),
-    onClose: ({ setAnchorEl }) => () => setAnchorEl(null),
-  }),
 )
 
 const MyAppBar = ({
-  onClickExporte,
-  showDeletedDatasets,
-  watchVideos,
-  openDocs,
-  anchorEl,
-  setAnchorEl,
+  onClickExporte: passedOnClickExporte,
   setShowDeletions,
   role,
-  deleteState,
-  onClickMehrButton,
-  onClose,
   localData,
 }: {
   onClickExporte: () => void,
-  showDeletedDatasets: () => void,
-  watchVideos: () => void,
-  openDocs: () => void,
-  anchorEl: Object,
-  setAnchorEl: () => void,
   setShowDeletions: () => void,
-  role: String,
-  deleteState: Object,
-  onClickMehrButton: () => void,
-  onClose: () => void,
+  role: string,
   localData: () => void,
 }) => {
   if (localData.error) return `Fehler: ${localData.error.message}`
+
+  const { deletedDatasets } = useContext(mobxStoreContext)
+
+  const [anchorEl, setAnchorEl] = useState(null)
+
   const activeNodeArray = get(localData, 'tree.activeNodeArray')
   const activeNodes = getActiveNodes(activeNodeArray)
   /**
@@ -93,7 +61,33 @@ const MyAppBar = ({
   const projekteTabs = clone(get(localData, 'urlQuery.projekteTabs', []))
   const exporteIsActive = !!activeNodes.projekt
   const isMobile = isMobilePhone()
-  const datasetsDeleted = deleteState.state.datasets
+
+  const openDocs = useCallback(() => {
+    setAnchorEl(null)
+    window.open('https://docs.apflora.ch')
+  })
+  const watchVideos = useCallback(() => {
+    setAnchorEl(null)
+    window.open(
+      'https://www.youtube.com/playlist?list=PLTz8Xt5SOQPS-dbvpJ_DrB4-o3k3yj09J',
+    )
+  })
+  const showDeletedDatasets = useCallback(() => {
+    setAnchorEl(null)
+    setShowDeletions(true)
+  })
+  const onClickMehrButton = useCallback(event =>
+    setAnchorEl(event.currentTarget),
+  )
+  const onClose = useCallback(() => setAnchorEl(null))
+  const onClickExporte = useCallback(() => {
+    setAnchorEl(null)
+    passedOnClickExporte()
+  })
+  const onClickLogout = useCallback(() => {
+    setAnchorEl(null)
+    logout()
+  })
 
   return (
     <ErrorBoundary>
@@ -114,10 +108,7 @@ const MyAppBar = ({
         >
           {isMobile && exporteIsActive && (
             <MenuItem
-              onClick={() => {
-                onClose()
-                onClickExporte()
-              }}
+              onClick={onClickExporte}
               disabled={projekteTabs.includes('exporte')}
             >
               Exporte
@@ -125,7 +116,7 @@ const MyAppBar = ({
           )}
           <MenuItem
             onClick={showDeletedDatasets}
-            disabled={datasetsDeleted.length === 0}
+            disabled={deletedDatasets.length === 0}
           >
             gelöschte Datensätze wiederherstellen
           </MenuItem>
@@ -134,12 +125,7 @@ const MyAppBar = ({
           )}
           <MenuItem onClick={openDocs}>Dokumentation öffnen</MenuItem>
           <MenuItem onClick={watchVideos}>Video-Anleitungen</MenuItem>
-          <MenuItem
-            onClick={() => {
-              onClose()
-              logout()
-            }}
-          >
+          <MenuItem onClick={onClickLogout}>
             {`${get(localData, 'user.name')} abmelden`}
           </MenuItem>
           <Version>Version: 1.3.0 vom 25.9.2018</Version>

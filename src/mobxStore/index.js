@@ -27,6 +27,11 @@ const myTypes = types
       features: [],
       type: 'FeatureCollection',
     }),
+    deletedDatasets: types.optional(types.array(types.string), []),
+    toDeleteTable: types.maybeNull(types.string),
+    toDeleteId: types.maybeNull(types.string),
+    toDeleteLabel: types.maybeNull(types.string),
+    toDeleteUrl: types.maybeNull(types.string),
   })
   // structure of these variables is not controlled
   // so need to define this as volatile
@@ -35,8 +40,24 @@ const myTypes = types
     markierungen: null,
     ktZh: null,
     errors: [],
+    toDeleteAfterDeletionHook: null,
   }))
   .actions(self => ({
+    setDeletedDatasets(val) {
+      self.deletedDatasets = val
+    },
+    setToDeleteTable(val) {
+      self.toDeleteTable = val
+    },
+    setToDeleteId(val) {
+      self.toDeleteId = val
+    },
+    setToDeleteLabel(val) {
+      self.toDeleteLabel = val
+    },
+    setToDeleteAfterDeletionHook(val) {
+      self.toDeleteAfterDeletionHook = val
+    },
     setApfloraLayers(val) {
       self.apfloraLayers = val
     },
