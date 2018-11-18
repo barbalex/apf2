@@ -3,7 +3,6 @@ import { types } from 'mobx-state-tree'
 
 import ApfloraLayer from './ApfloraLayer'
 import MapFilter from './MapFilter'
-import Detailplan from './Detailplan'
 import standardApfloraLayers from '../components/Projekte/Karte/apfloraLayers'
 import standardOverlays from '../components/Projekte/Karte/overlays'
 
