@@ -1,5 +1,5 @@
 // @flow
-import React, { useContext } from 'react'
+import React, { useContext, useState, useCallback } from 'react'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
@@ -8,15 +8,12 @@ import IconButton from '@material-ui/core/IconButton'
 import Icon from '@material-ui/core/Icon'
 import Button from '@material-ui/core/Button'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import app from 'ampersand-app'
 
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
-import withErrorState from '../../../../state/withErrorState'
 import allVBeobs from './allVBeobs'
 import allVBeobArtChangeds from './allVBeobArtChangeds'
 import mobxStoreContext from '../../../../mobxStoreContext'
@@ -59,38 +56,49 @@ const DownloadCardButton = styled(Button)`
   }
 `
 
-const enhance = compose(
-  withErrorState,
-  withState('expanded', 'setExpanded', false),
-  withState('message', 'setMessage', null),
-)
-
 const Beobachtungen = ({
   fileType,
   applyMapFilterToExport,
-  expanded,
-  setExpanded,
-  message,
-  setMessage,
-  errorState,
 }: {
   fileType: String,
   applyMapFilterToExport: Boolean,
-  expanded: Boolean,
-  setExpanded: () => void,
-  message: String,
-  setMessage: () => void,
-  errorState: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { mapFilter } = mobxStore
+  const { mapFilter, addError } = mobxStore
+
+  const [expanded, setExpanded] = useState(false)
+  const [message, setMessage] = useState(null)
+
+  const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
+  const onClickButton = useCallback(
+    async () => {
+      setMessage('Export "Beobachtungen" wird vorbereitet...')
+      try {
+        const { data } = await app.client.query({
+          query: allVBeobArtChangeds,
+        })
+        exportModule({
+          data: get(data, 'allVBeobArtChangeds.nodes', []),
+          fileName: 'BeobachtungenArtVeraendert',
+          fileType,
+          applyMapFilterToExport,
+          mapFilter,
+          idKey: 'id',
+          xKey: 'x',
+          yKey: 'y',
+          addError,
+        })
+      } catch (error) {
+        addError(error)
+      }
+      setMessage(null)
+    },
+    [fileType, applyMapFilterToExport],
+  )
 
   return (
     <StyledCard>
-      <StyledCardActions
-        disableActionSpacing
-        onClick={() => setExpanded(!expanded)}
-      >
+      <StyledCardActions disableActionSpacing onClick={onClickAction}>
         <CardActionTitle>Beobachtungen</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}
@@ -104,30 +112,7 @@ const Beobachtungen = ({
       </StyledCardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <StyledCardContent>
-          <DownloadCardButton
-            onClick={async () => {
-              setMessage('Export "Beobachtungen" wird vorbereitet...')
-              try {
-                const { data } = await app.client.query({
-                  query: allVBeobArtChangeds,
-                })
-                exportModule({
-                  data: get(data, 'allVBeobArtChangeds.nodes', []),
-                  fileName: 'BeobachtungenArtVeraendert',
-                  fileType,
-                  applyMapFilterToExport,
-                  mapFilter,
-                  idKey: 'id',
-                  xKey: 'x',
-                  yKey: 'y',
-                  errorState,
-                })
-              } catch (error) {
-                errorState.add(error)
-              }
-              setMessage(null)
-            }}
-          >
+          <DownloadCardButton onClick={onClickButton}>
             <div>Alle Beobachtungen, bei denen die Art verändert wurde</div>
           </DownloadCardButton>
           <DownloadCardButton
@@ -146,10 +131,10 @@ const Beobachtungen = ({
                   idKey: 'id',
                   xKey: 'x',
                   yKey: 'y',
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -164,4 +149,4 @@ const Beobachtungen = ({
   )
 }
 
-export default enhance(Beobachtungen)
+export default Beobachtungen

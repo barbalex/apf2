@@ -70,7 +70,6 @@ const AP = ({
   setExpanded,
   message,
   setMessage,
-  errorState,
 }: {
   fileType: String,
   applyMapFilterToExport: Boolean,
@@ -78,10 +77,9 @@ const AP = ({
   setExpanded: () => void,
   message: String,
   setMessage: () => void,
-  errorState: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { mapFilter } = mobxStore
+  const { mapFilter, addError } = mobxStore
 
   return (
     <StyledCard>
@@ -115,10 +113,10 @@ const AP = ({
                   fileType,
                   applyMapFilterToExport,
                   mapFilter,
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -138,10 +136,10 @@ const AP = ({
                   fileType,
                   applyMapFilterToExport,
                   mapFilter,
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -161,10 +159,10 @@ const AP = ({
                   fileType,
                   applyMapFilterToExport,
                   mapFilter,
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -184,10 +182,10 @@ const AP = ({
                   fileType,
                   applyMapFilterToExport,
                   mapFilter,
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -207,10 +205,10 @@ const AP = ({
                   fileType,
                   applyMapFilterToExport,
                   mapFilter,
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -234,10 +232,10 @@ const AP = ({
                   fileType,
                   applyMapFilterToExport,
                   mapFilter,
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -257,10 +255,10 @@ const AP = ({
                   fileType,
                   applyMapFilterToExport,
                   mapFilter,
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -280,10 +278,10 @@ const AP = ({
                   fileType,
                   applyMapFilterToExport,
                   mapFilter,
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -303,10 +301,10 @@ const AP = ({
                   fileType,
                   applyMapFilterToExport,
                   mapFilter,
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -326,10 +324,10 @@ const AP = ({
                   fileType,
                   applyMapFilterToExport,
                   mapFilter,
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -351,10 +349,10 @@ const AP = ({
                   fileType,
                   applyMapFilterToExport,
                   mapFilter,
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -374,10 +372,10 @@ const AP = ({
                   fileType,
                   applyMapFilterToExport,
                   mapFilter,
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
