@@ -1,5 +1,5 @@
 // @flow
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useContext } from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
@@ -17,6 +17,7 @@ import withLocalData from './withLocalData'
 import withData from './withData'
 import qk from './qk'
 import checkTpopOutsideZh from './checkTpopOutsideZh'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const Container = styled.div`
   height: 100%;
@@ -67,8 +68,6 @@ const Qk = ({
   treeName,
   activeNodes,
   errorState,
-  ktZh,
-  setKtZh,
   localData,
   data,
 }: {
@@ -77,13 +76,13 @@ const Qk = ({
   treeName: String,
   activeNodes: Array<Object>,
   errorState: Object,
-  ktZh: Object,
-  setKtZh: () => void,
   localData: Object,
   data: Object,
 }) => {
   if (localData.error) return `Fehler: ${localData.error.message}`
   if (data.error) return `Fehler: ${data.error.message}`
+
+  const { ktZh, setKtZh } = useContext(mobxStoreContext)
 
   const [berichtjahr, setBerichtjahr] = useState(standardQkYear())
   const [filter, setFilter] = useState('')

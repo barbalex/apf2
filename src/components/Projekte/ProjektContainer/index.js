@@ -139,7 +139,6 @@ const enhance = compose(
   withBeobAssignLines,
   withPopForMapMarkers,
   withErrorState,
-  withState('ktZh', 'setKtZh', null),
   observer,
 )
 
@@ -187,8 +186,6 @@ const ProjekteContainer = props => {
     treeName,
     tabs: tabsPassed,
     projekteTabs,
-    ktZh,
-    setKtZh,
     errorState,
     nodeFilterState,
   }: {
@@ -234,8 +231,6 @@ const ProjekteContainer = props => {
     treeName: String,
     tabs: Array<String>,
     projekteTabs: Array<String>,
-    ktZh: Object,
-    setKtZh: () => void,
     errorState: Object,
     nodeFilterState: Object,
   } = props
@@ -489,8 +484,6 @@ const ProjekteContainer = props => {
         activeNode={activeNode}
         activeNodes={activeNodes}
         refetchTree={refetch}
-        ktZh={ktZh}
-        setKtZh={setKtZh}
         role={role}
       />
     )
@@ -535,8 +528,6 @@ const ProjekteContainer = props => {
                 activeNode={activeNode}
                 activeNodes={activeNodes}
                 refetchTree={refetch}
-                ktZh={ktZh}
-                setKtZh={setKtZh}
                 role={role}
               />
             </ReflexElement>

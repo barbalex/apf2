@@ -68,8 +68,6 @@ const Daten = ({
   activeNodes,
   dimensions = { width: 380 },
   refetchTree,
-  ktZh,
-  setKtZh,
   role,
   errorState,
   nodeFilterState,
@@ -81,8 +79,6 @@ const Daten = ({
   activeNodes: Array<Object>,
   dimensions: Object,
   refetchTree: () => void,
-  ktZh: Object,
-  setKtZh: () => void,
   role: String,
   errorState: Object,
   nodeFilterState: Object,
@@ -290,8 +286,6 @@ const Daten = ({
         activeNodes={activeNodes}
         refetchTree={refetchTree}
         errorState={errorState}
-        ktZh={ktZh}
-        setKtZh={setKtZh}
       />
     ),
     beobNichtZuzuordnen: (

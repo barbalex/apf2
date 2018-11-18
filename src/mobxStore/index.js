@@ -33,6 +33,7 @@ const myTypes = types
   .volatile(() => ({
     detailplaene: null,
     markierungen: null,
+    ktZh: null,
   }))
   .actions(self => ({
     setApfloraLayers(val) {
@@ -70,6 +71,9 @@ const myTypes = types
     },
     setMarkierungen(val) {
       self.markierungen = val
+    },
+    setKtZh(val) {
+      self.ktZh = val
     },
   }))
 
