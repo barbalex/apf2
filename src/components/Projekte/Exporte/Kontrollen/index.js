@@ -8,14 +8,12 @@ import IconButton from '@material-ui/core/IconButton'
 import Icon from '@material-ui/core/Icon'
 import Button from '@material-ui/core/Button'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import compose from 'recompose/compose'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import app from 'ampersand-app'
 
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
-import withErrorState from '../../../../state/withErrorState'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
 const StyledCard = styled(Card)`
@@ -56,18 +54,14 @@ const DownloadCardButton = styled(Button)`
   }
 `
 
-const enhance = compose(withErrorState)
-
 const Kontrollen = ({
   fileType,
   applyMapFilterToExport,
-  errorState,
 }: {
   fileType: String,
   applyMapFilterToExport: Boolean,
-  errorState: Object,
 }) => {
-  const { mapFilter } = useContext(mobxStoreContext)
+  const { mapFilter, addError } = useContext(mobxStoreContext)
   const [expanded, setExpanded] = useState(false)
   const [message, setMessage] = useState(null)
 
@@ -106,10 +100,10 @@ const Kontrollen = ({
                   idKey: 'tpop_id',
                   xKey: 'tpop_x',
                   yKey: 'tpop_y',
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -134,10 +128,10 @@ const Kontrollen = ({
                   idKey: 'TPOPGUID',
                   xKey: 'KONTR_X',
                   yKey: 'KONTR_Y',
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -164,10 +158,10 @@ const Kontrollen = ({
                   idKey: 'tpop_id',
                   xKey: 'tpop_x',
                   yKey: 'tpop_y',
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -181,4 +175,4 @@ const Kontrollen = ({
   )
 }
 
-export default enhance(Kontrollen)
+export default Kontrollen
