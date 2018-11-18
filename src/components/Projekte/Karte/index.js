@@ -319,6 +319,13 @@ const Karte = ({
     overlays.findIndex(o => o.value === activeOverlay),
   )
 
+  console.log('Karte', {
+    activeApfloraLayers,
+    activeApfloraLayersIncludesMapFilter: activeApfloraLayers.includes(
+      'mapFilter',
+    ),
+  })
+
   return (
     <Container>
       <ErrorBoundary>

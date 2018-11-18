@@ -1,12 +1,9 @@
 import React from 'react'
 import 'leaflet'
 import styled from 'styled-components'
-import { ApolloProvider } from 'react-apollo'
-import { Query } from 'react-apollo'
-import app from 'ampersand-app'
 import get from 'lodash/get'
 
-import dataGql from './data'
+import withLocalData from './withLocalData'
 
 const StyledDiv = styled.div`
   background-color: transparent;
@@ -21,29 +18,25 @@ const StyledDiv = styled.div`
 `
 
 const ShowCoordinates = ({
+  localData,
   changeControlType,
 }: {
+  localData: Object,
   changeControlType: () => void,
-}) => (
-  <ApolloProvider client={app.client}>
-    <Query query={dataGql}>
-      {({ loading, error, data }) => {
-        if (error) return `Fehler: ${error.message}`
+}) => {
+  if (localData.error) return `Fehler: ${localData.error.message}`
 
-        const x = get(data, 'mapMouseCoordinates.x').toLocaleString('de-ch')
-        const y = get(data, 'mapMouseCoordinates.y').toLocaleString('de-ch')
+  const x = get(localData, 'mapMouseCoordinates.x').toLocaleString('de-ch')
+  const y = get(localData, 'mapMouseCoordinates.y').toLocaleString('de-ch')
 
-        return (
-          <StyledDiv
-            onClick={() => changeControlType('goto')}
-            title="Klicken um Koordinaten zu suchen"
-          >
-            {`${x}, ${y}`}
-          </StyledDiv>
-        )
-      }}
-    </Query>
-  </ApolloProvider>
-)
+  return (
+    <StyledDiv
+      onClick={() => changeControlType('goto')}
+      title="Klicken um Koordinaten zu suchen"
+    >
+      {`${x}, ${y}`}
+    </StyledDiv>
+  )
+}
 
-export default ShowCoordinates
+export default withLocalData(ShowCoordinates)

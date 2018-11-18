@@ -1,9 +1,6 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useCallback } from 'react'
 import Control from 'react-leaflet-control'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
-import withState from 'recompose/withState'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import theme from '../../../../theme'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
@@ -55,75 +52,10 @@ const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
   height: 18px !important;
 `
 
-const enhance = compose(
-  withState('baseLayersExpanded', 'toggleBaseLayersExpanded', false),
-  withState('overlaysExpanded', 'toggleOverlaysExpanded', false),
-  withState('apfloraLayersExpanded', 'toggleApfloraLayersExpanded', false),
-  withHandlers({
-    onToggleBaseLayersExpanded: ({
-      overlaysExpanded,
-      baseLayersExpanded,
-      toggleOverlaysExpanded,
-      toggleBaseLayersExpanded,
-      toggleApfloraLayersExpanded,
-      apfloraLayersExpanded,
-    }) => event => {
-      console.log('hi')
-      event.stopPropagation()
-      toggleBaseLayersExpanded(!baseLayersExpanded)
-      if (overlaysExpanded) {
-        toggleOverlaysExpanded(!overlaysExpanded)
-      }
-      if (apfloraLayersExpanded) {
-        toggleApfloraLayersExpanded(!apfloraLayersExpanded)
-      }
-    },
-    onToggleOverlaysExpanded: ({
-      overlaysExpanded,
-      baseLayersExpanded,
-      toggleOverlaysExpanded,
-      toggleBaseLayersExpanded,
-      toggleApfloraLayersExpanded,
-      apfloraLayersExpanded,
-    }) => () => {
-      toggleOverlaysExpanded(!overlaysExpanded)
-      if (baseLayersExpanded) {
-        toggleBaseLayersExpanded(!baseLayersExpanded)
-      }
-      if (apfloraLayersExpanded) {
-        toggleApfloraLayersExpanded(!apfloraLayersExpanded)
-      }
-    },
-    onToggleApfloraLayersExpanded: ({
-      overlaysExpanded,
-      baseLayersExpanded,
-      toggleOverlaysExpanded,
-      toggleBaseLayersExpanded,
-      toggleApfloraLayersExpanded,
-      apfloraLayersExpanded,
-    }) => () => {
-      toggleApfloraLayersExpanded(!apfloraLayersExpanded)
-      if (overlaysExpanded) {
-        toggleOverlaysExpanded(!overlaysExpanded)
-      }
-      if (baseLayersExpanded) {
-        toggleBaseLayersExpanded(!baseLayersExpanded)
-      }
-    },
-  }),
-  observer,
-)
-
 const LayersControl = ({
   data,
   tree,
   activeNodes,
-  baseLayersExpanded,
-  overlaysExpanded,
-  apfloraLayersExpanded,
-  onToggleBaseLayersExpanded,
-  onToggleOverlaysExpanded,
-  onToggleApfloraLayersExpanded,
   mapIdsFiltered,
   mapPopIdsFiltered,
   mapTpopIdsFiltered,
@@ -134,10 +66,6 @@ const LayersControl = ({
   data: Object,
   tree: Object,
   activeNodes: Object,
-  baseLayersExpanded: boolean,
-  overlaysExpanded: boolean,
-  toggleBaseLayersExpanded: () => void,
-  toggleOverlaysExpanded: () => void,
   onToggleBaseLayersExpanded: () => void,
   onToggleOverlaysExpanded: () => void,
   mapIdsFiltered: Array<String>,
@@ -149,6 +77,48 @@ const LayersControl = ({
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { apfloraLayers, overlays } = mobxStore
+
+  const [baseLayersExpanded, toggleBaseLayersExpanded] = useState(false)
+  const [overlaysExpanded, toggleOverlaysExpanded] = useState(false)
+  const [apfloraLayersExpanded, toggleApfloraLayersExpanded] = useState(false)
+
+  const onToggleBaseLayersExpanded = useCallback(
+    event => {
+      event.stopPropagation()
+      toggleBaseLayersExpanded(!baseLayersExpanded)
+      if (overlaysExpanded) {
+        toggleOverlaysExpanded(!overlaysExpanded)
+      }
+      if (apfloraLayersExpanded) {
+        toggleApfloraLayersExpanded(!apfloraLayersExpanded)
+      }
+    },
+    [baseLayersExpanded, overlaysExpanded, apfloraLayersExpanded],
+  )
+  const onToggleOverlaysExpanded = useCallback(
+    () => {
+      toggleOverlaysExpanded(!overlaysExpanded)
+      if (baseLayersExpanded) {
+        toggleBaseLayersExpanded(!baseLayersExpanded)
+      }
+      if (apfloraLayersExpanded) {
+        toggleApfloraLayersExpanded(!apfloraLayersExpanded)
+      }
+    },
+    [overlaysExpanded, baseLayersExpanded, apfloraLayersExpanded],
+  )
+  const onToggleApfloraLayersExpanded = useCallback(
+    () => {
+      toggleApfloraLayersExpanded(!apfloraLayersExpanded)
+      if (overlaysExpanded) {
+        toggleOverlaysExpanded(!overlaysExpanded)
+      }
+      if (baseLayersExpanded) {
+        toggleBaseLayersExpanded(!baseLayersExpanded)
+      }
+    },
+    [overlaysExpanded, baseLayersExpanded, apfloraLayersExpanded],
+  )
 
   const assigning = get(data, 'assigningBeob')
   const getApfloraLayersTitle = () => {
@@ -241,4 +211,4 @@ const LayersControl = ({
   )
 }
 
-export default enhance(LayersControl)
+export default observer(LayersControl)

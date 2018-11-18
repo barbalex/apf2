@@ -507,7 +507,7 @@ const ProjekteContainer = props => {
     )
   }
 
-  console.log('ProjektContainer rendering')
+  //console.log('ProjektContainer rendering')
 
   return (
     <Container data-loading={loading}>

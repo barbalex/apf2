@@ -68,11 +68,16 @@ const DrawControl = ({ leaflet }: { leaflet: Object }) => {
     map.on('draw:created', e => {
       mapFilter.addLayer(e.layer)
       setMapFilter(mapFilter.toGeoJSON())
+      console.log('DrawControl, onCreated', {
+        mapFilter,
+        mapFilterToGeoJSON: mapFilter.toGeoJSON(),
+      })
     })
     map.on('draw:edited', e => setMapFilter(mapFilter.toGeoJSON()))
     map.on('draw:deleted', e => setMapFilter(mapFilter.toGeoJSON()))
 
     return () => {
+      console.log('DrawControl, removing mapFilter')
       map.removeLayer(mapFilter)
       map.removeControl(drawControl)
       map.off('draw:created')

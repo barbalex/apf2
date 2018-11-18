@@ -56,8 +56,13 @@ const Optionen = ({
   fileType: String,
   applyMapFilterToExport: Boolean,
 }) => {
-  const { mapFilter } = useContext(mobxStoreContext)
+  const { mapFilter: mapFilterRaw } = useContext(mobxStoreContext)
+  const mapFilter = mapFilterRaw.toJSON()
   const [expanded, setExpanded] = useState(true)
+  console.log('Exporte, Optionen', {
+    mapFilter,
+    mapFilterFeaturesLength: mapFilter.features.length,
+  })
 
   return (
     <StyledCard>

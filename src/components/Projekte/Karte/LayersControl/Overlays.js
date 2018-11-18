@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
 import DragHandleIcon from '@material-ui/icons/DragHandle'
@@ -132,16 +132,24 @@ const SortableList = SortableContainer(
 )
 
 const Overlays = () => {
-  const mobxStore = useContext(mobxStoreContext)
-  const { overlays, setOverlays, activeOverlays, setActiveOverlays } = mobxStore
+  const {
+    overlays,
+    setOverlays,
+    activeOverlays,
+    setActiveOverlays,
+  } = useContext(mobxStoreContext)
+
+  const onSortEnd = useCallback(
+    ({ oldIndex, newIndex }) =>
+      setOverlays(arrayMove(overlays, oldIndex, newIndex)),
+    [overlays],
+  )
 
   return (
     <CardContent>
       <SortableList
         items={overlays}
-        onSortEnd={({ oldIndex, newIndex }) =>
-          setOverlays(arrayMove(overlays, oldIndex, newIndex))
-        }
+        onSortEnd={onSortEnd}
         useDragHandle
         lockAxis="y"
         activeOverlays={activeOverlays}
