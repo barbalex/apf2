@@ -86,7 +86,6 @@ import beobById from './beobById'
 import openLowerNodes from './openLowerNodes'
 import closeLowerNodes from './closeLowerNodes'
 import insertDataset from './insertDataset'
-import withDeleteState from '../../../state/withDeleteState'
 import mobxStoreContext from '../../../mobxStoreContext'
 
 const Container = styled.div`
@@ -173,10 +172,7 @@ const showMapIfNotYetVisible = (projekteTabs: Array<String>) => {
   }
 }
 
-const enhance = compose(
-  withDeleteState,
-  observer,
-)
+const enhance = compose(observer)
 
 const TreeContainer = ({
   data: dbData,
@@ -184,7 +180,6 @@ const TreeContainer = ({
   activeNode,
   activeNodes,
   refetchTree,
-  deleteState,
   nodes,
   data,
   loading,
@@ -206,7 +201,6 @@ const TreeContainer = ({
   copying: Object,
   refetchTree: () => void,
   mapIdsFiltered: Array<String>,
-  deleteState: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const {
@@ -220,9 +214,11 @@ const TreeContainer = ({
     setTpopLabelUsingNr,
     setIdOfTpopBeingLocalized,
     addError,
+    toDelete,
+    setToDelete,
   } = mobxStore
 
-  const datasetToDelete = deleteState.state.toDelete
+  const datasetToDelete = toDelete
   const deleteDatasetModalIsVisible = !!datasetToDelete.id
   const tree = get(data, treeName)
   const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
@@ -346,7 +342,7 @@ const TreeContainer = ({
             refetchTree('aps')
             refetchTree('projekts')
           }
-          deleteState.setToDelete({
+          setToDelete({
             table,
             id,
             label,
@@ -518,7 +514,7 @@ const TreeContainer = ({
       setIdOfTpopBeingLocalized,
       popLabelUsingNr,
       tpopLabelUsingNr,
-      deleteState,
+      toDelete,
       nodes,
     ],
   )

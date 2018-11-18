@@ -13,7 +13,6 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import withLocalData from '../withLocalData'
 import logout from '../../../modules/logout'
 import getActiveNodes from '../../../modules/getActiveNodes'
-import withDeleteState from '../../../state/withDeleteState'
 import EkfAdresse from './EkfAdresse'
 import mobxStoreContext from '../../../mobxStoreContext'
 
@@ -30,10 +29,7 @@ const Version = styled.div`
   user-select: none;
 `
 
-const enhance = compose(
-  withLocalData,
-  withDeleteState,
-)
+const enhance = compose(withLocalData)
 
 const MyAppBar = ({
   onClickExporte: passedOnClickExporte,
