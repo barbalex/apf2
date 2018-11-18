@@ -1,10 +1,11 @@
 // @flow
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import withErrorState from '../../state/withErrorState'
+import mobxStoreContext from '../../mobxStoreContext'
 
 const Container = styled.div`
   position: absolute;
@@ -28,14 +29,18 @@ const ErrorDiv = styled.div`
 
 const enhance = compose(withErrorState)
 
-const Errors = ({ errorState }: { errorState: Object }) => (
-  <ErrorBoundary>
-    <Container>
-      {errorState.state.errors.map((error, index) => (
-        <ErrorDiv key={index}>{error.message}</ErrorDiv>
-      ))}
-    </Container>
-  </ErrorBoundary>
-)
+const Errors = () => {
+  const { errors } = useContext(mobxStoreContext)
+
+  return (
+    <ErrorBoundary>
+      <Container>
+        {errors.map((error, index) => (
+          <ErrorDiv key={index}>{error.message}</ErrorDiv>
+        ))}
+      </Container>
+    </ErrorBoundary>
+  )
+}
 
 export default enhance(Errors)

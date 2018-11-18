@@ -20,7 +20,6 @@ import dataByUserNameGql from './dataByUserName'
 import dataByAdresseIdGql from './dataByAdresseId'
 import dataWithDateByUserNameGql from './dataWithDateByUserName'
 import dataWithDateByAdresseIdGql from './dataWithDateByAdresseId'
-import withErrorState from '../../state/withErrorState'
 import EkfList from './List'
 import Tpopfreiwkontr from '../Projekte/Daten/Tpopfreiwkontr'
 
@@ -40,19 +39,11 @@ const ReflexElementForEKF = styled(ReflexElement)`
   }
 `
 
-const enhance = compose(
-  withLocalData,
-  withErrorState,
-)
+const enhance = compose(withLocalData)
 
-const EkfContainer = ({
-  errorState,
-  localData,
-}: {
-  errorState: Object,
-  localData: Object,
-}) => {
+const EkfContainer = ({ localData }: { localData: Object }) => {
   if (localData.error) return `Fehler: ${localData.error.message}`
+
   const userName = get(localData, 'user.name')
   const isPrint = get(localData, 'isPrint')
   const jahr = get(localData, 'ekfYear')
@@ -88,7 +79,6 @@ const EkfContainer = ({
               activeNodeArray={activeNodeArray}
               treeName={treeName}
               refetchTree={refetch}
-              errorState={errorState}
               role={role}
               dimensions={{ width: 1000 }}
             />
@@ -120,7 +110,6 @@ const EkfContainer = ({
                       activeNodeArray={activeNodeArray}
                       treeName={treeName}
                       refetchTree={refetch}
-                      errorState={errorState}
                       role={role}
                       dimensions={{ width: 1000 }}
                     />
