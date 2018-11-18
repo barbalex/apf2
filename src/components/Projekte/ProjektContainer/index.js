@@ -185,7 +185,6 @@ const ProjekteContainer = props => {
     treeName,
     tabs: tabsPassed,
     projekteTabs,
-    errorState,
     nodeFilterState,
   }: {
     dataLocal: Object,
@@ -230,7 +229,6 @@ const ProjekteContainer = props => {
     treeName: String,
     tabs: Array<String>,
     projekteTabs: Array<String>,
-    errorState: Object,
     nodeFilterState: Object,
   } = props
 
@@ -565,7 +563,6 @@ const ProjekteContainer = props => {
                 }
                 mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
                 beobZugeordnetAssigning={assigning}
-                errorState={errorState}
                 // SortedStrings enforce rerendering when sorting or visibility changes
                 activeOverlaysString={activeOverlays.join()}
                 activeApfloraLayersString={activeApfloraLayers.join()}

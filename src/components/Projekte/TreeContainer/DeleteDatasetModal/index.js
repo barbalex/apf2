@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { useContext, useCallback } from 'react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import Button from '@material-ui/core/Button'
@@ -11,7 +11,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import withLocalData from './withLocalData'
 import deleteDataset from './delete'
 import withDeleteState from '../../../../state/withDeleteState'
-import withErrorState from '../../../../state/withErrorState'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const StyledDialog = styled(Dialog)`
   > div > div {
@@ -22,16 +22,13 @@ const StyledDialog = styled(Dialog)`
 const enhance = compose(
   withLocalData,
   withDeleteState,
-  withErrorState,
 )
 
 const DatasetDeleteModal = ({
   deleteState,
-  errorState,
   localData,
 }: {
   deleteState: Object,
-  errorState: Object,
   localData: Object,
 }) => {
   if (localData.error) {
@@ -44,6 +41,9 @@ const DatasetDeleteModal = ({
     }
     return `Fehler: ${localData.error.message}`
   }
+
+  const { addError } = useContext(mobxStoreContext)
+
   const datasetToDelete = deleteState.state.toDelete
   const table = tables.find(t => t.table === datasetToDelete.table)
   let tableName = null
@@ -57,22 +57,24 @@ const DatasetDeleteModal = ({
     question = `${tableName} löschen?`
   }
 
+  const onClickAbbrechen = useCallback(() => deleteState.emptyToDelete())
+  const onClickLoeschen = useCallback(
+    () =>
+      deleteDataset({
+        dataPassedIn: localData,
+        deleteState,
+        addError,
+      }),
+    [localData],
+  )
+
   return (
     <ErrorBoundary>
       <StyledDialog open={!!datasetToDelete.table}>
         {question}
         <DialogActions>
-          <Button onClick={() => deleteState.emptyToDelete()}>Abbrechen</Button>
-          <Button
-            color="primary"
-            onClick={() =>
-              deleteDataset({
-                dataPassedIn: localData,
-                deleteState,
-                errorState,
-              })
-            }
-          >
+          <Button onClick={onClickAbbrechen}>Abbrechen</Button>
+          <Button color="primary" onClick={onClickLoeschen}>
             Löschen
           </Button>
           ,

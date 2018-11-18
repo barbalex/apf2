@@ -16,11 +16,11 @@ const isFreiwilligenKontrolle = activeNodeArray =>
 export default async ({
   dataPassedIn,
   deleteState,
-  errorState,
+  addError,
 }: {
   dataPassedIn: Object,
   deleteState: Object,
-  errorState: Object,
+  addError: Object,
 }): Promise<void> => {
   const { client } = app
   // deleteDatasetDemand checks variables
@@ -35,7 +35,7 @@ export default async ({
   // some tables need to be translated, i.e. tpopfreiwkontr
   const tableMetadata = tables.find(t => t.table === tablePassed)
   if (!tableMetadata) {
-    return errorState.add(
+    return addError(
       new Error(
         `Error in action deleteDatasetDemand: no table meta data found for table "${tablePassed}"`,
       ),
@@ -61,7 +61,7 @@ export default async ({
       variables: { id },
     })
   } catch (error) {
-    return errorState.add(error)
+    return addError(error)
   }
   let data = { ...get(result, `data.${camelCase(table)}ById`) }
   data = omit(data, '__typename')
@@ -91,7 +91,7 @@ export default async ({
       variables: { id },
     })
   } catch (error) {
-    return errorState.add(error)
+    return addError(error)
   }
 
   // if tpop was deleted: set beob free
