@@ -26,9 +26,11 @@ const pointToLayer = (feature, latlng) => {
   return window.L.circleMarker(latlng, pTLOptions)
 }
 
-const MarkierungenLayer = ({ errorState }: { errorStatef: Object }) => {
-  const { markierungen, setMarkierungen } = useContext(mobxStoreContext)
-  !markierungen && fetchMarkierungen({ setMarkierungen, errorState })
+const MarkierungenLayer = () => {
+  const { markierungen, setMarkierungen, addError } = useContext(
+    mobxStoreContext,
+  )
+  !markierungen && fetchMarkierungen({ setMarkierungen, addError })
 
   return (
     markierungen && (

@@ -14,9 +14,11 @@ const onEachFeature = (feature, layer) => {
   }
 }
 
-const DetailplaeneLayer = ({ errorState }: { errorState: Object }) => {
-  const { detailplaene, setDetailplaene } = useContext(mobxStoreContext)
-  !detailplaene && fetchDetailplaene({ setDetailplaene, errorState })
+const DetailplaeneLayer = () => {
+  const { detailplaene, setDetailplaene, addError } = useContext(
+    mobxStoreContext,
+  )
+  !detailplaene && fetchDetailplaene({ setDetailplaene, addError })
 
   return (
     detailplaene && (

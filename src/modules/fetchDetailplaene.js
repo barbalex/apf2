@@ -4,10 +4,10 @@ import staticFilesBaseUrl from './staticFilesBaseUrl'
 
 export default async ({
   setDetailplaene,
-  errorState,
+  addError,
 }: {
   setDetailplaene: () => void,
-  errorState: Object,
+  addError: Object,
 }): void => {
   const baseURL = staticFilesBaseUrl
   const url = `/detailplaeneWgs84neu.json`
@@ -16,9 +16,7 @@ export default async ({
   try {
     result = await axios.get(url, { baseURL })
   } catch (error) {
-    console.log('fetchDateilplane, error:', error)
-    errorState.add(error)
+    addError(error)
   }
-  console.log('fetchDetailplaene, will set detailplaene:', result.data)
   setDetailplaene(result.data)
 }

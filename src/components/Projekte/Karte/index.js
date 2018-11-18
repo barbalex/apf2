@@ -141,7 +141,6 @@ const Karte = ({
   mapBeobNichtBeurteiltIdsFiltered,
   mapBeobZugeordnetIdsFiltered,
   mapBeobNichtZuzuordnenIdsFiltered,
-  errorState,
   dimensions,
 }: {
   tree: Object,
@@ -155,7 +154,6 @@ const Karte = ({
   mapBeobNichtBeurteiltIdsFiltered: Array<String>,
   mapBeobZugeordnetIdsFiltered: Array<String>,
   mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
-  errorState: Object,
   dimensions: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
@@ -169,9 +167,13 @@ const Karte = ({
     idOfTpopBeingLocalized,
     setIdOfTpopBeingLocalized,
     bounds,
+    addError,
   } = mobxStore
+
   const mapRef = useRef(null)
+
   const prevDimensions = usePrevious(dimensions) || {}
+
   useEffect(
     () => {
       const prevWidth = prevDimensions.width || 0
@@ -263,8 +265,8 @@ const Karte = ({
   }
   const OverlayComponents = {
     ZhUep: () => <ZhUepOverlay />,
-    Detailplaene: () => <Detailplaene errorState={errorState} />,
-    Markierungen: () => <Markierungen errorState={errorState} />,
+    Detailplaene: () => <Detailplaene />,
+    Markierungen: () => <Markierungen />,
     ZhGemeindegrenzen: () => <ZhGemeindegrenzen />,
     ZhSvoColor: () => <ZhSvoColor />,
     ZhSvoGrey: () => <ZhSvoGrey />,
@@ -360,7 +362,7 @@ const Karte = ({
                 // refetch so it appears on map
                 refetchTree('tpopForMap')
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setIdOfTpopBeingLocalized(null)
             }

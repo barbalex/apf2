@@ -5,10 +5,10 @@ import staticFilesBaseUrl from './staticFilesBaseUrl'
 
 export default async ({
   setMarkierungen,
-  errorState,
+  addError,
 }: {
   setMarkierungen: () => void,
-  errorState: Object,
+  addError: Object,
 }): void => {
   const baseURL = staticFilesBaseUrl
   const url = `/markierungen.json`
@@ -17,7 +17,7 @@ export default async ({
   try {
     result = await axios.get(url, { baseURL })
   } catch (error) {
-    errorState.add(error)
+    addError(error)
   }
   setMarkierungen(result.data)
 }
