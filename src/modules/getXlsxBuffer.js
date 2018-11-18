@@ -9,10 +9,10 @@ import getDataArrayFromExportObjects from './getDataArrayFromExportObjects'
 
 export default async ({
   data,
-  errorState,
-}:{
-  data: Array<Object>, 
-  errorState: Object,
+  addError,
+}: {
+  data: Array<Object>,
+  addError: Object,
 }) => {
   const dataArray = getDataArrayFromExportObjects(data)
   const numberOfColumns =
@@ -59,7 +59,7 @@ export default async ({
   try {
     buffer = await workbook.xlsx.writeBuffer()
   } catch (error) {
-    return errorState.add(error)
+    return addError(error)
   }
   return buffer
 }

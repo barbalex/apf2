@@ -8,13 +8,13 @@ export default async ({
   dataset,
   setShowDeletions,
   deleteState,
-  errorState,
+  addError,
 }: {
   datasetsDeleted: Array<Object>,
   dataset: Object,
   setShowDeletions: () => void,
   deleteState: Object,
-  errorState: Object,
+  addError: () => void,
 }) => {
   const { client } = app
   const { table, data, afterDeletionHook } = dataset
@@ -24,7 +24,7 @@ export default async ({
   try {
     mutation = await import(`./${queryName}`).then(m => m.default)
   } catch (error) {
-    return errorState.add(
+    return addError(
       new Error(
         `Die Abfrage, um einen Datensatz für die Tabelle ${table} zu erstellen, scheint zu fehlen. Sorry!`,
       ),
@@ -36,7 +36,7 @@ export default async ({
       variables: data,
     })
   } catch (error) {
-    return errorState.add(error)
+    return addError(error)
   }
 
   // 2. remove dataset from datasetsDeleted

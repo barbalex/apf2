@@ -16,7 +16,7 @@ export default async ({
   idKey,
   xKey,
   yKey,
-  errorState,
+  addError,
 }: {
   data: Array<Object>,
   fileName: String,
@@ -27,7 +27,7 @@ export default async ({
   idKey: String,
   xKey: String,
   yKey: String,
-  errorState: Object,
+  addError: Object,
 }) => {
   let data = dataPassed.map(d => omit(d, ['__typename', 'Symbol(id)']))
   // now we could manipulate the data, for instance apply mapFilter
@@ -54,7 +54,7 @@ export default async ({
   // 2. depending on typename check if this table is filtered
   // 3. if yes: filter by nodeFilterState by converting camelCase to lower_case
   if (data.length === 0) {
-    return errorState.add(
+    return addError(
       new Error(
         'Es gibt offenbar keine Daten, welche exportiert werden können',
       ),
@@ -75,7 +75,7 @@ export default async ({
     exportXlsx({
       fileName,
       data,
-      errorState,
+      addError,
     })
   }
 }

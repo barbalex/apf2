@@ -61,11 +61,11 @@ const enhance = compose(withErrorState)
 const Massnahmen = ({
   fileType,
   applyMapFilterToExport,
-  errorState,
+  addError,
 }: {
   fileType: String,
   applyMapFilterToExport: Boolean,
-  errorState: Object,
+  addError: () => void,
 }) => {
   const { mapFilter } = useContext(mobxStoreContext)
   const [expanded, setExpanded] = useState(false)
@@ -106,10 +106,10 @@ const Massnahmen = ({
                   idKey: 'tpop_id',
                   xKey: 'tpop_x',
                   yKey: 'tpop_y',
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}
@@ -134,10 +134,10 @@ const Massnahmen = ({
                   idKey: 'TPOPGUID',
                   xKey: 'TPOP_X',
                   yKey: 'TPOP_Y',
-                  errorState,
+                  addError,
                 })
               } catch (error) {
-                errorState.add(error)
+                addError(error)
               }
               setMessage(null)
             }}

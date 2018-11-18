@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { useContext, useState, useCallback } from 'react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
@@ -9,15 +9,13 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
-import withState from 'recompose/withState'
 import format from 'date-fns/format'
 import TextField from '@material-ui/core/TextField'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import undelete from './undelete'
 import withDeleteState from '../../state/withDeleteState'
-import withErrorState from '../../state/withErrorState'
+import mobxStoreContext from '../../mobxStoreContext'
 
 const List = styled.div`
   padding-left: 24px;
@@ -53,16 +51,24 @@ const StyledCheckbox = styled(Checkbox)`
   height: 30px !important;
 `
 
-const enhance = compose(
-  withDeleteState,
-  withErrorState,
-  withState('choosenDeletions', 'setChoosenDeletions', []),
-  withHandlers({
-    onClickUndo: ({
-      choosenDeletions,
-      setChoosenDeletions,
-      setShowDeletions,
-    }) => async ({ datasetsDeleted, deleteState, errorState }) => {
+const enhance = compose(withDeleteState)
+
+const Deletions = ({
+  showDeletions,
+  setShowDeletions,
+  deleteState,
+}: {
+  showDeletions: Boolean,
+  setShowDeletions: () => void,
+  deleteState: Object,
+}) => {
+  const { addError } = useContext(mobxStoreContext)
+  const datasetsDeleted = deleteState.state.datasets
+
+  const [choosenDeletions, setChoosenDeletions] = useState([])
+
+  const onClickUndo = useCallback(
+    async () => {
       // loop through all choosenDeletions
       await Promise.all(
         choosenDeletions.map(
@@ -72,7 +78,7 @@ const enhance = compose(
               dataset: datasetsDeleted.find(d => d.id === id),
               setShowDeletions,
               deleteState,
-              errorState,
+              addError,
             }),
         ),
       )
@@ -81,10 +87,10 @@ const enhance = compose(
         setShowDeletions(false)
       }
     },
-    toggleChoosenDeletions: ({
-      choosenDeletions,
-      setChoosenDeletions,
-    }) => event => {
+    [choosenDeletions, datasetsDeleted],
+  )
+  const toggleChoosenDeletions = useCallback(
+    event => {
       let id = event.target.value
       let newChoosenDeletions
       if (choosenDeletions.includes(id)) {
@@ -94,28 +100,8 @@ const enhance = compose(
       }
       setChoosenDeletions(newChoosenDeletions)
     },
-  }),
-)
-
-const Deletions = ({
-  onClickUndo,
-  choosenDeletions,
-  setChoosenDeletions,
-  toggleChoosenDeletions,
-  showDeletions,
-  setShowDeletions,
-  deleteState,
-  errorState,
-}: {
-  onClickUndo: () => void,
-  choosenDeletions: Array<string>,
-  toggleChoosenDeletions: () => void,
-  showDeletions: Boolean,
-  setShowDeletions: () => void,
-  deleteState: Object,
-  errorState: Object,
-}) => {
-  const datasetsDeleted = deleteState.state.datasets
+    [choosenDeletions],
+  )
 
   return (
     <ErrorBoundary>
@@ -173,7 +159,7 @@ const Deletions = ({
         <DialogActions>
           <Button
             onClick={() =>
-              onClickUndo({ datasetsDeleted, deleteState, errorState })
+              onClickUndo({ datasetsDeleted, deleteState, addError })
             }
             disabled={choosenDeletions.length === 0}
           >
