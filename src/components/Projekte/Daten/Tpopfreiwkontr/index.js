@@ -2,8 +2,6 @@
 import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
-import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
