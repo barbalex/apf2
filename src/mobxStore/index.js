@@ -28,12 +28,13 @@ const myTypes = types
       type: 'FeatureCollection',
     }),
   })
-  // structure of detailplaene is not controlled
+  // structure of these variables is not controlled
   // so need to define this as volatile
   .volatile(() => ({
     detailplaene: null,
     markierungen: null,
     ktZh: null,
+    errors: [],
   }))
   .actions(self => ({
     setApfloraLayers(val) {
@@ -74,6 +75,10 @@ const myTypes = types
     },
     setKtZh(val) {
       self.ktZh = val
+    },
+    addError(error) {
+      self.errors.push(error)
+      setTimeout(() => self.errors.pop(), 1000 * 10)
     },
   }))
 

@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
@@ -11,7 +11,7 @@ import app from 'ampersand-app'
 import format from 'date-fns/format'
 
 import StringToCopy from '../../../shared/StringToCopyOnlyButton'
-import dataGql from './data'
+import withData from './withData'
 import updateTpopkontrByIdGql from './updateTpopkontrById'
 import createTpopkontrzaehl from './createTpopkontrzaehl'
 import Title from './Title'
@@ -142,129 +142,7 @@ const CountHint = styled.div`
 const enhance = compose(
   withAllAdresses,
   withNodeFilter,
-  dataGql,
-  withState('errors', 'setErrors', {}),
-  withHandlers({
-    saveToDb: ({
-      setErrors,
-      errors,
-      data,
-      nodeFilterState,
-      treeName,
-      dataAllAdresses,
-    }) => async event => {
-      const field = event.target.name
-      let value = event.target.value
-      if (value === undefined) value = null
-      const showFilter = !!nodeFilterState.state[treeName].activeTable
-      let row
-      if (showFilter) {
-        row = nodeFilterState.state[treeName].tpopfreiwkontr
-      } else {
-        row = get(data, 'tpopkontrById', {})
-      }
-      /**
-       * only save if value changed
-       */
-      if (row[field] === value) return
-      if (showFilter) {
-        return nodeFilterState.setValue({
-          treeName,
-          table: 'tpopfreiwkontr',
-          key: field,
-          value,
-        })
-      }
-      /**
-       * enable passing two values
-       * with same update
-       */
-      const variables = {
-        id: row.id,
-        [field]: value,
-      }
-      let field2
-      if (field === 'datum') field2 = 'jahr'
-      let value2
-      if (field === 'datum') value2 = !!value ? format(value, 'YYYY') : null
-      if (field2) variables[field2] = value2
-      /*const adresseByBearbeiter =
-        field === 'bearbeiter'
-          ? row.adresseByBearbeiter
-          : get(dataAllAdresses, 'allAdresses.nodes', []).find(
-              r => r.id === value,
-          )*/
-      try {
-        await app.client.mutate({
-          mutation: updateTpopkontrByIdGql,
-          variables,
-          /*optimisticResponse: {
-            __typename: 'Mutation',
-            updateTpopkontrById: {
-              tpopkontr: {
-                id: row.id,
-                typ: field === 'typ' ? value : row.typ,
-                jahr:
-                  field === 'jahr'
-                    ? value
-                    : field2 === 'jahr'
-                    ? value2
-                    : row.jahr,
-                datum:
-                  field === 'datum'
-                    ? value
-                    : field2 === 'datum'
-                    ? value2
-                    : row.datum,
-                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-                flaecheUeberprueft:
-                  field === 'flaecheUeberprueft'
-                    ? value
-                    : row.flaecheUeberprueft,
-                deckungVegetation:
-                  field === 'deckungVegetation' ? value : row.deckungVegetation,
-                deckungNackterBoden:
-                  field === 'deckungNackterBoden'
-                    ? value
-                    : row.deckungNackterBoden,
-                deckungApArt:
-                  field === 'deckungApArt' ? value : row.deckungApArt,
-                vegetationshoeheMaximum:
-                  field === 'vegetationshoeheMaximum'
-                    ? value
-                    : row.vegetationshoeheMaximum,
-                vegetationshoeheMittel:
-                  field === 'vegetationshoeheMittel'
-                    ? value
-                    : row.vegetationshoeheMittel,
-                gefaehrdung: field === 'gefaehrdung' ? value : row.gefaehrdung,
-                tpopId: field === 'tpopId' ? value : row.tpopId,
-                bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
-                planVorhanden:
-                  field === 'planVorhanden' ? value : row.planVorhanden,
-                jungpflanzenVorhanden:
-                  field === 'jungpflanzenVorhanden'
-                    ? value
-                    : row.jungpflanzenVorhanden,
-                adresseByBearbeiter,
-                ekfVerifiziert:
-                  field === 'ekfVerifiziert' ? value : row.ekfVerifiziert,
-                ekfBemerkungen:
-                  field === 'ekfBemerkungen' ? value : row.ekfBemerkungen,
-                tpopByTpopId: row.tpopByTpopId,
-                tpopkontrzaehlsByTpopkontrId: row.tpopkontrzaehlsByTpopkontrId,
-                __typename: 'Tpopkontr',
-              },
-              __typename: 'Tpopkontr',
-            },
-          },*/
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
-      }
-      setErrors({})
-    },
-  }),
+  withData,
   withLifecycle({
     async onDidUpdate(prevProps, props) {
       if (prevProps.data.loading && !props.data.loading) {
@@ -347,9 +225,6 @@ const Tpopfreiwkontr = ({
   id = '99999999-9999-9999-9999-999999999999',
   data,
   dimensions,
-  saveToDb,
-  errors,
-  setErrors,
   activeNodeArray,
   role,
   nodeFilterState,
@@ -359,9 +234,6 @@ const Tpopfreiwkontr = ({
   id: string,
   data: Object,
   dimensions: Object,
-  saveToDb: () => void,
-  errors: Object,
-  setErrors: () => void,
   activeNodeArray: Array<string>,
   role: string,
   nodeFilterState: Object,
@@ -377,6 +249,9 @@ const Tpopfreiwkontr = ({
       </Container>
     )
   }
+
+  const [errors, setErrors] = useState({})
+
   const showFilter = !!nodeFilterState.state[treeName].activeTable
   const ekfzaehleinheits = get(
     data,
@@ -456,6 +331,115 @@ const Tpopfreiwkontr = ({
     vegetationshoeheMaximum,
     vegetationshoeheMittel,
   } = row
+
+  const saveToDb = useCallback(
+    async event => {
+      const field = event.target.name
+      let value = event.target.value
+      if (value === undefined) value = null
+      /**
+       * only save if value changed
+       */
+      if (row[field] === value) return
+      if (showFilter) {
+        return nodeFilterState.setValue({
+          treeName,
+          table: 'tpopfreiwkontr',
+          key: field,
+          value,
+        })
+      }
+      /**
+       * enable passing two values
+       * with same update
+       */
+      const variables = {
+        id: row.id,
+        [field]: value,
+      }
+      let field2
+      if (field === 'datum') field2 = 'jahr'
+      let value2
+      if (field === 'datum') value2 = !!value ? format(value, 'YYYY') : null
+      if (field2) variables[field2] = value2
+      /*const adresseByBearbeiter =
+      field === 'bearbeiter'
+        ? row.adresseByBearbeiter
+        : get(dataAllAdresses, 'allAdresses.nodes', []).find(
+            r => r.id === value,
+        )*/
+      try {
+        await app.client.mutate({
+          mutation: updateTpopkontrByIdGql,
+          variables,
+          /*optimisticResponse: {
+          __typename: 'Mutation',
+          updateTpopkontrById: {
+            tpopkontr: {
+              id: row.id,
+              typ: field === 'typ' ? value : row.typ,
+              jahr:
+                field === 'jahr'
+                  ? value
+                  : field2 === 'jahr'
+                  ? value2
+                  : row.jahr,
+              datum:
+                field === 'datum'
+                  ? value
+                  : field2 === 'datum'
+                  ? value2
+                  : row.datum,
+              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+              flaecheUeberprueft:
+                field === 'flaecheUeberprueft'
+                  ? value
+                  : row.flaecheUeberprueft,
+              deckungVegetation:
+                field === 'deckungVegetation' ? value : row.deckungVegetation,
+              deckungNackterBoden:
+                field === 'deckungNackterBoden'
+                  ? value
+                  : row.deckungNackterBoden,
+              deckungApArt:
+                field === 'deckungApArt' ? value : row.deckungApArt,
+              vegetationshoeheMaximum:
+                field === 'vegetationshoeheMaximum'
+                  ? value
+                  : row.vegetationshoeheMaximum,
+              vegetationshoeheMittel:
+                field === 'vegetationshoeheMittel'
+                  ? value
+                  : row.vegetationshoeheMittel,
+              gefaehrdung: field === 'gefaehrdung' ? value : row.gefaehrdung,
+              tpopId: field === 'tpopId' ? value : row.tpopId,
+              bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
+              planVorhanden:
+                field === 'planVorhanden' ? value : row.planVorhanden,
+              jungpflanzenVorhanden:
+                field === 'jungpflanzenVorhanden'
+                  ? value
+                  : row.jungpflanzenVorhanden,
+              adresseByBearbeiter,
+              ekfVerifiziert:
+                field === 'ekfVerifiziert' ? value : row.ekfVerifiziert,
+              ekfBemerkungen:
+                field === 'ekfBemerkungen' ? value : row.ekfBemerkungen,
+              tpopByTpopId: row.tpopByTpopId,
+              tpopkontrzaehlsByTpopkontrId: row.tpopkontrzaehlsByTpopkontrId,
+              __typename: 'Tpopkontr',
+            },
+            __typename: 'Tpopkontr',
+          },
+        },*/
+        })
+      } catch (error) {
+        return setErrors({ [field]: error.message })
+      }
+      setErrors({})
+    },
+    [showFilter, id],
+  )
 
   return (
     <Container showfilter={showFilter}>
