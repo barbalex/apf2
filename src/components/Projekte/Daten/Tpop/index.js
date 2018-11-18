@@ -1,5 +1,5 @@
 // @flow
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
@@ -22,6 +22,7 @@ import updateTpopByIdGql from './updateTpopById'
 import withNodeFilter from '../../../../state/withNodeFilter'
 import getGemeindeForKoord from '../../../../modules/getGemeindeForKoord'
 import withErrorState from '../../../../state/withErrorState'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const Container = styled.div`
   height: 100%;
@@ -53,14 +54,12 @@ const Tpop = ({
   dimensions = { width: 380 },
   nodeFilterState,
   treeName,
-  errorState,
   data,
 }: {
   id: String,
   dimensions: Object,
   nodeFilterState: Object,
   treeName: string,
-  errorState: Object,
   data: Object,
 }) => {
   if (data.loading) {
@@ -71,6 +70,8 @@ const Tpop = ({
     )
   }
   if (data.error) return `Fehler: ${data.error.message}`
+
+  const { addError } = useContext(mobxStoreContext)
 
   const [errors, setErrors] = useState({})
 
@@ -299,7 +300,7 @@ const Tpop = ({
               const gemeinde = await getGemeindeForKoord({
                 x: row.x,
                 y: row.y,
-                errorState,
+                addError,
               })
               if (gemeinde) {
                 const fakeEvent = {
