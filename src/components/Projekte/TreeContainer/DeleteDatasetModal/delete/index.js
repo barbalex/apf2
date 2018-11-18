@@ -15,22 +15,20 @@ const isFreiwilligenKontrolle = activeNodeArray =>
 
 export default async ({
   dataPassedIn,
-  deleteState,
+  toDelete,
+  emptyToDelete,
+  addDeletedDataset,
   addError,
 }: {
   dataPassedIn: Object,
-  deleteState: Object,
+  toDelete: Object,
+  emptyToDelete: () => void,
+  addDeletedDataset: () => void,
   addError: Object,
 }): Promise<void> => {
   const { client } = app
   // deleteDatasetDemand checks variables
-  const {
-    table: tablePassed,
-    id,
-    url,
-    label,
-    afterDeletionHook,
-  } = deleteState.state.toDelete
+  const { table: tablePassed, id, url, label, afterDeletionHook } = toDelete
 
   // some tables need to be translated, i.e. tpopfreiwkontr
   const tableMetadata = tables.find(t => t.table === tablePassed)
@@ -67,7 +65,7 @@ export default async ({
   data = omit(data, '__typename')
 
   // add to datasetsDeleted
-  deleteState.addDataset({
+  addDeletedDataset({
     table,
     id,
     label,
@@ -167,5 +165,5 @@ export default async ({
   if (afterDeletionHook) afterDeletionHook()
 
   // reset datasetToDelete
-  deleteState.emptyToDelete()
+  emptyToDelete()
 }

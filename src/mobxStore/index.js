@@ -42,6 +42,17 @@ const myTypes = types
     errors: [],
     toDeleteAfterDeletionHook: null,
   }))
+  .views(self => ({
+    get toDelete() {
+      return {
+        table: self.toDeleteTable,
+        id: self.toDeleteId,
+        label: self.toDeleteLabel,
+        url: self.toDeleteUrl,
+        afterDeletionHook: self.toDeleteAfterDeletionHook,
+      }
+    },
+  }))
   .actions(self => ({
     setDeletedDatasets(val) {
       self.deletedDatasets = val

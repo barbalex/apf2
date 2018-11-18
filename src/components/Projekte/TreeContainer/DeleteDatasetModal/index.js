@@ -10,7 +10,6 @@ import tables from '../../../../modules/tables'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import withLocalData from './withLocalData'
 import deleteDataset from './delete'
-import withDeleteState from '../../../../state/withDeleteState'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
 const StyledDialog = styled(Dialog)`
@@ -19,18 +18,9 @@ const StyledDialog = styled(Dialog)`
   }
 `
 
-const enhance = compose(
-  withLocalData,
-  withDeleteState,
-)
+const enhance = compose(withLocalData)
 
-const DatasetDeleteModal = ({
-  deleteState,
-  localData,
-}: {
-  deleteState: Object,
-  localData: Object,
-}) => {
+const DatasetDeleteModal = ({ localData }: { localData: Object }) => {
   if (localData.error) {
     if (
       localData.error.message.includes('permission denied') ||
@@ -42,9 +32,11 @@ const DatasetDeleteModal = ({
     return `Fehler: ${localData.error.message}`
   }
 
-  const { addError } = useContext(mobxStoreContext)
+  const { addError, toDelete, emptyToDelete, addDeletedDataset } = useContext(
+    mobxStoreContext,
+  )
 
-  const datasetToDelete = deleteState.state.toDelete
+  const datasetToDelete = toDelete
   const table = tables.find(t => t.table === datasetToDelete.table)
   let tableName = null
   if (table && table.labelSingular) {
@@ -57,12 +49,14 @@ const DatasetDeleteModal = ({
     question = `${tableName} löschen?`
   }
 
-  const onClickAbbrechen = useCallback(() => deleteState.emptyToDelete())
+  const onClickAbbrechen = useCallback(() => emptyToDelete())
   const onClickLoeschen = useCallback(
     () =>
       deleteDataset({
         dataPassedIn: localData,
-        deleteState,
+        toDelete,
+        emptyToDelete,
+        addDeletedDataset,
         addError,
       }),
     [localData],

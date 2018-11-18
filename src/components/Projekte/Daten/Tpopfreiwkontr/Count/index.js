@@ -1,12 +1,10 @@
 // @flow
-import React from 'react'
+import React, { useContext, useState, useCallback } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import uniqBy from 'lodash/uniqBy'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
-import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
 import Button from '@material-ui/core/Button'
 import DeleteIcon from '@material-ui/icons/DeleteForever'
@@ -18,8 +16,8 @@ import TextField from '../../../../shared/TextField'
 import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById'
 import withData from './withData'
 import createTpopkontrzaehl from './createTpopkontrzaehl'
-import withDeleteState from '../../../../../state/withDeleteState'
 import withAllTpopkontrzaehlEinheitWertes from './withAllTpopkontrzaehlEinheitWertes'
+import mobxStoreContext from '../../../../../mobxStoreContext'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -161,17 +159,110 @@ const ShowNew = styled.div`
 const enhance = compose(
   withData,
   withAllTpopkontrzaehlEinheitWertes,
-  withDeleteState,
-  withState('errors', 'setErrors', {}),
-  withHandlers({
-    saveToDb: ({ setErrors, errors, data }) => async event => {
+  withLifecycle({
+    onDidUpdate(prevProps, props) {
+      if (prevProps.id !== props.id) {
+        props.setErrors({})
+      }
+    },
+  }),
+)
+
+const Count = ({
+  id,
+  tpopkontrId,
+  nr,
+  updateTpopkontr,
+  showEmpty,
+  showNew,
+  refetch,
+  activeNodeArray,
+  einheitsUsed,
+  ekfzaehleinheits,
+  dataAllTpopkontrzaehlEinheitWertes,
+  data,
+}: {
+  id: String,
+  tpopkontrId: String,
+  nr: Number,
+  updateTpopkontr: () => void,
+  showEmpty: Boolean,
+  showNew: Boolean,
+  refetch: () => void,
+  activeNodeArray: Array<String>,
+  einheitsUsed: Array<Number>,
+  ekfzaehleinheits: Array<Object>,
+  dataAllTpopkontrzaehlEinheitWertes: Object,
+  data: Object,
+}) => {
+  const createNew = useCallback(
+    () => {
+      app.client
+        .mutate({
+          mutation: createTpopkontrzaehl,
+          variables: { tpopkontrId },
+        })
+        .then(() => refetch())
+    },
+    [tpopkontrId],
+  )
+  if (showNew)
+    return (
+      <Container nr={nr} shownew={showNew}>
+        <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
+        <ShowNew>
+          <Button color="primary" onClick={createNew}>
+            <StyledAddIcon /> Neu
+          </Button>
+        </ShowNew>
+      </Container>
+    )
+  if (showEmpty)
+    return (
+      <Container nr={nr} showempty={showEmpty}>
+        <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
+      </Container>
+    )
+  if (data.loading || dataAllTpopkontrzaehlEinheitWertes.loading)
+    return <Container>Lade...</Container>
+  if (data.error) return `Fehler: ${data.error.message}`
+  if (dataAllTpopkontrzaehlEinheitWertes.error)
+    return `Fehler: ${dataAllTpopkontrzaehlEinheitWertes.error.message}`
+
+  const { setToDelete } = useContext(mobxStoreContext)
+
+  const [errors, setErrors] = useState({})
+
+  const row = get(data, 'tpopkontrzaehlById', {})
+  const allEinheits = get(
+    dataAllTpopkontrzaehlEinheitWertes,
+    'allTpopkontrzaehlEinheitWertes.nodes',
+    [],
+  )
+  // do list this count's einheit
+  const einheitsNotToList = einheitsUsed.filter(e => e !== row.einheit)
+  let zaehleinheitWerte = ekfzaehleinheits
+    // remove already set values
+    .filter(e => !einheitsNotToList.includes(e.code))
+  // add this zaehleineits value if missing
+  // so as to show values input in earlier years that shall not be input any more
+  const thisRowsEinheit = allEinheits.find(e => e.code === row.einheit)
+  if (thisRowsEinheit)
+    zaehleinheitWerte = uniqBy([thisRowsEinheit, ...zaehleinheitWerte], 'id')
+  zaehleinheitWerte = sortBy(zaehleinheitWerte, 'sort').map(el => ({
+    value: el.code,
+    label: el.text,
+  }))
+  const showDelete = nr > 1
+
+  const saveToDb = useCallback(
+    async event => {
       const fieldPassed = event.target.name
       const field = ['anzahl1', 'anzahl2'].includes(fieldPassed)
         ? 'anzahl'
         : fieldPassed
       let value = event.target.value
       if (value === undefined) value = null
-      const row = get(data, 'tpopkontrzaehlById', {})
       /**
        * only save if value changed
        */
@@ -201,36 +292,31 @@ const enhance = compose(
           mutation: updateTpopkontrzaehlByIdGql,
           variables,
           /*optimisticResponse: {
-            __typename: 'Mutation',
-            updateTpopkontrzaehlById: {
-              tpopkontrzaehl: {
-                id: row.id,
-                anzahl: field === 'anzahl' ? value : row.anzahl,
-                einheit: field === 'einheit' ? value : row.einheit,
-                methode: field2 === 'methode' ? value2 : row.methode,
-                tpopkontrzaehlEinheitWerteByEinheit:
-                  row.tpopkontrzaehlEinheitWerteByEinheit,
-                __typename: 'Tpopkontrzaehl',
-              },
+          __typename: 'Mutation',
+          updateTpopkontrzaehlById: {
+            tpopkontrzaehl: {
+              id: row.id,
+              anzahl: field === 'anzahl' ? value : row.anzahl,
+              einheit: field === 'einheit' ? value : row.einheit,
+              methode: field2 === 'methode' ? value2 : row.methode,
+              tpopkontrzaehlEinheitWerteByEinheit:
+                row.tpopkontrzaehlEinheitWerteByEinheit,
               __typename: 'Tpopkontrzaehl',
             },
-          },*/
+            __typename: 'Tpopkontrzaehl',
+          },
+        },*/
         })
       } catch (error) {
         return setErrors({ [field]: error.message })
       }
       setErrors({})
     },
-    createNew: ({ tpopkontrId, refetch }) => () => {
-      app.client
-        .mutate({
-          mutation: createTpopkontrzaehl,
-          variables: { tpopkontrId },
-        })
-        .then(() => refetch())
-    },
-    remove: ({ id, refetch, activeNodeArray, deleteState }) => ({ row }) => {
-      deleteState.setToDelete({
+    [id],
+  )
+  const remove = useCallback(
+    ({ row }) => {
+      setToDelete({
         table: 'tpopkontrzaehl',
         id,
         label: null,
@@ -238,97 +324,8 @@ const enhance = compose(
         afterDeletionHook: refetch,
       })
     },
-  }),
-  withLifecycle({
-    onDidUpdate(prevProps, props) {
-      if (prevProps.id !== props.id) {
-        props.setErrors({})
-      }
-    },
-  }),
-)
-
-const Count = ({
-  id,
-  tpopkontrId,
-  nr,
-  saveToDb,
-  errors,
-  updateTpopkontr,
-  showEmpty,
-  showNew,
-  refetch,
-  createNew,
-  remove,
-  activeNodeArray,
-  einheitsUsed,
-  ekfzaehleinheits,
-  deleteState,
-  dataAllTpopkontrzaehlEinheitWertes,
-  data,
-}: {
-  id: String,
-  tpopkontrId: String,
-  nr: Number,
-  saveToDb: () => void,
-  errors: Object,
-  updateTpopkontr: () => void,
-  showEmpty: Boolean,
-  showNew: Boolean,
-  refetch: () => void,
-  createNew: () => void,
-  remove: () => void,
-  activeNodeArray: Array<String>,
-  einheitsUsed: Array<Number>,
-  ekfzaehleinheits: Array<Object>,
-  deleteState: Object,
-  dataAllTpopkontrzaehlEinheitWertes: Object,
-  data: Object,
-}) => {
-  if (showNew)
-    return (
-      <Container nr={nr} shownew={showNew}>
-        <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
-        <ShowNew>
-          <Button color="primary" onClick={createNew}>
-            <StyledAddIcon /> Neu
-          </Button>
-        </ShowNew>
-      </Container>
-    )
-  if (showEmpty)
-    return (
-      <Container nr={nr} showempty={showEmpty}>
-        <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
-      </Container>
-    )
-  if (data.loading || dataAllTpopkontrzaehlEinheitWertes.loading)
-    return <Container>Lade...</Container>
-  if (data.error) return `Fehler: ${data.error.message}`
-  if (dataAllTpopkontrzaehlEinheitWertes.error)
-    return `Fehler: ${dataAllTpopkontrzaehlEinheitWertes.error.message}`
-
-  const row = get(data, 'tpopkontrzaehlById', {})
-  const allEinheits = get(
-    dataAllTpopkontrzaehlEinheitWertes,
-    'allTpopkontrzaehlEinheitWertes.nodes',
-    [],
+    [id, activeNodeArray],
   )
-  // do list this count's einheit
-  const einheitsNotToList = einheitsUsed.filter(e => e !== row.einheit)
-  let zaehleinheitWerte = ekfzaehleinheits
-    // remove already set values
-    .filter(e => !einheitsNotToList.includes(e.code))
-  // add this zaehleineits value if missing
-  // so as to show values input in earlier years that shall not be input any more
-  const thisRowsEinheit = allEinheits.find(e => e.code === row.einheit)
-  if (thisRowsEinheit)
-    zaehleinheitWerte = uniqBy([thisRowsEinheit, ...zaehleinheitWerte], 'id')
-  zaehleinheitWerte = sortBy(zaehleinheitWerte, 'sort').map(el => ({
-    value: el.code,
-    label: el.text,
-  }))
-  const showDelete = nr > 1
 
   return (
     <Container nr={nr} showdelete={showDelete}>
