@@ -87,7 +87,6 @@ import openLowerNodes from './openLowerNodes'
 import closeLowerNodes from './closeLowerNodes'
 import insertDataset from './insertDataset'
 import withDeleteState from '../../../state/withDeleteState'
-import withErrorState from '../../../state/withErrorState'
 import mobxStoreContext from '../../../mobxStoreContext'
 
 const Container = styled.div`
@@ -176,7 +175,6 @@ const showMapIfNotYetVisible = (projekteTabs: Array<String>) => {
 
 const enhance = compose(
   withDeleteState,
-  withErrorState,
   observer,
 )
 

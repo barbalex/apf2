@@ -8,14 +8,12 @@ import IconButton from '@material-ui/core/IconButton'
 import Icon from '@material-ui/core/Icon'
 import Button from '@material-ui/core/Button'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import compose from 'recompose/compose'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import app from 'ampersand-app'
 
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
-import withErrorState from '../../../../state/withErrorState'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
 const StyledCard = styled(Card)`
@@ -55,8 +53,6 @@ const DownloadCardButton = styled(Button)`
     user-select: none;
   }
 `
-
-const enhance = compose(withErrorState)
 
 const Massnahmen = ({
   fileType,
@@ -151,4 +147,4 @@ const Massnahmen = ({
   )
 }
 
-export default enhance(Massnahmen)
+export default Massnahmen

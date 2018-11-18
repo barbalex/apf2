@@ -63,7 +63,6 @@ import Exporte from '../Exporte'
 import getActiveNodes from '../../../modules/getActiveNodes'
 import buildNodes from '../TreeContainer/nodes'
 import idsInsideFeatureCollection from '../../../modules/idsInsideFeatureCollection'
-import withErrorState from '../../../state/withErrorState'
 import logout from '../../../modules/logout'
 import withTreeNodeFilterState from '../../../state/withNodeFilter'
 import buildVariables from './buildVariables'
@@ -137,7 +136,6 @@ const enhance = compose(
   withBeobZugeordnetAssignPolylinesForMap,
   withBeobAssignLines,
   withPopForMapMarkers,
-  withErrorState,
   observer,
 )
 
