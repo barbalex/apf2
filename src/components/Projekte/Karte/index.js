@@ -141,8 +141,6 @@ const Karte = ({
   mapBeobNichtBeurteiltIdsFiltered,
   mapBeobZugeordnetIdsFiltered,
   mapBeobNichtZuzuordnenIdsFiltered,
-  markierungen,
-  setMarkierungen,
   errorState,
   dimensions,
 }: {
@@ -157,8 +155,6 @@ const Karte = ({
   mapBeobNichtBeurteiltIdsFiltered: Array<String>,
   mapBeobZugeordnetIdsFiltered: Array<String>,
   mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
-  markierungen: Object,
-  setMarkierungen: () => void,
   errorState: Object,
   dimensions: Object,
 }) => {
@@ -268,13 +264,7 @@ const Karte = ({
   const OverlayComponents = {
     ZhUep: () => <ZhUepOverlay />,
     Detailplaene: () => <Detailplaene errorState={errorState} />,
-    Markierungen: () => (
-      <Markierungen
-        markierungen={markierungen}
-        setMarkierungen={setMarkierungen}
-        errorState={errorState}
-      />
-    ),
+    Markierungen: () => <Markierungen errorState={errorState} />,
     ZhGemeindegrenzen: () => <ZhGemeindegrenzen />,
     ZhSvoColor: () => <ZhSvoColor />,
     ZhSvoGrey: () => <ZhSvoGrey />,
@@ -308,13 +298,6 @@ const Karte = ({
   const activeOverlaysSorted = sortBy(activeOverlays, activeOverlay =>
     overlays.findIndex(o => o.value === activeOverlay),
   )
-
-  console.log('Karte', {
-    activeApfloraLayers,
-    activeApfloraLayersIncludesMapFilter: activeApfloraLayers.includes(
-      'mapFilter',
-    ),
-  })
 
   return (
     <Container>

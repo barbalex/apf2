@@ -1,10 +1,12 @@
 // @flow
-import React from 'react'
+import React, { useContext } from 'react'
 import { GeoJSON } from 'react-leaflet'
 import 'leaflet'
+import { observer } from 'mobx-react-lite'
 
 import popupFromProperties from './popupFromProperties'
 import fetchMarkierungen from '../../../../modules/fetchMarkierungen'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const style = () => ({ fill: false, color: 'orange', weight: 1 })
 const onEachFeature = (feature, layer) => {
@@ -24,15 +26,8 @@ const pointToLayer = (feature, latlng) => {
   return window.L.circleMarker(latlng, pTLOptions)
 }
 
-const MarkierungenLayer = ({
-  markierungen,
-  setMarkierungen,
-  errorState,
-}:{
-  markierungen: Object,
-  setMarkierungen: () => void,
-  errorStatef: Object,
-}) => {
+const MarkierungenLayer = ({ errorState }: { errorStatef: Object }) => {
+  const { markierungen, setMarkierungen } = useContext(mobxStoreContext)
   !markierungen && fetchMarkierungen({ setMarkierungen, errorState })
 
   return (
@@ -47,4 +42,4 @@ const MarkierungenLayer = ({
   )
 }
 
-export default MarkierungenLayer
+export default observer(MarkierungenLayer)

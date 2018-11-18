@@ -139,7 +139,6 @@ const enhance = compose(
   withBeobAssignLines,
   withPopForMapMarkers,
   withErrorState,
-  withState('markierungen', 'setMarkierungen', null),
   withState('ktZh', 'setKtZh', null),
   observer,
 )
@@ -190,8 +189,6 @@ const ProjekteContainer = props => {
     projekteTabs,
     ktZh,
     setKtZh,
-    markierungen,
-    setMarkierungen,
     errorState,
     nodeFilterState,
   }: {
@@ -239,8 +236,6 @@ const ProjekteContainer = props => {
     projekteTabs: Array<String>,
     ktZh: Object,
     setKtZh: () => void,
-    markierungen: Object,
-    setMarkierungen: () => void,
     errorState: Object,
     nodeFilterState: Object,
   } = props
@@ -584,8 +579,6 @@ const ProjekteContainer = props => {
                 // SortedStrings enforce rerendering when sorting or visibility changes
                 activeOverlaysString={activeOverlays.join()}
                 activeApfloraLayersString={activeApfloraLayers.join()}
-                markierungen={markierungen}
-                setMarkierungen={setMarkierungen}
                 beobsString={beobs.toString()}
               />
             </ReflexElement>

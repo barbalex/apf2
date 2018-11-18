@@ -32,6 +32,7 @@ const myTypes = types
   // so need to define this as volatile
   .volatile(() => ({
     detailplaene: null,
+    markierungen: null,
   }))
   .actions(self => ({
     setApfloraLayers(val) {
@@ -65,8 +66,10 @@ const myTypes = types
       self.mapFilter = val
     },
     setDetailplaene(val) {
-      console.log('mobxStore, setDetailplaene:', val)
       self.detailplaene = val
+    },
+    setMarkierungen(val) {
+      self.markierungen = val
     },
   }))
 
