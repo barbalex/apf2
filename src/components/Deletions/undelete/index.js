@@ -4,16 +4,16 @@ import camelCase from 'lodash/camelCase'
 import app from 'ampersand-app'
 
 export default async ({
-  datasetsDeleted,
+  deletedDatasets,
   dataset,
   setShowDeletions,
-  deleteState,
+  removeDeletedDatasetById,
   addError,
 }: {
-  datasetsDeleted: Array<Object>,
+  deletedDatasets: Array<Object>,
   dataset: Object,
   setShowDeletions: () => void,
-  deleteState: Object,
+  removeDeletedDatasetById: Object,
   addError: () => void,
 }) => {
   const { client } = app
@@ -39,9 +39,9 @@ export default async ({
     return addError(error)
   }
 
-  // 2. remove dataset from datasetsDeleted
-  if (datasetsDeleted.length === 1) setShowDeletions(false)
-  deleteState.removeDataset(dataset.id)
+  // 2. remove dataset from deletedDatasets
+  if (deletedDatasets.length === 1) setShowDeletions(false)
+  removeDeletedDatasetById(dataset.id)
 
   if (afterDeletionHook) afterDeletionHook()
 }

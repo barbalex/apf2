@@ -46,17 +46,25 @@ const myTypes = types
     setDeletedDatasets(val) {
       self.deletedDatasets = val
     },
-    setToDeleteTable(val) {
-      self.toDeleteTable = val
+    addDeletedDataset(val) {
+      self.deletedDatasets.push(val)
     },
-    setToDeleteId(val) {
-      self.toDeleteId = val
+    removeDeletedDatasetById(id) {
+      self.deletedDatasets = self.deletedDatasets.filter(d => d.id !== id)
     },
-    setToDeleteLabel(val) {
-      self.toDeleteLabel = val
+    setToDelete({ table, id, label, url, afterDeletionHook }) {
+      self.toDeleteTable = table
+      self.toDeleteId = id
+      self.toDeleteLabel = label
+      self.toDeleteUrl = url
+      self.toDeleteAfterDeletionHook = afterDeletionHook
     },
-    setToDeleteAfterDeletionHook(val) {
-      self.toDeleteAfterDeletionHook = val
+    emptyToDelete() {
+      self.toDeleteTable = null
+      self.toDeleteId = null
+      self.toDeleteLabel = null
+      self.toDeleteUrl = null
+      self.toDeleteAfterDeletionHook = null
     },
     setApfloraLayers(val) {
       self.apfloraLayers = val

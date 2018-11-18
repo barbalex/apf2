@@ -8,13 +8,11 @@ import Button from '@material-ui/core/Button'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
 import format from 'date-fns/format'
 import TextField from '@material-ui/core/TextField'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import undelete from './undelete'
-import withDeleteState from '../../state/withDeleteState'
 import mobxStoreContext from '../../mobxStoreContext'
 
 const List = styled.div`
@@ -51,19 +49,16 @@ const StyledCheckbox = styled(Checkbox)`
   height: 30px !important;
 `
 
-const enhance = compose(withDeleteState)
-
 const Deletions = ({
   showDeletions,
   setShowDeletions,
-  deleteState,
 }: {
   showDeletions: Boolean,
   setShowDeletions: () => void,
-  deleteState: Object,
 }) => {
-  const { addError } = useContext(mobxStoreContext)
-  const datasetsDeleted = deleteState.state.datasets
+  const { addError, removeDeletedDatasetById, deletedDatasets } = useContext(
+    mobxStoreContext,
+  )
 
   const [choosenDeletions, setChoosenDeletions] = useState([])
 
@@ -74,20 +69,20 @@ const Deletions = ({
         choosenDeletions.map(
           async id =>
             await undelete({
-              datasetsDeleted,
-              dataset: datasetsDeleted.find(d => d.id === id),
+              deletedDatasets,
+              dataset: deletedDatasets.find(d => d.id === id),
               setShowDeletions,
-              deleteState,
+              removeDeletedDatasetById,
               addError,
             }),
         ),
       )
       setChoosenDeletions([])
-      if (choosenDeletions.length === datasetsDeleted.length) {
+      if (choosenDeletions.length === deletedDatasets.length) {
         setShowDeletions(false)
       }
     },
-    [choosenDeletions, datasetsDeleted],
+    [choosenDeletions, deletedDatasets],
   )
   const toggleChoosenDeletions = useCallback(
     event => {
@@ -102,17 +97,18 @@ const Deletions = ({
     },
     [choosenDeletions],
   )
+  const onClickClose = useCallback(() => setShowDeletions(false))
 
   return (
     <ErrorBoundary>
       <Dialog
         aria-labelledby="dialog-title"
-        open={showDeletions && datasetsDeleted.length > 0}
+        open={showDeletions && deletedDatasets.length > 0}
       >
         <DialogTitle id="dialog-title">gelöschte Datensätze</DialogTitle>
         <DialogContent>
           <List>
-            {datasetsDeleted.map((ds, index) => {
+            {deletedDatasets.map((ds, index) => {
               // clone to remove keys _only_ for presentation
               const dataset = { ...ds.data }
               // remove null values
@@ -158,14 +154,12 @@ const Deletions = ({
         </DialogContent>
         <DialogActions>
           <Button
-            onClick={() =>
-              onClickUndo({ datasetsDeleted, deleteState, addError })
-            }
+            onClick={onClickUndo}
             disabled={choosenDeletions.length === 0}
           >
             wiederherstellen
           </Button>
-          <Button color="primary" onClick={() => setShowDeletions(false)}>
+          <Button color="primary" onClick={onClickClose}>
             schliessen
           </Button>
         </DialogActions>
@@ -174,4 +168,4 @@ const Deletions = ({
   )
 }
 
-export default enhance(Deletions)
+export default Deletions
