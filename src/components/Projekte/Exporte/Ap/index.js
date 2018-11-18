@@ -1,5 +1,5 @@
 // @flow
-import React, { useContext } from 'react'
+import React, { useContext, useState, useCallback } from 'react'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
@@ -8,15 +8,12 @@ import IconButton from '@material-ui/core/IconButton'
 import Icon from '@material-ui/core/Icon'
 import Button from '@material-ui/core/Button'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import app from 'ampersand-app'
 
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
-import withErrorState from '../../../../state/withErrorState'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
 const StyledCard = styled(Card)`
@@ -57,36 +54,288 @@ const DownloadCardButton = styled(Button)`
   }
 `
 
-const enhance = compose(
-  withErrorState,
-  withState('expanded', 'setExpanded', false),
-  withState('message', 'setMessage', null),
-)
-
 const AP = ({
   fileType,
   applyMapFilterToExport,
-  expanded,
-  setExpanded,
-  message,
-  setMessage,
 }: {
   fileType: String,
   applyMapFilterToExport: Boolean,
-  expanded: Boolean,
-  setExpanded: () => void,
-  message: String,
-  setMessage: () => void,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { mapFilter, addError } = mobxStore
 
+  const [expanded, setExpanded] = useState(false)
+  const [message, setMessage] = useState(null)
+
+  const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
+  const onClickAp = useCallback(
+    async () => {
+      setMessage('Export "AP" wird vorbereitet...')
+      try {
+        const { data } = await app.client.query({
+          query: await import('./allVAps').then(m => m.default),
+        })
+        exportModule({
+          data: get(data, 'allVAps.nodes', []),
+          fileName: 'AP',
+          fileType,
+          applyMapFilterToExport,
+          mapFilter,
+          addError,
+        })
+      } catch (error) {
+        addError(error)
+      }
+      setMessage(null)
+    },
+    [fileType, applyMapFilterToExport, mapFilter],
+  )
+  const onClickApOhnePop = useCallback(
+    async () => {
+      setMessage('Export "ApOhnePopulationen" wird vorbereitet...')
+      try {
+        const { data } = await app.client.query({
+          query: await import('./allVApOhnepops').then(m => m.default),
+        })
+        exportModule({
+          data: get(data, 'allVApOhnepops.nodes', []),
+          fileName: 'ApOhnePopulationen',
+          fileType,
+          applyMapFilterToExport,
+          mapFilter,
+          addError,
+        })
+      } catch (error) {
+        addError(error)
+      }
+      setMessage(null)
+    },
+    [fileType, applyMapFilterToExport, mapFilter],
+  )
+  const onClickAnzMassnProAp = useCallback(
+    async () => {
+      setMessage('Export "ApAnzahlMassnahmen" wird vorbereitet...')
+      try {
+        const { data } = await app.client.query({
+          query: await import('./allVApAnzmassns').then(m => m.default),
+        })
+        exportModule({
+          data: get(data, 'allVApAnzmassns.nodes', []),
+          fileName: 'ApAnzahlMassnahmen',
+          fileType,
+          applyMapFilterToExport,
+          mapFilter,
+          addError,
+        })
+      } catch (error) {
+        addError(error)
+      }
+      setMessage(null)
+    },
+    [fileType, applyMapFilterToExport, mapFilter],
+  )
+  const onClickAnzKontrProAp = useCallback(
+    async () => {
+      setMessage('Export "ApAnzahlKontrollen" wird vorbereitet...')
+      try {
+        const { data } = await app.client.query({
+          query: await import('./allVApAnzkontrs').then(m => m.default),
+        })
+        exportModule({
+          data: get(data, 'allVApAnzkontrs.nodes', []),
+          fileName: 'ApAnzahlKontrollen',
+          fileType,
+          applyMapFilterToExport,
+          mapFilter,
+          addError,
+        })
+      } catch (error) {
+        addError(error)
+      }
+      setMessage(null)
+    },
+    [fileType, applyMapFilterToExport, mapFilter],
+  )
+  const onClickApBer = useCallback(
+    async () => {
+      setMessage('Export "Jahresberichte" wird vorbereitet...')
+      try {
+        const { data } = await app.client.query({
+          query: await import('./allVApbers').then(m => m.default),
+        })
+        exportModule({
+          data: get(data, 'allVApbers.nodes', []),
+          fileName: 'Jahresberichte',
+          fileType,
+          applyMapFilterToExport,
+          mapFilter,
+          addError,
+        })
+      } catch (error) {
+        addError(error)
+      }
+      setMessage(null)
+    },
+    [fileType, applyMapFilterToExport, mapFilter],
+  )
+  const onClickApBerUndMassn = useCallback(
+    async () => {
+      setMessage('Export "ApJahresberichteUndMassnahmen" wird vorbereitet...')
+      try {
+        const { data } = await app.client.query({
+          query: await import('./allVApApberundmassns').then(m => m.default),
+        })
+        exportModule({
+          data: get(data, 'allVApApberundmassns.nodes', []),
+          fileName: 'ApJahresberichteUndMassnahmen',
+          fileType,
+          applyMapFilterToExport,
+          mapFilter,
+          addError,
+        })
+      } catch (error) {
+        addError(error)
+      }
+      setMessage(null)
+    },
+    [fileType, applyMapFilterToExport, mapFilter],
+  )
+  const onClickZiele = useCallback(
+    async () => {
+      setMessage('Export "ApZiele" wird vorbereitet...')
+      try {
+        const { data } = await app.client.query({
+          query: await import('./allVZiels').then(m => m.default),
+        })
+        exportModule({
+          data: get(data, 'allVZiels.nodes', []),
+          fileName: 'ApZiele',
+          fileType,
+          applyMapFilterToExport,
+          mapFilter,
+          addError,
+        })
+      } catch (error) {
+        addError(error)
+      }
+      setMessage(null)
+    },
+    [fileType, applyMapFilterToExport, mapFilter],
+  )
+  const onClickZielber = useCallback(
+    async () => {
+      setMessage('Export "Zielberichte" wird vorbereitet...')
+      try {
+        const { data } = await app.client.query({
+          query: await import('./allVZielbers').then(m => m.default),
+        })
+        exportModule({
+          data: get(data, 'allVZielbers.nodes', []),
+          fileName: 'Zielberichte',
+          fileType,
+          applyMapFilterToExport,
+          mapFilter,
+          addError,
+        })
+      } catch (error) {
+        addError(error)
+      }
+      setMessage(null)
+    },
+    [fileType, applyMapFilterToExport, mapFilter],
+  )
+  const onClickBer = useCallback(
+    async () => {
+      setMessage('Export "Berichte" wird vorbereitet...')
+      try {
+        const { data } = await app.client.query({
+          query: await import('./allVBers').then(m => m.default),
+        })
+        exportModule({
+          data: get(data, 'allVBers.nodes', []),
+          fileName: 'Berichte',
+          fileType,
+          applyMapFilterToExport,
+          mapFilter,
+          addError,
+        })
+      } catch (error) {
+        addError(error)
+      }
+      setMessage(null)
+    },
+    [fileType, applyMapFilterToExport, mapFilter],
+  )
+  const onClickErfkrit = useCallback(
+    async () => {
+      setMessage('Export "Erfolgskriterien" wird vorbereitet...')
+      try {
+        const { data } = await app.client.query({
+          query: await import('./allVErfkrits').then(m => m.default),
+        })
+        exportModule({
+          data: get(data, 'allVErfkrits.nodes', []),
+          fileName: 'Erfolgskriterien',
+          fileType,
+          applyMapFilterToExport,
+          mapFilter,
+          addError,
+        })
+      } catch (error) {
+        addError(error)
+      }
+      setMessage(null)
+    },
+    [fileType, applyMapFilterToExport, mapFilter],
+  )
+  const onClickIdealbiotop = useCallback(
+    async () => {
+      setMessage('Export "Idealbiotope" wird vorbereitet...')
+      try {
+        const { data } = await app.client.query({
+          query: await import('./allVIdealbiotops').then(m => m.default),
+        })
+        exportModule({
+          data: get(data, 'allVIdealbiotops.nodes', []),
+          fileName: 'Idealbiotope',
+          fileType,
+          applyMapFilterToExport,
+          mapFilter,
+          addError,
+        })
+      } catch (error) {
+        addError(error)
+      }
+      setMessage(null)
+    },
+    [fileType, applyMapFilterToExport, mapFilter],
+  )
+  const onClickAssozarten = useCallback(
+    async () => {
+      setMessage('Export "AssoziierteArten" wird vorbereitet...')
+      try {
+        const { data } = await app.client.query({
+          query: await import('./allVAssozarts').then(m => m.default),
+        })
+        exportModule({
+          data: get(data, 'allVAssozarts.nodes', []),
+          fileName: 'AssoziierteArten',
+          fileType,
+          applyMapFilterToExport,
+          mapFilter,
+          addError,
+        })
+      } catch (error) {
+        addError(error)
+      }
+      setMessage(null)
+    },
+    [fileType, applyMapFilterToExport, mapFilter],
+  )
+
   return (
     <StyledCard>
-      <StyledCardActions
-        disableActionSpacing
-        onClick={() => setExpanded(!expanded)}
-      >
+      <StyledCardActions disableActionSpacing onClick={onClickAction}>
         <CardActionTitle>Aktionsplan</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}
@@ -100,286 +349,36 @@ const AP = ({
       </StyledCardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <StyledCardContent>
-          <DownloadCardButton
-            onClick={async () => {
-              setMessage('Export "AP" wird vorbereitet...')
-              try {
-                const { data } = await app.client.query({
-                  query: await import('./allVAps').then(m => m.default),
-                })
-                exportModule({
-                  data: get(data, 'allVAps.nodes', []),
-                  fileName: 'AP',
-                  fileType,
-                  applyMapFilterToExport,
-                  mapFilter,
-                  addError,
-                })
-              } catch (error) {
-                addError(error)
-              }
-              setMessage(null)
-            }}
-          >
+          <DownloadCardButton onClick={onClickAp}>
             Aktionspläne
           </DownloadCardButton>
-          <DownloadCardButton
-            onClick={async () => {
-              setMessage('Export "ApOhnePopulationen" wird vorbereitet...')
-              try {
-                const { data } = await app.client.query({
-                  query: await import('./allVApOhnepops').then(m => m.default),
-                })
-                exportModule({
-                  data: get(data, 'allVApOhnepops.nodes', []),
-                  fileName: 'ApOhnePopulationen',
-                  fileType,
-                  applyMapFilterToExport,
-                  mapFilter,
-                  addError,
-                })
-              } catch (error) {
-                addError(error)
-              }
-              setMessage(null)
-            }}
-          >
+          <DownloadCardButton onClick={onClickApOhnePop}>
             Aktionspläne ohne Populationen
           </DownloadCardButton>
-          <DownloadCardButton
-            onClick={async () => {
-              setMessage('Export "ApAnzahlMassnahmen" wird vorbereitet...')
-              try {
-                const { data } = await app.client.query({
-                  query: await import('./allVApAnzmassns').then(m => m.default),
-                })
-                exportModule({
-                  data: get(data, 'allVApAnzmassns.nodes', []),
-                  fileName: 'ApAnzahlMassnahmen',
-                  fileType,
-                  applyMapFilterToExport,
-                  mapFilter,
-                  addError,
-                })
-              } catch (error) {
-                addError(error)
-              }
-              setMessage(null)
-            }}
-          >
+          <DownloadCardButton onClick={onClickAnzMassnProAp}>
             Anzahl Massnahmen pro Aktionsplan
           </DownloadCardButton>
-          <DownloadCardButton
-            onClick={async () => {
-              setMessage('Export "ApAnzahlKontrollen" wird vorbereitet...')
-              try {
-                const { data } = await app.client.query({
-                  query: await import('./allVApAnzkontrs').then(m => m.default),
-                })
-                exportModule({
-                  data: get(data, 'allVApAnzkontrs.nodes', []),
-                  fileName: 'ApAnzahlKontrollen',
-                  fileType,
-                  applyMapFilterToExport,
-                  mapFilter,
-                  addError,
-                })
-              } catch (error) {
-                addError(error)
-              }
-              setMessage(null)
-            }}
-          >
+          <DownloadCardButton onClick={onClickAnzKontrProAp}>
             Anzahl Kontrollen pro Aktionsplan
           </DownloadCardButton>
-          <DownloadCardButton
-            onClick={async () => {
-              setMessage('Export "Jahresberichte" wird vorbereitet...')
-              try {
-                const { data } = await app.client.query({
-                  query: await import('./allVApbers').then(m => m.default),
-                })
-                exportModule({
-                  data: get(data, 'allVApbers.nodes', []),
-                  fileName: 'Jahresberichte',
-                  fileType,
-                  applyMapFilterToExport,
-                  mapFilter,
-                  addError,
-                })
-              } catch (error) {
-                addError(error)
-              }
-              setMessage(null)
-            }}
-          >
+          <DownloadCardButton onClick={onClickApBer}>
             AP-Berichte (Jahresberichte)
           </DownloadCardButton>
-          <DownloadCardButton
-            onClick={async () => {
-              setMessage(
-                'Export "ApJahresberichteUndMassnahmen" wird vorbereitet...',
-              )
-              try {
-                const { data } = await app.client.query({
-                  query: await import('./allVApApberundmassns').then(
-                    m => m.default,
-                  ),
-                })
-                exportModule({
-                  data: get(data, 'allVApApberundmassns.nodes', []),
-                  fileName: 'ApJahresberichteUndMassnahmen',
-                  fileType,
-                  applyMapFilterToExport,
-                  mapFilter,
-                  addError,
-                })
-              } catch (error) {
-                addError(error)
-              }
-              setMessage(null)
-            }}
-          >
+          <DownloadCardButton onClick={onClickApBerUndMassn}>
             AP-Berichte und Massnahmen
           </DownloadCardButton>
-          <DownloadCardButton
-            onClick={async () => {
-              setMessage('Export "ApZiele" wird vorbereitet...')
-              try {
-                const { data } = await app.client.query({
-                  query: await import('./allVZiels').then(m => m.default),
-                })
-                exportModule({
-                  data: get(data, 'allVZiels.nodes', []),
-                  fileName: 'ApZiele',
-                  fileType,
-                  applyMapFilterToExport,
-                  mapFilter,
-                  addError,
-                })
-              } catch (error) {
-                addError(error)
-              }
-              setMessage(null)
-            }}
-          >
-            Ziele
-          </DownloadCardButton>
-          <DownloadCardButton
-            onClick={async () => {
-              setMessage('Export "Zielberichte" wird vorbereitet...')
-              try {
-                const { data } = await app.client.query({
-                  query: await import('./allVZielbers').then(m => m.default),
-                })
-                exportModule({
-                  data: get(data, 'allVZielbers.nodes', []),
-                  fileName: 'Zielberichte',
-                  fileType,
-                  applyMapFilterToExport,
-                  mapFilter,
-                  addError,
-                })
-              } catch (error) {
-                addError(error)
-              }
-              setMessage(null)
-            }}
-          >
+          <DownloadCardButton onClick={onClickZiele}>Ziele</DownloadCardButton>
+          <DownloadCardButton onClick={onClickZielber}>
             Ziel-Berichte
           </DownloadCardButton>
-          <DownloadCardButton
-            onClick={async () => {
-              setMessage('Export "Berichte" wird vorbereitet...')
-              try {
-                const { data } = await app.client.query({
-                  query: await import('./allVBers').then(m => m.default),
-                })
-                exportModule({
-                  data: get(data, 'allVBers.nodes', []),
-                  fileName: 'Berichte',
-                  fileType,
-                  applyMapFilterToExport,
-                  mapFilter,
-                  addError,
-                })
-              } catch (error) {
-                addError(error)
-              }
-              setMessage(null)
-            }}
-          >
-            Berichte
-          </DownloadCardButton>
-          <DownloadCardButton
-            onClick={async () => {
-              setMessage('Export "Erfolgskriterien" wird vorbereitet...')
-              try {
-                const { data } = await app.client.query({
-                  query: await import('./allVErfkrits').then(m => m.default),
-                })
-                exportModule({
-                  data: get(data, 'allVErfkrits.nodes', []),
-                  fileName: 'Erfolgskriterien',
-                  fileType,
-                  applyMapFilterToExport,
-                  mapFilter,
-                  addError,
-                })
-              } catch (error) {
-                addError(error)
-              }
-              setMessage(null)
-            }}
-          >
+          <DownloadCardButton onClick={onClickBer}>Berichte</DownloadCardButton>
+          <DownloadCardButton onClick={onClickErfkrit}>
             Erfolgskriterien
           </DownloadCardButton>
-          <DownloadCardButton
-            onClick={async () => {
-              setMessage('Export "Idealbiotope" wird vorbereitet...')
-              try {
-                const { data } = await app.client.query({
-                  query: await import('./allVIdealbiotops').then(
-                    m => m.default,
-                  ),
-                })
-                exportModule({
-                  data: get(data, 'allVIdealbiotops.nodes', []),
-                  fileName: 'Idealbiotope',
-                  fileType,
-                  applyMapFilterToExport,
-                  mapFilter,
-                  addError,
-                })
-              } catch (error) {
-                addError(error)
-              }
-              setMessage(null)
-            }}
-          >
+          <DownloadCardButton onClick={onClickIdealbiotop}>
             Idealbiotope
           </DownloadCardButton>
-          <DownloadCardButton
-            onClick={async () => {
-              setMessage('Export "AssoziierteArten" wird vorbereitet...')
-              try {
-                const { data } = await app.client.query({
-                  query: await import('./allVAssozarts').then(m => m.default),
-                })
-                exportModule({
-                  data: get(data, 'allVAssozarts.nodes', []),
-                  fileName: 'AssoziierteArten',
-                  fileType,
-                  applyMapFilterToExport,
-                  mapFilter,
-                  addError,
-                })
-              } catch (error) {
-                addError(error)
-              }
-              setMessage(null)
-            }}
-          >
+          <DownloadCardButton onClick={onClickAssozarten}>
             Assoziierte Arten
           </DownloadCardButton>
         </StyledCardContent>
@@ -389,4 +388,4 @@ const AP = ({
   )
 }
 
-export default enhance(AP)
+export default AP

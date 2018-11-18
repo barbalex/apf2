@@ -1,10 +1,8 @@
 // @flow
 import React, { useContext } from 'react'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
-import withErrorState from '../../state/withErrorState'
 import mobxStoreContext from '../../mobxStoreContext'
 
 const Container = styled.div`
@@ -27,8 +25,6 @@ const ErrorDiv = styled.div`
   font-size: 14px;
 `
 
-const enhance = compose(withErrorState)
-
 const Errors = () => {
   const { errors } = useContext(mobxStoreContext)
 
@@ -43,4 +39,4 @@ const Errors = () => {
   )
 }
 
-export default enhance(Errors)
+export default Errors

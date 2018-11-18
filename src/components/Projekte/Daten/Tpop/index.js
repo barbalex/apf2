@@ -21,7 +21,6 @@ import withData from './withData'
 import updateTpopByIdGql from './updateTpopById'
 import withNodeFilter from '../../../../state/withNodeFilter'
 import getGemeindeForKoord from '../../../../modules/getGemeindeForKoord'
-import withErrorState from '../../../../state/withErrorState'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
 const Container = styled.div`
@@ -44,7 +43,6 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withErrorState,
   withNodeFilter,
   withData,
 )
