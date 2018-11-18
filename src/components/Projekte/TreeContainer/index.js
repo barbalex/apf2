@@ -118,7 +118,7 @@ const InnerTreeContainer = styled.div`
   overflow: hidden;
 `
 
-const getAndValidateCoordinatesOfTpop = async ({ id, errorState }) => {
+const getAndValidateCoordinatesOfTpop = async ({ id, addError }) => {
   let tpopResult
   try {
     tpopResult = await app.client.query({
@@ -126,12 +126,12 @@ const getAndValidateCoordinatesOfTpop = async ({ id, errorState }) => {
       variables: { id },
     })
   } catch (error) {
-    errorState.add(error)
+    addError(error)
   }
   const tpop = get(tpopResult, 'data.tpopById')
   const { x, y } = tpop
   if (!x || !y) {
-    errorState.add(
+    addError(
       new Error(
         `Die Teilpopulation mit der ID ${id} kat keine (vollständigen) Koordinaten`,
       ),
@@ -141,7 +141,7 @@ const getAndValidateCoordinatesOfTpop = async ({ id, errorState }) => {
   return { x, y }
 }
 
-const getAndValidateCoordinatesOfBeob = async ({ id, errorState }) => {
+const getAndValidateCoordinatesOfBeob = async ({ id, addError }) => {
   let beobResult
   try {
     beobResult = await app.client.query({
@@ -149,12 +149,12 @@ const getAndValidateCoordinatesOfBeob = async ({ id, errorState }) => {
       variables: { id },
     })
   } catch (error) {
-    errorState.add(error)
+    addError(error)
   }
   const beob = get(beobResult, 'data.beobById')
   const { x, y } = beob
   if (!x || !y) {
-    errorState.add(
+    addError(
       new Error(
         `Die Teilpopulation mit der ID ${id} kat keine (vollständigen) Koordinaten`,
       ),
@@ -187,7 +187,6 @@ const TreeContainer = ({
   activeNodes,
   refetchTree,
   deleteState,
-  errorState,
   nodes,
   data,
   loading,
@@ -210,7 +209,6 @@ const TreeContainer = ({
   refetchTree: () => void,
   mapIdsFiltered: Array<String>,
   deleteState: Object,
-  errorState: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const {
@@ -223,6 +221,7 @@ const TreeContainer = ({
     tpopLabelUsingNr,
     setTpopLabelUsingNr,
     setIdOfTpopBeingLocalized,
+    addError,
   } = mobxStore
 
   const datasetToDelete = deleteState.state.toDelete
@@ -275,15 +274,12 @@ const TreeContainer = ({
     (e, data, element) => {
       const tree = get(dbData, treeName)
       const { openNodes } = tree
-      if (!data) return errorState.add('no data passed with click')
-      if (!element)
-        return errorState.add(new Error('no element passed with click'))
+      if (!data) return addError('no data passed with click')
+      if (!element) return addError(new Error('no element passed with click'))
       const { table, action, actionTable } = data
       const { firstElementChild } = element
       if (!firstElementChild)
-        return errorState.add(
-          new Error('no firstElementChild passed with click'),
-        )
+        return addError(new Error('no firstElementChild passed with click'))
       let id = firstElementChild.getAttribute('data-id')
       const parentId = firstElementChild.getAttribute('data-parentid')
       const urlPassed = firstElementChild.getAttribute('data-url')
@@ -309,7 +305,7 @@ const TreeContainer = ({
             menuType,
             id,
             refetchTree,
-            errorState,
+            addError,
           })
         },
         openLowerNodes() {
@@ -396,7 +392,7 @@ const TreeContainer = ({
           })
         },
         move() {
-          moveTo({ id, errorState })
+          moveTo({ id, addError })
         },
         markForCopying() {
           app.client.mutate({
@@ -422,7 +418,7 @@ const TreeContainer = ({
           })
         },
         copy() {
-          copyTo({ parentId: id, refetchTree, errorState })
+          copyTo({ parentId: id, refetchTree, addError })
         },
         markForCopyingBiotop() {
           app.client.mutate({
@@ -440,7 +436,7 @@ const TreeContainer = ({
           copyBiotopTo(id)
         },
         copyTpopKoordToPop() {
-          copyTpopKoordToPop({ id, errorState })
+          copyTpopKoordToPop({ id, addError })
         },
         createNewPopFromBeob() {
           createNewPopFromBeob({
@@ -448,16 +444,16 @@ const TreeContainer = ({
             activeNodes,
             id,
             refetchTree,
-            errorState,
+            addError,
           })
         },
         copyBeobZugeordnetKoordToTpop() {
-          copyBeobZugeordnetKoordToTpop({ id, errorState })
+          copyBeobZugeordnetKoordToTpop({ id, addError })
         },
         async showCoordOfTpopOnMapsZhCh() {
           const { x, y } = await getAndValidateCoordinatesOfTpop({
             id,
-            errorState,
+            addError,
           })
           if (x && y) {
             window.open(
@@ -469,7 +465,7 @@ const TreeContainer = ({
         async showCoordOfTpopOnMapGeoAdminCh() {
           const { x, y } = await getAndValidateCoordinatesOfTpop({
             id,
-            errorState,
+            addError,
           })
           if (x && y) {
             window.open(
@@ -481,7 +477,7 @@ const TreeContainer = ({
         async showCoordOfBeobOnMapsZhCh() {
           const { x, y } = await getAndValidateCoordinatesOfBeob({
             id,
-            errorState,
+            addError,
           })
           if (x && y) {
             window.open(
@@ -493,7 +489,7 @@ const TreeContainer = ({
         async showCoordOfBeobOnMapGeoAdminCh() {
           const { x, y } = await getAndValidateCoordinatesOfBeob({
             id,
-            errorState,
+            addError,
           })
           if (x && y) {
             window.open(
@@ -506,7 +502,7 @@ const TreeContainer = ({
       if (Object.keys(actions).includes(action)) {
         actions[action]()
       } else {
-        errorState.add(
+        addError(
           new Error(`action "${action}" unknown, therefore not executed`),
         )
       }
@@ -525,7 +521,6 @@ const TreeContainer = ({
       popLabelUsingNr,
       tpopLabelUsingNr,
       deleteState,
-      errorState,
       nodes,
     ],
   )

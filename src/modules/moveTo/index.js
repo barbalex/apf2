@@ -16,10 +16,10 @@ import setMoving from './setMoving'
 
 export default async ({
   id: newParentId,
-  errorState,
+  addError,
 }: {
   newParentId: String,
-  errorState: Object,
+  addError: Object,
 }): any => {
   const { client } = app
   const { data } = await client.query({
@@ -41,13 +41,13 @@ export default async ({
   }
   const idField = tabelle ? tabelle.idField : undefined
   if (!idField) {
-    return errorState.add(
+    return addError(
       new Error('change was not saved: Reason: idField was not found'),
     )
   }
   const parentIdField = tabelle.parentIdField
   if (!parentIdField) {
-    return errorState.add(
+    return addError(
       new Error('change was not saved: Reason: parentIdField was not found'),
     )
   }

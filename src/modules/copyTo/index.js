@@ -29,13 +29,13 @@ export default async ({
   table: tablePassed,
   id: idPassed,
   refetchTree,
-  errorState,
+  addError,
 }: {
   parentId: String,
   tablePassed: ?String,
   idPassed: ?String,
   refetchTree: () => void,
-  errorState: Object,
+  addError: Object,
 }): Promise<void> => {
   const { client } = app
   const { data } = await client.query({
@@ -105,7 +105,7 @@ export default async ({
   }
 
   if (!row) {
-    return errorState.add(
+    return addError(
       new Error('change was not saved because dataset was not found in store'),
     )
   }

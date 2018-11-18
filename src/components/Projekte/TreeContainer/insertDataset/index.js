@@ -16,7 +16,7 @@ export default async ({
   menuType,
   url,
   refetchTree,
-  errorState,
+  addError,
 }: {
   tree: Object,
   tablePassed: String,
@@ -25,7 +25,7 @@ export default async ({
   menuType: String,
   url: Array<String>,
   refetchTree: () => void,
-  errorState: Object,
+  addError: () => void,
 }): any => {
   const { client } = app
   let table = tablePassed
@@ -36,9 +36,7 @@ export default async ({
     parentIdField: String,
   } = tables.find(t => t.table === table)
   if (!tableMetadata) {
-    return errorState.add(
-      new Error(`no table meta data found for table "${table}"`),
-    )
+    return addError(new Error(`no table meta data found for table "${table}"`))
   }
   // some tables need to be translated, i.e. tpopfreiwkontr
   if (tableMetadata.dbTable) {
@@ -47,7 +45,7 @@ export default async ({
   const parentIdField = camelCase(tableMetadata.parentIdField)
   const idField = tableMetadata.idField
   if (!idField) {
-    return errorState.add(
+    return addError(
       new Error('new dataset not created as no idField could be found'),
     )
   }
@@ -162,7 +160,7 @@ export default async ({
       result = await client.mutate({ mutation })
     }
   } catch (error) {
-    return errorState.add(error)
+    return addError(error)
   }
   const row = get(
     result,

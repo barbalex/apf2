@@ -7,10 +7,10 @@ import updateTpopById from './updateTpopById'
 
 export default async ({
   id,
-  errorState,
+  addError,
 }: {
   id: String,
-  errorState: Object,
+  addError: () => void,
 }): Promise<void> => {
   const { client } = app
   // fetch beob coodinates
@@ -21,7 +21,7 @@ export default async ({
       variables: { id },
     })
   } catch (error) {
-    return errorState.add(error)
+    return addError(error)
   }
   const beob = get(beobResult, 'data.beobById')
   const { x, y, tpopId } = beob
@@ -49,6 +49,6 @@ export default async ({
       },*/
     })
   } catch (error) {
-    return errorState.add(error)
+    return addError(error)
   }
 }

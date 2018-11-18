@@ -7,10 +7,10 @@ import updatePopById from './updatePopById'
 
 export default async ({
   id,
-  errorState,
+  addError,
 }: {
   id: String,
-  errorState: Object,
+  addError: Object,
 }): Promise<void> => {
   const { client } = app
 
@@ -22,7 +22,7 @@ export default async ({
       variables: { id },
     })
   } catch (error) {
-    return errorState.add(error)
+    return addError(error)
   }
   const tpop = get(tpopResult, 'data.tpopById')
   const { x, y, popId } = tpop
@@ -50,6 +50,6 @@ export default async ({
       },*/
     })
   } catch (error) {
-    return errorState.add(error)
+    return addError(error)
   }
 }

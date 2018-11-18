@@ -15,13 +15,13 @@ export default async ({
   activeNodes,
   id,
   refetchTree,
-  errorState,
+  addError,
 }: {
   tree: Object,
   activeNodes: Object,
   id: String,
   refetchTree: () => void,
-  errorState: Object,
+  addError: Object,
 }): Promise<void> => {
   const { client } = app
   const { ap, projekt } = activeNodes
@@ -32,7 +32,7 @@ export default async ({
       variables: { id },
     })
   } catch (error) {
-    return errorState.add(error)
+    return addError(error)
   }
   const beob = get(beobResult, 'data.beobById')
   const { x, y, datum, data } = beob
@@ -50,7 +50,7 @@ export default async ({
       },
     })
   } catch (error) {
-    return errorState.add(error)
+    return addError(error)
   }
   const pop = get(popResult, 'data.createPop.pop')
 
@@ -69,7 +69,7 @@ export default async ({
       },
     })
   } catch (error) {
-    return errorState.add(error)
+    return addError(error)
   }
   const tpop = get(tpopResult, 'data.createTpop.tpop')
 
@@ -82,7 +82,7 @@ export default async ({
       },
     })
   } catch (error) {
-    return errorState.add(error)
+    return addError(error)
   }
 
   // set new activeNodeArray
