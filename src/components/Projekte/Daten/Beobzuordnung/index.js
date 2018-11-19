@@ -7,7 +7,7 @@ import flatten from 'lodash/flatten'
 import Button from '@material-ui/core/Button'
 import SendIcon from '@material-ui/icons/EmailOutlined'
 import compose from 'recompose/compose'
-import app from 'ampersand-app'
+import { withApollo } from 'react-apollo'
 
 import FormTitle from '../../../shared/FormTitle'
 import TextField from '../../../shared/TextField'
@@ -136,6 +136,7 @@ const getTpopZuordnenSource = (row: Object, apId: string): Array<Object> => {
 }
 
 const enhance = compose(
+  withApollo,
   withAeEigenschaftens,
   withData,
 )
@@ -150,6 +151,7 @@ const Beobzuordnung = ({
   treeName,
   data,
   dataAeEigenschaftens,
+  client,
 }: {
   id: string,
   apId: string,
@@ -160,6 +162,7 @@ const Beobzuordnung = ({
   treeName: string,
   data: Object,
   dataAeEigenschaftens: Object,
+  client: Object,
 }) => {
   const { error } = data
   if (data.loading || dataAeEigenschaftens.loading)
@@ -199,7 +202,7 @@ const Beobzuordnung = ({
     [id, tree, type],
   )
   const onUpdateBemerkungen = useCallback(event => {
-    app.client.mutate({
+    client.mutate({
       mutation: updateBeobByIdGql,
       variables: {
         id,
