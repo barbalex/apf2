@@ -1,12 +1,9 @@
 // @flow
-import React, { Fragment } from 'react'
+import React, { useContext, useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
-import withState from 'recompose/withState'
-import withLifecycle from '@hocs/with-lifecycle'
 import app from 'ampersand-app'
 
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
@@ -17,11 +14,11 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import withAeEigenschaftens from './withAeEigenschaftens'
 import updateApByIdGql from './updateApById'
-import withNodeFilter from '../../../../state/withNodeFilter'
 import withAllAdresses from './withAllAdresses'
 import withAllAps from './withAllAps'
 import withLocalData from './withLocalData'
 import withData from './withData'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const Container = styled.div`
   height: 100%;
@@ -69,109 +66,26 @@ const enhance = compose(
   withAllAps,
   withAllAdresses,
   withAeEigenschaftens,
-  withNodeFilter,
   withLocalData,
   withData,
-  withState('errors', 'setErrors', {}),
-  withHandlers({
-    saveToDb: ({
-      refetchTree,
-      setErrors,
-      errors,
-      nodeFilterState,
-      treeName,
-      data,
-    }) => async event => {
-      const field = event.target.name
-      const value = event.target.value || null
-      const showFilter = !!nodeFilterState.state[treeName].activeTable
-      let row
-      if (showFilter) {
-        row = nodeFilterState.state[treeName].ap
-      } else {
-        row = get(data, 'apById', {})
-      }
-      /**
-       * only save if value changed
-       */
-      if (row[field] === value) return
-      if (showFilter) {
-        nodeFilterState.setValue({
-          treeName,
-          table: 'ap',
-          key: field,
-          value,
-        })
-        refetchTree('aps')
-      } else {
-        try {
-          await app.client.mutate({
-            mutation: updateApByIdGql,
-            variables: {
-              id: row.id,
-              [field]: value,
-            },
-            /*optimisticResponse: {
-              __typename: 'Mutation',
-              updateApById: {
-                ap: {
-                  id: row.id,
-                  startJahr: field === 'startJahr' ? value : row.startJahr,
-                  bearbeitung:
-                    field === 'bearbeitung' ? value : row.bearbeitung,
-                  umsetzung: field === 'umsetzung' ? value : row.umsetzung,
-                  artId: field === 'artId' ? value : row.artId,
-                  bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
-                  ekfBeobachtungszeitpunkt:
-                    field === 'ekfBeobachtungszeitpunkt'
-                      ? value
-                      : row.ekfBeobachtungszeitpunkt,
-                  projId: field === 'projId' ? value : row.projId,
-                  adresseByBearbeiter: row.adresseByBearbeiter,
-                  aeEigenschaftenByArtId: row.aeEigenschaftenByArtId,
-                  __typename: 'Ap',
-                },
-                __typename: 'Ap',
-              },
-            },*/
-          })
-        } catch (error) {
-          return setErrors({ [field]: error.message })
-        }
-        setErrors({})
-        if (['artId'].includes(field)) refetchTree('aps')
-      }
-    },
-  }),
-  withLifecycle({
-    onDidUpdate(prevProps, props) {
-      if (prevProps.id !== props.id) {
-        props.setErrors({})
-      }
-    },
-  }),
 )
 
 const Ap = ({
   treeName,
-  saveToDb,
-  errors,
-  nodeFilterState,
   dataAeEigenschaftens,
   dataAllAdresses,
   dataAllAps,
   localData,
   data,
+  refetchTree,
 }: {
   treeName: String,
-  saveToDb: () => void,
-  errors: Object,
-  nodeFilterState: Object,
   dataAeEigenschaftens: Object,
   dataAllAdresses: Object,
   dataAllAps: Object,
   localData: Object,
   data: Object,
+  refetchTree: () => void,
 }) => {
   if (
     data.loading ||
@@ -191,6 +105,10 @@ const Ap = ({
   if (localData.error) return `Fehler: ${localData.error.message}`
   if (data.error) return `Fehler: ${data.error.message}`
 
+  const { nodeFilter, nodeFilterSetValue } = useContext(mobxStoreContext)
+
+  const [errors, setErrors] = useState({})
+
   const id = get(
     localData,
     `${treeName}.activeNodeArray[3]`,
@@ -198,6 +116,8 @@ const Ap = ({
     // which means there is no id
     '99999999-9999-9999-9999-999999999999',
   )
+
+  useEffect(() => setErrors({}), [id])
 
   let bearbeitungWerte = get(data, 'allApBearbstandWertes.nodes', [])
   bearbeitungWerte = sortBy(bearbeitungWerte, 'sort')
@@ -218,7 +138,7 @@ const Ap = ({
     value: el.id,
   }))
 
-  const showFilter = !!nodeFilterState.state[treeName].activeTable
+  const showFilter = !!nodeFilter[treeName].activeTable
   let apArten
   let artWerte
   if (showFilter) {
@@ -248,10 +168,69 @@ const Ap = ({
 
   let row
   if (showFilter) {
-    row = nodeFilterState.state[treeName].ap
+    row = nodeFilter[treeName].ap
   } else {
     row = get(data, 'apById', {})
   }
+
+  const saveToDb = useCallback(
+    async event => {
+      const field = event.target.name
+      const value = event.target.value || null
+      const showFilter = !!nodeFilter[treeName].activeTable
+      /**
+       * only save if value changed
+       */
+      if (row[field] === value) return
+      if (showFilter) {
+        nodeFilterSetValue({
+          treeName,
+          table: 'ap',
+          key: field,
+          value,
+        })
+        refetchTree('aps')
+      } else {
+        try {
+          await app.client.mutate({
+            mutation: updateApByIdGql,
+            variables: {
+              id: row.id,
+              [field]: value,
+            },
+            /*optimisticResponse: {
+            __typename: 'Mutation',
+            updateApById: {
+              ap: {
+                id: row.id,
+                startJahr: field === 'startJahr' ? value : row.startJahr,
+                bearbeitung:
+                  field === 'bearbeitung' ? value : row.bearbeitung,
+                umsetzung: field === 'umsetzung' ? value : row.umsetzung,
+                artId: field === 'artId' ? value : row.artId,
+                bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
+                ekfBeobachtungszeitpunkt:
+                  field === 'ekfBeobachtungszeitpunkt'
+                    ? value
+                    : row.ekfBeobachtungszeitpunkt,
+                projId: field === 'projId' ? value : row.projId,
+                adresseByBearbeiter: row.adresseByBearbeiter,
+                aeEigenschaftenByArtId: row.aeEigenschaftenByArtId,
+                __typename: 'Ap',
+              },
+              __typename: 'Ap',
+            },
+          },*/
+          })
+        } catch (error) {
+          return setErrors({ [field]: error.message })
+        }
+        setErrors({})
+        if (['artId'].includes(field)) refetchTree('aps')
+      }
+    },
+    [row, showFilter],
+  )
 
   return (
     <ErrorBoundary>
@@ -281,7 +260,7 @@ const Ap = ({
             saveToDb={saveToDb}
             error={errors.bearbeitung}
             popover={
-              <Fragment>
+              <>
                 <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
                 <LabelPopoverContentRow>
                   <LabelPopoverRowColumnLeft>keiner:</LabelPopoverRowColumnLeft>
@@ -297,7 +276,7 @@ const Ap = ({
                     Aktionsplan fertig, auf der Webseite der FNS
                   </LabelPopoverRowColumnRight>
                 </LabelPopoverContentRow>
-              </Fragment>
+              </>
             }
             label="Aktionsplan"
           />
@@ -319,7 +298,7 @@ const Ap = ({
               saveToDb={saveToDb}
               error={errors.umsetzung}
               popover={
-                <Fragment>
+                <>
                   <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
                   <LabelPopoverContentRow>
                     <LabelPopoverRowColumnLeft>
@@ -340,7 +319,7 @@ const Ap = ({
                       erstellt)
                     </LabelPopoverRowColumnRight>
                   </LabelPopoverContentRow>
-                </Fragment>
+                </>
               }
               label="Stand Umsetzung"
             />
