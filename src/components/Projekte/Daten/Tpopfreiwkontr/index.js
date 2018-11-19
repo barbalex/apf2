@@ -24,7 +24,6 @@ import EkfRemarks from './EkfRemarks'
 import Count from './Count'
 import Verification from './Verification'
 import Image from './Image'
-import withNodeFilter from '../../../../state/withNodeFilter'
 import FormTitle from '../../../shared/FormTitle'
 import withAllAdresses from './withAllAdresses'
 import mobxStoreContext from '../../../../mobxStoreContext'
@@ -139,7 +138,6 @@ const CountHint = styled.div`
  */
 const enhance = compose(
   withAllAdresses,
-  withNodeFilter,
   withData,
 )
 
@@ -151,7 +149,6 @@ const Tpopfreiwkontr = ({
   dimensions,
   activeNodeArray,
   role,
-  nodeFilterState,
   treeName,
   dataAllAdresses,
 }: {
@@ -160,7 +157,6 @@ const Tpopfreiwkontr = ({
   dimensions: Object,
   activeNodeArray: Array<string>,
   role: string,
-  nodeFilterState: Object,
   treeName: string,
   dataAllAdresses: Object,
 }) => {
@@ -173,11 +169,13 @@ const Tpopfreiwkontr = ({
       </Container>
     )
   }
-  const { addError } = useContext(mobxStoreContext)
+  const { addError, nodeFilter, nodeFilterSetValue } = useContext(
+    mobxStoreContext,
+  )
 
   const [errors, setErrors] = useState({})
 
-  const showFilter = !!nodeFilterState.state[treeName].activeTable
+  const showFilter = !!nodeFilter[treeName].activeTable
   const ekfzaehleinheits = get(
     data,
     'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekfzaehleinheitsByApId.nodes',
@@ -222,7 +220,7 @@ const Tpopfreiwkontr = ({
 
   let row
   if (showFilter) {
-    row = nodeFilterState.state[treeName].tpopfreiwkontr
+    row = nodeFilter[treeName].tpopfreiwkontr
   } else {
     row = get(data, 'tpopkontrById', {})
   }
@@ -267,7 +265,7 @@ const Tpopfreiwkontr = ({
        */
       if (row[field] === value) return
       if (showFilter) {
-        return nodeFilterState.setValue({
+        return nodeFilterSetValue({
           treeName,
           table: 'tpopfreiwkontr',
           key: field,
