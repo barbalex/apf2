@@ -1,5 +1,5 @@
 // @flow
-import React, { lazy, Suspense } from 'react'
+import React, { lazy, Suspense, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
@@ -8,7 +8,7 @@ import ErrorBoundary from '../../shared/ErrorBoundarySingleChild'
 import Fallback from '../../shared/Fallback'
 import withLocalData from './withLocalData'
 import getTableNameFromActiveNode from '../../../modules/getTableNameFromActiveNode'
-import withNodeFilterState from '../../../state/withNodeFilter'
+import mobxStoreContext from '../../../mobxStoreContext'
 
 const Projekt = lazy(() => import('./Projekt'))
 const Ap = lazy(() => import('./Ap'))
@@ -54,10 +54,7 @@ const Container = styled.div`
   }
 `
 
-const enhance = compose(
-  withLocalData,
-  withNodeFilterState,
-)
+const enhance = compose(withLocalData)
 
 const Daten = ({
   tree,
@@ -67,7 +64,6 @@ const Daten = ({
   dimensions = { width: 380 },
   refetchTree,
   role,
-  nodeFilterState,
   localData,
 }: {
   tree: Object,
@@ -77,11 +73,12 @@ const Daten = ({
   dimensions: Object,
   refetchTree: () => void,
   role: String,
-  nodeFilterState: Object,
   localData: Object,
 }) => {
   // do not show loading but rather last state
   if (localData.error) return `Fehler: ${localData.error.message}`
+
+  const { nodeFilter } = useContext(mobxStoreContext)
 
   const activeNodeArray = get(localData, `${treeName}.activeNodeArray`)
   const apId = get(localData, `${treeName}.activeNodeArray[3]`)
@@ -355,8 +352,8 @@ const Daten = ({
     key = getTableNameFromActiveNode(activeNode)
   }
   let form
-  if (nodeFilterState.state[treeName].activeTable) {
-    form = formObject[nodeFilterState.state[treeName].activeTable]
+  if (nodeFilter[treeName].activeTable) {
+    form = formObject[nodeFilter[treeName].activeTable]
   } else {
     form = key ? formObject[key] : ''
   }
