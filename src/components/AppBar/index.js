@@ -7,8 +7,6 @@ import Button from '@material-ui/core/Button'
 import remove from 'lodash/remove'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
 import get from 'lodash/get'
 import clone from 'lodash/clone'
 import gql from 'graphql-tag'
@@ -19,7 +17,7 @@ import isMobilePhone from '../../modules/isMobilePhone'
 import ErrorBoundary from '../shared/ErrorBoundary'
 import withLocalData from './withLocalData'
 import setUrlQueryValue from '../../modules/setUrlQueryValue'
-import setEkfYear from './setEkfYear'
+import setEkfYearGql from './setEkfYear'
 import getActiveNodes from '../../modules/getActiveNodes'
 import More from './More'
 import setView from './setView'
@@ -64,85 +62,14 @@ const MenuDiv = styled.div`
   flex-wrap: wrap;
 `
 
-const enhance = compose(
-  withLocalData,
-  withHandlers({
-    onClickButton: ({ localData }) => (name: string) => {
-      const projekteTabs = get(localData, 'urlQuery.projekteTabs', [])
-      if (isMobilePhone()) {
-        // show one tab only
-        setUrlQueryValue({ key: 'projekteTabs', value: [name] })
-      } else {
-        if (projekteTabs.includes(name)) {
-          remove(projekteTabs, el => el === name)
-        } else {
-          projekteTabs.push(name)
-          if (name === 'tree2') {
-            app.client.mutate({
-              mutation: gql`
-                mutation cloneTree2From1 {
-                  cloneTree2From1 @client
-                }
-              `,
-            })
-            nodeFilterClone1To2()
-          }
-        }
-        setUrlQueryValue({ key: 'projekteTabs', value: projekteTabs })
-      }
-    },
-  }),
-  withHandlers({
-    onClickTree: ({ onClickButton }) => () => onClickButton('tree'),
-    onClickKarte: ({ onClickButton }) => () => onClickButton('karte'),
-    onClickExporte: ({ onClickButton }) => () => onClickButton('exporte'),
-    onClickTree2: ({ onClickButton }) => () => onClickButton('tree2'),
-    setViewNormal: () => () => {
-      app.client.mutate({
-        mutation: setView,
-        variables: { value: 'normal' },
-      })
-    },
-    setViewEkf: () => () => {
-      app.client.mutate({
-        mutation: setView,
-        variables: { value: 'ekf' },
-      })
-    },
-    setEkfYear: () => value => {
-      const ekfRefDate = new Date().setMonth(new Date().getMonth() - 2)
-      const ekfRefYear = new Date(ekfRefDate).getFullYear()
-      app.client.mutate({
-        mutation: setEkfYear,
-        variables: { value: value ? +value : ekfRefYear },
-      })
-    },
-    toggleUserOpen: ({ userOpen, setUserOpen }) => () => setUserOpen(!userOpen),
-  }),
-)
+const enhance = compose(withLocalData)
 
 const MyAppBar = ({
-  onClickTree,
-  onClickKarte,
-  onClickExporte,
-  onClickTree2,
-  setShowDeletions,
-  setViewNormal,
-  setViewEkf,
-  setEkfYear,
-  toggleUserOpen,
   localData,
+  setShowDeletions,
 }: {
-  onClickTree: () => void,
-  onClickKarte: () => void,
-  onClickExporte: () => void,
-  onClickTree2: () => void,
-  setShowDeletions: () => void,
-  setViewNormal: () => void,
-  setViewEkf: () => void,
-  setEkfYear: () => void,
-  toggleUserOpen: () => void,
   localData: Object,
+  setShowDeletions: () => void,
 }) => {
   if (localData.error) return `Fehler: ${localData.error.message}`
 
@@ -166,6 +93,58 @@ const MyAppBar = ({
   const username = get(localData, 'user.name')
 
   const [userOpen, setUserOpen] = useState(false)
+
+  const onClickButton = useCallback(
+    (name: string) => {
+      if (isMobilePhone()) {
+        // show one tab only
+        setUrlQueryValue({ key: 'projekteTabs', value: [name] })
+      } else {
+        if (projekteTabs.includes(name)) {
+          remove(projekteTabs, el => el === name)
+        } else {
+          projekteTabs.push(name)
+          if (name === 'tree2') {
+            app.client.mutate({
+              mutation: gql`
+                mutation cloneTree2From1 {
+                  cloneTree2From1 @client
+                }
+              `,
+            })
+            nodeFilterClone1To2()
+          }
+        }
+        setUrlQueryValue({ key: 'projekteTabs', value: projekteTabs })
+      }
+    },
+    [projekteTabs],
+  )
+  const onClickTree = useCallback(() => onClickButton('tree'))
+  const onClickKarte = useCallback(() => onClickButton('karte'))
+  const onClickExporte = useCallback(() => onClickButton('exporte'))
+  const onClickTree2 = useCallback(() => onClickButton('tree2'))
+  const setViewNormal = useCallback(() =>
+    app.client.mutate({
+      mutation: setView,
+      variables: { value: 'normal' },
+    }),
+  )
+  const setViewEkf = useCallback(() =>
+    app.client.mutate({
+      mutation: setView,
+      variables: { value: 'ekf' },
+    }),
+  )
+  const setEkfYear = useCallback(value => {
+    const ekfRefDate = new Date().setMonth(new Date().getMonth() - 2)
+    const ekfRefYear = new Date(ekfRefDate).getFullYear()
+    app.client.mutate({
+      mutation: setEkfYearGql,
+      variables: { value: value ? +value : ekfRefYear },
+    })
+  })
+  const toggleUserOpen = useCallback(() => setUserOpen(!userOpen), [userOpen])
 
   return (
     <ErrorBoundary>
