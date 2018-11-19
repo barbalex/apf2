@@ -13,6 +13,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import app from 'ampersand-app'
+import { observer } from 'mobx-react-lite'
 
 import Select from '../../../shared/Select'
 import exportModule from '../../../../modules/export'
@@ -65,7 +66,10 @@ const AutocompleteContainer = styled.div`
 `
 const isRemoteHost = window.location.hostname !== 'localhost'
 
-const enhance = compose(withData)
+const enhance = compose(
+  withData,
+  observer,
+)
 
 const Teilpopulationen = ({
   fileType,

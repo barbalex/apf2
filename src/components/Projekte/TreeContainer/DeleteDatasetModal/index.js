@@ -5,6 +5,7 @@ import DialogActions from '@material-ui/core/DialogActions'
 import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
+import { observer } from 'mobx-react-lite'
 
 import tables from '../../../../modules/tables'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -18,7 +19,10 @@ const StyledDialog = styled(Dialog)`
   }
 `
 
-const enhance = compose(withLocalData)
+const enhance = compose(
+  withLocalData,
+  observer,
+)
 
 const DatasetDeleteModal = ({ localData }: { localData: Object }) => {
   if (localData.error) {

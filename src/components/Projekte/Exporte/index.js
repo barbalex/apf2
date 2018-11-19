@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
+import { observer } from 'mobx-react-lite'
 
 import FormTitle from '../../shared/FormTitle'
 import Tipps from './Tipps'
@@ -42,7 +43,10 @@ const ExporteContainer = styled.div`
   height: 100%;
 `
 
-const enhance = compose(withLocalData)
+const enhance = compose(
+  withLocalData,
+  observer,
+)
 
 const Exporte = ({ localData }: { localData: Object }) => {
   if (localData.error) return `Fehler: ${localData.error.message}`

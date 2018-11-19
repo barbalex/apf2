@@ -12,6 +12,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
 import app from 'ampersand-app'
+import { observer } from 'mobx-react-lite'
 
 import mobxStoreContext from '../../../mobxStoreContext'
 
@@ -148,4 +149,4 @@ const Optionen = ({
   )
 }
 
-export default Optionen
+export default observer(Optionen)

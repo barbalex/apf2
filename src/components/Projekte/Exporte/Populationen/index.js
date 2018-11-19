@@ -11,6 +11,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import app from 'ampersand-app'
+import { observer } from 'mobx-react-lite'
 
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
@@ -430,4 +431,4 @@ const Populationen = ({
   )
 }
 
-export default Populationen
+export default observer(Populationen)

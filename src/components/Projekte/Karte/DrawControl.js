@@ -2,6 +2,7 @@ import React, { useEffect, useContext } from 'react'
 import 'leaflet'
 import 'leaflet-draw'
 import { withLeaflet } from 'react-leaflet'
+import { observer } from 'mobx-react-lite'
 
 import mobxStoreContext from '../../../mobxStoreContext'
 
@@ -86,4 +87,4 @@ const DrawControl = ({ leaflet }: { leaflet: Object }) => {
   return <div style={{ display: 'none' }} />
 }
 
-export default withLeaflet(DrawControl)
+export default withLeaflet(observer(DrawControl))

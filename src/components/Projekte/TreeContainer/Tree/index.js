@@ -5,6 +5,7 @@ import List from 'react-virtualized/dist/commonjs/List'
 import styled from 'styled-components'
 import findIndex from 'lodash/findIndex'
 import isEqual from 'lodash/isEqual'
+import { observer } from 'mobx-react-lite'
 
 import Row from './Row'
 
@@ -157,4 +158,4 @@ const Tree = ({
   )
 }
 
-export default Tree
+export default observer(Tree)

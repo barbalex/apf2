@@ -12,6 +12,7 @@ import styled from 'styled-components'
 import gql from 'graphql-tag'
 import get from 'lodash/get'
 import app from 'ampersand-app'
+import { observer } from 'mobx-react-lite'
 
 import beziehungen from '../../../etc/beziehungen.png'
 import exportModule from '../../../modules/export'
@@ -138,4 +139,4 @@ const Anwendung = ({
   )
 }
 
-export default Anwendung
+export default observer(Anwendung)

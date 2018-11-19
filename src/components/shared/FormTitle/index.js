@@ -9,6 +9,7 @@ import compose from 'recompose/compose'
 import isUuid from 'is-uuid'
 import app from 'ampersand-app'
 import get from 'lodash/get'
+import { observer } from 'mobx-react-lite'
 
 import TestdataMessage from './TestdataMessage'
 import types from '../../../state/nodeFilter/types'
@@ -62,7 +63,10 @@ const Symbols = styled.div`
   display: flex;
 `
 
-const enhance = compose(data)
+const enhance = compose(
+  data,
+  observer,
+)
 
 const FormTitle = ({
   tree,

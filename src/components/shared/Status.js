@@ -7,6 +7,7 @@ import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import styled from 'styled-components'
+import { observer } from 'mobx-react-lite'
 
 import Label from './Label'
 import InfoWithPopover from './InfoWithPopover'
@@ -242,4 +243,4 @@ Status.defaultProps = {
   bekanntSeitValue: '',
 }
 
-export default Status
+export default observer(Status)

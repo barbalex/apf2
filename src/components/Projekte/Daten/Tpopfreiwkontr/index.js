@@ -6,6 +6,7 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import app from 'ampersand-app'
 import format from 'date-fns/format'
+import { observer } from 'mobx-react-lite'
 
 import StringToCopy from '../../../shared/StringToCopyOnlyButton'
 import withData from './withData'
@@ -139,6 +140,7 @@ const CountHint = styled.div`
 const enhance = compose(
   withAllAdresses,
   withData,
+  observer,
 )
 
 const Tpopfreiwkontr = ({

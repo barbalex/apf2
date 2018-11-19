@@ -6,6 +6,7 @@ import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
 import compose from 'recompose/compose'
 import app from 'ampersand-app'
+import { observer } from 'mobx-react-lite'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -42,6 +43,7 @@ const enhance = compose(
   withData,
   withAllAdresses,
   withAeEigenschaftens,
+  observer,
 )
 
 const Tpopmassn = ({
