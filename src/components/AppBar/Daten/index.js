@@ -72,7 +72,13 @@ const RemoveMenuItem = styled(StyledMenuItem)`
   padding-top: 6px !important;
 `
 
-const MyAppBar = ({ data, treeNr = '' }: { data: Object, treeNr: string }) => {
+const MyAppBarDaten = ({
+  data,
+  treeNr = '',
+}: {
+  data: Object,
+  treeNr: string,
+}) => {
   const {
     nodeFilterTreeIsFiltered,
     nodeFilterClone1To2,
@@ -218,4 +224,4 @@ const MyAppBar = ({ data, treeNr = '' }: { data: Object, treeNr: string }) => {
   )
 }
 
-export default observer(MyAppBar)
+export default observer(MyAppBarDaten)

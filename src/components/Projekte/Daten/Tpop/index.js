@@ -67,9 +67,8 @@ const Tpop = ({
   }
   if (data.error) return `Fehler: ${data.error.message}`
 
-  const { addError, nodeFilter, nodeFilterSetValue } = useContext(
-    mobxStoreContext,
-  )
+  const mobxStore = useContext(mobxStoreContext)
+  const { addError, nodeFilter, nodeFilterSetValue } = mobxStore
 
   const [errors, setErrors] = useState({})
 

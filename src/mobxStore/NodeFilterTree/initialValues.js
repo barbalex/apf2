@@ -6,34 +6,12 @@ import { initial as tpopmassn } from './tpopmassn'
 import { initial as tpopfeldkontr } from './tpopfeldkontr'
 import { initial as tpopfreiwkontr } from './tpopfreiwkontr'
 
-export const initial = {
+export default {
   activeTable: null,
   ap,
   pop,
   tpop,
-  tpopkontr: {},
   tpopfeldkontr,
   tpopfreiwkontr,
-  tpopkontrzaehl: {},
   tpopmassn,
-  ziel: {},
-  zielber: {},
-  erfkrit: {},
-  apber: {},
-  apberuebersicht: {},
-  ber: {},
-  idealbiotop: {},
-  assozart: {},
-  ekfzaehleinheit: {},
-  popber: {},
-  popmassnber: {},
-  tpopber: {},
-  tpopmassnber: {},
-  apart: {},
-  projekt: {},
-  beob: {},
-  beobprojekt: {},
-  adresse: {},
-  gemeinde: {},
-  user: {},
 }

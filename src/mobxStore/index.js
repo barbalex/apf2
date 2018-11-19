@@ -4,9 +4,10 @@ import cloneDeep from 'lodash/cloneDeep'
 
 import ApfloraLayer from './ApfloraLayer'
 import MapFilter from './MapFilter'
+import NodeFilter, { defaultValue as defaultNodeFilter } from './NodeFilter'
 import standardApfloraLayers from '../components/Projekte/Karte/apfloraLayers'
 import standardOverlays from '../components/Projekte/Karte/overlays'
-import { initial as nodeFilterEmpty } from './nodeFilter'
+import initialNodeFilterTreeValues from './NodeFilterTree/initialValues'
 
 const myTypes = types
   .model({
@@ -34,6 +35,7 @@ const myTypes = types
     toDeleteId: types.maybeNull(types.string),
     toDeleteLabel: types.maybeNull(types.string),
     toDeleteUrl: types.maybeNull(types.string),
+    nodeFilter: types.optional(NodeFilter, defaultNodeFilter),
   })
   // structure of these variables is not controlled
   // so need to define this as volatile
@@ -43,10 +45,6 @@ const myTypes = types
     ktZh: null,
     errors: [],
     toDeleteAfterDeletionHook: null,
-    nodeFilter: {
-      tree: nodeFilterEmpty,
-      tree2: nodeFilterEmpty,
-    },
   }))
   .views(self => ({
     get toDelete() {
@@ -136,10 +134,10 @@ const myTypes = types
       self.nodeFilter[treeName][table][key] = value
     },
     nodeFilterEmptyTree(treeName) {
-      self.nodeFilter[treeName] = nodeFilterEmpty
+      self.nodeFilter[treeName] = initialNodeFilterTreeValues
     },
     nodeFilterEmptyTable({ treeName, table }) {
-      self.nodeFilter[treeName][table] = nodeFilterEmpty[table]
+      self.nodeFilter[treeName][table] = initialNodeFilterTreeValues[table]
     },
     nodeFilterSetActiveTable({ treeName, activeTable }) {
       self.nodeFilter[treeName].activeTable = activeTable
