@@ -3,7 +3,7 @@ import React, { useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
-import app from 'ampersand-app'
+import { withApollo } from 'react-apollo'
 
 import TextField from '../../../shared/TextField'
 import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
@@ -37,18 +37,23 @@ const Section = styled.div`
   }
 `
 
-const enhance = compose(withData)
+const enhance = compose(
+  withApollo,
+  withData,
+)
 
 const Idealbiotop = ({
   id,
   dimensions = { width: 380 },
   treeName,
   data,
+  client,
 }: {
   id: string,
   dimensions: Object,
   treeName: string,
   data: Object,
+  client: Object,
 }) => {
   if (data.loading)
     return (
@@ -73,7 +78,7 @@ const Idealbiotop = ({
        */
       if (row[field] === value) return
       try {
-        await app.client.mutate({
+        await client.mutate({
           mutation: updateIdealbiotopByIdGql,
           variables: {
             id: row.id,

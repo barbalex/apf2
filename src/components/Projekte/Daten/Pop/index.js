@@ -3,8 +3,8 @@ import React, { useContext, useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
-import app from 'ampersand-app'
 import { observer } from 'mobx-react-lite'
+import { withApollo } from 'react-apollo'
 
 import TextField from '../../../shared/TextField'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
@@ -29,6 +29,7 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withApollo,
   withData,
   observer,
 )
@@ -39,10 +40,12 @@ const Pop = ({
   id = '99999999-9999-9999-9999-999999999999',
   treeName,
   data,
+  client,
 }: {
   id: string,
   treeName: string,
   data: Object,
+  client: Object,
 }) => {
   if (data.loading)
     return (
@@ -84,7 +87,7 @@ const Pop = ({
         //refetchTree()
       } else {
         try {
-          app.client.mutate({
+          client.mutate({
             mutation: updatePopByIdGql,
             variables: {
               id: row.id,
