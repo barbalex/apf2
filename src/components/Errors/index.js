@@ -1,6 +1,7 @@
 // @flow
 import React, { useContext } from 'react'
 import styled from 'styled-components'
+import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import mobxStoreContext from '../../mobxStoreContext'
@@ -39,4 +40,4 @@ const Errors = () => {
   )
 }
 
-export default Errors
+export default observer(Errors)

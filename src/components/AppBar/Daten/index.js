@@ -10,9 +10,9 @@ import remove from 'lodash/remove'
 import get from 'lodash/get'
 import clone from 'lodash/clone'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
 import app from 'ampersand-app'
 import gql from 'graphql-tag'
+import { observer } from 'mobx-react-lite'
 
 import isMobilePhone from '../../../modules/isMobilePhone'
 import setUrlQueryValue from '../../../modules/setUrlQueryValue'
@@ -71,8 +71,6 @@ const StyledMenuItem = styled(MenuItem)`
 const RemoveMenuItem = styled(StyledMenuItem)`
   padding-top: 6px !important;
 `
-
-const enhance = compose()
 
 const MyAppBar = ({ data, treeNr = '' }: { data: Object, treeNr: string }) => {
   const {
@@ -220,4 +218,4 @@ const MyAppBar = ({ data, treeNr = '' }: { data: Object, treeNr: string }) => {
   )
 }
 
-export default enhance(MyAppBar)
+export default observer(MyAppBar)

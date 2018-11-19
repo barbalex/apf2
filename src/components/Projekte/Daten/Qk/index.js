@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import Paper from '@material-ui/core/Paper'
 import compose from 'recompose/compose'
 import sortBy from 'lodash/sortBy'
+import { observer } from 'mobx-react-lite'
 
 import FormTitle from '../../../shared/FormTitle'
 import appBaseUrl from '../../../../modules/appBaseUrl'
@@ -60,6 +61,7 @@ const LoadingLine = styled.div`
 const enhance = compose(
   withLocalData,
   withData,
+  observer,
 )
 
 const Qk = ({

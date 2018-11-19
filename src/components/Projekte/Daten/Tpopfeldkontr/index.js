@@ -8,6 +8,7 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
 import app from 'ampersand-app'
+import { observer } from 'mobx-react-lite'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -74,6 +75,7 @@ const tpopkontrTypWerte = [
 const enhance = compose(
   withData,
   withAllAdresses,
+  observer,
 )
 
 const Tpopfeldkontr = ({

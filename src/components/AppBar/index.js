@@ -12,6 +12,7 @@ import clone from 'lodash/clone'
 import gql from 'graphql-tag'
 import app from 'ampersand-app'
 import jwtDecode from 'jwt-decode'
+import { observer } from 'mobx-react-lite'
 
 import isMobilePhone from '../../modules/isMobilePhone'
 import ErrorBoundary from '../shared/ErrorBoundary'
@@ -62,7 +63,10 @@ const MenuDiv = styled.div`
   flex-wrap: wrap;
 `
 
-const enhance = compose(withLocalData)
+const enhance = compose(
+  withLocalData,
+  observer,
+)
 
 const MyAppBar = ({
   localData,

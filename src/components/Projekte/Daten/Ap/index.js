@@ -5,6 +5,7 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import app from 'ampersand-app'
+import { observer } from 'mobx-react-lite'
 
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import TextField from '../../../shared/TextField'
@@ -68,6 +69,7 @@ const enhance = compose(
   withAeEigenschaftens,
   withLocalData,
   withData,
+  observer,
 )
 
 const Ap = ({

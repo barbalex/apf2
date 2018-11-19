@@ -10,6 +10,7 @@ import Checkbox from '@material-ui/core/Checkbox'
 import styled from 'styled-components'
 import format from 'date-fns/format'
 import TextField from '@material-ui/core/TextField'
+import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import undelete from './undelete'
@@ -168,4 +169,4 @@ const Deletions = ({
   )
 }
 
-export default Deletions
+export default observer(Deletions)

@@ -3,6 +3,7 @@ import React, { lazy, Suspense, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
+import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../../shared/ErrorBoundarySingleChild'
 import Fallback from '../../shared/Fallback'
@@ -54,7 +55,10 @@ const Container = styled.div`
   }
 `
 
-const enhance = compose(withLocalData)
+const enhance = compose(
+  withLocalData,
+  observer,
+)
 
 const Daten = ({
   tree,

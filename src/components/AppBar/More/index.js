@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import get from 'lodash/get'
 import clone from 'lodash/clone'
+import { observer } from 'mobx-react-lite'
 
 import isMobilePhone from '../../../modules/isMobilePhone'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -29,7 +30,10 @@ const Version = styled.div`
   user-select: none;
 `
 
-const enhance = compose(withLocalData)
+const enhance = compose(
+  withLocalData,
+  observer,
+)
 
 const MyAppBar = ({
   onClickExporte: passedOnClickExporte,

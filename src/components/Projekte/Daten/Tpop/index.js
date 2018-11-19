@@ -5,6 +5,7 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import app from 'ampersand-app'
+import { observer } from 'mobx-react-lite'
 
 import TextField from '../../../shared/TextField'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
@@ -41,7 +42,10 @@ const FieldsContainer = styled.div`
   }
 `
 
-const enhance = compose(withData)
+const enhance = compose(
+  withData,
+  observer,
+)
 
 const Tpop = ({
   id,

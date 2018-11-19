@@ -1,15 +1,15 @@
 // @flow
-import React, { useContext, useState, useCallback } from 'react'
+import React, { useContext, useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import uniqBy from 'lodash/uniqBy'
 import compose from 'recompose/compose'
-import withLifecycle from '@hocs/with-lifecycle'
 import Button from '@material-ui/core/Button'
 import DeleteIcon from '@material-ui/icons/DeleteForever'
 import AddIcon from '@material-ui/icons/AddCircleOutline'
 import app from 'ampersand-app'
+import { observer } from 'mobx-react-lite'
 
 import Select from '../../../../shared/Select'
 import TextField from '../../../../shared/TextField'
@@ -159,13 +159,7 @@ const ShowNew = styled.div`
 const enhance = compose(
   withData,
   withAllTpopkontrzaehlEinheitWertes,
-  withLifecycle({
-    onDidUpdate(prevProps, props) {
-      if (prevProps.id !== props.id) {
-        props.setErrors({})
-      }
-    },
-  }),
+  observer,
 )
 
 const Count = ({
@@ -232,6 +226,8 @@ const Count = ({
   const { setToDelete } = useContext(mobxStoreContext)
 
   const [errors, setErrors] = useState({})
+
+  useEffect(() => setErrors({}), [id])
 
   const row = get(data, 'tpopkontrzaehlById', {})
   const allEinheits = get(

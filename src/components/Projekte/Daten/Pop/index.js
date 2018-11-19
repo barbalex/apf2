@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
 import app from 'ampersand-app'
+import { observer } from 'mobx-react-lite'
 
 import TextField from '../../../shared/TextField'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
@@ -27,7 +28,10 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const enhance = compose(withData)
+const enhance = compose(
+  withData,
+  observer,
+)
 
 const Pop = ({
   // pass in fake id to avoid error when filter is shown
