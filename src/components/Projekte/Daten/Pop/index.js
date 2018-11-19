@@ -3,7 +3,6 @@ import React, { useContext, useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
-import withLifecycle from '@hocs/with-lifecycle'
 import app from 'ampersand-app'
 
 import TextField from '../../../shared/TextField'
@@ -13,7 +12,6 @@ import RadioButton from '../../../shared/RadioButton'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updatePopByIdGql from './updatePopById'
-import withNodeFilter from '../../../../state/withNodeFilter'
 import withData from './withData'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
@@ -29,17 +27,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const enhance = compose(
-  withNodeFilter,
-  withData,
-  withLifecycle({
-    onDidUpdate(prevProps, props) {
-      if (prevProps.id !== props.id) {
-        props.setErrors({})
-      }
-    },
-  }),
-)
+const enhance = compose(withData)
 
 const Pop = ({
   // pass in fake id to avoid error when filter is shown

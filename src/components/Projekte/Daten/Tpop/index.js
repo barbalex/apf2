@@ -19,7 +19,6 @@ import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import withData from './withData'
 import updateTpopByIdGql from './updateTpopById'
-import withNodeFilter from '../../../../state/withNodeFilter'
 import getGemeindeForKoord from '../../../../modules/getGemeindeForKoord'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
@@ -42,21 +41,16 @@ const FieldsContainer = styled.div`
   }
 `
 
-const enhance = compose(
-  withNodeFilter,
-  withData,
-)
+const enhance = compose(withData)
 
 const Tpop = ({
   id,
   dimensions = { width: 380 },
-  nodeFilterState,
   treeName,
   data,
 }: {
   id: String,
   dimensions: Object,
-  nodeFilterState: Object,
   treeName: string,
   data: Object,
 }) => {
@@ -69,45 +63,48 @@ const Tpop = ({
   }
   if (data.error) return `Fehler: ${data.error.message}`
 
-  const { addError } = useContext(mobxStoreContext)
+  const { addError, nodeFilter, nodeFilterSetValue } = useContext(
+    mobxStoreContext,
+  )
 
   const [errors, setErrors] = useState({})
 
   useEffect(() => setErrors({}), [id])
 
-  const saveToDb = useCallback(async event => {
-    const field = event.target.name
-    let value = event.target.value
-    if (value === undefined) value = null
+  const showFilter = !!nodeFilter[treeName].activeTable
+  let row
+  if (showFilter) {
+    row = nodeFilter[treeName].tpop
+  } else {
+    row = get(data, 'tpopById', {})
+  }
 
-    const showFilter = !!nodeFilterState.state[treeName].activeTable
-    let row
-    if (showFilter) {
-      row = nodeFilterState.state[treeName].tpop
-    } else {
-      row = get(data, 'tpopById', {})
-    }
-    /**
-     * only save if value changed
-     */
-    if (row[field] === value) return
-    if (showFilter) {
-      nodeFilterState.setValue({
-        treeName,
-        table: 'tpop',
-        key: field,
-        value,
-      })
-      //refetchTree()
-    } else {
-      try {
-        await app.client.mutate({
-          mutation: updateTpopByIdGql,
-          variables: {
-            id: row.id,
-            [field]: value,
-          },
-          /*optimisticResponse: {
+  const saveToDb = useCallback(
+    async event => {
+      const field = event.target.name
+      let value = event.target.value
+      if (value === undefined) value = null
+      /**
+       * only save if value changed
+       */
+      if (row[field] === value) return
+      if (showFilter) {
+        nodeFilterSetValue({
+          treeName,
+          table: 'tpop',
+          key: field,
+          value,
+        })
+        //refetchTree()
+      } else {
+        try {
+          await app.client.mutate({
+            mutation: updateTpopByIdGql,
+            variables: {
+              id: row.id,
+              [field]: value,
+            },
+            /*optimisticResponse: {
             __typename: 'Mutation',
             updateTpopById: {
               tpop: {
@@ -163,21 +160,15 @@ const Tpop = ({
               __typename: 'Tpop',
             },
           },*/
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
+          })
+        } catch (error) {
+          return setErrors({ [field]: error.message })
+        }
+        setErrors({})
       }
-      setErrors({})
-    }
-  }, [])
-
-  const showFilter = !!nodeFilterState.state[treeName].activeTable
-  let row
-  if (showFilter) {
-    row = nodeFilterState.state[treeName].tpop
-  } else {
-    row = get(data, 'tpopById', {})
-  }
+    },
+    [showFilter, id],
+  )
   const apJahr = get(data, 'tpopById.popByPopId.apByApId.startJahr', null)
   let gemeindeWerte = get(data, 'allGemeindes.nodes', [])
   gemeindeWerte = gemeindeWerte
