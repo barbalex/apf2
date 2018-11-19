@@ -1,5 +1,5 @@
 // @flow
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
@@ -18,9 +18,9 @@ import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import withData from './withData'
 import updateTpopmassnByIdGql from './updateTpopmassnById'
-import withNodeFilter from '../../../../state/withNodeFilter'
 import withAeEigenschaftens from './withAeEigenschaftens'
 import withAllAdresses from './withAllAdresses'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const Container = styled.div`
   height: 100%;
@@ -42,14 +42,12 @@ const enhance = compose(
   withData,
   withAllAdresses,
   withAeEigenschaftens,
-  withNodeFilter,
 )
 
 const Tpopmassn = ({
   id,
   dimensions = { width: 380 },
   treeName,
-  nodeFilterState,
   dataAeEigenschaftens,
   dataAllAdresses,
   data,
@@ -60,7 +58,6 @@ const Tpopmassn = ({
   onBlurWirtspflanze: () => void,
   dimensions: number,
   treeName: string,
-  nodeFilterState: Object,
   dataAeEigenschaftens: Object,
   dataAllAdresses: Object,
   data: Object,
@@ -75,14 +72,16 @@ const Tpopmassn = ({
   if (data.error) return `Fehler: ${data.error.message}`
   if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
 
+  const { nodeFilter, nodeFilterSetValue } = useContext(mobxStoreContext)
+
   const [errors, setErrors] = useState({})
 
   useEffect(() => setErrors({}), [id])
 
-  const showFilter = !!nodeFilterState.state[treeName].activeTable
+  const showFilter = !!nodeFilter[treeName].activeTable
   let row
   if (showFilter) {
-    row = nodeFilterState.state[treeName].tpopmassn
+    row = nodeFilter[treeName].tpopmassn
   } else {
     row = get(data, 'tpopmassnById', {})
   }
@@ -97,7 +96,7 @@ const Tpopmassn = ({
        */
       if (row[field] === value) return
       if (showFilter) {
-        nodeFilterState.setValue({
+        nodeFilterSetValue({
           treeName,
           table: 'tpopmassn',
           key: field,
