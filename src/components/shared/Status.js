@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { useContext, useState, useCallback } from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
@@ -7,13 +7,10 @@ import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
-import withState from 'recompose/withState'
 
 import Label from './Label'
 import InfoWithPopover from './InfoWithPopover'
-import withNodeFilter from '../../state/withNodeFilter'
+import mobxStoreContext from '../../mobxStoreContext'
 
 const FieldWithInfoContainer = styled.div`
   display: flex;
@@ -58,16 +55,45 @@ const StyledRadio = styled(Radio)`
   height: 2px !important;
 `
 
-const enhance = compose(
-  withNodeFilter,
-  withState(
-    'bekanntSeitStateValue',
-    'setBekanntSeitStateValue',
-    ({ bekanntSeitValue }) =>
-      bekanntSeitValue || bekanntSeitValue === 0 ? bekanntSeitValue : '',
-  ),
-  withHandlers({
-    onClickButton: ({ herkunftValue, saveToDbStatus }) => event => {
+const Status = ({
+  apJahr,
+  herkunftValue,
+  bekanntSeitValue,
+  saveToDb,
+  saveToDbBekanntSeit,
+  saveToDbStatus,
+  treeName,
+}: {
+  apJahr?: nmumber,
+  herkunftValue?: number,
+  bekanntSeitValue: number,
+  saveToDbBekanntSeit: () => void,
+  saveToDb: () => void,
+  saveToDbStatus: () => void,
+  treeName: string,
+}) => {
+  const { nodeFilter } = useContext(mobxStoreContext)
+
+  const [bekanntSeitStateValue, setBekanntSeitStateValue] = useState(
+    bekanntSeitValue || bekanntSeitValue === 0 ? bekanntSeitValue : '',
+  )
+
+  const valueSelected =
+    herkunftValue !== null && herkunftValue !== undefined ? herkunftValue : ''
+  let angesiedeltLabel = 'angesiedelt:'
+  if (!!apJahr && !!bekanntSeitStateValue) {
+    if (apJahr <= bekanntSeitStateValue) {
+      angesiedeltLabel = 'angesiedelt (nach Beginn AP):'
+    } else {
+      angesiedeltLabel = 'angesiedelt (vor Beginn AP):'
+    }
+  }
+  const showFilter = !!nodeFilter[treeName].activeTable
+  const disabled =
+    !bekanntSeitStateValue && bekanntSeitStateValue !== 0 && !showFilter
+
+  const onClickButton = useCallback(
+    event => {
       /**
        * if clicked element is active value: set null
        * Problem: does not work on change event on RadioGroup
@@ -82,7 +108,10 @@ const enhance = compose(
         return saveToDbStatus(null)
       }
     },
-    onChangeStatus: ({ herkunftValue, saveToDb }) => event => {
+    [herkunftValue],
+  )
+  const onChangeStatus = useCallback(
+    event => {
       const { value: valuePassed } = event.target
       // if clicked element is active herkunftValue: set null
       const fakeEvent = {
@@ -93,58 +122,18 @@ const enhance = compose(
       }
       saveToDb(fakeEvent)
     },
-    onChangeBekanntSeit: ({ setBekanntSeitStateValue }) => event =>
-      setBekanntSeitStateValue(event.target.value ? +event.target.value : ''),
-    onBlurBekanntSeit: ({ saveToDb }) => event => {
-      const { value } = event.target
-      const fakeEvent = {
-        target: { value: value === '' ? null : value, name: 'bekanntSeit' },
-      }
-      saveToDb(fakeEvent)
-    },
-  }),
-)
-
-const Status = ({
-  apJahr,
-  herkunftValue,
-  bekanntSeitStateValue,
-  saveToDb,
-  saveToDbBekanntSeit,
-  saveToDbStatus,
-  onChangeStatus,
-  onChangeBekanntSeit,
-  onBlurBekanntSeit,
-  nodeFilterState,
-  onClickButton,
-  treeName,
-}: {
-  apJahr?: nmumber,
-  herkunftValue?: number,
-  bekanntSeitStateValue: number,
-  saveToDbBekanntSeit: () => void,
-  saveToDb: () => void,
-  saveToDbStatus: () => void,
-  onChangeStatus: () => void,
-  onChangeBekanntSeit: () => void,
-  onBlurBekanntSeit: () => void,
-  nodeFilterState: () => void,
-  onClickButton: () => void,
-  treeName: string,
-}) => {
-  const valueSelected =
-    herkunftValue !== null && herkunftValue !== undefined ? herkunftValue : ''
-  let angesiedeltLabel = 'angesiedelt:'
-  if (!!apJahr && !!bekanntSeitStateValue) {
-    if (apJahr <= bekanntSeitStateValue) {
-      angesiedeltLabel = 'angesiedelt (nach Beginn AP):'
-    } else {
-      angesiedeltLabel = 'angesiedelt (vor Beginn AP):'
+    [herkunftValue],
+  )
+  const onChangeBekanntSeit = useCallback(event =>
+    setBekanntSeitStateValue(event.target.value ? +event.target.value : ''),
+  )
+  const onBlurBekanntSeit = useCallback(event => {
+    const { value } = event.target
+    const fakeEvent = {
+      target: { value: value === '' ? null : value, name: 'bekanntSeit' },
     }
-  }
-  const showFilter = !!nodeFilterState.state[treeName].activeTable
-  const disabled =
-    !bekanntSeitStateValue && bekanntSeitStateValue !== 0 && !showFilter
+    saveToDb(fakeEvent)
+  })
 
   return (
     <div>
@@ -253,4 +242,4 @@ Status.defaultProps = {
   bekanntSeitValue: '',
 }
 
-export default enhance(Status)
+export default Status
