@@ -1,11 +1,9 @@
 // @flow
-import React, { lazy, Suspense } from 'react'
+import React, { lazy, Suspense, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withLifecycle from '@hocs/with-lifecycle'
-import app from 'ampersand-app'
 import get from 'lodash/get'
+import { withApollo } from 'react-apollo'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import setIsPrint from './setIsPrint'
@@ -32,39 +30,30 @@ const Messages = lazy(() => import('../Messages'))
 const Ekf = lazy(() => import('../Ekf'))
 
 const enhance = compose(
-  withState('showDeletions', 'setShowDeletions', false),
+  withApollo,
   appContainerData,
-  withLifecycle({
-    onDidMount(prevProps, props) {
-      window.matchMedia('print').addListener(mql => {
-        if (mql.matches) {
-          app.client.mutate({
-            mutation: setIsPrint,
-            variables: { value: true },
-          })
-        } else {
-          app.client.mutate({
-            mutation: setIsPrint,
-            variables: { value: false },
-          })
-        }
-      })
-    },
-    onWillUnmount() {
-      window.matchMedia('print').removeListener()
-    },
-  }),
 )
 
-const MyAppBar = ({
-  showDeletions,
-  setShowDeletions,
-  data,
-}: {
-  showDeletions: Boolean,
-  setShowDeletions: () => void,
-  data: Object,
-}) => {
+const MyAppBar = ({ data, client }: { data: Object, client: Object }) => {
+  const [showDeletions, setShowDeletions] = useState(false)
+
+  useEffect(() => {
+    window.matchMedia('print').addListener(mql => {
+      if (mql.matches) {
+        client.mutate({
+          mutation: setIsPrint,
+          variables: { value: true },
+        })
+      } else {
+        client.mutate({
+          mutation: setIsPrint,
+          variables: { value: false },
+        })
+      }
+      return () => window.matchMedia('print').removeListener()
+    })
+  }, [])
+
   const view = get(data, 'view')
 
   return (

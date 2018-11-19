@@ -55,14 +55,12 @@ const User = ({
   toggleUserOpen,
   data,
   client,
-  refetchTree,
 }: {
   username: string,
   userOpen: boolean,
   toggleUserOpen: () => void,
   data: Object,
   client: Object,
-  refetchTree: () => void,
 }) => {
   if (data.loading) return null
   if (data.error) return `Fehler: ${data.error.message}`
@@ -92,7 +90,7 @@ const User = ({
        */
       if (row[field] === value) return
       try {
-        await app.client.mutate({
+        await client.mutate({
           mutation: updateUserByIdGql,
           variables: {
             id: row.id,
@@ -147,7 +145,7 @@ const User = ({
         // edit password
         // then tell user if it worked
         try {
-          await app.client.mutate({
+          await client.mutate({
             mutation: updateUserByIdGql,
             variables: {
               id: row.id,

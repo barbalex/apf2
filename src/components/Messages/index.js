@@ -1,14 +1,12 @@
 // @flow
-import React from 'react'
+import React, { useCallback } from 'react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Button from '@material-ui/core/Button'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import Linkify from 'react-linkify'
-import app from 'ampersand-app'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import withLocalData from './withLocalData'
@@ -52,24 +50,48 @@ const OkButton = styled(Button)`
 const enhance = compose(
   withLocalData,
   withData,
-  withHandlers({
-    onClickRead: ({ data, localData }) => async message => {
-      const userName = get(localData, 'user.name')
-      await app.client.mutate({
+)
+
+const UserMessages = ({
+  open,
+  localData,
+  data,
+  client,
+}: {
+  open: Boolean,
+  localData: Object,
+  data: Object,
+  client: Object,
+}) => {
+  if (localData.error) return `Fehler: ${localData.error.message}`
+
+  if (data.error) {
+    if (data.error.message.includes('keine Berechtigung')) return null
+    return `Fehler: ${data.error.message}`
+  }
+
+  const userName = get(localData, 'user.name')
+  const allMessages = get(data, 'allMessages.nodes', [])
+  const unreadMessages = allMessages.filter(
+    m => get(m, 'usermessagesByMessageId.nodes', []).length === 0,
+  )
+  const updateAvailable = get(data, 'updateAvailable')
+
+  const onClickRead = useCallback(
+    async message => {
+      await client.mutate({
         mutation: createUsermessage,
         variables: { userName, id: message.id },
       })
       data.refetch()
     },
-    onClickReadAll: ({ data, localData }) => async () => {
-      const userName = get(localData, 'user.name')
-      const allMessages = get(data, 'allMessages.nodes', [])
-      const unreadMessages = allMessages.filter(
-        m => get(m, 'usermessagesByMessageId.nodes', []).length === 0,
-      )
+    [userName],
+  )
+  const onClickReadAll = useCallback(
+    async () => {
       await Promise.all(
         unreadMessages.map(async message => {
-          await app.client.mutate({
+          await client.mutate({
             mutation: createUsermessage,
             variables: { userName, id: message.id },
           })
@@ -77,36 +99,8 @@ const enhance = compose(
       )
       return data.refetch()
     },
-  }),
-)
-
-const UserMessages = ({
-  open,
-  onClickRead,
-  onClickReadAll,
-  localData,
-  data,
-}: {
-  open: Boolean,
-  onClickRead: () => {},
-  onClickReadAll: () => {},
-  localData: Object,
-  data: Object,
-}) => {
-  if (localData.error) return `Fehler: ${localData.error.message}`
-
-  const userName = get(localData, 'user.name')
-
-  if (data.error) {
-    if (data.error.message.includes('keine Berechtigung')) return null
-    return `Fehler: ${data.error.message}`
-  }
-
-  const allMessages = get(data, 'allMessages.nodes', [])
-  const unreadMessages = allMessages.filter(
-    m => get(m, 'usermessagesByMessageId.nodes', []).length === 0,
+    [unreadMessages, userName],
   )
-  const updateAvailable = get(data, 'updateAvailable')
 
   return (
     <ErrorBoundary>
