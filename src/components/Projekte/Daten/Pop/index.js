@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { useContext, useState, useCallback } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
@@ -17,6 +17,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updatePopByIdGql from './updatePopById'
 import withNodeFilter from '../../../../state/withNodeFilter'
 import withData from './withData'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const Container = styled.div`
   height: 100%;
@@ -35,19 +36,13 @@ const enhance = compose(
   withData,
   withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({
-      setErrors,
-      errors,
-      nodeFilterState,
-      treeName,
-      data,
-    }) => async event => {
+    saveToDb: ({ setErrors, errors, treeName, data }) => async event => {
       const field = event.target.name
       const value = event.target.value || null
-      const showFilter = !!nodeFilterState.state[treeName].activeTable
+      const showFilter = !!nodeFilter[treeName].activeTable
       let row
       if (showFilter) {
-        row = nodeFilterState.state[treeName].pop
+        row = nodeFilter[treeName].pop
       } else {
         row = get(data, 'popById', {})
       }
@@ -56,7 +51,7 @@ const enhance = compose(
        */
       if (row[field] === value) return
       if (showFilter) {
-        nodeFilterState.setValue({
+        nodeFilterSetValue({
           treeName,
           table: 'pop',
           key: field,
@@ -119,14 +114,12 @@ const Pop = ({
   id = '99999999-9999-9999-9999-999999999999',
   saveToDb,
   errors,
-  nodeFilterState,
   treeName,
   data,
 }: {
   id: string,
   saveToDb: () => void,
   errors: Object,
-  nodeFilterState: Object,
   treeName: string,
   data: Object,
 }) => {
@@ -138,10 +131,12 @@ const Pop = ({
     )
   if (data.error) return `Fehler: ${data.error.message}`
 
-  const showFilter = !!nodeFilterState.state[treeName].activeTable
+  const { nodeFilter, nodeFilterSetValue } = useContext(mobxStoreContext)
+
+  const showFilter = !!nodeFilter[treeName].activeTable
   let row
   if (showFilter) {
-    row = nodeFilterState.state[treeName].pop
+    row = nodeFilter[treeName].pop
   } else {
     row = get(data, 'popById', {})
   }
