@@ -8513,10 +8513,10 @@ mkdirp@0.5.1, mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdi
   dependencies:
     minimist "0.0.8"
 
-mobx-react-lite@0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/mobx-react-lite/-/mobx-react-lite-0.2.0.tgz#b78d49e86c81543bf4166052203158dd6ed70d70"
-  integrity sha512-1EnIRQPsqDUxQMpbCVjyesyFzvJ9Ar5o8kvGRUXWUQpu5vjeQQMnSez7i91fj4xvH5wz5+sY/7FHK3bvWXXnYg==
+mobx-react-lite@0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/mobx-react-lite/-/mobx-react-lite-0.3.1.tgz#cee607476a984526741d37ae63ebfaa09ad1bcab"
+  integrity sha512-Z/2zpZ7RaD4tEUVP6XTliT2ggwOjzMKu5zMonmx91DPaf6JBZOz/wqD3OSxCpWSJ4c8Ft0RgIXW9F+PEmh6fDQ==
 
 mobx-state-tree@3.7.1:
   version "3.7.1"
@@ -8751,9 +8751,9 @@ node-pre-gyp@^0.10.0:
     tar "^4"
 
 node-releases@^1.0.0-alpha.11, node-releases@^1.0.1:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.0.3.tgz#3414ed84595096459c251699bfcb47d88324a9e4"
-  integrity sha512-ZaZWMsbuDcetpHmYeKWPO6e63pSXLb50M7lJgCbcM2nC/nQC3daNifmtp5a2kp7EWwYfhuvH6zLPWkrF8IiDdw==
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.0.4.tgz#2d585de8c6c81d00017e063e7810a63889aa6756"
+  integrity sha512-GqRV9GcHw8JCRDaP/JoeNMNzEGzHAknMvIHqMb2VeTOmg1Cf9+ej8bkV12tHfzWHQMCkQ5zUFgwFUkfraynNCw==
   dependencies:
     semver "^5.3.0"
 
@@ -8853,7 +8853,7 @@ npm-cache-filename@~1.0.2:
   resolved "https://registry.yarnpkg.com/npm-cache-filename/-/npm-cache-filename-1.0.2.tgz#ded306c5b0bfc870a9e9faf823bc5f283e05ae11"
   integrity sha1-3tMGxbC/yHCp6fr4I7xfKD4FrhE=
 
-npm-check-updates@^2.14.3:
+npm-check-updates@2.14.3:
   version "2.14.3"
   resolved "https://registry.yarnpkg.com/npm-check-updates/-/npm-check-updates-2.14.3.tgz#2fa4b6a2d2cd631ac470ee50fd93aaa717cfecad"
   integrity sha512-3zRQkqa5JzSdzJBsWK1s+wycpwH7aNykm5rdg/ktYgAfKW2TzBuQm85irG0bmIb8ZKR7/0dzPkO8Ch1/g19aog==
