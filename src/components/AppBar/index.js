@@ -10,9 +10,9 @@ import compose from 'recompose/compose'
 import get from 'lodash/get'
 import clone from 'lodash/clone'
 import gql from 'graphql-tag'
-import app from 'ampersand-app'
 import jwtDecode from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
+import { withApollo } from 'react-apollo'
 
 import isMobilePhone from '../../modules/isMobilePhone'
 import ErrorBoundary from '../shared/ErrorBoundary'
@@ -64,6 +64,7 @@ const MenuDiv = styled.div`
 `
 
 const enhance = compose(
+  withApollo,
   withLocalData,
   observer,
 )
@@ -71,9 +72,11 @@ const enhance = compose(
 const MyAppBar = ({
   localData,
   setShowDeletions,
+  client,
 }: {
   localData: Object,
   setShowDeletions: () => void,
+  client: Object,
 }) => {
   if (localData.error) return `Fehler: ${localData.error.message}`
 
@@ -109,7 +112,7 @@ const MyAppBar = ({
         } else {
           projekteTabs.push(name)
           if (name === 'tree2') {
-            app.client.mutate({
+            client.mutate({
               mutation: gql`
                 mutation cloneTree2From1 {
                   cloneTree2From1 @client
@@ -129,13 +132,13 @@ const MyAppBar = ({
   const onClickExporte = useCallback(() => onClickButton('exporte'))
   const onClickTree2 = useCallback(() => onClickButton('tree2'))
   const setViewNormal = useCallback(() =>
-    app.client.mutate({
+    client.mutate({
       mutation: setView,
       variables: { value: 'normal' },
     }),
   )
   const setViewEkf = useCallback(() =>
-    app.client.mutate({
+    client.mutate({
       mutation: setView,
       variables: { value: 'ekf' },
     }),
@@ -143,7 +146,7 @@ const MyAppBar = ({
   const setEkfYear = useCallback(value => {
     const ekfRefDate = new Date().setMonth(new Date().getMonth() - 2)
     const ekfRefYear = new Date(ekfRefDate).getFullYear()
-    app.client.mutate({
+    client.mutate({
       mutation: setEkfYearGql,
       variables: { value: value ? +value : ekfRefYear },
     })

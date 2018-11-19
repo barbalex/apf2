@@ -10,9 +10,9 @@ import remove from 'lodash/remove'
 import get from 'lodash/get'
 import clone from 'lodash/clone'
 import styled from 'styled-components'
-import app from 'ampersand-app'
 import gql from 'graphql-tag'
 import { observer } from 'mobx-react-lite'
+import { withApollo } from 'react-apollo'
 
 import isMobilePhone from '../../../modules/isMobilePhone'
 import setUrlQueryValue from '../../../modules/setUrlQueryValue'
@@ -75,9 +75,11 @@ const RemoveMenuItem = styled(StyledMenuItem)`
 const MyAppBarDaten = ({
   data,
   treeNr = '',
+  client,
 }: {
   data: Object,
   treeNr: string,
+  client: Object,
 }) => {
   const {
     nodeFilterTreeIsFiltered,
@@ -107,7 +109,7 @@ const MyAppBarDaten = ({
         } else {
           copyOfProjekteTabs.push(`daten${treeNr}`)
           if (treeNr === '2') {
-            app.client.mutate({
+            client.mutate({
               mutation: gql`
                 mutation cloneTree2From1 {
                   cloneTree2From1 @client
@@ -224,4 +226,4 @@ const MyAppBarDaten = ({
   )
 }
 
-export default observer(MyAppBarDaten)
+export default withApollo(observer(MyAppBarDaten))

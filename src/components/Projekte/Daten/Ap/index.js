@@ -4,8 +4,8 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
-import app from 'ampersand-app'
 import { observer } from 'mobx-react-lite'
+import { withApollo } from 'react-apollo'
 
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import TextField from '../../../shared/TextField'
@@ -64,6 +64,7 @@ const LabelPopoverRowColumnRight = styled.div`
 `
 
 const enhance = compose(
+  withApollo,
   withAllAps,
   withAllAdresses,
   withAeEigenschaftens,
@@ -80,6 +81,7 @@ const Ap = ({
   localData,
   data,
   refetchTree,
+  client,
 }: {
   treeName: String,
   dataAeEigenschaftens: Object,
@@ -88,6 +90,7 @@ const Ap = ({
   localData: Object,
   data: Object,
   refetchTree: () => void,
+  client: Object,
 }) => {
   if (
     data.loading ||
@@ -194,7 +197,7 @@ const Ap = ({
         refetchTree('aps')
       } else {
         try {
-          await app.client.mutate({
+          await client.mutate({
             mutation: updateApByIdGql,
             variables: {
               id: row.id,
