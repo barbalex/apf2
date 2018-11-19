@@ -152,7 +152,9 @@ const myTypes = types
       const tables = Object.keys(self.nodeFilter[treeName]).filter(
         t => t !== 'activeTable',
       )
-      return tables.some(table => self.tableIsFiltered({ treeName, table }))
+      return tables.some(table =>
+        self.nodeFilterTableIsFiltered({ treeName, table }),
+      )
     },
   }))
 
