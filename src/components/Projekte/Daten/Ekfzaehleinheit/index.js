@@ -1,14 +1,11 @@
 // @flow
-import React from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
 import { Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
-import withState from 'recompose/withState'
-import withLifecycle from '@hocs/with-lifecycle'
-import app from 'ampersand-app'
+import { withApollo } from 'react-apollo'
 
 import TextField from '../../../shared/TextField'
 import Select from '../../../shared/Select'
@@ -30,83 +27,41 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withApollo,
   withData,
   withAllTpopkontrzaehlEinheitWertes,
-  withState('errors', 'setErrors', {}),
-  withHandlers({
-    saveToDb: ({ refetchTree, setErrors, errors, data }) => async event => {
-      const field = event.target.name
-      const value = event.target.value || null
-      const row = get(data, 'ekfzaehleinheitById', {})
-      /**
-       * only save if value changed
-       */
-      if (row[field] === value) return
-      try {
-        await app.client.mutate({
-          mutation: updateEkfzaehleinheitByIdGql,
-          variables: {
-            id: row.id,
-            [field]: value,
-          },
-          /*optimisticResponse: {
-            __typename: 'Mutation',
-            updateEkfzaehleinheitById: {
-              ekfzaehleinheit: {
-                id: row.id,
-                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-                zaehleinheitId:
-                  field === 'zaehleinheitId' ? value : row.zaehleinheitId,
-                apId: field === 'apId' ? value : row.apId,
-                tpopkontrzaehlEinheitWerteByZaehleinheitId:
-                  row.tpopkontrzaehlEinheitWerteByZaehleinheitId,
-                apByApId: row.apByApId,
-                __typename: 'Ekfzaehleinheit',
-              },
-              __typename: 'Ekfzaehleinheit',
-            },
-          },*/
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
-      }
-      setErrors({})
-      if (['zaehleinheitId'].includes(field)) refetchTree('ekfzaehleinheits')
-    },
-  }),
-  withLifecycle({
-    onDidUpdate(prevProps, props) {
-      if (prevProps.id !== props.id) {
-        props.setErrors({})
-      }
-    },
-  }),
 )
 
 const Ekfzaehleinheit = ({
   id,
-  saveToDb,
-  errors,
   treeName,
   dataAllTpopkontrzaehlEinheitWertes,
   data,
+  client,
+  refetchTree,
 }: {
   id: string,
-  saveToDb: () => void,
-  errors: Object,
   treeName: string,
   dataAllTpopkontrzaehlEinheitWertes: Object,
   data: Object,
+  client: Object,
+  refetchTree: () => void,
 }) => {
-  if (data.loading || dataAllTpopkontrzaehlEinheitWertes.loading)
+  if (data.loading || dataAllTpopkontrzaehlEinheitWertes.loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
       </Container>
     )
+  }
   if (data.error) return `Fehler: ${data.error.message}`
-  if (dataAllTpopkontrzaehlEinheitWertes.error)
+  if (dataAllTpopkontrzaehlEinheitWertes.error) {
     return `Fehler: ${dataAllTpopkontrzaehlEinheitWertes.error.message}`
+  }
+
+  const [errors, setErrors] = useState({})
+
+  useEffect(() => setErrors({}), [id])
 
   const row = get(data, 'ekfzaehleinheitById', {})
   const ekfzaehleinheitenOfAp = get(
@@ -128,6 +83,48 @@ const Ekfzaehleinheit = ({
     value: el.id,
     label: el.text,
   }))
+
+  const saveToDb = useCallback(
+    async event => {
+      const field = event.target.name
+      const value = event.target.value || null
+      /**
+       * only save if value changed
+       */
+      if (row[field] === value) return
+      try {
+        await client.mutate({
+          mutation: updateEkfzaehleinheitByIdGql,
+          variables: {
+            id: row.id,
+            [field]: value,
+          },
+          /*optimisticResponse: {
+          __typename: 'Mutation',
+          updateEkfzaehleinheitById: {
+            ekfzaehleinheit: {
+              id: row.id,
+              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+              zaehleinheitId:
+                field === 'zaehleinheitId' ? value : row.zaehleinheitId,
+              apId: field === 'apId' ? value : row.apId,
+              tpopkontrzaehlEinheitWerteByZaehleinheitId:
+                row.tpopkontrzaehlEinheitWerteByZaehleinheitId,
+              apByApId: row.apByApId,
+              __typename: 'Ekfzaehleinheit',
+            },
+            __typename: 'Ekfzaehleinheit',
+          },
+        },*/
+        })
+      } catch (error) {
+        return setErrors({ [field]: error.message })
+      }
+      setErrors({})
+      if (['zaehleinheitId'].includes(field)) refetchTree('ekfzaehleinheits')
+    },
+    [id],
+  )
 
   return (
     <ErrorBoundary>
