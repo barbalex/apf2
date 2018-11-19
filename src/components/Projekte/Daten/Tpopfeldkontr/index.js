@@ -1,5 +1,5 @@
 // @flow
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useContext } from 'react'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import styled from 'styled-components'
@@ -22,9 +22,9 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import withData from './withData'
 import updateTpopkontrByIdGql from './updateTpopkontrById'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
-import withNodeFilter from '../../../../state/withNodeFilter'
 import withAllAdresses from './withAllAdresses'
 import urlQuery from './urlQuery'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const Container = styled.div`
   height: 100%;
@@ -74,14 +74,12 @@ const tpopkontrTypWerte = [
 const enhance = compose(
   withData,
   withAllAdresses,
-  withNodeFilter,
 )
 
 const Tpopfeldkontr = ({
   id,
   dimensions = { width: 380 },
   treeName,
-  nodeFilterState,
   dataAllAdresses,
   data,
   refetchTree,
@@ -89,7 +87,6 @@ const Tpopfeldkontr = ({
   id: string,
   dimensions: Object,
   treeName: string,
-  nodeFilterState: Object,
   dataAllAdresses: Object,
   data: Object,
   refetchTree: () => void,
@@ -103,6 +100,8 @@ const Tpopfeldkontr = ({
   if (data.error) return `Fehler: ${data.error.message}`
   if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
 
+  const { nodeFilter, nodeFilterSetValue } = useContext(mobxStoreContext)
+
   const [errors, setErrors] = useState({})
   const [value, setValue] = useState(() => {
     const { data } = app.client.query({
@@ -113,10 +112,10 @@ const Tpopfeldkontr = ({
 
   useEffect(() => setErrors({}), [id])
 
-  const showFilter = !!nodeFilterState.state[treeName].activeTable
+  const showFilter = !!nodeFilter[treeName].activeTable
   let row
   if (showFilter) {
-    row = nodeFilterState.state[treeName].tpopfeldkontr
+    row = nodeFilter[treeName].tpopfeldkontr
   } else {
     row = get(data, 'tpopkontrById', {})
   }
@@ -131,7 +130,7 @@ const Tpopfeldkontr = ({
        */
       if (row[field] === value) return
       if (showFilter) {
-        nodeFilterState.setValue({
+        nodeFilterSetValue({
           treeName,
           table: 'tpopfeldkontr',
           key: field,
@@ -282,7 +281,7 @@ const Tpopfeldkontr = ({
         if (['typ'].includes(field)) refetchTree('tpopfeldkontrs')
       }
     },
-    [row, showFilter],
+    [id, showFilter],
   )
   const onChangeTab = useCallback((event, value) => {
     setUrlQueryValue({ key: 'feldkontrTab', value })
