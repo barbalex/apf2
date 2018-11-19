@@ -1,5 +1,5 @@
 // @flow
-import React, { useContext } from 'react'
+import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import SwapVerticalCircleIcon from '@material-ui/icons/SwapVerticalCircle'
@@ -12,9 +12,6 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 //import PrintIcon from '@material-ui/icons/LibraryBooks'
 import PrintIcon from '@material-ui/icons/PictureAsPdf'
 import get from 'lodash/get'
-import compose from 'recompose/compose'
-//import shouldUpdate from 'recompose/shouldUpdate'
-import withHandlers from 'recompose/withHandlers'
 import app from 'ampersand-app'
 
 import isNodeInActiveNodePath from '../../isNodeInActiveNodePath'
@@ -22,9 +19,7 @@ import isNodeOpen from '../../isNodeOpen'
 import toggleNode from '../../toggleNode'
 import toggleNodeSymbol from '../../toggleNodeSymbol'
 import setTreeKey from './setTreeKey'
-import withNodeFilterState from '../../../../../state/withNodeFilter'
 import mobxStoreContext from '../../../../../mobxStoreContext'
-//import shouldRowUpdate from './shouldRowUpdate'
 
 const singleRowHeight = 23
 const StyledNode = styled.div`
@@ -182,39 +177,6 @@ const PrintIconContainer = styled.div`
   }
 `
 
-const enhance = compose(
-  withNodeFilterState,
-  withHandlers({
-    onClickNode: ({
-      node,
-      index,
-      data,
-      treeName,
-      nodeFilterState,
-    }) => event => {
-      const tree2 = get(data, treeName)
-      toggleNode({ tree: tree2, node, nodeFilterState })
-    },
-    onClickNodeSymbol: ({ node, index, data, treeName }) => event => {
-      const tree2 = get(data, treeName)
-      toggleNodeSymbol({ tree: tree2, node })
-    },
-    onClickPrint: ({ node, index, tree }) => () => {
-      app.client.mutate({
-        mutation: setTreeKey,
-        variables: {
-          value: [...node.url, 'print'],
-          tree: tree.name,
-          key: 'activeNodeArray',
-        },
-      })
-    },
-  }),
-  // not implemented because seemed not to be faster
-  // but surely more complex
-  //shouldUpdate(shouldRowUpdate),
-)
-
 const Row = ({
   index,
   style,
@@ -227,10 +189,6 @@ const Row = ({
   openNodes,
   copying,
   mapIdsFiltered,
-  nodeFilterState,
-  onClickPrint,
-  onClickNode,
-  onClickNodeSymbol,
 }: {
   index: Number,
   style: Object,
@@ -243,12 +201,13 @@ const Row = ({
   openNodes: Array<string>,
   copying: Object,
   mapIdsFiltered: Array<String>,
-  nodeFilterState: Object,
-  onClickPrint: () => void,
-  onClickNode: () => void,
-  onClickNodeSymbol: () => void,
 }) => {
-  const { activeApfloraLayers } = useContext(mobxStoreContext)
+  const {
+    activeApfloraLayers,
+    nodeFilter,
+    nodeFilterSetActiveTable,
+  } = useContext(mobxStoreContext)
+
   const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
   const myProps = { key: index }
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, activeNodeArray)
@@ -292,6 +251,33 @@ const Row = ({
   const copyingBiotop =
     node.nodeType === 'table' && node.id === get(data, 'copyingBiotop.id')
   //console.log('Row rendering')
+  const tree2 = get(data, treeName)
+
+  const onClickNode = useCallback(
+    event => {
+      toggleNode({ tree: tree2, node, nodeFilter, nodeFilterSetActiveTable })
+    },
+    [tree2, node, nodeFilter],
+  )
+  const onClickNodeSymbol = useCallback(
+    event => {
+      toggleNodeSymbol({ tree: tree2, node })
+    },
+    [tree2, node],
+  )
+  const onClickPrint = useCallback(
+    () => {
+      app.client.mutate({
+        mutation: setTreeKey,
+        variables: {
+          value: [...node.url, 'print'],
+          tree: tree.name,
+          key: 'activeNodeArray',
+        },
+      })
+    },
+    [node.url, tree.name],
+  )
 
   return (
     <div style={style}>
@@ -471,4 +457,4 @@ const Row = ({
   )
 }
 
-export default enhance(Row)
+export default Row

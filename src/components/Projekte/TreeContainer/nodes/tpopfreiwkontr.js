@@ -20,7 +20,7 @@ export default ({
   apId,
   popId,
   tpopId,
-  nodeFilterState,
+  nodeFilter,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -34,7 +34,7 @@ export default ({
   apId: String,
   popId: String,
   tpopId: String,
-  nodeFilterState: Object,
+  nodeFilter: Object,
 }): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
@@ -47,7 +47,6 @@ export default ({
     data,
     `${treeName}.nodeLabelFilter.tpopfreiwkontr`,
   )
-  const nodeFilter = nodeFilterState.state[treeName]
   const nodeFilterArray = Object.entries(nodeFilter.tpopfreiwkontr).filter(
     ([key, value]) => value || value === 0 || value === false,
   )

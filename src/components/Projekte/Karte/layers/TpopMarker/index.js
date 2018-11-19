@@ -9,13 +9,9 @@ import buildMarkersClustered from './buildMarkersClustered'
 import Marker from './Marker'
 import MarkerCluster from './MarkerCluster'
 import filterNodesByNodeFilterArray from '../../../TreeContainer/filterNodesByNodeFilterArray'
-import withNodeFilter from '../../../../../state/withNodeFilter'
 import mobxStoreContext from '../../../../../mobxStoreContext'
 
-const enhance = compose(
-  withNodeFilter,
-  observer,
-)
+const enhance = compose(observer)
 
 const TpopMarkerMarker = ({
   tree,
@@ -28,26 +24,24 @@ const TpopMarkerMarker = ({
   activeNodes,
   clustered,
   mapIdsFiltered,
-  nodeFilterState,
 }: {
   tree: Object,
   data: Object,
   activeNodes: Array<Object>,
   clustered: Boolean,
   mapIdsFiltered: Array<String>,
-  nodeFilterState: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { apfloraLayers, tpopLabelUsingNr } = mobxStore
+  const { apfloraLayers, tpopLabelUsingNr, nodeFilter } = mobxStore
 
   const popFilterString = get(tree, 'nodeLabelFilter.pop')
-  const popNodeFilterArray = Object.entries(
-    nodeFilterState.state[tree.name].pop,
-  ).filter(([key, value]) => value || value === 0 || value === false)
+  const popNodeFilterArray = Object.entries(nodeFilter[tree.name].pop).filter(
+    ([key, value]) => value || value === 0 || value === false,
+  )
   const tpopFilterString = get(tree, 'nodeLabelFilter.tpop')
-  const tpopNodeFilterArray = Object.entries(
-    nodeFilterState.state[tree.name].tpop,
-  ).filter(([key, value]) => value || value === 0 || value === false)
+  const tpopNodeFilterArray = Object.entries(nodeFilter[tree.name].tpop).filter(
+    ([key, value]) => value || value === 0 || value === false,
+  )
   const pops = get(data, 'tpopForMap.apsByProjId.nodes[0].popsByApId.nodes', [])
     // filter them by nodeLabelFilter
     .filter(p => {

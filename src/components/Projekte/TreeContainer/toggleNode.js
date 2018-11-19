@@ -10,19 +10,21 @@ import openNode from './openNode'
 export default ({
   tree,
   node,
-  nodeFilterState,
+  nodeFilter,
+  nodeFilterSetActiveTable,
 }: {
   tree: Object,
   node: Object,
-  nodeFilterState: Object,
+  nodeFilter: Object,
+  nodeFilterSetActiveTable: () => void,
 }): any => {
   if (!node.url) throw new Error('passed node has no url')
 
   // TODO: always set showFilter false if is true
-  if (nodeFilterState) {
-    const show = !!nodeFilterState.state[tree.name].activeTable
+  if (nodeFilter) {
+    const show = !!nodeFilter[tree.name].activeTable
     if (show) {
-      nodeFilterState.setActiveTable({ treeName: tree.name, activeTable: null })
+      nodeFilterSetActiveTable({ treeName: tree.name, activeTable: null })
     }
   }
 

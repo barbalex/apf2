@@ -64,7 +64,6 @@ import getActiveNodes from '../../../modules/getActiveNodes'
 import buildNodes from '../TreeContainer/nodes'
 import idsInsideFeatureCollection from '../../../modules/idsInsideFeatureCollection'
 import logout from '../../../modules/logout'
-import withTreeNodeFilterState from '../../../state/withNodeFilter'
 import buildVariables from './buildVariables'
 import anyQueryReturnsPermissionError from '../../../modules/anyQueryReturnsPermissionError'
 import anyQueryIsLoading from '../../../modules/anyQueryIsLoading'
@@ -90,14 +89,14 @@ const LogoutButton = styled(Button)`
 
 const enhance = compose(
   withLocalData,
-  withTreeNodeFilterState,
-  withProps(({ dataLocal, treeName, nodeFilterState }) =>
-    buildVariables({
+  withProps(({ dataLocal, treeName }) => {
+    const { nodeFilter } = useContext(mobxStoreContext)
+    return buildVariables({
       dataLocal,
       treeName,
-      nodeFilter: nodeFilterState.state[treeName],
-    }),
-  ),
+      nodeFilter: nodeFilter[treeName],
+    })
+  }),
   withAdresses,
   withUsers,
   withProjekts,
@@ -183,7 +182,6 @@ const ProjekteContainer = props => {
     treeName,
     tabs: tabsPassed,
     projekteTabs,
-    nodeFilterState,
   }: {
     dataLocal: Object,
     dataAdresses: Object,
@@ -227,13 +225,13 @@ const ProjekteContainer = props => {
     treeName: String,
     tabs: Array<String>,
     projekteTabs: Array<String>,
-    nodeFilterState: Object,
   } = props
 
   const {
     activeApfloraLayers,
     activeOverlays,
     mapFilter: mapFilterRaw,
+    nodeFilter,
   } = useContext(mobxStoreContext)
   const mapFilter = toJS(mapFilterRaw)
 
@@ -373,7 +371,7 @@ const ProjekteContainer = props => {
     data,
     treeName,
     role,
-    nodeFilterState,
+    nodeFilter,
     dataAdresses,
     dataUsers,
     dataProjekts,

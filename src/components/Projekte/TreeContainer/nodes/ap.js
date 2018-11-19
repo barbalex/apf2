@@ -13,16 +13,15 @@ export default ({
   treeName,
   projektNodes,
   projId,
-  nodeFilterState,
+  nodeFilter,
 }: {
   nodes: Array<Object>,
   data: Object,
   treeName: String,
   projektNodes: Array<Object>,
   projId: String,
-  nodeFilterState: Object,
+  nodeFilter: Object,
 }): Array<Object> => {
-  const nodeFilter = nodeFilterState.state[treeName]
   const apFilter = get(data, `${treeName}.apFilter`)
   const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.ap`)
   const aps = get(data, 'aps.nodes', [])

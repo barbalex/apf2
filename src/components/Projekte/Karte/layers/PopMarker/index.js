@@ -7,13 +7,9 @@ import { observer } from 'mobx-react-lite'
 import buildMarkers from './buildMarkers'
 import PopMarkerCluster from './Cluster'
 import filterNodesByNodeFilterArray from '../../../TreeContainer/filterNodesByNodeFilterArray'
-import withNodeFilter from '../../../../../state/withNodeFilter'
 import mobxStoreContext from '../../../../../mobxStoreContext'
 
-const enhance = compose(
-  withNodeFilter,
-  observer,
-)
+const enhance = compose(observer)
 
 const PmcComponent = ({
   tree,
@@ -21,21 +17,20 @@ const PmcComponent = ({
   activeNodes,
   activeApfloraLayers,
   mapIdsFiltered,
-  nodeFilterState,
 }: {
   tree: Object,
   data: Object,
   activeNodes: Array<Object>,
   activeApfloraLayers: Array<String>,
   mapIdsFiltered: Array<String>,
-  nodeFilterState: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { apfloraLayers, popLabelUsingNr } = mobxStore
+  const { apfloraLayers, popLabelUsingNr, nodeFilter } = mobxStore
+
   const popFilterString = get(tree, 'nodeLabelFilter.pop')
-  const nodeFilterArray = Object.entries(
-    nodeFilterState.state[tree.name].pop,
-  ).filter(([key, value]) => value || value === 0 || value === false)
+  const nodeFilterArray = Object.entries(nodeFilter[tree.name].pop).filter(
+    ([key, value]) => value || value === 0 || value === false,
+  )
   let pops = get(
     data,
     'popForMapMarkers.apsByProjId.nodes[0].popsByApId.nodes',
@@ -74,9 +69,9 @@ const PmcComponent = ({
       }),
     )
   const tpopFilterString = get(tree, 'nodeLabelFilter.tpop')
-  const tpopNodeFilterArray = Object.entries(
-    nodeFilterState.state[tree.name].tpop,
-  ).filter(([key, value]) => value || value === 0 || value === false)
+  const tpopNodeFilterArray = Object.entries(nodeFilter[tree.name].tpop).filter(
+    ([key, value]) => value || value === 0 || value === false,
+  )
   const tpops = flatten(
     popsForTpops.map(pop => get(pop, 'tpopsByPopId.nodes', [])),
   )
