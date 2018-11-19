@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button'
 import ArrowBack from '@material-ui/icons/ArrowBack'
 import app from 'ampersand-app'
 import compose from 'recompose/compose'
+import { withApollo } from 'react-apollo'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import Fallback from '../shared/Fallback'
@@ -46,9 +47,18 @@ const StyledArrowBack = styled(ArrowBack)`
 const ApberForApFromAp = lazy(() => import('./ApberForApFromAp'))
 const ApberForYear = lazy(() => import('./ApberForYear'))
 
-const enhance = compose(withLocalData)
+const enhance = compose(
+  withApollo,
+  withLocalData,
+)
 
-const Print = ({ localData }: { localData: Object }) => {
+const Print = ({
+  localData,
+  client,
+}: {
+  localData: Object,
+  client: Object,
+}) => {
   if (localData.error) return `Fehler: ${localData.error.message}`
 
   const activeNodeArray = get(localData, 'tree.activeNodeArray')
@@ -77,7 +87,7 @@ const Print = ({ localData }: { localData: Object }) => {
                   // so nowhere to go back to
                   const newActiveNodeArray = [...activeNodeArray]
                   newActiveNodeArray.pop()
-                  app.client.mutate({
+                  client.mutate({
                     mutation: setTreeKey,
                     variables: {
                       value: newActiveNodeArray,

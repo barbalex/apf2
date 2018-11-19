@@ -1,12 +1,9 @@
 // @flow
-import React from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
-import withState from 'recompose/withState'
-import withLifecycle from '@hocs/with-lifecycle'
-import app from 'ampersand-app'
+import { withApollo } from 'react-apollo'
 
 import RadioButton from '../../../shared/RadioButton'
 import TextField from '../../../shared/TextField'
@@ -28,76 +25,25 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withApollo,
   withLocalData,
   withData,
-  withState('errors', 'setErrors', {}),
-  withHandlers({
-    saveToDb: ({ refetchTree, setErrors, errors, data }) => async event => {
-      const field = event.target.name
-      const value = event.target.value || null
-      const row = get(data, 'adresseById', {})
-      /**
-       * only save if value changed
-       */
-      if (row[field] === value) return
-      try {
-        app.client.mutate({
-          mutation: updateAdresseByIdGql,
-          variables: {
-            id: row.id,
-            [field]: value,
-          },
-          /*optimisticResponse: {
-            __typename: 'Mutation',
-            updateAdresseById: {
-              adresse: {
-                id: row.id,
-                name: field === 'name' ? value : row.name,
-                email: field === 'email' ? value : row.email,
-                adresse: field === 'adresse' ? value : row.adresse,
-                telefon: field === 'telefon' ? value : row.telefon,
-                freiwErfko: field === 'freiwErfko' ? value : row.freiwErfko,
-                evabVorname: field === 'evabVorname' ? value : row.evabVorname,
-                evabNachname:
-                  field === 'evabNachname' ? value : row.evabNachname,
-                evabOrt: field === 'evabOrt' ? value : row.evabOrt,
-                __typename: 'Adresse',
-              },
-              __typename: 'Adresse',
-            },
-          },*/
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
-      }
-      setErrors({})
-      if (['name', 'role'].includes(field)) refetchTree('adresses')
-    },
-  }),
-  withLifecycle({
-    onDidUpdate(prevProps, props) {
-      if (prevProps.id !== props.id) {
-        props.setErrors({})
-      }
-    },
-  }),
 )
 
 const Adresse = ({
   treeName,
-  saveToDb,
-  errors,
   localData,
   data,
+  client,
+  refetchTree,
 }: {
   treeName: String,
-  saveToDb: () => void,
-  errors: Object,
   localData: Object,
   data: Object,
+  client: Object,
+  refetchTree: () => void,
 }) => {
   if (localData.error) return `Fehler: ${localData.error.message}`
-  const id = get(localData, `${treeName}.activeNodeArray[2]`)
 
   if (data.loading)
     return (
@@ -107,7 +53,56 @@ const Adresse = ({
     )
   if (data.error) return `Fehler: ${data.error.message}`
 
+  const [errors, setErrors] = useState({})
+
+  const id = get(localData, `${treeName}.activeNodeArray[2]`)
   const row = get(data, 'adresseById', {})
+
+  useEffect(() => setErrors({}), [id])
+
+  const saveToDb = useCallback(
+    async event => {
+      const field = event.target.name
+      const value = event.target.value || null
+      /**
+       * only save if value changed
+       */
+      if (row[field] === value) return
+      try {
+        client.mutate({
+          mutation: updateAdresseByIdGql,
+          variables: {
+            id: row.id,
+            [field]: value,
+          },
+          /*optimisticResponse: {
+          __typename: 'Mutation',
+          updateAdresseById: {
+            adresse: {
+              id: row.id,
+              name: field === 'name' ? value : row.name,
+              email: field === 'email' ? value : row.email,
+              adresse: field === 'adresse' ? value : row.adresse,
+              telefon: field === 'telefon' ? value : row.telefon,
+              freiwErfko: field === 'freiwErfko' ? value : row.freiwErfko,
+              evabVorname: field === 'evabVorname' ? value : row.evabVorname,
+              evabNachname:
+                field === 'evabNachname' ? value : row.evabNachname,
+              evabOrt: field === 'evabOrt' ? value : row.evabOrt,
+              __typename: 'Adresse',
+            },
+            __typename: 'Adresse',
+          },
+        },*/
+        })
+      } catch (error) {
+        return setErrors({ [field]: error.message })
+      }
+      setErrors({})
+      if (['name', 'role'].includes(field)) refetchTree('adresses')
+    },
+    [id],
+  )
 
   return (
     <ErrorBoundary>
