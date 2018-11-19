@@ -1,10 +1,8 @@
 // @flow
-import React, { useContext, useState, useCallback } from 'react'
+import React, { useContext, useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
-import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
 import app from 'ampersand-app'
 
@@ -34,18 +32,52 @@ const FieldsContainer = styled.div`
 const enhance = compose(
   withNodeFilter,
   withData,
-  withState('errors', 'setErrors', {}),
-  withHandlers({
-    saveToDb: ({ setErrors, errors, treeName, data }) => async event => {
+  withLifecycle({
+    onDidUpdate(prevProps, props) {
+      if (prevProps.id !== props.id) {
+        props.setErrors({})
+      }
+    },
+  }),
+)
+
+const Pop = ({
+  // pass in fake id to avoid error when filter is shown
+  // which means there is no id
+  id = '99999999-9999-9999-9999-999999999999',
+  treeName,
+  data,
+}: {
+  id: string,
+  treeName: string,
+  data: Object,
+}) => {
+  if (data.loading)
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  if (data.error) return `Fehler: ${data.error.message}`
+
+  const { nodeFilter, nodeFilterSetValue } = useContext(mobxStoreContext)
+
+  const showFilter = !!nodeFilter[treeName].activeTable
+  let row
+  if (showFilter) {
+    row = nodeFilter[treeName].pop
+  } else {
+    row = get(data, 'popById', {})
+  }
+
+  const [errors, setErrors] = useState({})
+
+  useEffect(() => setErrors({}), [id])
+
+  const saveToDb = useCallback(
+    async event => {
       const field = event.target.name
       const value = event.target.value || null
-      const showFilter = !!nodeFilter[treeName].activeTable
-      let row
-      if (showFilter) {
-        row = nodeFilter[treeName].pop
-      } else {
-        row = get(data, 'popById', {})
-      }
       /**
        * only save if value changed
        */
@@ -67,30 +99,30 @@ const enhance = compose(
               [field]: value,
             },
             /*optimisticResponse: {
-              __typename: 'Mutation',
-              updatePopById: {
-                pop: {
-                  id: row.id,
-                  apId: field === 'apId' ? value : row.apId,
-                  nr: field === 'nr' ? value : row.nr,
-                  name: field === 'name' ? value : row.name,
-                  status: field === 'status' ? value : row.status,
-                  statusUnklar:
-                    field === 'statusUnklar' ? value : row.statusUnklar,
-                  statusUnklarBegruendung:
-                    field === 'statusUnklarBegruendung'
-                      ? value
-                      : row.statusUnklarBegruendung,
-                  bekanntSeit:
-                    field === 'bekanntSeit' ? value : row.bekanntSeit,
-                  x: field === 'x' ? value : row.x,
-                  y: field === 'y' ? value : row.y,
-                  apByApId: row.apByApId,
-                  __typename: 'Pop',
-                },
+            __typename: 'Mutation',
+            updatePopById: {
+              pop: {
+                id: row.id,
+                apId: field === 'apId' ? value : row.apId,
+                nr: field === 'nr' ? value : row.nr,
+                name: field === 'name' ? value : row.name,
+                status: field === 'status' ? value : row.status,
+                statusUnklar:
+                  field === 'statusUnklar' ? value : row.statusUnklar,
+                statusUnklarBegruendung:
+                  field === 'statusUnklarBegruendung'
+                    ? value
+                    : row.statusUnklarBegruendung,
+                bekanntSeit:
+                  field === 'bekanntSeit' ? value : row.bekanntSeit,
+                x: field === 'x' ? value : row.x,
+                y: field === 'y' ? value : row.y,
+                apByApId: row.apByApId,
                 __typename: 'Pop',
               },
-            },*/
+              __typename: 'Pop',
+            },
+          },*/
           })
         } catch (error) {
           return setErrors({ [field]: error.message })
@@ -98,48 +130,8 @@ const enhance = compose(
         setErrors({})
       }
     },
-  }),
-  withLifecycle({
-    onDidUpdate(prevProps, props) {
-      if (prevProps.id !== props.id) {
-        props.setErrors({})
-      }
-    },
-  }),
-)
-
-const Pop = ({
-  // pass in fake id to avoid error when filter is shown
-  // which means there is no id
-  id = '99999999-9999-9999-9999-999999999999',
-  saveToDb,
-  errors,
-  treeName,
-  data,
-}: {
-  id: string,
-  saveToDb: () => void,
-  errors: Object,
-  treeName: string,
-  data: Object,
-}) => {
-  if (data.loading)
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  if (data.error) return `Fehler: ${data.error.message}`
-
-  const { nodeFilter, nodeFilterSetValue } = useContext(mobxStoreContext)
-
-  const showFilter = !!nodeFilter[treeName].activeTable
-  let row
-  if (showFilter) {
-    row = nodeFilter[treeName].pop
-  } else {
-    row = get(data, 'popById', {})
-  }
+    [id, showFilter],
+  )
 
   return (
     <ErrorBoundary>
