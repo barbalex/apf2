@@ -1,5 +1,5 @@
 // @flow
-import React, { Fragment } from 'react'
+import React, { useContext, useState, useCallback } from 'react'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
@@ -26,7 +26,7 @@ import setView from './setView'
 import EkfYear from './EkfYear'
 import User from './User'
 import Daten from './Daten'
-import withNodeFilter from '../../state/withNodeFilter'
+import mobxStoreContext from '../../mobxStoreContext'
 
 const StyledAppBar = styled(AppBar)`
   @media print {
@@ -66,11 +66,8 @@ const MenuDiv = styled.div`
 
 const enhance = compose(
   withLocalData,
-  withNodeFilter,
-  withState('ekfYearState', 'setEkfYearState', null),
-  withState('userOpen', 'setUserOpen', false),
   withHandlers({
-    onClickButton: ({ nodeFilterState, localData }) => (name: string) => {
+    onClickButton: ({ localData }) => (name: string) => {
       const projekteTabs = get(localData, 'urlQuery.projekteTabs', [])
       if (isMobilePhone()) {
         // show one tab only
@@ -88,7 +85,7 @@ const enhance = compose(
                 }
               `,
             })
-            nodeFilterState.clone1To2()
+            nodeFilterClone1To2()
           }
         }
         setUrlQueryValue({ key: 'projekteTabs', value: projekteTabs })
@@ -133,7 +130,6 @@ const MyAppBar = ({
   setViewNormal,
   setViewEkf,
   setEkfYear,
-  userOpen,
   toggleUserOpen,
   localData,
 }: {
@@ -145,11 +141,13 @@ const MyAppBar = ({
   setViewNormal: () => void,
   setViewEkf: () => void,
   setEkfYear: () => void,
-  userOpen: boolean,
   toggleUserOpen: () => void,
   localData: Object,
 }) => {
   if (localData.error) return `Fehler: ${localData.error.message}`
+
+  const { nodeFilterClone1To2 } = useContext(mobxStoreContext)
+
   const activeNodeArray = get(localData, 'tree.activeNodeArray')
   const activeNodes = getActiveNodes(activeNodeArray)
   /**
@@ -166,6 +164,8 @@ const MyAppBar = ({
   const role = tokenDecoded ? tokenDecoded.role : null
   const isFreiwillig = role === 'apflora_freiwillig'
   const username = get(localData, 'user.name')
+
+  const [userOpen, setUserOpen] = useState(false)
 
   return (
     <ErrorBoundary>
@@ -191,7 +191,7 @@ const MyAppBar = ({
               </NormalViewButton>
             )}
             {view === 'ekf' && isFreiwillig && (
-              <Fragment>
+              <>
                 <NormalViewButton onClick={toggleUserOpen}>
                   {`Benutzer: ${username}`}
                 </NormalViewButton>
@@ -200,10 +200,10 @@ const MyAppBar = ({
                   userOpen={userOpen}
                   toggleUserOpen={toggleUserOpen}
                 />
-              </Fragment>
+              </>
             )}
             {view === 'normal' && (
-              <Fragment>
+              <>
                 {isFreiwillig && (
                   <NormalViewButton onClick={setViewEkf}>
                     EKF-Ansicht
@@ -261,7 +261,7 @@ const MyAppBar = ({
                   </StyledButton>
                 )}
                 {!isMobile && <Daten data={localData} treeNr="2" />}
-              </Fragment>
+              </>
             )}
             <More
               onClickExporte={onClickExporte}
