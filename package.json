@@ -87,8 +87,7 @@
     "react-window": "1.2.4",
     "recompose": "0.30.0",
     "styled-components": "4.1.1",
-    "typeface-roboto": "0.0.54",
-    "unstated": "2.1.1"
+    "typeface-roboto": "0.0.54"
   },
   "scripts": {
     "start": "react-scripts start",

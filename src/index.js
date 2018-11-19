@@ -19,7 +19,6 @@ import 'moment/locale/de-ch' // this is the important bit, you have to import th
 import MomentUtils from '@date-io/moment'
 import { MuiPickersUtilsProvider } from 'material-ui-pickers'
 import { ApolloProvider } from 'react-apollo'
-import { Provider as StateProvider } from 'unstated'
 import MobxStore from './mobxStore'
 
 import app from 'ampersand-app'
@@ -40,7 +39,7 @@ import AppContainer from './components/AppContainer'
 import Print from './components/Print'
 import historyListen from './modules/historyListen'
 
-import { StoreContextProvider as MobxStoreContextProvider } from './mobxStoreContext'
+import { StoreContextProvider as MobxProvider } from './mobxStoreContext'
 
 import './index.css'
 
@@ -83,24 +82,22 @@ const run = async () => {
     )
 
     ReactDOM.render(
-      <StateProvider>
-        <MobxStoreContextProvider value={mobxStore}>
-          <ApolloProvider client={myClient}>
-            <>
-              <Print />
-              <MuiThemeProvider theme={theme}>
-                <MuiPickersUtilsProvider
-                  utils={MomentUtils}
-                  moment={moment}
-                  locale="de-ch"
-                >
-                  <AppContainer />
-                </MuiPickersUtilsProvider>
-              </MuiThemeProvider>
-            </>
-          </ApolloProvider>
-        </MobxStoreContextProvider>
-      </StateProvider>,
+      <MobxProvider value={mobxStore}>
+        <ApolloProvider client={myClient}>
+          <>
+            <Print />
+            <MuiThemeProvider theme={theme}>
+              <MuiPickersUtilsProvider
+                utils={MomentUtils}
+                moment={moment}
+                locale="de-ch"
+              >
+                <AppContainer />
+              </MuiPickersUtilsProvider>
+            </MuiThemeProvider>
+          </>
+        </ApolloProvider>
+      </MobxProvider>,
       document.getElementById('root'),
     )
   } catch (error) {

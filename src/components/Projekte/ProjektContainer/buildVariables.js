@@ -3,9 +3,9 @@ import uniq from 'lodash/uniq'
 import get from 'lodash/get'
 
 import getActiveNodes from '../../../modules/getActiveNodes'
-import { type as apType } from '../../../state/nodeFilter/ap'
-import { type as popType } from '../../../state/nodeFilter/pop'
-import { type as tpopType } from '../../../state/nodeFilter/tpop'
+import { type as apType } from '../../../mobxStore/NodeFilterTree/ap'
+import { type as popType } from '../../../mobxStore/NodeFilterTree/pop'
+import { type as tpopType } from '../../../mobxStore/NodeFilterTree/tpop'
 
 export default ({
   dataLocal,
@@ -53,13 +53,12 @@ export default ({
   }
   const ap = uniq(
     openNodes
-      .map(
-        a =>
-          a.length > 3 &&
-          a[0] === 'Projekte' &&
-          decodeURIComponent(a[2]) === 'Aktionspläne'
-            ? a[3]
-            : null,
+      .map(a =>
+        a.length > 3 &&
+        a[0] === 'Projekte' &&
+        decodeURIComponent(a[2]) === 'Aktionspläne'
+          ? a[3]
+          : null,
       )
       .filter(v => v !== null),
   )
@@ -69,14 +68,13 @@ export default ({
     openNodes.some(nArray => nArray[2] === 'Aktionspläne' && nArray[3])
   const ziel = uniq(
     openNodes
-      .map(
-        a =>
-          a.length > 7 &&
-          a[0] === 'Projekte' &&
-          decodeURIComponent(a[2]) === 'Aktionspläne' &&
-          a[4] === 'AP-Ziele'
-            ? a[6]
-            : null,
+      .map(a =>
+        a.length > 7 &&
+        a[0] === 'Projekte' &&
+        decodeURIComponent(a[2]) === 'Aktionspläne' &&
+        a[4] === 'AP-Ziele'
+          ? a[6]
+          : null,
       )
       .filter(v => v !== null),
   )
@@ -85,14 +83,13 @@ export default ({
     openNodes.some(nArray => nArray[4] === 'AP-Ziele' && nArray[5] && nArray[6])
   const pop = uniq(
     openNodes
-      .map(
-        a =>
-          a.length > 5 &&
-          a[0] === 'Projekte' &&
-          decodeURIComponent(a[2]) === 'Aktionspläne' &&
-          a[4] === 'Populationen'
-            ? a[5]
-            : null,
+      .map(a =>
+        a.length > 5 &&
+        a[0] === 'Projekte' &&
+        decodeURIComponent(a[2]) === 'Aktionspläne' &&
+        a[4] === 'Populationen'
+          ? a[5]
+          : null,
       )
       .filter(v => v !== null),
   )
@@ -108,15 +105,14 @@ export default ({
   })
   const tpop = uniq(
     openNodes
-      .map(
-        a =>
-          a.length > 7 &&
-          a[0] === 'Projekte' &&
-          decodeURIComponent(a[2]) === 'Aktionspläne' &&
-          a[4] === 'Populationen' &&
-          a[6] === 'Teil-Populationen'
-            ? a[7]
-            : null,
+      .map(a =>
+        a.length > 7 &&
+        a[0] === 'Projekte' &&
+        decodeURIComponent(a[2]) === 'Aktionspläne' &&
+        a[4] === 'Populationen' &&
+        a[6] === 'Teil-Populationen'
+          ? a[7]
+          : null,
       )
       .filter(v => v !== null),
   )
@@ -134,16 +130,15 @@ export default ({
 
   const tpopkontr = uniq(
     openNodes
-      .map(
-        a =>
-          a.length > 9 &&
-          a[0] === 'Projekte' &&
-          decodeURIComponent(a[2]) === 'Aktionspläne' &&
-          a[4] === 'Populationen' &&
-          a[6] === 'Teil-Populationen' &&
-          ['Feld-Kontrollen', 'Freiwilligen-Kontrollen'].includes(a[8])
-            ? a[9]
-            : null,
+      .map(a =>
+        a.length > 9 &&
+        a[0] === 'Projekte' &&
+        decodeURIComponent(a[2]) === 'Aktionspläne' &&
+        a[4] === 'Populationen' &&
+        a[6] === 'Teil-Populationen' &&
+        ['Feld-Kontrollen', 'Freiwilligen-Kontrollen'].includes(a[8])
+          ? a[9]
+          : null,
       )
       .filter(v => v !== null),
   )

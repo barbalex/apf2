@@ -12,7 +12,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
 import TestdataMessage from './TestdataMessage'
-import types from '../../../state/nodeFilter/types'
+import types from '../../../mobxStore/NodeFilterTree/types'
 import setTreeKeyGql from './setTreeKey'
 import data from './data'
 import mobxStoreContext from '../../../mobxStoreContext'

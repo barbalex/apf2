@@ -4,7 +4,7 @@
 // this is done
 // but unfortunately query does not immediatly update
 
-import types from '../../../state/nodeFilter/types'
+import types from '../../../mobxStore/NodeFilterTree/types'
 
 export default ({
   node,
