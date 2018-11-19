@@ -1,12 +1,9 @@
 // @flow
-import React from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
-import withState from 'recompose/withState'
-import withLifecycle from '@hocs/with-lifecycle'
-import app from 'ampersand-app'
+import { withApollo } from 'react-apollo'
 
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
@@ -27,65 +24,20 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withApollo,
   withData,
-  withState('errors', 'setErrors', {}),
-  withHandlers({
-    saveToDb: ({ setErrors, errors, data }) => async event => {
-      const field = event.target.name
-      const value = event.target.value || null
-      const row = get(data, 'apberuebersichtById', {})
-      /**
-       * only save if value changed
-       */
-      if (row[field] === value) return
-      try {
-        await app.client.mutate({
-          mutation: updateApberuebersichtByIdGql,
-          variables: {
-            id: row.id,
-            [field]: value,
-          },
-          /*optimisticResponse: {
-            __typename: 'Mutation',
-            updateApberuebersichtById: {
-              apberuebersicht: {
-                id: row.id,
-                projId: field === 'projId' ? value : row.projId,
-                jahr: field === 'jahr' ? value : row.jahr,
-                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-                __typename: 'Apberuebersicht',
-              },
-              __typename: 'Apberuebersicht',
-            },
-          },*/
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
-      }
-      setErrors({})
-    },
-  }),
-  withLifecycle({
-    onDidUpdate(prevProps, props) {
-      if (prevProps.id !== props.id) {
-        props.setErrors({})
-      }
-    },
-  }),
 )
 
 const Apberuebersicht = ({
   id,
-  saveToDb,
-  errors,
   treeName,
   data,
+  client,
 }: {
   id: string,
-  saveToDb: () => void,
-  errors: Object,
   treeName: string,
-  data: object,
+  data: Object,
+  client: Object,
 }) => {
   if (data.loading)
     return (
@@ -95,7 +47,48 @@ const Apberuebersicht = ({
     )
   if (data.error) return `Fehler: ${data.error.message}`
 
+  const [errors, setErrors] = useState({})
+
+  useEffect(() => setErrors({}), [id])
+
   const row = get(data, 'apberuebersichtById', {})
+
+  const saveToDb = useCallback(
+    async event => {
+      const field = event.target.name
+      const value = event.target.value || null
+      /**
+       * only save if value changed
+       */
+      if (row[field] === value) return
+      try {
+        await client.mutate({
+          mutation: updateApberuebersichtByIdGql,
+          variables: {
+            id: row.id,
+            [field]: value,
+          },
+          /*optimisticResponse: {
+          __typename: 'Mutation',
+          updateApberuebersichtById: {
+            apberuebersicht: {
+              id: row.id,
+              projId: field === 'projId' ? value : row.projId,
+              jahr: field === 'jahr' ? value : row.jahr,
+              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+              __typename: 'Apberuebersicht',
+            },
+            __typename: 'Apberuebersicht',
+          },
+        },*/
+        })
+      } catch (error) {
+        return setErrors({ [field]: error.message })
+      }
+      setErrors({})
+    },
+    [id],
+  )
 
   return (
     <ErrorBoundary>

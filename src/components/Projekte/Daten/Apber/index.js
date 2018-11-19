@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
-import app from 'ampersand-app'
+import { withApollo } from 'react-apollo'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -34,6 +34,7 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withApollo,
   withData,
   withAllApErfkritWertes,
   withAllAdresses,
@@ -46,6 +47,7 @@ const Apber = ({
   dataAllAdresses,
   dataAllApErfkritWertes,
   data,
+  client,
 }: {
   id: string,
   dimensions: Object,
@@ -53,6 +55,7 @@ const Apber = ({
   dataAllAdresses: Object,
   dataAllApErfkritWertes: Object,
   data: Object,
+  client: Object,
 }) => {
   const [errors, setErrors] = useState({})
 
@@ -72,7 +75,7 @@ const Apber = ({
      */
     if (row[field] === value) return
     try {
-      await app.client.mutate({
+      await client.mutate({
         mutation: updateApberByIdGql,
         variables: {
           id: row.id,
