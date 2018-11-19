@@ -1,21 +1,20 @@
 // @flow
-import React from 'react'
+import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
 import FilterIcon from '@material-ui/icons/FilterList'
 import DeleteFilterIcon from '@material-ui/icons/DeleteSweep'
 import DeleteFilterIcon2 from '@material-ui/icons/DeleteSweepOutlined'
 import IconButton from '@material-ui/core/IconButton'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
 import isUuid from 'is-uuid'
 import app from 'ampersand-app'
 import get from 'lodash/get'
 
 import TestdataMessage from './TestdataMessage'
-import withNodeFilterState from '../../../state/withNodeFilter'
 import types from '../../../state/nodeFilter/types'
 import setTreeKeyGql from './setTreeKey'
 import data from './data'
+import mobxStoreContext from '../../../mobxStoreContext'
 
 const Container = styled.div`
   background-color: ${props => (props.showfilter ? '#D84315' : '#388e3c')};
@@ -63,13 +62,47 @@ const Symbols = styled.div`
   display: flex;
 `
 
-const enhance = compose(
-  data,
-  withNodeFilterState,
-  withHandlers({
-    onFilter: ({ nodeFilterState, data, treeName, table }) => () => {
-      const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
-      nodeFilterState.setActiveTable({ treeName, activeTable: table })
+const enhance = compose(data)
+
+const FormTitle = ({
+  tree,
+  title,
+  apId,
+  table,
+  treeName,
+}: {
+  tree: Object,
+  title: string,
+  apId: string,
+  table: string,
+  treeName: string,
+}) => {
+  const {
+    nodeFilter,
+    nodeFilterTableIsFiltered,
+    nodeFilterTreeIsFiltered,
+    nodeFilterSetActiveTable,
+    nodeFilterEmptyTable,
+    nodeFilterEmptyTree,
+  } = useContext(mobxStoreContext)
+
+  const typesExist = !!types[table]
+  const showFilter = !!treeName && !!nodeFilter[treeName].activeTable
+  let existsTableFilter
+  let existsTreeFilter
+  const doFilter = table && treeName
+  if (doFilter) {
+    existsTableFilter = nodeFilterTableIsFiltered({
+      treeName,
+      table,
+    })
+    existsTreeFilter = nodeFilterTreeIsFiltered(treeName)
+  }
+  const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
+
+  const onFilter = useCallback(
+    () => {
+      nodeFilterSetActiveTable({ treeName, activeTable: table })
       // if active node is id, pop
       if (
         activeNodeArray &&
@@ -87,46 +120,15 @@ const enhance = compose(
         })
       }
     },
-    onEmptyTable: ({ nodeFilterState, treeName, table }) => () =>
-      nodeFilterState.emptyTable({ treeName, table }),
-    onEmptyTree: ({ nodeFilterState, treeName }) => () =>
-      nodeFilterState.emptyTree(treeName),
-  }),
-)
-
-const FormTitle = ({
-  tree,
-  title,
-  apId,
-  nodeFilterState,
-  onFilter,
-  onEmptyTable,
-  onEmptyTree,
-  table,
-  treeName,
-}: {
-  tree: Object,
-  title: string,
-  apId: string,
-  nodeFilterState: Object,
-  onFilter: () => void,
-  onEmptyTable: () => void,
-  onEmptyTree: () => void,
-  table: string,
-  treeName: string,
-}) => {
-  const typesExist = !!types[table]
-  const showFilter = !!treeName && !!nodeFilterState.state[treeName].activeTable
-  let existsTableFilter
-  let existsTreeFilter
-  const doFilter = table && treeName
-  if (doFilter) {
-    existsTableFilter = nodeFilterState.tableIsFiltered({
-      treeName,
-      table,
-    })
-    existsTreeFilter = nodeFilterState.treeIsFiltered(treeName)
-  }
+    [activeNodeArray, treeName],
+  )
+  const onEmptyTable = useCallback(
+    () => nodeFilterEmptyTable({ treeName, table }),
+    [treeName, table],
+  )
+  const onEmptyTree = useCallback(() => nodeFilterEmptyTree(treeName), [
+    treeName,
+  ])
 
   return (
     <Container showfilter={showFilter}>
@@ -134,15 +136,14 @@ const FormTitle = ({
         <Title>{`${title}${showFilter ? ' Filter' : ''}`}</Title>
         {doFilter && (
           <Symbols>
-            {!showFilter &&
-              typesExist && (
-                <StyledIconButton
-                  aria-label="Daten filtern"
-                  title={`${table ? table : 'Daten'} filtern`}
-                >
-                  <StyledFilterIcon onClick={onFilter} />
-                </StyledIconButton>
-              )}
+            {!showFilter && typesExist && (
+              <StyledIconButton
+                aria-label="Daten filtern"
+                title={`${table ? table : 'Daten'} filtern`}
+              >
+                <StyledFilterIcon onClick={onFilter} />
+              </StyledIconButton>
+            )}
             {existsTableFilter && (
               <StyledIconButton
                 aria-label={`${title}-Filter entfernen`}
