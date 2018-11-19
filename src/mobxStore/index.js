@@ -1,10 +1,12 @@
 // @flow
 import { types } from 'mobx-state-tree'
+import cloneDeep from 'lodash/cloneDeep'
 
 import ApfloraLayer from './ApfloraLayer'
 import MapFilter from './MapFilter'
 import standardApfloraLayers from '../components/Projekte/Karte/apfloraLayers'
 import standardOverlays from '../components/Projekte/Karte/overlays'
+import { initial as nodeFilterEmpty } from './nodeFilter'
 
 const myTypes = types
   .model({
@@ -41,6 +43,10 @@ const myTypes = types
     ktZh: null,
     errors: [],
     toDeleteAfterDeletionHook: null,
+    nodeFilter: {
+      tree: nodeFilterEmpty,
+      tree2: nodeFilterEmpty,
+    },
   }))
   .views(self => ({
     get toDelete() {
@@ -119,6 +125,34 @@ const myTypes = types
     addError(error) {
       self.errors.push(error)
       setTimeout(() => self.errors.pop(), 1000 * 10)
+    },
+    nodeFilterSet({ treeName, nodeFilter }) {
+      self.nodeFilter[treeName] = nodeFilter
+    },
+    nodeFilterClone1To2() {
+      self.nodeFilter.tree2 = cloneDeep(self.nodeFilter.tree)
+    },
+    nodeFilterSetValue({ treeName, table, key, value }) {
+      self.nodeFilter[treeName][table][key] = value
+    },
+    nodeFilterEmptyTree(treeName) {
+      self.nodeFilter[treeName] = nodeFilterEmpty
+    },
+    nodeFilterEmptyTable({ treeName, table }) {
+      self.nodeFilter[treeName][table] = nodeFilterEmpty[table]
+    },
+    nodeFilterSetActiveTable({ treeName, activeTable }) {
+      self.nodeFilter[treeName].activeTable = activeTable
+    },
+    nodeFilterTableIsFiltered({ treeName, table }) {
+      const tableFilter = self.nodeFilter[treeName][table]
+      return Object.values(tableFilter).filter(v => v || v === 0).length > 0
+    },
+    nodeFilterTreeIsFiltered(treeName) {
+      const tables = Object.keys(self.nodeFilter[treeName]).filter(
+        t => t !== 'activeTable',
+      )
+      return tables.some(table => self.tableIsFiltered({ treeName, table }))
     },
   }))
 
