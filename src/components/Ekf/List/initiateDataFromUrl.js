@@ -32,5 +32,5 @@ export default async ({
     },
   })
   // need to set openNodes
-  setOpenNodesFromActiveNodeArray(activeNodeArray)
+  setOpenNodesFromActiveNodeArray({ activeNodeArray, client })
 }

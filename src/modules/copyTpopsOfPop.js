@@ -1,7 +1,6 @@
 // @flow
 import gql from 'graphql-tag'
 import get from 'lodash/get'
-import app from 'ampersand-app'
 
 import copyTo from './copyTo'
 
@@ -9,13 +8,15 @@ export default async ({
   popIdFrom,
   popIdTo,
   refetchTree,
+  client,
 }: {
   popIdFrom: String,
   popIdTo: String,
   refetchTree: () => void,
+  client: Object,
 }) => {
   // 1. fetch all tpops
-  const { data } = await app.client.query({
+  const { data } = await client.query({
     query: gql`
       query myquery($popId: UUID!) {
         allTpops(filter: { popId: { equalTo: $popId } }) {

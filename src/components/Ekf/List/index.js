@@ -171,7 +171,9 @@ const EkfList = ({
           return (
             <OuterContainer
               style={style}
-              onClick={initiateDataFromUrl.bind(this, url)}
+              onClick={() =>
+                initiateDataFromUrl({ activeNodeArray: url, client })
+              }
               active={activeTpopkontrId === row.id}
             >
               <InnerContainer height={innerContainerHeight}>
