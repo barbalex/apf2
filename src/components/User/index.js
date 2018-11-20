@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { useState, useCallback } from 'react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogActions from '@material-ui/core/DialogActions'
@@ -14,11 +14,10 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
-import withState from 'recompose/withState'
 import get from 'lodash/get'
 import gql from 'graphql-tag'
 import app from 'ampersand-app'
+import { withApollo } from 'react-apollo'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import withLocalData from './withLocalData'
@@ -37,24 +36,26 @@ const StyledInput = styled(Input)`
 `
 
 const enhance = compose(
+  withApollo,
   withLocalData,
-  withState('name', 'setName', ''),
-  withState('password', 'setPassword', ''),
-  withState('showPass', 'setShowPass', false),
-  withState('nameErrorText', 'setNameErrorText', ''),
-  withState('passwordErrorText', 'setPasswordErrorText', ''),
-  withHandlers({
-    fetchLogin: ({
-      setNameErrorText,
-      setPasswordErrorText,
-      setName,
-      setPassword,
-      name,
-      password,
-    }) => async () => {
+)
+
+const User = ({ localData, client }: { localData: Object, client: Object }) => {
+  if (localData.error) return `Fehler: ${localData.error.message}`
+
+  const [name, setName] = useState('')
+  const [password, setPassword] = useState('')
+  const [showPass, setShowPass] = useState(false)
+  const [nameErrorText, setNameErrorText] = useState('')
+  const [passwordErrorText, setPasswordErrorText] = useState('')
+
+  const user = get(localData, 'user', {})
+
+  const fetchLogin = useCallback(
+    async () => {
       let result
       try {
-        result = await app.client.mutate({
+        result = await client.mutate({
           mutation: gql`
             mutation logIn($name: String, $password: String) {
               login(input: { username: $name, pass: $password }) {
@@ -67,13 +68,13 @@ const enhance = compose(
             password,
           },
           /*optimisticResponse: {
-            login: {
-              username: name,
-              jwtToken: '',
-              __typename: 'Login',
-            },
-            __typename: 'Mutation',
-          },*/
+          login: {
+            username: name,
+            jwtToken: '',
+            __typename: 'Login',
+          },
+          __typename: 'Mutation',
+        },*/
         })
       } catch (error) {
         const messages = error.graphQLErrors.map(x => x.message)
@@ -91,17 +92,17 @@ const enhance = compose(
       // refresh currentUser in idb
       app.db.currentUser.clear()
       await app.db.currentUser.put({ name, token })
-      await app.client.mutate({
+      await client.mutate({
         mutation: setUserGql,
         variables: { name, token },
         /*optimisticResponse: {
-          setUser: {
-            name,
-            token,
-            __typename: 'User',
-          },
-          __typename: 'Mutation',
-        },*/
+        setUser: {
+          name,
+          token,
+          __typename: 'User',
+        },
+        __typename: 'Mutation',
+      },*/
       })
       // this is easiest way to make sure everything is correct
       // as client is rebuilt with new settings
@@ -114,9 +115,10 @@ const enhance = compose(
         }
       }, 2000)
     },
-  }),
-  withHandlers({
-    onBlurName: ({ password, setName, setNameErrorText, fetchLogin }) => e => {
+    [name, password],
+  )
+  const onBlurName = useCallback(
+    e => {
       setNameErrorText('')
       const name = e.target.value
       setName(name)
@@ -126,12 +128,10 @@ const enhance = compose(
         setTimeout(() => fetchLogin())
       }
     },
-    onBlurPassword: ({
-      name,
-      setPassword,
-      setPasswordErrorText,
-      fetchLogin,
-    }) => e => {
+    [password],
+  )
+  const onBlurPassword = useCallback(
+    e => {
       setPasswordErrorText('')
       const password = e.target.value
       setPassword(password)
@@ -141,41 +141,8 @@ const enhance = compose(
         setTimeout(() => fetchLogin())
       }
     },
-  }),
-)
-
-const User = ({
-  name,
-  password,
-  showPass,
-  setShowPass,
-  nameErrorText,
-  passwordErrorText,
-  setNameErrorText,
-  setPasswordErrorText,
-  onBlurName,
-  onBlurPassword,
-  fetchLogin,
-  localData,
-}: {
-  name: string,
-  showPass: Boolean,
-  setName: () => void,
-  password: string,
-  setShowPass: () => void,
-  setPassword: () => void,
-  nameErrorText: string,
-  setNameErrorText: () => void,
-  passwordErrorText: string,
-  setPasswordErrorText: () => void,
-  onBlurName: () => void,
-  onBlurPassword: () => void,
-  fetchLogin: () => void,
-  localData: Object,
-}) => {
-  if (localData.error) return `Fehler: ${localData.error.message}`
-
-  const user = get(localData, 'user', {})
+    [name],
+  )
 
   return (
     <ErrorBoundary>
