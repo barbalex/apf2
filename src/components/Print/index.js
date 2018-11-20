@@ -60,7 +60,6 @@ const Print = ({
   client: Object,
 }) => {
   const { history } = useContext(historyContext)
-  if (localData.error) return `Fehler: ${localData.error.message}`
 
   const activeNodeArray = get(localData, 'tree.activeNodeArray')
   const showApberForAp =
@@ -72,6 +71,7 @@ const Print = ({
     activeNodeArray[2] === 'AP-Berichte' &&
     activeNodeArray[4] === 'print'
 
+  if (localData.error) return `Fehler: ${localData.error.message}`
   if (!showApberForAp && !showApberForYear) return null
 
   return (

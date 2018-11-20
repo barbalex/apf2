@@ -45,6 +45,7 @@ const EkfAdresse = ({
 
   if (data.loading) return '...'
   if (data.error) return `Fehler: ${data.error.message}`
+
   let adressenWerte = get(data, 'allAdresses.nodes', [])
   adressenWerte = sortBy(adressenWerte, 'name')
   adressenWerte = adressenWerte.map(el => ({

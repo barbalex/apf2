@@ -42,8 +42,6 @@ const ReflexElementForEKF = styled(ReflexElement)`
 const enhance = compose(withLocalData)
 
 const EkfContainer = ({ localData }: { localData: Object }) => {
-  if (localData.error) return `Fehler: ${localData.error.message}`
-
   const userName = get(localData, 'user.name')
   const isPrint = get(localData, 'isPrint')
   const jahr = get(localData, 'ekfYear')
@@ -62,6 +60,8 @@ const EkfContainer = ({ localData }: { localData: Object }) => {
       ? dataWithDateByAdresseIdGql
       : dataWithDateByUserNameGql
   }
+
+  if (localData.error) return `Fehler: ${localData.error.message}`
 
   return (
     <Query query={query} variables={variables}>
