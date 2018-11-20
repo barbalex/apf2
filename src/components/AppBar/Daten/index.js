@@ -102,7 +102,11 @@ const MyAppBarDaten = ({
       const copyOfProjekteTabs = clone(projekteTabs)
       if (isMobilePhone()) {
         // show one tab only
-        setUrlQueryValue({ key: 'projekteTabs', value: [`daten${treeNr}`] })
+        setUrlQueryValue({
+          key: 'projekteTabs',
+          value: [`daten${treeNr}`],
+          client,
+        })
       } else {
         if (copyOfProjekteTabs.includes(`daten${treeNr}`)) {
           remove(copyOfProjekteTabs, el => el === `daten${treeNr}`)
@@ -119,7 +123,11 @@ const MyAppBarDaten = ({
             nodeFilterClone1To2()
           }
         }
-        setUrlQueryValue({ key: 'projekteTabs', value: copyOfProjekteTabs })
+        setUrlQueryValue({
+          key: 'projekteTabs',
+          value: copyOfProjekteTabs,
+          client,
+        })
       }
     },
     [data],

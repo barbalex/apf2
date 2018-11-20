@@ -105,7 +105,7 @@ const MyAppBar = ({
     (name: string) => {
       if (isMobilePhone()) {
         // show one tab only
-        setUrlQueryValue({ key: 'projekteTabs', value: [name] })
+        setUrlQueryValue({ key: 'projekteTabs', value: [name], client })
       } else {
         if (projekteTabs.includes(name)) {
           remove(projekteTabs, el => el === name)
@@ -122,7 +122,7 @@ const MyAppBar = ({
             nodeFilterClone1To2()
           }
         }
-        setUrlQueryValue({ key: 'projekteTabs', value: projekteTabs })
+        setUrlQueryValue({ key: 'projekteTabs', value: projekteTabs, client })
       }
     },
     [projekteTabs],
