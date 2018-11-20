@@ -39,6 +39,7 @@ export default async ({
       table: 'tpopkontrzaehl',
       id: zaehl.id,
       refetchTree,
+      client,
     }),
   )
 }
