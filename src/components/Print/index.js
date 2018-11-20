@@ -1,10 +1,9 @@
 // @flow
-import React, { lazy, Suspense } from 'react'
+import React, { lazy, Suspense, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import Button from '@material-ui/core/Button'
 import ArrowBack from '@material-ui/icons/ArrowBack'
-import app from 'ampersand-app'
 import compose from 'recompose/compose'
 import { withApollo } from 'react-apollo'
 
@@ -12,6 +11,7 @@ import ErrorBoundary from '../shared/ErrorBoundary'
 import Fallback from '../shared/Fallback'
 import withLocalData from './withLocalData'
 import setTreeKey from './setTreeKey'
+import historyContext from '../../historyContext'
 
 const Container = styled.div`
   background-color: #eee;
@@ -59,6 +59,7 @@ const Print = ({
   localData: Object,
   client: Object,
 }) => {
+  const { history } = useContext(historyContext)
   if (localData.error) return `Fehler: ${localData.error.message}`
 
   const activeNodeArray = get(localData, 'tree.activeNodeArray')
@@ -81,8 +82,8 @@ const Print = ({
             <BackButton
               variant="outlined"
               onClick={() => {
-                app.history.goBack()
-                if (app.history.location.state === undefined) {
+                history.goBack()
+                if (history.location.state === undefined) {
                   // happens when print was the initial page opened
                   // so nowhere to go back to
                   const newActiveNodeArray = [...activeNodeArray]

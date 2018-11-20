@@ -11,10 +11,10 @@ import gql from 'graphql-tag'
 import app from 'ampersand-app'
 
 import graphQlUri from './modules/graphQlUri'
-import resolvers from './store/resolvers'
+import buildResolvers from './store/resolvers'
 import defaults from './store/defaults'
 
-export default async idb => {
+export default async ({ idb, history }) => {
   const authLink = setContext(async (_, { headers }) => {
     const users = await idb.currentUser.toArray()
     let token = get(users, '[0].token', null)
@@ -61,7 +61,7 @@ export default async idb => {
   })
   const myDefaults = await defaults(idb)
   const stateLink = withClientState({
-    resolvers,
+    resolvers: buildResolvers({ history }),
     cache,
     defaults: myDefaults,
   })

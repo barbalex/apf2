@@ -1,7 +1,6 @@
 //@flow
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
-import app from 'ampersand-app'
 
 export default async ({
   deletedDatasets,
@@ -9,14 +8,15 @@ export default async ({
   setShowDeletions,
   removeDeletedDatasetById,
   addError,
+  client,
 }: {
   deletedDatasets: Array<Object>,
   dataset: Object,
   setShowDeletions: () => void,
   removeDeletedDatasetById: Object,
   addError: () => void,
+  client: Object,
 }) => {
-  const { client } = app
   const { table, data, afterDeletionHook } = dataset
   // 1. create new dataset
   const queryName = `create${upperFirst(camelCase(table))}`

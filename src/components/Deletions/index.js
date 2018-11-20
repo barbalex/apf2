@@ -11,6 +11,8 @@ import styled from 'styled-components'
 import format from 'date-fns/format'
 import TextField from '@material-ui/core/TextField'
 import { observer } from 'mobx-react-lite'
+import { withApollo } from 'react-apollo'
+import compose from 'recompose/compose'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import undelete from './undelete'
@@ -50,12 +52,19 @@ const StyledCheckbox = styled(Checkbox)`
   height: 30px !important;
 `
 
+const enhance = compose(
+  withApollo,
+  observer,
+)
+
 const Deletions = ({
   showDeletions,
   setShowDeletions,
+  client,
 }: {
   showDeletions: Boolean,
   setShowDeletions: () => void,
+  client: Object,
 }) => {
   const { addError, removeDeletedDatasetById, deletedDatasets } = useContext(
     mobxStoreContext,
@@ -75,6 +84,7 @@ const Deletions = ({
               setShowDeletions,
               removeDeletedDatasetById,
               addError,
+              client,
             }),
         ),
       )
@@ -169,4 +179,4 @@ const Deletions = ({
   )
 }
 
-export default observer(Deletions)
+export default enhance(Deletions)

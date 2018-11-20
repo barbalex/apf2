@@ -1,11 +1,10 @@
 // @flow
-import app from 'ampersand-app'
 import isEqual from 'lodash/isEqual'
 import get from 'lodash/get'
 import queryString from 'query-string'
 import gql from 'graphql-tag'
 
-export default {
+export default ({ history }) => ({
   Mutation: {
     setUrlQuery: (_, { projekteTabs, feldkontrTab }, { cache }) => {
       const newUrlQuery = { projekteTabs, feldkontrTab }
@@ -39,9 +38,9 @@ export default {
           Object.keys(newUrlQuery).length > 0 ? `?${search}` : ''
         }`
         const activeNodeArray = get(data, 'tree.activeNodeArray')
-        app.history.push(`/${activeNodeArray.join('/')}${query}`)
+        history.push(`/${activeNodeArray.join('/')}${query}`)
       }
       return null
     },
   },
-}
+})
