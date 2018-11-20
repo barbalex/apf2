@@ -1,5 +1,6 @@
 // @flow
 import React, { useContext, useCallback } from 'react'
+import compose from 'recompose/compose'
 import styled from 'styled-components'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import SwapVerticalCircleIcon from '@material-ui/icons/SwapVerticalCircle'
@@ -12,8 +13,8 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 //import PrintIcon from '@material-ui/icons/LibraryBooks'
 import PrintIcon from '@material-ui/icons/PictureAsPdf'
 import get from 'lodash/get'
-import app from 'ampersand-app'
 import { observer } from 'mobx-react-lite'
+import { withApollo } from 'react-apollo'
 
 import isNodeInActiveNodePath from '../../isNodeInActiveNodePath'
 import isNodeOpen from '../../isNodeOpen'
@@ -178,6 +179,11 @@ const PrintIconContainer = styled.div`
   }
 `
 
+const enhance = compose(
+  withApollo,
+  observer,
+)
+
 const Row = ({
   index,
   style,
@@ -190,6 +196,7 @@ const Row = ({
   openNodes,
   copying,
   mapIdsFiltered,
+  client,
 }: {
   index: Number,
   style: Object,
@@ -202,6 +209,7 @@ const Row = ({
   openNodes: Array<string>,
   copying: Object,
   mapIdsFiltered: Array<String>,
+  client: Object,
 }) => {
   const {
     activeApfloraLayers,
@@ -268,7 +276,7 @@ const Row = ({
   )
   const onClickPrint = useCallback(
     () => {
-      app.client.mutate({
+      client.mutate({
         mutation: setTreeKey,
         variables: {
           value: [...node.url, 'print'],
@@ -458,4 +466,4 @@ const Row = ({
   )
 }
 
-export default observer(Row)
+export default enhance(Row)

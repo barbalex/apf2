@@ -9,13 +9,13 @@
  * ...then triggers again some time later, passing an empty error object
  */
 
-import React from 'react'
+import React, { useCallback } from 'react'
 import Snackbar from '@material-ui/core/Snackbar'
 import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
-import app from 'ampersand-app'
+import { withApollo } from 'react-apollo'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import withLocalData from './withLocalData'
@@ -27,11 +27,31 @@ const StyledSnackbar = styled(Snackbar)`
   }
 `
 
-const enhance = compose(withLocalData)
+const enhance = compose(
+  withApollo,
+  withLocalData,
+)
 
-const UpdateAvailable = ({ localData }: { localData: Object }) => {
+const UpdateAvailable = ({
+  localData,
+  client,
+}: {
+  localData: Object,
+  client: Object,
+}) => {
   if (localData.error) return `Fehler: ${localData.error.message}`
   const updateAvailable = get(localData, 'updateAvailable')
+
+  const onClose = useCallback(() =>
+    client.mutate({
+      mutation: setUpdateAvailable,
+      variables: { value: false },
+    }),
+  )
+  const onClickIntall = useCallback(event => {
+    event.preventDefault()
+    window.location.reload(false)
+  })
 
   return (
     <ErrorBoundary>
@@ -43,24 +63,12 @@ const UpdateAvailable = ({ localData }: { localData: Object }) => {
         }}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         action={
-          <Button
-            color="primary"
-            size="small"
-            onClick={event => {
-              event.preventDefault()
-              window.location.reload(false)
-            }}
-          >
+          <Button color="primary" size="small" onClick={onClickIntall}>
             installieren
           </Button>
         }
         autoHideDuration={1000 * 60}
-        onClose={() => {
-          app.client.mutate({
-            mutation: setUpdateAvailable,
-            variables: { value: false },
-          })
-        }}
+        onClose={onClose}
       />
     </ErrorBoundary>
   )
