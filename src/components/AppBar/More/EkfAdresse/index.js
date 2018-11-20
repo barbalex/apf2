@@ -1,11 +1,10 @@
 // @flow
-import React from 'react'
+import React, { useCallback } from 'react'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
-import app from 'ampersand-app'
+import { withApollo } from 'react-apollo'
 
 import Select from '../../../shared/Select'
 import withData from './withData'
@@ -18,25 +17,32 @@ const Container = styled.div`
 `
 
 const enhance = compose(
+  withApollo,
   withData,
-  withHandlers({
-    choose: ({ setAnchorEl }: { setAnchorEl: () => void }) => async event => {
-      const id = event.target.value
-      const { client } = app
-      client.mutate({
-        mutation: setEkfAdresseIdGql,
-        variables: { value: id },
-      })
-      client.mutate({
-        mutation: setViewGql,
-        variables: { value: 'ekf' },
-      })
-      setAnchorEl(null)
-    },
-  }),
 )
 
-const EkfAdresse = ({ choose, data }: { choose: () => void, data: Object }) => {
+const EkfAdresse = ({
+  data,
+  client,
+  setAnchorEl,
+}: {
+  data: Object,
+  client: Object,
+  setAnchorEl: () => void,
+}) => {
+  const choose = useCallback(async event => {
+    const id = event.target.value
+    client.mutate({
+      mutation: setEkfAdresseIdGql,
+      variables: { value: id },
+    })
+    client.mutate({
+      mutation: setViewGql,
+      variables: { value: 'ekf' },
+    })
+    setAnchorEl(null)
+  })
+
   if (data.loading) return '...'
   if (data.error) return `Fehler: ${data.error.message}`
   let adressenWerte = get(data, 'allAdresses.nodes', [])
