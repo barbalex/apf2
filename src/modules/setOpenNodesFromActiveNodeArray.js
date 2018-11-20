@@ -1,13 +1,18 @@
 // @flow
 import gql from 'graphql-tag'
-import app from 'ampersand-app'
 
-export default (activeNodeArray: Array<String>): void => {
+export default ({
+  activeNodeArray,
+  client,
+}: {
+  activeNodeArray: Array<String>,
+  client: Object,
+}): void => {
   const openNodes = []
   activeNodeArray.forEach((n, index) =>
     openNodes.push(activeNodeArray.slice(0, index + 1)),
   )
-  app.client.mutate({
+  client.mutate({
     mutation: gql`
       mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
         setTreeKey(tree: $tree, key: $key, value: $value) @client {

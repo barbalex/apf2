@@ -276,7 +276,7 @@ const Row = ({
   )
   const onClickNodeSymbol = useCallback(
     event => {
-      toggleNodeSymbol({ tree: tree2, node })
+      toggleNodeSymbol({ tree: tree2, node, client })
     },
     [tree2, node],
   )
