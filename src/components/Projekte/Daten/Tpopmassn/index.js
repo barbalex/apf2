@@ -5,8 +5,8 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
 import compose from 'recompose/compose'
-import app from 'ampersand-app'
 import { observer } from 'mobx-react-lite'
+import { withApollo } from 'react-apollo'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -40,6 +40,7 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withApollo,
   withData,
   withAllAdresses,
   withAeEigenschaftens,
@@ -54,6 +55,7 @@ const Tpopmassn = ({
   dataAllAdresses,
   data,
   refetchTree,
+  client,
 }: {
   id: string,
   onNewRequestWirtspflanze: () => void,
@@ -64,13 +66,15 @@ const Tpopmassn = ({
   dataAllAdresses: Object,
   data: Object,
   refetchTree: () => void,
+  client: Object,
 }) => {
-  if (data.loading || dataAeEigenschaftens.loading || dataAllAdresses.loading)
+  if (data.loading || dataAeEigenschaftens.loading || dataAllAdresses.loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
       </Container>
     )
+  }
   if (data.error) return `Fehler: ${data.error.message}`
   if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
 
@@ -122,7 +126,7 @@ const Tpopmassn = ({
         if (field === 'datum') value2 = !!value ? format(value, 'YYYY') : null
         if (field2) variables[field2] = value2
         try {
-          await app.client.mutate({
+          await client.mutate({
             mutation: updateTpopmassnByIdGql,
             variables,
             /*optimisticResponse: {
