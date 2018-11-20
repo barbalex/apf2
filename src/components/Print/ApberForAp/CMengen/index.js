@@ -95,8 +95,6 @@ const CMengen = ({
   startJahr: Number,
   data: Object,
 }) => {
-  if (data.error) return `Fehler: ${data.error.message}`
-
   const oneLTpop_pop = get(data, 'apById.oneLTpop.nodes', [])
   const oneLTpop_tpop = flatten(
     oneLTpop_pop.map(p => get(p, 'tpopsByPopId.nodes', [])),
@@ -172,6 +170,8 @@ const CMengen = ({
   const sevenRTpop = oneRPop_lastMassnbersByTpopId.filter(
     b => b.beurteilung === 5,
   ).length
+
+  if (data.error) return `Fehler: ${data.error.message}`
 
   return (
     <Container>

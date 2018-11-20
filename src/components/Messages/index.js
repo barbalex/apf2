@@ -63,13 +63,6 @@ const UserMessages = ({
   data: Object,
   client: Object,
 }) => {
-  if (localData.error) return `Fehler: ${localData.error.message}`
-
-  if (data.error) {
-    if (data.error.message.includes('keine Berechtigung')) return null
-    return `Fehler: ${data.error.message}`
-  }
-
   const userName = get(localData, 'user.name')
   const allMessages = get(data, 'allMessages.nodes', [])
   const unreadMessages = allMessages.filter(
@@ -101,6 +94,13 @@ const UserMessages = ({
     },
     [unreadMessages, userName],
   )
+
+  if (localData.error) return `Fehler: ${localData.error.message}`
+
+  if (data.error) {
+    if (data.error.message.includes('keine Berechtigung')) return null
+    return `Fehler: ${data.error.message}`
+  }
 
   return (
     <ErrorBoundary>

@@ -93,7 +93,6 @@ const AMengen = ({
   startJahr: Number,
   data: Object,
 }) => {
-  if (data.error) return `Fehler: ${data.error.message}`
   const oneLPop = get(data, 'apById.oneLPop.nodes', []).filter(
     p => get(p, 'tpopsByPopId.totalCount') > 0,
   ).length
@@ -156,6 +155,8 @@ const AMengen = ({
       get(p, 'tpopsByPopId.totalCount'),
     ),
   )
+
+  if (data.error) return `Fehler: ${data.error.message}`
 
   return (
     <Container>
