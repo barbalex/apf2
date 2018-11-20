@@ -165,15 +165,6 @@ const Tpopfreiwkontr = ({
   dataAllAdresses: Object,
   client: Object,
 }) => {
-  if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
-  if (data.error) return `Fehler: ${data.error.message}`
-  if (data.loading || dataAllAdresses.loading) {
-    return (
-      <Container>
-        <InnerContainer>Lade...</InnerContainer>
-      </Container>
-    )
-  }
   const { addError, nodeFilter, nodeFilterSetValue } = useContext(
     mobxStoreContext,
   )
@@ -417,23 +408,35 @@ const Tpopfreiwkontr = ({
 
   useEffect(() => setErrors({}), [id])
 
-  useEffect(() => {
-    // check if adresse is choosen but no registered user exists
-    if (!showFilter) {
-      const bearbeiter = get(row, 'bearbeiter')
-      const userCount = get(
-        row,
-        'adresseByBearbeiter.usersByAdresseId.totalCount',
-        0,
-      )
-      if (bearbeiter && !userCount && !errors.bearbeiter) {
-        setErrors({
-          bearbeiter:
-            'Es ist kein Benutzer mit dieser Adresse verbunden. Damit dieser Benutzer Kontrollen erfassen kann, muss er ein Benutzerkonto haben, in dem obige Adresse als zugehörig erfasst wurde.',
-        })
+  useEffect(
+    () => {
+      // check if adresse is choosen but no registered user exists
+      if (!showFilter) {
+        const userCount = get(
+          row,
+          'adresseByBearbeiter.usersByAdresseId.totalCount',
+          0,
+        )
+        if (bearbeiter && !userCount && !errors.bearbeiter) {
+          setErrors({
+            bearbeiter:
+              'Es ist kein Benutzer mit dieser Adresse verbunden. Damit dieser Benutzer Kontrollen erfassen kann, muss er ein Benutzerkonto haben, in dem obige Adresse als zugehörig erfasst wurde.',
+          })
+        }
       }
-    }
-  })
+    },
+    [showFilter, bearbeiter],
+  )
+
+  if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
+  if (data.error) return `Fehler: ${data.error.message}`
+  if (data.loading || dataAllAdresses.loading) {
+    return (
+      <Container>
+        <InnerContainer>Lade...</InnerContainer>
+      </Container>
+    )
+  }
 
   return (
     <Container showfilter={showFilter}>
