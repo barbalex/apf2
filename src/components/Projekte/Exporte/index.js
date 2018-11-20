@@ -49,14 +49,13 @@ const enhance = compose(
 )
 
 const Exporte = ({ localData }: { localData: Object }) => {
-  if (localData.error) return `Fehler: ${localData.error.message}`
-
   const mobxStore = useContext(mobxStoreContext)
   const { mapFilter } = mobxStore
 
   const applyMapFilterToExport = get(localData, 'export.applyMapFilterToExport')
   const fileType = get(localData, 'export.fileType')
 
+  if (localData.error) return `Fehler: ${localData.error.message}`
   return (
     <ExporteContainer>
       <ErrorBoundary>

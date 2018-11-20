@@ -24,10 +24,10 @@ const ShowCoordinates = ({
   localData: Object,
   changeControlType: () => void,
 }) => {
-  if (localData.error) return `Fehler: ${localData.error.message}`
-
   const x = get(localData, 'mapMouseCoordinates.x').toLocaleString('de-ch')
   const y = get(localData, 'mapMouseCoordinates.y').toLocaleString('de-ch')
+
+  if (localData.error) return `Fehler: ${localData.error.message}`
 
   return (
     <StyledDiv
