@@ -47,18 +47,6 @@ const Ziel = ({
   client: Object,
   refetchTree: () => void,
 }) => {
-  if (data.loading) {
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-  if (data.error) {
-    console.log('Ziel:', { error: data.error })
-    return `Fehler: ${data.error.message}`
-  }
-
   const [errors, setErrors] = useState({})
 
   useEffect(() => setErrors({}), [id])
@@ -136,6 +124,17 @@ const Ziel = ({
     [id, activeNodeArray, openNodes, treeName],
   )
 
+  if (data.loading) {
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  }
+  if (data.error) {
+    console.log('Ziel:', { error: data.error })
+    return `Fehler: ${data.error.message}`
+  }
   return (
     <ErrorBoundary>
       <Container>
