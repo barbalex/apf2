@@ -1,4 +1,5 @@
 import React, { useContext, useCallback } from 'react'
+import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
@@ -17,9 +18,9 @@ import {
 } from 'react-sortable-hoc'
 import 'leaflet'
 import 'leaflet-draw'
-import app from 'ampersand-app'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
+import { withApollo } from 'react-apollo'
 
 import Checkbox from '../shared/Checkbox'
 import withData from './withData'
@@ -141,6 +142,7 @@ const SortableItem = SortableElement(
     mapBeobNichtBeurteiltIdsFiltered,
     mapBeobNichtZuzuordnenIdsFiltered,
     mapBeobZugeordnetIdsFiltered,
+    client,
   }) => {
     const assigning = get(data, 'assigningBeob')
     const assigningispossible =
@@ -192,7 +194,7 @@ const SortableItem = SortableElement(
                 title={getZuordnenIconTitle()}
                 onClick={() => {
                   if (activeApfloraLayers.includes('tpop')) {
-                    app.client.mutate({
+                    client.mutate({
                       mutation: setAssigningBeob,
                       variables: { value: !assigning },
                     })
@@ -384,6 +386,7 @@ const SortableList = SortableContainer(
     mapBeobNichtBeurteiltIdsFiltered,
     mapBeobZugeordnetIdsFiltered,
     mapBeobNichtZuzuordnenIdsFiltered,
+    client,
   }) => (
     <div>
       {items.map((apfloraLayer, index) => (
@@ -404,10 +407,17 @@ const SortableList = SortableContainer(
           mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
           mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
           mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
+          client={client}
         />
       ))}
     </div>
   ),
+)
+
+const enhance = compose(
+  withApollo,
+  withData,
+  observer,
 )
 
 const ApfloraLayers = ({
@@ -424,6 +434,7 @@ const ApfloraLayers = ({
   mapBeobZugeordnetIdsFiltered,
   mapBeobNichtZuzuordnenIdsFiltered,
   data,
+  client,
 }: {
   tree: Object,
   activeNodes: Object,
@@ -438,6 +449,7 @@ const ApfloraLayers = ({
   mapBeobZugeordnetIdsFiltered: Array<String>,
   mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
   data: Object,
+  client: Object,
 }) => {
   if (data.error) return `Fehler: ${data.error.message}`
 
@@ -478,9 +490,10 @@ const ApfloraLayers = ({
         mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
         mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
         mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
+        client={client}
       />
     </CardContent>
   )
 }
 
-export default withData(observer(ApfloraLayers))
+export default enhance(ApfloraLayers)

@@ -18,8 +18,8 @@ import 'proj4leaflet'
 import debounceHandler from '@hocs/debounce-handler'
 import sortBy from 'lodash/sortBy'
 import get from 'lodash/get'
-import app from 'ampersand-app'
 import { observer } from 'mobx-react-lite'
+import { withApollo } from 'react-apollo'
 
 import LayersControl from './LayersControl'
 import OsmColor from './layers/OsmColor'
@@ -109,10 +109,11 @@ const Container = styled.div`
  */
 
 const enhance = compose(
+  withApollo,
   withHandlers({
-    onMouseMove: ({ setMouseCoordinates }) => e => {
+    onMouseMove: ({ setMouseCoordinates, client }) => e => {
       const [x, y] = epsg4326to2056(e.latlng.lng, e.latlng.lat)
-      app.client.mutate({
+      client.mutate({
         mutation: gql`
           mutation setMapMouseCoordinates($x: Number!, $y: Number!) {
             setMapMouseCoordinates(x: $x, y: $y) @client {
@@ -142,6 +143,7 @@ const Karte = ({
   mapBeobZugeordnetIdsFiltered,
   mapBeobNichtZuzuordnenIdsFiltered,
   dimensions,
+  client,
 }: {
   tree: Object,
   activeNodes: Object,
@@ -155,6 +157,7 @@ const Karte = ({
   mapBeobZugeordnetIdsFiltered: Array<String>,
   mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
   dimensions: Object,
+  client: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const {
@@ -339,7 +342,7 @@ const Karte = ({
               // has wrong coordinates!!!!
               window.L.DomEvent.stopPropagation(event)
               try {
-                await app.client.mutate({
+                await client.mutate({
                   mutation: updateTpopById,
                   variables: {
                     id: idOfTpopBeingLocalized,
