@@ -7,8 +7,8 @@ import compose from 'recompose/compose'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
-import app from 'ampersand-app'
 import { observer } from 'mobx-react-lite'
+import { withApollo } from 'react-apollo'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -73,6 +73,7 @@ const tpopkontrTypWerte = [
 ]
 
 const enhance = compose(
+  withApollo,
   withData,
   withAllAdresses,
   observer,
@@ -85,20 +86,23 @@ const Tpopfeldkontr = ({
   dataAllAdresses,
   data,
   refetchTree,
+  client,
 }: {
   id: string,
   dimensions: Object,
   treeName: string,
   dataAllAdresses: Object,
   data: Object,
+  client: Object,
   refetchTree: () => void,
 }) => {
-  if (data.loading || dataAllAdresses.loading)
+  if (data.loading || dataAllAdresses.loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
       </Container>
     )
+  }
   if (data.error) return `Fehler: ${data.error.message}`
   if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
 
@@ -106,7 +110,7 @@ const Tpopfeldkontr = ({
 
   const [errors, setErrors] = useState({})
   const [value, setValue] = useState(() => {
-    const { data } = app.client.query({
+    const { data } = client.query({
       query: urlQuery,
     })
     return get(data, 'urlQuery.feldkontrTab', 'entwicklung')
@@ -156,7 +160,7 @@ const Tpopfeldkontr = ({
         if (field === 'datum') value2 = !!value ? format(value, 'YYYY') : null
         if (field2) variables[field2] = value2
         try {
-          await app.client.mutate({
+          await client.mutate({
             mutation: updateTpopkontrByIdGql,
             variables,
             /*optimisticResponse: {

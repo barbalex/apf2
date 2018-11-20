@@ -4,9 +4,9 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
-import app from 'ampersand-app'
 import format from 'date-fns/format'
 import { observer } from 'mobx-react-lite'
+import { withApollo } from 'react-apollo'
 
 import StringToCopy from '../../../shared/StringToCopyOnlyButton'
 import withData from './withData'
@@ -138,6 +138,7 @@ const CountHint = styled.div`
  * then refetch data
  */
 const enhance = compose(
+  withApollo,
   withAllAdresses,
   withData,
   observer,
@@ -153,6 +154,7 @@ const Tpopfreiwkontr = ({
   role,
   treeName,
   dataAllAdresses,
+  client,
 }: {
   id: string,
   data: Object,
@@ -161,6 +163,7 @@ const Tpopfreiwkontr = ({
   role: string,
   treeName: string,
   dataAllAdresses: Object,
+  client: Object,
 }) => {
   if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
   if (data.error) return `Fehler: ${data.error.message}`
@@ -294,7 +297,7 @@ const Tpopfreiwkontr = ({
             r => r.id === value,
         )*/
       try {
-        await app.client.mutate({
+        await client.mutate({
           mutation: updateTpopkontrByIdGql,
           variables,
           /*optimisticResponse: {
@@ -392,7 +395,7 @@ const Tpopfreiwkontr = ({
 
         Promise.all(
           ekfzaehleinheits.map(z =>
-            app.client.mutate({
+            client.mutate({
               mutation: createTpopkontrzaehl,
               variables: {
                 tpopkontrId: id,
