@@ -203,28 +203,6 @@ const Count = ({
     },
     [tpopkontrId],
   )
-  if (showNew)
-    return (
-      <Container nr={nr} shownew={showNew}>
-        <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
-        <ShowNew>
-          <Button color="primary" onClick={createNew}>
-            <StyledAddIcon /> Neu
-          </Button>
-        </ShowNew>
-      </Container>
-    )
-  if (showEmpty)
-    return (
-      <Container nr={nr} showempty={showEmpty}>
-        <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
-      </Container>
-    )
-  if (data.loading || dataAllTpopkontrzaehlEinheitWertes.loading)
-    return <Container>Lade...</Container>
-  if (data.error) return `Fehler: ${data.error.message}`
-  if (dataAllTpopkontrzaehlEinheitWertes.error)
-    return `Fehler: ${dataAllTpopkontrzaehlEinheitWertes.error.message}`
 
   const { setToDelete } = useContext(mobxStoreContext)
 
@@ -326,6 +304,32 @@ const Count = ({
     [id, activeNodeArray],
   )
 
+  if (showNew) {
+    return (
+      <Container nr={nr} shownew={showNew}>
+        <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
+        <ShowNew>
+          <Button color="primary" onClick={createNew}>
+            <StyledAddIcon /> Neu
+          </Button>
+        </ShowNew>
+      </Container>
+    )
+  }
+  if (showEmpty) {
+    return (
+      <Container nr={nr} showempty={showEmpty}>
+        <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
+      </Container>
+    )
+  }
+  if (data.loading || dataAllTpopkontrzaehlEinheitWertes.loading) {
+    return <Container>Lade...</Container>
+  }
+  if (data.error) return `Fehler: ${data.error.message}`
+  if (dataAllTpopkontrzaehlEinheitWertes.error) {
+    return `Fehler: ${dataAllTpopkontrzaehlEinheitWertes.error.message}`
+  }
   return (
     <Container nr={nr} showdelete={showDelete}>
       <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>

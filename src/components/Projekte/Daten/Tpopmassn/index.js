@@ -68,16 +68,6 @@ const Tpopmassn = ({
   refetchTree: () => void,
   client: Object,
 }) => {
-  if (data.loading || dataAeEigenschaftens.loading || dataAllAdresses.loading) {
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-  if (data.error) return `Fehler: ${data.error.message}`
-  if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
-
   const { nodeFilter, nodeFilterSetValue } = useContext(mobxStoreContext)
 
   const [errors, setErrors] = useState({})
@@ -211,6 +201,15 @@ const Tpopmassn = ({
     .sort()
     .map(o => ({ value: o, label: o }))
 
+  if (data.loading || dataAeEigenschaftens.loading || dataAllAdresses.loading) {
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  }
+  if (data.error) return `Fehler: ${data.error.message}`
+  if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>

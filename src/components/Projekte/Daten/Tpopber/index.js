@@ -42,15 +42,6 @@ const Tpopber = ({
   client: Object,
   refetchTree: () => void,
 }) => {
-  if (data.loading) {
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-  if (data.error) return `Fehler: ${data.error.message}`
-
   const [errors, setErrors] = useState({})
 
   useEffect(() => setErrors({}), [id])
@@ -117,6 +108,14 @@ const Tpopber = ({
     [id],
   )
 
+  if (data.loading) {
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  }
+  if (data.error) return `Fehler: ${data.error.message}`
   return (
     <ErrorBoundary>
       <Container>
