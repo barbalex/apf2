@@ -162,16 +162,6 @@ const getAndValidateCoordinatesOfBeob = async ({ id, addError, client }) => {
   return { x, y }
 }
 
-const showMapIfNotYetVisible = (projekteTabs: Array<String>) => {
-  const isVisible = projekteTabs.includes('karte')
-  if (!isVisible) {
-    setUrlQueryValue({
-      key: 'projekteTabs',
-      value: [...projekteTabs, 'karte'],
-    })
-  }
-}
-
 const enhance = compose(
   withApollo,
   observer,
@@ -393,7 +383,7 @@ const TreeContainer = ({
           })
         },
         move() {
-          moveTo({ id, addError })
+          moveTo({ id, addError, client })
         },
         markForCopying() {
           client.mutate({
@@ -419,7 +409,7 @@ const TreeContainer = ({
           })
         },
         copy() {
-          copyTo({ parentId: id, refetchTree, addError })
+          copyTo({ parentId: id, refetchTree, addError, client })
         },
         markForCopyingBiotop() {
           client.mutate({
@@ -434,10 +424,10 @@ const TreeContainer = ({
           })
         },
         copyBiotop() {
-          copyBiotopTo(id)
+          copyBiotopTo({ id, client })
         },
         copyTpopKoordToPop() {
-          copyTpopKoordToPop({ id, addError })
+          copyTpopKoordToPop({ id, addError, client })
         },
         createNewPopFromBeob() {
           createNewPopFromBeob({
@@ -446,10 +436,11 @@ const TreeContainer = ({
             id,
             refetchTree,
             addError,
+            client,
           })
         },
         copyBeobZugeordnetKoordToTpop() {
-          copyBeobZugeordnetKoordToTpop({ id, addError })
+          copyBeobZugeordnetKoordToTpop({ id, addError, client })
         },
         async showCoordOfTpopOnMapsZhCh() {
           const { x, y } = await getAndValidateCoordinatesOfTpop({
@@ -529,6 +520,16 @@ const TreeContainer = ({
       nodes,
     ],
   )
+  const showMapIfNotYetVisible = useCallback((projekteTabs: Array<String>) => {
+    const isVisible = projekteTabs.includes('karte')
+    if (!isVisible) {
+      setUrlQueryValue({
+        key: 'projekteTabs',
+        value: [...projekteTabs, 'karte'],
+        client,
+      })
+    }
+  })
 
   return (
     <ErrorBoundary>

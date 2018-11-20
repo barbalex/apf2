@@ -290,7 +290,7 @@ const Tpopfeldkontr = ({
     [id, showFilter],
   )
   const onChangeTab = useCallback((event, value) => {
-    setUrlQueryValue({ key: 'feldkontrTab', value })
+    setUrlQueryValue({ key: 'feldkontrTab', value, client })
     setValue(value)
   })
 
