@@ -1,6 +1,5 @@
 // @flow
 import gql from 'graphql-tag'
-import app from 'ampersand-app'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 import get from 'lodash/get'
@@ -17,6 +16,7 @@ export default async ({
   url,
   refetchTree,
   addError,
+  client,
 }: {
   tree: Object,
   tablePassed: String,
@@ -26,8 +26,8 @@ export default async ({
   url: Array<String>,
   refetchTree: () => void,
   addError: () => void,
+  client: Object,
 }): any => {
-  const { client } = app
   let table = tablePassed
   // insert new dataset in db and fetch id
   const tableMetadata: {

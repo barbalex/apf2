@@ -9,7 +9,6 @@ import clone from 'lodash/clone'
 import get from 'lodash/get'
 import uniq from 'lodash/uniq'
 import isEqual from 'lodash/isEqual'
-import app from 'ampersand-app'
 import { observer } from 'mobx-react-lite'
 import { withApollo } from 'react-apollo'
 
@@ -238,7 +237,6 @@ const TreeContainer = ({
      * open it
      * dont do this in render!
      */
-    const { client } = app
     const openNodes = get(data, `${treeName}.openNodes`)
     const projekteNodes = nodes.filter(n => n.menuType === 'projekt')
     const existsOnlyOneProjekt = projekteNodes.length === 1
@@ -306,6 +304,7 @@ const TreeContainer = ({
             id,
             refetchTree,
             addError,
+            client,
           })
         },
         openLowerNodes() {
@@ -316,6 +315,7 @@ const TreeContainer = ({
             parentId,
             menuType,
             refetchTree,
+            client,
           })
         },
         closeLowerNodes() {

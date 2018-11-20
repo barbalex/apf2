@@ -1,12 +1,18 @@
 // @flow
 import gql from 'graphql-tag'
-import app from 'ampersand-app'
 
 import isNodeOpen from './isNodeOpen'
 import treeNodeLabelFilterResetExceptAp from './treeNodeLabelFilterResetExceptAp'
 
-export default async ({ tree, node }: { tree: Object, node: Object }) => {
-  const { client } = app
+export default async ({
+  tree,
+  node,
+  client,
+}: {
+  tree: Object,
+  node: Object,
+  client: Object,
+}) => {
   // make sure this node's url is not yet contained
   // otherwise same nodes will be added multiple times!
   if (isNodeOpen(tree.openNodes, node.url)) return
