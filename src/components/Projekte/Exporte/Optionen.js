@@ -1,5 +1,6 @@
 // @flow
 import React, { useContext, useState } from 'react'
+import compose from 'recompose/compose'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
@@ -11,8 +12,8 @@ import Checkbox from '@material-ui/core/Checkbox'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
-import app from 'ampersand-app'
 import { observer } from 'mobx-react-lite'
+import { withApollo } from 'react-apollo'
 
 import mobxStoreContext from '../../../mobxStoreContext'
 
@@ -50,12 +51,19 @@ const StyledCheckbox = styled(Checkbox)`
   height: 30px !important;
 `
 
+const enhance = compose(
+  withApollo,
+  observer,
+)
+
 const Optionen = ({
   fileType,
   applyMapFilterToExport,
+  client,
 }: {
   fileType: String,
   applyMapFilterToExport: Boolean,
+  client: Object,
 }) => {
   const { mapFilter: mapFilterRaw } = useContext(mobxStoreContext)
   const mapFilter = mapFilterRaw.toJSON()
@@ -85,7 +93,7 @@ const Optionen = ({
               <StyledCheckbox
                 checked={fileType === 'csv'}
                 onChange={() => {
-                  app.client.mutate({
+                  client.mutate({
                     mutation: gql`
                       mutation setExportKey($key: String!, $value: Array!) {
                         setExportKey(key: $key, value: $value) @client {
@@ -114,7 +122,7 @@ const Optionen = ({
               <StyledCheckbox
                 checked={applyMapFilterToExport}
                 onChange={() => {
-                  app.client.mutate({
+                  client.mutate({
                     mutation: gql`
                       mutation setExportKey($key: String!, $value: Array!) {
                         setExportKey(key: $key, value: $value) @client {
@@ -149,4 +157,4 @@ const Optionen = ({
   )
 }
 
-export default observer(Optionen)
+export default enhance(Optionen)
