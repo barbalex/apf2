@@ -12,8 +12,8 @@ import compose from 'recompose/compose'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
-import app from 'ampersand-app'
 import { observer } from 'mobx-react-lite'
+import { withApollo } from 'react-apollo'
 
 import Select from '../../../shared/Select'
 import exportModule from '../../../../modules/export'
@@ -67,6 +67,7 @@ const AutocompleteContainer = styled.div`
 const isRemoteHost = window.location.hostname !== 'localhost'
 
 const enhance = compose(
+  withApollo,
   withData,
   observer,
 )
@@ -75,10 +76,12 @@ const Teilpopulationen = ({
   fileType,
   applyMapFilterToExport,
   data,
+  client,
 }: {
   fileType: String,
   applyMapFilterToExport: Boolean,
   data: Object,
+  client: Object,
 }) => {
   if (data.error) return `Fehler: ${data.error.message}`
 
@@ -103,7 +106,7 @@ const Teilpopulationen = ({
     async () => {
       setMessage('Export "Teilpopulationen" wird vorbereitet...')
       try {
-        const { data } = await app.client.query({
+        const { data } = await client.query({
           query: await import('./allVTpops').then(m => m.default),
         })
         const enrichedData = get(data, 'allVTpops.nodes', []).map(oWithout => {
@@ -167,7 +170,7 @@ const Teilpopulationen = ({
                 'Export "TeilpopulationenWebGisBun" wird vorbereitet...',
               )
               try {
-                const { data } = await app.client.query({
+                const { data } = await client.query({
                   query: await import('./allVTpopWebgisbuns').then(
                     m => m.default,
                   ),
@@ -195,7 +198,7 @@ const Teilpopulationen = ({
             onClick={async () => {
               setMessage('Export "Teilpopulationen" wird vorbereitet...')
               try {
-                const { data } = await app.client.query({
+                const { data } = await client.query({
                   query: await import('./allVTpopKmls').then(m => m.default),
                 })
                 const enrichedData = get(data, 'allVTpopKmls.nodes', []).map(
@@ -234,7 +237,7 @@ const Teilpopulationen = ({
                 'Export "TeilpopulationenNachNamen" wird vorbereitet...',
               )
               try {
-                const { data } = await app.client.query({
+                const { data } = await client.query({
                   query: await import('./allVTpopKmlnamen').then(
                     m => m.default,
                   ),
@@ -277,7 +280,7 @@ const Teilpopulationen = ({
                 'Export "TeilpopulationenVonApArtenOhneBekanntSeit" wird vorbereitet...',
               )
               try {
-                const { data } = await app.client.query({
+                const { data } = await client.query({
                   query: await import('./allVTpopOhnebekanntseits').then(
                     m => m.default,
                   ),
@@ -308,7 +311,7 @@ const Teilpopulationen = ({
                 'Export "TeilpopulationenOhneApBerichtRelevant" wird vorbereitet...',
               )
               try {
-                const { data } = await app.client.query({
+                const { data } = await client.query({
                   query: await import('./allVTpopOhneapberichtrelevants').then(
                     m => m.default,
                   ),
@@ -339,7 +342,7 @@ const Teilpopulationen = ({
                 'Export "TeilpopulationenAnzahlMassnahmen" wird vorbereitet...',
               )
               try {
-                const { data } = await app.client.query({
+                const { data } = await client.query({
                   query: await import('./allVTpopAnzmassns').then(
                     m => m.default,
                   ),
@@ -369,7 +372,7 @@ const Teilpopulationen = ({
                 'Export "TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht" wird vorbereitet...',
               )
               try {
-                const { data } = await app.client.query({
+                const { data } = await client.query({
                   query: await import('./allVTpopAnzkontrinklletzterundletztertpopbers').then(
                     m => m.default,
                   ),
@@ -429,7 +432,7 @@ const Teilpopulationen = ({
                   'Export "anzkontrinklletzterundletztertpopber" wird vorbereitet...',
                 )
                 try {
-                  const { data } = await app.client.query({
+                  const { data } = await client.query({
                     query: await import('./allVTpopAnzkontrinklletzterundletztertpopbersFiltered').then(
                       m => m.default,
                     ),
@@ -459,7 +462,7 @@ const Teilpopulationen = ({
                 'Export "TeilpopulationenTPopUndMassnBerichte" wird vorbereitet...',
               )
               try {
-                const { data } = await app.client.query({
+                const { data } = await client.query({
                   query: await import('./allVTpopPopberundmassnbers').then(
                     m => m.default,
                   ),

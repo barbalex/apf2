@@ -1,5 +1,6 @@
 // @flow
 import React, { useContext, useState } from 'react'
+import compose from 'recompose/compose'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
@@ -10,8 +11,8 @@ import Button from '@material-ui/core/Button'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import app from 'ampersand-app'
 import { observer } from 'mobx-react-lite'
+import { withApollo } from 'react-apollo'
 
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
@@ -56,12 +57,19 @@ const DownloadCardButton = styled(Button)`
   }
 `
 
+const enhance = compose(
+  withApollo,
+  observer,
+)
+
 const Populationen = ({
   fileType,
   applyMapFilterToExport,
+  client,
 }: {
   fileType: String,
   applyMapFilterToExport: Boolean,
+  client: Object,
 }) => {
   const { mapFilter, addError } = useContext(mobxStoreContext)
   const [expanded, setExpanded] = useState(false)
@@ -90,7 +98,7 @@ const Populationen = ({
             onClick={async () => {
               setMessage('Export "Populationen" wird vorbereitet...')
               try {
-                const { data } = await app.client.query({
+                const { data } = await client.query({
                   query: await import('./allVPops').then(m => m.default),
                 })
                 exportModule({
@@ -116,7 +124,7 @@ const Populationen = ({
             onClick={async () => {
               setMessage('Export "Populationen" wird vorbereitet...')
               try {
-                const { data } = await app.client.query({
+                const { data } = await client.query({
                   query: await import('./allVPopKmls').then(m => m.default),
                 })
                 const enrichedData = get(data, 'allVPopKmls.nodes', []).map(
@@ -152,7 +160,7 @@ const Populationen = ({
             onClick={async () => {
               setMessage('Export "PopulationenNachNamen" wird vorbereitet...')
               try {
-                const { data } = await app.client.query({
+                const { data } = await client.query({
                   query: await import('./allVPopKmlnamen').then(m => m.default),
                 })
                 const enrichedData = get(data, 'allVPopKmlnamen.nodes', []).map(
@@ -192,7 +200,7 @@ const Populationen = ({
                 'Export "PopulationenVonApArtenOhneStatus" wird vorbereitet...',
               )
               try {
-                const { data } = await app.client.query({
+                const { data } = await client.query({
                   query: await import('./allVPopVonapohnestatuses').then(
                     m => m.default,
                   ),
@@ -222,7 +230,7 @@ const Populationen = ({
                 'Export "PopulationenOhneKoordinaten" wird vorbereitet...',
               )
               try {
-                const { data } = await app.client.query({
+                const { data } = await client.query({
                   query: await import('./allVPopOhnekoords').then(
                     m => m.default,
                   ),
@@ -249,7 +257,7 @@ const Populationen = ({
                 'Export "PopulationenAnzMassnProMassnber" wird vorbereitet...',
               )
               try {
-                const { data } = await app.client.query({
+                const { data } = await client.query({
                   query: await import('./allVPopmassnberAnzmassns').then(
                     m => m.default,
                   ),
@@ -280,7 +288,7 @@ const Populationen = ({
                 'Export "PopulationenAnzahlMassnahmen" wird vorbereitet...',
               )
               try {
-                const { data } = await app.client.query({
+                const { data } = await client.query({
                   query: await import('./allVPopAnzmassns').then(
                     m => m.default,
                   ),
@@ -310,7 +318,7 @@ const Populationen = ({
                 'Export "PopulationenAnzahlKontrollen" wird vorbereitet...',
               )
               try {
-                const { data } = await app.client.query({
+                const { data } = await client.query({
                   query: await import('./allVPopAnzkontrs').then(
                     m => m.default,
                   ),
@@ -340,7 +348,7 @@ const Populationen = ({
                 'Export "PopulationenPopUndMassnBerichte" wird vorbereitet...',
               )
               try {
-                const { data } = await app.client.query({
+                const { data } = await client.query({
                   query: await import('./allVPopPopberundmassnbers').then(
                     m => m.default,
                   ),
@@ -370,7 +378,7 @@ const Populationen = ({
                 'Export "PopulationenMitLetzemPopBericht" wird vorbereitet...',
               )
               try {
-                const { data } = await app.client.query({
+                const { data } = await client.query({
                   query: await import('./allVPopMitLetzterPopbers').then(
                     m => m.default,
                   ),
@@ -400,7 +408,7 @@ const Populationen = ({
                 'Export "PopulationenMitLetztemMassnBericht" wird vorbereitet...',
               )
               try {
-                const { data } = await app.client.query({
+                const { data } = await client.query({
                   query: await import('./allVPopMitLetzterPopmassnbers').then(
                     m => m.default,
                   ),
@@ -431,4 +439,4 @@ const Populationen = ({
   )
 }
 
-export default observer(Populationen)
+export default enhance(Populationen)
