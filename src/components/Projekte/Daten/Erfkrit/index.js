@@ -46,18 +46,6 @@ const Erfkrit = ({
   client: Object,
   refetchTree: () => void,
 }) => {
-  if (data.loading || dataAllApErfkritWertes.loading) {
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-  if (data.error) return `Fehler: ${data.error.message}`
-  if (dataAllApErfkritWertes.error) {
-    return `Fehler: ${dataAllApErfkritWertes.error.message}`
-  }
-
   const [errors, setErrors] = useState({})
 
   useEffect(() => setErrors({}), [id])
@@ -108,6 +96,17 @@ const Erfkrit = ({
     [id],
   )
 
+  if (data.loading || dataAllApErfkritWertes.loading) {
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  }
+  if (data.error) return `Fehler: ${data.error.message}`
+  if (dataAllApErfkritWertes.error) {
+    return `Fehler: ${dataAllApErfkritWertes.error.message}`
+  }
   return (
     <ErrorBoundary>
       <Container>

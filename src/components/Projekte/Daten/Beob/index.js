@@ -28,12 +28,7 @@ const Beob = ({
   dimensions: Object,
   data: Object,
 }) => {
-  if (data.loading) return <Container>Lade...</Container>
-  if (data.error) return `Fehler: ${data.error.message}`
-
   const row = get(data, 'beobById', {})
-  if (!row) return null
-
   const beobFields = useMemo(
     () =>
       Object.entries(JSON.parse(row.data)).filter(
@@ -41,7 +36,10 @@ const Beob = ({
       ),
     [row.data],
   )
+  if (!row) return null
   if (!beobFields || beobFields.length === 0) return null
+  if (data.loading) return <Container>Lade...</Container>
+  if (data.error) return `Fehler: ${data.error.message}`
 
   return (
     <ErrorBoundary>
