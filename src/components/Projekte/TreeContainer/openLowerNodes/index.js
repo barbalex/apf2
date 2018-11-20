@@ -15,6 +15,7 @@ export default ({
   parentId,
   menuType,
   refetchTree,
+  client,
 }: {
   tree: Object,
   activeNodes: Object,
@@ -22,6 +23,7 @@ export default ({
   parentId: String | Number,
   menuType: String,
   refetchTree: () => void,
+  client: Object,
 }) => {
   /**
    * 1. load all data
