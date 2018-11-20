@@ -96,16 +96,6 @@ const Tpopfeldkontr = ({
   client: Object,
   refetchTree: () => void,
 }) => {
-  if (data.loading || dataAllAdresses.loading) {
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-  if (data.error) return `Fehler: ${data.error.message}`
-  if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
-
   const { nodeFilter, nodeFilterSetValue } = useContext(mobxStoreContext)
 
   const [errors, setErrors] = useState({})
@@ -324,6 +314,15 @@ const Tpopfeldkontr = ({
     .map(e => `${e.label}: ${e.einheit ? e.einheit.replace(/  +/g, ' ') : ''}`)
     .map(o => ({ value: o, label: o }))
 
+  if (data.loading || dataAllAdresses.loading) {
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  }
+  if (data.error) return `Fehler: ${data.error.message}`
+  if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>

@@ -61,15 +61,6 @@ const Tpop = ({
   data: Object,
   client: Object,
 }) => {
-  if (data.loading) {
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-  if (data.error) return `Fehler: ${data.error.message}`
-
   const mobxStore = useContext(mobxStoreContext)
   const { addError, nodeFilter, nodeFilterSetValue } = mobxStore
 
@@ -194,6 +185,14 @@ const Tpop = ({
     label: el.text,
   }))
 
+  if (data.loading) {
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  }
+  if (data.error) return `Fehler: ${data.error.message}`
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
