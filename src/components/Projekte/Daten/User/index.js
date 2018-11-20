@@ -1,12 +1,9 @@
 // @flow
-import React from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
-import withState from 'recompose/withState'
-import withLifecycle from '@hocs/with-lifecycle'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import InputAdornment from '@material-ui/core/InputAdornment'
@@ -16,7 +13,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import Button from '@material-ui/core/Button'
-import app from 'ampersand-app'
+import { withApollo } from 'react-apollo'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -48,182 +45,55 @@ const PasswordMessage = styled.div`
 `
 
 const enhance = compose(
+  withApollo,
   withLocalData,
   withData,
   withAllAdresses,
-  withState('errors', 'setErrors', {}),
-  withState('editPassword', 'setEditPassword', false),
-  withState('password', 'setPassword', ''),
-  withState('password2', 'setPassword2', ''),
-  withState('showPass', 'setShowPass', false),
-  withState('showPass2', 'setShowPass2', false),
-  withState('passwordErrorText', 'setPasswordErrorText', ''),
-  withState('password2ErrorText', 'setPassword2ErrorText', ''),
-  withState('passwordMessage', 'setPasswordMessage', ''),
-  withHandlers({
-    saveToDb: ({ refetchTree, setErrors, errors, data }) => async event => {
-      const field = event.target.name
-      let value = event.target.value
-      if (value === undefined) value = null
-      const row = get(data, 'userById', {})
-      /**
-       * only save if value changed
-       */
-      if (row[field] === value) return
-      try {
-        await app.client.mutate({
-          mutation: updateUserByIdGql,
-          variables: {
-            id: row.id,
-            [field]: value,
-          },
-          /*optimisticResponse: {
-            __typename: 'Mutation',
-            updateUserById: {
-              user: {
-                id: row.id,
-                name: field === 'name' ? value : row.name,
-                email: field === 'email' ? value : row.email,
-                role: field === 'role' ? value : row.role,
-                pass: field === 'pass' ? value : row.pass,
-                adresseId: field === 'adresseId' ? value : row.adresseId,
-                __typename: 'User',
-              },
-              __typename: 'User',
-            },
-          },*/
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
-      }
-      setErrors({})
-      if (['name', 'role'].includes(field)) refetchTree('users')
-    },
-  }),
-  withHandlers({
-    onBlurPassword: ({
-      setPassword,
-      setPasswordErrorText,
-      setShowPass2,
-      setPassword2,
-    }) => event => {
-      setPasswordErrorText('')
-      const password = event.target.value
-      setPassword(password)
-      if (!password) {
-        setPasswordErrorText('Bitte Passwort eingeben')
-      } else {
-        setPassword2('')
-      }
-    },
-    onBlurPassword2: ({
-      password,
-      setPassword,
-      setPassword2,
-      setPassword2ErrorText,
-      setShowPass,
-      setShowPass2,
-      setEditPassword,
-      saveToDb,
-      setPasswordMessage,
-    }) => async event => {
-      setPassword2ErrorText('')
-      const password2 = event.target.value
-      setPassword2(password2)
-      if (!password2) {
-        setPassword2ErrorText('Bitte Passwort eingeben')
-      } else if (password !== password2) {
-        setPassword2ErrorText('Die Passwörter stimmen nicht überein')
-      } else {
-        // edit password
-        // then tell user if it worked
-        try {
-          const fakeEvent = { target: { name: 'password', value: password2 } }
-          await saveToDb(fakeEvent)
-        } catch (error) {
-          return setPasswordMessage(error.message)
-        }
-        setPasswordMessage(
-          'Passwort gespeichert. Ihre aktuelle Anmeldung bleibt aktiv.',
-        )
-        setTimeout(() => {
-          setPasswordMessage('')
-        }, 5000)
-        setPassword('')
-        setPassword2('')
-        setShowPass(false)
-        setShowPass2(false)
-        setEditPassword(false)
-      }
-    },
-  }),
-  withLifecycle({
-    onDidUpdate(prevProps, props) {
-      if (prevProps.id !== props.id) {
-        props.setErrors({})
-      }
-    },
-  }),
 )
 
 const User = ({
   treeName,
-  saveToDb,
-  errors,
-  editPassword,
-  setEditPassword,
-  showPass,
-  setShowPass,
-  showPass2,
-  setShowPass2,
-  password,
-  password2,
-  passwordErrorText,
-  password2ErrorText,
-  onBlurPassword,
-  onBlurPassword2,
-  passwordMessage,
-  setPasswordMessage,
   dataAllAdresses,
   localData,
   data,
+  client,
+  refetchTree,
 }: {
   treeName: String,
-  saveToDb: () => void,
-  errors: Object,
-  editPassword: Boolean,
-  setEditPassword: () => void,
-  showPass: Boolean,
-  setShowPass: () => void,
-  showPass2: Boolean,
-  setShowPass2: () => void,
-  password: String,
-  password2: String,
-  passwordErrorText: String,
-  password2ErrorText: String,
-  onBlurPassword: () => void,
-  onBlurPassword2: () => void,
-  passwordMessage: String,
-  setPasswordMessage: () => void,
   dataAllAdresses: Object,
   localData: Object,
   data: Object,
+  client: Object,
+  refetchTree: () => void,
 }) => {
   if (localData.error) return `Fehler: ${localData.error.message}`
+  if (data.loading || dataAllAdresses.loading) {
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  }
+  if (data.error) return `Fehler: ${data.error.message}`
+  if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
+
+  const [errors, setErrors] = useState({})
+  const [editPassword, setEditPassword] = useState(false)
+  const [password, setPassword] = useState('')
+  const [password2, setPassword2] = useState('')
+  const [showPass, setShowPass] = useState(false)
+  const [showPass2, setShowPass2] = useState(false)
+  const [passwordErrorText, setPasswordErrorText] = useState('')
+  const [password2ErrorText, setPassword2ErrorText] = useState('')
+  const [passwordMessage, setPasswordMessage] = useState('')
+
   const id = get(
     localData,
     `${treeName}.activeNodeArray[1]`,
     '99999999-9999-9999-9999-999999999999',
   )
 
-  if (data.loading || dataAllAdresses.loading)
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  if (data.error) return `Fehler: ${data.error.message}`
-  if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
+  useEffect(() => setErrors({}), [id])
 
   const row = get(data, 'userById', {})
   let roleWerte = sortBy(
@@ -256,6 +126,90 @@ const User = ({
     value: el.id,
     label: el.name,
   }))
+
+  const saveToDb = useCallback(
+    async event => {
+      const field = event.target.name
+      let value = event.target.value
+      if (value === undefined) value = null
+      /**
+       * only save if value changed
+       */
+      if (row[field] === value) return
+      try {
+        await client.mutate({
+          mutation: updateUserByIdGql,
+          variables: {
+            id: row.id,
+            [field]: value,
+          },
+          /*optimisticResponse: {
+          __typename: 'Mutation',
+          updateUserById: {
+            user: {
+              id: row.id,
+              name: field === 'name' ? value : row.name,
+              email: field === 'email' ? value : row.email,
+              role: field === 'role' ? value : row.role,
+              pass: field === 'pass' ? value : row.pass,
+              adresseId: field === 'adresseId' ? value : row.adresseId,
+              __typename: 'User',
+            },
+            __typename: 'User',
+          },
+        },*/
+        })
+      } catch (error) {
+        return setErrors({ [field]: error.message })
+      }
+      setErrors({})
+      if (['name', 'role'].includes(field)) refetchTree('users')
+    },
+    [id],
+  )
+  const onBlurPassword = useCallback(event => {
+    setPasswordErrorText('')
+    const password = event.target.value
+    setPassword(password)
+    if (!password) {
+      setPasswordErrorText('Bitte Passwort eingeben')
+    } else {
+      setPassword2('')
+    }
+  })
+  const onBlurPassword2 = useCallback(
+    async event => {
+      setPassword2ErrorText('')
+      const password2 = event.target.value
+      setPassword2(password2)
+      if (!password2) {
+        setPassword2ErrorText('Bitte Passwort eingeben')
+      } else if (password !== password2) {
+        setPassword2ErrorText('Die Passwörter stimmen nicht überein')
+      } else {
+        // edit password
+        // then tell user if it worked
+        try {
+          const fakeEvent = { target: { name: 'password', value: password2 } }
+          await saveToDb(fakeEvent)
+        } catch (error) {
+          return setPasswordMessage(error.message)
+        }
+        setPasswordMessage(
+          'Passwort gespeichert. Ihre aktuelle Anmeldung bleibt aktiv.',
+        )
+        setTimeout(() => {
+          setPasswordMessage('')
+        }, 5000)
+        setPassword('')
+        setPassword2('')
+        setShowPass(false)
+        setShowPass2(false)
+        setEditPassword(false)
+      }
+    },
+    [password],
+  )
 
   return (
     <ErrorBoundary>
