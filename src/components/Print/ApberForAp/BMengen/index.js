@@ -93,8 +93,6 @@ const BMengen = ({
   startJahr: Number,
   data: Object,
 }) => {
-  if (data.error) return `Fehler: ${data.error.message}`
-
   // 1.
   const oneLPop_pop = get(data, 'apById.oneLPop.nodes', [])
     .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
@@ -191,6 +189,8 @@ const BMengen = ({
   const sevenLTpop = sevenLTpop_allTpops - oneLTpop
   const sevenRPop = sevenLPop_allPops - oneRPop
   const sevenRTpop = sevenLTpop_allTpops - oneRTpop
+
+  if (data.error) return `Fehler: ${data.error.message}`
 
   return (
     <Container>

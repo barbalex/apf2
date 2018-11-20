@@ -65,7 +65,7 @@ const enhance = compose(
     },
   }),
   apberData,
-  apData
+  apData,
 )
 
 const ApberForApFromAp = ({
@@ -81,17 +81,18 @@ const ApberForApFromAp = ({
   yearOfFirstTpopber: Number,
   onSetYearOfFirstTpopber: () => void,
 }) => {
-  if (apData.loading)
+  const jahr = get(apberData, 'apberById.jahr')
+  const { ap: apId } = getActiveNodes(activeNodeArray)
+
+  if (apData.loading) {
     return (
       <Container>
         <LoadingContainer>Lade...</LoadingContainer>
       </Container>
     )
+  }
   if (apberData.error) return `Fehler: ${apberData.error.message}`
   if (apData.error) return `Fehler: ${apData.error.message}`
-
-  const jahr = get(apberData, 'apberById.jahr')
-  const { ap: apId } = getActiveNodes(activeNodeArray)
 
   return (
     <ErrorBoundary>
