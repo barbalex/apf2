@@ -1,5 +1,6 @@
 // @flow
 import React, { useContext, useState, useCallback } from 'react'
+import compose from 'recompose/compose'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
@@ -10,8 +11,8 @@ import Button from '@material-ui/core/Button'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import app from 'ampersand-app'
 import { observer } from 'mobx-react-lite'
+import { withApollo } from 'react-apollo'
 
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
@@ -57,12 +58,19 @@ const DownloadCardButton = styled(Button)`
   }
 `
 
+const enhance = compose(
+  withApollo,
+  observer,
+)
+
 const Beobachtungen = ({
   fileType,
   applyMapFilterToExport,
+  client,
 }: {
   fileType: String,
   applyMapFilterToExport: Boolean,
+  client: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { mapFilter, addError } = mobxStore
@@ -75,7 +83,7 @@ const Beobachtungen = ({
     async () => {
       setMessage('Export "Beobachtungen" wird vorbereitet...')
       try {
-        const { data } = await app.client.query({
+        const { data } = await client.query({
           query: allVBeobArtChangeds,
         })
         exportModule({
@@ -120,7 +128,7 @@ const Beobachtungen = ({
             onClick={async () => {
               setMessage('Export "Beobachtungen" wird vorbereitet...')
               try {
-                const { data } = await app.client.query({
+                const { data } = await client.query({
                   query: allVBeobs,
                 })
                 exportModule({
@@ -150,4 +158,4 @@ const Beobachtungen = ({
   )
 }
 
-export default observer(Beobachtungen)
+export default enhance(Beobachtungen)
