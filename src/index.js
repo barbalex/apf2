@@ -39,7 +39,8 @@ import AppContainer from './components/AppContainer'
 import Print from './components/Print'
 import historyListen from './modules/historyListen'
 
-import { StoreContextProvider as MobxProvider } from './mobxStoreContext'
+import { Provider as MobxProvider } from './mobxStoreContext'
+import { Provider as IdbProvider } from './idbContext'
 
 import './index.css'
 
@@ -64,7 +65,6 @@ const run = async () => {
 
     app.extend({
       init() {
-        this.db = idb
         this.client = myClient
         this.history = history
       },
@@ -82,22 +82,24 @@ const run = async () => {
     )
 
     ReactDOM.render(
-      <MobxProvider value={mobxStore}>
-        <ApolloProvider client={myClient}>
-          <>
-            <Print />
-            <MuiThemeProvider theme={theme}>
-              <MuiPickersUtilsProvider
-                utils={MomentUtils}
-                moment={moment}
-                locale="de-ch"
-              >
-                <AppContainer />
-              </MuiPickersUtilsProvider>
-            </MuiThemeProvider>
-          </>
-        </ApolloProvider>
-      </MobxProvider>,
+      <IdbProvider value={idb}>
+        <MobxProvider value={mobxStore}>
+          <ApolloProvider client={myClient}>
+            <>
+              <Print />
+              <MuiThemeProvider theme={theme}>
+                <MuiPickersUtilsProvider
+                  utils={MomentUtils}
+                  moment={moment}
+                  locale="de-ch"
+                >
+                  <AppContainer />
+                </MuiPickersUtilsProvider>
+              </MuiThemeProvider>
+            </>
+          </ApolloProvider>
+        </MobxProvider>
+      </IdbProvider>,
       document.getElementById('root'),
     )
   } catch (error) {

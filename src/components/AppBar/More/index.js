@@ -16,6 +16,7 @@ import logout from '../../../modules/logout'
 import getActiveNodes from '../../../modules/getActiveNodes'
 import EkfAdresse from './EkfAdresse'
 import mobxStoreContext from '../../../mobxStoreContext'
+import idbContext from '../../../idbContext'
 
 const Container = styled.div`
   margin-top: auto;
@@ -49,6 +50,7 @@ const MyAppBar = ({
   if (localData.error) return `Fehler: ${localData.error.message}`
 
   const { deletedDatasets } = useContext(mobxStoreContext)
+  const { idb } = useContext(idbContext)
 
   const [anchorEl, setAnchorEl] = useState(null)
 
@@ -86,7 +88,7 @@ const MyAppBar = ({
   })
   const onClickLogout = useCallback(() => {
     setAnchorEl(null)
-    logout()
+    logout(idb)
   })
 
   return (

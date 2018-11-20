@@ -1,5 +1,5 @@
 // @flow
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useContext } from 'react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogActions from '@material-ui/core/DialogActions'
@@ -16,12 +16,12 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import get from 'lodash/get'
 import gql from 'graphql-tag'
-import app from 'ampersand-app'
 import { withApollo } from 'react-apollo'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import withLocalData from './withLocalData'
 import setUserGql from './setUser'
+import idbContext from '../../idbContext'
 
 const StyledDialog = styled(Dialog)``
 const StyledDiv = styled.div`
@@ -42,6 +42,8 @@ const enhance = compose(
 
 const User = ({ localData, client }: { localData: Object, client: Object }) => {
   if (localData.error) return `Fehler: ${localData.error.message}`
+
+  const { idb } = useContext(idbContext)
 
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
@@ -90,8 +92,8 @@ const User = ({ localData, client }: { localData: Object, client: Object }) => {
       }
       const token = get(result, 'data.login.jwtToken')
       // refresh currentUser in idb
-      app.db.currentUser.clear()
-      await app.db.currentUser.put({ name, token })
+      idb.currentUser.clear()
+      await idb.currentUser.put({ name, token })
       await client.mutate({
         mutation: setUserGql,
         variables: { name, token },
