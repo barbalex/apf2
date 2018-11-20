@@ -1,6 +1,5 @@
 // @flow
 import get from 'lodash/get'
-import app from 'ampersand-app'
 
 import queryTpop from './queryTpop'
 import updatePopById from './updatePopById'
@@ -8,12 +7,12 @@ import updatePopById from './updatePopById'
 export default async ({
   id,
   addError,
+  client,
 }: {
   id: String,
   addError: Object,
+  client: Object,
 }): Promise<void> => {
-  const { client } = app
-
   // fetch tpop
   let tpopResult
   try {

@@ -4,7 +4,6 @@
  * used when moving for instance tpop to other pop in tree
  */
 import get from 'lodash/get'
-import app from 'ampersand-app'
 
 import tables from '../tables'
 import movingGql from './moving'
@@ -17,11 +16,12 @@ import setMoving from './setMoving'
 export default async ({
   id: newParentId,
   addError,
+  client,
 }: {
   newParentId: String,
   addError: Object,
+  client: Object,
 }): any => {
-  const { client } = app
   const { data } = await client.query({
     query: movingGql,
   })
