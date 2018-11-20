@@ -3,18 +3,16 @@ import clone from 'lodash/clone'
 import isEqual from 'lodash/isEqual'
 import get from 'lodash/get'
 import gql from 'graphql-tag'
-import app from 'ampersand-app'
 
 import setTreeKeyGql from './setTreeKey'
 import updateBeobByIdGql from './updateBeobById'
 
-export default async ({ value, row, tree, refetchTree }) => {
-  const { client } = app
+export default async ({ value, row, tree, refetchTree, client }) => {
   const variables = {
     id: row.id,
     artId: value,
   }
-  await app.client.mutate({
+  await client.mutate({
     mutation: updateBeobByIdGql,
     variables,
   })

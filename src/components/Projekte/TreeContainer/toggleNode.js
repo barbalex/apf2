@@ -12,11 +12,13 @@ export default ({
   node,
   nodeFilter,
   nodeFilterSetActiveTable,
+  client,
 }: {
   tree: Object,
   node: Object,
   nodeFilter: Object,
   nodeFilterSetActiveTable: () => void,
+  client: Object,
 }): any => {
   if (!node.url) throw new Error('passed node has no url')
 
@@ -45,7 +47,7 @@ export default ({
     openNode({ tree, node })
   }
 
-  app.client.mutate({
+  client.mutate({
     mutation: gql`
       mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
         setTreeKey(tree: $tree, key: $key, value: $value) @client {

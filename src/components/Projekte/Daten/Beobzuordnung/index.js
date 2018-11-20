@@ -178,7 +178,7 @@ const Beobzuordnung = ({
   const onSaveArtIdToDb = useCallback(
     event => {
       const { value } = event.target
-      saveArtIdToDb({ value, row, tree, refetchTree })
+      saveArtIdToDb({ value, row, tree, refetchTree, client })
     },
     [row, tree],
   )
@@ -190,6 +190,7 @@ const Beobzuordnung = ({
         tree,
         refetch: data.refetch,
         refetchTree,
+        client,
       })
     },
     [id, tree],
@@ -197,7 +198,7 @@ const Beobzuordnung = ({
   const onSaveTpopIdToDb = useCallback(
     event => {
       const { value } = event.target
-      saveTpopIdToDb({ value, id, tree, refetchTree, type })
+      saveTpopIdToDb({ value, id, tree, refetchTree, type, client })
     },
     [id, tree, type],
   )
