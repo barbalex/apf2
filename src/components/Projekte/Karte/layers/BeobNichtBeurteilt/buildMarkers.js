@@ -5,7 +5,6 @@ import 'leaflet'
 import format from 'date-fns/format'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import app from 'ampersand-app'
 
 import beobIcon from '../../../../../etc/beob.png'
 import beobIconHighlighted from '../../../../../etc/beobHighlighted.png'
@@ -27,6 +26,7 @@ export default ({
   data,
   refetchTree,
   mapIdsFiltered,
+  client,
 }: {
   beobs: Array<Object>,
   tree: Object,
@@ -35,10 +35,10 @@ export default ({
   data: Object,
   refetchTree: () => void,
   mapIdsFiltered: Array<String>,
+  client: Object,
 }): Array<Object> => {
   const { ap, projekt } = activeNodes
   const assigning = get(data, 'assigningBeob')
-  const { client } = app
 
   return beobs.map(beob => {
     const isHighlighted = mapIdsFiltered.includes(beob.id)

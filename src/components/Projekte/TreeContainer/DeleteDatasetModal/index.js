@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
+import { withApollo } from 'react-apollo'
 
 import tables from '../../../../modules/tables'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -20,11 +21,18 @@ const StyledDialog = styled(Dialog)`
 `
 
 const enhance = compose(
+  withApollo,
   withLocalData,
   observer,
 )
 
-const DatasetDeleteModal = ({ localData }: { localData: Object }) => {
+const DatasetDeleteModal = ({
+  localData,
+  client,
+}: {
+  localData: Object,
+  client: Object,
+}) => {
   if (localData.error) {
     if (
       localData.error.message.includes('permission denied') ||
@@ -62,6 +70,7 @@ const DatasetDeleteModal = ({ localData }: { localData: Object }) => {
         emptyToDelete,
         addDeletedDataset,
         addError,
+        client,
       }),
     [localData],
   )

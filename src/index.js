@@ -67,7 +67,6 @@ const run = async () => {
     app.extend({
       init() {
         this.client = client
-        this.history = history
       },
     })
     app.init()

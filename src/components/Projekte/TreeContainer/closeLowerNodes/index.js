@@ -1,6 +1,5 @@
 //@flow
 import isEqual from 'lodash/isEqual'
-import app from 'ampersand-app'
 
 import setTreeKey from './setTreeKey'
 
@@ -8,12 +7,13 @@ export default async ({
   tree,
   url,
   refetchTree,
+  client,
 }: {
   tree: Object,
   url: Array<String>,
   refetchTree: () => void,
+  client: Object,
 }) => {
-  const { client } = app
   const { openNodes, activeNodeArray } = tree
   const newOpenNodes = openNodes.filter(n => {
     const partWithEqualLength = n.slice(0, url.length)

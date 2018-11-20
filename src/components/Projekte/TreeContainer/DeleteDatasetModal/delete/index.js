@@ -5,7 +5,6 @@ import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 import omit from 'lodash/omit'
 import gql from 'graphql-tag'
-import app from 'ampersand-app'
 
 import tables from '../../../../../modules/tables'
 import setTreeKey from './setTreeKey'
@@ -19,14 +18,15 @@ export default async ({
   emptyToDelete,
   addDeletedDataset,
   addError,
+  client,
 }: {
   dataPassedIn: Object,
   toDelete: Object,
   emptyToDelete: () => void,
   addDeletedDataset: () => void,
   addError: Object,
+  client: Object,
 }): Promise<void> => {
-  const { client } = app
   // deleteDatasetDemand checks variables
   const { table: tablePassed, id, url, label, afterDeletionHook } = toDelete
 

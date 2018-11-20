@@ -3,12 +3,19 @@ import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
 import { observer } from 'mobx-react-lite'
+import { withApollo } from 'react-apollo'
+import compose from 'recompose/compose'
 
 import buildMarkers from './buildMarkers'
 import buildMarkersClustered from './buildMarkersClustered'
 import Marker from './Marker'
 import MarkerCluster from './MarkerCluster'
 import mobxStoreContext from '../../../../../mobxStoreContext'
+
+const enhance = compose(
+  withApollo,
+  observer,
+)
 
 const BeobNichtBeurteiltMarker = ({
   tree,
@@ -17,6 +24,7 @@ const BeobNichtBeurteiltMarker = ({
   clustered,
   refetchTree,
   mapIdsFiltered,
+  client,
 }: {
   tree: Object,
   data: Object,
@@ -24,6 +32,7 @@ const BeobNichtBeurteiltMarker = ({
   clustered: Boolean,
   refetchTree: () => void,
   mapIdsFiltered: Array<String>,
+  client: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { apfloraLayers } = mobxStore
@@ -68,8 +77,9 @@ const BeobNichtBeurteiltMarker = ({
     data,
     mapIdsFiltered,
     refetchTree,
+    client,
   })
   return <Marker markers={markers} />
 }
 
-export default observer(BeobNichtBeurteiltMarker)
+export default enhance(BeobNichtBeurteiltMarker)

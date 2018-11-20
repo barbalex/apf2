@@ -322,6 +322,7 @@ const TreeContainer = ({
           closeLowerNodes({
             tree,
             url,
+            client,
           })
         },
         delete() {
