@@ -5,7 +5,6 @@
  * 3. update openNodes
  * 4. refresh tree
  */
-import app from 'ampersand-app'
 import get from 'lodash/get'
 
 import dataGql from './data'
@@ -17,15 +16,16 @@ export default async ({
   id: jahrString,
   parentId: apId,
   refetchTree,
+  client,
 }: {
   tree: Object,
   activeNodes: Object,
   id: String,
   parentId: String,
   refetchTree: () => void,
+  client: Object,
 }) => {
   const jahr = +jahrString
-  const { client } = app
   const { projekt } = activeNodes
   const { openNodes } = tree
   // 1. load all data
