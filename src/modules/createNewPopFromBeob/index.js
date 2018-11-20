@@ -1,6 +1,5 @@
 // @flow
 import format from 'date-fns/format'
-import app from 'ampersand-app'
 import get from 'lodash/get'
 
 import queryBeob from './queryBeob'
@@ -16,14 +15,15 @@ export default async ({
   id,
   refetchTree,
   addError,
+  client,
 }: {
   tree: Object,
   activeNodes: Object,
   id: String,
   refetchTree: () => void,
   addError: Object,
+  client: Object,
 }): Promise<void> => {
-  const { client } = app
   const { ap, projekt } = activeNodes
   let beobResult
   try {

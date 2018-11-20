@@ -1,6 +1,5 @@
 // @flow
 import get from 'lodash/get'
-import app from 'ampersand-app'
 
 import queryBeob from './queryBeob'
 import updateTpopById from './updateTpopById'
@@ -8,11 +7,12 @@ import updateTpopById from './updateTpopById'
 export default async ({
   id,
   addError,
+  client,
 }: {
   id: String,
   addError: () => void,
+  client: Object,
 }): Promise<void> => {
-  const { client } = app
   // fetch beob coodinates
   let beobResult
   try {
