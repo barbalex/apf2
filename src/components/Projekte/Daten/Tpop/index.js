@@ -6,6 +6,7 @@ import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import app from 'ampersand-app'
 import { observer } from 'mobx-react-lite'
+import { withApollo } from 'react-apollo'
 
 import TextField from '../../../shared/TextField'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
@@ -43,6 +44,7 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withApollo,
   withData,
   observer,
 )
@@ -52,11 +54,13 @@ const Tpop = ({
   dimensions = { width: 380 },
   treeName,
   data,
+  client,
 }: {
   id: String,
   dimensions: Object,
   treeName: string,
   data: Object,
+  client: Object,
 }) => {
   if (data.loading) {
     return (
@@ -101,7 +105,7 @@ const Tpop = ({
         //refetchTree()
       } else {
         try {
-          await app.client.mutate({
+          await client.mutate({
             mutation: updateTpopByIdGql,
             variables: {
               id: row.id,

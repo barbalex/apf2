@@ -1,13 +1,10 @@
 // @flow
-import React from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
-import withState from 'recompose/withState'
-import withLifecycle from '@hocs/with-lifecycle'
-import app from 'ampersand-app'
+import { withApollo } from 'react-apollo'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -29,83 +26,41 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withApollo,
   withData,
   withAllTpopmassnErfbeurtWertes,
-  withState('errors', 'setErrors', {}),
-  withHandlers({
-    saveToDb: ({ refetchTree, setErrors, errors, data }) => async event => {
-      const field = event.target.name
-      const value = event.target.value || null
-      const row = get(data, 'popmassnberById', {})
-      /**
-       * only save if value changed
-       */
-      if (row[field] === value) return
-      try {
-        await app.client.mutate({
-          mutation: updatePopmassnberByIdGql,
-          variables: {
-            id: row.id,
-            [field]: value,
-          },
-          /*optimisticResponse: {
-            __typename: 'Mutation',
-            updatePopmassnberById: {
-              popmassnber: {
-                id: row.id,
-                popId: field === 'popId' ? value : row.popId,
-                jahr: field === 'jahr' ? value : row.jahr,
-                beurteilung: field === 'beurteilung' ? value : row.beurteilung,
-                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-                tpopmassnErfbeurtWerteByBeurteilung:
-                  row.tpopmassnErfbeurtWerteByBeurteilung,
-                popByPopId: row.popByPopId,
-                __typename: 'Popmassnber',
-              },
-              __typename: 'Popmassnber',
-            },
-          },*/
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
-      }
-      setErrors({})
-      if (['beurteilung'].includes(field)) refetchTree('popmassnbers')
-    },
-  }),
-  withLifecycle({
-    onDidUpdate(prevProps, props) {
-      if (prevProps.id !== props.id) {
-        props.setErrors({})
-      }
-    },
-  }),
 )
 
 const Popmassnber = ({
   id,
-  saveToDb,
-  errors,
   treeName,
   dataAllTpopmassnErfbeurtWertes,
   data,
+  client,
+  refetchTree,
 }: {
   id: string,
-  saveToDb: () => void,
-  errors: Object,
   treeName: string,
   dataAllTpopmassnErfbeurtWertes: Object,
   data: Object,
+  client: Object,
+  refetchTree: () => void,
 }) => {
-  if (data.loading || dataAllTpopmassnErfbeurtWertes.loading)
+  if (data.loading || dataAllTpopmassnErfbeurtWertes.loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
       </Container>
     )
+  }
   if (data.error) return `Fehler: ${data.error.message}`
-  if (dataAllTpopmassnErfbeurtWertes.error)
+  if (dataAllTpopmassnErfbeurtWertes.error) {
     return `Fehler: ${dataAllTpopmassnErfbeurtWertes.error.message}`
+  }
+
+  const [errors, setErrors] = useState({})
+
+  useEffect(() => setErrors({}), [id])
 
   const row = get(data, 'popmassnberById', {})
   let popbeurteilungWerte = get(
@@ -118,6 +73,48 @@ const Popmassnber = ({
     value: el.code,
     label: el.text,
   }))
+
+  const saveToDb = useCallback(
+    async event => {
+      const field = event.target.name
+      const value = event.target.value || null
+      /**
+       * only save if value changed
+       */
+      if (row[field] === value) return
+      try {
+        await client.mutate({
+          mutation: updatePopmassnberByIdGql,
+          variables: {
+            id: row.id,
+            [field]: value,
+          },
+          /*optimisticResponse: {
+          __typename: 'Mutation',
+          updatePopmassnberById: {
+            popmassnber: {
+              id: row.id,
+              popId: field === 'popId' ? value : row.popId,
+              jahr: field === 'jahr' ? value : row.jahr,
+              beurteilung: field === 'beurteilung' ? value : row.beurteilung,
+              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+              tpopmassnErfbeurtWerteByBeurteilung:
+                row.tpopmassnErfbeurtWerteByBeurteilung,
+              popByPopId: row.popByPopId,
+              __typename: 'Popmassnber',
+            },
+            __typename: 'Popmassnber',
+          },
+        },*/
+        })
+      } catch (error) {
+        return setErrors({ [field]: error.message })
+      }
+      setErrors({})
+      if (['beurteilung'].includes(field)) refetchTree('popmassnbers')
+    },
+    [id],
+  )
 
   return (
     <ErrorBoundary>
