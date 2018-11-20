@@ -1,19 +1,18 @@
 //@flow
 import clone from 'lodash/clone'
 import isEqual from 'lodash/isEqual'
-import app from 'ampersand-app'
 
 import setTreeKeyGql from './setTreeKey'
 import updateBeobByIdGql from './updateBeobById'
 
-export default async ({ value, id, tree, refetch, refetchTree }) => {
+export default async ({ value, id, tree, refetch, refetchTree, client }) => {
   const variables = {
     id,
     nichtZuordnen: value,
   }
   // if true, empty tpopId
   if (value) variables.tpopId = null
-  await app.client.mutate({
+  await client.mutate({
     mutation: updateBeobByIdGql,
     variables,
   })
@@ -34,7 +33,7 @@ export default async ({ value, id, tree, refetch, refetchTree }) => {
     if (isEqual(n, oldParentNodeUrl)) return newParentNodeUrl
     return n
   })
-  await app.client.mutate({
+  await client.mutate({
     mutation: setTreeKeyGql,
     variables: {
       tree: tree.name,

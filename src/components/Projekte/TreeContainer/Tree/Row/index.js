@@ -264,7 +264,13 @@ const Row = ({
 
   const onClickNode = useCallback(
     event => {
-      toggleNode({ tree: tree2, node, nodeFilter, nodeFilterSetActiveTable })
+      toggleNode({
+        tree: tree2,
+        node,
+        nodeFilter,
+        nodeFilterSetActiveTable,
+        client,
+      })
     },
     [tree2, node, nodeFilter],
   )
