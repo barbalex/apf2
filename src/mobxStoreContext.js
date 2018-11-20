@@ -1,6 +1,6 @@
 import React from 'react'
 
-const StoreContext = React.createContext({})
-export const StoreContextProvider = StoreContext.Provider
-export const StoreContextConsumer = StoreContext.Consumer
-export default StoreContext
+const Context = React.createContext({})
+export const Provider = Context.Provider
+export const Consumer = Context.Consumer
+export default Context
