@@ -1,12 +1,9 @@
 // @flow
-import React from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
-import withState from 'recompose/withState'
-import withLifecycle from '@hocs/with-lifecycle'
-import app from 'ampersand-app'
+import { withApollo } from 'react-apollo'
 
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
@@ -26,78 +23,75 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withApollo,
   withData,
-  withState('errors', 'setErrors', {}),
-  withHandlers({
-    saveToDb: ({ setErrors, errors, data }) => async event => {
+)
+
+const Zielber = ({
+  id,
+  treeName,
+  data,
+  client,
+}: {
+  id: string,
+  treeName: string,
+  data: Object,
+  client: Object,
+}) => {
+  if (data.loading) {
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  }
+  if (data.error) return `Fehler: ${data.error.message}`
+
+  const [errors, setErrors] = useState({})
+
+  useEffect(() => setErrors({}), [id])
+
+  const row = get(data, 'zielberById', {})
+
+  const saveToDb = useCallback(
+    async event => {
       const field = event.target.name
       let value = event.target.value
       if (value === undefined) value = null
-      const row = get(data, 'zielberById', {})
       /**
        * only save if value changed
        */
       if (row[field] === value) return
       try {
-        await app.client.mutate({
+        await client.mutate({
           mutation: updateZielberByIdGql,
           variables: {
             id: row.id,
             [field]: value,
           },
           /*optimisticResponse: {
-            __typename: 'Mutation',
-            updateZielberById: {
-              zielber: {
-                id: row.id,
-                zielId: field === 'zielId' ? value : row.zielId,
-                jahr: field === 'jahr' ? value : row.jahr,
-                erreichung: field === 'erreichung' ? value : row.erreichung,
-                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-                zielByZielId: row.zielByZielId,
-                __typename: 'Zielber',
-              },
+          __typename: 'Mutation',
+          updateZielberById: {
+            zielber: {
+              id: row.id,
+              zielId: field === 'zielId' ? value : row.zielId,
+              jahr: field === 'jahr' ? value : row.jahr,
+              erreichung: field === 'erreichung' ? value : row.erreichung,
+              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+              zielByZielId: row.zielByZielId,
               __typename: 'Zielber',
             },
-          },*/
+            __typename: 'Zielber',
+          },
+        },*/
         })
       } catch (error) {
         return setErrors({ [field]: error.message })
       }
       setErrors({})
     },
-  }),
-  withLifecycle({
-    onDidUpdate(prevProps, props) {
-      if (prevProps.id !== props.id) {
-        props.setErrors({})
-      }
-    },
-  }),
-)
-
-const Zielber = ({
-  id,
-  saveToDb,
-  errors,
-  treeName,
-  data,
-}: {
-  id: string,
-  saveToDb: () => void,
-  errors: Object,
-  treeName: string,
-  data: Object,
-}) => {
-  if (data.loading)
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  if (data.error) return `Fehler: ${data.error.message}`
-
-  const row = get(data, 'zielberById', {})
+    [id],
+  )
 
   return (
     <ErrorBoundary>

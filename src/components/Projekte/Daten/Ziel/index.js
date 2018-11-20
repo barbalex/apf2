@@ -1,15 +1,12 @@
 // @flow
-import React from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import clone from 'lodash/clone'
 import isEqual from 'lodash/isEqual'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
-import withState from 'recompose/withState'
-import withLifecycle from '@hocs/with-lifecycle'
-import app from 'ampersand-app'
+import { withApollo } from 'react-apollo'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -31,45 +28,80 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withApollo,
   withData,
-  withState('errors', 'setErrors', {}),
-  withHandlers({
-    saveToDb: ({
-      tree,
-      refetchTree,
-      setErrors,
-      errors,
-      data,
-    }) => async event => {
+)
+
+const Ziel = ({
+  id,
+  tree,
+  treeName,
+  data,
+  client,
+  refetchTree,
+}: {
+  id: string,
+  tree: Object,
+  treeName: string,
+  data: Object,
+  client: Object,
+  refetchTree: () => void,
+}) => {
+  if (data.loading) {
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  }
+  if (data.error) {
+    console.log('Ziel:', { error: data.error })
+    return `Fehler: ${data.error.message}`
+  }
+
+  const [errors, setErrors] = useState({})
+
+  useEffect(() => setErrors({}), [id])
+
+  const row = get(data, 'zielById', {})
+  let typWerte = get(data, 'allZielTypWertes.nodes', [])
+  typWerte = sortBy(typWerte, 'sort')
+  typWerte = typWerte.map(el => ({
+    value: el.code,
+    label: el.text,
+  }))
+  const { activeNodeArray, openNodes } = tree
+
+  const saveToDb = useCallback(
+    async event => {
       const field = event.target.name
       let value = event.target.value
       if (value === undefined) value = null
-      const row = get(data, 'zielById', {})
       /**
        * only save if value changed
        */
       if (row[field] === value) return
       try {
-        await app.client.mutate({
+        await client.mutate({
           mutation: updateZielByIdGql,
           variables: {
             id: row.id,
             [field]: value,
           },
           /*optimisticResponse: {
-            __typename: 'Mutation',
-            updateZielById: {
-              ziel: {
-                id: row.id,
-                apId: field === 'apId' ? value : row.apId,
-                typ: field === 'typ' ? value : row.typ,
-                jahr: field === 'jahr' ? value : row.jahr,
-                bezeichnung: field === 'bezeichnung' ? value : row.bezeichnung,
-                __typename: 'Ziel',
-              },
+          __typename: 'Mutation',
+          updateZielById: {
+            ziel: {
+              id: row.id,
+              apId: field === 'apId' ? value : row.apId,
+              typ: field === 'typ' ? value : row.typ,
+              jahr: field === 'jahr' ? value : row.jahr,
+              bezeichnung: field === 'bezeichnung' ? value : row.bezeichnung,
               __typename: 'Ziel',
             },
-          },*/
+            __typename: 'Ziel',
+          },
+        },*/
         })
       } catch (error) {
         return setErrors({ [field]: error.message })
@@ -77,7 +109,6 @@ const enhance = compose(
       setErrors({})
       // if jahr of ziel is updated, activeNodeArray und openNodes need to change
       if (field === 'jahr') {
-        const { activeNodeArray, openNodes } = tree
         const newActiveNodeArray = clone(activeNodeArray)
         newActiveNodeArray[5] = +value
         const oldParentNodeUrl = clone(activeNodeArray)
@@ -89,7 +120,7 @@ const enhance = compose(
           if (isEqual(n, oldParentNodeUrl)) return newParentNodeUrl
           return n
         })
-        app.client.mutate({
+        client.mutate({
           mutation: setTreeKeyGql,
           variables: {
             tree: tree.name,
@@ -102,49 +133,8 @@ const enhance = compose(
         if (['typ'].includes(field)) refetchTree('ziels')
       }
     },
-  }),
-  withLifecycle({
-    onDidUpdate(prevProps, props) {
-      if (prevProps.id !== props.id) {
-        props.setErrors({})
-      }
-    },
-  }),
-)
-
-const Ziel = ({
-  id,
-  tree,
-  saveToDb,
-  errors,
-  treeName,
-  data,
-}: {
-  id: string,
-  tree: Object,
-  saveToDb: () => void,
-  errors: Object,
-  treeName: string,
-  data: Object,
-}) => {
-  if (data.loading)
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  if (data.error) {
-    console.log('Ziel:', { error: data.error })
-    return `Fehler: ${data.error.message}`
-  }
-
-  const row = get(data, 'zielById', {})
-  let typWerte = get(data, 'allZielTypWertes.nodes', [])
-  typWerte = sortBy(typWerte, 'sort')
-  typWerte = typWerte.map(el => ({
-    value: el.code,
-    label: el.text,
-  }))
+    [id, activeNodeArray, openNodes, treeName],
+  )
 
   return (
     <ErrorBoundary>
