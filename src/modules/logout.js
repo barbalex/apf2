@@ -1,8 +1,6 @@
 // @flow
-import app from 'ampersand-app'
-
-export default async (): void => {
+export default async (idb: Object): void => {
   console.log('LOGGING OUT')
-  app.db.currentUser.clear()
+  idb.currentUser.clear()
   window.location.reload(false)
 }
