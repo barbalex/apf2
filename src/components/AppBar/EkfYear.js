@@ -6,6 +6,7 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import withLifecycle from '@hocs/with-lifecycle'
 import styled from 'styled-components'
+import { withApollo } from 'react-apollo'
 
 import initiateDataFromUrl from '../../modules/initiateDataFromUrl'
 
@@ -30,16 +31,16 @@ const Jahr = styled.p`
 `
 
 const enhance = compose(
-  withState(
-    'stateValue',
-    'setStateValue',
-    ({ value }) => (value || value === 0 ? value : ''),
+  withApollo,
+  withState('stateValue', 'setStateValue', ({ value }) =>
+    value || value === 0 ? value : '',
   ),
   withHandlers({
     onChange: ({ setStateValue }) => event => setStateValue(event.target.value),
-    onBlur: ({ setEkfYear, value, stateValue }) => event => {
+    onBlur: ({ setEkfYear, value, stateValue, client }) => event => {
       setEkfYear(event.target.value || null)
-      if (value !== stateValue) initiateDataFromUrl(['Projekte'])
+      if (value !== stateValue)
+        initiateDataFromUrl({ activeNodeArray: ['Projekte'], client })
     },
   }),
   withLifecycle({

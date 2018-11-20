@@ -71,7 +71,7 @@ const run = async () => {
     })
     app.init()
 
-    await initiateDataFromUrl()
+    await initiateDataFromUrl({ client: myClient })
 
     // begin _after_ initiation data from url
     history.listen((location, action) =>

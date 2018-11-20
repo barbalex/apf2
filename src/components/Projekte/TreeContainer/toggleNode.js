@@ -1,7 +1,6 @@
 // @flow
 import clone from 'lodash/clone'
 import gql from 'graphql-tag'
-import app from 'ampersand-app'
 
 import isNodeOpen from './isNodeOpen'
 import isNodeInActiveNodePath from './isNodeInActiveNodePath'
