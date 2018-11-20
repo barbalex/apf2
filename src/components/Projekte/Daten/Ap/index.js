@@ -92,24 +92,6 @@ const Ap = ({
   refetchTree: () => void,
   client: Object,
 }) => {
-  if (
-    data.loading ||
-    dataAeEigenschaftens.loading ||
-    dataAllAdresses.loading ||
-    dataAllAps.loading
-  )
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  if (dataAeEigenschaftens.error)
-    return `Fehler: ${dataAeEigenschaftens.error.message}`
-  if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
-  if (dataAllAps.error) return `Fehler: ${dataAllAps.error.message}`
-  if (localData.error) return `Fehler: ${localData.error.message}`
-  if (data.error) return `Fehler: ${data.error.message}`
-
   const { nodeFilter, nodeFilterSetValue } = useContext(mobxStoreContext)
 
   const [errors, setErrors] = useState({})
@@ -236,6 +218,26 @@ const Ap = ({
     },
     [row, showFilter],
   )
+
+  if (
+    data.loading ||
+    dataAeEigenschaftens.loading ||
+    dataAllAdresses.loading ||
+    dataAllAps.loading
+  ) {
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  }
+  if (dataAeEigenschaftens.error) {
+    return `Fehler: ${dataAeEigenschaftens.error.message}`
+  }
+  if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
+  if (dataAllAps.error) return `Fehler: ${dataAllAps.error.message}`
+  if (localData.error) return `Fehler: ${localData.error.message}`
+  if (data.error) return `Fehler: ${data.error.message}`
 
   return (
     <ErrorBoundary>
