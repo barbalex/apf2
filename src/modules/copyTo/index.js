@@ -5,7 +5,6 @@
  */
 import get from 'lodash/get'
 import gql from 'graphql-tag'
-import app from 'ampersand-app'
 
 import tables from '../tables'
 import copyTpopsOfPop from '../copyTpopsOfPop'
@@ -30,14 +29,15 @@ export default async ({
   id: idPassed,
   refetchTree,
   addError,
+  client,
 }: {
   parentId: String,
   tablePassed: ?String,
   idPassed: ?String,
   refetchTree: () => void,
   addError: Object,
+  client: Object,
 }): Promise<void> => {
-  const { client } = app
   const { data } = await client.query({
     query: gql`
       query Query {

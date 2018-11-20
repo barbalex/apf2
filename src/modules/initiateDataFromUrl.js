@@ -75,9 +75,13 @@ export default async ({ activeNodeArray: activeNodeArrayPassed, client }) => {
       urlQuery.projekteTabs.length === 0)
   ) {
     if (isMobilePhone()) {
-      setUrlQueryValue({ key: 'projekteTabs', value: ['tree'] })
+      setUrlQueryValue({ key: 'projekteTabs', value: ['tree'], client })
     } else {
-      setUrlQueryValue({ key: 'projekteTabs', value: ['tree', 'daten'] })
+      setUrlQueryValue({
+        key: 'projekteTabs',
+        value: ['tree', 'daten'],
+        client,
+      })
     }
   }
 }
