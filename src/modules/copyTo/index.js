@@ -347,6 +347,7 @@ export default async ({
       popIdFrom: id,
       popIdTo: newId,
       refetchTree,
+      client,
     })
   }
   if (table === 'tpopkontr') {
@@ -355,6 +356,7 @@ export default async ({
       tpopkontrIdFrom: id,
       tpopkontrIdTo: newId,
       refetchTree,
+      client,
     })
   }
 }

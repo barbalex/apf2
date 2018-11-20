@@ -1,6 +1,5 @@
 // @flow
 import gql from 'graphql-tag'
-import app from 'ampersand-app'
 
 import getActiveNodeArrayFromPathname from './getActiveNodeArrayFromPathname'
 import getUrlQuery from '../modules/getUrlQuery'
@@ -8,8 +7,7 @@ import isMobilePhone from '../modules/isMobilePhone'
 import setUrlQueryValue from '../modules/setUrlQueryValue'
 import setOpenNodesFromActiveNodeArray from '../modules/setOpenNodesFromActiveNodeArray'
 
-export default async activeNodeArrayPassed => {
-  const { client } = app
+export default async ({ activeNodeArray: activeNodeArrayPassed, client }) => {
   const activeNodeArrayFromPathname =
     activeNodeArrayPassed || getActiveNodeArrayFromPathname()
   let initialActiveNodeArray = [...activeNodeArrayFromPathname]
@@ -42,7 +40,10 @@ export default async activeNodeArrayPassed => {
     },
   })
   // need to set openNodes
-  setOpenNodesFromActiveNodeArray(initialActiveNodeArray)
+  setOpenNodesFromActiveNodeArray({
+    activeNodeArray: initialActiveNodeArray,
+    client,
+  })
   // clone tree2 in case tree2 is open
   await client.mutate({
     mutation: gql`
