@@ -8,8 +8,8 @@ import compose from 'recompose/compose'
 import Button from '@material-ui/core/Button'
 import DeleteIcon from '@material-ui/icons/DeleteForever'
 import AddIcon from '@material-ui/icons/AddCircleOutline'
-import app from 'ampersand-app'
 import { observer } from 'mobx-react-lite'
+import { withApollo } from 'react-apollo'
 
 import Select from '../../../../shared/Select'
 import TextField from '../../../../shared/TextField'
@@ -157,6 +157,7 @@ const ShowNew = styled.div`
 `
 
 const enhance = compose(
+  withApollo,
   withData,
   withAllTpopkontrzaehlEinheitWertes,
   observer,
@@ -175,6 +176,7 @@ const Count = ({
   ekfzaehleinheits,
   dataAllTpopkontrzaehlEinheitWertes,
   data,
+  client,
 }: {
   id: String,
   tpopkontrId: String,
@@ -188,10 +190,11 @@ const Count = ({
   ekfzaehleinheits: Array<Object>,
   dataAllTpopkontrzaehlEinheitWertes: Object,
   data: Object,
+  client: Object,
 }) => {
   const createNew = useCallback(
     () => {
-      app.client
+      client
         .mutate({
           mutation: createTpopkontrzaehl,
           variables: { tpopkontrId },
@@ -284,7 +287,7 @@ const Count = ({
         if (field2) {
           variables[field2] = value2
         }
-        await app.client.mutate({
+        await client.mutate({
           mutation: updateTpopkontrzaehlByIdGql,
           variables,
           /*optimisticResponse: {
