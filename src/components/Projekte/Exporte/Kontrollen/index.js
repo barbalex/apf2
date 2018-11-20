@@ -1,5 +1,6 @@
 // @flow
 import React, { useContext, useState } from 'react'
+import compose from 'recompose/compose'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
@@ -10,8 +11,8 @@ import Button from '@material-ui/core/Button'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import app from 'ampersand-app'
 import { observer } from 'mobx-react-lite'
+import { withApollo } from 'react-apollo'
 
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
@@ -55,12 +56,19 @@ const DownloadCardButton = styled(Button)`
   }
 `
 
+const enhance = compose(
+  withApollo,
+  observer,
+)
+
 const Kontrollen = ({
   fileType,
   applyMapFilterToExport,
+  client,
 }: {
   fileType: String,
   applyMapFilterToExport: Boolean,
+  client: Object,
 }) => {
   const { mapFilter, addError } = useContext(mobxStoreContext)
   const [expanded, setExpanded] = useState(false)
@@ -89,7 +97,7 @@ const Kontrollen = ({
             onClick={async () => {
               setMessage('Export "Kontrollen" wird vorbereitet...')
               try {
-                const { data } = await app.client.query({
+                const { data } = await client.query({
                   query: await import('./allVTpopkontrs').then(m => m.default),
                 })
                 exportModule({
@@ -115,7 +123,7 @@ const Kontrollen = ({
             onClick={async () => {
               setMessage('Export "KontrollenWebGisBun" wird vorbereitet...')
               try {
-                const { data } = await app.client.query({
+                const { data } = await client.query({
                   query: await import('./allVTpopkontrWebgisbuns').then(
                     m => m.default,
                   ),
@@ -145,7 +153,7 @@ const Kontrollen = ({
                 'Export "KontrollenAnzahlProZaehleinheit" wird vorbereitet...',
               )
               try {
-                const { data } = await app.client.query({
+                const { data } = await client.query({
                   query: await import('./allVKontrzaehlAnzproeinheits').then(
                     m => m.default,
                   ),
@@ -176,4 +184,4 @@ const Kontrollen = ({
   )
 }
 
-export default observer(Kontrollen)
+export default enhance(Kontrollen)

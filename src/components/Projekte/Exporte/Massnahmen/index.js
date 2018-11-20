@@ -1,5 +1,6 @@
 // @flow
 import React, { useContext, useState } from 'react'
+import compose from 'recompose/compose'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
@@ -10,8 +11,8 @@ import Button from '@material-ui/core/Button'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import app from 'ampersand-app'
 import { observer } from 'mobx-react-lite'
+import { withApollo } from 'react-apollo'
 
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
@@ -55,14 +56,21 @@ const DownloadCardButton = styled(Button)`
   }
 `
 
+const enhance = compose(
+  withApollo,
+  observer,
+)
+
 const Massnahmen = ({
   fileType,
   applyMapFilterToExport,
   addError,
+  client,
 }: {
   fileType: String,
   applyMapFilterToExport: Boolean,
   addError: () => void,
+  client: Object,
 }) => {
   const { mapFilter } = useContext(mobxStoreContext)
   const [expanded, setExpanded] = useState(false)
@@ -91,7 +99,7 @@ const Massnahmen = ({
             onClick={async () => {
               setMessage('Export "Massnahmen" wird vorbereitet...')
               try {
-                const { data } = await app.client.query({
+                const { data } = await client.query({
                   query: await import('./allVMassns').then(m => m.default),
                 })
                 exportModule({
@@ -117,7 +125,7 @@ const Massnahmen = ({
             onClick={async () => {
               setMessage('Export "MassnahmenWebGisBun" wird vorbereitet...')
               try {
-                const { data } = await app.client.query({
+                const { data } = await client.query({
                   query: await import('./allVMassnWebgisbuns').then(
                     m => m.default,
                   ),
@@ -148,4 +156,4 @@ const Massnahmen = ({
   )
 }
 
-export default observer(Massnahmen)
+export default enhance(Massnahmen)
