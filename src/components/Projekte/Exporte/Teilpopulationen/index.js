@@ -83,8 +83,6 @@ const Teilpopulationen = ({
   data: Object,
   client: Object,
 }) => {
-  if (data.error) return `Fehler: ${data.error.message}`
-
   const artList = sortBy(
     get(data, 'allAeEigenschaftens.nodes', [])
       .filter(n => !!get(n, 'apByArtId.id'))
@@ -145,6 +143,7 @@ const Teilpopulationen = ({
     [fileType, applyMapFilterToExport],
   )
 
+  if (data.error) return `Fehler: ${data.error.message}`
   return (
     <StyledCard>
       <StyledCardActions disableActionSpacing onClick={onClickAction}>

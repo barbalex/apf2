@@ -451,8 +451,6 @@ const ApfloraLayers = ({
   data: Object,
   client: Object,
 }) => {
-  if (data.error) return `Fehler: ${data.error.message}`
-
   const mobxStore = useContext(mobxStoreContext)
   const {
     apfloraLayers,
@@ -470,6 +468,7 @@ const ApfloraLayers = ({
     [apfloraLayers],
   )
 
+  if (data.error) return `Fehler: ${data.error.message}`
   return (
     <CardContent>
       <SortableList
