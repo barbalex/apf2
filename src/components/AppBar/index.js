@@ -78,8 +78,6 @@ const MyAppBar = ({
   setShowDeletions: () => void,
   client: Object,
 }) => {
-  if (localData.error) return `Fehler: ${localData.error.message}`
-
   const { nodeFilterClone1To2 } = useContext(mobxStoreContext)
 
   const activeNodeArray = get(localData, 'tree.activeNodeArray')
@@ -152,6 +150,8 @@ const MyAppBar = ({
     })
   })
   const toggleUserOpen = useCallback(() => setUserOpen(!userOpen), [userOpen])
+
+  if (localData.error) return `Fehler: ${localData.error.message}`
 
   return (
     <ErrorBoundary>

@@ -47,8 +47,6 @@ const MyAppBar = ({
   role: string,
   localData: () => void,
 }) => {
-  if (localData.error) return `Fehler: ${localData.error.message}`
-
   const { deletedDatasets } = useContext(mobxStoreContext)
   const { idb } = useContext(idbContext)
 
@@ -90,6 +88,8 @@ const MyAppBar = ({
     setAnchorEl(null)
     logout(idb)
   })
+
+  if (localData.error) return `Fehler: ${localData.error.message}`
 
   return (
     <ErrorBoundary>

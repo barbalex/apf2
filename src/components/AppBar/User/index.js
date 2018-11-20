@@ -60,9 +60,6 @@ const User = ({
   data: Object,
   client: Object,
 }) => {
-  if (data.loading) return null
-  if (data.error) return `Fehler: ${data.error.message}`
-
   const row = get(data, 'userByName', {})
 
   const [errors, setErrors] = useState({})
@@ -168,6 +165,9 @@ const User = ({
     },
     [password, row.id],
   )
+
+  if (data.loading) return null
+  if (data.error) return `Fehler: ${data.error.message}`
 
   return (
     <Dialog
