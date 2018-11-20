@@ -1,11 +1,16 @@
 // @flow
 import gql from 'graphql-tag'
-import app from 'ampersand-app'
 
 import setOpenNodesFromActiveNodeArray from '../../../modules/setOpenNodesFromActiveNodeArray'
 
-export default async activeNodeArray => {
-  await app.client.mutate({
+export default async ({
+  activeNodeArray,
+  client,
+}: {
+  activeNodeArray: Array<string>,
+  client: Object,
+}) => {
+  await client.mutate({
     mutation: gql`
       mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
         setTreeKey(tree: $tree, key: $key, value: $value) @client {

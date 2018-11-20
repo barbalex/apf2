@@ -5,6 +5,7 @@ import get from 'lodash/get'
 import uniq from 'lodash/uniq'
 import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
+import { withApollo } from 'react-apollo'
 
 import initiateDataFromUrl from './initiateDataFromUrl'
 
@@ -85,10 +86,12 @@ const EkfList = ({
   data,
   loading,
   dimensions,
+  client,
 }: {
   data: Object,
   loading: Boolean,
   dimensions: Object,
+  client: Object,
 }) => {
   const [initialKontrId, setInitialKontrId] = useState(null)
   const ekf = getEkfFromData(data)
@@ -119,7 +122,7 @@ const EkfList = ({
           'Freiwilligen-Kontrollen',
           row.id,
         ]
-        initiateDataFromUrl(url)
+        initiateDataFromUrl({ url, client })
         setInitialKontrId(row.id)
       }
     },
@@ -185,4 +188,4 @@ const EkfList = ({
   )
 }
 
-export default EkfList
+export default withApollo(EkfList)
