@@ -1,11 +1,10 @@
 // @flow
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
 import Switch from '@material-ui/core/Switch'
 import get from 'lodash/get'
-import app from 'ampersand-app'
+import { withApollo } from 'react-apollo'
 
 import withLocalData from './withLocalData'
 import setTreeKey from './setTreeKey'
@@ -27,14 +26,38 @@ const StyledSwitch = styled(Switch)`
 `
 
 const enhance = compose(
+  withApollo,
   withLocalData,
-  withHandlers({
-    onChange: ({ treeName, localData }) => async () => {
-      const apFilter = get(localData, `${treeName}.apFilter`)
-      const activeNodeArray = get(localData, `${treeName}.activeNodeArray`)
-      const openNodes = get(localData, `${treeName}.openNodes`)
+)
+
+const ApFilter = ({
+  treeName,
+  localData,
+  client,
+}: {
+  treeName: String,
+  localData: Object,
+  client: Object,
+}) => {
+  if (localData.error) {
+    if (
+      localData.error.message.includes('permission denied') ||
+      localData.error.message.includes('keine Berechtigung')
+    ) {
+      // ProjektContainer returns helpful screen
+      return null
+    }
+    return `Fehler: ${localData.error.message}`
+  }
+
+  const apFilter = get(localData, `${treeName}.apFilter`)
+  const activeNodeArray = get(localData, `${treeName}.activeNodeArray`)
+  const openNodes = get(localData, `${treeName}.openNodes`)
+
+  const onChange = useCallback(
+    async () => {
       const previousApFilter = apFilter
-      app.client.mutate({
+      client.mutate({
         mutation: setTreeKey,
         variables: {
           value: !apFilter,
@@ -49,7 +72,7 @@ const enhance = compose(
         let result
         if (apId) {
           // check if this is real ap
-          result = await app.client.query({
+          result = await client.query({
             query: apById,
             variables: { id: apId },
           })
@@ -63,7 +86,7 @@ const enhance = compose(
             activeNodeArray[1],
             activeNodeArray[2],
           ]
-          await app.client.mutate({
+          await client.mutate({
             mutation: setTreeKey,
             variables: {
               value: newActiveNodeArray,
@@ -82,7 +105,7 @@ const enhance = compose(
               return false
             return true
           })
-          await app.client.mutate({
+          await client.mutate({
             mutation: setTreeKey,
             variables: {
               value: newOpenNodes,
@@ -93,30 +116,8 @@ const enhance = compose(
         }
       }
     },
-  }),
-)
-
-const ApFilter = ({
-  treeName,
-  onChange,
-  localData,
-}: {
-  treeName: String,
-  onChange: () => void,
-  localData: Object,
-}) => {
-  if (localData.error) {
-    if (
-      localData.error.message.includes('permission denied') ||
-      localData.error.message.includes('keine Berechtigung')
-    ) {
-      // ProjektContainer returns helpful screen
-      return null
-    }
-    return `Fehler: ${localData.error.message}`
-  }
-
-  const apFilter = get(localData, `${treeName}.apFilter`)
+    [treeName, activeNodeArray, openNodes, apFilter],
+  )
 
   return (
     <ErrorBoundary>

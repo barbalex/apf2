@@ -1,14 +1,13 @@
 // @flow
 
-import React from 'react'
+import React, { useCallback } from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
 import get from 'lodash/get'
-import app from 'ampersand-app'
+import { withApollo } from 'react-apollo'
 
 import tables from '../../../../modules/tables'
 import labelFilterData from './data'
@@ -28,66 +27,22 @@ const StyledInput = styled(Input)`
 `
 
 const enhance = compose(
+  withApollo,
   labelFilterData,
-  withHandlers({
-    onChange: ({
-      treeName,
-      activeNode,
-      data,
-    }: {
-      treeName: String,
-      activeNode: Object,
-      data: Object,
-    }) => async event => {
-      const { filterTable, url, label } = activeNode
-      const { value } = event.target
-      const openNodes = get(data, `${treeName}.openNodes`, [])
-      // pop if is not folder and label does not comply to filter
-      if (
-        activeNode.nodeType === 'table' &&
-        !label.includes(
-          value && value.toLowerCase ? value.toLowerCase() : value,
-        )
-      ) {
-        const newActiveNodeArray = [...url]
-        const newActiveUrl = [...url]
-        newActiveNodeArray.pop()
-        let newOpenNodes = openNodes.filter(n => n !== newActiveUrl)
-        await app.client.mutate({
-          mutation: setTreeKeyGql,
-          variables: {
-            tree: treeName,
-            value1: newActiveNodeArray,
-            key1: 'activeNodeArray',
-            value2: newOpenNodes,
-            key2: 'openNodes',
-          },
-        })
-      }
-      app.client.mutate({
-        mutation: setTreeNodeLabelFilterKey,
-        variables: {
-          value,
-          tree: treeName,
-          key: filterTable,
-        },
-      })
-    },
-  }),
 )
 
 const LabelFilter = ({
   treeName,
   activeNode,
-  onChange,
   nodes,
   data,
+  client,
 }: {
   treeName: String,
   activeNode: Object,
-  onChange: () => void,
   nodes: Array<Object>,
   data: Object,
+  client: Object,
 }) => {
   const tableName = activeNode ? activeNode.filterTable : null
 
@@ -103,6 +58,45 @@ const LabelFilter = ({
       labelText = `${tableLabel} filtern`
     }
   }
+  const openNodes = get(data, `${treeName}.openNodes`, [])
+
+  const onChange = useCallback(
+    async event => {
+      const { filterTable, url, label } = activeNode
+      const { value } = event.target
+      // pop if is not folder and label does not comply to filter
+      if (
+        activeNode.nodeType === 'table' &&
+        !label.includes(
+          value && value.toLowerCase ? value.toLowerCase() : value,
+        )
+      ) {
+        const newActiveNodeArray = [...url]
+        const newActiveUrl = [...url]
+        newActiveNodeArray.pop()
+        let newOpenNodes = openNodes.filter(n => n !== newActiveUrl)
+        await client.mutate({
+          mutation: setTreeKeyGql,
+          variables: {
+            tree: treeName,
+            value1: newActiveNodeArray,
+            key1: 'activeNodeArray',
+            value2: newOpenNodes,
+            key2: 'openNodes',
+          },
+        })
+      }
+      client.mutate({
+        mutation: setTreeNodeLabelFilterKey,
+        variables: {
+          value,
+          tree: treeName,
+          key: filterTable,
+        },
+      })
+    },
+    [treeName, openNodes, activeNode],
+  )
 
   return (
     <StyledFormControl fullWidth>

@@ -11,6 +11,7 @@ import uniq from 'lodash/uniq'
 import isEqual from 'lodash/isEqual'
 import app from 'ampersand-app'
 import { observer } from 'mobx-react-lite'
+import { withApollo } from 'react-apollo'
 
 import LabelFilter from './LabelFilter'
 import ApFilter from './ApFilter'
@@ -116,10 +117,10 @@ const InnerTreeContainer = styled.div`
   overflow: hidden;
 `
 
-const getAndValidateCoordinatesOfTpop = async ({ id, addError }) => {
+const getAndValidateCoordinatesOfTpop = async ({ id, addError, client }) => {
   let tpopResult
   try {
-    tpopResult = await app.client.query({
+    tpopResult = await client.query({
       query: tpopById,
       variables: { id },
     })
@@ -139,10 +140,10 @@ const getAndValidateCoordinatesOfTpop = async ({ id, addError }) => {
   return { x, y }
 }
 
-const getAndValidateCoordinatesOfBeob = async ({ id, addError }) => {
+const getAndValidateCoordinatesOfBeob = async ({ id, addError, client }) => {
   let beobResult
   try {
-    beobResult = await app.client.query({
+    beobResult = await client.query({
       query: beobById,
       variables: { id },
     })
@@ -172,7 +173,10 @@ const showMapIfNotYetVisible = (projekteTabs: Array<String>) => {
   }
 }
 
-const enhance = compose(observer)
+const enhance = compose(
+  withApollo,
+  observer,
+)
 
 const TreeContainer = ({
   data: dbData,
@@ -187,6 +191,7 @@ const TreeContainer = ({
   openNodes,
   copying,
   mapIdsFiltered,
+  client,
 }: {
   treeName: String,
   flex: Number,
@@ -201,6 +206,7 @@ const TreeContainer = ({
   copying: Object,
   refetchTree: () => void,
   mapIdsFiltered: Array<String>,
+  client: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const {
@@ -322,7 +328,7 @@ const TreeContainer = ({
           const afterDeletionHook = async () => {
             // set it as new activeNodeArray and open node
             const newOpenNodes = openNodes.filter(n => !isEqual(n, url))
-            await app.client.mutate({
+            await client.mutate({
               mutation: setTreeKey2Gql,
               variables: {
                 tree: tree.name,
@@ -380,7 +386,7 @@ const TreeContainer = ({
           setActiveApfloraLayers(uniq([...activeApfloraLayers, 'tpop']))
         },
         markForMoving() {
-          app.client.mutate({
+          client.mutate({
             mutation: setMoving,
             variables: { table, id, label },
           })
@@ -389,19 +395,19 @@ const TreeContainer = ({
           moveTo({ id, addError })
         },
         markForCopying() {
-          app.client.mutate({
+          client.mutate({
             mutation: setCopying,
             variables: { table, id, label, withNextLevel: false },
           })
         },
         markForCopyingWithNextLevel() {
-          app.client.mutate({
+          client.mutate({
             mutation: setCopying,
             variables: { table, id, label, withNextLevel: true },
           })
         },
         resetCopying() {
-          app.client.mutate({
+          client.mutate({
             mutation: setCopying,
             variables: {
               table: null,
@@ -415,13 +421,13 @@ const TreeContainer = ({
           copyTo({ parentId: id, refetchTree, addError })
         },
         markForCopyingBiotop() {
-          app.client.mutate({
+          client.mutate({
             mutation: setCopyingBiotop,
             variables: { id, label },
           })
         },
         resetCopyingBiotop() {
-          app.client.mutate({
+          client.mutate({
             mutation: setCopyingBiotop,
             variables: { id: 'copyingBiotop', label: null },
           })
@@ -448,6 +454,7 @@ const TreeContainer = ({
           const { x, y } = await getAndValidateCoordinatesOfTpop({
             id,
             addError,
+            client,
           })
           if (x && y) {
             window.open(
@@ -460,6 +467,7 @@ const TreeContainer = ({
           const { x, y } = await getAndValidateCoordinatesOfTpop({
             id,
             addError,
+            client,
           })
           if (x && y) {
             window.open(
@@ -472,6 +480,7 @@ const TreeContainer = ({
           const { x, y } = await getAndValidateCoordinatesOfBeob({
             id,
             addError,
+            client,
           })
           if (x && y) {
             window.open(
@@ -484,6 +493,7 @@ const TreeContainer = ({
           const { x, y } = await getAndValidateCoordinatesOfBeob({
             id,
             addError,
+            client,
           })
           if (x && y) {
             window.open(
