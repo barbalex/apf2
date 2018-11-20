@@ -138,17 +138,6 @@ const Apber = ({
     setErrors({})
   })
 
-  if (data.loading || dataAllAdresses.loading || dataAllApErfkritWertes.loading)
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  if (data.error) return `Fehler: ${data.error.message}`
-  if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
-  if (dataAllApErfkritWertes.error)
-    return `Fehler: ${dataAllApErfkritWertes.error.message}`
-
   const veraenGegenVorjahrWerte = [
     { value: '+', label: '+' },
     { value: '-', label: '-' },
@@ -171,6 +160,23 @@ const Apber = ({
     value: el.id,
     label: el.name,
   }))
+
+  if (
+    data.loading ||
+    dataAllAdresses.loading ||
+    dataAllApErfkritWertes.loading
+  ) {
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  }
+  if (data.error) return `Fehler: ${data.error.message}`
+  if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
+  if (dataAllApErfkritWertes.error) {
+    return `Fehler: ${dataAllApErfkritWertes.error.message}`
+  }
 
   return (
     <ErrorBoundary>

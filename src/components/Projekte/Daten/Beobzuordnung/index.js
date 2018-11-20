@@ -164,15 +164,6 @@ const Beobzuordnung = ({
   dataAeEigenschaftens: Object,
   client: Object,
 }) => {
-  const { error } = data
-  if (data.loading || dataAeEigenschaftens.loading)
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  if (error) return `Fehler: ${error.message}`
-
   const row = get(data, 'beobById', {})
 
   const onSaveArtIdToDb = useCallback(
@@ -219,6 +210,14 @@ const Beobzuordnung = ({
     label: el.artname,
   }))
 
+  if (data.loading || dataAeEigenschaftens.loading) {
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  }
+  if (data.error) return `Fehler: ${data.error.message}`
   return (
     <ErrorBoundary>
       <FormContainer>

@@ -116,25 +116,8 @@ const ApberForYear = ({
   data1: Object,
   data2: Object,
 }) => {
-  if (data1.loading)
-    return (
-      <Container>
-        <LoadingContainer>Lade...</LoadingContainer>
-      </Container>
-    )
-  if (data1.error) return `Fehler: ${data1.error.message}`
-
-  const jahr = get(data1, 'apberuebersichtById.jahr', 0)
-
-  if (data2.loading)
-    return (
-      <Container>
-        <LoadingContainer>Lade...</LoadingContainer>
-      </Container>
-    )
-  if (data2.error) return `Fehler: ${data2.error.message}`
-
   const data = merge(data1, data2)
+  const jahr = get(data, 'apberuebersichtById.jahr', 0)
   const apberuebersicht = get(data, 'apberuebersichtById')
   const aps = sortBy(
     get(data, 'projektById.apsByProjId.nodes', []).filter(
@@ -144,6 +127,16 @@ const ApberForYear = ({
     ),
     ap => get(ap, 'aeEigenschaftenByArtId.artname'),
   )
+
+  if (data1.loading || data2.loading) {
+    return (
+      <Container>
+        <LoadingContainer>Lade...</LoadingContainer>
+      </Container>
+    )
+  }
+  if (data1.error) return `Fehler: ${data1.error.message}`
+  if (data2.error) return `Fehler: ${data2.error.message}`
 
   return (
     <ErrorBoundary>
