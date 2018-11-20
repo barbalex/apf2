@@ -1,10 +1,14 @@
 // @flow
 import get from 'lodash/get'
 import gql from 'graphql-tag'
-import app from 'ampersand-app'
 
-export default async (id: String): Promise<void> => {
-  const { client } = app
+export default async ({
+  id,
+  client,
+}: {
+  id: String,
+  client: Object,
+}): Promise<void> => {
   // fetch previous id from copyingBiotop
   const { data: data1 } = await client.query({
     query: gql`

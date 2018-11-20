@@ -9,18 +9,18 @@ import gql from 'graphql-tag'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import isFinite from 'lodash/isFinite'
-import app from 'ampersand-app'
 
 import epsg2056to4326 from './epsg2056to4326'
 
 export default async ({
   activeNodes,
   latLng,
+  client,
 }: {
   activeNodes: Array<Object>,
   latLng: Object,
+  client: Object,
 }): String => {
-  const { client } = app
   const { lat, lng } = latLng
   const point = {
     type: 'Feature',
