@@ -5318,9 +5318,9 @@ flush-write-stream@^1.0.0:
     readable-stream "^2.0.4"
 
 follow-redirects@^1.0.0, follow-redirects@^1.3.0:
-  version "1.5.9"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.5.9.tgz#c9ed9d748b814a39535716e531b9196a845d89c6"
-  integrity sha512-Bh65EZI/RU8nx0wbYF9shkFZlqLP+6WT/5FnA3cE/djNSuKNHJEinGGZgu/cQEkeeb2GdFOgenAmn8qaqYke2w==
+  version "1.5.10"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.5.10.tgz#7b7a9f9aea2fdff36786a94ff643ed07f4ff5e2a"
+  integrity sha512-0V5l4Cizzvqt5D44aTXbFZz+FtyXV1vrDN6qrelxtfYQKW0KO0W2T/hkE8xvGa/540LkZlkaUjO4ailYTFtHVQ==
   dependencies:
     debug "=3.1.0"
 
@@ -8184,9 +8184,9 @@ map-visit@^1.0.0:
     object-visit "^1.0.0"
 
 marked@^0.5.1:
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/marked/-/marked-0.5.1.tgz#062f43b88b02ee80901e8e8d8e6a620ddb3aa752"
-  integrity sha512-iUkBZegCZou4AdwbKTwSW/lNDcz5OuRSl3qdcl31Ia0B2QPG0Jn+tKblh/9/eP9/6+4h27vpoh8wel/vQOV0vw==
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-0.5.2.tgz#3efdb27b1fd0ecec4f5aba362bddcd18120e5ba9"
+  integrity sha512-fdZvBa7/vSQIZCi4uuwo2N3q+7jJURpMVCcbaX0S1Mg65WZ5ilXvC67MviJAsdjqqgD+CEq4RKo5AYGgINkVAA==
 
 match-stream@~0.0.2:
   version "0.0.2"
@@ -8508,15 +8508,15 @@ mkdirp@0.5.1, mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdi
   dependencies:
     minimist "0.0.8"
 
-mobx-react-lite@0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/mobx-react-lite/-/mobx-react-lite-0.3.1.tgz#cee607476a984526741d37ae63ebfaa09ad1bcab"
-  integrity sha512-Z/2zpZ7RaD4tEUVP6XTliT2ggwOjzMKu5zMonmx91DPaf6JBZOz/wqD3OSxCpWSJ4c8Ft0RgIXW9F+PEmh6fDQ==
+mobx-react-lite@0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/mobx-react-lite/-/mobx-react-lite-0.3.2.tgz#e108c47111ea462ad9a60898100e0447ec4302df"
+  integrity sha512-RTmjhTFvpcLaqWDkWW4jqZBAiCjd5JSdeuJgaaap0+ENTDQy0TB6Ft/oxPhzfkFcCJ/alQBKoS6bEPdDxAqRLQ==
 
-mobx-state-tree@3.7.1:
-  version "3.7.1"
-  resolved "https://registry.yarnpkg.com/mobx-state-tree/-/mobx-state-tree-3.7.1.tgz#161fc1b46224d3defa28b482914d3aa8e1b80ed7"
-  integrity sha512-XJHT4ldB2eoHBOqTsNLOsJHNsClSkAUwNWQm9njat28Md0ymQIpVPpcKywz9I8tbu2RoWlEm1/U4v6SeQEk/sA==
+mobx-state-tree@3.8.0:
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/mobx-state-tree/-/mobx-state-tree-3.8.0.tgz#536f97a02fae0e4e4c05096e77e8ce96fd79f3f9"
+  integrity sha512-lpt6aE/0CI/yIXPAU4nlE3vA3l+HdYqF4IJILOMUTwHMsOf5gnkFMSmEyiRPRTaW57tFcsfPnwFWfuPOODmliA==
 
 mobx@5.6.0:
   version "5.6.0"
