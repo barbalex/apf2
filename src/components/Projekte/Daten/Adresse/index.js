@@ -43,16 +43,6 @@ const Adresse = ({
   client: Object,
   refetchTree: () => void,
 }) => {
-  if (localData.error) return `Fehler: ${localData.error.message}`
-
-  if (data.loading)
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  if (data.error) return `Fehler: ${data.error.message}`
-
   const [errors, setErrors] = useState({})
 
   const id = get(localData, `${treeName}.activeNodeArray[2]`)
@@ -103,6 +93,16 @@ const Adresse = ({
     },
     [id],
   )
+
+  if (localData.error) return `Fehler: ${localData.error.message}`
+  if (data.loading) {
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  }
+  if (data.error) return `Fehler: ${data.error.message}`
 
   return (
     <ErrorBoundary>

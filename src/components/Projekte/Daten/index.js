@@ -79,9 +79,6 @@ const Daten = ({
   role: String,
   localData: Object,
 }) => {
-  // do not show loading but rather last state
-  if (localData.error) return `Fehler: ${localData.error.message}`
-
   const { nodeFilter } = useContext(mobxStoreContext)
 
   const activeNodeArray = get(localData, `${treeName}.activeNodeArray`)
@@ -363,6 +360,7 @@ const Daten = ({
   }
   if (!key) return null
 
+  if (localData.error) return `Fehler: ${localData.error.message}`
   return (
     <ErrorBoundary>
       <Container>
