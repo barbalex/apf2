@@ -47,18 +47,6 @@ const Ekfzaehleinheit = ({
   client: Object,
   refetchTree: () => void,
 }) => {
-  if (data.loading || dataAllTpopkontrzaehlEinheitWertes.loading) {
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-  if (data.error) return `Fehler: ${data.error.message}`
-  if (dataAllTpopkontrzaehlEinheitWertes.error) {
-    return `Fehler: ${dataAllTpopkontrzaehlEinheitWertes.error.message}`
-  }
-
   const [errors, setErrors] = useState({})
 
   useEffect(() => setErrors({}), [id])
@@ -126,6 +114,17 @@ const Ekfzaehleinheit = ({
     [id],
   )
 
+  if (data.loading || dataAllTpopkontrzaehlEinheitWertes.loading) {
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  }
+  if (data.error) return `Fehler: ${data.error.message}`
+  if (dataAllTpopkontrzaehlEinheitWertes.error) {
+    return `Fehler: ${dataAllTpopkontrzaehlEinheitWertes.error.message}`
+  }
   return (
     <ErrorBoundary>
       <Container>

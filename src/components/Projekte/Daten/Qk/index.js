@@ -79,9 +79,6 @@ const Qk = ({
   localData: Object,
   data: Object,
 }) => {
-  if (localData.error) return `Fehler: ${localData.error.message}`
-  if (data.error) return `Fehler: ${data.error.message}`
-
   const { ktZh, setKtZh, addError } = useContext(mobxStoreContext)
 
   const [berichtjahr, setBerichtjahr] = useState(standardQkYear())
@@ -113,6 +110,8 @@ const Qk = ({
     if (!ktZh) fetchKtZh({ setKtZh, addError })
   }, [])
 
+  if (localData.error) return `Fehler: ${localData.error.message}`
+  if (data.error) return `Fehler: ${data.error.message}`
   return (
     <ErrorBoundary>
       <Container>
