@@ -12,7 +12,6 @@ import flatten from 'lodash/flatten'
 import Button from '@material-ui/core/Button'
 import jwtDecode from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
-import { toJS } from 'mobx'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
@@ -69,6 +68,7 @@ import anyQueryReturnsPermissionError from '../../../modules/anyQueryReturnsPerm
 import anyQueryIsLoading from '../../../modules/anyQueryIsLoading'
 import anyQueryReturnsError from '../../../modules/anyQueryReturnsError'
 import mobxStoreContext from '../../../mobxStoreContext'
+import idbContext from '../../../idbContext'
 
 const Container = styled.div`
   display: flex;
@@ -233,7 +233,8 @@ const ProjekteContainer = props => {
     mapFilter: mapFilterRaw,
     nodeFilter,
   } = useContext(mobxStoreContext)
-  const mapFilter = toJS(mapFilterRaw)
+  const { idb } = useContext(idbContext)
+  const mapFilter = mapFilterRaw.toJSON()
 
   const queryArray = [
     dataLocal,
@@ -312,7 +313,7 @@ const ProjekteContainer = props => {
         <LogoutButton
           variant="outlined"
           onClick={() => {
-            logout()
+            logout(idb)
           }}
         >
           Neu anmelden
