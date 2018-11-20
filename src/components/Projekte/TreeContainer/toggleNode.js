@@ -43,7 +43,7 @@ export default ({
       // leave newActiveNodeArray as it is
     }
   } else if (!nodeIsOpen) {
-    openNode({ tree, node })
+    openNode({ tree, node, client })
   }
 
   client.mutate({
