@@ -46,18 +46,6 @@ const Popmassnber = ({
   client: Object,
   refetchTree: () => void,
 }) => {
-  if (data.loading || dataAllTpopmassnErfbeurtWertes.loading) {
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-  if (data.error) return `Fehler: ${data.error.message}`
-  if (dataAllTpopmassnErfbeurtWertes.error) {
-    return `Fehler: ${dataAllTpopmassnErfbeurtWertes.error.message}`
-  }
-
   const [errors, setErrors] = useState({})
 
   useEffect(() => setErrors({}), [id])
@@ -116,6 +104,17 @@ const Popmassnber = ({
     [id],
   )
 
+  if (data.loading || dataAllTpopmassnErfbeurtWertes.loading) {
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  }
+  if (data.error) return `Fehler: ${data.error.message}`
+  if (dataAllTpopmassnErfbeurtWertes.error) {
+    return `Fehler: ${dataAllTpopmassnErfbeurtWertes.error.message}`
+  }
   return (
     <ErrorBoundary>
       <Container>

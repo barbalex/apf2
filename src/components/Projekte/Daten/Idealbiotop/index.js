@@ -55,14 +55,6 @@ const Idealbiotop = ({
   data: Object,
   client: Object,
 }) => {
-  if (data.loading)
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  if (data.error) return `Fehler: ${data.error.message}`
-
   const [errors, setErrors] = useState({})
 
   useEffect(() => setErrors({}), [id])
@@ -133,6 +125,14 @@ const Idealbiotop = ({
     [row],
   )
 
+  if (data.loading) {
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  }
+  if (data.error) return `Fehler: ${data.error.message}`
   return (
     <ErrorBoundary>
       <Container>

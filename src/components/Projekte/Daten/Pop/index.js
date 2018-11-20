@@ -47,14 +47,6 @@ const Pop = ({
   data: Object,
   client: Object,
 }) => {
-  if (data.loading)
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  if (data.error) return `Fehler: ${data.error.message}`
-
   const { nodeFilter, nodeFilterSetValue } = useContext(mobxStoreContext)
 
   const showFilter = !!nodeFilter[treeName].activeTable
@@ -128,6 +120,14 @@ const Pop = ({
     [id, showFilter],
   )
 
+  if (data.loading) {
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  }
+  if (data.error) return `Fehler: ${data.error.message}`
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
