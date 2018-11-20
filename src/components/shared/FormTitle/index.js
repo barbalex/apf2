@@ -7,14 +7,14 @@ import DeleteFilterIcon2 from '@material-ui/icons/DeleteSweepOutlined'
 import IconButton from '@material-ui/core/IconButton'
 import compose from 'recompose/compose'
 import isUuid from 'is-uuid'
-import app from 'ampersand-app'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
+import { withApollo } from 'react-apollo'
 
 import TestdataMessage from './TestdataMessage'
 import types from '../../../mobxStore/NodeFilterTree/types'
 import setTreeKeyGql from './setTreeKey'
-import data from './data'
+import withData from './withData'
 import mobxStoreContext from '../../../mobxStoreContext'
 
 const Container = styled.div`
@@ -64,7 +64,8 @@ const Symbols = styled.div`
 `
 
 const enhance = compose(
-  data,
+  withApollo,
+  withData,
   observer,
 )
 
@@ -74,12 +75,16 @@ const FormTitle = ({
   apId,
   table,
   treeName,
+  data,
+  client,
 }: {
   tree: Object,
   title: string,
   apId: string,
   table: string,
   treeName: string,
+  data: Object,
+  client: Object,
 }) => {
   const {
     nodeFilter,
@@ -114,7 +119,7 @@ const FormTitle = ({
         isUuid.anyNonNil(activeNodeArray[activeNodeArray.length - 1])
       ) {
         const newActiveNodeArray = activeNodeArray.slice(0, -1)
-        app.client.mutate({
+        client.mutate({
           mutation: setTreeKeyGql,
           variables: {
             value: newActiveNodeArray,
