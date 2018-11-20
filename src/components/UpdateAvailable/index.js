@@ -39,7 +39,6 @@ const UpdateAvailable = ({
   localData: Object,
   client: Object,
 }) => {
-  if (localData.error) return `Fehler: ${localData.error.message}`
   const updateAvailable = get(localData, 'updateAvailable')
 
   const onClose = useCallback(() =>
@@ -52,6 +51,8 @@ const UpdateAvailable = ({
     event.preventDefault()
     window.location.reload(false)
   })
+
+  if (localData.error) return `Fehler: ${localData.error.message}`
 
   return (
     <ErrorBoundary>

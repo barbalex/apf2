@@ -39,17 +39,6 @@ const ApFilter = ({
   localData: Object,
   client: Object,
 }) => {
-  if (localData.error) {
-    if (
-      localData.error.message.includes('permission denied') ||
-      localData.error.message.includes('keine Berechtigung')
-    ) {
-      // ProjektContainer returns helpful screen
-      return null
-    }
-    return `Fehler: ${localData.error.message}`
-  }
-
   const apFilter = get(localData, `${treeName}.apFilter`)
   const activeNodeArray = get(localData, `${treeName}.activeNodeArray`)
   const openNodes = get(localData, `${treeName}.openNodes`)
@@ -119,6 +108,16 @@ const ApFilter = ({
     [treeName, activeNodeArray, openNodes, apFilter],
   )
 
+  if (localData.error) {
+    if (
+      localData.error.message.includes('permission denied') ||
+      localData.error.message.includes('keine Berechtigung')
+    ) {
+      // ProjektContainer returns helpful screen
+      return null
+    }
+    return `Fehler: ${localData.error.message}`
+  }
   return (
     <ErrorBoundary>
       <NurApDiv>

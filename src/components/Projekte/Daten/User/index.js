@@ -66,17 +66,6 @@ const User = ({
   client: Object,
   refetchTree: () => void,
 }) => {
-  if (localData.error) return `Fehler: ${localData.error.message}`
-  if (data.loading || dataAllAdresses.loading) {
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
-  if (data.error) return `Fehler: ${data.error.message}`
-  if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
-
   const [errors, setErrors] = useState({})
   const [editPassword, setEditPassword] = useState(false)
   const [password, setPassword] = useState('')
@@ -211,6 +200,16 @@ const User = ({
     [password],
   )
 
+  if (localData.error) return `Fehler: ${localData.error.message}`
+  if (data.loading || dataAllAdresses.loading) {
+    return (
+      <Container>
+        <FieldsContainer>Lade...</FieldsContainer>
+      </Container>
+    )
+  }
+  if (data.error) return `Fehler: ${data.error.message}`
+  if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
   return (
     <ErrorBoundary>
       <Container>
