@@ -78,11 +78,14 @@ const run = async () => {
       historyListen({
         location,
         action,
+        client: myClient,
       }),
     )
 
+    const idbContext = { idb }
+
     ReactDOM.render(
-      <IdbProvider value={idb}>
+      <IdbProvider value={idbContext}>
         <MobxProvider value={mobxStore}>
           <ApolloProvider client={myClient}>
             <>
