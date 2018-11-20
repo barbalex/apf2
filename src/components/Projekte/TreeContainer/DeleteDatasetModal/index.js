@@ -33,17 +33,6 @@ const DatasetDeleteModal = ({
   localData: Object,
   client: Object,
 }) => {
-  if (localData.error) {
-    if (
-      localData.error.message.includes('permission denied') ||
-      localData.error.message.includes('keine Berechtigung')
-    ) {
-      // ProjektContainer returns helpful screen
-      return null
-    }
-    return `Fehler: ${localData.error.message}`
-  }
-
   const { addError, toDelete, emptyToDelete, addDeletedDataset } = useContext(
     mobxStoreContext,
   )
@@ -74,6 +63,17 @@ const DatasetDeleteModal = ({
       }),
     [localData],
   )
+
+  if (localData.error) {
+    if (
+      localData.error.message.includes('permission denied') ||
+      localData.error.message.includes('keine Berechtigung')
+    ) {
+      // ProjektContainer returns helpful screen
+      return null
+    }
+    return `Fehler: ${localData.error.message}`
+  }
 
   return (
     <ErrorBoundary>

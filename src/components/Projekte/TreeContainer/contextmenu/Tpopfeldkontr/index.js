@@ -39,9 +39,9 @@ const Tpopfeldkontr = ({
   copying: Object,
   localData: Object,
 }) => {
-  if (localData.error) return `Fehler: ${localData.error.message}`
   const copyingBiotop = get(localData, 'copyingBiotop.id') !== 'copyingBiotop'
 
+  if (localData.error) return `Fehler: ${localData.error.message}`
   return (
     <ErrorBoundary>
       <ContextMenu

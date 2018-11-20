@@ -41,8 +41,6 @@ const enhance = compose(
 )
 
 const User = ({ localData, client }: { localData: Object, client: Object }) => {
-  if (localData.error) return `Fehler: ${localData.error.message}`
-
   const { idb } = useContext(idbContext)
 
   const [name, setName] = useState('')
@@ -145,6 +143,8 @@ const User = ({ localData, client }: { localData: Object, client: Object }) => {
     },
     [name],
   )
+
+  if (localData.error) return `Fehler: ${localData.error.message}`
 
   return (
     <ErrorBoundary>
