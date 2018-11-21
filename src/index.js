@@ -22,7 +22,6 @@ import { MuiPickersUtilsProvider } from 'material-ui-pickers'
 import { ApolloProvider } from 'react-apollo'
 import MobxStore from './mobxStore'
 
-import app from 'ampersand-app'
 import 'typeface-roboto'
 import 'react-reflex/styles.css'
 import createHistory from 'history/createBrowserHistory'
@@ -76,13 +75,6 @@ const run = async () => {
 
     const client = await buildClient({ idb, history, mobxStore })
     registerServiceWorker(client)
-
-    app.extend({
-      init() {
-        this.client = client
-      },
-    })
-    app.init()
 
     await initiateDataFromUrl({ client })
 
