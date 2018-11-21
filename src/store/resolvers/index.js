@@ -11,7 +11,6 @@ import buildUrlQuery from './urlQuery'
 import login from './login'
 import moving from './moving'
 import copying from './copying'
-import updateAvailable from './updateAvailable'
 import isPrint from './isPrint'
 import ekfYear from './ekfYear'
 import ekfAdresseId from './ekfAdresseId'
@@ -35,7 +34,6 @@ export default ({ history }) => {
     login,
     moving,
     copying,
-    updateAvailable,
     isPrint,
     ekfYear,
     ekfAdresseId,

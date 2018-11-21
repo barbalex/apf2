@@ -9,17 +9,13 @@
  * ...then triggers again some time later, passing an empty error object
  */
 
-import React, { useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import Snackbar from '@material-ui/core/Snackbar'
 import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
-import get from 'lodash/get'
-import compose from 'recompose/compose'
-import { withApollo } from 'react-apollo'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
-import withLocalData from './withLocalData'
-import setUpdateAvailable from './setUpdateAvailable'
+import mobxStoreContext from '../../mobxStoreContext'
 
 const StyledSnackbar = styled(Snackbar)`
   > div {
@@ -27,32 +23,14 @@ const StyledSnackbar = styled(Snackbar)`
   }
 `
 
-const enhance = compose(
-  withApollo,
-  withLocalData,
-)
+const UpdateAvailable = () => {
+  const { updateAvailable, setUpdateAvailable } = useContext(mobxStoreContext)
 
-const UpdateAvailable = ({
-  localData,
-  client,
-}: {
-  localData: Object,
-  client: Object,
-}) => {
-  const updateAvailable = get(localData, 'updateAvailable')
-
-  const onClose = useCallback(() =>
-    client.mutate({
-      mutation: setUpdateAvailable,
-      variables: { value: false },
-    }),
-  )
+  const onClose = useCallback(() => setUpdateAvailable(false))
   const onClickIntall = useCallback(event => {
     event.preventDefault()
     window.location.reload(false)
   })
-
-  if (localData.error) return `Fehler: ${localData.error.message}`
 
   return (
     <ErrorBoundary>
@@ -77,4 +55,4 @@ const UpdateAvailable = ({
 
 UpdateAvailable.displayName = 'UpdateAvailable'
 
-export default enhance(UpdateAvailable)
+export default UpdateAvailable
