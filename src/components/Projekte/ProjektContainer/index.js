@@ -232,6 +232,7 @@ const ProjekteContainer = props => {
     activeOverlays,
     mapFilter: mapFilterRaw,
     nodeFilter,
+    user,
   } = useContext(mobxStoreContext)
   const { idb } = useContext(idbContext)
   const mapFilter = mapFilterRaw.toJSON()
@@ -297,7 +298,7 @@ const ProjekteContainer = props => {
   const openNodes = get(dataLocal, `${treeName}.openNodes`)
   const moving = get(dataLocal, 'moving')
   const copying = get(dataLocal, 'copying')
-  const token = get(dataLocal, 'user.token')
+  const { token } = user
   const tokenDecoded = token ? jwtDecode(token) : null
   const role = tokenDecoded ? tokenDecoded.role : null
   // TODO: which query to check for error?
