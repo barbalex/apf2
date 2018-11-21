@@ -43,9 +43,8 @@ const ReflexElementForEKF = styled(ReflexElement)`
 const enhance = compose(withLocalData)
 
 const EkfContainer = ({ localData }: { localData: Object }) => {
-  const { user } = useContext(mobxStoreContext)
+  const { user, isPrint } = useContext(mobxStoreContext)
   const { token, name: userName } = user
-  const isPrint = get(localData, 'isPrint')
   const jahr = get(localData, 'ekfYear')
   const ekfAdresseId = get(localData, 'ekfAdresseId')
   const variables = ekfAdresseId

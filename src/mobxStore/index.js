@@ -39,6 +39,7 @@ const myTypes = types
     nodeFilter: types.optional(NodeFilter, defaultNodeFilter),
     user: types.optional(User, defaultUser),
     updateAvailable: types.optional(types.boolean, false),
+    isPrint: types.optional(types.boolean, false),
   })
   // structure of these variables is not controlled
   // so need to define this as volatile
@@ -162,6 +163,9 @@ const myTypes = types
     },
     setUpdateAvailable(val) {
       self.updateAvailable = val
+    },
+    setIsPrint(val) {
+      self.isPrint = val
     },
   }))
 

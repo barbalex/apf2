@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import get from 'lodash/get'
@@ -11,6 +11,7 @@ import compose from 'recompose/compose'
 import ErrorBoundary from '../shared/ErrorBoundary'
 import withData from './withData'
 import ProjektContainer from './ProjektContainer'
+import mobxStoreContext from '../../mobxStoreContext'
 
 const Container = styled.div`
   display: flex;
@@ -27,10 +28,10 @@ const tree2TabValues = ['tree2', 'daten2', 'karte2', 'exporte2']
 const enhance = compose(withData)
 
 const Projekte = ({ data }: { data: Object }) => {
+  const { isPrint } = useContext(mobxStoreContext)
   const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
   const treeTabs = intersection(treeTabValues, projekteTabs)
   const tree2Tabs = intersection(tree2TabValues, projekteTabs)
-  const isPrint = get(data, 'isPrint')
 
   if (data.error) {
     console.log('Projekte:', { error: data.error })

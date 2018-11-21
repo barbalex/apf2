@@ -1,15 +1,14 @@
 // @flow
-import React, { lazy, Suspense, useState, useEffect } from 'react'
+import React, { lazy, Suspense, useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import get from 'lodash/get'
-import { withApollo } from 'react-apollo'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
-import setIsPrint from './setIsPrint'
-import appContainerData from './data'
+import withLocalData from './withLocalData'
 import Deletions from '../Deletions'
 import Fallback from '../shared/Fallback'
+import mobxStoreContext from '../../mobxStoreContext'
 
 const Container = styled.div`
   height: 100%;
@@ -29,27 +28,15 @@ const UpdateAvailable = lazy(() => import('../UpdateAvailable'))
 const Messages = lazy(() => import('../Messages'))
 const Ekf = lazy(() => import('../Ekf'))
 
-const enhance = compose(
-  withApollo,
-  appContainerData,
-)
+const enhance = compose(withLocalData)
 
-const MyAppBar = ({ data, client }: { data: Object, client: Object }) => {
+const MyAppBar = ({ data }: { data: Object }) => {
+  const { setIsPrint } = useContext(mobxStoreContext)
   const [showDeletions, setShowDeletions] = useState(false)
 
   useEffect(() => {
     window.matchMedia('print').addListener(mql => {
-      if (mql.matches) {
-        client.mutate({
-          mutation: setIsPrint,
-          variables: { value: true },
-        })
-      } else {
-        client.mutate({
-          mutation: setIsPrint,
-          variables: { value: false },
-        })
-      }
+      setIsPrint(mql.matches)
       return () => window.matchMedia('print').removeListener()
     })
   }, [])

@@ -3,7 +3,6 @@ import gql from 'graphql-tag'
 export default gql`
   query LocalDataQuery {
     assigningBeob @client
-    isPrint @client
     tree @client {
       name
       activeNodeArray

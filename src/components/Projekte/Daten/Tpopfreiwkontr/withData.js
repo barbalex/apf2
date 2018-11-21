@@ -5,7 +5,6 @@ import gql from 'graphql-tag'
 export default graphql(
   gql`
     query tpopkontrByIdQuery($id: UUID!) {
-      isPrint @client
       view @client
       tpopkontrById(id: $id) {
         id

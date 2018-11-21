@@ -233,6 +233,7 @@ const ProjekteContainer = props => {
     mapFilter: mapFilterRaw,
     nodeFilter,
     user,
+    isPrint,
   } = useContext(mobxStoreContext)
   const { idb } = useContext(idbContext)
   const mapFilter = mapFilterRaw.toJSON()
@@ -469,7 +470,6 @@ const ProjekteContainer = props => {
   const beobs = flatten(
     aparts.map(a => get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', [])),
   )
-  const isPrint = get(data, 'isPrint')
 
   if (isPrint) {
     return (

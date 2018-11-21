@@ -165,7 +165,7 @@ const Tpopfreiwkontr = ({
   dataAllAdresses: Object,
   client: Object,
 }) => {
-  const { addError, nodeFilter, nodeFilterSetValue } = useContext(
+  const { addError, nodeFilter, nodeFilterSetValue, isPrint } = useContext(
     mobxStoreContext,
   )
 
@@ -209,7 +209,6 @@ const Tpopfreiwkontr = ({
   )
     .filter(n => !!n.einheit)
     .map(n => n.einheit)
-  const isPrint = get(data, 'isPrint', false)
   const view = get(data, 'view')
   const isFreiwillig = role === 'apflora_freiwillig'
   const { width } = dimensions

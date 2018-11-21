@@ -20,7 +20,6 @@ export default async mobxStore => {
   const ekfYear = new Date(ekfRefDate).getFullYear()
 
   const defaults = {
-    isPrint: false,
     view,
     ekfYear,
     ekfAdresseId: null,

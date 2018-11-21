@@ -11,7 +11,6 @@ import buildUrlQuery from './urlQuery'
 import login from './login'
 import moving from './moving'
 import copying from './copying'
-import isPrint from './isPrint'
 import ekfYear from './ekfYear'
 import ekfAdresseId from './ekfAdresseId'
 import view from './view'
@@ -34,7 +33,6 @@ export default ({ history }) => {
     login,
     moving,
     copying,
-    isPrint,
     ekfYear,
     ekfAdresseId,
     view,
