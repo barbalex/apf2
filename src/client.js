@@ -36,7 +36,7 @@ export default async ({ idb, history, mobxStore }) => {
       return object.id
     },*/
   })
-  const myDefaults = await defaults(idb)
+  const myDefaults = await defaults(mobxStore)
   const stateLink = withClientState({
     resolvers: buildResolvers({ history }),
     cache,

@@ -2,7 +2,6 @@ import gql from 'graphql-tag'
 
 export default gql`
   query MyQuery($name: String!) {
-    updateAvailable @client
     allMessages(filter: { active: { equalTo: true } }, orderBy: TIME_ASC) {
       nodes {
         id
