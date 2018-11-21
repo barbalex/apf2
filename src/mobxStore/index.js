@@ -156,6 +156,9 @@ const myTypes = types
         self.nodeFilterTableIsFiltered({ treeName, table }),
       )
     },
+    setUser(User) {
+      self.user = User
+    },
   }))
 
 export default myTypes
