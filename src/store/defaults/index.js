@@ -1,14 +1,13 @@
 // @flow
-import get from 'lodash/get'
 import jwtDecode from 'jwt-decode'
 
 import nodeLabelFilter from './tree/nodeLabelFilter'
 import treeMap from './tree/map'
 
-export default async idb => {
+export default async mobxStore => {
   // fetch user from idb
-  const users = await idb.currentUser.toArray()
-  const token = get(users, '[0].token', null)
+  const { user } = mobxStore
+  const { token } = user
   const tokenDecoded = token ? jwtDecode(token) : null
   const userIsFreiw =
     tokenDecoded &&
@@ -21,7 +20,6 @@ export default async idb => {
   const ekfYear = new Date(ekfRefDate).getFullYear()
 
   const defaults = {
-    updateAvailable: false,
     isPrint: false,
     view,
     ekfYear,
@@ -69,11 +67,6 @@ export default async idb => {
       token: '',
       username: '',
       __typename: 'Login',
-    },
-    user: {
-      name: get(users, '[0].name', ''),
-      token,
-      __typename: 'User',
     },
     export: {
       applyMapFilterToExport: false,

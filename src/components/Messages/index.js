@@ -64,13 +64,12 @@ const UserMessages = ({
   data: Object,
   client: Object,
 }) => {
-  const { user } = useContext(mobxStoreContext)
+  const { user, updateAvailable } = useContext(mobxStoreContext)
   const userName = user.name
   const allMessages = get(data, 'allMessages.nodes', [])
   const unreadMessages = allMessages.filter(
     m => get(m, 'usermessagesByMessageId.nodes', []).length === 0,
   )
-  const updateAvailable = get(data, 'updateAvailable')
 
   const onClickRead = useCallback(
     async message => {
