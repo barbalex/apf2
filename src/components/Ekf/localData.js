@@ -5,10 +5,6 @@ export default gql`
     isPrint @client
     ekfYear @client
     ekfAdresseId @client
-    user @client {
-      name
-      token
-    }
     urlQuery @client {
       projekteTabs
     }
