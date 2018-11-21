@@ -74,7 +74,7 @@ const run = async () => {
     const mobxStore = MobxStore.create(initialStore)
 
     const client = await buildClient({ idb, history, mobxStore })
-    registerServiceWorker(client)
+    registerServiceWorker(mobxStore)
 
     await initiateDataFromUrl({ client })
 

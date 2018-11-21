@@ -38,6 +38,7 @@ const myTypes = types
     toDeleteUrl: types.maybeNull(types.string),
     nodeFilter: types.optional(NodeFilter, defaultNodeFilter),
     user: types.optional(User, defaultUser),
+    updateAvailable: types.optional(types.boolean, false),
   })
   // structure of these variables is not controlled
   // so need to define this as volatile
@@ -158,6 +159,9 @@ const myTypes = types
     },
     setUser(val) {
       self.user = val
+    },
+    setUpdateAvailable(val) {
+      self.updateAvailable = val
     },
   }))
 
