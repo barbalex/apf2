@@ -47,7 +47,7 @@ const MyAppBar = ({
   role: string,
   localData: () => void,
 }) => {
-  const { deletedDatasets } = useContext(mobxStoreContext)
+  const { deletedDatasets, user } = useContext(mobxStoreContext)
   const { idb } = useContext(idbContext)
 
   const [anchorEl, setAnchorEl] = useState(null)
@@ -127,9 +127,7 @@ const MyAppBar = ({
           )}
           <MenuItem onClick={openDocs}>Dokumentation öffnen</MenuItem>
           <MenuItem onClick={watchVideos}>Video-Anleitungen</MenuItem>
-          <MenuItem onClick={onClickLogout}>
-            {`${get(localData, 'user.name')} abmelden`}
-          </MenuItem>
+          <MenuItem onClick={onClickLogout}>{`${user.name} abmelden`}</MenuItem>
           <Version>Version: 1.3.0 vom 25.9.2018</Version>
         </Menu>
       </Container>

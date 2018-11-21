@@ -74,7 +74,7 @@ const run = async () => {
     // TODO: pass in token if exists
     const mobxStore = MobxStore.create(initialStore)
 
-    const client = await buildClient({ idb, history })
+    const client = await buildClient({ idb, history, mobxStore })
     registerServiceWorker(client)
 
     app.extend({
