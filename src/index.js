@@ -60,7 +60,6 @@ const run = async () => {
 
     const idb = initializeIdb()
 
-    // TODO: fetch
     const users = await idb.currentUser.toArray()
     let name = get(users, '[0].name', '')
     let token = get(users, '[0].token', null)
@@ -70,7 +69,6 @@ const run = async () => {
         token,
       },
     }
-    // TODO: pass in token if exists
     const mobxStore = MobxStore.create(initialStore)
 
     const client = await buildClient({ idb, history, mobxStore })
