@@ -156,8 +156,8 @@ const myTypes = types
         self.nodeFilterTableIsFiltered({ treeName, table }),
       )
     },
-    setUser(User) {
-      self.user = User
+    setUser(val) {
+      self.user = val
     },
   }))
 
