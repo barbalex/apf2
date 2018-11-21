@@ -11,7 +11,6 @@ import 'babel-polyfill'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import get from 'lodash/get'
 
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import theme from './theme'
@@ -42,8 +41,10 @@ import historyListen from './modules/historyListen'
 import { Provider as MobxProvider } from './mobxStoreContext'
 import { Provider as IdbProvider } from './idbContext'
 import { Provider as HistoryProvider } from './historyContext'
+import { onPatch } from 'mobx-state-tree'
 
 import './index.css'
+import createInitialMobxStore from './mobxStore/initial'
 
 const run = async () => {
   try {
@@ -60,16 +61,11 @@ const run = async () => {
 
     const idb = initializeIdb()
 
-    const users = await idb.currentUser.toArray()
-    let name = get(users, '[0].name', '')
-    let token = get(users, '[0].token', null)
-    const initialStore = {
-      user: {
-        name,
-        token,
-      },
-    }
-    const mobxStore = MobxStore.create(initialStore)
+    const initialMobxStore = await createInitialMobxStore({ idb })
+    const mobxStore = MobxStore.create(initialMobxStore)
+    onPatch(mobxStore, patch => {
+      console.log('mobxStore patch', patch)
+    })
 
     const client = await buildClient({ idb, history, mobxStore })
     registerServiceWorker(mobxStore)

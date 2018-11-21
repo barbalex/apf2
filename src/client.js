@@ -9,7 +9,7 @@ import jwtDecode from 'jwt-decode'
 
 import graphQlUri from './modules/graphQlUri'
 import buildResolvers from './store/resolvers'
-import defaults from './store/defaults'
+import localStoreDefaults from './store/defaults'
 
 export default async ({ idb, history, mobxStore }) => {
   const authLink = setContext(async (_, { headers }) => {
@@ -36,11 +36,10 @@ export default async ({ idb, history, mobxStore }) => {
       return object.id
     },*/
   })
-  const myDefaults = await defaults(mobxStore)
   const stateLink = withClientState({
     resolvers: buildResolvers({ history }),
     cache,
-    defaults: myDefaults,
+    defaults: localStoreDefaults,
   })
   // use httpLink _instead_ of batchHttpLink in order not to batch
   /*

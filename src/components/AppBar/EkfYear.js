@@ -1,14 +1,13 @@
 // @flow
-import React from 'react'
+import React, { useContext, useState, useCallback, useEffect } from 'react'
 import Input from '@material-ui/core/Input'
 import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
-import withLifecycle from '@hocs/with-lifecycle'
 import styled from 'styled-components'
 import { withApollo } from 'react-apollo'
+import { observer } from 'mobx-react-lite'
 
 import initiateDataFromUrl from '../../modules/initiateDataFromUrl'
+import mobxStoreContext from '../../mobxStoreContext'
 
 const StyledInput = styled(Input)`
   width: 60px;
@@ -30,50 +29,48 @@ const Jahr = styled.p`
   margin-bottom: auto;
 `
 
+const ekfRefDate = new Date().setMonth(new Date().getMonth() - 2)
+const ekfRefYear = new Date(ekfRefDate).getFullYear()
+
 const enhance = compose(
   withApollo,
-  withState('stateValue', 'setStateValue', ({ value }) =>
-    value || value === 0 ? value : '',
-  ),
-  withHandlers({
-    onChange: ({ setStateValue }) => event => setStateValue(event.target.value),
-    onBlur: ({ setEkfYear, value, stateValue, client }) => event => {
-      setEkfYear(event.target.value || null)
-      if (value !== stateValue)
-        initiateDataFromUrl({ activeNodeArray: ['Projekte'], client })
-    },
-  }),
-  withLifecycle({
-    onDidUpdate(prevProps, props) {
-      if (props.value !== prevProps.value) {
-        const value = props.value || props.value === 0 ? props.value : ''
-        props.setStateValue(value)
-      }
-    },
-  }),
+  observer,
 )
 
-const EkfYear = ({
-  stateValue,
-  setEkfYear,
-  onChange,
-  onBlur,
-}: {
-  stateValue: Number | String,
-  setEkfYear: () => void,
-  onChange: () => void,
-  onBlur: () => void,
-}) => (
-  <Container>
-    <Jahr>Jahr:</Jahr>
-    <StyledInput
-      value={stateValue}
-      type="number"
-      onChange={onChange}
-      onBlur={onBlur}
-      placeholder="Jahr"
-    />
-  </Container>
-)
+const EkfYear = ({ client }: { client: Object }) => {
+  const { ekfYear, setEkfYear } = useContext(mobxStoreContext)
+  const [stateValue, setStateValue] = useState(
+    ekfYear || ekfYear === 0 ? ekfYear : '',
+  )
+
+  useEffect(() => setStateValue(ekfYear), [ekfYear])
+
+  const onChange = useCallback(event =>
+    setStateValue(event.target.value ? +event.target.value : ''),
+  )
+  const onBlur = useCallback(
+    event => {
+      const newValue = event.target.value ? +event.target.value : ekfRefYear
+      setEkfYear(newValue)
+      if (ekfYear !== stateValue) {
+        initiateDataFromUrl({ activeNodeArray: ['Projekte'], client })
+      }
+    },
+    [ekfYear],
+  )
+
+  return (
+    <Container>
+      <Jahr>Jahr:</Jahr>
+      <StyledInput
+        value={stateValue}
+        type="number"
+        onChange={onChange}
+        onBlur={onBlur}
+        placeholder="Jahr"
+      />
+    </Container>
+  )
+}
 
 export default enhance(EkfYear)

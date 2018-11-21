@@ -18,10 +18,8 @@ import isMobilePhone from '../../modules/isMobilePhone'
 import ErrorBoundary from '../shared/ErrorBoundary'
 import withLocalData from './withLocalData'
 import setUrlQueryValue from '../../modules/setUrlQueryValue'
-import setEkfYearGql from './setEkfYear'
 import getActiveNodes from '../../modules/getActiveNodes'
 import More from './More'
-import setView from './setView'
 import EkfYear from './EkfYear'
 import User from './User'
 import Daten from './Daten'
@@ -78,7 +76,9 @@ const MyAppBar = ({
   setShowDeletions: () => void,
   client: Object,
 }) => {
-  const { nodeFilterClone1To2, user } = useContext(mobxStoreContext)
+  const { nodeFilterClone1To2, user, view, setView } = useContext(
+    mobxStoreContext,
+  )
 
   const activeNodeArray = get(localData, 'tree.activeNodeArray')
   const activeNodes = getActiveNodes(activeNodeArray)
@@ -89,7 +89,6 @@ const MyAppBar = ({
   const projekteTabs = clone(get(localData, 'urlQuery.projekteTabs', []))
   const exporteIsActive = !!activeNodes.projekt
   const isMobile = isMobilePhone()
-  const view = get(localData, 'view')
 
   const { token, name: username } = user
   const tokenDecoded = token ? jwtDecode(token) : null
@@ -128,26 +127,8 @@ const MyAppBar = ({
   const onClickKarte = useCallback(() => onClickButton('karte'))
   const onClickExporte = useCallback(() => onClickButton('exporte'))
   const onClickTree2 = useCallback(() => onClickButton('tree2'))
-  const setViewNormal = useCallback(() =>
-    client.mutate({
-      mutation: setView,
-      variables: { value: 'normal' },
-    }),
-  )
-  const setViewEkf = useCallback(() =>
-    client.mutate({
-      mutation: setView,
-      variables: { value: 'ekf' },
-    }),
-  )
-  const setEkfYear = useCallback(value => {
-    const ekfRefDate = new Date().setMonth(new Date().getMonth() - 2)
-    const ekfRefYear = new Date(ekfRefDate).getFullYear()
-    client.mutate({
-      mutation: setEkfYearGql,
-      variables: { value: value ? +value : ekfRefYear },
-    })
-  })
+  const setViewNormal = useCallback(() => setView('normal'))
+  const setViewEkf = useCallback(() => setView('ekf'))
   const toggleUserOpen = useCallback(() => setUserOpen(!userOpen), [userOpen])
 
   if (localData.error) return `Fehler: ${localData.error.message}`
@@ -164,12 +145,7 @@ const MyAppBar = ({
               : 'AP Flora'}
           </Typography>
           <MenuDiv>
-            {view === 'ekf' && (
-              <EkfYear
-                value={get(localData, 'ekfYear')}
-                setEkfYear={setEkfYear}
-              />
-            )}
+            {view === 'ekf' && <EkfYear />}
             {view === 'ekf' && !isFreiwillig && (
               <NormalViewButton onClick={setViewNormal}>
                 Normal-Ansicht

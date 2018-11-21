@@ -1,11 +1,8 @@
 // @flow
 import React, { lazy, Suspense, useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
-import get from 'lodash/get'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
-import withLocalData from './withLocalData'
 import Deletions from '../Deletions'
 import Fallback from '../shared/Fallback'
 import mobxStoreContext from '../../mobxStoreContext'
@@ -28,10 +25,8 @@ const UpdateAvailable = lazy(() => import('../UpdateAvailable'))
 const Messages = lazy(() => import('../Messages'))
 const Ekf = lazy(() => import('../Ekf'))
 
-const enhance = compose(withLocalData)
-
-const MyAppBar = ({ data }: { data: Object }) => {
-  const { setIsPrint } = useContext(mobxStoreContext)
+const MyAppBar = () => {
+  const { setIsPrint, view } = useContext(mobxStoreContext)
   const [showDeletions, setShowDeletions] = useState(false)
 
   useEffect(() => {
@@ -40,8 +35,6 @@ const MyAppBar = ({ data }: { data: Object }) => {
       return () => window.matchMedia('print').removeListener()
     })
   }, [])
-
-  const view = get(data, 'view')
 
   return (
     <ErrorBoundary>
@@ -66,4 +59,4 @@ const MyAppBar = ({ data }: { data: Object }) => {
   )
 }
 
-export default enhance(MyAppBar)
+export default MyAppBar

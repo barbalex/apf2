@@ -11,9 +11,6 @@ import buildUrlQuery from './urlQuery'
 import login from './login'
 import moving from './moving'
 import copying from './copying'
-import ekfYear from './ekfYear'
-import ekfAdresseId from './ekfAdresseId'
-import view from './view'
 import assigningBeob from './assigningBeob'
 import mapMouseCoordinates from './mapMouseCoordinates'
 import copyingBiotop from './copyingBiotop'
@@ -33,9 +30,6 @@ export default ({ history }) => {
     login,
     moving,
     copying,
-    ekfYear,
-    ekfAdresseId,
-    view,
     assigningBeob,
     mapMouseCoordinates,
     copyingBiotop,

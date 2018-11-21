@@ -3,7 +3,7 @@ import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { withApollo } from 'react-apollo'
 
-import initiateDataFromUrl from './initiateDataFromUrl'
+import initiateDataFromUrl from '../initiateDataFromUrl'
 
 const OuterContainer = styled.div`
   border-bottom: 1px solid rgba(46, 125, 50, 0.5);
@@ -59,7 +59,7 @@ const EkfList = ({
 
   const onClick = useCallback(
     () => initiateDataFromUrl({ activeNodeArray: url, client }),
-    [url],
+    [row.id],
   )
 
   return (

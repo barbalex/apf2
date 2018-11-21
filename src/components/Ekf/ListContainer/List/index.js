@@ -1,14 +1,18 @@
 // @flow
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { FixedSizeList as List } from 'react-window'
 import get from 'lodash/get'
 import uniq from 'lodash/uniq'
 import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
+import { observer } from 'mobx-react-lite'
+import compose from 'recompose/compose'
 import { withApollo } from 'react-apollo'
 
-import initiateDataFromUrl from './initiateDataFromUrl'
 import Item from './Item'
+import mobxStoreContext from '../../../../mobxStoreContext'
+import initiateDataFromUrl from '../initiateDataFromUrl'
+import withLocalData from './withLocalData'
 
 const Container = styled.div`
   height: 100%;
@@ -18,8 +22,7 @@ const NoDataContainer = styled.div`
   padding 15px;
 `
 
-const getEkfFromData = data => {
-  const ekfAdresseId = get(data, 'ekfAdresseId')
+const getEkfFromData = ({ data, ekfAdresseId }) => {
   const ekfNodes = !!ekfAdresseId
     ? get(data, 'adresseById.tpopkontrsByBearbeiter.nodes', [])
     : get(
@@ -27,7 +30,7 @@ const getEkfFromData = data => {
         'userByName.adresseByAdresseId.tpopkontrsByBearbeiter.nodes',
         [],
       )
-  let ekf = ekfNodes.map(e => ({
+  const ekf = ekfNodes.map(e => ({
     projekt: get(
       e,
       'tpopByTpopId.popByPopId.apByApId.projektByProjId.name',
@@ -59,38 +62,41 @@ const getEkfFromData = data => {
   return sortBy(ekf, ['projekt', 'art', 'popSort', 'tpopSort'])
 }
 
+const enhance = compose(
+  withApollo,
+  withLocalData,
+  observer,
+)
+
 const EkfList = ({
   data,
+  localData,
   loading,
   dimensions,
   client,
 }: {
   data: Object,
+  localData: Object,
   loading: Boolean,
   dimensions: Object,
   client: Object,
 }) => {
-  const ekf = getEkfFromData(data)
+  const { ekfYear, ekfAdresseId } = useContext(mobxStoreContext)
+  const ekf = getEkfFromData({ data, ekfAdresseId })
 
-  if (!loading && ekf.length === 0) {
-    return (
-      <NoDataContainer>
-        {`Für das Jahr ${get(
-          data,
-          'ekfYear',
-        )} existieren offenbar keine Erfolgskontrollen mit Ihnen als BearbeiterIn`}
-      </NoDataContainer>
-    )
-  }
-
-  const activeNodeArray = get(data, 'tree.activeNodeArray')
+  const activeNodeArray = get(localData, 'tree.activeNodeArray')
   const activeTpopkontrId = activeNodeArray[9]
+
+  const height = isNaN(dimensions.height) ? 250 : dimensions.height
+  const width = isNaN(dimensions.width) ? 250 : dimensions.width - 1
+  const projektCount = uniq(ekf.map(e => e.projekt)).length
+  const itemSize = projektCount > 1 ? 110 : 91
 
   useEffect(
     () => {
       // set initial kontrId so form is shown for first ekf
       // IF none is choosen yet
-      if (ekf && ekf.length && ekf.length > 0 && !activeTpopkontrId) {
+      if (ekf.length > 0 && !activeTpopkontrId) {
         const row = ekf[0]
         const url = [
           'Projekte',
@@ -107,14 +113,15 @@ const EkfList = ({
         initiateDataFromUrl({ activeNodeArray: url, client })
       }
     },
-    [loading],
+    [ekfYear, ekf.length],
   )
-
-  const height = isNaN(dimensions.height) ? 250 : dimensions.height
-  const width = isNaN(dimensions.width) ? 250 : dimensions.width - 1
-  const projektCount = uniq(ekf.map(e => e.projekt)).length
-  const itemSize = projektCount > 1 ? 110 : 91
-
+  if (!loading && ekf.length === 0) {
+    return (
+      <NoDataContainer>
+        {`Für das Jahr ${ekfYear} existieren offenbar keine Erfolgskontrollen mit Ihnen als BearbeiterIn`}
+      </NoDataContainer>
+    )
+  }
   return (
     <Container>
       <List
@@ -140,4 +147,4 @@ const EkfList = ({
   )
 }
 
-export default withApollo(EkfList)
+export default enhance(EkfList)

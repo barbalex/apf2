@@ -10,6 +10,10 @@ import standardOverlays from '../components/Projekte/Karte/overlays'
 import initialNodeFilterTreeValues from './NodeFilterTree/initialValues'
 import User, { defaultValue as defaultUser } from './User'
 
+// substract 3 Months to now so user sees previous year in February
+const ekfRefDate = new Date().setMonth(new Date().getMonth() - 2)
+const ekfYear = new Date(ekfRefDate).getFullYear()
+
 const myTypes = types
   .model({
     apfloraLayers: types.optional(
@@ -40,6 +44,9 @@ const myTypes = types
     user: types.optional(User, defaultUser),
     updateAvailable: types.optional(types.boolean, false),
     isPrint: types.optional(types.boolean, false),
+    view: types.optional(types.string, 'normal'),
+    ekfYear: types.optional(types.number, ekfYear),
+    ekfAdresseId: types.optional(types.maybeNull(types.string), null),
   })
   // structure of these variables is not controlled
   // so need to define this as volatile
@@ -166,6 +173,15 @@ const myTypes = types
     },
     setIsPrint(val) {
       self.isPrint = val
+    },
+    setView(val) {
+      self.view = val
+    },
+    setEkfYear(val) {
+      self.ekfYear = val
+    },
+    setEkfAdresseId(val) {
+      self.ekfAdresseId = val
     },
   }))
 

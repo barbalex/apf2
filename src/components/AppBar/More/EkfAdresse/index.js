@@ -1,5 +1,5 @@
 // @flow
-import React, { useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import compose from 'recompose/compose'
 import styled from 'styled-components'
 import get from 'lodash/get'
@@ -8,9 +8,8 @@ import { withApollo } from 'react-apollo'
 
 import Select from '../../../shared/Select'
 import withData from './withData'
-import setViewGql from './setView'
-import setEkfAdresseIdGql from './setEkfAdresseId'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const Container = styled.div`
   padding: 0 16px;
@@ -30,16 +29,10 @@ const EkfAdresse = ({
   client: Object,
   setAnchorEl: () => void,
 }) => {
+  const { setView, setEkfAdresseId } = useContext(mobxStoreContext)
   const choose = useCallback(async event => {
-    const id = event.target.value
-    client.mutate({
-      mutation: setEkfAdresseIdGql,
-      variables: { value: id },
-    })
-    client.mutate({
-      mutation: setViewGql,
-      variables: { value: 'ekf' },
-    })
+    setEkfAdresseId(event.target.value)
+    setView('ekf')
     setAnchorEl(null)
   })
 
