@@ -4,10 +4,6 @@ export default gql`
   query LocalDataQuery {
     assigningBeob @client
     isPrint @client
-    user @client {
-      name
-      token
-    }
     tree @client {
       name
       activeNodeArray
