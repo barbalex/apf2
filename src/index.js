@@ -11,6 +11,7 @@ import 'babel-polyfill'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
+import get from 'lodash/get'
 
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import theme from './theme'
@@ -45,8 +46,6 @@ import { Provider as HistoryProvider } from './historyContext'
 
 import './index.css'
 
-const mobxStore = MobxStore.create()
-
 const run = async () => {
   try {
     // prevent changing values in number inputs when scrolling pages!
@@ -61,6 +60,20 @@ const run = async () => {
     const history = createHistory()
 
     const idb = initializeIdb()
+
+    // TODO: fetch
+    const users = await idb.currentUser.toArray()
+    let name = get(users, '[0].name', '')
+    let token = get(users, '[0].token', null)
+    const initialStore = {
+      user: {
+        name,
+        token,
+      },
+    }
+    // TODO: pass in token if exists
+    const mobxStore = MobxStore.create(initialStore)
+
     const client = await buildClient({ idb, history })
     registerServiceWorker(client)
 

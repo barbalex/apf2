@@ -8,6 +8,7 @@ import NodeFilter, { defaultValue as defaultNodeFilter } from './NodeFilter'
 import standardApfloraLayers from '../components/Projekte/Karte/apfloraLayers'
 import standardOverlays from '../components/Projekte/Karte/overlays'
 import initialNodeFilterTreeValues from './NodeFilterTree/initialValues'
+import User, { defaultValue as defaultUser } from './User'
 
 const myTypes = types
   .model({
@@ -36,6 +37,7 @@ const myTypes = types
     toDeleteLabel: types.maybeNull(types.string),
     toDeleteUrl: types.maybeNull(types.string),
     nodeFilter: types.optional(NodeFilter, defaultNodeFilter),
+    user: types.optional(User, defaultUser),
   })
   // structure of these variables is not controlled
   // so need to define this as volatile
