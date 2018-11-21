@@ -19,9 +19,8 @@ import gql from 'graphql-tag'
 import { withApollo } from 'react-apollo'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
-import withLocalData from './withLocalData'
-import setUserGql from './setUser'
 import idbContext from '../../idbContext'
+import mobxStoreContext from '../../mobxStoreContext'
 
 const StyledDialog = styled(Dialog)``
 const StyledDiv = styled.div`
@@ -35,21 +34,18 @@ const StyledInput = styled(Input)`
   }
 `
 
-const enhance = compose(
-  withApollo,
-  withLocalData,
-)
+const enhance = compose(withApollo)
 
-const User = ({ localData, client }: { localData: Object, client: Object }) => {
+const User = ({ client }: { client: Object }) => {
   const { idb } = useContext(idbContext)
+  const { user, setUser } = useContext(mobxStoreContext)
+  const { token } = user
 
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
   const [showPass, setShowPass] = useState(false)
   const [nameErrorText, setNameErrorText] = useState('')
   const [passwordErrorText, setPasswordErrorText] = useState('')
-
-  const user = get(localData, 'user', {})
 
   const fetchLogin = useCallback(
     async () => {
@@ -92,18 +88,7 @@ const User = ({ localData, client }: { localData: Object, client: Object }) => {
       // refresh currentUser in idb
       idb.currentUser.clear()
       await idb.currentUser.put({ name, token })
-      await client.mutate({
-        mutation: setUserGql,
-        variables: { name, token },
-        /*optimisticResponse: {
-        setUser: {
-          name,
-          token,
-          __typename: 'User',
-        },
-        __typename: 'Mutation',
-      },*/
-      })
+      setUser({ name, token })
       // this is easiest way to make sure everything is correct
       // as client is rebuilt with new settings
       window.location.reload(true)
@@ -144,11 +129,9 @@ const User = ({ localData, client }: { localData: Object, client: Object }) => {
     [name],
   )
 
-  if (localData.error) return `Fehler: ${localData.error.message}`
-
   return (
     <ErrorBoundary>
-      <StyledDialog aria-labelledby="dialog-title" open={!user.token}>
+      <StyledDialog aria-labelledby="dialog-title" open={!token}>
         <DialogTitle id="dialog-title">Anmeldung</DialogTitle>
         <StyledDiv>
           <FormControl
