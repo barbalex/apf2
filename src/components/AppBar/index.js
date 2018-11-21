@@ -78,7 +78,7 @@ const MyAppBar = ({
   setShowDeletions: () => void,
   client: Object,
 }) => {
-  const { nodeFilterClone1To2 } = useContext(mobxStoreContext)
+  const { nodeFilterClone1To2, user } = useContext(mobxStoreContext)
 
   const activeNodeArray = get(localData, 'tree.activeNodeArray')
   const activeNodes = getActiveNodes(activeNodeArray)
@@ -91,11 +91,10 @@ const MyAppBar = ({
   const isMobile = isMobilePhone()
   const view = get(localData, 'view')
 
-  const token = get(localData, 'user.token')
+  const { token, name: username } = user
   const tokenDecoded = token ? jwtDecode(token) : null
   const role = tokenDecoded ? tokenDecoded.role : null
   const isFreiwillig = role === 'apflora_freiwillig'
-  const username = get(localData, 'user.name')
 
   const [userOpen, setUserOpen] = useState(false)
 
