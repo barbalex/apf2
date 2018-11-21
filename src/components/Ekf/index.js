@@ -3,7 +3,7 @@
  * Stopped lazy loading Tpopfreiwkontr
  * because Reflex would often not show layout
  */
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import { Query } from 'react-apollo'
@@ -22,6 +22,7 @@ import dataWithDateByUserNameGql from './dataWithDateByUserName'
 import dataWithDateByAdresseIdGql from './dataWithDateByAdresseId'
 import EkfList from './List'
 import Tpopfreiwkontr from '../Projekte/Daten/Tpopfreiwkontr'
+import mobxStoreContext from '../../mobxStoreContext'
 
 const Container = styled.div`
   display: flex;
@@ -42,14 +43,14 @@ const ReflexElementForEKF = styled(ReflexElement)`
 const enhance = compose(withLocalData)
 
 const EkfContainer = ({ localData }: { localData: Object }) => {
-  const userName = get(localData, 'user.name')
+  const { user } = useContext(mobxStoreContext)
+  const { token, name: userName } = user
   const isPrint = get(localData, 'isPrint')
   const jahr = get(localData, 'ekfYear')
   const ekfAdresseId = get(localData, 'ekfAdresseId')
   const variables = ekfAdresseId
     ? { id: ekfAdresseId, jahr }
     : { userName, jahr }
-  const token = get(localData, 'user.token')
   const tokenDecoded = token ? jwtDecode(token) : null
   const role = tokenDecoded ? tokenDecoded.role : null
   const ekfRefDate = new Date().setMonth(new Date().getMonth() - 2)

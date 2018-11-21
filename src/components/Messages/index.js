@@ -1,17 +1,19 @@
 // @flow
-import React, { useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Button from '@material-ui/core/Button'
 import compose from 'recompose/compose'
+import withProps from 'recompose/withProps'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import Linkify from 'react-linkify'
+import { withApollo } from 'react-apollo'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
-import withLocalData from './withLocalData'
 import withData from './withData'
 import createUsermessage from './createUsermessage'
+import mobxStoreContext from '../../mobxStoreContext'
 
 const StyledDialog = styled(Dialog)`
   > div > div {
@@ -48,22 +50,22 @@ const OkButton = styled(Button)`
 `
 
 const enhance = compose(
-  withLocalData,
+  withApollo,
+  withProps(() => useContext(mobxStoreContext)),
   withData,
 )
 
 const UserMessages = ({
   open,
-  localData,
   data,
   client,
 }: {
   open: Boolean,
-  localData: Object,
   data: Object,
   client: Object,
 }) => {
-  const userName = get(localData, 'user.name')
+  const { user } = useContext(mobxStoreContext)
+  const userName = user.name
   const allMessages = get(data, 'allMessages.nodes', [])
   const unreadMessages = allMessages.filter(
     m => get(m, 'usermessagesByMessageId.nodes', []).length === 0,
@@ -94,8 +96,6 @@ const UserMessages = ({
     },
     [unreadMessages, userName],
   )
-
-  if (localData.error) return `Fehler: ${localData.error.message}`
 
   if (data.error) {
     if (data.error.message.includes('keine Berechtigung')) return null
