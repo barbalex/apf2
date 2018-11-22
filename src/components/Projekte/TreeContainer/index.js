@@ -79,7 +79,6 @@ import setTreeKey2Gql from './setTreeKey2'
 import copyBeobZugeordnetKoordToTpop from '../../../modules/copyBeobZugeordnetKoordToTpop'
 import copyTpopKoordToPop from '../../../modules/copyTpopKoordToPop'
 import setCopyingBiotop from './setCopyingBiotop'
-import setCopying from './setCopying'
 import setMoving from './setMoving'
 import tpopById from './tpopById'
 import beobById from './beobById'
@@ -178,7 +177,6 @@ const TreeContainer = ({
   loading,
   moving,
   openNodes,
-  copying,
   mapIdsFiltered,
   client,
 }: {
@@ -192,7 +190,6 @@ const TreeContainer = ({
   loading: Boolean,
   moving: Object,
   openNodes: Array<string>,
-  copying: Object,
   refetchTree: () => void,
   mapIdsFiltered: Array<String>,
   client: Object,
@@ -211,6 +208,8 @@ const TreeContainer = ({
     addError,
     toDelete,
     setToDelete,
+    setCopying,
+    copying,
   } = mobxStore
 
   const datasetToDelete = toDelete
@@ -386,30 +385,21 @@ const TreeContainer = ({
           moveTo({ id, addError, client })
         },
         markForCopying() {
-          client.mutate({
-            mutation: setCopying,
-            variables: { table, id, label, withNextLevel: false },
-          })
+          setCopying({ table, id, label, withNextLevel: false })
         },
         markForCopyingWithNextLevel() {
-          client.mutate({
-            mutation: setCopying,
-            variables: { table, id, label, withNextLevel: true },
-          })
+          setCopying({ table, id, label, withNextLevel: true })
         },
         resetCopying() {
-          client.mutate({
-            mutation: setCopying,
-            variables: {
-              table: null,
-              id: null,
-              label: null,
-              withNextLevel: false,
-            },
+          setCopying({
+            table: null,
+            id: null,
+            label: null,
+            withNextLevel: false,
           })
         },
         copy() {
-          copyTo({ parentId: id, refetchTree, addError, client })
+          copyTo({ parentId: id, refetchTree, addError, client, copying })
         },
         markForCopyingBiotop() {
           client.mutate({
@@ -558,7 +548,6 @@ const TreeContainer = ({
             activeNodes={activeNodes}
             activeApfloraLayers={activeApfloraLayers}
             moving={moving}
-            copying={copying}
             mapIdsFiltered={mapIdsFiltered}
           />
         </InnerTreeContainer>
@@ -602,14 +591,12 @@ const TreeContainer = ({
           tree={tree}
           token={token}
           moving={moving}
-          copying={copying}
         />
         <CmPop
           onClick={handleClick}
           tree={tree}
           token={token}
           moving={moving}
-          copying={copying}
         />
         <CmPopmassnberFolder onClick={handleClick} tree={tree} token={token} />
         <CmPopmassnber onClick={handleClick} tree={tree} token={token} />
@@ -621,14 +608,12 @@ const TreeContainer = ({
           tree={tree}
           token={token}
           moving={moving}
-          copying={copying}
         />
         <CmTpop
           onClick={handleClick}
           tree={tree}
           token={token}
           moving={moving}
-          copying={copying}
         />
         <CmTpopberFolder onClick={handleClick} tree={tree} token={token} />
         <CmTpopber onClick={handleClick} tree={tree} token={token} />
@@ -644,14 +629,8 @@ const TreeContainer = ({
           tree={tree}
           token={token}
           moving={moving}
-          copying={copying}
         />
-        <CmTpopfreiwkontr
-          onClick={handleClick}
-          tree={tree}
-          token={token}
-          copying={copying}
-        />
+        <CmTpopfreiwkontr onClick={handleClick} tree={tree} token={token} />
         <CmTpopfreiwkontrzaehlFolder
           onClick={handleClick}
           tree={tree}
@@ -667,14 +646,8 @@ const TreeContainer = ({
           tree={tree}
           token={token}
           moving={moving}
-          copying={copying}
         />
-        <CmTpopfeldkontr
-          onClick={handleClick}
-          tree={tree}
-          token={token}
-          copying={copying}
-        />
+        <CmTpopfeldkontr onClick={handleClick} tree={tree} token={token} />
         <CmTpopfeldkontrzaehlFolder
           onClick={handleClick}
           tree={tree}
@@ -688,14 +661,8 @@ const TreeContainer = ({
           tree={tree}
           token={token}
           moving={moving}
-          copying={copying}
         />
-        <CmTpopmassn
-          onClick={handleClick}
-          tree={tree}
-          token={token}
-          copying={copying}
-        />
+        <CmTpopmassn onClick={handleClick} tree={tree} token={token} />
         <CmUserFolder onClick={handleClick} tree={tree} token={token} />
         <CmUser onClick={handleClick} tree={tree} token={token} />
         <CmAdresseFolder onClick={handleClick} tree={tree} token={token} />

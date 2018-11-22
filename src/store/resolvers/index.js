@@ -10,7 +10,6 @@ import treeMap from './treeMap'
 import buildUrlQuery from './urlQuery'
 import login from './login'
 import moving from './moving'
-import copying from './copying'
 import assigningBeob from './assigningBeob'
 import mapMouseCoordinates from './mapMouseCoordinates'
 import copyingBiotop from './copyingBiotop'
@@ -29,7 +28,6 @@ export default ({ history }) => {
     urlQuery,
     login,
     moving,
-    copying,
     assigningBeob,
     mapMouseCoordinates,
     copyingBiotop,

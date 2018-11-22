@@ -59,11 +59,4 @@ export default {
     label: null,
     __typename: 'Moving',
   },
-  copying: {
-    table: null,
-    id: null,
-    label: null,
-    withNextLevel: false,
-    __typename: 'Copying',
-  },
 }

@@ -1,23 +1,25 @@
 // @flow
-import React, { Fragment } from 'react'
+import React, { useContext } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
+import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const TpopfeldkontrFolder = ({
   onClick,
   tree,
   token,
   moving,
-  copying
 }: {
   tree: Object,
   onClick: () => void,
   token: String,
   moving: Object,
-  copying: Object
 }) => {
+  const { copying } = useContext(mobxStoreContext)
+
   const isMoving = moving.table && moving.table === 'tpopfeldkontr'
   const isCopying = copying.table && copying.table === 'tpopfeldkontr'
 
@@ -41,9 +43,8 @@ const TpopfeldkontrFolder = ({
         >
           alle schliessen
         </MenuItem>
-        {
-          !userIsReadOnly(token) &&
-          <Fragment>
+        {!userIsReadOnly(token) && (
+          <>
             <MenuItem
               onClick={onClick}
               data={{
@@ -83,11 +84,11 @@ const TpopfeldkontrFolder = ({
                 Kopieren aufheben
               </MenuItem>
             )}
-          </Fragment>
-        }
+          </>
+        )}
       </ContextMenu>
     </ErrorBoundary>
   )
 }
 
-export default TpopfeldkontrFolder
+export default observer(TpopfeldkontrFolder)

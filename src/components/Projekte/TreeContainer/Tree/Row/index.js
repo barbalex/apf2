@@ -194,7 +194,6 @@ const Row = ({
   data,
   moving,
   openNodes,
-  copying,
   mapIdsFiltered,
   client,
 }: {
@@ -207,7 +206,6 @@ const Row = ({
   data: Object,
   moving: Object,
   openNodes: Array<string>,
-  copying: Object,
   mapIdsFiltered: Array<String>,
   client: Object,
 }) => {
@@ -215,6 +213,7 @@ const Row = ({
     activeApfloraLayers,
     nodeFilter,
     nodeFilterSetActiveTable,
+    copying,
   } = useContext(mobxStoreContext)
 
   const activeNodeArray = get(data, `${treeName}.activeNodeArray`)

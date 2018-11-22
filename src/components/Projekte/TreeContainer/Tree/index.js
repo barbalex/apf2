@@ -59,7 +59,6 @@ type Props = {
   activeNodeArray: Array<Object>,
   moving: Object,
   openNodes: Array<string>,
-  copying: Object,
   mapIdsFiltered: Array<String>,
 }
 
@@ -73,7 +72,6 @@ const Tree = ({
   nodes,
   activeNodeArray,
   loading,
-  copying,
   moving,
   openNodes,
   data,
@@ -103,21 +101,11 @@ const Tree = ({
           data={data}
           treeName={treeName}
           moving={moving}
-          copying={copying}
           mapIdsFiltered={mapIdsFiltered}
         />
       )
     },
-    [
-      tree,
-      openNodes,
-      activeNodes,
-      data,
-      treeName,
-      moving,
-      copying,
-      mapIdsFiltered,
-    ],
+    [tree, openNodes, activeNodes, data, treeName, moving, mapIdsFiltered],
   )
 
   return (
@@ -140,7 +128,7 @@ const Tree = ({
               // TODO: is this loading needed?
               loading={loading}
               // ...after copying and moving
-              copying={copying}
+              //copying={copying}
               moving={moving}
               openNodes={openNodes}
               // ...map filter changes

@@ -4,6 +4,7 @@ import cloneDeep from 'lodash/cloneDeep'
 
 import ApfloraLayer from './ApfloraLayer'
 import MapFilter from './MapFilter'
+import Copying, { defaultValue as defaultCopying } from './Copying'
 import NodeFilter, { defaultValue as defaultNodeFilter } from './NodeFilter'
 import standardApfloraLayers from '../components/Projekte/Karte/apfloraLayers'
 import standardOverlays from '../components/Projekte/Karte/overlays'
@@ -47,6 +48,7 @@ const myTypes = types
     view: types.optional(types.string, 'normal'),
     ekfYear: types.optional(types.number, ekfYear),
     ekfAdresseId: types.optional(types.maybeNull(types.string), null),
+    copying: types.optional(Copying, defaultCopying),
   })
   // structure of these variables is not controlled
   // so need to define this as volatile
@@ -182,6 +184,9 @@ const myTypes = types
     },
     setEkfAdresseId(val) {
       self.ekfAdresseId = val
+    },
+    setCopying({ table, id, label, withNextLevel }) {
+      self.copying = { table, id, label, withNextLevel }
     },
   }))
 

@@ -1,43 +1,36 @@
 // @flow
-import React, { Fragment } from 'react'
+import React, { useContext, useState, useCallback } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
+import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
-const enhance = compose(
-  withState('label', 'changeLabel', ''),
-  withHandlers({
-    // according to https://github.com/vkbansal/react-contextmenu/issues/65
-    // this is how to pass data from ContextMenuTrigger to ContextMenu
-    onShow: props => event => props.changeLabel(event.detail.data.nodeLabel),
-  }),
-)
+const enhance = compose(observer)
 
 const PopFolder = ({
   tree,
   onClick,
-  changeLabel,
-  label,
-  onShow,
   token,
   moving,
-  copying
 }: {
   tree: Object,
   onClick: () => void,
-  changeLabel: () => void,
-  label: string | number,
-  onShow: () => void,
   token: String,
   moving: Object,
-  copying: Object
 }) => {
+  const { copying } = useContext(mobxStoreContext)
+
+  const [label, changeLabel] = useState('')
+
   const isMoving = moving.table && moving.table === 'pop'
   const isCopying = copying.table && copying.table === 'pop'
+
+  // according to https://github.com/vkbansal/react-contextmenu/issues/65
+  // this is how to pass data from ContextMenuTrigger to ContextMenu
+  const onShow = useCallback(event => changeLabel(event.detail.data.nodeLabel))
 
   return (
     <ErrorBoundary>
@@ -63,50 +56,49 @@ const PopFolder = ({
         >
           alle schliessen
         </MenuItem>
-      {
-        !userIsReadOnly(token) &&
-        <Fragment>
-          <MenuItem
-            onClick={onClick}
-            data={{
-              action: 'insert',
-              table: 'pop',
-            }}
-          >
-            erstelle neue
-          </MenuItem>
-          {isMoving && (
+        {!userIsReadOnly(token) && (
+          <>
             <MenuItem
               onClick={onClick}
               data={{
-                action: 'move',
+                action: 'insert',
+                table: 'pop',
               }}
             >
-              {`verschiebe '${moving.label}' hierhin`}
+              erstelle neue
             </MenuItem>
-          )}
-          {isCopying && (
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'copy',
-              }}
-            >
-              {`kopiere '${copying.label}' hierhin`}
-            </MenuItem>
-          )}
-          {isCopying && (
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'resetCopying',
-              }}
-            >
-              Kopieren aufheben
-            </MenuItem>
-          )}
-        </Fragment>
-      }
+            {isMoving && (
+              <MenuItem
+                onClick={onClick}
+                data={{
+                  action: 'move',
+                }}
+              >
+                {`verschiebe '${moving.label}' hierhin`}
+              </MenuItem>
+            )}
+            {isCopying && (
+              <MenuItem
+                onClick={onClick}
+                data={{
+                  action: 'copy',
+                }}
+              >
+                {`kopiere '${copying.label}' hierhin`}
+              </MenuItem>
+            )}
+            {isCopying && (
+              <MenuItem
+                onClick={onClick}
+                data={{
+                  action: 'resetCopying',
+                }}
+              >
+                Kopieren aufheben
+              </MenuItem>
+            )}
+          </>
+        )}
       </ContextMenu>
     </ErrorBoundary>
   )

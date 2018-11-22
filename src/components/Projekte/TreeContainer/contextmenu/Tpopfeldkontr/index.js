@@ -1,45 +1,40 @@
 // @flow
-import React, { Fragment } from 'react'
+import React, { useContext, useCallback, useState } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
 import get from 'lodash/get'
+import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../../modules/userIsReadOnly'
 import withLocalData from './withLocalData'
+import mobxStoreContext from '../../../../../mobxStoreContext'
 
 const enhance = compose(
   withLocalData,
-  withState('label', 'changeLabel', ''),
-  withHandlers({
-    // according to https://github.com/vkbansal/react-contextmenu/issues/65
-    // this is how to pass data from ContextMenuTrigger to ContextMenu
-    onShow: props => event => props.changeLabel(event.detail.data.nodeLabel),
-  }),
+  observer,
 )
 
 const Tpopfeldkontr = ({
   tree,
   onClick,
-  changeLabel,
-  label,
-  onShow,
   token,
-  copying,
   localData,
 }: {
   tree: Object,
   onClick: () => void,
-  changeLabel: () => void,
-  label: string | number,
-  onShow: () => void,
   token: String,
-  copying: Object,
   localData: Object,
 }) => {
+  const { copying } = useContext(mobxStoreContext)
+
+  const [label, changeLabel] = useState('')
+
   const copyingBiotop = get(localData, 'copyingBiotop.id') !== 'copyingBiotop'
+
+  // according to https://github.com/vkbansal/react-contextmenu/issues/65
+  // this is how to pass data from ContextMenuTrigger to ContextMenu
+  const onShow = useCallback(event => changeLabel(event.detail.data.nodeLabel))
 
   if (localData.error) return `Fehler: ${localData.error.message}`
   return (
@@ -51,7 +46,7 @@ const Tpopfeldkontr = ({
       >
         <div className="react-contextmenu-title">Feld-Kontrolle</div>
         {!userIsReadOnly(token) && (
-          <Fragment>
+          <>
             <MenuItem
               onClick={onClick}
               data={{
@@ -108,7 +103,7 @@ const Tpopfeldkontr = ({
               kopiere Biotop
             </MenuItem>
             {copyingBiotop && (
-              <Fragment>
+              <>
                 <MenuItem
                   onClick={onClick}
                   data={{
@@ -128,9 +123,9 @@ const Tpopfeldkontr = ({
                 >
                   Biotop Kopieren aufheben
                 </MenuItem>
-              </Fragment>
+              </>
             )}
-          </Fragment>
+          </>
         )}
       </ContextMenu>
     </ErrorBoundary>

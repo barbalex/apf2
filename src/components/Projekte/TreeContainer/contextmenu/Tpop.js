@@ -1,23 +1,25 @@
 // @flow
-import React, { Fragment } from 'react'
+import React, { useContext } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
+import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const Tpop = ({
   onClick,
   tree,
   token,
   moving,
-  copying,
 }: {
   onClick: () => void,
   tree: Object,
   token: String,
   moving: Object,
-  copying: Object,
 }) => {
+  const { copying } = useContext(mobxStoreContext)
+
   const isMoving =
     moving.table &&
     ['tpopmassn', 'tpopfeldkontr', 'tpopfreiwkontr'].includes(moving.table)
@@ -46,7 +48,7 @@ const Tpop = ({
           alle schliessen
         </MenuItem>
         {!userIsReadOnly(token) && (
-          <Fragment>
+          <>
             <MenuItem
               onClick={onClick}
               data={{
@@ -134,7 +136,7 @@ const Tpop = ({
             >
               Kopiere Koordinaten in die Population
             </MenuItem>
-          </Fragment>
+          </>
         )}
         <MenuItem
           onClick={onClick}
@@ -157,4 +159,4 @@ const Tpop = ({
   )
 }
 
-export default Tpop
+export default observer(Tpop)

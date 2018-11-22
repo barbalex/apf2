@@ -1,43 +1,36 @@
 // @flow
-import React, { Fragment } from 'react'
+import React, { useContext, useState, useCallback } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
+import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
-const enhance = compose(
-  withState('id', 'changeId', 0),
-  withHandlers({
-    // according to https://github.com/vkbansal/react-contextmenu/issues/65
-    // this is how to pass data from ContextMenuTrigger to ContextMenu
-    onShow: props => event => props.changeId(event.detail.data.nodeId),
-  }),
-)
+const enhance = compose(observer)
 
 const TpopFolder = ({
   tree,
   onClick,
-  changeId,
-  id,
-  onShow,
   token,
   moving,
-  copying
 }: {
   tree: Object,
   onClick: () => void,
-  changeId: () => void,
-  id: Number,
-  onShow: () => void,
   token: String,
   moving: Object,
-  copying: Object
 }) => {
+  const { copying } = useContext(mobxStoreContext)
+
+  const [id, changeId] = useState(0)
+
   const isMoving = moving.table && moving.table === 'tpop'
   const isCopying = copying.table && copying.table === 'tpop'
+
+  // according to https://github.com/vkbansal/react-contextmenu/issues/65
+  // this is how to pass data from ContextMenuTrigger to ContextMenu
+  const onShow = useCallback(event => changeId(event.detail.data.nodeId))
 
   return (
     <ErrorBoundary>
@@ -63,9 +56,8 @@ const TpopFolder = ({
         >
           alle schliessen
         </MenuItem>
-        {
-          !userIsReadOnly(token) &&
-          <Fragment>
+        {!userIsReadOnly(token) && (
+          <>
             <MenuItem
               onClick={onClick}
               data={{
@@ -105,8 +97,8 @@ const TpopFolder = ({
                 Kopieren aufheben
               </MenuItem>
             )}
-          </Fragment>
-        }
+          </>
+        )}
       </ContextMenu>
     </ErrorBoundary>
   )

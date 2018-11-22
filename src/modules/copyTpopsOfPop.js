@@ -9,11 +9,13 @@ export default async ({
   popIdTo,
   refetchTree,
   client,
+  copying,
 }: {
   popIdFrom: String,
   popIdTo: String,
   refetchTree: () => void,
   client: Object,
+  copying: Object,
 }) => {
   // 1. fetch all tpops
   const { data } = await client.query({
@@ -38,6 +40,7 @@ export default async ({
       id: tpop.id,
       refetchTree,
       client,
+      copying,
     }),
   )
 }

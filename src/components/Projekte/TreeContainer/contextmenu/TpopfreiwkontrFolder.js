@@ -1,23 +1,25 @@
 // @flow
-import React, { Fragment } from 'react'
+import React, { useContext } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
+import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const TpopfreiwkontrFolder = ({
   onClick,
   tree,
   token,
   moving,
-  copying
 }: {
   tree: Object,
   onClick: () => void,
   token: String,
   moving: Object,
-  copying: Object
 }) => {
+  const { copying } = useContext(mobxStoreContext)
+
   const isMoving = moving.table && moving.table === 'tpopfreiwkontr'
   const isCopying = copying.table && copying.table === 'tpopfreiwkontr'
 
@@ -41,9 +43,8 @@ const TpopfreiwkontrFolder = ({
         >
           alle schliessen
         </MenuItem>
-        {
-          !userIsReadOnly(token, 'freiw') &&
-          <Fragment>
+        {!userIsReadOnly(token, 'freiw') && (
+          <>
             <MenuItem
               onClick={onClick}
               data={{
@@ -83,11 +84,11 @@ const TpopfreiwkontrFolder = ({
                 Kopieren aufheben
               </MenuItem>
             )}
-          </Fragment>
-        }
+          </>
+        )}
       </ContextMenu>
     </ErrorBoundary>
   )
 }
 
-export default TpopfreiwkontrFolder
+export default observer(TpopfreiwkontrFolder)

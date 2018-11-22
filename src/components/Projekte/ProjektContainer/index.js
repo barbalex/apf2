@@ -298,7 +298,6 @@ const ProjekteContainer = props => {
   const activeNodes = getActiveNodes(activeNodeArray)
   const openNodes = get(dataLocal, `${treeName}.openNodes`)
   const moving = get(dataLocal, 'moving')
-  const copying = get(dataLocal, 'copying')
   const { token } = user
   const tokenDecoded = token ? jwtDecode(token) : null
   const role = tokenDecoded ? tokenDecoded.role : null
@@ -501,7 +500,6 @@ const ProjekteContainer = props => {
                 loading={loading}
                 moving={moving}
                 openNodes={openNodes}
-                copying={copying}
                 refetchTree={refetch}
                 mapFilter={mapFilter}
                 mapIdsFiltered={mapIdsFiltered}

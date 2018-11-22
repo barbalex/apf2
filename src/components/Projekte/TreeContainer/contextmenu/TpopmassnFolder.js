@@ -1,23 +1,25 @@
 // @flow
-import React, { Fragment } from 'react'
+import React, { useContext } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
+import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const TpopmassnFolder = ({
   tree,
   onClick,
   token,
   moving,
-  copying
 }: {
   tree: Object,
   onClick: () => void,
   token: String,
   moving: Object,
-  copying: Object
 }) => {
+  const { copying } = useContext(mobxStoreContext)
+
   const isMoving = moving.table && moving.table === 'tpopmassn'
   const isCopying = copying.table && copying.table === 'tpopmassn'
 
@@ -25,9 +27,8 @@ const TpopmassnFolder = ({
     <ErrorBoundary>
       <ContextMenu id={`${tree.name}tpopmassnFolder`}>
         <div className="react-contextmenu-title">Massnahmen</div>
-        {
-          !userIsReadOnly(token) &&
-          <Fragment>
+        {!userIsReadOnly(token) && (
+          <>
             <MenuItem
               onClick={onClick}
               data={{
@@ -67,11 +68,11 @@ const TpopmassnFolder = ({
                 Kopieren aufheben
               </MenuItem>
             )}
-          </Fragment>
-        }
+          </>
+        )}
       </ContextMenu>
     </ErrorBoundary>
   )
 }
 
-export default TpopmassnFolder
+export default observer(TpopmassnFolder)

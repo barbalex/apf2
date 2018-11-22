@@ -89,12 +89,6 @@ export default gql`
       id
       label
     }
-    copying @client {
-      table
-      id
-      label
-      withNextLevel
-    }
     urlQuery @client {
       projekteTabs
       feldkontrTab

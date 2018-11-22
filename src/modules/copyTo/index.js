@@ -4,7 +4,6 @@
  * used when copying for instance tpop to other pop in tree
  */
 import get from 'lodash/get'
-import gql from 'graphql-tag'
 
 import tables from '../tables'
 import copyTpopsOfPop from '../copyTpopsOfPop'
@@ -30,6 +29,7 @@ export default async ({
   refetchTree,
   addError,
   client,
+  copying,
 }: {
   parentId: String,
   tablePassed: ?String,
@@ -37,22 +37,11 @@ export default async ({
   refetchTree: () => void,
   addError: Object,
   client: Object,
+  copying: Object,
 }): Promise<void> => {
-  const { data } = await client.query({
-    query: gql`
-      query Query {
-        copying @client {
-          table
-          id
-          label
-          withNextLevel
-        }
-      }
-    `,
-  })
-  let table = tablePassed || get(data, 'copying.table')
-  const id = idPassed || get(data, 'copying.id')
-  const withNextLevel = get(data, 'copying.withNextLevel')
+  let table = tablePassed || copying.table
+  const id = idPassed || copying.id
+  const withNextLevel = copying.withNextLevel
 
   // ensure derived data exists
   const tabelle = tables.find(t => t.table === table)
@@ -348,6 +337,7 @@ export default async ({
       popIdTo: newId,
       refetchTree,
       client,
+      copying,
     })
   }
   if (table === 'tpopkontr') {
@@ -357,6 +347,7 @@ export default async ({
       tpopkontrIdTo: newId,
       refetchTree,
       client,
+      copying,
     })
   }
 }
