@@ -53,10 +53,4 @@ export default {
     fileType: 'xlsx',
     __typename: 'Export',
   },
-  moving: {
-    table: null,
-    id: null,
-    label: null,
-    __typename: 'Moving',
-  },
 }

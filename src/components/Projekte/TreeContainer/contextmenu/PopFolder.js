@@ -13,13 +13,11 @@ const enhance = compose(observer)
 const PopFolder = ({
   tree,
   onClick,
-  moving,
 }: {
   tree: Object,
   onClick: () => void,
-  moving: Object,
 }) => {
-  const { copying, user } = useContext(mobxStoreContext)
+  const { copying, user, moving } = useContext(mobxStoreContext)
 
   // eslint-disable-next-line no-unused-vars
   const [label, changeLabel] = useState('')

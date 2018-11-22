@@ -3,10 +3,7 @@
  * moves a dataset to a different parent
  * used when moving for instance tpop to other pop in tree
  */
-import get from 'lodash/get'
-
 import tables from '../tables'
-import movingGql from './moving'
 import updateTpopkontrById from './updateTpopkontrById'
 import updateTpopmassnById from './updateTpopmassnById'
 import updateTpopById from './updateTpopById'
@@ -16,18 +13,17 @@ export default async ({
   id: newParentId,
   addError,
   client,
+  moving,
   setMoving,
 }: {
   newParentId: String,
   addError: Object,
   client: Object,
+  moving: Object,
   setMoving: () => void,
 }): any => {
-  const { data } = await client.query({
-    query: movingGql,
-  })
-  let table = get(data, 'moving.table')
-  const id = get(data, 'moving.id')
+  let { table } = moving
+  const { id } = moving
 
   // ensure derived data exists
   const tabelle: {

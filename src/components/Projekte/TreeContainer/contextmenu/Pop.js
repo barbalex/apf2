@@ -10,16 +10,8 @@ import mobxStoreContext from '../../../../mobxStoreContext'
 
 const enhance = compose(observer)
 
-const Pop = ({
-  onClick,
-  tree,
-  moving,
-}: {
-  onClick: () => void,
-  tree: Object,
-  moving: Object,
-}) => {
-  const { copying, user } = useContext(mobxStoreContext)
+const Pop = ({ onClick, tree }: { onClick: () => void, tree: Object }) => {
+  const { copying, user, moving } = useContext(mobxStoreContext)
 
   // eslint-disable-next-line no-unused-vars
   const [id, changeId] = useState(0)

@@ -84,11 +84,6 @@ export default gql`
     copyingBiotop @client {
       id
     }
-    moving @client {
-      table
-      id
-      label
-    }
     urlQuery @client {
       projekteTabs
       feldkontrTab

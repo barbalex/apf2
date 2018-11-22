@@ -192,7 +192,6 @@ const Row = ({
   activeNodes,
   treeName,
   data,
-  moving,
   openNodes,
   mapIdsFiltered,
   client,
@@ -204,7 +203,6 @@ const Row = ({
   activeNodes: Array<Object>,
   treeName: String,
   data: Object,
-  moving: Object,
   openNodes: Array<string>,
   mapIdsFiltered: Array<String>,
   client: Object,
@@ -214,6 +212,7 @@ const Row = ({
     nodeFilter,
     nodeFilterSetActiveTable,
     copying,
+    moving,
   } = useContext(mobxStoreContext)
 
   const activeNodeArray = get(data, `${treeName}.activeNodeArray`)

@@ -57,7 +57,6 @@ type Props = {
   mapPopVisible: boolean,
   mapTpopVisible: boolean,
   activeNodeArray: Array<Object>,
-  moving: Object,
   openNodes: Array<string>,
   mapIdsFiltered: Array<String>,
 }
@@ -72,7 +71,6 @@ const Tree = ({
   nodes,
   activeNodeArray,
   loading,
-  moving,
   openNodes,
   data,
   tree,
@@ -100,12 +98,11 @@ const Tree = ({
           node={node}
           data={data}
           treeName={treeName}
-          moving={moving}
           mapIdsFiltered={mapIdsFiltered}
         />
       )
     },
-    [tree, openNodes, activeNodes, data, treeName, moving, mapIdsFiltered],
+    [tree, openNodes, activeNodes, data, treeName, mapIdsFiltered],
   )
 
   return (
@@ -129,7 +126,7 @@ const Tree = ({
               loading={loading}
               // ...after copying and moving
               //copying={copying}
-              moving={moving}
+              //moving={moving}
               openNodes={openNodes}
               // ...map filter changes
               mapFilterString={mapFilter.features.toString()}

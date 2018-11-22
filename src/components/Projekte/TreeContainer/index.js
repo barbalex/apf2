@@ -174,7 +174,6 @@ const TreeContainer = ({
   nodes,
   data,
   loading,
-  moving,
   openNodes,
   mapIdsFiltered,
   client,
@@ -187,7 +186,6 @@ const TreeContainer = ({
   activeNodes: Object,
   activeNode: Object,
   loading: Boolean,
-  moving: Object,
   openNodes: Array<string>,
   refetchTree: () => void,
   mapIdsFiltered: Array<String>,
@@ -209,6 +207,7 @@ const TreeContainer = ({
     setToDelete,
     setCopying,
     copying,
+    moving,
     setMoving,
   } = mobxStore
 
@@ -377,7 +376,7 @@ const TreeContainer = ({
           setMoving({ table, id, label })
         },
         move() {
-          moveTo({ id, addError, client, setMoving })
+          moveTo({ id, addError, client, moving, setMoving })
         },
         markForCopying() {
           setCopying({ table, id, label, withNextLevel: false })
@@ -540,12 +539,11 @@ const TreeContainer = ({
             openNodes={openNodes}
             activeNodes={activeNodes}
             activeApfloraLayers={activeApfloraLayers}
-            moving={moving}
             mapIdsFiltered={mapIdsFiltered}
           />
         </InnerTreeContainer>
         <CmApFolder onClick={handleClick} tree={tree} />
-        <CmAp onClick={handleClick} tree={tree} moving={moving} />
+        <CmAp onClick={handleClick} tree={tree} />
         <CmApberuebersichtFolder onClick={handleClick} tree={tree} />
         <CmApberuebersicht onClick={handleClick} tree={tree} />
         <CmAssozartFolder onClick={handleClick} tree={tree} />
@@ -570,39 +568,31 @@ const TreeContainer = ({
         <CmZiel onClick={handleClick} tree={tree} />
         <CmZielBerFolder onClick={handleClick} tree={tree} />
         <CmZielBer onClick={handleClick} tree={tree} />
-        <CmPopFolder onClick={handleClick} tree={tree} moving={moving} />
-        <CmPop onClick={handleClick} tree={tree} moving={moving} />
+        <CmPopFolder onClick={handleClick} tree={tree} />
+        <CmPop onClick={handleClick} tree={tree} />
         <CmPopmassnberFolder onClick={handleClick} tree={tree} />
         <CmPopmassnber onClick={handleClick} tree={tree} />
         <CmPopberFolder onClick={handleClick} tree={tree} />
         <CmPopber onClick={handleClick} tree={tree} />
         <CmProjekt onClick={handleClick} tree={tree} />
-        <CmTpopFolder onClick={handleClick} tree={tree} moving={moving} />
-        <CmTpop onClick={handleClick} tree={tree} moving={moving} />
+        <CmTpopFolder onClick={handleClick} tree={tree} />
+        <CmTpop onClick={handleClick} tree={tree} />
         <CmTpopberFolder onClick={handleClick} tree={tree} />
         <CmTpopber onClick={handleClick} tree={tree} />
         <CmBeobZugeordnet onClick={handleClick} tree={tree} />
         <CmBeobnichtbeurteilt onClick={handleClick} tree={tree} />
         <CmBeobNichtZuzuordnen onClick={handleClick} tree={tree} />
-        <CmTpopfreiwkontrFolder
-          onClick={handleClick}
-          tree={tree}
-          moving={moving}
-        />
+        <CmTpopfreiwkontrFolder onClick={handleClick} tree={tree} />
         <CmTpopfreiwkontr onClick={handleClick} tree={tree} />
         <CmTpopfreiwkontrzaehlFolder onClick={handleClick} tree={tree} />
         <CmTpopfreiwkontrzaehl onClick={handleClick} tree={tree} />
-        <CmTpopfeldkontrFolder
-          onClick={handleClick}
-          tree={tree}
-          moving={moving}
-        />
+        <CmTpopfeldkontrFolder onClick={handleClick} tree={tree} />
         <CmTpopfeldkontr onClick={handleClick} tree={tree} />
         <CmTpopfeldkontrzaehlFolder onClick={handleClick} tree={tree} />
         <CmTpopfeldkontrzaehl onClick={handleClick} tree={tree} />
         <CmTpopmassnberFolder onClick={handleClick} tree={tree} />
         <CmTpopmassnber onClick={handleClick} tree={tree} />
-        <CmTpopmassnFolder onClick={handleClick} tree={tree} moving={moving} />
+        <CmTpopmassnFolder onClick={handleClick} tree={tree} />
         <CmTpopmassn onClick={handleClick} tree={tree} />
         <CmUserFolder onClick={handleClick} tree={tree} />
         <CmUser onClick={handleClick} tree={tree} />

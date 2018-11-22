@@ -7,16 +7,8 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
-const Tpop = ({
-  onClick,
-  tree,
-  moving,
-}: {
-  onClick: () => void,
-  tree: Object,
-  moving: Object,
-}) => {
-  const { copying, user } = useContext(mobxStoreContext)
+const Tpop = ({ onClick, tree }: { onClick: () => void, tree: Object }) => {
+  const { copying, user, moving } = useContext(mobxStoreContext)
 
   const isMoving =
     moving.table &&

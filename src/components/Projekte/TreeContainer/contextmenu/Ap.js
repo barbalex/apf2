@@ -7,21 +7,14 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
-const Ap = ({
-  onClick,
-  tree,
-  moving,
-}: {
-  onClick: () => void,
-  tree: Object,
-  moving: Object,
-}) => {
+const Ap = ({ onClick, tree }: { onClick: () => void, tree: Object }) => {
   const mobxStore = useContext(mobxStoreContext)
   const {
     activeApfloraLayers,
     popLabelUsingNr,
     tpopLabelUsingNr,
     user,
+    moving,
   } = mobxStore
 
   const isMoving = moving.table && moving.table === 'pop'

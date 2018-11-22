@@ -10,13 +10,11 @@ import mobxStoreContext from '../../../../mobxStoreContext'
 const TpopmassnFolder = ({
   tree,
   onClick,
-  moving,
 }: {
   tree: Object,
   onClick: () => void,
-  moving: Object,
 }) => {
-  const { copying, user } = useContext(mobxStoreContext)
+  const { copying, user, moving } = useContext(mobxStoreContext)
 
   const isMoving = moving.table && moving.table === 'tpopmassn'
   const isCopying = copying.table && copying.table === 'tpopmassn'
