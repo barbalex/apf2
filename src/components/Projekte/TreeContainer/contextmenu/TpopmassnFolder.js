@@ -18,7 +18,7 @@ const TpopmassnFolder = ({
   token: String,
   moving: Object,
 }) => {
-  const { copying } = useContext(mobxStoreContext)
+  const { copying, user } = useContext(mobxStoreContext)
 
   const isMoving = moving.table && moving.table === 'tpopmassn'
   const isCopying = copying.table && copying.table === 'tpopmassn'
@@ -27,7 +27,7 @@ const TpopmassnFolder = ({
     <ErrorBoundary>
       <ContextMenu id={`${tree.name}tpopmassnFolder`}>
         <div className="react-contextmenu-title">Massnahmen</div>
-        {!userIsReadOnly(token) && (
+        {!userIsReadOnly(user.token) && (
           <>
             <MenuItem
               onClick={onClick}

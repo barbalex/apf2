@@ -21,8 +21,9 @@ const TpopFolder = ({
   token: String,
   moving: Object,
 }) => {
-  const { copying } = useContext(mobxStoreContext)
+  const { copying, user } = useContext(mobxStoreContext)
 
+  // eslint-disable-next-line no-unused-vars
   const [id, changeId] = useState(0)
 
   const isMoving = moving.table && moving.table === 'tpop'
@@ -56,7 +57,7 @@ const TpopFolder = ({
         >
           alle schliessen
         </MenuItem>
-        {!userIsReadOnly(token) && (
+        {!userIsReadOnly(user.token) && (
           <>
             <MenuItem
               onClick={onClick}

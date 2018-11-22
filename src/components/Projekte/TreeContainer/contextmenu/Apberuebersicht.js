@@ -1,47 +1,52 @@
 // @flow
-import React, { Fragment } from 'react'
+import React, { useContext } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
+import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const Apberuebersicht = ({
   onClick,
   tree,
-  token
+  token,
 }: {
   onClick: () => void,
   tree: Object,
-  token: String
-}) => (
-  <ErrorBoundary>
-    <ContextMenu id={`${tree.name}apberuebersicht`}>
-      <div className="react-contextmenu-title">AP-Bericht</div>
-      {
-        !userIsReadOnly(token) &&
-        <Fragment>
-          <MenuItem
-            onClick={onClick}
-            data={{
-              action: 'insert',
-              table: 'apberuebersicht',
-            }}
-          >
-            erstelle neuen
-          </MenuItem>
-          <MenuItem
-            onClick={onClick}
-            data={{
-              action: 'delete',
-              table: 'apberuebersicht',
-            }}
-          >
-            lösche
-          </MenuItem>
-        </Fragment>
-      }
-    </ContextMenu>
-  </ErrorBoundary>
-)
+  token: String,
+}) => {
+  const { user } = useContext(mobxStoreContext)
 
-export default Apberuebersicht
+  return (
+    <ErrorBoundary>
+      <ContextMenu id={`${tree.name}apberuebersicht`}>
+        <div className="react-contextmenu-title">AP-Bericht</div>
+        {!userIsReadOnly(user.token) && (
+          <>
+            <MenuItem
+              onClick={onClick}
+              data={{
+                action: 'insert',
+                table: 'apberuebersicht',
+              }}
+            >
+              erstelle neuen
+            </MenuItem>
+            <MenuItem
+              onClick={onClick}
+              data={{
+                action: 'delete',
+                table: 'apberuebersicht',
+              }}
+            >
+              lösche
+            </MenuItem>
+          </>
+        )}
+      </ContextMenu>
+    </ErrorBoundary>
+  )
+}
+
+export default observer(Apberuebersicht)

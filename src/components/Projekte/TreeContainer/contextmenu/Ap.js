@@ -19,10 +19,15 @@ const Ap = ({
   moving: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { activeApfloraLayers, popLabelUsingNr, tpopLabelUsingNr } = mobxStore
+  const {
+    activeApfloraLayers,
+    popLabelUsingNr,
+    tpopLabelUsingNr,
+    user,
+  } = mobxStore
 
   const isMoving = moving.table && moving.table === 'pop'
-  const mayWrite = !userIsReadOnly(token)
+  const mayWrite = !userIsReadOnly(user.token)
 
   return (
     <ErrorBoundary>

@@ -1,36 +1,41 @@
 // @flow
-import React from 'react'
+import React, { useContext } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
+import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const PopberFolder = ({
   onClick,
   tree,
-  token
+  token,
 }: {
   onClick: () => void,
   tree: Object,
-  token: String
-}) => (
-  <ErrorBoundary>
-    <ContextMenu id={`${tree.name}popberFolder`}>
-      <div className="react-contextmenu-title">Kontroll-Berichte</div>
-      {
-        !userIsReadOnly(token) &&
-        <MenuItem
-          onClick={onClick}
-          data={{
-            action: 'insert',
-            table: 'popber',
-          }}
-        >
-          erstelle neuen
-        </MenuItem>
-      }
-    </ContextMenu>
-  </ErrorBoundary>
-)
+  token: String,
+}) => {
+  const { user } = useContext(mobxStoreContext)
 
-export default PopberFolder
+  return (
+    <ErrorBoundary>
+      <ContextMenu id={`${tree.name}popberFolder`}>
+        <div className="react-contextmenu-title">Kontroll-Berichte</div>
+        {!userIsReadOnly(user.token) && (
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'insert',
+              table: 'popber',
+            }}
+          >
+            erstelle neuen
+          </MenuItem>
+        )}
+      </ContextMenu>
+    </ErrorBoundary>
+  )
+}
+
+export default observer(PopberFolder)

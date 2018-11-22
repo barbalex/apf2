@@ -1,9 +1,11 @@
 // @flow
-import React, { Fragment } from 'react'
+import React, { useContext } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
+import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const EkfzaehleinheitFolder = ({
   onClick,
@@ -13,34 +15,38 @@ const EkfzaehleinheitFolder = ({
   onClick: () => void,
   tree: Object,
   token: String,
-}) => (
-  <ErrorBoundary>
-    <ContextMenu id={`${tree.name}ekfzaehleinheit`}>
-      <div className="react-contextmenu-title">EKF-Zähleinheit</div>
-      {!userIsReadOnly(token) && (
-        <Fragment>
-          <MenuItem
-            onClick={onClick}
-            data={{
-              action: 'insert',
-              table: 'ekfzaehleinheit',
-            }}
-          >
-            erstelle neue
-          </MenuItem>
-          <MenuItem
-            onClick={onClick}
-            data={{
-              action: 'delete',
-              table: 'ekfzaehleinheit',
-            }}
-          >
-            lösche
-          </MenuItem>
-        </Fragment>
-      )}
-    </ContextMenu>
-  </ErrorBoundary>
-)
+}) => {
+  const { user } = useContext(mobxStoreContext)
 
-export default EkfzaehleinheitFolder
+  return (
+    <ErrorBoundary>
+      <ContextMenu id={`${tree.name}ekfzaehleinheit`}>
+        <div className="react-contextmenu-title">EKF-Zähleinheit</div>
+        {!userIsReadOnly(user.token) && (
+          <>
+            <MenuItem
+              onClick={onClick}
+              data={{
+                action: 'insert',
+                table: 'ekfzaehleinheit',
+              }}
+            >
+              erstelle neue
+            </MenuItem>
+            <MenuItem
+              onClick={onClick}
+              data={{
+                action: 'delete',
+                table: 'ekfzaehleinheit',
+              }}
+            >
+              lösche
+            </MenuItem>
+          </>
+        )}
+      </ContextMenu>
+    </ErrorBoundary>
+  )
+}
+
+export default observer(EkfzaehleinheitFolder)

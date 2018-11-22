@@ -1,44 +1,49 @@
 // @flow
-import React from 'react'
+import React, { useContext } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
+import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const Apfolder = ({
   onClick,
   tree,
-  token
+  token,
 }: {
   onClick: () => void,
   tree: Object,
-  token: String
-}) => (
-  <ErrorBoundary>
-    <ContextMenu id={`${tree.name}userFolder`}>
-      <div className="react-contextmenu-title">Benutzer</div>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'closeLowerNodes',
-        }}
-      >
-        alle schliessen
-      </MenuItem>
-      {
-        !userIsReadOnly(token) &&
+  token: String,
+}) => {
+  const { user } = useContext(mobxStoreContext)
+
+  return (
+    <ErrorBoundary>
+      <ContextMenu id={`${tree.name}userFolder`}>
+        <div className="react-contextmenu-title">Benutzer</div>
         <MenuItem
           onClick={onClick}
           data={{
-            action: 'insert',
-            table: 'user',
+            action: 'closeLowerNodes',
           }}
         >
-          erstelle neuen
+          alle schliessen
         </MenuItem>
-      }
-    </ContextMenu>
-  </ErrorBoundary>
-)
+        {!userIsReadOnly(user.token) && (
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'insert',
+              table: 'user',
+            }}
+          >
+            erstelle neuen
+          </MenuItem>
+        )}
+      </ContextMenu>
+    </ErrorBoundary>
+  )
+}
 
-export default Apfolder
+export default observer(Apfolder)

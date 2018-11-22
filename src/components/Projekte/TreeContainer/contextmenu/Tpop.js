@@ -18,7 +18,7 @@ const Tpop = ({
   token: String,
   moving: Object,
 }) => {
-  const { copying } = useContext(mobxStoreContext)
+  const { copying, user } = useContext(mobxStoreContext)
 
   const isMoving =
     moving.table &&
@@ -47,7 +47,7 @@ const Tpop = ({
         >
           alle schliessen
         </MenuItem>
-        {!userIsReadOnly(token) && (
+        {!userIsReadOnly(user.token) && (
           <>
             <MenuItem
               onClick={onClick}

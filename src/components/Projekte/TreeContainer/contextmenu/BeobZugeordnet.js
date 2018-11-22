@@ -1,9 +1,11 @@
 // @flow
-import React from 'react'
+import React, { useContext } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
+import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const BeobZugeordnet = ({
   tree,
@@ -13,38 +15,42 @@ const BeobZugeordnet = ({
   tree: Object,
   onClick: () => void,
   token: String,
-}) => (
-  <ErrorBoundary>
-    <ContextMenu id={`${tree.name}beobZugeordnet`}>
-      <div className="react-contextmenu-title">Beobachtung</div>
-      {!userIsReadOnly(token) && (
+}) => {
+  const { user } = useContext(mobxStoreContext)
+
+  return (
+    <ErrorBoundary>
+      <ContextMenu id={`${tree.name}beobZugeordnet`}>
+        <div className="react-contextmenu-title">Beobachtung</div>
+        {!userIsReadOnly(user.token) && (
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'copyBeobZugeordnetKoordToTpop',
+            }}
+          >
+            Koordinaten auf die Teilpopulation übertragen
+          </MenuItem>
+        )}
         <MenuItem
           onClick={onClick}
           data={{
-            action: 'copyBeobZugeordnetKoordToTpop',
+            action: 'showCoordOfBeobOnMapsZhCh',
           }}
         >
-          Koordinaten auf die Teilpopulation übertragen
+          Zeige auf maps.zh.ch
         </MenuItem>
-      )}
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'showCoordOfBeobOnMapsZhCh',
-        }}
-      >
-        Zeige auf maps.zh.ch
-      </MenuItem>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'showCoordOfBeobOnMapGeoAdminCh',
-        }}
-      >
-        Zeige auf map.geo.admin.ch
-      </MenuItem>
-    </ContextMenu>
-  </ErrorBoundary>
-)
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: 'showCoordOfBeobOnMapGeoAdminCh',
+          }}
+        >
+          Zeige auf map.geo.admin.ch
+        </MenuItem>
+      </ContextMenu>
+    </ErrorBoundary>
+  )
+}
 
-export default BeobZugeordnet
+export default observer(BeobZugeordnet)

@@ -18,7 +18,7 @@ const TpopfeldkontrFolder = ({
   token: String,
   moving: Object,
 }) => {
-  const { copying } = useContext(mobxStoreContext)
+  const { copying, user } = useContext(mobxStoreContext)
 
   const isMoving = moving.table && moving.table === 'tpopfeldkontr'
   const isCopying = copying.table && copying.table === 'tpopfeldkontr'
@@ -43,7 +43,7 @@ const TpopfeldkontrFolder = ({
         >
           alle schliessen
         </MenuItem>
-        {!userIsReadOnly(token) && (
+        {!userIsReadOnly(user.token) && (
           <>
             <MenuItem
               onClick={onClick}

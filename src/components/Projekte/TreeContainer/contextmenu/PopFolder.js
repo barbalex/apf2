@@ -21,8 +21,9 @@ const PopFolder = ({
   token: String,
   moving: Object,
 }) => {
-  const { copying } = useContext(mobxStoreContext)
+  const { copying, user } = useContext(mobxStoreContext)
 
+  // eslint-disable-next-line no-unused-vars
   const [label, changeLabel] = useState('')
 
   const isMoving = moving.table && moving.table === 'pop'
@@ -56,7 +57,7 @@ const PopFolder = ({
         >
           alle schliessen
         </MenuItem>
-        {!userIsReadOnly(token) && (
+        {!userIsReadOnly(user.token) && (
           <>
             <MenuItem
               onClick={onClick}

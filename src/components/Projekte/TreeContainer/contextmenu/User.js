@@ -1,9 +1,11 @@
 // @flow
-import React, { Fragment } from 'react'
+import React, { useContext } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
+import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const User = ({
   onClick,
@@ -14,15 +16,16 @@ const User = ({
   tree: Object,
   token: String,
 }) => {
-  const mayWrite = !userIsReadOnly(token)
+  const { user } = useContext(mobxStoreContext)
+
+  const mayWrite = !userIsReadOnly(user.token)
 
   return (
     <ErrorBoundary>
       <ContextMenu id={`${tree.name}user`}>
         <div className="react-contextmenu-title">Benutzer</div>
-        {
-          mayWrite &&
-          <Fragment>
+        {mayWrite && (
+          <>
             <MenuItem
               onClick={onClick}
               data={{
@@ -41,11 +44,11 @@ const User = ({
             >
               lösche
             </MenuItem>
-          </Fragment>
-        }
+          </>
+        )}
       </ContextMenu>
     </ErrorBoundary>
   )
 }
 
-export default User
+export default observer(User)

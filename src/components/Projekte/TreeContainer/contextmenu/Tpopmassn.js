@@ -19,8 +19,9 @@ const Tpopmassn = ({
   onClick: () => void,
   token: String,
 }) => {
-  const { copying } = useContext(mobxStoreContext)
+  const { copying, user } = useContext(mobxStoreContext)
 
+  // eslint-disable-next-line no-unused-vars
   const [label, changeLabel] = useState('')
 
   // according to https://github.com/vkbansal/react-contextmenu/issues/65
@@ -35,7 +36,7 @@ const Tpopmassn = ({
         onShow={onShow}
       >
         <div className="react-contextmenu-title">Massnahme</div>
-        {!userIsReadOnly(token) && (
+        {!userIsReadOnly(user.token) && (
           <>
             <MenuItem
               onClick={onClick}

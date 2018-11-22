@@ -21,9 +21,11 @@ const Pop = ({
   token: String,
   moving: Object,
 }) => {
-  const { copying } = useContext(mobxStoreContext)
+  const { copying, user } = useContext(mobxStoreContext)
 
+  // eslint-disable-next-line no-unused-vars
   const [id, changeId] = useState(0)
+  // eslint-disable-next-line no-unused-vars
   const [label, changeLabel] = useState('')
 
   const isMoving = moving.table && moving.table === 'tpop'
@@ -60,7 +62,7 @@ const Pop = ({
         >
           alle schliessen
         </MenuItem>
-        {!userIsReadOnly(token) && (
+        {!userIsReadOnly(user.token) && (
           <>
             <MenuItem
               onClick={onClick}

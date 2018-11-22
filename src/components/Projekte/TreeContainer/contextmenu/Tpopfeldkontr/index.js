@@ -26,8 +26,9 @@ const Tpopfeldkontr = ({
   token: String,
   localData: Object,
 }) => {
-  const { copying } = useContext(mobxStoreContext)
+  const { copying, user } = useContext(mobxStoreContext)
 
+  // eslint-disable-next-line no-unused-vars
   const [label, changeLabel] = useState('')
 
   const copyingBiotop = get(localData, 'copyingBiotop.id') !== 'copyingBiotop'
@@ -45,7 +46,7 @@ const Tpopfeldkontr = ({
         onShow={onShow}
       >
         <div className="react-contextmenu-title">Feld-Kontrolle</div>
-        {!userIsReadOnly(token) && (
+        {!userIsReadOnly(user.token) && (
           <>
             <MenuItem
               onClick={onClick}

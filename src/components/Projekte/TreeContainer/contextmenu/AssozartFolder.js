@@ -1,36 +1,41 @@
 // @flow
-import React from 'react'
+import React, { useContext } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
+import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const AssozartFolder = ({
   onClick,
   tree,
-  token
+  token,
 }: {
   onClick: () => void,
   tree: Object,
-  token: String
-}) => (
-  <ErrorBoundary>
-    <ContextMenu id={`${tree.name}assozartFolder`}>
-      <div className="react-contextmenu-title">assoziierte Art</div>
-      {
-        !userIsReadOnly(token) &&
-        <MenuItem
-          onClick={onClick}
-          data={{
-            action: 'insert',
-            table: 'assozart',
-          }}
-        >
-          erstelle neue
-        </MenuItem>
-      }
-    </ContextMenu>
-  </ErrorBoundary>
-)
+  token: String,
+}) => {
+  const { user } = useContext(mobxStoreContext)
 
-export default AssozartFolder
+  return (
+    <ErrorBoundary>
+      <ContextMenu id={`${tree.name}assozartFolder`}>
+        <div className="react-contextmenu-title">assoziierte Art</div>
+        {!userIsReadOnly(user.token) && (
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'insert',
+              table: 'assozart',
+            }}
+          >
+            erstelle neue
+          </MenuItem>
+        )}
+      </ContextMenu>
+    </ErrorBoundary>
+  )
+}
+
+export default observer(AssozartFolder)
