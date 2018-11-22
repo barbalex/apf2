@@ -79,7 +79,6 @@ import setTreeKey2Gql from './setTreeKey2'
 import copyBeobZugeordnetKoordToTpop from '../../../modules/copyBeobZugeordnetKoordToTpop'
 import copyTpopKoordToPop from '../../../modules/copyTpopKoordToPop'
 import setCopyingBiotop from './setCopyingBiotop'
-import setMoving from './setMoving'
 import tpopById from './tpopById'
 import beobById from './beobById'
 import openLowerNodes from './openLowerNodes'
@@ -210,6 +209,7 @@ const TreeContainer = ({
     setToDelete,
     setCopying,
     copying,
+    setMoving,
   } = mobxStore
 
   const datasetToDelete = toDelete
@@ -374,13 +374,10 @@ const TreeContainer = ({
           setActiveApfloraLayers(uniq([...activeApfloraLayers, 'tpop']))
         },
         markForMoving() {
-          client.mutate({
-            mutation: setMoving,
-            variables: { table, id, label },
-          })
+          setMoving({ table, id, label })
         },
         move() {
-          moveTo({ id, addError, client })
+          moveTo({ id, addError, client, setMoving })
         },
         markForCopying() {
           setCopying({ table, id, label, withNextLevel: false })

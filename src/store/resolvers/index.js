@@ -9,7 +9,6 @@ import treeNodeLabelFilterResetExceptAp from './treeNodeLabelFilterResetExceptAp
 import treeMap from './treeMap'
 import buildUrlQuery from './urlQuery'
 import login from './login'
-import moving from './moving'
 import assigningBeob from './assigningBeob'
 import mapMouseCoordinates from './mapMouseCoordinates'
 import copyingBiotop from './copyingBiotop'
@@ -27,7 +26,6 @@ export default ({ history }) => {
     treeMap,
     urlQuery,
     login,
-    moving,
     assigningBeob,
     mapMouseCoordinates,
     copyingBiotop,

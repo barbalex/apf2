@@ -11,16 +11,17 @@ import updateTpopkontrById from './updateTpopkontrById'
 import updateTpopmassnById from './updateTpopmassnById'
 import updateTpopById from './updateTpopById'
 import updatePopById from './updatePopById'
-import setMoving from './setMoving'
 
 export default async ({
   id: newParentId,
   addError,
   client,
+  setMoving,
 }: {
   newParentId: String,
   addError: Object,
   client: Object,
+  setMoving: () => void,
 }): any => {
   const { data } = await client.query({
     query: movingGql,
@@ -123,12 +124,9 @@ export default async ({
       break
   }
   // reset moving
-  client.mutate({
-    mutation: setMoving,
-    variables: {
-      table: null,
-      id: '99999999-9999-9999-9999-999999999999',
-      label: null,
-    },
+  setMoving({
+    table: null,
+    id: '99999999-9999-9999-9999-999999999999',
+    label: null,
   })
 }
