@@ -62,16 +62,13 @@ const enhance = compose(
   observer,
 )
 
-const Populationen = ({
-  fileType,
-  applyMapFilterToExport,
-  client,
-}: {
-  fileType: String,
-  applyMapFilterToExport: Boolean,
-  client: Object,
-}) => {
-  const { mapFilter, addError } = useContext(mobxStoreContext)
+const Populationen = ({ client }: { client: Object }) => {
+  const {
+    mapFilter,
+    addError,
+    exportApplyMapFilter,
+    exportFileType,
+  } = useContext(mobxStoreContext)
   const [expanded, setExpanded] = useState(false)
   const [message, setMessage] = useState(null)
 
@@ -104,9 +101,9 @@ const Populationen = ({
                 exportModule({
                   data: get(data, 'allVPops.nodes', []),
                   fileName: 'Populationen',
-                  fileType,
+                  exportFileType,
                   mapFilter,
-                  applyMapFilterToExport,
+                  exportApplyMapFilter,
                   idKey: 'id',
                   xKey: 'x',
                   yKey: 'y',
@@ -139,9 +136,9 @@ const Populationen = ({
                 exportModule({
                   data: enrichedData,
                   fileName: 'Populationen',
-                  fileType,
+                  exportFileType,
                   mapFilter,
-                  applyMapFilterToExport,
+                  exportApplyMapFilter,
                   idKey: 'id',
                   xKey: 'x',
                   yKey: 'y',
@@ -175,9 +172,9 @@ const Populationen = ({
                 exportModule({
                   data: enrichedData,
                   fileName: 'PopulationenNachNamen',
-                  fileType,
+                  exportFileType,
                   mapFilter,
-                  applyMapFilterToExport,
+                  exportApplyMapFilter,
                   idKey: 'id',
                   xKey: 'x',
                   yKey: 'y',
@@ -208,9 +205,9 @@ const Populationen = ({
                 exportModule({
                   data: get(data, 'allVPopVonapohnestatuses.nodes', []),
                   fileName: 'PopulationenVonApArtenOhneStatus',
-                  fileType,
+                  exportFileType,
                   mapFilter,
-                  applyMapFilterToExport,
+                  exportApplyMapFilter,
                   idKey: 'id',
                   xKey: 'x',
                   yKey: 'y',
@@ -238,9 +235,9 @@ const Populationen = ({
                 exportModule({
                   data: get(data, 'allVPopOhnekoords.nodes', []),
                   fileName: 'PopulationenOhneKoordinaten',
-                  fileType,
+                  exportFileType,
                   mapFilter,
-                  applyMapFilterToExport,
+                  exportApplyMapFilter,
                   addError,
                 })
               } catch (error) {
@@ -265,9 +262,9 @@ const Populationen = ({
                 exportModule({
                   data: get(data, 'allVPopmassnberAnzmassns.nodes', []),
                   fileName: 'PopulationenAnzMassnProMassnber',
-                  fileType,
+                  exportFileType,
                   mapFilter,
-                  applyMapFilterToExport,
+                  exportApplyMapFilter,
                   idKey: 'pop_id',
                   xKey: 'pop_x',
                   yKey: 'pop_y',
@@ -296,9 +293,9 @@ const Populationen = ({
                 exportModule({
                   data: get(data, 'allVPopAnzmassns.nodes', []),
                   fileName: 'PopulationenAnzahlMassnahmen',
-                  fileType,
+                  exportFileType,
                   mapFilter,
-                  applyMapFilterToExport,
+                  exportApplyMapFilter,
                   idKey: 'id',
                   xKey: 'x',
                   yKey: 'y',
@@ -326,9 +323,9 @@ const Populationen = ({
                 exportModule({
                   data: get(data, 'allVPopAnzkontrs.nodes', []),
                   fileName: 'PopulationenAnzahlKontrollen',
-                  fileType,
+                  exportFileType,
                   mapFilter,
-                  applyMapFilterToExport,
+                  exportApplyMapFilter,
                   idKey: 'id',
                   xKey: 'x',
                   yKey: 'y',
@@ -356,9 +353,9 @@ const Populationen = ({
                 exportModule({
                   data: get(data, 'allVPopPopberundmassnbers.nodes', []),
                   fileName: 'PopulationenPopUndMassnBerichte',
-                  fileType,
+                  exportFileType,
                   mapFilter,
-                  applyMapFilterToExport,
+                  exportApplyMapFilter,
                   idKey: 'pop_id',
                   xKey: 'pop_x',
                   yKey: 'pop_y',
@@ -386,9 +383,9 @@ const Populationen = ({
                 exportModule({
                   data: get(data, 'allVPopMitLetzterPopbers.nodes', []),
                   fileName: 'PopulationenMitLetzemPopBericht',
-                  fileType,
+                  exportFileType,
                   mapFilter,
-                  applyMapFilterToExport,
+                  exportApplyMapFilter,
                   idKey: 'pop_id',
                   xKey: 'pop_x',
                   yKey: 'pop_y',
@@ -416,9 +413,9 @@ const Populationen = ({
                 exportModule({
                   data: get(data, 'allVPopMitLetzterPopmassnbers.nodes', []),
                   fileName: 'allVPopMitLetzterPopmassnbers',
-                  fileType,
+                  exportFileType,
                   mapFilter,
-                  applyMapFilterToExport,
+                  exportApplyMapFilter,
                   idKey: 'pop_id',
                   xKey: 'pop_x',
                   yKey: 'pop_y',

@@ -51,6 +51,8 @@ const myTypes = types
     ekfAdresseId: types.optional(types.maybeNull(types.string), null),
     copying: types.optional(Copying, defaultCopying),
     moving: types.optional(Moving, defaultMoving),
+    exportFileType: types.optional(types.maybeNull(types.string), 'xlsx'),
+    exportApplyMapFilter: types.optional(types.boolean, false),
   })
   // structure of these variables is not controlled
   // so need to define this as volatile
@@ -192,6 +194,12 @@ const myTypes = types
     },
     setMoving({ table, id, label }) {
       self.moving = { table, id, label }
+    },
+    setExportFileType(val) {
+      self.exportFileType = val
+    },
+    setExportApplyMapFilter(val) {
+      self.exportApplyMapFilter = val
     },
   }))
 

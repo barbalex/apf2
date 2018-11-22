@@ -61,17 +61,14 @@ const enhance = compose(
   observer,
 )
 
-const AP = ({
-  fileType,
-  applyMapFilterToExport,
-  client,
-}: {
-  fileType: String,
-  applyMapFilterToExport: Boolean,
-  client: Object,
-}) => {
+const AP = ({ client }: { client: Object }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { mapFilter, addError } = mobxStore
+  const {
+    mapFilter,
+    addError,
+    exportApplyMapFilter,
+    exportFileType,
+  } = mobxStore
 
   const [expanded, setExpanded] = useState(false)
   const [message, setMessage] = useState(null)
@@ -87,8 +84,8 @@ const AP = ({
         exportModule({
           data: get(data, 'allVAps.nodes', []),
           fileName: 'AP',
-          fileType,
-          applyMapFilterToExport,
+          exportFileType,
+          exportApplyMapFilter,
           mapFilter,
           addError,
         })
@@ -97,7 +94,7 @@ const AP = ({
       }
       setMessage(null)
     },
-    [fileType, applyMapFilterToExport, mapFilter],
+    [exportFileType, exportApplyMapFilter, mapFilter],
   )
   const onClickApOhnePop = useCallback(
     async () => {
@@ -109,8 +106,8 @@ const AP = ({
         exportModule({
           data: get(data, 'allVApOhnepops.nodes', []),
           fileName: 'ApOhnePopulationen',
-          fileType,
-          applyMapFilterToExport,
+          exportFileType,
+          exportApplyMapFilter,
           mapFilter,
           addError,
         })
@@ -119,7 +116,7 @@ const AP = ({
       }
       setMessage(null)
     },
-    [fileType, applyMapFilterToExport, mapFilter],
+    [exportFileType, exportApplyMapFilter, mapFilter],
   )
   const onClickAnzMassnProAp = useCallback(
     async () => {
@@ -131,8 +128,8 @@ const AP = ({
         exportModule({
           data: get(data, 'allVApAnzmassns.nodes', []),
           fileName: 'ApAnzahlMassnahmen',
-          fileType,
-          applyMapFilterToExport,
+          exportFileType,
+          exportApplyMapFilter,
           mapFilter,
           addError,
         })
@@ -141,7 +138,7 @@ const AP = ({
       }
       setMessage(null)
     },
-    [fileType, applyMapFilterToExport, mapFilter],
+    [exportFileType, exportApplyMapFilter, mapFilter],
   )
   const onClickAnzKontrProAp = useCallback(
     async () => {
@@ -153,8 +150,8 @@ const AP = ({
         exportModule({
           data: get(data, 'allVApAnzkontrs.nodes', []),
           fileName: 'ApAnzahlKontrollen',
-          fileType,
-          applyMapFilterToExport,
+          exportFileType,
+          exportApplyMapFilter,
           mapFilter,
           addError,
         })
@@ -163,7 +160,7 @@ const AP = ({
       }
       setMessage(null)
     },
-    [fileType, applyMapFilterToExport, mapFilter],
+    [exportFileType, exportApplyMapFilter, mapFilter],
   )
   const onClickApBer = useCallback(
     async () => {
@@ -175,8 +172,8 @@ const AP = ({
         exportModule({
           data: get(data, 'allVApbers.nodes', []),
           fileName: 'Jahresberichte',
-          fileType,
-          applyMapFilterToExport,
+          exportFileType,
+          exportApplyMapFilter,
           mapFilter,
           addError,
         })
@@ -185,7 +182,7 @@ const AP = ({
       }
       setMessage(null)
     },
-    [fileType, applyMapFilterToExport, mapFilter],
+    [exportFileType, exportApplyMapFilter, mapFilter],
   )
   const onClickApBerUndMassn = useCallback(
     async () => {
@@ -197,8 +194,8 @@ const AP = ({
         exportModule({
           data: get(data, 'allVApApberundmassns.nodes', []),
           fileName: 'ApJahresberichteUndMassnahmen',
-          fileType,
-          applyMapFilterToExport,
+          exportFileType,
+          exportApplyMapFilter,
           mapFilter,
           addError,
         })
@@ -207,7 +204,7 @@ const AP = ({
       }
       setMessage(null)
     },
-    [fileType, applyMapFilterToExport, mapFilter],
+    [exportFileType, exportApplyMapFilter, mapFilter],
   )
   const onClickZiele = useCallback(
     async () => {
@@ -219,8 +216,8 @@ const AP = ({
         exportModule({
           data: get(data, 'allVZiels.nodes', []),
           fileName: 'ApZiele',
-          fileType,
-          applyMapFilterToExport,
+          exportFileType,
+          exportApplyMapFilter,
           mapFilter,
           addError,
         })
@@ -229,7 +226,7 @@ const AP = ({
       }
       setMessage(null)
     },
-    [fileType, applyMapFilterToExport, mapFilter],
+    [exportFileType, exportApplyMapFilter, mapFilter],
   )
   const onClickZielber = useCallback(
     async () => {
@@ -241,8 +238,8 @@ const AP = ({
         exportModule({
           data: get(data, 'allVZielbers.nodes', []),
           fileName: 'Zielberichte',
-          fileType,
-          applyMapFilterToExport,
+          exportFileType,
+          exportApplyMapFilter,
           mapFilter,
           addError,
         })
@@ -251,7 +248,7 @@ const AP = ({
       }
       setMessage(null)
     },
-    [fileType, applyMapFilterToExport, mapFilter],
+    [exportFileType, exportApplyMapFilter, mapFilter],
   )
   const onClickBer = useCallback(
     async () => {
@@ -263,8 +260,8 @@ const AP = ({
         exportModule({
           data: get(data, 'allVBers.nodes', []),
           fileName: 'Berichte',
-          fileType,
-          applyMapFilterToExport,
+          exportFileType,
+          exportApplyMapFilter,
           mapFilter,
           addError,
         })
@@ -273,7 +270,7 @@ const AP = ({
       }
       setMessage(null)
     },
-    [fileType, applyMapFilterToExport, mapFilter],
+    [exportFileType, exportApplyMapFilter, mapFilter],
   )
   const onClickErfkrit = useCallback(
     async () => {
@@ -285,8 +282,8 @@ const AP = ({
         exportModule({
           data: get(data, 'allVErfkrits.nodes', []),
           fileName: 'Erfolgskriterien',
-          fileType,
-          applyMapFilterToExport,
+          exportFileType,
+          exportApplyMapFilter,
           mapFilter,
           addError,
         })
@@ -295,7 +292,7 @@ const AP = ({
       }
       setMessage(null)
     },
-    [fileType, applyMapFilterToExport, mapFilter],
+    [exportFileType, exportApplyMapFilter, mapFilter],
   )
   const onClickIdealbiotop = useCallback(
     async () => {
@@ -307,8 +304,8 @@ const AP = ({
         exportModule({
           data: get(data, 'allVIdealbiotops.nodes', []),
           fileName: 'Idealbiotope',
-          fileType,
-          applyMapFilterToExport,
+          exportFileType,
+          exportApplyMapFilter,
           mapFilter,
           addError,
         })
@@ -317,7 +314,7 @@ const AP = ({
       }
       setMessage(null)
     },
-    [fileType, applyMapFilterToExport, mapFilter],
+    [exportFileType, exportApplyMapFilter, mapFilter],
   )
   const onClickAssozarten = useCallback(
     async () => {
@@ -329,8 +326,8 @@ const AP = ({
         exportModule({
           data: get(data, 'allVAssozarts.nodes', []),
           fileName: 'AssoziierteArten',
-          fileType,
-          applyMapFilterToExport,
+          exportFileType,
+          exportApplyMapFilter,
           mapFilter,
           addError,
         })
@@ -339,7 +336,7 @@ const AP = ({
       }
       setMessage(null)
     },
-    [fileType, applyMapFilterToExport, mapFilter],
+    [exportFileType, exportApplyMapFilter, mapFilter],
   )
 
   return (

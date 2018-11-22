@@ -61,16 +61,13 @@ const enhance = compose(
   observer,
 )
 
-const Kontrollen = ({
-  fileType,
-  applyMapFilterToExport,
-  client,
-}: {
-  fileType: String,
-  applyMapFilterToExport: Boolean,
-  client: Object,
-}) => {
-  const { mapFilter, addError } = useContext(mobxStoreContext)
+const Kontrollen = ({ client }: { client: Object }) => {
+  const {
+    mapFilter,
+    addError,
+    exportApplyMapFilter,
+    exportFileType,
+  } = useContext(mobxStoreContext)
   const [expanded, setExpanded] = useState(false)
   const [message, setMessage] = useState(null)
 
@@ -103,8 +100,8 @@ const Kontrollen = ({
                 exportModule({
                   data: get(data, 'allVTpopkontrs.nodes', []),
                   fileName: 'Kontrollen',
-                  fileType,
-                  applyMapFilterToExport,
+                  exportFileType,
+                  exportApplyMapFilter,
                   mapFilter,
                   idKey: 'tpop_id',
                   xKey: 'tpop_x',
@@ -131,8 +128,8 @@ const Kontrollen = ({
                 exportModule({
                   data: get(data, 'allVTpopkontrWebgisbuns.nodes', []),
                   fileName: 'KontrollenWebGisBun',
-                  fileType,
-                  applyMapFilterToExport,
+                  exportFileType,
+                  exportApplyMapFilter,
                   mapFilter,
                   idKey: 'TPOPGUID',
                   xKey: 'KONTR_X',
@@ -161,8 +158,8 @@ const Kontrollen = ({
                 exportModule({
                   data: get(data, 'allVKontrzaehlAnzproeinheits.nodes', []),
                   fileName: 'KontrollenAnzahlProZaehleinheit',
-                  fileType,
-                  applyMapFilterToExport,
+                  exportFileType,
+                  exportApplyMapFilter,
                   mapFilter,
                   idKey: 'tpop_id',
                   xKey: 'tpop_x',

@@ -63,17 +63,14 @@ const enhance = compose(
   observer,
 )
 
-const Beobachtungen = ({
-  fileType,
-  applyMapFilterToExport,
-  client,
-}: {
-  fileType: String,
-  applyMapFilterToExport: Boolean,
-  client: Object,
-}) => {
+const Beobachtungen = ({ client }: { client: Object }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { mapFilter, addError } = mobxStore
+  const {
+    mapFilter,
+    addError,
+    exportApplyMapFilter,
+    exportFileType,
+  } = mobxStore
 
   const [expanded, setExpanded] = useState(false)
   const [message, setMessage] = useState(null)
@@ -89,8 +86,8 @@ const Beobachtungen = ({
         exportModule({
           data: get(data, 'allVBeobArtChangeds.nodes', []),
           fileName: 'BeobachtungenArtVeraendert',
-          fileType,
-          applyMapFilterToExport,
+          exportFileType,
+          exportApplyMapFilter,
           mapFilter,
           idKey: 'id',
           xKey: 'x',
@@ -102,7 +99,7 @@ const Beobachtungen = ({
       }
       setMessage(null)
     },
-    [fileType, applyMapFilterToExport],
+    [exportFileType, exportApplyMapFilter],
   )
 
   return (
@@ -134,8 +131,8 @@ const Beobachtungen = ({
                 exportModule({
                   data: get(data, 'allVBeobs.nodes', []),
                   fileName: 'Beobachtungen',
-                  fileType,
-                  applyMapFilterToExport,
+                  exportFileType,
+                  exportApplyMapFilter,
                   mapFilter,
                   idKey: 'id',
                   xKey: 'x',

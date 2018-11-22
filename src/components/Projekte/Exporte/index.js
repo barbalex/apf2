@@ -1,8 +1,5 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
-import compose from 'recompose/compose'
-import { observer } from 'mobx-react-lite'
 
 import FormTitle from '../../shared/FormTitle'
 import Tipps from './Tipps'
@@ -15,8 +12,6 @@ import Beobachtungen from './Beobachtungen'
 import Anwendung from './Anwendung'
 import Optionen from './Optionen'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import withLocalData from './withLocalData'
-import mobxStoreContext from '../../../mobxStoreContext'
 
 const Container = styled.div`
   height: 100%;
@@ -43,67 +38,25 @@ const ExporteContainer = styled.div`
   height: 100%;
 `
 
-const enhance = compose(
-  withLocalData,
-  observer,
+const Exporte = () => (
+  <ExporteContainer>
+    <ErrorBoundary>
+      <Container>
+        <FormTitle title="Exporte" />
+        <FieldsContainer>
+          <Optionen />
+          <Tipps />
+          <Ap />
+          <Populationen />
+          <Teilpopulationen />
+          <Kontrollen />
+          <Massnahmen />
+          <Beobachtungen />
+          <Anwendung />
+        </FieldsContainer>
+      </Container>
+    </ErrorBoundary>
+  </ExporteContainer>
 )
 
-const Exporte = ({ localData }: { localData: Object }) => {
-  const mobxStore = useContext(mobxStoreContext)
-  const { mapFilter } = mobxStore
-
-  const applyMapFilterToExport = get(localData, 'export.applyMapFilterToExport')
-  const fileType = get(localData, 'export.fileType')
-
-  if (localData.error) return `Fehler: ${localData.error.message}`
-  return (
-    <ExporteContainer>
-      <ErrorBoundary>
-        <Container>
-          <FormTitle title="Exporte" />
-          <FieldsContainer>
-            <Optionen
-              mapFilter={mapFilter}
-              applyMapFilterToExport={applyMapFilterToExport}
-              fileType={fileType}
-            />
-            <Tipps />
-            <Ap
-              applyMapFilterToExport={applyMapFilterToExport}
-              fileType={fileType}
-              mapFilter={mapFilter}
-            />
-            <Populationen
-              mapFilter={mapFilter}
-              applyMapFilterToExport={applyMapFilterToExport}
-              fileType={fileType}
-            />
-            <Teilpopulationen
-              mapFilter={mapFilter}
-              applyMapFilterToExport={applyMapFilterToExport}
-              fileType={fileType}
-            />
-            <Kontrollen
-              mapFilter={mapFilter}
-              applyMapFilterToExport={applyMapFilterToExport}
-              fileType={fileType}
-            />
-            <Massnahmen
-              mapFilter={mapFilter}
-              applyMapFilterToExport={applyMapFilterToExport}
-              fileType={fileType}
-            />
-            <Beobachtungen
-              mapFilter={mapFilter}
-              applyMapFilterToExport={applyMapFilterToExport}
-              fileType={fileType}
-            />
-            <Anwendung />
-          </FieldsContainer>
-        </Container>
-      </ErrorBoundary>
-    </ExporteContainer>
-  )
-}
-
-export default enhance(Exporte)
+export default Exporte

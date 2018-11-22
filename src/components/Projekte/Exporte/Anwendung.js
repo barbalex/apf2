@@ -63,16 +63,10 @@ const enhance = compose(
   observer,
 )
 
-const Anwendung = ({
-  fileType,
-  applyMapFilterToExport,
-  client,
-}: {
-  fileType: String,
-  applyMapFilterToExport: Boolean,
-  client: Object,
-}) => {
-  const { addError } = useContext(mobxStoreContext)
+const Anwendung = ({ client }: { client: Object }) => {
+  const { addError, exportApplyMapFilter, exportFileType } = useContext(
+    mobxStoreContext,
+  )
 
   const [expanded, setExpanded] = useState(false)
   const [message, setMessage] = useState(null)
@@ -102,8 +96,8 @@ const Anwendung = ({
         exportModule({
           data: get(data, 'allVDatenstrukturs.nodes', []),
           fileName: 'Datenstruktur',
-          fileType,
-          applyMapFilterToExport,
+          exportFileType,
+          exportApplyMapFilter,
           addError,
         })
       } catch (error) {
@@ -111,7 +105,7 @@ const Anwendung = ({
       }
       setMessage(null)
     },
-    [fileType, applyMapFilterToExport],
+    [exportFileType, exportApplyMapFilter],
   )
 
   return (

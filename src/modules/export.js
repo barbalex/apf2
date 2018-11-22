@@ -9,8 +9,8 @@ import exportKml from './exportKml'
 export default async ({
   data: dataPassed,
   fileName,
-  fileType,
-  applyMapFilterToExport,
+  exportFileType,
+  exportApplyMapFilter,
   kml,
   mapFilter = {},
   idKey,
@@ -20,8 +20,8 @@ export default async ({
 }: {
   data: Array<Object>,
   fileName: String,
-  fileType: String,
-  applyMapFilterToExport: Boolean,
+  exportFileType: String,
+  exportApplyMapFilter: Boolean,
   kml: Boolean,
   mapFilter: Object,
   idKey: String,
@@ -34,7 +34,7 @@ export default async ({
   const filterFeatures = mapFilter.features
   if (
     filterFeatures.length > 0 &&
-    applyMapFilterToExport &&
+    exportApplyMapFilter &&
     idKey &&
     xKey &&
     yKey
@@ -65,7 +65,7 @@ export default async ({
       fileName,
       data,
     })
-  } else if (fileType === 'csv') {
+  } else if (exportFileType === 'csv') {
     exportCsv({
       fileName,
       data,

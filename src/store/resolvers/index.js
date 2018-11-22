@@ -2,7 +2,6 @@
 import merge from 'lodash/merge'
 
 import buildTreeKey from './treeKey'
-import exportKey from './exportKey'
 import treeNodeLabelFilterKey from './treeNodeLabelFilterKey'
 import treeNodeLabelFilter from './treeNodeLabelFilter'
 import treeNodeLabelFilterResetExceptAp from './treeNodeLabelFilterResetExceptAp'
@@ -19,7 +18,6 @@ export default ({ history }) => {
   const urlQuery = buildUrlQuery({ history })
   const resolvers = merge(
     treeKey,
-    exportKey,
     treeNodeLabelFilterKey,
     treeNodeLabelFilter,
     treeNodeLabelFilterResetExceptAp,

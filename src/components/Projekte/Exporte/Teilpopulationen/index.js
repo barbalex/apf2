@@ -73,13 +73,9 @@ const enhance = compose(
 )
 
 const Teilpopulationen = ({
-  fileType,
-  applyMapFilterToExport,
   data,
   client,
 }: {
-  fileType: String,
-  applyMapFilterToExport: Boolean,
   data: Object,
   client: Object,
 }) => {
@@ -93,7 +89,12 @@ const Teilpopulationen = ({
     'artname',
   )
 
-  const { mapFilter, addError } = useContext(mobxStoreContext)
+  const {
+    mapFilter,
+    addError,
+    exportApplyMapFilter,
+    exportFileType,
+  } = useContext(mobxStoreContext)
 
   const [expanded, setExpanded] = useState(false)
   const [message, setMessage] = useState(null)
@@ -127,9 +128,9 @@ const Teilpopulationen = ({
         exportModule({
           data: enrichedData,
           fileName: 'Teilpopulationen',
-          fileType,
+          exportFileType,
           mapFilter,
-          applyMapFilterToExport,
+          exportApplyMapFilter,
           idKey: 'id',
           xKey: 'x',
           yKey: 'y',
@@ -140,7 +141,7 @@ const Teilpopulationen = ({
       }
       setMessage(null)
     },
-    [fileType, applyMapFilterToExport],
+    [exportFileType, exportApplyMapFilter],
   )
 
   if (data.error) return `Fehler: ${data.error.message}`
@@ -177,8 +178,8 @@ const Teilpopulationen = ({
                 exportModule({
                   data: get(data, 'allVTpopWebgisbuns.nodes', []),
                   fileName: 'TeilpopulationenWebGisBun',
-                  fileType,
-                  applyMapFilterToExport,
+                  exportFileType,
+                  exportApplyMapFilter,
                   mapFilter,
                   idKey: 'TPOPID',
                   xKey: 'TPOP_X',
@@ -212,8 +213,8 @@ const Teilpopulationen = ({
                 exportModule({
                   data: enrichedData,
                   fileName: 'Teilpopulationen',
-                  fileType,
-                  applyMapFilterToExport,
+                  exportFileType,
+                  exportApplyMapFilter,
                   mapFilter,
                   idKey: 'id',
                   xKey: 'x',
@@ -255,8 +256,8 @@ const Teilpopulationen = ({
                 exportModule({
                   data: enrichedData,
                   fileName: 'TeilpopulationenNachNamen',
-                  fileType,
-                  applyMapFilterToExport,
+                  exportFileType,
+                  exportApplyMapFilter,
                   mapFilter,
                   idKey: 'id',
                   xKey: 'x',
@@ -287,8 +288,8 @@ const Teilpopulationen = ({
                 exportModule({
                   data: get(data, 'allVTpopOhnebekanntseits.nodes', []),
                   fileName: 'TeilpopulationenVonApArtenOhneBekanntSeit',
-                  fileType,
-                  applyMapFilterToExport,
+                  exportFileType,
+                  exportApplyMapFilter,
                   mapFilter,
                   idKey: 'id',
                   xKey: 'x',
@@ -318,8 +319,8 @@ const Teilpopulationen = ({
                 exportModule({
                   data: get(data, 'allVTpopOhneapberichtrelevants.nodes', []),
                   fileName: 'TeilpopulationenOhneApBerichtRelevant',
-                  fileType,
-                  applyMapFilterToExport,
+                  exportFileType,
+                  exportApplyMapFilter,
                   mapFilter,
                   idKey: 'id',
                   xKey: 'x',
@@ -349,8 +350,8 @@ const Teilpopulationen = ({
                 exportModule({
                   data: get(data, 'allVTpopAnzmassns.nodes', []),
                   fileName: 'TeilpopulationenAnzahlMassnahmen',
-                  fileType,
-                  applyMapFilterToExport,
+                  exportFileType,
+                  exportApplyMapFilter,
                   mapFilter,
                   idKey: 'id',
                   xKey: 'x',
@@ -384,8 +385,8 @@ const Teilpopulationen = ({
                   ),
                   fileName:
                     'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht',
-                  fileType,
-                  applyMapFilterToExport,
+                  exportFileType,
+                  exportApplyMapFilter,
                   mapFilter,
                   idKey: 'id',
                   xKey: 'x',
@@ -469,8 +470,8 @@ const Teilpopulationen = ({
                 exportModule({
                   data: get(data, 'allVTpopPopberundmassnbers.nodes', []),
                   fileName: 'TeilpopulationenTPopUndMassnBerichte',
-                  fileType,
-                  applyMapFilterToExport,
+                  exportFileType,
+                  exportApplyMapFilter,
                   mapFilter,
                   idKey: 'tpop_id',
                   xKey: 'tpop_x',

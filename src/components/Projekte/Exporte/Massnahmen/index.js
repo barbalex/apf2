@@ -62,17 +62,15 @@ const enhance = compose(
 )
 
 const Massnahmen = ({
-  fileType,
-  applyMapFilterToExport,
   addError,
   client,
 }: {
-  fileType: String,
-  applyMapFilterToExport: Boolean,
   addError: () => void,
   client: Object,
 }) => {
-  const { mapFilter } = useContext(mobxStoreContext)
+  const { mapFilter, exportApplyMapFilter, exportFileType } = useContext(
+    mobxStoreContext,
+  )
   const [expanded, setExpanded] = useState(false)
   const [message, setMessage] = useState(null)
 
@@ -105,8 +103,8 @@ const Massnahmen = ({
                 exportModule({
                   data: get(data, 'allVMassns.nodes', []),
                   fileName: 'Massnahmen',
-                  fileType,
-                  applyMapFilterToExport,
+                  exportFileType,
+                  exportApplyMapFilter,
                   mapFilter,
                   idKey: 'tpop_id',
                   xKey: 'tpop_x',
@@ -133,8 +131,8 @@ const Massnahmen = ({
                 exportModule({
                   data: get(data, 'allVMassnWebgisbuns.nodes', []),
                   fileName: 'MassnahmenWebGisBun',
-                  fileType,
-                  applyMapFilterToExport,
+                  exportFileType,
+                  exportApplyMapFilter,
                   mapFilter,
                   idKey: 'TPOPGUID',
                   xKey: 'TPOP_X',

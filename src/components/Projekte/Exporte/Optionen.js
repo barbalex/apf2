@@ -56,16 +56,14 @@ const enhance = compose(
   observer,
 )
 
-const Optionen = ({
-  fileType,
-  applyMapFilterToExport,
-  client,
-}: {
-  fileType: String,
-  applyMapFilterToExport: Boolean,
-  client: Object,
-}) => {
-  const { mapFilter: mapFilterRaw } = useContext(mobxStoreContext)
+const Optionen = ({ client }: { client: Object }) => {
+  const {
+    mapFilter: mapFilterRaw,
+    setExportFileType,
+    setExportApplyMapFilter,
+    exportApplyMapFilter,
+    exportFileType,
+  } = useContext(mobxStoreContext)
   const mapFilter = mapFilterRaw.toJSON()
   const [expanded, setExpanded] = useState(true)
 
@@ -91,27 +89,11 @@ const Optionen = ({
           <StyledFormControlLabel
             control={
               <StyledCheckbox
-                checked={fileType === 'csv'}
-                onChange={() => {
-                  client.mutate({
-                    mutation: gql`
-                      mutation setExportKey($key: String!, $value: Array!) {
-                        setExportKey(key: $key, value: $value) @client {
-                          export @client {
-                            applyMapFilterToExport
-                            fileType
-                            __typename: Export
-                          }
-                        }
-                      }
-                    `,
-                    variables: {
-                      value: fileType === 'csv' ? 'xlsx' : 'csv',
-                      key: 'fileType',
-                    },
-                  })
-                }}
-                value={fileType}
+                checked={exportFileType === 'csv'}
+                onChange={() =>
+                  setExportFileType(exportFileType === 'csv' ? 'xlsx' : 'csv')
+                }
+                value={exportFileType}
                 color="primary"
               />
             }
@@ -120,27 +102,9 @@ const Optionen = ({
           <StyledFormControlLabel
             control={
               <StyledCheckbox
-                checked={applyMapFilterToExport}
-                onChange={() => {
-                  client.mutate({
-                    mutation: gql`
-                      mutation setExportKey($key: String!, $value: Array!) {
-                        setExportKey(key: $key, value: $value) @client {
-                          export @client {
-                            applyMapFilterToExport
-                            fileType
-                            __typename: Export
-                          }
-                        }
-                      }
-                    `,
-                    variables: {
-                      value: !applyMapFilterToExport,
-                      key: 'applyMapFilterToExport',
-                    },
-                  })
-                }}
-                value={applyMapFilterToExport.toString()}
+                checked={exportApplyMapFilter}
+                onChange={() => setExportApplyMapFilter(!exportApplyMapFilter)}
+                value={exportApplyMapFilter.toString()}
                 color="primary"
               />
             }

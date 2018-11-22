@@ -48,9 +48,4 @@ export default {
     username: '',
     __typename: 'Login',
   },
-  export: {
-    applyMapFilterToExport: false,
-    fileType: 'xlsx',
-    __typename: 'Export',
-  },
 }
