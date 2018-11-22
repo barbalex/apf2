@@ -1,5 +1,4 @@
 //@flow
-import clone from 'lodash/clone'
 import isEqual from 'lodash/isEqual'
 
 import setTreeKeyGql from './setTreeKey'
@@ -18,15 +17,15 @@ export default async ({ value, id, tree, refetch, refetchTree, client }) => {
   })
   // need to update activeNodeArray and openNodes
   const { activeNodeArray, openNodes } = tree
-  let newActiveNodeArray = clone(activeNodeArray)
+  let newActiveNodeArray = [...activeNodeArray]
   newActiveNodeArray[4] = value
     ? 'nicht-zuzuordnende-Beobachtungen'
     : 'nicht-beurteilte-Beobachtungen'
   newActiveNodeArray[5] = id
   newActiveNodeArray = newActiveNodeArray.slice(0, 6)
-  const oldParentNodeUrl = clone(activeNodeArray)
+  const oldParentNodeUrl = [...activeNodeArray]
   oldParentNodeUrl.pop()
-  const newParentNodeUrl = clone(newActiveNodeArray)
+  const newParentNodeUrl = [...newActiveNodeArray]
   newParentNodeUrl.pop()
   let newOpenNodes = openNodes.map(n => {
     if (isEqual(n, activeNodeArray)) return newActiveNodeArray

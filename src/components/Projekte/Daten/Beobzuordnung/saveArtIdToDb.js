@@ -1,5 +1,4 @@
 //@flow
-import clone from 'lodash/clone'
 import isEqual from 'lodash/isEqual'
 import get from 'lodash/get'
 import gql from 'graphql-tag'
@@ -38,9 +37,9 @@ export default async ({ value, row, tree, refetchTree, client }) => {
     // aNA = activeNodeArray
     const newApId = get(result, 'data.aeEigenschaftenById.apByArtId.id')
     const newANA = [aNA[0], aNA[1], aNA[2], newApId, aNA[4], aNA[5]]
-    const oldParentNodeUrl = clone(aNA)
+    const oldParentNodeUrl = [...aNA]
     oldParentNodeUrl.pop()
-    const oldGParentNodeUrl = clone(oldParentNodeUrl)
+    const oldGParentNodeUrl = [...oldParentNodeUrl]
     oldGParentNodeUrl.pop()
 
     // need to close:

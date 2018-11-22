@@ -1,5 +1,4 @@
 // @flow
-import clone from 'lodash/clone'
 import gql from 'graphql-tag'
 
 import isNodeOpen from './isNodeOpen'
@@ -29,7 +28,7 @@ export default ({
     }
   }
 
-  const newActiveNodeArray = clone(node.url)
+  const newActiveNodeArray = [...node.url]
   const nodeIsOpen = isNodeOpen(tree.openNodes, node.url)
   if (nodeIsOpen && isNodeInActiveNodePath(node, tree.activeNodeArray)) {
     // need to check if node is last in activeNodePath

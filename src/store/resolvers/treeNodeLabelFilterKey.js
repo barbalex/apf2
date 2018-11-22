@@ -4,7 +4,6 @@
  */
 import isEqual from 'lodash/isEqual'
 import get from 'lodash/get'
-import clone from 'lodash/clone'
 import upperFirst from 'lodash/upperFirst'
 import gql from 'graphql-tag'
 
@@ -93,7 +92,7 @@ export default {
       // only write if changed
       if (!isEqual(oldValue, value)) {
         const oldNodeLabelFilter = get(data, `${tree}.nodeLabelFilter`)
-        const newNodeLabelFilter = clone(oldNodeLabelFilter)
+        const newNodeLabelFilter = { ...oldNodeLabelFilter }
         newNodeLabelFilter[key] = value
         cache.writeData({
           data: {

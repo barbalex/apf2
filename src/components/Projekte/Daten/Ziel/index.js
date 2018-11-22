@@ -2,7 +2,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import clone from 'lodash/clone'
 import isEqual from 'lodash/isEqual'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
@@ -97,11 +96,11 @@ const Ziel = ({
       setErrors({})
       // if jahr of ziel is updated, activeNodeArray und openNodes need to change
       if (field === 'jahr') {
-        const newActiveNodeArray = clone(activeNodeArray)
+        const newActiveNodeArray = [...activeNodeArray]
         newActiveNodeArray[5] = +value
-        const oldParentNodeUrl = clone(activeNodeArray)
+        const oldParentNodeUrl = [...activeNodeArray]
         oldParentNodeUrl.pop()
-        const newParentNodeUrl = clone(newActiveNodeArray)
+        const newParentNodeUrl = [...newActiveNodeArray]
         newParentNodeUrl.pop()
         let newOpenNodes = openNodes.map(n => {
           if (isEqual(n, activeNodeArray)) return newActiveNodeArray

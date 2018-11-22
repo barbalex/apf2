@@ -6,7 +6,6 @@ import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import get from 'lodash/get'
-import clone from 'lodash/clone'
 import { observer } from 'mobx-react-lite'
 
 import isMobilePhone from '../../../modules/isMobilePhone'
@@ -47,7 +46,7 @@ const MyAppBar = ({
   role: string,
   localData: () => void,
 }) => {
-  const { deletedDatasets, user } = useContext(mobxStoreContext)
+  const { deletedDatasets, user, urlQuery } = useContext(mobxStoreContext)
   const { idb } = useContext(idbContext)
 
   const [anchorEl, setAnchorEl] = useState(null)
@@ -58,7 +57,7 @@ const MyAppBar = ({
    * need to clone projekteTabs
    * because otherwise removing elements errors out (because elements are sealed)
    */
-  const projekteTabs = clone(get(localData, 'urlQuery.projekteTabs', []))
+  const projekteTabs = { ...urlQuery }
   const exporteIsActive = !!activeNodes.projekt
   const isMobile = isMobilePhone()
 

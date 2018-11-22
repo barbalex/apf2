@@ -1,6 +1,5 @@
 // @flow
 import isEqual from 'lodash/isEqual'
-import clone from 'lodash/clone'
 import gql from 'graphql-tag'
 
 import isNodeOpen from './isNodeOpen'
@@ -16,7 +15,7 @@ export default ({
 }): any => {
   if (!node.url) throw new Error('passed node has no url')
 
-  let newOpenNodes = clone(tree.openNodes)
+  let newOpenNodes = [...tree.openNodes]
   if (isNodeOpen(tree.openNodes, node.url)) {
     newOpenNodes = newOpenNodes.filter(n => !isEqual(n, node.url))
   } else {

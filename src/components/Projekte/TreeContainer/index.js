@@ -5,7 +5,6 @@
 import React, { useEffect, useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import clone from 'lodash/clone'
 import get from 'lodash/get'
 import uniq from 'lodash/uniq'
 import isEqual from 'lodash/isEqual'
@@ -238,7 +237,7 @@ const TreeContainer = ({
       existsOnlyOneProjekt &&
       projektNode
     ) {
-      const projektUrl = clone(projektNode.url)
+      const projektUrl = [...projektNode.url]
       client.mutate({
         mutation: setTreeKeyGql,
         variables: {

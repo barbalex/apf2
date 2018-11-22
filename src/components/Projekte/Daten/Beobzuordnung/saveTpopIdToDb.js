@@ -1,5 +1,4 @@
 //@flow
-import clone from 'lodash/clone'
 import isEqual from 'lodash/isEqual'
 import get from 'lodash/get'
 import gql from 'graphql-tag'
@@ -53,13 +52,13 @@ export default async ({ value, id, tree, refetchTree, type, client }) => {
       'Beobachtungen',
       id,
     ]
-    const oldParentNodeUrl = clone(aNA)
+    const oldParentNodeUrl = [...aNA]
     oldParentNodeUrl.pop()
-    const oldGParentNodeUrl = clone(oldParentNodeUrl)
+    const oldGParentNodeUrl = [...oldParentNodeUrl]
     oldGParentNodeUrl.pop()
-    const oldGGParentNodeUrl = clone(oldGParentNodeUrl)
+    const oldGGParentNodeUrl = [...oldGParentNodeUrl]
     oldGGParentNodeUrl.pop()
-    const oldGGGParentNodeUrl = clone(oldGGParentNodeUrl)
+    const oldGGGParentNodeUrl = [...oldGGParentNodeUrl]
     oldGGGParentNodeUrl.pop()
     if (['nichtZuzuordnen', 'nichtBeurteilt'].includes(type)) {
       newOpenNodes = [
@@ -178,15 +177,15 @@ export default async ({ value, id, tree, refetchTree, type, client }) => {
       'nicht-beurteilte-Beobachtungen',
       id,
     ]
-    const oldParentNodeUrl = clone(aNA)
+    const oldParentNodeUrl = [...aNA]
     oldParentNodeUrl.pop()
-    const oldGParentNodeUrl = clone(oldParentNodeUrl)
+    const oldGParentNodeUrl = [...oldParentNodeUrl]
     oldGParentNodeUrl.pop()
-    const oldGGParentNodeUrl = clone(oldGParentNodeUrl)
+    const oldGGParentNodeUrl = [...oldGParentNodeUrl]
     oldGGParentNodeUrl.pop()
-    const oldGGGParentNodeUrl = clone(oldGGParentNodeUrl)
+    const oldGGGParentNodeUrl = [...oldGGParentNodeUrl]
     oldGGGParentNodeUrl.pop()
-    const oldGGGGParentNodeUrl = clone(oldGGGParentNodeUrl)
+    const oldGGGGParentNodeUrl = [...oldGGGParentNodeUrl]
     oldGGGGParentNodeUrl.pop()
     if (['nichtZuzuordnen', 'nichtBeurteilt'].includes(type)) {
       newOpenNodes = [

@@ -7,17 +7,15 @@ import Divider from '@material-ui/core/Divider'
 import FilterIcon from '@material-ui/icons/FilterList'
 import DeleteFilterIcon from '@material-ui/icons/DeleteSweep'
 import remove from 'lodash/remove'
-import get from 'lodash/get'
-import clone from 'lodash/clone'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
 import { observer } from 'mobx-react-lite'
 import { withApollo } from 'react-apollo'
 
-import isMobilePhone from '../../../modules/isMobilePhone'
-import setUrlQueryValue from '../../../modules/setUrlQueryValue'
-import mobxStoreContext from '../../../mobxStoreContext'
-import historyContext from '../../../historyContext'
+import isMobilePhone from '../../modules/isMobilePhone'
+import setUrlQueryValue from '../../modules/setUrlQueryValue'
+import mobxStoreContext from '../../mobxStoreContext'
+import historyContext from '../../historyContext'
 
 const StyledIconButton = styled.div`
   height: 30px !important;
@@ -103,7 +101,7 @@ const MyAppBarDaten = ({
     event => {
       // catch case when inner filter button was clicked
       if (event.target.localName !== 'span') return
-      const copyOfProjekteTabs = clone(projekteTabs)
+      const copyOfProjekteTabs = [...projekteTabs]
       if (isMobilePhone()) {
         // show one tab only
         setUrlQueryValue({
