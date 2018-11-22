@@ -41,7 +41,6 @@ import historyListen from './modules/historyListen'
 import { Provider as MobxProvider } from './mobxStoreContext'
 import { Provider as IdbProvider } from './idbContext'
 import { Provider as HistoryProvider } from './historyContext'
-import { onPatch } from 'mobx-state-tree'
 
 import './index.css'
 import createInitialMobxStore from './mobxStore/initial'

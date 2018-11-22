@@ -17,7 +17,6 @@ import 'proj4'
 import 'proj4leaflet'
 import debounceHandler from '@hocs/debounce-handler'
 import sortBy from 'lodash/sortBy'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { withApollo } from 'react-apollo'
 

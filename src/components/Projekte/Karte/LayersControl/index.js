@@ -5,7 +5,6 @@ import { MuiThemeProvider } from '@material-ui/core/styles'
 import theme from '../../../../theme'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
 import Overlays from './Overlays'
