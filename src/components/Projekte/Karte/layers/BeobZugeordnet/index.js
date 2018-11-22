@@ -35,7 +35,7 @@ const BeobZugeordnetMarker = ({
   leaflet: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { apfloraLayers } = mobxStore
+  const { apfloraLayers, assigningBeob } = mobxStore
   const beobZugeordnetFilterString = get(tree, 'nodeLabelFilter.beobZugeordnet')
   const aparts = get(
     data,
@@ -63,6 +63,7 @@ const BeobZugeordnetMarker = ({
       apfloraLayers,
       data,
       mapIdsFiltered,
+      assigningBeob,
     })
     return <MarkerCluster markers={markers} />
   }
@@ -75,6 +76,7 @@ const BeobZugeordnetMarker = ({
     refetchTree,
     mapIdsFiltered,
     map: leaflet.map,
+    assigningBeob,
   })
   return <Marker markers={markers} />
 }

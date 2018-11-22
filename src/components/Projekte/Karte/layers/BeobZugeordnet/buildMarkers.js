@@ -28,6 +28,7 @@ export default ({
   mapIdsFiltered,
   map,
   apfloraLayers,
+  assigningBeob,
 }: {
   beobs: Array<Object>,
   tree: Object,
@@ -38,9 +39,9 @@ export default ({
   mapIdsFiltered: Array<String>,
   map: Object,
   apfloraLayers: Array<String>,
+  assigningBeob: Boolean,
 }): Array<Object> => {
   const { ap, projekt } = activeNodes
-  const assigning = get(data, 'assigningBeob')
 
   return beobs.map(beob => {
     const isHighlighted = mapIdsFiltered.includes(beob.id)
@@ -57,7 +58,7 @@ export default ({
     return window.L.marker(latLng, {
       title: label,
       icon,
-      draggable: assigning,
+      draggable: assigningBeob,
       zIndexOffset: -apfloraLayers.findIndex(
         apfloraLayer => apfloraLayer.value === 'beobZugeordnet',
       ),

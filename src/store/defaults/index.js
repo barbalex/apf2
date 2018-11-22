@@ -31,5 +31,4 @@ export default {
     feldkontrTab: 'entwicklung',
     __typename: 'UrlQuery',
   },
-  assigningBeob: false,
 }

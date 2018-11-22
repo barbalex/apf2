@@ -8,7 +8,6 @@ export default gql`
     tree2 @client {
       activeNodeArray
     }
-    assigningBeob @client
     pop: allPops(
       filter: { apId: { in: $ap }, x: { isNull: false }, y: { isNull: false } }
     ) @include(if: $isAp) {

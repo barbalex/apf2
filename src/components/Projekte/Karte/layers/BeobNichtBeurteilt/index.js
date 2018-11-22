@@ -35,7 +35,7 @@ const BeobNichtBeurteiltMarker = ({
   client: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { apfloraLayers } = mobxStore
+  const { apfloraLayers, assigningBeob } = mobxStore
   const beobNichtBeurteiltFilterString = get(
     tree,
     'nodeLabelFilter.beobNichtBeurteilt',
@@ -66,6 +66,7 @@ const BeobNichtBeurteiltMarker = ({
       apfloraLayers,
       data,
       mapIdsFiltered,
+      assigningBeob,
     })
     return <MarkerCluster markers={markers} />
   }
@@ -78,6 +79,7 @@ const BeobNichtBeurteiltMarker = ({
     mapIdsFiltered,
     refetchTree,
     client,
+    assigningBeob,
   })
   return <Marker markers={markers} />
 }

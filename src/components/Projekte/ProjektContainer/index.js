@@ -233,6 +233,7 @@ const ProjekteContainer = props => {
     nodeFilter,
     user,
     isPrint,
+    assigningBeob,
   } = useContext(mobxStoreContext)
   const { idb } = useContext(idbContext)
   const mapFilter = mapFilterRaw.toJSON()
@@ -421,7 +422,6 @@ const ProjekteContainer = props => {
       : tabs.length === 0
       ? 1
       : 1 / tabs.length
-  const assigning = get(data, 'assigningBeob')
   const mapPopIdsFiltered = idsInsideFeatureCollection({
     mapFilter,
     data: get(data, `popForMap.nodes`, []),
@@ -555,7 +555,7 @@ const ProjekteContainer = props => {
                   mapBeobNichtZuzuordnenIdsFiltered
                 }
                 mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
-                beobZugeordnetAssigning={assigning}
+                beobZugeordnetAssigning={assigningBeob}
                 // SortedStrings enforce rerendering when sorting or visibility changes
                 activeOverlaysString={activeOverlays.join()}
                 activeApfloraLayersString={activeApfloraLayers.join()}

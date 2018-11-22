@@ -120,7 +120,6 @@ const LayersControl = ({
     [overlaysExpanded, baseLayersExpanded, apfloraLayersExpanded],
   )
 
-  const assigning = get(data, 'assigningBeob')
   const getApfloraLayersTitle = () => {
     if (!activeNodes.ap) return 'apflora'
     const ap = activeNodes.ap
@@ -166,7 +165,6 @@ const LayersControl = ({
                  * even when only the sorting changes
                  */
                 apfloraLayersString={apfloraLayers.map(o => o.value).join()}
-                assigning={assigning}
               />
             )}
           </Card>
@@ -188,7 +186,6 @@ const LayersControl = ({
                  * even when only the sorting changes
                  */
                 overlaysString={overlays.map(o => o.value).join()}
-                assigning={assigning}
               />
             )}
           </Card>

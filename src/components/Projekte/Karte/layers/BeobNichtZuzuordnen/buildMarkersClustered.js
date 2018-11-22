@@ -23,22 +23,23 @@ export default ({
   apfloraLayers,
   data,
   mapIdsFiltered,
-}:{
+  assigningBeob,
+}: {
   beobs: Array<Object>,
   activeNodes: Array<Object>,
   apfloraLayers: Array<Object>,
   data: Object,
   mapIdsFiltered: Array<String>,
+  assigningBeob: Boolean,
 }): Object => {
   const { ap, projekt } = activeNodes
-  const assigning = get(data, 'assigningBeob')
   const mcgOptions = {
     maxClusterRadius: 66,
     iconCreateFunction: function(cluster) {
       const markers = cluster.getAllChildMarkers()
       const hasHighlightedTpop = some(
         markers,
-        m => m.options.icon.options.className === 'beobIconHighlighted'
+        m => m.options.icon.options.className === 'beobIconHighlighted',
       )
       const className = hasHighlightedTpop
         ? 'beobZugeordnetClusterHighlighted'
@@ -63,37 +64,39 @@ export default ({
     const autor = beob.autor || '(kein Autor)'
     const quelle = get(beob, 'beobQuelleWerteByQuelleId.name', '')
     const label = `${datum}: ${autor} (${quelle})`
-    const marker = window.L
-      .marker(latLng, {
-        title: label,
-        icon,
-        draggable: assigning,
-        zIndexOffset: -apfloraLayers.findIndex(
-          apfloraLayer => apfloraLayer.value === 'beobZugeordnet',
-        ),
-      })
-      .bindPopup(
-        ReactDOMServer.renderToStaticMarkup(
-          <Fragment>
-            <div>{`Beobachtung von ${get(beob, 'aeEigenschaftenByArtId.artname', '')}`}</div>
-            <StyledH3>
-              {label}
-            </StyledH3>
-            <div>
-              {`Koordinaten: ${beob.x.toLocaleString(
-                'de-ch'
-              )} / ${beob.y.toLocaleString('de-ch')}`}
-            </div>
-            <a
-              href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/nicht-beurteilte-Beobachtungen/${beob.id}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Formular in neuem Tab öffnen
-            </a>
-          </Fragment>,
-        ),
-      )
+    const marker = window.L.marker(latLng, {
+      title: label,
+      icon,
+      draggable: assigningBeob,
+      zIndexOffset: -apfloraLayers.findIndex(
+        apfloraLayer => apfloraLayer.value === 'beobZugeordnet',
+      ),
+    }).bindPopup(
+      ReactDOMServer.renderToStaticMarkup(
+        <Fragment>
+          <div>{`Beobachtung von ${get(
+            beob,
+            'aeEigenschaftenByArtId.artname',
+            '',
+          )}`}</div>
+          <StyledH3>{label}</StyledH3>
+          <div>
+            {`Koordinaten: ${beob.x.toLocaleString(
+              'de-ch',
+            )} / ${beob.y.toLocaleString('de-ch')}`}
+          </div>
+          <a
+            href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/nicht-beurteilte-Beobachtungen/${
+              beob.id
+            }`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Formular in neuem Tab öffnen
+          </a>
+        </Fragment>,
+      ),
+    )
     markers.addLayer(marker)
   })
   return markers

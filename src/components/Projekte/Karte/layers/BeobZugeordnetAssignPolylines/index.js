@@ -17,15 +17,21 @@ const Lines = ({
   tree,
   activeNodes,
   mapIdsFiltered,
-}:{
+}: {
   data: Object,
   tree: Object,
   activeNodes: Array<Object>,
   mapIdsFiltered: Array<String>,
 }) => {
   const beobZugeordnetFilterString = get(tree, 'nodeLabelFilter.beobZugeordnet')
-  const aparts = get(data, 'beobAssignLines.apsByProjId.nodes[0].apartsByApId.nodes', [])
-  const beobs = flatten(aparts.map(a => get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', [])))
+  const aparts = get(
+    data,
+    'beobAssignLines.apsByProjId.nodes[0].apartsByApId.nodes',
+    [],
+  )
+  const beobs = flatten(
+    aparts.map(a => get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', [])),
+  )
     // filter them by nodeLabelFilter
     .filter(el => {
       if (!beobZugeordnetFilterString) return true

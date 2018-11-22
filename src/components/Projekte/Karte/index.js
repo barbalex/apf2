@@ -165,6 +165,7 @@ const Karte = ({
     setIdOfTpopBeingLocalized,
     bounds,
     addError,
+    assigningBeob,
   } = mobxStore
 
   const mapRef = useRef(null)
@@ -192,9 +193,9 @@ const Karte = ({
     [dimensions.width],
   )
 
-  const assigning = get(data, 'assigningBeob')
   const clustered = !(
-    assigning || activeApfloraLayers.includes('beobZugeordnetAssignPolylines')
+    assigningBeob ||
+    activeApfloraLayers.includes('beobZugeordnetAssignPolylines')
   )
   /**
    * need an object whose methods return overlays

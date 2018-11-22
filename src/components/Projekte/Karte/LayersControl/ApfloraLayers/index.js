@@ -24,7 +24,6 @@ import { withApollo } from 'react-apollo'
 
 import Checkbox from '../shared/Checkbox'
 import withData from './withData'
-import setAssigningBeob from './setAssigningBeob'
 import getBounds from '../../../../../modules/getBounds'
 import mobxStoreContext from '../../../../../mobxStoreContext'
 
@@ -143,8 +142,9 @@ const SortableItem = SortableElement(
     mapBeobNichtZuzuordnenIdsFiltered,
     mapBeobZugeordnetIdsFiltered,
     client,
+    setAssigningBeob,
+    assigningBeob,
   }) => {
-    const assigning = get(data, 'assigningBeob')
     const assigningispossible =
       activeApfloraLayers.includes('tpop') &&
       ((activeApfloraLayers.includes('beobNichtBeurteilt') &&
@@ -152,7 +152,7 @@ const SortableItem = SortableElement(
         (activeApfloraLayers.includes('beobZugeordnet') &&
           apfloraLayer.value === 'beobZugeordnet'))
     const getZuordnenIconTitle = () => {
-      if (assigning) return 'Zuordnung beenden'
+      if (assigningBeob) return 'Zuordnung beenden'
       if (assigningispossible) return 'Teil-Populationen zuordnen'
       return 'Teil-Populationen zuordnen (aktivierbar, wenn auch Teil-Populationen eingeblendet werden)'
     }
@@ -194,14 +194,11 @@ const SortableItem = SortableElement(
                 title={getZuordnenIconTitle()}
                 onClick={() => {
                   if (activeApfloraLayers.includes('tpop')) {
-                    client.mutate({
-                      mutation: setAssigningBeob,
-                      variables: { value: !assigning },
-                    })
+                    setAssigningBeob(!assigningBeob)
                   }
                 }}
               >
-                {assigning ? (
+                {assigningBeob ? (
                   <StyledPauseCircleOutlineIcon
                     data-assigningispossible={assigningispossible}
                   />
@@ -387,6 +384,7 @@ const SortableList = SortableContainer(
     mapBeobZugeordnetIdsFiltered,
     mapBeobNichtZuzuordnenIdsFiltered,
     client,
+    setAssigningBeob,
   }) => (
     <div>
       {items.map((apfloraLayer, index) => (
@@ -408,6 +406,7 @@ const SortableList = SortableContainer(
           mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
           mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
           client={client}
+          setAssigningBeob={setAssigningBeob}
         />
       ))}
     </div>
@@ -460,6 +459,7 @@ const ApfloraLayers = ({
     bounds,
     setBounds,
     mapFilter,
+    setAssigningBeob,
   } = mobxStore
 
   const onSortEnd = useCallback(
@@ -490,6 +490,7 @@ const ApfloraLayers = ({
         mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
         mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
         client={client}
+        setAssigningBeob={setAssigningBeob}
       />
     </CardContent>
   )

@@ -64,6 +64,7 @@ const myTypes = types
     ),
     exportFileType: types.optional(types.maybeNull(types.string), 'xlsx'),
     exportApplyMapFilter: types.optional(types.boolean, false),
+    assigningBeob: types.optional(types.boolean, false),
   })
   // structure of these variables is not controlled
   // so need to define this as volatile
@@ -217,6 +218,9 @@ const myTypes = types
     },
     setExportApplyMapFilter(val) {
       self.exportApplyMapFilter = val
+    },
+    setAssigningBeob(val) {
+      self.assigningBeob = val
     },
   }))
 
