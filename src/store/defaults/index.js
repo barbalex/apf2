@@ -37,9 +37,4 @@ export default {
     y: 1247500,
     __typename: 'MapMouseCoordinates',
   },
-  login: {
-    token: '',
-    username: '',
-    __typename: 'Login',
-  },
 }
