@@ -11,11 +11,14 @@ export default ({
   dataLocal,
   treeName,
   nodeFilter,
+  mobxStore,
 }: {
   dataLocal: Object,
   treeName: String,
   nodeFilter: Object,
+  mobxStore: Object,
 }): Object => {
+  const { urlQuery } = mobxStore
   const activeNodeArray = get(dataLocal, `${treeName}.activeNodeArray`)
   const apFilterSet = get(dataLocal, `${treeName}.apFilter`)
   const activeNodes = getActiveNodes(activeNodeArray)
@@ -27,7 +30,7 @@ export default ({
   const isAdresse = openNodes.some(
     nodeArray => nodeArray[0] === 'Werte-Listen' && nodeArray[1] === 'Adressen',
   )
-  const projekteTabs = get(dataLocal, 'urlQuery.projekteTabs', [])
+  const { projekteTabs } = urlQuery
   const mapIsActive =
     projekteTabs.includes('karte') || projekteTabs.includes('karte2')
   const projekt = uniq(

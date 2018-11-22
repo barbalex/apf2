@@ -2,14 +2,13 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
-import get from 'lodash/get'
 import intersection from 'lodash/intersection'
 import compose from 'recompose/compose'
+import { observer } from 'mobx-react-lite'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
 import ErrorBoundary from '../shared/ErrorBoundary'
-import withData from './withData'
 import ProjektContainer from './ProjektContainer'
 import mobxStoreContext from '../../mobxStoreContext'
 
@@ -25,18 +24,14 @@ const Container = styled.div`
 const treeTabValues = ['tree', 'daten', 'karte', 'exporte']
 const tree2TabValues = ['tree2', 'daten2', 'karte2', 'exporte2']
 
-const enhance = compose(withData)
+const enhance = compose(observer)
 
-const Projekte = ({ data }: { data: Object }) => {
-  const { isPrint } = useContext(mobxStoreContext)
-  const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
+const Projekte = () => {
+  const { isPrint, urlQuery } = useContext(mobxStoreContext)
+
+  const { projekteTabs } = urlQuery
   const treeTabs = intersection(treeTabValues, projekteTabs)
   const tree2Tabs = intersection(tree2TabValues, projekteTabs)
-
-  if (data.error) {
-    console.log('Projekte:', { error: data.error })
-    return `Fehler: ${data.error.message}`
-  }
 
   if (tree2Tabs.length === 0 || isPrint) {
     return (

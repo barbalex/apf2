@@ -37,7 +37,7 @@ export default async ({ idb, history, mobxStore }) => {
     },*/
   })
   const stateLink = withClientState({
-    resolvers: buildResolvers({ history }),
+    resolvers: buildResolvers({ history, mobxStore }),
     cache,
     defaults: localStoreDefaults,
   })

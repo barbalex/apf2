@@ -9,7 +9,7 @@ import uniqWith from 'lodash/uniqWith'
 import gql from 'graphql-tag'
 import queryString from 'query-string'
 
-export default ({ history }) => ({
+export default ({ history, mobxStore }) => ({
   Mutation: {
     setTreeKey: (_, { tree, key, value }, { cache }) => {
       const data = cache.readQuery({
@@ -27,19 +27,11 @@ export default ({ history }) => ({
               openNodes
               apFilter
             }
-            urlQuery @client {
-              projekteTabs
-              feldkontrTab
-            }
           }
         `,
       })
       const oldValue = get(data, `${tree}.${key}`)
-      const urlQueryRead = get(data, 'urlQuery')
-      const urlQuery = {
-        feldkontrTab: urlQueryRead.feldkontrTab,
-        projekteTabs: urlQueryRead.projekteTabs,
-      }
+      const { urlQuery } = mobxStore
       // only write if changed
       if (!isEqual(oldValue, value)) {
         cache.writeData({

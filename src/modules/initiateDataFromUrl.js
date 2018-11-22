@@ -7,7 +7,12 @@ import isMobilePhone from '../modules/isMobilePhone'
 import setUrlQueryValue from '../modules/setUrlQueryValue'
 import setOpenNodesFromActiveNodeArray from '../modules/setOpenNodesFromActiveNodeArray'
 
-export default async ({ activeNodeArray: activeNodeArrayPassed, client }) => {
+export default async ({
+  activeNodeArray: activeNodeArrayPassed,
+  client,
+  setUrlQuery,
+  history,
+}) => {
   const activeNodeArrayFromPathname =
     activeNodeArrayPassed || getActiveNodeArrayFromPathname()
   let initialActiveNodeArray = [...activeNodeArrayFromPathname]
@@ -53,18 +58,7 @@ export default async ({ activeNodeArray: activeNodeArrayPassed, client }) => {
     `,
   })
   const { projekteTabs, feldkontrTab } = urlQuery
-  await client.mutate({
-    mutation: gql`
-      mutation setUrlQuery($projekteTabs: Array!, $feldkontrTab: String!) {
-        setUrlQuery(projekteTabs: $projekteTabs, feldkontrTab: $feldkontrTab)
-          @client {
-          projekteTabs
-          feldkontrTab
-        }
-      }
-    `,
-    variables: { projekteTabs, feldkontrTab },
-  })
+  setUrlQuery({ projekteTabs, feldkontrTab, history, client })
 
   // set projekte tabs of not yet existing
   if (

@@ -17,6 +17,7 @@ import { withApollo } from 'react-apollo'
 import isMobilePhone from '../../../modules/isMobilePhone'
 import setUrlQueryValue from '../../../modules/setUrlQueryValue'
 import mobxStoreContext from '../../../mobxStoreContext'
+import historyContext from '../../../historyContext'
 
 const StyledIconButton = styled.div`
   height: 30px !important;
@@ -86,11 +87,14 @@ const MyAppBarDaten = ({
     nodeFilterClone1To2,
     nodeFilterSetActiveTable,
     nodeFilterEmptyTree,
+    urlQuery,
+    setUrlQuery,
   } = useContext(mobxStoreContext)
+  const { history } = useContext(historyContext)
 
   const [datenFilterAnchorEl, setDatenFilterAnchorEl] = useState(null)
 
-  const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
+  const { projekteTabs } = urlQuery
   const isDaten = projekteTabs.includes(`daten${treeNr}`)
   const isTree = projekteTabs.includes(`tree${treeNr}`)
   const isKarte = projekteTabs.includes('karte')
@@ -105,7 +109,10 @@ const MyAppBarDaten = ({
         setUrlQueryValue({
           key: 'projekteTabs',
           value: [`daten${treeNr}`],
+          urlQuery,
+          setUrlQuery,
           client,
+          history,
         })
       } else {
         if (copyOfProjekteTabs.includes(`daten${treeNr}`)) {
@@ -126,7 +133,10 @@ const MyAppBarDaten = ({
         setUrlQueryValue({
           key: 'projekteTabs',
           value: copyOfProjekteTabs,
+          urlQuery,
+          setUrlQuery,
           client,
+          history,
         })
       }
     },

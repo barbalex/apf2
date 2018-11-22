@@ -8,6 +8,7 @@ import { observer } from 'mobx-react-lite'
 
 import initiateDataFromUrl from '../../modules/initiateDataFromUrl'
 import mobxStoreContext from '../../mobxStoreContext'
+import historyContext from '../../historyContext'
 
 const StyledInput = styled(Input)`
   width: 60px;
@@ -38,7 +39,9 @@ const enhance = compose(
 )
 
 const EkfYear = ({ client }: { client: Object }) => {
-  const { ekfYear, setEkfYear } = useContext(mobxStoreContext)
+  const { ekfYear, setEkfYear, setUrlQuery } = useContext(mobxStoreContext)
+  const { history } = useContext(historyContext)
+
   const [stateValue, setStateValue] = useState(
     ekfYear || ekfYear === 0 ? ekfYear : '',
   )
@@ -53,7 +56,12 @@ const EkfYear = ({ client }: { client: Object }) => {
       const newValue = event.target.value ? +event.target.value : ekfRefYear
       setEkfYear(newValue)
       if (ekfYear !== stateValue) {
-        initiateDataFromUrl({ activeNodeArray: ['Projekte'], client })
+        initiateDataFromUrl({
+          activeNodeArray: ['Projekte'],
+          client,
+          setUrlQuery,
+          history,
+        })
       }
     },
     [ekfYear],

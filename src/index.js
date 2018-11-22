@@ -63,14 +63,15 @@ const run = async () => {
 
     const initialMobxStore = await createInitialMobxStore({ idb })
     const mobxStore = MobxStore.create(initialMobxStore)
-    onPatch(mobxStore, patch => {
-      console.log('mobxStore patch', patch)
-    })
 
     const client = await buildClient({ idb, history, mobxStore })
     registerServiceWorker(mobxStore)
 
-    await initiateDataFromUrl({ client })
+    await initiateDataFromUrl({
+      client,
+      setUrlQuery: mobxStore.setUrlQuery,
+      history,
+    })
 
     // begin _after_ initiation data from url
     history.listen((location, action) =>

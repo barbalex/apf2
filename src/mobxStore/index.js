@@ -1,6 +1,10 @@
 // @flow
 import { types } from 'mobx-state-tree'
 import cloneDeep from 'lodash/cloneDeep'
+import isEqual from 'lodash/isEqual'
+import get from 'lodash/get'
+import queryString from 'query-string'
+import gql from 'graphql-tag'
 
 import ApfloraLayer from './ApfloraLayer'
 import MapFilter from './MapFilter'
@@ -8,6 +12,7 @@ import Copying, { defaultValue as defaultCopying } from './Copying'
 import CopyingBiotop, {
   defaultValue as defaultCopyingBiotop,
 } from './CopyingBiotop'
+import UrlQuery, { defaultValue as defaultUrlQuery } from './UrlQuery'
 import Moving, { defaultValue as defaultMoving } from './Moving'
 import MapMouseCoordinates, {
   defaultValue as defaultMapMouseCoordinates,
@@ -57,6 +62,7 @@ const myTypes = types
     ekfAdresseId: types.optional(types.maybeNull(types.string), null),
     copying: types.optional(Copying, defaultCopying),
     copyingBiotop: types.optional(CopyingBiotop, defaultCopyingBiotop),
+    urlQuery: types.optional(UrlQuery, defaultUrlQuery),
     moving: types.optional(Moving, defaultMoving),
     mapMouseCoordinates: types.optional(
       MapMouseCoordinates,
@@ -206,6 +212,31 @@ const myTypes = types
     },
     setCopyingBiotop({ id, label }) {
       self.copyingBiotop = { id, label }
+    },
+    setUrlQuery({ projekteTabs, feldkontrTab, history, client }) {
+      const newUrlQuery = {
+        projekteTabs,
+        feldkontrTab,
+      }
+      // only write if changed
+      if (!isEqual(self.urlQuery, newUrlQuery)) {
+        const data = client.readQuery({
+          query: gql`
+            query Query {
+              tree @client {
+                activeNodeArray
+              }
+            }
+          `,
+        })
+        self.urlQuery = newUrlQuery
+        const search = queryString.stringify(newUrlQuery)
+        const query = `${
+          Object.keys(newUrlQuery).length > 0 ? `?${search}` : ''
+        }`
+        const activeNodeArray = get(data, 'tree.activeNodeArray')
+        history.push(`/${activeNodeArray.join('/')}${query}`)
+      }
     },
     setMoving({ table, id, label }) {
       self.moving = { table, id, label }

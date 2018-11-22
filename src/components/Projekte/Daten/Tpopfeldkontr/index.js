@@ -24,8 +24,8 @@ import withData from './withData'
 import updateTpopkontrByIdGql from './updateTpopkontrById'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import withAllAdresses from './withAllAdresses'
-import urlQuery from './urlQuery'
 import mobxStoreContext from '../../../../mobxStoreContext'
+import historyContext from '../../../../historyContext'
 
 const Container = styled.div`
   height: 100%;
@@ -96,15 +96,15 @@ const Tpopfeldkontr = ({
   client: Object,
   refetchTree: () => void,
 }) => {
-  const { nodeFilter, nodeFilterSetValue } = useContext(mobxStoreContext)
+  const { nodeFilter, nodeFilterSetValue, urlQuery, setUrlQuery } = useContext(
+    mobxStoreContext,
+  )
+  const { history } = useContext(historyContext)
 
   const [errors, setErrors] = useState({})
-  const [value, setValue] = useState(() => {
-    const { data } = client.query({
-      query: urlQuery,
-    })
-    return get(data, 'urlQuery.feldkontrTab', 'entwicklung')
-  })
+  const [value, setValue] = useState(
+    get(urlQuery, 'feldkontrTab', 'entwicklung'),
+  )
 
   useEffect(() => setErrors({}), [id])
 
@@ -280,7 +280,14 @@ const Tpopfeldkontr = ({
     [id, showFilter],
   )
   const onChangeTab = useCallback((event, value) => {
-    setUrlQueryValue({ key: 'feldkontrTab', value, client })
+    setUrlQueryValue({
+      key: 'feldkontrTab',
+      value,
+      urlQuery,
+      setUrlQuery,
+      client,
+      history,
+    })
     setValue(value)
   })
 

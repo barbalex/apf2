@@ -22,13 +22,4 @@ export default {
     map: treeMap,
     __typename: 'Tree2',
   },
-  /**
-   * urlQueries are used to control tabs
-   * for instance: Entwicklung or Biotop in tpopfeldkontr
-   */
-  urlQuery: {
-    projekteTabs: ['tree', 'daten'],
-    feldkontrTab: 'entwicklung',
-    __typename: 'UrlQuery',
-  },
 }

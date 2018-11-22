@@ -80,9 +80,5 @@ export default gql`
         user
       }
     }
-    urlQuery @client {
-      projekteTabs
-      feldkontrTab
-    }
   }
 `

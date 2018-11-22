@@ -84,6 +84,7 @@ import openLowerNodes from './openLowerNodes'
 import closeLowerNodes from './closeLowerNodes'
 import insertDataset from './insertDataset'
 import mobxStoreContext from '../../../mobxStoreContext'
+import historyContext from '../../../historyContext'
 
 const Container = styled.div`
   height: 100%;
@@ -210,7 +211,10 @@ const TreeContainer = ({
     setMoving,
     copyingBiotop,
     setCopyingBiotop,
+    urlQuery,
+    setUrlQuery,
   } = mobxStore
+  const { history } = useContext(historyContext)
 
   const datasetToDelete = toDelete
   const deleteDatasetModalIsVisible = !!datasetToDelete.id
@@ -345,7 +349,7 @@ const TreeContainer = ({
           })
         },
         showBeobOnMap() {
-          const projekteTabs = get(dbData, 'urlQuery.projekteTabs', [])
+          const { projekteTabs } = urlQuery
           // 1. open map if not yet open
           showMapIfNotYetVisible(projekteTabs)
           // 2 add layer for actionTable
@@ -368,7 +372,7 @@ const TreeContainer = ({
           }
         },
         localizeOnMap() {
-          const projekteTabs = get(dbData, 'urlQuery.projekteTabs', [])
+          const { projekteTabs } = urlQuery
           setIdOfTpopBeingLocalized(id)
           showMapIfNotYetVisible(projekteTabs)
           setActiveApfloraLayers(uniq([...activeApfloraLayers, 'tpop']))
@@ -505,7 +509,10 @@ const TreeContainer = ({
       setUrlQueryValue({
         key: 'projekteTabs',
         value: [...projekteTabs, 'karte'],
+        urlQuery,
+        setUrlQuery,
         client,
+        history,
       })
     }
   })

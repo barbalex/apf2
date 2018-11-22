@@ -24,6 +24,7 @@ import EkfYear from './EkfYear'
 import User from './User'
 import Daten from './Daten'
 import mobxStoreContext from '../../mobxStoreContext'
+import historyContext from '../../historyContext'
 
 const StyledAppBar = styled(AppBar)`
   @media print {
@@ -76,9 +77,15 @@ const MyAppBar = ({
   setShowDeletions: () => void,
   client: Object,
 }) => {
-  const { nodeFilterClone1To2, user, view, setView } = useContext(
-    mobxStoreContext,
-  )
+  const {
+    nodeFilterClone1To2,
+    user,
+    view,
+    setView,
+    urlQuery,
+    setUrlQuery,
+  } = useContext(mobxStoreContext)
+  const { history } = useContext(historyContext)
 
   const activeNodeArray = get(localData, 'tree.activeNodeArray')
   const activeNodes = getActiveNodes(activeNodeArray)
@@ -86,7 +93,8 @@ const MyAppBar = ({
    * need to clone projekteTabs
    * because otherwise removing elements errors out (because elements are sealed)
    */
-  const projekteTabs = clone(get(localData, 'urlQuery.projekteTabs', []))
+  const { projekteTabs: projekteTabsOriginal } = urlQuery
+  const projekteTabs = projekteTabsOriginal.toJSON()
   const exporteIsActive = !!activeNodes.projekt
   const isMobile = isMobilePhone()
 
@@ -101,7 +109,14 @@ const MyAppBar = ({
     (name: string) => {
       if (isMobilePhone()) {
         // show one tab only
-        setUrlQueryValue({ key: 'projekteTabs', value: [name], client })
+        setUrlQueryValue({
+          key: 'projekteTabs',
+          value: [name],
+          urlQuery,
+          setUrlQuery,
+          client,
+          history,
+        })
       } else {
         if (projekteTabs.includes(name)) {
           remove(projekteTabs, el => el === name)
@@ -118,7 +133,14 @@ const MyAppBar = ({
             nodeFilterClone1To2()
           }
         }
-        setUrlQueryValue({ key: 'projekteTabs', value: projekteTabs, client })
+        setUrlQueryValue({
+          key: 'projekteTabs',
+          value: projekteTabs,
+          urlQuery,
+          setUrlQuery,
+          client,
+          history,
+        })
       }
     },
     [projekteTabs],

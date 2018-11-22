@@ -1,9 +1,11 @@
 // @flow
-import React, { useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import { withApollo } from 'react-apollo'
 
 import initiateDataFromUrl from '../initiateDataFromUrl'
+import mobxStoreContext from '../../../../mobxStoreContext'
+import historyContext from '../../../../historyContext'
 
 const OuterContainer = styled.div`
   border-bottom: 1px solid rgba(46, 125, 50, 0.5);
@@ -43,6 +45,8 @@ const EkfList = ({
   row: Object,
   client: Object,
 }) => {
+  const { setUrlQuery } = useContext(mobxStoreContext)
+  const { history } = useContext(historyContext)
   const innerContainerHeight = projektCount > 1 ? 81 : 62
   const url = [
     'Projekte',
@@ -58,7 +62,13 @@ const EkfList = ({
   ]
 
   const onClick = useCallback(
-    () => initiateDataFromUrl({ activeNodeArray: url, client }),
+    () =>
+      initiateDataFromUrl({
+        activeNodeArray: url,
+        client,
+        setUrlQuery,
+        history,
+      }),
     [row.id],
   )
 

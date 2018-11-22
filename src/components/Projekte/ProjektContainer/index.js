@@ -89,11 +89,13 @@ const LogoutButton = styled(Button)`
 const enhance = compose(
   withLocalData,
   withProps(({ dataLocal, treeName }) => {
+    const mobxStore = useContext(mobxStoreContext)
     const { nodeFilter } = useContext(mobxStoreContext)
     return buildVariables({
       dataLocal,
       treeName,
       nodeFilter: nodeFilter[treeName],
+      mobxStore,
     })
   }),
   withAdresses,
