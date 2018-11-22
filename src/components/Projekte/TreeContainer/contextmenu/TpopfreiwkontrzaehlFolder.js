@@ -1,36 +1,39 @@
 // @flow
-import React from 'react'
+import React, { useContext } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
+import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const TpopfreiwkontrzaehlFolder = ({
   onClick,
   tree,
-  token
 }: {
   onClick: () => void,
   tree: Object,
-  token: String
-}) => (
-  <ErrorBoundary>
-    <ContextMenu id={`${tree.name}tpopfreiwkontrzaehlFolder`}>
-      <div className="react-contextmenu-title">Zählungen</div>
-      {
-        !userIsReadOnly(token, 'freiw') &&
-        <MenuItem
-          onClick={onClick}
-          data={{
-            action: 'insert',
-            table: 'tpopfreiwkontrzaehl',
-          }}
-        >
-          erstelle neue
-        </MenuItem>
-      }
-    </ContextMenu>
-  </ErrorBoundary>
-)
+}) => {
+  const { user } = useContext(mobxStoreContext)
 
-export default TpopfreiwkontrzaehlFolder
+  return (
+    <ErrorBoundary>
+      <ContextMenu id={`${tree.name}tpopfreiwkontrzaehlFolder`}>
+        <div className="react-contextmenu-title">Zählungen</div>
+        {!userIsReadOnly(user.token, 'freiw') && (
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'insert',
+              table: 'tpopfreiwkontrzaehl',
+            }}
+          >
+            erstelle neue
+          </MenuItem>
+        )}
+      </ContextMenu>
+    </ErrorBoundary>
+  )
+}
+
+export default observer(TpopfreiwkontrzaehlFolder)

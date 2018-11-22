@@ -7,15 +7,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
-const User = ({
-  onClick,
-  tree,
-  token,
-}: {
-  onClick: () => void,
-  tree: Object,
-  token: String,
-}) => {
+const User = ({ onClick, tree }: { onClick: () => void, tree: Object }) => {
   const { user } = useContext(mobxStoreContext)
 
   const mayWrite = !userIsReadOnly(user.token)

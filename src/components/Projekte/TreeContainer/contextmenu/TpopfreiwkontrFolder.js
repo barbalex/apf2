@@ -10,15 +10,13 @@ import mobxStoreContext from '../../../../mobxStoreContext'
 const TpopfreiwkontrFolder = ({
   onClick,
   tree,
-  token,
   moving,
 }: {
   tree: Object,
   onClick: () => void,
-  token: String,
   moving: Object,
 }) => {
-  const { copying } = useContext(mobxStoreContext)
+  const { copying, user } = useContext(mobxStoreContext)
 
   const isMoving = moving.table && moving.table === 'tpopfreiwkontr'
   const isCopying = copying.table && copying.table === 'tpopfreiwkontr'
@@ -43,7 +41,7 @@ const TpopfreiwkontrFolder = ({
         >
           alle schliessen
         </MenuItem>
-        {!userIsReadOnly(token, 'freiw') && (
+        {!userIsReadOnly(user.token, 'freiw') && (
           <>
             <MenuItem
               onClick={onClick}

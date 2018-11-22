@@ -10,11 +10,9 @@ import mobxStoreContext from '../../../../mobxStoreContext'
 const TpopmassnberFolder = ({
   onClick,
   tree,
-  token,
 }: {
   onClick: () => void,
   tree: Object,
-  token: String,
 }) => {
   const { user } = useContext(mobxStoreContext)
 

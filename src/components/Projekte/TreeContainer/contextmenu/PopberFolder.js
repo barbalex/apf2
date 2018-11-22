@@ -10,11 +10,9 @@ import mobxStoreContext from '../../../../mobxStoreContext'
 const PopberFolder = ({
   onClick,
   tree,
-  token,
 }: {
   onClick: () => void,
   tree: Object,
-  token: String,
 }) => {
   const { user } = useContext(mobxStoreContext)
 

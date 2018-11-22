@@ -18,12 +18,10 @@ const enhance = compose(
 const Tpopfeldkontr = ({
   tree,
   onClick,
-  token,
   localData,
 }: {
   tree: Object,
   onClick: () => void,
-  token: String,
   localData: Object,
 }) => {
   const { copying, user } = useContext(mobxStoreContext)

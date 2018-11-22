@@ -13,11 +13,9 @@ const enhance = compose(observer)
 const Tpopmassn = ({
   tree,
   onClick,
-  token,
 }: {
   tree: Object,
   onClick: () => void,
-  token: String,
 }) => {
   const { copying, user } = useContext(mobxStoreContext)
 

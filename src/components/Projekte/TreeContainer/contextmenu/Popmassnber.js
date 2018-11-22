@@ -13,11 +13,9 @@ const enhance = compose(observer)
 const Popmassnber = ({
   tree,
   onClick,
-  token,
 }: {
   tree: Object,
   onClick: () => void,
-  token: String,
 }) => {
   const { user } = useContext(mobxStoreContext)
   // eslint-disable-next-line no-unused-vars

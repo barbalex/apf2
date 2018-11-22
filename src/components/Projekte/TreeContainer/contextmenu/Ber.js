@@ -13,11 +13,9 @@ const enhance = compose(observer)
 const BerFolder = ({
   tree,
   onClick,
-  token,
 }: {
   tree: Object,
   onClick: () => void,
-  token: String,
 }) => {
   const { user } = useContext(mobxStoreContext)
 

@@ -7,15 +7,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
-const Apfolder = ({
-  onClick,
-  tree,
-  token,
-}: {
-  onClick: () => void,
-  tree: Object,
-  token: String,
-}) => {
+const Apfolder = ({ onClick, tree }: { onClick: () => void, tree: Object }) => {
   const { user } = useContext(mobxStoreContext)
 
   return (

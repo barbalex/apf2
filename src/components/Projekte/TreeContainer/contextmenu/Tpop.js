@@ -10,12 +10,10 @@ import mobxStoreContext from '../../../../mobxStoreContext'
 const Tpop = ({
   onClick,
   tree,
-  token,
   moving,
 }: {
   onClick: () => void,
   tree: Object,
-  token: String,
   moving: Object,
 }) => {
   const { copying, user } = useContext(mobxStoreContext)

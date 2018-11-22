@@ -10,11 +10,9 @@ import mobxStoreContext from '../../../../mobxStoreContext'
 const BeobNichtZuzuordnen = ({
   tree,
   onClick,
-  token,
 }: {
   tree: Object,
   onClick: () => void,
-  token: String,
 }) => {
   const { user } = useContext(mobxStoreContext)
 

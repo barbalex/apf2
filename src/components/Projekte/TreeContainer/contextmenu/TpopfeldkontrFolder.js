@@ -10,12 +10,10 @@ import mobxStoreContext from '../../../../mobxStoreContext'
 const TpopfeldkontrFolder = ({
   onClick,
   tree,
-  token,
   moving,
 }: {
   tree: Object,
   onClick: () => void,
-  token: String,
   moving: Object,
 }) => {
   const { copying, user } = useContext(mobxStoreContext)

@@ -10,11 +10,9 @@ import mobxStoreContext from '../../../../mobxStoreContext'
 const BeobZugeordnet = ({
   tree,
   onClick,
-  token,
 }: {
   tree: Object,
   onClick: () => void,
-  token: String,
 }) => {
   const { user } = useContext(mobxStoreContext)
 

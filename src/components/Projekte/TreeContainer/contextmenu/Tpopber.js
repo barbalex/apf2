@@ -10,15 +10,7 @@ import mobxStoreContext from '../../../../mobxStoreContext'
 
 const enhance = compose(observer)
 
-const Tpopber = ({
-  tree,
-  onClick,
-  token,
-}: {
-  tree: Object,
-  onClick: () => void,
-  token: String,
-}) => {
+const Tpopber = ({ tree, onClick }: { tree: Object, onClick: () => void }) => {
   const { user } = useContext(mobxStoreContext)
   // eslint-disable-next-line no-unused-vars
   const [label, changeLabel] = useState('')

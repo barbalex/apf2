@@ -13,12 +13,10 @@ const enhance = compose(observer)
 const TpopFolder = ({
   tree,
   onClick,
-  token,
   moving,
 }: {
   tree: Object,
   onClick: () => void,
-  token: String,
   moving: Object,
 }) => {
   const { copying, user } = useContext(mobxStoreContext)

@@ -13,13 +13,11 @@ const enhance = compose(observer)
 const Tpopfreiwkontr = ({
   tree,
   onClick,
-  token,
 }: {
   tree: Object,
   onClick: () => void,
-  token: String,
 }) => {
-  const { copying } = useContext(mobxStoreContext)
+  const { copying, user } = useContext(mobxStoreContext)
 
   // eslint-disable-next-line no-unused-vars
   const [label, changeLabel] = useState('')
@@ -36,7 +34,7 @@ const Tpopfreiwkontr = ({
         onShow={onShow}
       >
         <div className="react-contextmenu-title">Freiwilligen-Kontrolle</div>
-        {!userIsReadOnly(token, 'freiw') && (
+        {!userIsReadOnly(user.token, 'freiw') && (
           <>
             <MenuItem
               onClick={onClick}

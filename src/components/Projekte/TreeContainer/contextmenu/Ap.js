@@ -10,12 +10,10 @@ import mobxStoreContext from '../../../../mobxStoreContext'
 const Ap = ({
   onClick,
   tree,
-  token,
   moving,
 }: {
   onClick: () => void,
   tree: Object,
-  token: String,
   moving: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)

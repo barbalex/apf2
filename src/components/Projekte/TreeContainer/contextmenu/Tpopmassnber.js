@@ -1,41 +1,30 @@
 // @flow
-import React, { useContext } from 'react'
+import React, { useContext, useState, useCallback } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
 import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
-const enhance = compose(
-  withState('label', 'changeLabel', ''),
-  withHandlers({
-    // according to https://github.com/vkbansal/react-contextmenu/issues/65
-    // this is how to pass data from ContextMenuTrigger to ContextMenu
-    onShow: props => event => props.changeLabel(event.detail.data.nodeLabel),
-  }),
-  observer,
-)
+const enhance = compose(observer)
 
 const Tpopmassnber = ({
   tree,
   onClick,
-  changeLabel,
-  label,
-  onShow,
-  token,
 }: {
   tree: Object,
   onClick: () => void,
-  changeLabel: () => void,
-  label: string | number,
-  onShow: () => void,
-  token: String,
 }) => {
   const { user } = useContext(mobxStoreContext)
+
+  // eslint-disable-next-line no-unused-vars
+  const [label, changeLabel] = useState('')
+
+  // according to https://github.com/vkbansal/react-contextmenu/issues/65
+  // this is how to pass data from ContextMenuTrigger to ContextMenu
+  const onShow = useCallback(event => changeLabel(event.detail.data.nodeLabel))
 
   return (
     <ErrorBoundary>
