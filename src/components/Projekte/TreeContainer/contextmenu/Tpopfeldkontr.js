@@ -13,11 +13,9 @@ const enhance = compose(observer)
 const Tpopfeldkontr = ({
   tree,
   onClick,
-  localData,
 }: {
   tree: Object,
   onClick: () => void,
-  localData: Object,
 }) => {
   const { copying, user, copyingBiotop } = useContext(mobxStoreContext)
 
@@ -27,8 +25,6 @@ const Tpopfeldkontr = ({
   // according to https://github.com/vkbansal/react-contextmenu/issues/65
   // this is how to pass data from ContextMenuTrigger to ContextMenu
   const onShow = useCallback(event => changeLabel(event.detail.data.nodeLabel))
-
-  if (localData.error) return `Fehler: ${localData.error.message}`
   return (
     <ErrorBoundary>
       <ContextMenu
