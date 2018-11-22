@@ -78,7 +78,6 @@ import setTreeKeyGql from './setTreeKey'
 import setTreeKey2Gql from './setTreeKey2'
 import copyBeobZugeordnetKoordToTpop from '../../../modules/copyBeobZugeordnetKoordToTpop'
 import copyTpopKoordToPop from '../../../modules/copyTpopKoordToPop'
-import setCopyingBiotop from './setCopyingBiotop'
 import tpopById from './tpopById'
 import beobById from './beobById'
 import openLowerNodes from './openLowerNodes'
@@ -209,6 +208,8 @@ const TreeContainer = ({
     copying,
     moving,
     setMoving,
+    copyingBiotop,
+    setCopyingBiotop,
   } = mobxStore
 
   const datasetToDelete = toDelete
@@ -396,19 +397,13 @@ const TreeContainer = ({
           copyTo({ parentId: id, refetchTree, addError, client, copying })
         },
         markForCopyingBiotop() {
-          client.mutate({
-            mutation: setCopyingBiotop,
-            variables: { id, label },
-          })
+          setCopyingBiotop({ id, label })
         },
         resetCopyingBiotop() {
-          client.mutate({
-            mutation: setCopyingBiotop,
-            variables: { id: 'copyingBiotop', label: null },
-          })
+          setCopyingBiotop({ id: null, label: null })
         },
         copyBiotop() {
-          copyBiotopTo({ id, client })
+          copyBiotopTo({ id, copyingBiotop, client })
         },
         copyTpopKoordToPop() {
           copyTpopKoordToPop({ id, addError, client })

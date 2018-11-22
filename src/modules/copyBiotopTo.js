@@ -5,21 +5,14 @@ import gql from 'graphql-tag'
 export default async ({
   id,
   client,
+  copyingBiotop,
 }: {
   id: String,
   client: Object,
+  copyingBiotop: Object,
 }): Promise<void> => {
   // fetch previous id from copyingBiotop
-  const { data: data1 } = await client.query({
-    query: gql`
-      query myquery {
-        copyingBiotop @client {
-          id
-        }
-      }
-    `,
-  })
-  const previousId = get(data1, 'copyingBiotop.id')
+  const previousId = copyingBiotop.id
   const { data: dataFrom } = await client.query({
     query: gql`
       query myquery($id: UUID!) {

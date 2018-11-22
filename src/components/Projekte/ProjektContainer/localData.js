@@ -81,9 +81,6 @@ export default gql`
         user
       }
     }
-    copyingBiotop @client {
-      id
-    }
     urlQuery @client {
       projekteTabs
       feldkontrTab

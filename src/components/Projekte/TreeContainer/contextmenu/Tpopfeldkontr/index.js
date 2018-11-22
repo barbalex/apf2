@@ -7,13 +7,9 @@ import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../../modules/userIsReadOnly'
-import withLocalData from './withLocalData'
 import mobxStoreContext from '../../../../../mobxStoreContext'
 
-const enhance = compose(
-  withLocalData,
-  observer,
-)
+const enhance = compose(observer)
 
 const Tpopfeldkontr = ({
   tree,
@@ -24,12 +20,10 @@ const Tpopfeldkontr = ({
   onClick: () => void,
   localData: Object,
 }) => {
-  const { copying, user } = useContext(mobxStoreContext)
+  const { copying, user, copyingBiotop } = useContext(mobxStoreContext)
 
   // eslint-disable-next-line no-unused-vars
   const [label, changeLabel] = useState('')
-
-  const copyingBiotop = get(localData, 'copyingBiotop.id') !== 'copyingBiotop'
 
   // according to https://github.com/vkbansal/react-contextmenu/issues/65
   // this is how to pass data from ContextMenuTrigger to ContextMenu
@@ -101,7 +95,7 @@ const Tpopfeldkontr = ({
             >
               kopiere Biotop
             </MenuItem>
-            {copyingBiotop && (
+            {copyingBiotop.label && (
               <>
                 <MenuItem
                   onClick={onClick}
@@ -109,10 +103,7 @@ const Tpopfeldkontr = ({
                     action: 'copyBiotop',
                   }}
                 >
-                  {`kopiere Biotop von '${get(
-                    localData,
-                    'copyingBiotop.label',
-                  )}' hierhin`}
+                  {`kopiere Biotop von '${copyingBiotop.label}' hierhin`}
                 </MenuItem>
                 <MenuItem
                   onClick={onClick}

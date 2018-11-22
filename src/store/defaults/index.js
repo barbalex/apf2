@@ -37,12 +37,6 @@ export default {
     y: 1247500,
     __typename: 'MapMouseCoordinates',
   },
-  copyingBiotop: {
-    // gql needs an id
-    id: 'copyingBiotop',
-    label: null,
-    __typename: 'CopyingBiotop',
-  },
   login: {
     token: '',
     username: '',

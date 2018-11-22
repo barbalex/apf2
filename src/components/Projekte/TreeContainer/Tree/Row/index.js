@@ -213,6 +213,7 @@ const Row = ({
     nodeFilterSetActiveTable,
     copying,
     moving,
+    copyingBiotop,
   } = useContext(mobxStoreContext)
 
   const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
@@ -255,8 +256,8 @@ const Row = ({
     node.nodeType === 'table' &&
     node.menuType === copying.table &&
     node.id === copying.id
-  const copyingBiotop =
-    node.nodeType === 'table' && node.id === get(data, 'copyingBiotop.id')
+  const amCopyingBiotop =
+    node.nodeType === 'table' && node.id === copyingBiotop.id
   //console.log('Row rendering')
   const tree2 = get(data, treeName)
 
@@ -454,7 +455,7 @@ const Row = ({
               <CopyingIcon />
             </div>
           )}
-          {copyingBiotop && (
+          {amCopyingBiotop && (
             <div title="Biotop kopiert, bereit zum Einfügen">
               <BiotopCopyingIcon />
             </div>

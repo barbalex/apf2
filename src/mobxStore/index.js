@@ -5,6 +5,9 @@ import cloneDeep from 'lodash/cloneDeep'
 import ApfloraLayer from './ApfloraLayer'
 import MapFilter from './MapFilter'
 import Copying, { defaultValue as defaultCopying } from './Copying'
+import CopyingBiotop, {
+  defaultValue as defaultCopyingBiotop,
+} from './CopyingBiotop'
 import Moving, { defaultValue as defaultMoving } from './Moving'
 import NodeFilter, { defaultValue as defaultNodeFilter } from './NodeFilter'
 import standardApfloraLayers from '../components/Projekte/Karte/apfloraLayers'
@@ -50,6 +53,7 @@ const myTypes = types
     ekfYear: types.optional(types.number, ekfYear),
     ekfAdresseId: types.optional(types.maybeNull(types.string), null),
     copying: types.optional(Copying, defaultCopying),
+    copyingBiotop: types.optional(CopyingBiotop, defaultCopyingBiotop),
     moving: types.optional(Moving, defaultMoving),
     exportFileType: types.optional(types.maybeNull(types.string), 'xlsx'),
     exportApplyMapFilter: types.optional(types.boolean, false),
@@ -191,6 +195,9 @@ const myTypes = types
     },
     setCopying({ table, id, label, withNextLevel }) {
       self.copying = { table, id, label, withNextLevel }
+    },
+    setCopyingBiotop({ id, label }) {
+      self.copyingBiotop = { id, label }
     },
     setMoving({ table, id, label }) {
       self.moving = { table, id, label }
