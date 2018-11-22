@@ -2,12 +2,11 @@
 import React, { useContext, useCallback, useState } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import compose from 'recompose/compose'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
-import ErrorBoundary from '../../../../shared/ErrorBoundary'
-import userIsReadOnly from '../../../../../modules/userIsReadOnly'
-import mobxStoreContext from '../../../../../mobxStoreContext'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
+import userIsReadOnly from '../../../../modules/userIsReadOnly'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const enhance = compose(observer)
 

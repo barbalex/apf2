@@ -11,7 +11,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import styled from 'styled-components'
-import gql from 'graphql-tag'
 import { observer } from 'mobx-react-lite'
 import { withApollo } from 'react-apollo'
 
