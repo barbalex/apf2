@@ -2,7 +2,7 @@
 import { graphql } from 'react-apollo'
 import get from 'lodash/get'
 
-import query from './data1'
+import query from './data2'
 import getActiveNodes from '../../../modules/getActiveNodes'
 
 export default graphql(query, {

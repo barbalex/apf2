@@ -3,7 +3,6 @@ import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
-import merge from 'lodash/merge'
 import format from 'date-fns/format'
 import compose from 'recompose/compose'
 
@@ -116,11 +115,11 @@ const ApberForYear = ({
   data1: Object,
   data2: Object,
 }) => {
-  const data = merge(data1, data2)
-  const jahr = get(data, 'apberuebersichtById.jahr', 0)
-  const apberuebersicht = get(data, 'apberuebersichtById')
+  const data = { ...data1, ...data2 }
+  const jahr = get(data1, 'apberuebersichtById.jahr', 0)
+  const apberuebersicht = get(data1, 'apberuebersichtById')
   const aps = sortBy(
-    get(data, 'projektById.apsByProjId.nodes', []).filter(
+    get(data2, 'projektById.apsByProjId.nodes', []).filter(
       ap =>
         !!get(ap, 'apbersByApId.nodes[0]', null) &&
         !!get(ap, 'apbersByApId.nodes[0].id'),
@@ -135,8 +134,14 @@ const ApberForYear = ({
       </Container>
     )
   }
-  if (data1.error) return `Fehler: ${data1.error.message}`
-  if (data2.error) return `Fehler: ${data2.error.message}`
+  if (data1.error) {
+    console.log(data1.error)
+    return `Fehler: ${data1.error.message}`
+  }
+  if (data2.error) {
+    console.log(data2.error)
+    return `Fehler: ${data2.error.message}`
+  }
 
   return (
     <ErrorBoundary>
