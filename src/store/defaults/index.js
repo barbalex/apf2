@@ -32,9 +32,4 @@ export default {
     __typename: 'UrlQuery',
   },
   assigningBeob: false,
-  mapMouseCoordinates: {
-    x: 2683000,
-    y: 1247500,
-    __typename: 'MapMouseCoordinates',
-  },
 }

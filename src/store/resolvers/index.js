@@ -8,7 +8,6 @@ import treeNodeLabelFilterResetExceptAp from './treeNodeLabelFilterResetExceptAp
 import treeMap from './treeMap'
 import buildUrlQuery from './urlQuery'
 import assigningBeob from './assigningBeob'
-import mapMouseCoordinates from './mapMouseCoordinates'
 import cloneTree2From1 from './cloneTree2From1'
 
 export default ({ history }) => {
@@ -22,7 +21,6 @@ export default ({ history }) => {
     treeMap,
     urlQuery,
     assigningBeob,
-    mapMouseCoordinates,
     cloneTree2From1,
   )
   return resolvers

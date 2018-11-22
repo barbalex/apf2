@@ -11,7 +11,7 @@ import { Map, ScaleControl } from 'react-leaflet'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
-import gql from 'graphql-tag'
+import withProps from 'recompose/withProps'
 import 'leaflet'
 import 'proj4'
 import 'proj4leaflet'
@@ -110,20 +110,14 @@ const Container = styled.div`
 
 const enhance = compose(
   withApollo,
+  withProps(() => {
+    const { setMapMouseCoordinates } = useContext(mobxStoreContext)
+    return { setMapMouseCoordinates }
+  }),
   withHandlers({
-    onMouseMove: ({ setMouseCoordinates, client }) => e => {
+    onMouseMove: ({ setMapMouseCoordinates }) => e => {
       const [x, y] = epsg4326to2056(e.latlng.lng, e.latlng.lat)
-      client.mutate({
-        mutation: gql`
-          mutation setMapMouseCoordinates($x: Number!, $y: Number!) {
-            setMapMouseCoordinates(x: $x, y: $y) @client {
-              x
-              y
-            }
-          }
-        `,
-        variables: { x, y },
-      })
+      setMapMouseCoordinates({ x, y })
     },
   }),
   debounceHandler('onMouseMove', 15),

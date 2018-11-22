@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useContext, useCallback } from 'react'
 import 'leaflet'
 import styled from 'styled-components'
-import get from 'lodash/get'
+import { observer } from 'mobx-react-lite'
 
-import withLocalData from './withLocalData'
+import mobxStoreContext from '../../../../../mobxStoreContext'
 
 const StyledDiv = styled.div`
   background-color: transparent;
@@ -18,25 +18,21 @@ const StyledDiv = styled.div`
 `
 
 const ShowCoordinates = ({
-  localData,
   changeControlType,
 }: {
-  localData: Object,
   changeControlType: () => void,
 }) => {
-  const x = get(localData, 'mapMouseCoordinates.x').toLocaleString('de-ch')
-  const y = get(localData, 'mapMouseCoordinates.y').toLocaleString('de-ch')
+  const { mapMouseCoordinates } = useContext(mobxStoreContext)
+  const x = mapMouseCoordinates.x.toLocaleString('de-ch')
+  const y = mapMouseCoordinates.y.toLocaleString('de-ch')
 
-  if (localData.error) return `Fehler: ${localData.error.message}`
+  const onClick = useCallback(() => changeControlType('goto'))
 
   return (
-    <StyledDiv
-      onClick={() => changeControlType('goto')}
-      title="Klicken um Koordinaten zu suchen"
-    >
+    <StyledDiv onClick={onClick} title="Klicken um Koordinaten zu suchen">
       {`${x}, ${y}`}
     </StyledDiv>
   )
 }
 
-export default withLocalData(ShowCoordinates)
+export default observer(ShowCoordinates)

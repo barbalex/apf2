@@ -9,6 +9,9 @@ import CopyingBiotop, {
   defaultValue as defaultCopyingBiotop,
 } from './CopyingBiotop'
 import Moving, { defaultValue as defaultMoving } from './Moving'
+import MapMouseCoordinates, {
+  defaultValue as defaultMapMouseCoordinates,
+} from './MapMouseCoordinates'
 import NodeFilter, { defaultValue as defaultNodeFilter } from './NodeFilter'
 import standardApfloraLayers from '../components/Projekte/Karte/apfloraLayers'
 import standardOverlays from '../components/Projekte/Karte/overlays'
@@ -55,6 +58,10 @@ const myTypes = types
     copying: types.optional(Copying, defaultCopying),
     copyingBiotop: types.optional(CopyingBiotop, defaultCopyingBiotop),
     moving: types.optional(Moving, defaultMoving),
+    mapMouseCoordinates: types.optional(
+      MapMouseCoordinates,
+      defaultMapMouseCoordinates,
+    ),
     exportFileType: types.optional(types.maybeNull(types.string), 'xlsx'),
     exportApplyMapFilter: types.optional(types.boolean, false),
   })
@@ -201,6 +208,9 @@ const myTypes = types
     },
     setMoving({ table, id, label }) {
       self.moving = { table, id, label }
+    },
+    setMapMouseCoordinates({ x, y }) {
+      self.mapMouseCoordinates = { x, y }
     },
     setExportFileType(val) {
       self.exportFileType = val
