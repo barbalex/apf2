@@ -1,15 +1,24 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 
 import constants from '../../../modules/constants'
+import mobxStoreContext from '../../../mobxStoreContext'
 
 const Div = styled.div`
   color: #c8e6c9;
   padding: 10px 10px 0 10px;
 `
 
-const TestdataMessage = ({ tree, apId }: { tree: Object, apId: String }) => {
+const TestdataMessage = ({
+  treeName,
+  apId,
+}: {
+  treeName: string,
+  apId: string,
+}) => {
+  const mobxStore = useContext(mobxStoreContext)
+  const tree = mobxStore[treeName]
   const apIdFromTree = get(tree, 'activeNodes.ap')
   const apIdUsed = apIdFromTree || apId
   const isTestAp = apIdUsed && constants.testAps.includes(apIdUsed)

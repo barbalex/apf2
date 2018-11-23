@@ -69,7 +69,6 @@ const enhance = compose(
 )
 
 const FormTitle = ({
-  tree,
   title,
   apId,
   table,
@@ -77,7 +76,6 @@ const FormTitle = ({
   data,
   client,
 }: {
-  tree: Object,
   title: string,
   apId: string,
   table: string,
@@ -85,6 +83,7 @@ const FormTitle = ({
   data: Object,
   client: Object,
 }) => {
+  const mobxStore = useContext(mobxStoreContext)
   const {
     nodeFilter,
     nodeFilterTableIsFiltered,
@@ -93,7 +92,7 @@ const FormTitle = ({
     nodeFilterEmptyTable,
     nodeFilterEmptyTree,
     setTreeKey,
-  } = useContext(mobxStoreContext)
+  } = mobxStore
 
   const typesExist = !!types[table]
   const showFilter = !!treeName && !!nodeFilter[treeName].activeTable
@@ -169,7 +168,7 @@ const FormTitle = ({
           </Symbols>
         )}
       </TitleRow>
-      <TestdataMessage tree={tree} apId={apId} />
+      <TestdataMessage treeName={treeName} apId={apId} />
     </Container>
   )
 }

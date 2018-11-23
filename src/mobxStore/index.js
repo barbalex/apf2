@@ -188,6 +188,19 @@ const myTypes = types
       self.nodeFilter[treeName].activeTable = activeTable
     },
     nodeFilterTableIsFiltered({ treeName, table }) {
+      if (
+        ![
+          'ap',
+          'pop',
+          'tpop',
+          'tpopfeldkontr',
+          'tpopfreiwkontr',
+          'tpopmassn',
+        ].includes(table)
+      ) {
+        // there exist no filter for this table
+        return false
+      }
       const tableFilter = self.nodeFilter[treeName][table]
       return Object.values(tableFilter).filter(v => v || v === 0).length > 0
     },
