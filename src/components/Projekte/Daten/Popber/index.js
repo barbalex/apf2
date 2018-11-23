@@ -1,10 +1,12 @@
 // @flow
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import { withApollo } from 'react-apollo'
+import withProps from 'recompose/withProps'
+import { observer } from 'mobx-react-lite'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -12,6 +14,7 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import withData from './withData'
 import updatePopberByIdGql from './updatePopberById'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const Container = styled.div`
   height: 100%;
@@ -26,17 +29,19 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   withApollo,
+  withProps(() => ({
+    mobxStore: useContext(mobxStoreContext),
+  })),
   withData,
+  observer,
 )
 
 const Popber = ({
-  id,
   treeName,
   data,
   client,
   refetchTree,
 }: {
-  id: string,
   treeName: string,
   data: Object,
   client: Object,

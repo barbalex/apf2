@@ -1,18 +1,21 @@
 // @flow
 import { graphql } from 'react-apollo'
-import get from 'lodash/get'
 
 import query from './data'
 
 export default graphql(query, {
-  options: ({ mobxStore, treeName }) => ({
-    variables: {
-      id: get(
-        mobxStore,
-        `${treeName}.activeNodeArray[1]`,
-        '99999999-9999-9999-9999-999999999999',
-      ),
-    },
-  }),
+  options: ({ mobxStore, treeName }) => {
+    const { activeNodeArray } = mobxStore[treeName]
+    const id =
+      activeNodeArray.length > 1
+        ? activeNodeArray[1]
+        : '99999999-9999-9999-9999-999999999999'
+
+    return {
+      variables: {
+        id,
+      },
+    }
+  },
   name: 'data',
 })
