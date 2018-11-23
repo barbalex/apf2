@@ -1,10 +1,15 @@
 // @flow
 export default (activeNodeArray: Array<mixed>): Object => {
-  const wlFolder = activeNodeArray[0] === 'Werte-Listen'
-  const wlAdresseFolder = wlFolder && activeNodeArray[1] === 'Adressen'
+  const wlFolder =
+    activeNodeArray.length > 0 && activeNodeArray[0] === 'Werte-Listen'
+  const wlAdresseFolder =
+    wlFolder && activeNodeArray.length > 1 && activeNodeArray[1] === 'Adressen'
   const wlAdresse =
-    wlAdresseFolder && activeNodeArray[2] ? activeNodeArray[2] : null
-  const userFolder = activeNodeArray[0] === 'Benutzer'
+    wlAdresseFolder && activeNodeArray.length > 2 && activeNodeArray[2]
+      ? activeNodeArray[2]
+      : null
+  const userFolder =
+    activeNodeArray.length > 0 && activeNodeArray[0] === 'Benutzer'
   const user =
     userFolder && activeNodeArray.length > 1 ? activeNodeArray[1] : null
   const projektFolder =
@@ -92,7 +97,8 @@ export default (activeNodeArray: Array<mixed>): Object => {
     false
   const apber =
     apberFolder && activeNodeArray.length > 5 ? activeNodeArray[5] : null
-  const apberPrint = !!apber && activeNodeArray[6] === 'print'
+  const apberPrint =
+    !!apber && activeNodeArray.length > 6 && activeNodeArray[6] === 'print'
   const erfkritFolder =
     (ap &&
       activeNodeArray.length > 4 &&

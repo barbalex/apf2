@@ -22,7 +22,10 @@ export default ({
     nodeArray => nodeArray[0] === 'Werte-Listen',
   )
   const isAdresse = openNodes.some(
-    nodeArray => nodeArray[0] === 'Werte-Listen' && nodeArray[1] === 'Adressen',
+    nodeArray =>
+      nodeArray[0] === 'Werte-Listen' &&
+      activeNodeArray.length > 1 &&
+      nodeArray[1] === 'Adressen',
   )
   const { projekteTabs } = urlQuery
   const mapIsActive =

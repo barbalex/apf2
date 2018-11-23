@@ -41,13 +41,16 @@ const Ekf = () => {
   const role = tokenDecoded ? tokenDecoded.role : null
 
   const { activeNodeArray } = tree
-  const tpopkontrId = activeNodeArray[9]
+  const tpopkontrId =
+    activeNodeArray.length > 9
+      ? activeNodeArray[9]
+      : '99999999-9999-9999-9999-999999999999'
   const treeName = 'tree'
 
   if (isPrint && tpopkontrId) {
     return (
       <Tpopfreiwkontr
-        id={activeNodeArray[9]}
+        id={tpopkontrId}
         activeNodeArray={activeNodeArray}
         treeName={treeName}
         role={role}
@@ -77,7 +80,7 @@ const Ekf = () => {
           >
             {tpopkontrId && (
               <Tpopfreiwkontr
-                id={activeNodeArray[9]}
+                id={tpopkontrId}
                 activeNodeArray={activeNodeArray}
                 treeName={treeName}
                 role={role}

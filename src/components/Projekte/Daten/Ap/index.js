@@ -65,10 +65,9 @@ const LabelPopoverRowColumnRight = styled.div`
 
 const enhance = compose(
   withApollo,
-  withProps(() => {
-    const mobxStore = useContext(mobxStoreContext)
-    return { mobxStore }
-  }),
+  withProps(() => ({
+    mobxStore: useContext(mobxStoreContext),
+  })),
   withAllAps,
   withAllAdresses,
   withAeEigenschaftens,
@@ -95,16 +94,14 @@ const Ap = ({
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { nodeFilter, nodeFilterSetValue } = mobxStore
+  const { activeNodeArray } = mobxStore[treeName]
 
   const [errors, setErrors] = useState({})
 
-  const id = get(
-    mobxStore,
-    `${treeName}.activeNodeArray[3]`,
-    // pass in fake id to avoid error when filter is shown
-    // which means there is no id
-    '99999999-9999-9999-9999-999999999999',
-  )
+  const id =
+    activeNodeArray.length > 3
+      ? activeNodeArray[3]
+      : '99999999-9999-9999-9999-999999999999'
 
   useEffect(() => setErrors({}), [id])
 

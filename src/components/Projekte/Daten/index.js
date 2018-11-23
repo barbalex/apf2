@@ -76,17 +76,18 @@ const Daten = ({
   const mobxStore = useContext(mobxStoreContext)
   const { nodeFilter } = mobxStore
 
-  const activeNodeArray = get(mobxStore, `${treeName}.activeNodeArray`)
-  const apId = activeNodeArray.length > 3 ? activeNodeArray[3] : null
+  const { activeNodeArray } = mobxStore[treeName]
+  const apId =
+    activeNodeArray.length > 3
+      ? activeNodeArray[3]
+      : '99999999-9999-9999-9999-999999999999'
 
   const formObject = {
     projekt: (
       <Projekt
         dimensions={dimensions}
-        id={activeNodeArray[1]}
         treeName={treeName}
         refetchTree={refetchTree}
-        activeNodeArray={activeNodeArray}
       />
     ),
     apberuebersicht: (
@@ -107,7 +108,6 @@ const Daten = ({
     assozart: (
       <Assozart
         dimensions={dimensions}
-        id={activeNodeArray[5]}
         treeName={treeName}
         refetchTree={refetchTree}
       />
@@ -147,7 +147,6 @@ const Daten = ({
     apber: (
       <Apber
         dimensions={dimensions}
-        id={activeNodeArray[5]}
         treeName={treeName}
         refetchTree={refetchTree}
       />

@@ -82,7 +82,10 @@ const EkfList = ({
   const ekf = getEkfFromData({ data, ekfAdresseId })
 
   const { activeNodeArray } = tree
-  const activeTpopkontrId = activeNodeArray[9]
+  const activeTpopkontrId =
+    activeNodeArray.length > 9
+      ? activeNodeArray[9]
+      : '99999999-9999-9999-9999-999999999999'
 
   const height = isNaN(dimensions.height) ? 250 : dimensions.height
   const width = isNaN(dimensions.width) ? 250 : dimensions.width - 1

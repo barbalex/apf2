@@ -27,10 +27,9 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   withApollo,
-  withProps(() => {
-    const mobxStore = useContext(mobxStoreContext)
-    return { mobxStore }
-  }),
+  withProps(() => ({
+    mobxStore: useContext(mobxStoreContext),
+  })),
   withData,
 )
 
@@ -47,8 +46,12 @@ const Adresse = ({
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const [errors, setErrors] = useState({})
+  const { activeNodeArray } = mobxStore[treeName]
 
-  const id = mobxStore[treeName].activeNodeArray[2]
+  const id =
+    activeNodeArray.length > 2
+      ? activeNodeArray[2]
+      : '99999999-9999-9999-9999-999999999999'
   const row = get(data, 'adresseById', {})
 
   useEffect(() => setErrors({}), [id])

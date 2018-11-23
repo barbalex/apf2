@@ -1,10 +1,12 @@
 // @flow
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
+import withProps from 'recompose/withProps'
 import { withApollo } from 'react-apollo'
+import { observer } from 'mobx-react-lite'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -17,6 +19,7 @@ import updateApberByIdGql from './updateApberById'
 import withAllAdresses from './withAllAdresses'
 import withAllApErfkritWertes from './withAllApErfkritWertes'
 import withData from './withData'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const Container = styled.div`
   height: 100%;
@@ -35,13 +38,16 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   withApollo,
+  withProps(() => ({
+    mobxStore: useContext(mobxStoreContext),
+  })),
   withData,
   withAllApErfkritWertes,
   withAllAdresses,
+  observer,
 )
 
 const Apber = ({
-  id,
   dimensions = { width: 380 },
   treeName,
   dataAllAdresses,
@@ -49,7 +55,6 @@ const Apber = ({
   data,
   client,
 }: {
-  id: string,
   dimensions: Object,
   treeName: string,
   dataAllAdresses: Object,
@@ -57,6 +62,13 @@ const Apber = ({
   data: Object,
   client: Object,
 }) => {
+  const mobxStore = useContext(mobxStoreContext)
+  const { activeNodeArray } = mobxStore[treeName]
+  const id =
+    activeNodeArray.length > 5
+      ? activeNodeArray[5]
+      : '99999999-9999-9999-9999-999999999999'
+
   const [errors, setErrors] = useState({})
 
   useEffect(
