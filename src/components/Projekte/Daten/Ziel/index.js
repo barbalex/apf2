@@ -1,5 +1,5 @@
 // @flow
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
@@ -13,7 +13,7 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import withData from './withData'
 import updateZielByIdGql from './updateZielById'
-import setTreeKeyGql from './setTreeKey'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const Container = styled.div`
   height: 100%;
@@ -46,6 +46,7 @@ const Ziel = ({
   client: Object,
   refetchTree: () => void,
 }) => {
+  const { setTreeKey } = useContext(mobxStoreContext)
   const [errors, setErrors] = useState({})
 
   useEffect(() => setErrors({}), [id])
@@ -107,15 +108,15 @@ const Ziel = ({
           if (isEqual(n, oldParentNodeUrl)) return newParentNodeUrl
           return n
         })
-        client.mutate({
-          mutation: setTreeKeyGql,
-          variables: {
-            tree: tree.name,
-            value1: newActiveNodeArray,
-            key1: 'activeNodeArray',
-            value2: newOpenNodes,
-            key2: 'openNodes',
-          },
+        setTreeKey({
+          tree: tree.name,
+          value: newActiveNodeArray,
+          key: 'activeNodeArray',
+        })
+        setTreeKey({
+          tree: tree.name,
+          value: newOpenNodes,
+          key: 'openNodes',
         })
         if (['typ'].includes(field)) refetchTree('ziels')
       }

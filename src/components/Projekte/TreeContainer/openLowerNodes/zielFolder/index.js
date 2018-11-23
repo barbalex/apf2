@@ -9,7 +9,6 @@ import get from 'lodash/get'
 import groupBy from 'lodash/groupBy'
 
 import dataGql from './data'
-import setTreeKeyGql from './setTreeKey'
 
 export default async ({
   tree,
@@ -17,13 +16,16 @@ export default async ({
   id,
   refetchTree,
   client,
+  mobxStore,
 }: {
   tree: Object,
   activeNodes: Object,
   id: String,
   refetchTree: () => void,
   client: Object,
+  mobxStore: Object,
 }) => {
+  const { setTreeKey } = mobxStore
   const { projekt } = activeNodes
   const { openNodes } = tree
   // 1. load all data
@@ -84,13 +86,10 @@ export default async ({
   })
 
   // 3. update openNodes
-  await client.mutate({
-    mutation: setTreeKeyGql,
-    variables: {
-      tree: tree.name,
-      value: newOpenNodes,
-      key: 'openNodes',
-    },
+  setTreeKey({
+    tree: tree.name,
+    value: newOpenNodes,
+    key: 'openNodes',
   })
 
   // 4. refresh tree

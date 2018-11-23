@@ -1,5 +1,5 @@
 // @flow
-import React, { useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import sortBy from 'lodash/sortBy'
 import get from 'lodash/get'
@@ -22,6 +22,7 @@ import saveNichtZuordnenToDb from './saveNichtZuordnenToDb'
 import saveArtIdToDb from './saveArtIdToDb'
 import saveTpopIdToDb from './saveTpopIdToDb'
 import sendMail from '../../../../modules/sendMail'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const Container = styled.div`
   height: 100%;
@@ -164,12 +165,13 @@ const Beobzuordnung = ({
   dataAeEigenschaftens: Object,
   client: Object,
 }) => {
+  const mobxStore = useContext(mobxStoreContext)
   const row = get(data, 'beobById', {})
 
   const onSaveArtIdToDb = useCallback(
     event => {
       const { value } = event.target
-      saveArtIdToDb({ value, row, tree, refetchTree, client })
+      saveArtIdToDb({ value, row, tree, refetchTree, client, mobxStore })
     },
     [row, tree],
   )
@@ -182,6 +184,7 @@ const Beobzuordnung = ({
         refetch: data.refetch,
         refetchTree,
         client,
+        mobxStore,
       })
     },
     [id, tree],
@@ -189,7 +192,7 @@ const Beobzuordnung = ({
   const onSaveTpopIdToDb = useCallback(
     event => {
       const { value } = event.target
-      saveTpopIdToDb({ value, id, tree, refetchTree, type, client })
+      saveTpopIdToDb({ value, id, tree, refetchTree, type, client, mobxStore })
     },
     [id, tree, type],
   )

@@ -47,9 +47,6 @@ export default {
                 gemeinde
                 user
               }
-              map {
-                detailplaene
-              }
             }
           }
         `,
@@ -77,14 +74,14 @@ export default {
               apber: get(data, 'tree.nodeLabelFilter.apber'),
               apberuebersicht: get(
                 data,
-                'tree.nodeLabelFilter.apberuebersicht'
+                'tree.nodeLabelFilter.apberuebersicht',
               ),
               ber: get(data, 'tree.nodeLabelFilter.ber'),
               idealbiotop: get(data, 'tree.nodeLabelFilter.idealbiotop'),
               assozart: get(data, 'tree.nodeLabelFilter.assozart'),
               ekfzaehleinheit: get(
                 data,
-                'tree.nodeLabelFilter.ekfzaehleinheit'
+                'tree.nodeLabelFilter.ekfzaehleinheit',
               ),
               popber: get(data, 'tree.nodeLabelFilter.popber'),
               popmassnber: get(data, 'tree.nodeLabelFilter.popmassnber'),
@@ -98,10 +95,6 @@ export default {
               gemeinde: get(data, 'tree.nodeLabelFilter.gemeinde'),
               user: get(data, 'tree.nodeLabelFilter.user'),
               __typename: 'NodeLabelFilter',
-            },
-            map: {
-              detailplaene: get(data, 'tree.map.detailplaene'),
-              __typename: 'Map',
             },
             __typename: 'Tree2',
           },

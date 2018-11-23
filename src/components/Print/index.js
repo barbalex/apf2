@@ -1,17 +1,12 @@
 // @flow
 import React, { lazy, Suspense, useContext } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
 import Button from '@material-ui/core/Button'
 import ArrowBack from '@material-ui/icons/ArrowBack'
-import compose from 'recompose/compose'
-import { withApollo } from 'react-apollo'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import Fallback from '../shared/Fallback'
-import withLocalData from './withLocalData'
-import setTreeKey from './setTreeKey'
-import historyContext from '../../historyContext'
+import mobxStoreContext from '../../mobxStoreContext'
 
 const Container = styled.div`
   background-color: #eee;
@@ -47,21 +42,12 @@ const StyledArrowBack = styled(ArrowBack)`
 const ApberForApFromAp = lazy(() => import('./ApberForApFromAp'))
 const ApberForYear = lazy(() => import('./ApberForYear'))
 
-const enhance = compose(
-  withApollo,
-  withLocalData,
-)
+const Print = () => {
+  const { history, historyGoBack, setTreeKey, tree } = useContext(
+    mobxStoreContext,
+  )
 
-const Print = ({
-  localData,
-  client,
-}: {
-  localData: Object,
-  client: Object,
-}) => {
-  const { history } = useContext(historyContext)
-
-  const activeNodeArray = get(localData, 'tree.activeNodeArray')
+  const { activeNodeArray } = tree
   const showApberForAp =
     activeNodeArray.length === 7 &&
     activeNodeArray[4] === 'AP-Berichte' &&
@@ -71,7 +57,6 @@ const Print = ({
     activeNodeArray[2] === 'AP-Berichte' &&
     activeNodeArray[4] === 'print'
 
-  if (localData.error) return `Fehler: ${localData.error.message}`
   if (!showApberForAp && !showApberForYear) return null
 
   return (
@@ -82,19 +67,16 @@ const Print = ({
             <BackButton
               variant="outlined"
               onClick={() => {
-                history.goBack()
+                historyGoBack()
                 if (history.location.state === undefined) {
                   // happens when print was the initial page opened
                   // so nowhere to go back to
                   const newActiveNodeArray = [...activeNodeArray]
                   newActiveNodeArray.pop()
-                  client.mutate({
-                    mutation: setTreeKey,
-                    variables: {
-                      value: newActiveNodeArray,
-                      tree: 'tree',
-                      key: 'activeNodeArray',
-                    },
+                  setTreeKey({
+                    value: newActiveNodeArray,
+                    tree: 'tree',
+                    key: 'activeNodeArray',
                   })
                   window.location.reload(false)
                 }
@@ -116,4 +98,4 @@ const Print = ({
   )
 }
 
-export default enhance(Print)
+export default Print

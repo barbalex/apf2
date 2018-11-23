@@ -33,9 +33,8 @@ const DatasetDeleteModal = ({
   localData: Object,
   client: Object,
 }) => {
-  const { addError, toDelete, emptyToDelete, addDeletedDataset } = useContext(
-    mobxStoreContext,
-  )
+  const mobxStore = useContext(mobxStoreContext)
+  const { addError, toDelete, emptyToDelete, addDeletedDataset } = mobxStore
 
   const datasetToDelete = toDelete
   const table = tables.find(t => t.table === datasetToDelete.table)
@@ -60,6 +59,7 @@ const DatasetDeleteModal = ({
         addDeletedDataset,
         addError,
         client,
+        mobxStore,
       }),
     [localData],
   )

@@ -13,7 +13,6 @@ import { withApollo } from 'react-apollo'
 
 import TestdataMessage from './TestdataMessage'
 import types from '../../../mobxStore/NodeFilterTree/types'
-import setTreeKeyGql from './setTreeKey'
 import withData from './withData'
 import mobxStoreContext from '../../../mobxStoreContext'
 
@@ -93,6 +92,7 @@ const FormTitle = ({
     nodeFilterSetActiveTable,
     nodeFilterEmptyTable,
     nodeFilterEmptyTree,
+    setTreeKey,
   } = useContext(mobxStoreContext)
 
   const typesExist = !!types[table]
@@ -119,13 +119,10 @@ const FormTitle = ({
         isUuid.anyNonNil(activeNodeArray[activeNodeArray.length - 1])
       ) {
         const newActiveNodeArray = activeNodeArray.slice(0, -1)
-        client.mutate({
-          mutation: setTreeKeyGql,
-          variables: {
-            value: newActiveNodeArray,
-            tree: treeName,
-            key: 'activeNodeArray',
-          },
+        setTreeKey({
+          value: newActiveNodeArray,
+          tree: treeName,
+          key: 'activeNodeArray',
         })
       }
     },

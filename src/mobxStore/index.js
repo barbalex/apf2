@@ -2,9 +2,8 @@
 import { types } from 'mobx-state-tree'
 import cloneDeep from 'lodash/cloneDeep'
 import isEqual from 'lodash/isEqual'
-import get from 'lodash/get'
 import queryString from 'query-string'
-import gql from 'graphql-tag'
+import createHistory from 'history/createBrowserHistory'
 
 import ApfloraLayer from './ApfloraLayer'
 import MapFilter from './MapFilter'
@@ -22,10 +21,12 @@ import standardApfloraLayers from '../components/Projekte/Karte/apfloraLayers'
 import standardOverlays from '../components/Projekte/Karte/overlays'
 import initialNodeFilterTreeValues from './NodeFilterTree/initialValues'
 import User, { defaultValue as defaultUser } from './User'
+import Tree, { defaultValue as defaultTree } from './Tree'
 
 // substract 3 Months to now so user sees previous year in February
 const ekfRefDate = new Date().setMonth(new Date().getMonth() - 2)
 const ekfYear = new Date(ekfRefDate).getFullYear()
+const history = createHistory()
 
 const myTypes = types
   .model({
@@ -71,6 +72,8 @@ const myTypes = types
     exportFileType: types.optional(types.maybeNull(types.string), 'xlsx'),
     exportApplyMapFilter: types.optional(types.boolean, false),
     assigningBeob: types.optional(types.boolean, false),
+    tree: types.optional(Tree, defaultTree),
+    tree2: types.optional(Tree, defaultTree),
   })
   // structure of these variables is not controlled
   // so need to define this as volatile
@@ -80,6 +83,7 @@ const myTypes = types
     ktZh: null,
     errors: [],
     toDeleteAfterDeletionHook: null,
+    history,
   }))
   .views(self => ({
     get toDelete() {
@@ -93,6 +97,12 @@ const myTypes = types
     },
   }))
   .actions(self => ({
+    historyPush(val) {
+      history.push(val)
+    },
+    historyGoBack() {
+      history.goBack()
+    },
     setDeletedDatasets(val) {
       self.deletedDatasets = val
     },
@@ -213,29 +223,20 @@ const myTypes = types
     setCopyingBiotop({ id, label }) {
       self.copyingBiotop = { id, label }
     },
-    setUrlQuery({ projekteTabs, feldkontrTab, history, client }) {
+    setUrlQuery({ projekteTabs, feldkontrTab }) {
       const newUrlQuery = {
         projekteTabs,
         feldkontrTab,
       }
       // only write if changed
       if (!isEqual(self.urlQuery, newUrlQuery)) {
-        const data = client.readQuery({
-          query: gql`
-            query Query {
-              tree @client {
-                activeNodeArray
-              }
-            }
-          `,
-        })
         self.urlQuery = newUrlQuery
         const search = queryString.stringify(newUrlQuery)
         const query = `${
           Object.keys(newUrlQuery).length > 0 ? `?${search}` : ''
         }`
-        const activeNodeArray = get(data, 'tree.activeNodeArray')
-        history.push(`/${activeNodeArray.join('/')}${query}`)
+        const { activeNodeArray } = self.tree
+        self.historyPush(`/${activeNodeArray.join('/')}${query}`)
       }
     },
     setMoving({ table, id, label }) {
@@ -252,6 +253,27 @@ const myTypes = types
     },
     setAssigningBeob(val) {
       self.assigningBeob = val
+    },
+    setTreeKey({ tree, key, value }) {
+      const oldValue = self.tree[key]
+      const { urlQuery } = self
+      // only write if changed
+      if (!isEqual(oldValue, value)) {
+        self.tree[key] = value
+        if (tree === 'tree' && key === 'activeNodeArray') {
+          const search = queryString.stringify(urlQuery)
+          const query = `${
+            Object.keys(urlQuery).length > 0 ? `?${search}` : ''
+          }`
+          // pass openNodes as state
+          self.historyPush(`/${value.join('/')}${query}`, {
+            openNodes: self.tree.openNodes,
+          })
+        }
+      }
+    },
+    cloneTree2From1() {
+      self.tree2 = cloneDeep(self.tree)
     },
   }))
 

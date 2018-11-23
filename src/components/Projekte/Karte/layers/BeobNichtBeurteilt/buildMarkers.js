@@ -1,5 +1,5 @@
 // @flow
-import React, { Fragment } from 'react'
+import React, { useContext } from 'react'
 import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
 import format from 'date-fns/format'
@@ -11,8 +11,8 @@ import beobIconHighlighted from '../../../../../etc/beobHighlighted.png'
 import getNearestTpop from '../../../../../modules/getNearestTpop'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import epsg2056to4326 from '../../../../../modules/epsg2056to4326'
-import setTreeKeyGql from './setTreeKey'
 import updateBeobByIdGql from './updateBeobById'
+import mobxStoreContext from '../../../../../mobxStoreContext'
 
 const StyledH3 = styled.h3`
   margin: 7px 0;
@@ -39,6 +39,7 @@ export default ({
   client: Object,
   assigningBeob: Boolean,
 }): Array<Object> => {
+  const { setTreeKey } = useContext(mobxStoreContext)
   const { ap, projekt } = activeNodes
 
   return beobs.map(beob => {
@@ -63,7 +64,7 @@ export default ({
     })
       .bindPopup(
         ReactDOMServer.renderToStaticMarkup(
-          <Fragment>
+          <>
             <div>{`Beobachtung von ${get(
               beob,
               'aeEigenschaftenByArtId.artname',
@@ -84,7 +85,7 @@ export default ({
             >
               Formular in neuem Tab öffnen
             </a>
-          </Fragment>,
+          </>,
         ),
       )
       .on('moveend', async event => {
@@ -110,13 +111,10 @@ export default ({
           'Beobachtungen',
           beob.id,
         ]
-        await client.mutate({
-          mutation: setTreeKeyGql,
-          variables: {
-            value: newActiveNodeArray,
-            tree: tree.name,
-            key: 'activeNodeArray',
-          },
+        setTreeKey({
+          value: newActiveNodeArray,
+          tree: tree.name,
+          key: 'activeNodeArray',
         })
         await client.mutate({
           mutation: updateBeobByIdGql,

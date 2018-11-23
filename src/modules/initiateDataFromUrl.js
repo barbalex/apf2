@@ -1,6 +1,4 @@
 // @flow
-import gql from 'graphql-tag'
-
 import getActiveNodeArrayFromPathname from './getActiveNodeArrayFromPathname'
 import getUrlQuery from '../modules/getUrlQuery'
 import isMobilePhone from '../modules/isMobilePhone'
@@ -9,72 +7,53 @@ import setOpenNodesFromActiveNodeArray from '../modules/setOpenNodesFromActiveNo
 
 export default async ({
   activeNodeArray: activeNodeArrayPassed,
-  client,
-  setUrlQuery,
-  history,
+  mobxStore,
 }) => {
+  const { setUrlQuery, cloneTree2From1 } = mobxStore
   const activeNodeArrayFromPathname =
     activeNodeArrayPassed || getActiveNodeArrayFromPathname()
   let initialActiveNodeArray = [...activeNodeArrayFromPathname]
   // fetch query here, BEFORE mutating active node array
   const urlQuery = getUrlQuery()
+  const { projekteTabs, feldkontrTab } = urlQuery
 
   // forward apflora.ch to Projekte
   if (activeNodeArrayFromPathname.length === 0) {
     initialActiveNodeArray.push('Projekte')
   }
-  await client.mutate({
-    mutation: gql`
-      mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
-        setTreeKey(tree: $tree, key: $key, value: $value) @client {
-          tree @client {
-            name
-            activeNodeArray
-            openNodes
-            apFilter
-            nodeLabelFilter
-            __typename: Tree
-          }
-        }
-      }
-    `,
-    variables: {
-      value: initialActiveNodeArray,
-      tree: 'tree',
-      key: 'activeNodeArray',
-    },
+  mobxStore.setTreeKey({
+    value: initialActiveNodeArray,
+    tree: 'tree',
+    key: 'activeNodeArray',
   })
   // need to set openNodes
   setOpenNodesFromActiveNodeArray({
     activeNodeArray: initialActiveNodeArray,
-    client,
+    mobxStore,
   })
   // clone tree2 in case tree2 is open
-  await client.mutate({
-    mutation: gql`
-      mutation cloneTree2From1 {
-        cloneTree2From1 @client
-      }
-    `,
-  })
-  const { projekteTabs, feldkontrTab } = urlQuery
-  setUrlQuery({ projekteTabs, feldkontrTab, history, client })
+  cloneTree2From1()
+  setUrlQuery({ projekteTabs, feldkontrTab })
 
   // set projekte tabs of not yet existing
   if (
     (activeNodeArrayFromPathname.length === 0 ||
       activeNodeArrayFromPathname[0] === 'Projekte') &&
-    (!urlQuery.projekteTabs ||
-      !urlQuery.projekteTabs.length ||
-      urlQuery.projekteTabs.length === 0)
+    (!projekteTabs || !projekteTabs.length || projekteTabs.length === 0)
   ) {
     if (isMobilePhone()) {
-      setUrlQueryValue({ key: 'projekteTabs', value: ['tree'], client })
+      setUrlQueryValue({
+        key: 'projekteTabs',
+        value: ['tree'],
+        urlQuery,
+        setUrlQuery,
+      })
     } else {
       setUrlQueryValue({
         key: 'projekteTabs',
         value: ['tree', 'daten'],
-        client,
+        urlQuery,
+        setUrlQuery,
       })
     }
   }

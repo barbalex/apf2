@@ -16,12 +16,11 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { withApollo } from 'react-apollo'
 
-import isNodeInActiveNodePath from '../../isNodeInActiveNodePath'
-import isNodeOpen from '../../isNodeOpen'
-import toggleNode from '../../toggleNode'
-import toggleNodeSymbol from '../../toggleNodeSymbol'
-import setTreeKey from './setTreeKey'
-import mobxStoreContext from '../../../../../mobxStoreContext'
+import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
+import isNodeOpen from '../isNodeOpen'
+import toggleNode from '../toggleNode'
+import toggleNodeSymbol from '../toggleNodeSymbol'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const singleRowHeight = 23
 const StyledNode = styled.div`
@@ -207,6 +206,7 @@ const Row = ({
   mapIdsFiltered: Array<String>,
   client: Object,
 }) => {
+  const mobxStore = useContext(mobxStoreContext)
   const {
     activeApfloraLayers,
     nodeFilter,
@@ -214,7 +214,8 @@ const Row = ({
     copying,
     moving,
     copyingBiotop,
-  } = useContext(mobxStoreContext)
+    setTreeKey,
+  } = mobxStore
 
   const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
   const myProps = { key: index }
@@ -269,27 +270,24 @@ const Row = ({
         nodeFilter,
         nodeFilterSetActiveTable,
         client,
+        mobxStore,
       })
     },
     [tree2, node, nodeFilter],
   )
   const onClickNodeSymbol = useCallback(
     event => {
-      toggleNodeSymbol({ tree: tree2, node, client })
+      toggleNodeSymbol({ tree: tree2, node, mobxStore })
     },
     [tree2, node],
   )
   const onClickPrint = useCallback(
-    () => {
-      client.mutate({
-        mutation: setTreeKey,
-        variables: {
-          value: [...node.url, 'print'],
-          tree: tree.name,
-          key: 'activeNodeArray',
-        },
-      })
-    },
+    () =>
+      setTreeKey({
+        value: [...node.url, 'print'],
+        tree: tree.name,
+        key: 'activeNodeArray',
+      }),
     [node.url, tree.name],
   )
 

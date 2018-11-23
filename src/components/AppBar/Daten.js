@@ -15,7 +15,6 @@ import { withApollo } from 'react-apollo'
 import isMobilePhone from '../../modules/isMobilePhone'
 import setUrlQueryValue from '../../modules/setUrlQueryValue'
 import mobxStoreContext from '../../mobxStoreContext'
-import historyContext from '../../historyContext'
 
 const StyledIconButton = styled.div`
   height: 30px !important;
@@ -88,7 +87,6 @@ const MyAppBarDaten = ({
     urlQuery,
     setUrlQuery,
   } = useContext(mobxStoreContext)
-  const { history } = useContext(historyContext)
 
   const [datenFilterAnchorEl, setDatenFilterAnchorEl] = useState(null)
 
@@ -109,8 +107,6 @@ const MyAppBarDaten = ({
           value: [`daten${treeNr}`],
           urlQuery,
           setUrlQuery,
-          client,
-          history,
         })
       } else {
         if (copyOfProjekteTabs.includes(`daten${treeNr}`)) {
@@ -133,8 +129,6 @@ const MyAppBarDaten = ({
           value: copyOfProjekteTabs,
           urlQuery,
           setUrlQuery,
-          client,
-          history,
         })
       }
     },

@@ -1,6 +1,4 @@
 // @flow
-import gql from 'graphql-tag'
-
 import isNodeOpen from './isNodeOpen'
 import treeNodeLabelFilterResetExceptAp from './treeNodeLabelFilterResetExceptAp'
 
@@ -8,11 +6,14 @@ export default async ({
   tree,
   node,
   client,
+  mobxStore,
 }: {
   tree: Object,
   node: Object,
   client: Object,
+  mobxStore: Object,
 }) => {
+  const { setTreeKey } = mobxStore
   // make sure this node's url is not yet contained
   // otherwise same nodes will be added multiple times!
   if (isNodeOpen(tree.openNodes, node.url)) return
@@ -27,26 +28,10 @@ export default async ({
     newOpenNodes.push([...node.url, 'Berichte'])
   }
 
-  client.mutate({
-    mutation: gql`
-      mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
-        setTreeKey(tree: $tree, key: $key, value: $value) @client {
-          tree @client {
-            name
-            activeNodeArray
-            openNodes
-            apFilter
-            nodeLabelFilter
-            __typename: Tree
-          }
-        }
-      }
-    `,
-    variables: {
-      value: newOpenNodes,
-      tree: tree.name,
-      key: 'openNodes',
-    },
+  setTreeKey({
+    value: newOpenNodes,
+    tree: tree.name,
+    key: 'openNodes',
   })
 
   if (node.menuType === 'ap') {

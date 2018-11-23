@@ -7,9 +7,6 @@ export default gql`
       activeNodeArray
       openNodes
       apFilter
-      map {
-        detailplaene
-      }
       nodeLabelFilter {
         ap
         pop
@@ -45,9 +42,6 @@ export default gql`
       activeNodeArray
       openNodes
       apFilter
-      map {
-        detailplaene
-      }
       nodeLabelFilter {
         ap
         pop

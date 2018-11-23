@@ -3,10 +3,10 @@ import isEqual from 'lodash/isEqual'
 import get from 'lodash/get'
 import gql from 'graphql-tag'
 
-import setTreeKeyGql from './setTreeKey'
 import updateBeobByIdGql from './updateBeobById'
 
-export default async ({ value, row, tree, refetchTree, client }) => {
+export default async ({ value, row, tree, refetchTree, client, mobxStore }) => {
+  const { setTreeKey } = mobxStore
   const variables = {
     id: row.id,
     artId: value,
@@ -62,15 +62,15 @@ export default async ({ value, row, tree, refetchTree, client }) => {
       [aNA[0], aNA[1], aNA[2], newApId, aNA[4]],
       [aNA[0], aNA[1], aNA[2], newApId, aNA[4], aNA[5]],
     ]
-    await client.mutate({
-      mutation: setTreeKeyGql,
-      variables: {
-        tree: tree.name,
-        value1: newANA,
-        key1: 'activeNodeArray',
-        value2: newOpenNodes,
-        key2: 'openNodes',
-      },
+    setTreeKey({
+      tree: tree.name,
+      value: newANA,
+      key: 'activeNodeArray',
+    })
+    setTreeKey({
+      tree: tree.name,
+      value: newOpenNodes,
+      key: 'openNodes',
     })
     refetchTree('local')
     refetchTree('aps')

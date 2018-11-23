@@ -11,7 +11,7 @@ import graphQlUri from './modules/graphQlUri'
 import buildResolvers from './store/resolvers'
 import localStoreDefaults from './store/defaults'
 
-export default async ({ idb, history, mobxStore }) => {
+export default async ({ idb, mobxStore }) => {
   const authLink = setContext(async (_, { headers }) => {
     const { token } = mobxStore.user
     if (token) {
@@ -37,7 +37,7 @@ export default async ({ idb, history, mobxStore }) => {
     },*/
   })
   const stateLink = withClientState({
-    resolvers: buildResolvers({ history, mobxStore }),
+    resolvers: buildResolvers({ mobxStore }),
     cache,
     defaults: localStoreDefaults,
   })

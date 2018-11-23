@@ -1,7 +1,6 @@
 // @flow
 
 import nodeLabelFilter from './tree/nodeLabelFilter'
-import treeMap from './tree/map'
 
 export default {
   tree: {
@@ -10,7 +9,6 @@ export default {
     openNodes: [],
     apFilter: false,
     nodeLabelFilter,
-    map: treeMap,
     __typename: 'Tree',
   },
   tree2: {
@@ -19,7 +17,6 @@ export default {
     openNodes: [],
     apFilter: false,
     nodeLabelFilter,
-    map: treeMap,
     __typename: 'Tree2',
   },
 }

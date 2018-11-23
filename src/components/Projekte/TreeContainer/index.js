@@ -73,8 +73,6 @@ import setUrlQueryValue from '../../../modules/setUrlQueryValue'
 import moveTo from '../../../modules/moveTo'
 import copyTo from '../../../modules/copyTo'
 import createNewPopFromBeob from '../../../modules/createNewPopFromBeob'
-import setTreeKeyGql from './setTreeKey'
-import setTreeKey2Gql from './setTreeKey2'
 import copyBeobZugeordnetKoordToTpop from '../../../modules/copyBeobZugeordnetKoordToTpop'
 import copyTpopKoordToPop from '../../../modules/copyTpopKoordToPop'
 import tpopById from './tpopById'
@@ -83,7 +81,6 @@ import openLowerNodes from './openLowerNodes'
 import closeLowerNodes from './closeLowerNodes'
 import insertDataset from './insertDataset'
 import mobxStoreContext from '../../../mobxStoreContext'
-import historyContext from '../../../historyContext'
 
 const Container = styled.div`
   height: 100%;
@@ -212,8 +209,8 @@ const TreeContainer = ({
     setCopyingBiotop,
     urlQuery,
     setUrlQuery,
+    setTreeKey,
   } = mobxStore
-  const { history } = useContext(historyContext)
 
   const datasetToDelete = toDelete
   const deleteDatasetModalIsVisible = !!datasetToDelete.id
@@ -238,22 +235,16 @@ const TreeContainer = ({
       projektNode
     ) {
       const projektUrl = [...projektNode.url]
-      client.mutate({
-        mutation: setTreeKeyGql,
-        variables: {
-          value: projektUrl,
-          tree: treeName,
-          key: 'activeNodeArray',
-        },
+      setTreeKey({
+        value: projektUrl,
+        tree: treeName,
+        key: 'activeNodeArray',
       })
       // add projekt to open nodes
-      client.mutate({
-        mutation: setTreeKeyGql,
-        variables: {
-          value: [...openNodes, projektUrl],
-          tree: treeName,
-          key: 'openNodes',
-        },
+      setTreeKey({
+        value: [...openNodes, projektUrl],
+        tree: treeName,
+        key: 'openNodes',
       })
     }
   })
@@ -295,6 +286,7 @@ const TreeContainer = ({
             refetchTree,
             addError,
             client,
+            mobxStore,
           })
         },
         openLowerNodes() {
@@ -306,28 +298,29 @@ const TreeContainer = ({
             menuType,
             refetchTree,
             client,
+            mobxStore,
           })
         },
         closeLowerNodes() {
           closeLowerNodes({
             tree,
             url,
-            client,
+            mobxStore,
           })
         },
         delete() {
           const afterDeletionHook = async () => {
             // set it as new activeNodeArray and open node
             const newOpenNodes = openNodes.filter(n => !isEqual(n, url))
-            await client.mutate({
-              mutation: setTreeKey2Gql,
-              variables: {
-                tree: tree.name,
-                value1: url,
-                key1: 'activeNodeArray',
-                value2: newOpenNodes,
-                key2: 'openNodes',
-              },
+            setTreeKey({
+              tree: tree.name,
+              value: url,
+              key: 'activeNodeArray',
+            })
+            setTreeKey({
+              tree: tree.name,
+              value: newOpenNodes,
+              key: 'openNodes',
             })
             const tableToUse = [
               'tpopfeldkontrzaehl',
@@ -419,6 +412,7 @@ const TreeContainer = ({
             refetchTree,
             addError,
             client,
+            mobxStore,
           })
         },
         copyBeobZugeordnetKoordToTpop() {
@@ -510,8 +504,6 @@ const TreeContainer = ({
         value: [...projekteTabs, 'karte'],
         urlQuery,
         setUrlQuery,
-        client,
-        history,
       })
     }
   })

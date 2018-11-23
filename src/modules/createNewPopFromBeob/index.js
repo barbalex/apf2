@@ -6,7 +6,6 @@ import queryBeob from './queryBeob'
 import createPop from './createPop'
 import createTpop from './createTpop'
 import updateBeobById from './updateBeobById'
-import setTreeKeyGql from './setTreeKey'
 import { isEqual } from 'date-fns'
 
 export default async ({
@@ -16,6 +15,7 @@ export default async ({
   refetchTree,
   addError,
   client,
+  mobxStore,
 }: {
   tree: Object,
   activeNodes: Object,
@@ -23,7 +23,9 @@ export default async ({
   refetchTree: () => void,
   addError: Object,
   client: Object,
+  mobxStore: Object,
 }): Promise<void> => {
+  const { setTreeKey } = mobxStore
   const { ap, projekt } = activeNodes
   let beobResult
   try {
@@ -150,22 +152,16 @@ export default async ({
     // and remove old node
     .filter(n => !isEqual(n, tree.activeNodeArray))
 
-  await client.mutate({
-    mutation: setTreeKeyGql,
-    variables: {
-      value: newOpenNodes,
-      tree: tree.name,
-      key: 'openNodes',
-    },
+  setTreeKey({
+    value: newOpenNodes,
+    tree: tree.name,
+    key: 'openNodes',
   })
   // set new activeNodeArray
-  await client.mutate({
-    mutation: setTreeKeyGql,
-    variables: {
-      value: newActiveNodeArray,
-      tree: tree.name,
-      key: 'activeNodeArray',
-    },
+  setTreeKey({
+    value: newActiveNodeArray,
+    tree: tree.name,
+    key: 'activeNodeArray',
   })
 
   refetchTree('local')

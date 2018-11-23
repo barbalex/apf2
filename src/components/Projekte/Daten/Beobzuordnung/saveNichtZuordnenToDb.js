@@ -1,10 +1,18 @@
 //@flow
 import isEqual from 'lodash/isEqual'
 
-import setTreeKeyGql from './setTreeKey'
 import updateBeobByIdGql from './updateBeobById'
 
-export default async ({ value, id, tree, refetch, refetchTree, client }) => {
+export default async ({
+  value,
+  id,
+  tree,
+  refetch,
+  refetchTree,
+  client,
+  mobxStore,
+}) => {
+  const { setTreeKey } = mobxStore
   const variables = {
     id,
     nichtZuordnen: value,
@@ -32,15 +40,15 @@ export default async ({ value, id, tree, refetch, refetchTree, client }) => {
     if (isEqual(n, oldParentNodeUrl)) return newParentNodeUrl
     return n
   })
-  await client.mutate({
-    mutation: setTreeKeyGql,
-    variables: {
-      tree: tree.name,
-      value1: newActiveNodeArray,
-      key1: 'activeNodeArray',
-      value2: newOpenNodes,
-      key2: 'openNodes',
-    },
+  setTreeKey({
+    tree: tree.name,
+    value: newActiveNodeArray,
+    key: 'activeNodeArray',
+  })
+  setTreeKey({
+    tree: tree.name,
+    value: newOpenNodes,
+    key: 'openNodes',
   })
   refetch()
   refetchTree('local')

@@ -23,7 +23,6 @@ import EkfYear from './EkfYear'
 import User from './User'
 import Daten from './Daten'
 import mobxStoreContext from '../../mobxStoreContext'
-import historyContext from '../../historyContext'
 
 const StyledAppBar = styled(AppBar)`
   @media print {
@@ -84,7 +83,6 @@ const MyAppBar = ({
     urlQuery,
     setUrlQuery,
   } = useContext(mobxStoreContext)
-  const { history } = useContext(historyContext)
 
   const activeNodeArray = get(localData, 'tree.activeNodeArray')
   const activeNodes = getActiveNodes(activeNodeArray)
@@ -113,8 +111,6 @@ const MyAppBar = ({
           value: [name],
           urlQuery,
           setUrlQuery,
-          client,
-          history,
         })
       } else {
         if (projekteTabs.includes(name)) {
@@ -137,8 +133,6 @@ const MyAppBar = ({
           value: projekteTabs,
           urlQuery,
           setUrlQuery,
-          client,
-          history,
         })
       }
     },

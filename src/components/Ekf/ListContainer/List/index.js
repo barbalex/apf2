@@ -11,7 +11,6 @@ import { withApollo } from 'react-apollo'
 
 import Item from './Item'
 import mobxStoreContext from '../../../../mobxStoreContext'
-import historyContext from '../../../../historyContext'
 import initiateDataFromUrl from '../initiateDataFromUrl'
 import withLocalData from './withLocalData'
 
@@ -82,8 +81,8 @@ const EkfList = ({
   dimensions: Object,
   client: Object,
 }) => {
-  const { ekfYear, ekfAdresseId, setUrlQuery } = useContext(mobxStoreContext)
-  const { history } = useContext(historyContext)
+  const mobxStore = useContext(mobxStoreContext)
+  const { ekfYear, ekfAdresseId } = mobxStore
   const ekf = getEkfFromData({ data, ekfAdresseId })
 
   const activeNodeArray = get(localData, 'tree.activeNodeArray')
@@ -114,9 +113,7 @@ const EkfList = ({
         ]
         initiateDataFromUrl({
           activeNodeArray: url,
-          client,
-          setUrlQuery,
-          history,
+          mobxStore,
         })
       }
     },

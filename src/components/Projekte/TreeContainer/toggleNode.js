@@ -1,6 +1,4 @@
 // @flow
-import gql from 'graphql-tag'
-
 import isNodeOpen from './isNodeOpen'
 import isNodeInActiveNodePath from './isNodeInActiveNodePath'
 import openNode from './openNode'
@@ -11,14 +9,17 @@ export default ({
   nodeFilter,
   nodeFilterSetActiveTable,
   client,
+  mobxStore,
 }: {
   tree: Object,
   node: Object,
   nodeFilter: Object,
   nodeFilterSetActiveTable: () => void,
   client: Object,
+  mobxStore: Object,
 }): any => {
   if (!node.url) throw new Error('passed node has no url')
+  const { setTreeKey } = mobxStore
 
   // TODO: always set showFilter false if is true
   if (nodeFilter) {
@@ -42,28 +43,12 @@ export default ({
       // leave newActiveNodeArray as it is
     }
   } else if (!nodeIsOpen) {
-    openNode({ tree, node, client })
+    openNode({ tree, node, client, mobxStore })
   }
 
-  client.mutate({
-    mutation: gql`
-      mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
-        setTreeKey(tree: $tree, key: $key, value: $value) @client {
-          tree @client {
-            name
-            activeNodeArray
-            openNodes
-            apFilter
-            nodeLabelFilter
-            __typename: Tree
-          }
-        }
-      }
-    `,
-    variables: {
-      value: newActiveNodeArray,
-      tree: tree.name,
-      key: 'activeNodeArray',
-    },
+  setTreeKey({
+    value: newActiveNodeArray,
+    tree: tree.name,
+    key: 'activeNodeArray',
   })
 }

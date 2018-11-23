@@ -23,7 +23,6 @@ import MobxStore from './mobxStore'
 
 import 'typeface-roboto'
 import 'react-reflex/styles.css'
-import createHistory from 'history/createBrowserHistory'
 
 // import components
 import initializeIdb from './modules/initializeIdb'
@@ -40,7 +39,6 @@ import historyListen from './modules/historyListen'
 
 import { Provider as MobxProvider } from './mobxStoreContext'
 import { Provider as IdbProvider } from './idbContext'
-import { Provider as HistoryProvider } from './historyContext'
 
 import './index.css'
 import createInitialMobxStore from './mobxStore/initial'
@@ -56,55 +54,51 @@ const run = async () => {
       }
     })
 
-    const history = createHistory()
-
     const idb = initializeIdb()
 
     const initialMobxStore = await createInitialMobxStore({ idb })
     const mobxStore = MobxStore.create(initialMobxStore)
 
-    const client = await buildClient({ idb, history, mobxStore })
+    const { history } = mobxStore
+    console.log('index.js', { mobxStore, history })
+
+    const client = await buildClient({ idb, mobxStore })
     registerServiceWorker(mobxStore)
 
     await initiateDataFromUrl({
-      client,
-      setUrlQuery: mobxStore.setUrlQuery,
-      history,
+      mobxStore,
     })
 
     // begin _after_ initiation data from url
-    history.listen((location, action) =>
+    mobxStore.history.listen((location, action) =>
       historyListen({
         location,
         action,
-        client,
+        mobxStore,
       }),
     )
 
     const idbContext = { idb }
-    const historyContext = { history }
 
     ReactDOM.render(
-      <HistoryProvider value={historyContext}>
-        <IdbProvider value={idbContext}>
-          <MobxProvider value={mobxStore}>
-            <ApolloProvider client={client}>
-              <>
-                <Print />
-                <MuiThemeProvider theme={theme}>
-                  <MuiPickersUtilsProvider
-                    utils={MomentUtils}
-                    moment={moment}
-                    locale="de-ch"
-                  >
-                    <AppContainer />
-                  </MuiPickersUtilsProvider>
-                </MuiThemeProvider>
-              </>
-            </ApolloProvider>
-          </MobxProvider>
-        </IdbProvider>
-      </HistoryProvider>,
+      <IdbProvider value={idbContext}>
+        <MobxProvider value={mobxStore}>
+          <ApolloProvider client={client}>
+            <>
+              <Print />
+              <MuiThemeProvider theme={theme}>
+                <MuiPickersUtilsProvider
+                  utils={MomentUtils}
+                  moment={moment}
+                  locale="de-ch"
+                >
+                  <AppContainer />
+                </MuiPickersUtilsProvider>
+              </MuiThemeProvider>
+            </>
+          </ApolloProvider>
+        </MobxProvider>
+      </IdbProvider>,
       document.getElementById('root'),
     )
   } catch (error) {

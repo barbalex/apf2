@@ -7,7 +7,6 @@ import omit from 'lodash/omit'
 import gql from 'graphql-tag'
 
 import tables from '../../../../../modules/tables'
-import setTreeKey from './setTreeKey'
 
 const isFreiwilligenKontrolle = activeNodeArray =>
   activeNodeArray[activeNodeArray.length - 2] === 'Freiwilligen-Kontrollen'
@@ -19,6 +18,7 @@ export default async ({
   addDeletedDataset,
   addError,
   client,
+  mobxStore,
 }: {
   dataPassedIn: Object,
   toDelete: Object,
@@ -26,7 +26,9 @@ export default async ({
   addDeletedDataset: () => void,
   addError: Object,
   client: Object,
+  mobxStore: Object,
 }): Promise<void> => {
+  const { setTreeKey } = mobxStore
   // deleteDatasetDemand checks variables
   const { table: tablePassed, id, url, label, afterDeletionHook } = toDelete
 
@@ -109,13 +111,10 @@ export default async ({
     if (table === 'ziel') {
       newActiveNodeArray1.pop()
     }
-    await client.mutate({
-      mutation: setTreeKey,
-      variables: {
-        value: newActiveNodeArray1,
-        tree: 'tree',
-        key: 'activeNodeArray',
-      },
+    setTreeKey({
+      value: newActiveNodeArray1,
+      tree: 'tree',
+      key: 'activeNodeArray',
     })
   }
   const activeNodeArray2 = get(dataPassedIn, 'tree2.activeNodeArray')
@@ -130,36 +129,27 @@ export default async ({
     if (table === 'ziel') {
       newActiveNodeArray2.pop()
     }
-    await client.mutate({
-      mutation: setTreeKey,
-      variables: {
-        value: newActiveNodeArray2,
-        tree: 'tree2',
-        key: 'activeNodeArray',
-      },
+    setTreeKey({
+      value: newActiveNodeArray2,
+      tree: 'tree2',
+      key: 'activeNodeArray',
     })
   }
 
   // remove from openNodes
   const openNodes1 = get(dataPassedIn, 'tree.openNodes')
   const newOpenNodes1 = openNodes1.filter(n => !isEqual(n, url))
-  await client.mutate({
-    mutation: setTreeKey,
-    variables: {
-      value: newOpenNodes1,
-      tree: 'tree',
-      key: 'openNodes',
-    },
+  setTreeKey({
+    value: newOpenNodes1,
+    tree: 'tree',
+    key: 'openNodes',
   })
   const openNodes2 = get(dataPassedIn, 'tree2.openNodes')
   const newOpenNodes2 = openNodes2.filter(n => !isEqual(n, url))
-  await client.mutate({
-    mutation: setTreeKey,
-    variables: {
-      value: newOpenNodes2,
-      tree: 'tree2',
-      key: 'openNodes',
-    },
+  setTreeKey({
+    value: newOpenNodes2,
+    tree: 'tree2',
+    key: 'openNodes',
   })
 
   if (afterDeletionHook) afterDeletionHook()

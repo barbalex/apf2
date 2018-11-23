@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
@@ -12,7 +12,7 @@ import { withApollo } from 'react-apollo'
 import tables from '../../../../modules/tables'
 import labelFilterData from './data'
 import setTreeNodeLabelFilterKey from './setTreeNodeLabelFilterKey'
-import setTreeKeyGql from './setTreeKey'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const StyledFormControl = styled(FormControl)`
   padding-right: 0.8em !important;
@@ -44,6 +44,7 @@ const LabelFilter = ({
   data: Object,
   client: Object,
 }) => {
+  const { setTreeKey } = useContext(mobxStoreContext)
   const tableName = activeNode ? activeNode.filterTable : null
 
   let labelText = '(filtern nicht möglich)'
@@ -75,15 +76,15 @@ const LabelFilter = ({
         const newActiveUrl = [...url]
         newActiveNodeArray.pop()
         let newOpenNodes = openNodes.filter(n => n !== newActiveUrl)
-        await client.mutate({
-          mutation: setTreeKeyGql,
-          variables: {
-            tree: treeName,
-            value1: newActiveNodeArray,
-            key1: 'activeNodeArray',
-            value2: newOpenNodes,
-            key2: 'openNodes',
-          },
+        setTreeKey({
+          tree: treeName,
+          value: newActiveNodeArray,
+          key: 'activeNodeArray',
+        })
+        setTreeKey({
+          tree: treeName,
+          value: newOpenNodes,
+          key: 'openNodes',
         })
       }
       client.mutate({

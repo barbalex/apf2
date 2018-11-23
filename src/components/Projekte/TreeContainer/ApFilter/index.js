@@ -1,17 +1,16 @@
 // @flow
-import React, { useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import Switch from '@material-ui/core/Switch'
 import get from 'lodash/get'
 import { withApollo } from 'react-apollo'
 
-import withLocalData from './withLocalData'
-import setTreeKey from './setTreeKey'
 import apById from './apById'
 import Label from '../../../shared/Label'
 import ErrorBoundary from '../../../shared/ErrorBoundarySingleChild'
 import getActiveNodes from '../../../../modules/getActiveNodes'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const NurApDiv = styled.div`
   display: flex;
@@ -25,34 +24,26 @@ const StyledSwitch = styled(Switch)`
   margin-top: -18px;
 `
 
-const enhance = compose(
-  withApollo,
-  withLocalData,
-)
+const enhance = compose(withApollo)
 
 const ApFilter = ({
   treeName,
-  localData,
   client,
 }: {
   treeName: String,
-  localData: Object,
   client: Object,
 }) => {
-  const apFilter = get(localData, `${treeName}.apFilter`)
-  const activeNodeArray = get(localData, `${treeName}.activeNodeArray`)
-  const openNodes = get(localData, `${treeName}.openNodes`)
+  const mobxStore = useContext(mobxStoreContext)
+  const { setTreeKey } = mobxStore
+  const { apFilter, activeNodeArray, openNodes } = mobxStore[treeName]
 
   const onChange = useCallback(
     async () => {
       const previousApFilter = apFilter
-      client.mutate({
-        mutation: setTreeKey,
-        variables: {
-          value: !apFilter,
-          tree: treeName,
-          key: 'apFilter',
-        },
+      setTreeKey({
+        value: !apFilter,
+        tree: treeName,
+        key: 'apFilter',
       })
       if (!previousApFilter) {
         // apFilter was set to true
@@ -75,13 +66,10 @@ const ApFilter = ({
             activeNodeArray[1],
             activeNodeArray[2],
           ]
-          await client.mutate({
-            mutation: setTreeKey,
-            variables: {
-              value: newActiveNodeArray,
-              tree: treeName,
-              key: 'activeNodeArray',
-            },
+          setTreeKey({
+            value: newActiveNodeArray,
+            tree: treeName,
+            key: 'activeNodeArray',
           })
           // remove from openNodes
           const newOpenNodes = openNodes.filter(n => {
@@ -94,13 +82,10 @@ const ApFilter = ({
               return false
             return true
           })
-          await client.mutate({
-            mutation: setTreeKey,
-            variables: {
-              value: newOpenNodes,
-              tree: treeName,
-              key: 'openNodes',
-            },
+          setTreeKey({
+            value: newOpenNodes,
+            tree: treeName,
+            key: 'openNodes',
           })
         }
       }
@@ -108,16 +93,6 @@ const ApFilter = ({
     [treeName, activeNodeArray, openNodes, apFilter],
   )
 
-  if (localData.error) {
-    if (
-      localData.error.message.includes('permission denied') ||
-      localData.error.message.includes('keine Berechtigung')
-    ) {
-      // ProjektContainer returns helpful screen
-      return null
-    }
-    return `Fehler: ${localData.error.message}`
-  }
   return (
     <ErrorBoundary>
       <NurApDiv>

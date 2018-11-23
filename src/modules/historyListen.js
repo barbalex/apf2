@@ -1,43 +1,27 @@
 //@flow
 import isEqual from 'lodash/isEqual'
-import gql from 'graphql-tag'
 
 import getActiveNodeArrayFromPathname from './getActiveNodeArrayFromPathname'
 
 export default ({
   location,
   action,
-  client,
+  mobxStore,
 }: {
   location: Object,
   action: String,
-  client: Object,
+  mobxStore: Object,
 }) => {
+  const { setTreeKey } = mobxStore
   const { pathname, state } = location
   //console.log(action, location.pathname, location.state)
   // prevent never ending loop if user clicks back right after initial loading
   if (!(pathname === '/Projekte' && action === 'PUSH')) {
     const activeNodeArray = getActiveNodeArrayFromPathname(pathname)
-    client.mutate({
-      mutation: gql`
-        mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
-          setTreeKey(tree: $tree, key: $key, value: $value) @client {
-            tree @client {
-              name
-              activeNodeArray
-              openNodes
-              apFilter
-              nodeLabelFilter
-              __typename: Tree
-            }
-          }
-        }
-      `,
-      variables: {
-        value: activeNodeArray,
-        tree: 'tree',
-        key: 'activeNodeArray',
-      },
+    setTreeKey({
+      value: activeNodeArray,
+      tree: 'tree',
+      key: 'activeNodeArray',
     })
     if (
       state &&
@@ -48,26 +32,10 @@ export default ({
         isEqual(state.openNodes[0], ['Projekte'])
       )
     ) {
-      client.mutate({
-        mutation: gql`
-          mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
-            setTreeKey(tree: $tree, key: $key, value: $value) @client {
-              tree @client {
-                name
-                activeNodeArray
-                openNodes
-                apFilter
-                nodeLabelFilter
-                __typename: Tree
-              }
-            }
-          }
-        `,
-        variables: {
-          value: state.openNodes,
-          tree: 'tree',
-          key: 'openNodes',
-        },
+      setTreeKey({
+        value: state.openNodes,
+        tree: 'tree',
+        key: 'openNodes',
       })
     }
   }

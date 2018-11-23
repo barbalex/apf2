@@ -16,6 +16,7 @@ export default ({
   menuType,
   refetchTree,
   client,
+  mobxStore,
 }: {
   tree: Object,
   activeNodes: Object,
@@ -24,6 +25,7 @@ export default ({
   menuType: String,
   refetchTree: () => void,
   client: Object,
+  mobxStore: Object,
 }) => {
   /**
    * 1. load all data
@@ -35,28 +37,35 @@ export default ({
    */
   switch (menuType) {
     case 'popFolder':
-      popFolder({ tree, id, activeNodes, refetchTree })
+      popFolder({ tree, id, activeNodes, refetchTree, mobxStore })
       break
     case 'pop':
-      pop({ tree, id, activeNodes, refetchTree })
+      pop({ tree, id, activeNodes, refetchTree, mobxStore })
       break
     case 'tpopFolder':
-      tpopFolder({ tree, id, activeNodes, refetchTree })
+      tpopFolder({ tree, id, activeNodes, refetchTree, mobxStore })
       break
     case 'tpop':
-      tpop({ tree, id, activeNodes, refetchTree })
+      tpop({ tree, id, activeNodes, refetchTree, mobxStore })
       break
     case 'tpopfeldkontrFolder':
-      tpopfeldkontrFolder({ tree, id, activeNodes, refetchTree })
+      tpopfeldkontrFolder({ tree, id, activeNodes, refetchTree, mobxStore })
       break
     case 'tpopfreiwkontrFolder':
-      tpopfreiwkontrFolder({ tree, id, activeNodes, refetchTree })
+      tpopfreiwkontrFolder({ tree, id, activeNodes, refetchTree, mobxStore })
       break
     case 'zielFolder':
-      zielFolder({ tree, id, activeNodes, refetchTree })
+      zielFolder({ tree, id, activeNodes, refetchTree, mobxStore })
       break
     case 'zieljahrFolder':
-      zieljahrFolder({ tree, id, parentId, activeNodes, refetchTree })
+      zieljahrFolder({
+        tree,
+        id,
+        parentId,
+        activeNodes,
+        refetchTree,
+        mobxStore,
+      })
       break
     default:
       // do nothing

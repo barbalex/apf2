@@ -5,15 +5,11 @@ export default async ({
   value,
   urlQuery,
   setUrlQuery,
-  client,
-  history,
 }: {
   key: String,
   value: String,
   urlQuery: Object,
   setUrlQuery: () => void,
-  client: Object,
-  history: Object,
 }): void => {
   let { projekteTabs, feldkontrTab } = urlQuery
   if (key === 'projekteTabs') {
@@ -21,5 +17,5 @@ export default async ({
   } else {
     feldkontrTab = value
   }
-  setUrlQuery({ projekteTabs, feldkontrTab, client, history })
+  setUrlQuery({ projekteTabs, feldkontrTab })
 }

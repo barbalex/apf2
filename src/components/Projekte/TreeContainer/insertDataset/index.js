@@ -5,7 +5,6 @@ import camelCase from 'lodash/camelCase'
 import get from 'lodash/get'
 
 import tables from '../../../../modules/tables'
-import setTreeKey from './setTreeKey'
 
 export default async ({
   tree,
@@ -17,6 +16,7 @@ export default async ({
   refetchTree,
   addError,
   client,
+  mobxStore,
 }: {
   tree: Object,
   tablePassed: String,
@@ -27,7 +27,9 @@ export default async ({
   refetchTree: () => void,
   addError: () => void,
   client: Object,
+  mobxStore: Object,
 }): any => {
+  const { setTreeKey } = mobxStore
   let table = tablePassed
   // insert new dataset in db and fetch id
   const tableMetadata: {
@@ -168,13 +170,10 @@ export default async ({
   )
   // set new url
   const newActiveNodeArray = [...url, row[idField]]
-  await client.mutate({
-    mutation: setTreeKey,
-    variables: {
-      value: newActiveNodeArray,
-      tree: tree.name,
-      key: 'activeNodeArray',
-    },
+  setTreeKey({
+    value: newActiveNodeArray,
+    tree: tree.name,
+    key: 'activeNodeArray',
   })
   // set open nodes
   const { openNodes } = tree
@@ -184,13 +183,10 @@ export default async ({
     urlWithoutJahr.pop()
     newOpenNodes = [...openNodes, urlWithoutJahr, newActiveNodeArray]
   }
-  await client.mutate({
-    mutation: setTreeKey,
-    variables: {
-      value: newOpenNodes,
-      tree: tree.name,
-      key: 'openNodes',
-    },
+  setTreeKey({
+    value: newOpenNodes,
+    tree: tree.name,
+    key: 'openNodes',
   })
   refetchTree(`${table === 'tpopkontrzaehl' ? table : tablePassed}s`)
 }

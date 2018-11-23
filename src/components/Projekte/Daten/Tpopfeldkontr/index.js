@@ -25,7 +25,6 @@ import updateTpopkontrByIdGql from './updateTpopkontrById'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import withAllAdresses from './withAllAdresses'
 import mobxStoreContext from '../../../../mobxStoreContext'
-import historyContext from '../../../../historyContext'
 
 const Container = styled.div`
   height: 100%;
@@ -99,7 +98,6 @@ const Tpopfeldkontr = ({
   const { nodeFilter, nodeFilterSetValue, urlQuery, setUrlQuery } = useContext(
     mobxStoreContext,
   )
-  const { history } = useContext(historyContext)
 
   const [errors, setErrors] = useState({})
   const [value, setValue] = useState(
@@ -285,8 +283,6 @@ const Tpopfeldkontr = ({
       value,
       urlQuery,
       setUrlQuery,
-      client,
-      history,
     })
     setValue(value)
   })
