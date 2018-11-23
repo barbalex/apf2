@@ -1,13 +1,16 @@
 // @flow
-import React, { useMemo } from 'react'
+import React, { useMemo, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
+import withProps from 'recompose/withProps'
+import { observer } from 'mobx-react-lite'
 
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import withData from './withData'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const Container = styled.div`
   padding: 15px 10px 0 10px;
@@ -17,14 +20,18 @@ const Container = styled.div`
       : 'auto'};
 `
 
-const enhance = compose(withData)
+const enhance = compose(
+  withProps(() => ({
+    mobxStore: useContext(mobxStoreContext),
+  })),
+  withData,
+  observer,
+)
 
 const Beob = ({
-  id,
   data,
   dimensions = { width: 380 },
 }: {
-  id: string,
   dimensions: Object,
   data: Object,
 }) => {

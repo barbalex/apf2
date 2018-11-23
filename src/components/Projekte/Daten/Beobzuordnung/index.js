@@ -7,7 +7,9 @@ import flatten from 'lodash/flatten'
 import Button from '@material-ui/core/Button'
 import SendIcon from '@material-ui/icons/EmailOutlined'
 import compose from 'recompose/compose'
+import withProps from 'recompose/withProps'
 import { withApollo } from 'react-apollo'
+import { observer } from 'mobx-react-lite'
 
 import FormTitle from '../../../shared/FormTitle'
 import TextField from '../../../shared/TextField'
@@ -138,14 +140,15 @@ const getTpopZuordnenSource = (row: Object, apId: string): Array<Object> => {
 
 const enhance = compose(
   withApollo,
+  withProps(() => ({
+    mobxStore: useContext(mobxStoreContext),
+  })),
   withAeEigenschaftens,
   withData,
+  observer,
 )
 
 const Beobzuordnung = ({
-  id,
-  apId,
-  tree,
   type,
   dimensions = { width: 380 },
   refetchTree,
@@ -154,9 +157,6 @@ const Beobzuordnung = ({
   dataAeEigenschaftens,
   client,
 }: {
-  id: string,
-  apId: string,
-  tree: Object,
   type: string,
   dimensions: Object,
   refetchTree: () => void,
@@ -166,6 +166,13 @@ const Beobzuordnung = ({
   client: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
+  const tree = mobxStore[treeName]
+  const { activeNodeArray } = mobxStore[treeName]
+  const id = activeNodeArray[activeNodeArray.length - 1]
+  const apId =
+    activeNodeArray.length > 3
+      ? activeNodeArray[3]
+      : '99999999-9999-9999-9999-999999999999'
   const row = get(data, 'beobById', {})
 
   const onSaveArtIdToDb = useCallback(
@@ -327,7 +334,7 @@ const Beobzuordnung = ({
             'beobQuelleWerteByQuelleId.name',
             '?',
           )} (nicht veränderbar)`}</Title>
-          <Beob id={id} dimensions={dimensions} />
+          <Beob dimensions={dimensions} treeName={treeName} />
         </DataContainer>
       </FormContainer>
     </ErrorBoundary>

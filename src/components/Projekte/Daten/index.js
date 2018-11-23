@@ -277,31 +277,25 @@ const Daten = ({
     beobNichtZuzuordnen: (
       <Beobzuordnung
         dimensions={dimensions}
-        id={activeNodeArray[activeNodeArray.length - 1]}
-        tree={tree}
+        treeName={treeName}
         refetchTree={refetchTree}
         type="nichtZuzuordnen"
-        apId={apId}
       />
     ),
     beobNichtBeurteilt: (
       <Beobzuordnung
         dimensions={dimensions}
-        id={activeNodeArray[activeNodeArray.length - 1]}
-        tree={tree}
+        treeName={treeName}
         refetchTree={refetchTree}
         type="nichtBeurteilt"
-        apId={apId}
       />
     ),
     beobZugeordnet: (
       <Beobzuordnung
         dimensions={dimensions}
-        id={activeNodeArray[activeNodeArray.length - 1]}
-        tree={tree}
+        treeName={treeName}
         refetchTree={refetchTree}
         type="zugeordnet"
-        apId={apId}
       />
     ),
     user: (
