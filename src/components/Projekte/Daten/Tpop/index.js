@@ -4,8 +4,9 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
-import { observer } from 'mobx-react-lite'
 import { withApollo } from 'react-apollo'
+import withProps from 'recompose/withProps'
+import { observer } from 'mobx-react-lite'
 
 import TextField from '../../../shared/TextField'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
@@ -44,18 +45,19 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   withApollo,
+  withProps(() => ({
+    mobxStore: useContext(mobxStoreContext),
+  })),
   withData,
   observer,
 )
 
 const Tpop = ({
-  id,
   dimensions = { width: 380 },
   treeName,
   data,
   client,
 }: {
-  id: String,
   dimensions: Object,
   treeName: string,
   data: Object,
@@ -164,7 +166,7 @@ const Tpop = ({
         setErrors({})
       }
     },
-    [showFilter, id],
+    [showFilter, row],
   )
   const apJahr = get(data, 'tpopById.popByPopId.apByApId.startJahr', null)
   let gemeindeWerte = get(data, 'allGemeindes.nodes', [])

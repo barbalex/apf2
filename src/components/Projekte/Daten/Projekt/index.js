@@ -5,6 +5,7 @@ import get from 'lodash/get'
 import compose from 'recompose/compose'
 import withProps from 'recompose/withProps'
 import { withApollo } from 'react-apollo'
+import { observer } from 'mobx-react-lite'
 
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
@@ -28,6 +29,7 @@ const enhance = compose(
   withApollo,
   withProps(() => ({ mobxStore: useContext(mobxStoreContext) })),
   withData,
+  observer,
 )
 
 const Projekt = ({
