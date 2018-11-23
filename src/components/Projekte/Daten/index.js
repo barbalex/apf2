@@ -57,7 +57,6 @@ const Container = styled.div`
 const enhance = compose(observer)
 
 const Daten = ({
-  tree,
   treeName,
   activeNode,
   activeNodes,
@@ -65,7 +64,6 @@ const Daten = ({
   refetchTree,
   role,
 }: {
-  tree: Object,
   treeName: String,
   activeNode: Object,
   activeNodes: Array<Object>,
@@ -75,12 +73,8 @@ const Daten = ({
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { nodeFilter } = mobxStore
-
-  const { activeNodeArray } = mobxStore[treeName]
-  const apId =
-    activeNodeArray.length > 3
-      ? activeNodeArray[3]
-      : '99999999-9999-9999-9999-999999999999'
+  const tree = mobxStore[treeName]
+  const { activeNodeArray } = tree
 
   const formObject = {
     projekt: (
@@ -93,7 +87,6 @@ const Daten = ({
     apberuebersicht: (
       <Apberuebersicht
         dimensions={dimensions}
-        id={activeNodeArray[3]}
         treeName={treeName}
         refetchTree={refetchTree}
       />
@@ -122,7 +115,6 @@ const Daten = ({
     apart: (
       <Apart
         dimensions={dimensions}
-        id={activeNodeArray[5]}
         treeName={treeName}
         refetchTree={refetchTree}
       />
@@ -158,15 +150,13 @@ const Daten = ({
     ziel: (
       <Ziel
         dimensions={dimensions}
-        id={activeNodeArray[6]}
-        tree={tree}
+        treeName={treeName}
         refetchTree={refetchTree}
       />
     ),
     zielber: (
       <Zielber
         dimensions={dimensions}
-        id={activeNodeArray[8]}
         treeName={treeName}
         refetchTree={refetchTree}
       />
@@ -181,7 +171,6 @@ const Daten = ({
     popmassnber: (
       <Popmassnber
         dimensions={dimensions}
-        id={activeNodeArray[7]}
         treeName={treeName}
         refetchTree={refetchTree}
       />
@@ -189,7 +178,6 @@ const Daten = ({
     popber: (
       <Popber
         dimensions={dimensions}
-        id={activeNodeArray[7]}
         treeName={treeName}
         refetchTree={refetchTree}
       />
@@ -197,7 +185,6 @@ const Daten = ({
     tpop: (
       <Tpop
         dimensions={dimensions}
-        id={activeNodeArray[7]}
         treeName={treeName}
         refetchTree={refetchTree}
       />
@@ -205,7 +192,6 @@ const Daten = ({
     tpopber: (
       <Tpopber
         dimensions={dimensions}
-        id={activeNodeArray[9]}
         treeName={treeName}
         refetchTree={refetchTree}
       />
@@ -213,7 +199,6 @@ const Daten = ({
     tpopmassn: (
       <Tpopmassn
         dimensions={dimensions}
-        id={activeNodeArray[9]}
         treeName={treeName}
         refetchTree={refetchTree}
       />
@@ -221,7 +206,6 @@ const Daten = ({
     tpopmassnber: (
       <Tpopmassnber
         dimensions={dimensions}
-        id={activeNodeArray[9]}
         treeName={treeName}
         refetchTree={refetchTree}
       />
@@ -229,7 +213,6 @@ const Daten = ({
     tpopfeldkontr: (
       <Tpopfeldkontr
         dimensions={dimensions}
-        id={activeNodeArray[9]}
         treeName={treeName}
         refetchTree={refetchTree}
       />
@@ -237,8 +220,6 @@ const Daten = ({
     tpopfreiwkontr: (
       <Tpopfreiwkontr
         dimensions={dimensions}
-        id={activeNodeArray[9]}
-        activeNodeArray={activeNodeArray}
         treeName={treeName}
         refetchTree={refetchTree}
         role={role}
@@ -247,24 +228,14 @@ const Daten = ({
     tpopkontrzaehl: (
       <Tpopkontrzaehl
         dimensions={dimensions}
-        id={activeNodeArray[11]}
         treeName={treeName}
         refetchTree={refetchTree}
       />
     ),
-    exporte: (
-      <Exporte
-        tree={tree}
-        dimensions={dimensions}
-        treeName={treeName}
-        refetchTree={refetchTree}
-      />
-    ),
+    exporte: <Exporte />,
     qk: (
       <Qk
-        tree={tree}
         treeName={treeName}
-        apId={apId}
         activeNodes={activeNodes}
         refetchTree={refetchTree}
       />
