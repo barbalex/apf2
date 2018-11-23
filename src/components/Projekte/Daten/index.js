@@ -115,7 +115,6 @@ const Daten = ({
     ekfzaehleinheit: (
       <Ekfzaehleinheit
         dimensions={dimensions}
-        id={activeNodeArray[5]}
         treeName={treeName}
         refetchTree={refetchTree}
       />
@@ -154,7 +153,6 @@ const Daten = ({
     ber: (
       <Ber
         dimensions={dimensions}
-        id={activeNodeArray[5]}
         treeName={treeName}
         refetchTree={refetchTree}
       />

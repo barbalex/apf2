@@ -1,9 +1,11 @@
 // @flow
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
+import withProps from 'recompose/withProps'
 import { withApollo } from 'react-apollo'
+import { observer } from 'mobx-react-lite'
 
 import TextField from '../../../shared/TextField'
 import TextFieldWithUrl from '../../../shared/TextFieldWithUrl'
@@ -11,6 +13,7 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import withData from './withData'
 import updateBerByIdGql from './updateBerById'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const Container = styled.div`
   height: 100%;
@@ -25,20 +28,29 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   withApollo,
+  withProps(() => ({
+    mobxStore: useContext(mobxStoreContext),
+  })),
   withData,
+  observer,
 )
 
 const Ber = ({
-  id,
   treeName,
   data,
   client,
 }: {
-  id: string,
   treeName: string,
   data: Object,
   client: Object,
 }) => {
+  const mobxStore = useContext(mobxStoreContext)
+  const { activeNodeArray } = mobxStore[treeName]
+  const id =
+    activeNodeArray.length > 5
+      ? activeNodeArray[5]
+      : '99999999-9999-9999-9999-999999999999'
+
   const [errors, setErrors] = useState({})
 
   useEffect(() => setErrors({}), [id])
