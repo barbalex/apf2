@@ -5,8 +5,9 @@ import compose from 'recompose/compose'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
-import { observer } from 'mobx-react-lite'
 import { withApollo } from 'react-apollo'
+import withProps from 'recompose/withProps'
+import { observer } from 'mobx-react-lite'
 
 import StringToCopy from '../../../shared/StringToCopyOnlyButton'
 import withData from './withData'
@@ -139,39 +140,33 @@ const CountHint = styled.div`
  */
 const enhance = compose(
   withApollo,
+  withProps(() => ({
+    mobxStore: useContext(mobxStoreContext),
+  })),
   withAllAdresses,
   withData,
   observer,
 )
 
 const Tpopfreiwkontr = ({
-  // pass in fake id to avoid error when filter is shown
-  // which means there is no id
-  id = '99999999-9999-9999-9999-999999999999',
   data,
   dimensions,
-  activeNodeArray,
   role,
   treeName,
   dataAllAdresses,
   client,
 }: {
-  id: string,
   data: Object,
   dimensions: Object,
-  activeNodeArray: Array<string>,
   role: string,
   treeName: string,
   dataAllAdresses: Object,
   client: Object,
 }) => {
-  const {
-    addError,
-    nodeFilter,
-    nodeFilterSetValue,
-    isPrint,
-    view,
-  } = useContext(mobxStoreContext)
+  const mobxStore = useContext(mobxStoreContext)
+  const { addError, nodeFilter, nodeFilterSetValue, isPrint, view } = mobxStore
+  const tree = mobxStore[treeName]
+  const { activeNodeArray } = tree
 
   const [errors, setErrors] = useState({})
 
@@ -391,7 +386,7 @@ const Tpopfreiwkontr = ({
             client.mutate({
               mutation: createTpopkontrzaehl,
               variables: {
-                tpopkontrId: id,
+                tpopkontrId: row.id,
                 einheit: get(
                   z,
                   'tpopkontrzaehlEinheitWerteByZaehleinheitId.code',
@@ -454,7 +449,7 @@ const Tpopfreiwkontr = ({
         <GridContainer width={width}>
           <Title />
           <Headdata
-            id={id}
+            id={row.id}
             bearbeiter={bearbeiter}
             errorsBearbeiter={errors.bearbeiter}
             pop={pop}
@@ -467,14 +462,14 @@ const Tpopfreiwkontr = ({
           />
           <Besttime ekfBeobachtungszeitpunkt={ekfBeobachtungszeitpunkt} />
           <Date
-            id={id}
+            id={row.id}
             datum={datum}
             saveToDb={saveToDb}
             errorsDatum={errors.datum}
             row={row}
           />
           <Map
-            id={id}
+            id={row.id}
             planVorhanden={planVorhanden}
             planVorhandenErrors={errors.planVorhanden}
             saveToDb={saveToDb}
@@ -515,7 +510,7 @@ const Tpopfreiwkontr = ({
           {!showFilter && zaehl2ShowNew && (
             <Count
               id={null}
-              tpopkontrId={id}
+              tpopkontrId={row.id}
               nr="2"
               saveToDb={saveToDb}
               errors={errors}
@@ -541,7 +536,7 @@ const Tpopfreiwkontr = ({
           {!showFilter && zaehl3ShowNew && (
             <Count
               id={null}
-              tpopkontrId={id}
+              tpopkontrId={row.id}
               nr="3"
               saveToDb={saveToDb}
               errors={errors}
@@ -553,7 +548,7 @@ const Tpopfreiwkontr = ({
             <Count nr="3" showEmpty />
           )}
           <Cover
-            id={id}
+            id={row.id}
             deckungApArt={deckungApArt}
             deckungNackterBoden={deckungNackterBoden}
             saveToDb={saveToDb}
@@ -562,7 +557,7 @@ const Tpopfreiwkontr = ({
             row={row}
           />
           <More
-            id={id}
+            id={row.id}
             flaecheUeberprueft={flaecheUeberprueft}
             errorsFlaecheUeberprueft={errors.flaecheUeberprueft}
             jungpflanzenVorhanden={jungpflanzenVorhanden}
@@ -575,14 +570,14 @@ const Tpopfreiwkontr = ({
             row={row}
           />
           <Danger
-            id={id}
+            id={row.id}
             gefaehrdung={gefaehrdung}
             errorsGefaehrdung={errors.gefaehrdung}
             saveToDb={saveToDb}
             row={row}
           />
           <Remarks
-            id={id}
+            id={row.id}
             bemerkungen={bemerkungen}
             errorsBemerkungen={errors.bemerkungen}
             saveToDb={saveToDb}
@@ -590,7 +585,7 @@ const Tpopfreiwkontr = ({
           />
           {!isPrint && !isFreiwillig && !(view === 'ekf') && (
             <Verification
-              id={id}
+              id={row.id}
               ekfVerifiziert={ekfVerifiziert}
               errorsEkfVerifiziert={errors.ekfVerifiziert}
               saveToDb={saveToDb}
@@ -599,7 +594,7 @@ const Tpopfreiwkontr = ({
           )}
           {!isPrint && (
             <EkfRemarks
-              id={id}
+              id={row.id}
               ekfBemerkungen={ekfBemerkungen}
               saveToDb={saveToDb}
               errorsEkfBemerkungen={errors.ekfBemerkungen}
@@ -608,7 +603,7 @@ const Tpopfreiwkontr = ({
           )}
         </GridContainer>
         {!showFilter && !isPrint && !isFreiwillig && !(view === 'ekf') && (
-          <StringToCopy text={id} label="GUID" />
+          <StringToCopy text={row.id} label="GUID" />
         )}
       </InnerContainer>
     </Container>

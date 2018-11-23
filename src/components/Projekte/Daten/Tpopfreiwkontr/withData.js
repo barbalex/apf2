@@ -1,84 +1,21 @@
 // @flow
 import { graphql } from 'react-apollo'
-import gql from 'graphql-tag'
 
-export default graphql(
-  gql`
-    query tpopkontrByIdQuery($id: UUID!) {
-      tpopkontrById(id: $id) {
-        id
-        typ
-        ekfVerifiziert
-        ekfBemerkungen
-        datum
-        jahr
-        bemerkungen
-        flaecheUeberprueft
-        deckungVegetation
-        deckungNackterBoden
-        deckungApArt
-        vegetationshoeheMaximum
-        vegetationshoeheMittel
-        gefaehrdung
-        tpopId
-        bearbeiter
-        adresseByBearbeiter {
-          id
-          name
-          usersByAdresseId {
-            totalCount
-          }
-        }
-        planVorhanden
-        jungpflanzenVorhanden
-        tpopByTpopId {
-          id
-          nr
-          flurname
-          x
-          y
-          status
-          popByPopId {
-            id
-            apId
-            nr
-            name
-            apByApId {
-              id
-              ekfBeobachtungszeitpunkt
-              aeEigenschaftenByArtId {
-                id
-                artname
-              }
-              ekfzaehleinheitsByApId {
-                nodes {
-                  id
-                  tpopkontrzaehlEinheitWerteByZaehleinheitId {
-                    id
-                    code
-                    text
-                    sort
-                  }
-                }
-              }
-            }
-          }
-        }
-        tpopkontrzaehlsByTpopkontrId {
-          nodes {
-            id
-            anzahl
-            einheit
-          }
-        }
-      }
-    }
-  `,
-  {
-    options: ({ id }) => ({
+import query from './data'
+
+export default graphql(query, {
+  options: ({ mobxStore, treeName }) => {
+    const { activeNodeArray } = mobxStore[treeName]
+    const id =
+      activeNodeArray.length > 9
+        ? activeNodeArray[9]
+        : '99999999-9999-9999-9999-999999999999'
+
+    return {
       variables: {
-        id: id || '99999999-9999-9999-9999-999999999999',
+        id,
       },
-    }),
+    }
   },
-)
+  name: 'data',
+})
