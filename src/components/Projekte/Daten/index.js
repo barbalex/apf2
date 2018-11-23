@@ -138,7 +138,6 @@ const Daten = ({
     erfkrit: (
       <Erfkrit
         dimensions={dimensions}
-        id={activeNodeArray[5]}
         treeName={treeName}
         refetchTree={refetchTree}
       />
