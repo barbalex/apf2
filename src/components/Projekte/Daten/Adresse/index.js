@@ -44,17 +44,11 @@ const Adresse = ({
   client: Object,
   refetchTree: () => void,
 }) => {
-  const mobxStore = useContext(mobxStoreContext)
   const [errors, setErrors] = useState({})
-  const { activeNodeArray } = mobxStore[treeName]
 
-  const id =
-    activeNodeArray.length > 2
-      ? activeNodeArray[2]
-      : '99999999-9999-9999-9999-999999999999'
   const row = get(data, 'adresseById', {})
 
-  useEffect(() => setErrors({}), [id])
+  useEffect(() => setErrors({}), [row])
 
   const saveToDb = useCallback(
     async event => {
@@ -97,7 +91,7 @@ const Adresse = ({
       setErrors({})
       if (['name', 'role'].includes(field)) refetchTree('adresses')
     },
-    [id],
+    [row],
   )
 
   if (data.loading) {
@@ -113,7 +107,7 @@ const Adresse = ({
     <ErrorBoundary>
       <Container>
         <FormTitle
-          apId={id}
+          apId={row.id}
           title="Adresse"
           treeName={treeName}
           table="adresse"

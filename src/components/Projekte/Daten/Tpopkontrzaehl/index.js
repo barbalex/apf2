@@ -49,9 +49,10 @@ const Tpopkontrzaehl = ({
 }) => {
   const [errors, setErrors] = useState({})
 
-  useEffect(() => setErrors({}), [id])
-
   const row = get(data, 'tpopkontrzaehlById', {})
+
+  useEffect(() => setErrors({}), [row])
+
   let zaehleinheitWerte = get(
     dataAllTpopkontrzaehlEinheitWertes,
     'allTpopkontrzaehlEinheitWertes.nodes',
@@ -109,7 +110,7 @@ const Tpopkontrzaehl = ({
       setErrors({})
       if (['einheit', 'methode'].includes(field)) refetchTree('tpopkontrzaehls')
     },
-    [id],
+    [row],
   )
 
   if (data.loading || dataAllTpopkontrzaehlEinheitWertes.loading) {

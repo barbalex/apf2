@@ -40,9 +40,9 @@ const Zielber = ({
 }) => {
   const [errors, setErrors] = useState({})
 
-  useEffect(() => setErrors({}), [id])
-
   const row = get(data, 'zielberById', {})
+
+  useEffect(() => setErrors({}), [row])
 
   const saveToDb = useCallback(
     async event => {
@@ -81,7 +81,7 @@ const Zielber = ({
       }
       setErrors({})
     },
-    [id],
+    [row],
   )
 
   if (data.loading) {

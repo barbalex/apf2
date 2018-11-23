@@ -41,16 +41,13 @@ const Projekt = ({
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { activeNodeArray } = mobxStore[treeName]
-  const id =
-    activeNodeArray.length > 1
-      ? activeNodeArray[1]
-      : '99999999-9999-9999-9999-999999999999'
 
   const [errors, setErrors] = useState({})
 
-  useEffect(() => setErrors({}), [id])
-
   const row = get(data, 'projektById', {})
+
+  useEffect(() => setErrors({}), [row])
+
   const filterTable = activeNodeArray.length === 2 ? 'projekt' : 'ap'
 
   const saveToDb = useCallback(
@@ -85,7 +82,7 @@ const Projekt = ({
       }
       setErrors({})
     },
-    [id],
+    [row],
   )
 
   if (data.loading) {

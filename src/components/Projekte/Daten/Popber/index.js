@@ -44,9 +44,10 @@ const Popber = ({
 }) => {
   const [errors, setErrors] = useState({})
 
-  useEffect(() => setErrors({}), [id])
-
   const row = get(data, 'popberById', {})
+
+  useEffect(() => setErrors({}), [row])
+
   let popentwicklungWerte = get(data, 'allTpopEntwicklungWertes.nodes', [])
   popentwicklungWerte = sortBy(popentwicklungWerte, 'sort')
   popentwicklungWerte = popentwicklungWerte.map(el => ({
@@ -93,7 +94,7 @@ const Popber = ({
       setErrors({})
       if (['entwicklung'].includes(field)) refetchTree('popbers')
     },
-    [id],
+    [row],
   )
 
   if (data.loading) {

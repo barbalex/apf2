@@ -104,8 +104,6 @@ const Tpopfeldkontr = ({
     get(urlQuery, 'feldkontrTab', 'entwicklung'),
   )
 
-  useEffect(() => setErrors({}), [id])
-
   const showFilter = !!nodeFilter[treeName].activeTable
   let row
   if (showFilter) {
@@ -113,6 +111,8 @@ const Tpopfeldkontr = ({
   } else {
     row = get(data, 'tpopkontrById', {})
   }
+
+  useEffect(() => setErrors({}), [row])
 
   const saveToDb = useCallback(
     async event => {

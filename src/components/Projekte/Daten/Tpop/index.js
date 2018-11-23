@@ -66,8 +66,6 @@ const Tpop = ({
 
   const [errors, setErrors] = useState({})
 
-  useEffect(() => setErrors({}), [id])
-
   const showFilter = !!nodeFilter[treeName].activeTable
   let row
   if (showFilter) {
@@ -75,6 +73,8 @@ const Tpop = ({
   } else {
     row = get(data, 'tpopById', {})
   }
+
+  useEffect(() => setErrors({}), [row])
 
   const saveToDb = useCallback(
     async event => {

@@ -57,9 +57,9 @@ const Idealbiotop = ({
 }) => {
   const [errors, setErrors] = useState({})
 
-  useEffect(() => setErrors({}), [id])
-
   const row = get(data, 'allIdealbiotops.nodes[0]', {})
+
+  useEffect(() => setErrors({}), [row])
 
   const saveToDb = useCallback(
     async event => {

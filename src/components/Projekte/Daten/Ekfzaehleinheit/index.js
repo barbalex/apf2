@@ -52,18 +52,11 @@ const Ekfzaehleinheit = ({
   client: Object,
   refetchTree: () => void,
 }) => {
-  const mobxStore = useContext(mobxStoreContext)
-  const { activeNodeArray } = mobxStore[treeName]
-  const id =
-    activeNodeArray.length > 5
-      ? activeNodeArray[5]
-      : '99999999-9999-9999-9999-999999999999'
-
   const [errors, setErrors] = useState({})
 
-  useEffect(() => setErrors({}), [id])
-
   const row = get(data, 'ekfzaehleinheitById', {})
+
+  useEffect(() => setErrors({}), [row])
   const ekfzaehleinheitenOfAp = get(
     row,
     'apByApId.ekfzaehleinheitsByApId.nodes',
@@ -123,7 +116,7 @@ const Ekfzaehleinheit = ({
       setErrors({})
       if (['zaehleinheitId'].includes(field)) refetchTree('ekfzaehleinheits')
     },
-    [id],
+    [row],
   )
 
   if (data.loading || dataAllTpopkontrzaehlEinheitWertes.loading) {

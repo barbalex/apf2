@@ -62,20 +62,15 @@ const Apber = ({
   data: Object,
   client: Object,
 }) => {
-  const mobxStore = useContext(mobxStoreContext)
-  const { activeNodeArray } = mobxStore[treeName]
-  const id =
-    activeNodeArray.length > 5
-      ? activeNodeArray[5]
-      : '99999999-9999-9999-9999-999999999999'
-
   const [errors, setErrors] = useState({})
+
+  const row = get(data, 'apberById', {})
 
   useEffect(
     () => {
       setErrors({})
     },
-    [id],
+    [row],
   )
 
   const saveToDb = useCallback(async event => {
@@ -155,7 +150,6 @@ const Apber = ({
     { value: '-', label: '-' },
   ]
   const width = isNaN(dimensions.width) ? 380 : dimensions.width
-  const row = get(data, 'apberById', {})
   let beurteilungWerte = get(
     dataAllApErfkritWertes,
     'allApErfkritWertes.nodes',

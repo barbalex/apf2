@@ -46,16 +46,12 @@ const Ber = ({
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { activeNodeArray } = mobxStore[treeName]
-  const id =
-    activeNodeArray.length > 5
-      ? activeNodeArray[5]
-      : '99999999-9999-9999-9999-999999999999'
 
   const [errors, setErrors] = useState({})
 
-  useEffect(() => setErrors({}), [id])
-
   const row = get(data, 'berById', {})
+
+  useEffect(() => setErrors({}), [row])
 
   const saveToDb = useCallback(
     async event => {
@@ -93,7 +89,7 @@ const Ber = ({
       }
       setErrors({})
     },
-    [id],
+    [row],
   )
 
   if (data.loading) {

@@ -48,9 +48,10 @@ const Tpopmassnber = ({
 }) => {
   const [errors, setErrors] = useState({})
 
-  useEffect(() => setErrors({}), [id])
-
   const row = get(data, 'tpopmassnberById', {})
+
+  useEffect(() => setErrors({}), [row])
+
   let tpopmassnbeurtWerte = get(
     dataAllTpopmassnErfbeurtWertes,
     'allTpopmassnErfbeurtWertes.nodes',
@@ -100,7 +101,7 @@ const Tpopmassnber = ({
       setErrors({})
       if (['beurteilung'].includes(field)) refetchTree('tpopmassnbers')
     },
-    [id],
+    [row],
   )
 
   if (data.loading || dataAllTpopmassnErfbeurtWertes.loading) {

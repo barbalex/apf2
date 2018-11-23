@@ -65,8 +65,6 @@ const User = ({
   client: Object,
   refetchTree: () => void,
 }) => {
-  const mobxStore = useContext(mobxStoreContext)
-
   const [errors, setErrors] = useState({})
   const [editPassword, setEditPassword] = useState(false)
   const [password, setPassword] = useState('')
@@ -77,15 +75,10 @@ const User = ({
   const [password2ErrorText, setPassword2ErrorText] = useState('')
   const [passwordMessage, setPasswordMessage] = useState('')
 
-  const id = get(
-    mobxStore,
-    `${treeName}.activeNodeArray[1]`,
-    '99999999-9999-9999-9999-999999999999',
-  )
-
-  useEffect(() => setErrors({}), [id])
-
   const row = get(data, 'userById', {})
+
+  useEffect(() => setErrors({}), [row])
+
   let roleWerte = sortBy(
     [
       {
@@ -155,7 +148,7 @@ const User = ({
       setErrors({})
       if (['name', 'role'].includes(field)) refetchTree('users')
     },
-    [id],
+    [row],
   )
   const onBlurPassword = useCallback(event => {
     setPasswordErrorText('')
@@ -214,7 +207,7 @@ const User = ({
     <ErrorBoundary>
       <Container>
         <FormTitle
-          apId={id}
+          apId={row.id}
           title="Benutzer"
           treeName={treeName}
           table="user"

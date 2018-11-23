@@ -59,7 +59,7 @@ const Pop = ({
 
   const [errors, setErrors] = useState({})
 
-  useEffect(() => setErrors({}), [id])
+  useEffect(() => setErrors({}), [row])
 
   const saveToDb = useCallback(
     async event => {

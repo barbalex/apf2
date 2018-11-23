@@ -49,9 +49,10 @@ const Ziel = ({
   const { setTreeKey } = useContext(mobxStoreContext)
   const [errors, setErrors] = useState({})
 
-  useEffect(() => setErrors({}), [id])
-
   const row = get(data, 'zielById', {})
+
+  useEffect(() => setErrors({}), [row])
+
   let typWerte = get(data, 'allZielTypWertes.nodes', [])
   typWerte = sortBy(typWerte, 'sort')
   typWerte = typWerte.map(el => ({

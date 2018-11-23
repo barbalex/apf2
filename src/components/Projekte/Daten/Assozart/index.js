@@ -60,7 +60,7 @@ const Assozart = ({
 
   const [errors, setErrors] = useState({})
 
-  useEffect(() => setErrors({}), [id])
+  useEffect(() => setErrors({}), [row])
 
   const row = get(data, 'assozartById', {})
   const assozartenOfAp = get(row, 'apByApId.assozartsByApId.nodes', []).map(
@@ -113,7 +113,7 @@ const Assozart = ({
       setErrors({})
       if (['aeId'].includes(field)) refetchTree('assozarts')
     },
-    [id],
+    [row],
   )
 
   if (data.loading || dataAeEigenschaftens.loading) {

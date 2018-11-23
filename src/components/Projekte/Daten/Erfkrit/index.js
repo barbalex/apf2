@@ -51,18 +51,12 @@ const Erfkrit = ({
   client: Object,
   refetchTree: () => void,
 }) => {
-  const mobxStore = useContext(mobxStoreContext)
-  const { activeNodeArray } = mobxStore[treeName]
-  const id =
-    activeNodeArray.length > 5
-      ? activeNodeArray[5]
-      : '99999999-9999-9999-9999-999999999999'
-
   const [errors, setErrors] = useState({})
 
-  useEffect(() => setErrors({}), [id])
-
   const row = get(data, 'erfkritById', {})
+
+  useEffect(() => setErrors({}), [row])
+
   let erfolgWerte = get(dataAllApErfkritWertes, 'allApErfkritWertes.nodes', [])
   erfolgWerte = sortBy(erfolgWerte, 'sort')
   erfolgWerte = erfolgWerte.map(el => ({
@@ -105,7 +99,7 @@ const Erfkrit = ({
       setErrors({})
       if (['erfolg'].includes(field)) refetchTree('erfkrits')
     },
-    [id],
+    [row],
   )
 
   if (data.loading || dataAllApErfkritWertes.loading) {

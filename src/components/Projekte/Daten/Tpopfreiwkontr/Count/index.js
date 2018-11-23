@@ -192,6 +192,14 @@ const Count = ({
   data: Object,
   client: Object,
 }) => {
+  const { setToDelete } = useContext(mobxStoreContext)
+
+  const [errors, setErrors] = useState({})
+
+  const row = get(data, 'tpopkontrzaehlById', {})
+
+  useEffect(() => setErrors({}), [row])
+
   const createNew = useCallback(
     () => {
       client
@@ -204,13 +212,6 @@ const Count = ({
     [tpopkontrId],
   )
 
-  const { setToDelete } = useContext(mobxStoreContext)
-
-  const [errors, setErrors] = useState({})
-
-  useEffect(() => setErrors({}), [id])
-
-  const row = get(data, 'tpopkontrzaehlById', {})
   const allEinheits = get(
     dataAllTpopkontrzaehlEinheitWertes,
     'allTpopkontrzaehlEinheitWertes.nodes',
@@ -289,19 +290,19 @@ const Count = ({
       }
       setErrors({})
     },
-    [id],
+    [row],
   )
   const remove = useCallback(
     ({ row }) => {
       setToDelete({
         table: 'tpopkontrzaehl',
-        id,
+        id: row.id,
         label: null,
         url: activeNodeArray,
         afterDeletionHook: refetch,
       })
     },
-    [id, activeNodeArray],
+    [row, activeNodeArray],
   )
 
   if (showNew) {

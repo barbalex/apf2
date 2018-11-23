@@ -94,16 +94,18 @@ const Ap = ({
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { nodeFilter, nodeFilterSetValue } = mobxStore
-  const { activeNodeArray } = mobxStore[treeName]
 
   const [errors, setErrors] = useState({})
 
-  const id =
-    activeNodeArray.length > 3
-      ? activeNodeArray[3]
-      : '99999999-9999-9999-9999-999999999999'
+  const showFilter = !!nodeFilter[treeName].activeTable
+  let row
+  if (showFilter) {
+    row = nodeFilter[treeName].ap
+  } else {
+    row = get(data, 'apById', {})
+  }
 
-  useEffect(() => setErrors({}), [id])
+  useEffect(() => setErrors({}), [row])
 
   let bearbeitungWerte = get(data, 'allApBearbstandWertes.nodes', [])
   bearbeitungWerte = sortBy(bearbeitungWerte, 'sort')
@@ -124,7 +126,6 @@ const Ap = ({
     value: el.id,
   }))
 
-  const showFilter = !!nodeFilter[treeName].activeTable
   let apArten
   let artWerte
   if (showFilter) {
@@ -140,7 +141,7 @@ const Ap = ({
   } else {
     // list all ap-Arten BUT the active one
     apArten = get(dataAllAps, 'allAps.nodes', [])
-      .filter(o => o.id !== id)
+      .filter(o => o.id !== row.id)
       .map(o => o.artId)
     artWerte = get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])
     // filter ap arten but the active one
@@ -150,13 +151,6 @@ const Ap = ({
       value: el.id,
       label: el.artname,
     }))
-  }
-
-  let row
-  if (showFilter) {
-    row = nodeFilter[treeName].ap
-  } else {
-    row = get(data, 'apById', {})
   }
 
   const saveToDb = useCallback(
@@ -241,7 +235,7 @@ const Ap = ({
     <ErrorBoundary>
       <Container showfilter={showFilter}>
         <FormTitle
-          apId={id}
+          apId={row.id}
           title="Aktionsplan"
           treeName={treeName}
           table="ap"

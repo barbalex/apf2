@@ -359,7 +359,7 @@ const Tpopfreiwkontr = ({
       }
       setErrors({})
     },
-    [showFilter, id],
+    [showFilter, row],
   )
 
   useEffect(
@@ -408,7 +408,7 @@ const Tpopfreiwkontr = ({
     [data.loading],
   )
 
-  useEffect(() => setErrors({}), [id])
+  useEffect(() => setErrors({}), [row])
 
   useEffect(
     () => {
