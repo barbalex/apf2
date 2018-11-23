@@ -3,8 +3,9 @@ import React, { useContext, useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
-import { observer } from 'mobx-react-lite'
 import { withApollo } from 'react-apollo'
+import withProps from 'recompose/withProps'
+import { observer } from 'mobx-react-lite'
 
 import TextField from '../../../shared/TextField'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
@@ -30,19 +31,18 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   withApollo,
+  withProps(() => ({
+    mobxStore: useContext(mobxStoreContext),
+  })),
   withData,
   observer,
 )
 
 const Pop = ({
-  // pass in fake id to avoid error when filter is shown
-  // which means there is no id
-  id = '99999999-9999-9999-9999-999999999999',
   treeName,
   data,
   client,
 }: {
-  id: string,
   treeName: string,
   data: Object,
   client: Object,
@@ -117,7 +117,7 @@ const Pop = ({
         setErrors({})
       }
     },
-    [id, showFilter],
+    [row, showFilter],
   )
 
   if (data.loading) {

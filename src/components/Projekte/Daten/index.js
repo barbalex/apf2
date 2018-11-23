@@ -130,7 +130,6 @@ const Daten = ({
     idealbiotop: (
       <Idealbiotop
         dimensions={dimensions}
-        id={activeNodeArray[3]}
         treeName={treeName}
         refetchTree={refetchTree}
       />
@@ -175,7 +174,6 @@ const Daten = ({
     pop: (
       <Pop
         dimensions={dimensions}
-        id={activeNodeArray[5]}
         treeName={treeName}
         refetchTree={refetchTree}
       />
