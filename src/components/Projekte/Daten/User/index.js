@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import InputAdornment from '@material-ui/core/InputAdornment'
@@ -15,6 +14,8 @@ import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import Button from '@material-ui/core/Button'
 import { withApollo } from 'react-apollo'
+import withProps from 'recompose/withProps'
+import { observer } from 'mobx-react-lite'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -50,6 +51,7 @@ const enhance = compose(
   withProps(() => ({ mobxStore: useContext(mobxStoreContext) })),
   withData,
   withAllAdresses,
+  observer,
 )
 
 const User = ({

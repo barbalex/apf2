@@ -6,6 +6,8 @@ import isEqual from 'lodash/isEqual'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import { withApollo } from 'react-apollo'
+import withProps from 'recompose/withProps'
+import { observer } from 'mobx-react-lite'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -28,25 +30,28 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   withApollo,
+  withProps(() => ({
+    mobxStore: useContext(mobxStoreContext),
+  })),
   withData,
+  observer,
 )
 
 const Ziel = ({
-  id,
-  tree,
   treeName,
   data,
   client,
   refetchTree,
 }: {
-  id: string,
-  tree: Object,
   treeName: string,
   data: Object,
   client: Object,
   refetchTree: () => void,
 }) => {
-  const { setTreeKey } = useContext(mobxStoreContext)
+  const mobxStore = useContext(mobxStoreContext)
+  const { setTreeKey } = mobxStore
+  const tree = mobxStore[treeName]
+
   const [errors, setErrors] = useState({})
 
   const row = get(data, 'zielById', {})
@@ -122,7 +127,7 @@ const Ziel = ({
         if (['typ'].includes(field)) refetchTree('ziels')
       }
     },
-    [id, activeNodeArray, openNodes, treeName],
+    [row, activeNodeArray, openNodes, treeName],
   )
 
   if (data.loading) {
