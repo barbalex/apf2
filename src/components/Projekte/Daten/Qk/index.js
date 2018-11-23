@@ -68,13 +68,11 @@ const enhance = compose(
 
 const Qk = ({
   tree,
-  apId,
   treeName,
   activeNodes,
   data,
 }: {
   tree: Object,
-  apId: String,
   treeName: String,
   activeNodes: Array<Object>,
   data: Object,

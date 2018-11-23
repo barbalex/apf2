@@ -1,17 +1,28 @@
 // @flow
 import { graphql } from 'react-apollo'
-import get from 'lodash/get'
 
 import query from './data'
 
 export default graphql(query, {
-  options: ({ treeName, berichtjahr, apId, mobxStore }) => ({
-    variables: {
-      berichtjahr,
-      isBerichtjahr: !!berichtjahr,
-      apId,
-      projId: get(mobxStore, `${treeName}.activeNodeArray[1]`),
-    },
-  }),
+  options: ({ treeName, berichtjahr, mobxStore }) => {
+    const { activeNodeArray } = mobxStore[treeName]
+    const apId =
+      activeNodeArray.length > 3
+        ? activeNodeArray[3]
+        : '99999999-9999-9999-9999-999999999999'
+    const projId =
+      activeNodeArray.length > 1
+        ? activeNodeArray[1]
+        : '99999999-9999-9999-9999-999999999999'
+
+    return {
+      variables: {
+        berichtjahr,
+        isBerichtjahr: !!berichtjahr,
+        apId,
+        projId,
+      },
+    }
+  },
   name: 'data',
 })
