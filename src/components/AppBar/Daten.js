@@ -71,11 +71,9 @@ const RemoveMenuItem = styled(StyledMenuItem)`
 `
 
 const MyAppBarDaten = ({
-  data,
   treeNr = '',
   client,
 }: {
-  data: Object,
   treeNr: string,
   client: Object,
 }) => {
@@ -132,7 +130,7 @@ const MyAppBarDaten = ({
         })
       }
     },
-    [data],
+    [projekteTabs, urlQuery],
   )
   const onClickFilterButton = useCallback(event => {
     setDatenFilterAnchorEl(event.currentTarget)

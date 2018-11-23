@@ -1,9 +1,10 @@
 // @flow
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
+import withProps from 'recompose/withProps'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import InputAdornment from '@material-ui/core/InputAdornment'
@@ -19,11 +20,11 @@ import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import withLocalData from './withLocalData'
 import withData from './withData'
 import updateUserByIdGql from './updateUserById'
 import Select from '../../../shared/Select'
 import withAllAdresses from './withAllAdresses'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const Container = styled.div`
   height: 100%;
@@ -46,7 +47,7 @@ const PasswordMessage = styled.div`
 
 const enhance = compose(
   withApollo,
-  withLocalData,
+  withProps(() => ({ mobxStore: useContext(mobxStoreContext) })),
   withData,
   withAllAdresses,
 )
@@ -54,18 +55,18 @@ const enhance = compose(
 const User = ({
   treeName,
   dataAllAdresses,
-  localData,
   data,
   client,
   refetchTree,
 }: {
   treeName: String,
   dataAllAdresses: Object,
-  localData: Object,
   data: Object,
   client: Object,
   refetchTree: () => void,
 }) => {
+  const mobxStore = useContext(mobxStoreContext)
+
   const [errors, setErrors] = useState({})
   const [editPassword, setEditPassword] = useState(false)
   const [password, setPassword] = useState('')
@@ -77,7 +78,7 @@ const User = ({
   const [passwordMessage, setPasswordMessage] = useState('')
 
   const id = get(
-    localData,
+    mobxStore,
     `${treeName}.activeNodeArray[1]`,
     '99999999-9999-9999-9999-999999999999',
   )
@@ -200,7 +201,6 @@ const User = ({
     [password],
   )
 
-  if (localData.error) return `Fehler: ${localData.error.message}`
   if (data.loading || dataAllAdresses.loading) {
     return (
       <Container>

@@ -6,6 +6,7 @@ import FormControl from '@material-ui/core/FormControl'
 import styled from 'styled-components'
 import Paper from '@material-ui/core/Paper'
 import compose from 'recompose/compose'
+import withProps from 'recompose/withProps'
 import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
 
@@ -14,7 +15,6 @@ import appBaseUrl from '../../../../modules/appBaseUrl'
 import standardQkYear from '../../../../modules/standardQkYear'
 import fetchKtZh from '../../../../modules/fetchKtZh'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import withLocalData from './withLocalData'
 import withData from './withData'
 import qk from './qk'
 import checkTpopOutsideZh from './checkTpopOutsideZh'
@@ -59,7 +59,9 @@ const LoadingLine = styled.div`
 `
 
 const enhance = compose(
-  withLocalData,
+  withProps(() => ({
+    mobxStore: useContext(mobxStoreContext),
+  })),
   withData,
   observer,
 )
@@ -69,14 +71,12 @@ const Qk = ({
   apId,
   treeName,
   activeNodes,
-  localData,
   data,
 }: {
   tree: Object,
   apId: String,
   treeName: String,
   activeNodes: Array<Object>,
-  localData: Object,
   data: Object,
 }) => {
   const { ktZh, setKtZh, addError } = useContext(mobxStoreContext)
@@ -110,7 +110,6 @@ const Qk = ({
     if (!ktZh) fetchKtZh({ setKtZh, addError })
   }, [])
 
-  if (localData.error) return `Fehler: ${localData.error.message}`
   if (data.error) return `Fehler: ${data.error.message}`
   return (
     <ErrorBoundary>

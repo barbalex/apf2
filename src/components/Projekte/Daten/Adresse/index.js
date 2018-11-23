@@ -1,8 +1,9 @@
 // @flow
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
+import withProps from 'recompose/withProps'
 import { withApollo } from 'react-apollo'
 
 import RadioButton from '../../../shared/RadioButton'
@@ -10,8 +11,8 @@ import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updateAdresseByIdGql from './updateAdresseById'
-import withLocalData from './withLocalData'
 import withData from './withData'
+import mobxStoreContext from '../../../../mobxStoreContext'
 
 const Container = styled.div`
   height: 100%;
@@ -26,26 +27,28 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   withApollo,
-  withLocalData,
+  withProps(() => {
+    const mobxStore = useContext(mobxStoreContext)
+    return { mobxStore }
+  }),
   withData,
 )
 
 const Adresse = ({
   treeName,
-  localData,
   data,
   client,
   refetchTree,
 }: {
   treeName: String,
-  localData: Object,
   data: Object,
   client: Object,
   refetchTree: () => void,
 }) => {
+  const mobxStore = useContext(mobxStoreContext)
   const [errors, setErrors] = useState({})
 
-  const id = get(localData, `${treeName}.activeNodeArray[2]`)
+  const id = mobxStore[treeName].activeNodeArray[2]
   const row = get(data, 'adresseById', {})
 
   useEffect(() => setErrors({}), [id])
@@ -94,7 +97,6 @@ const Adresse = ({
     [id],
   )
 
-  if (localData.error) return `Fehler: ${localData.error.message}`
   if (data.loading) {
     return (
       <Container>

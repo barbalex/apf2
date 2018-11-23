@@ -7,7 +7,6 @@ import Button from '@material-ui/core/Button'
 import remove from 'lodash/remove'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import get from 'lodash/get'
 import gql from 'graphql-tag'
 import jwtDecode from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
@@ -15,7 +14,6 @@ import { withApollo } from 'react-apollo'
 
 import isMobilePhone from '../../modules/isMobilePhone'
 import ErrorBoundary from '../shared/ErrorBoundary'
-import withLocalData from './withLocalData'
 import setUrlQueryValue from '../../modules/setUrlQueryValue'
 import getActiveNodes from '../../modules/getActiveNodes'
 import More from './More'
@@ -62,16 +60,13 @@ const MenuDiv = styled.div`
 
 const enhance = compose(
   withApollo,
-  withLocalData,
   observer,
 )
 
 const MyAppBar = ({
-  localData,
   setShowDeletions,
   client,
 }: {
-  localData: Object,
   setShowDeletions: () => void,
   client: Object,
 }) => {
@@ -82,9 +77,10 @@ const MyAppBar = ({
     setView,
     urlQuery,
     setUrlQuery,
+    tree,
   } = useContext(mobxStoreContext)
 
-  const activeNodeArray = get(localData, 'tree.activeNodeArray')
+  const { activeNodeArray } = tree
   const activeNodes = getActiveNodes(activeNodeArray)
   /**
    * need to clone projekteTabs
@@ -146,8 +142,6 @@ const MyAppBar = ({
   const setViewEkf = useCallback(() => setView('ekf'))
   const toggleUserOpen = useCallback(() => setUserOpen(!userOpen), [userOpen])
 
-  if (localData.error) return `Fehler: ${localData.error.message}`
-
   return (
     <ErrorBoundary>
       <StyledAppBar position="static">
@@ -193,7 +187,7 @@ const MyAppBar = ({
                 >
                   Strukturbaum
                 </StyledButton>
-                <Daten data={localData} />
+                <Daten />
                 <StyledButton
                   variant={projekteTabs.includes('karte') ? 'outlined' : 'text'}
                   preceded={projekteTabs.includes('daten')}
@@ -236,7 +230,7 @@ const MyAppBar = ({
                     Strukturbaum 2
                   </StyledButton>
                 )}
-                {!isMobile && <Daten data={localData} treeNr="2" />}
+                {!isMobile && <Daten treeNr="2" />}
               </>
             )}
             <More

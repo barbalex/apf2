@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
+import withProps from 'recompose/withProps'
 import { observer } from 'mobx-react-lite'
 import { withApollo } from 'react-apollo'
 
@@ -17,7 +18,6 @@ import withAeEigenschaftens from './withAeEigenschaftens'
 import updateApByIdGql from './updateApById'
 import withAllAdresses from './withAllAdresses'
 import withAllAps from './withAllAps'
-import withLocalData from './withLocalData'
 import withData from './withData'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
@@ -65,10 +65,13 @@ const LabelPopoverRowColumnRight = styled.div`
 
 const enhance = compose(
   withApollo,
+  withProps(() => {
+    const mobxStore = useContext(mobxStoreContext)
+    return { mobxStore }
+  }),
   withAllAps,
   withAllAdresses,
   withAeEigenschaftens,
-  withLocalData,
   withData,
   observer,
 )
@@ -78,7 +81,6 @@ const Ap = ({
   dataAeEigenschaftens,
   dataAllAdresses,
   dataAllAps,
-  localData,
   data,
   refetchTree,
   client,
@@ -87,17 +89,17 @@ const Ap = ({
   dataAeEigenschaftens: Object,
   dataAllAdresses: Object,
   dataAllAps: Object,
-  localData: Object,
   data: Object,
   refetchTree: () => void,
   client: Object,
 }) => {
-  const { nodeFilter, nodeFilterSetValue } = useContext(mobxStoreContext)
+  const mobxStore = useContext(mobxStoreContext)
+  const { nodeFilter, nodeFilterSetValue } = mobxStore
 
   const [errors, setErrors] = useState({})
 
   const id = get(
-    localData,
+    mobxStore,
     `${treeName}.activeNodeArray[3]`,
     // pass in fake id to avoid error when filter is shown
     // which means there is no id
@@ -236,7 +238,6 @@ const Ap = ({
   }
   if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
   if (dataAllAps.error) return `Fehler: ${dataAllAps.error.message}`
-  if (localData.error) return `Fehler: ${localData.error.message}`
   if (data.error) return `Fehler: ${data.error.message}`
 
   return (

@@ -5,10 +5,10 @@ import get from 'lodash/get'
 import query from './data'
 
 export default graphql(query, {
-  options: ({ localData, treeName }) => ({
+  options: ({ mobxStore, treeName }) => ({
     variables: {
       id: get(
-        localData,
+        mobxStore,
         `${treeName}.activeNodeArray[1]`,
         '99999999-9999-9999-9999-999999999999',
       ),

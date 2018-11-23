@@ -5,12 +5,12 @@ import get from 'lodash/get'
 import query from './data'
 
 export default graphql(query, {
-  options: ({ treeName, berichtjahr, apId, localData }) => ({
+  options: ({ treeName, berichtjahr, apId, mobxStore }) => ({
     variables: {
       berichtjahr,
       isBerichtjahr: !!berichtjahr,
       apId,
-      projId: get(localData, `${treeName}.activeNodeArray[1]`),
+      projId: get(mobxStore, `${treeName}.activeNodeArray[1]`),
     },
   }),
   name: 'data',

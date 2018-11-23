@@ -6,7 +6,6 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
-import get from 'lodash/get'
 import compose from 'recompose/compose'
 import jwtDecode from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
@@ -14,7 +13,6 @@ import { observer } from 'mobx-react-lite'
 // when Karte was loaded async, it did not load,
 // but only in production!
 import ErrorBoundary from '../shared/ErrorBoundary'
-import withLocalData from './withLocalData'
 import EkfList from './ListContainer'
 import Tpopfreiwkontr from '../Projekte/Daten/Tpopfreiwkontr'
 import mobxStoreContext from '../../mobxStoreContext'
@@ -34,20 +32,15 @@ const ReflexElementForEKF = styled(ReflexElement)`
   }
 `
 
-const enhance = compose(
-  withLocalData,
-  observer,
-)
+const enhance = compose(observer)
 
-const Ekf = ({ localData }: { localData: Object }) => {
-  const { user, isPrint } = useContext(mobxStoreContext)
+const Ekf = () => {
+  const { user, isPrint, tree } = useContext(mobxStoreContext)
   const { token } = user
   const tokenDecoded = token ? jwtDecode(token) : null
   const role = tokenDecoded ? tokenDecoded.role : null
 
-  if (localData.error) return `Fehler: ${localData.error.message}`
-
-  const activeNodeArray = get(localData, 'tree.activeNodeArray')
+  const { activeNodeArray } = tree
   const tpopkontrId = activeNodeArray[9]
   const treeName = 'tree'
 

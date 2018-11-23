@@ -16,7 +16,6 @@ import { observer } from 'mobx-react-lite'
 // but only in production!
 import Karte from '../Karte'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import withLocalData from './withLocalData'
 import withAdresses from './withAdresses'
 import withUsers from './withUsers'
 import withProjekts from './withProjekts'
@@ -87,14 +86,10 @@ const LogoutButton = styled(Button)`
 `
 
 const enhance = compose(
-  withLocalData,
-  withProps(({ dataLocal, treeName }) => {
+  withProps(({ treeName }) => {
     const mobxStore = useContext(mobxStoreContext)
-    const { nodeFilter } = useContext(mobxStoreContext)
     return buildVariables({
-      dataLocal,
       treeName,
-      nodeFilter: nodeFilter[treeName],
       mobxStore,
     })
   }),
@@ -141,7 +136,6 @@ const enhance = compose(
 
 const ProjekteContainer = props => {
   const {
-    dataLocal,
     dataAdresses,
     dataUsers,
     dataProjekts,
@@ -184,7 +178,6 @@ const ProjekteContainer = props => {
     tabs: tabsPassed,
     projekteTabs,
   }: {
-    dataLocal: Object,
     dataAdresses: Object,
     dataUsers: Object,
     dataProjekts: Object,
@@ -228,6 +221,7 @@ const ProjekteContainer = props => {
     projekteTabs: Array<String>,
   } = props
 
+  const mobxStore = useContext(mobxStoreContext)
   const {
     activeApfloraLayers,
     activeOverlays,
@@ -236,12 +230,11 @@ const ProjekteContainer = props => {
     user,
     isPrint,
     assigningBeob,
-  } = useContext(mobxStoreContext)
+  } = mobxStore
   const { idb } = useContext(idbContext)
   const mapFilter = mapFilterRaw.toJSON()
 
   const queryArray = [
-    dataLocal,
     dataAdresses,
     dataUsers,
     dataProjekts,
@@ -296,9 +289,8 @@ const ProjekteContainer = props => {
       }
     }
   }
-  const activeNodeArray = get(dataLocal, `${treeName}.activeNodeArray`)
+  const { activeNodeArray, openNodes } = mobxStore[treeName]
   const activeNodes = getActiveNodes(activeNodeArray)
-  const openNodes = get(dataLocal, `${treeName}.openNodes`)
   const { token } = user
   const tokenDecoded = token ? jwtDecode(token) : null
   const role = tokenDecoded ? tokenDecoded.role : null
@@ -330,7 +322,6 @@ const ProjekteContainer = props => {
   }
 
   const data = {
-    ...dataLocal,
     ...dataAdresses,
     ...dataUsers,
     ...dataProjekts,
@@ -413,6 +404,7 @@ const ProjekteContainer = props => {
     dataBeobZugeordnetAssignPolylinesForMap,
     dataPopForMapMarkers,
     dataBeobAssignLines,
+    mobxStore,
   })
   const tree = get(data, treeName)
   const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))

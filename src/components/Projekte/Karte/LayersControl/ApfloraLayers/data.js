@@ -2,12 +2,6 @@ import gql from 'graphql-tag'
 
 export default gql`
   query Query($isAp: Boolean!, $ap: [UUID!]) {
-    tree @client {
-      activeNodeArray
-    }
-    tree2 @client {
-      activeNodeArray
-    }
     pop: allPops(
       filter: { apId: { in: $ap }, x: { isNull: false }, y: { isNull: false } }
     ) @include(if: $isAp) {

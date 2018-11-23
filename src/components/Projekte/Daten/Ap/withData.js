@@ -5,10 +5,10 @@ import get from 'lodash/get'
 import query from './data'
 
 export default graphql(query, {
-  options: ({ localData, treeName }) => ({
+  options: ({ mobxStore, treeName }) => ({
     variables: {
       id: get(
-        localData,
+        mobxStore,
         `${treeName}.activeNodeArray[3]`,
         // pass in fake id to avoid error when filter is shown
         // which means there is no id

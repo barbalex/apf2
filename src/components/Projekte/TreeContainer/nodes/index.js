@@ -113,6 +113,7 @@ export default ({
   dataPopForMapMarkers,
   dataBeobAssignLines,
   nodeFilter,
+  mobxStore,
 }: {
   data: Object,
   treeName: string,
@@ -156,8 +157,10 @@ export default ({
   dataPopForMapMarkers: Object,
   dataBeobAssignLines: Object,
   nodeFilter: Object,
+  mobxStore: Object,
 }): Array<Object> => {
-  const openNodes = [...get(data, `${treeName}.openNodes`)]
+  const openNodes = mobxStore[treeName].openNodes
+    .toJSON()
     // need to sort so folders are added in correct order
     // because every lower folder gets previous nodes passed
     .sort(sort)

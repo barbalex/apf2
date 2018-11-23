@@ -12,7 +12,6 @@ import { withApollo } from 'react-apollo'
 import Item from './Item'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import initiateDataFromUrl from '../initiateDataFromUrl'
-import withLocalData from './withLocalData'
 
 const Container = styled.div`
   height: 100%;
@@ -64,28 +63,25 @@ const getEkfFromData = ({ data, ekfAdresseId }) => {
 
 const enhance = compose(
   withApollo,
-  withLocalData,
   observer,
 )
 
 const EkfList = ({
   data,
-  localData,
   loading,
   dimensions,
   client,
 }: {
   data: Object,
-  localData: Object,
   loading: Boolean,
   dimensions: Object,
   client: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { ekfYear, ekfAdresseId } = mobxStore
+  const { ekfYear, ekfAdresseId, tree } = mobxStore
   const ekf = getEkfFromData({ data, ekfAdresseId })
 
-  const activeNodeArray = get(localData, 'tree.activeNodeArray')
+  const { activeNodeArray } = tree
   const activeTpopkontrId = activeNodeArray[9]
 
   const height = isNaN(dimensions.height) ? 250 : dimensions.height

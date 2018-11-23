@@ -7,7 +7,6 @@ import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../../shared/ErrorBoundarySingleChild'
 import Fallback from '../../shared/Fallback'
-import withLocalData from './withLocalData'
 import getTableNameFromActiveNode from '../../../modules/getTableNameFromActiveNode'
 import mobxStoreContext from '../../../mobxStoreContext'
 
@@ -55,10 +54,7 @@ const Container = styled.div`
   }
 `
 
-const enhance = compose(
-  withLocalData,
-  observer,
-)
+const enhance = compose(observer)
 
 const Daten = ({
   tree,
@@ -68,7 +64,6 @@ const Daten = ({
   dimensions = { width: 380 },
   refetchTree,
   role,
-  localData,
 }: {
   tree: Object,
   treeName: String,
@@ -77,12 +72,12 @@ const Daten = ({
   dimensions: Object,
   refetchTree: () => void,
   role: String,
-  localData: Object,
 }) => {
-  const { nodeFilter } = useContext(mobxStoreContext)
+  const mobxStore = useContext(mobxStoreContext)
+  const { nodeFilter } = mobxStore
 
-  const activeNodeArray = get(localData, `${treeName}.activeNodeArray`)
-  const apId = get(localData, `${treeName}.activeNodeArray[3]`)
+  const activeNodeArray = get(mobxStore, `${treeName}.activeNodeArray`)
+  const apId = activeNodeArray.length > 3 ? activeNodeArray[3] : null
 
   const formObject = {
     projekt: (
@@ -360,7 +355,6 @@ const Daten = ({
   }
   if (!key) return null
 
-  if (localData.error) return `Fehler: ${localData.error.message}`
   return (
     <ErrorBoundary>
       <Container>

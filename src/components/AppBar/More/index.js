@@ -5,12 +5,10 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
 import isMobilePhone from '../../../modules/isMobilePhone'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import withLocalData from '../withLocalData'
 import logout from '../../../modules/logout'
 import getActiveNodes from '../../../modules/getActiveNodes'
 import EkfAdresse from './EkfAdresse'
@@ -30,28 +28,23 @@ const Version = styled.div`
   user-select: none;
 `
 
-const enhance = compose(
-  withLocalData,
-  observer,
-)
+const enhance = compose(observer)
 
 const MyAppBar = ({
   onClickExporte: passedOnClickExporte,
   setShowDeletions,
   role,
-  localData,
 }: {
   onClickExporte: () => void,
   setShowDeletions: () => void,
   role: string,
-  localData: () => void,
 }) => {
-  const { deletedDatasets, user, urlQuery } = useContext(mobxStoreContext)
+  const { deletedDatasets, user, urlQuery, tree } = useContext(mobxStoreContext)
   const { idb } = useContext(idbContext)
 
   const [anchorEl, setAnchorEl] = useState(null)
 
-  const activeNodeArray = get(localData, 'tree.activeNodeArray')
+  const { activeNodeArray } = tree
   const activeNodes = getActiveNodes(activeNodeArray)
   /**
    * need to clone projekteTabs
@@ -87,8 +80,6 @@ const MyAppBar = ({
     setAnchorEl(null)
     logout(idb)
   })
-
-  if (localData.error) return `Fehler: ${localData.error.message}`
 
   return (
     <ErrorBoundary>
