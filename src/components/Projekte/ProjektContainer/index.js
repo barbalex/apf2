@@ -465,7 +465,6 @@ const ProjekteContainer = props => {
   if (isPrint) {
     return (
       <Daten
-        tree={tree}
         treeName={treeName}
         activeNode={activeNode}
         activeNodes={activeNodes}
@@ -507,7 +506,6 @@ const ProjekteContainer = props => {
               renderOnResize={true}
             >
               <Daten
-                tree={tree}
                 treeName={treeName}
                 activeNode={activeNode}
                 activeNodes={activeNodes}
