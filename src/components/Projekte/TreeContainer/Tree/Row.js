@@ -217,7 +217,7 @@ const Row = ({
     setTreeKey,
   } = mobxStore
 
-  const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
+  const activeNodeArray = get(mobxStore, `${treeName}.activeNodeArray`)
   const myProps = { key: index }
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, activeNodeArray)
   const nodeIsOpen = isNodeOpen(openNodes, node.url)

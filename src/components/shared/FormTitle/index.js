@@ -106,7 +106,7 @@ const FormTitle = ({
     })
     existsTreeFilter = nodeFilterTreeIsFiltered(treeName)
   }
-  const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
+  const activeNodeArray = get(mobxStore, `${treeName}.activeNodeArray`)
 
   const onFilter = useCallback(
     () => {
