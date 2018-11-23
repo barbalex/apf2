@@ -7,7 +7,6 @@ import allParentNodesExist from '../allParentNodesExist'
 export default ({
   nodes: nodesPassed,
   data,
-  treeName,
   projektNodes,
   projId,
   apNodes,
@@ -16,7 +15,6 @@ export default ({
 }: {
   nodes: Array<Object>,
   data: Object,
-  treeName: String,
   projektNodes: Array<Object>,
   projId: String,
   apNodes: Array<Object>,

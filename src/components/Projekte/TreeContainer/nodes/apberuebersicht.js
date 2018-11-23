@@ -10,15 +10,17 @@ export default ({
   treeName,
   projektNodes,
   projId,
+  mobxStore,
 }: {
   nodes: Array<Object>,
   data: Object,
   treeName: String,
   projektNodes: Array<Object>,
   projId: String,
+  mobxStore: Object,
 }): Array<Object> => {
   const nodeLabelFilterString = get(
-    data,
+    mobxStore,
     `${treeName}.nodeLabelFilter.apberuebersicht`,
   )
   const apberuebersichts = get(data, 'apberuebersichts.nodes', [])

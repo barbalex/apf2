@@ -15,6 +15,7 @@ export default ({
   openNodes,
   projId,
   apId,
+  mobxStore,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -24,6 +25,7 @@ export default ({
   openNodes: Array<String>,
   projId: String,
   apId: String,
+  mobxStore: Object,
 }): Array<Object> => {
   const aparts = get(data, 'aparts.nodes', [])
   // fetch sorting indexes of parents
@@ -31,7 +33,10 @@ export default ({
     id: projId,
   })
   const apIndex = findIndex(apNodes, { id: apId })
-  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.apart`)
+  const nodeLabelFilterString = get(
+    mobxStore,
+    `${treeName}.nodeLabelFilter.apart`,
+  )
 
   // map through all elements and create array of nodes
   const nodes = aparts

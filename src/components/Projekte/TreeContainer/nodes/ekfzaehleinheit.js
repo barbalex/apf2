@@ -15,6 +15,7 @@ export default ({
   openNodes,
   projId,
   apId,
+  mobxStore,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -24,6 +25,7 @@ export default ({
   openNodes: Array<String>,
   projId: String,
   apId: String,
+  mobxStore: Object,
 }): Array<Object> => {
   const ekfzaehleinheits = get(data, 'ekfzaehleinheits.nodes', [])
   // fetch sorting indexes of parents
@@ -32,7 +34,7 @@ export default ({
   })
   const apIndex = findIndex(apNodes, { id: apId })
   const nodeLabelFilterString = get(
-    data,
+    mobxStore,
     `${treeName}.nodeLabelFilter.ekfzaehleinheit`,
   )
 

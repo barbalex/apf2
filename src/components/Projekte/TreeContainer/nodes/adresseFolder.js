@@ -7,16 +7,21 @@ export default ({
   treeName,
   loading,
   projektNodes,
+  mobxStore,
 }: {
   nodes: Array<Object>,
   data: Object,
   treeName: String,
   loading: Boolean,
   projektNodes: Array<Object>,
+  mobxStore: Object,
 }): Array<Object> => {
   const adresses = get(data, 'adresses.nodes', [])
   const wlIndex = projektNodes.length + 2
-  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.adresse`)
+  const nodeLabelFilterString = get(
+    mobxStore,
+    `${treeName}.nodeLabelFilter.adresse`,
+  )
 
   let adresseNodesLength = adresses
     // filter by nodeLabelFilter

@@ -14,6 +14,7 @@ export default ({
   projektNodes,
   projId,
   nodeFilter,
+  mobxStore,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -21,9 +22,10 @@ export default ({
   projektNodes: Array<Object>,
   projId: String,
   nodeFilter: Object,
+  mobxStore: Object,
 }): Array<Object> => {
-  const apFilter = get(data, `${treeName}.apFilter`)
-  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.ap`)
+  const apFilter = get(mobxStore, `${treeName}.apFilter`)
+  const nodeLabelFilterString = get(mobxStore, `${treeName}.nodeLabelFilter.ap`)
   const aps = get(data, 'aps.nodes', [])
   const nodeFilterArray = Object.entries(nodeFilter.ap).filter(
     ([key, value]) => value || value === 0 || value === false,

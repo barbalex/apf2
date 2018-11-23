@@ -5,12 +5,17 @@ export default ({
   nodes: nodesPassed,
   data,
   treeName,
+  mobxStore,
 }: {
   nodes: Array<Object>,
   data: Object,
   treeName: String,
+  mobxStore: Object,
 }): Array<Object> => {
-  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.projekt`)
+  const nodeLabelFilterString = get(
+    mobxStore,
+    `${treeName}.nodeLabelFilter.projekt`,
+  )
   const projekts = get(data, 'projekts.nodes', [])
 
   // map through all elements and create array of nodes

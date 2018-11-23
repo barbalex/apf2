@@ -15,6 +15,7 @@ export default ({
   apNodes,
   openNodes,
   apId,
+  mobxStore,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -25,6 +26,7 @@ export default ({
   apNodes: Array<Object>,
   openNodes: Array<String>,
   apId: String,
+  mobxStore: Object,
 }): Array<Object> => {
   const ekfzaehleinheits = get(data, 'ekfzaehleinheits.nodes', [])
 
@@ -36,7 +38,7 @@ export default ({
     id: apId,
   })
   const nodeLabelFilterString = get(
-    data,
+    mobxStore,
     `${treeName}.nodeLabelFilter.ekfzaehleinheit`,
   )
 

@@ -15,6 +15,7 @@ export default ({
   apNodes,
   openNodes,
   apId,
+  mobxStore,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -24,6 +25,7 @@ export default ({
   apNodes: Array<Object>,
   openNodes: Array<String>,
   apId: String,
+  mobxStore: Object,
 }): Array<Object> => {
   const ziels = get(data, 'ziels.nodes', [])
 
@@ -34,7 +36,10 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.ziel`)
+  const nodeLabelFilterString = get(
+    mobxStore,
+    `${treeName}.nodeLabelFilter.ziel`,
+  )
 
   const zieljahre = ziels
     .filter(el => el.apId === apId)

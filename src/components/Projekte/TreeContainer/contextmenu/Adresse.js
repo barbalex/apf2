@@ -4,13 +4,7 @@ import { ContextMenu, MenuItem } from 'react-contextmenu'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
-const Adresse = ({
-  onClick,
-  tree,
-}: {
-  onClick: () => void,
-  tree: Object,
-}) => 
+const Adresse = ({ onClick, tree }: { onClick: () => void, tree: Object }) => (
   <ErrorBoundary>
     <ContextMenu id={`${tree.name}adresse`}>
       <div className="react-contextmenu-title">Adresse</div>
@@ -34,5 +28,6 @@ const Adresse = ({
       </MenuItem>
     </ContextMenu>
   </ErrorBoundary>
+)
 
 export default Adresse

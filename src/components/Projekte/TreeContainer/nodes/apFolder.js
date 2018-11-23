@@ -15,6 +15,7 @@ export default ({
   projektNodes,
   projId,
   nodeFilter,
+  mobxStore,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -23,6 +24,7 @@ export default ({
   projektNodes: Array<Object>,
   projId: String,
   nodeFilter: Object,
+  mobxStore: Object,
 }): Array<Object> => {
   const aps = get(data, 'aps.nodes', [])
   const nodeFilterArray = Object.entries(nodeFilter.ap).filter(
@@ -33,8 +35,8 @@ export default ({
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
-  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.ap`)
-  const apFilter = get(data, `${treeName}.apFilter`)
+  const nodeLabelFilterString = get(mobxStore, `${treeName}.nodeLabelFilter.ap`)
+  const apFilter = get(mobxStore, `${treeName}.apFilter`)
 
   let apNodes = aps
     .filter(el => el.projId === projId)

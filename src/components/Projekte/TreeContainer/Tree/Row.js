@@ -260,7 +260,7 @@ const Row = ({
   const amCopyingBiotop =
     node.nodeType === 'table' && node.id === copyingBiotop.id
   //console.log('Row rendering')
-  const tree2 = get(data, treeName)
+  const tree2 = get(mobxStore, treeName)
 
   const onClickNode = useCallback(
     event => {

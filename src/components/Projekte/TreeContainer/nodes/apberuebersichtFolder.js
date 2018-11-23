@@ -11,6 +11,7 @@ export default ({
   loading,
   projektNodes,
   projId,
+  mobxStore,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -18,6 +19,7 @@ export default ({
   loading: Boolean,
   projektNodes: Array<Object>,
   projId: String,
+  mobxStore: Object,
 }): Array<Object> => {
   const apberuebersichts = get(data, 'apberuebersichts.nodes', [])
 
@@ -26,7 +28,7 @@ export default ({
     id: projId,
   })
   const nodeLabelFilterString = get(
-    data,
+    mobxStore,
     `${treeName}.nodeLabelFilter.apberuebersicht`,
   )
 

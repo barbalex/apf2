@@ -35,22 +35,21 @@ const LabelFilter = ({
   treeName,
   activeNode,
   nodes,
-  data,
   client,
 }: {
   treeName: String,
   activeNode: Object,
   nodes: Array<Object>,
-  data: Object,
   client: Object,
 }) => {
-  const { setTreeKey } = useContext(mobxStoreContext)
+  const mobxStore = useContext(mobxStoreContext)
+  const { setTreeKey } = mobxStore
   const tableName = activeNode ? activeNode.filterTable : null
 
   let labelText = '(filtern nicht möglich)'
   let filterValue = ''
   if (tableName) {
-    filterValue = get(data, `${treeName}.nodeLabelFilter.${tableName}`, '')
+    filterValue = get(mobxStore, `${treeName}.nodeLabelFilter.${tableName}`, '')
     // make sure 0 is kept
     if (!filterValue && filterValue !== 0) filterValue = ''
     const table = tables.find(t => t.table === tableName)
@@ -59,7 +58,7 @@ const LabelFilter = ({
       labelText = `${tableLabel} filtern`
     }
   }
-  const openNodes = get(data, `${treeName}.openNodes`, [])
+  const openNodes = get(mobxStore, `${treeName}.openNodes`, [])
 
   const onChange = useCallback(
     async event => {

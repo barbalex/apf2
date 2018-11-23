@@ -19,6 +19,7 @@ export default ({
   zielId,
   apzieljahrFolderNodes,
   apzielNodes,
+  mobxStore,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -32,6 +33,7 @@ export default ({
   zielId: String,
   apzieljahrFolderNodes: Array<Object>,
   apzielNodes: Array<Object>,
+  mobxStore: Object,
 }): Array<Object> => {
   const zielbers = get(data, 'zielbers.nodes', [])
   // fetch sorting indexes of parents
@@ -46,7 +48,10 @@ export default ({
     el => el.jahr === zielJahr,
   )
   const zielIndex = findIndex(apzielNodes, el => el.id === zielId)
-  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.zielber`)
+  const nodeLabelFilterString = get(
+    mobxStore,
+    `${treeName}.nodeLabelFilter.zielber`,
+  )
 
   // map through all elements and create array of nodes
   const nodes = zielbers

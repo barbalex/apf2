@@ -170,7 +170,6 @@ const TreeContainer = ({
   nodes,
   data,
   loading,
-  openNodes,
   mapIdsFiltered,
   client,
 }: {
@@ -182,7 +181,6 @@ const TreeContainer = ({
   activeNodes: Object,
   activeNode: Object,
   loading: Boolean,
-  openNodes: Array<string>,
   refetchTree: () => void,
   mapIdsFiltered: Array<String>,
   client: Object,
@@ -214,8 +212,8 @@ const TreeContainer = ({
 
   const datasetToDelete = toDelete
   const deleteDatasetModalIsVisible = !!datasetToDelete.id
-  const tree = get(data, treeName)
-  const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
+  const tree = mobxStore[treeName]
+  const { activeNodeArray, openNodes } = tree
 
   useEffect(() => {
     /**
@@ -224,7 +222,6 @@ const TreeContainer = ({
      * open it
      * dont do this in render!
      */
-    const openNodes = get(data, `${treeName}.openNodes`)
     const projekteNodes = nodes.filter(n => n.menuType === 'projekt')
     const existsOnlyOneProjekt = projekteNodes.length === 1
     const projektNode = projekteNodes[0]

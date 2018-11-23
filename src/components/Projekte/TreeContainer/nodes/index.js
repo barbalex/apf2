@@ -212,6 +212,7 @@ export default ({
             projektNodes,
             projId,
             nodeFilter: nodeFilter[treeName],
+            mobxStore,
           }),
           ...buildApberuebersichtFolderNodes({
             nodes,
@@ -220,6 +221,7 @@ export default ({
             loading: dataApberuebersichts.loading,
             projektNodes,
             projId,
+            mobxStore,
           }),
         ]
       }
@@ -237,6 +239,7 @@ export default ({
             loading: dataApberuebersichts.loading,
             projektNodes,
             projId,
+            mobxStore,
           }),
         ]
       }
@@ -275,6 +278,7 @@ export default ({
             openNodes,
             apId,
             nodeFilter: nodeFilter[treeName],
+            mobxStore,
           }),
           ...buildApzielFolderNodes({
             nodes,
@@ -286,6 +290,7 @@ export default ({
             projektNodes,
             projId,
             apId,
+            mobxStore,
           }),
           ...buildAperfkritFolderNodes({
             nodes,
@@ -297,6 +302,7 @@ export default ({
             projektNodes,
             projId,
             apId,
+            mobxStore,
           }),
           ...buildApberFolderNodes({
             nodes,
@@ -319,6 +325,7 @@ export default ({
             projektNodes,
             projId,
             apId,
+            mobxStore,
           }),
           ...buildIdealbiotopFolderNodes({
             nodes,
@@ -330,6 +337,7 @@ export default ({
             projektNodes,
             projId,
             apId,
+            mobxStore,
           }),
           ...buildAssozartFolderNodes({
             nodes,
@@ -341,6 +349,7 @@ export default ({
             projektNodes,
             projId,
             apId,
+            mobxStore,
           }),
           ...buildEkfzaehleinheitFolderNodes({
             nodes,
@@ -352,6 +361,7 @@ export default ({
             projektNodes,
             projId,
             apId,
+            mobxStore,
           }),
           ...buildApartFolderNodes({
             nodes,
@@ -363,6 +373,7 @@ export default ({
             projektNodes,
             projId,
             apId,
+            mobxStore,
           }),
           ...buildBeobNichtBeurteiltFolderNodes({
             nodes,
@@ -374,6 +385,7 @@ export default ({
             projektNodes,
             projId,
             apId,
+            mobxStore,
           }),
           ...buildBeobNichtZuzuordnenFolderNodes({
             nodes,
@@ -385,6 +397,7 @@ export default ({
             projektNodes,
             projId,
             apId,
+            mobxStore,
           }),
           ...qkFolderNodes({
             nodes,
@@ -396,6 +409,7 @@ export default ({
             projektNodes,
             projId,
             apId,
+            mobxStore,
           }),
         ]
       }
@@ -435,6 +449,7 @@ export default ({
           apId: nodeUrl[3],
           jahr: +nodeUrl[5],
           apzieljahrFolderNodes,
+          mobxStore,
         })
         nodes = [...nodes, ...apzielNodes]
       }
@@ -459,6 +474,7 @@ export default ({
             apzieljahrFolderNodes,
             zielId: nodeUrl[6],
             apzielNodes,
+            mobxStore,
           }),
         ]
       }
@@ -484,6 +500,7 @@ export default ({
             apzieljahrFolderNodes,
             zielId: nodeUrl[6],
             apzielNodes,
+            mobxStore,
           }),
         ]
       }
@@ -503,6 +520,7 @@ export default ({
           projId,
           apId: nodeUrl[3],
           nodeFilter: nodeFilter[treeName],
+          mobxStore,
         })
         nodes = [...nodes, ...popNodes]
       }
@@ -523,6 +541,7 @@ export default ({
             projektNodes,
             projId,
             apId: nodeUrl[3],
+            mobxStore,
           }),
         ]
       }
@@ -543,6 +562,7 @@ export default ({
             projektNodes,
             projId,
             apId: nodeUrl[3],
+            mobxStore,
           }),
         ]
       }
@@ -563,6 +583,7 @@ export default ({
             projektNodes,
             projId,
             apId: nodeUrl[3],
+            mobxStore,
           }),
         ]
       }
@@ -583,6 +604,7 @@ export default ({
             projektNodes,
             projId,
             apId: nodeUrl[3],
+            mobxStore,
           }),
         ]
       }
@@ -603,6 +625,7 @@ export default ({
             projektNodes,
             projId,
             apId: nodeUrl[3],
+            mobxStore,
           }),
         ]
       }
@@ -623,6 +646,7 @@ export default ({
             projektNodes,
             projId,
             apId: nodeUrl[3],
+            mobxStore,
           }),
         ]
       }
@@ -643,6 +667,7 @@ export default ({
             projektNodes,
             projId,
             apId: nodeUrl[3],
+            mobxStore,
           }),
         ]
       }
@@ -663,6 +688,7 @@ export default ({
             projektNodes,
             projId,
             apId: nodeUrl[3],
+            mobxStore,
           }),
         ]
       }
@@ -688,6 +714,7 @@ export default ({
             popNodes,
             popId,
             nodeFilter: nodeFilter[treeName],
+            mobxStore,
           }),
           ...buildPopberFolderNodes({
             nodes,
@@ -701,6 +728,7 @@ export default ({
             apId,
             popNodes,
             popId,
+            mobxStore,
           }),
           ...buildPopmassnberFolderNodes({
             nodes,
@@ -714,6 +742,7 @@ export default ({
             apId,
             popNodes,
             popId,
+            mobxStore,
           }),
         ]
       }
@@ -737,6 +766,7 @@ export default ({
             openNodes,
             popId: nodeUrl[5],
             popNodes,
+            mobxStore,
           }),
         ]
       }
@@ -760,6 +790,7 @@ export default ({
             openNodes,
             popId: nodeUrl[5],
             popNodes,
+            mobxStore,
           }),
         ]
       }
@@ -782,6 +813,7 @@ export default ({
           popId: nodeUrl[5],
           popNodes,
           nodeFilter: nodeFilter[treeName],
+          mobxStore,
         })
         nodes = [...nodes, ...tpopNodes]
       }
@@ -811,6 +843,7 @@ export default ({
             tpopId,
             tpopNodes,
             nodeFilter: nodeFilter[treeName],
+            mobxStore,
           }),
           ...buildTpopmassnberFolderNodes({
             nodes,
@@ -826,6 +859,7 @@ export default ({
             popNodes,
             tpopId,
             tpopNodes,
+            mobxStore,
           }),
           ...buildTpopfeldkontrFolderNodes({
             nodes,
@@ -842,6 +876,7 @@ export default ({
             tpopId,
             tpopNodes,
             nodeFilter: nodeFilter[treeName],
+            mobxStore,
           }),
           ...buildTpopfreiwkontrFolderNodes({
             nodes,
@@ -858,6 +893,7 @@ export default ({
             tpopId,
             tpopNodes,
             nodeFilter: nodeFilter[treeName],
+            mobxStore,
           }),
           ...buildTpopberFolderNodes({
             nodes,
@@ -873,6 +909,7 @@ export default ({
             popNodes,
             tpopId,
             tpopNodes,
+            mobxStore,
           }),
           ...buildBeobZugeordnetFolderNodes({
             nodes,
@@ -888,6 +925,7 @@ export default ({
             popNodes,
             tpopId,
             tpopNodes,
+            mobxStore,
           }),
         ]
       }
@@ -914,6 +952,7 @@ export default ({
             popNodes,
             tpopId: nodeUrl[7],
             tpopNodes,
+            mobxStore,
           }),
         ]
       }
@@ -940,6 +979,7 @@ export default ({
             popNodes,
             tpopId: nodeUrl[7],
             tpopNodes,
+            mobxStore,
           }),
         ]
       }
@@ -965,6 +1005,7 @@ export default ({
           tpopId: nodeUrl[7],
           tpopNodes,
           nodeFilter: nodeFilter[treeName],
+          mobxStore,
         })
         nodes = [...nodes, ...tpopfreiwkontrNodes]
       }
@@ -990,6 +1031,7 @@ export default ({
           tpopId: nodeUrl[7],
           tpopNodes,
           nodeFilter: nodeFilter[treeName],
+          mobxStore,
         })
         nodes = [...nodes, ...tpopfeldkontrNodes]
       }
@@ -1016,6 +1058,7 @@ export default ({
             popNodes,
             tpopId: nodeUrl[7],
             tpopNodes,
+            mobxStore,
           }),
         ]
       }
@@ -1043,6 +1086,7 @@ export default ({
             tpopId: nodeUrl[7],
             tpopNodes,
             nodeFilter: nodeFilter[treeName],
+            mobxStore,
           }),
         ]
       }
@@ -1071,6 +1115,7 @@ export default ({
             tpopNodes,
             tpopkontrId: nodeUrl[9],
             tpopfeldkontrNodes,
+            mobxStore,
           }),
         ]
       }
@@ -1099,6 +1144,7 @@ export default ({
             tpopNodes,
             tpopkontrId: nodeUrl[9],
             tpopfeldkontrNodes,
+            mobxStore,
           }),
         ]
       }
@@ -1111,6 +1157,7 @@ export default ({
           data,
           treeName,
           projektNodes,
+          mobxStore,
         }),
       ]
     }
@@ -1127,6 +1174,7 @@ export default ({
           treeName,
           loading: dataAdresses.loading,
           projektNodes,
+          mobxStore,
         }),
       ]
     }
@@ -1145,6 +1193,7 @@ export default ({
           treeName,
           loading: dataAdresses.loading,
           projektNodes,
+          mobxStore,
         }),
       ]
     }

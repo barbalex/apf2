@@ -7,18 +7,23 @@ export default ({
   treeName,
   loading,
   projektNodes,
+  mobxStore,
 }: {
   nodes: Array<Object>,
   data: Object,
   treeName: String,
   loading: Boolean,
   projektNodes: Array<Object>,
+  mobxStore: Object,
 }): Array<Object> => {
   const users = get(data, 'users.nodes', [])
 
   // fetch sorting indexes of parents
   const userIndex = projektNodes.length + 1
-  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.user`)
+  const nodeLabelFilterString = get(
+    mobxStore,
+    `${treeName}.nodeLabelFilter.user`,
+  )
 
   const userNodesLength = users
     // filter by nodeLabelFilter

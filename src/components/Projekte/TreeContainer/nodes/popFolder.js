@@ -18,6 +18,7 @@ export default ({
   openNodes,
   apId,
   nodeFilter,
+  mobxStore,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -29,9 +30,10 @@ export default ({
   openNodes: Array<String>,
   apId: String,
   nodeFilter: Object,
+  mobxStore: Object,
 }): Array<Object> => {
   const pops = get(data, 'pops.nodes', [])
-  const apFilter = get(data, `${treeName}.apFilter`)
+  const apFilter = get(mobxStore, `${treeName}.apFilter`)
   const nodeFilterArray = Object.entries(nodeFilter.pop).filter(
     ([key, value]) => value || value === 0 || value === false,
   )
@@ -43,7 +45,10 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.pop`)
+  const nodeLabelFilterString = get(
+    mobxStore,
+    `${treeName}.nodeLabelFilter.pop`,
+  )
 
   let popNodes = pops
     .filter(el => el.apId === apId)

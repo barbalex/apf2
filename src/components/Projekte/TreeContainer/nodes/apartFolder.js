@@ -13,6 +13,7 @@ export default ({
   projId,
   apNodes,
   apId,
+  mobxStore,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -22,11 +23,12 @@ export default ({
   projId: String,
   apNodes: Array<Object>,
   apId: String,
+  mobxStore: Object,
 }): Array<Object> => {
   // return empty if ap is not a real ap and apFilter is set
   const ap = get(data, 'aps.nodes', []).filter(n => n.id === apId)
   const isAp = [1, 2, 3].includes(ap.bearbeitung)
-  const apFilter = get(data, `${treeName}.apFilter`)
+  const apFilter = get(mobxStore, `${treeName}.apFilter`)
   if (!!apFilter && !isAp) return []
 
   const aparts = get(data, 'aparts.nodes', [])
@@ -38,7 +40,10 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.apart`)
+  const nodeLabelFilterString = get(
+    mobxStore,
+    `${treeName}.nodeLabelFilter.apart`,
+  )
 
   const apartNodesLength = aparts
     .filter(el => el.apId === apId)

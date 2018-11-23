@@ -21,6 +21,7 @@ export default ({
   popId,
   tpopId,
   tpopkontrId,
+  mobxStore,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -36,6 +37,7 @@ export default ({
   popId: String,
   tpopId: String,
   tpopkontrId: String,
+  mobxStore: Object,
 }): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
@@ -46,7 +48,7 @@ export default ({
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
   const tpopkontrIndex = findIndex(tpopfeldkontrNodes, { id: tpopkontrId })
   const nodeLabelFilterString = get(
-    data,
+    mobxStore,
     `${treeName}.nodeLabelFilter.tpopkontrzaehl`,
   )
 

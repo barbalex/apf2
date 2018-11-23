@@ -15,6 +15,7 @@ export default ({
   apNodes,
   openNodes,
   apId,
+  mobxStore,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -25,6 +26,7 @@ export default ({
   apNodes: Array<Object>,
   openNodes: Array<String>,
   apId: String,
+  mobxStore: Object,
 }): Array<Object> => {
   const erfkrits = get(data, 'erfkrits.nodes', [])
 
@@ -35,7 +37,10 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.erfkrit`)
+  const nodeLabelFilterString = get(
+    mobxStore,
+    `${treeName}.nodeLabelFilter.erfkrit`,
+  )
 
   const erfkritNodesLength = erfkrits
     .filter(el => el.apId === apId)
