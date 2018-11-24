@@ -3,13 +3,10 @@ import { ApolloClient } from 'apollo-client'
 import { BatchHttpLink } from 'apollo-link-batch-http'
 import { setContext } from 'apollo-link-context'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import { withClientState } from 'apollo-link-state'
 import { ApolloLink } from 'apollo-link'
 import jwtDecode from 'jwt-decode'
 
 import graphQlUri from './modules/graphQlUri'
-import buildResolvers from './store/resolvers'
-import localStoreDefaults from './store/defaults'
 
 export default async ({ idb, mobxStore }) => {
   const authLink = setContext(async (_, { headers }) => {
@@ -36,11 +33,6 @@ export default async ({ idb, mobxStore }) => {
       return object.id
     },*/
   })
-  const stateLink = withClientState({
-    resolvers: buildResolvers({ mobxStore }),
-    cache,
-    defaults: localStoreDefaults,
-  })
   // use httpLink _instead_ of batchHttpLink in order not to batch
   /*
   const httpLink = createHttpLink({
@@ -49,7 +41,7 @@ export default async ({ idb, mobxStore }) => {
   const batchHttpLink = new BatchHttpLink({ uri: graphQlUri() })
   const defaultOptions = { fetchPolicy: 'network-only' }
   const client = new ApolloClient({
-    link: ApolloLink.from([stateLink, authLink, batchHttpLink]),
+    link: ApolloLink.from([authLink, batchHttpLink]),
     cache,
     defaultOptions,
   })
