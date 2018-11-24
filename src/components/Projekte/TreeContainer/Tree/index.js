@@ -47,7 +47,6 @@ const LoadingDiv = styled.div`
 type Props = {
   treeName: String,
   data: Object,
-  tree: Object,
   nodes: Array<Object>,
   loading: Boolean,
   activeNodes: Array<Object>,
@@ -56,8 +55,6 @@ type Props = {
   mapBeobNichtZuzuordnenVisible: boolean,
   mapPopVisible: boolean,
   mapTpopVisible: boolean,
-  activeNodeArray: Array<Object>,
-  openNodes: Array<string>,
   mapIdsFiltered: Array<String>,
 }
 
@@ -69,11 +66,8 @@ const noRowsRenderer = () => (
 
 const Tree = ({
   nodes,
-  activeNodeArray,
   loading,
-  openNodes,
   data,
-  tree,
   treeName,
   activeNodes,
   mapIdsFiltered,
@@ -82,7 +76,10 @@ const Tree = ({
   // when beob.artId is changed, saveArtIdToDb changes openNodes
   // problem is: Tree renders AFTERWARDS with OLD openNodes !!!???
   //console.log('Tree rendering')
-  const { mapFilter, activeApfloraLayers } = useContext(mobxStoreContext)
+  const mobxStore = useContext(mobxStoreContext)
+  const { mapFilter, activeApfloraLayers } = mobxStore
+  const tree = mobxStore[treeName]
+  const { openNodes, activeNodeArray } = tree
   const rowRenderer = useCallback(
     ({ key, index, style }) => {
       const node = nodes[index]

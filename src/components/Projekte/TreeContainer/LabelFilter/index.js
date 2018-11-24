@@ -10,7 +10,6 @@ import get from 'lodash/get'
 import { withApollo } from 'react-apollo'
 
 import tables from '../../../../modules/tables'
-import labelFilterData from './data'
 import setTreeNodeLabelFilterKey from './setTreeNodeLabelFilterKey'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
@@ -26,10 +25,7 @@ const StyledInput = styled(Input)`
   }
 `
 
-const enhance = compose(
-  withApollo,
-  labelFilterData,
-)
+const enhance = compose(withApollo)
 
 const LabelFilter = ({
   treeName,

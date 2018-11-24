@@ -248,8 +248,6 @@ const TreeContainer = ({
 
   const handleClick = useCallback(
     (e, data, element) => {
-      const tree = get(dbData, treeName)
-      const { openNodes } = tree
       if (!data) return addError('no data passed with click')
       if (!element) return addError(new Error('no element passed with click'))
       const { table, action, actionTable } = data
@@ -274,7 +272,7 @@ const TreeContainer = ({
           }
           const idToPass = parentId || id
           insertDataset({
-            tree,
+            treeName,
             tablePassed: table,
             parentId: idToPass,
             url,
@@ -508,7 +506,9 @@ const TreeContainer = ({
   return (
     <ErrorBoundary>
       <Container>
-        {deleteDatasetModalIsVisible && <DeleteDatasetModal treeName={treeName} />}
+        {deleteDatasetModalIsVisible && (
+          <DeleteDatasetModal treeName={treeName} />
+        )}
         <LabelFilterContainer>
           <LabelFilter
             treeName={treeName}
@@ -521,12 +521,9 @@ const TreeContainer = ({
           <Tree
             treeName={treeName}
             data={data}
-            tree={tree}
             nodes={nodes}
             // TODO: is this loading needed?
             loading={loading}
-            activeNodeArray={activeNodeArray}
-            openNodes={openNodes}
             activeNodes={activeNodes}
             activeApfloraLayers={activeApfloraLayers}
             mapIdsFiltered={mapIdsFiltered}

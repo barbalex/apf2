@@ -1,5 +1,4 @@
 // @flow
-import get from 'lodash/get'
 import uniqBy from 'lodash/uniqBy'
 
 import allParentNodesAreOpen from '../allParentNodesAreOpen'

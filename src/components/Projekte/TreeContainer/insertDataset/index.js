@@ -7,7 +7,7 @@ import get from 'lodash/get'
 import tables from '../../../../modules/tables'
 
 export default async ({
-  tree,
+  treeName,
   tablePassed,
   parentId,
   id,
@@ -18,7 +18,7 @@ export default async ({
   client,
   mobxStore,
 }: {
-  tree: Object,
+  treeName: string,
   tablePassed: String,
   parentId: String,
   id: String,
@@ -30,6 +30,7 @@ export default async ({
   mobxStore: Object,
 }): any => {
   const { setTreeKey } = mobxStore
+  const tree = mobxStore[treeName]
   let table = tablePassed
   // insert new dataset in db and fetch id
   const tableMetadata: {
