@@ -14,7 +14,6 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import PrintIcon from '@material-ui/icons/PictureAsPdf'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { withApollo } from 'react-apollo'
 
 import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
 import isNodeOpen from '../isNodeOpen'
@@ -178,10 +177,7 @@ const PrintIconContainer = styled.div`
   }
 `
 
-const enhance = compose(
-  withApollo,
-  observer,
-)
+const enhance = compose(observer)
 
 const Row = ({
   index,
@@ -193,7 +189,6 @@ const Row = ({
   data,
   openNodes,
   mapIdsFiltered,
-  client,
 }: {
   index: Number,
   style: Object,
@@ -204,7 +199,6 @@ const Row = ({
   data: Object,
   openNodes: Array<string>,
   mapIdsFiltered: Array<String>,
-  client: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const {
@@ -269,7 +263,6 @@ const Row = ({
         node,
         nodeFilter,
         nodeFilterSetActiveTable,
-        client,
         mobxStore,
       })
     },

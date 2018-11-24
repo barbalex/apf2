@@ -8,14 +8,12 @@ export default ({
   node,
   nodeFilter,
   nodeFilterSetActiveTable,
-  client,
   mobxStore,
 }: {
   tree: Object,
   node: Object,
   nodeFilter: Object,
   nodeFilterSetActiveTable: () => void,
-  client: Object,
   mobxStore: Object,
 }): any => {
   if (!node.url) throw new Error('passed node has no url')
@@ -43,7 +41,7 @@ export default ({
       // leave newActiveNodeArray as it is
     }
   } else if (!nodeIsOpen) {
-    openNode({ tree, node, client, mobxStore })
+    openNode({ tree, node, mobxStore })
   }
 
   setTreeKey({

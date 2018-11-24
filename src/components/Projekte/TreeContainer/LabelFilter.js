@@ -9,9 +9,8 @@ import compose from 'recompose/compose'
 import get from 'lodash/get'
 import { withApollo } from 'react-apollo'
 
-import tables from '../../../../modules/tables'
-import setTreeNodeLabelFilterKey from './setTreeNodeLabelFilterKey'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import tables from '../../../modules/tables'
+import mobxStoreContext from '../../../mobxStoreContext'
 
 const StyledFormControl = styled(FormControl)`
   padding-right: 0.8em !important;
@@ -39,7 +38,7 @@ const LabelFilter = ({
   client: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { setTreeKey } = mobxStore
+  const { setTreeKey, setTreeNodeLabelFilterKey } = mobxStore
   const tableName = activeNode ? activeNode.filterTable : null
 
   let labelText = '(filtern nicht möglich)'
@@ -82,13 +81,10 @@ const LabelFilter = ({
           key: 'openNodes',
         })
       }
-      client.mutate({
-        mutation: setTreeNodeLabelFilterKey,
-        variables: {
-          value,
-          tree: treeName,
-          key: filterTable,
-        },
+      setTreeNodeLabelFilterKey({
+        value,
+        tree: treeName,
+        key: filterTable,
       })
     },
     [treeName, openNodes, activeNode],

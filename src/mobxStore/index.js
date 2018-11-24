@@ -268,11 +268,11 @@ const myTypes = types
       self.assigningBeob = val
     },
     setTreeKey({ tree, key, value }) {
-      const oldValue = self.tree[key]
+      const oldValue = self[tree][key]
       const { urlQuery } = self
       // only write if changed
       if (!isEqual(oldValue, value)) {
-        self.tree[key] = value
+        self[tree][key] = value
         if (tree === 'tree' && key === 'activeNodeArray') {
           const search = queryString.stringify(urlQuery)
           const query = `${
@@ -280,13 +280,52 @@ const myTypes = types
           }`
           // pass openNodes as state
           self.historyPush(`/${value.join('/')}${query}`, {
-            openNodes: self.tree.openNodes,
+            openNodes: self[tree].openNodes,
           })
         }
       }
     },
     cloneTree2From1() {
       self.tree2 = cloneDeep(self.tree)
+    },
+    setTreeNodeLabelFilterKey({ tree, key, value }) {
+      const oldValue = self[tree].nodeLabelFilter[key]
+      // only write if changed
+      if (!isEqual(oldValue, value)) {
+        self[tree].nodeLabelFilter[key] = value
+      }
+    },
+    treeNodeLabelFilterResetExceptAp({ tree }) {
+      self[tree].nodeLabelFilter = {
+        ap: self[tree].nodeLabelFilter.ap,
+        pop: null,
+        tpop: null,
+        tpopkontr: null,
+        tpopfeldkontr: null,
+        tpopfreiwkontr: null,
+        tpopkontrzaehl: null,
+        tpopmassn: null,
+        ziel: null,
+        zielber: null,
+        erfkrit: null,
+        apber: null,
+        apberuebersicht: null,
+        ber: null,
+        idealbiotop: null,
+        assozart: null,
+        ekfzaehleinheit: null,
+        popber: null,
+        popmassnber: null,
+        tpopber: null,
+        tpopmassnber: null,
+        apart: null,
+        projekt: null,
+        beob: null,
+        beobprojekt: null,
+        adresse: null,
+        gemeinde: null,
+        user: null,
+      }
     },
   }))
 

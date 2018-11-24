@@ -213,7 +213,7 @@ const TreeContainer = ({
   const datasetToDelete = toDelete
   const deleteDatasetModalIsVisible = !!datasetToDelete.id
   const tree = mobxStore[treeName]
-  const { activeNodeArray, openNodes } = tree
+  const { openNodes } = tree
 
   useEffect(() => {
     /**

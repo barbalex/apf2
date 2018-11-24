@@ -1,13 +1,9 @@
 // @flow
 import merge from 'lodash/merge'
 
-import treeNodeLabelFilterKey from './treeNodeLabelFilterKey'
 import treeNodeLabelFilterResetExceptAp from './treeNodeLabelFilterResetExceptAp'
 
 export default ({ mobxStore }) => {
-  const resolvers = merge(
-    treeNodeLabelFilterKey,
-    treeNodeLabelFilterResetExceptAp,
-  )
+  const resolvers = merge(treeNodeLabelFilterResetExceptAp)
   return resolvers
 }
