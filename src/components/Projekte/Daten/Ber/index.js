@@ -44,9 +44,6 @@ const Ber = ({
   data: Object,
   client: Object,
 }) => {
-  const mobxStore = useContext(mobxStoreContext)
-  const { activeNodeArray } = mobxStore[treeName]
-
   const [errors, setErrors] = useState({})
 
   const row = get(data, 'berById', {})
