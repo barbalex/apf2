@@ -10,7 +10,6 @@ import { withApollo } from 'react-apollo'
 
 import tables from '../../../../modules/tables'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import withLocalData from './withLocalData'
 import deleteDataset from './delete'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
@@ -22,15 +21,14 @@ const StyledDialog = styled(Dialog)`
 
 const enhance = compose(
   withApollo,
-  withLocalData,
   observer,
 )
 
 const DatasetDeleteModal = ({
-  localData,
+  treeName,
   client,
 }: {
-  localData: Object,
+  treeName: string,
   client: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
@@ -53,27 +51,16 @@ const DatasetDeleteModal = ({
   const onClickLoeschen = useCallback(
     () =>
       deleteDataset({
-        dataPassedIn: localData,
         toDelete,
         emptyToDelete,
         addDeletedDataset,
         addError,
         client,
         mobxStore,
+        treeName,
       }),
-    [localData],
+    [treeName],
   )
-
-  if (localData.error) {
-    if (
-      localData.error.message.includes('permission denied') ||
-      localData.error.message.includes('keine Berechtigung')
-    ) {
-      // ProjektContainer returns helpful screen
-      return null
-    }
-    return `Fehler: ${localData.error.message}`
-  }
 
   return (
     <ErrorBoundary>

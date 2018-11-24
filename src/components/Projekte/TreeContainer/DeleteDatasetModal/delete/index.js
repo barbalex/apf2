@@ -12,7 +12,6 @@ const isFreiwilligenKontrolle = activeNodeArray =>
   activeNodeArray[activeNodeArray.length - 2] === 'Freiwilligen-Kontrollen'
 
 export default async ({
-  dataPassedIn,
   toDelete,
   emptyToDelete,
   addDeletedDataset,
@@ -20,7 +19,6 @@ export default async ({
   client,
   mobxStore,
 }: {
-  dataPassedIn: Object,
   toDelete: Object,
   emptyToDelete: () => void,
   addDeletedDataset: () => void,
@@ -99,7 +97,7 @@ export default async ({
   // BUT: need to refetch tree
 
   // set new url if necessary
-  const activeNodeArray1 = get(dataPassedIn, 'tree.activeNodeArray')
+  const activeNodeArray1 = get(mobxStore, 'tree.activeNodeArray')
   if (
     isEqual(activeNodeArray1, url) &&
     !isFreiwilligenKontrolle(activeNodeArray1)
@@ -117,7 +115,7 @@ export default async ({
       key: 'activeNodeArray',
     })
   }
-  const activeNodeArray2 = get(dataPassedIn, 'tree2.activeNodeArray')
+  const activeNodeArray2 = get(mobxStore, 'tree2.activeNodeArray')
   if (
     isEqual(activeNodeArray2, url) &&
     !isFreiwilligenKontrolle(activeNodeArray2)
@@ -137,14 +135,14 @@ export default async ({
   }
 
   // remove from openNodes
-  const openNodes1 = get(dataPassedIn, 'tree.openNodes')
+  const openNodes1 = get(mobxStore, 'tree.openNodes')
   const newOpenNodes1 = openNodes1.filter(n => !isEqual(n, url))
   setTreeKey({
     value: newOpenNodes1,
     tree: 'tree',
     key: 'openNodes',
   })
-  const openNodes2 = get(dataPassedIn, 'tree2.openNodes')
+  const openNodes2 = get(mobxStore, 'tree2.openNodes')
   const newOpenNodes2 = openNodes2.filter(n => !isEqual(n, url))
   setTreeKey({
     value: newOpenNodes2,

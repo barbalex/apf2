@@ -508,7 +508,7 @@ const TreeContainer = ({
   return (
     <ErrorBoundary>
       <Container>
-        {deleteDatasetModalIsVisible && <DeleteDatasetModal tree={tree} />}
+        {deleteDatasetModalIsVisible && <DeleteDatasetModal treeName={treeName} />}
         <LabelFilterContainer>
           <LabelFilter
             treeName={treeName}
