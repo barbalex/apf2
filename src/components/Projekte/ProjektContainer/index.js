@@ -88,6 +88,15 @@ const LogoutButton = styled(Button)`
 const enhance = compose(
   withProps(({ treeName }) => {
     const mobxStore = useContext(mobxStoreContext)
+    // provoke running buildVariables by adding to props (before):
+    // openNodes, activeNodeArray
+    return {
+      openNodes: mobxStore[treeName].openNodes,
+      activeNodeArray: mobxStore[treeName].activeNodeArray,
+    }
+  }),
+  withProps(({ treeName }) => {
+    const mobxStore = useContext(mobxStoreContext)
     return buildVariables({
       treeName,
       mobxStore,

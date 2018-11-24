@@ -27,7 +27,8 @@ const tree2TabValues = ['tree2', 'daten2', 'karte2', 'exporte2']
 const enhance = compose(observer)
 
 const Projekte = () => {
-  const { isPrint, urlQuery } = useContext(mobxStoreContext)
+  const mobxStore = useContext(mobxStoreContext)
+  const { isPrint, urlQuery } = mobxStore
 
   const { projekteTabs } = urlQuery
   const treeTabs = intersection(treeTabValues, projekteTabs)
