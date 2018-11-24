@@ -163,7 +163,7 @@ export default ({
     // need to sort so folders are added in correct order
     // because every lower folder gets previous nodes passed
     .sort(sort)
-
+  console.log('nodes', { data })
   const projektNodes = [...buildProjektNodes({ data, treeName })]
   const userFolderNode = buildUserFolderNode({
     data,

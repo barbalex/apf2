@@ -21,6 +21,10 @@ export default ({
   const isWerteListen = openNodes.some(
     nodeArray => nodeArray[0] === 'Werte-Listen',
   )
+  console.log('buildVariables', {
+    isWerteListen,
+    openNodes: openNodes.toJSON(),
+  })
   const isAdresse = openNodes.some(
     nodeArray =>
       nodeArray[0] === 'Werte-Listen' &&

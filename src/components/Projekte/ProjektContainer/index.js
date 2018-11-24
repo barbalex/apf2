@@ -361,6 +361,7 @@ const ProjekteContainer = props => {
     ...dataPopForMapMarkers,
     ...dataBeobAssignLines,
   }
+  console.log('ProjektContainer', { dataAdresses })
   const nodes = buildNodes({
     data,
     treeName,
