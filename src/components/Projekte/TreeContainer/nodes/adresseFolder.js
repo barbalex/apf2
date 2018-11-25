@@ -1,5 +1,6 @@
 // @flow
 import get from 'lodash/get'
+import { getSnapshot } from 'mobx-state-tree'
 
 export default ({
   nodes: nodesPassed,
@@ -27,7 +28,10 @@ export default ({
     mobxStore,
     `${treeName}.nodeLabelFilter.adresse`,
   )
-  console.log('nodes, adresseFolder', { adresses })
+  console.log('nodes, adresseFolder', {
+    adresses,
+    openNodes: getSnapshot(mobxStore[treeName].openNodes),
+  })
 
   let adresseNodesLength = adresses
     // filter by nodeLabelFilter

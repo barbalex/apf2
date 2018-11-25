@@ -175,6 +175,7 @@ export default ({
     isWerteListen,
     isAdresse,
   }
+  console.log('buildVariables, variables:', variables)
   //console.log('variables:', variables)
   return variables
 }

@@ -48,6 +48,8 @@ const Projekt = ({
 
   const row = get(data, 'projektById', {})
 
+  console.log('Projekt', { row })
+
   useEffect(() => setErrors({}), [row])
 
   const filterTable = activeNodeArray.length === 2 ? 'projekt' : 'ap'

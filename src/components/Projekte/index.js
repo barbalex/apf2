@@ -9,6 +9,7 @@ import { observer } from 'mobx-react-lite'
 // when Karte was loaded async, it did not load,
 // but only in production!
 import ErrorBoundary from '../shared/ErrorBoundary'
+import ProjektContainerContainer from './ProjektContainerContainer'
 import ProjektContainer from './ProjektContainer'
 import mobxStoreContext from '../../mobxStoreContext'
 
@@ -36,7 +37,7 @@ const Projekte = () => {
 
   if (tree2Tabs.length === 0 || isPrint) {
     return (
-      <ProjektContainer
+      <ProjektContainerContainer
         treeName="tree"
         tabs={treeTabs}
         projekteTabs={projekteTabs}
@@ -52,7 +53,7 @@ const Projekte = () => {
             flex={treeTabs.length / projekteTabs.length}
             propagateDimensions={true}
           >
-            <ProjektContainer
+            <ProjektContainerContainer
               treeName="tree"
               tabs={treeTabs}
               projekteTabs={projekteTabs}
@@ -60,7 +61,7 @@ const Projekte = () => {
           </ReflexElement>
           <ReflexSplitter />
           <ReflexElement>
-            <ProjektContainer
+            <ProjektContainerContainer
               treeName="tree2"
               tabs={tree2Tabs}
               projekteTabs={projekteTabs}

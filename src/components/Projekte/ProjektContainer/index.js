@@ -86,15 +86,10 @@ const LogoutButton = styled(Button)`
 `
 
 const enhance = compose(
-  withProps(({ treeName }) => {
-    const mobxStore = useContext(mobxStoreContext)
-    // provoke running buildVariables by adding to props (before):
-    // openNodes, activeNodeArray
-    return {
-      openNodes: mobxStore[treeName].openNodes,
-      activeNodeArray: mobxStore[treeName].activeNodeArray,
-    }
-  }),
+  observer,
+  withProps(() => ({
+    mobxStore: useContext(mobxStoreContext),
+  })),
   withProps(({ treeName }) => {
     const mobxStore = useContext(mobxStoreContext)
     return buildVariables({
@@ -140,7 +135,6 @@ const enhance = compose(
   withBeobZugeordnetAssignPolylinesForMap,
   withBeobAssignLines,
   withPopForMapMarkers,
-  observer,
 )
 
 const ProjekteContainer = props => {
@@ -305,7 +299,7 @@ const ProjekteContainer = props => {
   const role = tokenDecoded ? tokenDecoded.role : null
   // TODO: which query to check for error?
   if (anyQueryReturnsPermissionError(queryArray)) {
-    console.log('ProjektContainer, token:', token)
+    //console.log('ProjektContainer, token:', token)
     // during login don't show permission error
     if (!token) return null
     // if token is not accepted, ask user to logout
