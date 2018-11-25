@@ -86,17 +86,17 @@ const LogoutButton = styled(Button)`
 `
 
 const enhance = compose(
-  observer,
   withProps(() => ({
     mobxStore: useContext(mobxStoreContext),
   })),
-  withProps(({ treeName }) => {
-    const mobxStore = useContext(mobxStoreContext)
-    return buildVariables({
+  withProps(({ treeName, mobxStore, openNodes, activeNodeArray }) =>
+    buildVariables({
       treeName,
       mobxStore,
-    })
-  }),
+      openNodes,
+      activeNodeArray,
+    }),
+  ),
   withAdresses,
   withUsers,
   withProjekts,
@@ -135,6 +135,7 @@ const enhance = compose(
   withBeobZugeordnetAssignPolylinesForMap,
   withBeobAssignLines,
   withPopForMapMarkers,
+  observer,
 )
 
 const ProjekteContainer = props => {
@@ -180,6 +181,8 @@ const ProjekteContainer = props => {
     treeName,
     tabs: tabsPassed,
     projekteTabs,
+    openNodes,
+    activeNodeArray,
   }: {
     dataAdresses: Object,
     dataUsers: Object,
@@ -222,7 +225,11 @@ const ProjekteContainer = props => {
     treeName: String,
     tabs: Array<String>,
     projekteTabs: Array<String>,
+    openNodes: Array<Array<string>>,
+    activeNodeArray: Array<string>,
   } = props
+
+  console.log('ProjektContainer', { activeNodeArray, openNodes })
 
   const mobxStore = useContext(mobxStoreContext)
   const {
@@ -292,7 +299,6 @@ const ProjekteContainer = props => {
       }
     }
   }
-  const { activeNodeArray, openNodes } = mobxStore[treeName]
   const activeNodes = getActiveNodes(activeNodeArray)
   const { token } = user
   const tokenDecoded = token ? jwtDecode(token) : null
