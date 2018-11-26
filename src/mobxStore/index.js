@@ -87,7 +87,6 @@ const myTypes = types
     toDeleteAfterDeletionHook: null,
     history,
     deletedDatasets: [],
-    //deletedDatasets: types.optional(types.array(types.string), []),
   }))
   .views(self => ({
     get toDelete() {
