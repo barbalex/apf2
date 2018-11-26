@@ -66,17 +66,7 @@ const enhance = compose(
   observer,
 )
 
-const Qk = ({
-  tree,
-  treeName,
-  activeNodes,
-  data,
-}: {
-  tree: Object,
-  treeName: String,
-  activeNodes: Array<Object>,
-  data: Object,
-}) => {
+const Qk = ({ data }: { data: Object }) => {
   const { ktZh, setKtZh, addError } = useContext(mobxStoreContext)
 
   const [berichtjahr, setBerichtjahr] = useState(standardQkYear())
