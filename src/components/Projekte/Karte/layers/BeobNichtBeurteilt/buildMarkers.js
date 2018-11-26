@@ -5,6 +5,7 @@ import 'leaflet'
 import format from 'date-fns/format'
 import styled from 'styled-components'
 import get from 'lodash/get'
+import { observer } from 'mobx-react-lite'
 
 import beobIcon from '../../../../../etc/beob.png'
 import beobIconHighlighted from '../../../../../etc/beobHighlighted.png'
@@ -18,28 +19,26 @@ const StyledH3 = styled.h3`
   margin: 7px 0;
 `
 
-export default ({
+const Markers = ({
   beobs,
-  tree,
-  activeNodes,
-  apfloraLayers,
+  treeName,
   data,
   refetchTree,
   mapIdsFiltered,
   client,
-  assigningBeob,
 }: {
   beobs: Array<Object>,
-  tree: Object,
-  activeNodes: Array<Object>,
-  apfloraLayers: Array<Object>,
+  treeName: string,
   data: Object,
   refetchTree: () => void,
   mapIdsFiltered: Array<String>,
   client: Object,
-  assigningBeob: Boolean,
 }): Array<Object> => {
-  const { setTreeKey } = useContext(mobxStoreContext)
+  const mobxStore = useContext(mobxStoreContext)
+  const { setTreeKey, apfloraLayers, assigningBeob } = useContext(
+    mobxStoreContext,
+  )
+  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
 
   return beobs.map(beob => {
@@ -113,7 +112,7 @@ export default ({
         ]
         setTreeKey({
           value: newActiveNodeArray,
-          tree: tree.name,
+          tree: treeName,
           key: 'activeNodeArray',
         })
         await client.mutate({
@@ -130,3 +129,5 @@ export default ({
       })
   })
 }
+
+export default observer(Markers)
