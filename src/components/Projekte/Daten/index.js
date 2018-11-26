@@ -58,14 +58,12 @@ const enhance = compose(observer)
 const Daten = ({
   treeName,
   activeNode,
-  activeNodes,
   dimensions = { width: 380 },
   refetchTree,
   role,
 }: {
   treeName: String,
   activeNode: Object,
-  activeNodes: Array<Object>,
   dimensions: Object,
   refetchTree: () => void,
   role: String,
@@ -74,6 +72,7 @@ const Daten = ({
   const { nodeFilter } = mobxStore
   const tree = mobxStore[treeName]
   const { activeNodeArray } = tree
+  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
 
   const formObject = {
     projekt: (
