@@ -8,9 +8,7 @@ import FilterIcon from '@material-ui/icons/FilterList'
 import DeleteFilterIcon from '@material-ui/icons/DeleteSweep'
 import remove from 'lodash/remove'
 import styled from 'styled-components'
-import gql from 'graphql-tag'
 import { observer } from 'mobx-react-lite'
-import { withApollo } from 'react-apollo'
 
 import isMobilePhone from '../../modules/isMobilePhone'
 import setUrlQueryValue from '../../modules/setUrlQueryValue'
@@ -70,13 +68,7 @@ const RemoveMenuItem = styled(StyledMenuItem)`
   padding-top: 6px !important;
 `
 
-const MyAppBarDaten = ({
-  treeNr = '',
-  client,
-}: {
-  treeNr: string,
-  client: Object,
-}) => {
+const MyAppBarDaten = ({ treeNr = '' }: { treeNr: string }) => {
   const {
     nodeFilterTreeIsFiltered,
     nodeFilterClone1To2,
@@ -84,6 +76,7 @@ const MyAppBarDaten = ({
     nodeFilterEmptyTree,
     urlQuery,
     setUrlQuery,
+    cloneTree2From1,
   } = useContext(mobxStoreContext)
 
   const [datenFilterAnchorEl, setDatenFilterAnchorEl] = useState(null)
@@ -112,13 +105,7 @@ const MyAppBarDaten = ({
         } else {
           copyOfProjekteTabs.push(`daten${treeNr}`)
           if (treeNr === '2') {
-            client.mutate({
-              mutation: gql`
-                mutation cloneTree2From1 {
-                  cloneTree2From1 @client
-                }
-              `,
-            })
+            cloneTree2From1()
             nodeFilterClone1To2()
           }
         }
@@ -234,4 +221,4 @@ const MyAppBarDaten = ({
   )
 }
 
-export default withApollo(observer(MyAppBarDaten))
+export default observer(MyAppBarDaten)
