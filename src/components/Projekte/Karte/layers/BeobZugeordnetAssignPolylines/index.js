@@ -16,12 +16,10 @@ import mobxStoreContext from '../../../../../mobxStoreContext'
 const Lines = ({
   data,
   treeName,
-  activeNodes,
   mapIdsFiltered,
 }: {
   data: Object,
   treeName: string,
-  activeNodes: Array<Object>,
   mapIdsFiltered: Array<String>,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
@@ -48,8 +46,9 @@ const Lines = ({
     })
   const lines = buildLines({
     beobs,
-    activeNodes,
+    treeName,
     mapIdsFiltered,
+    mobxStore,
   })
   return <Polylines lines={lines} />
 }

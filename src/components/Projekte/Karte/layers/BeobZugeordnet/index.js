@@ -20,7 +20,6 @@ const enhance = compose(
 const BeobZugeordnetMarker = ({
   treeName,
   data,
-  activeNodes,
   clustered,
   refetchTree,
   mapIdsFiltered,
@@ -28,7 +27,6 @@ const BeobZugeordnetMarker = ({
 }: {
   treeName: string,
   data: Object,
-  activeNodes: Array<Object>,
   clustered: Boolean,
   refetchTree: () => void,
   mapIdsFiltered: Array<String>,

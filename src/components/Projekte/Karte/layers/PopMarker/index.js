@@ -14,21 +14,14 @@ const enhance = compose(observer)
 const PmcComponent = ({
   treeName,
   data,
-  activeNodes,
   mapIdsFiltered,
 }: {
   treeName: string,
   data: Object,
-  activeNodes: Array<Object>,
   mapIdsFiltered: Array<String>,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const {
-    apfloraLayers,
-    activeApfloraLayers,
-    popLabelUsingNr,
-    nodeFilter,
-  } = mobxStore
+  const { nodeFilter } = mobxStore
   const tree = mobxStore[treeName]
 
   const popFilterString = get(tree, 'nodeLabelFilter.pop')

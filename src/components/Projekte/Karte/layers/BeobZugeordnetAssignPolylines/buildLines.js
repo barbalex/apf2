@@ -15,14 +15,17 @@ const StyledH3 = styled.h3`
 
 export default ({
   beobs,
-  activeNodes,
+  treeName,
   mapIdsFiltered,
+  mobxStore,
 }: {
   beobs: Array<Object>,
-  activeNodes: Array<Object>,
+  treeName: string,
   mapIdsFiltered: Array<String>,
   mapIdsFiltered: Array<String>,
+  mobxStore: Object,
 }): Array<Object> => {
+  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
 
   return beobs.map(beob => {

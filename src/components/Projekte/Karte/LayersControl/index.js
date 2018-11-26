@@ -74,7 +74,6 @@ const LayersControl = ({
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { apfloraLayers, overlays } = mobxStore
-  const tree = mobxStore[treeName]
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
 
   const [baseLayersExpanded, toggleBaseLayersExpanded] = useState(false)
@@ -147,8 +146,7 @@ const LayersControl = ({
             </CardHeader>
             {apfloraLayersExpanded && (
               <ApfloraLayers
-                tree={tree}
-                activeNodes={activeNodes}
+                treeName={treeName}
                 mapIdsFiltered={mapIdsFiltered}
                 mapPopIdsFiltered={mapPopIdsFiltered}
                 mapTpopIdsFiltered={mapTpopIdsFiltered}

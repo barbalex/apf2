@@ -1,5 +1,6 @@
 import React, { useContext, useCallback } from 'react'
 import compose from 'recompose/compose'
+import withProps from 'recompose/withProps'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
@@ -128,7 +129,6 @@ const SortableItem = SortableElement(
   ({
     tree,
     apfloraLayer,
-    activeNodes,
     activeApfloraLayers,
     setActiveApfloraLayers,
     data,
@@ -415,13 +415,18 @@ const SortableList = SortableContainer(
 
 const enhance = compose(
   withApollo,
+  withProps(({ treeName }) => {
+    const mobxStore = useContext(mobxStoreContext)
+    return {
+      activeNodes: mobxStore[`${treeName}ActiveNodes`],
+    }
+  }),
   withData,
   observer,
 )
 
 const ApfloraLayers = ({
-  tree,
-  activeNodes,
+  treeName,
   popBounds,
   setPopBounds,
   tpopBounds,
@@ -435,8 +440,7 @@ const ApfloraLayers = ({
   data,
   client,
 }: {
-  tree: Object,
-  activeNodes: Object,
+  treeName: string,
   popBounds: Array<Array<Number>>,
   setPopBounds: () => void,
   tpopBounds: Array<Array<Number>>,
@@ -461,6 +465,7 @@ const ApfloraLayers = ({
     mapFilter,
     setAssigningBeob,
   } = mobxStore
+  const tree = mobxStore[treeName]
 
   const onSortEnd = useCallback(
     ({ oldIndex, newIndex }) =>

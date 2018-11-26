@@ -21,18 +21,16 @@ const TpopMarkerMarker = ({
    * sure, new tpop appears
    */
   data,
-  activeNodes,
   clustered,
   mapIdsFiltered,
 }: {
   treeName: string,
   data: Object,
-  activeNodes: Array<Object>,
   clustered: Boolean,
   mapIdsFiltered: Array<String>,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { apfloraLayers, tpopLabelUsingNr, nodeFilter } = mobxStore
+  const { nodeFilter } = mobxStore
   const tree = mobxStore[treeName]
 
   const popFilterString = get(tree, 'nodeLabelFilter.pop')
