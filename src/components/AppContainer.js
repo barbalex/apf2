@@ -2,10 +2,10 @@
 import React, { lazy, Suspense, useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 
-import ErrorBoundary from '../shared/ErrorBoundary'
-import Deletions from '../Deletions'
-import Fallback from '../shared/Fallback'
-import mobxStoreContext from '../../mobxStoreContext'
+import ErrorBoundary from './shared/ErrorBoundary'
+import Deletions from './Deletions'
+import Fallback from './shared/Fallback'
+import mobxStoreContext from '../mobxStoreContext'
 
 const Container = styled.div`
   height: 100%;
@@ -17,13 +17,13 @@ const Container = styled.div`
   }
 `
 
-const AppBar = lazy(() => import('../AppBar'))
-const Projekte = lazy(() => import('../Projekte'))
-const User = lazy(() => import('../User'))
-const Errors = lazy(() => import('../Errors'))
-const UpdateAvailable = lazy(() => import('../UpdateAvailable'))
-const Messages = lazy(() => import('../Messages'))
-const Ekf = lazy(() => import('../Ekf'))
+const AppBar = lazy(() => import('./AppBar'))
+const Projekte = lazy(() => import('./Projekte'))
+const User = lazy(() => import('./User'))
+const Errors = lazy(() => import('./Errors'))
+const UpdateAvailable = lazy(() => import('./UpdateAvailable'))
+const Messages = lazy(() => import('./Messages'))
+const Ekf = lazy(() => import('./Ekf'))
 
 const MyAppBar = () => {
   const { setIsPrint, view } = useContext(mobxStoreContext)
