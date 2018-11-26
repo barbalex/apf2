@@ -48,7 +48,11 @@ const User = ({ client }: { client: Object }) => {
   const [passwordErrorText, setPasswordErrorText] = useState('')
 
   const fetchLogin = useCallback(
-    async () => {
+    // callbacks pass name or password
+    // because state is not up to date yet
+    async ({ name: namePassed, password: passwordPassed }) => {
+      const nameToUse = namePassed || name
+      const passwordToUse = passwordPassed || password
       let result
       try {
         result = await client.mutate({
@@ -60,8 +64,8 @@ const User = ({ client }: { client: Object }) => {
             }
           `,
           variables: {
-            name,
-            password,
+            name: nameToUse,
+            password: passwordToUse,
           },
           /*optimisticResponse: {
           login: {
@@ -110,7 +114,7 @@ const User = ({ client }: { client: Object }) => {
       if (!name) {
         setNameErrorText('Geben Sie den Ihnen zugeteilten Benutzernamen ein')
       } else if (password) {
-        setTimeout(() => fetchLogin())
+        setTimeout(() => fetchLogin({ name }))
       }
     },
     [password],
@@ -123,11 +127,23 @@ const User = ({ client }: { client: Object }) => {
       if (!password) {
         setPasswordErrorText('Bitte Passwort eingeben')
       } else if (name) {
-        setTimeout(() => fetchLogin())
+        setTimeout(() => fetchLogin({ password }))
       }
     },
     [name],
   )
+  const onKeyPressName = useCallback(e => {
+    if (e.key === 'Enter') {
+      onBlurName(e)
+    }
+  })
+  const onKeyPressPassword = useCallback(e => {
+    if (e.key === 'Enter') {
+      onBlurPassword(e)
+    }
+  })
+  const onClickShowPass = useCallback(() => setShowPass(!showPass), [showPass])
+  const onMouseDownShowPass = useCallback(e => e.preventDefault())
 
   return (
     <ErrorBoundary>
@@ -145,11 +161,7 @@ const User = ({ client }: { client: Object }) => {
               defaultValue={name}
               onBlur={onBlurName}
               autoFocus
-              onKeyPress={e => {
-                if (e.key === 'Enter') {
-                  onBlurName(e)
-                }
-              }}
+              onKeyPress={onKeyPressName}
             />
             <FormHelperText id="nameHelper">{nameErrorText}</FormHelperText>
           </FormControl>
@@ -164,19 +176,15 @@ const User = ({ client }: { client: Object }) => {
               type={showPass ? 'text' : 'password'}
               defaultValue={password}
               onBlur={onBlurPassword}
-              onKeyPress={e => {
-                if (e.key === 'Enter') {
-                  onBlurPassword(e)
-                }
-              }}
+              onKeyPress={onKeyPressPassword}
               autoComplete="current-password"
               autoCorrect="off"
               spellCheck="false"
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
-                    onClick={() => setShowPass(!showPass)}
-                    onMouseDown={e => e.preventDefault()}
+                    onClick={onClickShowPass}
+                    onMouseDown={onMouseDownShowPass}
                     title={showPass ? 'verstecken' : 'anzeigen'}
                   >
                     {showPass ? <VisibilityOff /> : <Visibility />}
