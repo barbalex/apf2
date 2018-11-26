@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { useCallback } from 'react'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import Select from 'react-select'
@@ -70,19 +70,7 @@ const StyledSelect = styled(Select)`
   }
 `
 
-const enhance = compose(
-  withHandlers({
-    onChange: ({ saveToDb, name }) => option => {
-      const fakeEvent = {
-        target: {
-          name,
-          value: option ? option.value : null,
-        },
-      }
-      saveToDb(fakeEvent)
-    },
-  }),
-)
+const enhance = compose(withHandlers({}))
 
 const SharedSelect = ({
   value,
@@ -91,9 +79,9 @@ const SharedSelect = ({
   name,
   error,
   options,
-  onChange,
   maxHeight = null,
   noCaret = false,
+  saveToDb,
 }: {
   value?: ?number | ?string,
   field?: string,
@@ -101,29 +89,45 @@ const SharedSelect = ({
   name: string,
   error: string,
   options: Array<Object>,
-  onChange: () => void,
   maxHeight?: number,
   noCaret: boolean,
-}) => (
-  <Container>
-    {label && <Label>{label}</Label>}
-    <StyledSelect
-      id={field}
-      name={field}
-      defaultValue={options.find(o => o.value === value)}
-      options={options}
-      onChange={onChange}
-      hideSelectedOptions
-      placeholder=""
-      isClearable
-      isSearchable
-      noOptionsMessage={() => '(keine)'}
-      maxheight={maxHeight}
-      classNamePrefix="react-select"
-      nocaret={noCaret}
-    />
-    {error && <Error>{error}</Error>}
-  </Container>
-)
+  saveToDb: () => void,
+}) => {
+  //console.log('Select', { value, field })
+  const onChange = useCallback(
+    option => {
+      const fakeEvent = {
+        target: {
+          name,
+          value: option ? option.value : null,
+        },
+      }
+      saveToDb(fakeEvent)
+    },
+    [name],
+  )
+
+  return (
+    <Container>
+      {label && <Label>{label}</Label>}
+      <StyledSelect
+        id={field}
+        name={field}
+        value={options.find(o => o.value === value)}
+        options={options}
+        onChange={onChange}
+        hideSelectedOptions
+        placeholder=""
+        isClearable
+        isSearchable
+        noOptionsMessage={() => '(keine)'}
+        maxheight={maxHeight}
+        classNamePrefix="react-select"
+        nocaret={noCaret}
+      />
+      {error && <Error>{error}</Error>}
+    </Container>
+  )
+}
 
 export default enhance(SharedSelect)
