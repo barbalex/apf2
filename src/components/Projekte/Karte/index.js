@@ -125,7 +125,6 @@ const enhance = compose(
 
 const Karte = ({
   treeName,
-  activeNodes,
   onMouseMove,
   data,
   refetchTree,
@@ -139,7 +138,6 @@ const Karte = ({
   client,
 }: {
   treeName: string,
-  activeNodes: Object,
   onMouseMove: () => void,
   data: Object,
   refetchTree: () => void,
@@ -203,18 +201,12 @@ const Karte = ({
     // MapFilter is used for filtering, need to return null
     mapFilter: () => null,
     pop: () => (
-      <Pop
-        treeName={treeName}
-        data={data}
-        activeNodes={activeNodes}
-        mapIdsFiltered={mapIdsFiltered}
-      />
+      <Pop treeName={treeName} data={data} mapIdsFiltered={mapIdsFiltered} />
     ),
     tpop: () => (
       <Tpop
         treeName={treeName}
         data={data}
-        activeNodes={activeNodes}
         clustered={clustered}
         mapIdsFiltered={mapIdsFiltered}
       />
@@ -223,7 +215,6 @@ const Karte = ({
       <BeobNichtBeurteilt
         treeName={treeName}
         data={data}
-        activeNodes={activeNodes}
         clustered={clustered}
         refetchTree={refetchTree}
         mapIdsFiltered={mapIdsFiltered}
@@ -233,7 +224,6 @@ const Karte = ({
       <BeobNichtZuzuordnen
         treeName={treeName}
         data={data}
-        activeNodes={activeNodes}
         clustered={clustered}
         mapIdsFiltered={mapIdsFiltered}
       />
@@ -242,7 +232,6 @@ const Karte = ({
       <BeobZugeordnet
         treeName={treeName}
         data={data}
-        activeNodes={activeNodes}
         clustered={clustered}
         refetchTree={refetchTree}
         mapIdsFiltered={mapIdsFiltered}
@@ -252,7 +241,6 @@ const Karte = ({
       <BeobZugeordnetAssignPolylines
         data={data}
         treeName={treeName}
-        activeNodes={activeNodes}
         mapIdsFiltered={mapIdsFiltered}
       />
     ),
@@ -398,7 +386,6 @@ const Karte = ({
           <LayersControl
             data={data}
             treeName={treeName}
-            activeNodes={activeNodes}
             mapIdsFiltered={mapIdsFiltered}
             mapPopIdsFiltered={mapPopIdsFiltered}
             mapTpopIdsFiltered={mapTpopIdsFiltered}
