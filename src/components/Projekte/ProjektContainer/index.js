@@ -57,7 +57,6 @@ import withPopForMapMarkers from './withPopForMapMarkers'
 import TreeContainer from '../TreeContainer'
 import Daten from '../Daten'
 import Exporte from '../Exporte'
-import getActiveNodes from '../../../modules/getActiveNodes'
 import buildNodes from '../TreeContainer/nodes'
 import idsInsideFeatureCollection from '../../../modules/idsInsideFeatureCollection'
 import logout from '../../../modules/logout'
@@ -301,7 +300,6 @@ const ProjekteContainer = props => {
       }
     }
   }
-  const activeNodes = getActiveNodes(activeNodeArray)
   const { token } = user
   const tokenDecoded = token ? jwtDecode(token) : null
   const role = tokenDecoded ? tokenDecoded.role : null
@@ -416,7 +414,6 @@ const ProjekteContainer = props => {
     dataBeobAssignLines,
     mobxStore,
   })
-  const tree = mobxStore[treeName]
   const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))
   // remove 2 to treat all same
   const tabs = [...tabsPassed].map(t => t.replace('2', ''))
@@ -477,7 +474,6 @@ const ProjekteContainer = props => {
       <Daten
         treeName={treeName}
         activeNode={activeNode}
-        activeNodes={activeNodes}
         refetchTree={refetch}
         role={role}
       />
@@ -494,7 +490,6 @@ const ProjekteContainer = props => {
                 treeName={treeName}
                 data={data}
                 nodes={nodes}
-                activeNodes={activeNodes}
                 activeNode={activeNode}
                 loading={loading}
                 openNodes={openNodes}
@@ -516,7 +511,6 @@ const ProjekteContainer = props => {
               <Daten
                 treeName={treeName}
                 activeNode={activeNode}
-                activeNodes={activeNodes}
                 refetchTree={refetch}
                 role={role}
               />
@@ -542,7 +536,6 @@ const ProjekteContainer = props => {
                  */
                 treeName={treeName}
                 data={data}
-                activeNodes={activeNodes}
                 key={tabs.toString()}
                 refetchTree={refetch}
                 mapIdsFiltered={mapIdsFiltered}
