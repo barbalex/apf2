@@ -18,7 +18,7 @@ const enhance = compose(
 )
 
 const BeobZugeordnetMarker = ({
-  tree,
+  treeName,
   data,
   activeNodes,
   clustered,
@@ -26,7 +26,7 @@ const BeobZugeordnetMarker = ({
   mapIdsFiltered,
   leaflet,
 }: {
-  tree: Object,
+  treeName: string,
   data: Object,
   activeNodes: Array<Object>,
   clustered: Boolean,
@@ -36,6 +36,8 @@ const BeobZugeordnetMarker = ({
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { apfloraLayers, assigningBeob } = mobxStore
+  const tree = mobxStore[treeName]
+
   const beobZugeordnetFilterString = get(tree, 'nodeLabelFilter.beobZugeordnet')
   const aparts = get(
     data,

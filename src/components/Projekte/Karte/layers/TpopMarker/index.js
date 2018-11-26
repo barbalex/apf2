@@ -14,7 +14,7 @@ import mobxStoreContext from '../../../../../mobxStoreContext'
 const enhance = compose(observer)
 
 const TpopMarkerMarker = ({
-  tree,
+  treeName,
   /**
    * need to fetch data from ProjektContainer
    * because refetch after localizing then makes
@@ -25,7 +25,7 @@ const TpopMarkerMarker = ({
   clustered,
   mapIdsFiltered,
 }: {
-  tree: Object,
+  treeName: string,
   data: Object,
   activeNodes: Array<Object>,
   clustered: Boolean,
@@ -33,6 +33,7 @@ const TpopMarkerMarker = ({
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { apfloraLayers, tpopLabelUsingNr, nodeFilter } = mobxStore
+  const tree = mobxStore[treeName]
 
   const popFilterString = get(tree, 'nodeLabelFilter.pop')
   const popNodeFilterArray = Object.entries(nodeFilter[tree.name].pop).filter(

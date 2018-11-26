@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
 
 import buildLines from './buildLines'
 import Polylines from './Polylines'
+import mobxStoreContext from '../../../../../mobxStoreContext'
 
 /**
  * not fetching data here because:
@@ -14,15 +15,18 @@ import Polylines from './Polylines'
 
 const Lines = ({
   data,
-  tree,
+  treeName,
   activeNodes,
   mapIdsFiltered,
 }: {
   data: Object,
-  tree: Object,
+  treeName: string,
   activeNodes: Array<Object>,
   mapIdsFiltered: Array<String>,
 }) => {
+  const mobxStore = useContext(mobxStoreContext)
+  const tree = mobxStore[treeName]
+
   const beobZugeordnetFilterString = get(tree, 'nodeLabelFilter.beobZugeordnet')
   const aparts = get(
     data,

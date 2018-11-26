@@ -18,7 +18,7 @@ const enhance = compose(
 )
 
 const BeobNichtBeurteiltMarker = ({
-  tree,
+  treeName,
   data,
   activeNodes,
   clustered,
@@ -26,7 +26,7 @@ const BeobNichtBeurteiltMarker = ({
   mapIdsFiltered,
   client,
 }: {
-  tree: Object,
+  treeName: string,
   data: Object,
   activeNodes: Array<Object>,
   clustered: Boolean,
@@ -36,6 +36,7 @@ const BeobNichtBeurteiltMarker = ({
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { apfloraLayers, assigningBeob } = mobxStore
+  const tree = mobxStore[treeName]
   const beobNichtBeurteiltFilterString = get(
     tree,
     'nodeLabelFilter.beobNichtBeurteilt',

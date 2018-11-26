@@ -159,14 +159,12 @@ const Karte = ({
     overlays,
     activeOverlays,
     activeBaseLayer,
-    popLabelUsingNr,
     idOfTpopBeingLocalized,
     setIdOfTpopBeingLocalized,
     bounds,
     addError,
     assigningBeob,
   } = mobxStore
-  const tree = mobxStore[treeName]
 
   const mapRef = useRef(null)
 
@@ -206,17 +204,15 @@ const Karte = ({
     mapFilter: () => null,
     pop: () => (
       <Pop
-        tree={tree}
+        treeName={treeName}
         data={data}
         activeNodes={activeNodes}
-        activeApfloraLayers={activeApfloraLayers}
-        popLabelUsingNr={popLabelUsingNr}
         mapIdsFiltered={mapIdsFiltered}
       />
     ),
     tpop: () => (
       <Tpop
-        tree={tree}
+        treeName={treeName}
         data={data}
         activeNodes={activeNodes}
         clustered={clustered}
@@ -225,7 +221,7 @@ const Karte = ({
     ),
     beobNichtBeurteilt: () => (
       <BeobNichtBeurteilt
-        tree={tree}
+        treeName={treeName}
         data={data}
         activeNodes={activeNodes}
         clustered={clustered}
@@ -235,7 +231,7 @@ const Karte = ({
     ),
     beobNichtZuzuordnen: () => (
       <BeobNichtZuzuordnen
-        tree={tree}
+        treeName={treeName}
         data={data}
         activeNodes={activeNodes}
         clustered={clustered}
@@ -244,7 +240,7 @@ const Karte = ({
     ),
     beobZugeordnet: () => (
       <BeobZugeordnet
-        tree={tree}
+        treeName={treeName}
         data={data}
         activeNodes={activeNodes}
         clustered={clustered}
@@ -255,7 +251,7 @@ const Karte = ({
     beobZugeordnetAssignPolylines: () => (
       <BeobZugeordnetAssignPolylines
         data={data}
-        tree={tree}
+        treeName={treeName}
         activeNodes={activeNodes}
         mapIdsFiltered={mapIdsFiltered}
       />
@@ -401,7 +397,7 @@ const Karte = ({
           <ScaleControl imperial={false} />
           <LayersControl
             data={data}
-            tree={tree}
+            treeName={treeName}
             activeNodes={activeNodes}
             mapIdsFiltered={mapIdsFiltered}
             mapPopIdsFiltered={mapPopIdsFiltered}

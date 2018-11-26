@@ -53,7 +53,7 @@ const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
 
 const LayersControl = ({
   data,
-  tree,
+  treeName,
   activeNodes,
   mapIdsFiltered,
   mapPopIdsFiltered,
@@ -63,7 +63,7 @@ const LayersControl = ({
   mapBeobZugeordnetIdsFiltered,
 }: {
   data: Object,
-  tree: Object,
+  treeName: string,
   activeNodes: Object,
   onToggleBaseLayersExpanded: () => void,
   onToggleOverlaysExpanded: () => void,
@@ -76,6 +76,7 @@ const LayersControl = ({
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { apfloraLayers, overlays } = mobxStore
+  const tree = mobxStore[treeName]
 
   const [baseLayersExpanded, toggleBaseLayersExpanded] = useState(false)
   const [overlaysExpanded, toggleOverlaysExpanded] = useState(false)
