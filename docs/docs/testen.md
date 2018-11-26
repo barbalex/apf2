@@ -9,6 +9,7 @@ Langfristig sollten diese Tests automatisiert werden.
   * filtern
   * Änderung speichern
   * Kontextmenus ausführen
+  * AP-Berichte testen
 * Formular-Filter
 * Karte
   * alle Layer
