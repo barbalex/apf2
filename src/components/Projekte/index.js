@@ -10,7 +10,6 @@ import { observer } from 'mobx-react-lite'
 // but only in production!
 import ErrorBoundary from '../shared/ErrorBoundary'
 import ProjektContainerContainer from './ProjektContainerContainer'
-import ProjektContainer from './ProjektContainer'
 import mobxStoreContext from '../../mobxStoreContext'
 
 const Container = styled.div`
