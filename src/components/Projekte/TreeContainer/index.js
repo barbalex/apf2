@@ -165,7 +165,6 @@ const TreeContainer = ({
   data: dbData,
   treeName,
   activeNode,
-  activeNodes,
   refetchTree,
   nodes,
   data,
@@ -178,7 +177,6 @@ const TreeContainer = ({
   handleClick: () => void,
   data: Object,
   nodes: Array<Object>,
-  activeNodes: Object,
   activeNode: Object,
   loading: Boolean,
   refetchTree: () => void,
@@ -209,6 +207,7 @@ const TreeContainer = ({
     setUrlQuery,
     setTreeKey,
   } = mobxStore
+  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
 
   const datasetToDelete = toDelete
   const deleteDatasetModalIsVisible = !!datasetToDelete.id
