@@ -182,22 +182,16 @@ const enhance = compose(observer)
 const Row = ({
   index,
   style,
-  tree,
   node,
-  activeNodes,
   treeName,
   data,
-  openNodes,
   mapIdsFiltered,
 }: {
   index: Number,
   style: Object,
-  tree: Object,
   node: Array<Object>,
-  activeNodes: Array<Object>,
   treeName: String,
   data: Object,
-  openNodes: Array<string>,
   mapIdsFiltered: Array<String>,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
@@ -209,7 +203,10 @@ const Row = ({
     moving,
     copyingBiotop,
     setTreeKey,
+    openNodes,
   } = mobxStore
+  const tree = mobxStore[treeName]
+  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
 
   const activeNodeArray = get(mobxStore, `${treeName}.activeNodeArray`)
   const myProps = { key: index }

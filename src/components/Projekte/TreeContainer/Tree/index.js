@@ -49,7 +49,6 @@ type Props = {
   data: Object,
   nodes: Array<Object>,
   loading: Boolean,
-  activeNodes: Array<Object>,
   mapBeobZugeordnetVisible: boolean,
   mapBeobNichtBeurteiltVisible: boolean,
   mapBeobNichtZuzuordnenVisible: boolean,
@@ -64,14 +63,7 @@ const noRowsRenderer = () => (
   </Container>
 )
 
-const Tree = ({
-  nodes,
-  loading,
-  data,
-  treeName,
-  activeNodes,
-  mapIdsFiltered,
-}: Props) => {
+const Tree = ({ nodes, loading, data, treeName, mapIdsFiltered }: Props) => {
   // TODO:
   // when beob.artId is changed, saveArtIdToDb changes openNodes
   // problem is: Tree renders AFTERWARDS with OLD openNodes !!!???
@@ -89,9 +81,6 @@ const Tree = ({
           key={key}
           style={style}
           index={index}
-          tree={tree}
-          openNodes={openNodes}
-          activeNodes={activeNodes}
           node={node}
           data={data}
           treeName={treeName}
@@ -99,7 +88,7 @@ const Tree = ({
         />
       )
     },
-    [tree, openNodes, activeNodes, data, treeName, mapIdsFiltered],
+    [data, treeName, mapIdsFiltered],
   )
 
   return (

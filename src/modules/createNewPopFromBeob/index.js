@@ -9,16 +9,14 @@ import updateBeobById from './updateBeobById'
 import { isEqual } from 'date-fns'
 
 export default async ({
-  tree,
-  activeNodes,
+  treeName,
   id,
   refetchTree,
   addError,
   client,
   mobxStore,
 }: {
-  tree: Object,
-  activeNodes: Object,
+  treeName: Object,
   id: String,
   refetchTree: () => void,
   addError: Object,
@@ -26,6 +24,8 @@ export default async ({
   mobxStore: Object,
 }): Promise<void> => {
   const { setTreeKey } = mobxStore
+  const tree = mobxStore[treeName]
+  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
   let beobResult
   try {

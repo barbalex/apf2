@@ -1,7 +1,6 @@
 // @flow
 import uniq from 'lodash/uniq'
 
-import getActiveNodes from '../../../modules/getActiveNodes'
 import { type as apType } from '../../../mobxStore/NodeFilterTree/ap'
 import { type as popType } from '../../../mobxStore/NodeFilterTree/pop'
 import { type as tpopType } from '../../../mobxStore/NodeFilterTree/tpop'
@@ -15,7 +14,7 @@ export default ({
 }): Object => {
   const { urlQuery, apFilterSet, nodeFilter: nodeFilterPassed } = mobxStore
   const { openNodes, activeNodeArray } = mobxStore[treeName]
-  const activeNodes = getActiveNodes(activeNodeArray)
+  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const nodeFilter = nodeFilterPassed[treeName]
 
   const isWerteListen = openNodes.some(

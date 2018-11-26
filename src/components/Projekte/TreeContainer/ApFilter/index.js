@@ -36,6 +36,7 @@ const ApFilter = ({
   const mobxStore = useContext(mobxStoreContext)
   const { setTreeKey } = mobxStore
   const { apFilter, activeNodeArray, openNodes } = mobxStore[treeName]
+  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
 
   const onChange = useCallback(
     async () => {
@@ -47,7 +48,6 @@ const ApFilter = ({
       })
       if (!previousApFilter) {
         // apFilter was set to true
-        const activeNodes = getActiveNodes(activeNodeArray)
         const { ap: apId } = activeNodes
         let result
         if (apId) {

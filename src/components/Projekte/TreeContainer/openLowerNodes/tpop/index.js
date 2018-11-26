@@ -10,20 +10,20 @@ import get from 'lodash/get'
 import dataGql from './data'
 
 export default async ({
-  tree,
-  activeNodes,
+  treeName,
   id,
   refetchTree,
   client,
   mobxStore,
 }: {
-  tree: Object,
-  activeNodes: Object,
+  treeName: string,
   id: String,
   refetchTree: () => void,
   client: Object,
   mobxStore: Object,
 }) => {
+  const tree = mobxStore[treeName]
+  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { setTreeKey } = mobxStore
   const { projekt, ap, pop } = activeNodes
   const { openNodes } = tree

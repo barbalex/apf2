@@ -11,20 +11,20 @@ import groupBy from 'lodash/groupBy'
 import dataGql from './data'
 
 export default async ({
-  tree,
-  activeNodes,
+  treeName,
   id,
   refetchTree,
   client,
   mobxStore,
 }: {
-  tree: Object,
-  activeNodes: Object,
+  treeName: Object,
   id: String,
   refetchTree: () => void,
   client: Object,
   mobxStore: Object,
 }) => {
+  const tree = mobxStore[treeName]
+  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { setTreeKey } = mobxStore
   const { projekt } = activeNodes
   const { openNodes } = tree

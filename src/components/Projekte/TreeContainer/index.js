@@ -285,8 +285,7 @@ const TreeContainer = ({
         },
         openLowerNodes() {
           openLowerNodes({
-            tree,
-            activeNodes,
+            treeName,
             id,
             parentId,
             menuType,
@@ -400,8 +399,7 @@ const TreeContainer = ({
         },
         createNewPopFromBeob() {
           createNewPopFromBeob({
-            tree,
-            activeNodes,
+            treeName,
             id,
             refetchTree,
             addError,
