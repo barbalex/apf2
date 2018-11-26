@@ -229,8 +229,6 @@ const ProjekteContainer = props => {
     activeNodeArray: Array<string>,
   } = props
 
-  console.log('ProjektContainer', { activeNodeArray, openNodes })
-
   const mobxStore = useContext(mobxStoreContext)
   const {
     activeApfloraLayers,
@@ -289,11 +287,9 @@ const ProjekteContainer = props => {
 
   // TODO:
   const refetch = query => {
-    //console.log('refetch', { query, props })
     if (query) {
       if (query) {
         if (props[`data${upperFirst(query)}`]) {
-          //console.log('refetching')
           props[`data${upperFirst(query)}`].refetch()
         }
       }
@@ -305,7 +301,6 @@ const ProjekteContainer = props => {
   const role = tokenDecoded ? tokenDecoded.role : null
   // TODO: which query to check for error?
   if (anyQueryReturnsPermissionError(queryArray)) {
-    //console.log('ProjektContainer, token:', token)
     // during login don't show permission error
     if (!token) return null
     // if token is not accepted, ask user to logout
@@ -370,7 +365,6 @@ const ProjekteContainer = props => {
     ...dataPopForMapMarkers,
     ...dataBeobAssignLines,
   }
-  console.log('ProjektContainer', { dataAdresses })
   const nodes = buildNodes({
     data,
     treeName,
@@ -483,8 +477,6 @@ const ProjekteContainer = props => {
       />
     )
   }
-
-  //console.log('ProjektContainer rendering')
 
   return (
     <Container data-loading={loading}>
