@@ -242,6 +242,12 @@ const ProjekteContainer = props => {
   const { idb } = useContext(idbContext)
   const mapFilter = mapFilterRaw.toJSON()
 
+  /*console.log('ProjektContainer, dataTpops', {
+    dataTpops,
+    activeNodeArray,
+    openNodes,
+  })*/
+
   const queryArray = [
     dataAdresses,
     dataUsers,
