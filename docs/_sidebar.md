@@ -13,3 +13,4 @@
 * Technische Dokumentation
   * [Daten-Sicherung](./docs/sichern.md)
   * [Beobachtungen verwalten](./docs/beobVerwalten.md)
+  * [Funktionalitäten testen](./docs/testen.md)
