@@ -7,15 +7,12 @@ import Button from '@material-ui/core/Button'
 import remove from 'lodash/remove'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import gql from 'graphql-tag'
 import jwtDecode from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
-import { withApollo } from 'react-apollo'
 
 import isMobilePhone from '../../modules/isMobilePhone'
 import ErrorBoundary from '../shared/ErrorBoundary'
 import setUrlQueryValue from '../../modules/setUrlQueryValue'
-import getActiveNodes from '../../modules/getActiveNodes'
 import More from './More'
 import EkfYear from './EkfYear'
 import User from './User'
@@ -58,18 +55,10 @@ const MenuDiv = styled.div`
   flex-wrap: wrap;
 `
 
-const enhance = compose(
-  withApollo,
-  observer,
-)
+const enhance = compose(observer)
 
-const MyAppBar = ({
-  setShowDeletions,
-  client,
-}: {
-  setShowDeletions: () => void,
-  client: Object,
-}) => {
+const MyAppBar = ({ setShowDeletions }: { setShowDeletions: () => void }) => {
+  const mobxStore = useContext(mobxStoreContext)
   const {
     nodeFilterClone1To2,
     user,
@@ -77,11 +66,10 @@ const MyAppBar = ({
     setView,
     urlQuery,
     setUrlQuery,
-    tree,
-  } = useContext(mobxStoreContext)
+    cloneTree2From1,
+  } = mobxStore
 
-  const { activeNodeArray } = tree
-  const activeNodes = getActiveNodes(activeNodeArray)
+  const activeNodes = mobxStore.treeActiveNodes
   /**
    * need to clone projekteTabs
    * because otherwise removing elements errors out (because elements are sealed)
@@ -114,13 +102,7 @@ const MyAppBar = ({
         } else {
           projekteTabs.push(name)
           if (name === 'tree2') {
-            client.mutate({
-              mutation: gql`
-                mutation cloneTree2From1 {
-                  cloneTree2From1 @client
-                }
-              `,
-            })
+            cloneTree2From1()
             nodeFilterClone1To2()
           }
         }
