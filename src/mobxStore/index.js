@@ -22,6 +22,7 @@ import standardOverlays from '../components/Projekte/Karte/overlays'
 import initialNodeFilterTreeValues from './NodeFilterTree/initialValues'
 import User, { defaultValue as defaultUser } from './User'
 import Tree, { defaultValue as defaultTree } from './Tree'
+import getActiveNodes from '../modules/getActiveNodes'
 
 // substract 3 Months to now so user sees previous year in February
 const ekfRefDate = new Date().setMonth(new Date().getMonth() - 2)
@@ -97,6 +98,12 @@ const myTypes = types
         url: self.toDeleteUrl,
         afterDeletionHook: self.toDeleteAfterDeletionHook,
       }
+    },
+    get treeActiveNodes() {
+      return getActiveNodes(self.tree.activeNodeArray)
+    },
+    get tree2ActiveNodes() {
+      return getActiveNodes(self.tree2.activeNodeArray)
     },
   }))
   .actions(self => ({
