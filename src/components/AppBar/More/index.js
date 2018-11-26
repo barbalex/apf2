@@ -10,7 +10,6 @@ import { observer } from 'mobx-react-lite'
 import isMobilePhone from '../../../modules/isMobilePhone'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import logout from '../../../modules/logout'
-import getActiveNodes from '../../../modules/getActiveNodes'
 import EkfAdresse from './EkfAdresse'
 import mobxStoreContext from '../../../mobxStoreContext'
 import idbContext from '../../../idbContext'
@@ -39,13 +38,13 @@ const MyAppBar = ({
   setShowDeletions: () => void,
   role: string,
 }) => {
-  const { deletedDatasets, user, urlQuery, tree } = useContext(mobxStoreContext)
+  const mobxStore = useContext(mobxStoreContext)
+  const { deletedDatasets, user, urlQuery } = mobxStore
   const { idb } = useContext(idbContext)
 
   const [anchorEl, setAnchorEl] = useState(null)
 
-  const { activeNodeArray } = tree
-  const activeNodes = getActiveNodes(activeNodeArray)
+  const activeNodes = mobxStore.treeActiveNodes
   /**
    * need to clone projekteTabs
    * because otherwise removing elements errors out (because elements are sealed)
