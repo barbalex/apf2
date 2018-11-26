@@ -1,7 +1,6 @@
 //@flow
 import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
 
 import mobxStoreContext from '../../mobxStoreContext'
 import ProjektContainer from './ProjektContainer'
@@ -16,13 +15,7 @@ const ProjektContainerContainer = ({
   projekteTabs: Array<string>,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const tree = mobxStore[treeName]
-  const { openNodes, activeNodeArray } = tree
-
-  console.log('ProjektContainerContainer', {
-    openNodes: getSnapshot(openNodes),
-    activeNodeArray: getSnapshot(activeNodeArray),
-  })
+  const { openNodes, activeNodeArray } = mobxStore[treeName]
 
   return (
     <ProjektContainer
