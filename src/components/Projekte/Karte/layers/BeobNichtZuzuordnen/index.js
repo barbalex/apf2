@@ -13,19 +13,18 @@ import mobxStoreContext from '../../../../../mobxStoreContext'
 const BeobNichtZuzuordnenMarker = ({
   treeName,
   data,
-  activeNodes,
   clustered,
   mapIdsFiltered,
 }: {
   treeName: string,
   data: Object,
-  activeNodes: Array<Object>,
   clustered: Boolean,
   mapIdsFiltered: Array<String>,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { apfloraLayers, assigningBeob } = mobxStore
   const tree = mobxStore[treeName]
+  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
 
   const beobNichtZuzuordnenFilterString = get(
     tree,
