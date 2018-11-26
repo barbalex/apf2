@@ -124,7 +124,7 @@ const enhance = compose(
 )
 
 const Karte = ({
-  tree,
+  treeName,
   activeNodes,
   onMouseMove,
   data,
@@ -138,7 +138,7 @@ const Karte = ({
   dimensions,
   client,
 }: {
-  tree: Object,
+  treeName: string,
   activeNodes: Object,
   onMouseMove: () => void,
   data: Object,
@@ -166,6 +166,7 @@ const Karte = ({
     addError,
     assigningBeob,
   } = mobxStore
+  const tree = mobxStore[treeName]
 
   const mapRef = useRef(null)
 

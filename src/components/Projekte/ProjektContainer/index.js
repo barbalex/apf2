@@ -416,7 +416,7 @@ const ProjekteContainer = props => {
     dataBeobAssignLines,
     mobxStore,
   })
-  const tree = get(data, treeName)
+  const tree = mobxStore[treeName]
   const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))
   // remove 2 to treat all same
   const tabs = [...tabsPassed].map(t => t.replace('2', ''))
@@ -540,7 +540,7 @@ const ProjekteContainer = props => {
                  * without remounting grey space remains
                  * when daten or tree tab is removed :-(
                  */
-                tree={tree}
+                treeName={treeName}
                 data={data}
                 activeNodes={activeNodes}
                 key={tabs.toString()}
