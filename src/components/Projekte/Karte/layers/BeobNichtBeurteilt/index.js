@@ -20,7 +20,6 @@ const enhance = compose(
 const BeobNichtBeurteiltMarker = ({
   treeName,
   data,
-  activeNodes,
   clustered,
   refetchTree,
   mapIdsFiltered,
@@ -28,14 +27,12 @@ const BeobNichtBeurteiltMarker = ({
 }: {
   treeName: string,
   data: Object,
-  activeNodes: Array<Object>,
   clustered: Boolean,
   refetchTree: () => void,
   mapIdsFiltered: Array<String>,
   client: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { apfloraLayers, assigningBeob } = mobxStore
   const tree = mobxStore[treeName]
   const beobNichtBeurteiltFilterString = get(
     tree,
@@ -63,24 +60,19 @@ const BeobNichtBeurteiltMarker = ({
   if (clustered) {
     const markers = buildMarkersClustered({
       beobs,
-      activeNodes,
-      apfloraLayers,
+      treeName,
       data,
       mapIdsFiltered,
-      assigningBeob,
     })
     return <MarkerCluster markers={markers} />
   }
   const markers = buildMarkers({
     beobs,
-    tree,
-    activeNodes,
-    apfloraLayers,
+    treeName,
     data,
     mapIdsFiltered,
     refetchTree,
     client,
-    assigningBeob,
   })
   return <Marker markers={markers} />
 }
