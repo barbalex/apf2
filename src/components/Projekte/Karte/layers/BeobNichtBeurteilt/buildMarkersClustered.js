@@ -1,5 +1,5 @@
 // @flow
-import React, { useContext } from 'react'
+import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
 import '../../../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
@@ -7,13 +7,11 @@ import format from 'date-fns/format'
 import some from 'lodash/some'
 import get from 'lodash/get'
 import styled from 'styled-components'
-import { observer } from 'mobx-react-lite'
 
 import beobIcon from '../../../../../etc/beob.png'
 import beobIconHighlighted from '../../../../../etc/beobHighlighted.png'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import epsg2056to4326 from '../../../../../modules/epsg2056to4326'
-import mobxStoreContext from '../../../../../mobxStoreContext'
 
 const StyledH3 = styled.h3`
   margin: 7px 0;
@@ -24,13 +22,14 @@ const MarkersClustered = ({
   treeName,
   data,
   mapIdsFiltered,
+  mobxStore,
 }: {
   beobs: Array<Object>,
   treeName: string,
   data: Object,
   mapIdsFiltered: Array<String>,
+  mobxStore: Object,
 }): Object => {
-  const mobxStore = useContext(mobxStoreContext)
   const { apfloraLayers, assigningBeob } = mobxStore
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
@@ -106,4 +105,4 @@ const MarkersClustered = ({
   return markers
 }
 
-export default observer(MarkersClustered)
+export default MarkersClustered

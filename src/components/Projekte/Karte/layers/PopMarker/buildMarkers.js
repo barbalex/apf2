@@ -21,21 +21,19 @@ const StyledH3 = styled.h3`
 
 export default ({
   pops,
-  activeNodes,
-  apfloraLayers,
-  activeApfloraLayers,
+  treeName,
   data,
-  popLabelUsingNr,
   mapIdsFiltered,
-}:{
-  pops:Array<Object>,
-  activeNodes:Array<Object>,
-  apfloraLayers: Array<Object>,
-  activeApfloraLayers: Array<String>,
+  mobxStore,
+}: {
+  pops: Array<Object>,
+  treeName: string,
   data: Object,
-  popLabelUsingNr: Boolean,
   mapIdsFiltered: Array<String>,
+  mobxStore: Object,
 }): Object => {
+  const { apfloraLayers, activeApfloraLayers, popLabelUsingNr } = mobxStore
+  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
   const visible = activeApfloraLayers.includes('pop')
   const mcgOptions = {
@@ -44,7 +42,7 @@ export default ({
       const markers = cluster.getAllChildMarkers()
       const hasHighlightedPop = some(
         markers,
-        m => m.options.icon.options.className === 'popIconHighlighted'
+        m => m.options.icon.options.className === 'popIconHighlighted',
       )
       const className = hasHighlightedPop
         ? 'popClusterHighlighted'
@@ -81,7 +79,7 @@ export default ({
         title,
         icon,
         zIndexOffset: -apfloraLayers.findIndex(
-          apfloraLayer => apfloraLayer.value === 'pop'
+          apfloraLayer => apfloraLayer.value === 'pop',
         ),
       })
         .bindPopup(
@@ -94,17 +92,21 @@ export default ({
                 }`}
               </StyledH3>
               <div>
-                {`Koordinaten: ${p.x ? p.x.toLocaleString('de-ch') : ''} / ${p.y ? p.y.toLocaleString('de-ch') : ''}`}
+                {`Koordinaten: ${p.x ? p.x.toLocaleString('de-ch') : ''} / ${
+                  p.y ? p.y.toLocaleString('de-ch') : ''
+                }`}
               </div>
               <a
-                href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${p.id}`}
+                href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${
+                  p.id
+                }`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 Formular in neuem Tab öffnen
               </a>
-            </div>
-          )
+            </div>,
+          ),
         )
         .bindTooltip(title, tooltipOptions)
       markers.addLayer(marker)

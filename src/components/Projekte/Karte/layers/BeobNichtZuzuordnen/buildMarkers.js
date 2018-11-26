@@ -17,21 +17,19 @@ const StyledH3 = styled.h3`
 
 export default ({
   beobs,
-  tree,
-  activeNodes,
+  treeName,
   data,
   mapIdsFiltered,
-  apfloraLayers,
-  assigningBeob,
+  mobxStore,
 }: {
   beobs: Array<Object>,
-  tree: Object,
-  activeNodes: Array<Object>,
+  treeName: string,
   data: Object,
   mapIdsFiltered: Array<String>,
-  apfloraLayers: Array<String>,
-  assigningBeob: Boolean,
+  mobxStore: Object,
 }): Array<Object> => {
+  const { apfloraLayers, assigningBeob } = mobxStore
+  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
 
   return beobs.map(beob => {

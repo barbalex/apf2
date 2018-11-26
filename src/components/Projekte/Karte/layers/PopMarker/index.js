@@ -98,12 +98,10 @@ const PmcComponent = ({
 
   const popMarkers = buildMarkers({
     pops,
-    activeNodes,
-    apfloraLayers,
-    activeApfloraLayers,
+    treeName,
     data,
-    popLabelUsingNr,
     mapIdsFiltered,
+    mobxStore,
   })
   return <PopMarkerCluster markers={popMarkers} />
 }

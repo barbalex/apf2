@@ -16,19 +16,17 @@ const StyledH3 = styled.h3`
 
 export default ({
   tpops,
-  tree,
-  activeNodes,
-  apfloraLayers,
-  tpopLabelUsingNr,
+  treeName,
   mapIdsFiltered,
+  mobxStore,
 }: {
   tpops: Array<Object>,
-  tree: Object,
-  activeNodes: Array<Object>,
-  apfloraLayers: Array<Object>,
-  tpopLabelUsingNr: Boolean,
+  treeName: string,
   mapIdsFiltered: Array<String>,
+  mobxStore: Object,
 }): Array<Object> => {
+  const { apfloraLayers, tpopLabelUsingNr } = mobxStore
+  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
 
   return tpops.map(tpop => {

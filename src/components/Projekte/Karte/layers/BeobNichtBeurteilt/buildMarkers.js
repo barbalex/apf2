@@ -1,11 +1,10 @@
 // @flow
-import React, { useContext } from 'react'
+import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
 import format from 'date-fns/format'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import { observer } from 'mobx-react-lite'
 
 import beobIcon from '../../../../../etc/beob.png'
 import beobIconHighlighted from '../../../../../etc/beobHighlighted.png'
@@ -13,7 +12,6 @@ import getNearestTpop from '../../../../../modules/getNearestTpop'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import epsg2056to4326 from '../../../../../modules/epsg2056to4326'
 import updateBeobByIdGql from './updateBeobById'
-import mobxStoreContext from '../../../../../mobxStoreContext'
 
 const StyledH3 = styled.h3`
   margin: 7px 0;
@@ -26,6 +24,7 @@ const Markers = ({
   refetchTree,
   mapIdsFiltered,
   client,
+  mobxStore,
 }: {
   beobs: Array<Object>,
   treeName: string,
@@ -33,11 +32,9 @@ const Markers = ({
   refetchTree: () => void,
   mapIdsFiltered: Array<String>,
   client: Object,
+  mobxStore: Object,
 }): Array<Object> => {
-  const mobxStore = useContext(mobxStoreContext)
-  const { setTreeKey, apfloraLayers, assigningBeob } = useContext(
-    mobxStoreContext,
-  )
+  const { setTreeKey, apfloraLayers, assigningBeob } = mobxStore
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
 
@@ -130,4 +127,4 @@ const Markers = ({
   })
 }
 
-export default observer(Markers)
+export default Markers

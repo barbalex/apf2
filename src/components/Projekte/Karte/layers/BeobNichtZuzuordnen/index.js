@@ -22,9 +22,7 @@ const BeobNichtZuzuordnenMarker = ({
   mapIdsFiltered: Array<String>,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { apfloraLayers, assigningBeob } = mobxStore
   const tree = mobxStore[treeName]
-  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
 
   const beobNichtZuzuordnenFilterString = get(
     tree,
@@ -52,22 +50,19 @@ const BeobNichtZuzuordnenMarker = ({
   if (clustered) {
     const markers = buildMarkersClustered({
       beobs,
-      activeNodes,
-      apfloraLayers,
+      treeName,
       data,
       mapIdsFiltered,
-      assigningBeob,
+      mobxStore,
     })
     return <MarkerCluster markers={markers} />
   }
   const markers = buildMarkers({
     beobs,
-    tree,
-    activeNodes,
-    apfloraLayers,
+    treeName,
     data,
     mapIdsFiltered,
-    assigningBeob,
+    mobxStore,
   })
   return <Marker markers={markers} />
 }

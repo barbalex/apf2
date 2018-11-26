@@ -19,20 +19,21 @@ const StyledH3 = styled.h3`
 
 export default ({
   beobs,
-  activeNodes,
-  apfloraLayers,
+  treeName,
   data,
   mapIdsFiltered,
-  assigningBeob,
+  mobxStore,
 }: {
   beobs: Array<Object>,
-  activeNodes: Array<Object>,
-  apfloraLayers: Array<Object>,
+  treeName: string,
   data: Object,
   mapIdsFiltered: Array<String>,
-  assigningBeob: Boolean,
+  mobxStore: Object,
 }): Object => {
+  const { apfloraLayers, assigningBeob } = mobxStore
+  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
+
   const mcgOptions = {
     maxClusterRadius: 66,
     iconCreateFunction: function(cluster) {

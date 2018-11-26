@@ -63,6 +63,7 @@ const BeobNichtBeurteiltMarker = ({
       treeName,
       data,
       mapIdsFiltered,
+      mobxStore,
     })
     return <MarkerCluster markers={markers} />
   }
@@ -73,6 +74,7 @@ const BeobNichtBeurteiltMarker = ({
     mapIdsFiltered,
     refetchTree,
     client,
+    mobxStore,
   })
   return <Marker markers={markers} />
 }

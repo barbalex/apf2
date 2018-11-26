@@ -5,7 +5,6 @@ import 'leaflet'
 import format from 'date-fns/format'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import { observer } from 'mobx-react-lite'
 
 import beobIcon from '../../../../../etc/beobZugeordnet.png'
 import beobIconHighlighted from '../../../../../etc/beobZugeordnetHighlighted.png'
@@ -143,4 +142,4 @@ const Markers = ({
   })
 }
 
-export default observer(Markers)
+export default Markers

@@ -79,21 +79,19 @@ const TpopMarkerMarker = ({
   if (clustered) {
     const markers = buildMarkersClustered({
       tpops,
-      activeNodes,
-      apfloraLayers,
+      treeName,
       data,
-      tpopLabelUsingNr,
       mapIdsFiltered,
+      mobxStore,
     })
     return <MarkerCluster markers={markers} />
   }
   const markers = buildMarkers({
     tpops,
-    activeNodes,
-    apfloraLayers,
+    treeName,
     data,
-    tpopLabelUsingNr,
     mapIdsFiltered,
+    mobxStore,
   })
   return <Marker markers={markers} />
 }

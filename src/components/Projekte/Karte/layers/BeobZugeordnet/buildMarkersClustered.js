@@ -7,7 +7,6 @@ import format from 'date-fns/format'
 import some from 'lodash/some'
 import get from 'lodash/get'
 import styled from 'styled-components'
-import { observer } from 'mobx-react-lite'
 
 import beobIcon from '../../../../../etc/beobZugeordnet.png'
 import beobIconHighlighted from '../../../../../etc/beobZugeordnetHighlighted.png'
@@ -111,4 +110,4 @@ const MarkersClustered = ({
   return markers
 }
 
-export default observer(MarkersClustered)
+export default MarkersClustered

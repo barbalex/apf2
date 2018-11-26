@@ -18,28 +18,28 @@ const StyledH3 = styled.h3`
 
 export default ({
   tpops,
-  activeNodes,
-  apfloraLayers,
+  treeName,
   data,
-  tpopLabelUsingNr,
   mapIdsFiltered,
-}:{
+  mobxStore,
+}: {
   tpops: Array<Object>,
-  activeNodes: Array<Object>,
-  apfloraLayers: Array<Object>,
+  treeName: string,
   data: Object,
-  tpopLabelUsingNr: Boolean,
   mapIdsFiltered: Array<String>,
+  mobxStore: Object,
 }): Object => {
+  const { apfloraLayers, tpopLabelUsingNr } = mobxStore
+  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
-  
+
   const mcgOptions = {
     maxClusterRadius: 66,
     iconCreateFunction: function(cluster) {
       const markers = cluster.getAllChildMarkers()
       const hasHighlightedTpop = some(
         markers,
-        m => m.options.icon.options.className === 'tpopIconHighlighted'
+        m => m.options.icon.options.className === 'tpopIconHighlighted',
       )
       const className = hasHighlightedTpop
         ? 'tpopClusterHighlighted'
@@ -55,7 +55,11 @@ export default ({
 
   tpops.forEach(tpop => {
     // beware: leaflet needs title to always be a string
-    const nrLabel = `${get(tpop, 'popByPopId.nr', '(keine Nr)')}.${get(tpop, 'nr', '(keine Nr)')}`.toString()
+    const nrLabel = `${get(tpop, 'popByPopId.nr', '(keine Nr)')}.${get(
+      tpop,
+      'nr',
+      '(keine Nr)',
+    )}`.toString()
     const isHighlighted = mapIdsFiltered.includes(tpop.id)
     const latLng = new window.L.LatLng(...epsg2056to4326(tpop.x, tpop.y))
     const icon = window.L.icon({
@@ -67,7 +71,7 @@ export default ({
       title: tpopLabelUsingNr ? tpop.flurname : nrLabel,
       icon,
       zIndexOffset: -apfloraLayers.findIndex(
-        apfloraLayer => apfloraLayer.value === 'tpop'
+        apfloraLayer => apfloraLayer.value === 'tpop',
       ),
     })
       .bindPopup(
@@ -75,33 +79,41 @@ export default ({
           <Fragment>
             <div>Teil-Population</div>
             <StyledH3>
-              {`${tpop.nr || '(keine Nr)'}: ${tpop.flurname || '(kein Flurname)'}`}
+              {`${tpop.nr || '(keine Nr)'}: ${tpop.flurname ||
+                '(kein Flurname)'}`}
             </StyledH3>
             <div>
-              {`Population: ${get(tpop, 'popByPopId.nr', '(keine Nr)')}: ${get(tpop, 'popByPopId.name', '(kein Name)')}`}
+              {`Population: ${get(tpop, 'popByPopId.nr', '(keine Nr)')}: ${get(
+                tpop,
+                'popByPopId.name',
+                '(kein Name)',
+              )}`}
             </div>
             <div>
-              {`Koordinaten: ${tpop.x.toLocaleString('de-ch')} / ${tpop.y.toLocaleString('de-ch')}`}
+              {`Koordinaten: ${tpop.x.toLocaleString(
+                'de-ch',
+              )} / ${tpop.y.toLocaleString('de-ch')}`}
             </div>
             <a
-              href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${get(tpop, 'popByPopId.id', '')}/Teil-Populationen/${tpop.id}`}
+              href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${get(
+                tpop,
+                'popByPopId.id',
+                '',
+              )}/Teil-Populationen/${tpop.id}`}
               target="_blank"
               rel="noopener noreferrer"
             >
               Formular in neuem Tab öffnen
             </a>
-          </Fragment>
-        )
+          </Fragment>,
+        ),
       )
-      .bindTooltip(
-        tpopLabelUsingNr ? nrLabel : tpop.flurname,
-        {
-          permanent: true,
-          direction: 'bottom',
-          className: 'mapTooltip',
-          opacity: 1,
-        }
-      )
+      .bindTooltip(tpopLabelUsingNr ? nrLabel : tpop.flurname, {
+        permanent: true,
+        direction: 'bottom',
+        className: 'mapTooltip',
+        opacity: 1,
+      })
     markers.addLayer(marker)
   })
   return markers
