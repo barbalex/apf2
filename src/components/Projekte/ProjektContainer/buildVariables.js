@@ -21,10 +21,6 @@ export default ({
   const isWerteListen = openNodes.some(
     nodeArray => nodeArray[0] === 'Werte-Listen',
   )
-  console.log('buildVariables', {
-    isWerteListen,
-    openNodes: openNodes.toJSON(),
-  })
   const isAdresse = openNodes.some(
     nodeArray =>
       nodeArray[0] === 'Werte-Listen' &&
@@ -175,7 +171,6 @@ export default ({
     isWerteListen,
     isAdresse,
   }
-  console.log('buildVariables, variables:', variables)
-  //console.log('variables:', variables)
+  //console.log('buildVariables, variables:', variables)
   return variables
 }
