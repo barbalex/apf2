@@ -1,5 +1,5 @@
 // @flow
-import React, { Fragment } from 'react'
+import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
 import '../../../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
@@ -7,6 +7,7 @@ import format from 'date-fns/format'
 import some from 'lodash/some'
 import get from 'lodash/get'
 import styled from 'styled-components'
+import { observer } from 'mobx-react-lite'
 
 import beobIcon from '../../../../../etc/beobZugeordnet.png'
 import beobIconHighlighted from '../../../../../etc/beobZugeordnetHighlighted.png'
@@ -17,21 +18,21 @@ const StyledH3 = styled.h3`
   margin: 7px 0;
 `
 
-export default ({
+const MarkersClustered = ({
   beobs,
-  activeNodes,
-  apfloraLayers,
+  treeName,
   data,
   mapIdsFiltered,
-  assigningBeob,
+  mobxStore,
 }: {
   beobs: Array<Object>,
-  activeNodes: Array<Object>,
-  apfloraLayers: Array<Object>,
+  treeName: string,
   data: Object,
   mapIdsFiltered: Array<String>,
-  assigningBeob: Boolean,
+  mobxStore: Object,
 }): Object => {
+  const { apfloraLayers, assigningBeob } = mobxStore
+  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
   const mcgOptions = {
     maxClusterRadius: 66,
@@ -76,7 +77,7 @@ export default ({
       ),
     }).bindPopup(
       ReactDOMServer.renderToStaticMarkup(
-        <Fragment>
+        <>
           <div>{`Beobachtung von ${get(
             beob,
             'aeEigenschaftenByArtId.artname',
@@ -102,10 +103,12 @@ export default ({
           >
             Formular in neuem Tab öffnen
           </a>
-        </Fragment>,
+        </>,
       ),
     )
     markers.addLayer(marker)
   })
   return markers
 }
+
+export default observer(MarkersClustered)
