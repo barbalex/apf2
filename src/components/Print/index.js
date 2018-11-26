@@ -43,9 +43,8 @@ const ApberForApFromAp = lazy(() => import('./ApberForApFromAp'))
 const ApberForYear = lazy(() => import('./ApberForYear'))
 
 const Print = () => {
-  const { history, historyGoBack, setTreeKey, tree } = useContext(
-    mobxStoreContext,
-  )
+  const mobxStore = useContext(mobxStoreContext)
+  const { history, historyGoBack, setTreeKey, tree } = mobxStore
 
   const { activeNodeArray } = tree
   const showApberForAp =
@@ -85,12 +84,8 @@ const Print = () => {
               <StyledArrowBack />
               zurück
             </BackButton>
-            {showApberForAp && (
-              <ApberForApFromAp activeNodeArray={activeNodeArray} />
-            )}
-            {showApberForYear && (
-              <ApberForYear activeNodeArray={activeNodeArray} />
-            )}
+            {showApberForAp && <ApberForApFromAp />}
+            {showApberForYear && <ApberForYear />}
           </Suspense>
         )}
       </Container>

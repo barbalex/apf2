@@ -9,7 +9,6 @@ import { withApollo } from 'react-apollo'
 import apById from './apById'
 import Label from '../../../shared/Label'
 import ErrorBoundary from '../../../shared/ErrorBoundarySingleChild'
-import getActiveNodes from '../../../../modules/getActiveNodes'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
 const NurApDiv = styled.div`

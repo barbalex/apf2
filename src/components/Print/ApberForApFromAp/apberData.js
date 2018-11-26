@@ -2,21 +2,22 @@
 import { graphql } from 'react-apollo'
 
 import apberById from './apberById'
-import getActiveNodes from '../../../modules/getActiveNodes'
 
 export default graphql(apberById, {
   options: ({
     activeNodeArray,
+    activeNodes,
     apberId: apberIdPassed,
   }: {
     activeNodeArray: Array<String>,
+    activeNodes: Array<Array<String>>,
     apberId: String,
   }) => {
     let apberId
     if (apberIdPassed) {
       apberId = apberIdPassed
     } else {
-      const { apber: apberIdFromActiveNodes } = getActiveNodes(activeNodeArray)
+      const { apber: apberIdFromActiveNodes } = activeNodes
       apberId = apberIdFromActiveNodes
     }
     const variables = { apberId }

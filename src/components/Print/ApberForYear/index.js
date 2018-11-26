@@ -1,10 +1,12 @@
 // @flow
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
 import compose from 'recompose/compose'
+import withProps from 'recompose/withProps'
+import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import withData1 from './withData1'
@@ -14,6 +16,7 @@ import AvList from './AvList'
 import AktPopList from './AktPopList'
 import ErfolgList from './ErfolgList'
 import ApberForAp from '../ApberForAp'
+import mobxStoreContext from '../../../mobxStoreContext'
 
 const LoadingContainer = styled.div`
   padding: 15px;
@@ -102,19 +105,18 @@ const SecondPageText = styled.p`
 `
 
 const enhance = compose(
+  withProps(() => {
+    const mobxStore = useContext(mobxStoreContext)
+    const { activeNodeArray } = mobxStore
+    const activeNodes = mobxStore.treeActiveNodes
+    return { activeNodes, activeNodeArray }
+  }),
   withData1,
   withData2,
+  observer,
 )
 
-const ApberForYear = ({
-  activeNodeArray,
-  data1,
-  data2,
-}: {
-  activeNodeArray: Array<String>,
-  data1: Object,
-  data2: Object,
-}) => {
+const ApberForYear = ({ data1, data2 }: { data1: Object, data2: Object }) => {
   const data = { ...data1, ...data2 }
   const jahr = get(data1, 'apberuebersichtById.jahr', 0)
   const apberuebersicht = get(data1, 'apberuebersichtById')

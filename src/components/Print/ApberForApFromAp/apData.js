@@ -3,8 +3,6 @@ import { graphql } from 'react-apollo'
 import get from 'lodash/get'
 import gql from 'graphql-tag'
 
-import getActiveNodes from '../../../modules/getActiveNodes'
-
 export default graphql(
   gql`
     query apById($apId: UUID!, $jahr: Int!) {
@@ -121,17 +119,19 @@ export default graphql(
     options: ({
       apberData,
       activeNodeArray,
+      activeNodes,
       apId: apIdPassed,
     }: {
       apberData: Object,
       activeNodeArray: Array<String>,
+      activeNodes: Array<Array<String>>,
       apId: String,
     }) => {
       let apId
       if (apIdPassed) {
         apId = apIdPassed
       } else {
-        const { ap: apIdFromActiveNodes } = getActiveNodes(activeNodeArray)
+        const { ap: apIdFromActiveNodes } = activeNodes
         apId = apIdFromActiveNodes
       }
       const jahr = get(apberData, 'apberById.jahr', 0)

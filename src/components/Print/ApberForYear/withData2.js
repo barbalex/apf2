@@ -3,11 +3,10 @@ import { graphql } from 'react-apollo'
 import get from 'lodash/get'
 
 import query from './data2'
-import getActiveNodes from '../../../modules/getActiveNodes'
 
 export default graphql(query, {
-  options: ({ activeNodeArray, data1 }) => {
-    const { projekt: projektId } = getActiveNodes(activeNodeArray)
+  options: ({ activeNodeArray, data1, activeNodes }) => {
+    const { projekt: projektId } = activeNodes
     const jahr = get(data1, 'apberuebersichtById.jahr', 0)
 
     return {

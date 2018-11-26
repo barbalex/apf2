@@ -1,16 +1,16 @@
 // @flow
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
+import withProps from 'recompose/withProps'
+import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import apData from './apData'
 import apberData from './apberData'
 import ApberForAp from '../ApberForAp'
-import getActiveNodes from '../../../modules/getActiveNodes'
+import mobxStoreContext from '../../../mobxStoreContext'
 
 const LoadingContainer = styled.div`
   padding: 15px;
@@ -53,36 +53,28 @@ const Container = styled.div`
 `
 
 const enhance = compose(
-  withState('yearOfFirstTpopber', 'setYearOfFirstTpopber', null),
-  withHandlers({
-    onSetYearOfFirstTpopber: ({
-      yearOfFirstTpopber,
-      setYearOfFirstTpopber,
-    }) => year => {
-      if (year !== yearOfFirstTpopber) {
-        setYearOfFirstTpopber(year)
-      }
-    },
+  withProps(() => {
+    const mobxStore = useContext(mobxStoreContext)
+    const { activeNodeArray } = mobxStore
+    const activeNodes = mobxStore.treeActiveNodes
+    return { activeNodes, activeNodeArray }
   }),
   apberData,
   apData,
+  observer,
 )
 
 const ApberForApFromAp = ({
-  activeNodeArray,
   apberData,
   apData,
-  yearOfFirstTpopber,
-  onSetYearOfFirstTpopber,
 }: {
-  activeNodeArray: Array<String>,
   apberData: Object,
   apData: Object,
-  yearOfFirstTpopber: Number,
-  onSetYearOfFirstTpopber: () => void,
 }) => {
+  const mobxStore = useContext(mobxStoreContext)
+  const activeNodes = mobxStore.treeActiveNodes
   const jahr = get(apberData, 'apberById.jahr')
-  const { ap: apId } = getActiveNodes(activeNodeArray)
+  const { ap: apId } = activeNodes
 
   if (apData.loading) {
     return (
