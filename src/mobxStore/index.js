@@ -49,11 +49,12 @@ const myTypes = types
       features: [],
       type: 'FeatureCollection',
     }),
-    deletedDatasets: types.optional(types.array(types.string), []),
     toDeleteTable: types.maybeNull(types.string),
     toDeleteId: types.maybeNull(types.string),
     toDeleteLabel: types.maybeNull(types.string),
-    toDeleteUrl: types.maybeNull(types.string),
+    toDeleteUrl: types.maybeNull(
+      types.array(types.union(types.string, types.number)),
+    ),
     nodeFilter: types.optional(NodeFilter, defaultNodeFilter),
     user: types.optional(User, defaultUser),
     updateAvailable: types.optional(types.boolean, false),
@@ -84,6 +85,8 @@ const myTypes = types
     errors: [],
     toDeleteAfterDeletionHook: null,
     history,
+    deletedDatasets: [],
+    //deletedDatasets: types.optional(types.array(types.string), []),
   }))
   .views(self => ({
     get toDelete() {
