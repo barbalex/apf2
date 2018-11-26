@@ -7,6 +7,7 @@
  */
 import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
+import { getSnapshot } from 'mobx-state-tree'
 
 import mobxStoreContext from '../../mobxStoreContext'
 import ProjektContainer from './ProjektContainer'
@@ -22,14 +23,23 @@ const ProjektContainerContainer = ({
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { openNodes, activeNodeArray } = mobxStore[treeName]
+  /*
+  console.log('ProjektContainerContainer', {
+    openNodes: getSnapshot(openNodes),
+    activeNodeArray: getSnapshot(activeNodeArray),
+  })*/
 
+  /**
+   * pass snapshots
+   * seems to update data more reliably
+   */
   return (
     <ProjektContainer
       treeName={treeName}
       tabs={tabs}
       projekteTabs={projekteTabs}
-      openNodes={openNodes}
-      activeNodeArray={activeNodeArray}
+      openNodes={getSnapshot(openNodes)}
+      activeNodeArray={getSnapshot(activeNodeArray)}
     />
   )
 }
