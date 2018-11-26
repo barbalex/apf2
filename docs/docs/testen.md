@@ -36,7 +36,8 @@ Langfristig sollten diese Tests automatisiert werden.
   * Distanz zeigen
   * Beobachtungen zuordnen
 * Exporte
-* Layout
+* Layout und Navigation
+  * back und forward des Browsers
   * Tabs ein-/ausblenden
   * breite variieren
   * Anpassung an kleine Bildschirme
