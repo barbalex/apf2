@@ -18,9 +18,9 @@ import get from 'lodash/get'
 import gql from 'graphql-tag'
 import { withApollo } from 'react-apollo'
 
-import ErrorBoundary from '../shared/ErrorBoundary'
-import idbContext from '../../idbContext'
-import mobxStoreContext from '../../mobxStoreContext'
+import ErrorBoundary from './shared/ErrorBoundary'
+import idbContext from '../idbContext'
+import mobxStoreContext from '../mobxStoreContext'
 
 const StyledDialog = styled(Dialog)``
 const StyledDiv = styled.div`
