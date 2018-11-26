@@ -11,7 +11,6 @@
   "devDependencies": {
     "docsify-cli": "4.3.0",
     "flow-bin": "0.86.0",
-    "npm-check-updates": "2.14.3",
     "postgraphile": "4.0.1",
     "postgraphile-plugin-connection-filter": "1.0.0-beta.20",
     "react-scripts": "2.1.1",
