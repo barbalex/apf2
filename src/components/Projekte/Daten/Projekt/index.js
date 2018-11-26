@@ -48,7 +48,7 @@ const Projekt = ({
 
   const row = get(data, 'projektById', {})
 
-  console.log('Projekt', { row })
+  //console.log('Projekt', { row })
 
   useEffect(() => setErrors({}), [row])
 
