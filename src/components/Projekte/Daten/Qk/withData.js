@@ -14,11 +14,12 @@ export default graphql(query, {
       activeNodeArray.length > 1
         ? activeNodeArray[1]
         : '99999999-9999-9999-9999-999999999999'
+    const isBerichtjahr = !!berichtjahr
 
     return {
       variables: {
         berichtjahr,
-        isBerichtjahr: !!berichtjahr,
+        isBerichtjahr,
         apId,
         projId,
       },

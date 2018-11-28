@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import Paper from '@material-ui/core/Paper'
 import compose from 'recompose/compose'
 import withProps from 'recompose/withProps'
+import withState from 'recompose/withState'
 import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
 
@@ -59,6 +60,9 @@ const LoadingLine = styled.div`
 `
 
 const enhance = compose(
+  // berichtjahr state needs to be added before withData
+  // because it is used there
+  withState('berichtjahr', 'setBerichtjahr', () => standardQkYear()),
   withProps(() => ({
     mobxStore: useContext(mobxStoreContext),
   })),
@@ -66,10 +70,17 @@ const enhance = compose(
   observer,
 )
 
-const Qk = ({ data }: { data: Object }) => {
+const Qk = ({
+  data,
+  berichtjahr,
+  setBerichtjahr,
+}: {
+  data: Object,
+  berichtjahr: number,
+  setBerichtjahr: () => void,
+}) => {
   const { ktZh, setKtZh, addError } = useContext(mobxStoreContext)
 
-  const [berichtjahr, setBerichtjahr] = useState(standardQkYear())
   const [filter, setFilter] = useState('')
 
   const onChangeBerichtjahr = useCallback(event =>
