@@ -70,7 +70,7 @@ const Print = () => {
                 // TODO: is location.state killed by mobx?
                 console.log('Print, onClickBack', {
                   historyGoBack,
-                  locationState: history.location.state,
+                  location: history.location,
                 })
                 historyGoBack()
                 if (history.location.state === undefined) {
