@@ -5,11 +5,9 @@ import Control from 'react-leaflet-control'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
-import { MuiThemeProvider } from '@material-ui/core/styles'
 
 import ShowCoordinates from './ShowCoordinates'
 import PanToCoordinates from './PanToCoordinates'
-import theme from '../../../../theme'
 
 /**
  * onClick coordinates container: render coordinate-field-pair and go-to button
@@ -41,16 +39,14 @@ const CoordinatesControl = ({
   leaflet: Object,
 }) => (
   <StyledControl position="bottomright">
-    <MuiThemeProvider theme={theme}>
-      {controlType === 'coordinates' ? (
-        <ShowCoordinates changeControlType={changeControlType} />
-      ) : (
-        <PanToCoordinates
-          changeControlType={changeControlType}
-          map={leaflet.map}
-        />
-      )}
-    </MuiThemeProvider>
+    {controlType === 'coordinates' ? (
+      <ShowCoordinates changeControlType={changeControlType} />
+    ) : (
+      <PanToCoordinates
+        changeControlType={changeControlType}
+        map={leaflet.map}
+      />
+    )}
   </StyledControl>
 )
 

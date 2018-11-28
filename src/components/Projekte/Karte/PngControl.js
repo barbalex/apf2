@@ -8,10 +8,7 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
-import { MuiThemeProvider } from '@material-ui/core/styles'
 import FileDownloadIcon from '@material-ui/icons/GetApp'
-
-import theme from '../../../theme'
 
 const StyledButton = styled.button`
   background-color: white;
@@ -82,11 +79,9 @@ class PngControl extends Component {
     return (
       <div ref={this.container}>
         <Control position="topright" ref={this.container}>
-          <MuiThemeProvider theme={theme}>
-            <StyledButton onClick={savePng} title="Karte als png speichern">
-              <FileDownloadIcon />
-            </StyledButton>
-          </MuiThemeProvider>
+          <StyledButton onClick={savePng} title="Karte als png speichern">
+            <FileDownloadIcon />
+          </StyledButton>
         </Control>
       </div>
     )
