@@ -283,6 +283,8 @@ const Karte = ({
     overlays.findIndex(o => o.value === activeOverlay),
   )
 
+  console.log('Karte rendering')
+
   return (
     <Container>
       <ErrorBoundary>

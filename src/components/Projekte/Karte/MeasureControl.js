@@ -28,7 +28,7 @@ class MeasureControl extends Component {
   }
 
   render() {
-    // console.log('map:', this.props.map)
+    console.log('MeasureControl rendering')
     return <div style={{ display: 'none' }} />
   }
 }

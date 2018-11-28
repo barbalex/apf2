@@ -1,3 +1,4 @@
+// @flow
 import React, { Component } from 'react'
 import 'leaflet'
 import { withLeaflet } from 'react-leaflet'
@@ -48,7 +49,7 @@ const options = {
   hideControlContainer: true,
 }
 
-class PrintControl extends Component {
+class PngControl extends Component {
   constructor(props) {
     super(props)
     // ref is used to try map not to hijack click events
@@ -92,4 +93,4 @@ class PrintControl extends Component {
   }
 }
 
-export default enhance(PrintControl)
+export default enhance(PngControl)
