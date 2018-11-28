@@ -203,9 +203,9 @@ const Row = ({
     moving,
     copyingBiotop,
     setTreeKey,
-    openNodes,
   } = mobxStore
   const tree = mobxStore[treeName]
+  const { openNodes } = tree
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
 
   const activeNodeArray = get(mobxStore, `${treeName}.activeNodeArray`)
