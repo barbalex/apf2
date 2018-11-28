@@ -4,6 +4,8 @@
  * to make sure all the depending queries in hoc's
  * of ProjektContainer are re-run every time they change
  * (no observer in the hoc's)
+ * apFilter: weird. Is updated if called here, does not need
+ * to be passed down...
  */
 import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
@@ -22,7 +24,7 @@ const ProjektContainerContainer = ({
   projekteTabs: Array<string>,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { openNodes, activeNodeArray } = mobxStore[treeName]
+  const { openNodes, activeNodeArray, apFilter } = mobxStore[treeName]
   /*
   console.log('ProjektContainerContainer', {
     openNodes: getSnapshot(openNodes),
@@ -40,6 +42,7 @@ const ProjektContainerContainer = ({
       projekteTabs={projekteTabs}
       openNodes={getSnapshot(openNodes)}
       activeNodeArray={getSnapshot(activeNodeArray)}
+      //apFilter={apFilter}
     />
   )
 }

@@ -4,9 +4,9 @@ import { graphql } from 'react-apollo'
 import query from './aps'
 
 export default graphql(query, {
-  options: ({ isProjekt, apFilter }) => ({
+  options: ({ isProjekt, apFilterSet }) => ({
     isProjekt,
-    apFilter,
+    apFilter: apFilterSet,
   }),
   name: 'dataAps',
 })

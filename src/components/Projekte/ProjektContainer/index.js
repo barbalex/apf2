@@ -88,12 +88,10 @@ const enhance = compose(
   withProps(() => ({
     mobxStore: useContext(mobxStoreContext),
   })),
-  withProps(({ treeName, mobxStore, openNodes, activeNodeArray }) =>
+  withProps(({ treeName, mobxStore }) =>
     buildVariables({
       treeName,
       mobxStore,
-      openNodes,
-      activeNodeArray,
     }),
   ),
   withAdresses,
@@ -180,8 +178,6 @@ const ProjekteContainer = props => {
     treeName,
     tabs: tabsPassed,
     projekteTabs,
-    openNodes,
-    activeNodeArray,
   }: {
     dataAdresses: Object,
     dataUsers: Object,
@@ -224,8 +220,6 @@ const ProjekteContainer = props => {
     treeName: String,
     tabs: Array<String>,
     projekteTabs: Array<String>,
-    openNodes: Array<Array<string>>,
-    activeNodeArray: Array<string>,
   } = props
 
   const mobxStore = useContext(mobxStoreContext)
@@ -238,6 +232,7 @@ const ProjekteContainer = props => {
     isPrint,
     assigningBeob,
   } = mobxStore
+  const { activeNodeArray, openNodes } = mobxStore[treeName]
   const { idb } = useContext(idbContext)
   const mapFilter = mapFilterRaw.toJSON()
 

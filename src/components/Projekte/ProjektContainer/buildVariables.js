@@ -12,8 +12,11 @@ export default ({
   treeName: String,
   mobxStore: Object,
 }): Object => {
-  const { urlQuery, apFilterSet, nodeFilter: nodeFilterPassed } = mobxStore
-  const { openNodes, activeNodeArray } = mobxStore[treeName]
+  const { urlQuery, nodeFilter: nodeFilterPassed } = mobxStore
+  // apFilter is used for form filter AND apFilter of tree :-(
+  const { openNodes, activeNodeArray, apFilter: apFilterSet } = mobxStore[
+    treeName
+  ]
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const nodeFilter = nodeFilterPassed[treeName]
 
@@ -153,6 +156,7 @@ export default ({
     projId,
     isProjekt,
     apFilter,
+    apFilterSet,
     ap,
     apId,
     isAp,
