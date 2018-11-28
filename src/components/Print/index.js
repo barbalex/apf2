@@ -3,6 +3,8 @@ import React, { lazy, Suspense, useContext } from 'react'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
 import ArrowBack from '@material-ui/icons/ArrowBack'
+import { getSnapshot } from 'mobx-state-tree'
+import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import Fallback from '../shared/Fallback'
@@ -45,7 +47,6 @@ const ApberForYear = lazy(() => import('./ApberForYear'))
 const Print = () => {
   const mobxStore = useContext(mobxStoreContext)
   const { history, historyGoBack, setTreeKey, tree } = mobxStore
-
   const { activeNodeArray } = tree
   const showApberForAp =
     activeNodeArray.length === 7 &&
@@ -66,6 +67,11 @@ const Print = () => {
             <BackButton
               variant="outlined"
               onClick={() => {
+                // TODO: is location.state killed by mobx?
+                console.log('Print, onClickBack', {
+                  historyGoBack,
+                  locationState: history.location.state,
+                })
                 historyGoBack()
                 if (history.location.state === undefined) {
                   // happens when print was the initial page opened
@@ -93,4 +99,4 @@ const Print = () => {
   )
 }
 
-export default Print
+export default observer(Print)
