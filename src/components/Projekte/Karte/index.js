@@ -283,7 +283,7 @@ const Karte = ({
     overlays.findIndex(o => o.value === activeOverlay),
   )
 
-  console.log('Karte rendering')
+  console.log('Karte rendering', { mapIdsFiltered, mapPopIdsFiltered })
 
   return (
     <Container>

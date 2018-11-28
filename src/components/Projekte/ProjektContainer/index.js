@@ -11,6 +11,7 @@ import flatten from 'lodash/flatten'
 import Button from '@material-ui/core/Button'
 import jwtDecode from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
+import { getSnapshot } from 'mobx-state-tree'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
@@ -444,7 +445,7 @@ const ProjekteContainer = props => {
     data: get(data, `beobZugeordnetForMap.nodes`, []),
   })
   // when no map filter exists nodes in activeNodeArray should be highlighted
-  let mapIdsFiltered = activeNodeArray
+  let mapIdsFiltered = getSnapshot(activeNodeArray)
   if (activeApfloraLayers.includes('mapFilter')) {
     // when map filter exists, nodes in map filter should be highlighted
     mapIdsFiltered = [
@@ -455,6 +456,7 @@ const ProjekteContainer = props => {
       ...mapBeobZugeordnetIdsFiltered,
     ]
   }
+  console.log('ProjektContainer', { mapIdsFiltered, mapPopIdsFiltered })
   const aparts = get(
     data,
     'projektById.apsByProjId.nodes[0].apartsByApId.nodes',

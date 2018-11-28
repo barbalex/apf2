@@ -28,7 +28,6 @@ class MeasureControl extends Component {
   }
 
   render() {
-    console.log('MeasureControl rendering')
     return <div style={{ display: 'none' }} />
   }
 }

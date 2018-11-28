@@ -68,10 +68,14 @@ const LayersControl = ({
   mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
   mapBeobZugeordnetIdsFiltered: Array<String>,
 }) => {
-  console.log('LayersControl rendering')
   const mobxStore = useContext(mobxStoreContext)
   const { apfloraLayers, overlays } = mobxStore
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
+  console.log('LayersControl', {
+    mapIdsFiltered,
+    mapPopIdsFiltered,
+    activeNodes,
+  })
 
   const [baseLayersExpanded, toggleBaseLayersExpanded] = useState(false)
   const [overlaysExpanded, toggleOverlaysExpanded] = useState(false)
