@@ -10,6 +10,7 @@ import {
   arrayMove,
 } from 'react-sortable-hoc'
 import { observer } from 'mobx-react-lite'
+import { getSnapshot } from 'mobx-state-tree'
 
 import Checkbox from './shared/Checkbox'
 import mobxStoreContext from '../../../../mobxStoreContext'
@@ -152,7 +153,7 @@ const Overlays = () => {
         onSortEnd={onSortEnd}
         useDragHandle
         lockAxis="y"
-        activeOverlays={activeOverlays}
+        activeOverlays={getSnapshot(activeOverlays)}
         setActiveOverlays={setActiveOverlays}
       />
     </CardContent>
