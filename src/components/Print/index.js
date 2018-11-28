@@ -64,29 +64,7 @@ const Print = () => {
       <Container>
         {(showApberForAp || showApberForYear) && (
           <Suspense fallback={<Fallback />}>
-            <BackButton
-              variant="outlined"
-              onClick={() => {
-                // TODO: is location.state killed by mobx?
-                console.log('Print, onClickBack', {
-                  historyGoBack,
-                  location: history.location,
-                })
-                historyGoBack()
-                if (history.location.state === undefined) {
-                  // happens when print was the initial page opened
-                  // so nowhere to go back to
-                  const newActiveNodeArray = [...activeNodeArray]
-                  newActiveNodeArray.pop()
-                  setTreeKey({
-                    value: newActiveNodeArray,
-                    tree: 'tree',
-                    key: 'activeNodeArray',
-                  })
-                  window.location.reload(false)
-                }
-              }}
-            >
+            <BackButton variant="outlined" onClick={historyGoBack}>
               <StyledArrowBack />
               zurück
             </BackButton>

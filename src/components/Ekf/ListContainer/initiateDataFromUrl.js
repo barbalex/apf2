@@ -6,7 +6,7 @@ export default async ({
   mobxStore,
 }: {
   activeNodeArray: Array<string>,
-  client: Object,
+  mobxStore: Object,
 }) => {
   mobxStore.setTreeKey({
     value: [...activeNodeArray],

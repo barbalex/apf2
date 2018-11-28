@@ -273,13 +273,12 @@ const Row = ({
     [tree2, node],
   )
   const onClickPrint = useCallback(
-    () => {
+    () =>
       setTreeKey({
         value: [...node.url, 'print'],
         tree: treeName,
         key: 'activeNodeArray',
-      })
-    },
+      }),
     [node.url, treeName],
   )
 
