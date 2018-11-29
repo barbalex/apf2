@@ -297,13 +297,6 @@ const myTypes = types
     cloneTree2From1() {
       self.tree2 = cloneDeep(self.tree)
     },
-    setTreeNodeLabelFilterKey({ tree, key, value }) {
-      const oldValue = self[tree].nodeLabelFilter[key]
-      // only write if changed
-      if (!isEqual(oldValue, value)) {
-        self[tree].nodeLabelFilter[key] = value
-      }
-    },
     treeNodeLabelFilterResetExceptAp({ tree }) {
       self[tree].nodeLabelFilter = {
         ap: self[tree].nodeLabelFilter.ap,
@@ -334,13 +327,6 @@ const myTypes = types
         adresse: null,
         gemeinde: null,
         user: null,
-      }
-    },
-    setTreeMapKey({ tree, key, value }) {
-      const oldValue = self[tree].map[key]
-      // only write if changed
-      if (!isEqual(oldValue, value)) {
-        self[tree].map[key] = value
       }
     },
   }))
