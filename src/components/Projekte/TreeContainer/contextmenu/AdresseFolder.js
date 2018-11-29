@@ -6,13 +6,13 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Apfolder = ({
   onClick,
-  tree,
+  treeName,
 }: {
   onClick: () => void,
-  tree: Object,
+  treeName: string,
 }) => (
   <ErrorBoundary>
-    <ContextMenu id={`${tree.name}adresseFolder`}>
+    <ContextMenu id={`${treeName}adresseFolder`}>
       <div className="react-contextmenu-title">Adressen</div>
       <MenuItem
         onClick={onClick}
