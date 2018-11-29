@@ -20,14 +20,14 @@ const enhance = compose(
 )
 
 const BeobZugeordnetFolder = ({
-  tree,
+  treeName,
   onClick,
   changeId,
   id,
   onShow,
 }: {
   changeId: () => {},
-  tree: Object,
+  treeName: string,
   onClick: () => void,
   id: number,
   onShow: () => {},
@@ -38,7 +38,7 @@ const BeobZugeordnetFolder = ({
   return (
     <ErrorBoundary>
       <ContextMenu
-        id={`${tree.name}beobZugeordnetFolder`}
+        id={`${treeName}beobZugeordnetFolder`}
         collect={props => props}
         onShow={onShow}
       >

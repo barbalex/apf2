@@ -11,10 +11,10 @@ import mobxStoreContext from '../../../../mobxStoreContext'
 const enhance = compose(observer)
 
 const BerFolder = ({
-  tree,
+  treeName,
   onClick,
 }: {
-  tree: Object,
+  treeName: string,
   onClick: () => void,
 }) => {
   const { user } = useContext(mobxStoreContext)
@@ -27,7 +27,7 @@ const BerFolder = ({
   return (
     <ErrorBoundary>
       <ContextMenu
-        id={`${tree.name}ber`}
+        id={`${treeName}ber`}
         collect={props => props}
         onShow={onShow}
       >

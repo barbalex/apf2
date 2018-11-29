@@ -9,16 +9,16 @@ import mobxStoreContext from '../../../../mobxStoreContext'
 
 const AssozartFolder = ({
   onClick,
-  tree,
+  treeName,
 }: {
   onClick: () => void,
-  tree: Object,
+  treeName: string,
 }) => {
   const { user } = useContext(mobxStoreContext)
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${tree.name}assozart`}>
+      <ContextMenu id={`${treeName}assozart`}>
         <div className="react-contextmenu-title">assoziierte Art</div>
         {!userIsReadOnly(user.token) && (
           <>
