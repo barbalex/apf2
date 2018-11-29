@@ -503,60 +503,63 @@ const TreeContainer = ({
           {!!activeNodes.projekt && <ApFilter treeName={treeName} />}
         </LabelFilterContainer>
         <InnerTreeContainer>
-          <Tree treeName={treeName} data={data} />
+          <Tree data={data} optimize treeName={treeName} />
         </InnerTreeContainer>
-        <CmApFolder onClick={handleClick} tree={tree} />
-        <CmAp onClick={handleClick} tree={tree} />
-        <CmApberuebersichtFolder onClick={handleClick} tree={tree} />
-        <CmApberuebersicht onClick={handleClick} tree={tree} />
-        <CmAssozartFolder onClick={handleClick} tree={tree} />
-        <CmEkfzaehleinheitFolder onClick={handleClick} tree={tree} />
-        <CmAssozart onClick={handleClick} tree={tree} />
-        <CmEkfzaehleinheit onClick={handleClick} tree={tree} />
-        <CmApartFolder onClick={handleClick} tree={tree} />
-        <CmApart onClick={handleClick} tree={tree} />
-        <CmBeobZugeordnetFolder onClick={handleClick} tree={tree} />
-        <CmBerFolder onClick={handleClick} tree={tree} />
-        <CmBer onClick={handleClick} tree={tree} />
-        <CmApberFolder onClick={handleClick} tree={tree} />
-        <CmApber onClick={handleClick} tree={tree} />
-        <CmErfkritFolder onClick={handleClick} tree={tree} />
-        <CmErfkrit onClick={handleClick} tree={tree} />
-        <CmZielFolder onClick={handleClick} tree={tree} />
-        <CmZielJahrFolder onClick={handleClick} tree={tree} />
-        <CmZiel onClick={handleClick} tree={tree} />
-        <CmZielBerFolder onClick={handleClick} tree={tree} />
-        <CmZielBer onClick={handleClick} tree={tree} />
-        <CmPopFolder onClick={handleClick} tree={tree} />
-        <CmPop onClick={handleClick} tree={tree} />
-        <CmPopmassnberFolder onClick={handleClick} tree={tree} />
-        <CmPopmassnber onClick={handleClick} tree={tree} />
-        <CmPopberFolder onClick={handleClick} tree={tree} />
-        <CmPopber onClick={handleClick} tree={tree} />
-        <CmProjekt onClick={handleClick} tree={tree} />
-        <CmTpopFolder onClick={handleClick} tree={tree} />
-        <CmTpop onClick={handleClick} tree={tree} />
-        <CmTpopberFolder onClick={handleClick} tree={tree} />
-        <CmTpopber onClick={handleClick} tree={tree} />
-        <CmBeobZugeordnet onClick={handleClick} tree={tree} />
-        <CmBeobnichtbeurteilt onClick={handleClick} tree={tree} />
-        <CmBeobNichtZuzuordnen onClick={handleClick} tree={tree} />
-        <CmTpopfreiwkontrFolder onClick={handleClick} tree={tree} />
-        <CmTpopfreiwkontr onClick={handleClick} tree={tree} />
-        <CmTpopfreiwkontrzaehlFolder onClick={handleClick} tree={tree} />
-        <CmTpopfreiwkontrzaehl onClick={handleClick} tree={tree} />
-        <CmTpopfeldkontrFolder onClick={handleClick} tree={tree} />
-        <CmTpopfeldkontr onClick={handleClick} tree={tree} />
-        <CmTpopfeldkontrzaehlFolder onClick={handleClick} tree={tree} />
-        <CmTpopfeldkontrzaehl onClick={handleClick} tree={tree} />
-        <CmTpopmassnberFolder onClick={handleClick} tree={tree} />
-        <CmTpopmassnber onClick={handleClick} tree={tree} />
-        <CmTpopmassnFolder onClick={handleClick} tree={tree} />
-        <CmTpopmassn onClick={handleClick} tree={tree} />
-        <CmUserFolder onClick={handleClick} tree={tree} />
-        <CmUser onClick={handleClick} tree={tree} />
-        <CmAdresseFolder onClick={handleClick} tree={tree} />
-        <CmAdresse onClick={handleClick} tree={tree} />
+        <CmApFolder onClick={handleClick} treeName={treeName} />
+        <CmAp onClick={handleClick} treeName={treeName} />
+        <CmApberuebersichtFolder onClick={handleClick} treeName={treeName} />
+        <CmApberuebersicht onClick={handleClick} treeName={treeName} />
+        <CmAssozartFolder onClick={handleClick} treeName={treeName} />
+        <CmEkfzaehleinheitFolder onClick={handleClick} treeName={treeName} />
+        <CmAssozart onClick={handleClick} treeName={treeName} />
+        <CmEkfzaehleinheit onClick={handleClick} treeName={treeName} />
+        <CmApartFolder onClick={handleClick} treeName={treeName} />
+        <CmApart onClick={handleClick} treeName={treeName} />
+        <CmBeobZugeordnetFolder onClick={handleClick} treeName={treeName} />
+        <CmBerFolder onClick={handleClick} treeName={treeName} />
+        <CmBer onClick={handleClick} treeName={treeName} />
+        <CmApberFolder onClick={handleClick} treeName={treeName} />
+        <CmApber onClick={handleClick} treeName={treeName} />
+        <CmErfkritFolder onClick={handleClick} treeName={treeName} />
+        <CmErfkrit onClick={handleClick} treeName={treeName} />
+        <CmZielFolder onClick={handleClick} treeName={treeName} />
+        <CmZielJahrFolder onClick={handleClick} treeName={treeName} />
+        <CmZiel onClick={handleClick} treeName={treeName} />
+        <CmZielBerFolder onClick={handleClick} treeName={treeName} />
+        <CmZielBer onClick={handleClick} treeName={treeName} />
+        <CmPopFolder onClick={handleClick} treeName={treeName} />
+        <CmPop onClick={handleClick} treeName={treeName} />
+        <CmPopmassnberFolder onClick={handleClick} treeName={treeName} />
+        <CmPopmassnber onClick={handleClick} treeName={treeName} />
+        <CmPopberFolder onClick={handleClick} treeName={treeName} />
+        <CmPopber onClick={handleClick} treeName={treeName} />
+        <CmProjekt onClick={handleClick} treeName={treeName} />
+        <CmTpopFolder onClick={handleClick} treeName={treeName} />
+        <CmTpop onClick={handleClick} treeName={treeName} />
+        <CmTpopberFolder onClick={handleClick} treeName={treeName} />
+        <CmTpopber onClick={handleClick} treeName={treeName} />
+        <CmBeobZugeordnet onClick={handleClick} treeName={treeName} />
+        <CmBeobnichtbeurteilt onClick={handleClick} treeName={treeName} />
+        <CmBeobNichtZuzuordnen onClick={handleClick} treeName={treeName} />
+        <CmTpopfreiwkontrFolder onClick={handleClick} treeName={treeName} />
+        <CmTpopfreiwkontr onClick={handleClick} treeName={treeName} />
+        <CmTpopfreiwkontrzaehlFolder
+          onClick={handleClick}
+          treeName={treeName}
+        />
+        <CmTpopfreiwkontrzaehl onClick={handleClick} treeName={treeName} />
+        <CmTpopfeldkontrFolder onClick={handleClick} treeName={treeName} />
+        <CmTpopfeldkontr onClick={handleClick} treeName={treeName} />
+        <CmTpopfeldkontrzaehlFolder onClick={handleClick} treeName={treeName} />
+        <CmTpopfeldkontrzaehl onClick={handleClick} treeName={treeName} />
+        <CmTpopmassnberFolder onClick={handleClick} treeName={treeName} />
+        <CmTpopmassnber onClick={handleClick} treeName={treeName} />
+        <CmTpopmassnFolder onClick={handleClick} treeName={treeName} />
+        <CmTpopmassn onClick={handleClick} treeName={treeName} />
+        <CmUserFolder onClick={handleClick} treeName={treeName} />
+        <CmUser onClick={handleClick} treeName={treeName} />
+        <CmAdresseFolder onClick={handleClick} treeName={treeName} />
+        <CmAdresse onClick={handleClick} treeName={treeName} />
       </Container>
     </ErrorBoundary>
   )

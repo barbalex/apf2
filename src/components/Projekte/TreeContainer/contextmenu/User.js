@@ -7,14 +7,20 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
-const User = ({ onClick, tree }: { onClick: () => void, tree: Object }) => {
+const User = ({
+  onClick,
+  treeName,
+}: {
+  onClick: () => void,
+  treeName: string,
+}) => {
   const { user } = useContext(mobxStoreContext)
 
   const mayWrite = !userIsReadOnly(user.token)
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${tree.name}user`}>
+      <ContextMenu id={`${treeName}user`}>
         <div className="react-contextmenu-title">Benutzer</div>
         {mayWrite && (
           <>
