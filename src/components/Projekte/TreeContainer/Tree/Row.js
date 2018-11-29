@@ -186,14 +186,12 @@ const Row = ({
   node,
   treeName,
   data,
-  mapIdsFiltered,
 }: {
   index: Number,
   style: Object,
   node: Array<Object>,
   treeName: String,
   data: Object,
-  mapIdsFiltered: Array<String>,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const {
@@ -208,6 +206,7 @@ const Row = ({
   const tree = mobxStore[treeName]
   const { openNodes } = tree
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
+  const { idsFiltered: mapIdsFiltered } = mobxStore[treeName].map
 
   const activeNodeArray = get(mobxStore, `${treeName}.activeNodeArray`)
   const myProps = { key: index }

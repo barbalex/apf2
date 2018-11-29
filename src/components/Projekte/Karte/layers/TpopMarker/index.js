@@ -22,12 +22,10 @@ const TpopMarkerMarker = ({
    */
   data,
   clustered,
-  mapIdsFiltered,
 }: {
   treeName: string,
   data: Object,
   clustered: Boolean,
-  mapIdsFiltered: Array<String>,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { nodeFilter } = mobxStore
@@ -79,7 +77,6 @@ const TpopMarkerMarker = ({
       tpops,
       treeName,
       data,
-      mapIdsFiltered,
       mobxStore,
     })
     return <MarkerCluster markers={markers} />
@@ -88,7 +85,6 @@ const TpopMarkerMarker = ({
     tpops,
     treeName,
     data,
-    mapIdsFiltered,
     mobxStore,
   })
   return <Marker markers={markers} />

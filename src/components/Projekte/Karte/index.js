@@ -128,12 +128,6 @@ const Karte = ({
   onMouseMove,
   data,
   refetchTree,
-  mapIdsFiltered,
-  mapPopIdsFiltered,
-  mapTpopIdsFiltered,
-  mapBeobNichtBeurteiltIdsFiltered,
-  mapBeobZugeordnetIdsFiltered,
-  mapBeobNichtZuzuordnenIdsFiltered,
   dimensions,
   client,
 }: {
@@ -141,12 +135,6 @@ const Karte = ({
   onMouseMove: () => void,
   data: Object,
   refetchTree: () => void,
-  mapIdsFiltered: Array<String>,
-  mapPopIdsFiltered: Array<String>,
-  mapTpopIdsFiltered: Array<String>,
-  mapBeobNichtBeurteiltIdsFiltered: Array<String>,
-  mapBeobZugeordnetIdsFiltered: Array<String>,
-  mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
   dimensions: Object,
   client: Object,
 }) => {
@@ -200,24 +188,14 @@ const Karte = ({
   const ApfloraLayerComponents = {
     // MapFilter is used for filtering, need to return null
     mapFilter: () => null,
-    pop: () => (
-      <Pop treeName={treeName} data={data} mapIdsFiltered={mapIdsFiltered} />
-    ),
-    tpop: () => (
-      <Tpop
-        treeName={treeName}
-        data={data}
-        clustered={clustered}
-        mapIdsFiltered={mapIdsFiltered}
-      />
-    ),
+    pop: () => <Pop treeName={treeName} data={data} />,
+    tpop: () => <Tpop treeName={treeName} data={data} clustered={clustered} />,
     beobNichtBeurteilt: () => (
       <BeobNichtBeurteilt
         treeName={treeName}
         data={data}
         clustered={clustered}
         refetchTree={refetchTree}
-        mapIdsFiltered={mapIdsFiltered}
       />
     ),
     beobNichtZuzuordnen: () => (
@@ -225,7 +203,6 @@ const Karte = ({
         treeName={treeName}
         data={data}
         clustered={clustered}
-        mapIdsFiltered={mapIdsFiltered}
       />
     ),
     beobZugeordnet: () => (
@@ -234,15 +211,10 @@ const Karte = ({
         data={data}
         clustered={clustered}
         refetchTree={refetchTree}
-        mapIdsFiltered={mapIdsFiltered}
       />
     ),
     beobZugeordnetAssignPolylines: () => (
-      <BeobZugeordnetAssignPolylines
-        data={data}
-        treeName={treeName}
-        mapIdsFiltered={mapIdsFiltered}
-      />
+      <BeobZugeordnetAssignPolylines data={data} treeName={treeName} />
     ),
   }
   const OverlayComponents = {
@@ -282,8 +254,6 @@ const Karte = ({
   const activeOverlaysSorted = sortBy(activeOverlays, activeOverlay =>
     overlays.findIndex(o => o.value === activeOverlay),
   )
-
-  console.log('Karte rendering', { mapIdsFiltered, mapPopIdsFiltered })
 
   return (
     <Container>
@@ -388,14 +358,6 @@ const Karte = ({
           <LayersControl
             data={data}
             treeName={treeName}
-            mapIdsFiltered={mapIdsFiltered}
-            mapPopIdsFiltered={mapPopIdsFiltered}
-            mapTpopIdsFiltered={mapTpopIdsFiltered}
-            mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
-            mapBeobNichtZuzuordnenIdsFiltered={
-              mapBeobNichtZuzuordnenIdsFiltered
-            }
-            mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
             // this enforces rerendering when sorting changes
             activeOverlaysString={activeOverlays.join()}
             activeApfloraLayersString={activeApfloraLayers.join()}
