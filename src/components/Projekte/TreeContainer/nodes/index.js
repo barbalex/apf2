@@ -201,6 +201,10 @@ export default ({
     ) {
       const projId = nodeUrl[1]
       if (nodeUrl.length === 2 && nodeUrl[0] === 'Projekte') {
+        /**
+         * TODO:
+         * can build calls be memoized?
+         */
         nodes = [
           ...nodes,
           ...buildApFolderNodes({
