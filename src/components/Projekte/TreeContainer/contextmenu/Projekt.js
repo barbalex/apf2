@@ -5,9 +5,15 @@ import { ContextMenu, MenuItem } from 'react-contextmenu'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 // TODO: add MenuItem for admins to add new projekt
-const Projekt = ({ onClick, tree }: { onClick: () => void, tree: Object }) => (
+const Projekt = ({
+  onClick,
+  treeName,
+}: {
+  onClick: () => void,
+  treeName: string,
+}) => (
   <ErrorBoundary>
-    <ContextMenu id={`${tree.name}projekt`}>
+    <ContextMenu id={`${treeName}projekt`}>
       <div className="react-contextmenu-title">Projekt</div>
       <MenuItem
         onClick={onClick}
