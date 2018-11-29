@@ -33,8 +33,8 @@ const MyAppBar = () => {
   useEffect(() => {
     window.matchMedia('print').addListener(mql => {
       setIsPrint(mql.matches)
-      return () => window.matchMedia('print').removeListener()
     })
+    return () => window.matchMedia('print').removeListener()
   }, [])
 
   return (
