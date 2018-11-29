@@ -52,28 +52,14 @@ const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
 const LayersControl = ({
   data,
   treeName,
-  mapIdsFiltered,
-  mapPopIdsFiltered,
-  mapTpopIdsFiltered,
-  mapBeobNichtBeurteiltIdsFiltered,
-  mapBeobNichtZuzuordnenIdsFiltered,
-  mapBeobZugeordnetIdsFiltered,
 }: {
   data: Object,
   treeName: string,
-  mapIdsFiltered: Array<String>,
-  mapPopIdsFiltered: Array<String>,
-  mapTpopIdsFiltered: Array<String>,
-  mapBeobNichtBeurteiltIdsFiltered: Array<String>,
-  mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
-  mapBeobZugeordnetIdsFiltered: Array<String>,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { apfloraLayers, overlays } = mobxStore
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   console.log('LayersControl', {
-    mapIdsFiltered,
-    mapPopIdsFiltered,
     activeNodes,
   })
 
@@ -147,16 +133,6 @@ const LayersControl = ({
           {apfloraLayersExpanded && (
             <ApfloraLayers
               treeName={treeName}
-              mapIdsFiltered={mapIdsFiltered}
-              mapPopIdsFiltered={mapPopIdsFiltered}
-              mapTpopIdsFiltered={mapTpopIdsFiltered}
-              mapBeobNichtBeurteiltIdsFiltered={
-                mapBeobNichtBeurteiltIdsFiltered
-              }
-              mapBeobNichtZuzuordnenIdsFiltered={
-                mapBeobNichtZuzuordnenIdsFiltered
-              }
-              mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
               /**
                * overlaysString enforces rererender
                * even when only the sorting changes

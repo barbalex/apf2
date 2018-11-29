@@ -431,12 +431,6 @@ const ApfloraLayers = ({
   setPopBounds,
   tpopBounds,
   setTpopBounds,
-  mapIdsFiltered,
-  mapPopIdsFiltered,
-  mapTpopIdsFiltered,
-  mapBeobNichtBeurteiltIdsFiltered,
-  mapBeobZugeordnetIdsFiltered,
-  mapBeobNichtZuzuordnenIdsFiltered,
   data,
   client,
 }: {
@@ -445,12 +439,6 @@ const ApfloraLayers = ({
   setPopBounds: () => void,
   tpopBounds: Array<Array<Number>>,
   setTpopBounds: () => void,
-  mapIdsFiltered: Array<String>,
-  mapPopIdsFiltered: Array<String>,
-  mapTpopIdsFiltered: Array<String>,
-  mapBeobNichtBeurteiltIdsFiltered: Array<String>,
-  mapBeobZugeordnetIdsFiltered: Array<String>,
-  mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
   data: Object,
   client: Object,
 }) => {
@@ -466,6 +454,14 @@ const ApfloraLayers = ({
     setAssigningBeob,
   } = mobxStore
   const tree = mobxStore[treeName]
+  const {
+    idsFiltered: mapIdsFiltered,
+    popIdsFiltered: mapPopIdsFiltered,
+    tpopIdsFiltered: mapTpopIdsFiltered,
+    beobNichtBeurteiltIdsFiltered: mapBeobNichtBeurteiltIdsFiltered,
+    beobNichtZuzuordnenIdsFiltered: mapBeobNichtZuzuordnenIdsFiltered,
+    beobZugeordnetIdsFiltered: mapBeobZugeordnetIdsFiltered,
+  } = mobxStore[treeName].map
 
   const onSortEnd = useCallback(
     ({ oldIndex, newIndex }) =>
