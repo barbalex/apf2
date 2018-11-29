@@ -9,16 +9,16 @@ import mobxStoreContext from '../../../../mobxStoreContext'
 
 const TpopfeldkontrzaehlFolder = ({
   onClick,
-  tree,
+  treeName,
 }: {
   onClick: () => void,
-  tree: Object,
+  treeName: string,
 }) => {
   const { user } = useContext(mobxStoreContext)
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${tree.name}tpopfeldkontrzaehlFolder`}>
+      <ContextMenu id={`${treeName}tpopfeldkontrzaehlFolder`}>
         <div className="react-contextmenu-title">Zählungen</div>
         {!userIsReadOnly(user.token) && (
           <MenuItem

@@ -11,10 +11,10 @@ import mobxStoreContext from '../../../../mobxStoreContext'
 const enhance = compose(observer)
 
 const Tpopfreiwkontr = ({
-  tree,
+  treeName,
   onClick,
 }: {
-  tree: Object,
+  treeName: string,
   onClick: () => void,
 }) => {
   const { copying, user } = useContext(mobxStoreContext)
@@ -29,7 +29,7 @@ const Tpopfreiwkontr = ({
   return (
     <ErrorBoundary>
       <ContextMenu
-        id={`${tree.name}tpopfreiwkontr`}
+        id={`${treeName}tpopfreiwkontr`}
         collect={props => props}
         onShow={onShow}
       >
