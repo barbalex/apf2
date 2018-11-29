@@ -99,6 +99,10 @@ const Container = styled.div`
   height: 100%;
   overflow: hidden;
 `
+const LoadingContainer = styled.div`
+  padding: 15px;
+  color: grey;
+`
 
 /**
  * DO NOT use component state / props to track mouseCoordinates
@@ -130,6 +134,7 @@ const Karte = ({
   refetchTree,
   dimensions,
   client,
+  loading,
 }: {
   treeName: string,
   onMouseMove: () => void,
@@ -137,6 +142,7 @@ const Karte = ({
   refetchTree: () => void,
   dimensions: Object,
   client: Object,
+  loading: boolean,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const {
@@ -254,6 +260,8 @@ const Karte = ({
   const activeOverlaysSorted = sortBy(activeOverlays, activeOverlay =>
     overlays.findIndex(o => o.value === activeOverlay),
   )
+
+  if (loading) return <LoadingContainer>Karte lädt daten...</LoadingContainer>
 
   return (
     <Container>
