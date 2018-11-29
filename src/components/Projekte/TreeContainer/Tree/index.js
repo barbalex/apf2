@@ -48,7 +48,6 @@ const LoadingDiv = styled.div`
 type Props = {
   treeName: String,
   data: Object,
-  loading: Boolean,
   mapBeobZugeordnetVisible: boolean,
   mapBeobNichtBeurteiltVisible: boolean,
   mapBeobNichtZuzuordnenVisible: boolean,
@@ -62,15 +61,14 @@ const noRowsRenderer = () => (
   </Container>
 )
 
-const Tree = ({ loading, data, treeName }: Props) => {
+const Tree = ({ data, treeName }: Props) => {
   // TODO:
   // when beob.artId is changed, saveArtIdToDb changes openNodes
   // problem is: Tree renders AFTERWARDS with OLD openNodes !!!???
   //console.log('Tree rendering')
   const mobxStore = useContext(mobxStoreContext)
-  const { mapFilter, activeApfloraLayers } = mobxStore
   const tree = mobxStore[treeName]
-  const { openNodes, activeNodeArray, nodes } = tree
+  const { activeNodeArray, nodes } = tree
   const rowRenderer = useCallback(
     ({ key, index, style }) => {
       const node = getSnapshot(nodes[index])
@@ -104,21 +102,6 @@ const Tree = ({ loading, data, treeName }: Props) => {
                 isEqual(node.url, activeNodeArray),
               )}
               width={width}
-              // force rerender when:
-              // ...second query finisches
-              // TODO: is this loading needed?
-              loading={loading}
-              // ...after copying and moving
-              //copying={copying}
-              //moving={moving}
-              openNodes={openNodes}
-              // ...map filter changes
-              mapFilterString={mapFilter.features.toString()}
-              // ...active apflora layers change
-              activeApfloraLayersString={activeApfloraLayers.join()}
-              // ...when anything changes in the queried data
-              // without this AP label did not update when Art was changed
-              dataString={JSON.stringify(data)}
             />
           )}
         </AutoSizer>

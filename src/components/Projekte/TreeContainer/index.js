@@ -503,14 +503,7 @@ const TreeContainer = ({
           {!!activeNodes.projekt && <ApFilter treeName={treeName} />}
         </LabelFilterContainer>
         <InnerTreeContainer>
-          <Tree
-            treeName={treeName}
-            data={data}
-            // TODO: is this loading needed?
-            loading={loading}
-            activeNodes={activeNodes}
-            activeApfloraLayers={activeApfloraLayers}
-          />
+          <Tree treeName={treeName} data={data} />
         </InnerTreeContainer>
         <CmApFolder onClick={handleClick} tree={tree} />
         <CmAp onClick={handleClick} tree={tree} />
@@ -522,11 +515,7 @@ const TreeContainer = ({
         <CmEkfzaehleinheit onClick={handleClick} tree={tree} />
         <CmApartFolder onClick={handleClick} tree={tree} />
         <CmApart onClick={handleClick} tree={tree} />
-        <CmBeobZugeordnetFolder
-          onClick={handleClick}
-          tree={tree}
-          activeApfloraLayers={activeApfloraLayers}
-        />
+        <CmBeobZugeordnetFolder onClick={handleClick} tree={tree} />
         <CmBerFolder onClick={handleClick} tree={tree} />
         <CmBer onClick={handleClick} tree={tree} />
         <CmApberFolder onClick={handleClick} tree={tree} />
