@@ -6,7 +6,6 @@ import withProps from 'recompose/withProps'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import get from 'lodash/get'
 import upperFirst from 'lodash/upperFirst'
-import isEqual from 'lodash/isEqual'
 import flatten from 'lodash/flatten'
 import Button from '@material-ui/core/Button'
 import jwtDecode from 'jwt-decode'
@@ -226,13 +225,12 @@ const ProjekteContainer = props => {
   const mobxStore = useContext(mobxStoreContext)
   const {
     activeApfloraLayers,
-    activeOverlays,
     mapFilter: mapFilterRaw,
     nodeFilter,
     user,
     isPrint,
   } = mobxStore
-  const { activeNodeArray, openNodes, map, setNodes } = mobxStore[treeName]
+  const { activeNodeArray, map, setNodes } = mobxStore[treeName]
   const {
     setIdsFiltered,
     setPopIdsFiltered,
@@ -243,12 +241,6 @@ const ProjekteContainer = props => {
   } = map
   const { idb } = useContext(idbContext)
   const mapFilter = mapFilterRaw.toJSON()
-
-  /*console.log('ProjektContainer, dataTpops', {
-    dataTpops,
-    activeNodeArray,
-    openNodes,
-  })*/
 
   const queryArray = [
     dataAdresses,
@@ -534,9 +526,7 @@ const ProjekteContainer = props => {
                 treeName={treeName}
                 data={data}
                 loading={loading}
-                openNodes={openNodes}
                 refetchTree={refetch}
-                mapFilter={mapFilter}
               />
             </ReflexElement>
           )}
@@ -569,7 +559,7 @@ const ProjekteContainer = props => {
                 refetchTree={refetch}
                 loading={loading}
                 // SortedStrings enforce rerendering when sorting or visibility changes
-                activeOverlaysString={activeOverlays.join()}
+                //activeOverlaysString={activeOverlays.join()}
                 activeApfloraLayersString={activeApfloraLayers.join()}
                 beobsString={beobs.toString()}
               />
@@ -581,7 +571,7 @@ const ProjekteContainer = props => {
               tabs.includes('karte')) && <ReflexSplitter />}
           {tabs.includes('exporte') && (
             <ReflexElement>
-              <Exporte mapFilter={mapFilter} />
+              <Exporte />
             </ReflexElement>
           )}
         </ReflexContainer>
