@@ -62,10 +62,6 @@ const noRowsRenderer = () => (
 )
 
 const Tree = ({ data, treeName }: Props) => {
-  // TODO:
-  // when beob.artId is changed, saveArtIdToDb changes openNodes
-  // problem is: Tree renders AFTERWARDS with OLD openNodes !!!???
-  //console.log('Tree rendering')
   const mobxStore = useContext(mobxStoreContext)
   const tree = mobxStore[treeName]
   const { activeNodeArray, nodes } = tree
