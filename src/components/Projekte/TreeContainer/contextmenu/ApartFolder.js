@@ -9,16 +9,16 @@ import mobxStoreContext from '../../../../mobxStoreContext'
 
 const ApartFolder = ({
   onClick,
-  tree,
+  treeName,
 }: {
   onClick: () => void,
-  tree: Object,
+  treeName: string,
 }) => {
   const { user } = useContext(mobxStoreContext)
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${tree.name}apartFolder`}>
+      <ContextMenu id={`${treeName}apartFolder`}>
         <div className="react-contextmenu-title">AP-Arten</div>
         {!userIsReadOnly(user.token) && (
           <>

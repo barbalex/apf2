@@ -7,7 +7,13 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
-const Ap = ({ onClick, tree }: { onClick: () => void, tree: Object }) => {
+const Ap = ({
+  onClick,
+  treeName,
+}: {
+  onClick: () => void,
+  treeName: string,
+}) => {
   const mobxStore = useContext(mobxStoreContext)
   const {
     activeApfloraLayers,
@@ -22,7 +28,7 @@ const Ap = ({ onClick, tree }: { onClick: () => void, tree: Object }) => {
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${tree.name}ap`}>
+      <ContextMenu id={`${treeName}ap`}>
         <div className="react-contextmenu-title">Aktionsplan</div>
         <MenuItem
           onClick={onClick}
