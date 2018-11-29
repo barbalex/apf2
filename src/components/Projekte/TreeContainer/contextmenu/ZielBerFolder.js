@@ -9,16 +9,16 @@ import mobxStoreContext from '../../../../mobxStoreContext'
 
 const ZielBerFolder = ({
   onClick,
-  tree,
+  treeName,
 }: {
   onClick: () => void,
-  tree: Object,
+  treeName: string,
 }) => {
   const { user } = useContext(mobxStoreContext)
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${tree.name}zielberFolder`}>
+      <ContextMenu id={`${treeName}zielberFolder`}>
         <div className="react-contextmenu-title">Berichte</div>
         {!userIsReadOnly(user.token) && (
           <MenuItem

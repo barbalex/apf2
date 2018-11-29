@@ -9,16 +9,16 @@ import mobxStoreContext from '../../../../mobxStoreContext'
 
 const ZielFolder = ({
   onClick,
-  tree,
+  treeName,
 }: {
   onClick: () => void,
-  tree: Object,
+  treeName: string,
 }) => {
   const { user } = useContext(mobxStoreContext)
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${tree.name}zielFolder`}>
+      <ContextMenu id={`${treeName}zielFolder`}>
         <div className="react-contextmenu-title">Ziele</div>
         <MenuItem
           onClick={onClick}

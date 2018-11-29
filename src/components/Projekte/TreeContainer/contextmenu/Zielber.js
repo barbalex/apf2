@@ -10,7 +10,13 @@ import mobxStoreContext from '../../../../mobxStoreContext'
 
 const enhance = compose(observer)
 
-const Zielber = ({ tree, onClick }: { tree: Object, onClick: () => void }) => {
+const Zielber = ({
+  treeName,
+  onClick,
+}: {
+  treeName: string,
+  onClick: () => void,
+}) => {
   const { user } = useContext(mobxStoreContext)
 
   // eslint-disable-next-line no-unused-vars
@@ -20,7 +26,7 @@ const Zielber = ({ tree, onClick }: { tree: Object, onClick: () => void }) => {
   return (
     <ErrorBoundary>
       <ContextMenu
-        id={`${tree.name}zielber`}
+        id={`${treeName}zielber`}
         collect={props => props}
         onShow={onShow}
       >

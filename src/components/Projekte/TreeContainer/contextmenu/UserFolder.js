@@ -7,12 +7,18 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
-const Apfolder = ({ onClick, tree }: { onClick: () => void, tree: Object }) => {
+const Apfolder = ({
+  onClick,
+  treeName,
+}: {
+  onClick: () => void,
+  treeName: string,
+}) => {
   const { user } = useContext(mobxStoreContext)
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${tree.name}userFolder`}>
+      <ContextMenu id={`${treeName}userFolder`}>
         <div className="react-contextmenu-title">Benutzer</div>
         <MenuItem
           onClick={onClick}
