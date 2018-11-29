@@ -41,10 +41,12 @@ const enhance = compose(
 const Pop = ({
   treeName,
   data,
+  refetchTree,
   client,
 }: {
   treeName: string,
   data: Object,
+  refetchTree: () => void,
   client: Object,
 }) => {
   const { nodeFilter, nodeFilterSetValue } = useContext(mobxStoreContext)
@@ -113,6 +115,13 @@ const Pop = ({
           })
         } catch (error) {
           return setErrors({ [field]: error.message })
+        }
+        // update tpop on map
+        if (
+          (value && ((field === 'y' && row.x) || (field === 'x' && row.y))) ||
+          (!value && (field === 'y' || field === 'x'))
+        ) {
+          refetchTree('popForMap')
         }
         setErrors({})
       }

@@ -89,9 +89,9 @@ export default ({
               )}`}
             </div>
             <div>
-              {`Koordinaten: ${tpop.x.toLocaleString(
-                'de-ch',
-              )} / ${tpop.y.toLocaleString('de-ch')}`}
+              {`Koordinaten: ${
+                tpop.x ? tpop.x.toLocaleString('de-ch') : ''
+              } / ${tpop.y ? tpop.y.toLocaleString('de-ch') : ''}`}
             </div>
             <a
               href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${get(

@@ -98,7 +98,6 @@ const Tpop = ({
         })
       } else {
         try {
-          console.log('Tpop', { value, field })
           await client.mutate({
             mutation: updateTpopByIdGql,
             variables: {
@@ -165,8 +164,13 @@ const Tpop = ({
         } catch (error) {
           return setErrors({ [field]: error.message })
         }
-        console.log('Tpop:', { field, value })
-        if (field === 'y') refetchTree()
+        // update tpop on map
+        if (
+          (value && ((field === 'y' && row.x) || (field === 'x' && row.y))) ||
+          (!value && (field === 'y' || field === 'x'))
+        ) {
+          refetchTree('tpopForMap')
+        }
         setErrors({})
       }
     },
