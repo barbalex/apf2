@@ -164,17 +164,18 @@ export default ({
     // because every lower folder gets previous nodes passed
     .sort(sort)
   //console.log('nodes', { data, openNodes })
-  const projektNodes = [...buildProjektNodes({ data, treeName })]
+  const projektNodes = [...buildProjektNodes({ data, treeName, mobxStore })]
   const userFolderNode = buildUserFolderNode({
     data,
     treeName,
     projektNodes,
     loading: dataUsers.loading,
+    mobxStore,
   })
 
   let nodes = [...projektNodes, userFolderNode]
   if (role === 'apflora_manager') {
-    nodes = [...nodes, buildWlFolderNode({ projektNodes })]
+    nodes = [...nodes, buildWlFolderNode({ projektNodes, mobxStore })]
   }
   let apNodes
   let popNodes
@@ -259,6 +260,7 @@ export default ({
           projektNodes,
           projId,
           nodeFilter: nodeFilter[treeName],
+          mobxStore,
         })
         nodes = [...nodes, ...apNodes]
       }
@@ -317,6 +319,7 @@ export default ({
             projektNodes,
             projId,
             apId,
+            mobxStore,
           }),
           ...buildBerFolderNodes({
             nodes,
