@@ -22,6 +22,7 @@ const TestdataMessage = ({
   const apIdFromTree = get(tree, 'activeNodes.ap')
   const apIdUsed = apIdFromTree || apId
   const isTestAp = apIdUsed && constants.testAps.includes(apIdUsed)
+
   if (isTestAp) {
     return (
       <Div>Das ist ein Test-Aktionsplan. Sie können alles ausprobieren!</Div>

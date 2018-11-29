@@ -359,45 +359,50 @@ const Tpopfreiwkontr = ({
 
   useEffect(
     () => {
-      if (data.loading) return
-      // loading data just finished
-      // check if tpopkontr exist
-      const tpopkontrCount = get(
-        data,
-        'tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes',
-        [],
-      ).length
-      if (tpopkontrCount === 0) {
-        // add counts for all ekfzaehleinheit
-        // BUT DANGER: only for ekfzaehleinheit with zaehleinheit_id
-        const ekfzaehleinheits = get(
+      if (!data.loading) {
+        // loading data just finished
+        // check if tpopkontr exist
+        const tpopkontrCount = get(
           data,
-          'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekfzaehleinheitsByApId.nodes',
+          'tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes',
           [],
-        )
-          // remove ekfzaehleinheits without zaehleinheit_id
-          .filter(
-            z =>
-              !!get(z, 'tpopkontrzaehlEinheitWerteByZaehleinheitId.code', null),
+        ).length
+        if (tpopkontrCount === 0) {
+          // add counts for all ekfzaehleinheit
+          // BUT DANGER: only for ekfzaehleinheit with zaehleinheit_id
+          const ekfzaehleinheits = get(
+            data,
+            'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekfzaehleinheitsByApId.nodes',
+            [],
           )
-
-        Promise.all(
-          ekfzaehleinheits.map(z =>
-            client.mutate({
-              mutation: createTpopkontrzaehl,
-              variables: {
-                tpopkontrId: row.id,
-                einheit: get(
+            // remove ekfzaehleinheits without zaehleinheit_id
+            .filter(
+              z =>
+                !!get(
                   z,
                   'tpopkontrzaehlEinheitWerteByZaehleinheitId.code',
                   null,
                 ),
-              },
-            }),
-          ),
-        )
-          .then(() => data.refetch())
-          .catch(error => addError(error))
+            )
+
+          Promise.all(
+            ekfzaehleinheits.map(z =>
+              client.mutate({
+                mutation: createTpopkontrzaehl,
+                variables: {
+                  tpopkontrId: row.id,
+                  einheit: get(
+                    z,
+                    'tpopkontrzaehlEinheitWerteByZaehleinheitId.code',
+                    null,
+                  ),
+                },
+              }),
+            ),
+          )
+            .then(() => data.refetch())
+            .catch(error => addError(error))
+        }
       }
     },
     [data.loading],

@@ -25,11 +25,6 @@ const ProjektContainerContainer = ({
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { openNodes, activeNodeArray } = mobxStore[treeName]
-  /*
-  console.log('ProjektContainerContainer', {
-    openNodes: getSnapshot(openNodes),
-    activeNodeArray: getSnapshot(activeNodeArray),
-  })*/
 
   /**
    * pass snapshots

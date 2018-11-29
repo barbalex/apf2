@@ -161,6 +161,7 @@ const ApberForAp = ({
   )
   const yearOfFirstTpopber = !!firstTpopber ? firstTpopber.jahr : 0
   const startJahr = get(apData, 'startJahr', 0)
+
   if (startJahr === 0)
     return (
       <ErrorBoundary>
