@@ -120,7 +120,7 @@ const Tpopfeldkontr = ({
     async event => {
       const field = event.target.name
       let value = event.target.value
-      if (value === undefined) value = null
+      if ([undefined, ''].includes(value)) value = null
       /**
        * only save if value changed
        */

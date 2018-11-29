@@ -78,7 +78,7 @@ const User = ({
     async event => {
       const field = event.target.name
       let value = event.target.value
-      if (value === undefined) value = null
+      if ([undefined, ''].includes(value)) value = null
       const row = get(data, 'userByName', {})
       /**
        * only save if value changed
@@ -128,7 +128,7 @@ const User = ({
   const onBlurPassword2 = useCallback(
     async event => {
       let value = event.target.value
-      if (value === undefined) value = null
+      if ([undefined, ''].includes(value)) value = null
       setPassword2ErrorText('')
       const password2 = event.target.value
       setPassword2(password2)

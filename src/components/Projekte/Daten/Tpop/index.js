@@ -56,11 +56,13 @@ const Tpop = ({
   dimensions = { width: 380 },
   treeName,
   data,
+  refetchTree,
   client,
 }: {
   dimensions: Object,
   treeName: string,
   data: Object,
+  refetchTree: () => void,
   client: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
@@ -82,7 +84,7 @@ const Tpop = ({
     async event => {
       const field = event.target.name
       let value = event.target.value
-      if (value === undefined) value = null
+      if ([undefined, ''].includes(value)) value = null
       /**
        * only save if value changed
        */
@@ -94,9 +96,9 @@ const Tpop = ({
           key: field,
           value,
         })
-        //refetchTree()
       } else {
         try {
+          console.log('Tpop', { value, field })
           await client.mutate({
             mutation: updateTpopByIdGql,
             variables: {
@@ -163,6 +165,8 @@ const Tpop = ({
         } catch (error) {
           return setErrors({ [field]: error.message })
         }
+        console.log('Tpop:', { field, value })
+        if (field === 'y') refetchTree()
         setErrors({})
       }
     },
