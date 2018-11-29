@@ -74,12 +74,15 @@ const Qk = ({
   data,
   berichtjahr,
   setBerichtjahr,
+  mobxStore,
 }: {
   data: Object,
   berichtjahr: number,
   setBerichtjahr: () => void,
+  mobxStore: Object,
 }) => {
-  const { ktZh, setKtZh, addError } = useContext(mobxStoreContext)
+  const { ktZh, setKtZh, addError } = mobxStore
+  const { refetch, loading } = data
 
   const [filter, setFilter] = useState('')
 
@@ -108,6 +111,12 @@ const Qk = ({
   useEffect(() => {
     if (!ktZh) fetchKtZh({ setKtZh, addError })
   }, [])
+
+  useEffect(() => {
+    if (!loading) {
+      refetch()
+    }
+  })
 
   if (data.error) return `Fehler: ${data.error.message}`
   return (
