@@ -23,18 +23,17 @@ export default ({
   pops,
   treeName,
   data,
-  mapIdsFiltered,
   mobxStore,
 }: {
   pops: Array<Object>,
   treeName: string,
   data: Object,
-  mapIdsFiltered: Array<String>,
   mobxStore: Object,
 }): Object => {
   const { apfloraLayers, activeApfloraLayers, popLabelUsingNr } = mobxStore
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
+  const { idsFiltered: mapIdsFiltered } = mobxStore[treeName].map
   const visible = activeApfloraLayers.includes('pop')
   const mcgOptions = {
     maxClusterRadius: 66,

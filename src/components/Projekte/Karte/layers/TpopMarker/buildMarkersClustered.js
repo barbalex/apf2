@@ -20,18 +20,17 @@ export default ({
   tpops,
   treeName,
   data,
-  mapIdsFiltered,
   mobxStore,
 }: {
   tpops: Array<Object>,
   treeName: string,
   data: Object,
-  mapIdsFiltered: Array<String>,
   mobxStore: Object,
 }): Object => {
   const { apfloraLayers, tpopLabelUsingNr } = mobxStore
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
+  const { idsFiltered: mapIdsFiltered } = mobxStore[treeName].map
 
   const mcgOptions = {
     maxClusterRadius: 66,

@@ -14,11 +14,9 @@ const enhance = compose(observer)
 const PmcComponent = ({
   treeName,
   data,
-  mapIdsFiltered,
 }: {
   treeName: string,
   data: Object,
-  mapIdsFiltered: Array<String>,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { nodeFilter } = mobxStore
@@ -93,7 +91,6 @@ const PmcComponent = ({
     pops,
     treeName,
     data,
-    mapIdsFiltered,
     mobxStore,
   })
   return <PopMarkerCluster markers={popMarkers} />
