@@ -59,9 +59,6 @@ const LayersControl = ({
   const mobxStore = useContext(mobxStoreContext)
   const { apfloraLayers, overlays } = mobxStore
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
-  console.log('LayersControl', {
-    activeNodes,
-  })
 
   const [baseLayersExpanded, toggleBaseLayersExpanded] = useState(false)
   const [overlaysExpanded, toggleOverlaysExpanded] = useState(false)
