@@ -16,17 +16,15 @@ const StyledH3 = styled.h3`
 export default ({
   beobs,
   treeName,
-  mapIdsFiltered,
   mobxStore,
 }: {
   beobs: Array<Object>,
   treeName: string,
-  mapIdsFiltered: Array<String>,
-  mapIdsFiltered: Array<String>,
   mobxStore: Object,
 }): Array<Object> => {
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
+  const { idsFiltered: mapIdsFiltered } = mobxStore[treeName].map
 
   return beobs.map(beob => {
     const isHighlighted = mapIdsFiltered.includes(beob.id)

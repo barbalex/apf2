@@ -233,7 +233,15 @@ const ProjekteContainer = props => {
     isPrint,
     assigningBeob,
   } = mobxStore
-  const { activeNodeArray, openNodes } = mobxStore[treeName]
+  const { activeNodeArray, openNodes, map } = mobxStore[treeName]
+  const {
+    setIdsFiltered,
+    setPopIdsFiltered,
+    setTpopIdsFiltered,
+    setBeobNichtBeurteiltIdsFiltered,
+    setBeobNichtZuzuordnenIdsFiltered,
+    setBeobZugeordnetIdsFiltered,
+  } = map
   const { idb } = useContext(idbContext)
   const mapFilter = mapFilterRaw.toJSON()
 
@@ -426,37 +434,41 @@ const ProjekteContainer = props => {
     xKey: 'x',
     yKey: 'y',
   })
+  setPopIdsFiltered(mapPopIdsFiltered)
   const pops = get(data, 'popForMap.nodes', [])
-  const mapTpopsData = flatten(pops.map(n => get(n, 'tpopsByPopId.nodes', [])))
   const mapTpopIdsFiltered = idsInsideFeatureCollection({
     mapFilter,
-    data: mapTpopsData,
+    data: flatten(pops.map(n => get(n, 'tpopsByPopId.nodes', []))),
   })
+  setTpopIdsFiltered(mapTpopIdsFiltered)
   const mapBeobNichtBeurteiltIdsFiltered = idsInsideFeatureCollection({
     mapFilter,
     data: get(data, `beobNichtBeurteiltForMap.nodes`, []),
   })
+  setBeobNichtBeurteiltIdsFiltered(mapBeobNichtBeurteiltIdsFiltered)
   const mapBeobNichtZuzuordnenIdsFiltered = idsInsideFeatureCollection({
     mapFilter,
     data: get(data, `beobNichtZuzuordnenForMap.nodes`, []),
   })
+  setBeobNichtZuzuordnenIdsFiltered(mapBeobNichtZuzuordnenIdsFiltered)
   const mapBeobZugeordnetIdsFiltered = idsInsideFeatureCollection({
     mapFilter,
     data: get(data, `beobZugeordnetForMap.nodes`, []),
   })
+  setBeobZugeordnetIdsFiltered(mapBeobZugeordnetIdsFiltered)
   // when no map filter exists nodes in activeNodeArray should be highlighted
-  let mapIdsFiltered = getSnapshot(activeNodeArray)
+  setIdsFiltered(getSnapshot(activeNodeArray))
   if (activeApfloraLayers.includes('mapFilter')) {
     // when map filter exists, nodes in map filter should be highlighted
-    mapIdsFiltered = [
+    setIdsFiltered([
       ...mapPopIdsFiltered,
       ...mapTpopIdsFiltered,
       ...mapBeobNichtBeurteiltIdsFiltered,
       ...mapBeobNichtZuzuordnenIdsFiltered,
       ...mapBeobZugeordnetIdsFiltered,
-    ]
+    ])
   }
-  console.log('ProjektContainer', { mapIdsFiltered, mapPopIdsFiltered })
+  console.log('ProjektContainer', { mapPopIdsFiltered })
   const aparts = get(
     data,
     'projektById.apsByProjId.nodes[0].apartsByApId.nodes',
@@ -492,7 +504,6 @@ const ProjekteContainer = props => {
                 openNodes={openNodes}
                 refetchTree={refetch}
                 mapFilter={mapFilter}
-                mapIdsFiltered={mapIdsFiltered}
               />
             </ReflexElement>
           )}
@@ -535,16 +546,6 @@ const ProjekteContainer = props => {
                 data={data}
                 key={tabs.toString()}
                 refetchTree={refetch}
-                mapIdsFiltered={mapIdsFiltered}
-                mapPopIdsFiltered={mapPopIdsFiltered}
-                mapTpopIdsFiltered={mapTpopIdsFiltered}
-                mapBeobNichtBeurteiltIdsFiltered={
-                  mapBeobNichtBeurteiltIdsFiltered
-                }
-                mapBeobNichtZuzuordnenIdsFiltered={
-                  mapBeobNichtZuzuordnenIdsFiltered
-                }
-                mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
                 beobZugeordnetAssigning={assigningBeob}
                 // SortedStrings enforce rerendering when sorting or visibility changes
                 activeOverlaysString={activeOverlays.join()}
