@@ -54,7 +54,6 @@ type Props = {
   mapBeobNichtZuzuordnenVisible: boolean,
   mapPopVisible: boolean,
   mapTpopVisible: boolean,
-  mapIdsFiltered: Array<String>,
 }
 
 const noRowsRenderer = () => (
@@ -63,7 +62,7 @@ const noRowsRenderer = () => (
   </Container>
 )
 
-const Tree = ({ nodes, loading, data, treeName, mapIdsFiltered }: Props) => {
+const Tree = ({ nodes, loading, data, treeName }: Props) => {
   // TODO:
   // when beob.artId is changed, saveArtIdToDb changes openNodes
   // problem is: Tree renders AFTERWARDS with OLD openNodes !!!???
@@ -84,11 +83,10 @@ const Tree = ({ nodes, loading, data, treeName, mapIdsFiltered }: Props) => {
           node={node}
           data={data}
           treeName={treeName}
-          mapIdsFiltered={mapIdsFiltered}
         />
       )
     },
-    [data, treeName, mapIdsFiltered],
+    [data, treeName],
   )
 
   return (

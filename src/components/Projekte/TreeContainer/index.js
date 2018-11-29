@@ -169,7 +169,6 @@ const TreeContainer = ({
   nodes,
   data,
   loading,
-  mapIdsFiltered,
   client,
 }: {
   treeName: String,
@@ -180,7 +179,6 @@ const TreeContainer = ({
   activeNode: Object,
   loading: Boolean,
   refetchTree: () => void,
-  mapIdsFiltered: Array<String>,
   client: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
@@ -523,7 +521,6 @@ const TreeContainer = ({
             loading={loading}
             activeNodes={activeNodes}
             activeApfloraLayers={activeApfloraLayers}
-            mapIdsFiltered={mapIdsFiltered}
           />
         </InnerTreeContainer>
         <CmApFolder onClick={handleClick} tree={tree} />
