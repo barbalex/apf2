@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import findIndex from 'lodash/findIndex'
 import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
+import { getSnapshot } from 'mobx-state-tree'
 
 import Row from './Row'
 
@@ -47,7 +48,6 @@ const LoadingDiv = styled.div`
 type Props = {
   treeName: String,
   data: Object,
-  nodes: Array<Object>,
   loading: Boolean,
   mapBeobZugeordnetVisible: boolean,
   mapBeobNichtBeurteiltVisible: boolean,
@@ -62,7 +62,7 @@ const noRowsRenderer = () => (
   </Container>
 )
 
-const Tree = ({ nodes, loading, data, treeName }: Props) => {
+const Tree = ({ loading, data, treeName }: Props) => {
   // TODO:
   // when beob.artId is changed, saveArtIdToDb changes openNodes
   // problem is: Tree renders AFTERWARDS with OLD openNodes !!!???
@@ -70,10 +70,10 @@ const Tree = ({ nodes, loading, data, treeName }: Props) => {
   const mobxStore = useContext(mobxStoreContext)
   const { mapFilter, activeApfloraLayers } = mobxStore
   const tree = mobxStore[treeName]
-  const { openNodes, activeNodeArray } = tree
+  const { openNodes, activeNodeArray, nodes } = tree
   const rowRenderer = useCallback(
     ({ key, index, style }) => {
-      const node = nodes[index]
+      const node = getSnapshot(nodes[index])
 
       return (
         <Row

@@ -29,12 +29,10 @@ const enhance = compose(withApollo)
 const LabelFilter = ({
   treeName,
   activeNode,
-  nodes,
   client,
 }: {
   treeName: String,
   activeNode: Object,
-  nodes: Array<Object>,
   client: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)

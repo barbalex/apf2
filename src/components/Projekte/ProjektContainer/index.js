@@ -232,7 +232,7 @@ const ProjekteContainer = props => {
     user,
     isPrint,
   } = mobxStore
-  const { activeNodeArray, openNodes, map } = mobxStore[treeName]
+  const { activeNodeArray, openNodes, map, setNodes } = mobxStore[treeName]
   const {
     setIdsFiltered,
     setPopIdsFiltered,
@@ -418,6 +418,7 @@ const ProjekteContainer = props => {
     dataBeobAssignLines,
     mobxStore,
   })
+  setNodes(nodes)
   const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))
   // remove 2 to treat all same
   const tabs = [...tabsPassed].map(t => t.replace('2', ''))
@@ -540,7 +541,6 @@ const ProjekteContainer = props => {
               <TreeContainer
                 treeName={treeName}
                 data={data}
-                nodes={nodes}
                 activeNode={activeNode}
                 loading={loading}
                 openNodes={openNodes}

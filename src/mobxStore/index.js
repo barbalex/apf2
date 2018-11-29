@@ -1,5 +1,5 @@
 // @flow
-import { types } from 'mobx-state-tree'
+import { types, getSnapshot } from 'mobx-state-tree'
 import cloneDeep from 'lodash/cloneDeep'
 import isEqual from 'lodash/isEqual'
 import queryString from 'query-string'
@@ -277,8 +277,8 @@ const myTypes = types
       self.assigningBeob = val
     },
     setTreeKey({ tree, key, value }) {
-      const oldValue = self[tree][key]
-      const { urlQuery } = self
+      const oldValue = getSnapshot(self[tree][key])
+      const urlQuery = getSnapshot(self.urlQuery)
       // only write if changed
       if (!isEqual(oldValue, value)) {
         self[tree][key] = value

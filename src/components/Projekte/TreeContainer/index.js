@@ -166,7 +166,6 @@ const TreeContainer = ({
   treeName,
   activeNode,
   refetchTree,
-  nodes,
   data,
   loading,
   client,
@@ -175,7 +174,6 @@ const TreeContainer = ({
   flex: Number,
   handleClick: () => void,
   data: Object,
-  nodes: Array<Object>,
   activeNode: Object,
   loading: Boolean,
   refetchTree: () => void,
@@ -210,7 +208,7 @@ const TreeContainer = ({
   const datasetToDelete = toDelete
   const deleteDatasetModalIsVisible = !!datasetToDelete.id
   const tree = mobxStore[treeName]
-  const { openNodes } = tree
+  const { openNodes, nodes } = tree
 
   useEffect(() => {
     /**
@@ -483,7 +481,6 @@ const TreeContainer = ({
       popLabelUsingNr,
       tpopLabelUsingNr,
       toDelete,
-      nodes,
     ],
   )
   const showMapIfNotYetVisible = useCallback((projekteTabs: Array<String>) => {
@@ -505,18 +502,13 @@ const TreeContainer = ({
           <DeleteDatasetModal treeName={treeName} />
         )}
         <LabelFilterContainer>
-          <LabelFilter
-            treeName={treeName}
-            nodes={nodes}
-            activeNode={activeNode}
-          />
+          <LabelFilter treeName={treeName} activeNode={activeNode} />
           {!!activeNodes.projekt && <ApFilter treeName={treeName} />}
         </LabelFilterContainer>
         <InnerTreeContainer>
           <Tree
             treeName={treeName}
             data={data}
-            nodes={nodes}
             // TODO: is this loading needed?
             loading={loading}
             activeNodes={activeNodes}

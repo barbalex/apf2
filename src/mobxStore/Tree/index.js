@@ -4,21 +4,29 @@ import NodeLabelFilter, {
   defaultValue as defaultNodeLabelFilter,
 } from './NodeLabelFilter'
 import Map, { defaultValue as defaultMap } from './Map'
+import Node from './Node'
 
-export default types.model('Tree', {
-  name: types.optional(types.string, 'tree'),
-  activeNodeArray: types.optional(
-    types.array(types.union(types.string, types.number)),
-    [],
-  ),
-  openNodes: types.optional(
-    types.array(types.array(types.union(types.string, types.number))),
-    [],
-  ),
-  apFilter: types.optional(types.boolean, false),
-  nodeLabelFilter: types.optional(NodeLabelFilter, defaultNodeLabelFilter),
-  map: types.optional(Map, defaultMap),
-})
+export default types
+  .model('Tree', {
+    name: types.optional(types.string, 'tree'),
+    activeNodeArray: types.optional(
+      types.array(types.union(types.string, types.number)),
+      [],
+    ),
+    openNodes: types.optional(
+      types.array(types.array(types.union(types.string, types.number))),
+      [],
+    ),
+    apFilter: types.optional(types.boolean, false),
+    nodeLabelFilter: types.optional(NodeLabelFilter, defaultNodeLabelFilter),
+    map: types.optional(Map, defaultMap),
+    nodes: types.optional(types.array(Node), []),
+  })
+  .actions(self => ({
+    setNodes(val) {
+      self.nodes = val
+    },
+  }))
 
 export const defaultValue = {
   name: 'tree',
@@ -27,4 +35,5 @@ export const defaultValue = {
   apFilter: false,
   nodeLabelFilter: defaultNodeLabelFilter,
   map: defaultMap,
+  nodes: [],
 }
