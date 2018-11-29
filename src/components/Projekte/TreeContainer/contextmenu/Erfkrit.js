@@ -10,7 +10,13 @@ import mobxStoreContext from '../../../../mobxStoreContext'
 
 const enhance = compose(observer)
 
-const Erfkrit = ({ tree, onClick }: { tree: Object, onClick: () => void }) => {
+const Erfkrit = ({
+  treeName,
+  onClick,
+}: {
+  treeName: string,
+  onClick: () => void,
+}) => {
   const { user } = useContext(mobxStoreContext)
   // eslint-disable-next-line no-unused-vars
   const [label, changeLabel] = useState('')
@@ -19,7 +25,7 @@ const Erfkrit = ({ tree, onClick }: { tree: Object, onClick: () => void }) => {
   return (
     <ErrorBoundary>
       <ContextMenu
-        id={`${tree.name}erfkrit`}
+        id={`${treeName}erfkrit`}
         collect={props => props}
         onShow={onShow}
       >

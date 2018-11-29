@@ -4,9 +4,15 @@ import { ContextMenu, MenuItem } from 'react-contextmenu'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
-const Adresse = ({ onClick, tree }: { onClick: () => void, tree: Object }) => (
+const Adresse = ({
+  onClick,
+  treeName,
+}: {
+  onClick: () => void,
+  treeName: string,
+}) => (
   <ErrorBoundary>
-    <ContextMenu id={`${tree.name}adresse`}>
+    <ContextMenu id={`${treeName}adresse`}>
       <div className="react-contextmenu-title">Adresse</div>
       <MenuItem
         onClick={onClick}
