@@ -33,9 +33,12 @@ const EkfAdresse = ({
 }) => {
   const { setView, setEkfAdresseId } = useContext(mobxStoreContext)
   const choose = useCallback(async event => {
-    setEkfAdresseId(event.target.value)
-    setView('ekf')
     setAnchorEl(null)
+    // prevent this happening before seAnchor happened
+    setTimeout(() => {
+      setEkfAdresseId(event.target.value)
+      setView('ekf')
+    })
   })
 
   if (data.loading) return '...'

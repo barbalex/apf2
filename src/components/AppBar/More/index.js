@@ -65,7 +65,9 @@ const MyAppBar = ({
   })
   const showDeletedDatasets = useCallback(() => {
     setAnchorEl(null)
-    setShowDeletions(true)
+    // prevent following from happening
+    // before setAnchor has finished
+    setTimeout(() => setShowDeletions(true))
   })
   const onClickMehrButton = useCallback(event =>
     setAnchorEl(event.currentTarget),
@@ -73,11 +75,15 @@ const MyAppBar = ({
   const onClose = useCallback(() => setAnchorEl(null))
   const onClickExporte = useCallback(() => {
     setAnchorEl(null)
-    passedOnClickExporte()
+    // prevent following from happening
+    // before setAnchor has finished
+    setTimeout(() => passedOnClickExporte())
   })
   const onClickLogout = useCallback(() => {
     setAnchorEl(null)
-    logout(idb)
+    // prevent following from happening
+    // before setAnchor has finished
+    setTimeout(() => logout(idb))
   })
 
   return (

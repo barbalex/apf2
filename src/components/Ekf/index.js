@@ -50,8 +50,6 @@ const Ekf = () => {
   if (isPrint && tpopkontrId) {
     return (
       <Tpopfreiwkontr
-        id={tpopkontrId}
-        activeNodeArray={activeNodeArray}
         treeName={treeName}
         role={role}
         dimensions={{ width: 1000 }}
@@ -80,8 +78,6 @@ const Ekf = () => {
           >
             {tpopkontrId && (
               <Tpopfreiwkontr
-                id={tpopkontrId}
-                activeNodeArray={activeNodeArray}
                 treeName={treeName}
                 role={role}
                 dimensions={{ width: 1000 }}

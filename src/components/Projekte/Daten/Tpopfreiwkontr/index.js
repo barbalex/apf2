@@ -515,6 +515,8 @@ const Tpopfreiwkontr = ({
               saveToDb={saveToDb}
               errors={errors}
               showNew
+              einheitsUsed={einheitsUsed}
+              ekfzaehleinheits={ekfzaehleinheits}
               refetch={data.refetch}
             />
           )}
@@ -541,6 +543,8 @@ const Tpopfreiwkontr = ({
               saveToDb={saveToDb}
               errors={errors}
               showNew
+              einheitsUsed={einheitsUsed}
+              ekfzaehleinheits={ekfzaehleinheits}
               refetch={data.refetch}
             />
           )}
