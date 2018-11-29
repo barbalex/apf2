@@ -11,10 +11,10 @@ import mobxStoreContext from '../../../../mobxStoreContext'
 const enhance = compose(observer)
 
 const PopFolder = ({
-  tree,
+  treeName,
   onClick,
 }: {
-  tree: Object,
+  treeName: string,
   onClick: () => void,
 }) => {
   const { copying, user, moving } = useContext(mobxStoreContext)
@@ -32,7 +32,7 @@ const PopFolder = ({
   return (
     <ErrorBoundary>
       <ContextMenu
-        id={`${tree.name}popFolder`}
+        id={`${treeName}popFolder`}
         collect={props => props}
         onShow={onShow}
       >

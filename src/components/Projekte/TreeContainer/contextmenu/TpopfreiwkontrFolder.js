@@ -9,9 +9,9 @@ import mobxStoreContext from '../../../../mobxStoreContext'
 
 const TpopfreiwkontrFolder = ({
   onClick,
-  tree,
+  treeName,
 }: {
-  tree: Object,
+  treeName: string,
   onClick: () => void,
 }) => {
   const { copying, user, moving } = useContext(mobxStoreContext)
@@ -21,7 +21,7 @@ const TpopfreiwkontrFolder = ({
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${tree.name}tpopfreiwkontrFolder`}>
+      <ContextMenu id={`${treeName}tpopfreiwkontrFolder`}>
         <div className="react-contextmenu-title">Freiwilligen-Kontrollen</div>
         <MenuItem
           onClick={onClick}

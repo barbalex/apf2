@@ -8,10 +8,10 @@ import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
 const TpopmassnFolder = ({
-  tree,
+  treeName,
   onClick,
 }: {
-  tree: Object,
+  treeName: string,
   onClick: () => void,
 }) => {
   const { copying, user, moving } = useContext(mobxStoreContext)
@@ -21,7 +21,7 @@ const TpopmassnFolder = ({
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${tree.name}tpopmassnFolder`}>
+      <ContextMenu id={`${treeName}tpopmassnFolder`}>
         <div className="react-contextmenu-title">Massnahmen</div>
         {!userIsReadOnly(user.token) && (
           <>
