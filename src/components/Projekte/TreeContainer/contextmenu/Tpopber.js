@@ -10,7 +10,13 @@ import mobxStoreContext from '../../../../mobxStoreContext'
 
 const enhance = compose(observer)
 
-const Tpopber = ({ tree, onClick }: { tree: Object, onClick: () => void }) => {
+const Tpopber = ({
+  treeName,
+  onClick,
+}: {
+  treeName: string,
+  onClick: () => void,
+}) => {
   const { user } = useContext(mobxStoreContext)
   // eslint-disable-next-line no-unused-vars
   const [label, changeLabel] = useState('')
@@ -19,7 +25,7 @@ const Tpopber = ({ tree, onClick }: { tree: Object, onClick: () => void }) => {
   return (
     <ErrorBoundary>
       <ContextMenu
-        id={`${tree.name}tpopber`}
+        id={`${treeName}tpopber`}
         collect={props => props}
         onShow={onShow}
       >

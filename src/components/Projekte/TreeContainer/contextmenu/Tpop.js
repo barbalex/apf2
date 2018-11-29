@@ -7,7 +7,13 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
-const Tpop = ({ onClick, tree }: { onClick: () => void, tree: Object }) => {
+const Tpop = ({
+  onClick,
+  treeName,
+}: {
+  onClick: () => void,
+  treeName: string,
+}) => {
   const { copying, user, moving } = useContext(mobxStoreContext)
 
   const isMoving =
@@ -19,7 +25,7 @@ const Tpop = ({ onClick, tree }: { onClick: () => void, tree: Object }) => {
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${tree.name}tpop`}>
+      <ContextMenu id={`${treeName}tpop`}>
         <div className="react-contextmenu-title">Teil-Population</div>
         <MenuItem
           onClick={onClick}
@@ -58,7 +64,7 @@ const Tpop = ({ onClick, tree }: { onClick: () => void, tree: Object }) => {
             >
               lösche
             </MenuItem>
-            {tree.name === 'tree' && (
+            {treeName === 'tree' && (
               <MenuItem
                 onClick={onClick}
                 data={{
