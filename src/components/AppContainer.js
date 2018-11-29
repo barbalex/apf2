@@ -1,6 +1,7 @@
 // @flow
 import React, { lazy, Suspense, useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
+import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from './shared/ErrorBoundary'
 import Deletions from './Deletions'
@@ -59,4 +60,4 @@ const MyAppBar = () => {
   )
 }
 
-export default MyAppBar
+export default observer(MyAppBar)
