@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import { withApollo } from 'react-apollo'
+import { observer } from 'mobx-react-lite'
 
 import Select from '../../../shared/Select'
 import withData from './withData'
@@ -18,6 +19,7 @@ const Container = styled.div`
 const enhance = compose(
   withApollo,
   withData,
+  observer,
 )
 
 const EkfAdresse = ({
