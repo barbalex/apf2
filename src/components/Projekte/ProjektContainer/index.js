@@ -1,5 +1,5 @@
 // @flow
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withProps from 'recompose/withProps'
@@ -231,7 +231,6 @@ const ProjekteContainer = props => {
     nodeFilter,
     user,
     isPrint,
-    assigningBeob,
   } = mobxStore
   const { activeNodeArray, openNodes, map } = mobxStore[treeName]
   const {
@@ -373,6 +372,7 @@ const ProjekteContainer = props => {
     ...dataPopForMapMarkers,
     ...dataBeobAssignLines,
   }
+  // TODO: useMemo?
   const nodes = buildNodes({
     data,
     treeName,
@@ -427,38 +427,80 @@ const ProjekteContainer = props => {
       : tabs.length === 0
       ? 1
       : 1 / tabs.length
-  const mapPopIdsFiltered = idsInsideFeatureCollection({
-    mapFilter,
-    data: get(data, `popForMap.nodes`, []),
-    idKey: 'id',
-    xKey: 'x',
-    yKey: 'y',
-  })
+
+  const popForMapNodes = get(data, `popForMap.nodes`, [])
+  const mapPopIdsFiltered = useMemo(
+    () =>
+      idsInsideFeatureCollection({
+        mapFilter,
+        data: popForMapNodes,
+        idKey: 'id',
+        xKey: 'x',
+        yKey: 'y',
+      }),
+    [mapFilter, popForMapNodes],
+  )
   setPopIdsFiltered(mapPopIdsFiltered)
+
   const pops = get(data, 'popForMap.nodes', [])
-  const mapTpopIdsFiltered = idsInsideFeatureCollection({
-    mapFilter,
-    data: flatten(pops.map(n => get(n, 'tpopsByPopId.nodes', []))),
-  })
+  const tpopForMapNodes = flatten(
+    pops.map(n => get(n, 'tpopsByPopId.nodes', [])),
+  )
+  const mapTpopIdsFiltered = useMemo(
+    () =>
+      idsInsideFeatureCollection({
+        mapFilter,
+        data: tpopForMapNodes,
+      }),
+    [mapFilter, tpopForMapNodes],
+  )
   setTpopIdsFiltered(mapTpopIdsFiltered)
-  const mapBeobNichtBeurteiltIdsFiltered = idsInsideFeatureCollection({
-    mapFilter,
-    data: get(data, `beobNichtBeurteiltForMap.nodes`, []),
-  })
+
+  const beobNichtBeurteiltForMapNodes = get(
+    data,
+    `beobNichtBeurteiltForMap.nodes`,
+    [],
+  )
+  const mapBeobNichtBeurteiltIdsFiltered = useMemo(
+    () =>
+      idsInsideFeatureCollection({
+        mapFilter,
+        data: beobNichtBeurteiltForMapNodes,
+      }),
+    [mapFilter, beobNichtBeurteiltForMapNodes],
+  )
   setBeobNichtBeurteiltIdsFiltered(mapBeobNichtBeurteiltIdsFiltered)
-  const mapBeobNichtZuzuordnenIdsFiltered = idsInsideFeatureCollection({
-    mapFilter,
-    data: get(data, `beobNichtZuzuordnenForMap.nodes`, []),
-  })
+
+  const beobNichtZuzuordnenForMapNodes = get(
+    data,
+    `beobNichtZuzuordnenForMap.nodes`,
+    [],
+  )
+  const mapBeobNichtZuzuordnenIdsFiltered = useMemo(
+    () =>
+      idsInsideFeatureCollection({
+        mapFilter,
+        data: beobNichtZuzuordnenForMapNodes,
+      }),
+    [mapFilter, beobNichtZuzuordnenForMapNodes],
+  )
   setBeobNichtZuzuordnenIdsFiltered(mapBeobNichtZuzuordnenIdsFiltered)
-  const mapBeobZugeordnetIdsFiltered = idsInsideFeatureCollection({
-    mapFilter,
-    data: get(data, `beobZugeordnetForMap.nodes`, []),
-  })
+
+  const beobZugeordnetForMapNodes = get(data, `beobZugeordnetForMap.nodes`, [])
+  const mapBeobZugeordnetIdsFiltered = useMemo(
+    () =>
+      idsInsideFeatureCollection({
+        mapFilter,
+        data: beobZugeordnetForMapNodes,
+      }),
+    [mapFilter, beobZugeordnetForMapNodes],
+  )
   setBeobZugeordnetIdsFiltered(mapBeobZugeordnetIdsFiltered)
-  // when no map filter exists nodes in activeNodeArray should be highlighted
-  setIdsFiltered(getSnapshot(activeNodeArray))
-  if (activeApfloraLayers.includes('mapFilter')) {
+
+  if (!activeApfloraLayers.includes('mapFilter')) {
+    // when no map filter exists nodes in activeNodeArray should be highlighted
+    setIdsFiltered(getSnapshot(activeNodeArray))
+  } else {
     // when map filter exists, nodes in map filter should be highlighted
     setIdsFiltered([
       ...mapPopIdsFiltered,
@@ -468,7 +510,7 @@ const ProjekteContainer = props => {
       ...mapBeobZugeordnetIdsFiltered,
     ])
   }
-  console.log('ProjektContainer', { mapPopIdsFiltered })
+
   const aparts = get(
     data,
     'projektById.apsByProjId.nodes[0].apartsByApId.nodes',
@@ -536,17 +578,9 @@ const ProjekteContainer = props => {
               renderOnResize={true}
             >
               <Karte
-                /**
-                 * key of tabs is added to force mounting
-                 * when tabs change
-                 * without remounting grey space remains
-                 * when daten or tree tab is removed :-(
-                 */
                 treeName={treeName}
                 data={data}
-                key={tabs.toString()}
                 refetchTree={refetch}
-                beobZugeordnetAssigning={assigningBeob}
                 // SortedStrings enforce rerendering when sorting or visibility changes
                 activeOverlaysString={activeOverlays.join()}
                 activeApfloraLayersString={activeApfloraLayers.join()}
