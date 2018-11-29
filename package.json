@@ -12,7 +12,7 @@
     "docsify-cli": "4.3.0",
     "flow-bin": "0.87.0",
     "postgraphile": "4.0.1",
-    "postgraphile-plugin-connection-filter": "1.0.0-beta.20",
+    "postgraphile-plugin-connection-filter": "1.0.0-beta.21",
     "react-scripts": "2.1.1",
     "serve": "10.1.1",
     "source-map-explorer": "1.6.0"
@@ -58,7 +58,7 @@
     "leaflet.fullscreen": "1.4.5",
     "leaflet.markercluster": "1.4.1",
     "lodash": "4.17.11",
-    "material-ui-pickers": "2.0.2",
+    "material-ui-pickers": "2.0.3",
     "mobx": "5.6.0",
     "mobx-react-lite": "0.3.4",
     "mobx-state-tree": "3.8.1",
@@ -68,7 +68,7 @@
     "prop-types": "15.6.2",
     "query-string": "6.2.0",
     "react": "16.7.0-alpha.2",
-    "react-apollo": "2.3.1",
+    "react-apollo": "2.3.2",
     "react-contextmenu": "2.10.0",
     "react-copy-to-clipboard": "5.0.1",
     "react-dom": "16.7.0-alpha.2",
@@ -83,7 +83,7 @@
     "react-virtualized": "9.21.0",
     "react-window": "1.2.4",
     "recompose": "0.30.0",
-    "styled-components": "4.1.1",
+    "styled-components": "4.1.2",
     "typeface-roboto": "0.0.54"
   },
   "scripts": {
