@@ -14,7 +14,6 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import PrintIcon from '@material-ui/icons/PictureAsPdf'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
 
 import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
 import isNodeOpen from '../isNodeOpen'

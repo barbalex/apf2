@@ -24,7 +24,7 @@ const ProjektContainerContainer = ({
   projekteTabs: Array<string>,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { openNodes, activeNodeArray, apFilter } = mobxStore[treeName]
+  const { openNodes, activeNodeArray } = mobxStore[treeName]
   /*
   console.log('ProjektContainerContainer', {
     openNodes: getSnapshot(openNodes),

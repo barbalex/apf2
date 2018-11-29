@@ -3,7 +3,6 @@ import React, { lazy, Suspense, useContext } from 'react'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
 import ArrowBack from '@material-ui/icons/ArrowBack'
-import { getSnapshot } from 'mobx-state-tree'
 import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
@@ -46,7 +45,7 @@ const ApberForYear = lazy(() => import('./ApberForYear'))
 
 const Print = () => {
   const mobxStore = useContext(mobxStoreContext)
-  const { history, historyGoBack, setTreeKey, tree } = mobxStore
+  const { historyGoBack, tree } = mobxStore
   const { activeNodeArray } = tree
   const showApberForAp =
     activeNodeArray.length === 7 &&
