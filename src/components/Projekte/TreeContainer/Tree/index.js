@@ -80,7 +80,7 @@ const Tree = ({ data, treeName }: Props) => {
         />
       )
     },
-    [data, treeName],
+    [data, treeName, nodes],
   )
 
   return (
