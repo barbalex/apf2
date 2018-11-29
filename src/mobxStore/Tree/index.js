@@ -3,6 +3,7 @@ import { types } from 'mobx-state-tree'
 import NodeLabelFilter, {
   defaultValue as defaultNodeLabelFilter,
 } from './NodeLabelFilter'
+import Map, { defaultValue as defaultMap } from './Map'
 
 export default types.model('Tree', {
   name: types.optional(types.string, 'tree'),
@@ -16,6 +17,7 @@ export default types.model('Tree', {
   ),
   apFilter: types.optional(types.boolean, false),
   nodeLabelFilter: types.optional(NodeLabelFilter, defaultNodeLabelFilter),
+  map: types.optional(Map, defaultMap),
 })
 
 export const defaultValue = {
@@ -24,4 +26,5 @@ export const defaultValue = {
   openNodes: [],
   apFilter: false,
   nodeLabelFilter: defaultNodeLabelFilter,
+  map: defaultMap,
 }

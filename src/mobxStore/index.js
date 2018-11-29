@@ -336,6 +336,13 @@ const myTypes = types
         user: null,
       }
     },
+    setTreeMapKey({ tree, key, value }) {
+      const oldValue = self[tree].map[key]
+      // only write if changed
+      if (!isEqual(oldValue, value)) {
+        self[tree].map[key] = value
+      }
+    },
   }))
 
 export default myTypes
