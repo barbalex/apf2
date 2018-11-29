@@ -13,7 +13,6 @@ import { withApollo } from 'react-apollo'
 
 import TestdataMessage from './TestdataMessage'
 import types from '../../../mobxStore/NodeFilterTree/types'
-import withData from './withData'
 import mobxStoreContext from '../../../mobxStoreContext'
 
 const Container = styled.div`
@@ -64,7 +63,6 @@ const Symbols = styled.div`
 
 const enhance = compose(
   withApollo,
-  withData,
   observer,
 )
 
@@ -73,14 +71,12 @@ const FormTitle = ({
   apId,
   table,
   treeName,
-  data,
   client,
 }: {
   title: string,
   apId: string,
   table: string,
   treeName: string,
-  data: Object,
   client: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
