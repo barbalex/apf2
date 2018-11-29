@@ -1,4 +1,4 @@
-import React, { useContext, useState, useCallback } from 'react'
+import React, { useContext, useState, useCallback, useEffect } from 'react'
 import Control from 'react-leaflet-control'
 import styled from 'styled-components'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
@@ -60,43 +60,43 @@ const LayersControl = ({
   const { apfloraLayers, overlays } = mobxStore
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
 
-  const [baseLayersExpanded, toggleBaseLayersExpanded] = useState(false)
-  const [overlaysExpanded, toggleOverlaysExpanded] = useState(false)
-  const [apfloraLayersExpanded, toggleApfloraLayersExpanded] = useState(false)
+  const [baseLayersExpanded, setBaseLayersExpanded] = useState(false)
+  const [overlaysExpanded, setOverlaysExpanded] = useState(false)
+  const [apfloraLayersExpanded, setApfloraLayersExpanded] = useState(false)
 
   const onToggleBaseLayersExpanded = useCallback(
     event => {
       event.stopPropagation()
-      toggleBaseLayersExpanded(!baseLayersExpanded)
+      setBaseLayersExpanded(!baseLayersExpanded)
       if (overlaysExpanded) {
-        toggleOverlaysExpanded(!overlaysExpanded)
+        setOverlaysExpanded(!overlaysExpanded)
       }
       if (apfloraLayersExpanded) {
-        toggleApfloraLayersExpanded(!apfloraLayersExpanded)
+        setApfloraLayersExpanded(!apfloraLayersExpanded)
       }
     },
     [baseLayersExpanded, overlaysExpanded, apfloraLayersExpanded],
   )
   const onToggleOverlaysExpanded = useCallback(
     () => {
-      toggleOverlaysExpanded(!overlaysExpanded)
+      setOverlaysExpanded(!overlaysExpanded)
       if (baseLayersExpanded) {
-        toggleBaseLayersExpanded(!baseLayersExpanded)
+        setBaseLayersExpanded(!baseLayersExpanded)
       }
       if (apfloraLayersExpanded) {
-        toggleApfloraLayersExpanded(!apfloraLayersExpanded)
+        setApfloraLayersExpanded(!apfloraLayersExpanded)
       }
     },
     [overlaysExpanded, baseLayersExpanded, apfloraLayersExpanded],
   )
   const onToggleApfloraLayersExpanded = useCallback(
     () => {
-      toggleApfloraLayersExpanded(!apfloraLayersExpanded)
+      setApfloraLayersExpanded(!apfloraLayersExpanded)
       if (overlaysExpanded) {
-        toggleOverlaysExpanded(!overlaysExpanded)
+        setOverlaysExpanded(!overlaysExpanded)
       }
       if (baseLayersExpanded) {
-        toggleBaseLayersExpanded(!baseLayersExpanded)
+        setBaseLayersExpanded(!baseLayersExpanded)
       }
     },
     [overlaysExpanded, baseLayersExpanded, apfloraLayersExpanded],
@@ -112,6 +112,10 @@ const LayersControl = ({
     baseLayersExpanded || apfloraLayersExpanded || overlaysExpanded
       ? CardTitle
       : CardTitleApfloraOpen
+
+  // hack to get control to show on first load
+  // see: https://github.com/LiveBy/react-leaflet-control/issues/27#issuecomment-430564722
+  useEffect(() => setBaseLayersExpanded(false), [])
 
   return (
     <Control position="topright">

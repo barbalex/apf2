@@ -68,9 +68,9 @@ class PngControl extends Component {
      * click events
      * see: https://github.com/LiveBy/react-leaflet-control/issues/22
      */
-    window.L.DomEvent.disableClickPropagation(
+    /*window.L.DomEvent.disableClickPropagation(
       this.container.current,
-    ).disableScrollPropagation(this.container.current)
+    ).disableScrollPropagation(this.container.current)*/
   }
 
   render() {

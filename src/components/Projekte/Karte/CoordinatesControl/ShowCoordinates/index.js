@@ -18,15 +18,15 @@ const StyledDiv = styled.div`
 `
 
 const ShowCoordinates = ({
-  changeControlType,
+  setControlType,
 }: {
-  changeControlType: () => void,
+  setControlType: () => void,
 }) => {
   const { mapMouseCoordinates } = useContext(mobxStoreContext)
   const x = mapMouseCoordinates.x.toLocaleString('de-ch')
   const y = mapMouseCoordinates.y.toLocaleString('de-ch')
 
-  const onClick = useCallback(() => changeControlType('goto'))
+  const onClick = useCallback(() => setControlType('goto'))
 
   return (
     <StyledDiv onClick={onClick} title="Klicken um Koordinaten zu suchen">

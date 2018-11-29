@@ -44,10 +44,10 @@ const xIsValid = (x: ?number) => !x || (x >= 2485071 && x < 2828516)
 const yIsValid = (y: ?number) => !y || (y >= 1075346 && y < 1299942)
 
 const PanToCoordinates = ({
-  changeControlType,
+  setControlType,
   map,
 }: {
-  changeControlType: () => void,
+  setControlType: () => void,
   map: Object,
 }) => {
   const xkoordField = useRef(null)
@@ -83,7 +83,7 @@ const PanToCoordinates = ({
       if (marker) map.removeLayer(marker)
       setX('')
       setY('')
-      changeControlType('coordinates')
+      setControlType('coordinates')
     },
     [marker, map],
   )
@@ -92,7 +92,7 @@ const PanToCoordinates = ({
       const newTimeoutId = setTimeout(() => {
         if (gotoFocused) {
           changeGotoFocused(false)
-          changeControlType('coordinates')
+          setControlType('coordinates')
         }
       })
       changeTimeoutId(newTimeoutId)

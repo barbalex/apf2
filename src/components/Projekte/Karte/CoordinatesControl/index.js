@@ -1,10 +1,9 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import 'leaflet'
 import { withLeaflet } from 'react-leaflet'
 import Control from 'react-leaflet-control'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import withState from 'recompose/withState'
 
 import ShowCoordinates from './ShowCoordinates'
 import PanToCoordinates from './PanToCoordinates'
@@ -24,30 +23,23 @@ const StyledControl = styled(Control)`
   margin-right: 5px !important;
 `
 
-const enhance = compose(
-  withLeaflet,
-  withState('controlType', 'changeControlType', 'coordinates'),
-)
+const enhance = compose(withLeaflet)
 
-const CoordinatesControl = ({
-  controlType,
-  changeControlType,
-  leaflet,
-}: {
-  controlType: string,
-  changeControlType: () => void,
-  leaflet: Object,
-}) => (
-  <StyledControl position="bottomright">
-    {controlType === 'coordinates' ? (
-      <ShowCoordinates changeControlType={changeControlType} />
-    ) : (
-      <PanToCoordinates
-        changeControlType={changeControlType}
-        map={leaflet.map}
-      />
-    )}
-  </StyledControl>
-)
+const CoordinatesControl = ({ leaflet }: { leaflet: Object }) => {
+  const [controlType, setControlType] = useState('coordinates')
+  // hack to get control to show on first load
+  // see: https://github.com/LiveBy/react-leaflet-control/issues/27#issuecomment-430564722
+  useEffect(() => setControlType('coordinates'), [])
+
+  return (
+    <StyledControl position="bottomright">
+      {controlType === 'coordinates' ? (
+        <ShowCoordinates setControlType={setControlType} />
+      ) : (
+        <PanToCoordinates setControlType={setControlType} map={leaflet.map} />
+      )}
+    </StyledControl>
+  )
+}
 
 export default enhance(CoordinatesControl)
