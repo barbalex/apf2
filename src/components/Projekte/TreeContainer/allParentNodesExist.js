@@ -1,10 +1,7 @@
 // @flow
 import isEqual from 'lodash/isEqual'
 
-export default (
-  nodes: Array<Array<Object>>,
-  nodePassed: Array<String>,
-): Boolean => {
+export default (nodes: Array<Array<Object>>, nodePassed: Object): Boolean => {
   let parentNodes = []
   const nodeUrl = [...nodePassed.url]
   // pop own url - check only for parents
