@@ -57,6 +57,7 @@ const Ekfzaehleinheit = ({
   const row = get(data, 'ekfzaehleinheitById', {})
 
   useEffect(() => setErrors({}), [row])
+
   const ekfzaehleinheitenOfAp = get(
     row,
     'apByApId.ekfzaehleinheitsByApId.nodes',
