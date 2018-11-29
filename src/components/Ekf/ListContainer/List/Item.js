@@ -2,6 +2,8 @@
 import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import { withApollo } from 'react-apollo'
+import { observer } from 'mobx-react-lite'
+import compose from 'recompose/compose'
 
 import initiateDataFromUrl from '../initiateDataFromUrl'
 import mobxStoreContext from '../../../../mobxStoreContext'
@@ -30,6 +32,11 @@ const InnerContainer = styled.div`
     text-overflow: ellipsis;
   }
 `
+
+const enhance = compose(
+  withApollo,
+  observer,
+)
 
 const EkfList = ({
   activeTpopkontrId,
@@ -84,4 +91,4 @@ const EkfList = ({
   )
 }
 
-export default withApollo(EkfList)
+export default enhance(EkfList)
