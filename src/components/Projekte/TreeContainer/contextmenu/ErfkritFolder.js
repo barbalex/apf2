@@ -9,16 +9,16 @@ import mobxStoreContext from '../../../../mobxStoreContext'
 
 const ErfkritFolder = ({
   onClick,
-  tree,
+  treeName,
 }: {
   onClick: () => void,
-  tree: Object,
+  treeName: string,
 }) => {
   const { user } = useContext(mobxStoreContext)
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${tree.name}erfkritFolder`}>
+      <ContextMenu id={`${treeName}erfkritFolder`}>
         <div className="react-contextmenu-title">AP-Erfolgskriterien</div>
         {!userIsReadOnly(user.token) && (
           <MenuItem
