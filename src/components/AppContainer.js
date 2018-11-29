@@ -26,7 +26,7 @@ const UpdateAvailable = lazy(() => import('./UpdateAvailable'))
 const Messages = lazy(() => import('./Messages'))
 const Ekf = lazy(() => import('./Ekf'))
 
-const MyAppBar = () => {
+const AppContainer = () => {
   const { setIsPrint, view } = useContext(mobxStoreContext)
   const [showDeletions, setShowDeletions] = useState(false)
 
@@ -60,4 +60,4 @@ const MyAppBar = () => {
   )
 }
 
-export default observer(MyAppBar)
+export default observer(AppContainer)
