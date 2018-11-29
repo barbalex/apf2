@@ -13,15 +13,7 @@ import mobxStoreContext from '../../../../../mobxStoreContext'
  * so it is fetched in ProjektContainer
  */
 
-const Lines = ({
-  data,
-  treeName,
-  mapIdsFiltered,
-}: {
-  data: Object,
-  treeName: string,
-  mapIdsFiltered: Array<String>,
-}) => {
+const Lines = ({ data, treeName }: { data: Object, treeName: string }) => {
   const mobxStore = useContext(mobxStoreContext)
   const tree = mobxStore[treeName]
 
@@ -47,7 +39,6 @@ const Lines = ({
   const lines = buildLines({
     beobs,
     treeName,
-    mapIdsFiltered,
     mobxStore,
   })
   return <Polylines lines={lines} />

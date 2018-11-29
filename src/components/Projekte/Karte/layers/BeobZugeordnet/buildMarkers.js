@@ -23,7 +23,6 @@ const Markers = ({
   client,
   data,
   refetchTree,
-  mapIdsFiltered,
   map,
   mobxStore,
 }: {
@@ -32,7 +31,6 @@ const Markers = ({
   client: Object,
   data: Object,
   refetchTree: () => void,
-  mapIdsFiltered: Array<String>,
   map: Object,
   mobxStore: Object,
 }): Array<Object> => {
@@ -40,6 +38,7 @@ const Markers = ({
   const tree = mobxStore[treeName]
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
+  const { idsFiltered: mapIdsFiltered } = mobxStore[treeName].map
 
   return beobs.map(beob => {
     const isHighlighted = mapIdsFiltered.includes(beob.id)
