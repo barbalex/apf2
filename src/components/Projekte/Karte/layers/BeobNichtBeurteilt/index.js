@@ -22,18 +22,17 @@ const BeobNichtBeurteiltMarker = ({
   data,
   clustered,
   refetchTree,
-  mapIdsFiltered,
   client,
 }: {
   treeName: string,
   data: Object,
   clustered: Boolean,
   refetchTree: () => void,
-  mapIdsFiltered: Array<String>,
   client: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const tree = mobxStore[treeName]
+  const { idsFiltered: mapIdsFiltered } = mobxStore[treeName].map
   const beobNichtBeurteiltFilterString = get(
     tree,
     'nodeLabelFilter.beobNichtBeurteilt',
