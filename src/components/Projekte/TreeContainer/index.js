@@ -164,7 +164,6 @@ const enhance = compose(
 const TreeContainer = ({
   data: dbData,
   treeName,
-  activeNode,
   refetchTree,
   data,
   loading,
@@ -174,7 +173,6 @@ const TreeContainer = ({
   flex: Number,
   handleClick: () => void,
   data: Object,
-  activeNode: Object,
   loading: Boolean,
   refetchTree: () => void,
   client: Object,
@@ -470,7 +468,6 @@ const TreeContainer = ({
     [
       data,
       treeName,
-      activeNode,
       activeNodes,
       refetchTree,
       activeApfloraLayers,
@@ -502,7 +499,7 @@ const TreeContainer = ({
           <DeleteDatasetModal treeName={treeName} />
         )}
         <LabelFilterContainer>
-          <LabelFilter treeName={treeName} activeNode={activeNode} />
+          <LabelFilter treeName={treeName} />
           {!!activeNodes.projekt && <ApFilter treeName={treeName} />}
         </LabelFilterContainer>
         <InnerTreeContainer>

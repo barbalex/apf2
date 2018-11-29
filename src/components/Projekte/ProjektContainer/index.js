@@ -419,7 +419,6 @@ const ProjekteContainer = props => {
     mobxStore,
   })
   setNodes(nodes)
-  const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))
   // remove 2 to treat all same
   const tabs = [...tabsPassed].map(t => t.replace('2', ''))
   const treeFlex =
@@ -522,14 +521,7 @@ const ProjekteContainer = props => {
   )
 
   if (isPrint) {
-    return (
-      <Daten
-        treeName={treeName}
-        activeNode={activeNode}
-        refetchTree={refetch}
-        role={role}
-      />
-    )
+    return <Daten treeName={treeName} refetchTree={refetch} role={role} />
   }
 
   return (
@@ -541,7 +533,6 @@ const ProjekteContainer = props => {
               <TreeContainer
                 treeName={treeName}
                 data={data}
-                activeNode={activeNode}
                 loading={loading}
                 openNodes={openNodes}
                 refetchTree={refetch}
@@ -558,12 +549,7 @@ const ProjekteContainer = props => {
               renderOnResizeRate={100}
               renderOnResize={true}
             >
-              <Daten
-                treeName={treeName}
-                activeNode={activeNode}
-                refetchTree={refetch}
-                role={role}
-              />
+              <Daten treeName={treeName} refetchTree={refetch} role={role} />
             </ReflexElement>
           )}
           {tabs.includes('karte') &&

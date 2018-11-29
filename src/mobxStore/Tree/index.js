@@ -1,4 +1,5 @@
 import { types } from 'mobx-state-tree'
+import isEqual from 'lodash/isEqual'
 
 import NodeLabelFilter, {
   defaultValue as defaultNodeLabelFilter,
@@ -25,6 +26,11 @@ export default types
   .actions(self => ({
     setNodes(val) {
       self.nodes = val
+    },
+  }))
+  .views(self => ({
+    get activeNode() {
+      return self.nodes.find(n => isEqual(n.url, self.activeNodeArray))
     },
   }))
 

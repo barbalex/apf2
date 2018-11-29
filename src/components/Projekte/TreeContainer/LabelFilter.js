@@ -28,16 +28,14 @@ const enhance = compose(withApollo)
 
 const LabelFilter = ({
   treeName,
-  activeNode,
   client,
 }: {
   treeName: String,
-  activeNode: Object,
   client: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { setTreeKey } = mobxStore
-  const { nodeLabelFilter } = mobxStore[treeName]
+  const { nodeLabelFilter, activeNode } = mobxStore[treeName]
   const { setKey: setNodeLabelFilterKey } = nodeLabelFilter
   const tableName = activeNode ? activeNode.filterTable : null
 
