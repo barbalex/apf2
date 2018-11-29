@@ -298,31 +298,6 @@ const ProjekteContainer = props => {
   const { token } = user
   const tokenDecoded = token ? jwtDecode(token) : null
   const role = tokenDecoded ? tokenDecoded.role : null
-  // TODO: which query to check for error?
-  if (anyQueryReturnsPermissionError(queryArray)) {
-    // during login don't show permission error
-    if (!token) return null
-    // if token is not accepted, ask user to logout
-    return (
-      <ErrorContainer>
-        <div>Ihre Anmeldung ist nicht mehr gültig.</div>
-        <div>Bitte melden Sie sich neu an.</div>
-        <LogoutButton
-          variant="outlined"
-          onClick={() => {
-            logout(idb)
-          }}
-        >
-          Neu anmelden
-        </LogoutButton>
-      </ErrorContainer>
-    )
-  }
-  const error = anyQueryReturnsError(queryArray)
-  if (error) {
-    console.log('ProjektContainer:', { error, queryArray })
-    return <ErrorContainer>`Fehler: ${error.message}`</ErrorContainer>
-  }
 
   const data = {
     ...dataAdresses,
@@ -511,6 +486,32 @@ const ProjekteContainer = props => {
   const beobs = flatten(
     aparts.map(a => get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', [])),
   )
+
+  // TODO: which query to check for error?
+  if (anyQueryReturnsPermissionError(queryArray)) {
+    // during login don't show permission error
+    if (!token) return null
+    // if token is not accepted, ask user to logout
+    return (
+      <ErrorContainer>
+        <div>Ihre Anmeldung ist nicht mehr gültig.</div>
+        <div>Bitte melden Sie sich neu an.</div>
+        <LogoutButton
+          variant="outlined"
+          onClick={() => {
+            logout(idb)
+          }}
+        >
+          Neu anmelden
+        </LogoutButton>
+      </ErrorContainer>
+    )
+  }
+  const error = anyQueryReturnsError(queryArray)
+  if (error) {
+    console.log('ProjektContainer:', { error, queryArray })
+    return <ErrorContainer>`Fehler: ${error.message}`</ErrorContainer>
+  }
 
   if (isPrint) {
     return <Daten treeName={treeName} refetchTree={refetch} role={role} />
