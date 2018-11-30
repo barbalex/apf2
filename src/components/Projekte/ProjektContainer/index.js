@@ -45,9 +45,9 @@ import withBeobNichtBeurteilts from './withBeobNichtBeurteilts'
 import withBeobNichtZuzuordnens from './withBeobNichtZuzuordnens'
 import withPopForMap from './withPopForMap'
 import withTpopForMap from './withTpopForMap'
-import withBeobZugeordnetForMapMarkers from './withBeobZugeordnetForMapMarkers'
-import withBeobNichtBeurteiltForMapMarkers from './withBeobNichtBeurteiltForMapMarkers'
-import withBeobNichtZuzuordnenForMapMarkers from './withBeobNichtZuzuordnenForMapMarkers'
+import withBeobZugeordnetForMap from './withBeobZugeordnetForMap'
+import withBeobNichtBeurteiltForMap from './withBeobNichtBeurteiltForMap'
+import withBeobNichtZuzuordnenForMap from './withBeobNichtZuzuordnenForMap'
 import withBeobZugeordnetAssignPolylinesForMap from './withBeobZugeordnetAssignPolylinesForMap'
 import withBeobAssignLines from './withBeobAssignLines'
 import TreeContainer from '../TreeContainer'
@@ -119,9 +119,9 @@ const enhance = compose(
   withBeobNichtZuzuordnens,
   withPopForMap,
   withTpopForMap,
-  withBeobZugeordnetForMapMarkers,
-  withBeobNichtBeurteiltForMapMarkers,
-  withBeobNichtZuzuordnenForMapMarkers,
+  withBeobZugeordnetForMap,
+  withBeobNichtBeurteiltForMap,
+  withBeobNichtZuzuordnenForMap,
   withBeobZugeordnetAssignPolylinesForMap,
   withBeobAssignLines,
   observer,
@@ -158,9 +158,9 @@ const ProjekteContainer = props => {
     dataBeobNichtZuzuordnens,
     dataPopForMap,
     dataTpopForMap,
-    dataBeobZugeordnetForMapMarkers,
-    dataBeobNichtBeurteiltForMapMarkers,
-    dataBeobNichtZuzuordnenForMapMarkers,
+    dataBeobZugeordnetForMap,
+    dataBeobNichtBeurteiltForMap,
+    dataBeobNichtZuzuordnenForMap,
     dataBeobZugeordnetAssignPolylinesForMap,
     dataBeobAssignLines,
     treeName,
@@ -196,9 +196,9 @@ const ProjekteContainer = props => {
     dataBeobNichtZuzuordnens: Object,
     dataPopForMap: Object,
     dataTpopForMap: Object,
-    dataBeobZugeordnetForMapMarkers: Object,
-    dataBeobNichtBeurteiltForMapMarkers: Object,
-    dataBeobNichtZuzuordnenForMapMarkers: Object,
+    dataBeobZugeordnetForMap: Object,
+    dataBeobNichtBeurteiltForMap: Object,
+    dataBeobNichtZuzuordnenForMap: Object,
     dataBeobZugeordnetAssignPolylinesForMap: Object,
     dataBeobAssignLines: Object,
     treeName: String,
@@ -256,9 +256,9 @@ const ProjekteContainer = props => {
     dataBeobNichtZuzuordnens,
     dataPopForMap,
     dataTpopForMap,
-    dataBeobZugeordnetForMapMarkers,
-    dataBeobNichtBeurteiltForMapMarkers,
-    dataBeobNichtZuzuordnenForMapMarkers,
+    dataBeobZugeordnetForMap,
+    dataBeobNichtBeurteiltForMap,
+    dataBeobNichtZuzuordnenForMap,
     dataBeobZugeordnetAssignPolylinesForMap,
     dataBeobAssignLines,
   ]
@@ -309,9 +309,9 @@ const ProjekteContainer = props => {
     ...dataBeobNichtZuzuordnens,
     ...dataPopForMap,
     ...dataTpopForMap,
-    ...dataBeobZugeordnetForMapMarkers,
-    ...dataBeobNichtBeurteiltForMapMarkers,
-    ...dataBeobNichtZuzuordnenForMapMarkers,
+    ...dataBeobZugeordnetForMap,
+    ...dataBeobNichtBeurteiltForMap,
+    ...dataBeobNichtZuzuordnenForMap,
     ...dataBeobZugeordnetAssignPolylinesForMap,
     ...dataBeobAssignLines,
   }
@@ -350,9 +350,9 @@ const ProjekteContainer = props => {
     dataBeobNichtZuzuordnens,
     dataPopForMap,
     dataTpopForMap,
-    dataBeobZugeordnetForMapMarkers,
-    dataBeobNichtBeurteiltForMapMarkers,
-    dataBeobNichtZuzuordnenForMapMarkers,
+    dataBeobZugeordnetForMap,
+    dataBeobNichtBeurteiltForMap,
+    dataBeobNichtZuzuordnenForMap,
     dataBeobZugeordnetAssignPolylinesForMap,
     dataBeobAssignLines,
     mobxStore,

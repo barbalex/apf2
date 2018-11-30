@@ -9,5 +9,5 @@ export default graphql(query, {
     apId,
     beobZugeordnetIsActiveInMap,
   }),
-  name: 'dataBeobZugeordnetForMapMarkers',
+  name: 'dataBeobZugeordnetForMap',
 })

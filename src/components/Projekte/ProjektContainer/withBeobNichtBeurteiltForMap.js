@@ -9,5 +9,5 @@ export default graphql(query, {
     apId,
     beobNichtBeurteiltIsActiveInMap,
   }),
-  name: 'dataBeobNichtBeurteiltForMapMarkers',
+  name: 'dataBeobNichtBeurteiltForMap',
 })

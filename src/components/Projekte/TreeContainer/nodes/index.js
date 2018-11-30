@@ -133,7 +133,6 @@ export default ({
   dataEkfzaehleinheits: Object,
   dataBeobNichtBeurteilts: Object,
   dataBeobNichtZuzuordnens: Object,
-  dataPopForMapMarkers: Object,
   nodeFilter: Object,
   mobxStore: Object,
 }): Array<Object> => {

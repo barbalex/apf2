@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query BeobNichtBeurteiltForMapMarkersQuery(
+  query BeobNichtBeurteiltForMapQuery(
     $projId: UUID!
     $apId: UUID
     $beobNichtBeurteiltIsActiveInMap: Boolean!

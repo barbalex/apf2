@@ -9,5 +9,5 @@ export default graphql(query, {
     apId,
     beobNichtZuzuordnenIsActiveInMap,
   }),
-  name: 'dataBeobNichtZuzuordnenForMapMarkers',
+  name: 'dataBeobNichtZuzuordnenForMap',
 })

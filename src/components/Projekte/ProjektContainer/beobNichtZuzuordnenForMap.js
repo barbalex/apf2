@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query BeobNichtZuzuordnenForMapMarkersQuery(
+  query BeobNichtZuzuordnenForMapQuery(
     $projId: UUID!
     $apId: UUID
     $beobNichtZuzuordnenIsActiveInMap: Boolean!

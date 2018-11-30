@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query BeobZugeordnetForMapMarkersQuery(
+  query BeobZugeordnetForMapQuery(
     $projId: UUID!
     $apId: UUID
     $beobZugeordnetIsActiveInMap: Boolean!
