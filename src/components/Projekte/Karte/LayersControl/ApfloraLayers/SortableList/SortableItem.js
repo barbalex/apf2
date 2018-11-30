@@ -4,7 +4,7 @@
  * let each item call it's data itself
  * use callbacks
  */
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useMemo } from 'react'
 import compose from 'recompose/compose'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
@@ -138,11 +138,14 @@ const SortableItem = SortableElement(
         apfloraLayer.value === 'beobNichtBeurteilt') ||
         (activeApfloraLayers.includes('beobZugeordnet') &&
           apfloraLayer.value === 'beobZugeordnet'))
-    const getZuordnenIconTitle = () => {
-      if (assigningBeob) return 'Zuordnung beenden'
-      if (assigningispossible) return 'Teil-Populationen zuordnen'
-      return 'Teil-Populationen zuordnen (aktivierbar, wenn auch Teil-Populationen eingeblendet werden)'
-    }
+    const zuordnenTitle = useCallback(
+      () => {
+        if (assigningBeob) return 'Zuordnung beenden'
+        if (assigningispossible) return 'Teil-Populationen zuordnen'
+        return 'Teil-Populationen zuordnen (aktivierbar, wenn auch Teil-Populationen eingeblendet werden)'
+      },
+      [assigningBeob, assigningispossible],
+    )
     // for each layer there must exist a path in data!
     let layerData = get(data, `${apfloraLayer.value}.nodes`, [])
     if (apfloraLayer.value === 'tpop') {
@@ -153,6 +156,17 @@ const SortableItem = SortableElement(
     const layerDataHighlighted = layerData.filter(o =>
       mapIdsFiltered.includes(o.id),
     )
+    const onChangeCheckbox = useCallback(()=>{
+      if (activeApfloraLayers.includes(apfloraLayer.value)) {
+        return setActiveApfloraLayers(
+          activeApfloraLayers.filter(l => l !== apfloraLayer.value),
+        )
+      }
+      return setActiveApfloraLayers([
+        ...activeApfloraLayers,
+        apfloraLayer.value,
+      ])
+    },[activeApfloraLayers,apfloraLayer])
 
     return (
       <LayerDiv>
@@ -160,17 +174,7 @@ const SortableItem = SortableElement(
           value={apfloraLayer.value}
           label={apfloraLayer.label}
           checked={activeApfloraLayers.includes(apfloraLayer.value)}
-          onChange={() => {
-            if (activeApfloraLayers.includes(apfloraLayer.value)) {
-              return setActiveApfloraLayers(
-                activeApfloraLayers.filter(l => l !== apfloraLayer.value),
-              )
-            }
-            return setActiveApfloraLayers([
-              ...activeApfloraLayers,
-              apfloraLayer.value,
-            ])
-          }}
+          onChange={onChangeCheckbox}
         />
         <IconsDiv>
           {['beobNichtBeurteilt', 'beobZugeordnet'].includes(
@@ -178,7 +182,7 @@ const SortableItem = SortableElement(
           ) && (
             <ZuordnenDiv>
               <StyledIconButton
-                title={getZuordnenIconTitle()}
+                title={zuordnenTitle()}
                 onClick={() => {
                   if (activeApfloraLayers.includes('tpop')) {
                     setAssigningBeob(!assigningBeob)
