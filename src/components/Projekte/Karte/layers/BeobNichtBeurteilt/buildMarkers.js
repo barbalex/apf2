@@ -118,7 +118,6 @@ const Markers = ({
             tpopId: nearestTpop.id,
           },
         })
-        refetchTree('beobNichtBeurteiltForMap')
         refetchTree('beobNichtBeurteiltForMapMarkers')
         refetchTree('beobZugeordnetForMapMarkers')
         refetchTree('beobAssignLines')

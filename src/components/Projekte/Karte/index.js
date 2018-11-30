@@ -265,7 +265,7 @@ const Karte = ({
     overlays.findIndex(o => o.value === activeOverlay),
   )
 
-  if (loading) return <LoadingContainer>Karte lädt daten...</LoadingContainer>
+  //if (loading) return <LoadingContainer>Karte lädt daten...</LoadingContainer>
 
   return (
     <Container>

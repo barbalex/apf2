@@ -45,8 +45,6 @@ import withBeobNichtBeurteilts from './withBeobNichtBeurteilts'
 import withBeobNichtZuzuordnens from './withBeobNichtZuzuordnens'
 import withPopForMap from './withPopForMap'
 import withTpopForMap from './withTpopForMap'
-import withBeobNichtBeurteiltForMap from './withBeobNichtBeurteiltForMap'
-import withBeobNichtZuzuordnenForMap from './withBeobNichtZuzuordnenForMap'
 import withBeobZugeordnetForMapMarkers from './withBeobZugeordnetForMapMarkers'
 import withBeobNichtBeurteiltForMapMarkers from './withBeobNichtBeurteiltForMapMarkers'
 import withBeobNichtZuzuordnenForMapMarkers from './withBeobNichtZuzuordnenForMapMarkers'
@@ -121,8 +119,6 @@ const enhance = compose(
   withBeobNichtZuzuordnens,
   withPopForMap,
   withTpopForMap,
-  withBeobNichtBeurteiltForMap,
-  withBeobNichtZuzuordnenForMap,
   withBeobZugeordnetForMapMarkers,
   withBeobNichtBeurteiltForMapMarkers,
   withBeobNichtZuzuordnenForMapMarkers,
@@ -162,8 +158,6 @@ const ProjekteContainer = props => {
     dataBeobNichtZuzuordnens,
     dataPopForMap,
     dataTpopForMap,
-    dataBeobNichtBeurteiltForMap,
-    dataBeobNichtZuzuordnenForMap,
     dataBeobZugeordnetForMapMarkers,
     dataBeobNichtBeurteiltForMapMarkers,
     dataBeobNichtZuzuordnenForMapMarkers,
@@ -202,8 +196,6 @@ const ProjekteContainer = props => {
     dataBeobNichtZuzuordnens: Object,
     dataPopForMap: Object,
     dataTpopForMap: Object,
-    dataBeobNichtBeurteiltForMap: Object,
-    dataBeobNichtZuzuordnenForMap: Object,
     dataBeobZugeordnetForMapMarkers: Object,
     dataBeobNichtBeurteiltForMapMarkers: Object,
     dataBeobNichtZuzuordnenForMapMarkers: Object,
@@ -264,8 +256,6 @@ const ProjekteContainer = props => {
     dataBeobNichtZuzuordnens,
     dataPopForMap,
     dataTpopForMap,
-    dataBeobNichtBeurteiltForMap,
-    dataBeobNichtZuzuordnenForMap,
     dataBeobZugeordnetForMapMarkers,
     dataBeobNichtBeurteiltForMapMarkers,
     dataBeobNichtZuzuordnenForMapMarkers,
@@ -319,8 +309,6 @@ const ProjekteContainer = props => {
     ...dataBeobNichtZuzuordnens,
     ...dataPopForMap,
     ...dataTpopForMap,
-    ...dataBeobNichtBeurteiltForMap,
-    ...dataBeobNichtZuzuordnenForMap,
     ...dataBeobZugeordnetForMapMarkers,
     ...dataBeobNichtBeurteiltForMapMarkers,
     ...dataBeobNichtZuzuordnenForMapMarkers,
@@ -362,8 +350,6 @@ const ProjekteContainer = props => {
     dataBeobNichtZuzuordnens,
     dataPopForMap,
     dataTpopForMap,
-    dataBeobNichtBeurteiltForMap,
-    dataBeobNichtZuzuordnenForMap,
     dataBeobZugeordnetForMapMarkers,
     dataBeobNichtBeurteiltForMapMarkers,
     dataBeobNichtZuzuordnenForMapMarkers,
@@ -417,10 +403,15 @@ const ProjekteContainer = props => {
   )
   setTpopIdsFiltered(mapTpopIdsFiltered)
 
-  const beobNichtBeurteiltForMapNodes = get(
+  const beobNichtBeurteiltForMapAparts = get(
     data,
-    `beobNichtBeurteiltForMap.nodes`,
+    `beobNichtBeurteiltForMapMarkers.apsByProjId.nodes[0].apartsByApId.nodes`,
     [],
+  )
+  const beobNichtBeurteiltForMapNodes = flatten(
+    beobNichtBeurteiltForMapAparts.map(n =>
+      get(n, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []),
+    ),
   )
   const mapBeobNichtBeurteiltIdsFiltered = useMemo(
     () =>
@@ -432,10 +423,15 @@ const ProjekteContainer = props => {
   )
   setBeobNichtBeurteiltIdsFiltered(mapBeobNichtBeurteiltIdsFiltered)
 
-  const beobNichtZuzuordnenForMapNodes = get(
+  const beobNichtZuzuordnenForMapNodesAparts = get(
     data,
-    `beobNichtZuzuordnenForMap.nodes`,
+    `beobNichtZuzuordnenForMapMarkers.apsByProjId.nodes[0].apartsByApId.nodes`,
     [],
+  )
+  const beobNichtZuzuordnenForMapNodes = flatten(
+    beobNichtZuzuordnenForMapNodesAparts.map(n =>
+      get(n, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []),
+    ),
   )
   const mapBeobNichtZuzuordnenIdsFiltered = useMemo(
     () =>
@@ -466,10 +462,9 @@ const ProjekteContainer = props => {
     [mapFilter, beobZugeordnetForMapNodes],
   )
   setBeobZugeordnetIdsFiltered(mapBeobZugeordnetIdsFiltered)
-  console.log(
-    'ProjektContainer, beobZugeordnetForMapNodes',
-    beobZugeordnetForMapNodes,
-  )
+  console.log('ProjektContainer', {
+    beobNichtZuzuordnenForMapNodes,
+  })
 
   if (!activeApfloraLayers.includes('mapFilter')) {
     // when no map filter exists nodes in activeNodeArray should be highlighted
