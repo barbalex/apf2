@@ -163,13 +163,16 @@ export default ({
     apIsActiveInMap && activeApfloraLayers.includes('pop')
   const tpopIsActiveInMap =
     apIsActiveInMap && activeApfloraLayers.includes('tpop')
-  console.log('buildVariables', {
-    tpopIsActiveInMap,
-    popIsActiveInMap,
-    activeApfloraLayers,
-    ap,
-    apId,
-  })
+  const beobNichtBeurteiltIsActiveInMap =
+    apIsActiveInMap && activeApfloraLayers.includes('beobNichtBeurteilt')
+  const beobNichtZuzuordnenIsActiveInMap =
+    apIsActiveInMap && activeApfloraLayers.includes('beobNichtZuzuordnen')
+  const beobZugeordnetAssignPolylinesIsActiveInMap =
+    apIsActiveInMap &&
+    activeApfloraLayers.includes('beobZugeordnetAssignPolylines')
+  const beobZugeordnetIsActiveInMap =
+    apIsActiveInMap && activeApfloraLayers.includes('beobZugeordnet')
+  //console.log('buildVariables, activeApfloraLayers', activeApfloraLayers)
 
   const variables = {
     projekt,
@@ -195,6 +198,10 @@ export default ({
     apIsActiveInMap,
     isWerteListen,
     isAdresse,
+    beobNichtBeurteiltIsActiveInMap,
+    beobNichtZuzuordnenIsActiveInMap,
+    beobZugeordnetAssignPolylinesIsActiveInMap,
+    beobZugeordnetIsActiveInMap,
   }
   //console.log('buildVariables, variables:', variables)
   return variables
