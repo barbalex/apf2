@@ -138,7 +138,7 @@ const SortableItem = SortableElement(
         apfloraLayer.value === 'beobNichtBeurteilt') ||
         (activeApfloraLayers.includes('beobZugeordnet') &&
           apfloraLayer.value === 'beobZugeordnet'))
-    const zuordnenTitle = useCallback(
+    const zuordnenTitle = useMemo(
       () => {
         if (assigningBeob) return 'Zuordnung beenden'
         if (assigningispossible) return 'Teil-Populationen zuordnen'
@@ -156,17 +156,28 @@ const SortableItem = SortableElement(
     const layerDataHighlighted = layerData.filter(o =>
       mapIdsFiltered.includes(o.id),
     )
-    const onChangeCheckbox = useCallback(()=>{
-      if (activeApfloraLayers.includes(apfloraLayer.value)) {
-        return setActiveApfloraLayers(
-          activeApfloraLayers.filter(l => l !== apfloraLayer.value),
-        )
-      }
-      return setActiveApfloraLayers([
-        ...activeApfloraLayers,
-        apfloraLayer.value,
-      ])
-    },[activeApfloraLayers,apfloraLayer])
+    const onChangeCheckbox = useCallback(
+      () => {
+        if (activeApfloraLayers.includes(apfloraLayer.value)) {
+          return setActiveApfloraLayers(
+            activeApfloraLayers.filter(l => l !== apfloraLayer.value),
+          )
+        }
+        return setActiveApfloraLayers([
+          ...activeApfloraLayers,
+          apfloraLayer.value,
+        ])
+      },
+      [activeApfloraLayers, apfloraLayer],
+    )
+    const onClickZuordnen = useCallback(
+      () => {
+        if (activeApfloraLayers.includes('tpop')) {
+          setAssigningBeob(!assigningBeob)
+        }
+      },
+      [assigningBeob, activeApfloraLayers],
+    )
 
     return (
       <LayerDiv>
@@ -181,14 +192,7 @@ const SortableItem = SortableElement(
             apfloraLayer.value,
           ) && (
             <ZuordnenDiv>
-              <StyledIconButton
-                title={zuordnenTitle()}
-                onClick={() => {
-                  if (activeApfloraLayers.includes('tpop')) {
-                    setAssigningBeob(!assigningBeob)
-                  }
-                }}
-              >
+              <StyledIconButton title={zuordnenTitle} onClick={onClickZuordnen}>
                 {assigningBeob ? (
                   <StyledPauseCircleOutlineIcon
                     data-assigningispossible={assigningispossible}
