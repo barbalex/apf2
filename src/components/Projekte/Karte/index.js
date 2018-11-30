@@ -100,6 +100,9 @@ const Container = styled.div`
   height: 100%;
   overflow: hidden;
 `
+const LoadingContainer = styled.div`
+  padding: 15px;
+`
 
 /**
  * DO NOT use component state / props to track mouseCoordinates
@@ -261,8 +264,43 @@ const Karte = ({
     overlays.findIndex(o => o.value === activeOverlay),
   )
 
-  //if (loading) return <LoadingContainer>Karte lädt daten...</LoadingContainer>
+  const {
+    aparts,
+    apbers,
+    apberuebersichts,
+    aps,
+    assozarts,
+    beobNichtBeurteilts,
+    beobNichtZuzuordnens,
+    bers,
+    ekfzaehleinheits,
+    erfkrits,
+    pops,
+    projekts,
+    ziels,
+  } = data
 
+  const isFirstLoad =
+    loading &&
+    !(
+      !!aparts &&
+      !!apbers &&
+      !!apberuebersichts &&
+      !!aps &&
+      !!assozarts &&
+      !!beobNichtBeurteilts &&
+      !!beobNichtZuzuordnens &&
+      !!bers &&
+      !!ekfzaehleinheits &&
+      !!erfkrits &&
+      !!pops &&
+      !!projekts &&
+      !!ziels
+    )
+
+  if (isFirstLoad) {
+    return <LoadingContainer>Karte lädt daten...</LoadingContainer>
+  }
   return (
     <Container>
       <ErrorBoundary>
