@@ -19,18 +19,14 @@ const PmcComponent = ({
   data: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { nodeFilter } = mobxStore
+  const { nodeFilter, activeApfloraLayers } = mobxStore
   const tree = mobxStore[treeName]
 
   const popFilterString = get(tree, 'nodeLabelFilter.pop')
   const nodeFilterArray = Object.entries(nodeFilter[tree.name].pop).filter(
     ([key, value]) => value || value === 0 || value === false,
   )
-  let pops = get(
-    data,
-    'popForMapMarkers.apsByProjId.nodes[0].popsByApId.nodes',
-    [],
-  )
+  let pops = get(data, 'popForMap.apsByProjId.nodes[0].popsByApId.nodes', [])
     // filter them by nodeLabelFilter
     .filter(p => {
       if (!popFilterString) return true
@@ -45,47 +41,49 @@ const PmcComponent = ({
     .filter(node => filterNodesByNodeFilterArray({ node, nodeFilterArray }))
 
   // if tpop are filtered, only show their pop
-  const popsForTpops = get(
-    data,
-    'tpopForMap.apsByProjId.nodes[0].popsByApId.nodes',
-    [],
-  )
-    .filter(p => {
-      if (!popFilterString) return true
-      return `${p.nr || '(keine Nr)'}: ${p.name || '(kein Name)'}`
-        .toLowerCase()
-        .includes(popFilterString.toLowerCase())
-    })
-    .filter(node =>
-      filterNodesByNodeFilterArray({
-        node,
-        nodeFilterArray,
-        table: 'pop',
-      }),
+  if (activeApfloraLayers.includes('tpop')) {
+    const popsForTpops = get(
+      data,
+      'tpopForMap.apsByProjId.nodes[0].popsByApId.nodes',
+      [],
     )
-  const tpopFilterString = get(tree, 'nodeLabelFilter.tpop')
-  const tpopNodeFilterArray = Object.entries(nodeFilter[tree.name].tpop).filter(
-    ([key, value]) => value || value === 0 || value === false,
-  )
-  const tpops = flatten(
-    popsForTpops.map(pop => get(pop, 'tpopsByPopId.nodes', [])),
-  )
-    // filter them by nodeLabelFilter
-    .filter(el => {
-      if (!tpopFilterString) return true
-      return `${el.nr || '(keine Nr)'}: ${el.flurname || '(kein Flurname)'}`
-        .toLowerCase()
-        .includes(tpopFilterString.toLowerCase())
-    })
-    .filter(node =>
-      filterNodesByNodeFilterArray({
-        node,
-        nodeFilterArray: tpopNodeFilterArray,
-        table: 'tpop',
-      }),
+      .filter(p => {
+        if (!popFilterString) return true
+        return `${p.nr || '(keine Nr)'}: ${p.name || '(kein Name)'}`
+          .toLowerCase()
+          .includes(popFilterString.toLowerCase())
+      })
+      .filter(node =>
+        filterNodesByNodeFilterArray({
+          node,
+          nodeFilterArray,
+          table: 'pop',
+        }),
+      )
+    const tpopFilterString = get(tree, 'nodeLabelFilter.tpop')
+    const tpopNodeFilterArray = Object.entries(
+      nodeFilter[tree.name].tpop,
+    ).filter(([key, value]) => value || value === 0 || value === false)
+    const tpops = flatten(
+      popsForTpops.map(pop => get(pop, 'tpopsByPopId.nodes', [])),
     )
-  const popIdsOfTpops = tpops.map(t => t.popId)
-  pops = pops.filter(p => popIdsOfTpops.includes(p.id))
+      // filter them by nodeLabelFilter
+      .filter(el => {
+        if (!tpopFilterString) return true
+        return `${el.nr || '(keine Nr)'}: ${el.flurname || '(kein Flurname)'}`
+          .toLowerCase()
+          .includes(tpopFilterString.toLowerCase())
+      })
+      .filter(node =>
+        filterNodesByNodeFilterArray({
+          node,
+          nodeFilterArray: tpopNodeFilterArray,
+          table: 'tpop',
+        }),
+      )
+    const popIdsOfTpops = tpops.map(t => t.popId)
+    pops = pops.filter(p => popIdsOfTpops.includes(p.id))
+  }
 
   const popMarkers = buildMarkers({
     pops,

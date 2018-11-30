@@ -4,10 +4,10 @@ import { graphql } from 'react-apollo'
 import query from './tpopForMap'
 
 export default graphql(query, {
-  options: ({ projId, apId, apIsActiveInMap }) => ({
+  options: ({ projId, apId, tpopIsActiveInMap }) => ({
     projId,
     apId,
-    apIsActiveInMap,
+    tpopIsActiveInMap,
   }),
   name: 'dataTpopForMap',
 })

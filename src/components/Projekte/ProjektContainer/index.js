@@ -53,7 +53,6 @@ import withBeobNichtBeurteiltForMapMarkers from './withBeobNichtBeurteiltForMapM
 import withBeobNichtZuzuordnenForMapMarkers from './withBeobNichtZuzuordnenForMapMarkers'
 import withBeobZugeordnetAssignPolylinesForMap from './withBeobZugeordnetAssignPolylinesForMap'
 import withBeobAssignLines from './withBeobAssignLines'
-import withPopForMapMarkers from './withPopForMapMarkers'
 import TreeContainer from '../TreeContainer'
 import Daten from '../Daten'
 import Exporte from '../Exporte'
@@ -131,7 +130,6 @@ const enhance = compose(
   withBeobNichtZuzuordnenForMapMarkers,
   withBeobZugeordnetAssignPolylinesForMap,
   withBeobAssignLines,
-  withPopForMapMarkers,
   observer,
 )
 
@@ -173,7 +171,6 @@ const ProjekteContainer = props => {
     dataBeobNichtBeurteiltForMapMarkers,
     dataBeobNichtZuzuordnenForMapMarkers,
     dataBeobZugeordnetAssignPolylinesForMap,
-    dataPopForMapMarkers,
     dataBeobAssignLines,
     treeName,
     tabs: tabsPassed,
@@ -215,7 +212,6 @@ const ProjekteContainer = props => {
     dataBeobNichtBeurteiltForMapMarkers: Object,
     dataBeobNichtZuzuordnenForMapMarkers: Object,
     dataBeobZugeordnetAssignPolylinesForMap: Object,
-    dataPopForMapMarkers: Object,
     dataBeobAssignLines: Object,
     treeName: String,
     tabs: Array<String>,
@@ -279,7 +275,6 @@ const ProjekteContainer = props => {
     dataBeobNichtBeurteiltForMapMarkers,
     dataBeobNichtZuzuordnenForMapMarkers,
     dataBeobZugeordnetAssignPolylinesForMap,
-    dataPopForMapMarkers,
     dataBeobAssignLines,
   ]
 
@@ -336,7 +331,6 @@ const ProjekteContainer = props => {
     ...dataBeobNichtBeurteiltForMapMarkers,
     ...dataBeobNichtZuzuordnenForMapMarkers,
     ...dataBeobZugeordnetAssignPolylinesForMap,
-    ...dataPopForMapMarkers,
     ...dataBeobAssignLines,
   }
   // TODO: useMemo?
@@ -381,7 +375,6 @@ const ProjekteContainer = props => {
     dataBeobNichtBeurteiltForMapMarkers,
     dataBeobNichtZuzuordnenForMapMarkers,
     dataBeobZugeordnetAssignPolylinesForMap,
-    dataPopForMapMarkers,
     dataBeobAssignLines,
     mobxStore,
   })
@@ -395,7 +388,12 @@ const ProjekteContainer = props => {
       ? 1
       : 1 / tabs.length
 
-  const popForMapNodes = get(data, `popForMap.nodes`, [])
+  // TODO:
+  // only fetch these if layer is active
+  const popForMapProj = get(dataPopForMap, `popForMap.apsByProjId.nodes`, [])
+  const popForMapNodes = flatten(
+    popForMapProj.map(n => get(n, 'popsByApId.nodes', [])),
+  )
   const mapPopIdsFiltered = useMemo(
     () =>
       idsInsideFeatureCollection({
@@ -409,9 +407,12 @@ const ProjekteContainer = props => {
   )
   setPopIdsFiltered(mapPopIdsFiltered)
 
-  const pops = get(data, 'popForMap.nodes', [])
+  const tpopForMapProj = get(dataTpopForMap, `tpopForMap.apsByProjId.nodes`, [])
+  const popForTpopForMapNodes = flatten(
+    tpopForMapProj.map(n => get(n, 'popsByApId.nodes', [])),
+  )
   const tpopForMapNodes = flatten(
-    pops.map(n => get(n, 'tpopsByPopId.nodes', [])),
+    popForTpopForMapNodes.map(n => get(n, 'tpopsByPopId.nodes', [])),
   )
   const mapTpopIdsFiltered = useMemo(
     () =>

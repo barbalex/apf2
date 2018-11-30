@@ -1,5 +1,6 @@
 // @flow
 import uniq from 'lodash/uniq'
+import { getSnapshot } from 'mobx-state-tree'
 
 import { type as apType } from '../../../mobxStore/NodeFilterTree/ap'
 import { type as popType } from '../../../mobxStore/NodeFilterTree/pop'
@@ -12,7 +13,12 @@ export default ({
   treeName: String,
   mobxStore: Object,
 }): Object => {
-  const { urlQuery, nodeFilter: nodeFilterPassed } = mobxStore
+  const {
+    urlQuery,
+    nodeFilter: nodeFilterPassed,
+    activeApfloraLayers: activeApfloraLayersRaw,
+  } = mobxStore
+  const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
   // apFilter is used for form filter AND apFilter of tree :-(
   const { openNodes, activeNodeArray, apFilter: apFilterSet } = mobxStore[
     treeName
@@ -151,6 +157,20 @@ export default ({
         ['Feld-Kontrollen', 'Freiwilligen-Kontrollen'].includes(nArray[8]) &&
         nArray[9],
     )
+
+  const apIsActiveInMap = mapIsActive && isAp
+  const popIsActiveInMap =
+    apIsActiveInMap && activeApfloraLayers.includes('pop')
+  const tpopIsActiveInMap =
+    apIsActiveInMap && activeApfloraLayers.includes('tpop')
+  console.log('buildVariables', {
+    tpopIsActiveInMap,
+    popIsActiveInMap,
+    activeApfloraLayers,
+    ap,
+    apId,
+  })
+
   const variables = {
     projekt,
     projId,
@@ -164,13 +184,15 @@ export default ({
     isZiel,
     pop,
     isPop,
+    popIsActiveInMap,
     popFilter,
     tpop,
     isTpop,
+    tpopIsActiveInMap,
     tpopFilter,
     tpopkontr,
     isTpopkontr,
-    apIsActiveInMap: mapIsActive && isAp,
+    apIsActiveInMap,
     isWerteListen,
     isAdresse,
   }

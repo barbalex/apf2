@@ -24,6 +24,7 @@ const ProjektContainerContainer = ({
   projekteTabs: Array<string>,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
+  const { activeApfloraLayers } = mobxStore
   const { openNodes, activeNodeArray } = mobxStore[treeName]
 
   /**
@@ -37,6 +38,7 @@ const ProjektContainerContainer = ({
       projekteTabs={projekteTabs}
       openNodes={getSnapshot(openNodes)}
       activeNodeArray={getSnapshot(activeNodeArray)}
+      activeApfloraLayers={getSnapshot(activeApfloraLayers)}
       //apFilter={apFilter}
     />
   )

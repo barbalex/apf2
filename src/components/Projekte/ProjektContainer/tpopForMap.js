@@ -4,18 +4,17 @@ export default gql`
   query TpopForMapQuery(
     $apId: UUID!
     $projId: UUID!
-    $apIsActiveInMap: Boolean!
+    $tpopIsActiveInMap: Boolean!
   ) {
     # this one is used to refetch data when new tpop was localized
     # so that the new marker appears on map
-    tpopForMap: projektById(id: $projId) @include(if: $apIsActiveInMap) {
+    tpopForMap: projektById(id: $projId) @include(if: $tpopIsActiveInMap) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
           popsByApId {
             nodes {
-              id
               id
               apId
               nr

@@ -148,9 +148,9 @@ const Karte = ({
   const mobxStore = useContext(mobxStoreContext)
   const {
     apfloraLayers,
-    activeApfloraLayers,
+    activeApfloraLayers: activeApfloraLayersRaw,
     overlays,
-    activeOverlays,
+    activeOverlays: activeOverlaysRaw,
     activeBaseLayer,
     idOfTpopBeingLocalized,
     setIdOfTpopBeingLocalized,
@@ -159,6 +159,8 @@ const Karte = ({
     assigningBeob,
   } = mobxStore
   const bounds = getSnapshot(boundsRaw)
+  const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
+  const activeOverlays = getSnapshot(activeOverlaysRaw)
 
   const mapRef = useRef(null)
 

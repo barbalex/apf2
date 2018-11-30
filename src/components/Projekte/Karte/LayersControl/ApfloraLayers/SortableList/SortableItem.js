@@ -120,7 +120,8 @@ const DragHandle = SortableHandle(() => (
 const enhance = compose(withApollo)
 
 const SortableItem = SortableElement(
-  ({ treeName, apfloraLayer, data, client }) => {
+  ({ treeName, apfloraLayer, data, client, index }) => {
+    //console.log('SortableItem, layer', apfloraLayer.value)
     const mobxStore = useContext(mobxStoreContext)
     const {
       activeApfloraLayers,

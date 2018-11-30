@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query Query($isAp: Boolean!, $ap: [UUID!]) {
+  query ApfloraLayersQuery($isAp: Boolean!, $ap: [UUID!]) {
     pop: allPops(
       filter: { apId: { in: $ap }, x: { isNull: false }, y: { isNull: false } }
     ) @include(if: $isAp) {
