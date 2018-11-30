@@ -5,6 +5,7 @@
  */
 import React, { useContext, useCallback, useMemo } from 'react'
 import compose from 'recompose/compose'
+import withProps from 'recompose/withProps'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
 import DragHandleIcon from '@material-ui/icons/DragHandle'
@@ -17,10 +18,13 @@ import { SortableElement, SortableHandle } from 'react-sortable-hoc'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { withApollo } from 'react-apollo'
+import { getSnapshot } from 'mobx-state-tree'
+import { observer } from 'mobx-react-lite'
 
-import Checkbox from '../../shared/Checkbox'
-import getBounds from '../../../../../../modules/getBounds'
-import mobxStoreContext from '../../../../../../mobxStoreContext'
+import Checkbox from '../../../shared/Checkbox'
+import getBounds from '../../../../../../../modules/getBounds'
+import mobxStoreContext from '../../../../../../../mobxStoreContext'
+import withData from './withData'
 
 const StyledIconButton = styled(Button)`
   max-width: 18px;
@@ -109,21 +113,34 @@ const DragHandle = SortableHandle(() => (
   </StyledIconButton>
 ))
 
-const enhance = compose(withApollo)
+const enhance = compose(
+  withApollo,
+  withProps(({ treeName }) => ({
+    mobxStore: useContext(mobxStoreContext),
+  })),
+  withData,
+  observer,
+)
 
-const SortableItem = SortableElement(
-  ({ treeName, apfloraLayer, data, client, index }) => {
-    //console.log('SortableItem, layer', apfloraLayer.value)
-    const mobxStore = useContext(mobxStoreContext)
-    const {
-      activeApfloraLayers,
-      setActiveApfloraLayers,
-      setBounds,
-      assigningBeob,
-      setAssigningBeob,
-    } = mobxStore
-    const { idsFiltered: mapIdsFiltered } = mobxStore[treeName].map
+const MySortableItem = ({
+  treeName,
+  apfloraLayer,
+  data,
+  client,
+  index,
+  mobxStore,
+}) => {
+  const {
+    activeApfloraLayers: activeApfloraLayersRaw,
+    setActiveApfloraLayers,
+    setBounds,
+    assigningBeob,
+    setAssigningBeob,
+  } = mobxStore
+  const { idsFiltered: mapIdsFiltered } = mobxStore[treeName].map
+  const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
 
+  const SortableItem = SortableElement(() => {
     const assigningispossible =
       activeApfloraLayers.includes('tpop') &&
       ((activeApfloraLayers.includes('beobNichtBeurteilt') &&
@@ -169,17 +186,6 @@ const SortableItem = SortableElement(
         }
       },
       [assigningBeob, activeApfloraLayers],
-    )
-    const onClickFiltern = useCallback(
-      () => {
-        if (activeApfloraLayers.includes('mapFilter')) {
-          return setActiveApfloraLayers(
-            activeApfloraLayers.filter(l => l !== 'mapFilter'),
-          )
-        }
-        setActiveApfloraLayers([...activeApfloraLayers, 'mapFilter'])
-      },
-      [activeApfloraLayers],
     )
     const onClickZoomToAll = useCallback(
       () => {
@@ -243,6 +249,7 @@ const SortableItem = SortableElement(
       [activeApfloraLayers, apfloraLayer, layerDataHighlighted],
     )
 
+    if (data.error) return `Fehler: ${data.error.message}`
     return (
       <LayerDiv>
         <Checkbox
@@ -337,7 +344,8 @@ const SortableItem = SortableElement(
         </IconsDiv>
       </LayerDiv>
     )
-  },
-)
+  })
+  return <SortableItem index={index} />
+}
 
-export default enhance(SortableItem)
+export default enhance(MySortableItem)

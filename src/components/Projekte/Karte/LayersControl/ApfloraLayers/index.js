@@ -1,12 +1,10 @@
 import React, { useContext, useCallback } from 'react'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { arrayMove } from 'react-sortable-hoc'
 import { getSnapshot } from 'mobx-state-tree'
 
-import withData from './withData'
 import mobxStoreContext from '../../../../../mobxStoreContext'
 import SortableList from './SortableList'
 
@@ -16,16 +14,7 @@ const CardContent = styled.div`
   padding-right: 4px;
 `
 
-const enhance = compose(
-  withProps(({ treeName }) => {
-    const mobxStore = useContext(mobxStoreContext)
-    return {
-      activeNodes: mobxStore[`${treeName}ActiveNodes`],
-    }
-  }),
-  withData,
-  observer,
-)
+const enhance = compose(observer)
 
 const ApfloraLayers = ({
   treeName,
@@ -33,14 +22,12 @@ const ApfloraLayers = ({
   setPopBounds,
   tpopBounds,
   setTpopBounds,
-  data,
 }: {
   treeName: string,
   popBounds: Array<Array<Number>>,
   setPopBounds: () => void,
   tpopBounds: Array<Array<Number>>,
   setTpopBounds: () => void,
-  data: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { apfloraLayers, setApfloraLayers } = mobxStore
@@ -51,7 +38,6 @@ const ApfloraLayers = ({
     [apfloraLayers],
   )
 
-  if (data.error) return `Fehler: ${data.error.message}`
   return (
     <CardContent>
       <SortableList
@@ -59,7 +45,6 @@ const ApfloraLayers = ({
         onSortEnd={onSortEnd}
         useDragHandle
         lockAxis="y"
-        data={data}
         treeName={treeName}
       />
     </CardContent>

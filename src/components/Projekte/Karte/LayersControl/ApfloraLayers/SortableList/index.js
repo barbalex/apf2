@@ -11,7 +11,6 @@ const SortableList = SortableContainer(({ treeName, items, data }) => (
         // need to pass index to sortableElement
         index={index}
         apfloraLayer={apfloraLayer}
-        data={data}
         treeName={treeName}
       />
     ))}
