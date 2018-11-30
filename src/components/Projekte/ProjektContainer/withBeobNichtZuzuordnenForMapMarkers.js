@@ -1,7 +1,7 @@
 // @flow
 import { graphql } from 'react-apollo'
 
-import query from './beobNichtZuzuordnenForMapMarkers'
+import query from './beobNichtZuzuordnenForMap'
 
 export default graphql(query, {
   options: ({ projId, apId, beobNichtZuzuordnenIsActiveInMap }) => ({

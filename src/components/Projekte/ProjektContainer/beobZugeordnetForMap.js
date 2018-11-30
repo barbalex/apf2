@@ -6,7 +6,7 @@ export default gql`
     $apId: UUID
     $beobZugeordnetIsActiveInMap: Boolean!
   ) {
-    beobZugeordnetForMapMarkers: projektById(id: $projId)
+    beobZugeordnetForMap: projektById(id: $projId)
       @include(if: $beobZugeordnetIsActiveInMap) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {

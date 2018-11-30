@@ -425,7 +425,7 @@ const ProjekteContainer = props => {
 
   const beobNichtZuzuordnenForMapNodesAparts = get(
     data,
-    `beobNichtZuzuordnenForMapMarkers.apsByProjId.nodes[0].apartsByApId.nodes`,
+    `beobNichtZuzuordnenForMap.apsByProjId.nodes[0].apartsByApId.nodes`,
     [],
   )
   const beobNichtZuzuordnenForMapNodes = flatten(

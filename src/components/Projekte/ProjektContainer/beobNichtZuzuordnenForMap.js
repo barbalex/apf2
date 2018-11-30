@@ -6,7 +6,7 @@ export default gql`
     $apId: UUID
     $beobNichtZuzuordnenIsActiveInMap: Boolean!
   ) {
-    beobNichtZuzuordnenForMapMarkers: projektById(id: $projId)
+    beobNichtZuzuordnenForMap: projektById(id: $projId)
       @include(if: $beobNichtZuzuordnenIsActiveInMap) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
