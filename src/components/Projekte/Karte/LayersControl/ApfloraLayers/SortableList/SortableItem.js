@@ -1,7 +1,11 @@
+// @flow
+/**
+ * TODO:
+ * let each item call it's data itself
+ * use callbacks
+ */
 import React, { useContext, useCallback } from 'react'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
-import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
 import DragHandleIcon from '@material-ui/icons/DragHandle'
@@ -12,15 +16,11 @@ import FilterCenterFocusIcon from '@material-ui/icons/FilterCenterFocus'
 import RemoveIcon from '@material-ui/icons/Remove'
 import PhotoFilterIcon from '@material-ui/icons/PhotoFilter'
 import { SortableElement, SortableHandle } from 'react-sortable-hoc'
-import 'leaflet'
-import 'leaflet-draw'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { withApollo } from 'react-apollo'
-import { getSnapshot } from 'mobx-state-tree'
 
 import Checkbox from '../../shared/Checkbox'
-import withData from '../withData'
 import getBounds from '../../../../../../modules/getBounds'
 import mobxStoreContext from '../../../../../../mobxStoreContext'
 

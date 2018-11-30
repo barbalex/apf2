@@ -4,8 +4,6 @@ import withProps from 'recompose/withProps'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { arrayMove } from 'react-sortable-hoc'
-import 'leaflet'
-import 'leaflet-draw'
 import { getSnapshot } from 'mobx-state-tree'
 
 import withData from './withData'

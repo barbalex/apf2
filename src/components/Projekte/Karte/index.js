@@ -100,10 +100,6 @@ const Container = styled.div`
   height: 100%;
   overflow: hidden;
 `
-const LoadingContainer = styled.div`
-  padding: 15px;
-  color: grey;
-`
 
 /**
  * DO NOT use component state / props to track mouseCoordinates
