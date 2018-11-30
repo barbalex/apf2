@@ -117,25 +117,17 @@ const DragHandle = SortableHandle(() => (
   </StyledIconButton>
 ))
 const SortableItem = SortableElement(
-  ({
-    tree,
-    apfloraLayer,
-    activeApfloraLayers,
-    setActiveApfloraLayers,
-    data,
-    bounds,
-    setBounds,
-    mapFilter,
-    mapIdsFiltered,
-    mapPopIdsFiltered,
-    mapTpopIdsFiltered,
-    mapBeobNichtBeurteiltIdsFiltered,
-    mapBeobNichtZuzuordnenIdsFiltered,
-    mapBeobZugeordnetIdsFiltered,
-    client,
-    setAssigningBeob,
-    assigningBeob,
-  }) => {
+  ({ treeName, apfloraLayer, data, client }) => {
+    const mobxStore = useContext(mobxStoreContext)
+    const {
+      activeApfloraLayers,
+      setActiveApfloraLayers,
+      setBounds,
+      assigningBeob,
+      setAssigningBeob,
+    } = mobxStore
+    const { idsFiltered: mapIdsFiltered } = mobxStore[treeName].map
+
     const assigningispossible =
       activeApfloraLayers.includes('tpop') &&
       ((activeApfloraLayers.includes('beobNichtBeurteilt') &&

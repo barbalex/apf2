@@ -87,6 +87,7 @@ const ApfloraLayers = ({
         setActiveApfloraLayers={setActiveApfloraLayers}
         data={data}
         tree={tree}
+        treeName={treeName}
         bounds={bounds}
         setBounds={setBounds}
         mapFilter={mapFilter}
