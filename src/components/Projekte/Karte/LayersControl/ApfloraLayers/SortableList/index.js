@@ -1,8 +1,5 @@
 import React from 'react'
-import { observer } from 'mobx-react-lite'
 import { SortableContainer } from 'react-sortable-hoc'
-import 'leaflet'
-import 'leaflet-draw'
 
 import SortableItem from './SortableItem'
 

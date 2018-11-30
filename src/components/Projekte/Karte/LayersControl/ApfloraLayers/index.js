@@ -83,22 +83,9 @@ const ApfloraLayers = ({
         onSortEnd={onSortEnd}
         useDragHandle
         lockAxis="y"
-        activeApfloraLayers={activeApfloraLayers.toJSON()}
-        setActiveApfloraLayers={setActiveApfloraLayers}
         data={data}
-        tree={tree}
         treeName={treeName}
-        bounds={bounds}
-        setBounds={setBounds}
-        mapFilter={mapFilter}
-        mapIdsFiltered={mapIdsFiltered}
-        mapPopIdsFiltered={mapPopIdsFiltered}
-        mapTpopIdsFiltered={mapTpopIdsFiltered}
-        mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
-        mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
-        mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
         client={client}
-        setAssigningBeob={setAssigningBeob}
       />
     </CardContent>
   )

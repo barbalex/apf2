@@ -116,6 +116,9 @@ const DragHandle = SortableHandle(() => (
     <StyledDragHandleIcon />
   </StyledIconButton>
 ))
+
+const enhance = compose()
+
 const SortableItem = SortableElement(
   ({ treeName, apfloraLayer, data, client }) => {
     const mobxStore = useContext(mobxStoreContext)
@@ -352,4 +355,4 @@ const SortableItem = SortableElement(
   },
 )
 
-export default SortableItem
+export default enhance(SortableItem)
