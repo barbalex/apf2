@@ -2,7 +2,6 @@
 /**
  * TODO:
  * let each item call it's data itself
- * use callbacks
  */
 import React, { useContext, useCallback, useMemo } from 'react'
 import compose from 'recompose/compose'
@@ -14,7 +13,6 @@ import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline'
 import LocalFloristIcon from '@material-ui/icons/LocalFlorist'
 import FilterCenterFocusIcon from '@material-ui/icons/FilterCenterFocus'
 import RemoveIcon from '@material-ui/icons/Remove'
-import PhotoFilterIcon from '@material-ui/icons/PhotoFilter'
 import { SortableElement, SortableHandle } from 'react-sortable-hoc'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
@@ -49,9 +47,6 @@ const StyledDragHandleIcon = styled(DragHandleIcon)`
 const ZoomToIcon = styled(FilterCenterFocusIcon)`
   height: 20px !important;
 `
-const FilterIcon = styled(PhotoFilterIcon)`
-  height: 20px !important;
-`
 const LayerDiv = styled.div`
   display: flex;
   min-height: 24px;
@@ -78,9 +73,6 @@ const ZuordnenDiv = styled.div``
 const ZoomToDiv = styled.div`
   padding-left: 3px;
   min-width: 18px;
-`
-const FilterDiv = styled.div`
-  padding-left: 3px;
 `
 const MapIcon = styled(LocalFloristIcon)`
   margin-right: -0.1em;
