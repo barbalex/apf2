@@ -47,7 +47,6 @@ import withPopForMap from './withPopForMap'
 import withTpopForMap from './withTpopForMap'
 import withBeobNichtBeurteiltForMap from './withBeobNichtBeurteiltForMap'
 import withBeobNichtZuzuordnenForMap from './withBeobNichtZuzuordnenForMap'
-import withBeobZugeordnetForMap from './withBeobZugeordnetForMap'
 import withBeobZugeordnetForMapMarkers from './withBeobZugeordnetForMapMarkers'
 import withBeobNichtBeurteiltForMapMarkers from './withBeobNichtBeurteiltForMapMarkers'
 import withBeobNichtZuzuordnenForMapMarkers from './withBeobNichtZuzuordnenForMapMarkers'
@@ -124,7 +123,6 @@ const enhance = compose(
   withTpopForMap,
   withBeobNichtBeurteiltForMap,
   withBeobNichtZuzuordnenForMap,
-  withBeobZugeordnetForMap,
   withBeobZugeordnetForMapMarkers,
   withBeobNichtBeurteiltForMapMarkers,
   withBeobNichtZuzuordnenForMapMarkers,
@@ -166,7 +164,6 @@ const ProjekteContainer = props => {
     dataTpopForMap,
     dataBeobNichtBeurteiltForMap,
     dataBeobNichtZuzuordnenForMap,
-    dataBeobZugeordnetForMap,
     dataBeobZugeordnetForMapMarkers,
     dataBeobNichtBeurteiltForMapMarkers,
     dataBeobNichtZuzuordnenForMapMarkers,
@@ -207,7 +204,6 @@ const ProjekteContainer = props => {
     dataTpopForMap: Object,
     dataBeobNichtBeurteiltForMap: Object,
     dataBeobNichtZuzuordnenForMap: Object,
-    dataBeobZugeordnetForMap: Object,
     dataBeobZugeordnetForMapMarkers: Object,
     dataBeobNichtBeurteiltForMapMarkers: Object,
     dataBeobNichtZuzuordnenForMapMarkers: Object,
@@ -270,7 +266,6 @@ const ProjekteContainer = props => {
     dataTpopForMap,
     dataBeobNichtBeurteiltForMap,
     dataBeobNichtZuzuordnenForMap,
-    dataBeobZugeordnetForMap,
     dataBeobZugeordnetForMapMarkers,
     dataBeobNichtBeurteiltForMapMarkers,
     dataBeobNichtZuzuordnenForMapMarkers,
@@ -326,7 +321,6 @@ const ProjekteContainer = props => {
     ...dataTpopForMap,
     ...dataBeobNichtBeurteiltForMap,
     ...dataBeobNichtZuzuordnenForMap,
-    ...dataBeobZugeordnetForMap,
     ...dataBeobZugeordnetForMapMarkers,
     ...dataBeobNichtBeurteiltForMapMarkers,
     ...dataBeobNichtZuzuordnenForMapMarkers,
@@ -370,7 +364,6 @@ const ProjekteContainer = props => {
     dataTpopForMap,
     dataBeobNichtBeurteiltForMap,
     dataBeobNichtZuzuordnenForMap,
-    dataBeobZugeordnetForMap,
     dataBeobZugeordnetForMapMarkers,
     dataBeobNichtBeurteiltForMapMarkers,
     dataBeobNichtZuzuordnenForMapMarkers,
@@ -454,7 +447,16 @@ const ProjekteContainer = props => {
   )
   setBeobNichtZuzuordnenIdsFiltered(mapBeobNichtZuzuordnenIdsFiltered)
 
-  const beobZugeordnetForMapNodes = get(data, `beobZugeordnetForMap.nodes`, [])
+  const beobZugeordnetForMapAparts = get(
+    data,
+    `beobZugeordnetForMapMarkers.apsByProjId.nodes[0].apartsByApId.nodes`,
+    [],
+  )
+  const beobZugeordnetForMapNodes = flatten(
+    beobZugeordnetForMapAparts.map(n =>
+      get(n, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []),
+    ),
+  )
   const mapBeobZugeordnetIdsFiltered = useMemo(
     () =>
       idsInsideFeatureCollection({
@@ -464,6 +466,10 @@ const ProjekteContainer = props => {
     [mapFilter, beobZugeordnetForMapNodes],
   )
   setBeobZugeordnetIdsFiltered(mapBeobZugeordnetIdsFiltered)
+  console.log(
+    'ProjektContainer, beobZugeordnetForMapNodes',
+    beobZugeordnetForMapNodes,
+  )
 
   if (!activeApfloraLayers.includes('mapFilter')) {
     // when no map filter exists nodes in activeNodeArray should be highlighted

@@ -236,7 +236,6 @@ export default async ({
   refetchTree('beobNichtBeurteilts')
   refetchTree('beobZugeordnets')
   refetchTree('beobNichtBeurteiltForMap')
-  refetchTree('beobZugeordnetForMap')
   refetchTree('beobZugeordnetForMapMarkers')
   refetchTree('beobNichtBeurteiltForMapMarkers')
   refetchTree('beobZugeordnetAssignPolylinesForMap')
