@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 export default gql`
   query BeobNichtBeurteiltForMapQuery(
     $ap: [UUID!]
-    $apIsActiveInMap: Boolean!
+    $beobNichtBeurteiltIsActiveInMap: Boolean!
   ) {
     beobNichtBeurteiltForMap: allVApbeobs(
       filter: {
@@ -11,7 +11,7 @@ export default gql`
         nichtZuordnen: { equalTo: false }
         tpopId: { isNull: true }
       }
-    ) @include(if: $apIsActiveInMap) {
+    ) @include(if: $beobNichtBeurteiltIsActiveInMap) {
       nodes {
         id
         x

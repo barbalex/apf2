@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 export default gql`
   query BeobZugeordnetAssignPolylinesForMapQuery(
     $ap: [UUID!]
-    $apIsActiveInMap: Boolean!
+    $beobZugeordnetAssignPolylinesIsActiveInMap: Boolean!
   ) {
     beobZugeordnetAssignPolylinesForMap: allVApbeobs(
       filter: {
@@ -11,7 +11,7 @@ export default gql`
         nichtZuordnen: { equalTo: false }
         tpopId: { isNull: false }
       }
-    ) @include(if: $apIsActiveInMap) {
+    ) @include(if: $beobZugeordnetAssignPolylinesIsActiveInMap) {
       nodes {
         id
         x

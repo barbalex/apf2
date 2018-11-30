@@ -4,9 +4,9 @@ import { graphql } from 'react-apollo'
 import query from './beobNichtZuzuordnenForMap'
 
 export default graphql(query, {
-  options: ({ ap, apIsActiveInMap }) => ({
+  options: ({ ap, beobNichtZuzuordnenIsActiveInMap }) => ({
     ap,
-    apIsActiveInMap,
+    beobNichtZuzuordnenIsActiveInMap,
   }),
   name: 'dataBeobNichtZuzuordnenForMap',
 })

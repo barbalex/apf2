@@ -4,10 +4,10 @@ export default gql`
   query BeobNichtBeurteiltForMapMarkersQuery(
     $projId: UUID!
     $apId: UUID
-    $apIsActiveInMap: Boolean!
+    $beobNichtBeurteiltIsActiveInMap: Boolean!
   ) {
     beobNichtBeurteiltForMapMarkers: projektById(id: $projId)
-      @include(if: $apIsActiveInMap) {
+      @include(if: $beobNichtBeurteiltIsActiveInMap) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {

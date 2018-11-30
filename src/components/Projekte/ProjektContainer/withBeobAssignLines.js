@@ -4,9 +4,14 @@ import { graphql } from 'react-apollo'
 import query from './beobAssignLines'
 
 export default graphql(query, {
-  options: ({ projId, isProjekt, apId, isAp }) => ({
+  options: ({
     projId,
-    isProjekt,
+    beobZugeordnetAssignPolylinesIsActiveInMap,
+    apId,
+    isAp,
+  }) => ({
+    projId,
+    beobZugeordnetAssignPolylinesIsActiveInMap,
     apId,
     isAp,
   }),

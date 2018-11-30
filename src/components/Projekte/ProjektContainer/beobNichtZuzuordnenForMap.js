@@ -3,11 +3,11 @@ import gql from 'graphql-tag'
 export default gql`
   query BeobNichtZuzuordnenForMapQuery(
     $ap: [UUID!]
-    $apIsActiveInMap: Boolean!
+    $beobNichtZuzuordnenIsActiveInMap: Boolean!
   ) {
     beobNichtZuzuordnenForMap: allVApbeobs(
       filter: { apId: { in: $ap }, nichtZuordnen: { equalTo: true } }
-    ) @include(if: $apIsActiveInMap) {
+    ) @include(if: $beobNichtZuzuordnenIsActiveInMap) {
       nodes {
         id
         x

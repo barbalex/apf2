@@ -4,10 +4,10 @@ export default gql`
   query BeobNichtZuzuordnenForMapMarkersQuery(
     $projId: UUID!
     $apId: UUID
-    $apIsActiveInMap: Boolean!
+    $beobNichtZuzuordnenIsActiveInMap: Boolean!
   ) {
     beobNichtZuzuordnenForMapMarkers: projektById(id: $projId)
-      @include(if: $apIsActiveInMap) {
+      @include(if: $beobNichtZuzuordnenIsActiveInMap) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
