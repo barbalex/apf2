@@ -405,7 +405,7 @@ const ProjekteContainer = props => {
 
   const beobNichtBeurteiltForMapAparts = get(
     data,
-    `beobNichtBeurteiltForMapMarkers.apsByProjId.nodes[0].apartsByApId.nodes`,
+    `beobNichtBeurteiltForMap.apsByProjId.nodes[0].apartsByApId.nodes`,
     [],
   )
   const beobNichtBeurteiltForMapNodes = flatten(
@@ -445,7 +445,7 @@ const ProjekteContainer = props => {
 
   const beobZugeordnetForMapAparts = get(
     data,
-    `beobZugeordnetForMapMarkers.apsByProjId.nodes[0].apartsByApId.nodes`,
+    `beobZugeordnetForMap.apsByProjId.nodes[0].apartsByApId.nodes`,
     [],
   )
   const beobZugeordnetForMapNodes = flatten(
@@ -462,9 +462,6 @@ const ProjekteContainer = props => {
     [mapFilter, beobZugeordnetForMapNodes],
   )
   setBeobZugeordnetIdsFiltered(mapBeobZugeordnetIdsFiltered)
-  console.log('ProjektContainer', {
-    beobNichtZuzuordnenForMapNodes,
-  })
 
   if (!activeApfloraLayers.includes('mapFilter')) {
     // when no map filter exists nodes in activeNodeArray should be highlighted

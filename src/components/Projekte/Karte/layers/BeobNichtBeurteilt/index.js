@@ -39,7 +39,7 @@ const BeobNichtBeurteiltMarker = ({
   )
   const aparts = get(
     data,
-    'beobNichtBeurteiltForMapMarkers.apsByProjId.nodes[0].apartsByApId.nodes',
+    'beobNichtBeurteiltForMap.apsByProjId.nodes[0].apartsByApId.nodes',
     [],
   )
   const beobs = flatten(

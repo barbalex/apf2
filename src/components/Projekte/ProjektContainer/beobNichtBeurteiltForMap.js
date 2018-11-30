@@ -6,7 +6,7 @@ export default gql`
     $apId: UUID
     $beobNichtBeurteiltIsActiveInMap: Boolean!
   ) {
-    beobNichtBeurteiltForMapMarkers: projektById(id: $projId)
+    beobNichtBeurteiltForMap: projektById(id: $projId)
       @include(if: $beobNichtBeurteiltIsActiveInMap) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {

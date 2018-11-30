@@ -36,7 +36,7 @@ const BeobZugeordnetMarker = ({
   const beobZugeordnetFilterString = get(tree, 'nodeLabelFilter.beobZugeordnet')
   const aparts = get(
     data,
-    'beobZugeordnetForMapMarkers.apsByProjId.nodes[0].apartsByApId.nodes',
+    'beobZugeordnetForMap.apsByProjId.nodes[0].apartsByApId.nodes',
     [],
   )
   const beobs = flatten(
