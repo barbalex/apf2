@@ -19,6 +19,7 @@ import debounceHandler from '@hocs/debounce-handler'
 import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
 import { withApollo } from 'react-apollo'
+import { getSnapshot } from 'mobx-state-tree'
 
 import LayersControl from './LayersControl'
 import OsmColor from './layers/OsmColor'
@@ -153,10 +154,11 @@ const Karte = ({
     activeBaseLayer,
     idOfTpopBeingLocalized,
     setIdOfTpopBeingLocalized,
-    bounds,
+    bounds: boundsRaw,
     addError,
     assigningBeob,
   } = mobxStore
+  const bounds = getSnapshot(boundsRaw)
 
   const mapRef = useRef(null)
 
