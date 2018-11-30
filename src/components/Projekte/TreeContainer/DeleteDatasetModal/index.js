@@ -24,50 +24,35 @@ const enhance = compose(
   observer,
 )
 
-const DatasetDeleteModal = ({
-  treeName,
-  client,
-}: {
-  treeName: string,
-  client: Object,
-}) => {
+const DatasetDeleteModal = ({ client }: { client: Object }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { addError, toDelete, emptyToDelete, addDeletedDataset } = mobxStore
+  const { toDeleteTable, toDeleteLabel, emptyToDelete, toDeleteId } = mobxStore
 
-  const datasetToDelete = toDelete
-  const table = tables.find(t => t.table === datasetToDelete.table)
+  const table = tables.find(t => t.table === toDeleteTable)
   let tableName = null
   if (table && table.labelSingular) {
     tableName = table.labelSingular
   }
-  let question = `${tableName ? `${tableName} "` : ''}${datasetToDelete.label}${
+  let question = `${tableName ? `${tableName} "` : ''}${toDeleteLabel}${
     tableName ? '"' : ''
   } löschen?`
-  if (!datasetToDelete.label) {
+  if (!toDeleteLabel) {
     question = `${tableName} löschen?`
   }
 
-  const onClickAbbrechen = useCallback(() => emptyToDelete())
-  const onClickLoeschen = useCallback(
-    () =>
-      deleteDataset({
-        toDelete,
-        emptyToDelete,
-        addDeletedDataset,
-        addError,
-        client,
-        mobxStore,
-        treeName,
-      }),
-    [treeName],
+  const onClickLoeschen = useCallback(() =>
+    deleteDataset({
+      client,
+      mobxStore,
+    }),
   )
 
   return (
     <ErrorBoundary>
-      <StyledDialog open={!!datasetToDelete.table}>
+      <StyledDialog open={!!toDeleteId}>
         {question}
         <DialogActions>
-          <Button onClick={onClickAbbrechen}>Abbrechen</Button>
+          <Button onClick={emptyToDelete}>Abbrechen</Button>
           <Button color="primary" onClick={onClickLoeschen}>
             Löschen
           </Button>

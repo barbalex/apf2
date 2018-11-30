@@ -164,7 +164,8 @@ export default async ({
         /**
          * update does not work because query contains filter
          */
-        /*optimisticResponse: {
+        /*
+        optimisticResponse: {
           __typename: 'Mutation',
           updateTpopkontrById: {
             tpopkontr: {
@@ -213,7 +214,8 @@ export default async ({
             },
             __typename: 'Tpopkontr',
           },
-        },
+        },*/
+        /*
         update: (proxy, { data: { updateTpopkontrById } }) => {
           // Read the data from our cache for this query.
           // need to use exact same query with which data was queried!
@@ -222,13 +224,13 @@ export default async ({
           if (kontrTyp !== 'Freiwilligen-Erfolgskontrolle') {
             data = proxy.readQuery({
               query: queryTpopfeldkontr,
-              variables: { tpop: parentId }
-            });
+              variables: { tpop: parentId },
+            })
           } else {
             data = proxy.readQuery({
               query: queryTpopfreiwkontr,
-              variables: { tpop: parentId }
-            });
+              variables: { tpop: parentId },
+            })
           }
           // Add our comment from the mutation to the end.
           data.tpopkontr.push(updateTpopkontrById.tpopkontr)
@@ -238,7 +240,7 @@ export default async ({
           } else {
             proxy.writeQuery({ query: queryTpopfreiwkontr, data })
           }
-        }*/
+        },*/
       })
       newId = get(response, 'data.createTpopkontr.tpopkontr.id')
       break
@@ -324,11 +326,11 @@ export default async ({
       // do nothing
       break
   }
-
   refetchTree(`${tablePassed}s`)
   refetchTree('aps')
   refetchTree('pops')
   refetchTree('tpops')
+  refetchTree('tpopfeldkontrs')
 
   // copy tpop if needed
   if (table === 'pop' && withNextLevel) {

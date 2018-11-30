@@ -12,23 +12,23 @@ const isFreiwilligenKontrolle = activeNodeArray =>
   activeNodeArray[activeNodeArray.length - 2] === 'Freiwilligen-Kontrollen'
 
 export default async ({
-  toDelete,
-  emptyToDelete,
-  addDeletedDataset,
-  addError,
   client,
   mobxStore,
 }: {
-  toDelete: Object,
-  emptyToDelete: () => void,
-  addDeletedDataset: () => void,
-  addError: Object,
   client: Object,
   mobxStore: Object,
 }): Promise<void> => {
-  const { setTreeKey } = mobxStore
-  // deleteDatasetDemand checks variables
-  const { table: tablePassed, id, url, label, afterDeletionHook } = toDelete
+  const {
+    setTreeKey,
+    emptyToDelete,
+    addDeletedDataset,
+    addError,
+    toDeleteTable: tablePassed,
+    toDeleteId,
+    toDeleteUrl,
+    toDeleteLabel,
+    toDeleteAfterDeletionHook,
+  } = mobxStore
 
   // some tables need to be translated, i.e. tpopfreiwkontr
   const tableMetadata = tables.find(t => t.table === tablePassed)
@@ -56,7 +56,7 @@ export default async ({
     const query = await import(`./${queryName}`) //.then(m => m.default)
     result = await client.query({
       query: query.default,
-      variables: { id },
+      variables: { id: toDeleteId },
     })
   } catch (error) {
     return addError(error)
@@ -67,12 +67,12 @@ export default async ({
   // add to datasetsDeleted
   addDeletedDataset({
     table,
-    id,
-    label,
-    url,
+    id: toDeleteId,
+    label: toDeleteLabel,
+    url: toDeleteUrl,
     data,
     time: Date.now(),
-    afterDeletionHook,
+    afterDeletionHook: toDeleteAfterDeletionHook,
   })
 
   try {
@@ -86,7 +86,7 @@ export default async ({
           }
         }
       `,
-      variables: { id },
+      variables: { id: toDeleteId },
     })
   } catch (error) {
     return addError(error)
@@ -99,10 +99,10 @@ export default async ({
   // set new url if necessary
   const activeNodeArray1 = get(mobxStore, 'tree.activeNodeArray')
   if (
-    isEqual(activeNodeArray1, url) &&
+    isEqual(activeNodeArray1, toDeleteUrl) &&
     !isFreiwilligenKontrolle(activeNodeArray1)
   ) {
-    const newActiveNodeArray1 = [...url]
+    const newActiveNodeArray1 = [...toDeleteUrl]
     newActiveNodeArray1.pop()
     // if zieljahr is active, need to pop again,
     // (in case there is no other ziel left in same year)
@@ -117,10 +117,10 @@ export default async ({
   }
   const activeNodeArray2 = get(mobxStore, 'tree2.activeNodeArray')
   if (
-    isEqual(activeNodeArray2, url) &&
+    isEqual(activeNodeArray2, toDeleteUrl) &&
     !isFreiwilligenKontrolle(activeNodeArray2)
   ) {
-    const newActiveNodeArray2 = [...url]
+    const newActiveNodeArray2 = [...toDeleteUrl]
     newActiveNodeArray2.pop()
     // if zieljahr is active, need to pop again,
     // (in case there is no other ziel left in same year)
@@ -136,21 +136,21 @@ export default async ({
 
   // remove from openNodes
   const openNodes1 = get(mobxStore, 'tree.openNodes')
-  const newOpenNodes1 = openNodes1.filter(n => !isEqual(n, url))
+  const newOpenNodes1 = openNodes1.filter(n => !isEqual(n, toDeleteUrl))
   setTreeKey({
     value: newOpenNodes1,
     tree: 'tree',
     key: 'openNodes',
   })
   const openNodes2 = get(mobxStore, 'tree2.openNodes')
-  const newOpenNodes2 = openNodes2.filter(n => !isEqual(n, url))
+  const newOpenNodes2 = openNodes2.filter(n => !isEqual(n, toDeleteUrl))
   setTreeKey({
     value: newOpenNodes2,
     tree: 'tree2',
     key: 'openNodes',
   })
 
-  if (afterDeletionHook) afterDeletionHook()
+  if (toDeleteAfterDeletionHook) toDeleteAfterDeletionHook()
 
   // reset datasetToDelete
   emptyToDelete()

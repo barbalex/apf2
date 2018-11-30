@@ -189,7 +189,7 @@ const TreeContainer = ({
     setTpopLabelUsingNr,
     setIdOfTpopBeingLocalized,
     addError,
-    toDelete,
+    toDeleteId,
     setToDelete,
     setCopying,
     copying,
@@ -203,8 +203,6 @@ const TreeContainer = ({
   } = mobxStore
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
 
-  const datasetToDelete = toDelete
-  const deleteDatasetModalIsVisible = !!datasetToDelete.id
   const tree = mobxStore[treeName]
   const { openNodes, nodes } = tree
 
@@ -296,7 +294,7 @@ const TreeContainer = ({
           })
         },
         delete() {
-          const afterDeletionHook = async () => {
+          const afterDeletionHook = () => {
             // set it as new activeNodeArray and open node
             const newOpenNodes = openNodes.filter(n => !isEqual(n, url))
             setTreeKey({
@@ -466,18 +464,13 @@ const TreeContainer = ({
       }
     },
     [
-      data,
       treeName,
       activeNodes,
-      refetchTree,
       activeApfloraLayers,
-      setActiveApfloraLayers,
       activeOverlays,
-      setActiveOverlays,
-      setIdOfTpopBeingLocalized,
       popLabelUsingNr,
       tpopLabelUsingNr,
-      toDelete,
+      toDeleteId,
     ],
   )
   const showMapIfNotYetVisible = useCallback((projekteTabs: Array<String>) => {
@@ -495,15 +488,13 @@ const TreeContainer = ({
   return (
     <ErrorBoundary>
       <Container>
-        {deleteDatasetModalIsVisible && (
-          <DeleteDatasetModal treeName={treeName} />
-        )}
+        {!!toDeleteId && <DeleteDatasetModal treeName={treeName} />}
         <LabelFilterContainer>
           <LabelFilter treeName={treeName} />
           {!!activeNodes.projekt && <ApFilter treeName={treeName} />}
         </LabelFilterContainer>
         <InnerTreeContainer>
-          <Tree data={data} optimize treeName={treeName} />
+          <Tree data={data} treeName={treeName} />
         </InnerTreeContainer>
         <CmApFolder onClick={handleClick} treeName={treeName} />
         <CmAp onClick={handleClick} treeName={treeName} />

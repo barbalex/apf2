@@ -89,15 +89,6 @@ const myTypes = types
     deletedDatasets: [],
   }))
   .views(self => ({
-    get toDelete() {
-      return {
-        table: self.toDeleteTable,
-        id: self.toDeleteId,
-        label: self.toDeleteLabel,
-        url: self.toDeleteUrl,
-        afterDeletionHook: self.toDeleteAfterDeletionHook,
-      }
-    },
     get treeActiveNodes() {
       return getActiveNodes(self.tree.activeNodeArray)
     },
