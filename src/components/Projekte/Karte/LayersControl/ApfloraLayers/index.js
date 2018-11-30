@@ -6,7 +6,6 @@ import styled from 'styled-components'
 import { arrayMove } from 'react-sortable-hoc'
 import 'leaflet'
 import 'leaflet-draw'
-import { withApollo } from 'react-apollo'
 import { getSnapshot } from 'mobx-state-tree'
 
 import withData from './withData'
@@ -20,7 +19,6 @@ const CardContent = styled.div`
 `
 
 const enhance = compose(
-  withApollo,
   withProps(({ treeName }) => {
     const mobxStore = useContext(mobxStoreContext)
     return {
@@ -38,7 +36,6 @@ const ApfloraLayers = ({
   tpopBounds,
   setTpopBounds,
   data,
-  client,
 }: {
   treeName: string,
   popBounds: Array<Array<Number>>,
@@ -46,28 +43,9 @@ const ApfloraLayers = ({
   tpopBounds: Array<Array<Number>>,
   setTpopBounds: () => void,
   data: Object,
-  client: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const {
-    apfloraLayers,
-    setApfloraLayers,
-    activeApfloraLayers,
-    setActiveApfloraLayers,
-    bounds,
-    setBounds,
-    mapFilter,
-    setAssigningBeob,
-  } = mobxStore
-  const tree = mobxStore[treeName]
-  const {
-    idsFiltered: mapIdsFiltered,
-    popIdsFiltered: mapPopIdsFiltered,
-    tpopIdsFiltered: mapTpopIdsFiltered,
-    beobNichtBeurteiltIdsFiltered: mapBeobNichtBeurteiltIdsFiltered,
-    beobNichtZuzuordnenIdsFiltered: mapBeobNichtZuzuordnenIdsFiltered,
-    beobZugeordnetIdsFiltered: mapBeobZugeordnetIdsFiltered,
-  } = mobxStore[treeName].map
+  const { apfloraLayers, setApfloraLayers } = mobxStore
 
   const onSortEnd = useCallback(
     ({ oldIndex, newIndex }) =>
@@ -85,7 +63,6 @@ const ApfloraLayers = ({
         lockAxis="y"
         data={data}
         treeName={treeName}
-        client={client}
       />
     </CardContent>
   )

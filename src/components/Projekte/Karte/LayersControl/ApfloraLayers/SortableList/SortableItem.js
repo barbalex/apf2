@@ -117,7 +117,7 @@ const DragHandle = SortableHandle(() => (
   </StyledIconButton>
 ))
 
-const enhance = compose()
+const enhance = compose(withApollo)
 
 const SortableItem = SortableElement(
   ({ treeName, apfloraLayer, data, client }) => {

@@ -3,7 +3,7 @@ import { SortableContainer } from 'react-sortable-hoc'
 
 import SortableItem from './SortableItem'
 
-const SortableList = SortableContainer(({ treeName, items, data, client }) => (
+const SortableList = SortableContainer(({ treeName, items, data }) => (
   <div>
     {items.map((apfloraLayer, index) => (
       <SortableItem
@@ -11,7 +11,6 @@ const SortableList = SortableContainer(({ treeName, items, data, client }) => (
         apfloraLayer={apfloraLayer}
         data={data}
         treeName={treeName}
-        client={client}
       />
     ))}
   </div>
