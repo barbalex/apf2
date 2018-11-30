@@ -4,10 +4,10 @@ export default gql`
   query BeobZugeordnetForMapMarkersQuery(
     $projId: UUID!
     $apId: UUID
-    $apIsActiveInMap: Boolean!
+    $beobZugeordnetIsActiveInMap: Boolean!
   ) {
     beobZugeordnetForMapMarkers: projektById(id: $projId)
-      @include(if: $apIsActiveInMap) {
+      @include(if: $beobZugeordnetIsActiveInMap) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {

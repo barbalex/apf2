@@ -4,10 +4,10 @@ import { graphql } from 'react-apollo'
 import query from './beobZugeordnetForMapMarkers'
 
 export default graphql(query, {
-  options: ({ projId, apId, apIsActiveInMap }) => ({
+  options: ({ projId, apId, beobZugeordnetIsActiveInMap }) => ({
     projId,
     apId,
-    apIsActiveInMap,
+    beobZugeordnetIsActiveInMap,
   }),
   name: 'dataBeobZugeordnetForMapMarkers',
 })
