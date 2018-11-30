@@ -178,6 +178,78 @@ const SortableItem = SortableElement(
       },
       [assigningBeob, activeApfloraLayers],
     )
+    const onClickFiltern = useCallback(
+      () => {
+        if (activeApfloraLayers.includes('mapFilter')) {
+          return setActiveApfloraLayers(
+            activeApfloraLayers.filter(l => l !== 'mapFilter'),
+          )
+        }
+        setActiveApfloraLayers([...activeApfloraLayers, 'mapFilter'])
+      },
+      [activeApfloraLayers],
+    )
+    const onClickZoomToAll = useCallback(
+      () => {
+        // only zoom if there is data to zoom on
+        if (layerData.length === 0) return
+        if (activeApfloraLayers.includes(apfloraLayer.value)) {
+          setBounds(getBounds(layerData))
+        }
+      },
+      [layerData, activeApfloraLayers, apfloraLayer],
+    )
+    const onClickZoomToActive = useCallback(
+      () => {
+        // only zoom if a tpop is highlighted
+        if (layerDataHighlighted.length === 0) return
+        if (activeApfloraLayers.includes(apfloraLayer.value)) {
+          const newBounds = getBounds(layerDataHighlighted)
+          setBounds(newBounds)
+        }
+      },
+      [layerDataHighlighted, activeApfloraLayers, apfloraLayer],
+    )
+    const zoomToAllIconStyle = useMemo(
+      () => ({
+        color:
+          activeApfloraLayers.includes(apfloraLayer.value) &&
+          layerData.length > 0
+            ? 'black'
+            : '#e2e2e2',
+        fontWeight:
+          activeApfloraLayers.includes(apfloraLayer.value) &&
+          layerData.length > 0
+            ? 'bold'
+            : 'normal',
+        cursor:
+          activeApfloraLayers.includes(apfloraLayer.value) &&
+          layerData.length > 0
+            ? 'pointer'
+            : 'not-allowed',
+      }),
+      [activeApfloraLayers, apfloraLayer, layerData],
+    )
+    const zoomToActiveIconStyle = useMemo(
+      () => ({
+        color:
+          activeApfloraLayers.includes(apfloraLayer.value) &&
+          layerDataHighlighted.length > 0
+            ? '#fbec04'
+            : '#e2e2e2',
+        fontWeight:
+          activeApfloraLayers.includes(apfloraLayer.value) &&
+          layerDataHighlighted.length > 0
+            ? 'bold'
+            : 'normal',
+        cursor:
+          activeApfloraLayers.includes(apfloraLayer.value) &&
+          layerDataHighlighted.length > 0
+            ? 'pointer'
+            : 'not-allowed',
+      }),
+      [activeApfloraLayers, apfloraLayer, layerDataHighlighted],
+    )
 
     return (
       <LayerDiv>
@@ -245,76 +317,13 @@ const SortableItem = SortableElement(
                 </BeobZugeordnetAssignPolylinesIcon>
               </MapIconDiv>
             )}
-          {false && (
-            <FilterDiv>
-              {[
-                'pop',
-                'tpop',
-                'beobNichtBeurteilt',
-                'beobNichtZuzuordnen',
-                'beobZugeordnet',
-              ].includes(apfloraLayer.value) && (
-                <StyledIconButton
-                  title="mit Umriss(en) filtern"
-                  onClick={() => {
-                    if (activeApfloraLayers.includes('mapFilter')) {
-                      return setActiveApfloraLayers(
-                        activeApfloraLayers.filter(l => l !== 'mapFilter'),
-                      )
-                    }
-                    setActiveApfloraLayers([
-                      ...activeApfloraLayers,
-                      'mapFilter',
-                    ])
-                    // this does not work, see: https://github.com/Leaflet/Leaflet.draw/issues/708
-                    //window.L.Draw.Rectangle.initialize()
-                  }}
-                >
-                  <FilterIcon
-                    style={{
-                      color: activeApfloraLayers.includes(apfloraLayer.value)
-                        ? 'black'
-                        : '#e2e2e2',
-                      cursor: activeApfloraLayers.includes(apfloraLayer.value)
-                        ? 'pointer'
-                        : 'not-allowed',
-                    }}
-                  />
-                </StyledIconButton>
-              )}
-            </FilterDiv>
-          )}
           <ZoomToDiv>
             {apfloraLayer.value !== 'mapFilter' && (
               <StyledIconButton
                 title={`auf alle ${apfloraLayer.label} zoomen`}
-                onClick={() => {
-                  // only zoom if there is data to zoom on
-                  if (layerData.length === 0) return
-                  if (activeApfloraLayers.includes(apfloraLayer.value)) {
-                    setBounds(getBounds(layerData))
-                  }
-                }}
+                onClick={onClickZoomToAll}
               >
-                <ZoomToIcon
-                  style={{
-                    color:
-                      activeApfloraLayers.includes(apfloraLayer.value) &&
-                      layerData.length > 0
-                        ? 'black'
-                        : '#e2e2e2',
-                    fontWeight:
-                      activeApfloraLayers.includes(apfloraLayer.value) &&
-                      layerData.length > 0
-                        ? 'bold'
-                        : 'normal',
-                    cursor:
-                      activeApfloraLayers.includes(apfloraLayer.value) &&
-                      layerData.length > 0
-                        ? 'pointer'
-                        : 'not-allowed',
-                  }}
-                />
+                <ZoomToIcon style={zoomToAllIconStyle} />
               </StyledIconButton>
             )}
           </ZoomToDiv>
@@ -322,34 +331,9 @@ const SortableItem = SortableElement(
             {apfloraLayer.value !== 'mapFilter' && (
               <StyledIconButton
                 title={`auf aktive ${apfloraLayer.label} zoomen`}
-                onClick={() => {
-                  // only zoom if a tpop is highlighted
-                  if (layerDataHighlighted.length === 0) return
-                  if (activeApfloraLayers.includes(apfloraLayer.value)) {
-                    const newBounds = getBounds(layerDataHighlighted)
-                    setBounds(newBounds)
-                  }
-                }}
+                onClick={onClickZoomToActive}
               >
-                <ZoomToIcon
-                  style={{
-                    color:
-                      activeApfloraLayers.includes(apfloraLayer.value) &&
-                      layerDataHighlighted.length > 0
-                        ? '#fbec04'
-                        : '#e2e2e2',
-                    fontWeight:
-                      activeApfloraLayers.includes(apfloraLayer.value) &&
-                      layerDataHighlighted.length > 0
-                        ? 'bold'
-                        : 'normal',
-                    cursor:
-                      activeApfloraLayers.includes(apfloraLayer.value) &&
-                      layerDataHighlighted.length > 0
-                        ? 'pointer'
-                        : 'not-allowed',
-                  }}
-                />
+                <ZoomToIcon style={zoomToActiveIconStyle} />
               </StyledIconButton>
             )}
           </ZoomToDiv>
