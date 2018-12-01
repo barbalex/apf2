@@ -30,7 +30,7 @@ const ApfloraLayers = ({
   setTpopBounds: () => void,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { apfloraLayers, setApfloraLayers } = mobxStore
+  const { apfloraLayers, setApfloraLayers, activeApfloraLayers } = mobxStore
 
   const onSortEnd = useCallback(
     ({ oldIndex, newIndex }) =>
@@ -46,6 +46,7 @@ const ApfloraLayers = ({
         useDragHandle
         lockAxis="y"
         treeName={treeName}
+        activeApfloraLayers={activeApfloraLayers}
       />
     </CardContent>
   )

@@ -5,7 +5,6 @@
  */
 import React, { useContext, useCallback, useMemo } from 'react'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
 import DragHandleIcon from '@material-ui/icons/DragHandle'
@@ -20,11 +19,12 @@ import flatten from 'lodash/flatten'
 import { withApollo } from 'react-apollo'
 import { getSnapshot } from 'mobx-state-tree'
 import { observer } from 'mobx-react-lite'
+import { Query } from 'react-apollo'
 
 import Checkbox from '../../../shared/Checkbox'
 import getBounds from '../../../../../../../modules/getBounds'
 import mobxStoreContext from '../../../../../../../mobxStoreContext'
-import withData from './withData'
+import query from './data'
 
 const StyledIconButton = styled(Button)`
   max-width: 18px;
@@ -115,21 +115,11 @@ const DragHandle = SortableHandle(() => (
 
 const enhance = compose(
   withApollo,
-  withProps(({ treeName }) => ({
-    mobxStore: useContext(mobxStoreContext),
-  })),
-  withData,
   observer,
 )
 
-const MySortableItem = ({
-  treeName,
-  apfloraLayer,
-  data,
-  client,
-  index,
-  mobxStore,
-}) => {
+const MySortableItem = ({ treeName, apfloraLayer, client, index }) => {
+  const mobxStore = useContext(mobxStoreContext)
   const {
     activeApfloraLayers: activeApfloraLayersRaw,
     setActiveApfloraLayers,
@@ -137,215 +127,253 @@ const MySortableItem = ({
     assigningBeob,
     setAssigningBeob,
   } = mobxStore
-  const { idsFiltered: mapIdsFiltered } = mobxStore[treeName].map
+  const { idsFiltered } = mobxStore[treeName].map
   const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
+  const mapIdsFiltered = getSnapshot(idsFiltered)
+  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
+  const layer = apfloraLayer.value
+  const pop = layer === 'pop' && activeApfloraLayers.includes('pop')
+  const tpop = layer === 'tpop' && activeApfloraLayers.includes('tpop')
+  const beobNichtBeurteilt =
+    layer === 'beobNichtBeurteilt' &&
+    activeApfloraLayers.includes('beobNichtBeurteilt')
+  const beobNichtZuzuordnen =
+    layer === 'beobNichtZuzuordnen' &&
+    activeApfloraLayers.includes('beobNichtZuzuordnen')
+  const beobZugeordnet =
+    layer === 'beobZugeordnet' && activeApfloraLayers.includes('beobZugeordnet')
+  const beobZugeordnetAssignPolylines =
+    layer === 'beobZugeordnetAssignPolylines' &&
+    activeApfloraLayers.includes('beobZugeordnetAssignPolylines')
 
-  const SortableItem = SortableElement(() => {
-    const assigningispossible =
-      activeApfloraLayers.includes('tpop') &&
-      ((activeApfloraLayers.includes('beobNichtBeurteilt') &&
-        apfloraLayer.value === 'beobNichtBeurteilt') ||
-        (activeApfloraLayers.includes('beobZugeordnet') &&
-          apfloraLayer.value === 'beobZugeordnet'))
-    const zuordnenTitle = useMemo(
-      () => {
-        if (assigningBeob) return 'Zuordnung beenden'
-        if (assigningispossible) return 'Teil-Populationen zuordnen'
-        return 'Teil-Populationen zuordnen (aktivierbar, wenn auch Teil-Populationen eingeblendet werden)'
-      },
-      [assigningBeob, assigningispossible],
-    )
-    // for each layer there must exist a path in data!
-    let layerData = get(data, `${apfloraLayer.value}.nodes`, [])
-    if (apfloraLayer.value === 'tpop') {
-      // but tpop is special...
-      const pops = get(data, 'tpopByPop.nodes', [])
-      layerData = flatten(pops.map(n => get(n, 'tpopsByPopId.nodes', [])))
-    }
-    const layerDataHighlighted = layerData.filter(o =>
-      mapIdsFiltered.includes(o.id),
-    )
-    const onChangeCheckbox = useCallback(
-      () => {
-        if (activeApfloraLayers.includes(apfloraLayer.value)) {
-          return setActiveApfloraLayers(
-            activeApfloraLayers.filter(l => l !== apfloraLayer.value),
+  const variables = {
+    ap: activeNodes.ap ? [activeNodes.ap] : [],
+    pop,
+    tpop,
+    beobNichtBeurteilt,
+    beobNichtZuzuordnen,
+    beobZugeordnet,
+    beobZugeordnetAssignPolylines,
+  }
+  return (
+    // query is not in hoc because variables need to update via observer
+    <Query query={query} variables={variables}>
+      {({ error, data }) => {
+        const SortableItem = SortableElement(() => {
+          const assigningispossible =
+            activeApfloraLayers.includes('tpop') &&
+            ((activeApfloraLayers.includes('beobNichtBeurteilt') &&
+              apfloraLayer.value === 'beobNichtBeurteilt') ||
+              (activeApfloraLayers.includes('beobZugeordnet') &&
+                apfloraLayer.value === 'beobZugeordnet'))
+          const zuordnenTitle = useMemo(
+            () => {
+              if (assigningBeob) return 'Zuordnung beenden'
+              if (assigningispossible) return 'Teil-Populationen zuordnen'
+              return 'Teil-Populationen zuordnen (aktivierbar, wenn auch Teil-Populationen eingeblendet werden)'
+            },
+            [assigningBeob, assigningispossible],
           )
-        }
-        return setActiveApfloraLayers([
-          ...activeApfloraLayers,
-          apfloraLayer.value,
-        ])
-      },
-      [activeApfloraLayers, apfloraLayer],
-    )
-    const onClickZuordnen = useCallback(
-      () => {
-        if (activeApfloraLayers.includes('tpop')) {
-          setAssigningBeob(!assigningBeob)
-        }
-      },
-      [assigningBeob, activeApfloraLayers],
-    )
-    const onClickZoomToAll = useCallback(
-      () => {
-        // only zoom if there is data to zoom on
-        if (layerData.length === 0) return
-        if (activeApfloraLayers.includes(apfloraLayer.value)) {
-          setBounds(getBounds(layerData))
-        }
-      },
-      [layerData, activeApfloraLayers, apfloraLayer],
-    )
-    const onClickZoomToActive = useCallback(
-      () => {
-        // only zoom if a tpop is highlighted
-        if (layerDataHighlighted.length === 0) return
-        if (activeApfloraLayers.includes(apfloraLayer.value)) {
-          const newBounds = getBounds(layerDataHighlighted)
-          setBounds(newBounds)
-        }
-      },
-      [layerDataHighlighted, activeApfloraLayers, apfloraLayer],
-    )
-    const zoomToAllIconStyle = useMemo(
-      () => ({
-        color:
-          activeApfloraLayers.includes(apfloraLayer.value) &&
-          layerData.length > 0
-            ? 'black'
-            : '#e2e2e2',
-        fontWeight:
-          activeApfloraLayers.includes(apfloraLayer.value) &&
-          layerData.length > 0
-            ? 'bold'
-            : 'normal',
-        cursor:
-          activeApfloraLayers.includes(apfloraLayer.value) &&
-          layerData.length > 0
-            ? 'pointer'
-            : 'not-allowed',
-      }),
-      [activeApfloraLayers, apfloraLayer, layerData],
-    )
-    const zoomToActiveIconStyle = useMemo(
-      () => ({
-        color:
-          activeApfloraLayers.includes(apfloraLayer.value) &&
-          layerDataHighlighted.length > 0
-            ? '#fbec04'
-            : '#e2e2e2',
-        fontWeight:
-          activeApfloraLayers.includes(apfloraLayer.value) &&
-          layerDataHighlighted.length > 0
-            ? 'bold'
-            : 'normal',
-        cursor:
-          activeApfloraLayers.includes(apfloraLayer.value) &&
-          layerDataHighlighted.length > 0
-            ? 'pointer'
-            : 'not-allowed',
-      }),
-      [activeApfloraLayers, apfloraLayer, layerDataHighlighted],
-    )
+          // for each layer there must exist a path in data!
+          let layerData = get(data, `${apfloraLayer.value}.nodes`, [])
+          if (apfloraLayer.value === 'tpop') {
+            // but tpop is special...
+            const pops = get(data, 'tpopByPop.nodes', [])
+            layerData = flatten(pops.map(n => get(n, 'tpopsByPopId.nodes', [])))
+          }
+          const layerDataHighlighted = layerData.filter(o =>
+            mapIdsFiltered.includes(o.id),
+          )
+          const onChangeCheckbox = useCallback(
+            () => {
+              if (activeApfloraLayers.includes(apfloraLayer.value)) {
+                return setActiveApfloraLayers(
+                  activeApfloraLayers.filter(l => l !== apfloraLayer.value),
+                )
+              }
+              return setActiveApfloraLayers([
+                ...activeApfloraLayers,
+                apfloraLayer.value,
+              ])
+            },
+            [activeApfloraLayers, apfloraLayer],
+          )
+          const onClickZuordnen = useCallback(
+            () => {
+              if (activeApfloraLayers.includes('tpop')) {
+                setAssigningBeob(!assigningBeob)
+              }
+            },
+            [assigningBeob, activeApfloraLayers],
+          )
+          const onClickZoomToAll = useCallback(
+            () => {
+              // only zoom if there is data to zoom on
+              if (layerData.length === 0) return
+              if (activeApfloraLayers.includes(apfloraLayer.value)) {
+                setBounds(getBounds(layerData))
+              }
+            },
+            [layerData, activeApfloraLayers, apfloraLayer],
+          )
+          const onClickZoomToActive = useCallback(
+            () => {
+              // only zoom if a tpop is highlighted
+              if (layerDataHighlighted.length === 0) return
+              if (activeApfloraLayers.includes(apfloraLayer.value)) {
+                const newBounds = getBounds(layerDataHighlighted)
+                setBounds(newBounds)
+              }
+            },
+            [layerDataHighlighted, activeApfloraLayers, apfloraLayer],
+          )
+          const zoomToAllIconStyle = useMemo(
+            () => ({
+              color:
+                activeApfloraLayers.includes(apfloraLayer.value) &&
+                layerData.length > 0
+                  ? 'black'
+                  : '#e2e2e2',
+              fontWeight:
+                activeApfloraLayers.includes(apfloraLayer.value) &&
+                layerData.length > 0
+                  ? 'bold'
+                  : 'normal',
+              cursor:
+                activeApfloraLayers.includes(apfloraLayer.value) &&
+                layerData.length > 0
+                  ? 'pointer'
+                  : 'not-allowed',
+            }),
+            [activeApfloraLayers, apfloraLayer, layerData],
+          )
+          const zoomToActiveIconStyle = useMemo(
+            () => ({
+              color:
+                activeApfloraLayers.includes(apfloraLayer.value) &&
+                layerDataHighlighted.length > 0
+                  ? '#fbec04'
+                  : '#e2e2e2',
+              fontWeight:
+                activeApfloraLayers.includes(apfloraLayer.value) &&
+                layerDataHighlighted.length > 0
+                  ? 'bold'
+                  : 'normal',
+              cursor:
+                activeApfloraLayers.includes(apfloraLayer.value) &&
+                layerDataHighlighted.length > 0
+                  ? 'pointer'
+                  : 'not-allowed',
+            }),
+            [activeApfloraLayers, apfloraLayer, layerDataHighlighted],
+          )
 
-    if (data.error) return `Fehler: ${data.error.message}`
-    return (
-      <LayerDiv>
-        <Checkbox
-          value={apfloraLayer.value}
-          label={apfloraLayer.label}
-          checked={activeApfloraLayers.includes(apfloraLayer.value)}
-          onChange={onChangeCheckbox}
-        />
-        <IconsDiv>
-          {['beobNichtBeurteilt', 'beobZugeordnet'].includes(
-            apfloraLayer.value,
-          ) && (
-            <ZuordnenDiv>
-              <StyledIconButton title={zuordnenTitle} onClick={onClickZuordnen}>
-                {assigningBeob ? (
-                  <StyledPauseCircleOutlineIcon
-                    data-assigningispossible={assigningispossible}
-                  />
-                ) : (
-                  <StyledPlayCircleOutlineIcon
-                    data-assigningispossible={assigningispossible}
-                  />
+          if (error) return `Fehler: ${error.message}`
+          return (
+            <LayerDiv>
+              <Checkbox
+                value={apfloraLayer.value}
+                label={apfloraLayer.label}
+                checked={activeApfloraLayers.includes(apfloraLayer.value)}
+                onChange={onChangeCheckbox}
+              />
+              <IconsDiv>
+                {['beobNichtBeurteilt', 'beobZugeordnet'].includes(
+                  apfloraLayer.value,
+                ) && (
+                  <ZuordnenDiv>
+                    <StyledIconButton
+                      title={zuordnenTitle}
+                      onClick={onClickZuordnen}
+                    >
+                      {assigningBeob ? (
+                        <StyledPauseCircleOutlineIcon
+                          data-assigningispossible={assigningispossible}
+                        />
+                      ) : (
+                        <StyledPlayCircleOutlineIcon
+                          data-assigningispossible={assigningispossible}
+                        />
+                      )}
+                    </StyledIconButton>
+                  </ZuordnenDiv>
                 )}
-              </StyledIconButton>
-            </ZuordnenDiv>
-          )}
-          {apfloraLayer.value === 'pop' && activeApfloraLayers.includes('pop') && (
-            <MapIconDiv>
-              <PopMapIcon id="PopMapIcon" />
-            </MapIconDiv>
-          )}
-          {apfloraLayer.value === 'tpop' &&
-            activeApfloraLayers.includes('tpop') && (
-              <MapIconDiv>
-                <TpopMapIcon id="TpopMapIcon" />
-              </MapIconDiv>
-            )}
-          {apfloraLayer.value === 'beobNichtBeurteilt' &&
-            activeApfloraLayers.includes('beobNichtBeurteilt') && (
-              <MapIconDiv>
-                <BeobNichtBeurteiltMapIcon id="BeobNichtBeurteiltMapIcon" />
-              </MapIconDiv>
-            )}
-          {apfloraLayer.value === 'beobNichtZuzuordnen' &&
-            activeApfloraLayers.includes('beobNichtZuzuordnen') && (
-              <MapIconDiv>
-                <BeobNichtZuzuordnenMapIcon id="BeobNichtZuzuordnenMapIcon" />
-              </MapIconDiv>
-            )}
-          {apfloraLayer.value === 'beobZugeordnet' &&
-            activeApfloraLayers.includes('beobZugeordnet') && (
-              <MapIconDiv>
-                <BeobZugeordnetMapIcon id="BeobZugeordnetMapIcon" />
-              </MapIconDiv>
-            )}
-          {apfloraLayer.value === 'beobZugeordnetAssignPolylines' &&
-            activeApfloraLayers.includes('beobZugeordnetAssignPolylines') && (
-              <MapIconDiv>
-                <BeobZugeordnetAssignPolylinesIcon
-                  id="BeobZugeordnetAssignPolylinesMapIcon"
-                  className="material-icons"
-                >
-                  remove
-                </BeobZugeordnetAssignPolylinesIcon>
-              </MapIconDiv>
-            )}
-          <ZoomToDiv>
-            {apfloraLayer.value !== 'mapFilter' && (
-              <StyledIconButton
-                title={`auf alle ${apfloraLayer.label} zoomen`}
-                onClick={onClickZoomToAll}
-              >
-                <ZoomToIcon style={zoomToAllIconStyle} />
-              </StyledIconButton>
-            )}
-          </ZoomToDiv>
-          <ZoomToDiv>
-            {apfloraLayer.value !== 'mapFilter' && (
-              <StyledIconButton
-                title={`auf aktive ${apfloraLayer.label} zoomen`}
-                onClick={onClickZoomToActive}
-              >
-                <ZoomToIcon style={zoomToActiveIconStyle} />
-              </StyledIconButton>
-            )}
-          </ZoomToDiv>
-          <div>
-            {!['beobZugeordnetAssignPolylines', 'mapFilter'].includes(
-              apfloraLayer.value,
-            ) && <DragHandle />}
-          </div>
-        </IconsDiv>
-      </LayerDiv>
-    )
-  })
-  return <SortableItem index={index} />
+                {apfloraLayer.value === 'pop' &&
+                  activeApfloraLayers.includes('pop') && (
+                    <MapIconDiv>
+                      <PopMapIcon id="PopMapIcon" />
+                    </MapIconDiv>
+                  )}
+                {apfloraLayer.value === 'tpop' &&
+                  activeApfloraLayers.includes('tpop') && (
+                    <MapIconDiv>
+                      <TpopMapIcon id="TpopMapIcon" />
+                    </MapIconDiv>
+                  )}
+                {apfloraLayer.value === 'beobNichtBeurteilt' &&
+                  activeApfloraLayers.includes('beobNichtBeurteilt') && (
+                    <MapIconDiv>
+                      <BeobNichtBeurteiltMapIcon id="BeobNichtBeurteiltMapIcon" />
+                    </MapIconDiv>
+                  )}
+                {apfloraLayer.value === 'beobNichtZuzuordnen' &&
+                  activeApfloraLayers.includes('beobNichtZuzuordnen') && (
+                    <MapIconDiv>
+                      <BeobNichtZuzuordnenMapIcon id="BeobNichtZuzuordnenMapIcon" />
+                    </MapIconDiv>
+                  )}
+                {apfloraLayer.value === 'beobZugeordnet' &&
+                  activeApfloraLayers.includes('beobZugeordnet') && (
+                    <MapIconDiv>
+                      <BeobZugeordnetMapIcon id="BeobZugeordnetMapIcon" />
+                    </MapIconDiv>
+                  )}
+                {apfloraLayer.value === 'beobZugeordnetAssignPolylines' &&
+                  activeApfloraLayers.includes(
+                    'beobZugeordnetAssignPolylines',
+                  ) && (
+                    <MapIconDiv>
+                      <BeobZugeordnetAssignPolylinesIcon
+                        id="BeobZugeordnetAssignPolylinesMapIcon"
+                        className="material-icons"
+                      >
+                        remove
+                      </BeobZugeordnetAssignPolylinesIcon>
+                    </MapIconDiv>
+                  )}
+                <ZoomToDiv>
+                  {apfloraLayer.value !== 'mapFilter' && (
+                    <StyledIconButton
+                      title={`auf alle ${apfloraLayer.label} zoomen`}
+                      onClick={onClickZoomToAll}
+                    >
+                      <ZoomToIcon style={zoomToAllIconStyle} />
+                    </StyledIconButton>
+                  )}
+                </ZoomToDiv>
+                <ZoomToDiv>
+                  {apfloraLayer.value !== 'mapFilter' && (
+                    <StyledIconButton
+                      title={`auf aktive ${apfloraLayer.label} zoomen`}
+                      onClick={onClickZoomToActive}
+                    >
+                      <ZoomToIcon style={zoomToActiveIconStyle} />
+                    </StyledIconButton>
+                  )}
+                </ZoomToDiv>
+                <div>
+                  {!['beobZugeordnetAssignPolylines', 'mapFilter'].includes(
+                    apfloraLayer.value,
+                  ) && <DragHandle />}
+                </div>
+              </IconsDiv>
+            </LayerDiv>
+          )
+        })
+        return <SortableItem index={index} />
+      }}
+    </Query>
+  )
 }
 
 export default enhance(MySortableItem)

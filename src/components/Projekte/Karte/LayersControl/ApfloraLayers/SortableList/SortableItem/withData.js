@@ -23,16 +23,20 @@ export default graphql(query, {
       layer === 'beobZugeordnetAssignPolylines' &&
       activeApfloraLayers.includes('beobZugeordnetAssignPolylines')
 
+    const variables = {
+      ap: activeNodes.ap ? [activeNodes.ap] : [],
+      pop,
+      tpop,
+      beobNichtBeurteilt,
+      beobNichtZuzuordnen,
+      beobZugeordnet,
+      beobZugeordnetAssignPolylines,
+    }
+
+    console.log('ApfloraLayers,SortableItem, withData, variables:', variables)
+
     return {
-      variables: {
-        ap: activeNodes.ap ? [activeNodes.ap] : [],
-        pop,
-        tpop,
-        beobNichtBeurteilt,
-        beobNichtZuzuordnen,
-        beobZugeordnet,
-        beobZugeordnetAssignPolylines,
-      },
+      variables,
     }
   },
   name: 'data',
