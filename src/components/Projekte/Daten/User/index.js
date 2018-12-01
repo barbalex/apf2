@@ -169,7 +169,7 @@ const User = ({
         // edit password
         // then tell user if it worked
         try {
-          const fakeEvent = { target: { name: 'password', value: password2 } }
+          const fakeEvent = { target: { name: 'pass', value: password2 } }
           await saveToDb(fakeEvent)
         } catch (error) {
           return setPasswordMessage(error.message)
@@ -270,7 +270,7 @@ const User = ({
               fullWidth
               aria-describedby="passwortHelper"
             >
-              <InputLabel htmlFor="passwort">Passwort</InputLabel>
+              <InputLabel htmlFor="passwort">Neues Passwort</InputLabel>
               <StyledInput
                 id="passwort"
                 type={showPass ? 'text' : 'password'}
@@ -307,7 +307,9 @@ const User = ({
               fullWidth
               aria-describedby="passwortHelper"
             >
-              <InputLabel htmlFor="passwort">Passwort wiederholen</InputLabel>
+              <InputLabel htmlFor="passwort">
+                Neues Passwort wiederholen
+              </InputLabel>
               <StyledInput
                 id="passwort2"
                 type={showPass2 ? 'text' : 'password'}
