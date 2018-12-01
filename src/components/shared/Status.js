@@ -61,16 +61,12 @@ const Status = ({
   herkunftValue,
   bekanntSeitValue,
   saveToDb,
-  saveToDbBekanntSeit,
-  saveToDbStatus,
   treeName,
 }: {
   apJahr?: nmumber,
   herkunftValue?: number,
   bekanntSeitValue: number,
-  saveToDbBekanntSeit: () => void,
   saveToDb: () => void,
-  saveToDbStatus: () => void,
   treeName: string,
 }) => {
   const { nodeFilter } = useContext(mobxStoreContext)
@@ -106,7 +102,10 @@ const Status = ({
       if (targetValue !== undefined && targetValue == herkunftValue) {
         // an already active option was clicked
         // set value null
-        return saveToDbStatus(null)
+        const fakeEvent = {
+          target: { value: null, name: 'status' },
+        }
+        return saveToDb(fakeEvent)
       }
     },
     [herkunftValue],
