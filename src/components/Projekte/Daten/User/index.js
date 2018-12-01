@@ -46,6 +46,25 @@ const PasswordMessage = styled.div`
   padding-bottom: 10px;
 `
 
+const roleWerte = [
+  {
+    value: 'apflora_reader',
+    label: 'reader',
+  },
+  {
+    value: 'apflora_freiwillig',
+    label: 'freiwillig',
+  },
+  {
+    value: 'apflora_artverantwortlich',
+    label: 'artverantwortlich',
+  },
+  {
+    value: 'apflora_manager',
+    label: 'manager',
+  },
+]
+
 const enhance = compose(
   withApollo,
   withProps(() => ({ mobxStore: useContext(mobxStoreContext) })),
@@ -81,31 +100,6 @@ const User = ({
 
   useEffect(() => setErrors({}), [row])
 
-  let roleWerte = sortBy(
-    [
-      {
-        value: 'apflora_reader',
-        label: 'reader',
-        sort: 1,
-      },
-      {
-        value: 'apflora_freiwillig',
-        label: 'freiwillig',
-        sort: 2,
-      },
-      {
-        value: 'apflora_artverantwortlich',
-        label: 'artverantwortlich',
-        sort: 3,
-      },
-      {
-        value: 'apflora_manager',
-        label: 'manager',
-        sort: 4,
-      },
-    ],
-    'sort',
-  )
   let adresses = sortBy(get(dataAllAdresses, 'allAdresses.nodes', []), 'name')
   adresses = adresses.map(el => ({
     value: el.id,
