@@ -21,11 +21,12 @@ const enhance = compose(
   withHandlers({
     onCopy: ({ updateCopied }) => () => {
       updateCopied(true)
+      // can fire after component was unmounted...
       setTimeout(() => {
         updateCopied(false)
       }, 3000)
     },
-  })
+  }),
 )
 
 const StringToCopy = ({

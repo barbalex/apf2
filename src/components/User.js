@@ -97,6 +97,7 @@ const User = ({ client }: { client: Object }) => {
       // as client is rebuilt with new settings
       window.location.reload(true)
 
+      // can fire after component was unmounted...
       setTimeout(() => {
         if (name) {
           setName('')

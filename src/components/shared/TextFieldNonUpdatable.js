@@ -21,6 +21,7 @@ const enhance = compose(
   withHandlers({
     onChange: ({ setError }) => () => {
       setError('Dieser Wert ist nicht veränderbar')
+      // can fire after component was unmounted...
       setTimeout(() => setError(null), 5000)
     },
   }),
@@ -48,10 +49,7 @@ const MyTextField = ({
       value={value || value === 0 ? value : ''}
       onChange={onChange}
     />
-    {
-      !!error &&
-      <FormHelperText id={`${label}-helper`}>{error}</FormHelperText>
-    }
+    {!!error && <FormHelperText id={`${label}-helper`}>{error}</FormHelperText>}
   </StyledFormControl>
 )
 
