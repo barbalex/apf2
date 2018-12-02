@@ -3,13 +3,12 @@ import React, { useCallback, useContext } from 'react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Button from '@material-ui/core/Button'
-import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import Linkify from 'react-linkify'
 import { useApolloClient } from 'react-apollo-hooks'
 import { useQuery } from 'react-apollo-hooks'
+import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import query from './data'
@@ -49,8 +48,6 @@ const OkButton = styled(Button)`
   position: relative !important;
   right: 12px;
 `
-
-const enhance = compose(withProps(() => useContext(mobxStoreContext)))
 
 const UserMessages = ({ open }: { open: Boolean }) => {
   const client = useApolloClient()
@@ -130,4 +127,4 @@ const UserMessages = ({ open }: { open: Boolean }) => {
   )
 }
 
-export default enhance(UserMessages)
+export default observer(UserMessages)

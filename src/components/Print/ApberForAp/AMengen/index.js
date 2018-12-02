@@ -3,7 +3,6 @@ import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sum from 'lodash/sum'
-import compose from 'recompose/compose'
 import { useQuery } from 'react-apollo-hooks'
 
 import query from './data'
@@ -81,8 +80,6 @@ const TpopBerJahr = styled(Number)`
 const PopSeit = styled(Number)``
 const TpopSeit = styled(Number)``
 
-const enhance = compose()
-
 const AMengen = ({
   apId,
   jahr,
@@ -92,7 +89,7 @@ const AMengen = ({
   jahr: Number,
   startJahr: Number,
 }) => {
-  const { data, error, loading, refetch } = useQuery(query, {
+  const { data, error, loading } = useQuery(query, {
     suspend: false,
     variables: { apId, startJahr },
   })
@@ -257,4 +254,4 @@ const AMengen = ({
   )
 }
 
-export default enhance(AMengen)
+export default AMengen
