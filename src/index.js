@@ -19,6 +19,7 @@ import 'moment/locale/de-ch' // this is the important bit, you have to import th
 import MomentUtils from '@date-io/moment'
 import { MuiPickersUtilsProvider } from 'material-ui-pickers'
 import { ApolloProvider } from 'react-apollo'
+import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
 import MobxStore from './mobxStore'
 
 import 'typeface-roboto'
@@ -81,18 +82,20 @@ const run = async () => {
       <IdbProvider value={idbContext}>
         <MobxProvider value={mobxStore}>
           <ApolloProvider client={client}>
-            <>
-              <Print />
-              <MuiThemeProvider theme={theme}>
-                <MuiPickersUtilsProvider
-                  utils={MomentUtils}
-                  moment={moment}
-                  locale="de-ch"
-                >
-                  <AppContainer />
-                </MuiPickersUtilsProvider>
-              </MuiThemeProvider>
-            </>
+            <ApolloHooksProvider client={client}>
+              <>
+                <Print />
+                <MuiThemeProvider theme={theme}>
+                  <MuiPickersUtilsProvider
+                    utils={MomentUtils}
+                    moment={moment}
+                    locale="de-ch"
+                  >
+                    <AppContainer />
+                  </MuiPickersUtilsProvider>
+                </MuiThemeProvider>
+              </>
+            </ApolloHooksProvider>
           </ApolloProvider>
         </MobxProvider>
       </IdbProvider>,

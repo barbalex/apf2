@@ -5,18 +5,16 @@ import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 import styled from 'styled-components'
 import Paper from '@material-ui/core/Paper'
-import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
-import withState from 'recompose/withState'
 import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
+import { useQuery } from 'react-apollo-hooks'
 
 import FormTitle from '../../../shared/FormTitle'
 import appBaseUrl from '../../../../modules/appBaseUrl'
 import standardQkYear from '../../../../modules/standardQkYear'
 import fetchKtZh from '../../../../modules/fetchKtZh'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import withData from './withData'
+import query from './data'
 import qk from './qk'
 import checkTpopOutsideZh from './checkTpopOutsideZh'
 import mobxStoreContext from '../../../../mobxStoreContext'
@@ -59,32 +57,29 @@ const LoadingLine = styled.div`
   display: flex;
 `
 
-const enhance = compose(
-  // berichtjahr state needs to be added before withData
-  // because it is used there
-  withState('berichtjahr', 'setBerichtjahr', () => standardQkYear()),
-  withProps(() => ({
-    mobxStore: useContext(mobxStoreContext),
-  })),
-  withData,
-  observer,
-)
-
-const Qk = ({
-  data,
-  berichtjahr,
-  setBerichtjahr,
-  mobxStore,
-}: {
-  data: Object,
-  berichtjahr: number,
-  setBerichtjahr: () => void,
-  mobxStore: Object,
-}) => {
+const Qk = ({ treeName }: { treeName: string }) => {
+  const mobxStore = useContext(mobxStoreContext)
   const { ktZh, setKtZh, addError } = mobxStore
-  const { refetch, loading } = data
+  const { activeNodeArray } = mobxStore[treeName]
 
+  const [berichtjahr, setBerichtjahr] = useState(standardQkYear())
   const [filter, setFilter] = useState('')
+
+  const { data, error, loading, refetch } = useQuery(query, {
+    suspend: false,
+    variables: {
+      berichtjahr,
+      isBerichtjahr: !!berichtjahr,
+      apId:
+        activeNodeArray.length > 3
+          ? activeNodeArray[3]
+          : '99999999-9999-9999-9999-999999999999',
+      projId:
+        activeNodeArray.length > 1
+          ? activeNodeArray[1]
+          : '99999999-9999-9999-9999-999999999999',
+    },
+  })
 
   const onChangeBerichtjahr = useCallback(event =>
     setBerichtjahr(+event.target.value),
@@ -118,7 +113,7 @@ const Qk = ({
     }
   })
 
-  if (data.error) return `Fehler: ${data.error.message}`
+  if (error) return `Fehler: ${error.message}`
   return (
     <ErrorBoundary>
       <Container>
@@ -140,8 +135,8 @@ const Qk = ({
             <Input id="filter" value={filter} onChange={onChangeFilter} />
           </StyledFormControl>
           <LoadingLine>
-            <LoadingIndicator loading={data.loading}>
-              {data.loading
+            <LoadingIndicator loading={loading}>
+              {loading
                 ? 'Die Daten werden analysiert...'
                 : 'Analyse abgeschlossen'}
             </LoadingIndicator>
@@ -168,4 +163,4 @@ const Qk = ({
   )
 }
 
-export default enhance(Qk)
+export default observer(Qk)
