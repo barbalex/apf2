@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
-import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
 
 import buildMarkers from './buildMarkers'
@@ -10,8 +9,6 @@ import Marker from './Marker'
 import MarkerCluster from './MarkerCluster'
 import filterNodesByNodeFilterArray from '../../../TreeContainer/filterNodesByNodeFilterArray'
 import mobxStoreContext from '../../../../../mobxStoreContext'
-
-const enhance = compose(observer)
 
 const TpopMarkerMarker = ({
   treeName,
@@ -90,4 +87,4 @@ const TpopMarkerMarker = ({
   return <Marker markers={markers} />
 }
 
-export default enhance(TpopMarkerMarker)
+export default observer(TpopMarkerMarker)

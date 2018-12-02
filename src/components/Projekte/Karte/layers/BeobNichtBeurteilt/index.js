@@ -3,7 +3,6 @@ import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
 import { observer } from 'mobx-react-lite'
-import compose from 'recompose/compose'
 import { useApolloClient } from 'react-apollo-hooks'
 
 import buildMarkers from './buildMarkers'
@@ -11,8 +10,6 @@ import buildMarkersClustered from './buildMarkersClustered'
 import Marker from './Marker'
 import MarkerCluster from './MarkerCluster'
 import mobxStoreContext from '../../../../../mobxStoreContext'
-
-const enhance = compose(observer)
 
 const BeobNichtBeurteiltMarker = ({
   treeName,
@@ -74,4 +71,4 @@ const BeobNichtBeurteiltMarker = ({
   return <Marker markers={markers} />
 }
 
-export default enhance(BeobNichtBeurteiltMarker)
+export default observer(BeobNichtBeurteiltMarker)

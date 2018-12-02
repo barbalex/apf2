@@ -4,7 +4,6 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from 'react-apollo-hooks'
 
@@ -18,8 +17,6 @@ const StyledDialog = styled(Dialog)`
     padding: 24px 24px 0 24px;
   }
 `
-
-const enhance = compose(observer)
 
 const DatasetDeleteModal = () => {
   const client = useApolloClient()
@@ -61,4 +58,4 @@ const DatasetDeleteModal = () => {
   )
 }
 
-export default enhance(DatasetDeleteModal)
+export default observer(DatasetDeleteModal)
