@@ -1,14 +1,10 @@
 // @flow
-import React from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
-import withLifecycle from '@hocs/with-lifecycle'
 
 import InfoWithPopover from './InfoWithPopover'
 
@@ -27,26 +23,8 @@ const PopoverContentRow = styled.div`
   border-radius: 4px;
 `
 
-const enhance = compose(
-  withState('stateValue', 'setStateValue', ({ value: propsValue }) =>
-    propsValue || propsValue === 0 ? propsValue : '',
-  ),
-  withHandlers({
-    onChange: ({ setStateValue }) => event => setStateValue(event.target.value),
-  }),
-  withLifecycle({
-    onDidUpdate(prevProps, props) {
-      if (props.value !== prevProps.value) {
-        const value = props.value || props.value === 0 ? props.value : ''
-        props.setStateValue(value)
-      }
-    },
-  }),
-)
-
 const TextFieldWithInfo = ({
   value: propsValue,
-  stateValue,
   label,
   name,
   type = 'text',
@@ -55,11 +33,9 @@ const TextFieldWithInfo = ({
   hintText = '',
   popover,
   saveToDb,
-  onChange,
   error,
 }: {
   value: Number | String,
-  stateValue: Number | String,
   label: String,
   name: String,
   type: String,
@@ -69,34 +45,43 @@ const TextFieldWithInfo = ({
   error: String,
   popover: Object,
   saveToDb: () => void,
-  onChange: () => void,
-}) => (
-  <StyledFormControl
-    fullWidth
-    disabled={disabled}
-    error={!!error}
-    aria-describedby={`${label}ErrorText`}
-  >
-    <InputLabel htmlFor={label}>{label}</InputLabel>
-    <Input
-      id={label}
-      name={name}
-      value={stateValue}
-      type={type}
-      multiline={multiLine}
-      onChange={onChange}
-      onBlur={saveToDb}
-      placeholder={hintText}
-      endAdornment={
-        <InfoWithPopover>
-          <PopoverContentRow>{popover}</PopoverContentRow>
-        </InfoWithPopover>
-      }
-    />
-    {!!error && (
-      <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
-    )}
-  </StyledFormControl>
-)
+}) => {
+  const [stateValue, setStateValue] = useState(
+    propsValue || propsValue === 0 ? propsValue : '',
+  )
+  const onChange = useCallback(event => setStateValue(event.target.value))
+  useEffect(() => {
+    setStateValue(propsValue || propsValue === 0 ? propsValue : '')
+  }, [])
 
-export default enhance(TextFieldWithInfo)
+  return (
+    <StyledFormControl
+      fullWidth
+      disabled={disabled}
+      error={!!error}
+      aria-describedby={`${label}ErrorText`}
+    >
+      <InputLabel htmlFor={label}>{label}</InputLabel>
+      <Input
+        id={label}
+        name={name}
+        value={stateValue}
+        type={type}
+        multiline={multiLine}
+        onChange={onChange}
+        onBlur={saveToDb}
+        placeholder={hintText}
+        endAdornment={
+          <InfoWithPopover>
+            <PopoverContentRow>{popover}</PopoverContentRow>
+          </InfoWithPopover>
+        }
+      />
+      {!!error && (
+        <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
+      )}
+    </StyledFormControl>
+  )
+}
+
+export default TextFieldWithInfo
