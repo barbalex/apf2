@@ -3,8 +3,8 @@ import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
 import { observer } from 'mobx-react-lite'
-import { withApollo } from 'react-apollo'
 import compose from 'recompose/compose'
+import { useApolloClient } from 'react-apollo-hooks'
 
 import buildMarkers from './buildMarkers'
 import buildMarkersClustered from './buildMarkersClustered'
@@ -12,24 +12,20 @@ import Marker from './Marker'
 import MarkerCluster from './MarkerCluster'
 import mobxStoreContext from '../../../../../mobxStoreContext'
 
-const enhance = compose(
-  withApollo,
-  observer,
-)
+const enhance = compose(observer)
 
 const BeobNichtBeurteiltMarker = ({
   treeName,
   data,
   clustered,
   refetchTree,
-  client,
 }: {
   treeName: string,
   data: Object,
   clustered: Boolean,
   refetchTree: () => void,
-  client: Object,
 }) => {
+  const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
   const tree = mobxStore[treeName]
   const { idsFiltered: mapIdsFiltered } = mobxStore[treeName].map

@@ -16,7 +16,6 @@ import RemoveIcon from '@material-ui/icons/Remove'
 import { SortableElement, SortableHandle } from 'react-sortable-hoc'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
-import { withApollo } from 'react-apollo'
 import { getSnapshot } from 'mobx-state-tree'
 import { observer } from 'mobx-react-lite'
 import { Query } from 'react-apollo'
@@ -113,12 +112,9 @@ const DragHandle = SortableHandle(() => (
   </StyledIconButton>
 ))
 
-const enhance = compose(
-  withApollo,
-  observer,
-)
+const enhance = compose(observer)
 
-const MySortableItem = ({ treeName, apfloraLayer, client, index }) => {
+const MySortableItem = ({ treeName, apfloraLayer, index }) => {
   const mobxStore = useContext(mobxStoreContext)
   const {
     activeApfloraLayers: activeApfloraLayersRaw,
