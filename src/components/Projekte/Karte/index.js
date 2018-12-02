@@ -388,9 +388,9 @@ const Karte = ({
         >
           {activeBaseLayer && <BaseLayerComponent />}
           {activeOverlaysSorted
-            .map((overlayName, index) => {
+            .map(overlayName => {
               const OverlayComponent = OverlayComponents[overlayName]
-              return <OverlayComponent key={index} />
+              return <OverlayComponent key={overlayName} />
             })
             .reverse()}
           {activeApfloraLayersSorted
