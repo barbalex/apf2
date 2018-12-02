@@ -1,7 +1,6 @@
 // @flow
 import React, { lazy, Suspense, useContext } from 'react'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../../shared/ErrorBoundarySingleChild'
@@ -52,8 +51,6 @@ const Container = styled.div`
     overflow: hidden;
   }
 `
-
-const enhance = compose(observer)
 
 const Daten = ({
   treeName,
@@ -319,4 +316,4 @@ const Daten = ({
   )
 }
 
-export default enhance(Daten)
+export default observer(Daten)

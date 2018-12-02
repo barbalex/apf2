@@ -6,7 +6,6 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
-import compose from 'recompose/compose'
 import jwtDecode from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
 
@@ -31,8 +30,6 @@ const ReflexElementForEKF = styled(ReflexElement)`
     border-left: 1px solid rgb(46, 125, 50);
   }
 `
-
-const enhance = compose(observer)
 
 const Ekf = () => {
   const { user, isPrint, tree } = useContext(mobxStoreContext)
@@ -90,4 +87,4 @@ const Ekf = () => {
   )
 }
 
-export default enhance(Ekf)
+export default observer(Ekf)

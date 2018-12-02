@@ -11,7 +11,6 @@ import styled from 'styled-components'
 import format from 'date-fns/format'
 import TextField from '@material-ui/core/TextField'
 import { observer } from 'mobx-react-lite'
-import compose from 'recompose/compose'
 import { useApolloClient } from 'react-apollo-hooks'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
@@ -51,8 +50,6 @@ const StyledCheckbox = styled(Checkbox)`
   width: 30px !important;
   height: 30px !important;
 `
-
-const enhance = compose(observer)
 
 const Deletions = ({
   showDeletions,
@@ -175,4 +172,4 @@ const Deletions = ({
   )
 }
 
-export default enhance(Deletions)
+export default observer(Deletions)
