@@ -1,12 +1,18 @@
 // @flow
-import React, { useContext, useState, useCallback, useEffect } from 'react'
+import React, {
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+  Suspense,
+} from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from 'react-apollo-hooks'
+import { useQuery } from 'react-apollo-hooks'
 
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import TextField from '../../../shared/TextField'
@@ -18,7 +24,7 @@ import withAeEigenschaftens from './withAeEigenschaftens'
 import updateApByIdGql from './updateApById'
 import withAllAdresses from './withAllAdresses'
 import withAllAps from './withAllAps'
-import withData from './withData'
+import query from './data'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
 const Container = styled.div`
@@ -64,34 +70,37 @@ const LabelPopoverRowColumnRight = styled.div`
 `
 
 const enhance = compose(
-  withProps(() => ({
-    mobxStore: useContext(mobxStoreContext),
-  })),
   withAllAps,
   withAllAdresses,
   withAeEigenschaftens,
-  withData,
   observer,
 )
 
 const Ap = ({
   treeName,
-  dataAeEigenschaftens,
   dataAllAdresses,
   dataAllAps,
-  data,
+  dataAeEigenschaftens,
   refetchTree,
 }: {
   treeName: String,
-  dataAeEigenschaftens: Object,
   dataAllAdresses: Object,
   dataAllAps: Object,
-  data: Object,
+  dataAeEigenschaftens: Object,
   refetchTree: () => void,
 }) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
   const { nodeFilter, nodeFilterSetValue } = mobxStore
+  const { activeNodeArray } = mobxStore[treeName]
+  const id =
+    activeNodeArray.length > 3
+      ? activeNodeArray[3]
+      : '99999999-9999-9999-9999-999999999999'
+  const { data, error, loading } = useQuery(query, {
+    suspend: false,
+    variables: { id },
+  })
 
   const [errors, setErrors] = useState({})
 
@@ -211,7 +220,7 @@ const Ap = ({
   )
 
   if (
-    data.loading ||
+    loading ||
     dataAeEigenschaftens.loading ||
     dataAllAdresses.loading ||
     dataAllAps.loading
@@ -227,7 +236,7 @@ const Ap = ({
   }
   if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
   if (dataAllAps.error) return `Fehler: ${dataAllAps.error.message}`
-  if (data.error) return `Fehler: ${data.error.message}`
+  if (error) return `Fehler: ${error.message}`
 
   return (
     <ErrorBoundary>
