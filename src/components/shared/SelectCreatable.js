@@ -1,8 +1,5 @@
 // @flow
-import React from 'react'
-import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
-import withState from 'recompose/withState'
+import React, { useState, useCallback } from 'react'
 import CreatableSelect from 'react-select/lib/Creatable'
 import styled from 'styled-components'
 
@@ -71,10 +68,31 @@ const StyledSelect = styled(CreatableSelect)`
   }
 `
 
-const enhance = compose(
-  withState('stateValue', 'setStateValue', null),
-  withHandlers({
-    onChange: ({ saveToDb, name }) => option => {
+const SharedSelectCreatable = ({
+  value,
+  field = '',
+  label,
+  name,
+  error,
+  options: optionsIn,
+  maxHeight = null,
+  noCaret = false,
+  saveToDb,
+}: {
+  value?: ?number | ?string,
+  field?: string,
+  label: string,
+  name: string,
+  error: string,
+  options: Array<Object>,
+  maxHeight?: number,
+  noCaret: boolean,
+  saveToDb: () => void,
+}) => {
+  const [stateValue, setStateValue] = useState(null)
+
+  const onChange = useCallback(
+    option => {
       const fakeEvent = {
         target: {
           name,
@@ -83,8 +101,11 @@ const enhance = compose(
       }
       saveToDb(fakeEvent)
     },
-    onInputChange: ({ setStateValue }) => value => setStateValue(value),
-    onBlur: ({ saveToDb, stateValue, name }) => event => {
+    [name],
+  )
+  const onInputChange = useCallback(value => setStateValue(value))
+  const onBlur = useCallback(
+    event => {
       if (stateValue) {
         const fakeEvent = {
           target: {
@@ -95,36 +116,9 @@ const enhance = compose(
         saveToDb(fakeEvent)
       }
     },
-  }),
-)
+    [stateValue, name],
+  )
 
-const SharedSelectCreatable = ({
-  value,
-  field = '',
-  label,
-  name,
-  error,
-  options: optionsIn,
-  stateValue,
-  onChange,
-  onInputChange,
-  onBlur,
-  maxHeight = null,
-  noCaret = false,
-}: {
-  value?: ?number | ?string,
-  field?: string,
-  label: string,
-  name: string,
-  error: string,
-  options: Array<Object>,
-  stateValue: Number | String,
-  onChange: () => void,
-  onInputChange: () => void,
-  onBlur: () => void,
-  maxHeight?: number,
-  noCaret: boolean,
-}) => {
   // need to add value to options list if it is not yet included
   const valuesArray = optionsIn.map(o => o.value)
   const options = [...optionsIn]
@@ -156,4 +150,4 @@ const SharedSelectCreatable = ({
   )
 }
 
-export default enhance(SharedSelectCreatable)
+export default SharedSelectCreatable
