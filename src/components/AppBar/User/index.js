@@ -2,7 +2,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import compose from 'recompose/compose'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogActions from '@material-ui/core/DialogActions'
@@ -16,8 +15,9 @@ import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import Button from '@material-ui/core/Button'
 import { useApolloClient } from 'react-apollo-hooks'
+import { useQuery } from 'react-apollo-hooks'
 
-import withData from './withData'
+import query from './data'
 import TextField from '../../shared/TextField'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import updateUserByIdGql from './updateUserById'
@@ -42,19 +42,19 @@ const PasswordMessage = styled.div`
   padding-bottom: 10px;
 `
 
-const enhance = compose(withData)
-
 const User = ({
   username,
   userOpen,
   toggleUserOpen,
-  data,
 }: {
   username: string,
   userOpen: boolean,
   toggleUserOpen: () => void,
-  data: Object,
 }) => {
+  const { data, error, loading } = useQuery(query, {
+    suspend: false,
+    variables: { name: username },
+  })
   const client = useApolloClient()
   const row = get(data, 'userByName', {})
 
@@ -162,8 +162,8 @@ const User = ({
     [password, row.id],
   )
 
-  if (data.loading) return null
-  if (data.error) return `Fehler: ${data.error.message}`
+  if (loading) return null
+  if (error) return `Fehler: ${error.message}`
 
   return (
     <Dialog
@@ -284,4 +284,4 @@ const User = ({
   )
 }
 
-export default enhance(User)
+export default User
