@@ -182,7 +182,6 @@ const TreeContainer = ({
     activeApfloraLayers,
     setActiveApfloraLayers,
     activeOverlays,
-    setActiveOverlays,
     popLabelUsingNr,
     setPopLabelUsingNr,
     tpopLabelUsingNr,
