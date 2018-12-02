@@ -13,7 +13,7 @@ import styled from 'styled-components'
 import gql from 'graphql-tag'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { withApollo } from 'react-apollo'
+import { useApolloClient } from 'react-apollo-hooks'
 
 import beziehungen from '../../../etc/beziehungen.png'
 import exportModule from '../../../modules/export'
@@ -58,15 +58,12 @@ const DownloadCardButton = styled(Button)`
   }
 `
 
-const enhance = compose(
-  withApollo,
-  observer,
-)
+const enhance = compose(observer)
 
-const Anwendung = ({ client }: { client: Object }) => {
-  const { addError, exportApplyMapFilter, exportFileType } = useContext(
-    mobxStoreContext,
-  )
+const Anwendung = () => {
+  const client = useApolloClient()
+  const mobxStore = useContext(mobxStoreContext)
+  const { addError, exportApplyMapFilter, exportFileType } = mobxStore
 
   const [expanded, setExpanded] = useState(false)
   const [message, setMessage] = useState(null)
