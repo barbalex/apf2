@@ -1,5 +1,4 @@
 import React, { useContext, useCallback } from 'react'
-import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 import { arrayMove } from 'react-sortable-hoc'
@@ -13,8 +12,6 @@ const CardContent = styled.div`
   padding-left: 5px;
   padding-right: 4px;
 `
-
-const enhance = compose(observer)
 
 const ApfloraLayers = ({
   treeName,
@@ -52,4 +49,4 @@ const ApfloraLayers = ({
   )
 }
 
-export default enhance(ApfloraLayers)
+export default observer(ApfloraLayers)

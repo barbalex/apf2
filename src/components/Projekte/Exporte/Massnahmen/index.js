@@ -1,6 +1,5 @@
 // @flow
 import React, { useContext, useState } from 'react'
-import compose from 'recompose/compose'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
@@ -55,8 +54,6 @@ const DownloadCardButton = styled(Button)`
     user-select: none;
   }
 `
-
-const enhance = compose(observer)
 
 const Massnahmen = () => {
   const client = useApolloClient()
@@ -150,4 +147,4 @@ const Massnahmen = () => {
   )
 }
 
-export default enhance(Massnahmen)
+export default observer(Massnahmen)
