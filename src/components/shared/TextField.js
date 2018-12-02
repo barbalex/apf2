@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
@@ -17,25 +17,10 @@ const StyledFormControl = styled(FormControl)`
   }
 `
 
-const enhance = compose(
-  withState('stateValue', 'setStateValue', ({ value }) =>
-    value || value === 0 ? value : '',
-  ),
-  withHandlers({
-    onChange: ({ setStateValue }) => event => setStateValue(event.target.value),
-  }),
-  withLifecycle({
-    onDidUpdate(prevProps, props) {
-      if (props.value !== prevProps.value) {
-        const value = props.value || props.value === 0 ? props.value : ''
-        props.setStateValue(value)
-      }
-    },
-  }),
-)
+const enhance = compose()
 
 const MyTextField = ({
-  stateValue,
+  value,
   label,
   name,
   type = 'text',
@@ -45,9 +30,8 @@ const MyTextField = ({
   helperText = '',
   error,
   saveToDb,
-  onChange,
 }: {
-  stateValue: Number | String,
+  value: number | string,
   label: String,
   name: String,
   type: String,
@@ -57,32 +41,41 @@ const MyTextField = ({
   helperText: String,
   error: String,
   saveToDb: () => void,
-  onChange: () => void,
-}) => (
-  <StyledFormControl
-    fullWidth
-    disabled={disabled}
-    error={!!error}
-    aria-describedby={`${label}ErrorText`}
-  >
-    <InputLabel htmlFor={label}>{label}</InputLabel>
-    <Input
-      id={label}
-      name={name}
-      value={stateValue}
-      type={type}
-      multiline={multiLine}
-      onChange={onChange}
-      onBlur={saveToDb}
-      placeholder={hintText}
-    />
-    {!!error && (
-      <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
-    )}
-    {!!helperText && (
-      <FormHelperText id={`${label}HelperText`}>{helperText}</FormHelperText>
-    )}
-  </StyledFormControl>
-)
+}) => {
+  const [stateValue, setStateValue] = useState(
+    value || value === 0 ? value : '',
+  )
+  const onChange = useCallback(event => setStateValue(event.target.value))
+  useEffect(() => {
+    setStateValue(value || value === 0 ? value : '')
+  }, [])
+
+  return (
+    <StyledFormControl
+      fullWidth
+      disabled={disabled}
+      error={!!error}
+      aria-describedby={`${label}ErrorText`}
+    >
+      <InputLabel htmlFor={label}>{label}</InputLabel>
+      <Input
+        id={label}
+        name={name}
+        value={stateValue}
+        type={type}
+        multiline={multiLine}
+        onChange={onChange}
+        onBlur={saveToDb}
+        placeholder={hintText}
+      />
+      {!!error && (
+        <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
+      )}
+      {!!helperText && (
+        <FormHelperText id={`${label}HelperText`}>{helperText}</FormHelperText>
+      )}
+    </StyledFormControl>
+  )
+}
 
 export default enhance(MyTextField)
