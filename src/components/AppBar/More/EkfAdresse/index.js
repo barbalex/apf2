@@ -1,13 +1,13 @@
 // @flow
 import React, { useCallback, useContext } from 'react'
-import compose from 'recompose/compose'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
+import { useQuery } from 'react-apollo-hooks'
 
 import Select from '../../../shared/Select'
-import withData from './withData'
+import query from './data'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
@@ -15,18 +15,8 @@ const Container = styled.div`
   padding: 0 16px;
 `
 
-const enhance = compose(
-  withData,
-  observer,
-)
-
-const EkfAdresse = ({
-  data,
-  setAnchorEl,
-}: {
-  data: Object,
-  setAnchorEl: () => void,
-}) => {
+const EkfAdresse = ({ setAnchorEl }: { setAnchorEl: () => void }) => {
+  const { data, error, loading } = useQuery(query, { suspend: false })
   const { setView, setEkfAdresseId } = useContext(mobxStoreContext)
   const choose = useCallback(async event => {
     setAnchorEl(null)
@@ -44,8 +34,8 @@ const EkfAdresse = ({
     label: el.name,
   }))
 
-  if (data.loading) return '...'
-  if (data.error) return `Fehler: ${data.error.message}`
+  if (loading) return '...'
+  if (error) return `Fehler: ${error.message}`
 
   return (
     <Container>
@@ -62,4 +52,4 @@ const EkfAdresse = ({
   )
 }
 
-export default enhance(EkfAdresse)
+export default observer(EkfAdresse)
