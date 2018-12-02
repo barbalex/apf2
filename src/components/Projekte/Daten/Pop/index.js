@@ -3,9 +3,9 @@ import React, { useContext, useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
-import { withApollo } from 'react-apollo'
 import withProps from 'recompose/withProps'
 import { observer } from 'mobx-react-lite'
+import { useApolloClient } from 'react-apollo-hooks'
 
 import TextField from '../../../shared/TextField'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
@@ -30,7 +30,6 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withApollo,
   withProps(() => ({
     mobxStore: useContext(mobxStoreContext),
   })),
@@ -42,13 +41,12 @@ const Pop = ({
   treeName,
   data,
   refetchTree,
-  client,
 }: {
   treeName: string,
   data: Object,
   refetchTree: () => void,
-  client: Object,
 }) => {
+  const client = useApolloClient()
   const { nodeFilter, nodeFilterSetValue } = useContext(mobxStoreContext)
 
   const showFilter = !!nodeFilter[treeName].activeTable

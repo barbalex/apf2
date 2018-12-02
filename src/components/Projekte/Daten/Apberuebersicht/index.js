@@ -4,8 +4,8 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
 import withProps from 'recompose/withProps'
-import { withApollo } from 'react-apollo'
 import { observer } from 'mobx-react-lite'
+import { useApolloClient } from 'react-apollo-hooks'
 
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
@@ -27,7 +27,6 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withApollo,
   withProps(() => ({
     mobxStore: useContext(mobxStoreContext),
   })),
@@ -38,12 +37,11 @@ const enhance = compose(
 const Apberuebersicht = ({
   treeName,
   data,
-  client,
 }: {
   treeName: string,
   data: Object,
-  client: Object,
 }) => {
+  const client = useApolloClient()
   const [errors, setErrors] = useState({})
 
   const row = get(data, 'apberuebersichtById', {})

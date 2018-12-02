@@ -5,8 +5,8 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import withProps from 'recompose/withProps'
-import { withApollo } from 'react-apollo'
 import { observer } from 'mobx-react-lite'
+import { useApolloClient } from 'react-apollo-hooks'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -37,7 +37,6 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withApollo,
   withProps(() => ({
     mobxStore: useContext(mobxStoreContext),
   })),
@@ -53,15 +52,14 @@ const Apber = ({
   dataAllAdresses,
   dataAllApErfkritWertes,
   data,
-  client,
 }: {
   dimensions: Object,
   treeName: string,
   dataAllAdresses: Object,
   dataAllApErfkritWertes: Object,
   data: Object,
-  client: Object,
 }) => {
+  const client = useApolloClient()
   const [errors, setErrors] = useState({})
 
   const row = get(data, 'apberById', {})
