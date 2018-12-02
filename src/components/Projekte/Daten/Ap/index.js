@@ -1,11 +1,5 @@
 // @flow
-import React, {
-  useContext,
-  useState,
-  useCallback,
-  useEffect,
-  Suspense,
-} from 'react'
+import React, { useContext, useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
