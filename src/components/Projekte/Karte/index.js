@@ -18,8 +18,8 @@ import 'proj4leaflet'
 import debounceHandler from '@hocs/debounce-handler'
 import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
-import { withApollo } from 'react-apollo'
 import { getSnapshot } from 'mobx-state-tree'
+import { useApolloClient } from 'react-apollo-hooks'
 
 import LayersControl from './LayersControl'
 import OsmColor from './layers/OsmColor'
@@ -112,7 +112,6 @@ const LoadingContainer = styled.div`
  */
 
 const enhance = compose(
-  withApollo,
   withProps(() => {
     const { setMapMouseCoordinates } = useContext(mobxStoreContext)
     return { setMapMouseCoordinates }
@@ -133,7 +132,6 @@ const Karte = ({
   data,
   refetchTree,
   dimensions,
-  client,
   loading,
 }: {
   treeName: string,
@@ -141,9 +139,9 @@ const Karte = ({
   data: Object,
   refetchTree: () => void,
   dimensions: Object,
-  client: Object,
   loading: boolean,
 }) => {
+  const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
   const {
     apfloraLayers,

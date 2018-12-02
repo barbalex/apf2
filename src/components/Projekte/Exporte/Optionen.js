@@ -12,7 +12,6 @@ import Checkbox from '@material-ui/core/Checkbox'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import { withApollo } from 'react-apollo'
 
 import mobxStoreContext from '../../../mobxStoreContext'
 
@@ -50,12 +49,9 @@ const StyledCheckbox = styled(Checkbox)`
   height: 30px !important;
 `
 
-const enhance = compose(
-  withApollo,
-  observer,
-)
+const enhance = compose(observer)
 
-const Optionen = ({ client }: { client: Object }) => {
+const Optionen = () => {
   const {
     mapFilter: mapFilterRaw,
     setExportFileType,
