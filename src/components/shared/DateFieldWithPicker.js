@@ -4,16 +4,12 @@
  * if set '' (as React wants) value is shown and set as Unknown :-(
  * setting null of cours makes react log errors
  */
-import React, { Fragment } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { DatePicker } from 'material-ui-pickers'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import format from 'date-fns/format'
 import isValid from 'date-fns/isValid'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
-import withLifecycle from '@hocs/with-lifecycle'
 
 import convertDateToYyyyMmDd from '../../modules/convertDateToYyyyMmDd'
 
@@ -29,12 +25,25 @@ const StyledDatePicker = styled(DatePicker)`
   }
 `
 
-const enhance = compose(
-  withState('stateValue', 'setStateValue', ({ value: propsValue }) =>
+const DateFieldWithPicker = ({
+  label,
+  name,
+  value: propsValue,
+  saveToDb,
+  error,
+}: {
+  label: String,
+  name: String,
+  value?: String | Number,
+  saveToDb: () => void,
+  error: String,
+}) => {
+  const [stateValue, setStateValue] = useState(
     isValid(propsValue) ? propsValue : null,
-  ),
-  withHandlers({
-    onChange: ({ setStateValue, saveToDb, name }) => value => {
+  )
+
+  const onChange = useCallback(
+    value => {
       /**
        * change happens when data is picked in picker
        * so is never null or otherwise invalid
@@ -51,13 +60,10 @@ const enhance = compose(
       saveToDb(fakeEvent)
       setStateValue(newValue)
     },
-    onBlur: ({
-      saveToDb,
-      stateValue,
-      setStateValue,
-      value: propsValue,
-      name,
-    }) => event => {
+    [name],
+  )
+  const onBlur = useCallback(
+    event => {
       const { value } = event.target
       //console.log('DateFieldWithPicker, onBlur:', {value})
       // do not change anything of there are no values
@@ -75,39 +81,18 @@ const enhance = compose(
       saveToDb(fakeEvent)
       setStateValue(newValue)
     },
-  }),
-  withLifecycle({
-    onDidUpdate(prevProps, props) {
-      if (props.value !== prevProps.value) {
-        //console.log('DateFieldWithPicker, onDidUpdate, setting state to:', props.value)
-        props.setStateValue(props.value)
-      }
-    },
-  }),
-)
+    [name],
+  )
 
-const DateFieldWithPicker = ({
-  label,
-  name,
-  value: propsValue,
-  stateValue,
-  saveToDb,
-  onChange,
-  onBlur,
-  error,
-}: {
-  label: String,
-  name: String,
-  value?: String | Number,
-  stateValue?: String | Number,
-  saveToDb: () => void,
-  onChange: () => void,
-  onBlur: () => void,
-  error: String,
-}) => {
-  //console.log('DateFieldWithPicker, render:', {stateValue})
+  useEffect(
+    () => {
+      setStateValue(propsValue)
+    },
+    [propsValue],
+  )
+
   return (
-    <Fragment>
+    <>
       <StyledDatePicker
         keyboard
         label={label}
@@ -131,8 +116,8 @@ const DateFieldWithPicker = ({
       {!!error && (
         <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
       )}
-    </Fragment>
+    </>
   )
 }
 
-export default enhance(DateFieldWithPicker)
+export default DateFieldWithPicker
