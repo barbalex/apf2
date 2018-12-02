@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
 import withProps from 'recompose/withProps'
-import { withApollo } from 'react-apollo'
+import { useApolloClient } from 'react-apollo-hooks'
 
 import RadioButton from '../../../shared/RadioButton'
 import TextField from '../../../shared/TextField'
@@ -26,7 +26,6 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withApollo,
   withProps(() => ({
     mobxStore: useContext(mobxStoreContext),
   })),
@@ -36,14 +35,13 @@ const enhance = compose(
 const Adresse = ({
   treeName,
   data,
-  client,
   refetchTree,
 }: {
   treeName: String,
   data: Object,
-  client: Object,
   refetchTree: () => void,
 }) => {
+  const client = useApolloClient()
   const [errors, setErrors] = useState({})
 
   const row = get(data, 'adresseById', {})

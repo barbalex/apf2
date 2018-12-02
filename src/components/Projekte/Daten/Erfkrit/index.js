@@ -4,9 +4,9 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
-import { withApollo } from 'react-apollo'
 import withProps from 'recompose/withProps'
 import { observer } from 'mobx-react-lite'
+import { useApolloClient } from 'react-apollo-hooks'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -29,7 +29,6 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withApollo,
   withProps(() => ({
     mobxStore: useContext(mobxStoreContext),
   })),
@@ -42,15 +41,14 @@ const Erfkrit = ({
   treeName,
   dataAllApErfkritWertes,
   data,
-  client,
   refetchTree,
 }: {
   treeName: string,
   dataAllApErfkritWertes: Object,
   data: Object,
-  client: Object,
   refetchTree: () => void,
 }) => {
+  const client = useApolloClient()
   const [errors, setErrors] = useState({})
 
   const row = get(data, 'erfkritById', {})
