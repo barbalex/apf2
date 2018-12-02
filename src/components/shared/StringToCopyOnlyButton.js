@@ -3,6 +3,7 @@ import React, { useState, useCallback } from 'react'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
+import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from './ErrorBoundary'
 
@@ -36,4 +37,4 @@ const StringToCopy = ({ text, label }: { text: string, label: string }) => {
   )
 }
 
-export default StringToCopy
+export default observer(StringToCopy)

@@ -8,6 +8,7 @@ import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import green from '@material-ui/core/colors/green'
 import styled from 'styled-components'
 import getUrls from 'get-urls'
+import { observer } from 'mobx-react-lite'
 
 const Container = styled.div`
   display: flex;
@@ -99,4 +100,4 @@ const TextFieldWithUrl = ({
   )
 }
 
-export default TextFieldWithUrl
+export default observer(TextFieldWithUrl)
