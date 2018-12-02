@@ -13,10 +13,10 @@ import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
 import get from 'lodash/get'
 import gql from 'graphql-tag'
-import { withApollo } from 'react-apollo'
+import { observer } from 'mobx-react-lite'
+import { useApolloClient } from 'react-apollo-hooks'
 
 import ErrorBoundary from './shared/ErrorBoundary'
 import idbContext from '../idbContext'
@@ -34,9 +34,8 @@ const StyledInput = styled(Input)`
   }
 `
 
-const enhance = compose(withApollo)
-
-const User = ({ client }: { client: Object }) => {
+const User = () => {
+  const client = useApolloClient()
   const { idb } = useContext(idbContext)
   const { user, setUser } = useContext(mobxStoreContext)
   const { token } = user
@@ -208,4 +207,4 @@ const User = ({ client }: { client: Object }) => {
   )
 }
 
-export default enhance(User)
+export default observer(User)
