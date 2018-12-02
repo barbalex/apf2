@@ -1,6 +1,7 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
+import { observer } from 'mobx-react-lite'
 
 import RadioButtonGroup from './RadioButtonGroup'
 import InfoWithPopover from './InfoWithPopover'
@@ -46,4 +47,4 @@ RadioButtonGroupWithInfo.defaultProps = {
   value: '',
 }
 
-export default RadioButtonGroupWithInfo
+export default observer(RadioButtonGroupWithInfo)

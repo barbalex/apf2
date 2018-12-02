@@ -2,6 +2,7 @@
 import React, { useState, useCallback } from 'react'
 import CreatableSelect from 'react-select/lib/Creatable'
 import styled from 'styled-components'
+import { observer } from 'mobx-react-lite'
 
 const Container = styled.div`
   display: flex;
@@ -150,4 +151,4 @@ const SharedSelectCreatable = ({
   )
 }
 
-export default SharedSelectCreatable
+export default observer(SharedSelectCreatable)
