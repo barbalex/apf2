@@ -1,12 +1,11 @@
 // @flow
-import React from 'react'
+import React, { useCallback } from 'react'
 import FormGroup from '@material-ui/core/FormGroup'
 import FormControl from '@material-ui/core/FormControl'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import Checkbox from '@material-ui/core/Checkbox'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
@@ -31,56 +30,53 @@ const StyledFormControlLabel = styled(FormControlLabel)`
   margin-top: -10px;
 `
 
-const enhance = compose(
-  withHandlers({
-    onCheck: ({ saveToDb }) => (e, val) => saveToDb(val),
-  }),
-  observer,
-)
+const enhance = compose(observer)
 
 const CheckboxWithInfo = ({
   value,
   label,
-  onCheck,
   popover,
   saveToDb,
   error,
 }: {
   value?: number | string,
   label: string,
-  onCheck: () => void,
   popover: Object,
   saveToDb: () => void,
   error: String,
-}) => (
-  <Container>
-    <StyledFormControl
-      component="fieldset"
-      error={!!error}
-      aria-describedby={`${label}ErrorText`}
-    >
-      <FormGroup>
-        <Label label={label} />
-        <StyledFormControlLabel
-          control={
-            <Checkbox
-              checked={value}
-              onChange={onCheck}
-              value={label}
-              color="primary"
-            />
-          }
-        />
-      </FormGroup>
-      {!!error && (
-        <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
-      )}
-    </StyledFormControl>
-    <div>
-      <InfoWithPopover>{popover}</InfoWithPopover>
-    </div>
-  </Container>
-)
+}) => {
+  const onCheck = useCallback((e, val) => saveToDb(val))
+
+  return (
+    <Container>
+      <StyledFormControl
+        component="fieldset"
+        error={!!error}
+        aria-describedby={`${label}ErrorText`}
+      >
+        <FormGroup>
+          <Label label={label} />
+          <StyledFormControlLabel
+            control={
+              <Checkbox
+                checked={value}
+                onChange={onCheck}
+                value={label}
+                color="primary"
+              />
+            }
+          />
+        </FormGroup>
+        {!!error && (
+          <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
+        )}
+      </StyledFormControl>
+      <div>
+        <InfoWithPopover>{popover}</InfoWithPopover>
+      </div>
+    </Container>
+  )
+}
 
 CheckboxWithInfo.defaultProps = {
   value: null,
