@@ -15,7 +15,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import Button from '@material-ui/core/Button'
-import { withApollo } from 'react-apollo'
+import { useApolloClient } from 'react-apollo-hooks'
 
 import withData from './withData'
 import TextField from '../../shared/TextField'
@@ -42,24 +42,20 @@ const PasswordMessage = styled.div`
   padding-bottom: 10px;
 `
 
-const enhance = compose(
-  withApollo,
-  withData,
-)
+const enhance = compose(withData)
 
 const User = ({
   username,
   userOpen,
   toggleUserOpen,
   data,
-  client,
 }: {
   username: string,
   userOpen: boolean,
   toggleUserOpen: () => void,
   data: Object,
-  client: Object,
 }) => {
+  const client = useApolloClient()
   const row = get(data, 'userByName', {})
 
   const [errors, setErrors] = useState({})

@@ -6,7 +6,7 @@ import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import withProps from 'recompose/withProps'
 import { observer } from 'mobx-react-lite'
-import { withApollo } from 'react-apollo'
+import { useApolloClient } from 'react-apollo-hooks'
 
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import TextField from '../../../shared/TextField'
@@ -64,7 +64,6 @@ const LabelPopoverRowColumnRight = styled.div`
 `
 
 const enhance = compose(
-  withApollo,
   withProps(() => ({
     mobxStore: useContext(mobxStoreContext),
   })),
@@ -82,7 +81,6 @@ const Ap = ({
   dataAllAps,
   data,
   refetchTree,
-  client,
 }: {
   treeName: String,
   dataAeEigenschaftens: Object,
@@ -90,8 +88,8 @@ const Ap = ({
   dataAllAps: Object,
   data: Object,
   refetchTree: () => void,
-  client: Object,
 }) => {
+  const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
   const { nodeFilter, nodeFilterSetValue } = mobxStore
 
