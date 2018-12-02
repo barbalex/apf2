@@ -3,7 +3,6 @@ import React, { useContext, useState, useCallback, useEffect } from 'react'
 import Input from '@material-ui/core/Input'
 import compose from 'recompose/compose'
 import styled from 'styled-components'
-import { withApollo } from 'react-apollo'
 import { observer } from 'mobx-react-lite'
 
 import initiateDataFromUrl from '../../modules/initiateDataFromUrl'
@@ -32,12 +31,9 @@ const Jahr = styled.p`
 const ekfRefDate = new Date().setMonth(new Date().getMonth() - 2)
 const ekfRefYear = new Date(ekfRefDate).getFullYear()
 
-const enhance = compose(
-  withApollo,
-  observer,
-)
+const enhance = compose(observer)
 
-const EkfYear = ({ client }: { client: Object }) => {
+const EkfYear = () => {
   const mobxStore = useContext(mobxStoreContext)
   const { ekfYear, setEkfYear } = mobxStore
 

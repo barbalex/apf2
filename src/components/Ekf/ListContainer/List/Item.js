@@ -1,7 +1,6 @@
 // @flow
 import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
-import { withApollo } from 'react-apollo'
 import { observer } from 'mobx-react-lite'
 import compose from 'recompose/compose'
 
@@ -33,23 +32,18 @@ const InnerContainer = styled.div`
   }
 `
 
-const enhance = compose(
-  withApollo,
-  observer,
-)
+const enhance = compose(observer)
 
 const EkfList = ({
   activeTpopkontrId,
   projektCount,
   style,
   row,
-  client,
 }: {
   activeTpopkontrId: string,
   projektCount: number,
   style: Object,
   row: Object,
-  client: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const innerContainerHeight = projektCount > 1 ? 81 : 62
