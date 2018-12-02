@@ -9,7 +9,7 @@ import get from 'lodash/get'
 import uniq from 'lodash/uniq'
 import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
-import { withApollo } from 'react-apollo'
+import { useApolloClient } from 'react-apollo-hooks'
 
 import LabelFilter from './LabelFilter'
 import ApFilter from './ApFilter'
@@ -156,10 +156,7 @@ const getAndValidateCoordinatesOfBeob = async ({ id, addError, client }) => {
   return { x, y }
 }
 
-const enhance = compose(
-  withApollo,
-  observer,
-)
+const enhance = compose(observer)
 
 const TreeContainer = ({
   data: dbData,
@@ -167,7 +164,6 @@ const TreeContainer = ({
   refetchTree,
   data,
   loading,
-  client,
 }: {
   treeName: String,
   flex: Number,
@@ -175,8 +171,8 @@ const TreeContainer = ({
   data: Object,
   loading: Boolean,
   refetchTree: () => void,
-  client: Object,
 }) => {
+  const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
   const {
     activeApfloraLayers,
@@ -492,7 +488,9 @@ const TreeContainer = ({
         {!!toDeleteId && <DeleteDatasetModal treeName={treeName} />}
         <LabelFilterContainer>
           <LabelFilter treeName={treeName} />
-          {!!activeNodes.projekt && <ApFilter treeName={treeName} />}
+          {!!activeNodes.projekt && (
+            <ApFilter treeName={treeName} refetchTree={refetchTree} />
+          )}
         </LabelFilterContainer>
         <InnerTreeContainer>
           <Tree data={data} treeName={treeName} />

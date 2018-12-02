@@ -1,10 +1,10 @@
 // @flow
 import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
 import Switch from '@material-ui/core/Switch'
 import get from 'lodash/get'
-import { withApollo } from 'react-apollo'
+import { observer } from 'mobx-react-lite'
+import { useApolloClient } from 'react-apollo-hooks'
 
 import apById from './apById'
 import Label from '../../../shared/Label'
@@ -23,15 +23,14 @@ const StyledSwitch = styled(Switch)`
   margin-top: -18px;
 `
 
-const enhance = compose(withApollo)
-
 const ApFilter = ({
   treeName,
-  client,
+  refetchTree,
 }: {
   treeName: String,
-  client: Object,
+  refetchTree: () => void,
 }) => {
+  const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
   const { setTreeKey } = mobxStore
   const { apFilter, activeNodeArray, openNodes } = mobxStore[treeName]
@@ -46,6 +45,8 @@ const ApFilter = ({
         key: 'apFilter',
       })
       if (!previousApFilter) {
+        // need to fetch previously not had aps
+        refetchTree()
         // apFilter was set to true
         const { ap: apId } = activeNodes
         let result
@@ -102,4 +103,4 @@ const ApFilter = ({
   )
 }
 
-export default enhance(ApFilter)
+export default observer(ApFilter)

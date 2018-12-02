@@ -9,7 +9,6 @@ import compose from 'recompose/compose'
 import isUuid from 'is-uuid'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { withApollo } from 'react-apollo'
 
 import TestdataMessage from './TestdataMessage'
 import types from '../../../mobxStore/NodeFilterTree/types'
@@ -61,23 +60,18 @@ const Symbols = styled.div`
   display: flex;
 `
 
-const enhance = compose(
-  withApollo,
-  observer,
-)
+const enhance = compose(observer)
 
 const FormTitle = ({
   title,
   apId,
   table,
   treeName,
-  client,
 }: {
   title: string,
   apId: string,
   table: string,
   treeName: string,
-  client: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const {
