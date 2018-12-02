@@ -1,13 +1,10 @@
 // @flow
-import React, { Component } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import 'leaflet'
 import { withLeaflet } from 'react-leaflet'
 import 'leaflet-easyprint'
 import Control from 'react-leaflet-control'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
 import FileDownloadIcon from '@material-ui/icons/GetApp'
 
 const StyledButton = styled.button`
@@ -25,17 +22,6 @@ const StyledButton = styled.button`
   }
 `
 
-const enhance = compose(
-  withLeaflet,
-  withState('printPlugin', 'changePrintPlugin', {}),
-  withHandlers({
-    savePng: ({ printPlugin }) => event => {
-      event.preventDefault()
-      printPlugin.printMap('CurrentSize', 'apfloraKarte')
-    },
-  }),
-)
-
 const options = {
   hidden: true,
   position: 'topright',
@@ -46,46 +32,28 @@ const options = {
   hideControlContainer: true,
 }
 
-class PngControl extends Component {
-  constructor(props) {
-    super(props)
-    // ref is used to try map not to hijack click events
-    this.container = React.createRef()
-  }
+const PngControl = ({ leaflet }: { leaflet: Object }) => {
+  const [printPlugin, changePrintPlugin] = useState({})
 
-  props: {
-    savePng: () => void,
-    printPlugin: object,
-    changePrintPlugin: () => void,
-  }
+  const savePng = useCallback(event => {
+    event.preventDefault()
+    printPlugin.printMap('CurrentSize', 'apfloraKarte')
+  })
 
-  componentDidMount() {
-    const { leaflet, changePrintPlugin } = this.props
+  useEffect(() => {
     const pp = window.L.easyPrint(options).addTo(leaflet.map)
     changePrintPlugin(pp)
-    /**
-     * This was trying to prevent the map from taking over
-     * click events
-     * see: https://github.com/LiveBy/react-leaflet-control/issues/22
-     */
-    /*window.L.DomEvent.disableClickPropagation(
-      this.container.current,
-    ).disableScrollPropagation(this.container.current)*/
-  }
+  }, [])
 
-  render() {
-    const { savePng } = this.props
-
-    return (
-      <div ref={this.container}>
-        <Control position="topright" ref={this.container}>
-          <StyledButton onClick={savePng} title="Karte als png speichern">
-            <FileDownloadIcon />
-          </StyledButton>
-        </Control>
-      </div>
-    )
-  }
+  return (
+    <div>
+      <Control position="topright">
+        <StyledButton onClick={savePng} title="Karte als png speichern">
+          <FileDownloadIcon />
+        </StyledButton>
+      </Control>
+    </div>
+  )
 }
 
-export default enhance(PngControl)
+export default withLeaflet(PngControl)
