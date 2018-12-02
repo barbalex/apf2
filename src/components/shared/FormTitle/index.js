@@ -5,7 +5,6 @@ import FilterIcon from '@material-ui/icons/FilterList'
 import DeleteFilterIcon from '@material-ui/icons/DeleteSweep'
 import DeleteFilterIcon2 from '@material-ui/icons/DeleteSweepOutlined'
 import IconButton from '@material-ui/core/IconButton'
-import compose from 'recompose/compose'
 import isUuid from 'is-uuid'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
@@ -59,8 +58,6 @@ const StyledDeleteFilterIcon2 = styled(DeleteFilterIcon2)`
 const Symbols = styled.div`
   display: flex;
 `
-
-const enhance = compose(observer)
 
 const FormTitle = ({
   title,
@@ -163,4 +160,4 @@ const FormTitle = ({
   )
 }
 
-export default enhance(FormTitle)
+export default observer(FormTitle)
