@@ -4,8 +4,9 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import sum from 'lodash/sum'
 import compose from 'recompose/compose'
+import { useQuery } from 'react-apollo-hooks'
 
-import withData from './withData'
+import query from './data'
 
 const Container = styled.div`
   padding: 0.2cm 0;
@@ -80,19 +81,21 @@ const TpopBerJahr = styled(Number)`
 const PopSeit = styled(Number)``
 const TpopSeit = styled(Number)``
 
-const enhance = compose(withData)
+const enhance = compose()
 
 const AMengen = ({
   apId,
   jahr,
   startJahr,
-  data,
 }: {
   apId: String,
   jahr: Number,
   startJahr: Number,
-  data: Object,
 }) => {
+  const { data, error, loading, refetch } = useQuery(query, {
+    suspend: false,
+    variables: { apId, startJahr },
+  })
   const oneLPop = get(data, 'apById.oneLPop.nodes', []).filter(
     p => get(p, 'tpopsByPopId.totalCount') > 0,
   ).length
@@ -156,7 +159,7 @@ const AMengen = ({
     ),
   )
 
-  if (data.error) return `Fehler: ${data.error.message}`
+  if (error) return `Fehler: ${error.message}`
 
   return (
     <Container>
@@ -173,18 +176,18 @@ const AMengen = ({
       </LabelRow>
       <Row>
         <Label1>Anzahl bekannt</Label1>
-        <PopBerJahr>{data.loading ? '...' : oneLPop}</PopBerJahr>
-        <TpopBerJahr>{data.loading ? '...' : oneLTpop}</TpopBerJahr>
+        <PopBerJahr>{loading ? '...' : oneLPop}</PopBerJahr>
+        <TpopBerJahr>{loading ? '...' : oneLTpop}</TpopBerJahr>
         <PopSeit />
         <TpopSeit />
       </Row>
       <TotalRow>
         <Label2>aktuell</Label2>
         <PopBerJahr>
-          {data.loading ? '...' : threeLPop + fourLPop + fiveLPop}
+          {loading ? '...' : threeLPop + fourLPop + fiveLPop}
         </PopBerJahr>
         <TpopBerJahr>
-          {data.loading ? '...' : threeLTpop + fourLTpop + fiveLTpop}
+          {loading ? '...' : threeLTpop + fourLTpop + fiveLTpop}
         </TpopBerJahr>
         <PopSeit />
         <TpopSeit />
@@ -192,31 +195,29 @@ const AMengen = ({
       <Row>
         <Label2Davon>davon:</Label2Davon>
         <Label3AfterDavon>ursprünglich</Label3AfterDavon>
-        <PopBerJahr>{data.loading ? '...' : threeLPop}</PopBerJahr>
-        <TpopBerJahr>{data.loading ? '...' : threeLTpop}</TpopBerJahr>
+        <PopBerJahr>{loading ? '...' : threeLPop}</PopBerJahr>
+        <TpopBerJahr>{loading ? '...' : threeLTpop}</TpopBerJahr>
         <PopSeit />
         <TpopSeit />
       </Row>
       <Row>
         <Label3>angesiedelt (vor Beginn AP)</Label3>
-        <PopBerJahr>{data.loading ? '...' : fourLPop}</PopBerJahr>
-        <TpopBerJahr>{data.loading ? '...' : fourLTpop}</TpopBerJahr>
+        <PopBerJahr>{loading ? '...' : fourLPop}</PopBerJahr>
+        <TpopBerJahr>{loading ? '...' : fourLTpop}</TpopBerJahr>
         <PopSeit />
         <TpopSeit />
       </Row>
       <Row>
         <Label3>angesiedelt (nach Beginn AP)</Label3>
-        <PopBerJahr>{data.loading ? '...' : fiveLPop}</PopBerJahr>
-        <TpopBerJahr>{data.loading ? '...' : fiveLTpop}</TpopBerJahr>
+        <PopBerJahr>{loading ? '...' : fiveLPop}</PopBerJahr>
+        <TpopBerJahr>{loading ? '...' : fiveLTpop}</TpopBerJahr>
         <PopSeit />
         <TpopSeit />
       </Row>
       <Row>
         <Label2>erloschen:</Label2>
-        <PopBerJahr>{data.loading ? '...' : sevenLPop + eightLPop}</PopBerJahr>
-        <TpopBerJahr>
-          {data.loading ? '...' : sevenLTpop + eightLTpop}
-        </TpopBerJahr>
+        <PopBerJahr>{loading ? '...' : sevenLPop + eightLPop}</PopBerJahr>
+        <TpopBerJahr>{loading ? '...' : sevenLTpop + eightLTpop}</TpopBerJahr>
         <PopSeit />
         <TpopSeit />
       </Row>
@@ -225,30 +226,30 @@ const AMengen = ({
         <Label3AfterDavon>
           zuvor autochthon oder vor AP angesiedelt
         </Label3AfterDavon>
-        <PopBerJahr>{data.loading ? '...' : sevenLPop}</PopBerJahr>
-        <TpopBerJahr>{data.loading ? '...' : sevenLTpop}</TpopBerJahr>
+        <PopBerJahr>{loading ? '...' : sevenLPop}</PopBerJahr>
+        <TpopBerJahr>{loading ? '...' : sevenLTpop}</TpopBerJahr>
         <PopSeit />
         <TpopSeit />
       </Row>
       <Row>
         <Label3>nach Beginn Aktionsplan angesiedelt</Label3>
-        <PopBerJahr>{data.loading ? '...' : eightLPop}</PopBerJahr>
-        <TpopBerJahr>{data.loading ? '...' : eightLTpop}</TpopBerJahr>
+        <PopBerJahr>{loading ? '...' : eightLPop}</PopBerJahr>
+        <TpopBerJahr>{loading ? '...' : eightLTpop}</TpopBerJahr>
         <PopSeit />
         <TpopSeit />
       </Row>
       <Row>
         <Label2>Ansaatversuche:</Label2>
-        <PopBerJahr>{data.loading ? '...' : nineLPop}</PopBerJahr>
-        <TpopBerJahr>{data.loading ? '...' : nineLTpop}</TpopBerJahr>
+        <PopBerJahr>{loading ? '...' : nineLPop}</PopBerJahr>
+        <TpopBerJahr>{loading ? '...' : nineLTpop}</TpopBerJahr>
         <PopSeit />
         <TpopSeit />
       </Row>
       <FernerRow>Ferner:</FernerRow>
       <Row>
         <Label1>potentieller Wuchs-/Ansiedlungsort:</Label1>
-        <PopBerJahr>{data.loading ? '...' : tenLPop}</PopBerJahr>
-        <TpopBerJahr>{data.loading ? '...' : tenLTpop}</TpopBerJahr>
+        <PopBerJahr>{loading ? '...' : tenLPop}</PopBerJahr>
+        <TpopBerJahr>{loading ? '...' : tenLTpop}</TpopBerJahr>
         <PopSeit />
         <TpopSeit />
       </Row>
