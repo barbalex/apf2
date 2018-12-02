@@ -905,13 +905,6 @@
     just-debounce-it "^1.0.1"
     react-display-name "^0.2.4"
 
-"@hocs/with-lifecycle@0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@hocs/with-lifecycle/-/with-lifecycle-0.5.0.tgz#358db86746be1ade689916a2ca0d7d5cbeef1a92"
-  integrity sha512-gf8pxJO3dovuEeJ3zLdOTGcE8z9fkAy2SEhDtf57zMrlU7hXCkOa6P9RR992FXjuJXTyb445Zk6QNrgpi2aw6Q==
-  dependencies:
-    react-display-name "^0.2.4"
-
 "@material-ui/core@3.6.1":
   version "3.6.1"
   resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-3.6.1.tgz#6f8259c64eaa34c9f977165f6b8d175d9eb1858a"
