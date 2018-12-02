@@ -1,13 +1,9 @@
 // @flow
-import React from 'react'
-import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
-import withState from 'recompose/withState'
+import React, { useState, useCallback, useEffect } from 'react'
 import CreatableSelect from 'react-select/lib/Creatable'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import AddLocation from '@material-ui/icons/AddLocationOutlined'
-import withLifecycle from '@hocs/with-lifecycle'
 
 const Container = styled.div`
   display: flex;
@@ -80,10 +76,33 @@ const StyledIconButton = styled(IconButton)`
   margin-top: -5px !important;
 `
 
-const enhance = compose(
-  withState('stateValue', 'setStateValue', null),
-  withHandlers({
-    onChange: ({ saveToDb, name }) => option => {
+const SharedSelectCreatable = ({
+  value,
+  field = '',
+  label,
+  name,
+  error,
+  options: optionsIn,
+  onClickLocate,
+  maxHeight = null,
+  noCaret = false,
+  saveToDb,
+}: {
+  value?: ?number | ?string,
+  field?: string,
+  label: string,
+  name: string,
+  error: string,
+  options: Array<Object>,
+  onClickLocate: () => void,
+  maxHeight?: number,
+  noCaret: boolean,
+  saveToDb: () => void,
+}) => {
+  const [stateValue, setStateValue] = useState(null)
+
+  const onChange = useCallback(
+    option => {
       const fakeEvent = {
         target: {
           name,
@@ -92,8 +111,11 @@ const enhance = compose(
       }
       saveToDb(fakeEvent)
     },
-    onInputChange: ({ setStateValue }) => value => setStateValue(value),
-    onBlur: ({ saveToDb, stateValue, name }) => event => {
+    [name],
+  )
+  const onInputChange = useCallback(value => setStateValue(value))
+  const onBlur = useCallback(
+    event => {
       if (stateValue) {
         const fakeEvent = {
           target: {
@@ -104,48 +126,16 @@ const enhance = compose(
         saveToDb(fakeEvent)
       }
     },
-  }),
-  withLifecycle({
-    onDidUpdate(prevProps, props) {
-      if (props.value !== prevProps.value) {
-        const value = props.value || props.value === 0 ? props.value : ''
-        props.setStateValue(value)
-      }
-    },
-  }),
-)
+    [stateValue, name],
+  )
 
-const SharedSelectCreatable = ({
-  value,
-  field = '',
-  label,
-  name,
-  error,
-  options: optionsIn,
-  stateValue,
-  setStateValue,
-  onChange,
-  onInputChange,
-  onBlur,
-  onClickLocate,
-  maxHeight = null,
-  noCaret = false,
-}: {
-  value?: ?number | ?string,
-  field?: string,
-  label: string,
-  name: string,
-  error: string,
-  options: Array<Object>,
-  stateValue: number | string,
-  setStateValue: () => void,
-  onChange: () => void,
-  onInputChange: () => void,
-  onBlur: () => void,
-  onClickLocate: () => void,
-  maxHeight?: number,
-  noCaret: boolean,
-}) => {
+  useEffect(
+    () => {
+      setStateValue(value)
+    },
+    [value],
+  )
+
   // need to add value to options list if it is not yet included
   const valuesArray = optionsIn.map(o => o.value)
   const options = [...optionsIn]
@@ -187,4 +177,4 @@ const SharedSelectCreatable = ({
   )
 }
 
-export default enhance(SharedSelectCreatable)
+export default SharedSelectCreatable
