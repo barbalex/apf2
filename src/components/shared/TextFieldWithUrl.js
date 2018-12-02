@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
@@ -7,10 +7,6 @@ import FormHelperText from '@material-ui/core/FormHelperText'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import green from '@material-ui/core/colors/green'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
-import withLifecycle from '@hocs/with-lifecycle'
 import getUrls from 'get-urls'
 
 const Container = styled.div`
@@ -32,27 +28,8 @@ const StyledFormControl = styled(FormControl)`
   }
 `
 
-const enhance = compose(
-  withState('stateValue', 'setStateValue', ({ value: propsValue }) =>
-    propsValue || propsValue === 0 ? propsValue : '',
-  ),
-  withHandlers({
-    onChange: ({ setStateValue }) => event => setStateValue(event.target.value),
-    onOpen: () => e => window.open(e.target.dataset.url, '_blank'),
-  }),
-  withLifecycle({
-    onDidUpdate(prevProps, props) {
-      if (props.value !== prevProps.value) {
-        const value = props.value || props.value === 0 ? props.value : ''
-        props.setStateValue(value)
-      }
-    },
-  }),
-)
-
 const TextFieldWithUrl = ({
   value: propsValue,
-  stateValue,
   label,
   name,
   type = 'text',
@@ -61,11 +38,8 @@ const TextFieldWithUrl = ({
   hintText = '',
   error,
   saveToDb,
-  onChange,
-  onOpen,
 }: {
   value: Number | String,
-  stateValue: Number | String,
   label: String,
   name: String,
   type: String,
@@ -74,9 +48,18 @@ const TextFieldWithUrl = ({
   hintText: String,
   error: String,
   saveToDb: () => void,
-  onChange: () => void,
-  onOpen: () => void,
 }) => {
+  const [stateValue, setStateValue] = useState(
+    propsValue || propsValue === 0 ? propsValue : '',
+  )
+
+  const onChange = useCallback(event => setStateValue(event.target.value))
+  const onOpen = useCallback(e => window.open(e.target.dataset.url, '_blank'))
+
+  useEffect(() => {
+    setStateValue(propsValue || propsValue === 0 ? propsValue : '')
+  }, [])
+
   const urls = stateValue ? getUrls(stateValue) : []
 
   return (
@@ -116,4 +99,4 @@ const TextFieldWithUrl = ({
   )
 }
 
-export default enhance(TextFieldWithUrl)
+export default TextFieldWithUrl
