@@ -3,9 +3,9 @@ import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
-import { withApollo } from 'react-apollo'
 import withProps from 'recompose/withProps'
 import { observer } from 'mobx-react-lite'
+import { useApolloClient } from 'react-apollo-hooks'
 
 import TextField from '../../../shared/TextField'
 import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
@@ -41,7 +41,6 @@ const Section = styled.div`
 `
 
 const enhance = compose(
-  withApollo,
   withProps(() => ({
     mobxStore: useContext(mobxStoreContext),
   })),
@@ -53,13 +52,12 @@ const Idealbiotop = ({
   dimensions = { width: 380 },
   treeName,
   data,
-  client,
 }: {
   dimensions: Object,
   treeName: string,
   data: Object,
-  client: Object,
 }) => {
+  const client = useApolloClient()
   const [errors, setErrors] = useState({})
 
   const row = get(data, 'allIdealbiotops.nodes[0]', {})
