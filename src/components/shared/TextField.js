@@ -5,10 +5,6 @@ import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
-import withLifecycle from '@hocs/with-lifecycle'
 
 const StyledFormControl = styled(FormControl)`
   padding-bottom: 19px !important;
@@ -16,8 +12,6 @@ const StyledFormControl = styled(FormControl)`
     border-bottom-color: rgba(0, 0, 0, 0.1) !important;
   }
 `
-
-const enhance = compose()
 
 const MyTextField = ({
   value,
@@ -78,4 +72,4 @@ const MyTextField = ({
   )
 }
 
-export default enhance(MyTextField)
+export default MyTextField
