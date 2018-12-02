@@ -4,9 +4,9 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
-import { withApollo } from 'react-apollo'
 import withProps from 'recompose/withProps'
 import { observer } from 'mobx-react-lite'
+import { useApolloClient } from 'react-apollo-hooks'
 
 import TextField from '../../../shared/TextField'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
@@ -44,7 +44,6 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withApollo,
   withProps(() => ({
     mobxStore: useContext(mobxStoreContext),
   })),
@@ -57,14 +56,13 @@ const Tpop = ({
   treeName,
   data,
   refetchTree,
-  client,
 }: {
   dimensions: Object,
   treeName: string,
   data: Object,
   refetchTree: () => void,
-  client: Object,
 }) => {
+  const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
   const { addError, nodeFilter, nodeFilterSetValue } = mobxStore
 

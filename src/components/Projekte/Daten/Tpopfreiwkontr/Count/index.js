@@ -9,7 +9,7 @@ import Button from '@material-ui/core/Button'
 import DeleteIcon from '@material-ui/icons/DeleteForever'
 import AddIcon from '@material-ui/icons/AddCircleOutline'
 import { observer } from 'mobx-react-lite'
-import { withApollo } from 'react-apollo'
+import { useApolloClient } from 'react-apollo-hooks'
 
 import Select from '../../../../shared/Select'
 import TextField from '../../../../shared/TextField'
@@ -157,7 +157,6 @@ const ShowNew = styled.div`
 `
 
 const enhance = compose(
-  withApollo,
   withData,
   withAllTpopkontrzaehlEinheitWertes,
   observer,
@@ -176,7 +175,6 @@ const Count = ({
   ekfzaehleinheits = [],
   dataAllTpopkontrzaehlEinheitWertes,
   data,
-  client,
 }: {
   id: String,
   tpopkontrId: String,
@@ -190,8 +188,8 @@ const Count = ({
   ekfzaehleinheits: Array<Object>,
   dataAllTpopkontrzaehlEinheitWertes: Object,
   data: Object,
-  client: Object,
 }) => {
+  const client = useApolloClient()
   const { setToDelete } = useContext(mobxStoreContext)
 
   const [errors, setErrors] = useState({})
