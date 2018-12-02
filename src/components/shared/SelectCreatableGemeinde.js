@@ -4,6 +4,7 @@ import CreatableSelect from 'react-select/lib/Creatable'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import AddLocation from '@material-ui/icons/AddLocationOutlined'
+import { observer } from 'mobx-react-lite'
 
 const Container = styled.div`
   display: flex;
@@ -177,4 +178,4 @@ const SharedSelectCreatable = ({
   )
 }
 
-export default SharedSelectCreatable
+export default observer(SharedSelectCreatable)

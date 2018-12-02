@@ -8,6 +8,7 @@ import Checkbox from '@material-ui/core/Checkbox'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import styled from 'styled-components'
+import { observer } from 'mobx-react-lite'
 
 import InfoWithPopover from './InfoWithPopover'
 import Label from './Label'
@@ -34,6 +35,7 @@ const enhance = compose(
   withHandlers({
     onCheck: ({ saveToDb }) => (e, val) => saveToDb(val),
   }),
+  observer,
 )
 
 const CheckboxWithInfo = ({
@@ -70,10 +72,9 @@ const CheckboxWithInfo = ({
           }
         />
       </FormGroup>
-      {
-        !!error &&
+      {!!error && (
         <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
-      }
+      )}
     </StyledFormControl>
     <div>
       <InfoWithPopover>{popover}</InfoWithPopover>
