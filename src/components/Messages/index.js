@@ -9,9 +9,10 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import Linkify from 'react-linkify'
 import { useApolloClient } from 'react-apollo-hooks'
+import { useQuery } from 'react-apollo-hooks'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
-import withData from './withData'
+import query from './data'
 import createUsermessage from './createUsermessage'
 import mobxStoreContext from '../../mobxStoreContext'
 
@@ -49,15 +50,16 @@ const OkButton = styled(Button)`
   right: 12px;
 `
 
-const enhance = compose(
-  withProps(() => useContext(mobxStoreContext)),
-  withData,
-)
+const enhance = compose(withProps(() => useContext(mobxStoreContext)))
 
-const UserMessages = ({ open, data }: { open: Boolean, data: Object }) => {
+const UserMessages = ({ open }: { open: Boolean }) => {
   const client = useApolloClient()
   const { user, updateAvailable } = useContext(mobxStoreContext)
   const userName = user.name
+  const { data, error, loading, refetch } = useQuery(query, {
+    suspend: false,
+    variables: { name: userName },
+  })
   const allMessages = get(data, 'allMessages.nodes', [])
   const unreadMessages = allMessages.filter(
     m => get(m, 'usermessagesByMessageId.nodes', []).length === 0,
@@ -69,7 +71,7 @@ const UserMessages = ({ open, data }: { open: Boolean, data: Object }) => {
         mutation: createUsermessage,
         variables: { userName, id: message.id },
       })
-      data.refetch()
+      refetch()
     },
     [userName],
   )
@@ -83,14 +85,14 @@ const UserMessages = ({ open, data }: { open: Boolean, data: Object }) => {
           })
         }),
       )
-      return data.refetch()
+      return refetch()
     },
     [unreadMessages, userName],
   )
 
-  if (data.error) {
-    if (data.error.message.includes('keine Berechtigung')) return null
-    return `Fehler: ${data.error.message}`
+  if (error) {
+    if (error.message.includes('keine Berechtigung')) return null
+    return `Fehler: ${error.message}`
   }
 
   return (
@@ -102,7 +104,7 @@ const UserMessages = ({ open, data }: { open: Boolean, data: Object }) => {
           // do not open if update is available
           updateAvailable === false &&
           // don't show while loading data
-          !data.loading
+          !loading
         }
         aria-labelledby="dialog-title"
       >
