@@ -5,9 +5,9 @@ import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
-import { withApollo } from 'react-apollo'
 import withProps from 'recompose/withProps'
 import { observer } from 'mobx-react-lite'
+import { useApolloClient } from 'react-apollo-hooks'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -29,7 +29,6 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withApollo,
   withProps(() => ({
     mobxStore: useContext(mobxStoreContext),
   })),
@@ -40,14 +39,13 @@ const enhance = compose(
 const Ziel = ({
   treeName,
   data,
-  client,
   refetchTree,
 }: {
   treeName: string,
   data: Object,
-  client: Object,
   refetchTree: () => void,
 }) => {
+  const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
   const { setTreeKey } = mobxStore
   const tree = mobxStore[treeName]

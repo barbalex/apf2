@@ -13,9 +13,9 @@ import IconButton from '@material-ui/core/IconButton'
 import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import Button from '@material-ui/core/Button'
-import { withApollo } from 'react-apollo'
 import withProps from 'recompose/withProps'
 import { observer } from 'mobx-react-lite'
+import { useApolloClient } from 'react-apollo-hooks'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -66,7 +66,6 @@ const roleWerte = [
 ]
 
 const enhance = compose(
-  withApollo,
   withProps(() => ({ mobxStore: useContext(mobxStoreContext) })),
   withData,
   withAllAdresses,
@@ -77,15 +76,14 @@ const User = ({
   treeName,
   dataAllAdresses,
   data,
-  client,
   refetchTree,
 }: {
   treeName: String,
   dataAllAdresses: Object,
   data: Object,
-  client: Object,
   refetchTree: () => void,
 }) => {
+  const client = useApolloClient()
   const [errors, setErrors] = useState({})
   const [editPassword, setEditPassword] = useState(false)
   const [password, setPassword] = useState('')

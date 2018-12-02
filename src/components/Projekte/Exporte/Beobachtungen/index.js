@@ -12,7 +12,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { withApollo } from 'react-apollo'
+import { useApolloClient } from 'react-apollo-hooks'
 
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
@@ -58,12 +58,10 @@ const DownloadCardButton = styled(Button)`
   }
 `
 
-const enhance = compose(
-  withApollo,
-  observer,
-)
+const enhance = compose(observer)
 
-const Beobachtungen = ({ client }: { client: Object }) => {
+const Beobachtungen = () => {
+  const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
   const {
     mapFilter,
