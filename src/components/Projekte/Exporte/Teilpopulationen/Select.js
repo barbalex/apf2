@@ -1,9 +1,8 @@
 // @flow
-import React from 'react'
-import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
+import React, { useCallback } from 'react'
 import Select from 'react-select'
 import styled from 'styled-components'
+import { observer } from 'mobx-react-lite'
 
 const Container = styled.div`
   display: flex;
@@ -47,20 +46,13 @@ const StyledSelect = styled(Select)`
   }
 `
 
-const enhance = compose(
-  withHandlers({
-    onChange: ({ saveToDb }) => option =>
-      saveToDb(option ? option.value : null),
-  }),
-)
-
 const SharedSelect = ({
   value,
   field = '',
   label,
   error,
   options,
-  onChange,
+  saveToDb,
   maxHeight = null,
 }: {
   value?: ?number | ?string,
@@ -68,27 +60,31 @@ const SharedSelect = ({
   label: string,
   error: string,
   options: Array<Object>,
-  onChange: () => void,
+  saveToDb: () => void,
   maxHeight?: number,
-}) => (
-  <Container>
-    {label && <Label>{label}</Label>}
-    <StyledSelect
-      id={field}
-      name={field}
-      defaultValue={options.find(o => o.value === value)}
-      options={options}
-      onChange={onChange}
-      hideSelectedOptions
-      placeholder=""
-      isClearable
-      isSearchable
-      noOptionsMessage={() => '(keine)'}
-      maxheight={maxHeight}
-      classNamePrefix="react-select"
-    />
-    {error && <Error>{error}</Error>}
-  </Container>
-)
+}) => {
+  const onChange = useCallback(option => saveToDb(option ? option.value : null))
 
-export default enhance(SharedSelect)
+  return (
+    <Container>
+      {label && <Label>{label}</Label>}
+      <StyledSelect
+        id={field}
+        name={field}
+        defaultValue={options.find(o => o.value === value)}
+        options={options}
+        onChange={onChange}
+        hideSelectedOptions
+        placeholder=""
+        isClearable
+        isSearchable
+        noOptionsMessage={() => '(keine)'}
+        maxheight={maxHeight}
+        classNamePrefix="react-select"
+      />
+      {error && <Error>{error}</Error>}
+    </Container>
+  )
+}
+
+export default observer(SharedSelect)
