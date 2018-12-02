@@ -6,7 +6,6 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import remove from 'lodash/remove'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
 import jwtDecode from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
 
@@ -54,8 +53,6 @@ const MenuDiv = styled.div`
   display: flex;
   flex-wrap: wrap;
 `
-
-const enhance = compose(observer)
 
 const MyAppBar = ({ setShowDeletions }: { setShowDeletions: () => void }) => {
   const mobxStore = useContext(mobxStoreContext)
@@ -227,4 +224,4 @@ const MyAppBar = ({ setShowDeletions }: { setShowDeletions: () => void }) => {
   )
 }
 
-export default enhance(MyAppBar)
+export default observer(MyAppBar)
