@@ -1,10 +1,6 @@
 // @flow
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import get from 'lodash/get'
-import withLifecycle from '@hocs/with-lifecycle'
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
 
 import padding from './padding'
 
@@ -37,45 +33,36 @@ const ImageContainer = styled.div`
   padding-bottom: ${props => (props.padding ? props.padding : 85)}%;
 `
 
-const enhance = compose(
-  withState('image', 'setImage', ''),
-  withLifecycle({
-    async onDidMount(props) {
-      const { row, setImage } = props
-      const apId = get(row, 'tpopByTpopId.popByPopId.apByApId.id')
-      let image
-      try {
-        image = await import(`./${apId}.png`) //.then(m => m.default)
-      } catch (error) {}
-      if (image && image.default) setImage(image.default)
-    },
-    async onDidUpdate(prevProps, props) {
-      const { row, setImage, image } = props
-      if (!image) {
-        const apId = get(row, 'tpopByTpopId.popByPopId.apByApId.id')
-        let image
-        try {
-          image = await import(`./${apId}.png`) //.then(m => m.default)
-        } catch (error) {}
-        if (image && image.default) setImage(image.default)
-      }
-    },
-  }),
-)
+const fetchImageIfNeeded = async ({ image, setImage, apId }) => {
+  if (!image) {
+    let newImage
+    try {
+      newImage = await import(`./${apId}.png`) //.then(m => m.default)
+    } catch (error) {}
+    if (newImage && newImage.default) setImage(newImage.default)
+  }
+}
 
 const Image = ({
-  image,
+  row,
   artname,
   apId,
 }: {
-  image: Object,
+  row: Object,
   artname: string,
   apId: string,
-}) => (
-  <Container>
-    <Title>{artname}</Title>
-    {!!image && <ImageContainer src={image} padding={padding[apId]} />}
-  </Container>
-)
+}) => {
+  const [image, setImage] = useState(null)
+  useEffect(() => {
+    fetchImageIfNeeded({ apId, image, setImage })
+  })
 
-export default enhance(Image)
+  return (
+    <Container>
+      <Title>{artname}</Title>
+      {!!image && <ImageContainer src={image} padding={padding[apId]} />}
+    </Container>
+  )
+}
+
+export default Image
