@@ -7,9 +7,9 @@ import compose from 'recompose/compose'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
-import { withApollo } from 'react-apollo'
 import withProps from 'recompose/withProps'
 import { observer } from 'mobx-react-lite'
+import { useApolloClient } from 'react-apollo-hooks'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -73,7 +73,6 @@ const tpopkontrTypWerte = [
 ]
 
 const enhance = compose(
-  withApollo,
   withProps(() => ({
     mobxStore: useContext(mobxStoreContext),
   })),
@@ -88,18 +87,16 @@ const Tpopfeldkontr = ({
   dataAllAdresses,
   data,
   refetchTree,
-  client,
 }: {
   dimensions: Object,
   treeName: string,
   dataAllAdresses: Object,
   data: Object,
-  client: Object,
   refetchTree: () => void,
 }) => {
-  const { nodeFilter, nodeFilterSetValue, urlQuery, setUrlQuery } = useContext(
-    mobxStoreContext,
-  )
+  const client = useApolloClient()
+  const mobxStore = useContext(mobxStoreContext)
+  const { nodeFilter, nodeFilterSetValue, urlQuery, setUrlQuery } = mobxStore
 
   const [errors, setErrors] = useState({})
   const [value, setValue] = useState(

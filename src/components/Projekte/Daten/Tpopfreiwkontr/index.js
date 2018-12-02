@@ -5,9 +5,9 @@ import compose from 'recompose/compose'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
-import { withApollo } from 'react-apollo'
 import withProps from 'recompose/withProps'
 import { observer } from 'mobx-react-lite'
+import { useApolloClient } from 'react-apollo-hooks'
 
 import StringToCopy from '../../../shared/StringToCopyOnlyButton'
 import withData from './withData'
@@ -139,7 +139,6 @@ const CountHint = styled.div`
  * then refetch data
  */
 const enhance = compose(
-  withApollo,
   withProps(() => ({
     mobxStore: useContext(mobxStoreContext),
   })),
@@ -154,15 +153,14 @@ const Tpopfreiwkontr = ({
   role,
   treeName,
   dataAllAdresses,
-  client,
 }: {
   data: Object,
   dimensions: Object,
   role: string,
   treeName: string,
   dataAllAdresses: Object,
-  client: Object,
 }) => {
+  const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
   const { addError, nodeFilter, nodeFilterSetValue, isPrint, view } = mobxStore
   const tree = mobxStore[treeName]
