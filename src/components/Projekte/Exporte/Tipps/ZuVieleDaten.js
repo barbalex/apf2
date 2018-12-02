@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { useState } from 'react'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
@@ -7,8 +7,6 @@ import Collapse from '@material-ui/core/Collapse'
 import IconButton from '@material-ui/core/IconButton'
 import Icon from '@material-ui/core/Icon'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
 import styled from 'styled-components'
 
 const StyledCard = styled(Card)`
@@ -39,45 +37,41 @@ const StyledCardContent = styled(CardContent)`
   }
 `
 
-const enhance = compose(withState('expanded', 'setExpanded', false))
+const ZuVieleDaten = () => {
+  const [expanded, setExpanded] = useState(false)
 
-const ZuVieleDaten = ({
-  expanded,
-  setExpanded,
-}: {
-  expanded: Boolean,
-  setExpanded: () => void,
-}) => (
-  <StyledCard>
-    <StyledCardActions
-      disableActionSpacing
-      onClick={() => setExpanded(!expanded)}
-    >
-      <CardActionTitle>Hilfe, das sind viel zu viele Daten!</CardActionTitle>
-      <CardActionIconButton
-        data-expanded={expanded}
-        aria-expanded={expanded}
-        aria-label="öffnen"
+  return (
+    <StyledCard>
+      <StyledCardActions
+        disableActionSpacing
+        onClick={() => setExpanded(!expanded)}
       >
-        <Icon title={expanded ? 'schliessen' : 'öffnen'}>
-          <ExpandMoreIcon />
-        </Icon>
-      </CardActionIconButton>
-    </StyledCardActions>
-    <Collapse in={expanded} timeout="auto" unmountOnExit>
-      <StyledCardContent>
-        {'Meist werden alle verfügbaren Datensätze und Felder exportiert.'}
-        <br />
-        {
-          'Daher können Listen sehr viele Zeilen und Spalten enthalten und unübersichtlich werden.'
-        }
-        <ul>
-          <li>Filtern Sie die Zeilen nach gewünschten Kriterien</li>
-          <li>Blenden Sie unerwünschte Spalten aus oder löschen Sie sie</li>
-        </ul>
-      </StyledCardContent>
-    </Collapse>
-  </StyledCard>
-)
+        <CardActionTitle>Hilfe, das sind viel zu viele Daten!</CardActionTitle>
+        <CardActionIconButton
+          data-expanded={expanded}
+          aria-expanded={expanded}
+          aria-label="öffnen"
+        >
+          <Icon title={expanded ? 'schliessen' : 'öffnen'}>
+            <ExpandMoreIcon />
+          </Icon>
+        </CardActionIconButton>
+      </StyledCardActions>
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <StyledCardContent>
+          {'Meist werden alle verfügbaren Datensätze und Felder exportiert.'}
+          <br />
+          {
+            'Daher können Listen sehr viele Zeilen und Spalten enthalten und unübersichtlich werden.'
+          }
+          <ul>
+            <li>Filtern Sie die Zeilen nach gewünschten Kriterien</li>
+            <li>Blenden Sie unerwünschte Spalten aus oder löschen Sie sie</li>
+          </ul>
+        </StyledCardContent>
+      </Collapse>
+    </StyledCard>
+  )
+}
 
-export default enhance(ZuVieleDaten)
+export default ZuVieleDaten

@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { useState } from 'react'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
@@ -7,8 +7,6 @@ import Collapse from '@material-ui/core/Collapse'
 import IconButton from '@material-ui/core/IconButton'
 import Icon from '@material-ui/core/Icon'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
 import styled from 'styled-components'
 
 import CsvInExcelOeffnen from './CsvInExcelOeffnen'
@@ -41,58 +39,54 @@ const StyledCardContent = styled(CardContent)`
   }
 `
 
-const enhance = compose(withState('expanded', 'setExpanded', false))
+const CsvOeffnen = () => {
+  const [expanded, setExpanded] = useState(false)
 
-const CsvOeffnen = ({
-  expanded,
-  setExpanded,
-}: {
-  expanded: Boolean,
-  setExpanded: () => void,
-}) => (
-  <StyledCard>
-    <StyledCardActions
-      disableActionSpacing
-      onClick={() => setExpanded(!expanded)}
-    >
-      <CardActionTitle>
-        Welches Programm soll ich dazu verwenden?
-      </CardActionTitle>
-      <CardActionIconButton
-        data-expanded={expanded}
-        aria-expanded={expanded}
-        aria-label="öffnen"
+  return (
+    <StyledCard>
+      <StyledCardActions
+        disableActionSpacing
+        onClick={() => setExpanded(!expanded)}
       >
-        <Icon title={expanded ? 'schliessen' : 'öffnen'}>
-          <ExpandMoreIcon />
-        </Icon>
-      </CardActionIconButton>
-    </StyledCardActions>
-    <Collapse in={expanded} timeout="auto" unmountOnExit>
-      <StyledCardContent>
-        {
-          'Um die Datei das erste Mal zu öffnen eignet sich Libre Office am besten: '
-        }
-        <a
-          href="https://de.libreoffice.org/"
-          target="_blank"
-          rel="noopener noreferrer"
+        <CardActionTitle>
+          Welches Programm soll ich dazu verwenden?
+        </CardActionTitle>
+        <CardActionIconButton
+          data-expanded={expanded}
+          aria-expanded={expanded}
+          aria-label="öffnen"
         >
-          https://de.libreoffice.org
-        </a>
-        <p>
+          <Icon title={expanded ? 'schliessen' : 'öffnen'}>
+            <ExpandMoreIcon />
+          </Icon>
+        </CardActionIconButton>
+      </StyledCardActions>
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <StyledCardContent>
           {
-            'Microsoft Excel eignet sich sehr gut, um die Daten danach auswerten.'
+            'Um die Datei das erste Mal zu öffnen eignet sich Libre Office am besten: '
           }
-          <br />
-          {
-            'Speichern Sie die Datei daher in Libre Office als .xlsx-Datei ab und öffnen Sie sie danach mit Excel.'
-          }
-        </p>
-        <CsvInExcelOeffnen />
-      </StyledCardContent>
-    </Collapse>
-  </StyledCard>
-)
+          <a
+            href="https://de.libreoffice.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            https://de.libreoffice.org
+          </a>
+          <p>
+            {
+              'Microsoft Excel eignet sich sehr gut, um die Daten danach auswerten.'
+            }
+            <br />
+            {
+              'Speichern Sie die Datei daher in Libre Office als .xlsx-Datei ab und öffnen Sie sie danach mit Excel.'
+            }
+          </p>
+          <CsvInExcelOeffnen />
+        </StyledCardContent>
+      </Collapse>
+    </StyledCard>
+  )
+}
 
-export default enhance(CsvOeffnen)
+export default CsvOeffnen
