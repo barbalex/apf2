@@ -4,7 +4,6 @@
  */
 import React, { useEffect, useCallback, useContext } from 'react'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
 import get from 'lodash/get'
 import uniq from 'lodash/uniq'
 import isEqual from 'lodash/isEqual'
@@ -155,8 +154,6 @@ const getAndValidateCoordinatesOfBeob = async ({ id, addError, client }) => {
   }
   return { x, y }
 }
-
-const enhance = compose(observer)
 
 const TreeContainer = ({
   data: dbData,
@@ -555,4 +552,4 @@ const TreeContainer = ({
   )
 }
 
-export default enhance(TreeContainer)
+export default observer(TreeContainer)

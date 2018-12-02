@@ -1,6 +1,5 @@
 // @flow
 import React, { useContext, useCallback } from 'react'
-import compose from 'recompose/compose'
 import styled from 'styled-components'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import SwapVerticalCircleIcon from '@material-ui/icons/SwapVerticalCircle'
@@ -176,8 +175,6 @@ const PrintIconContainer = styled.div`
     }
   }
 `
-
-const enhance = compose(observer)
 
 const Row = ({
   index,
@@ -458,4 +455,4 @@ const Row = ({
   )
 }
 
-export default enhance(Row)
+export default observer(Row)
