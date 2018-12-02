@@ -13,7 +13,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
-import { withApollo } from 'react-apollo'
+import { useApolloClient } from 'react-apollo-hooks'
 
 import Select from '../../../shared/Select'
 import exportModule from '../../../../modules/export'
@@ -67,27 +67,12 @@ const AutocompleteContainer = styled.div`
 const isRemoteHost = window.location.hostname !== 'localhost'
 
 const enhance = compose(
-  withApollo,
   withData,
   observer,
 )
 
-const Teilpopulationen = ({
-  data,
-  client,
-}: {
-  data: Object,
-  client: Object,
-}) => {
-  const artList = sortBy(
-    get(data, 'allAeEigenschaftens.nodes', [])
-      .filter(n => !!get(n, 'apByArtId.id'))
-      .map(n => ({
-        value: get(n, 'apByArtId.id'),
-        label: n.artname,
-      })),
-    'artname',
-  )
+const Teilpopulationen = ({ data }: { data: Object }) => {
+  const client = useApolloClient()
 
   const {
     mapFilter,
@@ -142,6 +127,16 @@ const Teilpopulationen = ({
       setMessage(null)
     },
     [exportFileType, exportApplyMapFilter],
+  )
+
+  const artList = sortBy(
+    get(data, 'allAeEigenschaftens.nodes', [])
+      .filter(n => !!get(n, 'apByArtId.id'))
+      .map(n => ({
+        value: get(n, 'apByArtId.id'),
+        label: n.artname,
+      })),
+    'artname',
   )
 
   if (data.error) return `Fehler: ${data.error.message}`

@@ -5,9 +5,8 @@ import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
 import get from 'lodash/get'
-import { withApollo } from 'react-apollo'
+import { observer } from 'mobx-react-lite'
 
 import tables from '../../../modules/tables'
 import mobxStoreContext from '../../../mobxStoreContext'
@@ -24,15 +23,7 @@ const StyledInput = styled(Input)`
   }
 `
 
-const enhance = compose(withApollo)
-
-const LabelFilter = ({
-  treeName,
-  client,
-}: {
-  treeName: String,
-  client: Object,
-}) => {
+const LabelFilter = ({ treeName }: { treeName: String }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { setTreeKey } = mobxStore
   const { nodeLabelFilter, activeNode } = mobxStore[treeName]
@@ -96,4 +87,4 @@ const LabelFilter = ({
   )
 }
 
-export default enhance(LabelFilter)
+export default observer(LabelFilter)
