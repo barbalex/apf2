@@ -1,14 +1,11 @@
 // @flow
 import React, { useContext, useState, useCallback } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
-import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import mobxStoreContext from '../../../../mobxStoreContext'
-
-const enhance = compose(observer)
 
 const BerFolder = ({
   treeName,
@@ -59,4 +56,4 @@ const BerFolder = ({
   )
 }
 
-export default enhance(BerFolder)
+export default observer(BerFolder)
