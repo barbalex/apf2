@@ -5,7 +5,6 @@
  */
 import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import compose from 'recompose/compose'
 import { Query } from 'react-apollo'
 
 import mobxStoreContext from '../../../mobxStoreContext'
@@ -14,8 +13,6 @@ import dataByAdresseIdGql from './dataByAdresseId'
 import dataWithDateByUserNameGql from './dataWithDateByUserName'
 import dataWithDateByAdresseIdGql from './dataWithDateByAdresseId'
 import List from './List'
-
-const enhance = compose(observer)
 
 const EkfListContainer = ({ dimensions }: { dimensions: Object }) => {
   const { ekfYear, ekfAdresseId, user } = useContext(mobxStoreContext)
@@ -43,4 +40,4 @@ const EkfListContainer = ({ dimensions }: { dimensions: Object }) => {
   )
 }
 
-export default enhance(EkfListContainer)
+export default observer(EkfListContainer)

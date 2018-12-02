@@ -3,7 +3,6 @@ import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import intersection from 'lodash/intersection'
-import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
 
 // when Karte was loaded async, it did not load,
@@ -23,8 +22,6 @@ const Container = styled.div`
 `
 const treeTabValues = ['tree', 'daten', 'karte', 'exporte']
 const tree2TabValues = ['tree2', 'daten2', 'karte2', 'exporte2']
-
-const enhance = compose(observer)
 
 const Projekte = () => {
   const mobxStore = useContext(mobxStoreContext)
@@ -72,4 +69,4 @@ const Projekte = () => {
   )
 }
 
-export default enhance(Projekte)
+export default observer(Projekte)
