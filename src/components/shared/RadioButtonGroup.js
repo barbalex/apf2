@@ -1,14 +1,13 @@
 // @flow
-import React from 'react'
+import React, { useCallback } from 'react'
 import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import FormLabel from '@material-ui/core/FormLabel'
 import FormControl from '@material-ui/core/FormControl'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
 import styled from 'styled-components'
+import { observer } from 'mobx-react-lite'
 
 // without slight padding radio is slightly cut off!
 const StyledFormControl = styled(FormControl)`
@@ -28,9 +27,25 @@ const StyledRadio = styled(Radio)`
   height: 2px !important;
 `
 
-const enhance = compose(
-  withHandlers({
-    onClickButton: ({ value: oldValue, saveToDb, name }) => event => {
+const RadioButtonGroup = ({
+  value,
+  label,
+  name,
+  error,
+  helperText = '',
+  dataSource = [],
+  saveToDb,
+}: {
+  value: Number | String,
+  label: String,
+  name: String,
+  error: String,
+  helperText: String,
+  dataSource: Array<Object>,
+  saveToDb: () => void,
+}) => {
+  const onClickButton = useCallback(
+    event => {
       /**
        * if clicked element is active value: set null
        * Problem: does not work on change event on RadioGroup
@@ -39,7 +54,7 @@ const enhance = compose(
        */
       const targetValue = event.target.value
       // eslint-disable-next-line eqeqeq
-      if (targetValue !== undefined && targetValue == oldValue) {
+      if (targetValue !== undefined && targetValue == value) {
         // an already active option was clicked
         // set value null
         const fakeEvent = {
@@ -51,7 +66,10 @@ const enhance = compose(
         return saveToDb(fakeEvent)
       }
     },
-    onChangeGroup: ({ value: oldValue, saveToDb, name }) => event => {
+    [value, name],
+  )
+  const onChangeGroup = useCallback(
+    event => {
       // group only changes if value changes
       const targetValue = event.target.value
       // values are passed as strings > need to convert
@@ -71,28 +89,9 @@ const enhance = compose(
       }
       saveToDb(fakeEvent)
     },
-  }),
-)
+    [name],
+  )
 
-const RadioButtonGroup = ({
-  value,
-  label,
-  name,
-  error,
-  helperText = '',
-  dataSource = [],
-  onClickButton,
-  onChangeGroup,
-}: {
-  value: Number | String,
-  label: String,
-  name: String,
-  error: String,
-  helperText: String,
-  dataSource: Array<Object>,
-  onClickButton: () => void,
-  onChangeGroup: () => void,
-}) => {
   const valueSelected =
     value !== null && value !== undefined ? value.toString() : ''
 
@@ -132,4 +131,4 @@ RadioButtonGroup.defaultProps = {
   value: null,
 }
 
-export default enhance(RadioButtonGroup)
+export default observer(RadioButtonGroup)

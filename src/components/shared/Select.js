@@ -1,7 +1,5 @@
 // @flow
 import React, { useCallback } from 'react'
-import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
 import Select from 'react-select'
 import styled from 'styled-components'
 
@@ -70,8 +68,6 @@ const StyledSelect = styled(Select)`
   }
 `
 
-const enhance = compose(withHandlers({}))
-
 const SharedSelect = ({
   value,
   field = '',
@@ -130,4 +126,4 @@ const SharedSelect = ({
   )
 }
 
-export default enhance(SharedSelect)
+export default SharedSelect
