@@ -7,9 +7,9 @@ import min from 'lodash/min'
 import flatten from 'lodash/flatten'
 import groupBy from 'lodash/groupBy'
 import maxBy from 'lodash/maxBy'
-import compose from 'recompose/compose'
+import { useQuery } from 'react-apollo-hooks'
 
-import withData from './withData'
+import query from './data'
 
 const Container = styled.div`
   padding: 0.2cm 0;
@@ -82,19 +82,19 @@ const TpopBerJahr = styled(Number)`
 const PopSeit = styled(Number)``
 const TpopSeit = styled(Number)``
 
-const enhance = compose(withData)
-
 const CMengen = ({
   apId,
   jahr,
   startJahr,
-  data,
 }: {
   apId: String,
   jahr: Number,
   startJahr: Number,
-  data: Object,
 }) => {
+  const { data, error, loading } = useQuery(query, {
+    suspend: false,
+    variables: { apId, jahr },
+  })
   const oneLTpop_pop = get(data, 'apById.oneLTpop.nodes', [])
   const oneLTpop_tpop = flatten(
     oneLTpop_pop.map(p => get(p, 'tpopsByPopId.nodes', [])),
@@ -171,16 +171,14 @@ const CMengen = ({
     b => b.beurteilung === 5,
   ).length
 
-  if (data.error) return `Fehler: ${data.error.message}`
+  if (error) return `Fehler: ${error.message}`
 
   return (
     <Container>
       <Title>C. Zwischenbilanz zur Wirkung von Massnahmen</Title>
       <YearRow>
         <Year>{jahr}</Year>
-        <YearSince>{`Seit ${
-          data.loading ? '...' : oneRTpop_firstYear
-        }`}</YearSince>
+        <YearSince>{`Seit ${loading ? '...' : oneRTpop_firstYear}`}</YearSince>
       </YearRow>
       <LabelRow>
         <Label1 />
@@ -191,56 +189,56 @@ const CMengen = ({
       </LabelRow>
       <Row>
         <Label1>Anzahl Populationen/Teilpopulationen mit Massnahmen</Label1>
-        <PopBerJahr>{data.loading ? '...' : oneLPop}</PopBerJahr>
-        <TpopBerJahr>{data.loading ? '...' : oneLTpop}</TpopBerJahr>
-        <PopSeit>{data.loading ? '...' : oneRPop}</PopSeit>
-        <TpopSeit>{data.loading ? '...' : oneRTpop}</TpopSeit>
+        <PopBerJahr>{loading ? '...' : oneLPop}</PopBerJahr>
+        <TpopBerJahr>{loading ? '...' : oneLTpop}</TpopBerJahr>
+        <PopSeit>{loading ? '...' : oneRPop}</PopSeit>
+        <TpopSeit>{loading ? '...' : oneRTpop}</TpopSeit>
       </Row>
       <Row>
         <Label2>kontrolliert</Label2>
         <PopBerJahr />
         <TpopBerJahr />
-        <PopSeit>{data.loading ? '...' : twoRPop}</PopSeit>
-        <TpopSeit>{data.loading ? '...' : twoRTpop}</TpopSeit>
+        <PopSeit>{loading ? '...' : twoRPop}</PopSeit>
+        <TpopSeit>{loading ? '...' : twoRTpop}</TpopSeit>
       </Row>
       <Row>
         <Label2Davon>davon:</Label2Davon>
         <Label3AfterDavon>sehr erfolgreich</Label3AfterDavon>
         <PopBerJahr />
         <TpopBerJahr />
-        <PopSeit>{data.loading ? '...' : threeRPop}</PopSeit>
-        <TpopSeit>{data.loading ? '...' : threeRTpop}</TpopSeit>
+        <PopSeit>{loading ? '...' : threeRPop}</PopSeit>
+        <TpopSeit>{loading ? '...' : threeRTpop}</TpopSeit>
       </Row>
       <Row>
         <Label3>erfolgreich</Label3>
         <PopBerJahr />
         <TpopBerJahr />
-        <PopSeit>{data.loading ? '...' : fourRPop}</PopSeit>
-        <TpopSeit>{data.loading ? '...' : fourRTpop}</TpopSeit>
+        <PopSeit>{loading ? '...' : fourRPop}</PopSeit>
+        <TpopSeit>{loading ? '...' : fourRTpop}</TpopSeit>
       </Row>
       <Row>
         <Label3>weniger erfolgreich</Label3>
         <PopBerJahr />
         <TpopBerJahr />
-        <PopSeit>{data.loading ? '...' : fiveRPop}</PopSeit>
-        <TpopSeit>{data.loading ? '...' : fiveRTpop}</TpopSeit>
+        <PopSeit>{loading ? '...' : fiveRPop}</PopSeit>
+        <TpopSeit>{loading ? '...' : fiveRTpop}</TpopSeit>
       </Row>
       <Row>
         <Label3>nicht erfolgreich</Label3>
         <PopBerJahr />
         <TpopBerJahr />
-        <PopSeit>{data.loading ? '...' : sixRPop}</PopSeit>
-        <TpopSeit>{data.loading ? '...' : sixRTpop}</TpopSeit>
+        <PopSeit>{loading ? '...' : sixRPop}</PopSeit>
+        <TpopSeit>{loading ? '...' : sixRTpop}</TpopSeit>
       </Row>
       <Row>
         <Label3>mit unsicherer Wirkung</Label3>
         <PopBerJahr />
         <TpopBerJahr />
-        <PopSeit>{data.loading ? '...' : sevenRPop}</PopSeit>
-        <TpopSeit>{data.loading ? '...' : sevenRTpop}</TpopSeit>
+        <PopSeit>{loading ? '...' : sevenRPop}</PopSeit>
+        <TpopSeit>{loading ? '...' : sevenRTpop}</TpopSeit>
       </Row>
     </Container>
   )
 }
 
-export default enhance(CMengen)
+export default CMengen
