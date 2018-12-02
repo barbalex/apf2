@@ -6,7 +6,6 @@ import uniq from 'lodash/uniq'
 import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import compose from 'recompose/compose'
 
 import Item from './Item'
 import mobxStoreContext from '../../../../mobxStoreContext'
@@ -59,8 +58,6 @@ const getEkfFromData = ({ data, ekfAdresseId }) => {
   }))
   return sortBy(ekf, ['projekt', 'art', 'popSort', 'tpopSort'])
 }
-
-const enhance = compose(observer)
 
 const EkfList = ({
   data,
@@ -144,4 +141,4 @@ const EkfList = ({
   )
 }
 
-export default enhance(EkfList)
+export default observer(EkfList)

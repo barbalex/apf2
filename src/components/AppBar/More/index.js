@@ -4,7 +4,6 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
 
 import isMobilePhone from '../../../modules/isMobilePhone'
@@ -26,8 +25,6 @@ const Version = styled.div`
   color: rgba(0, 0, 0, 0.87);
   user-select: none;
 `
-
-const enhance = compose(observer)
 
 const MyAppBar = ({
   onClickExporte: passedOnClickExporte,
@@ -130,4 +127,4 @@ const MyAppBar = ({
   )
 }
 
-export default enhance(MyAppBar)
+export default observer(MyAppBar)
