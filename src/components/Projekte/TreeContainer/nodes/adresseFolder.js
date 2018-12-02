@@ -28,10 +28,6 @@ export default ({
     mobxStore,
     `${treeName}.nodeLabelFilter.adresse`,
   )
-  console.log('nodes, adresseFolder', {
-    adresses,
-    openNodes: getSnapshot(mobxStore[treeName].openNodes),
-  })
 
   let adresseNodesLength = adresses
     // filter by nodeLabelFilter

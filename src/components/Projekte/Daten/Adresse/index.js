@@ -2,16 +2,16 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import { useApolloClient } from 'react-apollo-hooks'
+import { useQuery } from 'react-apollo-hooks'
+import { observer } from 'mobx-react-lite'
 
 import RadioButton from '../../../shared/RadioButton'
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updateAdresseByIdGql from './updateAdresseById'
-import withData from './withData'
+import query from './data'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
 const Container = styled.div`
@@ -25,22 +25,23 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const enhance = compose(
-  withProps(() => ({
-    mobxStore: useContext(mobxStoreContext),
-  })),
-  withData,
-)
-
 const Adresse = ({
   treeName,
-  data,
   refetchTree,
 }: {
   treeName: String,
-  data: Object,
   refetchTree: () => void,
 }) => {
+  const mobxStore = useContext(mobxStoreContext)
+  const { activeNodeArray } = mobxStore[treeName]
+  const id =
+    activeNodeArray.length > 2
+      ? activeNodeArray[2]
+      : '99999999-9999-9999-9999-999999999999'
+  const { data, error, loading } = useQuery(query, {
+    suspend: false,
+    variables: { id },
+  })
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
 
@@ -92,14 +93,14 @@ const Adresse = ({
     [row],
   )
 
-  if (data.loading) {
+  if (loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
       </Container>
     )
   }
-  if (data.error) return `Fehler: ${data.error.message}`
+  if (error) return `Fehler: ${error.message}`
 
   return (
     <ErrorBoundary>
@@ -184,4 +185,4 @@ const Adresse = ({
   )
 }
 
-export default enhance(Adresse)
+export default observer(Adresse)

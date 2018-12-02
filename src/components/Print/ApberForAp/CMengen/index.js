@@ -8,6 +8,7 @@ import flatten from 'lodash/flatten'
 import groupBy from 'lodash/groupBy'
 import maxBy from 'lodash/maxBy'
 import { useQuery } from 'react-apollo-hooks'
+import { observer } from 'mobx-react-lite'
 
 import query from './data'
 
@@ -241,4 +242,4 @@ const CMengen = ({
   )
 }
 
-export default CMengen
+export default observer(CMengen)
