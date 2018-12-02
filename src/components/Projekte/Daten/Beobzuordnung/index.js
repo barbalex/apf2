@@ -8,8 +8,8 @@ import Button from '@material-ui/core/Button'
 import SendIcon from '@material-ui/icons/EmailOutlined'
 import compose from 'recompose/compose'
 import withProps from 'recompose/withProps'
-import { withApollo } from 'react-apollo'
 import { observer } from 'mobx-react-lite'
+import { useApolloClient } from 'react-apollo-hooks'
 
 import FormTitle from '../../../shared/FormTitle'
 import TextField from '../../../shared/TextField'
@@ -139,7 +139,6 @@ const getTpopZuordnenSource = (row: Object, apId: string): Array<Object> => {
 }
 
 const enhance = compose(
-  withApollo,
   withProps(() => ({
     mobxStore: useContext(mobxStoreContext),
   })),
@@ -155,7 +154,6 @@ const Beobzuordnung = ({
   treeName,
   data,
   dataAeEigenschaftens,
-  client,
 }: {
   type: string,
   dimensions: Object,
@@ -163,8 +161,8 @@ const Beobzuordnung = ({
   treeName: string,
   data: Object,
   dataAeEigenschaftens: Object,
-  client: Object,
 }) => {
+  const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
   const tree = mobxStore[treeName]
   const { activeNodeArray } = mobxStore[treeName]

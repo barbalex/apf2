@@ -8,7 +8,7 @@ import withProps from 'recompose/withProps'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import Linkify from 'react-linkify'
-import { withApollo } from 'react-apollo'
+import { useApolloClient } from 'react-apollo-hooks'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import withData from './withData'
@@ -50,20 +50,12 @@ const OkButton = styled(Button)`
 `
 
 const enhance = compose(
-  withApollo,
   withProps(() => useContext(mobxStoreContext)),
   withData,
 )
 
-const UserMessages = ({
-  open,
-  data,
-  client,
-}: {
-  open: Boolean,
-  data: Object,
-  client: Object,
-}) => {
+const UserMessages = ({ open, data }: { open: Boolean, data: Object }) => {
+  const client = useApolloClient()
   const { user, updateAvailable } = useContext(mobxStoreContext)
   const userName = user.name
   const allMessages = get(data, 'allMessages.nodes', [])
