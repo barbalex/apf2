@@ -69,6 +69,7 @@
     "query-string": "6.2.0",
     "react": "16.7.0-alpha.2",
     "react-apollo": "2.3.2",
+    "react-apollo-hooks": "^0.2.1",
     "react-contextmenu": "2.10.0",
     "react-copy-to-clipboard": "5.0.1",
     "react-dom": "16.7.0-alpha.2",
