@@ -1,7 +1,6 @@
 // @flow
 import React, { useContext, useState, useCallback, useEffect } from 'react'
 import Input from '@material-ui/core/Input'
-import compose from 'recompose/compose'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
@@ -30,8 +29,6 @@ const Jahr = styled.p`
 
 const ekfRefDate = new Date().setMonth(new Date().getMonth() - 2)
 const ekfRefYear = new Date(ekfRefDate).getFullYear()
-
-const enhance = compose(observer)
 
 const EkfYear = () => {
   const mobxStore = useContext(mobxStoreContext)
@@ -74,4 +71,4 @@ const EkfYear = () => {
   )
 }
 
-export default enhance(EkfYear)
+export default observer(EkfYear)
