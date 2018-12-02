@@ -4,7 +4,6 @@
  * let each item call it's data itself
  */
 import React, { useContext, useCallback, useMemo } from 'react'
-import compose from 'recompose/compose'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
 import DragHandleIcon from '@material-ui/icons/DragHandle'
@@ -111,8 +110,6 @@ const DragHandle = SortableHandle(() => (
     <StyledDragHandleIcon />
   </StyledIconButton>
 ))
-
-const enhance = compose(observer)
 
 const MySortableItem = ({ treeName, apfloraLayer, index }) => {
   const mobxStore = useContext(mobxStoreContext)
@@ -372,4 +369,4 @@ const MySortableItem = ({ treeName, apfloraLayer, index }) => {
   )
 }
 
-export default enhance(MySortableItem)
+export default observer(MySortableItem)
