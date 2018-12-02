@@ -1,25 +1,9 @@
 // @flow
-import React, { Fragment } from 'react'
+import React, { useState, useCallback } from 'react'
 import Popover from '@material-ui/core/Popover'
 
 import InfoOutlineIcon from '@material-ui/icons/InfoOutlined'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
-
-const enhance = compose(
-  withState('popupOpen', 'changePopupOpen', false),
-  withState('popupAnchorEl', 'changePopupAnchorEl', null),
-  withHandlers({
-    onClickFontIcon: props => event => {
-      event.preventDefault()
-      props.changePopupOpen(!props.popupOpen)
-      props.changePopupAnchorEl(event.currentTarget)
-    },
-    onRequestClosePopover: props => () => props.changePopupOpen(false),
-  })
-)
 
 const StyledInfoOutlineIcon = styled(InfoOutlineIcon)`
   cursor: pointer;
@@ -31,34 +15,41 @@ const StyledPopover = styled(Popover)`
 `
 
 const InfoWithPopover = ({
-  popupOpen,
-  popupAnchorEl,
-  onRequestClosePopover,
-  onClickFontIcon,
   children,
 }: {
-  popupOpen: boolean,
-  popupAnchorEl?: Object,
-  onRequestClosePopover: () => void,
-  onClickFontIcon: () => void,
   children: Array<Object> | Object,
-}) => (
-  <Fragment>
-    <StyledInfoOutlineIcon onClick={onClickFontIcon} />
-    <StyledPopover
-      open={popupOpen}
-      anchorEl={popupAnchorEl}
-      anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
-      transformOrigin={{ horizontal: 'left', vertical: 'bottom' }}
-      onClose={onRequestClosePopover}
-    >
-      {children}
-    </StyledPopover>
-  </Fragment>
-)
+}) => {
+  const [popupOpen, changePopupOpen] = useState(false)
+  const [popupAnchorEl, changePopupAnchorEl] = useState(null)
+
+  const onClickFontIcon = useCallback(
+    event => {
+      event.preventDefault()
+      changePopupOpen(!popupOpen)
+      changePopupAnchorEl(event.currentTarget)
+    },
+    [popupOpen],
+  )
+  const onRequestClosePopover = useCallback(() => changePopupOpen(false))
+
+  return (
+    <>
+      <StyledInfoOutlineIcon onClick={onClickFontIcon} />
+      <StyledPopover
+        open={popupOpen}
+        anchorEl={popupAnchorEl}
+        anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
+        transformOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+        onClose={onRequestClosePopover}
+      >
+        {children}
+      </StyledPopover>
+    </>
+  )
+}
 
 InfoWithPopover.defaultProps = {
   popupAnchorEl: null,
 }
 
-export default enhance(InfoWithPopover)
+export default InfoWithPopover
