@@ -330,10 +330,12 @@ const TreeContainer = ({
           // 1. open map if not yet open
           showMapIfNotYetVisible(projekteTabs)
           // 2 add layer for actionTable
-          if (activeOverlays.includes(actionTable)) {
-            setActiveOverlays(activeOverlays.filter(o => o !== actionTable))
+          if (activeApfloraLayers.includes(actionTable)) {
+            setActiveApfloraLayers(
+              activeApfloraLayers.filter(o => o !== actionTable),
+            )
           } else {
-            setActiveOverlays([...activeOverlays, actionTable])
+            setActiveApfloraLayers([...activeApfloraLayers, actionTable])
           }
         },
         toggleTooltip() {
