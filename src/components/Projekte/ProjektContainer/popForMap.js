@@ -13,7 +13,7 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(filter: { x: { isNull: false }, y: { isNull: false } }) {
             nodes {
               id
               apId
@@ -25,15 +25,6 @@ export default gql`
               bekanntSeit
               x
               y
-              tpopsByPopId(
-                filter: { x: { isNull: false }, y: { isNull: false } }
-              ) {
-                nodes {
-                  id
-                  x
-                  y
-                }
-              }
             }
           }
         }
