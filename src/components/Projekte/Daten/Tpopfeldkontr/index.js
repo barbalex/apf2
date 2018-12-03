@@ -113,6 +113,8 @@ const Tpopfeldkontr = ({
 
   useEffect(() => setErrors({}), [row])
 
+  console.log('Tpopfeldkontr',{row})
+
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name

@@ -1,5 +1,5 @@
 // @flow
-import React, { useContext, useState, useCallback } from 'react'
+import React, { useContext, useState, useCallback, useEffect } from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
@@ -134,6 +134,13 @@ const Status = ({
     }
     saveToDb(fakeEvent)
   })
+
+  useEffect(
+    () => {
+      setBekanntSeitStateValue(bekanntSeitValue)
+    },
+    [bekanntSeitValue],
+  )
 
   return (
     <div>

@@ -91,6 +91,7 @@ const DateFieldWithPicker = ({
     },
     [propsValue],
   )
+  console.log('DateField', { name, propsValue, stateValue })
 
   return (
     <>

@@ -57,9 +57,12 @@ const TextFieldWithUrl = ({
   const onChange = useCallback(event => setStateValue(event.target.value))
   const onOpen = useCallback(e => window.open(e.target.dataset.url, '_blank'))
 
-  useEffect(() => {
-    setStateValue(propsValue || propsValue === 0 ? propsValue : '')
-  }, [])
+  useEffect(
+    () => {
+      setStateValue(propsValue || propsValue === 0 ? propsValue : '')
+    },
+    [propsValue],
+  )
 
   const urls = stateValue ? getUrls(stateValue) : []
 

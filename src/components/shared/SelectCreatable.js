@@ -1,5 +1,5 @@
 // @flow
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import CreatableSelect from 'react-select/lib/Creatable'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
@@ -118,6 +118,13 @@ const SharedSelectCreatable = ({
       }
     },
     [stateValue, name],
+  )
+
+  useEffect(
+    () => {
+      setStateValue(value)
+    },
+    [value],
   )
 
   // need to add value to options list if it is not yet included

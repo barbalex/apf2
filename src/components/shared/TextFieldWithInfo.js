@@ -51,9 +51,12 @@ const TextFieldWithInfo = ({
     propsValue || propsValue === 0 ? propsValue : '',
   )
   const onChange = useCallback(event => setStateValue(event.target.value))
-  useEffect(() => {
-    setStateValue(propsValue || propsValue === 0 ? propsValue : '')
-  }, [])
+  useEffect(
+    () => {
+      setStateValue(propsValue || propsValue === 0 ? propsValue : '')
+    },
+    [propsValue],
+  )
 
   return (
     <StyledFormControl
