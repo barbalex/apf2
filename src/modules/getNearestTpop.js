@@ -3,8 +3,8 @@
  * gets a latLng wgs 84
  * returns tpopId of nearest tpop
  */
-import nearest from '@turf/nearest'
-//import nearestPoint from '@turf/nearest-point'
+import nearestPoint from '@turf/nearest-point'
+import { featureCollection, point } from '@turf/helpers'
 import gql from 'graphql-tag'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
@@ -22,13 +22,7 @@ export default async ({
   client: Object,
 }): String => {
   const { lat, lng } = latLng
-  const point = {
-    type: 'Feature',
-    geometry: {
-      type: 'Point',
-      coordinates: [lat, lng],
-    },
-  }
+  const myPoint = point([lat, lng])
   const { data } = await client.query({
     query: gql`
       query Query($apId: UUID!) {
@@ -62,25 +56,14 @@ export default async ({
       ),
     ),
   )
-  const tpopFeatures = tpops.map(t => {
-    return {
-      type: 'Feature',
-      properties: {
+  const tpopPoints = featureCollection(
+    tpops.map(t =>
+      point(epsg2056to4326(+t.x, +t.y), {
         id: t.id,
         popId: t.popId,
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: epsg2056to4326(+t.x, +t.y),
-      },
-    }
-  })
-  const against = {
-    type: 'FeatureCollection',
-    features: tpopFeatures,
-  }
-  // errors out, see: https://github.com/Turfjs/turf/issues/1419
-  //const nearestTpopFeature = nearestPoint(point, against)
-  const nearestTpopFeature = nearest(point, against)
+      }),
+    ),
+  )
+  const nearestTpopFeature = nearestPoint(myPoint, tpopPoints)
   return nearestTpopFeature.properties
 }
