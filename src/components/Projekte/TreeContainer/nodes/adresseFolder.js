@@ -1,6 +1,5 @@
 // @flow
 import get from 'lodash/get'
-import { getSnapshot } from 'mobx-state-tree'
 
 export default ({
   nodes: nodesPassed,
