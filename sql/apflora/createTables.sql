@@ -108,6 +108,8 @@ COMMENT ON COLUMN apflora.ap.ekf_beobachtungszeitpunkt IS 'bester Beobachtungsze
 COMMENT ON COLUMN apflora.ap.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 alter table apflora.ap add column ekf_beobachtungszeitpunkt text default null;
+alter table apflora.ap alter column changed drop default;
+alter table apflora.ap alter column changed_by drop default;
 
 -- this table is NOT YET IN USE
 DROP TABLE IF EXISTS apflora.userprojekt;
