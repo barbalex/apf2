@@ -50,7 +50,7 @@ CREATE TABLE apflora.adresse (
   freiw_erfko boolean DEFAULT false,
   evab_id_person UUID DEFAULT NULL,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  changed_by varchar(20) DEFAULT null
 );
 CREATE INDEX ON apflora.adresse USING btree (id);
 CREATE INDEX ON apflora.adresse USING btree (name);
@@ -66,6 +66,7 @@ COMMENT ON COLUMN apflora.adresse.freiw_erfko IS 'Ist die Person freiwillige(r) 
 COMMENT ON COLUMN apflora.adresse.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.adresse.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.adresse.evab_id_person IS 'Personen werden in EvAB separat und mit eigener ID erfasst. Daher muss die passende Person hier gewählt werden';
+alter table apflora.adresse alter column changed_by set default null;
 
 ALTER TABLE apflora.adresse ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS writer ON apflora.adresse;
@@ -87,7 +88,7 @@ CREATE TABLE apflora.ap (
   bearbeiter uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
   ekf_beobachtungszeitpunkt text default null,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  changed_by varchar(20) DEFAULT null
 );
 CREATE INDEX ON apflora.ap USING btree (id);
 CREATE INDEX ON apflora.ap USING btree (art_id);
@@ -108,7 +109,7 @@ COMMENT ON COLUMN apflora.ap.ekf_beobachtungszeitpunkt IS 'bester Beobachtungsze
 COMMENT ON COLUMN apflora.ap.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 alter table apflora.ap add column ekf_beobachtungszeitpunkt text default null;
-alter table apflora.ap alter column changed drop default;
+alter table apflora.ap alter column changed_by set default null;
 
 -- this table is NOT YET IN USE
 DROP TABLE IF EXISTS apflora.userprojekt;
@@ -209,7 +210,7 @@ CREATE TABLE apflora.apber (
   datum date DEFAULT NULL,
   bearbeiter uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  changed_by varchar(20) DEFAULT null
 );
 CREATE INDEX ON apflora.apber USING btree (id);
 CREATE INDEX ON apflora.apber USING btree (ap_id);
@@ -236,6 +237,7 @@ COMMENT ON COLUMN apflora.apber.datum IS 'Datum der Nachführung';
 COMMENT ON COLUMN apflora.apber.bearbeiter IS 'BerichtsverfasserIn: Auswahl aus der Tabelle "adresse"';
 COMMENT ON COLUMN apflora.apber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.apber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+alter table apflora.apber alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.apberuebersicht;
 CREATE TABLE apflora.apberuebersicht (
@@ -245,7 +247,7 @@ CREATE TABLE apflora.apberuebersicht (
   jahr smallint,
   bemerkungen text,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true),
+  changed_by varchar(20) DEFAULT null,
   unique (proj_id, jahr)
 );
 CREATE INDEX ON apflora.apberuebersicht USING btree (id);
@@ -258,6 +260,7 @@ COMMENT ON COLUMN apflora.apberuebersicht.jahr IS 'Berichtsjahr. Zusammen mit pr
 COMMENT ON COLUMN apflora.apberuebersicht.bemerkungen IS 'Bemerkungen zur Artübersicht';
 COMMENT ON COLUMN apflora.apberuebersicht.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.apberuebersicht.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+alter table apflora.apberuebersicht alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.assozart;
 CREATE TABLE apflora.assozart (
@@ -267,7 +270,7 @@ CREATE TABLE apflora.assozart (
   ae_id UUID DEFAULT NULL REFERENCES apflora.ae_eigenschaften (id) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  changed_by varchar(20) DEFAULT null
 );
 CREATE INDEX ON apflora.assozart USING btree (id);
 CREATE INDEX ON apflora.assozart USING btree (ap_id);
@@ -278,6 +281,7 @@ COMMENT ON COLUMN apflora.assozart.ap_id IS 'Zugehöriger Aktionsplan. Fremdschl
 COMMENT ON COLUMN apflora.assozart.bemerkungen IS 'Bemerkungen zur Assoziation';
 COMMENT ON COLUMN apflora.assozart.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.assozart.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
+alter table apflora.assozart alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.tpopbeob;
 
@@ -286,12 +290,13 @@ CREATE TABLE apflora.projekt (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   name varchar(150) DEFAULT NULL,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  changed_by varchar(20) DEFAULT null
 );
 CREATE INDEX ON apflora.projekt USING btree (id);
 CREATE INDEX ON apflora.projekt USING btree (name);
 COMMENT ON COLUMN apflora.projekt.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.projekt.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+alter table apflora.projekt alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.ber;
 CREATE TABLE apflora.ber (
@@ -303,7 +308,7 @@ CREATE TABLE apflora.ber (
   titel text DEFAULT NULL,
   url text DEFAULT NULL,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  changed_by varchar(20) DEFAULT null
 );
 CREATE INDEX ON apflora.ber USING btree (id);
 CREATE INDEX ON apflora.ber USING btree (ap_id);
@@ -316,6 +321,7 @@ COMMENT ON COLUMN apflora.ber.titel IS 'Titel des Berichts';
 COMMENT ON COLUMN apflora.ber.url IS 'Link zum Bericht';
 COMMENT ON COLUMN apflora.ber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+alter table apflora.ber alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.erfkrit;
 CREATE TABLE apflora.erfkrit (
@@ -325,7 +331,7 @@ CREATE TABLE apflora.erfkrit (
   erfolg integer DEFAULT NULL REFERENCES apflora.ap_erfkrit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   kriterien text DEFAULT NULL,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  changed_by varchar(20) DEFAULT null
 );
 CREATE INDEX ON apflora.erfkrit USING btree (id);
 CREATE INDEX ON apflora.erfkrit USING btree (ap_id);
@@ -337,6 +343,7 @@ COMMENT ON COLUMN apflora.erfkrit.erfolg IS 'Wie gut werden die Ziele erreicht? 
 COMMENT ON COLUMN apflora.erfkrit.kriterien IS 'Beschreibung der Kriterien für den Erfolg';
 COMMENT ON COLUMN apflora.erfkrit.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.erfkrit.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+alter table apflora.erfkrit alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.gemeinde;
 CREATE TABLE apflora.gemeinde (
@@ -369,7 +376,7 @@ CREATE TABLE apflora.idealbiotop (
   baumschicht text,
   bemerkungen text,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  changed_by varchar(20) DEFAULT null
 );
 CREATE INDEX ON apflora.idealbiotop USING btree (id);
 CREATE INDEX ON apflora.idealbiotop USING btree (ap_id);
@@ -395,6 +402,7 @@ COMMENT ON COLUMN apflora.idealbiotop.baumschicht IS 'Baumschicht';
 COMMENT ON COLUMN apflora.idealbiotop.bemerkungen IS 'Bemerkungen';
 COMMENT ON COLUMN apflora.idealbiotop.changed IS 'Wann wurde der Datensatz zuletzt verändert?';
 COMMENT ON COLUMN apflora.idealbiotop.changed_by IS 'Wer hat den Datensatz zuletzt verändert?';
+alter table apflora.idealbiotop alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.pop;
 CREATE TABLE apflora.pop (
@@ -410,7 +418,7 @@ CREATE TABLE apflora.pop (
   x integer DEFAULT NULL CONSTRAINT zulaessige_x_koordinate CHECK (x IS NULL OR (x > 2485071 AND x < 2828516)),
   y integer DEFAULT NULL CONSTRAINT zulaessige_y_koordinate CHECK (y IS NULL OR (y > 1075346 AND y < 1299942)),
   changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  changed_by varchar(20) DEFAULT null
 );
 CREATE INDEX ON apflora.pop USING btree (id);
 CREATE INDEX ON apflora.pop USING btree (ap_id);
@@ -433,6 +441,7 @@ COMMENT ON COLUMN apflora.pop.x IS 'Wird in der Regel von einer Teilpopulation �
 COMMENT ON COLUMN apflora.pop.y IS 'Wird in der Regel von einer Teilpopulation übernommen';
 COMMENT ON COLUMN apflora.pop.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.pop.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+alter table apflora.pop alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.pop_status_werte;
 CREATE TABLE apflora.pop_status_werte (
@@ -441,7 +450,7 @@ CREATE TABLE apflora.pop_status_werte (
   text varchar(60) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  changed_by varchar(20) DEFAULT null
 );
 CREATE INDEX ON apflora.pop_status_werte USING btree (id);
 CREATE INDEX ON apflora.pop_status_werte USING btree (code);
@@ -451,6 +460,7 @@ COMMENT ON COLUMN apflora.pop_status_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.pop_status_werte.text IS 'Beschreibung der Herkunft';
 COMMENT ON COLUMN apflora.pop_status_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.pop_status_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+alter table apflora.pop_status_werte alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.popber;
 CREATE TABLE apflora.popber (
@@ -461,7 +471,7 @@ CREATE TABLE apflora.popber (
   entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  changed_by varchar(20) DEFAULT null
 );
 COMMENT ON COLUMN apflora.popber.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.popber.id_old IS 'frühere id';
@@ -475,6 +485,7 @@ CREATE INDEX ON apflora.popber USING btree (id);
 CREATE INDEX ON apflora.popber USING btree (pop_id);
 CREATE INDEX ON apflora.popber USING btree (entwicklung);
 CREATE INDEX ON apflora.popber USING btree (jahr);
+alter table apflora.popber alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.popmassnber;
 CREATE TABLE apflora.popmassnber (
@@ -485,7 +496,7 @@ CREATE TABLE apflora.popmassnber (
   beurteilung integer DEFAULT NULL REFERENCES apflora.tpopmassn_erfbeurt_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  changed_by varchar(20) DEFAULT null
 );
 CREATE INDEX ON apflora.popmassnber USING btree (id);
 CREATE INDEX ON apflora.popmassnber USING btree (pop_id);
@@ -499,6 +510,7 @@ COMMENT ON COLUMN apflora.popmassnber.beurteilung IS 'Wie wird die Wirkung aller
 COMMENT ON COLUMN apflora.popmassnber.bemerkungen IS 'Bemerkungen zur Beurteilung';
 COMMENT ON COLUMN apflora.popmassnber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.popmassnber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+alter table apflora.popmassnber alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.tpop;
 CREATE TABLE apflora.tpop (
@@ -531,8 +543,9 @@ CREATE TABLE apflora.tpop (
   kontrollfrequenz_freiwillige integer DEFAULT null REFERENCES apflora.tpopkontr_frequenz_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  changed_by varchar(20) DEFAULT null
 );
+alter table apflora.tpop alter column changed_by set default null;
 -- 2018-09-25, remove later:
 ALTER TABLE apflora.tpop ADD COLUMN kontrollfrequenz integer DEFAULT null REFERENCES apflora.tpopkontr_frequenz_werte (code) ON DELETE SET NULL ON UPDATE CASCADE;
 CREATE INDEX ON apflora.tpop USING btree (kontrollfrequenz);
@@ -622,7 +635,7 @@ CREATE TABLE apflora.tpopber (
   jahr smallint DEFAULT NULL,
   entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  changed_by varchar(20) DEFAULT null
 );
 COMMENT ON COLUMN apflora.tpopber.id IS 'Primärschlüssel der Tabelle "tpopber"';
 COMMENT ON COLUMN apflora.tpopber.id_old IS 'frühere id';
@@ -636,6 +649,7 @@ CREATE INDEX ON apflora.tpopber USING btree (id);
 CREATE INDEX ON apflora.tpopber USING btree (tpop_id);
 CREATE INDEX ON apflora.tpopber USING btree (entwicklung);
 CREATE INDEX ON apflora.tpopber USING btree (jahr);
+alter table apflora.tpopber alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.tpopkontr;
 CREATE TABLE apflora.tpopkontr (
@@ -689,8 +703,9 @@ CREATE TABLE apflora.tpopkontr (
   ekf_bemerkungen text DEFAULT NULL,
   zeit_id UUID DEFAULT uuid_generate_v1mc(),
   changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  changed_by varchar(20) DEFAULT null
 );
+alter table apflora.tpopkontr alter column changed_by set default null;
 CREATE INDEX ON apflora.tpopkontr USING btree (id);
 CREATE INDEX ON apflora.tpopkontr USING btree (tpop_id);
 CREATE INDEX ON apflora.tpopkontr USING btree (bearbeiter);
@@ -789,7 +804,7 @@ CREATE TABLE apflora.tpopkontrzaehl (
   einheit integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   methode integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_methode_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  changed_by varchar(20) DEFAULT null
 );
 COMMENT ON COLUMN apflora.tpopkontrzaehl.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.tpopkontrzaehl.anzahl IS 'Anzahl Zaehleinheiten';
@@ -802,6 +817,7 @@ CREATE INDEX ON apflora.tpopkontrzaehl USING btree (tpopkontr_id);
 CREATE INDEX ON apflora.tpopkontrzaehl USING btree (anzahl);
 CREATE INDEX ON apflora.tpopkontrzaehl USING btree (einheit);
 CREATE INDEX ON apflora.tpopkontrzaehl USING btree (methode);
+alter table apflora.tpopkontrzaehl alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl_einheit_werte;
 CREATE TABLE apflora.tpopkontrzaehl_einheit_werte (
@@ -859,8 +875,9 @@ CREATE TABLE apflora.tpopmassn (
   form text DEFAULT NULL,
   pflanzanordnung text DEFAULT NULL,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  changed_by varchar(20) DEFAULT null
 );
+alter table apflora.tpopmassn alter column changed_by set default null;
 CREATE UNIQUE INDEX ON apflora.tpopmassn USING btree (id);
 CREATE INDEX ON apflora.tpopmassn USING btree (tpop_id);
 CREATE INDEX ON apflora.tpopmassn USING btree (bearbeiter);
@@ -935,7 +952,7 @@ CREATE TABLE apflora.tpopmassnber (
   beurteilung integer DEFAULT NULL REFERENCES apflora.tpopmassn_erfbeurt_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  changed_by varchar(20) DEFAULT null
 );
 CREATE INDEX ON apflora.tpopmassnber USING btree (id);
 CREATE INDEX ON apflora.tpopmassnber USING btree (tpop_id);
@@ -949,6 +966,7 @@ COMMENT ON COLUMN apflora.tpopmassnber.beurteilung IS 'Beurteilung des Erfolgs. 
 COMMENT ON COLUMN apflora.tpopmassnber.bemerkungen IS 'Bemerkungen zur Beurteilung';
 COMMENT ON COLUMN apflora.tpopmassnber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopmassnber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+alter table apflora.tpopmassnber alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.message CASCADE;
 CREATE TABLE apflora.message (
@@ -984,7 +1002,7 @@ CREATE TABLE apflora.ziel (
   jahr smallint DEFAULT NULL,
   bezeichnung text,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  changed_by varchar(20) DEFAULT null
 );
 CREATE INDEX ON apflora.ziel USING btree (id);
 CREATE INDEX ON apflora.ziel USING btree (ap_id);
@@ -998,6 +1016,7 @@ COMMENT ON COLUMN apflora.ziel.jahr IS 'In welchem Jahr soll das Ziel erreicht w
 COMMENT ON COLUMN apflora.ziel.bezeichnung IS 'Textliche Beschreibung des Ziels';
 COMMENT ON COLUMN apflora.ziel.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ziel.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+alter table apflora.ziel alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.ziel_typ_werte;
 CREATE TABLE apflora.ziel_typ_werte (
@@ -1025,7 +1044,7 @@ CREATE TABLE apflora.zielber (
   erreichung text DEFAULT NULL,
   bemerkungen text DEFAULT NULL,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  changed_by varchar(20) DEFAULT null
 );
 CREATE INDEX ON apflora.zielber USING btree (id);
 CREATE INDEX ON apflora.zielber USING btree (ziel_id);
@@ -1038,6 +1057,7 @@ COMMENT ON COLUMN apflora.zielber.erreichung IS 'Beurteilung der Zielerreichung'
 COMMENT ON COLUMN apflora.zielber.bemerkungen IS 'Bemerkungen zur Zielerreichung';
 COMMENT ON COLUMN apflora.zielber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.zielber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+alter table apflora.zielber alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.evab_typologie;
 CREATE TABLE apflora.evab_typologie (
@@ -1122,8 +1142,9 @@ CREATE TABLE apflora.beob (
   nicht_zuordnen boolean default false,
   bemerkungen text,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  changed_by varchar(20) DEFAULT null
 );
+alter table apflora.beob alter column changed_by set default null;
 CREATE INDEX ON apflora.beob USING btree (id);
 CREATE INDEX ON apflora.beob USING btree (quelle_id);
 CREATE INDEX ON apflora.beob USING btree (art_id);
@@ -1193,8 +1214,9 @@ CREATE TABLE apflora.ekfzaehleinheit (
   zaehleinheit_id UUID DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte (id) ON DELETE CASCADE ON UPDATE CASCADE,
   bemerkungen text,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  changed_by varchar(20) DEFAULT null
 );
+alter table apflora.ekfzaehleinheit alter column changed_by set default null;
 CREATE INDEX ON apflora.ekfzaehleinheit USING btree (id);
 CREATE INDEX ON apflora.ekfzaehleinheit USING btree (ap_id);
 CREATE INDEX ON apflora.ekfzaehleinheit USING btree (zaehleinheit_id);
