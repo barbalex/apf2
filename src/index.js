@@ -21,6 +21,7 @@ import { MuiPickersUtilsProvider } from 'material-ui-pickers'
 import { ApolloProvider } from 'react-apollo'
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
 import MobxStore from './mobxStore'
+//import { onPatch } from 'mobx-state-tree'
 
 import 'typeface-roboto'
 import 'react-reflex/styles.css'
@@ -75,6 +76,8 @@ const run = async () => {
         mobxStore,
       }),
     )
+
+    //onPatch(mobxStore, patch => console.log(patch))
 
     const idbContext = { idb }
 
