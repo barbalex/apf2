@@ -50,7 +50,6 @@ const DateFieldWithPicker = ({
        * so is never null or otherwise invalid
        * oops: it is null if clear button is clicked!
        */
-      //console.log('DateFieldWithPicker, onChange:', {value})
       if (!isValid(value)) {
         const fakeEvent = { target: { value: null, name } }
         saveToDb(fakeEvent)
@@ -66,10 +65,8 @@ const DateFieldWithPicker = ({
   const onBlur = useCallback(
     event => {
       const { value } = event.target
-      //console.log('DateFieldWithPicker, onBlur:', {value})
       // do not change anything of there are no values
       if (!isValid(value)) {
-        //console.log('invalid value, propsValue:', propsValue)
         const fakeEvent = { target: { value: null, name } }
         saveToDb(fakeEvent)
         return setStateValue(null)
@@ -91,7 +88,6 @@ const DateFieldWithPicker = ({
     },
     [propsValue],
   )
-  console.log('DateField', { name, propsValue, stateValue })
 
   return (
     <>

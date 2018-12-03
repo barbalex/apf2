@@ -89,7 +89,6 @@ const SharedSelect = ({
   noCaret: boolean,
   saveToDb: () => void,
 }) => {
-  //console.log('Select', { value, field })
   const onChange = useCallback(
     option => {
       const fakeEvent = {

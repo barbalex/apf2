@@ -47,7 +47,6 @@ const MyTextField = ({
     },
     [value],
   )
-  console.log('Textfield', { name, value, stateValue })
 
   return (
     <StyledFormControl
