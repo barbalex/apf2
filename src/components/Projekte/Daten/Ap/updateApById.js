@@ -10,6 +10,7 @@ export default gql`
     $bearbeiter: UUID
     $ekfBeobachtungszeitpunkt: String
     $projId: UUID
+    $changedBy: String
   ) {
     updateApById(
       input: {
@@ -23,6 +24,7 @@ export default gql`
           bearbeiter: $bearbeiter
           ekfBeobachtungszeitpunkt: $ekfBeobachtungszeitpunkt
           projId: $projId
+          changedBy: $changedBy
         }
       }
     ) {
@@ -39,6 +41,7 @@ export default gql`
           name
         }
         projId
+        changedBy
         aeEigenschaftenByArtId {
           id
           artname

@@ -85,7 +85,7 @@ const Ap = ({
 }) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
-  const { nodeFilter, nodeFilterSetValue } = mobxStore
+  const { nodeFilter, nodeFilterSetValue, user } = mobxStore
   const { activeNodeArray } = mobxStore[treeName]
   const id =
     activeNodeArray.length > 3
@@ -178,6 +178,7 @@ const Ap = ({
             variables: {
               id: row.id,
               [field]: value,
+              changedBy: user.name,
             },
             /*optimisticResponse: {
             __typename: 'Mutation',
