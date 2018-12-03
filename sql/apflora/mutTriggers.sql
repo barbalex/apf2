@@ -2,7 +2,7 @@ DROP TRIGGER IF EXISTS adresse_on_update_set_mut ON apflora.adresse;
 DROP FUNCTION IF EXISTS adresse_on_update_set_mut();
 CREATE FUNCTION adresse_on_update_set_mut() RETURNS trigger AS $adresse_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -15,7 +15,7 @@ DROP TRIGGER IF EXISTS ap_on_update_set_mut ON apflora.ap;
 DROP FUNCTION IF EXISTS ap_on_update_set_mut();
 CREATE FUNCTION ap_on_update_set_mut() RETURNS trigger AS $ap_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -28,7 +28,7 @@ DROP TRIGGER IF EXISTS ap_bearbstand_werte_on_update_set_mut ON apflora.ap_bearb
 DROP FUNCTION IF EXISTS ap_bearbstand_werte_on_update_set_mut();
 CREATE FUNCTION ap_bearbstand_werte_on_update_set_mut() RETURNS trigger AS $ap_bearbstand_werte_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -41,7 +41,7 @@ DROP TRIGGER IF EXISTS ap_erfbeurtkrit_werte_on_update_set_mut ON apflora.ap_erf
 DROP FUNCTION IF EXISTS ap_erfbeurtkrit_werte_on_update_set_mut();
 CREATE FUNCTION ap_erfbeurtkrit_werte_on_update_set_mut() RETURNS trigger AS $ap_erfbeurtkrit_werte_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -54,7 +54,7 @@ DROP TRIGGER IF EXISTS ap_erfkrit_werte_on_update_set_mut ON apflora.ap_erfkrit_
 DROP FUNCTION IF EXISTS ap_erfkrit_werte_on_update_set_mut();
 CREATE FUNCTION ap_erfkrit_werte_on_update_set_mut() RETURNS trigger AS $ap_erfkrit_werte_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -67,7 +67,7 @@ DROP TRIGGER IF EXISTS ap_umsetzung_werte_on_update_set_mut ON apflora.ap_umsetz
 DROP FUNCTION IF EXISTS ap_umsetzung_werte_on_update_set_mut();
 CREATE FUNCTION ap_umsetzung_werte_on_update_set_mut() RETURNS trigger AS $ap_umsetzung_werte_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -80,7 +80,7 @@ DROP TRIGGER IF EXISTS apber_on_update_set_mut ON apflora.apber;
 DROP FUNCTION IF EXISTS apber_on_update_set_mut();
 CREATE FUNCTION apber_on_update_set_mut() RETURNS trigger AS $apber_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -93,7 +93,7 @@ DROP TRIGGER IF EXISTS apberuebersicht_on_update_set_mut ON apflora.apberuebersi
 DROP FUNCTION IF EXISTS apberuebersicht_on_update_set_mut();
 CREATE FUNCTION apberuebersicht_on_update_set_mut() RETURNS trigger AS $apberuebersicht_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -106,7 +106,7 @@ DROP TRIGGER IF EXISTS assozart_on_update_set_mut ON apflora.assozart;
 DROP FUNCTION IF EXISTS assozart_on_update_set_mut();
 CREATE FUNCTION assozart_on_update_set_mut() RETURNS trigger AS $assozart_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -119,7 +119,7 @@ DROP TRIGGER IF EXISTS beob_on_update_set_mut ON apflora.beob;
 DROP FUNCTION IF EXISTS beob_on_update_set_mut();
 CREATE FUNCTION beob_on_update_set_mut() RETURNS trigger AS $beob_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -132,7 +132,7 @@ DROP TRIGGER IF EXISTS projekt_on_update_set_mut ON apflora.projekt;
 DROP FUNCTION IF EXISTS projekt_on_update_set_mut();
 CREATE FUNCTION projekt_on_update_set_mut() RETURNS trigger AS $projekt_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -145,7 +145,7 @@ DROP TRIGGER IF EXISTS ber_on_update_set_mut ON apflora.ber;
 DROP FUNCTION IF EXISTS ber_on_update_set_mut();
 CREATE FUNCTION ber_on_update_set_mut() RETURNS trigger AS $ber_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -158,7 +158,7 @@ DROP TRIGGER IF EXISTS erfkrit_on_update_set_mut ON apflora.erfkrit;
 DROP FUNCTION IF EXISTS erfkrit_on_update_set_mut();
 CREATE FUNCTION erfkrit_on_update_set_mut() RETURNS trigger AS $erfkrit_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -171,7 +171,7 @@ DROP TRIGGER IF EXISTS idealbiotop_on_update_set_mut ON apflora.idealbiotop;
 DROP FUNCTION IF EXISTS idealbiotop_on_update_set_mut();
 CREATE FUNCTION idealbiotop_on_update_set_mut() RETURNS trigger AS $idealbiotop_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -184,7 +184,7 @@ DROP TRIGGER IF EXISTS pop_on_update_set_mut ON apflora.pop;
 DROP FUNCTION IF EXISTS pop_on_update_set_mut();
 CREATE FUNCTION pop_on_update_set_mut() RETURNS trigger AS $pop_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -197,7 +197,7 @@ DROP TRIGGER IF EXISTS pop_status_werte_on_update_set_mut ON apflora.pop_status_
 DROP FUNCTION IF EXISTS pop_status_werte_on_update_set_mut();
 CREATE FUNCTION pop_status_werte_on_update_set_mut() RETURNS trigger AS $pop_status_werte_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -210,7 +210,7 @@ DROP TRIGGER IF EXISTS popber_on_update_set_mut ON apflora.popber;
 DROP FUNCTION IF EXISTS popber_on_update_set_mut();
 CREATE FUNCTION popber_on_update_set_mut() RETURNS trigger AS $popber_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -223,7 +223,7 @@ DROP TRIGGER IF EXISTS popmassnber_on_update_set_mut ON apflora.popmassnber;
 DROP FUNCTION IF EXISTS popmassnber_on_update_set_mut();
 CREATE FUNCTION popmassnber_on_update_set_mut() RETURNS trigger AS $popmassnber_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -236,7 +236,7 @@ DROP TRIGGER IF EXISTS tpop_on_update_set_mut ON apflora.tpop;
 DROP FUNCTION IF EXISTS tpop_on_update_set_mut();
 CREATE FUNCTION tpop_on_update_set_mut() RETURNS trigger AS $tpop_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -249,7 +249,7 @@ DROP TRIGGER IF EXISTS tpop_apberrelevant_werte_on_update_set_mut ON apflora.tpo
 DROP FUNCTION IF EXISTS tpop_apberrelevant_werte_on_update_set_mut();
 CREATE FUNCTION tpop_apberrelevant_werte_on_update_set_mut() RETURNS trigger AS $tpop_apberrelevant_werte_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -262,7 +262,7 @@ DROP TRIGGER IF EXISTS tpop_entwicklung_werte_on_update_set_mut ON apflora.tpop_
 DROP FUNCTION IF EXISTS tpop_entwicklung_werte_on_update_set_mut();
 CREATE FUNCTION tpop_entwicklung_werte_on_update_set_mut() RETURNS trigger AS $tpop_entwicklung_werte_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -275,7 +275,7 @@ DROP TRIGGER IF EXISTS tpopber_on_update_set_mut ON apflora.tpopber;
 DROP FUNCTION IF EXISTS tpopber_on_update_set_mut();
 CREATE FUNCTION tpopber_on_update_set_mut() RETURNS trigger AS $tpopber_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -288,7 +288,7 @@ DROP TRIGGER IF EXISTS tpopkontr_on_update_set_mut ON apflora.tpopkontr;
 DROP FUNCTION IF EXISTS tpopkontr_on_update_set_mut();
 CREATE FUNCTION tpopkontr_on_update_set_mut() RETURNS trigger AS $tpopkontr_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     IF OLD.ekf_verifiziert <> NEW.ekf_verifiziert THEN
       NEW.ekf_verifiziert_durch = current_setting('request.jwt.claim.username', true);
@@ -305,7 +305,7 @@ DROP TRIGGER IF EXISTS tpopkontr_on_insert_set_mut ON apflora.tpopkontr;
 DROP FUNCTION IF EXISTS tpopkontr_on_insert_set_mut();
 CREATE FUNCTION tpopkontr_on_insert_set_mut() RETURNS trigger AS $tpopkontr_on_insert_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -318,7 +318,7 @@ DROP TRIGGER IF EXISTS tpopkontr_idbiotuebereinst_werte_on_update_set_mut ON apf
 DROP FUNCTION IF EXISTS tpopkontr_idbiotuebereinst_werte_on_update_set_mut();
 CREATE FUNCTION tpopkontr_idbiotuebereinst_werte_on_update_set_mut() RETURNS trigger AS $tpopkontr_idbiotuebereinst_werte_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -331,7 +331,7 @@ DROP TRIGGER IF EXISTS tpopkontr_typ_werte_on_update_set_mut ON apflora.tpopkont
 DROP FUNCTION IF EXISTS tpopkontr_typ_werte_on_update_set_mut();
 CREATE FUNCTION tpopkontr_typ_werte_on_update_set_mut() RETURNS trigger AS $tpopkontr_typ_werte_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -344,7 +344,7 @@ DROP TRIGGER IF EXISTS tpopkontrzaehl_on_update_set_mut ON apflora.tpopkontrzaeh
 DROP FUNCTION IF EXISTS tpopkontrzaehl_on_update_set_mut();
 CREATE FUNCTION tpopkontrzaehl_on_update_set_mut() RETURNS trigger AS $tpopkontrzaehl_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -357,7 +357,7 @@ DROP TRIGGER IF EXISTS tpopkontrzaehl_einheit_werte_on_update_set_mut ON apflora
 DROP FUNCTION IF EXISTS tpopkontrzaehl_einheit_werte_on_update_set_mut();
 CREATE FUNCTION tpopkontrzaehl_einheit_werte_on_update_set_mut() RETURNS trigger AS $tpopkontrzaehl_einheit_werte_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -370,7 +370,7 @@ DROP TRIGGER IF EXISTS tpopkontrzaehl_methode_werte_on_update_set_mut ON apflora
 DROP FUNCTION IF EXISTS tpopkontrzaehl_methode_werte_on_update_set_mut();
 CREATE FUNCTION tpopkontrzaehl_methode_werte_on_update_set_mut() RETURNS trigger AS $tpopkontrzaehl_methode_werte_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -383,7 +383,7 @@ DROP TRIGGER IF EXISTS tpopmassn_on_update_set_mut ON apflora.tpopmassn;
 DROP FUNCTION IF EXISTS tpopmassn_on_update_set_mut();
 CREATE FUNCTION tpopmassn_on_update_set_mut() RETURNS trigger AS $tpopmassn_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -396,7 +396,7 @@ DROP TRIGGER IF EXISTS tpopmassn_erfbeurt_werte_on_update_set_mut ON apflora.tpo
 DROP FUNCTION IF EXISTS tpopmassn_erfbeurt_werte_on_update_set_mut();
 CREATE FUNCTION tpopmassn_erfbeurt_werte_on_update_set_mut() RETURNS trigger AS $tpopmassn_erfbeurt_werte_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -409,7 +409,7 @@ DROP TRIGGER IF EXISTS tpopmassn_typ_werte_on_update_set_mut ON apflora.tpopmass
 DROP FUNCTION IF EXISTS tpopmassn_typ_werte_on_update_set_mut();
 CREATE FUNCTION tpopmassn_typ_werte_on_update_set_mut() RETURNS trigger AS $tpopmassn_typ_werte_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -422,7 +422,7 @@ DROP TRIGGER IF EXISTS tpopmassnber_on_update_set_mut ON apflora.tpopmassnber;
 DROP FUNCTION IF EXISTS tpopmassnber_on_update_set_mut();
 CREATE FUNCTION tpopmassnber_on_update_set_mut() RETURNS trigger AS $tpopmassnber_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -435,7 +435,7 @@ DROP TRIGGER IF EXISTS ziel_on_update_set_mut ON apflora.ziel;
 DROP FUNCTION IF EXISTS ziel_on_update_set_mut();
 CREATE FUNCTION ziel_on_update_set_mut() RETURNS trigger AS $ziel_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -448,7 +448,7 @@ DROP TRIGGER IF EXISTS ziel_typ_werte_on_update_set_mut ON apflora.ziel_typ_wert
 DROP FUNCTION IF EXISTS ziel_typ_werte_on_update_set_mut();
 CREATE FUNCTION ziel_typ_werte_on_update_set_mut() RETURNS trigger AS $ziel_typ_werte_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -461,7 +461,7 @@ DROP TRIGGER IF EXISTS zielber_on_update_set_mut ON apflora.zielber;
 DROP FUNCTION IF EXISTS zielber_on_update_set_mut();
 CREATE FUNCTION zielber_on_update_set_mut() RETURNS trigger AS $zielber_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -474,7 +474,7 @@ DROP TRIGGER IF EXISTS ekfzaehleinheit_on_update_set_mut ON apflora.ekfzaehleinh
 DROP FUNCTION IF EXISTS ekfzaehleinheit_on_update_set_mut();
 CREATE FUNCTION ekfzaehleinheit_on_update_set_mut() RETURNS trigger AS $ekfzaehleinheit_on_update_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
@@ -488,7 +488,7 @@ DROP TRIGGER IF EXISTS tpopkontr_frequenz_werte_set_mut ON apflora.tpopkontr_fre
 DROP FUNCTION IF EXISTS tpopkontr_frequenz_werte_set_mut();
 CREATE FUNCTION tpopkontr_frequenz_werte_set_mut() RETURNS trigger AS $tpopkontr_frequenz_werte_set_mut$
   BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+--  NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
