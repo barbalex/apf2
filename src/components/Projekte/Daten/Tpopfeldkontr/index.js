@@ -138,6 +138,7 @@ const Tpopfeldkontr = ({
         const variables = {
           id: row.id,
           [field]: value,
+          changedBy: mobxStore.user.name,
         }
         let field2
         if (field === 'jahr') field2 = 'datum'

@@ -59,6 +59,7 @@ const Apber = ({
   dataAllApErfkritWertes: Object,
   data: Object,
 }) => {
+  const mobxStore = useContext(mobxStoreContext)
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
 
@@ -85,6 +86,7 @@ const Apber = ({
         variables: {
           id: row.id,
           [field]: value,
+          changedBy: mobxStore.user.name,
         },
         /*optimisticResponse: {
           __typename: 'Mutation',

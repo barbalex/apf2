@@ -29,6 +29,7 @@ export default gql`
     $kontrollfrequenzFreiwillige: Int
     $bemerkungen: String
     $statusUnklar: Boolean
+    $changedBy: String
   ) {
     updateTpopById(
       input: {
@@ -61,6 +62,7 @@ export default gql`
           kontrollfrequenzFreiwillige: $kontrollfrequenzFreiwillige
           bemerkungen: $bemerkungen
           statusUnklar: $statusUnklar
+          changedBy: $changedBy
         }
       }
     ) {
@@ -100,6 +102,7 @@ export default gql`
         kontrollfrequenzFreiwillige
         bemerkungen
         statusUnklar
+        changedBy
         popByPopId {
           id
           apId

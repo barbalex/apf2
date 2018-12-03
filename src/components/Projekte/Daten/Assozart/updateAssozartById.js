@@ -6,6 +6,7 @@ export default gql`
     $bemerkungen: String
     $aeId: UUID
     $apId: UUID
+    $changedBy: String
   ) {
     updateAssozartById(
       input: {
@@ -15,6 +16,7 @@ export default gql`
           bemerkungen: $bemerkungen
           aeId: $aeId
           apId: $apId
+          changedBy: $changedBy
         }
       }
     ) {
@@ -23,6 +25,7 @@ export default gql`
         bemerkungen
         aeId
         apId
+        changedBy
         aeEigenschaftenByAeId {
           id
           artname

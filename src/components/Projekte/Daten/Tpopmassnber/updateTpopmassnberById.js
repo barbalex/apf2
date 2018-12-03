@@ -7,6 +7,7 @@ export default gql`
     $jahr: Int
     $beurteilung: Int
     $bemerkungen: String
+    $changedBy: String
   ) {
     updateTpopmassnberById(
       input: {
@@ -17,6 +18,7 @@ export default gql`
           jahr: $jahr
           beurteilung: $beurteilung
           bemerkungen: $bemerkungen
+          changedBy: $changedBy
         }
       }
     ) {
@@ -26,6 +28,7 @@ export default gql`
         jahr
         beurteilung
         bemerkungen
+        changedBy
         tpopByTpopId {
           id
           popByPopId {

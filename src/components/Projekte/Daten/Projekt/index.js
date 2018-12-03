@@ -60,6 +60,7 @@ const Projekt = ({ treeName, data }: { treeName: string, data: Object }) => {
           variables: {
             id: row.id,
             [field]: value,
+            changedBy: mobxStore.user.name,
           },
           /*optimisticResponse: {
           __typename: 'Mutation',

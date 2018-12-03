@@ -46,8 +46,9 @@ const Pop = ({
   data: Object,
   refetchTree: () => void,
 }) => {
+  const mobxStore = useContext(mobxStoreContext)
   const client = useApolloClient()
-  const { nodeFilter, nodeFilterSetValue } = useContext(mobxStoreContext)
+  const { nodeFilter, nodeFilterSetValue } = mobxStore
 
   const showFilter = !!nodeFilter[treeName].activeTable
   let row
@@ -84,6 +85,7 @@ const Pop = ({
             variables: {
               id: row.id,
               [field]: value,
+              changedBy: mobxStore.user.name,
             },
             /*optimisticResponse: {
             __typename: 'Mutation',

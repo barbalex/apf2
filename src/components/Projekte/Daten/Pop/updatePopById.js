@@ -12,6 +12,7 @@ export default gql`
     $bekanntSeit: Int
     $x: Int
     $y: Int
+    $changedBy: String
   ) {
     updatePopById(
       input: {
@@ -27,6 +28,7 @@ export default gql`
           bekanntSeit: $bekanntSeit
           x: $x
           y: $y
+          changedBy: $changedBy
         }
       }
     ) {
@@ -41,6 +43,7 @@ export default gql`
         bekanntSeit
         x
         y
+        changedBy
       }
     }
   }

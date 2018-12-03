@@ -8,6 +8,7 @@ export default gql`
     $role: String
     $pass: String
     $adresseId: UUID
+    $changedBy: String
   ) {
     updateUserById(
       input: {
@@ -19,6 +20,7 @@ export default gql`
           role: $role
           pass: $pass
           adresseId: $adresseId
+          changedBy: $changedBy
         }
       }
     ) {
@@ -29,6 +31,7 @@ export default gql`
         role
         pass
         adresseId
+        changedBy
       }
     }
   }

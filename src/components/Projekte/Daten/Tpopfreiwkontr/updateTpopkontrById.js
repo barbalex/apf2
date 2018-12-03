@@ -20,6 +20,7 @@ export default gql`
     $jungpflanzenVorhanden: Boolean
     $ekfVerifiziert: Boolean
     $ekfBemerkungen: String
+    $changedBy: String
   ) {
     updateTpopkontrById(
       input: {
@@ -42,6 +43,7 @@ export default gql`
           jungpflanzenVorhanden: $jungpflanzenVorhanden
           ekfVerifiziert: $ekfVerifiziert
           ekfBemerkungen: $ekfBemerkungen
+          changedBy: $changedBy
         }
       }
     ) {
@@ -68,6 +70,7 @@ export default gql`
         }
         planVorhanden
         jungpflanzenVorhanden
+        changedBy
         tpopByTpopId {
           id
           nr

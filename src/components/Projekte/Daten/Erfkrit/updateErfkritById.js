@@ -6,6 +6,7 @@ export default gql`
     $apId: UUID
     $erfolg: Int
     $kriterien: String
+    $changedBy: String
   ) {
     updateErfkritById(
       input: {
@@ -15,6 +16,7 @@ export default gql`
           apId: $apId
           erfolg: $erfolg
           kriterien: $kriterien
+          changedBy: $changedBy
         }
       }
     ) {
@@ -23,6 +25,7 @@ export default gql`
         apId
         erfolg
         kriterien
+        changedBy
       }
     }
   }

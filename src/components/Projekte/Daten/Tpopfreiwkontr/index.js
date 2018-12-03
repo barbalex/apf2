@@ -270,6 +270,7 @@ const Tpopfreiwkontr = ({
       const variables = {
         id: row.id,
         [field]: value,
+        changedBy: mobxStore.user.name,
       }
       let field2
       if (field === 'datum') field2 = 'jahr'
@@ -394,6 +395,7 @@ const Tpopfreiwkontr = ({
                     'tpopkontrzaehlEinheitWerteByZaehleinheitId.code',
                     null,
                   ),
+                  changedBy: mobxStore.user.name,
                 },
               }),
             ),

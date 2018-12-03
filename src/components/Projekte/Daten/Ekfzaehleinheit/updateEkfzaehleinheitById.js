@@ -6,6 +6,7 @@ export default gql`
     $bemerkungen: String
     $apId: UUID
     $zaehleinheitId: UUID
+    $changedBy: String
   ) {
     updateEkfzaehleinheitById(
       input: {
@@ -15,6 +16,7 @@ export default gql`
           bemerkungen: $bemerkungen
           apId: $apId
           zaehleinheitId: $zaehleinheitId
+          changedBy: $changedBy
         }
       }
     ) {
@@ -23,6 +25,7 @@ export default gql`
         bemerkungen
         apId
         zaehleinheitId
+        changedBy
         tpopkontrzaehlEinheitWerteByZaehleinheitId {
           id
           text

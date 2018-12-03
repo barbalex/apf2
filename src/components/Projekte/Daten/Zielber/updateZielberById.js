@@ -7,6 +7,7 @@ export default gql`
     $jahr: Int
     $erreichung: String
     $bemerkungen: String
+    $changedBy: String
   ) {
     updateZielberById(
       input: {
@@ -17,6 +18,7 @@ export default gql`
           jahr: $jahr
           erreichung: $erreichung
           bemerkungen: $bemerkungen
+          changedBy: $changedBy
         }
       }
     ) {
@@ -26,6 +28,7 @@ export default gql`
         jahr
         erreichung
         bemerkungen
+        changedBy
         zielByZielId {
           id
           apId

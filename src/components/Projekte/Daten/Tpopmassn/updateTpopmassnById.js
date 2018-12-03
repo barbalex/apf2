@@ -22,6 +22,7 @@ export default gql`
     $tpopId: UUID
     $bearbeiter: UUID
     $planVorhanden: Boolean
+    $changedBy: String
   ) {
     updateTpopmassnById(
       input: {
@@ -47,6 +48,7 @@ export default gql`
           tpopId: $tpopId
           bearbeiter: $bearbeiter
           planVorhanden: $planVorhanden
+          changedBy: $changedBy
         }
       }
     ) {
@@ -81,6 +83,7 @@ export default gql`
           name
         }
         planVorhanden
+        changedBy
       }
     }
   }

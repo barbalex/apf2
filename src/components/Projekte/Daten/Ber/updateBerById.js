@@ -8,6 +8,7 @@ export default gql`
     $jahr: Int
     $titel: String
     $url: String
+    $changedBy: String
   ) {
     updateBerById(
       input: {
@@ -19,6 +20,7 @@ export default gql`
           jahr: $jahr
           titel: $titel
           url: $url
+          changedBy: $changedBy
         }
       }
     ) {
@@ -29,6 +31,7 @@ export default gql`
         jahr
         titel
         url
+        changedBy
       }
     }
   }

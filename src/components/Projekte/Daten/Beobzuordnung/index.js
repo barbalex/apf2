@@ -207,6 +207,7 @@ const Beobzuordnung = ({
       variables: {
         id,
         bemerkungen: event.target.value,
+        changedBy: mobxStore.user.name,
       },
     })
   })

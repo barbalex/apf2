@@ -49,6 +49,7 @@ const Tpopkontrzaehl = ({
   data: Object,
   refetchTree: () => void,
 }) => {
+  const mobxStore = useContext(mobxStoreContext)
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
 
@@ -87,6 +88,7 @@ const Tpopkontrzaehl = ({
           variables: {
             id: row.id,
             [field]: value,
+            changedBy: mobxStore.user.name,
           },
           /*optimisticResponse: {
           __typename: 'Mutation',

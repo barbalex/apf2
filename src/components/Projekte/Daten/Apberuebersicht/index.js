@@ -41,6 +41,7 @@ const Apberuebersicht = ({
   treeName: string,
   data: Object,
 }) => {
+  const mobxStore = useContext(mobxStoreContext)
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
 
@@ -62,6 +63,7 @@ const Apberuebersicht = ({
           variables: {
             id: row.id,
             [field]: value,
+            changedBy: mobxStore.user.name,
           },
           /*optimisticResponse: {
           __typename: 'Mutation',

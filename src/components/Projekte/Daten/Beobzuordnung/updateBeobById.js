@@ -15,6 +15,7 @@ export default gql`
     $nichtZuordnen: Boolean
     $bemerkungen: String
     $quelleId: UUID
+    $changedBy: String
   ) {
     updateBeobById(
       input: {
@@ -33,6 +34,7 @@ export default gql`
           nichtZuordnen: $nichtZuordnen
           bemerkungen: $bemerkungen
           quelleId: $quelleId
+          changedBy: $changedBy
         }
       }
     ) {
@@ -50,6 +52,7 @@ export default gql`
         nichtZuordnen
         bemerkungen
         quelleId
+        changedBy
         aeEigenschaftenByArtId {
           id
           artname

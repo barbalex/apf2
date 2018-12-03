@@ -6,6 +6,7 @@ export default gql`
     $anzahl: Int
     $einheit: Int
     $methode: Int
+    $changedBy: String
   ) {
     updateTpopkontrzaehlById(
       input: {
@@ -15,6 +16,7 @@ export default gql`
           anzahl: $anzahl
           einheit: $einheit
           methode: $methode
+          changedBy: $changedBy
         }
       }
     ) {
@@ -23,6 +25,7 @@ export default gql`
         anzahl
         einheit
         methode
+        changedBy
       }
     }
   }

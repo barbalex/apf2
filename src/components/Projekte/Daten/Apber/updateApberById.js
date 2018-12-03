@@ -20,6 +20,7 @@ export default gql`
     $massnahmenPlanungVsAusfuehrung: String
     $apId: UUID
     $bearbeiter: UUID
+    $changedBy: String
   ) {
     updateApberById(
       input: {
@@ -43,6 +44,7 @@ export default gql`
           massnahmenPlanungVsAusfuehrung: $massnahmenPlanungVsAusfuehrung
           apId: $apId
           bearbeiter: $bearbeiter
+          changedBy: $changedBy
         }
       }
     ) {
@@ -65,6 +67,7 @@ export default gql`
         massnahmenPlanungVsAusfuehrung
         apId
         bearbeiter
+        changedBy
         apErfkritWerteByBeurteilung {
           id
           code

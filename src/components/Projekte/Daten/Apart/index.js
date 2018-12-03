@@ -48,6 +48,7 @@ const ApArt = ({
 
   refetchTree: () => void,
 }) => {
+  const mobxStore = useContext(mobxStoreContext)
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
 
@@ -79,6 +80,7 @@ const ApArt = ({
           variables: {
             id: row.id,
             [field]: value,
+            changedBy: mobxStore.user.name,
           },
           /*optimisticResponse: {
           __typename: 'Mutation',

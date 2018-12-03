@@ -6,6 +6,7 @@ export default gql`
     $projId: UUID
     $jahr: Int
     $bemerkungen: String
+    $changedBy: String
   ) {
     updateApberuebersichtById(
       input: {
@@ -15,6 +16,7 @@ export default gql`
           projId: $projId
           jahr: $jahr
           bemerkungen: $bemerkungen
+          changedBy: $changedBy
         }
       }
     ) {
@@ -23,6 +25,7 @@ export default gql`
         projId
         jahr
         bemerkungen
+        changedBy
       }
     }
   }

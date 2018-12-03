@@ -57,6 +57,7 @@ const Idealbiotop = ({
   treeName: string,
   data: Object,
 }) => {
+  const mobxStore = useContext(mobxStoreContext)
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
 
@@ -78,6 +79,7 @@ const Idealbiotop = ({
           variables: {
             id: row.id,
             [field]: value,
+            changedBy: mobxStore.user.name,
           },
           /*optimisticResponse: {
           __typename: 'Mutation',

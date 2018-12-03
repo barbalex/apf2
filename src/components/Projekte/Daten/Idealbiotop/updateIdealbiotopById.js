@@ -22,6 +22,7 @@ export default gql`
     $strauchschicht: String
     $baumschicht: String
     $bemerkungen: String
+    $changedBy: String
   ) {
     updateIdealbiotopById(
       input: {
@@ -47,6 +48,7 @@ export default gql`
           strauchschicht: $strauchschicht
           baumschicht: $baumschicht
           bemerkungen: $bemerkungen
+          changedBy: $changedBy
         }
       }
     ) {
@@ -71,6 +73,7 @@ export default gql`
         strauchschicht
         baumschicht
         bemerkungen
+        changedBy
       }
     }
   }

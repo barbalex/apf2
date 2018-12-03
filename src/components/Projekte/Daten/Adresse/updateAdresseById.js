@@ -11,6 +11,7 @@ export default gql`
     $evabVorname: String
     $evabNachname: String
     $evabOrt: String
+    $changedBy: String
   ) {
     updateAdresseById(
       input: {
@@ -25,6 +26,7 @@ export default gql`
           evabVorname: $evabVorname
           evabNachname: $evabNachname
           evabOrt: $evabOrt
+          changedBy: $changedBy
         }
       }
     ) {
@@ -38,6 +40,7 @@ export default gql`
         evabVorname
         evabNachname
         evabOrt
+        changedBy
       }
     }
   }

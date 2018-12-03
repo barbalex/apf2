@@ -44,6 +44,7 @@ export default gql`
     $bearbeiter: UUID
     $planVorhanden: Boolean
     $jungpflanzenVorhanden: Boolean
+    $changedBy: String
   ) {
     updateTpopkontrById(
       input: {
@@ -90,6 +91,7 @@ export default gql`
           bearbeiter: $bearbeiter
           planVorhanden: $planVorhanden
           jungpflanzenVorhanden: $jungpflanzenVorhanden
+          changedBy: $changedBy
         }
       }
     ) {
@@ -140,6 +142,7 @@ export default gql`
         }
         planVorhanden
         jungpflanzenVorhanden
+        changedBy
         tpopByTpopId {
           id
           popByPopId {

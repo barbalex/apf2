@@ -83,6 +83,7 @@ const User = ({
   data: Object,
   refetchTree: () => void,
 }) => {
+  const mobxStore = useContext(mobxStoreContext)
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
   const [editPassword, setEditPassword] = useState(false)
@@ -119,6 +120,7 @@ const User = ({
           variables: {
             id: row.id,
             [field]: value,
+            changedBy: mobxStore.user.name,
           },
           /*optimisticResponse: {
           __typename: 'Mutation',

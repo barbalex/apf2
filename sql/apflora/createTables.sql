@@ -109,7 +109,6 @@ COMMENT ON COLUMN apflora.ap.changed IS 'Wann wurde der Datensatz zuletzt geänd
 COMMENT ON COLUMN apflora.ap.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 alter table apflora.ap add column ekf_beobachtungszeitpunkt text default null;
 alter table apflora.ap alter column changed drop default;
-alter table apflora.ap alter column changed_by drop default;
 
 -- this table is NOT YET IN USE
 DROP TABLE IF EXISTS apflora.userprojekt;

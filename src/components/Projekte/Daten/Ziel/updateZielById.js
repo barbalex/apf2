@@ -7,6 +7,7 @@ export default gql`
     $typ: Int
     $jahr: Int
     $bezeichnung: String
+    $changedBy: String
   ) {
     updateZielById(
       input: {
@@ -17,6 +18,7 @@ export default gql`
           typ: $typ
           jahr: $jahr
           bezeichnung: $bezeichnung
+          changedBy: $changedBy
         }
       }
     ) {
@@ -26,6 +28,7 @@ export default gql`
         typ
         jahr
         bezeichnung
+        changedBy
       }
     }
   }

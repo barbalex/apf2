@@ -35,6 +35,7 @@ const enhance = compose(
 )
 
 const Ber = ({ treeName, data }: { treeName: string, data: Object }) => {
+  const mobxStore = useContext(mobxStoreContext)
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
 
@@ -56,6 +57,7 @@ const Ber = ({ treeName, data }: { treeName: string, data: Object }) => {
           variables: {
             id: row.id,
             [field]: value,
+            changedBy: mobxStore.user.name,
           },
           /*optimisticResponse: {
           __typename: 'Mutation',
