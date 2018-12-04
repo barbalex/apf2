@@ -68,6 +68,7 @@ const Qk = ({ treeName }: { treeName: string }) => {
 
   const { data, error, loading, refetch } = useQuery(query, {
     suspend: false,
+    // want to explicitly show user re-loading
     fetchPolicy: 'no-cache',
     notifyOnNetworkStatusChange: true,
     variables: {
