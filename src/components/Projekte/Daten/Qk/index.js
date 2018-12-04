@@ -3,6 +3,7 @@ import React, { useState, useCallback, useEffect, useContext } from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
+import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
 import Paper from '@material-ui/core/Paper'
 import sortBy from 'lodash/sortBy'
@@ -37,11 +38,6 @@ const StyledPaper = styled(Paper)`
 const Title = styled.div`
   font-weight: bold;
 `
-const LoadingIndicator = styled.div`
-  margin-bottom: 15px;
-  margin-top: -5px;
-  color: ${props => (props.loading ? '#D84315' : 'rgb(46, 125, 50)')};
-`
 const StyledA = styled.a`
   color: inherit;
   font-weight: normal;
@@ -53,8 +49,13 @@ const StyledFormControl = styled(FormControl)`
     border-bottom-color: rgba(0, 0, 0, 0.1) !important;
   }
 `
-const LoadingLine = styled.div`
-  display: flex;
+const StyledButton = styled(Button)`
+  margin-bottom: 15px !important;
+  margin-top: -5px !important;
+  color: ${props =>
+    props.loading === 'true'
+      ? '#D84315 !important'
+      : 'rgb(46, 125, 50) !important'};
 `
 
 const Qk = ({ treeName }: { treeName: string }) => {
@@ -67,6 +68,8 @@ const Qk = ({ treeName }: { treeName: string }) => {
 
   const { data, error, loading, refetch } = useQuery(query, {
     suspend: false,
+    fetchPolicy: 'no-cache',
+    notifyOnNetworkStatusChange: true,
     variables: {
       berichtjahr,
       isBerichtjahr: !!berichtjahr,
@@ -107,12 +110,6 @@ const Qk = ({ treeName }: { treeName: string }) => {
     if (!ktZh) fetchKtZh({ setKtZh, addError })
   }, [])
 
-  useEffect(() => {
-    if (!loading) {
-      refetch()
-    }
-  })
-
   if (error) return `Fehler: ${error.message}`
   return (
     <ErrorBoundary>
@@ -134,14 +131,13 @@ const Qk = ({ treeName }: { treeName: string }) => {
             </InputLabel>
             <Input id="filter" value={filter} onChange={onChangeFilter} />
           </StyledFormControl>
-          <LoadingLine>
-            <LoadingIndicator loading={loading}>
-              {loading
-                ? 'Die Daten werden analysiert...'
-                : 'Analyse abgeschlossen'}
-            </LoadingIndicator>
-            {/*<Button onClick={() => data.refetch()}>neu analysieren</Button>*/}
-          </LoadingLine>
+          <StyledButton
+            onClick={() => refetch()}
+            variant="outlined"
+            loading={loading.toString()}
+          >
+            {loading ? 'Die Daten werden analysiert...' : 'neu analysieren'}
+          </StyledButton>
           {messageGroupsFiltered.map((messageGroup, index) => (
             <StyledPaper key={index}>
               <Title>{messageGroup.title}</Title>
