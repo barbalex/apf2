@@ -2370,7 +2370,7 @@ export default ({
       })(),
     },
     {
-      title: `Zählung ohne Anzahl (Freiwilligen-Kontrolle):`,
+      title: `Alle Zählungen ohne Anzahl (Freiwilligen-Kontrolle):`,
       messages: (function() {
         const popNodes = get(
           data,
@@ -2383,30 +2383,21 @@ export default ({
         const tpopkontrNodes = flatten(
           tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes', [])),
         )
-        let tpopkontrzaehlNodes = flatten(
-          tpopkontrNodes.map(n =>
-            get(n, 'tpopkontrzaehlsByTpopkontrId.nodes', []),
-          ),
-        )
-        tpopkontrzaehlNodes = sortBy(tpopkontrzaehlNodes, n => [
-          get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.popByPopId.nr'),
-          get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.nr'),
-          get(n, 'tpopkontrByTpopkontrId.jahr'),
-          n.id,
-        ])
-        return tpopkontrzaehlNodes.map(n => {
-          const popId = get(
+        const tpopkontrMitZaehlungOhneAnzahl = tpopkontrNodes.filter(n => {
+          const anzZaehlungenMitAnzahl = get(n, 'zaehlungenMitAnzahl.nodes', [])
+            .length
+          const anzZaehlungenOhneAnzahl = get(
             n,
-            'tpopkontrByTpopkontrId.tpopByTpopId.popByPopId.id',
-          )
-          const popNr = get(
-            n,
-            'tpopkontrByTpopkontrId.tpopByTpopId.popByPopId.nr',
-          )
-          const tpopId = get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.id')
-          const tpopNr = get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.nr')
-          const tpopkontrId = get(n, 'tpopkontrByTpopkontrId.id')
-          const tpopkontrJahr = get(n, 'tpopkontrByTpopkontrId.jahr')
+            'zaehlungenOhneAnzahl.nodes',
+            [],
+          ).length
+          return anzZaehlungenMitAnzahl === 0 && anzZaehlungenOhneAnzahl > 0
+        })
+        return tpopkontrMitZaehlungOhneAnzahl.map(n => {
+          const popId = get(n, 'tpopByTpopId.popByPopId.id')
+          const popNr = get(n, 'tpopByTpopId.popByPopId.nr')
+          const tpopId = get(n, 'tpopByTpopId.id')
+          const tpopNr = get(n, 'tpopByTpopId.nr')
           return {
             url: [
               'Projekte',
@@ -2418,14 +2409,10 @@ export default ({
               'Teil-Populationen',
               tpopId,
               'Freiwilligen-Kontrollen',
-              tpopkontrId,
-              'Zaehlungen',
               n.id,
             ],
             text: `Population: ${popNr || popId}, Teil-Population: ${tpopNr ||
-              tpopId}, Kontrolle: ${tpopkontrJahr || tpopkontrId}, Zählung: ${
-              n.id
-            }`,
+              tpopId}, Kontrolle: ${n.jahr || n.id}`,
           }
         })
       })(),

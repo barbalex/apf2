@@ -1782,7 +1782,7 @@ export default gql`
                     nodes {
                       id
                       jahr
-                      tpopkontrzaehlsByTpopkontrId(
+                      zaehlungenOhneAnzahl: tpopkontrzaehlsByTpopkontrId(
                         filter: { anzahl: { isNull: true } }
                       ) {
                         nodes {
@@ -1799,6 +1799,33 @@ export default gql`
                               }
                             }
                           }
+                        }
+                      }
+                      zaehlungenMitAnzahl: tpopkontrzaehlsByTpopkontrId(
+                        filter: { anzahl: { isNull: false } }
+                      ) {
+                        nodes {
+                          id
+                          tpopkontrByTpopkontrId {
+                            id
+                            jahr
+                            tpopByTpopId {
+                              id
+                              nr
+                              popByPopId {
+                                id
+                                nr
+                              }
+                            }
+                          }
+                        }
+                      }
+                      tpopByTpopId {
+                        id
+                        nr
+                        popByPopId {
+                          id
+                          nr
                         }
                       }
                     }
