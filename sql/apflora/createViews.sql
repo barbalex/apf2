@@ -4670,7 +4670,7 @@ WHERE
       apflora.tpopmassn.tpop_id = apflora.tpop.id
       AND apflora.tpopmassn.typ BETWEEN 1 AND 3
       AND apflora.tpopmassn.jahr IS NOT NULL
-      AND apflora.tpopmassn.jahr > lasttpopber.jahr
+      AND apflora.tpopmassn.jahr >= lasttpopber.jahr
   );
 
 DROP VIEW IF EXISTS apflora.v_q_pop_statusaktuellletzterpopbererloschen CASCADE;
@@ -4717,7 +4717,7 @@ WHERE
         ON apflora.tpop.id = apflora.tpopmassn.tpop_id
     WHERE
       apflora.tpopmassn.typ BETWEEN 1 AND 3
-      AND apflora.tpopmassn.jahr > lastpopber.jahr
+      AND apflora.tpopmassn.jahr >= lastpopber.jahr
   );
 
 DROP VIEW IF EXISTS apflora.v_q_tpop_statuserloschenletztertpopberzunehmend CASCADE;
@@ -4768,7 +4768,7 @@ WHERE
       apflora.tpopmassn.tpop_id = apflora.tpop.id
       AND apflora.tpopmassn.typ BETWEEN 1 AND 3
       AND apflora.tpopmassn.jahr IS NOT NULL
-      AND apflora.tpopmassn.jahr > lasttpopber.jahr
+      AND apflora.tpopmassn.jahr >= lasttpopber.jahr
   );
 
 DROP VIEW IF EXISTS apflora.v_q_pop_statuserloschenletzterpopberzunehmend CASCADE;
@@ -4815,7 +4815,7 @@ WHERE
         ON apflora.tpop.id = apflora.tpopmassn.tpop_id
     WHERE
       apflora.tpopmassn.typ BETWEEN 1 AND 3
-      AND apflora.tpopmassn.jahr > lastpopber.jahr
+      AND apflora.tpopmassn.jahr >= lastpopber.jahr
   );
 
 DROP VIEW IF EXISTS apflora.v_q_tpop_statuserloschenletztertpopberstabil CASCADE;
@@ -4866,7 +4866,7 @@ WHERE
       apflora.tpopmassn.tpop_id = apflora.tpop.id
       AND apflora.tpopmassn.typ BETWEEN 1 AND 3
       AND apflora.tpopmassn.jahr IS NOT NULL
-      AND apflora.tpopmassn.jahr > lasttpopber.jahr
+      AND apflora.tpopmassn.jahr >= lasttpopber.jahr
   );
 
 DROP VIEW IF EXISTS apflora.v_q_pop_statuserloschenletzterpopberstabil CASCADE;
@@ -4913,7 +4913,7 @@ WHERE
         ON apflora.tpop.id = apflora.tpopmassn.tpop_id
     WHERE
       apflora.tpopmassn.typ BETWEEN 1 AND 3
-      AND apflora.tpopmassn.jahr > lastpopber.jahr
+      AND apflora.tpopmassn.jahr >= lastpopber.jahr
   );
 
 DROP VIEW IF EXISTS apflora.v_q_tpop_statuserloschenletztertpopberabnehmend CASCADE;
@@ -4964,7 +4964,7 @@ WHERE
       apflora.tpopmassn.tpop_id = apflora.tpop.id
       AND apflora.tpopmassn.typ BETWEEN 1 AND 3
       AND apflora.tpopmassn.jahr IS NOT NULL
-      AND apflora.tpopmassn.jahr > lasttpopber.jahr
+      AND apflora.tpopmassn.jahr >= lasttpopber.jahr
   );
 
 DROP VIEW IF EXISTS apflora.v_q_pop_statuserloschenletzterpopberabnehmend CASCADE;
@@ -5011,7 +5011,7 @@ WHERE
         ON apflora.tpop.id = apflora.tpopmassn.tpop_id
     WHERE
       apflora.tpopmassn.typ BETWEEN 1 AND 3
-      AND apflora.tpopmassn.jahr > lastpopber.jahr
+      AND apflora.tpopmassn.jahr >= lastpopber.jahr
   );
 
 DROP VIEW IF EXISTS apflora.v_q_tpop_statuserloschenletztertpopberunsicher CASCADE;
@@ -5062,7 +5062,7 @@ WHERE
       apflora.tpopmassn.tpop_id = apflora.tpop.id
       AND apflora.tpopmassn.typ BETWEEN 1 AND 3
       AND apflora.tpopmassn.jahr IS NOT NULL
-      AND apflora.tpopmassn.jahr > lasttpopber.jahr
+      AND apflora.tpopmassn.jahr >= lasttpopber.jahr
   );
 
 DROP VIEW IF EXISTS apflora.v_q_pop_statuserloschenletzterpopberunsicher CASCADE;
@@ -5109,7 +5109,7 @@ WHERE
         ON apflora.tpop.id = apflora.tpopmassn.tpop_id
     WHERE
       apflora.tpopmassn.typ BETWEEN 1 AND 3
-      AND apflora.tpopmassn.jahr > lastpopber.jahr
+      AND apflora.tpopmassn.jahr >= lastpopber.jahr
   );
 
 DROP VIEW IF EXISTS apflora.v_q_pop_ohnetpopmitgleichemstatus CASCADE;
