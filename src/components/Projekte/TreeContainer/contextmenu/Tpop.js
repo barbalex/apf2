@@ -7,6 +7,54 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
+// create objects outside render
+const openLowerNodesData = {
+  action: 'openLowerNodes',
+}
+const closeLowerNodesData = {
+  action: 'closeLowerNodes',
+}
+const insertData = {
+  action: 'insert',
+  table: 'tpop',
+}
+const deleteData = {
+  action: 'delete',
+  actionTable: 'tpop',
+  table: 'tpop',
+}
+const localizeOnMapData = {
+  action: 'localizeOnMap',
+  actionTable: 'tpop',
+  idTable: 'tpop',
+}
+const markForMovingData = {
+  action: 'markForMoving',
+  table: 'tpop',
+}
+const moveData = {
+  action: 'move',
+}
+const markForCopyingData = {
+  action: 'markForCopying',
+  table: 'tpop',
+}
+const copyData = {
+  action: 'copy',
+}
+const resetCopyingData = {
+  action: 'resetCopying',
+}
+const copyTpopKoordToPopData = {
+  action: 'copyTpopKoordToPop',
+}
+const showCoordOfTpopOnMapsZhChData = {
+  action: 'showCoordOfTpopOnMapsZhCh',
+}
+const showCoordOfTpopOnMapGeoAdminChData = {
+  action: 'showCoordOfTpopOnMapGeoAdminCh',
+}
+
 const Tpop = ({
   onClick,
   treeName,
@@ -27,127 +75,55 @@ const Tpop = ({
     <ErrorBoundary>
       <ContextMenu id={`${treeName}tpop`}>
         <div className="react-contextmenu-title">Teil-Population</div>
-        <MenuItem
-          onClick={onClick}
-          data={{
-            action: 'openLowerNodes',
-          }}
-        >
+        <MenuItem onClick={onClick} data={openLowerNodesData}>
           alle öffnen
         </MenuItem>
-        <MenuItem
-          onClick={onClick}
-          data={{
-            action: 'closeLowerNodes',
-          }}
-        >
+        <MenuItem onClick={onClick} data={closeLowerNodesData}>
           alle schliessen
         </MenuItem>
         {!userIsReadOnly(user.token) && (
           <>
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'insert',
-                table: 'tpop',
-              }}
-            >
+            <MenuItem onClick={onClick} data={insertData}>
               erstelle neue
             </MenuItem>
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'delete',
-                actionTable: 'tpop',
-                table: 'tpop',
-              }}
-            >
+            <MenuItem onClick={onClick} data={deleteData}>
               lösche
             </MenuItem>
             {treeName === 'tree' && (
-              <MenuItem
-                onClick={onClick}
-                data={{
-                  action: 'localizeOnMap',
-                  actionTable: 'tpop',
-                  idTable: 'tpop',
-                }}
-              >
+              <MenuItem onClick={onClick} data={localizeOnMapData}>
                 verorte auf Karte (mit Doppel-Klick)
               </MenuItem>
             )}
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'markForMoving',
-                table: 'tpop',
-              }}
-            >
+            <MenuItem onClick={onClick} data={markForMovingData}>
               verschiebe
             </MenuItem>
             {isMoving && (
-              <MenuItem
-                onClick={onClick}
-                data={{
-                  action: 'move',
-                }}
-              >
+              <MenuItem onClick={onClick} data={moveData}>
                 {`verschiebe '${moving.label}' hierhin`}
               </MenuItem>
             )}
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'markForCopying',
-                table: 'tpop',
-              }}
-            >
+            <MenuItem onClick={onClick} data={markForCopyingData}>
               kopiere
             </MenuItem>
             {isCopying && (
-              <MenuItem
-                onClick={onClick}
-                data={{
-                  action: 'copy',
-                }}
-              >
+              <MenuItem onClick={onClick} data={copyData}>
                 {`kopiere '${copying.label}' hierhin`}
               </MenuItem>
             )}
             {isCopying && (
-              <MenuItem
-                onClick={onClick}
-                data={{
-                  action: 'resetCopying',
-                }}
-              >
+              <MenuItem onClick={onClick} data={resetCopyingData}>
                 Kopieren aufheben
               </MenuItem>
             )}
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'copyTpopKoordToPop',
-              }}
-            >
+            <MenuItem onClick={onClick} data={copyTpopKoordToPopData}>
               Kopiere Koordinaten in die Population
             </MenuItem>
           </>
         )}
-        <MenuItem
-          onClick={onClick}
-          data={{
-            action: 'showCoordOfTpopOnMapsZhCh',
-          }}
-        >
+        <MenuItem onClick={onClick} data={showCoordOfTpopOnMapsZhChData}>
           Zeige auf maps.zh.ch
         </MenuItem>
-        <MenuItem
-          onClick={onClick}
-          data={{
-            action: 'showCoordOfTpopOnMapGeoAdminCh',
-          }}
-        >
+        <MenuItem onClick={onClick} data={showCoordOfTpopOnMapGeoAdminChData}>
           Zeige auf map.geo.admin.ch
         </MenuItem>
       </ContextMenu>
