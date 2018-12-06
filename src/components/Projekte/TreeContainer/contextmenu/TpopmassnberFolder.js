@@ -7,6 +7,12 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
+// create objects outside render
+const insertData = {
+  action: 'insert',
+  table: 'tpopmassnber',
+}
+
 const TpopmassnberFolder = ({
   onClick,
   treeName,
@@ -21,13 +27,7 @@ const TpopmassnberFolder = ({
       <ContextMenu id={`${treeName}tpopmassnberFolder`}>
         <div className="react-contextmenu-title">Massnahmen-Berichte</div>
         {!userIsReadOnly(user.token) && (
-          <MenuItem
-            onClick={onClick}
-            data={{
-              action: 'insert',
-              table: 'tpopmassnber',
-            }}
-          >
+          <MenuItem onClick={onClick} data={insertData}>
             erstelle neuen
           </MenuItem>
         )}
