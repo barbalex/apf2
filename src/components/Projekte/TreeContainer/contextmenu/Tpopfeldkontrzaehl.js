@@ -7,6 +7,16 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
+// create objects outside render
+const insertData = {
+  action: 'insert',
+  table: 'tpopfeldkontrzaehl',
+}
+const deleteData = {
+  action: 'delete',
+  table: 'tpopfeldkontrzaehl',
+}
+
 const Tpopfeldkontrzaehl = ({
   treeName,
   onClick,
@@ -30,22 +40,10 @@ const Tpopfeldkontrzaehl = ({
         <div className="react-contextmenu-title">Zählung</div>
         {!userIsReadOnly(user.token) && (
           <>
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'insert',
-                table: 'tpopfeldkontrzaehl',
-              }}
-            >
+            <MenuItem onClick={onClick} data={insertData}>
               erstelle neue
             </MenuItem>
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'delete',
-                table: 'tpopfeldkontrzaehl',
-              }}
-            >
+            <MenuItem onClick={onClick} data={deleteData}>
               lösche
             </MenuItem>
           </>
