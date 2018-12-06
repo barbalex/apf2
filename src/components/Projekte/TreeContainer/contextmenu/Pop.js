@@ -7,6 +7,43 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
+// create objects outside render
+const openLowerNodesData = {
+  action: 'openLowerNodes',
+}
+const closeLowerNodesData = {
+  action: 'closeLowerNodes',
+}
+const insertData = {
+  action: 'insert',
+  table: 'pop',
+}
+const deleteData = {
+  action: 'delete',
+  table: 'pop',
+}
+const markForMovingData = {
+  action: 'markForMoving',
+  table: 'pop',
+}
+const moveHereData = {
+  action: 'move',
+}
+const markForCopyingData = {
+  action: 'markForCopying',
+  table: 'pop',
+}
+const markForCopyingWithNextLevelData = {
+  action: 'markForCopyingWithNextLevel',
+  table: 'pop',
+}
+const copyData = {
+  action: 'copy',
+}
+const resetCopyingData = {
+  action: 'resetCopying',
+}
+
 const Pop = ({
   onClick,
   treeName,
@@ -39,96 +76,41 @@ const Pop = ({
         onShow={onShow}
       >
         <div className="react-contextmenu-title">Population</div>
-        <MenuItem
-          onClick={onClick}
-          data={{
-            action: 'openLowerNodes',
-          }}
-        >
+        <MenuItem onClick={onClick} data={openLowerNodesData}>
           alle öffnen
         </MenuItem>
-        <MenuItem
-          onClick={onClick}
-          data={{
-            action: 'closeLowerNodes',
-          }}
-        >
+        <MenuItem onClick={onClick} data={closeLowerNodesData}>
           alle schliessen
         </MenuItem>
         {!userIsReadOnly(user.token) && (
           <>
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'insert',
-                table: 'pop',
-              }}
-            >
+            <MenuItem onClick={onClick} data={insertData}>
               erstelle neue
             </MenuItem>
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'delete',
-                table: 'pop',
-              }}
-            >
+            <MenuItem onClick={onClick} data={deleteData}>
               lösche
             </MenuItem>
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'markForMoving',
-                table: 'pop',
-              }}
-            >
+            <MenuItem onClick={onClick} data={markForMovingData}>
               verschiebe
             </MenuItem>
             {isMoving && (
-              <MenuItem
-                onClick={onClick}
-                data={{
-                  action: 'move',
-                }}
-              >
+              <MenuItem onClick={onClick} data={moveHereData}>
                 {`verschiebe '${moving.label}' hierhin`}
               </MenuItem>
             )}
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'markForCopying',
-                table: 'pop',
-              }}
-            >
+            <MenuItem onClick={onClick} data={markForCopyingData}>
               kopiere
             </MenuItem>
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'markForCopyingWithNextLevel',
-                table: 'pop',
-              }}
-            >
+            <MenuItem onClick={onClick} data={markForCopyingWithNextLevelData}>
               kopiere inklusive Teilpopulationen
             </MenuItem>
             {isCopying && (
-              <MenuItem
-                onClick={onClick}
-                data={{
-                  action: 'copy',
-                }}
-              >
+              <MenuItem onClick={onClick} data={copyData}>
                 {`kopiere '${copying.label}' hierhin`}
               </MenuItem>
             )}
             {isCopying && (
-              <MenuItem
-                onClick={onClick}
-                data={{
-                  action: 'resetCopying',
-                }}
-              >
+              <MenuItem onClick={onClick} data={resetCopyingData}>
                 Kopieren aufheben
               </MenuItem>
             )}
