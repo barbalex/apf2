@@ -1,29 +1,28 @@
 // @flow
 import format from 'date-fns/format'
+import isValid from 'date-fns/isValid'
+import isEqual from 'date-fns/isEqual'
 import get from 'lodash/get'
 
 import queryBeob from './queryBeob'
 import createPop from './createPop'
 import createTpop from './createTpop'
 import updateBeobById from './updateBeobById'
-import { isEqual } from 'date-fns'
 
 export default async ({
   treeName,
   id,
   refetchTree,
-  addError,
   client,
   mobxStore,
 }: {
   treeName: Object,
   id: String,
   refetchTree: () => void,
-  addError: Object,
   client: Object,
   mobxStore: Object,
 }): Promise<void> => {
-  const { setTreeKey } = mobxStore
+  const { setTreeKey, addError } = mobxStore
   const tree = mobxStore[treeName]
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
@@ -38,6 +37,8 @@ export default async ({
   }
   const beob = get(beobResult, 'data.beobById')
   const { x, y, datum, data } = beob
+  const datumIsValid = isValid(new Date(datum))
+  const bekanntSeit = datumIsValid ? format(new Date(datum), 'YYYY') : null
 
   // create new pop for ap
   let popResult
@@ -48,7 +49,7 @@ export default async ({
         apId: ap,
         x,
         y,
-        bekanntSeit: format(new Date(datum), 'YYYY'),
+        bekanntSeit,
       },
     })
   } catch (error) {
@@ -65,7 +66,7 @@ export default async ({
         popId: pop.id,
         x,
         y,
-        bekannt_seit: format(new Date(datum), 'YYYY'),
+        bekannt_seit: bekanntSeit,
         gemeinde: data.NOM_COMMUNE ? data.NOM_COMMUNE : null,
         flurname: data.DESC_LOCALITE_ ? data.DESC_LOCALITE_ : null,
       },
