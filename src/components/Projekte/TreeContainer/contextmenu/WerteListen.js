@@ -4,6 +4,11 @@ import { ContextMenu, MenuItem } from 'react-contextmenu'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
+// create objects outside render
+const closeLowerNodesData = {
+  action: 'closeLowerNodes',
+}
+
 const WerteListen = ({
   onClick,
   treeName,
@@ -14,12 +19,7 @@ const WerteListen = ({
   <ErrorBoundary>
     <ContextMenu id={`${treeName}wlFolder`}>
       <div className="react-contextmenu-title">WerteListen</div>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'closeLowerNodes',
-        }}
-      >
+      <MenuItem onClick={onClick} data={closeLowerNodesData}>
         alle schliessen
       </MenuItem>
     </ContextMenu>
