@@ -7,6 +7,16 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
+// create objects outside render
+const insertData = {
+  action: 'insert',
+  table: 'ziel',
+}
+const deleteData = {
+  action: 'delete',
+  table: 'ziel',
+}
+
 const Ziel = ({
   treeName,
   onClick,
@@ -30,22 +40,10 @@ const Ziel = ({
         <div className="react-contextmenu-title">Ziel</div>
         {!userIsReadOnly(user.token) && (
           <>
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'insert',
-                table: 'ziel',
-              }}
-            >
+            <MenuItem onClick={onClick} data={insertData}>
               erstelle neues
             </MenuItem>
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'delete',
-                table: 'ziel',
-              }}
-            >
+            <MenuItem onClick={onClick} data={deleteData}>
               lösche
             </MenuItem>
           </>
