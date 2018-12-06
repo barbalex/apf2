@@ -262,7 +262,6 @@ const TreeContainer = ({
             menuType,
             id,
             refetchTree,
-            addError,
             client,
             mobxStore,
           })
@@ -388,7 +387,6 @@ const TreeContainer = ({
             treeName,
             id,
             refetchTree,
-            addError,
             client,
             mobxStore,
           })
