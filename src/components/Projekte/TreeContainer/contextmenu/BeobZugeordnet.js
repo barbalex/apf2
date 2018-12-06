@@ -7,6 +7,17 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
+// create objects outside render
+const copyBeobZugeordnetKoordToTpopData = {
+  action: 'copyBeobZugeordnetKoordToTpop',
+}
+const showCoordOfBeobOnMapsZhChData = {
+  action: 'showCoordOfBeobOnMapsZhCh',
+}
+const showCoordOfBeobOnMapGeoAdminChData = {
+  action: 'showCoordOfBeobOnMapGeoAdminCh',
+}
+
 const BeobZugeordnet = ({
   treeName,
   onClick,
@@ -21,29 +32,14 @@ const BeobZugeordnet = ({
       <ContextMenu id={`${treeName}beobZugeordnet`}>
         <div className="react-contextmenu-title">Beobachtung</div>
         {!userIsReadOnly(user.token) && (
-          <MenuItem
-            onClick={onClick}
-            data={{
-              action: 'copyBeobZugeordnetKoordToTpop',
-            }}
-          >
+          <MenuItem onClick={onClick} data={copyBeobZugeordnetKoordToTpopData}>
             Koordinaten auf die Teilpopulation übertragen
           </MenuItem>
         )}
-        <MenuItem
-          onClick={onClick}
-          data={{
-            action: 'showCoordOfBeobOnMapsZhCh',
-          }}
-        >
+        <MenuItem onClick={onClick} data={showCoordOfBeobOnMapsZhChData}>
           Zeige auf maps.zh.ch
         </MenuItem>
-        <MenuItem
-          onClick={onClick}
-          data={{
-            action: 'showCoordOfBeobOnMapGeoAdminCh',
-          }}
-        >
+        <MenuItem onClick={onClick} data={showCoordOfBeobOnMapGeoAdminChData}>
           Zeige auf map.geo.admin.ch
         </MenuItem>
       </ContextMenu>
