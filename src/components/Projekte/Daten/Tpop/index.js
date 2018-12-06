@@ -423,6 +423,16 @@ const Tpop = ({
             saveToDb={saveToDb}
             error={errors.bewirtschaftung}
           />
+          <TextField
+            key={`${row.id}bemerkungen`}
+            name="bemerkungen"
+            label="Bemerkungen"
+            value={row.bemerkungen}
+            type="text"
+            multiline
+            saveToDb={saveToDb}
+            error={errors.bemerkungen}
+          />
           <RadioButtonGroup
             value={row.kontrollfrequenz}
             name="kontrollfrequenz"
@@ -438,16 +448,6 @@ const Tpop = ({
             label="Frequenz Freiwilligen-Kontrollen"
             saveToDb={saveToDb}
             error={errors.kontrollfrequenzFreiwillige}
-          />
-          <TextField
-            key={`${row.id}bemerkungen`}
-            name="bemerkungen"
-            label="Bemerkungen"
-            value={row.bemerkungen}
-            type="text"
-            multiline
-            saveToDb={saveToDb}
-            error={errors.bemerkungen}
           />
         </FieldsContainer>
       </Container>
