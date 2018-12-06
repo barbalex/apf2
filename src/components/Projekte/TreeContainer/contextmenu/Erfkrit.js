@@ -7,6 +7,16 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
+// create objects outside render
+const insertData = {
+  action: 'insert',
+  table: 'erfkrit',
+}
+const deleteData = {
+  action: 'delete',
+  table: 'erfkrit',
+}
+
 const Erfkrit = ({
   treeName,
   onClick,
@@ -29,22 +39,10 @@ const Erfkrit = ({
         <div className="react-contextmenu-title">AP-Erfolgskriterium</div>
         {!userIsReadOnly(user.token) && (
           <>
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'insert',
-                table: 'erfkrit',
-              }}
-            >
+            <MenuItem onClick={onClick} data={insertData}>
               erstelle neues
             </MenuItem>
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'delete',
-                table: 'erfkrit',
-              }}
-            >
+            <MenuItem onClick={onClick} data={deleteData}>
               lösche
             </MenuItem>
           </>
