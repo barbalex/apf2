@@ -33,7 +33,7 @@ export default async ({ idb, mobxStore }) => {
       return object.id
     },*/
   })
-  // use httpLink _instead_ of batchHttpLink in order not to batch
+  // use httpLink _instead_ of batchHttpLink to _not_ batch
   /*
   const httpLink = createHttpLink({
     uri: graphQlUri(),
