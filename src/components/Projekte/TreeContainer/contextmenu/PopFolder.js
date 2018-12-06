@@ -7,6 +7,27 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
+// create objects outside render
+const openLowerNodesData = {
+  action: 'openLowerNodes',
+}
+const closeLowerNodesData = {
+  action: 'closeLowerNodes',
+}
+const insertData = {
+  action: 'insert',
+  table: 'pop',
+}
+const moveData = {
+  action: 'move',
+}
+const copyData = {
+  action: 'copy',
+}
+const resetCopyingData = {
+  action: 'resetCopying',
+}
+
 const PopFolder = ({
   treeName,
   onClick,
@@ -34,60 +55,29 @@ const PopFolder = ({
         onShow={onShow}
       >
         <div className="react-contextmenu-title">Populationen</div>
-        <MenuItem
-          onClick={onClick}
-          data={{
-            action: 'openLowerNodes',
-          }}
-        >
+        <MenuItem onClick={onClick} data={openLowerNodesData}>
           alle öffnen
         </MenuItem>
-        <MenuItem
-          onClick={onClick}
-          data={{
-            action: 'closeLowerNodes',
-          }}
-        >
+        <MenuItem onClick={onClick} data={closeLowerNodesData}>
           alle schliessen
         </MenuItem>
         {!userIsReadOnly(user.token) && (
           <>
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'insert',
-                table: 'pop',
-              }}
-            >
+            <MenuItem onClick={onClick} data={insertData}>
               erstelle neue
             </MenuItem>
             {isMoving && (
-              <MenuItem
-                onClick={onClick}
-                data={{
-                  action: 'move',
-                }}
-              >
+              <MenuItem onClick={onClick} data={moveData}>
                 {`verschiebe '${moving.label}' hierhin`}
               </MenuItem>
             )}
             {isCopying && (
-              <MenuItem
-                onClick={onClick}
-                data={{
-                  action: 'copy',
-                }}
-              >
+              <MenuItem onClick={onClick} data={copyData}>
                 {`kopiere '${copying.label}' hierhin`}
               </MenuItem>
             )}
             {isCopying && (
-              <MenuItem
-                onClick={onClick}
-                data={{
-                  action: 'resetCopying',
-                }}
-              >
+              <MenuItem onClick={onClick} data={resetCopyingData}>
                 Kopieren aufheben
               </MenuItem>
             )}
