@@ -279,7 +279,7 @@ const TreeContainer = ({
         },
         closeLowerNodes() {
           closeLowerNodes({
-            tree,
+            treeName,
             url,
             mobxStore,
           })

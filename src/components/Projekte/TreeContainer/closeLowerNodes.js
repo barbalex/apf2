@@ -1,24 +1,26 @@
 //@flow
 import isEqual from 'lodash/isEqual'
+import { getSnapshot } from 'mobx-state-tree'
 
 export default async ({
-  tree,
+  treeName,
   url,
   refetchTree,
   mobxStore,
 }: {
-  tree: Object,
+  treeName: string,
   url: Array<String>,
   refetchTree: () => void,
 }) => {
   const { setTreeKey } = mobxStore
-  const { openNodes, activeNodeArray } = tree
+  const openNodes = getSnapshot(mobxStore[treeName].openNodes)
+  const activeNodeArray = getSnapshot(mobxStore[treeName].activeNodeArray)
   const newOpenNodes = openNodes.filter(n => {
     const partWithEqualLength = n.slice(0, url.length)
     return !isEqual(partWithEqualLength, url)
   })
   setTreeKey({
-    tree: tree.name,
+    tree: treeName,
     value: newOpenNodes,
     key: 'openNodes',
   })
@@ -26,7 +28,7 @@ export default async ({
     // active node will be closed
     // set activeNodeArray to url
     setTreeKey({
-      tree: tree.name,
+      tree: treeName,
       value: url,
       key: 'activeNodeArray',
     })
