@@ -7,6 +7,17 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
+// create objects outside render
+const createNewPopFromBeobData = {
+  action: 'createNewPopFromBeob',
+}
+const showCoordOfBeobOnMapsZhChData = {
+  action: 'showCoordOfBeobOnMapsZhCh',
+}
+const showCoordOfBeobOnMapGeoAdminChData = {
+  action: 'showCoordOfBeobOnMapGeoAdminCh',
+}
+
 const BeobNichtZuzuordnen = ({
   treeName,
   onClick,
@@ -21,30 +32,15 @@ const BeobNichtZuzuordnen = ({
       <ContextMenu id={`${treeName}beobNichtZuzuordnen`}>
         <div className="react-contextmenu-title">Beobachtung</div>
         {!userIsReadOnly(user.token) && (
-          <MenuItem
-            onClick={onClick}
-            data={{
-              action: 'createNewPopFromBeob',
-            }}
-          >
+          <MenuItem onClick={onClick} data={createNewPopFromBeobData}>
             neue Population und Teil-Population gründen und Beobachtung der
             Teil-Population zuordnen
           </MenuItem>
         )}
-        <MenuItem
-          onClick={onClick}
-          data={{
-            action: 'showCoordOfBeobOnMapsZhCh',
-          }}
-        >
+        <MenuItem onClick={onClick} data={showCoordOfBeobOnMapsZhChData}>
           Zeige auf maps.zh.ch
         </MenuItem>
-        <MenuItem
-          onClick={onClick}
-          data={{
-            action: 'showCoordOfBeobOnMapGeoAdminCh',
-          }}
-        >
+        <MenuItem onClick={onClick} data={showCoordOfBeobOnMapGeoAdminChData}>
           Zeige auf map.geo.admin.ch
         </MenuItem>
       </ContextMenu>
