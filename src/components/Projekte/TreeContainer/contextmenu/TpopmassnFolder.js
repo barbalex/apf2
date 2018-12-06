@@ -7,6 +7,21 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
+// create objects outside render
+const insertData = {
+  action: 'insert',
+  table: 'tpopmassn',
+}
+const moveData = {
+  action: 'move',
+}
+const copyData = {
+  action: 'copy',
+}
+const resetCopyingData = {
+  action: 'resetCopying',
+}
+
 const TpopmassnFolder = ({
   treeName,
   onClick,
@@ -25,42 +40,21 @@ const TpopmassnFolder = ({
         <div className="react-contextmenu-title">Massnahmen</div>
         {!userIsReadOnly(user.token) && (
           <>
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'insert',
-                table: 'tpopmassn',
-              }}
-            >
+            <MenuItem onClick={onClick} data={insertData}>
               erstelle neue
             </MenuItem>
             {isMoving && (
-              <MenuItem
-                onClick={onClick}
-                data={{
-                  action: 'move',
-                }}
-              >
+              <MenuItem onClick={onClick} data={moveData}>
                 {`verschiebe '${moving.label}' hierhin`}
               </MenuItem>
             )}
             {isCopying && (
-              <MenuItem
-                onClick={onClick}
-                data={{
-                  action: 'copy',
-                }}
-              >
+              <MenuItem onClick={onClick} data={copyData}>
                 {`kopiere '${copying.label}' hierhin`}
               </MenuItem>
             )}
             {copying.table && (
-              <MenuItem
-                onClick={onClick}
-                data={{
-                  action: 'resetCopying',
-                }}
-              >
+              <MenuItem onClick={onClick} data={resetCopyingData}>
                 Kopieren aufheben
               </MenuItem>
             )}
