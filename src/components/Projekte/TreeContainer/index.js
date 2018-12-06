@@ -46,6 +46,7 @@ import CmPopmassnber from './contextmenu/Popmassnber'
 import CmPopberFolder from './contextmenu/PopberFolder'
 import CmPopber from './contextmenu/Popber'
 import CmProjekt from './contextmenu/Projekt'
+import CmWerteListen from './contextmenu/WerteListen'
 import CmTpopFolder from './contextmenu/TpopFolder'
 import CmTpop from './contextmenu/Tpop'
 import CmTpopberFolder from './contextmenu/TpopberFolder'
@@ -519,6 +520,7 @@ const TreeContainer = ({
         <CmPopberFolder onClick={handleClick} treeName={treeName} />
         <CmPopber onClick={handleClick} treeName={treeName} />
         <CmProjekt onClick={handleClick} treeName={treeName} />
+        <CmWerteListen onClick={handleClick} treeName={treeName} />
         <CmTpopFolder onClick={handleClick} treeName={treeName} />
         <CmTpop onClick={handleClick} treeName={treeName} />
         <CmTpopberFolder onClick={handleClick} treeName={treeName} />
