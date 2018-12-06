@@ -7,6 +7,12 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
+// create objects outside render
+const insertData = {
+  action: 'insert',
+  table: 'ekfzaehleinheit',
+}
+
 const EkfzaehleinheitFolder = ({
   onClick,
   treeName,
@@ -21,13 +27,7 @@ const EkfzaehleinheitFolder = ({
       <ContextMenu id={`${treeName}ekfzaehleinheitFolder`}>
         <div className="react-contextmenu-title">EKF-Zähleinheit</div>
         {!userIsReadOnly(user.token) && (
-          <MenuItem
-            onClick={onClick}
-            data={{
-              action: 'insert',
-              table: 'ekfzaehleinheit',
-            }}
-          >
+          <MenuItem onClick={onClick} data={insertData}>
             erstelle neue
           </MenuItem>
         )}
