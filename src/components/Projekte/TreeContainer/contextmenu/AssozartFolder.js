@@ -7,6 +7,12 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
+// create objects outside render
+const insertData = {
+  action: 'insert',
+  table: 'assozart',
+}
+
 const AssozartFolder = ({
   onClick,
   treeName,
@@ -21,13 +27,7 @@ const AssozartFolder = ({
       <ContextMenu id={`${treeName}assozartFolder`}>
         <div className="react-contextmenu-title">assoziierte Art</div>
         {!userIsReadOnly(user.token) && (
-          <MenuItem
-            onClick={onClick}
-            data={{
-              action: 'insert',
-              table: 'assozart',
-            }}
-          >
+          <MenuItem onClick={onClick} data={insertData}>
             erstelle neue
           </MenuItem>
         )}
