@@ -39,11 +39,10 @@ export default async ({ idb, mobxStore }) => {
     uri: graphQlUri(),
   })*/
   const batchHttpLink = new BatchHttpLink({ uri: graphQlUri() })
-  const defaultOptions = { fetchPolicy: 'network-only' }
   const client = new ApolloClient({
     link: ApolloLink.from([authLink, batchHttpLink]),
     cache,
-    defaultOptions,
+    defaultOptions: { fetchPolicy: 'network-only' },
   })
   return client
 }
