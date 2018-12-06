@@ -7,6 +7,8 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
+// create objects outside render
+
 const BerFolder = ({
   treeName,
   onClick,
@@ -21,6 +23,16 @@ const BerFolder = ({
 
   const onShow = useCallback(event => changeLabel(event.detail.data.nodeLabel))
 
+  // create objects outside render
+  const insertData = {
+    action: 'insert',
+    table: 'ber',
+  }
+  const deleteData = {
+    action: 'delete',
+    table: 'ber',
+  }
+
   return (
     <ErrorBoundary>
       <ContextMenu
@@ -31,22 +43,10 @@ const BerFolder = ({
         <div className="react-contextmenu-title">Bericht</div>
         {!userIsReadOnly(user.token) && (
           <>
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'insert',
-                table: 'ber',
-              }}
-            >
+            <MenuItem onClick={onClick} data={insertData}>
               erstelle neuen
             </MenuItem>
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'delete',
-                table: 'ber',
-              }}
-            >
+            <MenuItem onClick={onClick} data={deleteData}>
               lösche
             </MenuItem>
           </>
