@@ -42,7 +42,8 @@ export default async ({ idb, mobxStore }) => {
   const client = new ApolloClient({
     link: ApolloLink.from([authLink, batchHttpLink]),
     cache,
-    defaultOptions: { fetchPolicy: 'network-only' },
+    defaultOptions: { fetchPolicy: 'cache-and-network' },
+    //defaultOptions: { fetchPolicy: 'cache-first' },
   })
   return client
 }
