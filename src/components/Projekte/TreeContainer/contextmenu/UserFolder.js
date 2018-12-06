@@ -7,6 +7,15 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
+// create objects outside render
+const closeLowerNodesData = {
+  action: 'closeLowerNodes',
+}
+const insertData = {
+  action: 'insert',
+  table: 'user',
+}
+
 const Apfolder = ({
   onClick,
   treeName,
@@ -20,22 +29,11 @@ const Apfolder = ({
     <ErrorBoundary>
       <ContextMenu id={`${treeName}userFolder`}>
         <div className="react-contextmenu-title">Benutzer</div>
-        <MenuItem
-          onClick={onClick}
-          data={{
-            action: 'closeLowerNodes',
-          }}
-        >
+        <MenuItem onClick={onClick} data={closeLowerNodesData}>
           alle schliessen
         </MenuItem>
         {!userIsReadOnly(user.token) && (
-          <MenuItem
-            onClick={onClick}
-            data={{
-              action: 'insert',
-              table: 'user',
-            }}
-          >
+          <MenuItem onClick={onClick} data={insertData}>
             erstelle neuen
           </MenuItem>
         )}
