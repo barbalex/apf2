@@ -7,6 +7,27 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
+// create objects outside render
+const insertData = {
+  action: 'insert',
+  table: 'tpopfreiwkontr',
+}
+const deleteData = {
+  action: 'delete',
+  table: 'tpopfreiwkontr',
+}
+const markForMovingData = {
+  action: 'markForMoving',
+  table: 'tpopfreiwkontr',
+}
+const markForCopyingData = {
+  action: 'markForCopying',
+  table: 'tpopfreiwkontr',
+}
+const resetCopyingData = {
+  action: 'resetCopying',
+}
+
 const Tpopfreiwkontr = ({
   treeName,
   onClick,
@@ -33,49 +54,20 @@ const Tpopfreiwkontr = ({
         <div className="react-contextmenu-title">Freiwilligen-Kontrolle</div>
         {!userIsReadOnly(user.token, 'freiw') && (
           <>
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'insert',
-                table: 'tpopfreiwkontr',
-              }}
-            >
+            <MenuItem onClick={onClick} data={insertData}>
               erstelle neue
             </MenuItem>
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'delete',
-                table: 'tpopfreiwkontr',
-              }}
-            >
+            <MenuItem onClick={onClick} data={deleteData}>
               lösche
             </MenuItem>
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'markForMoving',
-                table: 'tpopfreiwkontr',
-              }}
-            >
+            <MenuItem onClick={onClick} data={markForMovingData}>
               verschiebe
             </MenuItem>
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'markForCopying',
-                table: 'tpopfreiwkontr',
-              }}
-            >
+            <MenuItem onClick={onClick} data={markForCopyingData}>
               kopiere
             </MenuItem>
             {copying.table && (
-              <MenuItem
-                onClick={onClick}
-                data={{
-                  action: 'resetCopying',
-                }}
-              >
+              <MenuItem onClick={onClick} data={resetCopyingData}>
                 Kopieren aufheben
               </MenuItem>
             )}
