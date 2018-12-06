@@ -7,6 +7,16 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
+// create objects outside render
+const insertData = {
+  action: 'insert',
+  table: 'tpopmassnber',
+}
+const deleteData = {
+  action: 'delete',
+  table: 'tpopmassnber',
+}
+
 const Tpopmassnber = ({
   treeName,
   onClick,
@@ -35,22 +45,10 @@ const Tpopmassnber = ({
         </div>
         {!userIsReadOnly(user.token) && (
           <>
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'insert',
-                table: 'tpopmassnber',
-              }}
-            >
+            <MenuItem onClick={onClick} data={insertData}>
               erstelle neuen
             </MenuItem>
-            <MenuItem
-              onClick={onClick}
-              data={{
-                action: 'delete',
-                table: 'tpopmassnber',
-              }}
-            >
+            <MenuItem onClick={onClick} data={deleteData}>
               lösche
             </MenuItem>
           </>
