@@ -5,7 +5,8 @@ import { ContextMenu, MenuItem } from 'react-contextmenu'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
-const data = {
+// create objects outside render
+const showBeobOnMapData = {
   action: 'showBeobOnMap',
   actionTable: 'beobZugeordnet',
   idTable: 'ap',
@@ -38,7 +39,7 @@ const BeobZugeordnetFolder = ({
         onShow={onShow}
       >
         <div className="react-contextmenu-title">Beobachtungen</div>
-        <MenuItem onClick={onClick} data={data}>
+        <MenuItem onClick={onClick} data={showBeobOnMapData}>
           {`blende auf Karte ${
             activeApfloraLayers.includes('beobZugeordnet') ? 'aus' : 'ein'
           }`}
