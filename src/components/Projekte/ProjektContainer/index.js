@@ -317,7 +317,16 @@ const ProjekteContainer = props => {
   ]
 
   // TODO: add all (copy from above)
-  const queryErrorArray = []
+  const queryErrorArray = [
+    errorUsers,
+    errorProjekts,
+    errorApberuebersichts,
+    errorAps,
+    errorPops,
+    errorPopbers,
+    errorPopmassnbers,
+    errorTpops,
+  ]
 
   const queryArray = [
     dataAdresses,
@@ -597,7 +606,7 @@ const ProjekteContainer = props => {
       </ErrorContainer>
     )
   }
-  const error = anyQueryReturnsError(queryArray)
+  const error = anyQueryReturnsError(queryErrorArray)
   if (error) {
     console.log('ProjektContainer:', { error, queryArray })
     return <ErrorContainer>{`Fehler: ${error.message}`}</ErrorContainer>

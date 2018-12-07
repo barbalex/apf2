@@ -4,7 +4,7 @@
  * returns true if any of them returns an error
  */
 export default queryArray => {
-  const errors = queryArray.map(q => q.error).filter(o => !!o)
+  const errors = queryArray.filter(o => !!o)
   //console.log('anQueryReturnsError, errors.length:', errors.length)
   if (errors.length && errors[0]) return errors[0]
   return null
