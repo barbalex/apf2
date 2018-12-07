@@ -44,6 +44,7 @@ import { Provider as IdbProvider } from './idbContext'
 
 import './index.css'
 import createInitialMobxStore from './mobxStore/initial'
+import 'react-leaflet-markercluster/dist/styles.min.css'
 
 const run = async () => {
   try {
