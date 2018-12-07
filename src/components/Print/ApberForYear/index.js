@@ -5,12 +5,12 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import { observer } from 'mobx-react-lite'
+import { useQuery } from 'react-apollo-hooks'
 
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import withData1 from './withData1'
-import withData2 from './withData2'
+import query1 from './data1'
+import query2 from './data2'
 import fnslogo from './fnslogo.png'
 import AvList from './AvList'
 import AktPopList from './AktPopList'
@@ -104,21 +104,36 @@ const SecondPageText = styled.p`
   hyphens: auto;
 `
 
-const enhance = compose(
-  withProps(() => {
-    const mobxStore = useContext(mobxStoreContext)
-    const { activeNodeArray } = mobxStore
-    const activeNodes = mobxStore.treeActiveNodes
-    return { activeNodes, activeNodeArray }
-  }),
-  withData1,
-  withData2,
-  observer,
-)
+const enhance = compose(observer)
 
-const ApberForYear = ({ data1, data2 }: { data1: Object, data2: Object }) => {
-  const data = { ...data1, ...data2 }
+const ApberForYear = () => {
+  const mobxStore = useContext(mobxStoreContext)
+  const activeNodes = mobxStore.treeActiveNodes
+  const { apberuebersicht: apberuebersichtId } = activeNodes
+
+  const { data: data1, loading: data1Loading, error: data1Error } = useQuery(
+    query1,
+    {
+      suspend: false,
+      variables: {
+        apberuebersichtId,
+      },
+    },
+  )
+  const { projekt: projektId } = activeNodes
   const jahr = get(data1, 'apberuebersichtById.jahr', 0)
+  const { data: data2, loading: data2Loading, error: data2Error } = useQuery(
+    query2,
+    {
+      suspend: false,
+      variables: {
+        projektId,
+        jahr,
+      },
+    },
+  )
+
+  const data = { ...data1, ...data2 }
   const apberuebersicht = get(data1, 'apberuebersichtById')
   const aps = sortBy(
     get(data2, 'projektById.apsByProjId.nodes', []).filter(
@@ -129,20 +144,20 @@ const ApberForYear = ({ data1, data2 }: { data1: Object, data2: Object }) => {
     ap => get(ap, 'aeEigenschaftenByArtId.artname'),
   )
 
-  if (data1.loading || data2.loading) {
+  if (data1Loading || data2Loading) {
     return (
       <Container>
         <LoadingContainer>Lade...</LoadingContainer>
       </Container>
     )
   }
-  if (data1.error) {
-    console.log(data1.error)
-    return `Fehler: ${data1.error.message}`
+  if (data1Error) {
+    console.log(data1Error)
+    return `Fehler: ${data1Error.message}`
   }
-  if (data2.error) {
-    console.log(data2.error)
-    return `Fehler: ${data2.error.message}`
+  if (data2Error) {
+    console.log(data2Error)
+    return `Fehler: ${data2Error.message}`
   }
 
   return (
