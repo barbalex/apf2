@@ -1,5 +1,5 @@
 // @flow
-import React, { Fragment } from 'react'
+import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
 import '../../../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
@@ -75,7 +75,7 @@ export default ({
     })
       .bindPopup(
         ReactDOMServer.renderToStaticMarkup(
-          <Fragment>
+          <>
             <div>Teil-Population</div>
             <StyledH3>
               {`${tpop.nr || '(keine Nr)'}: ${tpop.flurname ||
@@ -104,7 +104,7 @@ export default ({
             >
               Formular in neuem Tab öffnen
             </a>
-          </Fragment>,
+          </>,
         ),
       )
       .bindTooltip(tpopLabelUsingNr ? nrLabel : tpop.flurname, {
