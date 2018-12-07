@@ -5,15 +5,14 @@ import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from 'react-apollo-hooks'
+import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import withData from './withData'
+import query from './data'
 import updateZielByIdGql from './updateZielById'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
@@ -28,29 +27,31 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
 `
 
-const enhance = compose(
-  withProps(() => ({
-    mobxStore: useContext(mobxStoreContext),
-  })),
-  withData,
-  observer,
-)
+const enhance = compose(observer)
 
 const Ziel = ({
   treeName,
-  data,
   refetchTree,
 }: {
   treeName: string,
-  data: Object,
   refetchTree: () => void,
 }) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
   const { setTreeKey } = mobxStore
-  const tree = mobxStore[treeName]
+  const { activeNodeArray, openNodes } = mobxStore[treeName]
 
   const [errors, setErrors] = useState({})
+
+  const { data, loading, error } = useQuery(query, {
+    suspend: false,
+    variables: {
+      id:
+        activeNodeArray.length > 6
+          ? activeNodeArray[6]
+          : '99999999-9999-9999-9999-999999999999',
+    },
+  })
 
   const row = get(data, 'zielById', {})
 
@@ -62,7 +63,6 @@ const Ziel = ({
     value: el.code,
     label: el.text,
   }))
-  const { activeNodeArray, openNodes } = tree
 
   const saveToDb = useCallback(
     async event => {
@@ -114,12 +114,12 @@ const Ziel = ({
           return n
         })
         setTreeKey({
-          tree: tree.name,
+          tree: treeName,
           value: newActiveNodeArray,
           key: 'activeNodeArray',
         })
         setTreeKey({
-          tree: tree.name,
+          tree: treeName,
           value: newOpenNodes,
           key: 'openNodes',
         })
@@ -129,16 +129,16 @@ const Ziel = ({
     [row, activeNodeArray, openNodes, treeName],
   )
 
-  if (data.loading) {
+  if (loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
       </Container>
     )
   }
-  if (data.error) {
-    console.log('Ziel:', { error: data.error })
-    return `Fehler: ${data.error.message}`
+  if (error) {
+    console.log('Ziel:', { error: error })
+    return `Fehler: ${error.message}`
   }
   return (
     <ErrorBoundary>
