@@ -3,15 +3,15 @@ import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from 'react-apollo-hooks'
+import { useQuery } from 'react-apollo-hooks'
 
 import TextField from '../../../shared/TextField'
 import TextFieldWithUrl from '../../../shared/TextFieldWithUrl'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import withData from './withData'
+import query from './data'
 import updateBerByIdGql from './updateBerById'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
@@ -26,18 +26,23 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const enhance = compose(
-  withProps(() => ({
-    mobxStore: useContext(mobxStoreContext),
-  })),
-  withData,
-  observer,
-)
+const enhance = compose(observer)
 
-const Ber = ({ treeName, data }: { treeName: string, data: Object }) => {
+const Ber = ({ treeName }: { treeName: string }) => {
   const mobxStore = useContext(mobxStoreContext)
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
+  const { activeNodeArray } = mobxStore[treeName]
+
+  const { data, loading, error } = useQuery(query, {
+    suspend: false,
+    variables: {
+      id:
+        activeNodeArray.length > 5
+          ? activeNodeArray[5]
+          : '99999999-9999-9999-9999-999999999999',
+    },
+  })
 
   const row = get(data, 'berById', {})
 
@@ -83,14 +88,14 @@ const Ber = ({ treeName, data }: { treeName: string, data: Object }) => {
     [row],
   )
 
-  if (data.loading) {
+  if (loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
       </Container>
     )
   }
-  if (data.error) return `Fehler: ${data.error.message}`
+  if (error) return `Fehler: ${error.message}`
 
   return (
     <ErrorBoundary>

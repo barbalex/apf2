@@ -5,15 +5,15 @@ import styled from 'styled-components'
 import { Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from 'react-apollo-hooks'
+import { useQuery } from 'react-apollo-hooks'
 
 import TextField from '../../../shared/TextField'
 import Select from '../../../shared/Select'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import withData from './withData'
+import query from './data'
 import updateEkfzaehleinheitByIdGql from './updateEkfzaehleinheitById'
 import withAllTpopkontrzaehlEinheitWertes from './withAllTpopkontrzaehlEinheitWertes'
 import mobxStoreContext from '../../../../mobxStoreContext'
@@ -30,10 +30,6 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withProps(() => ({
-    mobxStore: useContext(mobxStoreContext),
-  })),
-  withData,
   withAllTpopkontrzaehlEinheitWertes,
   observer,
 )
@@ -41,17 +37,26 @@ const enhance = compose(
 const Ekfzaehleinheit = ({
   treeName,
   dataAllTpopkontrzaehlEinheitWertes,
-  data,
   refetchTree,
 }: {
   treeName: string,
   dataAllTpopkontrzaehlEinheitWertes: Object,
-  data: Object,
   refetchTree: () => void,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
+  const { activeNodeArray } = mobxStore[treeName]
+
+  const { data, loading, error } = useQuery(query, {
+    suspend: false,
+    variables: {
+      id:
+        activeNodeArray.length > 5
+          ? activeNodeArray[5]
+          : '99999999-9999-9999-9999-999999999999',
+    },
+  })
 
   const row = get(data, 'ekfzaehleinheitById', {})
 
@@ -120,14 +125,14 @@ const Ekfzaehleinheit = ({
     [row],
   )
 
-  if (data.loading || dataAllTpopkontrzaehlEinheitWertes.loading) {
+  if (loading || dataAllTpopkontrzaehlEinheitWertes.loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
       </Container>
     )
   }
-  if (data.error) return `Fehler: ${data.error.message}`
+  if (error) return `Fehler: ${error.message}`
   if (dataAllTpopkontrzaehlEinheitWertes.error) {
     return `Fehler: ${dataAllTpopkontrzaehlEinheitWertes.error.message}`
   }
