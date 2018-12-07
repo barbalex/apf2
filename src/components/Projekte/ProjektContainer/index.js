@@ -267,17 +267,12 @@ const ProjekteContainer = props => {
 
   // TODO:
   const refetch = query => {
-    if (query) {
-      if (query) {
-        if (props[`data${upperFirst(query)}`]) {
-          props[`data${upperFirst(query)}`].refetch()
-        }
-      }
+    if (query && props[`data${upperFirst(query)}`]) {
+      props[`data${upperFirst(query)}`].refetch()
     }
   }
   const { token } = user
-  const tokenDecoded = token ? jwtDecode(token) : null
-  const role = tokenDecoded ? tokenDecoded.role : null
+  const role = token ? jwtDecode(token).role : null
 
   const data = {
     ...dataAdresses,
