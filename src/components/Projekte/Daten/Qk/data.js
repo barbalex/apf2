@@ -1686,23 +1686,18 @@ export default gql`
                     nodes {
                       id
                       jahr
-                      tpopkontrzaehlsByTpopkontrId(
+                      zaehlungenOhneMethode: tpopkontrzaehlsByTpopkontrId(
                         filter: { methode: { isNull: true } }
                       ) {
                         nodes {
                           id
-                          tpopkontrByTpopkontrId {
-                            id
-                            jahr
-                            tpopByTpopId {
-                              id
-                              nr
-                              popByPopId {
-                                id
-                                nr
-                              }
-                            }
-                          }
+                        }
+                      }
+                      zaehlungenMitMethode: tpopkontrzaehlsByTpopkontrId(
+                        filter: { methode: { isNull: false } }
+                      ) {
+                        nodes {
+                          id
                         }
                       }
                     }
@@ -1787,18 +1782,6 @@ export default gql`
                       ) {
                         nodes {
                           id
-                          tpopkontrByTpopkontrId {
-                            id
-                            jahr
-                            tpopByTpopId {
-                              id
-                              nr
-                              popByPopId {
-                                id
-                                nr
-                              }
-                            }
-                          }
                         }
                       }
                       zaehlungenMitAnzahl: tpopkontrzaehlsByTpopkontrId(
@@ -1806,18 +1789,6 @@ export default gql`
                       ) {
                         nodes {
                           id
-                          tpopkontrByTpopkontrId {
-                            id
-                            jahr
-                            tpopByTpopId {
-                              id
-                              nr
-                              popByPopId {
-                                id
-                                nr
-                              }
-                            }
-                          }
                         }
                       }
                       tpopByTpopId {
