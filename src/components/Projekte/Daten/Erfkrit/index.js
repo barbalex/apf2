@@ -4,15 +4,15 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from 'react-apollo-hooks'
+import { useQuery } from 'react-apollo-hooks'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import withData from './withData'
+import query from './data'
 import updateErfkritByIdGql from './updateErfkritById'
 import withAllApErfkritWertes from './withAllApErfkritWertes'
 import mobxStoreContext from '../../../../mobxStoreContext'
@@ -29,10 +29,6 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withProps(() => ({
-    mobxStore: useContext(mobxStoreContext),
-  })),
-  withData,
   withAllApErfkritWertes,
   observer,
 )
@@ -40,17 +36,26 @@ const enhance = compose(
 const Erfkrit = ({
   treeName,
   dataAllApErfkritWertes,
-  data,
   refetchTree,
 }: {
   treeName: string,
   dataAllApErfkritWertes: Object,
-  data: Object,
   refetchTree: () => void,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
+  const { activeNodeArray } = mobxStore[treeName]
+
+  const { data, loading, error } = useQuery(query, {
+    suspend: false,
+    variables: {
+      id:
+        activeNodeArray.length > 5
+          ? activeNodeArray[5]
+          : '99999999-9999-9999-9999-999999999999',
+    },
+  })
 
   const row = get(data, 'erfkritById', {})
 
@@ -102,14 +107,14 @@ const Erfkrit = ({
     [row],
   )
 
-  if (data.loading || dataAllApErfkritWertes.loading) {
+  if (loading || dataAllApErfkritWertes.loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
       </Container>
     )
   }
-  if (data.error) return `Fehler: ${data.error.message}`
+  if (error) return `Fehler: ${error.message}`
   if (dataAllApErfkritWertes.error) {
     return `Fehler: ${dataAllApErfkritWertes.error.message}`
   }
