@@ -9,12 +9,12 @@ import Button from '@material-ui/core/Button'
 import DeleteIcon from '@material-ui/icons/DeleteForever'
 import AddIcon from '@material-ui/icons/AddCircleOutline'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from 'react-apollo-hooks'
+import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
 import Select from '../../../../shared/Select'
 import TextField from '../../../../shared/TextField'
 import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById'
-import withData from './withData'
+import query from './data'
 import createTpopkontrzaehl from './createTpopkontrzaehl'
 import withAllTpopkontrzaehlEinheitWertes from './withAllTpopkontrzaehlEinheitWertes'
 import mobxStoreContext from '../../../../../mobxStoreContext'
@@ -157,24 +157,22 @@ const ShowNew = styled.div`
 `
 
 const enhance = compose(
-  withData,
   withAllTpopkontrzaehlEinheitWertes,
   observer,
 )
 
 const Count = ({
-  id,
+  id = '99999999-9999-9999-9999-999999999999',
   tpopkontrId,
   nr,
   updateTpopkontr,
   showEmpty,
   showNew,
   refetch,
-  activeNodeArray,
   einheitsUsed = [],
   ekfzaehleinheits = [],
   dataAllTpopkontrzaehlEinheitWertes,
-  data,
+  treeName,
 }: {
   id: String,
   tpopkontrId: String,
@@ -183,16 +181,24 @@ const Count = ({
   showEmpty: Boolean,
   showNew: Boolean,
   refetch: () => void,
-  activeNodeArray: Array<String>,
   einheitsUsed: Array<Number>,
   ekfzaehleinheits: Array<Object>,
   dataAllTpopkontrzaehlEinheitWertes: Object,
-  data: Object,
+  treeName: string,
 }) => {
+  const mobxStore = useContext(mobxStoreContext)
   const client = useApolloClient()
   const { setToDelete } = useContext(mobxStoreContext)
 
   const [errors, setErrors] = useState({})
+  const { activeNodeArray } = mobxStore[treeName]
+
+  const { data, loading, error } = useQuery(query, {
+    suspend: false,
+    variables: {
+      id,
+    },
+  })
 
   const row = get(data, 'tpopkontrzaehlById', {})
 
@@ -322,10 +328,10 @@ const Count = ({
       </Container>
     )
   }
-  if (data.loading || dataAllTpopkontrzaehlEinheitWertes.loading) {
+  if (loading || dataAllTpopkontrzaehlEinheitWertes.loading) {
     return <Container>Lade...</Container>
   }
-  if (data.error) return `Fehler: ${data.error.message}`
+  if (error) return `Fehler: ${error.message}`
   if (dataAllTpopkontrzaehlEinheitWertes.error) {
     return `Fehler: ${dataAllTpopkontrzaehlEinheitWertes.error.message}`
   }
