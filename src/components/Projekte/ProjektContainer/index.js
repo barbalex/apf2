@@ -274,6 +274,8 @@ const ProjekteContainer = props => {
   const { token } = user
   const role = token ? jwtDecode(token).role : null
 
+  console.log('ProjektContainer')
+
   const data = {
     ...dataAdresses,
     ...dataUsers,
@@ -352,6 +354,7 @@ const ProjekteContainer = props => {
     dataBeobAssignLines,
     mobxStore,
   })
+  console.log('ProjektContainer', { data, dataAdresses })
   setNodes(nodes)
   // remove 2 to treat all same
   const tabs = [...tabsPassed].map(t => t.replace('2', ''))
@@ -504,7 +507,7 @@ const ProjekteContainer = props => {
   const error = anyQueryReturnsError(queryArray)
   if (error) {
     console.log('ProjektContainer:', { error, queryArray })
-    return <ErrorContainer>`Fehler: ${error.message}`</ErrorContainer>
+    return <ErrorContainer>{`Fehler: ${error.message}`}</ErrorContainer>
   }
 
   if (isPrint) {
