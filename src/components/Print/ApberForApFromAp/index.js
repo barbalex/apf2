@@ -3,12 +3,12 @@ import React, { useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import { observer } from 'mobx-react-lite'
+import { useQuery } from 'react-apollo-hooks'
 
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import apData from './apData'
-import apberData from './apberData'
+import apQuery from './apByIdJahr'
+import apberQuery from './apberById'
 import ApberForAp from '../ApberForAp'
 import mobxStoreContext from '../../../mobxStoreContext'
 
@@ -52,39 +52,61 @@ const Container = styled.div`
   }
 `
 
-const enhance = compose(
-  withProps(() => {
-    const mobxStore = useContext(mobxStoreContext)
-    const { activeNodeArray } = mobxStore
-    const activeNodes = mobxStore.treeActiveNodes
-    return { activeNodes, activeNodeArray }
-  }),
-  apberData,
-  apData,
-  observer,
-)
+const enhance = compose(observer)
 
 const ApberForApFromAp = ({
-  apberData,
-  apData,
+  apberId: apberIdPassed,
+  apId: apIdPassed,
 }: {
-  apberData: Object,
-  apData: Object,
+  apberId: string,
+  apId: String,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const activeNodes = mobxStore.treeActiveNodes
-  const jahr = get(apberData, 'apberById.jahr')
-  const { ap: apId } = activeNodes
+  let apberId
+  if (apberIdPassed) {
+    apberId = apberIdPassed
+  } else {
+    const { apber: apberIdFromActiveNodes } = activeNodes
+    apberId = apberIdFromActiveNodes
+  }
+  let apId
+  if (apIdPassed) {
+    apId = apIdPassed
+  } else {
+    const { ap: apIdFromActiveNodes } = activeNodes
+    apId = apIdFromActiveNodes
+  }
 
-  if (apData.loading) {
+  const { data: apberData, error: apberDataError } = useQuery(apberQuery, {
+    suspend: false,
+    variables: {
+      apberId,
+    },
+  })
+
+  const jahr = get(apberData, 'apberById.jahr', 0)
+
+  const { data: apData, loading: apDataLoading, error: apDataError } = useQuery(
+    apQuery,
+    {
+      suspend: false,
+      variables: {
+        apId,
+        jahr,
+      },
+    },
+  )
+
+  if (apDataLoading) {
     return (
       <Container>
         <LoadingContainer>Lade...</LoadingContainer>
       </Container>
     )
   }
-  if (apberData.error) return `Fehler: ${apberData.error.message}`
-  if (apData.error) return `Fehler: ${apData.error.message}`
+  if (apberDataError) return `Fehler: ${apberDataError.message}`
+  if (apDataError) return `Fehler: ${apDataError.message}`
 
   return (
     <ErrorBoundary>
