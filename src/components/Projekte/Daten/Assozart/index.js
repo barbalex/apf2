@@ -4,9 +4,9 @@ import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from 'react-apollo-hooks'
+import { useQuery } from 'react-apollo-hooks'
 
 import TextField from '../../../shared/TextField'
 import Select from '../../../shared/Select'
@@ -14,7 +14,7 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updateAssozartByIdGql from './updateAssozartById'
 import withAeEigenschaftens from './withAeEigenschaftens'
-import withData from './withData'
+import query from './data'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
 const Container = styled.div`
@@ -29,10 +29,6 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withProps(() => ({
-    mobxStore: useContext(mobxStoreContext),
-  })),
-  withData,
   withAeEigenschaftens,
   observer,
 )
@@ -40,17 +36,26 @@ const enhance = compose(
 const Assozart = ({
   treeName,
   dataAeEigenschaftens,
-  data,
   refetchTree,
 }: {
   treeName: string,
   dataAeEigenschaftens: Object,
-  data: Object,
   refetchTree: () => void,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
+  const { activeNodeArray } = mobxStore[treeName]
+
+  const { data, loading, error } = useQuery(query, {
+    suspend: false,
+    variables: {
+      id:
+        activeNodeArray.length > 5
+          ? activeNodeArray[5]
+          : '99999999-9999-9999-9999-999999999999',
+    },
+  })
 
   const row = get(data, 'assozartById', {})
 
@@ -110,14 +115,14 @@ const Assozart = ({
     [row],
   )
 
-  if (data.loading || dataAeEigenschaftens.loading) {
+  if (loading || dataAeEigenschaftens.loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
       </Container>
     )
   }
-  if (data.error) return `Fehler: ${data.error.message}`
+  if (error) return `Fehler: ${error.message}`
 
   return (
     <ErrorBoundary>
