@@ -5,9 +5,8 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from 'react-apollo-hooks'
+import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -18,7 +17,7 @@ import FormTitle from '../../../shared/FormTitle'
 import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
 import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import withData from './withData'
+import query from './data'
 import updateTpopmassnByIdGql from './updateTpopmassnById'
 import withAeEigenschaftens from './withAeEigenschaftens'
 import withAllAdresses from './withAllAdresses'
@@ -41,10 +40,6 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  withProps(() => ({
-    mobxStore: useContext(mobxStoreContext),
-  })),
-  withData,
   withAllAdresses,
   withAeEigenschaftens,
   observer,
@@ -55,7 +50,6 @@ const Tpopmassn = ({
   treeName,
   dataAeEigenschaftens,
   dataAllAdresses,
-  data,
   refetchTree,
 }: {
   onNewRequestWirtspflanze: () => void,
@@ -64,7 +58,6 @@ const Tpopmassn = ({
   treeName: string,
   dataAeEigenschaftens: Object,
   dataAllAdresses: Object,
-  data: Object,
   refetchTree: () => void,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
@@ -72,6 +65,17 @@ const Tpopmassn = ({
   const { nodeFilter, nodeFilterSetValue } = mobxStore
 
   const [errors, setErrors] = useState({})
+  const { activeNodeArray } = mobxStore[treeName]
+
+  const { data, loading, error } = useQuery(query, {
+    suspend: false,
+    variables: {
+      id:
+        activeNodeArray.length > 9
+          ? activeNodeArray[9]
+          : '99999999-9999-9999-9999-999999999999',
+    },
+  })
 
   const showFilter = !!nodeFilter[treeName].activeTable
   let row
@@ -203,14 +207,14 @@ const Tpopmassn = ({
     .sort()
     .map(o => ({ value: o, label: o }))
 
-  if (data.loading || dataAeEigenschaftens.loading || dataAllAdresses.loading) {
+  if (loading || dataAeEigenschaftens.loading || dataAllAdresses.loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
       </Container>
     )
   }
-  if (data.error) return `Fehler: ${data.error.message}`
+  if (error) return `Fehler: ${error.message}`
   if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
   return (
     <ErrorBoundary>
