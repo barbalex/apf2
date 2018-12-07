@@ -2,6 +2,7 @@
 import React, { lazy, Suspense, useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+import { getSnapshot } from 'mobx-state-tree'
 
 import ErrorBoundary from '../../shared/ErrorBoundarySingleChild'
 import Fallback from '../../shared/Fallback'
@@ -65,9 +66,14 @@ const Daten = ({
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { nodeFilter } = mobxStore
-  const tree = mobxStore[treeName]
-  const { activeNodeArray, activeNode } = tree
-  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
+  const { activeNodeArray, activeNode } = mobxStore[treeName]
+
+  console.log('Daten', {
+    nodeFilter: nodeFilter ? getSnapshot(nodeFilter) : undefined,
+    activeNodeArray: activeNodeArray ? getSnapshot(activeNodeArray) : undefined,
+    activeNode: activeNode ? getSnapshot(activeNode) : undefined,
+    role,
+  })
 
   const formObject = {
     projekt: (
@@ -226,13 +232,7 @@ const Daten = ({
       />
     ),
     exporte: <Exporte />,
-    qk: (
-      <Qk
-        treeName={treeName}
-        activeNodes={activeNodes}
-        refetchTree={refetchTree}
-      />
-    ),
+    qk: <Qk treeName={treeName} refetchTree={refetchTree} />,
     beobNichtZuzuordnen: (
       <Beobzuordnung
         dimensions={dimensions}
