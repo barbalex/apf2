@@ -328,43 +328,6 @@ const ProjekteContainer = props => {
     errorTpops,
   ]
 
-  const queryArray = [
-    dataAdresses,
-    dataUsers,
-    dataProjekts,
-    dataApberuebersichts,
-    dataAps,
-    dataPops,
-    dataPopbers,
-    dataPopmassnbers,
-    dataTpops,
-    dataTpopmassns,
-    dataTpopmassnbers,
-    dataTpopfeldkontrs,
-    dataTpopfreiwkontrs,
-    dataTpopkontrzaehls,
-    dataTpopbers,
-    dataBeobZugeordnets,
-    dataZiels,
-    dataZielbers,
-    dataErfkrits,
-    dataApbers,
-    dataBers,
-    dataIdealbiotops,
-    dataAparts,
-    dataAssozarts,
-    dataEkfzaehleinheits,
-    dataBeobNichtBeurteilts,
-    dataBeobNichtZuzuordnens,
-    dataPopForMap,
-    dataTpopForMap,
-    dataBeobZugeordnetForMap,
-    dataBeobNichtBeurteiltForMap,
-    dataBeobNichtZuzuordnenForMap,
-    dataBeobZugeordnetAssignPolylinesForMap,
-    dataBeobAssignLines,
-  ]
-
   const loading = anyQueryIsLoading(queryLoadingArray)
 
   // TODO:
@@ -608,7 +571,7 @@ const ProjekteContainer = props => {
   }
   const error = anyQueryReturnsError(queryErrorArray)
   if (error) {
-    console.log('ProjektContainer:', { error, queryArray })
+    console.log('ProjektContainer:', { error, queryErrorArray })
     return <ErrorContainer>{`Fehler: ${error.message}`}</ErrorContainer>
   }
 
