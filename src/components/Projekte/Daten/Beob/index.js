@@ -3,13 +3,13 @@ import React, { useMemo, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import { observer } from 'mobx-react-lite'
+import { useQuery } from 'react-apollo-hooks'
 
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import withData from './withData'
+import query from './data'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
 const Container = styled.div`
@@ -20,21 +20,23 @@ const Container = styled.div`
       : 'auto'};
 `
 
-const enhance = compose(
-  withProps(() => ({
-    mobxStore: useContext(mobxStoreContext),
-  })),
-  withData,
-  observer,
-)
+const enhance = compose(observer)
 
 const Beob = ({
-  data,
   dimensions = { width: 380 },
+  treeName,
 }: {
   dimensions: Object,
-  data: Object,
+  treeName: string,
 }) => {
+  const mobxStore = useContext(mobxStoreContext)
+  const { activeNodeArray } = mobxStore[treeName]
+  const { data, loading, error } = useQuery(query, {
+    suspend: false,
+    variables: {
+      id: activeNodeArray[activeNodeArray.length - 1],
+    },
+  })
   const row = get(data, 'beobById', {})
   const beobFields = useMemo(
     () =>
@@ -45,8 +47,8 @@ const Beob = ({
   )
   if (!row) return null
   if (!beobFields || beobFields.length === 0) return null
-  if (data.loading) return <Container>Lade...</Container>
-  if (data.error) return `Fehler: ${data.error.message}`
+  if (loading) return <Container>Lade...</Container>
+  if (error) return `Fehler: ${error.message}`
 
   return (
     <ErrorBoundary>

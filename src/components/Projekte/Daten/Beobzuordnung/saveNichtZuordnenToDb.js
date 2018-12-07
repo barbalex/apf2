@@ -50,7 +50,7 @@ export default async ({
     value: newOpenNodes,
     key: 'openNodes',
   })
-  refetch()
+  if (refetch) refetch()
   refetchTree('local')
   refetchTree('aps')
   refetchTree('pops')
