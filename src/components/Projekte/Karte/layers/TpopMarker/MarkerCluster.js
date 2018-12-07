@@ -1,30 +1,25 @@
-import React, { Component } from 'react'
-import compose from 'recompose/compose'
+import React, { useEffect } from 'react'
 import 'leaflet'
 import { withLeaflet } from 'react-leaflet'
 import '../../../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
 
-const enhance = compose(withLeaflet)
+const style = { display: 'none' }
 
-class TpopMarkerCluster extends Component {
-  props: {
-    markers: Object,
-    leaflet: Object,
-  }
-
-  componentDidMount() {
-    const { leaflet, markers } = this.props
+const TpopMarkerCluster = ({
+  markers,
+  leaflet,
+}: {
+  markers: Object,
+  leaflet: Object,
+}) => {
+  useEffect(() => {
     leaflet.map.addLayer(markers)
-  }
+    return () => {
+      leaflet.map.removeLayer(markers)
+    }
+  }, [])
 
-  componentWillUnmount() {
-    const { leaflet, markers } = this.props
-    leaflet.map.removeLayer(markers)
-  }
-
-  render() {
-    return <div style={{ display: 'none' }} />
-  }
+  return <div style={style} />
 }
 
-export default enhance(TpopMarkerCluster)
+export default withLeaflet(TpopMarkerCluster)
