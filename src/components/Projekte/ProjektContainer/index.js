@@ -318,6 +318,7 @@ const ProjekteContainer = props => {
 
   // TODO: add all (copy from above)
   const queryErrorArray = [
+    errorAdresses,
     errorUsers,
     errorProjekts,
     errorApberuebersichts,
