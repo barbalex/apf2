@@ -193,7 +193,6 @@ const Row = ({
   const {
     activeApfloraLayers,
     nodeFilter,
-    nodeFilterSetActiveTable,
     copying,
     moving,
     copyingBiotop,
@@ -247,25 +246,26 @@ const Row = ({
   const amCopyingBiotop =
     node.nodeType === 'table' && node.id === copyingBiotop.id
   //console.log('Row rendering')
-  const tree2 = get(mobxStore, treeName)
 
   const onClickNode = useCallback(
     event => {
       toggleNode({
-        tree: tree2,
+        treeName,
         node,
+        openNodes,
+        activeNodeArray,
         nodeFilter,
-        nodeFilterSetActiveTable,
         mobxStore,
       })
     },
-    [tree2, node, nodeFilter],
+    // do we need to add pass nodeFilter?
+    [treeName, node, nodeFilter, openNodes, activeNodeArray],
   )
   const onClickNodeSymbol = useCallback(
     event => {
-      toggleNodeSymbol({ tree: tree2, node, mobxStore })
+      toggleNodeSymbol({ treeName, node, openNodes, mobxStore })
     },
-    [tree2, node],
+    [treeName, node, openNodes],
   )
   const onClickPrint = useCallback(
     () =>
