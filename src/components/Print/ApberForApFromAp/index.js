@@ -2,7 +2,6 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from 'react-apollo-hooks'
 
@@ -51,8 +50,6 @@ const Container = styled.div`
     overflow: hidden;
   }
 `
-
-const enhance = compose(observer)
 
 const ApberForApFromAp = ({
   apberId: apberIdPassed,
@@ -115,4 +112,4 @@ const ApberForApFromAp = ({
   )
 }
 
-export default enhance(ApberForApFromAp)
+export default observer(ApberForApFromAp)

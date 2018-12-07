@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
-import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from 'react-apollo-hooks'
 
@@ -104,8 +103,6 @@ const SecondPageText = styled.p`
   hyphens: auto;
 `
 
-const enhance = compose(observer)
-
 const ApberForYear = () => {
   const mobxStore = useContext(mobxStoreContext)
   const activeNodes = mobxStore.treeActiveNodes
@@ -198,4 +195,4 @@ const ApberForYear = () => {
   )
 }
 
-export default enhance(ApberForYear)
+export default observer(ApberForYear)

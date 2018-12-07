@@ -2,7 +2,6 @@
 import React, { useMemo, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from 'react-apollo-hooks'
 
@@ -19,8 +18,6 @@ const Container = styled.div`
       ? `${constants.columnWidth}px`
       : 'auto'};
 `
-
-const enhance = compose(observer)
 
 const Beob = ({
   dimensions = { width: 380 },
@@ -67,4 +64,4 @@ const Beob = ({
   )
 }
 
-export default enhance(Beob)
+export default observer(Beob)
