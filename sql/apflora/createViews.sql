@@ -4404,7 +4404,6 @@ WHERE
       AND apflora.tpopkontrzaehl.anzahl > 0
   );
 
--- This view is not in use, noticed 2018-06-14
 DROP VIEW IF EXISTS apflora.v_q_tpop_mitstatuspotentiellundzaehlungmitanzahl CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_tpop_mitstatuspotentiellundzaehlungmitanzahl AS
 SELECT DISTINCT
@@ -4427,6 +4426,7 @@ FROM
     ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
   apflora.tpop.status = 300
+  AND apflora.tpop.status_unklar = false
   AND apflora.tpop.id IN (
     SELECT DISTINCT
       apflora.tpopkontr.tpop_id
