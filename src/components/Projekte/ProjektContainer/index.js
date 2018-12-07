@@ -24,9 +24,10 @@ import queryApberuebersichts from './apberuebersichts'
 import queryAps from './aps'
 import queryPops from './pops'
 import queryPopbers from './popbers'
-import withPopmassnbers from './withPopmassnbers'
-import withTpops from './withTpops'
+import queryPopmassnbers from './popmassnbers'
+import queryTpops from './tpops'
 import withTpopmassns from './withTpopmassns'
+import queryTpopmassns from './tpopmassns'
 import withTpopmassnbers from './withTpopmassnbers'
 import withTpopfeldkontrs from './withTpopfeldkontrs'
 import withTpopfreiwkontrs from './withTpopfreiwkontrs'
@@ -91,8 +92,6 @@ const enhance = compose(
       mobxStore,
     }),
   ),
-  withPopmassnbers,
-  withTpops,
   withTpopmassns,
   withTpopmassnbers,
   withTpopfeldkontrs,
@@ -123,8 +122,6 @@ const enhance = compose(
 
 const ProjekteContainer = props => {
   const {
-    dataPopmassnbers,
-    dataTpops,
     dataTpopmassns,
     dataTpopmassnbers,
     dataTpopfeldkontrs,
@@ -154,8 +151,6 @@ const ProjekteContainer = props => {
     tabs: tabsPassed,
     projekteTabs,
   }: {
-    dataPopmassnbers: Object,
-    dataTpops: Object,
     dataTpopmassns: Object,
     dataTpopmassnbers: Object,
     dataTpopfeldkontrs: Object,
@@ -291,6 +286,36 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { isPop, pop },
   })
+  const {
+    data: dataPopmassnbers,
+    error: errorPopmassnbers,
+    loading: loadingPopmassnbers,
+  } = useQuery(queryPopmassnbers, {
+    suspend: false,
+    variables: { isPop, pop },
+  })
+  const {
+    data: dataTpops,
+    error: errorTpops,
+    loading: loadingTpops,
+  } = useQuery(queryTpops, {
+    suspend: false,
+    variables: { isPop, tpopFilter },
+  })
+
+  const queryLoadingArray = [
+    loadingAdresses,
+    loadingUsers,
+    loadingProjekts,
+    loadingApberuebersichts,
+    loadingAps,
+    loadingPops,
+    loadingPopbers,
+    loadingPopmassnbers,
+    loadingTpops,
+  ]
+
+  const queryErrorArray = []
 
   const queryArray = [
     dataAdresses,
@@ -329,7 +354,7 @@ const ProjekteContainer = props => {
     dataBeobAssignLines,
   ]
 
-  const loading = anyQueryIsLoading(queryArray)
+  const loading = anyQueryIsLoading(queryLoadingArray)
 
   // TODO:
   const refetch = query => {
