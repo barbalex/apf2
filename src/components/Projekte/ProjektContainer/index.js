@@ -587,7 +587,7 @@ const ProjekteContainer = props => {
   )
 
   // TODO: which query to check for error?
-  if (anyQueryReturnsPermissionError(queryArray)) {
+  if (anyQueryReturnsPermissionError(queryErrorArray)) {
     // during login don't show permission error
     if (!token) return null
     // if token is not accepted, ask user to logout

@@ -5,8 +5,7 @@
  */
 export default queryArray =>
   queryArray.some(
-    q =>
-      q.error &&
-      (q.error.message.includes('permission denied') ||
-        q.error.message.includes('keine Berechtigung')),
+    error =>
+      error.message.includes('permission denied') ||
+      error.message.includes('keine Berechtigung'),
   )
