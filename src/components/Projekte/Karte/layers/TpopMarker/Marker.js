@@ -7,6 +7,10 @@ import tpopIcon from '../../../../../etc/tpop.png'
 import tpopIconHighlighted from '../../../../../etc/tpopHighlighted.png'
 import epsg2056to4326 from '../../../../../modules/epsg2056to4326'
 
+/**
+ * TODO:
+ * add tooltip and popup, see buildMarkers
+ */
 const TpopMarker = ({ treeName, tpop }: { treeName: string, tpop: Object }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { apfloraLayers, tpopLabelUsingNr } = mobxStore
