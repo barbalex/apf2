@@ -154,6 +154,9 @@ const Qk = ({ treeName }: { treeName: string }) => {
               ))}
             </StyledPaper>
           ))}
+          {!loading && messageGroups.length === 0 && (
+            <div>Juhui. Offenbar gibt es nichts zu meckern!</div>
+          )}
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
