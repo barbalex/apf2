@@ -2,8 +2,7 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import { useApolloClient } from 'react-apollo-hooks'
-import { useQuery } from 'react-apollo-hooks'
+import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import { observer } from 'mobx-react-lite'
 
 import RadioButton from '../../../shared/RadioButton'
