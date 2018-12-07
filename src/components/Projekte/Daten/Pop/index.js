@@ -115,7 +115,7 @@ const Pop = ({
         } catch (error) {
           return setErrors({ [field]: error.message })
         }
-        // update tpop on map
+        // update pop on map
         if (
           (value && ((field === 'y' && row.x) || (field === 'x' && row.y))) ||
           (!value && (field === 'y' || field === 'x'))
