@@ -6,17 +6,14 @@
  *
  */
 
-import React, { useContext, useRef, useEffect } from 'react'
+import React, { useContext, useRef, useEffect, useCallback } from 'react'
 import { Map, ScaleControl } from 'react-leaflet'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
-import withProps from 'recompose/withProps'
 import 'leaflet'
 import 'proj4'
 import 'proj4leaflet'
-import debounceHandler from '@hocs/debounce-handler'
 import sortBy from 'lodash/sortBy'
+import debounce from 'lodash/debounce'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { useApolloClient } from 'react-apollo-hooks'
@@ -111,31 +108,14 @@ const LoadingContainer = styled.div`
  * So: need to use app level store state
  */
 
-const enhance = compose(
-  withProps(() => {
-    const { setMapMouseCoordinates } = useContext(mobxStoreContext)
-    return { setMapMouseCoordinates }
-  }),
-  withHandlers({
-    onMouseMove: ({ setMapMouseCoordinates }) => e => {
-      const [x, y] = epsg4326to2056(e.latlng.lng, e.latlng.lat)
-      setMapMouseCoordinates({ x, y })
-    },
-  }),
-  debounceHandler('onMouseMove', 15),
-  observer,
-)
-
 const Karte = ({
   treeName,
-  onMouseMove,
   data,
   refetchTree,
   dimensions,
   loading,
 }: {
   treeName: string,
-  onMouseMove: () => void,
   data: Object,
   refetchTree: () => void,
   dimensions: Object,
@@ -154,6 +134,7 @@ const Karte = ({
     bounds: boundsRaw,
     addError,
     assigningBeob,
+    setMapMouseCoordinates,
   } = mobxStore
   const bounds = getSnapshot(boundsRaw)
   const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
@@ -183,6 +164,13 @@ const Karte = ({
     },
     [dimensions.width],
   )
+
+  const setMouseCoords = useCallback(e => {
+    const [x, y] = epsg4326to2056(e.latlng.lng, e.latlng.lat)
+    setMapMouseCoordinates({ x, y })
+  })
+
+  const onMouseMove = debounce(setMouseCoords, 50)
 
   const clustered = !(
     assigningBeob ||
@@ -422,4 +410,4 @@ const Karte = ({
   )
 }
 
-export default enhance(Karte)
+export default observer(Karte)
