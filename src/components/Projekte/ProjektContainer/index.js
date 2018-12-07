@@ -22,9 +22,7 @@ import queryUsers from './users'
 import queryProjekts from './projekts'
 import queryApberuebersichts from './apberuebersichts'
 import queryAps from './aps'
-import withPops from './withPops'
 import queryPops from './pops'
-import withPopbers from './withPopbers'
 import queryPopbers from './popbers'
 import withPopmassnbers from './withPopmassnbers'
 import withTpops from './withTpops'
@@ -93,8 +91,6 @@ const enhance = compose(
       mobxStore,
     }),
   ),
-  withPops,
-  withPopbers,
   withPopmassnbers,
   withTpops,
   withTpopmassns,
@@ -127,8 +123,6 @@ const enhance = compose(
 
 const ProjekteContainer = props => {
   const {
-    dataPops,
-    dataPopbers,
     dataPopmassnbers,
     dataTpops,
     dataTpopmassns,
@@ -160,8 +154,6 @@ const ProjekteContainer = props => {
     tabs: tabsPassed,
     projekteTabs,
   }: {
-    dataPops: Object,
-    dataPopbers: Object,
     dataPopmassnbers: Object,
     dataTpops: Object,
     dataTpopmassns: Object,
@@ -284,6 +276,21 @@ const ProjekteContainer = props => {
       variables: { isProjekt, apFilter },
     },
   )
+  const { data: dataPops, error: errorPops, loading: loadingPops } = useQuery(
+    queryPops,
+    {
+      suspend: false,
+      variables: { isAp, popFilter },
+    },
+  )
+  const {
+    data: dataPopbers,
+    error: errorPopbers,
+    loading: loadingPopbers,
+  } = useQuery(queryPopbers, {
+    suspend: false,
+    variables: { isPop, pop },
+  })
 
   const queryArray = [
     dataAdresses,
