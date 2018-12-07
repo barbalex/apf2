@@ -5,12 +5,11 @@ import compose from 'recompose/compose'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
-import withProps from 'recompose/withProps'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from 'react-apollo-hooks'
+import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
 import StringToCopy from '../../../shared/StringToCopyOnlyButton'
-import withData from './withData'
+import query from './data'
 import updateTpopkontrByIdGql from './updateTpopkontrById'
 import createTpopkontrzaehl from './createTpopkontrzaehl'
 import Title from './Title'
@@ -139,22 +138,16 @@ const CountHint = styled.div`
  * then refetch data
  */
 const enhance = compose(
-  withProps(() => ({
-    mobxStore: useContext(mobxStoreContext),
-  })),
   withAllAdresses,
-  withData,
   observer,
 )
 
 const Tpopfreiwkontr = ({
-  data,
   dimensions,
   role,
   treeName,
   dataAllAdresses,
 }: {
-  data: Object,
   dimensions: Object,
   role: string,
   treeName: string,
@@ -169,6 +162,17 @@ const Tpopfreiwkontr = ({
   const [errors, setErrors] = useState({})
 
   const showFilter = !!nodeFilter[treeName].activeTable
+
+  const { data, loading, error } = useQuery(query, {
+    suspend: false,
+    variables: {
+      id:
+        activeNodeArray.length > 9
+          ? activeNodeArray[9]
+          : '99999999-9999-9999-9999-999999999999',
+    },
+  })
+
   const ekfzaehleinheits = get(
     data,
     'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekfzaehleinheitsByApId.nodes',
@@ -358,7 +362,7 @@ const Tpopfreiwkontr = ({
 
   useEffect(
     () => {
-      if (!data.loading) {
+      if (!loading) {
         // loading data just finished
         // check if tpopkontr exist
         const tpopkontrCount = get(
@@ -405,7 +409,7 @@ const Tpopfreiwkontr = ({
         }
       }
     },
-    [data.loading],
+    [loading],
   )
 
   useEffect(() => setErrors({}), [row])
@@ -431,8 +435,8 @@ const Tpopfreiwkontr = ({
   )
 
   if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
-  if (data.error) return `Fehler: ${data.error.message}`
-  if (data.loading || dataAllAdresses.loading) {
+  if (error) return `Fehler: ${error.message}`
+  if (loading || dataAllAdresses.loading) {
     return (
       <Container>
         <InnerContainer>Lade...</InnerContainer>
@@ -489,9 +493,9 @@ const Tpopfreiwkontr = ({
               saveToDb={saveToDb}
               errors={errors}
               refetch={data.refetch}
-              activeNodeArray={activeNodeArray}
               einheitsUsed={einheitsUsed}
               ekfzaehleinheits={ekfzaehleinheits}
+              treeName={treeName}
             />
           )}
           {!showFilter && zaehl1ShowEmpty && (
@@ -507,9 +511,9 @@ const Tpopfreiwkontr = ({
               saveToDb={saveToDb}
               errors={errors}
               refetch={data.refetch}
-              activeNodeArray={activeNodeArray}
               einheitsUsed={einheitsUsed}
               ekfzaehleinheits={ekfzaehleinheits}
+              treeName={treeName}
             />
           )}
           {!showFilter && zaehl2ShowNew && (
@@ -523,10 +527,23 @@ const Tpopfreiwkontr = ({
               einheitsUsed={einheitsUsed}
               ekfzaehleinheits={ekfzaehleinheits}
               refetch={data.refetch}
+              treeName={treeName}
             />
           )}
           {!showFilter && zaehl2ShowEmpty && !zaehl1ShowEmpty && (
-            <Count nr="2" showEmpty />
+            <Count
+              id={null}
+              tpopkontrId={row.id}
+              nr="2"
+              showEmpty
+              saveToDb={saveToDb}
+              errors={errors}
+              showNew
+              einheitsUsed={einheitsUsed}
+              ekfzaehleinheits={ekfzaehleinheits}
+              refetch={data.refetch}
+              treeName={treeName}
+            />
           )}
           {!showFilter && zaehls3 && (
             <Count
@@ -535,9 +552,9 @@ const Tpopfreiwkontr = ({
               saveToDb={saveToDb}
               errors={errors}
               refetch={data.refetch}
-              activeNodeArray={activeNodeArray}
               einheitsUsed={einheitsUsed}
               ekfzaehleinheits={ekfzaehleinheits}
+              treeName={treeName}
             />
           )}
           {!showFilter && zaehl3ShowNew && (
@@ -551,10 +568,23 @@ const Tpopfreiwkontr = ({
               einheitsUsed={einheitsUsed}
               ekfzaehleinheits={ekfzaehleinheits}
               refetch={data.refetch}
+              treeName={treeName}
             />
           )}
           {!showFilter && zaehl3ShowEmpty && !zaehl2ShowEmpty && (
-            <Count nr="3" showEmpty />
+            <Count
+              id={null}
+              tpopkontrId={row.id}
+              nr="3"
+              showEmpty
+              saveToDb={saveToDb}
+              errors={errors}
+              showNew
+              einheitsUsed={einheitsUsed}
+              ekfzaehleinheits={ekfzaehleinheits}
+              refetch={data.refetch}
+              treeName={treeName}
+            />
           )}
           <Cover
             id={row.id}

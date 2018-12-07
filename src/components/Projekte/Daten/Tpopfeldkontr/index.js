@@ -7,9 +7,8 @@ import compose from 'recompose/compose'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
-import withProps from 'recompose/withProps'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from 'react-apollo-hooks'
+import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -21,7 +20,7 @@ import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
 import TpopfeldkontrentwicklungPopover from '../TpopfeldkontrentwicklungPopover'
 import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import withData from './withData'
+import query from './data'
 import updateTpopkontrByIdGql from './updateTpopkontrById'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import withAllAdresses from './withAllAdresses'
@@ -73,10 +72,6 @@ const tpopkontrTypWerte = [
 ]
 
 const enhance = compose(
-  withProps(() => ({
-    mobxStore: useContext(mobxStoreContext),
-  })),
-  withData,
   withAllAdresses,
   observer,
 )
@@ -85,18 +80,27 @@ const Tpopfeldkontr = ({
   dimensions = { width: 380 },
   treeName,
   dataAllAdresses,
-  data,
   refetchTree,
 }: {
   dimensions: Object,
   treeName: string,
   dataAllAdresses: Object,
-  data: Object,
   refetchTree: () => void,
 }) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
   const { nodeFilter, nodeFilterSetValue, urlQuery, setUrlQuery } = mobxStore
+  const { activeNodeArray } = mobxStore[treeName]
+
+  const { data, loading, error } = useQuery(query, {
+    suspend: false,
+    variables: {
+      id:
+        activeNodeArray.length > 9
+          ? activeNodeArray[9]
+          : '99999999-9999-9999-9999-999999999999',
+    },
+  })
 
   const [errors, setErrors] = useState({})
   const [value, setValue] = useState(
@@ -317,14 +321,14 @@ const Tpopfeldkontr = ({
     .map(e => `${e.label}: ${e.einheit ? e.einheit.replace(/  +/g, ' ') : ''}`)
     .map(o => ({ value: o, label: o }))
 
-  if (data.loading || dataAllAdresses.loading) {
+  if (loading || dataAllAdresses.loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
       </Container>
     )
   }
-  if (data.error) return `Fehler: ${data.error.message}`
+  if (error) return `Fehler: ${error.message}`
   if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
   return (
     <ErrorBoundary>
