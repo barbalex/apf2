@@ -7,9 +7,9 @@ import flatten from 'lodash/flatten'
 import Button from '@material-ui/core/Button'
 import SendIcon from '@material-ui/icons/EmailOutlined'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from 'react-apollo-hooks'
+import { useQuery } from 'react-apollo-hooks'
 
 import FormTitle from '../../../shared/FormTitle'
 import TextField from '../../../shared/TextField'
@@ -17,7 +17,7 @@ import CheckboxWithInfo from '../../../shared/CheckboxWithInfo'
 import Select from '../../../shared/Select'
 import Beob from '../Beob'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import withData from './withData'
+import query from './data'
 import withAeEigenschaftens from './withAeEigenschaftens'
 import updateBeobByIdGql from './updateBeobById'
 import saveNichtZuordnenToDb from './saveNichtZuordnenToDb'
@@ -139,11 +139,7 @@ const getTpopZuordnenSource = (row: Object, apId: string): Array<Object> => {
 }
 
 const enhance = compose(
-  withProps(() => ({
-    mobxStore: useContext(mobxStoreContext),
-  })),
   withAeEigenschaftens,
-  withData,
   observer,
 )
 
@@ -152,14 +148,12 @@ const Beobzuordnung = ({
   dimensions = { width: 380 },
   refetchTree,
   treeName,
-  data,
   dataAeEigenschaftens,
 }: {
   type: string,
   dimensions: Object,
   refetchTree: () => void,
   treeName: string,
-  data: Object,
   dataAeEigenschaftens: Object,
 }) => {
   const client = useApolloClient()
@@ -171,6 +165,14 @@ const Beobzuordnung = ({
     activeNodeArray.length > 3
       ? activeNodeArray[3]
       : '99999999-9999-9999-9999-999999999999'
+
+  const { data, loading, error } = useQuery(query, {
+    suspend: false,
+    variables: {
+      id,
+      apId,
+    },
+  })
   const row = get(data, 'beobById', {})
 
   const onSaveArtIdToDb = useCallback(
@@ -219,14 +221,14 @@ const Beobzuordnung = ({
     label: el.artname,
   }))
 
-  if (data.loading || dataAeEigenschaftens.loading) {
+  if (loading || dataAeEigenschaftens.loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
       </Container>
     )
   }
-  if (data.error) return `Fehler: ${data.error.message}`
+  if (error) return `Fehler: ${error.message}`
   return (
     <ErrorBoundary>
       <FormContainer>
