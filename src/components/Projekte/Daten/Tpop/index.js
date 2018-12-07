@@ -4,9 +4,8 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from 'react-apollo-hooks'
+import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
 import TextField from '../../../shared/TextField'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
@@ -19,7 +18,7 @@ import FormTitle from '../../../shared/FormTitle'
 import TpopAbBerRelevantInfoPopover from '../TpopAbBerRelevantInfoPopover'
 import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import withData from './withData'
+import query from './data'
 import updateTpopByIdGql from './updateTpopById'
 import getGemeindeForKoord from '../../../../modules/getGemeindeForKoord'
 import mobxStoreContext from '../../../../mobxStoreContext'
@@ -43,23 +42,15 @@ const FieldsContainer = styled.div`
   }
 `
 
-const enhance = compose(
-  withProps(() => ({
-    mobxStore: useContext(mobxStoreContext),
-  })),
-  withData,
-  observer,
-)
+const enhance = compose(observer)
 
 const Tpop = ({
   dimensions = { width: 380 },
   treeName,
-  data,
   refetchTree,
 }: {
   dimensions: Object,
   treeName: string,
-  data: Object,
   refetchTree: () => void,
 }) => {
   const client = useApolloClient()
@@ -69,6 +60,18 @@ const Tpop = ({
   const [errors, setErrors] = useState({})
 
   const showFilter = !!nodeFilter[treeName].activeTable
+  const { activeNodeArray } = mobxStore[treeName]
+
+  const { data, loading, error } = useQuery(query, {
+    suspend: false,
+    variables: {
+      id:
+        activeNodeArray.length > 7
+          ? activeNodeArray[7]
+          : '99999999-9999-9999-9999-999999999999',
+    },
+  })
+
   let row
   if (showFilter) {
     row = nodeFilter[treeName].tpop
@@ -194,14 +197,14 @@ const Tpop = ({
     label: el.text,
   }))
 
-  if (data.loading) {
+  if (loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
       </Container>
     )
   }
-  if (data.error) return `Fehler: ${data.error.message}`
+  if (error) return `Fehler: ${error.message}`
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
