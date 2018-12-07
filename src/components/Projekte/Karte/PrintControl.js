@@ -1,10 +1,7 @@
-import React, { Component } from 'react'
+import React, { useEffect } from 'react'
 import 'leaflet'
 import 'leaflet-easyprint'
-import compose from 'recompose/compose'
 import { withLeaflet } from 'react-leaflet'
-
-const enhance = compose(withLeaflet)
 
 const options = {
   title: 'drucken',
@@ -13,16 +10,14 @@ const options = {
   sizeModes: ['Current', 'A4Portrait', 'A4Landscape'],
   tileWait: 2000,
 }
+const style = { display: 'none' }
 
-class PrintControl extends Component {
-  componentDidMount() {
-    const { leaflet } = this.props
+const PrintControl = ({ leaflet }: { leaflet: Object }) => {
+  useEffect(() => {
     window.L.easyPrint(options).addTo(leaflet.map)
-  }
+  }, [])
 
-  render() {
-    return <div style={{ display: 'none' }} />
-  }
+  return <div style={style} />
 }
 
-export default enhance(PrintControl)
+export default withLeaflet(PrintControl)
