@@ -11,18 +11,21 @@ import Button from '@material-ui/core/Button'
 import jwtDecode from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
+import { useQuery } from 'react-apollo-hooks'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
 import Karte from '../Karte'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import withAdresses from './withAdresses'
-import withUsers from './withUsers'
-import withProjekts from './withProjekts'
-import withApberuebersichts from './withApberuebersichts'
-import withAps from './withAps'
+import queryAdresses from './adresses'
+import queryUsers from './users'
+import queryProjekts from './projekts'
+import queryApberuebersichts from './apberuebersichts'
+import queryAps from './aps'
 import withPops from './withPops'
+import queryPops from './pops'
 import withPopbers from './withPopbers'
+import queryPopbers from './popbers'
 import withPopmassnbers from './withPopmassnbers'
 import withTpops from './withTpops'
 import withTpopmassns from './withTpopmassns'
@@ -90,11 +93,6 @@ const enhance = compose(
       mobxStore,
     }),
   ),
-  withAdresses,
-  withUsers,
-  withProjekts,
-  withApberuebersichts,
-  withAps,
   withPops,
   withPopbers,
   withPopmassnbers,
@@ -129,11 +127,6 @@ const enhance = compose(
 
 const ProjekteContainer = props => {
   const {
-    dataAdresses,
-    dataUsers,
-    dataProjekts,
-    dataApberuebersichts,
-    dataAps,
     dataPops,
     dataPopbers,
     dataPopmassnbers,
@@ -167,11 +160,6 @@ const ProjekteContainer = props => {
     tabs: tabsPassed,
     projekteTabs,
   }: {
-    dataAdresses: Object,
-    dataUsers: Object,
-    dataProjekts: Object,
-    dataApberuebersichts: Object,
-    dataAps: Object,
     dataPops: Object,
     dataPopbers: Object,
     dataPopmassnbers: Object,
@@ -225,6 +213,77 @@ const ProjekteContainer = props => {
   } = map
   const { idb } = useContext(idbContext)
   const mapFilter = mapFilterRaw.toJSON()
+
+  const {
+    projekt,
+    projId,
+    isProjekt,
+    apFilter,
+    apFilterSet,
+    ap,
+    apId,
+    isAp,
+    ziel,
+    isZiel,
+    pop,
+    isPop,
+    popIsActiveInMap,
+    popFilter,
+    tpop,
+    isTpop,
+    tpopIsActiveInMap,
+    tpopFilter,
+    tpopkontr,
+    isTpopkontr,
+    apIsActiveInMap,
+    isWerteListen,
+    isAdresse,
+    beobNichtBeurteiltIsActiveInMap,
+    beobNichtZuzuordnenIsActiveInMap,
+    beobZugeordnetAssignPolylinesIsActiveInMap,
+    beobZugeordnetIsActiveInMap,
+  } = buildVariables({
+    treeName,
+    mobxStore,
+  })
+
+  const {
+    data: dataAdresses,
+    error: errorAdresses,
+    loading: loadingAdresses,
+  } = useQuery(queryAdresses, {
+    suspend: false,
+    variables: { isWerteListen, isAdresse },
+  })
+  const {
+    data: dataUsers,
+    error: errorUsers,
+    loading: loadingUsers,
+  } = useQuery(queryUsers, {
+    suspend: false,
+  })
+  const {
+    data: dataProjekts,
+    error: errorProjekts,
+    loading: loadingProjekts,
+  } = useQuery(queryProjekts, {
+    suspend: false,
+  })
+  const {
+    data: dataApberuebersichts,
+    error: errorApberuebersichts,
+    loading: loadingApberuebersichts,
+  } = useQuery(queryApberuebersichts, {
+    suspend: false,
+    variables: { isProjekt, projekt },
+  })
+  const { data: dataAps, error: errorAps, loading: loadingAps } = useQuery(
+    queryAps,
+    {
+      suspend: false,
+      variables: { isProjekt, apFilter },
+    },
+  )
 
   const queryArray = [
     dataAdresses,
