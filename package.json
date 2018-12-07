@@ -12,7 +12,7 @@
     "docsify-cli": "4.3.0",
     "flow-bin": "0.87.0",
     "postgraphile": "4.0.1",
-    "postgraphile-plugin-connection-filter": "1.0.0-beta.21",
+    "postgraphile-plugin-connection-filter": "1.0.0-beta.22",
     "react-scripts": "2.1.1",
     "serve": "10.1.1",
     "source-map-explorer": "1.6.0"

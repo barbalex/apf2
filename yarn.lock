@@ -8022,9 +8022,9 @@ minipass@^2.2.1, minipass@^2.3.4:
     yallist "^3.0.0"
 
 minizlib@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/minizlib/-/minizlib-1.1.1.tgz#6734acc045a46e61d596a43bb9d9cd326e19cc42"
-  integrity sha512-TrfjCjk4jLhcJyGMYymBH6oTXcWjYbUAXTHDbtnWHjZC25h0cdajHuPE1zxb4DVmu8crfh+HwH/WMuyLG0nHBg==
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/minizlib/-/minizlib-1.2.0.tgz#59517387478fd98d8017ed0299c6cb16cbd12da3"
+  integrity sha512-vQhkoouK/oKRVuFJynustmW3wrqZEXOrfbVVirvOVeglH4TNvIkcqiyojlIbbZYYDJZSbEKEXmDudg+tyRkm6g==
   dependencies:
     minipass "^2.2.1"
 
@@ -9654,10 +9654,10 @@ postgraphile-core@4.0.1:
     graphile-build "4.0.0"
     graphile-build-pg "4.0.1"
 
-postgraphile-plugin-connection-filter@1.0.0-beta.21:
-  version "1.0.0-beta.21"
-  resolved "https://registry.yarnpkg.com/postgraphile-plugin-connection-filter/-/postgraphile-plugin-connection-filter-1.0.0-beta.21.tgz#2130f5cc65f286335919815d2b5631bd890fb65f"
-  integrity sha512-wOPjGI7AkiXCx04VLhemRdmWQZoTA7yULyLq8MctlkgfInylEyYOQwoddZS8ZqV1SBs3k1SVh7XUeOLcGNBOAQ==
+postgraphile-plugin-connection-filter@1.0.0-beta.22:
+  version "1.0.0-beta.22"
+  resolved "https://registry.yarnpkg.com/postgraphile-plugin-connection-filter/-/postgraphile-plugin-connection-filter-1.0.0-beta.22.tgz#40006e574fa12d0194d1980934594f4b6a229c08"
+  integrity sha512-DgcKQiZwGHJpyfbL7wgsVjvRhX9mUGXlh9207/JZE/JAdRK061p71bm7xLe+vtqAqVA7IVegi7a3psenb0DKLg==
 
 postgraphile@4.0.1:
   version "4.0.1"
