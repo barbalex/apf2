@@ -303,6 +303,7 @@ const ProjekteContainer = props => {
     variables: { isPop, tpopFilter },
   })
 
+  // TODO: add all
   const queryLoadingArray = [
     loadingAdresses,
     loadingUsers,
@@ -315,6 +316,7 @@ const ProjekteContainer = props => {
     loadingTpops,
   ]
 
+  // TODO: add all (copy from above)
   const queryErrorArray = []
 
   const queryArray = [
