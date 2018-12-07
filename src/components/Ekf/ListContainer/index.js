@@ -5,7 +5,7 @@
  */
 import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import { Query } from 'react-apollo'
+import { useQuery } from 'react-apollo-hooks'
 
 import mobxStoreContext from '../../../mobxStoreContext'
 import dataByUserNameGql from './dataByUserName'
@@ -30,14 +30,13 @@ const EkfListContainer = ({ dimensions }: { dimensions: Object }) => {
     ? { id: ekfAdresseId, jahr: ekfYear }
     : { userName, jahr: ekfYear }
 
-  return (
-    <Query query={query} variables={variables}>
-      {({ error, data, refetch, loading }) => {
-        if (error) return `Fehler: ${error.message}`
-        return <List data={data} loading={loading} dimensions={dimensions} />
-      }}
-    </Query>
-  )
+  const { data, loading, error } = useQuery(query, {
+    suspend: false,
+    variables,
+  })
+
+  if (error) return `Fehler: ${error.message}`
+  return <List data={data} loading={loading} dimensions={dimensions} />
 }
 
 export default observer(EkfListContainer)
