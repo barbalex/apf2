@@ -25,7 +25,7 @@ const TpopMarkerMarker = ({
   clustered: Boolean,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { nodeFilter } = mobxStore
+  const { nodeFilter, activeApfloraLayers } = mobxStore
   const tree = mobxStore[treeName]
 
   const popFilterString = get(tree, 'nodeLabelFilter.pop')
@@ -68,6 +68,7 @@ const TpopMarkerMarker = ({
         table: 'tpop',
       }),
     )
+  const tpopsToUse = activeApfloraLayers.includes('tpop') ? tpops : []
 
   if (clustered) {
     const markers = buildMarkersClustered({
@@ -78,13 +79,10 @@ const TpopMarkerMarker = ({
     })
     return <MarkerCluster markers={markers} />
   }
-  const markers = buildMarkers({
-    tpops,
-    treeName,
-    data,
-    mobxStore,
-  })
-  return <Marker markers={markers} />
+  console.log('TpopMarker:', { tpops, activeApfloraLayers })
+  return tpopsToUse.map(tpop => (
+    <Marker key={tpop.id} treeName={treeName} tpop={tpop} />
+  ))
 }
 
 export default observer(TpopMarkerMarker)
