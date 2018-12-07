@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
 import sortBy from 'lodash/sortBy'
-import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
@@ -26,8 +25,6 @@ const FieldsContainer = styled.div`
   height: 100%;
   overflow: auto !important;
 `
-
-const enhance = compose(observer)
 
 const Ziel = ({
   treeName,
@@ -184,4 +181,4 @@ const Ziel = ({
   )
 }
 
-export default enhance(Ziel)
+export default observer(Ziel)

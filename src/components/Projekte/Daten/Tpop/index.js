@@ -3,7 +3,6 @@ import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
-import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
@@ -41,8 +40,6 @@ const FieldsContainer = styled.div`
     padding-right: 30px;
   }
 `
-
-const enhance = compose(observer)
 
 const Tpop = ({
   dimensions = { width: 380 },
@@ -458,4 +455,4 @@ const Tpop = ({
   )
 }
 
-export default enhance(Tpop)
+export default observer(Tpop)

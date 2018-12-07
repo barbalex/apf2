@@ -5,7 +5,6 @@ import FormControl from '@material-ui/core/FormControl'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import Checkbox from '@material-ui/core/Checkbox'
-import compose from 'recompose/compose'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
@@ -29,8 +28,6 @@ const StyledFormControl = styled(FormControl)`
 const StyledFormControlLabel = styled(FormControlLabel)`
   margin-top: -10px;
 `
-
-const enhance = compose(observer)
 
 const CheckboxWithInfo = ({
   value,
@@ -82,4 +79,4 @@ CheckboxWithInfo.defaultProps = {
   value: null,
 }
 
-export default enhance(CheckboxWithInfo)
+export default observer(CheckboxWithInfo)

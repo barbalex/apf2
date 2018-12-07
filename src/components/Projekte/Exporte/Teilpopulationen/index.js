@@ -8,7 +8,6 @@ import IconButton from '@material-ui/core/IconButton'
 import Icon from '@material-ui/core/Icon'
 import Button from '@material-ui/core/Button'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import compose from 'recompose/compose'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
@@ -65,8 +64,6 @@ const AutocompleteContainer = styled.div`
   padding-left: 16px;
 `
 const isRemoteHost = window.location.hostname !== 'localhost'
-
-const enhance = compose(observer)
 
 const Teilpopulationen = ({ treeName }: { treeName: string }) => {
   const client = useApolloClient()
@@ -502,4 +499,4 @@ const Teilpopulationen = ({ treeName }: { treeName: string }) => {
   )
 }
 
-export default enhance(Teilpopulationen)
+export default observer(Teilpopulationen)
