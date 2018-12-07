@@ -3,7 +3,6 @@ import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
-import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
@@ -25,8 +24,6 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
   height: 100%;
 `
-
-const enhance = compose(observer)
 
 const Popber = ({
   treeName,
@@ -156,4 +153,4 @@ const Popber = ({
   )
 }
 
-export default enhance(Popber)
+export default observer(Popber)

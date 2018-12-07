@@ -2,7 +2,6 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
@@ -24,8 +23,6 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const enhance = compose(observer)
-
 const Projekt = ({ treeName }: { treeName: string }) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
@@ -45,7 +42,7 @@ const Projekt = ({ treeName }: { treeName: string }) => {
 
   const row = get(data, 'projektById', {})
 
-  //console.log('Projekt', { row })
+  console.log('Projekt', { row })
 
   useEffect(() => setErrors({}), [row])
 
@@ -115,4 +112,4 @@ const Projekt = ({ treeName }: { treeName: string }) => {
   )
 }
 
-export default enhance(Projekt)
+export default observer(Projekt)

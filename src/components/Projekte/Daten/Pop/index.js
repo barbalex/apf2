@@ -2,7 +2,6 @@
 import React, { useContext, useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
@@ -27,8 +26,6 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
   height: 100%;
 `
-
-const enhance = compose(observer)
 
 const Pop = ({
   treeName,
@@ -218,4 +215,4 @@ const Pop = ({
   )
 }
 
-export default enhance(Pop)
+export default observer(Pop)
