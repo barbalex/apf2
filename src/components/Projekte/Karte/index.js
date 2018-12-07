@@ -6,7 +6,13 @@
  *
  */
 
-import React, { useContext, useRef, useEffect, useCallback } from 'react'
+import React, {
+  useContext,
+  useRef,
+  useEffect,
+  useCallback,
+  useMemo,
+} from 'react'
 import { Map, ScaleControl } from 'react-leaflet'
 import styled from 'styled-components'
 import 'leaflet'
@@ -212,7 +218,7 @@ const Karte = ({
       <BeobZugeordnetAssignPolylines data={data} treeName={treeName} />
     ),
   }
-  const OverlayComponents = {
+  const OverlayComponents = useMemo(() => ({
     ZhUep: () => <ZhUepOverlay />,
     Detailplaene: () => <Detailplaene />,
     Markierungen: () => <Markierungen />,
@@ -223,8 +229,8 @@ const Karte = ({
     ZhLrVegKartierungen: () => <ZhLrVegKartierungen />,
     ZhLichteWaelder: () => <ZhLichteWaelder />,
     ZhWaelderVegetation: () => <ZhWaelderVegetation />,
-  }
-  const BaseLayerComponents = {
+  }))
+  const BaseLayerComponents = useMemo(() => ({
     OsmColor: () => <OsmColor />,
     OsmBw: () => <OsmBw />,
     SwissTopoPixelFarbe: () => <SwissTopoPixelFarbe />,
@@ -237,7 +243,7 @@ const Karte = ({
     ZhOrthoIr: () => <ZhOrthoIr />,
     ZhOrtho2015: () => <ZhOrtho2015 />,
     ZhOrtho2015Ir: () => <ZhOrtho2015Ir />,
-  }
+  }))
   const BaseLayerComponent = BaseLayerComponents[activeBaseLayer]
   const activeApfloraLayersSorted = sortBy(
     activeApfloraLayers,
@@ -353,24 +359,6 @@ const Karte = ({
               setIdOfTpopBeingLocalized(null)
             }
           }}
-          // turned off because caused cyclic zooming
-          /*
-            onZoomlevelschange={event => {
-              // need to update bounds, otherwise map jumps back
-              // when adding new tpop
-              const mapBounds = event.target.getBounds()
-              setBounds([mapBounds._southWest, mapBounds._northEast])
-            }}
-            onZoomend={event => {
-              // need to update bounds, otherwise map jumps back
-              const mapBounds = event.target.getBounds()
-              setBounds([mapBounds._southWest, mapBounds._northEast])
-            }}
-            onMoveend={event => {
-              // need to update bounds, otherwise map jumps back
-              const mapBounds = event.target.getBounds()
-              setBounds([mapBounds._southWest, mapBounds._northEast])
-            }}*/
         >
           {activeBaseLayer && <BaseLayerComponent />}
           {activeOverlaysSorted
