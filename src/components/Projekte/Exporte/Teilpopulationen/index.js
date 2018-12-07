@@ -13,12 +13,12 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from 'react-apollo-hooks'
+import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
 import Select from '../../../shared/Select'
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
-import withData from './withData'
+import allAeEigenschaftensQuery from './allAeEigenschaftens'
 import epsg2056to4326 from '../../../../modules/epsg2056to4326'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
@@ -66,24 +66,37 @@ const AutocompleteContainer = styled.div`
 `
 const isRemoteHost = window.location.hostname !== 'localhost'
 
-const enhance = compose(
-  withData,
-  observer,
-)
+const enhance = compose(observer)
 
-const Teilpopulationen = ({ data }: { data: Object }) => {
+const Teilpopulationen = ({ treeName }: { treeName: string }) => {
   const client = useApolloClient()
+  const mobxStore = useContext(mobxStoreContext)
 
   const {
     mapFilter,
     addError,
     exportApplyMapFilter,
     exportFileType,
-  } = useContext(mobxStoreContext)
+  } = mobxStore
 
   const [expanded, setExpanded] = useState(false)
   const [message, setMessage] = useState(null)
   const [ewmMessage, setEwmMessage] = useState('')
+
+  const { activeNodeArray } = mobxStore.tree
+
+  const {
+    data: aeEigenschaftensData,
+    error: aeEigenschaftensDataError,
+  } = useQuery(allAeEigenschaftensQuery, {
+    suspend: false,
+    variables: {
+      id:
+        activeNodeArray.length > 9
+          ? activeNodeArray[9]
+          : '99999999-9999-9999-9999-999999999999',
+    },
+  })
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
   const onClickButton = useCallback(
@@ -130,16 +143,17 @@ const Teilpopulationen = ({ data }: { data: Object }) => {
   )
 
   const artList = sortBy(
-    get(data, 'allAeEigenschaftens.nodes', [])
+    get(aeEigenschaftensData, 'allAeEigenschaftens.nodes', [])
       .filter(n => !!get(n, 'apByArtId.id'))
       .map(n => ({
         value: get(n, 'apByArtId.id'),
         label: n.artname,
       })),
-    'artname',
+    'label',
   )
 
-  if (data.error) return `Fehler: ${data.error.message}`
+  if (aeEigenschaftensDataError)
+    return `Fehler: ${aeEigenschaftensDataError.message}`
   return (
     <StyledCard>
       <StyledCardActions disableActionSpacing onClick={onClickAction}>
