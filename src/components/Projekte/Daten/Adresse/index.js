@@ -12,6 +12,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updateAdresseByIdGql from './updateAdresseById'
 import query from './data'
 import mobxStoreContext from '../../../../mobxStoreContext'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
 const Container = styled.div`
   height: 100%;
@@ -51,7 +52,7 @@ const Adresse = ({
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
-      const value = event.target.value || null
+      const value = ifIsNumericAsNumber(event.target.value) || null
       /**
        * only save if value changed
        */

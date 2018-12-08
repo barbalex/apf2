@@ -19,6 +19,7 @@ import withAllAdresses from './withAllAdresses'
 import withAllAps from './withAllAps'
 import query from './data'
 import mobxStoreContext from '../../../../mobxStoreContext'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
 const Container = styled.div`
   height: 100%;
@@ -156,7 +157,7 @@ const Ap = ({
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
-      const value = event.target.value || null
+      const value = ifIsNumericAsNumber(event.target.value) || null
       const showFilter = !!nodeFilter[treeName].activeTable
       /**
        * only save if value changed

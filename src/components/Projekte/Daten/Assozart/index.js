@@ -15,6 +15,7 @@ import updateAssozartByIdGql from './updateAssozartById'
 import withAeEigenschaftens from './withAeEigenschaftens'
 import query from './data'
 import mobxStoreContext from '../../../../mobxStoreContext'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
 const Container = styled.div`
   height: 100%;
@@ -76,7 +77,7 @@ const Assozart = ({
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
-      const value = event.target.value || null
+      const value = ifIsNumericAsNumber(event.target.value) || null
       /**
        * only save if value changed
        */
