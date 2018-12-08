@@ -87,6 +87,7 @@ const myTypes = types
     toDeleteAfterDeletionHook: null,
     history,
     deletedDatasets: [],
+    refetch: {},
   }))
   .views(self => ({
     get treeActiveNodes() {
@@ -266,6 +267,9 @@ const myTypes = types
     },
     setAssigningBeob(val) {
       self.assigningBeob = val
+    },
+    setRefetchKey({ key, value }) {
+      self.refetch[key] = value
     },
     setTreeKey({ tree, key, value }) {
       //const oldValue = getSnapshot(self[tree][key])
