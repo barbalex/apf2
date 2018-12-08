@@ -2,19 +2,26 @@ import React, { useContext } from 'react'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
+import MarkerClusterGroup from 'react-leaflet-markercluster'
 
-import buildMarkers from './buildMarkers'
-import PopMarkerCluster from './Cluster'
+import Marker from './Marker'
 import filterNodesByNodeFilterArray from '../../../TreeContainer/filterNodesByNodeFilterArray'
 import mobxStoreContext from '../../../../../mobxStoreContext'
 
-const PmcComponent = ({
-  treeName,
-  data,
-}: {
-  treeName: string,
-  data: Object,
-}) => {
+const iconCreateFunction = function(cluster) {
+  const markers = cluster.getAllChildMarkers()
+  const hasHighlightedPop = markers.some(
+    m => m.options.icon.options.className === 'popIconHighlighted',
+  )
+  const className = hasHighlightedPop ? 'popClusterHighlighted' : 'popCluster'
+  return window.L.divIcon({
+    html: markers.length,
+    className,
+    iconSize: window.L.point(40, 40),
+  })
+}
+
+const Pop = ({ treeName, data }: { treeName: string, data: Object }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { nodeFilter, activeApfloraLayers } = mobxStore
   const tree = mobxStore[treeName]
@@ -81,14 +88,18 @@ const PmcComponent = ({
     const popIdsOfTpops = tpops.map(t => t.popId)
     pops = pops.filter(p => popIdsOfTpops.includes(p.id))
   }
+  const popsToUse = activeApfloraLayers.includes('pop') ? pops : []
 
-  const popMarkers = buildMarkers({
-    pops,
-    treeName,
-    data,
-    mobxStore,
-  })
-  return <PopMarkerCluster markers={popMarkers} />
+  return (
+    <MarkerClusterGroup
+      maxClusterRadius={66}
+      iconCreateFunction={iconCreateFunction}
+    >
+      {popsToUse.map(pop => (
+        <Marker key={pop.id} treeName={treeName} pop={pop} />
+      ))}
+    </MarkerClusterGroup>
+  )
 }
 
-export default observer(PmcComponent)
+export default observer(Pop)
