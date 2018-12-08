@@ -26,55 +26,30 @@ import queryPops from './pops'
 import queryPopbers from './popbers'
 import queryPopmassnbers from './popmassnbers'
 import queryTpops from './tpops'
-import withTpopmassns from './withTpopmassns'
 import queryTpopmassns from './tpopmassns'
-import withTpopmassnbers from './withTpopmassnbers'
 import queryTpopmassnbers from './tpopmassnbers'
-import withTpopfeldkontrs from './withTpopfeldkontrs'
 import queryTpopfeldkontrs from './tpopfeldkontrs'
-import withTpopfreiwkontrs from './withTpopfreiwkontrs'
 import queryTpopfreiwkontrs from './tpopfreiwkontrs'
-import withTpopkontrzaehls from './withTpopkontrzaehls'
 import queryTpopkontrzaehls from './tpopkontrzaehls'
-import withTpopbers from './withTpopbers'
 import queryTpopbers from './tpopbers'
-import withBeobZugeordnets from './withBeobZugeordnets'
 import queryBeobZugeordnets from './beobZugeordnets'
-import withZiels from './withZiels'
 import queryZiels from './ziels'
-import withZielbers from './withZielbers'
 import queryZielbers from './zielbers'
-import withErfkrits from './withErfkrits'
 import queryErfkrits from './erfkrits'
-import withApbers from './withApbers'
 import queryApbers from './apbers'
-import withBers from './withBers'
 import queryBers from './bers'
-import withIdealbiotops from './withIdealbiotops'
 import queryIdealbiotops from './idealbiotops'
-import withAparts from './withAparts'
 import queryAparts from './aparts'
-import withAssozarts from './withAssozarts'
 import queryAssozarts from './assozarts'
-import withEkfzaehleinheits from './withEkfzaehleinheits'
 import queryEkfzaehleinheits from './ekfzaehleinheits'
-import withBeobNichtBeurteilts from './withBeobNichtBeurteilts'
 import queryBeobNichtBeurteilts from './beobNichtBeurteilts'
-import withBeobNichtZuzuordnens from './withBeobNichtZuzuordnens'
 import queryBeobNichtZuzuordnens from './beobNichtZuzuordnens'
-import withPopForMap from './withPopForMap'
 import queryPopForMap from './popForMap'
-import withTpopForMap from './withTpopForMap'
 import queryTpopForMap from './tpopForMap'
-import withBeobZugeordnetForMap from './withBeobZugeordnetForMap'
 import queryBeobZugeordnetForMap from './beobZugeordnetForMap'
-import withBeobNichtBeurteiltForMap from './withBeobNichtBeurteiltForMap'
 import queryBeobNichtBeurteiltForMap from './beobNichtBeurteiltForMap'
-import withBeobNichtZuzuordnenForMap from './withBeobNichtZuzuordnenForMap'
 import queryBeobNichtZuzuordnenForMap from './beobNichtZuzuordnenForMap'
-import withBeobZugeordnetAssignPolylinesForMap from './withBeobZugeordnetAssignPolylinesForMap'
 import queryBeobZugeordnetAssignPolylinesForMap from './beobZugeordnetAssignPolylinesForMap'
-import withBeobAssignLines from './withBeobAssignLines'
 import queryBeobAssignLines from './beobAssignLines'
 import TreeContainer from '../TreeContainer'
 import Daten from '../Daten'
@@ -106,100 +81,14 @@ const LogoutButton = styled(Button)`
   margin-top: 10px !important;
 `
 
-const enhance = compose(
-  withProps(() => ({
-    mobxStore: useContext(mobxStoreContext),
-  })),
-  withProps(({ treeName, mobxStore }) =>
-    buildVariables({
-      treeName,
-      mobxStore,
-    }),
-  ),
-  withTpopmassns,
-  withTpopmassnbers,
-  withTpopfeldkontrs,
-  withTpopfreiwkontrs,
-  withTpopkontrzaehls,
-  withTpopbers,
-  withBeobZugeordnets,
-  withZiels,
-  withZielbers,
-  withErfkrits,
-  withApbers,
-  withBers,
-  withIdealbiotops,
-  withAparts,
-  withAssozarts,
-  withEkfzaehleinheits,
-  withBeobNichtBeurteilts,
-  withBeobNichtZuzuordnens,
-  withPopForMap,
-  withTpopForMap,
-  withBeobZugeordnetForMap,
-  withBeobNichtBeurteiltForMap,
-  withBeobNichtZuzuordnenForMap,
-  withBeobZugeordnetAssignPolylinesForMap,
-  withBeobAssignLines,
-  observer,
-)
+const enhance = compose(observer)
 
 const ProjekteContainer = props => {
   const {
-    dataTpopmassns,
-    dataTpopmassnbers,
-    dataTpopfeldkontrs,
-    dataTpopfreiwkontrs,
-    dataTpopkontrzaehls,
-    dataTpopbers,
-    dataBeobZugeordnets,
-    dataZiels,
-    dataZielbers,
-    dataErfkrits,
-    dataApbers,
-    dataBers,
-    dataIdealbiotops,
-    dataAparts,
-    dataAssozarts,
-    dataEkfzaehleinheits,
-    dataBeobNichtBeurteilts,
-    dataBeobNichtZuzuordnens,
-    dataPopForMap,
-    dataTpopForMap,
-    dataBeobZugeordnetForMap,
-    dataBeobNichtBeurteiltForMap,
-    dataBeobNichtZuzuordnenForMap,
-    dataBeobZugeordnetAssignPolylinesForMap,
-    dataBeobAssignLines,
     treeName,
     tabs: tabsPassed,
     projekteTabs,
   }: {
-    dataTpopmassns: Object,
-    dataTpopmassnbers: Object,
-    dataTpopfeldkontrs: Object,
-    dataTpopfreiwkontrs: Object,
-    dataTpopkontrzaehls: Object,
-    dataTpopbers: Object,
-    dataBeobZugeordnets: Object,
-    dataZiels: Object,
-    dataZielbers: Object,
-    dataErfkrits: Object,
-    dataApbers: Object,
-    dataBers: Object,
-    dataIdealbiotops: Object,
-    dataAparts: Object,
-    dataAssozarts: Object,
-    dataEkfzaehleinheits: Object,
-    dataBeobNichtBeurteilts: Object,
-    dataBeobNichtZuzuordnens: Object,
-    dataPopForMap: Object,
-    dataTpopForMap: Object,
-    dataBeobZugeordnetForMap: Object,
-    dataBeobNichtBeurteiltForMap: Object,
-    dataBeobNichtZuzuordnenForMap: Object,
-    dataBeobZugeordnetAssignPolylinesForMap: Object,
-    dataBeobAssignLines: Object,
     treeName: String,
     tabs: Array<String>,
     projekteTabs: Array<String>,
@@ -326,6 +215,210 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { isPop, tpopFilter },
   })
+  const {
+    data: dataTpopmassns,
+    error: errorTpopmassns,
+    loading: loadingTpopmassns,
+  } = useQuery(queryTpopmassns, {
+    suspend: false,
+    variables: { isTpop, tpop },
+  })
+  const {
+    data: dataTpopmassnbers,
+    error: errorTpopmassnbers,
+    loading: loadingTpopmassnbers,
+  } = useQuery(queryTpopmassnbers, {
+    suspend: false,
+    variables: { isTpop, tpop },
+  })
+  const {
+    data: dataTpopfeldkontrs,
+    error: errorTpopfeldkontrs,
+    loading: loadingTpopfeldkontrs,
+  } = useQuery(queryTpopfeldkontrs, {
+    suspend: false,
+    variables: { isTpop, tpop },
+  })
+  const {
+    data: dataTpopfreiwkontrs,
+    error: errorTpopfreiwkontrs,
+    loading: loadingTpopfreiwkontrs,
+  } = useQuery(queryTpopfreiwkontrs, {
+    suspend: false,
+    variables: { isTpop, tpop },
+  })
+  const {
+    data: dataTpopkontrzaehls,
+    error: errorTpopkontrzaehls,
+    loading: loadingTpopkontrzaehls,
+  } = useQuery(queryTpopkontrzaehls, {
+    suspend: false,
+    variables: { isTpopkontr, tpopkontr },
+  })
+  const {
+    data: dataTpopbers,
+    error: errorTpopbers,
+    loading: loadingTpopbers,
+  } = useQuery(queryTpopbers, {
+    suspend: false,
+    variables: { isTpop, tpop },
+  })
+  const {
+    data: dataBeobZugeordnets,
+    error: errorBeobZugeordnets,
+    loading: loadingBeobZugeordnets,
+  } = useQuery(queryBeobZugeordnets, {
+    suspend: false,
+    variables: { isTpop, tpop },
+  })
+  const {
+    data: dataZiels,
+    error: errorZiels,
+    loading: loadingZiels,
+  } = useQuery(queryZiels, {
+    suspend: false,
+    variables: { isAp, ap },
+  })
+  const {
+    data: dataZielbers,
+    error: errorZielbers,
+    loading: loadingZielbers,
+  } = useQuery(queryZielbers, {
+    suspend: false,
+    variables: { isZiel, ziel },
+  })
+  const {
+    data: dataErfkrits,
+    error: errorErfkrits,
+    loading: loadingErfkrits,
+  } = useQuery(queryErfkrits, {
+    suspend: false,
+    variables: { isAp, ap },
+  })
+  const {
+    data: dataApbers,
+    error: errorApbers,
+    loading: loadingApbers,
+  } = useQuery(queryApbers, {
+    suspend: false,
+    variables: { isAp, ap },
+  })
+  const { data: dataBers, error: errorBers, loading: loadingBers } = useQuery(
+    queryBers,
+    {
+      suspend: false,
+      variables: { isAp, ap },
+    },
+  )
+  const {
+    data: dataIdealbiotops,
+    error: errorIdealbiotops,
+    loading: loadingIdealbiotops,
+  } = useQuery(queryIdealbiotops, {
+    suspend: false,
+    variables: { isAp, ap },
+  })
+  const {
+    data: dataAparts,
+    error: errorAparts,
+    loading: loadingAparts,
+  } = useQuery(queryAparts, {
+    suspend: false,
+    variables: { isAp, ap },
+  })
+  const {
+    data: dataAssozarts,
+    error: errorAssozarts,
+    loading: loadingAssozarts,
+  } = useQuery(queryAssozarts, {
+    suspend: false,
+    variables: { isAp, ap },
+  })
+  const {
+    data: dataEkfzaehleinheits,
+    error: errorEkfzaehleinheits,
+    loading: loadingEkfzaehleinheits,
+  } = useQuery(queryEkfzaehleinheits, {
+    suspend: false,
+    variables: { isAp, ap },
+  })
+  const {
+    data: dataBeobNichtBeurteilts,
+    error: errorBeobNichtBeurteilts,
+    loading: loadingBeobNichtBeurteilts,
+  } = useQuery(queryBeobNichtBeurteilts, {
+    suspend: false,
+    variables: { isAp, ap },
+  })
+  const {
+    data: dataBeobNichtZuzuordnens,
+    error: errorBeobNichtZuzuordnens,
+    loading: loadingBeobNichtZuzuordnens,
+  } = useQuery(queryBeobNichtZuzuordnens, {
+    suspend: false,
+    variables: { isAp, ap },
+  })
+  const {
+    data: dataPopForMap,
+    error: errorPopForMap,
+    loading: loadingPopForMap,
+  } = useQuery(queryPopForMap, {
+    suspend: false,
+    variables: { apId, projId, popIsActiveInMap },
+  })
+  const {
+    data: dataTpopForMap,
+    error: errorTpopForMap,
+    loading: loadingTpopForMap,
+  } = useQuery(queryTpopForMap, {
+    suspend: false,
+    variables: { projId, apId, tpopIsActiveInMap },
+  })
+  const {
+    data: dataBeobZugeordnetForMap,
+    error: errorBeobZugeordnetForMap,
+    loading: loadingBeobZugeordnetForMap,
+  } = useQuery(queryBeobZugeordnetForMap, {
+    suspend: false,
+    variables: { projId, apId, beobZugeordnetIsActiveInMap },
+  })
+  const {
+    data: dataBeobNichtBeurteiltForMap,
+    error: errorBeobNichtBeurteiltForMap,
+    loading: loadingBeobNichtBeurteiltForMap,
+  } = useQuery(queryBeobNichtBeurteiltForMap, {
+    suspend: false,
+    variables: { projId, apId, beobNichtBeurteiltIsActiveInMap },
+  })
+  const {
+    data: dataBeobNichtZuzuordnenForMap,
+    error: errorBeobNichtZuzuordnenForMap,
+    loading: loadingBeobNichtZuzuordnenForMap,
+  } = useQuery(queryBeobNichtZuzuordnenForMap, {
+    suspend: false,
+    variables: { projId, apId, beobNichtZuzuordnenIsActiveInMap },
+  })
+  const {
+    data: dataBeobZugeordnetAssignPolylinesForMap,
+    error: errorBeobZugeordnetAssignPolylinesForMap,
+    loading: loadingBeobZugeordnetAssignPolylinesForMap,
+  } = useQuery(queryBeobZugeordnetAssignPolylinesForMap, {
+    suspend: false,
+    variables: { ap, beobZugeordnetAssignPolylinesIsActiveInMap },
+  })
+  const {
+    data: dataBeobAssignLines,
+    error: errorBeobAssignLines,
+    loading: loadingAssignLines,
+  } = useQuery(queryBeobAssignLines, {
+    suspend: false,
+    variables: {
+      projId,
+      beobZugeordnetAssignPolylinesIsActiveInMap,
+      apId,
+      isAp,
+    },
+  })
 
   // TODO: add all
   const queryLoadingArray = [
@@ -351,7 +444,8 @@ const ProjekteContainer = props => {
     errorPopbers,
     errorPopmassnbers,
     errorTpops,
-  ]
+  ].filter(e => !!e)
+  console.log('ProjektContainer, queryErrorArray:', queryErrorArray)
 
   const loading = anyQueryIsLoading(queryLoadingArray)
 
