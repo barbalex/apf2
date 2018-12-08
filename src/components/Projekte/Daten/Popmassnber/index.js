@@ -15,6 +15,7 @@ import query from './data'
 import updatePopmassnberByIdGql from './updatePopmassnberById'
 import withAllTpopmassnErfbeurtWertes from './withAllTpopmassnErfbeurtWertes'
 import mobxStoreContext from '../../../../mobxStoreContext'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
 const Container = styled.div`
   height: 100%;
@@ -74,7 +75,7 @@ const Popmassnber = ({
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
-      const value = event.target.value || null
+      const value = ifIsNumericAsNumber(event.target.value) || null
       /**
        * only save if value changed
        */

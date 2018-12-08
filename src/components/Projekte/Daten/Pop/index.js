@@ -65,7 +65,7 @@ const Pop = ({
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
-      const value = event.target.value || null
+      const value = ifIsNumericAsNumber(event.target.value) || null
       /**
        * only save if value changed
        */
@@ -75,7 +75,7 @@ const Pop = ({
           treeName,
           table: 'pop',
           key: field,
-          value: ifIsNumericAsNumber(value),
+          value,
         })
         //refetchTree()
       } else {
@@ -121,6 +121,7 @@ const Pop = ({
           (value && ((field === 'y' && row.x) || (field === 'x' && row.y))) ||
           (!value && (field === 'y' || field === 'x'))
         ) {
+          console.log('Daten, Pop, refetch.popForMap:', refetch.popForMap)
           if (refetch.popForMap) refetch.popForMap()
         }
         setErrors({})
