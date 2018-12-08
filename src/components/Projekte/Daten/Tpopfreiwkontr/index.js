@@ -28,6 +28,7 @@ import Image from './Image'
 import FormTitle from '../../../shared/FormTitle'
 import withAllAdresses from './withAllAdresses'
 import mobxStoreContext from '../../../../mobxStoreContext'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
 const Container = styled.div`
   background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
@@ -264,7 +265,7 @@ const Tpopfreiwkontr = ({
           treeName,
           table: 'tpopfreiwkontr',
           key: field,
-          value,
+          value: ifIsNumericAsNumber(value),
         })
       }
       /**

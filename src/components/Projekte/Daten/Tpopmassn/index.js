@@ -22,6 +22,7 @@ import updateTpopmassnByIdGql from './updateTpopmassnById'
 import withAeEigenschaftens from './withAeEigenschaftens'
 import withAllAdresses from './withAllAdresses'
 import mobxStoreContext from '../../../../mobxStoreContext'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
 const Container = styled.div`
   height: 100%;
@@ -101,7 +102,7 @@ const Tpopmassn = ({
           treeName,
           table: 'tpopmassn',
           key: field,
-          value,
+          value: ifIsNumericAsNumber(value),
         })
         //refetchTree()
       } else {

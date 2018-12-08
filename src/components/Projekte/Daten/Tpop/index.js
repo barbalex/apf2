@@ -21,6 +21,7 @@ import query from './data'
 import updateTpopByIdGql from './updateTpopById'
 import getGemeindeForKoord from '../../../../modules/getGemeindeForKoord'
 import mobxStoreContext from '../../../../mobxStoreContext'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
 const Container = styled.div`
   height: 100%;
@@ -92,7 +93,7 @@ const Tpop = ({
           treeName,
           table: 'tpop',
           key: field,
-          value,
+          value: ifIsNumericAsNumber(value),
         })
       } else {
         try {

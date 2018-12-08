@@ -25,6 +25,7 @@ import updateTpopkontrByIdGql from './updateTpopkontrById'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import withAllAdresses from './withAllAdresses'
 import mobxStoreContext from '../../../../mobxStoreContext'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
 const Container = styled.div`
   height: 100%;
@@ -131,7 +132,7 @@ const Tpopfeldkontr = ({
           treeName,
           table: 'tpopfeldkontr',
           key: field,
-          value,
+          value: ifIsNumericAsNumber(value),
         })
         //refetchTree()
       } else {

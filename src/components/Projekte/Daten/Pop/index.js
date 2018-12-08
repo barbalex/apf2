@@ -14,6 +14,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updatePopByIdGql from './updatePopById'
 import query from './data'
 import mobxStoreContext from '../../../../mobxStoreContext'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
 const Container = styled.div`
   height: 100%;
@@ -74,7 +75,7 @@ const Pop = ({
           treeName,
           table: 'pop',
           key: field,
-          value,
+          value: ifIsNumericAsNumber(value),
         })
         //refetchTree()
       } else {
