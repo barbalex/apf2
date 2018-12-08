@@ -18,6 +18,7 @@ import query from './data'
 import createTpopkontrzaehl from './createTpopkontrzaehl'
 import withAllTpopkontrzaehlEinheitWertes from './withAllTpopkontrzaehlEinheitWertes'
 import mobxStoreContext from '../../../../../mobxStoreContext'
+import ifIsNumericAsNumber from '../../../../../modules/ifIsNumericAsNumber'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -243,7 +244,7 @@ const Count = ({
       const field = ['anzahl1', 'anzahl2'].includes(fieldPassed)
         ? 'anzahl'
         : fieldPassed
-      let value = event.target.value
+      let value = ifIsNumericAsNumber(event.target.value)
       if ([undefined, ''].includes(value)) value = null
       /**
        * only save if value changed
