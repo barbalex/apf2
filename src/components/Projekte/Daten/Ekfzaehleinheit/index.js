@@ -16,6 +16,7 @@ import query from './data'
 import updateEkfzaehleinheitByIdGql from './updateEkfzaehleinheitById'
 import withAllTpopkontrzaehlEinheitWertes from './withAllTpopkontrzaehlEinheitWertes'
 import mobxStoreContext from '../../../../mobxStoreContext'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
 const Container = styled.div`
   height: 100%;
@@ -84,7 +85,7 @@ const Ekfzaehleinheit = ({
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
-      const value = event.target.value || null
+      const value = ifIsNumericAsNumber(event.target.value) || null
       /**
        * only save if value changed
        */
