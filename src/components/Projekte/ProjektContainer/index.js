@@ -42,7 +42,6 @@ import queryAssozarts from './assozarts'
 import queryEkfzaehleinheits from './ekfzaehleinheits'
 import queryBeobNichtBeurteilts from './beobNichtBeurteilts'
 import queryBeobNichtZuzuordnens from './beobNichtZuzuordnens'
-import queryTpopForMap from './tpopForMap'
 import queryBeobZugeordnetForMap from './beobZugeordnetForMap'
 import queryBeobNichtBeurteiltForMap from './beobNichtBeurteiltForMap'
 import queryBeobNichtZuzuordnenForMap from './beobNichtZuzuordnenForMap'
@@ -90,17 +89,9 @@ const ProjekteContainer = ({
   projekteTabs: Array<String>,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
+  const { mapFilter: mapFilterRaw, nodeFilter, user, isPrint } = mobxStore
+  const { map, setNodes } = mobxStore[treeName]
   const {
-    activeApfloraLayers,
-    mapFilter: mapFilterRaw,
-    nodeFilter,
-    user,
-    isPrint,
-  } = mobxStore
-  const { activeNodeArray, map, setNodes } = mobxStore[treeName]
-  const {
-    setIdsFiltered,
-    setPopIdsFiltered,
     setTpopIdsFiltered,
     setBeobNichtBeurteiltIdsFiltered,
     setBeobNichtZuzuordnenIdsFiltered,
@@ -125,7 +116,6 @@ const ProjekteContainer = ({
     popFilter,
     tpop,
     isTpop,
-    tpopIsActiveInMap,
     tpopFilter,
     tpopkontr,
     isTpopkontr,
@@ -350,14 +340,6 @@ const ProjekteContainer = ({
     variables: { isAp, ap },
   })
   var {
-    data: dataTpopForMap,
-    error: errorTpopForMap,
-    loading: loadingTpopForMap,
-  } = useQuery(queryTpopForMap, {
-    suspend: false,
-    variables: { projId, apId, tpopIsActiveInMap },
-  })
-  var {
     data: dataBeobZugeordnetForMap,
     error: errorBeobZugeordnetForMap,
     loading: loadingBeobZugeordnetForMap,
@@ -431,7 +413,6 @@ const ProjekteContainer = ({
     loadingEkfzaehleinheits,
     loadingBeobNichtBeurteilts,
     loadingBeobNichtZuzuordnens,
-    loadingTpopForMap,
     loadingBeobZugeordnetForMap,
     loadingBeobNichtBeurteiltForMap,
     loadingBeobNichtZuzuordnenForMap,
@@ -467,7 +448,6 @@ const ProjekteContainer = ({
     errorEkfzaehleinheits,
     errorBeobNichtBeurteilts,
     errorBeobNichtZuzuordnens,
-    errorTpopForMap,
     errorBeobZugeordnetForMap,
     errorBeobNichtBeurteiltForMap,
     errorBeobNichtZuzuordnenForMap,
@@ -522,7 +502,6 @@ const ProjekteContainer = ({
     ...dataEkfzaehleinheits,
     ...dataBeobNichtBeurteilts,
     ...dataBeobNichtZuzuordnens,
-    ...dataTpopForMap,
     ...dataBeobZugeordnetForMap,
     ...dataBeobNichtBeurteiltForMap,
     ...dataBeobNichtZuzuordnenForMap,
@@ -562,7 +541,6 @@ const ProjekteContainer = ({
     dataEkfzaehleinheits,
     dataBeobNichtBeurteilts,
     dataBeobNichtZuzuordnens,
-    dataTpopForMap,
     dataBeobZugeordnetForMap,
     dataBeobNichtBeurteiltForMap,
     dataBeobNichtZuzuordnenForMap,
@@ -579,23 +557,6 @@ const ProjekteContainer = ({
       : tabs.length === 0
       ? 1
       : 1 / tabs.length
-
-  const tpopForMapProj = get(dataTpopForMap, `tpopForMap.apsByProjId.nodes`, [])
-  const popForTpopForMapNodes = flatten(
-    tpopForMapProj.map(n => get(n, 'popsByApId.nodes', [])),
-  )
-  const tpopForMapNodes = flatten(
-    popForTpopForMapNodes.map(n => get(n, 'tpopsByPopId.nodes', [])),
-  )
-  const mapTpopIdsFiltered = useMemo(
-    () =>
-      idsInsideFeatureCollection({
-        mapFilter,
-        data: tpopForMapNodes,
-      }),
-    [mapFilter, tpopForMapNodes],
-  )
-  setTpopIdsFiltered(mapTpopIdsFiltered)
 
   const beobNichtBeurteiltForMapAparts = get(
     data,

@@ -45,11 +45,9 @@ const FieldsContainer = styled.div`
 const Tpop = ({
   dimensions = { width: 380 },
   treeName,
-  refetchTree,
 }: {
   dimensions: Object,
   treeName: string,
-  refetchTree: () => void,
 }) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
@@ -169,7 +167,6 @@ const Tpop = ({
           (value && ((field === 'y' && row.x) || (field === 'x' && row.y))) ||
           (!value && (field === 'y' || field === 'x'))
         ) {
-          refetchTree('tpopForMap')
           if (refetch.tpopForMap) refetch.tpopForMap()
         }
         setErrors({})

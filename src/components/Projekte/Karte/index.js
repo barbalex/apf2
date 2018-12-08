@@ -190,7 +190,7 @@ const Karte = ({
   const ApfloraLayerComponents = {
     // MapFilter is used for filtering, need to return null
     mapFilter: () => null,
-    pop: () => <Pop treeName={treeName} data={data} />,
+    pop: () => <Pop treeName={treeName} />,
     //tpop: () => <Tpop treeName={treeName} data={data} clustered={clustered} />,
     tpop: () => null,
     beobNichtBeurteilt: () => (
@@ -354,7 +354,6 @@ const Karte = ({
                     },*/
                 })
                 // refetch so it appears on map
-                refetchTree('tpopForMap')
                 if (refetch.tpopForMap) refetch.tpopForMap()
               } catch (error) {
                 addError(error)
@@ -377,7 +376,7 @@ const Karte = ({
               return <ApfloraLayerComponent key={index} />
             })
             .reverse()}
-          <Tpop treeName={treeName} data={data} clustered={clustered} />
+          <Tpop treeName={treeName} clustered={clustered} />
           <ScaleControl imperial={false} />
           <LayersControl
             data={data}

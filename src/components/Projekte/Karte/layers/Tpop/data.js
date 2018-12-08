@@ -1,14 +1,8 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query TpopForMapQuery(
-    $apId: UUID!
-    $projId: UUID!
-    $tpopIsActiveInMap: Boolean!
-  ) {
-    # this one is used to refetch data when new tpop was localized
-    # so that the new marker appears on map
-    tpopForMap: projektById(id: $projId) @include(if: $tpopIsActiveInMap) {
+  query TpopForMapQuery($apId: UUID!, $projId: UUID!) {
+    tpopForMap: projektById(id: $projId) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {

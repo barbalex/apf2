@@ -1,12 +1,15 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
+import { useQuery } from 'react-apollo-hooks'
 
 import Marker from './Marker'
 import filterNodesByNodeFilterArray from '../../../TreeContainer/filterNodesByNodeFilterArray'
 import mobxStoreContext from '../../../../../mobxStoreContext'
+import query from './data'
+import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
 
 const iconCreateFunction = function(cluster) {
   const markers = cluster.getAllChildMarkers()
@@ -26,21 +29,22 @@ const iconCreateFunction = function(cluster) {
 
 const Tpop = ({
   treeName,
-  /**
-   * need to fetch data from ProjektContainer
-   * because refetch after localizing then makes
-   * sure, new tpop appears
-   */
-  data,
   clustered,
 }: {
   treeName: string,
-  data: Object,
   clustered: Boolean,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { nodeFilter, activeApfloraLayers } = mobxStore
+  const {
+    nodeFilter,
+    mapFilter,
+    activeApfloraLayers,
+    setRefetchKey,
+    addError,
+  } = mobxStore
   const tree = mobxStore[treeName]
+  const { map } = tree
+  const { setTpopIdsFiltered } = map
 
   const popFilterString = get(tree, 'nodeLabelFilter.pop')
   const popNodeFilterArray = Object.entries(nodeFilter[tree.name].pop).filter(
@@ -50,6 +54,24 @@ const Tpop = ({
   const tpopNodeFilterArray = Object.entries(nodeFilter[tree.name].tpop).filter(
     ([key, value]) => value || value === 0 || value === false,
   )
+
+  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
+  const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
+  const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
+  var { data, error, refetch } = useQuery(query, {
+    suspend: false,
+    variables: { projId, apId },
+  })
+  setRefetchKey({ key: 'tpopForMap', value: refetch })
+
+  if (error) {
+    addError(
+      new Error(
+        `Fehler beim Laden der Populationen für die Karte: ${error.message}`,
+      ),
+    )
+  }
+
   const pops = get(data, 'tpopForMap.apsByProjId.nodes[0].popsByApId.nodes', [])
     // filter them by nodeLabelFilter
     .filter(p => {
@@ -86,6 +108,16 @@ const Tpop = ({
   const tpopMarkers = tpopsToUse.map(tpop => (
     <Marker key={tpop.id} treeName={treeName} tpop={tpop} />
   ))
+
+  const mapTpopIdsFiltered = useMemo(
+    () =>
+      idsInsideFeatureCollection({
+        mapFilter,
+        data: tpops,
+      }),
+    [mapFilter, tpops],
+  )
+  setTpopIdsFiltered(mapTpopIdsFiltered)
 
   if (clustered) {
     return (
