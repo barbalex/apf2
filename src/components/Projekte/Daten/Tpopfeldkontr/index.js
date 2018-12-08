@@ -121,7 +121,7 @@ const Tpopfeldkontr = ({
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
-      let value = event.target.value
+      let value = ifIsNumericAsNumber(event.target.value)
       if ([undefined, ''].includes(value)) value = null
       /**
        * only save if value changed
@@ -132,7 +132,7 @@ const Tpopfeldkontr = ({
           treeName,
           table: 'tpopfeldkontr',
           key: field,
-          value: ifIsNumericAsNumber(value),
+          value,
         })
         //refetchTree()
       } else {

@@ -82,7 +82,7 @@ const Tpop = ({
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
-      let value = event.target.value
+      let value = ifIsNumericAsNumber(event.target.value)
       if ([undefined, ''].includes(value)) value = null
       /**
        * only save if value changed
@@ -93,7 +93,7 @@ const Tpop = ({
           treeName,
           table: 'tpop',
           key: field,
-          value: ifIsNumericAsNumber(value),
+          value,
         })
       } else {
         try {

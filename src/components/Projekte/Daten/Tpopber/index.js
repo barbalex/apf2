@@ -13,6 +13,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './data'
 import updateTpopberByIdGql from './updateTpopberById'
 import mobxStoreContext from '../../../../mobxStoreContext'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
 const Container = styled.div`
   height: 100%;
@@ -61,7 +62,7 @@ const Tpopber = ({
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
-      let value = event.target.value
+      let value = ifIsNumericAsNumber(event.target.value)
       if ([undefined, ''].includes(value)) value = null
       /**
        * only save if value changed
