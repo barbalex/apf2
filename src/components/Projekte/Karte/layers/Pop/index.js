@@ -58,22 +58,6 @@ const Pop = ({ treeName }: { treeName: string }) => {
       ),
     )
   }
-  const popForMapProj = get(data, `popForMap.apsByProjId.nodes`, [])
-  const popForMapNodes = flatten(
-    popForMapProj.map(n => get(n, 'popsByApId.nodes', [])),
-  )
-  const mapPopIdsFiltered = useMemo(
-    () =>
-      idsInsideFeatureCollection({
-        mapFilter,
-        data: popForMapNodes,
-        idKey: 'id',
-        xKey: 'x',
-        yKey: 'y',
-      }),
-    [mapFilter, popForMapNodes],
-  )
-  setPopIdsFiltered(mapPopIdsFiltered)
 
   let pops = get(data, 'popForMap.apsByProjId.nodes[0].popsByApId.nodes', [])
     // filter them by nodeLabelFilter
@@ -134,6 +118,19 @@ const Pop = ({ treeName }: { treeName: string }) => {
     pops = pops.filter(p => popIdsOfTpops.includes(p.id))
   }
   const popsToUse = activeApfloraLayers.includes('pop') ? pops : []
+
+  const mapPopIdsFiltered = useMemo(
+    () =>
+      idsInsideFeatureCollection({
+        mapFilter,
+        data: pops,
+        idKey: 'id',
+        xKey: 'x',
+        yKey: 'y',
+      }),
+    [mapFilter, pops],
+  )
+  setPopIdsFiltered(mapPopIdsFiltered)
 
   return (
     <MarkerClusterGroup
