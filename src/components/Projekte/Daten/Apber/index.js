@@ -19,6 +19,7 @@ import withAllAdresses from './withAllAdresses'
 import withAllApErfkritWertes from './withAllApErfkritWertes'
 import query from './data'
 import mobxStoreContext from '../../../../mobxStoreContext'
+import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
 const Container = styled.div`
   height: 100%;
@@ -78,7 +79,7 @@ const Apber = ({
 
   const saveToDb = useCallback(async event => {
     const field = event.target.name
-    const value = event.target.value || null
+    const value = ifIsNumericAsNumber(event.target.value) || null
     const row = get(data, 'apberById', {})
     /**
      * only save if value changed
