@@ -1,11 +1,17 @@
 import React, { useContext } from 'react'
-import { Marker } from 'react-leaflet'
+import { Marker, Tooltip, Popup } from 'react-leaflet'
 import get from 'lodash/get'
+import styled from 'styled-components'
 
 import mobxStoreContext from '../../../../../mobxStoreContext'
 import tpopIcon from '../../../../../etc/tpop.png'
 import tpopIconHighlighted from '../../../../../etc/tpopHighlighted.png'
 import epsg2056to4326 from '../../../../../modules/epsg2056to4326'
+import appBaseUrl from '../../../../../modules/appBaseUrl'
+
+const StyledH3 = styled.h3`
+  margin: 7px 0;
+`
 
 /**
  * TODO:
@@ -15,7 +21,7 @@ const TpopMarker = ({ treeName, tpop }: { treeName: string, tpop: Object }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { apfloraLayers, tpopLabelUsingNr } = mobxStore
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
-  //const { ap, projekt } = activeNodes
+  const { ap, projekt } = activeNodes
   const { idsFiltered: mapIdsFiltered } = mobxStore[treeName].map
 
   const tpopNr = get(tpop, 'nr', '(keine Nr)')
@@ -35,7 +41,52 @@ const TpopMarker = ({ treeName, tpop }: { treeName: string, tpop: Object }) => {
   const zIndexOffset = -apfloraLayers.findIndex(
     apfloraLayer => apfloraLayer.value === 'tpop',
   )
-  return <Marker position={latLng} icon={icon} />
+  return (
+    <Marker
+      position={latLng}
+      icon={icon}
+      title={title}
+      zIndexOffset={zIndexOffset}
+    >
+      <Popup>
+        <>
+          <div>Teil-Population</div>
+          <StyledH3>
+            {`${tpop.nr || '(keine Nr)'}: ${tpop.flurname ||
+              '(kein Flurname)'}`}
+          </StyledH3>
+          <div>
+            {`Population: ${get(tpop, 'popByPopId.nr', '(keine Nr)')}: ${get(
+              tpop,
+              'popByPopId.name',
+              '(kein Name)',
+            )}`}
+          </div>
+          <div>
+            {`Koordinaten: ${tpop.x.toLocaleString(
+              'de-ch',
+            )} / ${tpop.y.toLocaleString('de-ch')}`}
+          </div>
+          <a
+            href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${get(
+              tpop,
+              'popByPopId.id',
+              '',
+            )}/Teil-Populationen/${tpop.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Formular in neuem Tab öffnen
+          </a>
+        </>
+      </Popup>
+      <Tooltip direction="bottom" opacity={1} permanent>
+        <span className="mapTooltip">
+          {tpopLabelUsingNr ? nrLabel : tpop.flurname}
+        </span>
+      </Tooltip>
+    </Marker>
+  )
 }
 
 export default TpopMarker
