@@ -1,6 +1,4 @@
 // @flow
-import get from 'lodash/get'
-
 import isNodeOpen from './isNodeOpen'
 import isNodeInActiveNodePath from './isNodeInActiveNodePath'
 import openNode from './openNode'
