@@ -2,14 +2,29 @@ import React, { useContext } from 'react'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
+import MarkerClusterGroup from 'react-leaflet-markercluster'
 
-import buildMarkersClustered from './buildMarkersClustered'
 import Marker from './Marker'
-import MarkerCluster from './MarkerCluster'
 import filterNodesByNodeFilterArray from '../../../TreeContainer/filterNodesByNodeFilterArray'
 import mobxStoreContext from '../../../../../mobxStoreContext'
 
-const TpopMarkerMarker = ({
+const iconCreateFunction = function(cluster) {
+  const markers = cluster.getAllChildMarkers()
+  const hasHighlightedTpop = markers.some(
+    m => m.options.icon.options.className === 'tpopIconHighlighted',
+  )
+
+  const className = hasHighlightedTpop
+    ? 'tpopClusterHighlighted'
+    : 'tpopCluster'
+  return window.L.divIcon({
+    html: markers.length,
+    className,
+    iconSize: window.L.point(40, 40),
+  })
+}
+
+const Tpop = ({
   treeName,
   /**
    * need to fetch data from ProjektContainer
@@ -68,20 +83,21 @@ const TpopMarkerMarker = ({
       }),
     )
   const tpopsToUse = activeApfloraLayers.includes('tpop') ? tpops : []
-
-  if (clustered) {
-    const markers = buildMarkersClustered({
-      tpops,
-      treeName,
-      data,
-      mobxStore,
-    })
-    return <MarkerCluster markers={markers} />
-  }
-  console.log('TpopMarker:', { tpops, activeApfloraLayers })
-  return tpopsToUse.map(tpop => (
+  const tpopMarkers = tpopsToUse.map(tpop => (
     <Marker key={tpop.id} treeName={treeName} tpop={tpop} />
   ))
+
+  if (clustered) {
+    return (
+      <MarkerClusterGroup
+        maxClusterRadius={66}
+        iconCreateFunction={iconCreateFunction}
+      >
+        {tpopMarkers}
+      </MarkerClusterGroup>
+    )
+  }
+  return tpopMarkers
 }
 
-export default observer(TpopMarkerMarker)
+export default observer(Tpop)

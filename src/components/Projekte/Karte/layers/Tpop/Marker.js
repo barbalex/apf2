@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { Marker, Tooltip, Popup } from 'react-leaflet'
 import get from 'lodash/get'
 import styled from 'styled-components'
+import { observer } from 'mobx-react-lite'
 
 import mobxStoreContext from '../../../../../mobxStoreContext'
 import tpopIcon from '../../../../../etc/tpop.png'
@@ -90,4 +91,4 @@ const TpopMarker = ({ treeName, tpop }: { treeName: string, tpop: Object }) => {
   )
 }
 
-export default TpopMarker
+export default observer(TpopMarker)

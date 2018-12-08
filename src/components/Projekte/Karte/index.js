@@ -52,7 +52,7 @@ import '../../../../node_modules/leaflet-measure/dist/leaflet-measure.css'
 import '../../../../node_modules/leaflet-draw/dist/leaflet.draw.css'
 import '../../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
 import Pop from './layers/PopMarker'
-import Tpop from './layers/TpopMarker'
+import Tpop from './layers/Tpop'
 import BeobNichtBeurteilt from './layers/BeobNichtBeurteilt'
 import BeobNichtZuzuordnen from './layers/BeobNichtZuzuordnen'
 import BeobZugeordnet from './layers/BeobZugeordnet'
@@ -375,7 +375,7 @@ const Karte = ({
               return <ApfloraLayerComponent key={index} />
             })
             .reverse()}
-          <Tpop treeName={treeName} data={data} clustered={false} />
+          <Tpop treeName={treeName} data={data} clustered={clustered} />
           <ScaleControl imperial={false} />
           <LayersControl
             data={data}
