@@ -2,7 +2,6 @@
 import React, { useContext, useMemo } from 'react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import get from 'lodash/get'
 import upperFirst from 'lodash/upperFirst'
