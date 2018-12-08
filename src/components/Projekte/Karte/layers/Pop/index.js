@@ -1,12 +1,15 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
+import { useQuery } from 'react-apollo-hooks'
 
 import Marker from './Marker'
 import filterNodesByNodeFilterArray from '../../../TreeContainer/filterNodesByNodeFilterArray'
 import mobxStoreContext from '../../../../../mobxStoreContext'
+import query from './data'
+import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
 
 const iconCreateFunction = function(cluster) {
   const markers = cluster.getAllChildMarkers()
@@ -21,15 +24,57 @@ const iconCreateFunction = function(cluster) {
   })
 }
 
-const Pop = ({ treeName, data }: { treeName: string, data: Object }) => {
+const Pop = ({ treeName }: { treeName: string }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { nodeFilter, activeApfloraLayers } = mobxStore
+  const {
+    nodeFilter,
+    activeApfloraLayers,
+    addError,
+    mapFilter,
+    setRefetchKey,
+  } = mobxStore
   const tree = mobxStore[treeName]
+  const { map } = tree
+  const { setPopIdsFiltered } = map
 
   const popFilterString = get(tree, 'nodeLabelFilter.pop')
   const nodeFilterArray = Object.entries(nodeFilter[tree.name].pop).filter(
     ([key, value]) => value || value === 0 || value === false,
   )
+
+  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
+  const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
+  const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
+  var { data, error, refetch } = useQuery(query, {
+    suspend: false,
+    variables: { apId, projId },
+  })
+  setRefetchKey({ key: 'popForMap', value: refetch })
+
+  if (error) {
+    addError(
+      new Error(
+        `Fehler beim Laden der Populationen für die Karte: ${error.message}`,
+      ),
+    )
+  }
+  const popForMapProj = get(data, `popForMap.apsByProjId.nodes`, [])
+  const popForMapNodes = flatten(
+    popForMapProj.map(n => get(n, 'popsByApId.nodes', [])),
+  )
+  const mapPopIdsFiltered = useMemo(
+    () =>
+      idsInsideFeatureCollection({
+        mapFilter,
+        data: popForMapNodes,
+        idKey: 'id',
+        xKey: 'x',
+        yKey: 'y',
+      }),
+    [mapFilter, popForMapNodes],
+  )
+  setPopIdsFiltered(mapPopIdsFiltered)
+
   let pops = get(data, 'popForMap.apsByProjId.nodes[0].popsByApId.nodes', [])
     // filter them by nodeLabelFilter
     .filter(p => {

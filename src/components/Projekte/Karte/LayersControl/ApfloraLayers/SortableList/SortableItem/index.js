@@ -122,7 +122,7 @@ const MySortableItem = ({ treeName, apfloraLayer, index }) => {
   } = mobxStore
   const { idsFiltered } = mobxStore[treeName].map
   const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
-  const mapIdsFiltered = getSnapshot(idsFiltered)
+  const mapIdsFiltered = idsFiltered
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const layer = apfloraLayer.value
   const pop = layer === 'pop' && activeApfloraLayers.includes('pop')

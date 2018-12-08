@@ -37,7 +37,7 @@ const Pop = ({
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const client = useApolloClient()
-  const { nodeFilter, nodeFilterSetValue } = mobxStore
+  const { nodeFilter, nodeFilterSetValue, refetch } = mobxStore
   const showFilter = !!nodeFilter[treeName].activeTable
   const { activeNodeArray } = mobxStore[treeName]
 
@@ -121,7 +121,7 @@ const Pop = ({
           (value && ((field === 'y' && row.x) || (field === 'x' && row.y))) ||
           (!value && (field === 'y' || field === 'x'))
         ) {
-          refetchTree('popForMap')
+          if (refetch.popForMap) refetch.popForMap()
         }
         setErrors({})
       }

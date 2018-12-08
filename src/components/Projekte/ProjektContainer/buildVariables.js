@@ -159,8 +159,6 @@ export default ({
     )
 
   const apIsActiveInMap = mapIsActive && isAp
-  const popIsActiveInMap =
-    apIsActiveInMap && activeApfloraLayers.includes('pop')
   const tpopIsActiveInMap =
     apIsActiveInMap && activeApfloraLayers.includes('tpop')
   const beobNichtBeurteiltIsActiveInMap =
@@ -187,7 +185,6 @@ export default ({
     isZiel,
     pop,
     isPop,
-    popIsActiveInMap,
     popFilter,
     tpop,
     isTpop,

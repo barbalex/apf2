@@ -1,18 +1,31 @@
-import { types } from 'mobx-state-tree'
+import { types, getParent } from 'mobx-state-tree'
 
 export default types
   .model('Map', {
-    idsFiltered: types.array(types.union(types.string, types.number)),
     popIdsFiltered: types.array(types.string),
     tpopIdsFiltered: types.array(types.string),
     beobNichtBeurteiltIdsFiltered: types.array(types.string),
     beobNichtZuzuordnenIdsFiltered: types.array(types.string),
     beobZugeordnetIdsFiltered: types.array(types.string),
   })
-  .actions(self => ({
-    setIdsFiltered(val) {
-      self.idsFiltered = val
+  .views(self => ({
+    get idsFiltered() {
+      const tree = getParent(self)
+      const { activeNodeArray } = tree
+      const { activeApfloraLayers } = getParent(tree)
+      if (!activeApfloraLayers.includes('mapFilter')) {
+        return activeNodeArray
+      }
+      return [
+        ...self.popIdsFiltered,
+        ...self.tpopIdsFiltered,
+        ...self.beobNichtBeurteiltIdsFiltered,
+        ...self.beobNichtZuzuordnenIdsFiltered,
+        ...self.beobZugeordnetIdsFiltered,
+      ]
     },
+  }))
+  .actions(self => ({
     setPopIdsFiltered(val) {
       self.popIdsFiltered = val
     },

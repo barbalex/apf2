@@ -53,7 +53,7 @@ const Tpop = ({
 }) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
-  const { addError, nodeFilter, nodeFilterSetValue } = mobxStore
+  const { addError, nodeFilter, nodeFilterSetValue, refetch } = mobxStore
 
   const [errors, setErrors] = useState({})
 
@@ -170,6 +170,7 @@ const Tpop = ({
           (!value && (field === 'y' || field === 'x'))
         ) {
           refetchTree('tpopForMap')
+          if (refetch.tpopForMap) refetch.tpopForMap()
         }
         setErrors({})
       }

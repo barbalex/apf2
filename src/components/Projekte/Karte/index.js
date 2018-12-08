@@ -141,6 +141,7 @@ const Karte = ({
     addError,
     assigningBeob,
     setMapMouseCoordinates,
+    refetch,
   } = mobxStore
   const bounds = getSnapshot(boundsRaw)
   const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
@@ -354,6 +355,7 @@ const Karte = ({
                 })
                 // refetch so it appears on map
                 refetchTree('tpopForMap')
+                if (refetch.tpopForMap) refetch.tpopForMap()
               } catch (error) {
                 addError(error)
               }

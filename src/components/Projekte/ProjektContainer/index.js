@@ -9,7 +9,6 @@ import flatten from 'lodash/flatten'
 import Button from '@material-ui/core/Button'
 import jwtDecode from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
 import { useQuery } from 'react-apollo-hooks'
 
 // when Karte was loaded async, it did not load,
@@ -43,7 +42,6 @@ import queryAssozarts from './assozarts'
 import queryEkfzaehleinheits from './ekfzaehleinheits'
 import queryBeobNichtBeurteilts from './beobNichtBeurteilts'
 import queryBeobNichtZuzuordnens from './beobNichtZuzuordnens'
-import queryPopForMap from './popForMap'
 import queryTpopForMap from './tpopForMap'
 import queryBeobZugeordnetForMap from './beobZugeordnetForMap'
 import queryBeobNichtBeurteiltForMap from './beobNichtBeurteiltForMap'
@@ -124,7 +122,6 @@ const ProjekteContainer = ({
     isZiel,
     pop,
     isPop,
-    popIsActiveInMap,
     popFilter,
     tpop,
     isTpop,
@@ -353,14 +350,6 @@ const ProjekteContainer = ({
     variables: { isAp, ap },
   })
   var {
-    data: dataPopForMap,
-    error: errorPopForMap,
-    loading: loadingPopForMap,
-  } = useQuery(queryPopForMap, {
-    suspend: false,
-    variables: { apId, projId, popIsActiveInMap },
-  })
-  var {
     data: dataTpopForMap,
     error: errorTpopForMap,
     loading: loadingTpopForMap,
@@ -442,7 +431,6 @@ const ProjekteContainer = ({
     loadingEkfzaehleinheits,
     loadingBeobNichtBeurteilts,
     loadingBeobNichtZuzuordnens,
-    loadingPopForMap,
     loadingTpopForMap,
     loadingBeobZugeordnetForMap,
     loadingBeobNichtBeurteiltForMap,
@@ -479,7 +467,6 @@ const ProjekteContainer = ({
     errorEkfzaehleinheits,
     errorBeobNichtBeurteilts,
     errorBeobNichtZuzuordnens,
-    errorPopForMap,
     errorTpopForMap,
     errorBeobZugeordnetForMap,
     errorBeobNichtBeurteiltForMap,
@@ -535,7 +522,6 @@ const ProjekteContainer = ({
     ...dataEkfzaehleinheits,
     ...dataBeobNichtBeurteilts,
     ...dataBeobNichtZuzuordnens,
-    ...dataPopForMap,
     ...dataTpopForMap,
     ...dataBeobZugeordnetForMap,
     ...dataBeobNichtBeurteiltForMap,
@@ -576,7 +562,6 @@ const ProjekteContainer = ({
     dataEkfzaehleinheits,
     dataBeobNichtBeurteilts,
     dataBeobNichtZuzuordnens,
-    dataPopForMap,
     dataTpopForMap,
     dataBeobZugeordnetForMap,
     dataBeobNichtBeurteiltForMap,
@@ -594,25 +579,6 @@ const ProjekteContainer = ({
       : tabs.length === 0
       ? 1
       : 1 / tabs.length
-
-  // TODO:
-  // only fetch these if layer is active
-  const popForMapProj = get(dataPopForMap, `popForMap.apsByProjId.nodes`, [])
-  const popForMapNodes = flatten(
-    popForMapProj.map(n => get(n, 'popsByApId.nodes', [])),
-  )
-  const mapPopIdsFiltered = useMemo(
-    () =>
-      idsInsideFeatureCollection({
-        mapFilter,
-        data: popForMapNodes,
-        idKey: 'id',
-        xKey: 'x',
-        yKey: 'y',
-      }),
-    [mapFilter, popForMapNodes],
-  )
-  setPopIdsFiltered(mapPopIdsFiltered)
 
   const tpopForMapProj = get(dataTpopForMap, `tpopForMap.apsByProjId.nodes`, [])
   const popForTpopForMapNodes = flatten(
@@ -690,20 +656,6 @@ const ProjekteContainer = ({
     [mapFilter, beobZugeordnetForMapNodes],
   )
   setBeobZugeordnetIdsFiltered(mapBeobZugeordnetIdsFiltered)
-
-  if (!activeApfloraLayers.includes('mapFilter')) {
-    // when no map filter exists nodes in activeNodeArray should be highlighted
-    setIdsFiltered(getSnapshot(activeNodeArray))
-  } else {
-    // when map filter exists, nodes in map filter should be highlighted
-    setIdsFiltered([
-      ...mapPopIdsFiltered,
-      ...mapTpopIdsFiltered,
-      ...mapBeobNichtBeurteiltIdsFiltered,
-      ...mapBeobNichtZuzuordnenIdsFiltered,
-      ...mapBeobZugeordnetIdsFiltered,
-    ])
-  }
 
   // TODO: which query to check for error?
   if (anyQueryReturnsPermissionError(queryErrorArray)) {
