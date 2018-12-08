@@ -68,13 +68,6 @@ const Daten = ({
   const { nodeFilter } = mobxStore
   const { activeNodeArray, activeNode } = mobxStore[treeName]
 
-  console.log('Daten', {
-    nodeFilter: nodeFilter ? getSnapshot(nodeFilter) : undefined,
-    activeNodeArray: activeNodeArray ? getSnapshot(activeNodeArray) : undefined,
-    activeNode: activeNode ? getSnapshot(activeNode) : undefined,
-    role,
-  })
-
   const formObject = {
     projekt: (
       <Projekt
