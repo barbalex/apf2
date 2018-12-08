@@ -12,11 +12,12 @@ import appBaseUrl from '../../../../../modules/appBaseUrl'
 const StyledH3 = styled.h3`
   margin: 7px 0;
 `
+const StyledTooltip = styled(Tooltip)`
+  &:before {
+    content: none !important;
+  }
+`
 
-/**
- * TODO:
- * add tooltip and popup, see buildMarkers
- */
 const TpopMarker = ({ treeName, tpop }: { treeName: string, tpop: Object }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { apfloraLayers, tpopLabelUsingNr } = mobxStore
@@ -80,11 +81,11 @@ const TpopMarker = ({ treeName, tpop }: { treeName: string, tpop: Object }) => {
           </a>
         </>
       </Popup>
-      <Tooltip direction="bottom" opacity={1} permanent>
+      <StyledTooltip direction="bottom" opacity={1} permanent>
         <span className="mapTooltip">
           {tpopLabelUsingNr ? nrLabel : tpop.flurname}
         </span>
-      </Tooltip>
+      </StyledTooltip>
     </Marker>
   )
 }
