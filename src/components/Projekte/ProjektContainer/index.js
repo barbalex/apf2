@@ -83,17 +83,15 @@ const LogoutButton = styled(Button)`
 
 const enhance = compose(observer)
 
-const ProjekteContainer = props => {
-  const {
-    treeName,
-    tabs: tabsPassed,
-    projekteTabs,
-  }: {
-    treeName: String,
-    tabs: Array<String>,
-    projekteTabs: Array<String>,
-  } = props
-
+const ProjekteContainer = ({
+  treeName,
+  tabs: tabsPassed,
+  projekteTabs,
+}: {
+  treeName: String,
+  tabs: Array<String>,
+  projekteTabs: Array<String>,
+}) => {
   const mobxStore = useContext(mobxStoreContext)
   const {
     activeApfloraLayers,
@@ -119,7 +117,7 @@ const ProjekteContainer = props => {
     projId,
     isProjekt,
     apFilter,
-    apFilterSet,
+    //apFilterSet,
     ap,
     apId,
     isAp,
@@ -135,7 +133,6 @@ const ProjekteContainer = props => {
     tpopFilter,
     tpopkontr,
     isTpopkontr,
-    apIsActiveInMap,
     isWerteListen,
     isAdresse,
     beobNichtBeurteiltIsActiveInMap,
@@ -147,7 +144,8 @@ const ProjekteContainer = props => {
     mobxStore,
   })
 
-  const {
+  // use var to enable calling window['variable_name']
+  var {
     data: dataAdresses,
     error: errorAdresses,
     loading: loadingAdresses,
@@ -155,21 +153,20 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { isWerteListen, isAdresse },
   })
-  const {
-    data: dataUsers,
-    error: errorUsers,
-    loading: loadingUsers,
-  } = useQuery(queryUsers, {
-    suspend: false,
-  })
-  const {
+  var { data: dataUsers, error: errorUsers, loading: loadingUsers } = useQuery(
+    queryUsers,
+    {
+      suspend: false,
+    },
+  )
+  var {
     data: dataProjekts,
     error: errorProjekts,
     loading: loadingProjekts,
   } = useQuery(queryProjekts, {
     suspend: false,
   })
-  const {
+  var {
     data: dataApberuebersichts,
     error: errorApberuebersichts,
     loading: loadingApberuebersichts,
@@ -177,21 +174,21 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { isProjekt, projekt },
   })
-  const { data: dataAps, error: errorAps, loading: loadingAps } = useQuery(
+  var { data: dataAps, error: errorAps, loading: loadingAps } = useQuery(
     queryAps,
     {
       suspend: false,
       variables: { isProjekt, apFilter },
     },
   )
-  const { data: dataPops, error: errorPops, loading: loadingPops } = useQuery(
+  var { data: dataPops, error: errorPops, loading: loadingPops } = useQuery(
     queryPops,
     {
       suspend: false,
       variables: { isAp, popFilter },
     },
   )
-  const {
+  var {
     data: dataPopbers,
     error: errorPopbers,
     loading: loadingPopbers,
@@ -199,7 +196,7 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { isPop, pop },
   })
-  const {
+  var {
     data: dataPopmassnbers,
     error: errorPopmassnbers,
     loading: loadingPopmassnbers,
@@ -207,15 +204,14 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { isPop, pop },
   })
-  const {
-    data: dataTpops,
-    error: errorTpops,
-    loading: loadingTpops,
-  } = useQuery(queryTpops, {
-    suspend: false,
-    variables: { isPop, tpopFilter },
-  })
-  const {
+  var { data: dataTpops, error: errorTpops, loading: loadingTpops } = useQuery(
+    queryTpops,
+    {
+      suspend: false,
+      variables: { isPop, tpopFilter },
+    },
+  )
+  var {
     data: dataTpopmassns,
     error: errorTpopmassns,
     loading: loadingTpopmassns,
@@ -223,7 +219,7 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { isTpop, tpop },
   })
-  const {
+  var {
     data: dataTpopmassnbers,
     error: errorTpopmassnbers,
     loading: loadingTpopmassnbers,
@@ -231,7 +227,7 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { isTpop, tpop },
   })
-  const {
+  var {
     data: dataTpopfeldkontrs,
     error: errorTpopfeldkontrs,
     loading: loadingTpopfeldkontrs,
@@ -239,7 +235,7 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { isTpop, tpop },
   })
-  const {
+  var {
     data: dataTpopfreiwkontrs,
     error: errorTpopfreiwkontrs,
     loading: loadingTpopfreiwkontrs,
@@ -247,7 +243,7 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { isTpop, tpop },
   })
-  const {
+  var {
     data: dataTpopkontrzaehls,
     error: errorTpopkontrzaehls,
     loading: loadingTpopkontrzaehls,
@@ -255,7 +251,7 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { isTpopkontr, tpopkontr },
   })
-  const {
+  var {
     data: dataTpopbers,
     error: errorTpopbers,
     loading: loadingTpopbers,
@@ -263,7 +259,7 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { isTpop, tpop },
   })
-  const {
+  var {
     data: dataBeobZugeordnets,
     error: errorBeobZugeordnets,
     loading: loadingBeobZugeordnets,
@@ -271,15 +267,14 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { isTpop, tpop },
   })
-  const {
-    data: dataZiels,
-    error: errorZiels,
-    loading: loadingZiels,
-  } = useQuery(queryZiels, {
-    suspend: false,
-    variables: { isAp, ap },
-  })
-  const {
+  var { data: dataZiels, error: errorZiels, loading: loadingZiels } = useQuery(
+    queryZiels,
+    {
+      suspend: false,
+      variables: { isAp, ap },
+    },
+  )
+  var {
     data: dataZielbers,
     error: errorZielbers,
     loading: loadingZielbers,
@@ -287,7 +282,7 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { isZiel, ziel },
   })
-  const {
+  var {
     data: dataErfkrits,
     error: errorErfkrits,
     loading: loadingErfkrits,
@@ -295,7 +290,7 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { isAp, ap },
   })
-  const {
+  var {
     data: dataApbers,
     error: errorApbers,
     loading: loadingApbers,
@@ -303,14 +298,14 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { isAp, ap },
   })
-  const { data: dataBers, error: errorBers, loading: loadingBers } = useQuery(
+  var { data: dataBers, error: errorBers, loading: loadingBers } = useQuery(
     queryBers,
     {
       suspend: false,
       variables: { isAp, ap },
     },
   )
-  const {
+  var {
     data: dataIdealbiotops,
     error: errorIdealbiotops,
     loading: loadingIdealbiotops,
@@ -318,7 +313,7 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { isAp, ap },
   })
-  const {
+  var {
     data: dataAparts,
     error: errorAparts,
     loading: loadingAparts,
@@ -326,7 +321,7 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { isAp, ap },
   })
-  const {
+  var {
     data: dataAssozarts,
     error: errorAssozarts,
     loading: loadingAssozarts,
@@ -334,7 +329,7 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { isAp, ap },
   })
-  const {
+  var {
     data: dataEkfzaehleinheits,
     error: errorEkfzaehleinheits,
     loading: loadingEkfzaehleinheits,
@@ -342,7 +337,7 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { isAp, ap },
   })
-  const {
+  var {
     data: dataBeobNichtBeurteilts,
     error: errorBeobNichtBeurteilts,
     loading: loadingBeobNichtBeurteilts,
@@ -350,7 +345,7 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { isAp, ap },
   })
-  const {
+  var {
     data: dataBeobNichtZuzuordnens,
     error: errorBeobNichtZuzuordnens,
     loading: loadingBeobNichtZuzuordnens,
@@ -358,7 +353,7 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { isAp, ap },
   })
-  const {
+  var {
     data: dataPopForMap,
     error: errorPopForMap,
     loading: loadingPopForMap,
@@ -366,7 +361,7 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { apId, projId, popIsActiveInMap },
   })
-  const {
+  var {
     data: dataTpopForMap,
     error: errorTpopForMap,
     loading: loadingTpopForMap,
@@ -374,7 +369,7 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { projId, apId, tpopIsActiveInMap },
   })
-  const {
+  var {
     data: dataBeobZugeordnetForMap,
     error: errorBeobZugeordnetForMap,
     loading: loadingBeobZugeordnetForMap,
@@ -382,7 +377,7 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { projId, apId, beobZugeordnetIsActiveInMap },
   })
-  const {
+  var {
     data: dataBeobNichtBeurteiltForMap,
     error: errorBeobNichtBeurteiltForMap,
     loading: loadingBeobNichtBeurteiltForMap,
@@ -390,7 +385,7 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { projId, apId, beobNichtBeurteiltIsActiveInMap },
   })
-  const {
+  var {
     data: dataBeobNichtZuzuordnenForMap,
     error: errorBeobNichtZuzuordnenForMap,
     loading: loadingBeobNichtZuzuordnenForMap,
@@ -398,7 +393,7 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { projId, apId, beobNichtZuzuordnenIsActiveInMap },
   })
-  const {
+  var {
     data: dataBeobZugeordnetAssignPolylinesForMap,
     error: errorBeobZugeordnetAssignPolylinesForMap,
     loading: loadingBeobZugeordnetAssignPolylinesForMap,
@@ -406,10 +401,10 @@ const ProjekteContainer = props => {
     suspend: false,
     variables: { ap, beobZugeordnetAssignPolylinesIsActiveInMap },
   })
-  const {
+  var {
     data: dataBeobAssignLines,
     error: errorBeobAssignLines,
-    loading: loadingAssignLines,
+    loading: loadingBeobAssignLines,
   } = useQuery(queryBeobAssignLines, {
     suspend: false,
     variables: {
@@ -420,7 +415,6 @@ const ProjekteContainer = props => {
     },
   })
 
-  // TODO: add all
   const queryLoadingArray = [
     loadingAdresses,
     loadingUsers,
@@ -431,9 +425,33 @@ const ProjekteContainer = props => {
     loadingPopbers,
     loadingPopmassnbers,
     loadingTpops,
+    loadingTpopmassns,
+    loadingTpopmassnbers,
+    loadingTpopfeldkontrs,
+    loadingTpopfreiwkontrs,
+    loadingTpopkontrzaehls,
+    loadingTpopbers,
+    loadingBeobZugeordnets,
+    loadingZiels,
+    loadingZielbers,
+    loadingErfkrits,
+    loadingApbers,
+    loadingBers,
+    loadingIdealbiotops,
+    loadingAparts,
+    loadingAssozarts,
+    loadingEkfzaehleinheits,
+    loadingBeobNichtBeurteilts,
+    loadingBeobNichtZuzuordnens,
+    loadingPopForMap,
+    loadingTpopForMap,
+    loadingBeobZugeordnetForMap,
+    loadingBeobNichtBeurteiltForMap,
+    loadingBeobNichtZuzuordnenForMap,
+    loadingBeobZugeordnetAssignPolylinesForMap,
+    loadingBeobAssignLines,
   ]
 
-  // TODO: add all (copy from above)
   const queryErrorArray = [
     errorAdresses,
     errorUsers,
@@ -444,21 +462,51 @@ const ProjekteContainer = props => {
     errorPopbers,
     errorPopmassnbers,
     errorTpops,
+    errorTpopmassns,
+    errorTpopmassnbers,
+    errorTpopfeldkontrs,
+    errorTpopfreiwkontrs,
+    errorTpopkontrzaehls,
+    errorTpopbers,
+    errorBeobZugeordnets,
+    errorZiels,
+    errorZielbers,
+    errorErfkrits,
+    errorApbers,
+    errorBers,
+    errorIdealbiotops,
+    errorAparts,
+    errorAssozarts,
+    errorEkfzaehleinheits,
+    errorBeobNichtBeurteilts,
+    errorBeobNichtZuzuordnens,
+    errorPopForMap,
+    errorTpopForMap,
+    errorBeobZugeordnetForMap,
+    errorBeobNichtBeurteiltForMap,
+    errorBeobNichtZuzuordnenForMap,
+    errorBeobZugeordnetAssignPolylinesForMap,
+    errorBeobAssignLines,
   ].filter(e => !!e)
-  console.log('ProjektContainer, queryErrorArray:', queryErrorArray)
 
   const loading = anyQueryIsLoading(queryLoadingArray)
 
-  // TODO:
+  /**
+   * TODO:
+   * idea:
+   * 1. add refetch to mobx-state (object with keys)
+   * 2. move queries where they belong
+   * 3. set refetch from there
+   */
   const refetch = query => {
-    if (query && props[`data${upperFirst(query)}`]) {
-      props[`data${upperFirst(query)}`].refetch()
+    if (query && window[`data${upperFirst(query)}`]) {
+      window[`data${upperFirst(query)}`].refetch()
     }
   }
   const { token } = user
   const role = token ? jwtDecode(token).role : null
 
-  console.log('ProjektContainer')
+  console.log('ProjektContainer', { loading })
 
   const data = {
     ...dataAdresses,
@@ -538,7 +586,6 @@ const ProjekteContainer = props => {
     dataBeobAssignLines,
     mobxStore,
   })
-  console.log('ProjektContainer', { data, dataAdresses })
   setNodes(nodes)
   // remove 2 to treat all same
   const tabs = [...tabsPassed].map(t => t.replace('2', ''))
@@ -690,7 +737,6 @@ const ProjekteContainer = props => {
   }
   const error = anyQueryReturnsError(queryErrorArray)
   if (error) {
-    console.log('ProjektContainer:', { error, queryErrorArray })
     return <ErrorContainer>{`Fehler: ${error.message}`}</ErrorContainer>
   }
 
