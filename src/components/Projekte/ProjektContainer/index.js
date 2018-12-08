@@ -785,10 +785,6 @@ const ProjekteContainer = ({
                 data={data}
                 refetchTree={refetch}
                 loading={loading}
-                // SortedStrings enforce rerendering when sorting or visibility changes
-                //activeOverlaysString={activeOverlays.join()}
-                //activeApfloraLayersString={activeApfloraLayers.join()}
-                //beobsString={beobs.toString()}
               />
             </ReflexElement>
           )}
