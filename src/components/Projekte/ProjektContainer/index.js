@@ -705,15 +705,6 @@ const ProjekteContainer = ({
     ])
   }
 
-  const aparts = get(
-    data,
-    'projektById.apsByProjId.nodes[0].apartsByApId.nodes',
-    [],
-  )
-  const beobs = flatten(
-    aparts.map(a => get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', [])),
-  )
-
   // TODO: which query to check for error?
   if (anyQueryReturnsPermissionError(queryErrorArray)) {
     // during login don't show permission error
