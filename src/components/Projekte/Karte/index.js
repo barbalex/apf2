@@ -130,7 +130,6 @@ const Karte = ({
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
   const {
-    apfloraLayers,
     activeApfloraLayers: activeApfloraLayersRaw,
     overlays,
     activeOverlays: activeOverlaysRaw,
@@ -183,43 +182,6 @@ const Karte = ({
     assigningBeob ||
     activeApfloraLayers.includes('beobZugeordnetAssignPolylines')
   )
-  /**
-   * need an object whose methods return overlays
-   * in order to dynamically display and sort active overlays
-   */
-  const ApfloraLayerComponents = {
-    // MapFilter is used for filtering, need to return null
-    mapFilter: () => null,
-    pop: () => <Pop treeName={treeName} />,
-    //tpop: () => <Tpop treeName={treeName} data={data} clustered={clustered} />,
-    tpop: () => null,
-    beobNichtBeurteilt: () => (
-      <BeobNichtBeurteilt
-        treeName={treeName}
-        data={data}
-        clustered={clustered}
-        refetchTree={refetchTree}
-      />
-    ),
-    beobNichtZuzuordnen: () => (
-      <BeobNichtZuzuordnen
-        treeName={treeName}
-        data={data}
-        clustered={clustered}
-      />
-    ),
-    beobZugeordnet: () => (
-      <BeobZugeordnet
-        treeName={treeName}
-        data={data}
-        clustered={clustered}
-        refetchTree={refetchTree}
-      />
-    ),
-    beobZugeordnetAssignPolylines: () => (
-      <BeobZugeordnetAssignPolylines data={data} treeName={treeName} />
-    ),
-  }
   const OverlayComponents = useMemo(() => ({
     ZhUep: () => <ZhUepOverlay />,
     Detailplaene: () => <Detailplaene />,
@@ -247,13 +209,6 @@ const Karte = ({
     ZhOrtho2015Ir: () => <ZhOrtho2015Ir />,
   }))
   const BaseLayerComponent = BaseLayerComponents[activeBaseLayer]
-  const activeApfloraLayersSorted = sortBy(
-    activeApfloraLayers,
-    activeApfloraLayer =>
-      apfloraLayers.findIndex(
-        apfloraLayer => apfloraLayer.value === activeApfloraLayer,
-      ),
-  )
   const activeOverlaysSorted = sortBy(activeOverlays, activeOverlay =>
     overlays.findIndex(o => o.value === activeOverlay),
   )
@@ -369,14 +324,26 @@ const Karte = ({
               return <OverlayComponent key={overlayName} />
             })
             .reverse()}
-          {activeApfloraLayersSorted
-            .map((apfloraLayerName, index) => {
-              const ApfloraLayerComponent =
-                ApfloraLayerComponents[apfloraLayerName]
-              return <ApfloraLayerComponent key={index} />
-            })
-            .reverse()}
+          <Pop treeName={treeName} />
           <Tpop treeName={treeName} clustered={clustered} />
+          <BeobNichtBeurteilt
+            treeName={treeName}
+            data={data}
+            clustered={clustered}
+            refetchTree={refetchTree}
+          />
+          <BeobNichtZuzuordnen
+            treeName={treeName}
+            data={data}
+            clustered={clustered}
+          />
+          <BeobZugeordnet
+            treeName={treeName}
+            data={data}
+            clustered={clustered}
+            refetchTree={refetchTree}
+          />
+          <BeobZugeordnetAssignPolylines data={data} treeName={treeName} />
           <ScaleControl imperial={false} />
           <LayersControl
             data={data}
