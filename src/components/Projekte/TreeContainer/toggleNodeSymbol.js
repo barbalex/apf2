@@ -1,6 +1,5 @@
 // @flow
 import isEqual from 'lodash/isEqual'
-import get from 'lodash/get'
 
 import isNodeOpen from './isNodeOpen'
 
