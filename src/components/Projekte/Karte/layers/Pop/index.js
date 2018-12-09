@@ -4,6 +4,7 @@ import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useQuery } from 'react-apollo-hooks'
+import { getSnapshot } from 'mobx-state-tree'
 
 import Marker from './Marker'
 import filterNodesByNodeFilterArray from '../../../TreeContainer/filterNodesByNodeFilterArray'
@@ -45,9 +46,10 @@ const Pop = ({ treeName }: { treeName: string }) => {
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
   const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
+  const tpopLayerIsActive = activeApfloraLayers.includes('tpop')
   var { data, error, refetch } = useQuery(query, {
     suspend: false,
-    variables: { apId, projId },
+    variables: { apId, projId, tpopLayerIsActive },
   })
   setRefetchKey({ key: 'popForMap', value: refetch })
 
@@ -59,7 +61,7 @@ const Pop = ({ treeName }: { treeName: string }) => {
     )
   }
 
-  let pops = get(data, 'popForMap.apsByProjId.nodes[0].popsByApId.nodes', [])
+  let pops = get(data, 'projektById.apsByProjId.nodes[0].popsByApId.nodes', [])
     // filter them by nodeLabelFilter
     .filter(p => {
       if (!popFilterString) return true
@@ -77,7 +79,7 @@ const Pop = ({ treeName }: { treeName: string }) => {
   if (activeApfloraLayers.includes('tpop')) {
     const popsForTpops = get(
       data,
-      'tpopForMap.apsByProjId.nodes[0].popsByApId.nodes',
+      'projektById.apsByProjId.nodes[0].popsByApId.nodes',
       [],
     )
       .filter(p => {
