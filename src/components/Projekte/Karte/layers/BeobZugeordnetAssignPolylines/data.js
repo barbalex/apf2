@@ -1,16 +1,10 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query BeobAssignLinesQuery(
-    $projId: UUID!
-    $beobZugeordnetAssignPolylinesIsActiveInMap: Boolean!
-    $apId: UUID
-    $isAp: Boolean!
-  ) {
-    beobAssignLines: projektById(id: $projId)
-      @include(if: $beobZugeordnetAssignPolylinesIsActiveInMap) {
+  query BeobAssignLinesQuery($projId: UUID!, $apId: UUID) {
+    projektById(id: $projId) {
       id
-      apsByProjId(filter: { id: { equalTo: $apId } }) @include(if: $isAp) {
+      apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
           apartsByApId {

@@ -21,14 +21,12 @@ const Markers = ({
   beobs,
   treeName,
   data,
-  refetchTree,
   client,
   mobxStore,
 }: {
   beobs: Array<Object>,
   treeName: string,
   data: Object,
-  refetchTree: () => void,
   client: Object,
   mobxStore: Object,
 }): Array<Object> => {
@@ -120,7 +118,7 @@ const Markers = ({
         })
         refetch.beobNichtBeurteiltForMap()
         refetch.beobZugeordnetForMap()
-        refetchTree('beobAssignLines')
+        refetch.beobAssignLines()
       })
   })
 }

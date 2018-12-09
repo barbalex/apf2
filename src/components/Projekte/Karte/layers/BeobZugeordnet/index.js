@@ -21,13 +21,11 @@ const BeobZugeordnetMarker = ({
   treeName,
   data,
   clustered,
-  refetchTree,
   leaflet,
 }: {
   treeName: string,
   data: Object,
   clustered: Boolean,
-  refetchTree: () => void,
   leaflet: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
@@ -66,7 +64,6 @@ const BeobZugeordnetMarker = ({
     beobs,
     treeName,
     data,
-    refetchTree,
     map: leaflet.map,
     mobxStore,
   })

@@ -22,7 +22,6 @@ const Markers = ({
   treeName,
   client,
   data,
-  refetchTree,
   map,
   mobxStore,
 }: {
@@ -30,7 +29,6 @@ const Markers = ({
   treeName: string,
   client: Object,
   data: Object,
-  refetchTree: () => void,
   map: Object,
   mobxStore: Object,
 }): Array<Object> => {
@@ -132,9 +130,9 @@ const Markers = ({
             tpopId: nearestTpop.id,
           },
         })
-        refetchTree('beobNichtBeurteiltForMap')
+        refetch.beobNichtBeurteiltForMap()
         refetch.beobZugeordnetForMap()
-        refetchTree('beobAssignLines')
+        refetch.beobAssignLines()
         map.redraw()
       })
   })

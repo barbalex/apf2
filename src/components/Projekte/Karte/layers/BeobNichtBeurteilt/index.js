@@ -64,7 +64,6 @@ const BeobNichtBeurteiltMarker = ({
     treeName,
     data,
     mapIdsFiltered,
-    refetchTree,
     client,
     mobxStore,
   })

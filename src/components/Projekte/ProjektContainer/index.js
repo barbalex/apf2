@@ -46,7 +46,6 @@ import queryBeobZugeordnetForMap from './beobZugeordnetForMap'
 import queryBeobNichtBeurteiltForMap from './beobNichtBeurteiltForMap'
 import queryBeobNichtZuzuordnenForMap from './beobNichtZuzuordnenForMap'
 import queryBeobZugeordnetAssignPolylinesForMap from './beobZugeordnetAssignPolylinesForMap'
-import queryBeobAssignLines from './beobAssignLines'
 import TreeContainer from '../TreeContainer'
 import Daten from '../Daten'
 import Exporte from '../Exporte'
@@ -406,19 +405,6 @@ const ProjekteContainer = ({
     key: 'beobZugeordnetAssignPolylinesForMap',
     value: refetchBeobZugeordnetAssignPolylinesForMap,
   })
-  var {
-    data: dataBeobAssignLines,
-    error: errorBeobAssignLines,
-    loading: loadingBeobAssignLines,
-  } = useQuery(queryBeobAssignLines, {
-    suspend: false,
-    variables: {
-      projId,
-      beobZugeordnetAssignPolylinesIsActiveInMap,
-      apId,
-      isAp,
-    },
-  })
 
   const queryLoadingArray = [
     loadingAdresses,
@@ -452,7 +438,6 @@ const ProjekteContainer = ({
     loadingBeobNichtBeurteiltForMap,
     loadingBeobNichtZuzuordnenForMap,
     loadingBeobZugeordnetAssignPolylinesForMap,
-    loadingBeobAssignLines,
   ]
 
   const queryErrorArray = [
@@ -487,7 +472,6 @@ const ProjekteContainer = ({
     errorBeobNichtBeurteiltForMap,
     errorBeobNichtZuzuordnenForMap,
     errorBeobZugeordnetAssignPolylinesForMap,
-    errorBeobAssignLines,
   ].filter(e => !!e)
 
   const loading = anyQueryIsLoading(queryLoadingArray)
@@ -541,7 +525,6 @@ const ProjekteContainer = ({
     ...dataBeobNichtBeurteiltForMap,
     ...dataBeobNichtZuzuordnenForMap,
     ...dataBeobZugeordnetAssignPolylinesForMap,
-    ...dataBeobAssignLines,
   }
   // TODO: useMemo?
   const nodes = buildNodes({
@@ -580,7 +563,6 @@ const ProjekteContainer = ({
     dataBeobNichtBeurteiltForMap,
     dataBeobNichtZuzuordnenForMap,
     dataBeobZugeordnetAssignPolylinesForMap,
-    dataBeobAssignLines,
     mobxStore,
   })
   setNodes(nodes)
