@@ -18,7 +18,13 @@ const StyledH3 = styled.h3`
   margin: 7px 0;
 `
 
-const TpopMarker = ({ treeName, beob }: { treeName: string, beob: Object }) => {
+const BeobNichtBeurteiltMarker = ({
+  treeName,
+  beob,
+}: {
+  treeName: string,
+  beob: Object,
+}) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
   const { assigningBeob, setTreeKey, refetch } = mobxStore
@@ -116,4 +122,4 @@ const TpopMarker = ({ treeName, beob }: { treeName: string, beob: Object }) => {
   )
 }
 
-export default observer(TpopMarker)
+export default observer(BeobNichtBeurteiltMarker)

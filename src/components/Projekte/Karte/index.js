@@ -337,12 +337,7 @@ const Karte = ({
             data={data}
             clustered={clustered}
           />
-          <BeobZugeordnet
-            treeName={treeName}
-            data={data}
-            clustered={clustered}
-            refetchTree={refetchTree}
-          />
+          <BeobZugeordnet treeName={treeName} clustered={clustered} />
           <BeobZugeordnetAssignPolylines treeName={treeName} />
           <ScaleControl imperial={false} />
           <LayersControl
