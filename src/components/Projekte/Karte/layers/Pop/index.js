@@ -4,7 +4,6 @@ import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useQuery } from 'react-apollo-hooks'
-import { getSnapshot } from 'mobx-state-tree'
 
 import Marker from './Marker'
 import filterNodesByNodeFilterArray from '../../../TreeContainer/filterNodesByNodeFilterArray'
@@ -46,10 +45,11 @@ const Pop = ({ treeName }: { treeName: string }) => {
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
   const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
+  const isActiveInMap = activeApfloraLayers.includes('pop')
   const tpopLayerIsActive = activeApfloraLayers.includes('tpop')
   var { data, error, refetch } = useQuery(query, {
     suspend: false,
-    variables: { apId, projId, tpopLayerIsActive },
+    variables: { apId, projId, tpopLayerIsActive, isActiveInMap },
   })
   setRefetchKey({ key: 'popForMap', value: refetch })
 
@@ -119,7 +119,6 @@ const Pop = ({ treeName }: { treeName: string }) => {
     const popIdsOfTpops = tpops.map(t => t.popId)
     pops = pops.filter(p => popIdsOfTpops.includes(p.id))
   }
-  const popsToUse = activeApfloraLayers.includes('pop') ? pops : []
 
   const mapPopIdsFiltered = useMemo(
     () =>
@@ -139,7 +138,7 @@ const Pop = ({ treeName }: { treeName: string }) => {
       maxClusterRadius={66}
       iconCreateFunction={iconCreateFunction}
     >
-      {popsToUse.map(pop => (
+      {pops.map(pop => (
         <Marker key={pop.id} treeName={treeName} pop={pop} />
       ))}
     </MarkerClusterGroup>

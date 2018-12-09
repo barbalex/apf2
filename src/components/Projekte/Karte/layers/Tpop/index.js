@@ -58,9 +58,10 @@ const Tpop = ({
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
   const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
+  const isActiveInMap = activeApfloraLayers.includes('tpop')
   var { data, error, refetch } = useQuery(query, {
     suspend: false,
-    variables: { projId, apId },
+    variables: { projId, apId, isActiveInMap },
   })
   setRefetchKey({ key: 'tpopForMap', value: refetch })
 
@@ -110,8 +111,7 @@ const Tpop = ({
         table: 'tpop',
       }),
     )
-  const tpopsToUse = activeApfloraLayers.includes('tpop') ? tpops : []
-  const tpopMarkers = tpopsToUse.map(tpop => (
+  const tpopMarkers = tpops.map(tpop => (
     <Marker key={tpop.id} treeName={treeName} tpop={tpop} />
   ))
 

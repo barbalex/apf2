@@ -124,10 +124,8 @@ const ProjekteContainer = ({
     isTpopkontr,
     isWerteListen,
     isAdresse,
-    beobNichtBeurteiltIsActiveInMap,
     beobNichtZuzuordnenIsActiveInMap,
     beobZugeordnetAssignPolylinesIsActiveInMap,
-    beobZugeordnetIsActiveInMap,
   } = buildVariables({
     treeName,
     mobxStore,
@@ -352,6 +350,7 @@ const ProjekteContainer = ({
     key: 'beobNichtZuzuordnens',
     value: refetchBeobNichtZuzuordnens,
   })
+
   var {
     data: dataBeobZugeordnetForMap,
     error: errorBeobZugeordnetForMap,
@@ -359,12 +358,13 @@ const ProjekteContainer = ({
     refetch: refetchBeobZugeordnetForMap,
   } = useQuery(queryBeobZugeordnetForMap, {
     suspend: false,
-    variables: { projId, apId, beobZugeordnetIsActiveInMap },
+    variables: { projId, apId },
   })
   setRefetchKey({
     key: 'beobZugeordnetForMap',
     value: refetchBeobZugeordnetForMap,
   })
+
   var {
     data: dataBeobNichtZuzuordnenForMap,
     error: errorBeobNichtZuzuordnenForMap,
