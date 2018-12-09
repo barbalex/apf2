@@ -146,8 +146,6 @@ const Karte = ({
   const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
   const activeOverlays = getSnapshot(activeOverlaysRaw)
 
-  console.log('Karte', { activeApfloraLayers })
-
   const mapRef = useRef(null)
 
   const prevDimensions = usePrevious(dimensions) || {}
