@@ -358,17 +358,27 @@ const ProjekteContainer = ({
     data: dataBeobZugeordnetForMap,
     error: errorBeobZugeordnetForMap,
     loading: loadingBeobZugeordnetForMap,
+    refetch: refetchBeobZugeordnetForMap,
   } = useQuery(queryBeobZugeordnetForMap, {
     suspend: false,
     variables: { projId, apId, beobZugeordnetIsActiveInMap },
+  })
+  setRefetchKey({
+    key: 'beobZugeordnetForMap',
+    value: refetchBeobZugeordnetForMap,
   })
   var {
     data: dataBeobNichtBeurteiltForMap,
     error: errorBeobNichtBeurteiltForMap,
     loading: loadingBeobNichtBeurteiltForMap,
+    refetch: refetchBeobNichtBeurteiltForMap,
   } = useQuery(queryBeobNichtBeurteiltForMap, {
     suspend: false,
     variables: { projId, apId, beobNichtBeurteiltIsActiveInMap },
+  })
+  setRefetchKey({
+    key: 'beobNichtBeurteiltForMap',
+    value: refetchBeobNichtBeurteiltForMap,
   })
   var {
     data: dataBeobNichtZuzuordnenForMap,

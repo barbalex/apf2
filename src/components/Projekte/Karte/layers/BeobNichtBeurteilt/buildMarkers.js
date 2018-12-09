@@ -32,7 +32,7 @@ const Markers = ({
   client: Object,
   mobxStore: Object,
 }): Array<Object> => {
-  const { setTreeKey, apfloraLayers, assigningBeob } = mobxStore
+  const { setTreeKey, apfloraLayers, assigningBeob, refetch } = mobxStore
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
   const { idsFiltered: mapIdsFiltered } = mobxStore[treeName].map
@@ -118,8 +118,8 @@ const Markers = ({
             tpopId: nearestTpop.id,
           },
         })
-        refetchTree('beobNichtBeurteiltForMap')
-        refetchTree('beobZugeordnetForMap')
+        refetch.beobNichtBeurteiltForMap()
+        refetch.beobZugeordnetForMap()
         refetchTree('beobAssignLines')
       })
   })

@@ -34,7 +34,7 @@ const Markers = ({
   map: Object,
   mobxStore: Object,
 }): Array<Object> => {
-  const { setTreeKey, apfloraLayers, assigningBeob } = mobxStore
+  const { setTreeKey, apfloraLayers, assigningBeob, refetch } = mobxStore
   const tree = mobxStore[treeName]
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
@@ -133,7 +133,7 @@ const Markers = ({
           },
         })
         refetchTree('beobNichtBeurteiltForMap')
-        refetchTree('beobZugeordnetForMap')
+        refetch.beobZugeordnetForMap()
         refetchTree('beobAssignLines')
         map.redraw()
       })
