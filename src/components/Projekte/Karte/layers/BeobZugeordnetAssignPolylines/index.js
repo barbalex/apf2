@@ -9,13 +9,7 @@ import Polyline from './Polyline'
 import mobxStoreContext from '../../../../../mobxStoreContext'
 import query from './data'
 
-/**
- * not fetching data here because:
- * needs to be refetched after assigning beobs
- * so it is fetched in ProjektContainer
- */
-
-const Lines = ({ treeName }: { treeName: string }) => {
+const BeobZugeordnetAssignPolylines = ({ treeName }: { treeName: string }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { setRefetchKey, addError, activeApfloraLayers } = mobxStore
   const tree = mobxStore[treeName]
@@ -56,21 +50,15 @@ const Lines = ({ treeName }: { treeName: string }) => {
         .toLowerCase()
         .includes(beobZugeordnetFilterString.toLowerCase())
     })
-  console.log('BeobZugeordnetAssignPolylines', {
-    activeApfloraLayers: activeApfloraLayers.toJSON(),
-    beobs,
-  })
   const beobsToUse = activeApfloraLayers.includes(
     'beobZugeordnetAssignPolylines',
   )
     ? beobs
     : []
-  console.log('BeobZugeordnetAssignPolylines', {
-    beobsToUse,
-  })
+
   return beobsToUse.map(beob => (
     <Polyline key={beob.id} beob={beob} treeName={treeName} />
   ))
 }
 
-export default observer(Lines)
+export default observer(BeobZugeordnetAssignPolylines)
