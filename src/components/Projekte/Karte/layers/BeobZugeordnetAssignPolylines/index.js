@@ -5,8 +5,7 @@ import format from 'date-fns/format'
 import { useQuery } from 'react-apollo-hooks'
 import { observer } from 'mobx-react-lite'
 
-import buildLines from './buildLines'
-import Polylines from './Polylines'
+import Polyline from './Polyline'
 import mobxStoreContext from '../../../../../mobxStoreContext'
 import query from './data'
 
@@ -66,16 +65,12 @@ const Lines = ({ treeName }: { treeName: string }) => {
   )
     ? beobs
     : []
-  const lines = buildLines({
-    beobs: beobsToUse,
-    treeName,
-    mobxStore,
-  })
   console.log('BeobZugeordnetAssignPolylines', {
     beobsToUse,
-    lines,
   })
-  return <Polylines lines={lines} />
+  return beobsToUse.map(beob => (
+    <Polyline key={beob.id} beob={beob} treeName={treeName} />
+  ))
 }
 
 export default observer(Lines)
