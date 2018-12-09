@@ -72,7 +72,11 @@ const Tpop = ({
     )
   }
 
-  const pops = get(data, 'tpopForMap.apsByProjId.nodes[0].popsByApId.nodes', [])
+  const pops = get(
+    data,
+    'projektById.apsByProjId.nodes[0].popsByApId.nodes',
+    [],
+  )
     // filter them by nodeLabelFilter
     .filter(p => {
       if (!popFilterString) return true

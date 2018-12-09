@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 
 export default gql`
   query TpopForMapQuery($apId: UUID!, $projId: UUID!) {
-    tpopForMap: projektById(id: $projId) {
+    projektById(id: $projId) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
