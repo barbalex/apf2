@@ -3,29 +3,63 @@ import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
 import { observer } from 'mobx-react-lite'
+import { useQuery } from 'react-apollo-hooks'
+import MarkerClusterGroup from 'react-leaflet-markercluster'
 
-import buildMarkers from './buildMarkers'
-import buildMarkersClustered from './buildMarkersClustered'
 import Marker from './Marker'
-import MarkerCluster from './MarkerCluster'
 import mobxStoreContext from '../../../../../mobxStoreContext'
+import query from './data'
+
+const iconCreateFunction = function(cluster) {
+  const markers = cluster.getAllChildMarkers()
+  const hasHighlightedTpop = markers.some(
+    m => m.options.icon.options.className === 'beobIconHighlighted',
+  )
+  const className = hasHighlightedTpop
+    ? 'beobZugeordnetClusterHighlighted'
+    : 'beobZugeordnetCluster'
+  return window.L.divIcon({
+    html: markers.length,
+    className,
+    iconSize: window.L.point(40, 40),
+  })
+}
 
 const BeobNichtZuzuordnenMarker = ({
   treeName,
-  data,
   clustered,
 }: {
   treeName: string,
-  data: Object,
   clustered: Boolean,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
+  const { activeApfloraLayers, setRefetchKey, addError } = mobxStore
   const tree = mobxStore[treeName]
-
   const beobNichtZuzuordnenFilterString = get(
     tree,
     'nodeLabelFilter.beobNichtZuzuordnen',
   )
+
+  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
+  const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
+  const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
+  const isActiveInMap = activeApfloraLayers.includes('beobNichtZuzuordnen')
+  var { data, error, refetch } = useQuery(query, {
+    suspend: false,
+    variables: { projId, apId, isActiveInMap },
+  })
+  setRefetchKey({ key: 'beobNichtZuzuordnenForMap', value: refetch })
+
+  if (error) {
+    addError(
+      new Error(
+        `Fehler beim Laden der Nicht zuzuordnenden Beobachtungen für die Karte: ${
+          error.message
+        }`,
+      ),
+    )
+  }
+
   const aparts = get(
     data,
     'beobNichtZuzuordnenForMap.apsByProjId.nodes[0].apartsByApId.nodes',
@@ -45,22 +79,21 @@ const BeobNichtZuzuordnenMarker = ({
         .includes(beobNichtZuzuordnenFilterString.toLowerCase())
     })
 
+  const beobMarkers = beobs.map(beob => (
+    <Marker key={beob.id} treeName={treeName} beob={beob} />
+  ))
+
   if (clustered) {
-    const markers = buildMarkersClustered({
-      beobs,
-      treeName,
-      data,
-      mobxStore,
-    })
-    return <MarkerCluster markers={markers} />
+    return (
+      <MarkerClusterGroup
+        maxClusterRadius={66}
+        iconCreateFunction={iconCreateFunction}
+      >
+        {beobMarkers}
+      </MarkerClusterGroup>
+    )
   }
-  const markers = buildMarkers({
-    beobs,
-    treeName,
-    data,
-    mobxStore,
-  })
-  return <Marker markers={markers} />
+  return beobMarkers
 }
 
 export default observer(BeobNichtZuzuordnenMarker)

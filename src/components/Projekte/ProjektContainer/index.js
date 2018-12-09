@@ -42,7 +42,6 @@ import queryAssozarts from './assozarts'
 import queryEkfzaehleinheits from './ekfzaehleinheits'
 import queryBeobNichtBeurteilts from './beobNichtBeurteilts'
 import queryBeobNichtZuzuordnens from './beobNichtZuzuordnens'
-import queryBeobZugeordnetForMap from './beobZugeordnetForMap'
 import queryBeobNichtZuzuordnenForMap from './beobNichtZuzuordnenForMap'
 import queryBeobZugeordnetAssignPolylinesForMap from './beobZugeordnetAssignPolylinesForMap'
 import TreeContainer from '../TreeContainer'
@@ -352,20 +351,6 @@ const ProjekteContainer = ({
   })
 
   var {
-    data: dataBeobZugeordnetForMap,
-    error: errorBeobZugeordnetForMap,
-    loading: loadingBeobZugeordnetForMap,
-    refetch: refetchBeobZugeordnetForMap,
-  } = useQuery(queryBeobZugeordnetForMap, {
-    suspend: false,
-    variables: { projId, apId },
-  })
-  setRefetchKey({
-    key: 'beobZugeordnetForMap',
-    value: refetchBeobZugeordnetForMap,
-  })
-
-  var {
     data: dataBeobNichtZuzuordnenForMap,
     error: errorBeobNichtZuzuordnenForMap,
     loading: loadingBeobNichtZuzuordnenForMap,
@@ -378,6 +363,7 @@ const ProjekteContainer = ({
     key: 'beobNichtZuzuordnenForMap',
     value: refetchBeobNichtZuzuordnenForMap,
   })
+
   var {
     data: dataBeobZugeordnetAssignPolylinesForMap,
     error: errorBeobZugeordnetAssignPolylinesForMap,
@@ -420,7 +406,6 @@ const ProjekteContainer = ({
     loadingEkfzaehleinheits,
     loadingBeobNichtBeurteilts,
     loadingBeobNichtZuzuordnens,
-    loadingBeobZugeordnetForMap,
     loadingBeobNichtZuzuordnenForMap,
     loadingBeobZugeordnetAssignPolylinesForMap,
   ]
@@ -453,7 +438,6 @@ const ProjekteContainer = ({
     errorEkfzaehleinheits,
     errorBeobNichtBeurteilts,
     errorBeobNichtZuzuordnens,
-    errorBeobZugeordnetForMap,
     errorBeobNichtZuzuordnenForMap,
     errorBeobZugeordnetAssignPolylinesForMap,
   ].filter(e => !!e)
@@ -505,7 +489,6 @@ const ProjekteContainer = ({
     ...dataEkfzaehleinheits,
     ...dataBeobNichtBeurteilts,
     ...dataBeobNichtZuzuordnens,
-    ...dataBeobZugeordnetForMap,
     ...dataBeobNichtZuzuordnenForMap,
     ...dataBeobZugeordnetAssignPolylinesForMap,
   }
@@ -542,7 +525,6 @@ const ProjekteContainer = ({
     dataEkfzaehleinheits,
     dataBeobNichtBeurteilts,
     dataBeobNichtZuzuordnens,
-    dataBeobZugeordnetForMap,
     dataBeobNichtZuzuordnenForMap,
     dataBeobZugeordnetAssignPolylinesForMap,
     mobxStore,

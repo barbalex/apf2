@@ -1,13 +1,13 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query BeobZugeordnetForMapQuery(
+  query BeobNichtZuzuordnenForMapQuery(
     $projId: UUID!
     $apId: UUID
-    $beobZugeordnetIsActiveInMap: Boolean!
+    $isActiveInMap: Boolean!
   ) {
-    beobZugeordnetForMap: projektById(id: $projId)
-      @include(if: $beobZugeordnetIsActiveInMap) {
+    beobNichtZuzuordnenForMap: projektById(id: $projId)
+      @include(if: $isActiveInMap) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -20,8 +20,8 @@ export default gql`
                 id
                 beobsByArtId(
                   filter: {
-                    tpopId: { isNull: false }
-                    nichtZuordnen: { equalTo: false }
+                    tpopId: { isNull: true }
+                    nichtZuordnen: { equalTo: true }
                     x: { isNull: false }
                     y: { isNull: false }
                   }
@@ -39,11 +39,6 @@ export default gql`
                     aeEigenschaftenByArtId {
                       id
                       artname
-                    }
-                    tpopByTpopId {
-                      id
-                      nr
-                      flurname
                     }
                   }
                 }
