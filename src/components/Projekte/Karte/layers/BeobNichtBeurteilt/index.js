@@ -3,7 +3,7 @@ import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import { useQuery } from 'react-apollo-hooks'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 
 import Marker from './Marker'
@@ -35,14 +35,10 @@ const BeobNichtBeurteiltMarker = ({
   clustered: Boolean,
   refetchTree: () => void,
 }) => {
-  const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
   const { setRefetchKey, addError, mapFilter, activeApfloraLayers } = mobxStore
   const tree = mobxStore[treeName]
-  const {
-    idsFiltered: mapIdsFiltered,
-    setBeobNichtBeurteiltIdsFiltered,
-  } = mobxStore[treeName].map
+  const { setBeobNichtBeurteiltIdsFiltered } = mobxStore[treeName].map
   const beobNichtBeurteiltFilterString = get(
     tree,
     'nodeLabelFilter.beobNichtBeurteilt',
@@ -51,9 +47,10 @@ const BeobNichtBeurteiltMarker = ({
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
   const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
+  const isActiveInMap = activeApfloraLayers.includes('beobNichtBeurteilt')
   var { data, error, refetch } = useQuery(query, {
     suspend: false,
-    variables: { projId, apId },
+    variables: { projId, apId, isActiveInMap },
   })
   setRefetchKey({ key: 'beobNichtBeurteiltForMap', value: refetch })
 
@@ -106,10 +103,7 @@ const BeobNichtBeurteiltMarker = ({
   )
   setBeobNichtBeurteiltIdsFiltered(mapBeobNichtBeurteiltIdsFiltered)
 
-  const beobsToUse = activeApfloraLayers.includes('beobNichtBeurteilt')
-    ? beobs
-    : []
-  const beobMarkers = beobsToUse.map(beob => (
+  const beobMarkers = beobs.map(beob => (
     <Marker key={beob.id} treeName={treeName} beob={beob} />
   ))
 

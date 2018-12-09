@@ -1,8 +1,12 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query BeobNichtBeurteiltForMapQuery($projId: UUID!, $apId: UUID) {
-    projektById(id: $projId) {
+  query BeobNichtBeurteiltForMapQuery(
+    $projId: UUID!
+    $apId: UUID
+    $isActiveInMap: Boolean!
+  ) {
+    projektById(id: $projId) @include(if: $isActiveInMap) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {

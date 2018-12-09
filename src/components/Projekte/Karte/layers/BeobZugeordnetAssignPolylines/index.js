@@ -17,9 +17,12 @@ const BeobZugeordnetAssignPolylines = ({ treeName }: { treeName: string }) => {
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
   const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
+  const isActiveInMap = activeApfloraLayers.includes(
+    'beobZugeordnetAssignPolylines',
+  )
   var { data, error, refetch } = useQuery(query, {
     suspend: false,
-    variables: { projId, apId },
+    variables: { projId, apId, isActiveInMap },
   })
   setRefetchKey({ key: 'beobAssignLines', value: refetch })
 
@@ -50,13 +53,8 @@ const BeobZugeordnetAssignPolylines = ({ treeName }: { treeName: string }) => {
         .toLowerCase()
         .includes(beobZugeordnetFilterString.toLowerCase())
     })
-  const beobsToUse = activeApfloraLayers.includes(
-    'beobZugeordnetAssignPolylines',
-  )
-    ? beobs
-    : []
 
-  return beobsToUse.map(beob => (
+  return beobs.map(beob => (
     <Polyline key={beob.id} beob={beob} treeName={treeName} />
   ))
 }
