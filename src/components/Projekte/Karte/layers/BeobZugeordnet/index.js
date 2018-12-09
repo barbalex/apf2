@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
@@ -9,6 +9,7 @@ import MarkerClusterGroup from 'react-leaflet-markercluster'
 import Marker from './Marker'
 import mobxStoreContext from '../../../../../mobxStoreContext'
 import query from './data'
+import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
 
 const iconCreateFunction = function(cluster) {
   const markers = cluster.getAllChildMarkers()
@@ -33,8 +34,10 @@ const BeobZugeordnetMarker = ({
   clustered: Boolean,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { setRefetchKey, addError, activeApfloraLayers } = mobxStore
+  const { setRefetchKey, addError, activeApfloraLayers, mapFilter } = mobxStore
   const tree = mobxStore[treeName]
+  const { map } = tree
+  const { setBeobZugeordnetIdsFiltered } = map
   const beobZugeordnetFilterString = get(tree, 'nodeLabelFilter.beobZugeordnet')
 
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
@@ -75,6 +78,26 @@ const BeobZugeordnetMarker = ({
         .toLowerCase()
         .includes(beobZugeordnetFilterString.toLowerCase())
     })
+
+  const beobZugeordnetForMapAparts = get(
+    data,
+    `beobZugeordnetForMap.apsByProjId.nodes[0].apartsByApId.nodes`,
+    [],
+  )
+  const beobZugeordnetForMapNodes = flatten(
+    beobZugeordnetForMapAparts.map(n =>
+      get(n, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []),
+    ),
+  )
+  const mapBeobZugeordnetIdsFiltered = useMemo(
+    () =>
+      idsInsideFeatureCollection({
+        mapFilter,
+        data: beobZugeordnetForMapNodes,
+      }),
+    [mapFilter, beobZugeordnetForMapNodes],
+  )
+  setBeobZugeordnetIdsFiltered(mapBeobZugeordnetIdsFiltered)
 
   const beobMarkers = beobs.map(beob => (
     <Marker key={beob.id} treeName={treeName} beob={beob} />

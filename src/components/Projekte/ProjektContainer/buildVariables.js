@@ -70,7 +70,6 @@ export default ({
       )
       .filter(v => v !== null),
   )
-  const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
   const isAp =
     isProjekt &&
     openNodes.some(nArray => nArray[2] === 'Aktionspläne' && nArray[3])
@@ -157,23 +156,14 @@ export default ({
         ['Feld-Kontrollen', 'Freiwilligen-Kontrollen'].includes(nArray[8]) &&
         nArray[9],
     )
-
-  const apIsActiveInMap = mapIsActive && isAp
-  const beobNichtZuzuordnenIsActiveInMap =
-    apIsActiveInMap && activeApfloraLayers.includes('beobNichtZuzuordnen')
-  const beobZugeordnetAssignPolylinesIsActiveInMap =
-    apIsActiveInMap &&
-    activeApfloraLayers.includes('beobZugeordnetAssignPolylines')
   //console.log('buildVariables, activeApfloraLayers', activeApfloraLayers)
 
   const variables = {
     projekt,
-    projId,
     isProjekt,
     apFilter,
     apFilterSet,
     ap,
-    apId,
     isAp,
     ziel,
     isZiel,
@@ -187,8 +177,6 @@ export default ({
     isTpopkontr,
     isWerteListen,
     isAdresse,
-    beobNichtZuzuordnenIsActiveInMap,
-    beobZugeordnetAssignPolylinesIsActiveInMap,
   }
   //console.log('buildVariables, variables:', variables)
   return variables

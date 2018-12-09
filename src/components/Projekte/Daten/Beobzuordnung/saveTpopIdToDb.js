@@ -238,7 +238,6 @@ export default async ({
   refetchTree('beobZugeordnets')
   refetch.beobZugeordnetForMap()
   refetch.beobNichtBeurteiltForMap()
-  refetch.beobZugeordnetAssignPolylinesForMap()
   refetch.beobAssignLines()
   refetchTree('aps')
   refetchTree('pops')

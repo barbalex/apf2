@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
@@ -9,6 +9,7 @@ import MarkerClusterGroup from 'react-leaflet-markercluster'
 import Marker from './Marker'
 import mobxStoreContext from '../../../../../mobxStoreContext'
 import query from './data'
+import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
 
 const iconCreateFunction = function(cluster) {
   const markers = cluster.getAllChildMarkers()
@@ -33,8 +34,10 @@ const BeobNichtZuzuordnenMarker = ({
   clustered: Boolean,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { activeApfloraLayers, setRefetchKey, addError } = mobxStore
+  const { activeApfloraLayers, mapFilter, setRefetchKey, addError } = mobxStore
   const tree = mobxStore[treeName]
+  const { map } = tree
+  const { setBeobNichtZuzuordnenIdsFiltered } = map
   const beobNichtZuzuordnenFilterString = get(
     tree,
     'nodeLabelFilter.beobNichtZuzuordnen',
@@ -62,7 +65,7 @@ const BeobNichtZuzuordnenMarker = ({
 
   const aparts = get(
     data,
-    'beobNichtZuzuordnenForMap.apsByProjId.nodes[0].apartsByApId.nodes',
+    'projektById.apsByProjId.nodes[0].apartsByApId.nodes',
     [],
   )
   const beobs = flatten(
@@ -78,6 +81,26 @@ const BeobNichtZuzuordnenMarker = ({
         .toLowerCase()
         .includes(beobNichtZuzuordnenFilterString.toLowerCase())
     })
+
+  const beobNichtZuzuordnenForMapNodesAparts = get(
+    data,
+    `beobNichtZuzuordnenForMap.apsByProjId.nodes[0].apartsByApId.nodes`,
+    [],
+  )
+  const beobNichtZuzuordnenForMapNodes = flatten(
+    beobNichtZuzuordnenForMapNodesAparts.map(n =>
+      get(n, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []),
+    ),
+  )
+  const mapBeobNichtZuzuordnenIdsFiltered = useMemo(
+    () =>
+      idsInsideFeatureCollection({
+        mapFilter,
+        data: beobNichtZuzuordnenForMapNodes,
+      }),
+    [mapFilter, beobNichtZuzuordnenForMapNodes],
+  )
+  setBeobNichtZuzuordnenIdsFiltered(mapBeobNichtZuzuordnenIdsFiltered)
 
   const beobMarkers = beobs.map(beob => (
     <Marker key={beob.id} treeName={treeName} beob={beob} />

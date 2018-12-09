@@ -1,11 +1,9 @@
 // @flow
-import React, { useContext, useMemo } from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
-import get from 'lodash/get'
 import upperFirst from 'lodash/upperFirst'
-import flatten from 'lodash/flatten'
 import Button from '@material-ui/core/Button'
 import jwtDecode from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
@@ -42,13 +40,10 @@ import queryAssozarts from './assozarts'
 import queryEkfzaehleinheits from './ekfzaehleinheits'
 import queryBeobNichtBeurteilts from './beobNichtBeurteilts'
 import queryBeobNichtZuzuordnens from './beobNichtZuzuordnens'
-import queryBeobNichtZuzuordnenForMap from './beobNichtZuzuordnenForMap'
-import queryBeobZugeordnetAssignPolylinesForMap from './beobZugeordnetAssignPolylinesForMap'
 import TreeContainer from '../TreeContainer'
 import Daten from '../Daten'
 import Exporte from '../Exporte'
 import buildNodes from '../TreeContainer/nodes'
-import idsInsideFeatureCollection from '../../../modules/idsInsideFeatureCollection'
 import logout from '../../../modules/logout'
 import buildVariables from './buildVariables'
 import anyQueryReturnsPermissionError from '../../../modules/anyQueryReturnsPermissionError'
@@ -86,30 +81,16 @@ const ProjekteContainer = ({
   projekteTabs: Array<String>,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const {
-    mapFilter: mapFilterRaw,
-    nodeFilter,
-    user,
-    isPrint,
-    setRefetchKey,
-  } = mobxStore
-  const { map, setNodes } = mobxStore[treeName]
-  const {
-    setBeobNichtBeurteiltIdsFiltered,
-    setBeobNichtZuzuordnenIdsFiltered,
-    setBeobZugeordnetIdsFiltered,
-  } = map
+  const { nodeFilter, user, isPrint, setRefetchKey } = mobxStore
+  const { setNodes } = mobxStore[treeName]
   const { idb } = useContext(idbContext)
-  const mapFilter = mapFilterRaw.toJSON()
 
   const {
     projekt,
-    projId,
     isProjekt,
     apFilter,
     //apFilterSet,
     ap,
-    apId,
     isAp,
     ziel,
     isZiel,
@@ -123,8 +104,6 @@ const ProjekteContainer = ({
     isTpopkontr,
     isWerteListen,
     isAdresse,
-    beobNichtZuzuordnenIsActiveInMap,
-    beobZugeordnetAssignPolylinesIsActiveInMap,
   } = buildVariables({
     treeName,
     mobxStore,
@@ -350,34 +329,6 @@ const ProjekteContainer = ({
     value: refetchBeobNichtZuzuordnens,
   })
 
-  var {
-    data: dataBeobNichtZuzuordnenForMap,
-    error: errorBeobNichtZuzuordnenForMap,
-    loading: loadingBeobNichtZuzuordnenForMap,
-    refetch: refetchBeobNichtZuzuordnenForMap,
-  } = useQuery(queryBeobNichtZuzuordnenForMap, {
-    suspend: false,
-    variables: { projId, apId, beobNichtZuzuordnenIsActiveInMap },
-  })
-  setRefetchKey({
-    key: 'beobNichtZuzuordnenForMap',
-    value: refetchBeobNichtZuzuordnenForMap,
-  })
-
-  var {
-    data: dataBeobZugeordnetAssignPolylinesForMap,
-    error: errorBeobZugeordnetAssignPolylinesForMap,
-    loading: loadingBeobZugeordnetAssignPolylinesForMap,
-    refetch: refetchBeobZugeordnetAssignPolylinesForMap,
-  } = useQuery(queryBeobZugeordnetAssignPolylinesForMap, {
-    suspend: false,
-    variables: { ap, beobZugeordnetAssignPolylinesIsActiveInMap },
-  })
-  setRefetchKey({
-    key: 'beobZugeordnetAssignPolylinesForMap',
-    value: refetchBeobZugeordnetAssignPolylinesForMap,
-  })
-
   const queryLoadingArray = [
     loadingAdresses,
     loadingUsers,
@@ -406,8 +357,6 @@ const ProjekteContainer = ({
     loadingEkfzaehleinheits,
     loadingBeobNichtBeurteilts,
     loadingBeobNichtZuzuordnens,
-    loadingBeobNichtZuzuordnenForMap,
-    loadingBeobZugeordnetAssignPolylinesForMap,
   ]
 
   const queryErrorArray = [
@@ -438,8 +387,6 @@ const ProjekteContainer = ({
     errorEkfzaehleinheits,
     errorBeobNichtBeurteilts,
     errorBeobNichtZuzuordnens,
-    errorBeobNichtZuzuordnenForMap,
-    errorBeobZugeordnetAssignPolylinesForMap,
   ].filter(e => !!e)
 
   const loading = anyQueryIsLoading(queryLoadingArray)
@@ -459,7 +406,7 @@ const ProjekteContainer = ({
   const { token } = user
   const role = token ? jwtDecode(token).role : null
 
-  //console.log('ProjektContainer', { loading })
+  console.log('ProjektContainer', { loading })
 
   const data = {
     ...dataAdresses,
@@ -489,8 +436,6 @@ const ProjekteContainer = ({
     ...dataEkfzaehleinheits,
     ...dataBeobNichtBeurteilts,
     ...dataBeobNichtZuzuordnens,
-    ...dataBeobNichtZuzuordnenForMap,
-    ...dataBeobZugeordnetAssignPolylinesForMap,
   }
   // TODO: useMemo?
   const nodes = buildNodes({
@@ -525,8 +470,6 @@ const ProjekteContainer = ({
     dataEkfzaehleinheits,
     dataBeobNichtBeurteilts,
     dataBeobNichtZuzuordnens,
-    dataBeobNichtZuzuordnenForMap,
-    dataBeobZugeordnetAssignPolylinesForMap,
     mobxStore,
   })
   setNodes(nodes)
@@ -538,46 +481,6 @@ const ProjekteContainer = ({
       : tabs.length === 0
       ? 1
       : 1 / tabs.length
-
-  const beobNichtZuzuordnenForMapNodesAparts = get(
-    data,
-    `beobNichtZuzuordnenForMap.apsByProjId.nodes[0].apartsByApId.nodes`,
-    [],
-  )
-  const beobNichtZuzuordnenForMapNodes = flatten(
-    beobNichtZuzuordnenForMapNodesAparts.map(n =>
-      get(n, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []),
-    ),
-  )
-  const mapBeobNichtZuzuordnenIdsFiltered = useMemo(
-    () =>
-      idsInsideFeatureCollection({
-        mapFilter,
-        data: beobNichtZuzuordnenForMapNodes,
-      }),
-    [mapFilter, beobNichtZuzuordnenForMapNodes],
-  )
-  setBeobNichtZuzuordnenIdsFiltered(mapBeobNichtZuzuordnenIdsFiltered)
-
-  const beobZugeordnetForMapAparts = get(
-    data,
-    `beobZugeordnetForMap.apsByProjId.nodes[0].apartsByApId.nodes`,
-    [],
-  )
-  const beobZugeordnetForMapNodes = flatten(
-    beobZugeordnetForMapAparts.map(n =>
-      get(n, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []),
-    ),
-  )
-  const mapBeobZugeordnetIdsFiltered = useMemo(
-    () =>
-      idsInsideFeatureCollection({
-        mapFilter,
-        data: beobZugeordnetForMapNodes,
-      }),
-    [mapFilter, beobZugeordnetForMapNodes],
-  )
-  setBeobZugeordnetIdsFiltered(mapBeobZugeordnetIdsFiltered)
 
   // TODO: which query to check for error?
   if (anyQueryReturnsPermissionError(queryErrorArray)) {
