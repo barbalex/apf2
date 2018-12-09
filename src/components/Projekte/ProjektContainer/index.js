@@ -391,13 +391,6 @@ const ProjekteContainer = ({
 
   const loading = anyQueryIsLoading(queryLoadingArray)
 
-  /**
-   * TODO:
-   * idea:
-   * 1. add refetch to mobx-state (object with keys)
-   * 2. move queries where they belong
-   * 3. set refetch from there
-   */
   const refetch = query => {
     if (query && window[`data${upperFirst(query)}`]) {
       window[`data${upperFirst(query)}`].refetch()
@@ -406,7 +399,7 @@ const ProjekteContainer = ({
   const { token } = user
   const role = token ? jwtDecode(token).role : null
 
-  console.log('ProjektContainer', { loading })
+  //consoleconsole.log('ProjektContainer', { loading })
 
   const data = {
     ...dataAdresses,
