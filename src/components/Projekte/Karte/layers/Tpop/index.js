@@ -67,7 +67,9 @@ const Tpop = ({
   if (error) {
     addError(
       new Error(
-        `Fehler beim Laden der Populationen für die Karte: ${error.message}`,
+        `Fehler beim Laden der Teil-Populationen für die Karte: ${
+          error.message
+        }`,
       ),
     )
   }

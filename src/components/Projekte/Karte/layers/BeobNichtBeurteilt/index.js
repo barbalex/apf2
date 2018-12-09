@@ -1,38 +1,75 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from 'react-apollo-hooks'
+import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import MarkerClusterGroup from 'react-leaflet-markercluster'
 
-import buildMarkers from './buildMarkers'
-import buildMarkersClustered from './buildMarkersClustered'
 import Marker from './Marker'
-import MarkerCluster from './MarkerCluster'
 import mobxStoreContext from '../../../../../mobxStoreContext'
+import query from './data'
+import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
+
+const iconCreateFunction = function(cluster) {
+  const markers = cluster.getAllChildMarkers()
+  const hasHighlightedBeob = markers.some(
+    m => m.options.icon.options.className === 'beobIconHighlighted',
+  )
+  const className = hasHighlightedBeob
+    ? 'beobClusterHighlighted'
+    : 'beobCluster'
+  return window.L.divIcon({
+    html: markers.length,
+    className,
+    iconSize: window.L.point(40, 40),
+  })
+}
 
 const BeobNichtBeurteiltMarker = ({
   treeName,
-  data,
   clustered,
   refetchTree,
 }: {
   treeName: string,
-  data: Object,
   clustered: Boolean,
   refetchTree: () => void,
 }) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
+  const { setRefetchKey, addError, mapFilter, activeApfloraLayers } = mobxStore
   const tree = mobxStore[treeName]
-  const { idsFiltered: mapIdsFiltered } = mobxStore[treeName].map
+  const {
+    idsFiltered: mapIdsFiltered,
+    setBeobNichtBeurteiltIdsFiltered,
+  } = mobxStore[treeName].map
   const beobNichtBeurteiltFilterString = get(
     tree,
     'nodeLabelFilter.beobNichtBeurteilt',
   )
+
+  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
+  const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
+  const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
+  var { data, error, refetch } = useQuery(query, {
+    suspend: false,
+    variables: { projId, apId },
+  })
+  setRefetchKey({ key: 'beobNichtBeurteiltForMap', value: refetch })
+
+  if (error) {
+    addError(
+      new Error(
+        `Fehler beim Laden der Nicht beurteilten Beobachtungen für die Karte: ${
+          error.message
+        }`,
+      ),
+    )
+  }
+
   const aparts = get(
     data,
-    'beobNichtBeurteiltForMap.apsByProjId.nodes[0].apartsByApId.nodes',
+    'projektById.apsByProjId.nodes[0].apartsByApId.nodes',
     [],
   )
   const beobs = flatten(
@@ -49,25 +86,44 @@ const BeobNichtBeurteiltMarker = ({
         .includes(beobNichtBeurteiltFilterString.toLowerCase())
     })
 
-  if (clustered) {
-    const markers = buildMarkersClustered({
-      beobs,
-      treeName,
-      data,
-      mapIdsFiltered,
-      mobxStore,
-    })
-    return <MarkerCluster markers={markers} />
-  }
-  const markers = buildMarkers({
-    beobs,
-    treeName,
+  const beobNichtBeurteiltForMapAparts = get(
     data,
-    mapIdsFiltered,
-    client,
-    mobxStore,
-  })
-  return <Marker markers={markers} />
+    `beobNichtBeurteiltForMap.apsByProjId.nodes[0].apartsByApId.nodes`,
+    [],
+  )
+  const beobNichtBeurteiltForMapNodes = flatten(
+    beobNichtBeurteiltForMapAparts.map(n =>
+      get(n, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []),
+    ),
+  )
+  const mapBeobNichtBeurteiltIdsFiltered = useMemo(
+    () =>
+      idsInsideFeatureCollection({
+        mapFilter,
+        data: beobNichtBeurteiltForMapNodes,
+      }),
+    [mapFilter, beobNichtBeurteiltForMapNodes],
+  )
+  setBeobNichtBeurteiltIdsFiltered(mapBeobNichtBeurteiltIdsFiltered)
+
+  const beobsToUse = activeApfloraLayers.includes('beobNichtBeurteilt')
+    ? beobs
+    : []
+  const beobMarkers = beobsToUse.map(beob => (
+    <Marker key={beob.id} treeName={treeName} beob={beob} />
+  ))
+
+  if (clustered) {
+    return (
+      <MarkerClusterGroup
+        maxClusterRadius={66}
+        iconCreateFunction={iconCreateFunction}
+      >
+        {beobMarkers}
+      </MarkerClusterGroup>
+    )
+  }
+  return beobMarkers
 }
 
 export default observer(BeobNichtBeurteiltMarker)

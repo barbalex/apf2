@@ -43,7 +43,6 @@ import queryEkfzaehleinheits from './ekfzaehleinheits'
 import queryBeobNichtBeurteilts from './beobNichtBeurteilts'
 import queryBeobNichtZuzuordnens from './beobNichtZuzuordnens'
 import queryBeobZugeordnetForMap from './beobZugeordnetForMap'
-import queryBeobNichtBeurteiltForMap from './beobNichtBeurteiltForMap'
 import queryBeobNichtZuzuordnenForMap from './beobNichtZuzuordnenForMap'
 import queryBeobZugeordnetAssignPolylinesForMap from './beobZugeordnetAssignPolylinesForMap'
 import TreeContainer from '../TreeContainer'
@@ -367,19 +366,6 @@ const ProjekteContainer = ({
     value: refetchBeobZugeordnetForMap,
   })
   var {
-    data: dataBeobNichtBeurteiltForMap,
-    error: errorBeobNichtBeurteiltForMap,
-    loading: loadingBeobNichtBeurteiltForMap,
-    refetch: refetchBeobNichtBeurteiltForMap,
-  } = useQuery(queryBeobNichtBeurteiltForMap, {
-    suspend: false,
-    variables: { projId, apId, beobNichtBeurteiltIsActiveInMap },
-  })
-  setRefetchKey({
-    key: 'beobNichtBeurteiltForMap',
-    value: refetchBeobNichtBeurteiltForMap,
-  })
-  var {
     data: dataBeobNichtZuzuordnenForMap,
     error: errorBeobNichtZuzuordnenForMap,
     loading: loadingBeobNichtZuzuordnenForMap,
@@ -435,7 +421,6 @@ const ProjekteContainer = ({
     loadingBeobNichtBeurteilts,
     loadingBeobNichtZuzuordnens,
     loadingBeobZugeordnetForMap,
-    loadingBeobNichtBeurteiltForMap,
     loadingBeobNichtZuzuordnenForMap,
     loadingBeobZugeordnetAssignPolylinesForMap,
   ]
@@ -469,7 +454,6 @@ const ProjekteContainer = ({
     errorBeobNichtBeurteilts,
     errorBeobNichtZuzuordnens,
     errorBeobZugeordnetForMap,
-    errorBeobNichtBeurteiltForMap,
     errorBeobNichtZuzuordnenForMap,
     errorBeobZugeordnetAssignPolylinesForMap,
   ].filter(e => !!e)
@@ -522,7 +506,6 @@ const ProjekteContainer = ({
     ...dataBeobNichtBeurteilts,
     ...dataBeobNichtZuzuordnens,
     ...dataBeobZugeordnetForMap,
-    ...dataBeobNichtBeurteiltForMap,
     ...dataBeobNichtZuzuordnenForMap,
     ...dataBeobZugeordnetAssignPolylinesForMap,
   }
@@ -560,7 +543,6 @@ const ProjekteContainer = ({
     dataBeobNichtBeurteilts,
     dataBeobNichtZuzuordnens,
     dataBeobZugeordnetForMap,
-    dataBeobNichtBeurteiltForMap,
     dataBeobNichtZuzuordnenForMap,
     dataBeobZugeordnetAssignPolylinesForMap,
     mobxStore,
@@ -574,26 +556,6 @@ const ProjekteContainer = ({
       : tabs.length === 0
       ? 1
       : 1 / tabs.length
-
-  const beobNichtBeurteiltForMapAparts = get(
-    data,
-    `beobNichtBeurteiltForMap.apsByProjId.nodes[0].apartsByApId.nodes`,
-    [],
-  )
-  const beobNichtBeurteiltForMapNodes = flatten(
-    beobNichtBeurteiltForMapAparts.map(n =>
-      get(n, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []),
-    ),
-  )
-  const mapBeobNichtBeurteiltIdsFiltered = useMemo(
-    () =>
-      idsInsideFeatureCollection({
-        mapFilter,
-        data: beobNichtBeurteiltForMapNodes,
-      }),
-    [mapFilter, beobNichtBeurteiltForMapNodes],
-  )
-  setBeobNichtBeurteiltIdsFiltered(mapBeobNichtBeurteiltIdsFiltered)
 
   const beobNichtZuzuordnenForMapNodesAparts = get(
     data,

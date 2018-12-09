@@ -1,33 +1,119 @@
-import React, { Component } from 'react'
-import compose from 'recompose/compose'
-import 'leaflet'
-import { withLeaflet } from 'react-leaflet'
+import React, { useContext, useCallback } from 'react'
+import { Marker, Popup } from 'react-leaflet'
+import get from 'lodash/get'
+import format from 'date-fns/format'
+import styled from 'styled-components'
+import { observer } from 'mobx-react-lite'
+import { useApolloClient } from 'react-apollo-hooks'
 
-const enhance = compose(withLeaflet)
+import mobxStoreContext from '../../../../../mobxStoreContext'
+import beobIcon from '../../../../../etc/beob.png'
+import beobIconHighlighted from '../../../../../etc/beobHighlighted.png'
+import getNearestTpop from '../../../../../modules/getNearestTpop'
+import appBaseUrl from '../../../../../modules/appBaseUrl'
+import epsg2056to4326 from '../../../../../modules/epsg2056to4326'
+import updateBeobByIdGql from './updateBeobById'
 
-class BeobMarker extends Component {
-  props: {
-    markers: Array<Object>,
-  }
+const StyledH3 = styled.h3`
+  margin: 7px 0;
+`
 
-  componentDidMount() {
-    const { leaflet, markers } = this.props
-    markers.forEach(m => m.addTo(leaflet.map))
-  }
+const TpopMarker = ({ treeName, beob }: { treeName: string, beob: Object }) => {
+  const client = useApolloClient()
+  const mobxStore = useContext(mobxStoreContext)
+  const { assigningBeob, setTreeKey, refetch } = mobxStore
+  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
+  const { ap, projekt } = activeNodes
+  const { idsFiltered: mapIdsFiltered } = mobxStore[treeName].map
 
-  /**
-   * seems that this component never updates
-   * instead it unmounts and mounts again
-   */
+  const isHighlighted = mapIdsFiltered.includes(beob.id)
+  const latLng = new window.L.LatLng(...epsg2056to4326(beob.x, beob.y))
+  const icon = window.L.icon({
+    iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,
+    iconSize: [24, 24],
+    className: isHighlighted ? 'beobIconHighlighted' : 'beobIcon',
+  })
+  const datum = beob.datum ? format(beob.datum, 'YYYY.MM.DD') : '(kein Datum)'
+  const autor = beob.autor || '(kein Autor)'
+  const quelle = get(beob, 'beobQuelleWerteByQuelleId.name', '')
+  const label = `${datum}: ${autor} (${quelle})`
 
-  componentWillUnmount() {
-    const { leaflet, markers } = this.props
-    markers.forEach(m => leaflet.map.removeLayer(m))
-  }
+  const onMoveend = useCallback(
+    async event => {
+      /**
+       * assign to nearest tpop
+       * point url to moved beob
+       */
+      const nearestTpop = await getNearestTpop({
+        activeNodes,
+        latLng: event.target._latlng,
+        client,
+      })
+      const newActiveNodeArray = [
+        'Projekte',
+        activeNodes.projekt,
+        'Aktionspläne',
+        activeNodes.ap,
+        'Populationen',
+        nearestTpop.popId,
+        'Teil-Populationen',
+        nearestTpop.id,
+        'Beobachtungen',
+        beob.id,
+      ]
+      setTreeKey({
+        value: newActiveNodeArray,
+        tree: treeName,
+        key: 'activeNodeArray',
+      })
+      await client.mutate({
+        mutation: updateBeobByIdGql,
+        variables: {
+          id: beob.id,
+          tpopId: nearestTpop.id,
+        },
+      })
+      refetch.beobNichtBeurteiltForMap()
+      refetch.beobZugeordnetForMap()
+      refetch.beobAssignLines()
+    },
+    [beob.id],
+  )
 
-  render() {
-    return <div style={{ display: 'none' }} />
-  }
+  return (
+    <Marker
+      position={latLng}
+      icon={icon}
+      title={label}
+      draggable={assigningBeob}
+      onMoveend={onMoveend}
+    >
+      <Popup>
+        <>
+          <div>{`Beobachtung von ${get(
+            beob,
+            'aeEigenschaftenByArtId.artname',
+            '',
+          )}`}</div>
+          <StyledH3>{label}</StyledH3>
+          <div>
+            {`Koordinaten: ${beob.x.toLocaleString(
+              'de-ch',
+            )} / ${beob.y.toLocaleString('de-ch')}`}
+          </div>
+          <a
+            href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/nicht-beurteilte-Beobachtungen/${
+              beob.id
+            }`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Formular in neuem Tab öffnen
+          </a>
+        </>
+      </Popup>
+    </Marker>
+  )
 }
 
-export default enhance(BeobMarker)
+export default observer(TpopMarker)

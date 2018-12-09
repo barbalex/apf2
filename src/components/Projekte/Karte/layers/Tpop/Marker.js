@@ -40,16 +40,8 @@ const TpopMarker = ({ treeName, tpop }: { treeName: string, tpop: Object }) => {
     className: isHighlighted ? 'tpopIconHighlighted' : 'tpopIcon',
   })
   const title = tpopLabelUsingNr ? tpop.flurname : nrLabel
-  const zIndexOffset = -apfloraLayers.findIndex(
-    apfloraLayer => apfloraLayer.value === 'tpop',
-  )
   return (
-    <Marker
-      position={latLng}
-      icon={icon}
-      title={title}
-      zIndexOffset={zIndexOffset}
-    >
+    <Marker position={latLng} icon={icon} title={title}>
       <Popup>
         <>
           <div>Teil-Population</div>
