@@ -1,11 +1,10 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import { arrayMove } from 'react-sortable-hoc'
-import { getSnapshot } from 'mobx-state-tree'
 
 import mobxStoreContext from '../../../../../mobxStoreContext'
-import SortableList from './SortableList'
+import SortableItem from './SortableList/SortableItem'
+import Layer from './Layer'
 
 const CardContent = styled.div`
   color: rgb(48, 48, 48);
@@ -27,24 +26,13 @@ const ApfloraLayers = ({
   setTpopBounds: () => void,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { apfloraLayers, setApfloraLayers, activeApfloraLayers } = mobxStore
-
-  const onSortEnd = useCallback(
-    ({ oldIndex, newIndex }) =>
-      setApfloraLayers(arrayMove(apfloraLayers, oldIndex, newIndex)),
-    [apfloraLayers],
-  )
+  const { apfloraLayers } = mobxStore
 
   return (
     <CardContent>
-      <SortableList
-        items={getSnapshot(apfloraLayers)}
-        onSortEnd={onSortEnd}
-        useDragHandle
-        lockAxis="y"
-        treeName={treeName}
-        activeApfloraLayers={activeApfloraLayers}
-      />
+      {apfloraLayers.map((apfloraLayer, index) => (
+        <Layer key={index} apfloraLayer={apfloraLayer} treeName={treeName} />
+      ))}
     </CardContent>
   )
 }

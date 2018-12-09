@@ -92,7 +92,6 @@ const ProjekteContainer = ({
   const { mapFilter: mapFilterRaw, nodeFilter, user, isPrint } = mobxStore
   const { map, setNodes } = mobxStore[treeName]
   const {
-    setTpopIdsFiltered,
     setBeobNichtBeurteiltIdsFiltered,
     setBeobNichtZuzuordnenIdsFiltered,
     setBeobZugeordnetIdsFiltered,
