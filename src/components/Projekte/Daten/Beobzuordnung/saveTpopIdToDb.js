@@ -232,7 +232,7 @@ export default async ({
     key: 'openNodes',
   })
   refetchTree('local')
-  refetchTree('beobNichtZuzuordnens')
+  refetch.beobNichtZuzuordnens()
   refetch.beobNichtBeurteilts()
   refetchTree('beobZugeordnets')
   refetchTree('beobZugeordnetForMap')

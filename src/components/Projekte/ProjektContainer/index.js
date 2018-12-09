@@ -345,9 +345,14 @@ const ProjekteContainer = ({
     data: dataBeobNichtZuzuordnens,
     error: errorBeobNichtZuzuordnens,
     loading: loadingBeobNichtZuzuordnens,
+    refetch: refetchBeobNichtZuzuordnens,
   } = useQuery(queryBeobNichtZuzuordnens, {
     suspend: false,
     variables: { isAp, ap },
+  })
+  setRefetchKey({
+    key: 'beobNichtZuzuordnens',
+    value: refetchBeobNichtZuzuordnens,
   })
   var {
     data: dataBeobZugeordnetForMap,

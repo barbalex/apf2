@@ -55,7 +55,7 @@ export default async ({
   refetchTree('aps')
   refetchTree('pops')
   refetchTree('tpops')
-  refetchTree('beobNichtZuzuordnens')
+  refetch.beobNichtZuzuordnens()
   refetch.beobNichtBeurteilts()
   refetchTree('beobZugeordnets')
 }
