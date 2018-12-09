@@ -4,9 +4,10 @@ export default gql`
   query PopForMapQuery(
     $projId: UUID!
     $apId: UUID!
+    $isActiveInMap: Boolean!
     $tpopLayerIsActive: Boolean!
   ) {
-    projektById(id: $projId) {
+    projektById(id: $projId) @include(if: $isActiveInMap) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {

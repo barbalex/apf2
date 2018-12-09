@@ -2,39 +2,64 @@ import React, { useContext } from 'react'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
-import compose from 'recompose/compose'
-import { withLeaflet } from 'react-leaflet'
 import { observer } from 'mobx-react-lite'
+import { useQuery } from 'react-apollo-hooks'
+import MarkerClusterGroup from 'react-leaflet-markercluster'
 
-import buildMarkers from './buildMarkers'
-import buildMarkersClustered from './buildMarkersClustered'
 import Marker from './Marker'
-import MarkerCluster from './MarkerCluster'
 import mobxStoreContext from '../../../../../mobxStoreContext'
+import query from './data'
 
-const enhance = compose(
-  withLeaflet,
-  observer,
-)
+const iconCreateFunction = function(cluster) {
+  const markers = cluster.getAllChildMarkers()
+  const hasHighlightedTpop = markers.some(
+    m => m.options.icon.options.className === 'beobIconHighlighted',
+  )
+  const className = hasHighlightedTpop
+    ? 'beobZugeordnetClusterHighlighted'
+    : 'beobZugeordnetCluster'
+  return window.L.divIcon({
+    html: markers.length,
+    className,
+    iconSize: window.L.point(40, 40),
+  })
+}
 
 const BeobZugeordnetMarker = ({
   treeName,
-  data,
   clustered,
-  leaflet,
 }: {
   treeName: string,
-  data: Object,
   clustered: Boolean,
-  leaflet: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
+  const { setRefetchKey, addError, activeApfloraLayers } = mobxStore
   const tree = mobxStore[treeName]
-
   const beobZugeordnetFilterString = get(tree, 'nodeLabelFilter.beobZugeordnet')
+
+  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
+  const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
+  const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
+  const isActiveInMap = activeApfloraLayers.includes('beobZugeordnet')
+  var { data, error, refetch } = useQuery(query, {
+    suspend: false,
+    variables: { projId, apId, isActiveInMap },
+  })
+  setRefetchKey({ key: 'beobZugeordnetForMap', value: refetch })
+
+  if (error) {
+    addError(
+      new Error(
+        `Fehler beim Laden der Nicht zugeordneten Beobachtungen für die Karte: ${
+          error.message
+        }`,
+      ),
+    )
+  }
+
   const aparts = get(
     data,
-    'beobZugeordnetForMap.apsByProjId.nodes[0].apartsByApId.nodes',
+    'projektById.apsByProjId.nodes[0].apartsByApId.nodes',
     [],
   )
   const beobs = flatten(
@@ -51,23 +76,21 @@ const BeobZugeordnetMarker = ({
         .includes(beobZugeordnetFilterString.toLowerCase())
     })
 
+  const beobMarkers = beobs.map(beob => (
+    <Marker key={beob.id} treeName={treeName} beob={beob} />
+  ))
+
   if (clustered) {
-    const markers = buildMarkersClustered({
-      beobs,
-      treeName,
-      data,
-      mobxStore,
-    })
-    return <MarkerCluster markers={markers} />
+    return (
+      <MarkerClusterGroup
+        maxClusterRadius={66}
+        iconCreateFunction={iconCreateFunction}
+      >
+        {beobMarkers}
+      </MarkerClusterGroup>
+    )
   }
-  const markers = buildMarkers({
-    beobs,
-    treeName,
-    data,
-    map: leaflet.map,
-    mobxStore,
-  })
-  return <Marker markers={markers} />
+  return beobMarkers
 }
 
-export default enhance(BeobZugeordnetMarker)
+export default observer(BeobZugeordnetMarker)

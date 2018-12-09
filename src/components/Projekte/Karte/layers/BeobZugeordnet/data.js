@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query BeobAssignLinesQuery(
+  query BeobZugeordnetForMapQuery(
     $projId: UUID!
     $apId: UUID
     $isActiveInMap: Boolean!
@@ -41,11 +41,8 @@ export default gql`
                     }
                     tpopByTpopId {
                       id
-                      popId
                       nr
                       flurname
-                      x
-                      y
                     }
                   }
                 }
