@@ -77,6 +77,7 @@ export default async ({ value, row, tree, refetchTree, client, mobxStore }) => {
     refetchTree('pops')
     refetchTree('tpops')
     refetch.beobNichtZuzuordnens()
+    refetch.beobNichtZuzuordnenForMap()
     refetch.beobNichtBeurteilts()
     refetchTree('beobZugeordnets')
   }

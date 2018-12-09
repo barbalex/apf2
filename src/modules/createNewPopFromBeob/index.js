@@ -170,6 +170,7 @@ export default async ({
   refetchTree('pops')
   refetchTree('tpops')
   refetch.beobNichtZuzuordnens()
+  refetch.beobNichtZuzuordnenForMap()
   refetch.beobNichtBeurteilts()
   refetchTree('beobZugeordnets')
 }
