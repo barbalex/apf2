@@ -14,7 +14,7 @@ export default async ({
   client,
   mobxStore,
 }) => {
-  const { setTreeKey } = mobxStore
+  const { setTreeKey, refetch } = mobxStore
   const variables = {
     id,
     tpopId: value,
@@ -233,7 +233,7 @@ export default async ({
   })
   refetchTree('local')
   refetchTree('beobNichtZuzuordnens')
-  refetchTree('beobNichtBeurteilts')
+  refetch.beobNichtBeurteilts()
   refetchTree('beobZugeordnets')
   refetchTree('beobZugeordnetForMap')
   refetchTree('beobNichtBeurteiltForMap')

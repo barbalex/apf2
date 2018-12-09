@@ -22,7 +22,7 @@ export default async ({
   client: Object,
   mobxStore: Object,
 }): Promise<void> => {
-  const { setTreeKey, addError } = mobxStore
+  const { setTreeKey, addError, refetch } = mobxStore
   const tree = mobxStore[treeName]
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
@@ -170,6 +170,6 @@ export default async ({
   refetchTree('pops')
   refetchTree('tpops')
   refetchTree('beobNichtZuzuordnens')
-  refetchTree('beobNichtBeurteilts')
+  refetch.beobNichtBeurteilts()
   refetchTree('beobZugeordnets')
 }

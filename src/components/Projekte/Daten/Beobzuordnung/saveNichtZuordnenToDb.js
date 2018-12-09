@@ -7,12 +7,12 @@ export default async ({
   value,
   id,
   tree,
-  refetch,
+  refetch: refetchPassed,
   refetchTree,
   client,
   mobxStore,
 }) => {
-  const { setTreeKey } = mobxStore
+  const { setTreeKey, refetch } = mobxStore
   const variables = {
     id,
     nichtZuordnen: value,
@@ -50,12 +50,12 @@ export default async ({
     value: newOpenNodes,
     key: 'openNodes',
   })
-  if (refetch) refetch()
+  if (refetchPassed) refetchPassed()
   refetchTree('local')
   refetchTree('aps')
   refetchTree('pops')
   refetchTree('tpops')
   refetchTree('beobNichtZuzuordnens')
-  refetchTree('beobNichtBeurteilts')
+  refetch.beobNichtBeurteilts()
   refetchTree('beobZugeordnets')
 }

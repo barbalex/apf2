@@ -89,7 +89,13 @@ const ProjekteContainer = ({
   projekteTabs: Array<String>,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { mapFilter: mapFilterRaw, nodeFilter, user, isPrint } = mobxStore
+  const {
+    mapFilter: mapFilterRaw,
+    nodeFilter,
+    user,
+    isPrint,
+    setRefetchKey,
+  } = mobxStore
   const { map, setNodes } = mobxStore[treeName]
   const {
     setBeobNichtBeurteiltIdsFiltered,
@@ -326,9 +332,14 @@ const ProjekteContainer = ({
     data: dataBeobNichtBeurteilts,
     error: errorBeobNichtBeurteilts,
     loading: loadingBeobNichtBeurteilts,
+    refetch: refetchBeobNichtBeurteilts,
   } = useQuery(queryBeobNichtBeurteilts, {
     suspend: false,
     variables: { isAp, ap },
+  })
+  setRefetchKey({
+    key: 'beobNichtBeurteilts',
+    value: refetchBeobNichtBeurteilts,
   })
   var {
     data: dataBeobNichtZuzuordnens,

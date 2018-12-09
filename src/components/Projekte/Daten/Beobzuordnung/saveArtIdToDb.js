@@ -6,7 +6,7 @@ import gql from 'graphql-tag'
 import updateBeobByIdGql from './updateBeobById'
 
 export default async ({ value, row, tree, refetchTree, client, mobxStore }) => {
-  const { setTreeKey } = mobxStore
+  const { setTreeKey, refetch } = mobxStore
   const variables = {
     id: row.id,
     artId: value,
@@ -77,7 +77,7 @@ export default async ({ value, row, tree, refetchTree, client, mobxStore }) => {
     refetchTree('pops')
     refetchTree('tpops')
     refetchTree('beobNichtZuzuordnens')
-    refetchTree('beobNichtBeurteilts')
+    refetch.beobNichtBeurteilts()
     refetchTree('beobZugeordnets')
   }
 }
