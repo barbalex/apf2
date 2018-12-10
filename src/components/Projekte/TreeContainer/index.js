@@ -378,7 +378,12 @@ const TreeContainer = ({
           })
         },
         copy() {
-          copyTo({ parentId: id, refetchTree, addError, client, copying })
+          copyTo({
+            parentId: id,
+            client,
+            copying,
+            mobxStore,
+          })
         },
         markForCopyingBiotop() {
           setCopyingBiotop({ id, label })

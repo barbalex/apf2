@@ -7,15 +7,15 @@ import copyTo from './copyTo'
 export default async ({
   tpopkontrIdFrom,
   tpopkontrIdTo,
-  refetchTree,
   client,
   copying,
+  mobxTree,
 }: {
   tpopkontrIdFrom: String,
   tpopkontrIdTo: String,
-  refetchTree: () => void,
   client: Object,
   copying: Object,
+  mobxTree: Object,
 }) => {
   // 1. fetch all tpopkontrzaehl
   const { data } = await client.query({
@@ -40,9 +40,9 @@ export default async ({
       parentId: tpopkontrIdTo,
       table: 'tpopkontrzaehl',
       id: zaehl.id,
-      refetchTree,
       client,
       copying,
+      mobxTree,
     }),
   )
 }

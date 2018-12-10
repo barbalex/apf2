@@ -26,19 +26,18 @@ export default async ({
   parentId,
   table: tablePassed,
   id: idPassed,
-  refetchTree,
-  addError,
   client,
   copying,
+  mobxTree,
 }: {
   parentId: String,
   tablePassed: ?String,
   idPassed: ?String,
-  refetchTree: () => void,
-  addError: Object,
   client: Object,
   copying: Object,
+  mobxTree: Object,
 }): Promise<void> => {
+  const { refetch, addError } = mobxTree
   let table = tablePassed || copying.table
   const id = idPassed || copying.id
   const withNextLevel = copying.withNextLevel
@@ -326,20 +325,20 @@ export default async ({
       // do nothing
       break
   }
-  refetchTree(`${tablePassed}s`)
-  refetchTree('aps')
-  refetchTree('pops')
-  refetchTree('tpops')
-  refetchTree('tpopfeldkontrs')
+  refetch[`${tablePassed}s`]()
+  refetch.aps()
+  refetch.pops()
+  refetch.tpops()
+  refetch.tpopfeldkontrs()
 
   // copy tpop if needed
   if (table === 'pop' && withNextLevel) {
     copyTpopsOfPop({
       popIdFrom: id,
       popIdTo: newId,
-      refetchTree,
       client,
       copying,
+      mobxTree,
     })
   }
   if (table === 'tpopkontr') {
@@ -347,9 +346,9 @@ export default async ({
     copyZaehlOfTpopKontr({
       tpopkontrIdFrom: id,
       tpopkontrIdTo: newId,
-      refetchTree,
       client,
       copying,
+      mobxTree,
     })
   }
 }
