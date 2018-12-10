@@ -12,19 +12,17 @@ import dataGql from './data'
 export default async ({
   treeName,
   id,
-  refetchTree,
   client,
   mobxStore,
 }: {
   treeName: string,
   id: String,
-  refetchTree: () => void,
   client: Object,
   mobxStore: Object,
 }) => {
   const tree = mobxStore[treeName]
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
-  const { setTreeKey } = mobxStore
+  const { setTreeKey, refetch } = mobxStore
   const { projekt } = activeNodes
   const { openNodes } = tree
   // 1. load all data
@@ -385,5 +383,5 @@ export default async ({
   })
 
   // 4. refresh tree
-  refetchTree('pops')
+  refetch.pops()
 }

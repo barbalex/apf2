@@ -13,20 +13,18 @@ export default async ({
   treeName,
   id: jahrString,
   parentId: apId,
-  refetchTree,
   client,
   mobxStore,
 }: {
   treeName: string,
   id: String,
   parentId: String,
-  refetchTree: () => void,
   client: Object,
   mobxStore: Object,
 }) => {
   const tree = mobxStore[treeName]
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
-  const { setTreeKey } = mobxStore
+  const { setTreeKey, refetch } = mobxStore
   const jahr = +jahrString
   const { projekt } = activeNodes
   const { openNodes } = tree
@@ -85,5 +83,5 @@ export default async ({
   })
 
   // 4. refresh tree
-  refetchTree('ziels')
+  refetch.ziels()
 }

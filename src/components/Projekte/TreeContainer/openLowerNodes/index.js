@@ -13,7 +13,6 @@ export default ({
   id,
   parentId,
   menuType,
-  refetchTree,
   client,
   mobxStore,
 }: {
@@ -21,7 +20,6 @@ export default ({
   id: String | Number,
   parentId: String | Number,
   menuType: String,
-  refetchTree: () => void,
   client: Object,
   mobxStore: Object,
 }) => {
@@ -35,22 +33,21 @@ export default ({
    */
   switch (menuType) {
     case 'popFolder':
-      popFolder({ treeName, id, refetchTree, client, mobxStore })
+      popFolder({ treeName, id, client, mobxStore })
       break
     case 'pop':
-      pop({ treeName, id, refetchTree, client, mobxStore })
+      pop({ treeName, id, client, mobxStore })
       break
     case 'tpopFolder':
-      tpopFolder({ treeName, id, refetchTree, client, mobxStore })
+      tpopFolder({ treeName, id, client, mobxStore })
       break
     case 'tpop':
-      tpop({ treeName, id, refetchTree, client, mobxStore })
+      tpop({ treeName, id, client, mobxStore })
       break
     case 'tpopfeldkontrFolder':
       tpopfeldkontrFolder({
         treeName,
         id,
-        refetchTree,
         client,
         mobxStore,
       })
@@ -59,20 +56,18 @@ export default ({
       tpopfreiwkontrFolder({
         treeName,
         id,
-        refetchTree,
         client,
         mobxStore,
       })
       break
     case 'zielFolder':
-      zielFolder({ treeName, id, refetchTree, client, mobxStore })
+      zielFolder({ treeName, id, client, mobxStore })
       break
     case 'zieljahrFolder':
       zieljahrFolder({
         treeName,
         id,
         parentId,
-        refetchTree,
         mobxStore,
       })
       break
