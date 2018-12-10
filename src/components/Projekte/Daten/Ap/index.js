@@ -75,17 +75,15 @@ const Ap = ({
   dataAllAdresses,
   dataAllAps,
   dataAeEigenschaftens,
-  refetchTree,
 }: {
   treeName: String,
   dataAllAdresses: Object,
   dataAllAps: Object,
   dataAeEigenschaftens: Object,
-  refetchTree: () => void,
 }) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
-  const { nodeFilter, nodeFilterSetValue, user } = mobxStore
+  const { nodeFilter, nodeFilterSetValue, user, refetch } = mobxStore
   const { activeNodeArray } = mobxStore[treeName]
   const id =
     activeNodeArray.length > 3
@@ -170,7 +168,7 @@ const Ap = ({
           key: field,
           value,
         })
-        refetchTree('aps')
+        refetch.aps()
       } else {
         try {
           await client.mutate({
@@ -208,7 +206,7 @@ const Ap = ({
           return setErrors({ [field]: error.message })
         }
         setErrors({})
-        if (['artId'].includes(field)) refetchTree('aps')
+        if (['artId'].includes(field)) refetch.aps()
       }
     },
     [row, showFilter],

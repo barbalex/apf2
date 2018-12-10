@@ -106,7 +106,7 @@ const User = ({
         return setErrors({ [field]: error.message })
       }
       setErrors({})
-      //if (['name', 'role'].includes(field)) refetchTree('users')
+      //if (['name', 'role'].includes(field)) refetch.users()
     },
     [errors, row.id],
   )
