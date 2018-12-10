@@ -156,15 +156,7 @@ const getAndValidateCoordinatesOfBeob = async ({ id, addError, client }) => {
   return { x, y }
 }
 
-const TreeContainer = ({
-  treeName,
-  data,
-  loading,
-}: {
-  treeName: String,
-  data: Object,
-  loading: Boolean,
-}) => {
+const TreeContainer = ({ treeName }: { treeName: String }) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
   const {
@@ -190,41 +182,9 @@ const TreeContainer = ({
     setTreeKey,
     refetch,
   } = mobxStore
-  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
-
   const tree = mobxStore[treeName]
-  const { openNodes, nodes } = tree
-
-  useEffect(() => {
-    /**
-     * if activeNodeArray.length === 1
-     * and there is only one projekt
-     * open it
-     * dont do this in render!
-     */
-    const projekteNodes = nodes.filter(n => n.menuType === 'projekt')
-    const existsOnlyOneProjekt = projekteNodes.length === 1
-    const projektNode = projekteNodes[0]
-    if (
-      activeNodes.projektFolder &&
-      !activeNodes.projekt &&
-      existsOnlyOneProjekt &&
-      projektNode
-    ) {
-      const projektUrl = [...projektNode.url]
-      setTreeKey({
-        value: projektUrl,
-        tree: treeName,
-        key: 'activeNodeArray',
-      })
-      // add projekt to open nodes
-      setTreeKey({
-        value: [...openNodes, projektUrl],
-        tree: treeName,
-        key: 'openNodes',
-      })
-    }
-  })
+  const { openNodes } = tree
+  const { projekt } = mobxStore[`${treeName}ActiveNodes`]
 
   const handleClick = useCallback(
     (e, data, element) => {
@@ -456,7 +416,6 @@ const TreeContainer = ({
     },
     [
       treeName,
-      activeNodes,
       activeApfloraLayers,
       activeOverlays,
       popLabelUsingNr,
@@ -476,16 +435,18 @@ const TreeContainer = ({
     }
   })
 
+  console.log('TreeContainer rendering')
+
   return (
     <ErrorBoundary>
       <Container>
         {!!toDeleteId && <DeleteDatasetModal treeName={treeName} />}
         <LabelFilterContainer>
           <LabelFilter treeName={treeName} />
-          {!!activeNodes.projekt && <ApFilter treeName={treeName} />}
+          {!!projekt && <ApFilter treeName={treeName} />}
         </LabelFilterContainer>
         <InnerTreeContainer>
-          <Tree data={data} treeName={treeName} />
+          <Tree treeName={treeName} />
         </InnerTreeContainer>
         <CmApFolder onClick={handleClick} treeName={treeName} />
         <CmAp onClick={handleClick} treeName={treeName} />
