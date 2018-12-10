@@ -134,17 +134,16 @@ const Tree = ({ treeName }: Props) => {
   })
 
   const {
-    data: dataAdresses,
-    error: errorAdresses,
-    loading: loadingAdresses,
-    refetch: refetchAdresses,
-  } = useQuery(queryAdresses, {
+    data: dataProjekts,
+    error: errorProjekts,
+    loading: loadingProjekts,
+    refetch: refetchProjekts,
+  } = useQuery(queryProjekts, {
     suspend: false,
-    variables: { isWerteListen, isAdresse },
   })
   setRefetchKey({
-    key: 'adresses',
-    value: refetchAdresses,
+    key: 'projekts',
+    value: refetchProjekts,
   })
   const {
     data: dataUsers,
@@ -157,18 +156,6 @@ const Tree = ({ treeName }: Props) => {
   setRefetchKey({
     key: 'users',
     value: refetchUsers,
-  })
-  const {
-    data: dataProjekts,
-    error: errorProjekts,
-    loading: loadingProjekts,
-    refetch: refetchProjekts,
-  } = useQuery(queryProjekts, {
-    suspend: false,
-  })
-  setRefetchKey({
-    key: 'projekts',
-    value: refetchProjekts,
   })
   const {
     data: dataApberuebersichts,
@@ -468,6 +455,19 @@ const Tree = ({ treeName }: Props) => {
   setRefetchKey({
     key: 'beobNichtZuzuordnens',
     value: refetchBeobNichtZuzuordnens,
+  })
+  const {
+    data: dataAdresses,
+    error: errorAdresses,
+    loading: loadingAdresses,
+    refetch: refetchAdresses,
+  } = useQuery(queryAdresses, {
+    suspend: false,
+    variables: { isWerteListen, isAdresse },
+  })
+  setRefetchKey({
+    key: 'adresses',
+    value: refetchAdresses,
   })
 
   const queryLoadingArray = [
