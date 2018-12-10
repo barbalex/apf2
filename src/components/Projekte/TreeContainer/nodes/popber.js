@@ -43,7 +43,7 @@ export default ({
   )
 
   // map through all elements and create array of nodes
-  const nodes = get(data, 'popbers.nodes', [])
+  const nodes = get(data, 'allPopbers.nodes', [])
     .filter(el => el.popId === popId)
     // filter by nodeLabelFilter
     .filter(el => {

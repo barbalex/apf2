@@ -29,7 +29,7 @@ export default ({
   mobxStore: Object,
 }): Array<Object> => {
   // return empty if ap is not a real ap and apFilter is set
-  const ap = get(data, 'aps.nodes', []).find(n => n.id === apId)
+  const ap = get(data, 'allAps.nodes', []).find(n => n.id === apId)
   const isAp = ap && [1, 2, 3].includes(ap.bearbeitung)
   const apFilter = get(mobxStore, `${treeName}.apFilter`)
   if (!!apFilter && !isAp) return []
@@ -45,7 +45,7 @@ export default ({
     `${treeName}.nodeLabelFilter.popber`,
   )
 
-  const childrenLength = get(data, 'popbers.nodes', [])
+  const childrenLength = get(data, 'allPopbers.nodes', [])
     .filter(el => el.popId === popId)
     // filter by nodeLabelFilter
     .filter(el => {
