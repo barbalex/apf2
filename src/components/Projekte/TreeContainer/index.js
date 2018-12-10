@@ -157,14 +157,11 @@ const getAndValidateCoordinatesOfBeob = async ({ id, addError, client }) => {
 }
 
 const TreeContainer = ({
-  data: dbData,
   treeName,
   data,
   loading,
 }: {
   treeName: String,
-  flex: Number,
-  handleClick: () => void,
   data: Object,
   loading: Boolean,
 }) => {
