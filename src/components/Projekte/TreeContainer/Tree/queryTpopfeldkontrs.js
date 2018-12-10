@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 
 export default gql`
   query TpopfeldkontrsQuery($tpop: [UUID!], $isTpop: Boolean!) {
-    tpopfeldkontrs: allTpopkontrs(
+    allTpopkontrs(
       filter: {
         or: [
           { typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" } }

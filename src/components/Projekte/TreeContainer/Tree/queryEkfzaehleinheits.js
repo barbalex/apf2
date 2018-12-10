@@ -2,8 +2,7 @@ import gql from 'graphql-tag'
 
 export default gql`
   query EkfzaehleinheitsQuery($ap: [UUID!], $isAp: Boolean!) {
-    ekfzaehleinheits: allEkfzaehleinheits(filter: { apId: { in: $ap } })
-      @include(if: $isAp) {
+    allEkfzaehleinheits(filter: { apId: { in: $ap } }) @include(if: $isAp) {
       nodes {
         id
         apId
