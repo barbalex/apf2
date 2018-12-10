@@ -1,0 +1,37 @@
+import gql from 'graphql-tag'
+
+export default gql`
+  query TpopQuery($isPop: Boolean!, $tpopFilter: TpopFilter!) {
+    tpops: allTpops(filter: $tpopFilter, orderBy: NR_ASC) @include(if: $isPop) {
+      nodes {
+        id
+        popId
+        nr
+        gemeinde
+        flurname
+        x
+        y
+        radius
+        hoehe
+        exposition
+        klima
+        neigung
+        beschreibung
+        katasterNr
+        status
+        statusUnklar
+        statusUnklarGrund
+        apberRelevant
+        bekanntSeit
+        eigentuemer
+        kontakt
+        nutzungszone
+        bewirtschafter
+        bewirtschaftung
+        kontrollfrequenz
+        kontrollfrequenzFreiwillige
+        bemerkungen
+      }
+    }
+  }
+`
