@@ -59,6 +59,8 @@ const Tpopmassnber = ({
 
   const row = get(data, 'tpopmassnberById', {})
 
+  console.log('Tpopmassnber', { activeNodeArray, row })
+
   useEffect(() => setErrors({}), [row])
 
   let tpopmassnbeurtWerte = get(

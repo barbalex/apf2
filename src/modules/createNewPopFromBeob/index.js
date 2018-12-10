@@ -12,13 +12,11 @@ import updateBeobById from './updateBeobById'
 export default async ({
   treeName,
   id,
-  refetchTree,
   client,
   mobxStore,
 }: {
   treeName: Object,
   id: String,
-  refetchTree: () => void,
   client: Object,
   mobxStore: Object,
 }): Promise<void> => {
@@ -165,12 +163,13 @@ export default async ({
     key: 'activeNodeArray',
   })
 
-  refetchTree('local')
-  refetchTree('aps')
-  refetchTree('pops')
-  refetchTree('tpops')
+  // TODO: what is this for?
+  //refetchTree('local')
+  refetch.aps()
+  refetch.pops()
+  refetch.tpops()
   refetch.beobNichtZuzuordnens()
   refetch.beobNichtZuzuordnenForMap()
   refetch.beobNichtBeurteilts()
-  refetchTree('beobZugeordnets')
+  refetch.beobZugeordnets()
 }

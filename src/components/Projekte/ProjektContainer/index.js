@@ -13,33 +13,33 @@ import { useQuery } from 'react-apollo-hooks'
 // but only in production!
 import Karte from '../Karte'
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import queryAdresses from './adresses'
-import queryUsers from './users'
-import queryProjekts from './projekts'
-import queryApberuebersichts from './apberuebersichts'
-import queryAps from './aps'
-import queryPops from './pops'
-import queryPopbers from './popbers'
-import queryPopmassnbers from './popmassnbers'
-import queryTpops from './tpops'
-import queryTpopmassns from './tpopmassns'
-import queryTpopmassnbers from './tpopmassnbers'
-import queryTpopfeldkontrs from './tpopfeldkontrs'
-import queryTpopfreiwkontrs from './tpopfreiwkontrs'
-import queryTpopkontrzaehls from './tpopkontrzaehls'
-import queryTpopbers from './tpopbers'
-import queryBeobZugeordnets from './beobZugeordnets'
-import queryZiels from './ziels'
-import queryZielbers from './zielbers'
-import queryErfkrits from './erfkrits'
-import queryApbers from './apbers'
-import queryBers from './bers'
-import queryIdealbiotops from './idealbiotops'
-import queryAparts from './aparts'
-import queryAssozarts from './assozarts'
-import queryEkfzaehleinheits from './ekfzaehleinheits'
-import queryBeobNichtBeurteilts from './beobNichtBeurteilts'
-import queryBeobNichtZuzuordnens from './beobNichtZuzuordnens'
+import queryAdresses from './queryAdresses'
+import queryUsers from './queryUsers'
+import queryProjekts from './queryProjekts'
+import queryApberuebersichts from './queryApberuebersichts'
+import queryAps from './queryAps'
+import queryPops from './queryPops'
+import queryPopbers from './queryPopbers'
+import queryPopmassnbers from './queryPopmassnbers'
+import queryTpops from './queryTpops'
+import queryTpopmassns from './queryTpopmassns'
+import queryTpopmassnbers from './queryTpopmassnbers'
+import queryTpopfeldkontrs from './queryTpopfeldkontrs'
+import queryTpopfreiwkontrs from './queryTpopfreiwkontrs'
+import queryTpopkontrzaehls from './queryTpopkontrzaehls'
+import queryTpopbers from './queryTpopbers'
+import queryBeobZugeordnets from './queryBeobZugeordnets'
+import queryZiels from './queryZiels'
+import queryZielbers from './queryZielbers'
+import queryErfkrits from './queryErfkrits'
+import queryApbers from './queryApbers'
+import queryBers from './queryBers'
+import queryIdealbiotops from './queryIdealbiotops'
+import queryAparts from './queryAparts'
+import queryAssozarts from './queryAssozarts'
+import queryEkfzaehleinheits from './queryEkfzaehleinheits'
+import queryBeobNichtBeurteilts from './queryBeobNichtBeurteilts'
+import queryBeobNichtZuzuordnens from './queryBeobNichtZuzuordnens'
 import TreeContainer from '../TreeContainer'
 import Daten from '../Daten'
 import Exporte from '../Exporte'
@@ -109,200 +109,330 @@ const ProjekteContainer = ({
     mobxStore,
   })
 
-  // use var to enable calling window['variable_name']
-  var {
+  const {
     data: dataAdresses,
     error: errorAdresses,
     loading: loadingAdresses,
+    refetch: refetchAdresses,
   } = useQuery(queryAdresses, {
     suspend: false,
     variables: { isWerteListen, isAdresse },
   })
-  var { data: dataUsers, error: errorUsers, loading: loadingUsers } = useQuery(
-    queryUsers,
-    {
-      suspend: false,
-    },
-  )
-  var {
+  setRefetchKey({
+    key: 'adresses',
+    value: refetchAdresses,
+  })
+  const {
+    data: dataUsers,
+    error: errorUsers,
+    loading: loadingUsers,
+    refetch: refetchUsers,
+  } = useQuery(queryUsers, {
+    suspend: false,
+  })
+  setRefetchKey({
+    key: 'users',
+    value: refetchUsers,
+  })
+  const {
     data: dataProjekts,
     error: errorProjekts,
     loading: loadingProjekts,
+    refetch: refetchProjekts,
   } = useQuery(queryProjekts, {
     suspend: false,
   })
-  var {
+  setRefetchKey({
+    key: 'projekts',
+    value: refetchProjekts,
+  })
+  const {
     data: dataApberuebersichts,
     error: errorApberuebersichts,
     loading: loadingApberuebersichts,
+    refetch: refetchApberuebersichts,
   } = useQuery(queryApberuebersichts, {
     suspend: false,
     variables: { isProjekt, projekt },
   })
-  var { data: dataAps, error: errorAps, loading: loadingAps } = useQuery(
-    queryAps,
-    {
-      suspend: false,
-      variables: { isProjekt, apFilter },
-    },
-  )
-  var { data: dataPops, error: errorPops, loading: loadingPops } = useQuery(
-    queryPops,
-    {
-      suspend: false,
-      variables: { isAp, popFilter },
-    },
-  )
-  var {
+  setRefetchKey({
+    key: 'apberuebersichts',
+    value: refetchApberuebersichts,
+  })
+  const {
+    data: dataAps,
+    error: errorAps,
+    loading: loadingAps,
+    refetch: refetchAps,
+  } = useQuery(queryAps, {
+    suspend: false,
+    variables: { isProjekt, apFilter },
+  })
+  setRefetchKey({
+    key: 'aps',
+    value: refetchAps,
+  })
+  const {
+    data: dataPops,
+    error: errorPops,
+    loading: loadingPops,
+    refetch: refetchPops,
+  } = useQuery(queryPops, {
+    suspend: false,
+    variables: { isAp, popFilter },
+  })
+  setRefetchKey({
+    key: 'pops',
+    value: refetchPops,
+  })
+  const {
     data: dataPopbers,
     error: errorPopbers,
     loading: loadingPopbers,
+    refetch: refetchPopbers,
   } = useQuery(queryPopbers, {
     suspend: false,
     variables: { isPop, pop },
   })
-  var {
+  setRefetchKey({
+    key: 'popbers',
+    value: refetchPopbers,
+  })
+  const {
     data: dataPopmassnbers,
     error: errorPopmassnbers,
     loading: loadingPopmassnbers,
+    refetch: refetchPopmassnbers,
   } = useQuery(queryPopmassnbers, {
     suspend: false,
     variables: { isPop, pop },
   })
-  var { data: dataTpops, error: errorTpops, loading: loadingTpops } = useQuery(
-    queryTpops,
-    {
-      suspend: false,
-      variables: { isPop, tpopFilter },
-    },
-  )
-  var {
+  setRefetchKey({
+    key: 'popmassnbers',
+    value: refetchPopmassnbers,
+  })
+  const {
+    data: dataTpops,
+    error: errorTpops,
+    loading: loadingTpops,
+    refetch: refetchTpops,
+  } = useQuery(queryTpops, {
+    suspend: false,
+    variables: { isPop, tpopFilter },
+  })
+  setRefetchKey({
+    key: 'tpops',
+    value: refetchTpops,
+  })
+  const {
     data: dataTpopmassns,
     error: errorTpopmassns,
     loading: loadingTpopmassns,
+    refetch: refetchTpopmassns,
   } = useQuery(queryTpopmassns, {
     suspend: false,
     variables: { isTpop, tpop },
   })
-  var {
+  setRefetchKey({
+    key: 'tpopmassns',
+    value: refetchTpopmassns,
+  })
+  const {
     data: dataTpopmassnbers,
     error: errorTpopmassnbers,
     loading: loadingTpopmassnbers,
+    refetch: refetchTpopmassnbers,
   } = useQuery(queryTpopmassnbers, {
     suspend: false,
     variables: { isTpop, tpop },
   })
-  var {
+  setRefetchKey({
+    key: 'tpopmassnbers',
+    value: refetchTpopmassnbers,
+  })
+  const {
     data: dataTpopfeldkontrs,
     error: errorTpopfeldkontrs,
     loading: loadingTpopfeldkontrs,
+    refetch: refetchTpopfeldkontrs,
   } = useQuery(queryTpopfeldkontrs, {
     suspend: false,
     variables: { isTpop, tpop },
   })
-  var {
+  setRefetchKey({
+    key: 'tpopfeldkontrs',
+    value: refetchTpopfeldkontrs,
+  })
+  const {
     data: dataTpopfreiwkontrs,
     error: errorTpopfreiwkontrs,
     loading: loadingTpopfreiwkontrs,
+    refetch: refetchTpopfreiwkontrs,
   } = useQuery(queryTpopfreiwkontrs, {
     suspend: false,
     variables: { isTpop, tpop },
   })
-  var {
+  setRefetchKey({
+    key: 'tpopfreiwkontrs',
+    value: refetchTpopfreiwkontrs,
+  })
+  const {
     data: dataTpopkontrzaehls,
     error: errorTpopkontrzaehls,
     loading: loadingTpopkontrzaehls,
+    refetch: refetchTpopkontrzaehls,
   } = useQuery(queryTpopkontrzaehls, {
     suspend: false,
     variables: { isTpopkontr, tpopkontr },
   })
-  var {
+  setRefetchKey({
+    key: 'tpopkontrzaehls',
+    value: refetchTpopkontrzaehls,
+  })
+  const {
     data: dataTpopbers,
     error: errorTpopbers,
     loading: loadingTpopbers,
+    refetch: refetchTpopbers,
   } = useQuery(queryTpopbers, {
     suspend: false,
     variables: { isTpop, tpop },
   })
-  var {
+  setRefetchKey({
+    key: 'tpopbers',
+    value: refetchTpopbers,
+  })
+  const {
     data: dataBeobZugeordnets,
     error: errorBeobZugeordnets,
     loading: loadingBeobZugeordnets,
+    refetch: refetchBeobZugeordnets,
   } = useQuery(queryBeobZugeordnets, {
     suspend: false,
     variables: { isTpop, tpop },
   })
-  var { data: dataZiels, error: errorZiels, loading: loadingZiels } = useQuery(
-    queryZiels,
-    {
-      suspend: false,
-      variables: { isAp, ap },
-    },
-  )
-  var {
+  setRefetchKey({
+    key: 'beobZugeordnets',
+    value: refetchBeobZugeordnets,
+  })
+  const {
+    data: dataZiels,
+    error: errorZiels,
+    loading: loadingZiels,
+    refetch: refetchZiels,
+  } = useQuery(queryZiels, {
+    suspend: false,
+    variables: { isAp, ap },
+  })
+  setRefetchKey({
+    key: 'ziels',
+    value: refetchZiels,
+  })
+  const {
     data: dataZielbers,
     error: errorZielbers,
     loading: loadingZielbers,
+    refetch: refetchZielbers,
   } = useQuery(queryZielbers, {
     suspend: false,
     variables: { isZiel, ziel },
   })
-  var {
+  setRefetchKey({
+    key: 'zielbers',
+    value: refetchZielbers,
+  })
+  const {
     data: dataErfkrits,
     error: errorErfkrits,
     loading: loadingErfkrits,
+    refetch: refetchErfkrits,
   } = useQuery(queryErfkrits, {
     suspend: false,
     variables: { isAp, ap },
   })
-  var {
+  setRefetchKey({
+    key: 'erfkrits',
+    value: refetchErfkrits,
+  })
+  const {
     data: dataApbers,
     error: errorApbers,
     loading: loadingApbers,
+    refetch: refetchApbers,
   } = useQuery(queryApbers, {
     suspend: false,
     variables: { isAp, ap },
   })
-  var { data: dataBers, error: errorBers, loading: loadingBers } = useQuery(
-    queryBers,
-    {
-      suspend: false,
-      variables: { isAp, ap },
-    },
-  )
-  var {
+  setRefetchKey({
+    key: 'apbers',
+    value: refetchApbers,
+  })
+  const {
+    data: dataBers,
+    error: errorBers,
+    loading: loadingBers,
+    refetch: refetchBers,
+  } = useQuery(queryBers, {
+    suspend: false,
+    variables: { isAp, ap },
+  })
+  setRefetchKey({
+    key: 'bers',
+    value: refetchBers,
+  })
+  const {
     data: dataIdealbiotops,
     error: errorIdealbiotops,
     loading: loadingIdealbiotops,
+    refetch: refetchIdealbiotops,
   } = useQuery(queryIdealbiotops, {
     suspend: false,
     variables: { isAp, ap },
   })
-  var {
+  setRefetchKey({
+    key: 'idealbiotops',
+    value: refetchIdealbiotops,
+  })
+  const {
     data: dataAparts,
     error: errorAparts,
     loading: loadingAparts,
+    refetch: refetchAparts,
   } = useQuery(queryAparts, {
     suspend: false,
     variables: { isAp, ap },
   })
-  var {
+  setRefetchKey({
+    key: 'aparts',
+    value: refetchAparts,
+  })
+  const {
     data: dataAssozarts,
     error: errorAssozarts,
     loading: loadingAssozarts,
+    refetch: refetchAssozarts,
   } = useQuery(queryAssozarts, {
     suspend: false,
     variables: { isAp, ap },
   })
-  var {
+  setRefetchKey({
+    key: 'assozarts',
+    value: refetchAssozarts,
+  })
+  const {
     data: dataEkfzaehleinheits,
     error: errorEkfzaehleinheits,
     loading: loadingEkfzaehleinheits,
+    refetch: refetchEkfzaehleinheits,
   } = useQuery(queryEkfzaehleinheits, {
     suspend: false,
     variables: { isAp, ap },
   })
-  var {
+  setRefetchKey({
+    key: 'ekfzaehleinheits',
+    value: refetchEkfzaehleinheits,
+  })
+  const {
     data: dataBeobNichtBeurteilts,
     error: errorBeobNichtBeurteilts,
     loading: loadingBeobNichtBeurteilts,
@@ -315,7 +445,7 @@ const ProjekteContainer = ({
     key: 'beobNichtBeurteilts',
     value: refetchBeobNichtBeurteilts,
   })
-  var {
+  const {
     data: dataBeobNichtZuzuordnens,
     error: errorBeobNichtZuzuordnens,
     loading: loadingBeobNichtZuzuordnens,
@@ -392,8 +522,16 @@ const ProjekteContainer = ({
   const loading = anyQueryIsLoading(queryLoadingArray)
 
   const refetch = query => {
-    if (query && window[`data${upperFirst(query)}`]) {
-      window[`data${upperFirst(query)}`].refetch()
+    const queryName = `data${upperFirst(query)}`
+    console.log('ProjektContainer, refetch', {
+      query,
+      queryName,
+      dataPopmassnbers,
+      window,
+    })
+    if (query && window[queryName]) {
+      console.log('ProjektContainer, refetching')
+      window[queryName].refetch()
     }
   }
   const { token } = user
@@ -475,7 +613,6 @@ const ProjekteContainer = ({
       ? 1
       : 1 / tabs.length
 
-  // TODO: which query to check for error?
   if (anyQueryReturnsPermissionError(queryErrorArray)) {
     // during login don't show permission error
     if (!token) return null
