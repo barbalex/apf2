@@ -690,7 +690,7 @@ const Tree = ({ treeName }: Props) => {
     [data, treeName, nodes],
   )
 
-  console.log('Tree rendering')
+  //console.log('Tree rendering')
 
   return (
     <ErrorBoundary>
