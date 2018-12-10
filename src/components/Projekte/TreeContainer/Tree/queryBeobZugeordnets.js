@@ -2,10 +2,8 @@ import gql from 'graphql-tag'
 
 export default gql`
   query BeobZugeordnetsQuery($tpop: [UUID!], $isTpop: Boolean!) {
-    beobZugeordnets: allVApbeobs(
-      filter: { tpopId: { in: $tpop } }
-      orderBy: DATUM_DESC
-    ) @include(if: $isTpop) {
+    allVApbeobs(filter: { tpopId: { in: $tpop } }, orderBy: DATUM_DESC)
+      @include(if: $isTpop) {
       nodes {
         id
         tpopId
