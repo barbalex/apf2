@@ -254,15 +254,6 @@ const TreeContainer = ({
             url.push(1)
           }
           const idToPass = parentId || id
-          console.log('TreeContainer, handleClick', {
-            nodeType,
-            menuType,
-            table,
-            action,
-            actionTable,
-            url,
-            idToPass,
-          })
           insertDataset({
             treeName,
             tablePassed: table,

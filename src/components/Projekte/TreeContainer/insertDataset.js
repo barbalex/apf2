@@ -25,14 +25,6 @@ export default async ({
   client: Object,
   mobxStore: Object,
 }): any => {
-  console.log('insertDataset 1', {
-    treeName,
-    tablePassed,
-    parentId,
-    url,
-    menuType,
-    id,
-  })
   const { setTreeKey, addError, refetch } = mobxStore
   const tree = mobxStore[treeName]
   let table = tablePassed
@@ -175,7 +167,6 @@ export default async ({
   )
   // set new url
   const newActiveNodeArray = [...url, row[idField]]
-  console.log('insertDataset 2', { url, newActiveNodeArray, idField, row })
   setTreeKey({
     value: newActiveNodeArray,
     tree: treeName,

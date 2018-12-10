@@ -245,6 +245,7 @@ const Karte = ({
       !!ziels
     )
 
+  console.log('Karte rendering')
   if (isFirstLoad) {
     return <LoadingContainer>Karte lädt daten...</LoadingContainer>
   }

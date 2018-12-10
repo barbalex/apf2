@@ -158,11 +158,7 @@ const Daten = ({
     form = key ? formObject[key] : ''
   }
 
-  /*console.log('Daten', {
-    activeNodeArray: activeNodeArray.toJSON(),
-    key,
-    activeNode,
-  })*/
+  console.log('Daten rendering')
   if (!key) return null
 
   return (

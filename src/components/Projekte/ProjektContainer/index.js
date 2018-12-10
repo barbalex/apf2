@@ -523,7 +523,7 @@ const ProjekteContainer = ({
   const { token } = user
   const role = token ? jwtDecode(token).role : null
 
-  //consoleconsole.log('ProjektContainer', { loading })
+  console.log('ProjektContainer rendering', { loading })
 
   const data = {
     ...dataAdresses,
