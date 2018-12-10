@@ -13,7 +13,6 @@ export default async ({
   id,
   menuType,
   url,
-  refetchTree,
   client,
   mobxStore,
 }: {
@@ -23,7 +22,6 @@ export default async ({
   id: String,
   menuType: String,
   url: Array<String>,
-  refetchTree: () => void,
   client: Object,
   mobxStore: Object,
 }): any => {
@@ -197,12 +195,5 @@ export default async ({
     key: 'openNodes',
   })
   const refetchName = `${table === 'tpopkontrzaehl' ? table : tablePassed}s`
-  console.log('insertDataset 3', {
-    refetchName,
-    refetchRefetchName: refetch[refetchName],
-  })
-  refetchTree(refetchName)
-  if (refetch[refetchName]) {
-    refetch[refetchName]()
-  }
+  refetch[refetchName]()
 }

@@ -159,7 +159,6 @@ const getAndValidateCoordinatesOfBeob = async ({ id, addError, client }) => {
 const TreeContainer = ({
   data: dbData,
   treeName,
-  refetchTree,
   data,
   loading,
 }: {
@@ -168,7 +167,6 @@ const TreeContainer = ({
   handleClick: () => void,
   data: Object,
   loading: Boolean,
-  refetchTree: () => void,
 }) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
@@ -193,6 +191,7 @@ const TreeContainer = ({
     urlQuery,
     setUrlQuery,
     setTreeKey,
+    refetch,
   } = mobxStore
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
 
@@ -271,7 +270,6 @@ const TreeContainer = ({
             url,
             menuType,
             id,
-            refetchTree,
             client,
             mobxStore,
           })
@@ -282,7 +280,6 @@ const TreeContainer = ({
             id,
             parentId,
             menuType,
-            refetchTree,
             client,
             mobxStore,
           })
@@ -314,9 +311,9 @@ const TreeContainer = ({
             ].includes(table)
               ? 'tpopkontrzaehl'
               : table
-            refetchTree(`${tableToUse}s`)
-            refetchTree('aps')
-            refetchTree('projekts')
+            refetch[`${tableToUse}s`]()
+            refetch.aps()
+            refetch.projekts()
           }
           setToDelete({
             table,
@@ -401,7 +398,6 @@ const TreeContainer = ({
           createNewPopFromBeob({
             treeName,
             id,
-            refetchTree,
             client,
             mobxStore,
           })
@@ -498,9 +494,7 @@ const TreeContainer = ({
         {!!toDeleteId && <DeleteDatasetModal treeName={treeName} />}
         <LabelFilterContainer>
           <LabelFilter treeName={treeName} />
-          {!!activeNodes.projekt && (
-            <ApFilter treeName={treeName} refetchTree={refetchTree} />
-          )}
+          {!!activeNodes.projekt && <ApFilter treeName={treeName} />}
         </LabelFilterContainer>
         <InnerTreeContainer>
           <Tree data={data} treeName={treeName} />
