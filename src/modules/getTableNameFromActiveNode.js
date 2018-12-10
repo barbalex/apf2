@@ -2,7 +2,6 @@
 import tables from './tables'
 
 export default (activeNode: Object): string => {
-  console.log('getTableFromActiveNode 1', { activeNode })
   if (!activeNode) return null
   // name it projekt
   // because: /projekte has no nodes!
@@ -25,6 +24,5 @@ export default (activeNode: Object): string => {
   }
   if (['adresseFolder', 'wlFolder', 'userFolder'].includes(activeNode.menuType))
     return null
-  console.log('getTableFromActiveNode', { tableName, activeNode })
   return tableName
 }
