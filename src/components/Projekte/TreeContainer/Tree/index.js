@@ -36,7 +36,6 @@ import queryZielbers from './queryZielbers'
 import queryErfkrits from './queryErfkrits'
 import queryApbers from './queryApbers'
 import queryBers from './queryBers'
-import queryIdealbiotops from './queryIdealbiotops'
 import queryAparts from './queryAparts'
 import queryAssozarts from './queryAssozarts'
 import queryEkfzaehleinheits from './queryEkfzaehleinheits'
@@ -406,19 +405,6 @@ const Tree = ({ treeName }: Props) => {
     value: refetchBers,
   })
   const {
-    data: dataIdealbiotops,
-    error: errorIdealbiotops,
-    loading: loadingIdealbiotops,
-    refetch: refetchIdealbiotops,
-  } = useQuery(queryIdealbiotops, {
-    suspend: false,
-    variables: { isAp, ap },
-  })
-  setRefetchKey({
-    key: 'idealbiotops',
-    value: refetchIdealbiotops,
-  })
-  const {
     data: dataAparts,
     error: errorAparts,
     loading: loadingAparts,
@@ -506,7 +492,6 @@ const Tree = ({ treeName }: Props) => {
     loadingErfkrits,
     loadingApbers,
     loadingBers,
-    loadingIdealbiotops,
     loadingAparts,
     loadingAssozarts,
     loadingEkfzaehleinheits,
@@ -536,7 +521,6 @@ const Tree = ({ treeName }: Props) => {
     errorErfkrits,
     errorApbers,
     errorBers,
-    errorIdealbiotops,
     errorAparts,
     errorAssozarts,
     errorEkfzaehleinheits,
@@ -573,7 +557,6 @@ const Tree = ({ treeName }: Props) => {
     dataErfkrits,
     dataApbers,
     dataBers,
-    dataIdealbiotops,
     dataAparts,
     dataAssozarts,
     dataEkfzaehleinheits,
@@ -600,7 +583,6 @@ const Tree = ({ treeName }: Props) => {
     loadingErfkrits,
     loadingApbers,
     loadingBers,
-    loadingIdealbiotops,
     loadingAparts,
     loadingAssozarts,
     loadingEkfzaehleinheits,
