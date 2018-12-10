@@ -28,13 +28,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Pop = ({
-  treeName,
-  refetchTree,
-}: {
-  treeName: string,
-  refetchTree: () => void,
-}) => {
+const Pop = ({ treeName }: { treeName: string }) => {
   const mobxStore = useContext(mobxStoreContext)
   const client = useApolloClient()
   const { nodeFilter, nodeFilterSetValue, refetch } = mobxStore
@@ -77,7 +71,6 @@ const Pop = ({
           key: field,
           value,
         })
-        //refetchTree()
       } else {
         try {
           client.mutate({

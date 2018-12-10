@@ -36,13 +36,12 @@ const enhance = compose(
 const Erfkrit = ({
   treeName,
   dataAllApErfkritWertes,
-  refetchTree,
 }: {
   treeName: string,
   dataAllApErfkritWertes: Object,
-  refetchTree: () => void,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
+  const { refetch } = mobxStore
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
   const { activeNodeArray } = mobxStore[treeName]
@@ -102,7 +101,7 @@ const Erfkrit = ({
         return setErrors({ [field]: error.message })
       }
       setErrors({})
-      if (['erfolg'].includes(field)) refetchTree('erfkrits')
+      if (['erfolg'].includes(field)) refetch.erfkrits()
     },
     [row],
   )

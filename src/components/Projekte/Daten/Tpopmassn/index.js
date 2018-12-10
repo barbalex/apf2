@@ -51,7 +51,6 @@ const Tpopmassn = ({
   treeName,
   dataAeEigenschaftens,
   dataAllAdresses,
-  refetchTree,
 }: {
   onNewRequestWirtspflanze: () => void,
   onBlurWirtspflanze: () => void,
@@ -59,11 +58,10 @@ const Tpopmassn = ({
   treeName: string,
   dataAeEigenschaftens: Object,
   dataAllAdresses: Object,
-  refetchTree: () => void,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const client = useApolloClient()
-  const { nodeFilter, nodeFilterSetValue } = mobxStore
+  const { nodeFilter, nodeFilterSetValue, refetch } = mobxStore
 
   const [errors, setErrors] = useState({})
   const { activeNodeArray } = mobxStore[treeName]
@@ -104,7 +102,6 @@ const Tpopmassn = ({
           key: field,
           value,
         })
-        //refetchTree()
       } else {
         /**
          * enable passing two values
@@ -183,7 +180,7 @@ const Tpopmassn = ({
           return setErrors({ [field]: error.message })
         }
         setErrors({})
-        if (['typ'].includes(field)) refetchTree('tpopmassns')
+        if (['typ'].includes(field)) refetch.tpopmassns()
       }
     },
     [row, showFilter],
