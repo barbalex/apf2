@@ -37,13 +37,12 @@ const enhance = compose(
 const Ekfzaehleinheit = ({
   treeName,
   dataAllTpopkontrzaehlEinheitWertes,
-  refetchTree,
 }: {
   treeName: string,
   dataAllTpopkontrzaehlEinheitWertes: Object,
-  refetchTree: () => void,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
+  const { refetch } = mobxStore
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
   const { activeNodeArray } = mobxStore[treeName]
@@ -120,7 +119,7 @@ const Ekfzaehleinheit = ({
         return setErrors({ [field]: error.message })
       }
       setErrors({})
-      if (['zaehleinheitId'].includes(field)) refetchTree('ekfzaehleinheits')
+      if (['zaehleinheitId'].includes(field)) refetch.ekfzaehleinheits()
     },
     [row],
   )

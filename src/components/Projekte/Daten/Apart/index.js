@@ -35,14 +35,12 @@ const enhance = compose(
 const ApArt = ({
   treeName,
   dataAeEigenschaftens,
-  refetchTree,
 }: {
   treeName: string,
   dataAeEigenschaftens: Object,
-
-  refetchTree: () => void,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
+  const { refetch } = mobxStore
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
   const { activeNodeArray } = mobxStore[treeName]
@@ -105,7 +103,7 @@ const ApArt = ({
         return setErrors({ [field]: error.message })
       }
       setErrors({})
-      if (['artId'].includes(field)) refetchTree('aparts')
+      if (['artId'].includes(field)) refetch.aparts()
     },
     [row.id],
   )

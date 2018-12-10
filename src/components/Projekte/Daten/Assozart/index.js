@@ -36,13 +36,12 @@ const enhance = compose(
 const Assozart = ({
   treeName,
   dataAeEigenschaftens,
-  refetchTree,
 }: {
   treeName: string,
   dataAeEigenschaftens: Object,
-  refetchTree: () => void,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
+  const { refetch } = mobxStore
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
   const { activeNodeArray } = mobxStore[treeName]
@@ -110,7 +109,7 @@ const Assozart = ({
         return setErrors({ [field]: error.message })
       }
       setErrors({})
-      if (['aeId'].includes(field)) refetchTree('assozarts')
+      if (['aeId'].includes(field)) refetch.assozarts()
     },
     [row],
   )
