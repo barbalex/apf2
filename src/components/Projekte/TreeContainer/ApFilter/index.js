@@ -23,16 +23,10 @@ const StyledSwitch = styled(Switch)`
   margin-top: -18px;
 `
 
-const ApFilter = ({
-  treeName,
-  refetchTree,
-}: {
-  treeName: String,
-  refetchTree: () => void,
-}) => {
+const ApFilter = ({ treeName }: { treeName: String }) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
-  const { setTreeKey } = mobxStore
+  const { setTreeKey, refetch } = mobxStore
   const { apFilter, activeNodeArray, openNodes } = mobxStore[treeName]
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
 
@@ -46,7 +40,7 @@ const ApFilter = ({
       })
       if (!previousApFilter) {
         // need to fetch previously not had aps
-        refetchTree()
+        refetch.aps()
         // apFilter was set to true
         const { ap: apId } = activeNodes
         let result

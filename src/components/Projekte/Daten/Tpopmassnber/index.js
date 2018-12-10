@@ -36,13 +36,12 @@ const enhance = compose(
 const Tpopmassnber = ({
   treeName,
   dataAllTpopmassnErfbeurtWertes,
-  refetchTree,
 }: {
   treeName: string,
   dataAllTpopmassnErfbeurtWertes: Object,
-  refetchTree: () => void,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
+  const { refetch } = mobxStore
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
   const { activeNodeArray } = mobxStore[treeName]
@@ -58,8 +57,6 @@ const Tpopmassnber = ({
   })
 
   const row = get(data, 'tpopmassnberById', {})
-
-  console.log('Tpopmassnber', { activeNodeArray, row })
 
   useEffect(() => setErrors({}), [row])
 
@@ -111,7 +108,7 @@ const Tpopmassnber = ({
         return setErrors({ [field]: error.message })
       }
       setErrors({})
-      if (['beurteilung'].includes(field)) refetchTree('tpopmassnbers')
+      if (['beurteilung'].includes(field)) refetch.tpopmassnbers()
     },
     [row],
   )

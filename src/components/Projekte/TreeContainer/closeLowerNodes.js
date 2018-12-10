@@ -5,12 +5,10 @@ import { getSnapshot } from 'mobx-state-tree'
 export default async ({
   treeName,
   url,
-  refetchTree,
   mobxStore,
 }: {
   treeName: string,
   url: Array<String>,
-  refetchTree: () => void,
 }) => {
   const { setTreeKey } = mobxStore
   const openNodes = getSnapshot(mobxStore[treeName].openNodes)
