@@ -29,11 +29,9 @@ const iconCreateFunction = function(cluster) {
 const BeobNichtBeurteiltMarker = ({
   treeName,
   clustered,
-  refetchTree,
 }: {
   treeName: string,
   clustered: Boolean,
-  refetchTree: () => void,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { setRefetchKey, addError, mapFilter, activeApfloraLayers } = mobxStore

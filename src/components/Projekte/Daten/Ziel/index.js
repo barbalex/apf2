@@ -27,16 +27,10 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
 `
 
-const Ziel = ({
-  treeName,
-  refetchTree,
-}: {
-  treeName: string,
-  refetchTree: () => void,
-}) => {
+const Ziel = ({ treeName }: { treeName: string }) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
-  const { setTreeKey } = mobxStore
+  const { setTreeKey, refetch } = mobxStore
   const { activeNodeArray, openNodes } = mobxStore[treeName]
 
   const [errors, setErrors] = useState({})
@@ -121,7 +115,7 @@ const Ziel = ({
           value: newOpenNodes,
           key: 'openNodes',
         })
-        if (['typ'].includes(field)) refetchTree('ziels')
+        if (['typ'].includes(field)) refetch.ziels()
       }
     },
     [row, activeNodeArray, openNodes, treeName],

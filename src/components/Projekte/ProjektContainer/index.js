@@ -520,20 +520,6 @@ const ProjekteContainer = ({
   ].filter(e => !!e)
 
   const loading = anyQueryIsLoading(queryLoadingArray)
-
-  const refetch = query => {
-    const queryName = `data${upperFirst(query)}`
-    console.log('ProjektContainer, refetch', {
-      query,
-      queryName,
-      dataPopmassnbers,
-      window,
-    })
-    if (query && window[queryName]) {
-      console.log('ProjektContainer, refetching')
-      window[queryName].refetch()
-    }
-  }
   const { token } = user
   const role = token ? jwtDecode(token).role : null
 
@@ -638,7 +624,7 @@ const ProjekteContainer = ({
   }
 
   if (isPrint) {
-    return <Daten treeName={treeName} refetchTree={refetch} role={role} />
+    return <Daten treeName={treeName} role={role} />
   }
 
   return (
@@ -651,7 +637,6 @@ const ProjekteContainer = ({
                 treeName={treeName}
                 data={data}
                 loading={loading}
-                refetchTree={refetch}
               />
             </ReflexElement>
           )}
@@ -664,7 +649,7 @@ const ProjekteContainer = ({
               renderOnResizeRate={100}
               renderOnResize={true}
             >
-              <Daten treeName={treeName} refetchTree={refetch} role={role} />
+              <Daten treeName={treeName} role={role} />
             </ReflexElement>
           )}
           {tabs.includes('karte') &&
@@ -678,12 +663,7 @@ const ProjekteContainer = ({
               renderOnResizeRate={200}
               renderOnResize={true}
             >
-              <Karte
-                treeName={treeName}
-                data={data}
-                refetchTree={refetch}
-                loading={loading}
-              />
+              <Karte treeName={treeName} data={data} loading={loading} />
             </ReflexElement>
           )}
           {tabs.includes('exporte') &&

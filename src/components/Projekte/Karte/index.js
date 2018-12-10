@@ -117,13 +117,11 @@ const LoadingContainer = styled.div`
 const Karte = ({
   treeName,
   data,
-  refetchTree,
   dimensions,
   loading,
 }: {
   treeName: string,
   data: Object,
-  refetchTree: () => void,
   dimensions: Object,
   loading: boolean,
 }) => {
@@ -330,7 +328,6 @@ const Karte = ({
             treeName={treeName}
             data={data}
             clustered={clustered}
-            refetchTree={refetchTree}
           />
           <BeobNichtZuzuordnen
             treeName={treeName}
