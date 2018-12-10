@@ -8,7 +8,6 @@ export default async ({
   id,
   tree,
   refetch: refetchPassed,
-  refetchTree,
   client,
   mobxStore,
 }) => {
@@ -51,12 +50,12 @@ export default async ({
     key: 'openNodes',
   })
   if (refetchPassed) refetchPassed()
-  refetchTree('local')
-  refetchTree('aps')
-  refetchTree('pops')
-  refetchTree('tpops')
+  //refetchTree('local')
+  refetch.aps()
+  refetch.pops()
+  refetch.tpops()
   refetch.beobNichtZuzuordnens()
   refetch.beobNichtZuzuordnenForMap()
   refetch.beobNichtBeurteilts()
-  refetchTree('beobZugeordnets')
+  refetch.beobZugeordnets()
 }

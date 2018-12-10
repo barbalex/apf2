@@ -5,7 +5,7 @@ import gql from 'graphql-tag'
 
 import updateBeobByIdGql from './updateBeobById'
 
-export default async ({ value, row, tree, refetchTree, client, mobxStore }) => {
+export default async ({ value, row, tree, client, mobxStore }) => {
   const { setTreeKey, refetch } = mobxStore
   const variables = {
     id: row.id,

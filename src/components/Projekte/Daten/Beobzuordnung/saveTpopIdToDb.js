@@ -5,15 +5,7 @@ import gql from 'graphql-tag'
 
 import updateBeobByIdGql from './updateBeobById'
 
-export default async ({
-  value,
-  id,
-  tree,
-  refetchTree,
-  type,
-  client,
-  mobxStore,
-}) => {
+export default async ({ value, id, tree, type, client, mobxStore }) => {
   const { setTreeKey, refetch } = mobxStore
   const variables = {
     id,
@@ -231,16 +223,16 @@ export default async ({
     value: newOpenNodes,
     key: 'openNodes',
   })
-  refetchTree('local')
+  //refetchTree('local')
   refetch.beobNichtZuzuordnens()
   refetch.beobNichtZuzuordnenForMap()
   refetch.beobNichtBeurteilts()
-  refetchTree('beobZugeordnets')
+  refetch.beobZugeordnets()
   refetch.beobZugeordnetForMap()
   refetch.beobNichtBeurteiltForMap()
   refetch.beobAssignLines()
-  refetchTree('aps')
-  refetchTree('pops')
-  refetchTree('tpops')
-  refetchTree('local')
+  refetch.aps()
+  refetch.pops()
+  refetch.tpops()
+  refetch.local()
 }

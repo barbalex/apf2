@@ -36,13 +36,12 @@ const enhance = compose(
 const Popmassnber = ({
   treeName,
   dataAllTpopmassnErfbeurtWertes,
-  refetchTree,
 }: {
   treeName: string,
   dataAllTpopmassnErfbeurtWertes: Object,
-  refetchTree: () => void,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
+  const { refetch } = mobxStore
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
   const { activeNodeArray } = mobxStore[treeName]
@@ -110,7 +109,7 @@ const Popmassnber = ({
         return setErrors({ [field]: error.message })
       }
       setErrors({})
-      if (['beurteilung'].includes(field)) refetchTree('popmassnbers')
+      if (['beurteilung'].includes(field)) refetch.popmassnbers()
     },
     [row],
   )
