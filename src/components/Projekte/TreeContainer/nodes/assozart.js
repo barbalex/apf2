@@ -27,7 +27,7 @@ export default ({
   apId: String,
   mobxStore: Object,
 }): Array<Object> => {
-  const assozarts = get(data, 'assozarts.nodes', [])
+  const assozarts = get(data, 'allAssozarts.nodes', [])
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
