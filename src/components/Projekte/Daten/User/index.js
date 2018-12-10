@@ -73,13 +73,12 @@ const enhance = compose(
 const User = ({
   treeName,
   dataAllAdresses,
-  refetchTree,
 }: {
   treeName: String,
   dataAllAdresses: Object,
-  refetchTree: () => void,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
+  const { refetch } = mobxStore
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
   const [editPassword, setEditPassword] = useState(false)
@@ -150,7 +149,7 @@ const User = ({
         return setErrors({ [field]: error.message })
       }
       setErrors({})
-      if (['name', 'role'].includes(field)) refetchTree('users')
+      if (['name', 'role'].includes(field)) refetch.users()
     },
     [row],
   )

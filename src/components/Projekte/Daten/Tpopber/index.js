@@ -26,14 +26,9 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Tpopber = ({
-  treeName,
-  refetchTree,
-}: {
-  treeName: string,
-  refetchTree: () => void,
-}) => {
+const Tpopber = ({ treeName }: { treeName: string }) => {
   const mobxStore = useContext(mobxStoreContext)
+  const { refetch } = mobxStore
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
   const { activeNodeArray } = mobxStore[treeName]
@@ -109,7 +104,7 @@ const Tpopber = ({
       */
       }
       setErrors({})
-      if (['entwicklung'].includes(field)) refetchTree('tpopbers')
+      if (['entwicklung'].includes(field)) refetch.tpopbers()
     },
     [row],
   )

@@ -81,16 +81,20 @@ const Tpopfeldkontr = ({
   dimensions = { width: 380 },
   treeName,
   dataAllAdresses,
-  refetchTree,
 }: {
   dimensions: Object,
   treeName: string,
   dataAllAdresses: Object,
-  refetchTree: () => void,
 }) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
-  const { nodeFilter, nodeFilterSetValue, urlQuery, setUrlQuery } = mobxStore
+  const {
+    nodeFilter,
+    nodeFilterSetValue,
+    urlQuery,
+    setUrlQuery,
+    refetch,
+  } = mobxStore
   const { activeNodeArray } = mobxStore[treeName]
 
   const { data, loading, error } = useQuery(query, {
@@ -134,7 +138,6 @@ const Tpopfeldkontr = ({
           key: field,
           value,
         })
-        //refetchTree()
       } else {
         /**
          * enable passing two values
@@ -277,7 +280,7 @@ const Tpopfeldkontr = ({
           return setErrors({ [field]: error.message })
         }
         setErrors({})
-        if (['typ'].includes(field)) refetchTree('tpopfeldkontrs')
+        if (['typ'].includes(field)) refetch.tpopfeldkontrs()
       }
     },
     [row, showFilter],

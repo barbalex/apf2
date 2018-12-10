@@ -37,13 +37,12 @@ const enhance = compose(
 const Tpopkontrzaehl = ({
   treeName,
   dataAllTpopkontrzaehlEinheitWertes,
-  refetchTree,
 }: {
   treeName: string,
   dataAllTpopkontrzaehlEinheitWertes: Object,
-  refetchTree: () => void,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
+  const { refetch } = mobxStore
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
   const { activeNodeArray } = mobxStore[treeName]
@@ -118,7 +117,7 @@ const Tpopkontrzaehl = ({
         return setErrors({ [field]: error.message })
       }
       setErrors({})
-      if (['einheit', 'methode'].includes(field)) refetchTree('tpopkontrzaehls')
+      if (['einheit', 'methode'].includes(field)) refetch.tpopkontrzaehls()
     },
     [row],
   )
