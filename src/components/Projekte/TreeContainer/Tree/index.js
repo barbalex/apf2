@@ -1,5 +1,5 @@
 // @flow
-import React, { useContext, useCallback, useEffect } from 'react'
+import React, { useContext, useCallback, useEffect, useMemo } from 'react'
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer'
 import Button from '@material-ui/core/Button'
 import List from 'react-virtualized/dist/commonjs/List'
@@ -684,6 +684,10 @@ const Tree = ({ treeName }: Props) => {
     },
     [treeName, nodes],
   )
+  const scrollToIndex = useMemo(
+    () => findIndex(nodes, node => isEqual(node.url, activeNodeArray)),
+    [nodes, activeNodeArray],
+  )
 
   //console.log('Tree rendering')
 
@@ -698,9 +702,7 @@ const Tree = ({ treeName }: Props) => {
               rowHeight={singleRowHeight}
               rowRenderer={rowRenderer}
               noRowsRenderer={noRowsRenderer}
-              scrollToIndex={findIndex(nodes, node =>
-                isEqual(node.url, activeNodeArray),
-              )}
+              scrollToIndex={scrollToIndex}
               width={width}
             />
           )}
