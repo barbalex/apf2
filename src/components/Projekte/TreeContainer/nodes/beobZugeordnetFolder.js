@@ -47,7 +47,7 @@ export default ({
     `${treeName}.nodeLabelFilter.beob`,
   )
 
-  const childrenLength = get(data, 'beobZugeordnets.nodes', [])
+  const childrenLength = get(data, 'allVApbeobs.nodes', [])
     .filter(el => el.tpopId === tpopId)
     // filter by nodeLabelFilter
     .filter(el => {

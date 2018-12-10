@@ -48,7 +48,7 @@ export default ({
   )
 
   // map through all elements and create array of nodes
-  const nodes = get(data, 'beobZugeordnets.nodes', [])
+  const nodes = get(data, 'allVApbeobs.nodes', [])
     .filter(el => el.tpopId === tpopId)
     // filter by nodeLabelFilter
     .filter(el => {

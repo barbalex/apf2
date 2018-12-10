@@ -29,7 +29,7 @@ export default ({
   apId: String,
   mobxStore: Object,
 }): Array<Object> => {
-  const beobNichtZuzuordnens = get(data, 'beobNichtZuzuordnens.nodes', [])
+  const beobNichtZuzuordnens = get(data, 'allVApbeobs.nodes', [])
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {

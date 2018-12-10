@@ -27,7 +27,7 @@ export default ({
   apId: String,
   mobxStore: Object,
 }): Array<Object> => {
-  const ekfzaehleinheits = get(data, 'ekfzaehleinheits.nodes', [])
+  const ekfzaehleinheits = get(data, 'allEkfzaehleinheits.nodes', [])
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
