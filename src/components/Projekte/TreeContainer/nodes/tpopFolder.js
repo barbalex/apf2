@@ -49,7 +49,7 @@ export default ({
     ([key, value]) => value || value === 0 || value === false,
   )
 
-  let children = get(data, 'tpops.nodes', [])
+  let children = get(data, 'allTpops.nodes', [])
     .filter(el => el.popId === popId)
     // filter by nodeLabelFilter
     .filter(el => {

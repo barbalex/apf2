@@ -16,7 +16,7 @@ export default ({
     mobxStore,
     `${treeName}.nodeLabelFilter.projekt`,
   )
-  const projekts = get(data, 'projekts.nodes', [])
+  const projekts = get(data, 'allProjekts.nodes', [])
 
   // map through all elements and create array of nodes
   const nodes = projekts
