@@ -103,9 +103,9 @@ const Container = styled.div`
   height: 100%;
   overflow: hidden;
 `
-const LoadingContainer = styled.div`
+/*const LoadingContainer = styled.div`
   padding: 15px;
-`
+`*/
 
 /**
  * DO NOT use component state / props to track mouseCoordinates
@@ -116,14 +116,10 @@ const LoadingContainer = styled.div`
 
 const Karte = ({
   treeName,
-  data,
   dimensions,
-  loading,
 }: {
   treeName: string,
-  data: Object,
   dimensions: Object,
-  loading: boolean,
 }) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
@@ -211,44 +207,10 @@ const Karte = ({
     overlays.findIndex(o => o.value === activeOverlay),
   )
 
-  const {
-    aparts,
-    apbers,
-    apberuebersichts,
-    aps,
-    assozarts,
-    beobNichtBeurteilts,
-    beobNichtZuzuordnens,
-    bers,
-    ekfzaehleinheits,
-    erfkrits,
-    pops,
-    projekts,
-    ziels,
-  } = data
-
-  const isFirstLoad =
-    loading &&
-    !(
-      !!aparts &&
-      !!apbers &&
-      !!apberuebersichts &&
-      !!aps &&
-      !!assozarts &&
-      !!beobNichtBeurteilts &&
-      !!beobNichtZuzuordnens &&
-      !!bers &&
-      !!ekfzaehleinheits &&
-      !!erfkrits &&
-      !!pops &&
-      !!projekts &&
-      !!ziels
-    )
-
   console.log('Karte rendering')
-  if (isFirstLoad) {
+  /*if (isFirstLoad) {
     return <LoadingContainer>Karte lädt daten...</LoadingContainer>
-  }
+  }*/
   return (
     <Container>
       <ErrorBoundary>
@@ -325,21 +287,12 @@ const Karte = ({
             .reverse()}
           <Pop treeName={treeName} />
           <Tpop treeName={treeName} clustered={clustered} />
-          <BeobNichtBeurteilt
-            treeName={treeName}
-            data={data}
-            clustered={clustered}
-          />
-          <BeobNichtZuzuordnen
-            treeName={treeName}
-            data={data}
-            clustered={clustered}
-          />
+          <BeobNichtBeurteilt treeName={treeName} clustered={clustered} />
+          <BeobNichtZuzuordnen treeName={treeName} clustered={clustered} />
           <BeobZugeordnet treeName={treeName} clustered={clustered} />
           <BeobZugeordnetAssignPolylines treeName={treeName} />
           <ScaleControl imperial={false} />
           <LayersControl
-            data={data}
             treeName={treeName}
             // this enforces rerendering when sorting changes
             activeOverlaysString={activeOverlays.join()}

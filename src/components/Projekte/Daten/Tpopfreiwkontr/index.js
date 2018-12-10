@@ -7,6 +7,7 @@ import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import jwtDecode from 'jwt-decode'
 
 import StringToCopy from '../../../shared/StringToCopyOnlyButton'
 import query from './data'
@@ -145,20 +146,27 @@ const enhance = compose(
 
 const Tpopfreiwkontr = ({
   dimensions,
-  role,
   treeName,
   dataAllAdresses,
 }: {
   dimensions: Object,
-  role: string,
   treeName: string,
   dataAllAdresses: Object,
 }) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
-  const { addError, nodeFilter, nodeFilterSetValue, isPrint, view } = mobxStore
+  const {
+    addError,
+    nodeFilter,
+    nodeFilterSetValue,
+    isPrint,
+    view,
+    user,
+  } = mobxStore
   const tree = mobxStore[treeName]
   const { activeNodeArray } = tree
+  const { token } = user
+  const role = token ? jwtDecode(token).role : null
 
   const [errors, setErrors] = useState({})
 
@@ -275,7 +283,7 @@ const Tpopfreiwkontr = ({
       const variables = {
         id: row.id,
         [field]: value,
-        changedBy: mobxStore.user.name,
+        changedBy: user.name,
       }
       let field2
       if (field === 'datum') field2 = 'jahr'
@@ -400,7 +408,7 @@ const Tpopfreiwkontr = ({
                     'tpopkontrzaehlEinheitWerteByZaehleinheitId.code',
                     null,
                   ),
-                  changedBy: mobxStore.user.name,
+                  changedBy: user.name,
                 },
               }),
             ),
