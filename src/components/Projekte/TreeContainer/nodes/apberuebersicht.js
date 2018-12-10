@@ -23,7 +23,7 @@ export default ({
     mobxStore,
     `${treeName}.nodeLabelFilter.apberuebersicht`,
   )
-  const apberuebersichts = get(data, 'apberuebersichts.nodes', [])
+  const apberuebersichts = get(data, 'allApberuebersichts.nodes', [])
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
