@@ -207,10 +207,7 @@ const Karte = ({
     overlays.findIndex(o => o.value === activeOverlay),
   )
 
-  console.log('Karte rendering')
-  /*if (isFirstLoad) {
-    return <LoadingContainer>Karte lädt daten...</LoadingContainer>
-  }*/
+  //console.log('Karte rendering')
   return (
     <Container>
       <ErrorBoundary>
