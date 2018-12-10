@@ -1,0 +1,64 @@
+import gql from 'graphql-tag'
+
+export default gql`
+  query TpopfeldkontrsQuery($tpop: [UUID!], $isTpop: Boolean!) {
+    tpopfeldkontrs: allTpopkontrs(
+      filter: {
+        or: [
+          { typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" } }
+          { typ: { isNull: true } }
+        ]
+        tpopId: { in: $tpop }
+      }
+    ) @include(if: $isTpop) {
+      nodes {
+        id
+        tpopId
+        typ
+        datum
+        jahr
+        bearbeiter
+        jungpflanzenAnzahl
+        vitalitaet
+        ueberlebensrate
+        entwicklung
+        ursachen
+        erfolgsbeurteilung
+        umsetzungAendern
+        kontrolleAendern
+        bemerkungen
+        lrDelarze
+        flaeche
+        lrUmgebungDelarze
+        vegetationstyp
+        konkurrenz
+        moosschicht
+        krautschicht
+        strauchschicht
+        baumschicht
+        bodenTyp
+        bodenKalkgehalt
+        bodenDurchlaessigkeit
+        bodenHumus
+        bodenNaehrstoffgehalt
+        bodenAbtrag
+        wasserhaushalt
+        idealbiotopUebereinstimmung
+        handlungsbedarf
+        flaecheUeberprueft
+        planVorhanden
+        deckungVegetation
+        deckungNackterBoden
+        deckungApArt
+        jungpflanzenVorhanden
+        vegetationshoeheMaximum
+        vegetationshoeheMittel
+        gefaehrdung
+        tpopkontrTypWerteByTyp {
+          id
+          text
+        }
+      }
+    }
+  }
+`
