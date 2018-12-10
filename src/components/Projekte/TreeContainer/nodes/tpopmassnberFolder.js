@@ -47,7 +47,7 @@ export default ({
     `${treeName}.nodeLabelFilter.tpopmassnber`,
   )
 
-  const childrenLength = get(data, 'tpopmassnbers.nodes', [])
+  const childrenLength = get(data, 'allTpopmassnbers.nodes', [])
     .filter(el => el.tpopId === tpopId)
     // filter by nodeLabelFilter
     .filter(el => {

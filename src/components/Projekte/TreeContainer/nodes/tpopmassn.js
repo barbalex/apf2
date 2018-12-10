@@ -54,7 +54,7 @@ export default ({
   )
 
   // map through all elements and create array of nodes
-  const nodes = get(data, 'tpopmassns.nodes', [])
+  const nodes = get(data, 'allTpopmassns.nodes', [])
     .filter(el => el.tpopId === tpopId)
     // filter by nodeLabelFilter
     .filter(el => {

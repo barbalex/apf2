@@ -21,7 +21,7 @@ export default ({
     mobxStore,
     `${treeName}.nodeLabelFilter.user`,
   )
-  const users = get(data, 'users.nodes', [])
+  const users = get(data, 'allUsers.nodes', [])
 
   // fetch sorting indexes of parents
   const userIndex = projektNodes.length + 1
