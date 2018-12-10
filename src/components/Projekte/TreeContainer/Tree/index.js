@@ -548,38 +548,7 @@ const Tree = ({ treeName }: Props) => {
   const { token } = user
   const role = token ? jwtDecode(token).role : null
 
-  const data = {
-    ...dataAdresses,
-    ...dataUsers,
-    ...dataProjekts,
-    ...dataApberuebersichts,
-    ...dataAps,
-    ...dataPops,
-    ...dataPopbers,
-    ...dataPopmassnbers,
-    ...dataTpops,
-    ...dataTpopmassns,
-    ...dataTpopmassnbers,
-    ...dataTpopfeldkontrs,
-    ...dataTpopfreiwkontrs,
-    ...dataTpopkontrzaehls,
-    ...dataTpopbers,
-    ...dataBeobZugeordnets,
-    ...dataZiels,
-    ...dataZielbers,
-    ...dataErfkrits,
-    ...dataApbers,
-    ...dataBers,
-    ...dataIdealbiotops,
-    ...dataAparts,
-    ...dataAssozarts,
-    ...dataEkfzaehleinheits,
-    ...dataBeobNichtBeurteilts,
-    ...dataBeobNichtZuzuordnens,
-  }
-  // TODO: useMemo?
   const nodes = buildNodes({
-    data,
     treeName,
     role,
     nodeFilter,

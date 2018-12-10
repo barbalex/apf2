@@ -70,7 +70,6 @@ const compare = (a, b) => {
 }
 
 export default ({
-  data,
   dataAdresses,
   dataAparts,
   dataApbers,
@@ -130,7 +129,6 @@ export default ({
   role,
   treeName,
 }: {
-  data: Object,
   dataAdresses: Object,
   dataAparts: Object,
   dataApbers: Object,
@@ -1190,7 +1188,7 @@ export default ({
         ...nodes,
         ...buildUserNodes({
           nodes,
-          data,
+          data: dataUsers,
           treeName,
           projektNodes,
           mobxStore,
