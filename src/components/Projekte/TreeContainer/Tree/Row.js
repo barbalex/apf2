@@ -181,13 +181,11 @@ const Row = ({
   style,
   node,
   treeName,
-  data,
 }: {
   index: Number,
   style: Object,
   node: Array<Object>,
   treeName: String,
-  data: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const {

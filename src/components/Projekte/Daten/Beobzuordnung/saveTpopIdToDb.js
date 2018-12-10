@@ -234,5 +234,4 @@ export default async ({ value, id, tree, type, client, mobxStore }) => {
   refetch.aps()
   refetch.pops()
   refetch.tpops()
-  refetch.local()
 }

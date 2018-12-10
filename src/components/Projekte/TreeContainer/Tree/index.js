@@ -682,12 +682,11 @@ const Tree = ({ treeName }: Props) => {
           style={style}
           index={index}
           node={node}
-          data={data}
           treeName={treeName}
         />
       )
     },
-    [data, treeName, nodes],
+    [treeName, nodes],
   )
 
   //console.log('Tree rendering')
