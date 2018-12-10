@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 
 export default gql`
   query ApsQuery($isProjekt: Boolean!, $apFilter: ApFilter!) {
-    aps: allAps(filter: $apFilter) @include(if: $isProjekt) {
+    allAps(filter: $apFilter) @include(if: $isProjekt) {
       totalCount
       nodes {
         id

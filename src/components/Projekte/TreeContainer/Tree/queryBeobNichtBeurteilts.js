@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 
 export default gql`
   query BeobNichtBeurteiltsQuery($ap: [UUID!], $isAp: Boolean!) {
-    beobNichtBeurteilts: allVApbeobs(
+    allVApbeobs(
       filter: {
         nichtZuordnen: { equalTo: false }
         apId: { in: $ap }

@@ -54,7 +54,7 @@ export default ({
     ([key, value]) => value || value === 0 || value === false,
   )
 
-  let children = get(data, 'tpopfreiwkontrs.nodes', [])
+  let children = get(data, 'allTpopkontrs.nodes', [])
     .filter(el => el.tpopId === tpopId)
     // filter by nodeLabelFilter
     .filter(el => {
