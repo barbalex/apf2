@@ -16,12 +16,7 @@ export default ({
   projektNodes: Array<Object>,
   mobxStore: Object,
 }): Array<Object> => {
-  const adresses = get(
-    data,
-    'adresses.nodes',
-    [],
-    //get(data, 'adresses.totalCount', []),
-  )
+  const adresses = get(data, 'allAdresses.nodes', [])
   const wlIndex = projektNodes.length + 2
   const nodeLabelFilterString = get(
     mobxStore,
@@ -39,7 +34,7 @@ export default ({
     }).length
   // before Adressen folder is active, only total count was fetched, not yet any adressen nodes
   if (adresses.length === 0)
-    adresseNodesLength = get(data, 'adresses.totalCount')
+    adresseNodesLength = get(data, 'allAdresses.totalCount')
   let message = loading && !adresseNodesLength ? '...' : adresseNodesLength
   if (nodeLabelFilterString) {
     message = `${adresseNodesLength} gefiltert`

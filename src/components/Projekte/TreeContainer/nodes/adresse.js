@@ -17,7 +17,7 @@ export default ({
   projektNodes: Array<Object>,
   mobxStore: Object,
 }): Array<Object> => {
-  const adresses = get(data, 'adresses.nodes', [])
+  const adresses = get(data, 'allAdresses.nodes', [])
   const wlIndex = projektNodes.length + 2
   const nodeLabelFilterString = get(
     mobxStore,

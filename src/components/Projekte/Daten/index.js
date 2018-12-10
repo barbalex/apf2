@@ -2,6 +2,8 @@
 import React, { lazy, Suspense, useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+import get from 'lodash/get'
+import { getSnapshot } from 'mobx-state-tree'
 
 import ErrorBoundary from '../../shared/ErrorBoundarySingleChild'
 import Fallback from '../../shared/Fallback'
@@ -60,8 +62,8 @@ const Daten = ({
   dimensions: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { nodeFilter } = mobxStore
   const { activeNodeArray, activeNode } = mobxStore[treeName]
+  const activeTable = get(mobxStore, `nodeFilter.${treeName}.activeTable`, '')
 
   const formObject = {
     projekt: <Projekt dimensions={dimensions} treeName={treeName} />,
@@ -149,14 +151,20 @@ const Daten = ({
   } else {
     key = getTableNameFromActiveNode(activeNode)
   }
+
   let form
-  if (nodeFilter[treeName].activeTable) {
-    form = formObject[nodeFilter[treeName].activeTable]
+  if (activeTable) {
+    form = formObject[activeTable]
   } else {
     form = key ? formObject[key] : ''
   }
 
-  console.log('Daten rendering')
+  console.log('Daten rendering', {
+    dimensions,
+    activeTable,
+    activeNodeArray: activeNodeArray.toJSON(),
+    activeNode: activeNode ? getSnapshot(activeNode) : activeNode,
+  })
   if (!key) return null
 
   return (
