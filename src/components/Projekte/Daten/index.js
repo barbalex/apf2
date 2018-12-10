@@ -55,11 +55,9 @@ const Container = styled.div`
 const Daten = ({
   treeName,
   dimensions = { width: 380 },
-  role,
 }: {
   treeName: String,
   dimensions: Object,
-  role: String,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { nodeFilter } = mobxStore
@@ -93,7 +91,7 @@ const Daten = ({
       <Tpopfeldkontr dimensions={dimensions} treeName={treeName} />
     ),
     tpopfreiwkontr: (
-      <Tpopfreiwkontr dimensions={dimensions} treeName={treeName} role={role} />
+      <Tpopfreiwkontr dimensions={dimensions} treeName={treeName} />
     ),
     tpopkontrzaehl: (
       <Tpopkontrzaehl dimensions={dimensions} treeName={treeName} />
