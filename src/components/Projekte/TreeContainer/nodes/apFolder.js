@@ -26,7 +26,7 @@ export default ({
   nodeFilter: Object,
   mobxStore: Object,
 }): Array<Object> => {
-  const aps = get(data, 'aps.nodes', [])
+  const aps = get(data, 'allAps.nodes', [])
   const nodeFilterArray = Object.entries(nodeFilter.ap).filter(
     ([key, value]) => value || value === 0 || value === false,
   )

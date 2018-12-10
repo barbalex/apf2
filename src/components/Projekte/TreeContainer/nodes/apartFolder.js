@@ -26,12 +26,12 @@ export default ({
   mobxStore: Object,
 }): Array<Object> => {
   // return empty if ap is not a real ap and apFilter is set
-  const ap = get(data, 'aps.nodes', []).find(n => n.id === apId)
+  const ap = get(data, 'allAps.nodes', []).find(n => n.id === apId)
   const isAp = ap && [1, 2, 3].includes(ap.bearbeitung)
   const apFilter = get(mobxStore, `${treeName}.apFilter`)
   if (!!apFilter && !isAp) return []
 
-  const aparts = get(data, 'aparts.nodes', [])
+  const aparts = get(data, 'allAparts.nodes', [])
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
