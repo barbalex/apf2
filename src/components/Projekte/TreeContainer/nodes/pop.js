@@ -29,7 +29,7 @@ export default ({
   nodeFilter: Object,
   mobxStore: Object,
 }): Array<Object> => {
-  const pops = get(data, 'pops.nodes', [])
+  const pops = get(data, 'allPops.nodes', [])
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,

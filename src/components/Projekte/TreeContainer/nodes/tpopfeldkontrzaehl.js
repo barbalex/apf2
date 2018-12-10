@@ -53,7 +53,7 @@ export default ({
   )
 
   // map through all elements and create array of nodes
-  let nodes = get(data, 'tpopkontrzaehls.nodes', [])
+  let nodes = get(data, 'allTpopkontrzaehls.nodes', [])
     .filter(el => el.tpopkontrId === tpopkontrId)
     // filter by nodeLabelFilter
     .filter(el => {
