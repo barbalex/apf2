@@ -82,7 +82,6 @@ export default ({
   dataBers,
   dataEkfzaehleinheits,
   dataErfkrits,
-  dataIdealbiotops,
   dataPopbers,
   dataPopmassnbers,
   dataPops,
@@ -141,7 +140,6 @@ export default ({
   dataBers: Object,
   dataEkfzaehleinheits: Object,
   dataErfkrits: Object,
-  dataIdealbiotops: Object,
   dataPopbers: Object,
   dataPopmassnbers: Object,
   dataPops: Object,
@@ -367,7 +365,6 @@ export default ({
           }),
           ...buildIdealbiotopFolderNodes({
             nodes,
-            data: dataIdealbiotops,
             treeName,
             loading: loadingIdealbiotops,
             apNodes,

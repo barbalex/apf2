@@ -32,7 +32,7 @@ export default ({
   nodeFilter: Object,
   mobxStore: Object,
 }): Array<Object> => {
-  const pops = get(data, 'pops.nodes', [])
+  const pops = get(data, 'allPops.nodes', [])
   const apFilter = get(mobxStore, `${treeName}.apFilter`)
   const nodeFilterArray = Object.entries(nodeFilter.pop).filter(
     ([key, value]) => value || value === 0 || value === false,
