@@ -145,13 +145,11 @@ const enhance = compose(
 const Beobzuordnung = ({
   type,
   dimensions = { width: 380 },
-  refetchTree,
   treeName,
   dataAeEigenschaftens,
 }: {
   type: string,
   dimensions: Object,
-  refetchTree: () => void,
   treeName: string,
   dataAeEigenschaftens: Object,
 }) => {
@@ -177,7 +175,7 @@ const Beobzuordnung = ({
   const onSaveArtIdToDb = useCallback(
     event => {
       const { value } = event.target
-      saveArtIdToDb({ value, row, tree, refetchTree, client, mobxStore })
+      saveArtIdToDb({ value, row, tree, client, mobxStore })
     },
     [row, tree],
   )
@@ -188,7 +186,6 @@ const Beobzuordnung = ({
         id,
         tree,
         refetch: data.refetch,
-        refetchTree,
         client,
         mobxStore,
       })
@@ -198,7 +195,7 @@ const Beobzuordnung = ({
   const onSaveTpopIdToDb = useCallback(
     event => {
       const { value } = event.target
-      saveTpopIdToDb({ value, id, tree, refetchTree, type, client, mobxStore })
+      saveTpopIdToDb({ value, id, tree, type, client, mobxStore })
     },
     [id, tree, type],
   )

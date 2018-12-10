@@ -55,12 +55,10 @@ const Container = styled.div`
 const Daten = ({
   treeName,
   dimensions = { width: 380 },
-  refetchTree,
   role,
 }: {
   treeName: String,
   dimensions: Object,
-  refetchTree: () => void,
   role: String,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
@@ -68,168 +66,44 @@ const Daten = ({
   const { activeNodeArray, activeNode } = mobxStore[treeName]
 
   const formObject = {
-    projekt: (
-      <Projekt
-        dimensions={dimensions}
-        treeName={treeName}
-        refetchTree={refetchTree}
-      />
-    ),
+    projekt: <Projekt dimensions={dimensions} treeName={treeName} />,
     apberuebersicht: (
-      <Apberuebersicht
-        dimensions={dimensions}
-        treeName={treeName}
-        refetchTree={refetchTree}
-      />
+      <Apberuebersicht dimensions={dimensions} treeName={treeName} />
     ),
-    ap: (
-      <Ap
-        dimensions={dimensions}
-        treeName={treeName}
-        refetchTree={refetchTree}
-      />
-    ),
-    assozart: (
-      <Assozart
-        dimensions={dimensions}
-        treeName={treeName}
-        refetchTree={refetchTree}
-      />
-    ),
+    ap: <Ap dimensions={dimensions} treeName={treeName} />,
+    assozart: <Assozart dimensions={dimensions} treeName={treeName} />,
     ekfzaehleinheit: (
-      <Ekfzaehleinheit
-        dimensions={dimensions}
-        treeName={treeName}
-        refetchTree={refetchTree}
-      />
+      <Ekfzaehleinheit dimensions={dimensions} treeName={treeName} />
     ),
-    apart: (
-      <Apart
-        dimensions={dimensions}
-        treeName={treeName}
-        refetchTree={refetchTree}
-      />
-    ),
-    idealbiotop: (
-      <Idealbiotop
-        dimensions={dimensions}
-        treeName={treeName}
-        refetchTree={refetchTree}
-      />
-    ),
-    erfkrit: (
-      <Erfkrit
-        dimensions={dimensions}
-        treeName={treeName}
-        refetchTree={refetchTree}
-      />
-    ),
-    apber: (
-      <Apber
-        dimensions={dimensions}
-        treeName={treeName}
-        refetchTree={refetchTree}
-      />
-    ),
-    ber: (
-      <Ber
-        dimensions={dimensions}
-        treeName={treeName}
-        refetchTree={refetchTree}
-      />
-    ),
-    ziel: (
-      <Ziel
-        dimensions={dimensions}
-        treeName={treeName}
-        refetchTree={refetchTree}
-      />
-    ),
-    zielber: (
-      <Zielber
-        dimensions={dimensions}
-        treeName={treeName}
-        refetchTree={refetchTree}
-      />
-    ),
-    pop: (
-      <Pop
-        dimensions={dimensions}
-        treeName={treeName}
-        refetchTree={refetchTree}
-      />
-    ),
-    popmassnber: (
-      <Popmassnber
-        dimensions={dimensions}
-        treeName={treeName}
-        refetchTree={refetchTree}
-      />
-    ),
-    popber: (
-      <Popber
-        dimensions={dimensions}
-        treeName={treeName}
-        refetchTree={refetchTree}
-      />
-    ),
-    tpop: (
-      <Tpop
-        dimensions={dimensions}
-        treeName={treeName}
-        refetchTree={refetchTree}
-      />
-    ),
-    tpopber: (
-      <Tpopber
-        dimensions={dimensions}
-        treeName={treeName}
-        refetchTree={refetchTree}
-      />
-    ),
-    tpopmassn: (
-      <Tpopmassn
-        dimensions={dimensions}
-        treeName={treeName}
-        refetchTree={refetchTree}
-      />
-    ),
-    tpopmassnber: (
-      <Tpopmassnber
-        dimensions={dimensions}
-        treeName={treeName}
-        refetchTree={refetchTree}
-      />
-    ),
+    apart: <Apart dimensions={dimensions} treeName={treeName} />,
+    idealbiotop: <Idealbiotop dimensions={dimensions} treeName={treeName} />,
+    erfkrit: <Erfkrit dimensions={dimensions} treeName={treeName} />,
+    apber: <Apber dimensions={dimensions} treeName={treeName} />,
+    ber: <Ber dimensions={dimensions} treeName={treeName} />,
+    ziel: <Ziel dimensions={dimensions} treeName={treeName} />,
+    zielber: <Zielber dimensions={dimensions} treeName={treeName} />,
+    pop: <Pop dimensions={dimensions} treeName={treeName} />,
+    popmassnber: <Popmassnber dimensions={dimensions} treeName={treeName} />,
+    popber: <Popber dimensions={dimensions} treeName={treeName} />,
+    tpop: <Tpop dimensions={dimensions} treeName={treeName} />,
+    tpopber: <Tpopber dimensions={dimensions} treeName={treeName} />,
+    tpopmassn: <Tpopmassn dimensions={dimensions} treeName={treeName} />,
+    tpopmassnber: <Tpopmassnber dimensions={dimensions} treeName={treeName} />,
     tpopfeldkontr: (
-      <Tpopfeldkontr
-        dimensions={dimensions}
-        treeName={treeName}
-        refetchTree={refetchTree}
-      />
+      <Tpopfeldkontr dimensions={dimensions} treeName={treeName} />
     ),
     tpopfreiwkontr: (
-      <Tpopfreiwkontr
-        dimensions={dimensions}
-        treeName={treeName}
-        refetchTree={refetchTree}
-        role={role}
-      />
+      <Tpopfreiwkontr dimensions={dimensions} treeName={treeName} role={role} />
     ),
     tpopkontrzaehl: (
-      <Tpopkontrzaehl
-        dimensions={dimensions}
-        treeName={treeName}
-        refetchTree={refetchTree}
-      />
+      <Tpopkontrzaehl dimensions={dimensions} treeName={treeName} />
     ),
     exporte: <Exporte />,
-    qk: <Qk treeName={treeName} refetchTree={refetchTree} />,
+    qk: <Qk treeName={treeName} />,
     beobNichtZuzuordnen: (
       <Beobzuordnung
         dimensions={dimensions}
         treeName={treeName}
-        refetchTree={refetchTree}
         type="nichtZuzuordnen"
       />
     ),
@@ -237,7 +111,6 @@ const Daten = ({
       <Beobzuordnung
         dimensions={dimensions}
         treeName={treeName}
-        refetchTree={refetchTree}
         type="nichtBeurteilt"
       />
     ),
@@ -245,24 +118,11 @@ const Daten = ({
       <Beobzuordnung
         dimensions={dimensions}
         treeName={treeName}
-        refetchTree={refetchTree}
         type="zugeordnet"
       />
     ),
-    user: (
-      <User
-        dimensions={dimensions}
-        treeName={treeName}
-        refetchTree={refetchTree}
-      />
-    ),
-    adresse: (
-      <Adresse
-        dimensions={dimensions}
-        treeName={treeName}
-        refetchTree={refetchTree}
-      />
-    ),
+    user: <User dimensions={dimensions} treeName={treeName} />,
+    adresse: <Adresse dimensions={dimensions} treeName={treeName} />,
   }
   let key
   if (activeNodeArray.length > 2 && activeNodeArray[2] === 'Exporte') {

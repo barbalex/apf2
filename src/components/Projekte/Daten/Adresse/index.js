@@ -25,15 +25,9 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Adresse = ({
-  treeName,
-  refetchTree,
-}: {
-  treeName: String,
-  refetchTree: () => void,
-}) => {
+const Adresse = ({ treeName }: { treeName: String }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { activeNodeArray } = mobxStore[treeName]
+  const { activeNodeArray, refetch } = mobxStore[treeName]
   const id =
     activeNodeArray.length > 2
       ? activeNodeArray[2]
@@ -89,7 +83,7 @@ const Adresse = ({
         return setErrors({ [field]: error.message })
       }
       setErrors({})
-      if (['name', 'role'].includes(field)) refetchTree('adresses')
+      if (['name', 'role'].includes(field)) refetch.adresses()
     },
     [row],
   )
