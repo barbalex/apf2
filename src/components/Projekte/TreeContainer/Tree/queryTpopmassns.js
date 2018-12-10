@@ -2,10 +2,8 @@ import gql from 'graphql-tag'
 
 export default gql`
   query TpopmassnQuery($tpop: [UUID!], $isTpop: Boolean!) {
-    tpopmassns: allTpopmassns(
-      filter: { tpopId: { in: $tpop } }
-      orderBy: JAHR_ASC
-    ) @include(if: $isTpop) {
+    allTpopmassns(filter: { tpopId: { in: $tpop } }, orderBy: JAHR_ASC)
+      @include(if: $isTpop) {
       nodes {
         id
         tpopId

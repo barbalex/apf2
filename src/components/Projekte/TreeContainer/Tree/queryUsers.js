@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 
 export default gql`
   query UsersQuery {
-    users: allUsers {
+    allUsers {
       nodes {
         id
         name

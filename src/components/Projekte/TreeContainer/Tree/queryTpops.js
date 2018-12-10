@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 
 export default gql`
   query TpopQuery($isPop: Boolean!, $tpopFilter: TpopFilter!) {
-    tpops: allTpops(filter: $tpopFilter, orderBy: NR_ASC) @include(if: $isPop) {
+    allTpops(filter: $tpopFilter, orderBy: NR_ASC) @include(if: $isPop) {
       nodes {
         id
         popId
