@@ -49,13 +49,7 @@ const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
   height: 18px !important;
 `
 
-const LayersControl = ({
-  data,
-  treeName,
-}: {
-  data: Object,
-  treeName: string,
-}) => {
+const LayersControl = ({ treeName }: { treeName: string }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { apfloraLayers, overlays } = mobxStore
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
