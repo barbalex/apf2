@@ -10,7 +10,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
 import TestdataMessage from './TestdataMessage'
-import types from '../../../mobxStore/NodeFilterTree/types'
+import types from '../../../mobxStore/NodeFilterTree/initialValues'
 import mobxStoreContext from '../../../mobxStoreContext'
 
 const Container = styled.div`
