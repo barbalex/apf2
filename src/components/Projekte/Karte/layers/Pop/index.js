@@ -47,9 +47,18 @@ const Pop = ({ treeName }: { treeName: string }) => {
   const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
   const isActiveInMap = activeApfloraLayers.includes('pop')
   const tpopLayerIsActive = activeApfloraLayers.includes('tpop')
+  const perProj = apId === '99999999-9999-9999-9999-999999999999'
+  const perAp = apId !== '99999999-9999-9999-9999-999999999999'
   var { data, error, refetch } = useQuery(query, {
     suspend: false,
-    variables: { apId, projId, tpopLayerIsActive, isActiveInMap },
+    variables: {
+      perAp,
+      apId,
+      perProj,
+      projId,
+      tpopLayerIsActive,
+      isActiveInMap,
+    },
   })
   setRefetchKey({ key: 'popForMap', value: refetch })
 
@@ -61,7 +70,12 @@ const Pop = ({ treeName }: { treeName: string }) => {
     )
   }
 
-  let pops = get(data, 'projektById.apsByProjId.nodes[0].popsByApId.nodes', [])
+  const aps = get(
+    data,
+    `projektById.${!!perAp ? 'perAp' : 'perProj'}.nodes`,
+    [],
+  )
+  let pops = flatten(aps.map(ap => get(ap, 'popsByApId.nodes', [])))
     // filter them by nodeLabelFilter
     .filter(p => {
       if (!popFilterString) return true
@@ -77,11 +91,7 @@ const Pop = ({ treeName }: { treeName: string }) => {
 
   // if tpop are filtered, only show their pop
   if (activeApfloraLayers.includes('tpop')) {
-    const popsForTpops = get(
-      data,
-      'projektById.apsByProjId.nodes[0].popsByApId.nodes',
-      [],
-    )
+    const popsForTpops = flatten(aps.map(ap => get(ap, 'popsByApId.nodes', [])))
       .filter(p => {
         if (!popFilterString) return true
         return `${p.nr || '(keine Nr)'}: ${p.name || '(kein Name)'}`
