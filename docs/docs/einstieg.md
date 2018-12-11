@@ -2,7 +2,7 @@
 
 * Die Anwendung ist hier: [https://apflora.ch](https://apflora.ch)
 
-* Ihr braucht ein `Login`. Das wird von Topos vergeben, z.B. von [Charlotte](mailto: salzmann@toposmm.ch)
+* Ihr braucht ein `Login`. Das wird von Topos vergeben, z.B. von [Charlotte](mailto:salzmann@toposmm.ch)
 
 * Nach erfolgreichem Login wählt ihr den `Aktionsplan`, mit dem ihr arbeiten wollt.
 
