@@ -81,7 +81,7 @@ const BeobZugeordnetMarker = ({
 
   const beobZugeordnetForMapAparts = get(
     data,
-    `beobZugeordnetForMap.apsByProjId.nodes[0].apartsByApId.nodes`,
+    `projektById.apsByProjId.nodes[0].apartsByApId.nodes`,
     [],
   )
   const beobZugeordnetForMapNodes = flatten(

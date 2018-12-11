@@ -27,14 +27,14 @@ const PopMarker = ({ treeName, pop }: { treeName: string, pop: Object }) => {
   const { apfloraLayers, popLabelUsingNr } = mobxStore
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
-  const { idsFiltered: mapIdsFiltered } = mobxStore[treeName].map
+  const { popIdsFiltered } = mobxStore[treeName].map
 
   let title = popLabelUsingNr ? pop.nr : pop.name
   // beware: leaflet needs title to always be a string
   if (title && title.toString) {
     title = title.toString()
   }
-  const isHighlighted = mapIdsFiltered.includes(pop.id)
+  const isHighlighted = popIdsFiltered.includes(pop.id)
   const latLng = new window.L.LatLng(...epsg2056to4326(pop.x, pop.y))
   const icon = window.L.icon({
     iconUrl: isHighlighted ? popIconHighlighted : popIcon,

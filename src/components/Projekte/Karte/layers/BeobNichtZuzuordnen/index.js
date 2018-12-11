@@ -84,7 +84,7 @@ const BeobNichtZuzuordnenMarker = ({
 
   const beobNichtZuzuordnenForMapNodesAparts = get(
     data,
-    `beobNichtZuzuordnenForMap.apsByProjId.nodes[0].apartsByApId.nodes`,
+    `projektById.apsByProjId.nodes[0].apartsByApId.nodes`,
     [],
   )
   const beobNichtZuzuordnenForMapNodes = flatten(
