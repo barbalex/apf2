@@ -41,6 +41,12 @@ const TpopMarker = ({ treeName, tpop }: { treeName: string, tpop: Object }) => {
     className: isHighlighted ? 'tpopIconHighlighted' : 'tpopIcon',
   })
   const title = tpopLabelUsingNr ? tpop.flurname : nrLabel
+  const artname = get(
+    tpop,
+    'popByPopId.apByApId.aeEigenschaftenByArtId.artname',
+    '',
+  )
+
   return (
     <Marker position={latLng} icon={icon} title={title}>
       <Popup>
@@ -50,6 +56,7 @@ const TpopMarker = ({ treeName, tpop }: { treeName: string, tpop: Object }) => {
             {`${tpop.nr || '(keine Nr)'}: ${tpop.flurname ||
               '(kein Flurname)'}`}
           </StyledH3>
+          <div>{`Aktionsplan: ${artname}`}</div>
           <div>
             {`Population: ${get(tpop, 'popByPopId.nr', '(keine Nr)')}: ${get(
               tpop,

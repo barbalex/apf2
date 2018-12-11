@@ -14,6 +14,10 @@ export default gql`
         @include(if: $perAp) {
         nodes {
           id
+          aeEigenschaftenByArtId {
+            id
+            artname
+          }
           popsByApId {
             nodes {
               id
@@ -61,6 +65,13 @@ export default gql`
                     id
                     nr
                     name
+                    apByApId {
+                      id
+                      aeEigenschaftenByArtId {
+                        id
+                        artname
+                      }
+                    }
                   }
                 }
               }
@@ -71,6 +82,10 @@ export default gql`
       perProj: apsByProjId @include(if: $perProj) {
         nodes {
           id
+          aeEigenschaftenByArtId {
+            id
+            artname
+          }
           popsByApId {
             nodes {
               id
@@ -118,6 +133,13 @@ export default gql`
                     id
                     nr
                     name
+                    apByApId {
+                      id
+                      aeEigenschaftenByArtId {
+                        id
+                        artname
+                      }
+                    }
                   }
                 }
               }

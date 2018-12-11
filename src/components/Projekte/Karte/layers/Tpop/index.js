@@ -4,7 +4,6 @@ import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useQuery } from 'react-apollo-hooks'
-import { getSnapshot } from 'mobx-state-tree'
 import { withLeaflet } from 'react-leaflet'
 
 import Marker from './Marker'
@@ -45,14 +44,13 @@ const Tpop = ({
     nodeFilter,
     mapFilter,
     activeApfloraLayers,
+    setActiveApfloraLayers,
     setRefetchKey,
     addError,
   } = mobxStore
   const tree = mobxStore[treeName]
-  const { bounds: boundsRaw } = mobxStore
   const { map } = tree
   const { setTpopIdsFiltered } = map
-  const bounds = boundsRaw ? getSnapshot(boundsRaw) : boundsRaw
 
   const popFilterString = get(tree, 'nodeLabelFilter.pop')
   const popNodeFilterArray = Object.entries(nodeFilter[tree.name].pop).filter(
@@ -133,10 +131,6 @@ const Tpop = ({
   )
   setTpopIdsFiltered(mapTpopIdsFiltered)
 
-  // TODO:
-  // if > 1000 tpops
-  // filter to inside bounds of map
-
   // use tpops for filtering on map,
   // tpopsForMap for presenting on map
   let tpopsForMap = []
@@ -152,30 +146,24 @@ const Tpop = ({
   if (tpopsForMap.length > 1500) {
     addError(
       new Error(
-        `Zuviele Teil-Populationen: Es werden maximal 1'500 angezeigt, im aktuellen Ausschnitt sind es: ${
-          tpopsForMap.length
-        }. Bitte wählen Sie einen kleineren Ausschnitt.`,
+        `Zuviele Teil-Populationen: Es werden maximal 1'500 angezeigt, im aktuellen Ausschnitt sind es: ${tpopsForMap.length.toLocaleString(
+          'de-CH',
+        )}. Bitte wählen Sie einen kleineren Ausschnitt.`,
       ),
     )
     tpopsForMap = []
-  }
-  if (tpopsForMap.length <= 1500 && tpops.length > 1500) {
+    setActiveApfloraLayers(activeApfloraLayers.filter(l => l !== 'tpop'))
+  } else if (tpops.length > 1500) {
     addError(
       new Error(
-        `Weil das Layer mehr als 1'500 Teil-Populationen enthält (nämlich: ${
-          tpops.length
-        }), wurden nur diejenigen im aktuellen Ausschnitt dargestellt. Falls Sie den Ausschnitt verändern sollten, müssen Sie das Layer aus- und wieder einschalten, um die Teil-Populationen anzuzeigen.`,
+        `Weil das Layer mehr als 1'500 Teil-Populationen enthält (nämlich: ${tpops.length.toLocaleString(
+          'de-CH',
+        )}), wurden nur die ${tpopsForMap.length.toLocaleString(
+          'de-CH',
+        )} im aktuellen Ausschnitt dargestellt. Falls Sie den Ausschnitt verändern sollten, müssen Sie das Layer aus- und wieder einschalten, um die passenden Teil-Populationen neu aufzubauen.`,
       ),
     )
   }
-  console.log('Tpop after filtering for bounds', {
-    tpopsLength: tpops.length,
-    tpopsForMapLength: tpopsForMap.length,
-  })
-
-  // TODO
-  // if tpops.length > 1500 tell user only tpops in current view are built
-  // if tpopsForMap.length > 1500 tell user to zoom in more for tpops to be built
 
   const tpopMarkers = tpopsForMap.map(tpop => (
     <Marker key={tpop.id} treeName={treeName} tpop={tpop} />
