@@ -36,7 +36,7 @@ export default async ({
   const beob = get(beobResult, 'data.beobById')
   const { x, y, datum, data } = beob
   const datumIsValid = isValid(new Date(datum))
-  const bekanntSeit = datumIsValid ? format(new Date(datum), 'YYYY') : null
+  const bekanntSeit = datumIsValid ? +format(new Date(datum), 'YYYY') : null
 
   // create new pop for ap
   let popResult
@@ -169,7 +169,7 @@ export default async ({
   refetch.pops()
   refetch.tpops()
   refetch.beobNichtZuzuordnens()
-  refetch.beobNichtZuzuordnenForMap()
+  if (refetch.beobNichtZuzuordnenForMap) refetch.beobNichtZuzuordnenForMap()
   refetch.beobNichtBeurteilts()
   refetch.beobZugeordnets()
 }
