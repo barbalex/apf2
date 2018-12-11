@@ -2,7 +2,7 @@
 /**
  * need to keep class because of ref
  */
-import React, { useEffect, useCallback, useContext } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import uniq from 'lodash/uniq'
