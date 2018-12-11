@@ -55,7 +55,7 @@ export default async ({
   refetch.pops()
   refetch.tpops()
   refetch.beobNichtZuzuordnens()
-  refetch.beobNichtZuzuordnenForMap()
+  if (refetch.beobNichtZuzuordnenForMap) refetch.beobNichtZuzuordnenForMap()
   refetch.beobNichtBeurteilts()
   refetch.beobZugeordnets()
 }
