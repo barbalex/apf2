@@ -36,6 +36,7 @@ const StyledIconButton = styled(IconButton)`
   height: 30px !important;
   width: 30px !important;
   margin-right: 5px !important;
+  padding-top: 3px !important;
 `
 const StyledFilterIcon = styled(FilterIcon)`
   cursor: pointer;
