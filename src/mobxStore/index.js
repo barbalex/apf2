@@ -2,6 +2,7 @@
 import { types } from 'mobx-state-tree'
 import cloneDeep from 'lodash/cloneDeep'
 import isEqual from 'lodash/isEqual'
+import uniqBy from 'lodash/uniqBy'
 import queryString from 'query-string'
 import createHistory from 'history/createBrowserHistory'
 
@@ -108,7 +109,7 @@ const myTypes = types
       self.deletedDatasets = val
     },
     addDeletedDataset(val) {
-      self.deletedDatasets.push(val)
+      self.deletedDatasets = [...self.deletedDatasets, val]
     },
     removeDeletedDatasetById(id) {
       self.deletedDatasets = self.deletedDatasets.filter(d => d.id !== id)
@@ -167,8 +168,19 @@ const myTypes = types
       self.ktZh = val
     },
     addError(error) {
-      self.errors.push(error)
-      setTimeout(() => self.errors.pop(), 1000 * 10)
+      // cannnot pop, need to set new value
+      // or the change will not be observed
+      // use uniq in case multiple same messages arrive
+      self.errors = uniqBy([...self.errors, error], 'message')
+      setTimeout(() => {
+        // need to use an action inside timeout
+        self.popError()
+      }, 1000 * 10)
+    },
+    popError() {
+      // eslint-disable-next-line no-unused-vars
+      const [first, ...last] = self.errors
+      self.errors = [...last]
     },
     nodeFilterSet({ treeName, nodeFilter }) {
       self.nodeFilter[treeName] = nodeFilter
