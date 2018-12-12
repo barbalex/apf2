@@ -46,6 +46,7 @@ export default gql`
         datum
         typ
         bearbeiter
+        jungpflanzenAnzahl
         ueberlebensrate
         vitalitaet
         entwicklung
