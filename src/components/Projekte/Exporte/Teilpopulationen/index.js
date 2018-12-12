@@ -432,7 +432,8 @@ const Teilpopulationen = ({ treeName }: { treeName: string }) => {
               field="ewm"
               label={`"Eier legende Wollmilchsau" für eine Art`}
               options={artList}
-              saveToDb={async apId => {
+              saveToDb={async e => {
+                const apId = e.target.value
                 if (apId === null) return
                 setEwmMessage(
                   'Export "anzkontrinklletzterundletztertpopber" wird vorbereitet...',
