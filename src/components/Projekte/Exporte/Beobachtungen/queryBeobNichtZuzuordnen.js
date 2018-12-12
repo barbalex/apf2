@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 
 export default gql`
   query allBeobs {
-    allVBeobs {
+    allVBeobs(filter: { nichtZuordnen: { equalTo: true } }) {
       nodes {
         id
         quelle

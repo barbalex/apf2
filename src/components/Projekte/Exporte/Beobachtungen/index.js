@@ -15,7 +15,8 @@ import { useApolloClient } from 'react-apollo-hooks'
 
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
-import allVBeobs from './allVBeobs'
+import queryBeobZugeordnet from './queryBeobZugeordnet'
+import queryBeobNichtZuzuordnen from './queryBeobNichtZuzuordnen'
 import allVBeobArtChangeds from './allVBeobArtChangeds'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
@@ -121,7 +122,7 @@ const Beobachtungen = () => {
               setMessage('Export "Beobachtungen" wird vorbereitet...')
               try {
                 const { data } = await client.query({
-                  query: allVBeobs,
+                  query: queryBeobZugeordnet,
                 })
                 exportModule({
                   data: get(data, 'allVBeobs.nodes', []),
@@ -140,8 +141,33 @@ const Beobachtungen = () => {
               setMessage(null)
             }}
           >
-            <div>Alle Beobachtungen von Arten aus apflora.ch</div>
-            <div>Nutzungsbedingungen der FNS beachten</div>
+            <div>Alle zugeordneten Beobachtungen</div>
+          </DownloadCardButton>
+          <DownloadCardButton
+            onClick={async () => {
+              setMessage('Export "Beobachtungen" wird vorbereitet...')
+              try {
+                const { data } = await client.query({
+                  query: queryBeobNichtZuzuordnen,
+                })
+                exportModule({
+                  data: get(data, 'allVBeobs.nodes', []),
+                  fileName: 'Beobachtungen',
+                  exportFileType,
+                  exportApplyMapFilter,
+                  mapFilter,
+                  idKey: 'id',
+                  xKey: 'x',
+                  yKey: 'y',
+                  addError,
+                })
+              } catch (error) {
+                addError(error)
+              }
+              setMessage(null)
+            }}
+          >
+            <div>Alle nicht zuzuordnenden Beobachtungen</div>
           </DownloadCardButton>
         </StyledCardContent>
       </Collapse>
