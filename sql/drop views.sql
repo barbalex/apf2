@@ -138,4 +138,4 @@ DROP VIEW if exists  apflora.v_q_pop_statuserloschenletzterpopberaktuell cascade
 DROP VIEW if exists  apflora.v_q_tpop_statuserloschenletzterpopberaktuell cascade;
 DROP VIEW if exists  apflora.v_exportevab_beob cascade;
 DROP VIEW if exists  apflora.v_popmassnber_anzmassn cascade;
-DROP VIEW if exists  apflora.v_tpop_anzkontrinklletzterundletztertpopber cascade;
+DROP VIEW if exists  apflora.v_tpop_erste_und_letzte_kontrolle_und_letzter_tpopber cascade;

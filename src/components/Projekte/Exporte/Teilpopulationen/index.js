@@ -379,14 +379,14 @@ const Teilpopulationen = ({ treeName }: { treeName: string }) => {
               )
               try {
                 const { data } = await client.query({
-                  query: await import('./allVTpopAnzkontrinklletzterundletztertpopbers').then(
+                  query: await import('./allVTpopErsteUndLetzteKontrolleUndLetzterTpopbers').then(
                     m => m.default,
                   ),
                 })
                 exportModule({
                   data: get(
                     data,
-                    'allVTpopAnzkontrinklletzterundletztertpopbers.nodes',
+                    'allVTpopErsteUndLetzteKontrolleUndLetzterTpopbers.nodes',
                     [],
                   ),
                   fileName:
@@ -420,9 +420,11 @@ const Teilpopulationen = ({ treeName }: { treeName: string }) => {
               }}
             >
               <li>Anzahl Kontrollen</li>
+              <li>erste Kontrolle</li>
+              <li>erste Zählung</li>
               <li>letzte Kontrolle</li>
-              <li>letzter Teilpopulationsbericht</li>
               <li>letzte Zählung</li>
+              <li>letzter Teilpopulationsbericht</li>
             </ul>
             <div>{'= "Eier legende Wollmilchsau"'}</div>
           </DownloadCardButton>
@@ -440,7 +442,7 @@ const Teilpopulationen = ({ treeName }: { treeName: string }) => {
                 )
                 try {
                   const { data } = await client.query({
-                    query: await import('./allVTpopAnzkontrinklletzterundletztertpopbersFiltered').then(
+                    query: await import('./allVTpopErsteUndLetzteKontrolleUndLetzterTpopbersFiltered').then(
                       m => m.default,
                     ),
                     variables: { apId },
@@ -448,7 +450,7 @@ const Teilpopulationen = ({ treeName }: { treeName: string }) => {
                   exportModule({
                     data: get(
                       data,
-                      'allVTpopAnzkontrinklletzterundletztertpopbers.nodes',
+                      'allVTpopErsteUndLetzteKontrolleUndLetzterTpopbers.nodes',
                       [],
                     ),
                     fileName: 'anzkontrinklletzterundletztertpopber',

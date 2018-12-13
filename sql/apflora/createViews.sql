@@ -2747,6 +2747,18 @@ FROM
     apflora.v_tpopkontr_letzteid
     ON apflora.tpop.id = apflora.v_tpopkontr_letzteid.id;
 
+DROP VIEW IF EXISTS apflora.v_tpop_ersteKontrId CASCADE;
+CREATE OR REPLACE VIEW apflora.v_tpop_ersteKontrId AS
+SELECT
+  apflora.tpop.id,
+  apflora.v_tpopkontr_ersteid.tpopkontr_id,
+  apflora.v_tpopkontr_ersteid."AnzTPopKontr"
+FROM
+  apflora.tpop
+  LEFT JOIN
+    apflora.v_tpopkontr_ersteid
+    ON apflora.tpop.id = apflora.v_tpopkontr_ersteid.id;
+
 DROP VIEW IF EXISTS apflora.v_tpopber_letzteid CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopber_letzteid AS
 SELECT
