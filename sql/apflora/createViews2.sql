@@ -660,13 +660,13 @@ SELECT
   apflora.v_tpopkontr.zaehlung_einheiten AS zaehlung_einheiten,
   apflora.v_tpopkontr.zaehlung_methoden AS zaehlung_methoden
 FROM
-  (apflora.v_tpop_letzteKontrId
+  apflora.v_tpop
+  INNER JOIN
+    apflora.v_tpop_letzteKontrId
+    ON apflora.v_tpop_letzteKontrId.id = apflora.v_tpop.id
   LEFT JOIN
     apflora.v_tpopkontr
-    ON apflora.v_tpop_letzteKontrId."MaxTPopKontrId" = apflora.v_tpopkontr.id::text)
-  INNER JOIN
-    apflora.v_tpop
-    ON apflora.v_tpop_letzteKontrId.id = apflora.v_tpop.id;
+    ON apflora.v_tpop_letzteKontrId.tpopkontr_id = apflora.v_tpopkontr.id::text;
 
 DROP VIEW IF EXISTS apflora.v_q_tpop_erloschenundrelevantaberletztebeobvor1950 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_tpop_erloschenundrelevantaberletztebeobvor1950 AS

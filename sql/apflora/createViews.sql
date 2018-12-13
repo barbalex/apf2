@@ -2679,10 +2679,11 @@ ORDER BY
   apflora.pop.nr,
   apflora.tpop.nr;
 
-DROP VIEW IF EXISTS apflora.v_tpopkontr_letztesjahr CASCADE;
-CREATE OR REPLACE VIEW apflora.v_tpopkontr_letztesjahr AS
+DROP VIEW IF EXISTS apflora.v_tpopkontr_anzprojahr CASCADE;
+CREATE OR REPLACE VIEW apflora.v_tpopkontr_anzprojahr AS
 SELECT
   apflora.tpop.id,
+  min(apflora.tpopkontr.jahr) AS "MinTPopKontrJahr",
   max(apflora.tpopkontr.jahr) AS "MaxTPopKontrJahr",
   count(apflora.tpopkontr.id) AS "AnzTPopKontr"
 FROM
@@ -2705,24 +2706,40 @@ GROUP BY
 DROP VIEW IF EXISTS apflora.v_tpopkontr_letzteid CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopkontr_letzteid AS
 SELECT
-  apflora.v_tpopkontr_letztesjahr.id,
-  max(apflora.tpopkontr.id::text) AS "MaxTPopKontrId",
-  max(apflora.v_tpopkontr_letztesjahr."AnzTPopKontr") AS "AnzTPopKontr"
+  apflora.v_tpopkontr_anzprojahr.id,
+  max(apflora.tpopkontr.id::text) AS tpopkontr_id,
+  max(apflora.v_tpopkontr_anzprojahr."AnzTPopKontr") AS "AnzTPopKontr"
 FROM
   apflora.tpopkontr
   INNER JOIN
-    apflora.v_tpopkontr_letztesjahr
+    apflora.v_tpopkontr_anzprojahr
     ON
-      (apflora.v_tpopkontr_letztesjahr."MaxTPopKontrJahr" = apflora.tpopkontr.jahr)
-      AND (apflora.tpopkontr.tpop_id = apflora.v_tpopkontr_letztesjahr.id)
+      (apflora.v_tpopkontr_anzprojahr."MaxTPopKontrJahr" = apflora.tpopkontr.jahr)
+      AND (apflora.tpopkontr.tpop_id = apflora.v_tpopkontr_anzprojahr.id)
 GROUP BY
-  apflora.v_tpopkontr_letztesjahr.id;
+  apflora.v_tpopkontr_anzprojahr.id;
+
+DROP VIEW IF EXISTS apflora.v_tpopkontr_ersteid CASCADE;
+CREATE OR REPLACE VIEW apflora.v_tpopkontr_ersteid AS
+SELECT
+  apflora.v_tpopkontr_anzprojahr.id,
+  max(apflora.tpopkontr.id::text) AS tpopkontr_id,
+  max(apflora.v_tpopkontr_anzprojahr."AnzTPopKontr") AS "AnzTPopKontr"
+FROM
+  apflora.tpopkontr
+  INNER JOIN
+    apflora.v_tpopkontr_anzprojahr
+    ON
+      (apflora.v_tpopkontr_anzprojahr."MinTPopKontrJahr" = apflora.tpopkontr.jahr)
+      AND (apflora.tpopkontr.tpop_id = apflora.v_tpopkontr_anzprojahr.id)
+GROUP BY
+  apflora.v_tpopkontr_anzprojahr.id;
 
 DROP VIEW IF EXISTS apflora.v_tpop_letzteKontrId CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_letzteKontrId AS
 SELECT
   apflora.tpop.id,
-  apflora.v_tpopkontr_letzteid."MaxTPopKontrId",
+  apflora.v_tpopkontr_letzteid.tpopkontr_id,
   apflora.v_tpopkontr_letzteid."AnzTPopKontr"
 FROM
   apflora.tpop
@@ -4399,7 +4416,7 @@ WHERE
         ON
           (
             apflora.v_tpopkontr_letzteid.id = apflora.tpopkontr.tpop_id
-            AND apflora.v_tpopkontr_letzteid."MaxTPopKontrId" = apflora.tpopkontr.id::text
+            AND apflora.v_tpopkontr_letzteid.tpopkontr_id = apflora.tpopkontr.id::text
           )
     WHERE
       apflora.tpopkontr.typ NOT IN ('Zwischenziel', 'Ziel')

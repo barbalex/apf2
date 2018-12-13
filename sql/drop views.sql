@@ -59,7 +59,7 @@ DROP VIEW if exists  apflora.v_zielber cascade;
 DROP VIEW if exists  apflora.v_bertpopfuerangezeigteap0 cascade;
 DROP VIEW if exists  apflora.v_tpopkontr cascade;
 DROP VIEW if exists  apflora.v_tpopkontr_webgisbun cascade;
-DROP VIEW if exists  apflora.v_tpopkontr_letztesjahr cascade;
+DROP VIEW if exists  apflora.v_tpopkontr_anzprojahr cascade;
 DROP VIEW if exists  apflora.v_tpopkontr_letzteid cascade;
 DROP VIEW if exists  apflora.v_tpop_letztekontrid cascade;
 DROP VIEW if exists  apflora.v_tpopber_letzteid cascade;
