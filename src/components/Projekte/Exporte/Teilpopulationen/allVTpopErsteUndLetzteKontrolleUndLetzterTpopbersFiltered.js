@@ -48,6 +48,7 @@ export default gql`
         kontrollfrequenz_freiwillige: kontrollfrequenzFreiwillige
         changed
         changed_by: changedBy
+        anzahl_kontrollen: anzahlKontrollen
         erste_kontrolle_id: ersteKontrolleId
         erste_kontrolle_jahr: ersteKontrolleJahr
         erste_kontrolle_datum: ersteKontrolleDatum
