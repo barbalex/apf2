@@ -59,25 +59,25 @@ const Adresse = ({ treeName }: { treeName: String }) => {
             [field]: value,
             changedBy: mobxStore.user.name,
           },
-          /*optimisticResponse: {
-          __typename: 'Mutation',
-          updateAdresseById: {
-            adresse: {
-              id: row.id,
-              name: field === 'name' ? value : row.name,
-              email: field === 'email' ? value : row.email,
-              adresse: field === 'adresse' ? value : row.adresse,
-              telefon: field === 'telefon' ? value : row.telefon,
-              freiwErfko: field === 'freiwErfko' ? value : row.freiwErfko,
-              evabVorname: field === 'evabVorname' ? value : row.evabVorname,
-              evabNachname:
-                field === 'evabNachname' ? value : row.evabNachname,
-              evabOrt: field === 'evabOrt' ? value : row.evabOrt,
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateAdresseById: {
+              adresse: {
+                id: row.id,
+                name: field === 'name' ? value : row.name,
+                email: field === 'email' ? value : row.email,
+                adresse: field === 'adresse' ? value : row.adresse,
+                telefon: field === 'telefon' ? value : row.telefon,
+                freiwErfko: field === 'freiwErfko' ? value : row.freiwErfko,
+                evabVorname: field === 'evabVorname' ? value : row.evabVorname,
+                evabNachname:
+                  field === 'evabNachname' ? value : row.evabNachname,
+                evabOrt: field === 'evabOrt' ? value : row.evabOrt,
+                __typename: 'Adresse',
+              },
               __typename: 'Adresse',
             },
-            __typename: 'Adresse',
           },
-        },*/
         })
       } catch (error) {
         return setErrors({ [field]: error.message })

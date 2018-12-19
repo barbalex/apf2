@@ -80,31 +80,31 @@ const Pop = ({ treeName }: { treeName: string }) => {
               [field]: value,
               changedBy: mobxStore.user.name,
             },
-            /*optimisticResponse: {
-            __typename: 'Mutation',
-            updatePopById: {
-              pop: {
-                id: row.id,
-                apId: field === 'apId' ? value : row.apId,
-                nr: field === 'nr' ? value : row.nr,
-                name: field === 'name' ? value : row.name,
-                status: field === 'status' ? value : row.status,
-                statusUnklar:
-                  field === 'statusUnklar' ? value : row.statusUnklar,
-                statusUnklarBegruendung:
-                  field === 'statusUnklarBegruendung'
-                    ? value
-                    : row.statusUnklarBegruendung,
-                bekanntSeit:
-                  field === 'bekanntSeit' ? value : row.bekanntSeit,
-                x: field === 'x' ? value : row.x,
-                y: field === 'y' ? value : row.y,
-                apByApId: row.apByApId,
+            optimisticResponse: {
+              __typename: 'Mutation',
+              updatePopById: {
+                pop: {
+                  id: row.id,
+                  apId: field === 'apId' ? value : row.apId,
+                  nr: field === 'nr' ? value : row.nr,
+                  name: field === 'name' ? value : row.name,
+                  status: field === 'status' ? value : row.status,
+                  statusUnklar:
+                    field === 'statusUnklar' ? value : row.statusUnklar,
+                  statusUnklarBegruendung:
+                    field === 'statusUnklarBegruendung'
+                      ? value
+                      : row.statusUnklarBegruendung,
+                  bekanntSeit:
+                    field === 'bekanntSeit' ? value : row.bekanntSeit,
+                  x: field === 'x' ? value : row.x,
+                  y: field === 'y' ? value : row.y,
+                  apByApId: row.apByApId,
+                  __typename: 'Pop',
+                },
                 __typename: 'Pop',
               },
-              __typename: 'Pop',
             },
-          },*/
           })
         } catch (error) {
           return setErrors({ [field]: error.message })

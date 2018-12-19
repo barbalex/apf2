@@ -86,21 +86,21 @@ const User = ({
             id: row.id,
             [field]: value,
           },
-          /*optimisticResponse: {
-          __typename: 'Mutation',
-          updateUserById: {
-            user: {
-              id: row.id,
-              name: field === 'name' ? value : row.name,
-              email: field === 'email' ? value : row.email,
-              role: field === 'role' ? value : row.role,
-              pass: field === 'pass' ? value : row.pass,
-              adresseId: field === 'adresseId' ? value : row.adresseId,
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateUserById: {
+              user: {
+                id: row.id,
+                name: field === 'name' ? value : row.name,
+                email: field === 'email' ? value : row.email,
+                role: field === 'role' ? value : row.role,
+                pass: field === 'pass' ? value : row.pass,
+                adresseId: field === 'adresseId' ? value : row.adresseId,
+                __typename: 'User',
+              },
               __typename: 'User',
             },
-            __typename: 'User',
           },
-        },*/
         })
       } catch (error) {
         return setErrors({ [field]: error.message })
