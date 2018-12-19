@@ -69,17 +69,17 @@ const Projekt = ({ treeName }: { treeName: string }) => {
             [field]: value,
             changedBy: mobxStore.user.name,
           },
-          /*optimisticResponse: {
-          __typename: 'Mutation',
-          updateProjektById: {
-            projekt: {
-              id: row.id,
-              name: field === 'name' ? value : row.name,
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateProjektById: {
+              projekt: {
+                id: row.id,
+                name: field === 'name' ? value : row.name,
+                __typename: 'Projekt',
+              },
               __typename: 'Projekt',
             },
-            __typename: 'Projekt',
           },
-        },*/
         })
       } catch (error) {
         return setErrors({ [field]: error.message })

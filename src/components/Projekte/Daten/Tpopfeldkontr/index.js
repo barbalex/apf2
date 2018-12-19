@@ -159,122 +159,122 @@ const Tpopfeldkontr = ({
           await client.mutate({
             mutation: updateTpopkontrByIdGql,
             variables,
-            /*optimisticResponse: {
-            __typename: 'Mutation',
-            updateTpopkontrById: {
-              tpopkontr: {
-                id: row.id,
-                typ: field === 'typ' ? value : row.typ,
-                jahr:
-                  field === 'jahr'
-                    ? value
-                    : field2 === 'jahr'
-                    ? value2
-                    : row.jahr,
-                datum:
-                  field === 'datum'
-                    ? value
-                    : field2 === 'datum'
-                    ? value2
-                    : row.datum,
-                jungpflanzenAnzahl:
-                  field === 'jungpflanzenAnzahl'
-                    ? value
-                    : row.jungpflanzenAnzahl,
-                vitalitaet: field === 'vitalitaet' ? value : row.vitalitaet,
-                ueberlebensrate:
-                  field === 'ueberlebensrate' ? value : row.ueberlebensrate,
-                entwicklung:
-                  field === 'entwicklung' ? value : row.entwicklung,
-                ursachen: field === 'ursachen' ? value : row.ursachen,
-                erfolgsbeurteilung:
-                  field === 'erfolgsbeurteilung'
-                    ? value
-                    : row.erfolgsbeurteilung,
-                umsetzungAendern:
-                  field === 'umsetzungAendern' ? value : row.umsetzungAendern,
-                kontrolleAendern:
-                  field === 'kontrolleAendern' ? value : row.kontrolleAendern,
-                bemerkungen:
-                  field === 'bemerkungen' ? value : row.bemerkungen,
-                lrDelarze: field === 'lrDelarze' ? value : row.lrDelarze,
-                flaeche: field === 'flaeche' ? value : row.flaeche,
-                lrUmgebungDelarze:
-                  field === 'lrUmgebungDelarze'
-                    ? value
-                    : row.lrUmgebungDelarze,
-                vegetationstyp:
-                  field === 'vegetationstyp' ? value : row.vegetationstyp,
-                konkurrenz: field === 'konkurrenz' ? value : row.konkurrenz,
-                moosschicht:
-                  field === 'moosschicht' ? value : row.moosschicht,
-                krautschicht:
-                  field === 'krautschicht' ? value : row.krautschicht,
-                strauchschicht:
-                  field === 'strauchschicht' ? value : row.strauchschicht,
-                baumschicht:
-                  field === 'baumschicht' ? value : row.baumschicht,
-                bodenTyp: field === 'bodenTyp' ? value : row.bodenTyp,
-                bodenKalkgehalt:
-                  field === 'bodenKalkgehalt' ? value : row.bodenKalkgehalt,
-                bodenDurchlaessigkeit:
-                  field === 'bodenDurchlaessigkeit'
-                    ? value
-                    : row.bodenDurchlaessigkeit,
-                bodenHumus: field === 'bodenHumus' ? value : row.bodenHumus,
-                bodenNaehrstoffgehalt:
-                  field === 'bodenNaehrstoffgehalt'
-                    ? value
-                    : row.bodenNaehrstoffgehalt,
-                bodenAbtrag:
-                  field === 'bodenAbtrag' ? value : row.bodenAbtrag,
-                wasserhaushalt:
-                  field === 'wasserhaushalt' ? value : row.wasserhaushalt,
-                idealbiotopUebereinstimmung:
-                  field === 'idealbiotopUebereinstimmung'
-                    ? value
-                    : row.idealbiotopUebereinstimmung,
-                handlungsbedarf:
-                  field === 'handlungsbedarf' ? value : row.handlungsbedarf,
-                flaecheUeberprueft:
-                  field === 'flaecheUeberprueft'
-                    ? value
-                    : row.flaecheUeberprueft,
-                deckungVegetation:
-                  field === 'deckungVegetation'
-                    ? value
-                    : row.deckungVegetation,
-                deckungNackterBoden:
-                  field === 'deckungNackterBoden'
-                    ? value
-                    : row.deckungNackterBoden,
-                deckungApArt:
-                  field === 'deckungApArt' ? value : row.deckungApArt,
-                vegetationshoeheMaximum:
-                  field === 'vegetationshoeheMaximum'
-                    ? value
-                    : row.vegetationshoeheMaximum,
-                vegetationshoeheMittel:
-                  field === 'vegetationshoeheMittel'
-                    ? value
-                    : row.vegetationshoeheMittel,
-                gefaehrdung:
-                  field === 'gefaehrdung' ? value : row.gefaehrdung,
-                tpopId: field === 'tpopId' ? value : row.tpopId,
-                bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
-                planVorhanden:
-                  field === 'planVorhanden' ? value : row.planVorhanden,
-                jungpflanzenVorhanden:
-                  field === 'jungpflanzenVorhanden'
-                    ? value
-                    : row.jungpflanzenVorhanden,
-                adresseByBearbeiter: row.adresseByBearbeiter,
-                tpopByTpopId: row.tpopByTpopId,
+            optimisticResponse: {
+              __typename: 'Mutation',
+              updateTpopkontrById: {
+                tpopkontr: {
+                  id: row.id,
+                  typ: field === 'typ' ? value : row.typ,
+                  jahr:
+                    field === 'jahr'
+                      ? value
+                      : field2 === 'jahr'
+                      ? value2
+                      : row.jahr,
+                  datum:
+                    field === 'datum'
+                      ? value
+                      : field2 === 'datum'
+                      ? value2
+                      : row.datum,
+                  jungpflanzenAnzahl:
+                    field === 'jungpflanzenAnzahl'
+                      ? value
+                      : row.jungpflanzenAnzahl,
+                  vitalitaet: field === 'vitalitaet' ? value : row.vitalitaet,
+                  ueberlebensrate:
+                    field === 'ueberlebensrate' ? value : row.ueberlebensrate,
+                  entwicklung:
+                    field === 'entwicklung' ? value : row.entwicklung,
+                  ursachen: field === 'ursachen' ? value : row.ursachen,
+                  erfolgsbeurteilung:
+                    field === 'erfolgsbeurteilung'
+                      ? value
+                      : row.erfolgsbeurteilung,
+                  umsetzungAendern:
+                    field === 'umsetzungAendern' ? value : row.umsetzungAendern,
+                  kontrolleAendern:
+                    field === 'kontrolleAendern' ? value : row.kontrolleAendern,
+                  bemerkungen:
+                    field === 'bemerkungen' ? value : row.bemerkungen,
+                  lrDelarze: field === 'lrDelarze' ? value : row.lrDelarze,
+                  flaeche: field === 'flaeche' ? value : row.flaeche,
+                  lrUmgebungDelarze:
+                    field === 'lrUmgebungDelarze'
+                      ? value
+                      : row.lrUmgebungDelarze,
+                  vegetationstyp:
+                    field === 'vegetationstyp' ? value : row.vegetationstyp,
+                  konkurrenz: field === 'konkurrenz' ? value : row.konkurrenz,
+                  moosschicht:
+                    field === 'moosschicht' ? value : row.moosschicht,
+                  krautschicht:
+                    field === 'krautschicht' ? value : row.krautschicht,
+                  strauchschicht:
+                    field === 'strauchschicht' ? value : row.strauchschicht,
+                  baumschicht:
+                    field === 'baumschicht' ? value : row.baumschicht,
+                  bodenTyp: field === 'bodenTyp' ? value : row.bodenTyp,
+                  bodenKalkgehalt:
+                    field === 'bodenKalkgehalt' ? value : row.bodenKalkgehalt,
+                  bodenDurchlaessigkeit:
+                    field === 'bodenDurchlaessigkeit'
+                      ? value
+                      : row.bodenDurchlaessigkeit,
+                  bodenHumus: field === 'bodenHumus' ? value : row.bodenHumus,
+                  bodenNaehrstoffgehalt:
+                    field === 'bodenNaehrstoffgehalt'
+                      ? value
+                      : row.bodenNaehrstoffgehalt,
+                  bodenAbtrag:
+                    field === 'bodenAbtrag' ? value : row.bodenAbtrag,
+                  wasserhaushalt:
+                    field === 'wasserhaushalt' ? value : row.wasserhaushalt,
+                  idealbiotopUebereinstimmung:
+                    field === 'idealbiotopUebereinstimmung'
+                      ? value
+                      : row.idealbiotopUebereinstimmung,
+                  handlungsbedarf:
+                    field === 'handlungsbedarf' ? value : row.handlungsbedarf,
+                  flaecheUeberprueft:
+                    field === 'flaecheUeberprueft'
+                      ? value
+                      : row.flaecheUeberprueft,
+                  deckungVegetation:
+                    field === 'deckungVegetation'
+                      ? value
+                      : row.deckungVegetation,
+                  deckungNackterBoden:
+                    field === 'deckungNackterBoden'
+                      ? value
+                      : row.deckungNackterBoden,
+                  deckungApArt:
+                    field === 'deckungApArt' ? value : row.deckungApArt,
+                  vegetationshoeheMaximum:
+                    field === 'vegetationshoeheMaximum'
+                      ? value
+                      : row.vegetationshoeheMaximum,
+                  vegetationshoeheMittel:
+                    field === 'vegetationshoeheMittel'
+                      ? value
+                      : row.vegetationshoeheMittel,
+                  gefaehrdung:
+                    field === 'gefaehrdung' ? value : row.gefaehrdung,
+                  tpopId: field === 'tpopId' ? value : row.tpopId,
+                  bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
+                  planVorhanden:
+                    field === 'planVorhanden' ? value : row.planVorhanden,
+                  jungpflanzenVorhanden:
+                    field === 'jungpflanzenVorhanden'
+                      ? value
+                      : row.jungpflanzenVorhanden,
+                  adresseByBearbeiter: row.adresseByBearbeiter,
+                  tpopByTpopId: row.tpopByTpopId,
+                  __typename: 'Tpopkontr',
+                },
                 __typename: 'Tpopkontr',
               },
-              __typename: 'Tpopkontr',
             },
-          },*/
           })
         } catch (error) {
           return setErrors({ [field]: error.message })

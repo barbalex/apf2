@@ -70,23 +70,23 @@ const Popber = ({ treeName }: { treeName: string }) => {
             [field]: value,
             changedBy: mobxStore.user.name,
           },
-          /*optimisticResponse: {
-          __typename: 'Mutation',
-          updatePopberById: {
-            popber: {
-              id: row.id,
-              popId: field === 'popId' ? value : row.popId,
-              jahr: field === 'jahr' ? value : row.jahr,
-              entwicklung: field === 'entwicklung' ? value : row.entwicklung,
-              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-              tpopEntwicklungWerteByEntwicklung:
-                row.tpopEntwicklungWerteByEntwicklung,
-              popByPopId: row.popByPopId,
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updatePopberById: {
+              popber: {
+                id: row.id,
+                popId: field === 'popId' ? value : row.popId,
+                jahr: field === 'jahr' ? value : row.jahr,
+                entwicklung: field === 'entwicklung' ? value : row.entwicklung,
+                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+                tpopEntwicklungWerteByEntwicklung:
+                  row.tpopEntwicklungWerteByEntwicklung,
+                popByPopId: row.popByPopId,
+                __typename: 'Popber',
+              },
               __typename: 'Popber',
             },
-            __typename: 'Popber',
           },
-        },*/
         })
       } catch (error) {
         return setErrors({ [field]: error.message })
