@@ -83,19 +83,19 @@ const Erfkrit = ({
             [field]: value,
             changedBy: mobxStore.user.name,
           },
-          /*optimisticResponse: {
-          __typename: 'Mutation',
-          updateErfkritById: {
-            erfkrit: {
-              id: row.id,
-              apId: field === 'apId' ? value : row.apId,
-              erfolg: field === 'erfolg' ? value : row.erfolg,
-              kriterien: field === 'kriterien' ? value : row.kriterien,
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateErfkritById: {
+              erfkrit: {
+                id: row.id,
+                apId: field === 'apId' ? value : row.apId,
+                erfolg: field === 'erfolg' ? value : row.erfolg,
+                kriterien: field === 'kriterien' ? value : row.kriterien,
+                __typename: 'Erfkrit',
+              },
               __typename: 'Erfkrit',
             },
-            __typename: 'Erfkrit',
           },
-        },*/
         })
       } catch (error) {
         return setErrors({ [field]: error.message })

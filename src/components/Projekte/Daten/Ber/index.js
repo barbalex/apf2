@@ -61,21 +61,21 @@ const Ber = ({ treeName }: { treeName: string }) => {
             [field]: value,
             changedBy: mobxStore.user.name,
           },
-          /*optimisticResponse: {
-          __typename: 'Mutation',
-          updateBerById: {
-            ber: {
-              id: row.id,
-              apId: field === 'apId' ? value : row.apId,
-              autor: field === 'autor' ? value : row.autor,
-              jahr: field === 'jahr' ? value : row.jahr,
-              titel: field === 'titel' ? value : row.titel,
-              url: field === 'url' ? value : row.url,
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateBerById: {
+              ber: {
+                id: row.id,
+                apId: field === 'apId' ? value : row.apId,
+                autor: field === 'autor' ? value : row.autor,
+                jahr: field === 'jahr' ? value : row.jahr,
+                titel: field === 'titel' ? value : row.titel,
+                url: field === 'url' ? value : row.url,
+                __typename: 'Ber',
+              },
               __typename: 'Ber',
             },
-            __typename: 'Ber',
           },
-        },*/
         })
       } catch (error) {
         return setErrors({ [field]: error.message })
