@@ -1698,16 +1698,16 @@ apollo-client@2.5.0-alpha.1:
   optionalDependencies:
     "@types/async" "2.0.49"
 
-apollo-link-batch-http@1.2.4:
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/apollo-link-batch-http/-/apollo-link-batch-http-1.2.4.tgz#71e617ed184900bedbc34903901b90af01b3d7a5"
-  integrity sha512-fmqqq4Y64kwDsUMqk1iqNdyC/fsf4bMZ1fuvo1B29us9rWzOrGiJ0CbnBGjcCRTM2eFdkKvpgl8qMAOB/rEqVA==
+apollo-link-batch-http@1.2.6:
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/apollo-link-batch-http/-/apollo-link-batch-http-1.2.6.tgz#24fa42dd39c87ffdfeaf83b61fe0ea2f28ae88ee"
+  integrity sha512-GdKXbF/Tczns7OoNJcnnFgvoYSVjnKI97irToagJ9O0jRfortWSKz4pAAkaUkzzxAouedTxl5A+W31ztzxqibA==
   dependencies:
-    apollo-link "^1.2.4"
-    apollo-link-batch "^1.1.5"
-    apollo-link-http-common "^0.2.6"
+    apollo-link "^1.2.6"
+    apollo-link-batch "^1.1.7"
+    apollo-link-http-common "^0.2.8"
 
-apollo-link-batch@^1.1.5:
+apollo-link-batch@^1.1.7:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/apollo-link-batch/-/apollo-link-batch-1.1.7.tgz#823817b06aae04e1b2d74515f9ef259ebcc9aa6f"
   integrity sha512-SANfQ0wJlJrfk82adD1ZNx1I3tgGiVh1zJTS2or+s9sKByaxhvHB3aZ6mu23zU0f+Z24FI53YG4ZNjDE1zHqpQ==
@@ -1728,7 +1728,7 @@ apollo-link-dedup@^1.0.0:
   dependencies:
     apollo-link "^1.2.6"
 
-apollo-link-http-common@^0.2.6, apollo-link-http-common@^0.2.8:
+apollo-link-http-common@^0.2.8:
   version "0.2.8"
   resolved "https://registry.yarnpkg.com/apollo-link-http-common/-/apollo-link-http-common-0.2.8.tgz#c6deedfc2739db8b11013c3c2d2ccd657152941f"
   integrity sha512-gGmXZN8mr7e9zjopzKQfZ7IKnh8H12NxBDzvp9nXI3U82aCVb72p+plgoYLcpMY8w6krvoYjgicFmf8LO20TCQ==
@@ -1743,7 +1743,7 @@ apollo-link-http@1.5.9:
     apollo-link "^1.2.6"
     apollo-link-http-common "^0.2.8"
 
-apollo-link@1.2.6, apollo-link@^1.0.0, apollo-link@^1.2.4, apollo-link@^1.2.6:
+apollo-link@1.2.6, apollo-link@^1.0.0, apollo-link@^1.2.6:
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-1.2.6.tgz#d9b5676d79c01eb4e424b95c7171697f6ad2b8da"
   integrity sha512-sUNlA20nqIF3gG3F8eyMD+mO80fmf3dPZX+GUOs3MI9oZR8ug09H3F0UsWJMcpEg6h55Yy5wZ+BMmAjrbenF/Q==
@@ -10043,10 +10043,10 @@ react-apollo-hooks@0.2.1:
     lodash "^4.17.11"
     react-fast-compare "^2.0.2"
 
-react-apollo@2.3.2:
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/react-apollo/-/react-apollo-2.3.2.tgz#b8e287d2813722b9e0a886cabf8149ab3b84a3b7"
-  integrity sha512-3lU9iqmj4KMIZvlWWSuLihxMGLEAL6oNmnSTWrb3/mRP36Zy0zJD4rdaonDx4WzqFYQAnUPaOiFnHGp0UQUTwA==
+react-apollo@2.3.3:
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/react-apollo/-/react-apollo-2.3.3.tgz#a4609f3112d4351a1e363090d8cd363b04e2cc91"
+  integrity sha512-y4CwwmJjp0De/An7vrvEWOJ27lxmS/SXT8z22I8aOEBC2wzdcavDPjKzeLYJKs+hv1MGS3h84PSwFtlU4Em/bA==
   dependencies:
     fbjs "^1.0.0"
     hoist-non-react-statics "^3.0.0"
