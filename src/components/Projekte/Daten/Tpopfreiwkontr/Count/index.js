@@ -274,21 +274,21 @@ const Count = ({
         await client.mutate({
           mutation: updateTpopkontrzaehlByIdGql,
           variables,
-          /*optimisticResponse: {
-          __typename: 'Mutation',
-          updateTpopkontrzaehlById: {
-            tpopkontrzaehl: {
-              id: row.id,
-              anzahl: field === 'anzahl' ? value : row.anzahl,
-              einheit: field === 'einheit' ? value : row.einheit,
-              methode: field2 === 'methode' ? value2 : row.methode,
-              tpopkontrzaehlEinheitWerteByEinheit:
-                row.tpopkontrzaehlEinheitWerteByEinheit,
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateTpopkontrzaehlById: {
+              tpopkontrzaehl: {
+                id: row.id,
+                anzahl: field === 'anzahl' ? value : row.anzahl,
+                einheit: field === 'einheit' ? value : row.einheit,
+                methode: field2 === 'methode' ? value2 : row.methode,
+                tpopkontrzaehlEinheitWerteByEinheit:
+                  row.tpopkontrzaehlEinheitWerteByEinheit,
+                __typename: 'Tpopkontrzaehl',
+              },
               __typename: 'Tpopkontrzaehl',
             },
-            __typename: 'Tpopkontrzaehl',
           },
-        },*/
         })
       } catch (error) {
         return setErrors({ [field]: error.message })

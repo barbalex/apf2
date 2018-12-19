@@ -71,23 +71,23 @@ const Tpopber = ({ treeName }: { treeName: string }) => {
             [field]: value,
             changedBy: mobxStore.user.name,
           },
-          /*optimisticResponse: {
-          __typename: 'Mutation',
-          updateTpopberById: {
-            tpopber: {
-              id: row.id,
-              tpopId: field === 'tpopId' ? value : row.tpopId,
-              jahr: field === 'jahr' ? value : row.jahr,
-              entwicklung: field === 'entwicklung' ? value : row.entwicklung,
-              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-              tpopEntwicklungWerteByEntwicklung:
-                row.tpopEntwicklungWerteByEntwicklung,
-              tpopByTpopId: row.tpopByTpopId,
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateTpopberById: {
+              tpopber: {
+                id: row.id,
+                tpopId: field === 'tpopId' ? value : row.tpopId,
+                jahr: field === 'jahr' ? value : row.jahr,
+                entwicklung: field === 'entwicklung' ? value : row.entwicklung,
+                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+                tpopEntwicklungWerteByEntwicklung:
+                  row.tpopEntwicklungWerteByEntwicklung,
+                tpopByTpopId: row.tpopByTpopId,
+                __typename: 'Tpopber',
+              },
               __typename: 'Tpopber',
             },
-            __typename: 'Tpopber',
           },
-        },*/
         })
       } catch (error) {
         return setErrors({ [field]: error.message })

@@ -97,23 +97,23 @@ const Ekfzaehleinheit = ({
             [field]: value,
             changedBy: mobxStore.user.name,
           },
-          /*optimisticResponse: {
-          __typename: 'Mutation',
-          updateEkfzaehleinheitById: {
-            ekfzaehleinheit: {
-              id: row.id,
-              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-              zaehleinheitId:
-                field === 'zaehleinheitId' ? value : row.zaehleinheitId,
-              apId: field === 'apId' ? value : row.apId,
-              tpopkontrzaehlEinheitWerteByZaehleinheitId:
-                row.tpopkontrzaehlEinheitWerteByZaehleinheitId,
-              apByApId: row.apByApId,
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateEkfzaehleinheitById: {
+              ekfzaehleinheit: {
+                id: row.id,
+                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+                zaehleinheitId:
+                  field === 'zaehleinheitId' ? value : row.zaehleinheitId,
+                apId: field === 'apId' ? value : row.apId,
+                tpopkontrzaehlEinheitWerteByZaehleinheitId:
+                  row.tpopkontrzaehlEinheitWerteByZaehleinheitId,
+                apByApId: row.apByApId,
+                __typename: 'Ekfzaehleinheit',
+              },
               __typename: 'Ekfzaehleinheit',
             },
-            __typename: 'Ekfzaehleinheit',
           },
-        },*/
         })
       } catch (error) {
         return setErrors({ [field]: error.message })
