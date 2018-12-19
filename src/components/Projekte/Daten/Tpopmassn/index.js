@@ -123,58 +123,58 @@ const Tpopmassn = ({
           await client.mutate({
             mutation: updateTpopmassnByIdGql,
             variables,
-            /*optimisticResponse: {
-            __typename: 'Mutation',
-            updateTpopmassnById: {
-              tpopmassn: {
-                id: row.id,
-                typ: field === 'typ' ? value : row.typ,
-                beschreibung:
-                  field === 'beschreibung' ? value : row.beschreibung,
-                jahr:
-                  field === 'jahr'
-                    ? value
-                    : field2 === 'jahr'
-                    ? value2
-                    : row.jahr,
-                datum:
-                  field === 'datum'
-                    ? value
-                    : field2 === 'datum'
-                    ? value2
-                    : row.datum,
-                bemerkungen:
-                  field === 'bemerkungen' ? value : row.bemerkungen,
-                planBezeichnung:
-                  field === 'planBezeichnung' ? value : row.planBezeichnung,
-                flaeche: field === 'flaeche' ? value : row.flaeche,
-                markierung: field === 'markierung' ? value : row.markierung,
-                anzTriebe: field === 'anzTriebe' ? value : row.anzTriebe,
-                anzPflanzen:
-                  field === 'anzPflanzen' ? value : row.anzPflanzen,
-                anzPflanzstellen:
-                  field === 'anzPflanzstellen' ? value : row.anzPflanzstellen,
-                wirtspflanze:
-                  field === 'wirtspflanze' ? value : row.wirtspflanze,
-                herkunftPop:
-                  field === 'herkunftPop' ? value : row.herkunftPop,
-                sammeldatum:
-                  field === 'sammeldatum' ? value : row.sammeldatum,
-                form: field === 'form' ? value : row.form,
-                pflanzanordnung:
-                  field === 'pflanzanordnung' ? value : row.pflanzanordnung,
-                tpopId: field === 'tpopId' ? value : row.tpopId,
-                bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
-                planVorhanden:
-                  field === 'planVorhanden' ? value : row.planVorhanden,
-                tpopmassnTypWerteByTyp: row.tpopmassnTypWerteByTyp,
-                adresseByBearbeiter: row.adresseByBearbeiter,
-                tpopByTpopId: row.tpopByTpopId,
+            optimisticResponse: {
+              __typename: 'Mutation',
+              updateTpopmassnById: {
+                tpopmassn: {
+                  id: row.id,
+                  typ: field === 'typ' ? value : row.typ,
+                  beschreibung:
+                    field === 'beschreibung' ? value : row.beschreibung,
+                  jahr:
+                    field === 'jahr'
+                      ? value
+                      : field2 === 'jahr'
+                      ? value2
+                      : row.jahr,
+                  datum:
+                    field === 'datum'
+                      ? value
+                      : field2 === 'datum'
+                      ? value2
+                      : row.datum,
+                  bemerkungen:
+                    field === 'bemerkungen' ? value : row.bemerkungen,
+                  planBezeichnung:
+                    field === 'planBezeichnung' ? value : row.planBezeichnung,
+                  flaeche: field === 'flaeche' ? value : row.flaeche,
+                  markierung: field === 'markierung' ? value : row.markierung,
+                  anzTriebe: field === 'anzTriebe' ? value : row.anzTriebe,
+                  anzPflanzen:
+                    field === 'anzPflanzen' ? value : row.anzPflanzen,
+                  anzPflanzstellen:
+                    field === 'anzPflanzstellen' ? value : row.anzPflanzstellen,
+                  wirtspflanze:
+                    field === 'wirtspflanze' ? value : row.wirtspflanze,
+                  herkunftPop:
+                    field === 'herkunftPop' ? value : row.herkunftPop,
+                  sammeldatum:
+                    field === 'sammeldatum' ? value : row.sammeldatum,
+                  form: field === 'form' ? value : row.form,
+                  pflanzanordnung:
+                    field === 'pflanzanordnung' ? value : row.pflanzanordnung,
+                  tpopId: field === 'tpopId' ? value : row.tpopId,
+                  bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
+                  planVorhanden:
+                    field === 'planVorhanden' ? value : row.planVorhanden,
+                  tpopmassnTypWerteByTyp: row.tpopmassnTypWerteByTyp,
+                  adresseByBearbeiter: row.adresseByBearbeiter,
+                  tpopByTpopId: row.tpopByTpopId,
+                  __typename: 'Tpopmassn',
+                },
                 __typename: 'Tpopmassn',
               },
-              __typename: 'Tpopmassn',
             },
-          },*/
           })
         } catch (error) {
           return setErrors({ [field]: error.message })

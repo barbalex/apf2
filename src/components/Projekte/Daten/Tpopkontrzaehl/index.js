@@ -94,24 +94,24 @@ const Tpopkontrzaehl = ({
             [field]: value,
             changedBy: mobxStore.user.name,
           },
-          /*optimisticResponse: {
-          __typename: 'Mutation',
-          updateTpopkontrzaehlById: {
-            tpopkontrzaehl: {
-              id: row.id,
-              anzahl: field === 'anzahl' ? value : row.anzahl,
-              einheit: field === 'einheit' ? value : row.einheit,
-              methode: field === 'methode' ? value : row.methode,
-              tpopkontrzaehlEinheitWerteByEinheit:
-                row.tpopkontrzaehlEinheitWerteByEinheit,
-              tpopkontrzaehlMethodeWerteByMethode:
-                row.tpopkontrzaehlMethodeWerteByMethode,
-              tpopkontrByTpopkontrId: row.tpopkontrByTpopkontrId,
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateTpopkontrzaehlById: {
+              tpopkontrzaehl: {
+                id: row.id,
+                anzahl: field === 'anzahl' ? value : row.anzahl,
+                einheit: field === 'einheit' ? value : row.einheit,
+                methode: field === 'methode' ? value : row.methode,
+                tpopkontrzaehlEinheitWerteByEinheit:
+                  row.tpopkontrzaehlEinheitWerteByEinheit,
+                tpopkontrzaehlMethodeWerteByMethode:
+                  row.tpopkontrzaehlMethodeWerteByMethode,
+                tpopkontrByTpopkontrId: row.tpopkontrByTpopkontrId,
+                __typename: 'Tpopkontrzaehl',
+              },
               __typename: 'Tpopkontrzaehl',
             },
-            __typename: 'Tpopkontrzaehl',
           },
-        },*/
         })
       } catch (error) {
         return setErrors({ [field]: error.message })
