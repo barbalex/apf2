@@ -85,19 +85,19 @@ const ApArt = ({
             [field]: value,
             changedBy: mobxStore.user.name,
           },
-          /*optimisticResponse: {
-          __typename: 'Mutation',
-          updateApartById: {
-            apart: {
-              id: row.id,
-              apId: field === 'apId' ? value : row.apId,
-              artId: field === 'artId' ? value : row.artId,
-              aeEigenschaftenByArtId: row.aeEigenschaftenByArtId,
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateApartById: {
+              apart: {
+                id: row.id,
+                apId: field === 'apId' ? value : row.apId,
+                artId: field === 'artId' ? value : row.artId,
+                aeEigenschaftenByArtId: row.aeEigenschaftenByArtId,
+                __typename: 'Apart',
+              },
               __typename: 'Apart',
             },
-            __typename: 'Apart',
           },
-        },*/
         })
       } catch (error) {
         return setErrors({ [field]: error.message })

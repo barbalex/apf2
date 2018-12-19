@@ -89,21 +89,21 @@ const Assozart = ({
             [field]: value,
             changedBy: mobxStore.user.name,
           },
-          /*optimisticResponse: {
-          __typename: 'Mutation',
-          updateAssozartById: {
-            assozart: {
-              id: row.id,
-              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-              aeId: field === 'aeId' ? value : row.aeId,
-              apId: field === 'apId' ? value : row.apId,
-              aeEigenschaftenByAeId: row.aeEigenschaftenByAeId,
-              apByApId: row.apByApId,
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateAssozartById: {
+              assozart: {
+                id: row.id,
+                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+                aeId: field === 'aeId' ? value : row.aeId,
+                apId: field === 'apId' ? value : row.apId,
+                aeEigenschaftenByAeId: row.aeEigenschaftenByAeId,
+                apByApId: row.apByApId,
+                __typename: 'Assozart',
+              },
               __typename: 'Assozart',
             },
-            __typename: 'Assozart',
           },
-        },*/
         })
       } catch (error) {
         return setErrors({ [field]: error.message })
