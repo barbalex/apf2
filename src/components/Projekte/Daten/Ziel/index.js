@@ -73,20 +73,20 @@ const Ziel = ({ treeName }: { treeName: string }) => {
             [field]: value,
             changedBy: mobxStore.user.name,
           },
-          /*optimisticResponse: {
-          __typename: 'Mutation',
-          updateZielById: {
-            ziel: {
-              id: row.id,
-              apId: field === 'apId' ? value : row.apId,
-              typ: field === 'typ' ? value : row.typ,
-              jahr: field === 'jahr' ? value : row.jahr,
-              bezeichnung: field === 'bezeichnung' ? value : row.bezeichnung,
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateZielById: {
+              ziel: {
+                id: row.id,
+                apId: field === 'apId' ? value : row.apId,
+                typ: field === 'typ' ? value : row.typ,
+                jahr: field === 'jahr' ? value : row.jahr,
+                bezeichnung: field === 'bezeichnung' ? value : row.bezeichnung,
+                __typename: 'Ziel',
+              },
               __typename: 'Ziel',
             },
-            __typename: 'Ziel',
           },
-        },*/
         })
       } catch (error) {
         return setErrors({ [field]: error.message })

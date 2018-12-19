@@ -35,7 +35,7 @@ export default async ({
         x,
         y,
       },
-      /*optimisticResponse: {
+      optimisticResponse: {
         __typename: 'Mutation',
         updateTpopById: {
           tpop: {
@@ -46,7 +46,7 @@ export default async ({
           },
           __typename: 'Tpop',
         },
-      },*/
+      },
     })
   } catch (error) {
     return addError(error)

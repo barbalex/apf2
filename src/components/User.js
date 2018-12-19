@@ -66,14 +66,14 @@ const User = () => {
             name: nameToUse,
             password: passwordToUse,
           },
-          /*optimisticResponse: {
-          login: {
-            username: name,
-            jwtToken: '',
-            __typename: 'Login',
+          optimisticResponse: {
+            login: {
+              username: name,
+              jwtToken: '',
+              __typename: 'Login',
+            },
+            __typename: 'Mutation',
           },
-          __typename: 'Mutation',
-        },*/
         })
       } catch (error) {
         const messages = error.graphQLErrors.map(x => x.message)
