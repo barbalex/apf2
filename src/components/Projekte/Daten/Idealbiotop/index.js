@@ -81,46 +81,46 @@ const Idealbiotop = ({
             [field]: value,
             changedBy: mobxStore.user.name,
           },
-          /*optimisticResponse: {
-          __typename: 'Mutation',
-          updateIdealbiotopById: {
-            idealbiotop: {
-              id: row.id,
-              apId: field === 'apId' ? value : row.apId,
-              erstelldatum:
-                field === 'erstelldatum' ? value : row.erstelldatum,
-              hoehenlage: field === 'hoehenlage' ? value : row.hoehenlage,
-              region: field === 'region' ? value : row.region,
-              exposition: field === 'exposition' ? value : row.exposition,
-              besonnung: field === 'besonnung' ? value : row.besonnung,
-              hangneigung: field === 'hangneigung' ? value : row.hangneigung,
-              bodenTyp: field === 'bodenTyp' ? value : row.bodenTyp,
-              bodenKalkgehalt:
-                field === 'bodenKalkgehalt' ? value : row.bodenKalkgehalt,
-              bodenDurchlaessigkeit:
-                field === 'bodenDurchlaessigkeit'
-                  ? value
-                  : row.bodenDurchlaessigkeit,
-              bodenHumus: field === 'bodenHumus' ? value : row.bodenHumus,
-              bodenNaehrstoffgehalt:
-                field === 'bodenNaehrstoffgehalt'
-                  ? value
-                  : row.bodenNaehrstoffgehalt,
-              wasserhaushalt:
-                field === 'wasserhaushalt' ? value : row.wasserhaushalt,
-              konkurrenz: field === 'konkurrenz' ? value : row.konkurrenz,
-              moosschicht: field === 'moosschicht' ? value : row.moosschicht,
-              krautschicht:
-                field === 'krautschicht' ? value : row.krautschicht,
-              strauchschicht:
-                field === 'strauchschicht' ? value : row.strauchschicht,
-              baumschicht: field === 'baumschicht' ? value : row.baumschicht,
-              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateIdealbiotopById: {
+              idealbiotop: {
+                id: row.id,
+                apId: field === 'apId' ? value : row.apId,
+                erstelldatum:
+                  field === 'erstelldatum' ? value : row.erstelldatum,
+                hoehenlage: field === 'hoehenlage' ? value : row.hoehenlage,
+                region: field === 'region' ? value : row.region,
+                exposition: field === 'exposition' ? value : row.exposition,
+                besonnung: field === 'besonnung' ? value : row.besonnung,
+                hangneigung: field === 'hangneigung' ? value : row.hangneigung,
+                bodenTyp: field === 'bodenTyp' ? value : row.bodenTyp,
+                bodenKalkgehalt:
+                  field === 'bodenKalkgehalt' ? value : row.bodenKalkgehalt,
+                bodenDurchlaessigkeit:
+                  field === 'bodenDurchlaessigkeit'
+                    ? value
+                    : row.bodenDurchlaessigkeit,
+                bodenHumus: field === 'bodenHumus' ? value : row.bodenHumus,
+                bodenNaehrstoffgehalt:
+                  field === 'bodenNaehrstoffgehalt'
+                    ? value
+                    : row.bodenNaehrstoffgehalt,
+                wasserhaushalt:
+                  field === 'wasserhaushalt' ? value : row.wasserhaushalt,
+                konkurrenz: field === 'konkurrenz' ? value : row.konkurrenz,
+                moosschicht: field === 'moosschicht' ? value : row.moosschicht,
+                krautschicht:
+                  field === 'krautschicht' ? value : row.krautschicht,
+                strauchschicht:
+                  field === 'strauchschicht' ? value : row.strauchschicht,
+                baumschicht: field === 'baumschicht' ? value : row.baumschicht,
+                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+                __typename: 'Idealbiotop',
+              },
               __typename: 'Idealbiotop',
             },
-            __typename: 'Idealbiotop',
           },
-        },*/
         })
       } catch (error) {
         return setErrors({ [field]: error.message })

@@ -61,19 +61,19 @@ const Apberuebersicht = ({ treeName }: { treeName: string }) => {
             [field]: value,
             changedBy: mobxStore.user.name,
           },
-          /*optimisticResponse: {
-          __typename: 'Mutation',
-          updateApberuebersichtById: {
-            apberuebersicht: {
-              id: row.id,
-              projId: field === 'projId' ? value : row.projId,
-              jahr: field === 'jahr' ? value : row.jahr,
-              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateApberuebersichtById: {
+              apberuebersicht: {
+                id: row.id,
+                projId: field === 'projId' ? value : row.projId,
+                jahr: field === 'jahr' ? value : row.jahr,
+                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+                __typename: 'Apberuebersicht',
+              },
               __typename: 'Apberuebersicht',
             },
-            __typename: 'Apberuebersicht',
           },
-        },*/
         })
       } catch (error) {
         return setErrors({ [field]: error.message })

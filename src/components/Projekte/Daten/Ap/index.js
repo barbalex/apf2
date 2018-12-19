@@ -178,29 +178,29 @@ const Ap = ({
               [field]: value,
               changedBy: user.name,
             },
-            /*optimisticResponse: {
-            __typename: 'Mutation',
-            updateApById: {
-              ap: {
-                id: row.id,
-                startJahr: field === 'startJahr' ? value : row.startJahr,
-                bearbeitung:
-                  field === 'bearbeitung' ? value : row.bearbeitung,
-                umsetzung: field === 'umsetzung' ? value : row.umsetzung,
-                artId: field === 'artId' ? value : row.artId,
-                bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
-                ekfBeobachtungszeitpunkt:
-                  field === 'ekfBeobachtungszeitpunkt'
-                    ? value
-                    : row.ekfBeobachtungszeitpunkt,
-                projId: field === 'projId' ? value : row.projId,
-                adresseByBearbeiter: row.adresseByBearbeiter,
-                aeEigenschaftenByArtId: row.aeEigenschaftenByArtId,
+            optimisticResponse: {
+              __typename: 'Mutation',
+              updateApById: {
+                ap: {
+                  id: row.id,
+                  startJahr: field === 'startJahr' ? value : row.startJahr,
+                  bearbeitung:
+                    field === 'bearbeitung' ? value : row.bearbeitung,
+                  umsetzung: field === 'umsetzung' ? value : row.umsetzung,
+                  artId: field === 'artId' ? value : row.artId,
+                  bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
+                  ekfBeobachtungszeitpunkt:
+                    field === 'ekfBeobachtungszeitpunkt'
+                      ? value
+                      : row.ekfBeobachtungszeitpunkt,
+                  projId: field === 'projId' ? value : row.projId,
+                  adresseByBearbeiter: row.adresseByBearbeiter,
+                  aeEigenschaftenByArtId: row.aeEigenschaftenByArtId,
+                  __typename: 'Ap',
+                },
                 __typename: 'Ap',
               },
-              __typename: 'Ap',
             },
-          },*/
           })
         } catch (error) {
           return setErrors({ [field]: error.message })
