@@ -87,23 +87,23 @@ const Popmassnber = ({
             [field]: value,
             changedBy: mobxStore.user.name,
           },
-          /*optimisticResponse: {
-          __typename: 'Mutation',
-          updatePopmassnberById: {
-            popmassnber: {
-              id: row.id,
-              popId: field === 'popId' ? value : row.popId,
-              jahr: field === 'jahr' ? value : row.jahr,
-              beurteilung: field === 'beurteilung' ? value : row.beurteilung,
-              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-              tpopmassnErfbeurtWerteByBeurteilung:
-                row.tpopmassnErfbeurtWerteByBeurteilung,
-              popByPopId: row.popByPopId,
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updatePopmassnberById: {
+              popmassnber: {
+                id: row.id,
+                popId: field === 'popId' ? value : row.popId,
+                jahr: field === 'jahr' ? value : row.jahr,
+                beurteilung: field === 'beurteilung' ? value : row.beurteilung,
+                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+                tpopmassnErfbeurtWerteByBeurteilung:
+                  row.tpopmassnErfbeurtWerteByBeurteilung,
+                popByPopId: row.popByPopId,
+                __typename: 'Popmassnber',
+              },
               __typename: 'Popmassnber',
             },
-            __typename: 'Popmassnber',
           },
-        },*/
         })
       } catch (error) {
         return setErrors({ [field]: error.message })

@@ -102,62 +102,62 @@ const Tpop = ({
               [field]: value,
               changedBy: mobxStore.user.name,
             },
-            /*optimisticResponse: {
-            __typename: 'Mutation',
-            updateTpopById: {
-              tpop: {
-                id: row.id,
-                popId: field === 'popId' ? value : row.popId,
-                nr: field === 'nr' ? value : row.nr,
-                gemeinde: field === 'gemeinde' ? value : row.gemeinde,
-                flurname: field === 'flurname' ? value : row.flurname,
-                x: field === 'x' ? value : row.x,
-                y: field === 'y' ? value : row.y,
-                radius: field === 'radius' ? value : row.radius,
-                hoehe: field === 'hoehe' ? value : row.hoehe,
-                exposition: field === 'exposition' ? value : row.exposition,
-                klima: field === 'klima' ? value : row.klima,
-                neigung: field === 'neigung' ? value : row.neigung,
-                beschreibung:
-                  field === 'beschreibung' ? value : row.beschreibung,
-                katasterNr: field === 'katasterNr' ? value : row.katasterNr,
-                status: field === 'status' ? value : row.status,
-                statusUnklarGrund:
-                  field === 'statusUnklarGrund'
-                    ? value
-                    : row.statusUnklarGrund,
-                apberRelevant:
-                  field === 'apberRelevant' ? value : row.apberRelevant,
-                bekanntSeit:
-                  field === 'bekanntSeit' ? value : row.bekanntSeit,
-                eigentuemer:
-                  field === 'eigentuemer' ? value : row.eigentuemer,
-                kontakt: field === 'kontakt' ? value : row.kontakt,
-                nutzungszone:
-                  field === 'nutzungszone' ? value : row.nutzungszone,
-                bewirtschafter:
-                  field === 'bewirtschafter' ? value : row.bewirtschafter,
-                bewirtschaftung:
-                  field === 'bewirtschaftung' ? value : row.bewirtschaftung,
-                kontrollfrequenz:
-                  field === 'kontrollfrequenz' ? value : row.kontrollfrequenz,
-                kontrollfrequenzFreiwillige:
-                  field === 'kontrollfrequenzFreiwillige'
-                    ? value
-                    : row.kontrollfrequenzFreiwillige,
-                bemerkungen:
-                  field === 'bemerkungen' ? value : row.bemerkungen,
-                statusUnklar:
-                  field === 'statusUnklar' ? value : row.statusUnklar,
-                popStatusWerteByStatus: row.popStatusWerteByStatus,
-                tpopApberrelevantWerteByApberRelevant:
-                  row.tpopApberrelevantWerteByApberRelevant,
-                popByPopId: row.popByPopId,
+            optimisticResponse: {
+              __typename: 'Mutation',
+              updateTpopById: {
+                tpop: {
+                  id: row.id,
+                  popId: field === 'popId' ? value : row.popId,
+                  nr: field === 'nr' ? value : row.nr,
+                  gemeinde: field === 'gemeinde' ? value : row.gemeinde,
+                  flurname: field === 'flurname' ? value : row.flurname,
+                  x: field === 'x' ? value : row.x,
+                  y: field === 'y' ? value : row.y,
+                  radius: field === 'radius' ? value : row.radius,
+                  hoehe: field === 'hoehe' ? value : row.hoehe,
+                  exposition: field === 'exposition' ? value : row.exposition,
+                  klima: field === 'klima' ? value : row.klima,
+                  neigung: field === 'neigung' ? value : row.neigung,
+                  beschreibung:
+                    field === 'beschreibung' ? value : row.beschreibung,
+                  katasterNr: field === 'katasterNr' ? value : row.katasterNr,
+                  status: field === 'status' ? value : row.status,
+                  statusUnklarGrund:
+                    field === 'statusUnklarGrund'
+                      ? value
+                      : row.statusUnklarGrund,
+                  apberRelevant:
+                    field === 'apberRelevant' ? value : row.apberRelevant,
+                  bekanntSeit:
+                    field === 'bekanntSeit' ? value : row.bekanntSeit,
+                  eigentuemer:
+                    field === 'eigentuemer' ? value : row.eigentuemer,
+                  kontakt: field === 'kontakt' ? value : row.kontakt,
+                  nutzungszone:
+                    field === 'nutzungszone' ? value : row.nutzungszone,
+                  bewirtschafter:
+                    field === 'bewirtschafter' ? value : row.bewirtschafter,
+                  bewirtschaftung:
+                    field === 'bewirtschaftung' ? value : row.bewirtschaftung,
+                  kontrollfrequenz:
+                    field === 'kontrollfrequenz' ? value : row.kontrollfrequenz,
+                  kontrollfrequenzFreiwillige:
+                    field === 'kontrollfrequenzFreiwillige'
+                      ? value
+                      : row.kontrollfrequenzFreiwillige,
+                  bemerkungen:
+                    field === 'bemerkungen' ? value : row.bemerkungen,
+                  statusUnklar:
+                    field === 'statusUnklar' ? value : row.statusUnklar,
+                  popStatusWerteByStatus: row.popStatusWerteByStatus,
+                  tpopApberrelevantWerteByApberRelevant:
+                    row.tpopApberrelevantWerteByApberRelevant,
+                  popByPopId: row.popByPopId,
+                  __typename: 'Tpop',
+                },
                 __typename: 'Tpop',
               },
-              __typename: 'Tpop',
             },
-          },*/
           })
         } catch (error) {
           return setErrors({ [field]: error.message })
