@@ -88,21 +88,21 @@ const Tpopmassnber = ({
             [field]: value,
             changedBy: mobxStore.user.name,
           },
-          /*optimisticResponse: {
-          __typename: 'Mutation',
-          updateTpopmassnberById: {
-            tpopmassnber: {
-              id: row.id,
-              tpopId: field === 'tpopId' ? value : row.tpopId,
-              jahr: field === 'jahr' ? value : row.jahr,
-              beurteilung: field === 'beurteilung' ? value : row.beurteilung,
-              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-              tpopByTpopId: row.tpopByTpopId,
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateTpopmassnberById: {
+              tpopmassnber: {
+                id: row.id,
+                tpopId: field === 'tpopId' ? value : row.tpopId,
+                jahr: field === 'jahr' ? value : row.jahr,
+                beurteilung: field === 'beurteilung' ? value : row.beurteilung,
+                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+                tpopByTpopId: row.tpopByTpopId,
+                __typename: 'Tpopmassnber',
+              },
               __typename: 'Tpopmassnber',
             },
-            __typename: 'Tpopmassnber',
           },
-        },*/
         })
       } catch (error) {
         return setErrors({ [field]: error.message })

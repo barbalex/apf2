@@ -290,76 +290,76 @@ const Tpopfreiwkontr = ({
       let value2
       if (field === 'datum') value2 = !!value ? format(value, 'YYYY') : null
       if (field2) variables[field2] = value2
-      /*const adresseByBearbeiter =
-      field === 'bearbeiter'
-        ? row.adresseByBearbeiter
-        : get(dataAllAdresses, 'allAdresses.nodes', []).find(
-            r => r.id === value,
-        )*/
+      const adresseByBearbeiter =
+        field === 'bearbeiter'
+          ? row.adresseByBearbeiter
+          : get(dataAllAdresses, 'allAdresses.nodes', []).find(
+              r => r.id === value,
+            )
       try {
         await client.mutate({
           mutation: updateTpopkontrByIdGql,
           variables,
-          /*optimisticResponse: {
-          __typename: 'Mutation',
-          updateTpopkontrById: {
-            tpopkontr: {
-              id: row.id,
-              typ: field === 'typ' ? value : row.typ,
-              jahr:
-                field === 'jahr'
-                  ? value
-                  : field2 === 'jahr'
-                  ? value2
-                  : row.jahr,
-              datum:
-                field === 'datum'
-                  ? value
-                  : field2 === 'datum'
-                  ? value2
-                  : row.datum,
-              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-              flaecheUeberprueft:
-                field === 'flaecheUeberprueft'
-                  ? value
-                  : row.flaecheUeberprueft,
-              deckungVegetation:
-                field === 'deckungVegetation' ? value : row.deckungVegetation,
-              deckungNackterBoden:
-                field === 'deckungNackterBoden'
-                  ? value
-                  : row.deckungNackterBoden,
-              deckungApArt:
-                field === 'deckungApArt' ? value : row.deckungApArt,
-              vegetationshoeheMaximum:
-                field === 'vegetationshoeheMaximum'
-                  ? value
-                  : row.vegetationshoeheMaximum,
-              vegetationshoeheMittel:
-                field === 'vegetationshoeheMittel'
-                  ? value
-                  : row.vegetationshoeheMittel,
-              gefaehrdung: field === 'gefaehrdung' ? value : row.gefaehrdung,
-              tpopId: field === 'tpopId' ? value : row.tpopId,
-              bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
-              planVorhanden:
-                field === 'planVorhanden' ? value : row.planVorhanden,
-              jungpflanzenVorhanden:
-                field === 'jungpflanzenVorhanden'
-                  ? value
-                  : row.jungpflanzenVorhanden,
-              adresseByBearbeiter,
-              ekfVerifiziert:
-                field === 'ekfVerifiziert' ? value : row.ekfVerifiziert,
-              ekfBemerkungen:
-                field === 'ekfBemerkungen' ? value : row.ekfBemerkungen,
-              tpopByTpopId: row.tpopByTpopId,
-              tpopkontrzaehlsByTpopkontrId: row.tpopkontrzaehlsByTpopkontrId,
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateTpopkontrById: {
+              tpopkontr: {
+                id: row.id,
+                typ: field === 'typ' ? value : row.typ,
+                jahr:
+                  field === 'jahr'
+                    ? value
+                    : field2 === 'jahr'
+                    ? value2
+                    : row.jahr,
+                datum:
+                  field === 'datum'
+                    ? value
+                    : field2 === 'datum'
+                    ? value2
+                    : row.datum,
+                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+                flaecheUeberprueft:
+                  field === 'flaecheUeberprueft'
+                    ? value
+                    : row.flaecheUeberprueft,
+                deckungVegetation:
+                  field === 'deckungVegetation' ? value : row.deckungVegetation,
+                deckungNackterBoden:
+                  field === 'deckungNackterBoden'
+                    ? value
+                    : row.deckungNackterBoden,
+                deckungApArt:
+                  field === 'deckungApArt' ? value : row.deckungApArt,
+                vegetationshoeheMaximum:
+                  field === 'vegetationshoeheMaximum'
+                    ? value
+                    : row.vegetationshoeheMaximum,
+                vegetationshoeheMittel:
+                  field === 'vegetationshoeheMittel'
+                    ? value
+                    : row.vegetationshoeheMittel,
+                gefaehrdung: field === 'gefaehrdung' ? value : row.gefaehrdung,
+                tpopId: field === 'tpopId' ? value : row.tpopId,
+                bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
+                planVorhanden:
+                  field === 'planVorhanden' ? value : row.planVorhanden,
+                jungpflanzenVorhanden:
+                  field === 'jungpflanzenVorhanden'
+                    ? value
+                    : row.jungpflanzenVorhanden,
+                adresseByBearbeiter,
+                ekfVerifiziert:
+                  field === 'ekfVerifiziert' ? value : row.ekfVerifiziert,
+                ekfBemerkungen:
+                  field === 'ekfBemerkungen' ? value : row.ekfBemerkungen,
+                tpopByTpopId: row.tpopByTpopId,
+                tpopkontrzaehlsByTpopkontrId: row.tpopkontrzaehlsByTpopkontrId,
+                __typename: 'Tpopkontr',
+              },
               __typename: 'Tpopkontr',
             },
-            __typename: 'Tpopkontr',
           },
-        },*/
         })
       } catch (error) {
         return setErrors({ [field]: error.message })
