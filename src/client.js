@@ -32,6 +32,7 @@ export default async ({ idb, mobxStore }) => {
     /*dataIdFromObject: object => {
       return object.id
     },*/
+    //resultCaching: false
   })
   // use httpLink _instead_ of batchHttpLink to _not_ batch
   /*
