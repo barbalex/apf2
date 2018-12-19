@@ -253,18 +253,18 @@ const Karte = ({
                     x,
                     y,
                   },
-                  /*optimisticResponse: {
-                      __typename: 'Mutation',
-                      updateTpopById: {
-                        tpop: {
-                          id: idOfTpopBeingLocalized,
-                          x,
-                          y,
-                          __typename: 'Tpop',
-                        },
+                  optimisticResponse: {
+                    __typename: 'Mutation',
+                    updateTpopById: {
+                      tpop: {
+                        id: idOfTpopBeingLocalized,
+                        x,
+                        y,
                         __typename: 'Tpop',
                       },
-                    },*/
+                      __typename: 'Tpop',
+                    },
+                  },
                 })
                 // refetch so it appears on map
                 if (refetch.tpopForMap) refetch.tpopForMap()

@@ -55,7 +55,7 @@ export default async ({
       client.mutate({
         mutation: updateTpopkontrById,
         variables: { id, tpopId: newParentId },
-        /*optimisticResponse: {
+        optimisticResponse: {
           __typename: 'Mutation',
           updateTpopkontrById: {
             tpopkontr: {
@@ -64,14 +64,14 @@ export default async ({
             },
             __typename: 'Tpopkontr',
           },
-        },*/
+        },
       })
       break
     case 'tpopmassn':
       client.mutate({
         mutation: updateTpopmassnById,
         variables: { id, tpopId: newParentId },
-        /*optimisticResponse: {
+        optimisticResponse: {
           __typename: 'Mutation',
           updateTpopmassnById: {
             tpopmassn: {
@@ -80,14 +80,14 @@ export default async ({
             },
             __typename: 'Tpopmassn',
           },
-        },*/
+        },
       })
       break
     case 'tpop':
       client.mutate({
         mutation: updateTpopById,
         variables: { id, popId: newParentId },
-        /*optimisticResponse: {
+        optimisticResponse: {
           __typename: 'Mutation',
           updateTpopById: {
             tpop: {
@@ -96,14 +96,14 @@ export default async ({
             },
             __typename: 'Tpop',
           },
-        },*/
+        },
       })
       break
     case 'pop':
       client.mutate({
         mutation: updatePopById,
         variables: { id, apId: newParentId },
-        /*optimisticResponse: {
+        optimisticResponse: {
           __typename: 'Mutation',
           updatePopById: {
             pop: {
@@ -112,7 +112,7 @@ export default async ({
             },
             __typename: 'Pop',
           },
-        },*/
+        },
       })
       break
     default:
