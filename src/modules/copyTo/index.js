@@ -325,7 +325,7 @@ export default async ({
       // do nothing
       break
   }
-  refetch[`${tablePassed}s`]()
+  if (table) refetch[`${table}s`]()
   refetch.aps()
   refetch.pops()
   refetch.tpops()
