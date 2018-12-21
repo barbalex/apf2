@@ -9,13 +9,13 @@ export default async ({
   popIdTo,
   client,
   copying,
-  mobxTree,
+  mobxStore,
 }: {
   popIdFrom: String,
   popIdTo: String,
   client: Object,
   copying: Object,
-  mobxTree: Object,
+  mobxStore: Object,
 }) => {
   // 1. fetch all tpops
   const { data } = await client.query({
@@ -40,7 +40,7 @@ export default async ({
       id: tpop.id,
       client,
       copying,
-      mobxTree,
+      mobxStore,
     }),
   )
 }

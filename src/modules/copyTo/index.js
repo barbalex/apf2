@@ -28,16 +28,16 @@ export default async ({
   id: idPassed,
   client,
   copying,
-  mobxTree,
+  mobxStore,
 }: {
   parentId: String,
   tablePassed: ?String,
   idPassed: ?String,
   client: Object,
   copying: Object,
-  mobxTree: Object,
+  mobxStore: Object,
 }): Promise<void> => {
-  const { refetch, addError } = mobxTree
+  const { refetch, addError } = mobxStore
   let table = tablePassed || copying.table
   const id = idPassed || copying.id
   const withNextLevel = copying.withNextLevel
@@ -338,7 +338,7 @@ export default async ({
       popIdTo: newId,
       client,
       copying,
-      mobxTree,
+      mobxStore,
     })
   }
   if (table === 'tpopkontr') {
@@ -348,7 +348,7 @@ export default async ({
       tpopkontrIdTo: newId,
       client,
       copying,
-      mobxTree,
+      mobxStore,
     })
   }
 }
