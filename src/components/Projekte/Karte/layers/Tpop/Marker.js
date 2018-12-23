@@ -69,6 +69,11 @@ const TpopMarker = ({ treeName, tpop }: { treeName: string, tpop: Object }) => {
               'de-ch',
             )} / ${tpop.y.toLocaleString('de-ch')}`}
           </div>
+          <div>{`Status: ${get(
+            tpop,
+            'popStatusWerteByStatus.text',
+            '(kein Status)',
+          )}`}</div>
           <a
             href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${get(
               tpop,

@@ -49,6 +49,10 @@ export default gql`
                   beschreibung
                   katasterNr
                   status
+                  popStatusWerteByStatus {
+                    id
+                    text
+                  }
                   statusUnklar
                   statusUnklarGrund
                   apberRelevant
@@ -93,6 +97,10 @@ export default gql`
               nr
               name
               status
+              popStatusWerteByStatus {
+                id
+                text
+              }
               statusUnklar
               statusUnklarBegruendung
               bekanntSeit
