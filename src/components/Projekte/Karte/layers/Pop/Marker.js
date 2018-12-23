@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { Marker, Tooltip, Popup } from 'react-leaflet'
 import styled from 'styled-components'
+import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
 /**
@@ -64,6 +65,11 @@ const PopMarker = ({ treeName, pop }: { treeName: string, pop: Object }) => {
               pop.y ? pop.y.toLocaleString('de-ch') : ''
             }`}
           </div>
+          <div>{`Status: ${get(
+            pop,
+            'popStatusWerteByStatus.text',
+            '(kein Status)',
+          )}`}</div>
           <a
             href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${
               pop.id

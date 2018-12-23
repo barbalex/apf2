@@ -22,6 +22,10 @@ export default gql`
               nr
               name
               status
+              popStatusWerteByStatus {
+                id
+                text
+              }
               statusUnklar
               statusUnklarBegruendung
               bekanntSeit
@@ -79,6 +83,10 @@ export default gql`
               nr
               name
               status
+              popStatusWerteByStatus {
+                id
+                text
+              }
               statusUnklar
               statusUnklarBegruendung
               bekanntSeit

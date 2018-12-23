@@ -5,8 +5,8 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
 import mobxStoreContext from '../../../../../mobxStoreContext'
-import tpopIcon from '../../../../../etc/tpop.png'
-import tpopIconHighlighted from '../../../../../etc/tpopHighlighted.png'
+import tpopIcon from './tpop.svg'
+import tpopIconHighlighted from './tpopHighlighted.svg'
 import epsg2056to4326 from '../../../../../modules/epsg2056to4326'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 
@@ -35,10 +35,10 @@ const TpopMarker = ({ treeName, tpop }: { treeName: string, tpop: Object }) => {
   const isHighlighted = tpopIdsFiltered.includes(tpop.id)
 
   const latLng = new window.L.LatLng(...epsg2056to4326(tpop.x, tpop.y))
+  console.log('tpopIconHighlighted', tpopIconHighlighted)
   const icon = window.L.icon({
     iconUrl: isHighlighted ? tpopIconHighlighted : tpopIcon,
     iconSize: [24, 24],
-    className: isHighlighted ? 'tpopIconHighlighted' : 'tpopIcon',
   })
   const title = tpopLabelUsingNr ? tpop.flurname : nrLabel
   const artname = get(
