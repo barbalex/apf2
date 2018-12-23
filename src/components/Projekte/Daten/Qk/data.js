@@ -346,6 +346,16 @@ export default gql`
         }
       }
     }
+    popBekanntSeitNichtAeltesteTpop: allVQPopBekanntseitNichtAeltestetpops(
+      filter: { apId: { equalTo: $apId } }
+    ) {
+      nodes {
+        projId
+        apId
+        id
+        nr
+      }
+    }
     popMitMehrdeutigerNr: allVQPopPopnrmehrdeutigs(
       filter: { apId: { equalTo: $apId } }
     ) {
@@ -760,6 +770,18 @@ export default gql`
       apid: $apId
       projid: $projId
     ) @include(if: $isBerichtjahr) {
+      nodes {
+        projId
+        apId
+        popId
+        popNr
+        id
+        nr
+      }
+    }
+    tpopBekanntSeitJuengerAlsAeltesteBeob: allVQTpopBekanntseitJuengerAlsAeltesteBeobs(
+      filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+    ) {
       nodes {
         projId
         apId

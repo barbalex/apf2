@@ -330,6 +330,24 @@ export default ({
       })),
     },
     {
+      title:
+        'Population: "Bekannt seit" der Population entspricht nicht dem Wert der am längsten bekannten Teil-Population:',
+      messages: sortBy(get(data, 'popBekanntSeitNichtAeltesteTpop.nodes', []), [
+        'nr',
+        'id',
+      ]).map(n => ({
+        url: [
+          'Projekte',
+          n.projId,
+          'Aktionspläne',
+          n.apId,
+          'Populationen',
+          n.id,
+        ],
+        text: `Population: ${n.nr || n.id}`,
+      })),
+    },
+    {
       title: 'Population: Die Nr. ist mehrdeutig:',
       messages: sortBy(get(data, 'popMitMehrdeutigerNr.nodes', []), [
         'nr',
@@ -953,6 +971,26 @@ export default ({
     // 3. Teilpopulation
 
     // Stati mit letztem Bericht vergleichen
+    {
+      title:
+        'Teilpopulation: "Bekannt seit" ist jünger als die älteste zugeordnete Beobachtung:',
+      messages: sortBy(
+        get(data, 'tpopBekanntSeitJuengerAlsAeltesteBeob.nodes', []),
+        ['popNr', 'nr'],
+      ).map(n => ({
+        url: [
+          'Projekte',
+          n.projId,
+          'Aktionspläne',
+          n.apId,
+          'Populationen',
+          n.popId,
+          'Teil-Populationen',
+          n.id,
+        ],
+        text: `Population: ${n.popNr}, Teil-Population: ${n.nr}`,
+      })),
+    },
     {
       title:
         'Teilpopulation: Status ist "aktuell" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "erloschen" und es gab seither keine Ansiedlung:',
