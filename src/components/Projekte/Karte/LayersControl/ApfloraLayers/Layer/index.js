@@ -21,6 +21,7 @@ import Checkbox from '../../shared/Checkbox'
 import getBounds from '../../../../../../modules/getBounds'
 import mobxStoreContext from '../../../../../../mobxStoreContext'
 import query from './data'
+import PopIcon from './PopIcon'
 
 const StyledIconButton = styled(Button)`
   max-width: 18px;
@@ -75,9 +76,6 @@ const MapIcon = styled(LocalFloristIcon)`
   paint-order: stroke;
   stroke-width: 1px;
   stroke: black;
-`
-const PopMapIcon = styled(MapIcon)`
-  color: #947500 !important;
 `
 const TpopMapIcon = styled(MapIcon)`
   color: #016f19 !important;
@@ -273,11 +271,8 @@ const MySortableItem = ({ treeName, apfloraLayer, index }) => {
             </StyledIconButton>
           </ZuordnenDiv>
         )}
-        {apfloraLayer.value === 'pop' && activeApfloraLayers.includes('pop') && (
-          <MapIconDiv>
-            <PopMapIcon id="PopMapIcon" />
-          </MapIconDiv>
-        )}
+        {apfloraLayer.value === 'pop' &&
+          activeApfloraLayers.includes('pop') && <PopIcon />}
         {apfloraLayer.value === 'tpop' && activeApfloraLayers.includes('tpop') && (
           <MapIconDiv>
             <TpopMapIcon id="TpopMapIcon" />
