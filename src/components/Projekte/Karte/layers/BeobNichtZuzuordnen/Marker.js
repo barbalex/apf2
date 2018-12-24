@@ -6,8 +6,8 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
 import mobxStoreContext from '../../../../../mobxStoreContext'
-import beobIcon from '../../../../../etc/beobNichtZuzuordnen.png'
-import beobIconHighlighted from '../../../../../etc/beobNichtZuzuordnenHighlighted.png'
+import beobIcon from './beob.svg'
+import beobIconHighlighted from './beobHighlighted.svg'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import epsg2056to4326 from '../../../../../modules/epsg2056to4326'
 

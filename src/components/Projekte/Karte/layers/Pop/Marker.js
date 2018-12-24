@@ -11,8 +11,8 @@ import { observer } from 'mobx-react-lite'
 import mobxStoreContext from '../../../../../mobxStoreContext'
 import epsg2056to4326 from '../../../../../modules/epsg2056to4326'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
-import popIcon from '../../../../../etc/pop.png'
-import popIconHighlighted from '../../../../../etc/popHighlighted.png'
+import popIcon from './pop.svg'
+import popIconHighlighted from './popHighlighted.svg'
 
 const StyledH3 = styled.h3`
   margin: 7px 0;
