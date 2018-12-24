@@ -30,9 +30,9 @@ const BeobNichtBeurteiltMarker = ({
   const { assigningBeob, setTreeKey, refetch } = mobxStore
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
-  const { beobNichtBeurteiltIdsFiltered } = mobxStore[treeName].map
+  const { idsFiltered } = mobxStore[treeName].map
 
-  const isHighlighted = beobNichtBeurteiltIdsFiltered.includes(beob.id)
+  const isHighlighted = idsFiltered.includes(beob.id)
   const latLng = new window.L.LatLng(...epsg2056to4326(beob.x, beob.y))
   const icon = window.L.icon({
     iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,

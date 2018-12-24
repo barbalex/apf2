@@ -24,7 +24,7 @@ const TpopMarker = ({ treeName, tpop }: { treeName: string, tpop: Object }) => {
   const { tpopLabelUsingNr } = mobxStore
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
-  const { tpopIdsFiltered } = mobxStore[treeName].map
+  const { idsFiltered } = mobxStore[treeName].map
 
   const tpopNr = get(tpop, 'nr', '(keine Nr)')
   const nrLabel = `${get(
@@ -32,10 +32,9 @@ const TpopMarker = ({ treeName, tpop }: { treeName: string, tpop: Object }) => {
     'popByPopId.nr',
     '(keine Nr)',
   )}.${tpopNr}`.toString()
-  const isHighlighted = tpopIdsFiltered.includes(tpop.id)
+  const isHighlighted = idsFiltered.includes(tpop.id)
 
   const latLng = new window.L.LatLng(...epsg2056to4326(tpop.x, tpop.y))
-  console.log('tpopIconHighlighted', tpopIconHighlighted)
   const icon = window.L.icon({
     iconUrl: isHighlighted ? tpopIconHighlighted : tpopIcon,
     iconSize: [24, 24],

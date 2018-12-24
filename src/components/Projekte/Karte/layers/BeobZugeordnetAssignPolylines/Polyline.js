@@ -17,9 +17,9 @@ const Line = ({ treeName, beob }: { treeName: string, beob: Object }) => {
   const mobxStore = useContext(mobxStoreContext)
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
-  const { beobZugeordnetIdsFiltered } = mobxStore[treeName].map
+  const { idsFiltered } = mobxStore[treeName].map
 
-  const isHighlighted = beobZugeordnetIdsFiltered.includes(beob.id)
+  const isHighlighted = idsFiltered.includes(beob.id)
   const beobLatLng = new window.L.LatLng(...epsg2056to4326(beob.x, beob.y))
   const tpopX = get(beob, 'tpopByTpopId.x')
   const tpopY = get(beob, 'tpopByTpopId.y')
