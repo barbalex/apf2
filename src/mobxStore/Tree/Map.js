@@ -14,7 +14,7 @@ export default types
       const { activeNodeArray } = tree
       const { activeApfloraLayers } = getParent(tree)
       if (!activeApfloraLayers.includes('mapFilter')) {
-        return activeNodeArray
+        return activeNodeArray.toJSON()
       }
       return [
         ...self.popIdsFiltered,
