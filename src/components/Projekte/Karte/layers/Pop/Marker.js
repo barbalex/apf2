@@ -28,7 +28,7 @@ const PopMarker = ({ treeName, pop }: { treeName: string, pop: Object }) => {
   const { apfloraLayers, popLabelUsingNr } = mobxStore
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
-  const { idsFiltered } = mobxStore[treeName].map
+  const { idsFiltered, popIcon: popIconName } = mobxStore[treeName].map
 
   let title = popLabelUsingNr ? pop.nr : pop.name
   // beware: leaflet needs title to always be a string

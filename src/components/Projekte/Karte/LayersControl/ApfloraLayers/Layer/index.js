@@ -272,7 +272,9 @@ const MySortableItem = ({ treeName, apfloraLayer, index }) => {
           </ZuordnenDiv>
         )}
         {apfloraLayer.value === 'pop' &&
-          activeApfloraLayers.includes('pop') && <PopIcon />}
+          activeApfloraLayers.includes('pop') && (
+            <PopIcon treeName={treeName} />
+          )}
         {apfloraLayer.value === 'tpop' && activeApfloraLayers.includes('tpop') && (
           <MapIconDiv>
             <TpopMapIcon id="TpopMapIcon" />

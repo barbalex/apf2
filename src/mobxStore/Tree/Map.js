@@ -7,6 +7,9 @@ export default types
     beobNichtBeurteiltIdsFiltered: types.array(types.string),
     beobNichtZuzuordnenIdsFiltered: types.array(types.string),
     beobZugeordnetIdsFiltered: types.array(types.string),
+    // icons: oneOf: normal, statusGroup
+    popIcon: types.string,
+    tpopIcon: types.string,
   })
   .views(self => ({
     get idsFiltered() {
@@ -41,6 +44,12 @@ export default types
     setBeobZugeordnetIdsFiltered(val) {
       self.beobZugeordnetIdsFiltered = val
     },
+    setPopIcon(val) {
+      self.popIcon = val
+    },
+    setTpopIcon(val) {
+      self.tpopIcon = val
+    },
   }))
 
 export const defaultValue = {
@@ -50,4 +59,6 @@ export const defaultValue = {
   beobNichtBeurteiltIdsFiltered: [],
   beobNichtZuzuordnenIdsFiltered: [],
   beobZugeordnetIdsFiltered: [],
+  popIcon: 'normal',
+  tpopIcon: 'normal',
 }
