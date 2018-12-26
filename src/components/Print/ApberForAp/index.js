@@ -206,17 +206,7 @@ const ApberForAp = ({
           )}
 
           <BMengen apId={apId} jahr={jahr} startJahr={startJahr} />
-          {!!apber.massnahmenApBearb && (
-            <FieldRowFullWidth>
-              <TitledLabel>
-                Weitere Aktivitäten der Aktionsplan-Verantwortlichen
-              </TitledLabel>
-              <FullWidthField>
-                {get(apber, 'massnahmenApBearb', '')}
-              </FullWidthField>
-            </FieldRowFullWidth>
-          )}
-          {!!apber.StringbiotopeOptimieren && (
+          {!!apber.biotopeOptimieren && (
             <FieldRowFullWidth>
               <TitledLabel>
                 Bemerkungen / Folgerungen für nächstes Jahr: Optimierung Biotope
@@ -228,6 +218,14 @@ const ApberForAp = ({
           )}
 
           <CMengen apId={apId} jahr={jahr} startJahr={startJahr} />
+          {!!apber.massnahmenPlanungVsAusfuehrung && (
+            <FieldRowFullWidth>
+              <TitledLabel>Vergleich Ausführung/Planung</TitledLabel>
+              <FullWidthField>
+                {get(apber, 'massnahmenPlanungVsAusfuehrung', '')}
+              </FullWidthField>
+            </FieldRowFullWidth>
+          )}
           {!!apber.massnahmenOptimieren && (
             <FieldRowFullWidth>
               <TitledLabel>
@@ -236,6 +234,16 @@ const ApberForAp = ({
               </TitledLabel>
               <FullWidthField>
                 {get(apber, 'massnahmenOptimieren', '')}
+              </FullWidthField>
+            </FieldRowFullWidth>
+          )}
+          {!!apber.massnahmenApBearb && (
+            <FieldRowFullWidth>
+              <TitledLabel>
+                Weitere Aktivitäten der Aktionsplan-Verantwortlichen
+              </TitledLabel>
+              <FullWidthField>
+                {get(apber, 'massnahmenApBearb', '')}
               </FullWidthField>
             </FieldRowFullWidth>
           )}
