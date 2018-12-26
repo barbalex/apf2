@@ -22,6 +22,7 @@ import getBounds from '../../../../../../modules/getBounds'
 import mobxStoreContext from '../../../../../../mobxStoreContext'
 import query from './data'
 import PopIcon from './PopIcon'
+import TpopIcon from './TpopIcon'
 
 const StyledIconButton = styled(Button)`
   max-width: 18px;
@@ -275,11 +276,10 @@ const MySortableItem = ({ treeName, apfloraLayer, index }) => {
           activeApfloraLayers.includes('pop') && (
             <PopIcon treeName={treeName} />
           )}
-        {apfloraLayer.value === 'tpop' && activeApfloraLayers.includes('tpop') && (
-          <MapIconDiv>
-            <TpopMapIcon id="TpopMapIcon" />
-          </MapIconDiv>
-        )}
+        {apfloraLayer.value === 'tpop' &&
+          activeApfloraLayers.includes('tpop') && (
+            <TpopIcon treeName={treeName} />
+          )}
         {apfloraLayer.value === 'beobNichtBeurteilt' &&
           activeApfloraLayers.includes('beobNichtBeurteilt') && (
             <MapIconDiv>

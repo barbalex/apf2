@@ -7,6 +7,14 @@ import { observer } from 'mobx-react-lite'
 import mobxStoreContext from '../../../../../mobxStoreContext'
 import tpopIcon from './tpop.svg'
 import tpopIconHighlighted from './tpopHighlighted.svg'
+import uIcon from './u.svg'
+import uIconHighlighted from './uHighlighted.svg'
+import aIcon from './a.svg'
+import aIconHighlighted from './aHighlighted.svg'
+import pIcon from './p.svg'
+import pIconHighlighted from './pHighlighted.svg'
+import qIcon from './q.svg'
+import qIconHighlighted from './qHighlighted.svg'
 import epsg2056to4326 from '../../../../../modules/epsg2056to4326'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 
@@ -24,7 +32,7 @@ const TpopMarker = ({ treeName, tpop }: { treeName: string, tpop: Object }) => {
   const { tpopLabelUsingNr } = mobxStore
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
-  const { idsFiltered } = mobxStore[treeName].map
+  const { idsFiltered, tpopIcon: tpopIconName } = mobxStore[treeName].map
 
   const tpopNr = get(tpop, 'nr', '(keine Nr)')
   const nrLabel = `${get(
@@ -34,9 +42,26 @@ const TpopMarker = ({ treeName, tpop }: { treeName: string, tpop: Object }) => {
   )}.${tpopNr}`.toString()
   const isHighlighted = idsFiltered.includes(tpop.id)
 
+  let iconUrl = tpopIcon
+  if (isHighlighted) iconUrl = tpopIconHighlighted
+  if (tpopIconName === 'statusGroup') {
+    iconUrl = qIcon
+    if (isHighlighted) iconUrl = qIconHighlighted
+    if (tpop.status === 300) {
+      iconUrl = pIcon
+      if (isHighlighted) iconUrl = pIconHighlighted
+    } else if (tpop.status >= 200) {
+      iconUrl = aIcon
+      if (isHighlighted) iconUrl = aIconHighlighted
+    } else if (tpop.status >= 100) {
+      iconUrl = uIcon
+      if (isHighlighted) iconUrl = uIconHighlighted
+    }
+  }
+
   const latLng = new window.L.LatLng(...epsg2056to4326(tpop.x, tpop.y))
   const icon = window.L.icon({
-    iconUrl: isHighlighted ? tpopIconHighlighted : tpopIcon,
+    iconUrl,
     iconSize: [24, 24],
   })
   const title = tpopLabelUsingNr ? tpop.flurname : nrLabel

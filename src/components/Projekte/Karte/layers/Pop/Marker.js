@@ -64,7 +64,7 @@ const PopMarker = ({ treeName, pop }: { treeName: string, pop: Object }) => {
 
   const latLng = new window.L.LatLng(...epsg2056to4326(pop.x, pop.y))
   const icon = window.L.icon({
-    iconUrl: iconUrl,
+    iconUrl,
     iconSize: [24, 24],
     className: isHighlighted ? 'popIconHighlighted' : 'popIcon',
   })

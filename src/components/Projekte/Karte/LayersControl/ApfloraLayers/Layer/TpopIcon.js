@@ -13,7 +13,7 @@ const MapIcon = styled(LocalFloristIcon)`
   paint-order: stroke;
   stroke-width: 1px;
   stroke: black;
-  color: #947500 !important;
+  color: #016f19 !important;
 `
 const IconContainer = styled.div`
   cursor: pointer;
@@ -26,19 +26,19 @@ const MenuTitle = styled.div`
   }
 `
 
-const PopIcon = ({ treeName }: { treeName: string }) => {
+const TpopIcon = ({ treeName }: { treeName: string }) => {
   const store = useContext(mobxStoreContext)
   const { map } = store[treeName]
-  const { setPopIcon } = map
+  const { setTpopIcon } = map
   const [anchorEl, setAnchorEl] = useState(null)
   const onClickIconContainer = useCallback(e => setAnchorEl(e.currentTarget))
   const onClose = useCallback(() => setAnchorEl(null))
   const onClickAllSame = useCallback(e => {
-    setPopIcon('normal')
+    setTpopIcon('normal')
     onClose()
   })
   const onClickByStatusGroup = useCallback(e => {
-    setPopIcon('statusGroup')
+    setTpopIcon('statusGroup')
     onClose()
   })
 
@@ -51,7 +51,7 @@ const PopIcon = ({ treeName }: { treeName: string }) => {
         onClick={onClickIconContainer}
         title="Symbole wählen"
       >
-        <MapIcon id="PopMapIcon" />
+        <MapIcon id="TpopMapIcon" />
       </IconContainer>
       <Menu
         id="menu"
@@ -69,4 +69,4 @@ const PopIcon = ({ treeName }: { treeName: string }) => {
   )
 }
 
-export default PopIcon
+export default TpopIcon
