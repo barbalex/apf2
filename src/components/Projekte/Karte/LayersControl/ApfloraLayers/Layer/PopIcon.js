@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import LocalFloristIcon from '@material-ui/icons/LocalFlorist'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
+import { observer } from 'mobx-react-lite'
 
 import mobxStoreContext from '../../../../../../mobxStoreContext'
 
@@ -29,7 +30,7 @@ const MenuTitle = styled.div`
 const PopIcon = ({ treeName }: { treeName: string }) => {
   const store = useContext(mobxStoreContext)
   const { map } = store[treeName]
-  const { setPopIcon } = map
+  const { setPopIcon, setPopLabel } = map
   const [anchorEl, setAnchorEl] = useState(null)
   const onClickIconContainer = useCallback(e => setAnchorEl(e.currentTarget))
   const onClose = useCallback(() => setAnchorEl(null))
@@ -39,6 +40,14 @@ const PopIcon = ({ treeName }: { treeName: string }) => {
   })
   const onClickByStatusGroup = useCallback(e => {
     setPopIcon('statusGroup')
+    onClose()
+  })
+  const onClickPopTpopNr = useCallback(e => {
+    setPopLabel('nr')
+    onClose()
+  })
+  const onClickFlurname = useCallback(e => {
+    setPopLabel('name')
     onClose()
   })
 
@@ -64,9 +73,12 @@ const PopIcon = ({ treeName }: { treeName: string }) => {
         <MenuItem onClick={onClickByStatusGroup}>
           aktuell / ursprünglich / potentiell
         </MenuItem>
+        <MenuTitle>Beschriftung wählen:</MenuTitle>
+        <MenuItem onClick={onClickPopTpopNr}>Nr.</MenuItem>
+        <MenuItem onClick={onClickFlurname}>Name</MenuItem>
       </Menu>
     </>
   )
 }
 
-export default PopIcon
+export default observer(PopIcon)

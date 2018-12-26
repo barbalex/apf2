@@ -22,14 +22,6 @@ const deleteData = {
 const moveData = {
   action: 'move',
 }
-const togglePopTooltipData = {
-  action: 'toggleTooltip',
-  actionTable: 'pop',
-}
-const toggleTpopTooltipData = {
-  action: 'toggleTooltip',
-  actionTable: 'tpop',
-}
 
 const Ap = ({
   onClick,
@@ -39,13 +31,7 @@ const Ap = ({
   treeName: string,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const {
-    activeApfloraLayers,
-    popLabelUsingNr,
-    tpopLabelUsingNr,
-    user,
-    moving,
-  } = mobxStore
+  const { user, moving } = mobxStore
 
   const isMoving = moving.table && moving.table === 'pop'
   const mayWrite = !userIsReadOnly(user.token)
@@ -70,27 +56,6 @@ const Ap = ({
         {isMoving && (
           <MenuItem onClick={onClick} data={moveData}>
             {`verschiebe '${moving.label}' hierhin`}
-          </MenuItem>
-        )}
-        {(activeApfloraLayers.includes('pop') ||
-          activeApfloraLayers.includes('tpop')) && (
-          <div>
-            <div className="react-contextmenu-divider" />
-            <div className="react-contextmenu-title">Karte</div>
-          </div>
-        )}
-        {activeApfloraLayers.includes('pop') && (
-          <MenuItem onClick={onClick} data={togglePopTooltipData}>
-            {popLabelUsingNr
-              ? 'beschrifte Populationen mit Namen'
-              : 'beschrifte Populationen mit Nummer'}
-          </MenuItem>
-        )}
-        {activeApfloraLayers.includes('tpop') && (
-          <MenuItem onClick={onClick} data={toggleTpopTooltipData}>
-            {tpopLabelUsingNr
-              ? 'beschrifte Teil-Populationen mit Namen'
-              : 'beschrifte Teil-Populationen mit Nummer'}
           </MenuItem>
         )}
       </ContextMenu>

@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import LocalFloristIcon from '@material-ui/icons/LocalFlorist'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
+import { observer } from 'mobx-react-lite'
 
 import mobxStoreContext from '../../../../../../mobxStoreContext'
 
@@ -29,7 +30,7 @@ const MenuTitle = styled.div`
 const TpopIcon = ({ treeName }: { treeName: string }) => {
   const store = useContext(mobxStoreContext)
   const { map } = store[treeName]
-  const { setTpopIcon } = map
+  const { setTpopIcon, setTpopLabel } = map
   const [anchorEl, setAnchorEl] = useState(null)
   const onClickIconContainer = useCallback(e => setAnchorEl(e.currentTarget))
   const onClose = useCallback(() => setAnchorEl(null))
@@ -39,6 +40,14 @@ const TpopIcon = ({ treeName }: { treeName: string }) => {
   })
   const onClickByStatusGroup = useCallback(e => {
     setTpopIcon('statusGroup')
+    onClose()
+  })
+  const onClickPopTpopNr = useCallback(e => {
+    setTpopLabel('nr')
+    onClose()
+  })
+  const onClickFlurname = useCallback(e => {
+    setTpopLabel('name')
     onClose()
   })
 
@@ -64,9 +73,12 @@ const TpopIcon = ({ treeName }: { treeName: string }) => {
         <MenuItem onClick={onClickByStatusGroup}>
           aktuell / ursprünglich / potentiell
         </MenuItem>
+        <MenuTitle>Beschriftung wählen:</MenuTitle>
+        <MenuItem onClick={onClickPopTpopNr}>Pop-Nr / TPop-Nr</MenuItem>
+        <MenuItem onClick={onClickFlurname}>Flurname</MenuItem>
       </Menu>
     </>
   )
 }
 
-export default TpopIcon
+export default observer(TpopIcon)

@@ -29,10 +29,13 @@ const StyledTooltip = styled(Tooltip)`
 
 const TpopMarker = ({ treeName, tpop }: { treeName: string, tpop: Object }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { tpopLabelUsingNr } = mobxStore
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
-  const { idsFiltered, tpopIcon: tpopIconName } = mobxStore[treeName].map
+  const {
+    idsFiltered,
+    tpopIcon: tpopIconName,
+    tpopLabel: tpopLabelName,
+  } = mobxStore[treeName].map
 
   const tpopNr = get(tpop, 'nr', '(keine Nr)')
   const nrLabel = `${get(
@@ -64,7 +67,8 @@ const TpopMarker = ({ treeName, tpop }: { treeName: string, tpop: Object }) => {
     iconUrl,
     iconSize: [24, 24],
   })
-  const title = tpopLabelUsingNr ? tpop.flurname : nrLabel
+  let title = nrLabel
+  if (tpopLabelName === 'name') title = tpop.flurname
   const artname = get(
     tpop,
     'popByPopId.apByApId.aeEigenschaftenByArtId.artname',
@@ -112,9 +116,7 @@ const TpopMarker = ({ treeName, tpop }: { treeName: string, tpop: Object }) => {
         </>
       </Popup>
       <StyledTooltip direction="bottom" opacity={1} permanent>
-        <span className="mapTooltip">
-          {tpopLabelUsingNr ? nrLabel : tpop.flurname}
-        </span>
+        <span className="mapTooltip">{title}</span>
       </StyledTooltip>
     </Marker>
   )

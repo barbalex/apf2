@@ -163,10 +163,6 @@ const TreeContainer = ({ treeName }: { treeName: String }) => {
     activeApfloraLayers,
     setActiveApfloraLayers,
     activeOverlays,
-    popLabelUsingNr,
-    setPopLabelUsingNr,
-    tpopLabelUsingNr,
-    setTpopLabelUsingNr,
     setIdOfTpopBeingLocalized,
     addError,
     toDeleteId,
@@ -282,18 +278,6 @@ const TreeContainer = ({ treeName }: { treeName: String }) => {
             )
           } else {
             setActiveApfloraLayers([...activeApfloraLayers, actionTable])
-          }
-        },
-        toggleTooltip() {
-          switch (actionTable) {
-            case 'pop':
-              setPopLabelUsingNr(!popLabelUsingNr)
-              break
-            case 'tpop':
-              setTpopLabelUsingNr(!tpopLabelUsingNr)
-              break
-            default:
-            // Do nothing
           }
         },
         localizeOnMap() {
@@ -414,14 +398,7 @@ const TreeContainer = ({ treeName }: { treeName: String }) => {
         )
       }
     },
-    [
-      treeName,
-      activeApfloraLayers,
-      activeOverlays,
-      popLabelUsingNr,
-      tpopLabelUsingNr,
-      toDeleteId,
-    ],
+    [treeName, activeApfloraLayers, activeOverlays, toDeleteId],
   )
   const showMapIfNotYetVisible = useCallback((projekteTabs: Array<String>) => {
     const isVisible = projekteTabs.includes('karte')

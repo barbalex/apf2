@@ -33,12 +33,18 @@ const StyledTooltip = styled(Tooltip)`
 
 const PopMarker = ({ treeName, pop }: { treeName: string, pop: Object }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { apfloraLayers, popLabelUsingNr } = mobxStore
+  const { apfloraLayers } = mobxStore
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
-  const { idsFiltered, popIcon: popIconName } = mobxStore[treeName].map
+  const {
+    idsFiltered,
+    popIcon: popIconName,
+    popLabel: popLabelName,
+  } = mobxStore[treeName].map
 
-  let title = popLabelUsingNr ? pop.nr : pop.name
+  const nrLabel = `${get(pop, 'nr', '(keine Nr)')}`.toString()
+  let title = nrLabel
+  if (popLabelName === 'name') title = get(pop, 'name', '(kein Name)')
   // beware: leaflet needs title to always be a string
   if (title && title.toString) {
     title = title.toString()

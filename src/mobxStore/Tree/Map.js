@@ -10,6 +10,9 @@ export default types
     // icons: oneOf: normal, statusGroup
     popIcon: types.string,
     tpopIcon: types.string,
+    // labels: oneOf: nr, name
+    popLabel: types.string,
+    tpopLabel: types.string,
   })
   .views(self => ({
     get idsFiltered() {
@@ -50,6 +53,12 @@ export default types
     setTpopIcon(val) {
       self.tpopIcon = val
     },
+    setPopLabel(val) {
+      self.popLabel = val
+    },
+    setTpopLabel(val) {
+      self.tpopLabel = val
+    },
   }))
 
 export const defaultValue = {
@@ -61,4 +70,6 @@ export const defaultValue = {
   beobZugeordnetIdsFiltered: [],
   popIcon: 'normal',
   tpopIcon: 'normal',
+  popLabel: 'nr',
+  tpopLabel: 'nr',
 }

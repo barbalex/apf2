@@ -40,8 +40,6 @@ const myTypes = types
     overlays: types.optional(types.array(ApfloraLayer), standardOverlays),
     activeOverlays: types.optional(types.array(types.string), []),
     activeBaseLayer: types.optional(types.string, 'OsmColor'),
-    popLabelUsingNr: types.optional(types.boolean, true),
-    tpopLabelUsingNr: types.optional(types.boolean, true),
     idOfTpopBeingLocalized: types.optional(types.maybeNull(types.string), null),
     bounds: types.optional(types.array(types.array(types.number)), [
       [47.159, 8.354],
@@ -142,12 +140,6 @@ const myTypes = types
     },
     setActiveBaseLayer(val) {
       self.activeBaseLayer = val
-    },
-    setPopLabelUsingNr(val) {
-      self.popLabelUsingNr = val
-    },
-    setTpopLabelUsingNr(val) {
-      self.tpopLabelUsingNr = val
     },
     setIdOfTpopBeingLocalized(val) {
       self.idOfTpopBeingLocalized = val
