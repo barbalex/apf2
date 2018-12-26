@@ -63,7 +63,7 @@ const PopIcon = ({ treeName }: { treeName: string }) => {
         aria-owns={anchorEl ? 'menu' : null}
         aria-haspopup="true"
         onClick={onClickIconContainer}
-        title="Symbole wählen"
+        title="Symbole und Label wählen"
       >
         <MapIcon id="PopMapIcon" />
       </IconContainer>
