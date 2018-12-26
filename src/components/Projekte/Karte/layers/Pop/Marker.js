@@ -13,6 +13,14 @@ import epsg2056to4326 from '../../../../../modules/epsg2056to4326'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import popIcon from './pop.svg'
 import popIconHighlighted from './popHighlighted.svg'
+import uIcon from './u.svg'
+import uIconHighlighted from './uHighlighted.svg'
+import aIcon from './a.svg'
+import aIconHighlighted from './aHighlighted.svg'
+import pIcon from './p.svg'
+import pIconHighlighted from './pHighlighted.svg'
+import qIcon from './q.svg'
+import qIconHighlighted from './qHighlighted.svg'
 
 const StyledH3 = styled.h3`
   margin: 7px 0;
@@ -36,9 +44,27 @@ const PopMarker = ({ treeName, pop }: { treeName: string, pop: Object }) => {
     title = title.toString()
   }
   const isHighlighted = idsFiltered.includes(pop.id)
+
+  let iconUrl = popIcon
+  if (isHighlighted) iconUrl = popIconHighlighted
+  if (popIconName === 'statusGroup') {
+    iconUrl = qIcon
+    if (isHighlighted) iconUrl = qIconHighlighted
+    if (pop.status === 300) {
+      iconUrl = pIcon
+      if (isHighlighted) iconUrl = pIconHighlighted
+    } else if (pop.status >= 200) {
+      iconUrl = aIcon
+      if (isHighlighted) iconUrl = aIconHighlighted
+    } else if (pop.status >= 100) {
+      iconUrl = uIcon
+      if (isHighlighted) iconUrl = uIconHighlighted
+    }
+  }
+
   const latLng = new window.L.LatLng(...epsg2056to4326(pop.x, pop.y))
   const icon = window.L.icon({
-    iconUrl: isHighlighted ? popIconHighlighted : popIcon,
+    iconUrl: iconUrl,
     iconSize: [24, 24],
     className: isHighlighted ? 'popIconHighlighted' : 'popIcon',
   })
