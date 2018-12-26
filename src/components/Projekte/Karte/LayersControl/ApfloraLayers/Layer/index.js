@@ -78,9 +78,6 @@ const MapIcon = styled(LocalFloristIcon)`
   stroke-width: 1px;
   stroke: black;
 `
-const TpopMapIcon = styled(MapIcon)`
-  color: #016f19 !important;
-`
 const BeobNichtBeurteiltMapIcon = styled(MapIcon)`
   color: #9a009a !important;
 `
