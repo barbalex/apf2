@@ -20,11 +20,16 @@ const IconContainer = styled.div`
   cursor: pointer;
 `
 const MenuTitle = styled.div`
-  padding: 5px 16px;
-  color: grey;
+  font-size: 14px !important;
+  padding: 2px 14px;
+  font-weight: 600;
   &:focus {
     outline: none;
   }
+`
+const StyledMenuItem = styled(MenuItem)`
+  font-size: 14px !important;
+  padding: 5px 14px !important;
 `
 
 const PopIcon = ({ treeName }: { treeName: string }) => {
@@ -69,13 +74,13 @@ const PopIcon = ({ treeName }: { treeName: string }) => {
         onClose={onClose}
       >
         <MenuTitle>Symbole wählen:</MenuTitle>
-        <MenuItem onClick={onClickAllSame}>alle gleich</MenuItem>
-        <MenuItem onClick={onClickByStatusGroup}>
+        <StyledMenuItem onClick={onClickAllSame}>alle gleich</StyledMenuItem>
+        <StyledMenuItem onClick={onClickByStatusGroup}>
           aktuell / ursprünglich / potentiell
-        </MenuItem>
+        </StyledMenuItem>
         <MenuTitle>Beschriftung wählen:</MenuTitle>
-        <MenuItem onClick={onClickPopTpopNr}>Nr.</MenuItem>
-        <MenuItem onClick={onClickFlurname}>Name</MenuItem>
+        <StyledMenuItem onClick={onClickPopTpopNr}>Nr.</StyledMenuItem>
+        <StyledMenuItem onClick={onClickFlurname}>Name</StyledMenuItem>
       </Menu>
     </>
   )
