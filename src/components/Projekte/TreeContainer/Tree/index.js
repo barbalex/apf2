@@ -59,8 +59,6 @@ const Container = styled.div`
 `
 const StyledList = styled(List)`
   overflow-x: hidden !important;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 `
 const ErrorContainer = styled.div`
   padding: 15px;
