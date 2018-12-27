@@ -156,7 +156,13 @@ const getAndValidateCoordinatesOfBeob = async ({ id, addError, client }) => {
   return { x, y }
 }
 
-const TreeContainer = ({ treeName }: { treeName: String }) => {
+const TreeContainer = ({
+  treeName,
+  dimensions,
+}: {
+  treeName: String,
+  dimensions: Object,
+}) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
   const {
@@ -423,7 +429,7 @@ const TreeContainer = ({ treeName }: { treeName: String }) => {
           {!!projekt && <ApFilter treeName={treeName} />}
         </LabelFilterContainer>
         <InnerTreeContainer>
-          <Tree treeName={treeName} />
+          <Tree treeName={treeName} dimensions={dimensions} />
         </InnerTreeContainer>
         <CmApFolder onClick={handleClick} treeName={treeName} />
         <CmAp onClick={handleClick} treeName={treeName} />

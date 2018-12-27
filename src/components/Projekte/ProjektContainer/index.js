@@ -57,7 +57,12 @@ const ProjekteContainer = ({
       <ErrorBoundary>
         <ReflexContainer orientation="vertical">
           {tabs.includes('tree') && (
-            <ReflexElement flex={treeFlex}>
+            <ReflexElement
+              flex={treeFlex}
+              propagateDimensions={true}
+              renderOnResizeRate={100}
+              renderOnResize={true}
+            >
               <TreeContainer treeName={treeName} />
             </ReflexElement>
           )}

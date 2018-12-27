@@ -1,8 +1,7 @@
 // @flow
-import React, { useContext, useCallback, useEffect, useMemo } from 'react'
-import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer'
+import React, { useContext, useEffect } from 'react'
 import Button from '@material-ui/core/Button'
-import List from 'react-virtualized/dist/commonjs/List'
+import { FixedSizeList as List } from 'react-window'
 import styled from 'styled-components'
 import findIndex from 'lodash/findIndex'
 import isEqual from 'lodash/isEqual'
@@ -57,28 +56,11 @@ const Container = styled.div`
     list-style: none;
     padding: 0 0 0 1.1em;
   }
-  /* need this because react-virtualized scrolls too far down, see
-   * https://github.com/bvaughn/react-virtualized/issues/543
-   */
-  .ReactVirtualized__Grid {
-    overflow-x: hidden !important;
-  }
 `
-const ListContainer = styled(List)`
-  font-size: 14px;
-  font-weight: normal;
-  * {
-    box-sizing: border-box;
-    font-size: 14px;
-    font-weight: normal;
-  }
-  &:focus {
-    outline-color: rgb(48, 48, 48) !important;
-  }
-`
-const LoadingDiv = styled.div`
-  padding-left: 15px;
-  font-size: 14px;
+const StyledList = styled(List)`
+  overflow-x: hidden !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `
 const ErrorContainer = styled.div`
   padding: 15px;
@@ -89,6 +71,7 @@ const LogoutButton = styled(Button)`
 
 type Props = {
   treeName: String,
+  dimensions: Object,
   mapBeobZugeordnetVisible: boolean,
   mapBeobNichtBeurteiltVisible: boolean,
   mapBeobNichtZuzuordnenVisible: boolean,
@@ -96,13 +79,7 @@ type Props = {
   mapTpopVisible: boolean,
 }
 
-const noRowsRenderer = () => (
-  <Container data-loading={true}>
-    <LoadingDiv>lade Daten...</LoadingDiv>
-  </Container>
-)
-
-const Tree = ({ treeName }: Props) => {
+const Tree = ({ treeName, dimensions }: Props) => {
   const mobxStore = useContext(mobxStoreContext)
   const tree = mobxStore[treeName]
   const { activeNodeArray, setNodes, openNodes } = tree
@@ -626,6 +603,14 @@ const Tree = ({ treeName }: Props) => {
     [loading],
   )
 
+  useEffect(
+    () => {
+      const index = findIndex(nodes, node => isEqual(node.url, activeNodeArray))
+      listRef.current.scrollToItem(index)
+    },
+    [loading, activeNodeArray, nodes],
+  )
+
   if (anyQueryReturnsPermissionError(queryErrorArray)) {
     // during login don't show permission error
     if (!token) return null
@@ -650,43 +635,35 @@ const Tree = ({ treeName }: Props) => {
     return <ErrorContainer>{`Fehler: ${error.message}`}</ErrorContainer>
   }
 
-  const rowRenderer = useCallback(
-    ({ key, index, style }) => {
-      const node = nodes[index]
+  const height = isNaN(dimensions.height) ? 250 : dimensions.height - 58
+  const width = isNaN(dimensions.width) ? 250 : dimensions.width
 
-      return (
-        <Row
-          key={key}
-          style={style}
-          index={index}
-          node={node}
-          treeName={treeName}
-        />
-      )
-    },
-    [treeName, nodes],
-  )
-  const scrollToIndex = useMemo(
-    () => findIndex(nodes, node => isEqual(node.url, activeNodeArray)),
-    [nodes, activeNodeArray],
-  )
+  const listRef = React.createRef()
 
   return (
     <ErrorBoundary>
       <Container data-loading={loading}>
-        <AutoSizer>
-          {({ height, width }) => (
-            <ListContainer
-              height={height}
-              rowCount={nodes.length}
-              rowHeight={singleRowHeight}
-              rowRenderer={rowRenderer}
-              noRowsRenderer={noRowsRenderer}
-              scrollToIndex={scrollToIndex}
-              width={width}
-            />
-          )}
-        </AutoSizer>
+        <StyledList
+          height={height}
+          itemCount={nodes.length}
+          itemSize={singleRowHeight}
+          width={width}
+          ref={listRef}
+        >
+          {({ index, style }) => {
+            const node = nodes[index]
+
+            return (
+              <Row
+                key={index}
+                style={style}
+                index={index}
+                node={node}
+                treeName={treeName}
+              />
+            )
+          }}
+        </StyledList>
       </Container>
     </ErrorBoundary>
   )

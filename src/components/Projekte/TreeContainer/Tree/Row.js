@@ -91,7 +91,7 @@ const SymbolSpan = styled.span`
     props['data-nodeisinactivenodepath'] ? '900 !important' : 'inherit'};
   margin-top: -9px !important;
   font-size: 28px !important;
-  width: 26px;
+  width: 9px;
 `
 const TextSpan = styled.span`
   margin-left: 0;
