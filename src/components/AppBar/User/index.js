@@ -75,10 +75,6 @@ const User = ({
       let value = event.target.value
       if ([undefined, ''].includes(value)) value = null
       const row = get(data, 'userByName', {})
-      /**
-       * only save if value changed
-       */
-      if (row[field] === value) return
       try {
         await client.mutate({
           mutation: updateUserByIdGql,
