@@ -61,10 +61,6 @@ const Ziel = ({ treeName }: { treeName: string }) => {
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
       if ([undefined, ''].includes(value)) value = null
-      /**
-       * only save if value changed
-       */
-      if (row[field] === value) return
       try {
         await client.mutate({
           mutation: updateZielByIdGql,
@@ -120,6 +116,8 @@ const Ziel = ({ treeName }: { treeName: string }) => {
     },
     [row, activeNodeArray, openNodes, treeName],
   )
+
+  console.log('Ziel', { typWerte, row })
 
   if (loading) {
     return (

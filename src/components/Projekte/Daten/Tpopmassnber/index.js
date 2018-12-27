@@ -76,10 +76,6 @@ const Tpopmassnber = ({
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
       if ([undefined, ''].includes(value)) value = null
-      /**
-       * only save if value changed
-       */
-      if (row[field] === value) return
       try {
         await client.mutate({
           mutation: updateTpopmassnberByIdGql,
