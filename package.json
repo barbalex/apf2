@@ -58,7 +58,7 @@
     "leaflet.fullscreen": "1.4.5",
     "leaflet.markercluster": "1.4.1",
     "lodash": "4.17.11",
-    "material-ui-pickers": "2.0.4",
+    "material-ui-pickers": "2.0.5",
     "mobx": "5.8.0",
     "mobx-react-lite": "0.3.4",
     "mobx-state-tree": "3.9.0",
