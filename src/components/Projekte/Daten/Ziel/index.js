@@ -117,8 +117,6 @@ const Ziel = ({ treeName }: { treeName: string }) => {
     [row, activeNodeArray, openNodes, treeName],
   )
 
-  console.log('Ziel', { typWerte, row })
-
   if (loading) {
     return (
       <Container>
