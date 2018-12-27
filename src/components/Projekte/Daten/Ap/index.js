@@ -157,10 +157,6 @@ const Ap = ({
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value) || null
       const showFilter = !!nodeFilter[treeName].activeTable
-      /**
-       * only save if value changed
-       */
-      if (row[field] === value) return
       if (showFilter) {
         nodeFilterSetValue({
           treeName,

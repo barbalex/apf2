@@ -77,10 +77,6 @@ const Assozart = ({
     async event => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value) || null
-      /**
-       * only save if value changed
-       */
-      if (row[field] === value) return
       try {
         await client.mutate({
           mutation: updateAssozartByIdGql,
