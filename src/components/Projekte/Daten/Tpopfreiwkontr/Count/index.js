@@ -246,10 +246,6 @@ const Count = ({
         : fieldPassed
       let value = ifIsNumericAsNumber(event.target.value)
       if ([undefined, ''].includes(value)) value = null
-      /**
-       * only save if value changed
-       */
-      if (row[field] === value) return
 
       let field2
       if (['anzahl1', 'anzahl2'].includes(fieldPassed)) {

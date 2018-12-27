@@ -127,10 +127,6 @@ const Tpopfeldkontr = ({
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
       if ([undefined, ''].includes(value)) value = null
-      /**
-       * only save if value changed
-       */
-      if (row[field] === value) return
       if (showFilter) {
         nodeFilterSetValue({
           treeName,
