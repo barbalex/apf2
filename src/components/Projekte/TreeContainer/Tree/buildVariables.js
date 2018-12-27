@@ -17,7 +17,6 @@ export default ({
   const { openNodes, activeNodeArray, apFilter: apFilterSet } = mobxStore[
     treeName
   ]
-  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const nodeFilter = nodeFilterPassed[treeName]
 
   const isWerteListen = openNodes.some(
@@ -34,7 +33,9 @@ export default ({
       .map(a => (a.length > 1 && a[0] === 'Projekte' ? a[1] : null))
       .filter(v => v !== null),
   )
-  const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
+  let projId = '99999999-9999-9999-9999-999999999999'
+  if (projekt && projekt[0]) projId = projekt[0]
+
   const isProjekt = openNodes.some(
     nArray => nArray[0] === 'Projekte' && nArray[1],
   )
@@ -147,7 +148,6 @@ export default ({
         ['Feld-Kontrollen', 'Freiwilligen-Kontrollen'].includes(nArray[8]) &&
         nArray[9],
     )
-  //console.log('buildVariables, activeApfloraLayers', activeApfloraLayers)
 
   const variables = {
     projekt,

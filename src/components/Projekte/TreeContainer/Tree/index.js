@@ -671,8 +671,6 @@ const Tree = ({ treeName }: Props) => {
     [nodes, activeNodeArray],
   )
 
-  //console.log('Tree rendering')
-
   return (
     <ErrorBoundary>
       <Container data-loading={loading}>

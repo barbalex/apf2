@@ -8,7 +8,6 @@ export default (activeNodeArray: Array<mixed>): Object => {
     wlAdresseFolder && activeNodeArray.length > 2 && activeNodeArray[2]
       ? activeNodeArray[2]
       : null
-  //console.log('getActiveNodes', { wlFolder, wlAdresseFolder, wlAdresse })
   const userFolder =
     activeNodeArray.length > 0 && activeNodeArray[0] === 'Benutzer'
   const user =
