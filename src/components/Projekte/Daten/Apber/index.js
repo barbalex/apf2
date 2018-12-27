@@ -81,10 +81,6 @@ const Apber = ({
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value) || null
     const row = get(data, 'apberById', {})
-    /**
-     * only save if value changed
-     */
-    if (row[field] === value) return
     try {
       await client.mutate({
         mutation: updateApberByIdGql,
