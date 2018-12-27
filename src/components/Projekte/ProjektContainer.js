@@ -7,12 +7,12 @@ import { observer } from 'mobx-react-lite'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
-import Karte from '../Karte'
-import ErrorBoundary from '../../shared/ErrorBoundary'
-import TreeContainer from '../TreeContainer'
-import Daten from '../Daten'
-import Exporte from '../Exporte'
-import mobxStoreContext from '../../../mobxStoreContext'
+import Karte from './Karte'
+import ErrorBoundary from '../shared/ErrorBoundary'
+import TreeContainer from './TreeContainer'
+import Daten from './Daten'
+import Exporte from './Exporte'
+import mobxStoreContext from '../../mobxStoreContext'
 
 const Container = styled.div`
   display: flex;
