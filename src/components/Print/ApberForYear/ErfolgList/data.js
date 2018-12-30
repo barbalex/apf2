@@ -12,10 +12,57 @@ export default gql`
           aeEigenschaftenByArtId {
             id
             artname
+            kefart
+            kefkontrolljahr
           }
-          adresseByBearbeiter {
-            id
-            name
+          popsByApId {
+            nodes {
+              id
+              status
+              tpopsByPopId(filter: { apberRelevant: { equalTo: 1 } }) {
+                totalCount
+                nodes {
+                  id
+                  apberRelevant
+                  firstTpopmassn: tpopmassnsByTpopId(
+                    orderBy: DATUM_ASC
+                    first: 1
+                  ) {
+                    nodes {
+                      id
+                      datum
+                    }
+                  }
+                  tpopmassnsByTpopId(filter: { jahr: { equalTo: $jahr } }) {
+                    nodes {
+                      id
+                      datum
+                      tpopmassnTypWerteByTyp {
+                        id
+                        text
+                      }
+                      beschreibung
+                      tpopByTpopId {
+                        id
+                        nr
+                        flurname
+                        popByPopId {
+                          id
+                          nr
+                          name
+                        }
+                      }
+                    }
+                  }
+                  firstTpopber: tpopbersByTpopId(orderBy: JAHR_ASC, first: 1) {
+                    nodes {
+                      id
+                      jahr
+                    }
+                  }
+                }
+              }
+            }
           }
           erfkritsByApId {
             nodes {

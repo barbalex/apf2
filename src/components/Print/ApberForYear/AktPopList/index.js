@@ -1,11 +1,14 @@
 // @flow
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import sortBy from 'lodash/sortBy'
+import { useQuery } from 'react-apollo-hooks'
 
-import ErrorBoundary from '../../shared/ErrorBoundary'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
+import mobxStoreContext from '../../../../mobxStoreContext'
+import query from './data'
 
 const Container = styled.div`
   display: flex;
@@ -61,29 +64,42 @@ const TotalColumn = styled.div`
   text-align: center;
 `
 
-const AktPopList = ({ data }:{ data: Object }) => {
+const AktPopList = () => {
+  const mobxStore = useContext(mobxStoreContext)
+  const activeNodes = mobxStore.treeActiveNodes
+  const { projekt: projektId } = activeNodes
+  const { data, error: dataError } = useQuery(query, {
+    suspend: false,
+    variables: {
+      projektId,
+    },
+  })
   const aps = get(data, 'projektById.apsByProjId.nodes', [])
-  const pops = flatten(
-    aps.map(ap => get(ap, 'popsByApId.nodes', []))
-  ).filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
-  const popsUrspr = pops.filter(p => p.status === 100).length
-  const popsAnges = pops.filter(p => p.status === 200).length
-  const popsTotal = pops.filter(p => [100, 200].includes(p.status)).length
-  const apRows = sortBy(
-      aps.map(ap => ({
-      ap: get(ap, 'aeEigenschaftenByArtId.artname'),
-      urspr: get(ap, 'popsByApId.nodes', [])
-        .filter(p => p.status === 100)
-        .length,
-      anges: get(ap, 'popsByApId.nodes', [])
-        .filter(p => p.status === 200)
-        .length,
-      total: get(ap, 'popsByApId.nodes', [])
-        .filter(p => [100, 200].includes(p.status))
-        .length
-    })),
-    'ap'
+  const pops100 = flatten(aps.map(ap => get(ap, 'pops100.nodes', []))).filter(
+    p => get(p, 'tpopsByPopId.totalCount') > 0,
   )
+  const pops200 = flatten(aps.map(ap => get(ap, 'pops200.nodes', []))).filter(
+    p => get(p, 'tpopsByPopId.totalCount') > 0,
+  )
+  const popsUrspr = pops100.length
+  const popsAnges = pops200.length
+  const popsTotal = popsUrspr + popsAnges
+  const apRows = sortBy(
+    aps.map(ap => ({
+      ap: get(ap, 'aeEigenschaftenByArtId.artname'),
+      urspr: get(ap, 'pops100.nodes', []).length,
+      anges: get(ap, 'pops200.nodes', []).length,
+      total:
+        get(ap, 'pops100.nodes', []).length +
+        get(ap, 'pops200.nodes', []).length,
+    })),
+    'ap',
+  )
+
+  if (dataError) {
+    console.log(dataError)
+    return `Fehler: ${dataError.message}`
+  }
 
   return (
     <ErrorBoundary>
@@ -95,16 +111,14 @@ const AktPopList = ({ data }:{ data: Object }) => {
           <AngesColumn>angesiedelt</AngesColumn>
           <TotalColumn>total</TotalColumn>
         </TitleRow>
-        {
-          apRows.map(o =>
-            <ApRow key={o.ap} >
-              <ApColumn>{o.ap}</ApColumn>
-              <UrprColumn>{o.urspr}</UrprColumn>
-              <AngesColumn>{o.anges}</AngesColumn>
-              <TotalColumn>{o.total}</TotalColumn>
-            </ApRow>
-          )
-        }
+        {apRows.map(o => (
+          <ApRow key={o.ap}>
+            <ApColumn>{o.ap}</ApColumn>
+            <UrprColumn>{o.urspr}</UrprColumn>
+            <AngesColumn>{o.anges}</AngesColumn>
+            <TotalColumn>{o.total}</TotalColumn>
+          </ApRow>
+        ))}
         <TotalRow>
           <ApColumn>{apRows.length}</ApColumn>
           <UrprColumn>{popsUrspr}</UrprColumn>
