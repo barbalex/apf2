@@ -93,14 +93,6 @@ const AMengen = ({
     suspend: false,
     variables: { apId, startJahr },
   })
-  const oneLPop = get(data, 'apById.oneLPop.nodes', []).filter(
-    p => get(p, 'tpopsByPopId.totalCount') > 0,
-  ).length
-  const oneLTpop = sum(
-    get(data, 'apById.oneLTpop.nodes', []).map(p =>
-      get(p, 'tpopsByPopId.totalCount'),
-    ),
-  )
   const threeLPop = get(data, 'apById.threeLPop.nodes', []).filter(
     p => get(p, 'tpopsByPopId.totalCount') > 0,
   ).length
@@ -173,8 +165,26 @@ const AMengen = ({
       </LabelRow>
       <Row>
         <Label1>Anzahl bekannt</Label1>
-        <PopBerJahr>{loading ? '...' : oneLPop}</PopBerJahr>
-        <TpopBerJahr>{loading ? '...' : oneLTpop}</TpopBerJahr>
+        <PopBerJahr>
+          {loading
+            ? '...'
+            : threeLPop +
+              fourLPop +
+              fiveLPop +
+              sevenLPop +
+              eightLPop +
+              nineLPop}
+        </PopBerJahr>
+        <TpopBerJahr>
+          {loading
+            ? '...'
+            : threeLTpop +
+              fourLTpop +
+              fiveLTpop +
+              sevenLTpop +
+              eightLTpop +
+              nineLTpop}
+        </TpopBerJahr>
         <PopSeit />
         <TpopSeit />
       </Row>

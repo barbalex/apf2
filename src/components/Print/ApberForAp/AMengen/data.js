@@ -4,38 +4,6 @@ export default gql`
   query apById($apId: UUID!, $startJahr: Int!) {
     apById(id: $apId) {
       id
-      oneLPop: popsByApId(
-        filter: {
-          and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
-        }
-      ) {
-        nodes {
-          id
-          tpopsByPopId(filter: { apberRelevant: { equalTo: 1 } }) {
-            totalCount
-          }
-        }
-      }
-      oneLTpop: popsByApId(
-        filter: {
-          and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
-        }
-      ) {
-        nodes {
-          id
-          tpopsByPopId(
-            filter: {
-              and: [
-                { status: { notEqualTo: 300 } }
-                { status: { isNull: false } }
-                { apberRelevant: { equalTo: 1 } }
-              ]
-            }
-          ) {
-            totalCount
-          }
-        }
-      }
       threeLPop: popsByApId(filter: { status: { equalTo: 100 } }) {
         nodes {
           id
