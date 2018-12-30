@@ -68,7 +68,7 @@ const AktPopList = () => {
   const mobxStore = useContext(mobxStoreContext)
   const activeNodes = mobxStore.treeActiveNodes
   const { projekt: projektId } = activeNodes
-  const { data, error: dataError } = useQuery(query, {
+  const { data, loading, error: dataError } = useQuery(query, {
     suspend: false,
     variables: {
       projektId,
@@ -85,20 +85,38 @@ const AktPopList = () => {
   const popsAnges = pops200.length
   const popsTotal = popsUrspr + popsAnges
   const apRows = sortBy(
-    aps.map(ap => ({
-      ap: get(ap, 'aeEigenschaftenByArtId.artname'),
-      urspr: get(ap, 'pops100.nodes', []).length,
-      anges: get(ap, 'pops200.nodes', []).length,
-      total:
-        get(ap, 'pops100.nodes', []).length +
-        get(ap, 'pops200.nodes', []).length,
-    })),
+    aps.map(ap => {
+      const urspr = get(ap, 'pops100.nodes', []).filter(
+        p => get(p, 'tpopsByPopId.totalCount') > 0,
+      ).length
+      const anges = get(ap, 'pops200.nodes', []).filter(
+        p => get(p, 'tpopsByPopId.totalCount') > 0,
+      ).length
+
+      return {
+        ap: get(ap, 'aeEigenschaftenByArtId.artname'),
+        urspr,
+        anges,
+        total: urspr + anges,
+      }
+    }),
     'ap',
   )
 
   if (dataError) {
     console.log(dataError)
     return `Fehler: ${dataError.message}`
+  }
+
+  if (loading) {
+    return (
+      <ErrorBoundary>
+        <Container>
+          <Title>Übersicht über aktuelle Populationen aller AP-Arten</Title>
+          <TitleRow>Lade Daten...</TitleRow>
+        </Container>
+      </ErrorBoundary>
+    )
   }
 
   return (

@@ -211,7 +211,7 @@ const ErfolgList = ({ jahr }: { jahr: Number }) => {
   const mobxStore = useContext(mobxStoreContext)
   const activeNodes = mobxStore.treeActiveNodes
   const { projekt: projektId } = activeNodes
-  const { data, error: dataError } = useQuery(query, {
+  const { data, loading, error: dataError } = useQuery(query, {
     suspend: false,
     variables: {
       projektId,
@@ -259,6 +259,55 @@ const ErfolgList = ({ jahr }: { jahr: Number }) => {
   if (dataError) {
     console.log(dataError)
     return `Fehler: ${dataError.message}`
+  }
+
+  if (loading) {
+    return (
+      <ErrorBoundary>
+        <Container>
+          <OverallTitle>{`Erfolg ${jahr}`}</OverallTitle>
+          <Table>
+            <ApTitle>Art</ApTitle>
+            <ErfolgSpanningTitle>Erfolg</ErfolgSpanningTitle>
+            <KeineMassnTitle>
+              <div>keine Massnahme</div>
+            </KeineMassnTitle>
+            <KefSpanningTitle>KEF</KefSpanningTitle>
+            <ErfolgNichtTitle>
+              <div>nicht</div>
+            </ErfolgNichtTitle>
+            <ErfolgWenigTitle>
+              <div>wenig</div>
+            </ErfolgWenigTitle>
+            <ErfolgMaessigTitle>
+              <div>mässig</div>
+            </ErfolgMaessigTitle>
+            <ErfolgGutTitle>
+              <div>gut</div>
+            </ErfolgGutTitle>
+            <ErfolgSehrTitle>
+              <div>sehr</div>
+            </ErfolgSehrTitle>
+            <ErfolgAenderungTitle>
+              <div>Veränderung</div>
+            </ErfolgAenderungTitle>
+            <ErfolgUnsicherTitle>
+              <div>unsicher</div>
+            </ErfolgUnsicherTitle>
+            <ErfolgNichtBeurteiltTitle>
+              <div>nicht beurteilt</div>
+            </ErfolgNichtBeurteiltTitle>
+            <KefArtTitle>
+              <div>Art</div>
+            </KefArtTitle>
+            <KefKontrolleTitle>
+              <div>Kontrolle</div>
+            </KefKontrolleTitle>
+            <Fragment>Lade Daten...</Fragment>
+          </Table>
+        </Container>
+      </ErrorBoundary>
+    )
   }
 
   return (
