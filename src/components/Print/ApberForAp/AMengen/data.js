@@ -91,7 +91,7 @@ export default gql`
       sevenLPop: popsByApId(
         filter: {
           status: { equalTo: 101 }
-          and: [
+          or: [
             { status: { equalTo: 202 } }
             {
               or: [
