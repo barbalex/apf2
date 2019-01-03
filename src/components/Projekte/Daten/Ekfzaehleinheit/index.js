@@ -2,7 +2,6 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react'
 import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
-import { Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
@@ -140,32 +139,28 @@ const Ekfzaehleinheit = ({
           treeName={treeName}
           table="ekfzaehleinheit"
         />
-        <Mutation mutation={updateEkfzaehleinheitByIdGql}>
-          {(updateEkfzaehleinheit, { data }) => (
-            <FieldsContainer>
-              <Select
-                key={`${row.id}zaehleinheitId`}
-                name="zaehleinheitId"
-                value={row.zaehleinheitId}
-                field="zaehleinheitId"
-                label="Zähleinheit"
-                options={zaehleinheitWerte}
-                saveToDb={saveToDb}
-                error={errors.zaehleinheitId}
-              />
-              <TextField
-                key={`${row.id}bemerkungen`}
-                name="bemerkungen"
-                label="Bemerkungen"
-                value={row.bemerkungen}
-                type="text"
-                multiLine
-                saveToDb={saveToDb}
-                error={errors.bemerkungen}
-              />
-            </FieldsContainer>
-          )}
-        </Mutation>
+        <FieldsContainer>
+          <Select
+            key={`${row.id}zaehleinheitId`}
+            name="zaehleinheitId"
+            value={row.zaehleinheitId}
+            field="zaehleinheitId"
+            label="Zähleinheit"
+            options={zaehleinheitWerte}
+            saveToDb={saveToDb}
+            error={errors.zaehleinheitId}
+          />
+          <TextField
+            key={`${row.id}bemerkungen`}
+            name="bemerkungen"
+            label="Bemerkungen"
+            value={row.bemerkungen}
+            type="text"
+            multiLine
+            saveToDb={saveToDb}
+            error={errors.bemerkungen}
+          />
+        </FieldsContainer>
       </Container>
     </ErrorBoundary>
   )
