@@ -1303,6 +1303,28 @@ GROUP BY
   apflora.tpopmassn.tpop_id;
 
 DROP VIEW IF EXISTS apflora.v_apber CASCADE;
+CREATE OR REPLACE VIEW apflora.v_apber AS	
+SELECT	
+  apflora.ae_eigenschaften.artname,	
+  apflora.apber.*,	
+  apflora.ap_erfkrit_werte.text AS beurteilung_decodiert,	
+  apflora.adresse.name AS bearbeiter_decodiert	
+FROM	
+  apflora.ap	
+  INNER JOIN	
+    apflora.ae_eigenschaften	
+    ON (apflora.ap.art_id = apflora.ae_eigenschaften.id)	
+  INNER JOIN	
+    ((apflora.apber	
+    LEFT JOIN	
+      apflora.ap_erfkrit_werte	
+      ON (apflora.apber.beurteilung = apflora.ap_erfkrit_werte.code))	
+    LEFT JOIN	
+      apflora.adresse	
+      ON (apflora.apber.bearbeiter = apflora.adresse.id))	
+    ON apflora.ap.id = apflora.apber.ap_id	
+ORDER BY	
+  apflora.ae_eigenschaften.artname;
 
 -- dieser view ist für die Qualitätskontrolle gedacht - daher letzter popber überhaupt
 DROP VIEW IF EXISTS apflora.v_pop_letzterpopber0_overall CASCADE;
