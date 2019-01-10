@@ -112,7 +112,7 @@ const Zielber = ({ treeName }: { treeName: string }) => {
           <TextField
             key={`${row.id}erreichung`}
             name="erreichung"
-            label="Entwicklung"
+            label="Ziel-Erreichung"
             value={row.erreichung}
             type="text"
             saveToDb={saveToDb}
