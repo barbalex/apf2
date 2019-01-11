@@ -12,8 +12,6 @@ import isValid from 'date-fns/isValid'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
-import convertDateToYyyyMmDd from '../../modules/convertDateToYyyyMmDd'
-
 const StyledDatePicker = styled(DatePicker)`
   padding-bottom: 19px !important;
   > div:before {
@@ -73,7 +71,7 @@ const DateFieldWithPicker = ({
       }
 
       // write a real date to db
-      const date = new Date(convertDateToYyyyMmDd(value))
+      const date = format(new Date(), 'YYYY-MM-DD')
       const newValue = format(date, 'YYYY-MM-DD')
       const fakeEvent = { target: { value: newValue, name } }
       saveToDb(fakeEvent)
