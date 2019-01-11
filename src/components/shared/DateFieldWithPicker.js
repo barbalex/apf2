@@ -7,12 +7,11 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { DatePicker } from 'material-ui-pickers'
 import FormHelperText from '@material-ui/core/FormHelperText'
+import moment from 'moment'
 import format from 'date-fns/format'
 import isValid from 'date-fns/isValid'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-
-import convertDateToYyyyMmDd from '../../modules/convertDateToYyyyMmDd'
 
 const StyledDatePicker = styled(DatePicker)`
   padding-bottom: 19px !important;
@@ -44,18 +43,18 @@ const DateFieldWithPicker = ({
   )
 
   const onChange = useCallback(
-    value => {
+    valuePassed => {
       /**
        * change happens when data is picked in picker
        * so is never null or otherwise invalid
        * oops: it is null if clear button is clicked!
        */
-      if (!isValid(value)) {
+      if (!moment(valuePassed).isValid()) {
         const fakeEvent = { target: { value: null, name } }
         saveToDb(fakeEvent)
         return setStateValue(null)
       }
-      const newValue = format(value, 'yyyy-MM-dd')
+      const newValue = format(new Date(valuePassed), 'yyyy-MM-dd')
       const fakeEvent = { target: { value: newValue, name } }
       saveToDb(fakeEvent)
       setStateValue(newValue)
@@ -66,20 +65,23 @@ const DateFieldWithPicker = ({
     event => {
       const { value } = event.target
       // do not change anything of there are no values
-      if (!isValid(value)) {
+      if (!moment(value).isValid()) {
         const fakeEvent = { target: { value: null, name } }
         saveToDb(fakeEvent)
         return setStateValue(null)
       }
 
       // write a real date to db
-<<<<<<< HEAD
-      const date = format(new Date(), 'yyyy-MM-dd')
+      /**
+       * would prefer to use data-fns for this but is not yet possible, see:
+       * https://github.com/date-fns/date-fns/issues/219
+       *
+       * Actually: moment not only parses the date. Which data-fns v2 can.
+       * It also gets "3", "3.1", 3.1.17" and adds missing month / year from now
+       * This is great and not possible with date-fns?
+       */
+      const date = new Date(moment(value, 'DD.MM.YYYY').format('YYYY-MM-DD'))
       const newValue = format(date, 'yyyy-MM-dd')
-=======
-      const date = new Date(convertDateToYyyyMmDd(value))
-      const newValue = format(date, 'YYYY-MM-DD')
->>>>>>> parent of 6bab15aa... use date-fns
       const fakeEvent = { target: { value: newValue, name } }
       saveToDb(fakeEvent)
       setStateValue(newValue)
@@ -99,7 +101,7 @@ const DateFieldWithPicker = ({
       <StyledDatePicker
         keyboard
         label={label}
-        format="dd.MM.yyyy"
+        format="DD.MM.YYYY"
         value={stateValue}
         onChange={onChange}
         onBlur={onBlur}
