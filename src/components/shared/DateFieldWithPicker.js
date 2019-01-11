@@ -65,6 +65,7 @@ const DateFieldWithPicker = ({
     event => {
       const { value } = event.target
       // do not change anything of there are no values
+      // test validity using moment because date-fns isValid('1') is false
       if (!moment(value).isValid()) {
         const fakeEvent = { target: { value: null, name } }
         saveToDb(fakeEvent)
@@ -79,6 +80,7 @@ const DateFieldWithPicker = ({
        * Actually: moment not only parses the date. Which data-fns v2 can.
        * It also gets "3", "3.1", 3.1.17" and adds missing month / year from now
        * This is great and not possible with date-fns?
+       * https://github.com/date-fns/date-fns/issues/219#issuecomment-424090895
        */
       const date = new Date(moment(value, 'DD.MM.YYYY').format('YYYY-MM-DD'))
       const newValue = format(date, 'yyyy-MM-dd')
