@@ -49,7 +49,7 @@ export default ({
     .filter(el => {
       if (nodeLabelFilterString) {
         return `${
-          el.datum ? format(el.datum, 'yyyy.MM.dd') : '(kein Datum)'
+          el.datum ? format(new Date(el.datum), 'yyyy.MM.dd') : '(kein Datum)'
         }: ${el.autor || '(kein Autor)'} (${el.quelle})`
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())

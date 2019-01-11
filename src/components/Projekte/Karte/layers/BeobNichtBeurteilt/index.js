@@ -73,7 +73,9 @@ const BeobNichtBeurteiltMarker = ({
     // filter them by nodeLabelFilter
     .filter(el => {
       if (!beobNichtBeurteiltFilterString) return true
-      const datum = el.datum ? format(el.datum, 'yyyy.MM.dd') : '(kein Datum)'
+      const datum = el.datum
+        ? format(new Date(el.datum), 'yyyy.MM.dd')
+        : '(kein Datum)'
       const autor = el.autor || '(kein Autor)'
       const quelle = get(el, 'beobQuelleWerteByQuelleId.name', '')
       return `${datum}: ${autor} (${quelle})`

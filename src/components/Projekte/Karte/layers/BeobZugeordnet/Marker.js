@@ -40,7 +40,9 @@ const BeobZugeordnetMarker = ({
     iconSize: [24, 24],
     className: isHighlighted ? 'beobIconHighlighted' : 'beobIcon',
   })
-  const datum = beob.datum ? format(beob.datum, 'yyyy.MM.dd') : '(kein Datum)'
+  const datum = beob.datum
+    ? format(new Date(beob.datum), 'yyyy.MM.dd')
+    : '(kein Datum)'
   const autor = beob.autor || '(kein Autor)'
   const quelle = get(beob, 'beobQuelleWerteByQuelleId.name', '')
   const label = `${datum}: ${autor} (${quelle})`

@@ -86,7 +86,7 @@ const Massnahmen = ({ massns }: { massns: Array<Object> }) => (
       </TitleSubRow>
     </TitleRow>
     {massns.map(m => {
-      const mDatum = m.datum ? format(m.datum, 'dd.MM') : ''
+      const mDatum = m.datum ? format(new Date(m.datum), 'dd.MM') : ''
       return (
         <Row key={m.id}>
           <PopNr>{get(m, 'tpopByTpopId.popByPopId.nr', '')}</PopNr>
