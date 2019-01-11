@@ -20,7 +20,7 @@ export default async ({
   } catch (error) {
     return addError(error)
   }
-  const file = `${fileName}_${format(new Date(), 'YYYY-MM-DD_HH-mm-ss')}`
+  const file = `${fileName}_${format(new Date(), 'yyyy-MM-dd_HH-mm-ss')}`
   fileSaver.saveAs(
     new Blob([buffer], { type: 'application/octet-stream' }),
     `${file}.xlsx`,

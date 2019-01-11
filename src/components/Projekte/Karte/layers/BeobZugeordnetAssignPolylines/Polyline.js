@@ -27,7 +27,7 @@ const Line = ({ treeName, beob }: { treeName: string, beob: Object }) => {
     tpopX && tpopY
       ? new window.L.LatLng(...epsg2056to4326(tpopX, tpopY))
       : beobLatLng
-  const datum = beob.datum ? format(beob.datum, 'YYYY.MM.DD') : '(kein Datum)'
+  const datum = beob.datum ? format(beob.datum, 'yyyy.MM.dd') : '(kein Datum)'
   const autor = beob.autor || '(kein Autor)'
   const quelle = get(beob, 'beobQuelleWerteByQuelleId.name', '')
   return (

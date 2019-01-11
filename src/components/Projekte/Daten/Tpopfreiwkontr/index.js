@@ -284,7 +284,7 @@ const Tpopfreiwkontr = ({
       let field2
       if (field === 'datum') field2 = 'jahr'
       let value2
-      if (field === 'datum') value2 = !!value ? format(value, 'YYYY') : null
+      if (field === 'datum') value2 = !!value ? format(value, 'yyyy') : null
       if (field2) variables[field2] = value2
       const adresseByBearbeiter =
         field === 'bearbeiter'

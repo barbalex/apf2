@@ -53,7 +53,7 @@ const DateFieldWithPicker = ({
         saveToDb(fakeEvent)
         return setStateValue(null)
       }
-      const newValue = format(value, 'YYYY-MM-DD')
+      const newValue = format(value, 'yyyy-MM-dd')
       const fakeEvent = { target: { value: newValue, name } }
       saveToDb(fakeEvent)
       setStateValue(newValue)
@@ -71,8 +71,8 @@ const DateFieldWithPicker = ({
       }
 
       // write a real date to db
-      const date = format(new Date(), 'YYYY-MM-DD')
-      const newValue = format(date, 'YYYY-MM-DD')
+      const date = format(new Date(), 'yyyy-MM-dd')
+      const newValue = format(date, 'yyyy-MM-dd')
       const fakeEvent = { target: { value: newValue, name } }
       saveToDb(fakeEvent)
       setStateValue(newValue)
@@ -92,7 +92,7 @@ const DateFieldWithPicker = ({
       <StyledDatePicker
         keyboard
         label={label}
-        format="DD.MM.YYYY"
+        format="dd.MM.yyyy"
         value={stateValue}
         onChange={onChange}
         onBlur={onBlur}

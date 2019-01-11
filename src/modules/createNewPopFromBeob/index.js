@@ -36,7 +36,7 @@ export default async ({
   const beob = get(beobResult, 'data.beobById')
   const { x, y, datum, data } = beob
   const datumIsValid = isValid(new Date(datum))
-  const bekanntSeit = datumIsValid ? +format(new Date(datum), 'YYYY') : null
+  const bekanntSeit = datumIsValid ? +format(new Date(datum), 'yyyy') : null
 
   // create new pop for ap
   let popResult

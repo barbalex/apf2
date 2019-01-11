@@ -168,7 +168,7 @@ const ApberForYear = () => {
           </FirstPageTitle>
           <FirstPageSubTitle>{`Jahresbericht ${jahr}`}</FirstPageSubTitle>
           <FirstPageFnsLogo src={fnslogo} alt="FNS" width="350" />
-          <FirstPageDate>{format(new Date(), 'DD.MM.YYYY')}</FirstPageDate>
+          <FirstPageDate>{format(new Date(), 'dd.MM.yyyy')}</FirstPageDate>
           <FirstPageBearbeiter>Karin Marti, topos</FirstPageBearbeiter>
           {!!apberuebersicht.bemerkungen && (
             <SecondPage>

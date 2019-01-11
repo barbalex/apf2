@@ -62,11 +62,7 @@ const MassnBeschreibung = styled.div`
   width: 100%;
 `
 
-const Massnahmen = ({
-  massns
-}:{
-  massns: Array<Object>
-}) =>
+const Massnahmen = ({ massns }: { massns: Array<Object> }) => (
   <Container>
     <Title>Massnahmen im Berichtsjahr:</Title>
     <TitleRow>
@@ -77,7 +73,7 @@ const Massnahmen = ({
         <TpopFlurname>TPop</TpopFlurname>
         <MassnDatum>Massn</MassnDatum>
         <MassnTyp>Massn</MassnTyp>
-        <MassnBeschreibung></MassnBeschreibung>
+        <MassnBeschreibung />
       </TitleSubRow>
       <TitleSubRow>
         <PopNr>Nr.</PopNr>
@@ -89,23 +85,21 @@ const Massnahmen = ({
         <MassnBeschreibung>Massnahme</MassnBeschreibung>
       </TitleSubRow>
     </TitleRow>
-    {
-      massns.map(m => {
-        const mDatum = m.datum ? format(m.datum, 'DD.MM') : ''
-        return (
-          <Row key={m.id}>
-            <PopNr>{get(m, 'tpopByTpopId.popByPopId.nr', '')}</PopNr>
-            <PopName>{get(m, 'tpopByTpopId.popByPopId.name', '')}</PopName>
-            <TpopNr>{get(m, 'tpopByTpopId.nr', '')}</TpopNr>
-            <TpopFlurname>{get(m, 'tpopByTpopId.flurname', '')}</TpopFlurname>
-            <MassnDatum>{mDatum}</MassnDatum>
-            <MassnTyp>{get(m, 'tpopmassnTypWerteByTyp.text', '')}</MassnTyp>
-            <MassnBeschreibung>{get(m, 'beschreibung', '')}</MassnBeschreibung>
-          </Row>
-        )
-      })
-    }
+    {massns.map(m => {
+      const mDatum = m.datum ? format(m.datum, 'dd.MM') : ''
+      return (
+        <Row key={m.id}>
+          <PopNr>{get(m, 'tpopByTpopId.popByPopId.nr', '')}</PopNr>
+          <PopName>{get(m, 'tpopByTpopId.popByPopId.name', '')}</PopName>
+          <TpopNr>{get(m, 'tpopByTpopId.nr', '')}</TpopNr>
+          <TpopFlurname>{get(m, 'tpopByTpopId.flurname', '')}</TpopFlurname>
+          <MassnDatum>{mDatum}</MassnDatum>
+          <MassnTyp>{get(m, 'tpopmassnTypWerteByTyp.text', '')}</MassnTyp>
+          <MassnBeschreibung>{get(m, 'beschreibung', '')}</MassnBeschreibung>
+        </Row>
+      )
+    })}
   </Container>
-  
+)
 
 export default Massnahmen

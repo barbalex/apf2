@@ -119,7 +119,7 @@ const Deletions = ({
               Object.keys(dataset).forEach(
                 key => dataset[key] == null && delete dataset[key],
               )
-              const time = format(new Date(ds.time), 'YYYY.MM.DD HH:mm:ss')
+              const time = format(new Date(ds.time), 'yyyy.MM.dd HH:mm:ss')
 
               return (
                 <Row key={ds.id} data-withtopline={index > 0}>

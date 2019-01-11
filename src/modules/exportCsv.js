@@ -11,6 +11,6 @@ export default ({
   data: Array<Object>,
 }) => {
   const csvData = parse(data)
-  const file = `${fileName}_${format(new Date(), 'YYYY-MM-DD_HH-mm-ss')}`
+  const file = `${fileName}_${format(new Date(), 'yyyy-MM-dd_HH-mm-ss')}`
   fileDownload(csvData, `${file}.csv`)
 }

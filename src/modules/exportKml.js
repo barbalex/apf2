@@ -12,7 +12,7 @@ export default ({
   fileName: string,
   data: Array<Object>,
 }) => {
-  const file = `${fileName}_${format(new Date(), 'YYYY-MM-DD_HH-mm-ss')}`
+  const file = `${fileName}_${format(new Date(), 'yyyy-MM-dd_HH-mm-ss')}`
   const dataByArt = groupBy(data, 'art')
   const kml = `<?xml version='1.0' encoding='UTF-8'?>
   <kml xmlns='http://earth.google.com/kml/2.1'>
@@ -27,12 +27,13 @@ export default ({
           </Icon>
         </IconStyle>
       </Style>
-      ${
-        Object.keys(dataByArt).map(key => `
+      ${Object.keys(dataByArt)
+        .map(
+          key => `
           <Folder>
             <name>${clean(key)}</name>
-            ${
-              dataByArt[key].map(
+            ${dataByArt[key]
+              .map(
                 ({ art, label, inhalte, breitengrad, laengengrad, url }) => `
                   <Placemark>
                     <name>${clean(label)}</name>
@@ -52,12 +53,13 @@ export default ({
                       </coordinates>
                     </Point>
                   </Placemark>
-                `
-              ).join('')
-            }
+                `,
+              )
+              .join('')}
           </Folder>
-        `).join('')
-      }
+        `,
+        )
+        .join('')}
     </Document>
     </kml>
   `

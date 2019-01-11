@@ -154,7 +154,7 @@ const ApberForAp = ({
     flatten(tpops.map(t => get(t, 'firstTpopmassn.nodes[0]', []))),
     'datum',
   )
-  const yearOfFirstMassn = !!firstMassn ? format(firstMassn.datum, 'YYYY') : 0
+  const yearOfFirstMassn = !!firstMassn ? format(firstMassn.datum, 'yyyy') : 0
   const firstTpopber = minBy(
     flatten(tpops.map(t => get(t, 'firstTpopber.nodes[0]', []))),
     'jahr',
@@ -180,7 +180,7 @@ const ApberForAp = ({
           <Header>
             {`Jahresbericht ${get(apber, 'jahr', '(Jahr fehlt)')},
               ${artname},
-              ${format(new Date(), 'DD.MM.YYYY')}`}
+              ${format(new Date(), 'dd.MM.yyyy')}`}
           </Header>
 
           <Title1>{artname}</Title1>
@@ -314,7 +314,7 @@ const ApberForAp = ({
           )}
           <Row>
             {`${
-              apberDatum ? format(apberDatum, 'DD.MM.YYYY') : '(Datum fehlt)'
+              apberDatum ? format(apberDatum, 'dd.MM.yyyy') : '(Datum fehlt)'
             } / ${get(apber, 'adresseByBearbeiter.name', '(kein Bearbeiter)')}`}
           </Row>
         </ContentContainer>
