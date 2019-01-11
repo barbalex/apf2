@@ -149,7 +149,7 @@ const Tpopfeldkontr = ({
         if (field === 'datum') field2 = 'jahr'
         let value2
         if (field === 'jahr') value2 = null
-        if (field === 'datum') value2 = !!value ? format(value, 'yyyy') : null
+        if (field === 'datum') value2 = !!value ? +format(value, 'yyyy') : null
         if (field2) variables[field2] = value2
         try {
           await client.mutate({
