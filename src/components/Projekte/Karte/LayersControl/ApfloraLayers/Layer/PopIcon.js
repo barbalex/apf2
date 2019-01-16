@@ -76,7 +76,7 @@ const PopIcon = ({ treeName }: { treeName: string }) => {
         <MenuTitle>Symbole wählen:</MenuTitle>
         <StyledMenuItem onClick={onClickAllSame}>alle gleich</StyledMenuItem>
         <StyledMenuItem onClick={onClickByStatusGroup}>
-          aktuell / ursprünglich / potentiell
+          angesiedelt / ursprünglich / potentiell
         </StyledMenuItem>
         <MenuTitle>Beschriftung wählen:</MenuTitle>
         <StyledMenuItem onClick={onClickPopTpopNr}>Nr.</StyledMenuItem>
