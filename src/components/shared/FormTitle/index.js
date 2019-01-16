@@ -142,16 +142,18 @@ const FormTitle = ({
               <StyledIconButton
                 aria-label={`${title}-Filter entfernen`}
                 title={`${title}-Filter entfernen`}
+                onClick={onEmptyTable}
               >
-                <StyledDeleteFilterIcon2 onClick={onEmptyTable} />
+                <StyledDeleteFilterIcon2 />
               </StyledIconButton>
             )}
             {existsTreeFilter && (
               <StyledIconButton
                 aria-label="Alle Filter entfernen"
                 title="Alle Filter entfernen"
+                onClick={onEmptyTree}
               >
-                <StyledDeleteFilterIcon onClick={onEmptyTree} />
+                <StyledDeleteFilterIcon />
               </StyledIconButton>
             )}
           </Symbols>
