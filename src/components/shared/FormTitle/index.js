@@ -133,8 +133,9 @@ const FormTitle = ({
               <StyledIconButton
                 aria-label="Daten filtern"
                 title={`${table ? table : 'Daten'} filtern`}
+                onClick={onFilter}
               >
-                <StyledFilterIcon onClick={onFilter} />
+                <StyledFilterIcon />
               </StyledIconButton>
             )}
             {existsTableFilter && (
