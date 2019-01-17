@@ -34,35 +34,31 @@ const Opinion = styled.div`
   padding-top: 0.1cm;
 `
 
-const Ziele = ({ ziele }: { ziele: Array<Object> }) => {
-  console.log('Ziele', { ziele })
-  return (
-    <Container>
-      <Title>Ziele im Berichtsjahr:</Title>
-      <TitleRow>
-        <Typ>Typ</Typ>
-        <Goal>Ziel</Goal>
-      </TitleRow>
-      {ziele.map(z => {
-        const zielBer = get(z, 'zielbersByZielId.nodes', [])[0]
-        console.log('Ziele', { bezeichnung: z.bezeichnung, zielBer, z })
+const Ziele = ({ ziele }: { ziele: Array<Object> }) => (
+  <Container>
+    <Title>Ziele im Berichtsjahr:</Title>
+    <TitleRow>
+      <Typ>Typ</Typ>
+      <Goal>Ziel</Goal>
+    </TitleRow>
+    {ziele.map(z => {
+      const zielBer = get(z, 'zielbersByZielId.nodes', [])[0]
 
-        return (
-          <Row key={z.id}>
-            <Typ>{get(z, 'zielTypWerteByTyp.text', '')}</Typ>
-            <ZielColumn>
-              <Goal>{z.bezeichnung || ''}</Goal>
-              {zielBer && (
-                <Opinion>{`Beurteilung: ${zielBer.erreichung}; ${
-                  zielBer.bemerkungen
-                }`}</Opinion>
-              )}
-            </ZielColumn>
-          </Row>
-        )
-      })}
-    </Container>
-  )
-}
+      return (
+        <Row key={z.id}>
+          <Typ>{get(z, 'zielTypWerteByTyp.text', '')}</Typ>
+          <ZielColumn>
+            <Goal>{z.bezeichnung || ''}</Goal>
+            {zielBer && (
+              <Opinion>{`Beurteilung: ${zielBer.erreichung}; ${
+                zielBer.bemerkungen
+              }`}</Opinion>
+            )}
+          </ZielColumn>
+        </Row>
+      )
+    })}
+  </Container>
+)
 
 export default Ziele
