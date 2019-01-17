@@ -13,8 +13,11 @@ const Title = styled.div`
 `
 const Row = styled.div`
   display: flex;
-  padding: 0.05cm 0;
+  padding: 0.15cm 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+`
+const ZielColumn = styled.div`
+  width: 100%;
 `
 const TitleRow = styled(Row)`
   color: grey;
@@ -26,26 +29,40 @@ const Typ = styled.div`
 const Goal = styled.div`
   width: 100%;
 `
+const Opinion = styled.div`
+  width: 100%;
+  padding-top: 0.1cm;
+`
 
-const Ziele = ({
-  ziele
-}:{
-  ziele: Array<Object>
-}) =>
-  <Container>
-    <Title>Ziele im Berichtsjahr:</Title>
-    <TitleRow>
-      <Typ>Typ</Typ><Goal>Ziel</Goal>
-    </TitleRow>
-    {
-      ziele.map(z =>
-        <Row key={z.id}>
-          <Typ>{get(z, 'zielTypWerteByTyp.text', '')}</Typ>
-          <Goal>{z.bezeichnung || ''}</Goal>
-        </Row>
-      )
-    }
-  </Container>
-  
+const Ziele = ({ ziele }: { ziele: Array<Object> }) => {
+  console.log('Ziele', { ziele })
+  return (
+    <Container>
+      <Title>Ziele im Berichtsjahr:</Title>
+      <TitleRow>
+        <Typ>Typ</Typ>
+        <Goal>Ziel</Goal>
+      </TitleRow>
+      {ziele.map(z => {
+        const zielBer = get(z, 'zielbersByZielId.nodes', [])[0]
+        console.log('Ziele', { bezeichnung: z.bezeichnung, zielBer, z })
+
+        return (
+          <Row key={z.id}>
+            <Typ>{get(z, 'zielTypWerteByTyp.text', '')}</Typ>
+            <ZielColumn>
+              <Goal>{z.bezeichnung || ''}</Goal>
+              {zielBer && (
+                <Opinion>{`Beurteilung: ${zielBer.erreichung}; ${
+                  zielBer.bemerkungen
+                }`}</Opinion>
+              )}
+            </ZielColumn>
+          </Row>
+        )
+      })}
+    </Container>
+  )
+}
 
 export default Ziele

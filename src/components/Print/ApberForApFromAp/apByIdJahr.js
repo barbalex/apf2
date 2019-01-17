@@ -74,6 +74,13 @@ export default gql`
             text
             sort
           }
+          zielbersByZielId {
+            nodes {
+              id
+              erreichung
+              bemerkungen
+            }
+          }
         }
       }
       apbersByApId(filter: { jahr: { equalTo: $jahr } }) {
