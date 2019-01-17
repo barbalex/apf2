@@ -1327,9 +1327,9 @@
     "@types/react" "*"
 
 "@types/react@*":
-  version "16.7.19"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.7.19.tgz#f9a527a172c7fd9375c01445cbd04834fa0fcca7"
-  integrity sha512-qT5NOZiZJ4z+ZjOSzOKeNxFvea2F+EJqTQVsqsMWM8uGIrDxMT2rmoIG/yu2vLmZFiJzW7c7+oFULr4kLCoJ6w==
+  version "16.7.20"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.7.20.tgz#13ae752c012710d0fa800985ca809814b51d3b58"
+  integrity sha512-Qd5RWkwl6SL7R2XzLk/cicjVQm1Mhc6HqXY5Ei4pWd1Vi8Fkbd5O0sA398x8fRSTPAuHdDYD9nrWmJMYTJI0vQ==
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
@@ -3895,9 +3895,9 @@ deepmerge@^2.0.1:
   integrity sha512-R9hc1Xa/NOBi9WRVUWg19rl1UB7Tt4kuPd+thNJgFZoxXsTz7ncaPaeIm+40oSGuP33DfMb4sZt1QIGiJzC4EA==
 
 deepmerge@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-3.0.0.tgz#ca7903b34bfa1f8c2eab6779280775a411bfc6ba"
-  integrity sha512-a8z8bkgHsAML+uHLqmMS83HHlpy3PvZOOuiTQqaa3wu8ZVg3h0hqHk6aCsGdOnZV2XMM/FRimNGjUh0KCcmHBw==
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-3.1.0.tgz#a612626ce4803da410d77554bfd80361599c034d"
+  integrity sha512-/TnecbwXEdycfbsM2++O3eGiatEFHjjNciHEwJclM+T5Kd94qD1AP+2elP/Mq0L5b9VZJao5znR01Mz6eX8Seg==
 
 default-gateway@^2.6.0:
   version "2.7.2"
@@ -5600,10 +5600,10 @@ graphql.macro@1.0.2:
     babel-plugin-macros "^2.0.0"
     graphql-tag "^2.6.1"
 
-graphql@14.1.0, "graphql@^0.6.0 || ^0.7.0 || ^0.8.0-b || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.2":
-  version "14.1.0"
-  resolved "https://registry.yarnpkg.com/graphql/-/graphql-14.1.0.tgz#f38eb11bf9b4678a9a7741de795a3d25d46a7490"
-  integrity sha512-1dFYdyjS3A2BmoYXXwmpNIr2SoSpcPkF6gXB4UqZh2mWKBLfyUaQbk2POigqrKvlCimphJoPgkb0SFxDgJwSXQ==
+graphql@14.1.1, "graphql@^0.6.0 || ^0.7.0 || ^0.8.0-b || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.2":
+  version "14.1.1"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-14.1.1.tgz#d5d77df4b19ef41538d7215d1e7a28834619fac0"
+  integrity sha512-C5zDzLqvfPAgTtP8AUPIt9keDabrdRAqSWjj2OPRKrKxI9Fb65I36s1uCs1UUBFnSWTdO7hyHi7z1ZbwKMKF6Q==
   dependencies:
     iterall "^1.2.2"
 
@@ -9752,10 +9752,10 @@ postgraphile-core@4.2.0:
     graphile-build "4.1.0"
     graphile-build-pg "4.2.0"
 
-postgraphile-plugin-connection-filter@1.0.0-beta.26:
-  version "1.0.0-beta.26"
-  resolved "https://registry.yarnpkg.com/postgraphile-plugin-connection-filter/-/postgraphile-plugin-connection-filter-1.0.0-beta.26.tgz#e881c70ea511b2ca23cb6dd3d112c816164363fc"
-  integrity sha512-rB4D+DAcfBUoI7f/4frB+PwcWNAOVkY/CUZbj0YiTnNIGW6iWniKXT7iXht5wV/MX9DYSuFei9oztZa8yZclPA==
+postgraphile-plugin-connection-filter@1.0.0-beta.27:
+  version "1.0.0-beta.27"
+  resolved "https://registry.yarnpkg.com/postgraphile-plugin-connection-filter/-/postgraphile-plugin-connection-filter-1.0.0-beta.27.tgz#a6350a6e86325a95d6dd33ac3c8845ef069078a6"
+  integrity sha512-Lt2+D2VGyaejGpwvHTTuIDWGmUpKK8OgaC9gRRfev+NW/6YbY4fwqGF4AT+b4FumY+OK6iXDAUfe3S5sGNA6vA==
 
 postgraphile@4.2.0:
   version "4.2.0"
@@ -10115,13 +10115,12 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-apollo-hooks@0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/react-apollo-hooks/-/react-apollo-hooks-0.2.1.tgz#27e820f780c041ede7cc16224133750ecf24a392"
-  integrity sha512-YNKi7qQWWiNNFApBOJTFLLH0AJoPHg/DseBmDB4HgCBetbh/XgwZ2DTCtRWgJcpvPbVpkt8q9ZG9Mvh2pUo13w==
+react-apollo-hooks@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/react-apollo-hooks/-/react-apollo-hooks-0.3.0.tgz#3a0f0e73f2ef0905ad3589b9fb227693282edd3d"
+  integrity sha512-VImPJJyYbAxiilvgFvlLRFR82cbUTB3Jl1zCpgJIfv0T5Z03X+WUt/842FO5Tsu4mL0r1Vel2NNGO8d73Sda7A==
   dependencies:
     lodash "^4.17.11"
-    react-fast-compare "^2.0.2"
 
 react-apollo@2.3.3:
   version "2.3.3"
@@ -10220,11 +10219,6 @@ react-event-listener@^0.6.2, react-event-listener@^0.6.5:
     "@babel/runtime" "7.2.0"
     prop-types "^15.6.0"
     warning "^4.0.1"
-
-react-fast-compare@^2.0.2:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-2.0.4.tgz#e84b4d455b0fec113e0402c329352715196f81f9"
-  integrity sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==
 
 react-input-autosize@^2.2.1:
   version "2.2.1"
@@ -10928,9 +10922,9 @@ sax@^1.2.2, sax@^1.2.4, sax@~1.2.4:
   integrity sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==
 
 saxes@^3.1.4:
-  version "3.1.5"
-  resolved "https://registry.yarnpkg.com/saxes/-/saxes-3.1.5.tgz#ecbba12c7ca99f87f70dbd14a6c57b2b5de8b298"
-  integrity sha512-2mgiX2VOarcQv8G40WdJ5QJniYdsPr0yGedkd98PqApodsS9DG29qyHl/X65OILm7Bapd1/zUUvTHVZwNLhXvQ==
+  version "3.1.6"
+  resolved "https://registry.yarnpkg.com/saxes/-/saxes-3.1.6.tgz#2d948a47b54918516c5a64096f08865deb5bd8cd"
+  integrity sha512-LAYs+lChg1v5uKNzPtsgTxSS5hLo8aIhSMCJt1WMpefAxm3D1RTpMwSpb6ebdL31cubiLTnhokVktBW+cv9Y9w==
   dependencies:
     xmlchars "^1.3.1"
 
