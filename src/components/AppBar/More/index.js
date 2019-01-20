@@ -120,7 +120,7 @@ const MyAppBar = ({
           <MenuItem onClick={openDocs}>Dokumentation öffnen</MenuItem>
           <MenuItem onClick={watchVideos}>Video-Anleitungen</MenuItem>
           <MenuItem onClick={onClickLogout}>{`${user.name} abmelden`}</MenuItem>
-          <Version>Version: 1.3.0 vom 25.9.2018</Version>
+          <Version>Version: 1.3.2 vom 20.01.2019</Version>
         </Menu>
       </Container>
     </ErrorBoundary>
