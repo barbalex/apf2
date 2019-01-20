@@ -50,9 +50,9 @@ const Ziele = ({ ziele }: { ziele: Array<Object> }) => (
           <ZielColumn>
             <Goal>{z.bezeichnung || ''}</Goal>
             {zielBer && (
-              <Opinion>{`Beurteilung: ${zielBer.erreichung}; ${
-                zielBer.bemerkungen
-              }`}</Opinion>
+              <Opinion>{`Beurteilung: ${zielBer.erreichung || '(keine)'}${
+                zielBer.bemerkungen ? '; ' : ''
+              }${zielBer.bemerkungen || ''}`}</Opinion>
             )}
           </ZielColumn>
         </Row>
