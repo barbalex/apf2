@@ -15,5 +15,5 @@ export default (nodes: Array<Array<Object>>, nodePassed: Object): Boolean => {
   )
   if (parentNodes.length === 0) return true
   const nodeUrls = nodes.map(n => n.url)
-  return parentNodes.every(n => nodeUrls.some(n => isEqual(n, nodeUrl)))
+  return parentNodes.every(n => nodeUrls.some(url => isEqual(url, n)))
 }
