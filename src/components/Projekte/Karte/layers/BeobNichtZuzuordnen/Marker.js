@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { Marker, Popup } from 'react-leaflet'
 import get from 'lodash/get'
 import format from 'date-fns/format'
+import isValid from 'date-fns/isValid'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
@@ -34,9 +35,14 @@ const BeobNichtZuzuordnenMarker = ({
     iconSize: [24, 24],
     className: isHighlighted ? 'beobIconHighlighted' : 'beobIcon',
   })
-  const datum = beob.datum
-    ? format(new Date(beob.datum), 'yyyy.MM.dd')
-    : '(kein Datum)'
+  // some dates are not valid
+  // need to account for that
+  let datum = '(kein Datum)'
+  if (!isValid(new Date(beob.datum))) {
+    datum = '(ungültiges Datum)'
+  } else if (!!beob.datum) {
+    datum = format(new Date(beob.datum), 'yyyy.MM.dd')
+  }
   const autor = beob.autor || '(kein Autor)'
   const quelle = get(beob, 'beobQuelleWerteByQuelleId.name', '')
   const label = `${datum}: ${autor} (${quelle})`

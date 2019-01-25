@@ -3,6 +3,7 @@ import { Polyline, Popup } from 'react-leaflet'
 import get from 'lodash/get'
 import styled from 'styled-components'
 import format from 'date-fns/format'
+import isValid from 'date-fns/isValid'
 import { observer } from 'mobx-react-lite'
 
 import mobxStoreContext from '../../../../../mobxStoreContext'
@@ -27,9 +28,14 @@ const Line = ({ treeName, beob }: { treeName: string, beob: Object }) => {
     tpopX && tpopY
       ? new window.L.LatLng(...epsg2056to4326(tpopX, tpopY))
       : beobLatLng
-  const datum = beob.datum
-    ? format(new Date(beob.datum), 'yyyy.MM.dd')
-    : '(kein Datum)'
+  // some dates are not valid
+  // need to account for that
+  let datum = '(kein Datum)'
+  if (!isValid(new Date(beob.datum))) {
+    datum = '(ungültiges Datum)'
+  } else if (!!beob.datum) {
+    datum = format(new Date(beob.datum), 'yyyy.MM.dd')
+  }
   const autor = beob.autor || '(kein Autor)'
   const quelle = get(beob, 'beobQuelleWerteByQuelleId.name', '')
   return (

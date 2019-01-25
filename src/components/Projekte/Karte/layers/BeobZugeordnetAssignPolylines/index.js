@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
+import isValid from 'date-fns/isValid'
 import { useQuery } from 'react-apollo-hooks'
 import { observer } from 'mobx-react-lite'
 
@@ -46,9 +47,14 @@ const BeobZugeordnetAssignPolylines = ({ treeName }: { treeName: string }) => {
     // filter them by nodeLabelFilter
     .filter(el => {
       if (!beobZugeordnetFilterString) return true
-      const datum = el.datum
-        ? format(new Date(el.datum), 'yyyy.MM.dd')
-        : '(kein Datum)'
+      // some dates are not valid
+      // need to account for that
+      let datum = '(kein Datum)'
+      if (!isValid(new Date(el.datum))) {
+        datum = '(ungültiges Datum)'
+      } else if (!!el.datum) {
+        datum = format(new Date(el.datum), 'yyyy.MM.dd')
+      }
       const autor = el.autor || '(kein Autor)'
       const quelle = get(el, 'beobQuelleWerteByQuelleId.name', '')
       return `${datum}: ${autor} (${quelle})`
