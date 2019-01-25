@@ -2969,6 +2969,9 @@ SELECT
   apflora.pop.nr as pop_nr,
   apflora.tpop.id AS tpop_id,
   apflora.tpop.nr AS tpop_nr,
+  pop_status_werte.text AS tpop_status,
+  apflora.tpop.gemeinde AS tpop_gemeinde,
+  apflora.tpop.flurname AS tpop_flurname,
   apflora.beob.x,
   apflora.beob.y,
   CASE
@@ -3010,6 +3013,9 @@ FROM
   LEFT JOIN
     apflora.tpop
     ON apflora.tpop.id = apflora.beob.tpop_id
+    LEFT JOIN
+      apflora.pop_status_werte AS pop_status_werte
+      ON apflora.tpop.status = pop_status_werte.code
     LEFT JOIN
       apflora.pop
       ON apflora.pop.id = apflora.tpop.pop_id
