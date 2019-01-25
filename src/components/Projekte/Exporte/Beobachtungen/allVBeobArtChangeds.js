@@ -18,6 +18,9 @@ export default gql`
         pop_nr: popNr
         tpop_id: tpopId
         tpop_nr: tpopNr
+        tpop_status: tpopStatus
+        tpop_gemeinde: tpopGemeinde
+        tpop_flurname: tpopFlurname
         x
         y
         distanz_zur_teilpopulation: distanzZurTeilpopulation
