@@ -1,6 +1,8 @@
 // @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
+import isValid from 'date-fns/isValid'
+import format from 'date-fns/format'
 
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 import allParentNodesExist from '../allParentNodesExist'
@@ -52,39 +54,55 @@ export default ({
     .filter(el => el.tpopId === tpopId)
     // filter by nodeLabelFilter
     .filter(el => {
+      // some dates are not valid
+      // need to account for that
+      let datum = '(kein Datum)'
+      if (!isValid(new Date(el.datum))) {
+        datum = '(ungültiges Datum)'
+      } else if (!!el.datum) {
+        datum = format(new Date(el.datum), 'yyyy.MM.dd')
+      }
+
       if (nodeLabelFilterString) {
-        return `${el.datum || '(kein Datum)'}: ${el.autor || '(kein Autor)'} (${
-          el.quelle
-        })`
+        return `${datum}: ${el.autor || '(kein Autor)'} (${el.quelle})`
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
       }
       return true
     })
-    .map((el, index) => ({
-      nodeType: 'table',
-      menuType: 'beobZugeordnet',
-      filterTable: 'beob',
-      id: el.id,
-      parentId: tpopId,
-      urlLabel: el.id,
-      label: `${el.datum || '(kein Datum)'}: ${el.autor || '(kein Autor)'} (${
-        el.quelle
-      })`,
-      url: [
-        'Projekte',
-        projId,
-        'Aktionspläne',
-        apId,
-        'Populationen',
-        popId,
-        'Teil-Populationen',
-        tpopId,
-        'Beobachtungen',
-        el.id,
-      ],
-      hasChildren: false,
-    }))
+    .map((el, index) => {
+      // some dates are not valid
+      // need to account for that
+      let datum = '(kein Datum)'
+      if (!isValid(new Date(el.datum))) {
+        datum = '(ungültiges Datum)'
+      } else if (!!el.datum) {
+        datum = format(new Date(el.datum), 'yyyy.MM.dd')
+      }
+
+      return {
+        nodeType: 'table',
+        menuType: 'beobZugeordnet',
+        filterTable: 'beob',
+        id: el.id,
+        parentId: tpopId,
+        urlLabel: el.id,
+        label: `${datum}: ${el.autor || '(kein Autor)'} (${el.quelle})`,
+        url: [
+          'Projekte',
+          projId,
+          'Aktionspläne',
+          apId,
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+          'Beobachtungen',
+          el.id,
+        ],
+        hasChildren: false,
+      }
+    })
     .filter(el => allParentNodesAreOpen(openNodes, el.url))
     .filter(n => allParentNodesExist(nodesPassed, n))
     // sort by label

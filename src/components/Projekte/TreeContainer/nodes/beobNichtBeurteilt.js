@@ -2,6 +2,7 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import format from 'date-fns/format'
+import isValid from 'date-fns/isValid'
 
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 import allParentNodesExist from '../allParentNodesExist'
@@ -44,35 +45,51 @@ export default ({
     .filter(el => el.apId === apId)
     // filter by nodeLabelFilter
     .filter(el => {
+      // some dates are not valid
+      // need to account for that
+      let datum = '(kein Datum)'
+      if (!isValid(new Date(el.datum))) {
+        datum = '(ungültiges Datum)'
+      } else if (!!el.datum) {
+        datum = format(new Date(el.datum), 'yyyy.MM.dd')
+      }
+
       if (nodeLabelFilterString) {
-        return `${
-          el.datum ? format(new Date(el.datum), 'yyyy.MM.dd') : '(kein Datum)'
-        }: ${el.autor || '(kein Autor)'} (${el.quelle})`
+        return `${datum}: ${el.autor || '(kein Autor)'} (${el.quelle})`
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
       }
       return true
     })
-    .map(el => ({
-      nodeType: 'table',
-      menuType: 'beobNichtBeurteilt',
-      filterTable: 'beob',
-      id: el.id,
-      parentId: apId,
-      urlLabel: el.id,
-      label: `${
-        el.datum ? format(new Date(el.datum), 'yyyy.MM.dd') : '(kein Datum)'
-      }: ${el.autor || '(kein Autor)'} (${el.quelle})`,
-      url: [
-        'Projekte',
-        projId,
-        'Aktionspläne',
-        apId,
-        'nicht-beurteilte-Beobachtungen',
-        el.id,
-      ],
-      hasChildren: false,
-    }))
+    .map(el => {
+      // some dates are not valid
+      // need to account for that
+      let datum = '(kein Datum)'
+      if (!isValid(new Date(el.datum))) {
+        datum = '(ungültiges Datum)'
+      } else if (!!el.datum) {
+        datum = format(new Date(el.datum), 'yyyy.MM.dd')
+      }
+
+      return {
+        nodeType: 'table',
+        menuType: 'beobNichtBeurteilt',
+        filterTable: 'beob',
+        id: el.id,
+        parentId: apId,
+        urlLabel: el.id,
+        label: `${datum}: ${el.autor || '(kein Autor)'} (${el.quelle})`,
+        url: [
+          'Projekte',
+          projId,
+          'Aktionspläne',
+          apId,
+          'nicht-beurteilte-Beobachtungen',
+          el.id,
+        ],
+        hasChildren: false,
+      }
+    })
     .filter(el => allParentNodesAreOpen(openNodes, el.url))
     .filter(n => allParentNodesExist(nodesPassed, n))
     // sort by label
