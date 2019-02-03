@@ -127,8 +127,8 @@ const Ap = ({
   }))
 
   let apArten
-  let apTotal
-  let apFiltered
+  let apTotal = []
+  let apFiltered = []
   let artWerte
   if (showFilter) {
     apArten = get(dataAllAps, 'allAps.nodes', []).map(o => o.artId)
