@@ -102,6 +102,9 @@ const Container = styled.div`
   border-right-style: solid;
   height: 100%;
   overflow: hidden;
+  .map-control-scalebar-text {
+    width: 83px;
+  }
 `
 /*const LoadingContainer = styled.div`
   padding: 15px;
@@ -144,26 +147,23 @@ const Karte = ({
 
   const prevDimensions = usePrevious(dimensions) || {}
 
-  useEffect(
-    () => {
-      const prevWidth = prevDimensions.width || 0
-      // DANGER: first width is '100%'!
-      if (Number.isInteger(prevWidth)) {
-        const width = dimensions.width
-        const widthHasChangedByOver20Percent =
-          prevWidth / width > 1.2 || prevWidth / width < 0.8
-        if (widthHasChangedByOver20Percent) {
-          /**
-           * need to redraw map, when tabs changed
-           * unfortunately, tabs change in previous update, so can't compare tabs
-           */
-          const map = mapRef.current.leafletElement
-          map.invalidateSize()
-        }
+  useEffect(() => {
+    const prevWidth = prevDimensions.width || 0
+    // DANGER: first width is '100%'!
+    if (Number.isInteger(prevWidth)) {
+      const width = dimensions.width
+      const widthHasChangedByOver20Percent =
+        prevWidth / width > 1.2 || prevWidth / width < 0.8
+      if (widthHasChangedByOver20Percent) {
+        /**
+         * need to redraw map, when tabs changed
+         * unfortunately, tabs change in previous update, so can't compare tabs
+         */
+        const map = mapRef.current.leafletElement
+        map.invalidateSize()
       }
-    },
-    [dimensions.width],
-  )
+    }
+  }, [dimensions.width])
 
   const setMouseCoords = useCallback(e => {
     const [x, y] = epsg4326to2056(e.latlng.lng, e.latlng.lat)
