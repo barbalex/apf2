@@ -503,6 +503,35 @@ const Tree = ({ treeName, dimensions }: Props) => {
     errorBeobNichtZuzuordnens,
   ].filter(e => !!e)
 
+  const data = {
+    ...dataAdresses,
+    ...dataUsers,
+    ...dataProjekts,
+    ...dataApberuebersichts,
+    ...dataAps,
+    ...dataPops,
+    ...dataPopbers,
+    ...dataPopmassnbers,
+    ...dataTpops,
+    ...dataTpopmassns,
+    ...dataTpopmassnbers,
+    ...dataTpopfeldkontrs,
+    ...dataTpopfreiwkontrs,
+    ...dataTpopkontrzaehls,
+    ...dataTpopbers,
+    ...dataBeobZugeordnets,
+    ...dataZiels,
+    ...dataZielbers,
+    ...dataErfkrits,
+    ...dataApbers,
+    ...dataBers,
+    ...dataAparts,
+    ...dataAssozarts,
+    ...dataEkfzaehleinheits,
+    ...dataBeobNichtBeurteilts,
+    ...dataBeobNichtZuzuordnens,
+  }
+
   const loading = anyQueryIsLoading(queryLoadingArray)
   const { token } = user
   const role = token ? jwtDecode(token).role : null
@@ -511,14 +540,13 @@ const Tree = ({ treeName, dimensions }: Props) => {
     treeName,
     role,
     nodeFilter,
+    data,
     dataAdresses,
     dataUsers,
     dataProjekts,
     dataApberuebersichts,
     dataAps,
     dataPops,
-    dataPopbers,
-    dataPopmassnbers,
     dataTpops,
     dataTpopmassns,
     dataTpopmassnbers,
@@ -532,7 +560,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     dataErfkrits,
     dataApbers,
     dataBers,
-    dataAparts,
     dataAssozarts,
     dataEkfzaehleinheits,
     dataBeobNichtBeurteilts,
@@ -567,47 +594,41 @@ const Tree = ({ treeName, dimensions }: Props) => {
   })
   setNodes(nodes)
 
-  useEffect(
-    () => {
-      /**
-       * if activeNodeArray.length === 1
-       * and there is only one projekt
-       * open it
-       * dont do this in render!
-       */
-      const projekteNodes = nodes.filter(n => n.menuType === 'projekt')
-      const existsOnlyOneProjekt = projekteNodes.length === 1
-      const projektNode = projekteNodes[0]
-      if (
-        activeNodes.projektFolder &&
-        !activeNodes.projekt &&
-        existsOnlyOneProjekt &&
-        projektNode
-      ) {
-        const projektUrl = [...projektNode.url]
-        setTreeKey({
-          value: projektUrl,
-          tree: treeName,
-          key: 'activeNodeArray',
-        })
-        // add projekt to open nodes
-        setTreeKey({
-          value: [...openNodes, projektUrl],
-          tree: treeName,
-          key: 'openNodes',
-        })
-      }
-    },
-    [loading],
-  )
+  useEffect(() => {
+    /**
+     * if activeNodeArray.length === 1
+     * and there is only one projekt
+     * open it
+     * dont do this in render!
+     */
+    const projekteNodes = nodes.filter(n => n.menuType === 'projekt')
+    const existsOnlyOneProjekt = projekteNodes.length === 1
+    const projektNode = projekteNodes[0]
+    if (
+      activeNodes.projektFolder &&
+      !activeNodes.projekt &&
+      existsOnlyOneProjekt &&
+      projektNode
+    ) {
+      const projektUrl = [...projektNode.url]
+      setTreeKey({
+        value: projektUrl,
+        tree: treeName,
+        key: 'activeNodeArray',
+      })
+      // add projekt to open nodes
+      setTreeKey({
+        value: [...openNodes, projektUrl],
+        tree: treeName,
+        key: 'openNodes',
+      })
+    }
+  }, [loading])
 
-  useEffect(
-    () => {
-      const index = findIndex(nodes, node => isEqual(node.url, activeNodeArray))
-      listRef.current.scrollToItem(index)
-    },
-    [loading, activeNodeArray, nodes],
-  )
+  useEffect(() => {
+    const index = findIndex(nodes, node => isEqual(node.url, activeNodeArray))
+    listRef.current.scrollToItem(index)
+  }, [loading, activeNodeArray, nodes])
 
   if (anyQueryReturnsPermissionError(queryErrorArray)) {
     // during login don't show permission error

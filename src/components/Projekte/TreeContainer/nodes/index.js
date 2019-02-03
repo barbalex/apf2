@@ -70,8 +70,8 @@ const compare = (a, b) => {
 }
 
 export default ({
+  data,
   dataAdresses,
-  dataAparts,
   dataApbers,
   dataApberuebersichts,
   dataAps,
@@ -82,8 +82,6 @@ export default ({
   dataBers,
   dataEkfzaehleinheits,
   dataErfkrits,
-  dataPopbers,
-  dataPopmassnbers,
   dataPops,
   dataProjekts,
   dataTpopbers,
@@ -128,8 +126,8 @@ export default ({
   role,
   treeName,
 }: {
+  data: Object,
   dataAdresses: Object,
-  dataAparts: Object,
   dataApbers: Object,
   dataApberuebersichts: Object,
   dataAps: Object,
@@ -140,8 +138,6 @@ export default ({
   dataBers: Object,
   dataEkfzaehleinheits: Object,
   dataErfkrits: Object,
-  dataPopbers: Object,
-  dataPopmassnbers: Object,
   dataPops: Object,
   dataProjekts: Object,
   dataTpopbers: Object,
@@ -400,7 +396,7 @@ export default ({
           }),
           ...buildApartFolderNodes({
             nodes,
-            data: dataAparts,
+            data,
             treeName,
             loading: loadingAparts,
             apNodes,
@@ -648,7 +644,7 @@ export default ({
           ...nodes,
           ...buildApartNodes({
             nodes,
-            data: dataAparts,
+            data,
             treeName,
             loading: loadingAparts,
             apNodes,
@@ -749,7 +745,7 @@ export default ({
           }),
           ...buildPopberFolderNodes({
             nodes,
-            data: dataPopbers,
+            data,
             treeName,
             loading: loadingPopbers,
             projektNodes,
@@ -763,7 +759,7 @@ export default ({
           }),
           ...buildPopmassnberFolderNodes({
             nodes,
-            data: dataPopmassnbers,
+            data,
             treeName,
             loading: loadingPopmassnbers,
             projektNodes,
@@ -787,7 +783,7 @@ export default ({
           ...nodes,
           ...buildPopmassnberNodes({
             nodes,
-            data: dataPopmassnbers,
+            data,
             treeName,
             loading: loadingPopmassnbers,
             projId,
@@ -811,7 +807,7 @@ export default ({
           ...nodes,
           ...buildPopberNodes({
             nodes,
-            data: dataPopbers,
+            data,
             treeName,
             loading: loadingPopbers,
             projId,
