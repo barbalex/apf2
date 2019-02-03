@@ -77,6 +77,8 @@ const PopMarker = ({ treeName, pop }: { treeName: string, pop: Object }) => {
   const zIndexOffset = -apfloraLayers.findIndex(
     apfloraLayer => apfloraLayer.value === 'pop',
   )
+  const artname = get(pop, 'apByApId.aeEigenschaftenByArtId.artname', '')
+
   return (
     <Marker
       position={latLng}
@@ -92,6 +94,7 @@ const PopMarker = ({ treeName, pop }: { treeName: string, pop: Object }) => {
               pop.name ? pop.name : '(kein Name)'
             }`}
           </StyledH3>
+          <div>{`Aktionsplan: ${artname}`}</div>
           <div>
             {`Koordinaten: ${pop.x ? pop.x.toLocaleString('de-ch') : ''} / ${
               pop.y ? pop.y.toLocaleString('de-ch') : ''

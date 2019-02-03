@@ -31,6 +31,13 @@ export default gql`
               bekanntSeit
               x
               y
+              apByApId {
+                id
+                aeEigenschaftenByArtId {
+                  id
+                  artname
+                }
+              }
               tpopsByPopId(
                 filter: { x: { isNull: false }, y: { isNull: false } }
               ) @include(if: $tpopLayerIsActive) {
@@ -92,6 +99,13 @@ export default gql`
               bekanntSeit
               x
               y
+              apByApId {
+                id
+                aeEigenschaftenByArtId {
+                  id
+                  artname
+                }
+              }
               tpopsByPopId(
                 filter: { x: { isNull: false }, y: { isNull: false } }
               ) @include(if: $tpopLayerIsActive) {
