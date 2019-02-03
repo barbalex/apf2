@@ -99,7 +99,8 @@
     "startDocs": "yarn docsify serve ./docs --port 8000"
   },
   "resolutions": {
-    "@babel/runtime": "7.3.1"
+    "@babel/runtime": "7.3.1",
+    "terser": "3.14.1"
   },
   "eslintConfig": {
     "extends": "react-app"
