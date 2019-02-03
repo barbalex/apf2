@@ -42,7 +42,7 @@ const PopMarker = ({ treeName, pop }: { treeName: string, pop: Object }) => {
     popLabel: popLabelName,
   } = mobxStore[treeName].map
 
-  const nrLabel = `${get(pop, 'nr', '(keine Nr)')}`.toString()
+  const nrLabel = pop.nr ? pop.nr.toString() : '(keine Nr)'
   let title = nrLabel
   if (popLabelName === 'name') title = get(pop, 'name', '(kein Name)')
   // beware: leaflet needs title to always be a string

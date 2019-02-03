@@ -37,12 +37,9 @@ const TpopMarker = ({ treeName, tpop }: { treeName: string, tpop: Object }) => {
     tpopLabel: tpopLabelName,
   } = mobxStore[treeName].map
 
-  const tpopNr = get(tpop, 'nr', '(keine Nr)')
-  const nrLabel = `${get(
-    tpop,
-    'popByPopId.nr',
-    '(keine Nr)',
-  )}.${tpopNr}`.toString()
+  const popNr = get(tpop, 'popByPopId.nr') || '(keine Nr)'
+  const tpopNr = get(tpop, 'nr') || '(keine Nr)'
+  const nrLabel = `${popNr}.${tpopNr}`.toString()
   const isHighlighted = idsFiltered.includes(tpop.id)
 
   let iconUrl = tpopIcon
