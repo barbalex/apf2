@@ -20,6 +20,7 @@ import withAllAps from './withAllAps'
 import query from './data'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
+import filterNodesByNodeFilterArray from '../../TreeContainer/filterNodesByNodeFilterArray'
 
 const Container = styled.div`
   height: 100%;
@@ -126,6 +127,8 @@ const Ap = ({
   }))
 
   let apArten
+  let apTotal
+  let apFiltered
   let artWerte
   if (showFilter) {
     apArten = get(dataAllAps, 'allAps.nodes', []).map(o => o.artId)
@@ -137,6 +140,18 @@ const Ap = ({
       value: el.id,
       label: el.artname,
     }))
+    // get filter values length
+    apTotal = get(dataAllAps, 'allAps.nodes', [])
+    const nodeFilterArray = Object.entries(nodeFilter[treeName].ap).filter(
+      ([key, value]) => value || value === 0 || value === false,
+    )
+    apFiltered = apTotal.filter(node =>
+      filterNodesByNodeFilterArray({
+        node,
+        nodeFilterArray,
+        table: 'ap',
+      }),
+    )
   } else {
     // list all ap-Arten BUT the active one
     apArten = get(dataAllAps, 'allAps.nodes', [])
@@ -235,6 +250,8 @@ const Ap = ({
           title="Aktionsplan"
           treeName={treeName}
           table="ap"
+          totalNr={apTotal.length}
+          filteredNr={apFiltered.length}
         />
         <FieldsContainer>
           <Select

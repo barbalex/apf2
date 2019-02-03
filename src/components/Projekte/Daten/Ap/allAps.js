@@ -6,6 +6,11 @@ export default gql`
       nodes {
         id
         artId
+        bearbeitung
+        startJahr
+        umsetzung
+        bearbeiter
+        ekfBeobachtungszeitpunkt
       }
     }
   }

@@ -32,6 +32,13 @@ const Title = styled.div`
   color: white;
   font-weight: bold;
 `
+const FilterNumbers = styled.div`
+  color: white;
+  padding-top: 11px;
+  padding-right: 8px;
+  cursor: default;
+  user-select: none;
+`
 const StyledIconButton = styled(IconButton)`
   height: 30px !important;
   width: 30px !important;
@@ -65,11 +72,15 @@ const FormTitle = ({
   apId,
   table,
   treeName,
+  totalNr,
+  filteredNr,
 }: {
   title: string,
   apId: string,
   table: string,
   treeName: string,
+  totalNr: number,
+  filteredNr: number,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const {
@@ -96,25 +107,22 @@ const FormTitle = ({
   }
   const activeNodeArray = get(mobxStore, `${treeName}.activeNodeArray`)
 
-  const onFilter = useCallback(
-    () => {
-      nodeFilterSetActiveTable({ treeName, activeTable: table })
-      // if active node is id, pop
-      if (
-        activeNodeArray &&
-        treeName &&
-        isUuid.anyNonNil(activeNodeArray[activeNodeArray.length - 1])
-      ) {
-        const newActiveNodeArray = activeNodeArray.slice(0, -1)
-        setTreeKey({
-          value: newActiveNodeArray,
-          tree: treeName,
-          key: 'activeNodeArray',
-        })
-      }
-    },
-    [activeNodeArray, treeName],
-  )
+  const onFilter = useCallback(() => {
+    nodeFilterSetActiveTable({ treeName, activeTable: table })
+    // if active node is id, pop
+    if (
+      activeNodeArray &&
+      treeName &&
+      isUuid.anyNonNil(activeNodeArray[activeNodeArray.length - 1])
+    ) {
+      const newActiveNodeArray = activeNodeArray.slice(0, -1)
+      setTreeKey({
+        value: newActiveNodeArray,
+        tree: treeName,
+        key: 'activeNodeArray',
+      })
+    }
+  }, [activeNodeArray, treeName])
   const onEmptyTable = useCallback(
     () => nodeFilterEmptyTable({ treeName, table }),
     [treeName, table],
@@ -129,6 +137,9 @@ const FormTitle = ({
         <Title>{`${title}${showFilter ? ' Filter' : ''}`}</Title>
         {doFilter && (
           <Symbols>
+            {showFilter && (
+              <FilterNumbers>{`${filteredNr}/${totalNr}`}</FilterNumbers>
+            )}
             {!showFilter && typesExist && (
               <StyledIconButton
                 aria-label="Daten filtern"
