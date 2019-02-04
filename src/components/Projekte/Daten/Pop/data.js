@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query popByIdQuery($id: UUID!) {
+  query popByIdQuery($id: UUID!, $showFilter: Boolean!) {
     popById(id: $id) {
       id
       apId
@@ -18,7 +18,7 @@ export default gql`
         startJahr
       }
     }
-    allPops {
+    allPops @include(if: $showFilter) {
       totalCount
       nodes {
         id

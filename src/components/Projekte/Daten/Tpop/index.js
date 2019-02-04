@@ -22,6 +22,7 @@ import updateTpopByIdGql from './updateTpopById'
 import getGemeindeForKoord from '../../../../modules/getGemeindeForKoord'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
+import filterNodesByNodeFilterArray from '../../TreeContainer/filterNodesByNodeFilterArray'
 
 const Container = styled.div`
   height: 100%;
@@ -65,12 +66,27 @@ const Tpop = ({
         activeNodeArray.length > 7
           ? activeNodeArray[7]
           : '99999999-9999-9999-9999-999999999999',
+      showFilter,
     },
   })
 
+  let tpopTotal = []
+  let tpopFiltered = []
   let row
   if (showFilter) {
     row = nodeFilter[treeName].tpop
+    // get filter values length
+    tpopTotal = get(data, 'allTpops.nodes', [])
+    const nodeFilterArray = Object.entries(nodeFilter[treeName].tpop).filter(
+      ([key, value]) => value || value === 0 || value === false,
+    )
+    tpopFiltered = tpopTotal.filter(node =>
+      filterNodesByNodeFilterArray({
+        node,
+        nodeFilterArray,
+        table: 'tpop',
+      }),
+    )
   } else {
     row = get(data, 'tpopById', {})
   }
@@ -205,6 +221,8 @@ const Tpop = ({
           title="Teil-Population"
           treeName={treeName}
           table="tpop"
+          totalNr={tpopTotal.length}
+          filteredNr={tpopFiltered.length}
         />
         <FieldsContainer
           data-width={isNaN(dimensions.width) ? 380 : dimensions.width}

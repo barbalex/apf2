@@ -86,6 +86,7 @@ const Ap = ({
   const mobxStore = useContext(mobxStoreContext)
   const { nodeFilter, nodeFilterSetValue, user, refetch } = mobxStore
   const { activeNodeArray } = mobxStore[treeName]
+  const showFilter = !!nodeFilter[treeName].activeTable
   const id =
     activeNodeArray.length > 3
       ? activeNodeArray[3]
@@ -97,7 +98,6 @@ const Ap = ({
 
   const [errors, setErrors] = useState({})
 
-  const showFilter = !!nodeFilter[treeName].activeTable
   let row
   if (showFilter) {
     row = nodeFilter[treeName].ap

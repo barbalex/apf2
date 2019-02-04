@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query tpopByIdQuery($id: UUID!) {
+  query tpopByIdQuery($id: UUID!, $showFilter: Boolean!) {
     tpopById(id: $id) {
       id
       popId
@@ -45,6 +45,37 @@ export default gql`
           id
           startJahr
         }
+      }
+    }
+    allTpops @include(if: $showFilter) {
+      nodes {
+        id
+        popId
+        nr
+        gemeinde
+        flurname
+        x
+        y
+        radius
+        hoehe
+        exposition
+        klima
+        neigung
+        beschreibung
+        katasterNr
+        status
+        statusUnklarGrund
+        apberRelevant
+        bekanntSeit
+        eigentuemer
+        kontakt
+        nutzungszone
+        bewirtschafter
+        bewirtschaftung
+        kontrollfrequenz
+        kontrollfrequenzFreiwillige
+        bemerkungen
+        statusUnklar
       }
     }
     allPopStatusWertes {
