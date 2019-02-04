@@ -2,8 +2,6 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
-import allParentNodesExist from '../allParentNodesExist'
-
 export default ({
   nodes: nodesPassed,
   data,
@@ -26,14 +24,15 @@ export default ({
   const apberuebersichts = get(data, 'allApberuebersichts.nodes', [])
 
   // fetch sorting indexes of parents
+  const projNodeIds = projektNodes.map(n => n.id)
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
 
   // map through all elements and create array of nodes
   const nodes = apberuebersichts
-    // filter by projekt
-    .filter(el => el.projId === projId)
+    // only show if parent node exists
+    .filter(el => projNodeIds.includes(el.projId))
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
@@ -52,9 +51,6 @@ export default ({
       url: ['Projekte', el.projId, 'AP-Berichte', el.id],
       hasChildren: false,
     }))
-    .filter(n => allParentNodesExist(nodesPassed, n))
-    // sort by Jahr
-    //.sort((a, b) => (a.jahr || 0) - (b.jahr || 0))
     .map((el, index) => {
       el.sort = [projIndex, 2, index]
       return el

@@ -2,8 +2,6 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
-import allParentNodesExist from '../allParentNodesExist'
-
 export default ({
   nodes: nodesPassed,
   data,
@@ -24,6 +22,7 @@ export default ({
   const apberuebersichts = get(data, 'allApberuebersichts.nodes', [])
 
   // fetch sorting indexes of parents
+  const projNodeIds = projektNodes.map(n => n.id)
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
@@ -33,7 +32,7 @@ export default ({
   )
 
   const apberuebersichtNodesLength = apberuebersichts
-    .filter(el => el.projId === projId)
+    .filter(el => projNodeIds.includes(el.projId))
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
@@ -47,6 +46,9 @@ export default ({
     message = `${apberuebersichtNodesLength} gefiltert`
   }
 
+  // only show if parent node exists
+  if (!projNodeIds.includes(projId)) return []
+
   return [
     {
       menuType: 'apberuebersichtFolder',
@@ -58,5 +60,5 @@ export default ({
       sort: [projIndex, 2],
       hasChildren: apberuebersichtNodesLength > 0,
     },
-  ].filter(n => allParentNodesExist(nodesPassed, n))
+  ]
 }

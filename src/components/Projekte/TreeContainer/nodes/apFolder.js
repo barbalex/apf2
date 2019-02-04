@@ -3,7 +3,6 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import uniqBy from 'lodash/uniqBy'
 
-import allParentNodesExist from '../allParentNodesExist'
 import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
 import filterNodesByApFilter from '../filterNodesByApFilter'
 
@@ -14,7 +13,6 @@ export default ({
   loading,
   projektNodes,
   projId,
-  nodeFilter,
   mobxStore,
 }: {
   nodes: Array<Object>,
@@ -23,9 +21,9 @@ export default ({
   loading: Boolean,
   projektNodes: Array<Object>,
   projId: String,
-  nodeFilter: Object,
   mobxStore: Object,
 }): Array<Object> => {
+  const nodeFilter = get(mobxStore, `nodeFilter.${treeName}`)
   const aps = get(data, 'allAps.nodes', [])
   const nodeFilterArray = Object.entries(nodeFilter.ap).filter(
     ([key, value]) => value || value === 0 || value === false,
@@ -42,7 +40,6 @@ export default ({
   let apNodes = aps
     // only show if parent node exists
     .filter(el => projNodeIds.includes(el.projId))
-    .filter(el => el.projId === projId)
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
@@ -75,17 +72,20 @@ export default ({
     message = `${apNodesLength} gefiltert`
   }
 
+  // only show if parent node exists
+  if (!projNodeIds.includes(projId)) return []
+
   return [
     {
       nodeType: 'folder',
       menuType: 'apFolder',
       filterTable: 'ap',
-      id: projId,
+      id: `${projId}ApFolder`,
       urlLabel: 'Aktionspläne',
       label: `Aktionspläne (${message})`,
       url: ['Projekte', projId, 'Aktionspläne'],
       sort: [projIndex, 1],
       hasChildren: apNodesLength > 0,
     },
-  ].filter(n => allParentNodesExist(nodesPassed, n))
+  ]
 }

@@ -241,7 +241,6 @@ export default ({
             loading: loadingAps,
             projektNodes,
             projId,
-            nodeFilter: nodeFilter[treeName],
             mobxStore,
           }),
           ...buildApberuebersichtFolderNodes({
@@ -273,11 +272,7 @@ export default ({
           }),
         ]
       }
-      if (
-        nodeUrl.length === 3 &&
-        nodeUrl[2] === 'Aktionspläne' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
-      ) {
+      if (nodeUrl.length === 3 && nodeUrl[2] === 'Aktionspläne') {
         apNodes = buildApNodes({
           nodes,
           data: dataAps,
@@ -285,16 +280,11 @@ export default ({
           loading: loadingAps,
           projektNodes,
           projId,
-          nodeFilter: nodeFilter[treeName],
           mobxStore,
         })
         nodes = [...nodes, ...apNodes]
       }
-      if (
-        nodeUrl.length === 4 &&
-        nodeUrl[2] === 'Aktionspläne' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
-      ) {
+      if (nodeUrl.length === 4 && nodeUrl[2] === 'Aktionspläne') {
         const apId = nodeUrl[3]
         nodes = [
           ...nodes,
@@ -403,7 +393,6 @@ export default ({
             treeName,
             loading: loadingBeobNichtBeurteilts,
             apNodes,
-            openNodes,
             projektNodes,
             projId,
             apId,
@@ -415,7 +404,6 @@ export default ({
             treeName,
             loading: loadingBeobNichtZuzuordnens,
             apNodes,
-            openNodes,
             projektNodes,
             projId,
             apId,
@@ -424,7 +412,6 @@ export default ({
           ...qkFolderNodes({
             nodes,
             apNodes,
-            openNodes,
             projektNodes,
             projId,
             apId,

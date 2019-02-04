@@ -13,7 +13,7 @@ export default ({
   return {
     nodeType: 'folder',
     menuType: 'wlFolder',
-    id: wlIndex,
+    id: 'wlFolder',
     urlLabel: 'Werte-Listen',
     label: `Werte-Listen`,
     url: ['Werte-Listen'],

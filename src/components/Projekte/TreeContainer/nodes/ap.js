@@ -3,7 +3,6 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
 import compareLabel from './compareLabel'
-import allParentNodesExist from '../allParentNodesExist'
 import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
 import filterNodesByApFilter from '../filterNodesByApFilter'
 
@@ -13,7 +12,6 @@ export default ({
   treeName,
   projektNodes,
   projId,
-  nodeFilter,
   mobxStore,
 }: {
   nodes: Array<Object>,
@@ -21,9 +19,9 @@ export default ({
   treeName: String,
   projektNodes: Array<Object>,
   projId: String,
-  nodeFilter: Object,
   mobxStore: Object,
 }): Array<Object> => {
+  const nodeFilter = get(mobxStore, `nodeFilter.${treeName}`)
   const apFilter = get(mobxStore, `${treeName}.apFilter`)
   const nodeLabelFilterString = get(mobxStore, `${treeName}.nodeLabelFilter.ap`)
   const aps = get(data, 'allAps.nodes', [])
@@ -32,14 +30,15 @@ export default ({
   )
 
   // fetch sorting indexes of parents
+  const projNodeIds = projektNodes.map(n => n.id)
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
 
   // map through all elements and create array of nodes
   const nodes = aps
-    // filter by projekt
-    .filter(el => el.projId === projId)
+    // only show if parent node exists
+    .filter(el => projNodeIds.includes(el.projId))
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
@@ -51,14 +50,8 @@ export default ({
       return true
     })
     // filter by apFilter
-    // TODO: would be much better to filter this in query
-    // this is done
-    // but unfortunately query does not immediatly update
     .filter(node => filterNodesByApFilter({ node, apFilter }))
     // filter by nodeFilter
-    // TODO: would be much better to filter this in query
-    // this is done
-    // but unfortunately query does not immediatly update
     .filter(node =>
       filterNodesByNodeFilterArray({
         node,
@@ -77,7 +70,6 @@ export default ({
       url: ['Projekte', el.projId, 'Aktionspläne', el.id],
       hasChildren: true,
     }))
-    .filter(n => allParentNodesExist(nodesPassed, n))
     // sort by label
     .sort(compareLabel)
     .map((el, index) => {

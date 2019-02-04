@@ -26,6 +26,7 @@ export default ({
 
   // map through all elements and create array of nodes
   const nodes = adresses
+    .filter(el => nodesPassed.map(n => n.id).includes('adresseFolder'))
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
@@ -45,7 +46,6 @@ export default ({
       url: ['Werte-Listen', 'Adressen', el.id],
       hasChildren: false,
     }))
-    .filter(n => allParentNodesExist(nodesPassed, n))
     // sort by label
     .sort(compareLabel)
     .map((el, index) => {

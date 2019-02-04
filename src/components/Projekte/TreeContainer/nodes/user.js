@@ -1,5 +1,6 @@
 // @flow
 import get from 'lodash/get'
+import findIndex from 'lodash/findIndex'
 
 import compareLabel from './compareLabel'
 import allParentNodesExist from '../allParentNodesExist'
@@ -39,6 +40,7 @@ export default ({
     .map(el => {
       const message = el.role ? el.role.replace('apflora_', '') : 'keine Rolle'
       const label = el.name ? `${el.name} (${message})` : '(kein Name)'
+
       return {
         nodeType: 'table',
         menuType: 'user',
@@ -50,7 +52,6 @@ export default ({
         hasChildren: false,
       }
     })
-    .filter(n => allParentNodesExist(nodesPassed, n))
     // sort by label
     .sort(compareLabel)
     .map((el, index) => {

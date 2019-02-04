@@ -43,7 +43,7 @@ export default ({
     nodeType: 'folder',
     menuType: 'userFolder',
     filterTable: 'user',
-    id: userIndex,
+    id: 'benutzerFolder',
     urlLabel: 'Benutzer',
     label: `Benutzer (${message})`,
     url: ['Benutzer'],
