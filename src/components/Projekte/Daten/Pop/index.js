@@ -15,6 +15,7 @@ import updatePopByIdGql from './updatePopById'
 import query from './data'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
+import filterNodesByNodeFilterArray from '../../TreeContainer/filterNodesByNodeFilterArray'
 
 const Container = styled.div`
   height: 100%;
@@ -45,9 +46,23 @@ const Pop = ({ treeName }: { treeName: string }) => {
     },
   })
 
+  let popTotal = []
+  let popFiltered = []
   let row
   if (showFilter) {
     row = nodeFilter[treeName].pop
+    // get filter values length
+    popTotal = get(data, 'allPops.nodes', [])
+    const nodeFilterArray = Object.entries(nodeFilter[treeName].pop).filter(
+      ([key, value]) => value || value === 0 || value === false,
+    )
+    popFiltered = popTotal.filter(node =>
+      filterNodesByNodeFilterArray({
+        node,
+        nodeFilterArray,
+        table: 'pop',
+      }),
+    )
   } else {
     row = get(data, 'popById', {})
   }
@@ -135,6 +150,8 @@ const Pop = ({ treeName }: { treeName: string }) => {
           title="Population"
           treeName={treeName}
           table="pop"
+          totalNr={popTotal.length}
+          filteredNr={popFiltered.length}
         />
         <FieldsContainer>
           <TextField

@@ -18,5 +18,20 @@ export default gql`
         startJahr
       }
     }
+    allPops {
+      totalCount
+      nodes {
+        id
+        apId
+        nr
+        name
+        status
+        statusUnklar
+        statusUnklarBegruendung
+        bekanntSeit
+        x
+        y
+      }
+    }
   }
 `
