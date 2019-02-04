@@ -1,9 +1,7 @@
 // @flow
 import get from 'lodash/get'
-import findIndex from 'lodash/findIndex'
 
 import compareLabel from './compareLabel'
-import allParentNodesExist from '../allParentNodesExist'
 
 export default ({
   nodes: nodesPassed,

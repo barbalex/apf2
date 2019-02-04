@@ -30,7 +30,6 @@ export default ({
   )
 
   // fetch sorting indexes of parents
-  const projNodeIds = projektNodes.map(n => n.id)
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
@@ -38,7 +37,7 @@ export default ({
   // map through all elements and create array of nodes
   const nodes = aps
     // only show if parent node exists
-    .filter(el => projNodeIds.includes(el.projId))
+    .filter(el => nodesPassed.map(n => n.id).includes(el.projId))
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {

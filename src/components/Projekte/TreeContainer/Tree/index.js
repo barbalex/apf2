@@ -102,7 +102,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     tpopkontr,
     isTpopkontr,
     isWerteListen,
-    isAdresse,
   } = buildVariables({
     treeName,
     mobxStore,
@@ -438,7 +437,7 @@ const Tree = ({ treeName, dimensions }: Props) => {
     refetch: refetchAdresses,
   } = useQuery(queryAdresses, {
     suspend: false,
-    variables: { isWerteListen, isAdresse },
+    variables: { isWerteListen },
   })
   setRefetchKey({
     key: 'adresses',

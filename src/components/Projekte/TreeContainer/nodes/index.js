@@ -1106,8 +1106,7 @@ export default ({
       role === 'apflora_manager' &&
       nodeUrl.length === 2 &&
       nodeUrl[0] === 'Werte-Listen' &&
-      nodeUrl[1] === 'Adressen' &&
-      allParentNodesAreOpen(openNodes, nodeUrl)
+      nodeUrl[1] === 'Adressen'
     ) {
       nodes = [
         ...nodes,

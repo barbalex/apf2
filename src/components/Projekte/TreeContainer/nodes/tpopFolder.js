@@ -2,8 +2,6 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import uniqBy from 'lodash/uniqBy'
 
-import allParentNodesAreOpen from '../allParentNodesAreOpen'
-import allParentNodesExist from '../allParentNodesExist'
 import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
 
 export default ({

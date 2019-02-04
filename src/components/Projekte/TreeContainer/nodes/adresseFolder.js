@@ -41,7 +41,7 @@ export default ({
   }
 
   // only show if parent node exists
-  if (!nodesPassed.includes('wlFolder')) return []
+  if (!nodesPassed.map(n => n.id).includes('wlFolder')) return []
 
   return [
     {

@@ -1,10 +1,10 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query AdressesDataQuery($isWerteListen: Boolean!, $isAdresse: Boolean!) {
+  query AdressesDataQuery($isWerteListen: Boolean!) {
     allAdresses @include(if: $isWerteListen) {
       totalCount
-      nodes @include(if: $isAdresse) {
+      nodes {
         id
         name
       }

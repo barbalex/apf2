@@ -2,7 +2,6 @@
 import get from 'lodash/get'
 
 import compareLabel from './compareLabel'
-import allParentNodesExist from '../allParentNodesExist'
 
 export default ({
   nodes: nodesPassed,
@@ -26,6 +25,7 @@ export default ({
 
   // map through all elements and create array of nodes
   const nodes = adresses
+    // only show if parent node exists
     .filter(el => nodesPassed.map(n => n.id).includes('adresseFolder'))
     // filter by nodeLabelFilter
     .filter(el => {
