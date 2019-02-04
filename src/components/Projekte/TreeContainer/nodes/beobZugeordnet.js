@@ -4,8 +4,6 @@ import get from 'lodash/get'
 import isValid from 'date-fns/isValid'
 import format from 'date-fns/format'
 
-import allParentNodesAreOpen from '../allParentNodesAreOpen'
-import allParentNodesExist from '../allParentNodesExist'
 import compareLabel from './compareLabel'
 
 export default ({
@@ -14,7 +12,6 @@ export default ({
   treeName,
   projektNodes,
   apNodes,
-  openNodes,
   popNodes,
   tpopNodes,
   projId,
@@ -28,7 +25,6 @@ export default ({
   treeName: String,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
-  openNodes: Array<String>,
   popNodes: Array<Object>,
   tpopNodes: Array<Object>,
   projId: String,
@@ -51,7 +47,10 @@ export default ({
 
   // map through all elements and create array of nodes
   const nodes = get(data, 'allVApbeobs.nodes', [])
-    .filter(el => el.tpopId === tpopId)
+    // only show if parent node exists
+    .filter(el =>
+      nodesPassed.map(n => n.id).includes(`${tpopId}BeobZugeordnetFolder`),
+    )
     // filter by nodeLabelFilter
     .filter(el => {
       // some dates are not valid
@@ -103,8 +102,6 @@ export default ({
         hasChildren: false,
       }
     })
-    .filter(el => allParentNodesAreOpen(openNodes, el.url))
-    .filter(n => allParentNodesExist(nodesPassed, n))
     // sort by label
     .sort(compareLabel)
     .map((el, index) => {

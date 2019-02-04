@@ -2,8 +2,6 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import uniqBy from 'lodash/uniqBy'
 
-import allParentNodesAreOpen from '../allParentNodesAreOpen'
-import allParentNodesExist from '../allParentNodesExist'
 import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
 
 export default ({
@@ -13,14 +11,12 @@ export default ({
   loading,
   projektNodes,
   apNodes,
-  openNodes,
   popNodes,
   tpopNodes,
   projId,
   apId,
   popId,
   tpopId,
-  nodeFilter,
   mobxStore,
 }: {
   nodes: Array<Object>,
@@ -29,16 +25,15 @@ export default ({
   loading: Boolean,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
-  openNodes: Array<String>,
   popNodes: Array<Object>,
   tpopNodes: Array<Object>,
   projId: String,
   apId: String,
   popId: String,
   tpopId: String,
-  nodeFilter: Object,
   mobxStore: Object,
 }): Array<Object> => {
+  const nodeFilter = get(mobxStore, `nodeFilter.${treeName}`)
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
@@ -66,9 +61,6 @@ export default ({
       return true
     })
     // filter by nodeFilter
-    // TODO: would be much better to filter this in query
-    // this is done
-    // but unfortunately query does not immediatly update
     .filter(node =>
       filterNodesByNodeFilterArray({
         node,
@@ -102,20 +94,21 @@ export default ({
     tpopId,
     'Freiwilligen-Kontrollen',
   ]
-  const allParentsOpen = allParentNodesAreOpen(openNodes, url)
-  if (!allParentsOpen) return []
+
+  // only show if parent node exists
+  if (!nodesPassed.map(n => n.id).includes(tpopId)) return []
 
   return [
     {
       nodeType: 'folder',
       menuType: 'tpopfreiwkontrFolder',
       filterTable: 'tpopkontr',
-      id: tpopId,
+      id: `${tpopId}TpopfreiwkontrFolder`,
       urlLabel: 'Freiwilligen-Kontrollen',
       label: `Freiwilligen-Kontrollen (${message})`,
       url,
       sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 4],
       hasChildren: childrenLength > 0,
     },
-  ].filter(n => allParentNodesExist(nodesPassed, n))
+  ]
 }

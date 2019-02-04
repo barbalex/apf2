@@ -3,8 +3,6 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 
-import allParentNodesAreOpen from '../allParentNodesAreOpen'
-import allParentNodesExist from '../allParentNodesExist'
 import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
 
 export default ({
@@ -13,14 +11,12 @@ export default ({
   treeName,
   projektNodes,
   apNodes,
-  openNodes,
   popNodes,
   tpopNodes,
   projId,
   apId,
   popId,
   tpopId,
-  nodeFilter,
   mobxStore,
 }: {
   nodes: Array<Object>,
@@ -28,16 +24,15 @@ export default ({
   treeName: String,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
-  openNodes: Array<String>,
   popNodes: Array<Object>,
   tpopNodes: Array<Object>,
   projId: String,
   apId: String,
   popId: String,
   tpopId: String,
-  nodeFilter: Object,
   mobxStore: Object,
 }): Array<Object> => {
+  const nodeFilter = get(mobxStore, `nodeFilter.${treeName}`)
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
@@ -55,6 +50,10 @@ export default ({
 
   // map through all elements and create array of nodes
   let nodes = get(data, 'allTpopkontrs.nodes', [])
+    // only show if parent node exists
+    .filter(el =>
+      nodesPassed.map(n => n.id).includes(`${tpopId}TpopfreiwkontrFolder`),
+    )
     .filter(el => el.tpopId === tpopId)
     // filter by nodeLabelFilter
     .filter(el => {
@@ -66,9 +65,6 @@ export default ({
       return true
     })
     // filter by nodeFilter
-    // TODO: would be much better to filter this in query
-    // this is done
-    // but unfortunately query does not immediatly update
     .filter(node =>
       filterNodesByNodeFilterArray({
         node,
@@ -86,7 +82,7 @@ export default ({
       menuType: 'tpopfreiwkontr',
       filterTable: 'tpopkontr',
       id: el.id,
-      parentId: tpopId,
+      parentId: `${tpopId}TpopfreiwkontrFolder`,
       urlLabel: el.id,
       label: `${el.jahr || '(kein Jahr)'}`,
       url: [
@@ -103,8 +99,6 @@ export default ({
       ],
       hasChildren: false,
     }))
-    .filter(el => allParentNodesAreOpen(openNodes, el.url))
-    .filter(n => allParentNodesExist(nodesPassed, n))
     .map((el, index) => {
       el.sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 4, index]
       return el

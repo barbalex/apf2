@@ -1,9 +1,6 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
-import allParentNodesAreOpen from '../allParentNodesAreOpen'
-import allParentNodesExist from '../allParentNodesExist'
-
 export default ({
   nodes: nodesPassed,
   data,
@@ -11,7 +8,6 @@ export default ({
   loading,
   projektNodes,
   apNodes,
-  openNodes,
   popNodes,
   tpopNodes,
   tpopfeldkontrNodes,
@@ -28,7 +24,6 @@ export default ({
   loading: Boolean,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
-  openNodes: Array<String>,
   popNodes: Array<Object>,
   tpopNodes: Array<Object>,
   tpopfeldkontrNodes: Array<Object>,
@@ -86,15 +81,16 @@ export default ({
     tpopkontrId,
     'Zaehlungen',
   ]
-  const allParentsOpen = allParentNodesAreOpen(openNodes, url)
-  if (!allParentsOpen) return []
+
+  // only show if parent node exists
+  if (!nodesPassed.map(n => n.id).includes(tpopkontrId)) return []
 
   return [
     {
       nodeType: 'folder',
       menuType: 'tpopfeldkontrzaehlFolder',
       filterTable: 'tpopkontrzaehl',
-      id: tpopkontrId,
+      id: `${tpopkontrId}TpopfeldkontrzaehlFolder`,
       urlLabel: 'Zaehlungen',
       label: `Zählungen (${message})`,
       url,
@@ -112,5 +108,5 @@ export default ({
       ],
       hasChildren: childrenLength > 0,
     },
-  ].filter(n => allParentNodesExist(nodesPassed, n))
+  ]
 }

@@ -3,9 +3,6 @@ import get from 'lodash/get'
 import format from 'date-fns/format'
 import isValid from 'date-fns/isValid'
 
-import allParentNodesAreOpen from '../allParentNodesAreOpen'
-import allParentNodesExist from '../allParentNodesExist'
-
 export default ({
   nodes: nodesPassed,
   data,
@@ -13,7 +10,6 @@ export default ({
   loading,
   projektNodes,
   apNodes,
-  openNodes,
   popNodes,
   tpopNodes,
   projId,
@@ -28,7 +24,6 @@ export default ({
   loading: Boolean,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
-  openNodes: Array<String>,
   popNodes: Array<Object>,
   tpopNodes: Array<Object>,
   projId: String,
@@ -85,20 +80,21 @@ export default ({
     tpopId,
     'Beobachtungen',
   ]
-  const allParentsOpen = allParentNodesAreOpen(openNodes, url)
-  if (!allParentsOpen) return []
+
+  // only show if parent node exists
+  if (!nodesPassed.map(n => n.id).includes(tpopId)) return []
 
   return [
     {
       nodeType: 'folder',
       menuType: 'beobZugeordnetFolder',
       filterTable: 'beob',
-      id: tpopId,
+      id: `${tpopId}BeobZugeordnetFolder`,
       urlLabel: 'Beobachtungen',
       label: `Beobachtungen zugeordnet (${message})`,
       url,
       sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 6],
       hasChildren: childrenLength > 0,
     },
-  ].filter(n => allParentNodesExist(nodesPassed, n))
+  ]
 }

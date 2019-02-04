@@ -832,12 +832,10 @@ export default ({
             projektNodes,
             apId,
             apNodes,
-            openNodes,
             popId,
             popNodes,
             tpopId,
             tpopNodes,
-            nodeFilter: nodeFilter[treeName],
             mobxStore,
           }),
           ...buildTpopberFolderNodes({
@@ -849,7 +847,6 @@ export default ({
             projektNodes,
             apId,
             apNodes,
-            openNodes,
             popId,
             popNodes,
             tpopId,
@@ -865,7 +862,6 @@ export default ({
             projektNodes,
             apId,
             apNodes,
-            openNodes,
             popId,
             popNodes,
             tpopId,
@@ -878,8 +874,7 @@ export default ({
         nodeUrl.length === 9 &&
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
-        nodeUrl[8] === 'Beobachtungen' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
+        nodeUrl[8] === 'Beobachtungen'
       ) {
         nodes = [
           ...nodes,
@@ -892,7 +887,6 @@ export default ({
             projektNodes,
             apId: nodeUrl[3],
             apNodes,
-            openNodes,
             popId: nodeUrl[5],
             popNodes,
             tpopId: nodeUrl[7],
@@ -905,8 +899,7 @@ export default ({
         nodeUrl.length === 9 &&
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
-        nodeUrl[8] === 'Kontroll-Berichte' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
+        nodeUrl[8] === 'Kontroll-Berichte'
       ) {
         nodes = [
           ...nodes,
@@ -919,7 +912,6 @@ export default ({
             projektNodes,
             apId: nodeUrl[3],
             apNodes,
-            openNodes,
             popId: nodeUrl[5],
             popNodes,
             tpopId: nodeUrl[7],
@@ -932,8 +924,7 @@ export default ({
         nodeUrl.length === 9 &&
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
-        nodeUrl[8] === 'Freiwilligen-Kontrollen' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
+        nodeUrl[8] === 'Freiwilligen-Kontrollen'
       ) {
         tpopfreiwkontrNodes = buildTpopfreiwkontrNodes({
           nodes,
@@ -944,12 +935,10 @@ export default ({
           projektNodes,
           apId: nodeUrl[3],
           apNodes,
-          openNodes,
           popId: nodeUrl[5],
           popNodes,
           tpopId: nodeUrl[7],
           tpopNodes,
-          nodeFilter: nodeFilter[treeName],
           mobxStore,
         })
         nodes = [...nodes, ...tpopfreiwkontrNodes]
@@ -958,8 +947,7 @@ export default ({
         nodeUrl.length === 9 &&
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
-        nodeUrl[8] === 'Feld-Kontrollen' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
+        nodeUrl[8] === 'Feld-Kontrollen'
       ) {
         tpopfeldkontrNodes = buildTpopfeldkontrNodes({
           nodes,
@@ -970,12 +958,10 @@ export default ({
           projektNodes,
           apId: nodeUrl[3],
           apNodes,
-          openNodes,
           popId: nodeUrl[5],
           popNodes,
           tpopId: nodeUrl[7],
           tpopNodes,
-          nodeFilter: nodeFilter[treeName],
           mobxStore,
         })
         nodes = [...nodes, ...tpopfeldkontrNodes]
@@ -984,8 +970,7 @@ export default ({
         nodeUrl.length === 9 &&
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
-        nodeUrl[8] === 'Massnahmen-Berichte' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
+        nodeUrl[8] === 'Massnahmen-Berichte'
       ) {
         nodes = [
           ...nodes,
@@ -998,7 +983,6 @@ export default ({
             projektNodes,
             apId: nodeUrl[3],
             apNodes,
-            openNodes,
             popId: nodeUrl[5],
             popNodes,
             tpopId: nodeUrl[7],
@@ -1011,8 +995,7 @@ export default ({
         nodeUrl.length === 9 &&
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
-        nodeUrl[8] === 'Massnahmen' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
+        nodeUrl[8] === 'Massnahmen'
       ) {
         nodes = [
           ...nodes,
@@ -1025,12 +1008,10 @@ export default ({
             projektNodes,
             apId: nodeUrl[3],
             apNodes,
-            openNodes,
             popId: nodeUrl[5],
             popNodes,
             tpopId: nodeUrl[7],
             tpopNodes,
-            nodeFilter: nodeFilter[treeName],
             mobxStore,
           }),
         ]
@@ -1039,8 +1020,7 @@ export default ({
         nodeUrl.length === 10 &&
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
-        nodeUrl[8] === 'Feld-Kontrollen' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
+        nodeUrl[8] === 'Feld-Kontrollen'
       ) {
         nodes = [
           ...nodes,
@@ -1053,7 +1033,6 @@ export default ({
             projektNodes,
             apId: nodeUrl[3],
             apNodes,
-            openNodes,
             popId: nodeUrl[5],
             popNodes,
             tpopId: nodeUrl[7],

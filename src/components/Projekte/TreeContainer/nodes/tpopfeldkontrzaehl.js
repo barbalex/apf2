@@ -2,8 +2,6 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
-import allParentNodesAreOpen from '../allParentNodesAreOpen'
-import allParentNodesExist from '../allParentNodesExist'
 import compareLabel from './compareLabel'
 
 export default ({
@@ -12,7 +10,6 @@ export default ({
   treeName,
   projektNodes,
   apNodes,
-  openNodes,
   popNodes,
   tpopNodes,
   tpopfeldkontrNodes,
@@ -28,7 +25,6 @@ export default ({
   treeName: String,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
-  openNodes: Array<String>,
   popNodes: Array<Object>,
   tpopNodes: Array<Object>,
   tpopfeldkontrNodes: Array<Object>,
@@ -54,7 +50,12 @@ export default ({
 
   // map through all elements and create array of nodes
   let nodes = get(data, 'allTpopkontrzaehls.nodes', [])
-    .filter(el => el.tpopkontrId === tpopkontrId)
+    // only show if parent node exists
+    .filter(el =>
+      nodesPassed
+        .map(n => n.id)
+        .includes(`${tpopkontrId}TpopfeldkontrzaehlFolder`),
+    )
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
@@ -73,7 +74,7 @@ export default ({
       menuType: 'tpopfeldkontrzaehl',
       filterTable: 'tpopkontrzaehl',
       id: el.id,
-      parentId: tpopkontrId,
+      parentId: `${tpopkontrId}TpopfeldkontrzaehlFolder`,
       urlLabel: el.id,
       label: `${get(el, 'tpopkontrzaehlEinheitWerteByEinheit.text') ||
         '(keine Einheit)'}: ${el.anzahl} ${get(
@@ -96,8 +97,6 @@ export default ({
       ],
       hasChildren: false,
     }))
-    .filter(el => allParentNodesAreOpen(openNodes, el.url))
-    .filter(n => allParentNodesExist(nodesPassed, n))
     // sort by label
     .sort(compareLabel)
     .map((el, index) => {
