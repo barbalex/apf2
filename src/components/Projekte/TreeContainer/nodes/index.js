@@ -525,8 +525,7 @@ export default ({
       }
       if (
         nodeUrl.length === 5 &&
-        nodeUrl[4] === 'nicht-zuzuordnende-Beobachtungen' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
+        nodeUrl[4] === 'nicht-zuzuordnende-Beobachtungen'
       ) {
         nodes = [
           ...nodes,
@@ -545,8 +544,7 @@ export default ({
       }
       if (
         nodeUrl.length === 5 &&
-        nodeUrl[4] === 'nicht-beurteilte-Beobachtungen' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
+        nodeUrl[4] === 'nicht-beurteilte-Beobachtungen'
       ) {
         nodes = [
           ...nodes,
@@ -556,7 +554,6 @@ export default ({
             treeName,
             loading: loadingBeobNichtBeurteilts,
             apNodes,
-            openNodes,
             projektNodes,
             projId,
             apId: nodeUrl[3],
@@ -564,11 +561,7 @@ export default ({
           }),
         ]
       }
-      if (
-        nodeUrl.length === 5 &&
-        nodeUrl[4] === 'assoziierte-Arten' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
-      ) {
+      if (nodeUrl.length === 5 && nodeUrl[4] === 'assoziierte-Arten') {
         nodes = [
           ...nodes,
           ...buildAssozartNodes({
@@ -577,7 +570,6 @@ export default ({
             treeName,
             loading: loadingAssozarts,
             apNodes,
-            openNodes,
             projektNodes,
             projId,
             apId: nodeUrl[3],
@@ -585,11 +577,7 @@ export default ({
           }),
         ]
       }
-      if (
-        nodeUrl.length === 5 &&
-        nodeUrl[4] === 'EKF-Zähleinheiten' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
-      ) {
+      if (nodeUrl.length === 5 && nodeUrl[4] === 'EKF-Zähleinheiten') {
         nodes = [
           ...nodes,
           ...buildEkfzaehleinheitNodes({
@@ -598,7 +586,6 @@ export default ({
             treeName,
             loading: loadingEkfzaehleinheits,
             apNodes,
-            openNodes,
             projektNodes,
             projId,
             apId: nodeUrl[3],
@@ -606,11 +593,7 @@ export default ({
           }),
         ]
       }
-      if (
-        nodeUrl.length === 5 &&
-        nodeUrl[4] === 'AP-Arten' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
-      ) {
+      if (nodeUrl.length === 5 && nodeUrl[4] === 'AP-Arten') {
         nodes = [
           ...nodes,
           ...buildApartNodes({
@@ -619,7 +602,6 @@ export default ({
             treeName,
             loading: loadingAparts,
             apNodes,
-            openNodes,
             projektNodes,
             projId,
             apId: nodeUrl[3],

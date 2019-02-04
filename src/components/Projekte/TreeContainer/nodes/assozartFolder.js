@@ -66,7 +66,7 @@ export default ({
       nodeType: 'folder',
       menuType: 'assozartFolder',
       filterTable: 'assozart',
-      id: apId,
+      id: `${apId}AssozartFolder`,
       urlLabel: 'assoziierte-Arten',
       label: `assoziierte Arten (${message})`,
       url,

@@ -2,8 +2,6 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
-import allParentNodesAreOpen from '../allParentNodesAreOpen'
-import allParentNodesExist from '../allParentNodesExist'
 import compareLabel from './compareLabel'
 
 export default ({
@@ -12,7 +10,6 @@ export default ({
   treeName,
   projektNodes,
   apNodes,
-  openNodes,
   projId,
   apId,
   mobxStore,
@@ -22,7 +19,6 @@ export default ({
   treeName: String,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
-  openNodes: Array<String>,
   projId: String,
   apId: String,
   mobxStore: Object,
@@ -40,7 +36,8 @@ export default ({
 
   // map through all elements and create array of nodes
   const nodes = assozarts
-    .filter(el => el.apId === apId)
+    // only show if parent node exists
+    .filter(el => nodesPassed.map(n => n.id).includes(`${apId}AssozartFolder`))
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
@@ -70,8 +67,6 @@ export default ({
       ],
       hasChildren: false,
     }))
-    .filter(el => allParentNodesAreOpen(openNodes, el.url))
-    .filter(n => allParentNodesExist(nodesPassed, n))
     // sort by label
     .sort(compareLabel)
     .map((el, index) => {

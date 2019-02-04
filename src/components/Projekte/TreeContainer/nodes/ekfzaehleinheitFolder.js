@@ -68,7 +68,7 @@ export default ({
       nodeType: 'folder',
       menuType: 'ekfzaehleinheitFolder',
       filterTable: 'ekfzaehleinheit',
-      id: apId,
+      id: `${apId}Ekfzaehleinheit`,
       urlLabel: 'EKF-Zähleinheiten',
       label: `EKF-Zähleinheiten (${message})`,
       url,

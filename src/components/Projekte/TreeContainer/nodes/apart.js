@@ -3,8 +3,6 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
 import compareLabel from './compareLabel'
-import allParentNodesAreOpen from '../allParentNodesAreOpen'
-import allParentNodesExist from '../allParentNodesExist'
 
 export default ({
   nodes: nodesPassed,
@@ -12,7 +10,6 @@ export default ({
   treeName,
   projektNodes,
   apNodes,
-  openNodes,
   projId,
   apId,
   mobxStore,
@@ -22,12 +19,12 @@ export default ({
   treeName: String,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
-  openNodes: Array<String>,
   projId: String,
   apId: String,
   mobxStore: Object,
 }): Array<Object> => {
   const aparts = get(data, 'allAparts.nodes', [])
+
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
@@ -40,7 +37,8 @@ export default ({
 
   // map through all elements and create array of nodes
   const nodes = aparts
-    .filter(el => el.apId === apId)
+    // only show if parent node exists
+    .filter(el => nodesPassed.map(n => n.id).includes(`${apId}Apart`))
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
@@ -61,8 +59,6 @@ export default ({
       url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Arten', el.id],
       hasChildren: false,
     }))
-    .filter(el => allParentNodesAreOpen(openNodes, el.url))
-    .filter(n => allParentNodesExist(nodesPassed, n))
     // sort by label
     .sort(compareLabel)
     .map((el, index) => {
