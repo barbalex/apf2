@@ -26,6 +26,7 @@ import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import withAllAdresses from './withAllAdresses'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
+import filterNodesByNodeFilterArray from '../../TreeContainer/filterNodesByNodeFilterArray'
 
 const Container = styled.div`
   height: 100%;
@@ -96,6 +97,7 @@ const Tpopfeldkontr = ({
     refetch,
   } = mobxStore
   const { activeNodeArray } = mobxStore[treeName]
+  const showFilter = !!nodeFilter[treeName].activeTable
 
   const { data, loading, error } = useQuery(query, {
     suspend: false,
@@ -104,6 +106,7 @@ const Tpopfeldkontr = ({
         activeNodeArray.length > 9
           ? activeNodeArray[9]
           : '99999999-9999-9999-9999-999999999999',
+      showFilter,
     },
   })
 
@@ -112,10 +115,23 @@ const Tpopfeldkontr = ({
     get(urlQuery, 'feldkontrTab', 'entwicklung'),
   )
 
-  const showFilter = !!nodeFilter[treeName].activeTable
+  let tpopkontrTotal = []
+  let tpopkontrFiltered = []
   let row
   if (showFilter) {
     row = nodeFilter[treeName].tpopfeldkontr
+    // get filter values length
+    tpopkontrTotal = get(data, 'allTpopkontrs.nodes', [])
+    const nodeFilterArray = Object.entries(
+      nodeFilter[treeName].tpopfeldkontr,
+    ).filter(([key, value]) => value || value === 0 || value === false)
+    tpopkontrFiltered = tpopkontrTotal.filter(node =>
+      filterNodesByNodeFilterArray({
+        node,
+        nodeFilterArray,
+        table: 'tpopfeldkontr',
+      }),
+    )
   } else {
     row = get(data, 'tpopkontrById', {})
   }
@@ -339,6 +355,8 @@ const Tpopfeldkontr = ({
           title="Feld-Kontrolle"
           treeName={treeName}
           table="tpopfeldkontr"
+          totalNr={tpopkontrTotal.length}
+          filteredNr={tpopkontrFiltered.length}
         />
         <FieldsContainer>
           <Tabs

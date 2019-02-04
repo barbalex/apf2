@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query tpopkontrByIdQuery($id: UUID!) {
+  query tpopkontrByIdQuery($id: UUID!, $showFilter: Boolean!) {
     tpopkontrById(id: $id) {
       id
       typ
@@ -55,6 +55,59 @@ export default gql`
           id
           apId
         }
+      }
+    }
+    allTpopkontrs(
+      filter: {
+        or: [
+          { typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" } }
+          { typ: { isNull: true } }
+        ]
+      }
+    ) @include(if: $showFilter) {
+      nodes {
+        id
+        typ
+        datum
+        jahr
+        jungpflanzenAnzahl
+        vitalitaet
+        ueberlebensrate
+        entwicklung
+        ursachen
+        erfolgsbeurteilung
+        umsetzungAendern
+        kontrolleAendern
+        bemerkungen
+        lrDelarze
+        flaeche
+        lrUmgebungDelarze
+        vegetationstyp
+        konkurrenz
+        moosschicht
+        krautschicht
+        strauchschicht
+        baumschicht
+        bodenTyp
+        bodenKalkgehalt
+        bodenDurchlaessigkeit
+        bodenHumus
+        bodenNaehrstoffgehalt
+        bodenAbtrag
+        wasserhaushalt
+        idealbiotopUebereinstimmung
+        handlungsbedarf
+        flaecheUeberprueft
+        deckungVegetation
+        deckungNackterBoden
+        deckungApArt
+        vegetationshoeheMaximum
+        vegetationshoeheMittel
+        gefaehrdung
+        tpopId
+        bearbeiter
+        planVorhanden
+        jungpflanzenVorhanden
       }
     }
     allTpopkontrIdbiotuebereinstWertes {
