@@ -2,8 +2,6 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
-import allParentNodesExist from '../allParentNodesExist'
-
 export default ({
   nodes: nodesPassed,
   data,
@@ -63,6 +61,10 @@ export default ({
     message = `${apartNodesLength} gefiltert`
   }
 
+  // only show if parent node exists
+  const apNodesIds = nodesPassed.map(n => n.id)
+  if (!apNodesIds.includes(apId)) return []
+
   return [
     {
       nodeType: 'folder',
@@ -75,5 +77,5 @@ export default ({
       sort: [projIndex, 1, apIndex, 7],
       hasChildren: apartNodesLength > 0,
     },
-  ].filter(n => allParentNodesExist(nodesPassed, n))
+  ]
 }

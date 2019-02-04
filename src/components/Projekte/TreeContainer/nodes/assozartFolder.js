@@ -2,9 +2,6 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
-import allParentNodesAreOpen from '../allParentNodesAreOpen'
-import allParentNodesExist from '../allParentNodesExist'
-
 export default ({
   nodes: nodesPassed,
   data,
@@ -13,7 +10,6 @@ export default ({
   projektNodes,
   projId,
   apNodes,
-  openNodes,
   apId,
   mobxStore,
 }: {
@@ -24,7 +20,6 @@ export default ({
   projektNodes: Array<Object>,
   projId: String,
   apNodes: Array<Object>,
-  openNodes: Array<String>,
   apId: String,
   mobxStore: Object,
 }): Array<Object> => {
@@ -61,8 +56,10 @@ export default ({
   }
 
   const url = ['Projekte', projId, 'Aktionspläne', apId, 'assoziierte-Arten']
-  const allParentsOpen = allParentNodesAreOpen(openNodes, url)
-  if (!allParentsOpen) return []
+
+  // only show if parent node exists
+  const apNodesIds = nodesPassed.map(n => n.id)
+  if (!apNodesIds.includes(apId)) return []
 
   return [
     {
@@ -76,5 +73,5 @@ export default ({
       sort: [projIndex, 1, apIndex, 8],
       hasChildren: assozartNodesLength > 0,
     },
-  ].filter(n => allParentNodesExist(nodesPassed, n))
+  ]
 }

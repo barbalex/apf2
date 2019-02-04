@@ -3,8 +3,6 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import uniqBy from 'lodash/uniqBy'
 
-import allParentNodesAreOpen from '../allParentNodesAreOpen'
-import allParentNodesExist from '../allParentNodesExist'
 import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
 
 export default ({
@@ -15,7 +13,6 @@ export default ({
   projektNodes,
   projId,
   apNodes,
-  openNodes,
   apId,
   nodeFilter,
   mobxStore,
@@ -27,13 +24,11 @@ export default ({
   projektNodes: Array<Object>,
   projId: String,
   apNodes: Array<Object>,
-  openNodes: Array<String>,
   apId: String,
   nodeFilter: Object,
   mobxStore: Object,
 }): Array<Object> => {
   const pops = get(data, 'allPops.nodes', [])
-  const apFilter = get(mobxStore, `${treeName}.apFilter`)
   const nodeFilterArray = Object.entries(nodeFilter.pop).filter(
     ([key, value]) => value || value === 0 || value === false,
   )
@@ -52,11 +47,6 @@ export default ({
 
   let popNodes = pops
     .filter(el => el.apId === apId)
-    // return empty if ap is not a real ap and apFilter is set
-    .filter(el => {
-      const isAp = [1, 2, 3].includes(get(el, 'apByApId.bearbeitung'))
-      return !(apFilter && !isAp)
-    })
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
@@ -67,9 +57,6 @@ export default ({
       return true
     })
     // filter by nodeFilter
-    // TODO: would be much better to filter this in query
-    // this is done
-    // but unfortunately query does not immediatly update
     .filter(node =>
       filterNodesByNodeFilterArray({
         node,
@@ -90,20 +77,22 @@ export default ({
   }
 
   const url = ['Projekte', projId, 'Aktionspläne', apId, 'Populationen']
-  const allParentsOpen = allParentNodesAreOpen(openNodes, url)
-  if (!allParentsOpen) return []
+
+  // only show if parent node exists
+  const apNodesIds = nodesPassed.map(n => n.id)
+  if (!apNodesIds.includes(apId)) return []
 
   return [
     {
       nodeType: 'folder',
       menuType: 'popFolder',
       filterTable: 'pop',
-      id: apId,
+      id: `${apId}PopFolder`,
       urlLabel: 'Populationen',
       label: `Populationen (${message})`,
       url,
       sort: [projIndex, 1, apIndex, 1],
       hasChildren: popNodesLength > 0,
     },
-  ].filter(n => allParentNodesExist(nodesPassed, n))
+  ]
 }

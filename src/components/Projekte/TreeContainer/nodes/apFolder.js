@@ -32,6 +32,7 @@ export default ({
   )
 
   // fetch sorting indexes of parents
+  const projNodeIds = projektNodes.map(n => n.id)
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
@@ -39,6 +40,8 @@ export default ({
   const apFilter = get(mobxStore, `${treeName}.apFilter`)
 
   let apNodes = aps
+    // only show if parent node exists
+    .filter(el => projNodeIds.includes(el.projId))
     .filter(el => el.projId === projId)
     // filter by nodeLabelFilter
     .filter(el => {
@@ -53,9 +56,6 @@ export default ({
     // filter by apFilter
     .filter(node => filterNodesByApFilter({ node, apFilter }))
     // filter by nodeFilter
-    // TODO: would be much better to filter this in query
-    // this is done
-    // but unfortunately query does not immediatly update
     .filter(node =>
       filterNodesByNodeFilterArray({
         node,
