@@ -509,22 +509,16 @@ export default ({
           }),
         ]
       }
-      if (
-        nodeUrl.length === 5 &&
-        nodeUrl[4] === 'Populationen' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
-      ) {
+      if (nodeUrl.length === 5 && nodeUrl[4] === 'Populationen') {
         popNodes = buildPopNodes({
           nodes,
           data: dataPops,
           treeName,
           loading: loadingPops,
           apNodes,
-          openNodes,
           projektNodes,
           projId,
           apId: nodeUrl[3],
-          nodeFilter: nodeFilter[treeName],
           mobxStore,
         })
         nodes = [...nodes, ...popNodes]
@@ -542,7 +536,6 @@ export default ({
             treeName,
             loading: loadingBeobNichtZuzuordnens,
             apNodes,
-            openNodes,
             projektNodes,
             projId,
             apId: nodeUrl[3],

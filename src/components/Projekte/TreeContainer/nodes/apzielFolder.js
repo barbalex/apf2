@@ -67,8 +67,7 @@ export default ({
   const url = ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele']
 
   // only show if parent node exists
-  const apNodesIds = nodesPassed.map(n => n.id)
-  if (!apNodesIds.includes(apId)) return []
+  if (!nodesPassed.map(n => n.id).includes(apId)) return []
 
   return [
     {

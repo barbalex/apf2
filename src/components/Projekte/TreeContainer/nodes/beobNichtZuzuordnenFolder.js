@@ -83,7 +83,7 @@ export default ({
       nodeType: 'folder',
       menuType: 'beobNichtZuzuordnenFolder',
       filterTable: 'beob',
-      id: apId,
+      id: `${apId}BeobNichtZuzuordnenFolder`,
       urlLabel: 'nicht-zuzuordnende-Beobachtungen',
       label: `Beobachtungen nicht zuzuordnen (${message})`,
       url,

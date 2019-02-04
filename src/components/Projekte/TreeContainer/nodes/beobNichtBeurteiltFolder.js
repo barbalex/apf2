@@ -83,7 +83,7 @@ export default ({
       nodeType: 'folder',
       menuType: 'beobNichtBeurteiltFolder',
       filterTable: 'beob',
-      id: apId,
+      id: `${apId}BeobNichtBeurteiltFolder`,
       urlLabel: 'nicht-beurteilte-Beobachtungen',
       label: `Beobachtungen nicht beurteilt (${message})`,
       url,

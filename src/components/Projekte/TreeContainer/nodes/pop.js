@@ -2,8 +2,6 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
-import allParentNodesAreOpen from '../allParentNodesAreOpen'
-import allParentNodesExist from '../allParentNodesExist'
 import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
 
 export default ({
@@ -12,10 +10,8 @@ export default ({
   treeName,
   projektNodes,
   apNodes,
-  openNodes,
   projId,
   apId,
-  nodeFilter,
   mobxStore,
 }: {
   nodes: Array<Object>,
@@ -23,13 +19,13 @@ export default ({
   treeName: String,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
-  openNodes: Array<String>,
   projId: String,
   apId: String,
-  nodeFilter: Object,
   mobxStore: Object,
 }): Array<Object> => {
   const pops = get(data, 'allPops.nodes', [])
+  const nodeFilter = get(mobxStore, `nodeFilter.${treeName}`)
+
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
@@ -45,7 +41,8 @@ export default ({
 
   // map through all elements and create array of nodes
   const nodes = pops
-    .filter(el => el.apId === apId)
+    // only show if parent node exists
+    .filter(el => nodesPassed.map(n => n.id).includes(`${apId}PopFolder`))
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
@@ -56,9 +53,6 @@ export default ({
       return true
     })
     // filter by nodeFilter
-    // TODO: would be much better to filter this in query
-    // this is done
-    // but unfortunately query does not immediatly update
     .filter(node =>
       filterNodesByNodeFilterArray({
         node,
@@ -78,8 +72,6 @@ export default ({
       hasChildren: true,
       nr: el.nr || 0,
     }))
-    .filter(el => allParentNodesAreOpen(openNodes, el.url))
-    .filter(n => allParentNodesExist(nodesPassed, n))
     // sort again to sort (keine Nr) on top
     .sort((a, b) => a.nr - b.nr)
     .map((el, index) => {

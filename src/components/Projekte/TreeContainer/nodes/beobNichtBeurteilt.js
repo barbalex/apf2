@@ -4,8 +4,6 @@ import get from 'lodash/get'
 import format from 'date-fns/format'
 import isValid from 'date-fns/isValid'
 
-import allParentNodesAreOpen from '../allParentNodesAreOpen'
-import allParentNodesExist from '../allParentNodesExist'
 import compareLabel from './compareLabel'
 
 export default ({
@@ -14,7 +12,6 @@ export default ({
   treeName,
   projektNodes,
   apNodes,
-  openNodes,
   projId,
   apId,
   mobxStore,
@@ -24,12 +21,12 @@ export default ({
   treeName: String,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
-  openNodes: Array<String>,
   projId: String,
   apId: String,
   mobxStore: Object,
 }): Array<Object> => {
   const beobNichtBeurteilts = get(data, 'allVApbeobs.nodes', [])
+
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
@@ -42,7 +39,10 @@ export default ({
 
   // map through all elements and create array of nodes
   const nodes = beobNichtBeurteilts
-    .filter(el => el.apId === apId)
+    // only show if parent node exists
+    .filter(el =>
+      nodesPassed.map(n => n.id).includes(`${apId}BeobNichtBeurteiltFolder`),
+    )
     // filter by nodeLabelFilter
     .filter(el => {
       // some dates are not valid
@@ -90,8 +90,6 @@ export default ({
         hasChildren: false,
       }
     })
-    .filter(el => allParentNodesAreOpen(openNodes, el.url))
-    .filter(n => allParentNodesExist(nodesPassed, n))
     // sort by label
     .sort(compareLabel)
     .map((el, index) => {
