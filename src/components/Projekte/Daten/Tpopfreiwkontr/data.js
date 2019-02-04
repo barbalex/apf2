@@ -2,7 +2,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query tpopkontrByIdQuery($id: UUID!) {
+  query tpopkontrByIdQuery($id: UUID!, $showFilter: Boolean!) {
     tpopkontrById(id: $id) {
       id
       typ
@@ -68,6 +68,30 @@ export default gql`
           anzahl
           einheit
         }
+      }
+    }
+    allTpopkontrs(
+      filter: { typ: { equalTo: "Freiwilligen-Erfolgskontrolle" } }
+    ) @include(if: $showFilter) {
+      nodes {
+        id
+        typ
+        ekfVerifiziert
+        ekfBemerkungen
+        datum
+        jahr
+        bemerkungen
+        flaecheUeberprueft
+        deckungVegetation
+        deckungNackterBoden
+        deckungApArt
+        vegetationshoeheMaximum
+        vegetationshoeheMittel
+        gefaehrdung
+        tpopId
+        bearbeiter
+        planVorhanden
+        jungpflanzenVorhanden
       }
     }
   }

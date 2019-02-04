@@ -137,7 +137,7 @@ const FormTitle = ({
         <Title>{`${title}${showFilter ? ' Filter' : ''}`}</Title>
         {doFilter && (
           <Symbols>
-            {showFilter && filteredNr && totalNr && (
+            {showFilter && (filteredNr || filteredNr === 0) && totalNr && (
               <FilterNumbers>{`${filteredNr}/${totalNr}`}</FilterNumbers>
             )}
             {!showFilter && typesExist && (

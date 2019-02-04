@@ -30,6 +30,7 @@ import FormTitle from '../../../shared/FormTitle'
 import withAllAdresses from './withAllAdresses'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
+import filterNodesByNodeFilterArray from '../../TreeContainer/filterNodesByNodeFilterArray'
 
 const Container = styled.div`
   background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
@@ -172,13 +173,14 @@ const Tpopfreiwkontr = ({
 
   const showFilter = !!nodeFilter[treeName].activeTable
 
-  const { data, loading, error } = useQuery(query, {
+  const { data, loading, error, refetch } = useQuery(query, {
     suspend: false,
     variables: {
       id:
         activeNodeArray.length > 9
           ? activeNodeArray[9]
           : '99999999-9999-9999-9999-999999999999',
+      showFilter,
     },
   })
 
@@ -222,9 +224,23 @@ const Tpopfreiwkontr = ({
   const isFreiwillig = role === 'apflora_freiwillig'
   const { width } = dimensions
 
+  let tpopkontrTotal = []
+  let tpopkontrFiltered = []
   let row
   if (showFilter) {
     row = nodeFilter[treeName].tpopfreiwkontr
+    // get filter values length
+    tpopkontrTotal = get(data, 'allTpopkontrs.nodes', [])
+    const nodeFilterArray = Object.entries(
+      nodeFilter[treeName].tpopfreiwkontr,
+    ).filter(([key, value]) => value || value === 0 || value === false)
+    tpopkontrFiltered = tpopkontrTotal.filter(node =>
+      filterNodesByNodeFilterArray({
+        node,
+        nodeFilterArray,
+        table: 'tpopfreiwkontr',
+      }),
+    )
   } else {
     row = get(data, 'tpopkontrById', {})
   }
@@ -366,79 +382,69 @@ const Tpopfreiwkontr = ({
     [showFilter, row],
   )
 
-  useEffect(
-    () => {
-      if (!loading) {
-        // loading data just finished
-        // check if tpopkontr exist
-        const tpopkontrCount = get(
+  useEffect(() => {
+    if (!loading) {
+      // loading data just finished
+      // check if tpopkontr exist
+      const tpopkontrCount = get(
+        data,
+        'tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes',
+        [],
+      ).length
+      if (tpopkontrCount === 0) {
+        // add counts for all ekfzaehleinheit
+        // BUT DANGER: only for ekfzaehleinheit with zaehleinheit_id
+        const ekfzaehleinheits = get(
           data,
-          'tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes',
+          'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekfzaehleinheitsByApId.nodes',
           [],
-        ).length
-        if (tpopkontrCount === 0) {
-          // add counts for all ekfzaehleinheit
-          // BUT DANGER: only for ekfzaehleinheit with zaehleinheit_id
-          const ekfzaehleinheits = get(
-            data,
-            'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekfzaehleinheitsByApId.nodes',
-            [],
+        )
+          // remove ekfzaehleinheits without zaehleinheit_id
+          .filter(
+            z =>
+              !!get(z, 'tpopkontrzaehlEinheitWerteByZaehleinheitId.code', null),
           )
-            // remove ekfzaehleinheits without zaehleinheit_id
-            .filter(
-              z =>
-                !!get(
+
+        Promise.all(
+          ekfzaehleinheits.map(z =>
+            client.mutate({
+              mutation: createTpopkontrzaehl,
+              variables: {
+                tpopkontrId: row.id,
+                einheit: get(
                   z,
                   'tpopkontrzaehlEinheitWerteByZaehleinheitId.code',
                   null,
                 ),
-            )
-
-          Promise.all(
-            ekfzaehleinheits.map(z =>
-              client.mutate({
-                mutation: createTpopkontrzaehl,
-                variables: {
-                  tpopkontrId: row.id,
-                  einheit: get(
-                    z,
-                    'tpopkontrzaehlEinheitWerteByZaehleinheitId.code',
-                    null,
-                  ),
-                  changedBy: user.name,
-                },
-              }),
-            ),
-          )
-            .then(() => data.refetch())
-            .catch(error => addError(error))
-        }
+                changedBy: user.name,
+              },
+            }),
+          ),
+        )
+          .then(() => refetch())
+          .catch(error => addError(error))
       }
-    },
-    [loading],
-  )
+    }
+  }, [loading])
 
   useEffect(() => setErrors({}), [row])
 
-  useEffect(
-    () => {
-      // check if adresse is choosen but no registered user exists
-      if (!showFilter) {
-        const userCount = get(
-          row,
-          'adresseByBearbeiter.usersByAdresseId.totalCount',
-          0,
-        )
-        if (bearbeiter && !userCount && !errors.bearbeiter) {
-          setErrors({
-            bearbeiter:
-              'Es ist kein Benutzer mit dieser Adresse verbunden. Damit dieser Benutzer Kontrollen erfassen kann, muss er ein Benutzerkonto haben, in dem obige Adresse als zugehörig erfasst wurde.',
-          })
-        }
+  useEffect(() => {
+    // check if adresse is choosen but no registered user exists
+    if (!showFilter) {
+      const userCount = get(
+        row,
+        'adresseByBearbeiter.usersByAdresseId.totalCount',
+        0,
+      )
+      if (bearbeiter && !userCount && !errors.bearbeiter) {
+        setErrors({
+          bearbeiter:
+            'Es ist kein Benutzer mit dieser Adresse verbunden. Damit dieser Benutzer Kontrollen erfassen kann, muss er ein Benutzerkonto haben, in dem obige Adresse als zugehörig erfasst wurde.',
+        })
       }
-    },
-    [showFilter, bearbeiter],
-  )
+    }
+  }, [showFilter, bearbeiter])
 
   if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
   if (error) return `Fehler: ${error.message}`
@@ -458,6 +464,8 @@ const Tpopfreiwkontr = ({
           title="Freiwilligen-Kontrolle"
           treeName={treeName}
           table="tpopfreiwkontr"
+          totalNr={tpopkontrTotal.length}
+          filteredNr={tpopkontrFiltered.length}
         />
       )}
       <InnerContainer>
@@ -498,7 +506,7 @@ const Tpopfreiwkontr = ({
               nr="1"
               saveToDb={saveToDb}
               errors={errors}
-              refetch={data.refetch}
+              refetch={refetch}
               einheitsUsed={einheitsUsed}
               ekfzaehleinheits={ekfzaehleinheits}
               treeName={treeName}
@@ -516,7 +524,7 @@ const Tpopfreiwkontr = ({
               nr="2"
               saveToDb={saveToDb}
               errors={errors}
-              refetch={data.refetch}
+              refetch={refetch}
               einheitsUsed={einheitsUsed}
               ekfzaehleinheits={ekfzaehleinheits}
               treeName={treeName}
@@ -532,7 +540,7 @@ const Tpopfreiwkontr = ({
               showNew
               einheitsUsed={einheitsUsed}
               ekfzaehleinheits={ekfzaehleinheits}
-              refetch={data.refetch}
+              refetch={refetch}
               treeName={treeName}
             />
           )}
@@ -547,7 +555,7 @@ const Tpopfreiwkontr = ({
               showNew
               einheitsUsed={einheitsUsed}
               ekfzaehleinheits={ekfzaehleinheits}
-              refetch={data.refetch}
+              refetch={refetch}
               treeName={treeName}
             />
           )}
@@ -557,7 +565,7 @@ const Tpopfreiwkontr = ({
               nr="3"
               saveToDb={saveToDb}
               errors={errors}
-              refetch={data.refetch}
+              refetch={refetch}
               einheitsUsed={einheitsUsed}
               ekfzaehleinheits={ekfzaehleinheits}
               treeName={treeName}
@@ -573,7 +581,7 @@ const Tpopfreiwkontr = ({
               showNew
               einheitsUsed={einheitsUsed}
               ekfzaehleinheits={ekfzaehleinheits}
-              refetch={data.refetch}
+              refetch={refetch}
               treeName={treeName}
             />
           )}
@@ -588,7 +596,7 @@ const Tpopfreiwkontr = ({
               showNew
               einheitsUsed={einheitsUsed}
               ekfzaehleinheits={ekfzaehleinheits}
-              refetch={data.refetch}
+              refetch={refetch}
               treeName={treeName}
             />
           )}
