@@ -40,15 +40,20 @@ export default ({
     message = `${adresseNodesLength} gefiltert`
   }
 
-  return {
-    nodeType: 'folder',
-    menuType: 'adresseFolder',
-    filterTable: 'adresse',
-    id: 'adresseFolder',
-    urlLabel: 'Adressen',
-    label: `Adressen (${message})`,
-    url: ['Werte-Listen', 'Adressen'],
-    sort: [wlIndex, 1],
-    hasChildren: adresseNodesLength > 0,
-  }
+  // only show if parent node exists
+  if (!nodesPassed.includes('wlFolder')) return []
+
+  return [
+    {
+      nodeType: 'folder',
+      menuType: 'adresseFolder',
+      filterTable: 'adresse',
+      id: 'adresseFolder',
+      urlLabel: 'Adressen',
+      label: `Adressen (${message})`,
+      url: ['Werte-Listen', 'Adressen'],
+      sort: [wlIndex, 1],
+      hasChildren: adresseNodesLength > 0,
+    },
+  ]
 }

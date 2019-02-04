@@ -3,9 +3,9 @@ import uniqBy from 'lodash/uniqBy'
 
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 import buildProjektNodes from './projekt'
-import buildUserFolderNode from './userFolder'
-import buildWlFolderNode from './wlFolder'
-import buildAdresseFolderNode from './adresseFolder'
+import buildUserFolderNodes from './userFolder'
+import buildWlFolderNodes from './wlFolder'
+import buildAdresseFolderNodes from './adresseFolder'
 import buildAdresseNodes from './adresse'
 import buildUserNodes from './user'
 import buildApFolderNodes from './apFolder'
@@ -191,17 +191,19 @@ export default ({
   const projektNodes = [
     ...buildProjektNodes({ data: dataProjekts, treeName, mobxStore }),
   ]
-  const userFolderNode = buildUserFolderNode({
-    data: dataUsers,
-    treeName,
-    projektNodes,
-    loading: loadingUsers,
-    mobxStore,
-  })
 
-  let nodes = [...projektNodes, userFolderNode]
+  let nodes = [
+    ...projektNodes,
+    ...buildUserFolderNodes({
+      data: dataUsers,
+      treeName,
+      projektNodes,
+      loading: loadingUsers,
+      mobxStore,
+    }),
+  ]
   if (role === 'apflora_manager') {
-    nodes = [...nodes, buildWlFolderNode({ projektNodes, mobxStore })]
+    nodes = [...nodes, ...buildWlFolderNodes({ projektNodes })]
   }
   let apNodes
   let popNodes
@@ -1047,8 +1049,7 @@ export default ({
         nodeUrl.length === 11 &&
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
-        nodeUrl[8] === 'Feld-Kontrollen' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
+        nodeUrl[8] === 'Feld-Kontrollen'
       ) {
         nodes = [
           ...nodes,
@@ -1061,7 +1062,6 @@ export default ({
             projektNodes,
             apId: nodeUrl[3],
             apNodes,
-            openNodes,
             popId: nodeUrl[5],
             popNodes,
             tpopId: nodeUrl[7],
@@ -1092,7 +1092,7 @@ export default ({
     ) {
       nodes = [
         ...nodes,
-        buildAdresseFolderNode({
+        ...buildAdresseFolderNodes({
           nodes,
           data: dataAdresses,
           treeName,

@@ -39,15 +39,17 @@ export default ({
     message = `${userNodesLength} gefiltert`
   }
 
-  return {
-    nodeType: 'folder',
-    menuType: 'userFolder',
-    filterTable: 'user',
-    id: 'benutzerFolder',
-    urlLabel: 'Benutzer',
-    label: `Benutzer (${message})`,
-    url: ['Benutzer'],
-    sort: [userIndex],
-    hasChildren: userNodesLength > 0,
-  }
+  return [
+    {
+      nodeType: 'folder',
+      menuType: 'userFolder',
+      filterTable: 'user',
+      id: 'benutzerFolder',
+      urlLabel: 'Benutzer',
+      label: `Benutzer (${message})`,
+      url: ['Benutzer'],
+      sort: [userIndex],
+      hasChildren: userNodesLength > 0,
+    },
+  ]
 }
