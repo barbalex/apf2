@@ -1,9 +1,6 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
-import allParentNodesAreOpen from '../allParentNodesAreOpen'
-import allParentNodesExist from '../allParentNodesExist'
-
 export default ({
   nodes: nodesPassed,
   data,
@@ -11,7 +8,6 @@ export default ({
   loading,
   projektNodes,
   apNodes,
-  openNodes,
   popNodes,
   tpopNodes,
   projId,
@@ -26,7 +22,6 @@ export default ({
   loading: Boolean,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
-  openNodes: Array<String>,
   popNodes: Array<Object>,
   tpopNodes: Array<Object>,
   projId: String,
@@ -78,21 +73,22 @@ export default ({
     tpopId,
     'Massnahmen-Berichte',
   ]
-  const allParentsOpen = allParentNodesAreOpen(openNodes, url)
-  if (!allParentsOpen) return []
+
+  // only show if parent node exists
+  if (!nodesPassed.map(n => n.id).includes(tpopId)) return []
 
   const nodes = [
     {
       nodeType: 'folder',
       menuType: 'tpopmassnberFolder',
       filterTable: 'tpopmassnber',
-      id: tpopId,
+      id: `${tpopId}TpopmassnberFolder`,
       urlLabel: 'Massnahmen-Berichte',
       label: `Massnahmen-Berichte (${message})`,
       url,
       sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 2],
       hasChildren: childrenLength > 0,
     },
-  ].filter(n => allParentNodesExist(nodesPassed, n))
+  ]
   return nodes
 }

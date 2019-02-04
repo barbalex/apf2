@@ -683,7 +683,6 @@ export default ({
             projektNodes,
             projId,
             apNodes,
-            openNodes,
             apId,
             popNodes,
             popId,
@@ -697,7 +696,6 @@ export default ({
             projektNodes,
             projId,
             apNodes,
-            openNodes,
             apId,
             popNodes,
             popId,
@@ -708,8 +706,7 @@ export default ({
       if (
         nodeUrl.length === 7 &&
         nodeUrl[4] === 'Populationen' &&
-        nodeUrl[6] === 'Massnahmen-Berichte' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
+        nodeUrl[6] === 'Massnahmen-Berichte'
       ) {
         nodes = [
           ...nodes,
@@ -722,7 +719,6 @@ export default ({
             projektNodes,
             apId: nodeUrl[3],
             apNodes,
-            openNodes,
             popId: nodeUrl[5],
             popNodes,
             mobxStore,
@@ -732,8 +728,7 @@ export default ({
       if (
         nodeUrl.length === 7 &&
         nodeUrl[4] === 'Populationen' &&
-        nodeUrl[6] === 'Kontroll-Berichte' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
+        nodeUrl[6] === 'Kontroll-Berichte'
       ) {
         nodes = [
           ...nodes,
@@ -746,7 +741,6 @@ export default ({
             projektNodes,
             apId: nodeUrl[3],
             apNodes,
-            openNodes,
             popId: nodeUrl[5],
             popNodes,
             mobxStore,
@@ -756,8 +750,7 @@ export default ({
       if (
         nodeUrl.length === 7 &&
         nodeUrl[4] === 'Populationen' &&
-        nodeUrl[6] === 'Teil-Populationen' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
+        nodeUrl[6] === 'Teil-Populationen'
       ) {
         tpopNodes = buildTpopNodes({
           nodes,
@@ -768,7 +761,6 @@ export default ({
           projektNodes,
           apId: nodeUrl[3],
           apNodes,
-          openNodes,
           popId: nodeUrl[5],
           popNodes,
           nodeFilter: nodeFilter[treeName],
@@ -779,8 +771,7 @@ export default ({
       if (
         nodeUrl.length === 8 &&
         nodeUrl[4] === 'Populationen' &&
-        nodeUrl[6] === 'Teil-Populationen' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
+        nodeUrl[6] === 'Teil-Populationen'
       ) {
         const apId = nodeUrl[3]
         const popId = nodeUrl[5]
@@ -796,12 +787,10 @@ export default ({
             projektNodes,
             apId,
             apNodes,
-            openNodes,
             popId,
             popNodes,
             tpopId,
             tpopNodes,
-            nodeFilter: nodeFilter[treeName],
             mobxStore,
           }),
           ...buildTpopmassnberFolderNodes({
@@ -813,7 +802,6 @@ export default ({
             projektNodes,
             apId,
             apNodes,
-            openNodes,
             popId,
             popNodes,
             tpopId,
@@ -829,12 +817,10 @@ export default ({
             projektNodes,
             apId,
             apNodes,
-            openNodes,
             popId,
             popNodes,
             tpopId,
             tpopNodes,
-            nodeFilter: nodeFilter[treeName],
             mobxStore,
           }),
           ...buildTpopfreiwkontrFolderNodes({

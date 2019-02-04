@@ -2,8 +2,6 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
-import allParentNodesAreOpen from '../allParentNodesAreOpen'
-import allParentNodesExist from '../allParentNodesExist'
 import compareLabel from './compareLabel'
 
 export default ({
@@ -12,7 +10,6 @@ export default ({
   treeName,
   projektNodes,
   apNodes,
-  openNodes,
   popNodes,
   projId,
   apId,
@@ -24,7 +21,6 @@ export default ({
   treeName: String,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
-  openNodes: Array<String>,
   popNodes: Array<Object>,
   projId: String,
   apId: String,
@@ -44,7 +40,10 @@ export default ({
 
   // map through all elements and create array of nodes
   const nodes = get(data, 'allPopmassnbers.nodes', [])
-    .filter(el => el.popId === popId)
+    // only show if parent node exists
+    .filter(el =>
+      nodesPassed.map(n => n.id).includes(`${popId}PopmassnberFolder`),
+    )
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
@@ -81,8 +80,6 @@ export default ({
       ],
       hasChildren: false,
     }))
-    .filter(el => allParentNodesAreOpen(openNodes, el.url))
-    .filter(n => allParentNodesExist(nodesPassed, n))
     // sort by label
     .sort(compareLabel)
     .map((el, index) => {

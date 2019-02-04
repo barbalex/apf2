@@ -1,8 +1,6 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
-import allParentNodesExist from '../allParentNodesExist'
-
 export default ({
   nodes: nodesPassed,
   data,
@@ -65,12 +63,15 @@ export default ({
     message = `${childrenLength} gefiltert`
   }
 
+  // only show if parent node exists
+  if (!nodesPassed.map(n => n.id).includes(popId)) return []
+
   return [
     {
       nodeType: 'folder',
       menuType: 'popmassnberFolder',
       filterTable: 'popmassnber',
-      id: popId,
+      id: `${popId}PopmassnberFolder`,
       urlLabel: 'Massnahmen-Berichte',
       label: `Massnahmen-Berichte (${message})`,
       url: [
@@ -85,5 +86,5 @@ export default ({
       sort: [projIndex, 1, apIndex, 1, popIndex, 3],
       hasChildren: childrenLength > 0,
     },
-  ].filter(n => allParentNodesExist(nodesPassed, n))
+  ]
 }
