@@ -657,11 +657,7 @@ export default ({
           }),
         ]
       }
-      if (
-        nodeUrl.length === 6 &&
-        nodeUrl[4] === 'Populationen' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
-      ) {
+      if (nodeUrl.length === 6 && nodeUrl[4] === 'Populationen') {
         const apId = nodeUrl[3]
         const popId = nodeUrl[5]
         nodes = [
@@ -674,11 +670,9 @@ export default ({
             projektNodes,
             projId,
             apNodes,
-            openNodes,
             apId,
             popNodes,
             popId,
-            nodeFilter: nodeFilter[treeName],
             mobxStore,
           }),
           ...buildPopberFolderNodes({

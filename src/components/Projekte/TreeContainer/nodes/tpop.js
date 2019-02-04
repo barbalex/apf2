@@ -2,8 +2,6 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
-import allParentNodesAreOpen from '../allParentNodesAreOpen'
-import allParentNodesExist from '../allParentNodesExist'
 import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
 
 export default ({
@@ -12,12 +10,10 @@ export default ({
   treeName,
   projektNodes,
   apNodes,
-  openNodes,
   popNodes,
   projId,
   apId,
   popId,
-  nodeFilter,
   mobxStore,
 }: {
   nodes: Array<Object>,
@@ -25,14 +21,13 @@ export default ({
   treeName: String,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
-  openNodes: Array<String>,
   popNodes: Array<Object>,
   projId: String,
   apId: String,
   popId: String,
-  nodeFilter: Object,
   mobxStore: Object,
 }): Array<Object> => {
+  const nodeFilter = get(mobxStore, `nodeFilter.${treeName}`)
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
@@ -49,7 +44,8 @@ export default ({
 
   // map through all elements and create array of nodes
   const nodes = get(data, 'allTpops.nodes', [])
-    .filter(el => el.popId === popId)
+    // only show if parent node exists
+    .filter(el => nodesPassed.map(n => n.id).includes(`${popId}TpopFolder`))
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
@@ -91,8 +87,6 @@ export default ({
       hasChildren: true,
       nr: el.nr,
     }))
-    .filter(el => allParentNodesAreOpen(openNodes, el.url))
-    .filter(n => allParentNodesExist(nodesPassed, n))
     // sort again to sort (keine Nr) on top
     .sort((a, b) => a.nr - b.nr)
     .map((el, index) => {

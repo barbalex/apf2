@@ -13,12 +13,10 @@ export default ({
   loading,
   projektNodes,
   apNodes,
-  openNodes,
   popNodes,
   projId,
   apId,
   popId,
-  nodeFilter,
   mobxStore,
 }: {
   nodes: Array<Object>,
@@ -27,14 +25,13 @@ export default ({
   loading: Boolean,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
-  openNodes: Array<String>,
   popNodes: Array<Object>,
   projId: String,
   apId: String,
   popId: String,
-  nodeFilter: Object,
   mobxStore: Object,
 }): Array<Object> => {
+  const nodeFilter = get(mobxStore, `nodeFilter.${treeName}`)
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
@@ -94,20 +91,21 @@ export default ({
     popId,
     'Teil-Populationen',
   ]
-  const allParentsOpen = allParentNodesAreOpen(openNodes, url)
-  if (!allParentsOpen) return []
+
+  // only show if parent node exists
+  if (!nodesPassed.map(n => n.id).includes(popId)) return []
 
   return [
     {
       nodeType: 'folder',
       menuType: 'tpopFolder',
       filterTable: 'tpop',
-      id: popId,
+      id: `${popId}TpopFolder`,
       urlLabel: 'Teil-Populationen',
       label: `Teil-Populationen (${message})`,
       url,
       sort: [projIndex, 1, apIndex, 1, popIndex, 1],
       hasChildren: childrenLength > 0,
     },
-  ].filter(n => allParentNodesExist(nodesPassed, n))
+  ]
 }
