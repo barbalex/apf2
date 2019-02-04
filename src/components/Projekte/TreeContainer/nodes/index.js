@@ -609,11 +609,7 @@ export default ({
           }),
         ]
       }
-      if (
-        nodeUrl.length === 5 &&
-        nodeUrl[4] === 'Berichte' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
-      ) {
+      if (nodeUrl.length === 5 && nodeUrl[4] === 'Berichte') {
         nodes = [
           ...nodes,
           ...buildBerNodes({
@@ -622,7 +618,6 @@ export default ({
             treeName,
             loading: loadingBers,
             apNodes,
-            openNodes,
             projektNodes,
             projId,
             apId: nodeUrl[3],
