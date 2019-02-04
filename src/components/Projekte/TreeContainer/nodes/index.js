@@ -625,11 +625,7 @@ export default ({
           }),
         ]
       }
-      if (
-        nodeUrl.length === 5 &&
-        nodeUrl[4] === 'AP-Berichte' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
-      ) {
+      if (nodeUrl.length === 5 && nodeUrl[4] === 'AP-Berichte') {
         nodes = [
           ...nodes,
           ...buildApberNodes({
@@ -638,7 +634,6 @@ export default ({
             treeName,
             loading: loadingApbers,
             apNodes,
-            openNodes,
             projektNodes,
             projId,
             apId: nodeUrl[3],
@@ -646,11 +641,7 @@ export default ({
           }),
         ]
       }
-      if (
-        nodeUrl.length === 5 &&
-        nodeUrl[4] === 'AP-Erfolgskriterien' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
-      ) {
+      if (nodeUrl.length === 5 && nodeUrl[4] === 'AP-Erfolgskriterien') {
         nodes = [
           ...nodes,
           ...buildAperfkritNodes({
@@ -659,7 +650,6 @@ export default ({
             treeName,
             loading: loadingErfkrits,
             apNodes,
-            openNodes,
             projektNodes,
             projId,
             apId: nodeUrl[3],

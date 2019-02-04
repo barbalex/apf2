@@ -3,16 +3,12 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 
-import allParentNodesAreOpen from '../allParentNodesAreOpen'
-import allParentNodesExist from '../allParentNodesExist'
-
 export default ({
   nodes: nodesPassed,
   data,
   treeName,
   projektNodes,
   apNodes,
-  openNodes,
   projId,
   apId,
   mobxStore,
@@ -22,7 +18,6 @@ export default ({
   treeName: String,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
-  openNodes: Array<String>,
   projId: String,
   apId: String,
   mobxStore: Object,
@@ -40,7 +35,8 @@ export default ({
 
   // map through all elements and create array of nodes
   let nodes = apbers
-    .filter(el => el.apId === apId)
+    // only show if parent node exists
+    .filter(el => nodesPassed.map(n => n.id).includes(`${apId}ApberFolder`))
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
@@ -60,8 +56,6 @@ export default ({
       url: ['Projekte', projId, 'Aktionspläne', el.apId, 'AP-Berichte', el.id],
       hasChildren: false,
     }))
-    .filter(el => allParentNodesAreOpen(openNodes, el.url))
-    .filter(n => allParentNodesExist(nodesPassed, n))
     .map((el, index) => {
       el.sort = [projIndex, 1, apIndex, 4, index]
       return el

@@ -60,15 +60,14 @@ export default ({
   const url = ['Projekte', projId, 'Aktionspläne', apId, 'AP-Erfolgskriterien']
 
   // only show if parent node exists
-  const apNodesIds = nodesPassed.map(n => n.id)
-  if (!apNodesIds.includes(apId)) return []
+  if (!nodesPassed.map(n => n.id).includes(apId)) return []
 
   return [
     {
       nodeType: 'folder',
       menuType: 'erfkritFolder',
       filterTable: 'erfkrit',
-      id: apId,
+      id: `${apId}Erfkrit`,
       urlLabel: 'AP-Erfolgskriterien',
       label: `AP-Erfolgskriterien (${message})`,
       url,
