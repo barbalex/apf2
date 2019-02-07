@@ -10333,10 +10333,10 @@ react-measure@^2.0.2:
     prop-types "^15.6.2"
     resize-observer-polyfill "^1.5.0"
 
-react-reflex@3.0.8:
-  version "3.0.8"
-  resolved "https://registry.yarnpkg.com/react-reflex/-/react-reflex-3.0.8.tgz#235280f1825c22477d8dc463d2433d57061d6f5a"
-  integrity sha512-IDq0CD4/hieuZaNKFA7p0W5b5jnzEWupasPB+yfI4aG5n3DzK1D6OjuHkehJqArN6NPF9Ku8Pl3P03W0dm5fNw==
+react-reflex@3.0.9:
+  version "3.0.9"
+  resolved "https://registry.yarnpkg.com/react-reflex/-/react-reflex-3.0.9.tgz#81ea4b60b6e3f70cecc434893e5528c5a48765e1"
+  integrity sha512-gWOWl9z/26jdA5+HFyFQQdbpVyPhva4QftI1X8LJgPBJIpy25NOWlq2aS33SjbCbs+g3jkL81Hn/ww4l/C6sTw==
   dependencies:
     "@babel/runtime" "^7.0.0"
     lodash.throttle "^4.1.1"
