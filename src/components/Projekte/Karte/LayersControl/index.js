@@ -102,6 +102,7 @@ const LayersControl = ({ treeName }: { treeName: string }) => {
       : CardTitleApfloraOpen
 
   // hack to get control to show on first load
+  // depends on state being changed, so needs to be true above
   // see: https://github.com/LiveBy/react-leaflet-control/issues/27#issuecomment-430564722
   useEffect(() => {
     setBaseLayersExpanded(false)
