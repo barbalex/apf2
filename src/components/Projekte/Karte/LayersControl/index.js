@@ -54,7 +54,7 @@ const LayersControl = ({ treeName }: { treeName: string }) => {
   const { apfloraLayers, overlays } = mobxStore
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
 
-  const [baseLayersExpanded, setBaseLayersExpanded] = useState(false)
+  const [baseLayersExpanded, setBaseLayersExpanded] = useState(true)
   const [overlaysExpanded, setOverlaysExpanded] = useState(false)
   const [apfloraLayersExpanded, setApfloraLayersExpanded] = useState(false)
 
@@ -71,30 +71,24 @@ const LayersControl = ({ treeName }: { treeName: string }) => {
     },
     [baseLayersExpanded, overlaysExpanded, apfloraLayersExpanded],
   )
-  const onToggleOverlaysExpanded = useCallback(
-    () => {
-      setOverlaysExpanded(!overlaysExpanded)
-      if (baseLayersExpanded) {
-        setBaseLayersExpanded(!baseLayersExpanded)
-      }
-      if (apfloraLayersExpanded) {
-        setApfloraLayersExpanded(!apfloraLayersExpanded)
-      }
-    },
-    [overlaysExpanded, baseLayersExpanded, apfloraLayersExpanded],
-  )
-  const onToggleApfloraLayersExpanded = useCallback(
-    () => {
+  const onToggleOverlaysExpanded = useCallback(() => {
+    setOverlaysExpanded(!overlaysExpanded)
+    if (baseLayersExpanded) {
+      setBaseLayersExpanded(!baseLayersExpanded)
+    }
+    if (apfloraLayersExpanded) {
       setApfloraLayersExpanded(!apfloraLayersExpanded)
-      if (overlaysExpanded) {
-        setOverlaysExpanded(!overlaysExpanded)
-      }
-      if (baseLayersExpanded) {
-        setBaseLayersExpanded(!baseLayersExpanded)
-      }
-    },
-    [overlaysExpanded, baseLayersExpanded, apfloraLayersExpanded],
-  )
+    }
+  }, [overlaysExpanded, baseLayersExpanded, apfloraLayersExpanded])
+  const onToggleApfloraLayersExpanded = useCallback(() => {
+    setApfloraLayersExpanded(!apfloraLayersExpanded)
+    if (overlaysExpanded) {
+      setOverlaysExpanded(!overlaysExpanded)
+    }
+    if (baseLayersExpanded) {
+      setBaseLayersExpanded(!baseLayersExpanded)
+    }
+  }, [overlaysExpanded, baseLayersExpanded, apfloraLayersExpanded])
 
   const getApfloraLayersTitle = () => {
     if (!activeNodes.ap) return 'apflora'
@@ -109,7 +103,9 @@ const LayersControl = ({ treeName }: { treeName: string }) => {
 
   // hack to get control to show on first load
   // see: https://github.com/LiveBy/react-leaflet-control/issues/27#issuecomment-430564722
-  useEffect(() => setBaseLayersExpanded(false), [])
+  useEffect(() => {
+    setBaseLayersExpanded(false)
+  }, [])
 
   return (
     <Control position="topright">
