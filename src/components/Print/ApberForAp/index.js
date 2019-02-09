@@ -316,7 +316,9 @@ const ApberForAp = ({
           )}
           <Row>
             {`${
-              apberDatum ? format(new Date(apberDatum), 'dd.MM.yyyy') : '(Datum fehlt)'
+              apberDatum
+                ? format(new Date(apberDatum), 'dd.MM.yyyy')
+                : '(Datum fehlt)'
             } / ${get(apber, 'adresseByBearbeiter.name', '(kein Bearbeiter)')}`}
           </Row>
         </ContentContainer>

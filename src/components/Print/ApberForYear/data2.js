@@ -13,9 +13,52 @@ export default gql`
             id
             artname
           }
-          adresseByBearbeiter {
-            id
-            name
+          popsByApId {
+            nodes {
+              id
+              tpopsByPopId(condition: { apberRelevant: 1 }) {
+                nodes {
+                  id
+                  apberRelevant
+                  firstTpopmassn: tpopmassnsByTpopId(
+                    orderBy: DATUM_ASC
+                    first: 1
+                  ) {
+                    nodes {
+                      id
+                      datum
+                    }
+                  }
+                  tpopmassnsByTpopId(condition: { jahr: $jahr }) {
+                    nodes {
+                      id
+                      datum
+                      tpopmassnTypWerteByTyp {
+                        id
+                        text
+                      }
+                      beschreibung
+                      tpopByTpopId {
+                        id
+                        nr
+                        flurname
+                        popByPopId {
+                          id
+                          nr
+                          name
+                        }
+                      }
+                    }
+                  }
+                  firstTpopber: tpopbersByTpopId(orderBy: JAHR_ASC, first: 1) {
+                    nodes {
+                      id
+                      jahr
+                    }
+                  }
+                }
+              }
+            }
           }
           erfkritsByApId {
             nodes {
