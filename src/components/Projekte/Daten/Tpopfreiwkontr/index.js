@@ -173,13 +173,15 @@ const Tpopfreiwkontr = ({
 
   const showFilter = !!nodeFilter[treeName].activeTable
 
+  const queryId =
+    activeNodeArray.length > 9
+      ? activeNodeArray[9]
+      : '99999999-9999-9999-9999-999999999999'
+
   const { data, loading, error, refetch } = useQuery(query, {
     suspend: false,
     variables: {
-      id:
-        activeNodeArray.length > 9
-          ? activeNodeArray[9]
-          : '99999999-9999-9999-9999-999999999999',
+      id: queryId,
       showFilter,
     },
   })
@@ -242,7 +244,7 @@ const Tpopfreiwkontr = ({
       }),
     )
   } else {
-    row = get(data, 'tpopkontrById', {})
+    row = get(data, 'tpopkontrById', {}) || {}
   }
 
   const apId = get(row, 'tpopByTpopId.popByPopId.apId')
@@ -455,6 +457,8 @@ const Tpopfreiwkontr = ({
       </Container>
     )
   }
+
+  if (Object.keys(row).length === 0) return null
 
   return (
     <Container showfilter={showFilter}>
