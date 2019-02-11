@@ -431,14 +431,15 @@ const Tpopfreiwkontr = ({
 
   useEffect(() => setErrors({}), [row])
 
+  const userCount = get(
+    row,
+    'adresseByBearbeiter.usersByAdresseId.totalCount',
+    0,
+  )
+
   useEffect(() => {
     // check if adresse is choosen but no registered user exists
     if (!showFilter) {
-      const userCount = get(
-        row,
-        'adresseByBearbeiter.usersByAdresseId.totalCount',
-        0,
-      )
       if (bearbeiter && !userCount && !errors.bearbeiter) {
         setErrors({
           bearbeiter:
@@ -446,7 +447,7 @@ const Tpopfreiwkontr = ({
         })
       }
     }
-  }, [showFilter, bearbeiter])
+  }, [showFilter, bearbeiter, userCount, errors.bearbeiter])
 
   if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
   if (error) return `Fehler: ${error.message}`
