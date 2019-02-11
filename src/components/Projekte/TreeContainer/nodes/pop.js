@@ -65,14 +65,14 @@ export default ({
       menuType: 'pop',
       filterTable: 'pop',
       id: el.id,
-      parentId: el.apId,
+      parentId: `${apId}PopFolder`,
       urlLabel: el.id,
       label: `${el.nr || '(keine Nr)'}: ${el.name || '(kein Name)'}`,
       url: ['Projekte', projId, 'Aktionspläne', el.apId, 'Populationen', el.id],
       hasChildren: true,
       nr: el.nr || 0,
     }))
-    // sort again to sort (keine Nr) on top
+    // sort again to sort (keine Nr) on tpop
     .sort((a, b) => a.nr - b.nr)
     .map((el, index) => {
       el.sort = [projIndex, 1, apIndex, 1, index]
