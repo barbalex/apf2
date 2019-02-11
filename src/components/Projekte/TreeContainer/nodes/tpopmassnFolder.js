@@ -107,6 +107,7 @@ export default ({
       menuType: 'tpopmassnFolder',
       filterTable: 'tpopmassn',
       id: `${tpopId}TpopmassnFolder`,
+      tableId: tpopId,
       urlLabel: 'Massnahmen',
       label: `Massnahmen (${message})`,
       url,

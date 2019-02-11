@@ -91,6 +91,7 @@ export default ({
       menuType: 'tpopfeldkontrzaehlFolder',
       filterTable: 'tpopkontrzaehl',
       id: `${tpopkontrId}TpopfeldkontrzaehlFolder`,
+      tableId: tpopkontrId,
       urlLabel: 'Zaehlungen',
       label: `Zählungen (${message})`,
       url,

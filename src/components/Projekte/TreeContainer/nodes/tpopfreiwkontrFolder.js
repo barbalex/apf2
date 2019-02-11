@@ -104,6 +104,7 @@ export default ({
       menuType: 'tpopfreiwkontrFolder',
       filterTable: 'tpopkontr',
       id: `${tpopId}TpopfreiwkontrFolder`,
+      tableId: tpopId,
       urlLabel: 'Freiwilligen-Kontrollen',
       label: `Freiwilligen-Kontrollen (${message})`,
       url,

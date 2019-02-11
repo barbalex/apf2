@@ -68,6 +68,7 @@ export default ({
       menuType: 'erfkritFolder',
       filterTable: 'erfkrit',
       id: `${apId}Erfkrit`,
+      tableId: apId,
       urlLabel: 'AP-Erfolgskriterien',
       label: `AP-Erfolgskriterien (${message})`,
       url,

@@ -71,6 +71,7 @@ export default ({
       menuType: 'apartFolder',
       filterTable: 'apart',
       id: `${apId}Apart`,
+      tableId: apId,
       urlLabel: 'AP-Arten',
       label: `AP-Arten (${message})`,
       url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Arten'],

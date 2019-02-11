@@ -90,6 +90,7 @@ export default ({
       menuType: 'beobZugeordnetFolder',
       filterTable: 'beob',
       id: `${tpopId}BeobZugeordnetFolder`,
+      tableId: tpopId,
       urlLabel: 'Beobachtungen',
       label: `Beobachtungen zugeordnet (${message})`,
       url,

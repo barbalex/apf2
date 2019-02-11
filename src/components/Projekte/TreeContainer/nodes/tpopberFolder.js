@@ -83,6 +83,7 @@ export default ({
       menuType: 'tpopberFolder',
       filterTable: 'tpopber',
       id: `${tpopId}TpopberFolder`,
+      tableId: tpopId,
       urlLabel: 'Kontroll-Berichte',
       label: `Kontroll-Berichte (${message})`,
       url,

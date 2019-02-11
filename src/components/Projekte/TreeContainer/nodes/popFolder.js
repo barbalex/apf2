@@ -87,6 +87,7 @@ export default ({
       menuType: 'popFolder',
       filterTable: 'pop',
       id: `${apId}PopFolder`,
+      tableId: apId,
       urlLabel: 'Populationen',
       label: `Populationen (${message})`,
       url,

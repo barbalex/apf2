@@ -81,6 +81,7 @@ export default ({
       menuType: 'apFolder',
       filterTable: 'ap',
       id: `${projId}ApFolder`,
+      tableId: projId,
       urlLabel: 'Aktionspläne',
       label: `Aktionspläne (${message})`,
       url: ['Projekte', projId, 'Aktionspläne'],

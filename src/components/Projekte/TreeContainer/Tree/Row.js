@@ -290,7 +290,7 @@ const Row = ({
         <StyledNode
           data-level={level}
           data-nodeisinactivenodepath={nodeIsInActiveNodePath}
-          data-id={node.id}
+          data-id={node.tableId || node.id}
           data-parentid={node.parentId}
           data-url={dataUrl}
           data-nodetype={node.nodeType}

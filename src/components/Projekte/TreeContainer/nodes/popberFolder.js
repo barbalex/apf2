@@ -72,6 +72,7 @@ export default ({
       menuType: 'popberFolder',
       filterTable: 'popber',
       id: `${popId}PopberFolder`,
+      tableId: popId,
       urlLabel: 'Kontroll-Berichte',
       label: `Kontroll-Berichte (${message})`,
       url: [

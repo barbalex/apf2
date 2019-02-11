@@ -63,6 +63,7 @@ export default ({
       menuType: 'apberFolder',
       filterTable: 'apber',
       id: `${apId}ApberFolder`,
+      tableId: apId,
       urlLabel: 'AP-Berichte',
       label: `AP-Berichte (${message})`,
       url,

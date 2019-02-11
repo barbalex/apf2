@@ -72,6 +72,7 @@ export default ({
       menuType: 'popmassnberFolder',
       filterTable: 'popmassnber',
       id: `${popId}PopmassnberFolder`,
+      tableId: popId,
       urlLabel: 'Massnahmen-Berichte',
       label: `Massnahmen-Berichte (${message})`,
       url: [

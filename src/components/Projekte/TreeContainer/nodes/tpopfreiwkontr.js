@@ -82,6 +82,7 @@ export default ({
       menuType: 'tpopfreiwkontr',
       filterTable: 'tpopkontr',
       id: el.id,
+      tableId: el.id,
       parentId: `${tpopId}TpopfreiwkontrFolder`,
       urlLabel: el.id,
       label: `${el.jahr || '(kein Jahr)'}`,

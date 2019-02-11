@@ -83,6 +83,7 @@ export default ({
       menuType: 'tpopmassnberFolder',
       filterTable: 'tpopmassnber',
       id: `${tpopId}TpopmassnberFolder`,
+      tableId: tpopId,
       urlLabel: 'Massnahmen-Berichte',
       label: `Massnahmen-Berichte (${message})`,
       url,

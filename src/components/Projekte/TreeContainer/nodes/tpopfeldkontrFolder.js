@@ -107,6 +107,7 @@ export default ({
       menuType: 'tpopfeldkontrFolder',
       filterTable: 'tpopkontr',
       id: `${tpopId}TpopfeldkontrFolder`,
+      tableId: tpopId,
       urlLabel: 'Feld-Kontrollen',
       label: `Feld-Kontrollen (${message})`,
       url,

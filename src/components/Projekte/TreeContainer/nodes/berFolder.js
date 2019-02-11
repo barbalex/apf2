@@ -64,6 +64,7 @@ export default ({
       menuType: 'berFolder',
       filterTable: 'ber',
       id: `${apId}Ber`,
+      tableId: apId,
       urlLabel: 'Berichte',
       label: `Berichte (${message})`,
       url,
