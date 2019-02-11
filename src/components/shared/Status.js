@@ -63,7 +63,7 @@ const Status = ({
   saveToDb,
   treeName,
 }: {
-  apJahr?: nmumber,
+  apJahr?: number,
   herkunftValue?: number,
   bekanntSeitValue: number,
   saveToDb: () => void,
@@ -135,12 +135,11 @@ const Status = ({
     saveToDb(fakeEvent)
   })
 
-  useEffect(
-    () => {
-      setBekanntSeitStateValue(bekanntSeitValue)
-    },
-    [bekanntSeitValue],
-  )
+  useEffect(() => {
+    setBekanntSeitStateValue(
+      bekanntSeitValue || bekanntSeitValue === 0 ? bekanntSeitValue : '',
+    )
+  }, [bekanntSeitValue])
 
   return (
     <div>
