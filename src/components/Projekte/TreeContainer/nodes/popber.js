@@ -41,7 +41,9 @@ export default ({
   // map through all elements and create array of nodes
   const nodes = get(data, 'allPopbers.nodes', [])
     // only show if parent node exists
-    .filter(el => nodesPassed.map(n => n.id).includes(`${popId}PopberFolder`))
+    .filter(el =>
+      nodesPassed.map(n => n.id).includes(`${el.popId}PopberFolder`),
+    )
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {

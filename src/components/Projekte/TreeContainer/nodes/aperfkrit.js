@@ -37,7 +37,7 @@ export default ({
   // map through all elements and create array of nodes
   const nodes = erfkrits
     // only show if parent node exists
-    .filter(el => nodesPassed.map(n => n.id).includes(`${apId}Erfkrit`))
+    .filter(el => nodesPassed.map(n => n.id).includes(`${el.apId}Erfkrit`))
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {

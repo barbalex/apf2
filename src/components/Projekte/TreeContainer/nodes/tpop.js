@@ -45,7 +45,7 @@ export default ({
   // map through all elements and create array of nodes
   const nodes = get(data, 'allTpops.nodes', [])
     // only show if parent node exists
-    .filter(el => nodesPassed.map(n => n.id).includes(`${popId}TpopFolder`))
+    .filter(el => nodesPassed.map(n => n.id).includes(`${el.popId}TpopFolder`))
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
@@ -56,9 +56,6 @@ export default ({
       return true
     })
     // filter by nodeFilter
-    // TODO: would be much better to filter this in query
-    // this is done
-    // but unfortunately query does not immediatly update
     .filter(node =>
       filterNodesByNodeFilterArray({
         node,
@@ -71,7 +68,7 @@ export default ({
       menuType: 'tpop',
       filterTable: 'tpop',
       id: el.id,
-      parentId: el.popId,
+      parentId: `${el.popId}TpopFolder`,
       urlLabel: el.id,
       label: `${el.nr || '(keine Nr)'}: ${el.flurname || '(kein Flurname)'}`,
       url: [

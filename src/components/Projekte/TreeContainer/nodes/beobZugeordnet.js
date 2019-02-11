@@ -49,7 +49,7 @@ export default ({
   const nodes = get(data, 'allVApbeobs.nodes', [])
     // only show if parent node exists
     .filter(el =>
-      nodesPassed.map(n => n.id).includes(`${tpopId}BeobZugeordnetFolder`),
+      nodesPassed.map(n => n.id).includes(`${el.tpopId}BeobZugeordnetFolder`),
     )
     // filter by nodeLabelFilter
     .filter(el => {

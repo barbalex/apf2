@@ -54,7 +54,7 @@ export default ({
     .filter(el =>
       nodesPassed
         .map(n => n.id)
-        .includes(`${tpopkontrId}TpopfeldkontrzaehlFolder`),
+        .includes(`${el.tpopkontrId}TpopfeldkontrzaehlFolder`),
     )
     // filter by nodeLabelFilter
     .filter(el => {

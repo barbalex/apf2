@@ -52,7 +52,7 @@ export default ({
   const nodes = get(data, 'allTpopmassns.nodes', [])
     // only show if parent node exists
     .filter(el =>
-      nodesPassed.map(n => n.id).includes(`${tpopId}TpopmassnFolder`),
+      nodesPassed.map(n => n.id).includes(`${el.tpopId}TpopmassnFolder`),
     )
     // filter by nodeLabelFilter
     .filter(el => {

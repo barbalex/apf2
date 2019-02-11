@@ -42,7 +42,7 @@ export default ({
   // map through all elements and create array of nodes
   const nodes = pops
     // only show if parent node exists
-    .filter(el => nodesPassed.map(n => n.id).includes(`${apId}PopFolder`))
+    .filter(el => nodesPassed.map(n => n.id).includes(`${el.apId}PopFolder`))
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {

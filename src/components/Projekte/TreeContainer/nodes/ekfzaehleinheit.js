@@ -37,7 +37,9 @@ export default ({
   // map through all elements and create array of nodes
   const nodes = ekfzaehleinheits
     // only show if parent node exists
-    .filter(el => nodesPassed.map(n => n.id).includes(`${apId}Ekfzaehleinheit`))
+    .filter(el =>
+      nodesPassed.map(n => n.id).includes(`${el.apId}Ekfzaehleinheit`),
+    )
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {

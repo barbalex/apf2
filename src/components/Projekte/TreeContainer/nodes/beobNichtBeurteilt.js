@@ -41,7 +41,7 @@ export default ({
   const nodes = beobNichtBeurteilts
     // only show if parent node exists
     .filter(el =>
-      nodesPassed.map(n => n.id).includes(`${apId}BeobNichtBeurteiltFolder`),
+      nodesPassed.map(n => n.id).includes(`${el.apId}BeobNichtBeurteiltFolder`),
     )
     // filter by nodeLabelFilter
     .filter(el => {

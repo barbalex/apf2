@@ -36,7 +36,7 @@ export default ({
   // map through all elements and create array of nodes
   let nodes = apbers
     // only show if parent node exists
-    .filter(el => nodesPassed.map(n => n.id).includes(`${apId}ApberFolder`))
+    .filter(el => nodesPassed.map(n => n.id).includes(`${el.apId}ApberFolder`))
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {

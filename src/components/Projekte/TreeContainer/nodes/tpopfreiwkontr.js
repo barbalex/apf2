@@ -52,7 +52,7 @@ export default ({
   let nodes = get(data, 'allTpopkontrs.nodes', [])
     // only show if parent node exists
     .filter(el =>
-      nodesPassed.map(n => n.id).includes(`${tpopId}TpopfreiwkontrFolder`),
+      nodesPassed.map(n => n.id).includes(`${el.tpopId}TpopfreiwkontrFolder`),
     )
     .filter(el => el.tpopId === tpopId)
     // filter by nodeLabelFilter

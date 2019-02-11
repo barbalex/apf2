@@ -42,7 +42,7 @@ export default ({
   const nodes = get(data, 'allPopmassnbers.nodes', [])
     // only show if parent node exists
     .filter(el =>
-      nodesPassed.map(n => n.id).includes(`${popId}PopmassnberFolder`),
+      nodesPassed.map(n => n.id).includes(`${el.popId}PopmassnberFolder`),
     )
     // filter by nodeLabelFilter
     .filter(el => {

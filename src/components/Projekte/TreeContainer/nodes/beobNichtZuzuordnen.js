@@ -42,7 +42,9 @@ export default ({
   const nodes = beobNichtZuzuordnens
     // only show if parent node exists
     .filter(el =>
-      nodesPassed.map(n => n.id).includes(`${apId}BeobNichtZuzuordnenFolder`),
+      nodesPassed
+        .map(n => n.id)
+        .includes(`${el.apId}BeobNichtZuzuordnenFolder`),
     )
     // filter by nodeLabelFilter
     .filter(el => {

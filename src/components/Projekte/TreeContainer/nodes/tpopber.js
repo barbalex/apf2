@@ -46,7 +46,9 @@ export default ({
   // map through all elements and create array of nodes
   const nodes = get(data, 'allTpopbers.nodes', [])
     // only show if parent node exists
-    .filter(el => nodesPassed.map(n => n.id).includes(`${tpopId}TpopberFolder`))
+    .filter(el =>
+      nodesPassed.map(n => n.id).includes(`${el.tpopId}TpopberFolder`),
+    )
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
