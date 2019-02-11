@@ -457,7 +457,6 @@ const Tpopfreiwkontr = ({
       </Container>
     )
   }
-
   if (Object.keys(row).length === 0) return null
 
   return (
