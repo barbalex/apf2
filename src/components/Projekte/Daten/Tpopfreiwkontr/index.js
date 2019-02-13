@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
-import format from 'date-fns/format'
+//import format from 'date-fns/format'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import jwtDecode from 'jwt-decode'
@@ -302,8 +302,12 @@ const Tpopfreiwkontr = ({
       let field2
       if (field === 'datum') field2 = 'jahr'
       let value2
-      if (field === 'datum')
-        value2 = !!value ? +format(new Date(value), 'yyyy') : null
+      console.log('TpopFreiwkontr', { value, field, date: new Date(value) })
+      if (field === 'datum') {
+        // this broke 13.2.2019
+        // value2 = !!value ? +format(new Date(value), 'yyyy') : null
+        value2 = +value.substring(0, 4)
+      }
       if (field2) variables[field2] = value2
       const adresseByBearbeiter =
         field === 'bearbeiter'
