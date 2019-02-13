@@ -72,6 +72,7 @@ export default ({
       filterTable: 'zielber',
       id: el.id,
       parentId: el.zielId,
+      parentTableId: el.zielId,
       urlLabel: el.id,
       label: `${el.jahr || '(kein Jahr)'}: ${el.erreichung ||
         '(nicht beurteilt)'}`,

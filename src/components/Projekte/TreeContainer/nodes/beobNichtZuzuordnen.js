@@ -46,6 +46,8 @@ export default ({
         .map(n => n.id)
         .includes(`${el.apId}BeobNichtZuzuordnenFolder`),
     )
+    // only show nodes of this parent
+    .filter(el => el.apId === apId)
     // filter by nodeLabelFilter
     .filter(el => {
       // some dates are not valid
@@ -79,7 +81,8 @@ export default ({
         menuType: 'beobNichtZuzuordnen',
         filterTable: 'beob',
         id: el.id,
-        parentId: apId,
+        parentId: el.apId,
+        parentTableId: el.apId,
         urlLabel: el.id,
         label: `${datum}: ${el.autor || '(kein Autor)'} (${el.quelle})`,
         url: [

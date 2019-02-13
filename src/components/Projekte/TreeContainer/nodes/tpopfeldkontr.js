@@ -54,6 +54,8 @@ export default ({
     .filter(el =>
       nodesPassed.map(n => n.id).includes(`${el.tpopId}TpopfeldkontrFolder`),
     )
+    // only show nodes of this parent
+    .filter(el => el.tpopId === tpopId)
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
@@ -84,7 +86,8 @@ export default ({
       menuType: 'tpopfeldkontr',
       filterTable: 'tpopkontr',
       id: el.id,
-      parentId: `${tpopId}TpopfeldkontrFolder`,
+      parentId: `${el.tpopId}TpopfeldkontrFolder`,
+      parentTableId: el.tpopId,
       urlLabel: el.id,
       label: `${el.jahr || '(kein Jahr)'}: ${get(
         el,

@@ -40,6 +40,8 @@ export default ({
     .filter(el =>
       nodesPassed.map(n => n.id).includes(`${el.apId}Ekfzaehleinheit`),
     )
+    // only show nodes of this parent
+    .filter(el => el.apId === apId)
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
@@ -57,7 +59,8 @@ export default ({
       menuType: 'ekfzaehleinheit',
       filterTable: 'ekfzaehleinheit',
       id: el.id,
-      parentId: apId,
+      parentId: el.apId,
+      parentTableId: el.apId,
       urlLabel: el.id,
       label: get(
         el,

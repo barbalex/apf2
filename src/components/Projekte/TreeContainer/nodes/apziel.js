@@ -66,6 +66,7 @@ export default ({
       filterTable: 'ziel',
       id: el.id,
       parentId: el.apId,
+      parentTableId: el.apId,
       urlLabel: el.id,
       label: `${el.bezeichnung || '(kein Ziel)'} (${get(
         el,

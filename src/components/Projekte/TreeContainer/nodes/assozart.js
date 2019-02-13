@@ -40,6 +40,8 @@ export default ({
     .filter(el =>
       nodesPassed.map(n => n.id).includes(`${el.apId}AssozartFolder`),
     )
+    // only show nodes of this parent
+    .filter(el => el.apId === apId)
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
@@ -56,7 +58,8 @@ export default ({
       menuType: 'assozart',
       filterTable: 'assozart',
       id: el.id,
-      parentId: apId,
+      parentId: el.apId,
+      parentTableId: el.apId,
       urlLabel: el.id,
       label: get(el, 'aeEigenschaftenByAeId.artname', '(keine Art gewählt)'),
       url: [

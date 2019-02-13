@@ -54,6 +54,8 @@ export default ({
     .filter(el =>
       nodesPassed.map(n => n.id).includes(`${el.tpopId}TpopmassnFolder`),
     )
+    // only show nodes of this parent
+    .filter(el => el.tpopId === tpopId)
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
@@ -79,7 +81,8 @@ export default ({
       menuType: 'tpopmassn',
       filterTable: 'tpopmassn',
       id: el.id,
-      parentId: tpopId,
+      parentId: el.tpopId,
+      parentTableId: el.tpopId,
       urlLabel: el.id,
       label: `${el.jahr || '(kein Jahr)'}: ${get(
         el,

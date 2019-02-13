@@ -44,6 +44,7 @@ export default ({
     mobxStore,
     `${treeName}.nodeLabelFilter.beob`,
   )
+  //const activeNodeArray = get(mobxStore, `${treeName}.activeNodeArray`)
 
   // map through all elements and create array of nodes
   const nodes = get(data, 'allVApbeobs.nodes', [])
@@ -51,6 +52,8 @@ export default ({
     .filter(el =>
       nodesPassed.map(n => n.id).includes(`${el.tpopId}BeobZugeordnetFolder`),
     )
+    // only show nodes of this parent
+    .filter(el => el.tpopId === tpopId)
     // filter by nodeLabelFilter
     .filter(el => {
       // some dates are not valid
@@ -84,7 +87,8 @@ export default ({
         menuType: 'beobZugeordnet',
         filterTable: 'beob',
         id: el.id,
-        parentId: tpopId,
+        parentId: `${el.tpopId}BeobZugeordnetFolder`,
+        parentTableId: el.tpopId,
         urlLabel: el.id,
         label: `${datum}: ${el.autor || '(kein Autor)'} (${el.quelle})`,
         url: [

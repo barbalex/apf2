@@ -54,6 +54,7 @@ export default ({
       menuType: 'apberuebersichtFolder',
       filterTable: 'apberuebersicht',
       id: projId,
+      tableId: projId,
       urlLabel: 'AP-Berichte',
       label: `AP-Berichte (${message})`,
       url: ['Projekte', projId, 'AP-Berichte'],

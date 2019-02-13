@@ -56,6 +56,8 @@ export default ({
         .map(n => n.id)
         .includes(`${el.tpopkontrId}TpopfeldkontrzaehlFolder`),
     )
+    // only show nodes of this parent
+    .filter(el => el.tpopkontrId === tpopkontrId)
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
@@ -74,7 +76,8 @@ export default ({
       menuType: 'tpopfeldkontrzaehl',
       filterTable: 'tpopkontrzaehl',
       id: el.id,
-      parentId: `${tpopkontrId}TpopfeldkontrzaehlFolder`,
+      parentId: `${el.tpopkontrId}TpopfeldkontrzaehlFolder`,
+      parentTableId: el.tpopkontrId,
       urlLabel: el.id,
       label: `${get(el, 'tpopkontrzaehlEinheitWerteByEinheit.text') ||
         '(keine Einheit)'}: ${el.anzahl} ${get(

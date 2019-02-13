@@ -75,6 +75,7 @@ export default ({
       menuType: 'zielFolder',
       filterTable: 'ziel',
       id: apId,
+      tableId: apId,
       urlLabel: 'AP-Ziele',
       label: `AP-Ziele (${message})`,
       url,

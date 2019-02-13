@@ -33,6 +33,8 @@ export default ({
   const nodes = apberuebersichts
     // only show if parent node exists
     .filter(el => projNodeIds.includes(el.projId))
+    // only show nodes of this parent
+    .filter(el => el.projId === projId)
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
@@ -46,6 +48,7 @@ export default ({
       filterTable: 'apberuebersicht',
       id: el.id,
       parentId: el.projId,
+      parentTableId: el.projId,
       urlLabel: el.jahr,
       label: el.jahr,
       url: ['Projekte', el.projId, 'AP-Berichte', el.id],

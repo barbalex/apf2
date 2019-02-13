@@ -46,6 +46,8 @@ export default ({
   const nodes = get(data, 'allTpops.nodes', [])
     // only show if parent node exists
     .filter(el => nodesPassed.map(n => n.id).includes(`${el.popId}TpopFolder`))
+    // only show nodes of this parent
+    .filter(el => el.popId === popId)
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
@@ -69,6 +71,7 @@ export default ({
       filterTable: 'tpop',
       id: el.id,
       parentId: `${el.popId}TpopFolder`,
+      parentTableId: el.popId,
       urlLabel: el.id,
       label: `${el.nr || '(keine Nr)'}: ${el.flurname || '(kein Flurname)'}`,
       url: [

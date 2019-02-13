@@ -39,6 +39,8 @@ export default ({
   const nodes = aparts
     // only show if parent node exists
     .filter(el => nodesPassed.map(n => n.id).includes(`${el.apId}Apart`))
+    // only show nodes of this parent
+    .filter(el => el.apId === apId)
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
@@ -53,7 +55,8 @@ export default ({
       menuType: 'apart',
       filterTable: 'apart',
       id: el.id,
-      parentId: apId,
+      parentId: el.apId,
+      parentTableId: el.apId,
       urlLabel: el.id,
       label: get(el, 'aeEigenschaftenByArtId.artname', '(keine Art gewählt)'),
       url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Arten', el.id],

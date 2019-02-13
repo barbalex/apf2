@@ -90,6 +90,7 @@ export default ({
       menuType: 'zielberFolder',
       filterTable: 'zielber',
       id: zielId,
+      tableId: zielId,
       urlLabel: 'Berichte',
       label: `Berichte (${message})`,
       url,

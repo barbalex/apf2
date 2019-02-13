@@ -38,6 +38,8 @@ export default ({
   const nodes = erfkrits
     // only show if parent node exists
     .filter(el => nodesPassed.map(n => n.id).includes(`${el.apId}Erfkrit`))
+    // only show nodes of this parent
+    .filter(el => el.apId === apId)
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
@@ -57,6 +59,7 @@ export default ({
       filterTable: 'erfkrit',
       id: el.id,
       parentId: el.apId,
+      parentTableId: el.apId,
       urlLabel: el.id,
       label: `${get(
         el,

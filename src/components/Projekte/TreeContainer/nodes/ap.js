@@ -38,6 +38,8 @@ export default ({
   const nodes = aps
     // only show if parent node exists
     .filter(el => nodesPassed.map(n => n.id).includes(el.projId))
+    // only show nodes of this parent
+    .filter(el => el.projId === projId)
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
@@ -64,6 +66,7 @@ export default ({
       filterTable: 'ap',
       id: el.id,
       parentId: el.projId,
+      parentTableId: el.projId,
       urlLabel: el.id,
       label: get(el, 'aeEigenschaftenByArtId.artname', '(keine Art gewählt)'),
       url: ['Projekte', el.projId, 'Aktionspläne', el.id],

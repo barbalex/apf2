@@ -43,6 +43,8 @@ export default ({
   const nodes = pops
     // only show if parent node exists
     .filter(el => nodesPassed.map(n => n.id).includes(`${el.apId}PopFolder`))
+    // only show nodes of this parent
+    .filter(el => el.apId === apId)
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
@@ -65,7 +67,8 @@ export default ({
       menuType: 'pop',
       filterTable: 'pop',
       id: el.id,
-      parentId: `${apId}PopFolder`,
+      parentId: `${el.apId}PopFolder`,
+      parentTableId: el.apId,
       urlLabel: el.id,
       label: `${el.nr || '(keine Nr)'}: ${el.name || '(kein Name)'}`,
       url: ['Projekte', projId, 'Aktionspläne', el.apId, 'Populationen', el.id],

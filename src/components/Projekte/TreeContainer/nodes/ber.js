@@ -38,6 +38,8 @@ export default ({
   const nodes = bers
     // only show if parent node exists
     .filter(el => nodesPassed.map(n => n.id).includes(`${el.apId}Ber`))
+    // only show nodes of this parent
+    .filter(el => el.apId === apId)
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
@@ -53,6 +55,7 @@ export default ({
       filterTable: 'ber',
       id: el.id,
       parentId: el.apId,
+      parentTableId: el.apId,
       urlLabel: el.id,
       label: `${el.jahr || '(kein Jahr)'}: ${el.titel || '(kein Titel)'}`,
       url: ['Projekte', projId, 'Aktionspläne', el.apId, 'Berichte', el.id],

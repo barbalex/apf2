@@ -33,6 +33,8 @@ export default ({
       nodeType: 'folder',
       menuType: 'qkFolder',
       id: apId,
+      tableId: apId,
+      parentTableId: apId,
       urlLabel: 'Qualitaetskontrollen',
       label: 'Qualitätskontrollen',
       url,

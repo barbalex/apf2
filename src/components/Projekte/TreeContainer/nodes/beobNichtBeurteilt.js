@@ -43,6 +43,8 @@ export default ({
     .filter(el =>
       nodesPassed.map(n => n.id).includes(`${el.apId}BeobNichtBeurteiltFolder`),
     )
+    // only show nodes of this parent
+    .filter(el => el.apId === apId)
     // filter by nodeLabelFilter
     .filter(el => {
       // some dates are not valid
@@ -76,7 +78,8 @@ export default ({
         menuType: 'beobNichtBeurteilt',
         filterTable: 'beob',
         id: el.id,
-        parentId: apId,
+        parentId: el.apId,
+        parentTableId: el.apId,
         urlLabel: el.id,
         label: `${datum}: ${el.autor || '(kein Autor)'} (${el.quelle})`,
         url: [

@@ -33,6 +33,7 @@ export default ({
       nodeType: 'folder',
       menuType: 'idealbiotopFolder',
       id: apId,
+      tableId: apId,
       urlLabel: 'Idealbiotop',
       label: 'Idealbiotop',
       url,
