@@ -302,7 +302,6 @@ const Tpopfreiwkontr = ({
       let field2
       if (field === 'datum') field2 = 'jahr'
       let value2
-      console.log('TpopFreiwkontr', { value, field, date: new Date(value) })
       if (field === 'datum') {
         // this broke 13.2.2019
         // value2 = !!value ? +format(new Date(value), 'yyyy') : null
