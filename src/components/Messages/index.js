@@ -53,7 +53,6 @@ const UserMessages = ({ open }: { open: Boolean }) => {
   const { user, updateAvailable } = useContext(mobxStoreContext)
   const userName = user.name
   const { data, error, loading, refetch } = useQuery(query, {
-    suspend: false,
     variables: { name: userName },
   })
   const allMessages = get(data, 'allMessages.nodes', [])

@@ -179,7 +179,6 @@ const Tpopfreiwkontr = ({
       : '99999999-9999-9999-9999-999999999999'
 
   const { data, loading, error, refetch } = useQuery(query, {
-    suspend: false,
     variables: {
       id: queryId,
       showFilter,

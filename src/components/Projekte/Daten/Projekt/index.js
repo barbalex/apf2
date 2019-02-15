@@ -32,7 +32,6 @@ const Projekt = ({ treeName }: { treeName: string }) => {
   const [errors, setErrors] = useState({})
 
   const { data, loading, error } = useQuery(query, {
-    suspend: false,
     variables: {
       id:
         activeNodeArray.length > 1

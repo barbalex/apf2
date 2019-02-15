@@ -90,7 +90,6 @@ const AMengen = ({
   startJahr: Number,
 }) => {
   const { data, error, loading } = useQuery(query, {
-    suspend: false,
     variables: { apId, startJahr },
   })
   const threeLPop = get(data, 'apById.threeLPop.nodes', []).filter(

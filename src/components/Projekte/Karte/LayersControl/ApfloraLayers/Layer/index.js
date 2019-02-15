@@ -133,7 +133,6 @@ const MySortableItem = ({ treeName, apfloraLayer, index }) => {
   }
 
   const { data, error } = useQuery(query, {
-    suspend: false,
     variables,
   })
 

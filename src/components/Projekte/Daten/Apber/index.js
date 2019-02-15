@@ -59,7 +59,6 @@ const Apber = ({
   const { activeNodeArray } = mobxStore[treeName]
 
   const { data, loading, error } = useQuery(query, {
-    suspend: false,
     variables: {
       id:
         activeNodeArray.length > 5
@@ -70,12 +69,9 @@ const Apber = ({
 
   const row = get(data, 'apberById', {})
 
-  useEffect(
-    () => {
-      setErrors({})
-    },
-    [row],
-  )
+  useEffect(() => {
+    setErrors({})
+  }, [row])
 
   const saveToDb = useCallback(async event => {
     const field = event.target.name

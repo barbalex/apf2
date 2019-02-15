@@ -29,7 +29,6 @@ const Beob = ({
   const mobxStore = useContext(mobxStoreContext)
   const { activeNodeArray } = mobxStore[treeName]
   const { data, loading, error } = useQuery(query, {
-    suspend: false,
     variables: {
       id: activeNodeArray[activeNodeArray.length - 1],
     },

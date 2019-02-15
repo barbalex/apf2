@@ -93,7 +93,6 @@ const CMengen = ({
   startJahr: Number,
 }) => {
   const { data, error, loading } = useQuery(query, {
-    suspend: false,
     variables: { apId, jahr },
   })
   const oneLTpop_pop = get(data, 'apById.oneLTpop.nodes', [])

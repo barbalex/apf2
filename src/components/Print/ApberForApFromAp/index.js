@@ -76,7 +76,6 @@ const ApberForApFromAp = ({
   }
 
   const { data: apberData, error: apberDataError } = useQuery(apberQuery, {
-    suspend: false,
     variables: {
       apberId,
     },
@@ -87,7 +86,6 @@ const ApberForApFromAp = ({
   const { data: apData, loading: apDataLoading, error: apDataError } = useQuery(
     apQuery,
     {
-      suspend: false,
       variables: {
         apId,
         jahr,

@@ -47,7 +47,6 @@ const Assozart = ({
   const { activeNodeArray } = mobxStore[treeName]
 
   const { data, loading, error } = useQuery(query, {
-    suspend: false,
     variables: {
       id:
         activeNodeArray.length > 5

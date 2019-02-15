@@ -86,7 +86,6 @@ const Teilpopulationen = ({ treeName }: { treeName: string }) => {
     data: aeEigenschaftensData,
     error: aeEigenschaftensDataError,
   } = useQuery(allAeEigenschaftensQuery, {
-    suspend: false,
     variables: {
       id:
         activeNodeArray.length > 9

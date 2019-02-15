@@ -46,7 +46,6 @@ const BeobZugeordnetMarker = ({
   const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
   const isActiveInMap = activeApfloraLayers.includes('beobZugeordnet')
   var { data, error, refetch } = useQuery(query, {
-    suspend: false,
     variables: { projId, apId, isActiveInMap },
   })
   setRefetchKey({ key: 'beobZugeordnetForMap', value: refetch })

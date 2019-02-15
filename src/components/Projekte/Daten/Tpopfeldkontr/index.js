@@ -100,7 +100,6 @@ const Tpopfeldkontr = ({
   const showFilter = !!nodeFilter[treeName].activeTable
 
   const { data, loading, error } = useQuery(query, {
-    suspend: false,
     variables: {
       id:
         activeNodeArray.length > 9

@@ -51,7 +51,6 @@ const User = ({
   toggleUserOpen: () => void,
 }) => {
   const { data, error, loading } = useQuery(query, {
-    suspend: false,
     variables: { name: username },
   })
   const client = useApolloClient()

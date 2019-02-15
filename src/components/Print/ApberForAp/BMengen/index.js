@@ -90,7 +90,6 @@ const BMengen = ({
   startJahr: Number,
 }) => {
   const { data, error, loading } = useQuery(query, {
-    suspend: false,
     variables: { apId, jahr },
   })
   // 1.

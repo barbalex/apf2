@@ -50,7 +50,6 @@ const Pop = ({ treeName }: { treeName: string }) => {
   const perProj = apId === '99999999-9999-9999-9999-999999999999'
   const perAp = apId !== '99999999-9999-9999-9999-999999999999'
   var { data, error, refetch } = useQuery(query, {
-    suspend: false,
     variables: {
       perAp,
       apId,

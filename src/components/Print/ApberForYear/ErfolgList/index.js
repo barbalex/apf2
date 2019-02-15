@@ -212,7 +212,6 @@ const ErfolgList = ({ jahr }: { jahr: Number }) => {
   const activeNodes = mobxStore.treeActiveNodes
   const { projekt: projektId } = activeNodes
   const { data, loading, error: dataError } = useQuery(query, {
-    suspend: false,
     variables: {
       projektId,
       jahr,

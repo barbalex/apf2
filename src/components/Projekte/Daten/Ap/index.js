@@ -92,7 +92,6 @@ const Ap = ({
       ? activeNodeArray[3]
       : '99999999-9999-9999-9999-999999999999'
   const { data, error, loading } = useQuery(query, {
-    suspend: false,
     variables: { id },
   })
 

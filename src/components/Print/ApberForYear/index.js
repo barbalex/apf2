@@ -111,7 +111,6 @@ const ApberForYear = () => {
   const { data: data1, loading: data1Loading, error: data1Error } = useQuery(
     query1,
     {
-      suspend: false,
       variables: {
         apberuebersichtId,
       },
@@ -122,7 +121,6 @@ const ApberForYear = () => {
   const { data: data2, loading: data2Loading, error: data2Error } = useQuery(
     query2,
     {
-      suspend: false,
       variables: {
         projektId,
         jahr,

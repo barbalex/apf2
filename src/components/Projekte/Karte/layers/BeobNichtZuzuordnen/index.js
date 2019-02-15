@@ -49,7 +49,6 @@ const BeobNichtZuzuordnenMarker = ({
   const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
   const isActiveInMap = activeApfloraLayers.includes('beobNichtZuzuordnen')
   var { data, error, refetch } = useQuery(query, {
-    suspend: false,
     variables: { projId, apId, isActiveInMap },
   })
   setRefetchKey({ key: 'beobNichtZuzuordnenForMap', value: refetch })

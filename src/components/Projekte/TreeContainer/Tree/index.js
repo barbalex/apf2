@@ -112,9 +112,7 @@ const Tree = ({ treeName, dimensions }: Props) => {
     error: errorProjekts,
     loading: loadingProjekts,
     refetch: refetchProjekts,
-  } = useQuery(queryProjekts, {
-    suspend: false,
-  })
+  } = useQuery(queryProjekts)
   setRefetchKey({
     key: 'projekts',
     value: refetchProjekts,
@@ -124,9 +122,7 @@ const Tree = ({ treeName, dimensions }: Props) => {
     error: errorUsers,
     loading: loadingUsers,
     refetch: refetchUsers,
-  } = useQuery(queryUsers, {
-    suspend: false,
-  })
+  } = useQuery(queryUsers)
   setRefetchKey({
     key: 'users',
     value: refetchUsers,
@@ -137,7 +133,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingApberuebersichts,
     refetch: refetchApberuebersichts,
   } = useQuery(queryApberuebersichts, {
-    suspend: false,
     variables: { isProjekt, projekt },
   })
   setRefetchKey({
@@ -150,7 +145,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingAps,
     refetch: refetchAps,
   } = useQuery(queryAps, {
-    suspend: false,
     variables: { isProjekt, apFilter },
   })
   setRefetchKey({
@@ -163,7 +157,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingPops,
     refetch: refetchPops,
   } = useQuery(queryPops, {
-    suspend: false,
     variables: { isAp, popFilter },
   })
   setRefetchKey({
@@ -176,7 +169,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingPopbers,
     refetch: refetchPopbers,
   } = useQuery(queryPopbers, {
-    suspend: false,
     variables: { isPop, pop },
   })
   setRefetchKey({
@@ -189,7 +181,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingPopmassnbers,
     refetch: refetchPopmassnbers,
   } = useQuery(queryPopmassnbers, {
-    suspend: false,
     variables: { isPop, pop },
   })
   setRefetchKey({
@@ -202,7 +193,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingTpops,
     refetch: refetchTpops,
   } = useQuery(queryTpops, {
-    suspend: false,
     variables: { isPop, tpopFilter },
   })
   setRefetchKey({
@@ -215,7 +205,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingTpopmassns,
     refetch: refetchTpopmassns,
   } = useQuery(queryTpopmassns, {
-    suspend: false,
     variables: { isTpop, tpop },
   })
   setRefetchKey({
@@ -228,7 +217,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingTpopmassnbers,
     refetch: refetchTpopmassnbers,
   } = useQuery(queryTpopmassnbers, {
-    suspend: false,
     variables: { isTpop, tpop },
   })
   setRefetchKey({
@@ -241,7 +229,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingTpopfeldkontrs,
     refetch: refetchTpopfeldkontrs,
   } = useQuery(queryTpopfeldkontrs, {
-    suspend: false,
     variables: { isTpop, tpop },
   })
   setRefetchKey({
@@ -254,7 +241,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingTpopfreiwkontrs,
     refetch: refetchTpopfreiwkontrs,
   } = useQuery(queryTpopfreiwkontrs, {
-    suspend: false,
     variables: { isTpop, tpop },
   })
   setRefetchKey({
@@ -267,7 +253,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingTpopkontrzaehls,
     refetch: refetchTpopkontrzaehls,
   } = useQuery(queryTpopkontrzaehls, {
-    suspend: false,
     variables: { isTpopkontr, tpopkontr },
   })
   setRefetchKey({
@@ -280,7 +265,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingTpopbers,
     refetch: refetchTpopbers,
   } = useQuery(queryTpopbers, {
-    suspend: false,
     variables: { isTpop, tpop },
   })
   setRefetchKey({
@@ -293,7 +277,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingBeobZugeordnets,
     refetch: refetchBeobZugeordnets,
   } = useQuery(queryBeobZugeordnets, {
-    suspend: false,
     variables: { isTpop, tpop },
   })
   setRefetchKey({
@@ -306,7 +289,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingZiels,
     refetch: refetchZiels,
   } = useQuery(queryZiels, {
-    suspend: false,
     variables: { isAp, ap },
   })
   setRefetchKey({
@@ -319,7 +301,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingZielbers,
     refetch: refetchZielbers,
   } = useQuery(queryZielbers, {
-    suspend: false,
     variables: { isZiel, ziel },
   })
   setRefetchKey({
@@ -332,7 +313,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingErfkrits,
     refetch: refetchErfkrits,
   } = useQuery(queryErfkrits, {
-    suspend: false,
     variables: { isAp, ap },
   })
   setRefetchKey({
@@ -345,7 +325,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingApbers,
     refetch: refetchApbers,
   } = useQuery(queryApbers, {
-    suspend: false,
     variables: { isAp, ap },
   })
   setRefetchKey({
@@ -358,7 +337,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingBers,
     refetch: refetchBers,
   } = useQuery(queryBers, {
-    suspend: false,
     variables: { isAp, ap },
   })
   setRefetchKey({
@@ -371,7 +349,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingAparts,
     refetch: refetchAparts,
   } = useQuery(queryAparts, {
-    suspend: false,
     variables: { isAp, ap },
   })
   setRefetchKey({
@@ -384,7 +361,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingAssozarts,
     refetch: refetchAssozarts,
   } = useQuery(queryAssozarts, {
-    suspend: false,
     variables: { isAp, ap },
   })
   setRefetchKey({
@@ -397,7 +373,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingEkfzaehleinheits,
     refetch: refetchEkfzaehleinheits,
   } = useQuery(queryEkfzaehleinheits, {
-    suspend: false,
     variables: { isAp, ap },
   })
   setRefetchKey({
@@ -410,7 +385,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingBeobNichtBeurteilts,
     refetch: refetchBeobNichtBeurteilts,
   } = useQuery(queryBeobNichtBeurteilts, {
-    suspend: false,
     variables: { isAp, ap },
   })
   setRefetchKey({
@@ -423,7 +397,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingBeobNichtZuzuordnens,
     refetch: refetchBeobNichtZuzuordnens,
   } = useQuery(queryBeobNichtZuzuordnens, {
-    suspend: false,
     variables: { isAp, ap },
   })
   setRefetchKey({
@@ -436,7 +409,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingAdresses,
     refetch: refetchAdresses,
   } = useQuery(queryAdresses, {
-    suspend: false,
     variables: { isWerteListen },
   })
   setRefetchKey({

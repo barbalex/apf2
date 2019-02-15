@@ -22,7 +22,6 @@ const BeobZugeordnetAssignPolylines = ({ treeName }: { treeName: string }) => {
     'beobZugeordnetAssignPolylines',
   )
   var { data, error, refetch } = useQuery(query, {
-    suspend: false,
     variables: { projId, apId, isActiveInMap },
   })
   setRefetchKey({ key: 'beobAssignLines', value: refetch })

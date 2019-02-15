@@ -34,7 +34,6 @@ const Tpopber = ({ treeName }: { treeName: string }) => {
   const { activeNodeArray } = mobxStore[treeName]
 
   const { data, loading, error } = useQuery(query, {
-    suspend: false,
     variables: {
       id:
         activeNodeArray.length > 9

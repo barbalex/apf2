@@ -31,7 +31,6 @@ const EkfListContainer = ({ dimensions }: { dimensions: Object }) => {
     : { userName, jahr: ekfYear }
 
   const { data, loading, error } = useQuery(query, {
-    suspend: false,
     variables,
   })
 

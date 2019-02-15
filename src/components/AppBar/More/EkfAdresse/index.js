@@ -16,7 +16,7 @@ const Container = styled.div`
 `
 
 const EkfAdresse = ({ setAnchorEl }: { setAnchorEl: () => void }) => {
-  const { data, error, loading } = useQuery(query, { suspend: false })
+  const { data, error, loading } = useQuery(query)
   const { setView, setEkfAdresseId } = useContext(mobxStoreContext)
   const choose = useCallback(async event => {
     setAnchorEl(null)
