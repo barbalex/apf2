@@ -22,3 +22,14 @@ export const initial = {
   x: null,
   y: null,
 }
+
+export const simpleTypes = {
+  nr: 'number',
+  name: 'string',
+  status: 'number',
+  statusUnklar: 'boolean',
+  statusUnklarBegruendung: 'string',
+  bekanntSeit: 'number',
+  x: 'number',
+  y: 'number',
+}

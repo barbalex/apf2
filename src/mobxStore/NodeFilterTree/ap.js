@@ -18,3 +18,12 @@ export const initial = {
   bearbeiter: null,
   ekfBeobachtungszeitpunkt: null,
 }
+
+export const simpleTypes = {
+  artId: 'uuid',
+  bearbeitung: 'number',
+  startJahr: 'number',
+  umsetzung: 'number',
+  bearbeiter: 'number',
+  ekfBeobachtungszeitpunkt: 'string',
+}

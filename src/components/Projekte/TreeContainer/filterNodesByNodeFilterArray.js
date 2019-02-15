@@ -1,10 +1,7 @@
 // @flow
 // filter by nodeFilter
-// TODO: would be much better to filter this in query
-// this is done
-// but unfortunately query does not immediatly update
 
-import types from '../../../mobxStore/NodeFilterTree/types'
+import types from '../../../mobxStore/NodeFilterTree/simpleTypes'
 
 export default ({
   node,
@@ -17,6 +14,7 @@ export default ({
 }) => {
   if (nodeFilterArray.length === 0) return true
   let type = 'string'
+  console.log('filterNodesByNodeFilterArray, types:', types)
   return nodeFilterArray.every(([key, value]) => {
     if (node[key] === null || node[key] === undefined) return false
     if (table && types[table] && types[table][key]) {

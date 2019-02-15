@@ -42,3 +42,24 @@ export const initial = {
   form: null,
   pflanzanordnung: null,
 }
+
+export const simpleTypes = {
+  typ: 'number',
+  beschreibung: 'string',
+  jahr: 'number',
+  datum: 'string',
+  bearbeiter: 'string',
+  bemerkungen: 'string',
+  planVorhanden: 'number',
+  planBezeichnung: 'string',
+  flaeche: 'number',
+  markierung: 'string',
+  anzTriebe: 'number',
+  anzPflanzen: 'number',
+  anzPflanzstellen: 'number',
+  wirtspflanze: 'string',
+  herkunftPop: 'string',
+  sammeldatum: 'string',
+  form: 'string',
+  pflanzanordnung: 'string',
+}
