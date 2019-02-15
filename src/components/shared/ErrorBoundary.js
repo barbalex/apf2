@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
 
+//import checkForPermissionError from '../../modules/checkForPermissionError'
+
 const Container = styled.div`
   margin: 10px;
 `
@@ -31,6 +33,7 @@ class ErrorBoundary extends Component {
 
     if (error) {
       console.log('error:', error)
+
       return (
         <Container>
           <ErrorTitle>

@@ -34,7 +34,7 @@ const EkfListContainer = ({ dimensions }: { dimensions: Object }) => {
     variables,
   })
 
-  if (error) return `Fehler: ${error.message}`
+  if (error) return `Fehler in ListContainer: ${error.message}`
   return <List data={data} loading={loading} dimensions={dimensions} />
 }
 

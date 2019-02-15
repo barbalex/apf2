@@ -157,7 +157,7 @@ const User = ({
   )
 
   if (loading) return null
-  if (error) return `Fehler: ${error.message}`
+  if (error) return `Fehler in AppBar > User: ${error.message}`
 
   return (
     <Dialog

@@ -35,7 +35,7 @@ const EkfAdresse = ({ setAnchorEl }: { setAnchorEl: () => void }) => {
   }))
 
   if (loading) return '...'
-  if (error) return `Fehler: ${error.message}`
+  if (error) return `Fehler in EKFAdresse: ${error.message}`
 
   return (
     <Container>

@@ -13,6 +13,7 @@ import ErrorBoundary from '../shared/ErrorBoundary'
 import query from './data'
 import createUsermessage from './createUsermessage'
 import mobxStoreContext from '../../mobxStoreContext'
+import checkForPermissionError from '../../modules/checkForPermissionError'
 
 const StyledDialog = styled(Dialog)`
   > div > div {
@@ -50,7 +51,8 @@ const OkButton = styled(Button)`
 
 const UserMessages = ({ open }: { open: Boolean }) => {
   const client = useApolloClient()
-  const { user, updateAvailable } = useContext(mobxStoreContext)
+  const mobxStore = useContext(mobxStoreContext)
+  const { user, updateAvailable } = mobxStore
   const userName = user.name
   const { data, error, loading, refetch } = useQuery(query, {
     variables: { name: userName },
@@ -70,23 +72,20 @@ const UserMessages = ({ open }: { open: Boolean }) => {
     },
     [userName],
   )
-  const onClickReadAll = useCallback(
-    async () => {
-      await Promise.all(
-        unreadMessages.map(async message => {
-          await client.mutate({
-            mutation: createUsermessage,
-            variables: { userName, id: message.id },
-          })
-        }),
-      )
-      return refetch()
-    },
-    [unreadMessages, userName],
-  )
+  const onClickReadAll = useCallback(async () => {
+    await Promise.all(
+      unreadMessages.map(async message => {
+        await client.mutate({
+          mutation: createUsermessage,
+          variables: { userName, id: message.id },
+        })
+      }),
+    )
+    return refetch()
+  }, [unreadMessages, userName])
 
   if (error) {
-    if (error.message.includes('keine Berechtigung')) return null
+    checkForPermissionError({ error, mobxStore })
     return `Fehler: ${error.message}`
   }
 
