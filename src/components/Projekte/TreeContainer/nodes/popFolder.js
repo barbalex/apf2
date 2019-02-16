@@ -1,7 +1,6 @@
 // @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
-import uniqBy from 'lodash/uniqBy'
 
 import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
 
@@ -45,6 +44,8 @@ export default ({
     `${treeName}.nodeLabelFilter.pop`,
   )
 
+  //console.log('nodes, popFolder, apId', apId)
+
   let popNodes = pops
     .filter(el => el.apId === apId)
     // filter by nodeLabelFilter
@@ -64,12 +65,7 @@ export default ({
         table: 'pop',
       }),
     )
-  /**
-   * There is something weird happening when filtering data
-   * that leads to duplicate nodes
-   * Need to solve that but in the meantime use uniqBy
-   */
-  popNodes = uniqBy(popNodes, 'id')
+
   const popNodesLength = popNodes.length
   let message = loading && !popNodesLength ? '...' : popNodesLength
   if (nodeLabelFilterString) {

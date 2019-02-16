@@ -56,9 +56,6 @@ export default ({
       return true
     })
     // filter by nodeFilter
-    // TODO: would be much better to filter this in query
-    // this is done
-    // but unfortunately query does not immediatly update
     .filter(node =>
       filterNodesByNodeFilterArray({
         node,
