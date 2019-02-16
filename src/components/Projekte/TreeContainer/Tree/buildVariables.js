@@ -1,9 +1,9 @@
 // @flow
 import uniq from 'lodash/uniq'
 
-import { type as apType } from '../../../../mobxStore/NodeFilterTree/ap'
-import { type as popType } from '../../../../mobxStore/NodeFilterTree/pop'
-import { type as tpopType } from '../../../../mobxStore/NodeFilterTree/tpop'
+import { simpleTypes as apType } from '../../../../mobxStore/NodeFilterTree/ap'
+import { simpleTypes as popType } from '../../../../mobxStore/NodeFilterTree/pop'
+import { simpleTypes as tpopType } from '../../../../mobxStore/NodeFilterTree/tpop'
 
 export default ({
   treeName,
