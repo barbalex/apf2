@@ -1,7 +1,10 @@
 // @flow
-export default ({ mobxStore, error }) => {
+export default ({ mobxStore, error, component }) => {
   const { user, setUser } = mobxStore
   if (error.message.includes('keine Berechtigung')) {
     setUser({ name: user.name || null, token: null })
+    return null
+  } else {
+    return `Fehler${component ? `in ${component}` : ''}: ${error.message}`
   }
 }

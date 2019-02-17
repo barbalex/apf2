@@ -1,5 +1,5 @@
 // @flow
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import Dialog from '@material-ui/core/Dialog'
@@ -20,6 +20,8 @@ import query from './data'
 import TextField from '../../shared/TextField'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import updateUserByIdGql from './updateUserById'
+import mobxStoreContext from '../../../mobxStoreContext'
+import dealWithError from '../../../modules/dealWithError'
 
 const Container = styled.div`
   height: 100%;
@@ -50,6 +52,7 @@ const User = ({
   userOpen: boolean,
   toggleUserOpen: () => void,
 }) => {
+  const mobxStore = useContext(mobxStoreContext)
   const { data, error, loading } = useQuery(query, {
     variables: { name: username },
   })
@@ -157,7 +160,9 @@ const User = ({
   )
 
   if (loading) return null
-  if (error) return `Fehler in AppBar > User: ${error.message}`
+  if (error) {
+    return dealWithError({ error, mobxStore, component: 'AppBar > User' })
+  }
 
   return (
     <Dialog

@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
 
-//import checkForPermissionError from '../../modules/checkForPermissionError'
+//import dealWithError from '../../modules/dealWithError'
 
 const Container = styled.div`
   margin: 10px;

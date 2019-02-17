@@ -13,7 +13,7 @@ import ErrorBoundary from '../shared/ErrorBoundary'
 import query from './data'
 import createUsermessage from './createUsermessage'
 import mobxStoreContext from '../../mobxStoreContext'
-import checkForPermissionError from '../../modules/checkForPermissionError'
+import dealWithError from '../../modules/dealWithError'
 
 const StyledDialog = styled(Dialog)`
   > div > div {
@@ -85,8 +85,7 @@ const UserMessages = ({ open }: { open: Boolean }) => {
   }, [unreadMessages, userName])
 
   if (error) {
-    checkForPermissionError({ error, mobxStore })
-    return `Fehler: ${error.message}`
+    return dealWithError({ error, mobxStore, component: 'Messages' })
   }
 
   return (

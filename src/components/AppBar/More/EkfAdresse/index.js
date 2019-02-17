@@ -10,6 +10,7 @@ import Select from '../../../shared/Select'
 import query from './data'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import mobxStoreContext from '../../../../mobxStoreContext'
+import dealWithError from '../../../../modules/dealWithError'
 
 const Container = styled.div`
   padding: 0 16px;
@@ -17,7 +18,8 @@ const Container = styled.div`
 
 const EkfAdresse = ({ setAnchorEl }: { setAnchorEl: () => void }) => {
   const { data, error, loading } = useQuery(query)
-  const { setView, setEkfAdresseId } = useContext(mobxStoreContext)
+  const mobxStore = useContext(mobxStoreContext)
+  const { setView, setEkfAdresseId } = mobxStore
   const choose = useCallback(async event => {
     setAnchorEl(null)
     // prevent this happening before seAnchor happened
@@ -35,7 +37,9 @@ const EkfAdresse = ({ setAnchorEl }: { setAnchorEl: () => void }) => {
   }))
 
   if (loading) return '...'
-  if (error) return `Fehler in EKFAdresse: ${error.message}`
+  if (error) {
+    return dealWithError({ error, mobxStore, component: 'EKFAdresse' })
+  }
 
   return (
     <Container>

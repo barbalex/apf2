@@ -13,9 +13,11 @@ import dataByAdresseIdGql from './dataByAdresseId'
 import dataWithDateByUserNameGql from './dataWithDateByUserName'
 import dataWithDateByAdresseIdGql from './dataWithDateByAdresseId'
 import List from './List'
+import dealWithError from '../../../modules/dealWithError'
 
 const EkfListContainer = ({ dimensions }: { dimensions: Object }) => {
-  const { ekfYear, ekfAdresseId, user } = useContext(mobxStoreContext)
+  const mobxStore = useContext(mobxStoreContext)
+  const { ekfYear, ekfAdresseId, user } = mobxStore
 
   let query = !!ekfAdresseId ? dataByAdresseIdGql : dataByUserNameGql
   const ekfRefDate = new Date().setMonth(new Date().getMonth() - 2)
@@ -34,7 +36,9 @@ const EkfListContainer = ({ dimensions }: { dimensions: Object }) => {
     variables,
   })
 
-  if (error) return `Fehler in ListContainer: ${error.message}`
+  if (error) {
+    return dealWithError({ error, mobxStore, component: 'ListContainer' })
+  }
   return <List data={data} loading={loading} dimensions={dimensions} />
 }
 
