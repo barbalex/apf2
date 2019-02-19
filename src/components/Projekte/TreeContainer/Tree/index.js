@@ -599,7 +599,7 @@ const Tree = ({ treeName, dimensions }: Props) => {
   const listRef = React.createRef()
 
   useEffect(() => {
-    if (listRef) {
+    if (listRef && listRef.current) {
       const index = findIndex(nodes, node => isEqual(node.url, activeNodeArray))
       listRef.current.scrollToItem(index)
     }
