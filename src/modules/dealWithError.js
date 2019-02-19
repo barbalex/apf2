@@ -5,6 +5,6 @@ export default ({ mobxStore, error, component }) => {
     setUser({ name: user.name || null, token: null })
     return null
   } else {
-    return `Fehler${component ? `in ${component}` : ''}: ${error.message}`
+    return `Fehler${component ? ` in ${component}` : ''}: ${error.message}`
   }
 }
