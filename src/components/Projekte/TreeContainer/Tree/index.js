@@ -596,10 +596,14 @@ const Tree = ({ treeName, dimensions }: Props) => {
     }
   }, [loading])
 
+  const listRef = React.createRef()
+
   useEffect(() => {
-    const index = findIndex(nodes, node => isEqual(node.url, activeNodeArray))
-    listRef.current.scrollToItem(index)
-  }, [loading, activeNodeArray, nodes])
+    if (listRef) {
+      const index = findIndex(nodes, node => isEqual(node.url, activeNodeArray))
+      listRef.current.scrollToItem(index)
+    }
+  }, [loading, activeNodeArray, nodes, listRef])
 
   if (anyQueryReturnsPermissionError(queryErrorArray)) {
     // during login don't show permission error
@@ -627,8 +631,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
 
   const height = isNaN(dimensions.height) ? 250 : dimensions.height - 58
   const width = isNaN(dimensions.width) ? 250 : dimensions.width
-
-  const listRef = React.createRef()
 
   return (
     <ErrorBoundary>
