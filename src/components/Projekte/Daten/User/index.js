@@ -122,7 +122,6 @@ const User = ({
           variables: {
             id: row.id,
             [field]: value,
-            changedBy: mobxStore.user.name,
           },
           optimisticResponse: {
             __typename: 'Mutation',
@@ -174,6 +173,7 @@ const User = ({
           const fakeEvent = { target: { name: 'pass', value: password2 } }
           await saveToDb(fakeEvent)
         } catch (error) {
+          setErrors({ pass: error.message })
           return setPasswordMessage(error.message)
         }
         setPasswordMessage(
@@ -276,6 +276,7 @@ const User = ({
               <InputLabel htmlFor="passwort">Neues Passwort</InputLabel>
               <StyledInput
                 id="passwort"
+                name="pass"
                 type={showPass ? 'text' : 'password'}
                 defaultValue={password}
                 onBlur={onBlurPassword}
@@ -287,6 +288,7 @@ const User = ({
                 autoComplete="current-password"
                 autoCorrect="off"
                 spellCheck="false"
+                error={errors.pass}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -300,7 +302,8 @@ const User = ({
                 }
               />
               <FormHelperText id="passwortHelper">
-                {passwordErrorText}
+                {passwordErrorText ||
+                  (errors && errors.pass ? errors.pass : '')}
               </FormHelperText>
             </FormControl>
           )}
@@ -315,6 +318,7 @@ const User = ({
               </InputLabel>
               <StyledInput
                 id="passwort2"
+                name="pass"
                 type={showPass2 ? 'text' : 'password'}
                 defaultValue={password2}
                 onBlur={onBlurPassword2}
