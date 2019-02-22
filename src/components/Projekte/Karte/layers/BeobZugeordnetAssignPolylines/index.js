@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
@@ -40,26 +40,32 @@ const BeobZugeordnetAssignPolylines = ({ treeName }: { treeName: string }) => {
     'projektById.apsByProjId.nodes[0].apartsByApId.nodes',
     [],
   )
-  const beobs = flatten(
-    aparts.map(a => get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', [])),
+  const beobs = useMemo(
+    () =>
+      flatten(
+        aparts.map(a =>
+          get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []),
+        ),
+      )
+        // filter them by nodeLabelFilter
+        .filter(el => {
+          if (!beobZugeordnetFilterString) return true
+          // some dates are not valid
+          // need to account for that
+          let datum = '(kein Datum)'
+          if (!isValid(new Date(el.datum))) {
+            datum = '(ungültiges Datum)'
+          } else if (!!el.datum) {
+            datum = format(new Date(el.datum), 'yyyy.MM.dd')
+          }
+          const autor = el.autor || '(kein Autor)'
+          const quelle = get(el, 'beobQuelleWerteByQuelleId.name', '')
+          return `${datum}: ${autor} (${quelle})`
+            .toLowerCase()
+            .includes(beobZugeordnetFilterString.toLowerCase())
+        }),
+    [aparts, beobZugeordnetFilterString],
   )
-    // filter them by nodeLabelFilter
-    .filter(el => {
-      if (!beobZugeordnetFilterString) return true
-      // some dates are not valid
-      // need to account for that
-      let datum = '(kein Datum)'
-      if (!isValid(new Date(el.datum))) {
-        datum = '(ungültiges Datum)'
-      } else if (!!el.datum) {
-        datum = format(new Date(el.datum), 'yyyy.MM.dd')
-      }
-      const autor = el.autor || '(kein Autor)'
-      const quelle = get(el, 'beobQuelleWerteByQuelleId.name', '')
-      return `${datum}: ${autor} (${quelle})`
-        .toLowerCase()
-        .includes(beobZugeordnetFilterString.toLowerCase())
-    })
 
   return beobs.map(beob => (
     <Polyline key={beob.id} beob={beob} treeName={treeName} />

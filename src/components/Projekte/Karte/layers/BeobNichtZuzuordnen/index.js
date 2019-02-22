@@ -68,36 +68,46 @@ const BeobNichtZuzuordnenMarker = ({
     'projektById.apsByProjId.nodes[0].apartsByApId.nodes',
     [],
   )
-  const beobs = flatten(
-    aparts.map(a => get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', [])),
+  const beobs = useMemo(
+    () =>
+      flatten(
+        aparts.map(a =>
+          get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []),
+        ),
+      )
+        // filter them by nodeLabelFilter
+        .filter(el => {
+          if (!beobNichtZuzuordnenFilterString) return true
+          // some dates are not valid
+          // need to account for that
+          let datum = '(kein Datum)'
+          if (!isValid(new Date(el.datum))) {
+            datum = '(ungültiges Datum)'
+          } else if (!!el.datum) {
+            datum = format(new Date(el.datum), 'yyyy.MM.dd')
+          }
+          const autor = el.autor || '(kein Autor)'
+          const quelle = get(el, 'beobQuelleWerteByQuelleId.name', '')
+          return `${datum}: ${autor} (${quelle})`
+            .toLowerCase()
+            .includes(beobNichtZuzuordnenFilterString.toLowerCase())
+        }),
+    [aparts, beobNichtZuzuordnenFilterString],
   )
-    // filter them by nodeLabelFilter
-    .filter(el => {
-      if (!beobNichtZuzuordnenFilterString) return true
-      // some dates are not valid
-      // need to account for that
-      let datum = '(kein Datum)'
-      if (!isValid(new Date(el.datum))) {
-        datum = '(ungültiges Datum)'
-      } else if (!!el.datum) {
-        datum = format(new Date(el.datum), 'yyyy.MM.dd')
-      }
-      const autor = el.autor || '(kein Autor)'
-      const quelle = get(el, 'beobQuelleWerteByQuelleId.name', '')
-      return `${datum}: ${autor} (${quelle})`
-        .toLowerCase()
-        .includes(beobNichtZuzuordnenFilterString.toLowerCase())
-    })
 
   const beobNichtZuzuordnenForMapNodesAparts = get(
     data,
     `projektById.apsByProjId.nodes[0].apartsByApId.nodes`,
     [],
   )
-  const beobNichtZuzuordnenForMapNodes = flatten(
-    beobNichtZuzuordnenForMapNodesAparts.map(n =>
-      get(n, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []),
-    ),
+  const beobNichtZuzuordnenForMapNodes = useMemo(
+    () =>
+      flatten(
+        beobNichtZuzuordnenForMapNodesAparts.map(n =>
+          get(n, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []),
+        ),
+      ),
+    [beobNichtZuzuordnenForMapNodesAparts],
   )
   const mapBeobNichtZuzuordnenIdsFiltered = useMemo(
     () =>

@@ -74,19 +74,25 @@ const Pop = ({ treeName }: { treeName: string }) => {
     `projektById.${!!perAp ? 'perAp' : 'perProj'}.nodes`,
     [],
   )
-  let pops = flatten(aps.map(ap => get(ap, 'popsByApId.nodes', [])))
-    // filter them by nodeLabelFilter
-    .filter(p => {
-      if (!popFilterString) return true
-      return `${p.nr || '(keine Nr)'}: ${p.name || '(kein Name)'}`
-        .toLowerCase()
-        .includes(popFilterString.toLowerCase())
-    })
-    // filter by nodeFilter
-    // TODO: would be much better to filter this in query
-    // this is done
-    // but unfortunately query does not immediatly update
-    .filter(node => filterNodesByNodeFilterArray({ node, nodeFilterArray }))
+  let pops = useMemo(
+    () =>
+      flatten(aps.map(ap => get(ap, 'popsByApId.nodes', [])))
+        // filter them by nodeLabelFilter
+        .filter(p => {
+          if (!popFilterString) return true
+          return `${p.nr || '(keine Nr)'}: ${p.name || '(kein Name)'}`
+            .toLowerCase()
+            .includes(popFilterString.toLowerCase())
+        })
+        // filter by nodeFilter
+        // TODO: would be much better to filter this in query
+        // this is done
+        // but unfortunately query does not immediatly update
+        .filter(node =>
+          filterNodesByNodeFilterArray({ node, nodeFilterArray }),
+        ),
+    [aps, popFilterString, nodeFilterArray],
+  )
 
   // if tpop are filtered, only show their pop
   if (activeApfloraLayers.includes('tpop')) {
