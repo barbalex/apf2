@@ -2,6 +2,7 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
+import memoizeOne from 'memoize-one'
 
 import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
 
@@ -49,63 +50,67 @@ export default ({
   )
 
   // map through all elements and create array of nodes
-  let nodes = get(data, 'allTpopkontrs.nodes', [])
-    // only show if parent node exists
-    .filter(el =>
-      nodesPassed.map(n => n.id).includes(`${el.tpopId}TpopfreiwkontrFolder`),
-    )
-    // only show nodes of this parent
-    .filter(el => el.tpopId === tpopId)
-    // filter by nodeLabelFilter
-    .filter(el => {
-      if (nodeLabelFilterString) {
-        return `${el.jahr || '(kein Jahr)'}`
-          .toLowerCase()
-          .includes(nodeLabelFilterString.toLowerCase())
-      }
-      return true
+  let nodes = memoizeOne(() =>
+    get(data, 'allTpopkontrs.nodes', [])
+      // only show if parent node exists
+      .filter(el =>
+        nodesPassed.map(n => n.id).includes(`${el.tpopId}TpopfreiwkontrFolder`),
+      )
+      // only show nodes of this parent
+      .filter(el => el.tpopId === tpopId)
+      // filter by nodeLabelFilter
+      .filter(el => {
+        if (nodeLabelFilterString) {
+          return `${el.jahr || '(kein Jahr)'}`
+            .toLowerCase()
+            .includes(nodeLabelFilterString.toLowerCase())
+        }
+        return true
+      })
+      // filter by nodeFilter
+      .filter(node =>
+        filterNodesByNodeFilterArray({
+          node,
+          nodeFilterArray,
+          table: 'tpopfreiwkontr',
+        }),
+      ),
+  )()
+  nodes = memoizeOne(() =>
+    sortBy(nodes, n => {
+      if (n.datum) return n.datum
+      if (n.jahr) return `${n.jahr}-01-01`
+      return '(kein Jahr)'
     })
-    // filter by nodeFilter
-    .filter(node =>
-      filterNodesByNodeFilterArray({
-        node,
-        nodeFilterArray,
-        table: 'tpopfreiwkontr',
+      .map(el => ({
+        nodeType: 'table',
+        menuType: 'tpopfreiwkontr',
+        filterTable: 'tpopkontr',
+        id: el.id,
+        tableId: el.id,
+        parentId: `${el.tpopId}TpopfreiwkontrFolder`,
+        parentTableId: el.tpopId,
+        urlLabel: el.id,
+        label: `${el.jahr || '(kein Jahr)'}`,
+        url: [
+          'Projekte',
+          projId,
+          'Aktionspläne',
+          apId,
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+          'Freiwilligen-Kontrollen',
+          el.id,
+        ],
+        hasChildren: false,
+      }))
+      .map((el, index) => {
+        el.sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 4, index]
+        return el
       }),
-    )
-  nodes = sortBy(nodes, n => {
-    if (n.datum) return n.datum
-    if (n.jahr) return `${n.jahr}-01-01`
-    return '(kein Jahr)'
-  })
-    .map(el => ({
-      nodeType: 'table',
-      menuType: 'tpopfreiwkontr',
-      filterTable: 'tpopkontr',
-      id: el.id,
-      tableId: el.id,
-      parentId: `${el.tpopId}TpopfreiwkontrFolder`,
-      parentTableId: el.tpopId,
-      urlLabel: el.id,
-      label: `${el.jahr || '(kein Jahr)'}`,
-      url: [
-        'Projekte',
-        projId,
-        'Aktionspläne',
-        apId,
-        'Populationen',
-        popId,
-        'Teil-Populationen',
-        tpopId,
-        'Freiwilligen-Kontrollen',
-        el.id,
-      ],
-      hasChildren: false,
-    }))
-    .map((el, index) => {
-      el.sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 4, index]
-      return el
-    })
+  )()
 
   return nodes
 }

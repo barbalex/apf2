@@ -1,6 +1,7 @@
 // @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
+import memoizeOne from 'memoize-one'
 
 import compareLabel from './compareLabel'
 import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
@@ -49,66 +50,68 @@ export default ({
   )
 
   // map through all elements and create array of nodes
-  const nodes = get(data, 'allTpopmassns.nodes', [])
-    // only show if parent node exists
-    .filter(el =>
-      nodesPassed.map(n => n.id).includes(`${el.tpopId}TpopmassnFolder`),
-    )
-    // only show nodes of this parent
-    .filter(el => el.tpopId === tpopId)
-    // filter by nodeLabelFilter
-    .filter(el => {
-      if (nodeLabelFilterString) {
-        return `${el.nr || '(keine Nr)'}: ${el.flurname || '(kein Flurname)'}`
-          .toLowerCase()
-          .includes(nodeLabelFilterString.toLowerCase())
-      }
-      return true
-    })
-    // filter by nodeFilter
-    // TODO: would be much better to filter this in query
-    // this is done
-    // but unfortunately query does not immediatly update
-    .filter(node =>
-      filterNodesByNodeFilterArray({
-        node,
-        nodeFilterArray,
-        table: 'tpopmassn',
+  const nodes = memoizeOne(() =>
+    get(data, 'allTpopmassns.nodes', [])
+      // only show if parent node exists
+      .filter(el =>
+        nodesPassed.map(n => n.id).includes(`${el.tpopId}TpopmassnFolder`),
+      )
+      // only show nodes of this parent
+      .filter(el => el.tpopId === tpopId)
+      // filter by nodeLabelFilter
+      .filter(el => {
+        if (nodeLabelFilterString) {
+          return `${el.jahr || '(kein Jahr)'}: ${get(
+            el,
+            'tpopmassnTypWerteByTyp.text',
+          ) || '(kein Typ)'}`
+            .toLowerCase()
+            .includes(nodeLabelFilterString.toLowerCase())
+        }
+        return true
+      })
+      // filter by nodeFilter
+      .filter(node =>
+        filterNodesByNodeFilterArray({
+          node,
+          nodeFilterArray,
+          table: 'tpopmassn',
+        }),
+      )
+      .map((el, index) => ({
+        nodeType: 'table',
+        menuType: 'tpopmassn',
+        filterTable: 'tpopmassn',
+        id: el.id,
+        parentId: el.tpopId,
+        parentTableId: el.tpopId,
+        urlLabel: el.id,
+        label: `${el.jahr || '(kein Jahr)'}: ${get(
+          el,
+          'tpopmassnTypWerteByTyp.text',
+          '(kein Typ)',
+        )}`,
+        url: [
+          'Projekte',
+          projId,
+          'Aktionspläne',
+          apId,
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+          'Massnahmen',
+          el.id,
+        ],
+        hasChildren: false,
+      }))
+      // sort by label
+      .sort(compareLabel)
+      .map((el, index) => {
+        el.sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 1, index]
+        return el
       }),
-    )
-    .map((el, index) => ({
-      nodeType: 'table',
-      menuType: 'tpopmassn',
-      filterTable: 'tpopmassn',
-      id: el.id,
-      parentId: el.tpopId,
-      parentTableId: el.tpopId,
-      urlLabel: el.id,
-      label: `${el.jahr || '(kein Jahr)'}: ${get(
-        el,
-        'tpopmassnTypWerteByTyp.text',
-        '(kein Typ)',
-      )}`,
-      url: [
-        'Projekte',
-        projId,
-        'Aktionspläne',
-        apId,
-        'Populationen',
-        popId,
-        'Teil-Populationen',
-        tpopId,
-        'Massnahmen',
-        el.id,
-      ],
-      hasChildren: false,
-    }))
-    // sort by label
-    .sort(compareLabel)
-    .map((el, index) => {
-      el.sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 1, index]
-      return el
-    })
+  )()
 
   return nodes
 }
