@@ -1,6 +1,7 @@
 // @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
+import memoizeOne from 'memoize-one'
 
 import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
 
@@ -44,27 +45,27 @@ export default ({
     `${treeName}.nodeLabelFilter.pop`,
   )
 
-  //console.log('nodes, popFolder, apId', apId)
-
-  let popNodes = pops
-    .filter(el => el.apId === apId)
-    // filter by nodeLabelFilter
-    .filter(el => {
-      if (nodeLabelFilterString) {
-        return `${el.nr || '(keine Nr)'}: ${el.name || '(kein Name)'}`
-          .toLowerCase()
-          .includes(nodeLabelFilterString.toLowerCase())
-      }
-      return true
-    })
-    // filter by nodeFilter
-    .filter(node =>
-      filterNodesByNodeFilterArray({
-        node,
-        nodeFilterArray,
-        table: 'pop',
-      }),
-    )
+  let popNodes = memoizeOne(() =>
+    pops
+      .filter(el => el.apId === apId)
+      // filter by nodeLabelFilter
+      .filter(el => {
+        if (nodeLabelFilterString) {
+          return `${el.nr || '(keine Nr)'}: ${el.name || '(kein Name)'}`
+            .toLowerCase()
+            .includes(nodeLabelFilterString.toLowerCase())
+        }
+        return true
+      })
+      // filter by nodeFilter
+      .filter(node =>
+        filterNodesByNodeFilterArray({
+          node,
+          nodeFilterArray,
+          table: 'pop',
+        }),
+      ),
+  )()
 
   const popNodesLength = popNodes.length
   let message = loading && !popNodesLength ? '...' : popNodesLength
