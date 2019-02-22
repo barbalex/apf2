@@ -26,7 +26,7 @@ import Tree, { defaultValue as defaultTree } from './Tree'
 import getActiveNodes from '../modules/getActiveNodes'
 
 // substract 3 Months to now so user sees previous year in February
-const ekfRefDate = new Date().setMonth(new Date().getMonth() - 2)
+const ekfRefDate = new Date()//.setMonth(new Date().getMonth() - 2)
 const ekfYear = new Date(ekfRefDate).getFullYear()
 const history = createHistory()
 
