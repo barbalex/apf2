@@ -1,6 +1,7 @@
 // @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
+import memoizeOne from 'memoize-one'
 
 export default ({
   nodes: nodesPassed,
@@ -37,21 +38,24 @@ export default ({
     `${treeName}.nodeLabelFilter.erfkrit`,
   )
 
-  const erfkritNodesLength = erfkrits
-    .filter(el => el.apId === apId)
-    // filter by nodeLabelFilter
-    .filter(el => {
-      if (nodeLabelFilterString) {
-        return `${get(
-          el,
-          'apErfkritWerteByErfolg.text',
-          '(nicht beurteilt)',
-        )}: ${el.kriterien || '(keine Kriterien erfasst)'}`.includes(
-          nodeLabelFilterString.toLowerCase(),
-        )
-      }
-      return true
-    }).length
+  const erfkritNodesLength = memoizeOne(
+    () =>
+      erfkrits
+        .filter(el => el.apId === apId)
+        // filter by nodeLabelFilter
+        .filter(el => {
+          if (nodeLabelFilterString) {
+            return `${get(
+              el,
+              'apErfkritWerteByErfolg.text',
+              '(nicht beurteilt)',
+            )}: ${el.kriterien || '(keine Kriterien erfasst)'}`.includes(
+              nodeLabelFilterString.toLowerCase(),
+            )
+          }
+          return true
+        }).length,
+  )()
   let message = loading && !erfkritNodesLength ? '...' : erfkritNodesLength
   if (nodeLabelFilterString) {
     message = `${erfkritNodesLength} gefiltert`
