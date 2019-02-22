@@ -1,6 +1,7 @@
 // @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
+import memoizeOne from 'memoize-one'
 
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 import allParentNodesExist from '../allParentNodesExist'
@@ -54,18 +55,21 @@ export default ({
     mobxStore,
     `${treeName}.nodeLabelFilter.zielber`,
   )
-  const zielberNodesLength = zielbers
-    .filter(el => el.zielId === zielId)
-    // filter by nodeLabelFilter
-    .filter(el => {
-      if (nodeLabelFilterString) {
-        return `${el.jahr || '(kein Jahr)'}: ${el.erreichung ||
-          '(nicht beurteilt)'}`
-          .toLowerCase()
-          .includes(nodeLabelFilterString.toLowerCase())
-      }
-      return true
-    }).length
+  const zielberNodesLength = memoizeOne(
+    () =>
+      zielbers
+        .filter(el => el.zielId === zielId)
+        // filter by nodeLabelFilter
+        .filter(el => {
+          if (nodeLabelFilterString) {
+            return `${el.jahr || '(kein Jahr)'}: ${el.erreichung ||
+              '(nicht beurteilt)'}`
+              .toLowerCase()
+              .includes(nodeLabelFilterString.toLowerCase())
+          }
+          return true
+        }).length,
+  )()
   let message = loading && !zielberNodesLength ? '...' : zielberNodesLength
   if (nodeLabelFilterString) {
     message = `${zielberNodesLength} gefiltert`

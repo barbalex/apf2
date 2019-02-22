@@ -2,6 +2,7 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import union from 'lodash/union'
+import memoizeOne from 'memoize-one'
 
 export default ({
   nodes: nodesPassed,
@@ -38,21 +39,23 @@ export default ({
     `${treeName}.nodeLabelFilter.ziel`,
   )
 
-  const zieljahre = ziels
-    .filter(el => el.apId === apId)
-    // filter by nodeLabelFilter
-    .filter(el => {
-      if (nodeLabelFilterString) {
-        return `${el.bezeichnung || '(kein Ziel)'} (${get(
-          el,
-          'zielTypWerteByTyp.text',
-          '(kein Typ)',
-        )})`.includes(nodeLabelFilterString.toLowerCase())
-      }
-      return true
-    })
-    // reduce to distinct years
-    .reduce((a, el, index) => union(a, [el.jahr]), [])
+  const zieljahre = memoizeOne(() =>
+    ziels
+      .filter(el => el.apId === apId)
+      // filter by nodeLabelFilter
+      .filter(el => {
+        if (nodeLabelFilterString) {
+          return `${el.bezeichnung || '(kein Ziel)'} (${get(
+            el,
+            'zielTypWerteByTyp.text',
+            '(kein Typ)',
+          )})`.includes(nodeLabelFilterString.toLowerCase())
+        }
+        return true
+      })
+      // reduce to distinct years
+      .reduce((a, el, index) => union(a, [el.jahr]), []),
+  )()
   const zieljahreLength = zieljahre.length
   let message =
     loading && !zieljahreLength
