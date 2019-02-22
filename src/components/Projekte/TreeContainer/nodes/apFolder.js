@@ -1,7 +1,7 @@
 // @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
-import uniqBy from 'lodash/uniqBy'
+import memoizeOne from 'memoize-one'
 
 import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
 import filterNodesByApFilter from '../filterNodesByApFilter'
@@ -37,35 +37,31 @@ export default ({
   const nodeLabelFilterString = get(mobxStore, `${treeName}.nodeLabelFilter.ap`)
   const apFilter = get(mobxStore, `${treeName}.apFilter`)
 
-  let apNodes = aps
-    // only show if parent node exists
-    .filter(el => projNodeIds.includes(el.projId))
-    // filter by nodeLabelFilter
-    .filter(el => {
-      if (nodeLabelFilterString) {
-        const artname = get(el, 'aeEigenschaftenByArtId.artname') || ''
-        return artname
-          .toLowerCase()
-          .includes(nodeLabelFilterString.toLowerCase())
-      }
-      return true
-    })
-    // filter by apFilter
-    .filter(node => filterNodesByApFilter({ node, apFilter }))
-    // filter by nodeFilter
-    .filter(node =>
-      filterNodesByNodeFilterArray({
-        node,
-        nodeFilterArray,
-        table: 'ap',
-      }),
-    )
-  /**
-   * There is something weird happening when filtering data
-   * that leads to duplicate nodes
-   * Need to solve that but in the meantime use uniqBy
-   */
-  apNodes = uniqBy(apNodes, 'id')
+  let apNodes = memoizeOne(() =>
+    aps
+      // only show if parent node exists
+      .filter(el => projNodeIds.includes(el.projId))
+      // filter by nodeLabelFilter
+      .filter(el => {
+        if (nodeLabelFilterString) {
+          const artname = get(el, 'aeEigenschaftenByArtId.artname') || ''
+          return artname
+            .toLowerCase()
+            .includes(nodeLabelFilterString.toLowerCase())
+        }
+        return true
+      })
+      // filter by apFilter
+      .filter(node => filterNodesByApFilter({ node, apFilter }))
+      // filter by nodeFilter
+      .filter(node =>
+        filterNodesByNodeFilterArray({
+          node,
+          nodeFilterArray,
+          table: 'ap',
+        }),
+      ),
+  )()
   const apNodesLength = apNodes.length
   let message = loading && !apNodesLength ? '...' : apNodesLength
   if (nodeLabelFilterString) {

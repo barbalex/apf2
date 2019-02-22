@@ -1,6 +1,7 @@
 // @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
+import memoizeOne from 'memoize-one'
 
 export default ({
   nodes: nodesPassed,
@@ -37,16 +38,19 @@ export default ({
     `${treeName}.nodeLabelFilter.apber`,
   )
 
-  const apberNodesLength = apbers
-    .filter(el => el.apId === apId)
-    // filter by nodeLabelFilter
-    .filter(el => {
-      if (nodeLabelFilterString) {
-        const jahr = get(el, 'jahr') || '(kein Jahr)'
-        return jahr.toString().includes(nodeLabelFilterString.toLowerCase())
-      }
-      return true
-    }).length
+  const apberNodesLength = memoizeOne(
+    () =>
+      apbers
+        .filter(el => el.apId === apId)
+        // filter by nodeLabelFilter
+        .filter(el => {
+          if (nodeLabelFilterString) {
+            const jahr = get(el, 'jahr') || '(kein Jahr)'
+            return jahr.toString().includes(nodeLabelFilterString.toLowerCase())
+          }
+          return true
+        }).length,
+  )()
   let message = loading && !apberNodesLength ? '...' : apberNodesLength
   if (nodeLabelFilterString) {
     message = `${apberNodesLength} gefiltert`

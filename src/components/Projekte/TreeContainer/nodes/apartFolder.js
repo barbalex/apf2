@@ -1,6 +1,7 @@
 // @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
+import memoizeOne from 'memoize-one'
 
 export default ({
   nodes: nodesPassed,
@@ -43,19 +44,22 @@ export default ({
     `${treeName}.nodeLabelFilter.apart`,
   )
 
-  const apartNodesLength = aparts
-    .filter(el => el.apId === apId)
-    // filter by nodeLabelFilter
-    .filter(el => {
-      if (nodeLabelFilterString) {
-        const artname =
-          get(el, 'aeEigenschaftenByArtId.artname') || '(keine Art gewählt)'
-        return artname
-          .toLowerCase()
-          .includes(nodeLabelFilterString.toLowerCase())
-      }
-      return true
-    }).length
+  const apartNodesLength = memoizeOne(
+    () =>
+      aparts
+        .filter(el => el.apId === apId)
+        // filter by nodeLabelFilter
+        .filter(el => {
+          if (nodeLabelFilterString) {
+            const artname =
+              get(el, 'aeEigenschaftenByArtId.artname') || '(keine Art gewählt)'
+            return artname
+              .toLowerCase()
+              .includes(nodeLabelFilterString.toLowerCase())
+          }
+          return true
+        }).length,
+  )()
   let message = loading && !apartNodesLength ? '...' : apartNodesLength
   if (nodeLabelFilterString) {
     message = `${apartNodesLength} gefiltert`
