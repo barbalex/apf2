@@ -1,5 +1,6 @@
 // @flow
 import get from 'lodash/get'
+import memoizeOne from 'memoize-one'
 
 export default ({
   nodes: nodesPassed,
@@ -25,15 +26,20 @@ export default ({
     `${treeName}.nodeLabelFilter.user`,
   )
 
-  const userNodesLength = users
-    // filter by nodeLabelFilter
-    .filter(el => {
-      if (nodeLabelFilterString) {
-        const name = get(el, 'name') || ''
-        return name.toLowerCase().includes(nodeLabelFilterString.toLowerCase())
-      }
-      return true
-    }).length
+  const userNodesLength = memoizeOne(
+    () =>
+      users
+        // filter by nodeLabelFilter
+        .filter(el => {
+          if (nodeLabelFilterString) {
+            const name = get(el, 'name') || ''
+            return name
+              .toLowerCase()
+              .includes(nodeLabelFilterString.toLowerCase())
+          }
+          return true
+        }).length,
+  )()
   let message = loading && !userNodesLength ? '...' : userNodesLength
   if (nodeLabelFilterString) {
     message = `${userNodesLength} gefiltert`
