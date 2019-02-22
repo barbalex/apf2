@@ -1,6 +1,7 @@
 // @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
+import memoizeOne from 'memoize-one'
 
 import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
 
@@ -40,47 +41,56 @@ export default ({
   )
 
   // map through all elements and create array of nodes
-  const nodes = pops
-    // only show if parent node exists
-    .filter(el => nodesPassed.map(n => n.id).includes(`${el.apId}PopFolder`))
-    // only show nodes of this parent
-    .filter(el => el.apId === apId)
-    // filter by nodeLabelFilter
-    .filter(el => {
-      if (nodeLabelFilterString) {
-        return `${el.nr || '(keine Nr)'}: ${el.name || '(kein Name)'}`
-          .toLowerCase()
-          .includes(nodeLabelFilterString.toLowerCase())
-      }
-      return true
-    })
-    // filter by nodeFilter
-    .filter(node =>
-      filterNodesByNodeFilterArray({
-        node,
-        nodeFilterArray,
-        table: 'pop',
+  const nodes = memoizeOne(() =>
+    pops
+      // only show if parent node exists
+      .filter(el => nodesPassed.map(n => n.id).includes(`${el.apId}PopFolder`))
+      // only show nodes of this parent
+      .filter(el => el.apId === apId)
+      // filter by nodeLabelFilter
+      .filter(el => {
+        if (nodeLabelFilterString) {
+          return `${el.nr || '(keine Nr)'}: ${el.name || '(kein Name)'}`
+            .toLowerCase()
+            .includes(nodeLabelFilterString.toLowerCase())
+        }
+        return true
+      })
+      // filter by nodeFilter
+      .filter(node =>
+        filterNodesByNodeFilterArray({
+          node,
+          nodeFilterArray,
+          table: 'pop',
+        }),
+      )
+      .map(el => ({
+        nodeType: 'table',
+        menuType: 'pop',
+        filterTable: 'pop',
+        id: el.id,
+        parentId: `${el.apId}PopFolder`,
+        parentTableId: el.apId,
+        urlLabel: el.id,
+        label: `${el.nr || '(keine Nr)'}: ${el.name || '(kein Name)'}`,
+        url: [
+          'Projekte',
+          projId,
+          'Aktionspläne',
+          el.apId,
+          'Populationen',
+          el.id,
+        ],
+        hasChildren: true,
+        nr: el.nr || 0,
+      }))
+      // sort again to sort (keine Nr) on tpop
+      .sort((a, b) => a.nr - b.nr)
+      .map((el, index) => {
+        el.sort = [projIndex, 1, apIndex, 1, index]
+        return el
       }),
-    )
-    .map(el => ({
-      nodeType: 'table',
-      menuType: 'pop',
-      filterTable: 'pop',
-      id: el.id,
-      parentId: `${el.apId}PopFolder`,
-      parentTableId: el.apId,
-      urlLabel: el.id,
-      label: `${el.nr || '(keine Nr)'}: ${el.name || '(kein Name)'}`,
-      url: ['Projekte', projId, 'Aktionspläne', el.apId, 'Populationen', el.id],
-      hasChildren: true,
-      nr: el.nr || 0,
-    }))
-    // sort again to sort (keine Nr) on tpop
-    .sort((a, b) => a.nr - b.nr)
-    .map((el, index) => {
-      el.sort = [projIndex, 1, apIndex, 1, index]
-      return el
-    })
+  )()
 
   return nodes
 }
