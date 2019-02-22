@@ -1,6 +1,7 @@
 // @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
+import memoizeOne from 'memoize-one'
 
 import compareLabel from './compareLabel'
 
@@ -44,58 +45,60 @@ export default ({
   )
 
   // map through all elements and create array of nodes
-  const nodes = get(data, 'allTpopmassnbers.nodes', [])
-    // only show if parent node exists
-    .filter(el =>
-      nodesPassed.map(n => n.id).includes(`${el.tpopId}TpopmassnberFolder`),
-    )
-    // only show nodes of this parent
-    .filter(el => el.tpopId === tpopId)
-    // filter by nodeLabelFilter
-    .filter(el => {
-      if (nodeLabelFilterString) {
-        return `${el.jahr || '(kein Jahr)'}: ${get(
+  const nodes = memoizeOne(() =>
+    get(data, 'allTpopmassnbers.nodes', [])
+      // only show if parent node exists
+      .filter(el =>
+        nodesPassed.map(n => n.id).includes(`${el.tpopId}TpopmassnberFolder`),
+      )
+      // only show nodes of this parent
+      .filter(el => el.tpopId === tpopId)
+      // filter by nodeLabelFilter
+      .filter(el => {
+        if (nodeLabelFilterString) {
+          return `${el.jahr || '(kein Jahr)'}: ${get(
+            el,
+            'tpopmassnErfbeurtWerteByBeurteilung.text',
+          ) || '(nicht beurteilt)'}`
+            .toLowerCase()
+            .includes(nodeLabelFilterString.toLowerCase())
+        }
+        return true
+      })
+      .map((el, index) => ({
+        nodeType: 'table',
+        menuType: 'tpopmassnber',
+        filterTable: 'tpopmassnber',
+        parentId: el.tpopId,
+        parentTableId: el.tpopId,
+        id: el.id,
+        urlLabel: el.id,
+        label: `${el.jahr || '(kein Jahr)'}: ${get(
           el,
           'tpopmassnErfbeurtWerteByBeurteilung.text',
-        ) || '(nicht beurteilt)'}`
-          .toLowerCase()
-          .includes(nodeLabelFilterString.toLowerCase())
-      }
-      return true
-    })
-    .map((el, index) => ({
-      nodeType: 'table',
-      menuType: 'tpopmassnber',
-      filterTable: 'tpopmassnber',
-      parentId: el.tpopId,
-      parentTableId: el.tpopId,
-      id: el.id,
-      urlLabel: el.id,
-      label: `${el.jahr || '(kein Jahr)'}: ${get(
-        el,
-        'tpopmassnErfbeurtWerteByBeurteilung.text',
-        '(nicht beurteilt)',
-      )}`,
-      url: [
-        'Projekte',
-        projId,
-        'Aktionspläne',
-        apId,
-        'Populationen',
-        popId,
-        'Teil-Populationen',
-        tpopId,
-        'Massnahmen-Berichte',
-        el.id,
-      ],
-      hasChildren: false,
-    }))
-    // sort by label
-    .sort(compareLabel)
-    .map((el, index) => {
-      el.sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 2, index]
-      return el
-    })
+          '(nicht beurteilt)',
+        )}`,
+        url: [
+          'Projekte',
+          projId,
+          'Aktionspläne',
+          apId,
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+          'Massnahmen-Berichte',
+          el.id,
+        ],
+        hasChildren: false,
+      }))
+      // sort by label
+      .sort(compareLabel)
+      .map((el, index) => {
+        el.sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 2, index]
+        return el
+      }),
+  )()
 
   return nodes
 }

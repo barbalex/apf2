@@ -1,5 +1,6 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
+import memoizeOne from 'memoize-one'
 
 export default ({
   nodes: nodesPassed,
@@ -42,20 +43,23 @@ export default ({
     `${treeName}.nodeLabelFilter.tpopmassnber`,
   )
 
-  const childrenLength = get(data, 'allTpopmassnbers.nodes', [])
-    .filter(el => el.tpopId === tpopId)
-    // filter by nodeLabelFilter
-    .filter(el => {
-      if (nodeLabelFilterString) {
-        return `${el.jahr || '(kein Jahr)'}: ${get(
-          el,
-          'tpopmassnErfbeurtWerteByBeurteilung.text',
-        ) || '(nicht beurteilt)'}`
-          .toLowerCase()
-          .includes(nodeLabelFilterString.toLowerCase())
-      }
-      return true
-    }).length
+  const childrenLength = memoizeOne(
+    () =>
+      get(data, 'allTpopmassnbers.nodes', [])
+        .filter(el => el.tpopId === tpopId)
+        // filter by nodeLabelFilter
+        .filter(el => {
+          if (nodeLabelFilterString) {
+            return `${el.jahr || '(kein Jahr)'}: ${get(
+              el,
+              'tpopmassnErfbeurtWerteByBeurteilung.text',
+            ) || '(nicht beurteilt)'}`
+              .toLowerCase()
+              .includes(nodeLabelFilterString.toLowerCase())
+          }
+          return true
+        }).length,
+  )()
 
   let message = loading && !childrenLength ? '...' : childrenLength
   if (nodeLabelFilterString) {
