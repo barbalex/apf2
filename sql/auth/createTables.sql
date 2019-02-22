@@ -33,12 +33,12 @@ create extension if not exists pgcrypto;
 -- need to run pgjwt.sql instead
 --create extension if not exists pgjwt;
 
-create or replace function auth.encrypt_pass()
+create or replace function apflora.encrypt_pass()
   returns trigger
   language plpgsql as
 $$
 begin
-  if tg_op = 'INSERT' or new.pass <> old.pass then
+  if TG_OP = 'INSERT' or new.pass <> old.pass then
     new.pass = crypt(new.pass, gen_salt('bf'));
   end if;
   return new;
@@ -47,11 +47,16 @@ $$;
 
 -- We’ll use the pgcrypto extension and a trigger
 -- to keep passwords safe in the users table
+-- PROBLEM: This trigger does NOT work on insert
 drop trigger if exists encrypt_pass on apflora.user;
 create trigger encrypt_pass
   before insert or update on apflora.user
   for each row
-  execute procedure auth.encrypt_pass();
+  execute procedure apflora.encrypt_pass();
+GRANT EXECUTE ON FUNCTION apflora.encrypt_pass() TO apflora_reader;
+GRANT EXECUTE ON FUNCTION apflora.encrypt_pass() TO apflora_freiwillig;
+GRANT EXECUTE ON FUNCTION apflora.encrypt_pass() TO authenticator;
+GRANT EXECUTE ON FUNCTION apflora.encrypt_pass() TO anon;
 
 -- Helper to check a password against the encrypted column
 -- It returns the database role for a user
