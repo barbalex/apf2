@@ -87,38 +87,46 @@ const Tpop = ({
     `projektById.${!!perAp ? 'perAp' : 'perProj'}.nodes`,
     [],
   )
-  const pops = flatten(aps.map(ap => get(ap, 'popsByApId.nodes', [])))
-    // filter them by nodeLabelFilter
-    .filter(p => {
-      if (!popFilterString) return true
-      return `${p.nr || '(keine Nr)'}: ${p.name || '(kein Name)'}`
-        .toLowerCase()
-        .includes(popFilterString.toLowerCase())
-    })
-    // filter by nodeFilter
-    .filter(node =>
-      filterNodesByNodeFilterArray({
-        node,
-        nodeFilterArray: popNodeFilterArray,
-        table: 'pop',
-      }),
-    )
-  const tpops = flatten(pops.map(pop => get(pop, 'tpopsByPopId.nodes', [])))
-    // filter them by nodeLabelFilter
-    .filter(el => {
-      if (!tpopFilterString) return true
-      return `${el.nr || '(keine Nr)'}: ${el.flurname || '(kein Flurname)'}`
-        .toLowerCase()
-        .includes(tpopFilterString.toLowerCase())
-    })
-    // filter by nodeFilter
-    .filter(node =>
-      filterNodesByNodeFilterArray({
-        node,
-        nodeFilterArray: tpopNodeFilterArray,
-        table: 'tpop',
-      }),
-    )
+  const pops = useMemo(
+    () =>
+      flatten(aps.map(ap => get(ap, 'popsByApId.nodes', [])))
+        // filter them by nodeLabelFilter
+        .filter(p => {
+          if (!popFilterString) return true
+          return `${p.nr || '(keine Nr)'}: ${p.name || '(kein Name)'}`
+            .toLowerCase()
+            .includes(popFilterString.toLowerCase())
+        })
+        // filter by nodeFilter
+        .filter(node =>
+          filterNodesByNodeFilterArray({
+            node,
+            nodeFilterArray: popNodeFilterArray,
+            table: 'pop',
+          }),
+        ),
+    [aps, popFilterString, popNodeFilterArray],
+  )
+  const tpops = useMemo(
+    () =>
+      flatten(pops.map(pop => get(pop, 'tpopsByPopId.nodes', [])))
+        // filter them by nodeLabelFilter
+        .filter(el => {
+          if (!tpopFilterString) return true
+          return `${el.nr || '(keine Nr)'}: ${el.flurname || '(kein Flurname)'}`
+            .toLowerCase()
+            .includes(tpopFilterString.toLowerCase())
+        })
+        // filter by nodeFilter
+        .filter(node =>
+          filterNodesByNodeFilterArray({
+            node,
+            nodeFilterArray: tpopNodeFilterArray,
+            table: 'tpop',
+          }),
+        ),
+    [pops, tpopFilterString, tpopNodeFilterArray],
+  )
 
   const mapTpopIdsFiltered = useMemo(
     () =>

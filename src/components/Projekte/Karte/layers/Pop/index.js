@@ -85,9 +85,6 @@ const Pop = ({ treeName }: { treeName: string }) => {
             .includes(popFilterString.toLowerCase())
         })
         // filter by nodeFilter
-        // TODO: would be much better to filter this in query
-        // this is done
-        // but unfortunately query does not immediatly update
         .filter(node =>
           filterNodesByNodeFilterArray({ node, nodeFilterArray }),
         ),
@@ -96,6 +93,7 @@ const Pop = ({ treeName }: { treeName: string }) => {
 
   // if tpop are filtered, only show their pop
   if (activeApfloraLayers.includes('tpop')) {
+    // adding useMemo here results in error ???
     const popsForTpops = flatten(aps.map(ap => get(ap, 'popsByApId.nodes', [])))
       .filter(p => {
         if (!popFilterString) return true
@@ -114,6 +112,7 @@ const Pop = ({ treeName }: { treeName: string }) => {
     const tpopNodeFilterArray = Object.entries(
       nodeFilter[tree.name].tpop,
     ).filter(([key, value]) => value || value === 0 || value === false)
+    // adding useMemo here results in error ???
     const tpops = flatten(
       popsForTpops.map(pop => get(pop, 'tpopsByPopId.nodes', [])),
     )
