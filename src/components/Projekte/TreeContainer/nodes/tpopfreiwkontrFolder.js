@@ -1,6 +1,7 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
-import uniqBy from 'lodash/uniqBy'
+//import uniqBy from 'lodash/uniqBy'
+import memoizeOne from 'memoize-one'
 
 import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
 
@@ -49,32 +50,34 @@ export default ({
     ([key, value]) => value || value === 0 || value === false,
   )
 
-  let children = get(data, 'allTpopkontrs.nodes', [])
-    .filter(el => el.tpopId === tpopId)
-    // filter by nodeLabelFilter
-    .filter(el => {
-      if (nodeLabelFilterString) {
-        return `${el.jahr || '(kein Jahr)'}`
-          .toLowerCase()
-          .includes(nodeLabelFilterString.toLowerCase())
-      }
-      return true
-    })
-    // filter by nodeFilter
-    .filter(node =>
-      filterNodesByNodeFilterArray({
-        node,
-        nodeFilterArray,
-        table: 'tpopfreiwkontr',
-      }),
-    )
+  let children = memoizeOne(() =>
+    get(data, 'allTpopkontrs.nodes', [])
+      .filter(el => el.tpopId === tpopId)
+      // filter by nodeLabelFilter
+      .filter(el => {
+        if (nodeLabelFilterString) {
+          return `${el.jahr || '(kein Jahr)'}`
+            .toLowerCase()
+            .includes(nodeLabelFilterString.toLowerCase())
+        }
+        return true
+      })
+      // filter by nodeFilter
+      .filter(node =>
+        filterNodesByNodeFilterArray({
+          node,
+          nodeFilterArray,
+          table: 'tpopfreiwkontr',
+        }),
+      ),
+  )()
 
   /**
    * There is something weird happening when filtering data
    * that leads to duplicate nodes
    * Need to solve that but in the meantime use uniqBy
    */
-  children = uniqBy(children, 'id')
+  //children = uniqBy(children, 'id')
 
   const childrenLength = children.length
 
