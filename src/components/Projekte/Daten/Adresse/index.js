@@ -78,7 +78,9 @@ const Adresse = ({ treeName }: { treeName: String }) => {
         return setErrors({ [field]: error.message })
       }
       setErrors({})
-      if (['name', 'role'].includes(field)) refetch.adresses()
+      if (['name', 'role'].includes(field) && refetch && refetch.adresses) {
+        refetch.adresses()
+      }
     },
     [row],
   )

@@ -1,5 +1,7 @@
 // @flow
 import get from 'lodash/get'
+import memoizeOne from 'memoize-one'
+import { memo } from 'react'
 
 export default ({
   nodes: nodesPassed,
@@ -23,15 +25,20 @@ export default ({
     `${treeName}.nodeLabelFilter.adresse`,
   )
 
-  let adresseNodesLength = adresses
-    // filter by nodeLabelFilter
-    .filter(el => {
-      if (nodeLabelFilterString) {
-        const name = el.name || '(kein Name)'
-        return name.toLowerCase().includes(nodeLabelFilterString.toLowerCase())
-      }
-      return true
-    }).length
+  let adresseNodesLength = memoizeOne(
+    () =>
+      adresses
+        // filter by nodeLabelFilter
+        .filter(el => {
+          if (nodeLabelFilterString) {
+            const name = el.name || '(kein Name)'
+            return name
+              .toLowerCase()
+              .includes(nodeLabelFilterString.toLowerCase())
+          }
+          return true
+        }).length,
+  )()
   // before Adressen folder is active, only total count was fetched, not yet any adressen nodes
   if (adresses.length === 0)
     adresseNodesLength = get(data, 'allAdresses.totalCount')

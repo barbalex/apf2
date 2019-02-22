@@ -1,6 +1,7 @@
 // @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
+import memoizeOne from 'memoize-one'
 
 import compareLabel from './compareLabel'
 import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
@@ -35,48 +36,50 @@ export default ({
   })
 
   // map through all elements and create array of nodes
-  const nodes = aps
-    // only show if parent node exists
-    .filter(el => nodesPassed.map(n => n.id).includes(el.projId))
-    // only show nodes of this parent
-    .filter(el => el.projId === projId)
-    // filter by nodeLabelFilter
-    .filter(el => {
-      if (nodeLabelFilterString) {
-        const artname = get(el, 'aeEigenschaftenByArtId.artname') || ''
-        return artname
-          .toLowerCase()
-          .includes(nodeLabelFilterString.toLowerCase())
-      }
-      return true
-    })
-    // filter by apFilter
-    .filter(node => filterNodesByApFilter({ node, apFilter }))
-    // filter by nodeFilter
-    .filter(node =>
-      filterNodesByNodeFilterArray({
-        node,
-        nodeFilterArray,
-        table: 'ap',
+  const nodes = memoizeOne(() =>
+    aps
+      // only show if parent node exists
+      .filter(el => nodesPassed.map(n => n.id).includes(el.projId))
+      // only show nodes of this parent
+      .filter(el => el.projId === projId)
+      // filter by nodeLabelFilter
+      .filter(el => {
+        if (nodeLabelFilterString) {
+          const artname = get(el, 'aeEigenschaftenByArtId.artname') || ''
+          return artname
+            .toLowerCase()
+            .includes(nodeLabelFilterString.toLowerCase())
+        }
+        return true
+      })
+      // filter by apFilter
+      .filter(node => filterNodesByApFilter({ node, apFilter }))
+      // filter by nodeFilter
+      .filter(node =>
+        filterNodesByNodeFilterArray({
+          node,
+          nodeFilterArray,
+          table: 'ap',
+        }),
+      )
+      .map(el => ({
+        nodeType: 'table',
+        menuType: 'ap',
+        filterTable: 'ap',
+        id: el.id,
+        parentId: el.projId,
+        parentTableId: el.projId,
+        urlLabel: el.id,
+        label: get(el, 'aeEigenschaftenByArtId.artname', '(keine Art gewählt)'),
+        url: ['Projekte', el.projId, 'Aktionspläne', el.id],
+        hasChildren: true,
+      }))
+      // sort by label
+      .sort(compareLabel)
+      .map((el, index) => {
+        el.sort = [projIndex, 1, index]
+        return el
       }),
-    )
-    .map(el => ({
-      nodeType: 'table',
-      menuType: 'ap',
-      filterTable: 'ap',
-      id: el.id,
-      parentId: el.projId,
-      parentTableId: el.projId,
-      urlLabel: el.id,
-      label: get(el, 'aeEigenschaftenByArtId.artname', '(keine Art gewählt)'),
-      url: ['Projekte', el.projId, 'Aktionspläne', el.id],
-      hasChildren: true,
-    }))
-    // sort by label
-    .sort(compareLabel)
-    .map((el, index) => {
-      el.sort = [projIndex, 1, index]
-      return el
-    })
+  )()
   return nodes
 }

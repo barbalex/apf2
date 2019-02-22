@@ -1,7 +1,42 @@
 // @flow
 import get from 'lodash/get'
+import memoizeOne from 'memoize-one'
 
 import compareLabel from './compareLabel'
+
+const createNodes = memoizeOne(
+  (adresses, nodeLabelFilterString, nodesPassed, wlIndex) =>
+    adresses
+      // only show if parent node exists
+      .filter(el => nodesPassed.map(n => n.id).includes('adresseFolder'))
+      // filter by nodeLabelFilter
+      .filter(el => {
+        if (nodeLabelFilterString) {
+          const name = el.name || '(kein Name)'
+          return name
+            .toLowerCase()
+            .includes(nodeLabelFilterString.toLowerCase())
+        }
+        return true
+      })
+      .map(el => ({
+        nodeType: 'table',
+        menuType: 'adresse',
+        filterTable: 'adresse',
+        id: el.id,
+        parentId: 'adresseFolder',
+        urlLabel: el.id,
+        label: el.name || '(kein Name)',
+        url: ['Werte-Listen', 'Adressen', el.id],
+        hasChildren: false,
+      }))
+      // sort by label
+      .sort(compareLabel)
+      .map((el, index) => {
+        el.sort = [wlIndex, 1, index]
+        return el
+      }),
+)
 
 export default ({
   nodes: nodesPassed,
@@ -22,35 +57,12 @@ export default ({
     mobxStore,
     `${treeName}.nodeLabelFilter.adresse`,
   )
+  const nodes = createNodes(
+    adresses,
+    nodeLabelFilterString,
+    nodesPassed,
+    wlIndex,
+  )
 
-  // map through all elements and create array of nodes
-  const nodes = adresses
-    // only show if parent node exists
-    .filter(el => nodesPassed.map(n => n.id).includes('adresseFolder'))
-    // filter by nodeLabelFilter
-    .filter(el => {
-      if (nodeLabelFilterString) {
-        const name = el.name || '(kein Name)'
-        return name.toLowerCase().includes(nodeLabelFilterString.toLowerCase())
-      }
-      return true
-    })
-    .map(el => ({
-      nodeType: 'table',
-      menuType: 'adresse',
-      filterTable: 'adresse',
-      id: el.id,
-      parentId: 'adresseFolder',
-      urlLabel: el.id,
-      label: el.name || '(kein Name)',
-      url: ['Werte-Listen', 'Adressen', el.id],
-      hasChildren: false,
-    }))
-    // sort by label
-    .sort(compareLabel)
-    .map((el, index) => {
-      el.sort = [wlIndex, 1, index]
-      return el
-    })
   return nodes
 }
