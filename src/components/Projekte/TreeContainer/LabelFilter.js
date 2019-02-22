@@ -1,6 +1,5 @@
 // @flow
-
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState, useEffect } from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
@@ -44,10 +43,17 @@ const LabelFilter = ({ treeName }: { treeName: String }) => {
   }
   const openNodes = get(mobxStore, `${treeName}.openNodes`, [])
 
-  const onChange = useCallback(
-    async event => {
+  const [value, setValue] = useState('')
+
+  useEffect(() => {
+    setValue(filterValue)
+  }, [tableName, treeName])
+
+  const onChange = useCallback(e => setValue(e.target.value))
+  const save = useCallback(
+    e => {
       const { filterTable, url, label } = activeNode
-      const { value } = event.target
+      const { value } = e.target
       // pop if is not folder and label does not comply to filter
       if (
         activeNode.nodeType === 'table' &&
@@ -76,13 +82,25 @@ const LabelFilter = ({ treeName }: { treeName: String }) => {
         key: filterTable,
       })
     },
-    [treeName, openNodes, activeNode],
+    [activeNode, treeName, openNodes],
   )
+  const onKeyPress = useCallback(event => {
+    if (event.key === 'Enter') {
+      save(event)
+    }
+  })
 
   return (
     <StyledFormControl fullWidth>
       <InputLabel htmlFor={labelText}>{labelText}</InputLabel>
-      <StyledInput id={labelText} value={filterValue} onChange={onChange} />
+      <StyledInput
+        id={labelText}
+        value={value}
+        onChange={onChange}
+        onBlur={save}
+        onKeyPress={onKeyPress}
+        spellCheck="false"
+      />
     </StyledFormControl>
   )
 }
