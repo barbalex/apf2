@@ -1,7 +1,6 @@
 // @flow
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
-import { memo } from 'react'
 
 export default ({
   nodes: nodesPassed,
