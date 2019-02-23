@@ -44,7 +44,7 @@ export default ({
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
   const nodeLabelFilterString = get(
     mobxStore,
-    `${treeName}.nodeLabelFilter.tpopfreiwkontr`,
+    `${treeName}.nodeLabelFilter.tpopkontr`,
   )
   const nodeFilterArray = Object.entries(nodeFilter.tpopfreiwkontr).filter(
     ([key, value]) => value || value === 0 || value === false,
