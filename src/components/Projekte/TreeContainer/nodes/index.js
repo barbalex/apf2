@@ -206,7 +206,10 @@ export default ({
     )(),
   ]
   if (role === 'apflora_manager') {
-    nodes = [...nodes, ...buildWlFolderNodes({ projektNodes })]
+    nodes = [
+      ...nodes,
+      ...memoizeOne(() => buildWlFolderNodes({ projektNodes }))(),
+    ]
   }
   let apNodes
   let popNodes
@@ -239,24 +242,28 @@ export default ({
          */
         nodes = [
           ...nodes,
-          ...buildApFolderNodes({
-            nodes,
-            data: dataAps,
-            treeName,
-            loading: loadingAps,
-            projektNodes,
-            projId,
-            mobxStore,
-          }),
-          ...buildApberuebersichtFolderNodes({
-            nodes,
-            data: dataApberuebersichts,
-            treeName,
-            loading: loadingApberuebersichts,
-            projektNodes,
-            projId,
-            mobxStore,
-          }),
+          ...memoizeOne(() =>
+            buildApFolderNodes({
+              nodes,
+              data: dataAps,
+              treeName,
+              loading: loadingAps,
+              projektNodes,
+              projId,
+              mobxStore,
+            }),
+          )(),
+          ...memoizeOne(() =>
+            buildApberuebersichtFolderNodes({
+              nodes,
+              data: dataApberuebersichts,
+              treeName,
+              loading: loadingApberuebersichts,
+              projektNodes,
+              projId,
+              mobxStore,
+            }),
+          )(),
         ]
       }
       if (
@@ -266,56 +273,64 @@ export default ({
       ) {
         nodes = [
           ...nodes,
-          ...buildApberuebersichtNodes({
+          ...memoizeOne(() =>
+            buildApberuebersichtNodes({
+              nodes,
+              data: dataApberuebersichts,
+              treeName,
+              loading: loadingApberuebersichts,
+              projektNodes,
+              projId,
+              mobxStore,
+            }),
+          )(),
+        ]
+      }
+      if (nodeUrl.length === 3 && nodeUrl[2] === 'Aktionspläne') {
+        apNodes = memoizeOne(() =>
+          buildApNodes({
             nodes,
-            data: dataApberuebersichts,
+            data: dataAps,
             treeName,
-            loading: loadingApberuebersichts,
+            loading: loadingAps,
             projektNodes,
             projId,
             mobxStore,
           }),
-        ]
-      }
-      if (nodeUrl.length === 3 && nodeUrl[2] === 'Aktionspläne') {
-        apNodes = buildApNodes({
-          nodes,
-          data: dataAps,
-          treeName,
-          loading: loadingAps,
-          projektNodes,
-          projId,
-          mobxStore,
-        })
+        )()
         nodes = [...nodes, ...apNodes]
       }
       if (nodeUrl.length === 4 && nodeUrl[2] === 'Aktionspläne') {
         const apId = nodeUrl[3]
         nodes = [
           ...nodes,
-          ...buildPopFolderNode({
-            nodes,
-            data: dataPops,
-            treeName,
-            loading: loadingPops,
-            projektNodes,
-            projId,
-            apNodes,
-            apId,
-            nodeFilter: nodeFilter[treeName],
-            mobxStore,
-          }),
-          ...buildApzielFolderNodes({
-            nodes,
-            data: dataZiels,
-            treeName,
-            loading: loadingZiels,
-            apNodes,
-            projektNodes,
-            projId,
-            apId,
-            mobxStore,
-          }),
+          ...memoizeOne(() =>
+            buildPopFolderNode({
+              nodes,
+              data: dataPops,
+              treeName,
+              loading: loadingPops,
+              projektNodes,
+              projId,
+              apNodes,
+              apId,
+              nodeFilter: nodeFilter[treeName],
+              mobxStore,
+            }),
+          )(),
+          ...memoizeOne(() =>
+            buildApzielFolderNodes({
+              nodes,
+              data: dataZiels,
+              treeName,
+              loading: loadingZiels,
+              apNodes,
+              projektNodes,
+              projId,
+              apId,
+              mobxStore,
+            }),
+          )(),
           ...buildAperfkritFolderNodes({
             nodes,
             data: dataErfkrits,
