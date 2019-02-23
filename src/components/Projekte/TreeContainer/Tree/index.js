@@ -88,7 +88,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     projekt,
     isProjekt,
     apFilter,
-    //apFilterSet,
     ap,
     isAp,
     ziel,
@@ -642,19 +641,15 @@ const Tree = ({ treeName, dimensions }: Props) => {
           width={width}
           ref={listRef}
         >
-          {({ index, style }) => {
-            const node = nodes[index]
-
-            return (
-              <Row
-                key={index}
-                style={style}
-                index={index}
-                node={node}
-                treeName={treeName}
-              />
-            )
-          }}
+          {({ index, style }) => (
+            <Row
+              key={index}
+              style={style}
+              index={index}
+              node={nodes[index]}
+              treeName={treeName}
+            />
+          )}
         </StyledList>
       </Container>
     </ErrorBoundary>

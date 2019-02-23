@@ -153,7 +153,6 @@ export default ({
     projekt,
     isProjekt,
     apFilter,
-    apFilterSet,
     ap,
     isAp,
     ziel,
