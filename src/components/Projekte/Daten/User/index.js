@@ -202,6 +202,7 @@ const User = ({
   }
   if (error) return `Fehler: ${error.message}`
   if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
+  if (!row) return null
   return (
     <ErrorBoundary>
       <Container>
