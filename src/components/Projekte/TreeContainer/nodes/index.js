@@ -1020,21 +1020,23 @@ export default ({
         nodeUrl[6] === 'Teil-Populationen' &&
         nodeUrl[8] === 'Freiwilligen-Kontrollen'
       ) {
-        tpopfreiwkontrNodes = buildTpopfreiwkontrNodes({
-          nodes,
-          data: dataTpopfreiwkontrs,
-          treeName,
-          loading: loadingTpopfreiwkontrs,
-          projId,
-          projektNodes,
-          apId: nodeUrl[3],
-          apNodes,
-          popId: nodeUrl[5],
-          popNodes,
-          tpopId: nodeUrl[7],
-          tpopNodes,
-          mobxStore,
-        })
+        tpopfreiwkontrNodes = memoizeOne(() =>
+          buildTpopfreiwkontrNodes({
+            nodes,
+            data: dataTpopfreiwkontrs,
+            treeName,
+            loading: loadingTpopfreiwkontrs,
+            projId,
+            projektNodes,
+            apId: nodeUrl[3],
+            apNodes,
+            popId: nodeUrl[5],
+            popNodes,
+            tpopId: nodeUrl[7],
+            tpopNodes,
+            mobxStore,
+          }),
+        )()
         nodes = [...nodes, ...tpopfreiwkontrNodes]
       }
       if (
@@ -1043,21 +1045,23 @@ export default ({
         nodeUrl[6] === 'Teil-Populationen' &&
         nodeUrl[8] === 'Feld-Kontrollen'
       ) {
-        tpopfeldkontrNodes = buildTpopfeldkontrNodes({
-          nodes,
-          data: dataTpopfeldkontrs,
-          treeName,
-          loading: loadingTpopfeldkontrs,
-          projId,
-          projektNodes,
-          apId: nodeUrl[3],
-          apNodes,
-          popId: nodeUrl[5],
-          popNodes,
-          tpopId: nodeUrl[7],
-          tpopNodes,
-          mobxStore,
-        })
+        tpopfeldkontrNodes = memoizeOne(() =>
+          buildTpopfeldkontrNodes({
+            nodes,
+            data: dataTpopfeldkontrs,
+            treeName,
+            loading: loadingTpopfeldkontrs,
+            projId,
+            projektNodes,
+            apId: nodeUrl[3],
+            apNodes,
+            popId: nodeUrl[5],
+            popNodes,
+            tpopId: nodeUrl[7],
+            tpopNodes,
+            mobxStore,
+          }),
+        )()
         nodes = [...nodes, ...tpopfeldkontrNodes]
       }
       if (
@@ -1068,21 +1072,23 @@ export default ({
       ) {
         nodes = [
           ...nodes,
-          ...buildTpopmassnberNodes({
-            nodes,
-            data: dataTpopmassnbers,
-            treeName,
-            loading: loadingTpopmassnbers,
-            projId,
-            projektNodes,
-            apId: nodeUrl[3],
-            apNodes,
-            popId: nodeUrl[5],
-            popNodes,
-            tpopId: nodeUrl[7],
-            tpopNodes,
-            mobxStore,
-          }),
+          ...memoizeOne(() =>
+            buildTpopmassnberNodes({
+              nodes,
+              data: dataTpopmassnbers,
+              treeName,
+              loading: loadingTpopmassnbers,
+              projId,
+              projektNodes,
+              apId: nodeUrl[3],
+              apNodes,
+              popId: nodeUrl[5],
+              popNodes,
+              tpopId: nodeUrl[7],
+              tpopNodes,
+              mobxStore,
+            }),
+          )(),
         ]
       }
       if (
@@ -1093,21 +1099,23 @@ export default ({
       ) {
         nodes = [
           ...nodes,
-          ...buildTpopmassnNodes({
-            nodes,
-            data: dataTpopmassns,
-            treeName,
-            loading: loadingTpopmassns,
-            projId,
-            projektNodes,
-            apId: nodeUrl[3],
-            apNodes,
-            popId: nodeUrl[5],
-            popNodes,
-            tpopId: nodeUrl[7],
-            tpopNodes,
-            mobxStore,
-          }),
+          ...memoizeOne(() =>
+            buildTpopmassnNodes({
+              nodes,
+              data: dataTpopmassns,
+              treeName,
+              loading: loadingTpopmassns,
+              projId,
+              projektNodes,
+              apId: nodeUrl[3],
+              apNodes,
+              popId: nodeUrl[5],
+              popNodes,
+              tpopId: nodeUrl[7],
+              tpopNodes,
+              mobxStore,
+            }),
+          )(),
         ]
       }
       if (
@@ -1118,23 +1126,25 @@ export default ({
       ) {
         nodes = [
           ...nodes,
-          ...buildTpopfeldkontrzaehlFolderNodes({
-            nodes,
-            data: dataTpopkontrzaehls,
-            treeName,
-            loading: loadingTpopkontrzaehls,
-            projId,
-            projektNodes,
-            apId: nodeUrl[3],
-            apNodes,
-            popId: nodeUrl[5],
-            popNodes,
-            tpopId: nodeUrl[7],
-            tpopNodes,
-            tpopkontrId: nodeUrl[9],
-            tpopfeldkontrNodes,
-            mobxStore,
-          }),
+          ...memoizeOne(() =>
+            buildTpopfeldkontrzaehlFolderNodes({
+              nodes,
+              data: dataTpopkontrzaehls,
+              treeName,
+              loading: loadingTpopkontrzaehls,
+              projId,
+              projektNodes,
+              apId: nodeUrl[3],
+              apNodes,
+              popId: nodeUrl[5],
+              popNodes,
+              tpopId: nodeUrl[7],
+              tpopNodes,
+              tpopkontrId: nodeUrl[9],
+              tpopfeldkontrNodes,
+              mobxStore,
+            }),
+          )(),
         ]
       }
       if (
@@ -1145,36 +1155,40 @@ export default ({
       ) {
         nodes = [
           ...nodes,
-          ...buildTpopfeldkontrzaehlNodes({
-            nodes,
-            data: dataTpopkontrzaehls,
-            treeName,
-            loading: loadingTpopkontrzaehls,
-            projId,
-            projektNodes,
-            apId: nodeUrl[3],
-            apNodes,
-            popId: nodeUrl[5],
-            popNodes,
-            tpopId: nodeUrl[7],
-            tpopNodes,
-            tpopkontrId: nodeUrl[9],
-            tpopfeldkontrNodes,
-            mobxStore,
-          }),
+          ...memoizeOne(() =>
+            buildTpopfeldkontrzaehlNodes({
+              nodes,
+              data: dataTpopkontrzaehls,
+              treeName,
+              loading: loadingTpopkontrzaehls,
+              projId,
+              projektNodes,
+              apId: nodeUrl[3],
+              apNodes,
+              popId: nodeUrl[5],
+              popNodes,
+              tpopId: nodeUrl[7],
+              tpopNodes,
+              tpopkontrId: nodeUrl[9],
+              tpopfeldkontrNodes,
+              mobxStore,
+            }),
+          )(),
         ]
       }
     }
     if (nodeUrl.length === 1 && nodeUrl[0] === 'Benutzer') {
       nodes = [
         ...nodes,
-        ...buildUserNodes({
-          nodes,
-          data: dataUsers,
-          treeName,
-          projektNodes,
-          mobxStore,
-        }),
+        ...memoizeOne(() =>
+          buildUserNodes({
+            nodes,
+            data: dataUsers,
+            treeName,
+            projektNodes,
+            mobxStore,
+          }),
+        )(),
       ]
     }
     if (
@@ -1184,14 +1198,16 @@ export default ({
     ) {
       nodes = [
         ...nodes,
-        ...buildAdresseFolderNodes({
-          nodes,
-          data: dataAdresses,
-          treeName,
-          loading: loadingAdresses,
-          projektNodes,
-          mobxStore,
-        }),
+        ...memoizeOne(() =>
+          buildAdresseFolderNodes({
+            nodes,
+            data: dataAdresses,
+            treeName,
+            loading: loadingAdresses,
+            projektNodes,
+            mobxStore,
+          }),
+        )(),
       ]
     }
     if (
@@ -1202,14 +1218,16 @@ export default ({
     ) {
       nodes = [
         ...nodes,
-        ...buildAdresseNodes({
-          nodes,
-          data: dataAdresses,
-          treeName,
-          loading: loadingAdresses,
-          projektNodes,
-          mobxStore,
-        }),
+        ...memoizeOne(() =>
+          buildAdresseNodes({
+            nodes,
+            data: dataAdresses,
+            treeName,
+            loading: loadingAdresses,
+            projektNodes,
+            mobxStore,
+          }),
+        )(),
       ]
     }
   })
