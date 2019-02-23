@@ -1,5 +1,5 @@
 // @flow
-import uniqBy from 'lodash/uniqBy'
+//import uniqBy from 'lodash/uniqBy'
 import memoizeOne from 'memoize-one'
 
 import allParentNodesAreOpenModule from '../allParentNodesAreOpen'
@@ -1238,7 +1238,7 @@ export default ({
    * that leads to duplicate nodes
    * Need to solve that but in the meantime use uniqBy
    */
-  nodes = uniqBy(nodes, n => n.url.join())
+  //nodes = uniqBy(nodes, n => n.url.join())
 
   /**
    * As all nodes are now in one flat list,
