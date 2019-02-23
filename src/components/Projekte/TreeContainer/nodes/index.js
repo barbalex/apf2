@@ -2,7 +2,7 @@
 import uniqBy from 'lodash/uniqBy'
 import memoizeOne from 'memoize-one'
 
-import allParentNodesAreOpen from '../allParentNodesAreOpen'
+import allParentNodesAreOpenModule from '../allParentNodesAreOpen'
 import buildProjektNodes from './projekt'
 import buildUserFolderNodes from './userFolder'
 import buildWlFolderNodes from './wlFolder'
@@ -229,6 +229,10 @@ export default ({
    * or some filter is active
    */
   openNodes.forEach(nodeUrl => {
+    const allParentNodesAreOpen = allParentNodesAreOpenModule(
+      openNodes,
+      nodeUrl,
+    )
     if (
       nodeUrl[0] === 'Projekte' &&
       // do not process ['Projekte']
@@ -236,10 +240,6 @@ export default ({
     ) {
       const projId = nodeUrl[1]
       if (nodeUrl.length === 2 && nodeUrl[0] === 'Projekte') {
-        /**
-         * TODO:
-         * can build calls be memoized?
-         */
         nodes = [
           ...nodes,
           ...memoizeOne(() =>
@@ -269,7 +269,7 @@ export default ({
       if (
         nodeUrl.length === 3 &&
         nodeUrl[2] === 'AP-Berichte' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
+        allParentNodesAreOpen
       ) {
         nodes = [
           ...nodes,
@@ -462,7 +462,7 @@ export default ({
       if (
         nodeUrl.length === 5 &&
         nodeUrl[4] === 'AP-Ziele' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
+        allParentNodesAreOpen
       ) {
         apzieljahrFolderNodes = memoizeOne(() =>
           buildApzieljahrFolderNodes({
@@ -482,7 +482,7 @@ export default ({
       if (
         nodeUrl.length === 6 &&
         nodeUrl[4] === 'AP-Ziele' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
+        allParentNodesAreOpen
       ) {
         apzielNodes = memoizeOne(() =>
           buildApzielNodes({
@@ -505,7 +505,7 @@ export default ({
       if (
         nodeUrl.length === 7 &&
         nodeUrl[4] === 'AP-Ziele' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
+        allParentNodesAreOpen
       ) {
         nodes = [
           ...nodes,
@@ -533,7 +533,7 @@ export default ({
         nodeUrl.length === 8 &&
         nodeUrl[4] === 'AP-Ziele' &&
         nodeUrl[7] === 'Berichte' &&
-        allParentNodesAreOpen(openNodes, nodeUrl)
+        allParentNodesAreOpen
       ) {
         nodes = [
           ...nodes,
