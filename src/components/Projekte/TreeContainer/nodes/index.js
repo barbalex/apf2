@@ -1,5 +1,6 @@
 // @flow
 import uniqBy from 'lodash/uniqBy'
+import memoizeOne from 'memoize-one'
 
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 import buildProjektNodes from './projekt'
@@ -194,13 +195,15 @@ export default ({
 
   let nodes = [
     ...projektNodes,
-    ...buildUserFolderNodes({
-      data: dataUsers,
-      treeName,
-      projektNodes,
-      loading: loadingUsers,
-      mobxStore,
-    }),
+    ...memoizeOne(() =>
+      buildUserFolderNodes({
+        data: dataUsers,
+        treeName,
+        projektNodes,
+        loading: loadingUsers,
+        mobxStore,
+      }),
+    )(),
   ]
   if (role === 'apflora_manager') {
     nodes = [...nodes, ...buildWlFolderNodes({ projektNodes })]
