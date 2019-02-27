@@ -20,7 +20,7 @@ const EkfListContainer = ({ dimensions }: { dimensions: Object }) => {
   const { ekfYear, ekfAdresseId, user } = mobxStore
 
   let query = !!ekfAdresseId ? dataByAdresseIdGql : dataByUserNameGql
-  const ekfRefDate = new Date().setMonth(new Date().getMonth() - 2)
+  const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
   const ekfRefYear = new Date(ekfRefDate).getFullYear()
   if (ekfRefYear !== ekfYear) {
     query = !!ekfAdresseId
