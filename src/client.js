@@ -2,7 +2,7 @@ import { ApolloClient } from 'apollo-client'
 //import { createHttpLink } from 'apollo-link-http'
 import { BatchHttpLink } from 'apollo-link-batch-http'
 import { setContext } from 'apollo-link-context'
-import { InMemoryCache } from 'apollo-cache-inmemory'
+import { InMemoryCache, defaultDataIdFromObject } from 'apollo-cache-inmemory'
 import { ApolloLink } from 'apollo-link'
 import jwtDecode from 'jwt-decode'
 
@@ -29,9 +29,10 @@ export default async ({ idb, mobxStore }) => {
   })
 
   const cache = new InMemoryCache({
-    /*dataIdFromObject: object => {
-      return object.id
-    },*/
+    dataIdFromObject: object => {
+      if (object.id && isNaN(object.id)) return object.id
+      return defaultDataIdFromObject(object)
+    },
     //resultCaching: false
   })
   // use httpLink _instead_ of batchHttpLink to _not_ batch
