@@ -41,9 +41,9 @@ const DateFieldWithPicker = ({
     isValid(propsValue) ? propsValue : null,
   )
 
-  const onBlur = useCallback(
-    event => {
-      let newValue = event.target.value
+  const onChange = useCallback(
+    valuePassed => {
+      let newValue = valuePassed
       if (newValue === '') newValue = null
       if (newValue) {
         newValue = moment(newValue, 'DD.MM.YYYY').format('YYYY-MM-DD')
@@ -63,6 +63,8 @@ const DateFieldWithPicker = ({
     [name],
   )
 
+  const onBlur = useCallback(event => onChange(event.target.value))
+
   useEffect(() => {
     setStateValue(propsValue)
   }, [propsValue])
@@ -81,7 +83,7 @@ const DateFieldWithPicker = ({
         format="DD.MM.YYYY"
         value={stateValue}
         // change happens when data is picked in picker
-        onChange={onBlur}
+        onChange={onChange}
         onBlur={onBlur}
         onKeyPress={onKeyPress}
         disableOpenOnEnter
