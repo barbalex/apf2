@@ -2,40 +2,115 @@
 import { types } from 'mobx-state-tree'
 
 export const type = types.model({
-  typ: types.optional(types.maybeNull(types.string), null),
-  datum: types.optional(types.maybeNull(types.string), null),
+  typ: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  datum: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
   jahr: types.optional(types.maybeNull(types.number), null),
-  bearbeiter: types.optional(types.maybeNull(types.string), null),
+  bearbeiter: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
   jungpflanzenAnzahl: types.optional(types.maybeNull(types.number), null),
-  vitalitaet: types.optional(types.maybeNull(types.string), null),
+  vitalitaet: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
   ueberlebensrate: types.optional(types.maybeNull(types.number), null),
   entwicklung: types.optional(types.maybeNull(types.number), null),
-  ursachen: types.optional(types.maybeNull(types.string), null),
-  erfolgsbeurteilung: types.optional(types.maybeNull(types.string), null),
-  umsetzungAendern: types.optional(types.maybeNull(types.string), null),
-  kontrolleAendern: types.optional(types.maybeNull(types.string), null),
-  bemerkungen: types.optional(types.maybeNull(types.string), null),
-  lrDelarze: types.optional(types.maybeNull(types.string), null),
+  ursachen: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  erfolgsbeurteilung: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  umsetzungAendern: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  kontrolleAendern: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  bemerkungen: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  lrDelarze: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
   flaeche: types.optional(types.maybeNull(types.number), null),
-  lrUmgebungDelarze: types.optional(types.maybeNull(types.string), null),
-  vegetationstyp: types.optional(types.maybeNull(types.string), null),
-  konkurrenz: types.optional(types.maybeNull(types.string), null),
-  moosschicht: types.optional(types.maybeNull(types.string), null),
-  krautschicht: types.optional(types.maybeNull(types.string), null),
-  strauchschicht: types.optional(types.maybeNull(types.string), null),
-  baumschicht: types.optional(types.maybeNull(types.string), null),
-  bodenTyp: types.optional(types.maybeNull(types.string), null),
-  bodenKalkgehalt: types.optional(types.maybeNull(types.string), null),
-  bodenDurchlaessigkeit: types.optional(types.maybeNull(types.string), null),
-  bodenHumus: types.optional(types.maybeNull(types.string), null),
-  bodenNaehrstoffgehalt: types.optional(types.maybeNull(types.string), null),
-  bodenAbtrag: types.optional(types.maybeNull(types.string), null),
-  wasserhaushalt: types.optional(types.maybeNull(types.string), null),
+  lrUmgebungDelarze: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  vegetationstyp: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  konkurrenz: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  moosschicht: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  krautschicht: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  strauchschicht: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  baumschicht: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  bodenTyp: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  bodenKalkgehalt: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  bodenDurchlaessigkeit: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  bodenHumus: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  bodenNaehrstoffgehalt: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  bodenAbtrag: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  wasserhaushalt: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
   idealbiotopUebereinstimmung: types.optional(
     types.maybeNull(types.number),
     null,
   ),
-  handlungsbedarf: types.optional(types.maybeNull(types.string), null),
+  handlungsbedarf: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
   flaecheUeberprueft: types.optional(types.maybeNull(types.number), null),
   planVorhanden: types.optional(types.maybeNull(types.boolean), null),
   deckungVegetation: types.optional(types.maybeNull(types.number), null),
@@ -44,7 +119,10 @@ export const type = types.model({
   jungpflanzenVorhanden: types.optional(types.maybeNull(types.boolean), null),
   vegetationshoeheMaximum: types.optional(types.maybeNull(types.number), null),
   vegetationshoeheMittel: types.optional(types.maybeNull(types.number), null),
-  gefaehrdung: types.optional(types.maybeNull(types.string), null),
+  gefaehrdung: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
 })
 
 export const initial = {
