@@ -8,7 +8,6 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { DatePicker } from 'material-ui-pickers'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import moment from 'moment'
-import format from 'date-fns/format'
 import isValid from 'date-fns/isValid'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
@@ -42,48 +41,21 @@ const DateFieldWithPicker = ({
     isValid(propsValue) ? propsValue : null,
   )
 
-  const onChange = useCallback(
-    valuePassed => {
-      /**
-       * change happens when data is picked in picker
-       * so is never null or otherwise invalid
-       * oops: it is null if clear button is clicked!
-       */
-      if (!moment(valuePassed).isValid()) {
-        const fakeEvent = { target: { value: null, name } }
-        saveToDb(fakeEvent)
-        return setStateValue(null)
-      }
-      const newValue = format(new Date(valuePassed), 'yyyy-MM-dd')
-      const fakeEvent = { target: { value: newValue, name } }
-      saveToDb(fakeEvent)
-      setStateValue(newValue)
-    },
-    [name],
-  )
   const onBlur = useCallback(
     event => {
-      const { value } = event.target
-      // do not change anything of there are no values
-      // test validity using moment because date-fns isValid('1') is false
-      if (!moment(value).isValid()) {
-        const fakeEvent = { target: { value: null, name } }
-        saveToDb(fakeEvent)
-        return setStateValue(null)
+      let newValue = event.target.value
+      if (newValue === '') newValue = null
+      if (newValue) {
+        newValue = moment(newValue, 'DD.MM.YYYY').format('YYYY-MM-DD')
       }
+      // do nothing if value has not changed
+      // otherwise in tpopfeldkontr year will be reset when null is passed
+      // after focusing empty field
+      if (newValue === stateValue) return
 
-      // write a real date to db
-      /**
-       * would prefer to use data-fns for this but is not yet possible, see:
-       * https://github.com/date-fns/date-fns/issues/219
-       *
-       * Actually: moment not only parses the date. Which data-fns v2 can.
-       * It also gets "3", "3.1", 3.1.17" and adds missing month / year from now
-       * This is great and not possible with date-fns?
-       * https://github.com/date-fns/date-fns/issues/219#issuecomment-424090895
-       */
-      const date = new Date(moment(value, 'DD.MM.YYYY').format('YYYY-MM-DD'))
-      const newValue = format(date, 'yyyy-MM-dd')
+      if (newValue && newValue.includes('Invalid date')) {
+        newValue = newValue.replace('Invalid date', 'Format: DD.MM.YYYY')
+      }
       const fakeEvent = { target: { value: newValue, name } }
       saveToDb(fakeEvent)
       setStateValue(newValue)
@@ -91,12 +63,15 @@ const DateFieldWithPicker = ({
     [name],
   )
 
-  useEffect(
-    () => {
-      setStateValue(propsValue)
-    },
-    [propsValue],
-  )
+  useEffect(() => {
+    setStateValue(propsValue)
+  }, [propsValue])
+
+  const onKeyPress = useCallback(event => {
+    if (event.key === 'Enter') {
+      onBlur(event)
+    }
+  })
 
   return (
     <>
@@ -105,8 +80,10 @@ const DateFieldWithPicker = ({
         label={label}
         format="DD.MM.YYYY"
         value={stateValue}
-        onChange={onChange}
+        // change happens when data is picked in picker
+        onChange={onBlur}
         onBlur={onBlur}
+        onKeyPress={onKeyPress}
         disableOpenOnEnter
         animateYearScrolling={false}
         autoOk

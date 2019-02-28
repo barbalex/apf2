@@ -64,7 +64,7 @@
     "mobx": "5.9.0",
     "mobx-react-lite": "1.1.0",
     "mobx-state-tree": "3.10.2",
-    "moment": "2.24.0",
+    "moment": "2.20.0",
     "proj4": "2.5.0",
     "proj4leaflet": "1.0.2",
     "prop-types": "15.7.2",

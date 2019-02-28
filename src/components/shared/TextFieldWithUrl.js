@@ -57,14 +57,17 @@ const TextFieldWithUrl = ({
   const onChange = useCallback(event => setStateValue(event.target.value))
   const onOpen = useCallback(e => window.open(e.target.dataset.url, '_blank'))
 
-  useEffect(
-    () => {
-      setStateValue(propsValue || propsValue === 0 ? propsValue : '')
-    },
-    [propsValue],
-  )
+  useEffect(() => {
+    setStateValue(propsValue || propsValue === 0 ? propsValue : '')
+  }, [propsValue])
 
   const urls = stateValue ? getUrls(stateValue) : []
+
+  const onKeyPress = useCallback(event => {
+    if (event.key === 'Enter') {
+      saveToDb(event)
+    }
+  })
 
   return (
     <Container>
@@ -85,6 +88,7 @@ const TextFieldWithUrl = ({
           multiline={multiLine}
           onChange={onChange}
           onBlur={saveToDb}
+          onKeyPress={onKeyPress}
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="off"

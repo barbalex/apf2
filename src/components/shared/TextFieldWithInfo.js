@@ -51,12 +51,15 @@ const TextFieldWithInfo = ({
     propsValue || propsValue === 0 ? propsValue : '',
   )
   const onChange = useCallback(event => setStateValue(event.target.value))
-  useEffect(
-    () => {
-      setStateValue(propsValue || propsValue === 0 ? propsValue : '')
-    },
-    [propsValue],
-  )
+  useEffect(() => {
+    setStateValue(propsValue || propsValue === 0 ? propsValue : '')
+  }, [propsValue])
+
+  const onKeyPress = useCallback(event => {
+    if (event.key === 'Enter') {
+      saveToDb(event)
+    }
+  })
 
   return (
     <StyledFormControl
@@ -74,6 +77,7 @@ const TextFieldWithInfo = ({
         multiline={multiLine}
         onChange={onChange}
         onBlur={saveToDb}
+        onKeyPress={onKeyPress}
         placeholder={hintText}
         endAdornment={
           <InfoWithPopover>
