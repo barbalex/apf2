@@ -81,6 +81,8 @@ const TextFieldWithInfo = ({
         placeholder={hintText}
         autoComplete="off"
         autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck="off"
         endAdornment={
           <InfoWithPopover>
             <PopoverContentRow>{popover}</PopoverContentRow>

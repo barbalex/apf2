@@ -71,6 +71,8 @@ const MyTextField = ({
         placeholder={hintText}
         autoComplete="off"
         autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck="off"
       />
       {!!error && (
         <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
