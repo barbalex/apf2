@@ -2,34 +2,118 @@ import { types } from 'mobx-state-tree'
 
 export default types
   .model('NodeLabelFilter', {
-    ap: types.optional(types.maybeNull(types.string), null),
-    pop: types.optional(types.maybeNull(types.string), null),
-    tpop: types.optional(types.maybeNull(types.string), null),
-    tpopkontr: types.optional(types.maybeNull(types.string), null),
-    tpopfeldkontr: types.optional(types.maybeNull(types.string), null),
-    tpopfreiwkontr: types.optional(types.maybeNull(types.string), null),
-    tpopkontrzaehl: types.optional(types.maybeNull(types.string), null),
-    tpopmassn: types.optional(types.maybeNull(types.string), null),
-    ziel: types.optional(types.maybeNull(types.string), null),
-    zielber: types.optional(types.maybeNull(types.string), null),
-    erfkrit: types.optional(types.maybeNull(types.string), null),
-    apber: types.optional(types.maybeNull(types.string), null),
-    apberuebersicht: types.optional(types.maybeNull(types.string), null),
-    ber: types.optional(types.maybeNull(types.string), null),
-    idealbiotop: types.optional(types.maybeNull(types.string), null),
-    assozart: types.optional(types.maybeNull(types.string), null),
-    ekfzaehleinheit: types.optional(types.maybeNull(types.string), null),
-    popber: types.optional(types.maybeNull(types.string), null),
-    popmassnber: types.optional(types.maybeNull(types.string), null),
-    tpopber: types.optional(types.maybeNull(types.string), null),
-    tpopmassnber: types.optional(types.maybeNull(types.string), null),
-    apart: types.optional(types.maybeNull(types.string), null),
-    projekt: types.optional(types.maybeNull(types.string), null),
-    beob: types.optional(types.maybeNull(types.string), null),
-    beobprojekt: types.optional(types.maybeNull(types.string), null),
-    adresse: types.optional(types.maybeNull(types.string), null),
-    gemeinde: types.optional(types.maybeNull(types.string), null),
-    user: types.optional(types.maybeNull(types.string), null),
+    ap: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    pop: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    tpop: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    tpopkontr: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    tpopfeldkontr: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    tpopfreiwkontr: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    tpopkontrzaehl: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    tpopmassn: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    ziel: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    zielber: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    erfkrit: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    apber: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    apberuebersicht: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    ber: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    idealbiotop: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    assozart: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    ekfzaehleinheit: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    popber: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    popmassnber: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    tpopber: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    tpopmassnber: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    apart: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    projekt: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    beob: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    beobprojekt: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    adresse: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    gemeinde: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
+    user: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
   })
   .actions(self => ({
     setKey({ key, value }) {

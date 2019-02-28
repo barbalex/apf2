@@ -45,7 +45,9 @@ export default ({
   )
   apFilterValues.forEach(([key, value]) => {
     const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
-    apFilter[key] = { [expression]: value }
+    // need to prevent numbers from being passed or graphql will bark
+    const val = !isNaN(value) ? value.toString() : value
+    apFilter[key] = { [expression]: val }
   })
   // for unknown reason the following only works belated, so not
   if (apFilterSet) {
@@ -100,7 +102,9 @@ export default ({
   )
   popFilterValues.forEach(([key, value]) => {
     const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
-    popFilter[key] = { [expression]: value }
+    // need to prevent numbers from being passed or graphql will bark
+    const val = !isNaN(value) ? value.toString() : value
+    popFilter[key] = { [expression]: val }
   })
   const tpop = uniq(
     openNodes
@@ -124,7 +128,9 @@ export default ({
   )
   tpopFilterValues.forEach(([key, value]) => {
     const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
-    tpopFilter[key] = { [expression]: value }
+    // need to prevent numbers from being passed or graphql will bark
+    const val = !isNaN(value) ? value.toString() : value
+    tpopFilter[key] = { [expression]: val }
   })
 
   const tpopkontr = uniq(

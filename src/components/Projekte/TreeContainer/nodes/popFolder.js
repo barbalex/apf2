@@ -53,7 +53,7 @@ export default ({
         if (nodeLabelFilterString) {
           return `${el.nr || '(keine Nr)'}: ${el.name || '(kein Name)'}`
             .toLowerCase()
-            .includes(nodeLabelFilterString.toLowerCase())
+            .includes(nodeLabelFilterString.toString().toLowerCase())
         }
         return true
       })
