@@ -42,7 +42,6 @@ const MyTextField = ({
         autoComplete="off"
         autoCorrect="off"
         autoCapitalize="off"
-        spellCheck="off"
       />
       {!!error && (
         <FormHelperText id={`${label}-helper`}>{error}</FormHelperText>

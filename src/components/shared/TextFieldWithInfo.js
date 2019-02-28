@@ -82,7 +82,6 @@ const TextFieldWithInfo = ({
         autoComplete="off"
         autoCorrect="off"
         autoCapitalize="off"
-        spellCheck="off"
         endAdornment={
           <InfoWithPopover>
             <PopoverContentRow>{popover}</PopoverContentRow>
