@@ -98,6 +98,8 @@ const DateFieldWithPicker = ({
         cancelLabel="schliessen"
         okLabel="speichern"
         fullWidth
+        autoComplete="off"
+        autoCorrect="off"
       />
       {!!error && (
         <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>

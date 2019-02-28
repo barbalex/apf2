@@ -79,6 +79,8 @@ const TextFieldWithInfo = ({
         onBlur={saveToDb}
         onKeyPress={onKeyPress}
         placeholder={hintText}
+        autoComplete="off"
+        autoCorrect="off"
         endAdornment={
           <InfoWithPopover>
             <PopoverContentRow>{popover}</PopoverContentRow>

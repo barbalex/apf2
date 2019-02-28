@@ -69,6 +69,8 @@ const MyTextField = ({
         onBlur={saveToDb}
         onKeyPress={onKeyPress}
         placeholder={hintText}
+        autoComplete="off"
+        autoCorrect="off"
       />
       {!!error && (
         <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>

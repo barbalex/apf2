@@ -39,6 +39,8 @@ const MyTextField = ({
         id={label}
         value={value || value === 0 ? value : ''}
         onChange={onChange}
+        autoComplete="off"
+        autoCorrect="off"
       />
       {!!error && (
         <FormHelperText id={`${label}-helper`}>{error}</FormHelperText>
