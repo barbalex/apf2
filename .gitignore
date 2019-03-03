@@ -18,5 +18,5 @@ npm-debug.log
 
 postgrest.conf
 yarn-error.log
-*.config.js
+#*.config.js
 secrets.json
