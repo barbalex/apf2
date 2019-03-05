@@ -15,6 +15,21 @@ export const adresse = gql`
   }
 `
 
+export const aeEigenschaften = gql`
+  fragment AeEigenschaftenFields on AeEigenschaften {
+    id
+    taxid
+    familie
+    artname
+    namedeutsch
+    status
+    artwert
+    kefkontrolljahr
+    fnsjahresartjahr
+    kefart
+  }
+`
+
 export const ap = gql`
   fragment ApFields on Ap {
     id

@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { aeEigenschaften } from '../../../shared/fragments'
+
 export default gql`
   query projektById($projektId: UUID!) {
     projektById(id: $projektId) {
@@ -8,8 +10,7 @@ export default gql`
         nodes {
           id
           aeEigenschaftenByArtId {
-            id
-            artname
+            ...AeEigenschaftenFields
           }
           pops100: popsByApId(filter: { status: { equalTo: 100 } }) {
             nodes {
@@ -33,4 +34,5 @@ export default gql`
       }
     }
   }
+  ${aeEigenschaften}
 `
