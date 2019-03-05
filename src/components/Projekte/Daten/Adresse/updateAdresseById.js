@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { adresse } from '../../../shared/fragments'
+
 export default gql`
   mutation updateAdresse(
     $id: UUID!
@@ -31,17 +33,9 @@ export default gql`
       }
     ) {
       adresse {
-        id
-        name
-        adresse
-        telefon
-        email
-        freiwErfko
-        evabVorname
-        evabNachname
-        evabOrt
-        changedBy
+        ...AdresseFields
       }
     }
   }
+  ${adresse}
 `

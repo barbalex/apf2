@@ -5,6 +5,7 @@ import camelCase from 'lodash/camelCase'
 import get from 'lodash/get'
 
 import tables from '../../../modules/tables'
+import { adresse as adresseFragment } from '../../shared/fragments'
 
 export default async ({
   treeName,
@@ -135,18 +136,11 @@ export default async ({
       mutation createAdresse {
         createAdresse(input: { adresse: {} }) {
           adresse {
-            id
-            name
-            adresse
-            telefon
-            email
-            freiwErfko
-            evabVorname
-            evabNachname
-            evabOrt
+            ...AdresseFields
           }
         }
       }
+      ${adresseFragment}
     `
     delete variables.parentId
   }
