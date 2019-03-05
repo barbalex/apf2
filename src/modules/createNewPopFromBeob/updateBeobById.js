@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { beob } from '../../components/shared/fragments'
+import { aeEigenschaften, beob } from '../../components/shared/fragments'
 
 export default gql`
   mutation updateBeob($id: UUID!, $tpopId: UUID) {
@@ -10,8 +10,7 @@ export default gql`
       beob {
         ...BeobFields
         aeEigenschaftenByArtId {
-          id
-          artname
+          ...AeEigenschaftenFields
           apByArtId {
             id
             popsByApId {
@@ -44,5 +43,6 @@ export default gql`
       }
     }
   }
+  ${aeEigenschaften}
   ${beob}
 `

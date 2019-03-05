@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { aeEigenschaften } from '../../../../shared/fragments'
+
 export default gql`
   query TpopForMapQuery(
     $apId: UUID!
@@ -15,8 +17,7 @@ export default gql`
         nodes {
           id
           aeEigenschaftenByArtId {
-            id
-            artname
+            ...AeEigenschaftenFields
           }
           popsByApId {
             nodes {
@@ -72,8 +73,7 @@ export default gql`
                     apByApId {
                       id
                       aeEigenschaftenByArtId {
-                        id
-                        artname
+                        ...AeEigenschaftenFields
                       }
                     }
                   }
@@ -87,8 +87,7 @@ export default gql`
         nodes {
           id
           aeEigenschaftenByArtId {
-            id
-            artname
+            ...AeEigenschaftenFields
           }
           popsByApId {
             nodes {
@@ -144,8 +143,7 @@ export default gql`
                     apByApId {
                       id
                       aeEigenschaftenByArtId {
-                        id
-                        artname
+                        ...AeEigenschaftenFields
                       }
                     }
                   }
@@ -157,4 +155,5 @@ export default gql`
       }
     }
   }
+  ${aeEigenschaften}
 `

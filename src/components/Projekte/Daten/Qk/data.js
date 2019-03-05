@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { aeEigenschaften } from '../../../shared/fragments'
+
 export default gql`
   query QkQuery(
     $berichtjahr: Int
@@ -36,8 +38,7 @@ export default gql`
             }
           }
           aeEigenschaftenByArtId {
-            id
-            artname
+            ...AeEigenschaftenFields
           }
         }
       }
@@ -1879,4 +1880,5 @@ export default gql`
       }
     }
   }
+  ${aeEigenschaften}
 `

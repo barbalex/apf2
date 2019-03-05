@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { ap, adresse } from '../../../shared/fragments'
+import { ap, adresse, aeEigenschaften } from '../../../shared/fragments'
 
 export default gql`
   query apByIdQuery($id: UUID!) {
@@ -10,9 +10,7 @@ export default gql`
         ...AdresseFields
       }
       aeEigenschaftenByArtId {
-        id
-        artname
-        artwert
+        ...AeEigenschaftenFields
       }
     }
     allApBearbstandWertes {
@@ -34,4 +32,5 @@ export default gql`
   }
   ${ap}
   ${adresse}
+  ${aeEigenschaften}
 `

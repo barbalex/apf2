@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { aeEigenschaften, apart, beob } from '../../../../shared/fragments'
+
 export default gql`
   query BeobNichtBeurteiltForMapQuery(
     $projId: UUID!
@@ -13,8 +15,7 @@ export default gql`
           id
           apartsByApId {
             nodes {
-              id
-              artId
+              ...ApartFiels
               aeEigenschaftenByArtId {
                 id
                 beobsByArtId(
@@ -26,18 +27,13 @@ export default gql`
                   }
                 ) {
                   nodes {
-                    id
-                    autor
-                    datum
+                    ...BeobFields
                     beobQuelleWerteByQuelleId {
                       id
                       name
                     }
-                    x
-                    y
                     aeEigenschaftenByArtId {
-                      id
-                      artname
+                      ...AeEigenschaftenFields
                     }
                   }
                 }
@@ -48,4 +44,7 @@ export default gql`
       }
     }
   }
+  ${aeEigenschaften}
+  ${apart}
+  ${beob}
 `

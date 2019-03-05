@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { aeEigenschaften } from '../../../shared/fragments'
+
 export default gql`
   query ApartsQuery($ap: [UUID!], $isAp: Boolean!) {
     allAparts(filter: { apId: { in: $ap } }) @include(if: $isAp) {
@@ -7,10 +9,10 @@ export default gql`
         id
         apId
         aeEigenschaftenByArtId {
-          id
-          artname
+          ...AeEigenschaftenFields
         }
       }
     }
   }
+  ${aeEigenschaften}
 `

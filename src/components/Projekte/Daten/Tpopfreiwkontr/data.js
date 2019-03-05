@@ -1,7 +1,7 @@
 // @flow
 import gql from 'graphql-tag'
 
-import { adresse } from '../../../shared/fragments'
+import { aeEigenschaften, adresse } from '../../../shared/fragments'
 
 export default gql`
   query tpopkontrByIdQuery($id: UUID!, $showFilter: Boolean!) {
@@ -46,8 +46,7 @@ export default gql`
             id
             ekfBeobachtungszeitpunkt
             aeEigenschaftenByArtId {
-              id
-              artname
+              ...AeEigenschaftenFields
             }
             ekfzaehleinheitsByApId {
               nodes {
@@ -96,5 +95,6 @@ export default gql`
       }
     }
   }
+  ${aeEigenschaften}
   ${adresse}
 `
