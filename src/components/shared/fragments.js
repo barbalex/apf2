@@ -63,6 +63,16 @@ export const apber = gql`
   }
 `
 
+export const apberuebersicht = gql`
+  fragment ApberuebersichtFields on Apberuebersicht {
+    id
+    projId
+    jahr
+    bemerkungen
+    changedBy
+  }
+`
+
 export const tpopber = gql`
   fragment TpopberFields on Tpopber {
     id

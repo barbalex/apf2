@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { apberuebersicht } from '../../shared/fragments'
+
 export default gql`
   mutation createApberuebersicht(
     $id: UUID
@@ -18,11 +20,9 @@ export default gql`
       }
     ) {
       apberuebersicht {
-        id
-        projId
-        jahr
-        bemerkungen
+        ...ApberuebersichtFields
       }
     }
   }
+  ${apberuebersicht}
 `

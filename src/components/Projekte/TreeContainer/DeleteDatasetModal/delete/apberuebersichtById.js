@@ -1,12 +1,12 @@
 import gql from 'graphql-tag'
 
+import { apberuebersicht } from '../../../../shared/fragments'
+
 export default gql`
   query apberuebersichtById($id: UUID!) {
     apberuebersichtById(id: $id) {
-      id
-      projId
-      jahr
-      bemerkungen
+      ...ApberuebersichtFields
     }
   }
+  ${apberuebersicht}
 `
