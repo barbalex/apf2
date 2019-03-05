@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { ber } from '../../shared/fragments'
+
 export default gql`
   mutation createBer(
     $id: UUID
@@ -22,13 +24,9 @@ export default gql`
       }
     ) {
       ber {
-        id
-        apId
-        autor
-        jahr
-        titel
-        url
+        ...BerFields
       }
     }
   }
+  ${ber}
 `

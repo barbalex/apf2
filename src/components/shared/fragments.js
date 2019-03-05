@@ -117,6 +117,20 @@ export const beob = gql`
   }
 `
 
+// TODO: beobQuelleWerte
+
+export const ber = gql`
+  fragment BerFields on Ber {
+    id
+    apId
+    autor
+    jahr
+    titel
+    url
+    changedBy
+  }
+`
+
 export const tpopber = gql`
   fragment TpopberFields on Tpopber {
     id
