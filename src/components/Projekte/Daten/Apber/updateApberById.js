@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { adresse } from '../../../shared/fragments'
+
 export default gql`
   mutation updateApber(
     $id: UUID!
@@ -75,10 +77,10 @@ export default gql`
           sort
         }
         adresseByBearbeiter {
-          id
-          name
+          ...AdresseFields
         }
       }
     }
   }
+  ${adresse}
 `

@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { adresse } from '../../../shared/fragments'
+
 export default gql`
   query apberByIdQuery($id: UUID!) {
     apberById(id: $id) {
@@ -28,9 +30,9 @@ export default gql`
         sort
       }
       adresseByBearbeiter {
-        id
-        name
+        ...AdresseFields
       }
     }
   }
+  ${adresse}
 `

@@ -1,20 +1,14 @@
 import gql from 'graphql-tag'
 
+import { ap, adresse } from '../../../shared/fragments'
+
 export default gql`
   query apByIdQuery($id: UUID!) {
     apById(id: $id) {
-      id
-      bearbeitung
-      startJahr
-      umsetzung
-      artId
-      bearbeiter
-      ekfBeobachtungszeitpunkt
+      ...ApFields
       adresseByBearbeiter {
-        id
-        name
+        ...AdresseFields
       }
-      projId
       aeEigenschaftenByArtId {
         id
         artname
@@ -38,4 +32,6 @@ export default gql`
       }
     }
   }
+  ${ap}
+  ${adresse}
 `

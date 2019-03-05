@@ -15,6 +15,21 @@ export const adresse = gql`
   }
 `
 
+export const ap = gql`
+  fragment ApFields on Ap {
+    id
+    artId
+    bearbeitung
+    startJahr
+    umsetzung
+    artId
+    bearbeiter
+    ekfBeobachtungszeitpunkt
+    projId
+    changedBy
+  }
+`
+
 export const tpopber = gql`
   fragment TpopberFields on Tpopber {
     id

@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { adresse } from '../../../shared/fragments'
+
 export default gql`
   query tpopmassnByIdQuery($id: UUID!) {
     tpopmassnById(id: $id) {
@@ -29,8 +31,7 @@ export default gql`
       tpopId
       bearbeiter
       adresseByBearbeiter {
-        id
-        name
+        ...AdresseFields
       }
       planVorhanden
       tpopByTpopId {
@@ -51,4 +52,5 @@ export default gql`
       }
     }
   }
+  ${adresse}
 `

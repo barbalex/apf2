@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { ap, adresse } from '../../../shared/fragments'
+
 export default gql`
   mutation updateAp(
     $id: UUID!
@@ -29,19 +31,10 @@ export default gql`
       }
     ) {
       ap {
-        id
-        bearbeitung
-        startJahr
-        umsetzung
-        artId
-        bearbeiter
-        ekfBeobachtungszeitpunkt
+        ...ApFields
         adresseByBearbeiter {
-          id
-          name
+          ...AdresseFields
         }
-        projId
-        changedBy
         aeEigenschaftenByArtId {
           id
           artname
@@ -50,4 +43,6 @@ export default gql`
       }
     }
   }
+  ${adresse}
+  ${ap}
 `

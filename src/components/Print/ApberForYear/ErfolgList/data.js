@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { adresse, tpopber } from '../../../shared/fragments'
+
 export default gql`
   query projektById($projektId: UUID!, $jahr: Int!) {
     projektById(id: $projektId) {
@@ -56,8 +58,7 @@ export default gql`
                   }
                   firstTpopber: tpopbersByTpopId(orderBy: JAHR_ASC, first: 1) {
                     nodes {
-                      id
-                      jahr
+                      ...TpopberFields
                     }
                   }
                 }
@@ -111,8 +112,7 @@ export default gql`
               apId
               bearbeiter
               adresseByBearbeiter {
-                id
-                name
+                ...AdresseFields
               }
             }
           }
@@ -120,4 +120,6 @@ export default gql`
       }
     }
   }
+  ${adresse}
+  ${tpopber}
 `

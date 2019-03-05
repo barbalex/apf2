@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { adresse } from '../../../shared/fragments'
+
 export default gql`
   mutation updateTpopkontr(
     $id: UUID!
@@ -65,8 +67,7 @@ export default gql`
         tpopId
         bearbeiter
         adresseByBearbeiter {
-          id
-          name
+          ...AdresseFields
         }
         planVorhanden
         jungpflanzenVorhanden
@@ -109,4 +110,5 @@ export default gql`
       }
     }
   }
+  ${adresse}
 `

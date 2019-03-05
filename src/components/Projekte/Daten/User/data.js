@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { adresse } from '../../../shared/fragments'
+
 export default gql`
   query userById($id: UUID!) {
     userById(id: $id) {
@@ -10,9 +12,9 @@ export default gql`
       pass
       adresseId
       adresseByAdresseId {
-        id
-        name
+        ...AdresseFields
       }
     }
   }
+  ${adresse}
 `

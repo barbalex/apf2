@@ -1,6 +1,8 @@
 // @flow
 import gql from 'graphql-tag'
 
+import { adresse } from '../../../shared/fragments'
+
 export default gql`
   query tpopkontrByIdQuery($id: UUID!, $showFilter: Boolean!) {
     tpopkontrById(id: $id) {
@@ -21,8 +23,7 @@ export default gql`
       tpopId
       bearbeiter
       adresseByBearbeiter {
-        id
-        name
+        ...AdresseFields
         usersByAdresseId {
           totalCount
         }
@@ -95,4 +96,5 @@ export default gql`
       }
     }
   }
+  ${adresse}
 `

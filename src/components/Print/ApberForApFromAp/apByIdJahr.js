@@ -1,11 +1,12 @@
 // @flow
 import gql from 'graphql-tag'
 
+import { ap, adresse, tpopber } from '../../shared/fragments'
+
 export default gql`
   query apByIdJahr($apId: UUID!, $jahr: Int!) {
     apById(id: $apId) {
-      id
-      startJahr
+      ...ApFields
       aeEigenschaftenByArtId {
         id
         artname
@@ -46,8 +47,7 @@ export default gql`
               }
               firstTpopber: tpopbersByTpopId(orderBy: JAHR_ASC, first: 1) {
                 nodes {
-                  id
-                  jahr
+                  ...TpopberFields
                 }
               }
             }
@@ -108,11 +108,13 @@ export default gql`
           apId
           bearbeiter
           adresseByBearbeiter {
-            id
-            name
+            ...AdresseFields
           }
         }
       }
     }
   }
+  ${ap}
+  ${adresse}
+  ${tpopber}
 `

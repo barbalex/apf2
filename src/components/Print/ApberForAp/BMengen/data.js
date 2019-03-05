@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { tpopber } from '../../../shared/fragments'
+
 export default gql`
   query apById($apId: UUID!, $jahr: Int!) {
     apById(id: $apId) {
@@ -45,8 +47,7 @@ export default gql`
               tpopbersByTpopId(filter: { jahr: { equalTo: $jahr } }) {
                 totalCount
                 nodes {
-                  id
-                  entwicklung
+                  ...TpopberFields
                 }
               }
             }
@@ -112,10 +113,7 @@ export default gql`
               ) {
                 totalCount
                 nodes {
-                  id
-                  entwicklung
-                  jahr
-                  tpopId
+                  ...TpopberFields
                 }
               }
             }
@@ -156,4 +154,5 @@ export default gql`
       }
     }
   }
+  ${tpopber}
 `

@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { ap } from '../../shared/fragments'
+
 export default gql`
   mutation createAp(
     $id: UUID
@@ -24,14 +26,9 @@ export default gql`
       }
     ) {
       ap {
-        id
-        projId
-        bearbeitung
-        startJahr
-        umsetzung
-        artId
-        bearbeiter
+        ...ApFields
       }
     }
   }
+  ${ap}
 `

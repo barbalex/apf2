@@ -1,10 +1,12 @@
 import gql from 'graphql-tag'
 
+import { ap } from '../../../shared/fragments'
+
 export default gql`
   query apByIdQuery($id: UUID!) {
     apById(id: $id) {
-      id
-      bearbeitung
+      ...ApFields
     }
   }
+  ${ap}
 `
