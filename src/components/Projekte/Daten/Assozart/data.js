@@ -1,12 +1,11 @@
 import gql from 'graphql-tag'
 
+import { assozart } from '../../../shared/fragments'
+
 export default gql`
   query assozartByIdQuery($id: UUID!) {
     assozartById(id: $id) {
-      id
-      bemerkungen
-      aeId
-      apId
+      ...AssozartFields
       aeEigenschaftenByAeId {
         id
         artname
@@ -15,11 +14,11 @@ export default gql`
         artId
         assozartsByApId {
           nodes {
-            id
-            aeId
+            ...AssozartFields
           }
         }
       }
     }
   }
+  ${assozart}
 `

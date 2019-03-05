@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { assozart } from '../../../shared/fragments'
+
 export default gql`
   mutation updateAssozart(
     $id: UUID!
@@ -21,11 +23,7 @@ export default gql`
       }
     ) {
       assozart {
-        id
-        bemerkungen
-        aeId
-        apId
-        changedBy
+        ...AssozartFields
         aeEigenschaftenByAeId {
           id
           artname
@@ -34,12 +32,12 @@ export default gql`
           artId
           assozartsByApId {
             nodes {
-              id
-              aeId
+              ...AssozartFields
             }
           }
         }
       }
     }
   }
+  ${assozart}
 `

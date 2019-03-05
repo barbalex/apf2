@@ -73,6 +73,16 @@ export const apberuebersicht = gql`
   }
 `
 
+export const assozart = gql`
+  fragment AssozartFields on Assozart {
+    id
+    bemerkungen
+    aeId
+    apId
+    changedBy
+  }
+`
+
 export const tpopber = gql`
   fragment TpopberFields on Tpopber {
     id
