@@ -8,7 +8,11 @@ export const tpopber = gql`
     entwicklung
     tpopEntwicklungWerteByEntwicklung {
       id
+      code
       text
+      sort
     }
+    bemerkungen
+    changedBy
   }
 `

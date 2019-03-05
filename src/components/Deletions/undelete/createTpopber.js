@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { tpopber } from '../../shared/fragments'
+
 export default gql`
   mutation createTpopber(
     $id: UUID
@@ -20,12 +22,9 @@ export default gql`
       }
     ) {
       tpopber {
-        id
-        tpopId
-        jahr
-        entwicklung
-        bemerkungen
+        ...TpopberFields
       }
     }
   }
+  ${tpopber}
 `

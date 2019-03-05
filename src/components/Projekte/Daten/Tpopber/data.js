@@ -1,19 +1,11 @@
 import gql from 'graphql-tag'
 
+import { tpopber } from '../../../shared/fragments'
+
 export default gql`
   query tpopberByIdQuery($id: UUID!) {
     tpopberById(id: $id) {
-      id
-      tpopId
-      jahr
-      entwicklung
-      tpopEntwicklungWerteByEntwicklung {
-        id
-        code
-        text
-        sort
-      }
-      bemerkungen
+      ...TpopberFields
       tpopByTpopId {
         id
         popByPopId {
@@ -31,4 +23,5 @@ export default gql`
       }
     }
   }
+  ${tpopber}
 `
