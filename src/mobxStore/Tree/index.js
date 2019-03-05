@@ -27,6 +27,14 @@ export default types
     setNodes(val) {
       self.nodes = val
     },
+    setOpenNodes(val) {
+      self.openNodes = val
+    },
+    addOpenNodes(nodes) {
+      // need set to ensure contained arrays are unique
+      const set = new Set([...self.openNodes, ...nodes].map(JSON.stringify))
+      self.openNodes = Array.from(set).map(JSON.parse)
+    },
   }))
   .views(self => ({
     get activeNode() {
