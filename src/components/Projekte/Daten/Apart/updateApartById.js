@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { apart } from '../../../shared/fragments'
+
 export default gql`
   mutation updateApart(
     $id: UUID!
@@ -19,10 +21,7 @@ export default gql`
       }
     ) {
       apart {
-        id
-        apId
-        artId
-        changedBy
+        ...ApartFields
         aeEigenschaftenByArtId {
           id
           artname
@@ -30,4 +29,5 @@ export default gql`
       }
     }
   }
+  ${apart}
 `

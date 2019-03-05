@@ -30,6 +30,15 @@ export const ap = gql`
   }
 `
 
+export const apart = gql`
+  fragment ApartFields on Apart {
+    id
+    apId
+    artId
+    changedBy
+  }
+`
+
 export const tpopber = gql`
   fragment TpopberFields on Tpopber {
     id
