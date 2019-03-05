@@ -1,12 +1,12 @@
 import gql from 'graphql-tag'
 
+import { beob } from '../../components/shared/fragments'
+
 export default gql`
   query Query($id: UUID!) {
     beobById(id: $id) {
-      id
-      x
-      y
-      tpopId
+      ...BeobFields
     }
   }
+  ${beob}
 `

@@ -1,29 +1,18 @@
 import gql from 'graphql-tag'
 
+import { apart, beob } from '../../../shared/fragments'
+
 export default gql`
   query beobByIdQuery($id: UUID!, $apId: UUID!) {
     beobById(id: $id) {
-      id
-      idField
-      datum
-      autor
-      x
-      y
-      data
-      artId
-      artIdOriginal
-      tpopId
-      nichtZuordnen
-      bemerkungen
-      quelleId
+      ...BeobFields
       aeEigenschaftenByArtId {
         id
         taxid
         artname
         apartsByArtId(filter: { apId: { equalTo: $apId } }) {
           nodes {
-            id
-            apId
+            ...ApartFields
             apByApId {
               id
               popsByApId {
@@ -62,4 +51,6 @@ export default gql`
       }
     }
   }
+  ${apart}
+  ${beob}
 `

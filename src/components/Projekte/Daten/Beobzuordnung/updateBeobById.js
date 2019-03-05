@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { beob } from '../../../shared/fragments'
+
 export default gql`
   mutation updateBeob(
     $id: UUID!
@@ -39,20 +41,7 @@ export default gql`
       }
     ) {
       beob {
-        id
-        idField
-        datum
-        autor
-        x
-        y
-        data
-        artId
-        artIdOriginal
-        tpopId
-        nichtZuordnen
-        bemerkungen
-        quelleId
-        changedBy
+        ...BeobFields
         aeEigenschaftenByArtId {
           id
           artname
@@ -92,4 +81,5 @@ export default gql`
       }
     }
   }
+  ${beob}
 `

@@ -1,20 +1,12 @@
 import gql from 'graphql-tag'
 
+import { beob } from '../../../../shared/fragments'
+
 export default gql`
   query beobById($id: UUID!) {
     beobById(id: $id) {
-      id
-      idField
-      datum
-      autor
-      x
-      y
-      data
-      artId
-      tpopId
-      nichtZuordnen
-      bemerkungen
-      quelleId
+      ...BeobFields
     }
   }
+  ${beob}
 `

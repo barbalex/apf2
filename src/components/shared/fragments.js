@@ -83,6 +83,25 @@ export const assozart = gql`
   }
 `
 
+export const beob = gql`
+  fragment BeobFields on Beob {
+    id
+    idField
+    datum
+    autor
+    x
+    y
+    data
+    artId
+    tpopId
+    nichtZuordnen
+    bemerkungen
+    quelleId
+    artIdOriginal
+    changedBy
+  }
+`
+
 export const tpopber = gql`
   fragment TpopberFields on Tpopber {
     id

@@ -34,13 +34,12 @@ const Beob = ({
     },
   })
   const row = get(data, 'beobById', {})
-  const beobFields = useMemo(
-    () =>
-      Object.entries(JSON.parse(row.data)).filter(
+  const beobFields = row.data
+    ? Object.entries(JSON.parse(row.data)).filter(
         ([key, value]) => value || value === 0 || value === false,
-      ),
-    [row.data],
-  )
+      )
+    : []
+
   if (!row) return null
   if (!beobFields || beobFields.length === 0) return null
   if (loading) return <Container>Lade...</Container>
