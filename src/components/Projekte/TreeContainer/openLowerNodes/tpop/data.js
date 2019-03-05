@@ -19,11 +19,6 @@ export default gql`
       ) {
         nodes {
           id
-          tpopkontrzaehlsByTpopkontrId {
-            nodes {
-              id
-            }
-          }
         }
       }
       tpopfreiwkontrs: tpopkontrsByTpopId(
@@ -31,11 +26,6 @@ export default gql`
       ) {
         nodes {
           id
-          tpopkontrzaehlsByTpopkontrId {
-            nodes {
-              id
-            }
-          }
         }
       }
       tpopbersByTpopId {

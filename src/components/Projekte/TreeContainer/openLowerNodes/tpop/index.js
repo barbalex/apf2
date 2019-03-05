@@ -22,9 +22,9 @@ export default async ({
 }) => {
   const tree = mobxStore[treeName]
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
-  const { setTreeKey, refetch } = mobxStore
+  const { refetch } = mobxStore
   const { projekt, ap, pop } = activeNodes
-  const { openNodes } = tree
+  const { addOpenNodes } = tree
   // 1. load all data
   const { data } = await client.query({
     query: dataGql,
@@ -39,7 +39,6 @@ export default async ({
   // 2. add activeNodeArrays for all data to openNodes
   // 2.0 add all folders
   let newOpenNodes = [
-    ...openNodes,
     [
       'Projekte',
       projekt,
@@ -185,6 +184,7 @@ export default async ({
         'Zaehlungen',
       ],
     ]
+    /*
     const zaehls = get(k, 'tpopkontrzaehlsByTpopkontrId.nodes', [])
     zaehls.forEach(z => {
       newOpenNodes = [
@@ -204,7 +204,7 @@ export default async ({
           z.id,
         ],
       ]
-    })
+    })*/
   })
 
   // 2.4: tpopfreiwkontrs
@@ -237,6 +237,7 @@ export default async ({
         'Zaehlungen',
       ],
     ]
+    /*
     const zaehls = get(k, 'tpopkontrzaehlsByTpopkontrId.nodes', [])
     zaehls.forEach(z => {
       newOpenNodes = [
@@ -256,7 +257,7 @@ export default async ({
           z.id,
         ],
       ]
-    })
+    })*/
   })
 
   // 2.5: tpopbers
@@ -298,11 +299,7 @@ export default async ({
   })
 
   // 3. update openNodes
-  setTreeKey({
-    tree: tree.name,
-    value: newOpenNodes,
-    key: 'openNodes',
-  })
+  addOpenNodes(newOpenNodes)
 
   // 4. refresh tree
   refetch.tpops()
