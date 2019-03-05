@@ -69,6 +69,7 @@ export default ({
         id,
         parentId,
         mobxStore,
+        client,
       })
       break
     default:
