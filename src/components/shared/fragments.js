@@ -117,7 +117,7 @@ export const beob = gql`
   }
 `
 
-// TODO: beobQuelleWerte
+// TODO: beobQuelleWerte and other werte
 
 export const ber = gql`
   fragment BerFields on Ber {
