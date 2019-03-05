@@ -39,6 +39,30 @@ export const apart = gql`
   }
 `
 
+export const apber = gql`
+  fragment ApberFields on Apber {
+    id
+    jahr
+    situation
+    vergleichVorjahrGesamtziel
+    beurteilung
+    veraenderungZumVorjahr
+    apberAnalyse
+    konsequenzenUmsetzung
+    konsequenzenErfolgskontrolle
+    biotopeNeue
+    biotopeOptimieren
+    massnahmenOptimieren
+    wirkungAufArt
+    datum
+    massnahmenApBearb
+    massnahmenPlanungVsAusfuehrung
+    apId
+    bearbeiter
+    changedBy
+  }
+`
+
 export const tpopber = gql`
   fragment TpopberFields on Tpopber {
     id

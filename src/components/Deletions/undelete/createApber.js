@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { apber } from '../../shared/fragments'
+
 export default gql`
   mutation createApber(
     $id: UUID
@@ -46,25 +48,9 @@ export default gql`
       }
     ) {
       apber {
-        id
-        jahr
-        situation
-        vergleichVorjahrGesamtziel
-        beurteilung
-        veraenderungZumVorjahr
-        apberAnalyse
-        konsequenzenUmsetzung
-        konsequenzenErfolgskontrolle
-        biotopeNeue
-        biotopeOptimieren
-        massnahmenOptimieren
-        wirkungAufArt
-        datum
-        massnahmenApBearb
-        massnahmenPlanungVsAusfuehrung
-        apId
-        bearbeiter
+        ...ApberFields
       }
     }
   }
+  ${apber}
 `

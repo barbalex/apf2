@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { adresse } from '../../../shared/fragments'
+import { adresse, apber } from '../../../shared/fragments'
 
 export default gql`
   mutation updateApber(
@@ -51,25 +51,7 @@ export default gql`
       }
     ) {
       apber {
-        id
-        jahr
-        situation
-        vergleichVorjahrGesamtziel
-        beurteilung
-        veraenderungZumVorjahr
-        apberAnalyse
-        konsequenzenUmsetzung
-        konsequenzenErfolgskontrolle
-        biotopeNeue
-        biotopeOptimieren
-        massnahmenOptimieren
-        wirkungAufArt
-        datum
-        massnahmenApBearb
-        massnahmenPlanungVsAusfuehrung
-        apId
-        bearbeiter
-        changedBy
+        ...ApberFields
         apErfkritWerteByBeurteilung {
           id
           code
@@ -83,4 +65,5 @@ export default gql`
     }
   }
   ${adresse}
+  ${apber}
 `

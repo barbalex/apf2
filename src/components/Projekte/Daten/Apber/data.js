@@ -1,28 +1,11 @@
 import gql from 'graphql-tag'
 
-import { adresse } from '../../../shared/fragments'
+import { adresse, apber } from '../../../shared/fragments'
 
 export default gql`
   query apberByIdQuery($id: UUID!) {
     apberById(id: $id) {
-      id
-      jahr
-      situation
-      vergleichVorjahrGesamtziel
-      beurteilung
-      veraenderungZumVorjahr
-      apberAnalyse
-      konsequenzenUmsetzung
-      konsequenzenErfolgskontrolle
-      biotopeNeue
-      biotopeOptimieren
-      massnahmenOptimieren
-      wirkungAufArt
-      datum
-      massnahmenApBearb
-      massnahmenPlanungVsAusfuehrung
-      apId
-      bearbeiter
+      ...ApberFields
       apErfkritWerteByBeurteilung {
         id
         code
@@ -35,4 +18,5 @@ export default gql`
     }
   }
   ${adresse}
+  ${apber}
 `
