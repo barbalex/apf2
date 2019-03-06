@@ -462,3 +462,14 @@ export const ziel = gql`
     changedBy
   }
 `
+
+export const zielber = gql`
+  fragment ZielberFields on Zielber {
+    id
+    zielId
+    jahr
+    erreichung
+    bemerkungen
+    changedBy
+  }
+`

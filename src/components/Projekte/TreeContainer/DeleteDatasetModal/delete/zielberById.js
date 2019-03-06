@@ -1,13 +1,12 @@
 import gql from 'graphql-tag'
 
+import { zielber } from '../../../../shared/fragments'
+
 export default gql`
   query zielberById($id: UUID!) {
     zielberById(id: $id) {
-      id
-      zielId
-      jahr
-      erreichung
-      bemerkungen
+      ...ZielberFields
     }
   }
+  ${zielber}
 `
