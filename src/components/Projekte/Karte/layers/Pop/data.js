@@ -1,6 +1,11 @@
 import gql from 'graphql-tag'
 
-import { aeEigenschaften, pop, tpop } from '../../../../shared/fragments'
+import {
+  aeEigenschaften,
+  pop,
+  popStatusWerte,
+  tpop,
+} from '../../../../shared/fragments'
 
 export default gql`
   query PopForMapQuery(
@@ -21,8 +26,7 @@ export default gql`
             nodes {
               ...PopFields
               popStatusWerteByStatus {
-                id
-                text
+                ...PopStatusWerteFields
               }
               apByApId {
                 id
@@ -53,8 +57,7 @@ export default gql`
             nodes {
               ...PopFields
               popStatusWerteByStatus {
-                id
-                text
+                ...PopStatusWerteFields
               }
               apByApId {
                 id
@@ -82,5 +85,6 @@ export default gql`
   }
   ${aeEigenschaften}
   ${pop}
+  ${popStatusWerte}
   ${tpop}
 `
