@@ -451,3 +451,14 @@ export const user = gql`
     adresseId
   }
 `
+
+export const ziel = gql`
+  fragment ZielFields on Ziel {
+    id
+    apId
+    typ
+    jahr
+    bezeichnung
+    changedBy
+  }
+`

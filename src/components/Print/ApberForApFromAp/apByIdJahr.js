@@ -1,7 +1,13 @@
 // @flow
 import gql from 'graphql-tag'
 
-import { aeEigenschaften, ap, adresse, tpopber } from '../../shared/fragments'
+import {
+  aeEigenschaften,
+  ap,
+  adresse,
+  tpopber,
+  ziel,
+} from '../../shared/fragments'
 
 export default gql`
   query apByIdJahr($apId: UUID!, $jahr: Int!) {
@@ -66,8 +72,7 @@ export default gql`
       }
       zielsByApId(condition: { jahr: $jahr }) {
         nodes {
-          id
-          bezeichnung
+          ...ZielFields
           zielTypWerteByTyp {
             id
             text
@@ -117,4 +122,5 @@ export default gql`
   ${ap}
   ${adresse}
   ${tpopber}
+  ${ziel}
 `

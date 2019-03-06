@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { ziel } from '../../../shared/fragments'
+
 export default gql`
   mutation updateZiel(
     $id: UUID!
@@ -23,13 +25,9 @@ export default gql`
       }
     ) {
       ziel {
-        id
-        apId
-        typ
-        jahr
-        bezeichnung
-        changedBy
+        ...ZielFields
       }
     }
   }
+  ${ziel}
 `

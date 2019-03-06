@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { aeEigenschaften, projekt } from '../../../shared/fragments'
+import { aeEigenschaften, projekt, ziel } from '../../../shared/fragments'
 
 export default gql`
   query QkQuery(
@@ -53,8 +53,7 @@ export default gql`
             }
           ) {
             nodes {
-              id
-              jahr
+              ...ZielFields
             }
           }
         }
@@ -69,8 +68,7 @@ export default gql`
             filter: { typ: { isNull: true }, jahr: { equalTo: $berichtjahr } }
           ) {
             nodes {
-              id
-              jahr
+              ...ZielFields
             }
           }
         }
@@ -88,8 +86,7 @@ export default gql`
             }
           ) {
             nodes {
-              id
-              jahr
+              ...ZielFields
             }
           }
         }
@@ -102,8 +99,7 @@ export default gql`
           id
           zielsByApId(filter: { jahr: { equalTo: $berichtjahr } }) {
             nodes {
-              id
-              jahr
+              ...ZielFields
               zielbersByZielId(filter: { jahr: { isNull: true } }) {
                 nodes {
                   id
@@ -125,8 +121,7 @@ export default gql`
           id
           zielsByApId(filter: { jahr: { equalTo: $berichtjahr } }) {
             nodes {
-              id
-              jahr
+              ...ZielFields
               zielbersByZielId(
                 filter: {
                   erreichung: { isNull: true }
@@ -1881,4 +1876,5 @@ export default gql`
   }
   ${aeEigenschaften}
   ${projekt}
+  ${ziel}
 `

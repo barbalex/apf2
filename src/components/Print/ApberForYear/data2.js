@@ -5,6 +5,7 @@ import {
   aeEigenschaften,
   projekt,
   tpopber,
+  ziel,
 } from '../../shared/fragments'
 
 export default gql`
@@ -77,8 +78,7 @@ export default gql`
           }
           zielsByApId(filter: { jahr: { equalTo: $jahr } }) {
             nodes {
-              id
-              bezeichnung
+              ...ZielFields
               zielTypWerteByTyp {
                 id
                 text
@@ -130,4 +130,5 @@ export default gql`
   ${aeEigenschaften}
   ${projekt}
   ${tpopber}
+  ${ziel}
 `
