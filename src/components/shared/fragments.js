@@ -177,6 +177,22 @@ export const idealbiotop = gql`
   }
 `
 
+export const pop = gql`
+  fragment PopFields on Pop {
+    id
+    apId
+    nr
+    name
+    status
+    statusUnklar
+    statusUnklarBegruendung
+    bekanntSeit
+    x
+    y
+    changedBy
+  }
+`
+
 export const tpopber = gql`
   fragment TpopberFields on Tpopber {
     id

@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { pop } from '../../components/shared/fragments'
+
 export default gql`
   mutation createPop(
     $apId: UUID
@@ -28,17 +30,9 @@ export default gql`
       }
     ) {
       pop {
-        id
-        apId
-        nr
-        name
-        status
-        statusUnklar
-        statusUnklarBegruendung
-        bekanntSeit
-        x
-        y
+        ...PopFields
       }
     }
   }
+  ${pop}
 `

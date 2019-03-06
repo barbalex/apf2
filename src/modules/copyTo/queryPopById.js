@@ -1,17 +1,12 @@
 import gql from 'graphql-tag'
 
+import { pop } from '../../components/shared/fragments'
+
 export default gql`
   query Query($id: UUID!) {
     popById(id: $id) {
-      id
-      nr
-      name
-      status
-      statusUnklar
-      statusUnklarBegruendung
-      bekanntSeit
-      x
-      y
+      ...PopFields
     }
   }
+  ${pop}
 `
