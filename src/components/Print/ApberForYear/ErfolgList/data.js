@@ -8,6 +8,8 @@ import {
   tpopber,
   ziel,
   apErfkritWerte,
+  tpopmassnTypWerte,
+  zielTypWerte,
 } from '../../../shared/fragments'
 
 export default gql`
@@ -44,8 +46,7 @@ export default gql`
                       id
                       datum
                       tpopmassnTypWerteByTyp {
-                        id
-                        text
+                        ...TpopmassnTypWerteFields
                       }
                       beschreibung
                       tpopByTpopId {
@@ -82,9 +83,7 @@ export default gql`
             nodes {
               ...ZielFields
               zielTypWerteByTyp {
-                id
-                text
-                sort
+                ...ZielTypWerteFields
               }
             }
           }
@@ -106,8 +105,10 @@ export default gql`
   ${adresse}
   ${aeEigenschaften}
   ${apber}
+  ${apErfkritWerte}
   ${projekt}
   ${tpopber}
+  ${tpopmassnTypWerte}
   ${ziel}
-  ${apErfkritWerte}
+  ${zielTypWerte}
 `

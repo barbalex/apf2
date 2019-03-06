@@ -1,14 +1,13 @@
 import gql from 'graphql-tag'
 
-import { popmassnber } from '../../../shared/fragments'
+import { popmassnber, tpopmassnErfbeurtWerte } from '../../../shared/fragments'
 
 export default gql`
   query popmassnberByIdQuery($id: UUID!) {
     popmassnberById(id: $id) {
       ...PopmassnberFields
       tpopmassnErfbeurtWerteByBeurteilung {
-        id
-        text
+        ...TpopmassnErfbeurtWerteFields
       }
       popByPopId {
         id
@@ -17,4 +16,5 @@ export default gql`
     }
   }
   ${popmassnber}
+  ${tpopmassnErfbeurtWerte}
 `
