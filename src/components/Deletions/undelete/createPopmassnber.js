@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { popmassnber } from '../../shared/fragments'
+
 export default gql`
   mutation createPopmassnber(
     $id: UUID
@@ -20,12 +22,9 @@ export default gql`
       }
     ) {
       popmassnber {
-        id
-        popId
-        jahr
-        beurteilung
-        bemerkungen
+        ...PopmassnberFields
       }
     }
   }
+  ${popmassnber}
 `
