@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { adresse } from '../../../shared/fragments'
+import { adresse, tpopfeldkontr } from '../../../shared/fragments'
 
 export default gql`
   mutation updateTpopkontr(
@@ -98,52 +98,10 @@ export default gql`
       }
     ) {
       tpopkontr {
-        id
-        typ
-        datum
-        jahr
-        jungpflanzenAnzahl
-        vitalitaet
-        ueberlebensrate
-        entwicklung
-        ursachen
-        erfolgsbeurteilung
-        umsetzungAendern
-        kontrolleAendern
-        bemerkungen
-        lrDelarze
-        flaeche
-        lrUmgebungDelarze
-        vegetationstyp
-        konkurrenz
-        moosschicht
-        krautschicht
-        strauchschicht
-        baumschicht
-        bodenTyp
-        bodenKalkgehalt
-        bodenDurchlaessigkeit
-        bodenHumus
-        bodenNaehrstoffgehalt
-        bodenAbtrag
-        wasserhaushalt
-        idealbiotopUebereinstimmung
-        handlungsbedarf
-        flaecheUeberprueft
-        deckungVegetation
-        deckungNackterBoden
-        deckungApArt
-        vegetationshoeheMaximum
-        vegetationshoeheMittel
-        gefaehrdung
-        tpopId
-        bearbeiter
+        ...TpopfeldkontrFields
         adresseByBearbeiter {
           ...AdresseFields
         }
-        planVorhanden
-        jungpflanzenVorhanden
-        changedBy
         tpopByTpopId {
           id
           popByPopId {
@@ -155,4 +113,5 @@ export default gql`
     }
   }
   ${adresse}
+  ${tpopfeldkontr}
 `

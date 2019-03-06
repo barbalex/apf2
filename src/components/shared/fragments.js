@@ -272,3 +272,123 @@ export const tpopber = gql`
     changedBy
   }
 `
+
+export const tpopfeldkontr = gql`
+  fragment TpopfeldkontrFields on Tpopkontr {
+    id
+    typ
+    datum
+    jahr
+    jungpflanzenAnzahl
+    vitalitaet
+    ueberlebensrate
+    entwicklung
+    ursachen
+    erfolgsbeurteilung
+    umsetzungAendern
+    kontrolleAendern
+    bemerkungen
+    lrDelarze
+    flaeche
+    lrUmgebungDelarze
+    vegetationstyp
+    konkurrenz
+    moosschicht
+    krautschicht
+    strauchschicht
+    baumschicht
+    bodenTyp
+    bodenKalkgehalt
+    bodenDurchlaessigkeit
+    bodenHumus
+    bodenNaehrstoffgehalt
+    bodenAbtrag
+    wasserhaushalt
+    idealbiotopUebereinstimmung
+    handlungsbedarf
+    flaecheUeberprueft
+    deckungVegetation
+    deckungNackterBoden
+    deckungApArt
+    vegetationshoeheMaximum
+    vegetationshoeheMittel
+    gefaehrdung
+    tpopId
+    bearbeiter
+    planVorhanden
+    jungpflanzenVorhanden
+    changedBy
+  }
+`
+
+export const tpopfreiwkontr = gql`
+  fragment TpopfreiwkontrFields on Tpopkontr {
+    id
+    typ
+    ekfVerifiziert
+    ekfBemerkungen
+    datum
+    jahr
+    bemerkungen
+    flaecheUeberprueft
+    deckungVegetation
+    deckungNackterBoden
+    deckungApArt
+    vegetationshoeheMaximum
+    vegetationshoeheMittel
+    gefaehrdung
+    tpopId
+    bearbeiter
+    planVorhanden
+    jungpflanzenVorhanden
+    changedBy
+  }
+`
+
+export const tpopkontr = gql`
+  fragment TpopkontrFields on Tpopkontr {
+    id
+    typ
+    datum
+    jahr
+    jungpflanzenAnzahl
+    vitalitaet
+    ueberlebensrate
+    entwicklung
+    ursachen
+    erfolgsbeurteilung
+    umsetzungAendern
+    kontrolleAendern
+    bemerkungen
+    lrDelarze
+    flaeche
+    lrUmgebungDelarze
+    vegetationstyp
+    konkurrenz
+    moosschicht
+    krautschicht
+    strauchschicht
+    baumschicht
+    bodenTyp
+    bodenKalkgehalt
+    bodenDurchlaessigkeit
+    bodenHumus
+    bodenNaehrstoffgehalt
+    bodenAbtrag
+    wasserhaushalt
+    idealbiotopUebereinstimmung
+    handlungsbedarf
+    flaecheUeberprueft
+    deckungVegetation
+    deckungNackterBoden
+    deckungApArt
+    vegetationshoeheMaximum
+    vegetationshoeheMittel
+    gefaehrdung
+    tpopId
+    bearbeiter
+    planVorhanden
+    jungpflanzenVorhanden
+    changedBy
+  }
+`

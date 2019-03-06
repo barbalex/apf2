@@ -1,47 +1,28 @@
 // @flow
 import gql from 'graphql-tag'
 
-import { aeEigenschaften, adresse } from '../../../shared/fragments'
+import {
+  aeEigenschaften,
+  adresse,
+  pop,
+  tpop,
+  tpopfreiwkontr,
+} from '../../../shared/fragments'
 
 export default gql`
   query tpopkontrByIdQuery($id: UUID!, $showFilter: Boolean!) {
     tpopkontrById(id: $id) {
-      id
-      typ
-      ekfVerifiziert
-      ekfBemerkungen
-      datum
-      jahr
-      bemerkungen
-      flaecheUeberprueft
-      deckungVegetation
-      deckungNackterBoden
-      deckungApArt
-      vegetationshoeheMaximum
-      vegetationshoeheMittel
-      gefaehrdung
-      tpopId
-      bearbeiter
+      ...TpopfreiwkontrFields
       adresseByBearbeiter {
         ...AdresseFields
         usersByAdresseId {
           totalCount
         }
       }
-      planVorhanden
-      jungpflanzenVorhanden
       tpopByTpopId {
-        id
-        nr
-        flurname
-        x
-        y
-        status
+        ...TpopFields
         popByPopId {
-          id
-          apId
-          nr
-          name
+          ...PopFields
           apByApId {
             id
             ekfBeobachtungszeitpunkt
@@ -74,27 +55,13 @@ export default gql`
       filter: { typ: { equalTo: "Freiwilligen-Erfolgskontrolle" } }
     ) @include(if: $showFilter) {
       nodes {
-        id
-        typ
-        ekfVerifiziert
-        ekfBemerkungen
-        datum
-        jahr
-        bemerkungen
-        flaecheUeberprueft
-        deckungVegetation
-        deckungNackterBoden
-        deckungApArt
-        vegetationshoeheMaximum
-        vegetationshoeheMittel
-        gefaehrdung
-        tpopId
-        bearbeiter
-        planVorhanden
-        jungpflanzenVorhanden
+        ...TpopfreiwkontrFields
       }
     }
   }
   ${aeEigenschaften}
   ${adresse}
+  ${pop}
+  ${tpop}
+  ${tpopfreiwkontr}
 `

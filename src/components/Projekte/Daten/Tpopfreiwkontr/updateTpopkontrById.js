@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { adresse } from '../../../shared/fragments'
+import { adresse, pop, tpop, tpopfreiwkontr } from '../../../shared/fragments'
 
 export default gql`
   mutation updateTpopkontr(
@@ -50,40 +50,14 @@ export default gql`
       }
     ) {
       tpopkontr {
-        id
-        typ
-        ekfVerifiziert
-        ekfBemerkungen
-        datum
-        jahr
-        bemerkungen
-        flaecheUeberprueft
-        deckungVegetation
-        deckungNackterBoden
-        deckungApArt
-        vegetationshoeheMaximum
-        vegetationshoeheMittel
-        gefaehrdung
-        tpopId
-        bearbeiter
+        ...TpopfreiwkontrFields
         adresseByBearbeiter {
           ...AdresseFields
         }
-        planVorhanden
-        jungpflanzenVorhanden
-        changedBy
         tpopByTpopId {
-          id
-          nr
-          flurname
-          x
-          y
-          status
+          ...TpopFields
           popByPopId {
-            id
-            apId
-            nr
-            name
+            ...PopFields
             apByApId {
               id
               ekfzaehleinheitsByApId {
@@ -111,4 +85,7 @@ export default gql`
     }
   }
   ${adresse}
+  ${pop}
+  ${tpop}
+  ${tpopfreiwkontr}
 `

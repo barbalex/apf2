@@ -2,6 +2,8 @@
 import get from 'lodash/get'
 import gql from 'graphql-tag'
 
+import { tpopfeldkontr } from '../components/shared/fragments'
+
 export default async ({
   id,
   client,
@@ -17,25 +19,7 @@ export default async ({
     query: gql`
       query myquery($id: UUID!) {
         tpopkontrById(id: $id) {
-          id
-          flaeche
-          lrDelarze
-          lrUmgebungDelarze
-          vegetationstyp
-          konkurrenz
-          moosschicht
-          krautschicht
-          strauchschicht
-          baumschicht
-          bodenTyp
-          bodenKalkgehalt
-          bodenDurchlaessigkeit
-          bodenHumus
-          bodenNaehrstoffgehalt
-          bodenAbtrag
-          wasserhaushalt
-          handlungsbedarf
-          idealbiotopUebereinstimmung
+          ...TpopfeldkontrFields
         }
       }
     `,
@@ -92,28 +76,11 @@ export default async ({
           }
         ) {
           tpopkontr {
-            id
-            flaeche
-            lrDelarze
-            lrUmgebungDelarze
-            vegetationstyp
-            konkurrenz
-            moosschicht
-            krautschicht
-            strauchschicht
-            baumschicht
-            bodenTyp
-            bodenKalkgehalt
-            bodenDurchlaessigkeit
-            bodenHumus
-            bodenNaehrstoffgehalt
-            bodenAbtrag
-            wasserhaushalt
-            handlungsbedarf
-            idealbiotopUebereinstimmung
+            ...TpopfeldkontrFields
           }
         }
       }
+      ${tpopfeldkontr}
     `,
     variables: {
       id,
