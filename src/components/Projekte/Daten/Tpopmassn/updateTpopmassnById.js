@@ -1,6 +1,10 @@
 import gql from 'graphql-tag'
 
-import { adresse, tpopmassn } from '../../../shared/fragments'
+import {
+  adresse,
+  tpopmassn,
+  tpopmassnTypWerte,
+} from '../../../shared/fragments'
 
 export default gql`
   mutation updateTpopmassn(
@@ -57,10 +61,7 @@ export default gql`
       tpopmassn {
         ...TpopmassnFields
         tpopmassnTypWerteByTyp {
-          id
-          code
-          text
-          sort
+          ...TpopmassnTypWerteFields
         }
         adresseByBearbeiter {
           ...AdresseFields
@@ -70,4 +71,5 @@ export default gql`
   }
   ${adresse}
   ${tpopmassn}
+  ${tpopmassnTypWerte}
 `

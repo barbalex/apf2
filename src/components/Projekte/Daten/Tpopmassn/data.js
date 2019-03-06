@@ -1,16 +1,17 @@
 import gql from 'graphql-tag'
 
-import { adresse, tpopmassn } from '../../../shared/fragments'
+import {
+  adresse,
+  tpopmassn,
+  tpopmassnTypWerte,
+} from '../../../shared/fragments'
 
 export default gql`
   query tpopmassnByIdQuery($id: UUID!) {
     tpopmassnById(id: $id) {
       ...TpopmassnFields
       tpopmassnTypWerteByTyp {
-        id
-        code
-        text
-        sort
+        ...TpopmassnTypWerteFields
       }
       adresseByBearbeiter {
         ...AdresseFields
@@ -25,14 +26,11 @@ export default gql`
     }
     allTpopmassnTypWertes {
       nodes {
-        id
-        code
-        text
-        ansiedlung
-        sort
+        ...TpopmassnTypWerteFields
       }
     }
   }
   ${adresse}
   ${tpopmassn}
+  ${tpopmassnTypWerte}
 `

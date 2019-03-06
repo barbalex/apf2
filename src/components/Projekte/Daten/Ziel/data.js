@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { ziel } from '../../../shared/fragments'
+import { ziel, zielTypWerte } from '../../../shared/fragments'
 
 export default gql`
   query zielByIdQuery($id: UUID!) {
@@ -9,12 +9,10 @@ export default gql`
     }
     allZielTypWertes {
       nodes {
-        id
-        code
-        text
-        sort
+        ...ZielTypWerteFields
       }
     }
   }
   ${ziel}
+  ${zielTypWerte}
 `
