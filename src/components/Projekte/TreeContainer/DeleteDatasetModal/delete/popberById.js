@@ -1,13 +1,12 @@
 import gql from 'graphql-tag'
 
+import { popber } from '../../../../shared/fragments'
+
 export default gql`
   query popberById($id: UUID!) {
     popberById(id: $id) {
-      id
-      popId
-      jahr
-      entwicklung
-      bemerkungen
+      ...PopberFields
     }
   }
+  ${popber}
 `

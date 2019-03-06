@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { pop, popber } from '../../../shared/fragments'
+
 export default gql`
   mutation updatePopber(
     $id: UUID!
@@ -23,23 +25,19 @@ export default gql`
       }
     ) {
       popber {
-        id
-        popId
-        jahr
-        entwicklung
+        ...PopberFields
         tpopEntwicklungWerteByEntwicklung {
           id
           code
           text
           sort
         }
-        bemerkungen
-        changedBy
         popByPopId {
-          id
-          apId
+          ...PopFields
         }
       }
     }
   }
+  ${pop}
+  ${popber}
 `
