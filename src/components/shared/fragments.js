@@ -590,3 +590,34 @@ export const tpopkontrzaehlMethodeWerte = gql`
     changedBy
   }
 `
+
+export const tpopmassnErfbeurtWerte = gql`
+  fragment TpopmassnErfbeurtWerteFields on TpopmassnErfbeurtWerte {
+    id
+    code
+    text
+    sort
+    changedBy
+  }
+`
+
+export const tpopmassnTypWerte = gql`
+  fragment TpopmassnTypWerteFields on TpopmassnTypWerte {
+    id
+    code
+    text
+    sort
+    ansiedlung
+    changedBy
+  }
+`
+
+export const zielTypWerte = gql`
+  fragment ZielTypWerteFields on ZielTypWerte {
+    id
+    code
+    text
+    sort
+    changedBy
+  }
+`

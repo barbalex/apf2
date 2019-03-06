@@ -1,19 +1,18 @@
 import gql from 'graphql-tag'
 
+import { ziel, zielTypWerte } from '../../../shared/fragments'
+
 export default gql`
   query ZielsQuery($ap: [UUID!], $isAp: Boolean!) {
     allZiels(filter: { apId: { in: $ap } }) @include(if: $isAp) {
       nodes {
-        id
-        apId
-        jahr
-        bezeichnung
-        typ
+        ...ZielFields
         zielTypWerteByTyp {
-          id
-          text
+          ...ZielTypWerteFields
         }
       }
     }
   }
+  ${ziel}
+  ${zielTypWerte}
 `
