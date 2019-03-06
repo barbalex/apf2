@@ -19,7 +19,7 @@ const secrets = require('../../secrets.json')
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
-
+/*
 describe('Navigation', function() {
   it('logs in', function() {
     cy.visit('http://localhost:3000')
@@ -27,4 +27,4 @@ describe('Navigation', function() {
     cy.get('#passwort').type(secrets.pass)
     cy.contains('anmelden').click()
   })
-})
+})*/
