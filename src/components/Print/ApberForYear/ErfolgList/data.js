@@ -3,6 +3,7 @@ import gql from 'graphql-tag'
 import {
   adresse,
   aeEigenschaften,
+  apber,
   projekt,
   tpopber,
   ziel,
@@ -90,28 +91,11 @@ export default gql`
           }
           apbersByApId(filter: { jahr: { equalTo: $jahr } }) {
             nodes {
-              id
-              jahr
-              situation
-              vergleichVorjahrGesamtziel
-              beurteilung
+              ...ApberFields
               apErfkritWerteByBeurteilung {
                 id
                 text
               }
-              veraenderungZumVorjahr
-              apberAnalyse
-              konsequenzenUmsetzung
-              konsequenzenErfolgskontrolle
-              biotopeNeue
-              biotopeOptimieren
-              massnahmenOptimieren
-              wirkungAufArt
-              datum
-              massnahmenApBearb
-              massnahmenPlanungVsAusfuehrung
-              apId
-              bearbeiter
               adresseByBearbeiter {
                 ...AdresseFields
               }
@@ -123,6 +107,7 @@ export default gql`
   }
   ${adresse}
   ${aeEigenschaften}
+  ${apber}
   ${projekt}
   ${tpopber}
   ${ziel}
