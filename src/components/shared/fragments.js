@@ -473,3 +473,23 @@ export const zielber = gql`
     changedBy
   }
 `
+
+export const apBearbstandWerte = gql`
+  fragment ApBearbstandWerteFields on ApBearbstandWerte {
+    id
+    code
+    text
+    sort
+    changedBy
+  }
+`
+
+export const apErfbeurtkritWerte = gql`
+  fragment ApErfbeurtkritWerteFields on ApErfbeurtkritWerte {
+    id
+    code
+    text
+    sort
+    changedBy
+  }
+`
