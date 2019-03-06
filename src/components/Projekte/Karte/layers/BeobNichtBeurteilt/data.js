@@ -15,7 +15,7 @@ export default gql`
           id
           apartsByApId {
             nodes {
-              ...ApartFiels
+              ...ApartFields
               aeEigenschaftenByArtId {
                 id
                 beobsByArtId(

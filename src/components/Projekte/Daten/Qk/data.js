@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { aeEigenschaften } from '../../../shared/fragments'
+import { aeEigenschaften, projekt } from '../../../shared/fragments'
 
 export default gql`
   query QkQuery(
@@ -10,8 +10,7 @@ export default gql`
     $apId: UUID!
   ) {
     projektById(id: $projId) {
-      id
-      name
+      ...ProjektFields
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
@@ -1881,4 +1880,5 @@ export default gql`
     }
   }
   ${aeEigenschaften}
+  ${projekt}
 `

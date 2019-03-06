@@ -215,6 +215,14 @@ export const popmassnber = gql`
   }
 `
 
+export const projekt = gql`
+  fragment ProjektFields on Projekt {
+    id
+    name
+    changedBy
+  }
+`
+
 export const tpopber = gql`
   fragment TpopberFields on Tpopber {
     id

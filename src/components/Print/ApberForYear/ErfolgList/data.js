@@ -1,12 +1,16 @@
 import gql from 'graphql-tag'
 
-import { adresse, aeEigenschaften, tpopber } from '../../../shared/fragments'
+import {
+  adresse,
+  aeEigenschaften,
+  projekt,
+  tpopber,
+} from '../../../shared/fragments'
 
 export default gql`
   query projektById($projektId: UUID!, $jahr: Int!) {
     projektById(id: $projektId) {
-      id
-      name
+      ...ProjektFields
       apsByProjId(filter: { bearbeitung: { in: [1, 2, 3] } }) {
         nodes {
           id
@@ -119,5 +123,6 @@ export default gql`
   }
   ${adresse}
   ${aeEigenschaften}
+  ${projekt}
   ${tpopber}
 `
