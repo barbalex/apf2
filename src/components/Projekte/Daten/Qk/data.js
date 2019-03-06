@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { aeEigenschaften, projekt, ziel } from '../../../shared/fragments'
+import { aeEigenschaften, pop, projekt, ziel } from '../../../shared/fragments'
 
 export default gql`
   query QkQuery(
@@ -28,9 +28,7 @@ export default gql`
                   y
                   apberRelevant
                   popByPopId {
-                    id
-                    nr
-                    name
+                    ...PopFields
                   }
                 }
               }
@@ -1875,6 +1873,7 @@ export default gql`
     }
   }
   ${aeEigenschaften}
+  ${pop}
   ${projekt}
   ${ziel}
 `

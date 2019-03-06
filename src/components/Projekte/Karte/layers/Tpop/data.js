@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { aeEigenschaften } from '../../../../shared/fragments'
+import { aeEigenschaften, pop, tpop } from '../../../../shared/fragments'
 
 export default gql`
   query TpopForMapQuery(
@@ -21,55 +21,18 @@ export default gql`
           }
           popsByApId {
             nodes {
-              id
-              apId
-              nr
-              name
-              status
-              statusUnklar
-              statusUnklarBegruendung
-              bekanntSeit
-              x
-              y
+              ...PopFields
               tpopsByPopId(
                 filter: { x: { isNull: false }, y: { isNull: false } }
               ) {
                 nodes {
-                  id
-                  popId
-                  nr
-                  gemeinde
-                  flurname
-                  x
-                  y
-                  radius
-                  hoehe
-                  exposition
-                  klima
-                  neigung
-                  beschreibung
-                  katasterNr
-                  status
+                  ...TpopFields
                   popStatusWerteByStatus {
                     id
                     text
                   }
-                  statusUnklar
-                  statusUnklarGrund
-                  apberRelevant
-                  bekanntSeit
-                  eigentuemer
-                  kontakt
-                  nutzungszone
-                  bewirtschafter
-                  bewirtschaftung
-                  kontrollfrequenz
-                  kontrollfrequenzFreiwillige
-                  bemerkungen
                   popByPopId {
-                    id
-                    nr
-                    name
+                    ...PopFields
                     apByApId {
                       id
                       aeEigenschaftenByArtId {
@@ -91,55 +54,18 @@ export default gql`
           }
           popsByApId {
             nodes {
-              id
-              apId
-              nr
-              name
-              status
+              ...PopFields
               popStatusWerteByStatus {
                 id
                 text
               }
-              statusUnklar
-              statusUnklarBegruendung
-              bekanntSeit
-              x
-              y
               tpopsByPopId(
                 filter: { x: { isNull: false }, y: { isNull: false } }
               ) {
                 nodes {
-                  id
-                  popId
-                  nr
-                  gemeinde
-                  flurname
-                  x
-                  y
-                  radius
-                  hoehe
-                  exposition
-                  klima
-                  neigung
-                  beschreibung
-                  katasterNr
-                  status
-                  statusUnklar
-                  statusUnklarGrund
-                  apberRelevant
-                  bekanntSeit
-                  eigentuemer
-                  kontakt
-                  nutzungszone
-                  bewirtschafter
-                  bewirtschaftung
-                  kontrollfrequenz
-                  kontrollfrequenzFreiwillige
-                  bemerkungen
+                  ...TpopFields
                   popByPopId {
-                    id
-                    nr
-                    name
+                    ...PopFields
                     apByApId {
                       id
                       aeEigenschaftenByArtId {
@@ -156,4 +82,6 @@ export default gql`
     }
   }
   ${aeEigenschaften}
+  ${pop}
+  ${tpop}
 `
