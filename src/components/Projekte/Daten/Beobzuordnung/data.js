@@ -1,6 +1,12 @@
 import gql from 'graphql-tag'
 
-import { aeEigenschaften, apart, beob, pop } from '../../../shared/fragments'
+import {
+  aeEigenschaften,
+  apart,
+  beob,
+  pop,
+  beobQuelleWerte,
+} from '../../../shared/fragments'
 
 export default gql`
   query beobByIdQuery($id: UUID!, $apId: UUID!) {
@@ -43,8 +49,7 @@ export default gql`
         artname
       }
       beobQuelleWerteByQuelleId {
-        id
-        name
+        ...BeobQuelleWerteFields
       }
     }
   }
@@ -52,4 +57,5 @@ export default gql`
   ${apart}
   ${beob}
   ${pop}
+  ${beobQuelleWerte}
 `

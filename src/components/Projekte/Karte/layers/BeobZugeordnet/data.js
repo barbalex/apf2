@@ -1,6 +1,11 @@
 import gql from 'graphql-tag'
 
-import { aeEigenschaften, apart, beob } from '../../../../shared/fragments'
+import {
+  aeEigenschaften,
+  apart,
+  beob,
+  beobQuelleWerte,
+} from '../../../../shared/fragments'
 
 export default gql`
   query BeobZugeordnetForMapQuery(
@@ -29,8 +34,7 @@ export default gql`
                   nodes {
                     ...BeobFields
                     beobQuelleWerteByQuelleId {
-                      id
-                      name
+                      ...BeobQuelleWerteFields
                     }
                     aeEigenschaftenByArtId {
                       ...AeEigenschaftenFields
@@ -52,4 +56,5 @@ export default gql`
   ${aeEigenschaften}
   ${apart}
   ${beob}
+  ${beobQuelleWerte}
 `

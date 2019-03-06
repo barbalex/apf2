@@ -5,6 +5,7 @@ import {
   adresse,
   aeEigenschaften,
   apBearbstandWerte,
+  apUmsetzungWerte,
 } from '../../../shared/fragments'
 
 export default gql`
@@ -25,10 +26,7 @@ export default gql`
     }
     allApUmsetzungWertes {
       nodes {
-        id
-        code
-        text
-        sort
+        ...ApUmsetzungWerteFields
       }
     }
   }
@@ -36,4 +34,5 @@ export default gql`
   ${adresse}
   ${aeEigenschaften}
   ${apBearbstandWerte}
+  ${apUmsetzungWerte}
 `

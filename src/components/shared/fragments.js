@@ -493,3 +493,20 @@ export const apErfkritWerte = gql`
     changedBy
   }
 `
+
+export const apUmsetzungWerte = gql`
+  fragment ApUmsetzungWerteFields on ApUmsetzungWerte {
+    id
+    code
+    text
+    sort
+    changedBy
+  }
+`
+
+export const beobQuelleWerte = gql`
+  fragment BeobQuelleWerteFields on BeobQuelleWerte {
+    id
+    name
+  }
+`
