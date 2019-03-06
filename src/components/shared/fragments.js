@@ -223,6 +223,39 @@ export const projekt = gql`
   }
 `
 
+export const tpop = gql`
+  fragment TpopFields on Tpop {
+    id
+    popId
+    nr
+    gemeinde
+    flurname
+    x
+    y
+    radius
+    hoehe
+    exposition
+    klima
+    neigung
+    beschreibung
+    katasterNr
+    status
+    statusUnklarGrund
+    apberRelevant
+    bekanntSeit
+    eigentuemer
+    kontakt
+    nutzungszone
+    bewirtschafter
+    bewirtschaftung
+    kontrollfrequenz
+    kontrollfrequenzFreiwillige
+    bemerkungen
+    statusUnklar
+    changedBy
+  }
+`
+
 export const tpopber = gql`
   fragment TpopberFields on Tpopber {
     id

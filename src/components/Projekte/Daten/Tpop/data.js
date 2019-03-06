@@ -1,81 +1,29 @@
 import gql from 'graphql-tag'
 
+import { ap, pop, tpop } from '../../../shared/fragments'
+
 export default gql`
   query tpopByIdQuery($id: UUID!, $showFilter: Boolean!) {
     tpopById(id: $id) {
-      id
-      popId
-      nr
-      gemeinde
-      flurname
-      x
-      y
-      radius
-      hoehe
-      exposition
-      klima
-      neigung
-      beschreibung
-      katasterNr
-      status
+      ...TpopFields
       popStatusWerteByStatus {
         id
         text
       }
-      statusUnklarGrund
-      apberRelevant
       tpopApberrelevantWerteByApberRelevant {
         id
         text
       }
-      bekanntSeit
-      eigentuemer
-      kontakt
-      nutzungszone
-      bewirtschafter
-      bewirtschaftung
-      kontrollfrequenz
-      kontrollfrequenzFreiwillige
-      bemerkungen
-      statusUnklar
       popByPopId {
-        id
-        apId
+        ...PopFields
         apByApId {
-          id
-          startJahr
+          ...ApFields
         }
       }
     }
     allTpops @include(if: $showFilter) {
       nodes {
-        id
-        popId
-        nr
-        gemeinde
-        flurname
-        x
-        y
-        radius
-        hoehe
-        exposition
-        klima
-        neigung
-        beschreibung
-        katasterNr
-        status
-        statusUnklarGrund
-        apberRelevant
-        bekanntSeit
-        eigentuemer
-        kontakt
-        nutzungszone
-        bewirtschafter
-        bewirtschaftung
-        kontrollfrequenz
-        kontrollfrequenzFreiwillige
-        bemerkungen
-        statusUnklar
+        ...TpopFields
       }
     }
     allPopStatusWertes {
@@ -107,4 +55,7 @@ export default gql`
       }
     }
   }
+  ${ap}
+  ${pop}
+  ${tpop}
 `
