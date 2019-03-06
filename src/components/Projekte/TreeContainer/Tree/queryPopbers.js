@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { popber, tpopEntwicklungWerte } from '../../../shared/CheckboxWithInfo'
+import { popber, tpopEntwicklungWerte } from '../../../shared/fragments'
 
 export default gql`
   query PopbersQuery($pop: [UUID!], $isPop: Boolean!) {

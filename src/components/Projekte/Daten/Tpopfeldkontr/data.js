@@ -5,6 +5,7 @@ import {
   pop,
   tpopEntwicklungWerte,
   tpopfeldkontr,
+  tpopkontrIdbiotuebereinstWerte,
 } from '../../../shared/fragments'
 
 export default gql`
@@ -35,10 +36,7 @@ export default gql`
     }
     allTpopkontrIdbiotuebereinstWertes {
       nodes {
-        id
-        code
-        text
-        sort
+        ...TpopkontrIdbiotuebereinstWerteFields
       }
     }
     allTpopEntwicklungWertes {
@@ -59,4 +57,5 @@ export default gql`
   ${pop}
   ${tpopEntwicklungWerte}
   ${tpopfeldkontr}
+  ${tpopkontrIdbiotuebereinstWerte}
 `

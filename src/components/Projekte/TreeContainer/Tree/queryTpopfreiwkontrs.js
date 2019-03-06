@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { tpopfreiwkontr, tpopkontrTypWerte } from '../../../shared/fragments'
+
 export default gql`
   query TpopfreiwkontrsQuery($tpop: [UUID!], $isTpop: Boolean!) {
     allTpopkontrs(
@@ -10,55 +12,13 @@ export default gql`
       orderBy: JAHR_ASC
     ) @include(if: $isTpop) {
       nodes {
-        id
-        tpopId
-        datum
-        jahr
-        typ
-        bearbeiter
-        jungpflanzenAnzahl
-        vitalitaet
-        ueberlebensrate
-        entwicklung
-        ursachen
-        erfolgsbeurteilung
-        umsetzungAendern
-        kontrolleAendern
-        bemerkungen
-        lrDelarze
-        flaeche
-        lrUmgebungDelarze
-        vegetationstyp
-        konkurrenz
-        moosschicht
-        krautschicht
-        strauchschicht
-        baumschicht
-        bodenTyp
-        bodenKalkgehalt
-        bodenDurchlaessigkeit
-        bodenHumus
-        bodenNaehrstoffgehalt
-        bodenAbtrag
-        wasserhaushalt
-        idealbiotopUebereinstimmung
-        handlungsbedarf
-        flaecheUeberprueft
-        planVorhanden
-        deckungVegetation
-        deckungNackterBoden
-        deckungApArt
-        jungpflanzenVorhanden
-        vegetationshoeheMaximum
-        vegetationshoeheMittel
-        gefaehrdung
-        ekfVerifiziert
-        ekfBemerkungen
+        ...TpopfreiwkontrFields
         tpopkontrTypWerteByTyp {
-          id
-          text
+          ...TpopkontrTypWerteFields
         }
       }
     }
   }
+  ${tpopfreiwkontr}
+  ${tpopkontrTypWerte}
 `

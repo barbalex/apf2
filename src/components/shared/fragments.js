@@ -540,3 +540,33 @@ export const tpopEntwicklungWerte = gql`
     changedBy
   }
 `
+
+export const tpopkontrFrequenzWerte = gql`
+  fragment TpopkontrFrequenzWerteFields on TpopkontrFrequenzWerte {
+    id
+    code
+    text
+    sort
+    changedBy
+  }
+`
+
+export const tpopkontrIdbiotuebereinstWerte = gql`
+  fragment TpopkontrIdbiotuebereinstWerteFields on TpopkontrIdbiotuebereinstWerte {
+    id
+    code
+    text
+    sort
+    changedBy
+  }
+`
+
+export const tpopkontrTypWerte = gql`
+  fragment TpopkontrTypWerteFields on TpopkontrTypWerte {
+    id
+    code
+    text
+    sort
+    changedBy
+  }
+`

@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { tpopkontrTypWerte } from '../../components/shared/fragments'
+
 export default gql`
   query Query($tpop: UUID!) {
     allTpopkontrs(
@@ -14,10 +16,10 @@ export default gql`
         datum
         jahr
         tpopkontrTypWerteByTyp {
-          id
-          text
+          ...TpopkontrTypWerteFields
         }
       }
     }
   }
+  ${tpopkontrTypWerte}
 `
