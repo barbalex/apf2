@@ -392,3 +392,14 @@ export const tpopkontr = gql`
     changedBy
   }
 `
+
+export const tpopkontrzaehl = gql`
+  fragment TpopkontrzaehlFields on Tpopkontrzaehl {
+    id
+    tpopkontrId
+    anzahl
+    einheit
+    methode
+    changedBy
+  }
+`

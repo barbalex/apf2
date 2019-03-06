@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { tpopkontrzaehl } from '../../../shared/fragments'
+
 export default gql`
   mutation updateAnzahl(
     $id: UUID!
@@ -21,12 +23,9 @@ export default gql`
       }
     ) {
       tpopkontrzaehl {
-        id
-        anzahl
-        einheit
-        methode
-        changedBy
+        ...TpopkontrzaehlFields
       }
     }
   }
+  ${tpopkontrzaehl}
 `

@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { tpopkontrzaehl } from '../../components/shared/fragments'
+
 export default gql`
   mutation createTpopkontrzaehl(
     $anzahl: Int
@@ -18,12 +20,9 @@ export default gql`
       }
     ) {
       tpopkontrzaehl {
-        id
-        tpopkontrId
-        anzahl
-        einheit
-        methode
+        ...TpopkontrzaehlFields
       }
     }
   }
+  ${tpopkontrzaehl}
 `
