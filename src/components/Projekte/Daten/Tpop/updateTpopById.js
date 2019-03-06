@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { tpop } from '../../../shared/fragments'
+
 export default gql`
   mutation updateTpop(
     $id: UUID!
@@ -67,42 +69,15 @@ export default gql`
       }
     ) {
       tpop {
-        id
-        popId
-        nr
-        gemeinde
-        flurname
-        x
-        y
-        radius
-        hoehe
-        exposition
-        klima
-        neigung
-        beschreibung
-        katasterNr
-        status
+        ...TpopFields
         popStatusWerteByStatus {
           id
           text
         }
-        statusUnklarGrund
-        apberRelevant
         tpopApberrelevantWerteByApberRelevant {
           id
           text
         }
-        bekanntSeit
-        eigentuemer
-        kontakt
-        nutzungszone
-        bewirtschafter
-        bewirtschaftung
-        kontrollfrequenz
-        kontrollfrequenzFreiwillige
-        bemerkungen
-        statusUnklar
-        changedBy
         popByPopId {
           id
           apId
@@ -110,4 +85,5 @@ export default gql`
       }
     }
   }
+  ${tpop}
 `

@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { aeEigenschaften } from '../shared/fragments'
+import { aeEigenschaften, projekt } from '../shared/fragments'
 
 export default gql`
   query ekfDataQuery($userName: String!, $jahr: Int!) {
@@ -32,8 +32,7 @@ export default gql`
                     ...AeEigenschaftenFields
                   }
                   projektByProjId {
-                    id
-                    name
+                    ...ProjektFields
                   }
                 }
               }
@@ -44,4 +43,5 @@ export default gql`
     }
   }
   ${aeEigenschaften}
+  ${projekt}
 `
