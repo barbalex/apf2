@@ -131,6 +131,16 @@ export const ber = gql`
   }
 `
 
+export const ekfzaehleinheit = gql`
+  fragment EkfzaehleinheitFields on Ekfzaehleinheit {
+    id
+    apId
+    zaehleinheitId
+    bemerkungen
+    changedBy
+  }
+`
+
 export const tpopber = gql`
   fragment TpopberFields on Tpopber {
     id

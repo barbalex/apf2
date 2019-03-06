@@ -1,12 +1,11 @@
 import gql from 'graphql-tag'
 
+import { ekfzaehleinheit } from '../../../shared/fragments'
+
 export default gql`
   query ekfzaehleinheitByIdQuery($id: UUID!) {
     ekfzaehleinheitById(id: $id) {
-      id
-      apId
-      zaehleinheitId
-      bemerkungen
+      ...EkfzaehleinheitFields
       tpopkontrzaehlEinheitWerteByZaehleinheitId {
         id
         text
@@ -15,11 +14,11 @@ export default gql`
         id
         ekfzaehleinheitsByApId {
           nodes {
-            id
-            zaehleinheitId
+            ...EkfzaehleinheitFields
           }
         }
       }
     }
   }
+  ${ekfzaehleinheit}
 `
