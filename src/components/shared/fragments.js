@@ -440,3 +440,14 @@ export const tpopmassnber = gql`
     changedBy
   }
 `
+
+export const user = gql`
+  fragment UserFields on User {
+    id
+    name
+    email
+    role
+    pass
+    adresseId
+  }
+`

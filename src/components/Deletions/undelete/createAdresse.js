@@ -1,7 +1,9 @@
 import gql from 'graphql-tag'
 
+import { adresse } from '../../shared/fragments'
+
 export default gql`
-  mutation createUser(
+  mutation createAdresse(
     $id: UUID
     $name: String
     $adresse: String
@@ -12,9 +14,9 @@ export default gql`
     $evabNachname: String
     $evabOrt: String
   ) {
-    createUser(
+    createAdresse(
       input: {
-        user: {
+        adresse: {
           id: $id
           name: $name
           adresse: $adresse
@@ -27,17 +29,10 @@ export default gql`
         }
       }
     ) {
-      user {
-        id
-        name
-        adresse
-        telefon
-        email
-        freiwErfko
-        evabVorname
-        evabNachname
-        evabOrt
+      adresse {
+        ...AdresseFields
       }
     }
   }
+  ${adresse}
 `

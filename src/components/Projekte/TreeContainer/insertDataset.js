@@ -5,7 +5,10 @@ import camelCase from 'lodash/camelCase'
 import get from 'lodash/get'
 
 import tables from '../../../modules/tables'
-import { adresse as adresseFragment } from '../../shared/fragments'
+import {
+  adresse as adresseFragment,
+  user as userFragment,
+} from '../../shared/fragments'
 
 export default async ({
   treeName,
@@ -120,13 +123,11 @@ export default async ({
       mutation createUser($role: String!) {
         createUser(input: { user: { role: $role } }) {
           user {
-            id
-            name
-            email
-            role
+            ...UserFields
           }
         }
       }
+      ${userFragment}
     `
     delete variables.parentId
     variables.role = 'apflora_reader'

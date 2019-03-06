@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { user } from '../../shared/fragments'
+
 export default gql`
   mutation createUser(
     $id: UUID
@@ -14,12 +16,9 @@ export default gql`
       }
     ) {
       user {
-        id
-        name
-        email
-        role
-        pass
+        ...UserFields
       }
     }
   }
+  ${user}
 `
