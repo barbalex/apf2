@@ -141,6 +141,16 @@ export const ekfzaehleinheit = gql`
   }
 `
 
+export const erfkrit = gql`
+  fragment ErfkritFields on Erfkrit {
+    id
+    apId
+    erfolg
+    kriterien
+    changedBy
+  }
+`
+
 export const tpopber = gql`
   fragment TpopberFields on Tpopber {
     id

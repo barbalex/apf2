@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { erfkrit } from '../../shared/fragments'
+
 export default gql`
   mutation createErfkrit(
     $id: UUID
@@ -18,11 +20,9 @@ export default gql`
       }
     ) {
       erfkrit {
-        id
-        apId
-        erfolg
-        kriterien
+        ...ErfkritFields
       }
     }
   }
+  ${erfkrit}
 `
