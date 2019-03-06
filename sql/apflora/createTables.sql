@@ -135,8 +135,7 @@ COMMENT ON COLUMN apflora.ap_bearbstand_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.ap_bearbstand_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap_bearbstand_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
--- this table is listed in apber print in D. Einschätzung der Wirkung des AP insgesamt auf die Art
--- as Beurteilungsskala
+-- this table is not used!!!
 DROP TABLE IF EXISTS apflora.ap_erfbeurtkrit_werte;
 CREATE TABLE apflora.ap_erfbeurtkrit_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),

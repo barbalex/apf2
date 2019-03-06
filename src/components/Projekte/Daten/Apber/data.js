@@ -1,16 +1,13 @@
 import gql from 'graphql-tag'
 
-import { adresse, apber } from '../../../shared/fragments'
+import { adresse, apber, apErfkritWerte } from '../../../shared/fragments'
 
 export default gql`
   query apberByIdQuery($id: UUID!) {
     apberById(id: $id) {
       ...ApberFields
       apErfkritWerteByBeurteilung {
-        id
-        code
-        text
-        sort
+        ...ApErfkritWerteFields
       }
       adresseByBearbeiter {
         ...AdresseFields
@@ -19,4 +16,5 @@ export default gql`
   }
   ${adresse}
   ${apber}
+  ${apErfkritWerte}
 `

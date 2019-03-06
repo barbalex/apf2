@@ -7,6 +7,7 @@ import {
   projekt,
   tpopber,
   ziel,
+  apErfkritWerte,
 } from '../../shared/fragments'
 
 export default gql`
@@ -71,9 +72,7 @@ export default gql`
               id
               kriterien
               apErfkritWerteByErfolg {
-                id
-                text
-                sort
+                ...ApErfkritWerteFields
               }
             }
           }
@@ -98,8 +97,7 @@ export default gql`
             nodes {
               ...ApberFields
               apErfkritWerteByBeurteilung {
-                id
-                text
+                ...ApErfkritWerteFields
               }
               adresseByBearbeiter {
                 ...AdresseFields
@@ -116,4 +114,5 @@ export default gql`
   ${projekt}
   ${tpopber}
   ${ziel}
+  ${apErfkritWerte}
 `

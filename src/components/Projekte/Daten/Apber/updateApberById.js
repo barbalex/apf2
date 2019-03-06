@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { adresse, apber } from '../../../shared/fragments'
+import { adresse, apber, apErfkritWerte } from '../../../shared/fragments'
 
 export default gql`
   mutation updateApber(
@@ -53,10 +53,7 @@ export default gql`
       apber {
         ...ApberFields
         apErfkritWerteByBeurteilung {
-          id
-          code
-          text
-          sort
+          ...ApErfkritWerteFields
         }
         adresseByBearbeiter {
           ...AdresseFields
@@ -66,4 +63,5 @@ export default gql`
   }
   ${adresse}
   ${apber}
+  ${apErfkritWerte}
 `

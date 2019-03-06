@@ -484,8 +484,8 @@ export const apBearbstandWerte = gql`
   }
 `
 
-export const apErfbeurtkritWerte = gql`
-  fragment ApErfbeurtkritWerteFields on ApErfbeurtkritWerte {
+export const apErfkritWerte = gql`
+  fragment ApErfkritWerteFields on ApErfkritWerte {
     id
     code
     text

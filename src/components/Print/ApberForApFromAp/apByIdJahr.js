@@ -8,6 +8,7 @@ import {
   apber,
   tpopber,
   ziel,
+  apErfkritWerte,
 } from '../../shared/fragments'
 
 export default gql`
@@ -65,9 +66,7 @@ export default gql`
           id
           kriterien
           apErfkritWerteByErfolg {
-            id
-            text
-            sort
+            ...ApErfkritWerteFields
           }
         }
       }
@@ -90,10 +89,9 @@ export default gql`
       }
       apbersByApId(filter: { jahr: { equalTo: $jahr } }) {
         nodes {
-          ...AbperFields
+          ...ApberFields
           apErfkritWerteByBeurteilung {
-            id
-            text
+            ...ApErfkritWerteFields
           }
           adresseByBearbeiter {
             ...AdresseFields
@@ -108,4 +106,5 @@ export default gql`
   ${adresse}
   ${tpopber}
   ${ziel}
+  ${apErfkritWerte}
 `

@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { apErfkritWerte } from '../../../shared/fragments'
+
 export default gql`
   query ErfkritsQuery($ap: [UUID!], $isAp: Boolean!) {
     allErfkrits(filter: { apId: { in: $ap } }) @include(if: $isAp) {
@@ -9,11 +11,10 @@ export default gql`
         kriterien
         erfolg
         apErfkritWerteByErfolg {
-          id
-          text
-          sort
+          ...ApErfkritWerteFields
         }
       }
     }
   }
+  ${apErfkritWerte}
 `
