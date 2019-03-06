@@ -510,3 +510,33 @@ export const beobQuelleWerte = gql`
     name
   }
 `
+
+export const popStatusWerte = gql`
+  fragment PopStatusWerteFields on PopStatusWerte {
+    id
+    code
+    text
+    sort
+    changedBy
+  }
+`
+
+export const tpopApberrelevantWerte = gql`
+  fragment TpopApberrelevantWerteFields on TpopApberrelevantWerte {
+    id
+    code
+    text
+    sort
+    changedBy
+  }
+`
+
+export const tpopEntwicklungWerte = gql`
+  fragment TpopEntwicklungWerteFields on TpopEntwicklungWerte {
+    id
+    code
+    text
+    sort
+    changedBy
+  }
+`
