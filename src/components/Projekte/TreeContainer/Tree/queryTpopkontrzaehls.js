@@ -1,16 +1,18 @@
 import gql from 'graphql-tag'
 
+import {
+  tpopkontrzaehl,
+  tpopkontrzaehlEinheitWerte,
+} from '../../../shared/fragments'
+
 export default gql`
   query TpopkontrzaehlsQuery($tpopkontr: [UUID!], $isTpopkontr: Boolean!) {
     allTpopkontrzaehls(filter: { tpopkontrId: { in: $tpopkontr } })
       @include(if: $isTpopkontr) {
       nodes {
-        id
-        tpopkontrId
-        anzahl
+        ...TpopkontrzaehlFields
         tpopkontrzaehlEinheitWerteByEinheit {
-          id
-          text
+          ...TpopkontrzaehlEinheitWerteFields
         }
         tpopkontrzaehlMethodeWerteByMethode {
           id
@@ -19,4 +21,6 @@ export default gql`
       }
     }
   }
+  ${tpopkontrzaehl}
+  ${tpopkontrzaehlEinheitWerte}
 `

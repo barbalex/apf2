@@ -570,3 +570,23 @@ export const tpopkontrTypWerte = gql`
     changedBy
   }
 `
+
+export const tpopkontrzaehlEinheitWerte = gql`
+  fragment TpopkontrzaehlEinheitWerteFields on TpopkontrzaehlEinheitWerte {
+    id
+    code
+    text
+    sort
+    changedBy
+  }
+`
+
+export const tpopkontrzaehlMethodeWerte = gql`
+  fragment TpopkontrzaehlMethodeWerteFields on TpopkontrzaehlMethodeWerte {
+    id
+    code
+    text
+    sort
+    changedBy
+  }
+`
