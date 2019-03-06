@@ -204,6 +204,17 @@ export const popber = gql`
   }
 `
 
+export const popmassnber = gql`
+  fragment PopmassnberFields on Popmassnber {
+    id
+    popId
+    jahr
+    beurteilung
+    bemerkungen
+    changedBy
+  }
+`
+
 export const tpopber = gql`
   fragment TpopberFields on Tpopber {
     id

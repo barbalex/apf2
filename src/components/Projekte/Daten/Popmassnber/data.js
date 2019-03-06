@@ -7,11 +7,11 @@ export default gql`
       popId
       jahr
       beurteilung
+      bemerkungen
       tpopmassnErfbeurtWerteByBeurteilung {
         id
         text
       }
-      bemerkungen
       popByPopId {
         id
         apId
