@@ -151,6 +151,32 @@ export const erfkrit = gql`
   }
 `
 
+export const idealbiotop = gql`
+  fragment IdealbiotopFields on Idealbiotop {
+    id
+    apId
+    erstelldatum
+    hoehenlage
+    region
+    exposition
+    besonnung
+    hangneigung
+    bodenTyp
+    bodenKalkgehalt
+    bodenDurchlaessigkeit
+    bodenHumus
+    bodenNaehrstoffgehalt
+    wasserhaushalt
+    konkurrenz
+    moosschicht
+    krautschicht
+    strauchschicht
+    baumschicht
+    bemerkungen
+    changedBy
+  }
+`
+
 export const tpopber = gql`
   fragment TpopberFields on Tpopber {
     id

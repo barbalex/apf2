@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { idealbiotop } from '../../../shared/fragments'
+
 export default gql`
   mutation updateIdealbiotop(
     $id: UUID!
@@ -53,28 +55,9 @@ export default gql`
       }
     ) {
       idealbiotop {
-        id
-        apId
-        erstelldatum
-        hoehenlage
-        region
-        exposition
-        besonnung
-        hangneigung
-        bodenTyp
-        bodenKalkgehalt
-        bodenDurchlaessigkeit
-        bodenHumus
-        bodenNaehrstoffgehalt
-        wasserhaushalt
-        konkurrenz
-        moosschicht
-        krautschicht
-        strauchschicht
-        baumschicht
-        bemerkungen
-        changedBy
+        ...IdealbiotopFields
       }
     }
   }
+  ${idealbiotop}
 `
