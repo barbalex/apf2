@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { tpopmassn } from '../../components/shared/fragments'
+
 export default gql`
   mutation createTpopmassn(
     $typ: Int
@@ -48,27 +50,9 @@ export default gql`
       }
     ) {
       tpopmassn {
-        id
-        tpopId
-        typ
-        beschreibung
-        jahr
-        datum
-        bemerkungen
-        planBezeichnung
-        flaeche
-        markierung
-        anzTriebe
-        anzPflanzen
-        anzPflanzstellen
-        wirtspflanze
-        herkunftPop
-        sammeldatum
-        form
-        pflanzanordnung
-        bearbeiter
-        planVorhanden
+        ...TpopmassnFields
       }
     }
   }
+  ${tpopmassn}
 `

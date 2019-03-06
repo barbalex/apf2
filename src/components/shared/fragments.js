@@ -403,3 +403,29 @@ export const tpopkontrzaehl = gql`
     changedBy
   }
 `
+
+export const tpopmassn = gql`
+  fragment TpopmassnFields on Tpopmassn {
+    id
+    typ
+    beschreibung
+    jahr
+    datum
+    bemerkungen
+    planBezeichnung
+    flaeche
+    markierung
+    anzTriebe
+    anzPflanzen
+    anzPflanzstellen
+    wirtspflanze
+    herkunftPop
+    sammeldatum
+    form
+    pflanzanordnung
+    tpopId
+    bearbeiter
+    planVorhanden
+    changedBy
+  }
+`
