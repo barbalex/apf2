@@ -94,7 +94,7 @@
     "dev": "react-scripts start",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "cypress open",
     "eject": "react-scripts eject",
     "flow": "flow",
     "serve": "node ecosystem.config.js",

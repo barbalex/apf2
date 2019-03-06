@@ -158,6 +158,7 @@ const User = () => {
             <InputLabel htmlFor="name">Name</InputLabel>
             <StyledInput
               id="name"
+              className="user-name"
               defaultValue={name}
               onBlur={onBlurName}
               autoFocus
@@ -173,6 +174,7 @@ const User = () => {
             <InputLabel htmlFor="passwort">Passwort</InputLabel>
             <StyledInput
               id="passwort"
+              className="user-passwort"
               type={showPass ? 'text' : 'password'}
               defaultValue={password}
               onBlur={onBlurPassword}

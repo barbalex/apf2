@@ -12,9 +12,19 @@
 // You can read more here:
 // https://on.cypress.io/configuration
 // ***********************************************************
-
 // Import commands.js using ES2015 syntax:
 import './commands'
 
+const secrets = require('../../secrets.json')
+
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+describe('Navigation', function() {
+  it('logs in', function() {
+    cy.visit('http://localhost:3000')
+    cy.get('#name').type(secrets.user)
+    cy.get('#passwort').type(secrets.pass)
+    cy.contains('anmelden').click()
+  })
+})
