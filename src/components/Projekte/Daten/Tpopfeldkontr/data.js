@@ -1,6 +1,11 @@
 import gql from 'graphql-tag'
 
-import { adresse, pop, tpopfeldkontr } from '../../../shared/fragments'
+import {
+  adresse,
+  pop,
+  tpopEntwicklungWerte,
+  tpopfeldkontr,
+} from '../../../shared/fragments'
 
 export default gql`
   query tpopkontrByIdQuery($id: UUID!, $showFilter: Boolean!) {
@@ -38,10 +43,7 @@ export default gql`
     }
     allTpopEntwicklungWertes {
       nodes {
-        id
-        code
-        text
-        sort
+        ...TpopEntwicklungWerteFields
       }
     }
     allAeLrdelarzes {
@@ -55,5 +57,6 @@ export default gql`
   }
   ${adresse}
   ${pop}
+  ${tpopEntwicklungWerte}
   ${tpopfeldkontr}
 `

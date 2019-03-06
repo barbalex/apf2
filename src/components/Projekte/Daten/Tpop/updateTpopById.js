@@ -1,6 +1,10 @@
 import gql from 'graphql-tag'
 
-import { tpop } from '../../../shared/fragments'
+import {
+  popStatusWerte,
+  tpop,
+  tpopApberrelevantWerte,
+} from '../../../shared/fragments'
 
 export default gql`
   mutation updateTpop(
@@ -71,12 +75,10 @@ export default gql`
       tpop {
         ...TpopFields
         popStatusWerteByStatus {
-          id
-          text
+          ...PopStatusWerteFields
         }
         tpopApberrelevantWerteByApberRelevant {
-          id
-          text
+          ...TpopApberrelevantWerteFields
         }
         popByPopId {
           id
@@ -85,5 +87,7 @@ export default gql`
       }
     }
   }
+  ${popStatusWerte}
   ${tpop}
+  ${tpopApberrelevantWerte}
 `
