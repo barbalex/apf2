@@ -1,13 +1,12 @@
 import gql from 'graphql-tag'
 
+import { tpopmassnber } from '../../../../shared/fragments'
+
 export default gql`
   query tpopmassnberById($id: UUID!) {
     tpopmassnberById(id: $id) {
-      id
-      tpopId
-      jahr
-      beurteilung
-      bemerkungen
+      ...TpopmassnberFields
     }
   }
+  ${tpopmassnber}
 `

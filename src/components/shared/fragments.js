@@ -429,3 +429,14 @@ export const tpopmassn = gql`
     changedBy
   }
 `
+
+export const tpopmassnber = gql`
+  fragment TpopmassnberFields on Tpopmassnber {
+    id
+    tpopId
+    jahr
+    beurteilung
+    bemerkungen
+    changedBy
+  }
+`
