@@ -1,6 +1,9 @@
 import gql from 'graphql-tag'
 
-import { ekfzaehleinheit } from '../../../shared/fragments'
+import {
+  ekfzaehleinheit,
+  tpopkontrzaehlEinheitWerte,
+} from '../../../shared/fragments'
 
 export default gql`
   mutation updateEkfzaehleinheit(
@@ -25,11 +28,11 @@ export default gql`
       ekfzaehleinheit {
         ...EkfzaehleinheitFields
         tpopkontrzaehlEinheitWerteByZaehleinheitId {
-          id
-          text
+          ...TpopkontrzaehlEinheitWerteFields
         }
       }
     }
   }
   ${ekfzaehleinheit}
+  ${tpopkontrzaehlEinheitWerte}
 `

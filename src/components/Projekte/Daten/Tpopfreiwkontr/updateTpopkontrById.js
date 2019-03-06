@@ -1,6 +1,12 @@
 import gql from 'graphql-tag'
 
-import { adresse, pop, tpop, tpopfreiwkontr } from '../../../shared/fragments'
+import {
+  adresse,
+  pop,
+  tpop,
+  tpopfreiwkontr,
+  tpopkontrzaehlEinheitWerte,
+} from '../../../shared/fragments'
 
 export default gql`
   mutation updateTpopkontr(
@@ -64,10 +70,7 @@ export default gql`
                 nodes {
                   id
                   tpopkontrzaehlEinheitWerteByZaehleinheitId {
-                    id
-                    code
-                    text
-                    sort
+                    ...TpopkontrzaehlEinheitWerteFields
                   }
                 }
               }
@@ -88,4 +91,5 @@ export default gql`
   ${pop}
   ${tpop}
   ${tpopfreiwkontr}
+  ${tpopkontrzaehlEinheitWerte}
 `
