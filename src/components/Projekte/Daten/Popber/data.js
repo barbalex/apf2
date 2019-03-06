@@ -1,16 +1,13 @@
 import gql from 'graphql-tag'
 
-import { pop, popber } from '../../../shared/fragments'
+import { pop, popber, tpopEntwicklungWerte } from '../../../shared/fragments'
 
 export default gql`
   query popberByIdQuery($id: UUID!) {
     popberById(id: $id) {
       ...PopberFields
       tpopEntwicklungWerteByEntwicklung {
-        id
-        code
-        text
-        sort
+        ...TpopEntwicklungWerteFields
       }
       popByPopId {
         ...PopFields
@@ -18,13 +15,11 @@ export default gql`
     }
     allTpopEntwicklungWertes {
       nodes {
-        id
-        code
-        text
-        sort
+        ...TpopEntwicklungWerteFields
       }
     }
   }
   ${pop}
   ${popber}
+  ${tpopEntwicklungWerte}
 `

@@ -1,18 +1,22 @@
 import gql from 'graphql-tag'
 
-import { ap, pop, tpop } from '../../../shared/fragments'
+import {
+  ap,
+  pop,
+  popStatusWerte,
+  tpop,
+  tpopApberrelevantWerte,
+} from '../../../shared/fragments'
 
 export default gql`
   query tpopByIdQuery($id: UUID!, $showFilter: Boolean!) {
     tpopById(id: $id) {
       ...TpopFields
       popStatusWerteByStatus {
-        id
-        text
+        ...PopStatusWerteFields
       }
       tpopApberrelevantWerteByApberRelevant {
-        id
-        text
+        ...TpopApberrelevantWerteFields
       }
       popByPopId {
         ...PopFields
@@ -28,17 +32,12 @@ export default gql`
     }
     allPopStatusWertes {
       nodes {
-        id
-        code
-        text
-        sort
+        ...PopStatusWerteFields
       }
     }
     allTpopApberrelevantWertes {
       nodes {
-        id
-        code
-        text
+        ...TpopApberrelevantWerteFields
       }
     }
     allTpopkontrFrequenzWertes {
@@ -57,5 +56,7 @@ export default gql`
   }
   ${ap}
   ${pop}
+  ${popStatusWerte}
   ${tpop}
+  ${tpopApberrelevantWerte}
 `

@@ -4,8 +4,9 @@ import {
   aeEigenschaften,
   apart,
   beob,
-  pop,
   beobQuelleWerte,
+  pop,
+  popStatusWerte,
 } from '../../../shared/fragments'
 
 export default gql`
@@ -29,8 +30,7 @@ export default gql`
                       x
                       y
                       popStatusWerteByStatus {
-                        id
-                        text
+                        ...PopStatusWerteFields
                       }
                       popByPopId {
                         ...PopFields
@@ -56,6 +56,7 @@ export default gql`
   ${aeEigenschaften}
   ${apart}
   ${beob}
-  ${pop}
   ${beobQuelleWerte}
+  ${pop}
+  ${popStatusWerte}
 `
