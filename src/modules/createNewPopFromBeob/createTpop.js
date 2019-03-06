@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { tpop } from '../../components/shared/fragments'
+
 export default gql`
   mutation createTpop(
     $popId: UUID
@@ -22,34 +24,9 @@ export default gql`
       }
     ) {
       tpop {
-        id
-        popId
-        nr
-        gemeinde
-        flurname
-        x
-        y
-        radius
-        hoehe
-        exposition
-        klima
-        neigung
-        beschreibung
-        katasterNr
-        status
-        statusUnklarGrund
-        apberRelevant
-        bekanntSeit
-        eigentuemer
-        kontakt
-        nutzungszone
-        bewirtschafter
-        bewirtschaftung
-        kontrollfrequenz
-        kontrollfrequenzFreiwillige
-        bemerkungen
-        statusUnklar
+        ...TpopFields
       }
     }
   }
+  ${tpop}
 `
