@@ -18,7 +18,7 @@ describe('Projekt form', () => {
   })
   it('updates Projekt', () => {
     const typedText = 'AP Flora Kt. ZH'
-    cy.get('[name=name]')
+    cy.get('#Name')
       .clear()
       .type(typedText)
       .should('have.value', typedText)
