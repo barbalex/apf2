@@ -7,7 +7,7 @@ describe('Navigation', () => {
   it('home directly opens Projekt', () => {
     cy.url().should('include', '/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13')
   })
-  it.only('opens Aktionsplan Abies alba', () => {
+  it('opens Aktionsplan Abies alba', () => {
     cy.visit('/')
       .url()
       .should('include', '/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13')
@@ -25,11 +25,21 @@ describe('Navigation', () => {
   it('toggles Strukturbaum', () => {
     cy.get('[data-id=tree-container]')
       .should('exist')
-      .get('.nav-strukturbaum')
+      .get('[data-id=nav-strukturbaum]')
       .click()
       .get('[data-id=tree-container]')
       .should('not.exist')
-      .get('.nav-strukturbaum')
+      .get('[data-id=nav-strukturbaum]')
+      .click()
+  })
+  it.only('toggles Daten', () => {
+    cy.get('[data-id=daten-container]')
+      .should('exist')
+      .get('[data-id=nav-daten1]')
+      .click()
+      .get('[data-id=daten-container]')
+      .should('not.exist')
+      .get('[data-id=nav-daten1]')
       .click()
   })
 })

@@ -149,6 +149,7 @@ const MyAppBarDaten = ({ treeNr = '' }: { treeNr: string }) => {
       preceded={isTree.toString()}
       followed={treeNr === '2' ? 'false' : isKarte.toString()}
       onClick={onClickButton}
+      data-id={`nav-daten${treeNr || 1}`}
     >
       {`Daten${treeNr === '2' ? ' 2' : ''}`}
       {isDaten && (
