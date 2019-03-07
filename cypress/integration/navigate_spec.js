@@ -1,19 +1,35 @@
 /* eslint-disable no-undef */
 
 describe('Navigation', () => {
+  beforeEach(() => {
+    cy.visit('/')
+  })
   it('home directly opens Projekt', () => {
-    cy.visit('/')
     cy.url().should('include', '/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13')
   })
-  it('opens Aktionsplan Abies alba', () => {
+  it.only('opens Aktionsplan Abies alba', () => {
     cy.visit('/')
-    cy.url().should('include', '/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13')
-    cy.contains('Aktionspläne').click()
-    cy.contains('Abies alba Mill.').click()
+      .url()
+      .should('include', '/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13')
+      .get(
+        '[data-url=\'["Projekte","e57f56f4-4376-11e8-ab21-4314b6749d13","Aktionspläne"]\']',
+      )
+      .click()
+      .get(
+        '[data-url=\'["Projekte","e57f56f4-4376-11e8-ab21-4314b6749d13","Aktionspläne","6c52d174-4f62-11e7-aebe-67a303eb0640"]\']',
+      )
+      .click()
+      .get('[data-id=form-title]')
+      .should('contain', 'Aktionsplan')
   })
-  it('hides Strukturbaum', () => {
-    cy.visit('/')
-    cy.url().should('include', '/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13')
-    cy.get('.nav-strukturbaum').click()
+  it('toggles Strukturbaum', () => {
+    cy.get('[data-id=tree-container]')
+      .should('exist')
+      .get('.nav-strukturbaum')
+      .click()
+      .get('[data-id=tree-container]')
+      .should('not.exist')
+      .get('.nav-strukturbaum')
+      .click()
   })
 })
