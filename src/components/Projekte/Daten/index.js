@@ -158,13 +158,6 @@ const Daten = ({
     form = key ? formObject[key] : ''
   }
 
-  /*
-  console.log('Daten rendering', {
-    dimensions,
-    activeTable,
-    activeNodeArray: activeNodeArray.toJSON(),
-    activeNode: activeNode ? getSnapshot(activeNode) : activeNode,
-  })*/
   if (!key) return null
 
   return (
