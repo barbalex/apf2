@@ -19,19 +19,22 @@ describe('Beobachtung form', () => {
   it.only('updates nicht zuordnen', () => {
     cy.get('[data-id=nichtZuordnen] input')
       .check()
-      .should('have.value', 'Nicht zuordnen')
-    cy.url().should(
+      .should('be.checked')
+    /*cy.url().should(
       'include',
       '/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Aktionspläne/6c52d174-4f62-11e7-aebe-67a303eb0640/nicht-zuzuordnende-Beobachtungen/b56a65e7-434e-11e8-ab21-4f56ad411a90',
-    )
-    cy.get('[data-id=nichtZuordnen] input')
+    )*/
+    cy.wait(10000)
+      .get('[data-id=nichtZuordnen] input')
       .check()
-      .wait(5000)
-    cy.url().should(
+      .should('not.be.checked')
+    //.wait(5000)
+    /*cy.url().should(
       'include',
       '/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Aktionspläne/6c52d174-4f62-11e7-aebe-67a303eb0640/nicht-beurteilte-Beobachtungen/b56a65e7-434e-11e8-ab21-4f56ad411a90',
-    )
+    )*/
   })
+  // TODO: test updating tpop
   it('updates Bemerkungen', () => {
     const typedText = 'das ist ein Test'
     cy.get('#bemerkungen')
