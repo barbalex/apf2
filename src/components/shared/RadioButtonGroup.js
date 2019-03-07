@@ -111,7 +111,12 @@ const RadioButtonGroup = ({
           <FormControlLabel
             key={index}
             value={e.value.toString()}
-            control={<StyledRadio color="primary" />}
+            control={
+              <StyledRadio
+                data-id={`${name}_${e.value.toString()}`}
+                color="primary"
+              />
+            }
             label={e.label}
             onClick={onClickButton}
           />

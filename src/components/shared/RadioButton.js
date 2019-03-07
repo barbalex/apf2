@@ -39,18 +39,15 @@ const RadioButton = ({
   error: String,
   saveToDb: () => void,
 }) => {
-  const onClickButton = useCallback(
-    () => {
-      const fakeEvent = {
-        target: {
-          value: !value,
-          name,
-        },
-      }
-      saveToDb(fakeEvent)
-    },
-    [value, name],
-  )
+  const onClickButton = useCallback(() => {
+    const fakeEvent = {
+      target: {
+        value: !value,
+        name,
+      },
+    }
+    saveToDb(fakeEvent)
+  }, [value, name])
 
   return (
     <StyledFormControl
@@ -65,7 +62,13 @@ const RadioButton = ({
       >
         <FormControlLabel
           value="true"
-          control={<StyledRadio onClick={onClickButton} color="primary" />}
+          control={
+            <StyledRadio
+              data-id={name}
+              onClick={onClickButton}
+              color="primary"
+            />
+          }
         />
       </RadioGroup>
       {!!error && (
