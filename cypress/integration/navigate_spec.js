@@ -72,7 +72,7 @@ describe('Navigation', () => {
       .get('[data-id=tree-container2]')
       .should('not.exist')
   })
-  it.only('toggles Tree 2 and Daten 2', () => {
+  it('toggles Tree 2 and Daten 2', () => {
     cy.get('[data-id=nav-tree2]')
       .click()
       .get('[data-id=tree-container2]')
@@ -90,5 +90,4 @@ describe('Navigation', () => {
       .get('[data-id=tree-container2]')
       .should('not.exist')
   })
-  // TODO: daten2
 })
