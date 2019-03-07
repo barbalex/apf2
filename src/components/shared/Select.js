@@ -103,7 +103,7 @@ const SharedSelect = ({
   )
 
   return (
-    <Container>
+    <Container data-id={field}>
       {label && <Label>{label}</Label>}
       <StyledSelect
         id={field}

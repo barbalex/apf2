@@ -21,6 +21,13 @@ describe('Aktionsplan form', () => {
   it('shows testdata-message', () => {
     cy.get('[data-id=testdata-message]').should('contain', 'Test-Aktionsplan')
   })
+  it.only('updates Art', () => {
+    cy.setReactSelectOption({
+      selector: '[data-id=artId]',
+      option: 'Abies alba Mill. (Weiss-Tanne)',
+      value: '1ab6bbb1-979a-4232-a5d8-62efb5cb984a',
+    })
+  })
   it('updates bearbeitung Aktionsplan', () => {
     cy.get('[data-id=bearbeitung_0] input')
       .check()
@@ -42,21 +49,13 @@ describe('Aktionsplan form', () => {
       .check()
       .should('have.value', '1')
   })
-  /*
   it('updates Verantwortlich', () => {
-    const typedText = '6c52d174-4f62-11e7-aebe-67a303eb0640'
-    cy.get('[name=bearbeiter]')
-      .clear({ force: true })
-      .type(typedText, { force: true })
-      .should('have.value', typedText)
+    cy.setReactSelectOption({
+      selector: '[data-id=bearbeiter]',
+      option: 'Adrienne Frei',
+      value: 'dbc6b98a-4375-11e8-ab21-63812d703dd9',
+    })
   })
-  it.only('updates Verantwortlich 2', () => {
-    const typedText = '6c52d174-4f62-11e7-aebe-67a303eb0640'
-    cy.get('[name=bearbeiter]')
-      .chooseReactSelectOption('#bearbeiter', 'Adrienne Frei', 'Adrienne Frei')
-      .should('have.value', typedText)
-  })
-  */
   it('updates Bester Beobachtungszeitpunkt für EKF', () => {
     const typedText = 'test'
     cy.get('#ekfBeobachtungszeitpunkt')
