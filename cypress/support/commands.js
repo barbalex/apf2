@@ -23,3 +23,13 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+/* eslint-disable no-undef */
+
+Cypress.Commands.add('chooseReactSelectOption', (selector, text, option) => {
+  //cy.get(`${selector} .react-select__clear-indicator`).click()
+  cy.get(`${selector} .react-select__value-container`)
+    .click({ force: true })
+    //.get(`${selector} .select__menu`)
+    .get(`.#react-select-3--option-3`)
+    .click()
+})

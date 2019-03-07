@@ -29,22 +29,33 @@ describe('ap form', function() {
       .type(typedText)
       .should('have.value', typedText)
   })
-  it.only('updates Stand Umsetzung', () => {
+  it('updates Stand Umsetzung', () => {
     cy.get('[data-id=umsetzung_0] input')
       .check()
       .get('[data-id=umsetzung_1] input')
       .check()
       .should('have.value', '1')
   })
+  /*
+  it('updates Verantwortlich', () => {
+    const typedText = '6c52d174-4f62-11e7-aebe-67a303eb0640'
+    cy.get('[name=bearbeiter]')
+      .clear({ force: true })
+      .type(typedText, { force: true })
+      .should('have.value', typedText)
+  })
+  it.only('updates Verantwortlich 2', () => {
+    const typedText = '6c52d174-4f62-11e7-aebe-67a303eb0640'
+    cy.get('[name=bearbeiter]')
+      .chooseReactSelectOption('#bearbeiter', 'Adrienne Frei', 'Adrienne Frei')
+      .should('have.value', typedText)
+  })
+  */
   it('updates Bester Beobachtungszeitpunkt für EKF', () => {
     const typedText = 'test'
     cy.get('[name=ekfBeobachtungszeitpunkt]')
       .clear()
       .type(typedText)
       .should('have.value', typedText)
-  })
-  it('updates ap Abies alba', function() {
-    cy.contains('kein Eintrag').click()
-    cy.contains('kein AP').click()
   })
 })

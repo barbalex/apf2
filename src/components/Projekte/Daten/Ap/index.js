@@ -241,6 +241,8 @@ const Ap = ({
   if (dataAllAps.error) return `Fehler: ${dataAllAps.error.message}`
   if (error) return `Fehler: ${error.message}`
 
+  console.log({ row })
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
