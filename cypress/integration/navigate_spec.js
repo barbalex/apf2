@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 
 describe('Navigation', function() {
-  it('home opens Projekt', function() {
+  it('home directly opens Projekt', function() {
     cy.visit('/')
     cy.url().should('include', '/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13')
   })

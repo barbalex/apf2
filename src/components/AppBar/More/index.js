@@ -91,6 +91,7 @@ const MyAppBar = ({
           aria-owns={anchorEl ? 'long-menu' : null}
           aria-haspopup="true"
           onClick={onClickMehrButton}
+          className="appbar-more"
         >
           Mehr
         </MehrButton>
@@ -119,7 +120,9 @@ const MyAppBar = ({
           )}
           <MenuItem onClick={openDocs}>Dokumentation öffnen</MenuItem>
           <MenuItem onClick={watchVideos}>Video-Anleitungen</MenuItem>
-          <MenuItem onClick={onClickLogout}>{`${user.name} abmelden`}</MenuItem>
+          <MenuItem onClick={onClickLogout} className="appbar-more-logout">{`${
+            user.name
+          } abmelden`}</MenuItem>
           <Version>Version: 1.3.2 vom 20.01.2019</Version>
         </Menu>
       </Container>
