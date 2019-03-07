@@ -15,6 +15,12 @@ describe('ap form', function() {
       })
     */
   })
+  it('has Title', function() {
+    cy.get('[data-id=form-title]').should('contain', 'Aktionsplan')
+  })
+  it('shows testdata-message', function() {
+    cy.get('[data-id=testdata-message]').should('contain', 'Test-Aktionsplan')
+  })
   it('updates bearbeitung Aktionsplan', () => {
     cy.get('[data-id=bearbeitung_0] input')
       .check()

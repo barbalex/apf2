@@ -134,7 +134,9 @@ const FormTitle = ({
   return (
     <Container showfilter={showFilter}>
       <TitleRow>
-        <Title>{`${title}${showFilter ? ' Filter' : ''}`}</Title>
+        <Title data-id="form-title">{`${title}${
+          showFilter ? ' Filter' : ''
+        }`}</Title>
         {doFilter && (
           <Symbols>
             {showFilter && (filteredNr || filteredNr === 0) && totalNr && (

@@ -25,7 +25,9 @@ const TestdataMessage = ({
 
   if (isTestAp) {
     return (
-      <Div>Das ist ein Test-Aktionsplan. Sie können alles ausprobieren!</Div>
+      <Div data-id="testdata-message">
+        Das ist ein Test-Aktionsplan. Sie können alles ausprobieren!
+      </Div>
     )
   }
   return null
