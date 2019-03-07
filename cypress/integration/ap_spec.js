@@ -21,7 +21,7 @@ describe('Aktionsplan form', () => {
   it('shows testdata-message', () => {
     cy.get('[data-id=testdata-message]').should('contain', 'Test-Aktionsplan')
   })
-  it.only('updates Art', () => {
+  it('updates Art', () => {
     cy.setReactSelectOption({
       selector: '[data-id=artId]',
       option: 'Abies alba Mill. (Weiss-Tanne)',

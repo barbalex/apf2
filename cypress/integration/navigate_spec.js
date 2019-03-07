@@ -8,12 +8,9 @@ describe('Navigation', () => {
     cy.url().should('include', '/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13')
   })
   it('opens Aktionsplan Abies alba', () => {
-    cy.visit('/')
-      .url()
-      .should('include', '/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13')
-      .get(
-        '[data-url=\'["Projekte","e57f56f4-4376-11e8-ab21-4314b6749d13","Aktionspläne"]\']',
-      )
+    cy.get(
+      '[data-url=\'["Projekte","e57f56f4-4376-11e8-ab21-4314b6749d13","Aktionspläne"]\']',
+    )
       .click({ force: true })
       .wait(5000)
       .get(

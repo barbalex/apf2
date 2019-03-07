@@ -32,12 +32,14 @@ const StyledFormControlLabel = styled(FormControlLabel)`
 const CheckboxWithInfo = ({
   value,
   label,
+  name,
   popover,
   saveToDb,
   error,
 }: {
   value?: number | string,
   label: string,
+  name: string,
   popover: Object,
   saveToDb: () => void,
   error: String,
@@ -60,6 +62,7 @@ const CheckboxWithInfo = ({
                 onChange={onCheck}
                 value={label}
                 color="primary"
+                data-id={name}
               />
             }
           />
