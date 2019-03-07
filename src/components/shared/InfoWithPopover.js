@@ -34,13 +34,14 @@ const InfoWithPopover = ({
 
   return (
     <>
-      <StyledInfoOutlineIcon onClick={onClickFontIcon} />
+      <StyledInfoOutlineIcon data-id="info-icon" onClick={onClickFontIcon} />
       <StyledPopover
         open={popupOpen}
         anchorEl={popupAnchorEl}
         anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
         transformOrigin={{ horizontal: 'left', vertical: 'bottom' }}
         onClose={onRequestClosePopover}
+        data-id="info-icon-popover"
       >
         {children}
       </StyledPopover>

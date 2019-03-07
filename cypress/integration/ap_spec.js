@@ -15,7 +15,7 @@ describe('ap form', function() {
       })
     */
   })
-  it('has Title', function() {
+  it('has Title Aktionsplan', function() {
     cy.get('[data-id=form-title]').should('contain', 'Aktionsplan')
   })
   it('shows testdata-message', function() {
@@ -63,5 +63,27 @@ describe('ap form', function() {
       .clear()
       .type(typedText)
       .should('have.value', typedText)
+  })
+  it('has filter icon', function() {
+    cy.get('[data-id=daten-filtern]').should('exist')
+  })
+  it('opens filter form', function() {
+    cy.get('[data-id=daten-filtern]')
+      .click()
+      .get('[data-id=form-title]')
+      .should('contain', 'Filter')
+  })
+  it('closes filter form', function() {
+    cy.get('[data-id=daten-anzeigen]')
+      .click()
+      .get('[data-id=form-title]')
+      .should('not.contain', 'Filter')
+  })
+  it('opens info when info icon is clicked', () => {
+    cy.get('[data-id=info-icon]')
+      .first()
+      .click()
+      .get('[data-id=info-icon-popover')
+      .should('exist')
   })
 })
