@@ -526,7 +526,6 @@ export const tpopApberrelevantWerte = gql`
     id
     code
     text
-    sort
     changedBy
   }
 `
