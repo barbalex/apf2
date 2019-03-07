@@ -39,7 +39,7 @@ const ExporteContainer = styled.div`
 `
 
 const Exporte = () => (
-  <ExporteContainer>
+  <ExporteContainer data-id={`exporte-container`}>
     <ErrorBoundary>
       <Container>
         <FormTitle title="Exporte" />

@@ -209,7 +209,7 @@ const Karte = ({
 
   //console.log('Karte rendering')
   return (
-    <Container>
+    <Container data-id={`karten-container${treeName === 'tree' ? 1 : 2}`}>
       <ErrorBoundary>
         <StyledMap
           localizing={!!idOfTpopBeingLocalized}

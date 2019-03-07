@@ -22,7 +22,7 @@ describe('Navigation', () => {
       .get('[data-id=form-title]')
       .should('contain', 'Aktionsplan')
   })
-  it('toggles Strukturbaum', () => {
+  it('toggles Strukturbaum 1', () => {
     cy.get('[data-id=tree-container1]')
       .should('exist')
       .get('[data-id=nav-strukturbaum1]')
@@ -32,7 +32,7 @@ describe('Navigation', () => {
       .get('[data-id=nav-strukturbaum1]')
       .click()
   })
-  it('toggles Daten', () => {
+  it('toggles Daten 1', () => {
     cy.get('[data-id=daten-container1]')
       .should('exist')
       .get('[data-id=nav-daten1]')
@@ -42,7 +42,26 @@ describe('Navigation', () => {
       .get('[data-id=nav-daten1]')
       .click()
   })
-  // TODO: karte
+  it('toggles Karte 1', () => {
+    cy.get('[data-id=nav-karte1]')
+      .click()
+      .get('[data-id=karten-container1]')
+      .should('exist')
+      .get('[data-id=nav-karte1]')
+      .click()
+      .get('[data-id=karten-container1]')
+      .should('not.exist')
+  })
+  it.only('toggles Exporte', () => {
+    cy.get('[data-id=nav-exporte]')
+      .click()
+      .get('[data-id=exporte-container]')
+      .should('exist')
+      .get('[data-id=nav-exporte]')
+      .click()
+      .get('[data-id=exporte-container]')
+      .should('not.exist')
+  })
   // TODO: exporte
   // TODO: strukturbaum2
   // TODO: daten2

@@ -180,6 +180,7 @@ const MyAppBar = ({ setShowDeletions }: { setShowDeletions: () => void }) => {
                       projekteTabs.includes('tree2'))
                   }
                   onClick={onClickKarte}
+                  data-id="nav-karte1"
                 >
                   Karte
                 </StyledButton>
@@ -191,6 +192,7 @@ const MyAppBar = ({ setShowDeletions }: { setShowDeletions: () => void }) => {
                     preceded={projekteTabs.includes('karte')}
                     followed={projekteTabs.includes('tree2')}
                     onClick={onClickExporte}
+                    data-id="nav-exporte"
                   >
                     Exporte
                   </StyledButton>
