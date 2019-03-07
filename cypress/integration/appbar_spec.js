@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 const secrets = require('../../secrets.json')
 
-describe('Login', function() {
+describe('Login', () => {
   beforeEach(() => {
     cy.visit('/')
     /*
@@ -14,12 +14,12 @@ describe('Login', function() {
       })
     */
   })
-  it('logs out correctly', function() {
+  it('logs out correctly', () => {
     cy.get('.appbar-more').click()
     cy.get('.appbar-more-logout').click()
     cy.get('#name').should('exist')
   })
-  it('logs back in correctly', function() {
+  it('logs back in correctly', () => {
     cy.get('#name').type(secrets.user)
     cy.get('#passwort').type(secrets.pass)
     cy.contains('anmelden').click()

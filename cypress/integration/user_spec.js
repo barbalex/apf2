@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 const secrets = require('../../secrets.json')
 
-describe('Login', function() {
+describe('Login', () => {
   beforeEach(() => {
     cy.visit('/')
     /*
@@ -15,21 +15,21 @@ describe('Login', function() {
     */
     indexedDB.deleteDatabase('apflora')
   })
-  it('greets with Anmeldung', function() {
+  it('greets with Anmeldung', () => {
     cy.contains('h2', 'Anmeldung')
   })
-  it('has Anmelden button', function() {
+  it('has Anmelden button', () => {
     cy.contains('button', 'anmelden')
   })
   it('focuses name on load', () => {
     cy.focused().should('have.id', 'name')
   })
-  it('requires name on submit', function() {
+  it('requires name on submit', () => {
     cy.get('#passwort').type(secrets.pass)
     cy.contains('anmelden').click()
     cy.get('p#nameHelper').should('contain', 'Name oder Passwort nicht bekannt')
   })
-  it('requires password on submit', function() {
+  it('requires password on submit', () => {
     cy.get('#name').type(secrets.user)
     cy.contains('anmelden').click()
     cy.get('p#passwortHelper').should(
@@ -37,11 +37,11 @@ describe('Login', function() {
       'Name oder Passwort nicht bekannt',
     )
   })
-  it('requires password on Enter in password field', function() {
+  it('requires password on Enter in password field', () => {
     cy.get('#passwort').type('{enter}')
     cy.get('p#passwortHelper').should('contain', 'Bitte Passwort eingeben')
   })
-  it('barks when submitting wrong name', function() {
+  it('barks when submitting wrong name', () => {
     cy.get('#name').type('wrong name')
     cy.get('#passwort').type(secrets.pass)
     cy.contains('anmelden').click()
@@ -50,13 +50,13 @@ describe('Login', function() {
       'Name oder Passwort nicht bekannt',
     )
   })
-  it('barks when submitting wrong password', function() {
+  it('barks when submitting wrong password', () => {
     cy.get('#name').type(secrets.user)
     cy.get('#passwort').type('wrong password')
     cy.contains('anmelden').click()
     cy.get('p#nameHelper').should('contain', 'Name oder Passwort nicht bekannt')
   })
-  it('logs in correctly', function() {
+  it('logs in correctly', () => {
     cy.get('#name').type(secrets.user)
     cy.get('#passwort').type(secrets.pass)
     cy.contains('anmelden').click()

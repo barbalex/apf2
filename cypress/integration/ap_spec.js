@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 
-describe('ap form', function() {
+describe('ap form', () => {
   before(() => {
     cy.visit(
       '/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Aktionspläne/6c52d174-4f62-11e7-aebe-67a303eb0640',
@@ -15,10 +15,10 @@ describe('ap form', function() {
       })
     */
   })
-  it('has Title Aktionsplan', function() {
+  it('has Title Aktionsplan', () => {
     cy.get('[data-id=form-title]').should('contain', 'Aktionsplan')
   })
-  it('shows testdata-message', function() {
+  it('shows testdata-message', () => {
     cy.get('[data-id=testdata-message]').should('contain', 'Test-Aktionsplan')
   })
   it('updates bearbeitung Aktionsplan', () => {
@@ -64,16 +64,16 @@ describe('ap form', function() {
       .type(typedText)
       .should('have.value', typedText)
   })
-  it('has filter icon', function() {
+  it('has filter icon', () => {
     cy.get('[data-id=daten-filtern]').should('exist')
   })
-  it('opens filter form', function() {
+  it('opens filter form', () => {
     cy.get('[data-id=daten-filtern]')
       .click()
       .get('[data-id=form-title]')
       .should('contain', 'Filter')
   })
-  it('closes filter form', function() {
+  it('closes filter form', () => {
     cy.get('[data-id=daten-anzeigen]')
       .click()
       .get('[data-id=form-title]')
