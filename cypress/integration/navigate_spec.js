@@ -42,4 +42,8 @@ describe('Navigation', () => {
       .get('[data-id=nav-daten1]')
       .click()
   })
+  // TODO: karte
+  // TODO: exporte
+  // TODO: strukturbaum2
+  // TODO: daten2
 })
