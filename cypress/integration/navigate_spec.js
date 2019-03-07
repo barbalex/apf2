@@ -15,6 +15,7 @@ describe('Navigation', () => {
         '[data-url=\'["Projekte","e57f56f4-4376-11e8-ab21-4314b6749d13","Aktionspläne"]\']',
       )
       .click()
+      .wait(5000)
       .get(
         '[data-url=\'["Projekte","e57f56f4-4376-11e8-ab21-4314b6749d13","Aktionspläne","6c52d174-4f62-11e7-aebe-67a303eb0640"]\']',
       )
@@ -45,6 +46,7 @@ describe('Navigation', () => {
   it('toggles Karte 1', () => {
     cy.get('[data-id=nav-karte1]')
       .click()
+      .wait(5000)
       .get('[data-id=karten-container1]')
       .should('exist')
       .get('[data-id=nav-karte1]')
@@ -65,6 +67,7 @@ describe('Navigation', () => {
   it('toggles Tree 2', () => {
     cy.get('[data-id=nav-tree2]')
       .click()
+      .wait(10000)
       .get('[data-id=tree-container2]')
       .should('exist')
       .get('[data-id=nav-tree2]')
@@ -75,6 +78,7 @@ describe('Navigation', () => {
   it('toggles Tree 2 and Daten 2', () => {
     cy.get('[data-id=nav-tree2]')
       .click()
+      .wait(15000)
       .get('[data-id=tree-container2]')
       .should('exist')
       .get('[data-id=nav-daten2]')
