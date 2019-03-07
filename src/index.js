@@ -82,6 +82,13 @@ const run = async () => {
 
     const idbContext = { idb }
 
+    if (window.Cypress) {
+      // enable directly using these in tests
+      window.__client__ = client
+      window.__store__ = mobxStore
+      window.__idb__ = idb
+    }
+
     ReactDOM.render(
       <IdbProvider value={idbContext}>
         <MobxProvider value={mobxStore}>

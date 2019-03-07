@@ -4,16 +4,25 @@ const secrets = require('../../secrets.json')
 describe('Login', function() {
   beforeEach(() => {
     cy.visit('/')
+    /*
+    Example of how to use idb, store or client 
+    cy.window()
+      .its('__idb__')
+      .then(idb => {
+        idb.currentUser.clear()
+        window.location.reload(false)
+      })
+    */
     indexedDB.deleteDatabase('apflora')
-    //cy.url().should('include', '/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13')
-    //cy.get('.appbar-more').click()
-    //cy.get('.appbar-more-logout').click()
   })
   it('greets with Anmeldung', function() {
     cy.contains('h2', 'Anmeldung')
   })
   it('has Anmelden button', function() {
     cy.contains('button', 'anmelden')
+  })
+  it('focuses name on load', () => {
+    cy.focused().should('have.id', 'name')
   })
   it('requires name on submit', function() {
     cy.get('#passwort').type(secrets.pass)
