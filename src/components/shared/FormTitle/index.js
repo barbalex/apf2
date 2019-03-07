@@ -110,7 +110,7 @@ const FormTitle = ({
   const onFilter = useCallback(() => {
     nodeFilterSetActiveTable({ treeName, activeTable: table })
     // if active node is id, pop
-    if (
+    /*if (
       activeNodeArray &&
       treeName &&
       isUuid.anyNonNil(activeNodeArray[activeNodeArray.length - 1])
@@ -121,8 +121,11 @@ const FormTitle = ({
         tree: treeName,
         key: 'activeNodeArray',
       })
-    }
+    }*/
   }, [activeNodeArray, treeName])
+  const onUnfilter = useCallback(() => {
+    nodeFilterSetActiveTable({ treeName, activeTable: '' })
+  }, [treeName])
   const onEmptyTable = useCallback(
     () => nodeFilterEmptyTable({ treeName, table }),
     [treeName, table],
@@ -147,6 +150,17 @@ const FormTitle = ({
                 aria-label="Daten filtern"
                 title={`${table ? table : 'Daten'} filtern`}
                 onClick={onFilter}
+                data-id="daten-filtern"
+              >
+                <StyledFilterIcon />
+              </StyledIconButton>
+            )}
+            {showFilter && typesExist && (
+              <StyledIconButton
+                aria-label="Daten anzeigen"
+                title="Daten anzeigen"
+                onClick={onUnfilter}
+                data-id="daten-anzeigen"
               >
                 <StyledFilterIcon />
               </StyledIconButton>
