@@ -167,8 +167,6 @@ const Daten = ({
   })*/
   if (!key) return null
 
-  console.log({ treeName })
-
   return (
     <ErrorBoundary>
       <Container data-id={`daten-container${treeName === 'tree' ? 1 : 2}`}>
