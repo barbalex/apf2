@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 const secrets = require('../../secrets.json')
 
-describe('Login', () => {
+describe('AppBar', () => {
   beforeEach(() => {
     cy.visit('/')
     /*
