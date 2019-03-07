@@ -22,14 +22,14 @@ describe('Navigation', () => {
       .get('[data-id=form-title]')
       .should('contain', 'Aktionsplan')
   })
-  it('toggles Strukturbaum 1', () => {
+  it('toggles Tree 1', () => {
     cy.get('[data-id=tree-container1]')
       .should('exist')
-      .get('[data-id=nav-strukturbaum1]')
+      .get('[data-id=nav-tree1]')
       .click()
       .get('[data-id=tree-container1]')
       .should('not.exist')
-      .get('[data-id=nav-strukturbaum1]')
+      .get('[data-id=nav-tree1]')
       .click()
   })
   it('toggles Daten 1', () => {
@@ -52,7 +52,7 @@ describe('Navigation', () => {
       .get('[data-id=karten-container1]')
       .should('not.exist')
   })
-  it.only('toggles Exporte', () => {
+  it('toggles Exporte', () => {
     cy.get('[data-id=nav-exporte]')
       .click()
       .get('[data-id=exporte-container]')
@@ -62,7 +62,33 @@ describe('Navigation', () => {
       .get('[data-id=exporte-container]')
       .should('not.exist')
   })
-  // TODO: exporte
-  // TODO: strukturbaum2
+  it('toggles Tree 2', () => {
+    cy.get('[data-id=nav-tree2]')
+      .click()
+      .get('[data-id=tree-container2]')
+      .should('exist')
+      .get('[data-id=nav-tree2]')
+      .click({ force: true })
+      .get('[data-id=tree-container2]')
+      .should('not.exist')
+  })
+  it.only('toggles Tree 2 and Daten 2', () => {
+    cy.get('[data-id=nav-tree2]')
+      .click()
+      .get('[data-id=tree-container2]')
+      .should('exist')
+      .get('[data-id=nav-daten2]')
+      .click()
+      .get('[data-id=daten-container2]')
+      .should('exist')
+      .get('[data-id=nav-daten2]')
+      .click()
+      .get('[data-id=daten-container2]')
+      .should('not.exist')
+      .get('[data-id=nav-tree2]')
+      .click({ force: true })
+      .get('[data-id=tree-container2]')
+      .should('not.exist')
+  })
   // TODO: daten2
 })

@@ -163,7 +163,7 @@ const MyAppBar = ({ setShowDeletions }: { setShowDeletions: () => void }) => {
                   variant={projekteTabs.includes('tree') ? 'outlined' : 'text'}
                   followed={projekteTabs.includes('daten')}
                   onClick={onClickTree}
-                  data-id="nav-strukturbaum1"
+                  data-id="nav-tree1"
                 >
                   Strukturbaum
                 </StyledButton>
@@ -208,6 +208,7 @@ const MyAppBar = ({ setShowDeletions }: { setShowDeletions: () => void }) => {
                     }
                     followed={projekteTabs.includes('daten2')}
                     onClick={onClickTree2}
+                    data-id="nav-tree2"
                   >
                     Strukturbaum 2
                   </StyledButton>
