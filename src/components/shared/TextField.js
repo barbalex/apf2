@@ -60,7 +60,7 @@ const MyTextField = ({
     >
       <InputLabel htmlFor={label}>{label}</InputLabel>
       <Input
-        id={label}
+        id={name}
         name={name}
         value={stateValue}
         type={type}

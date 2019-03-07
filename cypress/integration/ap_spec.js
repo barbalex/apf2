@@ -30,7 +30,7 @@ describe('Aktionsplan form', () => {
   })
   it('updates Start im Jahr', () => {
     const typedText = '2005'
-    cy.get('[name=startJahr]')
+    cy.get('#startJahr')
       .clear()
       .type(typedText)
       .should('have.value', typedText)
@@ -59,7 +59,7 @@ describe('Aktionsplan form', () => {
   */
   it('updates Bester Beobachtungszeitpunkt für EKF', () => {
     const typedText = 'test'
-    cy.get('[name=ekfBeobachtungszeitpunkt]')
+    cy.get('#ekfBeobachtungszeitpunkt')
       .clear()
       .type(typedText)
       .should('have.value', typedText)

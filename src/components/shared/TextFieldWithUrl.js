@@ -81,7 +81,7 @@ const TextFieldWithUrl = ({
           {`${label} (gültige URL's beginnen mit "https://", "//" oder "www.")`}
         </InputLabel>
         <Input
-          id={label}
+          id={name}
           name={name}
           value={stateValue}
           type={type}
