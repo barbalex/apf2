@@ -167,9 +167,11 @@ const Daten = ({
   })*/
   if (!key) return null
 
+  console.log({ treeName })
+
   return (
     <ErrorBoundary>
-      <Container data-id="daten-container">
+      <Container data-id={`daten-container${treeName === 'tree' ? 1 : 2}`}>
         <Suspense fallback={<Fallback />}>{form}</Suspense>
       </Container>
     </ErrorBoundary>

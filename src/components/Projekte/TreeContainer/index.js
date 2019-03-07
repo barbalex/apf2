@@ -422,7 +422,7 @@ const TreeContainer = ({
 
   return (
     <ErrorBoundary>
-      <Container data-id="tree-container">
+      <Container data-id={`tree-container${treeName === 'tree' ? 1 : 2}`}>
         {!!toDeleteId && <DeleteDatasetModal treeName={treeName} />}
         <LabelFilterContainer>
           <LabelFilter treeName={treeName} />
