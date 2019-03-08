@@ -120,7 +120,7 @@ const Assozart = ({
 
   return (
     <ErrorBoundary>
-      <Container>
+      <Container data-id="assozart">
         <FormTitle
           apId={row.apId}
           title="assoziierte Art"

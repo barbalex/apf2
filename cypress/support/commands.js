@@ -27,17 +27,33 @@
 
 Cypress.Commands.add('setSelectOption', ({ selector, option, value }) => {
   cy.get(selector)
-    .find('.css-10nd86i')
-    .click()
-    .find('input')
+    .find('.css-10nd86i input')
     .eq(1)
     .focus()
-  cy.contains(option).click({ force: true })
+    .type(value, { force: true })
+  //cy.contains(option).click({ force: true })
   cy.get(selector)
     .find('.css-10nd86i')
     .find('input')
     .eq(1)
     .should('have.value', value)
+})
+Cypress.Commands.add('setSelectOption2', ({ selector, option, value }) => {
+  cy.get(selector)
+    .find('.css-10nd86i')
+    .click()
+    .find('input')
+    .eq(1)
+    .focus()
+    .debug()
+  /*.find('.react-select__menu')
+    .contains(option)
+    .click({ force: true })*/
+  /*cy.get(selector)
+    .find('.css-10nd86i')
+    .find('input')
+    .eq(1)
+    .should('have.value', value)*/
 })
 Cypress.Commands.add('clearSelect', ({ selector }) => {
   cy.get(selector)
