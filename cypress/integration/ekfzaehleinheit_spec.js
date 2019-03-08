@@ -12,17 +12,12 @@ describe('EKF-Zähleinheit form', () => {
   it('shows testdata-message', () => {
     cy.get('[data-id=testdata-message]').should('contain', 'Test-Aktionsplan')
   })
-  // TODO: this does not work correctly
   it('updates Zähleinheit', () => {
-    cy
-      /*.clearSelect({
+    cy.setSelectOption({
       selector: '[data-id=zaehleinheitId]',
-    })*/
-      .setSelectOption({
-        selector: '[data-id=zaehleinheitId]',
-        option: 'Blätter',
-        value: 'ddf9e94b-3dc8-11e8-acca-23ae4dc9b8b9',
-      })
+      option: 'Blätter',
+      value: 'ddf9e94b-3dc8-11e8-acca-23ae4dc9b8b9',
+    })
   })
   it('updates Bemerkungen', () => {
     const typedText = 'test bemerkungen'

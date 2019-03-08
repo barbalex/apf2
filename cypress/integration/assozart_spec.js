@@ -10,17 +10,10 @@ describe('assoziierte Art form', () => {
     cy.get('[data-id=form-title]').should('contain', 'assoziierte Art')
   })
   it('updates Art 1', () => {
-    cy.setSelectOption({
+    cy.setSelectTopOption({
       selector: '[data-id=assozart] [data-id=aeId]',
-      option: 'Abies alba Mill. (Weiss-Tanne)',
+      option: 'Abies a',
       value: '1ab6bbb1-979a-4232-a5d8-62efb5cb984a',
-    })
-  })
-  it('updates Art 2', () => {
-    cy.setSelectOption({
-      selector: '[data-id=assozart] [data-id=aeId]',
-      option: 'Abutilon theophrasti Medik.',
-      value: '862333db-31cf-444c-b8ea-021c640c7a44',
     })
   })
   it('updates Bemerkungen', () => {

@@ -25,18 +25,38 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 /* eslint-disable no-undef */
 
+// TODO: setting selects is a total mess
+// should become better in next cypress updates
 Cypress.Commands.add('setSelectOption', ({ selector, option, value }) => {
   cy.get(selector)
-    .find('.css-10nd86i input')
-    .eq(1)
+    .find('.css-10nd86i input:text')
     .focus()
-    .type(value, { force: true })
-  //cy.contains(option).click({ force: true })
+    .type(option, { force: true })
+    .type('{enter}', { force: true })
   cy.get(selector)
     .find('.css-10nd86i')
     .find('input')
     .eq(1)
     .should('have.value', value)
+})
+Cypress.Commands.add('setSelectOptionSlowly', ({ selector, option, value }) => {
+  cy.get(selector)
+    .find('.css-10nd86i input:text')
+    .focus()
+    .type(option, { force: true, delay: 600, timeout: 330000 })
+    .type('{enter}', { force: true })
+  cy.get(selector)
+    .find('.css-10nd86i')
+    .find('input')
+    .eq(1)
+    .should('have.value', value)
+})
+Cypress.Commands.add('setSelectTopOption', ({ selector }) => {
+  cy.get(selector)
+    .find('.css-10nd86i input:text')
+    .focus()
+    .type('{downarrow}', { force: true })
+    .type('{enter}', { force: true })
 })
 Cypress.Commands.add('setSelectOption2', ({ selector, option, value }) => {
   cy.get(selector)
