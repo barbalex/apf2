@@ -5,6 +5,7 @@ describe('Aktionsplan form', () => {
     cy.visit(
       '/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Aktionspläne/6c52d174-4f62-11e7-aebe-67a303eb0640',
     )
+    // TODO: should create new dataset
     /*
     Example of how to use idb, store or client 
     cy.window()
@@ -53,7 +54,9 @@ describe('Aktionsplan form', () => {
       .should('have.value', '1')
   })
   it('updates Verantwortlich', () => {
-    cy.setSelectOption({
+    cy.clearSelect({
+      selector: '[data-id=bearbeiter]',
+    }).setSelectOption({
       selector: '[data-id=bearbeiter]',
       option: 'Adrienne Frei',
       value: 'dbc6b98a-4375-11e8-ab21-63812d703dd9',
