@@ -22,7 +22,7 @@ describe('Aktionsplan form', () => {
     cy.get('[data-id=testdata-message]').should('contain', 'Test-Aktionsplan')
   })
   it('updates Art', () => {
-    cy.setReactSelectOption({
+    cy.setSelectOption({
       selector: '[data-id=artId]',
       option: 'Abies alba Mill. (Weiss-Tanne)',
       value: '1ab6bbb1-979a-4232-a5d8-62efb5cb984a',
@@ -50,7 +50,7 @@ describe('Aktionsplan form', () => {
       .should('have.value', '1')
   })
   it('updates Verantwortlich', () => {
-    cy.setReactSelectOption({
+    cy.setSelectOption({
       selector: '[data-id=bearbeiter]',
       option: 'Adrienne Frei',
       value: 'dbc6b98a-4375-11e8-ab21-63812d703dd9',

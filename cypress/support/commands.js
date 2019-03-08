@@ -25,7 +25,7 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 /* eslint-disable no-undef */
 
-Cypress.Commands.add('setReactSelectOption', ({ selector, option, value }) => {
+Cypress.Commands.add('setSelectOption', ({ selector, option, value }) => {
   cy.get(selector)
     .find('.css-10nd86i')
     .click()
@@ -39,3 +39,15 @@ Cypress.Commands.add('setReactSelectOption', ({ selector, option, value }) => {
     .eq(1)
     .should('have.value', value)
 })
+Cypress.Commands.add('clearSelect', ({ selector }) => {
+  cy.get(selector)
+    .find('.css-10nd86i')
+    .find('.react-select__clear-indicator')
+    .click()
+  cy.get(selector)
+    .find('.css-10nd86i')
+    .find('input')
+    .eq(1)
+    .should('have.value', '')
+})
+// react-select__clear-indicator
