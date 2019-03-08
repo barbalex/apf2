@@ -9,7 +9,7 @@ describe('assoziierte Art form', () => {
   it('has Title assoziierte Art', () => {
     cy.get('[data-id=form-title]').should('contain', 'assoziierte Art')
   })
-  it('updates Art 1', () => {
+  it('updates Art', () => {
     cy.setSelectTopOption({
       selector: '[data-id=assozart] [data-id=aeId]',
       option: 'Abies a',
