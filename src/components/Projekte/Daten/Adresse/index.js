@@ -47,7 +47,7 @@ const Adresse = ({ treeName }: { treeName: String }) => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value) || null
       try {
-        client.mutate({
+        await client.mutate({
           mutation: updateAdresseByIdGql,
           variables: {
             id: row.id,
