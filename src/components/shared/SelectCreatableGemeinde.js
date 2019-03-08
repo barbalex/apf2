@@ -130,12 +130,9 @@ const SharedSelectCreatable = ({
     [stateValue, name],
   )
 
-  useEffect(
-    () => {
-      setStateValue(value)
-    },
-    [value],
-  )
+  useEffect(() => {
+    setStateValue(value)
+  }, [value])
 
   // need to add value to options list if it is not yet included
   const valuesArray = optionsIn.map(o => o.value)
@@ -145,7 +142,7 @@ const SharedSelectCreatable = ({
   }
 
   return (
-    <Container>
+    <Container data-id={field}>
       {label && <Label>{label}</Label>}
       <Field>
         <StyledSelect
