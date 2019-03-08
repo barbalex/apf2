@@ -20,3 +20,6 @@ postgrest.conf
 yarn-error.log
 #*.config.js
 secrets.json
+
+cypress/screenshots
+cypress/videos

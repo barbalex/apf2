@@ -65,7 +65,6 @@ Cypress.Commands.add('setSelectOption2', ({ selector, option, value }) => {
     .find('input')
     .eq(1)
     .focus()
-    .debug()
   /*.find('.react-select__menu')
     .contains(option)
     .click({ force: true })*/

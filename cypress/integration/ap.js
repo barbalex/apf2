@@ -61,6 +61,7 @@ describe('Aktionsplan form', () => {
       option: 'Adrienne Frei',
       value: 'dbc6b98a-4375-11e8-ab21-63812d703dd9',
     })
+    cy.get('#ekfBeobachtungszeitpunkt').focus()
   })
   it('updates Bester Beobachtungszeitpunkt für EKF', () => {
     const typedText = 'test'

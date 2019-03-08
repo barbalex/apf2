@@ -18,6 +18,7 @@ describe('EKF-Zähleinheit form', () => {
       option: 'Blätter',
       value: 'ddf9e94b-3dc8-11e8-acca-23ae4dc9b8b9',
     })
+    cy.get('#bemerkungen').focus()
   })
   it('updates Bemerkungen', () => {
     const typedText = 'test bemerkungen'

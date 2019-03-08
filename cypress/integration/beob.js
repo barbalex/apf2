@@ -50,6 +50,7 @@ describe('Beobachtung form', () => {
     }).clearSelect({
       selector: '[data-id=tpopId]',
     })
+    cy.get('#bemerkungen').focus()
   })
   it('updates Bemerkungen', () => {
     const typedText = 'das ist ein Test'
