@@ -175,14 +175,14 @@ const Status = ({
             >
               <FormControlLabel
                 value="100"
-                control={<StyledRadio color="primary" />}
+                control={<StyledRadio data-id="status_100" color="primary" />}
                 label="aktuell"
                 disabled={disabled}
                 onClick={onClickButton}
               />
               <FormControlLabel
                 value="101"
-                control={<StyledRadio color="primary" />}
+                control={<StyledRadio data-id="status_101" color="primary" />}
                 label="erloschen"
                 disabled={disabled}
                 onClick={onClickButton}
@@ -198,21 +198,21 @@ const Status = ({
             >
               <FormControlLabel
                 value="200"
-                control={<StyledRadio color="primary" />}
+                control={<StyledRadio data-id="status_200" color="primary" />}
                 label="aktuell"
                 disabled={disabled}
                 onClick={onClickButton}
               />
               <FormControlLabel
                 value="201"
-                control={<StyledRadio color="primary" />}
+                control={<StyledRadio data-id="status_201" color="primary" />}
                 label="Ansaatversuch"
                 disabled={disabled}
                 onClick={onClickButton}
               />
               <FormControlLabel
                 value="202"
-                control={<StyledRadio color="primary" />}
+                control={<StyledRadio data-id="status_202" color="primary" />}
                 label="erloschen / nicht etabliert"
                 disabled={disabled}
                 onClick={onClickButton}
@@ -229,7 +229,7 @@ const Status = ({
             >
               <FormControlLabel
                 value="300"
-                control={<StyledRadio color="primary" />}
+                control={<StyledRadio data-id="status_300" color="primary" />}
                 label="potenzieller Wuchs-/Ansiedlungsort"
                 disabled={disabled}
                 onClick={onClickButton}
