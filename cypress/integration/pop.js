@@ -69,10 +69,7 @@ describe('Population form', () => {
       .clear()
       .type(typedText)
       .blur()
-    cy.get('#X-KoordinatenErrorText').should(
-      'have.text',
-      'GraphQL error: neue Zeile für Relation »pop« verletzt Check-Constraint »zulaessige_x_koordinate«',
-    )
+    cy.contains('#X-KoordinatenErrorText', 'zulaessige_x_koordinate')
   })
   it('updates y', () => {
     const typedText = '1237625'
@@ -88,9 +85,28 @@ describe('Population form', () => {
       .clear()
       .type(typedText)
       .blur()
-    cy.get('#Y-KoordinatenErrorText').should(
-      'have.text',
-      'GraphQL error: neue Zeile für Relation »pop« verletzt Check-Constraint »zulaessige_y_koordinate«',
-    )
+    cy.contains('#Y-KoordinatenErrorText', 'zulaessige_y_koordinate')
+  })
+  it('has filter icon', () => {
+    cy.get('[data-id=daten-filtern]').should('exist')
+  })
+  it('opens filter form', () => {
+    cy.get('[data-id=daten-filtern]')
+      .click()
+      .get('[data-id=form-title]')
+      .should('contain', 'Filter')
+  })
+  it('closes filter form', () => {
+    cy.get('[data-id=daten-anzeigen]')
+      .click()
+      .get('[data-id=form-title]')
+      .should('not.contain', 'Filter')
+  })
+  it('opens info when info icon is clicked', () => {
+    cy.get('[data-id=info-icon]')
+      .first()
+      .click()
+      .get('[data-id=info-icon-popover')
+      .should('exist')
   })
 })
