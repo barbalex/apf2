@@ -84,7 +84,7 @@ const Pop = ({ treeName }: { treeName: string }) => {
         })
       } else {
         try {
-          client.mutate({
+          await client.mutate({
             mutation: updatePopByIdGql,
             variables: {
               id: row.id,
@@ -125,7 +125,6 @@ const Pop = ({ treeName }: { treeName: string }) => {
           (value && ((field === 'y' && row.x) || (field === 'x' && row.y))) ||
           (!value && (field === 'y' || field === 'x'))
         ) {
-          console.log('Daten, Pop, refetch.popForMap:', refetch.popForMap)
           if (refetch.popForMap) refetch.popForMap()
         }
         setErrors({})
