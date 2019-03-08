@@ -102,6 +102,7 @@ const DateFieldWithPicker = ({
         autoCorrect="off"
         autoCapitalize="off"
         spellCheck="off"
+        data-id={name}
       />
       {!!error && (
         <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
