@@ -5,7 +5,6 @@ import FilterIcon from '@material-ui/icons/FilterList'
 import DeleteFilterIcon from '@material-ui/icons/DeleteSweep'
 import DeleteFilterIcon2 from '@material-ui/icons/DeleteSweepOutlined'
 import IconButton from '@material-ui/core/IconButton'
-import isUuid from 'is-uuid'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
@@ -90,7 +89,6 @@ const FormTitle = ({
     nodeFilterSetActiveTable,
     nodeFilterEmptyTable,
     nodeFilterEmptyTree,
-    setTreeKey,
   } = mobxStore
 
   const typesExist = !!types[table]
