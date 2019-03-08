@@ -50,4 +50,3 @@ Cypress.Commands.add('clearSelect', ({ selector }) => {
     .eq(1)
     .should('have.value', '')
 })
-// react-select__clear-indicator
