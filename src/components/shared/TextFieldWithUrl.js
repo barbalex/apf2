@@ -100,7 +100,11 @@ const TextFieldWithUrl = ({
       </StyledFormControl>
       {Array.from(urls).map((url, index) => (
         <div key={index} title={`${url} öffnen`}>
-          <StyledOpenInNewIcon onClick={onOpen} data-url={url} />
+          <StyledOpenInNewIcon
+            onClick={onOpen}
+            data-url={url}
+            data-id="open-url"
+          />
         </div>
       ))}
     </Container>
