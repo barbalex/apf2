@@ -17,6 +17,9 @@ describe('Teil-Population Massnahme form', () => {
       .blur()
       .should('have.value', typedText)
   })
+  it('datum was nulled when updating jahr', () => {
+    cy.get('[data-id=datum] input').should('have.value', '')
+  })
   it('datum only accepts valid values', () => {
     const typedText = '01.02.1001'
     cy.get('[data-id=datum] input')
@@ -32,6 +35,10 @@ describe('Teil-Population Massnahme form', () => {
       .type(typedText)
       .blur()
       .should('have.value', typedText)
+  })
+  it('jahr was set to jahr of datum', () => {
+    const typedText = '2000'
+    cy.get('#jahr').should('have.value', typedText)
   })
   it('updates typ', () => {
     cy.get('[data-id=typ_1] input')
