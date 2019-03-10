@@ -222,7 +222,6 @@ describe('Teil-Population form', () => {
       .check()
       .should('have.value', '1')
   })
-
   it('has filter icon', () => {
     cy.get('[data-id=daten-filtern]').should('exist')
   })
