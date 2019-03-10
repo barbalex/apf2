@@ -12,7 +12,7 @@
     "cypress": "3.1.5",
     "docsify-cli": "4.3.0",
     "flow-bin": "0.94.0",
-    "npm-check-updates": "3.0.3",
+    "npm-check-updates": "3.0.4",
     "postgraphile": "4.3.3",
     "postgraphile-plugin-connection-filter": "1.0.0-beta.29",
     "react-scripts": "2.1.8",
