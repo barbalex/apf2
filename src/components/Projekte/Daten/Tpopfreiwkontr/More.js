@@ -198,7 +198,7 @@ const More = ({
     </MoreFlMeasure>
     <JungPflLabel0>Werden junge neben alten Pflanzen beobachtet?</JungPflLabel0>
     <JungPflLabel1>ja</JungPflLabel1>
-    <JungPflVal1>
+    <JungPflVal1 data-id="jungpflanzenVorhanden_true">
       <RadioButton
         key={`${id}jungpflanzenVorhanden1`}
         name="jungpflanzenVorhanden"
@@ -207,7 +207,7 @@ const More = ({
       />
     </JungPflVal1>
     <JungPflLabel2>nein</JungPflLabel2>
-    <JungPflVal2>
+    <JungPflVal2 data-id="jungpflanzenVorhanden_false">
       <RadioButton
         key={`${id}jungpflanzenVorhanden2`}
         name="jungpflanzenVorhanden"

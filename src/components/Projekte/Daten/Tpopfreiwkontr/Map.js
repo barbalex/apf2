@@ -79,7 +79,7 @@ const Map = ({
   <Container>
     <MapLabel0>Plan ergänzt</MapLabel0>
     <MapLabel1>ja</MapLabel1>
-    <MapVal1>
+    <MapVal1 data-id="planVorhanden_true">
       <RadioButton
         key={`${id}planVorhanden`}
         name="planVorhanden"
@@ -88,7 +88,7 @@ const Map = ({
       />
     </MapVal1>
     <MapLabel2>nein</MapLabel2>
-    <MapVal2>
+    <MapVal2 data-id="planVorhanden_false">
       <RadioButton
         key={`${id}planVorhanden2`}
         name="planVorhanden"

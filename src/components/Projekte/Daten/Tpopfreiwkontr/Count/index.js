@@ -204,17 +204,14 @@ const Count = ({
 
   useEffect(() => setErrors({}), [row])
 
-  const createNew = useCallback(
-    () => {
-      client
-        .mutate({
-          mutation: createTpopkontrzaehl,
-          variables: { tpopkontrId },
-        })
-        .then(() => refetch())
-    },
-    [tpopkontrId],
-  )
+  const createNew = useCallback(() => {
+    client
+      .mutate({
+        mutation: createTpopkontrzaehl,
+        variables: { tpopkontrId },
+      })
+      .then(() => refetch())
+  }, [tpopkontrId])
 
   const allEinheits = get(
     dataAllTpopkontrzaehlEinheitWertes,
@@ -332,7 +329,7 @@ const Count = ({
     return `Fehler: ${dataAllTpopkontrzaehlEinheitWertes.error.message}`
   }
   return (
-    <Container nr={nr} showdelete={showDelete}>
+    <Container nr={nr} showdelete={showDelete} data-id={`count${nr}`}>
       <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
       <EinheitVal>
         <Select
