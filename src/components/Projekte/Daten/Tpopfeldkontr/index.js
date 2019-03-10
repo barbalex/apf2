@@ -369,8 +369,12 @@ const Tpopfeldkontr = ({
             textColor="primary"
             centered
           >
-            <Tab label="Entwicklung" value="entwicklung" />
-            <Tab label="Biotop" value="biotop" />
+            <Tab
+              label="Entwicklung"
+              value="entwicklung"
+              data-id="entwicklung"
+            />
+            <Tab label="Biotop" value="biotop" data-id="biotop" />
           </Tabs>
           {value === 'entwicklung' && (
             <FormContainer data-width={width}>
