@@ -1,3 +1,6 @@
 {
-  "baseUrl": "http://localhost:3000"
+  "baseUrl": "http://localhost:3000",
+  "numTestsKeptInMemory": 20,
+  "viewportHeight": 1200,
+  "viewportWidth": 1600
 }
