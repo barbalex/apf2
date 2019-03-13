@@ -11,6 +11,7 @@
   * [Karte: Symbole und Label wählen](./docs/kartePopTpopIconsLabelWaehlen.md)
   * [Karte: Massstab-Werkzeug](./docs/mapScaleControl.md)
   * [Fehler, Ideen und Vorschläge melden](./docs/melden.md)
+  * [testen, ob pdf dargestellt wird](./docs/pdf.md)
 
 * Technische Dokumentation
   * [Daten-Sicherung](./docs/sichern.md)
