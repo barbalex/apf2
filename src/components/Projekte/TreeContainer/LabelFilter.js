@@ -100,6 +100,9 @@ const LabelFilter = ({ treeName }: { treeName: String }) => {
         onBlur={save}
         onKeyPress={onKeyPress}
         spellCheck="false"
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
       />
     </StyledFormControl>
   )
