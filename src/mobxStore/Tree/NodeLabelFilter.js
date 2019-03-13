@@ -123,6 +123,19 @@ export default types
         self[key] = value
       }
     },
+    tableIsFiltered({ table }) {
+      return (
+        Object.values(self[table] || {}).filter(v => v || v === 0).length > 0
+      )
+    },
+    isFiltered() {
+      // DO NOT USE VIEW, THE RESULT WILL BE WRONG!!!!
+      const tables = Object.keys(self)
+      return tables.some(table => self.tableIsFiltered({ table }))
+    },
+    empty() {
+      Object.keys(self).forEach(key => (self[key] = null))
+    },
   }))
 
 export const defaultValue = {

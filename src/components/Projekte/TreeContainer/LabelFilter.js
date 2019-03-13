@@ -3,6 +3,8 @@ import React, { useCallback, useContext, useState, useEffect } from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import DeleteFilterIcon from '@material-ui/icons/DeleteSweep'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
@@ -21,12 +23,23 @@ const StyledInput = styled(Input)`
     border-bottom-color: rgba(0, 0, 0, 0.1) !important;
   }
 `
+const StyledDeleteFilterIcon = styled(DeleteFilterIcon)`
+  cursor: pointer;
+  pointer-events: auto;
+  padding-top: 5px;
+  color: rgba(0, 0, 0, 0.7);
+`
 
 const LabelFilter = ({ treeName }: { treeName: String }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { setTreeKey } = mobxStore
   const { nodeLabelFilter, activeNode } = mobxStore[treeName]
-  const { setKey: setNodeLabelFilterKey } = nodeLabelFilter
+  const {
+    setKey: setNodeLabelFilterKey,
+    isFiltered: runIsFiltered,
+    empty,
+  } = nodeLabelFilter
+  const isFiltered = runIsFiltered()
   const tableName = activeNode ? activeNode.filterTable : null
 
   let labelText = '(filtern nicht möglich)'
@@ -89,6 +102,10 @@ const LabelFilter = ({ treeName }: { treeName: String }) => {
       save(event)
     }
   })
+  const onClickEmptyFilter = useCallback(() => {
+    empty()
+    setValue('')
+  })
 
   return (
     <StyledFormControl fullWidth>
@@ -103,6 +120,17 @@ const LabelFilter = ({ treeName }: { treeName: String }) => {
         autoComplete="off"
         autoCorrect="off"
         autoCapitalize="off"
+        endAdornment={
+          isFiltered ? (
+            <InputAdornment
+              position="end"
+              onClick={onClickEmptyFilter}
+              title="Alle Filter entfernen"
+            >
+              <StyledDeleteFilterIcon />
+            </InputAdornment>
+          ) : null
+        }
       />
     </StyledFormControl>
   )
