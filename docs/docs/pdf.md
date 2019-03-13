@@ -1,6 +1,6 @@
 # Test
 Auf diese Weise können wir beliebige pdf-Dateien in der Dokumentation anzeigen.<br/>
-Sie können sogar wahlweise heruntergeladen werden. <br/>
+Sie können sogar wahlweise heruntergeladen oder gedruckt werden. <br/>
 Unterstützt ein Browser die Anzeige von PDF-Dateien nicht, wird die Datei zum Download angeboten. <br/>
 Bloss: Die Breite muss leider fixiert werden, d.h. auf grossen Bildschirmen bleiben beidseits breite leere Ränder. Und auf kleinen Bildschirmen wird es wohl problematisch.
 
