@@ -54,10 +54,7 @@ const EkfRemarks = ({
   row: Object,
 }) => (
   <Container>
-    <RemarksLabel>
-    Mitteilungen zwischen AV/Topos und Freiwilligen
-      <RemarksSubLabel>(wird auch gedruckt)</RemarksSubLabel>
-    </RemarksLabel>
+    <RemarksLabel>Mitteilungen zwischen AV/Topos und Freiwilligen</RemarksLabel>
     <RemarksVal>
       <TextField
         key={`${id}ekfBemerkungen`}

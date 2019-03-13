@@ -290,6 +290,7 @@ const Tpopfreiwkontr = ({
           value,
         })
       }
+      if (field === 'ekfVerifiziert') value = !value
       /**
        * enable passing two values
        * with same update
