@@ -9,7 +9,7 @@ const Container = styled.div`
   margin-bottom: 12px;
 `
 const Label = styled.div`
-  font-size: 12px;
+  font-size: ${props => (props.labelsize ? `${props.labelsize}px` : '12px')};
   color: rgb(0, 0, 0, 0.54);
 `
 const Error = styled.div`
@@ -72,6 +72,7 @@ const SharedSelect = ({
   value,
   field = '',
   label,
+  labelSize,
   name,
   error,
   options,
@@ -82,6 +83,7 @@ const SharedSelect = ({
   value?: ?number | ?string,
   field?: string,
   label: string,
+  labelSize: ?number,
   name: string,
   error: string,
   options: Array<Object>,
@@ -104,7 +106,7 @@ const SharedSelect = ({
 
   return (
     <Container data-id={field}>
-      {label && <Label>{label}</Label>}
+      {label && <Label labelsize={labelSize}>{label}</Label>}
       <StyledSelect
         id={field}
         name={field}

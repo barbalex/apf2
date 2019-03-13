@@ -63,6 +63,15 @@ const AutocompleteContainer = styled.div`
   flex-basis: 450px;
   padding-left: 16px;
 `
+const Li = styled.li`
+  margin-top: -6px;
+  margin-bottom: -3px;
+`
+const EwmDiv = styled.div`
+  margin-top: -14px;
+  margin-bottom: 3px;
+`
+
 const isRemoteHost = window.location.hostname !== 'localhost'
 
 const Teilpopulationen = ({ treeName }: { treeName: string }) => {
@@ -95,48 +104,45 @@ const Teilpopulationen = ({ treeName }: { treeName: string }) => {
   })
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
-  const onClickButton = useCallback(
-    async () => {
-      setMessage('Export "Teilpopulationen" wird vorbereitet...')
-      try {
-        const { data } = await client.query({
-          query: await import('./allVTpops').then(m => m.default),
-        })
-        const enrichedData = get(data, 'allVTpops.nodes', []).map(oWithout => {
-          let o = { ...oWithout }
-          let nachBeginnAp = null
-          if (
-            o.ap_start_jahr &&
-            o.bekannt_seit &&
-            [200, 201, 202].includes(o.status)
-          ) {
-            if (o.ap_start_jahr <= o.bekannt_seit) {
-              nachBeginnAp = true
-            } else {
-              nachBeginnAp = false
-            }
+  const onClickButton = useCallback(async () => {
+    setMessage('Export "Teilpopulationen" wird vorbereitet...')
+    try {
+      const { data } = await client.query({
+        query: await import('./allVTpops').then(m => m.default),
+      })
+      const enrichedData = get(data, 'allVTpops.nodes', []).map(oWithout => {
+        let o = { ...oWithout }
+        let nachBeginnAp = null
+        if (
+          o.ap_start_jahr &&
+          o.bekannt_seit &&
+          [200, 201, 202].includes(o.status)
+        ) {
+          if (o.ap_start_jahr <= o.bekannt_seit) {
+            nachBeginnAp = true
+          } else {
+            nachBeginnAp = false
           }
-          o.angesiedelt_nach_beginn_ap = nachBeginnAp
-          return o
-        })
-        exportModule({
-          data: enrichedData,
-          fileName: 'Teilpopulationen',
-          exportFileType,
-          mapFilter,
-          exportApplyMapFilter,
-          idKey: 'id',
-          xKey: 'x',
-          yKey: 'y',
-          addError,
-        })
-      } catch (error) {
-        addError(error)
-      }
-      setMessage(null)
-    },
-    [exportFileType, exportApplyMapFilter],
-  )
+        }
+        o.angesiedelt_nach_beginn_ap = nachBeginnAp
+        return o
+      })
+      exportModule({
+        data: enrichedData,
+        fileName: 'Teilpopulationen',
+        exportFileType,
+        mapFilter,
+        exportApplyMapFilter,
+        idKey: 'id',
+        xKey: 'x',
+        yKey: 'y',
+        addError,
+      })
+    } catch (error) {
+      addError(error)
+    }
+    setMessage(null)
+  }, [exportFileType, exportApplyMapFilter])
 
   const artList = sortBy(
     get(aeEigenschaftensData, 'allAeEigenschaftens.nodes', [])
@@ -418,20 +424,21 @@ const Teilpopulationen = ({ treeName }: { treeName: string }) => {
                 marginBottom: '10px',
               }}
             >
-              <li>Anzahl Kontrollen</li>
-              <li>erste Kontrolle</li>
-              <li>erste Zählung</li>
-              <li>letzte Kontrolle</li>
-              <li>letzte Zählung</li>
-              <li>letzter Teilpopulationsbericht</li>
+              <Li>Anzahl Kontrollen</Li>
+              <Li>erste Kontrolle</Li>
+              <Li>erste Zählung</Li>
+              <Li>letzte Kontrolle</Li>
+              <Li>letzte Zählung</Li>
+              <Li>letzter Teilpopulationsbericht</Li>
             </ul>
-            <div>{'= "Eier legende Wollmilchsau"'}</div>
+            <EwmDiv>{'= "Eier legende Wollmilchsau"'}</EwmDiv>
           </DownloadCardButton>
           <AutocompleteContainer>
             <Select
               value=""
               field="ewm"
-              label={`"Eier legende Wollmilchsau" für eine Art`}
+              label={`"Eier legende Wollmilchsau": Art wählen`}
+              labelSize={14}
               options={artList}
               saveToDb={async e => {
                 const apId = e.target.value
