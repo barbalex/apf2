@@ -6,7 +6,6 @@ import {
   popStatusWerte,
   tpop,
   tpopApberrelevantWerte,
-  tpopkontrFrequenzWerte,
 } from '../../../shared/fragments'
 
 export default gql`
@@ -41,11 +40,6 @@ export default gql`
         ...TpopApberrelevantWerteFields
       }
     }
-    allTpopkontrFrequenzWertes {
-      nodes {
-        ...TpopkontrFrequenzWerteFields
-      }
-    }
     allGemeindes {
       nodes {
         id
@@ -58,5 +52,4 @@ export default gql`
   ${popStatusWerte}
   ${tpop}
   ${tpopApberrelevantWerte}
-  ${tpopkontrFrequenzWerte}
 `

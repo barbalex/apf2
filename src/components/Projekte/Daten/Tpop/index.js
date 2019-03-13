@@ -12,7 +12,6 @@ import Status from '../../../shared/Status'
 import SelectCreatable from '../../../shared/SelectCreatableGemeinde'
 import RadioButton from '../../../shared/RadioButton'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
-import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import FormTitle from '../../../shared/FormTitle'
 import TpopAbBerRelevantInfoPopover from '../TpopAbBerRelevantInfoPopover'
 import constants from '../../../../modules/constants'
@@ -194,12 +193,6 @@ const Tpop = ({
   let apberrelevantWerte = get(data, 'allTpopApberrelevantWertes.nodes', [])
   apberrelevantWerte = sortBy(apberrelevantWerte, 'sort')
   apberrelevantWerte = apberrelevantWerte.map(el => ({
-    value: el.code,
-    label: el.text,
-  }))
-  let tpopkontrFrequenzWerte = get(data, 'allTpopkontrFrequenzWertes.nodes', [])
-  tpopkontrFrequenzWerte = sortBy(tpopkontrFrequenzWerte, 'sort')
-  tpopkontrFrequenzWerte = tpopkontrFrequenzWerte.map(el => ({
     value: el.code,
     label: el.text,
   }))
