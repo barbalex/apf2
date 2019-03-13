@@ -65,8 +65,8 @@ const GridContainer = styled.div`
         'more'
         'danger'
         'remarks'
-        'verification'
         'ekfRemarks'
+        'verification'
       `
     }
     if (width < 800) {
@@ -83,8 +83,8 @@ const GridContainer = styled.div`
         'more more'
         'danger danger'
         'remarks remarks'
-        'verification verification'
         'ekfRemarks ekfRemarks'
+        'verification verification'
       `
     }
     return `
@@ -96,8 +96,8 @@ const GridContainer = styled.div`
       'cover cover cover more more more'
       'danger danger danger danger danger danger'
       'remarks remarks remarks remarks remarks remarks'
-      'verification verification verification verification verification verification'
       'ekfRemarks ekfRemarks ekfRemarks ekfRemarks ekfRemarks ekfRemarks'
+      'verification verification verification verification verification verification'
     `
   }};
   grid-template-columns: ${props => {
@@ -106,8 +106,8 @@ const GridContainer = styled.div`
     if (width < 800) return 'repeat(2, 1fr)'
     return 'repeat(6, 1fr)'
   }};
-  grid-column-gap: 10px;
-  grid-row-gap: 10px;
+  grid-column-gap: 5px;
+  grid-row-gap: 5px;
   justify-items: stretch;
   align-items: stretch;
   justify-content: stretch;
@@ -122,7 +122,8 @@ const GridContainer = styled.div`
       'count1 count1 count2 count2 count3 count3'
       'cover cover cover more more more'
       'danger danger danger danger danger danger'
-      'remarks remarks remarks remarks remarks remarks';
+      'remarks remarks remarks remarks remarks remarks'
+      'ekfRemarks ekfRemarks ekfRemarks ekfRemarks ekfRemarks ekfRemarks';
     grid-template-columns: repeat(6, 1fr);
   }
 `
@@ -643,21 +644,21 @@ const Tpopfreiwkontr = ({
             saveToDb={saveToDb}
             row={row}
           />
+          {((isPrint && ekfBemerkungen) || !isPrint) && (
+            <EkfRemarks
+              id={row.id}
+              ekfBemerkungen={ekfBemerkungen}
+              saveToDb={saveToDb}
+              errorsEkfBemerkungen={errors.ekfBemerkungen}
+              row={row}
+            />
+          )}
           {!isPrint && !isFreiwillig && !(view === 'ekf') && (
             <Verification
               id={row.id}
               ekfVerifiziert={ekfVerifiziert}
               errorsEkfVerifiziert={errors.ekfVerifiziert}
               saveToDb={saveToDb}
-              row={row}
-            />
-          )}
-          {!isPrint && (
-            <EkfRemarks
-              id={row.id}
-              ekfBemerkungen={ekfBemerkungen}
-              saveToDb={saveToDb}
-              errorsEkfBemerkungen={errors.ekfBemerkungen}
               row={row}
             />
           )}

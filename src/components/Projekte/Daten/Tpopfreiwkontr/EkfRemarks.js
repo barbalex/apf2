@@ -55,8 +55,8 @@ const EkfRemarks = ({
 }) => (
   <Container>
     <RemarksLabel>
-      Bemerkungen über diese Kontrolle
-      <RemarksSubLabel>(nicht Teil der Datenerfassung)</RemarksSubLabel>
+    Mitteilungen zwischen AV/Topos und Freiwilligen
+      <RemarksSubLabel>(wird auch gedruckt)</RemarksSubLabel>
     </RemarksLabel>
     <RemarksVal>
       <TextField
