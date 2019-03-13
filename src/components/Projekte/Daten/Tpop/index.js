@@ -445,22 +445,6 @@ const Tpop = ({
             saveToDb={saveToDb}
             error={errors.bemerkungen}
           />
-          <RadioButtonGroup
-            value={row.kontrollfrequenz}
-            name="kontrollfrequenz"
-            dataSource={tpopkontrFrequenzWerte}
-            label="Frequenz Feld-Kontrollen"
-            saveToDb={saveToDb}
-            error={errors.kontrollfrequenz}
-          />
-          <RadioButtonGroup
-            value={row.kontrollfrequenzFreiwillige}
-            name="kontrollfrequenzFreiwillige"
-            dataSource={tpopkontrFrequenzWerte}
-            label="Frequenz Freiwilligen-Kontrollen"
-            saveToDb={saveToDb}
-            error={errors.kontrollfrequenzFreiwillige}
-          />
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
