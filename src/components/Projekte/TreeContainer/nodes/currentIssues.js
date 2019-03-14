@@ -17,7 +17,6 @@ export default ({
   mobxStore: Object,
 }): Array<Object> => {
   const currentIssues = get(data, 'allCurrentissues.nodes', [])
-  console.log('nodes cI', { data, currentIssues })
 
   // fetch sorting indexes of parents
   const currentIssueIndex = projektNodes.length + 3

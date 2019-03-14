@@ -122,7 +122,7 @@ const Daten = ({
       />
     ),
     user: <User dimensions={dimensions} treeName={treeName} />,
-    currentissue: <CurrentIssue dimensions={dimensions} treeName={treeName} />,
+    currentIssue: <CurrentIssue dimensions={dimensions} treeName={treeName} />,
     adresse: <Adresse dimensions={dimensions} treeName={treeName} />,
   }
   let key
