@@ -7,7 +7,9 @@ describe('Erfolgs-Kriterien form', () => {
     )
   })
   it('has Title Erfolgs-Kriterium', () => {
-    cy.get('[data-id=form-title]').should('contain', 'Erfolgs-Kriterium')
+    cy.wait(3000)
+      .get('[data-id=form-title]')
+      .should('contain', 'Erfolgs-Kriterium')
   })
   it('updates Beurteilung', () => {
     cy.get('[data-id=erfolg_4] input')
