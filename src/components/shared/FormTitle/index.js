@@ -132,6 +132,8 @@ const FormTitle = ({
     treeName,
   ])
 
+  console.log('FormTitle', { typesExist, types, table })
+
   return (
     <Container showfilter={showFilter}>
       <TitleRow>
