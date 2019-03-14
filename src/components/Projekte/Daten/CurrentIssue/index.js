@@ -4,8 +4,8 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { useQuery } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
+import ReactMarkdown from 'react-markdown'
 
-import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import mobxStoreContext from '../../../../mobxStoreContext'
@@ -61,17 +61,12 @@ const CurrentIssue = ({ treeName }: { treeName: String }) => {
       <Container>
         <FormTitle
           apId={row.id}
-          title="Aktuelle Fehler"
+          title="Aktueller Fehler"
           treeName={treeName}
           table="currentissue"
         />
         <FieldsContainer>
-          <TextField
-            key={`${row.id}issue`}
-            name="issue"
-            label="Name"
-            value={row.issue}
-          />
+          <ReactMarkdown source={row.issue} escapeHtml={false} linkTarget="_blank" />
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
