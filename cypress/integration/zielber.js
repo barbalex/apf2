@@ -3,7 +3,7 @@
 describe('Ziel-Bericht form', () => {
   before(() => {
     cy.visit(
-      '/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Aktionspläne/6c52d174-4f62-11e7-aebe-67a303eb0640/AP-Ziele/1/609d6760-14db-11e9-97a0-1f2adbd510e6/Berichte/64acf1ea-14db-11e9-97a0-8fed09952fd8',
+      '/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Aktionspläne/6c52d174-4f62-11e7-aebe-67a303eb0640/AP-Ziele/1/b41cdf2a-3cf9-11e8-b0c5-fff3a8fbb9e5/Berichte/55281b5e-3d19-11e8-acca-a33b745c6fd1?feldkontrTab=entwicklung&projekteTabs=tree&projekteTabs=daten',
     )
   })
   it('has Title Ziel-Bericht', () => {
