@@ -46,8 +46,9 @@ export default ({
   apFilterValues.forEach(([key, value]) => {
     const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
     // need to prevent numbers from being passed or graphql will bark
-    const val = !isNaN(value) ? value.toString() : value
-    apFilter[key] = { [expression]: val }
+    // 2019.03.14: reverted as graphql barked because number was string
+    //const val = !isNaN(value) ? value.toString() : value
+    apFilter[key] = { [expression]: value }
   })
   // for unknown reason the following only works belated, so not
   if (apFilterSet) {
