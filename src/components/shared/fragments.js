@@ -131,6 +131,15 @@ export const ber = gql`
   }
 `
 
+export const currentIssue = gql`
+  fragment CurrentIssueFields on Currentissue {
+    id
+    sort
+    title
+    issue
+  }
+`
+
 export const ekfzaehleinheit = gql`
   fragment EkfzaehleinheitFields on Ekfzaehleinheit {
     id

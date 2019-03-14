@@ -981,6 +981,18 @@ CREATE INDEX ON apflora.message USING btree (time);
 COMMENT ON COLUMN apflora.message.message IS 'Nachricht an die Benutzer';
 COMMENT ON COLUMN apflora.message.active IS 'false: diese Nachricht wird nicht mehr übermittelt';
 
+DROP TABLE IF EXISTS apflora.currentIssue CASCADE;
+CREATE TABLE apflora.currentIssue (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  sort smallint default null,
+  title text default null,
+  issue text default null
+);
+CREATE INDEX ON apflora.currentIssue USING btree (id);
+CREATE INDEX ON apflora.currentIssue USING btree (sort);
+CREATE INDEX ON apflora.currentIssue USING btree (title);
+COMMENT ON COLUMN apflora.currentIssue.issue IS 'Bekannter Fehler';
+
 -- list of read messages per user
 DROP TABLE IF EXISTS apflora.usermessage;
 CREATE TABLE apflora.usermessage (

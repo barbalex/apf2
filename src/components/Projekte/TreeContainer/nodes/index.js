@@ -5,10 +5,12 @@ import memoizeOne from 'memoize-one'
 import allParentNodesAreOpenModule from '../allParentNodesAreOpen'
 import buildProjektNodes from './projekt'
 import buildUserFolderNodes from './userFolder'
+import buildCurrentIssuesFolderNodes from './currentIssuesFolder'
 import buildWlFolderNodes from './wlFolder'
 import buildAdresseFolderNodes from './adresseFolder'
 import buildAdresseNodes from './adresse'
 import buildUserNodes from './user'
+import buildCurrentIssuesNodes from './currentIssues'
 import buildApFolderNodes from './apFolder'
 import buildApberuebersichtFolderNodes from './apberuebersichtFolder'
 import buildApberuebersichtNodes from './apberuebersicht'
@@ -72,6 +74,7 @@ const compare = (a, b) => {
 
 export default ({
   data,
+  dataCurrentIssues,
   dataAdresses,
   dataApbers,
   dataApberuebersichts,
@@ -95,6 +98,7 @@ export default ({
   dataUsers,
   dataZielbers,
   dataZiels,
+  loadingCurrentIssues,
   loadingAdresses,
   loadingUsers,
   loadingProjekts,
@@ -128,6 +132,7 @@ export default ({
   treeName,
 }: {
   data: Object,
+  dataCurrentIssues: Object,
   dataAdresses: Object,
   dataApbers: Object,
   dataApberuebersichts: Object,
@@ -197,6 +202,15 @@ export default ({
     ...projektNodes,
     ...memoizeOne(() =>
       buildUserFolderNodes({
+        data: dataUsers,
+        treeName,
+        projektNodes,
+        loading: loadingUsers,
+        mobxStore,
+      }),
+    )(),
+    ...memoizeOne(() =>
+      buildCurrentIssuesFolderNodes({
         data: dataUsers,
         treeName,
         projektNodes,
@@ -1182,6 +1196,20 @@ export default ({
         ...nodes,
         ...memoizeOne(() =>
           buildUserNodes({
+            nodes,
+            data: dataUsers,
+            treeName,
+            projektNodes,
+            mobxStore,
+          }),
+        )(),
+      ]
+    }
+    if (nodeUrl.length === 1 && nodeUrl[0] === 'Aktuelle-Fehler') {
+      nodes = [
+        ...nodes,
+        ...memoizeOne(() =>
+          buildCurrentIssuesNodes({
             nodes,
             data: dataUsers,
             treeName,

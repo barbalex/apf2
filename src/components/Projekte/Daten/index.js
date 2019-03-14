@@ -12,6 +12,7 @@ import mobxStoreContext from '../../../mobxStoreContext'
 const Projekt = lazy(() => import('./Projekt'))
 const Ap = lazy(() => import('./Ap'))
 const User = lazy(() => import('./User'))
+const CurrentIssue = lazy(() => import('./CurrentIssue'))
 const Adresse = lazy(() => import('./Adresse'))
 const Apberuebersicht = lazy(() => import('./Apberuebersicht'))
 const Erfkrit = lazy(() => import('./Erfkrit'))
@@ -121,6 +122,7 @@ const Daten = ({
       />
     ),
     user: <User dimensions={dimensions} treeName={treeName} />,
+    currentissue: <CurrentIssue dimensions={dimensions} treeName={treeName} />,
     adresse: <Adresse dimensions={dimensions} treeName={treeName} />,
   }
   let key

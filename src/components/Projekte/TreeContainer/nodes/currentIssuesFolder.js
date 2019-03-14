@@ -1,0 +1,38 @@
+// @flow
+import get from 'lodash/get'
+
+export default ({
+  nodes: nodesPassed,
+  data,
+  treeName,
+  loading,
+  projektNodes,
+  mobxStore,
+}: {
+  nodes: Array<Object>,
+  data: Object,
+  treeName: String,
+  loading: Boolean,
+  projektNodes: Array<Object>,
+  mobxStore: Object,
+}): Array<Object> => {
+  const currentIssues = get(data, 'allCurrentissues.nodes', [])
+
+  // fetch sorting indexes of parents
+  const currentIssuesIndex = projektNodes.length + 3
+
+  let message = loading && !currentIssues.length ? '...' : currentIssues.length
+
+  return [
+    {
+      nodeType: 'folder',
+      menuType: 'currentIssuesFolder',
+      id: 'benutzerFolder',
+      urlLabel: 'Benutzer',
+      label: `Aktuelle Fehler (${message})`,
+      url: ['Aktuelle-Fehler'],
+      sort: [currentIssuesIndex],
+      hasChildren: currentIssues.length > 0,
+    },
+  ]
+}

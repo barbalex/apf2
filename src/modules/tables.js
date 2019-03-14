@@ -382,4 +382,12 @@ export default [
     idField: 'id',
     parentIdField: 'none',
   },
+  {
+    table: 'currentIssue',
+    parentTable: 'none',
+    label: 'Aktuelle Fehler',
+    labelSingular: 'Aktueller Fehler',
+    idField: 'id',
+    parentIdField: 'none',
+  },
 ]

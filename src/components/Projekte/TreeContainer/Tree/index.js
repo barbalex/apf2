@@ -15,6 +15,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import buildVariables from './buildVariables'
 import queryAdresses from './queryAdresses'
+import queryCurrentIssues from './queryCurrentIssues'
 import queryUsers from './queryUsers'
 import queryProjekts from './queryProjekts'
 import queryApberuebersichts from './queryApberuebersichts'
@@ -414,8 +415,14 @@ const Tree = ({ treeName, dimensions }: Props) => {
     key: 'adresses',
     value: refetchAdresses,
   })
+  const {
+    data: dataCurrentIssues,
+    error: errorCurrentIssues,
+    loading: loadingCurrentIssues,
+  } = useQuery(queryCurrentIssues)
 
   const queryLoadingArray = [
+    loadingCurrentIssues,
     loadingAdresses,
     loadingUsers,
     loadingProjekts,
@@ -445,6 +452,7 @@ const Tree = ({ treeName, dimensions }: Props) => {
   ]
 
   const queryErrorArray = [
+    errorCurrentIssues,
     errorAdresses,
     errorUsers,
     errorProjekts,
@@ -474,6 +482,7 @@ const Tree = ({ treeName, dimensions }: Props) => {
   ].filter(e => !!e)
 
   const data = {
+    ...dataCurrentIssues,
     ...dataAdresses,
     ...dataUsers,
     ...dataProjekts,
@@ -511,6 +520,7 @@ const Tree = ({ treeName, dimensions }: Props) => {
     role,
     nodeFilter,
     data,
+    dataCurrentIssues,
     dataAdresses,
     dataUsers,
     dataProjekts,
@@ -535,6 +545,7 @@ const Tree = ({ treeName, dimensions }: Props) => {
     dataBeobNichtBeurteilts,
     dataBeobNichtZuzuordnens,
     loadingAdresses,
+    loadingCurrentIssues,
     loadingUsers,
     loadingProjekts,
     loadingApberuebersichts,
