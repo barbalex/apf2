@@ -7,7 +7,8 @@ describe('Teil-Population Feldkontrolle Biotop form', () => {
     )
   })
   it('opens Biotop', () => {
-    cy.get('[data-id=biotop]')
+    cy.wait(5000)
+      .get('[data-id=biotop]')
       .click()
       .get('[data-id=lrDelarze]')
       .find('.css-10nd86i input:text')
