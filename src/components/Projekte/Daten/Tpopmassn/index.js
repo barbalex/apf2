@@ -23,6 +23,7 @@ import withAeEigenschaftens from './withAeEigenschaftens'
 import withAllAdresses from './withAllAdresses'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
+import filterNodesByNodeFilterArray from '../../TreeContainer/filterNodesByNodeFilterArray'
 
 const Container = styled.div`
   height: 100%;
@@ -65,6 +66,7 @@ const Tpopmassn = ({
 
   const [errors, setErrors] = useState({})
   const { activeNodeArray } = mobxStore[treeName]
+  const showFilter = !!nodeFilter[treeName].activeTable
 
   const { data, loading, error } = useQuery(query, {
     variables: {
@@ -72,13 +74,27 @@ const Tpopmassn = ({
         activeNodeArray.length > 9
           ? activeNodeArray[9]
           : '99999999-9999-9999-9999-999999999999',
+      showFilter,
     },
   })
 
-  const showFilter = !!nodeFilter[treeName].activeTable
+  let tpopmassnTotal = []
+  let tpopmassnFiltered = []
   let row
   if (showFilter) {
     row = nodeFilter[treeName].tpopmassn
+    // get filter values length
+    tpopmassnTotal = get(data, 'allTpopmassns.nodes', [])
+    const nodeFilterArray = Object.entries(
+      nodeFilter[treeName].tpopfeldkontr,
+    ).filter(([key, value]) => value || value === 0 || value === false)
+    tpopmassnFiltered = tpopmassnTotal.filter(node =>
+      filterNodesByNodeFilterArray({
+        node,
+        nodeFilterArray,
+        table: 'tpopmassn',
+      }),
+    )
   } else {
     row = get(data, 'tpopmassnById', {})
   }
@@ -222,6 +238,8 @@ const Tpopmassn = ({
           title="Massnahme"
           treeName={treeName}
           table="tpopmassn"
+          totalNr={tpopmassnTotal.length}
+          filteredNr={tpopmassnFiltered.length}
         />
         <FieldsContainer data-width={width}>
           <TextField

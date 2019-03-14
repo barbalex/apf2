@@ -7,7 +7,7 @@ import {
 } from '../../../shared/fragments'
 
 export default gql`
-  query tpopmassnByIdQuery($id: UUID!) {
+  query tpopmassnByIdQuery($id: UUID!, $showFilter: Boolean!) {
     tpopmassnById(id: $id) {
       ...TpopmassnFields
       tpopmassnTypWerteByTyp {
@@ -22,6 +22,11 @@ export default gql`
           id
           apId
         }
+      }
+    }
+    allTpopmassns @include(if: $showFilter) {
+      nodes {
+        ...TpopmassnFields
       }
     }
     allTpopmassnTypWertes {
