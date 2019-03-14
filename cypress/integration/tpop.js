@@ -208,20 +208,6 @@ describe('Teil-Population form', () => {
       .blur()
       .should('have.value', typedText)
   })
-  it('updates kontrollfrequenz', () => {
-    cy.get('[data-id=kontrollfrequenz_0] input')
-      .check()
-      .get('[data-id=kontrollfrequenz_1] input')
-      .check()
-      .should('have.value', '1')
-  })
-  it('updates kontrollfrequenzFreiwillige', () => {
-    cy.get('[data-id=kontrollfrequenzFreiwillige_0] input')
-      .check()
-      .get('[data-id=kontrollfrequenzFreiwillige_1] input')
-      .check()
-      .should('have.value', '1')
-  })
   it('has filter icon', () => {
     cy.get('[data-id=daten-filtern]').should('exist')
   })
