@@ -211,7 +211,7 @@ export default ({
     )(),
     ...memoizeOne(() =>
       buildCurrentIssuesFolderNodes({
-        data: dataUsers,
+        data: dataCurrentIssues,
         treeName,
         projektNodes,
         loading: loadingUsers,
@@ -1211,7 +1211,7 @@ export default ({
         ...memoizeOne(() =>
           buildCurrentIssuesNodes({
             nodes,
-            data: dataUsers,
+            data: dataCurrentIssues,
             treeName,
             projektNodes,
             mobxStore,

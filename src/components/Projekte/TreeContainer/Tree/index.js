@@ -421,6 +421,8 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingCurrentIssues,
   } = useQuery(queryCurrentIssues)
 
+  console.log('Tree', { dataCurrentIssues })
+
   const queryLoadingArray = [
     loadingCurrentIssues,
     loadingAdresses,

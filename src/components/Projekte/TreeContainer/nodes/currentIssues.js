@@ -1,8 +1,7 @@
 // @flow
 import get from 'lodash/get'
+import sortBy from 'lodash/sortBy'
 import memoizeOne from 'memoize-one'
-
-import compareLabel from './compareLabel'
 
 export default ({
   nodes: nodesPassed,
@@ -18,31 +17,23 @@ export default ({
   mobxStore: Object,
 }): Array<Object> => {
   const currentIssues = get(data, 'allCurrentissues.nodes', [])
+  console.log('nodes cI', { data, currentIssues })
 
   // fetch sorting indexes of parents
   const currentIssueIndex = projektNodes.length + 3
 
   // map through all elements and create array of nodes
   const nodes = memoizeOne(() =>
-    currentIssues
-      .map(el => {
-        const message = el.role
-          ? el.role.replace('apflora_', '')
-          : 'keine Rolle'
-        const label = el.name ? `${el.name} (${message})` : '(kein Name)'
-
-        return {
-          nodeType: 'table',
-          menuType: 'currentIssue',
-          id: el.id,
-          urlLabel: el.id,
-          label,
-          url: ['Aktuelle-Fehler', el.id],
-          hasChildren: false,
-        }
-      })
-      // sort by label
-      .sort(compareLabel)
+    sortBy(currentIssues, ['sort', 'title'])
+      .map(el => ({
+        nodeType: 'table',
+        menuType: 'currentIssue',
+        id: el.id,
+        urlLabel: el.id,
+        label: el.title || '(kein Titel)',
+        url: ['Aktuelle-Fehler', el.id],
+        hasChildren: false,
+      }))
       .map((el, index) => {
         el.sort = [currentIssueIndex, index]
         return el
