@@ -45,9 +45,6 @@ export default ({
   )
   apFilterValues.forEach(([key, value]) => {
     const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
-    // need to prevent numbers from being passed or graphql will bark
-    // 2019.03.14: reverted as graphql barked because number was string
-    //const val = !isNaN(value) ? value.toString() : value
     apFilter[key] = { [expression]: value }
   })
   // for unknown reason the following only works belated, so not
@@ -110,9 +107,7 @@ export default ({
   )
   popFilterValues.forEach(([key, value]) => {
     const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
-    // need to prevent numbers from being passed or graphql will bark
-    const val = !isNaN(value) ? value.toString() : value
-    popFilter[key] = { [expression]: val }
+    popFilter[key] = { [expression]: value }
   })
   const tpop = uniq(
     openNodes
@@ -136,9 +131,7 @@ export default ({
   )
   tpopFilterValues.forEach(([key, value]) => {
     const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
-    // need to prevent numbers from being passed or graphql will bark
-    const val = !isNaN(value) ? value.toString() : value
-    tpopFilter[key] = { [expression]: val }
+    tpopFilter[key] = { [expression]: value }
   })
 
   const tpopkontr = uniq(

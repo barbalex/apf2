@@ -67,7 +67,7 @@ export default ({
             nodeFilterArray,
             table: 'pop',
           }),
-        )
+        ).length
     : get(data, 'allPops.totalCount', '')
   let message = loading && !popNodesLength ? '...' : popNodesLength
   if (nodeLabelFilterString) {
