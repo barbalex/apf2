@@ -183,12 +183,4 @@ describe('Teil-Population Massnahme form', () => {
       .get('[data-id=form-title]')
       .should('not.contain', 'Filter')
   })
-  it('opens info when info icon is clicked', () => {
-    cy.get('[data-id=info-icon]')
-      .first()
-      .click()
-      .get('[data-id=info-icon-popover')
-      .should('exist')
-    cy.get('#jahr').focus()
-  })
 })
