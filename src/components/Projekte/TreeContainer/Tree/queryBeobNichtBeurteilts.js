@@ -1,7 +1,11 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query BeobNichtBeurteiltsQuery($ap: [UUID!], $isAp: Boolean!) {
+  query BeobNichtBeurteiltsQuery(
+    $ap: [UUID!]
+    $isAp: Boolean!
+    $withNodes: Boolean!
+  ) {
     allVApbeobs(
       filter: {
         nichtZuordnen: { equalTo: false }
@@ -10,7 +14,8 @@ export default gql`
       }
       orderBy: DATUM_DESC
     ) @include(if: $isAp) {
-      nodes {
+      totalCount
+      nodes @include(if: $withNodes) {
         id
         apId
         nichtZuordnen

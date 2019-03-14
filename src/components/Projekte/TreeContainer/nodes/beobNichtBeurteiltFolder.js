@@ -40,28 +40,24 @@ export default ({
     `${treeName}.nodeLabelFilter.beob`,
   )
 
-  const beobNichtBeurteiltNodesLength = memoizeOne(
-    () =>
-      beobNichtBeurteilts
+  const beobNichtBeurteiltNodesLength = nodeLabelFilterString
+    ? beobNichtBeurteilts
         .filter(el => el.apId === apId)
         // filter by nodeLabelFilter
         .filter(el => {
-          if (nodeLabelFilterString) {
-            // some dates are not valid
-            // need to account for that
-            let datum = '(kein Datum)'
-            if (!isValid(new Date(el.datum))) {
-              datum = '(ungültiges Datum)'
-            } else if (!!el.datum) {
-              datum = format(new Date(el.datum), 'yyyy.MM.dd')
-            }
-            return `${datum}: ${el.autor || '(kein Autor)'} (${el.quelle})`
-              .toLowerCase()
-              .includes(nodeLabelFilterString.toLowerCase())
+          // some dates are not valid
+          // need to account for that
+          let datum = '(kein Datum)'
+          if (!isValid(new Date(el.datum))) {
+            datum = '(ungültiges Datum)'
+          } else if (!!el.datum) {
+            datum = format(new Date(el.datum), 'yyyy.MM.dd')
           }
-          return true
-        }).length,
-  )()
+          return `${datum}: ${el.autor || '(kein Autor)'} (${el.quelle})`
+            .toLowerCase()
+            .includes(nodeLabelFilterString.toLowerCase())
+        }).length
+    : get(data, 'allVApbeobs.totalCount', '')
   let message =
     loading && !beobNichtBeurteiltNodesLength
       ? '...'

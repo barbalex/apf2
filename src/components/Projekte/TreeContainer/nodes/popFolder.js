@@ -44,30 +44,31 @@ export default ({
     mobxStore,
     `${treeName}.nodeLabelFilter.pop`,
   )
+  const isFiltered =
+    mobxStore.nodeFilterTableIsFiltered({ treeName, table: 'pop' }) ||
+    !!nodeLabelFilterString
 
-  let popNodes = memoizeOne(() =>
-    pops
-      .filter(el => el.apId === apId)
-      // filter by nodeLabelFilter
-      .filter(el => {
-        if (nodeLabelFilterString) {
-          return `${el.nr || '(keine Nr)'}: ${el.name || '(kein Name)'}`
-            .toLowerCase()
-            .includes(nodeLabelFilterString.toString().toLowerCase())
-        }
-        return true
-      })
-      // filter by nodeFilter
-      .filter(node =>
-        filterNodesByNodeFilterArray({
-          node,
-          nodeFilterArray,
-          table: 'pop',
-        }),
-      ),
-  )()
-
-  const popNodesLength = popNodes.length
+  const popNodesLength = isFiltered
+    ? pops
+        .filter(el => el.apId === apId)
+        // filter by nodeLabelFilter
+        .filter(el => {
+          if (nodeLabelFilterString) {
+            return `${el.nr || '(keine Nr)'}: ${el.name || '(kein Name)'}`
+              .toLowerCase()
+              .includes(nodeLabelFilterString.toString().toLowerCase())
+          }
+          return true
+        })
+        // filter by nodeFilter
+        .filter(node =>
+          filterNodesByNodeFilterArray({
+            node,
+            nodeFilterArray,
+            table: 'pop',
+          }),
+        )
+    : get(data, 'allPops.totalCount', '')
   let message = loading && !popNodesLength ? '...' : popNodesLength
   if (nodeLabelFilterString) {
     message = `${popNodesLength} gefiltert`

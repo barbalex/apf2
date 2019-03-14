@@ -1,9 +1,14 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query PopsQuery($isAp: Boolean!, $popFilter: PopFilter!) {
+  query PopsQuery(
+    $isAp: Boolean!
+    $popFilter: PopFilter!
+    $withNodes: Boolean!
+  ) {
     allPops(filter: $popFilter, orderBy: NR_ASC) @include(if: $isAp) {
-      nodes {
+      totalCount
+      nodes @include(if: $withNodes) {
         id
         apId
         nr

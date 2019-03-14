@@ -81,9 +81,15 @@ type Props = {
 const Tree = ({ treeName, dimensions }: Props) => {
   const mobxStore = useContext(mobxStoreContext)
   const tree = mobxStore[treeName]
-  const { activeNodeArray, setNodes, openNodes } = tree
+  const { activeNodeArray, setNodes, openNodes, nodeLabelFilter } = tree
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
-  const { nodeFilter, user, setRefetchKey, setTreeKey } = mobxStore
+  const {
+    nodeFilter,
+    user,
+    setRefetchKey,
+    setTreeKey,
+    nodeFilterTableIsFiltered,
+  } = mobxStore
   const { idb } = useContext(idbContext)
   const {
     projekt,
@@ -91,10 +97,12 @@ const Tree = ({ treeName, dimensions }: Props) => {
     apFilter,
     ap,
     isAp,
+    isBeobNichtBeurteilt,
     ziel,
     isZiel,
     pop,
     isPop,
+    isPopFolder,
     popFilter,
     tpop,
     isTpop,
@@ -157,7 +165,16 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingPops,
     refetch: refetchPops,
   } = useQuery(queryPops, {
-    variables: { isAp, popFilter },
+    variables: {
+      isAp,
+      popFilter,
+      withNodes: !(
+        isAp &&
+        !nodeLabelFilter.pop &&
+        !nodeFilterTableIsFiltered({ treeName, table: 'pop' }) &&
+        !isPopFolder
+      ),
+    },
   })
   setRefetchKey({
     key: 'pops',
@@ -385,7 +402,11 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingBeobNichtBeurteilts,
     refetch: refetchBeobNichtBeurteilts,
   } = useQuery(queryBeobNichtBeurteilts, {
-    variables: { isAp, ap },
+    variables: {
+      isAp,
+      ap,
+      withNodes: !(isAp && !nodeLabelFilter.beob && !isBeobNichtBeurteilt),
+    },
   })
   setRefetchKey({
     key: 'beobNichtBeurteilts',
