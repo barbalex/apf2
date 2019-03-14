@@ -3,7 +3,6 @@ import { types } from 'mobx-state-tree'
 import cloneDeep from 'lodash/cloneDeep'
 import isEqual from 'lodash/isEqual'
 import uniqBy from 'lodash/uniqBy'
-import get from 'lodash/get'
 import queryString from 'query-string'
 import createHistory from 'history/createBrowserHistory'
 
@@ -25,7 +24,6 @@ import initialNodeFilterTreeValues from './NodeFilterTree/initialValues'
 import User, { defaultValue as defaultUser } from './User'
 import Tree, { defaultValue as defaultTree } from './Tree'
 import getActiveNodes from '../modules/getActiveNodes'
-import simpleTypes from './NodeFilterTree/simpleTypes'
 
 // substract 3 Months to now so user sees previous year in February
 const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
@@ -183,16 +181,7 @@ const myTypes = types
       self.nodeFilter.tree2 = cloneDeep(self.nodeFilter.tree)
     },
     nodeFilterSetValue({ treeName, table, key, value }) {
-      const type = get(simpleTypes, `${table}.${key}`)
-      const valueToUse = type === 'number' ? +value : value
-      console.log('store, nodeFilterSetValue', {
-        type,
-        valueToUse,
-        value,
-        table,
-        key,
-      })
-      self.nodeFilter[treeName][table][key] = valueToUse
+      self.nodeFilter[treeName][table][key] = value
     },
     nodeFilterEmptyTree(treeName) {
       self.nodeFilter[treeName] = initialNodeFilterTreeValues
