@@ -16,7 +16,7 @@ describe('User login', () => {
     indexedDB.deleteDatabase('apflora')
   })
   it('greets with Anmeldung', () => {
-    cy.contains('h2', 'Anmeldung')
+    cy.contains('h6', 'Anmeldung')
   })
   it('has Anmelden button', () => {
     cy.contains('button', 'anmelden')
