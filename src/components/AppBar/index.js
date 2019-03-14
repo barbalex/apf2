@@ -125,7 +125,7 @@ const MyAppBar = ({ setShowDeletions }: { setShowDeletions: () => void }) => {
     <ErrorBoundary>
       <StyledAppBar position="static">
         <StyledToolbar>
-          <Typography variant="title" color="inherit">
+          <Typography variant="h6" color="inherit">
             {isMobile
               ? ''
               : view === 'ekf'
