@@ -106,8 +106,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     mobxStore,
   })
 
-  console.log('Tree', { apFilter })
-
   const {
     data: dataProjekts,
     error: errorProjekts,
