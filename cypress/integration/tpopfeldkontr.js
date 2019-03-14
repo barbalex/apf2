@@ -7,7 +7,9 @@ describe('Teil-Population Feldkontrolle form', () => {
     )
   })
   it('has correct Title', () => {
-    cy.get('[data-id=form-title]').should('contain', 'Feld-Kontrolle')
+    cy.wait(5000)
+      .get('[data-id=form-title]')
+      .should('contain', 'Feld-Kontrolle')
   })
   it('updates jahr', () => {
     const typedText = '1'
@@ -132,6 +134,7 @@ describe('Teil-Population Feldkontrolle form', () => {
   it('opens filter form', () => {
     cy.get('[data-id=daten-filtern]')
       .click()
+      .wait(5000)
       .get('[data-id=form-title]')
       .should('contain', 'Filter')
   })

@@ -7,7 +7,9 @@ describe('Teil-Population Massnahme form', () => {
     )
   })
   it('has correct Title', () => {
-    cy.get('[data-id=form-title]').should('contain', 'Massnahme')
+    cy.wait(5000)
+      .get('[data-id=form-title]')
+      .should('contain', 'Massnahme')
   })
   it('updates jahr', () => {
     const typedText = '1'
@@ -172,7 +174,8 @@ describe('Teil-Population Massnahme form', () => {
     cy.get('[data-id=daten-filtern]').should('exist')
   })
   it('opens filter form', () => {
-    cy.get('[data-id=daten-filtern]')
+    cy.wait(5000)
+      .get('[data-id=daten-filtern]')
       .click()
       .get('[data-id=form-title]')
       .should('contain', 'Filter')
