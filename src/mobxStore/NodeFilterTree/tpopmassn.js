@@ -20,7 +20,7 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  planVorhanden: types.optional(types.maybeNull(types.number), null),
+  planVorhanden: types.optional(types.maybeNull(types.boolean), null),
   planBezeichnung: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
