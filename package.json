@@ -12,9 +12,9 @@
     "cypress": "3.1.5",
     "docsify-cli": "4.3.0",
     "flow-bin": "0.94.0",
-    "npm-check-updates": "3.0.4",
+    "npm-check-updates": "3.0.8",
     "postgraphile": "4.3.3",
-    "postgraphile-plugin-connection-filter": "1.0.0-beta.29",
+    "postgraphile-plugin-connection-filter": "1.0.0-rc.1",
     "react-scripts": "2.1.8",
     "serve": "10.1.2",
     "source-map-explorer": "1.7.0"
@@ -32,10 +32,10 @@
     "@turf/points-within-polygon": "5.1.5",
     "apollo-cache-inmemory": "1.5.1",
     "apollo-client": "2.5.1",
-    "apollo-link": "1.2.9",
-    "apollo-link-batch-http": "1.2.9",
-    "apollo-link-context": "1.0.15",
-    "apollo-link-http": "1.5.12",
+    "apollo-link": "1.2.10",
+    "apollo-link-batch-http": "1.2.10",
+    "apollo-link-context": "1.0.16",
+    "apollo-link-http": "1.5.13",
     "autosuggest-highlight": "3.1.1",
     "axios": "0.18.0",
     "babel-polyfill": "6.26.0",
@@ -63,7 +63,7 @@
     "material-ui-pickers": "2.2.4",
     "memoize-one": "5.0.0",
     "mobx": "5.9.0",
-    "mobx-react-lite": "1.1.0",
+    "mobx-react-lite": "1.1.1",
     "mobx-state-tree": "3.11.0",
     "moment": "2.24.0",
     "proj4": "2.5.0",
@@ -83,7 +83,7 @@
     "react-linkify": "0.2.2",
     "react-measure": "2.2.4",
     "react-reflex": "3.0.13",
-    "react-select": "2.4.1",
+    "react-select": "2.4.2",
     "react-sortable-hoc": "1.7.1",
     "react-window": "1.6.2",
     "recompose": "0.30.0",
@@ -104,7 +104,8 @@
   },
   "resolutions": {
     "@babel/runtime": "7.3.1",
-    "terser": "3.14.1"
+    "terser": "3.14.1",
+    "apollo-link-dedup": "1.0.15"
   },
   "eslintConfig": {
     "extends": "react-app"
