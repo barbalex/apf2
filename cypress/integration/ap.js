@@ -33,7 +33,7 @@ describe('Aktionsplan form', () => {
     })
   })
   it('updates bearbeitung Aktionsplan', () => {
-    cy.get('[data-id=bearbeitung_0] input')
+    cy.get('[data-id=bearbeitung_1] input')
       .check()
       .get('[data-id=bearbeitung_4] input')
       .check()
