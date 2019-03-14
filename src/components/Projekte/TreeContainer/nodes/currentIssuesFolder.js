@@ -27,8 +27,8 @@ export default ({
     {
       nodeType: 'folder',
       menuType: 'currentIssuesFolder',
-      id: 'benutzerFolder',
-      urlLabel: 'Benutzer',
+      id: 'currentIssueFolder',
+      urlLabel: 'Aktuelle-Fehler',
       label: `Aktuelle Fehler (${message})`,
       url: ['Aktuelle-Fehler'],
       sort: [currentIssuesIndex],

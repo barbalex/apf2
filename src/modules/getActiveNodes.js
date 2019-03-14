@@ -12,6 +12,10 @@ export default (activeNodeArray: Array<mixed>): Object => {
     activeNodeArray.length > 0 && activeNodeArray[0] === 'Benutzer'
   const user =
     userFolder && activeNodeArray.length > 1 ? activeNodeArray[1] : null
+  const currentIssueFolder =
+    activeNodeArray.length > 0 && activeNodeArray[0] === 'Aktuelle-Fehler'
+  const currentIssue =
+    currentIssueFolder && activeNodeArray.length > 1 ? activeNodeArray[1] : null
   const projektFolder =
     (activeNodeArray.length > 0 && activeNodeArray[0] === 'Projekte') || false
   const projekt =
@@ -222,6 +226,8 @@ export default (activeNodeArray: Array<mixed>): Object => {
     wlAdresse,
     userFolder,
     user,
+    currentIssueFolder,
+    currentIssue,
     projektFolder,
     projekt,
     apberuebersichtFolder,
