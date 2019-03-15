@@ -1,11 +1,9 @@
 // @flow
-import React, { useContext } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
 import TestdataMessage from './TestdataMessage'
-import types from '../../../mobxStore/NodeFilterTree/initialValues'
-import mobxStoreContext from '../../../mobxStoreContext'
 
 const Container = styled.div`
   background-color: #388e3c;
