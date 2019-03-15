@@ -18,7 +18,7 @@ const Container = styled.div`
   background-color: #ffd3a7;
 `
 const StyledTab = styled(Tab)`
-  min-width: 100px !important;
+  min-width: 70px !important;
 `
 
 export default ({
@@ -70,7 +70,8 @@ export default ({
           onChange={onChangeTab}
           indicatorColor="primary"
           textColor="primary"
-          centered
+          variant="scrollable"
+          scrollButtons="auto"
         >
           <StyledTab label="AP" value="ap" data-id="ap" />
           <StyledTab label="Pop" value="pop" data-id="pop" />

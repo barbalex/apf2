@@ -95,9 +95,10 @@ const ProjektContainer = ({
               <Filter treeName={treeName} />
             </ReflexElement>
           )}
-          {(tabs.includes('karte') &&
-            (tabs.includes('tree') || tabs.includes('daten'))) ||
-            (tabs.includes('filter') && <ReflexSplitter />)}
+          {tabs.includes('karte') &&
+            (tabs.includes('tree') ||
+              tabs.includes('daten') ||
+              tabs.includes('filter')) && <ReflexSplitter />}
           {tabs.includes('karte') && (
             <ReflexElement
               className="karte"
