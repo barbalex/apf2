@@ -115,6 +115,7 @@ const MyAppBar = ({ setShowDeletions }: { setShowDeletions: () => void }) => {
   )
   const onClickTree = useCallback(() => onClickButton('tree'))
   const onClickKarte = useCallback(() => onClickButton('karte'))
+  const onClickFilter = useCallback(() => onClickButton('filter'))
   const onClickExporte = useCallback(() => onClickButton('exporte'))
   const onClickTree2 = useCallback(() => onClickButton('tree2'))
   const setViewNormal = useCallback(() => setView('normal'))
@@ -168,6 +169,17 @@ const MyAppBar = ({ setShowDeletions }: { setShowDeletions: () => void }) => {
                   Strukturbaum
                 </StyledButton>
                 <Daten />
+                <StyledButton
+                  variant={
+                    projekteTabs.includes('filter') ? 'outlined' : 'text'
+                  }
+                  preceded={projekteTabs.includes('daten')}
+                  followed={projekteTabs.includes('karte')}
+                  onClick={onClickFilter}
+                  data-id="nav-filter1"
+                >
+                  Filter
+                </StyledButton>
                 <StyledButton
                   variant={projekteTabs.includes('karte') ? 'outlined' : 'text'}
                   preceded={projekteTabs.includes('daten')}

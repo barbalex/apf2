@@ -15,6 +15,7 @@ import TextField from '../../../shared/TextField'
 import Select from '../../../shared/Select'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import StringToCopy from '../../../shared/StringToCopy'
+import FilterTitle from '../../../shared/FilterTitle'
 import FormTitle from '../../../shared/FormTitle'
 import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
 import TpopfeldkontrentwicklungPopover from '../TpopfeldkontrentwicklungPopover'
@@ -82,10 +83,12 @@ const Tpopfeldkontr = ({
   dimensions = { width: 380 },
   treeName,
   dataAllAdresses,
+  showFilter = false,
 }: {
   dimensions: Object,
   treeName: string,
   dataAllAdresses: Object,
+  showFilter: Boolean,
 }) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
@@ -97,14 +100,15 @@ const Tpopfeldkontr = ({
     refetch,
   } = mobxStore
   const { activeNodeArray } = mobxStore[treeName]
-  const showFilter = !!nodeFilter[treeName].activeTable
 
+  let id =
+    activeNodeArray.length > 9
+      ? activeNodeArray[9]
+      : '99999999-9999-9999-9999-999999999999'
+  if (showFilter) id = '99999999-9999-9999-9999-999999999999'
   const { data, loading, error } = useQuery(query, {
     variables: {
-      id:
-        activeNodeArray.length > 9
-          ? activeNodeArray[9]
-          : '99999999-9999-9999-9999-999999999999',
+      id,
       showFilter,
     },
   })
@@ -341,7 +345,10 @@ const Tpopfeldkontr = ({
     .map(e => `${e.label}: ${e.einheit ? e.einheit.replace(/  +/g, ' ') : ''}`)
     .map(o => ({ value: o, label: o }))
 
-  if (loading || dataAllAdresses.loading) {
+  if (
+    (showFilter && dataAllAdresses.loading) ||
+    (loading || dataAllAdresses.loading)
+  ) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
@@ -353,14 +360,21 @@ const Tpopfeldkontr = ({
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
-        <FormTitle
-          apId={get(data, 'tpopkontrById.tpopByTpopId.popByPopId.apId')}
-          title="Feld-Kontrolle"
-          treeName={treeName}
-          table="tpopfeldkontr"
-          totalNr={tpopkontrTotal.length}
-          filteredNr={tpopkontrFiltered.length}
-        />
+        {showFilter ? (
+          <FilterTitle
+            title="Feld-Kontrolle"
+            treeName={treeName}
+            table="tpopfeldkontr"
+            totalNr={tpopkontrTotal.length}
+            filteredNr={tpopkontrFiltered.length}
+          />
+        ) : (
+          <FormTitle
+            apId={get(data, 'tpopkontrById.tpopByTpopId.popByPopId.apId')}
+            title="Feld-Kontrolle"
+            treeName={treeName}
+          />
+        )}
         <FieldsContainer>
           <Tabs
             value={value}

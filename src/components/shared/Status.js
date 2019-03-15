@@ -62,12 +62,14 @@ const Status = ({
   bekanntSeitValue,
   saveToDb,
   treeName,
+  showFilter,
 }: {
   apJahr?: number,
   herkunftValue?: number,
   bekanntSeitValue: number,
   saveToDb: () => void,
   treeName: string,
+  showFilter: Boolean,
 }) => {
   const { nodeFilter } = useContext(mobxStoreContext)
 
@@ -85,9 +87,8 @@ const Status = ({
       angesiedeltLabel = 'angesiedelt (vor Beginn AP):'
     }
   }
-  const showFilter = !!nodeFilter[treeName].activeTable
-  const disabled =
-    !bekanntSeitStateValue && bekanntSeitStateValue !== 0 && !showFilter
+  let disabled = !bekanntSeitStateValue && bekanntSeitStateValue !== 0
+  if (showFilter) disabled = false
 
   const onClickButton = useCallback(
     event => {

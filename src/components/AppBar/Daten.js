@@ -1,11 +1,6 @@
 // @flow
-import React, { useContext, useState, useCallback } from 'react'
+import React, { useContext, useCallback } from 'react'
 import Button from '@material-ui/core/Button'
-import Menu from '@material-ui/core/Menu'
-import MenuItem from '@material-ui/core/MenuItem'
-import Divider from '@material-ui/core/Divider'
-import FilterIcon from '@material-ui/icons/FilterList'
-import DeleteFilterIcon from '@material-ui/icons/DeleteSweep'
 import remove from 'lodash/remove'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
@@ -14,28 +9,6 @@ import isMobilePhone from '../../modules/isMobilePhone'
 import setUrlQueryValue from '../../modules/setUrlQueryValue'
 import mobxStoreContext from '../../mobxStoreContext'
 
-const StyledIconButton = styled.div`
-  height: 30px !important;
-  width: 30px !important;
-  margin-right: -5px !important;
-  margin-left: 8px !important;
-  margin-top: -11px !important;
-  margin-bottom: -11px !important;
-  border-radius: 4px;
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-  }
-`
-const StyledFilterIcon = styled(FilterIcon)`
-  cursor: pointer;
-  pointer-events: auto;
-  margin-top: 2px;
-  color: white;
-`
-const StyledDeleteFilterIcon = styled(DeleteFilterIcon)`
-  margin-top: -4px;
-  padding-right: 5px;
-`
 const StyledButton = styled(Button)`
   color: white !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
@@ -58,33 +31,18 @@ const StyledButton = styled(Button)`
   margin-right: ${props =>
     props.followed === 'true' ? '-1px' : 'unset'} !important;
 `
-const StyledMenuItem = styled(MenuItem)`
-  padding-left: ${props =>
-    props.level ? 12 + (props.level - 1) * 23 : 16}px !important;
-  padding-top: 3px !important;
-  padding-bottom: 3px !important;
-`
-const RemoveMenuItem = styled(StyledMenuItem)`
-  padding-top: 6px !important;
-`
 
 const MyAppBarDaten = ({ treeNr = '' }: { treeNr: string }) => {
   const {
-    nodeFilterTreeIsFiltered,
     nodeFilterClone1To2,
-    nodeFilterSetActiveTable,
-    nodeFilterEmptyTree,
     urlQuery,
     setUrlQuery,
     cloneTree2From1,
   } = useContext(mobxStoreContext)
 
-  const [datenFilterAnchorEl, setDatenFilterAnchorEl] = useState(null)
-
   const { projekteTabs } = urlQuery
   const isDaten = projekteTabs.includes(`daten${treeNr}`)
   const isTree = projekteTabs.includes(`tree${treeNr}`)
-  const isKarte = projekteTabs.includes('karte')
 
   const onClickButton = useCallback(
     event => {
@@ -119,105 +77,19 @@ const MyAppBarDaten = ({ treeNr = '' }: { treeNr: string }) => {
     },
     [projekteTabs, urlQuery],
   )
-  const onClickFilterButton = useCallback(event => {
-    setDatenFilterAnchorEl(event.currentTarget)
-    event.stopPropagation()
-    event.preventDefault()
-  })
-  const onCloseFilter = useCallback(() => setDatenFilterAnchorEl(null))
-  const onClickFilterTable = useCallback(
-    event => {
-      setDatenFilterAnchorEl(null)
-      nodeFilterSetActiveTable({
-        treeName: `tree${treeNr}`,
-        activeTable: event.target.dataset.table,
-      })
-    },
-    [treeNr],
-  )
-  const onClickEmptyFilter = useCallback(
-    event => {
-      setDatenFilterAnchorEl(null)
-      nodeFilterEmptyTree(`tree${treeNr}`)
-    },
-    [treeNr],
-  )
+
+  let followed = projekteTabs.slice().includes('filter')
+  if (treeNr === '2') followed = false
 
   return (
     <StyledButton
       variant={isDaten ? 'outlined' : 'text'}
       preceded={isTree.toString()}
-      followed={treeNr === '2' ? 'false' : isKarte.toString()}
+      followed={followed.toString()}
       onClick={onClickButton}
       data-id={`nav-daten${treeNr || 1}`}
     >
       {`Daten${treeNr === '2' ? ' 2' : ''}`}
-      {isDaten && (
-        <>
-          <StyledIconButton
-            aria-label="Daten filtern"
-            title="Daten filtern"
-            aria-owns={datenFilterAnchorEl ? 'filterTable-menu' : null}
-            aria-haspopup="true"
-            onClick={onClickFilterButton}
-          >
-            <StyledFilterIcon />
-          </StyledIconButton>
-          <Menu
-            id="filterTable-menu"
-            anchorEl={datenFilterAnchorEl}
-            open={Boolean(datenFilterAnchorEl)}
-            onClose={onCloseFilter}
-          >
-            <StyledMenuItem data-table="ap" onClick={onClickFilterTable}>
-              Aktionspläne
-            </StyledMenuItem>
-            <StyledMenuItem
-              data-table="pop"
-              onClick={onClickFilterTable}
-              level={1}
-            >
-              └─ Populationen
-            </StyledMenuItem>
-            <StyledMenuItem
-              data-table="tpop"
-              onClick={onClickFilterTable}
-              level={2}
-            >
-              └─ Teil-Populationen
-            </StyledMenuItem>
-            <StyledMenuItem
-              data-table="tpopmassn"
-              onClick={onClickFilterTable}
-              level={3}
-            >
-              ─ Massnahmen
-            </StyledMenuItem>
-            <StyledMenuItem
-              data-table="tpopfeldkontr"
-              onClick={onClickFilterTable}
-              level={3}
-            >
-              ─ Feld-Kontrollen
-            </StyledMenuItem>
-            <StyledMenuItem
-              data-table="tpopfreiwkontr"
-              onClick={onClickFilterTable}
-              level={3}
-            >
-              ─ Freiwilligen-Kontrollen
-            </StyledMenuItem>
-            <Divider />
-            <RemoveMenuItem
-              onClick={onClickEmptyFilter}
-              disabled={!nodeFilterTreeIsFiltered(`tree${treeNr}`)}
-            >
-              <StyledDeleteFilterIcon />
-              Alle Filter entfernen
-            </RemoveMenuItem>
-          </Menu>
-        </>
-      )}
     </StyledButton>
   )
 }

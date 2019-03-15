@@ -13,6 +13,7 @@ import SelectCreatable from '../../../shared/SelectCreatableGemeinde'
 import RadioButton from '../../../shared/RadioButton'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import FormTitle from '../../../shared/FormTitle'
+import FilterTitle from '../../../shared/FilterTitle'
 import TpopAbBerRelevantInfoPopover from '../TpopAbBerRelevantInfoPopover'
 import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -45,9 +46,11 @@ const FieldsContainer = styled.div`
 const Tpop = ({
   dimensions = { width: 380 },
   treeName,
+  showFilter = false,
 }: {
   dimensions: Object,
   treeName: string,
+  showFilter: Boolean,
 }) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
@@ -55,15 +58,16 @@ const Tpop = ({
 
   const [errors, setErrors] = useState({})
 
-  const showFilter = !!nodeFilter[treeName].activeTable
   const { activeNodeArray } = mobxStore[treeName]
 
+  let id =
+    activeNodeArray.length > 7
+      ? activeNodeArray[7]
+      : '99999999-9999-9999-9999-999999999999'
+  if (showFilter) id = '99999999-9999-9999-9999-999999999999'
   const { data, loading, error } = useQuery(query, {
     variables: {
-      id:
-        activeNodeArray.length > 7
-          ? activeNodeArray[7]
-          : '99999999-9999-9999-9999-999999999999',
+      id,
       showFilter,
     },
   })
@@ -197,7 +201,7 @@ const Tpop = ({
     label: el.text,
   }))
 
-  if (loading) {
+  if (!showFilter && loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
@@ -208,14 +212,21 @@ const Tpop = ({
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
-        <FormTitle
-          apId={get(data, 'tpopById.popByPopId.apId')}
-          title="Teil-Population"
-          treeName={treeName}
-          table="tpop"
-          totalNr={tpopTotal.length}
-          filteredNr={tpopFiltered.length}
-        />
+        {showFilter ? (
+          <FilterTitle
+            title="Teil-Population"
+            treeName={treeName}
+            table="tpop"
+            totalNr={tpopTotal.length}
+            filteredNr={tpopFiltered.length}
+          />
+        ) : (
+          <FormTitle
+            apId={get(data, 'tpopById.popByPopId.apId')}
+            title="Teil-Population"
+            treeName={treeName}
+          />
+        )}
         <FieldsContainer
           data-width={isNaN(dimensions.width) ? 380 : dimensions.width}
         >
@@ -245,6 +256,7 @@ const Tpop = ({
             bekanntSeitValue={row.bekanntSeit}
             saveToDb={saveToDb}
             treeName={treeName}
+            showFilter={showFilter}
           />
           <RadioButton
             key={`${row.id}statusUnklar`}

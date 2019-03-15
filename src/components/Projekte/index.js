@@ -20,8 +20,8 @@ const Container = styled.div`
     display: block;
   }
 `
-const treeTabValues = ['tree', 'daten', 'karte', 'exporte']
-const tree2TabValues = ['tree2', 'daten2', 'karte2', 'exporte2']
+const treeTabValues = ['tree', 'daten', 'filter', 'karte', 'exporte']
+const tree2TabValues = ['tree2', 'daten2', 'filter2', 'karte2', 'exporte2']
 
 const Projekte = () => {
   const mobxStore = useContext(mobxStoreContext)

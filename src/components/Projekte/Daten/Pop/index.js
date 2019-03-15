@@ -10,6 +10,7 @@ import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
 import Status from '../../../shared/Status'
 import RadioButton from '../../../shared/RadioButton'
 import FormTitle from '../../../shared/FormTitle'
+import FilterTitle from '../../../shared/FilterTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updatePopByIdGql from './updatePopById'
 import query from './data'
@@ -29,19 +30,27 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Pop = ({ treeName }: { treeName: string }) => {
+const Pop = ({
+  treeName,
+  showFilter = false,
+}: {
+  treeName: string,
+  showFilter: Boolean,
+}) => {
   const mobxStore = useContext(mobxStoreContext)
   const client = useApolloClient()
   const { nodeFilter, nodeFilterSetValue, refetch } = mobxStore
-  const showFilter = !!nodeFilter[treeName].activeTable
   const { activeNodeArray } = mobxStore[treeName]
+
+  let id =
+    activeNodeArray.length > 5
+      ? activeNodeArray[5]
+      : '99999999-9999-9999-9999-999999999999'
+  if (showFilter) id = '99999999-9999-9999-9999-999999999999'
 
   const { data, loading, error } = useQuery(query, {
     variables: {
-      id:
-        activeNodeArray.length > 5
-          ? activeNodeArray[5]
-          : '99999999-9999-9999-9999-999999999999',
+      id,
       showFilter,
     },
   })
@@ -133,7 +142,7 @@ const Pop = ({ treeName }: { treeName: string }) => {
     [row, showFilter],
   )
 
-  if (loading) {
+  if (!showFilter && loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
@@ -144,14 +153,21 @@ const Pop = ({ treeName }: { treeName: string }) => {
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
-        <FormTitle
-          apId={get(data, 'popById.apId')}
-          title="Population"
-          treeName={treeName}
-          table="pop"
-          totalNr={popTotal.length}
-          filteredNr={popFiltered.length}
-        />
+        {showFilter ? (
+          <FilterTitle
+            title="Population"
+            treeName={treeName}
+            table="pop"
+            totalNr={popTotal.length}
+            filteredNr={popFiltered.length}
+          />
+        ) : (
+          <FormTitle
+            apId={get(data, 'popById.apId')}
+            title="Population"
+            treeName={treeName}
+          />
+        )}
         <FieldsContainer>
           <TextField
             key={`${row.id}nr`}
@@ -179,6 +195,7 @@ const Pop = ({ treeName }: { treeName: string }) => {
             bekanntSeitValue={row.bekanntSeit}
             saveToDb={saveToDb}
             treeName={treeName}
+            showFilter={showFilter}
           />
           <RadioButton
             key={`${row.id}statusUnklar`}

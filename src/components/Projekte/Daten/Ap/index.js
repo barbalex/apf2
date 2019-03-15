@@ -12,6 +12,7 @@ import TextField from '../../../shared/TextField'
 import Select from '../../../shared/Select'
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import FormTitle from '../../../shared/FormTitle'
+import FilterTitle from '../../../shared/FilterTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import withAeEigenschaftens from './withAeEigenschaftens'
 import updateApByIdGql from './updateApById'
@@ -76,21 +77,23 @@ const Ap = ({
   dataAllAdresses,
   dataAllAps,
   dataAeEigenschaftens,
+  showFilter = false,
 }: {
   treeName: String,
   dataAllAdresses: Object,
   dataAllAps: Object,
   dataAeEigenschaftens: Object,
+  showFilter: Boolean,
 }) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
   const { nodeFilter, nodeFilterSetValue, user, refetch } = mobxStore
   const { activeNodeArray } = mobxStore[treeName]
-  const showFilter = !!nodeFilter[treeName].activeTable
-  const id =
+  let id =
     activeNodeArray.length > 3
       ? activeNodeArray[3]
       : '99999999-9999-9999-9999-999999999999'
+  if (showFilter) id = '99999999-9999-9999-9999-999999999999'
   const { data, error, loading } = useQuery(query, {
     variables: { id },
   })
@@ -170,7 +173,6 @@ const Ap = ({
     async event => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value) || null
-      const showFilter = !!nodeFilter[treeName].activeTable
       if (showFilter) {
         nodeFilterSetValue({
           treeName,
@@ -223,10 +225,11 @@ const Ap = ({
   )
 
   if (
-    loading ||
-    dataAeEigenschaftens.loading ||
-    dataAllAdresses.loading ||
-    dataAllAps.loading
+    (showFilter && (dataAeEigenschaftens.loading || dataAllAdresses.loading)) ||
+    (loading ||
+      dataAeEigenschaftens.loading ||
+      dataAllAdresses.loading ||
+      dataAllAps.loading)
   ) {
     return (
       <Container>
@@ -244,14 +247,17 @@ const Ap = ({
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
-        <FormTitle
-          apId={row.id}
-          title="Aktionsplan"
-          treeName={treeName}
-          table="ap"
-          totalNr={apTotal.length}
-          filteredNr={apFiltered.length}
-        />
+        {showFilter ? (
+          <FilterTitle
+            title="Aktionsplan"
+            treeName={treeName}
+            table="ap"
+            totalNr={apTotal.length}
+            filteredNr={apFiltered.length}
+          />
+        ) : (
+          <FormTitle apId={row.id} title="Aktionsplan" treeName={treeName} />
+        )}
         <FieldsContainer>
           <Select
             key={`${row.id}artId`}

@@ -14,6 +14,7 @@ import Select from '../../../shared/Select'
 import RadioButton from '../../../shared/RadioButton'
 import StringToCopy from '../../../shared/StringToCopy'
 import FormTitle from '../../../shared/FormTitle'
+import FilterTitle from '../../../shared/FilterTitle'
 import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
 import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -52,6 +53,7 @@ const Tpopmassn = ({
   treeName,
   dataAeEigenschaftens,
   dataAllAdresses,
+  showFilter = false,
 }: {
   onNewRequestWirtspflanze: () => void,
   onBlurWirtspflanze: () => void,
@@ -59,6 +61,7 @@ const Tpopmassn = ({
   treeName: string,
   dataAeEigenschaftens: Object,
   dataAllAdresses: Object,
+  showFilter: Boolean,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const client = useApolloClient()
@@ -66,14 +69,15 @@ const Tpopmassn = ({
 
   const [errors, setErrors] = useState({})
   const { activeNodeArray } = mobxStore[treeName]
-  const showFilter = !!nodeFilter[treeName].activeTable
 
+  let id =
+    activeNodeArray.length > 9
+      ? activeNodeArray[9]
+      : '99999999-9999-9999-9999-999999999999'
+  if (showFilter) id = '99999999-9999-9999-9999-999999999999'
   const { data, loading, error } = useQuery(query, {
     variables: {
-      id:
-        activeNodeArray.length > 9
-          ? activeNodeArray[9]
-          : '99999999-9999-9999-9999-999999999999',
+      id,
       showFilter,
     },
   })
@@ -86,7 +90,7 @@ const Tpopmassn = ({
     // get filter values length
     tpopmassnTotal = get(data, 'allTpopmassns.nodes', [])
     const nodeFilterArray = Object.entries(
-      nodeFilter[treeName].tpopfeldkontr,
+      nodeFilter[treeName].tpopmassn,
     ).filter(([key, value]) => value || value === 0 || value === false)
     tpopmassnFiltered = tpopmassnTotal.filter(node =>
       filterNodesByNodeFilterArray({
@@ -233,14 +237,21 @@ const Tpopmassn = ({
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
-        <FormTitle
-          apId={get(data, 'tpopmassnById.tpopByTpopId.popByPopId.apId')}
-          title="Massnahme"
-          treeName={treeName}
-          table="tpopmassn"
-          totalNr={tpopmassnTotal.length}
-          filteredNr={tpopmassnFiltered.length}
-        />
+        {showFilter ? (
+          <FilterTitle
+            title="Massnahme"
+            treeName={treeName}
+            table="tpopmassn"
+            totalNr={tpopmassnTotal.length}
+            filteredNr={tpopmassnFiltered.length}
+          />
+        ) : (
+          <FormTitle
+            apId={get(data, 'tpopmassnById.tpopByTpopId.popByPopId.apId')}
+            title="Massnahme"
+            treeName={treeName}
+          />
+        )}
         <FieldsContainer data-width={width}>
           <TextField
             key={`${row.id}jahr`}

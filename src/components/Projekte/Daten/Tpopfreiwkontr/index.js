@@ -27,6 +27,7 @@ import Count from './Count'
 import Verification from './Verification'
 import Image from './Image'
 import FormTitle from '../../../shared/FormTitle'
+import FilterTitle from '../../../shared/FilterTitle'
 import withAllAdresses from './withAllAdresses'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
@@ -150,10 +151,12 @@ const Tpopfreiwkontr = ({
   dimensions,
   treeName,
   dataAllAdresses,
+  showFilter = false,
 }: {
   dimensions: Object,
   treeName: string,
   dataAllAdresses: Object,
+  showFilter: Boolean,
 }) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
@@ -172,16 +175,15 @@ const Tpopfreiwkontr = ({
 
   const [errors, setErrors] = useState({})
 
-  const showFilter = !!nodeFilter[treeName].activeTable
-
-  const queryId =
+  let id =
     activeNodeArray.length > 9
       ? activeNodeArray[9]
       : '99999999-9999-9999-9999-999999999999'
+  if (showFilter) id = '99999999-9999-9999-9999-999999999999'
 
   const { data, loading, error, refetch } = useQuery(query, {
     variables: {
-      id: queryId,
+      id,
       showFilter,
     },
   })
@@ -456,7 +458,10 @@ const Tpopfreiwkontr = ({
 
   if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
   if (error) return `Fehler: ${error.message}`
-  if (loading || dataAllAdresses.loading) {
+  if (
+    (showFilter && dataAllAdresses.loading) ||
+    (loading || dataAllAdresses.loading)
+  ) {
     return (
       <Container>
         <InnerContainer>Lade...</InnerContainer>
@@ -467,14 +472,20 @@ const Tpopfreiwkontr = ({
 
   return (
     <Container showfilter={showFilter}>
-      {!(view === 'ekf') && (
-        <FormTitle
-          apId={apId}
+      {!(view === 'ekf') && showFilter && (
+        <FilterTitle
           title="Freiwilligen-Kontrolle"
           treeName={treeName}
           table="tpopfreiwkontr"
           totalNr={tpopkontrTotal.length}
           filteredNr={tpopkontrFiltered.length}
+        />
+      )}
+      {!(view === 'ekf') && !showFilter && (
+        <FormTitle
+          apId={apId}
+          title="Freiwilligen-Kontrolle"
+          treeName={treeName}
         />
       )}
       <InnerContainer>

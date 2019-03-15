@@ -12,6 +12,7 @@ import ErrorBoundary from '../shared/ErrorBoundary'
 import TreeContainer from './TreeContainer'
 import Daten from './Daten'
 import Exporte from './Exporte'
+import Filter from './Filter'
 import mobxStoreContext from '../../mobxStoreContext'
 
 const Container = styled.div`
@@ -26,7 +27,7 @@ const Container = styled.div`
 
 const enhance = compose(observer)
 
-const ProjekteContainer = ({
+const ProjektContainer = ({
   treeName,
   tabs: tabsPassed,
   projekteTabs,
@@ -51,6 +52,8 @@ const ProjekteContainer = ({
       : tabs.length === 0
       ? 1
       : 1 / tabs.length
+
+  //console.log('ProjektContainer', { tabs })
 
   return (
     <Container>
@@ -78,10 +81,23 @@ const ProjekteContainer = ({
               <Daten treeName={treeName} />
             </ReflexElement>
           )}
-          {tabs.includes('karte') &&
+          {tabs.includes('filter') &&
             (tabs.includes('tree') || tabs.includes('daten')) && (
               <ReflexSplitter />
             )}
+          {tabs.includes('filter') && (
+            <ReflexElement
+              className="filter"
+              propagateDimensions={true}
+              renderOnResizeRate={200}
+              renderOnResize={true}
+            >
+              <Filter treeName={treeName} />
+            </ReflexElement>
+          )}
+          {(tabs.includes('karte') &&
+            (tabs.includes('tree') || tabs.includes('daten'))) ||
+            (tabs.includes('filter') && <ReflexSplitter />)}
           {tabs.includes('karte') && (
             <ReflexElement
               className="karte"
@@ -95,6 +111,7 @@ const ProjekteContainer = ({
           {tabs.includes('exporte') &&
             (tabs.includes('tree') ||
               tabs.includes('daten') ||
+              tabs.includes('filter') ||
               tabs.includes('karte')) && <ReflexSplitter />}
           {tabs.includes('exporte') && (
             <ReflexElement>
@@ -107,4 +124,4 @@ const ProjekteContainer = ({
   )
 }
 
-export default enhance(ProjekteContainer)
+export default enhance(ProjektContainer)
