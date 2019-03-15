@@ -178,6 +178,7 @@ const MyAppBar = ({ setShowDeletions }: { setShowDeletions: () => void }) => {
                   followed={projekteTabs.includes('karte')}
                   onClick={onClickFilter}
                   data-id="nav-filter1"
+                  title="Daten filtern"
                 >
                   Filter
                 </StyledButton>
@@ -236,6 +237,7 @@ const MyAppBar = ({ setShowDeletions }: { setShowDeletions: () => void }) => {
                     followed={projekteTabs.includes('karte2')}
                     onClick={onClickFilter2}
                     data-id="nav-filter2"
+                    title="Daten filtern"
                   >
                     Filter 2
                   </StyledButton>
