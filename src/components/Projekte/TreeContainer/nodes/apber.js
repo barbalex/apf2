@@ -29,10 +29,8 @@ export default ({
     id: projId,
   })
   const apIndex = findIndex(apNodes, { id: apId })
-  const nodeLabelFilterString = get(
-    mobxStore,
-    `${treeName}.nodeLabelFilter.apber`,
-  )
+  const nodeLabelFilterString =
+    get(mobxStore, `${treeName}.nodeLabelFilter.apber`) || ''
 
   // map through all elements and create array of nodes
   let nodes = memoizeOne(() =>

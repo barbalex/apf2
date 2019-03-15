@@ -24,7 +24,8 @@ export default ({
 }): Array<Object> => {
   const nodeFilter = get(mobxStore, `nodeFilter.${treeName}`)
   const apFilter = get(mobxStore, `${treeName}.apFilter`)
-  const nodeLabelFilterString = get(mobxStore, `${treeName}.nodeLabelFilter.ap`)
+  const nodeLabelFilterString =
+    get(mobxStore, `${treeName}.nodeLabelFilter.ap`) || ''
   const aps = get(data, 'allAps.nodes', [])
   const nodeFilterArray = Object.entries(nodeFilter.ap).filter(
     ([key, value]) => value || value === 0 || value === false,

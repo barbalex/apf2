@@ -65,11 +65,6 @@ export default ({
   const isAp =
     isProjekt &&
     openNodes.some(nArray => nArray[2] === 'Aktionspläne' && nArray[3])
-  const isBeobNichtBeurteilt =
-    isAp &&
-    openNodes.some(
-      nArray => nArray[4] && nArray[4] === 'nicht-beurteilte-Beobachtungen',
-    )
   const ziel = uniq(
     openNodes
       .map(a =>
@@ -99,8 +94,6 @@ export default ({
   )
   const isPop =
     isAp && openNodes.some(nArray => nArray[4] === 'Populationen' && nArray[5])
-  const isPopFolder =
-    isAp && openNodes.some(nArray => nArray[4] === 'Populationen')
   const popFilter = { apId: { in: ap } }
   const popFilterValues = Object.entries(nodeFilter.pop).filter(
     e => e[1] || e[1] === 0,
@@ -162,12 +155,10 @@ export default ({
     apFilter,
     ap,
     isAp,
-    isBeobNichtBeurteilt,
     ziel,
     isZiel,
     pop,
     isPop,
-    isPopFolder,
     popFilter,
     tpop,
     isTpop,

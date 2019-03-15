@@ -32,10 +32,8 @@ export default ({
     id: projId,
   })
   const apIndex = findIndex(apNodes, { id: apId })
-  const nodeLabelFilterString = get(
-    mobxStore,
-    `${treeName}.nodeLabelFilter.pop`,
-  )
+  const nodeLabelFilterString =
+    get(mobxStore, `${treeName}.nodeLabelFilter.pop`) || ''
   const nodeFilterArray = Object.entries(nodeFilter.pop).filter(
     ([key, value]) => value || value === 0 || value === false,
   )

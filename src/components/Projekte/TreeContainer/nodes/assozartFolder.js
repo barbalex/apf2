@@ -33,10 +33,8 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString = get(
-    mobxStore,
-    `${treeName}.nodeLabelFilter.assozart`,
-  )
+  const nodeLabelFilterString =
+    get(mobxStore, `${treeName}.nodeLabelFilter.assozart`) || ''
 
   const assozartNodesLength = memoizeOne(
     () =>

@@ -40,10 +40,8 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString = get(
-    mobxStore,
-    `${treeName}.nodeLabelFilter.ziel`,
-  )
+  const nodeLabelFilterString =
+    get(mobxStore, `${treeName}.nodeLabelFilter.ziel`) || ''
   const zieljahrIndex = findIndex(apzieljahrFolderNodes, el => el.jahr === jahr)
 
   // map through all elements and create array of nodes

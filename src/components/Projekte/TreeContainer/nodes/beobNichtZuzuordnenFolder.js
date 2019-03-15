@@ -35,10 +35,8 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString = get(
-    mobxStore,
-    `${treeName}.nodeLabelFilter.beob`,
-  )
+  const nodeLabelFilterString =
+    get(mobxStore, `${treeName}.nodeLabelFilter.beob`) || ''
 
   const beobNichtZuzuordnenNodesLength = memoizeOne(
     () =>

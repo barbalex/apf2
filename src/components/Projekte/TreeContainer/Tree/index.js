@@ -81,15 +81,9 @@ type Props = {
 const Tree = ({ treeName, dimensions }: Props) => {
   const mobxStore = useContext(mobxStoreContext)
   const tree = mobxStore[treeName]
-  const { activeNodeArray, setNodes, openNodes, nodeLabelFilter } = tree
+  const { activeNodeArray, setNodes, openNodes } = tree
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
-  const {
-    nodeFilter,
-    user,
-    setRefetchKey,
-    setTreeKey,
-    nodeFilterTableIsFiltered,
-  } = mobxStore
+  const { nodeFilter, user, setRefetchKey, setTreeKey } = mobxStore
   const { idb } = useContext(idbContext)
   const {
     projekt,
@@ -97,12 +91,10 @@ const Tree = ({ treeName, dimensions }: Props) => {
     apFilter,
     ap,
     isAp,
-    isBeobNichtBeurteilt,
     ziel,
     isZiel,
     pop,
     isPop,
-    isPopFolder,
     popFilter,
     tpop,
     isTpop,
@@ -168,12 +160,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     variables: {
       isAp,
       popFilter,
-      withNodes: !(
-        isAp &&
-        !nodeLabelFilter.pop &&
-        !nodeFilterTableIsFiltered({ treeName, table: 'pop' }) &&
-        !isPopFolder
-      ),
     },
   })
   setRefetchKey({
@@ -405,7 +391,6 @@ const Tree = ({ treeName, dimensions }: Props) => {
     variables: {
       isAp,
       ap,
-      withNodes: !(isAp && !nodeLabelFilter.beob && !isBeobNichtBeurteilt),
     },
   })
   setRefetchKey({

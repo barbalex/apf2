@@ -39,35 +39,28 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString = get(
-    mobxStore,
-    `${treeName}.nodeLabelFilter.pop`,
-  )
-  const isFiltered =
-    mobxStore.nodeFilterTableIsFiltered({ treeName, table: 'pop' }) ||
-    !!nodeLabelFilterString
+  const nodeLabelFilterString =
+    get(mobxStore, `${treeName}.nodeLabelFilter.pop`) || ''
 
-  const popNodesLength = isFiltered
-    ? pops
-        .filter(el => el.apId === apId)
-        // filter by nodeLabelFilter
-        .filter(el => {
-          if (nodeLabelFilterString) {
-            return `${el.nr || '(keine Nr)'}: ${el.name || '(kein Name)'}`
-              .toLowerCase()
-              .includes(nodeLabelFilterString.toString().toLowerCase())
-          }
-          return true
-        })
-        // filter by nodeFilter
-        .filter(node =>
-          filterNodesByNodeFilterArray({
-            node,
-            nodeFilterArray,
-            table: 'pop',
-          }),
-        ).length
-    : get(data, 'allPops.totalCount', '')
+  const popNodesLength = pops
+    .filter(el => el.apId === apId)
+    // filter by nodeLabelFilter
+    .filter(el => {
+      if (nodeLabelFilterString) {
+        return `${el.nr || '(keine Nr)'}: ${el.name || '(kein Name)'}`
+          .toLowerCase()
+          .includes(nodeLabelFilterString.toString().toLowerCase())
+      }
+      return true
+    })
+    // filter by nodeFilter
+    .filter(node =>
+      filterNodesByNodeFilterArray({
+        node,
+        nodeFilterArray,
+        table: 'pop',
+      }),
+    ).length
   let message = loading && !popNodesLength ? '...' : popNodesLength
   if (nodeLabelFilterString) {
     message = `${popNodesLength} gefiltert`

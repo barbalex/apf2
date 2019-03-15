@@ -21,10 +21,8 @@ export default ({
 
   // fetch sorting indexes of parents
   const userIndex = projektNodes.length + 1
-  const nodeLabelFilterString = get(
-    mobxStore,
-    `${treeName}.nodeLabelFilter.user`,
-  )
+  const nodeLabelFilterString =
+    get(mobxStore, `${treeName}.nodeLabelFilter.user`) || ''
 
   const userNodesLength = memoizeOne(
     () =>

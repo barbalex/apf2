@@ -33,10 +33,8 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString = get(
-    mobxStore,
-    `${treeName}.nodeLabelFilter.ekfzaehleinheit`,
-  )
+  const nodeLabelFilterString =
+    get(mobxStore, `${treeName}.nodeLabelFilter.ekfzaehleinheit`) || ''
 
   const ekfzaehleinheitNodesLength = memoizeOne(
     () =>

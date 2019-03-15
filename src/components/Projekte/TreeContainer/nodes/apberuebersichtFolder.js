@@ -27,10 +27,8 @@ export default ({
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
-  const nodeLabelFilterString = get(
-    mobxStore,
-    `${treeName}.nodeLabelFilter.apberuebersicht`,
-  )
+  const nodeLabelFilterString =
+    get(mobxStore, `${treeName}.nodeLabelFilter.apberuebersicht`) || ''
 
   const apberuebersichtNodesLength = memoizeOne(
     () =>

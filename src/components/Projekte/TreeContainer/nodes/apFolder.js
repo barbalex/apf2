@@ -34,7 +34,8 @@ export default ({
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
-  const nodeLabelFilterString = get(mobxStore, `${treeName}.nodeLabelFilter.ap`)
+  const nodeLabelFilterString =
+    get(mobxStore, `${treeName}.nodeLabelFilter.ap`) || ''
   const apFilter = get(mobxStore, `${treeName}.apFilter`)
 
   let apNodes = memoizeOne(() =>

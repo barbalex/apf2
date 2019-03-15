@@ -34,29 +34,25 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString = get(
-    mobxStore,
-    `${treeName}.nodeLabelFilter.beob`,
-  )
+  const nodeLabelFilterString =
+    get(mobxStore, `${treeName}.nodeLabelFilter.beob`) || ''
 
-  const beobNichtBeurteiltNodesLength = nodeLabelFilterString
-    ? beobNichtBeurteilts
-        .filter(el => el.apId === apId)
-        // filter by nodeLabelFilter
-        .filter(el => {
-          // some dates are not valid
-          // need to account for that
-          let datum = '(kein Datum)'
-          if (!isValid(new Date(el.datum))) {
-            datum = '(ungültiges Datum)'
-          } else if (!!el.datum) {
-            datum = format(new Date(el.datum), 'yyyy.MM.dd')
-          }
-          return `${datum}: ${el.autor || '(kein Autor)'} (${el.quelle})`
-            .toLowerCase()
-            .includes(nodeLabelFilterString.toLowerCase())
-        }).length
-    : get(data, 'allVApbeobs.totalCount', '')
+  const beobNichtBeurteiltNodesLength = beobNichtBeurteilts
+    .filter(el => el.apId === apId)
+    // filter by nodeLabelFilter
+    .filter(el => {
+      // some dates are not valid
+      // need to account for that
+      let datum = '(kein Datum)'
+      if (!isValid(new Date(el.datum))) {
+        datum = '(ungültiges Datum)'
+      } else if (!!el.datum) {
+        datum = format(new Date(el.datum), 'yyyy.MM.dd')
+      }
+      return `${datum}: ${el.autor || '(kein Autor)'} (${el.quelle})`
+        .toLowerCase()
+        .includes(nodeLabelFilterString.toLowerCase())
+    }).length
   let message =
     loading && !beobNichtBeurteiltNodesLength
       ? '...'

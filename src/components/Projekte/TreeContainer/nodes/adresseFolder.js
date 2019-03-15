@@ -19,10 +19,8 @@ export default ({
 }): Array<Object> => {
   const adresses = get(data, 'allAdresses.nodes', [])
   const wlIndex = projektNodes.length + 2
-  const nodeLabelFilterString = get(
-    mobxStore,
-    `${treeName}.nodeLabelFilter.adresse`,
-  )
+  const nodeLabelFilterString =
+    get(mobxStore, `${treeName}.nodeLabelFilter.adresse`) || ''
 
   let adresseNodesLength = memoizeOne(
     () =>

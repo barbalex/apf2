@@ -13,10 +13,8 @@ export default ({
   treeName: String,
   mobxStore: Object,
 }): Array<Object> => {
-  const nodeLabelFilterString = get(
-    mobxStore,
-    `${treeName}.nodeLabelFilter.projekt`,
-  )
+  const nodeLabelFilterString =
+    get(mobxStore, `${treeName}.nodeLabelFilter.projekt`) || ''
   const projekts = get(data, 'allProjekts.nodes', [])
 
   // map through all elements and create array of nodes

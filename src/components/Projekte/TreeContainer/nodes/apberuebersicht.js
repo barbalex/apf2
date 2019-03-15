@@ -18,10 +18,8 @@ export default ({
   projId: String,
   mobxStore: Object,
 }): Array<Object> => {
-  const nodeLabelFilterString = get(
-    mobxStore,
-    `${treeName}.nodeLabelFilter.apberuebersicht`,
-  )
+  const nodeLabelFilterString =
+    get(mobxStore, `${treeName}.nodeLabelFilter.apberuebersicht`) || ''
   const apberuebersichts = get(data, 'allApberuebersichts.nodes', [])
 
   // fetch sorting indexes of parents

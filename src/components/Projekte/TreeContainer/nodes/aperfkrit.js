@@ -30,10 +30,8 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString = get(
-    mobxStore,
-    `${treeName}.nodeLabelFilter.erfkrit`,
-  )
+  const nodeLabelFilterString =
+    get(mobxStore, `${treeName}.nodeLabelFilter.erfkrit`) || ''
 
   // map through all elements and create array of nodes
   const nodes = memoizeOne(() =>

@@ -49,10 +49,8 @@ export default ({
     el => el.jahr === zielJahr,
   )
   const zielIndex = findIndex(apzielNodes, el => el.id === zielId)
-  const nodeLabelFilterString = get(
-    mobxStore,
-    `${treeName}.nodeLabelFilter.zielber`,
-  )
+  const nodeLabelFilterString =
+    get(mobxStore, `${treeName}.nodeLabelFilter.zielber`) || ''
 
   // map through all elements and create array of nodes
   const nodes = memoizeOne(() =>
