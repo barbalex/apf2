@@ -116,6 +116,7 @@ const MyAppBar = ({ setShowDeletions }: { setShowDeletions: () => void }) => {
   const onClickTree = useCallback(() => onClickButton('tree'))
   const onClickKarte = useCallback(() => onClickButton('karte'))
   const onClickFilter = useCallback(() => onClickButton('filter'))
+  const onClickFilter2 = useCallback(() => onClickButton('filter2'))
   const onClickExporte = useCallback(() => onClickButton('exporte'))
   const onClickTree2 = useCallback(() => onClickButton('tree2'))
   const setViewNormal = useCallback(() => setView('normal'))
@@ -226,6 +227,19 @@ const MyAppBar = ({ setShowDeletions }: { setShowDeletions: () => void }) => {
                   </StyledButton>
                 )}
                 {!isMobile && <Daten treeNr="2" />}
+                {!isMobile && (
+                  <StyledButton
+                    variant={
+                      projekteTabs.includes('filter2') ? 'outlined' : 'text'
+                    }
+                    preceded={projekteTabs.includes('daten2')}
+                    followed={projekteTabs.includes('karte2')}
+                    onClick={onClickFilter2}
+                    data-id="nav-filter2"
+                  >
+                    Filter 2
+                  </StyledButton>
+                )}
               </>
             )}
             <More
