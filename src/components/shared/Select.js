@@ -76,6 +76,7 @@ const SharedSelect = ({
   name,
   error,
   options,
+  loading,
   maxHeight = null,
   noCaret = false,
   saveToDb,
@@ -87,6 +88,7 @@ const SharedSelect = ({
   name: string,
   error: string,
   options: Array<Object>,
+  loading: Boolean,
   maxHeight?: number,
   noCaret: boolean,
   saveToDb: () => void,
@@ -104,14 +106,19 @@ const SharedSelect = ({
     [name],
   )
 
+  // show ... while options are loading
+  const loadingOptions = [{ value, label: '...' }]
+  const optionsToUse = loading && value ? loadingOptions : options
+  const selectValue = optionsToUse.find(o => o.value === value)
+
   return (
     <Container data-id={field}>
       {label && <Label labelsize={labelSize}>{label}</Label>}
       <StyledSelect
         id={field}
         name={field}
-        value={options.find(o => o.value === value)}
-        options={options}
+        value={selectValue}
+        options={optionsToUse}
         onChange={onChange}
         hideSelectedOptions
         placeholder=""

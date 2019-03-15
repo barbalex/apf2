@@ -14,11 +14,11 @@ import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import FormTitle from '../../../shared/FormTitle'
 import FilterTitle from '../../../shared/FilterTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import withAeEigenschaftens from './withAeEigenschaftens'
 import updateApByIdGql from './updateApById'
-import withAllAdresses from './withAllAdresses'
-import withAllAps from './withAllAps'
 import query from './data'
+import allApsQuery from './allAps'
+import allAdressesQuery from './allAdresses'
+import allAeEigenschaftensQuery from './allAeEigenschaftens'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import filterNodesByNodeFilterArray from '../../TreeContainer/filterNodesByNodeFilterArray'
@@ -65,24 +65,13 @@ const LabelPopoverRowColumnRight = styled.div`
   padding-left: 5px;
 `
 
-const enhance = compose(
-  withAllAps,
-  withAllAdresses,
-  withAeEigenschaftens,
-  observer,
-)
+const enhance = compose(observer)
 
 const Ap = ({
   treeName,
-  dataAllAdresses,
-  dataAllAps,
-  dataAeEigenschaftens,
   showFilter = false,
 }: {
   treeName: String,
-  dataAllAdresses: Object,
-  dataAllAps: Object,
-  dataAeEigenschaftens: Object,
   showFilter: Boolean,
 }) => {
   const client = useApolloClient()
@@ -96,6 +85,29 @@ const Ap = ({
   if (showFilter) id = '99999999-9999-9999-9999-999999999999'
   const { data, error, loading } = useQuery(query, {
     variables: { id },
+  })
+  const {
+    data: allApsData,
+    error: allApsError,
+    loading: allApsLoading,
+  } = useQuery(allApsQuery)
+  const {
+    data: allAdressesData,
+    error: allAdressesError,
+    loading: allAdressesLoading,
+  } = useQuery(allAdressesQuery)
+  const {
+    data: allAeEigenschaftensData,
+    error: allAeEigenschaftensError,
+    loading: allAeEigenschaftensLoading,
+  } = useQuery(allAeEigenschaftensQuery)
+  console.log('Ap', {
+    allApsData,
+    allApsLoading,
+    allAdressesData,
+    allAdressesLoading,
+    allAeEigenschaftensData,
+    allAeEigenschaftensLoading,
   })
 
   const [errors, setErrors] = useState({})
@@ -121,7 +133,7 @@ const Ap = ({
     value: el.code,
     label: el.text,
   }))
-  let adressenWerte = get(dataAllAdresses, 'allAdresses.nodes', [])
+  let adressenWerte = get(allAdressesData, 'allAdresses.nodes', [])
   adressenWerte = sortBy(adressenWerte, 'name')
   adressenWerte = adressenWerte.map(el => ({
     label: el.name,
@@ -133,8 +145,8 @@ const Ap = ({
   let apFiltered = []
   let artWerte
   if (showFilter) {
-    apArten = get(dataAllAps, 'allAps.nodes', []).map(o => o.artId)
-    artWerte = get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])
+    apArten = get(allApsData, 'allAps.nodes', []).map(o => o.artId)
+    artWerte = get(allAeEigenschaftensData, 'allAeEigenschaftens.nodes', [])
     // only list ap arten
     artWerte = artWerte.filter(o => apArten.includes(o.id))
     artWerte = sortBy(artWerte, 'artname')
@@ -143,7 +155,7 @@ const Ap = ({
       label: el.artname,
     }))
     // get filter values length
-    apTotal = get(dataAllAps, 'allAps.nodes', [])
+    apTotal = get(allApsData, 'allAps.nodes', [])
     const nodeFilterArray = Object.entries(nodeFilter[treeName].ap).filter(
       ([key, value]) => value || value === 0 || value === false,
     )
@@ -156,10 +168,10 @@ const Ap = ({
     )
   } else {
     // list all ap-Arten BUT the active one
-    apArten = get(dataAllAps, 'allAps.nodes', [])
+    apArten = get(allApsData, 'allAps.nodes', [])
       .filter(o => o.id !== row.id)
       .map(o => o.artId)
-    artWerte = get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])
+    artWerte = get(allAeEigenschaftensData, 'allAeEigenschaftens.nodes', [])
     // filter ap arten but the active one
     artWerte = artWerte.filter(o => !apArten.includes(o.id))
     artWerte = sortBy(artWerte, 'artname')
@@ -224,24 +236,18 @@ const Ap = ({
     [row, showFilter],
   )
 
-  if (
-    (showFilter && (dataAeEigenschaftens.loading || dataAllAdresses.loading)) ||
-    (loading ||
-      dataAeEigenschaftens.loading ||
-      dataAllAdresses.loading ||
-      dataAllAps.loading)
-  ) {
+  if (showFilter || (loading || allApsLoading)) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
       </Container>
     )
   }
-  if (dataAeEigenschaftens.error) {
-    return `Fehler: ${dataAeEigenschaftens.error.message}`
+  if (allAeEigenschaftensError) {
+    return `Fehler: ${allAeEigenschaftensError.message}`
   }
-  if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
-  if (dataAllAps.error) return `Fehler: ${dataAllAps.error.message}`
+  if (allAdressesError) return `Fehler: ${allAdressesError.message}`
+  if (allApsError) return `Fehler: ${allApsError.message}`
   if (error) return `Fehler: ${error.message}`
 
   return (
@@ -266,6 +272,7 @@ const Ap = ({
             field="artId"
             label="Art (gibt dem Aktionsplan den Namen)"
             options={artWerte}
+            loading={allAeEigenschaftensLoading}
             saveToDb={saveToDb}
             error={errors.artId}
           />
@@ -348,6 +355,7 @@ const Ap = ({
             field="bearbeiter"
             label="Verantwortlich"
             options={adressenWerte}
+            loading={allAdressesLoading}
             saveToDb={saveToDb}
             error={errors.bearbeiter}
           />

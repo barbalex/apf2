@@ -31,10 +31,10 @@ Beispiel: Charlotte bereitet die Arbeit der Freiwilligen "A" vor:
 ...auf den Papier-Formularen
 
 ### 3. Freiwillige digitalisiert ihre Feld-Formulare
-1. Loggt A nach der Feldarbeit in apflora.ch ein, um ihre Feld-Formulare zu übertragen, öffnet sich die `EKF-Ansicht`: A sieht die Liste aller EKF dieses Jahres (bzw. noch ohne Datum), bei denen sie als Beobachterin erfasst ist
+1. Loggt A nach der Feldarbeit in apflora.ch ein, um ihre Feld-Formulare zu übertragen, öffnet sich die `EKF-Ansicht`: A sieht die Liste aller EKF dieses Jahres (inkl. diejenigen, die noch kein Datum haben), bei denen sie als Beobachterin erfasst ist
 2. Die Liste ist sortiert nach: Projekt, Aktionsplan, Population, Teil-Population (Projekt würde nur angezeigt, wenn in mehreren Projekten EKF für diese Mitarbeiterin existierten)
 3. A wählt in der Liste die gewünschte Kontrolle. Und überträgt rechts daneben ihr Feld-Formular ins apflora-Formular
-4. In der Titelleiste wird das aktuelle Erfassungs-Jahr angezeigt. Es dauert von März bis Februar. Loggt man also im Januar ein, sieht man die Liste für das vorhergehende Feld-Jahr. Ab März sieht man die Liste für das aktuelle Feld-Jahr
+4. In der Titelleiste wird das aktuelle Erfassungs-Jahr angezeigt
 5. Man kann ein anderes Jahr wählen. In diesem Fall werden die Freiwilligen-Kontrollen der angemeldeten Benutzerin aus dem betreffenden Jahr angezeigt. Nicht aber die Kontrollen ohne Datum (die werden nur angezeigt, wenn das gewählte Jahr dem aktuellen Feld-Jahr entspricht)
 6. A kann ihr Passwort ändern, indem sie oben rechts auf die Schaltfläche klickt, die ihren Benutzer-Namen anzeigt
 
