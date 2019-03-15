@@ -9,10 +9,10 @@
   "author": "Alexander Gabriel",
   "license": "MIT",
   "devDependencies": {
-    "cypress": "3.1.5",
+    "cypress": "3.2.0",
     "docsify-cli": "4.3.0",
-    "flow-bin": "0.94.0",
-    "npm-check-updates": "3.0.8",
+    "flow-bin": "0.95.1",
+    "npm-check-updates": "3.0.9",
     "postgraphile": "4.3.3",
     "postgraphile-plugin-connection-filter": "1.0.0-rc.1",
     "react-scripts": "2.1.8",
