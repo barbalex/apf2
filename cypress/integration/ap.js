@@ -70,21 +70,6 @@ describe('Aktionsplan form', () => {
       .type(typedText)
       .should('have.value', typedText)
   })
-  it('has filter icon', () => {
-    cy.get('[data-id=daten-filtern]').should('exist')
-  })
-  it('opens filter form', () => {
-    cy.get('[data-id=daten-filtern]')
-      .click()
-      .get('[data-id=form-title]')
-      .should('contain', 'Filter')
-  })
-  it('closes filter form', () => {
-    cy.get('[data-id=daten-anzeigen]')
-      .click()
-      .get('[data-id=form-title]')
-      .should('not.contain', 'Filter')
-  })
   it('opens info when info icon is clicked', () => {
     cy.get('[data-id=info-icon]')
       .first()
