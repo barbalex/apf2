@@ -1,5 +1,5 @@
 // @flow
-import React, { useContext, useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
@@ -11,7 +11,6 @@ import { observer } from 'mobx-react-lite'
 
 import Label from './Label'
 import InfoWithPopover from './InfoWithPopover'
-import mobxStoreContext from '../../mobxStoreContext'
 
 const FieldWithInfoContainer = styled.div`
   display: flex;
@@ -71,8 +70,6 @@ const Status = ({
   treeName: string,
   showFilter: Boolean,
 }) => {
-  const { nodeFilter } = useContext(mobxStoreContext)
-
   const [bekanntSeitStateValue, setBekanntSeitStateValue] = useState(
     bekanntSeitValue || bekanntSeitValue === 0 ? bekanntSeitValue : '',
   )
