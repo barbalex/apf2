@@ -18,7 +18,8 @@ Erfasst man in einem Filter-Feld Daten, wird der entsprechende Filter nach Verla
 Filtern kann man im `Strukturbaum` _und_ im `Strukturbaum 2`. Öffnet man den `Strukturbaum 2`, entspricht er genau dem `Strukturbaum`, d.h. es wird auch ein allfälliger Filter kopiert. Danach sind die Filter unabhängig.
 
 ## Wie öffnet man ein Filter-Formular?
-- Mit der Schaltfläche obn in der Navigationszeile, rechts neben der Daten-Schaltfläche
+- Mit der Schaltfläche obn in der Navigationszeile, rechts neben der Daten-Schaltfläche<br/>
+  ![Filter öffnen](./_media/filterButton.png)
 
 ## Wo wird der Filter angewendet?
 - Im Strukturbaum auf der gefilterten Ebene.<br/>
