@@ -362,7 +362,7 @@ const Tpopfeldkontr = ({
       <Container showfilter={showFilter}>
         {showFilter ? (
           <FilterTitle
-            title="Feld-Kontrolle"
+            title="Feld-Kontrollen"
             treeName={treeName}
             table="tpopfeldkontr"
             totalNr={tpopkontrTotal.length}

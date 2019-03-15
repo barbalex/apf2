@@ -474,7 +474,7 @@ const Tpopfreiwkontr = ({
     <Container showfilter={showFilter}>
       {!(view === 'ekf') && showFilter && (
         <FilterTitle
-          title="Freiwilligen-Kontrolle"
+          title="Freiwilligen-Kontrollen"
           treeName={treeName}
           table="tpopfreiwkontr"
           totalNr={tpopkontrTotal.length}

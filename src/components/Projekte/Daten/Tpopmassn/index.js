@@ -239,7 +239,7 @@ const Tpopmassn = ({
       <Container showfilter={showFilter}>
         {showFilter ? (
           <FilterTitle
-            title="Massnahme"
+            title="Massnahmen"
             treeName={treeName}
             table="tpopmassn"
             totalNr={tpopmassnTotal.length}
