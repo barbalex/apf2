@@ -199,12 +199,12 @@ const Karte = ({
     SwisstopoDufour: () => <SwisstopoDufour />,
     ZhUep: () => <ZhUep />,
     //BingAerial: () => <BingAerial />,
-    ZhOrtho2014Rgb: () => <ZhOrtho2014Rgb />,
-    ZhOrtho2014Ir: () => <ZhOrtho2014Ir />,
-    ZhOrtho2015Rgb: () => <ZhOrtho2015Rgb />,
-    ZhOrtho2015Ir: () => <ZhOrtho2015Ir />,
     ZhOrtho2018Rgb: () => <ZhOrtho2018Rgb />,
     ZhOrtho2018Ir: () => <ZhOrtho2018Ir />,
+    ZhOrtho2015Rgb: () => <ZhOrtho2015Rgb />,
+    ZhOrtho2015Ir: () => <ZhOrtho2015Ir />,
+    ZhOrtho2014Rgb: () => <ZhOrtho2014Rgb />,
+    ZhOrtho2014Ir: () => <ZhOrtho2014Ir />,
   }))
   const BaseLayerComponent = BaseLayerComponents[activeBaseLayer]
   const activeOverlaysSorted = sortBy(activeOverlays, activeOverlay =>
