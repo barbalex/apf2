@@ -21,8 +21,10 @@ const baseLayers = [
     label: 'Swisstopo Dufourkarte (1844-1864)',
     value: 'SwisstopoDufour',
   },
+  // https://wms.zh.ch/upwms?SERVICE=WMS&Request=GetCapabilities
   { label: 'ZH Übersichtsplan', value: 'ZhUep' },
   // { label: 'Bing Luftbild', value: 'BingAerial' },
+  // https://wms.zh.ch/OrthoZHWMS?SERVICE=WMS&Request=GetCapabilities
   { label: 'ZH Orthofoto Sommer 2018 RGB', value: 'ZhOrtho2018Rgb' },
   { label: 'ZH Orthofoto Sommer 2018 infrarot', value: 'ZhOrtho2018Ir' },
   { label: 'ZH Orthofoto Frühjahr 2015/16 RGB', value: 'ZhOrtho2015Rgb' },
