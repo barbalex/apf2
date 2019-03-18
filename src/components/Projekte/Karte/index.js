@@ -32,9 +32,11 @@ import SwissTopoPixelGrau from './layers/SwisstopoPixelGrau'
 import SwisstopoSiegfried from './layers/SwisstopoSiegfried'
 import SwisstopoDufour from './layers/SwisstopoDufour'
 //import BingAerial from './layers/BingAerial'
-import ZhOrtho from './layers/ZhOrtho'
-import ZhOrthoIr from './layers/ZhOrthoIr'
-import ZhOrtho2015 from './layers/ZhOrtho2015'
+import ZhOrtho2014Rgb from './layers/ZhOrtho2014Rgb'
+import ZhOrtho2014Ir from './layers/ZhOrtho2014Ir'
+import ZhOrtho2015Rgb from './layers/ZhOrtho2015Rgb'
+import ZhOrtho2018Rgb from './layers/ZhOrtho2018Rgb'
+import ZhOrtho2018Ir from './layers/ZhOrtho2018Ir'
 import ZhOrtho2015Ir from './layers/ZhOrtho2015Ir'
 import ZhUep from './layers/ZhUep'
 import Detailplaene from './layers/Detailplaene'
@@ -197,10 +199,12 @@ const Karte = ({
     SwisstopoDufour: () => <SwisstopoDufour />,
     ZhUep: () => <ZhUep />,
     //BingAerial: () => <BingAerial />,
-    ZhOrtho: () => <ZhOrtho />,
-    ZhOrthoIr: () => <ZhOrthoIr />,
-    ZhOrtho2015: () => <ZhOrtho2015 />,
+    ZhOrtho2014Rgb: () => <ZhOrtho2014Rgb />,
+    ZhOrtho2014Ir: () => <ZhOrtho2014Ir />,
+    ZhOrtho2015Rgb: () => <ZhOrtho2015Rgb />,
     ZhOrtho2015Ir: () => <ZhOrtho2015Ir />,
+    ZhOrtho2018Rgb: () => <ZhOrtho2018Rgb />,
+    ZhOrtho2018Ir: () => <ZhOrtho2018Ir />,
   }))
   const BaseLayerComponent = BaseLayerComponents[activeBaseLayer]
   const activeOverlaysSorted = sortBy(activeOverlays, activeOverlay =>

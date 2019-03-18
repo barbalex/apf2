@@ -23,10 +23,12 @@ const baseLayers = [
   },
   { label: 'ZH Übersichtsplan', value: 'ZhUep' },
   // { label: 'Bing Luftbild', value: 'BingAerial' },
-  { label: 'ZH Orthofoto Sommer RGB', value: 'ZhOrtho' },
-  { label: 'ZH Orthofoto Sommer infrarot', value: 'ZhOrthoIr' },
-  { label: 'ZH Orthofoto Frühjahr 2015/16 RGB', value: 'ZhOrtho2015' },
+  { label: 'ZH Orthofoto Sommer 2014/15 RGB', value: 'ZhOrtho2014Rgb' },
+  { label: 'ZH Orthofoto Sommer 2014/15 infrarot', value: 'ZhOrtho2014Ir' },
+  { label: 'ZH Orthofoto Frühjahr 2015/16 RGB', value: 'ZhOrtho2015Rgb' },
   { label: 'ZH Orthofoto Frühjahr 2015/16 infrarot', value: 'ZhOrtho2015Ir' },
+  { label: 'ZH Orthofoto Sommer 2018 RGB', value: 'ZhOrtho2018Rgb' },
+  { label: 'ZH Orthofoto Sommer 2018 infrarot', value: 'ZhOrtho2018Ir' },
 ]
 
 const BaseLayers = () => (
