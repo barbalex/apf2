@@ -86,11 +86,7 @@ const Ap = ({
   const { data, error, loading } = useQuery(query, {
     variables: { id },
   })
-  const {
-    data: allApsData,
-    error: allApsError,
-    loading: allApsLoading,
-  } = useQuery(allApsQuery)
+  const { data: allApsData, error: allApsError } = useQuery(allApsQuery)
   const {
     data: allAdressesData,
     error: allAdressesError,
@@ -101,14 +97,6 @@ const Ap = ({
     error: allAeEigenschaftensError,
     loading: allAeEigenschaftensLoading,
   } = useQuery(allAeEigenschaftensQuery)
-  console.log('Ap', {
-    allApsData,
-    allApsLoading,
-    allAdressesData,
-    allAdressesLoading,
-    allAeEigenschaftensData,
-    allAeEigenschaftensLoading,
-  })
 
   const [errors, setErrors] = useState({})
 
@@ -236,7 +224,7 @@ const Ap = ({
     [row, showFilter],
   )
 
-  if (showFilter || (loading || allApsLoading)) {
+  if (loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
