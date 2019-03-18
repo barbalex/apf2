@@ -4,7 +4,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import isEqual from 'lodash/isEqual'
 import uniqBy from 'lodash/uniqBy'
 import queryString from 'query-string'
-import createHistory from 'history/createBrowserHistory'
+import { createBrowserHistory } from 'history'
 
 import ApfloraLayer from './ApfloraLayer'
 import MapFilter from './MapFilter'
@@ -28,7 +28,7 @@ import getActiveNodes from '../modules/getActiveNodes'
 // substract 3 Months to now so user sees previous year in February
 const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
 const ekfYear = new Date(ekfRefDate).getFullYear()
-const history = createHistory()
+const history = createBrowserHistory()
 
 const myTypes = types
   .model({
