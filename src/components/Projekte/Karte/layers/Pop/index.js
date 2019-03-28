@@ -8,7 +8,7 @@ import { useQuery } from 'react-apollo-hooks'
 import Marker from './Marker'
 import filterNodesByNodeFilterArray from '../../../TreeContainer/filterNodesByNodeFilterArray'
 import mobxStoreContext from '../../../../../mobxStoreContext'
-import query from './data'
+import query from './query'
 import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
 
 const iconCreateFunction = function(cluster) {

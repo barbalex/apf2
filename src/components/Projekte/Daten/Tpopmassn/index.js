@@ -24,7 +24,6 @@ import queryAeEigenschaftens from './queryAeEigenschaftens'
 import updateTpopmassnByIdGql from './updateTpopmassnById'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
-import filterNodesByNodeFilterArray from '../../TreeContainer/filterNodesByNodeFilterArray'
 import { simpleTypes as tpopmassnType } from '../../../../mobxStore/NodeFilterTree/tpopmassn'
 
 const Container = styled.div`

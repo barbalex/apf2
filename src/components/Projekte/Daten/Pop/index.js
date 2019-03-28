@@ -14,7 +14,7 @@ import FilterTitle from '../../../shared/FilterTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updatePopByIdGql from './updatePopById'
 import query from './query'
-import queryAllPops from './queryAllPops'
+import queryPops from './queryPops'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { simpleTypes as popType } from '../../../../mobxStore/NodeFilterTree/pop'
@@ -69,15 +69,15 @@ const Pop = ({
     const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
     popFilter[key] = { [expression]: value }
   })
-  const { data: dataAllPops } = useQuery(queryAllPops, {
+  const { data: dataPops } = useQuery(queryPops, {
     variables: {
       showFilter,
       popFilter,
     },
   })
 
-  const popTotalCount = get(dataAllPops, 'allPops.totalCount', '...')
-  const popFilteredCount = get(dataAllPops, 'popsFiltered.totalCount', '...')
+  const popTotalCount = get(dataPops, 'allPops.totalCount', '...')
+  const popFilteredCount = get(dataPops, 'popsFiltered.totalCount', '...')
   let row
   if (showFilter) {
     row = nodeFilter[treeName].pop
