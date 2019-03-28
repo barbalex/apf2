@@ -141,11 +141,7 @@ const Tpopfeldkontr = ({
     error: errorAdresses,
   } = useQuery(queryAdresses)
 
-  const {
-    data: dataLists,
-    loading: loadingLists,
-    error: errorLists,
-  } = useQuery(queryLists)
+  const { data: dataLists, loading: loadingLists } = useQuery(queryLists)
 
   const [errors, setErrors] = useState({})
   const [value, setValue] = useState(

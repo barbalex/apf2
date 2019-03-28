@@ -1,16 +1,15 @@
 // @flow
 import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
-//import format from 'date-fns/format'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import jwtDecode from 'jwt-decode'
 
 import StringToCopy from '../../../shared/StringToCopyOnlyButton'
 import query from './query'
+import queryTpopkontrs from './queryTpopkontrs'
 import queryAdresses from './queryAdresses'
 import updateTpopkontrByIdGql from './updateTpopkontrById'
 import createTpopkontrzaehl from './createTpopkontrzaehl'
@@ -31,7 +30,7 @@ import FormTitle from '../../../shared/FormTitle'
 import FilterTitle from '../../../shared/FilterTitle'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
-import filterNodesByNodeFilterArray from '../../TreeContainer/filterNodesByNodeFilterArray'
+import { simpleTypes as tpopfreiwkontrType } from '../../../../mobxStore/NodeFilterTree/tpopfreiwkontr'
 
 const Container = styled.div`
   background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
@@ -136,14 +135,6 @@ const CountHint = styled.div`
   padding: 10px;
 `
 
-/**
- * on componentDidMount
- * check number of tpopkontrzaehl
- * if none: create new ones
- * then refetch data
- */
-const enhance = compose(observer)
-
 const Tpopfreiwkontr = ({
   dimensions,
   treeName,
@@ -175,11 +166,31 @@ const Tpopfreiwkontr = ({
       ? activeNodeArray[9]
       : '99999999-9999-9999-9999-999999999999'
   if (showFilter) id = '99999999-9999-9999-9999-999999999999'
-
   const { data, loading, error, refetch } = useQuery(query, {
     variables: {
       id,
+    },
+  })
+  /**
+   * THIS IS A BAD HACK
+   * and it will not work once there are many projects
+   * because 'connectionFilterRelations: true' cannot be set for postgraphile
+   * correct would be to query only what is in this project
+   * isNull: false is set so there is never an empty object, otherwise qraphql will fail
+   */
+  const tpopkontrFilter = { typ: { equalTo: 'Freiwilligen-Erfolgskontrolle' } }
+  const tpopkontrFilterValues = Object.entries(
+    nodeFilter[treeName].tpopfreiwkontr,
+  ).filter(e => e[1] || e[1] === 0)
+  tpopkontrFilterValues.forEach(([key, value]) => {
+    const expression =
+      tpopfreiwkontrType[key] === 'string' ? 'includes' : 'equalTo'
+    tpopkontrFilter[key] = { [expression]: value }
+  })
+  const { data: dataTpopkontrs } = useQuery(queryTpopkontrs, {
+    variables: {
       showFilter,
+      tpopkontrFilter,
     },
   })
 
@@ -229,23 +240,19 @@ const Tpopfreiwkontr = ({
   const isFreiwillig = role === 'apflora_freiwillig'
   const { width } = dimensions
 
-  let tpopkontrTotal = []
-  let tpopkontrFiltered = []
+  const tpopkontrTotalCount = get(
+    dataTpopkontrs,
+    'allTpopkontrs.totalCount',
+    '...',
+  )
+  const tpopkontrFilteredCount = get(
+    dataTpopkontrs,
+    'tpopkontrsFiltered.totalCount',
+    '...',
+  )
   let row
   if (showFilter) {
     row = nodeFilter[treeName].tpopfreiwkontr
-    // get filter values length
-    tpopkontrTotal = get(data, 'allTpopkontrs.nodes', [])
-    const nodeFilterArray = Object.entries(
-      nodeFilter[treeName].tpopfreiwkontr,
-    ).filter(([key, value]) => value || value === 0 || value === false)
-    tpopkontrFiltered = tpopkontrTotal.filter(node =>
-      filterNodesByNodeFilterArray({
-        node,
-        nodeFilterArray,
-        table: 'tpopfreiwkontr',
-      }),
-    )
   } else {
     row = get(data, 'tpopkontrById', {}) || {}
   }
@@ -473,8 +480,8 @@ const Tpopfreiwkontr = ({
           title="Freiwilligen-Kontrollen"
           treeName={treeName}
           table="tpopfreiwkontr"
-          totalNr={tpopkontrTotal.length}
-          filteredNr={tpopkontrFiltered.length}
+          totalNr={tpopkontrTotalCount}
+          filteredNr={tpopkontrFilteredCount}
         />
       )}
       {!(view === 'ekf') && !showFilter && (
@@ -679,4 +686,4 @@ const Tpopfreiwkontr = ({
   )
 }
 
-export default enhance(Tpopfreiwkontr)
+export default observer(Tpopfreiwkontr)

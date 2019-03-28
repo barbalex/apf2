@@ -11,7 +11,7 @@ import {
 } from '../../../shared/fragments'
 
 export default gql`
-  query tpopkontrByIdQuery($id: UUID!, $showFilter: Boolean!) {
+  query tpopkontrByIdQuery($id: UUID!) {
     tpopkontrById(id: $id) {
       ...TpopfreiwkontrFields
       adresseByBearbeiter {
@@ -47,13 +47,6 @@ export default gql`
           anzahl
           einheit
         }
-      }
-    }
-    allTpopkontrs(
-      filter: { typ: { equalTo: "Freiwilligen-Erfolgskontrolle" } }
-    ) @include(if: $showFilter) {
-      nodes {
-        ...TpopfreiwkontrFields
       }
     }
   }
