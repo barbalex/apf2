@@ -385,15 +385,15 @@ body {
 }
 
 .reflex-splitter {
-  background-color: #2e7d32 !important;
-  border-right: 1px solid #2e7d32 !important;
-  border-left: 1px solid #2e7d32 !important;
+  background-color: #388e3c !important;
+  border-right: 1px solid #388e3c !important;
+  border-left: 1px solid #388e3c !important;
 }
 
 .reflex-splitter:hover {
-  background-color: #fff59d !important;
-  border-right: 1px solid #fff59d !important;
-  border-left: 1px solid #fff59d !important;
+  background-color: #fff06c !important;
+  border-right: 1px solid #fff06c !important;
+  border-left: 1px solid #fff06c !important;
 }
 
 /*
