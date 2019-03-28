@@ -3,8 +3,6 @@ import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
-//import format from 'date-fns/format'
-import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
@@ -18,13 +16,16 @@ import FilterTitle from '../../../shared/FilterTitle'
 import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
 import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import query from './data'
+import query from './query'
+import queryLists from './queryLists'
+import queryTpopmassns from './queryTpopmassns'
+import queryAdresses from './queryAdresses'
+import queryAeEigenschaftens from './queryAeEigenschaftens'
 import updateTpopmassnByIdGql from './updateTpopmassnById'
-import withAeEigenschaftens from './withAeEigenschaftens'
-import withAllAdresses from './withAllAdresses'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import filterNodesByNodeFilterArray from '../../TreeContainer/filterNodesByNodeFilterArray'
+import { simpleTypes as tpopmassnType } from '../../../../mobxStore/NodeFilterTree/tpopmassn'
 
 const Container = styled.div`
   height: 100%;
@@ -42,25 +43,15 @@ const FieldsContainer = styled.div`
       : 'auto'};
 `
 
-const enhance = compose(
-  withAllAdresses,
-  withAeEigenschaftens,
-  observer,
-)
-
 const Tpopmassn = ({
   dimensions = { width: 380 },
   treeName,
-  dataAeEigenschaftens,
-  dataAllAdresses,
   showFilter = false,
 }: {
   onNewRequestWirtspflanze: () => void,
   onBlurWirtspflanze: () => void,
   dimensions: number,
   treeName: string,
-  dataAeEigenschaftens: Object,
-  dataAllAdresses: Object,
   showFilter: Boolean,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
@@ -78,27 +69,55 @@ const Tpopmassn = ({
   const { data, loading, error } = useQuery(query, {
     variables: {
       id,
-      showFilter,
     },
   })
 
-  let tpopmassnTotal = []
-  let tpopmassnFiltered = []
+  /**
+   * THIS IS A BAD HACK
+   * and it will not work once there are many projects
+   * because 'connectionFilterRelations: true' cannot be set for postgraphile
+   * correct would be to query only what is in this project
+   * isNull: false is set so there is never an empty object, otherwise qraphql will fail
+   */
+  const tpopmassnFilter = { tpopId: { isNull: false } }
+  const tpopmassnFilterValues = Object.entries(
+    nodeFilter[treeName].tpopmassn,
+  ).filter(e => e[1] || e[1] === 0)
+  tpopmassnFilterValues.forEach(([key, value]) => {
+    const expression = tpopmassnType[key] === 'string' ? 'includes' : 'equalTo'
+    tpopmassnFilter[key] = { [expression]: value }
+  })
+  const { data: dataTpopmassns } = useQuery(queryTpopmassns, {
+    variables: {
+      showFilter,
+      tpopmassnFilter,
+    },
+  })
+
+  const {
+    data: dataAdresses,
+    loading: loadingAdresses,
+    error: errorAdresses,
+  } = useQuery(queryAdresses)
+  const {
+    data: dataAeEigenschaftens,
+    loading: loadingAeEigenschaftens,
+  } = useQuery(queryAeEigenschaftens)
+  const { data: dataLists, loading: loadingLists } = useQuery(queryLists)
+
+  const tpopmassnTotalCount = get(
+    dataTpopmassns,
+    'allTpopmassns.totalCount',
+    '...',
+  )
+  const tpopmassnFilteredCount = get(
+    dataTpopmassns,
+    'tpopmassnsFiltered.totalCount',
+    '...',
+  )
   let row
   if (showFilter) {
     row = nodeFilter[treeName].tpopmassn
-    // get filter values length
-    tpopmassnTotal = get(data, 'allTpopmassns.nodes', [])
-    const nodeFilterArray = Object.entries(
-      nodeFilter[treeName].tpopmassn,
-    ).filter(([key, value]) => value || value === 0 || value === false)
-    tpopmassnFiltered = tpopmassnTotal.filter(node =>
-      filterNodesByNodeFilterArray({
-        node,
-        nodeFilterArray,
-        table: 'tpopmassn',
-      }),
-    )
   } else {
     row = get(data, 'tpopmassnById', {})
   }
@@ -208,13 +227,13 @@ const Tpopmassn = ({
 
   const width = isNaN(dimensions.width) ? 380 : dimensions.width
 
-  let adressenWerte = get(dataAllAdresses, 'allAdresses.nodes', [])
+  let adressenWerte = get(dataAdresses, 'allAdresses.nodes', [])
   adressenWerte = sortBy(adressenWerte, 'name')
   adressenWerte = adressenWerte.map(el => ({
     value: el.id,
     label: el.name,
   }))
-  let tpopmasstypWerte = get(data, 'allTpopmassnTypWertes.nodes', [])
+  let tpopmasstypWerte = get(dataLists, 'allTpopmassnTypWertes.nodes', [])
   tpopmasstypWerte = sortBy(tpopmasstypWerte, 'sort')
   tpopmasstypWerte = tpopmasstypWerte.map(el => ({
     value: el.code,
@@ -225,7 +244,7 @@ const Tpopmassn = ({
     .sort()
     .map(o => ({ value: o, label: o }))
 
-  if (loading || dataAeEigenschaftens.loading || dataAllAdresses.loading) {
+  if (loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
@@ -233,7 +252,7 @@ const Tpopmassn = ({
     )
   }
   if (error) return `Fehler: ${error.message}`
-  if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
+  if (errorAdresses) return `Fehler: ${errorAdresses.message}`
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -242,8 +261,8 @@ const Tpopmassn = ({
             title="Massnahmen"
             treeName={treeName}
             table="tpopmassn"
-            totalNr={tpopmassnTotal.length}
-            filteredNr={tpopmassnFiltered.length}
+            totalNr={tpopmassnTotalCount}
+            filteredNr={tpopmassnFilteredCount}
           />
         ) : (
           <FormTitle
@@ -276,6 +295,7 @@ const Tpopmassn = ({
             label="Typ"
             value={row.typ}
             dataSource={tpopmasstypWerte}
+            loading={loadingLists}
             saveToDb={saveToDb}
             error={errors.typ}
           />
@@ -295,6 +315,7 @@ const Tpopmassn = ({
             field="bearbeiter"
             label="BearbeiterIn"
             options={adressenWerte}
+            loading={loadingAdresses}
             saveToDb={saveToDb}
             error={errors.bearbeiter}
           />
@@ -395,6 +416,7 @@ const Tpopmassn = ({
             field="wirtspflanze"
             label="Wirtspflanze"
             options={artWerte}
+            loading={loadingAeEigenschaftens}
             saveToDb={saveToDb}
             error={errors.wirtspflanze}
           />
@@ -423,4 +445,4 @@ const Tpopmassn = ({
   )
 }
 
-export default enhance(Tpopmassn)
+export default observer(Tpopmassn)

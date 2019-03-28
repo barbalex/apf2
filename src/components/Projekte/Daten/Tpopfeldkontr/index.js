@@ -375,7 +375,7 @@ const Tpopfeldkontr = ({
     .map(e => `${e.label}: ${e.einheit ? e.einheit.replace(/  +/g, ' ') : ''}`)
     .map(o => ({ value: o, label: o }))
 
-  if ((showFilter && loadingAdresses) || (loading || loadingAdresses)) {
+  if (loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
@@ -452,6 +452,7 @@ const Tpopfeldkontr = ({
                 field="bearbeiter"
                 label="BearbeiterIn"
                 options={adressenWerte}
+                loading={loadingAdresses}
                 saveToDb={saveToDb}
                 error={errors.bearbeiter}
               />
