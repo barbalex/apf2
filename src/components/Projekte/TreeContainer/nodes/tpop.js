@@ -3,8 +3,6 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
-
 export default ({
   nodes: nodesPassed,
   data,
@@ -28,7 +26,6 @@ export default ({
   popId: String,
   mobxStore: Object,
 }): Array<Object> => {
-  const nodeFilter = get(mobxStore, `nodeFilter.${treeName}`)
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
@@ -37,9 +34,6 @@ export default ({
   const popIndex = findIndex(popNodes, { id: popId })
   const nodeLabelFilterString =
     get(mobxStore, `${treeName}.nodeLabelFilter.tpop`) || ''
-  const nodeFilterArray = Object.entries(nodeFilter.tpop).filter(
-    ([key, value]) => value || value === 0 || value === false,
-  )
 
   // map through all elements and create array of nodes
   const nodes = memoizeOne(() =>
@@ -59,14 +53,6 @@ export default ({
         }
         return true
       })
-      // filter by nodeFilter
-      .filter(node =>
-        filterNodesByNodeFilterArray({
-          node,
-          nodeFilterArray,
-          table: 'tpop',
-        }),
-      )
       .map((el, index) => ({
         nodeType: 'table',
         menuType: 'tpop',

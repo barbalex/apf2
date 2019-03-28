@@ -2,8 +2,6 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
-import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
-
 export default ({
   nodes: nodesPassed,
   data,
@@ -28,9 +26,6 @@ export default ({
   mobxStore: Object,
 }): Array<Object> => {
   const pops = get(data, 'allPops.nodes', [])
-  const nodeFilterArray = Object.entries(nodeFilter.pop).filter(
-    ([key, value]) => value || value === 0 || value === false,
-  )
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
@@ -52,15 +47,7 @@ export default ({
           .includes(nodeLabelFilterString.toString().toLowerCase())
       }
       return true
-    })
-    // filter by nodeFilter
-    .filter(node =>
-      filterNodesByNodeFilterArray({
-        node,
-        nodeFilterArray,
-        table: 'pop',
-      }),
-    ).length
+    }).length
   let message = loading && !popNodesLength ? '...' : popNodesLength
   if (nodeLabelFilterString) {
     message = `${popNodesLength} gefiltert`

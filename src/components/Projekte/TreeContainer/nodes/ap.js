@@ -4,8 +4,6 @@ import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
 import compareLabel from './compareLabel'
-import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
-import filterNodesByApFilter from '../filterNodesByApFilter'
 
 export default ({
   nodes: nodesPassed,
@@ -22,14 +20,9 @@ export default ({
   projId: String,
   mobxStore: Object,
 }): Array<Object> => {
-  const nodeFilter = get(mobxStore, `nodeFilter.${treeName}`)
-  const apFilter = get(mobxStore, `${treeName}.apFilter`)
   const nodeLabelFilterString =
     get(mobxStore, `${treeName}.nodeLabelFilter.ap`) || ''
   const aps = get(data, 'allAps.nodes', [])
-  const nodeFilterArray = Object.entries(nodeFilter.ap).filter(
-    ([key, value]) => value || value === 0 || value === false,
-  )
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
@@ -53,16 +46,6 @@ export default ({
         }
         return true
       })
-      // filter by apFilter
-      .filter(node => filterNodesByApFilter({ node, apFilter }))
-      // filter by nodeFilter
-      .filter(node =>
-        filterNodesByNodeFilterArray({
-          node,
-          nodeFilterArray,
-          table: 'ap',
-        }),
-      )
       .map(el => ({
         nodeType: 'table',
         menuType: 'ap',
