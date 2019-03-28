@@ -84,6 +84,8 @@ const SharedSelectCreatable = ({
   name,
   error,
   options: optionsIn,
+  loading,
+  showLocate,
   onClickLocate,
   maxHeight = null,
   noCaret = false,
@@ -95,6 +97,8 @@ const SharedSelectCreatable = ({
   name: string,
   error: string,
   options: Array<Object>,
+  loading: Boolean,
+  showLocate: Boolean,
   onClickLocate: () => void,
   maxHeight?: number,
   noCaret: boolean,
@@ -141,6 +145,11 @@ const SharedSelectCreatable = ({
     options.push({ label: value, value })
   }
 
+  // show ... while options are loading
+  const loadingOptions = [{ value, label: '...' }]
+  const optionsToUse = loading && value ? loadingOptions : options
+  const selectValue = optionsToUse.find(o => o.value === value)
+
   return (
     <Container data-id={field}>
       {label && <Label>{label}</Label>}
@@ -148,7 +157,7 @@ const SharedSelectCreatable = ({
         <StyledSelect
           id={field}
           name={field}
-          value={options.find(o => o.value === value)}
+          value={selectValue}
           options={options}
           onChange={onChange}
           onBlur={onBlur}
@@ -162,13 +171,15 @@ const SharedSelectCreatable = ({
           classNamePrefix="react-select"
           nocaret={noCaret}
         />
-        <StyledIconButton
-          aria-label="Mit Hilfe der Koordinaten automatisch setzen"
-          title="Mit Hilfe der Koordinaten automatisch setzen"
-          onClick={onClickLocate}
-        >
-          <AddLocation />
-        </StyledIconButton>
+        {showLocate && (
+          <StyledIconButton
+            aria-label="Mit Hilfe der Koordinaten automatisch setzen"
+            title="Mit Hilfe der Koordinaten automatisch setzen"
+            onClick={onClickLocate}
+          >
+            <AddLocation />
+          </StyledIconButton>
+        )}
       </Field>
       {error && <Error>{error}</Error>}
     </Container>

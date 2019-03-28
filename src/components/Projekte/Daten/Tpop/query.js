@@ -25,22 +25,6 @@ export default gql`
         }
       }
     }
-    allPopStatusWertes {
-      nodes {
-        ...PopStatusWerteFields
-      }
-    }
-    allTpopApberrelevantWertes {
-      nodes {
-        ...TpopApberrelevantWerteFields
-      }
-    }
-    allGemeindes {
-      nodes {
-        id
-        name
-      }
-    }
   }
   ${ap}
   ${pop}

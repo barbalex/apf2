@@ -18,6 +18,7 @@ import TpopAbBerRelevantInfoPopover from '../TpopAbBerRelevantInfoPopover'
 import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
+import queryLists from './queryLists'
 import queryTpops from './queryTpops'
 import updateTpopByIdGql from './updateTpopById'
 import getGemeindeForKoord from '../../../../modules/getGemeindeForKoord'
@@ -71,6 +72,11 @@ const Tpop = ({
       id,
     },
   })
+  const {
+    data: dataLists,
+    loading: loadingLists,
+    error: errorLists,
+  } = useQuery(queryLists)
   /**
    * THIS IS A BAD HACK
    * and it will not work once there are many projects
@@ -198,12 +204,16 @@ const Tpop = ({
     [showFilter, row],
   )
   const apJahr = get(data, 'tpopById.popByPopId.apByApId.startJahr', null)
-  let gemeindeWerte = get(data, 'allGemeindes.nodes', [])
+  let gemeindeWerte = get(dataLists, 'allGemeindes.nodes', [])
   gemeindeWerte = gemeindeWerte
     .map(el => el.name)
     .sort()
     .map(o => ({ label: o, value: o }))
-  let apberrelevantWerte = get(data, 'allTpopApberrelevantWertes.nodes', [])
+  let apberrelevantWerte = get(
+    dataLists,
+    'allTpopApberrelevantWertes.nodes',
+    [],
+  )
   apberrelevantWerte = sortBy(apberrelevantWerte, 'sort')
   apberrelevantWerte = apberrelevantWerte.map(el => ({
     value: el.code,
@@ -289,6 +299,7 @@ const Tpop = ({
             value={row.apberRelevant}
             name="apberRelevant"
             dataSource={apberrelevantWerte}
+            loading={loadingLists}
             popover={TpopAbBerRelevantInfoPopover}
             label="Für AP-Bericht relevant"
             saveToDb={saveToDb}
@@ -319,7 +330,9 @@ const Tpop = ({
             field="gemeinde"
             label="Gemeinde"
             options={gemeindeWerte}
+            loading={loadingLists}
             saveToDb={saveToDb}
+            showLocate={!showFilter}
             onClickLocate={async setStateValue => {
               if (!row.x || !row.y) {
                 return setErrors({

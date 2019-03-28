@@ -76,6 +76,7 @@ const SharedSelectCreatable = ({
   name,
   error,
   options: optionsIn,
+  loading,
   maxHeight = null,
   noCaret = false,
   saveToDb,
@@ -86,6 +87,7 @@ const SharedSelectCreatable = ({
   name: string,
   error: string,
   options: Array<Object>,
+  loading: Boolean,
   maxHeight?: number,
   noCaret: boolean,
   saveToDb: () => void,
@@ -120,12 +122,9 @@ const SharedSelectCreatable = ({
     [stateValue, name],
   )
 
-  useEffect(
-    () => {
-      setStateValue(value)
-    },
-    [value],
-  )
+  useEffect(() => {
+    setStateValue(value)
+  }, [value])
 
   // need to add value to options list if it is not yet included
   const valuesArray = optionsIn.map(o => o.value)
@@ -133,13 +132,19 @@ const SharedSelectCreatable = ({
   if (value && !valuesArray.includes(value)) {
     options.push({ label: value, value })
   }
+
+  // show ... while options are loading
+  const loadingOptions = [{ value, label: '...' }]
+  const optionsToUse = loading && value ? loadingOptions : options
+  const selectValue = optionsToUse.find(o => o.value === value)
+
   return (
     <Container>
       {label && <Label>{label}</Label>}
       <StyledSelect
         id={field}
         name={field}
-        defaultValue={options.find(o => o.value === value)}
+        defaultValue={selectValue}
         options={options}
         onChange={onChange}
         onBlur={onBlur}
