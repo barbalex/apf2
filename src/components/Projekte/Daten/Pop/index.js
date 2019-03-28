@@ -13,10 +13,12 @@ import FormTitle from '../../../shared/FormTitle'
 import FilterTitle from '../../../shared/FilterTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updatePopByIdGql from './updatePopById'
-import query from './data'
+import query from './query'
+import queryAps from './queryAps'
+import queryAllPops from './queryAllPops'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
-import filterNodesByNodeFilterArray from '../../TreeContainer/filterNodesByNodeFilterArray'
+import { simpleTypes as popType } from '../../../../mobxStore/NodeFilterTree/pop'
 
 const Container = styled.div`
   height: 100%;
@@ -51,27 +53,40 @@ const Pop = ({
   const { data, loading, error } = useQuery(query, {
     variables: {
       id,
+    },
+  })
+  const apFilter = { projId: { in: activeNodeArray[1] } }
+  const { data: dataAps } = useQuery(queryAps, {
+    variables: {
       showFilter,
+      apFilter,
+    },
+  })
+  // need to always pass something in the filter
+  // might as well pass al apIds to show only this project
+  const allApIds = get(dataAps, 'allAps.nodes', []).map(d => d.id)
+  const popFilter = { apId: { in: allApIds } }
+  const popFilterValues = Object.entries(nodeFilter[treeName].pop).filter(
+    e => e[1] || e[1] === 0,
+  )
+  popFilterValues.forEach(([key, value]) => {
+    const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
+    popFilter[key] = { [expression]: value }
+  })
+  const { data: dataAllPops } = useQuery(queryAllPops, {
+    variables: {
+      showFilter,
+      popFilter,
     },
   })
 
-  let popTotal = []
+  const popTotalCount = get(dataAllPops, 'allPops.totalCount', [])
   let popFiltered = []
   let row
   if (showFilter) {
     row = nodeFilter[treeName].pop
     // get filter values length
-    popTotal = get(data, 'allPops.nodes', [])
-    const nodeFilterArray = Object.entries(nodeFilter[treeName].pop).filter(
-      ([key, value]) => value || value === 0 || value === false,
-    )
-    popFiltered = popTotal.filter(node =>
-      filterNodesByNodeFilterArray({
-        node,
-        nodeFilterArray,
-        table: 'pop',
-      }),
-    )
+    popFiltered = get(dataAllPops, 'popsFiltered.nodes', [])
   } else {
     row = get(data, 'popById', {})
   }
@@ -158,7 +173,7 @@ const Pop = ({
             title="Population"
             treeName={treeName}
             table="pop"
-            totalNr={popTotal.length}
+            totalNr={popTotalCount}
             filteredNr={popFiltered.length}
           />
         ) : (

@@ -3,16 +3,11 @@ import gql from 'graphql-tag'
 import { pop } from '../../../shared/fragments'
 
 export default gql`
-  query popByIdQuery($id: UUID!, $showFilter: Boolean!) {
-    popById(id: $id) {
-      ...PopFields
-      apByApId {
-        id
-        startJahr
-      }
-    }
+  query allPopsQuery($showFilter: Boolean!, $popFilter: PopFilter!) {
     allPops @include(if: $showFilter) {
       totalCount
+    }
+    popsFiltered: allPops(filter: $popFilter) @include(if: $showFilter) {
       nodes {
         ...PopFields
       }
