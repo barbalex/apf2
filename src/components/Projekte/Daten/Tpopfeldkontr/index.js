@@ -6,7 +6,6 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
-//import format from 'date-fns/format'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
@@ -21,13 +20,14 @@ import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
 import TpopfeldkontrentwicklungPopover from '../TpopfeldkontrentwicklungPopover'
 import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import query from './data'
+import query from './query'
+import queryTpopkontrs from './queryTpopkontrs'
 import updateTpopkontrByIdGql from './updateTpopkontrById'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
-import withAllAdresses from './withAllAdresses'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
-import filterNodesByNodeFilterArray from '../../TreeContainer/filterNodesByNodeFilterArray'
+import { simpleTypes as tpopfeldkontrType } from '../../../../mobxStore/NodeFilterTree/tpopfeldkontr'
+import queryAdresses from '../../TreeContainer/Tree/queryAdresses'
 
 const Container = styled.div`
   height: 100%;
@@ -74,20 +74,15 @@ const tpopkontrTypWerte = [
   },
 ]
 
-const enhance = compose(
-  withAllAdresses,
-  observer,
-)
+const enhance = compose(observer)
 
 const Tpopfeldkontr = ({
   dimensions = { width: 380 },
   treeName,
-  dataAllAdresses,
   showFilter = false,
 }: {
   dimensions: Object,
   treeName: string,
-  dataAllAdresses: Object,
   showFilter: Boolean,
 }) => {
   const client = useApolloClient()
@@ -109,32 +104,60 @@ const Tpopfeldkontr = ({
   const { data, loading, error } = useQuery(query, {
     variables: {
       id,
-      showFilter,
     },
   })
+  /**
+   * THIS IS A BAD HACK
+   * and it will not work once there are many projects
+   * because 'connectionFilterRelations: true' cannot be set for postgraphile
+   * correct would be to query only what is in this project
+   * isNull: false is set so there is never an empty object, otherwise qraphql will fail
+   */
+  const tpopkontrFilter = {
+    or: [
+      { typ: { notEqualTo: 'Freiwilligen-Erfolgskontrolle' } },
+      { typ: { isNull: true } },
+    ],
+  }
+  const tpopfeldkontrFilterValues = Object.entries(
+    nodeFilter[treeName].tpopfeldkontr,
+  ).filter(e => e[1] || e[1] === 0)
+  tpopfeldkontrFilterValues.forEach(([key, value]) => {
+    const expression =
+      tpopfeldkontrType[key] === 'string' ? 'includes' : 'equalTo'
+    tpopkontrFilter[key] = { [expression]: value }
+  })
+  const { data: dataTpopkontrs } = useQuery(queryTpopkontrs, {
+    variables: {
+      showFilter,
+      tpopkontrFilter,
+    },
+  })
+
+  const {
+    data: dataAdresses,
+    loading: loadingAdresses,
+    error: errorAdresses,
+  } = useQuery(queryAdresses)
 
   const [errors, setErrors] = useState({})
   const [value, setValue] = useState(
     get(urlQuery, 'feldkontrTab', 'entwicklung'),
   )
 
-  let tpopkontrTotal = []
-  let tpopkontrFiltered = []
+  const tpopkontrTotalCount = get(
+    dataTpopkontrs,
+    'allTpopkontrs.totalCount',
+    '...',
+  )
+  const tpopkontrFilteredCount = get(
+    dataTpopkontrs,
+    'tpopkontrsFiltered.totalCount',
+    '...',
+  )
   let row
   if (showFilter) {
     row = nodeFilter[treeName].tpopfeldkontr
-    // get filter values length
-    tpopkontrTotal = get(data, 'allTpopkontrs.nodes', [])
-    const nodeFilterArray = Object.entries(
-      nodeFilter[treeName].tpopfeldkontr,
-    ).filter(([key, value]) => value || value === 0 || value === false)
-    tpopkontrFiltered = tpopkontrTotal.filter(node =>
-      filterNodesByNodeFilterArray({
-        node,
-        nodeFilterArray,
-        table: 'tpopfeldkontr',
-      }),
-    )
   } else {
     row = get(data, 'tpopkontrById', {})
   }
@@ -317,7 +340,7 @@ const Tpopfeldkontr = ({
 
   const width = isNaN(dimensions.width) ? 380 : dimensions.width
 
-  let adressenWerte = get(dataAllAdresses, 'allAdresses.nodes', [])
+  let adressenWerte = get(dataAdresses, 'allAdresses.nodes', [])
   adressenWerte = sortBy(adressenWerte, 'name')
   adressenWerte = adressenWerte.map(el => ({
     value: el.id,
@@ -345,10 +368,7 @@ const Tpopfeldkontr = ({
     .map(e => `${e.label}: ${e.einheit ? e.einheit.replace(/  +/g, ' ') : ''}`)
     .map(o => ({ value: o, label: o }))
 
-  if (
-    (showFilter && dataAllAdresses.loading) ||
-    (loading || dataAllAdresses.loading)
-  ) {
+  if ((showFilter && loadingAdresses) || (loading || loadingAdresses)) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
@@ -356,7 +376,7 @@ const Tpopfeldkontr = ({
     )
   }
   if (error) return `Fehler: ${error.message}`
-  if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
+  if (errorAdresses) return `Fehler: ${errorAdresses.message}`
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -365,8 +385,8 @@ const Tpopfeldkontr = ({
             title="Feld-Kontrollen"
             treeName={treeName}
             table="tpopfeldkontr"
-            totalNr={tpopkontrTotal.length}
-            filteredNr={tpopkontrFiltered.length}
+            totalNr={tpopkontrTotalCount}
+            filteredNr={tpopkontrFilteredCount}
           />
         ) : (
           <FormTitle

@@ -72,11 +72,7 @@ const Tpop = ({
       id,
     },
   })
-  const {
-    data: dataLists,
-    loading: loadingLists,
-    error: errorLists,
-  } = useQuery(queryLists)
+  const { data: dataLists, loading: loadingLists } = useQuery(queryLists)
   /**
    * THIS IS A BAD HACK
    * and it will not work once there are many projects

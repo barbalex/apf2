@@ -9,7 +9,7 @@ import {
 } from '../../../shared/fragments'
 
 export default gql`
-  query tpopkontrByIdQuery($id: UUID!, $showFilter: Boolean!) {
+  query tpopkontrByIdQuery($id: UUID!) {
     tpopkontrById(id: $id) {
       ...TpopfeldkontrFields
       adresseByBearbeiter {
@@ -20,18 +20,6 @@ export default gql`
         popByPopId {
           ...PopFields
         }
-      }
-    }
-    allTpopkontrs(
-      filter: {
-        or: [
-          { typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" } }
-          { typ: { isNull: true } }
-        ]
-      }
-    ) @include(if: $showFilter) {
-      nodes {
-        ...TpopfeldkontrFields
       }
     }
     allTpopkontrIdbiotuebereinstWertes {
