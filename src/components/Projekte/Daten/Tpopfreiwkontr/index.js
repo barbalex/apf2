@@ -10,7 +10,8 @@ import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import jwtDecode from 'jwt-decode'
 
 import StringToCopy from '../../../shared/StringToCopyOnlyButton'
-import query from './data'
+import query from './query'
+import queryAdresses from './queryAdresses'
 import updateTpopkontrByIdGql from './updateTpopkontrById'
 import createTpopkontrzaehl from './createTpopkontrzaehl'
 import Title from './Title'
@@ -28,7 +29,6 @@ import Verification from './Verification'
 import Image from './Image'
 import FormTitle from '../../../shared/FormTitle'
 import FilterTitle from '../../../shared/FilterTitle'
-import withAllAdresses from './withAllAdresses'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import filterNodesByNodeFilterArray from '../../TreeContainer/filterNodesByNodeFilterArray'
@@ -142,20 +142,15 @@ const CountHint = styled.div`
  * if none: create new ones
  * then refetch data
  */
-const enhance = compose(
-  withAllAdresses,
-  observer,
-)
+const enhance = compose(observer)
 
 const Tpopfreiwkontr = ({
   dimensions,
   treeName,
-  dataAllAdresses,
   showFilter = false,
 }: {
   dimensions: Object,
   treeName: string,
-  dataAllAdresses: Object,
   showFilter: Boolean,
 }) => {
   const client = useApolloClient()
@@ -187,6 +182,12 @@ const Tpopfreiwkontr = ({
       showFilter,
     },
   })
+
+  const {
+    data: dataAdresses,
+    loading: loadingAdresses,
+    error: errorAdresses,
+  } = useQuery(queryAdresses)
 
   const ekfzaehleinheits = get(
     data,
@@ -262,7 +263,7 @@ const Tpopfreiwkontr = ({
   )
   const pop = get(row, 'tpopByTpopId.popByPopId', {})
   const tpop = get(row, 'tpopByTpopId', {})
-  const adressenNodes = get(dataAllAdresses, 'allAdresses.nodes', [])
+  const adressenNodes = get(dataAdresses, 'allAdresses.nodes', [])
   const {
     bearbeiter,
     bemerkungen,
@@ -315,9 +316,7 @@ const Tpopfreiwkontr = ({
       const adresseByBearbeiter =
         field === 'bearbeiter'
           ? row.adresseByBearbeiter
-          : get(dataAllAdresses, 'allAdresses.nodes', []).find(
-              r => r.id === value,
-            )
+          : get(dataAdresses, 'allAdresses.nodes', []).find(r => r.id === value)
       try {
         await client.mutate({
           mutation: updateTpopkontrByIdGql,
@@ -456,12 +455,9 @@ const Tpopfreiwkontr = ({
     }
   }, [showFilter, bearbeiter, userCount, errors.bearbeiter])
 
-  if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
+  if (errorAdresses) return `Fehler: ${errorAdresses.message}`
   if (error) return `Fehler: ${error.message}`
-  if (
-    (showFilter && dataAllAdresses.loading) ||
-    (loading || dataAllAdresses.loading)
-  ) {
+  if ((showFilter && loadingAdresses) || (loading || loadingAdresses)) {
     return (
       <Container>
         <InnerContainer>Lade...</InnerContainer>
