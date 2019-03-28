@@ -139,8 +139,8 @@ const Ap = ({
   }))
 
   let apArten
-  const apTotalCount = get(allApsData, 'allAps.totalCount', 0)
-  let apFiltered = []
+  const apTotalCount = get(allApsData, 'allAps.totalCount', '...')
+  const apFilteredCount = get(allApsData, 'filteredAps.totalCount', '...')
   let artWerte
   if (showFilter) {
     apArten = get(allApsData, 'filteredAps.nodes', []).map(o => o.artId)
@@ -152,8 +152,6 @@ const Ap = ({
       value: el.id,
       label: el.artname,
     }))
-    // get filter values length
-    apFiltered = get(allApsData, 'filteredAps.nodes', [])
   } else {
     // list all ap-Arten BUT the active one
     apArten = get(allApsData, 'allAps.nodes', [])
@@ -247,7 +245,7 @@ const Ap = ({
             treeName={treeName}
             table="ap"
             totalNr={apTotalCount}
-            filteredNr={apFiltered.length}
+            filteredNr={apFilteredCount}
           />
         ) : (
           <FormTitle apId={row.id} title="Aktionsplan" treeName={treeName} />

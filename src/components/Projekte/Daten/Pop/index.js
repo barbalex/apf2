@@ -76,13 +76,11 @@ const Pop = ({
     },
   })
 
-  const popTotalCount = get(dataAllPops, 'allPops.totalCount', 0)
-  let popFiltered = []
+  const popTotalCount = get(dataAllPops, 'allPops.totalCount', '...')
+  const popFilteredCount = get(dataAllPops, 'popsFiltered.totalCount', '...')
   let row
   if (showFilter) {
     row = nodeFilter[treeName].pop
-    // get filter values length
-    popFiltered = get(dataAllPops, 'popsFiltered.nodes', [])
   } else {
     row = get(data, 'popById', {})
   }
@@ -170,7 +168,7 @@ const Pop = ({
             treeName={treeName}
             table="pop"
             totalNr={popTotalCount}
-            filteredNr={popFiltered.length}
+            filteredNr={popFilteredCount}
           />
         ) : (
           <FormTitle

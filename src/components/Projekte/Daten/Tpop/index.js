@@ -92,7 +92,6 @@ const Tpop = ({
       tpopFilter,
     },
   })
-  console.log('Tpop', { dataTpops })
 
   const tpopTotalCount = get(dataTpops, 'allTpops.totalCount', '...')
   const tpopFilteredCount = get(dataTpops, 'tpopsFiltered.totalCount', '...')

@@ -8,6 +8,7 @@ export default gql`
       totalCount
     }
     filteredAps: allAps(filter: $apFilter) {
+      totalCount
       nodes {
         ...ApFields
       }
