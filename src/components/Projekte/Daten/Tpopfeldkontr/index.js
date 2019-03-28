@@ -21,13 +21,14 @@ import TpopfeldkontrentwicklungPopover from '../TpopfeldkontrentwicklungPopover'
 import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
+import queryLists from './queryLists'
+import queryAdresses from './queryAdresses'
 import queryTpopkontrs from './queryTpopkontrs'
 import updateTpopkontrByIdGql from './updateTpopkontrById'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { simpleTypes as tpopfeldkontrType } from '../../../../mobxStore/NodeFilterTree/tpopfeldkontr'
-import queryAdresses from '../../TreeContainer/Tree/queryAdresses'
 
 const Container = styled.div`
   height: 100%;
@@ -139,6 +140,12 @@ const Tpopfeldkontr = ({
     loading: loadingAdresses,
     error: errorAdresses,
   } = useQuery(queryAdresses)
+
+  const {
+    data: dataLists,
+    loading: loadingLists,
+    error: errorLists,
+  } = useQuery(queryLists)
 
   const [errors, setErrors] = useState({})
   const [value, setValue] = useState(
@@ -347,7 +354,7 @@ const Tpopfeldkontr = ({
     label: el.name,
   }))
   let idbiotopuebereinstWerte = get(
-    data,
+    dataLists,
     'allTpopkontrIdbiotuebereinstWertes.nodes',
     [],
   )
@@ -356,13 +363,17 @@ const Tpopfeldkontr = ({
     value: el.code,
     label: el.text,
   }))
-  let tpopEntwicklungWerte = get(data, 'allTpopEntwicklungWertes.nodes', [])
+  let tpopEntwicklungWerte = get(
+    dataLists,
+    'allTpopEntwicklungWertes.nodes',
+    [],
+  )
   tpopEntwicklungWerte = sortBy(tpopEntwicklungWerte, 'sort')
   tpopEntwicklungWerte = tpopEntwicklungWerte.map(el => ({
     value: el.code,
     label: el.text,
   }))
-  let aeLrWerte = get(data, 'allAeLrdelarzes.nodes', [])
+  let aeLrWerte = get(dataLists, 'allAeLrdelarzes.nodes', [])
   aeLrWerte = sortBy(aeLrWerte, 'sort')
   aeLrWerte = aeLrWerte
     .map(e => `${e.label}: ${e.einheit ? e.einheit.replace(/  +/g, ' ') : ''}`)
@@ -481,6 +492,7 @@ const Tpopfeldkontr = ({
                 label="Entwicklung"
                 value={row.entwicklung}
                 dataSource={tpopEntwicklungWerte}
+                loading={loadingLists}
                 saveToDb={saveToDb}
                 error={errors.entwicklung}
                 popover={TpopfeldkontrentwicklungPopover}
@@ -558,6 +570,7 @@ const Tpopfeldkontr = ({
                 field="lrDelarze"
                 label="Lebensraum nach Delarze"
                 options={aeLrWerte}
+                loading={loadingLists}
                 saveToDb={saveToDb}
                 error={errors.lrDelarze}
               />
@@ -568,6 +581,7 @@ const Tpopfeldkontr = ({
                 field="lrUmgebungDelarze"
                 label="Umgebung nach Delarze"
                 options={aeLrWerte}
+                loading={loadingLists}
                 saveToDb={saveToDb}
                 error={errors.lrUmgebungDelarze}
               />
@@ -706,6 +720,7 @@ const Tpopfeldkontr = ({
                 label="Übereinstimmung mit Idealbiotop"
                 value={row.idealbiotopUebereinstimmung}
                 dataSource={idbiotopuebereinstWerte}
+                loading={loadingLists}
                 saveToDb={saveToDb}
                 error={errors.idealbiotopUebereinstimmung}
               />
