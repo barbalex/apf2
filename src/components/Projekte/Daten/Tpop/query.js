@@ -9,7 +9,7 @@ import {
 } from '../../../shared/fragments'
 
 export default gql`
-  query tpopByIdQuery($id: UUID!, $showFilter: Boolean!) {
+  query tpopByIdQuery($id: UUID!) {
     tpopById(id: $id) {
       ...TpopFields
       popStatusWerteByStatus {
@@ -23,11 +23,6 @@ export default gql`
         apByApId {
           ...ApFields
         }
-      }
-    }
-    allTpops @include(if: $showFilter) {
-      nodes {
-        ...TpopFields
       }
     }
     allPopStatusWertes {

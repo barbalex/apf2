@@ -17,12 +17,13 @@ import FilterTitle from '../../../shared/FilterTitle'
 import TpopAbBerRelevantInfoPopover from '../TpopAbBerRelevantInfoPopover'
 import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import query from './data'
+import query from './query'
+import queryTpops from './queryTpops'
 import updateTpopByIdGql from './updateTpopById'
 import getGemeindeForKoord from '../../../../modules/getGemeindeForKoord'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
-import filterNodesByNodeFilterArray from '../../TreeContainer/filterNodesByNodeFilterArray'
+import { simpleTypes as tpopType } from '../../../../mobxStore/NodeFilterTree/tpop'
 
 const Container = styled.div`
   height: 100%;
@@ -68,27 +69,36 @@ const Tpop = ({
   const { data, loading, error } = useQuery(query, {
     variables: {
       id,
-      showFilter,
     },
   })
+  /**
+   * THIS IS A BAD HACK
+   * and it will not work once there are many projects
+   * because 'connectionFilterRelations: true' cannot be set for postgraphile
+   * correct would be to query only what is in this project
+   * isNull: false is set so there is never an empty object, otherwise qraphql will fail
+   */
+  const tpopFilter = { popId: { isNull: false } }
+  const tpopFilterValues = Object.entries(nodeFilter[treeName].tpop).filter(
+    e => e[1] || e[1] === 0,
+  )
+  tpopFilterValues.forEach(([key, value]) => {
+    const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
+    tpopFilter[key] = { [expression]: value }
+  })
+  const { data: dataTpops } = useQuery(queryTpops, {
+    variables: {
+      showFilter,
+      tpopFilter,
+    },
+  })
+  console.log('Tpop', { dataTpops })
 
-  let tpopTotal = []
-  let tpopFiltered = []
+  const tpopTotalCount = get(dataTpops, 'allTpops.totalCount', '...')
+  const tpopFilteredCount = get(dataTpops, 'tpopsFiltered.totalCount', '...')
   let row
   if (showFilter) {
     row = nodeFilter[treeName].tpop
-    // get filter values length
-    tpopTotal = get(data, 'allTpops.nodes', [])
-    const nodeFilterArray = Object.entries(nodeFilter[treeName].tpop).filter(
-      ([key, value]) => value || value === 0 || value === false,
-    )
-    tpopFiltered = tpopTotal.filter(node =>
-      filterNodesByNodeFilterArray({
-        node,
-        nodeFilterArray,
-        table: 'tpop',
-      }),
-    )
   } else {
     row = get(data, 'tpopById', {})
   }
@@ -217,8 +227,8 @@ const Tpop = ({
             title="Teil-Population"
             treeName={treeName}
             table="tpop"
-            totalNr={tpopTotal.length}
-            filteredNr={tpopFiltered.length}
+            totalNr={tpopTotalCount}
+            filteredNr={tpopFilteredCount}
           />
         ) : (
           <FormTitle

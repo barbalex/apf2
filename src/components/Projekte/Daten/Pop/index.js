@@ -14,7 +14,6 @@ import FilterTitle from '../../../shared/FilterTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updatePopByIdGql from './updatePopById'
 import query from './query'
-import queryAps from './queryAps'
 import queryAllPops from './queryAllPops'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
@@ -55,17 +54,14 @@ const Pop = ({
       id,
     },
   })
-  const apFilter = { projId: { in: activeNodeArray[1] } }
-  const { data: dataAps } = useQuery(queryAps, {
-    variables: {
-      showFilter,
-      apFilter,
-    },
-  })
-  // need to always pass something in the filter
-  // might as well pass al apIds to show only this project
-  const allApIds = get(dataAps, 'allAps.nodes', []).map(d => d.id)
-  const popFilter = { apId: { in: allApIds } }
+  /**
+   * THIS IS A BAD HACK
+   * and it will not work once there are many projects
+   * because 'connectionFilterRelations: true' cannot be set for postgraphile
+   * correct would be to query only what is in this project
+   * isNull: false is set so there is never an empty object, otherwise qraphql will fail
+   */
+  const popFilter = { apId: { isNull: false } }
   const popFilterValues = Object.entries(nodeFilter[treeName].pop).filter(
     e => e[1] || e[1] === 0,
   )
@@ -80,7 +76,7 @@ const Pop = ({
     },
   })
 
-  const popTotalCount = get(dataAllPops, 'allPops.totalCount', [])
+  const popTotalCount = get(dataAllPops, 'allPops.totalCount', 0)
   let popFiltered = []
   let row
   if (showFilter) {
