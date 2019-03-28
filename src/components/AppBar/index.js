@@ -64,16 +64,16 @@ const MyAppBar = ({ setShowDeletions }: { setShowDeletions: () => void }) => {
     urlQuery,
     setUrlQuery,
     cloneTree2From1,
+    treeActiveNodes,
   } = mobxStore
 
-  const activeNodes = mobxStore.treeActiveNodes
   /**
    * need to clone projekteTabs
    * because otherwise removing elements errors out (because elements are sealed)
    */
   const { projekteTabs: projekteTabsOriginal } = urlQuery
   const projekteTabs = projekteTabsOriginal.toJSON()
-  const exporteIsActive = !!activeNodes.projekt
+  const exporteIsActive = !!treeActiveNodes.projekt
   const isMobile = isMobilePhone()
 
   const { token, name: username } = user

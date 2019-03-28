@@ -36,18 +36,16 @@ const MyAppBar = ({
   role: string,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { deletedDatasets, user, urlQuery } = mobxStore
+  const { deletedDatasets, user, urlQuery, treeActiveNodes } = mobxStore
   const { idb } = useContext(idbContext)
 
   const [anchorEl, setAnchorEl] = useState(null)
-
-  const activeNodes = mobxStore.treeActiveNodes
   /**
    * need to clone projekteTabs
    * because otherwise removing elements errors out (because elements are sealed)
    */
   const projekteTabs = { ...urlQuery }
-  const exporteIsActive = !!activeNodes.projekt
+  const exporteIsActive = !!treeActiveNodes.projekt
   const isMobile = isMobilePhone()
 
   const openDocs = useCallback(() => {
