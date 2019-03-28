@@ -105,10 +105,7 @@ const Tree = ({ treeName, dimensions }: Props) => {
     tpopmassnFilter,
     tpopfeldkontrFilter,
     tpopfreiwkontrFilter,
-  } = buildVariables({
-    treeName,
-    mobxStore,
-  })
+  } = mobxStore[treeName].nodeVariables
 
   const {
     data: dataProjekts,

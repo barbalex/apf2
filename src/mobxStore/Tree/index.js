@@ -1,4 +1,4 @@
-import { types } from 'mobx-state-tree'
+import { types, getParent } from 'mobx-state-tree'
 import isEqual from 'lodash/isEqual'
 
 import NodeLabelFilter, {
@@ -6,6 +6,7 @@ import NodeLabelFilter, {
 } from './NodeLabelFilter'
 import Map, { defaultValue as defaultMap } from './Map'
 import Node from './Node'
+import buildVariables from '../../components/Projekte/TreeContainer/Tree/buildVariables'
 
 export default types
   .model('Tree', {
@@ -36,6 +37,9 @@ export default types
   .views(self => ({
     get activeNode() {
       return self.nodes.find(n => isEqual(n.url, self.activeNodeArray))
+    },
+    get nodeVariables() {
+      return buildVariables({ treeName: self.name, mobxStore: getParent(self) })
     },
   }))
 

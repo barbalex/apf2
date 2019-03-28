@@ -15,13 +15,13 @@ import FormTitle from '../../../shared/FormTitle'
 import FilterTitle from '../../../shared/FilterTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updateApByIdGql from './updateApById'
-import query from './data'
-import allApsQuery from './allAps'
+import query from './query'
+import queryAps from './queryAps'
 import allAdressesQuery from './allAdresses'
 import allAeEigenschaftensQuery from './allAeEigenschaftens'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
-import filterNodesByNodeFilterArray from '../../TreeContainer/filterNodesByNodeFilterArray'
+import { simpleTypes as apType } from '../../../../mobxStore/NodeFilterTree/ap'
 
 const Container = styled.div`
   height: 100%;
@@ -86,7 +86,17 @@ const Ap = ({
   const { data, error, loading } = useQuery(query, {
     variables: { id },
   })
-  const { data: allApsData, error: allApsError } = useQuery(allApsQuery)
+  const apFilter = { projId: { in: activeNodeArray[1] } }
+  const apFilterValues = Object.entries(nodeFilter[treeName].ap).filter(
+    e => e[1] || e[1] === 0,
+  )
+  apFilterValues.forEach(([key, value]) => {
+    const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
+    apFilter[key] = { [expression]: value }
+  })
+  const { data: allApsData, error: allApsError } = useQuery(queryAps, {
+    variables: { apFilter },
+  })
   const {
     data: allAdressesData,
     error: allAdressesError,
@@ -129,11 +139,11 @@ const Ap = ({
   }))
 
   let apArten
-  let apTotal = []
+  const apTotalCount = get(allApsData, 'allAps.totalCount', 0)
   let apFiltered = []
   let artWerte
   if (showFilter) {
-    apArten = get(allApsData, 'allAps.nodes', []).map(o => o.artId)
+    apArten = get(allApsData, 'filteredAps.nodes', []).map(o => o.artId)
     artWerte = get(allAeEigenschaftensData, 'allAeEigenschaftens.nodes', [])
     // only list ap arten
     artWerte = artWerte.filter(o => apArten.includes(o.id))
@@ -143,17 +153,7 @@ const Ap = ({
       label: el.artname,
     }))
     // get filter values length
-    apTotal = get(allApsData, 'allAps.nodes', [])
-    const nodeFilterArray = Object.entries(nodeFilter[treeName].ap).filter(
-      ([key, value]) => value || value === 0 || value === false,
-    )
-    apFiltered = apTotal.filter(node =>
-      filterNodesByNodeFilterArray({
-        node,
-        nodeFilterArray,
-        table: 'ap',
-      }),
-    )
+    apFiltered = get(allApsData, 'filteredAps.nodes', [])
   } else {
     // list all ap-Arten BUT the active one
     apArten = get(allApsData, 'allAps.nodes', [])
@@ -246,7 +246,7 @@ const Ap = ({
             title="Aktionsplan"
             treeName={treeName}
             table="ap"
-            totalNr={apTotal.length}
+            totalNr={apTotalCount}
             filteredNr={apFiltered.length}
           />
         ) : (
