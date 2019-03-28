@@ -3,8 +3,6 @@ import get from 'lodash/get'
 //import uniqBy from 'lodash/uniqBy'
 import memoizeOne from 'memoize-one'
 
-import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
-
 export default ({
   nodes: nodesPassed,
   data,
@@ -34,7 +32,6 @@ export default ({
   tpopId: String,
   mobxStore: Object,
 }): Array<Object> => {
-  const nodeFilter = get(mobxStore, `nodeFilter.${treeName}`)
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
@@ -44,9 +41,6 @@ export default ({
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
   const nodeLabelFilterString =
     get(mobxStore, `${treeName}.nodeLabelFilter.tpopmassn`) || ''
-  const nodeFilterArray = Object.entries(nodeFilter.tpopmassn).filter(
-    ([key, value]) => value || value === 0 || value === false,
-  )
 
   let children = memoizeOne(() =>
     get(data, 'allTpopmassns.nodes', [])
@@ -62,15 +56,7 @@ export default ({
             .includes(nodeLabelFilterString.toLowerCase())
         }
         return true
-      })
-      // filter by nodeFilter
-      .filter(node =>
-        filterNodesByNodeFilterArray({
-          node,
-          nodeFilterArray,
-          table: 'tpopmassn',
-        }),
-      ),
+      }),
   )()
 
   /**

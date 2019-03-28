@@ -102,6 +102,7 @@ const Tree = ({ treeName, dimensions }: Props) => {
     tpopkontr,
     isTpopkontr,
     isWerteListen,
+    tpopmassnFilter,
   } = buildVariables({
     treeName,
     mobxStore,
@@ -208,7 +209,7 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingTpopmassns,
     refetch: refetchTpopmassns,
   } = useQuery(queryTpopmassns, {
-    variables: { isTpop, tpop },
+    variables: { isTpop, tpopmassnFilter },
   })
   setRefetchKey({
     key: 'tpopmassns',

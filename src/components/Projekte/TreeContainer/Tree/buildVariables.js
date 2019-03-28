@@ -4,6 +4,7 @@ import uniq from 'lodash/uniq'
 import { simpleTypes as apType } from '../../../../mobxStore/NodeFilterTree/ap'
 import { simpleTypes as popType } from '../../../../mobxStore/NodeFilterTree/pop'
 import { simpleTypes as tpopType } from '../../../../mobxStore/NodeFilterTree/tpop'
+import { simpleTypes as tpopmassnType } from '../../../../mobxStore/NodeFilterTree/tpopmassn'
 
 export default ({
   treeName,
@@ -149,6 +150,15 @@ export default ({
         nArray[9],
     )
 
+  const tpopmassnFilter = { tpopId: { in: tpop } }
+  const tpopmassnFilterValues = Object.entries(nodeFilter.tpopmassn).filter(
+    e => e[1] || e[1] === 0,
+  )
+  tpopmassnFilterValues.forEach(([key, value]) => {
+    const expression = tpopmassnType[key] === 'string' ? 'includes' : 'equalTo'
+    tpopmassnFilter[key] = { [expression]: value }
+  })
+
   const variables = {
     projekt,
     isProjekt,
@@ -167,6 +177,7 @@ export default ({
     isTpopkontr,
     isWerteListen,
     isAdresse,
+    tpopmassnFilter,
   }
   //console.log('buildVariables, variables:', variables)
   return variables
