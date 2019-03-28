@@ -80,7 +80,7 @@ export const simpleTypes = {
   typ: 'number',
   beschreibung: 'string',
   jahr: 'number',
-  datum: 'string',
+  datum: 'date',
   bearbeiter: 'string',
   bemerkungen: 'string',
   planVorhanden: 'number',

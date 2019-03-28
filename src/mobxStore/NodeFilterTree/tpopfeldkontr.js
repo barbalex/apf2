@@ -170,7 +170,7 @@ export const initial = {
 
 export const simpleTypes = {
   typ: 'string',
-  datum: 'string',
+  datum: 'date',
   jahr: 'number',
   bearbeiter: 'string',
   jungpflanzenAnzahl: 'number',

@@ -5,6 +5,8 @@ import { simpleTypes as apType } from '../../../../mobxStore/NodeFilterTree/ap'
 import { simpleTypes as popType } from '../../../../mobxStore/NodeFilterTree/pop'
 import { simpleTypes as tpopType } from '../../../../mobxStore/NodeFilterTree/tpop'
 import { simpleTypes as tpopmassnType } from '../../../../mobxStore/NodeFilterTree/tpopmassn'
+import { simpleTypes as tpopfeldkontrType } from '../../../../mobxStore/NodeFilterTree/tpopfeldkontr'
+import { simpleTypes as tpopfreiwkontrType } from '../../../../mobxStore/NodeFilterTree/tpopfreiwkontr'
 
 export default ({
   treeName,
@@ -150,6 +152,35 @@ export default ({
         nArray[9],
     )
 
+  const tpopfeldkontrFilter = {
+    or: [
+      { typ: { notEqualTo: 'Freiwilligen-Erfolgskontrolle' } },
+      { typ: { isNull: true } },
+    ],
+    tpopId: { in: tpop },
+  }
+  const tpopfeldkontrFilterValues = Object.entries(
+    nodeFilter.tpopfeldkontr,
+  ).filter(e => e[1] || e[1] === 0)
+  tpopfeldkontrFilterValues.forEach(([key, value]) => {
+    const expression =
+      tpopfeldkontrType[key] === 'string' ? 'includes' : 'equalTo'
+    tpopfeldkontrFilter[key] = { [expression]: value }
+  })
+
+  const tpopfreiwkontrFilter = {
+    typ: { equalTo: 'Freiwilligen-Erfolgskontrolle' },
+    tpopId: { in: tpop },
+  }
+  const tpopfreiwkontrFilterValues = Object.entries(
+    nodeFilter.tpopfreiwkontr,
+  ).filter(e => e[1] || e[1] === 0)
+  tpopfreiwkontrFilterValues.forEach(([key, value]) => {
+    const expression =
+      tpopfreiwkontrType[key] === 'string' ? 'includes' : 'equalTo'
+    tpopfreiwkontrFilter[key] = { [expression]: value }
+  })
+
   const tpopmassnFilter = { tpopId: { in: tpop } }
   const tpopmassnFilterValues = Object.entries(nodeFilter.tpopmassn).filter(
     e => e[1] || e[1] === 0,
@@ -178,6 +209,8 @@ export default ({
     isWerteListen,
     isAdresse,
     tpopmassnFilter,
+    tpopfeldkontrFilter,
+    tpopfreiwkontrFilter,
   }
   //console.log('buildVariables, variables:', variables)
   return variables

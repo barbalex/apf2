@@ -103,6 +103,8 @@ const Tree = ({ treeName, dimensions }: Props) => {
     isTpopkontr,
     isWerteListen,
     tpopmassnFilter,
+    tpopfeldkontrFilter,
+    tpopfreiwkontrFilter,
   } = buildVariables({
     treeName,
     mobxStore,
@@ -233,7 +235,7 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingTpopfeldkontrs,
     refetch: refetchTpopfeldkontrs,
   } = useQuery(queryTpopfeldkontrs, {
-    variables: { isTpop, tpop },
+    variables: { isTpop, tpopfeldkontrFilter },
   })
   setRefetchKey({
     key: 'tpopfeldkontrs',
@@ -245,7 +247,7 @@ const Tree = ({ treeName, dimensions }: Props) => {
     loading: loadingTpopfreiwkontrs,
     refetch: refetchTpopfreiwkontrs,
   } = useQuery(queryTpopfreiwkontrs, {
-    variables: { isTpop, tpop },
+    variables: { isTpop, tpopfreiwkontrFilter },
   })
   setRefetchKey({
     key: 'tpopfreiwkontrs',

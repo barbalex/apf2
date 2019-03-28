@@ -2,8 +2,6 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import uniqBy from 'lodash/uniqBy'
 
-import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
-
 export default ({
   nodes: nodesPassed,
   data,
@@ -33,7 +31,6 @@ export default ({
   tpopId: String,
   mobxStore: Object,
 }): Array<Object> => {
-  const nodeFilter = get(mobxStore, `nodeFilter.${treeName}`)
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
@@ -43,9 +40,6 @@ export default ({
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
   const nodeLabelFilterString =
     get(mobxStore, `${treeName}.nodeLabelFilter.tpopkontr`) || ''
-  const nodeFilterArray = Object.entries(nodeFilter.tpopfeldkontr).filter(
-    ([key, value]) => value || value === 0 || value === false,
-  )
 
   let children = get(data, 'allTpopkontrs.nodes', [])
     .filter(el => el.tpopId === tpopId)
@@ -61,14 +55,6 @@ export default ({
       }
       return true
     })
-    // filter by nodeFilter
-    .filter(node =>
-      filterNodesByNodeFilterArray({
-        node,
-        nodeFilterArray,
-        table: 'tpopfeldkontr',
-      }),
-    )
 
   /**
    * There is something weird happening when filtering data
