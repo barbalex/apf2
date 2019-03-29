@@ -1,9 +1,6 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
-//import uniqBy from 'lodash/uniqBy'
 import memoizeOne from 'memoize-one'
-
-import filterNodesByNodeFilterArray from '../filterNodesByNodeFilterArray'
 
 export default ({
   nodes: nodesPassed,
@@ -57,13 +54,6 @@ export default ({
         return true
       }),
   )()
-
-  /**
-   * There is something weird happening when filtering data
-   * that leads to duplicate nodes
-   * Need to solve that but in the meantime use uniqBy
-   */
-  //children = uniqBy(children, 'id')
 
   const childrenLength = children.length
 

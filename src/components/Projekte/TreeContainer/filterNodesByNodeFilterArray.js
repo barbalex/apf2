@@ -1,5 +1,6 @@
 // @flow
 // filter by nodeFilter
+// 2019 03 19: not any more in use: filtering happens directly in queries
 
 import types from '../../../mobxStore/NodeFilterTree/simpleTypes'
 
