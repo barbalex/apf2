@@ -49,14 +49,18 @@ const FormTitle = ({
   title,
   table,
   treeName,
-  totalNr,
-  filteredNr,
+  totalNr = '...',
+  filteredNr = '...',
+  totalApNr = '...',
+  filteredApNr = '...',
 }: {
   title: string,
   table: string,
   treeName: string,
   totalNr: number,
   filteredNr: number,
+  totalApNr: number,
+  filteredApNr: number,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const {
@@ -83,9 +87,14 @@ const FormTitle = ({
   return (
     <Container>
       <TitleRow>
-        {(filteredNr || filteredNr === 0) && totalNr && (
-          <FilterNumbers>{`${filteredNr}/${totalNr}`}</FilterNumbers>
-        )}
+        <FilterNumbers>
+          {`AP: `}
+          <span title="gefilterte Anzahl im Aktionsplan">{filteredApNr}</span>/
+          <span title="ungefilterte Anzahl im Aktionsplan">{totalApNr}</span>
+          {`, Projekt: `}
+          <span title="gefilterte Anzahl im Projekt">{filteredNr}</span>/
+          <span title="ungefilterte Anzahl im Projekt">{totalNr}</span>
+        </FilterNumbers>
         {existsTableFilter && (
           <StyledIconButton
             aria-label={`${title}-Filter entfernen`}

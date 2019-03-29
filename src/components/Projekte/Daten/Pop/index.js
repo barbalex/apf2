@@ -47,6 +47,7 @@ const Pop = ({
     activeNodeArray.length > 5
       ? activeNodeArray[5]
       : '99999999-9999-9999-9999-999999999999'
+  const apId = activeNodeArray[3]
   if (showFilter) id = '99999999-9999-9999-9999-999999999999'
 
   const { data, loading, error } = useQuery(query, {
@@ -69,15 +70,31 @@ const Pop = ({
     const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
     popFilter[key] = { [expression]: value }
   })
+  const popApFilter = { apId: { equalTo: apId } }
+  const popApFilterValues = Object.entries(nodeFilter[treeName].pop).filter(
+    e => e[1] || e[1] === 0,
+  )
+  popApFilterValues.forEach(([key, value]) => {
+    const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
+    popApFilter[key] = { [expression]: value }
+  })
   const { data: dataPops } = useQuery(queryPops, {
     variables: {
       showFilter,
       popFilter,
+      popApFilter,
+      apId,
     },
   })
 
   const popTotalCount = get(dataPops, 'allPops.totalCount', '...')
   const popFilteredCount = get(dataPops, 'popsFiltered.totalCount', '...')
+  const popOfApTotalCount = get(dataPops, 'popsOfAp.totalCount', '...')
+  const popOfApFilteredCount = get(
+    dataPops,
+    'popsOfApFiltered.totalCount',
+    '...',
+  )
   let row
   if (showFilter) {
     row = nodeFilter[treeName].pop
@@ -169,6 +186,8 @@ const Pop = ({
             table="pop"
             totalNr={popTotalCount}
             filteredNr={popFilteredCount}
+            totalApNr={popOfApTotalCount}
+            filteredApNr={popOfApFilteredCount}
           />
         ) : (
           <FormTitle
