@@ -3,6 +3,7 @@ import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
+import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
@@ -65,6 +66,7 @@ const Tpopmassn = ({
       ? activeNodeArray[9]
       : '99999999-9999-9999-9999-999999999999'
   if (showFilter) id = '99999999-9999-9999-9999-999999999999'
+  const apId = activeNodeArray[3]
   const { data, loading, error } = useQuery(query, {
     variables: {
       id,
@@ -90,6 +92,7 @@ const Tpopmassn = ({
     variables: {
       showFilter,
       tpopmassnFilter,
+      apId,
     },
   })
 
@@ -104,19 +107,31 @@ const Tpopmassn = ({
   } = useQuery(queryAeEigenschaftens)
   const { data: dataLists, loading: loadingLists } = useQuery(queryLists)
 
-  const tpopmassnTotalCount = get(
-    dataTpopmassns,
-    'allTpopmassns.totalCount',
-    '...',
-  )
-  const tpopmassnFilteredCount = get(
-    dataTpopmassns,
-    'tpopmassnsFiltered.totalCount',
-    '...',
-  )
+  let tpopmassnTotalCount
+  let tpopmassnFilteredCount
+  let tpopmassnsOfApTotalCount
+  let tpopmassnsOfApFilteredCount
   let row
   if (showFilter) {
     row = nodeFilter[treeName].tpopmassn
+    tpopmassnTotalCount = get(dataTpopmassns, 'allTpopmassns.totalCount', '...')
+    tpopmassnFilteredCount = get(
+      dataTpopmassns,
+      'tpopmassnsFiltered.totalCount',
+      '...',
+    )
+    const popsOfAp = get(dataTpopmassns, 'popsOfAp.nodes', [])
+    const tpopsOfAp = flatten(popsOfAp.map(p => get(p, 'tpops.nodes', [])))
+    tpopmassnsOfApTotalCount = !tpopsOfAp.length
+      ? '...'
+      : tpopsOfAp
+          .map(p => get(p, 'tpopmassns.totalCount'))
+          .reduce((acc = 0, val) => acc + val)
+    tpopmassnsOfApFilteredCount = !tpopsOfAp.length
+      ? '...'
+      : tpopsOfAp
+          .map(p => get(p, 'tpopmassnsFiltered.totalCount'))
+          .reduce((acc = 0, val) => acc + val)
   } else {
     row = get(data, 'tpopmassnById', {})
   }
@@ -262,6 +277,8 @@ const Tpopmassn = ({
             table="tpopmassn"
             totalNr={tpopmassnTotalCount}
             filteredNr={tpopmassnFilteredCount}
+            totalApNr={tpopmassnsOfApTotalCount}
+            filteredApNr={tpopmassnsOfApFilteredCount}
           />
         ) : (
           <FormTitle

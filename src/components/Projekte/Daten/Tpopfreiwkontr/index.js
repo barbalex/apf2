@@ -189,16 +189,13 @@ const Tpopfreiwkontr = ({
       tpopfreiwkontrType[key] === 'string' ? 'includes' : 'equalTo'
     tpopkontrFilter[key] = { [expression]: value }
   })
-  const { data: dataTpopkontrs, loading: loadingTpopkontrs } = useQuery(
-    queryTpopkontrs,
-    {
-      variables: {
-        showFilter,
-        tpopkontrFilter,
-        apId,
-      },
+  const { data: dataTpopkontrs } = useQuery(queryTpopkontrs, {
+    variables: {
+      showFilter,
+      tpopkontrFilter,
+      apId,
     },
-  )
+  })
 
   const {
     data: dataAdresses,
@@ -261,12 +258,12 @@ const Tpopfreiwkontr = ({
     )
     const popsOfAp = get(dataTpopkontrs, 'popsOfAp.nodes', [])
     const tpopsOfAp = flatten(popsOfAp.map(p => get(p, 'tpops.nodes', [])))
-    tpopkontrsOfApTotalCount = loadingTpopkontrs
+    tpopkontrsOfApTotalCount = !tpopsOfAp.length
       ? '...'
       : tpopsOfAp
           .map(p => get(p, 'tpopkontrs.totalCount'))
           .reduce((acc = 0, val) => acc + val)
-    tpopkontrsOfApFilteredCount = loadingTpopkontrs
+    tpopkontrsOfApFilteredCount = !tpopsOfAp.length
       ? '...'
       : tpopsOfAp
           .map(p => get(p, 'tpopkontrsFiltered.totalCount'))

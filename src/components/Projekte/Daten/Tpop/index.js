@@ -90,7 +90,7 @@ const Tpop = ({
     tpopFilter[key] = { [expression]: value }
   })
 
-  const { data: dataTpops, loading: loadingTpops } = useQuery(queryTpops, {
+  const { data: dataTpops } = useQuery(queryTpops, {
     variables: {
       showFilter,
       tpopFilter,
@@ -108,12 +108,12 @@ const Tpop = ({
     tpopTotalCount = get(dataTpops, 'allTpops.totalCount', '...')
     tpopFilteredCount = get(dataTpops, 'tpopsFiltered.totalCount', '...')
     const popsOfAp = get(dataTpops, 'popsOfAp.nodes', [])
-    tpopOfApTotalCount = loadingTpops
+    tpopOfApTotalCount = !popsOfAp.length
       ? '...'
       : popsOfAp
           .map(p => get(p, 'tpops.totalCount'))
           .reduce((acc = 0, val) => acc + val)
-    tpopOfApFilteredCount = loadingTpops
+    tpopOfApFilteredCount = !popsOfAp.length
       ? '...'
       : popsOfAp
           .map(p => get(p, 'tpopsFiltered.totalCount'))
