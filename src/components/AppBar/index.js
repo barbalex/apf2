@@ -227,8 +227,10 @@ const MyAppBar = ({ setShowDeletions }: { setShowDeletions: () => void }) => {
                     Strukturbaum 2
                   </StyledButton>
                 )}
-                {!isMobile && <Daten treeNr="2" />}
-                {!isMobile && (
+                {!isMobile && projekteTabs.includes('tree2') && (
+                  <Daten treeNr="2" />
+                )}
+                {!isMobile && projekteTabs.includes('tree2') && (
                   <StyledButton
                     variant={
                       projekteTabs.includes('filter2') ? 'outlined' : 'text'
