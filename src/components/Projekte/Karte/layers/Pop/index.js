@@ -6,10 +6,11 @@ import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useQuery } from 'react-apollo-hooks'
 
 import Marker from './Marker'
-import filterNodesByNodeFilterArray from '../../../TreeContainer/filterNodesByNodeFilterArray'
 import mobxStoreContext from '../../../../../mobxStoreContext'
 import query from './query'
 import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
+import { simpleTypes as popType } from '../../../../../mobxStore/NodeFilterTree/pop'
+import { simpleTypes as tpopType } from '../../../../../mobxStore/NodeFilterTree/tpop'
 
 const iconCreateFunction = function(cluster) {
   const markers = cluster.getAllChildMarkers()
@@ -38,9 +39,6 @@ const Pop = ({ treeName }: { treeName: string }) => {
   const { setPopIdsFiltered } = map
 
   const popFilterString = get(tree, 'nodeLabelFilter.pop')
-  const nodeFilterArray = Object.entries(nodeFilter[tree.name].pop).filter(
-    ([key, value]) => value || value === 0 || value === false,
-  )
 
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
@@ -49,6 +47,32 @@ const Pop = ({ treeName }: { treeName: string }) => {
   const tpopLayerIsActive = activeApfloraLayers.includes('tpop')
   const perProj = apId === '99999999-9999-9999-9999-999999999999'
   const perAp = apId !== '99999999-9999-9999-9999-999999999999'
+
+  /**
+   * THIS IS A BAD HACK
+   * and it will not work once there are many projects
+   * because 'connectionFilterRelations: true' cannot be set for postgraphile
+   * correct would be to query only what is in this project
+   * isNull: false is set so there is never an empty object, otherwise qraphql will fail
+   */
+  const popFilter = { x: { isNull: false }, y: { isNull: false } }
+  const popFilterValues = Object.entries(nodeFilter[treeName].pop).filter(
+    e => e[1] || e[1] === 0,
+  )
+  popFilterValues.forEach(([key, value]) => {
+    const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
+    //if (['x', 'y'].includes(key)) delete popFilter[key]
+    popFilter[key] = { [expression]: value }
+  })
+  const tpopFilter = { x: { isNull: false }, y: { isNull: false } }
+  const tpopFilterValues = Object.entries(nodeFilter[treeName].tpop).filter(
+    e => e[1] || e[1] === 0,
+  )
+  tpopFilterValues.forEach(([key, value]) => {
+    const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
+    tpopFilter[key] = { [expression]: value }
+  })
+
   var { data, error, refetch } = useQuery(query, {
     variables: {
       perAp,
@@ -57,6 +81,8 @@ const Pop = ({ treeName }: { treeName: string }) => {
       projId,
       tpopLayerIsActive,
       isActiveInMap,
+      popFilter,
+      tpopFilter,
     },
   })
   setRefetchKey({ key: 'popForMap', value: refetch })
@@ -83,35 +109,21 @@ const Pop = ({ treeName }: { treeName: string }) => {
           return `${p.nr || '(keine Nr)'}: ${p.name || '(kein Name)'}`
             .toLowerCase()
             .includes(popFilterString.toLowerCase())
-        })
-        // filter by nodeFilter
-        .filter(node =>
-          filterNodesByNodeFilterArray({ node, nodeFilterArray }),
-        ),
-    [aps, popFilterString, nodeFilterArray],
+        }),
+    [aps, popFilterString, tpopFilterValues, popFilterValues],
   )
 
   // if tpop are filtered, only show their pop
   if (activeApfloraLayers.includes('tpop')) {
-    // adding useMemo here results in error ???
-    const popsForTpops = flatten(aps.map(ap => get(ap, 'popsByApId.nodes', [])))
-      .filter(p => {
-        if (!popFilterString) return true
-        return `${p.nr || '(keine Nr)'}: ${p.name || '(kein Name)'}`
-          .toLowerCase()
-          .includes(popFilterString.toLowerCase())
-      })
-      .filter(node =>
-        filterNodesByNodeFilterArray({
-          node,
-          nodeFilterArray,
-          table: 'pop',
-        }),
-      )
+    const popsForTpops = flatten(
+      aps.map(ap => get(ap, 'popsByApId.nodes', [])),
+    ).filter(p => {
+      if (!popFilterString) return true
+      return `${p.nr || '(keine Nr)'}: ${p.name || '(kein Name)'}`
+        .toLowerCase()
+        .includes(popFilterString.toLowerCase())
+    })
     const tpopFilterString = get(tree, 'nodeLabelFilter.tpop')
-    const tpopNodeFilterArray = Object.entries(
-      nodeFilter[tree.name].tpop,
-    ).filter(([key, value]) => value || value === 0 || value === false)
     // adding useMemo here results in error ???
     const tpops = flatten(
       popsForTpops.map(pop => get(pop, 'tpopsByPopId.nodes', [])),
@@ -123,13 +135,6 @@ const Pop = ({ treeName }: { treeName: string }) => {
           .toLowerCase()
           .includes(tpopFilterString.toLowerCase())
       })
-      .filter(node =>
-        filterNodesByNodeFilterArray({
-          node,
-          nodeFilterArray: tpopNodeFilterArray,
-          table: 'tpop',
-        }),
-      )
     const popIdsOfTpops = tpops.map(t => t.popId)
     pops = pops.filter(p => popIdsOfTpops.includes(p.id))
   }
