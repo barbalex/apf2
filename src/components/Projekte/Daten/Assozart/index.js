@@ -13,7 +13,7 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updateAssozartByIdGql from './updateAssozartById'
 import withAeEigenschaftens from './withAeEigenschaftens'
-import query from './data'
+import query from './query'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 

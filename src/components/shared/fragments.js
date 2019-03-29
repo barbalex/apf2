@@ -30,6 +30,15 @@ export const aeEigenschaften = gql`
   }
 `
 
+export const aeLrDelarze = gql`
+  fragment AeLrDelarzeFields on AeLrDelarze {
+    id
+    label
+    einheit
+    sort
+  }
+`
+
 export const ap = gql`
   fragment ApFields on Ap {
     id

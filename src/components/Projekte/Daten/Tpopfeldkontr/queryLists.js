@@ -1,6 +1,7 @@
 import gql from 'graphql-tag'
 
 import {
+  aeLrDelarze,
   tpopEntwicklungWerte,
   tpopkontrIdbiotuebereinstWerte,
 } from '../../../shared/fragments'
@@ -19,13 +20,11 @@ export default gql`
     }
     allAeLrdelarzes {
       nodes {
-        id
-        label
-        einheit
-        sort
+        ...AeLrDelarzeFields
       }
     }
   }
+  ${aeLrDelarze}
   ${tpopEntwicklungWerte}
   ${tpopkontrIdbiotuebereinstWerte}
 `

@@ -8,7 +8,7 @@ import { useQuery } from 'react-apollo-hooks'
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import query from './data'
+import query from './query'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
 const Container = styled.div`

@@ -9,7 +9,7 @@ import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updateApberuebersichtByIdGql from './updateApberuebersichtById'
-import query from './data'
+import query from './query'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 

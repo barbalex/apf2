@@ -11,8 +11,8 @@ import Select from '../../../shared/Select'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updateApartByIdGql from './updateApartById'
-import withAeEigenschaftens from './withAeEigenschaftens'
-import query from './data'
+import query from './query'
+import queryAeEigenschaftens from './queryAeEigenschaftens'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
@@ -27,18 +27,9 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const enhance = compose(
-  withAeEigenschaftens,
-  observer,
-)
+const enhance = compose(observer)
 
-const ApArt = ({
-  treeName,
-  dataAeEigenschaftens,
-}: {
-  treeName: string,
-  dataAeEigenschaftens: Object,
-}) => {
+const ApArt = ({ treeName }: { treeName: string }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { refetch } = mobxStore
   const client = useApolloClient()
@@ -53,6 +44,11 @@ const ApArt = ({
           : '99999999-9999-9999-9999-999999999999',
     },
   })
+
+  const {
+    data: dataAeEigenschaftens,
+    loading: loadingAeEigenschaftens,
+  } = useQuery(queryAeEigenschaftens)
 
   const row = get(data, 'apartById', {})
   // do not show any artId's that have been used?
@@ -103,7 +99,7 @@ const ApArt = ({
     [row.id],
   )
 
-  if (loading || dataAeEigenschaftens.loading) {
+  if (loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
@@ -160,6 +156,7 @@ const ApArt = ({
             field="artId"
             label="Art"
             options={artWerte}
+            loading={loadingAeEigenschaftens}
             saveToDb={saveToDb}
             error={errors.artId}
           />
