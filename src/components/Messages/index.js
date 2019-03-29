@@ -38,6 +38,7 @@ const MessageDiv = styled.div`
 `
 const TitleRow = styled.div`
   padding-bottom: 5px;
+  overflow: visible !important;
 `
 const AllOkButton = styled(Button)`
   position: absolute !important;
