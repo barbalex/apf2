@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 
+import { apberuebersicht } from '../../../shared/fragments'
+
 export default gql`
   query ApberuebersichtQuery($projekt: [UUID!], $isProjekt: Boolean!) {
     allApberuebersichts(
@@ -7,10 +9,9 @@ export default gql`
       orderBy: JAHR_ASC
     ) @include(if: $isProjekt) {
       nodes {
-        id
-        projId
-        jahr
+        ...ApberuebersichtFields
       }
     }
   }
+  ${apberuebersicht}
 `

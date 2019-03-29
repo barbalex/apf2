@@ -1,15 +1,14 @@
 import gql from 'graphql-tag'
 
+import { user } from '../../../shared/fragments'
+
 export default gql`
   query UsersQuery {
     allUsers {
       nodes {
-        id
-        name
-        email
-        role
-        pass
+        ...UserFields
       }
     }
   }
+  ${user}
 `
