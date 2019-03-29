@@ -14,6 +14,8 @@ export default gql`
     $isActiveInMap: Boolean!
     $perProj: Boolean!
     $perAp: Boolean!
+    $popFilter: PopFilter!
+    $tpopFilter: TpopFilter!
   ) {
     projektById(id: $projId) @include(if: $isActiveInMap) {
       id
@@ -24,12 +26,10 @@ export default gql`
           aeEigenschaftenByArtId {
             ...AeEigenschaftenFields
           }
-          popsByApId {
+          popsByApId(filter: $popFilter) {
             nodes {
               ...PopFields
-              tpopsByPopId(
-                filter: { x: { isNull: false }, y: { isNull: false } }
-              ) {
+              tpopsByPopId(filter: $tpopFilter) {
                 nodes {
                   ...TpopFields
                   popStatusWerteByStatus {
@@ -56,15 +56,13 @@ export default gql`
           aeEigenschaftenByArtId {
             ...AeEigenschaftenFields
           }
-          popsByApId {
+          popsByApId(filter: $popFilter) {
             nodes {
               ...PopFields
               popStatusWerteByStatus {
                 ...PopStatusWerteFields
               }
-              tpopsByPopId(
-                filter: { x: { isNull: false }, y: { isNull: false } }
-              ) {
+              tpopsByPopId(filter: $tpopFilter) {
                 nodes {
                   ...TpopFields
                   popByPopId {

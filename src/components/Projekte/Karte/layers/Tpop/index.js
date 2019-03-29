@@ -7,11 +7,12 @@ import { useQuery } from 'react-apollo-hooks'
 import { withLeaflet } from 'react-leaflet'
 
 import Marker from './Marker'
-import filterNodesByNodeFilterArray from '../../../TreeContainer/filterNodesByNodeFilterArray'
 import mobxStoreContext from '../../../../../mobxStoreContext'
-import query from './data'
+import query from './query'
 import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
 import objectsInsideBounds from '../../../../../modules/objectsInsideBounds'
+import { simpleTypes as popType } from '../../../../../mobxStore/NodeFilterTree/pop'
+import { simpleTypes as tpopType } from '../../../../../mobxStore/NodeFilterTree/tpop'
 
 const iconCreateFunction = function(cluster) {
   const markers = cluster.getAllChildMarkers()
@@ -53,13 +54,7 @@ const Tpop = ({
   const { setTpopIdsFiltered } = map
 
   const popFilterString = get(tree, 'nodeLabelFilter.pop')
-  const popNodeFilterArray = Object.entries(nodeFilter[tree.name].pop).filter(
-    ([key, value]) => value || value === 0 || value === false,
-  )
   const tpopFilterString = get(tree, 'nodeLabelFilter.tpop')
-  const tpopNodeFilterArray = Object.entries(nodeFilter[tree.name].tpop).filter(
-    ([key, value]) => value || value === 0 || value === false,
-  )
 
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
@@ -67,8 +62,42 @@ const Tpop = ({
   const isActiveInMap = activeApfloraLayers.includes('tpop')
   const perProj = apId === '99999999-9999-9999-9999-999999999999'
   const perAp = apId !== '99999999-9999-9999-9999-999999999999'
+
+  /**
+   * THIS IS A BAD HACK
+   * and it will not work once there are many projects
+   * because 'connectionFilterRelations: true' cannot be set for postgraphile
+   * correct would be to query only what is in this project
+   * isNull: false is set so there is never an empty object, otherwise qraphql will fail
+   */
+  const popFilter = { x: { isNull: false }, y: { isNull: false } }
+  const popFilterValues = Object.entries(nodeFilter[treeName].pop).filter(
+    e => e[1] || e[1] === 0,
+  )
+  popFilterValues.forEach(([key, value]) => {
+    const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
+    //if (['x', 'y'].includes(key)) delete popFilter[key]
+    popFilter[key] = { [expression]: value }
+  })
+  const tpopFilter = { x: { isNull: false }, y: { isNull: false } }
+  const tpopFilterValues = Object.entries(nodeFilter[treeName].tpop).filter(
+    e => e[1] || e[1] === 0,
+  )
+  tpopFilterValues.forEach(([key, value]) => {
+    const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
+    tpopFilter[key] = { [expression]: value }
+  })
+
   var { data, error, refetch } = useQuery(query, {
-    variables: { projId, apId, perAp, perProj, isActiveInMap },
+    variables: {
+      projId,
+      apId,
+      perAp,
+      perProj,
+      isActiveInMap,
+      popFilter,
+      tpopFilter,
+    },
   })
   setRefetchKey({ key: 'tpopForMap', value: refetch })
 
@@ -96,16 +125,8 @@ const Tpop = ({
           return `${p.nr || '(keine Nr)'}: ${p.name || '(kein Name)'}`
             .toLowerCase()
             .includes(popFilterString.toLowerCase())
-        })
-        // filter by nodeFilter
-        .filter(node =>
-          filterNodesByNodeFilterArray({
-            node,
-            nodeFilterArray: popNodeFilterArray,
-            table: 'pop',
-          }),
-        ),
-    [aps, popFilterString, popNodeFilterArray],
+        }),
+    [aps, popFilterString, popFilterValues],
   )
   const tpops = useMemo(
     () =>
@@ -116,16 +137,8 @@ const Tpop = ({
           return `${el.nr || '(keine Nr)'}: ${el.flurname || '(kein Flurname)'}`
             .toLowerCase()
             .includes(tpopFilterString.toLowerCase())
-        })
-        // filter by nodeFilter
-        .filter(node =>
-          filterNodesByNodeFilterArray({
-            node,
-            nodeFilterArray: tpopNodeFilterArray,
-            table: 'tpop',
-          }),
-        ),
-    [pops, tpopFilterString, tpopNodeFilterArray],
+        }),
+    [pops, tpopFilterString, tpopFilterValues],
   )
 
   const mapTpopIdsFiltered = useMemo(
