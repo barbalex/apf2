@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
+import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
@@ -102,6 +103,7 @@ const Tpopfeldkontr = ({
       ? activeNodeArray[9]
       : '99999999-9999-9999-9999-999999999999'
   if (showFilter) id = '99999999-9999-9999-9999-999999999999'
+  const apId = activeNodeArray[3]
   const { data, loading, error } = useQuery(query, {
     variables: {
       id,
@@ -128,12 +130,16 @@ const Tpopfeldkontr = ({
       tpopfeldkontrType[key] === 'string' ? 'includes' : 'equalTo'
     tpopkontrFilter[key] = { [expression]: value }
   })
-  const { data: dataTpopkontrs } = useQuery(queryTpopkontrs, {
-    variables: {
-      showFilter,
-      tpopkontrFilter,
+  const { data: dataTpopkontrs, loading: loadingTpopkontrs } = useQuery(
+    queryTpopkontrs,
+    {
+      variables: {
+        showFilter,
+        tpopkontrFilter,
+        apId,
+      },
     },
-  })
+  )
 
   const {
     data: dataAdresses,
@@ -158,6 +164,18 @@ const Tpopfeldkontr = ({
     'tpopkontrsFiltered.totalCount',
     '...',
   )
+  const popsOfAp = get(dataTpopkontrs, 'popsOfAp.nodes', [])
+  const tpopsOfAp = flatten(popsOfAp.map(p => get(p, 'tpops.nodes', [])))
+  const tpopkontrsOfApTotalCount = loadingTpopkontrs
+    ? '...'
+    : tpopsOfAp
+        .map(p => get(p, 'tpopkontrs.totalCount'))
+        .reduce((acc = 0, val) => acc + val)
+  const tpopkontrsOfApFilteredCount = loadingTpopkontrs
+    ? '...'
+    : tpopsOfAp
+        .map(p => get(p, 'tpopkontrsFiltered.totalCount'))
+        .reduce((acc = 0, val) => acc + val)
   let row
   if (showFilter) {
     row = nodeFilter[treeName].tpopfeldkontr
@@ -394,6 +412,8 @@ const Tpopfeldkontr = ({
             table="tpopfeldkontr"
             totalNr={tpopkontrTotalCount}
             filteredNr={tpopkontrFilteredCount}
+            totalApNr={tpopkontrsOfApTotalCount}
+            filteredApNr={tpopkontrsOfApFilteredCount}
           />
         ) : (
           <FormTitle
