@@ -100,17 +100,13 @@ const Tpop = ({
 
   const tpopTotalCount = get(dataTpops, 'allTpops.totalCount', '...')
   const tpopFilteredCount = get(dataTpops, 'tpopsFiltered.totalCount', '...')
-  const tpopOfApTotalCount = get(dataTpops, 'popsOfAp.nodes', []).reduce(
-    (accumulator, currentValue) =>
-      accumulator + get(currentValue, 'tpopsByPopId.totalCount'),
+  const popsOfAp = get(dataTpops, 'popsOfAp.nodes', [])
+  console.log({ popsOfAp, dataTpops })
+  const tpopOfApTotalCount = popsOfAp.reduce(
+    (acc, val) => acc + get(val, 'tpops.totalCount'),
   )
-  const tpopOfApFilteredCount = get(
-    dataTpops,
-    'popsOfApFiltered.nodes',
-    [],
-  ).reduce(
-    (accumulator, currentValue) =>
-      accumulator + get(currentValue, 'tpopsByPopId.totalCount'),
+  const tpopOfApFilteredCount = popsOfAp.reduce(
+    (acc, val) => acc + get(val, 'tpopsFiltered.totalCount'),
   )
   let row
   if (showFilter) {

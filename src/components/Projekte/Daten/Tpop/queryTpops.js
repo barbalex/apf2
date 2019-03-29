@@ -12,20 +12,14 @@ export default gql`
     tpopsFiltered: allTpops(filter: $tpopFilter) @include(if: $showFilter) {
       totalCount
     }
-    tpopsOfAp: allPops(filter: { apId: { equalTo: $apId } })
+    popsOfAp: allPops(filter: { apId: { equalTo: $apId } })
       @include(if: $showFilter) {
       nodes {
         id
-        tpopsByPopId {
+        tpops: tpopsByPopId {
           totalCount
         }
-      }
-    }
-    tpopsOfApFiltered: allPops(filter: { apId: { equalTo: $apId } })
-      @include(if: $showFilter) {
-      nodes {
-        id
-        tpopsByPopId(filter: $tpopFilter) {
+        tpopsFiltered: tpopsByPopId(filter: $tpopFilter) {
           totalCount
         }
       }
