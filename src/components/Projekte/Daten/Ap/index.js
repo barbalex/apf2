@@ -110,9 +110,13 @@ const Ap = ({
 
   const [errors, setErrors] = useState({})
 
+  let apTotalCount
+  let apFilteredCount
   let row
   if (showFilter) {
     row = nodeFilter[treeName].ap
+    apTotalCount = get(allApsData, 'allAps.totalCount', '...')
+    apFilteredCount = get(allApsData, 'filteredAps.totalCount', '...')
   } else {
     row = get(data, 'apById', {})
   }
@@ -139,8 +143,6 @@ const Ap = ({
   }))
 
   let apArten
-  const apTotalCount = get(allApsData, 'allAps.totalCount', '...')
-  const apFilteredCount = get(allApsData, 'filteredAps.totalCount', '...')
   let artWerte
   if (showFilter) {
     apArten = get(allApsData, 'filteredAps.nodes', []).map(o => o.artId)

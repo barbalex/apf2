@@ -154,31 +154,31 @@ const Tpopfeldkontr = ({
     get(urlQuery, 'feldkontrTab', 'entwicklung'),
   )
 
-  const tpopkontrTotalCount = get(
-    dataTpopkontrs,
-    'allTpopkontrs.totalCount',
-    '...',
-  )
-  const tpopkontrFilteredCount = get(
-    dataTpopkontrs,
-    'tpopkontrsFiltered.totalCount',
-    '...',
-  )
-  const popsOfAp = get(dataTpopkontrs, 'popsOfAp.nodes', [])
-  const tpopsOfAp = flatten(popsOfAp.map(p => get(p, 'tpops.nodes', [])))
-  const tpopkontrsOfApTotalCount = loadingTpopkontrs
-    ? '...'
-    : tpopsOfAp
-        .map(p => get(p, 'tpopkontrs.totalCount'))
-        .reduce((acc = 0, val) => acc + val)
-  const tpopkontrsOfApFilteredCount = loadingTpopkontrs
-    ? '...'
-    : tpopsOfAp
-        .map(p => get(p, 'tpopkontrsFiltered.totalCount'))
-        .reduce((acc = 0, val) => acc + val)
+  let tpopkontrTotalCount
+  let tpopkontrFilteredCount
+  let tpopkontrsOfApTotalCount
+  let tpopkontrsOfApFilteredCount
   let row
   if (showFilter) {
     row = nodeFilter[treeName].tpopfeldkontr
+    tpopkontrTotalCount = get(dataTpopkontrs, 'allTpopkontrs.totalCount', '...')
+    tpopkontrFilteredCount = get(
+      dataTpopkontrs,
+      'tpopkontrsFiltered.totalCount',
+      '...',
+    )
+    const popsOfAp = get(dataTpopkontrs, 'popsOfAp.nodes', [])
+    const tpopsOfAp = flatten(popsOfAp.map(p => get(p, 'tpops.nodes', [])))
+    tpopkontrsOfApTotalCount = loadingTpopkontrs
+      ? '...'
+      : tpopsOfAp
+          .map(p => get(p, 'tpopkontrs.totalCount'))
+          .reduce((acc = 0, val) => acc + val)
+    tpopkontrsOfApFilteredCount = loadingTpopkontrs
+      ? '...'
+      : tpopsOfAp
+          .map(p => get(p, 'tpopkontrsFiltered.totalCount'))
+          .reduce((acc = 0, val) => acc + val)
   } else {
     row = get(data, 'tpopkontrById', {})
   }

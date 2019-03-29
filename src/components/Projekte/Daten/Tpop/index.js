@@ -98,22 +98,26 @@ const Tpop = ({
     },
   })
 
-  const tpopTotalCount = get(dataTpops, 'allTpops.totalCount', '...')
-  const tpopFilteredCount = get(dataTpops, 'tpopsFiltered.totalCount', '...')
-  const popsOfAp = get(dataTpops, 'popsOfAp.nodes', [])
-  const tpopOfApTotalCount = loadingTpops
-    ? '...'
-    : popsOfAp
-        .map(p => get(p, 'tpops.totalCount'))
-        .reduce((acc = 0, val) => acc + val)
-  const tpopOfApFilteredCount = loadingTpops
-    ? '...'
-    : popsOfAp
-        .map(p => get(p, 'tpopsFiltered.totalCount'))
-        .reduce((acc = 0, val) => acc + val)
+  let tpopTotalCount
+  let tpopFilteredCount
+  let tpopOfApTotalCount
+  let tpopOfApFilteredCount
   let row
   if (showFilter) {
     row = nodeFilter[treeName].tpop
+    tpopTotalCount = get(dataTpops, 'allTpops.totalCount', '...')
+    tpopFilteredCount = get(dataTpops, 'tpopsFiltered.totalCount', '...')
+    const popsOfAp = get(dataTpops, 'popsOfAp.nodes', [])
+    tpopOfApTotalCount = loadingTpops
+      ? '...'
+      : popsOfAp
+          .map(p => get(p, 'tpops.totalCount'))
+          .reduce((acc = 0, val) => acc + val)
+    tpopOfApFilteredCount = loadingTpops
+      ? '...'
+      : popsOfAp
+          .map(p => get(p, 'tpopsFiltered.totalCount'))
+          .reduce((acc = 0, val) => acc + val)
   } else {
     row = get(data, 'tpopById', {})
   }

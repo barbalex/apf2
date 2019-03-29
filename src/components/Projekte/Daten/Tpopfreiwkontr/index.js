@@ -3,6 +3,7 @@ import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
+import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import jwtDecode from 'jwt-decode'
@@ -165,6 +166,7 @@ const Tpopfreiwkontr = ({
     activeNodeArray.length > 9
       ? activeNodeArray[9]
       : '99999999-9999-9999-9999-999999999999'
+  const apId = activeNodeArray[3]
   if (showFilter) id = '99999999-9999-9999-9999-999999999999'
   const { data, loading, error, refetch } = useQuery(query, {
     variables: {
@@ -187,12 +189,16 @@ const Tpopfreiwkontr = ({
       tpopfreiwkontrType[key] === 'string' ? 'includes' : 'equalTo'
     tpopkontrFilter[key] = { [expression]: value }
   })
-  const { data: dataTpopkontrs } = useQuery(queryTpopkontrs, {
-    variables: {
-      showFilter,
-      tpopkontrFilter,
+  const { data: dataTpopkontrs, loading: loadingTpopkontrs } = useQuery(
+    queryTpopkontrs,
+    {
+      variables: {
+        showFilter,
+        tpopkontrFilter,
+        apId,
+      },
     },
-  })
+  )
 
   const {
     data: dataAdresses,
@@ -240,24 +246,35 @@ const Tpopfreiwkontr = ({
   const isFreiwillig = role === 'apflora_freiwillig'
   const { width } = dimensions
 
-  const tpopkontrTotalCount = get(
-    dataTpopkontrs,
-    'allTpopkontrs.totalCount',
-    '...',
-  )
-  const tpopkontrFilteredCount = get(
-    dataTpopkontrs,
-    'tpopkontrsFiltered.totalCount',
-    '...',
-  )
+  let tpopkontrTotalCount
+  let tpopkontrFilteredCount
+  let tpopkontrsOfApTotalCount
+  let tpopkontrsOfApFilteredCount
   let row
   if (showFilter) {
     row = nodeFilter[treeName].tpopfreiwkontr
+    tpopkontrTotalCount = get(dataTpopkontrs, 'allTpopkontrs.totalCount', '...')
+    tpopkontrFilteredCount = get(
+      dataTpopkontrs,
+      'tpopkontrsFiltered.totalCount',
+      '...',
+    )
+    const popsOfAp = get(dataTpopkontrs, 'popsOfAp.nodes', [])
+    const tpopsOfAp = flatten(popsOfAp.map(p => get(p, 'tpops.nodes', [])))
+    tpopkontrsOfApTotalCount = loadingTpopkontrs
+      ? '...'
+      : tpopsOfAp
+          .map(p => get(p, 'tpopkontrs.totalCount'))
+          .reduce((acc = 0, val) => acc + val)
+    tpopkontrsOfApFilteredCount = loadingTpopkontrs
+      ? '...'
+      : tpopsOfAp
+          .map(p => get(p, 'tpopkontrsFiltered.totalCount'))
+          .reduce((acc = 0, val) => acc + val)
   } else {
     row = get(data, 'tpopkontrById', {}) || {}
   }
 
-  const apId = get(row, 'tpopByTpopId.popByPopId.apId')
   const artname = get(
     row,
     'tpopByTpopId.popByPopId.apByApId.aeEigenschaftenByArtId.artname',
@@ -482,6 +499,8 @@ const Tpopfreiwkontr = ({
           table="tpopfreiwkontr"
           totalNr={tpopkontrTotalCount}
           filteredNr={tpopkontrFilteredCount}
+          totalApNr={tpopkontrsOfApTotalCount}
+          filteredApNr={tpopkontrsOfApFilteredCount}
         />
       )}
       {!(view === 'ekf') && !showFilter && (

@@ -87,17 +87,17 @@ const Pop = ({
     },
   })
 
-  const popTotalCount = get(dataPops, 'allPops.totalCount', '...')
-  const popFilteredCount = get(dataPops, 'popsFiltered.totalCount', '...')
-  const popOfApTotalCount = get(dataPops, 'popsOfAp.totalCount', '...')
-  const popOfApFilteredCount = get(
-    dataPops,
-    'popsOfApFiltered.totalCount',
-    '...',
-  )
+  let popTotalCount
+  let popFilteredCount
+  let popOfApTotalCount
+  let popOfApFilteredCount
   let row
   if (showFilter) {
     row = nodeFilter[treeName].pop
+    popTotalCount = get(dataPops, 'allPops.totalCount', '...')
+    popFilteredCount = get(dataPops, 'popsFiltered.totalCount', '...')
+    popOfApTotalCount = get(dataPops, 'popsOfAp.totalCount', '...')
+    popOfApFilteredCount = get(dataPops, 'popsOfApFiltered.totalCount', '...')
   } else {
     row = get(data, 'popById', {})
   }
