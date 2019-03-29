@@ -90,7 +90,11 @@ const Tpop = ({
     tpopFilter[key] = { [expression]: value }
   })
 
-  const { data: dataTpops } = useQuery(queryTpops, {
+  const {
+    data: dataTpops,
+    loading: loadingTpops,
+    error: errorTpops,
+  } = useQuery(queryTpops, {
     variables: {
       showFilter,
       tpopFilter,
@@ -101,13 +105,16 @@ const Tpop = ({
   const tpopTotalCount = get(dataTpops, 'allTpops.totalCount', '...')
   const tpopFilteredCount = get(dataTpops, 'tpopsFiltered.totalCount', '...')
   const popsOfAp = get(dataTpops, 'popsOfAp.nodes', [])
-  console.log({ popsOfAp, dataTpops })
-  const tpopOfApTotalCount = popsOfAp.reduce(
-    (acc, val) => acc + get(val, 'tpops.totalCount'),
-  )
-  const tpopOfApFilteredCount = popsOfAp.reduce(
-    (acc, val) => acc + get(val, 'tpopsFiltered.totalCount'),
-  )
+  const tpopOfApTotalCount = loadingTpops
+    ? '...'
+    : popsOfAp
+        .map(p => get(p, 'tpops.totalCount'))
+        .reduce((acc = 0, val) => acc + val)
+  const tpopOfApFilteredCount = loadingTpops
+    ? '...'
+    : popsOfAp
+        .map(p => get(p, 'tpopsFiltered.totalCount'))
+        .reduce((acc = 0, val) => acc + val)
   let row
   if (showFilter) {
     row = nodeFilter[treeName].tpop
