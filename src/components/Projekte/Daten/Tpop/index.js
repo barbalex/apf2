@@ -67,6 +67,7 @@ const Tpop = ({
       ? activeNodeArray[7]
       : '99999999-9999-9999-9999-999999999999'
   if (showFilter) id = '99999999-9999-9999-9999-999999999999'
+  const apId = activeNodeArray[3]
   const { data, loading, error } = useQuery(query, {
     variables: {
       id,
@@ -88,15 +89,29 @@ const Tpop = ({
     const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
     tpopFilter[key] = { [expression]: value }
   })
+
   const { data: dataTpops } = useQuery(queryTpops, {
     variables: {
       showFilter,
       tpopFilter,
+      apId,
     },
   })
 
   const tpopTotalCount = get(dataTpops, 'allTpops.totalCount', '...')
   const tpopFilteredCount = get(dataTpops, 'tpopsFiltered.totalCount', '...')
+  const tpopOfApTotalCount = get(dataTpops, 'popsOfAp.nodes', []).reduce(
+    (accumulator, currentValue) =>
+      accumulator + get(currentValue, 'tpopsByPopId.totalCount'),
+  )
+  const tpopOfApFilteredCount = get(
+    dataTpops,
+    'popsOfApFiltered.nodes',
+    [],
+  ).reduce(
+    (accumulator, currentValue) =>
+      accumulator + get(currentValue, 'tpopsByPopId.totalCount'),
+  )
   let row
   if (showFilter) {
     row = nodeFilter[treeName].tpop
@@ -234,6 +249,8 @@ const Tpop = ({
             table="tpop"
             totalNr={tpopTotalCount}
             filteredNr={tpopFilteredCount}
+            totalApNr={tpopOfApTotalCount}
+            filteredApNr={tpopOfApFilteredCount}
           />
         ) : (
           <FormTitle

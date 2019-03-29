@@ -49,10 +49,10 @@ const FormTitle = ({
   title,
   table,
   treeName,
-  totalNr = '...',
-  filteredNr = '...',
-  totalApNr = '...',
-  filteredApNr = '...',
+  totalNr,
+  filteredNr,
+  totalApNr,
+  filteredApNr,
 }: {
   title: string,
   table: string,
@@ -88,10 +88,20 @@ const FormTitle = ({
     <Container>
       <TitleRow>
         <FilterNumbers>
-          {`AP: `}
-          <span title="gefilterte Anzahl im Aktionsplan">{filteredApNr}</span>/
-          <span title="ungefilterte Anzahl im Aktionsplan">{totalApNr}</span>
-          {`, Projekt: `}
+          {filteredApNr && (
+            <>
+              {`AP: `}
+              <span title="gefilterte Anzahl im Aktionsplan">
+                {filteredApNr}
+              </span>
+              /
+              <span title="ungefilterte Anzahl im Aktionsplan">
+                {totalApNr}
+              </span>
+              {`, `}
+            </>
+          )}
+          {`Projekt: `}
           <span title="gefilterte Anzahl im Projekt">{filteredNr}</span>/
           <span title="ungefilterte Anzahl im Projekt">{totalNr}</span>
         </FilterNumbers>
