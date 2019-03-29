@@ -90,11 +90,7 @@ const Tpop = ({
     tpopFilter[key] = { [expression]: value }
   })
 
-  const {
-    data: dataTpops,
-    loading: loadingTpops,
-    error: errorTpops,
-  } = useQuery(queryTpops, {
+  const { data: dataTpops, loading: loadingTpops } = useQuery(queryTpops, {
     variables: {
       showFilter,
       tpopFilter,
