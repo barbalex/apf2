@@ -16,6 +16,7 @@ import FilterTitle from '../../../shared/FilterTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updateApByIdGql from './updateApById'
 import query from './query'
+import queryLists from './queryLists'
 import queryAps from './queryAps'
 import allAdressesQuery from './allAdresses'
 import allAeEigenschaftensQuery from './allAeEigenschaftens'
@@ -107,6 +108,11 @@ const Ap = ({
     error: allAeEigenschaftensError,
     loading: allAeEigenschaftensLoading,
   } = useQuery(allAeEigenschaftensQuery)
+  const {
+    data: dataLists,
+    error: errorLists,
+    loading: loadingLists,
+  } = useQuery(queryLists)
 
   const [errors, setErrors] = useState({})
 
@@ -123,18 +129,19 @@ const Ap = ({
 
   useEffect(() => setErrors({}), [row])
 
-  let bearbeitungWerte = get(data, 'allApBearbstandWertes.nodes', [])
+  let bearbeitungWerte = get(dataLists, 'allApBearbstandWertes.nodes', [])
   bearbeitungWerte = sortBy(bearbeitungWerte, 'sort')
   bearbeitungWerte = bearbeitungWerte.map(el => ({
     value: el.code,
     label: el.text,
   }))
-  let umsetzungWerte = get(data, 'allApUmsetzungWertes.nodes', [])
+  let umsetzungWerte = get(dataLists, 'allApUmsetzungWertes.nodes', [])
   umsetzungWerte = sortBy(umsetzungWerte, 'sort')
   umsetzungWerte = umsetzungWerte.map(el => ({
     value: el.code,
     label: el.text,
   }))
+  console.log('Ap', { bearbeitungWerte, umsetzungWerte })
   let adressenWerte = get(allAdressesData, 'allAdresses.nodes', [])
   adressenWerte = sortBy(adressenWerte, 'name')
   adressenWerte = adressenWerte.map(el => ({
@@ -172,7 +179,7 @@ const Ap = ({
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value) || null
+      const value = ifIsNumericAsNumber(event.target.value)
       if (showFilter) {
         nodeFilterSetValue({
           treeName,
@@ -236,6 +243,7 @@ const Ap = ({
   }
   if (allAdressesError) return `Fehler: ${allAdressesError.message}`
   if (allApsError) return `Fehler: ${allApsError.message}`
+  if (errorLists) return `Fehler: ${errorLists.message}`
   if (error) return `Fehler: ${error.message}`
 
   return (
@@ -269,6 +277,7 @@ const Ap = ({
             name="bearbeitung"
             value={row.bearbeitung}
             dataSource={bearbeitungWerte}
+            loading={loadingLists}
             saveToDb={saveToDb}
             error={errors.bearbeitung}
             popover={
@@ -307,6 +316,7 @@ const Ap = ({
               name="umsetzung"
               value={row.umsetzung}
               dataSource={umsetzungWerte}
+              loading={loadingLists}
               saveToDb={saveToDb}
               error={errors.umsetzung}
               popover={

@@ -185,8 +185,7 @@ const Tpopfeldkontr = ({
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
-      let value = ifIsNumericAsNumber(event.target.value)
-      if ([undefined, ''].includes(value)) value = null
+      const value = ifIsNumericAsNumber(event.target.value)
       if (showFilter) {
         nodeFilterSetValue({
           treeName,

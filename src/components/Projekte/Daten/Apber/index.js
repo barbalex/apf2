@@ -75,7 +75,7 @@ const Apber = ({
 
   const saveToDb = useCallback(async event => {
     const field = event.target.name
-    const value = ifIsNumericAsNumber(event.target.value) || null
+    const value = ifIsNumericAsNumber(event.target.value)
     const row = get(data, 'apberById', {})
     try {
       await client.mutate({

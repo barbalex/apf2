@@ -47,7 +47,7 @@ const Ber = ({ treeName }: { treeName: string }) => {
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value) || null
+      const value = ifIsNumericAsNumber(event.target.value)
       try {
         await client.mutate({
           mutation: updateBerByIdGql,

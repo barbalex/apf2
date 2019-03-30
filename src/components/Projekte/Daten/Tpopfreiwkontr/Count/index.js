@@ -240,13 +240,10 @@ const Count = ({
       const field = ['anzahl1', 'anzahl2'].includes(fieldPassed)
         ? 'anzahl'
         : fieldPassed
-      let value = ifIsNumericAsNumber(event.target.value)
-      if ([undefined, ''].includes(value)) value = null
+      const value = ifIsNumericAsNumber(event.target.value)
 
       let field2
       if (['anzahl1', 'anzahl2'].includes(fieldPassed)) {
-        // convert to number
-        value = !value && value !== 0 ? null : +value
         field2 = 'methode'
       }
       let value2

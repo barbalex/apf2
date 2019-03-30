@@ -305,7 +305,6 @@ const Tpopfreiwkontr = ({
     async event => {
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
-      if ([undefined, ''].includes(value)) value = null
       if (showFilter) {
         return nodeFilterSetValue({
           treeName,
