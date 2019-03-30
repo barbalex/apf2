@@ -3,7 +3,6 @@ import React, { useEffect, useState, useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
-import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
@@ -15,9 +14,9 @@ import FormTitle from '../../../shared/FormTitle'
 import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updateApberByIdGql from './updateApberById'
-import withAllAdresses from './withAllAdresses'
-import withAllApErfkritWertes from './withAllApErfkritWertes'
-import query from './data'
+import query from './query'
+import queryAdresses from './queryAdresses'
+import queryApErfkritWertes from './queryApErfkritWertes'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
@@ -36,22 +35,12 @@ const FieldsContainer = styled.div`
       : 'auto'};
 `
 
-const enhance = compose(
-  withAllApErfkritWertes,
-  withAllAdresses,
-  observer,
-)
-
 const Apber = ({
   dimensions = { width: 380 },
   treeName,
-  dataAllAdresses,
-  dataAllApErfkritWertes,
 }: {
   dimensions: Object,
   treeName: string,
-  dataAllAdresses: Object,
-  dataAllApErfkritWertes: Object,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
   const client = useApolloClient()
@@ -66,6 +55,17 @@ const Apber = ({
           : '99999999-9999-9999-9999-999999999999',
     },
   })
+
+  const {
+    data: dataAdresses,
+    loading: loadingAdresses,
+    error: errorAdresses,
+  } = useQuery(queryAdresses)
+  const {
+    data: dataApErfkritWertes,
+    loading: loadingApErfkritWertes,
+    error: errorApErfkritWertes,
+  } = useQuery(queryApErfkritWertes)
 
   const row = get(data, 'apberById', {})
 
@@ -148,7 +148,7 @@ const Apber = ({
   ]
   const width = isNaN(dimensions.width) ? 380 : dimensions.width
   let beurteilungWerte = get(
-    dataAllApErfkritWertes,
+    dataApErfkritWertes,
     'allApErfkritWertes.nodes',
     [],
   )
@@ -157,14 +157,14 @@ const Apber = ({
     value: el.code,
     label: el.text,
   }))
-  let adressenWerte = get(dataAllAdresses, 'allAdresses.nodes', [])
+  let adressenWerte = get(dataAdresses, 'allAdresses.nodes', [])
   adressenWerte = sortBy(adressenWerte, 'name')
   adressenWerte = adressenWerte.map(el => ({
     value: el.id,
     label: el.name,
   }))
 
-  if (loading || dataAllAdresses.loading || dataAllApErfkritWertes.loading) {
+  if (loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
@@ -172,9 +172,9 @@ const Apber = ({
     )
   }
   if (error) return `Fehler: ${error.message}`
-  if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
-  if (dataAllApErfkritWertes.error) {
-    return `Fehler: ${dataAllApErfkritWertes.error.message}`
+  if (errorAdresses) return `Fehler: ${errorAdresses.message}`
+  if (errorApErfkritWertes) {
+    return `Fehler: ${errorApErfkritWertes.message}`
   }
 
   return (
@@ -212,6 +212,7 @@ const Apber = ({
             value={row.beurteilung}
             label="Beurteilung"
             dataSource={beurteilungWerte}
+            loading={loadingApErfkritWertes}
             saveToDb={saveToDb}
             error={errors.beurteilung}
           />
@@ -329,6 +330,7 @@ const Apber = ({
             field="bearbeiter"
             label="BearbeiterIn"
             options={adressenWerte}
+            loading={loadingAdresses}
             saveToDb={saveToDb}
             error={errors.bearbeiter}
           />
@@ -338,4 +340,4 @@ const Apber = ({
   )
 }
 
-export default enhance(Apber)
+export default observer(Apber)

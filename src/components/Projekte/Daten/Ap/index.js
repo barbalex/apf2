@@ -3,7 +3,6 @@ import React, { useContext, useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
-import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
@@ -66,8 +65,6 @@ const LabelPopoverRowColumnRight = styled.div`
   padding-left: 5px;
 `
 
-const enhance = compose(observer)
-
 const Ap = ({
   treeName,
   showFilter = false,
@@ -99,14 +96,14 @@ const Ap = ({
     variables: { apFilter },
   })
   const {
-    data: allAdressesData,
-    error: allAdressesError,
-    loading: allAdressesLoading,
+    data: dataAdresses,
+    error: errorAdresses,
+    loading: loadingAdresses,
   } = useQuery(queryAdresses)
   const {
-    data: allAeEigenschaftensData,
-    error: allAeEigenschaftensError,
-    loading: allAeEigenschaftensLoading,
+    data: dataAeEigenschaftens,
+    error: errorAeEigenschaftens,
+    loading: loadingAeEigenschaftens,
   } = useQuery(queryAeEigenschaftens)
   const {
     data: dataLists,
@@ -115,6 +112,13 @@ const Ap = ({
   } = useQuery(queryLists)
 
   const [errors, setErrors] = useState({})
+
+  console.log('Ap rendering', {
+    loadingAdresses,
+    loadingAeEigenschaftens,
+    loadingLists,
+    loading,
+  })
 
   let apTotalCount
   let apFilteredCount
@@ -141,7 +145,7 @@ const Ap = ({
     value: el.code,
     label: el.text,
   }))
-  let adressenWerte = get(allAdressesData, 'allAdresses.nodes', [])
+  let adressenWerte = get(dataAdresses, 'allAdresses.nodes', [])
   adressenWerte = sortBy(adressenWerte, 'name')
   adressenWerte = adressenWerte.map(el => ({
     label: el.name,
@@ -152,7 +156,7 @@ const Ap = ({
   let artWerte
   if (showFilter) {
     apArten = get(allApsData, 'filteredAps.nodes', []).map(o => o.artId)
-    artWerte = get(allAeEigenschaftensData, 'allAeEigenschaftens.nodes', [])
+    artWerte = get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])
     // only list ap arten
     artWerte = artWerte.filter(o => apArten.includes(o.id))
     artWerte = sortBy(artWerte, 'artname')
@@ -165,7 +169,7 @@ const Ap = ({
     apArten = get(allApsData, 'allAps.nodes', [])
       .filter(o => o.id !== row.id)
       .map(o => o.artId)
-    artWerte = get(allAeEigenschaftensData, 'allAeEigenschaftens.nodes', [])
+    artWerte = get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])
     // filter ap arten but the active one
     artWerte = artWerte.filter(o => !apArten.includes(o.id))
     artWerte = sortBy(artWerte, 'artname')
@@ -237,10 +241,10 @@ const Ap = ({
       </Container>
     )
   }
-  if (allAeEigenschaftensError) {
-    return `Fehler: ${allAeEigenschaftensError.message}`
+  if (errorAeEigenschaftens) {
+    return `Fehler: ${errorAeEigenschaftens.message}`
   }
-  if (allAdressesError) return `Fehler: ${allAdressesError.message}`
+  if (errorAdresses) return `Fehler: ${errorAdresses.message}`
   if (allApsError) return `Fehler: ${allApsError.message}`
   if (errorLists) return `Fehler: ${errorLists.message}`
   if (error) return `Fehler: ${error.message}`
@@ -267,7 +271,7 @@ const Ap = ({
             field="artId"
             label="Art (gibt dem Aktionsplan den Namen)"
             options={artWerte}
-            loading={allAeEigenschaftensLoading}
+            loading={loadingAeEigenschaftens}
             saveToDb={saveToDb}
             error={errors.artId}
           />
@@ -352,7 +356,7 @@ const Ap = ({
             field="bearbeiter"
             label="Verantwortlich"
             options={adressenWerte}
-            loading={allAdressesLoading}
+            loading={loadingAdresses}
             saveToDb={saveToDb}
             error={errors.bearbeiter}
           />
@@ -381,4 +385,4 @@ const Ap = ({
   )
 }
 
-export default enhance(Ap)
+export default observer(Ap)
