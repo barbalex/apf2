@@ -205,7 +205,6 @@ const Karte = ({
     overlays.findIndex(o => o.value === activeOverlay),
   )
 
-  //console.log('Karte rendering')
   return (
     <Container data-id={`karten-container${treeName === 'tree' ? 1 : 2}`}>
       <ErrorBoundary>

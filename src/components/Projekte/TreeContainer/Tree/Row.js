@@ -246,7 +246,6 @@ const Row = ({
     node.id === copying.id
   const amCopyingBiotop =
     node.nodeType === 'table' && node.id === copyingBiotop.id
-  //console.log('Row rendering')
 
   const onClickNode = useCallback(
     event => {

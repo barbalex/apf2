@@ -39,7 +39,6 @@ const ProjektContainer = ({
   const mobxStore = useContext(mobxStoreContext)
   const { isPrint } = mobxStore
 
-  //console.log('ProjektContainer rendering')
   if (isPrint) {
     return <Daten treeName={treeName} />
   }
@@ -52,8 +51,6 @@ const ProjektContainer = ({
       : tabs.length === 0
       ? 1
       : 1 / tabs.length
-
-  //console.log('ProjektContainer', { tabs })
 
   return (
     <Container>
