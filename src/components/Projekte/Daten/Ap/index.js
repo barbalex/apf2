@@ -200,8 +200,6 @@ const Ap = ({
   if (errorLists) return `Fehler: ${errorLists.message}`
   if (error) return `Fehler: ${error.message}`
 
-  console.log('Ap rendering')
-
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
