@@ -1,14 +1,12 @@
 import gql from 'graphql-tag'
 
-import { apErfkritWerte } from '../../../shared/fragments'
-
 export default gql`
   query AllApErfkritWertesQuery {
-    allApErfkritWertes {
+    allApErfkritWertes(orderBy: SORT_ASC) {
       nodes {
-        ...ApErfkritWerteFields
+        value: code
+        label: text
       }
     }
   }
-  ${apErfkritWerte}
 `

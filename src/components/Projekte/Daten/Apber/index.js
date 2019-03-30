@@ -139,8 +139,6 @@ const Apber = ({
                   : row.massnahmenPlanungVsAusfuehrung,
               apId: field === 'apId' ? value : row.apId,
               bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
-              apErfkritWerteByBeurteilung: row.apErfkritWerteByBeurteilung,
-              adresseByBearbeiter: row.adresseByBearbeiter,
               __typename: 'Apber',
             },
             __typename: 'Apber',
@@ -154,25 +152,6 @@ const Apber = ({
   })
 
   const width = isNaN(dimensions.width) ? 380 : dimensions.width
-  const beurteilungWerte = useMemo(
-    () =>
-      sortBy(
-        get(dataApErfkritWertes, 'allApErfkritWertes.nodes', []),
-        'sort',
-      ).map(el => ({
-        value: el.code,
-        label: el.text,
-      })),
-    [dataApErfkritWertes.length],
-  )
-  const adressenWerte = useMemo(
-    () =>
-      sortBy(get(dataAdresses, 'allAdresses.nodes', []), 'name').map(el => ({
-        value: el.id,
-        label: el.name,
-      })),
-    [dataAdresses.length],
-  )
 
   if (loading) {
     return (
@@ -221,7 +200,11 @@ const Apber = ({
             name="beurteilung"
             value={row.beurteilung}
             label="Beurteilung"
-            dataSource={beurteilungWerte}
+            dataSource={get(
+              dataApErfkritWertes,
+              'allApErfkritWertes.nodes',
+              [],
+            )}
             loading={loadingApErfkritWertes}
             saveToDb={saveToDb}
             error={errors.beurteilung}
@@ -339,7 +322,7 @@ const Apber = ({
             value={row.bearbeiter}
             field="bearbeiter"
             label="BearbeiterIn"
-            options={adressenWerte}
+            options={get(dataAdresses, 'allAdresses.nodes', [])}
             loading={loadingAdresses}
             saveToDb={saveToDb}
             error={errors.bearbeiter}

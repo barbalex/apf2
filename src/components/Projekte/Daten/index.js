@@ -59,8 +59,6 @@ const Daten = ({
   const { activeNodeArray, activeNode } = mobxStore[treeName]
   const activeTable = get(mobxStore, `nodeFilter.${treeName}.activeTable`, '')
 
-  console.log('Daten rendering')
-
   const formObject = {
     projekt: <Projekt treeName={treeName} />,
     apberuebersicht: <Apberuebersicht treeName={treeName} />,
