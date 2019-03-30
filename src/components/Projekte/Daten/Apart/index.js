@@ -54,21 +54,12 @@ const ApArt = ({ treeName }: { treeName: string }) => {
   } = useQuery(queryAeEigenschaftens)
 
   const row = get(data, 'apartById', {})
+
   // do not show any artId's that have been used?
   // Nope: because some species have already been worked as separate ap
   // because apart did not exist...
   // maybe do later
-  const artWerte = useMemo(
-    () =>
-      sortBy(
-        get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', []),
-        'artname',
-      ).map(el => ({
-        value: el.id,
-        label: el.artname,
-      })),
-    [dataAeEigenschaftens.length],
-  )
+  const artWerte = get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])
 
   useEffect(() => setErrors({}), [row.id])
 
@@ -91,7 +82,6 @@ const ApArt = ({ treeName }: { treeName: string }) => {
                 id: row.id,
                 apId: field === 'apId' ? value : row.apId,
                 artId: field === 'artId' ? value : row.artId,
-                aeEigenschaftenByArtId: row.aeEigenschaftenByArtId,
                 __typename: 'Apart',
               },
               __typename: 'Apart',

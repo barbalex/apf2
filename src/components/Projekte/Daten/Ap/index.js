@@ -117,7 +117,9 @@ const Ap = ({
     data: dataAeEigenschaftens,
     error: errorAeEigenschaftens,
     loading: loadingAeEigenschaftens,
-  } = useQuery(queryAeEigenschaftens)
+  } = useQuery(queryAeEigenschaftens, {
+    variables: { showData: !showFilter, showFilter, apId: id },
+  })
   const {
     data: dataLists,
     error: errorLists,
@@ -167,8 +169,7 @@ const Ap = ({
                       ? value
                       : row.ekfBeobachtungszeitpunkt,
                   projId: field === 'projId' ? value : row.projId,
-                  //adresseByBearbeiter: row.adresseByBearbeiter,
-                  //aeEigenschaftenByArtId: row.aeEigenschaftenByArtId,
+                  aeEigenschaftenByArtId: row.aeEigenschaftenByArtId,
                   __typename: 'Ap',
                 },
                 __typename: 'Ap',
@@ -223,7 +224,11 @@ const Ap = ({
             value={row.artId}
             field="artId"
             label="Art (gibt dem Aktionsplan den Namen)"
-            options={get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])}
+            options={get(
+              dataAeEigenschaftens,
+              `${showFilter ? 'forFilter' : 'forData'}.nodes`,
+              [],
+            )}
             loading={loadingAeEigenschaftens}
             saveToDb={saveToDb}
             error={errors.artId}
