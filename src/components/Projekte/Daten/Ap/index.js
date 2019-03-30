@@ -113,12 +113,7 @@ const Ap = ({
 
   const [errors, setErrors] = useState({})
 
-  console.log('Ap rendering', {
-    loadingAdresses,
-    loadingAeEigenschaftens,
-    loadingLists,
-    loading,
-  })
+  console.log('Ap rendering')
 
   let apTotalCount
   let apFilteredCount

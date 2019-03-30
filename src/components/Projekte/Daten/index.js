@@ -59,17 +59,15 @@ const Daten = ({
   const { activeNodeArray, activeNode } = mobxStore[treeName]
   const activeTable = get(mobxStore, `nodeFilter.${treeName}.activeTable`, '')
 
+  console.log('Daten rendering')
+
   const formObject = {
-    projekt: <Projekt dimensions={dimensions} treeName={treeName} />,
-    apberuebersicht: (
-      <Apberuebersicht dimensions={dimensions} treeName={treeName} />
-    ),
-    ap: <Ap dimensions={dimensions} treeName={treeName} />,
-    assozart: <Assozart dimensions={dimensions} treeName={treeName} />,
-    ekfzaehleinheit: (
-      <Ekfzaehleinheit dimensions={dimensions} treeName={treeName} />
-    ),
-    apart: <Apart dimensions={dimensions} treeName={treeName} />,
+    projekt: <Projekt treeName={treeName} />,
+    apberuebersicht: <Apberuebersicht treeName={treeName} />,
+    ap: <Ap treeName={treeName} />,
+    assozart: <Assozart treeName={treeName} />,
+    ekfzaehleinheit: <Ekfzaehleinheit treeName={treeName} />,
+    apart: <Apart treeName={treeName} />,
     idealbiotop: <Idealbiotop dimensions={dimensions} treeName={treeName} />,
     erfkrit: <Erfkrit dimensions={dimensions} treeName={treeName} />,
     apber: <Apber dimensions={dimensions} treeName={treeName} />,
