@@ -1,11 +1,11 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query AllAdressesQuery {
-    allAdresses {
+  query ApAeEigenschaftensQuery {
+    allAeEigenschaftens {
       nodes {
         id
-        name
+        artname
       }
     }
   }

@@ -18,8 +18,8 @@ import updateApByIdGql from './updateApById'
 import query from './query'
 import queryLists from './queryLists'
 import queryAps from './queryAps'
-import allAdressesQuery from './allAdresses'
-import allAeEigenschaftensQuery from './allAeEigenschaftens'
+import queryAdresses from './queryAdresses'
+import queryAeEigenschaftens from './queryAeEigenschaftens'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { simpleTypes as apType } from '../../../../mobxStore/NodeFilterTree/ap'
@@ -102,12 +102,12 @@ const Ap = ({
     data: allAdressesData,
     error: allAdressesError,
     loading: allAdressesLoading,
-  } = useQuery(allAdressesQuery)
+  } = useQuery(queryAdresses)
   const {
     data: allAeEigenschaftensData,
     error: allAeEigenschaftensError,
     loading: allAeEigenschaftensLoading,
-  } = useQuery(allAeEigenschaftensQuery)
+  } = useQuery(queryAeEigenschaftens)
   const {
     data: dataLists,
     error: errorLists,
@@ -141,7 +141,6 @@ const Ap = ({
     value: el.code,
     label: el.text,
   }))
-  console.log('Ap', { bearbeitungWerte, umsetzungWerte })
   let adressenWerte = get(allAdressesData, 'allAdresses.nodes', [])
   adressenWerte = sortBy(adressenWerte, 'name')
   adressenWerte = adressenWerte.map(el => ({
