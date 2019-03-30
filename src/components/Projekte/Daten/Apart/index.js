@@ -1,9 +1,14 @@
 // @flow
-import React, { useState, useCallback, useEffect, useContext } from 'react'
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useContext,
+  useMemo,
+} from 'react'
 import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
@@ -26,8 +31,6 @@ const FieldsContainer = styled.div`
   padding: 10px;
   height: 100%;
 `
-
-const enhance = compose(observer)
 
 const ApArt = ({ treeName }: { treeName: string }) => {
   const mobxStore = useContext(mobxStoreContext)
@@ -55,12 +58,17 @@ const ApArt = ({ treeName }: { treeName: string }) => {
   // Nope: because some species have already been worked as separate ap
   // because apart did not exist...
   // maybe do later
-  let artWerte = get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])
-  artWerte = sortBy(artWerte, 'artname')
-  artWerte = artWerte.map(el => ({
-    value: el.id,
-    label: el.artname,
-  }))
+  const artWerte = useMemo(
+    () =>
+      sortBy(
+        get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', []),
+        'artname',
+      ).map(el => ({
+        value: el.id,
+        label: el.artname,
+      })),
+    [dataAeEigenschaftens.length],
+  )
 
   useEffect(() => setErrors({}), [row.id])
 
@@ -166,4 +174,4 @@ const ApArt = ({ treeName }: { treeName: string }) => {
   )
 }
 
-export default enhance(ApArt)
+export default observer(ApArt)

@@ -1,23 +1,18 @@
 import gql from 'graphql-tag'
 
-import {
-  apBearbstandWerte,
-  apUmsetzungWerte,
-} from '../../../shared/fragments'
-
 export default gql`
   query apListsQuery {
-    allApBearbstandWertes {
+    allApBearbstandWertes(orderBy: SORT_ASC) {
       nodes {
-        ...ApBearbstandWerteFields
+        value: code
+        label: text
       }
     }
-    allApUmsetzungWertes {
+    allApUmsetzungWertes(orderBy: SORT_ASC) {
       nodes {
-        ...ApUmsetzungWerteFields
+        value: code
+        label: text
       }
     }
   }
-  ${apBearbstandWerte}
-  ${apUmsetzungWerte}
 `

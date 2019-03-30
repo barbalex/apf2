@@ -1,7 +1,5 @@
 import gql from 'graphql-tag'
 
-import { ap } from '../../../shared/fragments'
-
 export default gql`
   query AllApsQuery($apFilter: ApFilter!) {
     allAps {
@@ -9,10 +7,6 @@ export default gql`
     }
     filteredAps: allAps(filter: $apFilter) {
       totalCount
-      nodes {
-        ...ApFields
-      }
     }
   }
-  ${ap}
 `

@@ -2,10 +2,10 @@ import gql from 'graphql-tag'
 
 export default gql`
   query ApAdressesQuery {
-    allAdresses {
+    allAdresses(orderBy: NAME_ASC) {
       nodes {
-        id
-        name
+        value: id
+        label: name
       }
     }
   }

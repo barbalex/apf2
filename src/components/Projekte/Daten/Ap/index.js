@@ -1,5 +1,11 @@
 // @flow
-import React, { useContext, useState, useCallback, useEffect } from 'react'
+import React, {
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+  useMemo,
+} from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
@@ -7,7 +13,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
-import TextField from '../../../shared/TextField'
+import TextField2 from '../../../shared/TextField2'
 import Select from '../../../shared/Select'
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import FormTitle from '../../../shared/FormTitle'
@@ -76,6 +82,7 @@ const Ap = ({
   const mobxStore = useContext(mobxStoreContext)
   const { nodeFilter, nodeFilterSetValue, user, refetch } = mobxStore
   const { activeNodeArray } = mobxStore[treeName]
+
   let id =
     activeNodeArray.length > 3
       ? activeNodeArray[3]
@@ -84,17 +91,23 @@ const Ap = ({
   const { data, error, loading } = useQuery(query, {
     variables: { id },
   })
-  const apFilter = { projId: { in: activeNodeArray[1] } }
-  const apFilterValues = Object.entries(nodeFilter[treeName].ap).filter(
-    e => e[1] || e[1] === 0,
-  )
-  apFilterValues.forEach(([key, value]) => {
-    const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
-    apFilter[key] = { [expression]: value }
-  })
+
+  const apFilter = useMemo(() => {
+    const apFilter = { projId: { in: activeNodeArray[1] } }
+    const apFilterValues = Object.entries(nodeFilter[treeName].ap).filter(
+      e => e[1] || e[1] === 0,
+    )
+    apFilterValues.forEach(([key, value]) => {
+      const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
+      apFilter[key] = { [expression]: value }
+    })
+    return apFilter
+  }, [activeNodeArray[1], nodeFilter[treeName].ap])
+
   const { data: allApsData, error: allApsError } = useQuery(queryAps, {
-    variables: { apFilter },
+    variables: { apFilter, showFilter },
   })
+
   const {
     data: dataAdresses,
     error: errorAdresses,
@@ -113,66 +126,9 @@ const Ap = ({
 
   const [errors, setErrors] = useState({})
 
-  console.log('Ap rendering')
-
-  let apTotalCount
-  let apFilteredCount
-  let row
-  if (showFilter) {
-    row = nodeFilter[treeName].ap
-    apTotalCount = get(allApsData, 'allAps.totalCount', '...')
-    apFilteredCount = get(allApsData, 'filteredAps.totalCount', '...')
-  } else {
-    row = get(data, 'apById', {})
-  }
+  const row = showFilter ? nodeFilter[treeName].ap : get(data, 'apById', {})
 
   useEffect(() => setErrors({}), [row])
-
-  let bearbeitungWerte = get(dataLists, 'allApBearbstandWertes.nodes', [])
-  bearbeitungWerte = sortBy(bearbeitungWerte, 'sort')
-  bearbeitungWerte = bearbeitungWerte.map(el => ({
-    value: el.code,
-    label: el.text,
-  }))
-  let umsetzungWerte = get(dataLists, 'allApUmsetzungWertes.nodes', [])
-  umsetzungWerte = sortBy(umsetzungWerte, 'sort')
-  umsetzungWerte = umsetzungWerte.map(el => ({
-    value: el.code,
-    label: el.text,
-  }))
-  let adressenWerte = get(dataAdresses, 'allAdresses.nodes', [])
-  adressenWerte = sortBy(adressenWerte, 'name')
-  adressenWerte = adressenWerte.map(el => ({
-    label: el.name,
-    value: el.id,
-  }))
-
-  let apArten
-  let artWerte
-  if (showFilter) {
-    apArten = get(allApsData, 'filteredAps.nodes', []).map(o => o.artId)
-    artWerte = get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])
-    // only list ap arten
-    artWerte = artWerte.filter(o => apArten.includes(o.id))
-    artWerte = sortBy(artWerte, 'artname')
-    artWerte = artWerte.map(el => ({
-      value: el.id,
-      label: el.artname,
-    }))
-  } else {
-    // list all ap-Arten BUT the active one
-    apArten = get(allApsData, 'allAps.nodes', [])
-      .filter(o => o.id !== row.id)
-      .map(o => o.artId)
-    artWerte = get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])
-    // filter ap arten but the active one
-    artWerte = artWerte.filter(o => !apArten.includes(o.id))
-    artWerte = sortBy(artWerte, 'artname')
-    artWerte = artWerte.map(el => ({
-      value: el.id,
-      label: el.artname,
-    }))
-  }
 
   const saveToDb = useCallback(
     async event => {
@@ -211,8 +167,8 @@ const Ap = ({
                       ? value
                       : row.ekfBeobachtungszeitpunkt,
                   projId: field === 'projId' ? value : row.projId,
-                  adresseByBearbeiter: row.adresseByBearbeiter,
-                  aeEigenschaftenByArtId: row.aeEigenschaftenByArtId,
+                  //adresseByBearbeiter: row.adresseByBearbeiter,
+                  //aeEigenschaftenByArtId: row.aeEigenschaftenByArtId,
                   __typename: 'Ap',
                 },
                 __typename: 'Ap',
@@ -244,6 +200,8 @@ const Ap = ({
   if (errorLists) return `Fehler: ${errorLists.message}`
   if (error) return `Fehler: ${error.message}`
 
+  console.log('Ap rendering')
+
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -252,8 +210,8 @@ const Ap = ({
             title="Aktionsplan"
             treeName={treeName}
             table="ap"
-            totalNr={apTotalCount}
-            filteredNr={apFilteredCount}
+            totalNr={get(allApsData, 'allAps.totalCount', '...')}
+            filteredNr={get(allApsData, 'filteredAps.totalCount', '...')}
           />
         ) : (
           <FormTitle apId={row.id} title="Aktionsplan" treeName={treeName} />
@@ -265,7 +223,7 @@ const Ap = ({
             value={row.artId}
             field="artId"
             label="Art (gibt dem Aktionsplan den Namen)"
-            options={artWerte}
+            options={get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])}
             loading={loadingAeEigenschaftens}
             saveToDb={saveToDb}
             error={errors.artId}
@@ -274,7 +232,7 @@ const Ap = ({
             key={`${row.id}bearbeitung`}
             name="bearbeitung"
             value={row.bearbeitung}
-            dataSource={bearbeitungWerte}
+            dataSource={get(dataLists, 'allApBearbstandWertes.nodes', [])}
             loading={loadingLists}
             saveToDb={saveToDb}
             error={errors.bearbeitung}
@@ -299,11 +257,11 @@ const Ap = ({
             }
             label="Aktionsplan"
           />
-          <TextField
+          <TextField2
             key={`${row.id}startJahr`}
             name="startJahr"
             label="Start im Jahr"
-            value={row.startJahr}
+            row={row}
             type="number"
             saveToDb={saveToDb}
             error={errors.startJahr}
@@ -313,7 +271,7 @@ const Ap = ({
               key={`${row.id}umsetzung`}
               name="umsetzung"
               value={row.umsetzung}
-              dataSource={umsetzungWerte}
+              dataSource={get(dataLists, 'allApUmsetzungWertes.nodes', [])}
               loading={loadingLists}
               saveToDb={saveToDb}
               error={errors.umsetzung}
@@ -350,16 +308,16 @@ const Ap = ({
             value={row.bearbeiter}
             field="bearbeiter"
             label="Verantwortlich"
-            options={adressenWerte}
+            options={get(dataAdresses, 'allAdresses.nodes', [])}
             loading={loadingAdresses}
             saveToDb={saveToDb}
             error={errors.bearbeiter}
           />
-          <TextField
+          <TextField2
             key={`${row.id}ekfBeobachtungszeitpunkt`}
             name="ekfBeobachtungszeitpunkt"
             label="Bester Beobachtungszeitpunkt für EKF (Freiwilligen-Kontrollen)"
-            value={row.ekfBeobachtungszeitpunkt}
+            row={row}
             saveToDb={saveToDb}
             error={errors.ekfBeobachtungszeitpunkt}
           />

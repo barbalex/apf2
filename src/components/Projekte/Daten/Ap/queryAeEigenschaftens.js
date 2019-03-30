@@ -2,10 +2,13 @@ import gql from 'graphql-tag'
 
 export default gql`
   query ApAeEigenschaftensQuery {
-    allAeEigenschaftens {
+    allAeEigenschaftens(
+      filter: { apByArtIdExists: true }
+      orderBy: ARTNAME_ASC
+    ) {
       nodes {
-        id
-        artname
+        value: id
+        label: artname
       }
     }
   }

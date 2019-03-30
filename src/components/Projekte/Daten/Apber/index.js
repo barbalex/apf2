@@ -1,5 +1,11 @@
 // @flow
-import React, { useEffect, useState, useCallback, useContext } from 'react'
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useContext,
+  useMemo,
+} from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
@@ -7,7 +13,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
-import TextField from '../../../shared/TextField'
+import TextField2 from '../../../shared/TextField2'
 import Select from '../../../shared/Select'
 import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
 import FormTitle from '../../../shared/FormTitle'
@@ -34,6 +40,11 @@ const FieldsContainer = styled.div`
       ? `${constants.columnWidth}px`
       : 'auto'};
 `
+
+const veraenGegenVorjahrWerte = [
+  { value: '+', label: '+' },
+  { value: '-', label: '-' },
+]
 
 const Apber = ({
   dimensions = { width: 380 },
@@ -142,27 +153,26 @@ const Apber = ({
     setErrors({})
   })
 
-  const veraenGegenVorjahrWerte = [
-    { value: '+', label: '+' },
-    { value: '-', label: '-' },
-  ]
   const width = isNaN(dimensions.width) ? 380 : dimensions.width
-  let beurteilungWerte = get(
-    dataApErfkritWertes,
-    'allApErfkritWertes.nodes',
-    [],
+  const beurteilungWerte = useMemo(
+    () =>
+      sortBy(
+        get(dataApErfkritWertes, 'allApErfkritWertes.nodes', []),
+        'sort',
+      ).map(el => ({
+        value: el.code,
+        label: el.text,
+      })),
+    [dataApErfkritWertes.length],
   )
-  beurteilungWerte = sortBy(beurteilungWerte, 'sort')
-  beurteilungWerte = beurteilungWerte.map(el => ({
-    value: el.code,
-    label: el.text,
-  }))
-  let adressenWerte = get(dataAdresses, 'allAdresses.nodes', [])
-  adressenWerte = sortBy(adressenWerte, 'name')
-  adressenWerte = adressenWerte.map(el => ({
-    value: el.id,
-    label: el.name,
-  }))
+  const adressenWerte = useMemo(
+    () =>
+      sortBy(get(dataAdresses, 'allAdresses.nodes', []), 'name').map(el => ({
+        value: el.id,
+        label: el.name,
+      })),
+    [dataAdresses.length],
+  )
 
   if (loading) {
     return (
@@ -187,20 +197,20 @@ const Apber = ({
           table="apber"
         />
         <FieldsContainer width={width}>
-          <TextField
+          <TextField2
             key={`${row.id}jahr`}
             name="jahr"
             label="Jahr"
-            value={row.jahr}
+            row={row}
             type="number"
             saveToDb={saveToDb}
             error={errors.jahr}
           />
-          <TextField
+          <TextField2
             key={`${row.id}vergleichVorjahrGesamtziel`}
             name="vergleichVorjahrGesamtziel"
             label="Vergleich Vorjahr - Gesamtziel"
-            value={row.vergleichVorjahrGesamtziel}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
@@ -225,91 +235,91 @@ const Apber = ({
             saveToDb={saveToDb}
             error={errors.veraenderungZumVorjahr}
           />
-          <TextField
+          <TextField2
             key={`${row.id}apberAnalyse`}
             name="apberAnalyse"
             label="Analyse"
-            value={row.apberAnalyse}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
             error={errors.apberAnalyse}
           />
-          <TextField
+          <TextField2
             key={`${row.id}konsequenzenUmsetzung`}
             name="konsequenzenUmsetzung"
             label="Konsequenzen für die Umsetzung"
-            value={row.konsequenzenUmsetzung}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
             error={errors.konsequenzenUmsetzung}
           />
-          <TextField
+          <TextField2
             key={`${row.id}konsequenzenErfolgskontrolle`}
             name="konsequenzenErfolgskontrolle"
             label="Konsequenzen für die Erfolgskontrolle"
-            value={row.konsequenzenErfolgskontrolle}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
             error={errors.konsequenzenErfolgskontrolle}
           />
-          <TextField
+          <TextField2
             key={`${row.id}biotopeNeue`}
             name="biotopeNeue"
             label="A. Grundmengen: Bemerkungen/Folgerungen für nächstes Jahr: neue Biotope"
-            value={row.biotopeNeue}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
             error={errors.biotopeNeue}
           />
-          <TextField
+          <TextField2
             key={`${row.id}biotopeOptimieren`}
             name="biotopeOptimieren"
             label="B. Bestandesentwicklung: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Biotope"
-            value={row.biotopeOptimieren}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
             error={errors.biotopeOptimieren}
           />
-          <TextField
+          <TextField2
             key={`${row.id}massnahmenApBearb`}
             name="massnahmenApBearb"
             label="C. Zwischenbilanz zur Wirkung von Massnahmen: Weitere Aktivitäten der Aktionsplan-Verantwortlichen"
-            value={row.massnahmenApBearb}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
             error={errors.massnahmenApBearb}
           />
-          <TextField
+          <TextField2
             key={`${row.id}massnahmenPlanungVsAusfuehrung`}
             name="massnahmenPlanungVsAusfuehrung"
             label="C. Zwischenbilanz zur Wirkung von Massnahmen: Vergleich Ausführung/Planung"
-            value={row.massnahmenPlanungVsAusfuehrung}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
             error={errors.massnahmenPlanungVsAusfuehrung}
           />
-          <TextField
+          <TextField2
             key={`${row.id}massnahmenOptimieren`}
             name="massnahmenOptimieren"
             label="C. Zwischenbilanz zur Wirkung von Massnahmen: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Massnahmen"
-            value={row.massnahmenOptimieren}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
             error={errors.massnahmenOptimieren}
           />
-          <TextField
+          <TextField2
             key={`${row.id}wirkungAufArt`}
             name="wirkungAufArt"
             label="D. Einschätzung der Wirkung des AP insgesamt auf die Art: Bemerkungen"
-            value={row.wirkungAufArt}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
