@@ -2,7 +2,6 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
@@ -26,8 +25,6 @@ const FieldsContainer = styled.div`
   padding: 10px;
   height: 100%;
 `
-
-const enhance = compose(observer)
 
 const Assozart = ({ treeName }: { treeName: string }) => {
   const mobxStore = useContext(mobxStoreContext)
@@ -152,4 +149,4 @@ const Assozart = ({ treeName }: { treeName: string }) => {
   )
 }
 
-export default enhance(Assozart)
+export default observer(Assozart)
