@@ -1,6 +1,5 @@
 // @flow
 import React, { useState, useCallback, useEffect, useContext } from 'react'
-import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
@@ -12,8 +11,8 @@ import Select from '../../../shared/Select'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updateAssozartByIdGql from './updateAssozartById'
-import withAeEigenschaftens from './withAeEigenschaftens'
 import query from './query'
+import queryAeEigenschaftens from './queryAeEigenschaftens'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
@@ -28,18 +27,9 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const enhance = compose(
-  withAeEigenschaftens,
-  observer,
-)
+const enhance = compose(observer)
 
-const Assozart = ({
-  treeName,
-  dataAeEigenschaftens,
-}: {
-  treeName: string,
-  dataAeEigenschaftens: Object,
-}) => {
+const Assozart = ({ treeName }: { treeName: string }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { refetch } = mobxStore
   const client = useApolloClient()
@@ -59,18 +49,24 @@ const Assozart = ({
 
   useEffect(() => setErrors({}), [row])
 
-  const assozartenOfAp = get(row, 'apByApId.assozartsByApId.nodes', []).map(
-    o => o.aeId,
-  )
-  const artenNotToShow = assozartenOfAp.filter(a => a !== row.aeId)
-  let artWerte = get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])
-  // filter ap arten but the active one
-  artWerte = artWerte.filter(o => !artenNotToShow.includes(o.id))
-  artWerte = sortBy(artWerte, 'artname')
-  artWerte = artWerte.map(el => ({
-    value: el.id,
-    label: el.artname,
-  }))
+  const assozartenOfAp = get(row, 'apByApId.assozartsByApId.nodes', [])
+    .map(o => o.aeId)
+    // always include the art included in the row
+    .filter(o => o !== row.aeId)
+  // do not include already choosen assozarten
+  // but do include the art included in the row
+  const aeEigenschaftenfilter = assozartenOfAp.length
+    ? { id: { notIn: assozartenOfAp } }
+    : { id: { isNull: false } }
+  const {
+    data: dataAeEigenschaftens,
+    loading: loadingAeEigenschaftens,
+    error: errorAeEigenschaftens,
+  } = useQuery(queryAeEigenschaftens, {
+    variables: {
+      filter: aeEigenschaftenfilter,
+    },
+  })
 
   const saveToDb = useCallback(
     async event => {
@@ -109,7 +105,7 @@ const Assozart = ({
     [row],
   )
 
-  if (loading || dataAeEigenschaftens.loading) {
+  if (loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
@@ -117,6 +113,7 @@ const Assozart = ({
     )
   }
   if (error) return `Fehler: ${error.message}`
+  if (errorAeEigenschaftens) return `Fehler: ${errorAeEigenschaftens.message}`
 
   return (
     <ErrorBoundary>
@@ -134,7 +131,8 @@ const Assozart = ({
             value={row.aeId}
             field="aeId"
             label="Art"
-            options={artWerte}
+            options={get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])}
+            loading={loadingAeEigenschaftens}
             saveToDb={saveToDb}
             error={errors.aeId}
           />
