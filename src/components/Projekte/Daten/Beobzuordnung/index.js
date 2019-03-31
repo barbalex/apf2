@@ -6,7 +6,6 @@ import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import Button from '@material-ui/core/Button'
 import SendIcon from '@material-ui/icons/EmailOutlined'
-import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
@@ -17,7 +16,7 @@ import Select from '../../../shared/Select'
 import Beob from '../Beob'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
-import withAeEigenschaftens from './withAeEigenschaftens'
+import queryAeEigenschaftens from './queryAeEigenschaftens'
 import updateBeobByIdGql from './updateBeobById'
 import saveNichtZuordnenToDb from './saveNichtZuordnenToDb'
 import saveArtIdToDb from './saveArtIdToDb'
@@ -137,21 +136,14 @@ const getTpopZuordnenSource = (row: Object, apId: string): Array<Object> => {
   }))
 }
 
-const enhance = compose(
-  withAeEigenschaftens,
-  observer,
-)
-
 const Beobzuordnung = ({
   type,
   dimensions = { width: 380 },
   treeName,
-  dataAeEigenschaftens,
 }: {
   type: string,
   dimensions: Object,
   treeName: string,
-  dataAeEigenschaftens: Object,
 }) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
@@ -169,6 +161,12 @@ const Beobzuordnung = ({
       apId,
     },
   })
+  const {
+    data: dataAeEigenschaftens,
+    loading: loadingAeEigenschaftens,
+    error: errorAeEigenschaftens,
+  } = useQuery(queryAeEigenschaftens)
+
   const row = get(data, 'beobById', {})
 
   const onSaveArtIdToDb = useCallback(
@@ -209,14 +207,7 @@ const Beobzuordnung = ({
     })
   })
 
-  let artWerte = get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])
-  artWerte = sortBy(artWerte, 'artname')
-  artWerte = artWerte.map(el => ({
-    value: el.id,
-    label: el.artname,
-  }))
-
-  if (loading || dataAeEigenschaftens.loading) {
+  if (loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
@@ -224,6 +215,7 @@ const Beobzuordnung = ({
     )
   }
   if (error) return `Fehler: ${error.message}`
+  if (errorAeEigenschaftens) return `Fehler: ${errorAeEigenschaftens.message}`
   return (
     <ErrorBoundary>
       <FormContainer>
@@ -247,7 +239,12 @@ const Beobzuordnung = ({
               value={row.artId}
               field="artId"
               label="Art"
-              options={artWerte}
+              options={get(
+                dataAeEigenschaftens,
+                'allAeEigenschaftens.nodes',
+                [],
+              )}
+              loading={loadingAeEigenschaftens}
               saveToDb={onSaveArtIdToDb}
             />
             <CheckboxWithInfo
@@ -337,4 +334,4 @@ const Beobzuordnung = ({
   )
 }
 
-export default enhance(Beobzuordnung)
+export default observer(Beobzuordnung)
