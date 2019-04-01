@@ -49,6 +49,7 @@ export default gql`
             filter: {
               or: [{ jahr: { equalTo: 1 } }, { jahr: { isNull: true } }]
             }
+            orderBy: ID_ASC
           ) {
             nodes {
               ...ZielFields
@@ -64,6 +65,7 @@ export default gql`
           id
           zielsByApId(
             filter: { typ: { isNull: true }, jahr: { equalTo: $berichtjahr } }
+            orderBy: JAHR_ASC
           ) {
             nodes {
               ...ZielFields
@@ -82,6 +84,7 @@ export default gql`
               bezeichnung: { isNull: true }
               jahr: { equalTo: $berichtjahr }
             }
+            orderBy: JAHR_ASC
           ) {
             nodes {
               ...ZielFields
@@ -98,7 +101,10 @@ export default gql`
           zielsByApId(filter: { jahr: { equalTo: $berichtjahr } }) {
             nodes {
               ...ZielFields
-              zielbersByZielId(filter: { jahr: { isNull: true } }) {
+              zielbersByZielId(
+                filter: { jahr: { isNull: true } }
+                orderBy: ID_ASC
+              ) {
                 nodes {
                   id
                   zielByZielId {
@@ -125,6 +131,7 @@ export default gql`
                   erreichung: { isNull: true }
                   jahr: { equalTo: $berichtjahr }
                 }
+                orderBy: JAHR_ASC
               ) {
                 nodes {
                   id

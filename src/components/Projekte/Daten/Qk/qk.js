@@ -19,9 +19,10 @@ export default ({
     // Ziel ohne Jahr/Zieltyp/Ziel
     {
       title: 'Ziel ohne Jahr:',
-      messages: sortBy(
-        get(data, 'zielOhneJahr.apsByProjId.nodes[0].zielsByApId.nodes', []),
-        'id',
+      messages: get(
+        data,
+        'zielOhneJahr.apsByProjId.nodes[0].zielsByApId.nodes',
+        [],
       ).map(n => ({
         url: [
           'Projekte',
@@ -37,9 +38,10 @@ export default ({
     },
     {
       title: 'Ziel ohne Typ:',
-      messages: sortBy(
-        get(data, 'zielOhneTyp.apsByProjId.nodes[0].zielsByApId.nodes', []),
-        'jahr',
+      messages: get(
+        data,
+        'zielOhneTyp.apsByProjId.nodes[0].zielsByApId.nodes',
+        [],
       ).map(n => ({
         url: [
           'Projekte',
@@ -55,9 +57,10 @@ export default ({
     },
     {
       title: 'Ziel ohne Ziel:',
-      messages: sortBy(
-        get(data, 'zielOhneZiel.apsByProjId.nodes[0].zielsByApId.nodes', []),
-        'jahr',
+      messages: get(
+        data,
+        'zielOhneZiel.apsByProjId.nodes[0].zielsByApId.nodes',
+        [],
       ).map(n => ({
         url: [
           'Projekte',
@@ -79,13 +82,9 @@ export default ({
           'zielberOhneJahr.apsByProjId.nodes[0].zielsByApId.nodes',
           [],
         )
-        let zielberNodes = flatten(
+        const zielberNodes = flatten(
           zielNodes.map(n => get(n, 'zielbersByZielId.nodes', [])),
         )
-        zielberNodes = sortBy(zielberNodes, n => [
-          get(n, 'zielByZielId.jahr'),
-          n.id,
-        ])
         return zielberNodes.map(n => {
           const zielId = get(n, 'zielByZielId.id')
           const zielJahr = get(n, 'zielByZielId.jahr')
@@ -107,20 +106,16 @@ export default ({
       })(),
     },
     {
-      title: 'Ziel-Bericht ohne Entwicklung:',
+      title: 'Ziel-Bericht ohne Erreichung:',
       messages: (function() {
         const zielNodes = get(
           data,
           'zielberOhneEntwicklung.apsByProjId.nodes[0].zielsByApId.nodes',
           [],
         )
-        let zielberNodes = flatten(
+        const zielberNodes = flatten(
           zielNodes.map(n => get(n, 'zielbersByZielId.nodes', [])),
         )
-        zielberNodes = sortBy(zielberNodes, n => [
-          get(n, 'zielByZielId.jahr'),
-          n.id,
-        ])
         return zielberNodes.map(n => {
           const zielId = get(n, 'zielByZielId.id')
           const zielJahr = get(n, 'zielByZielId.jahr')
