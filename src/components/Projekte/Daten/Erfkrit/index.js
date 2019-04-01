@@ -2,7 +2,6 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
@@ -12,8 +11,8 @@ import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
+import queryLists from './queryLists'
 import updateErfkritByIdGql from './updateErfkritById'
-import withAllApErfkritWertes from './withAllApErfkritWertes'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
@@ -28,18 +27,9 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const enhance = compose(
-  withAllApErfkritWertes,
-  observer,
-)
+const enhance = compose(observer)
 
-const Erfkrit = ({
-  treeName,
-  dataAllApErfkritWertes,
-}: {
-  treeName: string,
-  dataAllApErfkritWertes: Object,
-}) => {
+const Erfkrit = ({ treeName }: { treeName: string }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { refetch } = mobxStore
   const client = useApolloClient()
@@ -55,16 +45,15 @@ const Erfkrit = ({
     },
   })
 
+  const {
+    data: dataLists,
+    loading: loadingLists,
+    error: errorLists,
+  } = useQuery(queryLists)
+
   const row = get(data, 'erfkritById', {})
 
   useEffect(() => setErrors({}), [row])
-
-  let erfolgWerte = get(dataAllApErfkritWertes, 'allApErfkritWertes.nodes', [])
-  erfolgWerte = sortBy(erfolgWerte, 'sort')
-  erfolgWerte = erfolgWerte.map(el => ({
-    value: el.code,
-    label: el.text,
-  }))
 
   const saveToDb = useCallback(
     async event => {
@@ -101,7 +90,7 @@ const Erfkrit = ({
     [row],
   )
 
-  if (loading || dataAllApErfkritWertes.loading) {
+  if (loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
@@ -109,8 +98,8 @@ const Erfkrit = ({
     )
   }
   if (error) return `Fehler: ${error.message}`
-  if (dataAllApErfkritWertes.error) {
-    return `Fehler: ${dataAllApErfkritWertes.error.message}`
+  if (errorLists) {
+    return `Fehler: ${errorLists.message}`
   }
   return (
     <ErrorBoundary>
@@ -127,7 +116,8 @@ const Erfkrit = ({
             name="erfolg"
             label="Beurteilung"
             value={row.erfolg}
-            dataSource={erfolgWerte}
+            dataSource={get(dataLists, 'allApErfkritWertes.nodes', [])}
+            loading={loadingLists}
             saveToDb={saveToDb}
             error={errors.erfolg}
           />
