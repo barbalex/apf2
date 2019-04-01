@@ -116,7 +116,8 @@ const myTypes = types
       self.toDeleteTable = table
       self.toDeleteId = id
       self.toDeleteLabel = label
-      self.toDeleteUrl = url
+      // without slicing deleting ekfzaehleinheit errored
+      self.toDeleteUrl = url.slice()
       self.toDeleteAfterDeletionHook = afterDeletionHook
     },
     emptyToDelete() {
