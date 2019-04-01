@@ -1,14 +1,12 @@
 import gql from 'graphql-tag'
 
-import { tpopmassnTypWerte } from '../../../shared/fragments'
-
 export default gql`
-  query listsQuery {
-    allTpopmassnTypWertes {
+  query TpopmassnListsQuery {
+    allTpopmassnTypWertes(orderBy: SORT_ASC) {
       nodes {
-        ...TpopmassnTypWerteFields
+        value: code
+        label: text
       }
     }
   }
-  ${tpopmassnTypWerte}
 `

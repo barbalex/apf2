@@ -1,11 +1,11 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query AeEigenschaftensQuery {
-    allAeEigenschaftens {
+  query TpopmassnAeEigenschaftensQuery {
+    allAeEigenschaftens(orderBy: ARTNAME_ASC) {
       nodes {
-        id
-        artname
+        value: artname
+        label: artname
       }
     }
   }

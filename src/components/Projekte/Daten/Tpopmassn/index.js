@@ -2,7 +2,6 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import sortBy from 'lodash/sortBy'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
@@ -105,7 +104,11 @@ const Tpopmassn = ({
     data: dataAeEigenschaftens,
     loading: loadingAeEigenschaftens,
   } = useQuery(queryAeEigenschaftens)
-  const { data: dataLists, loading: loadingLists } = useQuery(queryLists)
+  const {
+    data: dataLists,
+    loading: loadingLists,
+    error: errorLists,
+  } = useQuery(queryLists)
 
   let tpopmassnTotalCount
   let tpopmassnFilteredCount
@@ -237,17 +240,6 @@ const Tpopmassn = ({
 
   const width = isNaN(dimensions.width) ? 380 : dimensions.width
 
-  let tpopmasstypWerte = get(dataLists, 'allTpopmassnTypWertes.nodes', [])
-  tpopmasstypWerte = sortBy(tpopmasstypWerte, 'sort')
-  tpopmasstypWerte = tpopmasstypWerte.map(el => ({
-    value: el.code,
-    label: el.text,
-  }))
-  const artWerte = get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])
-    .map(o => o.artname)
-    .sort()
-    .map(o => ({ value: o, label: o }))
-
   if (loading) {
     return (
       <Container>
@@ -257,6 +249,7 @@ const Tpopmassn = ({
   }
   if (error) return `Fehler: ${error.message}`
   if (errorAdresses) return `Fehler: ${errorAdresses.message}`
+  if (errorLists) return `Fehler: ${errorLists.message}`
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -300,7 +293,7 @@ const Tpopmassn = ({
             name="typ"
             label="Typ"
             value={row.typ}
-            dataSource={tpopmasstypWerte}
+            dataSource={get(dataLists, 'allTpopmassnTypWertes.nodes', [])}
             loading={loadingLists}
             saveToDb={saveToDb}
             error={errors.typ}
@@ -421,7 +414,7 @@ const Tpopmassn = ({
             value={row.wirtspflanze}
             field="wirtspflanze"
             label="Wirtspflanze"
-            options={artWerte}
+            options={get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])}
             loading={loadingAeEigenschaftens}
             saveToDb={saveToDb}
             error={errors.wirtspflanze}
