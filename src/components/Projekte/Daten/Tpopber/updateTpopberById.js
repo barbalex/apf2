@@ -26,13 +26,6 @@ export default gql`
     ) {
       tpopber {
         ...TpopberFields
-        tpopByTpopId {
-          id
-          popByPopId {
-            id
-            apId
-          }
-        }
       }
     }
   }
