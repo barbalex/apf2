@@ -1,14 +1,11 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query AllAdressesQuery {
-    allAdresses {
+  query TpopfreiwkontrAdressesQuery {
+    allAdresses(orderBy: NAME_ASC) {
       nodes {
-        id
-        name
-        usersByAdresseId {
-          totalCount
-        }
+        value: id
+        label: name
       }
     }
   }

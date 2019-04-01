@@ -284,7 +284,7 @@ const Tpopfreiwkontr = ({
   )
   const pop = get(row, 'tpopByTpopId.popByPopId', {})
   const tpop = get(row, 'tpopByTpopId', {})
-  const adressenNodes = get(dataAdresses, 'allAdresses.nodes', [])
+  const adressenWerte = get(dataAdresses, 'allAdresses.nodes', [])
   const {
     bearbeiter,
     bemerkungen,
@@ -333,10 +333,10 @@ const Tpopfreiwkontr = ({
         value2 = value.substring ? +value.substring(0, 4) : value
       }
       if (field2) variables[field2] = value2
-      const adresseByBearbeiter =
+      /*const adresseByBearbeiter =
         field === 'bearbeiter'
           ? row.adresseByBearbeiter
-          : get(dataAdresses, 'allAdresses.nodes', []).find(r => r.id === value)
+          : get(dataAdresses, 'allAdresses.nodes', []).find(r => r.id === value)*/
       try {
         await client.mutate({
           mutation: updateTpopkontrByIdGql,
@@ -389,7 +389,7 @@ const Tpopfreiwkontr = ({
                   field === 'jungpflanzenVorhanden'
                     ? value
                     : row.jungpflanzenVorhanden,
-                adresseByBearbeiter,
+                //adresseByBearbeiter,
                 ekfVerifiziert:
                   field === 'ekfVerifiziert' ? value : row.ekfVerifiziert,
                 ekfBemerkungen:
@@ -477,7 +477,8 @@ const Tpopfreiwkontr = ({
 
   if (errorAdresses) return `Fehler: ${errorAdresses.message}`
   if (error) return `Fehler: ${error.message}`
-  if ((showFilter && loadingAdresses) || (loading || loadingAdresses)) {
+  if (errorAdresses) return `Fehler: ${errorAdresses.message}`
+  if (showFilter || loading) {
     return (
       <Container>
         <InnerContainer>Lade...</InnerContainer>
@@ -517,7 +518,8 @@ const Tpopfreiwkontr = ({
             tpop={tpop}
             saveToDb={saveToDb}
             setErrors={setErrors}
-            adressenNodes={adressenNodes}
+            adressenWerte={adressenWerte}
+            loadingAdresses={loadingAdresses}
             row={row}
             showFilter={showFilter}
           />

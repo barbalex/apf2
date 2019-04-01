@@ -7,6 +7,7 @@ import {
   pop,
   tpop,
   tpopfreiwkontr,
+  tpopkontrzaehl,
   tpopkontrzaehlEinheitWerte,
 } from '../../../shared/fragments'
 
@@ -43,9 +44,7 @@ export default gql`
       }
       tpopkontrzaehlsByTpopkontrId {
         nodes {
-          id
-          anzahl
-          einheit
+          ...TpopkontrzaehlFields
         }
       }
     }
@@ -55,5 +54,6 @@ export default gql`
   ${pop}
   ${tpop}
   ${tpopfreiwkontr}
+  ${tpopkontrzaehl}
   ${tpopkontrzaehlEinheitWerte}
 `

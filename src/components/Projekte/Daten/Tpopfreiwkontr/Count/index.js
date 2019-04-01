@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import uniqBy from 'lodash/uniqBy'
-import compose from 'recompose/compose'
 import Button from '@material-ui/core/Button'
 import DeleteIcon from '@material-ui/icons/DeleteForever'
 import AddIcon from '@material-ui/icons/AddCircleOutline'
@@ -14,9 +13,9 @@ import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import Select from '../../../../shared/Select'
 import TextField from '../../../../shared/TextField'
 import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById'
-import query from './data'
+import query from './query'
+import queryLists from './queryLists'
 import createTpopkontrzaehl from './createTpopkontrzaehl'
-import withAllTpopkontrzaehlEinheitWertes from './withAllTpopkontrzaehlEinheitWertes'
 import mobxStoreContext from '../../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../../modules/ifIsNumericAsNumber'
 
@@ -157,11 +156,6 @@ const ShowNew = styled.div`
   }
 `
 
-const enhance = compose(
-  withAllTpopkontrzaehlEinheitWertes,
-  observer,
-)
-
 const Count = ({
   id = '99999999-9999-9999-9999-999999999999',
   tpopkontrId,
@@ -172,7 +166,6 @@ const Count = ({
   refetch,
   einheitsUsed = [],
   ekfzaehleinheits = [],
-  dataAllTpopkontrzaehlEinheitWertes,
   treeName,
 }: {
   id: String,
@@ -184,7 +177,6 @@ const Count = ({
   refetch: () => void,
   einheitsUsed: Array<Number>,
   ekfzaehleinheits: Array<Object>,
-  dataAllTpopkontrzaehlEinheitWertes: Object,
   treeName: string,
 }) => {
   const mobxStore = useContext(mobxStoreContext)
@@ -200,6 +192,8 @@ const Count = ({
     },
   })
 
+  const { data: dataLists, error: errorLists } = useQuery(queryLists)
+
   const row = get(data, 'tpopkontrzaehlById', {})
 
   useEffect(() => setErrors({}), [row])
@@ -213,11 +207,7 @@ const Count = ({
       .then(() => refetch())
   }, [tpopkontrId])
 
-  const allEinheits = get(
-    dataAllTpopkontrzaehlEinheitWertes,
-    'allTpopkontrzaehlEinheitWertes.nodes',
-    [],
-  )
+  const allEinheits = get(dataLists, 'allTpopkontrzaehlEinheitWertes.nodes', [])
   // do list this count's einheit
   const einheitsNotToList = einheitsUsed.filter(e => e !== row.einheit)
   let zaehleinheitWerte = ekfzaehleinheits
@@ -226,8 +216,9 @@ const Count = ({
   // add this zaehleineits value if missing
   // so as to show values input in earlier years that shall not be input any more
   const thisRowsEinheit = allEinheits.find(e => e.code === row.einheit)
-  if (thisRowsEinheit)
+  if (thisRowsEinheit) {
     zaehleinheitWerte = uniqBy([thisRowsEinheit, ...zaehleinheitWerte], 'id')
+  }
   zaehleinheitWerte = sortBy(zaehleinheitWerte, 'sort').map(el => ({
     value: el.code,
     label: el.text,
@@ -318,12 +309,12 @@ const Count = ({
       </Container>
     )
   }
-  if (loading || dataAllTpopkontrzaehlEinheitWertes.loading) {
+  if (loading) {
     return <Container>Lade...</Container>
   }
   if (error) return `Fehler: ${error.message}`
-  if (dataAllTpopkontrzaehlEinheitWertes.error) {
-    return `Fehler: ${dataAllTpopkontrzaehlEinheitWertes.error.message}`
+  if (errorLists) {
+    return `Fehler: ${errorLists.message}`
   }
   return (
     <Container nr={nr} showdelete={showDelete} data-id={`count${nr}`}>
@@ -373,4 +364,4 @@ const Count = ({
   )
 }
 
-export default enhance(Count)
+export default observer(Count)

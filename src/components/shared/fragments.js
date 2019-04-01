@@ -31,7 +31,7 @@ export const aeEigenschaften = gql`
 `
 
 export const aeLrDelarze = gql`
-  fragment AeLrDelarzeFields on AeLrDelarze {
+  fragment AeLrDelarzeFields on AeLrdelarze {
     id
     label
     einheit

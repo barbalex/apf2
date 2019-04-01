@@ -78,7 +78,7 @@ const enhance = compose(
     'errorsBearbeiter',
     'pop',
     'tpop',
-    'adressenNodes',
+    'adressenWerte',
   ]),
 )
 
@@ -89,7 +89,8 @@ const Headdata = ({
   pop,
   tpop,
   saveToDb,
-  adressenNodes,
+  adressenWerte,
+  loadingAdresses,
   row,
   showFilter,
 }: {
@@ -99,15 +100,11 @@ const Headdata = ({
   pop: Object,
   tpop: Object,
   saveToDb: () => void,
-  adressenNodes: Array<Object>,
+  adressenWerte: Array<Object>,
+  loadingAdresses: Boolean,
   row: Object,
   showFilter: boolean,
 }) => {
-  let adressenWerte = sortBy(adressenNodes, 'name')
-  adressenWerte = adressenWerte.map(el => ({
-    value: el.id,
-    label: el.name,
-  }))
   const statusValue = get(tpop, 'status', '')
   const status = [200, 201, 202].includes(statusValue)
     ? 'angesiedelt'
@@ -131,6 +128,7 @@ const Headdata = ({
           value={bearbeiter}
           field="bearbeiter"
           options={adressenWerte}
+          loading={loadingAdresses}
           saveToDb={saveToDb}
           error={errorsBearbeiter}
         />
