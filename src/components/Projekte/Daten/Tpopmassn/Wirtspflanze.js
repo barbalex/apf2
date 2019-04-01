@@ -84,13 +84,14 @@ const Wirtspflanze = ({
 
   useEffect(() => {
     setInputValue(row.wirtspflanze || '')
-  }, [])
+  }, [row.wirtspflanze])
 
   const loadOptions = async (inputValue, cb) => {
     console.log('Wirtspflanze, loadOptions', { inputValue })
-    const filter = inputValue
-      ? { artname: { includesInsensitive: inputValue } }
-      : { artname: { isNull: false } }
+    const filter =
+      inputValue && inputValue !== row.wirtspflanze
+        ? { artname: { includesInsensitive: inputValue } }
+        : { artname: { isNull: false } }
     const { data } = await client.query({
       query: queryAeEigenschaftens,
       variables: {
@@ -102,41 +103,62 @@ const Wirtspflanze = ({
     cb(aeEigenschaften)
   }
 
-  const onInputChange = newValue => {
-    setInputValue(newValue)
-    console.log('Wirtspflanze, onInputchange', { newValue })
-    return newValue
+  const onInputChange = (value, { action }) => {
+    console.log('Wirtspflanze, onInputchange', { value, action })
+    if (['input-change'].includes(action)) {
+      console.log('Wirtspflanze, onInputchange, setting value')
+      setInputValue(value)
+      const fakeEvent = {
+        target: {
+          name: 'wirtspflanze',
+          value,
+        },
+      }
+      saveToDb(fakeEvent)
+      return value
+    }
   }
 
   const onChange = useCallback(option => {
+    console.log('Wirtspflanze, onChange', {
+      inputValue,
+      option,
+    })
+    const value =
+      option && option.value ? option.value : inputValue ? inputValue : null
     const fakeEvent = {
       target: {
         name: 'wirtspflanze',
-        value: option ? option.value : null,
+        value,
       },
     }
     saveToDb(fakeEvent)
-    console.log('Wirtspflanze, onInputchange', { option })
+    setInputValue(value)
+    console.log('Wirtspflanze, onChange', {
+      value,
+    })
   })
 
-  const defaultOptions = row.wirtspflanze
-    ? [{ value: row.wirtspflanze, label: row.wirtspflanze }]
-    : []
-  console.log('Wirtspflanze rendering', { row, defaultOptions })
+  console.log('Wirtspflanze rendering', {
+    wirtspflanze: row.wirtspflanze,
+    inputValue,
+  })
 
   return (
     <Container data-id="wirtspflanze">
       <Label>Wirtspflanze</Label>
       <StyledSelect
-        cacheOptions
-        defaultOptions={defaultOptions}
+        defaultOptions
         name="wirtspflanze"
         onChange={onChange}
+        inputValue={inputValue}
         hideSelectedOptions
-        placeholder=""
+        placeholder="Tippen, um auszuwählen..."
         isClearable
         isSearchable
-        noOptionsMessage={() => '(keine)'}
+        noOptionsMessage={() => null}
+        backspaceRemovesValue
+        tabSelectsValue={false}
         classNamePrefix="react-select"
         onInputChange={onInputChange}
         loadOptions={loadOptions}
