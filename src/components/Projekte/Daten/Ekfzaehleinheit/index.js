@@ -1,9 +1,7 @@
 // @flow
 import React, { useState, useCallback, useEffect, useContext } from 'react'
-import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
@@ -12,8 +10,8 @@ import Select from '../../../shared/Select'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
+import queryLists from './queryLists'
 import updateEkfzaehleinheitByIdGql from './updateEkfzaehleinheitById'
-import withAllTpopkontrzaehlEinheitWertes from './withAllTpopkontrzaehlEinheitWertes'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
@@ -28,18 +26,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const enhance = compose(
-  withAllTpopkontrzaehlEinheitWertes,
-  observer,
-)
-
-const Ekfzaehleinheit = ({
-  treeName,
-  dataAllTpopkontrzaehlEinheitWertes,
-}: {
-  treeName: string,
-  dataAllTpopkontrzaehlEinheitWertes: Object,
-}) => {
+const Ekfzaehleinheit = ({ treeName }: { treeName: string }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { refetch } = mobxStore
   const client = useApolloClient()
@@ -66,18 +53,18 @@ const Ekfzaehleinheit = ({
   ).map(o => o.zaehleinheitId)
   // re-add this ones id
   const notToShow = ekfzaehleinheitenOfAp.filter(o => o !== row.zaehleinheitId)
-  let zaehleinheitWerte = get(
-    dataAllTpopkontrzaehlEinheitWertes,
-    'allTpopkontrzaehlEinheitWertes.nodes',
-    [],
-  )
-  // filter ap arten but the active one
-  zaehleinheitWerte = zaehleinheitWerte.filter(o => !notToShow.includes(o.id))
-  zaehleinheitWerte = sortBy(zaehleinheitWerte, 'text')
-  zaehleinheitWerte = zaehleinheitWerte.map(el => ({
-    value: el.id,
-    label: el.text,
-  }))
+  const zaehleinheitWerteFilter = notToShow.length
+    ? { id: { notIn: notToShow } }
+    : { id: { isNull: false } }
+  const {
+    data: dataLists,
+    loading: loadingLists,
+    error: errorLists,
+  } = useQuery(queryLists, {
+    variables: {
+      filter: zaehleinheitWerteFilter,
+    },
+  })
 
   const saveToDb = useCallback(
     async event => {
@@ -118,7 +105,7 @@ const Ekfzaehleinheit = ({
     [row],
   )
 
-  if (loading || dataAllTpopkontrzaehlEinheitWertes.loading) {
+  if (loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
@@ -126,8 +113,8 @@ const Ekfzaehleinheit = ({
     )
   }
   if (error) return `Fehler: ${error.message}`
-  if (dataAllTpopkontrzaehlEinheitWertes.error) {
-    return `Fehler: ${dataAllTpopkontrzaehlEinheitWertes.error.message}`
+  if (errorLists) {
+    return `Fehler: ${errorLists.message}`
   }
   return (
     <ErrorBoundary>
@@ -145,7 +132,8 @@ const Ekfzaehleinheit = ({
             value={row.zaehleinheitId}
             field="zaehleinheitId"
             label="Zähleinheit"
-            options={zaehleinheitWerte}
+            options={get(dataLists, 'allTpopkontrzaehlEinheitWertes.nodes', [])}
+            loading={loadingLists}
             saveToDb={saveToDb}
             error={errors.zaehleinheitId}
           />
@@ -165,4 +153,4 @@ const Ekfzaehleinheit = ({
   )
 }
 
-export default enhance(Ekfzaehleinheit)
+export default observer(Ekfzaehleinheit)
