@@ -328,7 +328,6 @@ const Tpopfeldkontr = ({
                     field === 'jungpflanzenVorhanden'
                       ? value
                       : row.jungpflanzenVorhanden,
-                  adresseByBearbeiter: row.adresseByBearbeiter,
                   __typename: 'Tpopkontr',
                 },
                 __typename: 'Tpopkontr',
