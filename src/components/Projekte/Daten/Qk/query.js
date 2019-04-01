@@ -152,7 +152,10 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          erfkritsByApId(filter: { erfolg: { isNull: true } }) {
+          erfkritsByApId(
+            filter: { erfolg: { isNull: true } }
+            orderBy: ID_ASC
+          ) {
             nodes {
               id
             }
@@ -165,7 +168,10 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          erfkritsByApId(filter: { kriterien: { isNull: true } }) {
+          erfkritsByApId(
+            filter: { kriterien: { isNull: true } }
+            orderBy: ID_ASC
+          ) {
             nodes {
               id
             }
@@ -178,7 +184,7 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          apbersByApId(filter: { jahr: { isNull: true } }) {
+          apbersByApId(filter: { jahr: { isNull: true } }, orderBy: ID_ASC) {
             nodes {
               id
             }
@@ -196,6 +202,7 @@ export default gql`
               vergleichVorjahrGesamtziel: { isNull: true }
               jahr: { equalTo: $berichtjahr }
             }
+            orderBy: JAHR_ASC
           ) {
             nodes {
               id
@@ -215,6 +222,7 @@ export default gql`
               beurteilung: { isNull: true }
               jahr: { equalTo: $berichtjahr }
             }
+            orderBy: JAHR_ASC
           ) {
             nodes {
               id
@@ -229,7 +237,7 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          assozartsByApId(filter: { aeId: { isNull: true } }) {
+          assozartsByApId(filter: { aeId: { isNull: true } }, orderBy: ID_ASC) {
             nodes {
               id
             }
@@ -242,7 +250,7 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId(filter: { nr: { isNull: true } }) {
+          popsByApId(filter: { nr: { isNull: true } }, orderBy: NAME_ASC) {
             nodes {
               id
               name
@@ -256,7 +264,7 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId(filter: { name: { isNull: true } }) {
+          popsByApId(filter: { name: { isNull: true } }, orderBy: NR_ASC) {
             nodes {
               id
               nr
@@ -270,7 +278,7 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId(filter: { status: { isNull: true } }) {
+          popsByApId(filter: { status: { isNull: true } }, orderBy: NR_ASC) {
             nodes {
               id
               nr
@@ -284,7 +292,10 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId(filter: { bekanntSeit: { isNull: true } }) {
+          popsByApId(
+            filter: { bekanntSeit: { isNull: true } }
+            orderBy: NR_ASC
+          ) {
             nodes {
               id
               nr
@@ -300,6 +311,7 @@ export default gql`
           id
           popsByApId(
             filter: { or: [{ x: { isNull: true } }, { y: { isNull: true } }] }
+            orderBy: NR_ASC
           ) {
             nodes {
               id
@@ -315,7 +327,7 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
               nr
@@ -337,6 +349,7 @@ export default gql`
               statusUnklar: { equalTo: true }
               statusUnklarBegruendung: { isNull: true }
             }
+            orderBy: NR_ASC
           ) {
             nodes {
               id
@@ -348,6 +361,7 @@ export default gql`
     }
     popBekanntSeitNichtAeltesteTpop: allVQPopBekanntseitNichtAeltestetpops(
       filter: { apId: { equalTo: $apId } }
+      orderBy: NR_ASC
     ) {
       nodes {
         projId
@@ -358,6 +372,7 @@ export default gql`
     }
     popMitMehrdeutigerNr: allVQPopPopnrmehrdeutigs(
       filter: { apId: { equalTo: $apId } }
+      orderBy: NR_ASC
     ) {
       nodes {
         projId

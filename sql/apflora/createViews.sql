@@ -4646,8 +4646,7 @@ WHERE
 ORDER BY
   apflora.ap.proj_id,
   apflora.ap.id,
-  apflora.pop.id,
-  apflora.popber.jahr;
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_pop_mit_ber_abnehmend_ohne_tpopber_abnehmend CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_mit_ber_abnehmend_ohne_tpopber_abnehmend AS
@@ -4679,8 +4678,7 @@ WHERE
 ORDER BY
   apflora.ap.proj_id,
   apflora.ap.id,
-  apflora.pop.id,
-  apflora.popber.jahr;
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_pop_mit_ber_erloschen_ohne_tpopber_erloschen CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_mit_ber_erloschen_ohne_tpopber_erloschen AS
@@ -4712,8 +4710,7 @@ WHERE
 ORDER BY
   apflora.ap.proj_id,
   apflora.ap.id,
-  apflora.pop.id,
-  apflora.popber.jahr;
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_pop_mit_ber_erloschen_und_tpopber_nicht_erloschen CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_mit_ber_erloschen_und_tpopber_nicht_erloschen AS
@@ -4745,8 +4742,7 @@ WHERE
 ORDER BY
   apflora.ap.proj_id,
   apflora.ap.id,
-  apflora.pop.id,
-  apflora.popber.jahr;
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_tpop_statusaktuellletztertpopbererloschen;
 CREATE OR REPLACE VIEW apflora.v_q_tpop_statusaktuellletztertpopbererloschen AS
@@ -5262,7 +5258,9 @@ WHERE
     WHERE
       apflora.tpop.pop_id = apflora.pop.id
       AND apflora.tpop.status = apflora.pop.status
-  );
+  )
+ORDER BY
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_pop_status300tpopstatusanders CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_status300tpopstatusanders AS

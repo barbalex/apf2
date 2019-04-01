@@ -73,6 +73,7 @@ CREATE OR REPLACE FUNCTION apflora.q_tpop_ohne_massnber(projid uuid, apid uuid, 
         and apflora.ap.id = $2
         and apflora.ap.proj_id = $1
     )
+    ORDER BY apflora.tpop.nr
   $$
   LANGUAGE sql STABLE;
 ALTER FUNCTION apflora.q_tpop_ohne_massnber(projid uuid, apid uuid, berichtjahr integer)

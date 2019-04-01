@@ -90,6 +90,7 @@ CREATE OR REPLACE FUNCTION apflora.q_pop_ohne_popber(projid uuid, apid uuid, ber
     )
     and apflora.pop.ap_id = $2
     and apflora.ap.proj_id = $1
+    ORDER BY apflora.pop.nr
   $$
   LANGUAGE sql STABLE;
 ALTER FUNCTION apflora.q_pop_ohne_popber(projid uuid, apid uuid, berichtjahr integer)

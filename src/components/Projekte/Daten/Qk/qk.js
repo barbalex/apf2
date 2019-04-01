@@ -139,13 +139,10 @@ export default ({
     // AP-Erfolgskriterium ohne Beurteilung/Kriterien
     {
       title: 'Erfolgskriterium ohne Beurteilung:',
-      messages: sortBy(
-        get(
-          data,
-          'erfkritOhneBeurteilung.apsByProjId.nodes[0].erfkritsByApId.nodes',
-          [],
-        ),
-        'id',
+      messages: get(
+        data,
+        'erfkritOhneBeurteilung.apsByProjId.nodes[0].erfkritsByApId.nodes',
+        [],
       ).map(n => ({
         url: [
           'Projekte',
@@ -160,13 +157,10 @@ export default ({
     },
     {
       title: 'Erfolgskriterium ohne Kriterien:',
-      messages: sortBy(
-        get(
-          data,
-          'erfkritOhneKriterien.apsByProjId.nodes[0].erfkritsByApId.nodes',
-          [],
-        ),
-        'id',
+      messages: get(
+        data,
+        'erfkritOhneKriterien.apsByProjId.nodes[0].erfkritsByApId.nodes',
+        [],
       ).map(n => ({
         url: [
           'Projekte',
@@ -182,9 +176,10 @@ export default ({
     // AP-Bericht ohne Jahr/Vergleich Vorjahr-Gesamtziel/Beurteilung
     {
       title: 'AP-Bericht ohne Jahr:',
-      messages: sortBy(
-        get(data, 'apberOhneJahr.apsByProjId.nodes[0].apbersByApId.nodes', []),
-        'id',
+      messages: get(
+        data,
+        'apberOhneJahr.apsByProjId.nodes[0].apbersByApId.nodes',
+        [],
       ).map(n => ({
         url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Berichte', n.id],
         text: `AP-Bericht: ${n.id}`,
@@ -192,13 +187,10 @@ export default ({
     },
     {
       title: 'AP-Bericht ohne Vergleich Vorjahr - Gesamtziel:',
-      messages: sortBy(
-        get(
-          data,
-          'apberOhneVergleichVorjahrGesamtziel.apsByProjId.nodes[0].apbersByApId.nodes',
-          [],
-        ),
-        ['jahr', 'id'],
+      messages: get(
+        data,
+        'apberOhneVergleichVorjahrGesamtziel.apsByProjId.nodes[0].apbersByApId.nodes',
+        [],
       ).map(n => ({
         url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Berichte', n.id],
         text: `AP-Bericht: ${n.jahr || n.id}`,
@@ -206,13 +198,10 @@ export default ({
     },
     {
       title: 'AP-Bericht ohne Beurteilung:',
-      messages: sortBy(
-        get(
-          data,
-          'apberOhneBeurteilung.apsByProjId.nodes[0].apbersByApId.nodes',
-          [],
-        ),
-        ['jahr', 'id'],
+      messages: get(
+        data,
+        'apberOhneBeurteilung.apsByProjId.nodes[0].apbersByApId.nodes',
+        [],
       ).map(n => ({
         url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Berichte', n.id],
         text: `AP-Bericht: ${n.jahr || n.id}`,
@@ -221,13 +210,10 @@ export default ({
     // assoziierte Art ohne Art
     {
       title: 'Assoziierte Art ohne Art:',
-      messages: sortBy(
-        get(
-          data,
-          'assozartOhneArt.apsByProjId.nodes[0].assozartsByApId.nodes',
-          [],
-        ),
-        'id',
+      messages: get(
+        data,
+        'assozartOhneArt.apsByProjId.nodes[0].assozartsByApId.nodes',
+        [],
       ).map(n => ({
         url: [
           'Projekte',
@@ -246,9 +232,10 @@ export default ({
     // Population: ohne Nr/Name/Status/bekannt seit/Koordinaten/tpop
     {
       title: 'Population ohne Nr.:',
-      messages: sortBy(
-        get(data, 'popOhneNr.apsByProjId.nodes[0].popsByApId.nodes', []),
-        ['name', 'id'],
+      messages: get(
+        data,
+        'popOhneNr.apsByProjId.nodes[0].popsByApId.nodes',
+        [],
       ).map(n => ({
         url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
         text: `Population: ${n.name || n.id}`,
@@ -256,9 +243,10 @@ export default ({
     },
     {
       title: 'Population ohne Name:',
-      messages: sortBy(
-        get(data, 'popOhneName.apsByProjId.nodes[0].popsByApId.nodes', []),
-        ['nr', 'id'],
+      messages: get(
+        data,
+        'popOhneName.apsByProjId.nodes[0].popsByApId.nodes',
+        [],
       ).map(n => ({
         url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
         text: `Population: ${n.nr || n.id}`,
@@ -266,9 +254,10 @@ export default ({
     },
     {
       title: 'Population ohne Status:',
-      messages: sortBy(
-        get(data, 'popOhneStatus.apsByProjId.nodes[0].popsByApId.nodes', []),
-        ['nr', 'id'],
+      messages: get(
+        data,
+        'popOhneStatus.apsByProjId.nodes[0].popsByApId.nodes',
+        [],
       ).map(n => ({
         url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
         text: `Population: ${n.nr || n.id}`,
@@ -276,13 +265,10 @@ export default ({
     },
     {
       title: 'Population ohne "bekannt seit":',
-      messages: sortBy(
-        get(
-          data,
-          'popOhneBekanntSeit.apsByProjId.nodes[0].popsByApId.nodes',
-          [],
-        ),
-        ['nr', 'id'],
+      messages: get(
+        data,
+        'popOhneBekanntSeit.apsByProjId.nodes[0].popsByApId.nodes',
+        [],
       ).map(n => ({
         url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
         text: `Population: ${n.nr || n.id}`,
@@ -290,9 +276,10 @@ export default ({
     },
     {
       title: 'Population: Mindestens eine Koordinate fehlt:',
-      messages: sortBy(
-        get(data, 'popOhneKoord.apsByProjId.nodes[0].popsByApId.nodes', []),
-        ['nr', 'id'],
+      messages: get(
+        data,
+        'popOhneKoord.apsByProjId.nodes[0].popsByApId.nodes',
+        [],
       ).map(n => ({
         url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
         text: `Population: ${n.nr || n.id}`,
@@ -300,9 +287,10 @@ export default ({
     },
     {
       title: 'Population ohne Teilpopulation:',
-      messages: sortBy(
-        get(data, 'popOhneTpop.apsByProjId.nodes[0].popsByApId.nodes', []),
-        ['nr', 'id'],
+      messages: get(
+        data,
+        'popOhneTpop.apsByProjId.nodes[0].popsByApId.nodes',
+        [],
       )
         .filter(n => get(n, 'tpopsByPopId.totalCount') === 0)
         .map(n => ({
@@ -312,13 +300,10 @@ export default ({
     },
     {
       title: 'Population mit "Status unklar", ohne Begründung:',
-      messages: sortBy(
-        get(
-          data,
-          'popMitStatusUnklarOhneBegruendung.apsByProjId.nodes[0].popsByApId.nodes',
-          [],
-        ),
-        ['nr', 'id'],
+      messages: get(
+        data,
+        'popMitStatusUnklarOhneBegruendung.apsByProjId.nodes[0].popsByApId.nodes',
+        [],
       ).map(n => ({
         url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
         text: `Population: ${n.nr || n.id}`,
@@ -327,27 +312,23 @@ export default ({
     {
       title:
         'Population: "Bekannt seit" der Population entspricht nicht dem Wert der am längsten bekannten Teil-Population:',
-      messages: sortBy(get(data, 'popBekanntSeitNichtAeltesteTpop.nodes', []), [
-        'nr',
-        'id',
-      ]).map(n => ({
-        url: [
-          'Projekte',
-          n.projId,
-          'Aktionspläne',
-          n.apId,
-          'Populationen',
-          n.id,
-        ],
-        text: `Population: ${n.nr || n.id}`,
-      })),
+      messages: get(data, 'popBekanntSeitNichtAeltesteTpop.nodes', []).map(
+        n => ({
+          url: [
+            'Projekte',
+            n.projId,
+            'Aktionspläne',
+            n.apId,
+            'Populationen',
+            n.id,
+          ],
+          text: `Population: ${n.nr || n.id}`,
+        }),
+      ),
     },
     {
       title: 'Population: Die Nr. ist mehrdeutig:',
-      messages: sortBy(get(data, 'popMitMehrdeutigerNr.nodes', []), [
-        'nr',
-        'id',
-      ]).map(n => ({
+      messages: get(data, 'popMitMehrdeutigerNr.nodes', []).map(n => ({
         url: [
           'Projekte',
           n.projId,
@@ -362,28 +343,27 @@ export default ({
     {
       title:
         'Population mit angesiedelten Teilpopulationen (vor dem Berichtjahr), die (im Berichtjahr) kontrolliert wurden, aber ohne Populations-Bericht (im Berichtjahr):',
-      messages: sortBy(get(data, 'popOhnePopber.nodes', []), ['nr', 'id']).map(
-        n => ({
-          url: [
-            'Projekte',
-            n.projId,
-            'Aktionspläne',
-            n.apId,
-            'Populationen',
-            n.id,
-          ],
-          text: `Population: ${n.nr || n.id}`,
-        }),
-      ),
+      messages: get(data, 'popOhnePopber.nodes', []).map(n => ({
+        url: [
+          'Projekte',
+          n.projId,
+          'Aktionspläne',
+          n.apId,
+          'Populationen',
+          n.id,
+        ],
+        text: `Population: ${n.nr || n.id}`,
+      })),
     },
 
     // Bericht-Stati kontrollieren
     {
       title:
         'Populationen mit Bericht "zunehmend" ohne Teil-Population mit Bericht "zunehmend":',
-      messages: sortBy(
-        get(data, 'popMitBerZunehmendOhneTpopberZunehmend.nodes', []),
-        ['nr', 'id'],
+      messages: get(
+        data,
+        'popMitBerZunehmendOhneTpopberZunehmend.nodes',
+        [],
       ).map(n => ({
         url: [
           'Projekte',
@@ -399,9 +379,10 @@ export default ({
     {
       title:
         'Populationen mit Bericht "abnehmend" ohne Teil-Population mit Bericht "abnehmend":',
-      messages: sortBy(
-        get(data, 'popMitBerAbnehmendOhneTpopberAbnehmend.nodes', []),
-        ['nr', 'id'],
+      messages: get(
+        data,
+        'popMitBerAbnehmendOhneTpopberAbnehmend.nodes',
+        [],
       ).map(n => ({
         url: [
           'Projekte',
@@ -417,9 +398,10 @@ export default ({
     {
       title:
         'Populationen mit Bericht "erloschen" ohne Teil-Population mit Bericht "erloschen":',
-      messages: sortBy(
-        get(data, 'popMitBerErloschenOhneTpopberErloschen.nodes', []),
-        ['nr', 'id'],
+      messages: get(
+        data,
+        'popMitBerErloschenOhneTpopberErloschen.nodes',
+        [],
       ).map(n => ({
         url: [
           'Projekte',
@@ -435,9 +417,10 @@ export default ({
     {
       title:
         'Populationen mit Bericht "erloschen" und mindestens einer gemäss Bericht nicht erloschenen Teil-Population:',
-      messages: sortBy(
-        get(data, 'popMitBerErloschenUndTpopberNichtErloschen.nodes', []),
-        ['nr', 'id'],
+      messages: get(
+        data,
+        'popMitBerErloschenUndTpopberNichtErloschen.nodes',
+        [],
       ).map(n => ({
         url: [
           'Projekte',
@@ -454,10 +437,7 @@ export default ({
     // Stati der Population mit den Stati der Teil-Populationen vergleichen
     {
       title: 'Population: Keine Teil-Population hat den Status der Population:',
-      messages: sortBy(get(data, 'popOhneTpopMitGleichemStatus.nodes', []), [
-        'nr',
-        'id',
-      ]).map(n => ({
+      messages: get(data, 'popOhneTpopMitGleichemStatus.nodes', []).map(n => ({
         url: [
           'Projekte',
           n.projId,
