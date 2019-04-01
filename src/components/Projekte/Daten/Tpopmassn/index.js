@@ -6,6 +6,7 @@ import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
+import Wirtspflanze from './Wirtspflanze'
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
 import Select from '../../../shared/Select'
@@ -100,15 +101,27 @@ const Tpopmassn = ({
     loading: loadingAdresses,
     error: errorAdresses,
   } = useQuery(queryAdresses)
+  const aeEigenschaftenFilter = { artname: { isNull: false } }
   const {
     data: dataAeEigenschaftens,
     loading: loadingAeEigenschaftens,
-  } = useQuery(queryAeEigenschaftens)
+    error: errorAeEigenschaftens,
+  } = useQuery(queryAeEigenschaftens, {
+    variables: {
+      filter: aeEigenschaftenFilter,
+    },
+  })
   const {
     data: dataLists,
     loading: loadingLists,
     error: errorLists,
   } = useQuery(queryLists)
+
+  const aeEigenschaftenWerte = get(
+    dataAeEigenschaftens,
+    'allAeEigenschaftens.nodes',
+    [],
+  )
 
   let tpopmassnTotalCount
   let tpopmassnFilteredCount
@@ -250,6 +263,7 @@ const Tpopmassn = ({
   if (error) return `Fehler: ${error.message}`
   if (errorAdresses) return `Fehler: ${errorAdresses.message}`
   if (errorLists) return `Fehler: ${errorLists.message}`
+  if (errorAeEigenschaftens) return `Fehler: ${errorAeEigenschaftens.message}`
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -414,8 +428,14 @@ const Tpopmassn = ({
             value={row.wirtspflanze}
             field="wirtspflanze"
             label="Wirtspflanze"
-            options={get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])}
+            options={aeEigenschaftenWerte}
             loading={loadingAeEigenschaftens}
+            saveToDb={saveToDb}
+            error={errors.wirtspflanze}
+          />
+          <Wirtspflanze
+            key={`${row.id}wirtspflanze2`}
+            row={row}
             saveToDb={saveToDb}
             error={errors.wirtspflanze}
           />

@@ -1,7 +1,13 @@
 // @flow
+/**
+ * Tried this hoping to make list faster
+ * But: typing and removing text ist still slow
+ * Idea from here: https://codesandbox.io/s/lxv7omv65l
+ */
 import React, { useCallback } from 'react'
 import Select from 'react-select'
 import styled from 'styled-components'
+import { FixedSizeList as List } from 'react-window'
 
 const Container = styled.div`
   display: flex;
@@ -64,6 +70,26 @@ const StyledSelect = styled(Select)`
     height: ${props => (props.maxheight ? `${props.maxheight}px` : 'unset')};
   }
 `
+const height = 35
+
+class MenuList extends React.Component {
+  render() {
+    const { options, children, maxHeight, getValue } = this.props
+    const [value] = getValue()
+    const initialOffset = options.indexOf(value) * height
+
+    return (
+      <List
+        height={maxHeight}
+        itemCount={children.length}
+        itemSize={height}
+        initialScrollOffset={initialOffset}
+      >
+        {({ index, style }) => <div style={style}>{children[index]}</div>}
+      </List>
+    )
+  }
+}
 
 const SharedSelect = ({
   value,
@@ -112,6 +138,7 @@ const SharedSelect = ({
     <Container data-id={field}>
       {label && <Label labelsize={labelSize}>{label}</Label>}
       <StyledSelect
+        components={{ MenuList }}
         id={field}
         name={field}
         value={selectValue}

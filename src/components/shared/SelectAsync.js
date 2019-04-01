@@ -1,6 +1,6 @@
 // @flow
-import React, { useCallback } from 'react'
-import Select from 'react-select'
+import React, { useCallback, useState } from 'react'
+import AsyncSelect from 'react-select/lib/Async'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -16,7 +16,7 @@ const Error = styled.div`
   font-size: 12px;
   color: red;
 `
-const StyledSelect = styled(Select)`
+const StyledSelect = styled(AsyncSelect)`
   .react-select__control {
     background-color: rgba(0, 0, 0, 0) !important;
     border-bottom-color: rgba(0, 0, 0, 0.1);
@@ -72,8 +72,8 @@ const SharedSelect = ({
   labelSize,
   name,
   error,
-  options,
-  loading,
+  loadOptions,
+  setInputValue,
   maxHeight = null,
   noCaret = false,
   saveToDb,
@@ -84,12 +84,18 @@ const SharedSelect = ({
   labelSize: ?number,
   name: string,
   error: string,
-  options: Array<Object>,
-  loading: Boolean,
+  loadOptions: () => void,
+  setInputValue: () => void,
   maxHeight?: number,
   noCaret: boolean,
   saveToDb: () => void,
 }) => {
+  const onInputChange = useCallback(newValue => {
+    const inputValue = newValue.replace(/\W/g, '')
+    setInputValue(inputValue)
+    loadOptions(inputValue)
+    return inputValue
+  })
   const onChange = useCallback(
     option => {
       const fakeEvent = {
@@ -103,19 +109,12 @@ const SharedSelect = ({
     [name],
   )
 
-  // show ... while options are loading
-  const loadingOptions = [{ value, label: '...' }]
-  const optionsToUse = loading && value ? loadingOptions : options
-  const selectValue = optionsToUse.find(o => o.value === value)
-
   return (
     <Container data-id={field}>
       {label && <Label labelsize={labelSize}>{label}</Label>}
       <StyledSelect
         id={field}
         name={field}
-        value={selectValue}
-        options={optionsToUse}
         onChange={onChange}
         hideSelectedOptions
         placeholder=""
@@ -125,6 +124,7 @@ const SharedSelect = ({
         maxheight={maxHeight}
         classNamePrefix="react-select"
         nocaret={noCaret}
+        onInputChange={onInputChange}
       />
       {error && <Error>{error}</Error>}
     </Container>
