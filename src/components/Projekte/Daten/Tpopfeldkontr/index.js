@@ -144,7 +144,11 @@ const Tpopfeldkontr = ({
     error: errorAdresses,
   } = useQuery(queryAdresses)
 
-  const { data: dataLists, loading: loadingLists } = useQuery(queryLists)
+  const {
+    data: dataLists,
+    loading: loadingLists,
+    error: errorLists,
+  } = useQuery(queryLists)
 
   const [errors, setErrors] = useState({})
   const [value, setValue] = useState(
@@ -355,29 +359,7 @@ const Tpopfeldkontr = ({
 
   const width = isNaN(dimensions.width) ? 380 : dimensions.width
 
-  let idbiotopuebereinstWerte = get(
-    dataLists,
-    'allTpopkontrIdbiotuebereinstWertes.nodes',
-    [],
-  )
-  idbiotopuebereinstWerte = sortBy(idbiotopuebereinstWerte, 'sort')
-  idbiotopuebereinstWerte = idbiotopuebereinstWerte.map(el => ({
-    value: el.code,
-    label: el.text,
-  }))
-  let tpopEntwicklungWerte = get(
-    dataLists,
-    'allTpopEntwicklungWertes.nodes',
-    [],
-  )
-  tpopEntwicklungWerte = sortBy(tpopEntwicklungWerte, 'sort')
-  tpopEntwicklungWerte = tpopEntwicklungWerte.map(el => ({
-    value: el.code,
-    label: el.text,
-  }))
-  let aeLrWerte = get(dataLists, 'allAeLrdelarzes.nodes', [])
-  aeLrWerte = sortBy(aeLrWerte, 'sort')
-  aeLrWerte = aeLrWerte
+  const aeLrWerte = get(dataLists, 'allAeLrdelarzes.nodes', [])
     .map(e => `${e.label}: ${e.einheit ? e.einheit.replace(/  +/g, ' ') : ''}`)
     .map(o => ({ value: o, label: o }))
 
@@ -390,6 +372,7 @@ const Tpopfeldkontr = ({
   }
   if (error) return `Fehler: ${error.message}`
   if (errorAdresses) return `Fehler: ${errorAdresses.message}`
+  if (errorLists) return `Fehler: ${errorLists.message}`
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -496,7 +479,11 @@ const Tpopfeldkontr = ({
                 name="entwicklung"
                 label="Entwicklung"
                 value={row.entwicklung}
-                dataSource={tpopEntwicklungWerte}
+                dataSource={get(
+                  dataLists,
+                  'allTpopEntwicklungWertes.nodes',
+                  [],
+                )}
                 loading={loadingLists}
                 saveToDb={saveToDb}
                 error={errors.entwicklung}
@@ -724,7 +711,11 @@ const Tpopfeldkontr = ({
                 name="idealbiotopUebereinstimmung"
                 label="Übereinstimmung mit Idealbiotop"
                 value={row.idealbiotopUebereinstimmung}
-                dataSource={idbiotopuebereinstWerte}
+                dataSource={get(
+                  dataLists,
+                  'allTpopkontrIdbiotuebereinstWertes.nodes',
+                  [],
+                )}
                 loading={loadingLists}
                 saveToDb={saveToDb}
                 error={errors.idealbiotopUebereinstimmung}

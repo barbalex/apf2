@@ -1,30 +1,25 @@
 import gql from 'graphql-tag'
 
-import {
-  aeLrDelarze,
-  tpopEntwicklungWerte,
-  tpopkontrIdbiotuebereinstWerte,
-} from '../../../shared/fragments'
-
 export default gql`
-  query listsQuery {
-    allTpopkontrIdbiotuebereinstWertes {
+  query TpopfeldkontrListsQuery {
+    allTpopkontrIdbiotuebereinstWertes(orderBy: SORT_ASC) {
       nodes {
-        ...TpopkontrIdbiotuebereinstWerteFields
+        value: code
+        label: text
       }
     }
-    allTpopEntwicklungWertes {
+    allTpopEntwicklungWertes(orderBy: SORT_ASC) {
       nodes {
-        ...TpopEntwicklungWerteFields
+        value: code
+        label: text
       }
     }
-    allAeLrdelarzes {
+    allAeLrdelarzes(orderBy: SORT_ASC) {
       nodes {
-        ...AeLrDelarzeFields
+        id
+        label
+        einheit
       }
     }
   }
-  ${aeLrDelarze}
-  ${tpopEntwicklungWerte}
-  ${tpopkontrIdbiotuebereinstWerte}
 `
