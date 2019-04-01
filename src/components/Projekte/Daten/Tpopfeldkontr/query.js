@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { adresse, pop, tpopfeldkontr } from '../../../shared/fragments'
+import { adresse, tpopfeldkontr } from '../../../shared/fragments'
 
 export default gql`
   query tpopkontrByIdQuery($id: UUID!) {
@@ -9,15 +9,8 @@ export default gql`
       adresseByBearbeiter {
         ...AdresseFields
       }
-      tpopByTpopId {
-        id
-        popByPopId {
-          ...PopFields
-        }
-      }
     }
   }
   ${adresse}
-  ${pop}
   ${tpopfeldkontr}
 `

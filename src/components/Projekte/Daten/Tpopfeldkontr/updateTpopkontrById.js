@@ -102,13 +102,6 @@ export default gql`
         adresseByBearbeiter {
           ...AdresseFields
         }
-        tpopByTpopId {
-          id
-          popByPopId {
-            id
-            apId
-          }
-        }
       }
     }
   }

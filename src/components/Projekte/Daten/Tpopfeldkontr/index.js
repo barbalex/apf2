@@ -329,7 +329,6 @@ const Tpopfeldkontr = ({
                       ? value
                       : row.jungpflanzenVorhanden,
                   adresseByBearbeiter: row.adresseByBearbeiter,
-                  tpopByTpopId: row.tpopByTpopId,
                   __typename: 'Tpopkontr',
                 },
                 __typename: 'Tpopkontr',
@@ -413,7 +412,7 @@ const Tpopfeldkontr = ({
           />
         ) : (
           <FormTitle
-            apId={get(data, 'tpopkontrById.tpopByTpopId.popByPopId.apId')}
+            apId={activeNodeArray[3]}
             title="Feld-Kontrolle"
             treeName={treeName}
           />
