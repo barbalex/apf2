@@ -4541,7 +4541,10 @@ WHERE
     WHERE
       apflora.tpopkontr.typ NOT IN ('Zwischenziel', 'Ziel')
       AND apflora.tpopkontrzaehl.anzahl > 0
-  );
+  )
+ORDER BY
+  apflora.pop.nr,
+  apflora.tpop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_tpop_mitstatuspotentiellundzaehlungmitanzahl CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_tpop_mitstatuspotentiellundzaehlungmitanzahl AS
@@ -4608,7 +4611,10 @@ WHERE
       apflora.tpopmassn
     WHERE
       apflora.tpopmassn.typ < 4
-  );
+  )
+ORDER BY
+  apflora.pop.nr,
+  apflora.tpop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_tpop_erloschenundrelevantaberletztebeobvor1950_maxbeobjahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_tpop_erloschenundrelevantaberletztebeobvor1950_maxbeobjahr AS
@@ -5547,7 +5553,10 @@ WHERE
       AND apflora.tpopmassn.typ BETWEEN 1 AND 3
       AND apflora.tpopmassn.jahr IS NOT NULL
       AND apflora.tpopmassn.jahr > lasttpopber.jahr
-  );
+  )
+ORDER BY
+  apflora.pop.nr,
+  apflora.tpop.nr;
 
 -- need this because filtering on apart
 -- in graphql overwhelms the server

@@ -903,10 +903,10 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
-              tpopsByPopId(filter: { nr: { isNull: true } }) {
+              tpopsByPopId(filter: { nr: { isNull: true } }, orderBy: ID_ASC) {
                 nodes {
                   id
                   popByPopId {
@@ -925,10 +925,13 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
-              tpopsByPopId(filter: { flurname: { isNull: true } }) {
+              tpopsByPopId(
+                filter: { flurname: { isNull: true } }
+                orderBy: NR_ASC
+              ) {
                 nodes {
                   id
                   popByPopId {
@@ -947,10 +950,13 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
-              tpopsByPopId(filter: { status: { isNull: true } }) {
+              tpopsByPopId(
+                filter: { status: { isNull: true } }
+                orderBy: NR_ASC
+              ) {
                 nodes {
                   id
                   popByPopId {
@@ -969,10 +975,13 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
-              tpopsByPopId(filter: { bekanntSeit: { isNull: true } }) {
+              tpopsByPopId(
+                filter: { bekanntSeit: { isNull: true } }
+                orderBy: NR_ASC
+              ) {
                 nodes {
                   id
                   popByPopId {
@@ -991,10 +1000,13 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
-              tpopsByPopId(filter: { apberRelevant: { isNull: true } }) {
+              tpopsByPopId(
+                filter: { apberRelevant: { isNull: true } }
+                orderBy: NR_ASC
+              ) {
                 nodes {
                   id
                   popByPopId {
@@ -1013,13 +1025,14 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
               tpopsByPopId(
                 filter: {
                   or: [{ x: { isNull: true } }, { y: { isNull: true } }]
                 }
+                orderBy: NR_ASC
               ) {
                 nodes {
                   id
@@ -1039,7 +1052,7 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
               tpopsByPopId(
@@ -1047,6 +1060,7 @@ export default gql`
                   status: { equalTo: 300 }
                   apberRelevant: { equalTo: 1 }
                 }
+                orderBy: NR_ASC
               ) {
                 nodes {
                   id
@@ -1078,7 +1092,7 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
               tpopsByPopId(
@@ -1086,6 +1100,7 @@ export default gql`
                   statusUnklar: { equalTo: true }
                   statusUnklarGrund: { isNull: true }
                 }
+                orderBy: NR_ASC
               ) {
                 nodes {
                   id
@@ -1153,13 +1168,16 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
-              tpopsByPopId {
+              tpopsByPopId(orderBy: NR_ASC) {
                 nodes {
                   id
-                  tpopbersByTpopId(filter: { jahr: { isNull: true } }) {
+                  tpopbersByTpopId(
+                    filter: { jahr: { isNull: true } }
+                    orderBy: ID_ASC
+                  ) {
                     nodes {
                       id
                       tpopByTpopId {
@@ -1184,13 +1202,16 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
-              tpopsByPopId {
+              tpopsByPopId(orderBy: NR_ASC) {
                 nodes {
                   id
-                  tpopbersByTpopId(filter: { entwicklung: { isNull: true } }) {
+                  tpopbersByTpopId(
+                    filter: { entwicklung: { isNull: true } }
+                    orderBy: JAHR_ASC
+                  ) {
                     nodes {
                       id
                       tpopByTpopId {
@@ -1215,13 +1236,16 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
-              tpopsByPopId {
+              tpopsByPopId(orderBy: NR_ASC) {
                 nodes {
                   id
-                  tpopmassnsByTpopId(filter: { jahr: { isNull: true } }) {
+                  tpopmassnsByTpopId(
+                    filter: { jahr: { isNull: true } }
+                    orderBy: ID_ASC
+                  ) {
                     nodes {
                       id
                       jahr
@@ -1247,10 +1271,10 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
-              tpopsByPopId {
+              tpopsByPopId(orderBy: NR_ASC) {
                 nodes {
                   id
                   tpopmassnsByTpopId(
@@ -1258,6 +1282,7 @@ export default gql`
                       bearbeiter: { isNull: true }
                       jahr: { equalTo: $berichtjahr }
                     }
+                    orderBy: JAHR_ASC
                   ) {
                     nodes {
                       id
@@ -1284,10 +1309,10 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
-              tpopsByPopId {
+              tpopsByPopId(orderBy: NR_ASC) {
                 nodes {
                   id
                   tpopmassnsByTpopId(
@@ -1295,6 +1320,7 @@ export default gql`
                       typ: { isNull: true }
                       jahr: { equalTo: $berichtjahr }
                     }
+                    orderBy: JAHR_ASC
                   ) {
                     nodes {
                       id
@@ -1321,13 +1347,16 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
-              tpopsByPopId {
+              tpopsByPopId(orderBy: NR_ASC) {
                 nodes {
                   id
-                  tpopmassnbersByTpopId(filter: { jahr: { isNull: true } }) {
+                  tpopmassnbersByTpopId(
+                    filter: { jahr: { isNull: true } }
+                    orderBy: ID_ASC
+                  ) {
                     nodes {
                       id
                       jahr
@@ -1353,10 +1382,10 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
-              tpopsByPopId {
+              tpopsByPopId(orderBy: NR_ASC) {
                 nodes {
                   id
                   tpopmassnbersByTpopId(
@@ -1364,6 +1393,7 @@ export default gql`
                       beurteilung: { isNull: true }
                       jahr: { equalTo: $berichtjahr }
                     }
+                    orderBy: JAHR_ASC
                   ) {
                     nodes {
                       id
@@ -1390,10 +1420,10 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
-              tpopsByPopId {
+              tpopsByPopId(orderBy: NR_ASC) {
                 nodes {
                   id
                   tpopkontrsByTpopId(
@@ -1401,6 +1431,7 @@ export default gql`
                       jahr: { isNull: true }
                       typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
                     }
+                    orderBy: ID_ASC
                   ) {
                     nodes {
                       id
@@ -1427,10 +1458,10 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
-              tpopsByPopId {
+              tpopsByPopId(orderBy: NR_ASC) {
                 nodes {
                   id
                   tpopkontrsByTpopId(
@@ -1438,6 +1469,7 @@ export default gql`
                       jahr: { isNull: true }
                       typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
                     }
+                    orderBy: ID_ASC
                   ) {
                     nodes {
                       id
@@ -1464,10 +1496,10 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
-              tpopsByPopId {
+              tpopsByPopId(orderBy: NR_ASC) {
                 nodes {
                   id
                   tpopkontrsByTpopId(
@@ -1476,6 +1508,7 @@ export default gql`
                       typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
+                    orderBy: JAHR_ASC
                   ) {
                     nodes {
                       id
@@ -1502,10 +1535,10 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
-              tpopsByPopId {
+              tpopsByPopId(orderBy: NR_ASC) {
                 nodes {
                   id
                   tpopkontrsByTpopId(
@@ -1514,6 +1547,7 @@ export default gql`
                       typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
+                    orderBy: JAHR_ASC
                   ) {
                     nodes {
                       id
@@ -1540,10 +1574,10 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
-              tpopsByPopId {
+              tpopsByPopId(orderBy: NR_ASC) {
                 nodes {
                   id
                   tpopkontrsByTpopId(
@@ -1551,6 +1585,7 @@ export default gql`
                       typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
+                    orderBy: JAHR_ASC
                   ) {
                     nodes {
                       id
@@ -1580,10 +1615,10 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
-              tpopsByPopId {
+              tpopsByPopId(orderBy: NR_ASC) {
                 nodes {
                   id
                   tpopkontrsByTpopId(
@@ -1591,6 +1626,7 @@ export default gql`
                       typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
+                    orderBy: JAHR_ASC
                   ) {
                     nodes {
                       id
@@ -1620,10 +1656,10 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
-              tpopsByPopId {
+              tpopsByPopId(orderBy: NR_ASC) {
                 nodes {
                   id
                   tpopkontrsByTpopId(
@@ -1631,12 +1667,14 @@ export default gql`
                       typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
+                    orderBy: JAHR_ASC
                   ) {
                     nodes {
                       id
                       jahr
                       tpopkontrzaehlsByTpopkontrId(
                         filter: { einheit: { isNull: true } }
+                        orderBy: ID_ASC
                       ) {
                         nodes {
                           id
@@ -1668,10 +1706,10 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
-              tpopsByPopId {
+              tpopsByPopId(orderBy: NR_ASC) {
                 nodes {
                   id
                   tpopkontrsByTpopId(
@@ -1679,12 +1717,14 @@ export default gql`
                       typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
+                    orderBy: JAHR_ASC
                   ) {
                     nodes {
                       id
                       jahr
                       tpopkontrzaehlsByTpopkontrId(
                         filter: { einheit: { isNull: true } }
+                        orderBy: ID_ASC
                       ) {
                         nodes {
                           id
@@ -1759,10 +1799,10 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
-              tpopsByPopId {
+              tpopsByPopId(orderBy: NR_ASC) {
                 nodes {
                   id
                   tpopkontrsByTpopId(
@@ -1770,12 +1810,14 @@ export default gql`
                       typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
+                    orderBy: JAHR_ASC
                   ) {
                     nodes {
                       id
                       jahr
                       tpopkontrzaehlsByTpopkontrId(
                         filter: { methode: { isNull: true } }
+                        orderBy: ID_ASC
                       ) {
                         nodes {
                           id
@@ -1858,10 +1900,10 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
-              tpopsByPopId {
+              tpopsByPopId(orderBy: NR_ASC) {
                 nodes {
                   id
                   tpopkontrsByTpopId(
@@ -1869,12 +1911,14 @@ export default gql`
                       typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
+                    orderBy: JAHR_ASC
                   ) {
                     nodes {
                       id
                       jahr
                       tpopkontrzaehlsByTpopkontrId(
                         filter: { anzahl: { isNull: true } }
+                        orderBy: ID_ASC
                       ) {
                         nodes {
                           id

@@ -1,7 +1,6 @@
 // @flow
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
-import sortBy from 'lodash/sortBy'
 
 export default ({
   data,
@@ -1076,13 +1075,10 @@ export default ({
       title: `Teilpopulation:
         Status ist "erloschen" (ursprünglich oder angesiedelt);
         der letzte Teilpopulations-Bericht meldet "erloschen". Seither gab es aber eine Ansiedlung:`,
-      messages: sortBy(
-        get(
-          data,
-          'tpopStatusErloschenLetzterTpopberErloschenMitAnsiedlung.nodes',
-          [],
-        ),
-        ['popNr', 'nr'],
+      messages: get(
+        data,
+        'tpopStatusErloschenLetzterTpopberErloschenMitAnsiedlung.nodes',
+        [],
       ).map(n => ({
         url: [
           'Projekte',
@@ -1107,10 +1103,9 @@ export default ({
           'tpopOhneNr.apsByProjId.nodes[0].popsByApId.nodes',
           [],
         )
-        let tpopNodes = flatten(
+        const tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes', [])),
         )
-        tpopNodes = sortBy(tpopNodes, n => [get(n, 'popByPopId.nr'), n.id])
         return tpopNodes.map(n => ({
           url: [
             'Projekte',
@@ -1135,10 +1130,9 @@ export default ({
           'tpopOhneFlurname.apsByProjId.nodes[0].popsByApId.nodes',
           [],
         )
-        let tpopNodes = flatten(
+        const tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes', [])),
         )
-        tpopNodes = sortBy(tpopNodes, n => [get(n, 'popByPopId.nr'), n.id])
         return tpopNodes.map(n => ({
           url: [
             'Projekte',
@@ -1163,10 +1157,9 @@ export default ({
           'tpopOhneStatus.apsByProjId.nodes[0].popsByApId.nodes',
           [],
         )
-        let tpopNodes = flatten(
+        const tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes', [])),
         )
-        tpopNodes = sortBy(tpopNodes, n => [get(n, 'popByPopId.nr'), n.id])
         return tpopNodes.map(n => ({
           url: [
             'Projekte',
@@ -1191,10 +1184,9 @@ export default ({
           'tpopOhneBekanntSeit.apsByProjId.nodes[0].popsByApId.nodes',
           [],
         )
-        let tpopNodes = flatten(
+        const tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes', [])),
         )
-        tpopNodes = sortBy(tpopNodes, n => [get(n, 'popByPopId.nr'), n.id])
         return tpopNodes.map(n => ({
           url: [
             'Projekte',
@@ -1219,10 +1211,9 @@ export default ({
           'tpopOhneApberRelevant.apsByProjId.nodes[0].popsByApId.nodes',
           [],
         )
-        let tpopNodes = flatten(
+        const tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes', [])),
         )
-        tpopNodes = sortBy(tpopNodes, n => [get(n, 'popByPopId.nr'), n.id])
         return tpopNodes.map(n => ({
           url: [
             'Projekte',
@@ -1247,10 +1238,9 @@ export default ({
           'tpopOhneKoord.apsByProjId.nodes[0].popsByApId.nodes',
           [],
         )
-        let tpopNodes = flatten(
+        const tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes', [])),
         )
-        tpopNodes = sortBy(tpopNodes, n => [get(n, 'popByPopId.nr'), n.id])
         return tpopNodes.map(n => ({
           url: [
             'Projekte',
@@ -1277,10 +1267,9 @@ export default ({
           'tpopStatusPotentiellApberrelevant.apsByProjId.nodes[0].popsByApId.nodes',
           [],
         )
-        let tpopNodes = flatten(
+        const tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes', [])),
         )
-        tpopNodes = sortBy(tpopNodes, n => [get(n, 'popByPopId.nr'), n.id])
         return tpopNodes.map(n => ({
           url: [
             'Projekte',
@@ -1302,9 +1291,10 @@ export default ({
               erloschen,
               für AP-Bericht relevant
               aber letzte Beobachtung vor 1950:`,
-      messages: sortBy(
-        get(data, 'tpopErloschenUndRelevantLetzteBeobVor1950.nodes', []),
-        ['popNr', 'nr'],
+      messages: get(
+        data,
+        'tpopErloschenUndRelevantLetzteBeobVor1950.nodes',
+        [],
       ).map(n => ({
         url: [
           'Projekte',
@@ -1329,10 +1319,9 @@ export default ({
           'tpopStatusUnklarOhneBegruendung.apsByProjId.nodes[0].popsByApId.nodes',
           [],
         )
-        let tpopNodes = flatten(
+        const tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes', [])),
         )
-        tpopNodes = sortBy(tpopNodes, n => [get(n, 'popByPopId.nr'), n.id])
         return tpopNodes.map(n => ({
           url: [
             'Projekte',
@@ -1352,10 +1341,7 @@ export default ({
     {
       title: `Teilpopulation:
               Die Nummer ist mehrdeutig:`,
-      messages: sortBy(get(data, 'tpopPopnrTponrMehrdeutig.nodes', []), [
-        'popNr',
-        'nr',
-      ]).map(n => ({
+      messages: get(data, 'tpopPopnrTponrMehrdeutig.nodes', []).map(n => ({
         url: [
           'Projekte',
           n.projId,
@@ -1374,10 +1360,7 @@ export default ({
       title: `Teilpopulation
               mit Kontrolle (im Berichtjahr)
               aber ohne Teilpopulations-Bericht (im Berichtjahr):`,
-      messages: sortBy(get(data, 'tpopOhneTpopber.nodes', []), [
-        'popNr',
-        'nr',
-      ]).map(n => ({
+      messages: get(data, 'tpopOhneTpopber.nodes', []).map(n => ({
         url: [
           'Projekte',
           n.projId,
@@ -1397,10 +1380,7 @@ export default ({
               mit Ansiedlung (vor dem Berichtjahr)
               und Kontrolle (im Berichtjahr)
               aber ohne Massnahmen-Bericht (im Berichtjahr):`,
-      messages: sortBy(get(data, 'tpopOhneMassnber.nodes', []), [
-        'popNr',
-        'nr',
-      ]).map(n => ({
+      messages: get(data, 'tpopOhneMassnber.nodes', []).map(n => ({
         url: [
           'Projekte',
           n.projId,
@@ -1419,9 +1399,10 @@ export default ({
       title: `Teilpopulation
               mit Status "Ansaatversuch",
               und in der letzten Kontrolle eine Anzahl:`,
-      messages: sortBy(
-        get(data, 'tpopMitStatusAnsaatversuchUndZaehlungMitAnzahl.nodes', []),
-        ['popNr', 'nr'],
+      messages: get(
+        data,
+        'tpopMitStatusAnsaatversuchUndZaehlungMitAnzahl.nodes',
+        [],
       ).map(n => ({
         url: [
           'Projekte',
@@ -1441,9 +1422,10 @@ export default ({
       title: `Teilpopulation
               mit Status "potentieller Wuchs-/Ansiedlungsort",
               bei der in einer Kontrolle eine Anzahl festgestellt wurde:`,
-      messages: sortBy(
-        get(data, 'tpopMitStatusPotentiellUndZaehlungMitAnzahl.nodes', []),
-        ['popNr', 'nr'],
+      messages: get(
+        data,
+        'tpopMitStatusPotentiellUndZaehlungMitAnzahl.nodes',
+        [],
       ).map(n => ({
         url: [
           'Projekte',
@@ -1463,23 +1445,22 @@ export default ({
       title: `Teilpopulation
               mit Status "potentieller Wuchs-/Ansiedlungsort"
               und Massnahme des Typs "Ansiedlung":`,
-      messages: sortBy(
-        get(data, 'tpopMitStatusPotentiellUndAnsiedlung.nodes', []),
-        ['popNr', 'nr'],
-      ).map(n => ({
-        url: [
-          'Projekte',
-          n.projId,
-          'Aktionspläne',
-          n.apId,
-          'Populationen',
-          n.popId,
-          'Teil-Populationen',
-          n.id,
-        ],
-        text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr ||
-          n.id}`,
-      })),
+      messages: get(data, 'tpopMitStatusPotentiellUndAnsiedlung.nodes', []).map(
+        n => ({
+          url: [
+            'Projekte',
+            n.projId,
+            'Aktionspläne',
+            n.apId,
+            'Populationen',
+            n.popId,
+            'Teil-Populationen',
+            n.id,
+          ],
+          text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr ||
+            n.id}`,
+        }),
+      ),
     },
     // TPop-Bericht ohne Jahr/Entwicklung
     {
@@ -1494,19 +1475,15 @@ export default ({
         const tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes', [])),
         )
-        let tpopberNodes = flatten(
+        const tpopberNodes = flatten(
           tpopNodes.map(n => get(n, 'tpopbersByTpopId.nodes', [])),
         )
-        tpopberNodes = sortBy(tpopberNodes, n => [
-          get(n, 'tpopByTpopId.popByPopId.nr'),
-          get(n, 'tpopByTpopId.nr'),
-          n.id,
-        ])
         return tpopberNodes.map(n => {
           const popId = get(n, 'tpopByTpopId.popByPopId.id')
           const popNr = get(n, 'tpopByTpopId.popByPopId.nr')
           const tpopId = get(n, 'tpopByTpopId.id')
           const tpopNr = get(n, 'tpopByTpopId.nr')
+
           return {
             url: [
               'Projekte',
@@ -1537,14 +1514,9 @@ export default ({
         const tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes', [])),
         )
-        let tpopberNodes = flatten(
+        const tpopberNodes = flatten(
           tpopNodes.map(n => get(n, 'tpopbersByTpopId.nodes', [])),
         )
-        tpopberNodes = sortBy(tpopberNodes, n => [
-          get(n, 'tpopByTpopId.popByPopId.nr'),
-          get(n, 'tpopByTpopId.nr'),
-          n.jahr,
-        ])
         return tpopberNodes.map(n => {
           const popId = get(n, 'tpopByTpopId.popByPopId.id')
           const popNr = get(n, 'tpopByTpopId.popByPopId.nr')
@@ -1584,14 +1556,9 @@ export default ({
         const tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes', [])),
         )
-        let tpopmassnNodes = flatten(
+        const tpopmassnNodes = flatten(
           tpopNodes.map(n => get(n, 'tpopmassnsByTpopId.nodes', [])),
         )
-        tpopmassnNodes = sortBy(tpopmassnNodes, n => [
-          get(n, 'tpopByTpopId.popByPopId.nr'),
-          get(n, 'tpopByTpopId.nr'),
-          n.id,
-        ])
         return tpopmassnNodes.map(n => {
           const popId = get(n, 'tpopByTpopId.popByPopId.id')
           const popNr = get(n, 'tpopByTpopId.popByPopId.nr')
@@ -1627,14 +1594,9 @@ export default ({
         const tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes', [])),
         )
-        let tpopmassnNodes = flatten(
+        const tpopmassnNodes = flatten(
           tpopNodes.map(n => get(n, 'tpopmassnsByTpopId.nodes', [])),
         )
-        tpopmassnNodes = sortBy(tpopmassnNodes, n => [
-          get(n, 'tpopByTpopId.popByPopId.nr'),
-          get(n, 'tpopByTpopId.nr'),
-          n.jahr,
-        ])
         return tpopmassnNodes.map(n => {
           const popId = get(n, 'tpopByTpopId.popByPopId.id')
           const popNr = get(n, 'tpopByTpopId.popByPopId.nr')
@@ -1670,14 +1632,9 @@ export default ({
         const tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes', [])),
         )
-        let tpopmassnNodes = flatten(
+        const tpopmassnNodes = flatten(
           tpopNodes.map(n => get(n, 'tpopmassnsByTpopId.nodes', [])),
         )
-        tpopmassnNodes = sortBy(tpopmassnNodes, n => [
-          get(n, 'tpopByTpopId.popByPopId.nr'),
-          get(n, 'tpopByTpopId.nr'),
-          n.jahr,
-        ])
         return tpopmassnNodes.map(n => {
           const popId = get(n, 'tpopByTpopId.popByPopId.id')
           const popNr = get(n, 'tpopByTpopId.popByPopId.nr')
@@ -1714,14 +1671,9 @@ export default ({
         const tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes', [])),
         )
-        let tpopmassnberNodes = flatten(
+        const tpopmassnberNodes = flatten(
           tpopNodes.map(n => get(n, 'tpopmassnbersByTpopId.nodes', [])),
         )
-        tpopmassnberNodes = sortBy(tpopmassnberNodes, n => [
-          get(n, 'tpopByTpopId.popByPopId.nr'),
-          get(n, 'tpopByTpopId.nr'),
-          n.id,
-        ])
         return tpopmassnberNodes.map(n => {
           const popId = get(n, 'tpopByTpopId.popByPopId.id')
           const popNr = get(n, 'tpopByTpopId.popByPopId.nr')
@@ -1757,14 +1709,9 @@ export default ({
         const tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes', [])),
         )
-        let tpopmassnberNodes = flatten(
+        const tpopmassnberNodes = flatten(
           tpopNodes.map(n => get(n, 'tpopmassnbersByTpopId.nodes', [])),
         )
-        tpopmassnberNodes = sortBy(tpopmassnberNodes, n => [
-          get(n, 'tpopByTpopId.popByPopId.nr'),
-          get(n, 'tpopByTpopId.nr'),
-          n.jahr,
-        ])
         return tpopmassnberNodes.map(n => {
           const popId = get(n, 'tpopByTpopId.popByPopId.id')
           const popNr = get(n, 'tpopByTpopId.popByPopId.nr')
@@ -1804,14 +1751,10 @@ export default ({
         const tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes', [])),
         )
-        let tpopkontrNodes = flatten(
+        const tpopkontrNodes = flatten(
           tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes', [])),
         )
-        tpopkontrNodes = sortBy(tpopkontrNodes, n => [
-          get(n, 'tpopByTpopId.popByPopId.nr'),
-          get(n, 'tpopByTpopId.nr'),
-          n.id,
-        ])
+
         return tpopkontrNodes.map(n => {
           const popId = get(n, 'tpopByTpopId.popByPopId.id')
           const popNr = get(n, 'tpopByTpopId.popByPopId.nr')
@@ -1847,14 +1790,9 @@ export default ({
         const tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes', [])),
         )
-        let tpopkontrNodes = flatten(
+        const tpopkontrNodes = flatten(
           tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes', [])),
         )
-        tpopkontrNodes = sortBy(tpopkontrNodes, n => [
-          get(n, 'tpopByTpopId.popByPopId.nr'),
-          get(n, 'tpopByTpopId.nr'),
-          n.id,
-        ])
         return tpopkontrNodes.map(n => {
           const popId = get(n, 'tpopByTpopId.popByPopId.id')
           const popNr = get(n, 'tpopByTpopId.popByPopId.nr')
@@ -1890,14 +1828,9 @@ export default ({
         const tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes', [])),
         )
-        let tpopkontrNodes = flatten(
+        const tpopkontrNodes = flatten(
           tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes', [])),
         )
-        tpopkontrNodes = sortBy(tpopkontrNodes, n => [
-          get(n, 'tpopByTpopId.popByPopId.nr'),
-          get(n, 'tpopByTpopId.nr'),
-          n.jahr,
-        ])
         return tpopkontrNodes.map(n => {
           const popId = get(n, 'tpopByTpopId.popByPopId.id')
           const popNr = get(n, 'tpopByTpopId.popByPopId.nr')
@@ -1933,14 +1866,9 @@ export default ({
         const tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes', [])),
         )
-        let tpopkontrNodes = flatten(
+        const tpopkontrNodes = flatten(
           tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes', [])),
         )
-        tpopkontrNodes = sortBy(tpopkontrNodes, n => [
-          get(n, 'tpopByTpopId.popByPopId.nr'),
-          get(n, 'tpopByTpopId.nr'),
-          n.jahr,
-        ])
         return tpopkontrNodes.map(n => {
           const popId = get(n, 'tpopByTpopId.popByPopId.id')
           const popNr = get(n, 'tpopByTpopId.popByPopId.nr')
@@ -1976,14 +1904,9 @@ export default ({
         const tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes', [])),
         )
-        let tpopkontrNodes = flatten(
+        const tpopkontrNodes = flatten(
           tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes', [])),
         )
-        tpopkontrNodes = sortBy(tpopkontrNodes, n => [
-          get(n, 'tpopByTpopId.popByPopId.nr'),
-          get(n, 'tpopByTpopId.nr'),
-          n.jahr,
-        ])
         return tpopkontrNodes
           .filter(n => get(n, 'tpopkontrzaehlsByTpopkontrId.totalCount') === 0)
           .map(n => {
@@ -2021,14 +1944,9 @@ export default ({
         const tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes', [])),
         )
-        let tpopkontrNodes = flatten(
+        const tpopkontrNodes = flatten(
           tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes', [])),
         )
-        tpopkontrNodes = sortBy(tpopkontrNodes, n => [
-          get(n, 'tpopByTpopId.popByPopId.nr'),
-          get(n, 'tpopByTpopId.nr'),
-          n.jahr,
-        ])
         return tpopkontrNodes
           .filter(n => get(n, 'tpopkontrzaehlsByTpopkontrId.totalCount') === 0)
           .map(n => {
@@ -2070,17 +1988,11 @@ export default ({
         const tpopkontrNodes = flatten(
           tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes', [])),
         )
-        let tpopkontrzaehlNodes = flatten(
+        const tpopkontrzaehlNodes = flatten(
           tpopkontrNodes.map(n =>
             get(n, 'tpopkontrzaehlsByTpopkontrId.nodes', []),
           ),
         )
-        tpopkontrzaehlNodes = sortBy(tpopkontrzaehlNodes, n => [
-          get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.popByPopId.nr'),
-          get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.nr'),
-          get(n, 'tpopkontrByTpopkontrId.jahr'),
-          n.id,
-        ])
         return tpopkontrzaehlNodes.map(n => {
           const popId = get(
             n,
@@ -2131,17 +2043,11 @@ export default ({
         const tpopkontrNodes = flatten(
           tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes', [])),
         )
-        let tpopkontrzaehlNodes = flatten(
+        const tpopkontrzaehlNodes = flatten(
           tpopkontrNodes.map(n =>
             get(n, 'tpopkontrzaehlsByTpopkontrId.nodes', []),
           ),
         )
-        tpopkontrzaehlNodes = sortBy(tpopkontrzaehlNodes, n => [
-          get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.popByPopId.nr'),
-          get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.nr'),
-          get(n, 'tpopkontrByTpopkontrId.jahr'),
-          n.id,
-        ])
         return tpopkontrzaehlNodes.map(n => {
           const popId = get(
             n,
@@ -2192,17 +2098,11 @@ export default ({
         const tpopkontrNodes = flatten(
           tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes', [])),
         )
-        let tpopkontrzaehlNodes = flatten(
+        const tpopkontrzaehlNodes = flatten(
           tpopkontrNodes.map(n =>
             get(n, 'tpopkontrzaehlsByTpopkontrId.nodes', []),
           ),
         )
-        tpopkontrzaehlNodes = sortBy(tpopkontrzaehlNodes, n => [
-          get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.popByPopId.nr'),
-          get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.nr'),
-          get(n, 'tpopkontrByTpopkontrId.jahr'),
-          n.id,
-        ])
         return tpopkontrzaehlNodes.map(n => {
           const popId = get(
             n,
@@ -2266,6 +2166,7 @@ export default ({
           ).length
           return anzZaehlungenMitMethode === 0 && anzZaehlungenOhneMethode > 0
         })
+
         return tpopkontrMitZaehlungOhneMethode.map(n => {
           const popId = get(n, 'tpopByTpopId.popByPopId.id')
           const popNr = get(n, 'tpopByTpopId.popByPopId.nr')
@@ -2304,17 +2205,11 @@ export default ({
         const tpopkontrNodes = flatten(
           tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes', [])),
         )
-        let tpopkontrzaehlNodes = flatten(
+        const tpopkontrzaehlNodes = flatten(
           tpopkontrNodes.map(n =>
             get(n, 'tpopkontrzaehlsByTpopkontrId.nodes', []),
           ),
         )
-        tpopkontrzaehlNodes = sortBy(tpopkontrzaehlNodes, n => [
-          get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.popByPopId.nr'),
-          get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.nr'),
-          get(n, 'tpopkontrByTpopkontrId.jahr'),
-          n.id,
-        ])
         return tpopkontrzaehlNodes.map(n => {
           const popId = get(
             n,
@@ -2375,11 +2270,13 @@ export default ({
           ).length
           return anzZaehlungenMitAnzahl === 0 && anzZaehlungenOhneAnzahl > 0
         })
+
         return tpopkontrMitZaehlungOhneAnzahl.map(n => {
           const popId = get(n, 'tpopByTpopId.popByPopId.id')
           const popNr = get(n, 'tpopByTpopId.popByPopId.nr')
           const tpopId = get(n, 'tpopByTpopId.id')
           const tpopNr = get(n, 'tpopByTpopId.nr')
+
           return {
             url: [
               'Projekte',
