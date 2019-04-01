@@ -13,11 +13,6 @@ export default gql`
         ...PopFields
       }
     }
-    allTpopEntwicklungWertes {
-      nodes {
-        ...TpopEntwicklungWerteFields
-      }
-    }
   }
   ${pop}
   ${popber}

@@ -11,6 +11,7 @@ import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
+import queryLists from './queryLists'
 import updatePopberByIdGql from './updatePopberById'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
@@ -42,16 +43,15 @@ const Popber = ({ treeName }: { treeName: string }) => {
     },
   })
 
+  const {
+    data: dataLists,
+    loading: loadingLists,
+    error: errorLists,
+  } = useQuery(queryLists)
+
   const row = get(data, 'popberById', {})
 
   useEffect(() => setErrors({}), [row])
-
-  let popentwicklungWerte = get(data, 'allTpopEntwicklungWertes.nodes', [])
-  popentwicklungWerte = sortBy(popentwicklungWerte, 'sort')
-  popentwicklungWerte = popentwicklungWerte.map(el => ({
-    value: el.code,
-    label: el.text,
-  }))
 
   const saveToDb = useCallback(
     async event => {
@@ -100,6 +100,7 @@ const Popber = ({ treeName }: { treeName: string }) => {
     )
   }
   if (error) return `Fehler: ${error.message}`
+  if (errorLists) return `Fehler: ${errorLists.message}`
   return (
     <ErrorBoundary>
       <Container>
@@ -124,7 +125,8 @@ const Popber = ({ treeName }: { treeName: string }) => {
             name="entwicklung"
             label="Entwicklung"
             value={row.entwicklung}
-            dataSource={popentwicklungWerte}
+            dataSource={get(dataLists, 'allTpopEntwicklungWertes.nodes', [])}
+            loading={loadingLists}
             saveToDb={saveToDb}
             error={errors.entwicklung}
           />
