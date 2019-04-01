@@ -219,9 +219,6 @@ const Tpopmassn = ({
                   bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
                   planVorhanden:
                     field === 'planVorhanden' ? value : row.planVorhanden,
-                  tpopmassnTypWerteByTyp: row.tpopmassnTypWerteByTyp,
-                  adresseByBearbeiter: row.adresseByBearbeiter,
-                  tpopByTpopId: row.tpopByTpopId,
                   __typename: 'Tpopmassn',
                 },
                 __typename: 'Tpopmassn',
@@ -240,12 +237,6 @@ const Tpopmassn = ({
 
   const width = isNaN(dimensions.width) ? 380 : dimensions.width
 
-  let adressenWerte = get(dataAdresses, 'allAdresses.nodes', [])
-  adressenWerte = sortBy(adressenWerte, 'name')
-  adressenWerte = adressenWerte.map(el => ({
-    value: el.id,
-    label: el.name,
-  }))
   let tpopmasstypWerte = get(dataLists, 'allTpopmassnTypWertes.nodes', [])
   tpopmasstypWerte = sortBy(tpopmasstypWerte, 'sort')
   tpopmasstypWerte = tpopmasstypWerte.map(el => ({
@@ -281,7 +272,7 @@ const Tpopmassn = ({
           />
         ) : (
           <FormTitle
-            apId={get(data, 'tpopmassnById.tpopByTpopId.popByPopId.apId')}
+            apId={activeNodeArray[3]}
             title="Massnahme"
             treeName={treeName}
           />
@@ -329,7 +320,7 @@ const Tpopmassn = ({
             value={row.bearbeiter}
             field="bearbeiter"
             label="BearbeiterIn"
-            options={adressenWerte}
+            options={get(dataAdresses, 'allAdresses.nodes', [])}
             loading={loadingAdresses}
             saveToDb={saveToDb}
             error={errors.bearbeiter}

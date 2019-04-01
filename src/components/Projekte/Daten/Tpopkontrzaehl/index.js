@@ -2,7 +2,6 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
@@ -13,8 +12,8 @@ import FormTitle from '../../../shared/FormTitle'
 import Select from '../../../shared/Select'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
+import queryLists from './queryLists'
 import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById'
-import withAllTpopkontrzaehlEinheitWertes from './withAllTpopkontrzaehlEinheitWertes'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
@@ -29,18 +28,9 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const enhance = compose(
-  withAllTpopkontrzaehlEinheitWertes,
-  observer,
-)
+const enhance = compose(observer)
 
-const Tpopkontrzaehl = ({
-  treeName,
-  dataAllTpopkontrzaehlEinheitWertes,
-}: {
-  treeName: string,
-  dataAllTpopkontrzaehlEinheitWertes: Object,
-}) => {
+const Tpopkontrzaehl = ({ treeName }: { treeName: string }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { refetch } = mobxStore
   const client = useApolloClient()
@@ -56,25 +46,15 @@ const Tpopkontrzaehl = ({
     },
   })
 
+  const {
+    data: dataLists,
+    loading: loadingLists,
+    error: errorLists,
+  } = useQuery(queryLists)
+
   const row = get(data, 'tpopkontrzaehlById', {})
 
   useEffect(() => setErrors({}), [row])
-
-  let zaehleinheitWerte = get(
-    dataAllTpopkontrzaehlEinheitWertes,
-    'allTpopkontrzaehlEinheitWertes.nodes',
-    [],
-  )
-  zaehleinheitWerte = sortBy(zaehleinheitWerte, 'sort').map(el => ({
-    value: el.code,
-    label: el.text,
-  }))
-  let methodeWerte = get(data, 'allTpopkontrzaehlMethodeWertes.nodes', [])
-  methodeWerte = sortBy(methodeWerte, 'sort')
-  methodeWerte = methodeWerte.map(el => ({
-    value: el.code,
-    label: el.text,
-  }))
 
   const saveToDb = useCallback(
     async event => {
@@ -96,11 +76,6 @@ const Tpopkontrzaehl = ({
                 anzahl: field === 'anzahl' ? value : row.anzahl,
                 einheit: field === 'einheit' ? value : row.einheit,
                 methode: field === 'methode' ? value : row.methode,
-                tpopkontrzaehlEinheitWerteByEinheit:
-                  row.tpopkontrzaehlEinheitWerteByEinheit,
-                tpopkontrzaehlMethodeWerteByMethode:
-                  row.tpopkontrzaehlMethodeWerteByMethode,
-                tpopkontrByTpopkontrId: row.tpopkontrByTpopkontrId,
                 __typename: 'Tpopkontrzaehl',
               },
               __typename: 'Tpopkontrzaehl',
@@ -116,7 +91,7 @@ const Tpopkontrzaehl = ({
     [row],
   )
 
-  if (loading || dataAllTpopkontrzaehlEinheitWertes.loading) {
+  if (loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
@@ -124,17 +99,14 @@ const Tpopkontrzaehl = ({
     )
   }
   if (error) return `Fehler: ${error.message}`
-  if (dataAllTpopkontrzaehlEinheitWertes.error) {
-    return `Fehler: ${dataAllTpopkontrzaehlEinheitWertes.error.message}`
+  if (errorLists) {
+    return `Fehler: ${errorLists.message}`
   }
   return (
     <ErrorBoundary>
       <Container>
         <FormTitle
-          apId={get(
-            data,
-            'tpopkontrzaehlById.tpopkontrByTpopkontrId.tpopByTpopId.popByPopId.apId',
-          )}
+          apId={activeNodeArray[3]}
           title="Zählung"
           treeName={treeName}
           table="tpopkontrzaehl"
@@ -146,7 +118,8 @@ const Tpopkontrzaehl = ({
             value={row.einheit}
             field="einheit"
             label="Einheit"
-            options={zaehleinheitWerte}
+            options={get(dataLists, 'allTpopkontrzaehlEinheitWertes.nodes', [])}
+            loading={loadingLists}
             saveToDb={saveToDb}
             error={errors.einheit}
           />
@@ -164,7 +137,11 @@ const Tpopkontrzaehl = ({
             name="methode"
             label="Methode"
             value={row.methode}
-            dataSource={methodeWerte}
+            dataSource={get(
+              dataLists,
+              'allTpopkontrzaehlMethodeWertes.nodes',
+              [],
+            )}
             saveToDb={saveToDb}
             error={errors.methode}
           />
