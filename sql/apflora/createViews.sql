@@ -4340,7 +4340,8 @@ WHERE
   )
   ORDER BY
     apflora.ap.proj_id,
-    apflora.pop.ap_id;
+    apflora.pop.ap_id,
+    apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_pop_statusansaatversuchmitaktuellentpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_statusansaatversuchmitaktuellentpop AS
@@ -4363,7 +4364,9 @@ WHERE
       apflora.tpop
     WHERE
       apflora.tpop.status IN (100, 101, 200)
-  );
+  )
+ORDER BY
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_pop_statusansaatversuchalletpoperloschen CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_statusansaatversuchalletpoperloschen AS
@@ -4397,7 +4400,9 @@ WHERE
     WHERE
       apflora.tpop.status NOT IN (101, 202)
       AND apflora.tpop.pop_id = apflora.pop.id
-  );
+  )
+ORDER BY
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_pop_statusansaatversuchmittpopursprerloschen CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_statusansaatversuchmittpopursprerloschen AS
@@ -4420,7 +4425,9 @@ WHERE
       apflora.tpop
     WHERE
       apflora.tpop.status = 101
-  );
+  )
+ORDER BY
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_pop_statuserloschenmittpopaktuell CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_statuserloschenmittpopaktuell AS
@@ -4443,7 +4450,9 @@ WHERE
       apflora.tpop
     WHERE
       apflora.tpop.status IN (100, 200)
-  );
+  )
+ORDER BY
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_pop_statuserloschenmittpopansaatversuch CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_statuserloschenmittpopansaatversuch AS
@@ -4466,7 +4475,9 @@ WHERE
       apflora.tpop
     WHERE
       apflora.tpop.status = 201
-  );
+  )
+ORDER BY
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_pop_statusangesiedeltmittpopurspruenglich CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_statusangesiedeltmittpopurspruenglich AS
@@ -4489,7 +4500,9 @@ WHERE
       apflora.tpop
     WHERE
       apflora.tpop.status = 100
-  );
+  )
+ORDER BY
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_tpop_mitstatusansaatversuchundzaehlungmitanzahl CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_tpop_mitstatusansaatversuchundzaehlungmitanzahl AS
@@ -4793,7 +4806,10 @@ WHERE
       AND apflora.tpopmassn.typ BETWEEN 1 AND 3
       AND apflora.tpopmassn.jahr IS NOT NULL
       AND apflora.tpopmassn.jahr >= lasttpopber.jahr
-  );
+  )
+ORDER BY
+  apflora.pop.nr,
+  apflora.tpop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_pop_statusaktuellletzterpopbererloschen CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_statusaktuellletzterpopbererloschen AS
@@ -4840,7 +4856,9 @@ WHERE
     WHERE
       apflora.tpopmassn.typ BETWEEN 1 AND 3
       AND apflora.tpopmassn.jahr >= lastpopber.jahr
-  );
+  )
+ORDER BY
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_tpop_statuserloschenletztertpopberzunehmend CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_tpop_statuserloschenletztertpopberzunehmend AS
@@ -4891,7 +4909,10 @@ WHERE
       AND apflora.tpopmassn.typ BETWEEN 1 AND 3
       AND apflora.tpopmassn.jahr IS NOT NULL
       AND apflora.tpopmassn.jahr >= lasttpopber.jahr
-  );
+  )
+ORDER BY
+  apflora.pop.nr,
+  apflora.tpop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_pop_statuserloschenletzterpopberzunehmend CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_statuserloschenletzterpopberzunehmend AS
@@ -4938,7 +4959,9 @@ WHERE
     WHERE
       apflora.tpopmassn.typ BETWEEN 1 AND 3
       AND apflora.tpopmassn.jahr >= lastpopber.jahr
-  );
+  )
+ORDER BY
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_tpop_statuserloschenletztertpopberstabil CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_tpop_statuserloschenletztertpopberstabil AS
@@ -4989,7 +5012,10 @@ WHERE
       AND apflora.tpopmassn.typ BETWEEN 1 AND 3
       AND apflora.tpopmassn.jahr IS NOT NULL
       AND apflora.tpopmassn.jahr >= lasttpopber.jahr
-  );
+  )
+ORDER BY
+  apflora.pop.nr,
+  apflora.tpop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_pop_statuserloschenletzterpopberstabil CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_statuserloschenletzterpopberstabil AS
@@ -5036,7 +5062,9 @@ WHERE
     WHERE
       apflora.tpopmassn.typ BETWEEN 1 AND 3
       AND apflora.tpopmassn.jahr >= lastpopber.jahr
-  );
+  )
+ORDER BY
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_tpop_statuserloschenletztertpopberabnehmend CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_tpop_statuserloschenletztertpopberabnehmend AS
@@ -5087,7 +5115,10 @@ WHERE
       AND apflora.tpopmassn.typ BETWEEN 1 AND 3
       AND apflora.tpopmassn.jahr IS NOT NULL
       AND apflora.tpopmassn.jahr >= lasttpopber.jahr
-  );
+  )
+ORDER BY
+  apflora.pop.nr,
+  apflora.tpop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_pop_statuserloschenletzterpopberabnehmend CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_statuserloschenletzterpopberabnehmend AS
@@ -5134,7 +5165,9 @@ WHERE
     WHERE
       apflora.tpopmassn.typ BETWEEN 1 AND 3
       AND apflora.tpopmassn.jahr >= lastpopber.jahr
-  );
+  )
+ORDER BY
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_tpop_statuserloschenletztertpopberunsicher CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_tpop_statuserloschenletztertpopberunsicher AS
@@ -5185,7 +5218,10 @@ WHERE
       AND apflora.tpopmassn.typ BETWEEN 1 AND 3
       AND apflora.tpopmassn.jahr IS NOT NULL
       AND apflora.tpopmassn.jahr >= lasttpopber.jahr
-  );
+  )
+ORDER BY
+  apflora.pop.nr,
+  apflora.tpop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_pop_statuserloschenletzterpopberunsicher CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_statuserloschenletzterpopberunsicher AS
@@ -5232,7 +5268,9 @@ WHERE
     WHERE
       apflora.tpopmassn.typ BETWEEN 1 AND 3
       AND apflora.tpopmassn.jahr >= lastpopber.jahr
-  );
+  )
+ORDER BY
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_pop_ohnetpopmitgleichemstatus CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_ohnetpopmitgleichemstatus AS
@@ -5287,7 +5325,9 @@ WHERE
     WHERE
       apflora.tpop.pop_id = apflora.pop.id
       AND apflora.tpop.status <> 300
-  );
+  )
+ORDER BY
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_pop_status201tpopstatusunzulaessig CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_status201tpopstatusunzulaessig AS
@@ -5314,7 +5354,9 @@ WHERE
     WHERE
       apflora.tpop.pop_id = apflora.pop.id
       AND apflora.tpop.status IN (100, 101, 200)
-  );
+  )
+ORDER BY
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_pop_status202tpopstatusanders CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_status202tpopstatusanders AS
@@ -5341,7 +5383,9 @@ WHERE
     WHERE
       apflora.tpop.pop_id = apflora.pop.id
       AND apflora.tpop.status <> 202
-  );
+  )
+ORDER BY
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_pop_status211tpopstatusunzulaessig CASCADE;
 
@@ -5370,7 +5414,9 @@ WHERE
     WHERE
       apflora.tpop.pop_id = apflora.pop.id
       AND apflora.tpop.status IN (100, 101)
-  );
+  )
+ORDER BY
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_pop_status210tpopstatusunzulaessig CASCADE;
 
@@ -5399,7 +5445,9 @@ WHERE
     WHERE
       apflora.tpop.pop_id = apflora.pop.id
       AND apflora.tpop.status NOT IN (101, 300)
-  );
+  )
+ORDER BY
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_pop_statuserloschenletzterpopbererloschenmitansiedlung CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_statuserloschenletzterpopbererloschenmitansiedlung AS
@@ -5446,7 +5494,9 @@ WHERE
     WHERE
       apflora.tpopmassn.typ BETWEEN 1 AND 3
       AND apflora.tpopmassn.jahr > lastpopber.jahr
-  );
+  )
+ORDER BY
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_tpop_statuserloschenletztertpopbererloschenmitansiedlung CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_tpop_statuserloschenletztertpopbererloschenmitansiedlung AS

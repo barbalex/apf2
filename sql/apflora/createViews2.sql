@@ -901,7 +901,9 @@ FROM
 WHERE
   apflora.popber.entwicklung < 8
   AND apflora.pop.status  IN (101, 202)
-  AND apflora.tpop.apber_relevant = 1;
+  AND apflora.tpop.apber_relevant = 1
+ORDER BY
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_q_tpop_statuserloschenletzterpopberaktuell CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_tpop_statuserloschenletzterpopberaktuell AS

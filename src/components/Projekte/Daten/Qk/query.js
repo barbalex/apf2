@@ -671,10 +671,13 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
-              popbersByPopId(filter: { jahr: { isNull: true } }) {
+              popbersByPopId(
+                filter: { jahr: { isNull: true } }
+                orderBy: ID_ASC
+              ) {
                 nodes {
                   id
                   popByPopId {
@@ -693,7 +696,7 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
               popbersByPopId(
@@ -701,6 +704,7 @@ export default gql`
                   entwicklung: { isNull: true }
                   jahr: { equalTo: $berichtjahr }
                 }
+                orderBy: JAHR_ASC
               ) {
                 nodes {
                   id
@@ -721,10 +725,13 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
-              popmassnbersByPopId(filter: { jahr: { isNull: true } }) {
+              popmassnbersByPopId(
+                filter: { jahr: { isNull: true } }
+                orderBy: ID_ASC
+              ) {
                 nodes {
                   id
                   popByPopId {
@@ -743,7 +750,7 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId {
+          popsByApId(orderBy: NR_ASC) {
             nodes {
               id
               popmassnbersByPopId(
@@ -751,6 +758,7 @@ export default gql`
                   beurteilung: { isNull: true }
                   jahr: { equalTo: $berichtjahr }
                 }
+                orderBy: JAHR_ASC
               ) {
                 nodes {
                   id
