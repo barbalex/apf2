@@ -73,7 +73,11 @@ const Tpop = ({
       id,
     },
   })
-  const { data: dataLists, loading: loadingLists } = useQuery(queryLists)
+  const {
+    data: dataLists,
+    loading: loadingLists,
+    error: errorLists,
+  } = useQuery(queryLists)
   /**
    * THIS IS A BAD HACK
    * and it will not work once there are many projects
@@ -216,22 +220,6 @@ const Tpop = ({
     },
     [showFilter, row],
   )
-  const apJahr = get(data, 'tpopById.popByPopId.apByApId.startJahr', null)
-  let gemeindeWerte = get(dataLists, 'allGemeindes.nodes', [])
-  gemeindeWerte = gemeindeWerte
-    .map(el => el.name)
-    .sort()
-    .map(o => ({ label: o, value: o }))
-  let apberrelevantWerte = get(
-    dataLists,
-    'allTpopApberrelevantWertes.nodes',
-    [],
-  )
-  apberrelevantWerte = sortBy(apberrelevantWerte, 'sort')
-  apberrelevantWerte = apberrelevantWerte.map(el => ({
-    value: el.code,
-    label: el.text,
-  }))
 
   if (!showFilter && loading) {
     return (
@@ -241,6 +229,7 @@ const Tpop = ({
     )
   }
   if (error) return `Fehler: ${error.message}`
+  if (errorLists) return `Fehler: ${errorLists.message}`
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -285,7 +274,7 @@ const Tpop = ({
           />
           <Status
             key={`${row.id}status`}
-            apJahr={apJahr}
+            apJahr={get(data, 'tpopById.popByPopId.apByApId.startJahr', null)}
             herkunftValue={row.status}
             bekanntSeitValue={row.bekanntSeit}
             saveToDb={saveToDb}
@@ -313,7 +302,7 @@ const Tpop = ({
           <RadioButtonGroupWithInfo
             value={row.apberRelevant}
             name="apberRelevant"
-            dataSource={apberrelevantWerte}
+            dataSource={get(dataLists, 'allTpopApberrelevantWertes.nodes', [])}
             loading={loadingLists}
             popover={TpopAbBerRelevantInfoPopover}
             label="Für AP-Bericht relevant"
@@ -344,7 +333,7 @@ const Tpop = ({
             value={row.gemeinde}
             field="gemeinde"
             label="Gemeinde"
-            options={gemeindeWerte}
+            options={get(dataLists, 'allGemeindes.nodes', [])}
             loading={loadingLists}
             saveToDb={saveToDb}
             showLocate={!showFilter}

@@ -1,20 +1,18 @@
 import gql from 'graphql-tag'
 
-import { tpopApberrelevantWerte } from '../../../shared/fragments'
-
 export default gql`
-  query tpopByIdQuery {
-    allTpopApberrelevantWertes {
+  query TpopListsQuery {
+    allTpopApberrelevantWertes(orderBy: TEXT_ASC) {
       nodes {
-        ...TpopApberrelevantWerteFields
+        value: code
+        label: text
       }
     }
-    allGemeindes {
+    allGemeindes(orderBy: NAME_ASC) {
       nodes {
-        id
-        name
+        value: name
+        label: name
       }
     }
   }
-  ${tpopApberrelevantWerte}
 `
