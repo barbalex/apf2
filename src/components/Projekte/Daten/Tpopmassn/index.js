@@ -422,19 +422,8 @@ const Tpopmassn = ({
             saveToDb={saveToDb}
             error={errors.anzPflanzstellen}
           />
-          <Select
-            key={`${row.id}wirtspflanze`}
-            name="wirtspflanze"
-            value={row.wirtspflanze}
-            field="wirtspflanze"
-            label="Wirtspflanze"
-            options={aeEigenschaftenWerte}
-            loading={loadingAeEigenschaftens}
-            saveToDb={saveToDb}
-            error={errors.wirtspflanze}
-          />
           <Wirtspflanze
-            key={`${row.id}wirtspflanze2`}
+            key={`${row.id}wirtspflanze`}
             row={row}
             saveToDb={saveToDb}
             error={errors.wirtspflanze}

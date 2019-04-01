@@ -1,9 +1,9 @@
 // @flow
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useCallback, useState } from 'react'
 import AsyncSelect from 'react-select/lib/Async'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import { useQuery, useApolloClient } from 'react-apollo-hooks'
+import { useApolloClient } from 'react-apollo-hooks'
 import get from 'lodash/get'
 
 import queryAeEigenschaftens from './queryAeEigenschaftens'
@@ -82,16 +82,10 @@ const Wirtspflanze = ({
   const client = useApolloClient()
   const [inputValue, setInputValue] = useState(row.wirtspflanze || '')
 
-  useEffect(() => {
-    setInputValue(row.wirtspflanze || '')
-  }, [row.wirtspflanze])
-
-  const loadOptions = async (inputValue, cb) => {
-    console.log('Wirtspflanze, loadOptions', { inputValue })
-    const filter =
-      inputValue && inputValue !== row.wirtspflanze
-        ? { artname: { includesInsensitive: inputValue } }
-        : { artname: { isNull: false } }
+  const loadOptions = useCallback(async (inputValue, cb) => {
+    const filter = !!inputValue
+      ? { artname: { includesInsensitive: inputValue } }
+      : { artname: { isNull: false } }
     const { data } = await client.query({
       query: queryAeEigenschaftens,
       variables: {
@@ -99,33 +93,30 @@ const Wirtspflanze = ({
       },
     })
     const aeEigenschaften = get(data, 'allAeEigenschaftens.nodes', [])
-    console.log('Wirtspflanze, loadOptions', { aeEigenschaften })
     cb(aeEigenschaften)
-  }
+  })
 
-  const onInputChange = (value, { action }) => {
-    console.log('Wirtspflanze, onInputchange', { value, action })
-    if (['input-change'].includes(action)) {
-      console.log('Wirtspflanze, onInputchange, setting value')
-      setInputValue(value)
-      const fakeEvent = {
-        target: {
-          name: 'wirtspflanze',
-          value,
-        },
+  const onInputChange = useCallback((value, { action }) => {
+    // update inputValue when typing in the input
+    if (!['input-blur', 'menu-close'].includes(action)) {
+      if (!value) {
+        // if inputValue was one character long, user must be deleting it
+        if (inputValue.length === 1) {
+          onChange({ value: null, label: null })
+        }
       }
-      saveToDb(fakeEvent)
-      return value
+      setInputValue(value)
     }
-  }
+  })
+
+  const onBlur = useCallback(() => {
+    if (!!inputValue) {
+      onChange({ value: inputValue, label: inputValue })
+    }
+  }, [inputValue])
 
   const onChange = useCallback(option => {
-    console.log('Wirtspflanze, onChange', {
-      inputValue,
-      option,
-    })
-    const value =
-      option && option.value ? option.value : inputValue ? inputValue : null
+    const value = option && option.value ? option.value : null
     const fakeEvent = {
       target: {
         name: 'wirtspflanze',
@@ -133,15 +124,6 @@ const Wirtspflanze = ({
       },
     }
     saveToDb(fakeEvent)
-    setInputValue(value)
-    console.log('Wirtspflanze, onChange', {
-      value,
-    })
-  })
-
-  console.log('Wirtspflanze rendering', {
-    wirtspflanze: row.wirtspflanze,
-    inputValue,
   })
 
   return (
@@ -151,13 +133,18 @@ const Wirtspflanze = ({
         defaultOptions
         name="wirtspflanze"
         onChange={onChange}
-        inputValue={inputValue}
+        onBlur={onBlur}
+        inputValue={inputValue || ''}
         hideSelectedOptions
-        placeholder="Tippen, um auszuwählen..."
+        placeholder=""
         isClearable
         isSearchable
+        // remove as can't select without typing
+        nocaret
         noOptionsMessage={() => null}
+        // enable deleting typed values
         backspaceRemovesValue
+        // use tab to move to next field
         tabSelectsValue={false}
         classNamePrefix="react-select"
         onInputChange={onInputChange}
