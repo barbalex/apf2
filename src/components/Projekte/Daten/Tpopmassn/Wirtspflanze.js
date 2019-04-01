@@ -101,6 +101,8 @@ const Wirtspflanze = ({
     if (!['input-blur', 'menu-close'].includes(action)) {
       if (!value) {
         // if inputValue was one character long, user must be deleting it
+        // THIS IS A BAD HACK BUT NECCESSARY BECAUSE AFTER CHOOSING AN OPTION
+        // onInputChange GETS A VALUE OF '', NOT THE OPTION CHOOSEN
         if (inputValue.length === 1) {
           onChange({ value: null, label: null })
         }
