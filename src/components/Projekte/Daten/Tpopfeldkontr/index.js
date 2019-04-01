@@ -355,12 +355,6 @@ const Tpopfeldkontr = ({
 
   const width = isNaN(dimensions.width) ? 380 : dimensions.width
 
-  let adressenWerte = get(dataAdresses, 'allAdresses.nodes', [])
-  adressenWerte = sortBy(adressenWerte, 'name')
-  adressenWerte = adressenWerte.map(el => ({
-    value: el.id,
-    label: el.name,
-  }))
   let idbiotopuebereinstWerte = get(
     dataLists,
     'allTpopkontrIdbiotuebereinstWertes.nodes',
@@ -465,7 +459,7 @@ const Tpopfeldkontr = ({
                 value={row.bearbeiter}
                 field="bearbeiter"
                 label="BearbeiterIn"
-                options={adressenWerte}
+                options={get(dataAdresses, 'allAdresses.nodes', [])}
                 loading={loadingAdresses}
                 saveToDb={saveToDb}
                 error={errors.bearbeiter}

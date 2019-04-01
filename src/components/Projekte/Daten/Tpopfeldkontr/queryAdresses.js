@@ -1,14 +1,12 @@
 import gql from 'graphql-tag'
 
-import { adresse } from '../../../shared/fragments'
-
 export default gql`
-  query AllAdressesQuery {
-    allAdresses {
+  query TpopfeldkontrAdressesQuery {
+    allAdresses(orderBy: NAME_ASC) {
       nodes {
-        ...AdresseFields
+        value: id
+        label: name
       }
     }
   }
-  ${adresse}
 `
