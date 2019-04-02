@@ -7,6 +7,7 @@ import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
 import TextField from '../../../shared/TextField'
 import Select from '../../../shared/Select'
+import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updateAssozartByIdGql from './updateAssozartById'
@@ -46,24 +47,20 @@ const Assozart = ({ treeName }: { treeName: string }) => {
 
   useEffect(() => setErrors({}), [row])
 
+  // do not include already choosen assozarten
   const assozartenOfAp = get(row, 'apByApId.assozartsByApId.nodes', [])
     .map(o => o.aeId)
-    // always include the art included in the row
+    // but do include the art included in the row
     .filter(o => o !== row.aeId)
-  // do not include already choosen assozarten
-  // but do include the art included in the row
-  const aeEigenschaftenfilter = assozartenOfAp.length
-    ? { id: { notIn: assozartenOfAp } }
-    : { id: { isNull: false } }
-  const {
-    data: dataAeEigenschaftens,
-    loading: loadingAeEigenschaftens,
-    error: errorAeEigenschaftens,
-  } = useQuery(queryAeEigenschaftens, {
-    variables: {
-      filter: aeEigenschaftenfilter,
-    },
-  })
+  const aeEigenschaftenfilter = inputValue =>
+    !!inputValue
+      ? assozartenOfAp.length
+        ? {
+            artname: { includesInsensitive: inputValue },
+            id: { notIn: assozartenOfAp },
+          }
+        : { artname: { includesInsensitive: inputValue } }
+      : { artname: { isNull: false } }
 
   const saveToDb = useCallback(
     async event => {
@@ -110,7 +107,6 @@ const Assozart = ({ treeName }: { treeName: string }) => {
     )
   }
   if (error) return `Fehler: ${error.message}`
-  if (errorAeEigenschaftens) return `Fehler: ${errorAeEigenschaftens.message}`
 
   return (
     <ErrorBoundary>
@@ -122,16 +118,17 @@ const Assozart = ({ treeName }: { treeName: string }) => {
           table="assozart"
         />
         <FieldsContainer>
-          <Select
-            key={`${row.id}aeId`}
-            name="aeId"
-            value={row.aeId}
+          <SelectLoadingOptions
+            key={`${row.id}aeId2`}
             field="aeId"
+            valueLabelPath="aeEigenschaftenByAeId.artname"
             label="Art"
-            options={get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])}
-            loading={loadingAeEigenschaftens}
+            row={row}
             saveToDb={saveToDb}
             error={errors.aeId}
+            query={queryAeEigenschaftens}
+            filter={aeEigenschaftenfilter}
+            queryNodesName="allAeEigenschaftens"
           />
           <TextField
             key={`${row.id}bemerkungen`}

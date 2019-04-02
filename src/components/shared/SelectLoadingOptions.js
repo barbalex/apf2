@@ -83,6 +83,7 @@ const SelectTypable = ({
   error: saveToDbError,
   saveToDb,
   query,
+  filter,
   queryNodesName,
 }: {
   row: Object,
@@ -92,18 +93,19 @@ const SelectTypable = ({
   error: string,
   saveToDb: () => void,
   query: () => void,
+  filter: Object,
   queryNodesName: string,
 }) => {
   const client = useApolloClient()
 
   const loadOptions = useCallback(async (inputValue, cb) => {
-    const filter = !!inputValue
+    const ownFilter = !!inputValue
       ? { artname: { includesInsensitive: inputValue } }
       : { artname: { isNull: false } }
     const { data } = await client.query({
       query,
       variables: {
-        filter,
+        filter: filter ? filter(inputValue) : ownFilter,
       },
     })
     const options = get(data, `${queryNodesName}.nodes`, [])

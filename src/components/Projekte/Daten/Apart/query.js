@@ -10,6 +10,14 @@ export default gql`
         id
         artname
       }
+      apByApId {
+        id
+        apartsByApId {
+          nodes {
+            ...ApartFields
+          }
+        }
+      }
     }
   }
   ${apart}

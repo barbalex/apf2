@@ -43,6 +43,21 @@ const ApArt = ({ treeName }: { treeName: string }) => {
 
   const row = get(data, 'apartById', {})
 
+  // do not include already choosen assozarten
+  const apartenOfAp = get(row, 'apByApId.apartsByApId.nodes', [])
+    .map(o => o.artId)
+    // but do include the art included in the row
+    .filter(o => o !== row.artId)
+  const aeEigenschaftenfilter = inputValue =>
+    !!inputValue
+      ? apartenOfAp.length
+        ? {
+            artname: { includesInsensitive: inputValue },
+            id: { notIn: apartenOfAp },
+          }
+        : { artname: { includesInsensitive: inputValue } }
+      : { artname: { isNull: false } }
+
   // do not show any artId's that have been used?
   // Nope: because some species have already been worked as separate ap
   // because apart did not exist...
@@ -143,6 +158,7 @@ const ApArt = ({ treeName }: { treeName: string }) => {
             saveToDb={saveToDb}
             error={errors.artId}
             query={queryAeEigenschaftens}
+            filter={aeEigenschaftenfilter}
             queryNodesName="allAeEigenschaftens"
           />
         </FieldsContainer>
