@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query ApartAeEigenschaftensQuery {
-    allAeEigenschaftens(orderBy: ARTNAME_ASC) {
+  query TpopmassnAeEigenschaftensQuery($filter: AeEigenschaftenFilter!) {
+    allAeEigenschaftens(first: 8, filter: $filter, orderBy: ARTNAME_ASC) {
       nodes {
         value: id
         label: artname

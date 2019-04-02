@@ -10,7 +10,7 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updateApartByIdGql from './updateApartById'
 import query from './query'
-import queryAeEigenschaftensAsync from './queryAeEigenschaftensAsync'
+import queryAeEigenschaftens from './queryAeEigenschaftens'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
@@ -142,7 +142,7 @@ const ApArt = ({ treeName }: { treeName: string }) => {
             row={row}
             saveToDb={saveToDb}
             error={errors.artId}
-            query={queryAeEigenschaftensAsync}
+            query={queryAeEigenschaftens}
             queryNodesName="allAeEigenschaftens"
           />
         </FieldsContainer>
