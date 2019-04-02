@@ -13,7 +13,6 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from 'react-apollo-hooks'
 
-import Select from '../../../shared/Select'
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
@@ -461,6 +460,7 @@ const Teilpopulationen = ({ treeName }: { treeName: string }) => {
               query={queryAeEigenschaftens}
               filter={aeEigenschaftenfilter}
               queryNodesName="allAeEigenschaftens"
+              error={ewmMessage}
             />
           </AutocompleteContainer>
           <DownloadCardButton

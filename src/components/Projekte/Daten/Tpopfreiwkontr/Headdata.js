@@ -2,7 +2,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys'
 
