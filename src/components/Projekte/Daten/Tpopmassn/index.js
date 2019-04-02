@@ -6,10 +6,11 @@ import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
-import Wirtspflanze from './Wirtspflanze'
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
 import Select from '../../../shared/Select'
+import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
+import SelectLoadingOptionsTypable from '../../../shared/SelectLoadingOptionsTypable'
 import RadioButton from '../../../shared/RadioButton'
 import StringToCopy from '../../../shared/StringToCopy'
 import FormTitle from '../../../shared/FormTitle'
@@ -101,27 +102,11 @@ const Tpopmassn = ({
     loading: loadingAdresses,
     error: errorAdresses,
   } = useQuery(queryAdresses)
-  const aeEigenschaftenFilter = { artname: { isNull: false } }
-  const {
-    data: dataAeEigenschaftens,
-    loading: loadingAeEigenschaftens,
-    error: errorAeEigenschaftens,
-  } = useQuery(queryAeEigenschaftens, {
-    variables: {
-      filter: aeEigenschaftenFilter,
-    },
-  })
   const {
     data: dataLists,
     loading: loadingLists,
     error: errorLists,
   } = useQuery(queryLists)
-
-  const aeEigenschaftenWerte = get(
-    dataAeEigenschaftens,
-    'allAeEigenschaftens.nodes',
-    [],
-  )
 
   let tpopmassnTotalCount
   let tpopmassnFilteredCount
@@ -263,7 +248,6 @@ const Tpopmassn = ({
   if (error) return `Fehler: ${error.message}`
   if (errorAdresses) return `Fehler: ${errorAdresses.message}`
   if (errorLists) return `Fehler: ${errorLists.message}`
-  if (errorAeEigenschaftens) return `Fehler: ${errorAeEigenschaftens.message}`
   return (
     <ErrorBoundary>
       <Container showfilter={showFilter}>
@@ -422,11 +406,25 @@ const Tpopmassn = ({
             saveToDb={saveToDb}
             error={errors.anzPflanzstellen}
           />
-          <Wirtspflanze
+          <SelectLoadingOptionsTypable
             key={`${row.id}wirtspflanze`}
+            field="wirtspflanze"
+            label="Wirtspflanze"
             row={row}
             saveToDb={saveToDb}
             error={errors.wirtspflanze}
+            query={queryAeEigenschaftens}
+            queryNodesName="allAeEigenschaftens"
+          />
+          <SelectLoadingOptions
+            key={`${row.id}wirtspflanze2`}
+            field="wirtspflanze"
+            label="Wirtspflanze"
+            row={row}
+            saveToDb={saveToDb}
+            error={errors.wirtspflanze}
+            query={queryAeEigenschaftens}
+            queryNodesName="allAeEigenschaftens"
           />
           <TextField
             key={`${row.id}herkunftPop`}

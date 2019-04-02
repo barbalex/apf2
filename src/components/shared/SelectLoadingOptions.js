@@ -1,12 +1,10 @@
 // @flow
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import AsyncSelect from 'react-select/lib/Async'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from 'react-apollo-hooks'
 import get from 'lodash/get'
-
-import queryAeEigenschaftens from './queryAeEigenschaftens'
 
 const Container = styled.div`
   display: flex;
@@ -70,52 +68,38 @@ const StyledSelect = styled(AsyncSelect)`
   }
 `
 
-const Wirtspflanze = ({
+const SelectTypable = ({
   row,
+  field = '',
+  label,
   error: saveToDbError,
   saveToDb,
+  query,
+  queryNodesName,
 }: {
   row: Object,
+  field?: string,
+  label: string,
   error: string,
   saveToDb: () => void,
+  query: () => void,
+  queryNodesName: string,
 }) => {
   const client = useApolloClient()
-  const [inputValue, setInputValue] = useState(row.wirtspflanze || '')
 
-  const loadOptions = useCallback(async (inputValue, cb) => {
-    const filter = !!inputValue
-      ? { artname: { includesInsensitive: inputValue } }
+  const loadOptions = useCallback(async (inputValuePassed, cb) => {
+    const filter = !!inputValuePassed
+      ? { artname: { includesInsensitive: inputValuePassed } }
       : { artname: { isNull: false } }
     const { data } = await client.query({
-      query: queryAeEigenschaftens,
+      query,
       variables: {
         filter,
       },
     })
-    const aeEigenschaften = get(data, 'allAeEigenschaftens.nodes', [])
-    cb(aeEigenschaften)
+    const options = get(data, `${queryNodesName}.nodes`, [])
+    cb(options)
   })
-
-  const onInputChange = useCallback((value, { action }) => {
-    // update inputValue when typing in the input
-    if (!['input-blur', 'menu-close'].includes(action)) {
-      if (!value) {
-        // if inputValue was one character long, user must be deleting it
-        // THIS IS A BAD HACK BUT NECCESSARY BECAUSE AFTER CHOOSING AN OPTION
-        // onInputChange GETS A VALUE OF '', NOT THE OPTION CHOOSEN
-        if (inputValue.length === 1) {
-          onChange({ value: null, label: null })
-        }
-      }
-      setInputValue(value)
-    }
-  })
-
-  const onBlur = useCallback(() => {
-    if (!!inputValue) {
-      onChange({ value: inputValue, label: inputValue })
-    }
-  }, [inputValue])
 
   const onChange = useCallback(option => {
     const value = option && option.value ? option.value : null
@@ -128,28 +112,28 @@ const Wirtspflanze = ({
     saveToDb(fakeEvent)
   })
 
+  const value = { value: row.wirtspflanze || '', label: row.wirtspflanze || '' }
+
   return (
-    <Container data-id="wirtspflanze">
-      <Label>Wirtspflanze</Label>
+    <Container data-id={field}>
+      {label && <Label>{label}</Label>}
       <StyledSelect
+        id={field}
         defaultOptions
-        name="wirtspflanze"
+        name={field}
         onChange={onChange}
-        onBlur={onBlur}
-        inputValue={inputValue || ''}
+        value={value}
         hideSelectedOptions
-        placeholder=""
+        placeholder="(Für Vorschläge tippen)"
         isClearable
         isSearchable
         // remove as can't select without typing
         nocaret
-        noOptionsMessage={() => null}
+        // don't show a no options message
+        noOptionsMessage={() => '(Bitte Tippen für Vorschläge)'}
         // enable deleting typed values
         backspaceRemovesValue
-        // use tab to move to next field
-        tabSelectsValue={false}
         classNamePrefix="react-select"
-        onInputChange={onInputChange}
         loadOptions={loadOptions}
       />
       {saveToDbError && <Error>{saveToDbError}</Error>}
@@ -157,4 +141,4 @@ const Wirtspflanze = ({
   )
 }
 
-export default observer(Wirtspflanze)
+export default observer(SelectTypable)
