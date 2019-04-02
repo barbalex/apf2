@@ -9,7 +9,6 @@ import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
 import Select from '../../../shared/Select'
-import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
 import SelectLoadingOptionsTypable from '../../../shared/SelectLoadingOptionsTypable'
 import RadioButton from '../../../shared/RadioButton'
 import StringToCopy from '../../../shared/StringToCopy'
@@ -408,16 +407,6 @@ const Tpopmassn = ({
           />
           <SelectLoadingOptionsTypable
             key={`${row.id}wirtspflanze`}
-            field="wirtspflanze"
-            label="Wirtspflanze"
-            row={row}
-            saveToDb={saveToDb}
-            error={errors.wirtspflanze}
-            query={queryAeEigenschaftens}
-            queryNodesName="allAeEigenschaftens"
-          />
-          <SelectLoadingOptions
-            key={`${row.id}wirtspflanze2`}
             field="wirtspflanze"
             label="Wirtspflanze"
             row={row}
