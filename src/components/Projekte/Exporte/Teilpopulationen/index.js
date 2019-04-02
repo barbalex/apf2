@@ -10,14 +10,14 @@ import Button from '@material-ui/core/Button'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import { useApolloClient } from 'react-apollo-hooks'
 
 import Select from '../../../shared/Select'
+import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
-import allAeEigenschaftensQuery from './allAeEigenschaftens'
+import queryAeEigenschaftens from './queryAeEigenschaftens'
 import epsg2056to4326 from '../../../../modules/epsg2056to4326'
 import mobxStoreContext from '../../../../mobxStoreContext'
 
@@ -89,20 +89,6 @@ const Teilpopulationen = ({ treeName }: { treeName: string }) => {
   const [message, setMessage] = useState(null)
   const [ewmMessage, setEwmMessage] = useState('')
 
-  const { activeNodeArray } = mobxStore.tree
-
-  const {
-    data: aeEigenschaftensData,
-    error: aeEigenschaftensDataError,
-  } = useQuery(allAeEigenschaftensQuery, {
-    variables: {
-      id:
-        activeNodeArray.length > 9
-          ? activeNodeArray[9]
-          : '99999999-9999-9999-9999-999999999999',
-    },
-  })
-
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
   const onClickButton = useCallback(async () => {
     setMessage('Export "Teilpopulationen" wird vorbereitet...')
@@ -144,18 +130,15 @@ const Teilpopulationen = ({ treeName }: { treeName: string }) => {
     setMessage(null)
   }, [exportFileType, exportApplyMapFilter])
 
-  const artList = sortBy(
-    get(aeEigenschaftensData, 'allAeEigenschaftens.nodes', [])
-      .filter(n => !!get(n, 'apByArtId.id'))
-      .map(n => ({
-        value: get(n, 'apByArtId.id'),
-        label: n.artname,
-      })),
-    'label',
+  const aeEigenschaftenfilter = useCallback(inputValue =>
+    !!inputValue
+      ? {
+          artname: { includesInsensitive: inputValue },
+          apByArtIdExists: true,
+        }
+      : { artname: { isNull: false }, apByArtIdExists: true },
   )
 
-  if (aeEigenschaftensDataError)
-    return `Fehler: ${aeEigenschaftensDataError.message}`
   return (
     <StyledCard>
       <StyledCardActions disableActionSpacing onClick={onClickAction}>
@@ -434,19 +417,26 @@ const Teilpopulationen = ({ treeName }: { treeName: string }) => {
             <EwmDiv>{'= "Eier legende Wollmilchsau"'}</EwmDiv>
           </DownloadCardButton>
           <AutocompleteContainer>
-            <Select
-              value=""
+            <SelectLoadingOptions
+              row={{}}
               field="ewm"
+              valueLabelPath="aeEigenschaftenByArtId.artname"
               label={`"Eier legende Wollmilchsau": Art wählen`}
               labelSize={14}
-              options={artList}
               saveToDb={async e => {
-                const apId = e.target.value
-                if (apId === null) return
+                const aeId = e.target.value
+                if (aeId === null) return
                 setEwmMessage(
                   'Export "anzkontrinklletzterundletztertpopber" wird vorbereitet...',
                 )
                 try {
+                  const res = await client.query({
+                    query: await import('./queryApByArtId').then(
+                      m => m.default,
+                    ),
+                    variables: { aeId },
+                  })
+                  const apId = get(res.data, 'apByArtId.id')
                   const { data } = await client.query({
                     query: await import('./allVTpopErsteUndLetzteKontrolleUndLetzterTpopbersFiltered').then(
                       m => m.default,
@@ -468,7 +458,9 @@ const Teilpopulationen = ({ treeName }: { treeName: string }) => {
                 }
                 setEwmMessage('')
               }}
-              error={ewmMessage}
+              query={queryAeEigenschaftens}
+              filter={aeEigenschaftenfilter}
+              queryNodesName="allAeEigenschaftens"
             />
           </AutocompleteContainer>
           <DownloadCardButton

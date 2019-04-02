@@ -80,6 +80,7 @@ const SelectTypable = ({
   valueLabelPath,
   field = '',
   label,
+  labelSize,
   error: saveToDbError,
   saveToDb,
   query,
@@ -90,6 +91,7 @@ const SelectTypable = ({
   valueLabelPath: string,
   field?: string,
   label: string,
+  labelSize: ?number,
   error: string,
   saveToDb: () => void,
   query: () => void,
@@ -139,7 +141,7 @@ const SelectTypable = ({
 
   return (
     <Container data-id={field}>
-      {label && <Label>{label}</Label>}
+      {label && <Label labelsize={labelSize}>{label}</Label>}
       <StyledSelect
         id={field}
         defaultOptions

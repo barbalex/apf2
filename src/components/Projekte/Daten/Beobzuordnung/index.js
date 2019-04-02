@@ -165,7 +165,7 @@ const Beobzuordnung = ({
 
   const row = get(data, 'beobById', {})
 
-  // do not include already choosen assozarten
+  // only include ap-arten (otherwise makes no sense, plus: error when app sets new activeNodeArray to non-existing ap)
   const aeEigenschaftenfilter = useCallback(inputValue =>
     !!inputValue
       ? {
@@ -239,7 +239,7 @@ const Beobzuordnung = ({
               )}`}</OriginalArtDiv>
             )}
             <SelectLoadingOptions
-              key={`${row.id}artId2`}
+              key={`${row.id}artId`}
               field="artId"
               valueLabelPath="aeEigenschaftenByArtId.artname"
               label="Art"
