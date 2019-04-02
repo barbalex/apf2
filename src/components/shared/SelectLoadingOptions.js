@@ -1,4 +1,11 @@
 // @flow
+
+/**
+ * This does not work as planned:
+ * It loads 8 options at mout
+ * BUT DOES NOT SHOW THEM WHEN USER ENTERS FIELD
+ */
+
 import React, { useCallback } from 'react'
 import AsyncSelect from 'react-select/lib/Async'
 import styled from 'styled-components'
@@ -70,6 +77,7 @@ const StyledSelect = styled(AsyncSelect)`
 
 const SelectTypable = ({
   row,
+  valueLabelPath,
   field = '',
   label,
   error: saveToDbError,
@@ -78,6 +86,7 @@ const SelectTypable = ({
   queryNodesName,
 }: {
   row: Object,
+  valueLabelPath: string,
   field?: string,
   label: string,
   error: string,
@@ -87,9 +96,9 @@ const SelectTypable = ({
 }) => {
   const client = useApolloClient()
 
-  const loadOptions = useCallback(async (inputValuePassed, cb) => {
-    const filter = !!inputValuePassed
-      ? { artname: { includesInsensitive: inputValuePassed } }
+  const loadOptions = useCallback(async (inputValue, cb) => {
+    const filter = !!inputValue
+      ? { artname: { includesInsensitive: inputValue } }
       : { artname: { isNull: false } }
     const { data } = await client.query({
       query,
@@ -105,14 +114,17 @@ const SelectTypable = ({
     const value = option && option.value ? option.value : null
     const fakeEvent = {
       target: {
-        name: 'wirtspflanze',
+        name: field,
         value,
       },
     }
     saveToDb(fakeEvent)
   })
 
-  const value = { value: row.wirtspflanze || '', label: row.wirtspflanze || '' }
+  const value = {
+    value: row[field] || '',
+    label: get(row, valueLabelPath) || '',
+  }
 
   return (
     <Container data-id={field}>
@@ -124,17 +136,20 @@ const SelectTypable = ({
         onChange={onChange}
         value={value}
         hideSelectedOptions
-        placeholder="(Für Vorschläge tippen)"
+        placeholder=""
         isClearable
         isSearchable
         // remove as can't select without typing
         nocaret
-        // don't show a no options message
-        noOptionsMessage={() => '(Bitte Tippen für Vorschläge)'}
+        // don't show a no options message if a value exists
+        noOptionsMessage={() =>
+          value.value ? null : '(Bitte Tippen für Vorschläge)'
+        }
         // enable deleting typed values
         backspaceRemovesValue
         classNamePrefix="react-select"
         loadOptions={loadOptions}
+        openMenuOnFocus
       />
       {saveToDbError && <Error>{saveToDbError}</Error>}
     </Container>

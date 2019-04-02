@@ -5,12 +5,12 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
-import Select from '../../../shared/Select'
+import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updateApartByIdGql from './updateApartById'
 import query from './query'
-import queryAeEigenschaftens from './queryAeEigenschaftens'
+import queryAeEigenschaftensAsync from './queryAeEigenschaftensAsync'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
@@ -41,18 +41,12 @@ const ApArt = ({ treeName }: { treeName: string }) => {
     },
   })
 
-  const {
-    data: dataAeEigenschaftens,
-    loading: loadingAeEigenschaftens,
-  } = useQuery(queryAeEigenschaftens)
-
   const row = get(data, 'apartById', {})
 
   // do not show any artId's that have been used?
   // Nope: because some species have already been worked as separate ap
   // because apart did not exist...
   // maybe do later
-  const artWerte = get(dataAeEigenschaftens, 'allAeEigenschaftens.nodes', [])
 
   useEffect(() => setErrors({}), [row.id])
 
@@ -140,16 +134,16 @@ const ApArt = ({ treeName }: { treeName: string }) => {
             <br />
             <br />
           </div>
-          <Select
+          <SelectLoadingOptions
             key={`${row.id}artId`}
-            name="artId"
-            value={row.artId}
             field="artId"
+            valueLabelPath="aeEigenschaftenByArtId.artname"
             label="Art"
-            options={artWerte}
-            loading={loadingAeEigenschaftens}
+            row={row}
             saveToDb={saveToDb}
             error={errors.artId}
+            query={queryAeEigenschaftensAsync}
+            queryNodesName="allAeEigenschaftens"
           />
         </FieldsContainer>
       </Container>
