@@ -2,7 +2,7 @@
 
 /**
  * This does not work as planned:
- * It loads 8 options at mout
+ * It loads 8 options at mount
  * BUT DOES NOT SHOW THEM WHEN USER ENTERS FIELD
  */
 
