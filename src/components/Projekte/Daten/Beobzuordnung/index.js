@@ -13,6 +13,7 @@ import FormTitle from '../../../shared/FormTitle'
 import TextField from '../../../shared/TextField'
 import CheckboxWithInfo from '../../../shared/CheckboxWithInfo'
 import Select from '../../../shared/Select'
+import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
 import Beob from '../Beob'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
@@ -161,13 +162,18 @@ const Beobzuordnung = ({
       apId,
     },
   })
-  const {
-    data: dataAeEigenschaftens,
-    loading: loadingAeEigenschaftens,
-    error: errorAeEigenschaftens,
-  } = useQuery(queryAeEigenschaftens)
 
   const row = get(data, 'beobById', {})
+
+  // do not include already choosen assozarten
+  const aeEigenschaftenfilter = useCallback(inputValue =>
+    !!inputValue
+      ? {
+          artname: { includesInsensitive: inputValue },
+          apartsByArtIdExist: true,
+        }
+      : { artname: { isNull: false }, apartsByArtIdExist: true },
+  )
 
   const onSaveArtIdToDb = useCallback(
     event => {
@@ -215,7 +221,6 @@ const Beobzuordnung = ({
     )
   }
   if (error) return `Fehler: ${error.message}`
-  if (errorAeEigenschaftens) return `Fehler: ${errorAeEigenschaftens.message}`
   return (
     <ErrorBoundary>
       <FormContainer>
@@ -233,19 +238,16 @@ const Beobzuordnung = ({
                 'aeEigenschaftenByArtIdOriginal.artname',
               )}`}</OriginalArtDiv>
             )}
-            <Select
-              key={`${row.id}artId`}
-              name="artId"
-              value={row.artId}
+            <SelectLoadingOptions
+              key={`${row.id}artId2`}
               field="artId"
+              valueLabelPath="aeEigenschaftenByArtId.artname"
               label="Art"
-              options={get(
-                dataAeEigenschaftens,
-                'allAeEigenschaftens.nodes',
-                [],
-              )}
-              loading={loadingAeEigenschaftens}
+              row={row}
               saveToDb={onSaveArtIdToDb}
+              query={queryAeEigenschaftens}
+              filter={aeEigenschaftenfilter}
+              queryNodesName="allAeEigenschaftens"
             />
             <CheckboxWithInfo
               key={`${row.id}nichtZuordnen`}

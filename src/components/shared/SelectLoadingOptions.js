@@ -98,19 +98,28 @@ const SelectTypable = ({
 }) => {
   const client = useApolloClient()
 
-  const loadOptions = useCallback(async (inputValue, cb) => {
-    const ownFilter = !!inputValue
-      ? { artname: { includesInsensitive: inputValue } }
-      : { artname: { isNull: false } }
-    const { data } = await client.query({
-      query,
-      variables: {
-        filter: filter ? filter(inputValue) : ownFilter,
-      },
-    })
-    const options = get(data, `${queryNodesName}.nodes`, [])
-    cb(options)
-  })
+  const loadOptions = useCallback(
+    async (inputValue, cb) => {
+      const ownFilter = !!inputValue
+        ? { artname: { includesInsensitive: inputValue } }
+        : { artname: { isNull: false } }
+      let result
+      try {
+        result = await client.query({
+          query,
+          variables: {
+            filter: filter ? filter(inputValue) : ownFilter,
+          },
+        })
+      } catch (error) {
+        console.log({ error })
+      }
+      const { data } = result
+      const options = get(data, `${queryNodesName}.nodes`, [])
+      cb(options)
+    },
+    [filter],
+  )
 
   const onChange = useCallback(option => {
     const value = option && option.value ? option.value : null
