@@ -14,12 +14,14 @@ import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import TextField2 from '../../../shared/TextField2'
 import Select from '../../../shared/Select'
+import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import FormTitle from '../../../shared/FormTitle'
 import FilterTitle from '../../../shared/FilterTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updateApByIdGql from './updateApById'
 import query from './query'
+import queryAeEigenschaftenById from './queryAeEigenschaftenById'
 import queryLists from './queryLists'
 import queryAps from './queryAps'
 import queryAdresses from './queryAdresses'
@@ -82,6 +84,8 @@ const Ap = ({
   const { nodeFilter, nodeFilterSetValue, user, refetch } = mobxStore
   const { activeNodeArray } = mobxStore[treeName]
 
+  const [filterArtname, setFilterArtname] = useState('')
+
   let id =
     activeNodeArray.length > 3
       ? activeNodeArray[3]
@@ -113,13 +117,6 @@ const Ap = ({
     loading: loadingAdresses,
   } = useQuery(queryAdresses)
   const {
-    data: dataAeEigenschaftens,
-    error: errorAeEigenschaftens,
-    loading: loadingAeEigenschaftens,
-  } = useQuery(queryAeEigenschaftens, {
-    variables: { showData: !showFilter, showFilter, apId: id },
-  })
-  const {
     data: dataLists,
     error: errorLists,
     loading: loadingLists,
@@ -127,7 +124,29 @@ const Ap = ({
 
   const [errors, setErrors] = useState({})
 
-  const row = showFilter ? nodeFilter[treeName].ap : get(data, 'apById', {})
+  let row
+  if (showFilter) {
+    row = { ...nodeFilter[treeName].ap }
+    row.aeEigenschaftenByArtId = {
+      artname: filterArtname,
+    }
+    // if artId is filtered, need to fetch artname
+    // and add it to row
+    if (!!nodeFilter[treeName].ap.artId && !filterArtname) {
+      client
+        .query({
+          query: queryAeEigenschaftenById,
+          variables: {
+            id: nodeFilter[treeName].ap.artId,
+          },
+        })
+        .then(result => {
+          setFilterArtname(get(result.data, 'aeEigenschaftenById.artname', ''))
+        })
+    }
+  } else {
+    row = get(data, 'apById', {})
+  }
 
   useEffect(() => setErrors({}), [row])
 
@@ -142,6 +161,9 @@ const Ap = ({
           key: field,
           value,
         })
+        if (field === 'artId') {
+          setFilterArtname('')
+        }
         refetch.aps()
       } else {
         try {
@@ -168,7 +190,6 @@ const Ap = ({
                       ? value
                       : row.ekfBeobachtungszeitpunkt,
                   projId: field === 'projId' ? value : row.projId,
-                  aeEigenschaftenByArtId: row.aeEigenschaftenByArtId,
                   __typename: 'Ap',
                 },
                 __typename: 'Ap',
@@ -185,15 +206,41 @@ const Ap = ({
     [row, showFilter],
   )
 
+  const aeEigenschaftenfilterForData = useCallback(
+    inputValue =>
+      !!inputValue
+        ? {
+            or: [
+              { apByArtIdExists: false },
+              { apByArtId: { id: { equalTo: id } } },
+            ],
+            artname: { includesInsensitive: inputValue },
+          }
+        : {
+            or: [
+              { apByArtIdExists: false },
+              { apByArtId: { id: { equalTo: id } } },
+            ],
+          },
+    [id],
+  )
+  const aeEigenschaftenfilterForFilter = useCallback(inputValue =>
+    !!inputValue
+      ? {
+          apByArtIdExists: true,
+          artname: { includesInsensitive: inputValue },
+        }
+      : {
+          apByArtIdExists: true,
+        },
+  )
+
   if (loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
       </Container>
     )
-  }
-  if (errorAeEigenschaftens) {
-    return `Fehler: ${errorAeEigenschaftens.message}`
   }
   if (errorAdresses) return `Fehler: ${errorAdresses.message}`
   if (allApsError) return `Fehler: ${allApsError.message}`
@@ -215,20 +262,21 @@ const Ap = ({
           <FormTitle apId={row.id} title="Aktionsplan" treeName={treeName} />
         )}
         <FieldsContainer>
-          <Select
+          <SelectLoadingOptions
             key={`${row.id}artId`}
-            name="artId"
-            value={row.artId}
             field="artId"
+            valueLabelPath="aeEigenschaftenByArtId.artname"
             label="Art (gibt dem Aktionsplan den Namen)"
-            options={get(
-              dataAeEigenschaftens,
-              `${showFilter ? 'forFilter' : 'forData'}.nodes`,
-              [],
-            )}
-            loading={loadingAeEigenschaftens}
+            row={row}
             saveToDb={saveToDb}
             error={errors.artId}
+            query={queryAeEigenschaftens}
+            filter={
+              showFilter
+                ? aeEigenschaftenfilterForFilter
+                : aeEigenschaftenfilterForData
+            }
+            queryNodesName="allAeEigenschaftens"
           />
           <RadioButtonGroupWithInfo
             key={`${row.id}bearbeitung`}
