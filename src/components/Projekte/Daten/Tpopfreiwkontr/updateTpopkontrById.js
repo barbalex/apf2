@@ -59,6 +59,9 @@ export default gql`
         ...TpopfreiwkontrFields
         adresseByBearbeiter {
           ...AdresseFields
+          usersByAdresseId {
+            totalCount
+          }
         }
         tpopByTpopId {
           ...TpopFields
@@ -87,7 +90,7 @@ export default gql`
       }
     }
   }
-  ${adresse}
+  #${adresse}
   ${pop}
   ${tpop}
   ${tpopfreiwkontr}

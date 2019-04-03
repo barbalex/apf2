@@ -1,10 +1,9 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys'
+import { observer } from 'mobx-react-lite'
 
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextField2'
 
 const Container = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -36,22 +35,14 @@ const DangerVal = styled.div`
   }
 `
 
-const enhance = compose(
-  onlyUpdateForKeys(['id', 'gefaehrdung', 'errorsGefaehrdung']),
-)
-
 const Danger = ({
-  id,
-  gefaehrdung,
   saveToDb,
-  errorsGefaehrdung,
   row,
+  errors,
 }: {
-  id: string,
-  gefaehrdung: string,
   saveToDb: () => void,
-  errorsGefaehrdung: string,
   row: Object,
+  errors: Object,
 }) => (
   <Container>
     <DangerLabel>
@@ -62,16 +53,16 @@ const Danger = ({
     </DangerLabel>
     <DangerVal>
       <TextField
-        key={`${id}gefaehrdung`}
+        key={`${row.id}gefaehrdung`}
         name="gefaehrdung"
-        value={gefaehrdung}
+        row={row}
         type="text"
         multiLine
         saveToDb={saveToDb}
-        error={errorsGefaehrdung}
+        errors={errors}
       />
     </DangerVal>
   </Container>
 )
 
-export default enhance(Danger)
+export default observer(Danger)

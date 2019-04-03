@@ -10,7 +10,6 @@ import jwtDecode from 'jwt-decode'
 import StringToCopy from '../../../shared/StringToCopyOnlyButton'
 import query from './query'
 import queryTpopkontrs from './queryTpopkontrs'
-import queryAdresses from './queryAdresses'
 import updateTpopkontrByIdGql from './updateTpopkontrById'
 import createTpopkontrzaehl from './createTpopkontrzaehl'
 import Title from './Title'
@@ -202,12 +201,6 @@ const Tpopfreiwkontr = ({
     },
   })
 
-  const {
-    data: dataAdresses,
-    loading: loadingAdresses,
-    error: errorAdresses,
-  } = useQuery(queryAdresses)
-
   const ekfzaehleinheits = get(
     data,
     'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekfzaehleinheitsByApId.nodes',
@@ -290,17 +283,12 @@ const Tpopfreiwkontr = ({
   )
   const pop = get(row, 'tpopByTpopId.popByPopId', {})
   const tpop = get(row, 'tpopByTpopId', {})
-  const adressenWerte = get(dataAdresses, 'allAdresses.nodes', [])
   const {
-    bearbeiter,
     bemerkungen,
     datum,
-    deckungApArt,
-    deckungNackterBoden,
     ekfBemerkungen,
     ekfVerifiziert,
     flaecheUeberprueft,
-    gefaehrdung,
     jungpflanzenVorhanden,
     planVorhanden,
     vegetationshoeheMaximum,
@@ -339,10 +327,6 @@ const Tpopfreiwkontr = ({
         value2 = value.substring ? +value.substring(0, 4) : value
       }
       if (field2) variables[field2] = value2
-      /*const adresseByBearbeiter =
-        field === 'bearbeiter'
-          ? row.adresseByBearbeiter
-          : get(dataAdresses, 'allAdresses.nodes', []).find(r => r.id === value)*/
       try {
         await client.mutate({
           mutation: updateTpopkontrByIdGql,
@@ -395,7 +379,6 @@ const Tpopfreiwkontr = ({
                   field === 'jungpflanzenVorhanden'
                     ? value
                     : row.jungpflanzenVorhanden,
-                //adresseByBearbeiter,
                 ekfVerifiziert:
                   field === 'ekfVerifiziert' ? value : row.ekfVerifiziert,
                 ekfBemerkungen:
@@ -463,27 +446,9 @@ const Tpopfreiwkontr = ({
 
   useEffect(() => setErrors({}), [row])
 
-  const userCount = get(
-    row,
-    'adresseByBearbeiter.usersByAdresseId.totalCount',
-    0,
-  )
+  console.log('Tpopfreiwkontr')
 
-  useEffect(() => {
-    // check if adresse is choosen but no registered user exists
-    if (!showFilter) {
-      if (bearbeiter && !userCount && !errors.bearbeiter) {
-        setErrors({
-          bearbeiter:
-            'Es ist kein Benutzer mit dieser Adresse verbunden. Damit dieser Benutzer Kontrollen erfassen kann, muss er ein Benutzerkonto haben, in dem obige Adresse als zugehörig erfasst wurde.',
-        })
-      }
-    }
-  }, [showFilter, bearbeiter, userCount, errors.bearbeiter])
-
-  if (errorAdresses) return `Fehler: ${errorAdresses.message}`
   if (error) return `Fehler: ${error.message}`
-  if (errorAdresses) return `Fehler: ${errorAdresses.message}`
   if (loading) {
     return (
       <Container>
@@ -517,17 +482,11 @@ const Tpopfreiwkontr = ({
         <GridContainer width={width}>
           <Title />
           <Headdata
-            id={row.id}
-            bearbeiter={bearbeiter}
-            errorsBearbeiter={errors.bearbeiter}
             pop={pop}
             tpop={tpop}
-            saveToDb={saveToDb}
-            setErrors={setErrors}
-            adressenWerte={adressenWerte}
-            loadingAdresses={loadingAdresses}
             row={row}
             showFilter={showFilter}
+            treeName={treeName}
           />
           <Besttime ekfBeobachtungszeitpunkt={ekfBeobachtungszeitpunkt} />
           <Date
@@ -646,15 +605,7 @@ const Tpopfreiwkontr = ({
               treeName={treeName}
             />
           )}
-          <Cover
-            id={row.id}
-            deckungApArt={deckungApArt}
-            deckungNackterBoden={deckungNackterBoden}
-            saveToDb={saveToDb}
-            errorsDeckungApArt={errors.deckungApArt}
-            errorsDeckungNackterBoden={errors.deckungNackterBoden}
-            row={row}
-          />
+          <Cover id={row.id} saveToDb={saveToDb} row={row} errors={errors} />
           <More
             id={row.id}
             flaecheUeberprueft={flaecheUeberprueft}
@@ -668,13 +619,7 @@ const Tpopfreiwkontr = ({
             saveToDb={saveToDb}
             row={row}
           />
-          <Danger
-            id={row.id}
-            gefaehrdung={gefaehrdung}
-            errorsGefaehrdung={errors.gefaehrdung}
-            saveToDb={saveToDb}
-            row={row}
-          />
+          <Danger saveToDb={saveToDb} row={row} errors={errors} />
           <Remarks
             id={row.id}
             bemerkungen={bemerkungen}

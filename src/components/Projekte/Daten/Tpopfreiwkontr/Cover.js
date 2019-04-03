@@ -1,10 +1,9 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys'
+import { observer } from 'mobx-react-lite'
 
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextField2'
 import anteilImg from './anteil.png'
 
 const Area = styled.div`
@@ -80,32 +79,16 @@ const Img = styled.img`
   max-width: inherit;
 `
 
-const enhance = compose(
-  onlyUpdateForKeys([
-    'id',
-    'deckungApArt',
-    'deckungNackterBoden',
-    'errorsDeckungApArt',
-    'errorsDeckungNackterBoden',
-  ]),
-)
-
 const Date = ({
   id,
-  deckungApArt,
-  deckungNackterBoden,
-  errorsDeckungApArt,
-  errorsDeckungNackterBoden,
   saveToDb,
   row,
+  errors,
 }: {
   id: string,
-  deckungApArt: string,
-  deckungNackterBoden: string,
-  errorsDeckungApArt: string,
-  errorsDeckungNackterBoden: string,
   saveToDb: () => void,
   row: Object,
+  errors: Object,
 }) => (
   <Container>
     <DeckApArtLabel>Deckung überprüfte Art</DeckApArtLabel>
@@ -113,10 +96,10 @@ const Date = ({
       <TextField
         key={`${row.id}deckungApArt`}
         name="deckungApArt"
-        value={row.deckungApArt}
+        row={row}
         type="number"
         saveToDb={saveToDb}
-        error={errorsDeckungApArt}
+        errors={errors}
       />
     </DeckApArtVal>
     <DeckApArtMass>%</DeckApArtMass>
@@ -125,10 +108,10 @@ const Date = ({
       <TextField
         key={`${row.id}deckungNackterBoden`}
         name="deckungNackterBoden"
-        value={row.deckungNackterBoden}
+        row={row}
         type="number"
         saveToDb={saveToDb}
-        error={errorsDeckungNackterBoden}
+        errors={errors}
       />
     </DeckNaBoVal>
     <DeckNaBoMass>%</DeckNaBoMass>
@@ -138,4 +121,4 @@ const Date = ({
   </Container>
 )
 
-export default enhance(Date)
+export default observer(Date)
