@@ -61,8 +61,7 @@ const Ekf = () => {
           <ReflexElement
             flex={0.33}
             propagateDimensions={true}
-            renderOnResizeRate={200}
-            renderOnResize={true}
+            propagateDimensionsRate={800}
           >
             <EkfList />
           </ReflexElement>
@@ -70,8 +69,7 @@ const Ekf = () => {
           <ReflexElementForEKF
             flex={0.67}
             propagateDimensions={true}
-            renderOnResizeRate={100}
-            renderOnResize={true}
+            propagateDimensionsRate={800}
           >
             {tpopkontrId && (
               <Tpopfreiwkontr

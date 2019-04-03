@@ -60,8 +60,7 @@ const ProjektContainer = ({
             <ReflexElement
               flex={treeFlex}
               propagateDimensions={true}
-              renderOnResizeRate={100}
-              renderOnResize={true}
+              propagateDimensionsRate={800}
             >
               <TreeContainer treeName={treeName} />
             </ReflexElement>
@@ -72,8 +71,7 @@ const ProjektContainer = ({
           {tabs.includes('daten') && (
             <ReflexElement
               propagateDimensions={true}
-              renderOnResizeRate={100}
-              renderOnResize={true}
+              propagateDimensionsRate={800}
             >
               <Daten treeName={treeName} />
             </ReflexElement>
@@ -86,8 +84,7 @@ const ProjektContainer = ({
             <ReflexElement
               className="filter"
               propagateDimensions={true}
-              renderOnResizeRate={200}
-              renderOnResize={true}
+              propagateDimensionsRate={800}
             >
               <Filter treeName={treeName} />
             </ReflexElement>
@@ -100,8 +97,7 @@ const ProjektContainer = ({
             <ReflexElement
               className="karte"
               propagateDimensions={true}
-              renderOnResizeRate={200}
-              renderOnResize={true}
+              propagateDimensionsRate={800}
             >
               <Karte treeName={treeName} />
             </ReflexElement>

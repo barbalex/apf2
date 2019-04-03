@@ -45,10 +45,7 @@ const Projekte = () => {
     <Container>
       <ErrorBoundary>
         <ReflexContainer orientation="vertical">
-          <ReflexElement
-            flex={treeTabs.length / projekteTabs.length}
-            propagateDimensions={true}
-          >
+          <ReflexElement flex={treeTabs.length / projekteTabs.length}>
             <ProjektContainer
               treeName="tree"
               tabs={treeTabs}
