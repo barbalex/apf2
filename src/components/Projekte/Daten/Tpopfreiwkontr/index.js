@@ -278,17 +278,7 @@ const Tpopfreiwkontr = ({
   )
   const pop = get(row, 'tpopByTpopId.popByPopId', {})
   const tpop = get(row, 'tpopByTpopId', {})
-  const {
-    bemerkungen,
-    datum,
-    ekfBemerkungen,
-    ekfVerifiziert,
-    flaecheUeberprueft,
-    jungpflanzenVorhanden,
-    planVorhanden,
-    vegetationshoeheMaximum,
-    vegetationshoeheMittel,
-  } = row
+  const { ekfBemerkungen } = row
 
   const saveToDb = useCallback(
     async event => {
