@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextField2'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
@@ -124,10 +124,10 @@ const Tpopber = ({ treeName }: { treeName: string }) => {
             key={`${row.id}jahr`}
             name="jahr"
             label="Jahr"
-            value={row.jahr}
+            row={row}
             type="number"
             saveToDb={saveToDb}
-            error={errors.jahr}
+            errors={errors}
           />
           <RadioButtonGroup
             key={`${row.id}entwicklung`}
@@ -143,11 +143,11 @@ const Tpopber = ({ treeName }: { treeName: string }) => {
             key={`${row.id}bemerkungen`}
             name="bemerkungen"
             label="Bemerkungen"
-            value={row.bemerkungen}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.bemerkungen}
+            errors={errors}
           />
         </FieldsContainer>
       </Container>

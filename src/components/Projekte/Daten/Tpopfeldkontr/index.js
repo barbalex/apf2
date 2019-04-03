@@ -10,7 +10,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextField2'
 import Select from '../../../shared/Select'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import StringToCopy from '../../../shared/StringToCopy'
@@ -420,10 +420,10 @@ const Tpopfeldkontr = ({
                 key={`${row.id}jahr`}
                 name="jahr"
                 label="Jahr"
-                value={row.jahr}
+                row={row}
                 type="number"
                 saveToDb={saveToDb}
-                error={errors.jahr}
+                errors={errors}
               />
               <DateFieldWithPicker
                 key={`${row.id}datum`}
@@ -453,32 +453,32 @@ const Tpopfeldkontr = ({
                 saveToDb={saveToDb}
                 error={errors.bearbeiter}
               />
-              <TextField
+              <row
                 key={`${row.id}jungpflanzen_anzahl`}
                 name="jungpflanzenAnzahl"
                 label="Anzahl Jungpflanzen"
-                value={row.jungpflanzenAnzahl}
+                row={row}
                 type="number"
                 saveToDb={saveToDb}
-                error={errors.jungpflanzenAnzahl}
+                errors={errors}
               />
               <TextField
                 key={`${row.id}vitalitaet`}
                 name="vitalitaet"
                 label="Vitalität"
-                value={row.vitalitaet}
+                row={row}
                 type="text"
                 saveToDb={saveToDb}
-                error={errors.vitalitaet}
+                errors={errors}
               />
               <TextField
                 key={`${row.id}ueberlebensrate`}
                 name="ueberlebensrate"
                 label="Überlebensrate"
-                value={row.ueberlebensrate}
+                row={row}
                 type="number"
                 saveToDb={saveToDb}
-                error={errors.ueberlebensrate}
+                errors={errors}
               />
               <RadioButtonGroupWithInfo
                 key={`${row.id}entwicklung`}
@@ -499,52 +499,52 @@ const Tpopfeldkontr = ({
                 key={`${row.id}ursachen`}
                 name="ursachen"
                 label="Ursachen"
-                value={row.ursachen}
+                row={row}
                 hintText="Standort: ..., Klima: ..., anderes: ..."
                 type="text"
                 multiLine
                 saveToDb={saveToDb}
-                error={errors.ursachen}
+                errors={errors}
               />
               <TextField
                 key={`${row.id}erfolgsbeurteilung`}
                 name="erfolgsbeurteilung"
                 label="Erfolgsbeurteilung"
-                value={row.erfolgsbeurteilung}
+                row={row}
                 type="text"
                 multiLine
                 saveToDb={saveToDb}
-                error={errors.erfolgsbeurteilung}
+                errors={errors}
               />
               <TextField
                 key={`${row.id}umsetzung_aendern`}
                 name="umsetzungAendern"
                 label="Änderungs-Vorschläge Umsetzung"
-                value={row.umsetzungAendern}
+                row={row}
                 type="text"
                 multiLine
                 saveToDb={saveToDb}
-                error={errors.umsetzungAendern}
+                errors={errors}
               />
               <TextField
                 key={`${row.id}kontrolle_aendern`}
                 name="kontrolleAendern"
                 label="Änderungs-Vorschläge Kontrolle"
-                value={row.kontrolleAendern}
+                row={row}
                 type="text"
                 multiLine
                 saveToDb={saveToDb}
-                error={errors.kontrolleAendern}
+                errors={errors}
               />
               <TextField
                 key={`${row.id}bemerkungen`}
                 name="bemerkungen"
                 label="Bemerkungen"
-                value={row.bemerkungen}
+                row={row}
                 type="text"
                 multiLine
                 saveToDb={saveToDb}
-                error={errors.bemerkungen}
+                errors={errors}
               />
               <StringToCopy text={row.id} label="id" />
             </FormContainer>
@@ -555,10 +555,10 @@ const Tpopfeldkontr = ({
                 key={`${row.id}flaeche`}
                 name="flaeche"
                 label="Fläche"
-                value={row.flaeche}
+                row={row}
                 type="number"
                 saveToDb={saveToDb}
-                error={errors.flaeche}
+                errors={errors}
               />
               <Section>Vegetation</Section>
               <Select
@@ -587,130 +587,130 @@ const Tpopfeldkontr = ({
                 key={`${row.id}vegetationstyp`}
                 name="vegetationstyp"
                 label="Vegetationstyp"
-                value={row.vegetationstyp}
+                row={row}
                 type="text"
                 saveToDb={saveToDb}
-                error={errors.vegetationstyp}
+                errors={errors}
               />
               <TextField
                 key={`${row.id}konkurrenz`}
                 name="konkurrenz"
                 label="Konkurrenz"
-                value={row.konkurrenz}
+                row={row}
                 type="text"
                 saveToDb={saveToDb}
-                error={errors.konkurrenz}
+                errors={errors}
               />
               <TextField
                 key={`${row.id}moosschicht`}
                 name="moosschicht"
                 label="Moosschicht"
-                value={row.moosschicht}
+                row={row}
                 type="text"
                 saveToDb={saveToDb}
-                error={errors.moosschicht}
+                errors={errors}
               />
               <TextField
                 key={`${row.id}krautschicht`}
                 name="krautschicht"
                 label="Krautschicht"
-                value={row.krautschicht}
+                row={row}
                 type="text"
                 saveToDb={saveToDb}
-                error={errors.krautschicht}
+                errors={errors}
               />
               <TextField
                 key={`${row.id}strauchschicht`}
                 name="strauchschicht"
                 label="Strauchschicht"
-                value={row.strauchschicht}
+                row={row}
                 type="text"
                 saveToDb={saveToDb}
-                error={errors.strauchschicht}
+                errors={errors}
               />
               <TextField
                 key={`${row.id}baumschicht`}
                 name="baumschicht"
                 label="Baumschicht"
-                value={row.baumschicht}
+                row={row}
                 type="text"
                 saveToDb={saveToDb}
-                error={errors.baumschicht}
+                errors={errors}
               />
               <Section>Boden</Section>
               <TextField
                 key={`${row.id}boden_typ`}
                 name="bodenTyp"
                 label="Typ"
-                value={row.bodenTyp}
+                row={row}
                 type="text"
                 saveToDb={saveToDb}
-                error={errors.bodenTyp}
+                errors={errors}
               />
               <TextField
                 key={`${row.id}boden_kalkgehalt`}
                 name="bodenKalkgehalt"
                 label="Kalkgehalt"
-                value={row.bodenKalkgehalt}
+                row={row}
                 type="text"
                 saveToDb={saveToDb}
-                error={errors.bodenKalkgehalt}
+                errors={errors}
               />
               <TextField
                 key={`${row.id}boden_durchlaessigkeit`}
                 name="bodenDurchlaessigkeit"
                 label="Durchlässigkeit"
-                value={row.bodenDurchlaessigkeit}
+                row={row}
                 type="text"
                 saveToDb={saveToDb}
-                error={errors.bodenDurchlaessigkeit}
+                errors={errors}
               />
               <TextField
                 key={`${row.id}boden_humus`}
                 name="bodenHumus"
                 label="Humusgehalt"
-                value={row.bodenHumus}
+                row={row}
                 type="text"
                 saveToDb={saveToDb}
-                error={errors.bodenHumus}
+                errors={errors}
               />
               <TextField
                 key={`${row.id}boden_naehrstoffgehalt`}
                 name="bodenNaehrstoffgehalt"
                 label="Nährstoffgehalt"
-                value={row.bodenNaehrstoffgehalt}
+                row={row}
                 type="text"
                 saveToDb={saveToDb}
-                error={errors.bodenNaehrstoffgehalt}
+                errors={errors}
               />
               <TextField
                 key={`${row.id}boden_abtrag`}
                 name="bodenAbtrag"
                 label="Bodenabtrag"
-                value={row.bodenAbtrag}
+                row={row}
                 type="text"
                 saveToDb={saveToDb}
-                error={errors.bodenAbtrag}
+                errors={errors}
               />
               <TextField
                 key={`${row.id}wasserhaushalt`}
                 name="wasserhaushalt"
                 label="Wasserhaushalt"
-                value={row.wasserhaushalt}
+                row={row}
                 type="text"
                 saveToDb={saveToDb}
-                error={errors.wasserhaushalt}
+                errors={errors}
               />
               <Section>Beurteilung</Section>
               <TextField
                 key={`${row.id}handlungsbedarf`}
                 name="handlungsbedarf"
                 label="Handlungsbedarf"
-                value={row.handlungsbedarf}
+                row={row}
                 type="text"
                 multiline
                 saveToDb={saveToDb}
-                error={errors.handlungsbedarf}
+                errors={errors}
               />
               <RadioButtonGroup
                 key={`${row.id}idealbiotop_uebereinstimmung`}
