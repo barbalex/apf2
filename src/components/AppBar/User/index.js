@@ -180,7 +180,7 @@ const User = ({
               label="Email"
               row={row}
               saveToDb={saveToDb}
-              error={errors.email}
+              errors={errors}
               helperText="Bitte aktuell halten, damit wir Sie bei Bedarf kontaktieren können"
             />
             {!!passwordMessage && (
