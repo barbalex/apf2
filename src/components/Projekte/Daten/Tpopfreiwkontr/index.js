@@ -2,7 +2,6 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import sortBy from 'lodash/sortBy'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
@@ -211,9 +210,10 @@ const Tpopfreiwkontr = ({
     .map(n => get(n, 'tpopkontrzaehlEinheitWerteByZaehleinheitId', {}))
     // remove null values stemming from efkzaehleinheit without zaehleinheit_id
     .filter(n => n !== null)
-  const zaehls = sortBy(
-    get(data, 'tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes', []),
-    'einheit',
+  const zaehls = get(
+    data,
+    'tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes',
+    [],
   )
   const zaehls1 = zaehls[0]
   const zaehls2 = zaehls[1]

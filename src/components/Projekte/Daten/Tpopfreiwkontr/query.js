@@ -42,7 +42,7 @@ export default gql`
           }
         }
       }
-      tpopkontrzaehlsByTpopkontrId {
+      tpopkontrzaehlsByTpopkontrId(orderBy: EINHEIT_ASC) {
         nodes {
           ...TpopkontrzaehlFields
         }
