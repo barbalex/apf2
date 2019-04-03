@@ -5,9 +5,10 @@ export default gql`
     $showFilter: Boolean!
     $popFilter: PopFilter!
     $popApFilter: PopFilter!
+    $allPopsFilter: PopFilter!
     $apId: UUID!
   ) {
-    allPops @include(if: $showFilter) {
+    allPops(filter: $allPopsFilter) @include(if: $showFilter) {
       totalCount
     }
     popsFiltered: allPops(filter: $popFilter) @include(if: $showFilter) {
