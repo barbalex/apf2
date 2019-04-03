@@ -23,7 +23,7 @@ const MyTextField = ({
   disabled = false,
   hintText = '',
   helperText = '',
-  error,
+  errors,
   saveToDb,
 }: {
   row: Object,
@@ -34,7 +34,7 @@ const MyTextField = ({
   disabled: Boolean,
   hintText: String,
   helperText: String,
-  error: String,
+  errors: Object,
   saveToDb: () => void,
 }) => {
   const value = row[name]
@@ -51,6 +51,7 @@ const MyTextField = ({
       saveToDb(event)
     }
   })
+  const error = errors[name]
 
   return (
     <StyledFormControl
