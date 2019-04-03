@@ -7,7 +7,6 @@ import { useQuery } from 'react-apollo-hooks'
 
 import Select from '../../../shared/Select'
 import queryAdresses from './queryAdresses'
-import ErrorBoundary from '../../../shared/ErrorBoundary'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import dealWithError from '../../../../modules/dealWithError'
 
@@ -35,16 +34,14 @@ const EkfAdresse = ({ setAnchorEl }: { setAnchorEl: () => void }) => {
 
   return (
     <Container>
-      <ErrorBoundary>
-        <Select
-          value={''}
-          label="EKF sehen als"
-          options={get(data, 'allAdresses.nodes', [])}
-          loading={loading}
-          saveToDb={choose}
-          maxHeight={130}
-        />
-      </ErrorBoundary>
+      <Select
+        value={''}
+        label="EKF sehen als"
+        options={get(data, 'allAdresses.nodes', [])}
+        loading={loading}
+        saveToDb={choose}
+        maxHeight={130}
+      />
     </Container>
   )
 }

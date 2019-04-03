@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import get from 'lodash/get'
 
-import ErrorBoundary from '../../shared/ErrorBoundarySingleChild'
 import Fallback from '../../shared/Fallback'
 import getTableNameFromActiveNode from '../../../modules/getTableNameFromActiveNode'
 import mobxStoreContext from '../../../mobxStoreContext'
@@ -151,11 +150,9 @@ const Daten = ({
   if (!key) return null
 
   return (
-    <ErrorBoundary>
-      <Container data-id={`daten-container${treeName === 'tree' ? 1 : 2}`}>
-        <Suspense fallback={<Fallback />}>{form}</Suspense>
-      </Container>
-    </ErrorBoundary>
+    <Container data-id={`daten-container${treeName === 'tree' ? 1 : 2}`}>
+      <Suspense fallback={<Fallback />}>{form}</Suspense>
+    </Container>
   )
 }
 

@@ -8,7 +8,6 @@ import { observer } from 'mobx-react-lite'
 // when Karte was loaded async, it did not load,
 // but only in production!
 import Karte from './Karte'
-import ErrorBoundary from '../shared/ErrorBoundary'
 import TreeContainer from './TreeContainer'
 import Daten from './Daten'
 import Exporte from './Exporte'
@@ -54,66 +53,62 @@ const ProjektContainer = ({
 
   return (
     <Container>
-      <ErrorBoundary>
-        <ReflexContainer orientation="vertical">
-          {tabs.includes('tree') && (
-            <ReflexElement
-              flex={treeFlex}
-              propagateDimensions={true}
-              propagateDimensionsRate={800}
-            >
-              <TreeContainer treeName={treeName} />
-            </ReflexElement>
-          )}
-          {tabs.includes('tree') && tabs.includes('daten') && (
+      <ReflexContainer orientation="vertical">
+        {tabs.includes('tree') && (
+          <ReflexElement
+            flex={treeFlex}
+            propagateDimensions={true}
+            propagateDimensionsRate={800}
+          >
+            <TreeContainer treeName={treeName} />
+          </ReflexElement>
+        )}
+        {tabs.includes('tree') && tabs.includes('daten') && <ReflexSplitter />}
+        {tabs.includes('daten') && (
+          <ReflexElement
+            propagateDimensions={true}
+            propagateDimensionsRate={800}
+          >
+            <Daten treeName={treeName} />
+          </ReflexElement>
+        )}
+        {tabs.includes('filter') &&
+          (tabs.includes('tree') || tabs.includes('daten')) && (
             <ReflexSplitter />
           )}
-          {tabs.includes('daten') && (
-            <ReflexElement
-              propagateDimensions={true}
-              propagateDimensionsRate={800}
-            >
-              <Daten treeName={treeName} />
-            </ReflexElement>
-          )}
-          {tabs.includes('filter') &&
-            (tabs.includes('tree') || tabs.includes('daten')) && (
-              <ReflexSplitter />
-            )}
-          {tabs.includes('filter') && (
-            <ReflexElement
-              className="filter"
-              propagateDimensions={true}
-              propagateDimensionsRate={800}
-            >
-              <Filter treeName={treeName} />
-            </ReflexElement>
-          )}
-          {tabs.includes('karte') &&
-            (tabs.includes('tree') ||
-              tabs.includes('daten') ||
-              tabs.includes('filter')) && <ReflexSplitter />}
-          {tabs.includes('karte') && (
-            <ReflexElement
-              className="karte"
-              propagateDimensions={true}
-              propagateDimensionsRate={800}
-            >
-              <Karte treeName={treeName} />
-            </ReflexElement>
-          )}
-          {tabs.includes('exporte') &&
-            (tabs.includes('tree') ||
-              tabs.includes('daten') ||
-              tabs.includes('filter') ||
-              tabs.includes('karte')) && <ReflexSplitter />}
-          {tabs.includes('exporte') && (
-            <ReflexElement>
-              <Exporte />
-            </ReflexElement>
-          )}
-        </ReflexContainer>
-      </ErrorBoundary>
+        {tabs.includes('filter') && (
+          <ReflexElement
+            className="filter"
+            propagateDimensions={true}
+            propagateDimensionsRate={800}
+          >
+            <Filter treeName={treeName} />
+          </ReflexElement>
+        )}
+        {tabs.includes('karte') &&
+          (tabs.includes('tree') ||
+            tabs.includes('daten') ||
+            tabs.includes('filter')) && <ReflexSplitter />}
+        {tabs.includes('karte') && (
+          <ReflexElement
+            className="karte"
+            propagateDimensions={true}
+            propagateDimensionsRate={800}
+          >
+            <Karte treeName={treeName} />
+          </ReflexElement>
+        )}
+        {tabs.includes('exporte') &&
+          (tabs.includes('tree') ||
+            tabs.includes('daten') ||
+            tabs.includes('filter') ||
+            tabs.includes('karte')) && <ReflexSplitter />}
+        {tabs.includes('exporte') && (
+          <ReflexElement>
+            <Exporte />
+          </ReflexElement>
+        )}
+      </ReflexContainer>
     </Container>
   )
 }

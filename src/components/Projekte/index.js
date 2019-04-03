@@ -7,7 +7,6 @@ import { observer } from 'mobx-react-lite'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
-import ErrorBoundary from '../shared/ErrorBoundary'
 import ProjektContainer from './ProjektContainer'
 import mobxStoreContext from '../../mobxStoreContext'
 
@@ -43,25 +42,23 @@ const Projekte = () => {
 
   return (
     <Container>
-      <ErrorBoundary>
-        <ReflexContainer orientation="vertical">
-          <ReflexElement flex={treeTabs.length / projekteTabs.length}>
-            <ProjektContainer
-              treeName="tree"
-              tabs={treeTabs}
-              projekteTabs={projekteTabs}
-            />
-          </ReflexElement>
-          <ReflexSplitter />
-          <ReflexElement>
-            <ProjektContainer
-              treeName="tree2"
-              tabs={tree2Tabs}
-              projekteTabs={projekteTabs}
-            />
-          </ReflexElement>
-        </ReflexContainer>
-      </ErrorBoundary>
+      <ReflexContainer orientation="vertical">
+        <ReflexElement flex={treeTabs.length / projekteTabs.length}>
+          <ProjektContainer
+            treeName="tree"
+            tabs={treeTabs}
+            projekteTabs={projekteTabs}
+          />
+        </ReflexElement>
+        <ReflexSplitter />
+        <ReflexElement>
+          <ProjektContainer
+            treeName="tree2"
+            tabs={tree2Tabs}
+            projekteTabs={projekteTabs}
+          />
+        </ReflexElement>
+      </ReflexContainer>
     </Container>
   )
 }

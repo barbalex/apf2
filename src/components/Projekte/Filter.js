@@ -47,8 +47,8 @@ export default ({
   const onChangeTab = useCallback((event, value) => setActiveTab(value))
 
   const formObject = {
-    ap: <Ap dimensions={dimensions} treeName={treeName} showFilter={true} />,
-    pop: <Pop dimensions={dimensions} treeName={treeName} showFilter={true} />,
+    ap: <Ap treeName={treeName} showFilter={true} />,
+    pop: <Pop treeName={treeName} showFilter={true} />,
     tpop: (
       <Tpop dimensions={dimensions} treeName={treeName} showFilter={true} />
     ),

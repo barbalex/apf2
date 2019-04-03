@@ -7,7 +7,6 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
 import isMobilePhone from '../../../modules/isMobilePhone'
-import ErrorBoundary from '../../shared/ErrorBoundary'
 import logout from '../../../modules/logout'
 import EkfAdresse from './EkfAdresse'
 import mobxStoreContext from '../../../mobxStoreContext'
@@ -82,49 +81,47 @@ const MyAppBar = ({
   })
 
   return (
-    <ErrorBoundary>
-      <Container>
-        <MehrButton
-          aria-label="Mehr"
-          aria-owns={anchorEl ? 'long-menu' : null}
-          aria-haspopup="true"
-          onClick={onClickMehrButton}
-          className="appbar-more"
-        >
-          Mehr
-        </MehrButton>
-        <Menu
-          id="long-menu"
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={onClose}
-        >
-          {isMobile && exporteIsActive && (
-            <MenuItem
-              onClick={onClickExporte}
-              disabled={projekteTabs.includes('exporte')}
-            >
-              Exporte
-            </MenuItem>
-          )}
+    <Container>
+      <MehrButton
+        aria-label="Mehr"
+        aria-owns={anchorEl ? 'long-menu' : null}
+        aria-haspopup="true"
+        onClick={onClickMehrButton}
+        className="appbar-more"
+      >
+        Mehr
+      </MehrButton>
+      <Menu
+        id="long-menu"
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={onClose}
+      >
+        {isMobile && exporteIsActive && (
           <MenuItem
-            onClick={showDeletedDatasets}
-            disabled={deletedDatasets.length === 0}
+            onClick={onClickExporte}
+            disabled={projekteTabs.includes('exporte')}
           >
-            gelöschte Datensätze wiederherstellen
+            Exporte
           </MenuItem>
-          {['apflora_manager', 'apflora_artverantwortlich'].includes(role) && (
-            <EkfAdresse setAnchorEl={setAnchorEl} />
-          )}
-          <MenuItem onClick={openDocs}>Dokumentation öffnen</MenuItem>
-          <MenuItem onClick={watchVideos}>Video-Anleitungen</MenuItem>
-          <MenuItem onClick={onClickLogout} className="appbar-more-logout">{`${
-            user.name
-          } abmelden`}</MenuItem>
-          <Version>Version: 1.3.2 vom 20.01.2019</Version>
-        </Menu>
-      </Container>
-    </ErrorBoundary>
+        )}
+        <MenuItem
+          onClick={showDeletedDatasets}
+          disabled={deletedDatasets.length === 0}
+        >
+          gelöschte Datensätze wiederherstellen
+        </MenuItem>
+        {['apflora_manager', 'apflora_artverantwortlich'].includes(role) && (
+          <EkfAdresse setAnchorEl={setAnchorEl} />
+        )}
+        <MenuItem onClick={openDocs}>Dokumentation öffnen</MenuItem>
+        <MenuItem onClick={watchVideos}>Video-Anleitungen</MenuItem>
+        <MenuItem onClick={onClickLogout} className="appbar-more-logout">{`${
+          user.name
+        } abmelden`}</MenuItem>
+        <Version>Version: 1.3.2 vom 20.01.2019</Version>
+      </Menu>
+    </Container>
   )
 }
 

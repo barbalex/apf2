@@ -11,7 +11,6 @@ import jwtDecode from 'jwt-decode'
 
 import Row from './Row'
 
-import ErrorBoundary from '../../../shared/ErrorBoundary'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import buildVariables from './buildVariables'
 import queryAdresses from './queryAdresses'
@@ -649,27 +648,25 @@ const Tree = ({ treeName, dimensions }: Props) => {
   const width = isNaN(dimensions.width) ? 250 : dimensions.width
 
   return (
-    <ErrorBoundary>
-      <Container data-loading={loading}>
-        <StyledList
-          height={height}
-          itemCount={nodes.length}
-          itemSize={singleRowHeight}
-          width={width}
-          ref={listRef}
-        >
-          {({ index, style }) => (
-            <Row
-              key={index}
-              style={style}
-              index={index}
-              node={nodes[index]}
-              treeName={treeName}
-            />
-          )}
-        </StyledList>
-      </Container>
-    </ErrorBoundary>
+    <Container data-loading={loading}>
+      <StyledList
+        height={height}
+        itemCount={nodes.length}
+        itemSize={singleRowHeight}
+        width={width}
+        ref={listRef}
+      >
+        {({ index, style }) => (
+          <Row
+            key={index}
+            style={style}
+            index={index}
+            node={nodes[index]}
+            treeName={treeName}
+          />
+        )}
+      </StyledList>
+    </Container>
   )
 }
 
