@@ -3,7 +3,6 @@ import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
-import compose from 'recompose/compose'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import InputAdornment from '@material-ui/core/InputAdornment'
@@ -21,9 +20,9 @@ import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
+import queryAdresses from './queryAdresses'
 import updateUserByIdGql from './updateUserById'
 import Select from '../../../shared/Select'
-import withAllAdresses from './withAllAdresses'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
@@ -65,18 +64,7 @@ const roleWerte = [
   },
 ]
 
-const enhance = compose(
-  withAllAdresses,
-  observer,
-)
-
-const User = ({
-  treeName,
-  dataAllAdresses,
-}: {
-  treeName: String,
-  dataAllAdresses: Object,
-}) => {
+const User = ({ treeName }: { treeName: String }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { refetch } = mobxStore
   const client = useApolloClient()
@@ -101,11 +89,17 @@ const User = ({
     },
   })
 
+  const {
+    data: dataAdresses,
+    loading: loadingAdresses,
+    error: errorAdresses,
+  } = useQuery(queryAdresses)
+
   const row = get(data, 'userById', {})
 
   useEffect(() => setErrors({}), [row])
 
-  let adresses = sortBy(get(dataAllAdresses, 'allAdresses.nodes', []), 'name')
+  let adresses = sortBy(get(dataAdresses, 'allAdresses.nodes', []), 'name')
   adresses = adresses.map(el => ({
     value: el.id,
     label: el.name,
@@ -192,7 +186,7 @@ const User = ({
     [password],
   )
 
-  if (loading || dataAllAdresses.loading) {
+  if (loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
@@ -200,7 +194,7 @@ const User = ({
     )
   }
   if (error) return `Fehler: ${error.message}`
-  if (dataAllAdresses.error) return `Fehler: ${dataAllAdresses.error.message}`
+  if (errorAdresses) return `Fehler: ${errorAdresses.message}`
   if (!row) return null
   return (
     <ErrorBoundary>
@@ -352,4 +346,4 @@ const User = ({
   )
 }
 
-export default enhance(User)
+export default observer(User)
