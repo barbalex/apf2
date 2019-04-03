@@ -200,7 +200,7 @@ const Apber = ({
             )}
             loading={loadingApErfkritWertes}
             saveToDb={saveToDb}
-            errors={errors}
+            error={errors.beurteilung}
           />
           <RadioButtonGroup
             key={`${row.id}veraenderungZumVorjahr`}
@@ -209,7 +209,7 @@ const Apber = ({
             label="Veränderung zum Vorjahr"
             dataSource={veraenGegenVorjahrWerte}
             saveToDb={saveToDb}
-            errors={errors}
+            error={errors.veraenderungZumVorjahr}
           />
           <TextField2
             key={`${row.id}apberAnalyse`}
@@ -229,7 +229,7 @@ const Apber = ({
             type="text"
             multiLine
             saveToDb={saveToDb}
-            errors={errors
+            errors={errors}
           />
           <TextField2
             key={`${row.id}konsequenzenErfolgskontrolle`}
@@ -239,7 +239,7 @@ const Apber = ({
             type="text"
             multiLine
             saveToDb={saveToDb}
-            errors={errors
+            errors={errors}
           />
           <TextField2
             key={`${row.id}biotopeNeue`}
@@ -307,7 +307,7 @@ const Apber = ({
             label="Datum"
             value={row.datum}
             saveToDb={saveToDb}
-            errors={errors}
+            error={errors.datum}
           />
           <Select
             key={`${row.id}bearbeiter`}
@@ -318,7 +318,7 @@ const Apber = ({
             options={get(dataAdresses, 'allAdresses.nodes', [])}
             loading={loadingAdresses}
             saveToDb={saveToDb}
-            errors={errors.bearbeiter}
+            error={errors.bearbeiter}
           />
         </FieldsContainer>
       </Container>
