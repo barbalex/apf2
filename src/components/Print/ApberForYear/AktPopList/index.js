@@ -8,7 +8,7 @@ import { useQuery } from 'react-apollo-hooks'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import mobxStoreContext from '../../../../mobxStoreContext'
-import query from './data'
+import query from './query'
 
 const Container = styled.div`
   display: flex;
@@ -73,7 +73,7 @@ const AktPopList = () => {
       projektId,
     },
   })
-  const aps = get(data, 'projektById.apsByProjId.nodes', [])
+  const aps = get(data, 'allAps.nodes', [])
   const pops100 = flatten(aps.map(ap => get(ap, 'pops100.nodes', []))).filter(
     p => get(p, 'tpopsByPopId.totalCount') > 0,
   )
@@ -103,7 +103,6 @@ const AktPopList = () => {
   )
 
   if (dataError) {
-    console.log(dataError)
     return `Fehler: ${dataError.message}`
   }
 
