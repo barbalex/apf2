@@ -26,6 +26,9 @@ export default gql`
         aeEigenschaftenByArtId {
           ...AeEigenschaftenFields
         }
+        adresseByBearbeiter {
+          ...AdresseFields
+        }
         popsByApId {
           nodes {
             id

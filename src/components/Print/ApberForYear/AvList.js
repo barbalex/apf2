@@ -37,13 +37,13 @@ const Title = styled.p`
   margin-bottom: 4px;
 `
 
-const AvList = ({ data }:{ data: Object }) => {
+const AvList = ({ data }: { data: Object }) => {
   const avGrouped = groupBy(
-    get(data, 'projektById.apsByProjId.nodes', []).map(ap => ({
+    get(data, 'allAps.nodes', []).map(ap => ({
       av: get(ap, 'adresseByBearbeiter.name', '(kein Wert)'),
-      art: get(ap, 'aeEigenschaftenByArtId.artname', '(keine Art gewählt)')
+      art: get(ap, 'aeEigenschaftenByArtId.artname', '(keine Art gewählt)'),
     })),
-    'av'
+    'av',
   )
   const avs = Object.keys(avGrouped).sort()
 
@@ -51,25 +51,24 @@ const AvList = ({ data }:{ data: Object }) => {
     <ErrorBoundary>
       <Container>
         <Title>Artverantwortliche</Title>
-        {
-          avs.map(av => {
-            const array = sortBy(avGrouped[av], 'art')
-            return array.map((o, i) => {
-              if (i ===  0) return (
+        {avs.map(av => {
+          const array = sortBy(avGrouped[av], 'art')
+          return array.map((o, i) => {
+            if (i === 0)
+              return (
                 <AvRow key={o.art}>
                   <Av>{o.av}</Av>
                   <Art>{o.art}</Art>
                 </AvRow>
               )
-              return (
-                <NonAvRow key={o.art}>
-                  <Av>{}</Av>
-                  <Art>{o.art}</Art>
-                </NonAvRow>
-              )
-            })
+            return (
+              <NonAvRow key={o.art}>
+                <Av>{}</Av>
+                <Art>{o.art}</Art>
+              </NonAvRow>
+            )
           })
-        }
+        })}
       </Container>
     </ErrorBoundary>
   )

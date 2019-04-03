@@ -1,14 +1,11 @@
 // @flow
-import React, { Fragment, useContext } from 'react'
+import React, { Fragment } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import sortBy from 'lodash/sortBy'
-import { useQuery } from 'react-apollo-hooks'
 
-import ErrorBoundary from '../../../shared/ErrorBoundary'
-import query from './data'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
   break-before: page;
@@ -207,17 +204,8 @@ const KefKontrolleTitle = styled(ErfolgTitle)`
   grid-row: 2 / span 1;
 `
 
-const ErfolgList = ({ jahr }: { jahr: Number }) => {
-  const mobxStore = useContext(mobxStoreContext)
-  const activeNodes = mobxStore.treeActiveNodes
-  const { projekt: projektId } = activeNodes
-  const { data, loading, error: dataError } = useQuery(query, {
-    variables: {
-      projektId,
-      jahr,
-    },
-  })
-  const aps = get(data, 'projektById.apsByProjId.nodes', [])
+const ErfolgList = ({ jahr, data }: { jahr: Number, data: Object }) => {
+  const aps = get(data, 'allAps.nodes', [])
   const apRows = sortBy(
     aps.map(ap => {
       const beurteilung = get(ap, 'apbersByApId.nodes[0].beurteilung')
@@ -254,60 +242,6 @@ const ErfolgList = ({ jahr }: { jahr: Number }) => {
     }),
     'ap',
   )
-
-  if (dataError) {
-    console.log(dataError)
-    return `Fehler: ${dataError.message}`
-  }
-
-  if (loading) {
-    return (
-      <ErrorBoundary>
-        <Container>
-          <OverallTitle>{`Erfolg ${jahr}`}</OverallTitle>
-          <Table>
-            <ApTitle>Art</ApTitle>
-            <ErfolgSpanningTitle>Erfolg</ErfolgSpanningTitle>
-            <KeineMassnTitle>
-              <div>keine Massnahme</div>
-            </KeineMassnTitle>
-            <KefSpanningTitle>KEF</KefSpanningTitle>
-            <ErfolgNichtTitle>
-              <div>nicht</div>
-            </ErfolgNichtTitle>
-            <ErfolgWenigTitle>
-              <div>wenig</div>
-            </ErfolgWenigTitle>
-            <ErfolgMaessigTitle>
-              <div>mässig</div>
-            </ErfolgMaessigTitle>
-            <ErfolgGutTitle>
-              <div>gut</div>
-            </ErfolgGutTitle>
-            <ErfolgSehrTitle>
-              <div>sehr</div>
-            </ErfolgSehrTitle>
-            <ErfolgAenderungTitle>
-              <div>Veränderung</div>
-            </ErfolgAenderungTitle>
-            <ErfolgUnsicherTitle>
-              <div>unsicher</div>
-            </ErfolgUnsicherTitle>
-            <ErfolgNichtBeurteiltTitle>
-              <div>nicht beurteilt</div>
-            </ErfolgNichtBeurteiltTitle>
-            <KefArtTitle>
-              <div>Art</div>
-            </KefArtTitle>
-            <KefKontrolleTitle>
-              <div>Kontrolle</div>
-            </KefKontrolleTitle>
-            <Fragment>Lade Daten...</Fragment>
-          </Table>
-        </Container>
-      </ErrorBoundary>
-    )
-  }
 
   return (
     <ErrorBoundary>

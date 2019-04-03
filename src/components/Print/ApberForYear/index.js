@@ -172,7 +172,7 @@ const ApberForYear = () => {
             </SecondPage>
           )}
           <AvList data={data} />
-          <ErfolgList jahr={jahr} />
+          <ErfolgList jahr={jahr} data={data} />
           <AktPopList />
           {aps.map(ap => (
             <ApberForAp
