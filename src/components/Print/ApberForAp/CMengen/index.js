@@ -10,7 +10,7 @@ import maxBy from 'lodash/maxBy'
 import { useQuery } from 'react-apollo-hooks'
 import { observer } from 'mobx-react-lite'
 
-import query from './data'
+import query from './query'
 
 const Container = styled.div`
   padding: 0.2cm 0;

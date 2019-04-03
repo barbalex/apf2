@@ -5,7 +5,7 @@ import get from 'lodash/get'
 import sum from 'lodash/sum'
 import { useQuery } from 'react-apollo-hooks'
 
-import query from './data'
+import query from './query'
 
 const Container = styled.div`
   padding: 0.2cm 0;
