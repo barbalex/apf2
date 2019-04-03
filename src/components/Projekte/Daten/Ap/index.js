@@ -316,7 +316,7 @@ const Ap = ({
             row={row}
             type="number"
             saveToDb={saveToDb}
-            error={errors.startJahr}
+            errors={errors}
           />
           <FieldContainer>
             <RadioButtonGroupWithInfo
@@ -371,7 +371,7 @@ const Ap = ({
             label="Bester Beobachtungszeitpunkt für EKF (Freiwilligen-Kontrollen)"
             row={row}
             saveToDb={saveToDb}
-            error={errors.ekfBeobachtungszeitpunkt}
+            errors={errors}
           />
           {!showFilter && (
             <TextFieldNonUpdatable
