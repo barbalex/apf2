@@ -2,8 +2,6 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import sortBy from 'lodash/sortBy'
-import compose from 'recompose/compose'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
@@ -12,8 +10,8 @@ import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
+import queryLists from './queryLists'
 import updateTpopmassnberByIdGql from './updateTpopmassnberById'
-import withAllTpopmassnErfbeurtWertes from './withAllTpopmassnErfbeurtWertes'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
@@ -28,18 +26,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const enhance = compose(
-  withAllTpopmassnErfbeurtWertes,
-  observer,
-)
-
-const Tpopmassnber = ({
-  treeName,
-  dataAllTpopmassnErfbeurtWertes,
-}: {
-  treeName: string,
-  dataAllTpopmassnErfbeurtWertes: Object,
-}) => {
+const Tpopmassnber = ({ treeName }: { treeName: string }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { refetch } = mobxStore
   const client = useApolloClient()
@@ -55,20 +42,15 @@ const Tpopmassnber = ({
     },
   })
 
+  const {
+    data: dataLists,
+    loading: loadingLists,
+    error: errorLists,
+  } = useQuery(queryLists)
+
   const row = get(data, 'tpopmassnberById', {})
 
   useEffect(() => setErrors({}), [row])
-
-  let tpopmassnbeurtWerte = get(
-    dataAllTpopmassnErfbeurtWertes,
-    'allTpopmassnErfbeurtWertes.nodes',
-    [],
-  )
-  tpopmassnbeurtWerte = sortBy(tpopmassnbeurtWerte, 'sort')
-  tpopmassnbeurtWerte = tpopmassnbeurtWerte.map(el => ({
-    value: el.code,
-    label: el.text,
-  }))
 
   const saveToDb = useCallback(
     async event => {
@@ -107,7 +89,7 @@ const Tpopmassnber = ({
     [row],
   )
 
-  if (loading || dataAllTpopmassnErfbeurtWertes.loading) {
+  if (loading) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
@@ -115,8 +97,8 @@ const Tpopmassnber = ({
     )
   }
   if (error) return `Fehler: ${error.message}`
-  if (dataAllTpopmassnErfbeurtWertes.error) {
-    return `Fehler: ${dataAllTpopmassnErfbeurtWertes.error.message}`
+  if (errorLists) {
+    return `Fehler: ${errorLists.message}`
   }
   return (
     <ErrorBoundary>
@@ -141,7 +123,8 @@ const Tpopmassnber = ({
             label="Entwicklung"
             name="beurteilung"
             value={row.beurteilung}
-            dataSource={tpopmassnbeurtWerte}
+            dataSource={get(dataLists, 'allTpopmassnErfbeurtWertes.nodes', [])}
+            loading={loadingLists}
             saveToDb={saveToDb}
             error={errors.beurteilung}
           />
@@ -161,4 +144,4 @@ const Tpopmassnber = ({
   )
 }
 
-export default enhance(Tpopmassnber)
+export default observer(Tpopmassnber)
