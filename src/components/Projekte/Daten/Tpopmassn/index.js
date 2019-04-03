@@ -73,14 +73,17 @@ const Tpopmassn = ({
     },
   })
 
-  /**
-   * THIS IS A BAD HACK
-   * and it will not work once there are many projects
-   * because 'connectionFilterRelations: true' cannot be set for postgraphile
-   * correct would be to query only what is in this project
-   * isNull: false is set so there is never an empty object, otherwise qraphql will fail
-   */
-  const tpopmassnFilter = { tpopId: { isNull: false } }
+  const allTpopmassnFilter = {
+    tpopByTpopId: {
+      popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
+    },
+  }
+  const tpopmassnFilter = {
+    tpopId: { isNull: false },
+    tpopByTpopId: {
+      popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
+    },
+  }
   const tpopmassnFilterValues = Object.entries(
     nodeFilter[treeName].tpopmassn,
   ).filter(e => e[1] || e[1] === 0)
@@ -92,6 +95,7 @@ const Tpopmassn = ({
     variables: {
       showFilter,
       tpopmassnFilter,
+      allTpopmassnFilter,
       apId,
     },
   })

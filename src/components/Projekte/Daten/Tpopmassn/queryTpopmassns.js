@@ -4,9 +4,10 @@ export default gql`
   query tpopmassnsQuery(
     $showFilter: Boolean!
     $tpopmassnFilter: TpopmassnFilter!
+    $allTpopmassnFilter: TpopmassnFilter!
     $apId: UUID!
   ) {
-    allTpopmassns @include(if: $showFilter) {
+    allTpopmassns(filter: $allTpopmassnFilter) @include(if: $showFilter) {
       totalCount
     }
     tpopmassnsFiltered: allTpopmassns(filter: $tpopmassnFilter)
