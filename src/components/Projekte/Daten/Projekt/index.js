@@ -5,7 +5,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextField2'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
@@ -101,10 +101,10 @@ const Projekt = ({ treeName }: { treeName: string }) => {
             key={`${row.id}name`}
             name="name"
             label="Name"
-            value={row.name}
+            row={row}
             type="text"
             saveToDb={saveToDb}
-            error={errors.name}
+            errors={errors}
           />
         </FieldsContainer>
       </Container>

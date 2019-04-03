@@ -5,7 +5,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextField2'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
 import Status from '../../../shared/Status'
 import SelectCreatable from '../../../shared/SelectCreatableGemeinde'
@@ -259,10 +259,10 @@ const Tpop = ({
             key={`${row.id}nr`}
             name="nr"
             label="Nr."
-            value={row.nr}
+            row={row}
             type="number"
             saveToDb={saveToDb}
-            error={errors.nr}
+            errors={errors}
           />
           <TextFieldWithInfo
             key={`${row.id}flurname`}
@@ -295,11 +295,11 @@ const Tpop = ({
             key={`${row.id}statusUnklarGrund`}
             name="statusUnklarGrund"
             label="Begründung"
-            value={row.statusUnklarGrund}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.statusUnklarGrund}
+            errors={errors}
           />
           <RadioButtonGroupWithInfo
             value={row.apberRelevant}
@@ -315,19 +315,19 @@ const Tpop = ({
             key={`${row.id}x`}
             name="x"
             label="X-Koordinaten"
-            value={row.x}
+            row={row}
             type="number"
             saveToDb={saveToDb}
-            error={errors.x}
+            errors={errors}
           />
           <TextField
             key={`${row.id}y`}
             name="y"
             label="Y-Koordinaten"
-            value={row.y}
+            row={row}
             type="number"
             saveToDb={saveToDb}
-            error={errors.y}
+            errors={errors}
           />
           <SelectCreatable
             key={`${row.id}gemeinde`}
@@ -363,120 +363,120 @@ const Tpop = ({
             key={`${row.id}radius`}
             name="radius"
             label="Radius (m)"
-            value={row.radius}
+            row={row}
             type="number"
             saveToDb={saveToDb}
-            error={errors.radius}
+            errors={errors}
           />
           <TextField
             key={`${row.id}hoehe`}
             name="hoehe"
             label="Höhe (m.ü.M.)"
-            value={row.hoehe}
+            row={row}
             type="number"
             saveToDb={saveToDb}
-            error={errors.hoehe}
+            errors={errors}
           />
           <TextField
             key={`${row.id}exposition`}
             name="exposition"
             label="Exposition, Besonnung"
-            value={row.exposition}
+            row={row}
             type="text"
             saveToDb={saveToDb}
-            error={errors.exposition}
+            errors={errors}
           />
           <TextField
             key={`${row.id}klima`}
             name="klima"
             label="Klima"
-            value={row.klima}
+            row={row}
             type="text"
             saveToDb={saveToDb}
-            error={errors.klima}
+            errors={errors}
           />
           <TextField
             key={`${row.id}neigung`}
             name="neigung"
             label="Hangneigung"
-            value={row.neigung}
+            row={row}
             type="text"
             saveToDb={saveToDb}
-            error={errors.neigung}
+            errors={errors}
           />
           <TextField
             key={`${row.id}beschreibung`}
             name="beschreibung"
             label="Beschreibung"
-            value={row.beschreibung}
+            row={row}
             type="text"
             multiline
             saveToDb={saveToDb}
-            error={errors.beschreibung}
+            errors={errors}
           />
           <TextField
             key={`${row.id}katasterNr`}
             name="katasterNr"
             label="Kataster-Nr."
-            value={row.katasterNr}
+            row={row}
             type="text"
             saveToDb={saveToDb}
-            error={errors.katasterNr}
+            errors={errors}
           />
           <TextField
             key={`${row.id}eigentuemer`}
             name="eigentuemer"
             label="EigentümerIn"
-            value={row.eigentuemer}
+            row={row}
             type="text"
             saveToDb={saveToDb}
-            error={errors.eigentuemer}
+            errors={errors}
           />
           <TextField
             key={`${row.id}kontakt`}
             name="kontakt"
             label="Kontakt vor Ort"
-            value={row.kontakt}
+            row={row}
             type="text"
             saveToDb={saveToDb}
-            error={errors.kontakt}
+            errors={errors}
           />
           <TextField
             key={`${row.id}nutzungszone`}
             name="nutzungszone"
             label="Nutzungszone"
-            value={row.nutzungszone}
+            row={row}
             type="text"
             saveToDb={saveToDb}
-            error={errors.nutzungszone}
+            errors={errors}
           />
           <TextField
             key={`${row.id}bewirtschafter`}
             name="bewirtschafter"
             label="BewirtschafterIn"
-            value={row.bewirtschafter}
+            row={row}
             type="text"
             saveToDb={saveToDb}
-            error={errors.bewirtschafter}
+            errors={errors}
           />
           <TextField
             key={`${row.id}bewirtschaftung`}
             name="bewirtschaftung"
             label="Bewirtschaftung"
-            value={row.bewirtschaftung}
+            row={row}
             type="text"
             saveToDb={saveToDb}
-            error={errors.bewirtschaftung}
+            errors={errors}
           />
           <TextField
             key={`${row.id}bemerkungen`}
             name="bemerkungen"
             label="Bemerkungen"
-            value={row.bemerkungen}
+            row={row}
             type="text"
             multiline
             saveToDb={saveToDb}
-            error={errors.bemerkungen}
+            errors={errors}
           />
         </FieldsContainer>
       </Container>
