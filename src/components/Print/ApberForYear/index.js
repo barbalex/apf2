@@ -8,8 +8,8 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from 'react-apollo-hooks'
 
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import query1 from './data1'
-import query2 from './data2'
+import query1 from './query1'
+import query2 from './query2'
 import fnslogo from './fnslogo.png'
 import AvList from './AvList'
 import AktPopList from './AktPopList'
@@ -131,7 +131,7 @@ const ApberForYear = () => {
   const data = { ...data1, ...data2 }
   const apberuebersicht = get(data1, 'apberuebersichtById')
   const aps = sortBy(
-    get(data2, 'projektById.apsByProjId.nodes', []).filter(
+    get(data2, 'allAps.nodes', []).filter(
       ap =>
         !!get(ap, 'apbersByApId.nodes[0]', null) &&
         !!get(ap, 'apbersByApId.nodes[0].id'),
