@@ -6,7 +6,7 @@ import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import { observer } from 'mobx-react-lite'
 
 import RadioButton from '../../../shared/RadioButton'
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextField2'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updateAdresseByIdGql from './updateAdresseById'
@@ -85,6 +85,8 @@ const Adresse = ({ treeName }: { treeName: String }) => {
     [row],
   )
 
+  console.log('Adresse')
+
   if (loading) {
     return (
       <Container>
@@ -108,33 +110,33 @@ const Adresse = ({ treeName }: { treeName: String }) => {
             key={`${row.id}name`}
             name="name"
             label="Name"
-            value={row.name}
+            row={row}
             saveToDb={saveToDb}
-            error={errors.name}
+            errors={errors}
           />
           <TextField
             key={`${row.id}adresse`}
             name="adresse"
             label="Adresse"
-            value={row.adresse}
+            row={row}
             saveToDb={saveToDb}
-            error={errors.adresse}
+            errors={errors}
           />
           <TextField
             key={`${row.id}telefon`}
             name="telefon"
             label="Telefon"
-            value={row.telefon}
+            row={row}
             saveToDb={saveToDb}
-            error={errors.telefon}
+            errors={errors}
           />
           <TextField
             key={`${row.id}email`}
             name="email"
             label="Email"
-            value={row.email}
+            row={row}
             saveToDb={saveToDb}
-            error={errors.email}
+            errors={errors}
           />
           <RadioButton
             key={`${row.id}freiwErfko`}
@@ -148,27 +150,27 @@ const Adresse = ({ treeName }: { treeName: String }) => {
             key={`${row.id}evabVorname`}
             name="evabVorname"
             label="EvAB Vorname"
-            value={row.evabVorname}
+            row={row}
             saveToDb={saveToDb}
-            error={errors.evabVorname}
+            errors={errors}
             helperText="Wird für den Export in EvAB benötigt"
           />
           <TextField
             key={`${row.id}evabNachname`}
             name="evabNachname"
             label="EvAB Nachname"
-            value={row.evabNachname}
+            row={row}
             saveToDb={saveToDb}
-            error={errors.evabNachname}
+            errors={errors}
             helperText="Wird für den Export in EvAB benötigt"
           />
           <TextField
             key={`${row.id}evabOrt`}
             name="evabOrt"
             label="EvAB Ort"
-            value={row.evabOrt}
+            row={row}
             saveToDb={saveToDb}
-            error={errors.evabOrt}
+            errors={errors}
             helperText="Wird für den Export in EvAB benötigt. Muss immer einen Wert enthalten. Ist keine Ort bekannt, bitte - eintragen"
           />
         </FieldsContainer>
