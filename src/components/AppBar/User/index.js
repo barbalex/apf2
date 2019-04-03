@@ -17,7 +17,7 @@ import Button from '@material-ui/core/Button'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
 import query from './data'
-import TextField from '../../shared/TextField'
+import TextField from '../../shared/TextField2'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import updateUserByIdGql from './updateUserById'
 import mobxStoreContext from '../../../mobxStoreContext'
@@ -178,7 +178,7 @@ const User = ({
               key={`${row.id}email`}
               name="email"
               label="Email"
-              value={row.email}
+              row={row}
               saveToDb={saveToDb}
               error={errors.email}
               helperText="Bitte aktuell halten, damit wir Sie bei Bedarf kontaktieren können"

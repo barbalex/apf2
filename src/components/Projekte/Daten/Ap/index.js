@@ -12,7 +12,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
-import TextField2 from '../../../shared/TextField2'
+import TextField from '../../../shared/TextField2'
 import Select from '../../../shared/Select'
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
@@ -235,6 +235,8 @@ const Ap = ({
         },
   )
 
+  console.log('Ap')
+
   if (loading) {
     return (
       <Container>
@@ -307,7 +309,7 @@ const Ap = ({
             }
             label="Aktionsplan"
           />
-          <TextField2
+          <TextField
             key={`${row.id}startJahr`}
             name="startJahr"
             label="Start im Jahr"
@@ -363,7 +365,7 @@ const Ap = ({
             saveToDb={saveToDb}
             error={errors.bearbeiter}
           />
-          <TextField2
+          <TextField
             key={`${row.id}ekfBeobachtungszeitpunkt`}
             name="ekfBeobachtungszeitpunkt"
             label="Bester Beobachtungszeitpunkt für EKF (Freiwilligen-Kontrollen)"
