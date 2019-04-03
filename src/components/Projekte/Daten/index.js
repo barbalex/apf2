@@ -67,27 +67,25 @@ const Daten = ({
     ekfzaehleinheit: <Ekfzaehleinheit treeName={treeName} />,
     apart: <Apart treeName={treeName} />,
     idealbiotop: <Idealbiotop dimensions={dimensions} treeName={treeName} />,
-    erfkrit: <Erfkrit dimensions={dimensions} treeName={treeName} />,
+    erfkrit: <Erfkrit treeName={treeName} />,
     apber: <Apber dimensions={dimensions} treeName={treeName} />,
-    ber: <Ber dimensions={dimensions} treeName={treeName} />,
+    ber: <Ber treeName={treeName} />,
     ziel: <Ziel dimensions={dimensions} treeName={treeName} />,
     zielber: <Zielber dimensions={dimensions} treeName={treeName} />,
     pop: <Pop dimensions={dimensions} treeName={treeName} />,
     popmassnber: <Popmassnber dimensions={dimensions} treeName={treeName} />,
-    popber: <Popber dimensions={dimensions} treeName={treeName} />,
+    popber: <Popber treeName={treeName} />,
     tpop: <Tpop dimensions={dimensions} treeName={treeName} />,
-    tpopber: <Tpopber dimensions={dimensions} treeName={treeName} />,
+    tpopber: <Tpopber treeName={treeName} />,
     tpopmassn: <Tpopmassn dimensions={dimensions} treeName={treeName} />,
-    tpopmassnber: <Tpopmassnber dimensions={dimensions} treeName={treeName} />,
+    tpopmassnber: <Tpopmassnber treeName={treeName} />,
     tpopfeldkontr: (
       <Tpopfeldkontr dimensions={dimensions} treeName={treeName} />
     ),
     tpopfreiwkontr: (
       <Tpopfreiwkontr dimensions={dimensions} treeName={treeName} />
     ),
-    tpopkontrzaehl: (
-      <Tpopkontrzaehl dimensions={dimensions} treeName={treeName} />
-    ),
+    tpopkontrzaehl: <Tpopkontrzaehl treeName={treeName} />,
     exporte: <Exporte />,
     qk: <Qk treeName={treeName} />,
     beobNichtZuzuordnen: (
@@ -111,9 +109,9 @@ const Daten = ({
         type="zugeordnet"
       />
     ),
-    user: <User dimensions={dimensions} treeName={treeName} />,
-    currentIssue: <CurrentIssue dimensions={dimensions} treeName={treeName} />,
-    adresse: <Adresse dimensions={dimensions} treeName={treeName} />,
+    user: <User treeName={treeName} />,
+    currentIssue: <CurrentIssue treeName={treeName} />,
+    adresse: <Adresse treeName={treeName} />,
   }
   let key
   if (activeNodeArray.length > 2 && activeNodeArray[2] === 'Exporte') {
