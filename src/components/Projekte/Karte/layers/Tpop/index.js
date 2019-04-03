@@ -63,14 +63,10 @@ const Tpop = ({
   const perProj = apId === '99999999-9999-9999-9999-999999999999'
   const perAp = apId !== '99999999-9999-9999-9999-999999999999'
 
-  /**
-   * THIS IS A BAD HACK
-   * and it will not work once there are many projects
-   * because 'connectionFilterRelations: true' cannot be set for postgraphile
-   * correct would be to query only what is in this project
-   * isNull: false is set so there is never an empty object, otherwise qraphql will fail
-   */
-  const popFilter = { x: { isNull: false }, y: { isNull: false } }
+  const popFilter = {
+    x: { isNull: false },
+    y: { isNull: false },
+  }
   const popFilterValues = Object.entries(nodeFilter[treeName].pop).filter(
     e => e[1] || e[1] === 0,
   )
