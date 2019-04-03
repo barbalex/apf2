@@ -4,9 +4,10 @@ export default gql`
   query tpopsQuery(
     $showFilter: Boolean!
     $tpopFilter: TpopFilter!
+    $allTpopsFilter: TpopFilter!
     $apId: UUID!
   ) {
-    allTpops @include(if: $showFilter) {
+    allTpops(filter: $allTpopsFilter) @include(if: $showFilter) {
       totalCount
     }
     tpopsFiltered: allTpops(filter: $tpopFilter) @include(if: $showFilter) {

@@ -77,14 +77,14 @@ const Tpop = ({
     loading: loadingLists,
     error: errorLists,
   } = useQuery(queryLists)
-  /**
-   * THIS IS A BAD HACK
-   * and it will not work once there are many projects
-   * because 'connectionFilterRelations: true' cannot be set for postgraphile
-   * correct would be to query only what is in this project
-   * isNull: false is set so there is never an empty object, otherwise qraphql will fail
-   */
-  const tpopFilter = { popId: { isNull: false } }
+
+  const allTpopsFilter = {
+    popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
+  }
+  const tpopFilter = {
+    popId: { isNull: false },
+    popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
+  }
   const tpopFilterValues = Object.entries(nodeFilter[treeName].tpop).filter(
     e => e[1] || e[1] === 0,
   )
@@ -96,6 +96,7 @@ const Tpop = ({
   const { data: dataTpops } = useQuery(queryTpops, {
     variables: {
       showFilter,
+      allTpopsFilter,
       tpopFilter,
       apId,
     },
