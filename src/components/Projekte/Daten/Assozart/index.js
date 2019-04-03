@@ -5,7 +5,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextField2'
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -133,11 +133,11 @@ const Assozart = ({ treeName }: { treeName: string }) => {
             key={`${row.id}bemerkungen`}
             name="bemerkungen"
             label="Bemerkungen zur Assoziation"
-            value={row.bemerkungen}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.bemerkungen}
+            errors={errors}
           />
         </FieldsContainer>
       </Container>

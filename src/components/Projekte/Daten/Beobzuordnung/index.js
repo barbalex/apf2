@@ -10,7 +10,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
 import FormTitle from '../../../shared/FormTitle'
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextField2'
 import CheckboxWithInfo from '../../../shared/CheckboxWithInfo'
 import Select from '../../../shared/Select'
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
@@ -276,7 +276,7 @@ const Beobzuordnung = ({
               key={`${row.id}bemerkungen`}
               name="bemerkungen"
               label="Bemerkungen zur Zuordnung"
-              value={row.bemerkungen}
+              row={row}
               type="text"
               multiLine
               saveToDb={onUpdateBemerkungen}

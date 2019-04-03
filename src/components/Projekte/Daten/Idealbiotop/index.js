@@ -5,7 +5,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextField2'
 import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
 import FormTitle from '../../../shared/FormTitle'
 import constants from '../../../../modules/constants'
@@ -158,173 +158,173 @@ const Idealbiotop = ({
             key={`${row.id}hoehenlage`}
             name="hoehenlage"
             label="Höhe"
-            value={row.hoehenlage}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.hoehenlage}
+            errors={errors}
           />
           <TextField
             key={`${row.id}region`}
             name="region"
             label="Region"
-            value={row.region}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.region}
+            errors={errors}
           />
           <TextField
             key={`${row.id}exposition`}
             name="exposition"
             label="Exposition"
-            value={row.exposition}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.exposition}
+            errors={errors}
           />
           <TextField
             key={`${row.id}besonnung`}
             name="besonnung"
             label="Besonnung"
-            value={row.besonnung}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.besonnung}
+            errors={errors}
           />
           <TextField
             key={`${row.id}hangneigung`}
             name="hangneigung"
             label="Hangneigung"
-            value={row.hangneigung}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.hangneigung}
+            errors={errors}
           />
           <Section>Boden</Section>
           <TextField
             key={`${row.id}bodenTyp`}
             name="bodenTyp"
             label="Typ"
-            value={row.bodenTyp}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.bodenTyp}
+            errors={errors}
           />
           <TextField
             key={`${row.id}bodenKalkgehalt`}
             name="bodenKalkgehalt"
             label="Kalkgehalt"
-            value={row.bodenKalkgehalt}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.bodenKalkgehalt}
+            errors={errors}
           />
           <TextField
             key={`${row.id}bodenDurchlaessigkeit`}
             name="bodenDurchlaessigkeit"
             label="Durchlässigkeit"
-            value={row.bodenDurchlaessigkeit}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.bodenDurchlaessigkeit}
+            errors={errors}
           />
           <TextField
             key={`${row.id}bodenHumus`}
             name="bodenHumus"
             label="Humus"
-            value={row.bodenHumus}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.bodenHumus}
+            errors={errors}
           />
           <TextField
             key={`${row.id}bodenNaehrstoffgehalt`}
             name="bodenNaehrstoffgehalt"
             label="Nährstoffgehalt"
-            value={row.bodenNaehrstoffgehalt}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.bodenNaehrstoffgehalt}
+            errors={errors}
           />
           <TextField
             key={`${row.id}wasserhaushalt`}
             name="wasserhaushalt"
             label="Wasserhaushalt"
-            value={row.wasserhaushalt}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.wasserhaushalt}
+            errors={errors}
           />
           <Section>Vegetation</Section>
           <TextField
             key={`${row.id}konkurrenz`}
             name="konkurrenz"
             label="Konkurrenz"
-            value={row.konkurrenz}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.konkurrenz}
+            errors={errors}
           />
           <TextField
             key={`${row.id}moosschicht`}
             name="moosschicht"
             label="Moosschicht"
-            value={row.moosschicht}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.moosschicht}
+            errors={errors}
           />
           <TextField
             key={`${row.id}Krautschicht`}
             name="krautschicht"
             label="Krautschicht"
-            value={row.krautschicht}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.krautschicht}
+            errors={errors}
           />
           <TextField
             key={`${row.id}Strauchschicht`}
             name="strauchschicht"
             label="Strauchschicht"
-            value={row.strauchschicht}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.strauchschicht}
+            errors={errors}
           />
           <TextField
             key={`${row.id}baumschicht`}
             name="baumschicht"
             label="Baumschicht"
-            value={row.baumschicht}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.baumschicht}
+            errors={errors}
           />
           <TextField
             key={`${row.id}bemerkungen`}
             name="bemerkungen"
             label="Bemerkungen"
-            value={row.bemerkungen}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.bemerkungen}
+            errors={errors}
           />
         </FieldsContainer>
       </Container>

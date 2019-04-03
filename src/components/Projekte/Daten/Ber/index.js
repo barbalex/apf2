@@ -5,7 +5,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextField2'
 import TextFieldWithUrl from '../../../shared/TextFieldWithUrl'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -103,29 +103,29 @@ const Ber = ({ treeName }: { treeName: string }) => {
             key={`${row.id}autor`}
             name="autor"
             label="AutorIn"
-            value={row.autor}
+            row={row}
             type="text"
             saveToDb={saveToDb}
-            error={errors.autor}
+            errors={errors}
           />
           <TextField
             key={`${row.id}jahr`}
             name="jahr"
             label="Jahr"
-            value={row.jahr}
+            row={row}
             type="number"
             saveToDb={saveToDb}
-            error={errors.jahr}
+            errors={errors}
           />
           <TextField
             key={`${row.id}titel`}
             name="titel"
             label="Titel"
-            value={row.titel}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.titel}
+            errors={errors}
           />
           <TextFieldWithUrl
             key={`${row.id}url`}

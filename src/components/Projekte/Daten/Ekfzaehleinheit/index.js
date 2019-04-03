@@ -5,7 +5,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextField2'
 import Select from '../../../shared/Select'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -141,11 +141,11 @@ const Ekfzaehleinheit = ({ treeName }: { treeName: string }) => {
             key={`${row.id}bemerkungen`}
             name="bemerkungen"
             label="Bemerkungen"
-            value={row.bemerkungen}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.bemerkungen}
+            errors={errors}
           />
         </FieldsContainer>
       </Container>

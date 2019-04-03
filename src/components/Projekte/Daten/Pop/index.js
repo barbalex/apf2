@@ -5,7 +5,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextField2'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
 import Status from '../../../shared/Status'
 import RadioButton from '../../../shared/RadioButton'
@@ -202,10 +202,10 @@ const Pop = ({
             key={`${row.id}nr`}
             label="Nr."
             name="nr"
-            value={row.nr}
+            row={row}
             type="number"
             saveToDb={saveToDb}
-            error={errors.nr}
+            errors={errors}
           />
           <TextFieldWithInfo
             key={`${row.id}name`}
@@ -238,29 +238,29 @@ const Pop = ({
             key={`${row.id}statusUnklarBegruendung`}
             label="Begründung"
             name="statusUnklarBegruendung"
-            value={row.statusUnklarBegruendung}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.statusUnklarBegruendung}
+            errors={errors}
           />
           <TextField
             key={`${row.id}x`}
             label="X-Koordinaten"
             name="x"
-            value={row.x}
+            row={row}
             type="number"
             saveToDb={saveToDb}
-            error={errors.x}
+            errors={errors}
           />
           <TextField
             key={`${row.id}y`}
             label="Y-Koordinaten"
             name="y"
-            value={row.y}
+            row={row}
             type="number"
             saveToDb={saveToDb}
-            error={errors.y}
+            errors={errors}
           />
         </FieldsContainer>
       </Container>
