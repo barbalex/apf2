@@ -172,14 +172,19 @@ const Tpopfreiwkontr = ({
       id,
     },
   })
-  /**
-   * THIS IS A BAD HACK
-   * and it will not work once there are many projects
-   * because 'connectionFilterRelations: true' cannot be set for postgraphile
-   * correct would be to query only what is in this project
-   * isNull: false is set so there is never an empty object, otherwise qraphql will fail
-   */
-  const tpopkontrFilter = { typ: { equalTo: 'Freiwilligen-Erfolgskontrolle' } }
+
+  const allTpopkontrFilter = {
+    typ: { equalTo: 'Freiwilligen-Erfolgskontrolle' },
+    tpopByTpopId: {
+      popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
+    },
+  }
+  const tpopkontrFilter = {
+    typ: { equalTo: 'Freiwilligen-Erfolgskontrolle' },
+    tpopByTpopId: {
+      popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
+    },
+  }
   const tpopkontrFilterValues = Object.entries(
     nodeFilter[treeName].tpopfreiwkontr,
   ).filter(e => e[1] || e[1] === 0)
@@ -192,6 +197,7 @@ const Tpopfreiwkontr = ({
     variables: {
       showFilter,
       tpopkontrFilter,
+      allTpopkontrFilter,
       apId,
     },
   })
@@ -478,7 +484,7 @@ const Tpopfreiwkontr = ({
   if (errorAdresses) return `Fehler: ${errorAdresses.message}`
   if (error) return `Fehler: ${error.message}`
   if (errorAdresses) return `Fehler: ${errorAdresses.message}`
-  if (showFilter || loading) {
+  if (loading) {
     return (
       <Container>
         <InnerContainer>Lade...</InnerContainer>
