@@ -2,7 +2,6 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import sortBy from 'lodash/sortBy'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import InputAdornment from '@material-ui/core/InputAdornment'
@@ -98,12 +97,6 @@ const User = ({ treeName }: { treeName: String }) => {
   const row = get(data, 'userById', {})
 
   useEffect(() => setErrors({}), [row])
-
-  let adresses = sortBy(get(dataAdresses, 'allAdresses.nodes', []), 'name')
-  adresses = adresses.map(el => ({
-    value: el.id,
-    label: el.name,
-  }))
 
   const saveToDb = useCallback(
     async event => {
@@ -240,7 +233,8 @@ const User = ({ treeName }: { treeName: String }) => {
             value={row.adresseId}
             field="adresseId"
             label="Zugehörige Adresse"
-            options={adresses}
+            options={get(dataAdresses, 'allAdresses.nodes', [])}
+            loading={loadingAdresses}
             saveToDb={saveToDb}
             error={errors.adresseId}
           />
