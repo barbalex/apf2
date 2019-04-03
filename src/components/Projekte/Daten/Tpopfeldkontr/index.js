@@ -108,18 +108,24 @@ const Tpopfeldkontr = ({
       id,
     },
   })
-  /**
-   * THIS IS A BAD HACK
-   * and it will not work once there are many projects
-   * because 'connectionFilterRelations: true' cannot be set for postgraphile
-   * correct would be to query only what is in this project
-   * isNull: false is set so there is never an empty object, otherwise qraphql will fail
-   */
+
+  const allTpopkontrFilter = {
+    or: [
+      { typ: { notEqualTo: 'Freiwilligen-Erfolgskontrolle' } },
+      { typ: { isNull: true } },
+    ],
+    tpopByTpopId: {
+      popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
+    },
+  }
   const tpopkontrFilter = {
     or: [
       { typ: { notEqualTo: 'Freiwilligen-Erfolgskontrolle' } },
       { typ: { isNull: true } },
     ],
+    tpopByTpopId: {
+      popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
+    },
   }
   const tpopfeldkontrFilterValues = Object.entries(
     nodeFilter[treeName].tpopfeldkontr,
@@ -133,6 +139,7 @@ const Tpopfeldkontr = ({
     variables: {
       showFilter,
       tpopkontrFilter,
+      allTpopkontrFilter,
       apId,
     },
   })

@@ -4,16 +4,10 @@ export default gql`
   query tpopkontrQuery(
     $showFilter: Boolean!
     $tpopkontrFilter: TpopkontrFilter!
+    $allTpopkontrFilter: TpopkontrFilter!
     $apId: UUID!
   ) {
-    allTpopkontrs(
-      filter: {
-        or: [
-          { typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" } }
-          { typ: { isNull: true } }
-        ]
-      }
-    ) @include(if: $showFilter) {
+    allTpopkontrs(filter: $allTpopkontrFilter) @include(if: $showFilter) {
       totalCount
     }
     tpopkontrsFiltered: allTpopkontrs(filter: $tpopkontrFilter)
