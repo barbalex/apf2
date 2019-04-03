@@ -1,8 +1,7 @@
 // @flow
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys'
+import { observer } from 'mobx-react-lite'
 
 import RadioButton from '../../../shared/RadioButton'
 
@@ -57,52 +56,48 @@ const MapVal2 = styled(Label)`
   }
 `
 
-const enhance = compose(
-  onlyUpdateForKeys(['id', 'planVorhanden', 'planVorhandenErrors']),
-)
-
 const Map = ({
-  id,
-  planVorhanden,
-  planVorhandenErrors,
   saveToDb,
   row,
+  errors,
   showFilter,
 }: {
-  id: string,
-  planVorhanden: string,
-  planVorhandenErrors: string,
   saveToDb: () => void,
   row: Object,
+  errors: Object,
   showFilter: boolean,
-}) => (
-  <Container>
-    <MapLabel0>Plan ergänzt</MapLabel0>
-    <MapLabel1>ja</MapLabel1>
-    <MapVal1 data-id="planVorhanden_true">
-      <RadioButton
-        key={`${id}planVorhanden`}
-        name="planVorhanden"
-        value={planVorhanden}
-        saveToDb={saveToDb}
-      />
-    </MapVal1>
-    <MapLabel2>nein</MapLabel2>
-    <MapVal2 data-id="planVorhanden_false">
-      <RadioButton
-        key={`${id}planVorhanden2`}
-        name="planVorhanden"
-        value={planVorhanden === false}
-        saveToDb={() => {
-          const fakeEvent = {
-            target: { name: 'planVorhanden', value: false },
-          }
-          saveToDb(fakeEvent)
-        }}
-        error={planVorhandenErrors}
-      />
-    </MapVal2>
-  </Container>
-)
+}) => {
+  const onSaveFalse = useCallback(() => {
+    const fakeEvent = {
+      target: { name: 'planVorhanden', value: false },
+    }
+    saveToDb(fakeEvent)
+  })
 
-export default enhance(Map)
+  return (
+    <Container>
+      <MapLabel0>Plan ergänzt</MapLabel0>
+      <MapLabel1>ja</MapLabel1>
+      <MapVal1 data-id="planVorhanden_true">
+        <RadioButton
+          key={`${row.id}planVorhanden`}
+          name="planVorhanden"
+          value={row.planVorhanden}
+          saveToDb={saveToDb}
+        />
+      </MapVal1>
+      <MapLabel2>nein</MapLabel2>
+      <MapVal2 data-id="planVorhanden_false">
+        <RadioButton
+          key={`${row.id}planVorhanden2`}
+          name="planVorhanden"
+          value={row.planVorhanden === false}
+          saveToDb={onSaveFalse}
+          error={errors.planVorhanden}
+        />
+      </MapVal2>
+    </Container>
+  )
+}
+
+export default observer(Map)

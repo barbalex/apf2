@@ -1,8 +1,7 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys'
+import { observer } from 'mobx-react-lite'
 
 import TextField from '../../../shared/TextField'
 import RadioButton from '../../../shared/RadioButton'
@@ -142,55 +141,25 @@ const Img = styled.img`
   max-width: inherit;
 `
 
-const enhance = compose(
-  onlyUpdateForKeys([
-    'id',
-    'flaecheUeberprueft',
-    'errorsFlaecheUeberprueft',
-    'jungpflanzenVorhanden',
-    'errorsJungpflanzenVorhanden',
-    'vegetationshoeheMaximum',
-    'errorsVegetationshoeheMaximum',
-    'vegetationshoeheMittel',
-    'errorsVegetationshoeheMittel',
-  ]),
-)
-
 const More = ({
-  id,
-  flaecheUeberprueft,
-  errorsFlaecheUeberprueft,
-  jungpflanzenVorhanden,
-  errorsJungpflanzenVorhanden,
-  vegetationshoeheMaximum,
-  errorsVegetationshoeheMaximum,
-  vegetationshoeheMittel,
-  errorsVegetationshoeheMittel,
   saveToDb,
   row,
+  errors,
 }: {
-  id: string,
-  flaecheUeberprueft: string,
-  errorsFlaecheUeberprueft: string,
-  jungpflanzenVorhanden: string,
-  errorsJungpflanzenVorhanden: string,
-  vegetationshoeheMaximum: string,
-  vegetationshoeheMittel: string,
-  errorsVegetationshoeheMittel: string,
-  errorsVegetationshoeheMaximum: string,
   saveToDb: () => void,
   row: Object,
+  errors: Object,
 }) => (
   <Container>
     <MoreFlLabel>Überprüfte Fläche</MoreFlLabel>
     <MoreFlVal>
       <TextField
-        key={`${id}flaecheUeberprueft`}
+        key={`${row.id}flaecheUeberprueft`}
         name="flaecheUeberprueft"
-        value={flaecheUeberprueft}
+        value={row.flaecheUeberprueft}
         type="number"
         saveToDb={saveToDb}
-        error={errorsFlaecheUeberprueft}
+        error={errors.flaecheUeberprueft}
       />
     </MoreFlVal>
     <MoreFlMeasure>
@@ -200,25 +169,25 @@ const More = ({
     <JungPflLabel1>ja</JungPflLabel1>
     <JungPflVal1 data-id="jungpflanzenVorhanden_true">
       <RadioButton
-        key={`${id}jungpflanzenVorhanden1`}
+        key={`${row.id}jungpflanzenVorhanden1`}
         name="jungpflanzenVorhanden"
-        value={jungpflanzenVorhanden}
+        value={row.jungpflanzenVorhanden}
         saveToDb={saveToDb}
       />
     </JungPflVal1>
     <JungPflLabel2>nein</JungPflLabel2>
     <JungPflVal2 data-id="jungpflanzenVorhanden_false">
       <RadioButton
-        key={`${id}jungpflanzenVorhanden2`}
+        key={`${row.id}jungpflanzenVorhanden2`}
         name="jungpflanzenVorhanden"
-        value={jungpflanzenVorhanden === false}
+        value={row.jungpflanzenVorhanden === false}
         saveToDb={() => {
           const fakeEvent = {
             target: { name: 'jungpflanzenVorhanden', value: false },
           }
           saveToDb(fakeEvent)
         }}
-        error={errorsJungpflanzenVorhanden}
+        error={errors.jungpflanzenVorhanden}
       />
     </JungPflVal2>
     <VeghoeheLabel0>Vegetationshöhe</VeghoeheLabel0>
@@ -228,27 +197,27 @@ const More = ({
     <VeghoeheMaxLabel>Maximum (cm)</VeghoeheMaxLabel>
     <VeghoeheMaxVal>
       <TextField
-        key={`${id}vegetationshoeheMaximum`}
+        key={`${row.id}vegetationshoeheMaximum`}
         name="vegetationshoeheMaximum"
-        value={vegetationshoeheMaximum}
+        value={row.vegetationshoeheMaximum}
         type="number"
         saveToDb={saveToDb}
-        error={errorsVegetationshoeheMaximum}
+        error={errors.vegetationshoeheMaximum}
       />
     </VeghoeheMaxVal>
     <VeghoeheMittLabel>Mittel (cm)</VeghoeheMittLabel>
     <VeghoeheMittVal>
       <TextField
-        key={`${id}vegetationshoeheMittel`}
+        key={`${row.id}vegetationshoeheMittel`}
         name="vegetationshoeheMittel"
-        value={vegetationshoeheMittel}
+        value={row.vegetationshoeheMittel}
         type="number"
         saveToDb={saveToDb}
-        error={errorsVegetationshoeheMittel}
+        error={errors.vegetationshoeheMittel}
       />
     </VeghoeheMittVal>
     <VeghoeheMinLabel>(Minimum)</VeghoeheMinLabel>
   </Container>
 )
 
-export default enhance(More)
+export default observer(More)

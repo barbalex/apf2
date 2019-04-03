@@ -1,8 +1,7 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys'
+import { observer } from 'mobx-react-lite'
 
 import RadioButton from '../../../shared/RadioButton'
 
@@ -38,35 +37,27 @@ const VerifVal1 = styled(Label)`
   }
 `
 
-const enhance = compose(
-  onlyUpdateForKeys(['id', 'ekfVerifiziert', 'errorsEkfVerifiziert']),
-)
-
 const Verification = ({
-  id,
-  ekfVerifiziert,
-  errorsEkfVerifiziert,
   saveToDb,
   row,
+  errors,
 }: {
-  id: string,
-  ekfVerifiziert: string,
-  errorsEkfVerifiziert: string,
   saveToDb: () => void,
   row: Object,
+  errors: Object,
 }) => (
   <Container>
     <VerifLabel1>Im Jahresbericht nicht berücksichtigen</VerifLabel1>
     <VerifVal1>
       <RadioButton
-        key={`${id}ekfVerifiziert2`}
+        key={`${row.id}ekfVerifiziert2`}
         name="ekfVerifiziert"
-        value={ekfVerifiziert === false}
+        value={row.ekfVerifiziert === false}
         saveToDb={saveToDb}
-        error={errorsEkfVerifiziert}
+        error={errors.ekfVerifiziert}
       />
     </VerifVal1>
   </Container>
 )
 
-export default enhance(Verification)
+export default observer(Verification)

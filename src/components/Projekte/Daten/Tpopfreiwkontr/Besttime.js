@@ -1,8 +1,7 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys'
+import get from 'lodash/get'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -28,17 +27,17 @@ const BesttimeVal = styled.div`
   grid-area: besttimeVal;
 `
 
-const enhance = compose(onlyUpdateForKeys(['ekfBeobachtungszeitpunkt']))
-
-const Besttime = ({
-  ekfBeobachtungszeitpunkt,
-}: {
-  ekfBeobachtungszeitpunkt: string,
-}) => (
+const Besttime = ({ row }: { row: Object }) => (
   <Container>
     <BesttimeLabel>bester Beobachtungs-Zeitpunkt</BesttimeLabel>
-    <BesttimeVal>{ekfBeobachtungszeitpunkt}</BesttimeVal>
+    <BesttimeVal>
+      {get(
+        row,
+        'tpopByTpopId.popByPopId.apByApId.ekfBeobachtungszeitpunkt',
+        '',
+      )}
+    </BesttimeVal>
   </Container>
 )
 
-export default enhance(Besttime)
+export default Besttime

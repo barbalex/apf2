@@ -1,10 +1,9 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys'
+import { observer } from 'mobx-react-lite'
 
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextField2'
 
 const Container = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -28,37 +27,29 @@ const RemarksVal = styled.div`
   }
 `
 
-const enhance = compose(
-  onlyUpdateForKeys(['id', 'ekfBemerkungen', 'errorsEkfBemerkungen']),
-)
-
 const EkfRemarks = ({
-  id,
-  ekfBemerkungen,
   saveToDb,
-  errorsEkfBemerkungen,
   row,
+  errors,
 }: {
-  id: string,
-  ekfBemerkungen: string,
   saveToDb: () => void,
-  errorsEkfBemerkungen: string,
   row: Object,
+  errors: Object,
 }) => (
   <Container>
     <RemarksLabel>Mitteilungen zwischen AV/Topos und Freiwilligen</RemarksLabel>
     <RemarksVal>
       <TextField
-        key={`${id}ekfBemerkungen`}
+        key={`${row.id}ekfBemerkungen`}
         name="ekfBemerkungen"
-        value={ekfBemerkungen}
+        row={row}
         type="text"
         multiLine
         saveToDb={saveToDb}
-        error={errorsEkfBemerkungen}
+        errors={errors}
       />
     </RemarksVal>
   </Container>
 )
 
-export default enhance(EkfRemarks)
+export default observer(EkfRemarks)

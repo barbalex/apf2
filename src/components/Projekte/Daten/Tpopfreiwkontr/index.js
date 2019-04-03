@@ -276,11 +276,6 @@ const Tpopfreiwkontr = ({
     'tpopByTpopId.popByPopId.apByApId.aeEigenschaftenByArtId.artname',
     '',
   )
-  const ekfBeobachtungszeitpunkt = get(
-    row,
-    'tpopByTpopId.popByPopId.apByApId.ekfBeobachtungszeitpunkt',
-    '',
-  )
   const pop = get(row, 'tpopByTpopId.popByPopId', {})
   const tpop = get(row, 'tpopByTpopId', {})
   const {
@@ -488,20 +483,12 @@ const Tpopfreiwkontr = ({
             showFilter={showFilter}
             treeName={treeName}
           />
-          <Besttime ekfBeobachtungszeitpunkt={ekfBeobachtungszeitpunkt} />
-          <Date
-            id={row.id}
-            datum={datum}
-            saveToDb={saveToDb}
-            errorsDatum={errors.datum}
-            row={row}
-          />
+          <Besttime row={row} />
+          <Date saveToDb={saveToDb} row={row} errors={errors} />
           <Map
-            id={row.id}
-            planVorhanden={planVorhanden}
-            planVorhandenErrors={errors.planVorhanden}
             saveToDb={saveToDb}
             row={row}
+            errors={errors}
             showFilter={showFilter}
           />
           <Image apId={apId} row={row} artname={artname} />
@@ -605,45 +592,15 @@ const Tpopfreiwkontr = ({
               treeName={treeName}
             />
           )}
-          <Cover id={row.id} saveToDb={saveToDb} row={row} errors={errors} />
-          <More
-            id={row.id}
-            flaecheUeberprueft={flaecheUeberprueft}
-            errorsFlaecheUeberprueft={errors.flaecheUeberprueft}
-            jungpflanzenVorhanden={jungpflanzenVorhanden}
-            errorsJungpflanzenVorhanden={errors.jungpflanzenVorhanden}
-            vegetationshoeheMaximum={vegetationshoeheMaximum}
-            errorsVegetationshoeheMaximum={errors.vegetationshoeheMaximum}
-            vegetationshoeheMittel={vegetationshoeheMittel}
-            errorsVegetationshoeheMittel={errors.vegetationshoeheMittel}
-            saveToDb={saveToDb}
-            row={row}
-          />
+          <Cover saveToDb={saveToDb} row={row} errors={errors} />
+          <More saveToDb={saveToDb} row={row} errors={errors} />
           <Danger saveToDb={saveToDb} row={row} errors={errors} />
-          <Remarks
-            id={row.id}
-            bemerkungen={bemerkungen}
-            errorsBemerkungen={errors.bemerkungen}
-            saveToDb={saveToDb}
-            row={row}
-          />
+          <Remarks saveToDb={saveToDb} row={row} errors={errors} />
           {((isPrint && ekfBemerkungen) || !isPrint) && (
-            <EkfRemarks
-              id={row.id}
-              ekfBemerkungen={ekfBemerkungen}
-              saveToDb={saveToDb}
-              errorsEkfBemerkungen={errors.ekfBemerkungen}
-              row={row}
-            />
+            <EkfRemarks saveToDb={saveToDb} row={row} errors={errors} />
           )}
           {!isPrint && !isFreiwillig && !(view === 'ekf') && (
-            <Verification
-              id={row.id}
-              ekfVerifiziert={ekfVerifiziert}
-              errorsEkfVerifiziert={errors.ekfVerifiziert}
-              saveToDb={saveToDb}
-              row={row}
-            />
+            <Verification saveToDb={saveToDb} row={row} errors={errors} />
           )}
         </GridContainer>
         {!showFilter && !isPrint && !isFreiwillig && !(view === 'ekf') && (

@@ -80,12 +80,10 @@ const Img = styled.img`
 `
 
 const Date = ({
-  id,
   saveToDb,
   row,
   errors,
 }: {
-  id: string,
   saveToDb: () => void,
   row: Object,
   errors: Object,

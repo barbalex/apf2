@@ -1,8 +1,7 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
-import onlyUpdateForKeys from 'recompose/onlyUpdateForKeys'
+import { observer } from 'mobx-react-lite'
 
 import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
 
@@ -39,33 +38,27 @@ const DateVal = styled.div`
   }
 `
 
-const enhance = compose(onlyUpdateForKeys(['id', 'datum', 'errorsDatum']))
-
 const Date = ({
-  id,
-  datum,
   saveToDb,
-  errorsDatum,
   row,
+  errors,
 }: {
-  id: string,
-  datum: string,
   saveToDb: () => void,
-  errorsDatum: string,
   row: Object,
+  errors: Object,
 }) => (
   <Container>
     <DateLabel>Aufnahme-datum</DateLabel>
     <DateVal>
       <DateFieldWithPicker
-        key={`${id}datum`}
+        key={`${row.id}datum`}
         name="datum"
-        value={datum}
+        value={row.datum}
         saveToDb={saveToDb}
-        error={errorsDatum}
+        error={errors.datum}
       />
     </DateVal>
   </Container>
 )
 
-export default enhance(Date)
+export default observer(Date)
