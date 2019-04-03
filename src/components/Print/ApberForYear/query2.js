@@ -94,6 +94,7 @@ export default gql`
           }
         }
         apbersByApId(filter: { jahr: { equalTo: $jahr } }) {
+          totalCount
           nodes {
             ...ApberFields
             apErfkritWerteByBeurteilung {

@@ -132,9 +132,7 @@ const ApberForYear = () => {
   const apberuebersicht = get(data1, 'apberuebersichtById')
   const aps = sortBy(
     get(data2, 'allAps.nodes', []).filter(
-      ap =>
-        !!get(ap, 'apbersByApId.nodes[0]', null) &&
-        !!get(ap, 'apbersByApId.nodes[0].id'),
+      ap => get(ap, 'apbersByApId.totalCount', 0) > 0,
     ),
     ap => get(ap, 'aeEigenschaftenByArtId.artname'),
   )
@@ -147,11 +145,9 @@ const ApberForYear = () => {
     )
   }
   if (data1Error) {
-    console.log(data1Error)
     return `Fehler: ${data1Error.message}`
   }
   if (data2Error) {
-    console.log(data2Error)
     return `Fehler: ${data2Error.message}`
   }
 
