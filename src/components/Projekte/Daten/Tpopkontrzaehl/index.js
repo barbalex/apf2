@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextField2'
 import FormTitle from '../../../shared/FormTitle'
 import Select from '../../../shared/Select'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -127,10 +127,10 @@ const Tpopkontrzaehl = ({ treeName }: { treeName: string }) => {
             key={`${row.id}anzahl`}
             name="anzahl"
             label="Anzahl (nur ganze Zahlen)"
-            value={row.anzahl}
+            row={row}
             type="number"
             saveToDb={saveToDb}
-            error={errors.anzahl}
+            errors={errors}
           />
           <RadioButtonGroup
             key={`${row.id}methode`}

@@ -15,7 +15,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextField2'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
@@ -203,18 +203,18 @@ const User = ({ treeName }: { treeName: String }) => {
             key={`${row.id}name`}
             name="name"
             label="Name"
-            value={row.name}
+            row={row}
             saveToDb={saveToDb}
-            error={errors.name}
+            errors={errors}
             helperText="Nur von Managern veränderbar"
           />
           <TextField
             key={`${row.id}email`}
             name="email"
             label="Email"
-            value={row.email}
+            row={row}
             saveToDb={saveToDb}
-            error={errors.email}
+            errors={errors}
             helperText="Bitte aktuell halten, damit wir Sie bei Bedarf kontaktieren können"
           />
           <RadioButtonGroup

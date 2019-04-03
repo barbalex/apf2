@@ -3,7 +3,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextField2'
 import RadioButton from '../../../shared/RadioButton'
 import veghoeheImg from './veghoehe.png'
 
@@ -156,10 +156,10 @@ const More = ({
       <TextField
         key={`${row.id}flaecheUeberprueft`}
         name="flaecheUeberprueft"
-        value={row.flaecheUeberprueft}
+        row={row}
         type="number"
         saveToDb={saveToDb}
-        error={errors.flaecheUeberprueft}
+        errors={errors}
       />
     </MoreFlVal>
     <MoreFlMeasure>
@@ -199,10 +199,10 @@ const More = ({
       <TextField
         key={`${row.id}vegetationshoeheMaximum`}
         name="vegetationshoeheMaximum"
-        value={row.vegetationshoeheMaximum}
+        row={row}
         type="number"
         saveToDb={saveToDb}
-        error={errors.vegetationshoeheMaximum}
+        errors={errors}
       />
     </VeghoeheMaxVal>
     <VeghoeheMittLabel>Mittel (cm)</VeghoeheMittLabel>
@@ -210,10 +210,10 @@ const More = ({
       <TextField
         key={`${row.id}vegetationshoeheMittel`}
         name="vegetationshoeheMittel"
-        value={row.vegetationshoeheMittel}
+        row={row}
         type="number"
         saveToDb={saveToDb}
-        error={errors.vegetationshoeheMittel}
+        errors={errors}
       />
     </VeghoeheMittVal>
     <VeghoeheMinLabel>(Minimum)</VeghoeheMinLabel>

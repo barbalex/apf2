@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextField2'
 import Select from '../../../shared/Select'
 import SelectLoadingOptionsTypable from '../../../shared/SelectLoadingOptionsTypable'
 import RadioButton from '../../../shared/RadioButton'
@@ -276,10 +276,10 @@ const Tpopmassn = ({
             key={`${row.id}jahr`}
             name="jahr"
             label="Jahr"
-            value={row.jahr}
+            row={row}
             type="number"
             saveToDb={saveToDb}
-            error={errors.jahr}
+            errors={errors}
           />
           <DateFieldWithPicker
             key={`${row.id}datum`}
@@ -303,10 +303,10 @@ const Tpopmassn = ({
             key={`${row.id}beschreibung`}
             name="beschreibung"
             label="Massnahme"
-            value={row.beschreibung}
+            row={row}
             type="text"
             saveToDb={saveToDb}
-            error={errors.beschreibung}
+            errors={errors}
           />
           <Select
             key={`${row.id}bearbeiter`}
@@ -323,11 +323,11 @@ const Tpopmassn = ({
             key={`${row.id}bemerkungen`}
             name="bemerkungen"
             label="Bemerkungen"
-            value={row.bemerkungen}
+            row={row}
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.bemerkungen}
+            errors={errors}
           />
           <RadioButton
             key={`${row.id}planVorhanden`}
@@ -341,73 +341,73 @@ const Tpopmassn = ({
             key={`${row.id}planBezeichnung`}
             name="planBezeichnung"
             label="Plan Bezeichnung"
-            value={row.planBezeichnung}
+            row={row}
             type="text"
             saveToDb={saveToDb}
-            error={errors.planBezeichnung}
+            errors={errors}
           />
           <TextField
             key={`${row.id}flaeche`}
             name="flaeche"
             label="Fläche (m2)"
-            value={row.flaeche}
+            row={row}
             type="number"
             saveToDb={saveToDb}
-            error={errors.flaeche}
+            errors={errors}
           />
           <TextField
             key={`${row.id}form`}
             name="form"
             label="Form der Ansiedlung"
-            value={row.form}
+            row={row}
             type="text"
             saveToDb={saveToDb}
-            error={errors.form}
+            errors={errors}
           />
           <TextField
             key={`${row.id}pflanzanordnung`}
             name="pflanzanordnung"
             label="Pflanzanordnung"
-            value={row.pflanzanordnung}
+            row={row}
             type="text"
             saveToDb={saveToDb}
-            error={errors.pflanzanordnung}
+            errors={errors}
           />
           <TextField
             key={`${row.id}markierung`}
             name="markierung"
             label="Markierung"
-            value={row.markierung}
+            row={row}
             type="text"
             saveToDb={saveToDb}
-            error={errors.markierung}
+            errors={errors}
           />
           <TextField
             key={`${row.id}anzTriebe`}
             name="anzTriebe"
             label="Anzahl Triebe"
-            value={row.anzTriebe}
+            row={row}
             type="number"
             saveToDb={saveToDb}
-            error={errors.anzTriebe}
+            errors={errors}
           />
           <TextField
             key={`${row.id}anzPflanzen`}
             name="anzPflanzen"
             label="Anzahl Pflanzen"
-            value={row.anzPflanzen}
+            row={row}
             type="number"
             saveToDb={saveToDb}
-            error={errors.anzPflanzen}
+            errors={errors}
           />
           <TextField
             key={`${row.id}anzPflanzstellen`}
             name="anzPflanzstellen"
             label="Anzahl Pflanzstellen"
-            value={row.anzPflanzstellen}
+            row={row}
             type="number"
             saveToDb={saveToDb}
-            error={errors.anzPflanzstellen}
+            errors={errors}
           />
           <SelectLoadingOptionsTypable
             key={`${row.id}wirtspflanze`}
@@ -423,19 +423,19 @@ const Tpopmassn = ({
             key={`${row.id}herkunftPop`}
             name="herkunftPop"
             label="Herkunftspopulation"
-            value={row.herkunftPop}
+            row={row}
             type="text"
             saveToDb={saveToDb}
-            error={errors.herkunftPop}
+            errors={errors}
           />
           <TextField
             key={`${row.id}sammeldatum`}
             name="sammeldatum"
             label="Sammeldatum"
-            value={row.sammeldatum}
+            row={row}
             type="text"
             saveToDb={saveToDb}
-            error={errors.sammeldatum}
+            errors={errors}
           />
           <StringToCopy text={row.id} label="id" />
         </FieldsContainer>
