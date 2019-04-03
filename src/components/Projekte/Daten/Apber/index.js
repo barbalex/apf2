@@ -176,7 +176,7 @@ const Apber = ({
             row={row}
             type="number"
             saveToDb={saveToDb}
-            error={errors.jahr}
+            errors={errors}
           />
           <TextField2
             key={`${row.id}vergleichVorjahrGesamtziel`}
@@ -186,7 +186,7 @@ const Apber = ({
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.vergleichVorjahrGesamtziel}
+            errors={errors}
           />
           <RadioButtonGroup
             key={`${row.id}beurteilung`}
@@ -200,7 +200,7 @@ const Apber = ({
             )}
             loading={loadingApErfkritWertes}
             saveToDb={saveToDb}
-            error={errors.beurteilung}
+            errors={errors}
           />
           <RadioButtonGroup
             key={`${row.id}veraenderungZumVorjahr`}
@@ -209,7 +209,7 @@ const Apber = ({
             label="Veränderung zum Vorjahr"
             dataSource={veraenGegenVorjahrWerte}
             saveToDb={saveToDb}
-            error={errors.veraenderungZumVorjahr}
+            errors={errors}
           />
           <TextField2
             key={`${row.id}apberAnalyse`}
@@ -219,7 +219,7 @@ const Apber = ({
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.apberAnalyse}
+            errors={errors}
           />
           <TextField2
             key={`${row.id}konsequenzenUmsetzung`}
@@ -229,7 +229,7 @@ const Apber = ({
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.konsequenzenUmsetzung}
+            errors={errors
           />
           <TextField2
             key={`${row.id}konsequenzenErfolgskontrolle`}
@@ -239,7 +239,7 @@ const Apber = ({
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.konsequenzenErfolgskontrolle}
+            errors={errors
           />
           <TextField2
             key={`${row.id}biotopeNeue`}
@@ -249,7 +249,7 @@ const Apber = ({
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.biotopeNeue}
+            errors={errors}
           />
           <TextField2
             key={`${row.id}biotopeOptimieren`}
@@ -259,7 +259,7 @@ const Apber = ({
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.biotopeOptimieren}
+            errors={errors}
           />
           <TextField2
             key={`${row.id}massnahmenApBearb`}
@@ -269,7 +269,7 @@ const Apber = ({
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.massnahmenApBearb}
+            errors={errors}
           />
           <TextField2
             key={`${row.id}massnahmenPlanungVsAusfuehrung`}
@@ -279,7 +279,7 @@ const Apber = ({
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.massnahmenPlanungVsAusfuehrung}
+            errors={errors}
           />
           <TextField2
             key={`${row.id}massnahmenOptimieren`}
@@ -289,7 +289,7 @@ const Apber = ({
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.massnahmenOptimieren}
+            errors={errors}
           />
           <TextField2
             key={`${row.id}wirkungAufArt`}
@@ -299,7 +299,7 @@ const Apber = ({
             type="text"
             multiLine
             saveToDb={saveToDb}
-            error={errors.wirkungAufArt}
+            errors={errors}
           />
           <DateFieldWithPicker
             key={`${row.id}datum`}
@@ -307,7 +307,7 @@ const Apber = ({
             label="Datum"
             value={row.datum}
             saveToDb={saveToDb}
-            error={errors.datum}
+            errors={errors}
           />
           <Select
             key={`${row.id}bearbeiter`}
@@ -318,7 +318,7 @@ const Apber = ({
             options={get(dataAdresses, 'allAdresses.nodes', [])}
             loading={loadingAdresses}
             saveToDb={saveToDb}
-            error={errors.bearbeiter}
+            errors={errors.bearbeiter}
           />
         </FieldsContainer>
       </Container>
