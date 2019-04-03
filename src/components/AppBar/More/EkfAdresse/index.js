@@ -2,12 +2,11 @@
 import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from 'react-apollo-hooks'
 
 import Select from '../../../shared/Select'
-import query from './data'
+import queryAdresses from './queryAdresses'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import dealWithError from '../../../../modules/dealWithError'
@@ -17,7 +16,7 @@ const Container = styled.div`
 `
 
 const EkfAdresse = ({ setAnchorEl }: { setAnchorEl: () => void }) => {
-  const { data, error, loading } = useQuery(query)
+  const { data, error, loading } = useQuery(queryAdresses)
   const mobxStore = useContext(mobxStoreContext)
   const { setView, setEkfAdresseId } = mobxStore
   const choose = useCallback(async event => {
@@ -28,13 +27,6 @@ const EkfAdresse = ({ setAnchorEl }: { setAnchorEl: () => void }) => {
       setView('ekf')
     })
   })
-
-  let adressenWerte = get(data, 'allAdresses.nodes', [])
-  adressenWerte = sortBy(adressenWerte, 'name')
-  adressenWerte = adressenWerte.map(el => ({
-    value: el.id,
-    label: el.name,
-  }))
 
   if (loading) return '...'
   if (error) {
@@ -47,7 +39,8 @@ const EkfAdresse = ({ setAnchorEl }: { setAnchorEl: () => void }) => {
         <Select
           value={''}
           label="EKF sehen als"
-          options={adressenWerte}
+          options={get(data, 'allAdresses.nodes', [])}
+          loading={loading}
           saveToDb={choose}
           maxHeight={130}
         />

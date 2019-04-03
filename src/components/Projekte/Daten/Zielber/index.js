@@ -65,7 +65,6 @@ const Zielber = ({ treeName }: { treeName: string }) => {
                 jahr: field === 'jahr' ? value : row.jahr,
                 erreichung: field === 'erreichung' ? value : row.erreichung,
                 bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-                zielByZielId: row.zielByZielId,
                 __typename: 'Zielber',
               },
               __typename: 'Zielber',
@@ -92,7 +91,7 @@ const Zielber = ({ treeName }: { treeName: string }) => {
     <ErrorBoundary>
       <Container>
         <FormTitle
-          apId={get(row, 'zielByZielId.apId')}
+          apId={activeNodeArray[3]}
           title="Ziel-Bericht"
           treeName={treeName}
           table="zielber"

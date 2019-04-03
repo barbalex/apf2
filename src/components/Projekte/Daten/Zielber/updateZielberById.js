@@ -26,10 +26,6 @@ export default gql`
     ) {
       zielber {
         ...ZielberFields
-        zielByZielId {
-          id
-          apId
-        }
       }
     }
   }
