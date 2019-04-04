@@ -49,8 +49,8 @@ export default ({
         id: el.id,
         parentId: el.projId,
         parentTableId: el.projId,
-        urlLabel: el.jahr,
-        label: el.jahr,
+        urlLabel: el.jahr || '(kein Jahr)',
+        label: el.jahr || '(kein Jahr)',
         url: ['Projekte', el.projId, 'AP-Berichte', el.id],
         hasChildren: false,
       }))
