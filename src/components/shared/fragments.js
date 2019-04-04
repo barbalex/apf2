@@ -483,6 +483,7 @@ export const tpopmassnber = gql`
 export const user = gql`
   fragment UserFields on User {
     id
+    label
     name
     email
     role

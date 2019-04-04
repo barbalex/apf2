@@ -97,7 +97,6 @@ const User = ({ treeName }: { treeName: String }) => {
   const row = get(data, 'userById', {})
 
   useEffect(() => {
-    console.log('User, resetting errors')
     setErrors({})
   }, [row])
 
@@ -106,11 +105,6 @@ const User = ({ treeName }: { treeName: String }) => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value)
       try {
-        console.log('User, saveToDb', {
-          field,
-          value,
-          eventValue: event.target.value,
-        })
         await client.mutate({
           mutation: updateUserByIdGql,
           variables: {
@@ -186,15 +180,6 @@ const User = ({ treeName }: { treeName: String }) => {
     },
     [password, password2],
   )
-
-  console.log('User:', {
-    row,
-    password,
-    errors,
-    errorsPass: errors.pass,
-    editPassword,
-    showPass,
-  })
 
   if (loading) {
     return (

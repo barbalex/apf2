@@ -154,6 +154,20 @@ create or replace function apflora.tpopkontrzaehl_label(tpopkontrzaehl apflora.t
 $$ language sql stable;
 comment on function apflora.tpopkontrzaehl_label(apflora.tpopkontrzaehl) is e'@sortable';
 
+drop function if exists apflora.tpopmassn_label(tpopmassn apflora.tpopmassn);
+create function apflora.tpopmassn_label(tpopmassn apflora.tpopmassn) returns text as $$
+  select coalesce(lpad(tpopmassn.jahr::text, 4, '0'), '(kein Jahr)') || ': ' || coalesce((select text from apflora.tpopmassn_typ_werte where apflora.tpopmassn_typ_werte.code = tpopmassn.typ), '(kein Typ)')
+$$ language sql stable;
+-- make label sortable, as of postgraphile 4.4/postgraphile@next
+comment on function apflora.tpopmassn_label(apflora.tpopmassn) is e'@sortable';
+
+drop function if exists apflora.user_label(u apflora.user);
+create function apflora.user_label(u apflora.user) returns text as $$
+  select coalesce(u.name || ' (' || replace(u.role, 'apflora_', '') || ')', '(kein Name)')
+$$ language sql stable;
+-- make label sortable, as of postgraphile 4.4/postgraphile@next
+comment on function apflora.user_label(apflora.user) is e'@sortable';
+
 
 
 
