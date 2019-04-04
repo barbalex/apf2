@@ -128,6 +128,13 @@ $$ language sql stable;
 -- make label sortable, as of PostGraphile 4.4/postgraphile@next
 comment on function apflora.tpopmassnber_label(apflora.tpopmassnber) is E'@sortable';
 
+drop function if exists apflora.tpopkontr_label_ek(tpopkontr apflora.tpopkontr);
+create function apflora.tpopkontr_label_ek(tpopkontr apflora.tpopkontr) returns text as $$
+  select COALESCE(LPAD(tpopkontr.jahr::text, 4, '0'), '(kein Jahr)') || ': ' || coalesce(tpopkontr.typ, '(kein Typ)')
+$$ language sql stable;
+-- make label sortable, as of PostGraphile 4.4/postgraphile@next
+comment on function apflora.tpopkontr_label_ek(apflora.tpopkontr) is E'@sortable';
+
 
 
 

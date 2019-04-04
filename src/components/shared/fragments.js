@@ -310,6 +310,7 @@ export const tpopber = gql`
 export const tpopfeldkontr = gql`
   fragment TpopfeldkontrFields on Tpopkontr {
     id
+    labelEk
     typ
     datum
     jahr

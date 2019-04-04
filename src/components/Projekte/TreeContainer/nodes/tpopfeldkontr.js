@@ -51,20 +51,17 @@ export default ({
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
-        return `${el.jahr || '(kein Jahr)'}: ${get(
-          el,
-          'tpopkontrTypWerteByTyp.text',
-        ) || '(kein Typ)'}`
+        return el.labelEk
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
       }
       return true
     })
-  nodes = sortBy(nodes, n => {
+    /*nodes = sortBy(nodes, n => {
     if (n.datum) return n.datum
     if (n.jahr) return `${n.jahr}-01-01`
     return '(kein Jahr)'
-  })
+  })*/
     .map(el => ({
       nodeType: 'table',
       menuType: 'tpopfeldkontr',
@@ -73,10 +70,7 @@ export default ({
       parentId: `${el.tpopId}TpopfeldkontrFolder`,
       parentTableId: el.tpopId,
       urlLabel: el.id,
-      label: `${el.jahr || '(kein Jahr)'}: ${get(
-        el,
-        'tpopkontrTypWerteByTyp.text',
-      ) || '(kein Typ)'}`,
+      label: el.labelEk,
       url: [
         'Projekte',
         projId,

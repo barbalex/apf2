@@ -453,7 +453,7 @@ const Tpopfeldkontr = ({
                 saveToDb={saveToDb}
                 error={errors.bearbeiter}
               />
-              <row
+              <TextField
                 key={`${row.id}jungpflanzen_anzahl`}
                 name="jungpflanzenAnzahl"
                 label="Anzahl Jungpflanzen"

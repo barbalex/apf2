@@ -46,10 +46,7 @@ export default ({
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
-        return `${el.jahr || '(kein Jahr)'}: ${get(
-          el,
-          'tpopkontrTypWerteByTyp.text',
-        ) || '(kein Typ)'}`
+        return el.labelEk
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
       }
