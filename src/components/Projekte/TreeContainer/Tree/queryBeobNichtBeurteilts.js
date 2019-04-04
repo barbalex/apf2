@@ -8,16 +8,11 @@ export default gql`
         apId: { in: $ap }
         tpopId: { isNull: true }
       }
-      orderBy: DATUM_DESC
     ) @include(if: $isAp) {
       nodes {
         id
+        label
         apId
-        nichtZuordnen
-        artId
-        datum
-        autor
-        quelle
       }
     }
   }

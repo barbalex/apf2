@@ -5565,7 +5565,8 @@ CREATE OR REPLACE VIEW apflora.v_apbeob AS
 select
   apflora.beob.*,
   apflora.apart.ap_id,
-  apflora.beob_quelle_werte.name as quelle
+  apflora.beob_quelle_werte.name as quelle,
+  to_char(apflora.beob.datum, 'YYYY.MM.DD') || ': ' || coalesce(apflora.beob.autor, '(kein Autor)') || ' (' || apflora.beob_quelle_werte.name || ')' as label
 from
   apflora.beob
   inner join apflora.apart
@@ -5573,4 +5574,6 @@ from
     inner join apflora.beob_quelle_werte
     on apflora.beob_quelle_werte.id = apflora.beob.quelle_id
 order by
-  apflora.beob.datum desc;
+  apflora.beob.datum desc,
+  apflora.beob.autor asc,
+  apflora.beob_quelle_werte.name asc;
