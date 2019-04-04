@@ -1,0 +1,47 @@
+-- all run on 2019 04 04
+DROP FUNCTION public.adresse_on_update_set_mut();
+DROP FUNCTION public.ap_on_update_set_mut();
+DROP FUNCTION public.ap_bearbstand_werte_on_update_set_mut();
+DROP FUNCTION public.ap_erfbeurtkrit_werte_on_update_set_mut();
+DROP FUNCTION public.ap_erfkrit_werte_on_update_set_mut();
+DROP FUNCTION public.ap_umsetzung_werte_on_update_set_mut();
+DROP FUNCTION public.apber_on_update_set_mut();
+DROP FUNCTION public.apberuebersicht_on_update_set_mut();
+DROP FUNCTION public.assozart_on_update_set_mut();
+DROP FUNCTION public.beob_on_update_set_mut();
+DROP FUNCTION public.ber_on_update_set_mut();
+DROP FUNCTION public.ekfzaehleinheit_on_update_set_mut();
+DROP FUNCTION public.erfkrit_on_update_set_mut();
+DROP FUNCTION public.idealbiotop_on_update_set_mut();
+DROP FUNCTION public.pop_on_update_set_mut();
+DROP FUNCTION public.pop_status_werte_on_update_set_mut();
+DROP FUNCTION public.popber_on_update_set_mut();
+DROP FUNCTION public.popmassnber_on_update_set_mut();
+DROP FUNCTION public.projekt_on_update_set_mut();
+DROP FUNCTION public.tpop_on_update_set_mut();
+DROP FUNCTION public.tpop_apberrelevant_werte_on_update_set_mut();
+DROP FUNCTION public.tpop_entwicklung_werte_on_update_set_mut();
+DROP FUNCTION public.tpopkontr_on_insert_set_mut();
+DROP FUNCTION public.tpopkontr_on_update_set_mut();
+DROP FUNCTION public.tpopkontr_frequenz_werte_set_mut();
+DROP FUNCTION public.tpopkontr_idbiotuebereinst_werte_on_update_set_mut();
+DROP FUNCTION public.tpopkontr_typ_werte_on_update_set_mut();
+DROP FUNCTION public.tpopkontrzaehl_on_update_set_mut();
+DROP FUNCTION public.tpopkontrzaehl_einheit_werte_on_update_set_mut();
+DROP FUNCTION public.tpopkontrzaehl_methode_werte_on_update_set_mut();
+DROP FUNCTION public.tpopmassn_on_update_set_mut();
+DROP FUNCTION public.tpopmassn_erfbeurt_werte_on_update_set_mut();
+DROP FUNCTION public.tpopmassn_typ_werte_on_update_set_mut();
+DROP FUNCTION public.tpopmassnber_on_update_set_mut();
+DROP FUNCTION public.ziel_on_update_set_mut();
+DROP FUNCTION public.ziel_typ_werte_on_update_set_mut();
+DROP FUNCTION public.zielber_on_update_set_mut();
+DROP FUNCTION public.tpopber_on_update_set_mut();
+DROP FUNCTION public.beobzuordnung_on_update_set_mut();
+DROP FUNCTION public.pop_entwicklung_werte_on_update_set_mut();
+
+DROP FUNCTION public.tabelle_delete_notify();
+DROP FUNCTION public.tabelle_insert_notify();
+DROP FUNCTION public.tabelle_update_notify();
+
+DROP FUNCTION public.beob_zuordnung_set_quelleid_on_insert()
