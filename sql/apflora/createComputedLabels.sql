@@ -23,3 +23,16 @@ $$ language sql stable;
 -- make label sortable, as of PostGraphile 4.4/postgraphile@next
 comment on function apflora.apart_label(apflora.apart) is E'@sortable';
 
+drop function if exists apflora.apber_label(apber apflora.apber);
+create function apflora.apber_label(apber apflora.apber) returns text as $$
+  select coalesce(apber.jahr::text, '(kein Jahr)')
+$$ language sql stable;
+-- make label sortable, as of PostGraphile 4.4/postgraphile@next
+comment on function apflora.apber_label(apflora.apber) is E'@sortable';
+
+drop function if exists apflora.apberuebersicht_label(apberuebersicht apflora.apberuebersicht);
+create function apflora.apberuebersicht_label(apberuebersicht apflora.apberuebersicht) returns text as $$
+  select coalesce(apberuebersicht.jahr::text, '(kein Jahr)')
+$$ language sql stable;
+-- make label sortable, as of PostGraphile 4.4/postgraphile@next
+comment on function apflora.apberuebersicht_label(apflora.apberuebersicht) is E'@sortable';
