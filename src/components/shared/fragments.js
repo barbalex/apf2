@@ -292,6 +292,7 @@ export const tpop = gql`
 export const tpopber = gql`
   fragment TpopberFields on Tpopber {
     id
+    label
     tpopId
     jahr
     entwicklung
