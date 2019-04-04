@@ -25,14 +25,14 @@ comment on function apflora.apart_label(apflora.apart) is e'@sortable';
 
 drop function if exists apflora.apber_label(apber apflora.apber);
 create function apflora.apber_label(apber apflora.apber) returns text as $$
-  select coalesce(lpad(apber.jahr::text, 4, '0'), '(kein jahr)')
+  select coalesce(lpad(apber.jahr::text, 4, '0'), '(kein Jahr)')
 $$ language sql stable;
 -- make label sortable, as of postgraphile 4.4/postgraphile@next
 comment on function apflora.apber_label(apflora.apber) is e'@sortable';
 
 drop function if exists apflora.apberuebersicht_label(apberuebersicht apflora.apberuebersicht);
 create function apflora.apberuebersicht_label(apberuebersicht apflora.apberuebersicht) returns text as $$
-  select coalesce(lpad(apberuebersicht.jahr::text, 4, '0'), '(kein jahr)')
+  select coalesce(lpad(apberuebersicht.jahr::text, 4, '0'), '(kein Jahr)')
 $$ language sql stable;
 -- make label sortable, as of postgraphile 4.4/postgraphile@next
 comment on function apflora.apberuebersicht_label(apflora.apberuebersicht) is e'@sortable';
@@ -59,7 +59,7 @@ comment on function apflora.ziel_label(apflora.ziel) is e'@sortable';
 
 drop function if exists apflora.zielber_label(zielber apflora.zielber);
 create function apflora.zielber_label(zielber apflora.zielber) returns text as $$
-  select coalesce(lpad(zielber.jahr::text, 4, '0'), '(kein jahr)') || ': ' || coalesce(zielber.erreichung, '(nicht beurteilt)')
+  select coalesce(lpad(zielber.jahr::text, 4, '0'), '(kein Jahr)') || ': ' || coalesce(zielber.erreichung, '(nicht beurteilt)')
 $$ language sql stable;
 -- make label sortable, as of postgraphile 4.4/postgraphile@next
 comment on function apflora.zielber_label(apflora.zielber) is e'@sortable';
@@ -73,7 +73,7 @@ comment on function apflora.assozart_label(apflora.assozart) is e'@sortable';
 
 drop function if exists apflora.ber_label(ber apflora.ber);
 create function apflora.ber_label(ber apflora.ber) returns text as $$
-  select coalesce(lpad(ber.jahr::text, 4, '0'), '(kein jahr)') || ': ' || coalesce(ber.titel, '(kein titel)')
+  select coalesce(lpad(ber.jahr::text, 4, '0'), '(kein Jahr)') || ': ' || coalesce(ber.titel, '(kein titel)')
 $$ language sql stable;
 -- make label sortable, as of postgraphile 4.4/postgraphile@next
 comment on function apflora.ber_label(apflora.ber) is e'@sortable';
@@ -94,14 +94,14 @@ comment on function apflora.pop_label(apflora.pop) is e'@sortable';
 
 drop function if exists apflora.popber_label(popber apflora.popber);
 create function apflora.popber_label(popber apflora.popber) returns text as $$
-  select coalesce(lpad(popber.jahr::text, 4, '0'), '(kein jahr)') || ': ' || coalesce((select text from apflora.tpop_entwicklung_werte where apflora.tpop_entwicklung_werte.code = popber.entwicklung), '(nicht beurteilt)')
+  select coalesce(lpad(popber.jahr::text, 4, '0'), '(kein Jahr)') || ': ' || coalesce((select text from apflora.tpop_entwicklung_werte where apflora.tpop_entwicklung_werte.code = popber.entwicklung), '(nicht beurteilt)')
 $$ language sql stable;
 -- make label sortable, as of postgraphile 4.4/postgraphile@next
 comment on function apflora.popber_label(apflora.popber) is e'@sortable';
 
 drop function if exists apflora.popmassnber_label(popmassnber apflora.popmassnber);
 create function apflora.popmassnber_label(popmassnber apflora.popmassnber) returns text as $$
-  select coalesce(lpad(popmassnber.jahr::text, 4, '0'), '(kein jahr)') || ': ' || coalesce((select text from apflora.tpopmassn_erfbeurt_werte where apflora.tpopmassn_erfbeurt_werte.code = popmassnber.beurteilung), '(nicht beurteilt)')
+  select coalesce(lpad(popmassnber.jahr::text, 4, '0'), '(kein Jahr)') || ': ' || coalesce((select text from apflora.tpopmassn_erfbeurt_werte where apflora.tpopmassn_erfbeurt_werte.code = popmassnber.beurteilung), '(nicht beurteilt)')
 $$ language sql stable;
 -- make label sortable, as of postgraphile 4.4/postgraphile@next
 comment on function apflora.popmassnber_label(apflora.popmassnber) is e'@sortable';
@@ -122,28 +122,28 @@ comment on function apflora.tpop_label(apflora.tpop) is e'@sortable';
 
 drop function if exists apflora.tpopber_label(tpopber apflora.tpopber);
 create function apflora.tpopber_label(tpopber apflora.tpopber) returns text as $$
-  select coalesce(lpad(tpopber.jahr::text, 4, '0'), '(kein jahr)') || ': ' || coalesce((select text from apflora.tpop_entwicklung_werte where apflora.tpop_entwicklung_werte.code = tpopber.entwicklung), '(nicht beurteilt)')
+  select coalesce(lpad(tpopber.jahr::text, 4, '0'), '(kein Jahr)') || ': ' || coalesce((select text from apflora.tpop_entwicklung_werte where apflora.tpop_entwicklung_werte.code = tpopber.entwicklung), '(nicht beurteilt)')
 $$ language sql stable;
 -- make label sortable, as of postgraphile 4.4/postgraphile@next
 comment on function apflora.tpopber_label(apflora.tpopber) is e'@sortable';
 
 drop function if exists apflora.tpopmassnber_label(tpopmassnber apflora.tpopmassnber);
 create function apflora.tpopmassnber_label(tpopmassnber apflora.tpopmassnber) returns text as $$
-  select coalesce(lpad(tpopmassnber.jahr::text, 4, '0'), '(kein jahr)') || ': ' || coalesce((select text from apflora.tpopmassn_erfbeurt_werte where apflora.tpopmassn_erfbeurt_werte.code = tpopmassnber.beurteilung), '(nicht beurteilt)')
+  select coalesce(lpad(tpopmassnber.jahr::text, 4, '0'), '(kein Jahr)') || ': ' || coalesce((select text from apflora.tpopmassn_erfbeurt_werte where apflora.tpopmassn_erfbeurt_werte.code = tpopmassnber.beurteilung), '(nicht beurteilt)')
 $$ language sql stable;
 -- make label sortable, as of postgraphile 4.4/postgraphile@next
 comment on function apflora.tpopmassnber_label(apflora.tpopmassnber) is e'@sortable';
 
 drop function if exists apflora.tpopkontr_label_ek(tpopkontr apflora.tpopkontr);
 create function apflora.tpopkontr_label_ek(tpopkontr apflora.tpopkontr) returns text as $$
-  select coalesce(lpad(tpopkontr.jahr::text, 4, '0'), '(kein jahr)') || ': ' || coalesce(tpopkontr.typ, '(kein typ)')
+  select coalesce(lpad(tpopkontr.jahr::text, 4, '0'), '(kein Jahr)') || ': ' || coalesce(tpopkontr.typ, '(kein typ)')
 $$ language sql stable;
 -- make label sortable, as of postgraphile 4.4/postgraphile@next
 comment on function apflora.tpopkontr_label_ek(apflora.tpopkontr) is e'@sortable';
 
 drop function if exists apflora.tpopkontr_label_ekf(tpopkontr apflora.tpopkontr);
 create function apflora.tpopkontr_label_ekf(tpopkontr apflora.tpopkontr) returns text as $$
-  select coalesce(lpad(tpopkontr.jahr::text, 4, '0'), '(kein jahr)')
+  select coalesce(lpad(tpopkontr.jahr::text, 4, '0'), '(kein Jahr)')
 $$ language sql stable;
 -- make label sortable, as of postgraphile 4.4/postgraphile@next
 comment on function apflora.tpopkontr_label_ekf(apflora.tpopkontr) is e'@sortable';

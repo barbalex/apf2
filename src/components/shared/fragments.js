@@ -444,6 +444,7 @@ export const tpopkontrzaehl = gql`
 export const tpopmassn = gql`
   fragment TpopmassnFields on Tpopmassn {
     id
+    label
     typ
     beschreibung
     jahr

@@ -3,8 +3,6 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-import compareLabel from './compareLabel'
-
 export default ({
   nodes: nodesPassed,
   data,
@@ -54,10 +52,7 @@ export default ({
       // filter by nodeLabelFilter
       .filter(el => {
         if (nodeLabelFilterString) {
-          return `${el.jahr || '(kein Jahr)'}: ${get(
-            el,
-            'tpopmassnTypWerteByTyp.text',
-          ) || '(kein Typ)'}`
+          return el.label
             .toLowerCase()
             .includes(nodeLabelFilterString.toLowerCase())
         }
@@ -71,11 +66,7 @@ export default ({
         parentId: el.tpopId,
         parentTableId: el.tpopId,
         urlLabel: el.id,
-        label: `${el.jahr || '(kein Jahr)'}: ${get(
-          el,
-          'tpopmassnTypWerteByTyp.text',
-          '(kein Typ)',
-        )}`,
+        label: el.label,
         url: [
           'Projekte',
           projId,
@@ -90,8 +81,6 @@ export default ({
         ],
         hasChildren: false,
       }))
-      // sort by label
-      .sort(compareLabel)
       .map((el, index) => {
         el.sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 1, index]
         return el
