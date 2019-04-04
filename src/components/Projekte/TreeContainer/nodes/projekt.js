@@ -13,23 +13,11 @@ export default ({
   treeName: String,
   mobxStore: Object,
 }): Array<Object> => {
-  const nodeLabelFilterString =
-    get(mobxStore, `${treeName}.nodeLabelFilter.projekt`) || ''
   const projekts = get(data, 'allProjekts.nodes', [])
 
   // map through all elements and create array of nodes
   const nodes = memoizeOne(() =>
     projekts
-      // filter by nodeLabelFilter
-      .filter(el => {
-        if (nodeLabelFilterString) {
-          const name = el.name || ''
-          return name
-            .toLowerCase()
-            .includes(nodeLabelFilterString.toLowerCase())
-        }
-        return true
-      })
       // is already sorted by name
       .map((el, index) => ({
         nodeType: 'table',
@@ -37,7 +25,7 @@ export default ({
         filterTable: 'projekt',
         id: el.id,
         urlLabel: el.id,
-        label: el.name || '(kein Name)',
+        label: el.label,
         url: ['Projekte', el.id],
         sort: [index],
         hasChildren: true,

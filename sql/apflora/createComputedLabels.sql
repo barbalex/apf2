@@ -83,6 +83,8 @@ drop function if exists apflora.pop_label(pop apflora.pop);
 create function apflora.pop_label(pop apflora.pop) returns text as $$
   select COALESCE(pop.nr::text, '(keine Nr)') || ': ' || COALESCE(pop.name, '(kein Name)')
 $$ language sql stable;
+-- make label sortable, as of PostGraphile 4.4/postgraphile@next
+comment on function apflora.pop_label(apflora.pop) is E'@sortable';
 
 drop function if exists apflora.popber_label(popber apflora.popber);
 create function apflora.popber_label(popber apflora.popber) returns text as $$
@@ -98,6 +100,12 @@ $$ language sql stable;
 -- make label sortable, as of PostGraphile 4.4/postgraphile@next
 comment on function apflora.popmassnber_label(apflora.popmassnber) is E'@sortable';
 
+drop function if exists apflora.projekt_label(projekt apflora.projekt);
+create function apflora.projekt_label(projekt apflora.projekt) returns text as $$
+  select COALESCE(projekt.name, '(kein Name)')
+$$ language sql stable;
+-- make label sortable, as of PostGraphile 4.4/postgraphile@next
+comment on function apflora.projekt_label(apflora.projekt) is E'@sortable';
 
 
 

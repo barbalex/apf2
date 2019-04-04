@@ -249,6 +249,7 @@ export const popmassnber = gql`
 export const projekt = gql`
   fragment ProjektFields on Projekt {
     id
+    label
     name
     changedBy
   }

@@ -33,7 +33,7 @@ const StyledDeleteFilterIcon = styled(DeleteFilterIcon)`
 const LabelFilter = ({ treeName }: { treeName: String }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { setTreeKey } = mobxStore
-  const { nodeLabelFilter, activeNode } = mobxStore[treeName]
+  const { nodeLabelFilter, activeNode, activeNodeArray } = mobxStore[treeName]
   const {
     setKey: setNodeLabelFilterKey,
     isFiltered: runIsFiltered,
@@ -50,7 +50,11 @@ const LabelFilter = ({ treeName }: { treeName: String }) => {
     if (!filterValue && filterValue !== 0) filterValue = ''
     const table = tables.find(t => t.table === tableName)
     const tableLabel = table ? table.label : null
-    if (tableLabel) {
+    // danger: Projekte can not be filtered because no parent folder
+    if (
+      tableLabel &&
+      !(activeNodeArray.length <= 2 && activeNodeArray[0] === 'Projekte')
+    ) {
       labelText = `${tableLabel} filtern`
     }
   }
@@ -65,6 +69,7 @@ const LabelFilter = ({ treeName }: { treeName: String }) => {
   const onChange = useCallback(e => setValue(e.target.value))
   const save = useCallback(
     e => {
+      if (labelText === '(filtern nicht möglich)') return
       const { filterTable, url, label } = activeNode
       const { value } = e.target
       // pop if is not folder and label does not comply to filter
