@@ -467,6 +467,7 @@ export const tpopmassn = gql`
 export const tpopmassnber = gql`
   fragment TpopmassnberFields on Tpopmassnber {
     id
+    label
     tpopId
     jahr
     beurteilung

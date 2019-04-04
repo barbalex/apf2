@@ -1,19 +1,15 @@
 import gql from 'graphql-tag'
 
-import { tpopmassnber, tpopmassnErfbeurtWerte } from '../../../shared/fragments'
+import { tpopmassnber } from '../../../shared/fragments'
 
 export default gql`
   query TpopmassnbersQuery($tpop: [UUID!], $isTpop: Boolean!) {
-    allTpopmassnbers(filter: { tpopId: { in: $tpop } }, orderBy: JAHR_ASC)
+    allTpopmassnbers(filter: { tpopId: { in: $tpop } }, orderBy: LABEL_ASC)
       @include(if: $isTpop) {
       nodes {
         ...TpopmassnberFields
-        tpopmassnErfbeurtWerteByBeurteilung {
-          ...TpopmassnErfbeurtWerteFields
-        }
       }
     }
   }
   ${tpopmassnber}
-  ${tpopmassnErfbeurtWerte}
 `
