@@ -51,7 +51,7 @@ const MyTextField = ({
       saveToDb(event)
     }
   })
-  const error = errors[name]
+  const error = errors ? errors[name] : null
 
   return (
     <StyledFormControl
