@@ -105,6 +105,7 @@ export const apberuebersicht = gql`
 export const assozart = gql`
   fragment AssozartFields on Assozart {
     id
+    label
     bemerkungen
     aeId
     apId

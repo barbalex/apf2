@@ -58,6 +58,13 @@ $$ language sql stable;
 -- make label sortable, as of PostGraphile 4.4/postgraphile@next
 comment on function apflora.zielber_label(apflora.zielber) is E'@sortable';
 
+drop function if exists apflora.assozart_label(assozart apflora.assozart);
+create function apflora.assozart_label(assozart apflora.assozart) returns text as $$
+  select coalesce((select artname from apflora.ae_eigenschaften where apflora.ae_eigenschaften.id = assozart.ae_id), '(keine Art gewählt)')
+$$ language sql stable;
+-- make label sortable, as of PostGraphile 4.4/postgraphile@next
+comment on function apflora.assozart_label(apflora.assozart) is E'@sortable';
+
 
 
 
