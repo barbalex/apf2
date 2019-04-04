@@ -57,6 +57,9 @@ GRANT EXECUTE ON FUNCTION apflora.encrypt_pass() TO apflora_reader;
 GRANT EXECUTE ON FUNCTION apflora.encrypt_pass() TO apflora_freiwillig;
 GRANT EXECUTE ON FUNCTION apflora.encrypt_pass() TO authenticator;
 GRANT EXECUTE ON FUNCTION apflora.encrypt_pass() TO anon;
+GRANT EXECUTE ON FUNCTION apflora.encrypt_pass() TO public;
+GRANT EXECUTE ON FUNCTION apflora.encrypt_pass() TO authenticator;
+GRANT EXECUTE ON FUNCTION public.crypt(text, text) TO public;
 
 -- Helper to check a password against the encrypted column
 -- It returns the database role for a user
@@ -83,7 +86,6 @@ CREATE TYPE auth.jwt_token AS (
 
 -- Login function which takes an user name and password
 -- and returns JWT if the credentials match a user in the internal table
---create type login_return as (token auth.jwt_token, role text);
 create or replace function apflora.login(username text, pass text)
 returns auth.jwt_token
   as $$
