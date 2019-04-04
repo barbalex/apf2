@@ -44,6 +44,15 @@ $$ language sql stable;
 -- make label sortable, as of PostGraphile 4.4/postgraphile@next
 comment on function apflora.erfkrit_label(apflora.erfkrit) is E'@sortable';
 
+drop function if exists apflora.ziel_label(ziel apflora.ziel);
+create function apflora.ziel_label(ziel apflora.ziel) returns text as $$
+  select COALESCE(ziel.bezeichnung, '(kein Ziel)') || ' (' || coalesce((select text from apflora.ziel_typ_werte where apflora.ziel_typ_werte.code = ziel.typ), 'kein Typ') || ')'
+$$ language sql stable;
+-- make label sortable, as of PostGraphile 4.4/postgraphile@next
+comment on function apflora.ziel_label(apflora.ziel) is E'@sortable';
+
+
+
 
 
 

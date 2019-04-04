@@ -479,6 +479,7 @@ export const user = gql`
 export const ziel = gql`
   fragment ZielFields on Ziel {
     id
+    label
     apId
     typ
     jahr

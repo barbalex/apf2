@@ -488,6 +488,7 @@ export default ({
             projektNodes,
             projId,
             apId: nodeUrl[3],
+            mobxStore,
           }),
         )()
         nodes = [...nodes, ...apzieljahrFolderNodes]
