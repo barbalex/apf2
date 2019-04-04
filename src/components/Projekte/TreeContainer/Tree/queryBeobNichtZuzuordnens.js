@@ -4,16 +4,12 @@ export default gql`
   query BeobNichtZuzuordnensQuery($ap: [UUID!], $isAp: Boolean!) {
     allVApbeobs(
       filter: { nichtZuordnen: { equalTo: true }, apId: { in: $ap } }
-      orderBy: DATUM_DESC
     ) @include(if: $isAp) {
       nodes {
         id
+        label
         apId
-        nichtZuordnen
         artId
-        datum
-        autor
-        quelle
       }
     }
   }

@@ -23,7 +23,7 @@ export default async ({
     variables,
   })
   // need to update activeNodeArray and openNodes
-  const { activeNodeArray, openNodes } = tree
+  const { activeNodeArray, openNodes, addOpenNodes } = tree
   let newActiveNodeArray = [...activeNodeArray]
   newActiveNodeArray[4] = value
     ? 'nicht-zuzuordnende-Beobachtungen'
@@ -34,7 +34,7 @@ export default async ({
   oldParentNodeUrl.pop()
   const newParentNodeUrl = [...newActiveNodeArray]
   newParentNodeUrl.pop()
-  let newOpenNodes = openNodes.map(n => {
+  const newOpenNodes = openNodes.map(n => {
     if (isEqual(n, activeNodeArray)) return newActiveNodeArray
     if (isEqual(n, oldParentNodeUrl)) return newParentNodeUrl
     return n
@@ -44,11 +44,7 @@ export default async ({
     value: newActiveNodeArray,
     key: 'activeNodeArray',
   })
-  setTreeKey({
-    tree: tree.name,
-    value: newOpenNodes,
-    key: 'openNodes',
-  })
+  addOpenNodes(newOpenNodes)
   if (refetchPassed) refetchPassed()
   //refetchTree('local')
   refetch.aps()
