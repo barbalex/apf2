@@ -36,3 +36,17 @@ create function apflora.apberuebersicht_label(apberuebersicht apflora.apberueber
 $$ language sql stable;
 -- make label sortable, as of PostGraphile 4.4/postgraphile@next
 comment on function apflora.apberuebersicht_label(apflora.apberuebersicht) is E'@sortable';
+
+drop function if exists apflora.erfkrit_label(erfkrit apflora.erfkrit);
+create function apflora.erfkrit_label(erfkrit apflora.erfkrit) returns text as $$
+  select coalesce((select text from apflora.ap_erfkrit_werte where apflora.ap_erfkrit_werte.code = erfkrit.erfolg), '(nicht beurteilt)') || ': ' || COALESCE(erfkrit.kriterien, '(keine Kriterien erfasst)')
+$$ language sql stable;
+-- make label sortable, as of PostGraphile 4.4/postgraphile@next
+comment on function apflora.erfkrit_label(apflora.erfkrit) is E'@sortable';
+
+
+
+
+
+
+
