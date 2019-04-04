@@ -42,7 +42,7 @@ export default ({
       // filter by nodeLabelFilter
       .filter(el => {
         if (nodeLabelFilterString) {
-          return `${el.nr || '(keine Nr)'}: ${el.flurname || '(kein Flurname)'}`
+          return el.label
             .toLowerCase()
             .includes(nodeLabelFilterString.toLowerCase())
         }

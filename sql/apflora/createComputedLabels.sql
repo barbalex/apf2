@@ -107,6 +107,13 @@ $$ language sql stable;
 -- make label sortable, as of PostGraphile 4.4/postgraphile@next
 comment on function apflora.projekt_label(apflora.projekt) is E'@sortable';
 
+drop function if exists apflora.tpop_label(tpop apflora.tpop);
+create function apflora.tpop_label(tpop apflora.tpop) returns text as $$
+  select COALESCE(tpop.nr::text, '(keine Nr)') || ': ' || COALESCE(tpop.flurname, '(kein Flurname)')
+$$ language sql stable;
+-- make label sortable, as of PostGraphile 4.4/postgraphile@next
+comment on function apflora.tpop_label(apflora.tpop) is E'@sortable';
+
 
 
 

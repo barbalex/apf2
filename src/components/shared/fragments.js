@@ -258,6 +258,7 @@ export const projekt = gql`
 export const tpop = gql`
   fragment TpopFields on Tpop {
     id
+    label
     popId
     nr
     gemeinde
