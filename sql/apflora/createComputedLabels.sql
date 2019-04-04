@@ -65,6 +65,13 @@ $$ language sql stable;
 -- make label sortable, as of PostGraphile 4.4/postgraphile@next
 comment on function apflora.assozart_label(apflora.assozart) is E'@sortable';
 
+drop function if exists apflora.ber_label(ber apflora.ber);
+create function apflora.ber_label(ber apflora.ber) returns text as $$
+  select COALESCE(LPAD(ber.jahr::text, 4, '0'), '(kein Jahr)') || ': ' || COALESCE(ber.titel, '(kein Titel)')
+$$ language sql stable;
+-- make label sortable, as of PostGraphile 4.4/postgraphile@next
+comment on function apflora.ber_label(apflora.ber) is E'@sortable';
+
 
 
 

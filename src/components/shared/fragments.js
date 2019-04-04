@@ -137,6 +137,7 @@ export const beob = gql`
 export const ber = gql`
   fragment BerFields on Ber {
     id
+    label
     apId
     autor
     jahr
