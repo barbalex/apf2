@@ -43,10 +43,7 @@ export default ({
         // filter by nodeLabelFilter
         .filter(el => {
           if (nodeLabelFilterString) {
-            const artname =
-              get(el, 'tpopkontrzaehlEinheitWerteByZaehleinheitId.text') ||
-              '(keine Zähleinheit gewählt)'
-            return artname
+            return el.label
               .toLowerCase()
               .includes(nodeLabelFilterString.toLowerCase())
           }

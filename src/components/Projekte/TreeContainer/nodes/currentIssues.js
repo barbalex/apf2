@@ -29,7 +29,7 @@ export default ({
         menuType: 'currentIssue',
         id: el.id,
         urlLabel: el.id,
-        label: el.title || '(kein Titel)',
+        label: el.label,
         url: ['Aktuelle-Fehler', el.id],
         hasChildren: false,
       }))

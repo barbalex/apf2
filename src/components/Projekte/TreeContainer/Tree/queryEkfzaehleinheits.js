@@ -1,21 +1,15 @@
 import gql from 'graphql-tag'
 
-import {
-  ekfzaehleinheit,
-  tpopkontrzaehlEinheitWerte,
-} from '../../../shared/fragments'
+import { ekfzaehleinheit } from '../../../shared/fragments'
 
 export default gql`
   query EkfzaehleinheitsQuery($ap: [UUID!], $isAp: Boolean!) {
-    allEkfzaehleinheits(filter: { apId: { in: $ap } }) @include(if: $isAp) {
+    allEkfzaehleinheits(filter: { apId: { in: $ap } }, orderBy: LABEL_ASC)
+      @include(if: $isAp) {
       nodes {
         ...EkfzaehleinheitFields
-        tpopkontrzaehlEinheitWerteByZaehleinheitId {
-          ...TpopkontrzaehlEinheitWerteFields
-        }
       }
     }
   }
   ${ekfzaehleinheit}
-  ${tpopkontrzaehlEinheitWerte}
 `
