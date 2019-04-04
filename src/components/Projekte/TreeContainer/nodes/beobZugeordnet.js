@@ -1,11 +1,7 @@
 // @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
-import isValid from 'date-fns/isValid'
-import format from 'date-fns/format'
 import memoizeOne from 'memoize-one'
-
-import compareLabel from './compareLabel'
 
 export default ({
   nodes: nodesPassed,
@@ -55,32 +51,14 @@ export default ({
       .filter(el => el.tpopId === tpopId)
       // filter by nodeLabelFilter
       .filter(el => {
-        // some dates are not valid
-        // need to account for that
-        let datum = '(kein Datum)'
-        if (!isValid(new Date(el.datum))) {
-          datum = '(ungültiges Datum)'
-        } else if (!!el.datum) {
-          datum = format(new Date(el.datum), 'yyyy.MM.dd')
-        }
-
         if (nodeLabelFilterString) {
-          return `${datum}: ${el.autor || '(kein Autor)'} (${el.quelle})`
+          return el.label
             .toLowerCase()
             .includes(nodeLabelFilterString.toLowerCase())
         }
         return true
       })
       .map((el, index) => {
-        // some dates are not valid
-        // need to account for that
-        let datum = '(kein Datum)'
-        if (!isValid(new Date(el.datum))) {
-          datum = '(ungültiges Datum)'
-        } else if (!!el.datum) {
-          datum = format(new Date(el.datum), 'yyyy.MM.dd')
-        }
-
         return {
           nodeType: 'table',
           menuType: 'beobZugeordnet',
@@ -89,7 +67,7 @@ export default ({
           parentId: `${el.tpopId}BeobZugeordnetFolder`,
           parentTableId: el.tpopId,
           urlLabel: el.id,
-          label: `${datum}: ${el.autor || '(kein Autor)'} (${el.quelle})`,
+          label: el.label,
           url: [
             'Projekte',
             projId,
@@ -105,8 +83,6 @@ export default ({
           hasChildren: false,
         }
       })
-      // sort by label
-      .sort(compareLabel)
       .map((el, index) => {
         el.sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 6, index]
         return el

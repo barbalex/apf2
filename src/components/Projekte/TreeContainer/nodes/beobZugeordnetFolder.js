@@ -1,7 +1,5 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
-import format from 'date-fns/format'
-import isValid from 'date-fns/isValid'
 import memoizeOne from 'memoize-one'
 
 export default ({
@@ -50,15 +48,7 @@ export default ({
         // filter by nodeLabelFilter
         .filter(el => {
           if (nodeLabelFilterString) {
-            // some dates are not valid
-            // need to account for that
-            let datum = '(kein Datum)'
-            if (!isValid(new Date(el.datum))) {
-              datum = '(ungültiges Datum)'
-            } else if (!!el.datum) {
-              datum = format(new Date(el.datum), 'yyyy.MM.dd')
-            }
-            return `${datum}: ${el.autor || '(kein Autor)'} (${el.quelle})`
+            return el.label
               .toLowerCase()
               .includes(nodeLabelFilterString.toLowerCase())
           }
