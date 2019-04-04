@@ -140,41 +140,35 @@ left join apflora.idealbiotop
 on apflora.idealbiotop.ap_id = apflora.ap.id
 where apflora.idealbiotop.ap_id is null;
 
--- when ap is inserted
--- ensure apart is created too
-DROP TRIGGER IF EXISTS ap_insert_add_beobart ON apflora.ap;
+
+
+
+-- when ap is updated
+-- ensure apart is updated too
 DROP TRIGGER IF EXISTS ap_insert_add_apart ON apflora.ap;
-DROP FUNCTION IF EXISTS apflora.ap_insert_add_beobart();
 DROP FUNCTION IF EXISTS apflora.ap_insert_add_apart();
-CREATE FUNCTION apflora.ap_insert_add_apart() RETURNS trigger AS $ap_insert_add_apart$
+DROP TRIGGER IF EXISTS ap_update_add_apart ON apflora.ap;
+DROP FUNCTION IF EXISTS apflora.ap_update_add_apart();
+CREATE FUNCTION apflora.ap_update_add_apart() RETURNS trigger AS $ap_update_add_apart$
+-- on insert, art_id is not yet set
+-- so need to do this on update
 BEGIN
-  INSERT INTO
-    apflora.apart (ap_id, art_id)
-  VALUES (NEW.id, NEW.art_id);
+    -- if apart with this ap and new art_id does not exist yet
+    if not exists (select 1 from apflora.apart where ap_id = NEW.id and art_id = NEW.art_id) then
+      -- create it
+      INSERT INTO
+        apflora.apart (ap_id, art_id)
+      VALUES (NEW.id, NEW.art_id);
+    end if;
   RETURN NEW;
 END;
-$ap_insert_add_apart$ LANGUAGE plpgsql;
+$ap_update_add_apart$ LANGUAGE plpgsql;
 
-CREATE TRIGGER ap_insert_add_apart AFTER INSERT ON apflora.ap
-  FOR EACH ROW EXECUTE PROCEDURE apflora.ap_insert_add_apart();
+CREATE TRIGGER ap_update_add_apart AFTER UPDATE ON apflora.ap
+  FOR EACH ROW EXECUTE PROCEDURE apflora.ap_update_add_apart();
 
--- when ap is inserted
--- ensure apart is created too
-DROP TRIGGER IF EXISTS ap_insert_add_beobart ON apflora.ap;
-DROP TRIGGER IF EXISTS ap_insert_add_apart ON apflora.ap;
-DROP FUNCTION IF EXISTS apflora.ap_insert_add_beobart();
-DROP FUNCTION IF EXISTS apflora.ap_insert_add_apart();
-CREATE FUNCTION apflora.ap_insert_add_apart() RETURNS trigger AS $ap_insert_add_apart$
-BEGIN
-  INSERT INTO
-    apflora.apart (ap_id, art_id)
-  VALUES (NEW.id, NEW.art_id);
-  RETURN NEW;
-END;
-$ap_insert_add_apart$ LANGUAGE plpgsql;
 
-CREATE TRIGGER ap_insert_add_apart AFTER INSERT ON apflora.ap
-  FOR EACH ROW EXECUTE PROCEDURE apflora.ap_insert_add_apart();
+
 
 -- ensure max 3 ekfzaehleinheit per ap
 DROP TRIGGER IF EXISTS ekfzaehleinheit_max_3_per_ap ON apflora.ekfzaehleinheit;
