@@ -84,6 +84,13 @@ create function apflora.pop_label(pop apflora.pop) returns text as $$
   select COALESCE(pop.nr::text, '(keine Nr)') || ': ' || COALESCE(pop.name, '(kein Name)')
 $$ language sql stable;
 
+drop function if exists apflora.popber_label(popber apflora.popber);
+create function apflora.popber_label(popber apflora.popber) returns text as $$
+  select COALESCE(LPAD(popber.jahr::text, 4, '0'), '(kein Jahr)') || ': ' || coalesce((select text from apflora.tpop_entwicklung_werte where apflora.tpop_entwicklung_werte.code = popber.entwicklung), '(nicht beurteilt)')
+$$ language sql stable;
+-- make label sortable, as of PostGraphile 4.4/postgraphile@next
+comment on function apflora.popber_label(apflora.popber) is E'@sortable';
+
 
 
 

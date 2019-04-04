@@ -2,8 +2,6 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
-import compareLabel from './compareLabel'
-
 export default ({
   nodes: nodesPassed,
   data,
@@ -47,10 +45,7 @@ export default ({
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
-        return `${el.jahr || '(kein Jahr)'}: ${get(
-          el,
-          'tpopmassnErfbeurtWerteByBeurteilung.text',
-        ) || '(nicht beurteilt)'}`
+        return el.label
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
       }
@@ -64,11 +59,7 @@ export default ({
       parentId: el.popId,
       parentTableId: el.popId,
       urlLabel: el.id,
-      label: `${el.jahr || '(kein Jahr)'}: ${get(
-        el,
-        'tpopEntwicklungWerteByEntwicklung.text',
-        '(nicht beurteilt)',
-      )}`,
+      label: el.label,
       url: [
         'Projekte',
         projId,
@@ -81,8 +72,6 @@ export default ({
       ],
       hasChildren: false,
     }))
-    // sort by label
-    .sort(compareLabel)
     .map((el, index) => {
       el.sort = [projIndex, 1, apIndex, 1, popIndex, 2, index]
       return el

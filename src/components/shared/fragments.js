@@ -225,6 +225,7 @@ export const pop = gql`
 export const popber = gql`
   fragment PopberFields on Popber {
     id
+    label
     popId
     jahr
     entwicklung

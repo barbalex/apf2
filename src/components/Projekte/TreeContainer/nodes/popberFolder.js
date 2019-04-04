@@ -46,10 +46,7 @@ export default ({
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
-        return `${el.jahr || '(kein Jahr)'}: ${get(
-          el,
-          'tpopEntwicklungWerteByEntwicklung.text',
-        ) || '(nicht beurteilt)'}`
+        return el.label
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
       }
