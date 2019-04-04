@@ -51,6 +51,13 @@ $$ language sql stable;
 -- make label sortable, as of PostGraphile 4.4/postgraphile@next
 comment on function apflora.ziel_label(apflora.ziel) is E'@sortable';
 
+drop function if exists apflora.zielber_label(zielber apflora.zielber);
+create function apflora.zielber_label(zielber apflora.zielber) returns text as $$
+  select COALESCE(LPAD(zielber.jahr::text, 4, '0'), '(kein Jahr)') || ': ' || COALESCE(zielber.erreichung, '(nicht beurteilt)')
+$$ language sql stable;
+-- make label sortable, as of PostGraphile 4.4/postgraphile@next
+comment on function apflora.zielber_label(apflora.zielber) is E'@sortable';
+
 
 
 

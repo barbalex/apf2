@@ -491,6 +491,7 @@ export const ziel = gql`
 export const zielber = gql`
   fragment ZielberFields on Zielber {
     id
+    label
     zielId
     jahr
     erreichung

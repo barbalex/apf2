@@ -60,8 +60,7 @@ export default ({
         // filter by nodeLabelFilter
         .filter(el => {
           if (nodeLabelFilterString) {
-            return `${el.jahr || '(kein Jahr)'}: ${el.erreichung ||
-              '(nicht beurteilt)'}`
+            return el.label
               .toLowerCase()
               .includes(nodeLabelFilterString.toLowerCase())
           }

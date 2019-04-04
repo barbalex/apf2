@@ -5,7 +5,6 @@ import memoizeOne from 'memoize-one'
 
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 import allParentNodesExist from '../allParentNodesExist'
-import compareLabel from './compareLabel'
 
 export default ({
   nodes: nodesPassed,
@@ -59,8 +58,7 @@ export default ({
       // filter by nodeLabelFilter
       .filter(el => {
         if (nodeLabelFilterString) {
-          return `${el.jahr || '(kein Jahr)'}: ${el.erreichung ||
-            '(nicht beurteilt)'}`
+          return el.label
             .toLowerCase()
             .includes(nodeLabelFilterString.toLowerCase())
         }
@@ -74,8 +72,7 @@ export default ({
         parentId: el.zielId,
         parentTableId: el.zielId,
         urlLabel: el.id,
-        label: `${el.jahr || '(kein Jahr)'}: ${el.erreichung ||
-          '(nicht beurteilt)'}`,
+        label: el.label,
         url: [
           'Projekte',
           projId,
@@ -91,8 +88,6 @@ export default ({
       }))
       .filter(el => allParentNodesAreOpen(openNodes, el.url))
       .filter(n => allParentNodesExist(nodesPassed, n))
-      // sort by label
-      .sort(compareLabel)
       .map((el, index) => {
         el.sort = [projIndex, 1, apIndex, 2, zieljahrIndex, zielIndex, 1, index]
         return el
