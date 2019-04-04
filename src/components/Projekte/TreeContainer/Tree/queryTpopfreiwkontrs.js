@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { tpopfreiwkontr, tpopkontrTypWerte } from '../../../shared/fragments'
+import { tpopfreiwkontr } from '../../../shared/fragments'
 
 export default gql`
   query TpopfreiwkontrsQuery(
@@ -11,12 +11,8 @@ export default gql`
       @include(if: $isTpop) {
       nodes {
         ...TpopfreiwkontrFields
-        tpopkontrTypWerteByTyp {
-          ...TpopkontrTypWerteFields
-        }
       }
     }
   }
   ${tpopfreiwkontr}
-  ${tpopkontrTypWerte}
 `

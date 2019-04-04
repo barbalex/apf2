@@ -1,7 +1,6 @@
 // @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
-import sortBy from 'lodash/sortBy'
 import memoizeOne from 'memoize-one'
 
 export default ({
@@ -53,7 +52,7 @@ export default ({
       // filter by nodeLabelFilter
       .filter(el => {
         if (nodeLabelFilterString) {
-          return `${el.jahr || '(kein Jahr)'}`
+          return el.labelEkf
             .toLowerCase()
             .includes(nodeLabelFilterString.toLowerCase())
         }
@@ -61,11 +60,7 @@ export default ({
       }),
   )()
   nodes = memoizeOne(() =>
-    sortBy(nodes, n => {
-      if (n.datum) return n.datum
-      if (n.jahr) return `${n.jahr}-01-01`
-      return '(kein Jahr)'
-    })
+    nodes
       .map(el => ({
         nodeType: 'table',
         menuType: 'tpopfreiwkontr',
@@ -75,7 +70,7 @@ export default ({
         parentId: `${el.tpopId}TpopfreiwkontrFolder`,
         parentTableId: el.tpopId,
         urlLabel: el.id,
-        label: `${el.jahr || '(kein Jahr)'}`,
+        label: el.labelEkf,
         url: [
           'Projekte',
           projId,

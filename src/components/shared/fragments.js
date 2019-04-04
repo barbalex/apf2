@@ -359,6 +359,7 @@ export const tpopfeldkontr = gql`
 export const tpopfreiwkontr = gql`
   fragment TpopfreiwkontrFields on Tpopkontr {
     id
+    labelEkf
     typ
     ekfVerifiziert
     ekfBemerkungen

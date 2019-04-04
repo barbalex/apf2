@@ -57,11 +57,6 @@ export default ({
       }
       return true
     })
-    /*nodes = sortBy(nodes, n => {
-    if (n.datum) return n.datum
-    if (n.jahr) return `${n.jahr}-01-01`
-    return '(kein Jahr)'
-  })*/
     .map(el => ({
       nodeType: 'table',
       menuType: 'tpopfeldkontr',
