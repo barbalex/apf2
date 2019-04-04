@@ -50,11 +50,7 @@ export default ({
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
-        return `${get(el, 'tpopkontrzaehlEinheitWerteByEinheit.text') ||
-          '(keine Einheit)'}: ${el.anzahl} ${get(
-          el,
-          'tpopkontrzaehlMethodeWerteByMethode.text',
-        ) || '(keine Methode)'}`
+        return el.label
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
       }

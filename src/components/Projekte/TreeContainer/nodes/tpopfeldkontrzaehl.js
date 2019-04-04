@@ -2,8 +2,6 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
-import compareLabel from './compareLabel'
-
 export default ({
   nodes: nodesPassed,
   data,
@@ -59,11 +57,7 @@ export default ({
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
-        return `${get(el, 'tpopkontrzaehlEinheitWerteByEinheit.text') ||
-          '(keine Einheit)'}: ${el.anzahl} ${get(
-          el,
-          'tpopkontrzaehlMethodeWerteByMethode.text',
-        ) || '(keine Methode)'}`
+        return el.label
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
       }
@@ -77,11 +71,7 @@ export default ({
       parentId: `${el.tpopkontrId}TpopfeldkontrzaehlFolder`,
       parentTableId: el.tpopkontrId,
       urlLabel: el.id,
-      label: `${get(el, 'tpopkontrzaehlEinheitWerteByEinheit.text') ||
-        '(keine Einheit)'}: ${el.anzahl} ${get(
-        el,
-        'tpopkontrzaehlMethodeWerteByMethode.text',
-      ) || '(keine Methode)'}`,
+      label: el.label,
       url: [
         'Projekte',
         projId,
@@ -98,8 +88,6 @@ export default ({
       ],
       hasChildren: false,
     }))
-    // sort by label
-    .sort(compareLabel)
     .map((el, index) => {
       el.sort = [
         projIndex,

@@ -432,6 +432,7 @@ export const tpopkontr = gql`
 export const tpopkontrzaehl = gql`
   fragment TpopkontrzaehlFields on Tpopkontrzaehl {
     id
+    label
     tpopkontrId
     anzahl
     einheit
