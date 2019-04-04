@@ -37,32 +37,36 @@ export default ({
   const nodeLabelFilterString =
     get(mobxStore, `${treeName}.nodeLabelFilter.ziel`) || ''
 
-  const ziels = get(data, 'allZiels.nodes', [])
-    // of this ap
-    .filter(el => el.apId === apId)
-    // filter by nodeLabelFilter
-    .filter(el => {
-      if (nodeLabelFilterString) {
-        return el.label
-          .toLowerCase()
-          .includes(nodeLabelFilterString.toLowerCase())
-      }
-      return true
-    })
+  const ziels = memoizeOne(() =>
+    get(data, 'allZiels.nodes', [])
+      // of this ap
+      .filter(el => el.apId === apId)
+      // filter by nodeLabelFilter
+      .filter(el => {
+        if (nodeLabelFilterString) {
+          return el.label
+            .toLowerCase()
+            .includes(nodeLabelFilterString.toLowerCase())
+        }
+        return true
+      }),
+  )()
 
-  const zieljahre = ziels
-    .reduce((a, el, index) => union(a, [el.jahr]), [])
-    .filter(jahr =>
-      allParentNodesAreOpen(openNodes, [
-        'Projekte',
-        projId,
-        'Aktionspläne',
-        apId,
-        'AP-Ziele',
-        jahr,
-      ]),
-    )
-    .sort()
+  const zieljahre = memoizeOne(() =>
+    ziels
+      .reduce((a, el, index) => union(a, [el.jahr]), [])
+      .filter(jahr =>
+        allParentNodesAreOpen(openNodes, [
+          'Projekte',
+          projId,
+          'Aktionspläne',
+          apId,
+          'AP-Ziele',
+          jahr,
+        ]),
+      )
+      .sort(),
+  )()
 
   return zieljahre.map((jahr, index) => {
     const labelJahr = jahr === null || jahr === undefined ? 'kein Jahr' : jahr

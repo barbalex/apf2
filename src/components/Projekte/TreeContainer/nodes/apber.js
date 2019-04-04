@@ -1,7 +1,6 @@
 // @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
-import sortBy from 'lodash/sortBy'
 import memoizeOne from 'memoize-one'
 
 export default ({

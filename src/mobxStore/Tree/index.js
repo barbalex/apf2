@@ -1,4 +1,4 @@
-import { types, getSnapshot } from 'mobx-state-tree'
+import { types } from 'mobx-state-tree'
 import isEqual from 'lodash/isEqual'
 
 import NodeLabelFilter, {
