@@ -91,6 +91,13 @@ $$ language sql stable;
 -- make label sortable, as of PostGraphile 4.4/postgraphile@next
 comment on function apflora.popber_label(apflora.popber) is E'@sortable';
 
+drop function if exists apflora.popmassnber_label(popmassnber apflora.popmassnber);
+create function apflora.popmassnber_label(popmassnber apflora.popmassnber) returns text as $$
+  select COALESCE(LPAD(popmassnber.jahr::text, 4, '0'), '(kein Jahr)') || ': ' || coalesce((select text from apflora.tpopmassn_erfbeurt_werte where apflora.tpopmassn_erfbeurt_werte.code = popmassnber.beurteilung), '(nicht beurteilt)')
+$$ language sql stable;
+-- make label sortable, as of PostGraphile 4.4/postgraphile@next
+comment on function apflora.popmassnber_label(apflora.popmassnber) is E'@sortable';
+
 
 
 
