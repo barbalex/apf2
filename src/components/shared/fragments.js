@@ -208,6 +208,7 @@ export const idealbiotop = gql`
 export const pop = gql`
   fragment PopFields on Pop {
     id
+    label
     apId
     nr
     name

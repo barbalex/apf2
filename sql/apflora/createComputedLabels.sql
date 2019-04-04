@@ -79,6 +79,11 @@ $$ language sql stable;
 -- make label sortable, as of PostGraphile 4.4/postgraphile@next
 comment on function apflora.currentissue_label(apflora.currentissue) is E'@sortable';
 
+drop function if exists apflora.pop_label(pop apflora.pop);
+create function apflora.pop_label(pop apflora.pop) returns text as $$
+  select COALESCE(pop.nr::text, '(keine Nr)') || ': ' || COALESCE(pop.name, '(kein Name)')
+$$ language sql stable;
+
 
 
 

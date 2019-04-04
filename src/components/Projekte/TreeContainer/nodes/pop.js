@@ -42,7 +42,7 @@ export default ({
       // filter by nodeLabelFilter
       .filter(el => {
         if (nodeLabelFilterString) {
-          return `${el.nr || '(keine Nr)'}: ${el.name || '(kein Name)'}`
+          return el.label
             .toLowerCase()
             .includes(nodeLabelFilterString.toString().toLowerCase())
         }
@@ -56,7 +56,7 @@ export default ({
         parentId: `${el.apId}PopFolder`,
         parentTableId: el.apId,
         urlLabel: el.id,
-        label: `${el.nr || '(keine Nr)'}: ${el.name || '(kein Name)'}`,
+        label: el.label,
         url: [
           'Projekte',
           projId,
@@ -68,8 +68,6 @@ export default ({
         hasChildren: true,
         nr: el.nr || 0,
       }))
-      // sort again to sort (keine Nr) on tpop
-      .sort((a, b) => a.nr - b.nr)
       .map((el, index) => {
         el.sort = [projIndex, 1, apIndex, 1, index]
         return el
