@@ -66,7 +66,9 @@ const roleWerte = [
 const User = ({ treeName }: { treeName: String }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { refetch } = mobxStore
+  const { activeNodeArray } = mobxStore[treeName]
   const client = useApolloClient()
+
   const [errors, setErrors] = useState({})
   const [editPassword, setEditPassword] = useState(false)
   const [password, setPassword] = useState('')
@@ -76,8 +78,6 @@ const User = ({ treeName }: { treeName: String }) => {
   const [passwordErrorText, setPasswordErrorText] = useState('')
   const [password2ErrorText, setPassword2ErrorText] = useState('')
   const [passwordMessage, setPasswordMessage] = useState('')
-
-  const { activeNodeArray } = mobxStore[treeName]
 
   const { data, loading, error } = useQuery(query, {
     variables: {
@@ -96,13 +96,21 @@ const User = ({ treeName }: { treeName: String }) => {
 
   const row = get(data, 'userById', {})
 
-  useEffect(() => setErrors({}), [row])
+  useEffect(() => {
+    console.log('User, resetting errors')
+    setErrors({})
+  }, [row])
 
   const saveToDb = useCallback(
     async event => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value)
       try {
+        console.log('User, saveToDb', {
+          field,
+          value,
+          eventValue: event.target.value,
+        })
         await client.mutate({
           mutation: updateUserByIdGql,
           variables: {
@@ -176,8 +184,17 @@ const User = ({ treeName }: { treeName: String }) => {
         setEditPassword(false)
       }
     },
-    [password],
+    [password, password2],
   )
+
+  console.log('User:', {
+    row,
+    password,
+    errors,
+    errorsPass: errors.pass,
+    editPassword,
+    showPass,
+  })
 
   if (loading) {
     return (
@@ -255,7 +272,7 @@ const User = ({ treeName }: { treeName: String }) => {
               </Button>
             </div>
           )}
-          {editPassword && (
+          {(editPassword || errors.pass) && (
             <FormControl
               error={!!passwordErrorText}
               fullWidth
@@ -276,7 +293,7 @@ const User = ({ treeName }: { treeName: String }) => {
                 autoComplete="current-password"
                 autoCorrect="off"
                 spellCheck="false"
-                error={errors.pass}
+                error={!!errors.pass}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -290,12 +307,13 @@ const User = ({ treeName }: { treeName: String }) => {
                 }
               />
               <FormHelperText id="passwortHelper">
-                {passwordErrorText ||
-                  (errors && errors.pass ? errors.pass : '')}
+                {passwordErrorText || (errors && !!errors.pass)
+                  ? errors.pass
+                  : ''}
               </FormHelperText>
             </FormControl>
           )}
-          {editPassword && !!password && (
+          {(editPassword || errors.pass) && !!password && (
             <FormControl
               error={!!password2ErrorText}
               fullWidth
