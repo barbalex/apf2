@@ -38,7 +38,7 @@ export default ({
       // filter by nodeLabelFilter
       .filter(el => {
         if (nodeLabelFilterString) {
-          return el.jahr.toString().includes(nodeLabelFilterString)
+          return el.label.toLowerCase().includes(nodeLabelFilterString)
         }
         return true
       })
@@ -50,7 +50,7 @@ export default ({
         parentId: el.projId,
         parentTableId: el.projId,
         urlLabel: el.jahr || '(kein Jahr)',
-        label: el.jahr || '(kein Jahr)',
+        label: el.label,
         url: ['Projekte', el.projId, 'AP-Berichte', el.id],
         hasChildren: false,
       }))

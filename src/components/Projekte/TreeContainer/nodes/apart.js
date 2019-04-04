@@ -3,8 +3,6 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-import compareLabel from './compareLabel'
-
 export default ({
   nodes: nodesPassed,
   data,
@@ -24,8 +22,6 @@ export default ({
   apId: String,
   mobxStore: Object,
 }): Array<Object> => {
-  const aparts = get(data, 'allAparts.nodes', [])
-
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
@@ -36,7 +32,7 @@ export default ({
 
   // map through all elements and create array of nodes
   const nodes = memoizeOne(() =>
-    aparts
+    get(data, 'allAparts.nodes', [])
       // only show if parent node exists
       .filter(el => nodesPassed.map(n => n.id).includes(`${el.apId}Apart`))
       // only show nodes of this parent
@@ -44,9 +40,7 @@ export default ({
       // filter by nodeLabelFilter
       .filter(el => {
         if (nodeLabelFilterString) {
-          const apart =
-            get(el, 'aeEigenschaftenByArtId.artname') || '(keine Art gewählt)'
-          return apart
+          return el.label
             .toLowerCase()
             .includes(nodeLabelFilterString.toLowerCase())
         }
@@ -60,12 +54,10 @@ export default ({
         parentId: el.apId,
         parentTableId: el.apId,
         urlLabel: el.id,
-        label: get(el, 'aeEigenschaftenByArtId.artname', '(keine Art gewählt)'),
+        label: el.label,
         url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Arten', el.id],
         hasChildren: false,
       }))
-      // sort by label
-      .sort(compareLabel)
       .map((el, index) => {
         el.sort = [projIndex, 1, apIndex, 7, index]
         return el

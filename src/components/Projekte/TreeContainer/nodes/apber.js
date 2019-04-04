@@ -44,8 +44,9 @@ export default ({
       // filter by nodeLabelFilter
       .filter(el => {
         if (nodeLabelFilterString) {
-          const jahr = el.jahr || '(kein Jahr)'
-          return jahr.toString().includes(nodeLabelFilterString.toLowerCase())
+          return el.label
+            .toLowerCase()
+            .includes(nodeLabelFilterString.toLowerCase())
         }
         return true
       })
@@ -57,7 +58,7 @@ export default ({
         parentId: el.apId,
         parentTableId: el.apId,
         urlLabel: el.id,
-        label: el.jahr || '(kein Jahr)',
+        label: el.label,
         url: [
           'Projekte',
           projId,
@@ -74,5 +75,5 @@ export default ({
       }),
   )()
 
-  return sortBy(nodes, 'label')
+  return nodes
 }

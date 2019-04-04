@@ -43,8 +43,9 @@ export default ({
         // filter by nodeLabelFilter
         .filter(el => {
           if (nodeLabelFilterString) {
-            const jahr = get(el, 'jahr') || '(kein Jahr)'
-            return jahr.toString().includes(nodeLabelFilterString.toLowerCase())
+            return el.label
+              .toLowerCase()
+              .includes(nodeLabelFilterString.toLowerCase())
           }
           return true
         }).length,

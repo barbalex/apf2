@@ -43,13 +43,9 @@ export default ({
         // filter by nodeLabelFilter
         .filter(el => {
           if (nodeLabelFilterString) {
-            return `${get(
-              el,
-              'apErfkritWerteByErfolg.text',
-              '(nicht beurteilt)',
-            )}: ${el.kriterien || '(keine Kriterien erfasst)'}`.includes(
-              nodeLabelFilterString.toLowerCase(),
-            )
+            return el.label
+              .toLowerCase()
+              .includes(nodeLabelFilterString.toLowerCase())
           }
           return true
         }).length,

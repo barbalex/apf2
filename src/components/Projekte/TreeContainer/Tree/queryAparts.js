@@ -1,18 +1,15 @@
 import gql from 'graphql-tag'
 
-import { apart, aeEigenschaften } from '../../../shared/fragments'
+import { apart } from '../../../shared/fragments'
 
 export default gql`
   query ApartsQuery($ap: [UUID!], $isAp: Boolean!) {
-    allAparts(filter: { apId: { in: $ap } }) @include(if: $isAp) {
+    allAparts(filter: { apId: { in: $ap } }, orderBy: LABEL_ASC)
+      @include(if: $isAp) {
       nodes {
         ...ApartFields
-        aeEigenschaftenByArtId {
-          ...AeEigenschaftenFields
-        }
       }
     }
   }
-  ${aeEigenschaften}
   ${apart}
 `

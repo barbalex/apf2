@@ -3,8 +3,6 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-import compareLabel from './compareLabel'
-
 export default ({
   nodes: nodesPassed,
   data,
@@ -39,8 +37,7 @@ export default ({
       // filter by nodeLabelFilter
       .filter(el => {
         if (nodeLabelFilterString) {
-          const artname = get(el, 'aeEigenschaftenByArtId.artname') || ''
-          return artname
+          return el.label
             .toLowerCase()
             .includes(nodeLabelFilterString.toLowerCase())
         }
@@ -54,16 +51,15 @@ export default ({
         parentId: el.projId,
         parentTableId: el.projId,
         urlLabel: el.id,
-        label: get(el, 'aeEigenschaftenByArtId.artname', '(keine Art gewählt)'),
+        label: el.label,
         url: ['Projekte', el.projId, 'Aktionspläne', el.id],
         hasChildren: true,
       }))
-      // sort by label
-      .sort(compareLabel)
       .map((el, index) => {
         el.sort = [projIndex, 1, index]
         return el
       }),
   )()
+
   return nodes
 }

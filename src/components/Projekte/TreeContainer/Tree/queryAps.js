@@ -1,16 +1,13 @@
 import gql from 'graphql-tag'
 
-import { aeEigenschaften, ap, apart } from '../../../shared/fragments'
+import { ap, apart } from '../../../shared/fragments'
 
 export default gql`
   query ApsQuery($isProjekt: Boolean!, $apFilter: ApFilter!) {
-    allAps(filter: $apFilter) @include(if: $isProjekt) {
+    allAps(filter: $apFilter, orderBy: LABEL_ASC) @include(if: $isProjekt) {
       totalCount
       nodes {
         ...ApFields
-        aeEigenschaftenByArtId {
-          ...AeEigenschaftenFields
-        }
         apartsByApId {
           nodes {
             ...ApartFields
@@ -19,7 +16,6 @@ export default gql`
       }
     }
   }
-  ${aeEigenschaften}
   ${ap}
   ${apart}
 `

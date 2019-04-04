@@ -2,8 +2,6 @@
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-import compareLabel from './compareLabel'
-
 const createNodes = memoizeOne(
   (adresses, nodeLabelFilterString, nodesPassed, wlIndex) =>
     adresses
@@ -12,8 +10,7 @@ const createNodes = memoizeOne(
       // filter by nodeLabelFilter
       .filter(el => {
         if (nodeLabelFilterString) {
-          const name = el.name || '(kein Name)'
-          return name
+          return el.label
             .toLowerCase()
             .includes(nodeLabelFilterString.toLowerCase())
         }
@@ -26,12 +23,10 @@ const createNodes = memoizeOne(
         id: el.id,
         parentId: 'adresseFolder',
         urlLabel: el.id,
-        label: el.name || '(kein Name)',
+        label: el.label,
         url: ['Werte-Listen', 'Adressen', el.id],
         hasChildren: false,
       }))
-      // sort by label
-      .sort(compareLabel)
       .map((el, index) => {
         el.sort = [wlIndex, 1, index]
         return el

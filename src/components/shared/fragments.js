@@ -3,6 +3,7 @@ import gql from 'graphql-tag'
 export const adresse = gql`
   fragment AdresseFields on Adresse {
     id
+    label
     name
     adresse
     telefon
@@ -42,6 +43,7 @@ export const aeLrDelarze = gql`
 export const ap = gql`
   fragment ApFields on Ap {
     id
+    label
     artId
     bearbeitung
     startJahr
@@ -57,6 +59,7 @@ export const ap = gql`
 export const apart = gql`
   fragment ApartFields on Apart {
     id
+    label
     apId
     artId
     changedBy
@@ -66,6 +69,7 @@ export const apart = gql`
 export const apber = gql`
   fragment ApberFields on Apber {
     id
+    label
     jahr
     situation
     vergleichVorjahrGesamtziel
@@ -90,6 +94,7 @@ export const apber = gql`
 export const apberuebersicht = gql`
   fragment ApberuebersichtFields on Apberuebersicht {
     id
+    label
     projId
     jahr
     bemerkungen
@@ -162,6 +167,7 @@ export const ekfzaehleinheit = gql`
 export const erfkrit = gql`
   fragment ErfkritFields on Erfkrit {
     id
+    label
     apId
     erfolg
     kriterien

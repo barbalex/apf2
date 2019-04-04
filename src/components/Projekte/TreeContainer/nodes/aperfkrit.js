@@ -43,13 +43,9 @@ export default ({
       // filter by nodeLabelFilter
       .filter(el => {
         if (nodeLabelFilterString) {
-          return `${get(
-            el,
-            'apErfkritWerteByErfolg.text',
-            '(nicht beurteilt)',
-          )}: ${el.kriterien || '(keine Kriterien erfasst)'}`.includes(
-            nodeLabelFilterString.toLowerCase(),
-          )
+          return el.label
+            .toLowerCase()
+            .includes(nodeLabelFilterString.toLowerCase())
         }
         return true
       })
@@ -61,11 +57,7 @@ export default ({
         parentId: el.apId,
         parentTableId: el.apId,
         urlLabel: el.id,
-        label: `${get(
-          el,
-          'apErfkritWerteByErfolg.text',
-          '(nicht beurteilt)',
-        )}: ${el.kriterien || '(keine Kriterien erfasst)'}`,
+        label: el.label,
         url: [
           'Projekte',
           projId,
@@ -76,12 +68,6 @@ export default ({
         ],
         hasChildren: false,
       }))
-      // sort by label
-      .sort(
-        (a, b) =>
-          get(b, 'apErfkritWerteByErfolg.sort', 0) -
-          get(a, 'apErfkritWerteByErfolg.sort', 0),
-      )
       .map((el, index) => {
         el.sort = [projIndex, 1, apIndex, 3, index]
         return el

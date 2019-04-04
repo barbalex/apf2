@@ -6,7 +6,7 @@ export default gql`
   query ApberuebersichtQuery($projekt: [UUID!], $isProjekt: Boolean!) {
     allApberuebersichts(
       filter: { projId: { in: $projekt } }
-      orderBy: JAHR_ASC
+      orderBy: LABEL_ASC
     ) @include(if: $isProjekt) {
       nodes {
         ...ApberuebersichtFields
