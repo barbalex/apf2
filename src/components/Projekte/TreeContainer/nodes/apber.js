@@ -28,8 +28,6 @@ export default ({
     id: projId,
   })
   const apIndex = findIndex(apNodes, { id: apId })
-  const nodeLabelFilterString =
-    get(mobxStore, `${treeName}.nodeLabelFilter.apber`) || ''
 
   // map through all elements and create array of nodes
   let nodes = memoizeOne(() =>
@@ -40,15 +38,6 @@ export default ({
       )
       // only show nodes of this parent
       .filter(el => el.apId === apId)
-      // filter by nodeLabelFilter
-      .filter(el => {
-        if (nodeLabelFilterString) {
-          return el.label
-            .toLowerCase()
-            .includes(nodeLabelFilterString.toLowerCase())
-        }
-        return true
-      })
       .map(el => ({
         nodeType: 'table',
         menuType: 'apber',

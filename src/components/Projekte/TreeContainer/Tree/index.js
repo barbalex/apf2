@@ -325,13 +325,15 @@ const Tree = ({ treeName, dimensions }: Props) => {
     key: 'erfkrits',
     value: refetchErfkrits,
   })
+  const queryApbersFilter = { apId: { in: ap } }
+  if (!!nodeLabelFilter.apber) {queryApbersFilter.label = { includesInsensitive: nodeLabelFilter.apber }}
   const {
     data: dataApbers,
     error: errorApbers,
     loading: loadingApbers,
     refetch: refetchApbers,
   } = useQuery(queryApbers, {
-    variables: { isAp, ap },
+    variables: { isAp, filter: queryApbersFilter },
   })
   setRefetchKey({
     key: 'apbers',
