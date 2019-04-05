@@ -193,12 +193,14 @@ const Row = ({
   const mobxStore = useContext(mobxStoreContext)
   const {
     activeApfloraLayers,
+    nodeFilter,
     copying,
     moving,
     copyingBiotop,
+    setTreeKey,
   } = mobxStore
   const tree = mobxStore[treeName]
-  const { openNodes, setActiveNodeArray } = tree
+  const { openNodes } = tree
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { idsFiltered: mapIdsFiltered } = mobxStore[treeName].map
 
@@ -263,7 +265,11 @@ const Row = ({
   )
   const onClickPrint = useCallback(
     () =>
-      setActiveNodeArray([...node.url, 'print']),
+      setTreeKey({
+        value: [...node.url, 'print'],
+        tree: treeName,
+        key: 'activeNodeArray',
+      }),
     [node.url, treeName],
   )
 

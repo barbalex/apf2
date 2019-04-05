@@ -1,7 +1,4 @@
 //@flow
-import { getSnapshot } from 'mobx-state-tree'
-import isEqual from 'lodash/isEqual'
-
 import getActiveNodeArrayFromPathname from './getActiveNodeArrayFromPathname'
 
 export default ({
@@ -13,14 +10,16 @@ export default ({
   action: String,
   mobxStore: Object,
 }) => {
+  const { setTreeKey } = mobxStore
   const { pathname } = location
-  const activeNodeArray = getSnapshot(mobxStore.tree.activeNodeArray)
   //console.log(action, location.pathname, location.state)
   // prevent never ending loop if user clicks back right after initial loading
   if (pathname === '/Projekte' && action === 'PUSH') return
 
-  const newActiveNodeArray = getActiveNodeArrayFromPathname(pathname)
-  if (!isEqual(activeNodeArray, newActiveNodeArray)) {
-    mobxStore.tree.setActiveNodeArray(newActiveNodeArray)
-  }
+  const activeNodeArray = getActiveNodeArrayFromPathname(pathname)
+  setTreeKey({
+    value: activeNodeArray,
+    tree: 'tree',
+    key: 'activeNodeArray',
+  })
 }

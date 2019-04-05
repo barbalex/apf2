@@ -80,16 +80,9 @@ type Props = {
 const Tree = ({ treeName, dimensions }: Props) => {
   const mobxStore = useContext(mobxStoreContext)
   const tree = mobxStore[treeName]
-  const {
-    activeNodeArray,
-    setActiveNodeArray,
-    setNodes,
-    openNodes,
-    setOpenNodes,
-    nodeLabelFilter,
-  } = tree
+  const { activeNodeArray, setNodes, openNodes, nodeLabelFilter } = tree
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
-  const { nodeFilter, user, setRefetchKey } = mobxStore
+  const { nodeFilter, user, setRefetchKey, setTreeKey } = mobxStore
   const { idb } = useContext(idbContext)
   const {
     projekt,
@@ -426,10 +419,10 @@ const Tree = ({ treeName, dimensions }: Props) => {
   } = useQuery(queryAdresses, {
     variables: { isWerteListen, filter: queryAdressesFilter },
   })
-  /*setRefetchKey({
+  setRefetchKey({
     key: 'adresses',
     value: refetchAdresses,
-  })*/
+  })
   const {
     data: dataCurrentIssues,
     error: errorCurrentIssues,
@@ -607,8 +600,17 @@ const Tree = ({ treeName, dimensions }: Props) => {
       projektNode
     ) {
       const projektUrl = [...projektNode.url]
-      setActiveNodeArray(projektUrl)
-      setOpenNodes([...openNodes, projektUrl])
+      setTreeKey({
+        value: projektUrl,
+        tree: treeName,
+        key: 'activeNodeArray',
+      })
+      // add projekt to open nodes
+      setTreeKey({
+        value: [...openNodes, projektUrl],
+        tree: treeName,
+        key: 'openNodes',
+      })
     }
   }, [loading])
 

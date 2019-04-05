@@ -10,5 +10,5 @@ export default ({
   activeNodeArray.forEach((n, index) =>
     openNodes.push(activeNodeArray.slice(0, index + 1)),
   )
-  mobxStore.tree.setOpenNodes(openNodes)
+  mobxStore.setTreeKey({ value: openNodes, tree: 'tree', key: 'openNodes' })
 }
