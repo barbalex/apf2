@@ -15,25 +15,12 @@ export default ({
   projektNodes: Array<Object>,
   mobxStore: Object,
 }): Array<Object> => {
-  const nodeLabelFilterString =
-    get(mobxStore, `${treeName}.nodeLabelFilter.user`) || ''
-  const users = get(data, 'allUsers.nodes', [])
-
   // fetch sorting indexes of parents
   const userIndex = projektNodes.length + 1
 
   // map through all elements and create array of nodes
   const nodes = memoizeOne(() =>
-    users
-      // filter by nodeLabelFilter
-      .filter(el => {
-        if (nodeLabelFilterString) {
-          return el.label
-            .toLowerCase()
-            .includes(nodeLabelFilterString.toLowerCase())
-        }
-        return true
-      })
+    get(data, 'allUsers.nodes', [])
       .map(el => ({
         nodeType: 'table',
         menuType: 'user',

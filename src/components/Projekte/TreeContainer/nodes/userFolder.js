@@ -17,30 +17,19 @@ export default ({
   projektNodes: Array<Object>,
   mobxStore: Object,
 }): Array<Object> => {
-  const users = get(data, 'allUsers.nodes', [])
-
   // fetch sorting indexes of parents
   const userIndex = projektNodes.length + 1
   const nodeLabelFilterString =
     get(mobxStore, `${treeName}.nodeLabelFilter.user`) || ''
 
   const userNodesLength = memoizeOne(
-    () =>
-      users
-        // filter by nodeLabelFilter
-        .filter(el => {
-          if (nodeLabelFilterString) {
-            return el.label
-              .toLowerCase()
-              .includes(nodeLabelFilterString.toLowerCase())
-          }
-          return true
-        }).length,
+    () => get(data, 'allUsers.nodes', []).length,
   )()
-  let message = loading && !userNodesLength ? '...' : userNodesLength
-  if (nodeLabelFilterString) {
-    message = `${userNodesLength} gefiltert`
-  }
+  const message = loading
+    ? '...'
+    : !!nodeLabelFilterString
+    ? `${userNodesLength} gefiltert`
+    : userNodesLength
 
   return [
     {

@@ -116,12 +116,22 @@ const Tree = ({ treeName, dimensions }: Props) => {
     key: 'projekts',
     value: refetchProjekts,
   })
+  const queryUsersFilter = { id: { isNull: false } }
+  if (!!nodeLabelFilter.user) {
+    queryUsersFilter.label = {
+      includesInsensitive: nodeLabelFilter.user,
+    }
+  }
   const {
     data: dataUsers,
     error: errorUsers,
     loading: loadingUsers,
     refetch: refetchUsers,
-  } = useQuery(queryUsers)
+  } = useQuery(queryUsers, {
+    variables: {
+      filter: queryUsersFilter,
+    },
+  })
   setRefetchKey({
     key: 'users',
     value: refetchUsers,
