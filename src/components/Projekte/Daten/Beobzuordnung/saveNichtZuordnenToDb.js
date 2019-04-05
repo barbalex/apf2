@@ -6,12 +6,12 @@ import updateBeobByIdGql from './updateBeobById'
 export default async ({
   value,
   id,
-  tree,
+  treeName,
   refetch: refetchPassed,
   client,
   mobxStore,
 }) => {
-  const { setTreeKey, refetch } = mobxStore
+  const {  refetch } = mobxStore
   const variables = {
     id,
     nichtZuordnen: value,
@@ -23,7 +23,7 @@ export default async ({
     variables,
   })
   // need to update activeNodeArray and openNodes
-  const { activeNodeArray, openNodes, addOpenNodes } = tree
+  const { activeNodeArray, setActiveNodeArray, openNodes, addOpenNodes } = mobxStore[treeName]
   let newActiveNodeArray = [...activeNodeArray]
   newActiveNodeArray[4] = value
     ? 'nicht-zuzuordnende-Beobachtungen'
@@ -39,11 +39,7 @@ export default async ({
     if (isEqual(n, oldParentNodeUrl)) return newParentNodeUrl
     return n
   })
-  setTreeKey({
-    tree: tree.name,
-    value: newActiveNodeArray,
-    key: 'activeNodeArray',
-  })
+  setActiveNodeArray(newActiveNodeArray)
   addOpenNodes(newOpenNodes)
   if (refetchPassed) refetchPassed()
   //refetchTree('local')

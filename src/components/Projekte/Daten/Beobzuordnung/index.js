@@ -187,7 +187,7 @@ const Beobzuordnung = ({
       saveNichtZuordnenToDb({
         value,
         id,
-        tree,
+        treeName,
         refetch: data.refetch,
         client,
         mobxStore,
