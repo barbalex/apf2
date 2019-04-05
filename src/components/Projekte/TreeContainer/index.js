@@ -175,11 +175,9 @@ const TreeContainer = ({
     setCopyingBiotop,
     urlQuery,
     setUrlQuery,
-    setTreeKey,
     refetch,
   } = mobxStore
-  const tree = mobxStore[treeName]
-  const { openNodes } = tree
+  const {openNodes,setOpenNodes,setActiveNodeArray} = mobxStore[treeName]
   const { projekt } = mobxStore[`${treeName}ActiveNodes`]
 
   const handleClick = useCallback(
@@ -239,16 +237,8 @@ const TreeContainer = ({
           const afterDeletionHook = () => {
             // set it as new activeNodeArray and open node
             const newOpenNodes = openNodes.filter(n => !isEqual(n, url))
-            setTreeKey({
-              tree: tree.name,
-              value: url,
-              key: 'activeNodeArray',
-            })
-            setTreeKey({
-              tree: tree.name,
-              value: newOpenNodes,
-              key: 'openNodes',
-            })
+            setActiveNodeArray(url)
+            setOpenNodes(newOpenNodes)
             const tableToUse = [
               'tpopfeldkontrzaehl',
               'tpopfreiwkontrzaehl',

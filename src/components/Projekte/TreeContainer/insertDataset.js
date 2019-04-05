@@ -29,8 +29,8 @@ export default async ({
   client: Object,
   mobxStore: Object,
 }): any => {
-  const { setTreeKey, addError, refetch } = mobxStore
-  const tree = mobxStore[treeName]
+  const {  addError, refetch } = mobxStore
+  const {setActiveNodeArray, openNodes,setOpenNodes} = mobxStore[treeName]
   let table = tablePassed
   // insert new dataset in db and fetch id
   const tableMetadata: {
@@ -162,24 +162,15 @@ export default async ({
   )
   // set new url
   const newActiveNodeArray = [...url, row[idField]]
-  setTreeKey({
-    value: newActiveNodeArray,
-    tree: treeName,
-    key: 'activeNodeArray',
-  })
+  setActiveNodeArray(newActiveNodeArray)
   // set open nodes
-  const { openNodes } = tree
   let newOpenNodes = [...openNodes, newActiveNodeArray]
   if (['zielFolder', 'zieljahrFolder'].includes(menuType)) {
     const urlWithoutJahr = [...url]
     urlWithoutJahr.pop()
     newOpenNodes = [...openNodes, urlWithoutJahr, newActiveNodeArray]
   }
-  setTreeKey({
-    value: newOpenNodes,
-    tree: treeName,
-    key: 'openNodes',
-  })
+  setOpenNodes(newOpenNodes)
   const refetchName = `${table === 'tpopkontrzaehl' ? table : tablePassed}s`
   refetch[refetchName]()
 }

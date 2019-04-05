@@ -32,8 +32,13 @@ const StyledDeleteFilterIcon = styled(DeleteFilterIcon)`
 
 const LabelFilter = ({ treeName }: { treeName: String }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { setTreeKey } = mobxStore
-  const { nodeLabelFilter, activeNode, activeNodeArray } = mobxStore[treeName]
+  const {
+    nodeLabelFilter,
+    activeNode,
+    activeNodeArray,
+    setActiveNodeArray,
+    setOpenNodes,
+  } = mobxStore[treeName]
   const {
     setKey: setNodeLabelFilterKey,
     isFiltered: runIsFiltered,
@@ -83,16 +88,8 @@ const LabelFilter = ({ treeName }: { treeName: String }) => {
         const newActiveUrl = [...url]
         newActiveNodeArray.pop()
         let newOpenNodes = openNodes.filter(n => n !== newActiveUrl)
-        setTreeKey({
-          tree: treeName,
-          value: newActiveNodeArray,
-          key: 'activeNodeArray',
-        })
-        setTreeKey({
-          tree: treeName,
-          value: newOpenNodes,
-          key: 'openNodes',
-        })
+        setActiveNodeArray(newActiveNodeArray)
+        setOpenNodes(newOpenNodes)
       }
       setNodeLabelFilterKey({
         value,
