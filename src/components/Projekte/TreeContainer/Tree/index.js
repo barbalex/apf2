@@ -295,25 +295,37 @@ const Tree = ({ treeName, dimensions }: Props) => {
     key: 'beobZugeordnets',
     value: refetchBeobZugeordnets,
   })
+  const queryZielsFilter = { apId: { in: ap } }
+  if (!!nodeLabelFilter.ziel) {
+    queryZielsFilter.label = {
+      includesInsensitive: nodeLabelFilter.ziel,
+    }
+  }
   const {
     data: dataZiels,
     error: errorZiels,
     loading: loadingZiels,
     refetch: refetchZiels,
   } = useQuery(queryZiels, {
-    variables: { isAp, ap },
+    variables: { isAp, filter: queryZielsFilter },
   })
   setRefetchKey({
     key: 'ziels',
     value: refetchZiels,
   })
+  const queryZielbersFilter = { zielId: { in: ziel } }
+  if (!!nodeLabelFilter.zielber) {
+    queryZielbersFilter.label = {
+      includesInsensitive: nodeLabelFilter.zielber,
+    }
+  }
   const {
     data: dataZielbers,
     error: errorZielbers,
     loading: loadingZielbers,
     refetch: refetchZielbers,
   } = useQuery(queryZielbers, {
-    variables: { isZiel, ziel },
+    variables: { isZiel, filter: queryZielbersFilter },
   })
   setRefetchKey({
     key: 'zielbers',

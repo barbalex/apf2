@@ -31,7 +31,6 @@ export default ({
   apzieljahrFolderNodes: Array<Object>,
   mobxStore: Object,
 }): Array<Object> => {
-  const ziels = get(data, 'allZiels.nodes', [])
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
@@ -39,24 +38,13 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString =
-    get(mobxStore, `${treeName}.nodeLabelFilter.ziel`) || ''
   const zieljahrIndex = findIndex(apzieljahrFolderNodes, el => el.jahr === jahr)
 
   // map through all elements and create array of nodes
   const nodes = memoizeOne(() =>
-    ziels
+    get(data, 'allZiels.nodes', [])
       .filter(el => el.apId === apId)
       .filter(el => el.jahr === jahr)
-      // filter by nodeLabelFilter
-      .filter(el => {
-        if (nodeLabelFilterString) {
-          return el.label
-            .toLowerCase()
-            .includes(nodeLabelFilterString.toLowerCase())
-        }
-        return true
-      })
       .map(el => ({
         nodeType: 'table',
         menuType: 'ziel',

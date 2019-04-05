@@ -38,28 +38,15 @@ export default ({
   const zieljahre = memoizeOne(() =>
     get(data, 'allZiels.nodes', [])
       .filter(el => el.apId === apId)
-      // filter by nodeLabelFilter
-      .filter(el => {
-        if (nodeLabelFilterString) {
-          return el.label
-            .toLowerCase()
-            .includes(nodeLabelFilterString.toLowerCase())
-        }
-        return true
-      })
       // reduce to distinct years
       .reduce((a, el, index) => union(a, [el.jahr]), []),
   )()
   const zieljahreLength = zieljahre.length
-  let message =
-    loading && !zieljahreLength
-      ? '...'
-      : `${zieljahreLength} ${zieljahreLength === 1 ? 'Jahr' : 'Jahre'}`
-  if (nodeLabelFilterString) {
-    message = `${zieljahreLength} ${
-      zieljahreLength === 1 ? 'Jahr' : 'Jahre'
-    } gefiltert`
-  }
+  const message = loading
+    ? '...'
+    : !!nodeLabelFilterString
+    ? `${zieljahreLength} ${zieljahreLength === 1 ? 'Jahr' : 'Jahre'} gefiltert`
+    : `${zieljahreLength} ${zieljahreLength === 1 ? 'Jahr' : 'Jahre'}`
 
   const url = ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele']
 
