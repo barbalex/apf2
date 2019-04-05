@@ -198,7 +198,7 @@ const Beobzuordnung = ({
   const onSaveTpopIdToDb = useCallback(
     event => {
       const { value } = event.target
-      saveTpopIdToDb({ value, id, tree, type, client, mobxStore })
+      saveTpopIdToDb({ value, id, treeName, type, client, mobxStore })
     },
     [id, tree, type],
   )

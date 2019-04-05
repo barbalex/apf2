@@ -5,8 +5,8 @@ import gql from 'graphql-tag'
 
 import updateBeobByIdGql from './updateBeobById'
 
-export default async ({ value, id, tree, type, client, mobxStore }) => {
-  const { setTreeKey, refetch } = mobxStore
+export default async ({ value, id, treeName, type, client, mobxStore }) => {
+  const { refetch } = mobxStore
   const variables = {
     id,
     tpopId: value,
@@ -20,7 +20,12 @@ export default async ({ value, id, tree, type, client, mobxStore }) => {
   })
 
   // need to update activeNodeArray and openNodes
-  const { activeNodeArray: aNA, openNodes } = tree
+  const {
+    activeNodeArray: aNA,
+    setActiveNodeArray,
+    openNodes,
+    setOpenNodes,
+  } = mobxStore[treeName]
   let newANA
   let newOpenNodes
 
@@ -212,17 +217,8 @@ export default async ({ value, id, tree, type, client, mobxStore }) => {
       ]
     }
   }
-  //console.log({ newOpenNodes, newANA, aNA, openNodes, type })
-  setTreeKey({
-    tree: tree.name,
-    value: newANA,
-    key: 'activeNodeArray',
-  })
-  setTreeKey({
-    tree: tree.name,
-    value: newOpenNodes,
-    key: 'openNodes',
-  })
+  setActiveNodeArray(newANA)
+  setOpenNodes(newOpenNodes)
   //refetchTree('local')
   refetch.beobNichtZuzuordnens()
   if (refetch.beobNichtZuzuordnenForMap) refetch.beobNichtZuzuordnenForMap()
