@@ -138,13 +138,17 @@ const Tree = ({ treeName, dimensions }: Props) => {
     key: 'apberuebersichts',
     value: refetchApberuebersichts,
   })
+  const queryApsFilter = {...apFilter}
+  if (nodeLabelFilter.ap) {
+    queryApsFilter.label = { includesInsensitive: nodeLabelFilter.ap }
+  }
   const {
     data: dataAps,
     error: errorAps,
     loading: loadingAps,
     refetch: refetchAps,
   } = useQuery(queryAps, {
-    variables: { isProjekt, apFilter },
+    variables: { isProjekt, filter: queryApsFilter },
   })
   setRefetchKey({
     key: 'aps',

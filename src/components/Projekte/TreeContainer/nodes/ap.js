@@ -18,10 +18,6 @@ export default ({
   projId: String,
   mobxStore: Object,
 }): Array<Object> => {
-  const nodeLabelFilterString =
-    get(mobxStore, `${treeName}.nodeLabelFilter.ap`) || ''
-  const aps = get(data, 'allAps.nodes', [])
-
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
@@ -29,20 +25,11 @@ export default ({
 
   // map through all elements and create array of nodes
   const nodes = memoizeOne(() =>
-    aps
+  get(data, 'allAps.nodes', [])
       // only show if parent node exists
       .filter(el => nodesPassed.map(n => n.id).includes(el.projId))
       // only show nodes of this parent
       .filter(el => el.projId === projId)
-      // filter by nodeLabelFilter
-      .filter(el => {
-        if (nodeLabelFilterString) {
-          return el.label
-            .toLowerCase()
-            .includes(nodeLabelFilterString.toLowerCase())
-        }
-        return true
-      })
       .map(el => ({
         nodeType: 'table',
         menuType: 'ap',
