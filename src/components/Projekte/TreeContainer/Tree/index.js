@@ -181,13 +181,19 @@ const Tree = ({ treeName, dimensions }: Props) => {
     key: 'pops',
     value: refetchPops,
   })
+  const queryPopbersFilter = { popId: { in: pop } }
+  if (!!nodeLabelFilter.popber) {
+    queryPopbersFilter.label = {
+      includesInsensitive: nodeLabelFilter.popber,
+    }
+  }
   const {
     data: dataPopbers,
     error: errorPopbers,
     loading: loadingPopbers,
     refetch: refetchPopbers,
   } = useQuery(queryPopbers, {
-    variables: { isPop, pop },
+    variables: { isPop, filter: queryPopbersFilter },
   })
   setRefetchKey({
     key: 'popbers',

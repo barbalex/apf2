@@ -1,6 +1,7 @@
 // @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
+import memoizeOne from 'memoize-one'
 
 export default ({
   nodes: nodesPassed,
@@ -37,7 +38,9 @@ export default ({
   const nodeLabelFilterString =
     get(mobxStore, `${treeName}.nodeLabelFilter.pop`) || ''
 
-  const popNodesLength = pops.filter(el => el.apId === apId).length
+  const popNodesLength = memoizeOne(
+    () => pops.filter(el => el.apId === apId).length,
+  )()
   const message = loading
     ? '...'
     : !!nodeLabelFilterString

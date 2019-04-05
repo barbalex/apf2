@@ -1,5 +1,6 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
+import memoizeOne from 'memoize-one'
 
 export default ({
   nodes: nodesPassed,
@@ -41,22 +42,16 @@ export default ({
   const nodeLabelFilterString =
     get(mobxStore, `${treeName}.nodeLabelFilter.popber`) || ''
 
-  const childrenLength = get(data, 'allPopbers.nodes', [])
-    .filter(el => el.popId === popId)
-    // filter by nodeLabelFilter
-    .filter(el => {
-      if (nodeLabelFilterString) {
-        return el.label
-          .toLowerCase()
-          .includes(nodeLabelFilterString.toLowerCase())
-      }
-      return true
-    }).length
+  const childrenLength = memoizeOne(
+    () =>
+      get(data, 'allPopbers.nodes', []).filter(el => el.popId === popId).length,
+  )()
 
-  let message = loading && !childrenLength ? '...' : childrenLength
-  if (nodeLabelFilterString) {
-    message = `${childrenLength} gefiltert`
-  }
+  const message = loading
+    ? '...'
+    : !!nodeLabelFilterString
+    ? `${childrenLength} gefiltert`
+    : childrenLength
 
   // only show if parent node exists
   if (!nodesPassed.map(n => n.id).includes(popId)) return []
