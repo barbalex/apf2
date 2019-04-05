@@ -126,13 +126,15 @@ const Tree = ({ treeName, dimensions }: Props) => {
     key: 'users',
     value: refetchUsers,
   })
+  const queryApberuebersichtsFilter = { projId: { in: projekt } }
+  if (!!nodeLabelFilter.apberuebersicht) {queryApberuebersichtsFilter.label = { includesInsensitive: nodeLabelFilter.apberuebersicht }}
   const {
     data: dataApberuebersichts,
     error: errorApberuebersichts,
     loading: loadingApberuebersichts,
     refetch: refetchApberuebersichts,
   } = useQuery(queryApberuebersichts, {
-    variables: { isProjekt, projekt },
+    variables: { isProjekt, filter: queryApberuebersichtsFilter },
   })
   setRefetchKey({
     key: 'apberuebersichts',

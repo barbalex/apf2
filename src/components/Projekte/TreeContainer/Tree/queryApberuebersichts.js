@@ -3,9 +3,9 @@ import gql from 'graphql-tag'
 import { apberuebersicht } from '../../../shared/fragments'
 
 export default gql`
-  query ApberuebersichtQuery($projekt: [UUID!], $isProjekt: Boolean!) {
+  query ApberuebersichtQuery($filter: ApberuebersichtFilter!, $isProjekt: Boolean!) {
     allApberuebersichts(
-      filter: { projId: { in: $projekt } }
+      filter: $filter
       orderBy: LABEL_ASC
     ) @include(if: $isProjekt) {
       nodes {
