@@ -43,23 +43,15 @@ export default ({
 
   const childrenLength = memoizeOne(
     () =>
-      get(data, 'allTpopbers.nodes', [])
-        .filter(el => el.tpopId === tpopId)
-        // filter by nodeLabelFilter
-        .filter(el => {
-          if (nodeLabelFilterString) {
-            return el.label
-              .toLowerCase()
-              .includes(nodeLabelFilterString.toLowerCase())
-          }
-          return true
-        }).length,
+      get(data, 'allTpopbers.nodes', []).filter(el => el.tpopId === tpopId)
+        .length,
   )()
 
-  let message = loading && !childrenLength ? '...' : childrenLength
-  if (nodeLabelFilterString) {
-    message = `${childrenLength} gefiltert`
-  }
+  const message = loading
+    ? '...'
+    : !!nodeLabelFilterString
+    ? `${childrenLength} gefiltert`
+    : childrenLength
 
   const url = [
     'Projekte',

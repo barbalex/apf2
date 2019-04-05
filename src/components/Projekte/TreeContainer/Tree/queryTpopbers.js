@@ -3,9 +3,8 @@ import gql from 'graphql-tag'
 import { tpopber } from '../../../shared/fragments'
 
 export default gql`
-  query TpopbersQuery($tpop: [UUID!], $isTpop: Boolean!) {
-    allTpopbers(filter: { tpopId: { in: $tpop } }, orderBy: LABEL_ASC)
-      @include(if: $isTpop) {
+  query TpopbersQuery($filter: TpopberFilter!, $isTpop: Boolean!) {
+    allTpopbers(filter: $filter, orderBy: LABEL_ASC) @include(if: $isTpop) {
       nodes {
         ...TpopberFields
       }
