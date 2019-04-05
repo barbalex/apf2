@@ -277,25 +277,37 @@ const Tree = ({ treeName, dimensions }: Props) => {
     key: 'tpopfeldkontrs',
     value: refetchTpopfeldkontrs,
   })
+  const queryTpopfreiwkontrsFilter = { ...tpopfreiwkontrFilter }
+  if (!!nodeLabelFilter.tpopkontr) {
+    queryTpopfreiwkontrsFilter.labelEkf = {
+      includesInsensitive: nodeLabelFilter.tpopkontr,
+    }
+  }
   const {
     data: dataTpopfreiwkontrs,
     error: errorTpopfreiwkontrs,
     loading: loadingTpopfreiwkontrs,
     refetch: refetchTpopfreiwkontrs,
   } = useQuery(queryTpopfreiwkontrs, {
-    variables: { isTpop, tpopfreiwkontrFilter },
+    variables: { isTpop, filter: queryTpopfreiwkontrsFilter },
   })
   setRefetchKey({
     key: 'tpopfreiwkontrs',
     value: refetchTpopfreiwkontrs,
   })
+  const queryTpopkontrzaehlsFilter = { tpopkontrId: { in: tpopkontr } }
+  if (!!nodeLabelFilter.tpopkontrzaehl) {
+    queryTpopkontrzaehlsFilter.label = {
+      includesInsensitive: nodeLabelFilter.tpopkontrzaehl,
+    }
+  }
   const {
     data: dataTpopkontrzaehls,
     error: errorTpopkontrzaehls,
     loading: loadingTpopkontrzaehls,
     refetch: refetchTpopkontrzaehls,
   } = useQuery(queryTpopkontrzaehls, {
-    variables: { isTpopkontr, tpopkontr },
+    variables: { isTpopkontr, filter: queryTpopkontrzaehlsFilter },
   })
   setRefetchKey({
     key: 'tpopkontrzaehls',

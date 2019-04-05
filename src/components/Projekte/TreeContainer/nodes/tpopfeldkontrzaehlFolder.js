@@ -1,5 +1,6 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
+import memoizeOne from 'memoize-one'
 
 export default ({
   nodes: nodesPassed,
@@ -45,22 +46,18 @@ export default ({
   const nodeLabelFilterString =
     get(mobxStore, `${treeName}.nodeLabelFilter.tpopkontrzaehl`) || ''
 
-  const childrenLength = get(data, 'allTpopkontrzaehls.nodes', [])
-    .filter(el => el.tpopkontrId === tpopkontrId)
-    // filter by nodeLabelFilter
-    .filter(el => {
-      if (nodeLabelFilterString) {
-        return el.label
-          .toLowerCase()
-          .includes(nodeLabelFilterString.toLowerCase())
-      }
-      return true
-    }).length
+  const childrenLength = memoizeOne(
+    () =>
+      get(data, 'allTpopkontrzaehls.nodes', []).filter(
+        el => el.tpopkontrId === tpopkontrId,
+      ).length,
+  )()
 
-  let message = loading && !childrenLength ? '...' : childrenLength
-  if (nodeLabelFilterString) {
-    message = `${childrenLength} gefiltert`
-  }
+  const message = loading
+    ? '...'
+    : !!nodeLabelFilterString
+    ? `${childrenLength} gefiltert`
+    : childrenLength
 
   const url = [
     'Projekte',
