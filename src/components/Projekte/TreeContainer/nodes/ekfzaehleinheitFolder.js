@@ -37,24 +37,13 @@ export default ({
     get(mobxStore, `${treeName}.nodeLabelFilter.ekfzaehleinheit`) || ''
 
   const ekfzaehleinheitNodesLength = memoizeOne(
-    () =>
-      ekfzaehleinheits
-        .filter(el => el.apId === apId)
-        // filter by nodeLabelFilter
-        .filter(el => {
-          if (nodeLabelFilterString) {
-            return el.label
-              .toLowerCase()
-              .includes(nodeLabelFilterString.toLowerCase())
-          }
-          return true
-        }).length,
+    () => ekfzaehleinheits.filter(el => el.apId === apId).length,
   )()
-  let message =
-    loading && !ekfzaehleinheitNodesLength ? '...' : ekfzaehleinheitNodesLength
-  if (nodeLabelFilterString) {
-    message = `${ekfzaehleinheitNodesLength} gefiltert`
-  }
+  const message = loading
+    ? '...'
+    : !!nodeLabelFilterString
+    ? `${ekfzaehleinheitNodesLength} gefiltert`
+    : ekfzaehleinheitNodesLength
 
   const url = ['Projekte', projId, 'Aktionspläne', apId, 'EKF-Zähleinheiten']
 

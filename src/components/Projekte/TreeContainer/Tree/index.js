@@ -423,13 +423,19 @@ const Tree = ({ treeName, dimensions }: Props) => {
     key: 'assozarts',
     value: refetchAssozarts,
   })
+  const queryEkfzaehleinheitsFilter = { apId: { in: ap } }
+  if (!!nodeLabelFilter.ekfzaehleinheit) {
+    queryEkfzaehleinheitsFilter.label = {
+      includesInsensitive: nodeLabelFilter.ekfzaehleinheit,
+    }
+  }
   const {
     data: dataEkfzaehleinheits,
     error: errorEkfzaehleinheits,
     loading: loadingEkfzaehleinheits,
     refetch: refetchEkfzaehleinheits,
   } = useQuery(queryEkfzaehleinheits, {
-    variables: { isAp, ap },
+    variables: { isAp, filter: queryEkfzaehleinheitsFilter },
   })
   setRefetchKey({
     key: 'ekfzaehleinheits',
