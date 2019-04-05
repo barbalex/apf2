@@ -42,25 +42,15 @@ export default ({
     get(mobxStore, `${treeName}.nodeLabelFilter.tpopmassn`) || ''
 
   let children = memoizeOne(() =>
-    get(data, 'allTpopmassns.nodes', [])
-      .filter(el => el.tpopId === tpopId)
-      // filter by nodeLabelFilter
-      .filter(el => {
-        if (nodeLabelFilterString) {
-          return el.label
-            .toLowerCase()
-            .includes(nodeLabelFilterString.toLowerCase())
-        }
-        return true
-      }),
+    get(data, 'allTpopmassns.nodes', []).filter(el => el.tpopId === tpopId),
   )()
 
   const childrenLength = children.length
-
-  let message = loading && !childrenLength ? '...' : childrenLength
-  if (nodeLabelFilterString) {
-    message = `${childrenLength} gefiltert`
-  }
+  const message = loading
+    ? '...'
+    : !!nodeLabelFilterString
+    ? `${childrenLength} gefiltert`
+    : childrenLength
 
   const url = [
     'Projekte',
