@@ -22,7 +22,6 @@ export default ({
   apId: String,
   mobxStore: Object,
 }): Array<Object> => {
-  const erfkrits = get(data, 'allErfkrits.nodes', [])
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
@@ -30,25 +29,14 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString =
-    get(mobxStore, `${treeName}.nodeLabelFilter.erfkrit`) || ''
 
   // map through all elements and create array of nodes
   const nodes = memoizeOne(() =>
-    erfkrits
+    get(data, 'allErfkrits.nodes', [])
       // only show if parent node exists
       .filter(el => nodesPassed.map(n => n.id).includes(`${el.apId}Erfkrit`))
       // only show nodes of this parent
       .filter(el => el.apId === apId)
-      // filter by nodeLabelFilter
-      .filter(el => {
-        if (nodeLabelFilterString) {
-          return el.label
-            .toLowerCase()
-            .includes(nodeLabelFilterString.toLowerCase())
-        }
-        return true
-      })
       .map(el => ({
         nodeType: 'table',
         menuType: 'erfkrit',

@@ -127,7 +127,11 @@ const Tree = ({ treeName, dimensions }: Props) => {
     value: refetchUsers,
   })
   const queryApberuebersichtsFilter = { projId: { in: projekt } }
-  if (!!nodeLabelFilter.apberuebersicht) {queryApberuebersichtsFilter.label = { includesInsensitive: nodeLabelFilter.apberuebersicht }}
+  if (!!nodeLabelFilter.apberuebersicht) {
+    queryApberuebersichtsFilter.label = {
+      includesInsensitive: nodeLabelFilter.apberuebersicht,
+    }
+  }
   const {
     data: dataApberuebersichts,
     error: errorApberuebersichts,
@@ -140,7 +144,7 @@ const Tree = ({ treeName, dimensions }: Props) => {
     key: 'apberuebersichts',
     value: refetchApberuebersichts,
   })
-  const queryApsFilter = {...apFilter}
+  const queryApsFilter = { ...apFilter }
   if (nodeLabelFilter.ap) {
     queryApsFilter.label = { includesInsensitive: nodeLabelFilter.ap }
   }
@@ -315,20 +319,28 @@ const Tree = ({ treeName, dimensions }: Props) => {
     key: 'zielbers',
     value: refetchZielbers,
   })
+  const queryErfkritsFilter = { apId: { in: ap } }
+  if (!!nodeLabelFilter.erfkrit) {
+    queryErfkritsFilter.label = {
+      includesInsensitive: nodeLabelFilter.erfkrit,
+    }
+  }
   const {
     data: dataErfkrits,
     error: errorErfkrits,
     loading: loadingErfkrits,
     refetch: refetchErfkrits,
   } = useQuery(queryErfkrits, {
-    variables: { isAp, ap },
+    variables: { isAp, filter: queryErfkritsFilter },
   })
   setRefetchKey({
     key: 'erfkrits',
     value: refetchErfkrits,
   })
   const queryApbersFilter = { apId: { in: ap } }
-  if (!!nodeLabelFilter.apber) {queryApbersFilter.label = { includesInsensitive: nodeLabelFilter.apber }}
+  if (!!nodeLabelFilter.apber) {
+    queryApbersFilter.label = { includesInsensitive: nodeLabelFilter.apber }
+  }
   const {
     data: dataApbers,
     error: errorApbers,
@@ -354,7 +366,9 @@ const Tree = ({ treeName, dimensions }: Props) => {
     value: refetchBers,
   })
   const queryApartsFilter = { apId: { in: ap } }
-  if (!!nodeLabelFilter.apart) {queryApartsFilter.label = { includesInsensitive: nodeLabelFilter.apart }}
+  if (!!nodeLabelFilter.apart) {
+    queryApartsFilter.label = { includesInsensitive: nodeLabelFilter.apart }
+  }
   const {
     data: dataAparts,
     error: errorAparts,

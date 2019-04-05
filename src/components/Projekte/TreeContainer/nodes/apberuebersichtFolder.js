@@ -30,8 +30,9 @@ export default ({
 
   const apberuebersichtNodesLength = memoizeOne(
     () =>
-    get(data, 'allApberuebersichts.nodes', [])
-        .filter(el => projNodeIds.includes(el.projId)).length,
+      get(data, 'allApberuebersichts.nodes', []).filter(el =>
+        projNodeIds.includes(el.projId),
+      ).length,
   )()
   /*
   let message =
@@ -39,7 +40,11 @@ export default ({
   if (nodeLabelFilterString) {
     message = `${apberuebersichtNodesLength} gefiltert`
   }*/
-  const message = loading ? '...' : !!nodeLabelFilterString ? `${apberuebersichtNodesLength} gefiltert`:apberuebersichtNodesLength
+  const message = loading
+    ? '...'
+    : !!nodeLabelFilterString
+    ? `${apberuebersichtNodesLength} gefiltert`
+    : apberuebersichtNodesLength
 
   // only show if parent node exists
   if (!projNodeIds.includes(projId)) return []
