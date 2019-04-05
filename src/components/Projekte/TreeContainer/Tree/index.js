@@ -199,25 +199,37 @@ const Tree = ({ treeName, dimensions }: Props) => {
     key: 'popbers',
     value: refetchPopbers,
   })
+  const queryPopmassnbersFilter = { popId: { in: pop } }
+  if (!!nodeLabelFilter.popmassnber) {
+    queryPopmassnbersFilter.label = {
+      includesInsensitive: nodeLabelFilter.popmassnber,
+    }
+  }
   const {
     data: dataPopmassnbers,
     error: errorPopmassnbers,
     loading: loadingPopmassnbers,
     refetch: refetchPopmassnbers,
   } = useQuery(queryPopmassnbers, {
-    variables: { isPop, pop },
+    variables: { isPop, filter: queryPopmassnbersFilter },
   })
   setRefetchKey({
     key: 'popmassnbers',
     value: refetchPopmassnbers,
   })
+  const queryTpopsFilter = { ...tpopFilter }
+  if (!!nodeLabelFilter.tpop) {
+    queryTpopsFilter.label = {
+      includesInsensitive: nodeLabelFilter.tpop,
+    }
+  }
   const {
     data: dataTpops,
     error: errorTpops,
     loading: loadingTpops,
     refetch: refetchTpops,
   } = useQuery(queryTpops, {
-    variables: { isPop, tpopFilter },
+    variables: { isPop, filter: queryTpopsFilter },
   })
   setRefetchKey({
     key: 'tpops',

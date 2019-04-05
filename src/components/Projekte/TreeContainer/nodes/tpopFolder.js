@@ -36,26 +36,15 @@ export default ({
   const nodeLabelFilterString =
     get(mobxStore, `${treeName}.nodeLabelFilter.tpop`) || ''
 
-  let children = memoizeOne(() =>
-    get(data, 'allTpops.nodes', [])
-      .filter(el => el.popId === popId)
-      // filter by nodeLabelFilter
-      .filter(el => {
-        if (nodeLabelFilterString) {
-          return el.label
-            .toLowerCase()
-            .includes(nodeLabelFilterString.toLowerCase())
-        }
-        return true
-      }),
+  const children = memoizeOne(() =>
+    get(data, 'allTpops.nodes', []).filter(el => el.popId === popId),
   )()
 
-  const childrenLength = children.length
-
-  let message = loading && !childrenLength ? '...' : childrenLength
-  if (nodeLabelFilterString) {
-    message = `${childrenLength} gefiltert`
-  }
+  const message = loading
+    ? '...'
+    : !!nodeLabelFilterString
+    ? `${children.length} gefiltert`
+    : children.length
 
   const url = [
     'Projekte',
@@ -82,7 +71,7 @@ export default ({
       label: `Teil-Populationen (${message})`,
       url,
       sort: [projIndex, 1, apIndex, 1, popIndex, 1],
-      hasChildren: childrenLength > 0,
+      hasChildren: children.length > 0,
     },
   ]
 }

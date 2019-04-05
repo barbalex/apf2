@@ -44,23 +44,15 @@ export default ({
 
   const childrenLength = memoizeOne(
     () =>
-      get(data, 'allPopmassnbers.nodes', [])
-        .filter(el => el.popId === popId)
-        // filter by nodeLabelFilter
-        .filter(el => {
-          if (nodeLabelFilterString) {
-            return el.label
-              .toLowerCase()
-              .includes(nodeLabelFilterString.toLowerCase())
-          }
-          return true
-        }).length,
+      get(data, 'allPopmassnbers.nodes', []).filter(el => el.popId === popId)
+        .length,
   )()
 
-  let message = loading && !childrenLength ? '...' : childrenLength
-  if (nodeLabelFilterString) {
-    message = `${childrenLength} gefiltert`
-  }
+  const message = loading
+    ? '...'
+    : !!nodeLabelFilterString
+    ? `${childrenLength} gefiltert`
+    : childrenLength
 
   // only show if parent node exists
   if (!nodesPassed.map(n => n.id).includes(popId)) return []
