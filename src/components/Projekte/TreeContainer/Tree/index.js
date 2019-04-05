@@ -80,7 +80,14 @@ type Props = {
 const Tree = ({ treeName, dimensions }: Props) => {
   const mobxStore = useContext(mobxStoreContext)
   const tree = mobxStore[treeName]
-  const { activeNodeArray, setActiveNodeArray, setNodes, openNodes, setOpenNodes } = tree
+  const {
+    activeNodeArray,
+    setActiveNodeArray,
+    setNodes,
+    openNodes,
+    setOpenNodes,
+    nodeLabelFilter,
+  } = tree
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { nodeFilter, user, setRefetchKey } = mobxStore
   const { idb } = useContext(idbContext)
@@ -408,18 +415,21 @@ const Tree = ({ treeName, dimensions }: Props) => {
     key: 'beobNichtZuzuordnens',
     value: refetchBeobNichtZuzuordnens,
   })
+  const queryAdressesFilter = nodeLabelFilter.adresse
+    ? { label: { includesInsensitive: nodeLabelFilter.adresse } }
+    : { id: { isNull: false } }
   const {
     data: dataAdresses,
     error: errorAdresses,
     loading: loadingAdresses,
     refetch: refetchAdresses,
   } = useQuery(queryAdresses, {
-    variables: { isWerteListen },
+    variables: { isWerteListen, filter: queryAdressesFilter },
   })
-  setRefetchKey({
+  /*setRefetchKey({
     key: 'adresses',
     value: refetchAdresses,
-  })
+  })*/
   const {
     data: dataCurrentIssues,
     error: errorCurrentIssues,

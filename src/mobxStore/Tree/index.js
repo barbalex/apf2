@@ -40,16 +40,18 @@ export default types
       self.apFilter = val
     },
     setActiveNodeArray(val) {
-      self.activeNodeArray = val
       if (self.name === 'tree') {
         const store = getParent(self)
         const {urlQuery, historyPush} = store
         const search = queryString.stringify(urlQuery)
         const query = `${Object.keys(urlQuery).length > 0 ? `?${search}` : ''}`
         // pass openNodes as state
+        // pushing state will set activeNodeArray via modules/historyListen
         historyPush(`/${val.join('/')}${query}`, {
           openNodes: self.openNodes,
         })
+      } else {
+        self.activeNodeArray = val
       }
     },
   }))

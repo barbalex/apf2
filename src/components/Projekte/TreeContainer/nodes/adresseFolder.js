@@ -1,6 +1,5 @@
 // @flow
 import get from 'lodash/get'
-import memoizeOne from 'memoize-one'
 
 export default ({
   nodes: nodesPassed,
@@ -22,22 +21,10 @@ export default ({
   const nodeLabelFilterString =
     get(mobxStore, `${treeName}.nodeLabelFilter.adresse`) || ''
 
-  let adresseNodesLength = memoizeOne(
-    () =>
-      adresses
-        // filter by nodeLabelFilter
-        .filter(el => {
-          if (nodeLabelFilterString) {
-            return el.label
-              .toLowerCase()
-              .includes(nodeLabelFilterString.toLowerCase())
-          }
-          return true
-        }).length,
-  )()
+  let adresseNodesLength = adresses.length
   // before Adressen folder is active, only total count was fetched, not yet any adressen nodes
   if (adresses.length === 0)
-    adresseNodesLength = get(data, 'allAdresses.totalCount')
+    adresseNodesLength = get(data, 'unfiltered.totalCount')
   let message = loading && !adresseNodesLength ? '...' : adresseNodesLength
   if (nodeLabelFilterString) {
     message = `${adresseNodesLength} gefiltert`

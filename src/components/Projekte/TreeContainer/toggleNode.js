@@ -22,10 +22,8 @@ export default ({
     }
   }
 
-  const newActiveNodeArray = [...node.url]
-  const nodeIsOpen = isNodeOpen(openNodes, node.url)
-  if (!nodeIsOpen) {
+  if (!isNodeOpen(openNodes, node.url)) {
     openNode({ treeName, node, openNodes, mobxStore })
   }
-  mobxStore[treeName].setActiveNodeArray(newActiveNodeArray)
+  mobxStore[treeName].setActiveNodeArray([...node.url])
 }
