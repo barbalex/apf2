@@ -1,5 +1,6 @@
-import { types } from 'mobx-state-tree'
+import { types, getParent } from 'mobx-state-tree'
 import isEqual from 'lodash/isEqual'
+import queryString from 'query-string'
 
 import NodeLabelFilter, {
   defaultValue as defaultNodeLabelFilter,
@@ -31,6 +32,25 @@ export default types
       // need set to ensure contained arrays are unique
       const set = new Set([...self.openNodes, ...nodes].map(JSON.stringify))
       self.openNodes = Array.from(set).map(JSON.parse)
+    },
+    setOpenNodes(val){
+      self.openNodes = val
+    },
+    setApFilter(val) {
+      self.apFilter = val
+    },
+    setActiveNodeArray(val) {
+      self.activeNodeArray = val
+      if (self.name === 'tree') {
+        const store = getParent(self)
+        const {urlQuery, historyPush} = store
+        const search = queryString.stringify(urlQuery)
+        const query = `${Object.keys(urlQuery).length > 0 ? `?${search}` : ''}`
+        // pass openNodes as state
+        historyPush(`/${val.join('/')}${query}`, {
+          openNodes: self.openNodes,
+        })
+      }
     },
   }))
   .views(self => ({

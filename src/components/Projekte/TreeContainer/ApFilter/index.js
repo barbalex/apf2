@@ -27,65 +27,57 @@ const ApFilter = ({ treeName }: { treeName: String }) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
   const { setTreeKey, refetch } = mobxStore
-  const { apFilter, activeNodeArray, openNodes } = mobxStore[treeName]
+  const {
+    apFilter,
+    setApFilter,
+    activeNodeArray,
+    setActiveNodeArray,
+    openNodes,
+    setOpenNodes,
+  } = mobxStore[treeName]
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
 
-  const onChange = useCallback(
-    async () => {
-      const previousApFilter = apFilter
-      setTreeKey({
-        value: !apFilter,
-        tree: treeName,
-        key: 'apFilter',
-      })
-      if (!previousApFilter) {
-        // need to fetch previously not had aps
-        refetch.aps()
-        // apFilter was set to true
-        const { ap: apId } = activeNodes
-        let result
-        if (apId) {
-          // check if this is real ap
-          result = await client.query({
-            query: apById,
-            variables: { id: apId },
-          })
-        }
-        const isAp = [1, 2, 3].includes(get(result, 'data.apById.bearbeitung'))
-        if (!isAp && activeNodeArray[2] === 'Aktionspläne') {
-          // not a real ap
-          // shorten active node array to Aktionspläne
-          const newActiveNodeArray = [
-            activeNodeArray[0],
-            activeNodeArray[1],
-            activeNodeArray[2],
-          ]
-          setTreeKey({
-            value: newActiveNodeArray,
-            tree: treeName,
-            key: 'activeNodeArray',
-          })
-          // remove from openNodes
-          const newOpenNodes = openNodes.filter(n => {
-            if (
-              n.length > newActiveNodeArray.length &&
-              n[0] === newActiveNodeArray[0] &&
-              n[1] === newActiveNodeArray[1] &&
-              n[2] === newActiveNodeArray[2]
-            )
-              return false
-            return true
-          })
-          setTreeKey({
-            value: newOpenNodes,
-            tree: treeName,
-            key: 'openNodes',
-          })
-        }
+  const onChange = useCallback(async () => {
+    const previousApFilter = apFilter
+    setApFilter(!apFilter)
+    if (!previousApFilter) {
+      // need to fetch previously not had aps
+      refetch.aps()
+      // apFilter was set to true
+      const { ap: apId } = activeNodes
+      let result
+      if (apId) {
+        // check if this is real ap
+        result = await client.query({
+          query: apById,
+          variables: { id: apId },
+        })
       }
-    },
-    [treeName, activeNodeArray, openNodes, apFilter],
-  )
+      const isAp = [1, 2, 3].includes(get(result, 'data.apById.bearbeitung'))
+      if (!isAp && activeNodeArray[2] === 'Aktionspläne') {
+        // not a real ap
+        // shorten active node array to Aktionspläne
+        const newActiveNodeArray = [
+          activeNodeArray[0],
+          activeNodeArray[1],
+          activeNodeArray[2],
+        ]
+        setActiveNodeArray(newActiveNodeArray)
+        // remove from openNodes
+        const newOpenNodes = openNodes.filter(n => {
+          if (
+            n.length > newActiveNodeArray.length &&
+            n[0] === newActiveNodeArray[0] &&
+            n[1] === newActiveNodeArray[1] &&
+            n[2] === newActiveNodeArray[2]
+          )
+            return false
+          return true
+        })
+        setOpenNodes(newOpenNodes)
+      }
+    }
+  }, [treeName, activeNodeArray, openNodes, apFilter])
 
   return (
     <ErrorBoundary>
