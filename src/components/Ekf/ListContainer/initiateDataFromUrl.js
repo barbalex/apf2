@@ -8,11 +8,6 @@ export default async ({
   activeNodeArray: Array<string>,
   mobxStore: Object,
 }) => {
-  mobxStore.setTreeKey({
-    value: [...activeNodeArray],
-    tree: 'tree',
-    key: 'activeNodeArray',
-  })
-  // need to set openNodes
+  mobxStore.tree.setActiveNodeArray([...activeNodeArray])
   setOpenNodesFromActiveNodeArray({ activeNodeArray, mobxStore })
 }

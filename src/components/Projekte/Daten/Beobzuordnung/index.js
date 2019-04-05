@@ -178,7 +178,7 @@ const Beobzuordnung = ({
   const onSaveArtIdToDb = useCallback(
     event => {
       const { value } = event.target
-      saveArtIdToDb({ value, row, tree, client, mobxStore })
+      saveArtIdToDb({ value, row, treeName, client, mobxStore })
     },
     [row, tree],
   )
