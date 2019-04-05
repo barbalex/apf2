@@ -1,8 +1,6 @@
 import React, { useContext, useMemo } from 'react'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
-import format from 'date-fns/format'
-import isValid from 'date-fns/isValid'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from 'react-apollo-hooks'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
