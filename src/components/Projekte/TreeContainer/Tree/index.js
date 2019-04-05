@@ -423,6 +423,16 @@ const Tree = ({ treeName, dimensions }: Props) => {
     key: 'ekfzaehleinheits',
     value: refetchEkfzaehleinheits,
   })
+  const queryBeobNichtBeurteiltsFilter = {
+    nichtZuordnen: { equalTo: false },
+    apId: { in: ap },
+    tpopId: { isNull: true },
+  }
+  if (!!nodeLabelFilter.beob) {
+    queryBeobNichtBeurteiltsFilter.label = {
+      includesInsensitive: nodeLabelFilter.beob,
+    }
+  }
   const {
     data: dataBeobNichtBeurteilts,
     error: errorBeobNichtBeurteilts,
@@ -431,7 +441,7 @@ const Tree = ({ treeName, dimensions }: Props) => {
   } = useQuery(queryBeobNichtBeurteilts, {
     variables: {
       isAp,
-      ap,
+      filter: queryBeobNichtBeurteiltsFilter,
     },
   })
   setRefetchKey({

@@ -35,21 +35,14 @@ export default ({
   const nodeLabelFilterString =
     get(mobxStore, `${treeName}.nodeLabelFilter.beob`) || ''
 
-  const beobNichtBeurteiltNodesLength = beobNichtBeurteilts
-    .filter(el => el.apId === apId)
-    // filter by nodeLabelFilter
-    .filter(el => {
-      return el.label
-        .toLowerCase()
-        .includes(nodeLabelFilterString.toLowerCase())
-    }).length
-  let message =
-    loading && !beobNichtBeurteiltNodesLength
-      ? '...'
-      : beobNichtBeurteiltNodesLength
-  if (nodeLabelFilterString) {
-    message = `${beobNichtBeurteiltNodesLength} gefiltert`
-  }
+  const beobNichtBeurteiltNodesLength = beobNichtBeurteilts.filter(
+    el => el.apId === apId,
+  ).length
+  const message = loading
+    ? '...'
+    : !!nodeLabelFilterString
+    ? `${beobNichtBeurteiltNodesLength} gefiltert`
+    : beobNichtBeurteiltNodesLength
 
   const url = [
     'Projekte',
