@@ -193,7 +193,6 @@ const Row = ({
   const mobxStore = useContext(mobxStoreContext)
   const {
     activeApfloraLayers,
-    nodeFilter,
     copying,
     moving,
     copyingBiotop,

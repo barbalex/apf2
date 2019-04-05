@@ -221,8 +221,6 @@ const Tpop = ({
     [showFilter, row],
   )
 
-  console.log('Tpop')
-
   if (!showFilter && loading) {
     return (
       <Container>
