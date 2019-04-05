@@ -1,6 +1,7 @@
 // @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
+import memoizeOne from 'memoize-one'
 
 export default ({
   nodes: nodesPassed,
@@ -23,8 +24,6 @@ export default ({
   apId: String,
   mobxStore: Object,
 }): Array<Object> => {
-  const beobNichtBeurteilts = get(data, 'allVApbeobs.nodes', [])
-
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
@@ -35,9 +34,10 @@ export default ({
   const nodeLabelFilterString =
     get(mobxStore, `${treeName}.nodeLabelFilter.beob`) || ''
 
-  const beobNichtBeurteiltNodesLength = beobNichtBeurteilts.filter(
-    el => el.apId === apId,
-  ).length
+  const beobNichtBeurteiltNodesLength = memoizeOne(
+    () =>
+      get(data, 'allVApbeobs.nodes', []).filter(el => el.apId === apId).length,
+  )()
   const message = loading
     ? '...'
     : !!nodeLabelFilterString

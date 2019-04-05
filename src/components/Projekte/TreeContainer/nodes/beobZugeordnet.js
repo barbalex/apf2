@@ -37,8 +37,6 @@ export default ({
   const apIndex = findIndex(apNodes, { id: apId })
   const popIndex = findIndex(popNodes, { id: popId })
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
-  const nodeLabelFilterString =
-    get(mobxStore, `${treeName}.nodeLabelFilter.beob`) || ''
 
   // map through all elements and create array of nodes
   const nodes = memoizeOne(() =>
@@ -49,15 +47,6 @@ export default ({
       )
       // only show nodes of this parent
       .filter(el => el.tpopId === tpopId)
-      // filter by nodeLabelFilter
-      .filter(el => {
-        if (nodeLabelFilterString) {
-          return el.label
-            .toLowerCase()
-            .includes(nodeLabelFilterString.toLowerCase())
-        }
-        return true
-      })
       .map((el, index) => {
         return {
           nodeType: 'table',

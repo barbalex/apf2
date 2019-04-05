@@ -283,13 +283,19 @@ const Tree = ({ treeName, dimensions }: Props) => {
     key: 'tpopbers',
     value: refetchTpopbers,
   })
+  const queryBeobZugeordnetsFilter = { tpopId: { in: tpop } }
+  if (!!nodeLabelFilter.beob) {
+    queryBeobZugeordnetsFilter.label = {
+      includesInsensitive: nodeLabelFilter.beob,
+    }
+  }
   const {
     data: dataBeobZugeordnets,
     error: errorBeobZugeordnets,
     loading: loadingBeobZugeordnets,
     refetch: refetchBeobZugeordnets,
   } = useQuery(queryBeobZugeordnets, {
-    variables: { isTpop, tpop },
+    variables: { isTpop, filter: queryBeobZugeordnetsFilter },
   })
   setRefetchKey({
     key: 'beobZugeordnets',
@@ -448,13 +454,22 @@ const Tree = ({ treeName, dimensions }: Props) => {
     key: 'beobNichtBeurteilts',
     value: refetchBeobNichtBeurteilts,
   })
+  const queryBeobNichtZuzuordnensFilter = {
+    nichtZuordnen: { equalTo: true },
+    apId: { in: ap },
+  }
+  if (!!nodeLabelFilter.beob) {
+    queryBeobNichtZuzuordnensFilter.label = {
+      includesInsensitive: nodeLabelFilter.beob,
+    }
+  }
   const {
     data: dataBeobNichtZuzuordnens,
     error: errorBeobNichtZuzuordnens,
     loading: loadingBeobNichtZuzuordnens,
     refetch: refetchBeobNichtZuzuordnens,
   } = useQuery(queryBeobNichtZuzuordnens, {
-    variables: { isAp, ap },
+    variables: { isAp, filter: queryBeobNichtZuzuordnensFilter },
   })
   setRefetchKey({
     key: 'beobNichtZuzuordnens',

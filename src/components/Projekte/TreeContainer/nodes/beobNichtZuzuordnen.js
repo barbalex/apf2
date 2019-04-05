@@ -24,18 +24,15 @@ export default ({
   apId: String,
   mobxStore: Object,
 }): Array<Object> => {
-  const beobNichtZuzuordnens = get(data, 'allVApbeobs.nodes', [])
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
   const apIndex = findIndex(apNodes, { id: apId })
-  const nodeLabelFilterString =
-    get(mobxStore, `${treeName}.nodeLabelFilter.beob`) || ''
 
   // map through all elements and create array of nodes
   const nodes = memoizeOne(() =>
-    beobNichtZuzuordnens
+    get(data, 'allVApbeobs.nodes', [])
       // only show if parent node exists
       .filter(el =>
         nodesPassed
@@ -44,15 +41,6 @@ export default ({
       )
       // only show nodes of this parent
       .filter(el => el.apId === apId)
-      // filter by nodeLabelFilter
-      .filter(el => {
-        if (nodeLabelFilterString) {
-          return el.label
-            .toLowerCase()
-            .includes(nodeLabelFilterString.toLowerCase())
-        }
-        return true
-      })
       .map(el => {
         return {
           nodeType: 'table',

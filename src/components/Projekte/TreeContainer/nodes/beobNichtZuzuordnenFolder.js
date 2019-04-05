@@ -24,8 +24,6 @@ export default ({
   apId: String,
   mobxStore: Object,
 }): Array<Object> => {
-  const beobNichtZuzuordnens = get(data, 'allVApbeobs.nodes', [])
-
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
@@ -38,25 +36,13 @@ export default ({
 
   const beobNichtZuzuordnenNodesLength = memoizeOne(
     () =>
-      beobNichtZuzuordnens
-        .filter(el => el.apId === apId)
-        // filter by nodeLabelFilter
-        .filter(el => {
-          if (nodeLabelFilterString) {
-            return el.label
-              .toLowerCase()
-              .includes(nodeLabelFilterString.toLowerCase())
-          }
-          return true
-        }).length,
+      get(data, 'allVApbeobs.nodes', []).filter(el => el.apId === apId).length,
   )()
-  let message =
-    loading && !beobNichtZuzuordnenNodesLength
-      ? '...'
-      : beobNichtZuzuordnenNodesLength
-  if (nodeLabelFilterString) {
-    message = `${beobNichtZuzuordnenNodesLength} gefiltert`
-  }
+  const message = loading
+    ? '...'
+    : !!nodeLabelFilterString
+    ? `${beobNichtZuzuordnenNodesLength} gefiltert`
+    : beobNichtZuzuordnenNodesLength
 
   const url = [
     'Projekte',
