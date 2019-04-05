@@ -259,13 +259,19 @@ const Tree = ({ treeName, dimensions }: Props) => {
     key: 'tpopmassnbers',
     value: refetchTpopmassnbers,
   })
+  const queryTpopfeldkontrsFilter = { ...tpopfeldkontrFilter }
+  if (!!nodeLabelFilter.tpopkontr) {
+    queryTpopfeldkontrsFilter.labelEk = {
+      includesInsensitive: nodeLabelFilter.tpopkontr,
+    }
+  }
   const {
     data: dataTpopfeldkontrs,
     error: errorTpopfeldkontrs,
     loading: loadingTpopfeldkontrs,
     refetch: refetchTpopfeldkontrs,
   } = useQuery(queryTpopfeldkontrs, {
-    variables: { isTpop, tpopfeldkontrFilter },
+    variables: { isTpop, filter: queryTpopfeldkontrsFilter },
   })
   setRefetchKey({
     key: 'tpopfeldkontrs',

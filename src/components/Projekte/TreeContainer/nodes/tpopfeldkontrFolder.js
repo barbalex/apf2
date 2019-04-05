@@ -41,17 +41,9 @@ export default ({
   const nodeLabelFilterString =
     get(mobxStore, `${treeName}.nodeLabelFilter.tpopkontr`) || ''
 
-  let children = get(data, 'allTpopkontrs.nodes', [])
-    .filter(el => el.tpopId === tpopId)
-    // filter by nodeLabelFilter
-    .filter(el => {
-      if (nodeLabelFilterString) {
-        return el.labelEk
-          .toLowerCase()
-          .includes(nodeLabelFilterString.toLowerCase())
-      }
-      return true
-    })
+  let children = get(data, 'allTpopkontrs.nodes', []).filter(
+    el => el.tpopId === tpopId,
+  )
 
   /**
    * There is something weird happening when filtering data
@@ -62,10 +54,11 @@ export default ({
 
   const childrenLength = children.length
 
-  let message = loading && !childrenLength ? '...' : childrenLength
-  if (nodeLabelFilterString) {
-    message = `${childrenLength} gefiltert`
-  }
+  const message = loading
+    ? '...'
+    : !!nodeLabelFilterString
+    ? `${childrenLength} gefiltert`
+    : childrenLength
 
   const url = [
     'Projekte',
