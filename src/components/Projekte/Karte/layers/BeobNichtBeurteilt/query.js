@@ -7,6 +7,7 @@ export default gql`
     $projId: UUID!
     $apId: UUID
     $isActiveInMap: Boolean!
+    $beobFilter: BeobFilter!
   ) {
     projektById(id: $projId) @include(if: $isActiveInMap) {
       id
@@ -18,14 +19,7 @@ export default gql`
               ...ApartFields
               aeEigenschaftenByArtId {
                 id
-                beobsByArtId(
-                  filter: {
-                    tpopId: { isNull: true }
-                    nichtZuordnen: { equalTo: false }
-                    x: { isNull: false }
-                    y: { isNull: false }
-                  }
-                ) {
+                beobsByArtId(filter: $beobFilter) {
                   nodes {
                     ...BeobFields
                     beobQuelleWerteByQuelleId {

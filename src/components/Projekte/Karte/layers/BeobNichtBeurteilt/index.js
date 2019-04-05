@@ -9,7 +9,7 @@ import MarkerClusterGroup from 'react-leaflet-markercluster'
 
 import Marker from './Marker'
 import mobxStoreContext from '../../../../../mobxStoreContext'
-import query from './data'
+import query from './query'
 import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
 
 const iconCreateFunction = function(cluster) {
@@ -38,17 +38,24 @@ const BeobNichtBeurteiltMarker = ({
   const { setRefetchKey, addError, mapFilter, activeApfloraLayers } = mobxStore
   const tree = mobxStore[treeName]
   const { setBeobNichtBeurteiltIdsFiltered } = mobxStore[treeName].map
-  const beobNichtBeurteiltFilterString = get(
-    tree,
-    'nodeLabelFilter.beobNichtBeurteilt',
-  )
 
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
   const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
   const isActiveInMap = activeApfloraLayers.includes('beobNichtBeurteilt')
+  const beobsFilter = {
+    tpopId: { isNull: true },
+    nichtZuordnen: { equalTo: false },
+    x: { isNull: false },
+    y: { isNull: false },
+  }
+  if (!!tree.nodeLabelFilter.beob) {
+    beobsFilter.label = {
+      includesInsensitive: tree.nodeLabelFilter.beob,
+    }
+  }
   var { data, error, refetch } = useQuery(query, {
-    variables: { projId, apId, isActiveInMap },
+    variables: { projId, apId, isActiveInMap, beobFilter: beobsFilter },
   })
   setRefetchKey({ key: 'beobNichtBeurteiltForMap', value: refetch })
 
@@ -73,25 +80,8 @@ const BeobNichtBeurteiltMarker = ({
         aparts.map(a =>
           get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []),
         ),
-      )
-        // filter them by nodeLabelFilter
-        .filter(el => {
-          if (!beobNichtBeurteiltFilterString) return true
-          // some dates are not valid
-          // need to account for that
-          let datum = '(kein Datum)'
-          if (!isValid(new Date(el.datum))) {
-            datum = '(ungültiges Datum)'
-          } else if (!!el.datum) {
-            datum = format(new Date(el.datum), 'yyyy.MM.dd')
-          }
-          const autor = el.autor || '(kein Autor)'
-          const quelle = get(el, 'beobQuelleWerteByQuelleId.name', '')
-          return `${datum}: ${autor} (${quelle})`
-            .toLowerCase()
-            .includes(beobNichtBeurteiltFilterString.toLowerCase())
-        }),
-    [aparts, beobNichtBeurteiltFilterString],
+      ),
+    [aparts],
   )
 
   const beobNichtBeurteiltForMapAparts = get(

@@ -116,6 +116,7 @@ export const assozart = gql`
 export const beob = gql`
   fragment BeobFields on Beob {
     id
+    label
     idField
     datum
     autor
