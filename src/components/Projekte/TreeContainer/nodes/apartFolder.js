@@ -45,21 +45,13 @@ export default ({
   const apartNodesLength = memoizeOne(
     () =>
       aparts
-        .filter(el => el.apId === apId)
-        // filter by nodeLabelFilter
-        .filter(el => {
-          if (nodeLabelFilterString) {
-            return el.label
-              .toLowerCase()
-              .includes(nodeLabelFilterString.toLowerCase())
-          }
-          return true
-        }).length,
+        .filter(el => el.apId === apId).length,
   )()
-  let message = loading && !apartNodesLength ? '...' : apartNodesLength
+  /*let message = loading && !apartNodesLength ? '...' : apartNodesLength
   if (nodeLabelFilterString) {
     message = `${apartNodesLength} gefiltert`
-  }
+  }*/
+  const message = loading ? '...' : !!nodeLabelFilterString ? `${apartNodesLength} gefiltert`:apartNodesLength
 
   // only show if parent node exists
   const apNodesIds = nodesPassed.map(n => n.id)
