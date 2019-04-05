@@ -19,7 +19,6 @@ export default async ({
   mobxStore: Object,
 }): Promise<void> => {
   const {
-    setTreeKey,
     emptyToDelete,
     addDeletedDataset,
     addError,
@@ -109,11 +108,7 @@ export default async ({
     if (table === 'ziel') {
       newActiveNodeArray1.pop()
     }
-    setTreeKey({
-      value: newActiveNodeArray1,
-      tree: 'tree',
-      key: 'activeNodeArray',
-    })
+    mobxStore.tree.setActiveNodeArray(newActiveNodeArray1)
   }
   const activeNodeArray2 = get(mobxStore, 'tree2.activeNodeArray')
   if (
@@ -127,28 +122,16 @@ export default async ({
     if (table === 'ziel') {
       newActiveNodeArray2.pop()
     }
-    setTreeKey({
-      value: newActiveNodeArray2,
-      tree: 'tree2',
-      key: 'activeNodeArray',
-    })
+    mobxStore.tree2.setActiveNodeArray(newActiveNodeArray2)
   }
 
   // remove from openNodes
   const openNodes1 = get(mobxStore, 'tree.openNodes')
   const newOpenNodes1 = openNodes1.filter(n => !isEqual(n, toDeleteUrl))
-  setTreeKey({
-    value: newOpenNodes1,
-    tree: 'tree',
-    key: 'openNodes',
-  })
+  mobxStore.tree.setOpenNodes(newOpenNodes1)
   const openNodes2 = get(mobxStore, 'tree2.openNodes')
   const newOpenNodes2 = openNodes2.filter(n => !isEqual(n, toDeleteUrl))
-  setTreeKey({
-    value: newOpenNodes2,
-    tree: 'tree2',
-    key: 'openNodes',
-  })
+  mobxStore.tree2.setOpenNodes(newOpenNodes2)
 
   if (toDeleteAfterDeletionHook) toDeleteAfterDeletionHook()
 

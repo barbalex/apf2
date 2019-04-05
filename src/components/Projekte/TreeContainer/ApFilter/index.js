@@ -26,7 +26,7 @@ const StyledSwitch = styled(Switch)`
 const ApFilter = ({ treeName }: { treeName: String }) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
-  const { setTreeKey, refetch } = mobxStore
+  const { refetch } = mobxStore
   const {
     apFilter,
     setApFilter,
