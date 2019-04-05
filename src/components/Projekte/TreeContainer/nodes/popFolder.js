@@ -37,21 +37,12 @@ export default ({
   const nodeLabelFilterString =
     get(mobxStore, `${treeName}.nodeLabelFilter.pop`) || ''
 
-  const popNodesLength = pops
-    .filter(el => el.apId === apId)
-    // filter by nodeLabelFilter
-    .filter(el => {
-      if (nodeLabelFilterString) {
-        return el.label
-          .toLowerCase()
-          .includes(nodeLabelFilterString.toString().toLowerCase())
-      }
-      return true
-    }).length
-  let message = loading && !popNodesLength ? '...' : popNodesLength
-  if (nodeLabelFilterString) {
-    message = `${popNodesLength} gefiltert`
-  }
+  const popNodesLength = pops.filter(el => el.apId === apId).length
+  const message = loading
+    ? '...'
+    : !!nodeLabelFilterString
+    ? `${popNodesLength} gefiltert`
+    : popNodesLength
 
   const url = ['Projekte', projId, 'Aktionspläne', apId, 'Populationen']
 

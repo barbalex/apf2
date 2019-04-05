@@ -22,32 +22,19 @@ export default ({
   apId: String,
   mobxStore: Object,
 }): Array<Object> => {
-  const pops = get(data, 'allPops.nodes', [])
-
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
   const apIndex = findIndex(apNodes, { id: apId })
-  const nodeLabelFilterString =
-    get(mobxStore, `${treeName}.nodeLabelFilter.pop`) || ''
 
   // map through all elements and create array of nodes
   const nodes = memoizeOne(() =>
-    pops
+    get(data, 'allPops.nodes', [])
       // only show if parent node exists
       .filter(el => nodesPassed.map(n => n.id).includes(`${el.apId}PopFolder`))
       // only show nodes of this parent
       .filter(el => el.apId === apId)
-      // filter by nodeLabelFilter
-      .filter(el => {
-        if (nodeLabelFilterString) {
-          return el.label
-            .toLowerCase()
-            .includes(nodeLabelFilterString.toString().toLowerCase())
-        }
-        return true
-      })
       .map(el => ({
         nodeType: 'table',
         menuType: 'pop',

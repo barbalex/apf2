@@ -160,6 +160,12 @@ const Tree = ({ treeName, dimensions }: Props) => {
     key: 'aps',
     value: refetchAps,
   })
+  const queryPopsFilter = { ...popFilter }
+  if (!!nodeLabelFilter.pop) {
+    queryPopsFilter.label = {
+      includesInsensitive: nodeLabelFilter.pop,
+    }
+  }
   const {
     data: dataPops,
     error: errorPops,
@@ -168,7 +174,7 @@ const Tree = ({ treeName, dimensions }: Props) => {
   } = useQuery(queryPops, {
     variables: {
       isAp,
-      popFilter,
+      filter: queryPopsFilter,
     },
   })
   setRefetchKey({
