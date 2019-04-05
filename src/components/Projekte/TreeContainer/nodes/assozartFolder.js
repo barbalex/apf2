@@ -24,8 +24,6 @@ export default ({
   apId: String,
   mobxStore: Object,
 }): Array<Object> => {
-  const assozarts = get(data, 'allAssozarts.nodes', [])
-
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
@@ -38,22 +36,13 @@ export default ({
 
   const assozartNodesLength = memoizeOne(
     () =>
-      assozarts
-        .filter(el => el.apId === apId)
-        // filter by nodeLabelFilter
-        .filter(el => {
-          if (nodeLabelFilterString) {
-            return el.label
-              .toLowerCase()
-              .includes(nodeLabelFilterString.toLowerCase())
-          }
-          return true
-        }).length,
+      get(data, 'allAssozarts.nodes', []).filter(el => el.apId === apId).length,
   )()
-  let message = loading && !assozartNodesLength ? '...' : assozartNodesLength
-  if (nodeLabelFilterString) {
-    message = `${assozartNodesLength} gefiltert`
-  }
+  const message = loading
+    ? '...'
+    : !!nodeLabelFilterString
+    ? `${assozartNodesLength} gefiltert`
+    : assozartNodesLength
 
   const url = ['Projekte', projId, 'Aktionspläne', apId, 'assoziierte-Arten']
 

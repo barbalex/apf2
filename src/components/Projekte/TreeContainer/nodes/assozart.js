@@ -22,33 +22,21 @@ export default ({
   apId: String,
   mobxStore: Object,
 }): Array<Object> => {
-  const assozarts = get(data, 'allAssozarts.nodes', [])
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
   const apIndex = findIndex(apNodes, { id: apId })
-  const nodeLabelFilterString =
-    get(mobxStore, `${treeName}.nodeLabelFilter.assozart`) || ''
 
   // map through all elements and create array of nodes
   const nodes = memoizeOne(() =>
-    assozarts
+    get(data, 'allAssozarts.nodes', [])
       // only show if parent node exists
       .filter(el =>
         nodesPassed.map(n => n.id).includes(`${el.apId}AssozartFolder`),
       )
       // only show nodes of this parent
       .filter(el => el.apId === apId)
-      // filter by nodeLabelFilter
-      .filter(el => {
-        if (nodeLabelFilterString) {
-          return el.label
-            .toLowerCase()
-            .includes(nodeLabelFilterString.toLowerCase())
-        }
-        return true
-      })
       .map(el => ({
         nodeType: 'table',
         menuType: 'assozart',

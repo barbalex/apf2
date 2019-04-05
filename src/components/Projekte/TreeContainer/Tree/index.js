@@ -393,13 +393,19 @@ const Tree = ({ treeName, dimensions }: Props) => {
     key: 'aparts',
     value: refetchAparts,
   })
+  const queryAssozartsFilter = { apId: { in: ap } }
+  if (!!nodeLabelFilter.assozart) {
+    queryAssozartsFilter.label = {
+      includesInsensitive: nodeLabelFilter.assozart,
+    }
+  }
   const {
     data: dataAssozarts,
     error: errorAssozarts,
     loading: loadingAssozarts,
     refetch: refetchAssozarts,
   } = useQuery(queryAssozarts, {
-    variables: { isAp, ap },
+    variables: { isAp, filter: queryAssozartsFilter },
   })
   setRefetchKey({
     key: 'assozarts',

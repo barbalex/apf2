@@ -34,22 +34,11 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId,
   })
-  const nodeLabelFilterString =
-    get(mobxStore, `${treeName}.nodeLabelFilter.ziel`) || ''
 
   const ziels = memoizeOne(() =>
     get(data, 'allZiels.nodes', [])
       // of this ap
-      .filter(el => el.apId === apId)
-      // filter by nodeLabelFilter
-      .filter(el => {
-        if (nodeLabelFilterString) {
-          return el.label
-            .toLowerCase()
-            .includes(nodeLabelFilterString.toLowerCase())
-        }
-        return true
-      }),
+      .filter(el => el.apId === apId),
   )()
 
   const zieljahre = memoizeOne(() =>
