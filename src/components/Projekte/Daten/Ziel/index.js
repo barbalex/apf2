@@ -30,8 +30,8 @@ const FieldsContainer = styled.div`
 const Ziel = ({ treeName }: { treeName: string }) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
-  const { setTreeKey, refetch } = mobxStore
-  const { activeNodeArray, openNodes } = mobxStore[treeName]
+  const { refetch } = mobxStore
+  const { activeNodeArray, setActiveNodeArray, openNodes, setOpenNodes } = mobxStore[treeName]
 
   const [errors, setErrors] = useState({})
 
@@ -98,16 +98,8 @@ const Ziel = ({ treeName }: { treeName: string }) => {
           if (isEqual(n, oldParentNodeUrl)) return newParentNodeUrl
           return n
         })
-        setTreeKey({
-          tree: treeName,
-          value: newActiveNodeArray,
-          key: 'activeNodeArray',
-        })
-        setTreeKey({
-          tree: treeName,
-          value: newOpenNodes,
-          key: 'openNodes',
-        })
+        setActiveNodeArray(newActiveNodeArray)
+        setOpenNodes(newOpenNodes)
         if (['typ'].includes(field)) refetch.ziels()
       }
     },

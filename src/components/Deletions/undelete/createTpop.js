@@ -28,7 +28,6 @@ export default gql`
     $bewirtschafter: String
     $bewirtschaftung: String
     $kontrollfrequenz: Int
-    $bewirtschaftung: String
     $bemerkungen: String
     $statusUnklar: Boolean
   ) {

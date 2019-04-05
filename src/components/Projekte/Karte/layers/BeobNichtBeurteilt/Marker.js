@@ -28,10 +28,11 @@ const BeobNichtBeurteiltMarker = ({
 }) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
-  const { assigningBeob, setTreeKey, refetch } = mobxStore
+  const { assigningBeob, refetch } = mobxStore
+  const { setActiveNodeArray, map } = mobxStore[treeName]
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
-  const { idsFiltered } = mobxStore[treeName].map
+  const { idsFiltered } = map
 
   const isHighlighted = idsFiltered.includes(beob.id)
   const latLng = new window.L.LatLng(...epsg2056to4326(beob.x, beob.y))
@@ -75,11 +76,7 @@ const BeobNichtBeurteiltMarker = ({
         'Beobachtungen',
         beob.id,
       ]
-      setTreeKey({
-        value: newActiveNodeArray,
-        tree: treeName,
-        key: 'activeNodeArray',
-      })
+      setActiveNodeArray(newActiveNodeArray)
       await client.mutate({
         mutation: updateBeobByIdGql,
         variables: {

@@ -7,7 +7,7 @@ export default gql`
     allTpopkontrs(
       filter: {
         typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
-        tpopId: { in: $tpop }
+        tpopId: { equalTo: $tpop }
       }
     ) {
       nodes {

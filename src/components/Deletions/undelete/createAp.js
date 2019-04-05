@@ -10,7 +10,7 @@ export default gql`
     $startJahr: Int
     $umsetzung: Int
     $artId: UUID
-    $bearbeiter: Int
+    $bearbeiter: UUID
   ) {
     createAp(
       input: {
