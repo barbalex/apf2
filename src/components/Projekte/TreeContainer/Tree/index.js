@@ -80,9 +80,9 @@ type Props = {
 const Tree = ({ treeName, dimensions }: Props) => {
   const mobxStore = useContext(mobxStoreContext)
   const tree = mobxStore[treeName]
-  const { activeNodeArray, setNodes, openNodes } = tree
+  const { activeNodeArray, setActiveNodeArray, setNodes, openNodes, setOpenNodes } = tree
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
-  const { nodeFilter, user, setRefetchKey, setTreeKey } = mobxStore
+  const { nodeFilter, user, setRefetchKey } = mobxStore
   const { idb } = useContext(idbContext)
   const {
     projekt,
@@ -597,17 +597,8 @@ const Tree = ({ treeName, dimensions }: Props) => {
       projektNode
     ) {
       const projektUrl = [...projektNode.url]
-      setTreeKey({
-        value: projektUrl,
-        tree: treeName,
-        key: 'activeNodeArray',
-      })
-      // add projekt to open nodes
-      setTreeKey({
-        value: [...openNodes, projektUrl],
-        tree: treeName,
-        key: 'openNodes',
-      })
+      setActiveNodeArray(projektUrl)
+      setOpenNodes([...openNodes, projektUrl])
     }
   }, [loading])
 

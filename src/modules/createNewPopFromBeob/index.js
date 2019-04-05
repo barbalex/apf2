@@ -20,8 +20,13 @@ export default async ({
   client: Object,
   mobxStore: Object,
 }): Promise<void> => {
-  const { setTreeKey, addError, refetch } = mobxStore
-  const tree = mobxStore[treeName]
+  const { addError, refetch } = mobxStore
+  const {
+    openNodes,
+    setOpenNodes,
+    activeNodeArray,
+    setActiveNodeArray,
+  } = mobxStore[treeName]
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
   let beobResult
@@ -101,7 +106,7 @@ export default async ({
   ]
 
   let newOpenNodes = [
-    ...tree.openNodes,
+    ...openNodes,
     // add Beob and it's not yet existing parents to open nodes
     [`Projekte`, projekt, `Aktionspläne`, ap, `Populationen`],
     [`Projekte`, projekt, `Aktionspläne`, ap, `Populationen`, tpop.popId],
@@ -149,22 +154,11 @@ export default async ({
     ],
   ]
     // and remove old node
-    .filter(n => !isEqual(n, tree.activeNodeArray))
+    .filter(n => !isEqual(n, activeNodeArray))
 
-  setTreeKey({
-    value: newOpenNodes,
-    tree: tree.name,
-    key: 'openNodes',
-  })
-  // set new activeNodeArray
-  setTreeKey({
-    value: newActiveNodeArray,
-    tree: tree.name,
-    key: 'activeNodeArray',
-  })
+  setOpenNodes(newOpenNodes)
+  setActiveNodeArray(newActiveNodeArray)
 
-  // TODO: what is this for?
-  //refetchTree('local')
   refetch.aps()
   refetch.pops()
   refetch.tpops()

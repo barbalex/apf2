@@ -21,11 +21,7 @@ export default async ({
   if (activeNodeArrayFromPathname.length === 0) {
     initialActiveNodeArray.push('Projekte')
   }
-  mobxStore.setTreeKey({
-    value: initialActiveNodeArray,
-    tree: 'tree',
-    key: 'activeNodeArray',
-  })
+  mobxStore.tree.setActiveNodeArray(initialActiveNodeArray)
   // need to set openNodes
   setOpenNodesFromActiveNodeArray({
     activeNodeArray: initialActiveNodeArray,
