@@ -252,20 +252,16 @@ const Row = ({
       toggleNode({
         treeName,
         node,
-        openNodes,
-        activeNodeArray,
-        nodeFilter,
         mobxStore,
       })
     },
-    // do we need to add pass nodeFilter?
-    [treeName, node, nodeFilter, openNodes, activeNodeArray],
+    [treeName, node],
   )
   const onClickNodeSymbol = useCallback(
     event => {
-      toggleNodeSymbol({ treeName, node, openNodes, mobxStore })
+      toggleNodeSymbol({ treeName, node, mobxStore })
     },
-    [treeName, node, openNodes],
+    [treeName, node],
   )
   const onClickPrint = useCallback(
     () =>

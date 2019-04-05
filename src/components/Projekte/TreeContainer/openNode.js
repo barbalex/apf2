@@ -12,7 +12,7 @@ export default async ({
   openNodes: Array<Array<string>>,
   mobxStore: Object,
 }) => {
-  const { setTreeKey, treeNodeLabelFilterResetExceptAp } = mobxStore
+  const {  treeNodeLabelFilterResetExceptAp } = mobxStore
   // make sure this node's url is not yet contained
   // otherwise same nodes will be added multiple times!
   if (isNodeOpen(openNodes, node.url)) return
@@ -27,11 +27,7 @@ export default async ({
     newOpenNodes.push([...node.url, 'Berichte'])
   }
 
-  setTreeKey({
-    value: newOpenNodes,
-    tree: treeName,
-    key: 'openNodes',
-  })
+  mobxStore[treeName].setOpenNodes(newOpenNodes)
 
   if (node.menuType === 'ap') {
     // if ap is changed, need to empty nodeLabelFilter,

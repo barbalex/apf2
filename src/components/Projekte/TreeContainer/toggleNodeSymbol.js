@@ -6,16 +6,14 @@ import isNodeOpen from './isNodeOpen'
 export default ({
   treeName,
   node,
-  openNodes,
   mobxStore,
 }: {
   treeName: string,
   node: Object,
-  openNodes: Array<Array<string>>,
   mobxStore: Object,
 }): any => {
   if (!node.url) throw new Error('passed node has no url')
-  const { setTreeKey } = mobxStore
+  const {openNodes, setOpenNodes}=mobxStore[treeName]
 
   let newOpenNodes = [...openNodes]
   if (isNodeOpen(openNodes, node.url)) {
@@ -23,9 +21,5 @@ export default ({
   } else {
     newOpenNodes.push(node.url)
   }
-  setTreeKey({
-    value: newOpenNodes,
-    tree: treeName,
-    key: 'openNodes',
-  })
+  setOpenNodes(newOpenNodes)
 }
