@@ -40,6 +40,13 @@ const Projekte = () => {
     )
   }
 
+  const flex = treeTabs.length / projekteTabs.length
+  console.log('Projekte', {
+    treeTabsLength: treeTabs.length,
+    projekteTabsLength: projekteTabs.length,
+    flex,
+  })
+
   return (
     <Container>
       <ReflexContainer orientation="vertical">

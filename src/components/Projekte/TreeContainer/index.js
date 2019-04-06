@@ -84,6 +84,7 @@ import mobxStoreContext from '../../../mobxStoreContext'
 
 const Container = styled.div`
   height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -177,7 +178,7 @@ const TreeContainer = ({
     setUrlQuery,
     refetch,
   } = mobxStore
-  const {openNodes,setOpenNodes,setActiveNodeArray} = mobxStore[treeName]
+  const { openNodes, setOpenNodes, setActiveNodeArray } = mobxStore[treeName]
   const { projekt } = mobxStore[`${treeName}ActiveNodes`]
 
   const handleClick = useCallback(

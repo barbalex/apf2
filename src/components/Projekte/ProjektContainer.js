@@ -51,6 +51,8 @@ const ProjektContainer = ({
       ? 1
       : 1 / tabs.length
 
+  console.log('ProjektContainer', { treeFlex })
+
   return (
     <Container>
       <ReflexContainer orientation="vertical">

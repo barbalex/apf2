@@ -39,6 +39,7 @@ const Beobzuordnung = lazy(() => import('./Beobzuordnung'))
 
 const Container = styled.div`
   height: 100%;
+  width: 100%;
   overflow-x: auto;
   @media print {
     height: auto;
