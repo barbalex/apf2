@@ -41,19 +41,19 @@ const BeobNichtBeurteiltMarker = ({
   const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
   const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
   const isActiveInMap = activeApfloraLayers.includes('beobNichtBeurteilt')
-  const beobsFilter = {
+  const beobFilter = {
     tpopId: { isNull: true },
     nichtZuordnen: { equalTo: false },
     x: { isNull: false },
     y: { isNull: false },
   }
   if (!!tree.nodeLabelFilter.beob) {
-    beobsFilter.label = {
+    beobFilter.label = {
       includesInsensitive: tree.nodeLabelFilter.beob,
     }
   }
   var { data, error, refetch } = useQuery(query, {
-    variables: { projId, apId, isActiveInMap, beobFilter: beobsFilter },
+    variables: { projId, apId, isActiveInMap, beobFilter },
   })
   setRefetchKey({ key: 'beobNichtBeurteiltForMap', value: refetch })
 

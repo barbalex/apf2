@@ -1,15 +1,13 @@
 import React, { useContext, useMemo } from 'react'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
-import format from 'date-fns/format'
-import isValid from 'date-fns/isValid'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from 'react-apollo-hooks'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 
 import Marker from './Marker'
 import mobxStoreContext from '../../../../../mobxStoreContext'
-import query from './data'
+import query from './query'
 import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
 
 const iconCreateFunction = function(cluster) {
@@ -45,8 +43,20 @@ const BeobZugeordnetMarker = ({
   const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
   const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
   const isActiveInMap = activeApfloraLayers.includes('beobZugeordnet')
+
+  const beobFilter = {
+    tpopId: { isNull: false },
+    nichtZuordnen: { equalTo: false },
+    x: { isNull: false },
+    y: { isNull: false },
+  }
+  if (!!tree.nodeLabelFilter.beob) {
+    beobFilter.label = {
+      includesInsensitive: tree.nodeLabelFilter.beob,
+    }
+  }
   var { data, error, refetch } = useQuery(query, {
-    variables: { projId, apId, isActiveInMap },
+    variables: { projId, apId, isActiveInMap, beobFilter },
   })
   setRefetchKey({ key: 'beobZugeordnetForMap', value: refetch })
 
@@ -71,24 +81,7 @@ const BeobZugeordnetMarker = ({
         aparts.map(a =>
           get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []),
         ),
-      )
-        // filter them by nodeLabelFilter
-        .filter(el => {
-          if (!beobZugeordnetFilterString) return true
-          // some dates are not valid
-          // need to account for that
-          let datum = '(kein Datum)'
-          if (!isValid(new Date(el.datum))) {
-            datum = '(ungültiges Datum)'
-          } else if (!!el.datum) {
-            datum = format(new Date(el.datum), 'yyyy.MM.dd')
-          }
-          const autor = el.autor || '(kein Autor)'
-          const quelle = get(el, 'beobQuelleWerteByQuelleId.name', '')
-          return `${datum}: ${autor} (${quelle})`
-            .toLowerCase()
-            .includes(beobZugeordnetFilterString.toLowerCase())
-        }),
+      ),
     [aparts, beobZugeordnetFilterString],
   )
 

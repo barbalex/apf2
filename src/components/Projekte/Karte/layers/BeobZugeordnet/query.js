@@ -1,12 +1,18 @@
 import gql from 'graphql-tag'
 
-import { aeEigenschaften, apart, beob } from '../../../../shared/fragments'
+import {
+  aeEigenschaften,
+  apart,
+  beob,
+  beobQuelleWerte,
+} from '../../../../shared/fragments'
 
 export default gql`
-  query BeobNichtZuzuordnenForMapQuery(
+  query BeobZugeordnetForMapQuery(
     $projId: UUID!
     $apId: UUID
     $isActiveInMap: Boolean!
+    $beobFilter: BeobFilter!
   ) {
     projektById(id: $projId) @include(if: $isActiveInMap) {
       id
@@ -18,22 +24,19 @@ export default gql`
               ...ApartFields
               aeEigenschaftenByArtId {
                 id
-                beobsByArtId(
-                  filter: {
-                    tpopId: { isNull: true }
-                    nichtZuordnen: { equalTo: true }
-                    x: { isNull: false }
-                    y: { isNull: false }
-                  }
-                ) {
+                beobsByArtId(filter: $beobFilter) {
                   nodes {
                     ...BeobFields
                     beobQuelleWerteByQuelleId {
-                      id
-                      name
+                      ...BeobQuelleWerteFields
                     }
                     aeEigenschaftenByArtId {
                       ...AeEigenschaftenFields
+                    }
+                    tpopByTpopId {
+                      id
+                      nr
+                      flurname
                     }
                   }
                 }
@@ -47,4 +50,5 @@ export default gql`
   ${aeEigenschaften}
   ${apart}
   ${beob}
+  ${beobQuelleWerte}
 `
