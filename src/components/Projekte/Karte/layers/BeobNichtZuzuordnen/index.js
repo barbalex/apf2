@@ -37,10 +37,6 @@ const BeobNichtZuzuordnenMarker = ({
   const tree = mobxStore[treeName]
   const { map } = tree
   const { setBeobNichtZuzuordnenIdsFiltered } = map
-  const beobNichtZuzuordnenFilterString = get(
-    tree,
-    'nodeLabelFilter.beobNichtZuzuordnen',
-  )
 
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
@@ -85,7 +81,7 @@ const BeobNichtZuzuordnenMarker = ({
           get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []),
         ),
       ),
-    [aparts, beobNichtZuzuordnenFilterString],
+    [aparts],
   )
 
   const beobNichtZuzuordnenForMapNodesAparts = get(

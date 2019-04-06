@@ -37,7 +37,6 @@ const BeobZugeordnetMarker = ({
   const tree = mobxStore[treeName]
   const { map } = tree
   const { setBeobZugeordnetIdsFiltered } = map
-  const beobZugeordnetFilterString = get(tree, 'nodeLabelFilter.beobZugeordnet')
 
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
@@ -82,7 +81,7 @@ const BeobZugeordnetMarker = ({
           get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []),
         ),
       ),
-    [aparts, beobZugeordnetFilterString],
+    [aparts],
   )
 
   const beobZugeordnetForMapAparts = get(
