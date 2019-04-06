@@ -53,9 +53,6 @@ const Tpop = ({
   const { map } = tree
   const { setTpopIdsFiltered } = map
 
-  const popFilterString = get(tree, 'nodeLabelFilter.pop')
-  const tpopFilterString = get(tree, 'nodeLabelFilter.tpop')
-
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
   const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
@@ -75,6 +72,12 @@ const Tpop = ({
     //if (['x', 'y'].includes(key)) delete popFilter[key]
     popFilter[key] = { [expression]: value }
   })
+  if (!!tree.nodeLabelFilter.pop) {
+    popFilter.label = {
+      includesInsensitive: tree.nodeLabelFilter.pop,
+    }
+  }
+
   const tpopFilter = { x: { isNull: false }, y: { isNull: false } }
   const tpopFilterValues = Object.entries(nodeFilter[treeName].tpop).filter(
     e => e[1] || e[1] === 0,
@@ -83,6 +86,11 @@ const Tpop = ({
     const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
     tpopFilter[key] = { [expression]: value }
   })
+  if (!!tree.nodeLabelFilter.tpop) {
+    tpopFilter.label = {
+      includesInsensitive: tree.nodeLabelFilter.tpop,
+    }
+  }
 
   var { data, error, refetch } = useQuery(query, {
     variables: {
@@ -113,28 +121,12 @@ const Tpop = ({
     [],
   )
   const pops = useMemo(
-    () =>
-      flatten(aps.map(ap => get(ap, 'popsByApId.nodes', [])))
-        // filter them by nodeLabelFilter
-        .filter(p => {
-          if (!popFilterString) return true
-          return `${p.nr || '(keine Nr)'}: ${p.name || '(kein Name)'}`
-            .toLowerCase()
-            .includes(popFilterString.toLowerCase())
-        }),
-    [aps, popFilterString, popFilterValues],
+    () => flatten(aps.map(ap => get(ap, 'popsByApId.nodes', []))),
+    [aps],
   )
   const tpops = useMemo(
-    () =>
-      flatten(pops.map(pop => get(pop, 'tpopsByPopId.nodes', [])))
-        // filter them by nodeLabelFilter
-        .filter(el => {
-          if (!tpopFilterString) return true
-          return `${el.nr || '(keine Nr)'}: ${el.flurname || '(kein Flurname)'}`
-            .toLowerCase()
-            .includes(tpopFilterString.toLowerCase())
-        }),
-    [pops, tpopFilterString, tpopFilterValues],
+    () => flatten(pops.map(pop => get(pop, 'tpopsByPopId.nodes', []))),
+    [pops],
   )
 
   const mapTpopIdsFiltered = useMemo(
