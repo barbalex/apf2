@@ -39,18 +39,6 @@ Cypress.Commands.add('setSelectOption', ({ selector, option, value }) => {
     .eq(1)
     .should('have.value', value)
 })
-Cypress.Commands.add('setSelectOptionSlowly', ({ selector, option, value }) => {
-  cy.get(selector)
-    .find('.css-10nd86i input:text')
-    .focus()
-    .type(option, { force: true, delay: 600, timeout: 330000 })
-    .type('{enter}', { force: true })
-  cy.get(selector)
-    .find('.css-10nd86i')
-    .find('input')
-    .eq(1)
-    .should('have.value', value)
-})
 Cypress.Commands.add('setSelectTopOption', ({ selector }) => {
   cy.get(selector)
     .find('.css-10nd86i input:text')

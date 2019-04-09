@@ -11,12 +11,12 @@ describe('Beobachtung form', () => {
   })
   // TODO: get this to work
   it.skip('updates Art', () => {
-    cy.setSelectOptionSlowly({
+    cy.setSelectOption({
       selector: '[data-id=artId]',
       option: 'Abutilon',
       value: '862333db-31cf-444c-b8ea-021c640c7a44',
     })
-    cy.setSelectOptionSlowly({
+    cy.setSelectOption({
       selector: '[data-id=artId]',
       option: 'Abies alba',
       value: '1ab6bbb1-979a-4232-a5d8-62efb5cb984a',

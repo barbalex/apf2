@@ -148,7 +148,7 @@ describe('Teil-Population Massnahme form', () => {
     cy.clearSelect({
       selector: '[data-id=wirtspflanze]',
     })
-    cy.setSelectOptionSlowly({
+    cy.setSelectOption({
       selector: '[data-id=wirtspflanze]',
       option: 'Abies',
       value: 'Abies alba Mill. (Weiss-Tanne)',

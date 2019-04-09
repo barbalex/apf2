@@ -26,7 +26,7 @@ describe('Aktionsplan form', () => {
     cy.clearSelect({
       selector: '[data-id=artId]',
     })
-    cy.setSelectOptionSlowly({
+    cy.setSelectOption({
       selector: '[data-id=artId]',
       option: 'Abies a',
       value: '1ab6bbb1-979a-4232-a5d8-62efb5cb984a',
