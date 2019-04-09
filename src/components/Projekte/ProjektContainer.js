@@ -160,59 +160,161 @@ const ProjektContainer = ({
       ? '100%'
       : `${(1 / tabs.length) * 100}%`
 
-  console.log('ProjektContainer', {
-    treeWidth,
-    treeHeight,
-    datenWidth,
-    datenHeight,
-    filterWidth,
-    filterHeight,
-    tabsLength: tabs.length,
-    tabs,
-  })
+  const elObj = {
+    tree: (
+      <InnerContainer ref={treeEl}>
+        <TreeContainer
+          treeName={treeName}
+          dimensions={{ width: treeWidth, height: treeHeight }}
+        />
+      </InnerContainer>
+    ),
+    daten: (
+      <InnerContainer ref={datenEl}>
+        <Daten
+          treeName={treeName}
+          dimensions={{ width: datenWidth, height: datenHeight }}
+        />
+      </InnerContainer>
+    ),
+    filter: (
+      <InnerContainer ref={filterEl}>
+        <Filter
+          treeName={treeName}
+          dimensions={{ width: filterWidth, height: filterHeight }}
+        />
+      </InnerContainer>
+    ),
+    karte: (
+      <InnerContainer ref={karteEl}>
+        <Karte
+          treeName={treeName}
+          dimensions={{ width: karteWidth, height: karteHeight }}
+        />
+      </InnerContainer>
+    ),
+    exporte: (
+      <InnerContainer ref={exporteEl}>
+        <Exporte dimensions={{ width: exporteWidth, height: exporteHeight }} />
+      </InnerContainer>
+    ),
+  }
 
-  if (tabs.lengh < 2) {
+  if (tabs.length < 2) {
+    return <Container>{elObj[tabs[0]]}</Container>
+  }
+
+  if (tabs.length === 2) {
     return (
       <Container>
-        {tabs.includes('tree') && (
-          <InnerContainer ref={treeEl}>
-            <TreeContainer
-              treeName={treeName}
-              dimensions={{ width: treeWidth, height: treeHeight }}
-            />
-          </InnerContainer>
-        )}
-        {tabs.includes('daten') && (
-          <InnerContainer ref={datenEl}>
-            <Daten
-              treeName={treeName}
-              dimensions={{ width: datenWidth, height: datenHeight }}
-            />
-          </InnerContainer>
-        )}
-        {tabs.includes('filter') && (
-          <InnerContainer ref={filterEl}>
-            <Filter
-              treeName={treeName}
-              dimensions={{ width: filterWidth, height: filterHeight }}
-            />
-          </InnerContainer>
-        )}
-        {tabs.includes('karte') && (
-          <InnerContainer ref={karteEl}>
-            <Karte
-              treeName={treeName}
-              dimensions={{ width: karteWidth, height: karteHeight }}
-            />
-          </InnerContainer>
-        )}
-        {tabs.includes('exporte') && (
-          <InnerContainer ref={exporteEl}>
-            <Exporte
-              dimensions={{ width: exporteWidth, height: exporteHeight }}
-            />
-          </InnerContainer>
-        )}
+        <StyledSplitPane
+          split="vertical"
+          size={tabs[0] === 'tree' ? '33%' : '50%'}
+          minSize={100}
+          onDragFinished={onChange}
+        >
+          {elObj[tabs[0]]}
+          {elObj[tabs[1]]}
+        </StyledSplitPane>
+      </Container>
+    )
+  }
+
+  if (tabs.length === 3) {
+    return (
+      <Container>
+        <StyledSplitPane
+          split="vertical"
+          size="33%"
+          minSize={100}
+          onDragFinished={onChange}
+        >
+          {elObj[tabs[0]]}
+
+          <StyledSplitPane
+            split="vertical"
+            size="50%"
+            minSize={100}
+            onDragFinished={onChange}
+          >
+            {elObj[tabs[1]]}
+            {elObj[tabs[2]]}
+          </StyledSplitPane>
+        </StyledSplitPane>
+      </Container>
+    )
+  }
+
+  if (tabs.length === 4) {
+    return (
+      <Container>
+        <StyledSplitPane
+          split="vertical"
+          size="25%"
+          minSize={100}
+          onDragFinished={onChange}
+        >
+          {elObj[tabs[0]]}
+
+          <StyledSplitPane
+            split="vertical"
+            size="33%"
+            minSize={100}
+            onDragFinished={onChange}
+          >
+            {elObj[tabs[1]]}
+            <StyledSplitPane
+              split="vertical"
+              size="50%"
+              minSize={100}
+              onDragFinished={onChange}
+            >
+              {elObj[tabs[2]]}
+              {elObj[tabs[3]]}
+            </StyledSplitPane>
+          </StyledSplitPane>
+        </StyledSplitPane>
+      </Container>
+    )
+  }
+
+  if (tabs.length === 5) {
+    return (
+      <Container>
+        <StyledSplitPane
+          split="vertical"
+          size="20%"
+          onDragFinished={onChange}
+          minSize={100}
+        >
+          {elObj[tabs[0]]}
+
+          <StyledSplitPane
+            split="vertical"
+            size="25%"
+            minSize={100}
+            onDragFinished={onChange}
+          >
+            {elObj[tabs[1]]}
+            <StyledSplitPane
+              split="vertical"
+              size="33%"
+              minSize={100}
+              onDragFinished={onChange}
+            >
+              {elObj[tabs[2]]}
+              <StyledSplitPane
+                split="vertical"
+                size="50%"
+                minSize={100}
+                onDragFinished={onChange}
+              >
+                {elObj[tabs[3]]}
+                {elObj[tabs[4]]}
+              </StyledSplitPane>
+            </StyledSplitPane>
+          </StyledSplitPane>
+        </StyledSplitPane>
       </Container>
     )
   }
@@ -223,7 +325,6 @@ const ProjektContainer = ({
         split="vertical"
         defaultSize={defaultSize}
         onDragFinished={onChange}
-        ref={el}
       >
         {tabs.includes('tree') && (
           <InnerContainer ref={treeEl}>
