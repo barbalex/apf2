@@ -796,8 +796,8 @@ const Tree = ({ treeName, dimensions }: Props) => {
     return <ErrorContainer>{`Fehler: ${error.message}`}</ErrorContainer>
   }
 
-  const height = isNaN(dimensions.height) ? 250 : dimensions.height - 58
-  const width = isNaN(dimensions.width) ? 250 : dimensions.width
+  const height = dimensions.height - 58 - 65
+  const width = dimensions.width
 
   return (
     <Container data-loading={loading}>

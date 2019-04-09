@@ -1,7 +1,7 @@
 // @flow
 import React, { useContext } from 'react'
 import styled from 'styled-components'
-import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
+import SplitPane from 'react-split-pane'
 import intersection from 'lodash/intersection'
 import { observer } from 'mobx-react-lite'
 
@@ -17,6 +17,44 @@ const Container = styled.div`
   @media print {
     height: auto !important;
     display: block;
+  }
+`
+const StyledSplitPane = styled(SplitPane)`
+  .Resizer {
+    background: #388e3c;
+    opacity: 1;
+    z-index: 1;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    -moz-background-clip: padding;
+    -webkit-background-clip: padding;
+    background-clip: padding-box;
+  }
+
+  .Resizer:hover {
+    -webkit-transition: all 2s ease;
+    transition: all 2s ease;
+  }
+
+  .Resizer.vertical {
+    width: 5px;
+    margin: 0 -3px;
+    border-left: 3px solid #388e3c;
+    border-right: 3px solid #388e3c;
+    cursor: col-resize;
+    background-color: #388e3c;
+  }
+
+  .Resizer.vertical:hover {
+    border-left: 3px solid rgba(0, 0, 0, 0.3);
+    border-right: 3px solid rgba(0, 0, 0, 0.3);
+  }
+  .Resizer.disabled {
+    cursor: not-allowed;
+  }
+  .Resizer.disabled:hover {
+    border-color: transparent;
   }
 `
 const treeTabValues = ['tree', 'daten', 'filter', 'karte', 'exporte']
@@ -40,32 +78,20 @@ const Projekte = () => {
     )
   }
 
-  const flex = treeTabs.length / projekteTabs.length
-  console.log('Projekte', {
-    treeTabsLength: treeTabs.length,
-    projekteTabsLength: projekteTabs.length,
-    flex,
-  })
-
   return (
     <Container>
-      <ReflexContainer orientation="vertical">
-        <ReflexElement flex={treeTabs.length / projekteTabs.length}>
-          <ProjektContainer
-            treeName="tree"
-            tabs={treeTabs}
-            projekteTabs={projekteTabs}
-          />
-        </ReflexElement>
-        <ReflexSplitter />
-        <ReflexElement>
-          <ProjektContainer
-            treeName="tree2"
-            tabs={tree2Tabs}
-            projekteTabs={projekteTabs}
-          />
-        </ReflexElement>
-      </ReflexContainer>
+      <StyledSplitPane split="vertical" defaultSize="50%">
+        <ProjektContainer
+          treeName="tree"
+          tabs={treeTabs}
+          projekteTabs={projekteTabs}
+        />
+        <ProjektContainer
+          treeName="tree2"
+          tabs={tree2Tabs}
+          projekteTabs={projekteTabs}
+        />
+      </StyledSplitPane>
     </Container>
   )
 }

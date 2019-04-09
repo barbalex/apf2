@@ -1,8 +1,13 @@
 // @flow
-import React, { useContext } from 'react'
+import React, {
+  useContext,
+  useRef,
+  useState,
+  useCallback,
+  useEffect,
+} from 'react'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
-import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
+import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'
 
 // when Karte was loaded async, it did not load,
@@ -23,8 +28,48 @@ const Container = styled.div`
     height: auto !important;
   }
 `
+const StyledSplitPane = styled(SplitPane)`
+  .Resizer {
+    background: #388e3c;
+    opacity: 1;
+    z-index: 1;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    -moz-background-clip: padding;
+    -webkit-background-clip: padding;
+    background-clip: padding-box;
+  }
 
-const enhance = compose(observer)
+  .Resizer:hover {
+    -webkit-transition: all 2s ease;
+    transition: all 2s ease;
+  }
+
+  .Resizer.vertical {
+    width: 5px;
+    margin: 0 -3px;
+    border-left: 3px solid #388e3c;
+    border-right: 3px solid #388e3c;
+    cursor: col-resize;
+    background-color: #388e3c;
+  }
+
+  .Resizer.vertical:hover {
+    border-left: 3px solid rgba(0, 0, 0, 0.3);
+    border-right: 3px solid rgba(0, 0, 0, 0.3);
+  }
+  .Resizer.disabled {
+    cursor: not-allowed;
+  }
+  .Resizer.disabled:hover {
+    border-color: transparent;
+  }
+`
+const InnerContainer = styled.div`
+  width: 100%;
+  height: 100%;
+`
 
 const ProjektContainer = ({
   treeName,
@@ -38,81 +83,190 @@ const ProjektContainer = ({
   const mobxStore = useContext(mobxStoreContext)
   const { isPrint } = mobxStore
 
+  const el = useRef(null)
+  const treeEl = useRef(null)
+  const datenEl = useRef(null)
+  const filterEl = useRef(null)
+  const karteEl = useRef(null)
+  const exporteEl = useRef(null)
+
+  const [treeWidth, setTreeWidth] = useState(0)
+  const [treeHeight, setTreeHeight] = useState(0)
+  const [datenWidth, setDatenWidth] = useState(0)
+  const [datenHeight, setDatenHeight] = useState(0)
+  const [filterWidth, setFilterWidth] = useState(0)
+  const [filterHeight, setFilterHeight] = useState(0)
+  const [karteWidth, setKarteWidth] = useState(0)
+  const [karteHeight, setKarteHeight] = useState(0)
+  const [exporteWidth, setExporteWidth] = useState(0)
+  const [exporteHeight, setExporteHeight] = useState(0)
+
+  const onChange = useCallback(() => {
+    if (treeEl.current) {
+      setTreeWidth(treeEl.current.clientWidth)
+      setTreeHeight(treeEl.current.clientHeight)
+    }
+    if (datenEl.current) {
+      setDatenWidth(datenEl.current.clientWidth)
+      setDatenHeight(datenEl.current.clientHeight)
+    }
+    if (filterEl.current) {
+      setFilterWidth(filterEl.current.clientWidth)
+      setFilterHeight(filterEl.current.clientHeight)
+    }
+    if (karteEl.current) {
+      setKarteWidth(karteEl.current.clientWidth)
+      setKarteHeight(karteEl.current.clientHeight)
+    }
+    if (exporteEl.current) {
+      setExporteWidth(exporteEl.current.clientWidth)
+      setExporteHeight(exporteEl.current.clientHeight)
+    }
+  })
+
+  useEffect(() => {
+    if (treeEl.current) {
+      setTreeWidth(treeEl.current.clientWidth)
+      setTreeHeight(treeEl.current.clientHeight)
+    }
+    if (datenEl.current) {
+      setDatenWidth(datenEl.current.clientWidth)
+      setDatenHeight(datenEl.current.clientHeight)
+    }
+    if (filterEl.current) {
+      setFilterWidth(filterEl.current.clientWidth)
+      setFilterHeight(filterEl.current.clientHeight)
+    }
+    if (karteEl.current) {
+      setKarteWidth(karteEl.current.clientWidth)
+      setKarteHeight(karteEl.current.clientHeight)
+    }
+    if (exporteEl.current) {
+      setExporteWidth(exporteEl.current.clientWidth)
+      setExporteHeight(exporteEl.current.clientHeight)
+    }
+  }, [])
+
   if (isPrint) {
     return <Daten treeName={treeName} />
   }
 
   // remove 2 to treat all same
   const tabs = [...tabsPassed].map(t => t.replace('2', ''))
-  const treeFlex =
+  const defaultSize =
     projekteTabs.length === 2 && tabs.length === 2
-      ? 0.33
+      ? '33%'
       : tabs.length === 0
-      ? 1
-      : 1 / tabs.length
+      ? '100%'
+      : `${(1 / tabs.length) * 100}%`
 
-  console.log('ProjektContainer', { treeFlex })
+  console.log('ProjektContainer', {
+    treeWidth,
+    treeHeight,
+    datenWidth,
+    datenHeight,
+    filterWidth,
+    filterHeight,
+    tabsLength: tabs.length,
+    tabs,
+  })
+
+  if (tabs.lengh < 2) {
+    return (
+      <Container>
+        {tabs.includes('tree') && (
+          <InnerContainer ref={treeEl}>
+            <TreeContainer
+              treeName={treeName}
+              dimensions={{ width: treeWidth, height: treeHeight }}
+            />
+          </InnerContainer>
+        )}
+        {tabs.includes('daten') && (
+          <InnerContainer ref={datenEl}>
+            <Daten
+              treeName={treeName}
+              dimensions={{ width: datenWidth, height: datenHeight }}
+            />
+          </InnerContainer>
+        )}
+        {tabs.includes('filter') && (
+          <InnerContainer ref={filterEl}>
+            <Filter
+              treeName={treeName}
+              dimensions={{ width: filterWidth, height: filterHeight }}
+            />
+          </InnerContainer>
+        )}
+        {tabs.includes('karte') && (
+          <InnerContainer ref={karteEl}>
+            <Karte
+              treeName={treeName}
+              dimensions={{ width: karteWidth, height: karteHeight }}
+            />
+          </InnerContainer>
+        )}
+        {tabs.includes('exporte') && (
+          <InnerContainer ref={exporteEl}>
+            <Exporte
+              dimensions={{ width: exporteWidth, height: exporteHeight }}
+            />
+          </InnerContainer>
+        )}
+      </Container>
+    )
+  }
 
   return (
     <Container>
-      <ReflexContainer orientation="vertical">
+      <StyledSplitPane
+        split="vertical"
+        defaultSize={defaultSize}
+        onDragFinished={onChange}
+        ref={el}
+      >
         {tabs.includes('tree') && (
-          <ReflexElement
-            flex={treeFlex}
-            propagateDimensions={true}
-            propagateDimensionsRate={800}
-          >
-            <TreeContainer treeName={treeName} />
-          </ReflexElement>
+          <InnerContainer ref={treeEl}>
+            <TreeContainer
+              treeName={treeName}
+              dimensions={{ width: treeWidth, height: treeHeight }}
+            />
+          </InnerContainer>
         )}
-        {tabs.includes('tree') && tabs.includes('daten') && <ReflexSplitter />}
         {tabs.includes('daten') && (
-          <ReflexElement
-            propagateDimensions={true}
-            propagateDimensionsRate={800}
-          >
-            <Daten treeName={treeName} />
-          </ReflexElement>
+          <InnerContainer ref={datenEl}>
+            <Daten
+              treeName={treeName}
+              dimensions={{ width: datenWidth, height: datenHeight }}
+            />
+          </InnerContainer>
         )}
-        {tabs.includes('filter') &&
-          (tabs.includes('tree') || tabs.includes('daten')) && (
-            <ReflexSplitter />
-          )}
         {tabs.includes('filter') && (
-          <ReflexElement
-            className="filter"
-            propagateDimensions={true}
-            propagateDimensionsRate={800}
-          >
-            <Filter treeName={treeName} />
-          </ReflexElement>
+          <InnerContainer ref={filterEl}>
+            <Filter
+              treeName={treeName}
+              dimensions={{ width: filterWidth, height: filterHeight }}
+            />
+          </InnerContainer>
         )}
-        {tabs.includes('karte') &&
-          (tabs.includes('tree') ||
-            tabs.includes('daten') ||
-            tabs.includes('filter')) && <ReflexSplitter />}
         {tabs.includes('karte') && (
-          <ReflexElement
-            className="karte"
-            propagateDimensions={true}
-            propagateDimensionsRate={800}
-          >
-            <Karte treeName={treeName} />
-          </ReflexElement>
+          <InnerContainer ref={karteEl}>
+            <Karte
+              treeName={treeName}
+              dimensions={{ width: karteWidth, height: karteHeight }}
+            />
+          </InnerContainer>
         )}
-        {tabs.includes('exporte') &&
-          (tabs.includes('tree') ||
-            tabs.includes('daten') ||
-            tabs.includes('filter') ||
-            tabs.includes('karte')) && <ReflexSplitter />}
         {tabs.includes('exporte') && (
-          <ReflexElement>
-            <Exporte />
-          </ReflexElement>
+          <InnerContainer ref={exporteEl}>
+            <Exporte
+              dimensions={{ width: exporteWidth, height: exporteHeight }}
+            />
+          </InnerContainer>
         )}
-      </ReflexContainer>
+      </StyledSplitPane>
     </Container>
   )
 }
 
-export default enhance(ProjektContainer)
+export default observer(ProjektContainer)
