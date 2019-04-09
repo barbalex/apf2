@@ -319,55 +319,7 @@ const ProjektContainer = ({
     )
   }
 
-  return (
-    <Container>
-      <StyledSplitPane
-        split="vertical"
-        defaultSize={defaultSize}
-        onDragFinished={onChange}
-      >
-        {tabs.includes('tree') && (
-          <InnerContainer ref={treeEl}>
-            <TreeContainer
-              treeName={treeName}
-              dimensions={{ width: treeWidth, height: treeHeight }}
-            />
-          </InnerContainer>
-        )}
-        {tabs.includes('daten') && (
-          <InnerContainer ref={datenEl}>
-            <Daten
-              treeName={treeName}
-              dimensions={{ width: datenWidth, height: datenHeight }}
-            />
-          </InnerContainer>
-        )}
-        {tabs.includes('filter') && (
-          <InnerContainer ref={filterEl}>
-            <Filter
-              treeName={treeName}
-              dimensions={{ width: filterWidth, height: filterHeight }}
-            />
-          </InnerContainer>
-        )}
-        {tabs.includes('karte') && (
-          <InnerContainer ref={karteEl}>
-            <Karte
-              treeName={treeName}
-              dimensions={{ width: karteWidth, height: karteHeight }}
-            />
-          </InnerContainer>
-        )}
-        {tabs.includes('exporte') && (
-          <InnerContainer ref={exporteEl}>
-            <Exporte
-              dimensions={{ width: exporteWidth, height: exporteHeight }}
-            />
-          </InnerContainer>
-        )}
-      </StyledSplitPane>
-    </Container>
-  )
+  return null
 }
 
 export default observer(ProjektContainer)
