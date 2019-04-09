@@ -27,9 +27,6 @@ const StyledSplitPane = styled(SplitPane)`
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    -moz-background-clip: padding;
-    -webkit-background-clip: padding;
-    background-clip: padding-box;
   }
 
   .Resizer:hover {
@@ -38,23 +35,24 @@ const StyledSplitPane = styled(SplitPane)`
   }
 
   .Resizer.vertical {
-    width: 5px;
-    margin: 0 -3px;
     border-left: 3px solid #388e3c;
-    border-right: 3px solid #388e3c;
+    /*border-right: 1.5px solid #388e3c;*/
     cursor: col-resize;
     background-color: #388e3c;
   }
 
   .Resizer.vertical:hover {
-    border-left: 3px solid rgba(0, 0, 0, 0.3);
-    border-right: 3px solid rgba(0, 0, 0, 0.3);
+    border-left: 2px solid rgba(0, 0, 0, 0.3);
+    border-right: 2px solid rgba(0, 0, 0, 0.3);
   }
   .Resizer.disabled {
     cursor: not-allowed;
   }
   .Resizer.disabled:hover {
     border-color: transparent;
+  }
+  .Pane {
+    overflow: hidden;
   }
 `
 const treeTabValues = ['tree', 'daten', 'filter', 'karte', 'exporte']

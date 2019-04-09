@@ -44,8 +44,8 @@ const StyledSplitPane = styled(SplitPane)`
   }
 
   .Resizer.vertical {
-    border-left: 1.5px solid #388e3c;
-    border-right: 1.5px solid #388e3c;
+    border-left: 3px solid #388e3c;
+    /*border-right: 1.5px solid #388e3c;*/
     cursor: col-resize;
     background-color: #388e3c;
   }
