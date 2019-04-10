@@ -69,8 +69,6 @@ const InnerContainer = styled.div`
   height: 100%;
 `
 
-const standardWidth = 500
-const standardHeight = 800
 const standardDimensions = { width: 500, height: 800 }
 
 const ProjektContainer = ({
@@ -135,6 +133,13 @@ const ProjektContainer = ({
 
   const onChange = useCallback(() => setDimensions())
 
+  // reset dimensions when window resizes
+  useEffect(() => {
+    window.addEventListener('resize', setDimensions)
+    return () => window.removeEventListener('resize', setDimensions)
+  }, [])
+
+  // reset dimensions when tabs are toggled
   useEffect(() => {
     setDimensions()
   }, [tabs.length])
