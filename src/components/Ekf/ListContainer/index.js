@@ -15,7 +15,7 @@ import dataWithDateByAdresseIdGql from './dataWithDateByAdresseId'
 import List from './List'
 import dealWithError from '../../../modules/dealWithError'
 
-const EkfListContainer = ({ dimensions }: { dimensions: Object }) => {
+const EkfListContainer = () => {
   const mobxStore = useContext(mobxStoreContext)
   const { ekfYear, ekfAdresseId, user } = mobxStore
 
@@ -39,7 +39,7 @@ const EkfListContainer = ({ dimensions }: { dimensions: Object }) => {
   if (error) {
     return dealWithError({ error, mobxStore, component: 'ListContainer' })
   }
-  return <List data={data} loading={loading} dimensions={dimensions} />
+  return <List data={data} loading={loading} />
 }
 
 export default observer(EkfListContainer)

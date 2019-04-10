@@ -3,15 +3,14 @@
  * Stopped lazy loading Tpopfreiwkontr
  * because Reflex would often not show layout
  */
-import React, { useContext } from 'react'
+import React, { useContext, useCallback, useRef, useEffect } from 'react'
 import styled from 'styled-components'
-import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
+import SplitPane from 'react-split-pane'
 import jwtDecode from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
-import ErrorBoundary from '../shared/ErrorBoundary'
 import EkfList from './ListContainer'
 import Tpopfreiwkontr from '../Projekte/Daten/Tpopfreiwkontr'
 import mobxStoreContext from '../../mobxStoreContext'
@@ -25,11 +24,49 @@ const Container = styled.div`
     height: auto !important;
   }
 `
-const ReflexElementForEKF = styled(ReflexElement)`
-  > div {
-    border-left: 1px solid rgb(46, 125, 50);
+const StyledSplitPane = styled(SplitPane)`
+  .Resizer {
+    background: #388e3c;
+    opacity: 1;
+    z-index: 1;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  .Resizer:hover {
+    -webkit-transition: all 2s ease;
+    transition: all 2s ease;
+  }
+
+  .Resizer.vertical {
+    border-left: 3px solid #388e3c;
+    /*border-right: 1.5px solid #388e3c;*/
+    cursor: col-resize;
+    background-color: #388e3c;
+  }
+
+  .Resizer.vertical:hover {
+    border-left: 2px solid rgba(0, 0, 0, 0.3);
+    border-right: 2px solid rgba(0, 0, 0, 0.3);
+  }
+  .Resizer.disabled {
+    cursor: not-allowed;
+  }
+  .Resizer.disabled:hover {
+    border-color: transparent;
+  }
+  .Pane {
+    overflow: hidden;
   }
 `
+const InnerContainer = styled.div`
+  width: 100%;
+  height: 100%;
+`
+
+const standardWidth = 500
+const standardHeight = 800
 
 const Ekf = () => {
   const { user, isPrint, tree } = useContext(mobxStoreContext)
@@ -37,14 +74,38 @@ const Ekf = () => {
   const tokenDecoded = token ? jwtDecode(token) : null
   const role = tokenDecoded ? tokenDecoded.role : null
 
-  const { activeNodeArray, setDatenWidth } = tree
+  const { activeNodeArray, setTreeWidth, setTreeHeight, setDatenWidth } = tree
   const tpopkontrId =
     activeNodeArray.length > 9
       ? activeNodeArray[9]
       : '99999999-9999-9999-9999-999999999999'
   const treeName = 'tree'
 
-  setDatenWidth(1000)
+  const treeEl = useRef(null)
+  const datenEl = useRef(null)
+
+  const setDimensions = useCallback(() => {
+    if (treeEl.current && treeEl.current.clientWidth) {
+      setTreeWidth(treeEl.current.clientWidth)
+      setTreeHeight(treeEl.current.clientHeight)
+    } else {
+      setTreeWidth(standardWidth)
+      setTreeHeight(standardHeight)
+    }
+    if (datenEl.current && datenEl.current.clientWidth) {
+      setDatenWidth(datenEl.current.clientWidth)
+    } else {
+      setDatenWidth(standardWidth)
+    }
+  }, [treeEl.current, datenEl.current])
+
+  const onDragFinished = useCallback(() => setDimensions())
+
+  // reset dimensions when window resizes
+  useEffect(() => {
+    window.addEventListener('resize', setDimensions)
+    return () => window.removeEventListener('resize', setDimensions)
+  }, [])
 
   if (isPrint && tpopkontrId) {
     return <Tpopfreiwkontr treeName={treeName} role={role} />
@@ -52,25 +113,23 @@ const Ekf = () => {
 
   return (
     <Container>
-      <ErrorBoundary>
-        <ReflexContainer orientation="vertical">
-          <ReflexElement
-            flex={0.33}
-            propagateDimensions={true}
-            propagateDimensionsRate={800}
-          >
-            <EkfList />
-          </ReflexElement>
-          <ReflexSplitter />
-          <ReflexElementForEKF
-            flex={0.67}
-            propagateDimensions={true}
-            propagateDimensionsRate={800}
-          >
-            {tpopkontrId && <Tpopfreiwkontr treeName={treeName} role={role} />}
-          </ReflexElementForEKF>
-        </ReflexContainer>
-      </ErrorBoundary>
+      <StyledSplitPane
+        split="vertical"
+        size="33%"
+        minSize={100}
+        onDragFinished={onDragFinished}
+      >
+        <InnerContainer ref={treeEl}>
+          <EkfList />
+        </InnerContainer>
+        <InnerContainer ref={datenEl}>
+          {tpopkontrId ? (
+            <Tpopfreiwkontr treeName={treeName} role={role} />
+          ) : (
+            <InnerContainer />
+          )}
+        </InnerContainer>
+      </StyledSplitPane>
     </Container>
   )
 }

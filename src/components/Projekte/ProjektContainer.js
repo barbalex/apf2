@@ -1,11 +1,5 @@
 // @flow
-import React, {
-  useContext,
-  useRef,
-  useState,
-  useCallback,
-  useEffect,
-} from 'react'
+import React, { useContext, useRef, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import { observer } from 'mobx-react-lite'

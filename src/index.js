@@ -24,7 +24,6 @@ import MobxStore from './mobxStore'
 //import { onPatch } from 'mobx-state-tree'
 
 import 'typeface-roboto'
-import 'react-reflex/styles.css'
 
 // import components
 import initializeIdb from './modules/initializeIdb'

@@ -59,56 +59,43 @@ const getEkfFromData = ({ data, ekfAdresseId }) => {
   return sortBy(ekf, ['projekt', 'art', 'popSort', 'tpopSort'])
 }
 
-const EkfList = ({
-  data,
-  loading,
-  dimensions,
-}: {
-  data: Object,
-  loading: Boolean,
-  dimensions: Object,
-}) => {
+const EkfList = ({ data, loading }: { data: Object, loading: Boolean }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { ekfYear, ekfAdresseId, tree } = mobxStore
   const ekf = getEkfFromData({ data, ekfAdresseId })
 
-  const { activeNodeArray } = tree
+  const { activeNodeArray, treeWidth, treeHeight } = tree
   const activeTpopkontrId =
     activeNodeArray.length > 9
       ? activeNodeArray[9]
       : '99999999-9999-9999-9999-999999999999'
 
-  const height = isNaN(dimensions.height) ? 250 : dimensions.height
-  const width = isNaN(dimensions.width) ? 250 : dimensions.width - 1
   const projektCount = uniq(ekf.map(e => e.projekt)).length
   const itemSize = projektCount > 1 ? 110 : 91
 
-  useEffect(
-    () => {
-      // set initial kontrId so form is shown for first ekf
-      // IF none is choosen yet
-      if (ekf.length > 0 && !activeTpopkontrId) {
-        const row = ekf[0]
-        const url = [
-          'Projekte',
-          row.projId,
-          'Aktionspläne',
-          row.apId,
-          'Populationen',
-          row.popId,
-          'Teil-Populationen',
-          row.tpopId,
-          'Freiwilligen-Kontrollen',
-          row.id,
-        ]
-        initiateDataFromUrl({
-          activeNodeArray: url,
-          mobxStore,
-        })
-      }
-    },
-    [ekfYear, ekf.length],
-  )
+  useEffect(() => {
+    // set initial kontrId so form is shown for first ekf
+    // IF none is choosen yet
+    if (ekf.length > 0 && !activeTpopkontrId) {
+      const row = ekf[0]
+      const url = [
+        'Projekte',
+        row.projId,
+        'Aktionspläne',
+        row.apId,
+        'Populationen',
+        row.popId,
+        'Teil-Populationen',
+        row.tpopId,
+        'Freiwilligen-Kontrollen',
+        row.id,
+      ]
+      initiateDataFromUrl({
+        activeNodeArray: url,
+        mobxStore,
+      })
+    }
+  }, [ekfYear, ekf.length])
   if (!loading && ekf.length === 0) {
     return (
       <NoDataContainer>
@@ -119,10 +106,10 @@ const EkfList = ({
   return (
     <Container>
       <List
-        height={height}
+        height={treeHeight}
         itemCount={ekf.length}
         itemSize={itemSize}
-        width={width}
+        width={treeWidth}
       >
         {({ index, style }) => {
           const row = ekf[index]
