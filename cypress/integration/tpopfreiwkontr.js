@@ -61,8 +61,8 @@ describe('Teil-Population Freiwilligen-Kontrolle form', () => {
   it('updates deckungApArt', () => {
     const typedText = '5'
     cy.get('#deckungApArt')
-      .clear()
-      .type(typedText)
+      .clear({ force: true })
+      .type(typedText, { force: true })
       .blur()
       .should('have.value', typedText)
   })
