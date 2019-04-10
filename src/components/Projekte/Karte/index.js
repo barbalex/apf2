@@ -6,13 +6,7 @@
  *
  */
 
-import React, {
-  useContext,
-  useRef,
-  useEffect,
-  useCallback,
-  useMemo,
-} from 'react'
+import React, { useContext, useRef, useCallback, useMemo } from 'react'
 import { Map, ScaleControl } from 'react-leaflet'
 import styled from 'styled-components'
 import 'leaflet'
@@ -71,7 +65,6 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import updateTpopById from './updateTpopById'
 
 import mobxStoreContext from '../../../mobxStoreContext'
-import usePrevious from '../../../modules/usePrevious'
 //import getBounds from '../../../modules/getBounds'
 
 // this does not work
@@ -140,26 +133,6 @@ const Karte = ({
   const activeOverlays = getSnapshot(activeOverlaysRaw)
 
   const mapRef = useRef(null)
-
-  const prevDimensions = usePrevious(dimensions) || {}
-
-  useEffect(() => {
-    const prevWidth = prevDimensions.width || 0
-    // DANGER: first width is '100%'!
-    if (Number.isInteger(prevWidth)) {
-      const width = dimensions.width
-      const widthHasChangedByOver20Percent =
-        prevWidth / width > 1.2 || prevWidth / width < 0.8
-      if (widthHasChangedByOver20Percent) {
-        /**
-         * need to redraw map, when tabs changed
-         * unfortunately, tabs change in previous update, so can't compare tabs
-         */
-        const map = mapRef.current.leafletElement
-        map.invalidateSize()
-      }
-    }
-  }, [dimensions.width])
 
   const setMouseCoords = useCallback(e => {
     const [x, y] = epsg4326to2056(e.latlng.lng, e.latlng.lat)
