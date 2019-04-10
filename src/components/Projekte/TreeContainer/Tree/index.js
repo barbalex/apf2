@@ -799,6 +799,8 @@ const Tree = ({ treeName, dimensions }: Props) => {
   const height = dimensions.height - 58 - 65
   const width = dimensions.width
 
+  //console.log('Tree rendering', { queryLoadingArray })
+
   return (
     <Container data-loading={loading}>
       <StyledList

@@ -235,6 +235,8 @@ const Ap = ({
         },
   )
 
+  console.log('Ap rendering', { loading, loadingAdresses })
+
   if (loading) {
     return (
       <Container>

@@ -71,6 +71,7 @@ const InnerContainer = styled.div`
 
 const standardWidth = 500
 const standardHeight = 800
+const standardDimensions = { width: 500, height: 800 }
 
 const ProjektContainer = ({
   treeName,
@@ -89,54 +90,53 @@ const ProjektContainer = ({
   const filterEl = useRef(null)
   const karteEl = useRef(null)
 
-  const [treeWidth, setTreeWidth] = useState(standardWidth)
-  const [treeHeight, setTreeHeight] = useState(standardHeight)
-  const [datenWidth, setDatenWidth] = useState(standardWidth)
-  const [datenHeight, setDatenHeight] = useState(standardHeight)
-  const [filterWidth, setFilterWidth] = useState(standardWidth)
-  const [filterHeight, setFilterHeight] = useState(standardHeight)
-  const [karteWidth, setKarteWidth] = useState(standardWidth)
-  const [karteHeight, setKarteHeight] = useState(standardHeight)
+  const [treeDimensions, setTreeDimensions] = useState(standardDimensions)
+  const [datenDimensions, setDatenDimensions] = useState(standardDimensions)
+  const [filterDimensions, setFilterDimensions] = useState(standardDimensions)
+  const [karteDimensions, setKarteDimensions] = useState(standardDimensions)
 
   // remove 2 to treat all same
   const tabs = [...tabsPassed].map(t => t.replace('2', ''))
 
-  const onChange = useCallback(() => {
-    if (treeEl.current) {
-      setTreeWidth(treeEl.current.clientWidth || standardWidth)
-      setTreeHeight(treeEl.current.clientHeight || standardHeight)
+  const setDimensions = useCallback(() => {
+    if (treeEl.current && treeEl.current.clientWidth) {
+      setTreeDimensions({
+        width: treeEl.current.clientWidth,
+        height: treeEl.current.clientHeight,
+      })
+    } else {
+      setTreeDimensions(standardDimensions)
     }
-    if (datenEl.current) {
-      setDatenWidth(datenEl.current.clientWidth || standardWidth)
-      setDatenHeight(datenEl.current.clientHeight || standardHeight)
+    if (datenEl.current && datenEl.current.clientWidth) {
+      setDatenDimensions({
+        width: datenEl.current.clientWidth,
+        height: datenEl.current.clientHeight,
+      })
+    } else {
+      setDatenDimensions(standardDimensions)
     }
-    if (filterEl.current) {
-      setFilterWidth(filterEl.current.clientWidth || standardWidth)
-      setFilterHeight(filterEl.current.clientHeight || standardHeight)
+    if (filterEl.current && filterEl.current.clientWidth) {
+      setFilterDimensions({
+        width: filterEl.current.clientWidth,
+        height: filterEl.current.clientHeight,
+      })
+    } else {
+      setFilterDimensions(standardDimensions)
     }
-    if (karteEl.current) {
-      setKarteWidth(karteEl.current.clientWidth || standardWidth)
-      setKarteHeight(karteEl.current.clientHeight || standardHeight)
+    if (karteEl.current && karteEl.current.clientWidth) {
+      setKarteDimensions({
+        width: karteEl.current.clientWidth,
+        height: karteEl.current.clientHeight,
+      })
+    } else {
+      setKarteDimensions(standardDimensions)
     }
-  })
+  }, [treeEl.current, datenEl.current, filterEl.current, karteEl.current])
+
+  const onChange = useCallback(() => setDimensions())
 
   useEffect(() => {
-    if (treeEl.current) {
-      setTreeWidth(treeEl.current.clientWidth || standardWidth)
-      setTreeHeight(treeEl.current.clientHeight || standardHeight)
-    }
-    if (datenEl.current) {
-      setDatenWidth(datenEl.current.clientWidth || standardWidth)
-      setDatenHeight(datenEl.current.clientHeight || standardHeight)
-    }
-    if (filterEl.current) {
-      setFilterWidth(filterEl.current.clientWidth || standardWidth)
-      setFilterHeight(filterEl.current.clientHeight || standardHeight)
-    }
-    if (karteEl.current) {
-      setKarteWidth(karteEl.current.clientWidth || standardWidth)
-      setKarteHeight(karteEl.current.clientHeight || standardHeight)
-    }
+    setDimensions()
   }, [tabs.length])
 
   if (isPrint) {
@@ -146,34 +146,22 @@ const ProjektContainer = ({
   const elObj = {
     tree: (
       <InnerContainer ref={treeEl}>
-        <TreeContainer
-          treeName={treeName}
-          dimensions={{ width: treeWidth, height: treeHeight }}
-        />
+        <TreeContainer treeName={treeName} dimensions={treeDimensions} />
       </InnerContainer>
     ),
     daten: (
       <InnerContainer ref={datenEl}>
-        <Daten
-          treeName={treeName}
-          dimensions={{ width: datenWidth, height: datenHeight }}
-        />
+        <Daten treeName={treeName} dimensions={datenDimensions} />
       </InnerContainer>
     ),
     filter: (
       <InnerContainer ref={filterEl}>
-        <Filter
-          treeName={treeName}
-          dimensions={{ width: filterWidth, height: filterHeight }}
-        />
+        <Filter treeName={treeName} dimensions={filterDimensions} />
       </InnerContainer>
     ),
     karte: (
       <InnerContainer ref={karteEl}>
-        <Karte
-          treeName={treeName}
-          dimensions={{ width: karteWidth, height: karteHeight }}
-        />
+        <Karte treeName={treeName} dimensions={karteDimensions} />
       </InnerContainer>
     ),
     exporte: (
@@ -183,7 +171,7 @@ const ProjektContainer = ({
     ),
   }
 
-  console.log('ProjektContainer', { treeWidth })
+  console.log('ProjektContainer')
 
   if (tabs.length < 2) {
     return <Container>{elObj[tabs[0]]}</Container>

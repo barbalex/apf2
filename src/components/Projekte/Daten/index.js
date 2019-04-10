@@ -59,6 +59,36 @@ const Daten = ({
   const { activeNodeArray, activeNode } = mobxStore[treeName]
   const activeTable = get(mobxStore, `nodeFilter.${treeName}.activeTable`, '')
 
+  let key
+  if (activeNodeArray.length > 2 && activeNodeArray[2] === 'Exporte') {
+    key = 'exporte'
+  } else if (
+    activeNodeArray.length > 4 &&
+    activeNodeArray[4] === 'Qualitaetskontrollen'
+  ) {
+    key = 'qk'
+  } else if (
+    activeNodeArray.length > 5 &&
+    activeNodeArray[4] === 'nicht-zuzuordnende-Beobachtungen'
+  ) {
+    key = 'beobNichtZuzuordnen'
+  } else if (
+    activeNodeArray.length > 5 &&
+    activeNodeArray[4] === 'nicht-beurteilte-Beobachtungen'
+  ) {
+    key = 'beobNichtBeurteilt'
+  } else if (
+    activeNodeArray.length > 9 &&
+    activeNodeArray[6] === 'Teil-Populationen' &&
+    activeNodeArray[8] === 'Beobachtungen'
+  ) {
+    key = 'beobZugeordnet'
+  } else {
+    key = getTableNameFromActiveNode(activeNode)
+  }
+
+  const fOKey = activeTable ? activeTable : key ? key : ''
+  console.log('Daten', { fOKey })
   const formObject = {
     projekt: <Projekt treeName={treeName} />,
     apberuebersicht: <Apberuebersicht treeName={treeName} />,
@@ -113,40 +143,15 @@ const Daten = ({
     currentIssue: <CurrentIssue treeName={treeName} />,
     adresse: <Adresse treeName={treeName} />,
   }
-  let key
-  if (activeNodeArray.length > 2 && activeNodeArray[2] === 'Exporte') {
-    key = 'exporte'
-  } else if (
-    activeNodeArray.length > 4 &&
-    activeNodeArray[4] === 'Qualitaetskontrollen'
-  ) {
-    key = 'qk'
-  } else if (
-    activeNodeArray.length > 5 &&
-    activeNodeArray[4] === 'nicht-zuzuordnende-Beobachtungen'
-  ) {
-    key = 'beobNichtZuzuordnen'
-  } else if (
-    activeNodeArray.length > 5 &&
-    activeNodeArray[4] === 'nicht-beurteilte-Beobachtungen'
-  ) {
-    key = 'beobNichtBeurteilt'
-  } else if (
-    activeNodeArray.length > 9 &&
-    activeNodeArray[6] === 'Teil-Populationen' &&
-    activeNodeArray[8] === 'Beobachtungen'
-  ) {
-    key = 'beobZugeordnet'
-  } else {
-    key = getTableNameFromActiveNode(activeNode)
-  }
+  const form = formObject[fOKey]
 
-  let form
-  if (activeTable) {
-    form = formObject[activeTable]
-  } else {
-    form = key ? formObject[key] : ''
-  }
+  console.log('Daten', {
+    dimensions,
+    treeName,
+    activeNodeArray: activeNodeArray.slice(),
+    activeNodeId: activeNode ? activeNode.id : null,
+    activeTable,
+  })
 
   if (!key) return null
 
