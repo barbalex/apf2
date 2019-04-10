@@ -78,11 +78,9 @@ const tpopkontrTypWerte = [
 const enhance = compose(observer)
 
 const Tpopfeldkontr = ({
-  dimensions = { width: 380 },
   treeName,
   showFilter = false,
 }: {
-  dimensions: Object,
   treeName: string,
   showFilter: Boolean,
 }) => {
@@ -95,7 +93,7 @@ const Tpopfeldkontr = ({
     setUrlQuery,
     refetch,
   } = mobxStore
-  const { activeNodeArray } = mobxStore[treeName]
+  const { activeNodeArray, datenWidth, filterWidth } = mobxStore[treeName]
 
   let id =
     activeNodeArray.length > 9
@@ -363,8 +361,6 @@ const Tpopfeldkontr = ({
     setValue(value)
   })
 
-  const width = isNaN(dimensions.width) ? 380 : dimensions.width
-
   const aeLrWerte = get(dataLists, 'allAeLrdelarzes.nodes', [])
     .map(e => `${e.label}: ${e.einheit ? e.einheit.replace(/  +/g, ' ') : ''}`)
     .map(o => ({ value: o, label: o }))
@@ -415,7 +411,7 @@ const Tpopfeldkontr = ({
             <Tab label="Biotop" value="biotop" data-id="biotop" />
           </Tabs>
           {value === 'entwicklung' && (
-            <FormContainer data-width={width}>
+            <FormContainer data-width={showFilter ? filterWidth : datenWidth}>
               <TextField
                 key={`${row.id}jahr`}
                 name="jahr"
@@ -550,7 +546,7 @@ const Tpopfeldkontr = ({
             </FormContainer>
           )}
           {value === 'biotop' && (
-            <FormContainer data-width={width}>
+            <FormContainer data-width={datenWidth}>
               <TextField
                 key={`${row.id}flaeche`}
                 name="flaeche"

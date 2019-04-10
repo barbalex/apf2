@@ -106,13 +106,7 @@ const Container = styled.div`
  * So: need to use app level store state
  */
 
-const Karte = ({
-  treeName,
-  dimensions,
-}: {
-  treeName: string,
-  dimensions: Object,
-}) => {
+const Karte = ({ treeName }: { treeName: string }) => {
   const client = useApolloClient()
   const mobxStore = useContext(mobxStoreContext)
   const {

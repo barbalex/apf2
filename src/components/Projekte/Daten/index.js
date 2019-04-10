@@ -1,5 +1,5 @@
 // @flow
-import React, { lazy, Suspense, useContext, useCallback, useMemo } from 'react'
+import React, { lazy, Suspense, useContext, useMemo } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import get from 'lodash/get'
@@ -19,13 +19,7 @@ const Container = styled.div`
   }
 `
 
-const Daten = ({
-  treeName,
-  dimensions = { width: 380 },
-}: {
-  treeName: String,
-  dimensions: Object,
-}) => {
+const Daten = ({ treeName }: { treeName: String }) => {
   const mobxStore = useContext(mobxStoreContext)
   const { activeNodeArray, activeNode } = mobxStore[treeName]
   const activeTable = get(mobxStore, `nodeFilter.${treeName}.activeTable`, '')
@@ -84,7 +78,7 @@ const Daten = ({
       }
       case 'apber': {
         const Apber = lazy(() => import('./Apber'))
-        form = <Apber dimensions={dimensions} treeName={treeName} />
+        form = <Apber treeName={treeName} />
         break
       }
       case 'assozart': {
@@ -94,35 +88,17 @@ const Daten = ({
       }
       case 'beobNichtBeurteilt': {
         const Beobzuordnung = lazy(() => import('./Beobzuordnung'))
-        form = (
-          <Beobzuordnung
-            dimensions={dimensions}
-            treeName={treeName}
-            type="nichtBeurteilt"
-          />
-        )
+        form = <Beobzuordnung treeName={treeName} type="nichtBeurteilt" />
         break
       }
       case 'beobNichtZuzuordnen': {
         const Beobzuordnung = lazy(() => import('./Beobzuordnung'))
-        form = (
-          <Beobzuordnung
-            dimensions={dimensions}
-            treeName={treeName}
-            type="nichtZuzuordnen"
-          />
-        )
+        form = <Beobzuordnung treeName={treeName} type="nichtZuzuordnen" />
         break
       }
       case 'beobZugeordnet': {
         const Beobzuordnung = lazy(() => import('./Beobzuordnung'))
-        form = (
-          <Beobzuordnung
-            dimensions={dimensions}
-            treeName={treeName}
-            type="zugeordnet"
-          />
-        )
+        form = <Beobzuordnung treeName={treeName} type="zugeordnet" />
         break
       }
       case 'ber': {
@@ -152,12 +128,12 @@ const Daten = ({
       }
       case 'idealbiotop': {
         const Idealbiotop = lazy(() => import('./Idealbiotop'))
-        form = <Idealbiotop dimensions={dimensions} treeName={treeName} />
+        form = <Idealbiotop treeName={treeName} />
         break
       }
       case 'pop': {
         const Pop = lazy(() => import('./Pop'))
-        form = <Pop dimensions={dimensions} treeName={treeName} />
+        form = <Pop treeName={treeName} />
         break
       }
       case 'popber': {
@@ -167,7 +143,7 @@ const Daten = ({
       }
       case 'popmassnber': {
         const Popmassnber = lazy(() => import('./Popmassnber'))
-        form = <Popmassnber dimensions={dimensions} treeName={treeName} />
+        form = <Popmassnber treeName={treeName} />
         break
       }
       case 'projekt': {
@@ -182,7 +158,7 @@ const Daten = ({
       }
       case 'tpop': {
         const Tpop = lazy(() => import('./Tpop'))
-        form = <Tpop dimensions={dimensions} treeName={treeName} />
+        form = <Tpop treeName={treeName} />
         break
       }
       case 'tpopber': {
@@ -192,12 +168,12 @@ const Daten = ({
       }
       case 'tpopfeldkontr': {
         const Tpopfeldkontr = lazy(() => import('./Tpopfeldkontr'))
-        form = <Tpopfeldkontr dimensions={dimensions} treeName={treeName} />
+        form = <Tpopfeldkontr treeName={treeName} />
         break
       }
       case 'tpopfreiwkontr': {
         const Tpopfreiwkontr = lazy(() => import('./Tpopfreiwkontr'))
-        form = <Tpopfreiwkontr dimensions={dimensions} treeName={treeName} />
+        form = <Tpopfreiwkontr treeName={treeName} />
         break
       }
       case 'tpopkontrzaehl': {
@@ -207,7 +183,7 @@ const Daten = ({
       }
       case 'tpopmassn': {
         const Tpopmassn = lazy(() => import('./Tpopmassn'))
-        form = <Tpopmassn dimensions={dimensions} treeName={treeName} />
+        form = <Tpopmassn treeName={treeName} />
         break
       }
       case 'tpopmassnber': {
@@ -222,12 +198,12 @@ const Daten = ({
       }
       case 'ziel': {
         const Ziel = lazy(() => import('./Ziel'))
-        form = <Ziel dimensions={dimensions} treeName={treeName} />
+        form = <Ziel treeName={treeName} />
         break
       }
       case 'zielber': {
         const Zielber = lazy(() => import('./Zielber'))
-        form = <Zielber dimensions={dimensions} treeName={treeName} />
+        form = <Zielber treeName={treeName} />
         break
       }
       default:

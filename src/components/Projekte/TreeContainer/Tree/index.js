@@ -69,18 +69,19 @@ const LogoutButton = styled(Button)`
 
 type Props = {
   treeName: String,
-  dimensions: Object,
-  mapBeobZugeordnetVisible: boolean,
-  mapBeobNichtBeurteiltVisible: boolean,
-  mapBeobNichtZuzuordnenVisible: boolean,
-  mapPopVisible: boolean,
-  mapTpopVisible: boolean,
 }
 
-const Tree = ({ treeName, dimensions }: Props) => {
+const Tree = ({ treeName }: Props) => {
   const mobxStore = useContext(mobxStoreContext)
   const tree = mobxStore[treeName]
-  const { activeNodeArray, setNodes, openNodes, nodeLabelFilter } = tree
+  const {
+    activeNodeArray,
+    setNodes,
+    openNodes,
+    nodeLabelFilter,
+    treeWidth,
+    treeHeight,
+  } = tree
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { nodeFilter, user, setRefetchKey, setTreeKey } = mobxStore
   const { idb } = useContext(idbContext)
@@ -796,18 +797,13 @@ const Tree = ({ treeName, dimensions }: Props) => {
     return <ErrorContainer>{`Fehler: ${error.message}`}</ErrorContainer>
   }
 
-  const height = dimensions.height - 58 - 65
-  const width = dimensions.width
-
-  //console.log('Tree rendering', { queryLoadingArray })
-
   return (
     <Container data-loading={loading}>
       <StyledList
-        height={height}
+        height={treeHeight - 58 - 65}
         itemCount={nodes.length}
         itemSize={singleRowHeight}
-        width={width}
+        width={treeWidth}
         ref={listRef}
       >
         {({ index, style }) => (

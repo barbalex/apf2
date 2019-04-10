@@ -135,11 +135,9 @@ const CountHint = styled.div`
 `
 
 const Tpopfreiwkontr = ({
-  dimensions,
   treeName,
   showFilter = false,
 }: {
-  dimensions: Object,
   treeName: string,
   showFilter: Boolean,
 }) => {
@@ -154,7 +152,7 @@ const Tpopfreiwkontr = ({
     user,
   } = mobxStore
   const tree = mobxStore[treeName]
-  const { activeNodeArray } = tree
+  const { activeNodeArray, datenWidth, filterWidth } = tree
   const { token } = user
   const role = token ? jwtDecode(token).role : null
 
@@ -240,7 +238,6 @@ const Tpopfreiwkontr = ({
     .filter(n => !!n.einheit)
     .map(n => n.einheit)
   const isFreiwillig = role === 'apflora_freiwillig'
-  const { width } = dimensions
 
   let tpopkontrTotalCount
   let tpopkontrFilteredCount
@@ -464,7 +461,7 @@ const Tpopfreiwkontr = ({
         />
       )}
       <InnerContainer>
-        <GridContainer width={width}>
+        <GridContainer width={showFilter ? filterWidth : datenWidth}>
           <Title />
           <Headdata
             pop={pop}

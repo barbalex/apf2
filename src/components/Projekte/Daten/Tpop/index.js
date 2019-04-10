@@ -45,11 +45,9 @@ const FieldsContainer = styled.div`
 `
 
 const Tpop = ({
-  dimensions = { width: 380 },
   treeName,
   showFilter = false,
 }: {
-  dimensions: Object,
   treeName: string,
   showFilter: Boolean,
 }) => {
@@ -59,7 +57,7 @@ const Tpop = ({
 
   const [errors, setErrors] = useState({})
 
-  const { activeNodeArray } = mobxStore[treeName]
+  const { activeNodeArray, datenWidth, filterWidth } = mobxStore[treeName]
 
   let id =
     activeNodeArray.length > 7
@@ -250,9 +248,7 @@ const Tpop = ({
             treeName={treeName}
           />
         )}
-        <FieldsContainer
-          data-width={isNaN(dimensions.width) ? 380 : dimensions.width}
-        >
+        <FieldsContainer data-width={showFilter ? filterWidth : datenWidth}>
           <TextField
             key={`${row.id}nr`}
             name="nr"

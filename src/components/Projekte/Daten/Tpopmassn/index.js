@@ -44,13 +44,11 @@ const FieldsContainer = styled.div`
 `
 
 const Tpopmassn = ({
-  dimensions = { width: 380 },
   treeName,
   showFilter = false,
 }: {
   onNewRequestWirtspflanze: () => void,
   onBlurWirtspflanze: () => void,
-  dimensions: number,
   treeName: string,
   showFilter: Boolean,
 }) => {
@@ -59,7 +57,7 @@ const Tpopmassn = ({
   const { nodeFilter, nodeFilterSetValue, refetch } = mobxStore
 
   const [errors, setErrors] = useState({})
-  const { activeNodeArray } = mobxStore[treeName]
+  const { activeNodeArray, datenWidth, filterWidth } = mobxStore[treeName]
 
   let id =
     activeNodeArray.length > 9
@@ -239,8 +237,6 @@ const Tpopmassn = ({
     [row, showFilter],
   )
 
-  const width = isNaN(dimensions.width) ? 380 : dimensions.width
-
   if (loading) {
     return (
       <Container>
@@ -271,7 +267,7 @@ const Tpopmassn = ({
             treeName={treeName}
           />
         )}
-        <FieldsContainer data-width={width}>
+        <FieldsContainer data-width={showFilter ? filterWidth : datenWidth}>
           <TextField
             key={`${row.id}jahr`}
             name="jahr"

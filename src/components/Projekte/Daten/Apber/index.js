@@ -39,17 +39,11 @@ const veraenGegenVorjahrWerte = [
   { value: '-', label: '-' },
 ]
 
-const Apber = ({
-  dimensions = { width: 380 },
-  treeName,
-}: {
-  dimensions: Object,
-  treeName: string,
-}) => {
+const Apber = ({ treeName }: { treeName: string }) => {
   const mobxStore = useContext(mobxStoreContext)
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
-  const { activeNodeArray } = mobxStore[treeName]
+  const { activeNodeArray, datenWidth } = mobxStore[treeName]
 
   const { data, loading, error } = useQuery(query, {
     variables: {
@@ -144,8 +138,6 @@ const Apber = ({
     setErrors({})
   })
 
-  const width = isNaN(dimensions.width) ? 380 : dimensions.width
-
   if (loading) {
     return (
       <Container>
@@ -168,7 +160,7 @@ const Apber = ({
           treeName={treeName}
           table="apber"
         />
-        <FieldsContainer width={width}>
+        <FieldsContainer width={datenWidth}>
           <TextField2
             key={`${row.id}jahr`}
             name="jahr"

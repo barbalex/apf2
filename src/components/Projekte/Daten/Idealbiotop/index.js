@@ -39,17 +39,11 @@ const Section = styled.div`
   }
 `
 
-const Idealbiotop = ({
-  dimensions = { width: 380 },
-  treeName,
-}: {
-  dimensions: Object,
-  treeName: string,
-}) => {
+const Idealbiotop = ({ treeName }: { treeName: string }) => {
   const mobxStore = useContext(mobxStoreContext)
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
-  const { activeNodeArray } = mobxStore[treeName]
+  const { activeNodeArray, datenWidth } = mobxStore[treeName]
 
   const { data, loading, error } = useQuery(query, {
     variables: {
@@ -142,9 +136,7 @@ const Idealbiotop = ({
           treeName={treeName}
           table="idealbiotop"
         />
-        <FieldsContainer
-          data-width={isNaN(dimensions.width) ? 380 : dimensions.width}
-        >
+        <FieldsContainer data-width={datenWidth}>
           <DateFieldWithPicker
             key={`${row.id}erstelldatum`}
             name="erstelldatum"

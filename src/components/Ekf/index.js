@@ -37,21 +37,17 @@ const Ekf = () => {
   const tokenDecoded = token ? jwtDecode(token) : null
   const role = tokenDecoded ? tokenDecoded.role : null
 
-  const { activeNodeArray } = tree
+  const { activeNodeArray, setDatenWidth } = tree
   const tpopkontrId =
     activeNodeArray.length > 9
       ? activeNodeArray[9]
       : '99999999-9999-9999-9999-999999999999'
   const treeName = 'tree'
 
+  setDatenWidth(1000)
+
   if (isPrint && tpopkontrId) {
-    return (
-      <Tpopfreiwkontr
-        treeName={treeName}
-        role={role}
-        dimensions={{ width: 1000 }}
-      />
-    )
+    return <Tpopfreiwkontr treeName={treeName} role={role} />
   }
 
   return (
@@ -71,13 +67,7 @@ const Ekf = () => {
             propagateDimensions={true}
             propagateDimensionsRate={800}
           >
-            {tpopkontrId && (
-              <Tpopfreiwkontr
-                treeName={treeName}
-                role={role}
-                dimensions={{ width: 1000 }}
-              />
-            )}
+            {tpopkontrId && <Tpopfreiwkontr treeName={treeName} role={role} />}
           </ReflexElementForEKF>
         </ReflexContainer>
       </ErrorBoundary>

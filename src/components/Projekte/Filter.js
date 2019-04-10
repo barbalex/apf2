@@ -35,13 +35,7 @@ const Title = styled.div`
   font-weight: bold;
 `
 
-export default ({
-  treeName,
-  dimensions,
-}: {
-  treeName: String,
-  dimensions: Object,
-}) => {
+export default ({ treeName }: { treeName: String }) => {
   const [activeTab, setActiveTab] = useState('ap')
 
   const onChangeTab = useCallback((event, value) => setActiveTab(value))
@@ -49,30 +43,10 @@ export default ({
   const formObject = {
     ap: <Ap treeName={treeName} showFilter={true} />,
     pop: <Pop treeName={treeName} showFilter={true} />,
-    tpop: (
-      <Tpop dimensions={dimensions} treeName={treeName} showFilter={true} />
-    ),
-    tpopmassn: (
-      <Tpopmassn
-        dimensions={dimensions}
-        treeName={treeName}
-        showFilter={true}
-      />
-    ),
-    tpopfeldkontr: (
-      <Tpopfeldkontr
-        dimensions={dimensions}
-        treeName={treeName}
-        showFilter={true}
-      />
-    ),
-    tpopfreiwkontr: (
-      <Tpopfreiwkontr
-        dimensions={dimensions}
-        treeName={treeName}
-        showFilter={true}
-      />
-    ),
+    tpop: <Tpop treeName={treeName} showFilter={true} />,
+    tpopmassn: <Tpopmassn treeName={treeName} showFilter={true} />,
+    tpopfeldkontr: <Tpopfeldkontr treeName={treeName} showFilter={true} />,
+    tpopfreiwkontr: <Tpopfreiwkontr treeName={treeName} showFilter={true} />,
   }
   const form = formObject[activeTab]
   const titleObject = {

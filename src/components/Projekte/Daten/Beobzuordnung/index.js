@@ -139,11 +139,9 @@ const getTpopZuordnenSource = (row: Object, apId: string): Array<Object> => {
 
 const Beobzuordnung = ({
   type,
-  dimensions = { width: 380 },
   treeName,
 }: {
   type: string,
-  dimensions: Object,
   treeName: string,
 }) => {
   const client = useApolloClient()
@@ -329,7 +327,7 @@ const Beobzuordnung = ({
             'beobQuelleWerteByQuelleId.name',
             '?',
           )} (nicht veränderbar)`}</Title>
-          <Beob dimensions={dimensions} treeName={treeName} />
+          <Beob treeName={treeName} />
         </DataContainer>
       </FormContainer>
     </ErrorBoundary>

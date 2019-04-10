@@ -19,15 +19,9 @@ const Container = styled.div`
       : 'auto'};
 `
 
-const Beob = ({
-  dimensions = { width: 380 },
-  treeName,
-}: {
-  dimensions: Object,
-  treeName: string,
-}) => {
+const Beob = ({ treeName }: { treeName: string }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { activeNodeArray } = mobxStore[treeName]
+  const { activeNodeArray, datenWidth } = mobxStore[treeName]
   const { data, loading, error } = useQuery(query, {
     variables: {
       id: activeNodeArray[activeNodeArray.length - 1],
@@ -48,9 +42,7 @@ const Beob = ({
   return (
     <ErrorBoundary>
       <div>
-        <Container
-          data-width={isNaN(dimensions.width) ? 380 : dimensions.width}
-        >
+        <Container data-width={datenWidth}>
           {beobFields.map(([key, value]) => (
             <div key={key}>
               <TextFieldNonUpdatable label={key} value={value} />

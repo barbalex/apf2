@@ -23,8 +23,32 @@ export default types
     nodeLabelFilter: types.optional(NodeLabelFilter, defaultNodeLabelFilter),
     map: types.optional(Map, defaultMap),
     nodes: types.optional(types.array(Node), []),
+    treeWidth: types.optional(types.number, 500),
+    treeHeight: types.optional(types.number, 800),
+    datenWidth: types.optional(types.number, 500),
+    datenHeight: types.optional(types.number, 800),
+    filterWidth: types.optional(types.number, 500),
+    filterHeight: types.optional(types.number, 800),
   })
   .actions(self => ({
+    setTreeWidth(val) {
+      self.treeWidth = val
+    },
+    setTreeHeight(val) {
+      self.treeHeight = val
+    },
+    setDatenWidth(val) {
+      self.datenWidth = val
+    },
+    setDatenHeight(val) {
+      self.datenHeight = val
+    },
+    setFilterWidth(val) {
+      self.filterWidth = val
+    },
+    setFilterHeight(val) {
+      self.filterHeight = val
+    },
     setNodes(val) {
       self.nodes = val
     },
@@ -33,7 +57,7 @@ export default types
       const set = new Set([...self.openNodes, ...nodes].map(JSON.stringify))
       self.openNodes = Array.from(set).map(JSON.parse)
     },
-    setOpenNodes(val){
+    setOpenNodes(val) {
       self.openNodes = val
     },
     setApFilter(val) {
@@ -42,7 +66,7 @@ export default types
     setActiveNodeArray(val) {
       if (self.name === 'tree') {
         const store = getParent(self)
-        const {urlQuery, historyPush} = store
+        const { urlQuery, historyPush } = store
         const search = queryString.stringify(urlQuery)
         const query = `${Object.keys(urlQuery).length > 0 ? `?${search}` : ''}`
         // pass openNodes as state
