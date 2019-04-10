@@ -96,6 +96,10 @@ const MyAppBar = ({ setShowDeletions }: { setShowDeletions: () => void }) => {
       } else {
         if (projekteTabs.includes(name)) {
           remove(projekteTabs, el => el === name)
+          if (name === 'tree2') {
+            // close all tree2-tabs
+            remove(projekteTabs, el => el.includes('2'))
+          }
         } else {
           projekteTabs.push(name)
           if (name === 'tree2') {

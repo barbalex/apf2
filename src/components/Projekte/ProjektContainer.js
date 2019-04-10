@@ -156,8 +156,6 @@ const ProjektContainer = ({
     ),
   }
 
-  console.log('ProjektContainer')
-
   if (tabs.length < 2) {
     return <Container>{elObj[tabs[0]]}</Container>
   }
