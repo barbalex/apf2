@@ -26,9 +26,7 @@ export default types
     treeWidth: types.optional(types.number, 500),
     treeHeight: types.optional(types.number, 800),
     datenWidth: types.optional(types.number, 500),
-    datenHeight: types.optional(types.number, 800),
     filterWidth: types.optional(types.number, 500),
-    filterHeight: types.optional(types.number, 800),
   })
   .actions(self => ({
     setTreeWidth(val) {
@@ -40,14 +38,8 @@ export default types
     setDatenWidth(val) {
       self.datenWidth = val
     },
-    setDatenHeight(val) {
-      self.datenHeight = val
-    },
     setFilterWidth(val) {
       self.filterWidth = val
-    },
-    setFilterHeight(val) {
-      self.filterHeight = val
     },
     setNodes(val) {
       self.nodes = val

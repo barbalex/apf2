@@ -87,11 +87,7 @@ const ProjektContainer = ({
     setTreeWidth,
     setTreeHeight,
     setDatenWidth,
-    setDatenHeight,
     setFilterWidth,
-    setFilterHeight,
-    setMapWidth,
-    setMapHeight,
   } = mobxStore[treeName]
 
   const treeEl = useRef(null)
@@ -111,17 +107,13 @@ const ProjektContainer = ({
     }
     if (datenEl.current && datenEl.current.clientWidth) {
       setDatenWidth(datenEl.current.clientWidth)
-      setDatenHeight(datenEl.current.clientHeight)
     } else {
       setDatenWidth(standardWidth)
-      setDatenHeight(standardHeight)
     }
     if (filterEl.current && filterEl.current.clientWidth) {
       setFilterWidth(filterEl.current.clientWidth)
-      setFilterHeight(filterEl.current.clientHeight)
     } else {
       setFilterWidth(standardWidth)
-      setFilterHeight(standardHeight)
     }
   }, [treeEl.current, datenEl.current, filterEl.current])
 
