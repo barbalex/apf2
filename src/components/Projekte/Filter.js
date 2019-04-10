@@ -58,8 +58,6 @@ export default ({ treeName }: { treeName: String }) => {
     tpopfreiwkontr: 'Freiwilligen-Kontrollen Filter',
   }
 
-  console.log('Filter')
-
   return (
     <ErrorBoundary>
       <Container>
