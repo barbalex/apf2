@@ -13,7 +13,7 @@ export default ({
 }): any => {
   if (!node.url) throw new Error('passed node has no url')
   const { nodeFilterSetActiveTable, nodeFilter } = mobxStore
-  const {openNodes}=mobxStore[treeName]
+  const { openNodes, setActiveNodeArray } = mobxStore[treeName]
 
   if (nodeFilter) {
     const show = !!nodeFilter[treeName].activeTable
@@ -25,5 +25,5 @@ export default ({
   if (!isNodeOpen(openNodes, node.url)) {
     openNode({ treeName, node, openNodes, mobxStore })
   }
-  mobxStore[treeName].setActiveNodeArray([...node.url])
+  setActiveNodeArray([...node.url])
 }
