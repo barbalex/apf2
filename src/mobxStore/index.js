@@ -277,8 +277,6 @@ const myTypes = types
       self.refetch[key] = value
     },
     setTreeKey({ tree, key, value }) {
-      //const oldValue = getSnapshot(self[tree][key])
-      //const urlQuery = getSnapshot(self.urlQuery)
       const oldValue = self[tree][key]
       const urlQuery = self.urlQuery
       // only write if changed
