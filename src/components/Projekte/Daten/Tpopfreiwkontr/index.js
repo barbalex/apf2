@@ -428,8 +428,6 @@ const Tpopfreiwkontr = ({
 
   useEffect(() => setErrors({}), [row])
 
-  console.log('Tpopfreiwkontr')
-
   if (error) return `Fehler: ${error.message}`
   if (loading) {
     return (
