@@ -79,7 +79,9 @@ const MyAppBarDaten = ({ treeNr = '' }: { treeNr: string }) => {
   )
 
   let followed = projekteTabs.slice().includes('filter')
-  if (treeNr === '2') followed = false
+  if (treeNr === '2') {
+    followed = projekteTabs.slice().includes('filter2')
+  }
 
   return (
     <StyledButton

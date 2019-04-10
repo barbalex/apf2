@@ -188,7 +188,7 @@ const MyAppBar = ({ setShowDeletions }: { setShowDeletions: () => void }) => {
                 </StyledButton>
                 <StyledButton
                   variant={projekteTabs.includes('karte') ? 'outlined' : 'text'}
-                  preceded={projekteTabs.includes('daten')}
+                  preceded={projekteTabs.includes('filter')}
                   followed={
                     (!isMobile &&
                       exporteIsActive &&
