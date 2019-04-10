@@ -144,7 +144,7 @@ describe('Teil-Population Massnahme form', () => {
       .blur()
       .should('have.value', typedText)
   })
-  it('updates wirtspflanze', () => {
+  it.skip('updates wirtspflanze', () => {
     cy.clearSelect({
       selector: '[data-id=wirtspflanze]',
     })
