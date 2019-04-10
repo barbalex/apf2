@@ -104,6 +104,7 @@ const Ekf = () => {
   // reset dimensions when window resizes
   useEffect(() => {
     window.addEventListener('resize', setDimensions)
+    setDimensions()
     return () => window.removeEventListener('resize', setDimensions)
   }, [])
 
