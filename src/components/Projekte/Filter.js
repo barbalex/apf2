@@ -4,7 +4,7 @@ import Tab from '@material-ui/core/Tab'
 import styled from 'styled-components'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
-import Ap from './Daten/Ap'
+import ApFilter from './Daten/ApFilter'
 import Pop from './Daten/Pop'
 import Tpop from './Daten/Tpop'
 import Tpopmassn from './Daten/Tpopmassn'
@@ -41,7 +41,7 @@ export default ({ treeName }: { treeName: String }) => {
   const onChangeTab = useCallback((event, value) => setActiveTab(value))
 
   const formObject = {
-    ap: <Ap treeName={treeName} showFilter={true} />,
+    ap: <ApFilter treeName={treeName} />,
     pop: <Pop treeName={treeName} showFilter={true} />,
     tpop: <Tpop treeName={treeName} showFilter={true} />,
     tpopmassn: <Tpopmassn treeName={treeName} showFilter={true} />,
@@ -57,6 +57,8 @@ export default ({ treeName }: { treeName: String }) => {
     tpopfeldkontr: 'Feld-Kontrollen Filter',
     tpopfreiwkontr: 'Freiwilligen-Kontrollen Filter',
   }
+
+  console.log('Filter')
 
   return (
     <ErrorBoundary>

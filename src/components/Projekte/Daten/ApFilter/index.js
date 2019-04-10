@@ -1,29 +1,36 @@
 // @flow
-import React, { useContext, useState, useCallback, useEffect } from 'react'
+import React, {
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+  useMemo,
+} from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import { useQuery } from 'react-apollo-hooks'
 
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import TextField from '../../../shared/TextField2'
 import Select from '../../../shared/Select'
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
-import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
-import FormTitle from '../../../shared/FormTitle'
+import FilterTitle from '../../../shared/FilterTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import updateApByIdGql from './updateApById'
-import query from './query'
+import queryAeEigenschaftenById from './queryAeEigenschaftenById'
 import queryLists from './queryLists'
+import queryAps from './queryAps'
 import queryAdresses from './queryAdresses'
 import queryAeEigenschaftens from './queryAeEigenschaftens'
 import mobxStoreContext from '../../../../mobxStoreContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
+import { simpleTypes as apType } from '../../../../mobxStore/NodeFilterTree/ap'
 
 const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  background-color: #ffd3a7;
 `
 const FieldsContainer = styled.div`
   padding: 10px;
@@ -61,24 +68,26 @@ const LabelPopoverRowColumnRight = styled.div`
   padding-left: 5px;
 `
 
-const Ap = ({
-  treeName,
-  showFilter = false,
-}: {
-  treeName: String,
-  showFilter: Boolean,
-}) => {
-  const client = useApolloClient()
+const ApFilter = ({ treeName }: { treeName: String }) => {
   const mobxStore = useContext(mobxStoreContext)
-  const { user, refetch } = mobxStore
+  const { nodeFilter, nodeFilterSetValue, refetch } = mobxStore
   const { activeNodeArray } = mobxStore[treeName]
 
-  let id =
-    activeNodeArray.length > 3
-      ? activeNodeArray[3]
-      : '99999999-9999-9999-9999-999999999999'
-  const { data, error, loading } = useQuery(query, {
-    variables: { id },
+  const projId = activeNodeArray[1]
+  const nodeFilterAp = { ...nodeFilter[treeName].ap }
+  const apFilter = useMemo(() => {
+    const apFilter = { projId: { equalTo: projId } }
+    const apFilterValues = Object.entries(nodeFilterAp).filter(
+      e => e[1] || e[1] === 0,
+    )
+    apFilterValues.forEach(([key, value]) => {
+      const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
+      apFilter[key] = { [expression]: value }
+    })
+    return apFilter
+  }, [projId, nodeFilterAp])
+  const { data: apsData, error: apsError } = useQuery(queryAps, {
+    variables: { apFilter },
   })
 
   const {
@@ -86,105 +95,98 @@ const Ap = ({
     error: errorAdresses,
     loading: loadingAdresses,
   } = useQuery(queryAdresses)
+
   const {
     data: dataLists,
     error: errorLists,
     loading: loadingLists,
   } = useQuery(queryLists)
 
+  const {
+    data: dataAeEigenschaftenById,
+    error: errorAeEigenschaftenById,
+    loading: loadingAeEigenschaftenById,
+  } = useQuery(queryAeEigenschaftenById, {
+    variables: {
+      id: nodeFilter[treeName].ap.artId,
+      run: !!nodeFilter[treeName].ap.artId,
+    },
+  })
+
+  const artname =
+    !!nodeFilter[treeName].ap.artId && !loadingAeEigenschaftenById
+      ? get(dataAeEigenschaftenById, 'aeEigenschaftenById.artname') || ''
+      : ''
+
   const [errors, setErrors] = useState({})
 
-  const row = get(data, 'apById', {})
+  const row = nodeFilter[treeName].ap
 
-  useEffect(() => setErrors({}), [row])
+  useEffect(() => {
+    setErrors({})
+  }, [row])
 
   const saveToDb = useCallback(
-    async event => {
+    event => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value)
-      try {
-        await client.mutate({
-          mutation: updateApByIdGql,
-          variables: {
-            id: row.id,
-            [field]: value,
-            changedBy: user.name,
-          },
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateApById: {
-              ap: {
-                id: row.id,
-                startJahr: field === 'startJahr' ? value : row.startJahr,
-                bearbeitung: field === 'bearbeitung' ? value : row.bearbeitung,
-                umsetzung: field === 'umsetzung' ? value : row.umsetzung,
-                artId: field === 'artId' ? value : row.artId,
-                bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
-                ekfBeobachtungszeitpunkt:
-                  field === 'ekfBeobachtungszeitpunkt'
-                    ? value
-                    : row.ekfBeobachtungszeitpunkt,
-                projId: field === 'projId' ? value : row.projId,
-                __typename: 'Ap',
-              },
-              __typename: 'Ap',
-            },
-          },
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
-      }
-      setErrors({})
-      if (['artId'].includes(field)) refetch.aps()
+      nodeFilterSetValue({
+        treeName,
+        table: 'ap',
+        key: field,
+        value,
+      })
+      refetch.aps()
     },
     [row],
   )
 
-  const aeEigenschaftenfilterForData = useCallback(
-    inputValue =>
-      !!inputValue
-        ? {
-            or: [
-              { apByArtIdExists: false },
-              { apByArtId: { id: { equalTo: id } } },
-            ],
-            artname: { includesInsensitive: inputValue },
-          }
-        : {
-            or: [
-              { apByArtIdExists: false },
-              { apByArtId: { id: { equalTo: id } } },
-            ],
-          },
-    [id],
+  const aeEigenschaftenFilter = useCallback(inputValue =>
+    !!inputValue
+      ? {
+          apByArtIdExists: true,
+          artname: { includesInsensitive: inputValue },
+        }
+      : {
+          apByArtIdExists: true,
+        },
   )
 
-  if (loading) {
-    return (
-      <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
-      </Container>
-    )
-  }
   if (errorAdresses) return `Fehler: ${errorAdresses.message}`
+  if (apsError) return `Fehler: ${apsError.message}`
   if (errorLists) return `Fehler: ${errorLists.message}`
-  if (error) return `Fehler: ${error.message}`
+  if (errorAeEigenschaftenById) {
+    return `Fehler: ${errorAeEigenschaftenById.message}`
+  }
 
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle apId={row.id} title="Aktionsplan" treeName={treeName} />
+        <FilterTitle
+          title="Aktionsplan"
+          treeName={treeName}
+          table="ap"
+          totalNr={get(apsData, 'allAps.totalCount', '...')}
+          filteredNr={get(apsData, 'filteredAps.totalCount', '...')}
+        />
         <FieldsContainer>
           <SelectLoadingOptions
             key={`${row.id}artId`}
             field="artId"
             valueLabelPath="aeEigenschaftenByArtId.artname"
             label="Art (gibt dem Aktionsplan den Namen)"
-            row={row}
+            row={{
+              ...row,
+              ...{
+                aeEigenschaftenByArtId: {
+                  artname,
+                },
+              },
+            }}
             saveToDb={saveToDb}
             error={errors.artId}
             query={queryAeEigenschaftens}
-            filter={aeEigenschaftenfilterForData}
+            filter={aeEigenschaftenFilter}
             queryNodesName="allAeEigenschaftens"
           />
           <RadioButtonGroupWithInfo
@@ -280,19 +282,10 @@ const Ap = ({
             saveToDb={saveToDb}
             errors={errors}
           />
-          <TextFieldNonUpdatable
-            key={`${row.id}artwert`}
-            label="Artwert"
-            value={get(
-              row,
-              'aeEigenschaftenByArtId.artwert',
-              'Diese Art hat keinen Artwert',
-            )}
-          />
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
   )
 }
 
-export default observer(Ap)
+export default observer(ApFilter)
