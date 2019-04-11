@@ -1,4 +1,3 @@
-// @flow
 import { types } from 'mobx-state-tree'
 
 import { type as ap } from './ap'

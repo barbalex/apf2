@@ -1,4 +1,3 @@
-// @flow
 import { initial as ap } from './ap'
 import { initial as pop } from './pop'
 import { initial as tpop } from './tpop'

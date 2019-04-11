@@ -1,35 +1,76 @@
-// @flow
 import { types } from 'mobx-state-tree'
 
 export const type = types.model({
   nr: types.optional(types.maybeNull(types.number), null),
-  gemeinde: types.optional(types.maybeNull(types.union(types.string, types.number)), null),
-  flurname: types.optional(types.maybeNull(types.union(types.string, types.number)), null),
+  gemeinde: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  flurname: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
   x: types.optional(types.maybeNull(types.number), null),
   y: types.optional(types.maybeNull(types.number), null),
   radius: types.optional(types.maybeNull(types.number), null),
   hoehe: types.optional(types.maybeNull(types.number), null),
-  exposition: types.optional(types.maybeNull(types.union(types.string, types.number)), null),
-  klima: types.optional(types.maybeNull(types.union(types.string, types.number)), null),
-  neigung: types.optional(types.maybeNull(types.union(types.string, types.number)), null),
-  beschreibung: types.optional(types.maybeNull(types.union(types.string, types.number)), null),
-  katasterNr: types.optional(types.maybeNull(types.union(types.string, types.number)), null),
+  exposition: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  klima: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  neigung: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  beschreibung: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  katasterNr: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
   status: types.optional(types.maybeNull(types.number), null),
   statusUnklar: types.optional(types.maybeNull(types.boolean), null),
-  statusUnklarGrund: types.optional(types.maybeNull(types.union(types.string, types.number)), null),
+  statusUnklarGrund: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
   apberRelevant: types.optional(types.maybeNull(types.number), null),
   bekanntSeit: types.optional(types.maybeNull(types.number), null),
-  eigentuemer: types.optional(types.maybeNull(types.union(types.string, types.number)), null),
-  kontakt: types.optional(types.maybeNull(types.union(types.string, types.number)), null),
-  nutzungszone: types.optional(types.maybeNull(types.union(types.string, types.number)), null),
-  bewirtschafter: types.optional(types.maybeNull(types.union(types.string, types.number)), null),
-  bewirtschaftung: types.optional(types.maybeNull(types.union(types.string, types.number)), null),
+  eigentuemer: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  kontakt: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  nutzungszone: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  bewirtschafter: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  bewirtschaftung: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
   kontrollfrequenz: types.optional(types.maybeNull(types.number), null),
   kontrollfrequenzFreiwillige: types.optional(
     types.maybeNull(types.number),
     null,
   ),
-  bemerkungen: types.optional(types.maybeNull(types.union(types.string, types.number)), null),
+  bemerkungen: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
 })
 
 export const initial = {

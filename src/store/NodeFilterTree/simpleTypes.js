@@ -1,4 +1,3 @@
-// @flow
 import { simpleTypes as ap } from './ap'
 import { simpleTypes as pop } from './pop'
 import { simpleTypes as tpop } from './tpop'

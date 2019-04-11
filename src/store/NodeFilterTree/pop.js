@@ -1,4 +1,3 @@
-// @flow
 import { types } from 'mobx-state-tree'
 
 export const type = types.model({

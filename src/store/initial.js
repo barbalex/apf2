@@ -1,4 +1,3 @@
-//@flow
 /**
  * in this function
  * default values are set
