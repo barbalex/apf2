@@ -6,7 +6,7 @@ import DeleteFilterIcon2 from '@material-ui/icons/DeleteSweepOutlined'
 import IconButton from '@material-ui/core/IconButton'
 import { observer } from 'mobx-react-lite'
 
-import mobxStoreContext from '../../mobxStoreContext'
+import storeContext from '../../storeContext'
 
 const Container = styled.div`
   background-color: #ffd3a7;
@@ -62,7 +62,7 @@ const FormTitle = ({
   totalApNr: number,
   filteredApNr: number,
 }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const {
     nodeFilterTableIsFiltered,
     nodeFilterTreeIsFiltered,

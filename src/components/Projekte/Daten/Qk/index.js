@@ -18,7 +18,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
 import qk from './qk'
 import checkTpopOutsideZh from './checkTpopOutsideZh'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 
 const Container = styled.div`
   height: 100%;
@@ -59,7 +59,7 @@ const StyledButton = styled(Button)`
 `
 
 const Qk = ({ treeName }: { treeName: string }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { ktZh, setKtZh, addError } = mobxStore
   const { activeNodeArray } = mobxStore[treeName]
 

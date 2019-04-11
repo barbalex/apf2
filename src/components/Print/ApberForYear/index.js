@@ -15,7 +15,7 @@ import AvList from './AvList'
 import AktPopList from './AktPopList'
 import ErfolgList from './ErfolgList'
 import ApberForAp from '../ApberForAp'
-import mobxStoreContext from '../../../mobxStoreContext'
+import storeContext from '../../../storeContext'
 
 const LoadingContainer = styled.div`
   padding: 15px;
@@ -104,7 +104,7 @@ const SecondPageText = styled.p`
 `
 
 const ApberForYear = () => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const activeNodes = mobxStore.treeActiveNodes
   const { apberuebersicht: apberuebersichtId } = activeNodes
 

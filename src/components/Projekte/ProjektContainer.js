@@ -11,7 +11,7 @@ import TreeContainer from './TreeContainer'
 import Daten from './Daten'
 import Exporte from './Exporte'
 import Filter from './Filter'
-import mobxStoreContext from '../../mobxStoreContext'
+import storeContext from '../../storeContext'
 
 const Container = styled.div`
   display: flex;
@@ -75,7 +75,7 @@ const ProjektContainer = ({
   tabs: Array<String>,
   projekteTabs: Array<String>,
 }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { isPrint } = mobxStore
   const {
     setTreeWidth,

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
 import initiateDataFromUrl from '../initiateDataFromUrl'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 
 const OuterContainer = styled.div`
   border-bottom: 1px solid rgba(46, 125, 50, 0.5);
@@ -42,7 +42,7 @@ const EkfList = ({
   style: Object,
   row: Object,
 }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const innerContainerHeight = projektCount > 1 ? 81 : 62
   const url = [
     'Projekte',

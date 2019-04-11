@@ -19,7 +19,7 @@ import { useQuery } from 'react-apollo-hooks'
 
 import Checkbox from '../../shared/Checkbox'
 import getBounds from '../../../../../../modules/getBounds'
-import mobxStoreContext from '../../../../../../mobxStoreContext'
+import storeContext from '../../../../../../storeContext'
 import query from './data'
 import PopIcon from './PopIcon'
 import TpopIcon from './TpopIcon'
@@ -95,7 +95,7 @@ const BeobZugeordnetAssignPolylinesIcon = styled(RemoveIcon)`
 const MapIconDiv = styled.div``
 
 const MySortableItem = ({ treeName, apfloraLayer, index }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const {
     activeApfloraLayers: activeApfloraLayersRaw,
     setActiveApfloraLayers,

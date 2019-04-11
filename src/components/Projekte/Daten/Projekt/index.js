@@ -10,7 +10,7 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
 import updateProjektByIdGql from './updateProjektById'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
 const Container = styled.div`
@@ -26,7 +26,7 @@ const FieldsContainer = styled.div`
 
 const Projekt = ({ treeName }: { treeName: string }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { activeNodeArray } = mobxStore[treeName]
 
   const [errors, setErrors] = useState({})

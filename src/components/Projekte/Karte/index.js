@@ -64,7 +64,7 @@ import epsg4326to2056 from '../../../modules/epsg4326to2056'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import updateTpopById from './updateTpopById'
 
-import mobxStoreContext from '../../../mobxStoreContext'
+import storeContext from '../../../storeContext'
 //import getBounds from '../../../modules/getBounds'
 
 // this does not work
@@ -108,7 +108,7 @@ const Container = styled.div`
 
 const Karte = ({ treeName }: { treeName: string }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const {
     activeApfloraLayers: activeApfloraLayersRaw,
     overlays,

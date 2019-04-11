@@ -4,7 +4,7 @@ import { ContextMenu, MenuItem } from 'react-contextmenu'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 
 // create objects outside render
 const insertData = {
@@ -23,7 +23,7 @@ const Apber = ({
   onClick: () => void,
   treeName: string,
 }) => {
-  const { user } = useContext(mobxStoreContext)
+  const { user } = useContext(storeContext)
 
   return (
     <ErrorBoundary>

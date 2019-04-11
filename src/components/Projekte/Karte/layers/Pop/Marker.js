@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
  * TODO: the svg path on production contains "Projekte/1/" !!??
  * Maybe give an absolute path?
  */
-import mobxStoreContext from '../../../../../mobxStoreContext'
+import storeContext from '../../../../../storeContext'
 import epsg2056to4326 from '../../../../../modules/epsg2056to4326'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import popIcon from './pop.svg'
@@ -32,7 +32,7 @@ const StyledTooltip = styled(Tooltip)`
 `
 
 const PopMarker = ({ treeName, pop }: { treeName: string, pop: Object }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { apfloraLayers } = mobxStore
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes

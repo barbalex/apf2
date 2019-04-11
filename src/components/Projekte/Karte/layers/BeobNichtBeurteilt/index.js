@@ -6,7 +6,7 @@ import { useQuery } from 'react-apollo-hooks'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 
 import Marker from './Marker'
-import mobxStoreContext from '../../../../../mobxStoreContext'
+import storeContext from '../../../../../storeContext'
 import query from './query'
 import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
 
@@ -32,7 +32,7 @@ const BeobNichtBeurteiltMarker = ({
   treeName: string,
   clustered: Boolean,
 }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { setRefetchKey, addError, mapFilter, activeApfloraLayers } = mobxStore
   const tree = mobxStore[treeName]
   const { setBeobNichtBeurteiltIdsFiltered } = mobxStore[treeName].map

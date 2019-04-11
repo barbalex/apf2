@@ -20,7 +20,7 @@ import { useApolloClient } from 'react-apollo-hooks'
 
 import ErrorBoundary from './shared/ErrorBoundary'
 import idbContext from '../idbContext'
-import mobxStoreContext from '../mobxStoreContext'
+import storeContext from '../storeContext'
 
 const StyledDialog = styled(Dialog)``
 const StyledDiv = styled.div`
@@ -37,7 +37,7 @@ const StyledInput = styled(Input)`
 const User = () => {
   const client = useApolloClient()
   const { idb } = useContext(idbContext)
-  const { user, setUser } = useContext(mobxStoreContext)
+  const { user, setUser } = useContext(storeContext)
   const { token } = user
 
   const [name, setName] = useState('')

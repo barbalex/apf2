@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 
 import popupFromProperties from './popupFromProperties'
 import fetchDetailplaene from '../../../../modules/fetchDetailplaene'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 
 const style = () => ({ fill: false, color: 'red', weight: 1 })
 const onEachFeature = (feature, layer) => {
@@ -16,7 +16,7 @@ const onEachFeature = (feature, layer) => {
 
 const DetailplaeneLayer = () => {
   const { detailplaene, setDetailplaene, addError } = useContext(
-    mobxStoreContext,
+    storeContext,
   )
   !detailplaene && fetchDetailplaene({ setDetailplaene, addError })
 

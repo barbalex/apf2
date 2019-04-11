@@ -38,7 +38,7 @@ import AppContainer from './components/AppContainer'
 import Print from './components/Print'
 import historyListen from './modules/historyListen'
 
-import { Provider as MobxProvider } from './mobxStoreContext'
+import { Provider as MobxProvider } from './storeContext'
 import { Provider as IdbProvider } from './idbContext'
 
 import './index.css'

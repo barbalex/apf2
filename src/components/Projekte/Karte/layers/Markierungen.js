@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 
 import popupFromProperties from './popupFromProperties'
 import fetchMarkierungen from '../../../../modules/fetchMarkierungen'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 
 const style = () => ({ fill: false, color: 'orange', weight: 1 })
 const onEachFeature = (feature, layer) => {
@@ -28,7 +28,7 @@ const pointToLayer = (feature, latlng) => {
 
 const MarkierungenLayer = () => {
   const { markierungen, setMarkierungen, addError } = useContext(
-    mobxStoreContext,
+    storeContext,
   )
   !markierungen && fetchMarkierungen({ setMarkierungen, addError })
 

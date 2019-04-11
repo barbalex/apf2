@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
 import initiateDataFromUrl from '../../modules/initiateDataFromUrl'
-import mobxStoreContext from '../../mobxStoreContext'
+import storeContext from '../../storeContext'
 
 const StyledInput = styled(Input)`
   width: 60px;
@@ -31,7 +31,7 @@ const ekfRefDate = new Date()//.setMonth(new Date().getMonth() - 2)
 const ekfRefYear = new Date(ekfRefDate).getFullYear()
 
 const EkfYear = () => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { ekfYear, setEkfYear } = mobxStore
 
   const [stateValue, setStateValue] = useState(

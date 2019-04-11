@@ -11,7 +11,7 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updateAdresseByIdGql from './updateAdresseById'
 import query from './query'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
 const Container = styled.div`
@@ -26,7 +26,7 @@ const FieldsContainer = styled.div`
 `
 
 const Adresse = ({ treeName }: { treeName: String }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { activeNodeArray, refetch } = mobxStore[treeName]
   const id =
     activeNodeArray.length > 2

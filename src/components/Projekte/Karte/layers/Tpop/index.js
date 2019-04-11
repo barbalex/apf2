@@ -7,7 +7,7 @@ import { useQuery } from 'react-apollo-hooks'
 import { withLeaflet } from 'react-leaflet'
 
 import Marker from './Marker'
-import mobxStoreContext from '../../../../../mobxStoreContext'
+import storeContext from '../../../../../storeContext'
 import query from './query'
 import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
 import objectsInsideBounds from '../../../../../modules/objectsInsideBounds'
@@ -40,7 +40,7 @@ const Tpop = ({
   leaflet: Object,
 }) => {
   const { map: leafletMap } = leaflet
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const {
     nodeFilter,
     mapFilter,

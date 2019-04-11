@@ -23,7 +23,7 @@ import queryTpopmassns from './queryTpopmassns'
 import queryAdresses from './queryAdresses'
 import queryAeEigenschaftens from './queryAeEigenschaftens'
 import updateTpopmassnByIdGql from './updateTpopmassnById'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { simpleTypes as tpopmassnType } from '../../../../mobxStore/NodeFilterTree/tpopmassn'
 
@@ -52,7 +52,7 @@ const Tpopmassn = ({
   treeName: string,
   showFilter: Boolean,
 }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const client = useApolloClient()
   const { nodeFilter, nodeFilterSetValue, refetch } = mobxStore
 

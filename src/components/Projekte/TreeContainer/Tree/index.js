@@ -11,7 +11,7 @@ import jwtDecode from 'jwt-decode'
 
 import Row from './Row'
 
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 import buildVariables from './buildVariables'
 import queryAdresses from './queryAdresses'
 import queryCurrentIssues from './queryCurrentIssues'
@@ -72,7 +72,7 @@ type Props = {
 }
 
 const Tree = ({ treeName }: Props) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const tree = mobxStore[treeName]
   const {
     activeNodeArray,

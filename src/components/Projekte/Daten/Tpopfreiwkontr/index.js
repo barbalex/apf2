@@ -27,7 +27,7 @@ import Verification from './Verification'
 import Image from './Image'
 import FormTitle from '../../../shared/FormTitle'
 import FilterTitle from '../../../shared/FilterTitle'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { simpleTypes as tpopfreiwkontrType } from '../../../../mobxStore/NodeFilterTree/tpopfreiwkontr'
 
@@ -142,7 +142,7 @@ const Tpopfreiwkontr = ({
   showFilter: Boolean,
 }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const {
     addError,
     nodeFilter,

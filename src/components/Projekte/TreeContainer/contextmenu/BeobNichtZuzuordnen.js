@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 
 // create objects outside render
 const createNewPopFromBeobData = {
@@ -25,7 +25,7 @@ const BeobNichtZuzuordnen = ({
   treeName: string,
   onClick: () => void,
 }) => {
-  const { user } = useContext(mobxStoreContext)
+  const { user } = useContext(storeContext)
 
   return (
     <ErrorBoundary>

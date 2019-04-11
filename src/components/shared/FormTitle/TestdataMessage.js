@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 
 import constants from '../../../modules/constants'
-import mobxStoreContext from '../../../mobxStoreContext'
+import storeContext from '../../../storeContext'
 
 const Div = styled.div`
   color: #c8e6c9;
@@ -17,7 +17,7 @@ const TestdataMessage = ({
   treeName: string,
   apId: string,
 }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const tree = mobxStore[treeName]
   const apIdFromTree = get(tree, 'activeNodes.ap')
   const apIdUsed = apIdFromTree || apId

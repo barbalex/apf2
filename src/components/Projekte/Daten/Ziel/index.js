@@ -13,7 +13,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
 import queryLists from './queryLists'
 import updateZielByIdGql from './updateZielById'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
 const Container = styled.div`
@@ -29,7 +29,7 @@ const FieldsContainer = styled.div`
 
 const Ziel = ({ treeName }: { treeName: string }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { refetch } = mobxStore
   const { activeNodeArray, setActiveNodeArray, openNodes, setOpenNodes } = mobxStore[treeName]
 

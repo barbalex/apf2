@@ -9,7 +9,7 @@ import { useApolloClient } from 'react-apollo-hooks'
 import apById from './apById'
 import Label from '../../../shared/Label'
 import ErrorBoundary from '../../../shared/ErrorBoundarySingleChild'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 
 const NurApDiv = styled.div`
   display: flex;
@@ -25,7 +25,7 @@ const StyledSwitch = styled(Switch)`
 
 const ApFilter = ({ treeName }: { treeName: String }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { refetch } = mobxStore
   const {
     apFilter,

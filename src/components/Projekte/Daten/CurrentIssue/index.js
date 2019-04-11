@@ -8,7 +8,7 @@ import ReactMarkdown from 'react-markdown'
 
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 import { currentIssue as currentIssueFragment } from '../../../shared/fragments'
 
 const Container = styled.div`
@@ -32,7 +32,7 @@ const query = gql`
 `
 
 const CurrentIssue = ({ treeName }: { treeName: String }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
 
   const { activeNodeArray } = mobxStore[treeName]
 

@@ -7,7 +7,7 @@ import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from 'react-apollo-hooks'
 
-import mobxStoreContext from '../../../mobxStoreContext'
+import storeContext from '../../../storeContext'
 import dataByUserNameGql from './dataByUserName'
 import dataByAdresseIdGql from './dataByAdresseId'
 import dataWithDateByUserNameGql from './dataWithDateByUserName'
@@ -16,7 +16,7 @@ import List from './List'
 import dealWithError from '../../../modules/dealWithError'
 
 const EkfListContainer = () => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { ekfYear, ekfAdresseId, user } = mobxStore
 
   let query = !!ekfAdresseId ? dataByAdresseIdGql : dataByUserNameGql

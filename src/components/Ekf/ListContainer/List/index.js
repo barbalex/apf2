@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
 import Item from './Item'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 import initiateDataFromUrl from '../initiateDataFromUrl'
 
 const Container = styled.div`
@@ -60,7 +60,7 @@ const getEkfFromData = ({ data, ekfAdresseId }) => {
 }
 
 const EkfList = ({ data, loading }: { data: Object, loading: Boolean }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { ekfYear, ekfAdresseId, tree } = mobxStore
   const ekf = getEkfFromData({ data, ekfAdresseId })
 

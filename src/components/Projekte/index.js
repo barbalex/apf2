@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
 // when Karte was loaded async, it did not load,
 // but only in production!
 import ProjektContainer from './ProjektContainer'
-import mobxStoreContext from '../../mobxStoreContext'
+import storeContext from '../../storeContext'
 
 const Container = styled.div`
   display: flex;
@@ -59,7 +59,7 @@ const treeTabValues = ['tree', 'daten', 'filter', 'karte', 'exporte']
 const tree2TabValues = ['tree2', 'daten2', 'filter2', 'karte2', 'exporte2']
 
 const Projekte = () => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { isPrint, urlQuery } = mobxStore
 
   const { projekteTabs } = urlQuery

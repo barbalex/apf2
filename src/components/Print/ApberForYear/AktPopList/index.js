@@ -7,7 +7,7 @@ import sortBy from 'lodash/sortBy'
 import { useQuery } from 'react-apollo-hooks'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 import query from './query'
 
 const Container = styled.div`
@@ -65,7 +65,7 @@ const TotalColumn = styled.div`
 `
 
 const AktPopList = () => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const activeNodes = mobxStore.treeActiveNodes
   const { projekt: projektId } = activeNodes
   const { data, loading, error: dataError } = useQuery(query, {

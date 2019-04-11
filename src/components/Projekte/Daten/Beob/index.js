@@ -9,7 +9,7 @@ import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 
 const Container = styled.div`
   padding: 15px 10px 0 10px;
@@ -20,7 +20,7 @@ const Container = styled.div`
 `
 
 const Beob = ({ treeName }: { treeName: string }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { activeNodeArray, datenWidth } = mobxStore[treeName]
   const { data, loading, error } = useQuery(query, {
     variables: {

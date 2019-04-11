@@ -80,7 +80,7 @@ import beobById from './beobById'
 import openLowerNodes from './openLowerNodes'
 import closeLowerNodes from './closeLowerNodes'
 import insertDataset from './insertDataset'
-import mobxStoreContext from '../../../mobxStoreContext'
+import storeContext from '../../../storeContext'
 
 const Container = styled.div`
   height: 100%;
@@ -154,7 +154,7 @@ const getAndValidateCoordinatesOfBeob = async ({ id, addError, client }) => {
 
 const TreeContainer = ({ treeName }: { treeName: String }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const {
     activeApfloraLayers,
     setActiveApfloraLayers,

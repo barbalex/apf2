@@ -16,7 +16,7 @@ import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById'
 import query from './query'
 import queryLists from './queryLists'
 import createTpopkontrzaehl from './createTpopkontrzaehl'
-import mobxStoreContext from '../../../../../mobxStoreContext'
+import storeContext from '../../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../../modules/ifIsNumericAsNumber'
 
 const Area = styled.div`
@@ -179,9 +179,9 @@ const Count = ({
   ekfzaehleinheits: Array<Object>,
   treeName: string,
 }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const client = useApolloClient()
-  const { setToDelete } = useContext(mobxStoreContext)
+  const { setToDelete } = useContext(storeContext)
 
   const [errors, setErrors] = useState({})
   const { activeNodeArray } = mobxStore[treeName]

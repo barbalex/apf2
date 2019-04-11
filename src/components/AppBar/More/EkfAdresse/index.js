@@ -7,7 +7,7 @@ import { useQuery } from 'react-apollo-hooks'
 
 import Select from '../../../shared/Select'
 import queryAdresses from './queryAdresses'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 import dealWithError from '../../../../modules/dealWithError'
 
 const Container = styled.div`
@@ -16,7 +16,7 @@ const Container = styled.div`
 
 const EkfAdresse = ({ setAnchorEl }: { setAnchorEl: () => void }) => {
   const { data, error, loading } = useQuery(queryAdresses)
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { setView, setEkfAdresseId } = mobxStore
   const choose = useCallback(async event => {
     setAnchorEl(null)

@@ -22,7 +22,7 @@ import query from './query'
 import queryAdresses from './queryAdresses'
 import updateUserByIdGql from './updateUserById'
 import Select from '../../../shared/Select'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
 const Container = styled.div`
@@ -64,7 +64,7 @@ const roleWerte = [
 ]
 
 const User = ({ treeName }: { treeName: String }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { refetch } = mobxStore
   const { activeNodeArray } = mobxStore[treeName]
   const client = useApolloClient()

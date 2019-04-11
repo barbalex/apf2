@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from 'react-apollo-hooks'
 
-import mobxStoreContext from '../../../../../mobxStoreContext'
+import storeContext from '../../../../../storeContext'
 import beobIcon from './beob.svg'
 import beobIconHighlighted from './beobHighlighted.svg'
 import getNearestTpop from '../../../../../modules/getNearestTpop'
@@ -27,7 +27,7 @@ const BeobZugeordnetMarker = ({
   beob: Object,
 }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { assigningBeob, refetch } = mobxStore
   const { map, setActiveNodeArray } = mobxStore[treeName]
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]

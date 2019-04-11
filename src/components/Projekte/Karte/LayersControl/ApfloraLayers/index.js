@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
-import mobxStoreContext from '../../../../../mobxStoreContext'
+import storeContext from '../../../../../storeContext'
 import Layer from './Layer'
 
 const CardContent = styled.div`
@@ -24,7 +24,7 @@ const ApfloraLayers = ({
   tpopBounds: Array<Array<Number>>,
   setTpopBounds: () => void,
 }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { apfloraLayers } = mobxStore
 
   return (

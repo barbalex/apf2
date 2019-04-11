@@ -23,7 +23,7 @@ import saveNichtZuordnenToDb from './saveNichtZuordnenToDb'
 import saveArtIdToDb from './saveArtIdToDb'
 import saveTpopIdToDb from './saveTpopIdToDb'
 import sendMail from '../../../../modules/sendMail'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 
 const Container = styled.div`
   height: 100%;
@@ -145,7 +145,7 @@ const Beobzuordnung = ({
   treeName: string,
 }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const tree = mobxStore[treeName]
   const { activeNodeArray } = mobxStore[treeName]
   const id = activeNodeArray[activeNodeArray.length - 1]

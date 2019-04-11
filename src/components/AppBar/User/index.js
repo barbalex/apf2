@@ -20,7 +20,7 @@ import query from './data'
 import TextField from '../../shared/TextField2'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import updateUserByIdGql from './updateUserById'
-import mobxStoreContext from '../../../mobxStoreContext'
+import storeContext from '../../../storeContext'
 import dealWithError from '../../../modules/dealWithError'
 
 const Container = styled.div`
@@ -52,7 +52,7 @@ const User = ({
   userOpen: boolean,
   toggleUserOpen: () => void,
 }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { data, error, loading } = useQuery(query, {
     variables: { name: username },
   })

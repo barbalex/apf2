@@ -6,7 +6,7 @@ import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useQuery } from 'react-apollo-hooks'
 
 import Marker from './Marker'
-import mobxStoreContext from '../../../../../mobxStoreContext'
+import storeContext from '../../../../../storeContext'
 import query from './query'
 import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
 import { simpleTypes as popType } from '../../../../../mobxStore/NodeFilterTree/pop'
@@ -26,7 +26,7 @@ const iconCreateFunction = function(cluster) {
 }
 
 const Pop = ({ treeName }: { treeName: string }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const {
     nodeFilter,
     activeApfloraLayers,

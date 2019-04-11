@@ -18,7 +18,7 @@ import Message from '../Message'
 import queryBeobZugeordnet from './queryBeobZugeordnet'
 import queryBeobNichtZuzuordnen from './queryBeobNichtZuzuordnen'
 import allVBeobArtChangeds from './allVBeobArtChangeds'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -60,7 +60,7 @@ const DownloadCardButton = styled(Button)`
 
 const Beobachtungen = () => {
   const client = useApolloClient()
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const {
     mapFilter,
     addError,

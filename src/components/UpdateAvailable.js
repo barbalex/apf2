@@ -15,7 +15,7 @@ import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
 
 import ErrorBoundary from './shared/ErrorBoundary'
-import mobxStoreContext from '../mobxStoreContext'
+import storeContext from '../storeContext'
 
 const StyledSnackbar = styled(Snackbar)`
   > div {
@@ -24,7 +24,7 @@ const StyledSnackbar = styled(Snackbar)`
 `
 
 const UpdateAvailable = () => {
-  const { updateAvailable, setUpdateAvailable } = useContext(mobxStoreContext)
+  const { updateAvailable, setUpdateAvailable } = useContext(storeContext)
 
   const onClose = useCallback(() => setUpdateAvailable(false))
   const onClickIntall = useCallback(event => {

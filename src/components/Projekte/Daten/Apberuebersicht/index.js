@@ -10,7 +10,7 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updateApberuebersichtByIdGql from './updateApberuebersichtById'
 import query from './query'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
 const Container = styled.div`
@@ -26,7 +26,7 @@ const FieldsContainer = styled.div`
 `
 
 const Apberuebersicht = ({ treeName }: { treeName: string }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
   const { activeNodeArray } = mobxStore[treeName]

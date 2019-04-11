@@ -4,11 +4,11 @@ import 'leaflet-draw'
 import { withLeaflet } from 'react-leaflet'
 import { observer } from 'mobx-react-lite'
 
-import mobxStoreContext from '../../../mobxStoreContext'
+import storeContext from '../../../storeContext'
 
 const DrawControl = ({ leaflet }: { leaflet: Object }) => {
   const { map } = leaflet
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { setMapFilter } = mobxStore
 
   useEffect(() => {

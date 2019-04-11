@@ -15,7 +15,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updatePopByIdGql from './updatePopById'
 import query from './query'
 import queryPops from './queryPops'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { simpleTypes as popType } from '../../../../mobxStore/NodeFilterTree/pop'
 
@@ -38,7 +38,7 @@ const Pop = ({
   treeName: string,
   showFilter: Boolean,
 }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const client = useApolloClient()
   const { nodeFilter, nodeFilterSetValue, refetch } = mobxStore
   const { activeNodeArray } = mobxStore[treeName]

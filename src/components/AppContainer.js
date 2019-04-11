@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import ErrorBoundary from './shared/ErrorBoundary'
 import Deletions from './Deletions'
 import Fallback from './shared/Fallback'
-import mobxStoreContext from '../mobxStoreContext'
+import storeContext from '../storeContext'
 
 const Container = styled.div`
   height: 100%;
@@ -27,7 +27,7 @@ const Messages = lazy(() => import('./Messages'))
 const Ekf = lazy(() => import('./Ekf'))
 
 const AppContainer = () => {
-  const { setIsPrint, view } = useContext(mobxStoreContext)
+  const { setIsPrint, view } = useContext(storeContext)
   const [showDeletions, setShowDeletions] = useState(false)
 
   useEffect(() => {

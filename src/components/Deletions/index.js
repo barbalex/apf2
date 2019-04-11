@@ -15,7 +15,7 @@ import { useApolloClient } from 'react-apollo-hooks'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import undelete from './undelete'
-import mobxStoreContext from '../../mobxStoreContext'
+import storeContext from '../../storeContext'
 
 const List = styled.div`
   padding-left: 24px;
@@ -60,7 +60,7 @@ const Deletions = ({
 }) => {
   const client = useApolloClient()
   const { addError, removeDeletedDatasetById, deletedDatasets } = useContext(
-    mobxStoreContext,
+    storeContext,
   )
 
   const [choosenDeletions, setChoosenDeletions] = useState([])

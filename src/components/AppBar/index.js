@@ -16,7 +16,7 @@ import More from './More'
 import EkfYear from './EkfYear'
 import User from './User'
 import Daten from './Daten'
-import mobxStoreContext from '../../mobxStoreContext'
+import storeContext from '../../storeContext'
 
 const StyledAppBar = styled(AppBar)`
   @media print {
@@ -55,7 +55,7 @@ const MenuDiv = styled.div`
 `
 
 const MyAppBar = ({ setShowDeletions }: { setShowDeletions: () => void }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const {
     nodeFilterClone1To2,
     user,

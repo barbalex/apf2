@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 
 // create objects outside render
 const insertData = {
@@ -45,7 +45,7 @@ const Tpopfeldkontr = ({
   treeName: string,
   onClick: () => void,
 }) => {
-  const { copying, user, copyingBiotop } = useContext(mobxStoreContext)
+  const { copying, user, copyingBiotop } = useContext(storeContext)
 
   // eslint-disable-next-line no-unused-vars
   const [label, changeLabel] = useState('')

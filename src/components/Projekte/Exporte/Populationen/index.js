@@ -16,7 +16,7 @@ import { useApolloClient } from 'react-apollo-hooks'
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
 import epsg2056to4326 from '../../../../modules/epsg2056to4326'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -63,7 +63,7 @@ const Populationen = () => {
     addError,
     exportApplyMapFilter,
     exportFileType,
-  } = useContext(mobxStoreContext)
+  } = useContext(storeContext)
   const [expanded, setExpanded] = useState(false)
   const [message, setMessage] = useState(null)
 

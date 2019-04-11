@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
 import Overlays from './Overlays'
 import ApfloraLayers from './ApfloraLayers'
 import BaseLayers from './BaseLayers'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 
 const CardContainer = styled.div`
   background-color: white;
@@ -50,7 +50,7 @@ const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
 `
 
 const LayersControl = ({ treeName }: { treeName: string }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { apfloraLayers, overlays } = mobxStore
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
 

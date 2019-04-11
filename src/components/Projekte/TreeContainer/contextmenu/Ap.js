@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 
 // create objects outside render
 const closeLowerNodesData = {
@@ -30,7 +30,7 @@ const Ap = ({
   onClick: () => void,
   treeName: string,
 }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { user, moving } = mobxStore
 
   const isMoving = moving.table && moving.table === 'pop'

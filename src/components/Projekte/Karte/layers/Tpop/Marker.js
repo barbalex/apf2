@@ -4,7 +4,7 @@ import get from 'lodash/get'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
-import mobxStoreContext from '../../../../../mobxStoreContext'
+import storeContext from '../../../../../storeContext'
 import tpopIcon from './tpop.svg'
 import tpopIconHighlighted from './tpopHighlighted.svg'
 import uIcon from './u.svg'
@@ -28,7 +28,7 @@ const StyledTooltip = styled(Tooltip)`
 `
 
 const TpopMarker = ({ treeName, tpop }: { treeName: string, tpop: Object }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
   const {

@@ -16,7 +16,7 @@ import updateApberByIdGql from './updateApberById'
 import query from './query'
 import queryAdresses from './queryAdresses'
 import queryApErfkritWertes from './queryApErfkritWertes'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
 const Container = styled.div`
@@ -40,7 +40,7 @@ const veraenGegenVorjahrWerte = [
 ]
 
 const Apber = ({ treeName }: { treeName: string }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
   const { activeNodeArray, datenWidth } = mobxStore[treeName]

@@ -9,7 +9,7 @@ import { observer } from 'mobx-react-lite'
 import isMobilePhone from '../../../modules/isMobilePhone'
 import logout from '../../../modules/logout'
 import EkfAdresse from './EkfAdresse'
-import mobxStoreContext from '../../../mobxStoreContext'
+import storeContext from '../../../storeContext'
 import idbContext from '../../../idbContext'
 
 const Container = styled.div`
@@ -34,7 +34,7 @@ const MyAppBar = ({
   setShowDeletions: () => void,
   role: string,
 }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { deletedDatasets, user, urlQuery, treeActiveNodes } = mobxStore
   const { idb } = useContext(idbContext)
 

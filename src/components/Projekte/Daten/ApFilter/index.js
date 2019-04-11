@@ -22,7 +22,7 @@ import queryLists from './queryLists'
 import queryAps from './queryAps'
 import queryAdresses from './queryAdresses'
 import queryAeEigenschaftens from './queryAeEigenschaftens'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { simpleTypes as apType } from '../../../../mobxStore/NodeFilterTree/ap'
 
@@ -69,7 +69,7 @@ const LabelPopoverRowColumnRight = styled.div`
 `
 
 const ApFilter = ({ treeName }: { treeName: String }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { nodeFilter, nodeFilterSetValue, refetch } = mobxStore
   const { activeNodeArray } = mobxStore[treeName]
 

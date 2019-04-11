@@ -15,7 +15,7 @@ import { useApolloClient } from 'react-apollo-hooks'
 
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -57,7 +57,7 @@ const DownloadCardButton = styled(Button)`
 
 const Massnahmen = () => {
   const client = useApolloClient()
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const {
     mapFilter,
     exportApplyMapFilter,

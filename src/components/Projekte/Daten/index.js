@@ -6,7 +6,7 @@ import get from 'lodash/get'
 
 import Fallback from '../../shared/Fallback'
 import getTableNameFromActiveNode from '../../../modules/getTableNameFromActiveNode'
-import mobxStoreContext from '../../../mobxStoreContext'
+import storeContext from '../../../storeContext'
 
 const Container = styled.div`
   height: 100%;
@@ -20,7 +20,7 @@ const Container = styled.div`
 `
 
 const Daten = ({ treeName }: { treeName: String }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { activeNodeArray, activeNode } = mobxStore[treeName]
   const activeTable = get(mobxStore, `nodeFilter.${treeName}.activeTable`, '')
 

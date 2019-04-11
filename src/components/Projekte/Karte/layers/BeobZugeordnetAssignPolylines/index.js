@@ -5,11 +5,11 @@ import { useQuery } from 'react-apollo-hooks'
 import { observer } from 'mobx-react-lite'
 
 import Polyline from './Polyline'
-import mobxStoreContext from '../../../../../mobxStoreContext'
+import storeContext from '../../../../../storeContext'
 import query from './query'
 
 const BeobZugeordnetAssignPolylines = ({ treeName }: { treeName: string }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { setRefetchKey, addError, activeApfloraLayers } = mobxStore
   const tree = mobxStore[treeName]
 

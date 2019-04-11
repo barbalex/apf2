@@ -12,7 +12,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
 import queryLists from './queryLists'
 import updatePopberByIdGql from './updatePopberById'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
 const Container = styled.div`
@@ -27,7 +27,7 @@ const FieldsContainer = styled.div`
 `
 
 const Popber = ({ treeName }: { treeName: string }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { refetch } = mobxStore
   const client = useApolloClient()
   const [errors, setErrors] = useState({})

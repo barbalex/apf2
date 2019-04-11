@@ -9,7 +9,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import apQuery from './apByIdJahr'
 import apberQuery from './apberById'
 import ApberForAp from '../ApberForAp'
-import mobxStoreContext from '../../../mobxStoreContext'
+import storeContext from '../../../storeContext'
 
 const LoadingContainer = styled.div`
   padding: 15px;
@@ -58,7 +58,7 @@ const ApberForApFromAp = ({
   apberId: string,
   apId: String,
 }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const activeNodes = mobxStore.treeActiveNodes
   let apberId
   if (apberIdPassed) {

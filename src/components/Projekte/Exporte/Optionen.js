@@ -12,7 +12,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
-import mobxStoreContext from '../../../mobxStoreContext'
+import storeContext from '../../../storeContext'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -55,7 +55,7 @@ const Optionen = () => {
     setExportApplyMapFilter,
     exportApplyMapFilter,
     exportFileType,
-  } = useContext(mobxStoreContext)
+  } = useContext(storeContext)
   const mapFilter = mapFilterRaw.toJSON()
   const [expanded, setExpanded] = useState(true)
 

@@ -6,7 +6,7 @@ import format from 'date-fns/format'
 import isValid from 'date-fns/isValid'
 import { observer } from 'mobx-react-lite'
 
-import mobxStoreContext from '../../../../../mobxStoreContext'
+import storeContext from '../../../../../storeContext'
 import epsg2056to4326 from '../../../../../modules/epsg2056to4326'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 
@@ -15,7 +15,7 @@ const StyledH3 = styled.h3`
 `
 
 const Line = ({ treeName, beob }: { treeName: string, beob: Object }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
   const { idsFiltered } = mobxStore[treeName].map

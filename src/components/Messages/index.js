@@ -12,7 +12,7 @@ import { observer } from 'mobx-react-lite'
 import ErrorBoundary from '../shared/ErrorBoundary'
 import query from './data'
 import createUsermessage from './createUsermessage'
-import mobxStoreContext from '../../mobxStoreContext'
+import storeContext from '../../storeContext'
 import dealWithError from '../../modules/dealWithError'
 
 const StyledDialog = styled(Dialog)`
@@ -52,7 +52,7 @@ const OkButton = styled(Button)`
 
 const UserMessages = ({ open }: { open: Boolean }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { user, updateAvailable } = mobxStore
   const userName = user.name
   const { data, error, loading, refetch } = useQuery(query, {

@@ -10,7 +10,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
 import tables from '../../../modules/tables'
-import mobxStoreContext from '../../../mobxStoreContext'
+import storeContext from '../../../storeContext'
 
 const StyledFormControl = styled(FormControl)`
   padding-right: 0.8em !important;
@@ -31,7 +31,7 @@ const StyledDeleteFilterIcon = styled(DeleteFilterIcon)`
 `
 
 const LabelFilter = ({ treeName }: { treeName: String }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const {
     nodeLabelFilter,
     activeNode,

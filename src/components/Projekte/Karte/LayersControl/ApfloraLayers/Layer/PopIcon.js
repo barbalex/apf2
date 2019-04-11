@@ -6,7 +6,7 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import { observer } from 'mobx-react-lite'
 
-import mobxStoreContext from '../../../../../../mobxStoreContext'
+import storeContext from '../../../../../../storeContext'
 
 const MapIcon = styled(LocalFloristIcon)`
   margin-right: -0.1em;
@@ -33,7 +33,7 @@ const StyledMenuItem = styled(MenuItem)`
 `
 
 const PopIcon = ({ treeName }: { treeName: string }) => {
-  const store = useContext(mobxStoreContext)
+  const store = useContext(storeContext)
   const { map } = store[treeName]
   const { setPopIcon, setPopLabel } = map
   const [anchorEl, setAnchorEl] = useState(null)

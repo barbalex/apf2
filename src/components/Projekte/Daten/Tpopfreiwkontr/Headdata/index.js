@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { useQuery, useApolloClient } from 'react-apollo-hooks'
 
 import Select from '../../../../shared/Select'
-import mobxStoreContext from '../../../../../mobxStoreContext'
+import storeContext from '../../../../../storeContext'
 import queryAdresses from './queryAdresses'
 import updateTpopkontrByIdGql from '../updateTpopkontrById'
 
@@ -87,7 +87,7 @@ const Headdata = ({
   treeName: String,
 }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { nodeFilterSetValue, user } = mobxStore
   const { data, loading, error } = useQuery(queryAdresses)
   const [errors, setErrors] = useState(null)

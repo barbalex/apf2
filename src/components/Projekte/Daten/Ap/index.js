@@ -17,7 +17,7 @@ import query from './query'
 import queryLists from './queryLists'
 import queryAdresses from './queryAdresses'
 import queryAeEigenschaftens from './queryAeEigenschaftens'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
 const Container = styled.div`
@@ -69,7 +69,7 @@ const Ap = ({
   showFilter: Boolean,
 }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { user, refetch } = mobxStore
   const { activeNodeArray } = mobxStore[treeName]
 

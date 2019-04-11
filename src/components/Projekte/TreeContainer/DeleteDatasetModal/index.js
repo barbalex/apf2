@@ -10,7 +10,7 @@ import { useApolloClient } from 'react-apollo-hooks'
 import tables from '../../../../modules/tables'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import deleteDataset from './delete'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 
 const StyledDialog = styled(Dialog)`
   > div > div {
@@ -20,7 +20,7 @@ const StyledDialog = styled(Dialog)`
 
 const DatasetDeleteModal = () => {
   const client = useApolloClient()
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { toDeleteTable, toDeleteLabel, emptyToDelete, toDeleteId } = mobxStore
 
   const table = tables.find(t => t.table === toDeleteTable)

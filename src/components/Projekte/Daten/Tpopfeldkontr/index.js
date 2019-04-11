@@ -26,7 +26,7 @@ import queryAdresses from './queryAdresses'
 import queryTpopkontrs from './queryTpopkontrs'
 import updateTpopkontrByIdGql from './updateTpopkontrById'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { simpleTypes as tpopfeldkontrType } from '../../../../mobxStore/NodeFilterTree/tpopfeldkontr'
 
@@ -85,7 +85,7 @@ const Tpopfeldkontr = ({
   showFilter: Boolean,
 }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const {
     nodeFilter,
     nodeFilterSetValue,

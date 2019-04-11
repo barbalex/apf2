@@ -18,7 +18,7 @@ import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
 import isNodeOpen from '../isNodeOpen'
 import toggleNode from '../toggleNode'
 import toggleNodeSymbol from '../toggleNodeSymbol'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 
 const singleRowHeight = 23
 const StyledNode = styled.div`
@@ -190,7 +190,7 @@ const Row = ({
   node: Array<Object>,
   treeName: String,
 }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const {
     activeApfloraLayers,
     copying,

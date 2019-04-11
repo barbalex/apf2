@@ -6,7 +6,7 @@ import isValid from 'date-fns/isValid'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
-import mobxStoreContext from '../../../../../mobxStoreContext'
+import storeContext from '../../../../../storeContext'
 import beobIcon from './beob.svg'
 import beobIconHighlighted from './beobHighlighted.svg'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
@@ -23,7 +23,7 @@ const BeobNichtZuzuordnenMarker = ({
   treeName: string,
   beob: Object,
 }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const activeNodes = mobxStore[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
   const { idsFiltered } = mobxStore[treeName].map

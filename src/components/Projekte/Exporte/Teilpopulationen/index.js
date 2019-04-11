@@ -18,7 +18,7 @@ import exportModule from '../../../../modules/export'
 import Message from '../Message'
 import queryAeEigenschaftens from './queryAeEigenschaftens'
 import epsg2056to4326 from '../../../../modules/epsg2056to4326'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -75,7 +75,7 @@ const isRemoteHost = window.location.hostname !== 'localhost'
 
 const Teilpopulationen = ({ treeName }: { treeName: string }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
 
   const {
     mapFilter,

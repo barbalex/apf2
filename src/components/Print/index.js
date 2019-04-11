@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import Fallback from '../shared/Fallback'
-import mobxStoreContext from '../../mobxStoreContext'
+import storeContext from '../../storeContext'
 
 const Container = styled.div`
   background-color: #eee;
@@ -44,7 +44,7 @@ const ApberForApFromAp = lazy(() => import('./ApberForApFromAp'))
 const ApberForYear = lazy(() => import('./ApberForYear'))
 
 const Print = () => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { historyGoBack, tree } = mobxStore
   const { activeNodeArray } = tree
   const showApberForAp =

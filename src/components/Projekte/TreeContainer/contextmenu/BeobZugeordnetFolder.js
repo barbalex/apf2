@@ -3,7 +3,7 @@ import React, { useContext, useState, useCallback } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 
 // create objects outside render
 const showBeobOnMapData = {
@@ -19,7 +19,7 @@ const BeobZugeordnetFolder = ({
   treeName: string,
   onClick: () => void,
 }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { activeApfloraLayers } = mobxStore
 
   // eslint-disable-next-line no-unused-vars

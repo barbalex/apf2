@@ -21,7 +21,7 @@ import queryLists from './queryLists'
 import queryTpops from './queryTpops'
 import updateTpopByIdGql from './updateTpopById'
 import getGemeindeForKoord from '../../../../modules/getGemeindeForKoord'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { simpleTypes as tpopType } from '../../../../mobxStore/NodeFilterTree/tpop'
 
@@ -52,7 +52,7 @@ const Tpop = ({
   showFilter: Boolean,
 }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { addError, nodeFilter, nodeFilterSetValue, refetch } = mobxStore
 
   const [errors, setErrors] = useState({})

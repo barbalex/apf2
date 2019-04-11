@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 
 import isMobilePhone from '../../modules/isMobilePhone'
 import setUrlQueryValue from '../../modules/setUrlQueryValue'
-import mobxStoreContext from '../../mobxStoreContext'
+import storeContext from '../../storeContext'
 
 const StyledButton = styled(Button)`
   color: white !important;
@@ -38,7 +38,7 @@ const MyAppBarDaten = ({ treeNr = '' }: { treeNr: string }) => {
     urlQuery,
     setUrlQuery,
     cloneTree2From1,
-  } = useContext(mobxStoreContext)
+  } = useContext(storeContext)
 
   const { projekteTabs } = urlQuery
   const isDaten = projekteTabs.includes(`daten${treeNr}`)

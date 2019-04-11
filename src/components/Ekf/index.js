@@ -13,7 +13,7 @@ import { observer } from 'mobx-react-lite'
 // but only in production!
 import EkfList from './ListContainer'
 import Tpopfreiwkontr from '../Projekte/Daten/Tpopfreiwkontr'
-import mobxStoreContext from '../../mobxStoreContext'
+import storeContext from '../../storeContext'
 
 const Container = styled.div`
   display: flex;
@@ -69,7 +69,7 @@ const standardWidth = 500
 const standardHeight = 800
 
 const Ekf = () => {
-  const { user, isPrint, tree } = useContext(mobxStoreContext)
+  const { user, isPrint, tree } = useContext(storeContext)
   const { token } = user
   const tokenDecoded = token ? jwtDecode(token) : null
   const role = tokenDecoded ? tokenDecoded.role : null

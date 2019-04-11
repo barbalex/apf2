@@ -13,7 +13,7 @@ import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
 import Checkbox from './shared/Checkbox'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 
 const CardContent = styled.div`
   color: rgb(48, 48, 48);
@@ -138,7 +138,7 @@ const Overlays = () => {
     setOverlays,
     activeOverlays,
     setActiveOverlays,
-  } = useContext(mobxStoreContext)
+  } = useContext(storeContext)
 
   const onSortEnd = useCallback(
     ({ oldIndex, newIndex }) =>

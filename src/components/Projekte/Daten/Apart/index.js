@@ -11,7 +11,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updateApartByIdGql from './updateApartById'
 import query from './query'
 import queryAeEigenschaftens from './queryAeEigenschaftens'
-import mobxStoreContext from '../../../../mobxStoreContext'
+import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
 const Container = styled.div`
@@ -26,7 +26,7 @@ const FieldsContainer = styled.div`
 `
 
 const ApArt = ({ treeName }: { treeName: string }) => {
-  const mobxStore = useContext(mobxStoreContext)
+  const mobxStore = useContext(storeContext)
   const { refetch } = mobxStore
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
