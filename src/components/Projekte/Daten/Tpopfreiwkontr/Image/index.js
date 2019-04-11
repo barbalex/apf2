@@ -1,4 +1,3 @@
-// @flow
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
@@ -43,15 +42,7 @@ const fetchImageIfNeeded = async ({ image, setImage, apId }) => {
   }
 }
 
-const Image = ({
-  row,
-  artname,
-  apId,
-}: {
-  row: Object,
-  artname: string,
-  apId: string,
-}) => {
+const Image = ({ row, artname, apId }) => {
   const [image, setImage] = useState(null)
   useEffect(() => {
     fetchImageIfNeeded({ apId, image, setImage })

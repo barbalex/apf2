@@ -1,14 +1,7 @@
-// @flow
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 
-export default ({
-  data,
-  berichtjahr,
-}: {
-  data: Object,
-  berichtjahr: Number,
-}) => {
+export default ({ data, berichtjahr }) => {
   const projId = get(data, 'zielOhneTyp.id')
   const apId = get(data, 'zielOhneTyp.apsByProjId.nodes[0].id')
 

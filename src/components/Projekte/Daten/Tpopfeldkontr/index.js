@@ -1,9 +1,7 @@
-// @flow
 import React, { useState, useCallback, useEffect, useContext } from 'react'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
@@ -75,15 +73,7 @@ const tpopkontrTypWerte = [
   },
 ]
 
-const enhance = compose(observer)
-
-const Tpopfeldkontr = ({
-  treeName,
-  showFilter = false,
-}: {
-  treeName: string,
-  showFilter: Boolean,
-}) => {
+const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const {
@@ -730,4 +720,4 @@ const Tpopfeldkontr = ({
   )
 }
 
-export default enhance(Tpopfeldkontr)
+export default observer(Tpopfeldkontr)

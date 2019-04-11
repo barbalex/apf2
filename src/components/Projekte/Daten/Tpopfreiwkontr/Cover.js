@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
@@ -79,15 +78,7 @@ const Img = styled.img`
   max-width: inherit;
 `
 
-const Date = ({
-  saveToDb,
-  row,
-  errors,
-}: {
-  saveToDb: () => void,
-  row: Object,
-  errors: Object,
-}) => (
+const Date = ({ saveToDb, row, errors }) => (
   <Container>
     <DeckApArtLabel>Deckung überprüfte Art</DeckApArtLabel>
     <DeckApArtVal>

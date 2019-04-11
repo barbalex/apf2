@@ -1,4 +1,3 @@
-// @flow
 import React, { useState, useCallback, useEffect, useContext } from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'

@@ -1,4 +1,3 @@
-// @flow
 import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import sortBy from 'lodash/sortBy'
@@ -101,7 +100,7 @@ const nichtZuordnenPopover = (
   </Container>
 )
 
-const getTpopZuordnenSource = (row: Object, apId: string) => {
+const getTpopZuordnenSource = (row, apId) => {
   // get all popIds of active ap
   const apArt = get(row, 'aeEigenschaftenByArtId.apartsByArtId.nodes[0]', [])
   if (!apArt) return []
@@ -137,13 +136,7 @@ const getTpopZuordnenSource = (row: Object, apId: string) => {
   }))
 }
 
-const Beobzuordnung = ({
-  type,
-  treeName,
-}: {
-  type: string,
-  treeName: string,
-}) => {
+const Beobzuordnung = ({ type, treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const tree = store[treeName]

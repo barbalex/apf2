@@ -1,4 +1,3 @@
-// @flow
 /**
  * This file delivers padding-bottom for images
  * according to https://www.voorhoede.nl/en/blog/say-no-to-image-reflow

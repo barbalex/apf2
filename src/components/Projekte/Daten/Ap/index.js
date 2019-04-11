@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext, useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
@@ -61,13 +60,7 @@ const LabelPopoverRowColumnRight = styled.div`
   padding-left: 5px;
 `
 
-const Ap = ({
-  treeName,
-  showFilter = false,
-}: {
-  treeName: String,
-  showFilter: Boolean,
-}) => {
+const Ap = ({ treeName, showFilter = false }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { user, refetch } = store

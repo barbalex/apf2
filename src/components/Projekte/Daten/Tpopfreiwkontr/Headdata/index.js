@@ -1,4 +1,3 @@
-// @flow
 import React, { useState, useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
@@ -73,19 +72,7 @@ const StatusLabel = styled(Label)`
   grid-area: statusVal;
 `
 
-const Headdata = ({
-  pop,
-  tpop,
-  row,
-  showFilter,
-  treeName,
-}: {
-  pop: Object,
-  tpop: Object,
-  row: Object,
-  showFilter: Boolean,
-  treeName: String,
-}) => {
+const Headdata = ({ pop, tpop, row, showFilter, treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { nodeFilterSetValue, user } = store

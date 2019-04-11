@@ -1,4 +1,3 @@
-// @flow
 import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
@@ -44,13 +43,7 @@ const FieldsContainer = styled.div`
   }
 `
 
-const Tpop = ({
-  treeName,
-  showFilter = false,
-}: {
-  treeName: string,
-  showFilter: Boolean,
-}) => {
+const Tpop = ({ treeName, showFilter = false }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { addError, nodeFilter, nodeFilterSetValue, refetch } = store

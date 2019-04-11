@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
@@ -27,7 +26,7 @@ const BesttimeVal = styled.div`
   grid-area: besttimeVal;
 `
 
-const Besttime = ({ row }: { row: Object }) => (
+const Besttime = ({ row }) => (
   <Container>
     <BesttimeLabel>bester Beobachtungs-Zeitpunkt</BesttimeLabel>
     <BesttimeVal>

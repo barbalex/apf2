@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext, useState, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
@@ -167,17 +166,6 @@ const Count = ({
   einheitsUsed = [],
   ekfzaehleinheits = [],
   treeName,
-}: {
-  id: String,
-  tpopkontrId: String,
-  nr: Number,
-  updateTpopkontr: () => void,
-  showEmpty: Boolean,
-  showNew: Boolean,
-  refetch: () => void,
-  einheitsUsed: Array<Number>,
-  ekfzaehleinheits: Array<Object>,
-  treeName: string,
 }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()

@@ -1,4 +1,3 @@
-//@flow
 import isFinite from 'lodash/isFinite'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
