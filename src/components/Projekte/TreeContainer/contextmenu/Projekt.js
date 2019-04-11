@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 
@@ -10,13 +9,7 @@ const closeLowerNodesData = {
 }
 
 // TODO: add MenuItem for admins to add new projekt
-const Projekt = ({
-  onClick,
-  treeName,
-}: {
-  onClick: () => void,
-  treeName: string,
-}) => (
+const Projekt = ({ onClick, treeName }) => (
   <ErrorBoundary>
     <ContextMenu id={`${treeName}projekt`}>
       <div className="react-contextmenu-title">Projekt</div>

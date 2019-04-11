@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { observer } from 'mobx-react-lite'
@@ -16,13 +15,7 @@ const insertData = {
   table: 'user',
 }
 
-const Apfolder = ({
-  onClick,
-  treeName,
-}: {
-  onClick: () => void,
-  treeName: string,
-}) => {
+const Apfolder = ({ onClick, treeName }) => {
   const { user } = useContext(storeContext)
 
   return (

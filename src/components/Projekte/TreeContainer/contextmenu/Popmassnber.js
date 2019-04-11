@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext, useState, useCallback } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { observer } from 'mobx-react-lite'
@@ -17,13 +16,7 @@ const deleteData = {
   table: 'popmassnber',
 }
 
-const Popmassnber = ({
-  treeName,
-  onClick,
-}: {
-  treeName: string,
-  onClick: () => void,
-}) => {
+const Popmassnber = ({ treeName, onClick }) => {
   const { user } = useContext(storeContext)
   // eslint-disable-next-line no-unused-vars
   const [label, changeLabel] = useState('')

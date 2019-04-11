@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
 import { ContextMenuTrigger } from 'react-contextmenu'
@@ -179,17 +178,7 @@ const PrintIconContainer = styled.div`
   }
 `
 
-const Row = ({
-  index,
-  style,
-  node,
-  treeName,
-}: {
-  index: Number,
-  style: Object,
-  node: Array<Object>,
-  treeName: String,
-}) => {
+const Row = ({ index, style, node, treeName }) => {
   const store = useContext(storeContext)
   const {
     activeApfloraLayers,

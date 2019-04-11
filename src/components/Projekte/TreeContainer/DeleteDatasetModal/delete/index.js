@@ -1,4 +1,3 @@
-// @flow
 import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
 import upperFirst from 'lodash/upperFirst'
@@ -11,13 +10,7 @@ import tables from '../../../../../modules/tables'
 const isFreiwilligenKontrolle = activeNodeArray =>
   activeNodeArray[activeNodeArray.length - 2] === 'Freiwilligen-Kontrollen'
 
-export default async ({
-  client,
-  store,
-}: {
-  client: Object,
-  store: Object,
-}): Promise<void> => {
+export default async ({ client, store }) => {
   const {
     emptyToDelete,
     addDeletedDataset,

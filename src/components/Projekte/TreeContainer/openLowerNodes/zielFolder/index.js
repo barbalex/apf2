@@ -1,4 +1,3 @@
-//@flow
 /**
  * 1. load all data
  * 2. add activeNodeArrays for all data to openNodes
@@ -10,17 +9,7 @@ import groupBy from 'lodash/groupBy'
 
 import dataGql from './data'
 
-export default async ({
-  treeName,
-  id,
-  client,
-  store,
-}: {
-  treeName: Object,
-  id: String,
-  client: Object,
-  store: Object,
-}) => {
+export default async ({ treeName, id, client, store }) => {
   const tree = store[treeName]
   const activeNodes = store[`${treeName}ActiveNodes`]
   const { refetch } = store

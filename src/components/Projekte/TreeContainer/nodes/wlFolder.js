@@ -1,10 +1,4 @@
-// @flow
-
-export default ({
-  projektNodes,
-}: {
-  projektNodes: Array<Object>,
-}): Array<Object> => {
+export default ({ projektNodes }) => {
   // fetch sorting indexes of parents
   const wlIndex = projektNodes.length + 2
 

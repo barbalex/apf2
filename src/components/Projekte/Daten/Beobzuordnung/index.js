@@ -101,7 +101,7 @@ const nichtZuordnenPopover = (
   </Container>
 )
 
-const getTpopZuordnenSource = (row: Object, apId: string): Array<Object> => {
+const getTpopZuordnenSource = (row: Object, apId: string) => {
   // get all popIds of active ap
   const apArt = get(row, 'aeEigenschaftenByArtId.apartsByArtId.nodes[0]', [])
   if (!apArt) return []

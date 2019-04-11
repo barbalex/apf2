@@ -1,4 +1,3 @@
-// @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
@@ -13,17 +12,7 @@ export default ({
   projId,
   apId,
   store,
-}: {
-  nodes: Array<Object>,
-  data: Object,
-  treeName: String,
-  projektNodes: Array<Object>,
-  apNodes: Array<Object>,
-  openNodes: Array<String>,
-  projId: String,
-  apId: String,
-  store: Object,
-}): Array<Object> => {
+}) => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,

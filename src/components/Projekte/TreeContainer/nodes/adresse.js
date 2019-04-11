@@ -1,4 +1,3 @@
-// @flow
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
@@ -8,13 +7,7 @@ export default ({
   treeName,
   projektNodes,
   store,
-}: {
-  nodes: Array<Object>,
-  data: Object,
-  treeName: String,
-  projektNodes: Array<Object>,
-  store: Object,
-}): Array<Object> => {
+}) => {
   const adresses = get(data, 'allAdresses.nodes', [])
   const wlIndex = projektNodes.length + 2
   const nodes = memoizeOne(() =>

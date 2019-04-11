@@ -1,4 +1,3 @@
-//@flow
 /**
  * 1. load all data
  * 2. add activeNodeArrays for all data to openNodes
@@ -15,12 +14,6 @@ export default async ({
   parentId: apId,
   client,
   store,
-}: {
-  treeName: string,
-  id: String,
-  parentId: String,
-  client: Object,
-  store: Object,
 }) => {
   const tree = store[treeName]
   const activeNodes = store[`${treeName}ActiveNodes`]

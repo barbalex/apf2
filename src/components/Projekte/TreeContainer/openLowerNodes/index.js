@@ -1,4 +1,3 @@
-// @flow
 import tpopfreiwkontrFolder from './tpopfreiwkontrFolder'
 import tpopfeldkontrFolder from './tpopfeldkontrFolder'
 import tpop from './tpop'
@@ -8,21 +7,7 @@ import popFolder from './popFolder'
 import zielFolder from './zielFolder'
 import zieljahrFolder from './zieljahrFolder'
 
-export default ({
-  treeName,
-  id,
-  parentId,
-  menuType,
-  client,
-  store,
-}: {
-  treeName: string,
-  id: String | Number,
-  parentId: String | Number,
-  menuType: String,
-  client: Object,
-  store: Object,
-}) => {
+export default ({ treeName, id, parentId, menuType, client, store }) => {
   /**
    * 1. load all data
    * 2. build openNodes for all data using setOpenNodesFromActiveNodeArray

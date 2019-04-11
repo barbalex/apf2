@@ -1,15 +1,7 @@
-//@flow
 import isEqual from 'lodash/isEqual'
 import { getSnapshot } from 'mobx-state-tree'
 
-export default async ({
-  treeName,
-  url,
-  store,
-}: {
-  treeName: string,
-  url: Array<String>,
-}) => {
+export default async ({ treeName, url, store }) => {
   const { setOpenNodes, setActiveNodeArray } = store[treeName]
   const openNodes = getSnapshot(store[treeName].openNodes)
   const activeNodeArray = getSnapshot(store[treeName].activeNodeArray)

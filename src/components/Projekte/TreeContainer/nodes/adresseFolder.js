@@ -1,4 +1,3 @@
-// @flow
 import get from 'lodash/get'
 
 export default ({
@@ -8,14 +7,7 @@ export default ({
   loading,
   projektNodes,
   store,
-}: {
-  nodes: Array<Object>,
-  data: Object,
-  treeName: String,
-  loading: Boolean,
-  projektNodes: Array<Object>,
-  store: Object,
-}): Array<Object> => {
+}) => {
   const adresses = get(data, 'allAdresses.nodes', [])
   const wlIndex = projektNodes.length + 2
   const nodeLabelFilterString =

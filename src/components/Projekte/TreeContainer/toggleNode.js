@@ -1,16 +1,7 @@
-// @flow
 import isNodeOpen from './isNodeOpen'
 import openNode from './openNode'
 
-export default ({
-  treeName,
-  node,
-  store,
-}: {
-  treeName: string,
-  node: Object,
-  store: Object,
-}): any => {
+export default ({ treeName, node, store }) => {
   if (!node.url) throw new Error('passed node has no url')
   const { nodeFilterSetActiveTable, nodeFilter } = store
   const { openNodes, setActiveNodeArray } = store[treeName]

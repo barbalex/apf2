@@ -1,4 +1,3 @@
-// @flow
 import findIndex from 'lodash/findIndex'
 
 export default ({
@@ -7,13 +6,7 @@ export default ({
   projId,
   apNodes,
   apId,
-}: {
-  nodes: Array<Object>,
-  projektNodes: Array<Object>,
-  projId: String,
-  apNodes: Array<Object>,
-  apId: String,
-}): Array<Object> => {
+}) => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,

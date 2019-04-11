@@ -1,4 +1,3 @@
-// @flow
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import memoizeOne from 'memoize-one'
@@ -9,13 +8,7 @@ export default ({
   treeName,
   projektNodes,
   store,
-}: {
-  nodes: Array<Object>,
-  data: Object,
-  treeName: String,
-  projektNodes: Array<Object>,
-  store: Object,
-}): Array<Object> => {
+}) => {
   const currentIssues = get(data, 'allCurrentissues.nodes', [])
 
   // fetch sorting indexes of parents

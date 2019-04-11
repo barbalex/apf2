@@ -6,7 +6,7 @@ import sortBy from 'lodash/sortBy'
 
 import isPointInsidePolygon from './isPointInsidePolygon'
 
-export default ({ data, ktZh }): Array<Object> => {
+export default ({ data, ktZh }) => {
   if (!ktZh) return null
   const projId = get(data, 'projektById.id')
   const apId = get(data, 'projektById.apsByProjId.nodes[0].id')

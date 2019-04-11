@@ -1,10 +1,6 @@
-// @flow
 import isNodeOpen from './isNodeOpen'
 
-export default (
-  openNodes: Array<Array<String>>,
-  urlPassed: Array<String>,
-): Boolean => {
+export default (openNodes, urlPassed) => {
   let parentNodes = []
   const url = [...urlPassed]
   for (let i = 1; i < url.length; i++) {

@@ -1,4 +1,3 @@
-// @flow
 import React, { useCallback, useContext, useState, useEffect } from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
@@ -30,7 +29,7 @@ const StyledDeleteFilterIcon = styled(DeleteFilterIcon)`
   color: rgba(0, 0, 0, 0.7);
 `
 
-const LabelFilter = ({ treeName }: { treeName: String }) => {
+const LabelFilter = ({ treeName }) => {
   const store = useContext(storeContext)
   const {
     nodeLabelFilter,

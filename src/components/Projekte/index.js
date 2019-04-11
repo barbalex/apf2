@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext } from 'react'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'

@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 
@@ -9,13 +8,7 @@ const closeLowerNodesData = {
   action: 'closeLowerNodes',
 }
 
-const WerteListen = ({
-  onClick,
-  treeName,
-}: {
-  onClick: () => void,
-  treeName: string,
-}) => (
+const WerteListen = ({ onClick, treeName }) => (
   <ErrorBoundary>
     <ContextMenu id={`${treeName}wlFolder`}>
       <div className="react-contextmenu-title">WerteListen</div>

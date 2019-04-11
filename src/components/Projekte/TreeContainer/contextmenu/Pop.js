@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext, useState, useCallback } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { observer } from 'mobx-react-lite'
@@ -44,13 +43,7 @@ const resetCopyingData = {
   action: 'resetCopying',
 }
 
-const Pop = ({
-  onClick,
-  treeName,
-}: {
-  onClick: () => void,
-  treeName: string,
-}) => {
+const Pop = ({ onClick, treeName }) => {
   const { copying, user, moving } = useContext(storeContext)
 
   // eslint-disable-next-line no-unused-vars

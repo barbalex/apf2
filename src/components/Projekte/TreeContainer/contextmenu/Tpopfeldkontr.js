@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext, useCallback, useState } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { observer } from 'mobx-react-lite'
@@ -38,13 +37,7 @@ const resetCopyingBiotopData = {
   action: 'resetCopyingBiotop',
 }
 
-const Tpopfeldkontr = ({
-  treeName,
-  onClick,
-}: {
-  treeName: string,
-  onClick: () => void,
-}) => {
+const Tpopfeldkontr = ({ treeName, onClick }) => {
   const { copying, user, copyingBiotop } = useContext(storeContext)
 
   // eslint-disable-next-line no-unused-vars

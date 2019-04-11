@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { observer } from 'mobx-react-lite'
@@ -17,13 +16,7 @@ const deleteData = {
   table: 'user',
 }
 
-const User = ({
-  onClick,
-  treeName,
-}: {
-  onClick: () => void,
-  treeName: string,
-}) => {
+const User = ({ onClick, treeName }) => {
   const { user } = useContext(storeContext)
 
   const mayWrite = !userIsReadOnly(user.token)

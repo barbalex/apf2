@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext, useState, useCallback } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 
@@ -12,13 +11,7 @@ const showBeobOnMapData = {
   idTable: 'ap',
 }
 
-const BeobZugeordnetFolder = ({
-  treeName,
-  onClick,
-}: {
-  treeName: string,
-  onClick: () => void,
-}) => {
+const BeobZugeordnetFolder = ({ treeName, onClick }) => {
   const store = useContext(storeContext)
   const { activeApfloraLayers } = store
 

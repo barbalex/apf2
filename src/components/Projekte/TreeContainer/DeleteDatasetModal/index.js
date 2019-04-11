@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext, useCallback } from 'react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'

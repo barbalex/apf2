@@ -1,17 +1,8 @@
-// @flow
 import isEqual from 'lodash/isEqual'
 
 import isNodeOpen from './isNodeOpen'
 
-export default ({
-  treeName,
-  node,
-  store,
-}: {
-  treeName: string,
-  node: Object,
-  store: Object,
-}): any => {
+export default ({ treeName, node, store }) => {
   if (!node.url) throw new Error('passed node has no url')
   const { openNodes, setOpenNodes } = store[treeName]
 

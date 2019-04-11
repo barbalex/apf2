@@ -1,4 +1,3 @@
-// @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import union from 'lodash/union'
@@ -14,17 +13,7 @@ export default ({
   apNodes,
   apId,
   store,
-}: {
-  nodes: Array<Object>,
-  data: Object,
-  treeName: String,
-  loading: Boolean,
-  projektNodes: Array<Object>,
-  projId: String,
-  apNodes: Array<Object>,
-  apId: String,
-  store: Object,
-}): Array<Object> => {
+}) => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,

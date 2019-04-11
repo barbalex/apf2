@@ -1,4 +1,3 @@
-// @flow
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
@@ -8,13 +7,7 @@ export default ({
   treeName,
   projektNodes,
   store,
-}: {
-  nodes: Array<Object>,
-  data: Object,
-  treeName: String,
-  projektNodes: Array<Object>,
-  store: Object,
-}): Array<Object> => {
+}) => {
   // fetch sorting indexes of parents
   const userIndex = projektNodes.length + 1
 

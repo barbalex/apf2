@@ -1,4 +1,3 @@
-// @flow
 import gql from 'graphql-tag'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
@@ -19,16 +18,7 @@ export default async ({
   url,
   client,
   store,
-}: {
-  treeName: string,
-  tablePassed: String,
-  parentId: String,
-  id: String,
-  menuType: String,
-  url: Array<String>,
-  client: Object,
-  store: Object,
-}): any => {
+}) => {
   const { addError, refetch } = store
   const { setActiveNodeArray, openNodes, setOpenNodes } = store[treeName]
   let table = tablePassed

@@ -1,4 +1,3 @@
-// @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
@@ -14,18 +13,7 @@ export default ({
   apId,
   nodeFilter,
   store,
-}: {
-  nodes: Array<Object>,
-  data: Object,
-  treeName: String,
-  loading: Boolean,
-  projektNodes: Array<Object>,
-  projId: String,
-  apNodes: Array<Object>,
-  apId: String,
-  nodeFilter: Object,
-  store: Object,
-}): Array<Object> => {
+}) => {
   const pops = get(data, 'allPops.nodes', [])
 
   // fetch sorting indexes of parents

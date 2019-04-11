@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext, useState, useCallback } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { observer } from 'mobx-react-lite'
@@ -8,30 +7,22 @@ import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import storeContext from '../../../../storeContext'
 
 // create objects outside render
+const insertData = {
+  action: 'insert',
+  table: 'ber',
+}
+const deleteData = {
+  action: 'delete',
+  table: 'ber',
+}
 
-const BerFolder = ({
-  treeName,
-  onClick,
-}: {
-  treeName: string,
-  onClick: () => void,
-}) => {
+const BerFolder = ({ treeName, onClick }) => {
   const { user } = useContext(storeContext)
 
   // eslint-disable-next-line no-unused-vars
   const [label, changeLabel] = useState('')
 
   const onShow = useCallback(event => changeLabel(event.detail.data.nodeLabel))
-
-  // create objects outside render
-  const insertData = {
-    action: 'insert',
-    table: 'ber',
-  }
-  const deleteData = {
-    action: 'delete',
-    table: 'ber',
-  }
 
   return (
     <ErrorBoundary>

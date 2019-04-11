@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext, useEffect } from 'react'
 import Button from '@material-ui/core/Button'
 import { FixedSizeList as List } from 'react-window'
@@ -67,11 +66,7 @@ const LogoutButton = styled(Button)`
   margin-top: 10px !important;
 `
 
-type Props = {
-  treeName: String,
-}
-
-const Tree = ({ treeName }: Props) => {
+const Tree = ({ treeName }) => {
   const store = useContext(storeContext)
   const tree = store[treeName]
   const {

@@ -1,4 +1,3 @@
-// @flow
 import uniq from 'lodash/uniq'
 
 import { simpleTypes as apType } from '../../../../store/NodeFilterTree/ap'
@@ -8,13 +7,7 @@ import { simpleTypes as tpopmassnType } from '../../../../store/NodeFilterTree/t
 import { simpleTypes as tpopfeldkontrType } from '../../../../store/NodeFilterTree/tpopfeldkontr'
 import { simpleTypes as tpopfreiwkontrType } from '../../../../store/NodeFilterTree/tpopfreiwkontr'
 
-export default ({
-  treeName,
-  store,
-}: {
-  treeName: String,
-  store: Object,
-}): Object => {
+export default ({ treeName, store }) => {
   const { nodeFilter: nodeFilterPassed } = store
   // apFilter is used for form filter AND apFilter of tree :-(
   const { openNodes, activeNodeArray, apFilter: apFilterSet } = store[treeName]

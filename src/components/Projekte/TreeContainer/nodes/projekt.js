@@ -1,18 +1,7 @@
-// @flow
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
-export default ({
-  nodes: nodesPassed,
-  data,
-  treeName,
-  store,
-}: {
-  nodes: Array<Object>,
-  data: Object,
-  treeName: String,
-  store: Object,
-}): Array<Object> => {
+export default ({ nodes: nodesPassed, data, treeName, store }) => {
   const projekts = get(data, 'allProjekts.nodes', [])
 
   // map through all elements and create array of nodes

@@ -1,4 +1,3 @@
-// @flow
 /**
  * need to keep class because of ref
  */
@@ -152,7 +151,7 @@ const getAndValidateCoordinatesOfBeob = async ({ id, addError, client }) => {
   return { x, y }
 }
 
-const TreeContainer = ({ treeName }: { treeName: String }) => {
+const TreeContainer = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const {

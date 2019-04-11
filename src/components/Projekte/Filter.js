@@ -35,7 +35,7 @@ const Title = styled.div`
   font-weight: bold;
 `
 
-export default ({ treeName }: { treeName: String }) => {
+export default ({ treeName }) => {
   const [activeTab, setActiveTab] = useState('ap')
 
   const onChangeTab = useCallback((event, value) => setActiveTab(value))

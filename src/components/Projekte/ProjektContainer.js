@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext, useRef, useCallback, useEffect } from 'react'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
@@ -66,15 +65,7 @@ const InnerContainer = styled.div`
 const standardWidth = 500
 const standardHeight = 800
 
-const ProjektContainer = ({
-  treeName,
-  tabs: tabsPassed,
-  projekteTabs,
-}: {
-  treeName: String,
-  tabs: Array<String>,
-  projekteTabs: Array<String>,
-}) => {
+const ProjektContainer = ({ treeName, tabs: tabsPassed, projekteTabs }) => {
   const store = useContext(storeContext)
   const { isPrint } = store
   const { setTreeWidth, setTreeHeight, setDatenWidth, setFilterWidth } = store[

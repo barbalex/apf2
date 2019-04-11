@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { observer } from 'mobx-react-lite'
@@ -55,13 +54,7 @@ const showCoordOfTpopOnMapGeoAdminChData = {
   action: 'showCoordOfTpopOnMapGeoAdminCh',
 }
 
-const Tpop = ({
-  onClick,
-  treeName,
-}: {
-  onClick: () => void,
-  treeName: string,
-}) => {
+const Tpop = ({ onClick, treeName }) => {
   const { copying, user, moving } = useContext(storeContext)
 
   const isMoving =

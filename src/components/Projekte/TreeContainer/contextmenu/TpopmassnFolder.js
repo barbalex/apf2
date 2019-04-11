@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { observer } from 'mobx-react-lite'
@@ -22,13 +21,7 @@ const resetCopyingData = {
   action: 'resetCopying',
 }
 
-const TpopmassnFolder = ({
-  treeName,
-  onClick,
-}: {
-  treeName: string,
-  onClick: () => void,
-}) => {
+const TpopmassnFolder = ({ treeName, onClick }) => {
   const { copying, user, moving } = useContext(storeContext)
 
   const isMoving = moving.table && moving.table === 'tpopmassn'

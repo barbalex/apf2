@@ -14,19 +14,7 @@ export default ({
   apId,
   popId,
   store,
-}: {
-  nodes: Array<Object>,
-  data: Object,
-  treeName: String,
-  loading: Boolean,
-  projektNodes: Array<Object>,
-  apNodes: Array<Object>,
-  popNodes: Array<Object>,
-  projId: String,
-  apId: String,
-  popId: String,
-  store: Object,
-}): Array<Object> => {
+}) => {
   // return empty if ap is not a real ap and apFilter is set
   const ap = get(data, 'allAps.nodes', []).find(n => n.id === apId)
   const isAp = ap && [1, 2, 3].includes(ap.bearbeitung)

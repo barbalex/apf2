@@ -1,4 +1,3 @@
-// @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
@@ -13,17 +12,7 @@ export default ({
   apNodes,
   apId,
   store,
-}: {
-  nodes: Array<Object>,
-  data: Object,
-  treeName: String,
-  loading: Boolean,
-  projektNodes: Array<Object>,
-  projId: String,
-  apNodes: Array<Object>,
-  apId: String,
-  store: Object,
-}): Array<Object> => {
+}) => {
   // return empty if ap is not a real ap and apFilter is set
   const ap = get(data, 'allAps.nodes', []).find(n => n.id === apId)
   const isAp = ap && [1, 2, 3].includes(ap.bearbeitung)

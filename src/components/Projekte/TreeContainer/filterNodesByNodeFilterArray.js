@@ -1,18 +1,9 @@
-// @flow
 // filter by nodeFilter
 // 2019 03 19: not any more in use: filtering happens directly in queries
 
 import types from '../../../store/NodeFilterTree/simpleTypes'
 
-export default ({
-  node,
-  nodeFilterArray,
-  table,
-}: {
-  node: Object,
-  nodeFilterArray: Array<Object>,
-  table: string,
-}) => {
+export default ({ node, nodeFilterArray, table }) => {
   if (nodeFilterArray.length === 0) return true
   let type = 'string'
   return nodeFilterArray.every(([key, value]) => {
