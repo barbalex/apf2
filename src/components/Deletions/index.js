@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext, useState, useCallback } from 'react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -51,13 +50,7 @@ const StyledCheckbox = styled(Checkbox)`
   height: 30px !important;
 `
 
-const Deletions = ({
-  showDeletions,
-  setShowDeletions,
-}: {
-  showDeletions: Boolean,
-  setShowDeletions: () => void,
-}) => {
+const Deletions = ({ showDeletions, setShowDeletions }) => {
   const client = useApolloClient()
   const { addError, removeDeletedDatasetById, deletedDatasets } = useContext(
     storeContext,

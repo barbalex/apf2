@@ -1,4 +1,3 @@
-// @flow
 import React, { useCallback, useContext } from 'react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
@@ -50,7 +49,7 @@ const OkButton = styled(Button)`
   right: 12px;
 `
 
-const UserMessages = ({ open }: { open: Boolean }) => {
+const UserMessages = ({ open }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { user, updateAvailable } = store

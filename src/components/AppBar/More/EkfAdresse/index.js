@@ -1,4 +1,3 @@
-// @flow
 import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
@@ -14,7 +13,7 @@ const Container = styled.div`
   padding: 0 16px;
 `
 
-const EkfAdresse = ({ setAnchorEl }: { setAnchorEl: () => void }) => {
+const EkfAdresse = ({ setAnchorEl }) => {
   const { data, error, loading } = useQuery(queryAdresses)
   const store = useContext(storeContext)
   const { setView, setEkfAdresseId } = store

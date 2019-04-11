@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
@@ -37,7 +36,7 @@ const Title = styled.p`
   margin-bottom: 4px;
 `
 
-const AvList = ({ data }: { data: Object }) => {
+const AvList = ({ data }) => {
   const avGrouped = groupBy(
     get(data, 'allAps.nodes', []).map(ap => ({
       av: get(ap, 'adresseByBearbeiter.name', '(kein Wert)'),

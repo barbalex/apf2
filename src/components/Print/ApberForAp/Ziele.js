@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
@@ -34,7 +33,7 @@ const Opinion = styled.div`
   padding-top: 0.1cm;
 `
 
-const Ziele = ({ ziele }: { ziele: Array<Object> }) => (
+const Ziele = ({ ziele }) => (
   <Container>
     <Title>Ziele im Berichtsjahr:</Title>
     <TitleRow>

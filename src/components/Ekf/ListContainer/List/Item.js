@@ -1,4 +1,3 @@
-// @flow
 import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
@@ -31,17 +30,7 @@ const InnerContainer = styled.div`
   }
 `
 
-const EkfList = ({
-  activeTpopkontrId,
-  projektCount,
-  style,
-  row,
-}: {
-  activeTpopkontrId: string,
-  projektCount: number,
-  style: Object,
-  row: Object,
-}) => {
+const EkfList = ({ activeTpopkontrId, projektCount, style, row }) => {
   const store = useContext(storeContext)
   const innerContainerHeight = projektCount > 1 ? 81 : 62
   const url = [

@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
@@ -62,7 +61,7 @@ const MassnBeschreibung = styled.div`
   width: 100%;
 `
 
-const Massnahmen = ({ massns }: { massns: Array<Object> }) => (
+const Massnahmen = ({ massns }) => (
   <Container>
     <Title>Massnahmen im Berichtsjahr:</Title>
     <TitleRow>

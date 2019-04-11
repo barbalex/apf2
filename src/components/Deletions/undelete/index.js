@@ -1,4 +1,3 @@
-//@flow
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 
@@ -9,13 +8,6 @@ export default async ({
   removeDeletedDatasetById,
   addError,
   client,
-}: {
-  deletedDatasets: Array<Object>,
-  dataset: Object,
-  setShowDeletions: () => void,
-  removeDeletedDatasetById: Object,
-  addError: () => void,
-  client: Object,
 }) => {
   const { table, data, afterDeletionHook } = dataset
   // 1. create new dataset

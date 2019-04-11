@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext, useState, useCallback } from 'react'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
@@ -29,10 +28,6 @@ const MyAppBar = ({
   onClickExporte: passedOnClickExporte,
   setShowDeletions,
   role,
-}: {
-  onClickExporte: () => void,
-  setShowDeletions: () => void,
-  role: string,
 }) => {
   const store = useContext(storeContext)
   const { deletedDatasets, user, urlQuery, treeActiveNodes } = store

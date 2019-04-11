@@ -1,4 +1,3 @@
-// @flow
 import React, { Fragment } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
@@ -204,7 +203,7 @@ const KefKontrolleTitle = styled(ErfolgTitle)`
   grid-row: 2 / span 1;
 `
 
-const ErfolgList = ({ jahr, data }: { jahr: Number, data: Object }) => {
+const ErfolgList = ({ jahr, data }) => {
   const aps = get(data, 'allAps.nodes', [])
   const apRows = sortBy(
     aps.map(ap => {

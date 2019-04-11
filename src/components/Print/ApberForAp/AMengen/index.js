@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
@@ -80,15 +79,7 @@ const TpopBerJahr = styled(Number)`
 const PopSeit = styled(Number)``
 const TpopSeit = styled(Number)``
 
-const AMengen = ({
-  apId,
-  jahr,
-  startJahr,
-}: {
-  apId: String,
-  jahr: Number,
-  startJahr: Number,
-}) => {
+const AMengen = ({ apId, jahr, startJahr }) => {
   const { data, error, loading } = useQuery(query, {
     variables: { apId, startJahr },
   })

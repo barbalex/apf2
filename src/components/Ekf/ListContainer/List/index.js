@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext, useEffect } from 'react'
 import { FixedSizeList as List } from 'react-window'
 import get from 'lodash/get'
@@ -59,7 +58,7 @@ const getEkfFromData = ({ data, ekfAdresseId }) => {
   return sortBy(ekf, ['projekt', 'art', 'popSort', 'tpopSort'])
 }
 
-const EkfList = ({ data, loading }: { data: Object, loading: Boolean }) => {
+const EkfList = ({ data, loading }) => {
   const store = useContext(storeContext)
   const { ekfYear, ekfAdresseId, tree } = store
   const ekf = getEkfFromData({ data, ekfAdresseId })

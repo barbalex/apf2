@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext, useState, useCallback } from 'react'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -54,7 +53,7 @@ const MenuDiv = styled.div`
   flex-wrap: wrap;
 `
 
-const MyAppBar = ({ setShowDeletions }: { setShowDeletions: () => void }) => {
+const MyAppBar = ({ setShowDeletions }) => {
   const store = useContext(storeContext)
   const {
     nodeFilterClone1To2,

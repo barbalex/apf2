@@ -1,4 +1,3 @@
-// @flow
 import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
@@ -43,15 +42,7 @@ const PasswordMessage = styled.div`
   padding-bottom: 10px;
 `
 
-const User = ({
-  username,
-  userOpen,
-  toggleUserOpen,
-}: {
-  username: string,
-  userOpen: boolean,
-  toggleUserOpen: () => void,
-}) => {
+const User = ({ username, userOpen, toggleUserOpen }) => {
   const store = useContext(storeContext)
   const { data, error, loading } = useQuery(query, {
     variables: { name: username },

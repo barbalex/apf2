@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext, useCallback } from 'react'
 import Button from '@material-ui/core/Button'
 import remove from 'lodash/remove'
@@ -32,7 +31,7 @@ const StyledButton = styled(Button)`
     props.followed === 'true' ? '-1px' : 'unset'} !important;
 `
 
-const MyAppBarDaten = ({ treeNr = '' }: { treeNr: string }) => {
+const MyAppBarDaten = ({ treeNr = '' }) => {
   const {
     nodeFilterClone1To2,
     urlQuery,

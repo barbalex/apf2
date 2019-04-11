@@ -1,4 +1,3 @@
-// @flow
 /**
  * Stopped lazy loading Tpopfreiwkontr
  * because Reflex would often not show layout

@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
@@ -51,13 +50,7 @@ const Container = styled.div`
   }
 `
 
-const ApberForApFromAp = ({
-  apberId: apberIdPassed,
-  apId: apIdPassed,
-}: {
-  apberId: string,
-  apId: String,
-}) => {
+const ApberForApFromAp = ({ apberId: apberIdPassed, apId: apIdPassed }) => {
   const store = useContext(storeContext)
   const activeNodes = store.treeActiveNodes
   let apberId

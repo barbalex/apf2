@@ -1,4 +1,3 @@
-// @flow
 /**
  * this is own component
  * because of the conditional query

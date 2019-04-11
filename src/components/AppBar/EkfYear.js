@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext, useState, useCallback, useEffect } from 'react'
 import Input from '@material-ui/core/Input'
 import styled from 'styled-components'

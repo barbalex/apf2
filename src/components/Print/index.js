@@ -1,4 +1,3 @@
-// @flow
 import React, { lazy, Suspense, useContext } from 'react'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'

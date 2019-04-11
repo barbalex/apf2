@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
@@ -121,11 +120,6 @@ const ApberForAp = ({
    * isSubReport is passed
    */
   isSubReport,
-}: {
-  apId: String,
-  jahr: Number,
-  apData: Object,
-  isSubReport: Boolean,
 }) => {
   const apData = isSubReport ? apDataPassed : apDataPassed.apById
   const artname = get(apData, 'aeEigenschaftenByArtId.artname', '(Art fehlt)')
