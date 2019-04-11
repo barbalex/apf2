@@ -72,31 +72,28 @@ const Beobachtungen = () => {
   const [message, setMessage] = useState(null)
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
-  const onClickButton = useCallback(
-    async () => {
-      setMessage('Export "Beobachtungen" wird vorbereitet...')
-      try {
-        const { data } = await client.query({
-          query: allVBeobArtChangeds,
-        })
-        exportModule({
-          data: get(data, 'allVBeobArtChangeds.nodes', []),
-          fileName: 'BeobachtungenArtVeraendert',
-          exportFileType,
-          exportApplyMapFilter,
-          mapFilter,
-          idKey: 'id',
-          xKey: 'x',
-          yKey: 'y',
-          addError,
-        })
-      } catch (error) {
-        addError(error)
-      }
-      setMessage(null)
-    },
-    [exportFileType, exportApplyMapFilter],
-  )
+  const onClickButton = useCallback(async () => {
+    setMessage('Export "Beobachtungen" wird vorbereitet...')
+    try {
+      const { data } = await client.query({
+        query: allVBeobArtChangeds,
+      })
+      exportModule({
+        data: get(data, 'allVBeobArtChangeds.nodes', []),
+        fileName: 'BeobachtungenArtVeraendert',
+        exportFileType,
+        exportApplyMapFilter,
+        mapFilter,
+        idKey: 'id',
+        xKey: 'x',
+        yKey: 'y',
+        addError,
+      })
+    } catch (error) {
+      addError(error)
+    }
+    setMessage(null)
+  }, [exportFileType, exportApplyMapFilter])
 
   return (
     <StyledCard>

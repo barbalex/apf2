@@ -66,7 +66,11 @@ const CurrentIssue = ({ treeName }: { treeName: String }) => {
           table="currentissue"
         />
         <FieldsContainer>
-          <ReactMarkdown source={row.issue} escapeHtml={false} linkTarget="_blank" />
+          <ReactMarkdown
+            source={row.issue}
+            escapeHtml={false}
+            linkTarget="_blank"
+          />
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

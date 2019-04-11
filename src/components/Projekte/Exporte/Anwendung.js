@@ -66,41 +66,38 @@ const Anwendung = () => {
   const [message, setMessage] = useState(null)
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
-  const onClickButton = useCallback(
-    async () => {
-      setMessage('Export "Datenstruktur" wird vorbereitet...')
-      try {
-        const { data } = await client.query({
-          query: gql`
-            query view {
-              allVDatenstrukturs {
-                nodes {
-                  tabelle_schema: tabelleSchema
-                  tabelle_name: tabelleName
-                  tabelle_anzahl_datensaetze: tabelleAnzahlDatensaetze
-                  feld_name: feldName
-                  feld_standardwert: feldStandardwert
-                  feld_datentyp: feldDatentyp
-                  feld_nullwerte: feldNullwerte
-                }
+  const onClickButton = useCallback(async () => {
+    setMessage('Export "Datenstruktur" wird vorbereitet...')
+    try {
+      const { data } = await client.query({
+        query: gql`
+          query view {
+            allVDatenstrukturs {
+              nodes {
+                tabelle_schema: tabelleSchema
+                tabelle_name: tabelleName
+                tabelle_anzahl_datensaetze: tabelleAnzahlDatensaetze
+                feld_name: feldName
+                feld_standardwert: feldStandardwert
+                feld_datentyp: feldDatentyp
+                feld_nullwerte: feldNullwerte
               }
             }
-          `,
-        })
-        exportModule({
-          data: get(data, 'allVDatenstrukturs.nodes', []),
-          fileName: 'Datenstruktur',
-          exportFileType,
-          exportApplyMapFilter,
-          addError,
-        })
-      } catch (error) {
-        addError(error)
-      }
-      setMessage(null)
-    },
-    [exportFileType, exportApplyMapFilter],
-  )
+          }
+        `,
+      })
+      exportModule({
+        data: get(data, 'allVDatenstrukturs.nodes', []),
+        fileName: 'Datenstruktur',
+        exportFileType,
+        exportApplyMapFilter,
+        addError,
+      })
+    } catch (error) {
+      addError(error)
+    }
+    setMessage(null)
+  }, [exportFileType, exportApplyMapFilter])
 
   return (
     <StyledCard>

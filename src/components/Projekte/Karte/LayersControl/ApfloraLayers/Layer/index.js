@@ -142,14 +142,11 @@ const MySortableItem = ({ treeName, apfloraLayer, index }) => {
       apfloraLayer.value === 'beobNichtBeurteilt') ||
       (activeApfloraLayers.includes('beobZugeordnet') &&
         apfloraLayer.value === 'beobZugeordnet'))
-  const zuordnenTitle = useMemo(
-    () => {
-      if (assigningBeob) return 'Zuordnung beenden'
-      if (assigningispossible) return 'Teil-Populationen zuordnen'
-      return 'Teil-Populationen zuordnen (aktivierbar, wenn auch Teil-Populationen eingeblendet werden)'
-    },
-    [assigningBeob, assigningispossible],
-  )
+  const zuordnenTitle = useMemo(() => {
+    if (assigningBeob) return 'Zuordnung beenden'
+    if (assigningispossible) return 'Teil-Populationen zuordnen'
+    return 'Teil-Populationen zuordnen (aktivierbar, wenn auch Teil-Populationen eingeblendet werden)'
+  }, [assigningBeob, assigningispossible])
   // for each layer there must exist a path in data!
   let layerData = get(data, `${apfloraLayer.value}.nodes`, [])
   if (apfloraLayer.value === 'tpop') {
@@ -160,49 +157,34 @@ const MySortableItem = ({ treeName, apfloraLayer, index }) => {
   const layerDataHighlighted = layerData.filter(o =>
     mapIdsFiltered.includes(o.id),
   )
-  const onChangeCheckbox = useCallback(
-    () => {
-      if (activeApfloraLayers.includes(apfloraLayer.value)) {
-        return setActiveApfloraLayers(
-          activeApfloraLayers.filter(l => l !== apfloraLayer.value),
-        )
-      }
-      return setActiveApfloraLayers([
-        ...activeApfloraLayers,
-        apfloraLayer.value,
-      ])
-    },
-    [activeApfloraLayers, apfloraLayer],
-  )
-  const onClickZuordnen = useCallback(
-    () => {
-      if (activeApfloraLayers.includes('tpop')) {
-        setAssigningBeob(!assigningBeob)
-      }
-    },
-    [assigningBeob, activeApfloraLayers],
-  )
-  const onClickZoomToAll = useCallback(
-    () => {
-      // only zoom if there is data to zoom on
-      if (layerData.length === 0) return
-      if (activeApfloraLayers.includes(apfloraLayer.value)) {
-        setBounds(getBounds(layerData))
-      }
-    },
-    [layerData, activeApfloraLayers, apfloraLayer],
-  )
-  const onClickZoomToActive = useCallback(
-    () => {
-      // only zoom if a tpop is highlighted
-      if (layerDataHighlighted.length === 0) return
-      if (activeApfloraLayers.includes(apfloraLayer.value)) {
-        const newBounds = getBounds(layerDataHighlighted)
-        setBounds(newBounds)
-      }
-    },
-    [layerDataHighlighted, activeApfloraLayers, apfloraLayer],
-  )
+  const onChangeCheckbox = useCallback(() => {
+    if (activeApfloraLayers.includes(apfloraLayer.value)) {
+      return setActiveApfloraLayers(
+        activeApfloraLayers.filter(l => l !== apfloraLayer.value),
+      )
+    }
+    return setActiveApfloraLayers([...activeApfloraLayers, apfloraLayer.value])
+  }, [activeApfloraLayers, apfloraLayer])
+  const onClickZuordnen = useCallback(() => {
+    if (activeApfloraLayers.includes('tpop')) {
+      setAssigningBeob(!assigningBeob)
+    }
+  }, [assigningBeob, activeApfloraLayers])
+  const onClickZoomToAll = useCallback(() => {
+    // only zoom if there is data to zoom on
+    if (layerData.length === 0) return
+    if (activeApfloraLayers.includes(apfloraLayer.value)) {
+      setBounds(getBounds(layerData))
+    }
+  }, [layerData, activeApfloraLayers, apfloraLayer])
+  const onClickZoomToActive = useCallback(() => {
+    // only zoom if a tpop is highlighted
+    if (layerDataHighlighted.length === 0) return
+    if (activeApfloraLayers.includes(apfloraLayer.value)) {
+      const newBounds = getBounds(layerDataHighlighted)
+      setBounds(newBounds)
+    }
+  }, [layerDataHighlighted, activeApfloraLayers, apfloraLayer])
   const zoomToAllIconStyle = useMemo(
     () => ({
       color:

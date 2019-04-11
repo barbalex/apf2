@@ -27,9 +27,7 @@ const pointToLayer = (feature, latlng) => {
 }
 
 const MarkierungenLayer = () => {
-  const { markierungen, setMarkierungen, addError } = useContext(
-    storeContext,
-  )
+  const { markierungen, setMarkierungen, addError } = useContext(storeContext)
   !markierungen && fetchMarkierungen({ setMarkierungen, addError })
 
   return (

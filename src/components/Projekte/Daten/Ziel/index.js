@@ -31,7 +31,12 @@ const Ziel = ({ treeName }: { treeName: string }) => {
   const client = useApolloClient()
   const mobxStore = useContext(storeContext)
   const { refetch } = mobxStore
-  const { activeNodeArray, setActiveNodeArray, openNodes, setOpenNodes } = mobxStore[treeName]
+  const {
+    activeNodeArray,
+    setActiveNodeArray,
+    openNodes,
+    setOpenNodes,
+  } = mobxStore[treeName]
 
   const [errors, setErrors] = useState({})
 

@@ -65,29 +65,26 @@ const Deletions = ({
 
   const [choosenDeletions, setChoosenDeletions] = useState([])
 
-  const onClickUndo = useCallback(
-    async () => {
-      // loop through all choosenDeletions
-      await Promise.all(
-        choosenDeletions.map(
-          async id =>
-            await undelete({
-              deletedDatasets,
-              dataset: deletedDatasets.find(d => d.id === id),
-              setShowDeletions,
-              removeDeletedDatasetById,
-              addError,
-              client,
-            }),
-        ),
-      )
-      setChoosenDeletions([])
-      if (choosenDeletions.length === deletedDatasets.length) {
-        setShowDeletions(false)
-      }
-    },
-    [choosenDeletions, deletedDatasets],
-  )
+  const onClickUndo = useCallback(async () => {
+    // loop through all choosenDeletions
+    await Promise.all(
+      choosenDeletions.map(
+        async id =>
+          await undelete({
+            deletedDatasets,
+            dataset: deletedDatasets.find(d => d.id === id),
+            setShowDeletions,
+            removeDeletedDatasetById,
+            addError,
+            client,
+          }),
+      ),
+    )
+    setChoosenDeletions([])
+    if (choosenDeletions.length === deletedDatasets.length) {
+      setShowDeletions(false)
+    }
+  }, [choosenDeletions, deletedDatasets])
   const toggleChoosenDeletions = useCallback(
     event => {
       let id = event.target.value
