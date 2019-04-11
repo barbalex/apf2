@@ -1,4 +1,3 @@
-// @flow
 import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
@@ -134,13 +133,7 @@ const CountHint = styled.div`
   padding: 10px;
 `
 
-const Tpopfreiwkontr = ({
-  treeName,
-  showFilter = false,
-}: {
-  treeName: string,
-  showFilter: Boolean,
-}) => {
+const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const {

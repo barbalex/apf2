@@ -25,13 +25,7 @@ const iconCreateFunction = function(cluster) {
   })
 }
 
-const BeobZugeordnetMarker = ({
-  treeName,
-  clustered,
-}: {
-  treeName: string,
-  clustered: Boolean,
-}) => {
+const BeobZugeordnetMarker = ({ treeName, clustered }) => {
   const store = useContext(storeContext)
   const { setRefetchKey, addError, activeApfloraLayers, mapFilter } = store
   const tree = store[treeName]

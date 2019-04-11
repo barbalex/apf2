@@ -14,7 +14,7 @@ const StyledH3 = styled.h3`
   margin: 7px 0;
 `
 
-const Line = ({ treeName, beob }: { treeName: string, beob: Object }) => {
+const Line = ({ treeName, beob }) => {
   const store = useContext(storeContext)
   const activeNodes = store[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes

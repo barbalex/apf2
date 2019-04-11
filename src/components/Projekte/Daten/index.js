@@ -1,4 +1,3 @@
-// @flow
 import React, { lazy, Suspense, useContext, useMemo } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
@@ -19,7 +18,7 @@ const Container = styled.div`
   }
 `
 
-const Daten = ({ treeName }: { treeName: String }) => {
+const Daten = ({ treeName }) => {
   const store = useContext(storeContext)
   const { activeNodeArray, activeNode } = store[treeName]
   const activeTable = get(store, `nodeFilter.${treeName}.activeTable`, '')

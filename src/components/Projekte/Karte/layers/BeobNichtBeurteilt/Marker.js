@@ -19,13 +19,7 @@ const StyledH3 = styled.h3`
   margin: 7px 0;
 `
 
-const BeobNichtBeurteiltMarker = ({
-  treeName,
-  beob,
-}: {
-  treeName: string,
-  beob: Object,
-}) => {
+const BeobNichtBeurteiltMarker = ({ treeName, beob }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { assigningBeob, refetch } = store

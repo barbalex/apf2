@@ -68,7 +68,7 @@ const LabelPopoverRowColumnRight = styled.div`
   padding-left: 5px;
 `
 
-const ApFilter = ({ treeName }: { treeName: String }) => {
+const ApFilter = ({ treeName }) => {
   const store = useContext(storeContext)
   const { nodeFilter, nodeFilterSetValue, refetch } = store
   const { activeNodeArray } = store[treeName]

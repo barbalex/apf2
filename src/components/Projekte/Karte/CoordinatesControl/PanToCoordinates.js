@@ -40,16 +40,10 @@ const StyledInput = styled(Input)`
   }
 `
 
-const xIsValid = (x: ?number) => !x || (x >= 2485071 && x < 2828516)
-const yIsValid = (y: ?number) => !y || (y >= 1075346 && y < 1299942)
+const xIsValid = x => !x || (x >= 2485071 && x < 2828516)
+const yIsValid = y => !y || (y >= 1075346 && y < 1299942)
 
-const PanToCoordinates = ({
-  setControlType,
-  map,
-}: {
-  setControlType: () => void,
-  map: Object,
-}) => {
+const PanToCoordinates = ({ setControlType, map }) => {
   const xkoordField = useRef(null)
 
   useEffect(() => {
@@ -77,16 +71,13 @@ const PanToCoordinates = ({
     },
     [gotoFocused, timeoutId],
   )
-  const onClickClear = useCallback(
-    () => {
-      setMarker(null)
-      if (marker) map.removeLayer(marker)
-      setX('')
-      setY('')
-      setControlType('coordinates')
-    },
-    [marker, map],
-  )
+  const onClickClear = useCallback(() => {
+    setMarker(null)
+    if (marker) map.removeLayer(marker)
+    setX('')
+    setY('')
+    setControlType('coordinates')
+  }, [marker, map])
   const onBlurGotoContainer = useCallback(
     event => {
       const newTimeoutId = setTimeout(() => {
@@ -106,25 +97,22 @@ const PanToCoordinates = ({
    * is added to the map
    * but marker passed second time is saved in state...
    */
-  const onClickGoto = useCallback(
-    () => {
-      if (x && y && !xError && !yError) {
-        const latLng = new window.L.LatLng(...epsg2056to4326(x, y))
-        map.flyTo(latLng)
-        const newMarker = window.L.marker(latLng, {
-          title: `${x}/${y}`,
-          icon: window.L.icon({
-            iconUrl: panCentreIcon,
-            iconSize: [36, 36],
-          }),
-        })
-        if (marker) map.removeLayer(marker)
-        newMarker.addTo(map)
-        setMarker(newMarker)
-      }
-    },
-    [x, y, xError, yError, map, marker],
-  )
+  const onClickGoto = useCallback(() => {
+    if (x && y && !xError && !yError) {
+      const latLng = new window.L.LatLng(...epsg2056to4326(x, y))
+      map.flyTo(latLng)
+      const newMarker = window.L.marker(latLng, {
+        title: `${x}/${y}`,
+        icon: window.L.icon({
+          iconUrl: panCentreIcon,
+          iconSize: [36, 36],
+        }),
+      })
+      if (marker) map.removeLayer(marker)
+      newMarker.addTo(map)
+      setMarker(newMarker)
+    }
+  }, [x, y, xError, yError, map, marker])
   const onChangeX = useCallback(event => {
     let { value } = event.target
     // convert string to number

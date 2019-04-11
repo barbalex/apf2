@@ -1,4 +1,3 @@
-// @flow
 import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
@@ -63,7 +62,7 @@ const roleWerte = [
   },
 ]
 
-const User = ({ treeName }: { treeName: String }) => {
+const User = ({ treeName }) => {
   const store = useContext(storeContext)
   const { refetch } = store
   const { activeNodeArray } = store[treeName]

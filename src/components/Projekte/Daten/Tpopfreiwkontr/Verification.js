@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
@@ -37,15 +36,7 @@ const VerifVal1 = styled(Label)`
   }
 `
 
-const Verification = ({
-  saveToDb,
-  row,
-  errors,
-}: {
-  saveToDb: () => void,
-  row: Object,
-  errors: Object,
-}) => (
+const Verification = ({ saveToDb, row, errors }) => (
   <Container>
     <VerifLabel1>Im Jahresbericht nicht berücksichtigen</VerifLabel1>
     <VerifVal1>

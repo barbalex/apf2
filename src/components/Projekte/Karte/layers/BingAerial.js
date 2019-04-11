@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 /**
  * loading BingLayer results in error

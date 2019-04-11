@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext, useState } from 'react'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'

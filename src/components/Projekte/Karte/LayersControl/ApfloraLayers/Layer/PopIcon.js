@@ -1,4 +1,3 @@
-// @flow
 import React, { useState, useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import LocalFloristIcon from '@material-ui/icons/LocalFlorist'

@@ -1,4 +1,3 @@
-// @flow
 /**
  * TODO:
  * let each item call it's data itself

@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
@@ -35,15 +34,7 @@ const DangerVal = styled.div`
   }
 `
 
-const Danger = ({
-  saveToDb,
-  row,
-  errors,
-}: {
-  saveToDb: () => void,
-  row: Object,
-  errors: Object,
-}) => (
+const Danger = ({ saveToDb, row, errors }) => (
   <Container>
     <DangerLabel>
       Gefährdung{' '}

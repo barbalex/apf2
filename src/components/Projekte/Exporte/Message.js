@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import styled from 'styled-components'
 
@@ -23,14 +22,12 @@ const ErrorDiv = styled.div`
   font-size: 14px;
 `
 
-const DownloadMessage = ({ message }: { message: String }) => (
+const DownloadMessage = ({ message }) => (
   <ErrorBoundary>
     <Container>
-      <ErrorDiv>
-        {message}
-      </ErrorDiv>
+      <ErrorDiv>{message}</ErrorDiv>
     </Container>
   </ErrorBoundary>
 )
 
-export default (DownloadMessage)
+export default DownloadMessage

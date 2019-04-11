@@ -25,7 +25,7 @@ const StyledControl = styled(Control)`
 
 const enhance = compose(withLeaflet)
 
-const CoordinatesControl = ({ leaflet }: { leaflet: Object }) => {
+const CoordinatesControl = ({ leaflet }) => {
   const [controlType, setControlType] = useState('coordinates')
   // hack to get control to show on first load
   // see: https://github.com/LiveBy/react-leaflet-control/issues/27#issuecomment-430564722

@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../storeContext'
 
-const DrawControl = ({ leaflet }: { leaflet: Object }) => {
+const DrawControl = ({ leaflet }) => {
   const { map } = leaflet
   const store = useContext(storeContext)
   const { setMapFilter } = store

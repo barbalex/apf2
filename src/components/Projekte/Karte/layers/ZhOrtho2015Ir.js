@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import { WMSTileLayer } from 'react-leaflet'
 

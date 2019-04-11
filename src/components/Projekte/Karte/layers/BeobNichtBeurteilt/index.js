@@ -25,13 +25,7 @@ const iconCreateFunction = function(cluster) {
   })
 }
 
-const BeobNichtBeurteiltMarker = ({
-  treeName,
-  clustered,
-}: {
-  treeName: string,
-  clustered: Boolean,
-}) => {
+const BeobNichtBeurteiltMarker = ({ treeName, clustered }) => {
   const store = useContext(storeContext)
   const { setRefetchKey, addError, mapFilter, activeApfloraLayers } = store
   const tree = store[treeName]

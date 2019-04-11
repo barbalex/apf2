@@ -17,12 +17,6 @@ const ApfloraLayers = ({
   setPopBounds,
   tpopBounds,
   setTpopBounds,
-}: {
-  treeName: string,
-  popBounds: Array<Array<Number>>,
-  setPopBounds: () => void,
-  tpopBounds: Array<Array<Number>>,
-  setTpopBounds: () => void,
 }) => {
   const store = useContext(storeContext)
   const { apfloraLayers } = store

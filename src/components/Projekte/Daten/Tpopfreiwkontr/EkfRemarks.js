@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
@@ -27,15 +26,7 @@ const RemarksVal = styled.div`
   }
 `
 
-const EkfRemarks = ({
-  saveToDb,
-  row,
-  errors,
-}: {
-  saveToDb: () => void,
-  row: Object,
-  errors: Object,
-}) => (
+const EkfRemarks = ({ saveToDb, row, errors }) => (
   <Container>
     <RemarksLabel>Mitteilungen zwischen AV/Topos und Freiwilligen</RemarksLabel>
     <RemarksVal>

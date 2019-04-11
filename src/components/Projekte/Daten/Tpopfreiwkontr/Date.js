@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
@@ -38,15 +37,7 @@ const DateVal = styled.div`
   }
 `
 
-const Date = ({
-  saveToDb,
-  row,
-  errors,
-}: {
-  saveToDb: () => void,
-  row: Object,
-  errors: Object,
-}) => (
+const Date = ({ saveToDb, row, errors }) => (
   <Container>
     <DateLabel>Aufnahme-datum</DateLabel>
     <DateVal>

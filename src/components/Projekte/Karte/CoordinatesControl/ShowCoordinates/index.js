@@ -17,11 +17,7 @@ const StyledDiv = styled.div`
   margin-right: 5px !important;
 `
 
-const ShowCoordinates = ({
-  setControlType,
-}: {
-  setControlType: () => void,
-}) => {
+const ShowCoordinates = ({ setControlType }) => {
   const { mapMouseCoordinates } = useContext(storeContext)
   const x = mapMouseCoordinates.x.toLocaleString('de-ch')
   const y = mapMouseCoordinates.y.toLocaleString('de-ch')

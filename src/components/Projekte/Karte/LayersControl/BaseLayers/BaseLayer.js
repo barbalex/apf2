@@ -13,7 +13,7 @@ const LayerDiv = styled.div`
   padding-bottom: 4px;
 `
 
-const BaseLayer = ({ layer }: { layer: Object }) => {
+const BaseLayer = ({ layer }) => {
   const store = useContext(storeContext)
   const { activeBaseLayer, setActiveBaseLayer } = store
   const onChange = useCallback(() => setActiveBaseLayer(layer.value), [layer])

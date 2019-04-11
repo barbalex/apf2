@@ -1,4 +1,3 @@
-// @flow
 import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
@@ -56,17 +55,7 @@ const MapVal2 = styled(Label)`
   }
 `
 
-const Map = ({
-  saveToDb,
-  row,
-  errors,
-  showFilter,
-}: {
-  saveToDb: () => void,
-  row: Object,
-  errors: Object,
-  showFilter: boolean,
-}) => {
+const Map = ({ saveToDb, row, errors, showFilter }) => {
   const onSaveFalse = useCallback(() => {
     const fakeEvent = {
       target: { name: 'planVorhanden', value: false },

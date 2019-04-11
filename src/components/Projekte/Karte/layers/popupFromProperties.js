@@ -1,5 +1,4 @@
-// @flow
-export default (p: Object) =>
+export default p =>
   `<div>
   ${Object.entries(p)
     .filter(e => !!e[1])
@@ -8,7 +7,7 @@ export default (p: Object) =>
       entry =>
         `<div style="display:flex;justify-content:space-between;">
       <div>${entry[0]}:</div><div>${entry[1]}</div>
-    </div>`
+    </div>`,
     )
     .join('')}
 </div>`

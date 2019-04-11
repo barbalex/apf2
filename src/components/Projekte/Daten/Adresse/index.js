@@ -25,7 +25,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Adresse = ({ treeName }: { treeName: String }) => {
+const Adresse = ({ treeName }) => {
   const store = useContext(storeContext)
   const { activeNodeArray, refetch } = store[treeName]
   const id =

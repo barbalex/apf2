@@ -30,15 +30,7 @@ const iconCreateFunction = function(cluster) {
   })
 }
 
-const Tpop = ({
-  treeName,
-  clustered,
-  leaflet,
-}: {
-  treeName: string,
-  clustered: Boolean,
-  leaflet: Object,
-}) => {
+const Tpop = ({ treeName, clustered, leaflet }) => {
   const { map: leafletMap } = leaflet
   const store = useContext(storeContext)
   const {

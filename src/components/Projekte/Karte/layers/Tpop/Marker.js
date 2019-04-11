@@ -27,7 +27,7 @@ const StyledTooltip = styled(Tooltip)`
   }
 `
 
-const TpopMarker = ({ treeName, tpop }: { treeName: string, tpop: Object }) => {
+const TpopMarker = ({ treeName, tpop }) => {
   const store = useContext(storeContext)
   const activeNodes = store[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes

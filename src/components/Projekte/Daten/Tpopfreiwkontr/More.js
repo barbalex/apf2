@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
@@ -141,15 +140,7 @@ const Img = styled.img`
   max-width: inherit;
 `
 
-const More = ({
-  saveToDb,
-  row,
-  errors,
-}: {
-  saveToDb: () => void,
-  row: Object,
-  errors: Object,
-}) => (
+const More = ({ saveToDb, row, errors }) => (
   <Container>
     <MoreFlLabel>Überprüfte Fläche</MoreFlLabel>
     <MoreFlVal>

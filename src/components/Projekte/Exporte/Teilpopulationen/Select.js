@@ -1,4 +1,3 @@
-// @flow
 import React, { useCallback } from 'react'
 import Select from 'react-select'
 import styled from 'styled-components'
@@ -54,14 +53,6 @@ const SharedSelect = ({
   options,
   saveToDb,
   maxHeight = null,
-}: {
-  value?: ?number | ?string,
-  field?: string,
-  label: string,
-  error: string,
-  options: Array<Object>,
-  saveToDb: () => void,
-  maxHeight?: number,
 }) => {
   const onChange = useCallback(option => saveToDb(option ? option.value : null))
 

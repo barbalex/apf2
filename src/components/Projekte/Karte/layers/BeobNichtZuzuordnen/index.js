@@ -25,13 +25,7 @@ const iconCreateFunction = function(cluster) {
   })
 }
 
-const BeobNichtZuzuordnenMarker = ({
-  treeName,
-  clustered,
-}: {
-  treeName: string,
-  clustered: Boolean,
-}) => {
+const BeobNichtZuzuordnenMarker = ({ treeName, clustered }) => {
   const store = useContext(storeContext)
   const { activeApfloraLayers, mapFilter, setRefetchKey, addError } = store
   const tree = store[treeName]

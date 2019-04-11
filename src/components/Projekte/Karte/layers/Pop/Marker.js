@@ -31,7 +31,7 @@ const StyledTooltip = styled(Tooltip)`
   }
 `
 
-const PopMarker = ({ treeName, pop }: { treeName: string, pop: Object }) => {
+const PopMarker = ({ treeName, pop }) => {
   const store = useContext(storeContext)
   const { apfloraLayers } = store
   const activeNodes = store[`${treeName}ActiveNodes`]

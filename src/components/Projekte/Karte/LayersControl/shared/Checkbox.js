@@ -10,20 +10,7 @@ const Label = styled.label`
   user-select: none;
 `
 
-const Checkbox = (
-  {
-    value,
-    label,
-    checked,
-    onChange,
-  }:
-  {
-    value: string,
-    label: string,
-    checked: boolean,
-    onChange: () => void,
-  }
-) =>
+const Checkbox = ({ value, label, checked, onChange }) => (
   <Label>
     <Input
       type="checkbox"
@@ -33,5 +20,6 @@ const Checkbox = (
     />
     {label}
   </Label>
+)
 
 export default Checkbox

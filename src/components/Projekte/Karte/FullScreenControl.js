@@ -17,7 +17,7 @@ const options = {
   fullscreenElement: false, // Dom element to render in full screen, false by default, fallback to map._container
 }
 
-const FullScreenControl = ({ leaflet }: { leaflet: Object }) => {
+const FullScreenControl = ({ leaflet }) => {
   useEffect(() => {
     const fullscreenControl = window.L.control.fullscreen(options)
     fullscreenControl.addTo(leaflet.map)
