@@ -1,9 +1,0 @@
-[ignore]
-<PROJECT_ROOT>/build/.*
-
-[include]
-
-[libs]
-
-[options]
-suppress_comment=\\(.\\|\n\\)*\\$FlowIssue

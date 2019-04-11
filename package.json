@@ -11,7 +11,6 @@
   "devDependencies": {
     "cypress": "3.2.0",
     "docsify-cli": "4.3.0",
-    "flow-bin": "0.96.0",
     "postgraphile": "4.3.3",
     "postgraphile-plugin-connection-filter": "1.0.0",
     "react-scripts": "2.1.8",
@@ -95,7 +94,6 @@
     "build": "react-scripts build",
     "test": "cypress open",
     "eject": "react-scripts eject",
-    "flow": "flow",
     "serve": "node ecosystem.config.js",
     "serveBuild": "npx serve -s build",
     "analyze": "npx source-map-explorer build/static/js/main.*",
