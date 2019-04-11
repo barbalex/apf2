@@ -19,7 +19,7 @@ const Container = styled.div`
       : 'auto'};
 `
 
-const Beob = ({ treeName }: { treeName: string }) => {
+const Beob = ({ treeName }) => {
   const store = useContext(storeContext)
   const { activeNodeArray, datenWidth } = store[treeName]
   const { data, loading, error } = useQuery(query, {

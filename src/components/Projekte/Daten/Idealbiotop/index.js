@@ -39,7 +39,7 @@ const Section = styled.div`
   }
 `
 
-const Idealbiotop = ({ treeName }: { treeName: string }) => {
+const Idealbiotop = ({ treeName }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
   const [errors, setErrors] = useState({})

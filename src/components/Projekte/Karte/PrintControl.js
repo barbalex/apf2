@@ -12,7 +12,7 @@ const options = {
 }
 const style = { display: 'none' }
 
-const PrintControl = ({ leaflet }: { leaflet: Object }) => {
+const PrintControl = ({ leaflet }) => {
   useEffect(() => {
     window.L.easyPrint(options).addTo(leaflet.map)
   }, [])

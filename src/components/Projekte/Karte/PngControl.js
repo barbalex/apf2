@@ -1,4 +1,3 @@
-// @flow
 import React, { useCallback, useState, useEffect } from 'react'
 import 'leaflet'
 import { withLeaflet } from 'react-leaflet'
@@ -32,7 +31,7 @@ const options = {
   hideControlContainer: true,
 }
 
-const PngControl = ({ leaflet }: { leaflet: Object }) => {
+const PngControl = ({ leaflet }) => {
   const [printPlugin, changePrintPlugin] = useState({})
 
   const savePng = useCallback(event => {

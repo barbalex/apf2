@@ -58,7 +58,7 @@ const StyledButton = styled(Button)`
       : 'rgb(46, 125, 50) !important'};
 `
 
-const Qk = ({ treeName }: { treeName: string }) => {
+const Qk = ({ treeName }) => {
   const store = useContext(storeContext)
   const { ktZh, setKtZh, addError } = store
   const { activeNodeArray } = store[treeName]

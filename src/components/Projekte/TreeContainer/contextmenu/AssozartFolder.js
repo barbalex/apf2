@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { observer } from 'mobx-react-lite'
@@ -13,13 +12,7 @@ const insertData = {
   table: 'assozart',
 }
 
-const AssozartFolder = ({
-  onClick,
-  treeName,
-}: {
-  onClick: () => void,
-  treeName: string,
-}) => {
+const AssozartFolder = ({ onClick, treeName }) => {
   const { user } = useContext(storeContext)
 
   return (

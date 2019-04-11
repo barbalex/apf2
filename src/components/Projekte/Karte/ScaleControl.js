@@ -1,4 +1,3 @@
-// @flow
 // https://github.com/Flexberry/leaflet-switch-scale-control
 // but due to semantic ui requirement using this instead:
 // https://github.com/victorzinho/leaflet-switch-scale-control
@@ -40,7 +39,7 @@ const options = {
 }
 const style = { display: 'none' }
 
-const ScaleControl = ({ leaflet }: { leaflet: Object }) => {
+const ScaleControl = ({ leaflet }) => {
   useEffect(() => {
     const switchScaleControl = new window.L.Control.SwitchScaleControl(options)
     switchScaleControl.addTo(leaflet.map)

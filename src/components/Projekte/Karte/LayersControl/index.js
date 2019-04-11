@@ -49,7 +49,7 @@ const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
   height: 18px !important;
 `
 
-const LayersControl = ({ treeName }: { treeName: string }) => {
+const LayersControl = ({ treeName }) => {
   const store = useContext(storeContext)
   const { apfloraLayers, overlays } = store
   const activeNodes = store[`${treeName}ActiveNodes`]

@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 
@@ -13,13 +12,7 @@ const insertData = {
   table: 'adresse',
 }
 
-const Apfolder = ({
-  onClick,
-  treeName,
-}: {
-  onClick: () => void,
-  treeName: string,
-}) => (
+const Apfolder = ({ onClick, treeName }) => (
   <ErrorBoundary>
     <ContextMenu id={`${treeName}adresseFolder`}>
       <div className="react-contextmenu-title">Adressen</div>

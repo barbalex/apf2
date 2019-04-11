@@ -29,7 +29,7 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(observer)
 
-const Erfkrit = ({ treeName }: { treeName: string }) => {
+const Erfkrit = ({ treeName }) => {
   const store = useContext(storeContext)
   const { refetch } = store
   const client = useApolloClient()

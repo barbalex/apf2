@@ -32,7 +32,7 @@ const StyledMenuItem = styled(MenuItem)`
   padding: 5px 14px !important;
 `
 
-const PopIcon = ({ treeName }: { treeName: string }) => {
+const PopIcon = ({ treeName }) => {
   const store = useContext(storeContext)
   const { map } = store[treeName]
   const { setPopIcon, setPopLabel } = map

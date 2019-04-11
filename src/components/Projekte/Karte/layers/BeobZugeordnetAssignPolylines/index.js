@@ -8,7 +8,7 @@ import Polyline from './Polyline'
 import storeContext from '../../../../../storeContext'
 import query from './query'
 
-const BeobZugeordnetAssignPolylines = ({ treeName }: { treeName: string }) => {
+const BeobZugeordnetAssignPolylines = ({ treeName }) => {
   const store = useContext(storeContext)
   const { setRefetchKey, addError, activeApfloraLayers } = store
   const tree = store[treeName]

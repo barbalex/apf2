@@ -1,4 +1,3 @@
-// @flow
 /*
  *
  * Karte
@@ -106,7 +105,7 @@ const Container = styled.div`
  * So: need to use app level store state
  */
 
-const Karte = ({ treeName }: { treeName: string }) => {
+const Karte = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const {

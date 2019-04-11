@@ -1,4 +1,3 @@
-// @flow
 import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import Switch from '@material-ui/core/Switch'
@@ -23,7 +22,7 @@ const StyledSwitch = styled(Switch)`
   margin-top: -18px;
 `
 
-const ApFilter = ({ treeName }: { treeName: String }) => {
+const ApFilter = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { refetch } = store

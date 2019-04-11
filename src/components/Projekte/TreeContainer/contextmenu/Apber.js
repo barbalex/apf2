@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 
@@ -16,13 +15,7 @@ const deleteData = {
   table: 'apber',
 }
 
-const Apber = ({
-  onClick,
-  treeName,
-}: {
-  onClick: () => void,
-  treeName: string,
-}) => {
+const Apber = ({ onClick, treeName }) => {
   const { user } = useContext(storeContext)
 
   return (

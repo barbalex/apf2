@@ -25,7 +25,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Ber = ({ treeName }: { treeName: string }) => {
+const Ber = ({ treeName }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
   const [errors, setErrors] = useState({})

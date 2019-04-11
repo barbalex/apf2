@@ -30,7 +30,7 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(observer)
 
-const Tpopkontrzaehl = ({ treeName }: { treeName: string }) => {
+const Tpopkontrzaehl = ({ treeName }) => {
   const store = useContext(storeContext)
   const { refetch } = store
   const client = useApolloClient()

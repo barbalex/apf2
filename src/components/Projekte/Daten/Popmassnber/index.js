@@ -26,7 +26,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Popmassnber = ({ treeName }: { treeName: string }) => {
+const Popmassnber = ({ treeName }) => {
   const store = useContext(storeContext)
   const { refetch } = store
   const client = useApolloClient()

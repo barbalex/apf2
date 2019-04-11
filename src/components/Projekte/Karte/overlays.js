@@ -1,4 +1,3 @@
-//@flow
 export default [
   { label: 'Markierungen', value: 'Markierungen' },
   { label: 'Detailpläne', value: 'Detailplaene' },

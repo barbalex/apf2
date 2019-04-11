@@ -1,4 +1,3 @@
-// @flow
 import React, { Fragment, useContext } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { observer } from 'mobx-react-lite'
@@ -23,13 +22,7 @@ const moveData = {
   action: 'move',
 }
 
-const Ap = ({
-  onClick,
-  treeName,
-}: {
-  onClick: () => void,
-  treeName: string,
-}) => {
+const Ap = ({ onClick, treeName }) => {
   const store = useContext(storeContext)
   const { user, moving } = store
 

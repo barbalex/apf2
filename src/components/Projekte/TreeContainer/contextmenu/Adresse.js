@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 
@@ -14,13 +13,7 @@ const deleteData = {
   table: 'adresse',
 }
 
-const Adresse = ({
-  onClick,
-  treeName,
-}: {
-  onClick: () => void,
-  treeName: string,
-}) => (
+const Adresse = ({ onClick, treeName }) => (
   <ErrorBoundary>
     <ContextMenu id={`${treeName}adresse`}>
       <div className="react-contextmenu-title">Adresse</div>

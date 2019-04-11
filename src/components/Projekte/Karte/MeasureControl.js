@@ -19,7 +19,7 @@ const options = {
 }
 const style = { display: 'none' }
 
-const MeasureControl = ({ leaflet }: { leaflet: Object }) => {
+const MeasureControl = ({ leaflet }) => {
   useEffect(() => {
     const measureControl = new window.L.Control.Measure(options)
     measureControl.addTo(leaflet.map)

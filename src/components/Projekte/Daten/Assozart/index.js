@@ -26,7 +26,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Assozart = ({ treeName }: { treeName: string }) => {
+const Assozart = ({ treeName }) => {
   const store = useContext(storeContext)
   const { refetch } = store
   const client = useApolloClient()

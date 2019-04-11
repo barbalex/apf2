@@ -27,7 +27,7 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
 `
 
-const Ziel = ({ treeName }: { treeName: string }) => {
+const Ziel = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { refetch } = store

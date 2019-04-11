@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { observer } from 'mobx-react-lite'
@@ -18,13 +17,7 @@ const showCoordOfBeobOnMapGeoAdminChData = {
   action: 'showCoordOfBeobOnMapGeoAdminCh',
 }
 
-const BeobNichtZuzuordnen = ({
-  treeName,
-  onClick,
-}: {
-  treeName: string,
-  onClick: () => void,
-}) => {
+const BeobNichtZuzuordnen = ({ treeName, onClick }) => {
   const { user } = useContext(storeContext)
 
   return (

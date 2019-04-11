@@ -39,7 +39,7 @@ const veraenGegenVorjahrWerte = [
   { value: '-', label: '-' },
 ]
 
-const Apber = ({ treeName }: { treeName: string }) => {
+const Apber = ({ treeName }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
   const [errors, setErrors] = useState({})

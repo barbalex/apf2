@@ -26,7 +26,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Ekfzaehleinheit = ({ treeName }: { treeName: string }) => {
+const Ekfzaehleinheit = ({ treeName }) => {
   const store = useContext(storeContext)
   const { refetch } = store
   const client = useApolloClient()

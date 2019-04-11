@@ -73,7 +73,7 @@ const EwmDiv = styled.div`
 
 const isRemoteHost = window.location.hostname !== 'localhost'
 
-const Teilpopulationen = ({ treeName }: { treeName: string }) => {
+const Teilpopulationen = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
 

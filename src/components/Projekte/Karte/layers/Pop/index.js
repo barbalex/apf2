@@ -25,7 +25,7 @@ const iconCreateFunction = function(cluster) {
   })
 }
 
-const Pop = ({ treeName }: { treeName: string }) => {
+const Pop = ({ treeName }) => {
   const store = useContext(storeContext)
   const {
     nodeFilter,
