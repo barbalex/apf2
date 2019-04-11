@@ -5,8 +5,8 @@ import gql from 'graphql-tag'
 
 import updateBeobByIdGql from './updateBeobById'
 
-export default async ({ value, id, treeName, type, client, mobxStore }) => {
-  const { refetch } = mobxStore
+export default async ({ value, id, treeName, type, client, store }) => {
+  const { refetch } = store
   const variables = {
     id,
     tpopId: value,
@@ -25,7 +25,7 @@ export default async ({ value, id, treeName, type, client, mobxStore }) => {
     setActiveNodeArray,
     openNodes,
     setOpenNodes,
-  } = mobxStore[treeName]
+  } = store[treeName]
   let newANA
   let newOpenNodes
 

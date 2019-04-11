@@ -15,10 +15,10 @@ const StyledH3 = styled.h3`
 `
 
 const Line = ({ treeName, beob }: { treeName: string, beob: Object }) => {
-  const mobxStore = useContext(storeContext)
-  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
+  const store = useContext(storeContext)
+  const activeNodes = store[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
-  const { idsFiltered } = mobxStore[treeName].map
+  const { idsFiltered } = store[treeName].map
 
   const isHighlighted = idsFiltered.includes(beob.id)
   const beobLatLng = new window.L.LatLng(...epsg2056to4326(beob.x, beob.y))

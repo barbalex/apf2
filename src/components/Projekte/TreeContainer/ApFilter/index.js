@@ -25,8 +25,8 @@ const StyledSwitch = styled(Switch)`
 
 const ApFilter = ({ treeName }: { treeName: String }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(storeContext)
-  const { refetch } = mobxStore
+  const store = useContext(storeContext)
+  const { refetch } = store
   const {
     apFilter,
     setApFilter,
@@ -34,8 +34,8 @@ const ApFilter = ({ treeName }: { treeName: String }) => {
     setActiveNodeArray,
     openNodes,
     setOpenNodes,
-  } = mobxStore[treeName]
-  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
+  } = store[treeName]
+  const activeNodes = store[`${treeName}ActiveNodes`]
 
   const onChange = useCallback(async () => {
     const previousApFilter = apFilter

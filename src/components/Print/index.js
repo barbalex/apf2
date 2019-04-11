@@ -44,8 +44,8 @@ const ApberForApFromAp = lazy(() => import('./ApberForApFromAp'))
 const ApberForYear = lazy(() => import('./ApberForYear'))
 
 const Print = () => {
-  const mobxStore = useContext(storeContext)
-  const { historyGoBack, tree } = mobxStore
+  const store = useContext(storeContext)
+  const { historyGoBack, tree } = store
   const { activeNodeArray } = tree
   const showApberForAp =
     activeNodeArray.length === 7 &&

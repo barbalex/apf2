@@ -27,10 +27,10 @@ const BeobNichtBeurteiltMarker = ({
   beob: Object,
 }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(storeContext)
-  const { assigningBeob, refetch } = mobxStore
-  const { setActiveNodeArray, map } = mobxStore[treeName]
-  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
+  const store = useContext(storeContext)
+  const { assigningBeob, refetch } = store
+  const { setActiveNodeArray, map } = store[treeName]
+  const activeNodes = store[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
   const { idsFiltered } = map
 

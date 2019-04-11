@@ -75,14 +75,11 @@ const ProjektContainer = ({
   tabs: Array<String>,
   projekteTabs: Array<String>,
 }) => {
-  const mobxStore = useContext(storeContext)
-  const { isPrint } = mobxStore
-  const {
-    setTreeWidth,
-    setTreeHeight,
-    setDatenWidth,
-    setFilterWidth,
-  } = mobxStore[treeName]
+  const store = useContext(storeContext)
+  const { isPrint } = store
+  const { setTreeWidth, setTreeHeight, setDatenWidth, setFilterWidth } = store[
+    treeName
+  ]
 
   const treeEl = useRef(null)
   const datenEl = useRef(null)

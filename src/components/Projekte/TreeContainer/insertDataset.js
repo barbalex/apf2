@@ -18,7 +18,7 @@ export default async ({
   menuType,
   url,
   client,
-  mobxStore,
+  store,
 }: {
   treeName: string,
   tablePassed: String,
@@ -27,10 +27,10 @@ export default async ({
   menuType: String,
   url: Array<String>,
   client: Object,
-  mobxStore: Object,
+  store: Object,
 }): any => {
-  const {  addError, refetch } = mobxStore
-  const {setActiveNodeArray, openNodes,setOpenNodes} = mobxStore[treeName]
+  const { addError, refetch } = store
+  const { setActiveNodeArray, openNodes, setOpenNodes } = store[treeName]
   let table = tablePassed
   // insert new dataset in db and fetch id
   const tableMetadata: {

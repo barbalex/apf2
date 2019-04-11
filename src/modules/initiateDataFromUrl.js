@@ -5,11 +5,8 @@ import isMobilePhone from '../modules/isMobilePhone'
 import setUrlQueryValue from '../modules/setUrlQueryValue'
 import setOpenNodesFromActiveNodeArray from '../modules/setOpenNodesFromActiveNodeArray'
 
-export default async ({
-  activeNodeArray: activeNodeArrayPassed,
-  mobxStore,
-}) => {
-  const { setUrlQuery, cloneTree2From1 } = mobxStore
+export default async ({ activeNodeArray: activeNodeArrayPassed, store }) => {
+  const { setUrlQuery, cloneTree2From1 } = store
   const activeNodeArrayFromPathname =
     activeNodeArrayPassed || getActiveNodeArrayFromPathname()
   let initialActiveNodeArray = [...activeNodeArrayFromPathname]
@@ -21,7 +18,7 @@ export default async ({
   if (activeNodeArrayFromPathname.length === 0) {
     initialActiveNodeArray.push('Projekte')
   }
-  mobxStore.setTreeKey({
+  store.setTreeKey({
     value: initialActiveNodeArray,
     tree: 'tree',
     key: 'activeNodeArray',
@@ -29,7 +26,7 @@ export default async ({
   // need to set openNodes
   setOpenNodesFromActiveNodeArray({
     activeNodeArray: initialActiveNodeArray,
-    mobxStore,
+    store,
   })
   // clone tree2 in case tree2 is open
   cloneTree2From1()

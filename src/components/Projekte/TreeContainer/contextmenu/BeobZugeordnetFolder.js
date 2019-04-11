@@ -19,8 +19,8 @@ const BeobZugeordnetFolder = ({
   treeName: string,
   onClick: () => void,
 }) => {
-  const mobxStore = useContext(storeContext)
-  const { activeApfloraLayers } = mobxStore
+  const store = useContext(storeContext)
+  const { activeApfloraLayers } = store
 
   // eslint-disable-next-line no-unused-vars
   const [id, changeId] = useState(0)

@@ -60,13 +60,8 @@ const DownloadCardButton = styled(Button)`
 
 const Beobachtungen = () => {
   const client = useApolloClient()
-  const mobxStore = useContext(storeContext)
-  const {
-    mapFilter,
-    addError,
-    exportApplyMapFilter,
-    exportFileType,
-  } = mobxStore
+  const store = useContext(storeContext)
+  const { mapFilter, addError, exportApplyMapFilter, exportFileType } = store
 
   const [expanded, setExpanded] = useState(false)
   const [message, setMessage] = useState(null)

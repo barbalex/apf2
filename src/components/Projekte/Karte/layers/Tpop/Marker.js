@@ -28,14 +28,14 @@ const StyledTooltip = styled(Tooltip)`
 `
 
 const TpopMarker = ({ treeName, tpop }: { treeName: string, tpop: Object }) => {
-  const mobxStore = useContext(storeContext)
-  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
+  const store = useContext(storeContext)
+  const activeNodes = store[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
   const {
     idsFiltered,
     tpopIcon: tpopIconName,
     tpopLabel: tpopLabelName,
-  } = mobxStore[treeName].map
+  } = store[treeName].map
 
   const popNr = get(tpop, 'popByPopId.nr') || '(keine Nr)'
   const tpopNr = get(tpop, 'nr') || '(keine Nr)'

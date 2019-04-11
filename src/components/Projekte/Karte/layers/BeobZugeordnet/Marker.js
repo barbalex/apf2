@@ -27,10 +27,10 @@ const BeobZugeordnetMarker = ({
   beob: Object,
 }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(storeContext)
-  const { assigningBeob, refetch } = mobxStore
-  const { map, setActiveNodeArray } = mobxStore[treeName]
-  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
+  const store = useContext(storeContext)
+  const { assigningBeob, refetch } = store
+  const { map, setActiveNodeArray } = store[treeName]
+  const activeNodes = store[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
   const { idsFiltered } = map
 

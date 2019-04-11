@@ -6,12 +6,12 @@ export default ({
   nodes: nodesPassed,
   data,
   treeName,
-  mobxStore,
+  store,
 }: {
   nodes: Array<Object>,
   data: Object,
   treeName: String,
-  mobxStore: Object,
+  store: Object,
 }): Array<Object> => {
   const projekts = get(data, 'allProjekts.nodes', [])
 

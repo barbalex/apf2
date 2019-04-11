@@ -31,8 +31,8 @@ const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
 const ekfRefYear = new Date(ekfRefDate).getFullYear()
 
 const EkfYear = () => {
-  const mobxStore = useContext(storeContext)
-  const { ekfYear, setEkfYear } = mobxStore
+  const store = useContext(storeContext)
+  const { ekfYear, setEkfYear } = store
 
   const [stateValue, setStateValue] = useState(
     ekfYear || ekfYear === 0 ? ekfYear : '',
@@ -50,7 +50,7 @@ const EkfYear = () => {
       if (ekfYear !== stateValue) {
         initiateDataFromUrl({
           activeNodeArray: ['Projekte'],
-          mobxStore,
+          store,
         })
       }
     },

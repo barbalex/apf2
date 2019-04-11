@@ -65,8 +65,8 @@ const TotalColumn = styled.div`
 `
 
 const AktPopList = () => {
-  const mobxStore = useContext(storeContext)
-  const activeNodes = mobxStore.treeActiveNodes
+  const store = useContext(storeContext)
+  const activeNodes = store.treeActiveNodes
   const { projekt: projektId } = activeNodes
   const { data, loading, error: dataError } = useQuery(query, {
     variables: {

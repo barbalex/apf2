@@ -17,8 +17,8 @@ const TestdataMessage = ({
   treeName: string,
   apId: string,
 }) => {
-  const mobxStore = useContext(storeContext)
-  const tree = mobxStore[treeName]
+  const store = useContext(storeContext)
+  const tree = store[treeName]
   const apIdFromTree = get(tree, 'activeNodes.ap')
   const apIdUsed = apIdFromTree || apId
   const isTestAp = apIdUsed && constants.testAps.includes(apIdUsed)

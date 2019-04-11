@@ -7,19 +7,19 @@ export default ({
   treeName,
   loading,
   projektNodes,
-  mobxStore,
+  store,
 }: {
   nodes: Array<Object>,
   data: Object,
   treeName: String,
   loading: Boolean,
   projektNodes: Array<Object>,
-  mobxStore: Object,
+  store: Object,
 }): Array<Object> => {
   const adresses = get(data, 'allAdresses.nodes', [])
   const wlIndex = projektNodes.length + 2
   const nodeLabelFilterString =
-    get(mobxStore, `${treeName}.nodeLabelFilter.adresse`) || ''
+    get(store, `${treeName}.nodeLabelFilter.adresse`) || ''
 
   let adresseNodesLength = adresses.length
   // before Adressen folder is active, only total count was fetched, not yet any adressen nodes

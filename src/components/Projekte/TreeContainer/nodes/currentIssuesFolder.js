@@ -7,14 +7,14 @@ export default ({
   treeName,
   loading,
   projektNodes,
-  mobxStore,
+  store,
 }: {
   nodes: Array<Object>,
   data: Object,
   treeName: String,
   loading: Boolean,
   projektNodes: Array<Object>,
-  mobxStore: Object,
+  store: Object,
 }): Array<Object> => {
   const currentIssues = get(data, 'allCurrentissues.nodes', [])
 

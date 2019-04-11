@@ -12,7 +12,7 @@ export default ({
   projId,
   apNodes,
   apId,
-  mobxStore,
+  store,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -22,7 +22,7 @@ export default ({
   projId: String,
   apNodes: Array<Object>,
   apId: String,
-  mobxStore: Object,
+  store: Object,
 }): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
@@ -32,7 +32,7 @@ export default ({
     id: apId,
   })
   const nodeLabelFilterString =
-    get(mobxStore, `${treeName}.nodeLabelFilter.ber`) || ''
+    get(store, `${treeName}.nodeLabelFilter.ber`) || ''
 
   const berNodesLength = memoizeOne(
     () => get(data, 'allBers.nodes', []).filter(el => el.apId === apId).length,

@@ -75,14 +75,9 @@ const isRemoteHost = window.location.hostname !== 'localhost'
 
 const Teilpopulationen = ({ treeName }: { treeName: string }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(storeContext)
+  const store = useContext(storeContext)
 
-  const {
-    mapFilter,
-    addError,
-    exportApplyMapFilter,
-    exportFileType,
-  } = mobxStore
+  const { mapFilter, addError, exportApplyMapFilter, exportFileType } = store
 
   const [expanded, setExpanded] = useState(false)
   const [message, setMessage] = useState(null)

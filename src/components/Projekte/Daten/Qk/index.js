@@ -59,9 +59,9 @@ const StyledButton = styled(Button)`
 `
 
 const Qk = ({ treeName }: { treeName: string }) => {
-  const mobxStore = useContext(storeContext)
-  const { ktZh, setKtZh, addError } = mobxStore
-  const { activeNodeArray } = mobxStore[treeName]
+  const store = useContext(storeContext)
+  const { ktZh, setKtZh, addError } = store
+  const { activeNodeArray } = store[treeName]
 
   const [berichtjahr, setBerichtjahr] = useState(standardQkYear())
   const [filter, setFilter] = useState('')

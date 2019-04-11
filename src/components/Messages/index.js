@@ -52,8 +52,8 @@ const OkButton = styled(Button)`
 
 const UserMessages = ({ open }: { open: Boolean }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(storeContext)
-  const { user, updateAvailable } = mobxStore
+  const store = useContext(storeContext)
+  const { user, updateAvailable } = store
   const userName = user.name
   const { data, error, loading, refetch } = useQuery(query, {
     variables: { name: userName },
@@ -86,7 +86,7 @@ const UserMessages = ({ open }: { open: Boolean }) => {
   }, [unreadMessages, userName])
 
   if (error) {
-    return dealWithError({ error, mobxStore, component: 'Messages' })
+    return dealWithError({ error, store, component: 'Messages' })
   }
 
   return (

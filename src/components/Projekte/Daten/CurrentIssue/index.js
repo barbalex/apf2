@@ -32,9 +32,9 @@ const query = gql`
 `
 
 const CurrentIssue = ({ treeName }: { treeName: String }) => {
-  const mobxStore = useContext(storeContext)
+  const store = useContext(storeContext)
 
-  const { activeNodeArray } = mobxStore[treeName]
+  const { activeNodeArray } = store[treeName]
 
   const { data, loading, error } = useQuery(query, {
     variables: {

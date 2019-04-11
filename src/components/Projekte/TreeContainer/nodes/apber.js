@@ -11,7 +11,7 @@ export default ({
   apNodes,
   projId,
   apId,
-  mobxStore,
+  store,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -20,7 +20,7 @@ export default ({
   apNodes: Array<Object>,
   projId: String,
   apId: String,
-  mobxStore: Object,
+  store: Object,
 }): Array<Object> => {
   const apbers = get(data, 'allApbers.nodes', [])
   // fetch sorting indexes of parents

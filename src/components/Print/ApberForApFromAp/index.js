@@ -58,8 +58,8 @@ const ApberForApFromAp = ({
   apberId: string,
   apId: String,
 }) => {
-  const mobxStore = useContext(storeContext)
-  const activeNodes = mobxStore.treeActiveNodes
+  const store = useContext(storeContext)
+  const activeNodes = store.treeActiveNodes
   let apberId
   if (apberIdPassed) {
     apberId = apberIdPassed

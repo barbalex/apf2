@@ -5,14 +5,14 @@ import { getSnapshot } from 'mobx-state-tree'
 export default async ({
   treeName,
   url,
-  mobxStore,
+  store,
 }: {
   treeName: string,
   url: Array<String>,
 }) => {
-  const {setOpenNodes,setActiveNodeArray}=mobxStore[treeName]
-  const openNodes = getSnapshot(mobxStore[treeName].openNodes)
-  const activeNodeArray = getSnapshot(mobxStore[treeName].activeNodeArray)
+  const { setOpenNodes, setActiveNodeArray } = store[treeName]
+  const openNodes = getSnapshot(store[treeName].openNodes)
+  const activeNodeArray = getSnapshot(store[treeName].activeNodeArray)
   const newOpenNodes = openNodes.filter(n => {
     const partWithEqualLength = n.slice(0, url.length)
     return !isEqual(partWithEqualLength, url)

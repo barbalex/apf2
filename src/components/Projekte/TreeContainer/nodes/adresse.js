@@ -7,13 +7,13 @@ export default ({
   data,
   treeName,
   projektNodes,
-  mobxStore,
+  store,
 }: {
   nodes: Array<Object>,
   data: Object,
   treeName: String,
   projektNodes: Array<Object>,
-  mobxStore: Object,
+  store: Object,
 }): Array<Object> => {
   const adresses = get(data, 'allAdresses.nodes', [])
   const wlIndex = projektNodes.length + 2

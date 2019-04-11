@@ -69,9 +69,9 @@ const Ap = ({
   showFilter: Boolean,
 }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(storeContext)
-  const { user, refetch } = mobxStore
-  const { activeNodeArray } = mobxStore[treeName]
+  const store = useContext(storeContext)
+  const { user, refetch } = store
+  const { activeNodeArray } = store[treeName]
 
   let id =
     activeNodeArray.length > 3

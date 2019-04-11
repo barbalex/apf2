@@ -9,8 +9,8 @@ import Marker from './Marker'
 import storeContext from '../../../../../storeContext'
 import query from './query'
 import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
-import { simpleTypes as popType } from '../../../../../mobxStore/NodeFilterTree/pop'
-import { simpleTypes as tpopType } from '../../../../../mobxStore/NodeFilterTree/tpop'
+import { simpleTypes as popType } from '../../../../../store/NodeFilterTree/pop'
+import { simpleTypes as tpopType } from '../../../../../store/NodeFilterTree/tpop'
 
 const iconCreateFunction = function(cluster) {
   const markers = cluster.getAllChildMarkers()
@@ -26,19 +26,19 @@ const iconCreateFunction = function(cluster) {
 }
 
 const Pop = ({ treeName }: { treeName: string }) => {
-  const mobxStore = useContext(storeContext)
+  const store = useContext(storeContext)
   const {
     nodeFilter,
     activeApfloraLayers,
     addError,
     mapFilter,
     setRefetchKey,
-  } = mobxStore
-  const tree = mobxStore[treeName]
+  } = store
+  const tree = store[treeName]
   const { map } = tree
   const { setPopIdsFiltered } = map
 
-  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
+  const activeNodes = store[`${treeName}ActiveNodes`]
   const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
   const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
   const isActiveInMap = activeApfloraLayers.includes('pop')

@@ -16,8 +16,8 @@ const Container = styled.div`
 
 const EkfAdresse = ({ setAnchorEl }: { setAnchorEl: () => void }) => {
   const { data, error, loading } = useQuery(queryAdresses)
-  const mobxStore = useContext(storeContext)
-  const { setView, setEkfAdresseId } = mobxStore
+  const store = useContext(storeContext)
+  const { setView, setEkfAdresseId } = store
   const choose = useCallback(async event => {
     setAnchorEl(null)
     // prevent this happening before seAnchor happened
@@ -29,7 +29,7 @@ const EkfAdresse = ({ setAnchorEl }: { setAnchorEl: () => void }) => {
 
   if (loading) return '...'
   if (error) {
-    return dealWithError({ error, mobxStore, component: 'EKFAdresse' })
+    return dealWithError({ error, store, component: 'EKFAdresse' })
   }
 
   return (

@@ -20,8 +20,8 @@ const Container = styled.div`
 `
 
 const Beob = ({ treeName }: { treeName: string }) => {
-  const mobxStore = useContext(storeContext)
-  const { activeNodeArray, datenWidth } = mobxStore[treeName]
+  const store = useContext(storeContext)
+  const { activeNodeArray, datenWidth } = store[treeName]
   const { data, loading, error } = useQuery(query, {
     variables: {
       id: activeNodeArray[activeNodeArray.length - 1],

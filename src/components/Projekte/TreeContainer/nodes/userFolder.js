@@ -8,19 +8,19 @@ export default ({
   treeName,
   loading,
   projektNodes,
-  mobxStore,
+  store,
 }: {
   nodes: Array<Object>,
   data: Object,
   treeName: String,
   loading: Boolean,
   projektNodes: Array<Object>,
-  mobxStore: Object,
+  store: Object,
 }): Array<Object> => {
   // fetch sorting indexes of parents
   const userIndex = projektNodes.length + 1
   const nodeLabelFilterString =
-    get(mobxStore, `${treeName}.nodeLabelFilter.user`) || ''
+    get(store, `${treeName}.nodeLabelFilter.user`) || ''
 
   const userNodesLength = memoizeOne(
     () => get(data, 'allUsers.nodes', []).length,

@@ -8,9 +8,9 @@ import jwtDecode from 'jwt-decode'
 
 import graphQlUri from './modules/graphQlUri'
 
-export default async ({ idb, mobxStore }) => {
+export default async ({ idb, store }) => {
   const authLink = setContext(async (_, { headers }) => {
-    const { token } = mobxStore.user
+    const { token } = store.user
     if (token) {
       const tokenDecoded = jwtDecode(token)
       // for unknown reason, date.now returns three more after comma

@@ -25,7 +25,7 @@ import queryAeEigenschaftens from './queryAeEigenschaftens'
 import updateTpopmassnByIdGql from './updateTpopmassnById'
 import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
-import { simpleTypes as tpopmassnType } from '../../../../mobxStore/NodeFilterTree/tpopmassn'
+import { simpleTypes as tpopmassnType } from '../../../../store/NodeFilterTree/tpopmassn'
 
 const Container = styled.div`
   height: 100%;
@@ -52,12 +52,12 @@ const Tpopmassn = ({
   treeName: string,
   showFilter: Boolean,
 }) => {
-  const mobxStore = useContext(storeContext)
+  const store = useContext(storeContext)
   const client = useApolloClient()
-  const { nodeFilter, nodeFilterSetValue, refetch } = mobxStore
+  const { nodeFilter, nodeFilterSetValue, refetch } = store
 
   const [errors, setErrors] = useState({})
-  const { activeNodeArray, datenWidth, filterWidth } = mobxStore[treeName]
+  const { activeNodeArray, datenWidth, filterWidth } = store[treeName]
 
   let id =
     activeNodeArray.length > 9
@@ -159,7 +159,7 @@ const Tpopmassn = ({
         const variables = {
           id: row.id,
           [field]: value,
-          changedBy: mobxStore.user.name,
+          changedBy: store.user.name,
         }
         let field2
         if (field === 'jahr') field2 = 'datum'

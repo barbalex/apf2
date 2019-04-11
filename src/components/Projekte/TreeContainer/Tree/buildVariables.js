@@ -1,25 +1,23 @@
 // @flow
 import uniq from 'lodash/uniq'
 
-import { simpleTypes as apType } from '../../../../mobxStore/NodeFilterTree/ap'
-import { simpleTypes as popType } from '../../../../mobxStore/NodeFilterTree/pop'
-import { simpleTypes as tpopType } from '../../../../mobxStore/NodeFilterTree/tpop'
-import { simpleTypes as tpopmassnType } from '../../../../mobxStore/NodeFilterTree/tpopmassn'
-import { simpleTypes as tpopfeldkontrType } from '../../../../mobxStore/NodeFilterTree/tpopfeldkontr'
-import { simpleTypes as tpopfreiwkontrType } from '../../../../mobxStore/NodeFilterTree/tpopfreiwkontr'
+import { simpleTypes as apType } from '../../../../store/NodeFilterTree/ap'
+import { simpleTypes as popType } from '../../../../store/NodeFilterTree/pop'
+import { simpleTypes as tpopType } from '../../../../store/NodeFilterTree/tpop'
+import { simpleTypes as tpopmassnType } from '../../../../store/NodeFilterTree/tpopmassn'
+import { simpleTypes as tpopfeldkontrType } from '../../../../store/NodeFilterTree/tpopfeldkontr'
+import { simpleTypes as tpopfreiwkontrType } from '../../../../store/NodeFilterTree/tpopfreiwkontr'
 
 export default ({
   treeName,
-  mobxStore,
+  store,
 }: {
   treeName: String,
-  mobxStore: Object,
+  store: Object,
 }): Object => {
-  const { nodeFilter: nodeFilterPassed } = mobxStore
+  const { nodeFilter: nodeFilterPassed } = store
   // apFilter is used for form filter AND apFilter of tree :-(
-  const { openNodes, activeNodeArray, apFilter: apFilterSet } = mobxStore[
-    treeName
-  ]
+  const { openNodes, activeNodeArray, apFilter: apFilterSet } = store[treeName]
   const nodeFilter = nodeFilterPassed[treeName]
 
   const isWerteListen = openNodes.some(

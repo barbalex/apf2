@@ -64,9 +64,9 @@ const roleWerte = [
 ]
 
 const User = ({ treeName }: { treeName: String }) => {
-  const mobxStore = useContext(storeContext)
-  const { refetch } = mobxStore
-  const { activeNodeArray } = mobxStore[treeName]
+  const store = useContext(storeContext)
+  const { refetch } = store
+  const { activeNodeArray } = store[treeName]
   const client = useApolloClient()
 
   const [errors, setErrors] = useState({})

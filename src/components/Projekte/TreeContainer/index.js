@@ -154,7 +154,7 @@ const getAndValidateCoordinatesOfBeob = async ({ id, addError, client }) => {
 
 const TreeContainer = ({ treeName }: { treeName: String }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(storeContext)
+  const store = useContext(storeContext)
   const {
     activeApfloraLayers,
     setActiveApfloraLayers,
@@ -172,9 +172,9 @@ const TreeContainer = ({ treeName }: { treeName: String }) => {
     urlQuery,
     setUrlQuery,
     refetch,
-  } = mobxStore
-  const { openNodes, setOpenNodes, setActiveNodeArray } = mobxStore[treeName]
-  const { projekt } = mobxStore[`${treeName}ActiveNodes`]
+  } = store
+  const { openNodes, setOpenNodes, setActiveNodeArray } = store[treeName]
+  const { projekt } = store[`${treeName}ActiveNodes`]
 
   const handleClick = useCallback(
     (e, data, element) => {
@@ -209,7 +209,7 @@ const TreeContainer = ({ treeName }: { treeName: String }) => {
             menuType,
             id,
             client,
-            mobxStore,
+            store,
           })
         },
         openLowerNodes() {
@@ -219,14 +219,14 @@ const TreeContainer = ({ treeName }: { treeName: String }) => {
             parentId,
             menuType,
             client,
-            mobxStore,
+            store,
           })
         },
         closeLowerNodes() {
           closeLowerNodes({
             treeName,
             url,
-            mobxStore,
+            store,
           })
         },
         delete() {
@@ -297,7 +297,7 @@ const TreeContainer = ({ treeName }: { treeName: String }) => {
             parentId: id,
             client,
             copying,
-            mobxStore,
+            store,
           })
         },
         markForCopyingBiotop() {
@@ -317,7 +317,7 @@ const TreeContainer = ({ treeName }: { treeName: String }) => {
             treeName,
             id,
             client,
-            mobxStore,
+            store,
           })
         },
         copyBeobZugeordnetKoordToTpop() {

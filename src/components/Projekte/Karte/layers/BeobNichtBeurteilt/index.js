@@ -32,12 +32,12 @@ const BeobNichtBeurteiltMarker = ({
   treeName: string,
   clustered: Boolean,
 }) => {
-  const mobxStore = useContext(storeContext)
-  const { setRefetchKey, addError, mapFilter, activeApfloraLayers } = mobxStore
-  const tree = mobxStore[treeName]
-  const { setBeobNichtBeurteiltIdsFiltered } = mobxStore[treeName].map
+  const store = useContext(storeContext)
+  const { setRefetchKey, addError, mapFilter, activeApfloraLayers } = store
+  const tree = store[treeName]
+  const { setBeobNichtBeurteiltIdsFiltered } = store[treeName].map
 
-  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
+  const activeNodes = store[`${treeName}ActiveNodes`]
   const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
   const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
   const isActiveInMap = activeApfloraLayers.includes('beobNichtBeurteilt')

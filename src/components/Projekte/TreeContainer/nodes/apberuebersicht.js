@@ -9,14 +9,14 @@ export default ({
   treeName,
   projektNodes,
   projId,
-  mobxStore,
+  store,
 }: {
   nodes: Array<Object>,
   data: Object,
   treeName: String,
   projektNodes: Array<Object>,
   projId: String,
-  mobxStore: Object,
+  store: Object,
 }): Array<Object> => {
   // fetch sorting indexes of parents
   const projNodeIds = projektNodes.map(n => n.id)

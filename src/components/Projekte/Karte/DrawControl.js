@@ -8,8 +8,8 @@ import storeContext from '../../../storeContext'
 
 const DrawControl = ({ leaflet }: { leaflet: Object }) => {
   const { map } = leaflet
-  const mobxStore = useContext(storeContext)
-  const { setMapFilter } = mobxStore
+  const store = useContext(storeContext)
+  const { setMapFilter } = store
 
   useEffect(() => {
     window.L.drawLocal.draw.toolbar.buttons.polygon =

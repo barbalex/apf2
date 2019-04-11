@@ -95,18 +95,18 @@ const BeobZugeordnetAssignPolylinesIcon = styled(RemoveIcon)`
 const MapIconDiv = styled.div``
 
 const MySortableItem = ({ treeName, apfloraLayer, index }) => {
-  const mobxStore = useContext(storeContext)
+  const store = useContext(storeContext)
   const {
     activeApfloraLayers: activeApfloraLayersRaw,
     setActiveApfloraLayers,
     setBounds,
     assigningBeob,
     setAssigningBeob,
-  } = mobxStore
-  const { idsFiltered } = mobxStore[treeName].map
+  } = store
+  const { idsFiltered } = store[treeName].map
   const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
   const mapIdsFiltered = idsFiltered
-  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
+  const activeNodes = store[`${treeName}ActiveNodes`]
   const layer = apfloraLayer.value
   const pop = layer === 'pop' && activeApfloraLayers.includes('pop')
   const tpop = layer === 'tpop' && activeApfloraLayers.includes('tpop')

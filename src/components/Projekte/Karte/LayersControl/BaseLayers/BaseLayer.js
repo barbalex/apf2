@@ -14,8 +14,8 @@ const LayerDiv = styled.div`
 `
 
 const BaseLayer = ({ layer }: { layer: Object }) => {
-  const mobxStore = useContext(storeContext)
-  const { activeBaseLayer, setActiveBaseLayer } = mobxStore
+  const store = useContext(storeContext)
+  const { activeBaseLayer, setActiveBaseLayer } = store
   const onChange = useCallback(() => setActiveBaseLayer(layer.value), [layer])
 
   return (

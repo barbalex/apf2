@@ -17,7 +17,7 @@ export default ({
   popId,
   tpopId,
   tpopkontrId,
-  mobxStore,
+  store,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -33,7 +33,7 @@ export default ({
   popId: String,
   tpopId: String,
   tpopkontrId: String,
-  mobxStore: Object,
+  store: Object,
 }): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
@@ -44,7 +44,7 @@ export default ({
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
   const tpopkontrIndex = findIndex(tpopfeldkontrNodes, { id: tpopkontrId })
   const nodeLabelFilterString =
-    get(mobxStore, `${treeName}.nodeLabelFilter.tpopkontrzaehl`) || ''
+    get(store, `${treeName}.nodeLabelFilter.tpopkontrzaehl`) || ''
 
   const childrenLength = memoizeOne(
     () =>

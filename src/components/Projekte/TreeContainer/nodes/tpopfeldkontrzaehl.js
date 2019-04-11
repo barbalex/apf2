@@ -17,7 +17,7 @@ export default ({
   popId,
   tpopId,
   tpopkontrId,
-  mobxStore,
+  store,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -32,7 +32,7 @@ export default ({
   popId: String,
   tpopId: String,
   tpopkontrId: String,
-  mobxStore: Object,
+  store: Object,
 }): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {

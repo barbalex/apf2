@@ -60,8 +60,8 @@ const getEkfFromData = ({ data, ekfAdresseId }) => {
 }
 
 const EkfList = ({ data, loading }: { data: Object, loading: Boolean }) => {
-  const mobxStore = useContext(storeContext)
-  const { ekfYear, ekfAdresseId, tree } = mobxStore
+  const store = useContext(storeContext)
+  const { ekfYear, ekfAdresseId, tree } = store
   const ekf = getEkfFromData({ data, ekfAdresseId })
 
   const { activeNodeArray, treeWidth, treeHeight } = tree
@@ -92,7 +92,7 @@ const EkfList = ({ data, loading }: { data: Object, loading: Boolean }) => {
       ]
       initiateDataFromUrl({
         activeNodeArray: url,
-        mobxStore,
+        store,
       })
     }
   }, [ekfYear, ekf.length])

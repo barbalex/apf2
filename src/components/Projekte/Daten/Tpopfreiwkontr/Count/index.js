@@ -179,12 +179,12 @@ const Count = ({
   ekfzaehleinheits: Array<Object>,
   treeName: string,
 }) => {
-  const mobxStore = useContext(storeContext)
+  const store = useContext(storeContext)
   const client = useApolloClient()
   const { setToDelete } = useContext(storeContext)
 
   const [errors, setErrors] = useState({})
-  const { activeNodeArray } = mobxStore[treeName]
+  const { activeNodeArray } = store[treeName]
 
   const { data, loading, error } = useQuery(query, {
     variables: {

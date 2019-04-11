@@ -7,13 +7,13 @@ export default ({
   data,
   treeName,
   projektNodes,
-  mobxStore,
+  store,
 }: {
   nodes: Array<Object>,
   data: Object,
   treeName: String,
   projektNodes: Array<Object>,
-  mobxStore: Object,
+  store: Object,
 }): Array<Object> => {
   // fetch sorting indexes of parents
   const userIndex = projektNodes.length + 1

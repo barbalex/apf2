@@ -14,17 +14,17 @@ export default async ({
   id: jahrString,
   parentId: apId,
   client,
-  mobxStore,
+  store,
 }: {
   treeName: string,
   id: String,
   parentId: String,
   client: Object,
-  mobxStore: Object,
+  store: Object,
 }) => {
-  const tree = mobxStore[treeName]
-  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
-  const { refetch } = mobxStore
+  const tree = store[treeName]
+  const activeNodes = store[`${treeName}ActiveNodes`]
+  const { refetch } = store
   const jahr = +jahrString
   const { projekt } = activeNodes
   const { addOpenNodes } = tree

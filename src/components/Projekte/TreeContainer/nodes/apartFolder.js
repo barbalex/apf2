@@ -12,7 +12,7 @@ export default ({
   projId,
   apNodes,
   apId,
-  mobxStore,
+  store,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -22,12 +22,12 @@ export default ({
   projId: String,
   apNodes: Array<Object>,
   apId: String,
-  mobxStore: Object,
+  store: Object,
 }): Array<Object> => {
   // return empty if ap is not a real ap and apFilter is set
   const ap = get(data, 'allAps.nodes', []).find(n => n.id === apId)
   const isAp = ap && [1, 2, 3].includes(ap.bearbeitung)
-  const apFilter = get(mobxStore, `${treeName}.apFilter`)
+  const apFilter = get(store, `${treeName}.apFilter`)
   if (!!apFilter && !isAp) return []
 
   const aparts = get(data, 'allAparts.nodes', [])
@@ -40,18 +40,20 @@ export default ({
     id: apId,
   })
   const nodeLabelFilterString =
-    get(mobxStore, `${treeName}.nodeLabelFilter.apart`) || ''
+    get(store, `${treeName}.nodeLabelFilter.apart`) || ''
 
   const apartNodesLength = memoizeOne(
-    () =>
-      aparts
-        .filter(el => el.apId === apId).length,
+    () => aparts.filter(el => el.apId === apId).length,
   )()
   /*let message = loading && !apartNodesLength ? '...' : apartNodesLength
   if (nodeLabelFilterString) {
     message = `${apartNodesLength} gefiltert`
   }*/
-  const message = loading ? '...' : !!nodeLabelFilterString ? `${apartNodesLength} gefiltert`:apartNodesLength
+  const message = loading
+    ? '...'
+    : !!nodeLabelFilterString
+    ? `${apartNodesLength} gefiltert`
+    : apartNodesLength
 
   // only show if parent node exists
   const apNodesIds = nodesPassed.map(n => n.id)

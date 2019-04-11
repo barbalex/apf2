@@ -42,7 +42,7 @@ const EkfList = ({
   style: Object,
   row: Object,
 }) => {
-  const mobxStore = useContext(storeContext)
+  const store = useContext(storeContext)
   const innerContainerHeight = projektCount > 1 ? 81 : 62
   const url = [
     'Projekte',
@@ -61,7 +61,7 @@ const EkfList = ({
     () =>
       initiateDataFromUrl({
         activeNodeArray: url,
-        mobxStore,
+        store,
       }),
     [row.id],
   )

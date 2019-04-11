@@ -34,8 +34,8 @@ const MyAppBar = ({
   setShowDeletions: () => void,
   role: string,
 }) => {
-  const mobxStore = useContext(storeContext)
-  const { deletedDatasets, user, urlQuery, treeActiveNodes } = mobxStore
+  const store = useContext(storeContext)
+  const { deletedDatasets, user, urlQuery, treeActiveNodes } = store
   const { idb } = useContext(idbContext)
 
   const [anchorEl, setAnchorEl] = useState(null)

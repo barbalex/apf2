@@ -26,8 +26,8 @@ const FieldsContainer = styled.div`
 
 const Projekt = ({ treeName }: { treeName: string }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(storeContext)
-  const { activeNodeArray } = mobxStore[treeName]
+  const store = useContext(storeContext)
+  const { activeNodeArray } = store[treeName]
 
   const [errors, setErrors] = useState({})
 
@@ -62,7 +62,7 @@ const Projekt = ({ treeName }: { treeName: string }) => {
           variables: {
             id: row.id,
             [field]: value,
-            changedBy: mobxStore.user.name,
+            changedBy: store.user.name,
           },
           optimisticResponse: {
             __typename: 'Mutation',

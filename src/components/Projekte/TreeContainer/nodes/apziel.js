@@ -17,7 +17,7 @@ export default ({
   apId,
   jahr,
   apzieljahrFolderNodes,
-  mobxStore,
+  store,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -29,7 +29,7 @@ export default ({
   apId: String,
   jahr: Number,
   apzieljahrFolderNodes: Array<Object>,
-  mobxStore: Object,
+  store: Object,
 }): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {

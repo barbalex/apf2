@@ -31,14 +31,14 @@ const StyledDeleteFilterIcon = styled(DeleteFilterIcon)`
 `
 
 const LabelFilter = ({ treeName }: { treeName: String }) => {
-  const mobxStore = useContext(storeContext)
+  const store = useContext(storeContext)
   const {
     nodeLabelFilter,
     activeNode,
     activeNodeArray,
     setActiveNodeArray,
     setOpenNodes,
-  } = mobxStore[treeName]
+  } = store[treeName]
   const {
     setKey: setNodeLabelFilterKey,
     isFiltered: runIsFiltered,
@@ -63,7 +63,7 @@ const LabelFilter = ({ treeName }: { treeName: String }) => {
       labelText = `${tableLabel} filtern`
     }
   }
-  const openNodes = get(mobxStore, `${treeName}.openNodes`, [])
+  const openNodes = get(store, `${treeName}.openNodes`, [])
 
   const [value, setValue] = useState('')
 

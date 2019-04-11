@@ -23,7 +23,7 @@ import updateTpopByIdGql from './updateTpopById'
 import getGemeindeForKoord from '../../../../modules/getGemeindeForKoord'
 import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
-import { simpleTypes as tpopType } from '../../../../mobxStore/NodeFilterTree/tpop'
+import { simpleTypes as tpopType } from '../../../../store/NodeFilterTree/tpop'
 
 const Container = styled.div`
   height: 100%;
@@ -52,12 +52,12 @@ const Tpop = ({
   showFilter: Boolean,
 }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(storeContext)
-  const { addError, nodeFilter, nodeFilterSetValue, refetch } = mobxStore
+  const store = useContext(storeContext)
+  const { addError, nodeFilter, nodeFilterSetValue, refetch } = store
 
   const [errors, setErrors] = useState({})
 
-  const { activeNodeArray, datenWidth, filterWidth } = mobxStore[treeName]
+  const { activeNodeArray, datenWidth, filterWidth } = store[treeName]
 
   let id =
     activeNodeArray.length > 7
@@ -144,7 +144,7 @@ const Tpop = ({
             variables: {
               id: row.id,
               [field]: value,
-              changedBy: mobxStore.user.name,
+              changedBy: store.user.name,
             },
             optimisticResponse: {
               __typename: 'Mutation',

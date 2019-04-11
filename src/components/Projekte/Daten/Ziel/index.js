@@ -29,14 +29,14 @@ const FieldsContainer = styled.div`
 
 const Ziel = ({ treeName }: { treeName: string }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(storeContext)
-  const { refetch } = mobxStore
+  const store = useContext(storeContext)
+  const { refetch } = store
   const {
     activeNodeArray,
     setActiveNodeArray,
     openNodes,
     setOpenNodes,
-  } = mobxStore[treeName]
+  } = store[treeName]
 
   const [errors, setErrors] = useState({})
 
@@ -69,7 +69,7 @@ const Ziel = ({ treeName }: { treeName: string }) => {
           variables: {
             id: row.id,
             [field]: value,
-            changedBy: mobxStore.user.name,
+            changedBy: store.user.name,
           },
           optimisticResponse: {
             __typename: 'Mutation',

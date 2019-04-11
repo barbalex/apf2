@@ -9,14 +9,14 @@ export default ({
   treeName,
   projektNodes,
   projId,
-  mobxStore,
+  store,
 }: {
   nodes: Array<Object>,
   data: Object,
   treeName: String,
   projektNodes: Array<Object>,
   projId: String,
-  mobxStore: Object,
+  store: Object,
 }): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
@@ -25,7 +25,7 @@ export default ({
 
   // map through all elements and create array of nodes
   const nodes = memoizeOne(() =>
-  get(data, 'allAps.nodes', [])
+    get(data, 'allAps.nodes', [])
       // only show if parent node exists
       .filter(el => nodesPassed.map(n => n.id).includes(el.projId))
       // only show nodes of this parent

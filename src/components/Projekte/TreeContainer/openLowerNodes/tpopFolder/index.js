@@ -13,16 +13,16 @@ export default async ({
   treeName,
   id,
   client,
-  mobxStore,
+  store,
 }: {
   treeName: string,
   id: String,
   client: Object,
-  mobxStore: Object,
+  store: Object,
 }) => {
-  const tree = mobxStore[treeName]
-  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
-  const { refetch } = mobxStore
+  const tree = store[treeName]
+  const activeNodes = store[`${treeName}ActiveNodes`]
+  const { refetch } = store
   const { projekt, ap } = activeNodes
   const { addOpenNodes } = tree
   // 1. load all data

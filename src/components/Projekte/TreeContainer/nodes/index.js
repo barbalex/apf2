@@ -125,7 +125,7 @@ export default ({
   loadingEkfzaehleinheits,
   loadingBeobNichtBeurteilts,
   loadingBeobNichtZuzuordnens,
-  mobxStore,
+  store,
   nodeFilter,
   role,
   treeName,
@@ -182,19 +182,19 @@ export default ({
   loadingEkfzaehleinheits: Boolean,
   loadingBeobNichtBeurteilts: Boolean,
   loadingBeobNichtZuzuordnens: Boolean,
-  mobxStore: Object,
+  store: Object,
   nodeFilter: Object,
   role: string,
   treeName: string,
 }): Array<Object> => {
-  const openNodes = mobxStore[treeName].openNodes
+  const openNodes = store[treeName].openNodes
     .toJSON()
     // need to sort so folders are added in correct order
     // because every lower folder gets previous nodes passed
     .sort(sort)
   //console.log('nodes', { data, openNodes })
   const projektNodes = [
-    ...buildProjektNodes({ data: dataProjekts, treeName, mobxStore }),
+    ...buildProjektNodes({ data: dataProjekts, treeName, store }),
   ]
 
   let nodes = [
@@ -205,7 +205,7 @@ export default ({
         treeName,
         projektNodes,
         loading: loadingUsers,
-        mobxStore,
+        store,
       }),
     )(),
     ...memoizeOne(() =>
@@ -214,7 +214,7 @@ export default ({
         treeName,
         projektNodes,
         loading: loadingUsers,
-        mobxStore,
+        store,
       }),
     )(),
   ]
@@ -263,7 +263,7 @@ export default ({
               loading: loadingAps,
               projektNodes,
               projId,
-              mobxStore,
+              store,
             }),
           )(),
           ...memoizeOne(() =>
@@ -274,7 +274,7 @@ export default ({
               loading: loadingApberuebersichts,
               projektNodes,
               projId,
-              mobxStore,
+              store,
             }),
           )(),
         ]
@@ -294,7 +294,7 @@ export default ({
               loading: loadingApberuebersichts,
               projektNodes,
               projId,
-              mobxStore,
+              store,
             }),
           )(),
         ]
@@ -308,7 +308,7 @@ export default ({
             loading: loadingAps,
             projektNodes,
             projId,
-            mobxStore,
+            store,
           }),
         )()
         nodes = [...nodes, ...apNodes]
@@ -328,7 +328,7 @@ export default ({
               apNodes,
               apId,
               nodeFilter: nodeFilter[treeName],
-              mobxStore,
+              store,
             }),
           )(),
           ...memoizeOne(() =>
@@ -341,7 +341,7 @@ export default ({
               projektNodes,
               projId,
               apId,
-              mobxStore,
+              store,
             }),
           )(),
           ...memoizeOne(() =>
@@ -354,7 +354,7 @@ export default ({
               projektNodes,
               projId,
               apId,
-              mobxStore,
+              store,
             }),
           )(),
           ...memoizeOne(() =>
@@ -367,7 +367,7 @@ export default ({
               projektNodes,
               projId,
               apId,
-              mobxStore,
+              store,
             }),
           )(),
           ...memoizeOne(() =>
@@ -380,7 +380,7 @@ export default ({
               projektNodes,
               projId,
               apId,
-              mobxStore,
+              store,
             }),
           )(),
           ...memoizeOne(() =>
@@ -392,7 +392,7 @@ export default ({
               projektNodes,
               projId,
               apId,
-              mobxStore,
+              store,
             }),
           )(),
           ...memoizeOne(() =>
@@ -405,7 +405,7 @@ export default ({
               projektNodes,
               projId,
               apId,
-              mobxStore,
+              store,
             }),
           )(),
           ...memoizeOne(() =>
@@ -418,7 +418,7 @@ export default ({
               projektNodes,
               projId,
               apId,
-              mobxStore,
+              store,
             }),
           )(),
           ...memoizeOne(() =>
@@ -431,7 +431,7 @@ export default ({
               projektNodes,
               projId,
               apId,
-              mobxStore,
+              store,
             }),
           )(),
           ...memoizeOne(() =>
@@ -444,7 +444,7 @@ export default ({
               projektNodes,
               projId,
               apId,
-              mobxStore,
+              store,
             }),
           )(),
           ...memoizeOne(() =>
@@ -457,7 +457,7 @@ export default ({
               projektNodes,
               projId,
               apId,
-              mobxStore,
+              store,
             }),
           )(),
           ...memoizeOne(() =>
@@ -488,7 +488,7 @@ export default ({
             projektNodes,
             projId,
             apId: nodeUrl[3],
-            mobxStore,
+            store,
           }),
         )()
         nodes = [...nodes, ...apzieljahrFolderNodes]
@@ -511,7 +511,7 @@ export default ({
             apId: nodeUrl[3],
             jahr: +nodeUrl[5],
             apzieljahrFolderNodes,
-            mobxStore,
+            store,
           }),
         )()
         nodes = [...nodes, ...apzielNodes]
@@ -538,7 +538,7 @@ export default ({
               apzieljahrFolderNodes,
               zielId: nodeUrl[6],
               apzielNodes,
-              mobxStore,
+              store,
             }),
           )(),
         ]
@@ -566,7 +566,7 @@ export default ({
               apzieljahrFolderNodes,
               zielId: nodeUrl[6],
               apzielNodes,
-              mobxStore,
+              store,
             }),
           )(),
         ]
@@ -582,7 +582,7 @@ export default ({
             projektNodes,
             projId,
             apId: nodeUrl[3],
-            mobxStore,
+            store,
           }),
         )()
         nodes = [...nodes, ...popNodes]
@@ -603,7 +603,7 @@ export default ({
               projektNodes,
               projId,
               apId: nodeUrl[3],
-              mobxStore,
+              store,
             }),
           )(),
         ]
@@ -624,7 +624,7 @@ export default ({
               projektNodes,
               projId,
               apId: nodeUrl[3],
-              mobxStore,
+              store,
             }),
           )(),
         ]
@@ -642,7 +642,7 @@ export default ({
               projektNodes,
               projId,
               apId: nodeUrl[3],
-              mobxStore,
+              store,
             }),
           )(),
         ]
@@ -660,7 +660,7 @@ export default ({
               projektNodes,
               projId,
               apId: nodeUrl[3],
-              mobxStore,
+              store,
             }),
           )(),
         ]
@@ -678,7 +678,7 @@ export default ({
               projektNodes,
               projId,
               apId: nodeUrl[3],
-              mobxStore,
+              store,
             }),
           )(),
         ]
@@ -696,7 +696,7 @@ export default ({
               projektNodes,
               projId,
               apId: nodeUrl[3],
-              mobxStore,
+              store,
             }),
           )(),
         ]
@@ -714,7 +714,7 @@ export default ({
               projektNodes,
               projId,
               apId: nodeUrl[3],
-              mobxStore,
+              store,
             }),
           )(),
         ]
@@ -732,7 +732,7 @@ export default ({
               projektNodes,
               projId,
               apId: nodeUrl[3],
-              mobxStore,
+              store,
             }),
           )(),
         ]
@@ -754,7 +754,7 @@ export default ({
               apId,
               popNodes,
               popId,
-              mobxStore,
+              store,
             }),
           )(),
           ...memoizeOne(() =>
@@ -769,7 +769,7 @@ export default ({
               apId,
               popNodes,
               popId,
-              mobxStore,
+              store,
             }),
           )(),
           ...memoizeOne(() =>
@@ -784,7 +784,7 @@ export default ({
               apId,
               popNodes,
               popId,
-              mobxStore,
+              store,
             }),
           )(),
         ]
@@ -808,7 +808,7 @@ export default ({
               apNodes,
               popId: nodeUrl[5],
               popNodes,
-              mobxStore,
+              store,
             }),
           )(),
         ]
@@ -832,7 +832,7 @@ export default ({
               apNodes,
               popId: nodeUrl[5],
               popNodes,
-              mobxStore,
+              store,
             }),
           )(),
         ]
@@ -855,7 +855,7 @@ export default ({
             popId: nodeUrl[5],
             popNodes,
             nodeFilter: nodeFilter[treeName],
-            mobxStore,
+            store,
           }),
         )()
         nodes = [...nodes, ...tpopNodes]
@@ -884,7 +884,7 @@ export default ({
               popNodes,
               tpopId,
               tpopNodes,
-              mobxStore,
+              store,
             }),
           )(),
           ...memoizeOne(() =>
@@ -901,7 +901,7 @@ export default ({
               popNodes,
               tpopId,
               tpopNodes,
-              mobxStore,
+              store,
             }),
           )(),
           ...memoizeOne(() =>
@@ -918,7 +918,7 @@ export default ({
               popNodes,
               tpopId,
               tpopNodes,
-              mobxStore,
+              store,
             }),
           )(),
           ...memoizeOne(() =>
@@ -935,7 +935,7 @@ export default ({
               popNodes,
               tpopId,
               tpopNodes,
-              mobxStore,
+              store,
             }),
           )(),
           ...memoizeOne(() =>
@@ -952,7 +952,7 @@ export default ({
               popNodes,
               tpopId,
               tpopNodes,
-              mobxStore,
+              store,
             }),
           )(),
           ...memoizeOne(() =>
@@ -969,7 +969,7 @@ export default ({
               popNodes,
               tpopId,
               tpopNodes,
-              mobxStore,
+              store,
             }),
           )(),
         ]
@@ -996,7 +996,7 @@ export default ({
               popNodes,
               tpopId: nodeUrl[7],
               tpopNodes,
-              mobxStore,
+              store,
             }),
           )(),
         ]
@@ -1023,7 +1023,7 @@ export default ({
               popNodes,
               tpopId: nodeUrl[7],
               tpopNodes,
-              mobxStore,
+              store,
             }),
           )(),
         ]
@@ -1048,7 +1048,7 @@ export default ({
             popNodes,
             tpopId: nodeUrl[7],
             tpopNodes,
-            mobxStore,
+            store,
           }),
         )()
         nodes = [...nodes, ...tpopfreiwkontrNodes]
@@ -1073,7 +1073,7 @@ export default ({
             popNodes,
             tpopId: nodeUrl[7],
             tpopNodes,
-            mobxStore,
+            store,
           }),
         )()
         nodes = [...nodes, ...tpopfeldkontrNodes]
@@ -1100,7 +1100,7 @@ export default ({
               popNodes,
               tpopId: nodeUrl[7],
               tpopNodes,
-              mobxStore,
+              store,
             }),
           )(),
         ]
@@ -1127,7 +1127,7 @@ export default ({
               popNodes,
               tpopId: nodeUrl[7],
               tpopNodes,
-              mobxStore,
+              store,
             }),
           )(),
         ]
@@ -1156,7 +1156,7 @@ export default ({
               tpopNodes,
               tpopkontrId: nodeUrl[9],
               tpopfeldkontrNodes,
-              mobxStore,
+              store,
             }),
           )(),
         ]
@@ -1185,7 +1185,7 @@ export default ({
               tpopNodes,
               tpopkontrId: nodeUrl[9],
               tpopfeldkontrNodes,
-              mobxStore,
+              store,
             }),
           )(),
         ]
@@ -1200,7 +1200,7 @@ export default ({
             data: dataUsers,
             treeName,
             projektNodes,
-            mobxStore,
+            store,
           }),
         )(),
       ]
@@ -1214,7 +1214,7 @@ export default ({
             data: dataCurrentIssues,
             treeName,
             projektNodes,
-            mobxStore,
+            store,
           }),
         )(),
       ]
@@ -1233,7 +1233,7 @@ export default ({
             treeName,
             loading: loadingAdresses,
             projektNodes,
-            mobxStore,
+            store,
           }),
         )(),
       ]
@@ -1253,7 +1253,7 @@ export default ({
             treeName,
             loading: loadingAdresses,
             projektNodes,
-            mobxStore,
+            store,
           }),
         )(),
       ]

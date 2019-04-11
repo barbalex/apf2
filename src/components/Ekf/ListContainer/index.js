@@ -16,8 +16,8 @@ import List from './List'
 import dealWithError from '../../../modules/dealWithError'
 
 const EkfListContainer = () => {
-  const mobxStore = useContext(storeContext)
-  const { ekfYear, ekfAdresseId, user } = mobxStore
+  const store = useContext(storeContext)
+  const { ekfYear, ekfAdresseId, user } = store
 
   let query = !!ekfAdresseId ? dataByAdresseIdGql : dataByUserNameGql
   const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
@@ -37,7 +37,7 @@ const EkfListContainer = () => {
   })
 
   if (error) {
-    return dealWithError({ error, mobxStore, component: 'ListContainer' })
+    return dealWithError({ error, store, component: 'ListContainer' })
   }
   return <List data={data} loading={loading} />
 }

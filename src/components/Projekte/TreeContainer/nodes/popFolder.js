@@ -13,7 +13,7 @@ export default ({
   apNodes,
   apId,
   nodeFilter,
-  mobxStore,
+  store,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -24,7 +24,7 @@ export default ({
   apNodes: Array<Object>,
   apId: String,
   nodeFilter: Object,
-  mobxStore: Object,
+  store: Object,
 }): Array<Object> => {
   const pops = get(data, 'allPops.nodes', [])
 
@@ -36,7 +36,7 @@ export default ({
     id: apId,
   })
   const nodeLabelFilterString =
-    get(mobxStore, `${treeName}.nodeLabelFilter.pop`) || ''
+    get(store, `${treeName}.nodeLabelFilter.pop`) || ''
 
   const popNodesLength = memoizeOne(
     () => pops.filter(el => el.apId === apId).length,

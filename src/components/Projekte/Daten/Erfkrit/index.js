@@ -30,11 +30,11 @@ const FieldsContainer = styled.div`
 const enhance = compose(observer)
 
 const Erfkrit = ({ treeName }: { treeName: string }) => {
-  const mobxStore = useContext(storeContext)
-  const { refetch } = mobxStore
+  const store = useContext(storeContext)
+  const { refetch } = store
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
-  const { activeNodeArray } = mobxStore[treeName]
+  const { activeNodeArray } = store[treeName]
 
   const { data, loading, error } = useQuery(query, {
     variables: {
@@ -65,7 +65,7 @@ const Erfkrit = ({ treeName }: { treeName: string }) => {
           variables: {
             id: row.id,
             [field]: value,
-            changedBy: mobxStore.user.name,
+            changedBy: store.user.name,
           },
           optimisticResponse: {
             __typename: 'Mutation',

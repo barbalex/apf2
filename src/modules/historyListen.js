@@ -4,13 +4,13 @@ import getActiveNodeArrayFromPathname from './getActiveNodeArrayFromPathname'
 export default ({
   location,
   action,
-  mobxStore,
+  store,
 }: {
   location: Object,
   action: String,
-  mobxStore: Object,
+  store: Object,
 }) => {
-  const { setTreeKey } = mobxStore
+  const { setTreeKey } = store
   const { pathname } = location
   //console.log(action, location.pathname, location.state)
   // prevent never ending loop if user clicks back right after initial loading

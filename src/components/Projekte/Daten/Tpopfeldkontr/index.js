@@ -28,7 +28,7 @@ import updateTpopkontrByIdGql from './updateTpopkontrById'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
-import { simpleTypes as tpopfeldkontrType } from '../../../../mobxStore/NodeFilterTree/tpopfeldkontr'
+import { simpleTypes as tpopfeldkontrType } from '../../../../store/NodeFilterTree/tpopfeldkontr'
 
 const Container = styled.div`
   height: 100%;
@@ -85,15 +85,15 @@ const Tpopfeldkontr = ({
   showFilter: Boolean,
 }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(storeContext)
+  const store = useContext(storeContext)
   const {
     nodeFilter,
     nodeFilterSetValue,
     urlQuery,
     setUrlQuery,
     refetch,
-  } = mobxStore
-  const { activeNodeArray, datenWidth, filterWidth } = mobxStore[treeName]
+  } = store
+  const { activeNodeArray, datenWidth, filterWidth } = store[treeName]
 
   let id =
     activeNodeArray.length > 9
@@ -209,7 +209,7 @@ const Tpopfeldkontr = ({
         const variables = {
           id: row.id,
           [field]: value,
-          changedBy: mobxStore.user.name,
+          changedBy: store.user.name,
         }
         let field2
         if (field === 'jahr') field2 = 'datum'

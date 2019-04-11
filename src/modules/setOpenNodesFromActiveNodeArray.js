@@ -1,14 +1,14 @@
 // @flow
 export default ({
   activeNodeArray,
-  mobxStore,
+  store,
 }: {
   activeNodeArray: Array<String>,
-  mobxStore: Object,
+  store: Object,
 }): void => {
   const openNodes = []
   activeNodeArray.forEach((n, index) =>
     openNodes.push(activeNodeArray.slice(0, index + 1)),
   )
-  mobxStore.setTreeKey({ value: openNodes, tree: 'tree', key: 'openNodes' })
+  store.setTreeKey({ value: openNodes, tree: 'tree', key: 'openNodes' })
 }

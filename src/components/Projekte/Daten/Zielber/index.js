@@ -25,11 +25,11 @@ const FieldsContainer = styled.div`
 `
 
 const Zielber = ({ treeName }: { treeName: string }) => {
-  const mobxStore = useContext(storeContext)
+  const store = useContext(storeContext)
   const client = useApolloClient()
   const [errors, setErrors] = useState({})
 
-  const { activeNodeArray } = mobxStore[treeName]
+  const { activeNodeArray } = store[treeName]
 
   const { data, loading, error } = useQuery(query, {
     variables: {
@@ -54,7 +54,7 @@ const Zielber = ({ treeName }: { treeName: string }) => {
           variables: {
             id: row.id,
             [field]: value,
-            changedBy: mobxStore.user.name,
+            changedBy: store.user.name,
           },
           optimisticResponse: {
             __typename: 'Mutation',

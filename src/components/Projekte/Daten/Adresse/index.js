@@ -26,8 +26,8 @@ const FieldsContainer = styled.div`
 `
 
 const Adresse = ({ treeName }: { treeName: String }) => {
-  const mobxStore = useContext(storeContext)
-  const { activeNodeArray, refetch } = mobxStore[treeName]
+  const store = useContext(storeContext)
+  const { activeNodeArray, refetch } = store[treeName]
   const id =
     activeNodeArray.length > 2
       ? activeNodeArray[2]
@@ -52,7 +52,7 @@ const Adresse = ({ treeName }: { treeName: String }) => {
           variables: {
             id: row.id,
             [field]: value,
-            changedBy: mobxStore.user.name,
+            changedBy: store.user.name,
           },
           optimisticResponse: {
             __typename: 'Mutation',

@@ -108,7 +108,7 @@ const Container = styled.div`
 
 const Karte = ({ treeName }: { treeName: string }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(storeContext)
+  const store = useContext(storeContext)
   const {
     activeApfloraLayers: activeApfloraLayersRaw,
     overlays,
@@ -121,7 +121,7 @@ const Karte = ({ treeName }: { treeName: string }) => {
     assigningBeob,
     setMapMouseCoordinates,
     refetch,
-  } = mobxStore
+  } = store
   const bounds = getSnapshot(boundsRaw)
   const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
   const activeOverlays = getSnapshot(activeOverlaysRaw)
@@ -189,8 +189,8 @@ const Karte = ({ treeName }: { treeName: string }) => {
           doubleClickZoom={false}
           onDblclick={async event => {
             // since 2018 10 31 using idOfTpopBeingLocalized directly
-            // returns null, so need to use mobxStore.idOfTpopBeingLocalized
-            const { idOfTpopBeingLocalized } = mobxStore
+            // returns null, so need to use store.idOfTpopBeingLocalized
+            const { idOfTpopBeingLocalized } = store
             /**
              * TODO
              * When clicking on Layertool

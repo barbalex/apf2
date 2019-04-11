@@ -13,16 +13,16 @@ export default async ({
   treeName,
   id,
   client,
-  mobxStore,
+  store,
 }: {
   treeName: Object,
   id: String,
   client: Object,
-  mobxStore: Object,
+  store: Object,
 }): Promise<void> => {
-  const { setTreeKey, addError, refetch } = mobxStore
-  const tree = mobxStore[treeName]
-  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
+  const { setTreeKey, addError, refetch } = store
+  const tree = store[treeName]
+  const activeNodes = store[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
   let beobResult
   try {

@@ -190,20 +190,20 @@ const Row = ({
   node: Array<Object>,
   treeName: String,
 }) => {
-  const mobxStore = useContext(storeContext)
+  const store = useContext(storeContext)
   const {
     activeApfloraLayers,
     copying,
     moving,
     copyingBiotop,
     setTreeKey,
-  } = mobxStore
-  const tree = mobxStore[treeName]
+  } = store
+  const tree = store[treeName]
   const { openNodes } = tree
-  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
-  const { idsFiltered: mapIdsFiltered } = mobxStore[treeName].map
+  const activeNodes = store[`${treeName}ActiveNodes`]
+  const { idsFiltered: mapIdsFiltered } = store[treeName].map
 
-  const activeNodeArray = get(mobxStore, `${treeName}.activeNodeArray`)
+  const activeNodeArray = get(store, `${treeName}.activeNodeArray`)
   const myProps = { key: index }
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, activeNodeArray)
   const nodeIsOpen = isNodeOpen(openNodes, node.url)
@@ -251,14 +251,14 @@ const Row = ({
       toggleNode({
         treeName,
         node,
-        mobxStore,
+        store,
       })
     },
     [treeName, node],
   )
   const onClickNodeSymbol = useCallback(
     event => {
-      toggleNodeSymbol({ treeName, node, mobxStore })
+      toggleNodeSymbol({ treeName, node, store })
     },
     [treeName, node],
   )

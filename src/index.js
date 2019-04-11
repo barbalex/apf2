@@ -20,7 +20,7 @@ import MomentUtils from '@date-io/moment'
 import { MuiPickersUtilsProvider } from 'material-ui-pickers'
 import { ApolloProvider } from 'react-apollo'
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
-import MobxStore from './mobxStore'
+import MobxStore from './store'
 //import { onPatch } from 'mobx-state-tree'
 
 import 'typeface-roboto'
@@ -42,7 +42,7 @@ import { Provider as MobxProvider } from './storeContext'
 import { Provider as IdbProvider } from './idbContext'
 
 import './index.css'
-import createInitialMobxStore from './mobxStore/initial'
+import createInitialMobxStore from './store/initial'
 import 'react-leaflet-markercluster/dist/styles.min.css'
 
 const run = async () => {
@@ -59,38 +59,38 @@ const run = async () => {
     const idb = initializeIdb()
 
     const initialMobxStore = await createInitialMobxStore({ idb })
-    const mobxStore = MobxStore.create(initialMobxStore)
+    const store = MobxStore.create(initialMobxStore)
 
-    const client = await buildClient({ idb, mobxStore })
-    registerServiceWorker(mobxStore)
+    const client = await buildClient({ idb, store })
+    registerServiceWorker(store)
 
     await initiateDataFromUrl({
-      mobxStore,
+      store,
     })
 
     // begin _after_ initiation data from url
-    mobxStore.history.listen((location, action) =>
+    store.history.listen((location, action) =>
       historyListen({
         location,
         action,
-        mobxStore,
+        store,
       }),
     )
 
-    //onPatch(mobxStore, patch => console.log(patch))
+    //onPatch(store, patch => console.log(patch))
 
     const idbContext = { idb }
 
     if (window.Cypress) {
       // enable directly using these in tests
       window.__client__ = client
-      window.__store__ = mobxStore
+      window.__store__ = store
       window.__idb__ = idb
     }
 
     ReactDOM.render(
       <IdbProvider value={idbContext}>
-        <MobxProvider value={mobxStore}>
+        <MobxProvider value={store}>
           <ApolloProvider client={client}>
             <ApolloHooksProvider client={client}>
               <>

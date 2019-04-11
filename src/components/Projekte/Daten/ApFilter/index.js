@@ -24,7 +24,7 @@ import queryAdresses from './queryAdresses'
 import queryAeEigenschaftens from './queryAeEigenschaftens'
 import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
-import { simpleTypes as apType } from '../../../../mobxStore/NodeFilterTree/ap'
+import { simpleTypes as apType } from '../../../../store/NodeFilterTree/ap'
 
 const Container = styled.div`
   height: 100%;
@@ -69,9 +69,9 @@ const LabelPopoverRowColumnRight = styled.div`
 `
 
 const ApFilter = ({ treeName }: { treeName: String }) => {
-  const mobxStore = useContext(storeContext)
-  const { nodeFilter, nodeFilterSetValue, refetch } = mobxStore
-  const { activeNodeArray } = mobxStore[treeName]
+  const store = useContext(storeContext)
+  const { nodeFilter, nodeFilterSetValue, refetch } = store
+  const { activeNodeArray } = store[treeName]
 
   const projId = activeNodeArray[1]
   const nodeFilterAp = { ...nodeFilter[treeName].ap }

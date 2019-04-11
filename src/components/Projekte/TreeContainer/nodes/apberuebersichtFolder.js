@@ -10,7 +10,7 @@ export default ({
   loading,
   projektNodes,
   projId,
-  mobxStore,
+  store,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -18,7 +18,7 @@ export default ({
   loading: Boolean,
   projektNodes: Array<Object>,
   projId: String,
-  mobxStore: Object,
+  store: Object,
 }): Array<Object> => {
   // fetch sorting indexes of parents
   const projNodeIds = projektNodes.map(n => n.id)
@@ -26,7 +26,7 @@ export default ({
     id: projId,
   })
   const nodeLabelFilterString =
-    get(mobxStore, `${treeName}.nodeLabelFilter.apberuebersicht`) || ''
+    get(store, `${treeName}.nodeLabelFilter.apberuebersicht`) || ''
 
   const apberuebersichtNodesLength = memoizeOne(
     () =>

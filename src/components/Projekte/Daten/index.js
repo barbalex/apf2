@@ -20,9 +20,9 @@ const Container = styled.div`
 `
 
 const Daten = ({ treeName }: { treeName: String }) => {
-  const mobxStore = useContext(storeContext)
-  const { activeNodeArray, activeNode } = mobxStore[treeName]
-  const activeTable = get(mobxStore, `nodeFilter.${treeName}.activeTable`, '')
+  const store = useContext(storeContext)
+  const { activeNodeArray, activeNode } = store[treeName]
+  const activeTable = get(store, `nodeFilter.${treeName}.activeTable`, '')
 
   const key = useMemo(() => {
     if (activeNodeArray.length > 2 && activeNodeArray[2] === 'Exporte') {

@@ -13,10 +13,10 @@ const isFreiwilligenKontrolle = activeNodeArray =>
 
 export default async ({
   client,
-  mobxStore,
+  store,
 }: {
   client: Object,
-  mobxStore: Object,
+  store: Object,
 }): Promise<void> => {
   const {
     emptyToDelete,
@@ -27,7 +27,7 @@ export default async ({
     toDeleteUrl,
     toDeleteLabel,
     toDeleteAfterDeletionHook,
-  } = mobxStore
+  } = store
 
   // some tables need to be translated, i.e. tpopfreiwkontr
   const tableMetadata = tables.find(t => t.table === tablePassed)
@@ -96,7 +96,7 @@ export default async ({
   // BUT: need to refetch tree
 
   // set new url if necessary
-  const activeNodeArray1 = get(mobxStore, 'tree.activeNodeArray')
+  const activeNodeArray1 = get(store, 'tree.activeNodeArray')
   if (
     isEqual(activeNodeArray1, toDeleteUrl) &&
     !isFreiwilligenKontrolle(activeNodeArray1)
@@ -108,9 +108,9 @@ export default async ({
     if (table === 'ziel') {
       newActiveNodeArray1.pop()
     }
-    mobxStore.tree.setActiveNodeArray(newActiveNodeArray1)
+    store.tree.setActiveNodeArray(newActiveNodeArray1)
   }
-  const activeNodeArray2 = get(mobxStore, 'tree2.activeNodeArray')
+  const activeNodeArray2 = get(store, 'tree2.activeNodeArray')
   if (
     isEqual(activeNodeArray2, toDeleteUrl) &&
     !isFreiwilligenKontrolle(activeNodeArray2)
@@ -122,16 +122,16 @@ export default async ({
     if (table === 'ziel') {
       newActiveNodeArray2.pop()
     }
-    mobxStore.tree2.setActiveNodeArray(newActiveNodeArray2)
+    store.tree2.setActiveNodeArray(newActiveNodeArray2)
   }
 
   // remove from openNodes
-  const openNodes1 = get(mobxStore, 'tree.openNodes')
+  const openNodes1 = get(store, 'tree.openNodes')
   const newOpenNodes1 = openNodes1.filter(n => !isEqual(n, toDeleteUrl))
-  mobxStore.tree.setOpenNodes(newOpenNodes1)
-  const openNodes2 = get(mobxStore, 'tree2.openNodes')
+  store.tree.setOpenNodes(newOpenNodes1)
+  const openNodes2 = get(store, 'tree2.openNodes')
   const newOpenNodes2 = openNodes2.filter(n => !isEqual(n, toDeleteUrl))
-  mobxStore.tree2.setOpenNodes(newOpenNodes2)
+  store.tree2.setOpenNodes(newOpenNodes2)
 
   if (toDeleteAfterDeletionHook) toDeleteAfterDeletionHook()
 

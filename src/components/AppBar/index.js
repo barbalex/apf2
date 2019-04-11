@@ -55,7 +55,7 @@ const MenuDiv = styled.div`
 `
 
 const MyAppBar = ({ setShowDeletions }: { setShowDeletions: () => void }) => {
-  const mobxStore = useContext(storeContext)
+  const store = useContext(storeContext)
   const {
     nodeFilterClone1To2,
     user,
@@ -65,7 +65,7 @@ const MyAppBar = ({ setShowDeletions }: { setShowDeletions: () => void }) => {
     setUrlQuery,
     cloneTree2From1,
     treeActiveNodes,
-  } = mobxStore
+  } = store
 
   /**
    * need to clone projekteTabs

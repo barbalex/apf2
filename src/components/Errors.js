@@ -29,8 +29,8 @@ const ErrorDiv = styled.div`
 `
 
 const Errors = () => {
-  const mobxStore = useContext(storeContext)
-  const { errors } = mobxStore
+  const store = useContext(storeContext)
+  const { errors } = store
 
   return (
     <ErrorBoundary>

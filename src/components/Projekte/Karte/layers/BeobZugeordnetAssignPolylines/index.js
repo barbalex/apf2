@@ -9,11 +9,11 @@ import storeContext from '../../../../../storeContext'
 import query from './query'
 
 const BeobZugeordnetAssignPolylines = ({ treeName }: { treeName: string }) => {
-  const mobxStore = useContext(storeContext)
-  const { setRefetchKey, addError, activeApfloraLayers } = mobxStore
-  const tree = mobxStore[treeName]
+  const store = useContext(storeContext)
+  const { setRefetchKey, addError, activeApfloraLayers } = store
+  const tree = store[treeName]
 
-  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
+  const activeNodes = store[`${treeName}ActiveNodes`]
   const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
   const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
   const isActiveInMap = activeApfloraLayers.includes(

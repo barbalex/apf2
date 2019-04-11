@@ -30,8 +30,8 @@ const Ap = ({
   onClick: () => void,
   treeName: string,
 }) => {
-  const mobxStore = useContext(storeContext)
-  const { user, moving } = mobxStore
+  const store = useContext(storeContext)
+  const { user, moving } = store
 
   const isMoving = moving.table && moving.table === 'pop'
   const mayWrite = !userIsReadOnly(user.token)

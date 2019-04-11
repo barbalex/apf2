@@ -52,7 +52,7 @@ const User = ({
   userOpen: boolean,
   toggleUserOpen: () => void,
 }) => {
-  const mobxStore = useContext(storeContext)
+  const store = useContext(storeContext)
   const { data, error, loading } = useQuery(query, {
     variables: { name: username },
   })
@@ -161,7 +161,7 @@ const User = ({
 
   if (loading) return null
   if (error) {
-    return dealWithError({ error, mobxStore, component: 'AppBar > User' })
+    return dealWithError({ error, store, component: 'AppBar > User' })
   }
 
   return (

@@ -10,7 +10,7 @@ export default ({
   loading,
   projektNodes,
   projId,
-  mobxStore,
+  store,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -18,7 +18,7 @@ export default ({
   loading: Boolean,
   projektNodes: Array<Object>,
   projId: String,
-  mobxStore: Object,
+  store: Object,
 }): Array<Object> => {
   // fetch sorting indexes of parents
   const projNodeIds = projektNodes.map(n => n.id)
@@ -26,14 +26,18 @@ export default ({
     id: projId,
   })
   const nodeLabelFilterString =
-    get(mobxStore, `${treeName}.nodeLabelFilter.ap`) || ''
+    get(store, `${treeName}.nodeLabelFilter.ap`) || ''
 
   const apNodes = memoizeOne(() =>
-  get(data, 'allAps.nodes', [])
+    get(data, 'allAps.nodes', [])
       // only show if parent node exists
       .filter(el => projNodeIds.includes(el.projId)),
   )()
-  const message = loading ? '...' : !!nodeLabelFilterString ? `${apNodes.length} gefiltert`:apNodes.length
+  const message = loading
+    ? '...'
+    : !!nodeLabelFilterString
+    ? `${apNodes.length} gefiltert`
+    : apNodes.length
 
   // only show if parent node exists
   if (!projNodeIds.includes(projId)) return []

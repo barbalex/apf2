@@ -9,9 +9,9 @@ export default async ({
   treeName,
   refetch: refetchPassed,
   client,
-  mobxStore,
+  store,
 }) => {
-  const {  refetch } = mobxStore
+  const { refetch } = store
   const variables = {
     id,
     nichtZuordnen: value,
@@ -23,7 +23,12 @@ export default async ({
     variables,
   })
   // need to update activeNodeArray and openNodes
-  const { activeNodeArray, setActiveNodeArray, openNodes, addOpenNodes } = mobxStore[treeName]
+  const {
+    activeNodeArray,
+    setActiveNodeArray,
+    openNodes,
+    addOpenNodes,
+  } = store[treeName]
   let newActiveNodeArray = [...activeNodeArray]
   newActiveNodeArray[4] = value
     ? 'nicht-zuzuordnende-Beobachtungen'

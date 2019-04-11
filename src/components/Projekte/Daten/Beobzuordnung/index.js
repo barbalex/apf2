@@ -145,9 +145,9 @@ const Beobzuordnung = ({
   treeName: string,
 }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(storeContext)
-  const tree = mobxStore[treeName]
-  const { activeNodeArray } = mobxStore[treeName]
+  const store = useContext(storeContext)
+  const tree = store[treeName]
+  const { activeNodeArray } = store[treeName]
   const id = activeNodeArray[activeNodeArray.length - 1]
   const apId =
     activeNodeArray.length > 3
@@ -176,7 +176,7 @@ const Beobzuordnung = ({
   const onSaveArtIdToDb = useCallback(
     event => {
       const { value } = event.target
-      saveArtIdToDb({ value, row, treeName, client, mobxStore })
+      saveArtIdToDb({ value, row, treeName, client, store })
     },
     [row, tree],
   )
@@ -188,7 +188,7 @@ const Beobzuordnung = ({
         treeName,
         refetch: data.refetch,
         client,
-        mobxStore,
+        store,
       })
     },
     [id, tree],
@@ -196,7 +196,7 @@ const Beobzuordnung = ({
   const onSaveTpopIdToDb = useCallback(
     event => {
       const { value } = event.target
-      saveTpopIdToDb({ value, id, treeName, type, client, mobxStore })
+      saveTpopIdToDb({ value, id, treeName, type, client, store })
     },
     [id, tree, type],
   )
@@ -206,7 +206,7 @@ const Beobzuordnung = ({
       variables: {
         id,
         bemerkungen: event.target.value,
-        changedBy: mobxStore.user.name,
+        changedBy: store.user.name,
       },
     })
   })

@@ -104,8 +104,8 @@ const SecondPageText = styled.p`
 `
 
 const ApberForYear = () => {
-  const mobxStore = useContext(storeContext)
-  const activeNodes = mobxStore.treeActiveNodes
+  const store = useContext(storeContext)
+  const activeNodes = store.treeActiveNodes
   const { apberuebersicht: apberuebersichtId } = activeNodes
 
   const { data: data1, loading: data1Loading, error: data1Error } = useQuery(

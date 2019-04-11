@@ -14,14 +14,14 @@ export default ({
   parentId,
   menuType,
   client,
-  mobxStore,
+  store,
 }: {
   treeName: string,
   id: String | Number,
   parentId: String | Number,
   menuType: String,
   client: Object,
-  mobxStore: Object,
+  store: Object,
 }) => {
   /**
    * 1. load all data
@@ -33,23 +33,23 @@ export default ({
    */
   switch (menuType) {
     case 'popFolder':
-      popFolder({ treeName, id, client, mobxStore })
+      popFolder({ treeName, id, client, store })
       break
     case 'pop':
-      pop({ treeName, id, client, mobxStore })
+      pop({ treeName, id, client, store })
       break
     case 'tpopFolder':
-      tpopFolder({ treeName, id, client, mobxStore })
+      tpopFolder({ treeName, id, client, store })
       break
     case 'tpop':
-      tpop({ treeName, id, client, mobxStore })
+      tpop({ treeName, id, client, store })
       break
     case 'tpopfeldkontrFolder':
       tpopfeldkontrFolder({
         treeName,
         id,
         client,
-        mobxStore,
+        store,
       })
       break
     case 'tpopfreiwkontrFolder':
@@ -57,18 +57,18 @@ export default ({
         treeName,
         id,
         client,
-        mobxStore,
+        store,
       })
       break
     case 'zielFolder':
-      zielFolder({ treeName, id, client, mobxStore })
+      zielFolder({ treeName, id, client, store })
       break
     case 'zieljahrFolder':
       zieljahrFolder({
         treeName,
         id,
         parentId,
-        mobxStore,
+        store,
         client,
       })
       break

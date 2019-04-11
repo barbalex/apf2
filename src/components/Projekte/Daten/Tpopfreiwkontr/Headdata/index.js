@@ -87,8 +87,8 @@ const Headdata = ({
   treeName: String,
 }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(storeContext)
-  const { nodeFilterSetValue, user } = mobxStore
+  const store = useContext(storeContext)
+  const { nodeFilterSetValue, user } = store
   const { data, loading, error } = useQuery(queryAdresses)
   const [errors, setErrors] = useState(null)
 

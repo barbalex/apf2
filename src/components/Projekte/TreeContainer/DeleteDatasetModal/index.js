@@ -20,8 +20,8 @@ const StyledDialog = styled(Dialog)`
 
 const DatasetDeleteModal = () => {
   const client = useApolloClient()
-  const mobxStore = useContext(storeContext)
-  const { toDeleteTable, toDeleteLabel, emptyToDelete, toDeleteId } = mobxStore
+  const store = useContext(storeContext)
+  const { toDeleteTable, toDeleteLabel, emptyToDelete, toDeleteId } = store
 
   const table = tables.find(t => t.table === toDeleteTable)
   let tableName = null
@@ -38,7 +38,7 @@ const DatasetDeleteModal = () => {
   const onClickLoeschen = useCallback(() =>
     deleteDataset({
       client,
-      mobxStore,
+      store,
     }),
   )
 

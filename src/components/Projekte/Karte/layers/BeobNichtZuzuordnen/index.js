@@ -32,13 +32,13 @@ const BeobNichtZuzuordnenMarker = ({
   treeName: string,
   clustered: Boolean,
 }) => {
-  const mobxStore = useContext(storeContext)
-  const { activeApfloraLayers, mapFilter, setRefetchKey, addError } = mobxStore
-  const tree = mobxStore[treeName]
+  const store = useContext(storeContext)
+  const { activeApfloraLayers, mapFilter, setRefetchKey, addError } = store
+  const tree = store[treeName]
   const { map } = tree
   const { setBeobNichtZuzuordnenIdsFiltered } = map
 
-  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
+  const activeNodes = store[`${treeName}ActiveNodes`]
   const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
   const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
   const isActiveInMap = activeApfloraLayers.includes('beobNichtZuzuordnen')

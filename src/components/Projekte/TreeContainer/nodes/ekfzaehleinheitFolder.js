@@ -12,7 +12,7 @@ export default ({
   projId,
   apNodes,
   apId,
-  mobxStore,
+  store,
 }: {
   nodes: Array<Object>,
   data: Object,
@@ -22,7 +22,7 @@ export default ({
   projId: String,
   apNodes: Array<Object>,
   apId: String,
-  mobxStore: Object,
+  store: Object,
 }): Array<Object> => {
   const ekfzaehleinheits = get(data, 'allEkfzaehleinheits.nodes', [])
 
@@ -34,7 +34,7 @@ export default ({
     id: apId,
   })
   const nodeLabelFilterString =
-    get(mobxStore, `${treeName}.nodeLabelFilter.ekfzaehleinheit`) || ''
+    get(store, `${treeName}.nodeLabelFilter.ekfzaehleinheit`) || ''
 
   const ekfzaehleinheitNodesLength = memoizeOne(
     () => ekfzaehleinheits.filter(el => el.apId === apId).length,

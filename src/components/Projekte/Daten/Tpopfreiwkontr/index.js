@@ -29,7 +29,7 @@ import FormTitle from '../../../shared/FormTitle'
 import FilterTitle from '../../../shared/FilterTitle'
 import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
-import { simpleTypes as tpopfreiwkontrType } from '../../../../mobxStore/NodeFilterTree/tpopfreiwkontr'
+import { simpleTypes as tpopfreiwkontrType } from '../../../../store/NodeFilterTree/tpopfreiwkontr'
 
 const Container = styled.div`
   background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
@@ -142,7 +142,7 @@ const Tpopfreiwkontr = ({
   showFilter: Boolean,
 }) => {
   const client = useApolloClient()
-  const mobxStore = useContext(storeContext)
+  const store = useContext(storeContext)
   const {
     addError,
     nodeFilter,
@@ -150,8 +150,8 @@ const Tpopfreiwkontr = ({
     isPrint,
     view,
     user,
-  } = mobxStore
-  const tree = mobxStore[treeName]
+  } = store
+  const tree = store[treeName]
   const { activeNodeArray, datenWidth, filterWidth } = tree
   const { token } = user
   const role = token ? jwtDecode(token).role : null

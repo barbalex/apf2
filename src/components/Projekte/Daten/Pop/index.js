@@ -17,7 +17,7 @@ import query from './query'
 import queryPops from './queryPops'
 import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
-import { simpleTypes as popType } from '../../../../mobxStore/NodeFilterTree/pop'
+import { simpleTypes as popType } from '../../../../store/NodeFilterTree/pop'
 
 const Container = styled.div`
   height: 100%;
@@ -38,10 +38,10 @@ const Pop = ({
   treeName: string,
   showFilter: Boolean,
 }) => {
-  const mobxStore = useContext(storeContext)
+  const store = useContext(storeContext)
   const client = useApolloClient()
-  const { nodeFilter, nodeFilterSetValue, refetch } = mobxStore
-  const { activeNodeArray } = mobxStore[treeName]
+  const { nodeFilter, nodeFilterSetValue, refetch } = store
+  const { activeNodeArray } = store[treeName]
 
   let id =
     activeNodeArray.length > 5
@@ -125,7 +125,7 @@ const Pop = ({
             variables: {
               id: row.id,
               [field]: value,
-              changedBy: mobxStore.user.name,
+              changedBy: store.user.name,
             },
             optimisticResponse: {
               __typename: 'Mutation',

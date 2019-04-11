@@ -72,8 +72,8 @@ type Props = {
 }
 
 const Tree = ({ treeName }: Props) => {
-  const mobxStore = useContext(storeContext)
-  const tree = mobxStore[treeName]
+  const store = useContext(storeContext)
+  const tree = store[treeName]
   const {
     activeNodeArray,
     setNodes,
@@ -82,8 +82,8 @@ const Tree = ({ treeName }: Props) => {
     treeWidth,
     treeHeight,
   } = tree
-  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
-  const { nodeFilter, user, setRefetchKey, setTreeKey } = mobxStore
+  const activeNodes = store[`${treeName}ActiveNodes`]
+  const { nodeFilter, user, setRefetchKey, setTreeKey } = store
   const { idb } = useContext(idbContext)
   const {
     projekt,
@@ -105,7 +105,7 @@ const Tree = ({ treeName }: Props) => {
     tpopmassnFilter,
     tpopfeldkontrFilter,
     tpopfreiwkontrFilter,
-  } = buildVariables({ treeName, mobxStore })
+  } = buildVariables({ treeName, store })
 
   const {
     data: dataProjekts,
@@ -729,7 +729,7 @@ const Tree = ({ treeName }: Props) => {
     loadingEkfzaehleinheits,
     loadingBeobNichtBeurteilts,
     loadingBeobNichtZuzuordnens,
-    mobxStore,
+    store,
   })
   setNodes(nodes)
 

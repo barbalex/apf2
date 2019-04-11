@@ -59,8 +59,8 @@ const treeTabValues = ['tree', 'daten', 'filter', 'karte', 'exporte']
 const tree2TabValues = ['tree2', 'daten2', 'filter2', 'karte2', 'exporte2']
 
 const Projekte = () => {
-  const mobxStore = useContext(storeContext)
-  const { isPrint, urlQuery } = mobxStore
+  const store = useContext(storeContext)
+  const { isPrint, urlQuery } = store
 
   const { projekteTabs } = urlQuery
   const treeTabs = intersection(treeTabValues, projekteTabs)

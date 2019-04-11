@@ -23,10 +23,10 @@ const BeobNichtZuzuordnenMarker = ({
   treeName: string,
   beob: Object,
 }) => {
-  const mobxStore = useContext(storeContext)
-  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
+  const store = useContext(storeContext)
+  const activeNodes = store[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
-  const { idsFiltered } = mobxStore[treeName].map
+  const { idsFiltered } = store[treeName].map
 
   const isHighlighted = idsFiltered.includes(beob.id)
   const latLng = new window.L.LatLng(...epsg2056to4326(beob.x, beob.y))

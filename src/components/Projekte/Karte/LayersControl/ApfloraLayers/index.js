@@ -24,8 +24,8 @@ const ApfloraLayers = ({
   tpopBounds: Array<Array<Number>>,
   setTpopBounds: () => void,
 }) => {
-  const mobxStore = useContext(storeContext)
-  const { apfloraLayers } = mobxStore
+  const store = useContext(storeContext)
+  const { apfloraLayers } = store
 
   return (
     <CardContent>

@@ -62,13 +62,13 @@ const FormTitle = ({
   totalApNr: number,
   filteredApNr: number,
 }) => {
-  const mobxStore = useContext(storeContext)
+  const store = useContext(storeContext)
   const {
     nodeFilterTableIsFiltered,
     nodeFilterTreeIsFiltered,
     nodeFilterEmptyTable,
     nodeFilterEmptyTree,
-  } = mobxStore
+  } = store
 
   const existsTableFilter = nodeFilterTableIsFiltered({
     treeName,

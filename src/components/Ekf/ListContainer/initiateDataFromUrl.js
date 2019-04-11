@@ -3,11 +3,11 @@ import setOpenNodesFromActiveNodeArray from '../../../modules/setOpenNodesFromAc
 
 export default async ({
   activeNodeArray,
-  mobxStore,
+  store,
 }: {
   activeNodeArray: Array<string>,
-  mobxStore: Object,
+  store: Object,
 }) => {
-  mobxStore.tree.setActiveNodeArray([...activeNodeArray])
-  setOpenNodesFromActiveNodeArray({ activeNodeArray, mobxStore })
+  store.tree.setActiveNodeArray([...activeNodeArray])
+  setOpenNodesFromActiveNodeArray({ activeNodeArray, store })
 }

@@ -50,9 +50,9 @@ const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
 `
 
 const LayersControl = ({ treeName }: { treeName: string }) => {
-  const mobxStore = useContext(storeContext)
-  const { apfloraLayers, overlays } = mobxStore
-  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
+  const store = useContext(storeContext)
+  const { apfloraLayers, overlays } = store
+  const activeNodes = store[`${treeName}ActiveNodes`]
 
   const [baseLayersExpanded, setBaseLayersExpanded] = useState(true)
   const [overlaysExpanded, setOverlaysExpanded] = useState(false)

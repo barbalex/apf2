@@ -32,15 +32,13 @@ const StyledTooltip = styled(Tooltip)`
 `
 
 const PopMarker = ({ treeName, pop }: { treeName: string, pop: Object }) => {
-  const mobxStore = useContext(storeContext)
-  const { apfloraLayers } = mobxStore
-  const activeNodes = mobxStore[`${treeName}ActiveNodes`]
+  const store = useContext(storeContext)
+  const { apfloraLayers } = store
+  const activeNodes = store[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
-  const {
-    idsFiltered,
-    popIcon: popIconName,
-    popLabel: popLabelName,
-  } = mobxStore[treeName].map
+  const { idsFiltered, popIcon: popIconName, popLabel: popLabelName } = store[
+    treeName
+  ].map
 
   const nrLabel = pop.nr ? pop.nr.toString() : '(keine Nr)'
   let title = nrLabel
