@@ -1,4 +1,3 @@
-// @flow
 /**
  * for unknown reason need to set null
  * if set '' (as React wants) value is shown and set as Unknown :-(
@@ -30,12 +29,6 @@ const DateFieldWithPicker = ({
   value: propsValue,
   saveToDb,
   error,
-}: {
-  label: String,
-  name: String,
-  value?: String | Number,
-  saveToDb: () => void,
-  error: String,
 }) => {
   const [stateValue, setStateValue] = useState(
     isValid(propsValue) ? propsValue : null,

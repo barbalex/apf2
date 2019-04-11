@@ -1,4 +1,3 @@
-// @flow
 import React, { useState, useCallback } from 'react'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import Button from '@material-ui/core/Button'
@@ -14,7 +13,7 @@ const Container = styled.div`
   }
 `
 
-const StringToCopy = ({ text, label }: { text: string, label: string }) => {
+const StringToCopy = ({ text, label }) => {
   const [copied, setCopied] = useState(false)
   const onCopy = useCallback(() => {
     setCopied(true)

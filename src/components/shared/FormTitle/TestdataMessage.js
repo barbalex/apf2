@@ -10,13 +10,7 @@ const Div = styled.div`
   padding: 10px 10px 0 10px;
 `
 
-const TestdataMessage = ({
-  treeName,
-  apId,
-}: {
-  treeName: string,
-  apId: string,
-}) => {
+const TestdataMessage = ({ treeName, apId }) => {
   const store = useContext(storeContext)
   const tree = store[treeName]
   const apIdFromTree = get(tree, 'activeNodes.ap')

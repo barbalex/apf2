@@ -1,4 +1,3 @@
-// @flow
 import React, { useCallback, useState, useEffect } from 'react'
 import AsyncSelect from 'react-select/lib/Async'
 import styled from 'styled-components'
@@ -76,14 +75,6 @@ const SelectTypable = ({
   saveToDb,
   query,
   queryNodesName,
-}: {
-  row: Object,
-  field?: string,
-  label: string,
-  error: string,
-  saveToDb: () => void,
-  query: () => void,
-  queryNodesName: string,
 }) => {
   const client = useApolloClient()
   const [inputValue, setInputValue] = useState(row.wirtspflanze || '')

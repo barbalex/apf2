@@ -1,4 +1,3 @@
-// @flow
 import React, { useState, useCallback, useEffect } from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
@@ -62,13 +61,6 @@ const Status = ({
   saveToDb,
   treeName,
   showFilter,
-}: {
-  apJahr?: number,
-  herkunftValue?: number,
-  bekanntSeitValue: number,
-  saveToDb: () => void,
-  treeName: string,
-  showFilter: Boolean,
 }) => {
   const [bekanntSeitStateValue, setBekanntSeitStateValue] = useState(
     bekanntSeitValue || bekanntSeitValue === 0 ? bekanntSeitValue : '',

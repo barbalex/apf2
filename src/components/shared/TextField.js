@@ -1,4 +1,3 @@
-// @flow
 import React, { useState, useCallback, useEffect } from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
@@ -25,17 +24,6 @@ const MyTextField = ({
   helperText = '',
   error,
   saveToDb,
-}: {
-  value: number | string,
-  label: String,
-  name: String,
-  type: String,
-  multiLine: Boolean,
-  disabled: Boolean,
-  hintText: String,
-  helperText: String,
-  error: String,
-  saveToDb: () => void,
 }) => {
   const [stateValue, setStateValue] = useState(
     value || value === 0 ? value : '',

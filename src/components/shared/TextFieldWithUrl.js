@@ -1,4 +1,3 @@
-// @flow
 import React, { useState, useCallback, useEffect } from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
@@ -39,16 +38,6 @@ const TextFieldWithUrl = ({
   hintText = '',
   error,
   saveToDb,
-}: {
-  value: Number | String,
-  label: String,
-  name: String,
-  type: String,
-  multiLine: Boolean,
-  disabled: Boolean,
-  hintText: String,
-  error: String,
-  saveToDb: () => void,
 }) => {
   const [stateValue, setStateValue] = useState(
     propsValue || propsValue === 0 ? propsValue : '',

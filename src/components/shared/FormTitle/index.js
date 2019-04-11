@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
@@ -25,15 +24,7 @@ const Title = styled.div`
   font-weight: bold;
 `
 
-const FormTitle = ({
-  title,
-  apId,
-  treeName,
-}: {
-  title: string,
-  apId: string,
-  treeName: string,
-}) => {
+const FormTitle = ({ title, apId, treeName }) => {
   return (
     <Container>
       <TitleRow>

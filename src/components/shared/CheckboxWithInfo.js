@@ -1,4 +1,3 @@
-// @flow
 import React, { useCallback } from 'react'
 import FormGroup from '@material-ui/core/FormGroup'
 import FormControl from '@material-ui/core/FormControl'
@@ -29,21 +28,7 @@ const StyledFormControlLabel = styled(FormControlLabel)`
   margin-top: -10px;
 `
 
-const CheckboxWithInfo = ({
-  value,
-  label,
-  name,
-  popover,
-  saveToDb,
-  error,
-}: {
-  value?: number | string,
-  label: string,
-  name: string,
-  popover: Object,
-  saveToDb: () => void,
-  error: String,
-}) => {
+const CheckboxWithInfo = ({ value, label, name, popover, saveToDb, error }) => {
   const onCheck = useCallback((e, val) => saveToDb(val))
 
   return (

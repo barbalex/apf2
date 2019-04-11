@@ -1,4 +1,3 @@
-// @flow
 import React, { useCallback } from 'react'
 import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
@@ -26,19 +25,7 @@ const StyledRadio = styled(Radio)`
   height: 2px !important;
 `
 
-const RadioButton = ({
-  label,
-  name,
-  value,
-  error,
-  saveToDb,
-}: {
-  label: String,
-  name: String,
-  value: Boolean,
-  error: String,
-  saveToDb: () => void,
-}) => {
+const RadioButton = ({ label, name, value, error, saveToDb }) => {
   const onClickButton = useCallback(() => {
     const fakeEvent = {
       target: {

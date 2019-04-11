@@ -1,5 +1,3 @@
-// @flow
-
 /**
  * This does not work as planned:
  * It loads 8 options at mount
@@ -86,17 +84,6 @@ const SelectTypable = ({
   query,
   filter,
   queryNodesName,
-}: {
-  row: Object,
-  valueLabelPath: string,
-  field?: string,
-  label: string,
-  labelSize: ?number,
-  error: string,
-  saveToDb: () => void,
-  query: () => void,
-  filter: Object,
-  queryNodesName: string,
 }) => {
   const client = useApolloClient()
 

@@ -1,4 +1,3 @@
-// @flow
 import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
 import DeleteFilterIcon from '@material-ui/icons/DeleteSweep'
@@ -53,14 +52,6 @@ const FormTitle = ({
   filteredNr,
   totalApNr,
   filteredApNr,
-}: {
-  title: string,
-  table: string,
-  treeName: string,
-  totalNr: number,
-  filteredNr: number,
-  totalApNr: number,
-  filteredApNr: number,
 }) => {
   const store = useContext(storeContext)
   const {

@@ -1,4 +1,3 @@
-// @flow
 import React from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
@@ -21,14 +20,6 @@ const RadioButtonGroupWithInfo = ({
   dataSource,
   saveToDb,
   popover,
-}: {
-  label: String,
-  name: String,
-  value?: ?Number | ?String,
-  error: String,
-  dataSource: Array<Object>,
-  saveToDb: () => void,
-  popover: Object,
 }) => (
   <Container>
     <RadioButtonGroup

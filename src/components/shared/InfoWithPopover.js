@@ -1,4 +1,3 @@
-// @flow
 import React, { useState, useCallback } from 'react'
 import Popover from '@material-ui/core/Popover'
 
@@ -14,11 +13,7 @@ const StyledPopover = styled(Popover)`
   border-radius: 4px;
 `
 
-const InfoWithPopover = ({
-  children,
-}: {
-  children: Array<Object> | Object,
-}) => {
+const InfoWithPopover = ({ children }) => {
   const [popupOpen, changePopupOpen] = useState(false)
   const [popupAnchorEl, changePopupAnchorEl] = useState(null)
 

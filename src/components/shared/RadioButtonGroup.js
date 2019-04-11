@@ -1,4 +1,3 @@
-// @flow
 import React, { useCallback } from 'react'
 import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
@@ -35,14 +34,6 @@ const RadioButtonGroup = ({
   helperText = '',
   dataSource = [],
   saveToDb,
-}: {
-  value: Number | String,
-  label: String,
-  name: String,
-  error: String,
-  helperText: String,
-  dataSource: Array<Object>,
-  saveToDb: () => void,
 }) => {
   const onClickButton = useCallback(
     event => {

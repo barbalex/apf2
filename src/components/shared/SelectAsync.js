@@ -1,5 +1,4 @@
-// @flow
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import AsyncSelect from 'react-select/lib/Async'
 import styled from 'styled-components'
 
@@ -77,18 +76,6 @@ const SharedSelect = ({
   maxHeight = null,
   noCaret = false,
   saveToDb,
-}: {
-  value?: ?number | ?string,
-  field?: string,
-  label: string,
-  labelSize: ?number,
-  name: string,
-  error: string,
-  loadOptions: () => void,
-  setInputValue: () => void,
-  maxHeight?: number,
-  noCaret: boolean,
-  saveToDb: () => void,
 }) => {
   const onInputChange = useCallback(newValue => {
     const inputValue = newValue.replace(/\W/g, '')

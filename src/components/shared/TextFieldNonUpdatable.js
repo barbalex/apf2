@@ -1,4 +1,3 @@
-// @flow
 import React, { useState, useCallback } from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
@@ -14,13 +13,7 @@ const StyledFormControl = styled(FormControl)`
   }
 `
 
-const MyTextField = ({
-  label,
-  value = '',
-}: {
-  label: String,
-  value?: ?Number | ?String,
-}) => {
+const MyTextField = ({ label, value = '' }) => {
   const [error, setError] = useState(null)
   const onChange = useCallback(() => {
     setError('Dieser Wert ist nicht veränderbar')

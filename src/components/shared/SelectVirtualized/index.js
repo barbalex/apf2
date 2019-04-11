@@ -1,4 +1,3 @@
-// @flow
 /**
  * Tried this hoping to make list faster
  * But: typing and removing text ist still slow
@@ -103,18 +102,6 @@ const SharedSelect = ({
   maxHeight = null,
   noCaret = false,
   saveToDb,
-}: {
-  value?: ?number | ?string,
-  field?: string,
-  label: string,
-  labelSize: ?number,
-  name: string,
-  error: string,
-  options: Array<Object>,
-  loading: Boolean,
-  maxHeight?: number,
-  noCaret: boolean,
-  saveToDb: () => void,
 }) => {
   const onChange = useCallback(
     option => {

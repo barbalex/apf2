@@ -1,4 +1,3 @@
-// @flow
 import React, { useState, useCallback, useEffect } from 'react'
 import CreatableSelect from 'react-select/lib/Creatable'
 import styled from 'styled-components'
@@ -90,19 +89,6 @@ const SharedSelectCreatable = ({
   maxHeight = null,
   noCaret = false,
   saveToDb,
-}: {
-  value?: ?number | ?string,
-  field?: string,
-  label: string,
-  name: string,
-  error: string,
-  options: Array<Object>,
-  loading: Boolean,
-  showLocate: Boolean,
-  onClickLocate: () => void,
-  maxHeight?: number,
-  noCaret: boolean,
-  saveToDb: () => void,
 }) => {
   const [stateValue, setStateValue] = useState(null)
 
