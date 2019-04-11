@@ -1,5 +1,4 @@
-// @flow
-export default (table: string): string => {
+export default table => {
   const names = {
     ap: 'Aktionspläne',
     apber: 'AP-Berichte',

@@ -1,11 +1,4 @@
-// @flow
-export default ({
-  activeNodeArray,
-  store,
-}: {
-  activeNodeArray: Array<String>,
-  store: Object,
-}): void => {
+export default ({ activeNodeArray, store }) => {
   const openNodes = []
   activeNodeArray.forEach((n, index) =>
     openNodes.push(activeNodeArray.slice(0, index + 1)),

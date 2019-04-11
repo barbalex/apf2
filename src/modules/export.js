@@ -1,4 +1,3 @@
-// @flow
 import omit from 'lodash/omit'
 
 import idsInsideFeatureCollection from './idsInsideFeatureCollection'
@@ -17,17 +16,6 @@ export default async ({
   xKey,
   yKey,
   addError,
-}: {
-  data: Array<Object>,
-  fileName: String,
-  exportFileType: String,
-  exportApplyMapFilter: Boolean,
-  kml: Boolean,
-  mapFilter: Object,
-  idKey: String,
-  xKey: String,
-  yKey: String,
-  addError: Object,
 }) => {
   let data = dataPassed.map(d => omit(d, ['__typename', 'Symbol(id)']))
   // now we could manipulate the data, for instance apply mapFilter

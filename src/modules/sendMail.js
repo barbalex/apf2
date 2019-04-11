@@ -1,15 +1,4 @@
-// @flow
-export default ({
-  to,
-  subject,
-  body,
-  cc,
-}: {
-  to: string,
-  subject: string,
-  body: string,
-  cc: string,
-}) => {
+export default ({ to, subject, body, cc }) => {
   const link = `mailto:${to}${cc ? `?cc=${cc}` : '?'}${
     subject ? `&subject=${subject}` : ''
   }${body ? `&body=${encodeURIComponent(body)}` : ''}`

@@ -1,5 +1,4 @@
-// @flow
-export default async (idb: Object): void => {
+export default async idb => {
   console.log('LOGGING OUT')
   idb.currentUser.clear()
   window.location.reload(false)

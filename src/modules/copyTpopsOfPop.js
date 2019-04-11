@@ -1,22 +1,9 @@
-// @flow
 import gql from 'graphql-tag'
 import get from 'lodash/get'
 
 import copyTo from './copyTo'
 
-export default async ({
-  popIdFrom,
-  popIdTo,
-  client,
-  copying,
-  store,
-}: {
-  popIdFrom: String,
-  popIdTo: String,
-  client: Object,
-  copying: Object,
-  store: Object,
-}) => {
+export default async ({ popIdFrom, popIdTo, client, copying, store }) => {
   // 1. fetch all tpops
   const { data } = await client.query({
     query: gql`

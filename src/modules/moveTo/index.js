@@ -1,4 +1,3 @@
-// @flow
 /**
  * moves a dataset to a different parent
  * used when moving for instance tpop to other pop in tree
@@ -15,23 +14,12 @@ export default async ({
   client,
   moving,
   setMoving,
-}: {
-  newParentId: String,
-  addError: Object,
-  client: Object,
-  moving: Object,
-  setMoving: () => void,
-}): any => {
+}) => {
   let { table } = moving
   const { id } = moving
 
   // ensure derived data exists
-  const tabelle: {
-    table: String,
-    dbTable: ?String,
-    idField: String,
-    parentIdField: String,
-  } = tables.find(t => t.table === table)
+  const tabelle = tables.find(t => t.table === table)
   // in tpopfeldkontr and tpopfreiwkontr need to find dbTable
   if (tabelle.dbTable) {
     table = tabelle.dbTable

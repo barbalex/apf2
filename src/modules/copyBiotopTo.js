@@ -1,18 +1,9 @@
-// @flow
 import get from 'lodash/get'
 import gql from 'graphql-tag'
 
 import { tpopfeldkontr } from '../components/shared/fragments'
 
-export default async ({
-  id,
-  client,
-  copyingBiotop,
-}: {
-  id: String,
-  client: Object,
-  copyingBiotop: Object,
-}): Promise<void> => {
+export default async ({ id, client, copyingBiotop }) => {
   // fetch previous id from copyingBiotop
   const previousId = copyingBiotop.id
   const { data: dataFrom } = await client.query({

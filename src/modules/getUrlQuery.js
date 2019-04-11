@@ -1,8 +1,7 @@
-// @flow
 import isString from 'lodash/isString'
 import queryString from 'query-string'
 
-export default (): String => {
+export default () => {
   const query = queryString.parse(window.location.search)
   // on initial load an empty object can be returned
   // set initial values

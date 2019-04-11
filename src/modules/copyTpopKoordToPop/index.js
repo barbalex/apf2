@@ -1,18 +1,9 @@
-// @flow
 import get from 'lodash/get'
 
 import queryTpop from './queryTpop'
 import updatePopById from './updatePopById'
 
-export default async ({
-  id,
-  addError,
-  client,
-}: {
-  id: String,
-  addError: Object,
-  client: Object,
-}): Promise<void> => {
+export default async ({ id, addError, client }) => {
   // fetch tpop
   let tpopResult
   try {

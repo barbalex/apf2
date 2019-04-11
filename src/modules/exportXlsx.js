@@ -1,19 +1,9 @@
-// @flow
-
 import fileSaver from 'file-saver'
 import format from 'date-fns/format'
 
 import getXlsxBuffer from './getXlsxBuffer'
 
-export default async ({
-  fileName,
-  data,
-  addError,
-}: {
-  fileName: String,
-  data: Array<Object>,
-  addError: Object,
-}) => {
+export default async ({ fileName, data, addError }) => {
   let buffer
   try {
     buffer = await getXlsxBuffer({ data, addError })

@@ -1,4 +1,3 @@
-// @flow
 /**
  * gets a latLng wgs 84
  * returns tpopId of nearest tpop
@@ -12,15 +11,7 @@ import isFinite from 'lodash/isFinite'
 
 import epsg2056to4326 from './epsg2056to4326'
 
-export default async ({
-  activeNodes,
-  latLng,
-  client,
-}: {
-  activeNodes: Array<Object>,
-  latLng: Object,
-  client: Object,
-}): String => {
+export default async ({ activeNodes, latLng, client }) => {
   const { lat, lng } = latLng
   const myPoint = point([lat, lng])
   const { data } = await client.query({

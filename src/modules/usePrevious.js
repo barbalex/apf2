@@ -1,4 +1,3 @@
-//@flow
 import { useRef, useEffect } from 'react'
 
 export default value => {

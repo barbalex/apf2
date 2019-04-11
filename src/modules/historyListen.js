@@ -1,15 +1,6 @@
-//@flow
 import getActiveNodeArrayFromPathname from './getActiveNodeArrayFromPathname'
 
-export default ({
-  location,
-  action,
-  store,
-}: {
-  location: Object,
-  action: String,
-  store: Object,
-}) => {
+export default ({ location, action, store }) => {
   const { setTreeKey } = store
   const { pathname } = location
   //console.log(action, location.pathname, location.state)

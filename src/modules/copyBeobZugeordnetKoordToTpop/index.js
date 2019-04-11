@@ -1,18 +1,9 @@
-// @flow
 import get from 'lodash/get'
 
 import queryBeob from './queryBeob'
 import updateTpopById from './updateTpopById'
 
-export default async ({
-  id,
-  addError,
-  client,
-}: {
-  id: String,
-  addError: () => void,
-  client: Object,
-}): Promise<void> => {
+export default async ({ id, addError, client }) => {
   // fetch beob coodinates
   let beobResult
   try {

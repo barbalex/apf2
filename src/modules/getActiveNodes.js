@@ -1,5 +1,4 @@
-// @flow
-export default (activeNodeArray: Array<mixed>): Object => {
+export default activeNodeArray => {
   const wlFolder =
     activeNodeArray.length > 0 && activeNodeArray[0] === 'Werte-Listen'
   const wlAdresseFolder =

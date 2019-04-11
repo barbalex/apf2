@@ -1,4 +1,3 @@
-// @flow
 import format from 'date-fns/format'
 import isValid from 'date-fns/isValid'
 import isEqual from 'date-fns/isEqual'
@@ -9,17 +8,7 @@ import createPop from './createPop'
 import createTpop from './createTpop'
 import updateBeobById from './updateBeobById'
 
-export default async ({
-  treeName,
-  id,
-  client,
-  store,
-}: {
-  treeName: Object,
-  id: String,
-  client: Object,
-  store: Object,
-}): Promise<void> => {
+export default async ({ treeName, id, client, store }) => {
   const { setTreeKey, addError, refetch } = store
   const tree = store[treeName]
   const activeNodes = store[`${treeName}ActiveNodes`]

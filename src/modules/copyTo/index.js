@@ -1,4 +1,3 @@
-// @flow
 /**
  * moves a dataset to a different parent
  * used when copying for instance tpop to other pop in tree
@@ -29,14 +28,7 @@ export default async ({
   client,
   copying,
   store,
-}: {
-  parentId: String,
-  tablePassed: ?String,
-  idPassed: ?String,
-  client: Object,
-  copying: Object,
-  store: Object,
-}): Promise<void> => {
+}) => {
   const { refetch, addError } = store
   let table = tablePassed || copying.table
   const id = idPassed || copying.id

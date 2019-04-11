@@ -1,7 +1,6 @@
-//@flow
 import tables from './tables'
 
-export default (activeNode: Object): string => {
+export default activeNode => {
   if (!activeNode) return null
   // name it projekt
   // because: /projekte has no nodes!

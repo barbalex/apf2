@@ -1,4 +1,3 @@
-// @flow
 import pointsWithinPolygon from '@turf/points-within-polygon'
 import { featureCollection, point, polygon } from '@turf/helpers'
 import bboxPolygon from '@turf/bbox-polygon'
@@ -6,19 +5,7 @@ import isFinite from 'lodash/isFinite'
 
 import epsg2056to4326 from './epsg2056to4326notReverse'
 
-export default ({
-  map,
-  data,
-  idKey = 'id',
-  xKey = 'x',
-  yKey = 'y',
-}: {
-  map: Object,
-  data: Array<Object>,
-  idKey: String,
-  xKey: String,
-  yKey: String,
-}): Array<String> => {
+export default ({ map, data, idKey = 'id', xKey = 'x', yKey = 'y' }) => {
   const bounds = map.getBounds()
   /**
    * data is passed from map.pop.pops OR a view fetched from the server

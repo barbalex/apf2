@@ -1,4 +1,3 @@
-// @flow
 import getActiveNodeArrayFromPathname from './getActiveNodeArrayFromPathname'
 import getUrlQuery from '../modules/getUrlQuery'
 import isMobilePhone from '../modules/isMobilePhone'

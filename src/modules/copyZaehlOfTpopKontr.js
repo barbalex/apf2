@@ -1,4 +1,3 @@
-// @flow
 import gql from 'graphql-tag'
 import get from 'lodash/get'
 
@@ -10,12 +9,6 @@ export default async ({
   client,
   copying,
   store,
-}: {
-  tpopkontrIdFrom: String,
-  tpopkontrIdTo: String,
-  client: Object,
-  copying: Object,
-  store: Object,
 }) => {
   // 1. fetch all tpopkontrzaehl
   const { data } = await client.query({

@@ -1,4 +1,3 @@
-// @flow
 export default () => {
   const hostnameWithoutWww = window.location.hostname.replace('www.', '')
   const isLocalhost = hostnameWithoutWww === 'localhost'

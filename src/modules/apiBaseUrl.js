@@ -1,4 +1,3 @@
-// @flow
 // in development should return local path
 
 const hostnameWithoutWww = window.location.hostname.replace('www.', '')

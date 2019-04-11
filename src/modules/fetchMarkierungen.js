@@ -1,15 +1,8 @@
-// @flow
 import axios from 'axios'
 
 import staticFilesBaseUrl from './staticFilesBaseUrl'
 
-export default async ({
-  setMarkierungen,
-  addError,
-}: {
-  setMarkierungen: () => void,
-  addError: Object,
-}): void => {
+export default async ({ setMarkierungen, addError }) => {
   const baseURL = staticFilesBaseUrl
   const url = `/markierungen.json`
   //const axios = await import('axios').then(m => m.default)

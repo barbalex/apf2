@@ -1,4 +1,3 @@
-// @flow
 /**
  * Gets an array of query results passed
  * returns true if any of them returns an error

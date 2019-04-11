@@ -9,5 +9,6 @@ export default arrayOfBoundsPassed => {
   const yMin = Math.min(...yMinArray)
   const xMax = Math.max(...xMaxArray)
   const yMax = Math.max(...yMaxArray)
+
   return [[xMin, yMin], [xMax, yMax]]
 }
