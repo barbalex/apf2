@@ -31,6 +31,9 @@ import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { simpleTypes as tpopfreiwkontrType } from '../../../../store/NodeFilterTree/tpopfreiwkontr'
 
 const Container = styled.div`
+  height: calc(100vh - 64px);
+  display: flex;
+  flex-direction: column;
   background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
   @media print {
     font-size: 11px;
@@ -584,6 +587,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
         {!showFilter && !isPrint && !isFreiwillig && !(view === 'ekf') && (
           <StringToCopy text={row.id} label="GUID" />
         )}
+        {!isPrint && <div style={{ height: '64px' }} />}
       </InnerContainer>
     </Container>
   )

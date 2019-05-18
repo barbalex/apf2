@@ -1,17 +1,18 @@
 import React, { useEffect, useContext } from 'react'
 import 'leaflet'
 import 'leaflet-draw'
-import { withLeaflet } from 'react-leaflet'
+import { useLeaflet } from 'react-leaflet'
 import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../storeContext'
 
-const DrawControl = ({ leaflet }) => {
-  const { map } = leaflet
+const DrawControl = () => {
+  const { map } = useLeaflet()
   const store = useContext(storeContext)
   const { setMapFilter } = store
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
     window.L.drawLocal.draw.toolbar.buttons.polygon =
       'Polygon(e) zeichnen, um zu filtern'
     window.L.drawLocal.draw.toolbar.buttons.rectangle =
@@ -87,4 +88,4 @@ const DrawControl = ({ leaflet }) => {
   return <div style={{ display: 'none' }} />
 }
 
-export default withLeaflet(observer(DrawControl))
+export default observer(DrawControl)

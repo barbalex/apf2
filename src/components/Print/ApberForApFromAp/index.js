@@ -1,14 +1,14 @@
-import React, { useContext } from 'react'
-import styled from 'styled-components'
-import get from 'lodash/get'
-import { observer } from 'mobx-react-lite'
-import { useQuery } from 'react-apollo-hooks'
+import React, { useContext } from "react"
+import styled from "styled-components"
+import get from "lodash/get"
+import { observer } from "mobx-react-lite"
+import { useQuery } from "react-apollo-hooks"
 
-import ErrorBoundary from '../../shared/ErrorBoundary'
-import apQuery from './apByIdJahr'
-import apberQuery from './apberById'
-import ApberForAp from '../ApberForAp'
-import storeContext from '../../../storeContext'
+import ErrorBoundary from "../../shared/ErrorBoundary"
+import apQuery from "./apByIdJahr"
+import apberQuery from "./apberById"
+import ApberForAp from "../ApberForAp"
+import storeContext from "../../../storeContext"
 
 const LoadingContainer = styled.div`
   padding: 15px;
@@ -18,14 +18,14 @@ const Container = styled.div`
   /* this part is for when page preview is shown */
   /* Divide single pages with some space and center all pages horizontally */
   /* will be removed in @media print */
-  margin: ${props => (props.issubreport ? '0' : '1cm auto')};
+  margin: ${props => (props.issubreport ? "0" : "1cm auto")};
   margin-left: ${props =>
-    props.issubreport ? '-0.75cm !important' : '1cm auto'};
+    props.issubreport ? "-0.75cm !important" : "1cm auto"};
   /* Define a white paper background that sticks out from the darker overall background */
-  background: ${props => (props.issubreport ? 'rgba(0, 0, 0, 0)' : '#fff')};
+  background: ${props => (props.issubreport ? "rgba(0, 0, 0, 0)" : "#fff")};
   /* Show a drop shadow beneath each page */
   box-shadow: ${props =>
-    props.issubreport ? 'unset' : '0 4px 5px rgba(75, 75, 75, 0.2)'};
+    props.issubreport ? "unset" : "0 4px 5px rgba(75, 75, 75, 0.2)"};
 
   /* set dimensions */
   width: 21cm;
@@ -34,19 +34,15 @@ const Container = styled.div`
 
   @media print {
     /* this is when it is actually printed */
-    height: inherit;
-    width: inherit;
+    height: auto !important;
+    overflow: visible !important;
+    width: 21cm;
 
     margin: 0 !important;
-    padding: ${props => (props.issubreport ? '0' : '0.5cm !important')};
-    overflow-y: hidden !important;
-    /* try this */
-    page-break-inside: avoid !important;
-    page-break-before: avoid !important;
-    page-break-after: avoid !important;
+    padding: ${props => (props.issubreport ? "0" : "0.5cm !important")};
+    /*padding-left: 0 !important;*/
 
     box-shadow: unset;
-    overflow: hidden;
   }
 `
 
@@ -74,7 +70,7 @@ const ApberForApFromAp = ({ apberId: apberIdPassed, apId: apIdPassed }) => {
     },
   })
 
-  const jahr = get(apberData, 'apberById.jahr', 0)
+  const jahr = get(apberData, "apberById.jahr", 0)
 
   const { data: apData, loading: apDataLoading, error: apDataError } = useQuery(
     apQuery,
@@ -83,7 +79,7 @@ const ApberForApFromAp = ({ apberId: apberIdPassed, apId: apIdPassed }) => {
         apId,
         jahr,
       },
-    },
+    }
   )
 
   if (apDataLoading) {

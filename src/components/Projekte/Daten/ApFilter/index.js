@@ -26,7 +26,7 @@ import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { simpleTypes as apType } from '../../../../store/NodeFilterTree/ap'
 
 const Container = styled.div`
-  height: 100%;
+  height: calc(100vh - 64px);
   display: flex;
   flex-direction: column;
   background-color: #ffd3a7;

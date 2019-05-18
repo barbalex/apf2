@@ -1,16 +1,19 @@
-import React, { Fragment } from 'react'
-import styled from 'styled-components'
-import get from 'lodash/get'
-import flatten from 'lodash/flatten'
-import sortBy from 'lodash/sortBy'
+import React, { Fragment } from "react"
+import styled from "styled-components"
+import get from "lodash/get"
+import flatten from "lodash/flatten"
+import sortBy from "lodash/sortBy"
 
-import ErrorBoundary from '../../shared/ErrorBoundary'
+import ErrorBoundary from "../../shared/ErrorBoundary"
 
 const Container = styled.div`
   break-before: page;
   font-size: 11px;
   @media screen {
     margin-top: 3cm;
+  }
+  @media print {
+    padding-top: 0.3cm !important;
   }
 `
 const Table = styled.div`
@@ -64,27 +67,27 @@ const ErfolgSpanningTitle = styled(Title)`
 const ErfolgNicht = styled(Cell)`
   grid-column: 2 / span 1;
   text-align: center;
-  background-color: ${props => (props.val ? 'red' : 'unset')};
+  background-color: ${props => (props.val ? "red" : "unset")};
 `
 const ErfolgWenig = styled(Cell)`
   grid-column: 3 / span 1;
   text-align: center;
-  background-color: ${props => (props.val ? 'orange' : 'unset')};
+  background-color: ${props => (props.val ? "orange" : "unset")};
 `
 const ErfolgMaessig = styled(Cell)`
   grid-column: 4 / span 1;
   text-align: center;
-  background-color: ${props => (props.val ? 'yellow' : 'unset')};
+  background-color: ${props => (props.val ? "yellow" : "unset")};
 `
 const ErfolgGut = styled(Cell)`
   grid-column: 5 / span 1;
   text-align: center;
-  background-color: ${props => (props.val ? '#00f6ff' : 'unset')};
+  background-color: ${props => (props.val ? "#00f6ff" : "unset")};
 `
 const ErfolgSehr = styled(Cell)`
   grid-column: 6 / span 1;
   text-align: center;
-  background-color: ${props => (props.val ? '#00ff00' : 'unset')};
+  background-color: ${props => (props.val ? "#00ff00" : "unset")};
 `
 const ErfolgVeraenderung = styled(Cell)`
   grid-column: 7 / span 1;
@@ -93,7 +96,7 @@ const ErfolgVeraenderung = styled(Cell)`
 const ErfolgUnsicher = styled(Cell)`
   grid-column: 8 / span 1;
   text-align: center;
-  background-color: ${props => (props.val ? '#afafaf' : 'unset')};
+  background-color: ${props => (props.val ? "#afafaf" : "unset")};
 `
 const ErfolgNichtBeurteilt = styled(Cell)`
   grid-column: 9 / span 1;
@@ -204,42 +207,43 @@ const KefKontrolleTitle = styled(ErfolgTitle)`
 `
 
 const ErfolgList = ({ jahr, data }) => {
-  const aps = get(data, 'allAps.nodes', [])
+  const aps = get(data, "allAps.nodes", [])
   const apRows = sortBy(
     aps.map(ap => {
-      const beurteilung = get(ap, 'apbersByApId.nodes[0].beurteilung')
-      const pops = get(ap, 'popsByApId.nodes', [])
-      const tpops = flatten(pops.map(p => get(p, 'tpopsByPopId.nodes', [])))
+      const beurteilung = get(ap, "apbersByApId.nodes[0].beurteilung")
+      const pops = get(ap, "popsByApId.nodes", [])
+      const tpops = flatten(pops.map(p => get(p, "tpopsByPopId.nodes", [])))
       const anzMassn = flatten(
-        tpops.map(t => get(t, 'tpopmassnsByTpopId.nodes', [])),
+        tpops.map(t => get(t, "tpopmassnsByTpopId.nodes", []))
       ).length
-      const kefKontrollJahr = get(ap, 'aeEigenschaftenByArtId.kefkontrolljahr')
+      const kefKontrollJahr = get(ap, "aeEigenschaftenByArtId.kefkontrolljahr")
       const isKefKontrollJahr =
         !!kefKontrollJahr &&
+        typeof window !== "undefined" &&
         window.Math.floor((jahr - kefKontrollJahr) / 4) ===
           (jahr - kefKontrollJahr) / 4
       return {
-        ap: get(ap, 'aeEigenschaftenByArtId.artname'),
-        erfolgNicht: beurteilung === 3 ? 'X' : '',
-        erfolgWenig: beurteilung === 6 ? 'X' : '',
-        erfolgMaessig: beurteilung === 5 ? 'X' : '',
-        erfolgGut: beurteilung === 1 ? 'X' : '',
-        erfolgSehr: beurteilung === 4 ? 'X' : '',
-        erfolgUnsicher: beurteilung === 1168274204 ? 'X' : '',
+        ap: get(ap, "aeEigenschaftenByArtId.artname"),
+        erfolgNicht: beurteilung === 3 ? "X" : "",
+        erfolgWenig: beurteilung === 6 ? "X" : "",
+        erfolgMaessig: beurteilung === 5 ? "X" : "",
+        erfolgGut: beurteilung === 1 ? "X" : "",
+        erfolgSehr: beurteilung === 4 ? "X" : "",
+        erfolgUnsicher: beurteilung === 1168274204 ? "X" : "",
         nichtBeurteilt: ![1, 3, 4, 5, 6, 1168274204].includes(beurteilung)
-          ? 'X'
-          : '',
+          ? "X"
+          : "",
         veraenderung: get(
           ap,
-          'apbersByApId.nodes[0].veraenderungZumVorjahr',
-          '',
+          "apbersByApId.nodes[0].veraenderungZumVorjahr",
+          ""
         ),
-        keineMassnahme: anzMassn === 0 ? 'X' : '',
-        kefArt: !!get(ap, 'aeEigenschaftenByArtId.kefart') ? 'X' : '',
-        kefKontrolle: isKefKontrollJahr ? 'X' : '',
+        keineMassnahme: anzMassn === 0 ? "X" : "",
+        kefArt: !!get(ap, "aeEigenschaftenByArtId.kefart") ? "X" : "",
+        kefKontrolle: isKefKontrollJahr ? "X" : "",
       }
     }),
-    'ap',
+    "ap"
   )
 
   return (

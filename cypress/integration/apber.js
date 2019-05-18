@@ -3,7 +3,7 @@
 describe('AP-Bericht form', () => {
   before(() => {
     cy.visit(
-      '/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Aktionspläne/6c52d174-4f62-11e7-aebe-67a303eb0640/AP-Berichte/e6b2cfbe-3e7b-11e8-acca-fffa590cd65f',
+      '/Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Aktionspläne/6c52d174-4f62-11e7-aebe-67a303eb0640/AP-Berichte/e6b2cfbe-3e7b-11e8-acca-fffa590cd65f',
     )
   })
   it('has Title AP-Bericht', () => {

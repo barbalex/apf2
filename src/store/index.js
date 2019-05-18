@@ -3,7 +3,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import isEqual from 'lodash/isEqual'
 import uniqBy from 'lodash/uniqBy'
 import queryString from 'query-string'
-import { createBrowserHistory } from 'history'
+import { navigate } from 'gatsby'
 
 import ApfloraLayer from './ApfloraLayer'
 import MapFilter from './MapFilter'
@@ -27,7 +27,6 @@ import getActiveNodes from '../modules/getActiveNodes'
 // substract 3 Months to now so user sees previous year in February
 const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
 const ekfYear = new Date(ekfRefDate).getFullYear()
-const history = createBrowserHistory()
 
 const myTypes = types
   .model({
@@ -74,6 +73,15 @@ const myTypes = types
     assigningBeob: types.optional(types.boolean, false),
     tree: types.optional(Tree, defaultTree),
     tree2: types.optional(Tree, defaultTree),
+    showDeletions: types.optional(types.boolean, false),
+    technDokuFilter: types.optional(
+      types.union(types.string, types.number),
+      '',
+    ),
+    benutzerDokuFilter: types.optional(
+      types.union(types.string, types.number),
+      '',
+    ),
   })
   // structure of these variables is not controlled
   // so need to define this as volatile
@@ -83,7 +91,6 @@ const myTypes = types
     ktZh: null,
     errors: [],
     toDeleteAfterDeletionHook: null,
-    history,
     deletedDatasets: [],
     refetch: {},
   }))
@@ -96,11 +103,14 @@ const myTypes = types
     },
   }))
   .actions(self => ({
-    historyPush(val) {
-      history.push(val)
+    setTechnDokuFilter(val) {
+      self.technDokuFilter = val
     },
-    historyGoBack() {
-      history.goBack()
+    setBenutzerDokuFilter(val) {
+      self.benutzerDokuFilter = val
+    },
+    setShowDeletions(val) {
+      self.showDeletions = val
     },
     setDeletedDatasets(val) {
       self.deletedDatasets = val
@@ -254,7 +264,7 @@ const myTypes = types
           Object.keys(newUrlQuery).length > 0 ? `?${search}` : ''
         }`
         const { activeNodeArray } = self.tree
-        self.historyPush(`/${activeNodeArray.join('/')}${query}`)
+        navigate(`/Daten/${activeNodeArray.join('/')}${query}`)
       }
     },
     setMoving({ table, id, label }) {
@@ -274,24 +284,6 @@ const myTypes = types
     },
     setRefetchKey({ key, value }) {
       self.refetch[key] = value
-    },
-    setTreeKey({ tree, key, value }) {
-      const oldValue = self[tree][key]
-      const urlQuery = self.urlQuery
-      // only write if changed
-      if (!isEqual(oldValue, value)) {
-        self[tree][key] = value
-        if (tree === 'tree' && key === 'activeNodeArray') {
-          const search = queryString.stringify(urlQuery)
-          const query = `${
-            Object.keys(urlQuery).length > 0 ? `?${search}` : ''
-          }`
-          // pass openNodes as state
-          self.historyPush(`/${value.join('/')}${query}`, {
-            openNodes: self[tree].openNodes,
-          })
-        }
-      }
     },
     cloneTree2From1() {
       self.tree2 = cloneDeep(self.tree)

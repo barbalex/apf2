@@ -1,5 +1,5 @@
 import { ApolloClient } from 'apollo-client'
-//import { createHttpLink } from 'apollo-link-http'
+//import { createHttpLink } from "apollo-link-http"
 import { BatchHttpLink } from 'apollo-link-batch-http'
 import { setContext } from 'apollo-link-context'
 import { InMemoryCache, defaultDataIdFromObject } from 'apollo-cache-inmemory'
@@ -8,8 +8,8 @@ import jwtDecode from 'jwt-decode'
 
 import graphQlUri from './modules/graphQlUri'
 
-export default async ({ idb, store }) => {
-  const authLink = setContext(async (_, { headers }) => {
+export default ({ idb, store }) => {
+  const authLink = setContext((_, { headers }) => {
     const { token } = store.user
     if (token) {
       const tokenDecoded = jwtDecode(token)
@@ -36,8 +36,8 @@ export default async ({ idb, store }) => {
     //resultCaching: false
   })
   // use httpLink _instead_ of batchHttpLink to _not_ batch
-  /*
-  const httpLink = createHttpLink({
+
+  /*const httpLink = createHttpLink({
     uri: graphQlUri(),
   })*/
   const batchHttpLink = new BatchHttpLink({ uri: graphQlUri() })

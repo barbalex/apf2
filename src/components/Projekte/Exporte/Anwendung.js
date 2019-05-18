@@ -1,22 +1,22 @@
-import React, { useContext, useState, useCallback } from 'react'
-import Card from '@material-ui/core/Card'
-import CardActions from '@material-ui/core/CardActions'
-import CardContent from '@material-ui/core/CardContent'
-import Collapse from '@material-ui/core/Collapse'
-import IconButton from '@material-ui/core/IconButton'
-import Icon from '@material-ui/core/Icon'
-import Button from '@material-ui/core/Button'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import styled from 'styled-components'
-import gql from 'graphql-tag'
-import get from 'lodash/get'
-import { observer } from 'mobx-react-lite'
-import { useApolloClient } from 'react-apollo-hooks'
+import React, { useContext, useState, useCallback } from "react"
+import Card from "@material-ui/core/Card"
+import CardActions from "@material-ui/core/CardActions"
+import CardContent from "@material-ui/core/CardContent"
+import Collapse from "@material-ui/core/Collapse"
+import IconButton from "@material-ui/core/IconButton"
+import Icon from "@material-ui/core/Icon"
+import Button from "@material-ui/core/Button"
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
+import styled from "styled-components"
+import gql from "graphql-tag"
+import get from "lodash/get"
+import { observer } from "mobx-react-lite"
+import { useApolloClient } from "react-apollo-hooks"
 
-import beziehungen from '../../../etc/beziehungen.png'
-import exportModule from '../../../modules/export'
-import Message from './Message'
-import storeContext from '../../../storeContext'
+import beziehungen from "../../../etc/beziehungen.png"
+import exportModule from "../../../modules/export"
+import Message from "./Message"
+import storeContext from "../../../storeContext"
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -28,7 +28,7 @@ const StyledCardActions = styled(CardActions)`
   height: auto !important;
 `
 const CardActionIconButton = styled(IconButton)`
-  transform: ${props => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
+  transform: ${props => (props["data-expanded"] ? "rotate(180deg)" : "none")};
 `
 const CardActionTitle = styled.div`
   padding-left: 8px;
@@ -86,8 +86,8 @@ const Anwendung = () => {
         `,
       })
       exportModule({
-        data: get(data, 'allVDatenstrukturs.nodes', []),
-        fileName: 'Datenstruktur',
+        data: get(data, "allVDatenstrukturs.nodes", []),
+        fileName: "Datenstruktur",
         exportFileType,
         exportApplyMapFilter,
         addError,
@@ -107,7 +107,7 @@ const Anwendung = () => {
           aria-expanded={expanded}
           aria-label="öffnen"
         >
-          <Icon title={expanded ? 'schliessen' : 'öffnen'}>
+          <Icon title={expanded ? "schliessen" : "öffnen"}>
             <ExpandMoreIcon />
           </Icon>
         </CardActionIconButton>
@@ -119,7 +119,7 @@ const Anwendung = () => {
           </DownloadCardButton>
           <DownloadCardButton
             onClick={() => {
-              window.open(beziehungen)
+              typeof window !== "undefined" && window.open(beziehungen)
             }}
           >
             Datenstruktur grafisch dargestellt

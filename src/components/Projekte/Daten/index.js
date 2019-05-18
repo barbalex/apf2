@@ -1,9 +1,14 @@
-import React, { lazy, Suspense, useContext, useMemo } from 'react'
+import React, { useContext, useMemo } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import get from 'lodash/get'
+import loadable from '@loadable/component'
 
-import Fallback from '../../shared/Fallback'
+/**
+ * ReactDOMServer does not yet support Suspense
+ */
+
+//import Fallback from '../../shared/Fallback'
 import getTableNameFromActiveNode from '../../../modules/getTableNameFromActiveNode'
 import storeContext from '../../../storeContext'
 
@@ -56,152 +61,152 @@ const Daten = ({ treeName }) => {
     let form
     switch (fOKey) {
       case 'adresse': {
-        const Adresse = lazy(() => import('./Adresse'))
+        const Adresse = loadable(() => import('./Adresse'))
         form = <Adresse treeName={treeName} />
         break
       }
       case 'ap': {
-        const Ap = lazy(() => import('./Ap'))
+        const Ap = loadable(() => import('./Ap'))
         form = <Ap treeName={treeName} />
         break
       }
       case 'apberuebersicht': {
-        const Apberuebersicht = lazy(() => import('./Apberuebersicht'))
+        const Apberuebersicht = loadable(() => import('./Apberuebersicht'))
         form = <Apberuebersicht treeName={treeName} />
         break
       }
       case 'apart': {
-        const Apart = lazy(() => import('./Apart'))
+        const Apart = loadable(() => import('./Apart'))
         form = <Apart treeName={treeName} />
         break
       }
       case 'apber': {
-        const Apber = lazy(() => import('./Apber'))
+        const Apber = loadable(() => import('./Apber'))
         form = <Apber treeName={treeName} />
         break
       }
       case 'assozart': {
-        const Assozart = lazy(() => import('./Assozart'))
+        const Assozart = loadable(() => import('./Assozart'))
         form = <Assozart treeName={treeName} />
         break
       }
       case 'beobNichtBeurteilt': {
-        const Beobzuordnung = lazy(() => import('./Beobzuordnung'))
+        const Beobzuordnung = loadable(() => import('./Beobzuordnung'))
         form = <Beobzuordnung treeName={treeName} type="nichtBeurteilt" />
         break
       }
       case 'beobNichtZuzuordnen': {
-        const Beobzuordnung = lazy(() => import('./Beobzuordnung'))
+        const Beobzuordnung = loadable(() => import('./Beobzuordnung'))
         form = <Beobzuordnung treeName={treeName} type="nichtZuzuordnen" />
         break
       }
       case 'beobZugeordnet': {
-        const Beobzuordnung = lazy(() => import('./Beobzuordnung'))
+        const Beobzuordnung = loadable(() => import('./Beobzuordnung'))
         form = <Beobzuordnung treeName={treeName} type="zugeordnet" />
         break
       }
       case 'ber': {
-        const Ber = lazy(() => import('./Ber'))
+        const Ber = loadable(() => import('./Ber'))
         form = <Ber treeName={treeName} />
         break
       }
       case 'currentIssue': {
-        const CurrentIssue = lazy(() => import('./CurrentIssue'))
+        const CurrentIssue = loadable(() => import('./CurrentIssue'))
         form = <CurrentIssue treeName={treeName} />
         break
       }
       case 'ekfzaehleinheit': {
-        const Ekfzaehleinheit = lazy(() => import('./Ekfzaehleinheit'))
+        const Ekfzaehleinheit = loadable(() => import('./Ekfzaehleinheit'))
         form = <Ekfzaehleinheit treeName={treeName} />
         break
       }
       case 'erfkrit': {
-        const Erfkrit = lazy(() => import('./Erfkrit'))
+        const Erfkrit = loadable(() => import('./Erfkrit'))
         form = <Erfkrit treeName={treeName} />
         break
       }
       case 'exporte': {
-        const Exporte = lazy(() => import('../Exporte'))
+        const Exporte = loadable(() => import('../Exporte'))
         form = <Exporte />
         break
       }
       case 'idealbiotop': {
-        const Idealbiotop = lazy(() => import('./Idealbiotop'))
+        const Idealbiotop = loadable(() => import('./Idealbiotop'))
         form = <Idealbiotop treeName={treeName} />
         break
       }
       case 'pop': {
-        const Pop = lazy(() => import('./Pop'))
+        const Pop = loadable(() => import('./Pop'))
         form = <Pop treeName={treeName} />
         break
       }
       case 'popber': {
-        const Popber = lazy(() => import('./Popber'))
+        const Popber = loadable(() => import('./Popber'))
         form = <Popber treeName={treeName} />
         break
       }
       case 'popmassnber': {
-        const Popmassnber = lazy(() => import('./Popmassnber'))
+        const Popmassnber = loadable(() => import('./Popmassnber'))
         form = <Popmassnber treeName={treeName} />
         break
       }
       case 'projekt': {
-        const Projekt = lazy(() => import('./Projekt'))
+        const Projekt = loadable(() => import('./Projekt'))
         form = <Projekt treeName={treeName} />
         break
       }
       case 'qk': {
-        const Qk = lazy(() => import('./Qk'))
+        const Qk = loadable(() => import('./Qk'))
         form = <Qk treeName={treeName} />
         break
       }
       case 'tpop': {
-        const Tpop = lazy(() => import('./Tpop'))
+        const Tpop = loadable(() => import('./Tpop'))
         form = <Tpop treeName={treeName} />
         break
       }
       case 'tpopber': {
-        const Tpopber = lazy(() => import('./Tpopber'))
+        const Tpopber = loadable(() => import('./Tpopber'))
         form = <Tpopber treeName={treeName} />
         break
       }
       case 'tpopfeldkontr': {
-        const Tpopfeldkontr = lazy(() => import('./Tpopfeldkontr'))
+        const Tpopfeldkontr = loadable(() => import('./Tpopfeldkontr'))
         form = <Tpopfeldkontr treeName={treeName} />
         break
       }
       case 'tpopfreiwkontr': {
-        const Tpopfreiwkontr = lazy(() => import('./Tpopfreiwkontr'))
+        const Tpopfreiwkontr = loadable(() => import('./Tpopfreiwkontr'))
         form = <Tpopfreiwkontr treeName={treeName} />
         break
       }
       case 'tpopkontrzaehl': {
-        const Tpopkontrzaehl = lazy(() => import('./Tpopkontrzaehl'))
+        const Tpopkontrzaehl = loadable(() => import('./Tpopkontrzaehl'))
         form = <Tpopkontrzaehl treeName={treeName} />
         break
       }
       case 'tpopmassn': {
-        const Tpopmassn = lazy(() => import('./Tpopmassn'))
+        const Tpopmassn = loadable(() => import('./Tpopmassn'))
         form = <Tpopmassn treeName={treeName} />
         break
       }
       case 'tpopmassnber': {
-        const Tpopmassnber = lazy(() => import('./Tpopmassnber'))
+        const Tpopmassnber = loadable(() => import('./Tpopmassnber'))
         form = <Tpopmassnber treeName={treeName} />
         break
       }
       case 'user': {
-        const User = lazy(() => import('./User'))
+        const User = loadable(() => import('./User'))
         form = <User treeName={treeName} />
         break
       }
       case 'ziel': {
-        const Ziel = lazy(() => import('./Ziel'))
+        const Ziel = loadable(() => import('./Ziel'))
         form = <Ziel treeName={treeName} />
         break
       }
       case 'zielber': {
-        const Zielber = lazy(() => import('./Zielber'))
+        const Zielber = loadable(() => import('./Zielber'))
         form = <Zielber treeName={treeName} />
         break
       }
@@ -213,9 +218,15 @@ const Daten = ({ treeName }) => {
 
   if (!form) return null
 
+  /**
+   * ReactDOMServer does not yet support Suspense
+   */
+
   return (
     <Container data-id={`daten-container${treeName === 'tree' ? 1 : 2}`}>
-      <Suspense fallback={<Fallback />}>{form}</Suspense>
+      {/*<Suspense fallback={<Fallback />}>*/}
+      {form}
+      {/*</Suspense>*/}
     </Container>
   )
 }

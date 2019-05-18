@@ -27,7 +27,7 @@ import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { simpleTypes as tpopmassnType } from '../../../../store/NodeFilterTree/tpopmassn'
 
 const Container = styled.div`
-  height: 100%;
+  height: calc(100vh - 64px);
   display: flex;
   flex-direction: column;
   background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};

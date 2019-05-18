@@ -4,7 +4,7 @@
 module.exports = {
   client: {
     service: {
-      url: 'https://apflora.ch/graphql',
+      url: 'https://api.apflora.ch/graphql',
       // optional headers
       //headers: {
       //  'X-Hasura-Access-Key': secrets.accessKey,

@@ -3,7 +3,7 @@
 // https://github.com/victorzinho/leaflet-switch-scale-control
 import React, { useEffect } from 'react'
 import 'leaflet'
-import { withLeaflet } from 'react-leaflet'
+import { useLeaflet } from 'react-leaflet'
 // eslint-disable-next-line no-unused-vars
 import SwitchScaleControl from 'leaflet-switch-scale-control'
 
@@ -18,7 +18,7 @@ const options = {
   customScaleTitle: 'Задайте свой масштаб и нажмите Enter', // Custom scale title text.
   recalcOnPositionChange: false, // Flag: whether to recalc scale on map position change.
   recalcOnZoomChange: false, // Flag: whether to recalc scale on map zoom change.
-  scales: [500, 1000, 2000, 5000, 10000, 25000, 50000, 100000, 200000, 500000], // Array of available to select scales
+  scales: [500, 1000, 2000, 5000, 10000, 25000, 50000, 100000, 200000, 500000], // Array of selectable scales
   roundScales: undefined, // Array of available to display rounded scales
   adjustScales: false, // Flag: whether to adjust custom scale to max of scales
   pixelsInMeterWidth: function() {
@@ -39,13 +39,15 @@ const options = {
 }
 const style = { display: 'none' }
 
-const ScaleControl = ({ leaflet }) => {
+const ScaleControl = () => {
+  const { map } = useLeaflet()
   useEffect(() => {
+    if (typeof window === 'undefined') return
     const switchScaleControl = new window.L.Control.SwitchScaleControl(options)
-    switchScaleControl.addTo(leaflet.map)
+    switchScaleControl.addTo(map)
   }, [])
 
   return <div style={style} />
 }
 
-export default withLeaflet(ScaleControl)
+export default ScaleControl

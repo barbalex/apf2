@@ -1,13 +1,13 @@
-import React, { useContext } from 'react'
-import { GeoJSON } from 'react-leaflet'
-import 'leaflet'
-import { observer } from 'mobx-react-lite'
+import React, { useContext } from "react"
+import { GeoJSON } from "react-leaflet"
+import "leaflet"
+import { observer } from "mobx-react-lite"
 
-import popupFromProperties from './popupFromProperties'
-import fetchMarkierungen from '../../../../modules/fetchMarkierungen'
-import storeContext from '../../../../storeContext'
+import popupFromProperties from "./popupFromProperties"
+import fetchMarkierungen from "../../../../modules/fetchMarkierungen"
+import storeContext from "../../../../storeContext"
 
-const style = () => ({ fill: false, color: 'orange', weight: 1 })
+const style = () => ({ fill: false, color: "orange", weight: 1 })
 const onEachFeature = (feature, layer) => {
   if (feature.properties) {
     layer.bindPopup(popupFromProperties(feature.properties))
@@ -15,13 +15,14 @@ const onEachFeature = (feature, layer) => {
 }
 const pTLOptions = {
   radius: 3,
-  fillColor: '#ff7800',
-  color: '#000',
+  fillColor: "#ff7800",
+  color: "#000",
   weight: 1,
   opacity: 1,
   fillOpacity: 0.8,
 }
 const pointToLayer = (feature, latlng) => {
+  if (typeof window === "undefined") return {}
   return window.L.circleMarker(latlng, pTLOptions)
 }
 

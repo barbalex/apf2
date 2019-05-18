@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import 'leaflet'
-import { withLeaflet } from 'react-leaflet'
+import { useLeaflet } from 'react-leaflet'
 import 'leaflet-easyprint'
 import Control from 'react-leaflet-control'
 import styled from 'styled-components'
@@ -31,8 +31,9 @@ const options = {
   hideControlContainer: true,
 }
 
-const PngControl = ({ leaflet }) => {
+const PngControl = () => {
   const [printPlugin, changePrintPlugin] = useState({})
+  const { map } = useLeaflet()
 
   const savePng = useCallback(event => {
     event.preventDefault()
@@ -40,7 +41,8 @@ const PngControl = ({ leaflet }) => {
   })
 
   useEffect(() => {
-    const pp = window.L.easyPrint(options).addTo(leaflet.map)
+    if (typeof window === 'undefined') return
+    const pp = window.L.easyPrint(options).addTo(map)
     changePrintPlugin(pp)
   }, [])
 
@@ -55,4 +57,4 @@ const PngControl = ({ leaflet }) => {
   )
 }
 
-export default withLeaflet(PngControl)
+export default PngControl

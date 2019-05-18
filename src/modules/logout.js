@@ -1,5 +1,5 @@
 export default async idb => {
-  console.log('LOGGING OUT')
+  console.log("LOGGING OUT")
   idb.currentUser.clear()
-  window.location.reload(false)
+  typeof window !== "undefined" && window.location.reload(false)
 }

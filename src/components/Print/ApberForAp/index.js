@@ -1,30 +1,30 @@
-import React from 'react'
-import styled from 'styled-components'
-import get from 'lodash/get'
-import sortBy from 'lodash/sortBy'
-import minBy from 'lodash/minBy'
-import flatten from 'lodash/flatten'
-import format from 'date-fns/format'
+import React from "react"
+import styled from "styled-components"
+import get from "lodash/get"
+import sortBy from "lodash/sortBy"
+import minBy from "lodash/minBy"
+import flatten from "lodash/flatten"
+import format from "date-fns/format"
 
-import ErrorBoundary from '../../shared/ErrorBoundary'
-import Ziele from './Ziele'
-import Massnahmen from './Massnahmen'
-import AMengen from './AMengen'
-import BMengen from './BMengen'
-import CMengen from './CMengen'
+import ErrorBoundary from "../../shared/ErrorBoundary"
+import Ziele from "./Ziele"
+import Massnahmen from "./Massnahmen"
+import AMengen from "./AMengen"
+import BMengen from "./BMengen"
+import CMengen from "./CMengen"
 
 const Container = styled.div`
   /* this part is for when page preview is shown */
   /* Divide single pages with some space and center all pages horizontally */
   /* will be removed in @media print */
-  margin: ${props => (props.issubreport ? '0' : '1cm auto')};
+  margin: ${props => (props.issubreport ? "0" : "1cm auto")};
   margin-left: ${props =>
-    props.issubreport ? '-0.75cm !important' : '1cm auto'};
+    props.issubreport ? "-0.75cm !important" : "1cm auto"};
   /* Define a white paper background that sticks out from the darker overall background */
-  background: ${props => (props.issubreport ? 'rgba(0, 0, 0, 0)' : '#fff')};
+  background: ${props => (props.issubreport ? "rgba(0, 0, 0, 0)" : "#fff")};
   /* Show a drop shadow beneath each page */
   box-shadow: ${props =>
-    props.issubreport ? 'unset' : '0 4px 5px rgba(75, 75, 75, 0.2)'};
+    props.issubreport ? "unset" : "0 4px 5px rgba(75, 75, 75, 0.2)"};
 
   /* set dimensions */
   width: 21cm;
@@ -33,19 +33,17 @@ const Container = styled.div`
 
   @media print {
     /* this is when it is actually printed */
-    height: inherit;
-    width: inherit;
+    height: auto !important;
+    overflow: visible !important;
+    width: 21cm;
 
     margin: 0 !important;
-    padding: ${props => (props.issubreport ? '0' : '0.5cm !important')};
-    overflow-y: hidden !important;
+    padding: ${props => (props.issubreport ? "0" : "0.5cm !important")};
+    /*padding-left: 0 !important;*/
     /* try this */
-    page-break-inside: avoid !important;
-    page-break-before: avoid !important;
-    page-break-after: avoid !important;
+    page-break-before: always !important;
 
     box-shadow: unset;
-    overflow: hidden;
   }
 `
 const ContentContainer = styled.div`
@@ -53,7 +51,8 @@ const ContentContainer = styled.div`
   font-size: 14px;
   @media print {
     padding: 0;
-    overflow: hidden;
+    height: auto !important;
+    overflow: visible !important;
   }
 `
 const Header = styled.p`
@@ -122,41 +121,41 @@ const ApberForAp = ({
   isSubReport,
 }) => {
   const apData = isSubReport ? apDataPassed : apDataPassed.apById
-  const artname = get(apData, 'aeEigenschaftenByArtId.artname', '(Art fehlt)')
-  const apber = get(apData, 'apbersByApId.nodes[0]', {})
-  const apberDatum = get(apber, 'datum')
-  const erfkrit = sortBy(get(apData, 'erfkritsByApId.nodes', []), e =>
-    get(e, 'apErfkritWerteByErfolg.sort'),
+  const artname = get(apData, "aeEigenschaftenByArtId.artname", "(Art fehlt)")
+  const apber = get(apData, "apbersByApId.nodes[0]", {})
+  const apberDatum = get(apber, "datum")
+  const erfkrit = sortBy(get(apData, "erfkritsByApId.nodes", []), e =>
+    get(e, "apErfkritWerteByErfolg.sort")
   )
-  const ziele = sortBy(get(apData, 'zielsByApId.nodes', []), e => [
-    get(e, 'zielTypWerteByTyp.sort'),
+  const ziele = sortBy(get(apData, "zielsByApId.nodes", []), e => [
+    get(e, "zielTypWerteByTyp.sort"),
     e.bezeichnung,
   ])
-  const pops = get(apData, 'popsByApId.nodes', [])
-  const tpops = flatten(pops.map(p => get(p, 'tpopsByPopId.nodes', [])))
+  const pops = get(apData, "popsByApId.nodes", [])
+  const tpops = flatten(pops.map(p => get(p, "tpopsByPopId.nodes", [])))
   const massns = sortBy(
-    flatten(tpops.map(t => get(t, 'tpopmassnsByTpopId.nodes', []))),
+    flatten(tpops.map(t => get(t, "tpopmassnsByTpopId.nodes", []))),
     m => [
-      get(m, 'tpopByTpopId.popByPopId.nr'),
-      get(m, 'tpopByTpopId.nr'),
-      get(m, 'datum'),
-      get(m, 'tpopmassnTypWerteByTyp.text'),
-      get(m, 'beschreibung'),
-    ],
+      get(m, "tpopByTpopId.popByPopId.nr"),
+      get(m, "tpopByTpopId.nr"),
+      get(m, "datum"),
+      get(m, "tpopmassnTypWerteByTyp.text"),
+      get(m, "beschreibung"),
+    ]
   )
   const firstMassn = minBy(
-    flatten(tpops.map(t => get(t, 'firstTpopmassn.nodes[0]', []))),
-    'datum',
+    flatten(tpops.map(t => get(t, "firstTpopmassn.nodes[0]", []))),
+    "datum"
   )
   const yearOfFirstMassn = !!firstMassn
-    ? format(new Date(firstMassn.datum), 'yyyy')
+    ? format(new Date(firstMassn.datum), "yyyy")
     : 0
   const firstTpopber = minBy(
-    flatten(tpops.map(t => get(t, 'firstTpopber.nodes[0]', []))),
-    'jahr',
+    flatten(tpops.map(t => get(t, "firstTpopber.nodes[0]", []))),
+    "jahr"
   )
   const yearOfFirstTpopber = !!firstTpopber ? firstTpopber.jahr : 0
-  const startJahr = get(apData, 'startJahr', 0)
+  const startJahr = get(apData, "startJahr", 0)
 
   if (startJahr === 0)
     return (
@@ -174,9 +173,9 @@ const ApberForAp = ({
       <Container issubreport={isSubReport}>
         <ContentContainer>
           <Header>
-            {`Jahresbericht ${get(apber, 'jahr', '(Jahr fehlt)')},
+            {`Jahresbericht ${get(apber, "jahr", "(Jahr fehlt)")},
               ${artname},
-              ${format(new Date(), 'dd.MM.yyyy')}`}
+              ${format(new Date(), "dd.MM.yyyy")}`}
           </Header>
 
           <Title1>{artname}</Title1>
@@ -184,8 +183,8 @@ const ApberForAp = ({
           <Row>
             <p>{`Start Programm: ${get(
               apData,
-              'startJahr',
-              '(Start-Jahr fehlt)',
+              "startJahr",
+              "(Start-Jahr fehlt)"
             )}`}</p>
             <p>{`Erste Massnahme: ${yearOfFirstMassn}`}</p>
             <p>{`Erste Kontrolle: ${yearOfFirstTpopber}`}</p>
@@ -197,7 +196,7 @@ const ApberForAp = ({
               <TitledLabel>
                 Bemerkungen / Folgerungen für nächstes Jahr: neue Biotope
               </TitledLabel>
-              <FullWidthField>{get(apber, 'biotopeNeue', '')}</FullWidthField>
+              <FullWidthField>{get(apber, "biotopeNeue", "")}</FullWidthField>
             </FieldRowFullWidth>
           )}
 
@@ -208,7 +207,7 @@ const ApberForAp = ({
                 Bemerkungen / Folgerungen für nächstes Jahr: Optimierung Biotope
               </TitledLabel>
               <FullWidthField>
-                {get(apber, 'biotopeOptimieren', '')}
+                {get(apber, "biotopeOptimieren", "")}
               </FullWidthField>
             </FieldRowFullWidth>
           )}
@@ -218,7 +217,7 @@ const ApberForAp = ({
             <FieldRowFullWidth>
               <TitledLabel>Vergleich Ausführung/Planung</TitledLabel>
               <FullWidthField>
-                {get(apber, 'massnahmenPlanungVsAusfuehrung', '')}
+                {get(apber, "massnahmenPlanungVsAusfuehrung", "")}
               </FullWidthField>
             </FieldRowFullWidth>
           )}
@@ -229,7 +228,7 @@ const ApberForAp = ({
                 Massnahmen
               </TitledLabel>
               <FullWidthField>
-                {get(apber, 'massnahmenOptimieren', '')}
+                {get(apber, "massnahmenOptimieren", "")}
               </FullWidthField>
             </FieldRowFullWidth>
           )}
@@ -239,7 +238,7 @@ const ApberForAp = ({
                 Weitere Aktivitäten der Aktionsplan-Verantwortlichen
               </TitledLabel>
               <FullWidthField>
-                {get(apber, 'massnahmenApBearb', '')}
+                {get(apber, "massnahmenApBearb", "")}
               </FullWidthField>
             </FieldRowFullWidth>
           )}
@@ -253,7 +252,7 @@ const ApberForAp = ({
               <FieldLabel>
                 Vergleich zu Vorjahr - Ausblick auf Gesamtziel
               </FieldLabel>
-              <Field>{get(apber, 'vergleichVorjahrGesamtziel', '')}</Field>
+              <Field>{get(apber, "vergleichVorjahrGesamtziel", "")}</Field>
             </FieldRow>
           )}
           {!!ziele.length && <Ziele ziele={ziele} />}
@@ -265,11 +264,11 @@ const ApberForAp = ({
                   <ErfkritRow key={e.id}>
                     <ErfkritErfolg>{`${get(
                       e,
-                      'apErfkritWerteByErfolg.text',
-                      '(fehlt)',
+                      "apErfkritWerteByErfolg.text",
+                      "(fehlt)"
                     )}:`}</ErfkritErfolg>
                     <ErfkritKriterium>
-                      {e.kriterien || '(fehlt)'}
+                      {e.kriterien || "(fehlt)"}
                     </ErfkritKriterium>
                   </ErfkritRow>
                 ))}
@@ -280,40 +279,40 @@ const ApberForAp = ({
             <FieldRowBold>
               <FieldLabel>Beurteilung</FieldLabel>
               <Field>
-                {get(apber, 'apErfkritWerteByBeurteilung.text', '')}
+                {get(apber, "apErfkritWerteByBeurteilung.text", "")}
               </Field>
             </FieldRowBold>
           )}
           {!!apber.wirkungAufArt && (
             <FieldRow>
               <FieldLabel>Bemerkungen</FieldLabel>
-              <Field>{get(apber, 'wirkungAufArt', '')}</Field>
+              <Field>{get(apber, "wirkungAufArt", "")}</Field>
             </FieldRow>
           )}
           {!!apber.apberAnalyse && (
             <FieldRow>
               <FieldLabel>Analyse</FieldLabel>
-              <Field>{get(apber, 'apberAnalyse', '')}</Field>
+              <Field>{get(apber, "apberAnalyse", "")}</Field>
             </FieldRow>
           )}
           {!!apber.konsequenzenUmsetzung && (
             <FieldRow>
               <FieldLabel>Konsequenzen für die Umsetzung</FieldLabel>
-              <Field>{get(apber, 'konsequenzenUmsetzung', '')}</Field>
+              <Field>{get(apber, "konsequenzenUmsetzung", "")}</Field>
             </FieldRow>
           )}
           {!!apber.konsequenzenErfolgskontrolle && (
             <FieldRow>
               <FieldLabel>Konsequenzen für die Erfolgskontrolle</FieldLabel>
-              <Field>{get(apber, 'konsequenzenErfolgskontrolle', '')}</Field>
+              <Field>{get(apber, "konsequenzenErfolgskontrolle", "")}</Field>
             </FieldRow>
           )}
           <Row>
             {`${
               apberDatum
-                ? format(new Date(apberDatum), 'dd.MM.yyyy')
-                : '(Datum fehlt)'
-            } / ${get(apber, 'adresseByBearbeiter.name', '(kein Bearbeiter)')}`}
+                ? format(new Date(apberDatum), "dd.MM.yyyy")
+                : "(Datum fehlt)"
+            } / ${get(apber, "adresseByBearbeiter.name", "(kein Bearbeiter)")}`}
           </Row>
         </ContentContainer>
       </Container>

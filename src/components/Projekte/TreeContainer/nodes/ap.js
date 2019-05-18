@@ -2,6 +2,8 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import memoizeOne from 'memoize-one'
 
+import allParentNodesAreOpen from '../allParentNodesAreOpen'
+
 export default ({
   nodes: nodesPassed,
   data,
@@ -34,6 +36,7 @@ export default ({
         url: ['Projekte', el.projId, 'Aktionspläne', el.id],
         hasChildren: true,
       }))
+      .filter(el => allParentNodesAreOpen(store[treeName].openNodes, el.url))
       .map((el, index) => {
         el.sort = [projIndex, 1, index]
         return el

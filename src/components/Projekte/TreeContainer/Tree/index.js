@@ -71,14 +71,16 @@ const Tree = ({ treeName }) => {
   const tree = store[treeName]
   const {
     activeNodeArray,
+    setActiveNodeArray,
     setNodes,
     openNodes,
+    setOpenNodes,
     nodeLabelFilter,
     treeWidth,
     treeHeight,
   } = tree
   const activeNodes = store[`${treeName}ActiveNodes`]
-  const { nodeFilter, user, setRefetchKey, setTreeKey } = store
+  const { nodeFilter, user, setRefetchKey } = store
   const { idb } = useContext(idbContext)
   const {
     projekt,
@@ -745,17 +747,9 @@ const Tree = ({ treeName }) => {
       projektNode
     ) {
       const projektUrl = [...projektNode.url]
-      setTreeKey({
-        value: projektUrl,
-        tree: treeName,
-        key: 'activeNodeArray',
-      })
+      setActiveNodeArray(projektUrl)
       // add projekt to open nodes
-      setTreeKey({
-        value: [...openNodes, projektUrl],
-        tree: treeName,
-        key: 'openNodes',
-      })
+      setOpenNodes([...openNodes, projektUrl])
     }
   }, [loading])
 
@@ -795,7 +789,7 @@ const Tree = ({ treeName }) => {
   return (
     <Container data-loading={loading}>
       <StyledList
-        height={treeHeight - 58 - 65}
+        height={treeHeight - 64 - 64}
         itemCount={nodes.length}
         itemSize={singleRowHeight}
         width={treeWidth}

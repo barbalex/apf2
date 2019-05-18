@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import intersection from 'lodash/intersection'
@@ -12,9 +12,10 @@ import storeContext from '../../storeContext'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: calc(100% - 49.3px);
+  height: calc(100vh - 64px);
   @media print {
     height: auto !important;
+    overflow: visible !important;
     display: block;
   }
 `
@@ -35,7 +36,6 @@ const StyledSplitPane = styled(SplitPane)`
 
   .Resizer.vertical {
     border-left: 3px solid #388e3c;
-    /*border-right: 1.5px solid #388e3c;*/
     cursor: col-resize;
     background-color: #388e3c;
   }
@@ -59,19 +59,36 @@ const tree2TabValues = ['tree2', 'daten2', 'filter2', 'karte2', 'exporte2']
 
 const Projekte = () => {
   const store = useContext(storeContext)
-  const { isPrint, urlQuery } = store
+  const { isPrint, setIsPrint, urlQuery } = store
 
   const { projekteTabs } = urlQuery
   const treeTabs = intersection(treeTabValues, projekteTabs)
   const tree2Tabs = intersection(tree2TabValues, projekteTabs)
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.matchMedia('print').addListener(mql => {
+        setIsPrint(mql.matches)
+      })
+    }
+    return () => {
+      if (typeof window !== 'undefined') {
+        window.matchMedia('print').removeListener(mql => {
+          setIsPrint(mql.matches)
+        })
+      }
+    }
+  }, [])
+
   if (tree2Tabs.length === 0 || isPrint) {
     return (
-      <ProjektContainer
-        treeName="tree"
-        tabs={treeTabs}
-        projekteTabs={projekteTabs}
-      />
+      <Container>
+        <ProjektContainer
+          treeName="tree"
+          tabs={treeTabs}
+          projekteTabs={projekteTabs}
+        />
+      </Container>
     )
   }
 

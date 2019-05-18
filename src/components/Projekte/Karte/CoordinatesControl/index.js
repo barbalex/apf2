@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import 'leaflet'
-import { withLeaflet } from 'react-leaflet'
+import { useLeaflet } from 'react-leaflet'
 import Control from 'react-leaflet-control'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
 
 import ShowCoordinates from './ShowCoordinates'
 import PanToCoordinates from './PanToCoordinates'
@@ -23,10 +22,9 @@ const StyledControl = styled(Control)`
   margin-right: 5px !important;
 `
 
-const enhance = compose(withLeaflet)
-
-const CoordinatesControl = ({ leaflet }) => {
+const CoordinatesControl = () => {
   const [controlType, setControlType] = useState('coordinates')
+  const { map } = useLeaflet()
   // hack to get control to show on first load
   // see: https://github.com/LiveBy/react-leaflet-control/issues/27#issuecomment-430564722
   useEffect(() => setControlType('coordinates'), [])
@@ -36,10 +34,10 @@ const CoordinatesControl = ({ leaflet }) => {
       {controlType === 'coordinates' ? (
         <ShowCoordinates setControlType={setControlType} />
       ) : (
-        <PanToCoordinates setControlType={setControlType} map={leaflet.map} />
+        <PanToCoordinates setControlType={setControlType} map={map} />
       )}
     </StyledControl>
   )
 }
 
-export default enhance(CoordinatesControl)
+export default CoordinatesControl

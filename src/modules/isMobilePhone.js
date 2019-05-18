@@ -2,6 +2,7 @@
 /* eslint-disable */
 export default () => {
   let check = false
+  if (typeof window === 'undefined') return false
   const a = navigator.userAgent || navigator.vendor || window.opera
 
   if (

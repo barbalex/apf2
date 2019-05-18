@@ -1,7 +1,3 @@
-/**
- * Stopped lazy loading Tpopfreiwkontr
- * because Reflex would often not show layout
- */
 import React, { useContext, useCallback, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
@@ -102,9 +98,12 @@ const Ekf = () => {
 
   // reset dimensions when window resizes
   useEffect(() => {
-    window.addEventListener('resize', setDimensions)
+    typeof window !== 'undefined' &&
+      window.addEventListener('resize', setDimensions)
     setDimensions()
-    return () => window.removeEventListener('resize', setDimensions)
+    return () =>
+      typeof window !== 'undefined' &&
+      window.removeEventListener('resize', setDimensions)
   }, [])
 
   if (isPrint && tpopkontrId) {

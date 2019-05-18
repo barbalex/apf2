@@ -3,7 +3,7 @@
 describe('EKF-Zähleinheit form', () => {
   before(() => {
     cy.visit(
-      '/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Aktionspläne/6c52d174-4f62-11e7-aebe-67a303eb0640/EKF-Zähleinheiten/bf940388-b28d-11e8-ae88-73ea713f4a92',
+      '/Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Aktionspläne/6c52d174-4f62-11e7-aebe-67a303eb0640/EKF-Zähleinheiten/bf940388-b28d-11e8-ae88-73ea713f4a92',
     )
   })
   it('has Title EKF-Zähleinheit', () => {

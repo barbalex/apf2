@@ -19,7 +19,7 @@ import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { simpleTypes as popType } from '../../../../store/NodeFilterTree/pop'
 
 const Container = styled.div`
-  height: 100%;
+  height: calc(100vh - 64px);
   display: flex;
   flex-direction: column;
   background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
@@ -27,7 +27,6 @@ const Container = styled.div`
 const FieldsContainer = styled.div`
   padding: 10px;
   overflow: auto !important;
-  height: 100%;
 `
 
 const Pop = ({ treeName, showFilter = false }) => {

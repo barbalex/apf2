@@ -31,7 +31,7 @@ const Container = styled.div`
   border-top-right-radius: 4px;
 `
 const FormContainer = styled.div`
-  height: 100%;
+  height: calc(100vh - 64px);
   display: flex;
   flex-direction: column;
 `

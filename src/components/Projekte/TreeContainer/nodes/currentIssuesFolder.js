@@ -13,7 +13,8 @@ export default ({
   // fetch sorting indexes of parents
   const currentIssuesIndex = projektNodes.length + 3
 
-  let message = loading && !currentIssues.length ? '...' : currentIssues.length
+  let message =
+    loading && !currentIssues.length ? '...' : currentIssues.length - 1
 
   return [
     {

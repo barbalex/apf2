@@ -3680,7 +3680,7 @@ SELECT
     from 1 for 225
   ) AS "inhalte",
   concat(
-    'https://www.apflora.ch/Projekte/',
+    'https://www.apflora.ch/Daten/Projekte/',
     apflora.ap.proj_id,
     '/Aktionspläne/',
     apflora.ap.id,
@@ -3740,7 +3740,7 @@ SELECT
     from 1 for 225
   ) AS "inhalte",
   concat(
-    'https://www.apflora.ch/Projekte/',
+    'https://www.apflora.ch/Daten/Projekte/',
     apflora.ap.proj_id,
     '/Aktionspläne/',
     apflora.ap.id,
@@ -3784,7 +3784,7 @@ SELECT
     from 1 for 225
   ) AS "inhalte",
   concat(
-    'https://www.apflora.ch/Projekte/',
+    'https://www.apflora.ch/Daten/Projekte/',
     apflora.ap.proj_id,
     '/Aktionspläne/',
     apflora.ap.id,
@@ -3822,7 +3822,7 @@ SELECT
     from 1 for 225
   ) AS "inhalte",
   concat(
-    'https://www.apflora.ch/Projekte/',
+    'https://www.apflora.ch/Daten/Projekte/',
     apflora.ap.proj_id,
     '/Aktionspläne/',
     apflora.ap.id,

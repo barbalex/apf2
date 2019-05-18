@@ -1,23 +1,24 @@
-import { types, getParent } from 'mobx-state-tree'
-import isEqual from 'lodash/isEqual'
-import queryString from 'query-string'
+import { types, getParent } from "mobx-state-tree"
+import isEqual from "lodash/isEqual"
+import queryString from "query-string"
+import { navigate } from "gatsby"
 
 import NodeLabelFilter, {
   defaultValue as defaultNodeLabelFilter,
-} from './NodeLabelFilter'
-import Map, { defaultValue as defaultMap } from './Map'
-import Node from './Node'
+} from "./NodeLabelFilter"
+import Map, { defaultValue as defaultMap } from "./Map"
+import Node from "./Node"
 
 export default types
-  .model('Tree', {
-    name: types.optional(types.string, 'tree'),
+  .model("Tree", {
+    name: types.optional(types.string, "tree"),
     activeNodeArray: types.optional(
       types.array(types.union(types.string, types.number)),
-      [],
+      []
     ),
     openNodes: types.optional(
       types.array(types.array(types.union(types.string, types.number))),
-      [],
+      []
     ),
     apFilter: types.optional(types.boolean, false),
     nodeLabelFilter: types.optional(NodeLabelFilter, defaultNodeLabelFilter),
@@ -56,19 +57,14 @@ export default types
       self.apFilter = val
     },
     setActiveNodeArray(val) {
-      if (self.name === 'tree') {
+      if (self.name === "tree") {
         const store = getParent(self)
-        const { urlQuery, historyPush } = store
+        const { urlQuery } = store
         const search = queryString.stringify(urlQuery)
-        const query = `${Object.keys(urlQuery).length > 0 ? `?${search}` : ''}`
-        // pass openNodes as state
-        // pushing state will set activeNodeArray via modules/historyListen
-        historyPush(`/${val.join('/')}${query}`, {
-          openNodes: self.openNodes,
-        })
-      } else {
-        self.activeNodeArray = val
+        const query = `${Object.keys(urlQuery).length > 0 ? `?${search}` : ""}`
+        navigate(`/Daten/${val.join("/")}${query}`)
       }
+      self.activeNodeArray = val
     },
   }))
   .views(self => ({
@@ -78,7 +74,7 @@ export default types
   }))
 
 export const defaultValue = {
-  name: 'tree',
+  name: "tree",
   activeNodeArray: [],
   openNodes: [],
   apFilter: false,

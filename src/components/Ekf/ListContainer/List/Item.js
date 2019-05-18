@@ -1,16 +1,16 @@
-import React, { useCallback, useContext } from 'react'
-import styled from 'styled-components'
-import { observer } from 'mobx-react-lite'
+import React, { useCallback, useContext } from "react"
+import styled from "styled-components"
+import { observer } from "mobx-react-lite"
 
-import initiateDataFromUrl from '../initiateDataFromUrl'
-import storeContext from '../../../../storeContext'
+import initiateDataFromUrl from "../initiateDataFromUrl"
+import storeContext from "../../../../storeContext"
 
 const OuterContainer = styled.div`
   border-bottom: 1px solid rgba(46, 125, 50, 0.5);
   cursor: pointer;
-  background-color: ${props => (props.active ? 'rgb(255, 250, 198)' : 'unset')};
+  background-color: ${props => (props.active ? "rgb(255, 250, 198)" : "unset")};
   border-top: ${props =>
-    props.active ? '1px solid rgba(46, 125, 50, 0.5)' : 'unset'};
+    props.active ? "1px solid rgba(46, 125, 50, 0.5)" : "unset"};
   &:hover {
     background-color: rgb(255, 250, 198);
     border-top: 1px solid rgba(46, 125, 50, 0.5);
@@ -32,17 +32,17 @@ const InnerContainer = styled.div`
 
 const EkfList = ({ activeTpopkontrId, projektCount, style, row }) => {
   const store = useContext(storeContext)
-  const innerContainerHeight = projektCount > 1 ? 81 : 62
+  const innerContainerHeight = projektCount > 1 ? 110 : 91
   const url = [
-    'Projekte',
+    "Projekte",
     row.projId,
-    'Aktionspläne',
+    "Aktionspläne",
     row.apId,
-    'Populationen',
+    "Populationen",
     row.popId,
-    'Teil-Populationen',
+    "Teil-Populationen",
     row.tpopId,
-    'Freiwilligen-Kontrollen',
+    "Freiwilligen-Kontrollen",
     row.id,
   ]
 
@@ -52,7 +52,7 @@ const EkfList = ({ activeTpopkontrId, projektCount, style, row }) => {
         activeNodeArray: url,
         store,
       }),
-    [row.id],
+    [row.id]
   )
 
   return (

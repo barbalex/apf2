@@ -1,16 +1,20 @@
-import React from 'react'
-import styled from 'styled-components'
-import get from 'lodash/get'
-import format from 'date-fns/format'
+import React from "react"
+import styled from "styled-components"
+import get from "lodash/get"
+import format from "date-fns/format"
 
 const Container = styled.div`
   padding: 0.2cm 0;
+  margin-bottom: 0.4cm;
   max-width: 18cm;
   font-size: 12px;
 `
 const Title = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
   font-weight: 600;
+  break-after: avoid;
+  page-break-after: avoid;
+  page-break-inside: avoid;
 `
 const Row = styled.div`
   display: flex;
@@ -22,6 +26,9 @@ const TitleRow = styled(Row)`
   flex-direction: column;
   color: grey;
   max-width: 18cm;
+  break-after: avoid;
+  page-break-after: avoid;
+  page-break-inside: avoid;
 `
 const TitleSubRow = styled.div`
   display: flex;
@@ -85,16 +92,16 @@ const Massnahmen = ({ massns }) => (
       </TitleSubRow>
     </TitleRow>
     {massns.map(m => {
-      const mDatum = m.datum ? format(new Date(m.datum), 'dd.MM') : ''
+      const mDatum = m.datum ? format(new Date(m.datum), "dd.MM") : ""
       return (
         <Row key={m.id}>
-          <PopNr>{get(m, 'tpopByTpopId.popByPopId.nr', '')}</PopNr>
-          <PopName>{get(m, 'tpopByTpopId.popByPopId.name', '')}</PopName>
-          <TpopNr>{get(m, 'tpopByTpopId.nr', '')}</TpopNr>
-          <TpopFlurname>{get(m, 'tpopByTpopId.flurname', '')}</TpopFlurname>
+          <PopNr>{get(m, "tpopByTpopId.popByPopId.nr", "")}</PopNr>
+          <PopName>{get(m, "tpopByTpopId.popByPopId.name", "")}</PopName>
+          <TpopNr>{get(m, "tpopByTpopId.nr", "")}</TpopNr>
+          <TpopFlurname>{get(m, "tpopByTpopId.flurname", "")}</TpopFlurname>
           <MassnDatum>{mDatum}</MassnDatum>
-          <MassnTyp>{get(m, 'tpopmassnTypWerteByTyp.text', '')}</MassnTyp>
-          <MassnBeschreibung>{get(m, 'beschreibung', '')}</MassnBeschreibung>
+          <MassnTyp>{get(m, "tpopmassnTypWerteByTyp.text", "")}</MassnTyp>
+          <MassnBeschreibung>{get(m, "beschreibung", "")}</MassnBeschreibung>
         </Row>
       )
     })}

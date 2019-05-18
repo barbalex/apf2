@@ -3,7 +3,7 @@
 describe('Aktionsplan form', () => {
   before(() => {
     cy.visit(
-      '/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Aktionspläne/6c52d174-4f62-11e7-aebe-67a303eb0640',
+      '/Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Aktionspläne/6c52d174-4f62-11e7-aebe-67a303eb0640',
     )
     // TODO: should create new dataset
     /*

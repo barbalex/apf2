@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
-import styled from 'styled-components'
-import Button from '@material-ui/core/Button'
+import React, { Component } from "react"
+import styled from "styled-components"
+import Button from "@material-ui/core/Button"
 
 const Container = styled.div`
   margin: 10px;
@@ -28,7 +28,7 @@ class ErrorBoundary extends Component {
   render() {
     const { error } = this.state
     if (error) {
-      console.log('error:', error)
+      console.log("error:", error)
       return (
         <Container>
           <ErrorTitle>
@@ -37,7 +37,9 @@ class ErrorBoundary extends Component {
           <div>{error.message}</div>
           <ReloadButton
             variant="outlined"
-            onClick={() => window.location.reload(false)}
+            onClick={() =>
+              typeof window !== "undefined" && window.location.reload(false)
+            }
           >
             Neu laden
           </ReloadButton>

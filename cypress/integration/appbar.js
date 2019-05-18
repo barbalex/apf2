@@ -3,7 +3,7 @@ const secrets = require('../../secrets.json')
 
 describe('AppBar', () => {
   beforeEach(() => {
-    cy.visit('/')
+    cy.visit('/Daten/')
     /*
     Example of how to use idb, store or client 
     cy.window()

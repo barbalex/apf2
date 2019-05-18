@@ -20,7 +20,7 @@ import checkTpopOutsideZh from './checkTpopOutsideZh'
 import storeContext from '../../../../storeContext'
 
 const Container = styled.div`
-  height: 100%;
+  height: calc(100vh - 64px);
   display: flex;
   flex-direction: column;
 `
@@ -143,7 +143,7 @@ const Qk = ({ treeName }) => {
               {messageGroup.messages.map(m => (
                 <div key={m.url.join()}>
                   <StyledA
-                    href={`${appBaseUrl}/${m.url.join('/')}`}
+                    href={`${appBaseUrl()}/${m.url.join('/')}`}
                     target="_blank"
                   >
                     {m.text}

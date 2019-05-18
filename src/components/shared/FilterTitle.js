@@ -1,11 +1,11 @@
-import React, { useContext, useCallback } from 'react'
-import styled from 'styled-components'
-import DeleteFilterIcon from '@material-ui/icons/DeleteSweep'
-import DeleteFilterIcon2 from '@material-ui/icons/DeleteSweepOutlined'
-import IconButton from '@material-ui/core/IconButton'
-import { observer } from 'mobx-react-lite'
+import React, { useContext, useCallback } from "react"
+import styled from "styled-components"
+import DeleteFilterIcon from "@material-ui/icons/DeleteSweep"
+import DeleteFilterIcon2 from "@material-ui/icons/DeleteSweepOutlined"
+import IconButton from "@material-ui/core/IconButton"
+import { observer } from "mobx-react-lite"
 
-import storeContext from '../../storeContext'
+import storeContext from "../../storeContext"
 
 const Container = styled.div`
   background-color: #ffd3a7;
@@ -28,20 +28,19 @@ const FilterNumbers = styled.div`
   user-select: none;
 `
 const StyledIconButton = styled(IconButton)`
-  height: 30px !important;
-  width: 30px !important;
-  margin-right: 5px !important;
-  padding-top: 3px !important;
+  height: 34px !important;
+  width: 34px !important;
+  margin-top: -2px !important;
 `
 const StyledDeleteFilterIcon = styled(DeleteFilterIcon)`
   cursor: pointer;
   pointer-events: auto;
-  padding-top: 5px;
+  /*font-size: 28px !important;*/
 `
 const StyledDeleteFilterIcon2 = styled(DeleteFilterIcon2)`
   cursor: pointer;
   pointer-events: auto;
-  padding-top: 5px;
+  /*font-size: 28px !important;*/
 `
 
 const FormTitle = ({
@@ -69,7 +68,7 @@ const FormTitle = ({
 
   const onEmptyTable = useCallback(
     () => nodeFilterEmptyTable({ treeName, table }),
-    [treeName, table],
+    [treeName, table]
   )
   const onEmptyTree = useCallback(() => nodeFilterEmptyTree(treeName), [
     treeName,

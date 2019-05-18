@@ -1,16 +1,17 @@
-import format from 'date-fns/format'
-import isValid from 'date-fns/isValid'
-import isEqual from 'date-fns/isEqual'
-import get from 'lodash/get'
+import format from "date-fns/format"
+import isValid from "date-fns/isValid"
+import isEqual from "date-fns/isEqual"
+import get from "lodash/get"
 
-import queryBeob from './queryBeob'
-import createPop from './createPop'
-import createTpop from './createTpop'
-import updateBeobById from './updateBeobById'
+import queryBeob from "./queryBeob"
+import createPop from "./createPop"
+import createTpop from "./createTpop"
+import updateBeobById from "./updateBeobById"
 
 export default async ({ treeName, id, client, store }) => {
-  const { setTreeKey, addError, refetch } = store
+  const { addError, refetch } = store
   const tree = store[treeName]
+  const { setActiveNodeArray, setOpenNodes } = tree
   const activeNodes = store[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
   let beobResult
@@ -22,10 +23,10 @@ export default async ({ treeName, id, client, store }) => {
   } catch (error) {
     return addError(error)
   }
-  const beob = get(beobResult, 'data.beobById')
+  const beob = get(beobResult, "data.beobById")
   const { x, y, datum, data } = beob
   const datumIsValid = isValid(new Date(datum))
-  const bekanntSeit = datumIsValid ? +format(new Date(datum), 'yyyy') : null
+  const bekanntSeit = datumIsValid ? +format(new Date(datum), "yyyy") : null
 
   // create new pop for ap
   let popResult
@@ -42,7 +43,7 @@ export default async ({ treeName, id, client, store }) => {
   } catch (error) {
     return addError(error)
   }
-  const pop = get(popResult, 'data.createPop.pop')
+  const pop = get(popResult, "data.createPop.pop")
 
   // create new tpop for pop
   let tpopResult
@@ -61,7 +62,7 @@ export default async ({ treeName, id, client, store }) => {
   } catch (error) {
     return addError(error)
   }
-  const tpop = get(tpopResult, 'data.createTpop.tpop')
+  const tpop = get(tpopResult, "data.createTpop.tpop")
 
   try {
     await client.mutate({
@@ -140,17 +141,8 @@ export default async ({ treeName, id, client, store }) => {
     // and remove old node
     .filter(n => !isEqual(n, tree.activeNodeArray))
 
-  setTreeKey({
-    value: newOpenNodes,
-    tree: tree.name,
-    key: 'openNodes',
-  })
-  // set new activeNodeArray
-  setTreeKey({
-    value: newActiveNodeArray,
-    tree: tree.name,
-    key: 'activeNodeArray',
-  })
+  setOpenNodes(newOpenNodes)
+  setActiveNodeArray(newActiveNodeArray)
 
   // TODO: what is this for?
   //refetchTree('local')

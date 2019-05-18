@@ -11,7 +11,7 @@ import storeContext from '../../../../storeContext'
 import { currentIssue as currentIssueFragment } from '../../../shared/fragments'
 
 const Container = styled.div`
-  height: 100%;
+  height: calc(100vh - 64px);
   display: flex;
   flex-direction: column;
 `

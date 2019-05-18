@@ -4,7 +4,7 @@ import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useQuery } from 'react-apollo-hooks'
-import { withLeaflet } from 'react-leaflet'
+import { useLeaflet } from 'react-leaflet'
 
 import Marker from './Marker'
 import storeContext from '../../../../../storeContext'
@@ -23,6 +23,7 @@ const iconCreateFunction = function(cluster) {
   const className = hasHighlightedTpop
     ? 'tpopClusterHighlighted'
     : 'tpopCluster'
+  if (typeof window === 'undefined') return () => {}
   return window.L.divIcon({
     html: markers.length,
     className,
@@ -31,7 +32,7 @@ const iconCreateFunction = function(cluster) {
 }
 
 const Tpop = ({ treeName, clustered, leaflet }) => {
-  const { map: leafletMap } = leaflet
+  const { map: leafletMap } = useLeaflet()
   const store = useContext(storeContext)
   const {
     nodeFilter,
@@ -182,4 +183,4 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
   return tpopMarkers
 }
 
-export default withLeaflet(observer(Tpop))
+export default observer(Tpop)
