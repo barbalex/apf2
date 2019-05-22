@@ -206,14 +206,15 @@ export default ({ data }) => {
                 </a>
                 .
                 <p>
-                  Die Applikation wird entwickelt von&nbsp;
+                  Die Applikation wird von&nbsp;
                   <a
                     href="https://gabriel-software.ch"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     Gabriel-Software
-                  </a>
+                  </a>{' '}
+                  entwickelt.
                 </p>
               </Card>
             </CardContainer>
