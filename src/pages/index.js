@@ -138,6 +138,11 @@ export default ({ data }) => {
                 sollen, damit die Art langfristig erhalten bleibt.
               </Card>
               <Card>
+                <CardTitle>Idealbiotope</CardTitle>
+                Günstige Standorte werden analysiert. Sie dienen als Basis für
+                die Beurteilung und Aufwertung anderer.
+              </Card>
+              <Card>
                 <CardTitle>Massnahmen</CardTitle>
                 Die Arten werden gezielt gefördert. Zum Beispiel durch
                 Lebensraum-Verbesserung oder{' '}
@@ -200,32 +205,15 @@ export default ({ data }) => {
                   Fachstelle Naturschutz des Kantons Zürich
                 </a>
                 .
-              </Card>
-              <Card>
-                <CardTitle>Interessiert?</CardTitle>
                 <p>
-                  Möchten Sie den Kanton Zürich bei diesem Projekt unterstützen?
-                  Fragen Sie&nbsp;
+                  Die Applikation wird entwickelt von&nbsp;
                   <a
-                    href="//toposmm.ch/index.php?option=com_content&view=article&id=21:vegapzh1&catid=8&Itemid=115"
+                    href="https://gabriel-software.ch"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Topos
+                    Gabriel-Software
                   </a>
-                  .
-                </p>
-                <p>
-                  Sie suchen ein Werkzeug, um ein Art-Förder-Programm zu
-                  verwalten? Fragen Sie&nbsp;
-                  <a
-                    href="https://gabriel-software.ch/Kontakt/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    den Entwickler
-                  </a>
-                  .
                 </p>
               </Card>
             </CardContainer>
