@@ -120,8 +120,7 @@ export default ({ data }) => {
             <CardContainer>
               <Card>
                 <CardTitle>Arten</CardTitle>
-                Ein paar Dutzend der im Kanton Zürich am stärksten vom
-                Aussterben bedrohten Pflanzen-Arten.
+                Sorgfältig ausgewählte, vom Aussterben bedrohte Pflanzen-Arten.
               </Card>
               <Card>
                 <CardTitle>Aktionspläne</CardTitle>
@@ -153,8 +152,8 @@ export default ({ data }) => {
               </Card>
               <Card>
                 <CardTitle>Kontrollen</CardTitle>
-                Profis und Freiwillige besuchen Populationen, erfassen Zustand
-                und Bestand und prüfen die Wirkung von Massnahmen.
+                Profis und Freiwillige besuchen Populationen, erfassen den
+                Bestand und prüfen die Wirkung von Massnahmen.
               </Card>
               <Card>
                 <CardTitle>Berichte</CardTitle>
@@ -163,8 +162,8 @@ export default ({ data }) => {
               </Card>
               <Card>
                 <CardTitle>Planung</CardTitle>
-                Aufgrund der Berichte werden die Massnahmen und Kontrollen für
-                das nächste Jahr geplant.
+                Aufgrund der Berichte und Erfahrungen werden die Massnahmen und
+                Kontrollen für das nächste Jahr geplant.
               </Card>
               <Card>
                 <CardTitle>Beobachtungen</CardTitle>
