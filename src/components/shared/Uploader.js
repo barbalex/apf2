@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { signature, expire } from '../utils/uploadcareSignature'
+import { signature, expire } from '../../utils/uploadcareSignature'
 
 if (typeof window !== 'undefined') {
   window.UPLOADCARE_PUBLIC_KEY = process.env.UPLOADCARE_PUBLIC_KEY

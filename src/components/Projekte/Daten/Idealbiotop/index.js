@@ -13,6 +13,7 @@ import query from './query'
 import updateIdealbiotopByIdGql from './updateIdealbiotopById'
 import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
+import Files from '../../../shared/Files'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -318,6 +319,7 @@ const Idealbiotop = ({ treeName }) => {
             errors={errors}
           />
         </FieldsContainer>
+        <Files parentId={row.id} parent="idealbiotop" />
       </Container>
     </ErrorBoundary>
   )

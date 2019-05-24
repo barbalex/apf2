@@ -78,6 +78,7 @@
     "leaflet.markercluster": "1.4.1",
     "lodash": "4.17.11",
     "material-ui-pickers": "2.2.4",
+    "md5-hex": "^3.0.0",
     "memoize-one": "5.0.4",
     "mobx": "5.9.4",
     "mobx-react-lite": "1.3.2",
@@ -94,6 +95,8 @@
     "react-copy-to-clipboard": "5.0.1",
     "react-dom": "16.8.6",
     "react-helmet": "5.2.1",
+    "react-icons": "^3.7.0",
+    "react-image-lightbox": "^5.1.0",
     "react-leaflet": "2.3.0",
     "react-leaflet-bing": "4.1.0",
     "react-leaflet-control": "2.1.1",
@@ -107,7 +110,8 @@
     "react-window": "1.8.1",
     "styled-components": "4.2.0",
     "typeface-roboto": "0.0.54",
-    "typography": "0.16.19"
+    "typography": "0.16.19",
+    "uploadcare-widget": "^3.7.5"
   },
   "devDependencies": {
     "copyfiles": "2.1.0",
