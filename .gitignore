@@ -74,3 +74,6 @@ secrets.json
 
 cypress/screenshots
 cypress/videos
+
+# dotenv environment variables file
+.env*

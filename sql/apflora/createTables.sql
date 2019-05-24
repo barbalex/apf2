@@ -409,6 +409,20 @@ COMMENT ON COLUMN apflora.idealbiotop.changed IS 'Wann wurde der Datensatz zulet
 COMMENT ON COLUMN apflora.idealbiotop.changed_by IS 'Wer hat den Datensatz zuletzt verändert?';
 alter table apflora.idealbiotop alter column changed_by set default null;
 
+drop table if exists apflora.idealbiotop_file;
+create table apflora.idealbiotop_file (
+  id uuid primary key,
+  idealbiotop_id uuid default null references apflora.idealbiotop (id) on delete cascade on update cascade,
+  file_id uuid default null,
+  file_mime_type text default null,
+  name text default null,
+  beschreibung text default null
+);
+create index on apflora.idealbiotop using btree (id);
+create index on apflora.idealbiotop_file using btree (idealbiotop_id);
+create index on apflora.idealbiotop_file using btree (file_id);
+create index on apflora.idealbiotop_file using btree (file_mime_type);
+
 DROP TABLE IF EXISTS apflora.pop;
 CREATE TABLE apflora.pop (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
