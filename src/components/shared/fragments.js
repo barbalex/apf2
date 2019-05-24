@@ -205,6 +205,15 @@ export const idealbiotop = gql`
     changedBy
   }
 `
+export const idealbiotopFile = gql`
+  fragment IdealbiotopFileFields on idealbiotop_file {
+    idealbiotop_id
+    file_id
+    file_mime_type
+    name
+    beschreibung
+  }
+`
 
 export const pop = gql`
   fragment PopFields on Pop {
