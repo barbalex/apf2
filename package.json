@@ -63,7 +63,6 @@
     "gatsby-transformer-remark": "2.3.12",
     "gatsby-transformer-sharp": "2.1.19",
     "get-urls": "9.1.0",
-    "graphql": "14.3.0",
     "graphql.macro": "1.4.2",
     "is-uuid": "1.0.2",
     "isomorphic-fetch": "2.2.1",
