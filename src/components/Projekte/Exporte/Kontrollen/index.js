@@ -68,7 +68,7 @@ const Kontrollen = () => {
   return (
     <StyledCard>
       <StyledCardActions
-        disableActionSpacing
+        disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
         <CardActionTitle>Kontrollen</CardActionTitle>

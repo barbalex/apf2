@@ -91,7 +91,7 @@ const Beobachtungen = () => {
 
   return (
     <StyledCard>
-      <StyledCardActions disableActionSpacing onClick={onClickAction}>
+      <StyledCardActions disableSpacing onClick={onClickAction}>
         <CardActionTitle>Beobachtungen</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}

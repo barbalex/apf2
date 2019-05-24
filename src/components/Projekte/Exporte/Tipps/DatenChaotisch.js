@@ -42,7 +42,7 @@ const DatenChaotisch = () => {
   return (
     <StyledCard>
       <StyledCardActions
-        disableActionSpacing
+        disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
         <CardActionTitle>

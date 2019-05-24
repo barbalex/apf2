@@ -61,7 +61,7 @@ const Optionen = () => {
   return (
     <StyledCard>
       <StyledCardActions
-        disableActionSpacing
+        disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
         <CardActionTitle>Optionen</CardActionTitle>

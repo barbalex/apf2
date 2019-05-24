@@ -294,7 +294,7 @@ const AP = () => {
 
   return (
     <StyledCard>
-      <StyledCardActions disableActionSpacing onClick={onClickAction}>
+      <StyledCardActions disableSpacing onClick={onClickAction}>
         <CardActionTitle>Aktionsplan</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}

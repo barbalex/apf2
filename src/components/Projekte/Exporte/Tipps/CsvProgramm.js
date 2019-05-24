@@ -44,7 +44,7 @@ const CsvOeffnen = () => {
   return (
     <StyledCard>
       <StyledCardActions
-        disableActionSpacing
+        disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
         <CardActionTitle>

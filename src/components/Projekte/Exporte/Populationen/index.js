@@ -69,7 +69,7 @@ const Populationen = () => {
   return (
     <StyledCard>
       <StyledCardActions
-        disableActionSpacing
+        disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
         <CardActionTitle>Populationen</CardActionTitle>

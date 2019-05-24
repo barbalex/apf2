@@ -42,7 +42,7 @@ const WasIstCsv = () => {
   return (
     <StyledCard>
       <StyledCardActions
-        disableActionSpacing
+        disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
         <CardActionTitle>Was ist eine .csv-Datei?</CardActionTitle>

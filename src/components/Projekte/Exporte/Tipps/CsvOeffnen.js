@@ -42,7 +42,7 @@ const CsvOeffnen = () => {
   return (
     <StyledCard>
       <StyledCardActions
-        disableActionSpacing
+        disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
         <CardActionTitle>Wie öffne ich eine .csv-Datei?</CardActionTitle>

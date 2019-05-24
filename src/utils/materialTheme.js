@@ -12,12 +12,6 @@ const theme = createMuiTheme({
       main: red[500],
     },
   },
-  /*background: {
-    default: orange[50],
-  },*/
-  typography: {
-    useNextVariants: true,
-  },
 })
 
 export default theme

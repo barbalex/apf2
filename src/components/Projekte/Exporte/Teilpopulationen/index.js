@@ -135,7 +135,7 @@ const Teilpopulationen = ({ treeName }) => {
 
   return (
     <StyledCard>
-      <StyledCardActions disableActionSpacing onClick={onClickAction}>
+      <StyledCardActions disableSpacing onClick={onClickAction}>
         <CardActionTitle>Teilpopulationen</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}

@@ -100,7 +100,7 @@ const Anwendung = () => {
 
   return (
     <StyledCard>
-      <StyledCardActions disableActionSpacing onClick={onClickAction}>
+      <StyledCardActions disableSpacing onClick={onClickAction}>
         <CardActionTitle>Anwendung</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}

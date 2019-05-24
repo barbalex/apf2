@@ -42,7 +42,7 @@ const ZuVieleDaten = () => {
   return (
     <StyledCard>
       <StyledCardActions
-        disableActionSpacing
+        disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
         <CardActionTitle>Hilfe, das sind viel zu viele Daten!</CardActionTitle>

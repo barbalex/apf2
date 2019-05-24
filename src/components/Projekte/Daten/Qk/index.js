@@ -138,7 +138,7 @@ const Qk = ({ treeName }) => {
             {loading ? 'Die Daten werden analysiert...' : 'neu analysieren'}
           </StyledButton>
           {messageGroupsFiltered.map((messageGroup, index) => (
-            <StyledPaper key={index}>
+            <StyledPaper key={index} elevation={2}>
               <Title>{messageGroup.title}</Title>
               {messageGroup.messages.map(m => (
                 <div key={m.url.join()}>
