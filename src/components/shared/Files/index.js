@@ -51,16 +51,18 @@ const Files = ({ parentId, parent }) => {
   const [imageIndex, setImageIndex] = useState(0)
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
 
-  const fieldsName = `${upperFirst(parent)}FileFields`
+  const queryName = `all${upperFirst(parent)}Files`
+  const parentIdName = `${parent}Id`
+  const fields = `${upperFirst(parent)}FileFields`
   const fragment = fragmentObject[parent]
   const queryObject = {
     herkunft: gql`
       query FileQuery($parentId: uuid!) {
-        ${parent}_file(
-          order_by: { name: asc }
-          where: { herkunft_id: { _eq: $parentId } }
+        ${queryName}(
+          orderBy: NAME_ASC
+          filter: { ${parentIdName}: { equalTo: $parentId } }
         ) {
-          ...${fieldsName}
+          ...${fields}
         }
       }
       ${fragment}
@@ -78,18 +80,24 @@ const Files = ({ parentId, parent }) => {
     file => {
       if (file) {
         file.done(async info => {
-          //console.log({ info })
           const mutation = gql`
             mutation insertFile {
-              insert_${parent}_file (objects: [{
-                file_id: "${info.uuid}",
-                file_mime_type: "${info.mimeType}",
-                ${parent}_id: ${parentId},
-                name: "${info.name}"
-              }]) {
-                returning { ${parent}_id }
+              create${upperFirst(parent)}File(
+                input: {
+                  ${parent}File: {
+                    file_id: "${info.uuid}",
+                    file_mime_type: "${info.mimeType}",
+                    ${parent}_id: ${parentId},
+                    name: "${info.name}"
+                  }
+                }
+              ) {
+                ${parent}File {
+                  ...${fields}
+                }
               }
             }
+            ${fragment}
           `
           try {
             await client.mutate({
