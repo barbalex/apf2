@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
@@ -8,7 +8,6 @@ import upperFirst from 'lodash/upperFirst'
 import Lightbox from 'react-image-lightbox'
 import Button from '@material-ui/core/Button'
 
-import storeContext from '../../../storeContext'
 import ErrorBoundary from '../ErrorBoundary'
 import { idealbiotopFile as idealbiotopFileFragment } from '../fragments'
 import Uploader from '../Uploader'
@@ -46,7 +45,6 @@ const fragmentObject = {
 
 const Files = ({ parentId, parent }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
 
   const [imageIndex, setImageIndex] = useState(0)
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)

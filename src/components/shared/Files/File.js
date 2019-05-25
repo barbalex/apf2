@@ -13,6 +13,7 @@ import TextField from '../../shared/TextField'
 import ErrorBoundary from '../ErrorBoundary'
 import { idealbiotopFile as idealbiotopFileFragment } from '../fragments'
 import isImageFile from './isImageFile'
+import { upperFirst } from 'graphql-compose'
 
 const Container = styled.div`
   display: flex;
@@ -66,6 +67,10 @@ const MenuTitle = styled.h3`
   }
 `
 
+const fragmentObject = {
+  idealbiotop: idealbiotopFileFragment,
+}
+
 const File = ({ file, parent, refetch }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
@@ -77,14 +82,21 @@ const File = ({ file, parent, refetch }) => {
 
   useEffect(() => setErrors({}), [file])
 
+  const tableName = `${parent}File`
+
   const onClickDelete = useCallback(async () => {
     // 1. remove dataset
     try {
+      const mutationName = `delete${upperFirst(parent)}FileById`
       await client.mutate({
         mutation: gql`
           mutation deleteDataset {
-            delete_${parent}_file (where: {file_id: {_eq: "${file.file_id}"}}) {
-              returning {
+            ${mutationName}(
+              input: {
+                id: "${file.id}"
+              }
+            ) {
+              ${tableName} {
                 id
               }
             }
@@ -92,13 +104,14 @@ const File = ({ file, parent, refetch }) => {
         `,
       })
     } catch (error) {
-      console.log(error)
-      return store.enqueNotification({
+      return console.log(error)
+      // TODO: enque
+      /*return store.enqueNotification({
         message: `Die Datei konnte nicht gelöscht werden: ${error.message}`,
         options: {
           variant: 'error',
         },
-      })
+      })*/
     }
     refetch()
   }, [file])
@@ -118,27 +131,30 @@ const File = ({ file, parent, refetch }) => {
         } else {
           valueToSet = `"${value}"`
         }
+        const mutationName = `update${upperFirst(parent)}FileById`
+        const fields = `${upperFirst(parent)}FileFields`
+        const fragment = fragmentObject[parent]
         await client.mutate({
           mutation: gql`
-              mutation update_${parent}_file(
-                $file_id: uuid!
+              mutation ${mutationName}(
+                $id: uuid!
               ) {
-                update_${parent}_file(
-                  where: { file_id: { _eq: $file_id } }
-                  _set: {
-                    ${field}: ${valueToSet}
+                ${mutationName}(
+                  input: {
+                    id: $id
+                    ${tableName}Patch: {
+                      ${field}: ${valueToSet}
+                    }
                   }
                 ) {
-                  affected_rows
-                  returning {
-                    ...HerkunftFileFields
+                  ${tableName} {
+                    ...${fields}
                   }
                 }
-              }
-              ${idealbiotopFileFragment}
+              ${fragment}
             `,
           variables: {
-            file_id: file.file_id,
+            id: file.id,
           },
         })
       } catch (error) {
