@@ -80,36 +80,37 @@ const Files = ({ parentId, parent }) => {
     file => {
       if (file) {
         file.done(async info => {
-          const mutation = gql`
-            mutation insertFile {
-              create${upperFirst(parent)}File(
-                input: {
-                  ${parent}File: {
-                    file_id: "${info.uuid}",
-                    file_mime_type: "${info.mimeType}",
-                    ${parent}_id: ${parentId},
-                    name: "${info.name}"
-                  }
-                }
-              ) {
-                ${parent}File {
-                  ...${fields}
-                }
-              }
-            }
-            ${fragment}
-          `
           try {
             await client.mutate({
-              mutation,
+              mutation: gql`
+              mutation insertFile {
+                create${upperFirst(parent)}File(
+                  input: {
+                    ${parent}File: {
+                      file_id: "${info.uuid}",
+                      file_mime_type: "${info.mimeType}",
+                      ${parent}_id: ${parentId},
+                      name: "${info.name}"
+                    }
+                  }
+                ) {
+                  ${parent}File {
+                    ...${fields}
+                  }
+                }
+              }
+              ${fragment}
+            `,
             })
           } catch (error) {
-            return store.enqueNotification({
+            return console.log(error)
+            // TODO: add enqueNotification
+            /*return store.enqueNotification({
               message: error.message,
               options: {
                 variant: 'error',
               },
-            })
+            })*/
           }
           //console.log('File uploaded: ', { info, responce })
           refetch()
