@@ -116,7 +116,7 @@ const File = ({ file, parent, refetch }) => {
     refetch()
   }, [file])
   const onClickDownload = useCallback(
-    () => window.open(`https://ucarecdn.com/${file.file_id}/-/inline/no/`),
+    () => window.open(`https://ucarecdn.com/${file.fileId}/-/inline/no/`),
     [file],
   )
 
@@ -176,7 +176,7 @@ const File = ({ file, parent, refetch }) => {
         {isImage ? (
           <Img
             src={`https://ucarecdn.com/${
-              file.file_id
+              file.fileId
             }/-/resize/80x/-/quality/lightest/${file.name}`}
           />
         ) : (
@@ -187,9 +187,9 @@ const File = ({ file, parent, refetch }) => {
             key={`${file.id}fileMimeType`}
             name="fileMimeType"
             label="Datei-Typ"
-            value={file.file_mime_type}
+            value={file.fileMimeType}
             saveToDb={saveToDb}
-            error={errors.file_mime_type}
+            error={errors.fileMimeType}
             disabled
             schrinkLabel
           />

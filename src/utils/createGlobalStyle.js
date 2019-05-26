@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components"
+import { createGlobalStyle } from 'styled-components'
 
 export default () => createGlobalStyle`
   html,
@@ -68,4 +68,52 @@ export default () => createGlobalStyle`
   ::-webkit-scrollbar-corner {
     background: rgba(0, 0, 0, 0);
   }
+
+/* uploadcare */
+.uploadcare--button {
+  background-color: #2e7d32;
+  background: #2e7d32;
+  border: 1px solid #2e7d32;
+  color: white;
+}
+.uploadcare--button:focus {
+  color: #2e7d32;
+  outline: 2px solid rgba(46, 125, 50,.5);
+}
+.uploadcare--button:hover {
+  background: rgba(46, 125, 50,.8);
+  border-color: rgba(46, 125, 50,.8);
+  color: white;
+}
+.uploadcare--widget__button,
+.uploadcare--widget__button:active,
+.uploadcare--widget__button:focus {
+  background:none;
+  color: black;
+  border: 1px solid black;
+  outline: none;
+}
+.uploadcare--widget__button,
+.uploadcare--widget__button:focus {
+  color: #2e7d32;
+  font-size: 0.875rem;
+  line-height: 24.5px;
+  font-weight: 500;
+  border: 1px solid rgba(46, 125, 50, 0.5);
+  border-radius: 4px;
+  padding: 5px 16px;
+}
+.uploadcare--widget__button:hover {
+  color: #2e7d32;
+  font-size: 0.875rem;
+  line-height: 24.5px;
+  font-weight: 500;
+  border: 1px solid #2e7d32;
+  background-color: rgba(46, 125, 50, 0.08);
+}
+
+/* lightbox */
+.lightbox .ril-toolbar{
+  margin-top: 64px;
+}
 `

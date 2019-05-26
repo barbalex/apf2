@@ -411,7 +411,7 @@ alter table apflora.idealbiotop alter column changed_by set default null;
 
 drop table if exists apflora.idealbiotop_file;
 create table apflora.idealbiotop_file (
-  id uuid primary key,
+  id uuid primary key DEFAULT uuid_generate_v1mc(),
   idealbiotop_id uuid default null references apflora.idealbiotop (id) on delete cascade on update cascade,
   file_id uuid default null,
   file_mime_type text default null,

@@ -75,7 +75,8 @@ const Files = ({ parentId, parent }) => {
     variables: { parentId },
   })
 
-  const files = get(data, `${parent}_file`, [])
+  const files = get(data, `all${upperFirst(parent)}Files.nodes`, [])
+  console.log({ data, files })
 
   const onChangeUploader = useCallback(
     file => {
@@ -88,9 +89,9 @@ const Files = ({ parentId, parent }) => {
                 create${upperFirst(parent)}File(
                   input: {
                     ${parent}File: {
-                      file_id: "${info.uuid}",
-                      file_mime_type: "${info.mimeType}",
-                      ${parent}_id: ${parentId},
+                      fileId: "${info.uuid}",
+                      fileMimeType: "${info.mimeType}",
+                      ${parent}Id: "${parentId}",
                       name: "${info.name}"
                     }
                   }
@@ -125,7 +126,7 @@ const Files = ({ parentId, parent }) => {
   const images = files.filter(f => isImageFile(f))
   const imageUrls = images.map(
     f =>
-      `https://ucarecdn.com/${f.file_id}/-/resize/1200x/-/quality/lightest/${
+      `https://ucarecdn.com/${f.fileId}/-/resize/1200x/-/quality/lightest/${
         f.name
       }`,
   )
@@ -191,7 +192,7 @@ const Files = ({ parentId, parent }) => {
         <Spacer />
         {files.map(file => (
           <File
-            key={file.file_id}
+            key={file.fileId}
             file={file}
             parent={parent}
             refetch={refetch}
