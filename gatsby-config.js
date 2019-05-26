@@ -87,6 +87,7 @@ module.exports = {
             options: {
               maxWidth: 1500,
               wrapperStyle: 'margin-left: 0;',
+              linkImagesToOriginal: false,
             },
           },
           {
@@ -132,6 +133,7 @@ module.exports = {
               noIframeBorder: true, //Optional: Disable insertion of <style> border: 0
             },
           },
+          //'gatsby-remark-images-zoom',
         ],
       },
     },
