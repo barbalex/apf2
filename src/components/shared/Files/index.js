@@ -44,15 +44,23 @@ const fragmentObject = {
 }
 
 const Files = ({ parentId, parent }) => {
+  console.log('0')
   const client = useApolloClient()
 
+  console.log('1')
+
   const [imageIndex, setImageIndex] = useState(0)
+
+  console.log('2')
   const [lightboxIsOpen, setLightboxIsOpen] = useState(false)
+
+  console.log('3')
 
   const queryName = `all${upperFirst(parent)}Files`
   const parentIdName = `${parent}Id`
   const fields = `${upperFirst(parent)}FileFields`
   const fragment = fragmentObject[parent]
+  console.log({ queryName, parentIdName, fields, fragment })
   const queryObject = {
     herkunft: gql`
       query FileQuery($parentId: uuid!) {
@@ -69,10 +77,14 @@ const Files = ({ parentId, parent }) => {
     `,
   }
 
+  console.log('4')
+
   const query = queryObject[parent]
   const { data, error, loading, refetch } = useQuery(query, {
     variables: { parentId },
   })
+
+  console.log('5')
 
   const files = get(data, `${parent}_file`, [])
 

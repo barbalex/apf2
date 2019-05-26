@@ -207,6 +207,7 @@ export const idealbiotop = gql`
 `
 export const idealbiotopFile = gql`
   fragment IdealbiotopFileFields on IdealbiotopFile {
+    id
     idealbiotopId
     fileId
     fileMimeType
