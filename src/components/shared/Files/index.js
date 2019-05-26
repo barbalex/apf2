@@ -60,7 +60,9 @@ const Files = ({ parentId, parent }) => {
           orderBy: NAME_ASC
           filter: { ${parentIdName}: { equalTo: $parentId } }
         ) {
-          ...${fields}
+          nodes {
+            ...${fields}
+          }
         }
       }
       ${fragment}
