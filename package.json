@@ -58,7 +58,7 @@
     "gatsby-remark-emojis": "0.3.2",
     "gatsby-remark-external-links": "0.0.4",
     "gatsby-remark-images": "3.0.12",
-    "gatsby-remark-images-zoom": "^1.1.0",
+    "gatsby-remark-images-zoom": "1.1.0",
     "gatsby-source-filesystem": "2.0.37",
     "gatsby-transformer-remark": "2.3.12",
     "gatsby-transformer-sharp": "2.1.19",
@@ -79,7 +79,7 @@
     "leaflet.markercluster": "1.4.1",
     "lodash": "4.17.11",
     "material-ui-pickers": "2.2.4",
-    "md5-hex": "^3.0.0",
+    "md5-hex": "3.0.0",
     "memoize-one": "5.0.4",
     "mobx": "5.9.4",
     "mobx-react-lite": "1.3.2",
@@ -96,8 +96,8 @@
     "react-copy-to-clipboard": "5.0.1",
     "react-dom": "16.8.6",
     "react-helmet": "5.2.1",
-    "react-icons": "^3.7.0",
-    "react-image-lightbox": "^5.1.0",
+    "react-icons": "3.7.0",
+    "react-image-lightbox": "5.1.0",
     "react-leaflet": "2.3.0",
     "react-leaflet-bing": "4.1.0",
     "react-leaflet-control": "2.1.1",
@@ -112,7 +112,7 @@
     "styled-components": "4.2.0",
     "typeface-roboto": "0.0.54",
     "typography": "0.16.19",
-    "uploadcare-widget": "^3.7.5"
+    "uploadcare-widget": "3.7.5"
   },
   "devDependencies": {
     "copyfiles": "2.1.0",
