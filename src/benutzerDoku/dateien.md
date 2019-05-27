@@ -16,11 +16,11 @@ Dateien können in folgenden Formularen angefügt werden:
 Beispiel Idealbiotop:
 ![Datein](_media/files_01.png)<br/>
 
-Zweck: Idealbiotope und Kontrollen gemäss Vorgaben von Topos dokumentieren. Daher kann man jede Datei im entsprechenden Feld beschreiben.<br/><br/>
+**Zweck**: Idealbiotope und Kontrollen gemäss Vorgaben von Topos dokumentieren. Daher jede Datei ein Feld, um sie zu beschreiben.<br/><br/>
 
-**Hochladen** könnt ihr Bilder aus folgenden Quellen:
+**Hochladen** könnt ihr aus folgenden Quellen:
 - Lokal: Eine auf eurem PC gespeicherte Datei
-- Kamera: Direkt von der Kamera (v.a. wenn ihr das direkt im Feld auf dem Smartphone macht)
+- Kamera: Direkt von der Kamera (z.B. wenn ihr das direkt im Feld auf dem Smartphone macht)
 - Web-Links
 - Google Drive
 - Google Photos
@@ -36,4 +36,9 @@ Meist dürfte es sich um Bilder handeln. Daher gibt es auch eine Möglichkeit, d
 ![Gallerie-Ansicht](_media/files_02_gallery.png)<br/>
 
 Ihr könnt Dateien auch **herunterladen**:
-![herunterladen](_media/files_03_herunterladen.png)
+![herunterladen](_media/files_03_herunterladen.png)<br/>
+
+**Bitte mit Bedacht nutzen**:
+- Möglichst nur hochladen, was nützlich ist 
+- Speicherplatz hat seinen Preis
+- Grössere Bilder werden daher beim Upload auf maximal 2056*2056 Pixel reduziert
