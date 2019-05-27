@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient } from 'react-apollo-hooks'
@@ -8,7 +8,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 
-import storeContext from '../../../storeContext'
+//import storeContext from '../../../storeContext'
 import TextField from '../../shared/TextField'
 import ErrorBoundary from '../ErrorBoundary'
 import { idealbiotopFile as idealbiotopFileFragment } from '../fragments'
@@ -73,7 +73,7 @@ const fragmentObject = {
 
 const File = ({ file, parent, refetch }) => {
   const client = useApolloClient()
-  const store = useContext(storeContext)
+  //const store = useContext(storeContext)
 
   const [errors, setErrors] = useState({})
 
