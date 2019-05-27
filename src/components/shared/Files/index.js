@@ -20,14 +20,6 @@ const Container = styled.div`
   flex-direction: column;
   background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
-const H4 = styled.h4`
-  margin-bottom: 0.5rem;
-  background-color: rgba(74, 20, 140, 0.1);
-  margin-left: -10px;
-  margin-right: -10px;
-  margin-bottom: 15px;
-  padding: 10px;
-`
 const Spacer = styled.div`
   height: 10px;
 `
@@ -53,7 +45,6 @@ const Files = ({ parentId, parent }) => {
   const parentIdName = `${parent}Id`
   const fields = `${upperFirst(parent)}FileFields`
   const fragment = fragmentObject[parent]
-  console.log({ queryName, parentIdName, fields, fragment, parent })
   const queryObject = {
     idealbiotop: gql`
       query FileQuery($parentId: UUID!) {
@@ -154,7 +145,6 @@ const Files = ({ parentId, parent }) => {
   return (
     <ErrorBoundary>
       <Container>
-        <H4>Dateien</H4>
         <ButtonsContainer>
           <Uploader
             id="file"

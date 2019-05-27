@@ -44,15 +44,6 @@ const FieldsContainer = styled.div`
     }
   }
 `
-const Section = styled.div`
-  padding-top: 20px;
-  padding-bottom: 5px;
-  font-weight: bold;
-  break-after: avoid;
-  &:after {
-    content: ':';
-  }
-`
 const FormContainer = styled.div`
   padding: 10px;
   overflow-y: auto !important;
@@ -61,6 +52,15 @@ const FormContainer = styled.div`
     props['data-width'] > 2 * constants.columnWidth
       ? `${constants.columnWidth}px`
       : 'auto'};
+`
+const Section = styled.div`
+  padding-top: 20px;
+  padding-bottom: 5px;
+  font-weight: bold;
+  break-after: avoid;
+  &:after {
+    content: ':';
+  }
 `
 const tpopkontrTypWerte = [
   {
@@ -145,9 +145,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
   } = useQuery(queryLists)
 
   const [errors, setErrors] = useState({})
-  const [value, setValue] = useState(
-    get(urlQuery, 'feldkontrTab', 'entwicklung'),
-  )
+  const [tab, setTab] = useState(get(urlQuery, 'feldkontrTab', 'entwicklung'))
 
   let tpopkontrTotalCount
   let tpopkontrFilteredCount
@@ -348,7 +346,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
       urlQuery,
       setUrlQuery,
     })
-    setValue(value)
+    setTab(value)
   })
 
   const aeLrWerte = get(dataLists, 'allAeLrdelarzes.nodes', [])
@@ -387,7 +385,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
         )}
         <FieldsContainer>
           <Tabs
-            value={value}
+            value={tab}
             onChange={onChangeTab}
             indicatorColor="primary"
             textColor="primary"
@@ -400,7 +398,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
             />
             <Tab label="Biotop" value="biotop" data-id="biotop" />
           </Tabs>
-          {value === 'entwicklung' && (
+          {tab === 'entwicklung' && (
             <FormContainer data-width={showFilter ? filterWidth : datenWidth}>
               <TextField
                 key={`${row.id}jahr`}
@@ -535,7 +533,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
               <StringToCopy text={row.id} label="id" />
             </FormContainer>
           )}
-          {value === 'biotop' && (
+          {tab === 'biotop' && (
             <FormContainer data-width={datenWidth}>
               <TextField
                 key={`${row.id}flaeche`}

@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
 
 import TextField from '../../../shared/TextField2'
 import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
@@ -14,6 +16,7 @@ import updateIdealbiotopByIdGql from './updateIdealbiotopById'
 import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import Files from '../../../shared/Files'
+import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -21,13 +24,28 @@ const Container = styled.div`
   flex-direction: column;
 `
 const FieldsContainer = styled.div`
-  padding: 10px;
-  overflow: auto !important;
+  display: flex;
+  flex-direction: column;
   height: 100%;
+  > div:first-child {
+    > div:first-child {
+      display: block !important;
+    }
+  }
+`
+const FormContainer = styled.div`
+  padding: 10px;
+  overflow-y: auto !important;
+  height: calc(100% - 20px);
   column-width: ${props =>
     props['data-width'] > 2 * constants.columnWidth
       ? `${constants.columnWidth}px`
       : 'auto'};
+`
+const FilesContainer = styled.div`
+  padding: 10px;
+  overflow-y: auto !important;
+  height: calc(100% - 20px);
 `
 const Section = styled.div`
   padding-top: 20px;
@@ -41,8 +59,11 @@ const Section = styled.div`
 
 const Idealbiotop = ({ treeName }) => {
   const store = useContext(storeContext)
+  const { urlQuery, setUrlQuery } = store
   const client = useApolloClient()
+
   const [errors, setErrors] = useState({})
+  const [tab, setTab] = useState(get(urlQuery, 'idealbiotopTab', 'idealbiotop'))
   const { activeNodeArray, datenWidth } = store[treeName]
 
   const { data, loading, error } = useQuery(query, {
@@ -118,6 +139,15 @@ const Idealbiotop = ({ treeName }) => {
     },
     [row],
   )
+  const onChangeTab = useCallback((event, value) => {
+    setUrlQueryValue({
+      key: 'feldkontrTab',
+      value,
+      urlQuery,
+      setUrlQuery,
+    })
+    setTab(value)
+  })
 
   if (loading) {
     return (
@@ -136,190 +166,212 @@ const Idealbiotop = ({ treeName }) => {
           treeName={treeName}
           table="idealbiotop"
         />
-        <FieldsContainer data-width={datenWidth}>
-          <DateFieldWithPicker
-            key={`${row.id}erstelldatum`}
-            name="erstelldatum"
-            label="Erstelldatum"
-            value={row.erstelldatum}
-            saveToDb={saveToDb}
-            error={errors.erstelldatum}
-          />
-          <Section>Lage</Section>
-          <TextField
-            key={`${row.id}hoehenlage`}
-            name="hoehenlage"
-            label="Höhe"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}region`}
-            name="region"
-            label="Region"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}exposition`}
-            name="exposition"
-            label="Exposition"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}besonnung`}
-            name="besonnung"
-            label="Besonnung"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}hangneigung`}
-            name="hangneigung"
-            label="Hangneigung"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <Section>Boden</Section>
-          <TextField
-            key={`${row.id}bodenTyp`}
-            name="bodenTyp"
-            label="Typ"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}bodenKalkgehalt`}
-            name="bodenKalkgehalt"
-            label="Kalkgehalt"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}bodenDurchlaessigkeit`}
-            name="bodenDurchlaessigkeit"
-            label="Durchlässigkeit"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}bodenHumus`}
-            name="bodenHumus"
-            label="Humus"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}bodenNaehrstoffgehalt`}
-            name="bodenNaehrstoffgehalt"
-            label="Nährstoffgehalt"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}wasserhaushalt`}
-            name="wasserhaushalt"
-            label="Wasserhaushalt"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <Section>Vegetation</Section>
-          <TextField
-            key={`${row.id}konkurrenz`}
-            name="konkurrenz"
-            label="Konkurrenz"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}moosschicht`}
-            name="moosschicht"
-            label="Moosschicht"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}Krautschicht`}
-            name="krautschicht"
-            label="Krautschicht"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}Strauchschicht`}
-            name="strauchschicht"
-            label="Strauchschicht"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}baumschicht`}
-            name="baumschicht"
-            label="Baumschicht"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}bemerkungen`}
-            name="bemerkungen"
-            label="Bemerkungen"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
+        <FieldsContainer>
+          <Tabs
+            value={tab}
+            onChange={onChangeTab}
+            indicatorColor="primary"
+            textColor="primary"
+            centered
+          >
+            <Tab
+              label="Idealbiotop"
+              value="idealbiotop"
+              data-id="idealbiotop"
+            />
+            <Tab label="Dateien" value="dateien" data-id="dateien" />
+          </Tabs>
+          {tab === 'idealbiotop' && (
+            <FormContainer data-width={datenWidth}>
+              <DateFieldWithPicker
+                key={`${row.id}erstelldatum`}
+                name="erstelldatum"
+                label="Erstelldatum"
+                value={row.erstelldatum}
+                saveToDb={saveToDb}
+                error={errors.erstelldatum}
+              />
+              <Section>Lage</Section>
+              <TextField
+                key={`${row.id}hoehenlage`}
+                name="hoehenlage"
+                label="Höhe"
+                row={row}
+                type="text"
+                multiLine
+                saveToDb={saveToDb}
+                errors={errors}
+              />
+              <TextField
+                key={`${row.id}region`}
+                name="region"
+                label="Region"
+                row={row}
+                type="text"
+                multiLine
+                saveToDb={saveToDb}
+                errors={errors}
+              />
+              <TextField
+                key={`${row.id}exposition`}
+                name="exposition"
+                label="Exposition"
+                row={row}
+                type="text"
+                multiLine
+                saveToDb={saveToDb}
+                errors={errors}
+              />
+              <TextField
+                key={`${row.id}besonnung`}
+                name="besonnung"
+                label="Besonnung"
+                row={row}
+                type="text"
+                multiLine
+                saveToDb={saveToDb}
+                errors={errors}
+              />
+              <TextField
+                key={`${row.id}hangneigung`}
+                name="hangneigung"
+                label="Hangneigung"
+                row={row}
+                type="text"
+                multiLine
+                saveToDb={saveToDb}
+                errors={errors}
+              />
+              <Section>Boden</Section>
+              <TextField
+                key={`${row.id}bodenTyp`}
+                name="bodenTyp"
+                label="Typ"
+                row={row}
+                type="text"
+                multiLine
+                saveToDb={saveToDb}
+                errors={errors}
+              />
+              <TextField
+                key={`${row.id}bodenKalkgehalt`}
+                name="bodenKalkgehalt"
+                label="Kalkgehalt"
+                row={row}
+                type="text"
+                multiLine
+                saveToDb={saveToDb}
+                errors={errors}
+              />
+              <TextField
+                key={`${row.id}bodenDurchlaessigkeit`}
+                name="bodenDurchlaessigkeit"
+                label="Durchlässigkeit"
+                row={row}
+                type="text"
+                multiLine
+                saveToDb={saveToDb}
+                errors={errors}
+              />
+              <TextField
+                key={`${row.id}bodenHumus`}
+                name="bodenHumus"
+                label="Humus"
+                row={row}
+                type="text"
+                multiLine
+                saveToDb={saveToDb}
+                errors={errors}
+              />
+              <TextField
+                key={`${row.id}bodenNaehrstoffgehalt`}
+                name="bodenNaehrstoffgehalt"
+                label="Nährstoffgehalt"
+                row={row}
+                type="text"
+                multiLine
+                saveToDb={saveToDb}
+                errors={errors}
+              />
+              <TextField
+                key={`${row.id}wasserhaushalt`}
+                name="wasserhaushalt"
+                label="Wasserhaushalt"
+                row={row}
+                type="text"
+                multiLine
+                saveToDb={saveToDb}
+                errors={errors}
+              />
+              <Section>Vegetation</Section>
+              <TextField
+                key={`${row.id}konkurrenz`}
+                name="konkurrenz"
+                label="Konkurrenz"
+                row={row}
+                type="text"
+                multiLine
+                saveToDb={saveToDb}
+                errors={errors}
+              />
+              <TextField
+                key={`${row.id}moosschicht`}
+                name="moosschicht"
+                label="Moosschicht"
+                row={row}
+                type="text"
+                multiLine
+                saveToDb={saveToDb}
+                errors={errors}
+              />
+              <TextField
+                key={`${row.id}Krautschicht`}
+                name="krautschicht"
+                label="Krautschicht"
+                row={row}
+                type="text"
+                multiLine
+                saveToDb={saveToDb}
+                errors={errors}
+              />
+              <TextField
+                key={`${row.id}Strauchschicht`}
+                name="strauchschicht"
+                label="Strauchschicht"
+                row={row}
+                type="text"
+                multiLine
+                saveToDb={saveToDb}
+                errors={errors}
+              />
+              <TextField
+                key={`${row.id}baumschicht`}
+                name="baumschicht"
+                label="Baumschicht"
+                row={row}
+                type="text"
+                multiLine
+                saveToDb={saveToDb}
+                errors={errors}
+              />
+              <TextField
+                key={`${row.id}bemerkungen`}
+                name="bemerkungen"
+                label="Bemerkungen"
+                row={row}
+                type="text"
+                multiLine
+                saveToDb={saveToDb}
+                errors={errors}
+              />
+            </FormContainer>
+          )}
+          {tab === 'dateien' && (
+            <FilesContainer data-width={datenWidth}>
+              <Files parentId={row.id} parent="idealbiotop" />
+            </FilesContainer>
+          )}
         </FieldsContainer>
-        <Files parentId={row.id} parent="idealbiotop" />
       </Container>
     </ErrorBoundary>
   )
