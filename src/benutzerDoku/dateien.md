@@ -16,7 +16,7 @@ Dateien können **in folgenden Formularen** angefügt werden:
 Beispiel Idealbiotop:
 ![Datein](_media/files_01.png)<br/>
 
-**Zweck**: Idealbiotope und Kontrollen gemäss Vorgaben von Topos dokumentieren. Daher jede Datei ein Feld, um sie zu beschreiben.<br/><br/>
+**Zweck**: Idealbiotope und Kontrollen gemäss Vorgaben von Topos dokumentieren. Daher gibt es ein Feld, um die Datei zu beschreiben.<br/><br/>
 
 **Hochladen** könnt ihr aus folgenden Quellen:
 - Lokal: Eine auf eurem PC gespeicherte Datei
