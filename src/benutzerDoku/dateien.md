@@ -8,10 +8,10 @@ sort: 14
 
 Wurde am 27.05.2019 eingeführt.<br/><br/>
 
-Dateien können in folgenden Formularen angefügt werden:
-- **Idealbiotop**: Im neuen Reiter "Dateien"
-- **Feld-Kontrolle**: Im neuen Reiter "Dateien"
-- **Freiwilligen-Kontrolle**: Im neuen Bereich "Dateien". Er ist nur im Formular sichtbar, wird also nicht gedruckt.
+Dateien können **in folgenden Formularen** angefügt werden:
+- Idealbiotop: Im neuen Reiter "Dateien"
+- Feld-Kontrolle: Im neuen Reiter "Dateien"
+- Freiwilligen-Kontrolle: Im neuen Bereich "Dateien". Er ist nur im Formular sichtbar, wird also nicht gedruckt.
 
 Beispiel Idealbiotop:
 ![Datein](_media/files_01.png)<br/>
@@ -42,3 +42,4 @@ Ihr könnt Dateien auch **herunterladen**:
 - Möglichst nur hochladen, was nützlich ist 
 - Speicherplatz hat seinen Preis
 - Grössere Bilder werden daher beim Upload auf maximal 2056*2056 Pixel reduziert
+- Maximale Datei-Grösse ist 100MB
