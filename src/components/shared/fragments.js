@@ -439,6 +439,16 @@ export const tpopkontr = gql`
     changedBy
   }
 `
+export const tpopkontrFile = gql`
+  fragment TpopkontrFileFields on TpopkontrFile {
+    id
+    tpopkontrId
+    fileId
+    fileMimeType
+    name
+    beschreibung
+  }
+`
 
 export const tpopkontrzaehl = gql`
   fragment TpopkontrzaehlFields on Tpopkontrzaehl {

@@ -782,6 +782,20 @@ COMMENT ON COLUMN apflora.tpopkontr.zeit_id IS 'GUID für den Export von Zeiten 
 COMMENT ON COLUMN apflora.tpopkontr.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontr.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
+drop table if exists apflora.tpopkontr_file;
+create table apflora.tpopkontr_file (
+  id uuid primary key DEFAULT uuid_generate_v1mc(),
+  tpopkontr_id uuid default null references apflora.tpopkontr (id) on delete cascade on update cascade,
+  file_id uuid default null,
+  file_mime_type text default null,
+  name text default null,
+  beschreibung text default null
+);
+create index on apflora.tpopkontr using btree (id);
+create index on apflora.tpopkontr_file using btree (tpopkontr_id);
+create index on apflora.tpopkontr_file using btree (file_id);
+create index on apflora.tpopkontr_file using btree (file_mime_type);
+
 DROP TABLE IF EXISTS apflora.tpopkontr_idbiotuebereinst_werte;
 CREATE TABLE apflora.tpopkontr_idbiotuebereinst_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
