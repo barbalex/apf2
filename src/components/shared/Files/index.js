@@ -67,7 +67,6 @@ const Files = ({ parentId, parent }) => {
   })
 
   const files = get(data, `all${upperFirst(parent)}Files.nodes`, [])
-  console.log({ data, files })
 
   const onChangeUploader = useCallback(
     file => {
