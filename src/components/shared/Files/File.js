@@ -11,7 +11,10 @@ import MenuItem from '@material-ui/core/MenuItem'
 //import storeContext from '../../../storeContext'
 import TextField from '../../shared/TextField'
 import ErrorBoundary from '../ErrorBoundary'
-import { idealbiotopFile as idealbiotopFileFragment } from '../fragments'
+import {
+  idealbiotopFile as idealbiotopFileFragment,
+  tpopkontrFile as tpopkontrFileFragment,
+} from '../fragments'
 import isImageFile from './isImageFile'
 import { upperFirst } from 'graphql-compose'
 
@@ -69,6 +72,7 @@ const MenuTitle = styled.h3`
 
 const fragmentObject = {
   idealbiotop: idealbiotopFileFragment,
+  tpopkontr: tpopkontrFileFragment,
 }
 
 const File = ({ file, parent, refetch }) => {
@@ -136,8 +140,8 @@ const File = ({ file, parent, refetch }) => {
         const fragment = fragmentObject[parent]
         await client.mutate({
           mutation: gql`
-              mutation ${mutationName}(
-                $id: uuid!
+              mutation UpdateFile(
+                $id: UUID!
               ) {
                 ${mutationName}(
                   input: {
@@ -151,6 +155,7 @@ const File = ({ file, parent, refetch }) => {
                     ...${fields}
                   }
                 }
+              }
               ${fragment}
             `,
           variables: {
