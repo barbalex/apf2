@@ -9,7 +9,7 @@ import Lightbox from 'react-image-lightbox'
 import Button from '@material-ui/core/Button'
 
 import ErrorBoundary from '../ErrorBoundary'
-import { idealbiotopFile as idealbiotopFileFragment } from '../fragments'
+import { idealbiotopFile as idealbiotopFileFragment, tpopkontrFile as tpopkontrFileFragment } from '../fragments'
 import Uploader from '../Uploader'
 import File from './File'
 import 'react-image-lightbox/style.css'
@@ -33,6 +33,7 @@ const LightboxButton = styled(Button)`
 
 const fragmentObject = {
   idealbiotop: idealbiotopFileFragment,
+  tpopkontr: tpopkontrFileFragment,
 }
 
 const Files = ({ parentId, parent }) => {
@@ -45,23 +46,20 @@ const Files = ({ parentId, parent }) => {
   const parentIdName = `${parent}Id`
   const fields = `${upperFirst(parent)}FileFields`
   const fragment = fragmentObject[parent]
-  const queryObject = {
-    idealbiotop: gql`
-      query FileQuery($parentId: UUID!) {
-        ${queryName}(
-          orderBy: NAME_ASC
-          filter: { ${parentIdName}: { equalTo: $parentId } }
-        ) {
-          nodes {
-            ...${fields}
-          }
-        }
-      }
-      ${fragment}
-    `,
-  }
 
-  const query = queryObject[parent]
+  const query = gql`
+  query FileQuery($parentId: UUID!) {
+    ${queryName}(
+      orderBy: NAME_ASC
+      filter: { ${parentIdName}: { equalTo: $parentId } }
+    ) {
+      nodes {
+        ...${fields}
+      }
+    }
+  }
+  ${fragment}
+`
   const { data, error, loading, refetch } = useQuery(query, {
     variables: { parentId },
   })

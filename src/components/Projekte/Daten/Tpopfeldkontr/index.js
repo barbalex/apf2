@@ -27,6 +27,7 @@ import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { simpleTypes as tpopfeldkontrType } from '../../../../store/NodeFilterTree/tpopfeldkontr'
+import Files from '../../../shared/Files'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -52,6 +53,11 @@ const FormContainer = styled.div`
     props['data-width'] > 2 * constants.columnWidth
       ? `${constants.columnWidth}px`
       : 'auto'};
+`
+const FilesContainer = styled.div`
+  padding: 10px;
+  overflow-y: auto !important;
+  height: calc(100% - 20px);
 `
 const Section = styled.div`
   padding-top: 20px;
@@ -397,6 +403,9 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
               data-id="entwicklung"
             />
             <Tab label="Biotop" value="biotop" data-id="biotop" />
+            {!showFilter && (
+              <Tab label="Dateien" value="dateien" data-id="dateien" />
+            )}
           </Tabs>
           {tab === 'entwicklung' && (
             <FormContainer data-width={showFilter ? filterWidth : datenWidth}>
@@ -711,6 +720,11 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                 error={errors.idealbiotopUebereinstimmung}
               />
             </FormContainer>
+          )}
+          {tab === 'dateien' && !showFilter && (
+            <FilesContainer data-width={datenWidth}>
+              <Files parentId={row.id} parent="tpopkontr" />
+            </FilesContainer>
           )}
         </FieldsContainer>
       </Container>
