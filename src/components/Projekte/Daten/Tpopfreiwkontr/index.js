@@ -21,6 +21,7 @@ import More from './More'
 import Danger from './Danger'
 import Remarks from './Remarks'
 import EkfRemarks from './EkfRemarks'
+import Files from './Files'
 import Count from './Count'
 import Verification from './Verification'
 import Image from './Image'
@@ -67,6 +68,7 @@ const GridContainer = styled.div`
         'danger'
         'remarks'
         'ekfRemarks'
+        'files'
         'verification'
       `
     }
@@ -85,6 +87,7 @@ const GridContainer = styled.div`
         'danger danger'
         'remarks remarks'
         'ekfRemarks ekfRemarks'
+        'files files'
         'verification verification'
       `
     }
@@ -98,6 +101,7 @@ const GridContainer = styled.div`
       'danger danger danger danger danger danger'
       'remarks remarks remarks remarks remarks remarks'
       'ekfRemarks ekfRemarks ekfRemarks ekfRemarks ekfRemarks ekfRemarks'
+      'files files files files files files'
       'verification verification verification verification verification verification'
     `
   }};
@@ -580,6 +584,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
           {((isPrint && ekfBemerkungen) || !isPrint) && (
             <EkfRemarks saveToDb={saveToDb} row={row} errors={errors} />
           )}
+          {!isPrint && <Files row={row} />}
           {!isPrint && !isFreiwillig && !(view === 'ekf') && (
             <Verification saveToDb={saveToDb} row={row} errors={errors} />
           )}
