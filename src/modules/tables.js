@@ -311,6 +311,12 @@ export default [
     parentIdField: 'none',
   },
   {
+    table: 'tpop_apberrelevant_grund_werte',
+    label: 'Grund für AP-Bericht Relevanz',
+    idField: 'id',
+    parentIdField: 'none',
+  },
+  {
     table: 'ap_erfkrit_werte',
     label: 'AP-Erfolgskriterium-Werte',
     idField: 'id',
