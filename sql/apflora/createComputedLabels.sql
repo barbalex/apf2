@@ -4,10 +4,17 @@
 
 drop function if exists apflora.adresse_label(adresse apflora.adresse);
 create function apflora.adresse_label(adresse apflora.adresse) returns text as $$
-  select coalesce(adresse.name, '(kein name)')
+  select coalesce(adresse.name, '(kein Name)')
 $$ language sql stable;
 -- make label sortable, as of postgraphile 4.4/postgraphile@next
 comment on function apflora.adresse_label(apflora.adresse) is e'@sortable';
+
+drop function if exists apflora.tpop_apberrelevant_grund_werte_label(tpop_apberrelevant_grund_werte apflora.tpop_apberrelevant_grund_werte);
+create function apflora.tpop_apberrelevant_grund_werte_label(tpop_apberrelevant_grund_werte apflora.tpop_apberrelevant_grund_werte) returns text as $$
+  select coalesce(tpop_apberrelevant_grund_werte.text, '(kein Name)')
+$$ language sql stable;
+-- make label sortable, as of postgraphile 4.4/postgraphile@next
+comment on function apflora.tpop_apberrelevant_grund_werte_label(apflora.tpop_apberrelevant_grund_werte) is e'@sortable';
 
 drop function if exists apflora.ap_label(ap apflora.ap);
 create function apflora.ap_label(ap apflora.ap) returns text as $$
