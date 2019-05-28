@@ -1,13 +1,10 @@
 import axios from 'axios'
-import staticFilesBaseUrl from './staticFilesBaseUrl'
 
 export default async ({ setKtZh, addError }) => {
-  const baseURL = staticFilesBaseUrl
-  const url = `/ktZh.json`
-  //const axios = await import('axios').then(m => m.default)
+  const url = `https://ucarecdn.com/e0979273-45fb-46cd-9635-9715a887f887/ktZh.json`
   let result
   try {
-    result = await axios.get(url, { baseURL })
+    result = await axios.get(url)
   } catch (error) {
     addError(error)
   }

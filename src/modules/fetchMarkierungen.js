@@ -1,14 +1,10 @@
 import axios from 'axios'
 
-import staticFilesBaseUrl from './staticFilesBaseUrl'
-
 export default async ({ setMarkierungen, addError }) => {
-  const baseURL = staticFilesBaseUrl
-  const url = `/markierungen.json`
-  //const axios = await import('axios').then(m => m.default)
+  const url = `https://ucarecdn.com/531f7c51-53d6-432e-8eb1-c75717c8e6ab/markierungen.json`
   let result
   try {
-    result = await axios.get(url, { baseURL })
+    result = await axios.get(url)
   } catch (error) {
     addError(error)
   }
