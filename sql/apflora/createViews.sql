@@ -1892,79 +1892,6 @@ ORDER BY
   apflora.tpop.gemeinde,
   apflora.tpop.flurname;
 
-DROP VIEW IF EXISTS apflora.v_tpopmassnber_fueraktap0 CASCADE;
-CREATE OR REPLACE VIEW apflora.v_tpopmassnber_fueraktap0 AS
-SELECT
-  apflora.ap.id as ap_id,
-  apflora.ae_eigenschaften.artname AS "Art",
-  apflora.ap_bearbstand_werte.text AS "Aktionsplan-Status",
-  apflora.ap.start_jahr AS "Aktionsplan-Jahr",
-  apflora.ap_umsetzung_werte.text AS "Aktionsplan-Umsetzung",
-  apflora.pop.nr AS "Population-Nr",
-  apflora.pop.name AS "Population-Name",
-  pop_status_werte.text AS "Population-Herkunft",
-  apflora.pop.bekannt_seit AS "Population - bekannt seit",
-  apflora.tpop.nr AS "Teilpopulation-Nr",
-  apflora.tpop.gemeinde AS "Teilpopulation-Gemeinde",
-  apflora.tpop.flurname AS "Teilpopulation-Flurname",
-  apflora.tpop.x AS "Teilpopulation-X-Koodinate",
-  apflora.tpop.y AS "Teilpopulation-Y-Koordinate",
-  apflora.tpop.radius AS "Teilpopulation-Radius",
-  apflora.tpop.hoehe AS "Teilpopulation-Hoehe",
-  apflora.tpop.beschreibung AS "Teilpopulation-Beschreibung",
-  apflora.tpop.kataster_nr AS "Teilpopulation-Kataster-Nr",
-  pop_status_werte_2.text AS "Teilpopulation-Herkunft",
-  apflora.tpop.status_unklar AS "Teilpopulation - Herkunft unklar",
-  apflora.tpop.status_unklar_grund AS "Teilpopulation - Herkunft unklar Begruendung",
-  apflora.tpop_apberrelevant_werte.text AS "Teilpopulation - Fuer Bericht relevant",
-  apflora.tpop.bekannt_seit AS "Teilpopulation - bekannt seit",
-  apflora.tpop.eigentuemer AS "Teilpopulation-Eigentuemer",
-  apflora.tpop.kontakt AS "Teilpopulation-Kontakt",
-  apflora.tpop.nutzungszone AS "Teilpopulation-Nutzungszone",
-  apflora.tpop.bewirtschafter AS "Teilpopulation-Bewirtschafter",
-  apflora.tpop.bewirtschaftung AS "Teilpopulation-Bewirtschaftung",
-  apflora.tpop.bemerkungen AS "Teilpopulation-Bemerkungen",
-  apflora.tpopmassnber.jahr AS "Massnahmenbericht-Jahr",
-  tpopmassn_erfbeurt_werte.text AS "Massnahmenbericht-Erfolgsberuteilung",
-  apflora.tpopmassnber.bemerkungen AS "Massnahmenbericht-Interpretation"
-FROM
-  (((apflora.ae_eigenschaften
-  INNER JOIN
-    apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
-  LEFT JOIN
-    apflora.ap_bearbstand_werte
-    ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
-  LEFT JOIN
-    apflora.ap_umsetzung_werte
-    ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
-  INNER JOIN
-    (((apflora.pop
-    LEFT JOIN
-      apflora.pop_status_werte
-      ON apflora.pop.status  = pop_status_werte.code)
-    INNER JOIN
-      ((apflora.tpop
-      LEFT JOIN
-        apflora.pop_status_werte
-        AS pop_status_werte_2 ON apflora.tpop.status = pop_status_werte_2.code)
-      LEFT JOIN
-        apflora.tpop_apberrelevant_werte
-        ON apflora.tpop.apber_relevant  = apflora.tpop_apberrelevant_werte.code)
-      ON apflora.pop.id = apflora.tpop.pop_id)
-    INNER JOIN
-      (apflora.tpopmassnber
-      INNER JOIN
-        apflora.tpopmassn_erfbeurt_werte
-        ON apflora.tpopmassnber.beurteilung = tpopmassn_erfbeurt_werte.code)
-      ON apflora.tpop.id = apflora.tpopmassnber.tpop_id)
-    ON apflora.ap.id = apflora.pop.ap_id
-ORDER BY
-  apflora.ae_eigenschaften.artname,
-  apflora.pop.nr,
-  apflora.tpop.nr,
-  apflora.tpopmassnber.jahr;
-
 DROP VIEW IF EXISTS apflora.v_tpopmassn_0 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopmassn_0 AS
 SELECT
@@ -5585,3 +5512,5 @@ order by
   apflora.beob.datum desc,
   apflora.beob.autor asc,
   apflora.beob_quelle_werte.name asc;
+
+DROP VIEW IF EXISTS apflora.v_tpopmassnber_fueraktap0 CASCADE;
