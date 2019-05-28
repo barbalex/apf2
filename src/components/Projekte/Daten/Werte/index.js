@@ -124,9 +124,9 @@ const Werte = ({ treeName, table }) => {
       <Container>
         <FormTitle
           apId={row.apId}
-          title="Bericht"
+          title={`Werte für ${table}`}
           treeName={treeName}
-          table="ber"
+          table={table}
         />
         <FieldsContainer>
           <TextField

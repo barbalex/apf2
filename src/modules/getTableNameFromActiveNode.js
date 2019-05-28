@@ -22,9 +22,13 @@ export default activeNode => {
     }
   }
   if (
-    ['adresseFolder', 'wlFolder', 'userFolder', 'currentIssuesFolder'].includes(
-      activeNode.menuType,
-    )
+    [
+      'adresseFolder',
+      'apberrelevantGrundWerteFolder',
+      'wlFolder',
+      'userFolder',
+      'currentIssuesFolder',
+    ].includes(activeNode.menuType)
   )
     return null
   return tableName
