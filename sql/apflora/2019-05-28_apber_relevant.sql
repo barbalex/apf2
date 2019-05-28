@@ -40,4 +40,14 @@ drop table apflora.tpop_apberrelevant_werte;
 
 -- 6. recreate all views
 
--- 7. inform
+-- 7. create labels
+drop function if exists apflora.tpop_apberrelevant_grund_werte_label(tpop_apberrelevant_grund_werte apflora.tpop_apberrelevant_grund_werte);
+create function apflora.tpop_apberrelevant_grund_werte_label(tpop_apberrelevant_grund_werte apflora.tpop_apberrelevant_grund_werte) returns text as $$
+  select coalesce(tpop_apberrelevant_grund_werte.text, '(kein Name)')
+$$ language sql stable;
+-- make label sortable, as of postgraphile 4.4/postgraphile@next
+comment on function apflora.tpop_apberrelevant_grund_werte_label(apflora.tpop_apberrelevant_grund_werte) is e'@sortable';
+
+-- 8. restart api
+
+-- 9. inform
