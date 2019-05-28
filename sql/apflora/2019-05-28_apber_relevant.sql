@@ -32,6 +32,8 @@ update apflora.tpop set apber_relevant_grund = apber_relevant_old where apber_re
 -- 3. drop, then recreate all views
 -- 4. drop, then recreate all functions
 
--- 5. clean up
-alter table apflora.tpop drop column apber_relevant_old;
+-- 5. clean up. Cascades to view calling tpop.*
+alter table apflora.tpop drop column apber_relevant_old cascade;
 drop table apflora.tpop_apberrelevant_werte;
+
+-- 6. recreate all views
