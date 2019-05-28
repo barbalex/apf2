@@ -40,6 +40,7 @@ SELECT
   eulk.beschreibung,
   eulk.kataster_nr,
   eulk.apber_relevant,
+  eulk.apber_relevant_grund,
   eulk.eigentuemer,
   eulk.kontakt,
   eulk.nutzungszone,
