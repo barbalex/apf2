@@ -60,7 +60,7 @@ grant apflora_manager to authenticator;
 drop role if exists apflora_freiwillig;
 create role apflora_freiwillig;
 grant apflora_reader to apflora_freiwillig;
-grant all on apflora.tpopkontr, apflora.tpopkontrzaehl to apflora_freiwillig;
+grant all on apflora.tpopkontr, apflora.tpopkontr_file, apflora.tpopkontrzaehl to apflora_freiwillig;
 
 -- SELECT * FROM pg_group;
 -- lost roles: \du
