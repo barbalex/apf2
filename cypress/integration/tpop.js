@@ -87,13 +87,14 @@ describe('Teil-Population form', () => {
       .blur()
     cy.contains('#Y-KoordinatenErrorText', 'zulaessige_y_koordinate')
   })
+  /*
   it('updates apberRelevant', () => {
     cy.get('[data-id=apberRelevant_2] input')
       .check()
       .get('[data-id=apberRelevant_1] input')
       .check()
       .should('have.value', '1')
-  })
+  })*/
   it('updates gemeinde', () => {
     cy.clearSelect({
       selector: '[data-id=gemeinde]',

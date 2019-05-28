@@ -19,7 +19,7 @@ export default ({ data, ktZh }) => {
   // kontrolliere die Relevanz ausserkantonaler Tpop
   let tpopsOutsideZh = tpops.filter(
     tpop =>
-      tpop.apberRelevant === 1 &&
+      tpop.apberRelevant &&
       !!tpop.x &&
       isFinite(tpop.x) &&
       !!tpop.y &&

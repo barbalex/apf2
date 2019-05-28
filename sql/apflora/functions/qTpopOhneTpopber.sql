@@ -21,7 +21,7 @@ CREATE OR REPLACE FUNCTION apflora.q_tpop_ohne_tpopber(projid uuid, apid uuid, b
   WHERE
     apflora.ap.proj_id = $1
     and apflora.pop.ap_id = $2
-    and apflora.tpop.apber_relevant = 1
+    and apflora.tpop.apber_relevant = true
     and apflora.tpop.id IN (
       -- 1. "TPop mit Kontrolle im Berichtjahr" ermitteln:
       SELECT DISTINCT

@@ -5,7 +5,7 @@ import {
   pop,
   popStatusWerte,
   tpop,
-  tpopApberrelevantWerte,
+  tpopApberrelevantGrundWerte,
 } from '../../../shared/fragments'
 
 export default gql`
@@ -15,8 +15,8 @@ export default gql`
       popStatusWerteByStatus {
         ...PopStatusWerteFields
       }
-      tpopApberrelevantWerteByApberRelevant {
-        ...TpopApberrelevantWerteFields
+      tpopApberrelevantGrundWerteByApberRelevantGrund {
+        ...TpopApberrelevantGrundWerteFields
       }
       popByPopId {
         ...PopFields
@@ -30,5 +30,5 @@ export default gql`
   ${pop}
   ${popStatusWerte}
   ${tpop}
-  ${tpopApberrelevantWerte}
+  ${tpopApberrelevantGrundWerte}
 `

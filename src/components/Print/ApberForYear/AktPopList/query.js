@@ -19,7 +19,7 @@ export default gql`
           nodes {
             id
             status
-            tpopsByPopId(filter: { apberRelevant: { equalTo: 1 } }) {
+            tpopsByPopId(filter: { apberRelevant: { equalTo: true } }) {
               totalCount
             }
           }
@@ -28,7 +28,7 @@ export default gql`
           nodes {
             id
             status
-            tpopsByPopId(filter: { apberRelevant: { equalTo: 1 } }) {
+            tpopsByPopId(filter: { apberRelevant: { equalTo: true } }) {
               totalCount
             }
           }

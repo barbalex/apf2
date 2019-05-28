@@ -23,7 +23,7 @@ CREATE OR REPLACE FUNCTION apflora.q_pop_ohne_popber(projid uuid, apid uuid, ber
           on apflora.ap.id = apflora.pop.ap_id
         on apflora.pop.id = apflora.tpop.pop_id
       WHERE
-        apflora.tpop.apber_relevant = 1
+        apflora.tpop.apber_relevant = true
         and apflora.ap.id = $2
         and apflora.ap.proj_id = $1
       GROUP BY

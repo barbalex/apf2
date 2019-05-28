@@ -12,6 +12,7 @@ export default gql`
         gemeinde
         flurname
         apber_relevant: apberRelevant
+        apber_relevant_grund: apberRelevantGrund
         x
         y
       }

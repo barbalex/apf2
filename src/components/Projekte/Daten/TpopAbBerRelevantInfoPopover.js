@@ -38,7 +38,8 @@ export default (
     <Container>
       <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
       <LabelPopoverContentRow>
-        Dieses Feld möglichst immer ausfüllen.
+        Möglichst immer ausfüllen, wenn die Teil-Population für den AP-Bericht
+        nicht relevant ist.
       </LabelPopoverContentRow>
       <LabelPopoverContentRow>
         <LabelPopoverRowColumnLeft>

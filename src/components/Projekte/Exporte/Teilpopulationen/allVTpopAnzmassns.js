@@ -36,7 +36,8 @@ export default gql`
         neigung
         beschreibung
         kataster_nr: katasterNr
-        apber_relevant: apberRelevant
+        apber_relevant: 
+        apber_relevant_grund: apberRelevantGrund
         eigentuemer
         kontakt
         nutzungszone

@@ -39,6 +39,7 @@ export default gql`
         beschreibung
         kataster_nr: katasterNr
         apber_relevant: apberRelevant
+        apber_relevant_grund: apberRelevantGrund
         eigentuemer
         kontakt
         nutzungszone

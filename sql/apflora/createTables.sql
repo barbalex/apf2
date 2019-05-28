@@ -604,6 +604,7 @@ COMMENT ON COLUMN apflora.tpop.status IS 'Herkunft der Teilpopulation. Auswahl a
 COMMENT ON COLUMN apflora.tpop.status_unklar IS 'Ist der Status der Teilpopulation unklar? (es bestehen keine glaubwuerdigen Beboachtungen)';
 COMMENT ON COLUMN apflora.tpop.status_unklar_grund IS 'Wieso ist der Status unklar?';
 COMMENT ON COLUMN apflora.tpop.apber_relevant IS 'Ist die Teilpopulation für den AP-Bericht relevant? Auswahl aus der Tabelle "tpop_apberrelevant_werte"';
+COMMENT ON COLUMN apflora.tpop.apber_relevant_grund IS 'Grund für AP-Bericht Relevanz. Auswahl aus der Tabelle "tpop_apberrelevant_grund_werte"';
 COMMENT ON COLUMN apflora.tpop.bekannt_seit IS 'Seit wann ist die Teilpopulation bekannt?';
 COMMENT ON COLUMN apflora.tpop.eigentuemer IS 'EigentümerIn';
 COMMENT ON COLUMN apflora.tpop.kontakt IS 'Kontaktperson vor Ort';

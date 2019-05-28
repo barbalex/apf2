@@ -282,6 +282,7 @@ export default async ({
           status: row.status,
           statusUnklarGrund: row.statusUnklarGrund,
           apberRelevant: row.apberRelevant,
+          apberRelevantGrund: row.apberRelevantGrund,
           bekanntSeit: row.bekanntSeit,
           eigentuemer: row.eigentuemer,
           kontakt: row.kontakt,

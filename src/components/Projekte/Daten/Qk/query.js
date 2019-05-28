@@ -1058,7 +1058,7 @@ export default gql`
               tpopsByPopId(
                 filter: {
                   status: { equalTo: 300 }
-                  apberRelevant: { equalTo: 1 }
+                  apberRelevant: { equalTo: true }
                 }
                 orderBy: NR_ASC
               ) {

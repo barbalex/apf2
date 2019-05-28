@@ -119,7 +119,7 @@ FROM
     apflora.tpop
     ON apflora.pop.id = apflora.tpop.pop_id
 WHERE
-  apflora.tpop.apber_relevant = 1
+  apflora.tpop.apber_relevant = true
   AND apflora.pop.status  <> 300
 GROUP BY
   apflora.pop.ap_id,
@@ -848,7 +848,7 @@ FROM
     ON apflora.ap.id = apflora.pop.ap_id
 WHERE
   apflora.tpop.status IN (101, 202)
-  AND apflora.tpop.apber_relevant = 1
+  AND apflora.tpop.apber_relevant = true
   AND apflora.tpop.id NOT IN (
     SELECT DISTINCT
       apflora.tpopkontr.tpop_id
@@ -901,7 +901,7 @@ FROM
 WHERE
   apflora.popber.entwicklung < 8
   AND apflora.pop.status  IN (101, 202)
-  AND apflora.tpop.apber_relevant = 1
+  AND apflora.tpop.apber_relevant = true
 ORDER BY
   apflora.pop.nr;
 

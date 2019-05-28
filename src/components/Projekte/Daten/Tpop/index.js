@@ -165,6 +165,10 @@ const Tpop = ({ treeName, showFilter = false }) => {
                       : row.statusUnklarGrund,
                   apberRelevant:
                     field === 'apberRelevant' ? value : row.apberRelevant,
+                  apberRelevantGrund:
+                    field === 'apberRelevantGrund'
+                      ? value
+                      : row.apberRelevantGrund,
                   bekanntSeit:
                     field === 'bekanntSeit' ? value : row.bekanntSeit,
                   eigentuemer:
@@ -288,15 +292,27 @@ const Tpop = ({ treeName, showFilter = false }) => {
             saveToDb={saveToDb}
             errors={errors}
           />
-          <RadioButtonGroupWithInfo
-            value={row.apberRelevant}
+          <RadioButton
+            key={`${row.id}apberRelevant`}
             name="apberRelevant"
-            dataSource={get(dataLists, 'allTpopApberrelevantWertes.nodes', [])}
-            loading={loadingLists}
-            popover={TpopAbBerRelevantInfoPopover}
             label="Für AP-Bericht relevant"
+            value={row.apberRelevant}
             saveToDb={saveToDb}
             error={errors.apberRelevant}
+          />
+          <RadioButtonGroupWithInfo
+            value={row.apberRelevantGrund}
+            name="apberRelevantGrund"
+            dataSource={get(
+              dataLists,
+              'allTpopApberrelevantGrundWertes.nodes',
+              [],
+            )}
+            loading={loadingLists}
+            popover={TpopAbBerRelevantInfoPopover}
+            label="Grund für AP-Bericht (Nicht-)Relevanz"
+            saveToDb={saveToDb}
+            error={errors.apberRelevantGrund}
           />
           <TextField
             key={`${row.id}x`}

@@ -16,6 +16,7 @@ COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.id IS 'Primärschlüsse
 COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 alter table apflora.tpop add column apber_relevant_grund integer DEFAULT NULL REFERENCES apflora.tpop_apberrelevant_grund_werte (code) ON DELETE SET NULL ON UPDATE CASCADE;
+COMMENT ON COLUMN apflora.tpop.apber_relevant_grund IS 'Grund für AP-Bericht Relevanz. Auswahl aus der Tabelle "tpop_apberrelevant_grund_werte"';
 
 -- 2. migrate data
 insert into apflora.tpop_apberrelevant_grund_werte(code, text, changed, changed_by)
@@ -24,10 +25,12 @@ values
   (3, 'ausserkantonal', '2010-03-27', 'KarinMarti'),
   (5, 'kein Vorkommen', '2011-06-17', 'alex'),
   (6, 'anderer Grund', '2019-05-28', 'alex');
-update apflora set apber_relevant = true where apber_relevant_old = 1;
-update apflora set apber_relevant = false where apber_relevant_old > 1;
-update apflora set apber_relevant_grund = apber_relevant_old where apber_relevant_old > 1;
+update apflora.tpop set apber_relevant = true where apber_relevant_old = 1;
+update apflora.tpop set apber_relevant = false where apber_relevant_old > 1;
+update apflora.tpop set apber_relevant_grund = apber_relevant_old where apber_relevant_old > 1;
 
--- 3. clean up
+-- 3. drop, then recreate all views and functions
+
+-- 4. clean up
 alter table apflora.tpop drop column apber_relevant_old;
 drop table apflora.tpop_apberrelevant_werte;

@@ -13,7 +13,7 @@ export default gql`
       ) {
         nodes {
           id
-          tpopsByPopId(filter: { apberRelevant: { equalTo: 1 } }) {
+          tpopsByPopId(filter: { apberRelevant: { equalTo: true } }) {
             totalCount
           }
           popbersByPopId(filter: { jahr: { equalTo: $jahr } }) {
@@ -36,7 +36,7 @@ export default gql`
               and: [
                 { status: { notEqualTo: 300 } }
                 { status: { isNull: false } }
-                { apberRelevant: { equalTo: 1 } }
+                { apberRelevant: { equalTo: true } }
               ]
             }
           ) {
@@ -60,7 +60,7 @@ export default gql`
       ) {
         nodes {
           id
-          tpopsByPopId(filter: { apberRelevant: { equalTo: 1 } }) {
+          tpopsByPopId(filter: { apberRelevant: { equalTo: true } }) {
             totalCount
           }
           popbersByPopId(
@@ -91,7 +91,7 @@ export default gql`
               and: [
                 { status: { notEqualTo: 300 } }
                 { status: { isNull: false } }
-                { apberRelevant: { equalTo: 1 } }
+                { apberRelevant: { equalTo: true } }
               ]
             }
           ) {
@@ -123,7 +123,7 @@ export default gql`
       ) {
         nodes {
           id
-          tpopsByPopId(filter: { apberRelevant: { equalTo: 1 } }) {
+          tpopsByPopId(filter: { apberRelevant: { equalTo: true } }) {
             totalCount
           }
         }
@@ -140,7 +140,7 @@ export default gql`
               and: [
                 { status: { notEqualTo: 300 } }
                 { status: { isNull: false } }
-                { apberRelevant: { equalTo: 1 } }
+                { apberRelevant: { equalTo: true } }
               ]
             }
           ) {

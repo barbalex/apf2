@@ -18,7 +18,7 @@ export default gql`
               and: [
                 { status: { notEqualTo: 300 } }
                 { status: { isNull: false } }
-                { apberRelevant: { equalTo: 1 } }
+                { apberRelevant: { equalTo: true } }
               ]
             }
           ) {
@@ -45,7 +45,7 @@ export default gql`
               and: [
                 { status: { notEqualTo: 300 } }
                 { status: { isNull: false } }
-                { apberRelevant: { equalTo: 1 } }
+                { apberRelevant: { equalTo: true } }
               ]
             }
           ) {

@@ -19,7 +19,7 @@ CREATE OR REPLACE FUNCTION apflora.q_tpop_ohne_massnber(projid uuid, apid uuid, 
   WHERE
     apflora.ap.proj_id = $1
     and apflora.pop.ap_id = $2
-    and apflora.tpop.apber_relevant = 1
+    and apflora.tpop.apber_relevant = true
     and apflora.tpop.id IN (
       -- 1. "TPop mit Ansiedlungen/Ansaaten vor dem Berichtjahr" ermitteln:
       SELECT DISTINCT

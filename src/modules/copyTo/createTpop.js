@@ -19,7 +19,8 @@ export default gql`
     $katasterNr: String
     $status: Int
     $statusUnklarGrund: String
-    $apberRelevant: Int
+    $apberRelevant: Boolean
+    $apberRelevantGrund: Int
     $bekanntSeit: Int
     $eigentuemer: String
     $kontakt: String
@@ -50,6 +51,7 @@ export default gql`
           status: $status
           statusUnklarGrund: $statusUnklarGrund
           apberRelevant: $apberRelevant
+          apberRelevantGrund: $apberRelevantGrund
           bekanntSeit: $bekanntSeit
           eigentuemer: $eigentuemer
           kontakt: $kontakt

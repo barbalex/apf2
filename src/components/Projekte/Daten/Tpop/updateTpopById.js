@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import {
   popStatusWerte,
   tpop,
-  tpopApberrelevantWerte,
+  tpopApberrelevantGrundWerte,
 } from '../../../shared/fragments'
 
 export default gql`
@@ -24,7 +24,8 @@ export default gql`
     $katasterNr: String
     $status: Int
     $statusUnklarGrund: String
-    $apberRelevant: Int
+    $apberRelevant: Boolean
+    $apberRelevantGrund: Int
     $bekanntSeit: Int
     $eigentuemer: String
     $kontakt: String
@@ -58,6 +59,7 @@ export default gql`
           status: $status
           statusUnklarGrund: $statusUnklarGrund
           apberRelevant: $apberRelevant
+          apberRelevantGrund: $apberRelevantGrund
           bekanntSeit: $bekanntSeit
           eigentuemer: $eigentuemer
           kontakt: $kontakt
@@ -77,8 +79,8 @@ export default gql`
         popStatusWerteByStatus {
           ...PopStatusWerteFields
         }
-        tpopApberrelevantWerteByApberRelevant {
-          ...TpopApberrelevantWerteFields
+        tpopApberrelevantGrundWerteByApberRelevantGrund {
+          ...TpopApberrelevantGrundWerteFields
         }
         popByPopId {
           id
@@ -89,5 +91,5 @@ export default gql`
   }
   ${popStatusWerte}
   ${tpop}
-  ${tpopApberrelevantWerte}
+  ${tpopApberrelevantGrundWerte}
 `

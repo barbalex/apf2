@@ -286,6 +286,7 @@ export const tpop = gql`
     status
     statusUnklarGrund
     apberRelevant
+    apberRelevantGrund
     bekanntSeit
     eigentuemer
     kontakt
@@ -584,8 +585,8 @@ export const popStatusWerte = gql`
   }
 `
 
-export const tpopApberrelevantWerte = gql`
-  fragment TpopApberrelevantWerteFields on TpopApberrelevantWerte {
+export const tpopApberrelevantGrundWerte = gql`
+  fragment TpopApberrelevantGrundWerteFields on TpopApberrelevantGrundWerte {
     id
     code
     text

@@ -24,7 +24,7 @@ export default gql`
       popsByApId {
         nodes {
           id
-          tpopsByPopId(condition: { apberRelevant: 1 }) {
+          tpopsByPopId(condition: { apberRelevant: true }) {
             nodes {
               id
               apberRelevant

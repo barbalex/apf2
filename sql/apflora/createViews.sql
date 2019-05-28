@@ -94,7 +94,7 @@ FROM
     ON apflora.ap.id = apflora.pop.ap_id
 WHERE
   apflora.ap.bearbeitung BETWEEN 1 AND 3
-  AND apflora.tpop.apber_relevant = 1
+  AND apflora.tpop.apber_relevant = true
   AND apflora.pop.status  <> 300
 GROUP BY
   apflora.ap.id,
@@ -118,7 +118,7 @@ FROM
       ON apflora.pop.id = apflora.tpop.pop_id)
     ON apflora.ap.id = apflora.pop.ap_id
 WHERE
-  apflora.tpop.apber_relevant = 1
+  apflora.tpop.apber_relevant = true
   AND apflora.pop.status  <> 300
 GROUP BY
   apflora.ap.id;
@@ -163,6 +163,7 @@ SELECT
   apflora.tpop.beschreibung AS tpop_beschreibung,
   apflora.tpop.kataster_nr AS tpop_kataster_nr,
   apflora.tpop.apber_relevant AS tpop_apber_relevant,
+  apflora.tpop.apber_relevant_grund AS tpop_apber_relevant_grund,
   apflora.tpop.eigentuemer AS tpop_eigentuemer,
   apflora.tpop.kontakt AS tpop_kontakt,
   apflora.tpop.nutzungszone AS tpop_nutzungszone,
@@ -367,6 +368,7 @@ SELECT
   apflora.tpop.kataster_nr AS tpop_kataster_nr,
   apflora.adresse.name AS tpop_bearbeiter,
   apflora.tpop.apber_relevant AS tpop_apber_relevant,
+  apflora.tpop.apber_relevant_grund AS tpop_apber_relevant_grund,
   apflora.tpop.bekannt_seit AS tpop_bekannt_seit,
   apflora.tpop.eigentuemer AS tpop_eigentuemer,
   apflora.tpop.kontakt AS tpop_kontakt,
@@ -468,6 +470,7 @@ SELECT
   apflora.tpop.beschreibung,
   apflora.tpop.kataster_nr,
   apflora.tpop.apber_relevant,
+  apflora.tpop.apber_relevant_grund,
   apflora.tpop.eigentuemer,
   apflora.tpop.kontakt,
   apflora.tpop.nutzungszone,
@@ -536,6 +539,7 @@ GROUP BY
   apflora.tpop.beschreibung,
   apflora.tpop.kataster_nr,
   apflora.tpop.apber_relevant,
+  apflora.tpop.apber_relevant_grund,
   apflora.tpop.eigentuemer,
   apflora.tpop.kontakt,
   apflora.tpop.nutzungszone,
@@ -1028,6 +1032,7 @@ SELECT
   apflora.tpop.beschreibung,
   apflora.tpop.kataster_nr,
   apflora.tpop.apber_relevant,
+  apflora.tpop.apber_relevant_grund,
   apflora.tpop.eigentuemer,
   apflora.tpop.kontakt,
   apflora.tpop.nutzungszone,
@@ -1106,6 +1111,7 @@ SELECT
   apflora.tpop.kataster_nr AS "TPOPKATASTERNR",
   apflora.adresse.name AS "TPOPVERANTWORTLICH",
   apflora.tpop.apber_relevant AS "TPOPBERICHTSRELEVANZ",
+  apflora.tpop.apber_relevant_grund AS "TPOPBERICHTSRELEVANZGRUND",
   apflora.tpop.bekannt_seit AS "TPOPBEKANNTSEIT",
   apflora.tpop.eigentuemer AS "TPOPEIGENTUEMERIN",
   apflora.tpop.kontakt AS "TPOPKONTAKT_VO",
@@ -1168,6 +1174,7 @@ SELECT
   apflora.tpop.beschreibung AS tpop_beschreibung,
   apflora.tpop.kataster_nr AS tpop_kataster_nr,
   apflora.tpop.apber_relevant AS tpop_apber_relevant,
+  apflora.tpop.apber_relevant_grund AS tpop_apber_relevant_grund,
   apflora.tpop.bekannt_seit AS tpop_bekannt_seit,
   apflora.tpop.eigentuemer AS tpop_eigentuemer,
   apflora.tpop.kontakt AS tpop_kontakt,
@@ -1213,6 +1220,7 @@ SELECT
   apflora.tpop.beschreibung AS tpop_beschreibung,
   apflora.tpop.kataster_nr AS tpop_kataster_nr,
   apflora.tpop.apber_relevant AS tpop_apber_relevant,
+  apflora.tpop.apber_relevant_grund AS tpop_apber_relevant_grund,
   apflora.tpop.eigentuemer AS tpop_eigentuemer,
   apflora.tpop.kontakt AS tpop_kontakt,
   apflora.tpop.nutzungszone AS tpop_nutzungszone,
