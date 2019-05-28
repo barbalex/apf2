@@ -8,18 +8,25 @@ export default ({
   projektNodes,
   store,
 }) => {
-  const adresses = get(data, 'allApberrelevantGrundWertes.nodes', [])
+  const apberrelevantGrundWertes = get(
+    data,
+    'allApberrelevantGrundWertes.nodes',
+    [],
+  )
   const wlIndex = projektNodes.length + 2
   const nodeLabelFilterString =
-    get(store, `${treeName}.nodeLabelFilter.adresse`) || ''
+    get(store, `${treeName}.nodeLabelFilter.apberrelevantGrundWerte`) || ''
 
-  let adresseNodesLength = adresses.length
-  // before ApberrelevantGrundWerte folder is active, only total count was fetched, not yet any adressen nodes
-  if (adresses.length === 0)
-    adresseNodesLength = get(data, 'unfiltered.totalCount')
-  let message = loading && !adresseNodesLength ? '...' : adresseNodesLength
+  let apberrelevantGrundWerteNodesLength = apberrelevantGrundWertes.length
+  // before ApberrelevantGrundWerte folder is active, only total count was fetched, not yet any apberrelevantGrundWerten nodes
+  if (apberrelevantGrundWertes.length === 0)
+    apberrelevantGrundWerteNodesLength = get(data, 'unfiltered.totalCount')
+  let message =
+    loading && !apberrelevantGrundWerteNodesLength
+      ? '...'
+      : apberrelevantGrundWerteNodesLength
   if (nodeLabelFilterString) {
-    message = `${adresseNodesLength} gefiltert`
+    message = `${apberrelevantGrundWerteNodesLength} gefiltert`
   }
 
   // only show if parent node exists
@@ -28,14 +35,14 @@ export default ({
   return [
     {
       nodeType: 'folder',
-      menuType: 'adresseFolder',
-      filterTable: 'adresse',
-      id: 'adresseFolder',
-      urlLabel: 'ApberRelevantGrund',
-      label: `AP-Bericht relevant Grund (${message})`,
-      url: ['Werte-Listen', 'ApberRelevantGrund'],
-      sort: [wlIndex, 1],
-      hasChildren: adresseNodesLength > 0,
+      menuType: 'apberrelevantGrundWerteFolder',
+      filterTable: 'apberrelevantGrundWerte',
+      id: 'apberrelevantGrundWerteFolder',
+      urlLabel: 'ApberrelevantGrundWerte',
+      label: `Teil-Population: Grund für AP-Bericht Relevanz (${message})`,
+      url: ['Werte-Listen', 'ApberrelevantGrundWerte'],
+      sort: [wlIndex, 2],
+      hasChildren: apberrelevantGrundWerteNodesLength > 0,
     },
   ]
 }

@@ -8,6 +8,7 @@ import buildWlFolderNodes from './wlFolder'
 import buildAdresseFolderNodes from './adresseFolder'
 import buildAdresseNodes from './adresse'
 import buildApberrelevantGrundWerteFolderNodes from './apberrelevantGrundWerteFolder'
+import buildApberrelevantGrundWerteNodes from './apberrelevantGrundWerte'
 import buildUserNodes from './user'
 import buildCurrentIssuesNodes from './currentIssues'
 import buildApFolderNodes from './apFolder'
@@ -1207,6 +1208,26 @@ export default ({
             data: dataAdresses,
             treeName,
             loading: loadingAdresses,
+            projektNodes,
+            store,
+          }),
+        )(),
+      ]
+    }
+    if (
+      role === 'apflora_manager' &&
+      nodeUrl.length === 2 &&
+      nodeUrl[0] === 'Werte-Listen' &&
+      nodeUrl[1] === 'ApberrelevantGrundWerte'
+    ) {
+      nodes = [
+        ...nodes,
+        ...memoizeOne(() =>
+          buildApberrelevantGrundWerteNodes({
+            nodes,
+            data: dataApberrelevantGrundWertes,
+            treeName,
+            loading: loadingApberrelevantGrundWertes,
             projektNodes,
             store,
           }),
