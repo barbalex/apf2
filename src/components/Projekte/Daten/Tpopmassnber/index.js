@@ -119,13 +119,14 @@ const Tpopmassnber = ({ treeName }) => {
             errors={errors}
           />
           <RadioButtonGroup
-            label="Entwicklung"
+            key={`${row.id}beurteilung`}
             name="beurteilung"
-            row={row}
+            label="Entwicklung"
+            value={row.beurteilung}
             dataSource={get(dataLists, 'allTpopmassnErfbeurtWertes.nodes', [])}
             loading={loadingLists}
             saveToDb={saveToDb}
-            errors={errors}
+            error={errors.beurteilung}
           />
           <TextField
             key={`${row.id}bemerkungen`}
