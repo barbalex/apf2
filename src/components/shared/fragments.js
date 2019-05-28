@@ -590,6 +590,7 @@ export const tpopApberrelevantGrundWerte = gql`
     id
     code
     text
+    label
     sort
     changed
     changedBy
