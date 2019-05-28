@@ -13,6 +13,7 @@ export default async ({ id, client, copyingBiotop }) => {
           ...TpopfeldkontrFields
         }
       }
+      ${tpopfeldkontr}
     `,
     variables: { id: previousId },
   })
