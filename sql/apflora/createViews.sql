@@ -3960,6 +3960,7 @@ SELECT
   apflora.tpop.gemeinde,
   apflora.tpop.flurname,
   apflora.tpop.apber_relevant,
+  apflora.tpop.apber_relevant_grund,
   apflora.tpop.x,
   apflora.tpop.y
 FROM
