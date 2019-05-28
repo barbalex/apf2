@@ -572,8 +572,10 @@ const Tree = ({ treeName }) => {
     value: refetchAdresses,
   })
 
-  const queryApberrelevantGrundWertesFilter = nodeLabelFilter.adresse
-    ? { label: { includesInsensitive: nodeLabelFilter.adresse } }
+  const queryApberrelevantGrundWertesFilter = nodeLabelFilter.apberrelevantGrundWerte
+    ? {
+        label: { includesInsensitive: nodeLabelFilter.apberrelevantGrundWerte },
+      }
     : { id: { isNull: false } }
   const {
     data: dataApberrelevantGrundWertes,
@@ -584,7 +586,7 @@ const Tree = ({ treeName }) => {
     variables: { isWerteListen, filter: queryApberrelevantGrundWertesFilter },
   })
   setRefetchKey({
-    key: 'adresses',
+    key: 'tpopApberrelevantGrundWerte',
     value: refetchApberrelevantGrundWertes,
   })
 

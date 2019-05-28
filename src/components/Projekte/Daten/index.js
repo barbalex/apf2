@@ -65,6 +65,13 @@ const Daten = ({ treeName }) => {
         form = <Adresse treeName={treeName} />
         break
       }
+      case 'apberrelevantGrundWerte': {
+        const Werte = loadable(() => import('./Werte'))
+        form = (
+          <Werte treeName={treeName} table="tpop_apberrelevant_grund_werte" />
+        )
+        break
+      }
       case 'ap': {
         const Ap = loadable(() => import('./Ap'))
         form = <Ap treeName={treeName} />

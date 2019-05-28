@@ -8,13 +8,10 @@ import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 
 import TextField from '../../../shared/TextField2'
-import TextFieldWithUrl from '../../../shared/TextFieldWithUrl'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import query from './query'
 import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
-import { tpopApberrelevantGrundWerte } from '../../../shared/fragments'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -30,21 +27,32 @@ const FieldsContainer = styled.div`
 const Werte = ({ treeName, table }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
+  const { refetch: refetchTree } = store
   const [errors, setErrors] = useState({})
   const { activeNodeArray } = store[treeName]
 
   const tableCamelCased = camelCase(table)
-
-  const { data, loading, error } = useQuery(query, {
+  const id =
+    activeNodeArray.length > 2
+      ? activeNodeArray[2]
+      : '99999999-9999-9999-9999-999999999999'
+  const query = gql`
+    query werteByIdQuery($id: UUID!) {
+      ${tableCamelCased}ById(id: $id) {
+        id
+        code
+        text
+        sort
+      }
+    }
+  `
+  const { data, loading, error, refetch } = useQuery(query, {
     variables: {
-      id:
-        activeNodeArray.length > 5
-          ? activeNodeArray[5]
-          : '99999999-9999-9999-9999-999999999999',
+      id,
     },
   })
 
-  const row = get(data, 'berById', {})
+  const row = get(data, `${tableCamelCased}ById`, {})
 
   useEffect(() => setErrors({}), [row])
 
@@ -54,19 +62,18 @@ const Werte = ({ treeName, table }) => {
       const typename = upperFirst(tableCamelCased)
       const value = ifIsNumericAsNumber(event.target.value)
       try {
-        const fields = `${upperFirst(tableCamelCased)}Fields`
         const mutation = gql`
-          mutation updateBer(
+          mutation updateWert(
             $id: UUID!
             $code: Int
             $text: String
             $sort: Int
             $changedBy: String
           ) {
-            updateBerById(
+            update${typename}ById(
               input: {
                 id: $id
-                berPatch: {
+                ${tableCamelCased}Patch: {
                   id: $id
                   code: $code
                   text: $text
@@ -75,12 +82,15 @@ const Werte = ({ treeName, table }) => {
                 }
               }
             ) {
-              ber {
-                ...${fields}
+              ${tableCamelCased} {
+                id
+                code
+                text
+                sort
+                changedBy
               }
             }
           }
-          ${tableCamelCased}
         `
         await client.mutate({
           mutation,
@@ -89,23 +99,12 @@ const Werte = ({ treeName, table }) => {
             [field]: value,
             changedBy: store.user.name,
           },
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateBerById: {
-              ber: {
-                id: row.id,
-                sort: field === 'sort' ? value : row.sort,
-                text: field === 'text' ? value : row.text,
-                code: field === 'code' ? value : row.code,
-                __typename: `'${typename}'`,
-              },
-              __typename: `'${typename}'`,
-            },
-          },
         })
       } catch (error) {
         return setErrors({ [field]: error.message })
       }
+      refetch()
+      refetchTree[tableCamelCased]()
       setErrors({})
     },
     [row],
