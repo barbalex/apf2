@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import CreatableSelect from 'react-select/lib/Creatable'
+import CreatableSelect from 'react-select/Creatable'
 import styled from 'styled-components'
 import IconButton from '@material-ui/core/IconButton'
 import AddLocation from '@material-ui/icons/AddLocationOutlined'
