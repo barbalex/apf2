@@ -6,10 +6,12 @@ CREATE TABLE apflora.tpop_apberrelevant_grund_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   code integer UNIQUE DEFAULT NULL,
   text text,
+  sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
   changed_by varchar(20) NOT NULL
 );
 CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree (id);
+CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree (sort);
 CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree (code);
 CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree (text);
 COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.id IS 'Primärschlüssel';
@@ -19,12 +21,12 @@ alter table apflora.tpop add column apber_relevant_grund integer DEFAULT NULL RE
 COMMENT ON COLUMN apflora.tpop.apber_relevant_grund IS 'Grund für AP-Bericht Relevanz. Auswahl aus der Tabelle "tpop_apberrelevant_grund_werte"';
 
 -- 2. migrate data
-insert into apflora.tpop_apberrelevant_grund_werte(code, text, changed, changed_by)
+insert into apflora.tpop_apberrelevant_grund_werte(code, text, sort, changed, changed_by)
 values
-  (2, 'historisch', '2010-03-27', 'KarinMarti'),
-  (3, 'ausserkantonal', '2010-03-27', 'KarinMarti'),
-  (5, 'kein Vorkommen', '2011-06-17', 'alex'),
-  (6, 'anderer Grund', '2019-05-28', 'alex');
+  (2, 'historisch', 1, '2010-03-27', 'KarinMarti'),
+  (3, 'ausserkantonal', 2, '2010-03-27', 'KarinMarti'),
+  (5, 'kein Vorkommen', 3, '2011-06-17', 'alex'),
+  (6, 'anderer Grund', 4, '2019-05-28', 'alex');
 update apflora.tpop set apber_relevant = true where apber_relevant_old = 1;
 update apflora.tpop set apber_relevant = false where apber_relevant_old > 1;
 update apflora.tpop set apber_relevant_grund = apber_relevant_old where apber_relevant_old > 1;
@@ -37,3 +39,5 @@ alter table apflora.tpop drop column apber_relevant_old cascade;
 drop table apflora.tpop_apberrelevant_werte;
 
 -- 6. recreate all views
+
+-- 7. inform

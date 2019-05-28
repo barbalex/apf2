@@ -551,7 +551,6 @@ CREATE TABLE apflora.tpop (
   status integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   status_unklar boolean default false,
   status_unklar_grund text DEFAULT NULL,
-  apber_relevant_old integer DEFAULT NULL REFERENCES apflora.tpop_apberrelevant_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   apber_relevant boolean default null,
   apber_relevant_grund integer DEFAULT NULL REFERENCES apflora.tpop_apberrelevant_grund_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   bekannt_seit smallint DEFAULT NULL,
@@ -637,6 +636,7 @@ CREATE TABLE apflora.tpop_apberrelevant_grund_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   code integer UNIQUE DEFAULT NULL,
   text text,
+  sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
   changed_by varchar(20) NOT NULL
 );
