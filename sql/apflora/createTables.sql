@@ -551,7 +551,9 @@ CREATE TABLE apflora.tpop (
   status integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   status_unklar boolean default false,
   status_unklar_grund text DEFAULT NULL,
-  apber_relevant integer DEFAULT NULL REFERENCES apflora.tpop_apberrelevant_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  apber_relevant_old integer DEFAULT NULL REFERENCES apflora.tpop_apberrelevant_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  apber_relevant boolean default null,
+  apber_relevant_grund integer DEFAULT NULL REFERENCES apflora.tpop_apberrelevant_grund_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   bekannt_seit smallint DEFAULT NULL,
   eigentuemer text DEFAULT NULL,
   kontakt text DEFAULT NULL,
@@ -628,6 +630,21 @@ CREATE INDEX ON apflora.tpop_apberrelevant_werte USING btree (text);
 COMMENT ON COLUMN apflora.tpop_apberrelevant_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpop_apberrelevant_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpop_apberrelevant_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+
+DROP TABLE IF EXISTS apflora.tpop_apberrelevant_grund_werte;
+CREATE TABLE apflora.tpop_apberrelevant_grund_werte (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  code integer UNIQUE DEFAULT NULL,
+  text text,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) NOT NULL
+);
+CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree (id);
+CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree (code);
+CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree (text);
+COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.tpop_entwicklung_werte;
 CREATE TABLE apflora.tpop_entwicklung_werte (
