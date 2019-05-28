@@ -29,8 +29,9 @@ update apflora.tpop set apber_relevant = true where apber_relevant_old = 1;
 update apflora.tpop set apber_relevant = false where apber_relevant_old > 1;
 update apflora.tpop set apber_relevant_grund = apber_relevant_old where apber_relevant_old > 1;
 
--- 3. drop, then recreate all views and functions
+-- 3. drop, then recreate all views
+-- 4. drop, then recreate all functions
 
--- 4. clean up
+-- 5. clean up
 alter table apflora.tpop drop column apber_relevant_old;
 drop table apflora.tpop_apberrelevant_werte;
