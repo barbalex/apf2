@@ -2095,52 +2095,6 @@ ORDER BY
   apflora.ziel.typ,
   apflora.zielber.jahr;
 
-DROP VIEW IF EXISTS apflora.v_bertpopfuerangezeigteap0 CASCADE;
-CREATE OR REPLACE VIEW apflora.v_bertpopfuerangezeigteap0 AS
-SELECT
-  apflora.ap.id as ap_id,
-  apflora.pop.id as pop_id,
-  apflora.tpop.id AS tpop_id,
-  apflora.ae_eigenschaften.artname,
-  apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
-  apflora.ap.start_jahr as ap_start_jahr,
-  apflora.ap_umsetzung_werte.text AS ap_umsetzung,
-  apflora.pop.nr as pop_nr,
-  apflora.pop.name as pop_name,
-  pop_status_werte.text AS pop_status ,
-  apflora.pop.bekannt_seit,
-  apflora.tpop.nr AS tpop_nr,
-  apflora.tpop.gemeinde as tpop_gemeinde,
-  apflora.tpop.flurname as tpop_flurname,
-  apflora.tpop.x as tpop_x,
-  apflora.tpop.y as tpop_y,
-  apflora.tpop.bekannt_seit as tpop_bekannt_seit,
-  pop_status_werte_2.text AS tpop_status,
-  apflora.tpop.apber_relevant
-FROM
-  ((((apflora.ae_eigenschaften
-  INNER JOIN
-    ((apflora.ap
-    INNER JOIN
-      apflora.pop
-      ON apflora.ap.id = apflora.pop.ap_id)
-    INNER JOIN
-      apflora.tpop
-      ON apflora.pop.id = apflora.tpop.pop_id)
-    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
-  LEFT JOIN
-    apflora.ap_bearbstand_werte
-    ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
-  LEFT JOIN
-    apflora.ap_umsetzung_werte
-    ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
-  LEFT JOIN
-    apflora.pop_status_werte
-    ON apflora.pop.status  = pop_status_werte.code)
-  LEFT JOIN
-    apflora.pop_status_werte
-    AS pop_status_werte_2 ON apflora.tpop.status = pop_status_werte_2.code;
-
 DROP VIEW IF EXISTS apflora.v_tpopkontr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopkontr AS
 SELECT
@@ -5422,3 +5376,4 @@ order by
   apflora.beob_quelle_werte.name asc;
 
 DROP VIEW IF EXISTS apflora.v_tpopmassnber_fueraktap0 CASCADE;
+DROP VIEW IF EXISTS apflora.v_bertpopfuerangezeigteap0 CASCADE;
