@@ -13,6 +13,7 @@ import Row from './Row'
 import storeContext from '../../../../storeContext'
 import buildVariables from './buildVariables'
 import queryAdresses from './queryAdresses'
+import queryApberrelevantGrundWertes from './queryApberrelevantGrundWertes'
 import queryCurrentIssues from './queryCurrentIssues'
 import queryUsers from './queryUsers'
 import queryProjekts from './queryProjekts'
@@ -570,6 +571,23 @@ const Tree = ({ treeName }) => {
     key: 'adresses',
     value: refetchAdresses,
   })
+
+  const queryApberrelevantGrundWertesFilter = nodeLabelFilter.adresse
+    ? { label: { includesInsensitive: nodeLabelFilter.adresse } }
+    : { id: { isNull: false } }
+  const {
+    data: dataApberrelevantGrundWertes,
+    error: errorApberrelevantGrundWertes,
+    loading: loadingApberrelevantGrundWertes,
+    refetch: refetchApberrelevantGrundWertes,
+  } = useQuery(queryApberrelevantGrundWertes, {
+    variables: { isWerteListen, filter: queryApberrelevantGrundWertesFilter },
+  })
+  setRefetchKey({
+    key: 'adresses',
+    value: refetchApberrelevantGrundWertes,
+  })
+
   const {
     data: dataCurrentIssues,
     error: errorCurrentIssues,
@@ -579,6 +597,7 @@ const Tree = ({ treeName }) => {
   const queryLoadingArray = [
     loadingCurrentIssues,
     loadingAdresses,
+    loadingApberrelevantGrundWertes,
     loadingUsers,
     loadingProjekts,
     loadingApberuebersichts,
@@ -609,6 +628,7 @@ const Tree = ({ treeName }) => {
   const queryErrorArray = [
     errorCurrentIssues,
     errorAdresses,
+    errorApberrelevantGrundWertes,
     errorUsers,
     errorProjekts,
     errorApberuebersichts,
@@ -639,6 +659,7 @@ const Tree = ({ treeName }) => {
   const data = {
     ...dataCurrentIssues,
     ...dataAdresses,
+    ...dataApberrelevantGrundWertes,
     ...dataUsers,
     ...dataProjekts,
     ...dataApberuebersichts,
@@ -677,6 +698,7 @@ const Tree = ({ treeName }) => {
     data,
     dataCurrentIssues,
     dataAdresses,
+    dataApberrelevantGrundWertes,
     dataUsers,
     dataProjekts,
     dataApberuebersichts,
@@ -700,6 +722,7 @@ const Tree = ({ treeName }) => {
     dataBeobNichtBeurteilts,
     dataBeobNichtZuzuordnens,
     loadingAdresses,
+    loadingApberrelevantGrundWertes,
     loadingCurrentIssues,
     loadingUsers,
     loadingProjekts,

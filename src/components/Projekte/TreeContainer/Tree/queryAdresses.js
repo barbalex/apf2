@@ -5,7 +5,8 @@ export default gql`
     unfiltered: allAdresses {
       totalCount
     }
-    allAdresses(filter: $filter,orderBy: LABEL_ASC) @include(if: $isWerteListen) {
+    allAdresses(filter: $filter, orderBy: LABEL_ASC)
+      @include(if: $isWerteListen) {
       totalCount
       nodes {
         id

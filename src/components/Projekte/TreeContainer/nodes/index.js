@@ -7,6 +7,7 @@ import buildCurrentIssuesFolderNodes from './currentIssuesFolder'
 import buildWlFolderNodes from './wlFolder'
 import buildAdresseFolderNodes from './adresseFolder'
 import buildAdresseNodes from './adresse'
+import buildApberrelevantGrundWerteFolderNodes from './apberrelevantGrundWerteFolder'
 import buildUserNodes from './user'
 import buildCurrentIssuesNodes from './currentIssues'
 import buildApFolderNodes from './apFolder'
@@ -74,6 +75,7 @@ export default ({
   data,
   dataCurrentIssues,
   dataAdresses,
+  dataApberrelevantGrundWertes,
   dataApbers,
   dataApberuebersichts,
   dataAps,
@@ -98,6 +100,7 @@ export default ({
   dataZiels,
   loadingCurrentIssues,
   loadingAdresses,
+  loadingApberrelevantGrundWertes,
   loadingUsers,
   loadingProjekts,
   loadingApberuebersichts,
@@ -1174,6 +1177,16 @@ export default ({
             data: dataAdresses,
             treeName,
             loading: loadingAdresses,
+            projektNodes,
+            store,
+          }),
+        )(),
+        ...memoizeOne(() =>
+          buildApberrelevantGrundWerteFolderNodes({
+            nodes,
+            data: dataApberrelevantGrundWertes,
+            treeName,
+            loading: loadingApberrelevantGrundWertes,
             projektNodes,
             store,
           }),
