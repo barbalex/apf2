@@ -5,67 +5,67 @@
  *
  */
 
-import React, { useContext, useRef, useCallback, useMemo } from "react"
-import { Map, ScaleControl } from "react-leaflet"
-import styled from "styled-components"
-import "leaflet"
-import "proj4"
-import "proj4leaflet"
-import sortBy from "lodash/sortBy"
-import debounce from "lodash/debounce"
-import { observer } from "mobx-react-lite"
-import { getSnapshot } from "mobx-state-tree"
-import { useApolloClient } from "react-apollo-hooks"
+import React, { useContext, useRef, useCallback, useMemo } from 'react'
+import { Map, ScaleControl } from 'react-leaflet'
+import styled from 'styled-components'
+import 'leaflet'
+import 'proj4'
+import 'proj4leaflet'
+import sortBy from 'lodash/sortBy'
+import debounce from 'lodash/debounce'
+import { observer } from 'mobx-react-lite'
+import { getSnapshot } from 'mobx-state-tree'
+import { useApolloClient } from 'react-apollo-hooks'
 
-import LayersControl from "./LayersControl"
-import OsmColor from "./layers/OsmColor"
-import OsmBw from "./layers/OsmBw"
-import SwissTopoPixelFarbe from "./layers/SwisstopoPixelFarbe"
-import SwissTopoPixelGrau from "./layers/SwisstopoPixelGrau"
-import SwisstopoSiegfried from "./layers/SwisstopoSiegfried"
-import SwisstopoDufour from "./layers/SwisstopoDufour"
+import LayersControl from './LayersControl'
+import OsmColor from './layers/OsmColor'
+import OsmBw from './layers/OsmBw'
+import SwissTopoPixelFarbe from './layers/SwisstopoPixelFarbe'
+import SwissTopoPixelGrau from './layers/SwisstopoPixelGrau'
+import SwisstopoSiegfried from './layers/SwisstopoSiegfried'
+import SwisstopoDufour from './layers/SwisstopoDufour'
 //import BingAerial from './layers/BingAerial'
-import ZhOrtho2014Rgb from "./layers/ZhOrtho2014Rgb"
-import ZhOrtho2014Ir from "./layers/ZhOrtho2014Ir"
-import ZhOrtho2015Rgb from "./layers/ZhOrtho2015Rgb"
-import ZhOrtho2018Rgb from "./layers/ZhOrtho2018Rgb"
-import ZhOrtho2018Ir from "./layers/ZhOrtho2018Ir"
-import ZhOrtho2015Ir from "./layers/ZhOrtho2015Ir"
-import ZhUep from "./layers/ZhUep"
-import Detailplaene from "./layers/Detailplaene"
-import Markierungen from "./layers/Markierungen"
-import ZhSvoColor from "./layers/ZhSvoColor"
-import ZhPflegeplan from "./layers/ZhPflegeplan"
-import ZhSvoGrey from "./layers/ZhSvoGrey"
-import ZhLrVegKartierungen from "./layers/ZhLrVegKartierungen"
-import ZhLichteWaelder from "./layers/ZhLichteWaelder"
-import ZhGemeindegrenzen from "./layers/ZhGemeindegrenzen"
-import ZhWaelderVegetation from "./layers/ZhWaelderVegetation"
-import ZhUepOverlay from "./layers/ZhUepOverlay"
-import "../../../../node_modules/leaflet/dist/leaflet.css"
-import "../../../../node_modules/leaflet-measure/dist/leaflet-measure.css"
-import "../../../../node_modules/leaflet-draw/dist/leaflet.draw.css"
-import "../../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css"
-import Pop from "./layers/Pop"
-import Tpop from "./layers/Tpop"
-import BeobNichtBeurteilt from "./layers/BeobNichtBeurteilt"
-import BeobNichtZuzuordnen from "./layers/BeobNichtZuzuordnen"
-import BeobZugeordnet from "./layers/BeobZugeordnet"
-import BeobZugeordnetAssignPolylines from "./layers/BeobZugeordnetAssignPolylines"
-import MeasureControl from "./MeasureControl"
-import FullScreenControl from "./FullScreenControl"
-import SwitchScaleControl from "./ScaleControl"
-import DrawControl from "./DrawControl"
+import ZhOrtho2014Rgb from './layers/ZhOrtho2014Rgb'
+import ZhOrtho2014Ir from './layers/ZhOrtho2014Ir'
+import ZhOrtho2015Rgb from './layers/ZhOrtho2015Rgb'
+import ZhOrtho2018Rgb from './layers/ZhOrtho2018Rgb'
+import ZhOrtho2018Ir from './layers/ZhOrtho2018Ir'
+import ZhOrtho2015Ir from './layers/ZhOrtho2015Ir'
+import ZhUep from './layers/ZhUep'
+import Detailplaene from './layers/Detailplaene'
+import Markierungen from './layers/Markierungen'
+import ZhSvoColor from './layers/ZhSvoColor'
+import ZhPflegeplan from './layers/ZhPflegeplan'
+import ZhSvoGrey from './layers/ZhSvoGrey'
+import ZhLrVegKartierungen from './layers/ZhLrVegKartierungen'
+import ZhLichteWaelder from './layers/ZhLichteWaelder'
+import ZhGemeindegrenzen from './layers/ZhGemeindegrenzen'
+import ZhWaelderVegetation from './layers/ZhWaelderVegetation'
+import ZhUepOverlay from './layers/ZhUepOverlay'
+import '../../../../node_modules/leaflet/dist/leaflet.css'
+import '../../../../node_modules/leaflet-measure/dist/leaflet-measure.css'
+import '../../../../node_modules/leaflet-draw/dist/leaflet.draw.css'
+import '../../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
+import Pop from './layers/Pop'
+import Tpop from './layers/Tpop'
+import BeobNichtBeurteilt from './layers/BeobNichtBeurteilt'
+import BeobNichtZuzuordnen from './layers/BeobNichtZuzuordnen'
+import BeobZugeordnet from './layers/BeobZugeordnet'
+import BeobZugeordnetAssignPolylines from './layers/BeobZugeordnetAssignPolylines'
+import MeasureControl from './MeasureControl'
+import FullScreenControl from './FullScreenControl'
+import SwitchScaleControl from './ScaleControl'
+import DrawControl from './DrawControl'
 // import PrintControl from './PrintControl'
-import PngControl from "./PngControl"
-import CoordinatesControl from "./CoordinatesControl"
-import epsg4326to2056 from "../../../modules/epsg4326to2056"
-import ErrorBoundary from "../../shared/ErrorBoundary"
-import updateTpopById from "./updateTpopById"
-import iconFullscreen from "./iconFullscreen.png"
-import iconFullscreen2x from "./iconFullscreen2x.png"
+import PngControl from './PngControl'
+import CoordinatesControl from './CoordinatesControl'
+import epsg4326to2056 from '../../../modules/epsg4326to2056'
+import ErrorBoundary from '../../shared/ErrorBoundary'
+import updateTpopById from './updateTpopById'
+import iconFullscreen from './iconFullscreen.png'
+import iconFullscreen2x from './iconFullscreen2x.png'
 
-import storeContext from "../../../storeContext"
+import storeContext from '../../../storeContext'
 //import getBounds from '../../../modules/getBounds'
 
 // this does not work
@@ -89,7 +89,7 @@ const Container = styled.div`
 `
 const StyledMap = styled(Map)`
   height: calc(100%);
-  cursor: ${props => (props.localizing ? "crosshair" : "grab")} !important;
+  cursor: ${props => (props.localizing ? 'crosshair' : 'grab')} !important;
   @media print {
     height: 100%;
     width: 100%;
@@ -444,7 +444,7 @@ const Karte = ({ treeName }) => {
 
   const clustered = !(
     assigningBeob ||
-    activeApfloraLayers.includes("beobZugeordnetAssignPolylines")
+    activeApfloraLayers.includes('beobZugeordnetAssignPolylines')
   )
   const OverlayComponents = useMemo(() => ({
     ZhUep: () => <ZhUepOverlay />,
@@ -476,13 +476,13 @@ const Karte = ({ treeName }) => {
   }))
   const BaseLayerComponent = BaseLayerComponents[activeBaseLayer]
   const activeOverlaysSorted = sortBy(activeOverlays, activeOverlay =>
-    overlays.findIndex(o => o.value === activeOverlay)
+    overlays.findIndex(o => o.value === activeOverlay),
   )
 
-  if (typeof window === "undefined") return null
+  if (typeof window === 'undefined') return null
 
   return (
-    <Container data-id={`karten-container${treeName === "tree" ? 1 : 2}`}>
+    <Container data-id={`karten-container${treeName === 'tree' ? 1 : 2}`}>
       <ErrorBoundary>
         <StyledMap
           localizing={!!idOfTpopBeingLocalized}
@@ -517,8 +517,12 @@ const Karte = ({ treeName }) => {
               // the crazy thing is:
               // in some areas (not all) the second event
               // has wrong coordinates!!!!
-              typeof window !== "undefined" &&
+              typeof window !== 'undefined' &&
                 window.L.DomEvent.stopPropagation(event)
+              /**
+               * how to update a geometry value?
+               * v1: "SRID=4326;POINT(25800 256000)" https://github.com/graphile/postgraphile/issues/575#issuecomment-372030995
+               */
               try {
                 await client.mutate({
                   mutation: updateTpopById,
@@ -528,15 +532,15 @@ const Karte = ({ treeName }) => {
                     y,
                   },
                   optimisticResponse: {
-                    __typename: "Mutation",
+                    __typename: 'Mutation',
                     updateTpopById: {
                       tpop: {
                         id: idOfTpopBeingLocalized,
                         x,
                         y,
-                        __typename: "Tpop",
+                        __typename: 'Tpop',
                       },
-                      __typename: "Tpop",
+                      __typename: 'Tpop',
                     },
                   },
                 })
@@ -572,7 +576,7 @@ const Karte = ({ treeName }) => {
           <MeasureControl />
           <SwitchScaleControl />
           <FullScreenControl />
-          {activeApfloraLayers.includes("mapFilter") && <DrawControl />}
+          {activeApfloraLayers.includes('mapFilter') && <DrawControl />}
           {/*
             need to get background maps to show when printing A4
             <PrintControl />
