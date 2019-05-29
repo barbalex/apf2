@@ -1,6 +1,6 @@
 import omit from 'lodash/omit'
 
-import idsInsideFeatureCollection from './idsInsideFeatureCollectionLv95'
+import idsInsideFeatureCollection from './idsInsideFeatureCollection'
 import exportXlsx from './exportXlsx'
 import exportCsv from './exportCsv'
 import exportKml from './exportKml'

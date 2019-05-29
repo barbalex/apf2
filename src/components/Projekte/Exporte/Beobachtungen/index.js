@@ -78,9 +78,6 @@ const Beobachtungen = () => {
         exportFileType,
         exportApplyMapFilter,
         mapFilter,
-        idKey: 'id',
-        xKey: 'x',
-        yKey: 'y',
         addError,
       })
     } catch (error) {
@@ -121,9 +118,6 @@ const Beobachtungen = () => {
                   exportFileType,
                   exportApplyMapFilter,
                   mapFilter,
-                  idKey: 'id',
-                  xKey: 'x',
-                  yKey: 'y',
                   addError,
                 })
               } catch (error) {
@@ -147,9 +141,6 @@ const Beobachtungen = () => {
                   exportFileType,
                   exportApplyMapFilter,
                   mapFilter,
-                  idKey: 'id',
-                  xKey: 'x',
-                  yKey: 'y',
                   addError,
                 })
               } catch (error) {

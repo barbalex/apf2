@@ -1,23 +1,23 @@
-import React, { useContext, useState, useCallback } from "react"
-import Card from "@material-ui/core/Card"
-import CardActions from "@material-ui/core/CardActions"
-import CardContent from "@material-ui/core/CardContent"
-import Collapse from "@material-ui/core/Collapse"
-import IconButton from "@material-ui/core/IconButton"
-import Icon from "@material-ui/core/Icon"
-import Button from "@material-ui/core/Button"
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
-import styled from "styled-components"
-import get from "lodash/get"
-import { observer } from "mobx-react-lite"
-import { useApolloClient } from "react-apollo-hooks"
+import React, { useContext, useState, useCallback } from 'react'
+import Card from '@material-ui/core/Card'
+import CardActions from '@material-ui/core/CardActions'
+import CardContent from '@material-ui/core/CardContent'
+import Collapse from '@material-ui/core/Collapse'
+import IconButton from '@material-ui/core/IconButton'
+import Icon from '@material-ui/core/Icon'
+import Button from '@material-ui/core/Button'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import styled from 'styled-components'
+import get from 'lodash/get'
+import { observer } from 'mobx-react-lite'
+import { useApolloClient } from 'react-apollo-hooks'
 
-import SelectLoadingOptions from "../../../shared/SelectLoadingOptions"
-import exportModule from "../../../../modules/export"
-import Message from "../Message"
-import queryAeEigenschaftens from "./queryAeEigenschaftens"
-import epsg2056to4326 from "../../../../modules/epsg2056to4326"
-import storeContext from "../../../../storeContext"
+import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
+import exportModule from '../../../../modules/export'
+import Message from '../Message'
+import queryAeEigenschaftens from './queryAeEigenschaftens'
+import epsg2056to4326 from '../../../../modules/epsg2056to4326'
+import storeContext from '../../../../storeContext'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -29,7 +29,7 @@ const StyledCardActions = styled(CardActions)`
   height: auto !important;
 `
 const CardActionIconButton = styled(IconButton)`
-  transform: ${props => (props["data-expanded"] ? "rotate(180deg)" : "none")};
+  transform: ${props => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
 `
 const CardActionTitle = styled.div`
   padding-left: 8px;
@@ -71,7 +71,7 @@ const EwmDiv = styled.div`
 `
 
 const isRemoteHost =
-  typeof window !== "undefined" && window.location.hostname !== "localhost"
+  typeof window !== 'undefined' && window.location.hostname !== 'localhost'
 
 const Teilpopulationen = ({ treeName }) => {
   const client = useApolloClient()
@@ -81,16 +81,16 @@ const Teilpopulationen = ({ treeName }) => {
 
   const [expanded, setExpanded] = useState(false)
   const [message, setMessage] = useState(null)
-  const [ewmMessage, setEwmMessage] = useState("")
+  const [ewmMessage, setEwmMessage] = useState('')
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
   const onClickButton = useCallback(async () => {
     setMessage('Export "Teilpopulationen" wird vorbereitet...')
     try {
       const { data } = await client.query({
-        query: await import("./allVTpops").then(m => m.default),
+        query: await import('./allVTpops').then(m => m.default),
       })
-      const enrichedData = get(data, "allVTpops.nodes", []).map(oWithout => {
+      const enrichedData = get(data, 'allVTpops.nodes', []).map(oWithout => {
         let o = { ...oWithout }
         let nachBeginnAp = null
         if (
@@ -109,13 +109,10 @@ const Teilpopulationen = ({ treeName }) => {
       })
       exportModule({
         data: enrichedData,
-        fileName: "Teilpopulationen",
+        fileName: 'Teilpopulationen',
         exportFileType,
         mapFilter,
         exportApplyMapFilter,
-        idKey: "id",
-        xKey: "x",
-        yKey: "y",
         addError,
       })
     } catch (error) {
@@ -130,7 +127,7 @@ const Teilpopulationen = ({ treeName }) => {
           artname: { includesInsensitive: inputValue },
           apByArtIdExists: true,
         }
-      : { artname: { isNull: false }, apByArtIdExists: true }
+      : { artname: { isNull: false }, apByArtIdExists: true },
   )
 
   return (
@@ -142,7 +139,7 @@ const Teilpopulationen = ({ treeName }) => {
           aria-expanded={expanded}
           aria-label="öffnen"
         >
-          <Icon title={expanded ? "schliessen" : "öffnen"}>
+          <Icon title={expanded ? 'schliessen' : 'öffnen'}>
             <ExpandMoreIcon />
           </Icon>
         </CardActionIconButton>
@@ -155,23 +152,23 @@ const Teilpopulationen = ({ treeName }) => {
           <DownloadCardButton
             onClick={async () => {
               setMessage(
-                'Export "TeilpopulationenWebGisBun" wird vorbereitet...'
+                'Export "TeilpopulationenWebGisBun" wird vorbereitet...',
               )
               try {
                 const { data } = await client.query({
-                  query: await import("./allVTpopWebgisbuns").then(
-                    m => m.default
+                  query: await import('./allVTpopWebgisbuns').then(
+                    m => m.default,
                   ),
                 })
                 exportModule({
-                  data: get(data, "allVTpopWebgisbuns.nodes", []),
-                  fileName: "TeilpopulationenWebGisBun",
+                  data: get(data, 'allVTpopWebgisbuns.nodes', []),
+                  fileName: 'TeilpopulationenWebGisBun',
                   exportFileType,
                   exportApplyMapFilter,
                   mapFilter,
-                  idKey: "TPOPID",
-                  xKey: "TPOP_X",
-                  yKey: "TPOP_Y",
+                  idKey: 'TPOPID',
+                  xKey: 'TPOP_WGS84LAT',
+                  yKey: 'TPOP_WGS84LONG',
                   addError,
                 })
               } catch (error) {
@@ -187,26 +184,23 @@ const Teilpopulationen = ({ treeName }) => {
               setMessage('Export "Teilpopulationen" wird vorbereitet...')
               try {
                 const { data } = await client.query({
-                  query: await import("./allVTpopKmls").then(m => m.default),
+                  query: await import('./allVTpopKmls').then(m => m.default),
                 })
-                const enrichedData = get(data, "allVTpopKmls.nodes", []).map(
+                const enrichedData = get(data, 'allVTpopKmls.nodes', []).map(
                   oWithout => {
                     let o = { ...oWithout }
                     const [bg, lg] = epsg2056to4326(o.x, o.y)
                     o.laengengrad = lg
                     o.breitengrad = bg
                     return o
-                  }
+                  },
                 )
                 exportModule({
                   data: enrichedData,
-                  fileName: "Teilpopulationen",
+                  fileName: 'Teilpopulationen',
                   exportFileType,
                   exportApplyMapFilter,
                   mapFilter,
-                  idKey: "id",
-                  xKey: "x",
-                  yKey: "y",
                   addError,
                   kml: true,
                 })
@@ -222,18 +216,18 @@ const Teilpopulationen = ({ treeName }) => {
           <DownloadCardButton
             onClick={async () => {
               setMessage(
-                'Export "TeilpopulationenNachNamen" wird vorbereitet...'
+                'Export "TeilpopulationenNachNamen" wird vorbereitet...',
               )
               try {
                 const { data } = await client.query({
-                  query: await import("./allVTpopKmlnamen").then(
-                    m => m.default
+                  query: await import('./allVTpopKmlnamen').then(
+                    m => m.default,
                   ),
                 })
                 const enrichedData = get(
                   data,
-                  "allVTpopKmlnamen.nodes",
-                  []
+                  'allVTpopKmlnamen.nodes',
+                  [],
                 ).map(oWithout => {
                   let o = { ...oWithout }
                   const [bg, lg] = epsg2056to4326(o.x, o.y)
@@ -243,13 +237,10 @@ const Teilpopulationen = ({ treeName }) => {
                 })
                 exportModule({
                   data: enrichedData,
-                  fileName: "TeilpopulationenNachNamen",
+                  fileName: 'TeilpopulationenNachNamen',
                   exportFileType,
                   exportApplyMapFilter,
                   mapFilter,
-                  idKey: "id",
-                  xKey: "x",
-                  yKey: "y",
                   addError,
                   kml: true,
                 })
@@ -265,23 +256,20 @@ const Teilpopulationen = ({ treeName }) => {
           <DownloadCardButton
             onClick={async () => {
               setMessage(
-                'Export "TeilpopulationenVonApArtenOhneBekanntSeit" wird vorbereitet...'
+                'Export "TeilpopulationenVonApArtenOhneBekanntSeit" wird vorbereitet...',
               )
               try {
                 const { data } = await client.query({
-                  query: await import("./allVTpopOhnebekanntseits").then(
-                    m => m.default
+                  query: await import('./allVTpopOhnebekanntseits').then(
+                    m => m.default,
                   ),
                 })
                 exportModule({
-                  data: get(data, "allVTpopOhnebekanntseits.nodes", []),
-                  fileName: "TeilpopulationenVonApArtenOhneBekanntSeit",
+                  data: get(data, 'allVTpopOhnebekanntseits.nodes', []),
+                  fileName: 'TeilpopulationenVonApArtenOhneBekanntSeit',
                   exportFileType,
                   exportApplyMapFilter,
                   mapFilter,
-                  idKey: "id",
-                  xKey: "x",
-                  yKey: "y",
                   addError,
                 })
               } catch (error) {
@@ -296,23 +284,20 @@ const Teilpopulationen = ({ treeName }) => {
           <DownloadCardButton
             onClick={async () => {
               setMessage(
-                'Export "TeilpopulationenOhneApBerichtRelevant" wird vorbereitet...'
+                'Export "TeilpopulationenOhneApBerichtRelevant" wird vorbereitet...',
               )
               try {
                 const { data } = await client.query({
-                  query: await import("./allVTpopOhneapberichtrelevants").then(
-                    m => m.default
+                  query: await import('./allVTpopOhneapberichtrelevants').then(
+                    m => m.default,
                   ),
                 })
                 exportModule({
-                  data: get(data, "allVTpopOhneapberichtrelevants.nodes", []),
-                  fileName: "TeilpopulationenOhneApBerichtRelevant",
+                  data: get(data, 'allVTpopOhneapberichtrelevants.nodes', []),
+                  fileName: 'TeilpopulationenOhneApBerichtRelevant',
                   exportFileType,
                   exportApplyMapFilter,
                   mapFilter,
-                  idKey: "id",
-                  xKey: "x",
-                  yKey: "y",
                   addError,
                 })
               } catch (error) {
@@ -327,23 +312,20 @@ const Teilpopulationen = ({ treeName }) => {
           <DownloadCardButton
             onClick={async () => {
               setMessage(
-                'Export "TeilpopulationenAnzahlMassnahmen" wird vorbereitet...'
+                'Export "TeilpopulationenAnzahlMassnahmen" wird vorbereitet...',
               )
               try {
                 const { data } = await client.query({
-                  query: await import("./allVTpopAnzmassns").then(
-                    m => m.default
+                  query: await import('./allVTpopAnzmassns').then(
+                    m => m.default,
                   ),
                 })
                 exportModule({
-                  data: get(data, "allVTpopAnzmassns.nodes", []),
-                  fileName: "TeilpopulationenAnzahlMassnahmen",
+                  data: get(data, 'allVTpopAnzmassns.nodes', []),
+                  fileName: 'TeilpopulationenAnzahlMassnahmen',
                   exportFileType,
                   exportApplyMapFilter,
                   mapFilter,
-                  idKey: "id",
-                  xKey: "x",
-                  yKey: "y",
                   addError,
                 })
               } catch (error) {
@@ -357,28 +339,25 @@ const Teilpopulationen = ({ treeName }) => {
           <DownloadCardButton
             onClick={async () => {
               setMessage(
-                'Export "TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht" wird vorbereitet...'
+                'Export "TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht" wird vorbereitet...',
               )
               try {
                 const { data } = await client.query({
-                  query: await import("./allVTpopErsteUndLetzteKontrolleUndLetzterTpopbers").then(
-                    m => m.default
-                  ),
+                  query: await import(
+                    './allVTpopErsteUndLetzteKontrolleUndLetzterTpopbers'
+                  ).then(m => m.default),
                 })
                 exportModule({
                   data: get(
                     data,
-                    "allVTpopErsteUndLetzteKontrolleUndLetzterTpopbers.nodes",
-                    []
+                    'allVTpopErsteUndLetzteKontrolleUndLetzterTpopbers.nodes',
+                    [],
                   ),
                   fileName:
-                    "TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht",
+                    'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht',
                   exportFileType,
                   exportApplyMapFilter,
                   mapFilter,
-                  idKey: "id",
-                  xKey: "x",
-                  yKey: "y",
                   addError,
                 })
               } catch (error) {
@@ -389,16 +368,16 @@ const Teilpopulationen = ({ treeName }) => {
             disabled={isRemoteHost}
             title={
               isRemoteHost
-                ? "nur aktiv, wenn apflora lokal installiert wird"
-                : ""
+                ? 'nur aktiv, wenn apflora lokal installiert wird'
+                : ''
             }
           >
             <div>Teilpopulationen mit:</div>
             <ul
               style={{
-                paddingLeft: "18px",
-                marginTop: "5px",
-                marginBottom: "10px",
+                paddingLeft: '18px',
+                marginTop: '5px',
+                marginBottom: '10px',
               }}
             >
               <Li>Anzahl Kontrollen</Li>
@@ -421,36 +400,36 @@ const Teilpopulationen = ({ treeName }) => {
                 const aeId = e.target.value
                 if (aeId === null) return
                 setEwmMessage(
-                  'Export "anzkontrinklletzterundletztertpopber" wird vorbereitet...'
+                  'Export "anzkontrinklletzterundletztertpopber" wird vorbereitet...',
                 )
                 try {
                   const res = await client.query({
-                    query: await import("./queryApByArtId").then(
-                      m => m.default
+                    query: await import('./queryApByArtId').then(
+                      m => m.default,
                     ),
                     variables: { aeId },
                   })
-                  const apId = get(res.data, "apByArtId.id")
+                  const apId = get(res.data, 'apByArtId.id')
                   const { data } = await client.query({
-                    query: await import("./allVTpopErsteUndLetzteKontrolleUndLetzterTpopbersFiltered").then(
-                      m => m.default
-                    ),
+                    query: await import(
+                      './allVTpopErsteUndLetzteKontrolleUndLetzterTpopbersFiltered'
+                    ).then(m => m.default),
                     variables: { apId },
                   })
                   exportModule({
                     data: get(
                       data,
-                      "allVTpopErsteUndLetzteKontrolleUndLetzterTpopbers.nodes",
-                      []
+                      'allVTpopErsteUndLetzteKontrolleUndLetzterTpopbers.nodes',
+                      [],
                     ),
-                    fileName: "anzkontrinklletzterundletztertpopber",
+                    fileName: 'anzkontrinklletzterundletztertpopber',
                     mapFilter,
                     addError,
                   })
                 } catch (error) {
                   addError(error)
                 }
-                setEwmMessage("")
+                setEwmMessage('')
               }}
               query={queryAeEigenschaftens}
               filter={aeEigenschaftenfilter}
@@ -461,23 +440,23 @@ const Teilpopulationen = ({ treeName }) => {
           <DownloadCardButton
             onClick={async () => {
               setMessage(
-                'Export "TeilpopulationenTPopUndMassnBerichte" wird vorbereitet...'
+                'Export "TeilpopulationenTPopUndMassnBerichte" wird vorbereitet...',
               )
               try {
                 const { data } = await client.query({
-                  query: await import("./allVTpopPopberundmassnbers").then(
-                    m => m.default
+                  query: await import('./allVTpopPopberundmassnbers').then(
+                    m => m.default,
                   ),
                 })
                 exportModule({
-                  data: get(data, "allVTpopPopberundmassnbers.nodes", []),
-                  fileName: "TeilpopulationenTPopUndMassnBerichte",
+                  data: get(data, 'allVTpopPopberundmassnbers.nodes', []),
+                  fileName: 'TeilpopulationenTPopUndMassnBerichte',
                   exportFileType,
                   exportApplyMapFilter,
                   mapFilter,
-                  idKey: "tpop_id",
-                  xKey: "tpop_x",
-                  yKey: "tpop_y",
+                  idKey: 'tpop_id',
+                  xKey: 'tpop_wgs84lat',
+                  yKey: 'tpop_wgs84long',
                   addError,
                 })
               } catch (error) {

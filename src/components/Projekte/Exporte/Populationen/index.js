@@ -68,10 +68,7 @@ const Populationen = () => {
 
   return (
     <StyledCard>
-      <StyledCardActions
-        disableSpacing
-        onClick={() => setExpanded(!expanded)}
-      >
+      <StyledCardActions disableSpacing onClick={() => setExpanded(!expanded)}>
         <CardActionTitle>Populationen</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}
@@ -98,9 +95,6 @@ const Populationen = () => {
                   exportFileType,
                   mapFilter,
                   exportApplyMapFilter,
-                  idKey: 'id',
-                  xKey: 'x',
-                  yKey: 'y',
                   addError,
                 })
               } catch (error) {
@@ -133,9 +127,6 @@ const Populationen = () => {
                   exportFileType,
                   mapFilter,
                   exportApplyMapFilter,
-                  idKey: 'id',
-                  xKey: 'x',
-                  yKey: 'y',
                   addError,
                   kml: true,
                 })
@@ -169,9 +160,6 @@ const Populationen = () => {
                   exportFileType,
                   mapFilter,
                   exportApplyMapFilter,
-                  idKey: 'id',
-                  xKey: 'x',
-                  yKey: 'y',
                   addError,
                   kml: true,
                 })
@@ -202,9 +190,6 @@ const Populationen = () => {
                   exportFileType,
                   mapFilter,
                   exportApplyMapFilter,
-                  idKey: 'id',
-                  xKey: 'x',
-                  yKey: 'y',
                   addError,
                 })
               } catch (error) {
@@ -260,8 +245,8 @@ const Populationen = () => {
                   mapFilter,
                   exportApplyMapFilter,
                   idKey: 'pop_id',
-                  xKey: 'pop_x',
-                  yKey: 'pop_y',
+                  xKey: 'pop_wgs84lat',
+                  yKey: 'pop_wgs84long',
                   addError,
                 })
               } catch (error) {
@@ -290,9 +275,6 @@ const Populationen = () => {
                   exportFileType,
                   mapFilter,
                   exportApplyMapFilter,
-                  idKey: 'id',
-                  xKey: 'x',
-                  yKey: 'y',
                   addError,
                 })
               } catch (error) {
@@ -320,9 +302,6 @@ const Populationen = () => {
                   exportFileType,
                   mapFilter,
                   exportApplyMapFilter,
-                  idKey: 'id',
-                  xKey: 'x',
-                  yKey: 'y',
                   addError,
                 })
               } catch (error) {
@@ -351,8 +330,8 @@ const Populationen = () => {
                   mapFilter,
                   exportApplyMapFilter,
                   idKey: 'pop_id',
-                  xKey: 'pop_x',
-                  yKey: 'pop_y',
+                  xKey: 'pop_wgs84lat',
+                  yKey: 'pop_wgs84long',
                   addError,
                 })
               } catch (error) {
@@ -381,8 +360,8 @@ const Populationen = () => {
                   mapFilter,
                   exportApplyMapFilter,
                   idKey: 'pop_id',
-                  xKey: 'pop_x',
-                  yKey: 'pop_y',
+                  xKey: 'pop_wgs84lat',
+                  yKey: 'pop_wgs84long',
                   addError,
                 })
               } catch (error) {
@@ -411,8 +390,8 @@ const Populationen = () => {
                   mapFilter,
                   exportApplyMapFilter,
                   idKey: 'pop_id',
-                  xKey: 'pop_x',
-                  yKey: 'pop_y',
+                  xKey: 'pop_wgs84lat',
+                  yKey: 'pop_wgs84long',
                   addError,
                 })
               } catch (error) {
