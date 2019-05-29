@@ -1,24 +1,24 @@
-import React, { useContext, useMemo } from "react"
-import get from "lodash/get"
-import flatten from "lodash/flatten"
-import { observer } from "mobx-react-lite"
-import { useQuery } from "react-apollo-hooks"
-import MarkerClusterGroup from "react-leaflet-markercluster"
+import React, { useContext, useMemo } from 'react'
+import get from 'lodash/get'
+import flatten from 'lodash/flatten'
+import { observer } from 'mobx-react-lite'
+import { useQuery } from 'react-apollo-hooks'
+import MarkerClusterGroup from 'react-leaflet-markercluster'
 
-import Marker from "./Marker"
-import storeContext from "../../../../../storeContext"
-import query from "./query"
-import idsInsideFeatureCollection from "../../../../../modules/idsInsideFeatureCollectionLv95"
+import Marker from './Marker'
+import storeContext from '../../../../../storeContext'
+import query from './query'
+import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
 
 const iconCreateFunction = function(cluster) {
   const markers = cluster.getAllChildMarkers()
   const hasHighlightedTpop = markers.some(
-    m => m.options.icon.options.className === "beobIconHighlighted"
+    m => m.options.icon.options.className === 'beobIconHighlighted',
   )
-  if (typeof window === "undefined") return {}
+  if (typeof window === 'undefined') return {}
   const className = hasHighlightedTpop
-    ? "beobZugeordnetClusterHighlighted"
-    : "beobZugeordnetCluster"
+    ? 'beobZugeordnetClusterHighlighted'
+    : 'beobZugeordnetCluster'
   return window.L.divIcon({
     html: markers.length,
     className,
@@ -34,15 +34,14 @@ const BeobZugeordnetMarker = ({ treeName, clustered }) => {
   const { setBeobZugeordnetIdsFiltered } = map
 
   const activeNodes = store[`${treeName}ActiveNodes`]
-  const projId = activeNodes.projekt || "99999999-9999-9999-9999-999999999999"
-  const apId = activeNodes.ap || "99999999-9999-9999-9999-999999999999"
-  const isActiveInMap = activeApfloraLayers.includes("beobZugeordnet")
+  const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
+  const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
+  const isActiveInMap = activeApfloraLayers.includes('beobZugeordnet')
 
   const beobFilter = {
     tpopId: { isNull: false },
     nichtZuordnen: { equalTo: false },
-    x: { isNull: false },
-    y: { isNull: false },
+    wgs84Lat: { isNull: false },
   }
   if (!!tree.nodeLabelFilter.beob) {
     beobFilter.label = {
@@ -52,53 +51,51 @@ const BeobZugeordnetMarker = ({ treeName, clustered }) => {
   var { data, error, refetch } = useQuery(query, {
     variables: { projId, apId, isActiveInMap, beobFilter },
   })
-  setRefetchKey({ key: "beobZugeordnetForMap", value: refetch })
+  setRefetchKey({ key: 'beobZugeordnetForMap', value: refetch })
 
   if (error) {
     addError(
       new Error(
         `Fehler beim Laden der Nicht zugeordneten Beobachtungen für die Karte: ${
           error.message
-        }`
-      )
+        }`,
+      ),
     )
   }
 
   const aparts = get(
     data,
-    "projektById.apsByProjId.nodes[0].apartsByApId.nodes",
-    []
+    'projektById.apsByProjId.nodes[0].apartsByApId.nodes',
+    [],
   )
   const beobs = useMemo(
     () =>
       flatten(
-        aparts.map(a => get(a, "aeEigenschaftenByArtId.beobsByArtId.nodes", []))
+        aparts.map(a =>
+          get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []),
+        ),
       ),
-    [aparts]
+    [aparts],
   )
 
   const beobZugeordnetForMapAparts = get(
     data,
     `projektById.apsByProjId.nodes[0].apartsByApId.nodes`,
-    []
+    [],
   )
   const beobZugeordnetForMapNodes = useMemo(
     () =>
       flatten(
         beobZugeordnetForMapAparts.map(n =>
-          get(n, "aeEigenschaftenByArtId.beobsByArtId.nodes", [])
-        )
+          get(n, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []),
+        ),
       ),
-    [beobZugeordnetForMapAparts]
+    [beobZugeordnetForMapAparts],
   )
-  const mapBeobZugeordnetIdsFiltered = useMemo(
-    () =>
-      idsInsideFeatureCollection({
-        mapFilter,
-        data: beobZugeordnetForMapNodes,
-      }),
-    [mapFilter, beobZugeordnetForMapNodes]
-  )
+  const mapBeobZugeordnetIdsFiltered = idsInsideFeatureCollection({
+    mapFilter,
+    data: beobZugeordnetForMapNodes,
+  })
   setBeobZugeordnetIdsFiltered(mapBeobZugeordnetIdsFiltered)
 
   const beobMarkers = beobs.map(beob => (

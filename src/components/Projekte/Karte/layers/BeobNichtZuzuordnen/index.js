@@ -1,24 +1,24 @@
-import React, { useContext, useMemo } from "react"
-import get from "lodash/get"
-import flatten from "lodash/flatten"
-import { observer } from "mobx-react-lite"
-import { useQuery } from "react-apollo-hooks"
-import MarkerClusterGroup from "react-leaflet-markercluster"
+import React, { useContext, useMemo } from 'react'
+import get from 'lodash/get'
+import flatten from 'lodash/flatten'
+import { observer } from 'mobx-react-lite'
+import { useQuery } from 'react-apollo-hooks'
+import MarkerClusterGroup from 'react-leaflet-markercluster'
 
-import Marker from "./Marker"
-import storeContext from "../../../../../storeContext"
-import query from "./query"
-import idsInsideFeatureCollection from "../../../../../modules/idsInsideFeatureCollectionLv95"
+import Marker from './Marker'
+import storeContext from '../../../../../storeContext'
+import query from './query'
+import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
 
 const iconCreateFunction = function(cluster) {
   const markers = cluster.getAllChildMarkers()
   const hasHighlightedTpop = markers.some(
-    m => m.options.icon.options.className === "beobIconHighlighted"
+    m => m.options.icon.options.className === 'beobIconHighlighted',
   )
-  if (typeof window === "undefined") return {}
+  if (typeof window === 'undefined') return {}
   const className = hasHighlightedTpop
-    ? "beobZugeordnetClusterHighlighted"
-    : "beobZugeordnetCluster"
+    ? 'beobZugeordnetClusterHighlighted'
+    : 'beobZugeordnetCluster'
   return window.L.divIcon({
     html: markers.length,
     className,
@@ -34,15 +34,14 @@ const BeobNichtZuzuordnenMarker = ({ treeName, clustered }) => {
   const { setBeobNichtZuzuordnenIdsFiltered } = map
 
   const activeNodes = store[`${treeName}ActiveNodes`]
-  const projId = activeNodes.projekt || "99999999-9999-9999-9999-999999999999"
-  const apId = activeNodes.ap || "99999999-9999-9999-9999-999999999999"
-  const isActiveInMap = activeApfloraLayers.includes("beobNichtZuzuordnen")
+  const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
+  const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
+  const isActiveInMap = activeApfloraLayers.includes('beobNichtZuzuordnen')
 
   const beobFilter = {
     tpopId: { isNull: true },
     nichtZuordnen: { equalTo: true },
-    x: { isNull: false },
-    y: { isNull: false },
+    wgs84Lat: { isNull: false },
   }
   if (!!tree.nodeLabelFilter.beob) {
     beobFilter.label = {
@@ -52,53 +51,51 @@ const BeobNichtZuzuordnenMarker = ({ treeName, clustered }) => {
   var { data, error, refetch } = useQuery(query, {
     variables: { projId, apId, isActiveInMap, beobFilter },
   })
-  setRefetchKey({ key: "beobNichtZuzuordnenForMap", value: refetch })
+  setRefetchKey({ key: 'beobNichtZuzuordnenForMap', value: refetch })
 
   if (error) {
     addError(
       new Error(
         `Fehler beim Laden der Nicht zuzuordnenden Beobachtungen für die Karte: ${
           error.message
-        }`
-      )
+        }`,
+      ),
     )
   }
 
   const aparts = get(
     data,
-    "projektById.apsByProjId.nodes[0].apartsByApId.nodes",
-    []
+    'projektById.apsByProjId.nodes[0].apartsByApId.nodes',
+    [],
   )
   const beobs = useMemo(
     () =>
       flatten(
-        aparts.map(a => get(a, "aeEigenschaftenByArtId.beobsByArtId.nodes", []))
+        aparts.map(a =>
+          get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []),
+        ),
       ),
-    [aparts]
+    [aparts],
   )
 
   const beobNichtZuzuordnenForMapNodesAparts = get(
     data,
     `projektById.apsByProjId.nodes[0].apartsByApId.nodes`,
-    []
+    [],
   )
   const beobNichtZuzuordnenForMapNodes = useMemo(
     () =>
       flatten(
         beobNichtZuzuordnenForMapNodesAparts.map(n =>
-          get(n, "aeEigenschaftenByArtId.beobsByArtId.nodes", [])
-        )
+          get(n, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []),
+        ),
       ),
-    [beobNichtZuzuordnenForMapNodesAparts]
+    [beobNichtZuzuordnenForMapNodesAparts],
   )
-  const mapBeobNichtZuzuordnenIdsFiltered = useMemo(
-    () =>
-      idsInsideFeatureCollection({
-        mapFilter,
-        data: beobNichtZuzuordnenForMapNodes,
-      }),
-    [mapFilter, beobNichtZuzuordnenForMapNodes]
-  )
+  const mapBeobNichtZuzuordnenIdsFiltered = idsInsideFeatureCollection({
+    mapFilter,
+    data: beobNichtZuzuordnenForMapNodes,
+  })
   setBeobNichtZuzuordnenIdsFiltered(mapBeobNichtZuzuordnenIdsFiltered)
 
   const beobMarkers = beobs.map(beob => (

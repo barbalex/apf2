@@ -9,7 +9,7 @@ import { useLeaflet } from 'react-leaflet'
 import Marker from './Marker'
 import storeContext from '../../../../../storeContext'
 import query from './query'
-import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollectionLv95'
+import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
 import objectsInsideBounds from '../../../../../modules/objectsInsideBounds'
 import { simpleTypes as popType } from '../../../../../store/NodeFilterTree/pop'
 import { simpleTypes as tpopType } from '../../../../../store/NodeFilterTree/tpop'
@@ -17,7 +17,7 @@ import { simpleTypes as tpopType } from '../../../../../store/NodeFilterTree/tpo
 const iconCreateFunction = function(cluster) {
   const markers = cluster.getAllChildMarkers()
   const hasHighlightedTpop = markers.some(
-    m => m.options.icon.options.className === 'tpopIconHighlighted',
+    m => m.options.icon.options.isHighlighted,
   )
 
   const className = hasHighlightedTpop
@@ -122,14 +122,10 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
     [pops],
   )
 
-  const mapTpopIdsFiltered = useMemo(
-    () =>
-      idsInsideFeatureCollection({
-        mapFilter,
-        data: tpops,
-      }),
-    [mapFilter, tpops],
-  )
+  const mapTpopIdsFiltered = idsInsideFeatureCollection({
+    mapFilter,
+    data: tpops,
+  })
   setTpopIdsFiltered(mapTpopIdsFiltered)
 
   // use tpops for filtering on map,

@@ -38,8 +38,8 @@ export default gql`
                       popId
                       nr
                       flurname
-                      x
-                      y
+                      wgs84Lat
+                      wgs84Long
                     }
                   }
                 }

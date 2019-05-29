@@ -72,7 +72,6 @@ const DrawControl = () => {
     map.on('draw:deleted', e => setMapFilter(mapFilter.toGeoJSON()))
 
     return () => {
-      console.log('DrawControl, removing mapFilter')
       map.removeLayer(mapFilter)
       map.removeControl(drawControl)
       map.off('draw:created')

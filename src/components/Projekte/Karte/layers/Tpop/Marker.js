@@ -1,22 +1,21 @@
-import React, { useContext } from "react"
-import { Marker, Tooltip, Popup } from "react-leaflet"
-import get from "lodash/get"
-import styled from "styled-components"
-import { observer } from "mobx-react-lite"
+import React, { useContext } from 'react'
+import { Marker, Tooltip, Popup } from 'react-leaflet'
+import get from 'lodash/get'
+import styled from 'styled-components'
+import { observer } from 'mobx-react-lite'
 
-import storeContext from "../../../../../storeContext"
-import tpopIcon from "./tpop.svg"
-import tpopIconHighlighted from "./tpopHighlighted.svg"
-import uIcon from "./u.svg"
-import uIconHighlighted from "./uHighlighted.svg"
-import aIcon from "./a.svg"
-import aIconHighlighted from "./aHighlighted.svg"
-import pIcon from "./p.svg"
-import pIconHighlighted from "./pHighlighted.svg"
-import qIcon from "./q.svg"
-import qIconHighlighted from "./qHighlighted.svg"
-import epsg2056to4326 from "../../../../../modules/epsg2056to4326"
-import appBaseUrl from "../../../../../modules/appBaseUrl"
+import storeContext from '../../../../../storeContext'
+import tpopIcon from './tpop.svg'
+import tpopIconHighlighted from './tpopHighlighted.svg'
+import uIcon from './u.svg'
+import uIconHighlighted from './uHighlighted.svg'
+import aIcon from './a.svg'
+import aIconHighlighted from './aHighlighted.svg'
+import pIcon from './p.svg'
+import pIconHighlighted from './pHighlighted.svg'
+import qIcon from './q.svg'
+import qIconHighlighted from './qHighlighted.svg'
+import appBaseUrl from '../../../../../modules/appBaseUrl'
 
 const StyledH3 = styled.h3`
   margin: 7px 0;
@@ -37,14 +36,14 @@ const TpopMarker = ({ treeName, tpop }) => {
     tpopLabel: tpopLabelName,
   } = store[treeName].map
 
-  const popNr = get(tpop, "popByPopId.nr") || "(keine Nr)"
-  const tpopNr = get(tpop, "nr") || "(keine Nr)"
+  const popNr = get(tpop, 'popByPopId.nr') || '(keine Nr)'
+  const tpopNr = get(tpop, 'nr') || '(keine Nr)'
   const nrLabel = `${popNr}.${tpopNr}`.toString()
   const isHighlighted = idsFiltered.includes(tpop.id)
 
   let iconUrl = tpopIcon
   if (isHighlighted) iconUrl = tpopIconHighlighted
-  if (tpopIconName === "statusGroup") {
+  if (tpopIconName === 'statusGroup') {
     iconUrl = qIcon
     if (isHighlighted) iconUrl = qIconHighlighted
     if (tpop.status === 300) {
@@ -59,18 +58,19 @@ const TpopMarker = ({ treeName, tpop }) => {
     }
   }
 
-  if (typeof window === "undefined") return null
-  const latLng = new window.L.LatLng(...epsg2056to4326(tpop.x, tpop.y))
+  if (typeof window === 'undefined') return null
+  const latLng = new window.L.LatLng(tpop.wgs84Long, tpop.wgs84Lat)
   const icon = window.L.icon({
     iconUrl,
     iconSize: [24, 24],
+    isHighlighted,
   })
   let title = nrLabel
-  if (tpopLabelName === "name") title = tpop.flurname
+  if (tpopLabelName === 'name') title = tpop.flurname
   const artname = get(
     tpop,
-    "popByPopId.apByApId.aeEigenschaftenByArtId.artname",
-    ""
+    'popByPopId.apByApId.aeEigenschaftenByArtId.artname',
+    '',
   )
 
   return (
@@ -79,32 +79,32 @@ const TpopMarker = ({ treeName, tpop }) => {
         <>
           <div>Teil-Population</div>
           <StyledH3>
-            {`${tpop.nr || "(keine Nr)"}: ${tpop.flurname ||
-              "(kein Flurname)"}`}
+            {`${tpop.nr || '(keine Nr)'}: ${tpop.flurname ||
+              '(kein Flurname)'}`}
           </StyledH3>
           <div>{`Aktionsplan: ${artname}`}</div>
           <div>
-            {`Population: ${get(tpop, "popByPopId.nr", "(keine Nr)")}: ${get(
+            {`Population: ${get(tpop, 'popByPopId.nr', '(keine Nr)')}: ${get(
               tpop,
-              "popByPopId.name",
-              "(kein Name)"
+              'popByPopId.name',
+              '(kein Name)',
             )}`}
           </div>
           <div>
-            {`Koordinaten: ${tpop.x.toLocaleString(
-              "de-ch"
-            )} / ${tpop.y.toLocaleString("de-ch")}`}
+            {`Koordinaten: ${tpop.lv95X.toLocaleString(
+              'de-ch',
+            )} / ${tpop.lv95Y.toLocaleString('de-ch')}`}
           </div>
           <div>{`Status: ${get(
             tpop,
-            "popStatusWerteByStatus.text",
-            "(kein Status)"
+            'popStatusWerteByStatus.text',
+            '(kein Status)',
           )}`}</div>
           <a
             href={`${appBaseUrl()}/Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${get(
               tpop,
-              "popByPopId.id",
-              ""
+              'popByPopId.id',
+              '',
             )}/Teil-Populationen/${tpop.id}`}
             target="_blank"
             rel="noopener noreferrer"
