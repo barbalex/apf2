@@ -434,8 +434,7 @@ CREATE TABLE apflora.pop (
   status_unklar boolean default false,
   status_unklar_begruendung text DEFAULT NULL,
   bekannt_seit smallint DEFAULT NULL,
-  x integer DEFAULT NULL CONSTRAINT zulaessige_x_koordinate CHECK (x IS NULL OR (x > 2485071 AND x < 2828516)),
-  y integer DEFAULT NULL CONSTRAINT zulaessige_y_koordinate CHECK (y IS NULL OR (y > 1075346 AND y < 1299942)),
+  geom_point geometry(Point, 4326) default null,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null
 );
@@ -539,8 +538,7 @@ CREATE TABLE apflora.tpop (
   nr integer DEFAULT NULL,
   gemeinde text DEFAULT NULL,
   flurname text DEFAULT NULL,
-  x integer DEFAULT NULL CONSTRAINT zulaessige_x_koordinate CHECK (x IS NULL OR (x > 2485071 AND x < 2828516)),
-  y integer DEFAULT NULL CONSTRAINT zulaessige_y_koordinate CHECK (y IS NULL OR (y > 1075346 AND y < 1299942)),
+  geom_point geometry(Point, 4326) default null,
   radius smallint DEFAULT NULL,
   hoehe smallint DEFAULT NULL,
   exposition varchar(50) DEFAULT NULL,
@@ -590,8 +588,6 @@ COMMENT ON COLUMN apflora.tpop.pop_id IS 'Zugehörige Population. Fremdschlüsse
 COMMENT ON COLUMN apflora.tpop.nr IS 'Nummer der Teilpopulation';
 COMMENT ON COLUMN apflora.tpop.gemeinde IS 'Gemeinde. Freier Text, Einträge aus apflora.gemeinde sollen gewählt werden können.';
 COMMENT ON COLUMN apflora.tpop.flurname IS 'Flurname';
-COMMENT ON COLUMN apflora.tpop.x IS 'X-Koordinate';
-COMMENT ON COLUMN apflora.tpop.y IS 'Y-Koordinate';
 COMMENT ON COLUMN apflora.tpop.radius IS 'Radius der Teilpopulation (m)';
 COMMENT ON COLUMN apflora.tpop.hoehe IS 'Höhe über Meer (m)';
 COMMENT ON COLUMN apflora.tpop.exposition IS 'Exposition / Besonnung des Standorts';
