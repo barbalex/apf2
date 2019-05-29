@@ -8,7 +8,7 @@ import { useQuery } from "react-apollo-hooks"
 import Marker from "./Marker"
 import storeContext from "../../../../../storeContext"
 import query from "./query"
-import idsInsideFeatureCollection from "../../../../../modules/idsInsideFeatureCollection"
+import idsInsideFeatureCollection from "../../../../../modules/idsInsideFeatureCollectionLv95"
 import { simpleTypes as popType } from "../../../../../store/NodeFilterTree/pop"
 import { simpleTypes as tpopType } from "../../../../../store/NodeFilterTree/tpop"
 

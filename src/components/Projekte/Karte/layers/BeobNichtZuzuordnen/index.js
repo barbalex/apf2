@@ -8,7 +8,7 @@ import MarkerClusterGroup from "react-leaflet-markercluster"
 import Marker from "./Marker"
 import storeContext from "../../../../../storeContext"
 import query from "./query"
-import idsInsideFeatureCollection from "../../../../../modules/idsInsideFeatureCollection"
+import idsInsideFeatureCollection from "../../../../../modules/idsInsideFeatureCollectionLv95"
 
 const iconCreateFunction = function(cluster) {
   const markers = cluster.getAllChildMarkers()

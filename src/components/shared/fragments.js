@@ -121,7 +121,11 @@ export const beob = gql`
     datum
     autor
     x
+    lv95X
+    wgs84Lat
     y
+    lv95Y
+    wgs84Long
     data
     artId
     tpopId
