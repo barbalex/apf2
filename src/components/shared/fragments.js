@@ -281,8 +281,10 @@ export const tpop = gql`
     flurname
     x
     lv95X
+    wgs84Lat
     y
     lv95Y
+    wgs84Long
     radius
     hoehe
     exposition

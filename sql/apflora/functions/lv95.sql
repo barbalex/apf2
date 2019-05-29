@@ -54,3 +54,29 @@ drop function if exists apflora.pop_lv95y(pop apflora.pop);
 CREATE OR REPLACE FUNCTION apflora.pop_lv95y(pop apflora.pop) RETURNS float8 AS $$
   select round(ST_Y(ST_Transform(pop.geom_point, 2056)))
 $$ LANGUAGE sql STABLE;
+
+-- 3. beob
+drop function if exists apflora.lv95_x(apflora.beob);
+drop function if exists lv95_x(apflora.beob);
+CREATE OR REPLACE FUNCTION lv95_x(apflora.beob)
+  RETURNS float8 AS
+$func$
+    select round(ST_X(ST_Transform(geom_point, 2056))) from apflora.beob where apflora.beob.id = $1.id
+$func$ LANGUAGE SQL STABLE;
+drop function if exists apflora.lv95_y(apflora.beob);
+drop function if exists lv95_y(apflora.beob);
+CREATE OR REPLACE FUNCTION lv95_y(apflora.beob)
+  RETURNS float8 AS
+$func$
+    select round(ST_Y(ST_Transform(geom_point, 2056))) from apflora.beob where apflora.beob.id = $1.id
+$func$ LANGUAGE SQL STABLE;
+
+-- this works for postgraphile
+drop function if exists apflora.beob_lv95x(beob apflora.beob);
+CREATE OR REPLACE FUNCTION apflora.beob_lv95x(beob apflora.beob) RETURNS float8 AS $$
+  select round(ST_X(ST_Transform(beob.geom_point, 2056)))
+$$ LANGUAGE sql STABLE;
+drop function if exists apflora.beob_lv95y(beob apflora.beob);
+CREATE OR REPLACE FUNCTION apflora.beob_lv95y(beob apflora.beob) RETURNS float8 AS $$
+  select round(ST_Y(ST_Transform(beob.geom_point, 2056)))
+$$ LANGUAGE sql STABLE;

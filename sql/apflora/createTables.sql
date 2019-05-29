@@ -1194,6 +1194,7 @@ CREATE TABLE apflora.beob (
   -- data without coordinates is not imported
   x integer DEFAULT NULL,
   y integer DEFAULT NULL,
+  geom_point geometry(Point, 4326) default null,
   -- maybe later add a geojson field for polygons?
   data jsonb,
   quelle_id uuid Default Null REFERENCES apflora.beob_quelle_werte (id) ON DELETE SET NULL ON UPDATE CASCADE,
