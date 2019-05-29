@@ -2,7 +2,7 @@
 -- meanwhile use separate solutions for inside postgres and postgraphile
 
 -- this works for queries inside postgres
--- query like this: select tpop.lv95_x from apflora.tpop;
+-- query like this: select tpop.lv95_x, x, tpop.lv95_y, y from apflora.tpop;
 -- 1. tpop
 drop function if exists apflora.lv95_x(apflora.tpop);
 drop function if exists lv95_x(apflora.tpop);

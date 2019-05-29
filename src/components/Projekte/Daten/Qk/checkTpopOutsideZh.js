@@ -20,11 +20,8 @@ export default ({ data, ktZh }) => {
   let tpopsOutsideZh = tpops.filter(
     tpop =>
       tpop.apberRelevant &&
-      !!tpop.x &&
-      isFinite(tpop.x) &&
-      !!tpop.y &&
-      isFinite(tpop.y) &&
-      !isPointInsidePolygon(ktZh, tpop.x, tpop.y),
+      !!tpop.wgs84Lat &&
+      !isPointInsidePolygon(ktZh, tpop.wgs84Lat, tpop.wgs84Long),
   )
   tpopsOutsideZh = sortBy(tpopsOutsideZh, n => [get(n, 'popByPopId.nr'), n.nr])
   return {

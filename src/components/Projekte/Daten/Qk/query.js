@@ -17,15 +17,14 @@ export default gql`
           popsByApId {
             nodes {
               id
-              tpopsByPopId(
-                filter: { x: { isNull: false }, y: { isNull: false } }
-              ) {
+              tpopsByPopId(filter: { lv95X: { isNull: false } }) {
                 nodes {
                   id
                   nr
                   flurname
-                  x
-                  y
+                  geomPoint
+                  wgs84Lat
+                  wgs84Long
                   apberRelevant
                   popByPopId {
                     ...PopFields
@@ -309,10 +308,7 @@ export default gql`
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
-          popsByApId(
-            filter: { or: [{ x: { isNull: true } }, { y: { isNull: true } }] }
-            orderBy: NR_ASC
-          ) {
+          popsByApId(filter: { lv95X: { isNull: true } }, orderBy: NR_ASC) {
             nodes {
               id
               nr
@@ -1029,9 +1025,7 @@ export default gql`
             nodes {
               id
               tpopsByPopId(
-                filter: {
-                  or: [{ x: { isNull: true } }, { y: { isNull: true } }]
-                }
+                filter: { lv95X: { isNull: true } }
                 orderBy: NR_ASC
               ) {
                 nodes {

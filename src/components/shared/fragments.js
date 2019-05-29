@@ -227,8 +227,13 @@ export const pop = gql`
     statusUnklar
     statusUnklarBegruendung
     bekanntSeit
+    geomPoint
     x
+    lv95X
+    wgs84Lat
     y
+    lv95Y
+    wgs84Long
     changedBy
   }
 `
@@ -275,7 +280,9 @@ export const tpop = gql`
     gemeinde
     flurname
     x
+    lv95X
     y
+    lv95Y
     radius
     hoehe
     exposition
