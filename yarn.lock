@@ -878,6 +878,16 @@
     signedsource "^1.0.0"
     yargs "^9.0.0"
 
+"@graphile/postgis@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@graphile/postgis/-/postgis-0.1.0.tgz#de87bf9a3742decc86841e7e00ddda89f868a929"
+  integrity sha512-67lTNvyTnng2oPU9OoA1NRvbAvS/zyTGQIK+d77OFhNi41NHNZynNVRZ+R/UpotcWVQL6rAmo2w8EkI1o4xfAg==
+  dependencies:
+    "@types/debug" "^4.1.2"
+    "@types/graphql" "^14.0.7"
+    debug "^4.1.1"
+    tslib "^1.9.3"
+
 "@hocs/debounce-handler@0.5.0":
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/@hocs/debounce-handler/-/debounce-handler-0.5.0.tgz#68f7bdb5fcda96b2b18633b06b5bec1e70a22fff"
@@ -1184,6 +1194,11 @@
   resolved "https://registry.yarnpkg.com/@types/debug/-/debug-0.0.29.tgz#a1e514adfbd92f03a224ba54d693111dbf1f3754"
   integrity sha1-oeUUrfvZLwOiJLpU1pMRHb8fN1Q=
 
+"@types/debug@^4.1.2":
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.4.tgz#56eec47706f0fd0b7c694eae2f3172e6b0b769da"
+  integrity sha512-D9MyoQFI7iP5VdpEyPZyjjqIJ8Y8EDNQFIFVLOmeg1rI1xiHOChyUPMPRUVfqFCerxfE+yS3vMyj37F6IdtOoQ==
+
 "@types/events@*":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@types/events/-/events-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"
@@ -1229,7 +1244,7 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
-"@types/graphql@^14.0.3":
+"@types/graphql@^14.0.3", "@types/graphql@^14.0.7":
   version "14.2.0"
   resolved "https://registry.yarnpkg.com/@types/graphql/-/graphql-14.2.0.tgz#74e1da5f2a4a744ac6eb3ed57b48242ea9367202"
   integrity sha512-lELg5m6eBOmATWyCZl8qULEOvnPIUG6B443yXKj930glXIgwQirIBPp5rthP2amJW0YSzUg2s5sfgba4mRRCNw==
