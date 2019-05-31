@@ -10,18 +10,17 @@ export default gql`
     $beobZugeordnet: Boolean!
     $beobZugeordnetAssignPolylines: Boolean!
   ) {
-    pop: allPops(
-      filter: { apId: { in: $ap }, x: { isNull: false }, y: { isNull: false } }
-    ) @include(if: $pop) {
+    pop: allPops(filter: { apId: { in: $ap }, wgs84Lat: { isNull: false } })
+      @include(if: $pop) {
       nodes {
         id
-        x
-        y
-        tpopsByPopId(filter: { x: { isNull: false }, y: { isNull: false } }) {
+        wgs84Lat
+        wgs84Long
+        tpopsByPopId(filter: { wgs84Lat: { isNull: false } }) {
           nodes {
             id
-            x
-            y
+            wgs84Lat
+            wgs84Long
           }
         }
       }
@@ -30,13 +29,13 @@ export default gql`
     tpopByPop: allPops(filter: { apId: { in: $ap } }) @include(if: $tpop) {
       nodes {
         id
-        x
-        y
-        tpopsByPopId(filter: { x: { isNull: false }, y: { isNull: false } }) {
+        wgs84Lat
+        wgs84Long
+        tpopsByPopId(filter: { wgs84Lat: { isNull: false } }) {
           nodes {
             id
-            x
-            y
+            wgs84Lat
+            wgs84Long
           }
         }
       }
@@ -50,8 +49,8 @@ export default gql`
     ) @include(if: $beobNichtBeurteilt) {
       nodes {
         id
-        x
-        y
+        wgs84Lat
+        wgs84Long
       }
     }
     beobNichtZuzuordnen: allVApbeobs(
@@ -59,8 +58,8 @@ export default gql`
     ) @include(if: $beobNichtZuzuordnen) {
       nodes {
         id
-        x
-        y
+        wgs84Lat
+        wgs84Long
       }
     }
     beobZugeordnet: allVApbeobs(
@@ -72,8 +71,8 @@ export default gql`
     ) @include(if: $beobZugeordnet) {
       nodes {
         id
-        x
-        y
+        wgs84Lat
+        wgs84Long
       }
     }
     beobZugeordnetAssignPolylines: allVApbeobs(
@@ -85,8 +84,8 @@ export default gql`
     ) @include(if: $beobZugeordnetAssignPolylines) {
       nodes {
         id
-        x
-        y
+        wgs84Lat
+        wgs84Long
       }
     }
   }

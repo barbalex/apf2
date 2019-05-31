@@ -66,7 +66,6 @@ import iconFullscreen from './iconFullscreen.png'
 import iconFullscreen2x from './iconFullscreen2x.png'
 
 import storeContext from '../../../storeContext'
-//import getBounds from '../../../modules/getBounds'
 
 // this does not work
 // see issue on proj4js: https://github.com/proj4js/proj4js/issues/214

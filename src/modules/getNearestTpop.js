@@ -7,9 +7,6 @@ import { featureCollection, point } from '@turf/helpers'
 import gql from 'graphql-tag'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
-import isFinite from 'lodash/isFinite'
-
-import epsg2056to4326 from './epsg2056to4326'
 
 export default async ({ activeNodes, latLng, client }) => {
   const { lat, lng } = latLng
@@ -22,14 +19,12 @@ export default async ({ activeNodes, latLng, client }) => {
           popsByApId {
             nodes {
               id
-              tpopsByPopId(
-                filter: { x: { isNull: false }, y: { isNull: false } }
-              ) {
+              tpopsByPopId(filter: { wgs84Lat: { isNull: false } }) {
                 nodes {
                   id
                   popId
-                  x
-                  y
+                  wgs84Lat
+                  wgs84Long
                 }
               }
             }
@@ -41,15 +36,11 @@ export default async ({ activeNodes, latLng, client }) => {
   })
   const pops = get(data, 'apById.popsByApId.nodes', [])
   const tpops = flatten(
-    pops.map(p =>
-      get(p, 'tpopsByPopId.nodes', []).filter(
-        t => isFinite(t.x) && isFinite(t.y),
-      ),
-    ),
+    pops.map(p => get(p, 'tpopsByPopId.nodes', []).filter(t => t.wgs84Lat)),
   )
   const tpopPoints = featureCollection(
     tpops.map(t =>
-      point(epsg2056to4326(+t.x, +t.y), {
+      point([t.wgs84Lat, t.wgs84Long], {
         id: t.id,
         popId: t.popId,
       }),

@@ -5340,6 +5340,8 @@ DROP VIEW IF EXISTS apflora.v_apbeob CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apbeob AS
 select
   apflora.beob.*,
+  apflora.beob.wgs84_lat,
+  apflora.beob.wgs84_long,
   apflora.apart.ap_id,
   apflora.beob_quelle_werte.name as quelle,
   to_char(apflora.beob.datum, 'YYYY.MM.DD') || ': ' || coalesce(apflora.beob.autor, '(kein Autor)') || ' (' || apflora.beob_quelle_werte.name || ')' as label
