@@ -54,15 +54,13 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
   const perAp = apId !== '99999999-9999-9999-9999-999999999999'
 
   const popFilter = {
-    x: { isNull: false },
-    y: { isNull: false },
+    wgs84Lat: { isNull: false },
   }
   const popFilterValues = Object.entries(nodeFilter[treeName].pop).filter(
     e => e[1] || e[1] === 0,
   )
   popFilterValues.forEach(([key, value]) => {
     const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
-    //if (['x', 'y'].includes(key)) delete popFilter[key]
     popFilter[key] = { [expression]: value }
   })
   if (!!tree.nodeLabelFilter.pop) {
@@ -71,7 +69,7 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
     }
   }
 
-  const tpopFilter = { x: { isNull: false }, y: { isNull: false } }
+  const tpopFilter = { wgs84Lat: { isNull: false } }
   const tpopFilterValues = Object.entries(nodeFilter[treeName].tpop).filter(
     e => e[1] || e[1] === 0,
   )

@@ -509,7 +509,7 @@ const Karte = ({ treeName }) => {
              */
             if (!!idOfTpopBeingLocalized) {
               const { lat, lng } = event.latlng
-              const [x, y] = epsg4326to2056(lng, lat)
+              const geomPoint = `SRID=4326;POINT(${lng} ${lat})`
               // DANGER:
               // need to stop propagation of the event
               // if not it is called a second time
@@ -520,23 +520,20 @@ const Karte = ({ treeName }) => {
                 window.L.DomEvent.stopPropagation(event)
               /**
                * how to update a geometry value?
-               * v1: "SRID=4326;POINT(25800 256000)" https://github.com/graphile/postgraphile/issues/575#issuecomment-372030995
+               * v1: "SRID=4326;POINT(long lat)" https://github.com/graphile/postgraphile/issues/575#issuecomment-372030995
                */
               try {
                 await client.mutate({
                   mutation: updateTpopById,
                   variables: {
                     id: idOfTpopBeingLocalized,
-                    x,
-                    y,
+                    geomPoint,
                   },
                   optimisticResponse: {
                     __typename: 'Mutation',
                     updateTpopById: {
                       tpop: {
                         id: idOfTpopBeingLocalized,
-                        x,
-                        y,
                         __typename: 'Tpop',
                       },
                       __typename: 'Tpop',

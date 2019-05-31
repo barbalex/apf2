@@ -15,7 +15,8 @@ export default async ({ id, addError, client }) => {
     return addError(error)
   }
   const beob = get(beobResult, 'data.beobById')
-  const { x, y, tpopId } = beob
+  const { wgs84Lat, wgs84Long, tpopId } = beob
+  const geomPoint = `SRID=4326;POINT(${wgs84Long} ${wgs84Lat})`
 
   // set tpop coordinates
   try {
@@ -23,16 +24,13 @@ export default async ({ id, addError, client }) => {
       mutation: updateTpopById,
       variables: {
         id: tpopId,
-        x,
-        y,
+        geomPoint,
       },
       optimisticResponse: {
         __typename: 'Mutation',
         updateTpopById: {
           tpop: {
             id: tpopId,
-            x,
-            y,
             __typename: 'Tpop',
           },
           __typename: 'Tpop',

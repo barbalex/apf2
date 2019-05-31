@@ -120,10 +120,8 @@ export const beob = gql`
     idField
     datum
     autor
-    x
     lv95X
     wgs84Lat
-    y
     lv95Y
     wgs84Long
     data
@@ -231,10 +229,8 @@ export const pop = gql`
     statusUnklar
     statusUnklarBegruendung
     bekanntSeit
-    x
     lv95X
     wgs84Lat
-    y
     lv95Y
     wgs84Long
     changedBy
@@ -282,10 +278,8 @@ export const tpop = gql`
     nr
     gemeinde
     flurname
-    x
     lv95X
     wgs84Lat
-    y
     lv95Y
     wgs84Long
     radius

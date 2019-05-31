@@ -4,8 +4,8 @@ export default gql`
   query tpopById($id: UUID!) {
     tpopById(id: $id) {
       id
-      x
-      y
+      x: lv95X
+      y: lv95Y
     }
   }
 `
