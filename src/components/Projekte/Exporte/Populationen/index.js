@@ -14,7 +14,6 @@ import { useApolloClient } from 'react-apollo-hooks'
 
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
-import epsg2056to4326 from '../../../../modules/epsg2056to4326'
 import storeContext from '../../../../storeContext'
 
 const StyledCard = styled(Card)`
@@ -112,17 +111,8 @@ const Populationen = () => {
                 const { data } = await client.query({
                   query: await import('./allVPopKmls').then(m => m.default),
                 })
-                const enrichedData = get(data, 'allVPopKmls.nodes', []).map(
-                  oWithout => {
-                    let o = { ...oWithout }
-                    const [bg, lg] = epsg2056to4326(o.x, o.y)
-                    o.laengengrad = lg
-                    o.breitengrad = bg
-                    return o
-                  },
-                )
                 exportModule({
-                  data: enrichedData,
+                  data: get(data, 'allVPopKmls.nodes', []),
                   fileName: 'Populationen',
                   exportFileType,
                   mapFilter,
@@ -145,17 +135,8 @@ const Populationen = () => {
                 const { data } = await client.query({
                   query: await import('./allVPopKmlnamen').then(m => m.default),
                 })
-                const enrichedData = get(data, 'allVPopKmlnamen.nodes', []).map(
-                  oWithout => {
-                    let o = { ...oWithout }
-                    const [bg, lg] = epsg2056to4326(o.x, o.y)
-                    o.laengengrad = lg
-                    o.breitengrad = bg
-                    return o
-                  },
-                )
                 exportModule({
-                  data: enrichedData,
+                  data: get(data, 'allVPopKmlnamen.nodes', []),
                   fileName: 'PopulationenNachNamen',
                   exportFileType,
                   mapFilter,

@@ -3467,8 +3467,8 @@ SELECT
     apflora.tpop.id
   ) AS url,
   apflora.tpop.id,
-  apflora.tpop.lv95_x as x,
-  apflora.tpop.lv95_y as y
+  apflora.tpop.wgs84_lat,
+  apflora.tpop.wgs84_long
 FROM
   (apflora.ae_eigenschaften
   INNER JOIN
@@ -3526,8 +3526,8 @@ SELECT
     apflora.tpop.id
   ) AS url,
   apflora.tpop.id,
-  apflora.tpop.lv95_x as x,
-  apflora.tpop.lv95_y as y
+  apflora.tpop.wgs84_lat,
+  apflora.tpop.wgs84_long
 FROM
   (apflora.ae_eigenschaften
   INNER JOIN
@@ -3567,8 +3567,8 @@ SELECT
     apflora.pop.id
   ) AS url,
   apflora.pop.id,
-  apflora.pop.lv95_x as x,
-  apflora.pop.lv95_y as y
+  apflora.pop.wgs84_lat,
+  apflora.pop.wgs84_long
 FROM
   apflora.ae_eigenschaften
   INNER JOIN apflora.ap
@@ -3604,8 +3604,8 @@ SELECT
     apflora.pop.id
   ) AS url,
   apflora.pop.id,
-  apflora.pop.lv95_x as x,
-  apflora.pop.lv95_y as y
+  apflora.pop.wgs84_lat,
+  apflora.pop.wgs84_long
 FROM
   apflora.ae_eigenschaften
   INNER JOIN

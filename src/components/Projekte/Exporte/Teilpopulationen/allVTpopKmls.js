@@ -9,8 +9,8 @@ export default gql`
         inhalte
         url
         id
-        x
-        y
+        wgs84Lat
+        wgs84Long
       }
     }
   }

@@ -8,8 +8,8 @@ export default gql`
         label
         inhalte
         id
-        lv95X: x
-        lv95Y: y
+        wgs84Lat
+        wgs84Long
         url
       }
     }

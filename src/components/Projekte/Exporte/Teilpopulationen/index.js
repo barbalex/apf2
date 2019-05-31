@@ -16,7 +16,6 @@ import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
 import queryAeEigenschaftens from './queryAeEigenschaftens'
-import epsg2056to4326 from '../../../../modules/epsg2056to4326'
 import storeContext from '../../../../storeContext'
 
 const StyledCard = styled(Card)`
@@ -186,17 +185,8 @@ const Teilpopulationen = ({ treeName }) => {
                 const { data } = await client.query({
                   query: await import('./allVTpopKmls').then(m => m.default),
                 })
-                const enrichedData = get(data, 'allVTpopKmls.nodes', []).map(
-                  oWithout => {
-                    let o = { ...oWithout }
-                    const [bg, lg] = epsg2056to4326(o.x, o.y)
-                    o.laengengrad = lg
-                    o.breitengrad = bg
-                    return o
-                  },
-                )
                 exportModule({
-                  data: enrichedData,
+                  data: get(data, 'allVTpopKmls.nodes', []),
                   fileName: 'Teilpopulationen',
                   exportFileType,
                   exportApplyMapFilter,
@@ -224,19 +214,8 @@ const Teilpopulationen = ({ treeName }) => {
                     m => m.default,
                   ),
                 })
-                const enrichedData = get(
-                  data,
-                  'allVTpopKmlnamen.nodes',
-                  [],
-                ).map(oWithout => {
-                  let o = { ...oWithout }
-                  const [bg, lg] = epsg2056to4326(o.x, o.y)
-                  o.laengengrad = lg
-                  o.breitengrad = bg
-                  return o
-                })
                 exportModule({
-                  data: enrichedData,
+                  data: get(data, 'allVTpopKmlnamen.nodes', []),
                   fileName: 'TeilpopulationenNachNamen',
                   exportFileType,
                   exportApplyMapFilter,

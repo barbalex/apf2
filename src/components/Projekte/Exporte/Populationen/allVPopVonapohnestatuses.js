@@ -11,8 +11,8 @@ export default gql`
         nr
         name
         status
-        x
-        y
+        lv95X: x
+        lv95Y: y
       }
     }
   }
