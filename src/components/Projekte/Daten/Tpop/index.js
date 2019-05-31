@@ -148,8 +148,7 @@ const Tpop = ({ treeName, showFilter = false }) => {
                   nr: field === 'nr' ? value : row.nr,
                   gemeinde: field === 'gemeinde' ? value : row.gemeinde,
                   flurname: field === 'flurname' ? value : row.flurname,
-                  x: field === 'x' ? value : row.x,
-                  y: field === 'y' ? value : row.y,
+                  geomPoint: field === 'geomPoint' ? value : row.geomPoint,
                   radius: field === 'radius' ? value : row.radius,
                   hoehe: field === 'hoehe' ? value : row.hoehe,
                   exposition: field === 'exposition' ? value : row.exposition,
@@ -205,8 +204,10 @@ const Tpop = ({ treeName, showFilter = false }) => {
         }
         // update tpop on map
         if (
-          (value && ((field === 'y' && row.x) || (field === 'x' && row.y))) ||
-          (!value && (field === 'y' || field === 'x'))
+          (value &&
+            ((field === 'ylv95Y' && row.lv95X) ||
+              (field === 'lv95X' && row.y))) ||
+          (!value && (field === 'ylv95Y' || field === 'lv95X'))
         ) {
           if (refetch.tpopForMap) refetch.tpopForMap()
         }
@@ -315,8 +316,8 @@ const Tpop = ({ treeName, showFilter = false }) => {
             error={errors.apberRelevantGrund}
           />
           <TextField
-            key={`${row.id}x`}
-            name="x"
+            key={`${row.id}lv95X`}
+            name="lv95X"
             label="X-Koordinaten"
             row={row}
             type="number"
@@ -324,8 +325,8 @@ const Tpop = ({ treeName, showFilter = false }) => {
             errors={errors}
           />
           <TextField
-            key={`${row.id}y`}
-            name="y"
+            key={`${row.id}lv95Y`}
+            name="lv95Y"
             label="Y-Koordinaten"
             row={row}
             type="number"
@@ -343,14 +344,14 @@ const Tpop = ({ treeName, showFilter = false }) => {
             saveToDb={saveToDb}
             showLocate={!showFilter}
             onClickLocate={async setStateValue => {
-              if (!row.x || !row.y) {
+              if (!row.lv95X) {
                 return setErrors({
                   gemeinde: 'Es fehlen Koordinaten',
                 })
               }
               const gemeinde = await getGemeindeForKoord({
-                x: row.x,
-                y: row.y,
+                x: row.lv95X,
+                y: row.lv95Y,
                 addError,
               })
               if (gemeinde) {

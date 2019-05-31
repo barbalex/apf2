@@ -7,8 +7,7 @@ export default gql`
     $popId: UUID
     $gemeinde: String
     $flurname: String
-    $x: Int
-    $y: Int
+    $geomPoint: String
     $bekanntSeit: Int
   ) {
     createTpop(
@@ -17,8 +16,7 @@ export default gql`
           popId: $popId
           gemeinde: $gemeinde
           flurname: $flurname
-          x: $x
-          y: $y
+          geomPoint: $geomPoint
           bekanntSeit: $bekanntSeit
         }
       }

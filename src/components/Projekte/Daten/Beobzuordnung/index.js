@@ -109,11 +109,11 @@ const getTpopZuordnenSource = (row, apId) => {
   let tpopList = flatten(popList.map(p => get(p, 'tpopsByPopId.nodes', [])))
     // with coordinates
     // and also: even keep own tpop if it has no coordinates
-    .filter(t => (!!t.x && !!t.y) || t.id === row.tpopId)
+    .filter(t => !!t.lv95X || t.id === row.tpopId)
     .map(t => {
       // calculate their distance to this beob
-      const dX = Math.abs(row.x - t.x)
-      const dY = Math.abs(row.y - t.y)
+      const dX = Math.abs(row.lv95X - t.lv95X)
+      const dY = Math.abs(row.lv95Y - t.lv95Y)
       const distNr = Math.round((dX ** 2 + dY ** 2) ** 0.5)
       const distance = distNr.toLocaleString('de-ch')
       // build label

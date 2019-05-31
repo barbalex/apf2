@@ -231,7 +231,6 @@ export const pop = gql`
     statusUnklar
     statusUnklarBegruendung
     bekanntSeit
-    geomPoint
     x
     lv95X
     wgs84Lat

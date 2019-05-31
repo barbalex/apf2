@@ -156,7 +156,11 @@ const Headdata = ({ pop, tpop, row, showFilter, treeName }) => {
       <TpopLabel>Teilpopulation</TpopLabel>
       <TpopVal>{get(tpop, 'flurname', '')}</TpopVal>
       <KoordLabel>Koordinaten</KoordLabel>
-      <KoordVal>{`${get(tpop, 'x', '')} / ${get(tpop, 'y', '')}`}</KoordVal>
+      <KoordVal>{`${get(tpop, 'lv95X', '')} / ${get(
+        tpop,
+        'lv95Y',
+        '',
+      )}`}</KoordVal>
       <TpopNrLabel>Teilpop.Nr.</TpopNrLabel>
       <TpopNrVal>{`${get(pop, 'nr', '')}.${get(tpop, 'nr', '')}`}</TpopNrVal>
       <BearbLabel>BeobachterIn</BearbLabel>

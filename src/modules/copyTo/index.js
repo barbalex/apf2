@@ -270,8 +270,7 @@ export default async ({
           nr: row.nr,
           gemeinde: row.gemeinde,
           flurname: row.flurname,
-          x: row.x,
-          y: row.y,
+          geomPoint: row.geomPoint,
           radius: row.radius,
           hoehe: row.hoehe,
           exposition: row.exposition,
@@ -308,8 +307,7 @@ export default async ({
           statusUnklar: row.statusUnklar,
           statusUnklarBegruendung: row.statusUnklarBegruendung,
           bekanntSeit: row.bekanntSeit,
-          x: row.x,
-          y: row.y,
+          geomPoint: row.geomPoint,
         },
       })
       newId = get(response, 'data.createPop.pop.id')

@@ -1,12 +1,12 @@
-import format from "date-fns/format"
-import isValid from "date-fns/isValid"
-import isEqual from "date-fns/isEqual"
-import get from "lodash/get"
+import format from 'date-fns/format'
+import isValid from 'date-fns/isValid'
+import isEqual from 'date-fns/isEqual'
+import get from 'lodash/get'
 
-import queryBeob from "./queryBeob"
-import createPop from "./createPop"
-import createTpop from "./createTpop"
-import updateBeobById from "./updateBeobById"
+import queryBeob from './queryBeob'
+import createPop from './createPop'
+import createTpop from './createTpop'
+import updateBeobById from './updateBeobById'
 
 export default async ({ treeName, id, client, store }) => {
   const { addError, refetch } = store
@@ -23,10 +23,10 @@ export default async ({ treeName, id, client, store }) => {
   } catch (error) {
     return addError(error)
   }
-  const beob = get(beobResult, "data.beobById")
-  const { x, y, datum, data } = beob
+  const beob = get(beobResult, 'data.beobById')
+  const { geomPoint, datum, data } = beob
   const datumIsValid = isValid(new Date(datum))
-  const bekanntSeit = datumIsValid ? +format(new Date(datum), "yyyy") : null
+  const bekanntSeit = datumIsValid ? +format(new Date(datum), 'yyyy') : null
 
   // create new pop for ap
   let popResult
@@ -35,15 +35,14 @@ export default async ({ treeName, id, client, store }) => {
       mutation: createPop,
       variables: {
         apId: ap,
-        x,
-        y,
+        geomPoint,
         bekanntSeit,
       },
     })
   } catch (error) {
     return addError(error)
   }
-  const pop = get(popResult, "data.createPop.pop")
+  const pop = get(popResult, 'data.createPop.pop')
 
   // create new tpop for pop
   let tpopResult
@@ -52,8 +51,7 @@ export default async ({ treeName, id, client, store }) => {
       mutation: createTpop,
       variables: {
         popId: pop.id,
-        x,
-        y,
+        geomPoint,
         bekannt_seit: bekanntSeit,
         gemeinde: data.NOM_COMMUNE ? data.NOM_COMMUNE : null,
         flurname: data.DESC_LOCALITE_ ? data.DESC_LOCALITE_ : null,
@@ -62,7 +60,7 @@ export default async ({ treeName, id, client, store }) => {
   } catch (error) {
     return addError(error)
   }
-  const tpop = get(tpopResult, "data.createTpop.tpop")
+  const tpop = get(tpopResult, 'data.createTpop.tpop')
 
   try {
     await client.mutate({

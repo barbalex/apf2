@@ -22,7 +22,6 @@ export default gql`
                   id
                   nr
                   flurname
-                  geomPoint
                   wgs84Lat
                   wgs84Long
                   apberRelevant

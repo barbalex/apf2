@@ -136,8 +136,7 @@ const Pop = ({ treeName, showFilter = false }) => {
                       : row.statusUnklarBegruendung,
                   bekanntSeit:
                     field === 'bekanntSeit' ? value : row.bekanntSeit,
-                  x: field === 'x' ? value : row.x,
-                  y: field === 'y' ? value : row.y,
+                  geomPoint: field === 'geomPoint' ? value : row.geomPoint,
                   apByApId: row.apByApId,
                   __typename: 'Pop',
                 },
@@ -150,8 +149,10 @@ const Pop = ({ treeName, showFilter = false }) => {
         }
         // update pop on map
         if (
-          (value && ((field === 'y' && row.x) || (field === 'x' && row.y))) ||
-          (!value && (field === 'y' || field === 'x'))
+          (value &&
+            ((field === 'lv95Y' && row.lv95X) ||
+              (field === 'lv95X' && row.lv95Y))) ||
+          (!value && (field === 'lv95Y' || field === 'lv95X'))
         ) {
           if (refetch.popForMap) refetch.popForMap()
         }
@@ -237,18 +238,18 @@ const Pop = ({ treeName, showFilter = false }) => {
             errors={errors}
           />
           <TextField
-            key={`${row.id}x`}
+            key={`${row.id}lv95X`}
             label="X-Koordinaten"
-            name="x"
+            name="lv95X"
             row={row}
             type="number"
             saveToDb={saveToDb}
             errors={errors}
           />
           <TextField
-            key={`${row.id}y`}
+            key={`${row.id}lv95Y`}
             label="Y-Koordinaten"
-            name="y"
+            name="lv95Y"
             row={row}
             type="number"
             saveToDb={saveToDb}
