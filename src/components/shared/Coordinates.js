@@ -7,18 +7,19 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
+import upperFirst from 'lodash/upperFirst'
 
-import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
-import epsg2056to4326 from '../../../../modules/epsg2056to4326'
+import ifIsNumericAsNumber from '../../modules/ifIsNumericAsNumber'
+import epsg2056to4326 from '../../modules/epsg2056to4326'
 import {
   isValid as xIsValid,
   message as xMessage,
-} from '../../../../modules/lv95XIsValid'
+} from '../../modules/lv95XIsValid'
 import {
   isValid as yIsValid,
   message as yMessage,
-} from '../../../../modules/lv95YIsValid'
-import storeContext from '../../../../storeContext'
+} from '../../modules/lv95YIsValid'
+import storeContext from '../../storeContext'
 
 const StyledFormControl = styled(FormControl)`
   padding-bottom: 19px !important;
@@ -27,7 +28,7 @@ const StyledFormControl = styled(FormControl)`
   }
 `
 
-const Coordinates = ({ row, refetchPop }) => {
+const Coordinates = ({ row, refetchForm, table }) => {
   const { lv95X, lv95Y, id } = row
 
   const client = useApolloClient()
@@ -86,20 +87,22 @@ const Coordinates = ({ row, refetchPop }) => {
         geomPoint = `SRID=4326;POINT(${long} ${lat})`
       }
       try {
+        const mutationName = `update${upperFirst(table)}ById`
+        const patchName = `${table}Patch`
         await client.mutate({
           mutation: gql`
-            mutation updatePop(
+            mutation ${mutationName}(
               $id: UUID!
               $geomPoint: String
               $changedBy: String
             ) {
-              updatePopById(
+              ${mutationName}(
                 input: {
                   id: $id
-                  popPatch: { geomPoint: $geomPoint, changedBy: $changedBy }
+                  ${patchName}: { geomPoint: $geomPoint, changedBy: $changedBy }
                 }
               ) {
-                pop {
+                ${table} {
                   id
                   geomPoint
                 }
@@ -115,10 +118,11 @@ const Coordinates = ({ row, refetchPop }) => {
       } catch (error) {
         return setYError(error.message)
       }
-      // update pop on map
-      if (refetch.popForMap) refetch.popForMap()
-      // refetch pop form
-      refetchPop()
+      // update on map
+      if (table === 'pop' && refetch.popForMap) refetch.popForMap()
+      if (table === 'tpop' && refetch.tpopForMap) refetch.tpopForMap()
+      // refetch form
+      refetchForm()
       setYError('')
       setXError('')
     },

@@ -23,6 +23,7 @@ import getGemeindeForKoord from '../../../../modules/getGemeindeForKoord'
 import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { simpleTypes as tpopType } from '../../../../store/NodeFilterTree/tpop'
+import Coordinates from '../../../shared/Coordinates'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -58,7 +59,7 @@ const Tpop = ({ treeName, showFilter = false }) => {
       : '99999999-9999-9999-9999-999999999999'
   if (showFilter) id = '99999999-9999-9999-9999-999999999999'
   const apId = activeNodeArray[3]
-  const { data, loading, error } = useQuery(query, {
+  const { data, loading, error, refetch: refetchTpop } = useQuery(query, {
     variables: {
       id,
     },
@@ -337,26 +338,7 @@ const Tpop = ({ treeName, showFilter = false }) => {
             error={errors.apberRelevantGrund}
           />
           {!showFilter && (
-            <>
-              <TextField
-                key={`${row.id}lv95X`}
-                name="lv95X"
-                label="X-Koordinaten"
-                row={row}
-                type="number"
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-              <TextField
-                key={`${row.id}lv95Y`}
-                name="lv95Y"
-                label="Y-Koordinaten"
-                row={row}
-                type="number"
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-            </>
+            <Coordinates row={row} refetchForm={refetchTpop} table="tpop" />
           )}
           <SelectCreatable
             key={`${row.id}gemeinde`}

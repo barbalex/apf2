@@ -17,7 +17,7 @@ import queryPops from './queryPops'
 import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { simpleTypes as popType } from '../../../../store/NodeFilterTree/pop'
-import Coordinates from './Coordinates'
+import Coordinates from '../../../shared/Coordinates'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -104,12 +104,7 @@ const Pop = ({ treeName, showFilter = false }) => {
     async event => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value)
-      if (['lv95X', 'lv95Y'].includes(field)) {
-        // TODO:
-        // only procede if both coordinates include a value
-        //if (field === 'lv95X' && !row.lv95Y)
-        // if so, use both fields to calculate new geomPoint string
-      } else if (showFilter) {
+      if (showFilter) {
         nodeFilterSetValue({
           treeName,
           table: 'pop',
@@ -244,27 +239,7 @@ const Pop = ({ treeName, showFilter = false }) => {
             errors={errors}
           />
           {!showFilter && (
-            <>
-              <Coordinates row={row} refetchPop={refetchPop} />
-              <TextField
-                key={`${row.id}lv95X`}
-                label="X-Koordinaten"
-                name="lv95X"
-                row={row}
-                type="number"
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-              <TextField
-                key={`${row.id}lv95Y`}
-                label="Y-Koordinaten"
-                name="lv95Y"
-                row={row}
-                type="number"
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-            </>
+            <Coordinates row={row} refetchForm={refetchPop} table="pop" />
           )}
         </FieldsContainer>
       </Container>
