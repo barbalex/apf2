@@ -354,8 +354,8 @@ const Tpop = ({ treeName, showFilter = false }) => {
                 })
               }
               const gemeinde = await getGemeindeForKoord({
-                x: row.lv95X,
-                y: row.lv95Y,
+                lv95X: row.lv95X,
+                lv95Y: row.lv95Y,
                 addError,
               })
               if (gemeinde) {
