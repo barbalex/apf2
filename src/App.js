@@ -42,12 +42,13 @@ const App = ({ element }) => {
   // prevent changing values in number inputs when scrolling pages!
   // see: http://stackoverflow.com/a/38589039/712005
   // and: https://stackoverflow.com/a/42058469/712005
-  typeof window !== 'undefined' &&
+  // turned off due to chrome overriding this: https://www.chromestatus.com/features/6662647093133312
+  /*typeof window !== 'undefined' &&
     document.addEventListener('wheel', function(event) {
       if (window.document.activeElement.type === 'number') {
         event.preventDefault()
       }
-    })
+    })*/
 
   const idb = initializeIdb()
   const store = MobxStore.create()

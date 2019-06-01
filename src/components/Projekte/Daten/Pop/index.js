@@ -103,7 +103,12 @@ const Pop = ({ treeName, showFilter = false }) => {
     async event => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value)
-      if (showFilter) {
+      if (['lv95X', 'lv95Y'].includes(field)) {
+        // TODO:
+        // only procede if both coordinates include a value
+        //if (field === 'lv95X' && !row.lv95Y)
+        // if so, use both fields to calculate new geomPoint string
+      } else if (showFilter) {
         nodeFilterSetValue({
           treeName,
           table: 'pop',
