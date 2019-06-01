@@ -5,6 +5,7 @@ import {
   beob,
   beobQuelleWerte,
   popStatusWerte,
+  tpop,
 } from '../../components/shared/fragments'
 
 export default gql`
@@ -23,10 +24,7 @@ export default gql`
                 id
                 tpopsByPopId {
                   nodes {
-                    id
-                    nr
-                    x
-                    y
+                    ...TpopFields
                     popStatusWerteByStatus {
                       ...PopStatusWerteFields
                     }
@@ -50,4 +48,5 @@ export default gql`
   ${beob}
   ${beobQuelleWerte}
   ${popStatusWerte}
+  ${tpop}
 `
