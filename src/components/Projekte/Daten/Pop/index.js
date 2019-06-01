@@ -17,6 +17,7 @@ import queryPops from './queryPops'
 import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { simpleTypes as popType } from '../../../../store/NodeFilterTree/pop'
+import Coordinates from './Coordinates'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -42,7 +43,7 @@ const Pop = ({ treeName, showFilter = false }) => {
   const apId = activeNodeArray[3]
   if (showFilter) id = '99999999-9999-9999-9999-999999999999'
 
-  const { data, loading, error } = useQuery(query, {
+  const { data, loading, error, refetch: refetchPop } = useQuery(query, {
     variables: {
       id,
     },
@@ -244,6 +245,7 @@ const Pop = ({ treeName, showFilter = false }) => {
           />
           {!showFilter && (
             <>
+              <Coordinates row={row} refetchPop={refetchPop} />
               <TextField
                 key={`${row.id}lv95X`}
                 label="X-Koordinaten"
