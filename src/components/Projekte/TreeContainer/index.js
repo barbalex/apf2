@@ -197,16 +197,16 @@ const getAndValidateCoordinatesOfTpop = async ({ id, addError, client }) => {
     addError(error)
   }
   const tpop = get(tpopResult, 'data.tpopById')
-  const { x, y } = tpop
-  if (!x || !y) {
+  const { lv95X, lv95Y } = tpop
+  if (!lv95X) {
     addError(
       new Error(
         `Die Teilpopulation mit der ID ${id} kat keine (vollständigen) Koordinaten`,
       ),
     )
-    return { x: null, y: null }
+    return { lv95X: null, lv95Y: null }
   }
-  return { x, y }
+  return { lv95X, lv95Y }
 }
 
 const getAndValidateCoordinatesOfBeob = async ({ id, addError, client }) => {
@@ -220,16 +220,16 @@ const getAndValidateCoordinatesOfBeob = async ({ id, addError, client }) => {
     addError(error)
   }
   const beob = get(beobResult, 'data.beobById')
-  const { x, y } = beob
-  if (!x || !y) {
+  const { lv95X, lv95Y } = beob
+  if (!lv95X) {
     addError(
       new Error(
         `Die Teilpopulation mit der ID ${id} kat keine (vollständigen) Koordinaten`,
       ),
     )
-    return { x: null, y: null }
+    return { lv95X: null, lv95Y: null }
   }
-  return { x, y }
+  return { lv95X, lv95Y }
 }
 
 const TreeContainer = ({ treeName }) => {
@@ -404,57 +404,57 @@ const TreeContainer = ({ treeName }) => {
           copyBeobZugeordnetKoordToTpop({ id, addError, client })
         },
         async showCoordOfTpopOnMapsZhCh() {
-          const { x, y } = await getAndValidateCoordinatesOfTpop({
+          const { lv95X, lv95Y } = await getAndValidateCoordinatesOfTpop({
             id,
             addError,
             client,
           })
-          if (x && y) {
+          if (lv95X && lv95Y) {
             typeof window !== 'undefined' &&
               window.open(
-                `https://maps.zh.ch/?x=${x}&y=${y}&scale=3000&markers=ring`,
+                `https://maps.zh.ch/?x=${lv95X}&y=${lv95Y}&scale=3000&markers=ring`,
                 'target="_blank"',
               )
           }
         },
         async showCoordOfTpopOnMapGeoAdminCh() {
-          const { x, y } = await getAndValidateCoordinatesOfTpop({
+          const { lv95X, lv95Y } = await getAndValidateCoordinatesOfTpop({
             id,
             addError,
             client,
           })
-          if (x && y) {
+          if (lv95X && lv95Y) {
             typeof window !== 'undefined' &&
               window.open(
-                `https://map.geo.admin.ch/?bgLayer=ch.swisstopo.pixelkarte-farbe&Y=${x}&X=${y}&zoom=10&crosshair=circle`,
+                `https://map.geo.admin.ch/?bgLayer=ch.swisstopo.pixelkarte-farbe&Y=${lv95X}&X=${lv95Y}&zoom=10&crosshair=circle`,
                 'target="_blank"',
               )
           }
         },
         async showCoordOfBeobOnMapsZhCh() {
-          const { x, y } = await getAndValidateCoordinatesOfBeob({
+          const { lv95X, lv95Y } = await getAndValidateCoordinatesOfBeob({
             id,
             addError,
             client,
           })
-          if (x && y) {
+          if (lv95X && lv95Y) {
             typeof window !== 'undefined' &&
               window.open(
-                `https://maps.zh.ch/?x=${x}&y=${y}&scale=3000&markers=ring`,
+                `https://maps.zh.ch/?x=${lv95X}&y=${lv95Y}&scale=3000&markers=ring`,
                 'target="_blank"',
               )
           }
         },
         async showCoordOfBeobOnMapGeoAdminCh() {
-          const { x, y } = await getAndValidateCoordinatesOfBeob({
+          const { lv95X, lv95Y } = await getAndValidateCoordinatesOfBeob({
             id,
             addError,
             client,
           })
-          if (x && y) {
+          if (lv95X && lv95Y) {
             typeof window !== 'undefined' &&
               window.open(
-                `https://map.geo.admin.ch/?bgLayer=ch.swisstopo.pixelkarte-farbe&Y=${x}&X=${y}&zoom=10&crosshair=circle`,
+                `https://map.geo.admin.ch/?bgLayer=ch.swisstopo.pixelkarte-farbe&Y=${lv95X}&X=${lv95Y}&zoom=10&crosshair=circle`,
                 'target="_blank"',
               )
           }

@@ -5,7 +5,9 @@ import { beob } from '../../shared/fragments'
 export default gql`
   query beobById($id: UUID!) {
     beobById(id: $id) {
-      ...BeobFields
+      id
+      lv95X
+      lv95Y
     }
   }
   ${beob}

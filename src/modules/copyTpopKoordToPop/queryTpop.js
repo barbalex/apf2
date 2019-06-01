@@ -5,8 +5,7 @@ export default gql`
     tpopById(id: $id) {
       id
       popId
-      x
-      y
+      geomPoint
     }
   }
 `
