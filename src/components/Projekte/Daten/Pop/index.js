@@ -237,24 +237,28 @@ const Pop = ({ treeName, showFilter = false }) => {
             saveToDb={saveToDb}
             errors={errors}
           />
-          <TextField
-            key={`${row.id}lv95X`}
-            label="X-Koordinaten"
-            name="lv95X"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}lv95Y`}
-            label="Y-Koordinaten"
-            name="lv95Y"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
+          {!showFilter && (
+            <>
+              <TextField
+                key={`${row.id}lv95X`}
+                label="X-Koordinaten"
+                name="lv95X"
+                row={row}
+                type="number"
+                saveToDb={saveToDb}
+                errors={errors}
+              />
+              <TextField
+                key={`${row.id}lv95Y`}
+                label="Y-Koordinaten"
+                name="lv95Y"
+                row={row}
+                type="number"
+                saveToDb={saveToDb}
+                errors={errors}
+              />
+            </>
+          )}
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

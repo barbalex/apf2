@@ -315,24 +315,28 @@ const Tpop = ({ treeName, showFilter = false }) => {
             saveToDb={saveToDb}
             error={errors.apberRelevantGrund}
           />
-          <TextField
-            key={`${row.id}lv95X`}
-            name="lv95X"
-            label="X-Koordinaten"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}lv95Y`}
-            name="lv95Y"
-            label="Y-Koordinaten"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
+          {!showFilter && (
+            <>
+              <TextField
+                key={`${row.id}lv95X`}
+                name="lv95X"
+                label="X-Koordinaten"
+                row={row}
+                type="number"
+                saveToDb={saveToDb}
+                errors={errors}
+              />
+              <TextField
+                key={`${row.id}lv95Y`}
+                name="lv95Y"
+                label="Y-Koordinaten"
+                row={row}
+                type="number"
+                saveToDb={saveToDb}
+                errors={errors}
+              />
+            </>
+          )}
           <SelectCreatable
             key={`${row.id}gemeinde`}
             name="gemeinde"
