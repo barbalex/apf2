@@ -216,6 +216,27 @@ const Tpop = ({ treeName, showFilter = false }) => {
     },
     [showFilter, row],
   )
+  const onClickLocate = useCallback(
+    async setStateValue => {
+      if (!row.lv95X) {
+        return setErrors({
+          gemeinde: 'Es fehlen Koordinaten',
+        })
+      }
+      const gemeinde = await getGemeindeForKoord({
+        lv95X: row.lv95X,
+        lv95Y: row.lv95Y,
+        addError,
+      })
+      if (gemeinde) {
+        const fakeEvent = {
+          target: { value: gemeinde, name: 'gemeinde' },
+        }
+        saveToDb(fakeEvent)
+      }
+    },
+    [row],
+  )
 
   if (!showFilter && loading) {
     return (
@@ -347,24 +368,7 @@ const Tpop = ({ treeName, showFilter = false }) => {
             loading={loadingLists}
             saveToDb={saveToDb}
             showLocate={!showFilter}
-            onClickLocate={async setStateValue => {
-              if (!row.lv95X) {
-                return setErrors({
-                  gemeinde: 'Es fehlen Koordinaten',
-                })
-              }
-              const gemeinde = await getGemeindeForKoord({
-                lv95X: row.lv95X,
-                lv95Y: row.lv95Y,
-                addError,
-              })
-              if (gemeinde) {
-                const fakeEvent = {
-                  target: { value: gemeinde, name: 'gemeinde' },
-                }
-                saveToDb(fakeEvent)
-              }
-            }}
+            onClickLocate={onClickLocate}
             error={errors.gemeinde}
           />
           <TextField
