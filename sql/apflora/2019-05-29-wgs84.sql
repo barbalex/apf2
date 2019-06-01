@@ -16,3 +16,12 @@ update apflora.beob set geom_point = ST_Transform(ST_FlipCoordinates(ST_SetSRID(
 -- select geom_point, round(ST_X(ST_Transform(geom_point, 2056))), x, round(ST_Y(ST_Transform(geom_point, 2056))), y, ST_AsKML(geom_point) from apflora.tpop;
 
 -- 3. run lv95.sql and wgs84.sql (done)
+
+-- drop x and y fields
+ALTER TABLE apflora.tpop DROP COLUMN x cascade;
+ALTER TABLE apflora.tpop DROP COLUMN y cascade;
+ALTER TABLE apflora.pop DROP COLUMN x cascade;
+ALTER TABLE apflora.pop DROP COLUMN y cascade;
+ALTER TABLE apflora.beob DROP COLUMN x cascade;
+ALTER TABLE apflora.beob DROP COLUMN y cascade;
+-- re-run all views

@@ -9,6 +9,7 @@ import { useApolloClient } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 import upperFirst from 'lodash/upperFirst'
 
+import storeContext from '../../storeContext'
 import ifIsNumericAsNumber from '../../modules/ifIsNumericAsNumber'
 import epsg2056to4326 from '../../modules/epsg2056to4326'
 import {
@@ -19,7 +20,14 @@ import {
   isValid as yIsValid,
   message as yMessage,
 } from '../../modules/lv95YIsValid'
-import storeContext from '../../storeContext'
+import {
+  isValid as wgs84LatIsValid,
+  message as wgs84LatMessage,
+} from '../../modules/wgs84LatIsValid'
+import {
+  isValid as wgs84LongIsValid,
+  message as wgs84LongMessage,
+} from '../../modules/wgs84LongIsValid'
 
 const StyledFormControl = styled(FormControl)`
   padding-bottom: 19px !important;
@@ -27,9 +35,12 @@ const StyledFormControl = styled(FormControl)`
     border-bottom-color: rgba(0, 0, 0, 0.1) !important;
   }
 `
+const Row = styled.div`
+  display: flex;
+`
 
 const Coordinates = ({ row, refetchForm, table }) => {
-  const { lv95X, lv95Y, id } = row
+  const { lv95X, lv95Y, wgs84Lat, wgs84Long, id } = row
 
   const client = useApolloClient()
   const store = useContext(storeContext)
@@ -40,11 +51,20 @@ const Coordinates = ({ row, refetchForm, table }) => {
   const [xError, setXError] = useState('')
   const [yError, setYError] = useState('')
 
+  const [wgs84LatState, setWgs84LatState] = useState(wgs84Lat || '')
+  const [wgs84LongState, setWgs84LongState] = useState(wgs84Long || '')
+  const [wgs84LatError, setWgs84LatError] = useState('')
+  const [wgs84LongError, setWgs84LongError] = useState('')
+
   // ensure state is updated when changed from outside
   useEffect(() => {
     setLv95XState(lv95X || '')
     setLv95YState(lv95Y || '')
   }, [lv95X, lv95Y])
+  useEffect(() => {
+    setWgs84LatState(wgs84Lat || '')
+    setWgs84LongState(wgs84Long || '')
+  }, [wgs84Lat, wgs84Long])
 
   const onChangeX = useCallback(event => {
     const value = ifIsNumericAsNumber(event.target.value)
@@ -56,13 +76,14 @@ const Coordinates = ({ row, refetchForm, table }) => {
       const isValid = xIsValid(value)
       if (!isValid) return setXError(xMessage)
       setXError('')
+      // only save if changed
+      if (value === lv95X) return
       if ((value && lv95YState) || (!value && !lv95YState)) {
-        saveToDb(value, lv95YState)
+        saveToDbLv95(value, lv95YState)
       }
     },
     [lv95YState],
   )
-
   const onChangeY = useCallback(event => {
     const value = ifIsNumericAsNumber(event.target.value)
     setLv95YState(value)
@@ -73,19 +94,71 @@ const Coordinates = ({ row, refetchForm, table }) => {
       const isValid = yIsValid(value)
       if (!isValid) return setYError(yMessage)
       setYError('')
+      // only save if changed
+      if (value === lv95Y) return
       if ((value && lv95XState) || (!value && !lv95XState))
-        saveToDb(lv95XState, value)
+        saveToDbLv95(lv95XState, value)
     },
     [lv95XState],
   )
 
-  const saveToDb = useCallback(
-    async (x, y) => {
-      let geomPoint = null
-      if (x && y) {
-        const [lat, long] = epsg2056to4326(x, y)
-        geomPoint = `SRID=4326;POINT(${long} ${lat})`
+  const onChangeWgs84Lat = useCallback(event => {
+    const value = ifIsNumericAsNumber(event.target.value)
+    setWgs84LatState(value)
+  }, [])
+  const onBlurWgs84Lat = useCallback(
+    event => {
+      const value = ifIsNumericAsNumber(event.target.value)
+      const isValid = wgs84LatIsValid(value)
+      if (!isValid) return setWgs84LatError(wgs84LatMessage)
+      setWgs84LatError('')
+      // only save if changed
+      if (value === wgs84Lat) return
+      if ((value && wgs84LongState) || (!value && !wgs84LongState)) {
+        // why does long need to be passed first?
+        saveToDbWgs84(wgs84LongState, value)
       }
+    },
+    [wgs84LongState],
+  )
+  const onChangeWgs84Long = useCallback(event => {
+    const value = ifIsNumericAsNumber(event.target.value)
+    setWgs84LongState(value)
+  }, [])
+  const onBlurWgs84Long = useCallback(
+    event => {
+      const value = ifIsNumericAsNumber(event.target.value)
+      const isValid = wgs84LongIsValid(value)
+      if (!isValid) return setWgs84LongError(wgs84LongMessage)
+      setWgs84LongError('')
+      // only save if changed
+      if (value === wgs84Long) return
+      if ((value && wgs84LatState) || (!value && !wgs84LatState)) {
+        // why does long need to be passed first?
+        saveToDbWgs84(value, wgs84LatState)
+      }
+    },
+    [wgs84LatState],
+  )
+
+  const saveToDbLv95 = useCallback((x, y) => {
+    let geomPoint = null
+    if (x && y) {
+      const [lat, long] = epsg2056to4326(x, y)
+      geomPoint = `SRID=4326;POINT(${long} ${lat})`
+    }
+    saveToDb(geomPoint, 'lv95')
+  }, [])
+  const saveToDbWgs84 = useCallback((lat, long) => {
+    let geomPoint = null
+    if (lat && long) {
+      geomPoint = `SRID=4326;POINT(${long} ${lat})`
+    }
+    saveToDb(geomPoint, 'wgs84')
+  }, [])
+
+  const saveToDb = useCallback(
+    async (geomPoint, projection) => {
       try {
         const mutationName = `update${upperFirst(table)}ById`
         const patchName = `${table}Patch`
@@ -116,7 +189,9 @@ const Coordinates = ({ row, refetchForm, table }) => {
           },
         })
       } catch (error) {
-        return setYError(error.message)
+        return projection === 'lv95'
+          ? setYError(error.message)
+          : setWgs84LatError(error.message)
       }
       // update on map
       if (table === 'pop' && refetch.popForMap) refetch.popForMap()
@@ -125,54 +200,106 @@ const Coordinates = ({ row, refetchForm, table }) => {
       refetchForm()
       setYError('')
       setXError('')
+      setWgs84LatError('')
+      setWgs84LongError('')
     },
     [row],
   )
 
   return (
     <>
-      <StyledFormControl
-        fullWidth
-        error={!!xError}
-        aria-describedby={`${id}lv95XErrorText`}
-      >
-        <InputLabel htmlFor={`${id}lv95X`}>X-Koordinate</InputLabel>
-        <Input
-          id={`${id}lv95X`}
-          name="lv95X"
-          value={lv95XState}
-          type="number"
-          onChange={onChangeX}
-          onBlur={onBlurX}
-          autoComplete="off"
-          autoCorrect="off"
-          autoCapitalize="off"
-        />
-        {!!xError && (
-          <FormHelperText id={`${id}lv95XErrorText`}>{xError}</FormHelperText>
-        )}
-      </StyledFormControl>
-      <StyledFormControl
-        fullWidth
-        error={!!yError}
-        aria-describedby={`${id}lv95YErrorText`}
-      >
-        <InputLabel htmlFor={`${id}lv95Y`}>Y-Koordinate</InputLabel>
-        <Input
-          id={`${id}lv95Y`}
-          name="lv95Y"
-          value={lv95YState}
-          type="number"
-          onChange={onChangeY}
-          onBlur={onBlurY}
-          autoComplete="off"
-          autoCorrect="off"
-          autoCapitalize="off"
-        />
-        {!!yError && (
-          <FormHelperText id={`${id}lv95YErrorText`}>{yError}</FormHelperText>
-        )}
-      </StyledFormControl>
+      <Row>
+        <StyledFormControl
+          fullWidth
+          error={!!wgs84LatError}
+          aria-describedby={`${id}wgs84LatErrorText`}
+        >
+          <InputLabel htmlFor={`${id}wgs84Lat`}>Breitengrad</InputLabel>
+          <Input
+            id={`${id}wgs84Lat`}
+            name="wgs84Lat"
+            value={wgs84LatState}
+            type="number"
+            onChange={onChangeWgs84Lat}
+            onBlur={onBlurWgs84Lat}
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+          />
+          {!!wgs84LatError && (
+            <FormHelperText id={`${id}wgs84LatErrorText`}>
+              {wgs84LatError}
+            </FormHelperText>
+          )}
+        </StyledFormControl>
+        <StyledFormControl
+          fullWidth
+          error={!!wgs84LongError}
+          aria-describedby={`${id}wgs84LongErrorText`}
+        >
+          <InputLabel htmlFor={`${id}wgs84Long`}>Längengrad</InputLabel>
+          <Input
+            id={`${id}wgs84Long`}
+            name="wgs84Long"
+            value={wgs84LongState}
+            type="number"
+            onChange={onChangeWgs84Long}
+            onBlur={onBlurWgs84Long}
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+          />
+          {!!wgs84LongError && (
+            <FormHelperText id={`${id}wgs84LongErrorText`}>
+              {wgs84LongError}
+            </FormHelperText>
+          )}
+        </StyledFormControl>
+      </Row>
+      <Row>
+        <StyledFormControl
+          fullWidth
+          error={!!xError}
+          aria-describedby={`${id}lv95XErrorText`}
+        >
+          <InputLabel htmlFor={`${id}lv95X`}>X-Koordinate</InputLabel>
+          <Input
+            id={`${id}lv95X`}
+            name="lv95X"
+            value={lv95XState}
+            type="number"
+            onChange={onChangeX}
+            onBlur={onBlurX}
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+          />
+          {!!xError && (
+            <FormHelperText id={`${id}lv95XErrorText`}>{xError}</FormHelperText>
+          )}
+        </StyledFormControl>
+        <StyledFormControl
+          fullWidth
+          error={!!yError}
+          aria-describedby={`${id}lv95YErrorText`}
+        >
+          <InputLabel htmlFor={`${id}lv95Y`}>Y-Koordinate</InputLabel>
+          <Input
+            id={`${id}lv95Y`}
+            name="lv95Y"
+            value={lv95YState}
+            type="number"
+            onChange={onChangeY}
+            onBlur={onBlurY}
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+          />
+          {!!yError && (
+            <FormHelperText id={`${id}lv95YErrorText`}>{yError}</FormHelperText>
+          )}
+        </StyledFormControl>
+      </Row>
     </>
   )
 }
