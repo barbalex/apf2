@@ -14,7 +14,7 @@ const StyledFormControl = styled(FormControl)`
 `
 
 const Coordinates = ({ row }) => {
-  const { lv95X, lv95Y } = row
+  const { lv95X, lv95Y, id } = row
   const [lv95XState, setLv95XState] = useState(lv95X)
   const [lv95YState, setLv95YState] = useState(lv95Y)
 
@@ -29,25 +29,22 @@ const Coordinates = ({ row }) => {
       <StyledFormControl
         fullWidth
         error={!!error}
-        aria-describedby={`${label}ErrorText`}
+        aria-describedby={`${id}lv95XErrorText`}
       >
         <InputLabel htmlFor={label}>{label}</InputLabel>
         <Input
-          id={name}
-          name={name}
+          id={`${id}lv95X`}
+          name="lv95X"
           value={lv95XState}
           type="number"
-          multiline={multiLine}
           onChange={onChange}
           onBlur={saveToDb}
-          onKeyPress={onKeyPress}
-          placeholder={hintText}
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="off"
         />
         {!!error && (
-          <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
+          <FormHelperText id={`${id}lv95XErrorText`}>{error}</FormHelperText>
         )}
       </StyledFormControl>
     </>
