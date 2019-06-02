@@ -55,7 +55,6 @@ describe('Population form', () => {
       .blur()
       .should('have.value', typedText)
   })
-
   it('updates wgs84Lat', () => {
     const typedText = '47.2826994360682'
     cy.get('[data-id=wgs84Lat] input')
@@ -88,7 +87,6 @@ describe('Population form', () => {
       .blur()
     cy.contains('[data-id=wgs84LongErrorText]', 'Der Längengrad')
   })
-
   it('updates lv95X', () => {
     const typedText = '2694876'
     cy.get('[data-id=lv95X] input')
