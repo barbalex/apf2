@@ -217,6 +217,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
           <InputLabel htmlFor={`${id}wgs84Lat`}>Breitengrad</InputLabel>
           <Input
             id={`${id}wgs84Lat`}
+            data-id="wgs84Lat"
             name="wgs84Lat"
             value={wgs84LatState}
             type="number"
@@ -227,7 +228,10 @@ const Coordinates = ({ row, refetchForm, table }) => {
             autoCapitalize="off"
           />
           {!!wgs84LatError && (
-            <FormHelperText id={`${id}wgs84LatErrorText`}>
+            <FormHelperText
+              id={`${id}wgs84LatErrorText`}
+              data-id="wgs84LatErrorText"
+            >
               {wgs84LatError}
             </FormHelperText>
           )}
@@ -240,6 +244,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
           <InputLabel htmlFor={`${id}wgs84Long`}>Längengrad</InputLabel>
           <Input
             id={`${id}wgs84Long`}
+            data-id="wgs84Long"
             name="wgs84Long"
             value={wgs84LongState}
             type="number"
@@ -250,7 +255,10 @@ const Coordinates = ({ row, refetchForm, table }) => {
             autoCapitalize="off"
           />
           {!!wgs84LongError && (
-            <FormHelperText id={`${id}wgs84LongErrorText`}>
+            <FormHelperText
+              id={`${id}wgs84LongErrorText`}
+              data-id="wgs84LongErrorText"
+            >
               {wgs84LongError}
             </FormHelperText>
           )}
@@ -265,6 +273,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
           <InputLabel htmlFor={`${id}lv95X`}>X-Koordinate</InputLabel>
           <Input
             id={`${id}lv95X`}
+            data-id="lv95X"
             name="lv95X"
             value={lv95XState}
             type="number"
@@ -275,7 +284,9 @@ const Coordinates = ({ row, refetchForm, table }) => {
             autoCapitalize="off"
           />
           {!!xError && (
-            <FormHelperText id={`${id}lv95XErrorText`}>{xError}</FormHelperText>
+            <FormHelperText id={`${id}lv95XErrorText`} data-id="lv95XErrorText">
+              {xError}
+            </FormHelperText>
           )}
         </StyledFormControl>
         <StyledFormControl
@@ -286,6 +297,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
           <InputLabel htmlFor={`${id}lv95Y`}>Y-Koordinate</InputLabel>
           <Input
             id={`${id}lv95Y`}
+            data-id="lv95Y"
             name="lv95Y"
             value={lv95YState}
             type="number"
@@ -296,7 +308,9 @@ const Coordinates = ({ row, refetchForm, table }) => {
             autoCapitalize="off"
           />
           {!!yError && (
-            <FormHelperText id={`${id}lv95YErrorText`}>{yError}</FormHelperText>
+            <FormHelperText id={`${id}lv95YErrorText`} data-id="lv95YErrorText">
+              {yError}
+            </FormHelperText>
           )}
         </StyledFormControl>
       </Row>
