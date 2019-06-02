@@ -4110,9 +4110,11 @@ WHERE
       apflora.tpop.pop_id
     FROM
       apflora.tpop
+      inner join apflora.pop
+      on apflora.pop.id = apflora.tpop.pop_id
     WHERE
-      apflora.tpop.lv95_x = x
-      AND apflora.tpop.lv95_y = y
+      apflora.tpop.lv95_x = apflora.pop.lv95_x
+      AND apflora.tpop.lv95_y = apflora.pop.lv95_y
   )
   ORDER BY
     apflora.ap.proj_id,
