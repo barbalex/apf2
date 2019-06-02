@@ -12,8 +12,7 @@ export default gql`
     $statusUnklar: Boolean
     $statusUnklarBegruendung: String
     $bekanntSeit: Int
-    $x: Int
-    $y: Int
+    $geomPoint: String
     $changedBy: String
   ) {
     updatePopById(
@@ -28,8 +27,7 @@ export default gql`
           statusUnklar: $statusUnklar
           statusUnklarBegruendung: $statusUnklarBegruendung
           bekanntSeit: $bekanntSeit
-          x: $x
-          y: $y
+          geomPoint: $geomPoint
           changedBy: $changedBy
         }
       }

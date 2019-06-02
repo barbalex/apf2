@@ -13,8 +13,8 @@ export default gql`
         flurname
         apber_relevant: apberRelevant
         apber_relevant_grund: apberRelevantGrund
-        x
-        y
+        lv95X: x
+        lv95Y: y
       }
     }
   }

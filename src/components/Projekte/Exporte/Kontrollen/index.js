@@ -67,10 +67,7 @@ const Kontrollen = () => {
 
   return (
     <StyledCard>
-      <StyledCardActions
-        disableSpacing
-        onClick={() => setExpanded(!expanded)}
-      >
+      <StyledCardActions disableSpacing onClick={() => setExpanded(!expanded)}>
         <CardActionTitle>Kontrollen</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}
@@ -98,8 +95,8 @@ const Kontrollen = () => {
                   exportApplyMapFilter,
                   mapFilter,
                   idKey: 'tpop_id',
-                  xKey: 'tpop_x',
-                  yKey: 'tpop_y',
+                  xKey: 'tpop_wgs84lat',
+                  yKey: 'tpop_wgs84long',
                   addError,
                 })
               } catch (error) {
@@ -126,8 +123,8 @@ const Kontrollen = () => {
                   exportApplyMapFilter,
                   mapFilter,
                   idKey: 'TPOPGUID',
-                  xKey: 'KONTR_X',
-                  yKey: 'KONTR_Y',
+                  xKey: 'KONTR_WGS84LAT',
+                  yKey: 'KONTR_WGS84LONG',
                   addError,
                 })
               } catch (error) {
@@ -156,8 +153,8 @@ const Kontrollen = () => {
                   exportApplyMapFilter,
                   mapFilter,
                   idKey: 'tpop_id',
-                  xKey: 'tpop_x',
-                  yKey: 'tpop_y',
+                  xKey: 'tpop_wgs84lat',
+                  yKey: 'tpop_wgs84long',
                   addError,
                 })
               } catch (error) {

@@ -13,8 +13,7 @@ export default gql`
     $nr: Int
     $gemeinde: String
     $flurname: String
-    $x: Int
-    $y: Int
+    $geomPoint: String
     $radius: Int
     $hoehe: Int
     $exposition: String
@@ -47,8 +46,7 @@ export default gql`
           nr: $nr
           gemeinde: $gemeinde
           flurname: $flurname
-          x: $x
-          y: $y
+          geomPoint: $geomPoint
           radius: $radius
           hoehe: $hoehe
           exposition: $exposition

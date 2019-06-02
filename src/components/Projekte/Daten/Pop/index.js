@@ -17,6 +17,7 @@ import queryPops from './queryPops'
 import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { simpleTypes as popType } from '../../../../store/NodeFilterTree/pop'
+import Coordinates from '../../../shared/Coordinates'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -42,7 +43,7 @@ const Pop = ({ treeName, showFilter = false }) => {
   const apId = activeNodeArray[3]
   if (showFilter) id = '99999999-9999-9999-9999-999999999999'
 
-  const { data, loading, error } = useQuery(query, {
+  const { data, loading, error, refetch: refetchPop } = useQuery(query, {
     variables: {
       id,
     },
@@ -136,8 +137,7 @@ const Pop = ({ treeName, showFilter = false }) => {
                       : row.statusUnklarBegruendung,
                   bekanntSeit:
                     field === 'bekanntSeit' ? value : row.bekanntSeit,
-                  x: field === 'x' ? value : row.x,
-                  y: field === 'y' ? value : row.y,
+                  geomPoint: field === 'geomPoint' ? value : row.geomPoint,
                   apByApId: row.apByApId,
                   __typename: 'Pop',
                 },
@@ -150,8 +150,10 @@ const Pop = ({ treeName, showFilter = false }) => {
         }
         // update pop on map
         if (
-          (value && ((field === 'y' && row.x) || (field === 'x' && row.y))) ||
-          (!value && (field === 'y' || field === 'x'))
+          (value &&
+            ((field === 'lv95Y' && row.lv95X) ||
+              (field === 'lv95X' && row.lv95Y))) ||
+          (!value && (field === 'lv95Y' || field === 'lv95X'))
         ) {
           if (refetch.popForMap) refetch.popForMap()
         }
@@ -236,24 +238,9 @@ const Pop = ({ treeName, showFilter = false }) => {
             saveToDb={saveToDb}
             errors={errors}
           />
-          <TextField
-            key={`${row.id}x`}
-            label="X-Koordinaten"
-            name="x"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}y`}
-            label="Y-Koordinaten"
-            name="y"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
+          {!showFilter && (
+            <Coordinates row={row} refetchForm={refetchPop} table="pop" />
+          )}
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

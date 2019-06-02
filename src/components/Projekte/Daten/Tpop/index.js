@@ -23,6 +23,7 @@ import getGemeindeForKoord from '../../../../modules/getGemeindeForKoord'
 import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { simpleTypes as tpopType } from '../../../../store/NodeFilterTree/tpop'
+import Coordinates from '../../../shared/Coordinates'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -58,7 +59,7 @@ const Tpop = ({ treeName, showFilter = false }) => {
       : '99999999-9999-9999-9999-999999999999'
   if (showFilter) id = '99999999-9999-9999-9999-999999999999'
   const apId = activeNodeArray[3]
-  const { data, loading, error } = useQuery(query, {
+  const { data, loading, error, refetch: refetchTpop } = useQuery(query, {
     variables: {
       id,
     },
@@ -148,8 +149,7 @@ const Tpop = ({ treeName, showFilter = false }) => {
                   nr: field === 'nr' ? value : row.nr,
                   gemeinde: field === 'gemeinde' ? value : row.gemeinde,
                   flurname: field === 'flurname' ? value : row.flurname,
-                  x: field === 'x' ? value : row.x,
-                  y: field === 'y' ? value : row.y,
+                  geomPoint: field === 'geomPoint' ? value : row.geomPoint,
                   radius: field === 'radius' ? value : row.radius,
                   hoehe: field === 'hoehe' ? value : row.hoehe,
                   exposition: field === 'exposition' ? value : row.exposition,
@@ -205,8 +205,10 @@ const Tpop = ({ treeName, showFilter = false }) => {
         }
         // update tpop on map
         if (
-          (value && ((field === 'y' && row.x) || (field === 'x' && row.y))) ||
-          (!value && (field === 'y' || field === 'x'))
+          (value &&
+            ((field === 'ylv95Y' && row.lv95X) ||
+              (field === 'lv95X' && row.y))) ||
+          (!value && (field === 'ylv95Y' || field === 'lv95X'))
         ) {
           if (refetch.tpopForMap) refetch.tpopForMap()
         }
@@ -214,6 +216,27 @@ const Tpop = ({ treeName, showFilter = false }) => {
       }
     },
     [showFilter, row],
+  )
+  const onClickLocate = useCallback(
+    async setStateValue => {
+      if (!row.lv95X) {
+        return setErrors({
+          gemeinde: 'Es fehlen Koordinaten',
+        })
+      }
+      const gemeinde = await getGemeindeForKoord({
+        lv95X: row.lv95X,
+        lv95Y: row.lv95Y,
+        addError,
+      })
+      if (gemeinde) {
+        const fakeEvent = {
+          target: { value: gemeinde, name: 'gemeinde' },
+        }
+        saveToDb(fakeEvent)
+      }
+    },
+    [row],
   )
 
   if (!showFilter && loading) {
@@ -314,24 +337,9 @@ const Tpop = ({ treeName, showFilter = false }) => {
             saveToDb={saveToDb}
             error={errors.apberRelevantGrund}
           />
-          <TextField
-            key={`${row.id}x`}
-            name="x"
-            label="X-Koordinaten"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}y`}
-            name="y"
-            label="Y-Koordinaten"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
+          {!showFilter && (
+            <Coordinates row={row} refetchForm={refetchTpop} table="tpop" />
+          )}
           <SelectCreatable
             key={`${row.id}gemeinde`}
             name="gemeinde"
@@ -342,24 +350,7 @@ const Tpop = ({ treeName, showFilter = false }) => {
             loading={loadingLists}
             saveToDb={saveToDb}
             showLocate={!showFilter}
-            onClickLocate={async setStateValue => {
-              if (!row.x || !row.y) {
-                return setErrors({
-                  gemeinde: 'Es fehlen Koordinaten',
-                })
-              }
-              const gemeinde = await getGemeindeForKoord({
-                x: row.x,
-                y: row.y,
-                addError,
-              })
-              if (gemeinde) {
-                const fakeEvent = {
-                  target: { value: gemeinde, name: 'gemeinde' },
-                }
-                saveToDb(fakeEvent)
-              }
-            }}
+            onClickLocate={onClickLocate}
             error={errors.gemeinde}
           />
           <TextField

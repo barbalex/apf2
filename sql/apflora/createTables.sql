@@ -434,16 +434,13 @@ CREATE TABLE apflora.pop (
   status_unklar boolean default false,
   status_unklar_begruendung text DEFAULT NULL,
   bekannt_seit smallint DEFAULT NULL,
-  x integer DEFAULT NULL CONSTRAINT zulaessige_x_koordinate CHECK (x IS NULL OR (x > 2485071 AND x < 2828516)),
-  y integer DEFAULT NULL CONSTRAINT zulaessige_y_koordinate CHECK (y IS NULL OR (y > 1075346 AND y < 1299942)),
+  geom_point geometry(Point, 4326) default null,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null
 );
 CREATE INDEX ON apflora.pop USING btree (id);
 CREATE INDEX ON apflora.pop USING btree (ap_id);
 CREATE INDEX ON apflora.pop USING btree (status);
-CREATE INDEX ON apflora.pop USING btree (x);
-CREATE INDEX ON apflora.pop USING btree (y);
 CREATE INDEX ON apflora.pop USING btree (nr);
 CREATE INDEX ON apflora.pop USING btree (name);
 CREATE INDEX ON apflora.pop USING btree (bekannt_seit);
@@ -456,8 +453,6 @@ COMMENT ON COLUMN apflora.pop.status IS 'Herkunft der Population: autochthon ode
 COMMENT ON COLUMN apflora.pop.status_unklar IS 'true = die Herkunft der Population ist unklar';
 COMMENT ON COLUMN apflora.pop.status_unklar_begruendung IS 'Begründung, wieso die Herkunft unklar ist';
 COMMENT ON COLUMN apflora.pop.bekannt_seit IS 'Seit wann ist die Population bekannt?';
-COMMENT ON COLUMN apflora.pop.x IS 'Wird in der Regel von einer Teilpopulation übernommen';
-COMMENT ON COLUMN apflora.pop.y IS 'Wird in der Regel von einer Teilpopulation übernommen';
 COMMENT ON COLUMN apflora.pop.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.pop.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 alter table apflora.pop alter column changed_by set default null;
@@ -539,8 +534,7 @@ CREATE TABLE apflora.tpop (
   nr integer DEFAULT NULL,
   gemeinde text DEFAULT NULL,
   flurname text DEFAULT NULL,
-  x integer DEFAULT NULL CONSTRAINT zulaessige_x_koordinate CHECK (x IS NULL OR (x > 2485071 AND x < 2828516)),
-  y integer DEFAULT NULL CONSTRAINT zulaessige_y_koordinate CHECK (y IS NULL OR (y > 1075346 AND y < 1299942)),
+  geom_point geometry(Point, 4326) default null,
   radius smallint DEFAULT NULL,
   hoehe smallint DEFAULT NULL,
   exposition varchar(50) DEFAULT NULL,
@@ -578,8 +572,6 @@ CREATE INDEX ON apflora.tpop USING btree (id);
 CREATE INDEX ON apflora.tpop USING btree (pop_id);
 CREATE INDEX ON apflora.tpop USING btree (status);
 CREATE INDEX ON apflora.tpop USING btree (apber_relevant);
-CREATE INDEX ON apflora.tpop USING btree (x);
-CREATE INDEX ON apflora.tpop USING btree (y);
 CREATE INDEX ON apflora.tpop USING btree (nr);
 CREATE INDEX ON apflora.tpop USING btree (flurname);
 CREATE INDEX ON apflora.tpop USING btree (kontrollfrequenz);
@@ -590,8 +582,6 @@ COMMENT ON COLUMN apflora.tpop.pop_id IS 'Zugehörige Population. Fremdschlüsse
 COMMENT ON COLUMN apflora.tpop.nr IS 'Nummer der Teilpopulation';
 COMMENT ON COLUMN apflora.tpop.gemeinde IS 'Gemeinde. Freier Text, Einträge aus apflora.gemeinde sollen gewählt werden können.';
 COMMENT ON COLUMN apflora.tpop.flurname IS 'Flurname';
-COMMENT ON COLUMN apflora.tpop.x IS 'X-Koordinate';
-COMMENT ON COLUMN apflora.tpop.y IS 'Y-Koordinate';
 COMMENT ON COLUMN apflora.tpop.radius IS 'Radius der Teilpopulation (m)';
 COMMENT ON COLUMN apflora.tpop.hoehe IS 'Höhe über Meer (m)';
 COMMENT ON COLUMN apflora.tpop.exposition IS 'Exposition / Besonnung des Standorts';
@@ -1167,7 +1157,7 @@ COMMENT ON COLUMN apflora.ae_lrdelarze.id IS 'Primärschlüssel';
 --
 -- beob can collect beob of any provenience by following this convention:
 -- - fields that are used in apflora.ch are appended as regular fields, that is:
---   quelle_id, art_id, datum, autor, x, y
+--   quelle_id, art_id, datum, autor, geom_point
 --   These fields are extracted from the original beob at import
 -- - all fields of the original beob are put in jsonb field "data"
 --   and shown in the form that lists beob
@@ -1196,8 +1186,7 @@ CREATE TABLE apflora.beob (
   -- Nachname Vorname
   autor varchar(100) DEFAULT NULL,
   -- data without coordinates is not imported
-  x integer DEFAULT NULL,
-  y integer DEFAULT NULL,
+  geom_point geometry(Point, 4326) default null,
   -- maybe later add a geojson field for polygons?
   data jsonb,
   quelle_id uuid Default Null REFERENCES apflora.beob_quelle_werte (id) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -1212,8 +1201,6 @@ CREATE INDEX ON apflora.beob USING btree (id);
 CREATE INDEX ON apflora.beob USING btree (quelle_id);
 CREATE INDEX ON apflora.beob USING btree (art_id);
 CREATE INDEX ON apflora.beob USING btree (art_id_original);
-CREATE INDEX ON apflora.beob USING btree (x);
-CREATE INDEX ON apflora.beob USING btree (y);
 CREATE INDEX ON apflora.beob USING btree (quelle_id);
 CREATE INDEX ON apflora.beob USING btree (tpop_id);
 CREATE INDEX ON apflora.beob USING btree (nicht_zuordnen);

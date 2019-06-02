@@ -13,8 +13,8 @@ export default gql`
         gemeinde
         flurname
         bekannt_seit: bekanntSeit
-        x
-        y
+        lv95X: x
+        lv95Y: y
       }
     }
   }

@@ -60,6 +60,9 @@ const MyTextField = ({
         autoComplete="off"
         autoCorrect="off"
         autoCapitalize="off"
+        onWheel={event => {
+          event.preventDefault()
+        }}
       />
       {!!error && (
         <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>

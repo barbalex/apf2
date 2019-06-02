@@ -27,8 +27,8 @@ export default gql`
         bekannt_seit: bekanntSeit
         status_unklar: statusUnklar
         status_unklar_grund: statusUnklarGrund
-        x
-        y
+        lv95X: x
+        lv95Y: y
         radius
         hoehe
         exposition

@@ -3,7 +3,8 @@ import gql from 'graphql-tag'
 import {
   aeEigenschaften,
   beob,
-  beobQuelleWerte,popStatusWerte
+  beobQuelleWerte,
+  popStatusWerte,
 } from '../../../../shared/fragments'
 
 export default gql`
@@ -24,8 +25,6 @@ export default gql`
                   nodes {
                     id
                     nr
-                    x
-                    y
                     popStatusWerteByStatus {
                       ...PopStatusWerteFields
                     }

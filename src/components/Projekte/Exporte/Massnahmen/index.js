@@ -63,10 +63,7 @@ const Massnahmen = () => {
 
   return (
     <StyledCard>
-      <StyledCardActions
-        disableSpacing
-        onClick={() => setExpanded(!expanded)}
-      >
+      <StyledCardActions disableSpacing onClick={() => setExpanded(!expanded)}>
         <CardActionTitle>Massnahmen</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}
@@ -94,8 +91,8 @@ const Massnahmen = () => {
                   exportApplyMapFilter,
                   mapFilter,
                   idKey: 'tpop_id',
-                  xKey: 'tpop_x',
-                  yKey: 'tpop_y',
+                  xKey: 'tpop_wgs84lat',
+                  yKey: 'tpop_wgs84long',
                   addError,
                 })
               } catch (error) {
@@ -122,8 +119,8 @@ const Massnahmen = () => {
                   exportApplyMapFilter,
                   mapFilter,
                   idKey: 'TPOPGUID',
-                  xKey: 'TPOP_X',
-                  yKey: 'TPOP_Y',
+                  xKey: 'TPOP_WGS84LAT',
+                  yKey: 'TPOP_WGS84LONG',
                   addError,
                 })
               } catch (error) {

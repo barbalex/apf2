@@ -13,8 +13,6 @@ export const type = types.model({
     null,
   ),
   bekanntSeit: types.optional(types.maybeNull(types.number), null),
-  x: types.optional(types.maybeNull(types.number), null),
-  y: types.optional(types.maybeNull(types.number), null),
 })
 
 export const initial = {
@@ -24,8 +22,6 @@ export const initial = {
   statusUnklar: null,
   statusUnklarBegruendung: null,
   bekanntSeit: null,
-  x: null,
-  y: null,
 }
 
 export const simpleTypes = {
@@ -35,6 +31,4 @@ export const simpleTypes = {
   statusUnklar: 'boolean',
   statusUnklarBegruendung: 'string',
   bekanntSeit: 'number',
-  x: 'number',
-  y: 'number',
 }

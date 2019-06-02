@@ -2,6 +2,10 @@ import gql from 'graphql-tag'
 
 import { tpop } from '../../shared/fragments'
 
+/**
+ * add geomPoint: "SRID=4326;POINT(47.3021 8.5530)"
+ */
+
 export default gql`
   mutation createTpop(
     $id: UUID
@@ -9,8 +13,7 @@ export default gql`
     $nr: Int
     $gemeinde: String
     $flurname: String
-    $x: Int
-    $y: Int
+    $geomPoint: String
     $radius: Int
     $hoehe: Int
     $exposition: String
@@ -40,8 +43,7 @@ export default gql`
           nr: $nr
           gemeinde: $gemeinde
           flurname: $flurname
-          x: $x
-          y: $y
+          geomPoint: $geomPoint
           radius: $radius
           hoehe: $hoehe
           exposition: $exposition

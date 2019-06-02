@@ -14,7 +14,6 @@ import { useApolloClient } from 'react-apollo-hooks'
 
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
-import epsg2056to4326 from '../../../../modules/epsg2056to4326'
 import storeContext from '../../../../storeContext'
 
 const StyledCard = styled(Card)`
@@ -68,10 +67,7 @@ const Populationen = () => {
 
   return (
     <StyledCard>
-      <StyledCardActions
-        disableSpacing
-        onClick={() => setExpanded(!expanded)}
-      >
+      <StyledCardActions disableSpacing onClick={() => setExpanded(!expanded)}>
         <CardActionTitle>Populationen</CardActionTitle>
         <CardActionIconButton
           data-expanded={expanded}
@@ -98,9 +94,6 @@ const Populationen = () => {
                   exportFileType,
                   mapFilter,
                   exportApplyMapFilter,
-                  idKey: 'id',
-                  xKey: 'x',
-                  yKey: 'y',
                   addError,
                 })
               } catch (error) {
@@ -118,24 +111,12 @@ const Populationen = () => {
                 const { data } = await client.query({
                   query: await import('./allVPopKmls').then(m => m.default),
                 })
-                const enrichedData = get(data, 'allVPopKmls.nodes', []).map(
-                  oWithout => {
-                    let o = { ...oWithout }
-                    const [bg, lg] = epsg2056to4326(o.x, o.y)
-                    o.laengengrad = lg
-                    o.breitengrad = bg
-                    return o
-                  },
-                )
                 exportModule({
-                  data: enrichedData,
+                  data: get(data, 'allVPopKmls.nodes', []),
                   fileName: 'Populationen',
                   exportFileType,
                   mapFilter,
                   exportApplyMapFilter,
-                  idKey: 'id',
-                  xKey: 'x',
-                  yKey: 'y',
                   addError,
                   kml: true,
                 })
@@ -154,24 +135,12 @@ const Populationen = () => {
                 const { data } = await client.query({
                   query: await import('./allVPopKmlnamen').then(m => m.default),
                 })
-                const enrichedData = get(data, 'allVPopKmlnamen.nodes', []).map(
-                  oWithout => {
-                    let o = { ...oWithout }
-                    const [bg, lg] = epsg2056to4326(o.x, o.y)
-                    o.laengengrad = lg
-                    o.breitengrad = bg
-                    return o
-                  },
-                )
                 exportModule({
-                  data: enrichedData,
+                  data: get(data, 'allVPopKmlnamen.nodes', []),
                   fileName: 'PopulationenNachNamen',
                   exportFileType,
                   mapFilter,
                   exportApplyMapFilter,
-                  idKey: 'id',
-                  xKey: 'x',
-                  yKey: 'y',
                   addError,
                   kml: true,
                 })
@@ -202,9 +171,6 @@ const Populationen = () => {
                   exportFileType,
                   mapFilter,
                   exportApplyMapFilter,
-                  idKey: 'id',
-                  xKey: 'x',
-                  yKey: 'y',
                   addError,
                 })
               } catch (error) {
@@ -260,8 +226,8 @@ const Populationen = () => {
                   mapFilter,
                   exportApplyMapFilter,
                   idKey: 'pop_id',
-                  xKey: 'pop_x',
-                  yKey: 'pop_y',
+                  xKey: 'pop_wgs84lat',
+                  yKey: 'pop_wgs84long',
                   addError,
                 })
               } catch (error) {
@@ -290,9 +256,6 @@ const Populationen = () => {
                   exportFileType,
                   mapFilter,
                   exportApplyMapFilter,
-                  idKey: 'id',
-                  xKey: 'x',
-                  yKey: 'y',
                   addError,
                 })
               } catch (error) {
@@ -320,9 +283,6 @@ const Populationen = () => {
                   exportFileType,
                   mapFilter,
                   exportApplyMapFilter,
-                  idKey: 'id',
-                  xKey: 'x',
-                  yKey: 'y',
                   addError,
                 })
               } catch (error) {
@@ -351,8 +311,8 @@ const Populationen = () => {
                   mapFilter,
                   exportApplyMapFilter,
                   idKey: 'pop_id',
-                  xKey: 'pop_x',
-                  yKey: 'pop_y',
+                  xKey: 'pop_wgs84lat',
+                  yKey: 'pop_wgs84long',
                   addError,
                 })
               } catch (error) {
@@ -381,8 +341,8 @@ const Populationen = () => {
                   mapFilter,
                   exportApplyMapFilter,
                   idKey: 'pop_id',
-                  xKey: 'pop_x',
-                  yKey: 'pop_y',
+                  xKey: 'pop_wgs84lat',
+                  yKey: 'pop_wgs84long',
                   addError,
                 })
               } catch (error) {
@@ -411,8 +371,8 @@ const Populationen = () => {
                   mapFilter,
                   exportApplyMapFilter,
                   idKey: 'pop_id',
-                  xKey: 'pop_x',
-                  yKey: 'pop_y',
+                  xKey: 'pop_wgs84lat',
+                  yKey: 'pop_wgs84long',
                   addError,
                 })
               } catch (error) {

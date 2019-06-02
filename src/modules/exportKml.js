@@ -27,7 +27,7 @@ export default ({ fileName, data }) => {
             <name>${clean(key)}</name>
             ${dataByArt[key]
               .map(
-                ({ art, label, inhalte, breitengrad, laengengrad, url }) => `
+                ({ art, label, inhalte, wgs84Lat, wgs84Long, url }) => `
                   <Placemark>
                     <name>${clean(label)}</name>
                     <description>
@@ -42,7 +42,7 @@ export default ({ fileName, data }) => {
                     </styleUrl>
                     <Point>
                       <coordinates>
-                        ${laengengrad},${breitengrad},0
+                        ${wgs84Lat},${wgs84Long},0
                       </coordinates>
                     </Point>
                   </Placemark>

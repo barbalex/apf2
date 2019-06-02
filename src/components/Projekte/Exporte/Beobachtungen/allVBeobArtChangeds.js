@@ -21,8 +21,8 @@ export default gql`
         tpop_status: tpopStatus
         tpop_gemeinde: tpopGemeinde
         tpop_flurname: tpopFlurname
-        x
-        y
+        lv95X: x
+        lv95Y: y
         distanz_zur_teilpopulation: distanzZurTeilpopulation
         datum
         autor

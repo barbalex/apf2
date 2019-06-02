@@ -55,37 +55,69 @@ describe('Population form', () => {
       .blur()
       .should('have.value', typedText)
   })
-  it('updates x', () => {
+  it('updates wgs84Lat', () => {
+    const typedText = '47.2826994360682'
+    cy.get('[data-id=wgs84Lat] input')
+      .clear()
+      .type(typedText)
+      .blur()
+      .should('have.value', typedText)
+  })
+  it('wgs84Lat only accepts valid values', () => {
+    const typedText = '100'
+    cy.get('[data-id=wgs84Lat] input')
+      .clear()
+      .type(typedText)
+      .blur()
+    cy.contains('[data-id=wgs84LatErrorText]', 'Der Breitengrad')
+  })
+  it('updates wgs84Long', () => {
+    const typedText = '8.69272852121984'
+    cy.get('[data-id=wgs84Long] input')
+      .clear()
+      .type(typedText)
+      .blur()
+      .should('have.value', typedText)
+  })
+  it('wgs84Long only accepts valid values', () => {
+    const typedText = '200'
+    cy.get('[data-id=wgs84Long] input')
+      .clear()
+      .type(typedText)
+      .blur()
+    cy.contains('[data-id=wgs84LongErrorText]', 'Der Längengrad')
+  })
+  it('updates lv95X', () => {
     const typedText = '2694876'
-    cy.get('#x')
+    cy.get('[data-id=lv95X] input')
       .clear()
       .type(typedText)
       .blur()
       .should('have.value', typedText)
   })
-  it('x only accepts valid values', () => {
+  it('lv95X only accepts valid values', () => {
     const typedText = '26948'
-    cy.get('#x')
+    cy.get('[data-id=lv95X] input')
       .clear()
       .type(typedText)
       .blur()
-    cy.contains('#X-KoordinatenErrorText', 'zulaessige_x_koordinate')
+    cy.contains('[data-id=lv95XErrorText]', 'Die X-Koordinate')
   })
-  it('updates y', () => {
+  it('updates lv95Y', () => {
     const typedText = '1237625'
-    cy.get('#y')
+    cy.get('[data-id=lv95Y] input')
       .clear()
       .type(typedText)
       .blur()
       .should('have.value', typedText)
   })
-  it('y only accepts valid values', () => {
+  it('lv95Y only accepts valid values', () => {
     const typedText = '12376'
-    cy.get('#y')
+    cy.get('[data-id=lv95Y] input')
       .clear()
       .type(typedText)
       .blur()
-    cy.contains('#Y-KoordinatenErrorText', 'zulaessige_y_koordinate')
+    cy.contains('[data-id=lv95YErrorText]', 'Die Y-Koordinate')
   })
   it('opens info when info icon is clicked', () => {
     cy.get('[data-id=info-icon]')

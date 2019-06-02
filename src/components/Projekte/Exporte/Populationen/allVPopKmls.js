@@ -8,8 +8,8 @@ export default gql`
         label
         inhalte
         id
-        x
-        y
+        wgs84Lat
+        wgs84Long
         url
       }
     }

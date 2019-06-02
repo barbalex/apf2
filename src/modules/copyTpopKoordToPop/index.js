@@ -15,7 +15,7 @@ export default async ({ id, addError, client }) => {
     return addError(error)
   }
   const tpop = get(tpopResult, 'data.tpopById')
-  const { x, y, popId } = tpop
+  const { geomPoint, popId } = tpop
 
   // set pop coordinates
   try {
@@ -23,21 +23,9 @@ export default async ({ id, addError, client }) => {
       mutation: updatePopById,
       variables: {
         id: popId,
-        x,
-        y,
+        geomPoint,
       },
-      optimisticResponse: {
-        __typename: 'Mutation',
-        updatePopById: {
-          pop: {
-            id: popId,
-            x,
-            y,
-            __typename: 'Pop',
-          },
-          __typename: 'Pop',
-        },
-      },
+      // no optimistic responce as geomPoint
     })
   } catch (error) {
     return addError(error)

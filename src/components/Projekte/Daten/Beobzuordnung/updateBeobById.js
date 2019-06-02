@@ -14,8 +14,7 @@ export default gql`
     $idField: String
     $datum: Date
     $autor: String
-    $x: Int
-    $y: Int
+    $geomPoint: String
     $data: JSON
     $artId: UUID
     $artIdOriginal: UUID
@@ -33,8 +32,7 @@ export default gql`
           idField: $idField
           datum: $datum
           autor: $autor
-          x: $x
-          y: $y
+          geomPoint: $geomPoint
           data: $data
           artId: $artId
           artIdOriginal: $artIdOriginal
@@ -59,8 +57,8 @@ export default gql`
                   nodes {
                     id
                     nr
-                    x
-                    y
+                    lv95X
+                    lv95Y
                     popStatusWerteByStatus {
                       ...PopStatusWerteFields
                     }

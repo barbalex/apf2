@@ -1,12 +1,12 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  mutation updateTpopById($id: UUID!, $x: Int, $y: Int) {
-    updateTpopById(input: { id: $id, tpopPatch: { x: $x, y: $y } }) {
+  mutation updateTpopById($id: UUID!, $geomPoint: String) {
+    updateTpopById(input: { id: $id, tpopPatch: { geomPoint: $geomPoint } }) {
       tpop {
         id
-        x
-        y
+        lv95X
+        lv95Y
       }
     }
   }

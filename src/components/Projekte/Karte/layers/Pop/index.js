@@ -1,24 +1,24 @@
-import React, { useContext, useMemo } from "react"
-import get from "lodash/get"
-import flatten from "lodash/flatten"
-import { observer } from "mobx-react-lite"
-import MarkerClusterGroup from "react-leaflet-markercluster"
-import { useQuery } from "react-apollo-hooks"
+import React, { useContext, useMemo } from 'react'
+import get from 'lodash/get'
+import flatten from 'lodash/flatten'
+import { observer } from 'mobx-react-lite'
+import MarkerClusterGroup from 'react-leaflet-markercluster'
+import { useQuery } from 'react-apollo-hooks'
 
-import Marker from "./Marker"
-import storeContext from "../../../../../storeContext"
-import query from "./query"
-import idsInsideFeatureCollection from "../../../../../modules/idsInsideFeatureCollection"
-import { simpleTypes as popType } from "../../../../../store/NodeFilterTree/pop"
-import { simpleTypes as tpopType } from "../../../../../store/NodeFilterTree/tpop"
+import Marker from './Marker'
+import storeContext from '../../../../../storeContext'
+import query from './query'
+import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
+import { simpleTypes as popType } from '../../../../../store/NodeFilterTree/pop'
+import { simpleTypes as tpopType } from '../../../../../store/NodeFilterTree/tpop'
 
 const iconCreateFunction = function(cluster) {
   const markers = cluster.getAllChildMarkers()
   const hasHighlightedPop = markers.some(
-    m => m.options.icon.options.className === "popIconHighlighted"
+    m => m.options.icon.options.className === 'popIconHighlighted',
   )
-  const className = hasHighlightedPop ? "popClusterHighlighted" : "popCluster"
-  if (typeof window === "undefined") return () => {}
+  const className = hasHighlightedPop ? 'popClusterHighlighted' : 'popCluster'
+  if (typeof window === 'undefined') return () => {}
   return window.L.divIcon({
     html: markers.length,
     className,
@@ -40,19 +40,19 @@ const Pop = ({ treeName }) => {
   const { setPopIdsFiltered } = map
 
   const activeNodes = store[`${treeName}ActiveNodes`]
-  const projId = activeNodes.projekt || "99999999-9999-9999-9999-999999999999"
-  const apId = activeNodes.ap || "99999999-9999-9999-9999-999999999999"
-  const isActiveInMap = activeApfloraLayers.includes("pop")
-  const tpopLayerIsActive = activeApfloraLayers.includes("tpop")
-  const perProj = apId === "99999999-9999-9999-9999-999999999999"
-  const perAp = apId !== "99999999-9999-9999-9999-999999999999"
+  const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
+  const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
+  const isActiveInMap = activeApfloraLayers.includes('pop')
+  const tpopLayerIsActive = activeApfloraLayers.includes('tpop')
+  const perProj = apId === '99999999-9999-9999-9999-999999999999'
+  const perAp = apId !== '99999999-9999-9999-9999-999999999999'
 
-  const popFilter = { x: { isNull: false }, y: { isNull: false } }
+  const popFilter = { wgs84Lat: { isNull: false } }
   const popFilterValues = Object.entries(nodeFilter[treeName].pop).filter(
-    e => e[1] || e[1] === 0
+    e => e[1] || e[1] === 0,
   )
   popFilterValues.forEach(([key, value]) => {
-    const expression = popType[key] === "string" ? "includes" : "equalTo"
+    const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
     popFilter[key] = { [expression]: value }
   })
   if (!!tree.nodeLabelFilter.pop) {
@@ -61,12 +61,12 @@ const Pop = ({ treeName }) => {
     }
   }
 
-  const tpopFilter = { x: { isNull: false }, y: { isNull: false } }
+  const tpopFilter = { wgs84Lat: { isNull: false } }
   const tpopFilterValues = Object.entries(nodeFilter[treeName].tpop).filter(
-    e => e[1] || e[1] === 0
+    e => e[1] || e[1] === 0,
   )
   tpopFilterValues.forEach(([key, value]) => {
-    const expression = tpopType[key] === "string" ? "includes" : "equalTo"
+    const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
     tpopFilter[key] = { [expression]: value }
   })
   if (!!tree.nodeLabelFilter.tpop) {
@@ -87,48 +87,41 @@ const Pop = ({ treeName }) => {
       tpopFilter,
     },
   })
-  setRefetchKey({ key: "popForMap", value: refetch })
+  setRefetchKey({ key: 'popForMap', value: refetch })
 
   if (error) {
     addError(
       new Error(
-        `Fehler beim Laden der Populationen für die Karte: ${error.message}`
-      )
+        `Fehler beim Laden der Populationen für die Karte: ${error.message}`,
+      ),
     )
   }
 
   const aps = get(
     data,
-    `projektById.${!!perAp ? "perAp" : "perProj"}.nodes`,
-    []
+    `projektById.${!!perAp ? 'perAp' : 'perProj'}.nodes`,
+    [],
   )
   let pops = useMemo(
-    () => flatten(aps.map(ap => get(ap, "popsByApId.nodes", []))),
-    [aps]
+    () => flatten(aps.map(ap => get(ap, 'popsByApId.nodes', []))),
+    [aps],
   )
 
   // if tpop are filtered, only show their pop
-  if (activeApfloraLayers.includes("tpop")) {
-    const popsForTpops = flatten(aps.map(ap => get(ap, "popsByApId.nodes", [])))
+  if (activeApfloraLayers.includes('tpop')) {
+    const popsForTpops = flatten(aps.map(ap => get(ap, 'popsByApId.nodes', [])))
     // adding useMemo here results in error ???
     const tpops = flatten(
-      popsForTpops.map(pop => get(pop, "tpopsByPopId.nodes", []))
+      popsForTpops.map(pop => get(pop, 'tpopsByPopId.nodes', [])),
     )
     const popIdsOfTpops = tpops.map(t => t.popId)
     pops = pops.filter(p => popIdsOfTpops.includes(p.id))
   }
 
-  const mapPopIdsFiltered = useMemo(
-    () =>
-      idsInsideFeatureCollection({
-        mapFilter,
-        data: pops,
-        idKey: "id",
-        xKey: "x",
-        yKey: "y",
-      }),
-    [mapFilter, pops]
-  )
+  const mapPopIdsFiltered = idsInsideFeatureCollection({
+    mapFilter,
+    data: pops,
+  })
   setPopIdsFiltered(mapPopIdsFiltered)
 
   return (

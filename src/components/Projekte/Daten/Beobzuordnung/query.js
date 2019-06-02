@@ -27,8 +27,8 @@ export default gql`
                     nodes {
                       id
                       nr
-                      x
-                      y
+                      lv95X
+                      lv95Y
                       popStatusWerteByStatus {
                         ...PopStatusWerteFields
                       }

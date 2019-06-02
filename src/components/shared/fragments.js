@@ -120,8 +120,10 @@ export const beob = gql`
     idField
     datum
     autor
-    x
-    y
+    lv95X
+    wgs84Lat
+    lv95Y
+    wgs84Long
     data
     artId
     tpopId
@@ -227,8 +229,10 @@ export const pop = gql`
     statusUnklar
     statusUnklarBegruendung
     bekanntSeit
-    x
-    y
+    lv95X
+    wgs84Lat
+    lv95Y
+    wgs84Long
     changedBy
   }
 `
@@ -274,8 +278,10 @@ export const tpop = gql`
     nr
     gemeinde
     flurname
-    x
-    y
+    lv95X
+    wgs84Lat
+    lv95Y
+    wgs84Long
     radius
     hoehe
     exposition

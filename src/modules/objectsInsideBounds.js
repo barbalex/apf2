@@ -1,26 +1,23 @@
 import pointsWithinPolygon from '@turf/points-within-polygon'
 import { featureCollection, point, polygon } from '@turf/helpers'
 import bboxPolygon from '@turf/bbox-polygon'
-import isFinite from 'lodash/isFinite'
 
-import epsg2056to4326 from './epsg2056to4326notReverse'
-
-export default ({ map, data, idKey = 'id', xKey = 'x', yKey = 'y' }) => {
+export default ({ map, data, idKey = 'id' }) => {
   const bounds = map.getBounds()
   /**
    * data is passed from map.pop.pops OR a view fetched from the server
    * so need to filter to data with coordinates first...
-   * data arrives only if idKey, xKey and yKey exist
+   * data arrives only if idKey exists
    */
   let dataToUse = data
     // make sure all rows used have id...
     .filter(p => !!p[idKey])
     // ...and coordinates
-    .filter(p => p[xKey] && isFinite(p[xKey]) && p[yKey] && isFinite(p[yKey]))
+    .filter(p => p.wgs84Lat)
 
   const dataPoints = featureCollection(
     dataToUse.map(t =>
-      point(epsg2056to4326(+t[xKey], +t[yKey]), {
+      point([t.wgs84Lat, t.wgs84Long], {
         id: t[idKey],
       }),
     ),

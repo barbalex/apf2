@@ -16,8 +16,8 @@ export default gql`
         bekannt_seit: bekanntSeit
         status_unklar: statusUnklar
         status_unklar_begruendung: statusUnklarBegruendung
-        x
-        y
+        lv95X: x
+        lv95Y: y
         changed
         changed_by: changedBy
       }

@@ -23,8 +23,7 @@ const BeobZugeordnetAssignPolylines = ({ treeName }) => {
   const beobFilter = {
     tpopId: { isNull: false },
     nichtZuordnen: { equalTo: false },
-    x: { isNull: false },
-    y: { isNull: false },
+    wgs84Lat: { isNull: false },
   }
   if (!!tree.nodeLabelFilter.beob) {
     beobFilter.label = {
