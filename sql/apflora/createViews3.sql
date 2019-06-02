@@ -161,7 +161,3 @@ FROM
   LEFT JOIN
     apflora.v_tpopber_mitletzterid as letzte_tpopber
     ON eulk.id = letzte_tpopber.tpop_id;
-
-
--- TODO: drop - no more used
-DROP VIEW IF EXISTS apflora.v_tpop_anzkontrinklletzterundletztertpopber CASCADE;
