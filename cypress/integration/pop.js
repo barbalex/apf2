@@ -57,7 +57,7 @@ describe('Population form', () => {
   })
 
   it('updates wgs84Lat', () => {
-    const typedText = '8.69272852121984'
+    const typedText = '47.2826994360682'
     cy.get('[data-id=wgs84Lat] input')
       .clear()
       .type(typedText)
@@ -73,7 +73,7 @@ describe('Population form', () => {
     cy.contains('[data-id=wgs84LatErrorText]', 'Der Breitengrad')
   })
   it('updates wgs84Long', () => {
-    const typedText = '47.2826994360682'
+    const typedText = '8.69272852121984'
     cy.get('[data-id=wgs84Long] input')
       .clear()
       .type(typedText)

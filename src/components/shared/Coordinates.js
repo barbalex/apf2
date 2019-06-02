@@ -115,8 +115,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
       // only save if changed
       if (value === wgs84Lat) return
       if ((value && wgs84LongState) || (!value && !wgs84LongState)) {
-        // why does long need to be passed first?
-        saveToDbWgs84(wgs84LongState, value)
+        saveToDbWgs84(value, wgs84LongState)
       }
     },
     [wgs84LongState],
@@ -134,8 +133,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
       // only save if changed
       if (value === wgs84Long) return
       if ((value && wgs84LatState) || (!value && !wgs84LatState)) {
-        // why does long need to be passed first?
-        saveToDbWgs84(value, wgs84LatState)
+        saveToDbWgs84(wgs84LatState, value)
       }
     },
     [wgs84LatState],
