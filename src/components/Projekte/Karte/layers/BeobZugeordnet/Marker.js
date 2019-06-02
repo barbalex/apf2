@@ -118,7 +118,7 @@ const BeobZugeordnetMarker = ({ treeName, beob }) => {
             '(keine Nr)',
           )}: ${get(beob, 'tpopByTpopId.flurname', '(kein Flurname)')}`}</div>
           <a
-            href={`${appBaseUrl()}/Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${get(
+            href={`${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${get(
               beob,
               'tpopByTpopId.popId',
               '',

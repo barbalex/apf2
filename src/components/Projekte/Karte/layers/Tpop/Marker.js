@@ -101,7 +101,7 @@ const TpopMarker = ({ treeName, tpop }) => {
             '(kein Status)',
           )}`}</div>
           <a
-            href={`${appBaseUrl()}/Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${get(
+            href={`${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${get(
               tpop,
               'popByPopId.id',
               '',
