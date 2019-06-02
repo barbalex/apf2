@@ -66,7 +66,7 @@ const PopMarker = ({ treeName, pop }) => {
   }
 
   if (typeof window === 'undefined') return null
-  const latLng = new window.L.LatLng(pop.wgs84Long, pop.wgs84Lat)
+  const latLng = new window.L.LatLng(pop.wgs84Lat, pop.wgs84Long)
   const icon = window.L.icon({
     iconUrl,
     iconSize: [24, 24],

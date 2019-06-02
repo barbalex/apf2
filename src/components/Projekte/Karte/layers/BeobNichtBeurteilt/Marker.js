@@ -30,7 +30,7 @@ const BeobNichtBeurteiltMarker = ({ treeName, beob }) => {
   const isHighlighted = idsFiltered.includes(beob.id)
   const latLng =
     typeof window !== 'undefined'
-      ? new window.L.LatLng(beob.wgs84Long, beob.wgs84Lat)
+      ? new window.L.LatLng(beob.wgs84Lat, beob.wgs84Long)
       : {}
   const icon =
     typeof window !== 'undefined'

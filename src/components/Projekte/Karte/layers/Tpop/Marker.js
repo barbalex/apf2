@@ -59,7 +59,7 @@ const TpopMarker = ({ treeName, tpop }) => {
   }
 
   if (typeof window === 'undefined') return null
-  const latLng = new window.L.LatLng(tpop.wgs84Long, tpop.wgs84Lat)
+  const latLng = new window.L.LatLng(tpop.wgs84Lat, tpop.wgs84Long)
   const icon = window.L.icon({
     iconUrl,
     iconSize: [24, 24],

@@ -22,11 +22,11 @@ const Line = ({ treeName, beob }) => {
   if (typeof window === 'undefined') return null
 
   const isHighlighted = idsFiltered.includes(beob.id)
-  const beobLatLng = new window.L.LatLng(beob.wgs84Long, beob.wgs84Lat)
+  const beobLatLng = new window.L.LatLng(beob.wgs84Lat, beob.wgs84Long)
   const tpopLong = get(beob, 'tpopByTpopId.wgs84Long')
   const tpopLat = get(beob, 'tpopByTpopId.wgs84Lat')
   const tpopLatLng =
-    tpopLong && tpopLat ? new window.L.LatLng(tpopLong, tpopLat) : beobLatLng
+    tpopLong && tpopLat ? new window.L.LatLng(tpopLat, tpopLong) : beobLatLng
   // some dates are not valid
   // need to account for that
   let datum = '(kein Datum)'
