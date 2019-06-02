@@ -1,4 +1,11 @@
--- long term solution (PG v12): computed columns, see https://stackoverflow.com/a/8250729/712005
+-- add this to ensure only valid values are returned (no infinite)
+CREATE OR REPLACE FUNCTION is_valid_coordinates(geometry) RETURNS boolean AS
+  'SELECT ST_XMin($1) >= -180 AND ST_XMax($1) <= 180 AND
+          ST_YMin($1) >= -90 AND ST_YMax($1) <= 90;'
+  LANGUAGE sql IMMUTABLE STRICT;
+  
+  
+  -- long term solution (PG v12): computed columns, see https://stackoverflow.com/a/8250729/712005
 -- meanwhile use separate solutions for inside postgres and postgraphile
 
 -- this works for queries inside postgres
@@ -80,9 +87,3 @@ $$ LANGUAGE sql STABLE;
 CREATE OR REPLACE FUNCTION apflora.beob_lv95y(beob apflora.beob) RETURNS float8 AS $$
   select round(ST_Y(ST_Transform(beob.geom_point, 2056))) where is_valid_coordinates(beob.geom_point) = true
 $$ LANGUAGE sql STABLE;
-
-
-CREATE OR REPLACE FUNCTION is_valid_coordinates(geometry) RETURNS boolean AS
-  'SELECT ST_XMin($1) >= -180 AND ST_XMax($1) <= 180 AND
-          ST_YMin($1) >= -90 AND ST_YMax($1) <= 90;'
-  LANGUAGE sql IMMUTABLE STRICT;
