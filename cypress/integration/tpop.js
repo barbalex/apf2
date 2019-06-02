@@ -55,38 +55,7 @@ describe('Teil-Population form', () => {
       .blur()
       .should('have.value', typedText)
   })
-  it('updates x', () => {
-    const typedText = '2694876'
-    cy.get('#x')
-      .clear()
-      .type(typedText)
-      .blur()
-      .should('have.value', typedText)
-  })
-  it('x only accepts valid values', () => {
-    const typedText = '26948'
-    cy.get('#x')
-      .clear()
-      .type(typedText)
-      .blur()
-    cy.contains('#X-KoordinatenErrorText', 'zulaessige_x_koordinate')
-  })
-  it('updates y', () => {
-    const typedText = '1237625'
-    cy.get('#y')
-      .clear()
-      .type(typedText)
-      .blur()
-      .should('have.value', typedText)
-  })
-  it('y only accepts valid values', () => {
-    const typedText = '12376'
-    cy.get('#y')
-      .clear()
-      .type(typedText)
-      .blur()
-    cy.contains('#Y-KoordinatenErrorText', 'zulaessige_y_koordinate')
-  })
+  // coordinates are tested in pop
   /*
   it('updates apberRelevant', () => {
     cy.get('[data-id=apberRelevant_2] input')
