@@ -64,7 +64,7 @@ describe('Population form', () => {
       .should('have.value', typedText)
   })
   it('wgs84Lat only accepts valid values', () => {
-    const typedText = '300'
+    const typedText = '100'
     cy.get('[data-id=wgs84Lat] input')
       .clear()
       .type(typedText)
@@ -80,7 +80,7 @@ describe('Population form', () => {
       .should('have.value', typedText)
   })
   it('wgs84Long only accepts valid values', () => {
-    const typedText = '300'
+    const typedText = '200'
     cy.get('[data-id=wgs84Long] input')
       .clear()
       .type(typedText)
