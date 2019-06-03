@@ -35,9 +35,9 @@ export default ({
   return [
     {
       nodeType: 'folder',
-      menuType: 'apberrelevantGrundWerteFolder',
-      filterTable: 'apberrelevantGrundWerte',
-      id: 'apberrelevantGrundWerteFolder',
+      menuType: 'tpopApberrelevantGrundWerteFolder',
+      filterTable: 'tpopApberrelevantGrundWerte',
+      id: 'tpopApberrelevantGrundWerteFolder',
       urlLabel: 'ApberrelevantGrundWerte',
       label: `Teil-Population: Grund für AP-Bericht Relevanz (${message})`,
       url: ['Werte-Listen', 'ApberrelevantGrundWerte'],

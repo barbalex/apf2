@@ -18,14 +18,16 @@ export default ({
     apberrelevantGrundWertes
       // only show if parent node exists
       .filter(el =>
-        nodesPassed.map(n => n.id).includes('apberrelevantGrundWerteFolder'),
+        nodesPassed
+          .map(n => n.id)
+          .includes('tpopApberrelevantGrundWerteFolder'),
       )
       .map(el => ({
         nodeType: 'table',
-        menuType: 'apberrelevantGrundWerte',
-        filterTable: 'apberrelevantGrundWerte',
+        menuType: 'tpopApberrelevantGrundWerte',
+        filterTable: 'tpopApberrelevantGrundWerte',
         id: el.id,
-        parentId: 'apberrelevantGrundWerteFolder',
+        parentId: 'tpopApberrelevantGrundWerteFolder',
         urlLabel: el.id,
         label: el.label,
         url: ['Werte-Listen', 'ApberrelevantGrundWerte', el.id],

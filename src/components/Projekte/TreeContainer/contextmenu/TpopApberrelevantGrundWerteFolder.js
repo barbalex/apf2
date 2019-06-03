@@ -12,9 +12,9 @@ const insertData = {
   table: 'tpop_apberrelevant_grund_werte',
 }
 
-const TpopkontrzaehlEinheitWerteFolder = ({ onClick, treeName }) => (
+const TpopApberrelevantGrundWerteFolder = ({ onClick, treeName }) => (
   <ErrorBoundary>
-    <ContextMenu id={`${treeName}adresseFolder`}>
+    <ContextMenu id={`${treeName}tpopApberrelevantGrundWerteFolder`}>
       <div className="react-contextmenu-title">Gründe</div>
       <MenuItem onClick={onClick} data={closeLowerNodesData}>
         alle schliessen
@@ -26,4 +26,4 @@ const TpopkontrzaehlEinheitWerteFolder = ({ onClick, treeName }) => (
   </ErrorBoundary>
 )
 
-export default TpopkontrzaehlEinheitWerteFolder
+export default TpopApberrelevantGrundWerteFolder
