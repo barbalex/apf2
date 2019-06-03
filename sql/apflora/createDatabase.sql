@@ -1,4 +1,5 @@
 CREATE DATABASE apflora encoding 'UTF8';
+create extension if not exists postgis;
 CREATE EXTENSION if not exists pgcrypto;
 CREATE EXTENSION if not exists "uuid-ossp";
 
