@@ -13,6 +13,11 @@ import {
   tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
 } from '../../shared/fragments'
 
+const fragments = {
+  tpopApberrelevantGrundWerte: tpopApberrelevantGrundWerteFragment,
+  tpopkontrzaehlEinheitWerte: tpopkontrzaehlEinheitWerteFragment,
+}
+
 export default async ({
   treeName,
   tablePassed,
@@ -42,9 +47,9 @@ export default async ({
       new Error('new dataset not created as no idField could be found'),
     )
   }
-  console.log('insertDataset', { table, parentId, menuType, id })
+  console.log('insertDataset', { table, parentId, menuType, id, tablePassed })
   let mutation = gql`
-    mutation create${upperFirst(camelCase(table))}(
+    mutation createWerte(
       $parentId: UUID!
     ) {
       create${upperFirst(camelCase(table))} (
@@ -136,18 +141,20 @@ export default async ({
     `
     delete variables.parentId
   }
-  if (['werteFolder', 'werte'].includes(menuType)) {
-    const fields = `${upperFirst(table)}Fields`
-    const fragment = `${camelCase(table)}Fragment`
+  if (menuType.includes('Werte')) {
+    const tableName = camelCase(table)
+    const fields = `${upperFirst(tableName)}Fields`
     mutation = gql`
-      mutation create${upperFirst(table)} {
-        create${upperFirst(table)}(input: { ${table}: {} }) {
-          adresse {
+      mutation createWerte {
+        create${upperFirst(tableName)}(input: { ${tableName}: {
+          changedBy: "${store.user.name}"
+        } }) {
+          ${tableName} {
             ...${fields}
           }
         }
       }
-      ${fragment}
+      ${fragments[tableName]}
     `
     delete variables.parentId
   }
@@ -178,5 +185,6 @@ export default async ({
   }
   setOpenNodes(newOpenNodes)
   const refetchName = `${table === 'tpopkontrzaehl' ? table : tablePassed}s`
+  console.log('insertDataset', { refetchName, refetch })
   refetch[refetchName]()
 }

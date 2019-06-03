@@ -22,7 +22,7 @@ export default ({
       )
       .map(el => ({
         nodeType: 'table',
-        menuType: 'werte',
+        menuType: 'tpopkontrzaehlEinheitWerte',
         filterTable: 'tpopkontrzaehlEinheitWerte',
         id: el.id,
         parentId: 'tpopkontrzaehlEinheitWerteFolder',

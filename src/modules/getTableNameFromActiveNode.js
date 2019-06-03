@@ -22,15 +22,11 @@ export default activeNode => {
     }
   }
   if (
-    [
-      'adresseFolder',
-      'apberrelevantGrundWerteFolder',
-      'tpopkontrzaehlEinheitWerteFolder',
-      'wlFolder',
-      'userFolder',
-      'currentIssuesFolder',
-    ].includes(activeNode.menuType)
+    ['adresseFolder', 'wlFolder', 'userFolder', 'currentIssuesFolder'].includes(
+      activeNode.menuType,
+    )
   )
     return null
+  if (activeNode.menuType.includes('Werte')) return null
   return tableName
 }

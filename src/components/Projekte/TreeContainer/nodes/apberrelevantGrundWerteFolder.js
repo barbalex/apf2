@@ -35,7 +35,7 @@ export default ({
   return [
     {
       nodeType: 'folder',
-      menuType: 'werteFolder',
+      menuType: 'apberrelevantGrundWerteFolder',
       filterTable: 'apberrelevantGrundWerte',
       id: 'apberrelevantGrundWerteFolder',
       urlLabel: 'ApberrelevantGrundWerte',

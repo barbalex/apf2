@@ -22,7 +22,7 @@ export default ({
       )
       .map(el => ({
         nodeType: 'table',
-        menuType: 'werte',
+        menuType: 'apberrelevantGrundWerte',
         filterTable: 'apberrelevantGrundWerte',
         id: el.id,
         parentId: 'apberrelevantGrundWerteFolder',

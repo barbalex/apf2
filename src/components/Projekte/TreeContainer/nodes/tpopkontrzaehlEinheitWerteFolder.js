@@ -35,7 +35,7 @@ export default ({
   return [
     {
       nodeType: 'folder',
-      menuType: 'werteFolder',
+      menuType: 'tpopkontrzaehlEinheitWerteFolder',
       filterTable: 'tpopkontrzaehlEinheitWerte',
       id: 'tpopkontrzaehlEinheitWerteFolder',
       urlLabel: 'TpopkontrzaehlEinheitWerte',

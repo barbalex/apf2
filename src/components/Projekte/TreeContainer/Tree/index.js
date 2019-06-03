@@ -587,7 +587,7 @@ const Tree = ({ treeName }) => {
     variables: { isWerteListen, filter: queryApberrelevantGrundWertesFilter },
   })
   setRefetchKey({
-    key: 'tpopApberrelevantGrundWerte',
+    key: 'tpop_apberrelevant_grund_wertes',
     value: refetchApberrelevantGrundWertes,
   })
 
@@ -608,7 +608,7 @@ const Tree = ({ treeName }) => {
     },
   })
   setRefetchKey({
-    key: 'tpopkontrzaehlEinheitWerte',
+    key: 'tpopkontrzaehl_einheit_wertes',
     value: refetchTpopkontrzaehlEinheitWertes,
   })
 
