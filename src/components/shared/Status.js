@@ -15,7 +15,6 @@ const FieldWithInfoContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  margin-bottom: -15px;
   break-inside: avoid;
 `
 const PopoverContentRow = styled.div`
