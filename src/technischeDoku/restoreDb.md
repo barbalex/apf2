@@ -26,6 +26,8 @@ grant connect on database apflora to authenticator;
 grant connect on database apflora to anon;
 grant anon to authenticator;
 ```
+anon und authenticator werden für das Login benutzt.<br/>
+apflora_reader, apflora_freiwillig, apflora_artverantwortlich und apflora_manager sind Benutzer mit unterschiedlichen Rechten.<br/><br/>
 
 ### 3. Aus Sicherung wiederherstellen
 Am Einfachsten direkt in pgAdmin<br/><br/>
