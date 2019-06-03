@@ -47,7 +47,6 @@ export default async ({
       new Error('new dataset not created as no idField could be found'),
     )
   }
-  console.log('insertDataset', { table, parentId, menuType, id, tablePassed })
   let mutation = gql`
     mutation createWerte(
       $parentId: UUID!
@@ -185,6 +184,5 @@ export default async ({
   }
   setOpenNodes(newOpenNodes)
   const refetchName = `${table === 'tpopkontrzaehl' ? table : tablePassed}s`
-  console.log('insertDataset', { refetchName, refetch })
   refetch[refetchName]()
 }
