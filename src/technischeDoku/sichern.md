@@ -12,4 +12,4 @@ Täglich nach Mitternacht wird von der Datenbank ein SQL-Dumpfile erstellt und i
 Alle paar Tage wird der gesammte virtuelle Server gesichert.<br/><br/>
 
 
-Sporadisch wird die Datenbank auf Entwicklungs-PC's aus einer Sicherung neu hergestellt. Das dient einerseits dem Unterhalt der Anwendung: Entwickelt wird auf einer lokalen Kopie. Gleichzeitig werden so Sicherung und Wiederherstellung getestet.
+Sporadisch wird die Datenbank auf Entwicklungs-PC's aus einer Sicherung neu hergestellt [(Anleitung)](/Dokumentation/Technisch/Daten-Wiederherstellen). Das dient einerseits dem Unterhalt der Anwendung: Entwickelt wird auf einer lokalen Kopie. Gleichzeitig werden so Sicherung und Wiederherstellung getestet.
