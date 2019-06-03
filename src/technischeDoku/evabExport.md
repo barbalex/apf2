@@ -3,7 +3,7 @@ typ: 'technDoku'
 path: "/Dokumentation/Technisch/EvAB-Export"
 date: "2019-05-16"
 title: "EvAB-Export"
-sort: 9
+sort: 10
 ---
 
 Feld- und Freiwilligen-Kontrollen entsprechen Beobachtungen. Ein mal jährlich (ca. im April) werden sie daher ins EvAB exportiert. Von dort gelangen sie zu InfoFlora.<br/><br/>

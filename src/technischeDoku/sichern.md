@@ -2,7 +2,7 @@
 typ: 'technDoku'
 path: "/Dokumentation/Technisch/Daten-Sicherung"
 date: "2019-04-18"
-title: "Daten-Sicherung"
+title: "Daten sichern"
 sort: 5
 ---
 

@@ -3,7 +3,7 @@ typ: 'technDoku'
 path: "/Dokumentation/Technisch/Testen"
 date: "2019-04-18"
 title: "Funktionalität testen"
-sort: 6
+sort: 7
 ---
 
 Nachfolgend eine Liste der Funktionalitäten, die getestet werden sollen, wenn grössere Änderungen umgesetzt wurden.<br/><br/>
