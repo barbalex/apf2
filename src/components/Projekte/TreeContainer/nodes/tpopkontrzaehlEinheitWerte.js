@@ -8,31 +8,31 @@ export default ({
   projektNodes,
   store,
 }) => {
-  const apberrelevantGrundWertes = get(
+  const tpopkontrzaehlEinheitWertes = get(
     data,
-    'allTpopApberrelevantGrundWertes.nodes',
+    'allTpopkontrzaehlEinheitWertes.nodes',
     [],
   )
   const wlIndex = projektNodes.length + 2
   const nodes = memoizeOne(() =>
-    apberrelevantGrundWertes
+    tpopkontrzaehlEinheitWertes
       // only show if parent node exists
       .filter(el =>
-        nodesPassed.map(n => n.id).includes('apberrelevantGrundWerteFolder'),
+        nodesPassed.map(n => n.id).includes('tpopkontrzaehlEinheitWerteFolder'),
       )
       .map(el => ({
         nodeType: 'table',
         menuType: 'werte',
-        filterTable: 'apberrelevantGrundWerte',
+        filterTable: 'tpopkontrzaehlEinheitWerte',
         id: el.id,
-        parentId: 'apberrelevantGrundWerteFolder',
+        parentId: 'tpopkontrzaehlEinheitWerteFolder',
         urlLabel: el.id,
         label: el.label,
-        url: ['Werte-Listen', 'ApberrelevantGrundWerte', el.id],
+        url: ['Werte-Listen', 'TpopkontrzaehlEinheitWerte', el.id],
         hasChildren: false,
       }))
       .map((el, index) => {
-        el.sort = [wlIndex, 2, index]
+        el.sort = [wlIndex, 3, index]
         return el
       }),
   )()

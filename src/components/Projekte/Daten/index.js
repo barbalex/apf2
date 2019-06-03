@@ -192,6 +192,13 @@ const Daten = ({ treeName }) => {
         form = <Tpopkontrzaehl treeName={treeName} />
         break
       }
+      case 'tpopkontrzaehlEinheitWerte': {
+        const Werte = loadable(() => import('./Werte'))
+        form = (
+          <Werte treeName={treeName} table="tpopkontrzaehl_einheit_werte" />
+        )
+        break
+      }
       case 'tpopmassn': {
         const Tpopmassn = loadable(() => import('./Tpopmassn'))
         form = <Tpopmassn treeName={treeName} />

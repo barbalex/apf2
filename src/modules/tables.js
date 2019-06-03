@@ -317,6 +317,12 @@ export default [
     parentIdField: 'none',
   },
   {
+    table: 'tpopkontrzaehl_einheit_werte',
+    label: 'Zähl-Einheit',
+    idField: 'id',
+    parentIdField: 'none',
+  },
+  {
     table: 'ap_erfkrit_werte',
     label: 'AP-Erfolgskriterium-Werte',
     idField: 'id',

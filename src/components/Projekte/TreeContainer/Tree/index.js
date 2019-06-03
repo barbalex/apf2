@@ -14,6 +14,7 @@ import storeContext from '../../../../storeContext'
 import buildVariables from './buildVariables'
 import queryAdresses from './queryAdresses'
 import queryApberrelevantGrundWertes from './queryApberrelevantGrundWertes'
+import queryTpopkontrzaehlEinheitWertes from './queryTpopkontrzaehlEinheitWertes'
 import queryCurrentIssues from './queryCurrentIssues'
 import queryUsers from './queryUsers'
 import queryProjekts from './queryProjekts'
@@ -590,6 +591,27 @@ const Tree = ({ treeName }) => {
     value: refetchApberrelevantGrundWertes,
   })
 
+  const queryTpopkontrzaehlEinheitWertesFilter = nodeLabelFilter.apberrelevantGrundWerte
+    ? {
+        label: { includesInsensitive: nodeLabelFilter.apberrelevantGrundWerte },
+      }
+    : { id: { isNull: false } }
+  const {
+    data: dataTpopkontrzaehlEinheitWertes,
+    error: errorTpopkontrzaehlEinheitWertes,
+    loading: loadingTpopkontrzaehlEinheitWertes,
+    refetch: refetchTpopkontrzaehlEinheitWertes,
+  } = useQuery(queryTpopkontrzaehlEinheitWertes, {
+    variables: {
+      isWerteListen,
+      filter: queryTpopkontrzaehlEinheitWertesFilter,
+    },
+  })
+  setRefetchKey({
+    key: 'tpopkontrzaehlEinheitWerte',
+    value: refetchTpopkontrzaehlEinheitWertes,
+  })
+
   const {
     data: dataCurrentIssues,
     error: errorCurrentIssues,
@@ -600,6 +622,7 @@ const Tree = ({ treeName }) => {
     loadingCurrentIssues,
     loadingAdresses,
     loadingApberrelevantGrundWertes,
+    loadingTpopkontrzaehlEinheitWertes,
     loadingUsers,
     loadingProjekts,
     loadingApberuebersichts,
@@ -631,6 +654,7 @@ const Tree = ({ treeName }) => {
     errorCurrentIssues,
     errorAdresses,
     errorApberrelevantGrundWertes,
+    errorTpopkontrzaehlEinheitWertes,
     errorUsers,
     errorProjekts,
     errorApberuebersichts,
@@ -662,6 +686,7 @@ const Tree = ({ treeName }) => {
     ...dataCurrentIssues,
     ...dataAdresses,
     ...dataApberrelevantGrundWertes,
+    ...dataTpopkontrzaehlEinheitWertes,
     ...dataUsers,
     ...dataProjekts,
     ...dataApberuebersichts,
@@ -701,6 +726,7 @@ const Tree = ({ treeName }) => {
     dataCurrentIssues,
     dataAdresses,
     dataApberrelevantGrundWertes,
+    dataTpopkontrzaehlEinheitWertes,
     dataUsers,
     dataProjekts,
     dataApberuebersichts,
@@ -725,6 +751,7 @@ const Tree = ({ treeName }) => {
     dataBeobNichtZuzuordnens,
     loadingAdresses,
     loadingApberrelevantGrundWertes,
+    loadingTpopkontrzaehlEinheitWertes,
     loadingCurrentIssues,
     loadingUsers,
     loadingProjekts,

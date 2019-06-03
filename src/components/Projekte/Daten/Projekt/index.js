@@ -41,12 +41,6 @@ const Projekt = ({ treeName }) => {
 
   const row = get(data, 'projektById', {})
 
-  /*console.log('Projekt', {
-    rowName: row.name,
-    loading,
-    activeNodeArray: activeNodeArray.toJSON().toString(),
-  })*/
-
   useEffect(() => setErrors({}), [row])
 
   const filterTable = activeNodeArray.length === 2 ? 'projekt' : 'ap'

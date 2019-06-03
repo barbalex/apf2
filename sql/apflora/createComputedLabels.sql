@@ -16,6 +16,13 @@ $$ language sql stable;
 -- make label sortable, as of postgraphile 4.4/postgraphile@next
 comment on function apflora.tpop_apberrelevant_grund_werte_label(apflora.tpop_apberrelevant_grund_werte) is e'@sortable';
 
+drop function if exists apflora.tpopkontrzaehl_einheit_werte_label(tpopkontrzaehl_einheit_werte apflora.tpopkontrzaehl_einheit_werte);
+create function apflora.tpopkontrzaehl_einheit_werte_label(tpopkontrzaehl_einheit_werte apflora.tpopkontrzaehl_einheit_werte) returns text as $$
+  select coalesce(tpopkontrzaehl_einheit_werte.text, '(keine Einheit)')
+$$ language sql stable;
+-- make label sortable, as of postgraphile 4.4/postgraphile@next
+comment on function apflora.tpopkontrzaehl_einheit_werte_label(apflora.tpopkontrzaehl_einheit_werte) is e'@sortable';
+
 drop function if exists apflora.ap_label(ap apflora.ap);
 create function apflora.ap_label(ap apflora.ap) returns text as $$
   select coalesce((select artname from apflora.ae_eigenschaften where apflora.ae_eigenschaften.id = ap.art_id), '(kein name)')

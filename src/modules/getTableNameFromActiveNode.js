@@ -25,6 +25,7 @@ export default activeNode => {
     [
       'adresseFolder',
       'apberrelevantGrundWerteFolder',
+      'tpopkontrzaehlEinheitWerteFolder',
       'wlFolder',
       'userFolder',
       'currentIssuesFolder',

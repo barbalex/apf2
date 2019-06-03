@@ -18,6 +18,10 @@ import CmUserFolder from './contextmenu/UserFolder'
 import CmUser from './contextmenu/User'
 import CmAdresseFolder from './contextmenu/AdresseFolder'
 import CmAdresse from './contextmenu/Adresse'
+import CmTpopApberrelevantGrundWerteFolder from './contextmenu/TpopApberrelevantGrundWerteFolder'
+import CmTpopApberrelevantGrundWerte from './contextmenu/TpopApberrelevantGrundWerte'
+import CmTpopkontrzaehlEinheitWerteFolder from './contextmenu/TpopkontrzaehlEinheitWerteFolder'
+import CmTpopkontrzaehlEinheitWerte from './contextmenu/TpopkontrzaehlEinheitWerte'
 import CmApberuebersichtFolder from './contextmenu/ApberuebersichtFolder'
 import CmApberuebersicht from './contextmenu/Apberuebersicht'
 import CmAssozartFolder from './contextmenu/AssozartFolder'
@@ -550,7 +554,23 @@ const TreeContainer = ({ treeName }) => {
         <CmUserFolder onClick={handleClick} treeName={treeName} />
         <CmUser onClick={handleClick} treeName={treeName} />
         <CmAdresseFolder onClick={handleClick} treeName={treeName} />
+        <CmTpopApberrelevantGrundWerteFolder
+          onClick={handleClick}
+          treeName={treeName}
+        />
+        <CmTpopkontrzaehlEinheitWerteFolder
+          onClick={handleClick}
+          treeName={treeName}
+        />
         <CmAdresse onClick={handleClick} treeName={treeName} />
+        <CmTpopApberrelevantGrundWerte
+          onClick={handleClick}
+          treeName={treeName}
+        />
+        <CmTpopkontrzaehlEinheitWerte
+          onClick={handleClick}
+          treeName={treeName}
+        />
       </Container>
     </ErrorBoundary>
   )

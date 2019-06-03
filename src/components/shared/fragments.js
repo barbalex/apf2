@@ -649,6 +649,7 @@ export const tpopkontrzaehlEinheitWerte = gql`
     code
     text
     sort
+    label
     changedBy
   }
 `

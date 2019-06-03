@@ -9,6 +9,8 @@ import buildAdresseFolderNodes from './adresseFolder'
 import buildAdresseNodes from './adresse'
 import buildApberrelevantGrundWerteFolderNodes from './apberrelevantGrundWerteFolder'
 import buildApberrelevantGrundWerteNodes from './apberrelevantGrundWerte'
+import buildTpopkontrzaehlEinheitWerteFolderNodes from './tpopkontrzaehlEinheitWerteFolder'
+import buildTpopkontrzaehlEinheitWerteNodes from './tpopkontrzaehlEinheitWerte'
 import buildUserNodes from './user'
 import buildCurrentIssuesNodes from './currentIssues'
 import buildApFolderNodes from './apFolder'
@@ -77,6 +79,7 @@ export default ({
   dataCurrentIssues,
   dataAdresses,
   dataApberrelevantGrundWertes,
+  dataTpopkontrzaehlEinheitWertes,
   dataApbers,
   dataApberuebersichts,
   dataAps,
@@ -102,6 +105,7 @@ export default ({
   loadingCurrentIssues,
   loadingAdresses,
   loadingApberrelevantGrundWertes,
+  loadingTpopkontrzaehlEinheitWertes,
   loadingUsers,
   loadingProjekts,
   loadingApberuebersichts,
@@ -1192,6 +1196,16 @@ export default ({
             store,
           }),
         )(),
+        ...memoizeOne(() =>
+          buildTpopkontrzaehlEinheitWerteFolderNodes({
+            nodes,
+            data: dataTpopkontrzaehlEinheitWertes,
+            treeName,
+            loading: loadingTpopkontrzaehlEinheitWertes,
+            projektNodes,
+            store,
+          }),
+        )(),
       ]
     }
     if (
@@ -1228,6 +1242,26 @@ export default ({
             data: dataApberrelevantGrundWertes,
             treeName,
             loading: loadingApberrelevantGrundWertes,
+            projektNodes,
+            store,
+          }),
+        )(),
+      ]
+    }
+    if (
+      role === 'apflora_manager' &&
+      nodeUrl.length === 2 &&
+      nodeUrl[0] === 'Werte-Listen' &&
+      nodeUrl[1] === 'TpopkontrzaehlEinheitWerte'
+    ) {
+      nodes = [
+        ...nodes,
+        ...memoizeOne(() =>
+          buildTpopkontrzaehlEinheitWerteNodes({
+            nodes,
+            data: dataTpopkontrzaehlEinheitWertes,
+            treeName,
+            loading: loadingTpopkontrzaehlEinheitWertes,
             projektNodes,
             store,
           }),

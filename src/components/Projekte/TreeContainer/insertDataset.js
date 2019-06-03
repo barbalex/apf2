@@ -1,13 +1,16 @@
-import gql from "graphql-tag"
-import upperFirst from "lodash/upperFirst"
-import camelCase from "lodash/camelCase"
-import get from "lodash/get"
+import gql from 'graphql-tag'
+import upperFirst from 'lodash/upperFirst'
+import camelCase from 'lodash/camelCase'
+import get from 'lodash/get'
 
-import tables from "../../../modules/tables"
+import tables from '../../../modules/tables'
 import {
   adresse as adresseFragment,
   user as userFragment,
-} from "../../shared/fragments"
+  tpopApberrelevantGrundWerte as tpopApberrelevantGrundWerteFragment,
+  tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
+} from '../../shared/fragments'
+import { Fragment } from 'react'
 
 export default async ({
   treeName,
@@ -35,9 +38,10 @@ export default async ({
   const idField = tableMetadata.idField
   if (!idField) {
     return addError(
-      new Error("new dataset not created as no idField could be found")
+      new Error('new dataset not created as no idField could be found'),
     )
   }
+  console.log('insertDataset', { table, parentId, menuType, id })
   let mutation = gql`
     mutation create${upperFirst(camelCase(table))}(
       $parentId: UUID!
@@ -58,10 +62,10 @@ export default async ({
   let variables = { parentId }
 
   let jahr
-  if (menuType === "zielFolder") {
+  if (menuType === 'zielFolder') {
     jahr = 1
   }
-  if (menuType === "zieljahrFolder") {
+  if (menuType === 'zieljahrFolder') {
     jahr = +id
     mutation = gql`
       mutation create${upperFirst(camelCase(table))}(
@@ -84,7 +88,7 @@ export default async ({
     }`
     variables = { parentId, jahr }
   }
-  if (menuType === "tpopfreiwkontrFolder") {
+  if (menuType === 'tpopfreiwkontrFolder') {
     mutation = gql`
       mutation create${upperFirst(camelCase(table))}(
         $parentId: UUID!
@@ -104,7 +108,7 @@ export default async ({
       }
     }`
   }
-  if (["userFolder", "user"].includes(menuType)) {
+  if (['userFolder', 'user'].includes(menuType)) {
     mutation = gql`
       mutation createUser($role: String!) {
         createUser(input: { user: { role: $role } }) {
@@ -116,9 +120,9 @@ export default async ({
       ${userFragment}
     `
     delete variables.parentId
-    variables.role = "apflora_reader"
+    variables.role = 'apflora_reader'
   }
-  if (["adresseFolder", "adresse"].includes(menuType)) {
+  if (['adresseFolder', 'adresse'].includes(menuType)) {
     mutation = gql`
       mutation createAdresse {
         createAdresse(input: { adresse: {} }) {
@@ -128,6 +132,21 @@ export default async ({
         }
       }
       ${adresseFragment}
+    `
+    delete variables.parentId
+  }
+  if (['werteFolder', 'werte'].includes(menuType)) {
+    const fields = `${upperFirst(table)}Fields`
+    const fragment = `${camelCase(table)}Fragment`
+    mutation = gql`
+      mutation create${upperFirst(table)} {
+        create${upperFirst(table)}(input: { ${table}: {} }) {
+          adresse {
+            ...${fields}
+          }
+        }
+      }
+      ${fragment}
     `
     delete variables.parentId
   }
@@ -144,19 +163,19 @@ export default async ({
   }
   const row = get(
     result,
-    `data.create${upperFirst(camelCase(table))}.${camelCase(table)}`
+    `data.create${upperFirst(camelCase(table))}.${camelCase(table)}`,
   )
   // set new url
   const newActiveNodeArray = [...url, row[idField]]
   setActiveNodeArray(newActiveNodeArray)
   // set open nodes
   let newOpenNodes = [...openNodes, newActiveNodeArray]
-  if (["zielFolder", "zieljahrFolder"].includes(menuType)) {
+  if (['zielFolder', 'zieljahrFolder'].includes(menuType)) {
     const urlWithoutJahr = [...url]
     urlWithoutJahr.pop()
     newOpenNodes = [...openNodes, urlWithoutJahr, newActiveNodeArray]
   }
   setOpenNodes(newOpenNodes)
-  const refetchName = `${table === "tpopkontrzaehl" ? table : tablePassed}s`
+  const refetchName = `${table === 'tpopkontrzaehl' ? table : tablePassed}s`
   refetch[refetchName]()
 }
