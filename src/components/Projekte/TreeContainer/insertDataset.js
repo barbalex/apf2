@@ -7,10 +7,11 @@ import tables from '../../../modules/tables'
 import {
   adresse as adresseFragment,
   user as userFragment,
+  // eslint-disable-next-line no-unused-vars
   tpopApberrelevantGrundWerte as tpopApberrelevantGrundWerteFragment,
+  // eslint-disable-next-line no-unused-vars
   tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
 } from '../../shared/fragments'
-import { Fragment } from 'react'
 
 export default async ({
   treeName,
