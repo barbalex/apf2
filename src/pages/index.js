@@ -119,84 +119,89 @@ export default ({ data }) => {
             </PageTitle>
             <CardContainer>
               <Card>
-                <CardTitle>Arten</CardTitle>
-                Sorgfältig ausgewählte, vom Aussterben bedrohte Pflanzen-Arten.
+                <CardTitle>Aktionsplanarten</CardTitle>
+                Sehr seltene und gefährdete Pflanzenarten, für welche der Kanton
+                Zürich eine besondere Verantwortung hat. Für jede zu fördernde
+                Pflanzenart wurde ein Aktionsplan erstellt.
               </Card>
               <Card>
-                <CardTitle>Aktionspläne</CardTitle>
-                Für jede Art ist ein ausgewiesener Experte oder eine Expertin
+                <CardTitle>Artverantwortliche</CardTitle>
+                Für jede Aktionsplanart ist ein Experte oder eine Expertin
                 verantwortlich.
               </Card>
               <Card>
                 <CardTitle>Populationen</CardTitle>
-                Hier leben die Arten noch - oder wieder. Populationen sind die
-                Basis für Ziele, Massnahmen, Kontrollen und Berichte.
+                Die Pflanzen einer Art bilden kleine oder grosse Populationen,
+                je nachdem wie günstig die Bedingungen für die Art sind.
               </Card>
               <Card>
                 <CardTitle>Ziele</CardTitle>
-                ...beschreiben, wie sich die Populationen künftig entwickeln
+                beschreiben, wie sich die Populationen künftig entwickeln
                 sollen, damit die Art langfristig erhalten bleibt.
               </Card>
               <Card>
                 <CardTitle>Idealbiotope</CardTitle>
-                Günstige Standorte werden analysiert. Sie dienen als Basis für
-                die Beurteilung und Aufwertung anderer.
+                An den Orten, wo die Aktionsplanarten gut gedeihen, werden die
+                Standortsbedingungen analysiert. Daraus lassen sich die
+                Idealbiotope ableiten. Diese geben den Massstab vor für die
+                Aufwertung und die Schaffung von neuen Wuchsorten.
               </Card>
               <Card>
                 <CardTitle>Massnahmen</CardTitle>
-                Die Arten werden gezielt gefördert. Zum Beispiel durch
-                Lebensraum-Verbesserung oder{' '}
-                <a
-                  href="//vermehrung.apflora.ch"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Vermehrung und Aussetzung
-                </a>
-                .
+                In erster Priorität werden die Lebensräume der ursprünglichen
+                Vorkommen der Aktionsplanarten gemäss ihrer Ansprüche
+                aufgewertet. In zweiter Priorität werden die Aktionsplanarten
+                vermehrt, um bestehende Populationen durch Ansiedlungen zu
+                verstärken oder um neue Populationen zu gründen.
               </Card>
               <Card>
                 <CardTitle>Kontrollen</CardTitle>
-                Profis und Freiwillige besuchen Populationen, erfassen den
-                Bestand und prüfen die Wirkung von Massnahmen.
+                Die Artverantwortlichen, aber auch Freiwillige besuchen
+                Populationen, erfassen die Grösse des Bestandes und überprüfen
+                die Wirkung der Massnahmen.
               </Card>
               <Card>
                 <CardTitle>Berichte</CardTitle>
-                Jährlich wird über die Entwicklung der Populationen, den Erfolg
-                der Massnahmen und die Erreichung der Ziele berichtet.
+                Jährlich verfassen die Artverantwortlichen einen Bericht über
+                die Entwicklung der Populationen, den Erfolg der Massnahmen und
+                die Erreichung der Ziele.
               </Card>
               <Card>
                 <CardTitle>Planung</CardTitle>
-                Aufgrund der Berichte und Erfahrungen werden die Massnahmen und
-                Kontrollen für das nächste Jahr geplant.
+                Aufgrund der in den Jahresberichten dargestellten Erfahrungen
+                planen die Artverantwortlichen die Massnahmen und Kontrollen für
+                das folgende Jahr.
               </Card>
               <Card>
                 <CardTitle>Beobachtungen</CardTitle>
-                Gemeldete Beobachtungen Dritter werden überprüft.
+                Die Artverantwortlichen prüfen von Dritten gemeldete
+                Beobachtungen und ordnen diese den Populationen der
+                Aktionsplanarten zu.
               </Card>
               <Card>
                 <CardTitle>Freiwillige</CardTitle>
-                ...unterstützen die Profis bei der Kontrolle von Populationen
-                und der{' '}
+                unterstützen die Artverantwortlichen bei der Kontrolle von
+                Populationen und der{' '}
                 <a
                   href="//vermehrung.apflora.ch"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Vermehrung von Pflanzen
+                  Vermehrung von Aktionsplanarten
                 </a>
                 .
               </Card>
               <Card>
-                <CardTitle>Wer organisiert das Projekt?</CardTitle>
+                <CardTitle>Organisation des Projektes</CardTitle>
+                durch&nbsp;
                 <a
                   href="//toposmm.ch"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Topos
+                  {'topos Marti & Müller AG'}
                 </a>
-                &nbsp;im Auftrag der{' '}
+                &nbsp;im Auftrag der&nbsp;
                 <a
                   href="//aln.zh.ch/internet/baudirektion/aln/de/naturschutz/artenfoerderung/ap_fl.html"
                   target="_blank"
@@ -213,8 +218,8 @@ export default ({ data }) => {
                     rel="noopener noreferrer"
                   >
                     Gabriel-Software
-                  </a>{' '}
-                  entwickelt.
+                  </a>
+                  &nbsp;entwickelt.
                 </p>
               </Card>
             </CardContainer>
