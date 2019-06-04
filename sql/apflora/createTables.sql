@@ -592,7 +592,6 @@ COMMENT ON COLUMN apflora.tpop.kataster_nr IS 'Kataster-Nummer';
 COMMENT ON COLUMN apflora.tpop.status IS 'Herkunft der Teilpopulation. Auswahl aus Tabelle "pop_status_werte"';
 COMMENT ON COLUMN apflora.tpop.status_unklar IS 'Ist der Status der Teilpopulation unklar? (es bestehen keine glaubwuerdigen Beboachtungen)';
 COMMENT ON COLUMN apflora.tpop.status_unklar_grund IS 'Wieso ist der Status unklar?';
-COMMENT ON COLUMN apflora.tpop.apber_relevant IS 'Ist die Teilpopulation für den AP-Bericht relevant? Auswahl aus der Tabelle "tpop_apberrelevant_werte"';
 COMMENT ON COLUMN apflora.tpop.apber_relevant_grund IS 'Grund für AP-Bericht Relevanz. Auswahl aus der Tabelle "tpop_apberrelevant_grund_werte"';
 COMMENT ON COLUMN apflora.tpop.bekannt_seit IS 'Seit wann ist die Teilpopulation bekannt?';
 COMMENT ON COLUMN apflora.tpop.eigentuemer IS 'EigentümerIn';
@@ -607,19 +606,6 @@ COMMENT ON COLUMN apflora.tpop.kontrollfrequenz IS 'Wert aus Tabelle tpopkontr_f
 COMMENT ON COLUMN apflora.tpop.kontrollfrequenz_freiwillige IS 'Wert aus Tabelle tpopkontr_frequenz_werte. Bestimmt, wie häufig durch Freiwillige kontrolliert werden soll';
 
 DROP TABLE IF EXISTS apflora.tpop_apberrelevant_werte;
-CREATE TABLE apflora.tpop_apberrelevant_werte (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  code integer UNIQUE DEFAULT NULL,
-  text text,
-  changed date DEFAULT NOW(),
-  changed_by varchar(20) NOT NULL
-);
-CREATE INDEX ON apflora.tpop_apberrelevant_werte USING btree (id);
-CREATE INDEX ON apflora.tpop_apberrelevant_werte USING btree (code);
-CREATE INDEX ON apflora.tpop_apberrelevant_werte USING btree (text);
-COMMENT ON COLUMN apflora.tpop_apberrelevant_werte.id IS 'Primärschlüssel';
-COMMENT ON COLUMN apflora.tpop_apberrelevant_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.tpop_apberrelevant_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.tpop_apberrelevant_grund_werte;
 CREATE TABLE apflora.tpop_apberrelevant_grund_werte (
@@ -641,7 +627,6 @@ DROP TABLE IF EXISTS apflora.tpop_entwicklung_werte;
 CREATE TABLE apflora.tpop_entwicklung_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   code integer UNIQUE DEFAULT NULL,
-  code integer PRIMARY KEY,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
