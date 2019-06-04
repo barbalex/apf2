@@ -10,8 +10,12 @@ export default async ({
   client,
 }) => {
   const { table, data, afterDeletionHook } = dataset
+  const isWerte = table.toLowerCase().includes('werte')
   // 1. create new dataset
-  const queryName = `create${upperFirst(camelCase(table))}`
+  // use one query for all werte tables
+  const queryName = isWerte
+    ? 'createWerte'
+    : `create${upperFirst(camelCase(table))}`
   let mutation
   try {
     mutation = await import(`./${queryName}`).then(m => m.default)
@@ -24,7 +28,7 @@ export default async ({
   }
   try {
     await client.mutate({
-      mutation,
+      mutation: isWerte ? mutation(table) : mutation,
       variables: data,
     })
   } catch (error) {

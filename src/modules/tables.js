@@ -337,13 +337,6 @@ export default [
     stammdaten: true,
   },
   {
-    table: 'tpop_apberrelevant_werte',
-    label: 'AP-Berichts-Relevant-Werte',
-    idField: 'id',
-    parentIdField: 'none',
-    stammdaten: true,
-  },
-  {
     table: 'gemeinde',
     label: 'Gemeinde',
     idField: 'id',

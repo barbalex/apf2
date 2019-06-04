@@ -329,7 +329,6 @@ const TreeContainer = ({ treeName }) => {
             refetch.aps()
             refetch.projekts()
           }
-          console.log('table:', table)
           setToDelete({
             table,
             id,

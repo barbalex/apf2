@@ -21,12 +21,16 @@ export default activeNode => {
       tableName = childTableName
     }
   }
+  //console.log('getTableNameFromActiveNode', { activeNode })
   if (
     ['adresseFolder', 'wlFolder', 'userFolder', 'currentIssuesFolder'].includes(
       activeNode.menuType,
     )
-  )
+  ) {
     return null
-  if (activeNode.menuType.includes('Werte')) return null
+  }
+  if (activeNode.menuType.includes('WerteFolder')) {
+    return null
+  }
   return tableName
 }

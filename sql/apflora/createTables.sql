@@ -72,7 +72,6 @@ COMMENT ON COLUMN apflora.adresse.evab_id_person IS 'Personen werden in EvAB sep
 COMMENT ON COLUMN apflora.adresse.evab_nachname IS 'Benötigt für den Export nach EvAB. Weil offenbar nicht immer alle Personen in EvAB enthalten sind, müssen sie jedesmal neu geschaffen werden :-(';
 COMMENT ON COLUMN apflora.adresse.evab_vorname IS 'Benötigt für den Export nach EvAB. Weil offenbar nicht immer alle Personen in EvAB enthalten sind, müssen sie jedesmal neu geschaffen werden :-(';
 COMMENT ON COLUMN apflora.adresse.evab_ort IS 'Benötigt für den Export nach EvAB. Weil offenbar nicht immer alle Personen in EvAB enthalten sind, müssen sie jedesmal neu geschaffen werden :-(';
-alter table apflora.adresse alter column changed_by set default null;
 
 ALTER TABLE apflora.adresse ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS writer ON apflora.adresse;
@@ -115,7 +114,6 @@ COMMENT ON COLUMN apflora.ap.ekf_beobachtungszeitpunkt IS 'bester Beobachtungsze
 COMMENT ON COLUMN apflora.ap.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 alter table apflora.ap add column ekf_beobachtungszeitpunkt text default null;
-alter table apflora.ap alter column changed_by set default null;
 
 -- this table is NOT YET IN USE
 DROP TABLE IF EXISTS apflora.userprojekt;
@@ -132,7 +130,7 @@ CREATE TABLE apflora.ap_bearbstand_werte (
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) NOT NULL
+  changed_by varchar(20) default NULL
 );
 CREATE INDEX ON apflora.ap_bearbstand_werte USING btree (id);
 CREATE INDEX ON apflora.ap_bearbstand_werte USING btree (code);
@@ -140,6 +138,7 @@ CREATE INDEX ON apflora.ap_bearbstand_werte USING btree (sort);
 COMMENT ON COLUMN apflora.ap_bearbstand_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.ap_bearbstand_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap_bearbstand_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+alter table apflora.ap_bearbstand_werte alter column changed_by set default null;
 
 -- this table is not used!!!
 DROP TABLE IF EXISTS apflora.ap_erfbeurtkrit_werte;
@@ -149,7 +148,7 @@ CREATE TABLE apflora.ap_erfbeurtkrit_werte (
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) NOT NULL
+  changed_by varchar(20) default NULL
 );
 CREATE INDEX ON apflora.ap_erfbeurtkrit_werte USING btree (id);
 CREATE INDEX ON apflora.ap_erfbeurtkrit_werte USING btree (code);
@@ -157,6 +156,7 @@ CREATE INDEX ON apflora.ap_erfbeurtkrit_werte USING btree (sort);
 COMMENT ON COLUMN apflora.ap_erfbeurtkrit_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.ap_erfbeurtkrit_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap_erfbeurtkrit_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+alter table apflora.ap_erfbeurtkrit_werte alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.ap_erfkrit_werte;
 CREATE TABLE apflora.ap_erfkrit_werte (
@@ -166,7 +166,7 @@ CREATE TABLE apflora.ap_erfkrit_werte (
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) NOT NULL
+  changed_by varchar(20) default NULL
 );
 CREATE INDEX ON apflora.ap_erfkrit_werte USING btree (id);
 CREATE INDEX ON apflora.ap_erfkrit_werte USING btree (code);
@@ -175,6 +175,7 @@ COMMENT ON COLUMN apflora.ap_erfkrit_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.ap_erfkrit_werte.text IS 'Wie werden die durchgefuehrten Massnahmen beurteilt?';
 COMMENT ON COLUMN apflora.ap_erfkrit_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap_erfkrit_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+alter table apflora.ap_erfkrit_werte alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.ap_umsetzung_werte;
 CREATE TABLE apflora.ap_umsetzung_werte (
@@ -183,7 +184,7 @@ CREATE TABLE apflora.ap_umsetzung_werte (
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) NOT NULL
+  changed_by varchar(20) default NULL
 );
 CREATE INDEX ON apflora.ap_umsetzung_werte USING btree (id);
 CREATE INDEX ON apflora.ap_umsetzung_werte USING btree (code);
@@ -191,6 +192,7 @@ CREATE INDEX ON apflora.ap_umsetzung_werte USING btree (sort);
 COMMENT ON COLUMN apflora.ap_umsetzung_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.ap_umsetzung_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap_umsetzung_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+alter table apflora.ap_umsetzung_werte alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.apber;
 CREATE TABLE apflora.apber (
@@ -301,7 +303,6 @@ CREATE INDEX ON apflora.projekt USING btree (id);
 CREATE INDEX ON apflora.projekt USING btree (name);
 COMMENT ON COLUMN apflora.projekt.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.projekt.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-alter table apflora.projekt alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.ber;
 CREATE TABLE apflora.ber (
@@ -326,7 +327,6 @@ COMMENT ON COLUMN apflora.ber.titel IS 'Titel des Berichts';
 COMMENT ON COLUMN apflora.ber.url IS 'Link zum Bericht';
 COMMENT ON COLUMN apflora.ber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-alter table apflora.ber alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.erfkrit;
 CREATE TABLE apflora.erfkrit (
@@ -348,7 +348,6 @@ COMMENT ON COLUMN apflora.erfkrit.erfolg IS 'Wie gut werden die Ziele erreicht? 
 COMMENT ON COLUMN apflora.erfkrit.kriterien IS 'Beschreibung der Kriterien für den Erfolg';
 COMMENT ON COLUMN apflora.erfkrit.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.erfkrit.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-alter table apflora.erfkrit alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.gemeinde;
 CREATE TABLE apflora.gemeinde (
@@ -407,7 +406,6 @@ COMMENT ON COLUMN apflora.idealbiotop.baumschicht IS 'Baumschicht';
 COMMENT ON COLUMN apflora.idealbiotop.bemerkungen IS 'Bemerkungen';
 COMMENT ON COLUMN apflora.idealbiotop.changed IS 'Wann wurde der Datensatz zuletzt verändert?';
 COMMENT ON COLUMN apflora.idealbiotop.changed_by IS 'Wer hat den Datensatz zuletzt verändert?';
-alter table apflora.idealbiotop alter column changed_by set default null;
 
 drop table if exists apflora.idealbiotop_file;
 create table apflora.idealbiotop_file (
@@ -455,7 +453,6 @@ COMMENT ON COLUMN apflora.pop.status_unklar_begruendung IS 'Begründung, wieso d
 COMMENT ON COLUMN apflora.pop.bekannt_seit IS 'Seit wann ist die Population bekannt?';
 COMMENT ON COLUMN apflora.pop.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.pop.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-alter table apflora.pop alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.pop_status_werte;
 CREATE TABLE apflora.pop_status_werte (
@@ -474,7 +471,6 @@ COMMENT ON COLUMN apflora.pop_status_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.pop_status_werte.text IS 'Beschreibung der Herkunft';
 COMMENT ON COLUMN apflora.pop_status_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.pop_status_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-alter table apflora.pop_status_werte alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.popber;
 CREATE TABLE apflora.popber (
@@ -499,7 +495,6 @@ CREATE INDEX ON apflora.popber USING btree (id);
 CREATE INDEX ON apflora.popber USING btree (pop_id);
 CREATE INDEX ON apflora.popber USING btree (entwicklung);
 CREATE INDEX ON apflora.popber USING btree (jahr);
-alter table apflora.popber alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.popmassnber;
 CREATE TABLE apflora.popmassnber (
@@ -524,7 +519,6 @@ COMMENT ON COLUMN apflora.popmassnber.beurteilung IS 'Wie wird die Wirkung aller
 COMMENT ON COLUMN apflora.popmassnber.bemerkungen IS 'Bemerkungen zur Beurteilung';
 COMMENT ON COLUMN apflora.popmassnber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.popmassnber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-alter table apflora.popmassnber alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.tpop;
 CREATE TABLE apflora.tpop (
@@ -559,7 +553,6 @@ CREATE TABLE apflora.tpop (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null
 );
-alter table apflora.tpop alter column changed_by set default null;
 -- 2018-09-25, remove later:
 ALTER TABLE apflora.tpop ADD COLUMN kontrollfrequenz integer DEFAULT null REFERENCES apflora.tpopkontr_frequenz_werte (code) ON DELETE SET NULL ON UPDATE CASCADE;
 CREATE INDEX ON apflora.tpop USING btree (kontrollfrequenz);
@@ -592,7 +585,6 @@ COMMENT ON COLUMN apflora.tpop.kataster_nr IS 'Kataster-Nummer';
 COMMENT ON COLUMN apflora.tpop.status IS 'Herkunft der Teilpopulation. Auswahl aus Tabelle "pop_status_werte"';
 COMMENT ON COLUMN apflora.tpop.status_unklar IS 'Ist der Status der Teilpopulation unklar? (es bestehen keine glaubwuerdigen Beboachtungen)';
 COMMENT ON COLUMN apflora.tpop.status_unklar_grund IS 'Wieso ist der Status unklar?';
-COMMENT ON COLUMN apflora.tpop.apber_relevant IS 'Ist die Teilpopulation für den AP-Bericht relevant? Auswahl aus der Tabelle "tpop_apberrelevant_werte"';
 COMMENT ON COLUMN apflora.tpop.apber_relevant_grund IS 'Grund für AP-Bericht Relevanz. Auswahl aus der Tabelle "tpop_apberrelevant_grund_werte"';
 COMMENT ON COLUMN apflora.tpop.bekannt_seit IS 'Seit wann ist die Teilpopulation bekannt?';
 COMMENT ON COLUMN apflora.tpop.eigentuemer IS 'EigentümerIn';
@@ -607,19 +599,6 @@ COMMENT ON COLUMN apflora.tpop.kontrollfrequenz IS 'Wert aus Tabelle tpopkontr_f
 COMMENT ON COLUMN apflora.tpop.kontrollfrequenz_freiwillige IS 'Wert aus Tabelle tpopkontr_frequenz_werte. Bestimmt, wie häufig durch Freiwillige kontrolliert werden soll';
 
 DROP TABLE IF EXISTS apflora.tpop_apberrelevant_werte;
-CREATE TABLE apflora.tpop_apberrelevant_werte (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  code integer UNIQUE DEFAULT NULL,
-  text text,
-  changed date DEFAULT NOW(),
-  changed_by varchar(20) NOT NULL
-);
-CREATE INDEX ON apflora.tpop_apberrelevant_werte USING btree (id);
-CREATE INDEX ON apflora.tpop_apberrelevant_werte USING btree (code);
-CREATE INDEX ON apflora.tpop_apberrelevant_werte USING btree (text);
-COMMENT ON COLUMN apflora.tpop_apberrelevant_werte.id IS 'Primärschlüssel';
-COMMENT ON COLUMN apflora.tpop_apberrelevant_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.tpop_apberrelevant_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.tpop_apberrelevant_grund_werte;
 CREATE TABLE apflora.tpop_apberrelevant_grund_werte (
@@ -628,7 +607,7 @@ CREATE TABLE apflora.tpop_apberrelevant_grund_werte (
   text text,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) NOT NULL
+  changed_by varchar(20) default NULL
 );
 CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree (id);
 CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree (code);
@@ -636,16 +615,16 @@ CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree (text);
 COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+alter table apflora.tpop_apberrelevant_grund_werte alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.tpop_entwicklung_werte;
 CREATE TABLE apflora.tpop_entwicklung_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   code integer UNIQUE DEFAULT NULL,
-  code integer PRIMARY KEY,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) NOT NULL
+  changed_by varchar(20) default NULL
 );
 CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree (id);
 CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree (code);
@@ -653,6 +632,7 @@ CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree (sort);
 COMMENT ON COLUMN apflora.tpop_entwicklung_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpop_entwicklung_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpop_entwicklung_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+alter table apflora.tpop_entwicklung_werte alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.tpopber;
 CREATE TABLE apflora.tpopber (
@@ -676,7 +656,6 @@ CREATE INDEX ON apflora.tpopber USING btree (id);
 CREATE INDEX ON apflora.tpopber USING btree (tpop_id);
 CREATE INDEX ON apflora.tpopber USING btree (entwicklung);
 CREATE INDEX ON apflora.tpopber USING btree (jahr);
-alter table apflora.tpopber alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.tpopkontr;
 CREATE TABLE apflora.tpopkontr (
@@ -732,7 +711,6 @@ CREATE TABLE apflora.tpopkontr (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null
 );
-alter table apflora.tpopkontr alter column changed_by set default null;
 CREATE INDEX ON apflora.tpopkontr USING btree (id);
 CREATE INDEX ON apflora.tpopkontr USING btree (tpop_id);
 CREATE INDEX ON apflora.tpopkontr USING btree (bearbeiter);
@@ -811,7 +789,7 @@ CREATE TABLE apflora.tpopkontr_idbiotuebereinst_werte (
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) NOT NULL
+  changed_by varchar(20) default NULL
 );
 CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree (id);
 CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree (code);
@@ -819,6 +797,7 @@ CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree (sort);
 COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+alter table apflora.tpopkontr_idbiotuebereinst_werte alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.tpopkontr_typ_werte;
 CREATE TABLE apflora.tpopkontr_typ_werte (
@@ -827,7 +806,7 @@ CREATE TABLE apflora.tpopkontr_typ_werte (
   text varchar(50) unique DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) NOT NULL
+  changed_by varchar(20) default NULL
 );
 CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree (id);
 CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree (code);
@@ -835,6 +814,7 @@ CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree (sort);
 COMMENT ON COLUMN apflora.tpopkontr_typ_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpopkontr_typ_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontr_typ_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+alter table apflora.tpopkontr_typ_werte alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl;
 CREATE TABLE apflora.tpopkontrzaehl (
@@ -858,7 +838,6 @@ CREATE INDEX ON apflora.tpopkontrzaehl USING btree (tpopkontr_id);
 CREATE INDEX ON apflora.tpopkontrzaehl USING btree (anzahl);
 CREATE INDEX ON apflora.tpopkontrzaehl USING btree (einheit);
 CREATE INDEX ON apflora.tpopkontrzaehl USING btree (methode);
-alter table apflora.tpopkontrzaehl alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl_einheit_werte;
 CREATE TABLE apflora.tpopkontrzaehl_einheit_werte (
@@ -867,7 +846,7 @@ CREATE TABLE apflora.tpopkontrzaehl_einheit_werte (
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) NOT NULL
+  changed_by varchar(20) default NULL
 );
 CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree (id);
 CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree (code);
@@ -875,6 +854,7 @@ CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree (sort);
 COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+alter table apflora.tpopkontrzaehl_einheit_werte alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl_methode_werte;
 CREATE TABLE apflora.tpopkontrzaehl_methode_werte (
@@ -883,8 +863,9 @@ CREATE TABLE apflora.tpopkontrzaehl_methode_werte (
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) NOT NULL
+  changed_by varchar(20) default NULL
 );
+alter table apflora.tpopkontrzaehl_methode_werte alter column changed_by set default null;
 CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree (id);
 CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree (code);
 CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree (sort);
@@ -918,7 +899,6 @@ CREATE TABLE apflora.tpopmassn (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null
 );
-alter table apflora.tpopmassn alter column changed_by set default null;
 CREATE UNIQUE INDEX ON apflora.tpopmassn USING btree (id);
 CREATE INDEX ON apflora.tpopmassn USING btree (tpop_id);
 CREATE INDEX ON apflora.tpopmassn USING btree (bearbeiter);
@@ -956,8 +936,9 @@ CREATE TABLE apflora.tpopmassn_erfbeurt_werte (
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) NOT NULL
+  changed_by varchar(20) default NULL
 );
+alter table apflora.tpopmassn_erfbeurt_werte alter column changed_by set default null;
 CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree (id);
 CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree (code);
 CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree (sort);
@@ -974,8 +955,9 @@ CREATE TABLE apflora.tpopmassn_typ_werte (
   sort smallint DEFAULT NULL,
   ansiedlung smallint NOT NULL,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) NOT NULL
+  changed_by varchar(20) DEFAULT NULL
 );
+alter table apflora.tpopmassn_typ_werte alter column changed_by set default null;
 CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (id);
 CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (code);
 CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (sort);
@@ -1007,7 +989,6 @@ COMMENT ON COLUMN apflora.tpopmassnber.beurteilung IS 'Beurteilung des Erfolgs. 
 COMMENT ON COLUMN apflora.tpopmassnber.bemerkungen IS 'Bemerkungen zur Beurteilung';
 COMMENT ON COLUMN apflora.tpopmassnber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopmassnber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-alter table apflora.tpopmassnber alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.message CASCADE;
 CREATE TABLE apflora.message (
@@ -1069,7 +1050,6 @@ COMMENT ON COLUMN apflora.ziel.jahr IS 'In welchem Jahr soll das Ziel erreicht w
 COMMENT ON COLUMN apflora.ziel.bezeichnung IS 'Textliche Beschreibung des Ziels';
 COMMENT ON COLUMN apflora.ziel.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ziel.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-alter table apflora.ziel alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.ziel_typ_werte;
 CREATE TABLE apflora.ziel_typ_werte (
@@ -1110,7 +1090,6 @@ COMMENT ON COLUMN apflora.zielber.erreichung IS 'Beurteilung der Zielerreichung'
 COMMENT ON COLUMN apflora.zielber.bemerkungen IS 'Bemerkungen zur Zielerreichung';
 COMMENT ON COLUMN apflora.zielber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.zielber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-alter table apflora.zielber alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.evab_typologie;
 CREATE TABLE apflora.evab_typologie (
@@ -1196,7 +1175,6 @@ CREATE TABLE apflora.beob (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null
 );
-alter table apflora.beob alter column changed_by set default null;
 CREATE INDEX ON apflora.beob USING btree (id);
 CREATE INDEX ON apflora.beob USING btree (quelle_id);
 CREATE INDEX ON apflora.beob USING btree (art_id);
@@ -1301,8 +1279,6 @@ COMMENT ON COLUMN apflora.tpopkontr_frequenz_werte.text IS 'Beschreibung der Kon
 COMMENT ON COLUMN apflora.tpopkontr_frequenz_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontr_frequenz_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 insert into apflora.tpopkontr_frequenz_werte (code, text, sort, changed_by) values (0, 'nie', 1, 'alex'), (1, 'jährlich', 2, 'alex'), (2, 'alle 2 Jahre', 3, 'alex'), (3, 'alle 3 Jahre', 4, 'alex');
-ALTER TABLE ONLY apflora.tpopkontr_frequenz_werte ALTER COLUMN changed_by drop default;
-ALTER TABLE ONLY apflora.tpopkontr_frequenz_werte ALTER COLUMN changed_by SET DEFAULT null;
 
 drop table if exists apflora.evab_personen;
 create table apflora.evab_personen (
