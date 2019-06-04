@@ -121,8 +121,8 @@ export default ({ data }) => {
               <Card>
                 <CardTitle>Aktionsplanarten</CardTitle>
                 Sehr seltene und gefährdete Pflanzenarten, für welche der Kanton
-                Zürich eine besondere Verantwortung hat. Für jede zu fördernde
-                Pflanzenart wurde ein Aktionsplan erstellt.
+                Zürich eine besondere Verantwortung hat. Für jede wurde ein
+                Aktionsplan erstellt.
               </Card>
               <Card>
                 <CardTitle>Artverantwortliche</CardTitle>
@@ -141,18 +141,18 @@ export default ({ data }) => {
               </Card>
               <Card>
                 <CardTitle>Idealbiotope</CardTitle>
-                An den Orten, wo die Aktionsplanarten gut gedeihen, werden die
+                Wo die Aktionsplanarten gut gedeihen, werden die
                 Standortsbedingungen analysiert. Daraus lassen sich die
                 Idealbiotope ableiten. Diese geben den Massstab vor für die
                 Aufwertung und die Schaffung von neuen Wuchsorten.
               </Card>
               <Card>
                 <CardTitle>Massnahmen</CardTitle>
-                In erster Priorität werden die Lebensräume der ursprünglichen
-                Vorkommen der Aktionsplanarten gemäss ihrer Ansprüche
-                aufgewertet. In zweiter Priorität werden die Aktionsplanarten
-                vermehrt, um bestehende Populationen durch Ansiedlungen zu
-                verstärken oder um neue Populationen zu gründen.
+                Primär werden die Lebensräume der ursprünglichen Vorkommen der
+                Aktionsplanarten gemäss ihrer Ansprüche aufgewertet. Sekundär
+                werden die Aktionsplanarten vermehrt, um bestehende Populationen
+                durch Ansiedlungen zu verstärken oder um neue Populationen zu
+                gründen.
               </Card>
               <Card>
                 <CardTitle>Kontrollen</CardTitle>
