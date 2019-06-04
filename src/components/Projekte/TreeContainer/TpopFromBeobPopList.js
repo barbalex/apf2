@@ -12,12 +12,17 @@ import get from 'lodash/get'
 
 import ErrorBoundary from '../../shared/ErrorBoundarySingleChild'
 import storeContext from '../../../storeContext'
+import createNewTpopFromBeob from '../../../modules/createNewTpopFromBeob'
 
 const StyledList = styled(List)`
   overflow-y: auto;
 `
 
-const TpopFromBeobPopList = ({ treeName, closeNewTpopFromBeobDialog }) => {
+const TpopFromBeobPopList = ({
+  treeName,
+  closeNewTpopFromBeobDialog,
+  beobId,
+}) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const tree = store[treeName]
@@ -48,17 +53,18 @@ const TpopFromBeobPopList = ({ treeName, closeNewTpopFromBeobDialog }) => {
 
   return (
     <ErrorBoundary>
-      <StyledList>
-        {pops.map(p => (
+      <StyledList dense>
+        {pops.map(pop => (
           <ListItem
-            key={p.id}
+            key={pop.id}
             button
             onClick={() => {
-              console.log('pop:', p)
+              console.log('pop:', { pop: pop, beobId })
+              createNewTpopFromBeob({ pop, beobId, client, store })
               closeNewTpopFromBeobDialog()
             }}
           >
-            {p.label}
+            {pop.label}
           </ListItem>
         ))}
       </StyledList>

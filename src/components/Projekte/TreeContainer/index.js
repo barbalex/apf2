@@ -274,6 +274,7 @@ const TreeContainer = ({ treeName }) => {
   const [newTpopFromBeobDialogOpen, setNewTpopFromBeobDialogOpen] = useState(
     false,
   )
+  const [newTpopFromBeobBeobId, setNewTpopFromBeobBeobId] = useState(null)
   const closeNewTpopFromBeobDialog = useCallback(
     () => setNewTpopFromBeobDialogOpen(false),
     [],
@@ -424,6 +425,7 @@ const TreeContainer = ({ treeName }) => {
           })
         },
         createNewTpopFromBeob() {
+          setNewTpopFromBeobBeobId(id)
           setNewTpopFromBeobDialogOpen(true)
         },
         copyBeobZugeordnetKoordToTpop() {
@@ -604,6 +606,7 @@ const TreeContainer = ({ treeName }) => {
           </DialogTitle>
           <TpopFromBeobPopList
             treeName={treeName}
+            beobId={newTpopFromBeobBeobId}
             closeNewTpopFromBeobDialog={closeNewTpopFromBeobDialog}
           />
           <DialogActions>
