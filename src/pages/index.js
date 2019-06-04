@@ -141,10 +141,10 @@ export default ({ data }) => {
               </Card>
               <Card>
                 <CardTitle>Idealbiotope</CardTitle>
-                Wo die Aktionsplanarten gut gedeihen, werden die
-                Standortsbedingungen analysiert. Daraus lassen sich die
-                Idealbiotope ableiten. Diese geben den Massstab vor für die
-                Aufwertung und die Schaffung von neuen Wuchsorten.
+                Wo Aktionsplanarten gut gedeihen, werden die
+                Standortsbedingungen analysiert. Daraus lassen sich Idealbiotope
+                ableiten. Diese geben den Massstab vor für die Aufwertung und
+                die Schaffung von neuen Wuchsorten.
               </Card>
               <Card>
                 <CardTitle>Massnahmen</CardTitle>
