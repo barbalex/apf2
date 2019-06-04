@@ -110,6 +110,8 @@ const Werte = ({ treeName, table }) => {
     [row],
   )
 
+  //console.log('Werte')
+
   if (loading) {
     return (
       <Container>
