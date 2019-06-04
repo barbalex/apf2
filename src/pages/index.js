@@ -150,7 +150,7 @@ export default ({ data }) => {
                 <CardTitle>Massnahmen</CardTitle>
                 Primär werden die Lebensräume der ursprünglichen Vorkommen der
                 Aktionsplanarten gemäss ihrer Ansprüche aufgewertet. Sekundär
-                werden die Aktionsplanarten vermehrt, um bestehende Populationen
+                werden Aktionsplanarten vermehrt, um bestehende Populationen
                 durch Ansiedlungen zu verstärken oder um neue Populationen zu
                 gründen.
               </Card>
