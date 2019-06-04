@@ -11,11 +11,7 @@ import { useApolloClient } from 'react-apollo-hooks'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
 
 import LabelFilter from './LabelFilter'
 import ApFilter from './ApFilter'
@@ -92,6 +88,7 @@ import openLowerNodes from './openLowerNodes'
 import closeLowerNodes from './closeLowerNodes'
 import insertDataset from './insertDataset'
 import storeContext from '../../../storeContext'
+import TpopFromBeobPopList from './TpopFromBeobPopList'
 
 const Container = styled.div`
   height: 100%;
@@ -196,6 +193,12 @@ const InnerTreeContainer = styled.div`
   height: 100%;
   width: 100%;
   overflow: hidden;
+`
+const StyledDialog = styled(Dialog)`
+  overflow-y: hidden;
+  .MuiDialog-paper {
+    overflow-y: hidden;
+  }
 `
 
 const getAndValidateCoordinatesOfTpop = async ({ id, addError, client }) => {
@@ -590,7 +593,7 @@ const TreeContainer = ({ treeName }) => {
           onClick={handleClick}
           treeName={treeName}
         />
-        <Dialog
+        <StyledDialog
           open={newTpopFromBeobDialogOpen}
           onClose={closeNewTpopFromBeobDialog}
           aria-labelledby="alert-dialog-title"
@@ -599,17 +602,14 @@ const TreeContainer = ({ treeName }) => {
           <DialogTitle id="alert-dialog-title">
             {'Population wählen:'}
           </DialogTitle>
-          <List>
-            <ListItem button>TODO: load pop labels</ListItem>
-            <ListItem button>pop 2</ListItem>
-            <ListItem button>pop 3</ListItem>
-          </List>
+          <TpopFromBeobPopList
+            treeName={treeName}
+            closeNewTpopFromBeobDialog={closeNewTpopFromBeobDialog}
+          />
           <DialogActions>
-            <Button onClick={closeNewTpopFromBeobDialog} color="primary">
-              abbrechen
-            </Button>
+            <Button onClick={closeNewTpopFromBeobDialog}>abbrechen</Button>
           </DialogActions>
-        </Dialog>
+        </StyledDialog>
       </Container>
     </ErrorBoundary>
   )
