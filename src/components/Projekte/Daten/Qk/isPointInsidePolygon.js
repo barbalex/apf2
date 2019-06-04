@@ -6,7 +6,7 @@ export default (polygon, lat, long) => {
     type: 'Feature',
     geometry: {
       type: 'Point',
-      coordinates: [lat, long],
+      coordinates: [long, lat],
     },
   }
   // let turf check if the point is in zh
