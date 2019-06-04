@@ -37,7 +37,9 @@ export default async ({ client, store }) => {
    * fetch data for dataset
    * then add it to deletedDatasets
    */
-  const queryName = `${camelCase(table)}ById`
+  const isWerte = table.toLowerCase().includes('werte')
+  const tableName = camelCase(table)
+  const queryName = `${tableName}ById`
   /**
    * cannot use `./${camelCase(table)}ById`
    * because webpack performs static analysis at build time
@@ -45,9 +47,22 @@ export default async ({ client, store }) => {
    */
   let result
   try {
-    const query = await import(`./${queryName}`) //.then(m => m.default)
+    const query = isWerte
+      ? gql`
+          query werteById($id: UUID!) {
+            ${queryName}(id: $id) {
+              id
+              code
+              text
+              sort
+              changed
+              changedBy
+            }
+          }
+        `
+      : await import(`./${queryName}`).default
     result = await client.query({
-      query: query.default,
+      query,
       variables: { id: toDeleteId },
     })
   } catch (error) {
@@ -70,7 +85,7 @@ export default async ({ client, store }) => {
   try {
     await client.mutate({
       mutation: gql`
-        mutation delete${upperFirst(camelCase(table))}($id: UUID!) {
+        mutation deleteSomething($id: UUID!) {
           delete${upperFirst(camelCase(table))}ById(input: { id: $id }) {
             ${camelCase(table)} {
               id

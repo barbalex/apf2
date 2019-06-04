@@ -65,7 +65,7 @@ const Daten = ({ treeName }) => {
         form = <Adresse treeName={treeName} />
         break
       }
-      case 'apberrelevantGrundWerte': {
+      case 'tpopApberrelevantGrundWerte': {
         const Werte = loadable(() => import('./Werte'))
         form = (
           <Werte treeName={treeName} table="tpop_apberrelevant_grund_werte" />

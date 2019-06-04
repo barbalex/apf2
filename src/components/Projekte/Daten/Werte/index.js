@@ -104,7 +104,8 @@ const Werte = ({ treeName, table }) => {
         return setErrors({ [field]: error.message })
       }
       refetch()
-      refetchTree[tableCamelCased]()
+      const refetchTableName = `${table}s`
+      refetchTree[refetchTableName] && refetchTree[refetchTableName]()
       setErrors({})
     },
     [row],
@@ -126,7 +127,7 @@ const Werte = ({ treeName, table }) => {
       <Container>
         <FormTitle
           apId={row.apId}
-          title={`Werte für ${table}`}
+          title={table}
           treeName={treeName}
           table={table}
         />
