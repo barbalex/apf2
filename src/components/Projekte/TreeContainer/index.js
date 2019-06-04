@@ -1,13 +1,21 @@
 /**
  * need to keep class because of ref
  */
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import uniq from 'lodash/uniq'
 import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from 'react-apollo-hooks'
+import Button from '@material-ui/core/Button'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogContentText from '@material-ui/core/DialogContentText'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
 
 import LabelFilter from './LabelFilter'
 import ApFilter from './ApFilter'
@@ -260,6 +268,14 @@ const TreeContainer = ({ treeName }) => {
   const { openNodes, setOpenNodes, setActiveNodeArray } = store[treeName]
   const { projekt } = store[`${treeName}ActiveNodes`]
 
+  const [newTpopFromBeobDialogOpen, setNewTpopFromBeobDialogOpen] = useState(
+    false,
+  )
+  const closeNewTpopFromBeobDialog = useCallback(
+    () => setNewTpopFromBeobDialogOpen(false),
+    [],
+  )
+
   const handleClick = useCallback(
     (e, data, element) => {
       if (!data) return addError('no data passed with click')
@@ -403,6 +419,9 @@ const TreeContainer = ({ treeName }) => {
             client,
             store,
           })
+        },
+        createNewTpopFromBeob() {
+          setNewTpopFromBeobDialogOpen(true)
         },
         copyBeobZugeordnetKoordToTpop() {
           copyBeobZugeordnetKoordToTpop({ id, addError, client })
@@ -571,6 +590,26 @@ const TreeContainer = ({ treeName }) => {
           onClick={handleClick}
           treeName={treeName}
         />
+        <Dialog
+          open={newTpopFromBeobDialogOpen}
+          onClose={closeNewTpopFromBeobDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {'Population wählen:'}
+          </DialogTitle>
+          <List>
+            <ListItem button>TODO: load pop labels</ListItem>
+            <ListItem button>pop 2</ListItem>
+            <ListItem button>pop 3</ListItem>
+          </List>
+          <DialogActions>
+            <Button onClick={closeNewTpopFromBeobDialog} color="primary">
+              abbrechen
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Container>
     </ErrorBoundary>
   )
