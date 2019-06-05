@@ -50,6 +50,24 @@ const BeobNichtZuzuordnenMarker = ({ treeName, beob }) => {
   const autor = beob.autor || '(kein Autor)'
   const quelle = get(beob, 'beobQuelleWerteByQuelleId.name', '')
   const label = `${datum}: ${autor} (${quelle})`
+  const openBeobInTree2 = useCallback(() => {
+    openTree2WithActiveNodeArray([
+      'Projekte',
+      projekt,
+      'Aktionspläne',
+      ap,
+      'nicht-zuzuordnende-Beobachtungen',
+      beob.id,
+    ])
+  }, [beob.id])
+  const openBeobInTab = useCallback(() => {
+    typeof window !== 'undefined' &&
+      window.open(
+        `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/nicht-zuzuordnende-Beobachtungen/${
+          beob.id
+        }`,
+      )
+  }, [beob.id])
 
   return (
     <Marker position={latLng} icon={icon} title={label}>
@@ -66,15 +84,16 @@ const BeobNichtZuzuordnenMarker = ({ treeName, beob }) => {
               'de-ch',
             )} / ${beob.lv95Y.toLocaleString('de-ch')}`}
           </div>
-          <a
-            href={`${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/nicht-zuzuordnende-Beobachtungen/${
-              beob.id
-            }`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <StyledButton size="small" variant="outlined" onClick={openBeobInTab}>
             Formular in neuem Tab öffnen
-          </a>
+          </StyledButton>
+          <StyledButton
+            size="small"
+            variant="outlined"
+            onClick={openBeobInTree2}
+          >
+            Formular in Strukturbaum 2 öffnen
+          </StyledButton>
         </>
       </Popup>
     </Marker>

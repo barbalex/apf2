@@ -133,15 +133,6 @@ const BeobNichtBeurteiltMarker = ({ treeName, beob }) => {
               'de-ch',
             )} / ${beob.lv95Y.toLocaleString('de-ch')}`}
           </div>
-          <a
-            href={`${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/nicht-beurteilte-Beobachtungen/${
-              beob.id
-            }`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Formular in neuem Tab öffnen
-          </a>
           <StyledButton size="small" variant="outlined" onClick={openBeobInTab}>
             Formular in neuem Tab öffnen
           </StyledButton>
