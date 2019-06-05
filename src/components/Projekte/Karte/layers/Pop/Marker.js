@@ -129,7 +129,7 @@ const PopMarker = ({ treeName, pop }) => {
             variant="outlined"
             onClick={openPopInTree2}
           >
-            Formular in neuer Spalte öffnen
+            Formular in Strukturbaum 2 öffnen
           </StyledButton>
         </>
       </Popup>
