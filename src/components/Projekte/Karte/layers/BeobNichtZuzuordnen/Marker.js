@@ -1,10 +1,11 @@
-import React, { useContext } from 'react'
+import React, { useContext, useCallback } from 'react'
 import { Marker, Popup } from 'react-leaflet'
 import get from 'lodash/get'
 import format from 'date-fns/format'
 import isValid from 'date-fns/isValid'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+import Button from '@material-ui/core/Button'
 
 import storeContext from '../../../../../storeContext'
 import beobIcon from './beob.svg'
@@ -14,9 +15,13 @@ import appBaseUrl from '../../../../../modules/appBaseUrl'
 const StyledH3 = styled.h3`
   margin: 7px 0;
 `
+const StyledButton = styled(Button)`
+  margin-top: 5px !important;
+`
 
 const BeobNichtZuzuordnenMarker = ({ treeName, beob }) => {
   const store = useContext(storeContext)
+  const { openTree2WithActiveNodeArray } = store
   const activeNodes = store[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
   const { idsFiltered } = store[treeName].map

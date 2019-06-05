@@ -64,6 +64,24 @@ const PopMarker = ({ treeName, pop }) => {
       if (isHighlighted) iconUrl = uIconHighlighted
     }
   }
+  const openPopInTree2 = useCallback(() => {
+    openTree2WithActiveNodeArray([
+      'Projekte',
+      projekt,
+      'Aktionspläne',
+      ap,
+      'Populationen',
+      pop.id,
+    ])
+  }, [pop.id])
+  const openPopInTab = useCallback(() => {
+    typeof window !== 'undefined' &&
+      window.open(
+        `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${
+          pop.id
+        }`,
+      )
+  }, [pop.id])
 
   if (typeof window === 'undefined') return null
   const latLng = new window.L.LatLng(pop.wgs84Lat, pop.wgs84Long)
@@ -76,24 +94,6 @@ const PopMarker = ({ treeName, pop }) => {
     apfloraLayer => apfloraLayer.value === 'pop',
   )
   const artname = get(pop, 'apByApId.aeEigenschaftenByArtId.artname', '')
-  const openPopInTree2 = useCallback(() => {
-    openTree2WithActiveNodeArray([
-      'Projekte',
-      projekt,
-      'Aktionspläne',
-      ap,
-      'Populationen',
-      pop.id,
-    ])
-  }, [])
-  const openPopInTab = useCallback(() => {
-    typeof window !== 'undefined' &&
-      window.open(
-        `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${
-          pop.id
-        }`,
-      )
-  }, [])
 
   return (
     <Marker

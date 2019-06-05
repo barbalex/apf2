@@ -6,6 +6,7 @@ import isValid from 'date-fns/isValid'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from 'react-apollo-hooks'
+import Button from '@material-ui/core/Button'
 
 import storeContext from '../../../../../storeContext'
 import beobIcon from './beob.svg'
@@ -17,11 +18,14 @@ import updateBeobByIdGql from './updateBeobById'
 const StyledH3 = styled.h3`
   margin: 7px 0;
 `
+const StyledButton = styled(Button)`
+  margin-top: 5px !important;
+`
 
 const BeobZugeordnetMarker = ({ treeName, beob }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { assigningBeob, refetch } = store
+  const { assigningBeob, refetch, openTree2WithActiveNodeArray } = store
   const { map, setActiveNodeArray } = store[treeName]
   const activeNodes = store[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes

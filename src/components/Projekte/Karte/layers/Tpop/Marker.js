@@ -1,8 +1,9 @@
-import React, { useContext } from 'react'
+import React, { useContext, useCallback } from 'react'
 import { Marker, Tooltip, Popup } from 'react-leaflet'
 import get from 'lodash/get'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+import Button from '@material-ui/core/Button'
 
 import storeContext from '../../../../../storeContext'
 import tpopIcon from './tpop.svg'
@@ -25,9 +26,13 @@ const StyledTooltip = styled(Tooltip)`
     content: none !important;
   }
 `
+const StyledButton = styled(Button)`
+  margin-top: 5px !important;
+`
 
 const TpopMarker = ({ treeName, tpop }) => {
   const store = useContext(storeContext)
+  const { openTree2WithActiveNodeArray } = store
   const activeNodes = store[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
   const {
@@ -57,6 +62,27 @@ const TpopMarker = ({ treeName, tpop }) => {
       if (isHighlighted) iconUrl = uIconHighlighted
     }
   }
+  const popId = get(tpop, 'popByPopId.id', '')
+  const openTpopInTree2 = useCallback(() => {
+    openTree2WithActiveNodeArray([
+      'Projekte',
+      projekt,
+      'Aktionspläne',
+      ap,
+      'Populationen',
+      popId,
+      'Teil-Populationen',
+      tpop.id,
+    ])
+  }, [tpop.id])
+  const openTpopInTab = useCallback(() => {
+    typeof window !== 'undefined' &&
+      window.open(
+        `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${popId}/Teil-Populationen/${
+          tpop.id
+        }`,
+      )
+  }, [tpop.id])
 
   if (typeof window === 'undefined') return null
   const latLng = new window.L.LatLng(tpop.wgs84Lat, tpop.wgs84Long)
@@ -100,17 +126,16 @@ const TpopMarker = ({ treeName, tpop }) => {
             'popStatusWerteByStatus.text',
             '(kein Status)',
           )}`}</div>
-          <a
-            href={`${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${get(
-              tpop,
-              'popByPopId.id',
-              '',
-            )}/Teil-Populationen/${tpop.id}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <StyledButton size="small" variant="outlined" onClick={openTpopInTab}>
             Formular in neuem Tab öffnen
-          </a>
+          </StyledButton>
+          <StyledButton
+            size="small"
+            variant="outlined"
+            onClick={openTpopInTree2}
+          >
+            Formular in Strukturbaum 2 öffnen
+          </StyledButton>
         </>
       </Popup>
       <StyledTooltip direction="bottom" opacity={1} permanent>
