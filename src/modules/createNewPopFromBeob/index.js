@@ -11,7 +11,7 @@ import updateBeobById from './updateBeobById'
 export default async ({ treeName, id, client, store }) => {
   const { addError, refetch } = store
   const tree = store[treeName]
-  const { setActiveNodeArray, setOpenNodes } = tree
+  const { setActiveNodeArray, addOpenNodes } = tree
   const activeNodes = store[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
   let beobResult
@@ -139,7 +139,7 @@ export default async ({ treeName, id, client, store }) => {
     // and remove old node
     .filter(n => !isEqual(n, tree.activeNodeArray))
 
-  setOpenNodes(newOpenNodes)
+  addOpenNodes(newOpenNodes)
   setActiveNodeArray(newActiveNodeArray)
 
   // TODO: what is this for?
