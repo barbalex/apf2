@@ -8,6 +8,7 @@ import Paper from '@material-ui/core/Paper'
 import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from 'react-apollo-hooks'
+import { FaExternalLinkAlt } from 'react-icons/fa'
 
 import FormTitle from '../../../shared/FormTitle'
 import appBaseUrl from '../../../../modules/appBaseUrl'
@@ -37,10 +38,26 @@ const StyledPaper = styled(Paper)`
 const Title = styled.div`
   font-weight: bold;
 `
-const StyledA = styled.a`
+const StyledA = styled.p`
   color: inherit;
   font-weight: normal;
   font-size: 12px;
+  text-decoration-line: underline;
+  cursor: pointer;
+  margin-bottom: 0;
+  padding: 2px 0;
+`
+const Row = styled.div`
+  display: flex;
+`
+const OutsideLink = styled.div`
+  margin-left: 8px;
+  margin-bottom: -2px;
+  cursor: pointer;
+  svg {
+    font-size: 0.9em;
+    color: rgba(0, 0, 0, 0.77);
+  }
 `
 const StyledFormControl = styled(FormControl)`
   padding-bottom: 19px !important;
@@ -59,7 +76,7 @@ const StyledButton = styled(Button)`
 
 const Qk = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { ktZh, setKtZh, addError } = store
+  const { ktZh, setKtZh, addError, openTree2WithActiveNodeArray } = store
   const { activeNodeArray } = store[treeName]
 
   const [berichtjahr, setBerichtjahr] = useState(standardQkYear())
@@ -141,14 +158,23 @@ const Qk = ({ treeName }) => {
             <StyledPaper key={index} elevation={2}>
               <Title>{messageGroup.title}</Title>
               {messageGroup.messages.map(m => (
-                <div key={m.url.join()}>
+                <Row key={m.url.join()}>
                   <StyledA
-                    href={`${appBaseUrl()}Daten/${m.url.join('/')}`}
-                    target="_blank"
+                    onClick={() => openTree2WithActiveNodeArray(m.url)}
+                    title="in Strukturbaum 2 öffnen"
                   >
                     {m.text}
                   </StyledA>
-                </div>
+                  <OutsideLink
+                    onClick={() =>
+                      typeof window !== 'undefined' &&
+                      window.open(`${appBaseUrl()}Daten/${m.url.join('/')}`)
+                    }
+                    title="in neuem Tab öffnen"
+                  >
+                    <FaExternalLinkAlt />
+                  </OutsideLink>
+                </Row>
               ))}
             </StyledPaper>
           ))}
