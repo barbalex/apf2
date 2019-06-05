@@ -11,7 +11,10 @@ import {
 export default gql`
   mutation updateBeob($id: UUID!, $tpopId: UUID) {
     updateBeobById(
-      input: { id: $id, beobPatch: { id: $id, tpopId: $tpopId } }
+      input: {
+        id: $id
+        beobPatch: { id: $id, tpopId: $tpopId, nichtZuordnen: false }
+      }
     ) {
       beob {
         ...BeobFields

@@ -41,7 +41,10 @@ const createTpop = gql`
 const updateBeobById = gql`
   mutation updateBeob($beobId: UUID!, $tpopId: UUID) {
     updateBeobById(
-      input: { id: $beobId, beobPatch: { id: $beobId, tpopId: $tpopId } }
+      input: {
+        id: $beobId
+        beobPatch: { id: $beobId, tpopId: $tpopId, nichtZuordnen: false }
+      }
     ) {
       beob {
         ...BeobFields
