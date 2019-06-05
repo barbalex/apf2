@@ -59,8 +59,7 @@ const TpopFromBeobPopList = ({
             key={pop.id}
             button
             onClick={() => {
-              console.log('pop:', { pop: pop, beobId })
-              createNewTpopFromBeob({ pop, beobId, client, store })
+              createNewTpopFromBeob({ treeName, pop, beobId, client, store })
               closeNewTpopFromBeobDialog()
             }}
           >

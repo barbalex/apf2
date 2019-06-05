@@ -2,13 +2,86 @@ import format from 'date-fns/format'
 import isValid from 'date-fns/isValid'
 import isEqual from 'date-fns/isEqual'
 import get from 'lodash/get'
+import gql from 'graphql-tag'
 
-import queryBeob from './queryBeob'
-import createPop from './createPop'
-import createTpop from './createTpop'
-import updateBeobById from './updateBeobById'
+import {
+  beob as beobFragment,
+  tpop,
+  aeEigenschaften,
+  beobQuelleWerte,
+  popStatusWerte,
+} from '../components/shared/fragments'
 
-export default async ({ treeName, id, client, store }) => {
+const createTpop = gql`
+  mutation createTpop(
+    $popId: UUID
+    $gemeinde: String
+    $flurname: String
+    $geomPoint: String
+    $bekanntSeit: Int
+  ) {
+    createTpop(
+      input: {
+        tpop: {
+          popId: $popId
+          gemeinde: $gemeinde
+          flurname: $flurname
+          geomPoint: $geomPoint
+          bekanntSeit: $bekanntSeit
+        }
+      }
+    ) {
+      tpop {
+        ...TpopFields
+      }
+    }
+  }
+  ${tpop}
+`
+const updateBeobById = gql`
+  mutation updateBeob($beobId: UUID!, $tpopId: UUID) {
+    updateBeobById(
+      input: { id: $beobId, beobPatch: { id: $beobId, tpopId: $tpopId } }
+    ) {
+      beob {
+        ...BeobFields
+        aeEigenschaftenByArtId {
+          ...AeEigenschaftenFields
+          apByArtId {
+            id
+            popsByApId {
+              nodes {
+                id
+                tpopsByPopId {
+                  nodes {
+                    ...TpopFields
+                    popStatusWerteByStatus {
+                      ...PopStatusWerteFields
+                    }
+                    popByPopId {
+                      id
+                      nr
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        beobQuelleWerteByQuelleId {
+          ...BeobQuelleWerteFields
+        }
+      }
+    }
+  }
+  ${aeEigenschaften}
+  ${beobFragment}
+  ${beobQuelleWerte}
+  ${popStatusWerte}
+  ${tpop}
+`
+
+export default async ({ treeName, pop, beobId, client, store }) => {
   const { addError, refetch } = store
   const tree = store[treeName]
   const { setActiveNodeArray, setOpenNodes } = tree
@@ -17,8 +90,15 @@ export default async ({ treeName, id, client, store }) => {
   let beobResult
   try {
     beobResult = await client.query({
-      query: queryBeob,
-      variables: { id },
+      query: gql`
+        query Query($beobId: UUID!) {
+          beobById(id: $beobId) {
+            ...BeobFields
+          }
+        }
+        ${beobFragment}
+      `,
+      variables: { beobId },
     })
   } catch (error) {
     return addError(error)
@@ -27,22 +107,6 @@ export default async ({ treeName, id, client, store }) => {
   const { geomPoint, datum, data } = beob
   const datumIsValid = isValid(new Date(datum))
   const bekanntSeit = datumIsValid ? +format(new Date(datum), 'yyyy') : null
-
-  // create new pop for ap
-  let popResult
-  try {
-    popResult = await client.mutate({
-      mutation: createPop,
-      variables: {
-        apId: ap,
-        geomPoint,
-        bekanntSeit,
-      },
-    })
-  } catch (error) {
-    return addError(error)
-  }
-  const pop = get(popResult, 'data.createPop.pop')
 
   // create new tpop for pop
   let tpopResult
@@ -66,7 +130,7 @@ export default async ({ treeName, id, client, store }) => {
     await client.mutate({
       mutation: updateBeobById,
       variables: {
-        id,
+        beobId,
         tpopId: tpop.id,
       },
     })
@@ -85,7 +149,7 @@ export default async ({ treeName, id, client, store }) => {
     `Teil-Populationen`,
     tpop.id,
     `Beobachtungen`,
-    id,
+    beobId,
   ]
 
   let newOpenNodes = [
@@ -133,7 +197,7 @@ export default async ({ treeName, id, client, store }) => {
       `Teil-Populationen`,
       tpop.id,
       `Beobachtungen`,
-      id,
+      beobId,
     ],
   ]
     // and remove old node
