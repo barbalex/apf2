@@ -1,7 +1,7 @@
 /**
  * need to keep class because of ref
  */
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import List from '@material-ui/core/List'
