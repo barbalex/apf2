@@ -23,6 +23,7 @@ import initialNodeFilterTreeValues from './NodeFilterTree/initialValues'
 import User, { defaultValue as defaultUser } from './User'
 import Tree, { defaultValue as defaultTree } from './Tree'
 import getActiveNodes from '../modules/getActiveNodes'
+import getOpenNodesFromActiveNodeArray from '../modules/getOpenNodesFromActiveNodeArray'
 
 // substract 3 Months to now so user sees previous year in February
 const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
@@ -287,6 +288,12 @@ const myTypes = types
     },
     cloneTree2From1() {
       self.tree2 = cloneDeep(self.tree)
+    },
+    openNewTree2WithActiveNodeArray(activeNodeArray) {
+      const openNodes = getOpenNodesFromActiveNodeArray(activeNodeArray)
+      self.tree2 = { ...defaultTree, activeNodeArray, openNodes }
+      self.urlQuery.addProjekteTab('tree2')
+      self.urlQuery.addProjekteTab('daten2')
     },
     treeNodeLabelFilterResetExceptAp({ tree }) {
       self[tree].nodeLabelFilter = {

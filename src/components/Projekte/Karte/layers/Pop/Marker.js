@@ -1,13 +1,10 @@
-import React, { useContext } from 'react'
+import React, { useContext, useCallback } from 'react'
 import { Marker, Tooltip, Popup } from 'react-leaflet'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
+import Button from '@material-ui/core/Button'
 
-/**
- * TODO: the svg path on production contains "Projekte/1/" !!??
- * Maybe give an absolute path?
- */
 import storeContext from '../../../../../storeContext'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import popIcon from './pop.svg'
@@ -29,10 +26,13 @@ const StyledTooltip = styled(Tooltip)`
     content: none !important;
   }
 `
+const StyledButton = styled(Button)`
+  margin-top: 5px !important;
+`
 
 const PopMarker = ({ treeName, pop }) => {
   const store = useContext(storeContext)
-  const { apfloraLayers } = store
+  const { apfloraLayers, openNewTree2WithActiveNodeArray } = store
   const activeNodes = store[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
   const { idsFiltered, popIcon: popIconName, popLabel: popLabelName } = store[
@@ -76,6 +76,24 @@ const PopMarker = ({ treeName, pop }) => {
     apfloraLayer => apfloraLayer.value === 'pop',
   )
   const artname = get(pop, 'apByApId.aeEigenschaftenByArtId.artname', '')
+  const openPopInTree2 = useCallback(() => {
+    openNewTree2WithActiveNodeArray([
+      'Projekte',
+      projekt,
+      'Aktionspläne',
+      ap,
+      'Populationen',
+      pop.id,
+    ])
+  }, [])
+  const openPopInTab = useCallback(() => {
+    typeof window !== 'undefined' &&
+      window.open(
+        `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${
+          pop.id
+        }`,
+      )
+  }, [])
 
   return (
     <Marker
@@ -103,15 +121,16 @@ const PopMarker = ({ treeName, pop }) => {
             'popStatusWerteByStatus.text',
             '(kein Status)',
           )}`}</div>
-          <a
-            href={`${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${
-              pop.id
-            }`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <StyledButton size="small" variant="outlined" onClick={openPopInTab}>
             Formular in neuem Tab öffnen
-          </a>
+          </StyledButton>
+          <StyledButton
+            size="small"
+            variant="outlined"
+            onClick={openPopInTree2}
+          >
+            Formular in neuer Spalte öffnen
+          </StyledButton>
         </>
       </Popup>
       <StyledTooltip direction="bottom" opacity={1} permanent>
