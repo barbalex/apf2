@@ -126,48 +126,62 @@ CREATE INDEX ON apflora.userprojekt USING btree (username, proj_id);
 DROP TABLE IF EXISTS apflora.ap_bearbstand_werte;
 CREATE TABLE apflora.ap_bearbstand_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  code integer UNIQUE DEFAULT NULL,
+  code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
   changed_by varchar(20) default NULL
 );
+create sequence apflora.ap_bearbstand_werte_code_seq owned by apflora.ap_bearbstand_werte.code;
+alter table apflora.ap_bearbstand_werte alter column code set default nextval('apflora.ap_bearbstand_werte_code_seq');
+select setval('apflora.ap_bearbstand_werte_code_seq', (select max(code)+1 from apflora.ap_bearbstand_werte), false);
+alter table apflora.ap_bearbstand_werte alter column changed_by drop not null, alter column changed_by set default null;
+
 CREATE INDEX ON apflora.ap_bearbstand_werte USING btree (id);
 CREATE INDEX ON apflora.ap_bearbstand_werte USING btree (code);
 CREATE INDEX ON apflora.ap_bearbstand_werte USING btree (sort);
 COMMENT ON COLUMN apflora.ap_bearbstand_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.ap_bearbstand_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap_bearbstand_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-alter table apflora.ap_bearbstand_werte alter column changed_by set default null;
 
 -- this table is not used!!!
 DROP TABLE IF EXISTS apflora.ap_erfbeurtkrit_werte;
 CREATE TABLE apflora.ap_erfbeurtkrit_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  code integer UNIQUE DEFAULT NULL,
+  code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
   changed_by varchar(20) default NULL
 );
+create sequence apflora.ap_erfbeurtkrit_werte_code_seq owned by apflora.ap_erfbeurtkrit_werte.code;
+alter table apflora.ap_erfbeurtkrit_werte alter column code set default nextval('apflora.ap_erfbeurtkrit_werte_code_seq');
+select setval('apflora.ap_erfbeurtkrit_werte_code_seq', (select max(code)+1 from apflora.ap_erfbeurtkrit_werte), false);
+alter table apflora.ap_erfbeurtkrit_werte alter column changed_by drop not null, alter column changed_by set default null;
+
+
 CREATE INDEX ON apflora.ap_erfbeurtkrit_werte USING btree (id);
 CREATE INDEX ON apflora.ap_erfbeurtkrit_werte USING btree (code);
 CREATE INDEX ON apflora.ap_erfbeurtkrit_werte USING btree (sort);
 COMMENT ON COLUMN apflora.ap_erfbeurtkrit_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.ap_erfbeurtkrit_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap_erfbeurtkrit_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-alter table apflora.ap_erfbeurtkrit_werte alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.ap_erfkrit_werte;
 CREATE TABLE apflora.ap_erfkrit_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  code integer UNIQUE DEFAULT NULL,
-  code integer PRIMARY KEY,
+  code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
   changed_by varchar(20) default NULL
 );
+create sequence apflora.ap_erfkrit_werte_code_seq owned by apflora.ap_erfkrit_werte.code;
+alter table apflora.ap_erfkrit_werte alter column code set default nextval('apflora.ap_erfkrit_werte_code_seq');
+select setval('apflora.ap_erfkrit_werte_code_seq', (select max(code)+1 from apflora.ap_erfkrit_werte), false);
+alter table apflora.ap_erfkrit_werte alter column changed_by drop not null, alter column changed_by set default null;
+
+
 CREATE INDEX ON apflora.ap_erfkrit_werte USING btree (id);
 CREATE INDEX ON apflora.ap_erfkrit_werte USING btree (code);
 CREATE INDEX ON apflora.ap_erfkrit_werte USING btree (sort);
@@ -175,24 +189,27 @@ COMMENT ON COLUMN apflora.ap_erfkrit_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.ap_erfkrit_werte.text IS 'Wie werden die durchgefuehrten Massnahmen beurteilt?';
 COMMENT ON COLUMN apflora.ap_erfkrit_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap_erfkrit_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-alter table apflora.ap_erfkrit_werte alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.ap_umsetzung_werte;
 CREATE TABLE apflora.ap_umsetzung_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  code integer UNIQUE DEFAULT NULL,
+  code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
   changed_by varchar(20) default NULL
 );
+create sequence apflora.ap_umsetzung_werte_code_seq owned by apflora.ap_umsetzung_werte.code;
+alter table apflora.ap_umsetzung_werte alter column code set default nextval('apflora.ap_umsetzung_werte_code_seq');
+select setval('apflora.ap_umsetzung_werte_code_seq', (select max(code)+1 from apflora.ap_umsetzung_werte), false);
+alter table apflora.ap_umsetzung_werte alter column changed_by drop not null, alter column changed_by set default null;
+
 CREATE INDEX ON apflora.ap_umsetzung_werte USING btree (id);
 CREATE INDEX ON apflora.ap_umsetzung_werte USING btree (code);
 CREATE INDEX ON apflora.ap_umsetzung_werte USING btree (sort);
 COMMENT ON COLUMN apflora.ap_umsetzung_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.ap_umsetzung_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap_umsetzung_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-alter table apflora.ap_umsetzung_werte alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.apber;
 CREATE TABLE apflora.apber (
@@ -457,12 +474,18 @@ COMMENT ON COLUMN apflora.pop.changed_by IS 'Von wem wurde der Datensatz zuletzt
 DROP TABLE IF EXISTS apflora.pop_status_werte;
 CREATE TABLE apflora.pop_status_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  code integer UNIQUE DEFAULT NULL,
+  code serial,
   text varchar(60) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null
 );
+create sequence apflora.pop_status_werte_code_seq owned by apflora.pop_status_werte.code;
+alter table apflora.pop_status_werte alter column code set default nextval('apflora.pop_status_werte_code_seq');
+select setval('apflora.pop_status_werte_code_seq', (select max(code)+1 from apflora.pop_status_werte), false);
+alter table apflora.pop_status_werte alter column changed_by drop not null, alter column changed_by set default null;
+
+
 CREATE INDEX ON apflora.pop_status_werte USING btree (id);
 CREATE INDEX ON apflora.pop_status_werte USING btree (code);
 CREATE INDEX ON apflora.pop_status_werte USING btree (text);
@@ -603,36 +626,44 @@ DROP TABLE IF EXISTS apflora.tpop_apberrelevant_werte;
 DROP TABLE IF EXISTS apflora.tpop_apberrelevant_grund_werte;
 CREATE TABLE apflora.tpop_apberrelevant_grund_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  code integer UNIQUE DEFAULT NULL,
+  code serial,
   text text,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
   changed_by varchar(20) default NULL
 );
+create sequence apflora.tpop_apberrelevant_grund_werte_code_seq owned by apflora.tpop_apberrelevant_grund_werte.code;
+alter table apflora.tpop_apberrelevant_grund_werte alter column code set default nextval('apflora.tpop_apberrelevant_grund_werte_code_seq');
+select setval('apflora.tpop_apberrelevant_grund_werte_code_seq', (select max(code)+1 from apflora.tpop_apberrelevant_grund_werte), false);
+alter table apflora.tpop_apberrelevant_grund_werte alter column changed_by drop not null, alter column changed_by set default null;
+
 CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree (id);
 CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree (code);
 CREATE INDEX ON apflora.tpop_apberrelevant_grund_werte USING btree (text);
 COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-alter table apflora.tpop_apberrelevant_grund_werte alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.tpop_entwicklung_werte;
 CREATE TABLE apflora.tpop_entwicklung_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  code integer UNIQUE DEFAULT NULL,
+  code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
   changed_by varchar(20) default NULL
 );
+create sequence apflora.tpop_entwicklung_werte_code_seq owned by apflora.tpop_entwicklung_werte.code;
+alter table apflora.tpop_entwicklung_werte alter column code set default nextval('apflora.tpop_entwicklung_werte_code_seq');
+select setval('apflora.tpop_entwicklung_werte_code_seq', (select max(code)+1 from apflora.tpop_entwicklung_werte), false);
+alter table apflora.tpop_entwicklung_werte alter column changed_by drop not null, alter column changed_by set default null;
+
 CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree (id);
 CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree (code);
 CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree (sort);
 COMMENT ON COLUMN apflora.tpop_entwicklung_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpop_entwicklung_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpop_entwicklung_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-alter table apflora.tpop_entwicklung_werte alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.tpopber;
 CREATE TABLE apflora.tpopber (
@@ -785,36 +816,44 @@ create index on apflora.tpopkontr_file using btree (file_mime_type);
 DROP TABLE IF EXISTS apflora.tpopkontr_idbiotuebereinst_werte;
 CREATE TABLE apflora.tpopkontr_idbiotuebereinst_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  code integer UNIQUE DEFAULT NULL,
+  code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
   changed_by varchar(20) default NULL
 );
+create sequence apflora.tpopkontr_idbiotuebereinst_werte_code_seq owned by apflora.tpopkontr_idbiotuebereinst_werte.code;
+alter table apflora.tpopkontr_idbiotuebereinst_werte alter column code set default nextval('apflora.tpopkontr_idbiotuebereinst_werte_code_seq');
+select setval('apflora.tpopkontr_idbiotuebereinst_werte_code_seq', (select max(code)+1 from apflora.tpopkontr_idbiotuebereinst_werte), false);
+alter table apflora.tpopkontr_idbiotuebereinst_werte alter column changed_by drop not null, alter column changed_by set default null;
+
 CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree (id);
 CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree (code);
 CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree (sort);
 COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-alter table apflora.tpopkontr_idbiotuebereinst_werte alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.tpopkontr_typ_werte;
 CREATE TABLE apflora.tpopkontr_typ_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  code integer UNIQUE DEFAULT NULL,
+  code serial,
   text varchar(50) unique DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
   changed_by varchar(20) default NULL
 );
+create sequence apflora.tpopkontr_typ_werte_code_seq owned by apflora.tpopkontr_typ_werte.code;
+alter table apflora.tpopkontr_typ_werte alter column code set default nextval('apflora.tpopkontr_typ_werte_code_seq');
+select setval('apflora.tpopkontr_typ_werte_code_seq', (select max(code)+1 from apflora.tpopkontr_typ_werte), false);
+alter table apflora.tpopkontr_typ_werte alter column changed_by drop not null, alter column changed_by set default null;
+
 CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree (id);
 CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree (code);
 CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree (sort);
 COMMENT ON COLUMN apflora.tpopkontr_typ_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpopkontr_typ_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontr_typ_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-alter table apflora.tpopkontr_typ_werte alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl;
 CREATE TABLE apflora.tpopkontrzaehl (
@@ -842,29 +881,38 @@ CREATE INDEX ON apflora.tpopkontrzaehl USING btree (methode);
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl_einheit_werte;
 CREATE TABLE apflora.tpopkontrzaehl_einheit_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  code integer UNIQUE DEFAULT NULL,
+  code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
   changed_by varchar(20) default NULL
 );
+create sequence apflora.tpopkontrzaehl_einheit_werte_code_seq owned by apflora.tpopkontrzaehl_einheit_werte.code;
+alter table apflora.tpopkontrzaehl_einheit_werte alter column code set default nextval('apflora.tpopkontrzaehl_einheit_werte_code_seq');
+select setval('apflora.tpopkontrzaehl_einheit_werte_code_seq', (select max(code)+1 from apflora.tpopkontrzaehl_einheit_werte), false);
+alter table apflora.tpopkontrzaehl_einheit_werte alter column changed_by drop not null, alter column changed_by set default null;
+
 CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree (id);
 CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree (code);
 CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree (sort);
 COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-alter table apflora.tpopkontrzaehl_einheit_werte alter column changed_by set default null;
 
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl_methode_werte;
 CREATE TABLE apflora.tpopkontrzaehl_methode_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  code integer UNIQUE DEFAULT NULL,
+  code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
   changed_by varchar(20) default NULL
 );
+create sequence apflora.tpopkontrzaehl_methode_werte_code_seq owned by apflora.tpopkontrzaehl_methode_werte.code;
+alter table apflora.tpopkontrzaehl_methode_werte alter column code set default nextval('apflora.tpopkontrzaehl_methode_werte_code_seq');
+select setval('apflora.tpopkontrzaehl_methode_werte_code_seq', (select max(code)+1 from apflora.tpopkontrzaehl_methode_werte), false);
+alter table apflora.tpopkontrzaehl_methode_werte alter column changed_by drop not null, alter column changed_by set default null;
+
 alter table apflora.tpopkontrzaehl_methode_werte alter column changed_by set default null;
 CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree (id);
 CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree (code);
@@ -932,13 +980,17 @@ COMMENT ON COLUMN apflora.tpopmassn.changed_by IS 'Von wem wurde der Datensatz z
 DROP TABLE IF EXISTS apflora.tpopmassn_erfbeurt_werte;
 CREATE TABLE apflora.tpopmassn_erfbeurt_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  code integer UNIQUE DEFAULT NULL,
+  code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
   changed_by varchar(20) default NULL
 );
-alter table apflora.tpopmassn_erfbeurt_werte alter column changed_by set default null;
+create sequence apflora.tpopmassn_erfbeurt_werte_code_seq owned by apflora.tpopmassn_erfbeurt_werte.code;
+alter table apflora.tpopmassn_erfbeurt_werte alter column code set default nextval('apflora.tpopmassn_erfbeurt_werte_code_seq');
+select setval('apflora.tpopmassn_erfbeurt_werte_code_seq', (select max(code)+1 from apflora.tpopmassn_erfbeurt_werte), false);
+alter table apflora.tpopmassn_erfbeurt_werte alter column changed_by drop not null, alter column changed_by set default null;
+
 CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree (id);
 CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree (code);
 CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree (sort);
@@ -950,14 +1002,18 @@ COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.changed_by IS 'Von wem wurde 
 DROP TABLE IF EXISTS apflora.tpopmassn_typ_werte;
 CREATE TABLE apflora.tpopmassn_typ_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  code integer UNIQUE DEFAULT NULL,
+  code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   ansiedlung smallint NOT NULL,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
-alter table apflora.tpopmassn_typ_werte alter column changed_by set default null;
+create sequence apflora.tpopmassn_typ_werte_code_seq owned by apflora.tpopmassn_typ_werte.code;
+alter table apflora.tpopmassn_typ_werte alter column code set default nextval('apflora.tpopmassn_typ_werte_code_seq');
+select setval('apflora.tpopmassn_typ_werte_code_seq', (select max(code)+1 from apflora.tpopmassn_typ_werte), false);
+alter table apflora.tpopmassn_typ_werte alter column changed_by drop not null, alter column changed_by set default null;
+
 CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (id);
 CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (code);
 CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (sort);
@@ -1054,12 +1110,17 @@ COMMENT ON COLUMN apflora.ziel.changed_by IS 'Von wem wurde der Datensatz zuletz
 DROP TABLE IF EXISTS apflora.ziel_typ_werte;
 CREATE TABLE apflora.ziel_typ_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  code integer UNIQUE DEFAULT NULL,
+  code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
   changed_by varchar(20) NOT NULL
 );
+create sequence apflora.ziel_typ_werte_code_seq owned by apflora.ziel_typ_werte.code;
+alter table apflora.ziel_typ_werte alter column code set default nextval('apflora.ziel_typ_werte_code_seq');
+select setval('apflora.ziel_typ_werte_code_seq', (select max(code)+1 from apflora.ziel_typ_werte), false);
+alter table apflora.ziel_typ_werte alter column changed_by drop not null, alter column changed_by set default null;
+
 CREATE INDEX ON apflora.ziel_typ_werte USING btree (id);
 CREATE INDEX ON apflora.ziel_typ_werte USING btree (code);
 CREATE INDEX ON apflora.ziel_typ_werte USING btree (sort);
@@ -1265,12 +1326,17 @@ CREATE POLICY writer ON apflora.ekfzaehleinheit
 DROP TABLE IF EXISTS apflora.tpopkontr_frequenz_werte;
 CREATE TABLE apflora.tpopkontr_frequenz_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  code integer UNIQUE DEFAULT NULL,
+  code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
+create sequence apflora.tpopkontr_frequenz_werte_code_seq owned by apflora.tpopkontr_frequenz_werte.code;
+alter table apflora.tpopkontr_frequenz_werte alter column code set default nextval('apflora.tpopkontr_frequenz_werte_code_seq');
+select setval('apflora.tpopkontr_frequenz_werte_code_seq', (select max(code)+1 from apflora.tpopkontr_frequenz_werte), false);
+alter table apflora.tpopkontr_frequenz_werte alter column changed_by drop not null, alter column changed_by set default null;
+
 CREATE INDEX ON apflora.tpopkontr_frequenz_werte USING btree (id);
 CREATE INDEX ON apflora.tpopkontr_frequenz_werte USING btree (code);
 CREATE INDEX ON apflora.tpopkontr_frequenz_werte USING btree (sort);
