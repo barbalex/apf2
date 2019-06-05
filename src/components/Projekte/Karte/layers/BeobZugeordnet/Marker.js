@@ -145,15 +145,6 @@ const BeobZugeordnetMarker = ({ treeName, beob }) => {
             'tpopByTpopId.nr',
             '(keine Nr)',
           )}: ${get(beob, 'tpopByTpopId.flurname', '(kein Flurname)')}`}</div>
-          <a
-            href={`${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${
-              beob.id
-            }`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Formular in neuem Tab öffnen
-          </a>
           <StyledButton size="small" variant="outlined" onClick={openBeobInTab}>
             Formular in neuem Tab öffnen
           </StyledButton>

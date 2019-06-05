@@ -42,6 +42,51 @@ const Line = ({ treeName, beob }) => {
   }
   const autor = beob.autor || '(kein Autor)'
   const quelle = get(beob, 'beobQuelleWerteByQuelleId.name', '')
+
+  const popId = get(beob, 'tpopByTpopId.popId', '')
+  const tpopId = get(beob, 'tpopByTpopId.id', '')
+  const openBeobInTree2 = useCallback(() => {
+    openTree2WithActiveNodeArray([
+      'Projekte',
+      projekt,
+      'Aktionspläne',
+      ap,
+      'Populationen',
+      popId,
+      'Teil-Populationen',
+      tpopId,
+      'Beobachtungen',
+      beob.id,
+    ])
+  }, [beob.id])
+  const openBeobInTab = useCallback(() => {
+    typeof window !== 'undefined' &&
+      window.open(
+        `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${
+          beob.id
+        }`,
+      )
+  }, [beob.id])
+
+  const openTpopInTree2 = useCallback(() => {
+    openTree2WithActiveNodeArray([
+      'Projekte',
+      projekt,
+      'Aktionspläne',
+      ap,
+      'Populationen',
+      popId,
+      'Teil-Populationen',
+      tpopId,
+    ])
+  }, [tpopId])
+  const openTpopInTab = useCallback(() => {
+    typeof window !== 'undefined' &&
+      window.open(
+        `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}`,
+      )
+  }, [tpopId])
+
   return (
     <Polyline
       positions={[beobLatLng, tpopLatLng]}
@@ -66,20 +111,34 @@ const Line = ({ treeName, beob }) => {
           )}: ${get(beob, 'tpopByTpopId.flurname', '(kein Flurname)')}`}</div>
           <div>{`Quelle: ${quelle}`}</div>
           <a
-            href={`${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${get(
-              beob,
-              'tpopByTpopId.popId',
-              '',
-            )}/Teil-Populationen/${get(
-              beob,
-              'tpopByTpopId.id',
-              '',
-            )}/Beobachtungen/${beob.id}`}
+            href={`${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${
+              beob.id
+            }`}
             target="_blank"
             rel="noopener noreferrer"
           >
             Formular in neuem Tab öffnen
           </a>
+          <StyledButton size="small" variant="outlined" onClick={openBeobInTab}>
+            Beob. in neuem Tab öffnen
+          </StyledButton>
+          <StyledButton
+            size="small"
+            variant="outlined"
+            onClick={openBeobInTree2}
+          >
+            Beob. in Strukturbaum 2 öffnen
+          </StyledButton>
+          <StyledButton size="small" variant="outlined" onClick={openTpopInTab}>
+            TPop. in neuem Tab öffnen
+          </StyledButton>
+          <StyledButton
+            size="small"
+            variant="outlined"
+            onClick={openTpopInTree2}
+          >
+            TPop. in Strukturbaum 2 öffnen
+          </StyledButton>
         </>
       </Popup>
     </Polyline>
