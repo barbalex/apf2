@@ -94,6 +94,30 @@ const BeobZugeordnetMarker = ({ treeName, beob }) => {
     },
     [beob.id],
   )
+  const popId = get(beob, 'tpopByTpopId.popId', '')
+  const tpopId = get(beob, 'tpopByTpopId.id', '')
+  const openBeobInTree2 = useCallback(() => {
+    openTree2WithActiveNodeArray([
+      'Projekte',
+      projekt,
+      'Aktionspläne',
+      ap,
+      'Populationen',
+      popId,
+      'Teil-Populationen',
+      tpopId,
+      'Beobachtungen',
+      beob.id,
+    ])
+  }, [beob.id])
+  const openBeobInTab = useCallback(() => {
+    typeof window !== 'undefined' &&
+      window.open(
+        `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${
+          beob.id
+        }`,
+      )
+  }, [beob.id])
 
   return (
     <Marker
@@ -122,20 +146,24 @@ const BeobZugeordnetMarker = ({ treeName, beob }) => {
             '(keine Nr)',
           )}: ${get(beob, 'tpopByTpopId.flurname', '(kein Flurname)')}`}</div>
           <a
-            href={`${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${get(
-              beob,
-              'tpopByTpopId.popId',
-              '',
-            )}/Teil-Populationen/${get(
-              beob,
-              'tpopByTpopId.id',
-              '',
-            )}/Beobachtungen/${beob.id}`}
+            href={`${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${
+              beob.id
+            }`}
             target="_blank"
             rel="noopener noreferrer"
           >
             Formular in neuem Tab öffnen
           </a>
+          <StyledButton size="small" variant="outlined" onClick={openBeobInTab}>
+            Formular in neuem Tab öffnen
+          </StyledButton>
+          <StyledButton
+            size="small"
+            variant="outlined"
+            onClick={openBeobInTree2}
+          >
+            Formular in Strukturbaum 2 öffnen
+          </StyledButton>
         </>
       </Popup>
     </Marker>

@@ -35,6 +35,7 @@ export default gql`
                     }
                     tpopByTpopId {
                       id
+                      popId
                       nr
                       flurname
                     }
