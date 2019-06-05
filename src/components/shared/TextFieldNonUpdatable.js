@@ -27,7 +27,7 @@ const MyTextField = ({ label, value = '' }) => {
       fullWidth
       aria-describedby={`${label}-helper`}
     >
-      <InputLabel htmlFor={label}>{label}</InputLabel>
+      <InputLabel htmlFor={label} shrink>{label}</InputLabel>
       <Input
         id={label}
         value={value || value === 0 ? value : ''}

@@ -149,6 +149,8 @@ const Werte = ({ treeName, table }) => {
             type="number"
             saveToDb={saveToDb}
             errors={errors}
+            hintText="Dieser Wert ist erforderlich"
+            required
           />
           <TextField
             key={`${row.id}sort`}

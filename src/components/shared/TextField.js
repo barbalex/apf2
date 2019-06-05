@@ -24,6 +24,7 @@ const MyTextField = ({
   helperText = '',
   error,
   saveToDb,
+  required = false,
 }) => {
   const [stateValue, setStateValue] = useState(
     value || value === 0 ? value : '',
@@ -46,7 +47,9 @@ const MyTextField = ({
       error={!!error}
       aria-describedby={`${label}ErrorText`}
     >
-      <InputLabel htmlFor={label}>{label}</InputLabel>
+      <InputLabel htmlFor={label} shrink required={required}>
+        {label}
+      </InputLabel>
       <Input
         id={name}
         name={name}

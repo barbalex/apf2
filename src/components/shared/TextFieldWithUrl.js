@@ -1,13 +1,13 @@
-import React, { useState, useCallback, useEffect } from "react"
-import Input from "@material-ui/core/Input"
-import InputLabel from "@material-ui/core/InputLabel"
-import FormControl from "@material-ui/core/FormControl"
-import FormHelperText from "@material-ui/core/FormHelperText"
-import OpenInNewIcon from "@material-ui/icons/OpenInNew"
-import green from "@material-ui/core/colors/green"
-import styled from "styled-components"
-import getUrls from "get-urls"
-import { observer } from "mobx-react-lite"
+import React, { useState, useCallback, useEffect } from 'react'
+import Input from '@material-ui/core/Input'
+import InputLabel from '@material-ui/core/InputLabel'
+import FormControl from '@material-ui/core/FormControl'
+import FormHelperText from '@material-ui/core/FormHelperText'
+import OpenInNewIcon from '@material-ui/icons/OpenInNew'
+import green from '@material-ui/core/colors/green'
+import styled from 'styled-components'
+import getUrls from 'get-urls'
+import { observer } from 'mobx-react-lite'
 
 const Container = styled.div`
   display: flex;
@@ -32,32 +32,32 @@ const TextFieldWithUrl = ({
   value: propsValue,
   label,
   name,
-  type = "text",
+  type = 'text',
   multiLine = false,
   disabled = false,
-  hintText = "",
+  hintText = '',
   error,
   saveToDb,
 }) => {
   const [stateValue, setStateValue] = useState(
-    propsValue || propsValue === 0 ? propsValue : ""
+    propsValue || propsValue === 0 ? propsValue : '',
   )
 
   const onChange = useCallback(event => setStateValue(event.target.value))
   const onOpen = useCallback(
     e =>
-      typeof window !== "undefined" &&
-      window.open(e.target.dataset.url, "_blank")
+      typeof window !== 'undefined' &&
+      window.open(e.target.dataset.url, '_blank'),
   )
 
   useEffect(() => {
-    setStateValue(propsValue || propsValue === 0 ? propsValue : "")
+    setStateValue(propsValue || propsValue === 0 ? propsValue : '')
   }, [propsValue])
 
   const urls = stateValue ? getUrls(stateValue) : []
 
   const onKeyPress = useCallback(event => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       saveToDb(event)
     }
   })
@@ -70,7 +70,7 @@ const TextFieldWithUrl = ({
         error={!!error}
         aria-describedby={`${label}ErrorText`}
       >
-        <InputLabel htmlFor={label}>
+        <InputLabel htmlFor={label} shrink>
           {`${label} (gültige URL's beginnen mit "https://", "//" oder "www.")`}
         </InputLabel>
         <Input

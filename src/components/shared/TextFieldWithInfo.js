@@ -56,7 +56,9 @@ const TextFieldWithInfo = ({
       error={!!error}
       aria-describedby={`${label}ErrorText`}
     >
-      <InputLabel htmlFor={label}>{label}</InputLabel>
+      <InputLabel htmlFor={label} shrink>
+        {label}
+      </InputLabel>
       <Input
         id={name}
         name={name}
