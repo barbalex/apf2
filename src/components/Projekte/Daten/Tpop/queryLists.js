@@ -2,7 +2,10 @@ import gql from 'graphql-tag'
 
 export default gql`
   query TpopListsQuery {
-    allTpopApberrelevantGrundWertes(orderBy: SORT_ASC) {
+    allTpopApberrelevantGrundWertes(
+      orderBy: SORT_ASC
+      filter: { code: { isNull: false } }
+    ) {
       nodes {
         value: code
         label: text
