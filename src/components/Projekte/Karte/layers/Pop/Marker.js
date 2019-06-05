@@ -32,7 +32,7 @@ const StyledButton = styled(Button)`
 
 const PopMarker = ({ treeName, pop }) => {
   const store = useContext(storeContext)
-  const { apfloraLayers, openNewTree2WithActiveNodeArray } = store
+  const { apfloraLayers, openTree2WithActiveNodeArray } = store
   const activeNodes = store[`${treeName}ActiveNodes`]
   const { ap, projekt } = activeNodes
   const { idsFiltered, popIcon: popIconName, popLabel: popLabelName } = store[
@@ -77,7 +77,7 @@ const PopMarker = ({ treeName, pop }) => {
   )
   const artname = get(pop, 'apByApId.aeEigenschaftenByArtId.artname', '')
   const openPopInTree2 = useCallback(() => {
-    openNewTree2WithActiveNodeArray([
+    openTree2WithActiveNodeArray([
       'Projekte',
       projekt,
       'Aktionspläne',

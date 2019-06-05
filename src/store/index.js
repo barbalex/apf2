@@ -289,7 +289,7 @@ const myTypes = types
     cloneTree2From1() {
       self.tree2 = cloneDeep(self.tree)
     },
-    openNewTree2WithActiveNodeArray(activeNodeArray) {
+    openTree2WithActiveNodeArray(activeNodeArray) {
       const openNodes = getOpenNodesFromActiveNodeArray(activeNodeArray)
       self.tree2 = { ...defaultTree, activeNodeArray, openNodes }
       self.urlQuery.addProjekteTab('tree2')
