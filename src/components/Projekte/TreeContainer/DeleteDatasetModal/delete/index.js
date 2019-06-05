@@ -45,27 +45,32 @@ export default async ({ client, store }) => {
    * because webpack performs static analysis at build time
    * see: https://github.com/webpack/webpack/issues/6680#issuecomment-370800037
    */
+  let query
+  if (isWerte) {
+    query = gql`
+      query werteById($id: UUID!) {
+        ${queryName}(id: $id) {
+          id
+          code
+          text
+          sort
+          changed
+          changedBy
+        }
+      }
+    `
+  } else {
+    const qrObject = await import(`./${queryName}`)
+    query = qrObject.default
+  }
   let result
   try {
-    const query = isWerte
-      ? gql`
-          query werteById($id: UUID!) {
-            ${queryName}(id: $id) {
-              id
-              code
-              text
-              sort
-              changed
-              changedBy
-            }
-          }
-        `
-      : await import(`./${queryName}`).default
     result = await client.query({
       query,
       variables: { id: toDeleteId },
     })
   } catch (error) {
+    console.log(error)
     return addError(error)
   }
   let data = { ...get(result, `data.${camelCase(table)}ById`) }
