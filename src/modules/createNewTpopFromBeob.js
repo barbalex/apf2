@@ -206,8 +206,6 @@ export default async ({ treeName, pop, beobId, client, store }) => {
   setOpenNodes(newOpenNodes)
   setActiveNodeArray(newActiveNodeArray)
 
-  // TODO: what is this for?
-  //refetchTree('local')
   refetch.aps()
   refetch.pops()
   refetch.tpops()
