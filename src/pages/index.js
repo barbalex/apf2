@@ -115,7 +115,7 @@ export default ({ data }) => {
               style={bgImageStyle}
             />
             <PageTitle align="center" variant="h6" color="inherit">
-              Bedrohte Pflanzen fördern
+              Bedrohte Pflanzenarten fördern
             </PageTitle>
             <CardContainer>
               <Card>
