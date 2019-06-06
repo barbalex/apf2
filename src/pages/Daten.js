@@ -10,7 +10,6 @@ import getActiveNodeArrayFromPathname from '../modules/getActiveNodeArrayFromPat
 import setUserFromIdb from '../modules/setUserFromIdb'
 import Projekte from '../components/Projekte'
 import User from '../components/User'
-import Errors from '../components/Errors'
 import UpdateAvailable from '../components/UpdateAvailable'
 import Messages from '../components/Messages'
 import Ekf from '../components/Ekf'
@@ -57,7 +56,6 @@ const DatenPage = ({ location }) => {
             <>
               {view === 'ekf' && <Ekf />}
               {view === 'normal' && <Projekte />}
-              <Errors />
               <UpdateAvailable />
               <Messages />
               {showDeletions && <Deletions />}
