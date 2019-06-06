@@ -57,14 +57,6 @@ describe('Teil-Population Feldkontrolle form', () => {
     })
     cy.get('#bemerkungen').focus()
   })
-  it('updates jungpflanzenAnzahl', () => {
-    const typedText = '5'
-    cy.get('#jungpflanzenAnzahl')
-      .clear()
-      .type(typedText)
-      .blur()
-      .should('have.value', typedText)
-  })
   it('updates vitalitaet', () => {
     const typedText = 'test, bitte nicht löschen'
     cy.get('#vitalitaet')
