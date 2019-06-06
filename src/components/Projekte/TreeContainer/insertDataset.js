@@ -28,13 +28,18 @@ export default async ({
   client,
   store,
 }) => {
-  const { addError, refetch } = store
+  const { enqueNotification, refetch } = store
   const { setActiveNodeArray, openNodes, setOpenNodes } = store[treeName]
   let table = tablePassed
   // insert new dataset in db and fetch id
   const tableMetadata = tables.find(t => t.table === table)
   if (!tableMetadata) {
-    return addError(new Error(`no table meta data found for table "${table}"`))
+    return enqueNotification({
+      message: `no table meta data found for table "${table}"`,
+      options: {
+        variant: 'error',
+      },
+    })
   }
   // some tables need to be translated, i.e. tpopfreiwkontr
   if (tableMetadata.dbTable) {
@@ -43,9 +48,12 @@ export default async ({
   const parentIdField = camelCase(tableMetadata.parentIdField)
   const idField = tableMetadata.idField
   if (!idField) {
-    return addError(
-      new Error('new dataset not created as no idField could be found'),
-    )
+    return enqueNotification({
+      message: 'new dataset not created as no idField could be found',
+      options: {
+        variant: 'error',
+      },
+    })
   }
   let mutation = gql`
     mutation createWerte(
@@ -166,7 +174,12 @@ export default async ({
       result = await client.mutate({ mutation })
     }
   } catch (error) {
-    return addError(error)
+    return enqueNotification({
+      message: error.message,
+      options: {
+        variant: 'error',
+      },
+    })
   }
   const row = get(
     result,

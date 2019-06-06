@@ -85,7 +85,7 @@ const updateBeobById = gql`
 `
 
 export default async ({ treeName, pop, beobId, client, store }) => {
-  const { addError, refetch } = store
+  const { enqueNotification, refetch } = store
   const tree = store[treeName]
   const { setActiveNodeArray, addOpenNodes } = tree
   const activeNodes = store[`${treeName}ActiveNodes`]
@@ -104,7 +104,12 @@ export default async ({ treeName, pop, beobId, client, store }) => {
       variables: { beobId },
     })
   } catch (error) {
-    return addError(error)
+    return enqueNotification({
+      message: error.message,
+      options: {
+        variant: 'error',
+      },
+    })
   }
   const beob = get(beobResult, 'data.beobById')
   const { geomPoint, datum, data } = beob
@@ -125,7 +130,12 @@ export default async ({ treeName, pop, beobId, client, store }) => {
       },
     })
   } catch (error) {
-    return addError(error)
+    return enqueNotification({
+      message: error.message,
+      options: {
+        variant: 'error',
+      },
+    })
   }
   const tpop = get(tpopResult, 'data.createTpop.tpop')
 
@@ -138,7 +148,12 @@ export default async ({ treeName, pop, beobId, client, store }) => {
       },
     })
   } catch (error) {
-    return addError(error)
+    return enqueNotification({
+      message: error.message,
+      options: {
+        variant: 'error',
+      },
+    })
   }
 
   // set new activeNodeArray

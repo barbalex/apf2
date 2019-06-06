@@ -90,7 +90,6 @@ const myTypes = types
     detailplaene: null,
     markierungen: null,
     ktZh: null,
-    errors: [],
     toDeleteAfterDeletionHook: null,
     deletedDatasets: [],
     refetch: {},
@@ -182,21 +181,6 @@ const myTypes = types
     },
     setKtZh(val) {
       self.ktZh = val
-    },
-    addError(error) {
-      // cannnot pop, need to set new value
-      // or the change will not be observed
-      // use uniq in case multiple same messages arrive
-      self.errors = uniqBy([...self.errors, error], 'message')
-      setTimeout(() => {
-        // need to use an action inside timeout
-        self.popError()
-      }, 1000 * 10)
-    },
-    popError() {
-      // eslint-disable-next-line no-unused-vars
-      const [first, ...last] = self.errors
-      self.errors = [...last]
     },
     nodeFilterSet({ treeName, nodeFilter }) {
       self.nodeFilter[treeName] = nodeFilter
