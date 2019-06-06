@@ -60,7 +60,7 @@ const DownloadCardButton = styled(Button)`
 const Beobachtungen = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { mapFilter, addError, exportApplyMapFilter, exportFileType } = store
+  const { exportApplyMapFilter, exportFileType, enqueNotification } = store
 
   const [expanded, setExpanded] = useState(false)
   const [message, setMessage] = useState(null)
@@ -75,13 +75,15 @@ const Beobachtungen = () => {
       exportModule({
         data: get(data, 'allVBeobArtChangeds.nodes', []),
         fileName: 'BeobachtungenArtVeraendert',
-        exportFileType,
-        exportApplyMapFilter,
-        mapFilter,
-        addError,
+        store,
       })
     } catch (error) {
-      addError(error)
+      enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
     }
     setMessage(null)
   }, [exportFileType, exportApplyMapFilter])
@@ -115,13 +117,15 @@ const Beobachtungen = () => {
                 exportModule({
                   data: get(data, 'allVBeobs.nodes', []),
                   fileName: 'Beobachtungen',
-                  exportFileType,
-                  exportApplyMapFilter,
-                  mapFilter,
-                  addError,
+                  store,
                 })
               } catch (error) {
-                addError(error)
+                enqueNotification({
+                  message: error.message,
+                  options: {
+                    variant: 'error',
+                  },
+                })
               }
               setMessage(null)
             }}
@@ -138,13 +142,15 @@ const Beobachtungen = () => {
                 exportModule({
                   data: get(data, 'allVBeobs.nodes', []),
                   fileName: 'Beobachtungen',
-                  exportFileType,
-                  exportApplyMapFilter,
-                  mapFilter,
-                  addError,
+                  store,
                 })
               } catch (error) {
-                addError(error)
+                enqueNotification({
+                  message: error.message,
+                  options: {
+                    variant: 'error',
+                  },
+                })
               }
               setMessage(null)
             }}

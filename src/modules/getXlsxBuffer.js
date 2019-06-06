@@ -6,7 +6,7 @@ import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
 
 import getDataArrayFromExportObjects from './getDataArrayFromExportObjects'
 
-export default async ({ data, addError }) => {
+export default async ({ data, store }) => {
   const dataArray = getDataArrayFromExportObjects(data)
   const numberOfColumns =
     dataArray && dataArray[0] && dataArray[0].length ? dataArray[0].length : 0
@@ -52,7 +52,12 @@ export default async ({ data, addError }) => {
   try {
     buffer = await workbook.xlsx.writeBuffer()
   } catch (error) {
-    return addError(error)
+    return store.enqueNotification({
+      message: error.message,
+      options: {
+        variant: 'error',
+      },
+    })
   }
   return buffer
 }

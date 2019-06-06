@@ -57,7 +57,7 @@ const DownloadCardButton = styled(Button)`
 const Massnahmen = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { mapFilter, exportApplyMapFilter, exportFileType, addError } = store
+  const { enqueNotification } = store
   const [expanded, setExpanded] = useState(false)
   const [message, setMessage] = useState(null)
 
@@ -87,16 +87,18 @@ const Massnahmen = () => {
                 exportModule({
                   data: get(data, 'allVMassns.nodes', []),
                   fileName: 'Massnahmen',
-                  exportFileType,
-                  exportApplyMapFilter,
-                  mapFilter,
                   idKey: 'tpop_id',
                   xKey: 'tpop_wgs84lat',
                   yKey: 'tpop_wgs84long',
-                  addError,
+                  store,
                 })
               } catch (error) {
-                addError(error)
+                enqueNotification({
+                  message: error.message,
+                  options: {
+                    variant: 'error',
+                  },
+                })
               }
               setMessage(null)
             }}
@@ -115,16 +117,18 @@ const Massnahmen = () => {
                 exportModule({
                   data: get(data, 'allVMassnWebgisbuns.nodes', []),
                   fileName: 'MassnahmenWebGisBun',
-                  exportFileType,
-                  exportApplyMapFilter,
-                  mapFilter,
                   idKey: 'TPOPGUID',
                   xKey: 'TPOP_WGS84LAT',
                   yKey: 'TPOP_WGS84LONG',
-                  addError,
+                  store,
                 })
               } catch (error) {
-                addError(error)
+                enqueNotification({
+                  message: error.message,
+                  options: {
+                    variant: 'error',
+                  },
+                })
               }
               setMessage(null)
             }}

@@ -8,15 +8,13 @@ import exportKml from './exportKml'
 export default async ({
   data: dataPassed,
   fileName,
-  exportFileType,
-  exportApplyMapFilter,
   kml,
-  mapFilter = {},
   idKey,
   xKey,
   yKey,
-  addError,
+  store,
 }) => {
+  const { mapFilter, exportApplyMapFilter, exportFileType } = store
   let data = dataPassed.map(d => omit(d, ['__typename', 'Symbol(id)']))
   // now we could manipulate the data, for instance apply mapFilter
   const filterFeatures = mapFilter.features
@@ -42,11 +40,12 @@ export default async ({
   // 2. depending on typename check if this table is filtered
   // 3. if yes: filter by nodeFilterState by converting camelCase to lower_case
   if (data.length === 0) {
-    return addError(
-      new Error(
-        'Es gibt offenbar keine Daten, welche exportiert werden können',
-      ),
-    )
+    return store.enqueNotification({
+      message: 'Es gibt offenbar keine Daten, welche exportiert werden können',
+      options: {
+        variant: 'warning',
+      },
+    })
   }
   if (kml) {
     exportKml({
@@ -63,7 +62,7 @@ export default async ({
     exportXlsx({
       fileName,
       data,
-      addError,
+      store,
     })
   }
 }

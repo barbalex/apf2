@@ -47,7 +47,7 @@ const FieldsContainer = styled.div`
 const Tpop = ({ treeName, showFilter = false }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { addError, nodeFilter, nodeFilterSetValue, refetch } = store
+  const { nodeFilter, nodeFilterSetValue, refetch } = store
 
   const [errors, setErrors] = useState({})
 
@@ -227,7 +227,7 @@ const Tpop = ({ treeName, showFilter = false }) => {
       const gemeinde = await getGemeindeForKoord({
         lv95X: row.lv95X,
         lv95Y: row.lv95Y,
-        addError,
+        store,
       })
       if (gemeinde) {
         const fakeEvent = {

@@ -57,7 +57,12 @@ const DownloadCardButton = styled(Button)`
 const AP = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { mapFilter, addError, exportApplyMapFilter, exportFileType } = store
+  const {
+    mapFilter,
+    exportApplyMapFilter,
+    exportFileType,
+    enqueNotification,
+  } = store
 
   const [expanded, setExpanded] = useState(false)
   const [message, setMessage] = useState(null)
@@ -72,13 +77,15 @@ const AP = () => {
       exportModule({
         data: get(data, 'allVAps.nodes', []),
         fileName: 'AP',
-        exportFileType,
-        exportApplyMapFilter,
-        mapFilter,
-        addError,
+        store,
       })
     } catch (error) {
-      addError(error)
+      enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
     }
     setMessage(null)
   }, [exportFileType, exportApplyMapFilter, mapFilter])
@@ -91,13 +98,15 @@ const AP = () => {
       exportModule({
         data: get(data, 'allVApOhnepops.nodes', []),
         fileName: 'ApOhnePopulationen',
-        exportFileType,
-        exportApplyMapFilter,
-        mapFilter,
-        addError,
+        store,
       })
     } catch (error) {
-      addError(error)
+      enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
     }
     setMessage(null)
   }, [exportFileType, exportApplyMapFilter, mapFilter])
@@ -110,13 +119,15 @@ const AP = () => {
       exportModule({
         data: get(data, 'allVApAnzmassns.nodes', []),
         fileName: 'ApAnzahlMassnahmen',
-        exportFileType,
-        exportApplyMapFilter,
-        mapFilter,
-        addError,
+        store,
       })
     } catch (error) {
-      addError(error)
+      enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
     }
     setMessage(null)
   }, [exportFileType, exportApplyMapFilter, mapFilter])
@@ -129,13 +140,15 @@ const AP = () => {
       exportModule({
         data: get(data, 'allVApAnzkontrs.nodes', []),
         fileName: 'ApAnzahlKontrollen',
-        exportFileType,
-        exportApplyMapFilter,
-        mapFilter,
-        addError,
+        store,
       })
     } catch (error) {
-      addError(error)
+      enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
     }
     setMessage(null)
   }, [exportFileType, exportApplyMapFilter, mapFilter])
@@ -148,13 +161,15 @@ const AP = () => {
       exportModule({
         data: get(data, 'allVApbers.nodes', []),
         fileName: 'Jahresberichte',
-        exportFileType,
-        exportApplyMapFilter,
-        mapFilter,
-        addError,
+        store,
       })
     } catch (error) {
-      addError(error)
+      enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
     }
     setMessage(null)
   }, [exportFileType, exportApplyMapFilter, mapFilter])
@@ -167,13 +182,15 @@ const AP = () => {
       exportModule({
         data: get(data, 'allVApApberundmassns.nodes', []),
         fileName: 'ApJahresberichteUndMassnahmen',
-        exportFileType,
-        exportApplyMapFilter,
-        mapFilter,
-        addError,
+        store,
       })
     } catch (error) {
-      addError(error)
+      enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
     }
     setMessage(null)
   }, [exportFileType, exportApplyMapFilter, mapFilter])
@@ -186,13 +203,15 @@ const AP = () => {
       exportModule({
         data: get(data, 'allVZiels.nodes', []),
         fileName: 'ApZiele',
-        exportFileType,
-        exportApplyMapFilter,
-        mapFilter,
-        addError,
+        store,
       })
     } catch (error) {
-      addError(error)
+      enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
     }
     setMessage(null)
   }, [exportFileType, exportApplyMapFilter, mapFilter])
@@ -205,13 +224,15 @@ const AP = () => {
       exportModule({
         data: get(data, 'allVZielbers.nodes', []),
         fileName: 'Zielberichte',
-        exportFileType,
-        exportApplyMapFilter,
-        mapFilter,
-        addError,
+        store,
       })
     } catch (error) {
-      addError(error)
+      enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
     }
     setMessage(null)
   }, [exportFileType, exportApplyMapFilter, mapFilter])
@@ -224,13 +245,15 @@ const AP = () => {
       exportModule({
         data: get(data, 'allVBers.nodes', []),
         fileName: 'Berichte',
-        exportFileType,
-        exportApplyMapFilter,
-        mapFilter,
-        addError,
+        store,
       })
     } catch (error) {
-      addError(error)
+      enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
     }
     setMessage(null)
   }, [exportFileType, exportApplyMapFilter, mapFilter])
@@ -243,13 +266,15 @@ const AP = () => {
       exportModule({
         data: get(data, 'allVErfkrits.nodes', []),
         fileName: 'Erfolgskriterien',
-        exportFileType,
-        exportApplyMapFilter,
-        mapFilter,
-        addError,
+        store,
       })
     } catch (error) {
-      addError(error)
+      enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
     }
     setMessage(null)
   }, [exportFileType, exportApplyMapFilter, mapFilter])
@@ -262,13 +287,15 @@ const AP = () => {
       exportModule({
         data: get(data, 'allVIdealbiotops.nodes', []),
         fileName: 'Idealbiotope',
-        exportFileType,
-        exportApplyMapFilter,
-        mapFilter,
-        addError,
+        store,
       })
     } catch (error) {
-      addError(error)
+      enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
     }
     setMessage(null)
   }, [exportFileType, exportApplyMapFilter, mapFilter])
@@ -281,13 +308,15 @@ const AP = () => {
       exportModule({
         data: get(data, 'allVAssozarts.nodes', []),
         fileName: 'AssoziierteArten',
-        exportFileType,
-        exportApplyMapFilter,
-        mapFilter,
-        addError,
+        store,
       })
     } catch (error) {
-      addError(error)
+      enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
     }
     setMessage(null)
   }, [exportFileType, exportApplyMapFilter, mapFilter])

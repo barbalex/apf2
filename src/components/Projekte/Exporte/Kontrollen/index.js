@@ -56,12 +56,8 @@ const DownloadCardButton = styled(Button)`
 
 const Kontrollen = () => {
   const client = useApolloClient()
-  const {
-    mapFilter,
-    addError,
-    exportApplyMapFilter,
-    exportFileType,
-  } = useContext(storeContext)
+  const store = useContext(storeContext)
+  const { enqueNotification } = store
   const [expanded, setExpanded] = useState(false)
   const [message, setMessage] = useState(null)
 
@@ -91,16 +87,18 @@ const Kontrollen = () => {
                 exportModule({
                   data: get(data, 'allVTpopkontrs.nodes', []),
                   fileName: 'Kontrollen',
-                  exportFileType,
-                  exportApplyMapFilter,
-                  mapFilter,
                   idKey: 'tpop_id',
                   xKey: 'tpop_wgs84lat',
                   yKey: 'tpop_wgs84long',
-                  addError,
+                  store,
                 })
               } catch (error) {
-                addError(error)
+                enqueNotification({
+                  message: error.message,
+                  options: {
+                    variant: 'error',
+                  },
+                })
               }
               setMessage(null)
             }}
@@ -119,16 +117,18 @@ const Kontrollen = () => {
                 exportModule({
                   data: get(data, 'allVTpopkontrWebgisbuns.nodes', []),
                   fileName: 'KontrollenWebGisBun',
-                  exportFileType,
-                  exportApplyMapFilter,
-                  mapFilter,
                   idKey: 'TPOPGUID',
                   xKey: 'KONTR_WGS84LAT',
                   yKey: 'KONTR_WGS84LONG',
-                  addError,
+                  store,
                 })
               } catch (error) {
-                addError(error)
+                enqueNotification({
+                  message: error.message,
+                  options: {
+                    variant: 'error',
+                  },
+                })
               }
               setMessage(null)
             }}
@@ -149,16 +149,18 @@ const Kontrollen = () => {
                 exportModule({
                   data: get(data, 'allVKontrzaehlAnzproeinheits.nodes', []),
                   fileName: 'KontrollenAnzahlProZaehleinheit',
-                  exportFileType,
-                  exportApplyMapFilter,
-                  mapFilter,
                   idKey: 'tpop_id',
                   xKey: 'tpop_wgs84lat',
                   yKey: 'tpop_wgs84long',
-                  addError,
+                  store,
                 })
               } catch (error) {
-                addError(error)
+                enqueNotification({
+                  message: error.message,
+                  options: {
+                    variant: 'error',
+                  },
+                })
               }
               setMessage(null)
             }}

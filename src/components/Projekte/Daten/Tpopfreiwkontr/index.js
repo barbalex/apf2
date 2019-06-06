@@ -144,7 +144,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const {
-    addError,
+    enqueNotification,
     nodeFilter,
     nodeFilterSetValue,
     isPrint,
@@ -421,7 +421,14 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
           ),
         )
           .then(() => refetch())
-          .catch(error => addError(error))
+          .catch(error =>
+            enqueNotification({
+              message: error.message,
+              options: {
+                variant: 'error',
+              },
+            }),
+          )
       }
     }
   }, [loading])

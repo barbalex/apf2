@@ -56,12 +56,8 @@ const DownloadCardButton = styled(Button)`
 
 const Populationen = () => {
   const client = useApolloClient()
-  const {
-    mapFilter,
-    addError,
-    exportApplyMapFilter,
-    exportFileType,
-  } = useContext(storeContext)
+  const store = useContext(storeContext)
+  const { enqueNotification } = store
   const [expanded, setExpanded] = useState(false)
   const [message, setMessage] = useState(null)
 
@@ -91,13 +87,15 @@ const Populationen = () => {
                 exportModule({
                   data: get(data, 'allVPops.nodes', []),
                   fileName: 'Populationen',
-                  exportFileType,
-                  mapFilter,
-                  exportApplyMapFilter,
-                  addError,
+                  store,
                 })
               } catch (error) {
-                addError(error)
+                enqueNotification({
+                  message: error.message,
+                  options: {
+                    variant: 'error',
+                  },
+                })
               }
               setMessage(null)
             }}
@@ -114,14 +112,16 @@ const Populationen = () => {
                 exportModule({
                   data: get(data, 'allVPopKmls.nodes', []),
                   fileName: 'Populationen',
-                  exportFileType,
-                  mapFilter,
-                  exportApplyMapFilter,
-                  addError,
+                  store,
                   kml: true,
                 })
               } catch (error) {
-                addError(error)
+                enqueNotification({
+                  message: error.message,
+                  options: {
+                    variant: 'error',
+                  },
+                })
               }
               setMessage(null)
             }}
@@ -138,14 +138,16 @@ const Populationen = () => {
                 exportModule({
                   data: get(data, 'allVPopKmlnamen.nodes', []),
                   fileName: 'PopulationenNachNamen',
-                  exportFileType,
-                  mapFilter,
-                  exportApplyMapFilter,
-                  addError,
+                  store,
                   kml: true,
                 })
               } catch (error) {
-                addError(error)
+                enqueNotification({
+                  message: error.message,
+                  options: {
+                    variant: 'error',
+                  },
+                })
               }
               setMessage(null)
             }}
@@ -168,13 +170,15 @@ const Populationen = () => {
                 exportModule({
                   data: get(data, 'allVPopVonapohnestatuses.nodes', []),
                   fileName: 'PopulationenVonApArtenOhneStatus',
-                  exportFileType,
-                  mapFilter,
-                  exportApplyMapFilter,
-                  addError,
+                  store,
                 })
               } catch (error) {
-                addError(error)
+                enqueNotification({
+                  message: error.message,
+                  options: {
+                    variant: 'error',
+                  },
+                })
               }
               setMessage(null)
             }}
@@ -195,13 +199,15 @@ const Populationen = () => {
                 exportModule({
                   data: get(data, 'allVPopOhnekoords.nodes', []),
                   fileName: 'PopulationenOhneKoordinaten',
-                  exportFileType,
-                  mapFilter,
-                  exportApplyMapFilter,
-                  addError,
+                  store,
                 })
               } catch (error) {
-                addError(error)
+                enqueNotification({
+                  message: error.message,
+                  options: {
+                    variant: 'error',
+                  },
+                })
               }
               setMessage(null)
             }}
@@ -222,16 +228,18 @@ const Populationen = () => {
                 exportModule({
                   data: get(data, 'allVPopmassnberAnzmassns.nodes', []),
                   fileName: 'PopulationenAnzMassnProMassnber',
-                  exportFileType,
-                  mapFilter,
-                  exportApplyMapFilter,
                   idKey: 'pop_id',
                   xKey: 'pop_wgs84lat',
                   yKey: 'pop_wgs84long',
-                  addError,
+                  store,
                 })
               } catch (error) {
-                addError(error)
+                enqueNotification({
+                  message: error.message,
+                  options: {
+                    variant: 'error',
+                  },
+                })
               }
               setMessage(null)
             }}
@@ -253,13 +261,15 @@ const Populationen = () => {
                 exportModule({
                   data: get(data, 'allVPopAnzmassns.nodes', []),
                   fileName: 'PopulationenAnzahlMassnahmen',
-                  exportFileType,
-                  mapFilter,
-                  exportApplyMapFilter,
-                  addError,
+                  store,
                 })
               } catch (error) {
-                addError(error)
+                enqueNotification({
+                  message: error.message,
+                  options: {
+                    variant: 'error',
+                  },
+                })
               }
               setMessage(null)
             }}
@@ -280,13 +290,15 @@ const Populationen = () => {
                 exportModule({
                   data: get(data, 'allVPopAnzkontrs.nodes', []),
                   fileName: 'PopulationenAnzahlKontrollen',
-                  exportFileType,
-                  mapFilter,
-                  exportApplyMapFilter,
-                  addError,
+                  store,
                 })
               } catch (error) {
-                addError(error)
+                enqueNotification({
+                  message: error.message,
+                  options: {
+                    variant: 'error',
+                  },
+                })
               }
               setMessage(null)
             }}
@@ -307,16 +319,18 @@ const Populationen = () => {
                 exportModule({
                   data: get(data, 'allVPopPopberundmassnbers.nodes', []),
                   fileName: 'PopulationenPopUndMassnBerichte',
-                  exportFileType,
-                  mapFilter,
-                  exportApplyMapFilter,
                   idKey: 'pop_id',
                   xKey: 'pop_wgs84lat',
                   yKey: 'pop_wgs84long',
-                  addError,
+                  store,
                 })
               } catch (error) {
-                addError(error)
+                enqueNotification({
+                  message: error.message,
+                  options: {
+                    variant: 'error',
+                  },
+                })
               }
               setMessage(null)
             }}
@@ -337,16 +351,18 @@ const Populationen = () => {
                 exportModule({
                   data: get(data, 'allVPopMitLetzterPopbers.nodes', []),
                   fileName: 'PopulationenMitLetzemPopBericht',
-                  exportFileType,
-                  mapFilter,
-                  exportApplyMapFilter,
                   idKey: 'pop_id',
                   xKey: 'pop_wgs84lat',
                   yKey: 'pop_wgs84long',
-                  addError,
+                  store,
                 })
               } catch (error) {
-                addError(error)
+                enqueNotification({
+                  message: error.message,
+                  options: {
+                    variant: 'error',
+                  },
+                })
               }
               setMessage(null)
             }}
@@ -367,16 +383,18 @@ const Populationen = () => {
                 exportModule({
                   data: get(data, 'allVPopMitLetzterPopmassnbers.nodes', []),
                   fileName: 'allVPopMitLetzterPopmassnbers',
-                  exportFileType,
-                  mapFilter,
-                  exportApplyMapFilter,
                   idKey: 'pop_id',
                   xKey: 'pop_wgs84lat',
                   yKey: 'pop_wgs84long',
-                  addError,
+                  store,
                 })
               } catch (error) {
-                addError(error)
+                enqueNotification({
+                  message: error.message,
+                  options: {
+                    variant: 'error',
+                  },
+                })
               }
               setMessage(null)
             }}

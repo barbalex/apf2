@@ -76,7 +76,7 @@ const Teilpopulationen = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
 
-  const { mapFilter, addError, exportApplyMapFilter, exportFileType } = store
+  const { exportApplyMapFilter, exportFileType, enqueNotification } = store
 
   const [expanded, setExpanded] = useState(false)
   const [message, setMessage] = useState(null)
@@ -109,13 +109,13 @@ const Teilpopulationen = ({ treeName }) => {
       exportModule({
         data: enrichedData,
         fileName: 'Teilpopulationen',
-        exportFileType,
-        mapFilter,
-        exportApplyMapFilter,
-        addError,
+        store,
       })
     } catch (error) {
-      addError(error)
+      enqueNotification({
+        message: error.message,
+        options: { variant: 'error' },
+      })
     }
     setMessage(null)
   }, [exportFileType, exportApplyMapFilter])
@@ -162,16 +162,16 @@ const Teilpopulationen = ({ treeName }) => {
                 exportModule({
                   data: get(data, 'allVTpopWebgisbuns.nodes', []),
                   fileName: 'TeilpopulationenWebGisBun',
-                  exportFileType,
-                  exportApplyMapFilter,
-                  mapFilter,
                   idKey: 'TPOPID',
                   xKey: 'TPOP_WGS84LAT',
                   yKey: 'TPOP_WGS84LONG',
-                  addError,
+                  store,
                 })
               } catch (error) {
-                addError(error)
+                enqueNotification({
+                  message: error.message,
+                  options: { variant: 'error' },
+                })
               }
               setMessage(null)
             }}
@@ -188,14 +188,14 @@ const Teilpopulationen = ({ treeName }) => {
                 exportModule({
                   data: get(data, 'allVTpopKmls.nodes', []),
                   fileName: 'Teilpopulationen',
-                  exportFileType,
-                  exportApplyMapFilter,
-                  mapFilter,
-                  addError,
+                  store,
                   kml: true,
                 })
               } catch (error) {
-                addError(error)
+                enqueNotification({
+                  message: error.message,
+                  options: { variant: 'error' },
+                })
               }
               setMessage(null)
             }}
@@ -217,14 +217,14 @@ const Teilpopulationen = ({ treeName }) => {
                 exportModule({
                   data: get(data, 'allVTpopKmlnamen.nodes', []),
                   fileName: 'TeilpopulationenNachNamen',
-                  exportFileType,
-                  exportApplyMapFilter,
-                  mapFilter,
-                  addError,
+                  store,
                   kml: true,
                 })
               } catch (error) {
-                addError(error)
+                enqueNotification({
+                  message: error.message,
+                  options: { variant: 'error' },
+                })
               }
               setMessage(null)
             }}
@@ -246,13 +246,13 @@ const Teilpopulationen = ({ treeName }) => {
                 exportModule({
                   data: get(data, 'allVTpopOhnebekanntseits.nodes', []),
                   fileName: 'TeilpopulationenVonApArtenOhneBekanntSeit',
-                  exportFileType,
-                  exportApplyMapFilter,
-                  mapFilter,
-                  addError,
+                  store,
                 })
               } catch (error) {
-                addError(error)
+                enqueNotification({
+                  message: error.message,
+                  options: { variant: 'error' },
+                })
               }
               setMessage(null)
             }}
@@ -274,13 +274,13 @@ const Teilpopulationen = ({ treeName }) => {
                 exportModule({
                   data: get(data, 'allVTpopOhneapberichtrelevants.nodes', []),
                   fileName: 'TeilpopulationenOhneApBerichtRelevant',
-                  exportFileType,
-                  exportApplyMapFilter,
-                  mapFilter,
-                  addError,
+                  store,
                 })
               } catch (error) {
-                addError(error)
+                enqueNotification({
+                  message: error.message,
+                  options: { variant: 'error' },
+                })
               }
               setMessage(null)
             }}
@@ -302,13 +302,13 @@ const Teilpopulationen = ({ treeName }) => {
                 exportModule({
                   data: get(data, 'allVTpopAnzmassns.nodes', []),
                   fileName: 'TeilpopulationenAnzahlMassnahmen',
-                  exportFileType,
-                  exportApplyMapFilter,
-                  mapFilter,
-                  addError,
+                  store,
                 })
               } catch (error) {
-                addError(error)
+                enqueNotification({
+                  message: error.message,
+                  options: { variant: 'error' },
+                })
               }
               setMessage(null)
             }}
@@ -334,13 +334,13 @@ const Teilpopulationen = ({ treeName }) => {
                   ),
                   fileName:
                     'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht',
-                  exportFileType,
-                  exportApplyMapFilter,
-                  mapFilter,
-                  addError,
+                  store,
                 })
               } catch (error) {
-                addError(error)
+                enqueNotification({
+                  message: error.message,
+                  options: { variant: 'error' },
+                })
               }
               setMessage(null)
             }}
@@ -402,11 +402,13 @@ const Teilpopulationen = ({ treeName }) => {
                       [],
                     ),
                     fileName: 'anzkontrinklletzterundletztertpopber',
-                    mapFilter,
-                    addError,
+                    store,
                   })
                 } catch (error) {
-                  addError(error)
+                  enqueNotification({
+                    message: error.message,
+                    options: { variant: 'error' },
+                  })
                 }
                 setEwmMessage('')
               }}
@@ -430,16 +432,16 @@ const Teilpopulationen = ({ treeName }) => {
                 exportModule({
                   data: get(data, 'allVTpopPopberundmassnbers.nodes', []),
                   fileName: 'TeilpopulationenTPopUndMassnBerichte',
-                  exportFileType,
-                  exportApplyMapFilter,
-                  mapFilter,
                   idKey: 'tpop_id',
                   xKey: 'tpop_wgs84lat',
                   yKey: 'tpop_wgs84long',
-                  addError,
+                  store,
                 })
               } catch (error) {
-                addError(error)
+                enqueNotification({
+                  message: error.message,
+                  options: { variant: 'error' },
+                })
               }
               setMessage(null)
             }}
