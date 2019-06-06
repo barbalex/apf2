@@ -279,7 +279,6 @@ const TreeContainer = ({ treeName }) => {
     toDeleteId,
     setToDelete,
     setCopying,
-    copying,
     setMoving,
     copyingBiotop,
     setCopyingBiotop,

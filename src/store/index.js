@@ -1,7 +1,6 @@
 import { types } from 'mobx-state-tree'
 import cloneDeep from 'lodash/cloneDeep'
 import isEqual from 'lodash/isEqual'
-import uniqBy from 'lodash/uniqBy'
 import queryString from 'query-string'
 import { navigate } from 'gatsby'
 
