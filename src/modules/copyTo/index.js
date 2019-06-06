@@ -26,10 +26,9 @@ export default async ({
   table: tablePassed,
   id: idPassed,
   client,
-  copying,
   store,
 }) => {
-  const { refetch, addError } = store
+  const { refetch, copying, enqueNotification } = store
   let table = tablePassed || copying.table
   const id = idPassed || copying.id
   const withNextLevel = copying.withNextLevel
@@ -85,9 +84,12 @@ export default async ({
   }
 
   if (!row) {
-    return addError(
-      new Error('change was not saved because dataset was not found in store'),
-    )
+    return enqueNotification({
+      message: 'change was not saved because dataset was not found in store',
+      options: {
+        variant: 'error',
+      },
+    })
   }
 
   // insert
@@ -328,7 +330,6 @@ export default async ({
       popIdFrom: id,
       popIdTo: newId,
       client,
-      copying,
       store,
     })
   }
@@ -338,7 +339,6 @@ export default async ({
       tpopkontrIdFrom: id,
       tpopkontrIdTo: newId,
       client,
-      copying,
       store,
     })
   }

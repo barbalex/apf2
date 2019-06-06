@@ -8,13 +8,8 @@ import updateTpopmassnById from './updateTpopmassnById'
 import updateTpopById from './updateTpopById'
 import updatePopById from './updatePopById'
 
-export default async ({
-  id: newParentId,
-  addError,
-  client,
-  moving,
-  setMoving,
-}) => {
+export default async ({ id: newParentId, store, client }) => {
+  const { enqueNotification, moving, setMoving } = store
   let { table } = moving
   const { id } = moving
 
@@ -26,15 +21,21 @@ export default async ({
   }
   const idField = tabelle ? tabelle.idField : undefined
   if (!idField) {
-    return addError(
-      new Error('change was not saved: Reason: idField was not found'),
-    )
+    return enqueNotification({
+      message: 'change was not saved: Reason: idField was not found',
+      options: {
+        variant: 'error',
+      },
+    })
   }
   const parentIdField = tabelle.parentIdField
   if (!parentIdField) {
-    return addError(
-      new Error('change was not saved: Reason: parentIdField was not found'),
-    )
+    return enqueNotification({
+      message: 'change was not saved: Reason: parentIdField was not found',
+      options: {
+        variant: 'error',
+      },
+    })
   }
 
   // move

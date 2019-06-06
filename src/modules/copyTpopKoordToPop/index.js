@@ -3,7 +3,7 @@ import get from 'lodash/get'
 import queryTpop from './queryTpop'
 import updatePopById from './updatePopById'
 
-export default async ({ id, addError, client }) => {
+export default async ({ id, store, client }) => {
   // fetch tpop
   let tpopResult
   try {
@@ -12,7 +12,12 @@ export default async ({ id, addError, client }) => {
       variables: { id },
     })
   } catch (error) {
-    return addError(error)
+    return store.enqueNotification({
+      message: error.message,
+      options: {
+        variant: 'error',
+      },
+    })
   }
   const tpop = get(tpopResult, 'data.tpopById')
   const { geomPoint, popId } = tpop
@@ -28,6 +33,11 @@ export default async ({ id, addError, client }) => {
       // no optimistic responce as geomPoint
     })
   } catch (error) {
-    return addError(error)
+    return store.enqueNotification({
+      message: error.message,
+      options: {
+        variant: 'error',
+      },
+    })
   }
 }

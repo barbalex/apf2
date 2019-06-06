@@ -3,13 +3,7 @@ import get from 'lodash/get'
 
 import copyTo from './copyTo'
 
-export default async ({
-  tpopkontrIdFrom,
-  tpopkontrIdTo,
-  client,
-  copying,
-  store,
-}) => {
+export default async ({ tpopkontrIdFrom, tpopkontrIdTo, client, store }) => {
   // 1. fetch all tpopkontrzaehl
   const { data } = await client.query({
     query: gql`
@@ -34,7 +28,6 @@ export default async ({
       table: 'tpopkontrzaehl',
       id: zaehl.id,
       client,
-      copying,
       store,
     }),
   )

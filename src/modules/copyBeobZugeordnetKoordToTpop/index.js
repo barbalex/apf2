@@ -3,7 +3,7 @@ import get from 'lodash/get'
 import queryBeob from './queryBeob'
 import updateTpopById from './updateTpopById'
 
-export default async ({ id, addError, client }) => {
+export default async ({ id, store, client }) => {
   // fetch beob coodinates
   let beobResult
   try {
@@ -12,7 +12,12 @@ export default async ({ id, addError, client }) => {
       variables: { id },
     })
   } catch (error) {
-    return addError(error)
+    return store.enqueNotification({
+      message: error.message,
+      options: {
+        variant: 'error',
+      },
+    })
   }
   const beob = get(beobResult, 'data.beobById')
   const { wgs84Lat, wgs84Long, tpopId } = beob
@@ -38,6 +43,11 @@ export default async ({ id, addError, client }) => {
       },
     })
   } catch (error) {
-    return addError(error)
+    return store.enqueNotification({
+      message: error.message,
+      options: {
+        variant: 'error',
+      },
+    })
   }
 }

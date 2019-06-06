@@ -201,7 +201,11 @@ const StyledDialog = styled(Dialog)`
   }
 `
 
-const getAndValidateCoordinatesOfTpop = async ({ id, addError, client }) => {
+const getAndValidateCoordinatesOfTpop = async ({
+  id,
+  enqueNotification,
+  client,
+}) => {
   let tpopResult
   try {
     tpopResult = await client.query({
@@ -209,22 +213,32 @@ const getAndValidateCoordinatesOfTpop = async ({ id, addError, client }) => {
       variables: { id },
     })
   } catch (error) {
-    addError(error)
+    enqueNotification({
+      message: error.message,
+      options: {
+        variant: 'error',
+      },
+    })
   }
   const tpop = get(tpopResult, 'data.tpopById')
   const { lv95X, lv95Y } = tpop
   if (!lv95X) {
-    addError(
-      new Error(
-        `Die Teilpopulation mit der ID ${id} kat keine (vollständigen) Koordinaten`,
-      ),
-    )
+    enqueNotification({
+      message: `Die Teilpopulation mit der ID ${id} kat keine (vollständigen) Koordinaten`,
+      options: {
+        variant: 'warning',
+      },
+    })
     return { lv95X: null, lv95Y: null }
   }
   return { lv95X, lv95Y }
 }
 
-const getAndValidateCoordinatesOfBeob = async ({ id, addError, client }) => {
+const getAndValidateCoordinatesOfBeob = async ({
+  id,
+  enqueNotification,
+  client,
+}) => {
   let beobResult
   try {
     beobResult = await client.query({
@@ -232,16 +246,22 @@ const getAndValidateCoordinatesOfBeob = async ({ id, addError, client }) => {
       variables: { id },
     })
   } catch (error) {
-    addError(error)
+    enqueNotification({
+      message: error.message,
+      options: {
+        variant: 'error',
+      },
+    })
   }
   const beob = get(beobResult, 'data.beobById')
   const { lv95X, lv95Y } = beob
   if (!lv95X) {
-    addError(
-      new Error(
-        `Die Teilpopulation mit der ID ${id} kat keine (vollständigen) Koordinaten`,
-      ),
-    )
+    enqueNotification({
+      message: `Die Teilpopulation mit der ID ${id} kat keine (vollständigen) Koordinaten`,
+      options: {
+        variant: 'error',
+      },
+    })
     return { lv95X: null, lv95Y: null }
   }
   return { lv95X, lv95Y }
@@ -255,12 +275,11 @@ const TreeContainer = ({ treeName }) => {
     setActiveApfloraLayers,
     activeOverlays,
     setIdOfTpopBeingLocalized,
-    addError,
+    enqueNotification,
     toDeleteId,
     setToDelete,
     setCopying,
     copying,
-    moving,
     setMoving,
     copyingBiotop,
     setCopyingBiotop,
@@ -282,12 +301,32 @@ const TreeContainer = ({ treeName }) => {
 
   const handleClick = useCallback(
     (e, data, element) => {
-      if (!data) return addError('no data passed with click')
-      if (!element) return addError(new Error('no element passed with click'))
+      if (!data) {
+        return enqueNotification({
+          message: 'no data passed with click',
+          options: {
+            variant: 'error',
+          },
+        })
+      }
+      if (!element) {
+        return enqueNotification({
+          message: 'no element passed with click',
+          options: {
+            variant: 'error',
+          },
+        })
+      }
       const { table, action, actionTable } = data
       const { firstElementChild } = element
-      if (!firstElementChild)
-        return addError(new Error('no firstElementChild passed with click'))
+      if (!firstElementChild) {
+        return enqueNotification({
+          message: 'no firstElementChild passed with click',
+          options: {
+            variant: 'error',
+          },
+        })
+      }
       let id = firstElementChild.getAttribute('data-id')
       const parentId = firstElementChild.getAttribute('data-parentid')
       const urlPassed = firstElementChild.getAttribute('data-url')
@@ -380,7 +419,7 @@ const TreeContainer = ({ treeName }) => {
           setMoving({ table, id, label })
         },
         move() {
-          moveTo({ id, addError, client, moving, setMoving })
+          moveTo({ id, store, client })
         },
         markForCopying() {
           setCopying({ table, id, label, withNextLevel: false })
@@ -400,7 +439,6 @@ const TreeContainer = ({ treeName }) => {
           copyTo({
             parentId: id,
             client,
-            copying,
             store,
           })
         },
@@ -414,7 +452,7 @@ const TreeContainer = ({ treeName }) => {
           copyBiotopTo({ id, copyingBiotop, client })
         },
         copyTpopKoordToPop() {
-          copyTpopKoordToPop({ id, addError, client })
+          copyTpopKoordToPop({ id, store, client })
         },
         createNewPopFromBeob() {
           createNewPopFromBeob({
@@ -429,12 +467,12 @@ const TreeContainer = ({ treeName }) => {
           setNewTpopFromBeobDialogOpen(true)
         },
         copyBeobZugeordnetKoordToTpop() {
-          copyBeobZugeordnetKoordToTpop({ id, addError, client })
+          copyBeobZugeordnetKoordToTpop({ id, store, client })
         },
         async showCoordOfTpopOnMapsZhCh() {
           const { lv95X, lv95Y } = await getAndValidateCoordinatesOfTpop({
             id,
-            addError,
+            enqueNotification,
             client,
           })
           if (lv95X && lv95Y) {
@@ -448,7 +486,7 @@ const TreeContainer = ({ treeName }) => {
         async showCoordOfTpopOnMapGeoAdminCh() {
           const { lv95X, lv95Y } = await getAndValidateCoordinatesOfTpop({
             id,
-            addError,
+            enqueNotification,
             client,
           })
           if (lv95X && lv95Y) {
@@ -462,7 +500,7 @@ const TreeContainer = ({ treeName }) => {
         async showCoordOfBeobOnMapsZhCh() {
           const { lv95X, lv95Y } = await getAndValidateCoordinatesOfBeob({
             id,
-            addError,
+            enqueNotification,
             client,
           })
           if (lv95X && lv95Y) {
@@ -476,7 +514,7 @@ const TreeContainer = ({ treeName }) => {
         async showCoordOfBeobOnMapGeoAdminCh() {
           const { lv95X, lv95Y } = await getAndValidateCoordinatesOfBeob({
             id,
-            addError,
+            enqueNotification,
             client,
           })
           if (lv95X && lv95Y) {
@@ -491,9 +529,12 @@ const TreeContainer = ({ treeName }) => {
       if (Object.keys(actions).includes(action)) {
         actions[action]()
       } else {
-        addError(
-          new Error(`action "${action}" unknown, therefore not executed`),
-        )
+        enqueNotification({
+          message: `action "${action}" unknown, therefore not executed`,
+          options: {
+            variant: 'error',
+          },
+        })
       }
     },
     [treeName, activeApfloraLayers, activeOverlays, toDeleteId],
