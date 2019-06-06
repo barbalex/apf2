@@ -423,7 +423,7 @@ const Karte = ({ treeName }) => {
     idOfTpopBeingLocalized,
     setIdOfTpopBeingLocalized,
     bounds: boundsRaw,
-    addError,
+    enqueNotification,
     assigningBeob,
     setMapMouseCoordinates,
     refetch,
@@ -543,7 +543,12 @@ const Karte = ({ treeName }) => {
                 // refetch so it appears on map
                 if (refetch.tpopForMap) refetch.tpopForMap()
               } catch (error) {
-                addError(error)
+                enqueNotification({
+                  message: error.message,
+                  options: {
+                    variant: 'error',
+                  },
+                })
               }
               setIdOfTpopBeingLocalized(null)
             }

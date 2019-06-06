@@ -28,7 +28,12 @@ const iconCreateFunction = function(cluster) {
 
 const BeobNichtZuzuordnenMarker = ({ treeName, clustered }) => {
   const store = useContext(storeContext)
-  const { activeApfloraLayers, mapFilter, setRefetchKey, addError } = store
+  const {
+    activeApfloraLayers,
+    mapFilter,
+    setRefetchKey,
+    enqueNotification,
+  } = store
   const tree = store[treeName]
   const { map } = tree
   const { setBeobNichtZuzuordnenIdsFiltered } = map
@@ -54,13 +59,14 @@ const BeobNichtZuzuordnenMarker = ({ treeName, clustered }) => {
   setRefetchKey({ key: 'beobNichtZuzuordnenForMap', value: refetch })
 
   if (error) {
-    addError(
-      new Error(
-        `Fehler beim Laden der Nicht zuzuordnenden Beobachtungen für die Karte: ${
-          error.message
-        }`,
-      ),
-    )
+    enqueNotification({
+      message: `Fehler beim Laden der Nicht zuzuordnenden Beobachtungen für die Karte: ${
+        error.message
+      }`,
+      options: {
+        variant: 'error',
+      },
+    })
   }
 
   const aparts = get(

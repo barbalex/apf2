@@ -14,7 +14,7 @@ export default async ({ client, store }) => {
   const {
     emptyToDelete,
     addDeletedDataset,
-    addError,
+    enqueNotification,
     toDeleteTable: tablePassed,
     toDeleteId,
     toDeleteUrl,
@@ -25,11 +25,12 @@ export default async ({ client, store }) => {
   // some tables need to be translated, i.e. tpopfreiwkontr
   const tableMetadata = tables.find(t => t.table === tablePassed)
   if (!tableMetadata) {
-    return addError(
-      new Error(
-        `Error in action deleteDatasetDemand: no table meta data found for table "${tablePassed}"`,
-      ),
-    )
+    return enqueNotification({
+      message: `Error in action deleteDatasetDemand: no table meta data found for table "${tablePassed}"`,
+      options: {
+        variant: 'error',
+      },
+    })
   }
   const table = tableMetadata.dbTable ? tableMetadata.dbTable : tablePassed
 
@@ -71,7 +72,12 @@ export default async ({ client, store }) => {
     })
   } catch (error) {
     console.log(error)
-    return addError(error)
+    return enqueNotification({
+      message: error.message,
+      options: {
+        variant: 'error',
+      },
+    })
   }
   let data = { ...get(result, `data.${camelCase(table)}ById`) }
   data = omit(data, '__typename')
@@ -101,7 +107,12 @@ export default async ({ client, store }) => {
       variables: { id: toDeleteId },
     })
   } catch (error) {
-    return addError(error)
+    return enqueNotification({
+      message: error.message,
+      options: {
+        variant: 'error',
+      },
+    })
   }
 
   // if tpop was deleted: set beob free

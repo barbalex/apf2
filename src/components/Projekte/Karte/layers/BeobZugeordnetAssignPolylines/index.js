@@ -10,7 +10,7 @@ import query from './query'
 
 const BeobZugeordnetAssignPolylines = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { setRefetchKey, addError, activeApfloraLayers } = store
+  const { setRefetchKey, enqueNotification, activeApfloraLayers } = store
   const tree = store[treeName]
 
   const activeNodes = store[`${treeName}ActiveNodes`]
@@ -36,11 +36,14 @@ const BeobZugeordnetAssignPolylines = ({ treeName }) => {
   setRefetchKey({ key: 'beobAssignLines', value: refetch })
 
   if (error) {
-    addError(
-      new Error(
-        `Fehler beim Laden der Populationen für die Karte: ${error.message}`,
-      ),
-    )
+    enqueNotification({
+      message: `Fehler beim Laden der Populationen für die Karte: ${
+        error.message
+      }`,
+      options: {
+        variant: 'error',
+      },
+    })
   }
 
   const aparts = get(

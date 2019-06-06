@@ -14,8 +14,9 @@ const onEachFeature = (feature, layer) => {
 }
 
 const DetailplaeneLayer = () => {
-  const { detailplaene, setDetailplaene, addError } = useContext(storeContext)
-  !detailplaene && fetchDetailplaene({ setDetailplaene, addError })
+  const store = useContext(storeContext)
+  const { detailplaene, setDetailplaene } = store
+  !detailplaene && fetchDetailplaene({ setDetailplaene, store })
 
   return (
     detailplaene && (

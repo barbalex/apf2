@@ -40,7 +40,7 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
     activeApfloraLayers,
     setActiveApfloraLayers,
     setRefetchKey,
-    addError,
+    enqueNotification,
   } = store
   const tree = store[treeName]
   const { map } = tree
@@ -97,13 +97,14 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
   setRefetchKey({ key: 'tpopForMap', value: refetch })
 
   if (error) {
-    addError(
-      new Error(
-        `Fehler beim Laden der Teil-Populationen für die Karte: ${
-          error.message
-        }`,
-      ),
-    )
+    enqueNotification({
+      message: `Fehler beim Laden der Teil-Populationen für die Karte: ${
+        error.message
+      }`,
+      options: {
+        variant: 'error',
+      },
+    })
   }
 
   const aps = get(
@@ -139,25 +140,27 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
   }
 
   if (tpopsForMap.length > 1500) {
-    addError(
-      new Error(
-        `Zuviele Teil-Populationen: Es werden maximal 1'500 angezeigt, im aktuellen Ausschnitt sind es: ${tpopsForMap.length.toLocaleString(
-          'de-CH',
-        )}. Bitte wählen Sie einen kleineren Ausschnitt.`,
-      ),
-    )
+    enqueNotification({
+      message: `Zuviele Teil-Populationen: Es werden maximal 1'500 angezeigt, im aktuellen Ausschnitt sind es: ${tpopsForMap.length.toLocaleString(
+        'de-CH',
+      )}. Bitte wählen Sie einen kleineren Ausschnitt.`,
+      options: {
+        variant: 'warning',
+      },
+    })
     tpopsForMap = []
     setActiveApfloraLayers(activeApfloraLayers.filter(l => l !== 'tpop'))
   } else if (tpops.length > 1500) {
-    addError(
-      new Error(
-        `Weil das Layer mehr als 1'500 Teil-Populationen enthält (nämlich: ${tpops.length.toLocaleString(
-          'de-CH',
-        )}), wurden nur die ${tpopsForMap.length.toLocaleString(
-          'de-CH',
-        )} im aktuellen Ausschnitt dargestellt. Falls Sie den Ausschnitt verändern sollten, müssen Sie das Layer aus- und wieder einschalten, um die passenden Teil-Populationen neu aufzubauen.`,
-      ),
-    )
+    enqueNotification({
+      message: `Weil das Layer mehr als 1'500 Teil-Populationen enthält (nämlich: ${tpops.length.toLocaleString(
+        'de-CH',
+      )}), wurden nur die ${tpopsForMap.length.toLocaleString(
+        'de-CH',
+      )} im aktuellen Ausschnitt dargestellt. Falls Sie den Ausschnitt verändern sollten, müssen Sie das Layer aus- und wieder einschalten, um die passenden Teil-Populationen neu aufzubauen.`,
+      options: {
+        variant: 'info',
+      },
+    })
   }
 
   const tpopMarkers = tpopsForMap.map(tpop => (

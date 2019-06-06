@@ -31,7 +31,7 @@ const Pop = ({ treeName }) => {
   const {
     nodeFilter,
     activeApfloraLayers,
-    addError,
+    enqueNotification,
     mapFilter,
     setRefetchKey,
   } = store
@@ -90,11 +90,14 @@ const Pop = ({ treeName }) => {
   setRefetchKey({ key: 'popForMap', value: refetch })
 
   if (error) {
-    addError(
-      new Error(
-        `Fehler beim Laden der Populationen für die Karte: ${error.message}`,
-      ),
-    )
+    enqueNotification({
+      message: `Fehler beim Laden der Populationen für die Karte: ${
+        error.message
+      }`,
+      options: {
+        variant: 'error',
+      },
+    })
   }
 
   const aps = get(

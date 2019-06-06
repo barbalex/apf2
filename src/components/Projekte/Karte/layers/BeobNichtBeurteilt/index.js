@@ -28,7 +28,12 @@ const iconCreateFunction = function(cluster) {
 
 const BeobNichtBeurteiltMarker = ({ treeName, clustered }) => {
   const store = useContext(storeContext)
-  const { setRefetchKey, addError, mapFilter, activeApfloraLayers } = store
+  const {
+    setRefetchKey,
+    enqueNotification,
+    mapFilter,
+    activeApfloraLayers,
+  } = store
   const tree = store[treeName]
   const { setBeobNichtBeurteiltIdsFiltered } = store[treeName].map
 
@@ -52,13 +57,14 @@ const BeobNichtBeurteiltMarker = ({ treeName, clustered }) => {
   setRefetchKey({ key: 'beobNichtBeurteiltForMap', value: refetch })
 
   if (error) {
-    addError(
-      new Error(
-        `Fehler beim Laden der Nicht beurteilten Beobachtungen für die Karte: ${
-          error.message
-        }`,
-      ),
-    )
+    enqueNotification({
+      message: `Fehler beim Laden der Nicht beurteilten Beobachtungen für die Karte: ${
+        error.message
+      }`,
+      options: {
+        variant: 'error',
+      },
+    })
   }
 
   const aparts = get(
