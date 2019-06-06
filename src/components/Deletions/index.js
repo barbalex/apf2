@@ -1,20 +1,20 @@
-import React, { useContext, useState, useCallback } from "react"
-import Dialog from "@material-ui/core/Dialog"
-import DialogContent from "@material-ui/core/DialogContent"
-import DialogTitle from "@material-ui/core/DialogTitle"
-import DialogActions from "@material-ui/core/DialogActions"
-import Button from "@material-ui/core/Button"
-import FormControlLabel from "@material-ui/core/FormControlLabel"
-import Checkbox from "@material-ui/core/Checkbox"
-import styled from "styled-components"
-import format from "date-fns/format"
-import TextField from "@material-ui/core/TextField"
-import { observer } from "mobx-react-lite"
-import { useApolloClient } from "react-apollo-hooks"
+import React, { useContext, useState, useCallback } from 'react'
+import Dialog from '@material-ui/core/Dialog'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import DialogActions from '@material-ui/core/DialogActions'
+import Button from '@material-ui/core/Button'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Checkbox from '@material-ui/core/Checkbox'
+import styled from 'styled-components'
+import format from 'date-fns/format'
+import TextField from '@material-ui/core/TextField'
+import { observer } from 'mobx-react-lite'
+import { useApolloClient } from 'react-apollo-hooks'
 
-import ErrorBoundary from "../shared/ErrorBoundary"
-import undelete from "./undelete"
-import storeContext from "../../storeContext"
+import ErrorBoundary from '../shared/ErrorBoundary'
+import undelete from './undelete'
+import storeContext from '../../storeContext'
 
 const List = styled.div`
   padding-left: 24px;
@@ -22,13 +22,13 @@ const List = styled.div`
   display: flex;
   flex-direction: column;
   width: 500px;
-  max-width: ${typeof window !== "undefined" && window.innerWidth * 0.8}px;
+  max-width: ${typeof window !== 'undefined' && window.innerWidth * 0.8}px;
 `
 const Row = styled.div`
   display: flex;
   border-top: ${props =>
-    props["data-withtopline"] ? "1px solid rgba(0,0,0,0.1)" : "none"};
-  padding-top: ${props => (props["data-withtopline"] ? "10px" : "unset")};
+    props['data-withtopline'] ? '1px solid rgba(0,0,0,0.1)' : 'none'};
+  padding-top: ${props => (props['data-withtopline'] ? '10px' : 'unset')};
 `
 const TextContainer = styled.div`
   display: flex;
@@ -52,13 +52,13 @@ const StyledCheckbox = styled(Checkbox)`
 
 const Deletions = () => {
   const client = useApolloClient()
+  const store = useContext(storeContext)
   const {
-    addError,
     removeDeletedDatasetById,
     deletedDatasets,
     showDeletions,
     setShowDeletions,
-  } = useContext(storeContext)
+  } = store
 
   const [choosenDeletions, setChoosenDeletions] = useState([])
 
@@ -72,10 +72,10 @@ const Deletions = () => {
             dataset: deletedDatasets.find(d => d.id === id),
             setShowDeletions,
             removeDeletedDatasetById,
-            addError,
             client,
-          })
-      )
+            store,
+          }),
+      ),
     )
     setChoosenDeletions([])
     if (choosenDeletions.length === deletedDatasets.length) {
@@ -93,7 +93,7 @@ const Deletions = () => {
       }
       setChoosenDeletions(newChoosenDeletions)
     },
-    [choosenDeletions]
+    [choosenDeletions],
   )
   const onClickClose = useCallback(() => setShowDeletions(false))
 
@@ -111,9 +111,9 @@ const Deletions = () => {
               const dataset = { ...ds.data }
               // remove null values
               Object.keys(dataset).forEach(
-                key => dataset[key] == null && delete dataset[key]
+                key => dataset[key] == null && delete dataset[key],
               )
-              const time = format(new Date(ds.time), "yyyy.MM.dd HH:mm:ss")
+              const time = format(new Date(ds.time), 'yyyy.MM.dd HH:mm:ss')
 
               return (
                 <Row key={ds.id} data-withtopline={index > 0}>

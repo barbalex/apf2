@@ -21,6 +21,7 @@ import { MuiPickersUtilsProvider } from 'material-ui-pickers'
 import { ApolloProvider } from 'react-apollo'
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
 import MobxStore from './store'
+import { SnackbarProvider } from 'notistack'
 //import { onPatch } from 'mobx-state-tree'
 
 import 'typeface-roboto'
@@ -33,6 +34,9 @@ import createGlobalStyle from './utils/createGlobalStyle'
 
 import { Provider as MobxProvider } from './storeContext'
 import { Provider as IdbProvider } from './idbContext'
+
+import Notifier from './components/shared/Notifier'
+import NotificationDismisser from './components/shared/NotificationDismisser'
 
 import 'react-leaflet-markercluster/dist/styles.min.css'
 
@@ -75,8 +79,18 @@ const App = ({ element }) => {
                 moment={moment}
                 locale="de-ch"
               >
-                <GlobalStyle />
-                {element}
+                <SnackbarProvider
+                  maxSnack={5}
+                  preventDuplicate
+                  autoHideDuration={10000}
+                  action={key => <NotificationDismisser nKey={key} />}
+                >
+                  <>
+                    <GlobalStyle />
+                    {element}
+                    <Notifier />
+                  </>
+                </SnackbarProvider>
               </MuiPickersUtilsProvider>
             </MuiThemeProvider>
           </ApolloHooksProvider>

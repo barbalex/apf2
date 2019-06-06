@@ -6,8 +6,8 @@ export default async ({
   dataset,
   setShowDeletions,
   removeDeletedDatasetById,
-  addError,
   client,
+  store,
 }) => {
   const { table, data, afterDeletionHook } = dataset
   const isWerte = table.toLowerCase().includes('werte')
@@ -20,11 +20,12 @@ export default async ({
   try {
     mutation = await import(`./${queryName}`).then(m => m.default)
   } catch (error) {
-    return addError(
-      new Error(
-        `Die Abfrage, um einen Datensatz für die Tabelle ${table} zu erstellen, scheint zu fehlen. Sorry!`,
-      ),
-    )
+    return store.enqueNotification({
+      message: `Die Abfrage, um einen Datensatz für die Tabelle ${table} zu erstellen, scheint zu fehlen. Sorry!`,
+      options: {
+        variant: 'error',
+      },
+    })
   }
   try {
     await client.mutate({
@@ -32,7 +33,12 @@ export default async ({
       variables: data,
     })
   } catch (error) {
-    return addError(error)
+    return store.enqueNotification({
+      message: error.message,
+      options: {
+        variant: 'error',
+      },
+    })
   }
 
   // 2. remove dataset from deletedDatasets

@@ -76,7 +76,7 @@ const StyledButton = styled(Button)`
 
 const Qk = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { ktZh, setKtZh, addError, openTree2WithActiveNodeArray } = store
+  const { ktZh, openTree2WithActiveNodeArray } = store
   const { activeNodeArray } = store[treeName]
 
   const [berichtjahr, setBerichtjahr] = useState(standardQkYear())
@@ -123,7 +123,7 @@ const Qk = ({ treeName }) => {
   })
 
   useEffect(() => {
-    if (!ktZh) fetchKtZh({ setKtZh, addError })
+    if (!ktZh) fetchKtZh(store)
   }, [])
 
   if (error) return `Fehler: ${error.message}`

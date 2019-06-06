@@ -86,6 +86,7 @@
     "mobx-react-lite": "1.4.0",
     "mobx-state-tree": "3.14.0",
     "moment": "2.24.0",
+    "notistack": "0.8.6",
     "proj4": "2.5.0",
     "proj4leaflet": "1.0.2",
     "prop-types": "15.7.2",

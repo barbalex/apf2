@@ -94,6 +94,7 @@ const myTypes = types
     toDeleteAfterDeletionHook: null,
     deletedDatasets: [],
     refetch: {},
+    notifications: [],
   }))
   .views(self => ({
     get treeActiveNodes() {
@@ -104,6 +105,18 @@ const myTypes = types
     },
   }))
   .actions(self => ({
+    enqueNotification(note) {
+      self.notifications = [
+        ...self.notifications,
+        {
+          key: new Date().getTime() + Math.random(),
+          ...note,
+        },
+      ]
+    },
+    removeNotification(note) {
+      self.notifications = self.notifications.filter(n => n.key !== note)
+    },
     setTechnDokuFilter(val) {
       self.technDokuFilter = val
     },
