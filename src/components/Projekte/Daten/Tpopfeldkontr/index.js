@@ -8,6 +8,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
+import RadioButton from '../../../shared/RadioButton'
 import TextField from '../../../shared/TextField2'
 import Select from '../../../shared/Select'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
@@ -239,10 +240,6 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                       : field2 === 'datum'
                       ? value2
                       : row.datum,
-                  jungpflanzenAnzahl:
-                    field === 'jungpflanzenAnzahl'
-                      ? value
-                      : row.jungpflanzenAnzahl,
                   vitalitaet: field === 'vitalitaet' ? value : row.vitalitaet,
                   ueberlebensrate:
                     field === 'ueberlebensrate' ? value : row.ueberlebensrate,
@@ -446,14 +443,13 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                 saveToDb={saveToDb}
                 error={errors.bearbeiter}
               />
-              <TextField
-                key={`${row.id}jungpflanzen_anzahl`}
-                name="jungpflanzenAnzahl"
-                label="Anzahl Jungpflanzen"
-                row={row}
-                type="number"
+              <RadioButton
+                key={`${row.id}jungpflanzenVorhanden`}
+                name="jungpflanzenVorhanden"
+                label="Jungpflanzen vorhanden"
+                value={row.jungpflanzenVorhanden}
                 saveToDb={saveToDb}
-                errors={errors}
+                error={errors.jungpflanzenVorhanden}
               />
               <TextField
                 key={`${row.id}vitalitaet`}

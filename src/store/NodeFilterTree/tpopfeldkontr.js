@@ -14,7 +14,6 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  jungpflanzenAnzahl: types.optional(types.maybeNull(types.number), null),
   vitalitaet: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
@@ -129,7 +128,6 @@ export const initial = {
   datum: null,
   jahr: null,
   bearbeiter: null,
-  jungpflanzenAnzahl: null,
   vitalitaet: null,
   ueberlebensrate: null,
   entwicklung: null,
@@ -172,7 +170,6 @@ export const simpleTypes = {
   datum: 'date',
   jahr: 'number',
   bearbeiter: 'string',
-  jungpflanzenAnzahl: 'number',
   vitalitaet: 'string',
   ueberlebensrate: 'number',
   entwicklung: 'number',

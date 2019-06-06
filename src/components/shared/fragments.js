@@ -332,7 +332,6 @@ export const tpopfeldkontr = gql`
     typ
     datum
     jahr
-    jungpflanzenAnzahl
     vitalitaet
     ueberlebensrate
     entwicklung
@@ -405,7 +404,6 @@ export const tpopkontr = gql`
     typ
     datum
     jahr
-    jungpflanzenAnzahl
     vitalitaet
     ueberlebensrate
     entwicklung

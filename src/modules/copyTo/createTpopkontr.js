@@ -7,7 +7,6 @@ export default gql`
     $typ: String
     $datum: Date
     $jahr: Int
-    $jungpflanzenAnzahl: Int
     $vitalitaet: String
     $ueberlebensrate: Int
     $entwicklung: Int
@@ -52,7 +51,6 @@ export default gql`
           typ: $typ
           datum: $datum
           jahr: $jahr
-          jungpflanzenAnzahl: $jungpflanzenAnzahl
           vitalitaet: $vitalitaet
           ueberlebensrate: $ueberlebensrate
           entwicklung: $entwicklung
