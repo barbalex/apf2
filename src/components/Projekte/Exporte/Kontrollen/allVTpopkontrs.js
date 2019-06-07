@@ -83,10 +83,9 @@ export default gql`
         gefaehrdung
         changed
         changed_by: changedBy
-        ekf_verifiziert: ekfVerifiziert
+        apber_nicht_relevant: apberNichtRelevant
+        apber_nicht_relevant_grund: apberNichtRelevantGrund
         ekf_bemerkungen: ekfBemerkungen
-        ekf_verifiziert_durch: ekfVerifiziertDurch
-        ekf_verifiziert_datum: ekfVerifiziertDatum
         zaehlung_anzahlen: zaehlungAnzahlen
         zaehlung_einheiten: zaehlungEinheiten
         zaehlung_methoden: zaehlungMethoden
