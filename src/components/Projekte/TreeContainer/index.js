@@ -63,8 +63,6 @@ import CmBeobnichtbeurteilt from './contextmenu/Beobnichtbeurteilt'
 import CmBeobNichtZuzuordnen from './contextmenu/BeobNichtZuzuordnen'
 import CmTpopfreiwkontrFolder from './contextmenu/TpopfreiwkontrFolder'
 import CmTpopfreiwkontr from './contextmenu/Tpopfreiwkontr'
-import CmTpopfreiwkontrzaehlFolder from './contextmenu/TpopfreiwkontrzaehlFolder'
-import CmTpopfreiwkontrzaehl from './contextmenu/Tpopfreiwkontrzaehl'
 import CmTpopfeldkontrFolder from './contextmenu/TpopfeldkontrFolder'
 import CmTpopfeldkontr from './contextmenu/Tpopfeldkontr'
 import CmTpopfeldkontrzaehlFolder from './contextmenu/TpopfeldkontrzaehlFolder'
@@ -602,11 +600,6 @@ const TreeContainer = ({ treeName }) => {
         <CmBeobNichtZuzuordnen onClick={handleClick} treeName={treeName} />
         <CmTpopfreiwkontrFolder onClick={handleClick} treeName={treeName} />
         <CmTpopfreiwkontr onClick={handleClick} treeName={treeName} />
-        <CmTpopfreiwkontrzaehlFolder
-          onClick={handleClick}
-          treeName={treeName}
-        />
-        <CmTpopfreiwkontrzaehl onClick={handleClick} treeName={treeName} />
         <CmTpopfeldkontrFolder onClick={handleClick} treeName={treeName} />
         <CmTpopfeldkontr onClick={handleClick} treeName={treeName} />
         <CmTpopfeldkontrzaehlFolder onClick={handleClick} treeName={treeName} />

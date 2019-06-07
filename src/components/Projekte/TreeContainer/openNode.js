@@ -7,7 +7,7 @@ export default async ({ treeName, node, openNodes, store }) => {
   if (isNodeOpen(openNodes, node.url)) return
 
   let newOpenNodes = [...openNodes, node.url]
-  if (['tpopfeldkontr'].includes(node.menuType)) {
+  if (['tpopfeldkontr', 'tpopfreiwkontr'].includes(node.menuType)) {
     // automatically open zaehlFolder of tpopfeldkontr or tpopfreiwkontr
     newOpenNodes.push([...node.url, 'Zaehlungen'])
   }

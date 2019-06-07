@@ -62,6 +62,8 @@ import buildTpopmassnberNodes from './tpopmassnber'
 import buildTpopmassnNodes from './tpopmassn'
 import buildTpopfeldkontrzaehlFolderNodes from './tpopfeldkontrzaehlFolder'
 import buildTpopfeldkontrzaehlNodes from './tpopfeldkontrzaehl'
+import buildTpopfreiwkontrzaehlFolderNodes from './tpopfreiwkontrzaehlFolder'
+import buildTpopfreiwkontrzaehlNodes from './tpopfreiwkontrzaehl'
 import sort from '../sort'
 import allParentNodesExist from '../allParentNodesExist'
 
@@ -1112,6 +1114,35 @@ export default ({
         ]
       }
       if (
+        nodeUrl.length === 10 &&
+        nodeUrl[4] === 'Populationen' &&
+        nodeUrl[6] === 'Teil-Populationen' &&
+        nodeUrl[8] === 'Freiwilligen-Kontrollen'
+      ) {
+        nodes = [
+          ...nodes,
+          ...memoizeOne(() =>
+            buildTpopfreiwkontrzaehlFolderNodes({
+              nodes,
+              data: dataTpopkontrzaehls,
+              treeName,
+              loading: loadingTpopkontrzaehls,
+              projId,
+              projektNodes,
+              apId: nodeUrl[3],
+              apNodes,
+              popId: nodeUrl[5],
+              popNodes,
+              tpopId: nodeUrl[7],
+              tpopNodes,
+              tpopkontrId: nodeUrl[9],
+              tpopfreiwkontrNodes,
+              store,
+            }),
+          )(),
+        ]
+      }
+      if (
         nodeUrl.length === 11 &&
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
@@ -1135,6 +1166,35 @@ export default ({
               tpopNodes,
               tpopkontrId: nodeUrl[9],
               tpopfeldkontrNodes,
+              store,
+            }),
+          )(),
+        ]
+      }
+      if (
+        nodeUrl.length === 11 &&
+        nodeUrl[4] === 'Populationen' &&
+        nodeUrl[6] === 'Teil-Populationen' &&
+        nodeUrl[8] === 'Freiwilligen-Kontrollen'
+      ) {
+        nodes = [
+          ...nodes,
+          ...memoizeOne(() =>
+            buildTpopfreiwkontrzaehlNodes({
+              nodes,
+              data: dataTpopkontrzaehls,
+              treeName,
+              loading: loadingTpopkontrzaehls,
+              projId,
+              projektNodes,
+              apId: nodeUrl[3],
+              apNodes,
+              popId: nodeUrl[5],
+              popNodes,
+              tpopId: nodeUrl[7],
+              tpopNodes,
+              tpopkontrId: nodeUrl[9],
+              tpopfreiwkontrNodes,
               store,
             }),
           )(),

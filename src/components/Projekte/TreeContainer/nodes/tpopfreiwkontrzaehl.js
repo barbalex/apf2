@@ -10,10 +10,12 @@ export default ({
   apNodes,
   popNodes,
   tpopNodes,
+  tpopfreiwkontrNodes,
   projId,
   apId,
   popId,
   tpopId,
+  tpopkontrId,
   store,
 }) => {
   // fetch sorting indexes of parents
@@ -23,26 +25,28 @@ export default ({
   const apIndex = findIndex(apNodes, { id: apId })
   const popIndex = findIndex(popNodes, { id: popId })
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
+  const tpopkontrIndex = findIndex(tpopfreiwkontrNodes, { id: tpopkontrId })
 
   // map through all elements and create array of nodes
   const nodes = memoizeOne(() =>
-    get(data, 'allTpopkontrs.nodes', [])
+    get(data, 'allTpopkontrzaehls.nodes', [])
       // only show if parent node exists
       .filter(el =>
-        nodesPassed.map(n => n.id).includes(`${el.tpopId}TpopfreiwkontrFolder`),
+        nodesPassed
+          .map(n => n.id)
+          .includes(`${el.tpopkontrId}TpopfreiwkontrzaehlFolder`),
       )
       // only show nodes of this parent
-      .filter(el => el.tpopId === tpopId)
+      .filter(el => el.tpopkontrId === tpopkontrId)
       .map(el => ({
         nodeType: 'table',
-        menuType: 'tpopfreiwkontr',
-        filterTable: 'tpopkontr',
+        menuType: 'tpopfreiwkontrzaehl',
+        filterTable: 'tpopkontrzaehl',
         id: el.id,
-        tableId: el.id,
-        parentId: `${el.tpopId}TpopfreiwkontrFolder`,
-        parentTableId: el.tpopId,
+        parentId: `${el.tpopkontrId}TpopfreiwkontrzaehlFolder`,
+        parentTableId: el.tpopkontrId,
         urlLabel: el.id,
-        label: el.labelEkf,
+        label: el.label,
         url: [
           'Projekte',
           projId,
@@ -53,12 +57,26 @@ export default ({
           'Teil-Populationen',
           tpopId,
           'Freiwilligen-Kontrollen',
+          tpopkontrId,
+          'Zaehlungen',
           el.id,
         ],
-        hasChildren: true,
+        hasChildren: false,
       }))
       .map((el, index) => {
-        el.sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 4, index]
+        el.sort = [
+          projIndex,
+          1,
+          apIndex,
+          1,
+          popIndex,
+          1,
+          tpopIndex,
+          4,
+          tpopkontrIndex,
+          1,
+          index,
+        ]
         return el
       }),
   )()
