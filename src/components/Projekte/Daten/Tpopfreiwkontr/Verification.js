@@ -37,6 +37,9 @@ const Relevant = styled.div`
 `
 const Grund = styled.div`
   grid-area: grund;
+  > div {
+    margin-bottom: -15px;
+  }
 `
 
 const Verification = ({ saveToDb, row, errors }) => (
