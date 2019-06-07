@@ -1389,6 +1389,29 @@ export default ({ data, berichtjahr }) => {
       })),
     },
     {
+      title: `Teilpopulation:
+              dieselbe Einheit wurde im Berichtjahr mehrmals gezählt
+              (und alle Kontrollen sind im Jahresbericht zu berücksichtigen)`,
+      messages: get(
+        data,
+        'tpopCountedEinheitMultipleTimesInYear.nodes',
+        [],
+      ).map(n => ({
+        url: [
+          'Projekte',
+          n.projId,
+          'Aktionspläne',
+          n.apId,
+          'Populationen',
+          n.popId,
+          'Teil-Populationen',
+          n.id,
+        ],
+        text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr ||
+          n.id}: "${n.einheit}" wurde ${n.anzahl} mal gezählt`,
+      })),
+    },
+    {
       title: `Teilpopulation
               mit Status "Ansaatversuch",
               und in der letzten Kontrolle eine Anzahl:`,

@@ -797,6 +797,22 @@ export default gql`
         nr
       }
     }
+    tpopCountedEinheitMultipleTimesInYear: qTpopCountedEinheitMultipleTimesInYear(
+      berichtjahr: $berichtjahr
+      apid: $apId
+      projid: $projId
+    ) @include(if: $isBerichtjahr) {
+      nodes {
+        projId
+        apId
+        popId
+        popNr
+        id
+        nr
+        einheit
+        anzahl
+      }
+    }
     tpopBekanntSeitJuengerAlsAeltesteBeob: allVQTpopBekanntseitJuengerAlsAeltesteBeobs(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
     ) {
