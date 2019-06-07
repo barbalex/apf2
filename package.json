@@ -10,7 +10,7 @@
   "license": "MIT",
   "scripts": {
     "analyze": "npx source-map-explorer build/static/js/main.*",
-    "build": "gatsby build",
+    "build": "gatsby clean && gatsby build",
     "postbuild": "copyfiles now.json public",
     "dev": "gatsby develop",
     "format": "prettier --write src/**/*.{js,jsx}",
