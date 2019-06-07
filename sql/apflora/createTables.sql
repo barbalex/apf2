@@ -708,14 +708,8 @@ CREATE TABLE apflora.tpopkontr (
   vegetationshoehe_maximum smallint DEFAULT NULL,
   vegetationshoehe_mittel smallint DEFAULT NULL,
   gefaehrdung text DEFAULT NULL,
-
   apber_nicht_relevant boolean default null,
   apber_nicht_relevant_grund text DEFAULT NULL,
-  -- TODO: drop, replace by apber_nicht_relevant
-  ekf_verifiziert boolean DEFAULT null,
-  ekf_verifiziert_durch varchar(20) DEFAULT null,
-  ekf_verifiziert_datum date DEFAULT null,
-
   ekf_bemerkungen text DEFAULT NULL,
   zeit_id UUID DEFAULT uuid_generate_v1mc(),
   changed date DEFAULT NOW(),
