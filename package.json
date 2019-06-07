@@ -111,7 +111,7 @@
     "react-split-pane": "0.1.87",
     "react-typography": "0.16.19",
     "react-window": "1.8.2",
-    "styled-components": "4.3.0",
+    "styled-components": "4.3.1",
     "typeface-roboto": "0.0.54",
     "typography": "0.16.19",
     "uploadcare-widget": "3.7.5"
@@ -121,7 +121,7 @@
     "cypress": "3.3.1",
     "postgraphile": "4.4.0",
     "postgraphile-plugin-connection-filter": "1.1.0",
-    "prettier": "1.17.1",
+    "prettier": "1.18.0",
     "source-map-explorer": "2.0.0"
   },
   "eslintConfig": {
