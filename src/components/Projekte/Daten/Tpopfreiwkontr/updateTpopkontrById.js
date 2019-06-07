@@ -26,7 +26,8 @@ export default gql`
     $bearbeiter: UUID
     $planVorhanden: Boolean
     $jungpflanzenVorhanden: Boolean
-    $ekfVerifiziert: Boolean
+    $apberNichtRelevant: Boolean
+    $apberNichtRelevantGrund: String
     $ekfBemerkungen: String
     $changedBy: String
   ) {
@@ -49,7 +50,8 @@ export default gql`
           bearbeiter: $bearbeiter
           planVorhanden: $planVorhanden
           jungpflanzenVorhanden: $jungpflanzenVorhanden
-          ekfVerifiziert: $ekfVerifiziert
+          apberNichtRelevant: $apberNichtRelevant
+          apberNichtRelevantGrund: $apberNichtRelevantGrund
           ekfBemerkungen: $ekfBemerkungen
           changedBy: $changedBy
         }
@@ -90,7 +92,7 @@ export default gql`
       }
     }
   }
-  #${adresse}
+  ${adresse}
   ${pop}
   ${tpop}
   ${tpopfreiwkontr}
