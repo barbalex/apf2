@@ -24,4 +24,7 @@ ALTER TABLE apflora.tpopmassnber DROP COLUMN id_old CASCADE;
 ALTER TABLE apflora.ziel DROP COLUMN id_old CASCADE;
 ALTER TABLE apflora.zielber DROP COLUMN id_old CASCADE;
 
+
+ALTER TABLE apflora.beob DROP COLUMN art_id_old CASCADE;
+
 -- 2. rebuild all views
