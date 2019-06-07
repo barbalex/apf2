@@ -92,9 +92,8 @@ export default gql`
         erste_kontrolle_gefaehrdung: ersteKontrolleGefaehrdung
         erste_kontrolle_changed: ersteKontrolleChanged
         erste_kontrolle_changed_by: ersteKontrolleChangedBy
-        erste_kontrolle_ekf_verifiziert: ersteKontrolleEkfVerifiziert
-        erste_kontrolle_ekf_verifiziert_durch: ersteKontrolleEkfVerifiziertDurch
-        erste_kontrolle_ekf_verifiziert_datum: ersteKontrolleEkfVerifiziertDatum
+        erste_kontrolle_apber_nicht_relevant: ersteKontrolleApberNichtRelevant
+        apber_nicht_relevant_grund: ersteKontrolleApberNichtRelevantGrund
         erste_kontrolle_ekf_bemerkungen: ersteKontrolleEkfBemerkungen
         erste_kontrolle_zaehlung_anzahlen: ersteKontrolleZaehlungAnzahlen
         erste_kontrolle_zaehlung_einheiten: ersteKontrolleZaehlungEinheiten
@@ -141,9 +140,8 @@ export default gql`
         letzte_kontrolle_gefaehrdung: letzteKontrolleGefaehrdung
         letzte_kontrolle_changed: letzteKontrolleChanged
         letzte_kontrolle_changed_by: letzteKontrolleChangedBy
-        letzte_kontrolle_ekf_verifiziert: letzteKontrolleEkfVerifiziert
-        letzte_kontrolle_ekf_verifiziert_durch: letzteKontrolleEkfVerifiziertDurch
-        letzte_kontrolle_ekf_verifiziert_datum: letzteKontrolleEkfVerifiziertDatum
+        letzte_kontrolle_apber_nicht_relevant: letzteKontrolleApberNichtRelevant
+        letzte_kontrolle_apber_nicht_relevant_grund: letzteKontrolleApberNichtRelevantGrund
         letzte_kontrolle_ekf_bemerkungen: letzteKontrolleEkfBemerkungen
         letzte_kontrolle_zaehlung_anzahlen: letzteKontrolleZaehlungAnzahlen
         letzte_kontrolle_zaehlung_einheiten: letzteKontrolleZaehlungEinheiten
