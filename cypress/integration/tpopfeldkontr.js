@@ -112,6 +112,21 @@ describe('Teil-Population Feldkontrolle form', () => {
       .blur()
       .should('have.value', typedText)
   })
+  it('updates apberNichtRelevant', () => {
+    cy.get('[data-id=apberNichtRelevant] input')
+      .check()
+      .get('[data-id=apberNichtRelevant] input')
+      .check()
+      .should('have.value', 'true')
+  })
+  it('updates apberNichtRelevantGrund', () => {
+    const typedText = 'test, bitte nicht löschen'
+    cy.get('#apberNichtRelevantGrund')
+      .clear()
+      .type(typedText)
+      .blur()
+      .should('have.value', typedText)
+  })
   it('updates bemerkungen', () => {
     const typedText = 'test, bitte nicht löschen'
     cy.get('#bemerkungen')

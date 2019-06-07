@@ -121,12 +121,20 @@ describe('Teil-Population Freiwilligen-Kontrolle form', () => {
       .blur()
       .should('have.value', typedText)
   })
-  it('updates ekfVerifiziert', () => {
-    cy.get('[data-id=ekfVerifiziert] input')
+  it('updates apberNichtRelevant', () => {
+    cy.get('[data-id=apberNichtRelevant] input')
       .check()
-      .get('[data-id=ekfVerifiziert] input')
+      .get('[data-id=apberNichtRelevant] input')
       .check()
       .should('have.value', 'true')
+  })
+  it('updates apberNichtRelevantGrund', () => {
+    const typedText = 'test, bitte nicht löschen'
+    cy.get('#apberNichtRelevantGrund')
+      .clear()
+      .type(typedText)
+      .blur()
+      .should('have.value', typedText)
   })
   it('updates ekfBemerkungen', () => {
     const typedText = 'test, bitte nicht löschen'

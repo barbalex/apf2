@@ -708,12 +708,14 @@ CREATE TABLE apflora.tpopkontr (
   vegetationshoehe_maximum smallint DEFAULT NULL,
   vegetationshoehe_mittel smallint DEFAULT NULL,
   gefaehrdung text DEFAULT NULL,
+
   apber_nicht_relevant boolean default null,
   apber_nicht_relevant_grund text DEFAULT NULL,
   -- TODO: drop, replace by apber_nicht_relevant
   ekf_verifiziert boolean DEFAULT null,
   ekf_verifiziert_durch varchar(20) DEFAULT null,
   ekf_verifiziert_datum date DEFAULT null,
+
   ekf_bemerkungen text DEFAULT NULL,
   zeit_id UUID DEFAULT uuid_generate_v1mc(),
   changed date DEFAULT NOW(),
@@ -729,7 +731,6 @@ CREATE INDEX ON apflora.tpopkontr USING btree (typ);
 CREATE INDEX ON apflora.tpopkontr USING btree (datum);
 CREATE INDEX ON apflora.tpopkontr USING btree (apber_nicht_relevant);
 CREATE UNIQUE INDEX ON apflora.tpopkontr USING btree (zeit_id);
-CREATE INDEX ON apflora.tpopkontr USING btree (ekf_verifiziert);
 COMMENT ON COLUMN apflora.tpopkontr.id IS 'Primärschlüssel. Wird u.a. verwendet für die Identifikation der Beobachtung im nationalen Beobachtungs-Daten-Kreislauf';
 COMMENT ON COLUMN apflora.tpopkontr.tpop_id IS 'Zugehörige Teilpopulation. Fremdschlüssel aus der Tabelle "tpop"';
 COMMENT ON COLUMN apflora.tpopkontr.typ IS 'Typ der Kontrolle. Auswahl aus Tabelle "tpopkontr_typ_werte"';

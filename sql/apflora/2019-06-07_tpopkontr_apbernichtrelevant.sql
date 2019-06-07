@@ -14,6 +14,7 @@ update apflora.tpopkontr set apber_nicht_relevant = true where ekf_verifiziert =
 alter table apflora.tpopkontr drop column ekf_verifiziert;
 alter table apflora.tpopkontr drop column ekf_verifiziert_durch;
 alter table apflora.tpopkontr drop column ekf_verifiziert_datum;
+DROP INDEX apflora.tpopkontr_ekf_verifiziert_idx;
 
 -- 4. recreate all views
 

@@ -121,7 +121,11 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  ekfVerifiziert: types.optional(types.maybeNull(types.boolean), null),
+  apberNichtRelevant: types.optional(types.maybeNull(types.boolean), null),
+  apberNichtRelevantGrund: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
   ekfBemerkungen: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
@@ -165,12 +169,11 @@ export const initial = {
   deckungNackterBoden: null,
   deckungApArt: null,
   jungpflanzenVorhanden: null,
-  apberNichtRelevant: null,
-  apberNichtRelevantGrund: null,
   vegetationshoeheMaximum: null,
   vegetationshoeheMittel: null,
   gefaehrdung: null,
-  ekfVerifiziert: null,
+  apberNichtRelevant: null,
+  apberNichtRelevantGrund: null,
   ekfBemerkungen: null,
 }
 
@@ -211,11 +214,10 @@ export const simpleTypes = {
   deckungNackterBoden: 'number',
   deckungApArt: 'number',
   jungpflanzenVorhanden: 'boolean',
-  apberNichtRelevant: 'boolean',
-  apberNichtRelevantGrund: 'string',
   vegetationshoeheMaximum: 'number',
   vegetationshoeheMittel: 'number',
   gefaehrdung: 'string',
-  ekfVerifiziert: 'boolean',
+  apberNichtRelevant: 'boolean',
+  apberNichtRelevantGrund: 'string',
   ekfBemerkungen: 'string',
 }
