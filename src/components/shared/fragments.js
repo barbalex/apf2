@@ -378,7 +378,6 @@ export const tpopfreiwkontr = gql`
     id
     labelEkf
     typ
-    ekfVerifiziert
     ekfBemerkungen
     datum
     jahr
@@ -394,6 +393,8 @@ export const tpopfreiwkontr = gql`
     bearbeiter
     planVorhanden
     jungpflanzenVorhanden
+    apberNichtRelevant
+    apberNichtRelevantGrund
     changedBy
   }
 `
