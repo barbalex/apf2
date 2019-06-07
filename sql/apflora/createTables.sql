@@ -41,7 +41,6 @@ DROP TABLE IF EXISTS _variable;
 DROP TABLE IF EXISTS adresse;
 CREATE TABLE apflora.adresse (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  id_old integer DEFAULT NULL,
   id SERIAL PRIMARY KEY,
   name text DEFAULT NULL,
   adresse text DEFAULT NULL,
@@ -60,7 +59,6 @@ CREATE INDEX ON apflora.adresse USING btree (name);
 CREATE INDEX ON apflora.adresse USING btree (freiw_erfko);
 CREATE INDEX ON apflora.adresse USING btree (user_id);
 COMMENT ON COLUMN apflora.adresse.id IS 'Primärschlüssel';
-COMMENT ON COLUMN apflora.adresse.id_old IS 'Frühere id';
 COMMENT ON COLUMN apflora.adresse.name IS 'Vor- und Nachname';
 COMMENT ON COLUMN apflora.adresse.adresse IS 'Strasse, PLZ und Ort';
 COMMENT ON COLUMN apflora.adresse.telefon IS 'Telefonnummer';
@@ -84,7 +82,6 @@ CREATE POLICY writer ON apflora.adresse
 DROP TABLE IF EXISTS apflora.ap;
 CREATE TABLE apflora.ap (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  id_old integer DEFAULT NULL,
   art_id UUID UNIQUE DEFAULT NULL REFERENCES apflora.ae_eigenschaften(id) on delete set null on update cascade,
   proj_id uuid DEFAULT NULL REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE,
   bearbeitung integer DEFAULT NULL REFERENCES apflora.ap_bearbstand_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -103,7 +100,6 @@ CREATE INDEX ON apflora.ap USING btree (start_jahr);
 CREATE INDEX ON apflora.ap USING btree (umsetzung);
 CREATE INDEX ON apflora.ap USING btree (bearbeiter);
 COMMENT ON COLUMN apflora.ap.id IS 'Primärschlüssel';
-COMMENT ON COLUMN apflora.ap.id_old IS 'Frühere id. = SISF2-Nr';
 COMMENT ON COLUMN apflora.ap.proj_id IS 'Zugehöriges Projekt. Fremdschlüssel aus der Tabelle "proj"';
 COMMENT ON COLUMN apflora.ap.art_id IS 'Namensgebende Art. Unter ihrem Namen bzw. Nummer werden Kontrollen an InfoFlora geliefert';
 COMMENT ON COLUMN apflora.ap.bearbeitung IS 'In welchem Bearbeitungsstand befindet sich der AP?';
@@ -214,7 +210,6 @@ COMMENT ON COLUMN apflora.ap_umsetzung_werte.changed_by IS 'Von wem wurde der Da
 DROP TABLE IF EXISTS apflora.apber;
 CREATE TABLE apflora.apber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  id_old integer,
   ap_id UUID NOT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   situation text,
@@ -242,7 +237,6 @@ CREATE INDEX ON apflora.apber USING btree (beurteilung);
 CREATE INDEX ON apflora.apber USING btree (bearbeiter);
 CREATE INDEX ON apflora.apber USING btree (jahr);
 COMMENT ON COLUMN apflora.apber.id IS 'Primärschlüssel';
-COMMENT ON COLUMN apflora.apber.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.apber.jahr IS 'Für welches Jahr gilt der Bericht?';
 COMMENT ON COLUMN apflora.apber.situation IS 'Beschreibung der Situation im Berichtjahr. Seit 2017 nicht mehr verwendet: Früher wurden hier die Massnahmen aufgelistet';
 COMMENT ON COLUMN apflora.apber.vergleich_vorjahr_gesamtziel IS 'Vergleich zu Vorjahr und Ausblick auf das Gesamtziel';
@@ -266,7 +260,6 @@ alter table apflora.apber alter column changed_by set default null;
 DROP TABLE IF EXISTS apflora.apberuebersicht;
 CREATE TABLE apflora.apberuebersicht (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  id_old integer,
   proj_id uuid DEFAULT NULL REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint,
   bemerkungen text,
@@ -278,7 +271,6 @@ CREATE INDEX ON apflora.apberuebersicht USING btree (id);
 CREATE INDEX ON apflora.apberuebersicht USING btree (jahr);
 CREATE INDEX ON apflora.apberuebersicht USING btree (proj_id);
 COMMENT ON COLUMN apflora.apberuebersicht.id IS 'Primärschlüssel';
-COMMENT ON COLUMN apflora.apberuebersicht.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.apberuebersicht.proj_id IS 'Zugehöriges Projekt. Zusammen mit jahr eindeutig';
 COMMENT ON COLUMN apflora.apberuebersicht.jahr IS 'Berichtsjahr. Zusammen mit proj_id eindeutig';
 COMMENT ON COLUMN apflora.apberuebersicht.bemerkungen IS 'Bemerkungen zur Artübersicht';
@@ -289,7 +281,6 @@ alter table apflora.apberuebersicht alter column changed_by set default null;
 DROP TABLE IF EXISTS apflora.assozart;
 CREATE TABLE apflora.assozart (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  id_old integer DEFAULT NULL,
   ap_id UUID DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   ae_id UUID DEFAULT NULL REFERENCES apflora.ae_eigenschaften (id) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
@@ -300,7 +291,6 @@ CREATE INDEX ON apflora.assozart USING btree (id);
 CREATE INDEX ON apflora.assozart USING btree (ap_id);
 CREATE INDEX ON apflora.assozart USING btree (ae_id);
 COMMENT ON COLUMN apflora.assozart.id IS 'Primärschlüssel';
-COMMENT ON COLUMN apflora.assozart.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.assozart.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
 COMMENT ON COLUMN apflora.assozart.bemerkungen IS 'Bemerkungen zur Assoziation';
 COMMENT ON COLUMN apflora.assozart.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
@@ -324,7 +314,6 @@ COMMENT ON COLUMN apflora.projekt.changed_by IS 'Von wem wurde der Datensatz zul
 DROP TABLE IF EXISTS apflora.ber;
 CREATE TABLE apflora.ber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  id_old integer DEFAULT NULL,
   ap_id UUID DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   autor varchar(150) DEFAULT NULL,
   jahr smallint DEFAULT NULL,
@@ -348,7 +337,6 @@ COMMENT ON COLUMN apflora.ber.changed_by IS 'Von wem wurde der Datensatz zuletzt
 DROP TABLE IF EXISTS apflora.erfkrit;
 CREATE TABLE apflora.erfkrit (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  id_old integer DEFAULT NULL,
   ap_id UUID NOT NULL DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   erfolg integer DEFAULT NULL REFERENCES apflora.ap_erfkrit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   kriterien text DEFAULT NULL,
@@ -359,7 +347,6 @@ CREATE INDEX ON apflora.erfkrit USING btree (id);
 CREATE INDEX ON apflora.erfkrit USING btree (ap_id);
 CREATE INDEX ON apflora.erfkrit USING btree (erfolg);
 COMMENT ON COLUMN apflora.erfkrit.id IS 'Primärschlüssel';
-COMMENT ON COLUMN apflora.erfkrit.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.erfkrit.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
 COMMENT ON COLUMN apflora.erfkrit.erfolg IS 'Wie gut werden die Ziele erreicht? Auswahl aus der Tabelle "ap_erfkrit_werte"';
 COMMENT ON COLUMN apflora.erfkrit.kriterien IS 'Beschreibung der Kriterien für den Erfolg';
@@ -441,7 +428,6 @@ create index on apflora.idealbiotop_file using btree (file_mime_type);
 DROP TABLE IF EXISTS apflora.pop;
 CREATE TABLE apflora.pop (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  id_old integer,
   ap_id UUID DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   nr integer DEFAULT NULL,
   name varchar(150) DEFAULT NULL,
@@ -460,7 +446,6 @@ CREATE INDEX ON apflora.pop USING btree (nr);
 CREATE INDEX ON apflora.pop USING btree (name);
 CREATE INDEX ON apflora.pop USING btree (bekannt_seit);
 COMMENT ON COLUMN apflora.pop.id IS 'Primärschlüssel der Tabelle "pop"';
-COMMENT ON COLUMN apflora.pop.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.pop.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
 COMMENT ON COLUMN apflora.pop.nr IS 'Nummer der Population';
 COMMENT ON COLUMN apflora.pop.name IS 'Bezeichnung der Population';
@@ -498,7 +483,6 @@ COMMENT ON COLUMN apflora.pop_status_werte.changed_by IS 'Von wem wurde der Date
 DROP TABLE IF EXISTS apflora.popber;
 CREATE TABLE apflora.popber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  id_old integer,
   pop_id uuid DEFAULT NULL REFERENCES apflora.pop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -507,7 +491,6 @@ CREATE TABLE apflora.popber (
   changed_by varchar(20) DEFAULT null
 );
 COMMENT ON COLUMN apflora.popber.id IS 'Primärschlüssel';
-COMMENT ON COLUMN apflora.popber.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.popber.pop_id IS 'Zugehörige Population. Fremdschlüssel aus der Tabelle "pop"';
 COMMENT ON COLUMN apflora.popber.jahr IS 'Für welches Jahr gilt der Bericht?';
 COMMENT ON COLUMN apflora.popber.entwicklung IS 'Beurteilung der Populationsentwicklung: Auswahl aus Tabelle "tpop_entwicklung_werte"';
@@ -522,7 +505,6 @@ CREATE INDEX ON apflora.popber USING btree (jahr);
 DROP TABLE IF EXISTS apflora.popmassnber;
 CREATE TABLE apflora.popmassnber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  id_old integer,
   pop_id uuid DEFAULT NULL REFERENCES apflora.pop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   beurteilung integer DEFAULT NULL REFERENCES apflora.tpopmassn_erfbeurt_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -535,7 +517,6 @@ CREATE INDEX ON apflora.popmassnber USING btree (pop_id);
 CREATE INDEX ON apflora.popmassnber USING btree (beurteilung);
 CREATE INDEX ON apflora.popmassnber USING btree (jahr);
 COMMENT ON COLUMN apflora.popmassnber.id IS 'Primärschlüssel';
-COMMENT ON COLUMN apflora.popmassnber.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.popmassnber.pop_id IS 'Zugehörige Population. Fremdschlüssel aus der Tabelle "pop"';
 COMMENT ON COLUMN apflora.popmassnber.jahr IS 'Für welches Jahr gilt der Bericht?';
 COMMENT ON COLUMN apflora.popmassnber.beurteilung IS 'Wie wird die Wirkung aller im Rahmen des AP durchgeführten Massnahmen beurteilt?';
@@ -546,7 +527,6 @@ COMMENT ON COLUMN apflora.popmassnber.changed_by IS 'Von wem wurde der Datensatz
 DROP TABLE IF EXISTS apflora.tpop;
 CREATE TABLE apflora.tpop (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  id_old integer,
   pop_id uuid DEFAULT NULL REFERENCES apflora.pop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   nr integer DEFAULT NULL,
   gemeinde text DEFAULT NULL,
@@ -593,7 +573,6 @@ CREATE INDEX ON apflora.tpop USING btree (flurname);
 CREATE INDEX ON apflora.tpop USING btree (kontrollfrequenz);
 CREATE INDEX ON apflora.tpop USING btree (kontrollfrequenz_freiwillige);
 COMMENT ON COLUMN apflora.tpop.id IS 'Primärschlüssel';
-COMMENT ON COLUMN apflora.tpop.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.tpop.pop_id IS 'Zugehörige Population. Fremdschlüssel aus der Tabelle "pop"';
 COMMENT ON COLUMN apflora.tpop.nr IS 'Nummer der Teilpopulation';
 COMMENT ON COLUMN apflora.tpop.gemeinde IS 'Gemeinde. Freier Text, Einträge aus apflora.gemeinde sollen gewählt werden können.';
@@ -668,7 +647,6 @@ COMMENT ON COLUMN apflora.tpop_entwicklung_werte.changed_by IS 'Von wem wurde de
 DROP TABLE IF EXISTS apflora.tpopber;
 CREATE TABLE apflora.tpopber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  id_old integer,
   tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -676,7 +654,6 @@ CREATE TABLE apflora.tpopber (
   changed_by varchar(20) DEFAULT null
 );
 COMMENT ON COLUMN apflora.tpopber.id IS 'Primärschlüssel der Tabelle "tpopber"';
-COMMENT ON COLUMN apflora.tpopber.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.tpopber.tpop_id IS 'Zugehörige Teilpopulation. Fremdschlüssel der Tabelle "tpop"';
 COMMENT ON COLUMN apflora.tpopber.jahr IS 'Für welches Jahr gilt der Bericht?';
 COMMENT ON COLUMN apflora.tpopber.entwicklung IS 'Beurteilung der Populationsentwicklung: Auswahl aus Tabelle "tpop_entwicklung_werte"';
@@ -691,7 +668,6 @@ CREATE INDEX ON apflora.tpopber USING btree (jahr);
 DROP TABLE IF EXISTS apflora.tpopkontr;
 CREATE TABLE apflora.tpopkontr (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  id_old integer,
   tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   typ varchar(50) DEFAULT NULL REFERENCES apflora.tpopkontr_typ_werte (text) ON DELETE SET NULL ON UPDATE CASCADE,
   datum date DEFAULT NULL,
@@ -732,6 +708,9 @@ CREATE TABLE apflora.tpopkontr (
   vegetationshoehe_maximum smallint DEFAULT NULL,
   vegetationshoehe_mittel smallint DEFAULT NULL,
   gefaehrdung text DEFAULT NULL,
+  apber_nicht_relevant boolean default null,
+  apber_nicht_relevant_grund text DEFAULT NULL,
+  -- TODO: drop, replace by apber_nicht_relevant
   ekf_verifiziert boolean DEFAULT null,
   ekf_verifiziert_durch varchar(20) DEFAULT null,
   ekf_verifiziert_datum date DEFAULT null,
@@ -748,10 +727,10 @@ CREATE INDEX ON apflora.tpopkontr USING btree (idealbiotop_uebereinstimmung);
 CREATE INDEX ON apflora.tpopkontr USING btree (jahr);
 CREATE INDEX ON apflora.tpopkontr USING btree (typ);
 CREATE INDEX ON apflora.tpopkontr USING btree (datum);
+CREATE INDEX ON apflora.tpopkontr USING btree (apber_nicht_relevant);
 CREATE UNIQUE INDEX ON apflora.tpopkontr USING btree (zeit_id);
 CREATE INDEX ON apflora.tpopkontr USING btree (ekf_verifiziert);
 COMMENT ON COLUMN apflora.tpopkontr.id IS 'Primärschlüssel. Wird u.a. verwendet für die Identifikation der Beobachtung im nationalen Beobachtungs-Daten-Kreislauf';
-COMMENT ON COLUMN apflora.tpopkontr.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.tpopkontr.tpop_id IS 'Zugehörige Teilpopulation. Fremdschlüssel aus der Tabelle "tpop"';
 COMMENT ON COLUMN apflora.tpopkontr.typ IS 'Typ der Kontrolle. Auswahl aus Tabelle "tpopkontr_typ_werte"';
 COMMENT ON COLUMN apflora.tpopkontr.datum IS 'Wann wurde kontrolliert?';
@@ -795,6 +774,8 @@ COMMENT ON COLUMN apflora.tpopkontr.gefaehrdung IS 'Gefährdung. Nur für Freiwi
 COMMENT ON COLUMN apflora.tpopkontr.zeit_id IS 'GUID für den Export von Zeiten in EvAB';
 COMMENT ON COLUMN apflora.tpopkontr.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontr.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.tpopkontr.apber_nicht_relevant IS 'Pro Jahr sollte maximal eine Kontrolle AP-Bericht-relevant sein. Dient dazu Kontrollen auszuschliessen';
+COMMENT ON COLUMN apflora.tpopkontr.apber_nicht_relevant_grund IS 'Grund, wieso die Kontrolle vom AP-Bericht ausgeschlossen wurde';
 
 drop table if exists apflora.tpopkontr_file;
 create table apflora.tpopkontr_file (
@@ -855,7 +836,6 @@ COMMENT ON COLUMN apflora.tpopkontr_typ_werte.changed_by IS 'Von wem wurde der D
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl;
 CREATE TABLE apflora.tpopkontrzaehl (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  -- old_id still exist...
   tpopkontr_id uuid DEFAULT NULL REFERENCES apflora.tpopkontr (id) ON DELETE CASCADE ON UPDATE CASCADE,
   anzahl integer DEFAULT NULL,
   einheit integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -863,7 +843,6 @@ CREATE TABLE apflora.tpopkontrzaehl (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null
 );
-COMMENT ON COLUMN apflora.tpopkontrzaehl.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.tpopkontrzaehl.anzahl IS 'Anzahl Zaehleinheiten';
 COMMENT ON COLUMN apflora.tpopkontrzaehl.einheit IS 'Verwendete Zaehleinheit. Auswahl aus Tabelle "tpopkontrzaehl_einheit_werte"';
 COMMENT ON COLUMN apflora.tpopkontrzaehl.methode IS 'Verwendete Methodik. Auswahl aus Tabelle "tpopkontrzaehl_methode_werte"';
@@ -921,7 +900,6 @@ COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.changed_by IS 'Von wem wu
 DROP TABLE IF EXISTS apflora.tpopmassn;
 CREATE TABLE apflora.tpopmassn (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  id_old integer DEFAULT NULL,
   tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   typ integer DEFAULT NULL REFERENCES apflora.tpopmassn_typ_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   beschreibung text DEFAULT NULL,
@@ -950,7 +928,6 @@ CREATE INDEX ON apflora.tpopmassn USING btree (bearbeiter);
 CREATE INDEX ON apflora.tpopmassn USING btree (typ);
 CREATE INDEX ON apflora.tpopmassn USING btree (jahr);
 COMMENT ON COLUMN apflora.tpopmassn.id IS 'Primärschlüssel der Tabelle "tpopmassn"';
-COMMENT ON COLUMN apflora.tpopmassn.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.tpopmassn.tpop_id IS 'Zugehörige Teilpopulation. Fremdschlüssel aus der Tabelle "tpop"';
 COMMENT ON COLUMN apflora.tpopmassn.typ IS 'Typ der Massnahme. Auswahl aus Tabelle "tpopmassn_typ_werte"';
 COMMENT ON COLUMN apflora.tpopmassn.beschreibung IS 'Was wurde gemacht? V.a. für Typ "Spezial"';
@@ -1022,7 +999,6 @@ COMMENT ON COLUMN apflora.tpopmassn_typ_werte.changed_by IS 'Von wem wurde der D
 DROP TABLE IF EXISTS apflora.tpopmassnber;
 CREATE TABLE apflora.tpopmassnber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  id_old integer,
   tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   beurteilung integer DEFAULT NULL REFERENCES apflora.tpopmassn_erfbeurt_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -1035,7 +1011,6 @@ CREATE INDEX ON apflora.tpopmassnber USING btree (tpop_id);
 CREATE INDEX ON apflora.tpopmassnber USING btree (beurteilung);
 CREATE INDEX ON apflora.tpopmassnber USING btree (jahr);
 COMMENT ON COLUMN apflora.tpopmassnber.id IS 'Primärschlüssel der Tabelle "tpopmassnber"';
-COMMENT ON COLUMN apflora.tpopmassnber.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.tpopmassnber.tpop_id IS 'Zugehörige Teilpopulation. Fremdschlüssel aus Tabelle "tpop"';
 COMMENT ON COLUMN apflora.tpopmassnber.jahr IS 'Jahr, für den der Bericht gilt';
 COMMENT ON COLUMN apflora.tpopmassnber.beurteilung IS 'Beurteilung des Erfolgs. Auswahl aus Tabelle "tpopmassn_erfbeurt_werte"';
@@ -1083,7 +1058,6 @@ CREATE INDEX ON apflora.usermessage USING btree (message_id);
 DROP TABLE IF EXISTS apflora.ziel;
 CREATE TABLE apflora.ziel (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  id_old integer,
   ap_id UUID NOT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   typ integer DEFAULT NULL REFERENCES apflora.ziel_typ_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
@@ -1096,7 +1070,6 @@ CREATE INDEX ON apflora.ziel USING btree (ap_id);
 CREATE INDEX ON apflora.ziel USING btree (typ);
 CREATE INDEX ON apflora.ziel USING btree (jahr);
 COMMENT ON COLUMN apflora.ziel.id IS 'Primärschlüssel';
-COMMENT ON COLUMN apflora.ziel.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.ziel.ap_id IS 'Zugehöriger Aktionsplan. Fremdschluessel aus der Tabelle "ap"';
 COMMENT ON COLUMN apflora.ziel.typ IS 'Typ des Ziels. Z.B. Zwischenziel, Gesamtziel. Auswahl aus Tabelle "ziel_typ_werte"';
 COMMENT ON COLUMN apflora.ziel.jahr IS 'In welchem Jahr soll das Ziel erreicht werden?';
@@ -1129,7 +1102,6 @@ COMMENT ON COLUMN apflora.ziel_typ_werte.changed_by IS 'Von wem wurde der Datens
 DROP TABLE IF EXISTS apflora.zielber;
 CREATE TABLE apflora.zielber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  id_old integer,
   ziel_id uuid DEFAULT NULL REFERENCES apflora.ziel (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   erreichung text DEFAULT NULL,
@@ -1141,7 +1113,6 @@ CREATE INDEX ON apflora.zielber USING btree (id);
 CREATE INDEX ON apflora.zielber USING btree (ziel_id);
 CREATE INDEX ON apflora.zielber USING btree (jahr);
 COMMENT ON COLUMN apflora.zielber.id IS 'Primärschlüssel';
-COMMENT ON COLUMN apflora.zielber.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.zielber.ziel_id IS 'Zugehöriges Ziel. Fremdschlüssel aus der Tabelle "ziel"';
 COMMENT ON COLUMN apflora.zielber.jahr IS 'Für welches Jahr gilt der Bericht?';
 COMMENT ON COLUMN apflora.zielber.erreichung IS 'Beurteilung der Zielerreichung';
@@ -1207,12 +1178,9 @@ COMMENT ON COLUMN apflora.ae_lrdelarze.id IS 'Primärschlüssel';
 DROP TABLE IF EXISTS apflora.beob;
 CREATE TABLE apflora.beob (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  id_old integer DEFAULT NULL,
   quelle_id uuid Default Null,
   -- this field in data contains this datasets id
   id_field varchar(38) DEFAULT NULL,
-  -- SISF Nr.
-  art_id_old integer DEFAULT NULL,
   art_id UUID DEFAULT NULL REFERENCES apflora.ae_eigenschaften(id) on delete set null on update cascade,
   -- art_id can be changed. art_id_original documents this change
   art_id_original UUID DEFAULT NULL REFERENCES apflora.ae_eigenschaften(id) on delete set null on update cascade,
@@ -1241,8 +1209,6 @@ CREATE INDEX ON apflora.beob USING btree (quelle_id);
 CREATE INDEX ON apflora.beob USING btree (tpop_id);
 CREATE INDEX ON apflora.beob USING btree (nicht_zuordnen);
 COMMENT ON COLUMN apflora.beob.id IS 'Primärschlüssel';
-COMMENT ON COLUMN apflora.beob.id_old IS 'Frühere id';
-COMMENT ON COLUMN apflora.beob.art_id_old IS 'Frühere Art id (= SISF2-Nr)';
 COMMENT ON COLUMN apflora.beob.tpop_id IS 'Dieser Teilpopulation wurde die Beobachtung zugeordnet. Fremdschlüssel aus der Tabelle "tpop"';
 COMMENT ON COLUMN apflora.beob.nicht_zuordnen IS 'Wird ja gesetzt, wenn eine Beobachtung keiner Teilpopulation zugeordnet werden kann. Sollte im Bemerkungsfeld begründet werden. In der Regel ist die Artbestimmung zweifelhaft. Oder die Beobachtung ist nicht (genau genug) lokalisierbar';
 COMMENT ON COLUMN apflora.beob.bemerkungen IS 'Bemerkungen zur Zuordnung';
@@ -1276,7 +1242,6 @@ CREATE INDEX ON apflora.beob_quelle_werte USING btree (id);
 DROP TABLE IF EXISTS apflora.apart;
 CREATE TABLE apflora.apart (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  id_old integer,
   art_id UUID DEFAULT NULL REFERENCES apflora.ae_eigenschaften (id) ON DELETE SET NULL ON UPDATE CASCADE,
   ap_id UUID DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   changed date DEFAULT NULL,
@@ -1287,7 +1252,6 @@ CREATE INDEX ON apflora.apart USING btree (id);
 CREATE INDEX ON apflora.apart USING btree (ap_id);
 CREATE INDEX ON apflora.apart USING btree (art_id);
 COMMENT ON COLUMN apflora.apart.id IS 'Primärschlüssel';
-COMMENT ON COLUMN apflora.apart.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.apart.art_id IS 'Zugehörige Art. Aus der Tabelle "ae_eigenschaften"';
 COMMENT ON COLUMN apflora.apart.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
 COMMENT ON COLUMN apflora.apart.changed IS 'Wann wurde der Datensatz zuletzt geändert?';

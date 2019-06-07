@@ -45,6 +45,8 @@ export default gql`
     $bearbeiter: UUID
     $planVorhanden: Boolean
     $jungpflanzenVorhanden: Boolean
+    $apberNichtRelevant: Boolean
+    $apberNichtRelevantGrund: String
     $changedBy: String
   ) {
     updateTpopkontrById(
@@ -91,6 +93,8 @@ export default gql`
           bearbeiter: $bearbeiter
           planVorhanden: $planVorhanden
           jungpflanzenVorhanden: $jungpflanzenVorhanden
+          apberNichtRelevant: $apberNichtRelevant
+          apberNichtRelevantGrund: $apberNichtRelevantGrund
           changedBy: $changedBy
         }
       }

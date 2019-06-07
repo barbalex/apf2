@@ -440,6 +440,8 @@ export const tpopkontr = gql`
     tpopId
     bearbeiter
     planVorhanden
+    apberNichtRelevant
+    apberNichtRelevantGrund
     jungpflanzenVorhanden
     changedBy
   }

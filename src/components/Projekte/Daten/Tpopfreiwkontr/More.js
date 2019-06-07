@@ -61,12 +61,18 @@ const JungPflLabel1 = styled.div`
 `
 const JungPflVal1 = styled.div`
   grid-area: jungPflVal1;
+  > fieldset {
+    padding-bottom: 0 !important;
+  }
 `
 const JungPflLabel2 = styled.div`
   grid-area: jungPflLabel2;
 `
 const JungPflVal2 = styled.div`
   grid-area: jungPflVal2;
+  > fieldset {
+    padding-bottom: 0 !important;
+  }
 `
 const VeghoeheLabel0 = styled.div`
   grid-area: veghoeheLabel0;

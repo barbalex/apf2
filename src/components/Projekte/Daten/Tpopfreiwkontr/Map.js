@@ -37,7 +37,6 @@ const MapLabel2 = styled(Label)`
 const MapVal1 = styled(Label)`
   grid-area: mapVal1;
   > fieldset {
-    margin-top: -5px;
     padding-bottom: 0 !important;
   }
   > fieldset > legend {
@@ -47,7 +46,6 @@ const MapVal1 = styled(Label)`
 const MapVal2 = styled(Label)`
   grid-area: mapVal2;
   > fieldset {
-    margin-top: -5px;
     padding-bottom: 0 !important;
   }
   > fieldset > legend {

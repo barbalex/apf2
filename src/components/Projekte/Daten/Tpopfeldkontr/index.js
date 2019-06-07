@@ -327,6 +327,14 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                     field === 'jungpflanzenVorhanden'
                       ? value
                       : row.jungpflanzenVorhanden,
+                  apberNichtRelevant:
+                    field === 'apberNichtRelevant'
+                      ? value
+                      : row.apberNichtRelevant,
+                  apberNichtRelevantGrund:
+                    field === 'apberNichtRelevantGrund'
+                      ? value
+                      : row.apberNichtRelevantGrund,
                   __typename: 'Tpopkontr',
                 },
                 __typename: 'Tpopkontr',
@@ -529,6 +537,24 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                 key={`${row.id}bemerkungen`}
                 name="bemerkungen"
                 label="Bemerkungen"
+                row={row}
+                type="text"
+                multiLine
+                saveToDb={saveToDb}
+                errors={errors}
+              />
+              <RadioButton
+                key={`${row.id}apberNichtRelevant`}
+                name="apberNichtRelevant"
+                label="Im Jahresbericht nicht berücksichtigen"
+                value={row.apberNichtRelevant}
+                saveToDb={saveToDb}
+                error={errors.apberNichtRelevant}
+              />
+              <TextField
+                key={`${row.id}apberNichtRelevantGrund`}
+                name="apberNichtRelevantGrund"
+                label="Wieso im Jahresbericht nicht berücksichtigen?"
                 row={row}
                 type="text"
                 multiLine
