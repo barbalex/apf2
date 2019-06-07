@@ -360,8 +360,14 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
                   field === 'jungpflanzenVorhanden'
                     ? value
                     : row.jungpflanzenVorhanden,
-                ekfVerifiziert:
-                  field === 'ekfVerifiziert' ? value : row.ekfVerifiziert,
+                apberNichtRelevant:
+                  field === 'apberNichtRelevant'
+                    ? value
+                    : row.apberNichtRelevant,
+                apberNichtRelevantGrund:
+                  field === 'apberNichtRelevantGrund'
+                    ? value
+                    : row.apberNichtRelevantGrund,
                 ekfBemerkungen:
                   field === 'ekfBemerkungen' ? value : row.ekfBemerkungen,
                 tpopByTpopId: row.tpopByTpopId,
