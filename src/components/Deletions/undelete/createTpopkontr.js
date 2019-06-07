@@ -45,6 +45,9 @@ export default gql`
     $bearbeiter: UUID
     $planVorhanden: Boolean
     $jungpflanzenVorhanden: Boolean
+    $apberNichtRelevant: Boolean
+    $apberNichtRelevantGrund: String
+    $ekfBemerkungen: String
   ) {
     createTpopkontr(
       input: {
@@ -90,6 +93,9 @@ export default gql`
           bearbeiter: $bearbeiter
           planVorhanden: $planVorhanden
           jungpflanzenVorhanden: $jungpflanzenVorhanden
+          apberNichtRelevant: $apberNichtRelevant
+          apberNichtRelevantGrund: $apberNichtRelevantGrund
+          ekfBemerkungen: $ekfBemerkungen
         }
       }
     ) {
