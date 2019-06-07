@@ -5,20 +5,20 @@ CREATE INDEX ON apflora.tpopkontr USING btree (apber_nicht_relevant);
 COMMENT ON COLUMN apflora.tpopkontr.apber_nicht_relevant IS 'Pro Jahr sollte maximal eine Kontrolle AP-Bericht-relevant sein. Dient dazu Kontrollen auszuschliessen';
 COMMENT ON COLUMN apflora.tpopkontr.apber_nicht_relevant_grund IS 'Grund, wieso die Kontrolle vom AP-Bericht ausgeschlossen wurde';
 
--- 2. Migrate ekf_verifiziert data to apber_nicht_relevant
+-- 2. Migrate ekf_verifiziert data to apber_nicht_relevant (done)
 -- select * from apflora.tpopkontr where ekf_verifiziert = false;
 update apflora.tpopkontr set apber_nicht_relevant = true where ekf_verifiziert = false;
 -- select * from apflora.tpopkontr where apber_nicht_relevant = true;
 
--- 3. drop ekf_verifiziert fields
+-- 3. drop ekf_verifiziert fields (done)
 alter table apflora.tpopkontr drop column ekf_verifiziert;
 alter table apflora.tpopkontr drop column ekf_verifiziert_durch;
 alter table apflora.tpopkontr drop column ekf_verifiziert_datum;
-DROP INDEX apflora.tpopkontr_ekf_verifiziert_idx;
+DROP INDEX if exists apflora.tpopkontr_ekf_verifiziert_idx;
 
--- 4. recreate all views
+-- 4. recreate all views (done)
 
--- 5. create unique index in zählungen
+-- 5. TODO: create unique index in zählungen
 -- 5.1 find violating datasets
 select * from apflora.tpopkontrzaehl ou
 where (
