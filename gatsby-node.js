@@ -5,55 +5,79 @@
  */
 
 // You can delete this file if you're not using it
-const path = require("path")
+const path = require('path')
 
-exports.createPages = ({ actions, graphql }) => {
+exports.createPages = async ({ actions, graphql }) => {
   const { createPage } = actions
 
   const technDokuTemplate = path.resolve(`src/templates/technDokuTemplate.js`)
   const benutzerDokuTemplate = path.resolve(
-    `src/templates/benutzerDokuTemplate.js`
+    `src/templates/benutzerDokuTemplate.js`,
   )
 
-  return graphql(`
-    {
-      allMarkdownRemark(
-        sort: { order: ASC, fields: [frontmatter___sort] }
-        limit: 1000
-      ) {
-        edges {
-          node {
-            frontmatter {
-              path
-              typ
+  let resultMd
+  try {
+    resultMd = await graphql(`
+      {
+        allMarkdownRemark(
+          sort: { order: ASC, fields: [frontmatter___sort] }
+          limit: 1000
+        ) {
+          edges {
+            node {
+              frontmatter {
+                path
+                typ
+              }
             }
           }
         }
       }
-    }
-  `).then(result => {
-    if (result.errors) {
-      return Promise.reject(result.errors)
-    }
+    `)
+  } catch (error) {
+    return error
+  }
 
-    const { edges } = result.data.allMarkdownRemark
-    edges.forEach(({ node }) => {
-      if (node.frontmatter.typ === "technDoku") {
-        return createPage({
-          path: node.frontmatter.path,
-          component: technDokuTemplate,
-        })
-      } else if (node.frontmatter.typ === "benutzerDoku") {
-        createPage({
-          path: node.frontmatter.path,
-          component: benutzerDokuTemplate,
-        })
-      } else {
-        console.log(
-          "gatsby-node, node: NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO!",
-          node
-        )
+  /*let resultMdx
+  try {
+    resultMdx = await graphql(`
+      {
+        allMdx {
+          edges {
+            node {
+              frontmatter {
+                path
+                typ
+              }
+            }
+          }
+        }
       }
-    })
+    `)
+  } catch (error) {
+    return error
+  }*/
+
+  const edges = [
+    ...resultMd.data.allMarkdownRemark.edges,
+    //...resultMdx.data.allMdx.edges,
+  ]
+  return edges.forEach(({ node }) => {
+    if (node.frontmatter.typ === 'technDoku') {
+      return createPage({
+        path: node.frontmatter.path,
+        component: technDokuTemplate,
+      })
+    } else if (node.frontmatter.typ === 'benutzerDoku') {
+      createPage({
+        path: node.frontmatter.path,
+        component: benutzerDokuTemplate,
+      })
+    } else {
+      console.log(
+        'gatsby-node, node: NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO!',
+        node,
+      )
+    }
   })
 }
