@@ -40,10 +40,9 @@ const DokuDate = styled.p`
 `
 
 const BenutzerDokuTemplate = ({ data }) => {
-  const { markdownRemark, mdx } = data
-  const md = markdownRemark ? markdownRemark : mdx
-  const { frontmatter, html } = md
-  const edges = [...data.allMarkdownRemark.edges, ...data.allMdx.edges]
+  const { markdownRemark } = data
+  const { frontmatter, html } = markdownRemark
+  const edges = data.allMarkdownRemark.edges
 
   return (
     <ErrorBoundary>
@@ -75,14 +74,6 @@ export const pageQuery = graphql`
         title
       }
     }
-    mdx(frontmatter: { path: { eq: $path } }) {
-      html
-      frontmatter {
-        date(formatString: "DD.MM.YYYY")
-        path
-        title
-      }
-    }
     allMarkdownRemark(
       sort: { order: ASC, fields: [frontmatter___sort] }
       filter: { fileAbsolutePath: { regex: "/(/benutzerDoku)/.*.md$/" } }
@@ -93,18 +84,6 @@ export const pageQuery = graphql`
           frontmatter {
             date(formatString: "DD.MM.YYYY")
             path
-            title
-          }
-        }
-      }
-    }
-    allMdx {
-      edges {
-        node {
-          frontmatter {
-            path
-            typ
-            date(formatString: "DD.MM.YYYY")
             title
           }
         }

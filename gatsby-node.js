@@ -39,30 +39,7 @@ exports.createPages = async ({ actions, graphql }) => {
     return error
   }
 
-  let resultMdx
-  try {
-    resultMdx = await graphql(`
-      {
-        allMdx {
-          edges {
-            node {
-              frontmatter {
-                path
-                typ
-              }
-            }
-          }
-        }
-      }
-    `)
-  } catch (error) {
-    return error
-  }
-
-  const edges = [
-    ...resultMd.data.allMarkdownRemark.edges,
-    ..._.get(resultMdx, 'data.allMdx.edges', []),
-  ]
+  const edges = [...resultMd.data.allMarkdownRemark.edges]
   return edges.forEach(({ node }) => {
     if (node.frontmatter.typ === 'technDoku') {
       return createPage({

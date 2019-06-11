@@ -2,9 +2,9 @@ import React from 'react'
 import { graphql } from 'gatsby'
 import styled from 'styled-components'
 
-import Layout from '../../components/Layout'
-import Sidebar from '../../templates/Sidebar'
-import ErrorBoundary from '../../components/shared/ErrorBoundary'
+import Layout from '../../../components/Layout'
+import Sidebar from '../../../templates/Sidebar'
+import ErrorBoundary from '../../../components/shared/ErrorBoundary'
 
 const Container = styled.div`
   margin-top: 64px;
@@ -35,7 +35,7 @@ const Doku = styled.div`
 `
 
 const Template = ({ data }) => {
-  const edges = [...data.allMarkdownRemark.edges, ...data.allMdx.edges]
+  const edges = data.allMarkdownRemark.edges
 
   return (
     <ErrorBoundary>
@@ -68,16 +68,6 @@ export const pageQuery = graphql`
             title
             date(formatString: "DD.MM.YYYY")
             path
-          }
-        }
-      }
-    }
-    allMdx {
-      edges {
-        node {
-          frontmatter {
-            path
-            typ
           }
         }
       }

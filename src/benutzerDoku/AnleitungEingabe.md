@@ -17,3 +17,6 @@ sort: 5
     </p>
   </embed>
 </object>
+
+<embed src="https://drive.google.com/viewerng/viewer?embedded=true&url=https://github.com/barbalex/apf2/raw/master/src/benutzerDoku/_media/AnleitungEingabe20190318.pdf" width="100%" height="100%">
+  </embed>
