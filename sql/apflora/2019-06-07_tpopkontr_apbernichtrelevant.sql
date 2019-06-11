@@ -62,6 +62,31 @@ order by
   kontr.jahr,
   kontr.datum;
 
+-- 5.2 remove duplicates with smaller anzahl
+
+select tpopkontr_id, einheit, anzahl from apflora.tpopkontrzaehl ou
+where (
+  select count(*) from apflora.tpopkontrzaehl inr
+  where
+    inr.tpopkontr_id = ou.tpopkontr_id
+    and inr.einheit = ou.einheit
+) > 1
+order by tpopkontr_id, einheit, anzahl;
+
+DELETE
+FROM
+  apflora.tpopkontrzaehl ou
+  using apflora.tpopkontrzaehl b
+WHERE
+  (
+    select count(*) from apflora.tpopkontrzaehl inr
+    where
+      inr.tpopkontr_id = ou.tpopkontr_id
+      and inr.einheit = ou.einheit
+  ) > 1
+  and b.anzahl < ou.anzahl;
+
+
 -- 5.2 create index
 -- after conflicts are resolved, see https://github.com/barbalex/apf2/issues/273
 CREATE unique INDEX tpopkontrzaehl_tpopkontrid_einheit_idx ON apflora.tpopkontrzaehl (tpopkontr_id, einheit);
