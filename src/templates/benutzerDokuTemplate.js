@@ -38,15 +38,15 @@ const Doku = styled.div`
 const DokuDate = styled.p`
   margin-bottom: 10px !important;
   color: grey;
-  padding-left: 12px;
+  padding-left: 25px;
 `
 const HtmlDiv = styled.div`
   height: 100%;
-  margin: ${props => (props.pdf ? '0' : '0 12px')};
+  margin: ${props => (props.pdf ? '0' : '0 25px')};
 `
 const Title = styled.h1`
   font-size: 1.5rem;
-  padding-left: 12px;
+  padding-left: 25px;
   padding-top: 25px;
 `
 
