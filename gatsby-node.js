@@ -6,6 +6,7 @@
 
 // You can delete this file if you're not using it
 const path = require('path')
+const _ = require('lodash')
 
 exports.createPages = async ({ actions, graphql }) => {
   const { createPage } = actions
@@ -38,7 +39,7 @@ exports.createPages = async ({ actions, graphql }) => {
     return error
   }
 
-  /*let resultMdx
+  let resultMdx
   try {
     resultMdx = await graphql(`
       {
@@ -56,11 +57,11 @@ exports.createPages = async ({ actions, graphql }) => {
     `)
   } catch (error) {
     return error
-  }*/
+  }
 
   const edges = [
     ...resultMd.data.allMarkdownRemark.edges,
-    //...resultMdx.data.allMdx.edges,
+    ..._.get(resultMdx, 'data.allMdx.edges', []),
   ]
   return edges.forEach(({ node }) => {
     if (node.frontmatter.typ === 'technDoku') {

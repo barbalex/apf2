@@ -35,8 +35,7 @@ const Doku = styled.div`
 `
 
 const Template = ({ data }) => {
-  const { allMarkdownRemark } = data
-  const { edges } = allMarkdownRemark
+  const edges = [...data.allMarkdownRemark.edges, ...data.allMdx.edges]
 
   return (
     <ErrorBoundary>
@@ -69,6 +68,16 @@ export const pageQuery = graphql`
             title
             date(formatString: "DD.MM.YYYY")
             path
+          }
+        }
+      }
+    }
+    allMdx {
+      edges {
+        node {
+          frontmatter {
+            path
+            typ
           }
         }
       }
