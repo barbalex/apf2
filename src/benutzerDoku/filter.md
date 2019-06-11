@@ -3,7 +3,7 @@ typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/Formular-Filter"
 date: "2019-04-18"
 title: "Formular-Filter"
-sort: 10
+sort: 11
 ---
 
 Am 12.09.2018 wurden Formular-Filter eingeführt.<br/>

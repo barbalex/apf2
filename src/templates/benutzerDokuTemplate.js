@@ -54,12 +54,6 @@ const BenutzerDokuTemplate = ({ data }) => {
   const { markdownRemark } = data
   const { frontmatter, html } = markdownRemark
   const edges = data.allMarkdownRemark.edges
-  const pdf = !!frontmatter.pdf
-  console.log('BenutzerDokuTemplate', {
-    frontmatterPdf: frontmatter.pdf,
-    pdf,
-    frontmatter,
-  })
 
   return (
     <ErrorBoundary>
