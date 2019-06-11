@@ -14,7 +14,6 @@ const Container = styled.div`
 `
 const Doku = styled.div`
   width: 100%;
-  padding: 25px;
   overflow-y: auto;
   ul {
     margin-top: 0;
@@ -33,16 +32,34 @@ const Doku = styled.div`
     margin-top: 10px;
     margin-bottom: 10px;
   }
+  display: flex;
+  flex-direction: column;
 `
 const DokuDate = styled.p`
-  margin-bottom: 15px !important;
+  margin-bottom: 10px !important;
   color: grey;
+  padding-left: 12px;
+`
+const HtmlDiv = styled.div`
+  height: 100%;
+  margin: ${props => (props.pdf ? '0' : '0 12px')};
+`
+const Title = styled.h1`
+  font-size: 1.5rem;
+  padding-left: 12px;
+  padding-top: 25px;
 `
 
 const BenutzerDokuTemplate = ({ data }) => {
   const { markdownRemark } = data
   const { frontmatter, html } = markdownRemark
   const edges = data.allMarkdownRemark.edges
+  const pdf = !!frontmatter.pdf
+  console.log('BenutzerDokuTemplate', {
+    frontmatterPdf: frontmatter.pdf,
+    pdf,
+    frontmatter,
+  })
 
   return (
     <ErrorBoundary>
@@ -54,9 +71,12 @@ const BenutzerDokuTemplate = ({ data }) => {
             edges={edges}
           />
           <Doku>
-            <h1>{frontmatter.title}</h1>
+            <Title>{frontmatter.title}</Title>
             <DokuDate>{frontmatter.date}</DokuDate>
-            <div dangerouslySetInnerHTML={{ __html: html }} />
+            <HtmlDiv
+              pdf={frontmatter.pdf}
+              dangerouslySetInnerHTML={{ __html: html }}
+            />
           </Doku>
         </Container>
       </Layout>
@@ -72,6 +92,7 @@ export const pageQuery = graphql`
         date(formatString: "DD.MM.YYYY")
         path
         title
+        pdf
       }
     }
     allMarkdownRemark(
