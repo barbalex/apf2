@@ -23,7 +23,7 @@ export default async ({ treeName, id, client, store }) => {
   const popbers = get(data, 'popById.popbersByPopId.nodes', [])
   const popmassnbers = get(data, 'popById.popmassnbersByPopId.nodes', [])
   // 2. add activeNodeArrays for all data to openNodes
-  let newOpenNodes = [
+  const newOpenNodes = [
     ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', id],
     [
       'Projekte',
@@ -52,52 +52,37 @@ export default async ({ treeName, id, client, store }) => {
       id,
       'Massnahmen-Berichte',
     ],
+    popbers.map(o => [
+      'Projekte',
+      projekt,
+      'Aktionspläne',
+      ap,
+      'Populationen',
+      id,
+      'Kontroll-Berichte',
+      o.id,
+    ]),
+    popmassnbers.map(o => [
+      'Projekte',
+      projekt,
+      'Aktionspläne',
+      ap,
+      'Populationen',
+      id,
+      'Massnahmen-Berichte',
+      o.id,
+    ]),
+    tpops.map(o => [
+      'Projekte',
+      projekt,
+      'Aktionspläne',
+      ap,
+      'Populationen',
+      id,
+      'Teil-Populationen',
+      o.id,
+    ]),
   ]
-  popbers.forEach(o => {
-    newOpenNodes = [
-      ...newOpenNodes,
-      [
-        'Projekte',
-        projekt,
-        'Aktionspläne',
-        ap,
-        'Populationen',
-        id,
-        'Kontroll-Berichte',
-        o.id,
-      ],
-    ]
-  })
-  popmassnbers.forEach(o => {
-    newOpenNodes = [
-      ...newOpenNodes,
-      [
-        'Projekte',
-        projekt,
-        'Aktionspläne',
-        ap,
-        'Populationen',
-        id,
-        'Massnahmen-Berichte',
-        o.id,
-      ],
-    ]
-  })
-  tpops.forEach(tpop => {
-    newOpenNodes = [
-      ...newOpenNodes,
-      [
-        'Projekte',
-        projekt,
-        'Aktionspläne',
-        ap,
-        'Populationen',
-        id,
-        'Teil-Populationen',
-        tpop.id,
-      ],
-    ]
-  })
 
   // 3. update openNodes
   addOpenNodes(newOpenNodes)
