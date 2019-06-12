@@ -12,10 +12,10 @@ import gql from 'graphql-tag'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from 'react-apollo-hooks'
+import { useSnackbar } from 'notistack'
 
 import beziehungen from '../../../etc/beziehungen.png'
 import exportModule from '../../../modules/export'
-import Message from './Message'
 import storeContext from '../../../storeContext'
 
 const StyledCard = styled(Card)`
@@ -59,14 +59,25 @@ const DownloadCardButton = styled(Button)`
 const Anwendung = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { enqueNotification, exportApplyMapFilter, exportFileType } = store
+  const {
+    enqueNotification,
+    removeNotification,
+    exportApplyMapFilter,
+    exportFileType,
+  } = store
 
   const [expanded, setExpanded] = useState(false)
-  const [message, setMessage] = useState(null)
+  const { closeSnackbar } = useSnackbar()
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
   const onClickButton = useCallback(async () => {
-    setMessage('Export "Datenstruktur" wird vorbereitet...')
+    const notif = enqueNotification({
+      message: `Export "Datenstruktur" wird vorbereitet...`,
+      options: {
+        variant: 'info',
+        persist: true,
+      },
+    })
     try {
       const { data } = await client.query({
         query: gql`
@@ -98,7 +109,7 @@ const Anwendung = () => {
         },
       })
     }
-    setMessage(null)
+    removeNotification(notif)
   }, [exportFileType, exportApplyMapFilter])
 
   return (
@@ -129,7 +140,6 @@ const Anwendung = () => {
           </DownloadCardButton>
         </StyledCardContent>
       </Collapse>
-      {!!message && <Message message={message} />}
     </StyledCard>
   )
 }

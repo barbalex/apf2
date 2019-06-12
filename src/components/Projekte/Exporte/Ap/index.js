@@ -11,9 +11,9 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from 'react-apollo-hooks'
+import { useSnackbar } from 'notistack'
 
 import exportModule from '../../../../modules/export'
-import Message from '../Message'
 import storeContext from '../../../../storeContext'
 
 const StyledCard = styled(Card)`
@@ -62,14 +62,21 @@ const AP = () => {
     exportApplyMapFilter,
     exportFileType,
     enqueNotification,
+    removeNotification,
   } = store
 
   const [expanded, setExpanded] = useState(false)
-  const [message, setMessage] = useState(null)
+  const { closeSnackbar } = useSnackbar()
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
   const onClickAp = useCallback(async () => {
-    setMessage('Export "AP" wird vorbereitet...')
+    const notif = enqueNotification({
+      message: `Export "AP" wird vorbereitet...`,
+      options: {
+        variant: 'info',
+        persist: true,
+      },
+    })
     try {
       const { data } = await client.query({
         query: await import('./allVAps').then(m => m.default),
@@ -87,10 +94,18 @@ const AP = () => {
         },
       })
     }
-    setMessage(null)
+    removeNotification(notif)
+    closeSnackbar(notif)
   }, [exportFileType, exportApplyMapFilter, mapFilter])
+
   const onClickApOhnePop = useCallback(async () => {
-    setMessage('Export "ApOhnePopulationen" wird vorbereitet...')
+    const notif = enqueNotification({
+      message: `Export "ApOhnePopulationen" wird vorbereitet...`,
+      options: {
+        variant: 'info',
+        persist: true,
+      },
+    })
     try {
       const { data } = await client.query({
         query: await import('./allVApOhnepops').then(m => m.default),
@@ -108,10 +123,18 @@ const AP = () => {
         },
       })
     }
-    setMessage(null)
+    removeNotification(notif)
+    closeSnackbar(notif)
   }, [exportFileType, exportApplyMapFilter, mapFilter])
+
   const onClickAnzMassnProAp = useCallback(async () => {
-    setMessage('Export "ApAnzahlMassnahmen" wird vorbereitet...')
+    const notif = enqueNotification({
+      message: `Export "ApAnzahlMassnahmen" wird vorbereitet...`,
+      options: {
+        variant: 'info',
+        persist: true,
+      },
+    })
     try {
       const { data } = await client.query({
         query: await import('./allVApAnzmassns').then(m => m.default),
@@ -129,10 +152,18 @@ const AP = () => {
         },
       })
     }
-    setMessage(null)
+    removeNotification(notif)
+    closeSnackbar(notif)
   }, [exportFileType, exportApplyMapFilter, mapFilter])
+
   const onClickAnzKontrProAp = useCallback(async () => {
-    setMessage('Export "ApAnzahlKontrollen" wird vorbereitet...')
+    const notif = enqueNotification({
+      message: `Export "ApAnzahlKontrollen" wird vorbereitet...`,
+      options: {
+        variant: 'info',
+        persist: true,
+      },
+    })
     try {
       const { data } = await client.query({
         query: await import('./allVApAnzkontrs').then(m => m.default),
@@ -150,10 +181,18 @@ const AP = () => {
         },
       })
     }
-    setMessage(null)
+    removeNotification(notif)
+    closeSnackbar(notif)
   }, [exportFileType, exportApplyMapFilter, mapFilter])
+
   const onClickApBer = useCallback(async () => {
-    setMessage('Export "Jahresberichte" wird vorbereitet...')
+    const notif = enqueNotification({
+      message: `Export "Jahresberichte" wird vorbereitet...`,
+      options: {
+        variant: 'info',
+        persist: true,
+      },
+    })
     try {
       const { data } = await client.query({
         query: await import('./allVApbers').then(m => m.default),
@@ -171,10 +210,18 @@ const AP = () => {
         },
       })
     }
-    setMessage(null)
+    removeNotification(notif)
+    closeSnackbar(notif)
   }, [exportFileType, exportApplyMapFilter, mapFilter])
+
   const onClickApBerUndMassn = useCallback(async () => {
-    setMessage('Export "ApJahresberichteUndMassnahmen" wird vorbereitet...')
+    const notif = enqueNotification({
+      message: `Export "ApJahresberichteUndMassnahmen" wird vorbereitet...`,
+      options: {
+        variant: 'info',
+        persist: true,
+      },
+    })
     try {
       const { data } = await client.query({
         query: await import('./allVApApberundmassns').then(m => m.default),
@@ -192,10 +239,18 @@ const AP = () => {
         },
       })
     }
-    setMessage(null)
+    removeNotification(notif)
+    closeSnackbar(notif)
   }, [exportFileType, exportApplyMapFilter, mapFilter])
+
   const onClickZiele = useCallback(async () => {
-    setMessage('Export "ApZiele" wird vorbereitet...')
+    const notif = enqueNotification({
+      message: `Export "ApZiele" wird vorbereitet...`,
+      options: {
+        variant: 'info',
+        persist: true,
+      },
+    })
     try {
       const { data } = await client.query({
         query: await import('./allVZiels').then(m => m.default),
@@ -213,10 +268,18 @@ const AP = () => {
         },
       })
     }
-    setMessage(null)
+    removeNotification(notif)
+    closeSnackbar(notif)
   }, [exportFileType, exportApplyMapFilter, mapFilter])
+
   const onClickZielber = useCallback(async () => {
-    setMessage('Export "Zielberichte" wird vorbereitet...')
+    const notif = enqueNotification({
+      message: `Export "Zielberichte" wird vorbereitet...`,
+      options: {
+        variant: 'info',
+        persist: true,
+      },
+    })
     try {
       const { data } = await client.query({
         query: await import('./allVZielbers').then(m => m.default),
@@ -234,10 +297,18 @@ const AP = () => {
         },
       })
     }
-    setMessage(null)
+    removeNotification(notif)
+    closeSnackbar(notif)
   }, [exportFileType, exportApplyMapFilter, mapFilter])
+
   const onClickBer = useCallback(async () => {
-    setMessage('Export "Berichte" wird vorbereitet...')
+    const notif = enqueNotification({
+      message: `Export "Berichte" wird vorbereitet...`,
+      options: {
+        variant: 'info',
+        persist: true,
+      },
+    })
     try {
       const { data } = await client.query({
         query: await import('./allVBers').then(m => m.default),
@@ -255,10 +326,18 @@ const AP = () => {
         },
       })
     }
-    setMessage(null)
+    removeNotification(notif)
+    closeSnackbar(notif)
   }, [exportFileType, exportApplyMapFilter, mapFilter])
+
   const onClickErfkrit = useCallback(async () => {
-    setMessage('Export "Erfolgskriterien" wird vorbereitet...')
+    const notif = enqueNotification({
+      message: `Export "Erfolgskriterien" wird vorbereitet...`,
+      options: {
+        variant: 'info',
+        persist: true,
+      },
+    })
     try {
       const { data } = await client.query({
         query: await import('./allVErfkrits').then(m => m.default),
@@ -276,10 +355,18 @@ const AP = () => {
         },
       })
     }
-    setMessage(null)
+    removeNotification(notif)
+    closeSnackbar(notif)
   }, [exportFileType, exportApplyMapFilter, mapFilter])
+
   const onClickIdealbiotop = useCallback(async () => {
-    setMessage('Export "Idealbiotope" wird vorbereitet...')
+    const notif = enqueNotification({
+      message: `Export "Idealbiotope" wird vorbereitet...`,
+      options: {
+        variant: 'info',
+        persist: true,
+      },
+    })
     try {
       const { data } = await client.query({
         query: await import('./allVIdealbiotops').then(m => m.default),
@@ -297,10 +384,18 @@ const AP = () => {
         },
       })
     }
-    setMessage(null)
+    removeNotification(notif)
+    closeSnackbar(notif)
   }, [exportFileType, exportApplyMapFilter, mapFilter])
+
   const onClickAssozarten = useCallback(async () => {
-    setMessage('Export "AssoziierteArten" wird vorbereitet...')
+    const notif = enqueNotification({
+      message: `Export "AssoziierteArten" wird vorbereitet...`,
+      options: {
+        variant: 'info',
+        persist: true,
+      },
+    })
     try {
       const { data } = await client.query({
         query: await import('./allVAssozarts').then(m => m.default),
@@ -318,7 +413,8 @@ const AP = () => {
         },
       })
     }
-    setMessage(null)
+    removeNotification(notif)
+    closeSnackbar(notif)
   }, [exportFileType, exportApplyMapFilter, mapFilter])
 
   return (
@@ -371,7 +467,6 @@ const AP = () => {
           </DownloadCardButton>
         </StyledCardContent>
       </Collapse>
-      {!!message && <Message message={message} />}
     </StyledCard>
   )
 }
