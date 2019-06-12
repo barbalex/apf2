@@ -2,9 +2,9 @@ import React from 'react'
 import { graphql } from 'gatsby'
 import styled from 'styled-components'
 
-import Layout from '../../../components/Layout'
-import Sidebar from '../../../templates/Sidebar'
-import ErrorBoundary from '../../../components/shared/ErrorBoundary'
+import Layout from '../../components/Layout'
+import Sidebar from '../../templates/Sidebar'
+import ErrorBoundary from '../../components/shared/ErrorBoundary'
 
 const Container = styled.div`
   margin-top: 64px;
