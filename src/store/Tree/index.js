@@ -1,24 +1,24 @@
-import { types, getParent } from "mobx-state-tree"
-import isEqual from "lodash/isEqual"
-import queryString from "query-string"
-import { navigate } from "gatsby"
+import { types, getParent } from 'mobx-state-tree'
+import isEqual from 'lodash/isEqual'
+import queryString from 'query-string'
+import { navigate } from 'gatsby'
 
 import NodeLabelFilter, {
   defaultValue as defaultNodeLabelFilter,
-} from "./NodeLabelFilter"
-import Map, { defaultValue as defaultMap } from "./Map"
-import Node from "./Node"
+} from './NodeLabelFilter'
+import Map, { defaultValue as defaultMap } from './Map'
+import Node from './Node'
 
 export default types
-  .model("Tree", {
-    name: types.optional(types.string, "tree"),
+  .model('Tree', {
+    name: types.optional(types.string, 'tree'),
     activeNodeArray: types.optional(
       types.array(types.union(types.string, types.number)),
-      []
+      [],
     ),
     openNodes: types.optional(
       types.array(types.array(types.union(types.string, types.number))),
-      []
+      [],
     ),
     apFilter: types.optional(types.boolean, false),
     nodeLabelFilter: types.optional(NodeLabelFilter, defaultNodeLabelFilter),
@@ -49,6 +49,10 @@ export default types
       // need set to ensure contained arrays are unique
       const set = new Set([...self.openNodes, ...nodes].map(JSON.stringify))
       self.openNodes = Array.from(set).map(JSON.parse)
+      console.log('addOpenNodes:', {
+        openNodesLength: self.openNodes.length,
+        newNodes: nodes.length,
+      })
     },
     setOpenNodes(val) {
       self.openNodes = val
@@ -57,12 +61,12 @@ export default types
       self.apFilter = val
     },
     setActiveNodeArray(val) {
-      if (self.name === "tree") {
+      if (self.name === 'tree') {
         const store = getParent(self)
         const { urlQuery } = store
         const search = queryString.stringify(urlQuery)
-        const query = `${Object.keys(urlQuery).length > 0 ? `?${search}` : ""}`
-        navigate(`/Daten/${val.join("/")}${query}`)
+        const query = `${Object.keys(urlQuery).length > 0 ? `?${search}` : ''}`
+        navigate(`/Daten/${val.join('/')}${query}`)
       }
       self.activeNodeArray = val
     },
@@ -74,7 +78,7 @@ export default types
   }))
 
 export const defaultValue = {
-  name: "tree",
+  name: 'tree',
   activeNodeArray: [],
   openNodes: [],
   apFilter: false,
