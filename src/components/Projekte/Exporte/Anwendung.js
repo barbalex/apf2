@@ -110,6 +110,7 @@ const Anwendung = () => {
       })
     }
     removeNotification(notif)
+    closeSnackbar(notif)
   }, [exportFileType, exportApplyMapFilter])
 
   return (

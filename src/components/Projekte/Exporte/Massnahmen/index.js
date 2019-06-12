@@ -11,9 +11,9 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from 'react-apollo-hooks'
+import { useSnackbar } from 'notistack'
 
 import exportModule from '../../../../modules/export'
-import Message from '../Message'
 import storeContext from '../../../../storeContext'
 
 const StyledCard = styled(Card)`
@@ -57,9 +57,9 @@ const DownloadCardButton = styled(Button)`
 const Massnahmen = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { enqueNotification } = store
+  const { enqueNotification, removeNotification } = store
   const [expanded, setExpanded] = useState(false)
-  const [message, setMessage] = useState(null)
+  const { closeSnackbar } = useSnackbar()
 
   return (
     <StyledCard>
@@ -79,7 +79,13 @@ const Massnahmen = () => {
         <StyledCardContent>
           <DownloadCardButton
             onClick={async () => {
-              setMessage('Export "Massnahmen" wird vorbereitet...')
+              const notif = enqueNotification({
+                message: `Export "Massnahmen" wird vorbereitet...`,
+                options: {
+                  variant: 'info',
+                  persist: true,
+                },
+              })
               try {
                 const { data } = await client.query({
                   query: await import('./allVMassns').then(m => m.default),
@@ -100,14 +106,21 @@ const Massnahmen = () => {
                   },
                 })
               }
-              setMessage(null)
+              removeNotification(notif)
+              closeSnackbar(notif)
             }}
           >
             Massnahmen
           </DownloadCardButton>
           <DownloadCardButton
             onClick={async () => {
-              setMessage('Export "MassnahmenWebGisBun" wird vorbereitet...')
+              const notif = enqueNotification({
+                message: `Export "MassnahmenWebGisBun" wird vorbereitet...`,
+                options: {
+                  variant: 'info',
+                  persist: true,
+                },
+              })
               try {
                 const { data } = await client.query({
                   query: await import('./allVMassnWebgisbuns').then(
@@ -130,14 +143,14 @@ const Massnahmen = () => {
                   },
                 })
               }
-              setMessage(null)
+              removeNotification(notif)
+              closeSnackbar(notif)
             }}
           >
             Massnahmen für WebGIS BUN
           </DownloadCardButton>
         </StyledCardContent>
       </Collapse>
-      {!!message && <Message message={message} />}
     </StyledCard>
   )
 }

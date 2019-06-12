@@ -81,8 +81,8 @@ export default gql`
         kontr_gefaehrdung: kontrGefaehrdung
         kontr_changed: kontrChanged
         kontr_changed_by: kontrChangedBy
-        apber_nicht_relevant: apberNichtRelevant
-        apber_nicht_relevant_grund: apberNichtRelevantGrund
+        kontr_apber_nicht_relevant: kontrApberNichtRelevant
+        apber_nicht_relevant_grund: kontrApberNichtRelevantGrund
         ekf_bemerkungen: kontrEkfBemerkungen
         id
         einheit

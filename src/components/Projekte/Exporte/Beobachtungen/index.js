@@ -11,9 +11,9 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from 'react-apollo-hooks'
+import { useSnackbar } from 'notistack'
 
 import exportModule from '../../../../modules/export'
-import Message from '../Message'
 import queryBeobZugeordnet from './queryBeobZugeordnet'
 import queryBeobNichtZuzuordnen from './queryBeobNichtZuzuordnen'
 import allVBeobArtChangeds from './allVBeobArtChangeds'
@@ -60,14 +60,25 @@ const DownloadCardButton = styled(Button)`
 const Beobachtungen = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { exportApplyMapFilter, exportFileType, enqueNotification } = store
+  const {
+    exportApplyMapFilter,
+    exportFileType,
+    enqueNotification,
+    removeNotification,
+  } = store
 
   const [expanded, setExpanded] = useState(false)
-  const [message, setMessage] = useState(null)
+  const { closeSnackbar } = useSnackbar()
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
   const onClickButton = useCallback(async () => {
-    setMessage('Export "Beobachtungen" wird vorbereitet...')
+    const notif = enqueNotification({
+      message: `Export "Beobachtungen" wird vorbereitet...`,
+      options: {
+        variant: 'info',
+        persist: true,
+      },
+    })
     try {
       const { data } = await client.query({
         query: allVBeobArtChangeds,
@@ -85,7 +96,8 @@ const Beobachtungen = () => {
         },
       })
     }
-    setMessage(null)
+    removeNotification(notif)
+    closeSnackbar(notif)
   }, [exportFileType, exportApplyMapFilter])
 
   return (
@@ -109,7 +121,13 @@ const Beobachtungen = () => {
           </DownloadCardButton>
           <DownloadCardButton
             onClick={async () => {
-              setMessage('Export "Beobachtungen" wird vorbereitet...')
+              const notif = enqueNotification({
+                message: `Export "Beobachtungen" wird vorbereitet...`,
+                options: {
+                  variant: 'info',
+                  persist: true,
+                },
+              })
               try {
                 const { data } = await client.query({
                   query: queryBeobZugeordnet,
@@ -127,14 +145,21 @@ const Beobachtungen = () => {
                   },
                 })
               }
-              setMessage(null)
+              removeNotification(notif)
+              closeSnackbar(notif)
             }}
           >
             <div>Alle zugeordneten Beobachtungen</div>
           </DownloadCardButton>
           <DownloadCardButton
             onClick={async () => {
-              setMessage('Export "Beobachtungen" wird vorbereitet...')
+              const notif = enqueNotification({
+                message: `Export "Beobachtungen" wird vorbereitet...`,
+                options: {
+                  variant: 'info',
+                  persist: true,
+                },
+              })
               try {
                 const { data } = await client.query({
                   query: queryBeobNichtZuzuordnen,
@@ -152,14 +177,14 @@ const Beobachtungen = () => {
                   },
                 })
               }
-              setMessage(null)
+              removeNotification(notif)
+              closeSnackbar(notif)
             }}
           >
             <div>Alle nicht zuzuordnenden Beobachtungen</div>
           </DownloadCardButton>
         </StyledCardContent>
       </Collapse>
-      {!!message && <Message message={message} />}
     </StyledCard>
   )
 }

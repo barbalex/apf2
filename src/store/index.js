@@ -104,10 +104,11 @@ const myTypes = types
   }))
   .actions(self => ({
     enqueNotification(note) {
+      const key = note.options && note.options.key
       self.notifications = [
         ...self.notifications,
         {
-          key: new Date().getTime() + Math.random(),
+          key: key || new Date().getTime() + Math.random(),
           ...note,
         },
       ]

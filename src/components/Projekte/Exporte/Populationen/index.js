@@ -11,9 +11,9 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from 'react-apollo-hooks'
+import { useSnackbar } from 'notistack'
 
 import exportModule from '../../../../modules/export'
-import Message from '../Message'
 import storeContext from '../../../../storeContext'
 
 const StyledCard = styled(Card)`
@@ -57,9 +57,9 @@ const DownloadCardButton = styled(Button)`
 const Populationen = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { enqueNotification } = store
+  const { enqueNotification, removeNotification } = store
   const [expanded, setExpanded] = useState(false)
-  const [message, setMessage] = useState(null)
+  const { closeSnackbar } = useSnackbar()
 
   return (
     <StyledCard>
@@ -79,7 +79,13 @@ const Populationen = () => {
         <StyledCardContent>
           <DownloadCardButton
             onClick={async () => {
-              setMessage('Export "Populationen" wird vorbereitet...')
+              const notif = enqueNotification({
+                message: `Export "Populationen" wird vorbereitet...`,
+                options: {
+                  variant: 'info',
+                  persist: true,
+                },
+              })
               try {
                 const { data } = await client.query({
                   query: await import('./allVPops').then(m => m.default),
@@ -97,14 +103,21 @@ const Populationen = () => {
                   },
                 })
               }
-              setMessage(null)
+              removeNotification(notif)
+              closeSnackbar(notif)
             }}
           >
             Populationen
           </DownloadCardButton>
           <DownloadCardButton
             onClick={async () => {
-              setMessage('Export "Populationen" wird vorbereitet...')
+              const notif = enqueNotification({
+                message: `Export "Populationen" wird vorbereitet...`,
+                options: {
+                  variant: 'info',
+                  persist: true,
+                },
+              })
               try {
                 const { data } = await client.query({
                   query: await import('./allVPopKmls').then(m => m.default),
@@ -123,14 +136,21 @@ const Populationen = () => {
                   },
                 })
               }
-              setMessage(null)
+              removeNotification(notif)
+              closeSnackbar(notif)
             }}
           >
             <div>Populationen für Google Earth (beschriftet mit PopNr)</div>
           </DownloadCardButton>
           <DownloadCardButton
             onClick={async () => {
-              setMessage('Export "PopulationenNachNamen" wird vorbereitet...')
+              const notif = enqueNotification({
+                message: `Export "PopulationenNachNamen" wird vorbereitet...`,
+                options: {
+                  variant: 'info',
+                  persist: true,
+                },
+              })
               try {
                 const { data } = await client.query({
                   query: await import('./allVPopKmlnamen').then(m => m.default),
@@ -149,7 +169,8 @@ const Populationen = () => {
                   },
                 })
               }
-              setMessage(null)
+              removeNotification(notif)
+              closeSnackbar(notif)
             }}
           >
             <div>
@@ -158,9 +179,13 @@ const Populationen = () => {
           </DownloadCardButton>
           <DownloadCardButton
             onClick={async () => {
-              setMessage(
-                'Export "PopulationenVonApArtenOhneStatus" wird vorbereitet...',
-              )
+              const notif = enqueNotification({
+                message: `Export "PopulationenVonApArtenOhneStatus" wird vorbereitet...`,
+                options: {
+                  variant: 'info',
+                  persist: true,
+                },
+              })
               try {
                 const { data } = await client.query({
                   query: await import('./allVPopVonapohnestatuses').then(
@@ -180,16 +205,21 @@ const Populationen = () => {
                   },
                 })
               }
-              setMessage(null)
+              removeNotification(notif)
+              closeSnackbar(notif)
             }}
           >
             Populationen von AP-Arten ohne Status
           </DownloadCardButton>
           <DownloadCardButton
             onClick={async () => {
-              setMessage(
-                'Export "PopulationenOhneKoordinaten" wird vorbereitet...',
-              )
+              const notif = enqueNotification({
+                message: `Export "PopulationenOhneKoordinaten" wird vorbereitet...`,
+                options: {
+                  variant: 'info',
+                  persist: true,
+                },
+              })
               try {
                 const { data } = await client.query({
                   query: await import('./allVPopOhnekoords').then(
@@ -209,16 +239,21 @@ const Populationen = () => {
                   },
                 })
               }
-              setMessage(null)
+              removeNotification(notif)
+              closeSnackbar(notif)
             }}
           >
             Populationen ohne Koordinaten
           </DownloadCardButton>
           <DownloadCardButton
             onClick={async () => {
-              setMessage(
-                'Export "PopulationenAnzMassnProMassnber" wird vorbereitet...',
-              )
+              const notif = enqueNotification({
+                message: `Export "PopulationenAnzMassnProMassnber" wird vorbereitet...`,
+                options: {
+                  variant: 'info',
+                  persist: true,
+                },
+              })
               try {
                 const { data } = await client.query({
                   query: await import('./allVPopmassnberAnzmassns').then(
@@ -241,7 +276,8 @@ const Populationen = () => {
                   },
                 })
               }
-              setMessage(null)
+              removeNotification(notif)
+              closeSnackbar(notif)
             }}
           >
             Populationen mit Massnahmen-Berichten: Anzahl Massnahmen im
@@ -249,9 +285,13 @@ const Populationen = () => {
           </DownloadCardButton>
           <DownloadCardButton
             onClick={async () => {
-              setMessage(
-                'Export "PopulationenAnzahlMassnahmen" wird vorbereitet...',
-              )
+              const notif = enqueNotification({
+                message: `Export "PopulationenAnzahlMassnahmen" wird vorbereitet...`,
+                options: {
+                  variant: 'info',
+                  persist: true,
+                },
+              })
               try {
                 const { data } = await client.query({
                   query: await import('./allVPopAnzmassns').then(
@@ -271,16 +311,21 @@ const Populationen = () => {
                   },
                 })
               }
-              setMessage(null)
+              removeNotification(notif)
+              closeSnackbar(notif)
             }}
           >
             Anzahl Massnahmen pro Population
           </DownloadCardButton>
           <DownloadCardButton
             onClick={async () => {
-              setMessage(
-                'Export "PopulationenAnzahlKontrollen" wird vorbereitet...',
-              )
+              const notif = enqueNotification({
+                message: `Export "PopulationenAnzahlKontrollen" wird vorbereitet...`,
+                options: {
+                  variant: 'info',
+                  persist: true,
+                },
+              })
               try {
                 const { data } = await client.query({
                   query: await import('./allVPopAnzkontrs').then(
@@ -300,16 +345,21 @@ const Populationen = () => {
                   },
                 })
               }
-              setMessage(null)
+              removeNotification(notif)
+              closeSnackbar(notif)
             }}
           >
             Anzahl Kontrollen pro Population
           </DownloadCardButton>
           <DownloadCardButton
             onClick={async () => {
-              setMessage(
-                'Export "PopulationenPopUndMassnBerichte" wird vorbereitet...',
-              )
+              const notif = enqueNotification({
+                message: `Export "PopulationenPopUndMassnBerichte" wird vorbereitet...`,
+                options: {
+                  variant: 'info',
+                  persist: true,
+                },
+              })
               try {
                 const { data } = await client.query({
                   query: await import('./allVPopPopberundmassnbers').then(
@@ -332,16 +382,21 @@ const Populationen = () => {
                   },
                 })
               }
-              setMessage(null)
+              removeNotification(notif)
+              closeSnackbar(notif)
             }}
           >
             Populationen inkl. Populations- und Massnahmen-Berichte
           </DownloadCardButton>
           <DownloadCardButton
             onClick={async () => {
-              setMessage(
-                'Export "PopulationenMitLetzemPopBericht" wird vorbereitet...',
-              )
+              const notif = enqueNotification({
+                message: `Export "PopulationenMitLetzemPopBericht" wird vorbereitet...`,
+                options: {
+                  variant: 'info',
+                  persist: true,
+                },
+              })
               try {
                 const { data } = await client.query({
                   query: await import('./allVPopMitLetzterPopbers').then(
@@ -364,16 +419,21 @@ const Populationen = () => {
                   },
                 })
               }
-              setMessage(null)
+              removeNotification(notif)
+              closeSnackbar(notif)
             }}
           >
             Populationen mit dem letzten Populations-Bericht
           </DownloadCardButton>
           <DownloadCardButton
             onClick={async () => {
-              setMessage(
-                'Export "PopulationenMitLetztemMassnBericht" wird vorbereitet...',
-              )
+              const notif = enqueNotification({
+                message: `Export "PopulationenMitLetztemMassnBericht" wird vorbereitet...`,
+                options: {
+                  variant: 'info',
+                  persist: true,
+                },
+              })
               try {
                 const { data } = await client.query({
                   query: await import('./allVPopMitLetzterPopmassnbers').then(
@@ -396,14 +456,14 @@ const Populationen = () => {
                   },
                 })
               }
-              setMessage(null)
+              removeNotification(notif)
+              closeSnackbar(notif)
             }}
           >
             Populationen mit dem letzten Massnahmen-Bericht
           </DownloadCardButton>
         </StyledCardContent>
       </Collapse>
-      {!!message && <Message message={message} />}
     </StyledCard>
   )
 }

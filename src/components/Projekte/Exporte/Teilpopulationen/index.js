@@ -11,10 +11,10 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from 'react-apollo-hooks'
+import { useSnackbar } from 'notistack'
 
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
 import exportModule from '../../../../modules/export'
-import Message from '../Message'
 import queryAeEigenschaftens from './queryAeEigenschaftens'
 import storeContext from '../../../../storeContext'
 
@@ -76,15 +76,26 @@ const Teilpopulationen = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
 
-  const { exportApplyMapFilter, exportFileType, enqueNotification } = store
+  const {
+    exportApplyMapFilter,
+    exportFileType,
+    enqueNotification,
+    removeNotification,
+  } = store
 
   const [expanded, setExpanded] = useState(false)
-  const [message, setMessage] = useState(null)
+  const { closeSnackbar } = useSnackbar()
   const [ewmMessage, setEwmMessage] = useState('')
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
   const onClickButton = useCallback(async () => {
-    setMessage('Export "Teilpopulationen" wird vorbereitet...')
+    const notif = enqueNotification({
+      message: `Export "Teilpopulationen" wird vorbereitet...`,
+      options: {
+        variant: 'info',
+        persist: true,
+      },
+    })
     try {
       const { data } = await client.query({
         query: await import('./allVTpops').then(m => m.default),
@@ -117,7 +128,8 @@ const Teilpopulationen = ({ treeName }) => {
         options: { variant: 'error' },
       })
     }
-    setMessage(null)
+    removeNotification(notif)
+    closeSnackbar(notif)
   }, [exportFileType, exportApplyMapFilter])
 
   const aeEigenschaftenfilter = useCallback(inputValue =>
@@ -150,9 +162,13 @@ const Teilpopulationen = ({ treeName }) => {
           </DownloadCardButton>
           <DownloadCardButton
             onClick={async () => {
-              setMessage(
-                'Export "TeilpopulationenWebGisBun" wird vorbereitet...',
-              )
+              const notif = enqueNotification({
+                message: `Export "TeilpopulationenWebGisBun" wird vorbereitet...`,
+                options: {
+                  variant: 'info',
+                  persist: true,
+                },
+              })
               try {
                 const { data } = await client.query({
                   query: await import('./allVTpopWebgisbuns').then(
@@ -173,14 +189,21 @@ const Teilpopulationen = ({ treeName }) => {
                   options: { variant: 'error' },
                 })
               }
-              setMessage(null)
+              removeNotification(notif)
+              closeSnackbar(notif)
             }}
           >
             Teilpopulationen für WebGIS BUN
           </DownloadCardButton>
           <DownloadCardButton
             onClick={async () => {
-              setMessage('Export "Teilpopulationen" wird vorbereitet...')
+              const notif = enqueNotification({
+                message: `Export "Teilpopulationen" wird vorbereitet...`,
+                options: {
+                  variant: 'info',
+                  persist: true,
+                },
+              })
               try {
                 const { data } = await client.query({
                   query: await import('./allVTpopKmls').then(m => m.default),
@@ -197,7 +220,8 @@ const Teilpopulationen = ({ treeName }) => {
                   options: { variant: 'error' },
                 })
               }
-              setMessage(null)
+              removeNotification(notif)
+              closeSnackbar(notif)
             }}
           >
             <div>Teilpopulationen für Google Earth</div>
@@ -205,9 +229,13 @@ const Teilpopulationen = ({ treeName }) => {
           </DownloadCardButton>
           <DownloadCardButton
             onClick={async () => {
-              setMessage(
-                'Export "TeilpopulationenNachNamen" wird vorbereitet...',
-              )
+              const notif = enqueNotification({
+                message: `Export "TeilpopulationenNachNamen" wird vorbereitet...`,
+                options: {
+                  variant: 'info',
+                  persist: true,
+                },
+              })
               try {
                 const { data } = await client.query({
                   query: await import('./allVTpopKmlnamen').then(
@@ -226,7 +254,8 @@ const Teilpopulationen = ({ treeName }) => {
                   options: { variant: 'error' },
                 })
               }
-              setMessage(null)
+              removeNotification(notif)
+              closeSnackbar(notif)
             }}
           >
             <div>Teilpopulationen für Google Earth</div>
@@ -234,9 +263,13 @@ const Teilpopulationen = ({ treeName }) => {
           </DownloadCardButton>
           <DownloadCardButton
             onClick={async () => {
-              setMessage(
-                'Export "TeilpopulationenVonApArtenOhneBekanntSeit" wird vorbereitet...',
-              )
+              const notif = enqueNotification({
+                message: `Export "TeilpopulationenVonApArtenOhneBekanntSeit" wird vorbereitet...`,
+                options: {
+                  variant: 'info',
+                  persist: true,
+                },
+              })
               try {
                 const { data } = await client.query({
                   query: await import('./allVTpopOhnebekanntseits').then(
@@ -254,7 +287,8 @@ const Teilpopulationen = ({ treeName }) => {
                   options: { variant: 'error' },
                 })
               }
-              setMessage(null)
+              removeNotification(notif)
+              closeSnackbar(notif)
             }}
           >
             <div>Teilpopulationen von AP-Arten</div>
@@ -262,9 +296,13 @@ const Teilpopulationen = ({ treeName }) => {
           </DownloadCardButton>
           <DownloadCardButton
             onClick={async () => {
-              setMessage(
-                'Export "TeilpopulationenOhneApBerichtRelevant" wird vorbereitet...',
-              )
+              const notif = enqueNotification({
+                message: `Export "TeilpopulationenOhneApBerichtRelevant" wird vorbereitet...`,
+                options: {
+                  variant: 'info',
+                  persist: true,
+                },
+              })
               try {
                 const { data } = await client.query({
                   query: await import('./allVTpopOhneapberichtrelevants').then(
@@ -282,7 +320,8 @@ const Teilpopulationen = ({ treeName }) => {
                   options: { variant: 'error' },
                 })
               }
-              setMessage(null)
+              removeNotification(notif)
+              closeSnackbar(notif)
             }}
           >
             <div>Teilpopulationen ohne Eintrag</div>
@@ -290,9 +329,13 @@ const Teilpopulationen = ({ treeName }) => {
           </DownloadCardButton>
           <DownloadCardButton
             onClick={async () => {
-              setMessage(
-                'Export "TeilpopulationenAnzahlMassnahmen" wird vorbereitet...',
-              )
+              const notif = enqueNotification({
+                message: `Export "TeilpopulationenAnzahlMassnahmen" wird vorbereitet...`,
+                options: {
+                  variant: 'info',
+                  persist: true,
+                },
+              })
               try {
                 const { data } = await client.query({
                   query: await import('./allVTpopAnzmassns').then(
@@ -310,16 +353,21 @@ const Teilpopulationen = ({ treeName }) => {
                   options: { variant: 'error' },
                 })
               }
-              setMessage(null)
+              removeNotification(notif)
+              closeSnackbar(notif)
             }}
           >
             Anzahl Massnahmen pro Teilpopulation
           </DownloadCardButton>
           <DownloadCardButton
             onClick={async () => {
-              setMessage(
-                'Export "TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht" wird vorbereitet...',
-              )
+              const notif = enqueNotification({
+                message: `Export "TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht" wird vorbereitet...`,
+                options: {
+                  variant: 'info',
+                  persist: true,
+                },
+              })
               try {
                 const { data } = await client.query({
                   query: await import(
@@ -342,7 +390,8 @@ const Teilpopulationen = ({ treeName }) => {
                   options: { variant: 'error' },
                 })
               }
-              setMessage(null)
+              removeNotification(notif)
+              closeSnackbar(notif)
             }}
             disabled={isRemoteHost}
             title={
@@ -420,9 +469,13 @@ const Teilpopulationen = ({ treeName }) => {
           </AutocompleteContainer>
           <DownloadCardButton
             onClick={async () => {
-              setMessage(
-                'Export "TeilpopulationenTPopUndMassnBerichte" wird vorbereitet...',
-              )
+              const notif = enqueNotification({
+                message: `Export "TeilpopulationenTPopUndMassnBerichte" wird vorbereitet...`,
+                options: {
+                  variant: 'info',
+                  persist: true,
+                },
+              })
               try {
                 const { data } = await client.query({
                   query: await import('./allVTpopPopberundmassnbers').then(
@@ -443,14 +496,14 @@ const Teilpopulationen = ({ treeName }) => {
                   options: { variant: 'error' },
                 })
               }
-              setMessage(null)
+              removeNotification(notif)
+              closeSnackbar(notif)
             }}
           >
             Teilpopulationen inklusive Teilpopulations- und Massnahmen-Berichten
           </DownloadCardButton>
         </StyledCardContent>
       </Collapse>
-      {!!message && <Message message={message} />}
     </StyledCard>
   )
 }
