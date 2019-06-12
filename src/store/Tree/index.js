@@ -49,10 +49,6 @@ export default types
       // need set to ensure contained arrays are unique
       const set = new Set([...self.openNodes, ...nodes].map(JSON.stringify))
       self.openNodes = Array.from(set).map(JSON.parse)
-      console.log('addOpenNodes:', {
-        openNodesLength: self.openNodes.length,
-        newNodes: nodes.length,
-      })
     },
     setOpenNodes(val) {
       self.openNodes = val
