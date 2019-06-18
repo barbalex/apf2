@@ -2,8 +2,15 @@
   "version": 2,
   "name": "apflora",
   "alias": "apflora.ch",
-  "routes": [{
-    "src": "/Daten/.*",
-    "dest": "/Daten"
-  }]
+  "routes": [
+    {
+      "src": "/Daten/.*",
+      "dest": "/Daten"
+    },
+    {
+      "src": "/.*",
+      "status": 404,
+      "dest": "404.html"
+    }
+  ]
 }
