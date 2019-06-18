@@ -133,11 +133,16 @@ module.exports = {
               noIframeBorder: true, //Optional: Disable insertion of <style> border: 0
             },
           },
-          //'gatsby-remark-images-zoom',
+          {
+            resolve: `gatsby-remark-images-medium-zoom`, // point!
+            options: {
+              background: 'rgba(128,128,128,0.5)',
+            },
+          },
         ],
       },
     },
     'gatsby-plugin-offline',
-    'gatsby-mdx'
+    'gatsby-mdx',
   ],
 }

@@ -6148,10 +6148,10 @@ gatsby-remark-external-links@0.0.4:
     unist-util-find "^1.0.1"
     unist-util-visit "^1.1.3"
 
-gatsby-remark-images-zoom@1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/gatsby-remark-images-zoom/-/gatsby-remark-images-zoom-1.1.0.tgz#8e42d463891cd0c84a4f70ec8df4b41965b22996"
-  integrity sha512-VYuSEH0tg3WJh8DpMKeMm5G/K6DDInA+tPySzdsakDLPDU1dh8VjCDg4q45Rdu1xcnICISn9tXCjOdQ3cryKCQ==
+gatsby-remark-images-medium-zoom@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/gatsby-remark-images-medium-zoom/-/gatsby-remark-images-medium-zoom-1.0.1.tgz#d1d7f678297ed31b3528c33dcd5ac2c110e67c3c"
+  integrity sha512-bW2Y0cIsTzoyUASErRuznjkN4QVCjTJgohoqBzRv9LPvlX7ItV0dLinMPV38vScy92cWMQZNhwwMUVBtCyTUUw==
   dependencies:
     medium-zoom "^1.0.4"
 
