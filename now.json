@@ -6,11 +6,6 @@
     {
       "src": "/Daten/.*",
       "dest": "/Daten"
-    },
-    {
-      "src": "/.*",
-      "status": 404,
-      "dest": "404.html"
     }
   ]
 }
