@@ -1,15 +1,15 @@
 ---
 typ: 'technDoku'
-path: '/Dokumentation/Technisch/EK-Konzept'
+path: '/Dokumentation/Technisch/EK-Weiterentwicklung-2019'
 date: '2019-06-21'
-title: 'EK-Konzept'
+title: 'EK-Weiterentwicklung 2019'
 sort: 11
 ---
 
-Erfolgskontrollen sind gleichzeitig wichtig und aufwändig.
-- Ihre Durchführung soll daher sorgfältig geplant werden
-- Artverantwortliche und Topos benötigen eine gute Übersicht über geplante und durchgeführte EK's
-- Es ist sicher zu stellen, dass für jede Art die Ziel-relevanten Einheiten gezählt werden
+Erfolgskontrollen sind gleichzeitig wichtig und aufwändig. Sie beginnen mit der Zielsetzung und enden mit der Berichterstattung. Im Jahr 2019 ist geplant, die Verwaltung und Planung der eigentlichen Kontrollen in apflora weiter zu entwickeln:
+- Ihre Durchführung soll sorgfältig geplant werden können
+- Topos und Artverantwortliche sollen eine gute Übersicht über geplante und durchgeführte EK's erhalten
+- Es ist sicher zu stellen, dass für jede Art die zielrelevanten Einheiten gezählt und dokumentiert werden
 
 Das soll mit folgenden Massnahmen umgesetzt werden:<br/><br/>
 
@@ -46,6 +46,9 @@ Das soll mit folgenden Massnahmen umgesetzt werden:<br/><br/>
   - `abrechnungstyp`: Auswahl aus der Tabelle `abrechnungstyp_werte`
   - `abweichend`: Diese Frequenz entspricht nicht derjenigen, welche gemäss Populationsgrösse vergeben worden wäre
   - bestehende zwei kontrollfrequenz-Felder wieder entfernen
+- neue Felder auf tpopkontr:
+  - `apber_nicht_relevant`: Wenn "ja" soll diese Kontrolle für den Jahresbericht nicht berücksichtigt werden (ist umgesetzt)
+  - `apber_nicht_relevant_grund`: Begründen, wieso nicht berücksichtigt (ist umgesetzt)
 - neue Tabelle: `ekplan` mit Feldern:
   - `tpopkontr_id`
   - `jahr`
@@ -57,7 +60,7 @@ Das soll mit folgenden Massnahmen umgesetzt werden:<br/><br/>
 - Bestehender Knoten `EKF-Zähleinheiten` wird neu `EK-Zähleinheiten`
 
 #### Formular TPop
-- Neue Felder der Tabelle tpop ergänzen
+- Neue Felder der Tabelle tpop ergänzen (bearbeitbar)
 - Liste aller Kontrolljahre anzeigen. Ist hier nicht bearbeitbar.
 
 #### Neues Formular EK-Planung
@@ -82,9 +85,9 @@ Das Formular, um Kontrollen zu planen.
 - Der Jahres-Spalten-Bereich kann horizontal gescrollt werden, wenn der Platz für die Anzeige aller nicht ausreicht
 - Eine Jahres-Spalte zeigt folgende Informationen an:
   - EK geplant, bearbeitbar
-  - EK (durchgeführt)
+  - EK: Summen für die zielrelevante(n) Zähleinheit(en) aus für den Jahresbericht relevanten Kontrollen
   - EKF geplant, bearbeitbar
-  - EKF (durchgeführt)
+  - EKF: Summen für die zielrelevante(n) Zähleinheit(en) aus für den Jahresbericht relevanten Kontrollen
   - Massnahmen des Typs Ansiedlung (unterscheiden nach Anpflanzung/Ansaat?)
 - Der Benutzer kann wählen, welche der obigen Informationen angezeigt werden
 - Fährt man mit der Maus über EK, EKF und Massnahmen, werden deren wichtigsten Angaben angezeigt. Und ein Link, um das Objekt in einem neuen Fenster zu öffnen
@@ -104,6 +107,11 @@ Das Formular, um Kontrollen zu planen.
   - Abrechnungstyp
   - geplanten EK
   - geplanten EKF
+- Stand Zählungen pro Propulation:
+  - pro zielrelevanter Einheit
+  - pro TPop Wert aus letzter EK/EKF ermitteln
+  - und als "Anzahl kontrolliert" pro Pop summieren
+  - zusätzlich "Anzahl inkl. neu angesiedelt, noch nicht kontrolliert" rechnen. Anzahl aus der Anzahl Pflanzen oder Triebe der Massnahme entnehmen.
 
 #### Qualitätskontrollen
 - Erloschene TPop mit geplanten Kontrollen
