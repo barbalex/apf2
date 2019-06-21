@@ -133,6 +133,7 @@ const ProjekteAppBar = () => {
   const setViewNormal = useCallback(() => setView('normal'))
   const setViewEkf = useCallback(() => setView('ekf'))
   const toggleUserOpen = useCallback(() => setUserOpen(!userOpen), [userOpen])
+  const onClickEkPlanung = useCallback(() => console.log('TODO'))
 
   return (
     <>
@@ -248,6 +249,20 @@ const ProjekteAppBar = () => {
                   title="Daten filtern"
                 >
                   Filter 2
+                </StyledButton>
+              )}
+              {!isMobile && (
+                <StyledButton
+                  variant={
+                    projekteTabs.includes('ekplanung') ? 'outlined' : 'text'
+                  }
+                  preceded={false}
+                  followed={false}
+                  onClick={onClickEkPlanung}
+                  data-id="ek-planung"
+                  title="EK und EKF planen"
+                >
+                  EK-Planung
                 </StyledButton>
               )}
             </>

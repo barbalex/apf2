@@ -48,6 +48,10 @@ const DatenPage = ({ location }) => {
     setActiveNodeArray(activeNodeArray)
   }, [pathname])
 
+  // TODO:
+  // depend on activeNodeArray
+  // same as when click in tree on AP-Berichte
+
   return (
     <ErrorBoundary>
       <Layout>
