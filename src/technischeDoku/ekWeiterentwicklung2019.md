@@ -120,5 +120,13 @@ Das Formular, um Kontrollen zu planen.
 - TPop, bei denen die ekfrequenz nicht derjenigen entspricht, welche nach der Populationsgrösse zugewiesen werden sollte und nicht als `abweichend` markiert ist
 - TPop mit Abrechnungstyp D (Anpflanzung), deren Anpflanzung mehr als 4 Jahre her ist
 
+#### Navigation
+Wenn ein Projekt geöffnet ist, steht in der Menüzeile rechts vom "Strukturbaum 2" eine neue Schaltfläche zur Verfügung: "EK-Planung".<br/><br/>
+
+Befindet man sich im Formular EK-Planung, gibt es in der Menüzeile oben rechts folgende Befehle:
+- Aktionspläne bearbeiten
+- Dokumentation
+- Mehr
+
 #### Termin
 Sollte möglichst bald nach den Sommerferien bereit sein.
