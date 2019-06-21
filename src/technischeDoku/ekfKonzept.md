@@ -44,6 +44,7 @@ Nachfolgend der Plan für die Umsetzung.<br/><br/>
 - neue Felder auf tpop:
   - `ekfrequenz`
   - `abrechnungstyp`: Auswahl aus der Tabelle `abrechnungstyp_werte`
+  - `abweichend`: Diese Frequenz entspricht nicht derjenigen, welche gemäss Populationsgrösse vergeben worden wäre
   - bestehende zwei kontrollfrequenz-Felder wieder entfernen
 - neue Tabelle: `ekplan` mit Feldern:
   - `tpopkontr_id`
@@ -61,18 +62,32 @@ Nachfolgend der Plan für die Umsetzung.<br/><br/>
 
 #### Neues Formular EK-Planung
 Das Formular, um Kontrollen zu planen.
-- Liste von Teil-Populationen
+- Das Formular besteht aus einer Liste von Teil-Populationen...
+- ...aus einem oder mehreren Aktionsplänen
 - Sortiert nach: AP, Pop-Nr, TPop-Nr
-- Felder aus AP, Pop und Tpop werden angezeigt (nicht bearbeitbar)
+- Ein Symbol, um die Teil-Population in einem neuen Fenster zu öffnen
+- Felder aus AP, Pop und Tpop (nicht bearbeitbar). Namentlich:
+  - Artname
+  - Pop Nr
+  - Pop Name
+  - Pop Status
+  - TPop Nr
+  - TPop Gemeinde
+  - TPop Flurname
+  - TPop Status
+  - TPop Bekannt seit
 - Diese Felder können ein- und ausgeblendet werden
 - Abrechnungstyp und EK-Frequenz können bearbeitet werden
-- Für den Bereich zwischen 1996 und 20 Jahre in die Zukunft werden für jedes Jahr Spalten angezeigt
-- Der Jahres-Spalten-Bereich kann horizontal gescrollt werden 
+- Für den Bereich zwischen 1996 und 20 Jahre in die Zukunft werden für jedes Jahr Spalten generiert
+- Der Jahres-Spalten-Bereich kann horizontal gescrollt werden, wenn der Platz für die Anzeige aller nicht ausreicht
 - Eine Jahres-Spalte zeigt folgende Informationen an:
-  - EK: geplant (bearbeitbar) / durchgeführt
-  - EKF geplant (bearbeitbar) / durchgeführt
-  - Ansiedlungen? Unterscheiden nach Ansaat und Auspflanzung?
-
+  - EK geplant, bearbeitbar
+  - EK (durchgeführt)
+  - EKF geplant, bearbeitbar
+  - EKF (durchgeführt)
+  - Massnahmen des Typs Ansiedlung (unterscheiden nach Anpflanzung/Ansaat?)
+- Der Benutzer kann wählen, welche der obigen Informationen angezeigt werden
+- Fährt man mit der Maus über EK, EKF und Massnahmen, werden deren wichtigsten Angaben angezeigt. Und ein Link, um das Objekt in einem neuen Fenster zu öffnen
 
 #### Import
 - EK-Frequenzen werden einmalig für alle Arten gleich gesetzt
@@ -84,8 +99,10 @@ Das Formular, um Kontrollen zu planen.
 - EKF-Export, um zu vergleichen geplant <> kontrolliert
 
 #### QK: 
-- Erloschene TPop sollten keine Kontrollen geplant haben
-- Bei welchen TPop fehlen EK-Pläne
+- Erloschene TPop mit geplanten Kontrollen (sollte nicht vorkommen)
+- TPop, die gemäss `ekfrequenz` kontrolliert werden sollten, aber ohne EK-Pläne
 - TPop mit Kontrollen im Jahr. Aber mindestens eine der zielrelevanten Einheiten wurde nicht erfasst
+- TPop, bei denen die ekfrequenz nicht derjenigen entspricht, welche nach der Populationsgrösse zugewiesen werden sollte und nicht als `abweichend` markiert ist
+- TPop mit Abrechnungstyp D (Anpflanzung), deren Anpflanzung mehr als 4 Jahre her ist
 
 Termin: Sollte möglichst bald nach den Sommerferien bereit sein.
