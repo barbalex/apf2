@@ -9,9 +9,9 @@ sort: 11
 Erfolgskontrollen sind gleichzeitig wichtig und aufwändig.
 - Ihre Durchführung soll daher sorgfältig geplant werden
 - Artverantwortliche und Topos benötigen eine gute Übersicht über geplante und durchgeführte EK's
-- Es ist sicher zu stellen, dass für jede Art die gewünschten Einheiten gezählt werden
+- Es ist sicher zu stellen, dass für jede Art die Ziel-relevanten Einheiten gezählt werden
 
-Nachfolgend der Plan für die Umsetzung.<br/><br/>
+Das soll mit folgenden Massnahmen umgesetzt werden:<br/><br/>
 
 #### Tabellen-Struktur
 - neue Tabelle `ekzaehleinheit`. Hier wird pro Art bestimmt, welche Einheiten gezählt werden sollen. Umwandlung der bestehenden Tabelle `ekfzaehleinheit`. Mit folgenden Feldern:
@@ -62,8 +62,8 @@ Nachfolgend der Plan für die Umsetzung.<br/><br/>
 
 #### Neues Formular EK-Planung
 Das Formular, um Kontrollen zu planen.
-- Das Formular besteht aus einer Liste von Teil-Populationen...
-- ...aus einem oder mehreren Aktionsplänen
+- Es besteht aus einer Liste von Teil-Populationen...
+- ...aus einem oder mehreren Aktionsplänen (Benutzer wählt)
 - Sortiert nach: AP, Pop-Nr, TPop-Nr
 - Ein Symbol, um die Teil-Population in einem neuen Fenster zu öffnen
 - Felder aus AP, Pop und Tpop (nicht bearbeitbar). Namentlich:
@@ -88,20 +88,27 @@ Das Formular, um Kontrollen zu planen.
   - Massnahmen des Typs Ansiedlung (unterscheiden nach Anpflanzung/Ansaat?)
 - Der Benutzer kann wählen, welche der obigen Informationen angezeigt werden
 - Fährt man mit der Maus über EK, EKF und Massnahmen, werden deren wichtigsten Angaben angezeigt. Und ein Link, um das Objekt in einem neuen Fenster zu öffnen
+- "Schulden" 1: Felder in der Jahres-Spalte, bei denen eine EK/EKF geplant aber nicht durchgeführt wurde und die in der Vergangenheit liegen, werden farblich hervorgehoben
+- "Schulden" 2: Später geplante Ergänzung: Wenn die geplante Kontrolle nicht im nächsten Jahr nachgeholt wurde und das nächste Jahr in der Vergangenheit ligt: besonders auffällig markieren.
+- "Schulden" 3: Später geplante Ergänzung: Benutzer kann wählen, Schulden anzuzeigen oder nicht
 
 #### Import
-- EK-Frequenzen werden einmalig für alle Arten gleich gesetzt
+- EK-Frequenzen werden einmalig und für alle Arten gleich gesetzt
 - EK-Pläne werden einmalig aus Excel-Liste von Topos importiert
 - Danach zuhanden Topos Liste generieren: bei welchen TPop fehlen EK-Pläne
 
 #### Exporte
-- Für EK und EKF vorsehen. Später spezifizieren.
-- EKF-Export, um zu vergleichen geplant <> kontrolliert
+- TPop zur Dokumentation der Planung zu bestimmten Zeitpunkten. Felder:
+  - Aus AP, Pop und TPop wie im Formular EK-Planung
+  - EK-Frequenz
+  - Abrechnungstyp
+  - geplanten EK
+  - geplanten EKF
 
-#### QK: 
-- Erloschene TPop mit geplanten Kontrollen (sollte nicht vorkommen)
-- TPop, die gemäss `ekfrequenz` kontrolliert werden sollten, aber ohne EK-Pläne
-- TPop mit Kontrollen im Jahr. Aber mindestens eine der zielrelevanten Einheiten wurde nicht erfasst
+#### Qualitätskontrollen: 
+- Erloschene TPop mit geplanten Kontrollen
+- TPop, die gemäss `ekfrequenz` kontrolliert werden sollten, ohne EK-Pläne
+- TPop mit Kontrollen im Bericht-Jahr. Mindestens eine der zielrelevanten Einheiten wurde nicht erfasst
 - TPop, bei denen die ekfrequenz nicht derjenigen entspricht, welche nach der Populationsgrösse zugewiesen werden sollte und nicht als `abweichend` markiert ist
 - TPop mit Abrechnungstyp D (Anpflanzung), deren Anpflanzung mehr als 4 Jahre her ist
 
