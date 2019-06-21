@@ -105,11 +105,12 @@ Das Formular, um Kontrollen zu planen.
   - geplanten EK
   - geplanten EKF
 
-#### Qualitätskontrollen: 
+#### Qualitätskontrollen
 - Erloschene TPop mit geplanten Kontrollen
 - TPop, die gemäss `ekfrequenz` kontrolliert werden sollten, ohne EK-Pläne
 - TPop mit Kontrollen im Bericht-Jahr. Mindestens eine der zielrelevanten Einheiten wurde nicht erfasst
 - TPop, bei denen die ekfrequenz nicht derjenigen entspricht, welche nach der Populationsgrösse zugewiesen werden sollte und nicht als `abweichend` markiert ist
 - TPop mit Abrechnungstyp D (Anpflanzung), deren Anpflanzung mehr als 4 Jahre her ist
 
-Termin: Sollte möglichst bald nach den Sommerferien bereit sein.
+#### Termin
+Sollte möglichst bald nach den Sommerferien bereit sein.
