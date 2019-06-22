@@ -42,7 +42,7 @@ export default ({ fileName, data }) => {
                     </styleUrl>
                     <Point>
                       <coordinates>
-                        ${wgs84Lat},${wgs84Long},0
+                        ${wgs84Long},${wgs84Lat},0
                       </coordinates>
                     </Point>
                   </Placemark>
