@@ -113,10 +113,10 @@ const EkPlanAppBar = () => {
     [projekteTabs],
   )
   const onClickExporte = useCallback(() => onClickButton('exporte'))
-  const onClickEkPlanung = useCallback(() => {
+  const onClickAp = useCallback(() => {
     // eslint-disable-next-line no-unused-vars
     const [projectTitle, projectId, ...rest] = tree.activeNodeArray
-    tree.setActiveNodeArray([projectTitle, projectId, 'EK-Planung'])
+    tree.setActiveNodeArray([projectTitle, projectId])
   })
 
   return (
@@ -128,14 +128,14 @@ const EkPlanAppBar = () => {
       )}
       <MenuDiv>
         <StyledButton
-          variant={isEkPlan ? 'outlined' : 'text'}
-          preceded={false}
-          followed={false}
-          onClick={onClickEkPlanung}
+          variant="text"
+          preceded="false"
+          followed="false"
+          onClick={onClickAp}
           data-id="ek-planung"
           title="EK und EKF planen"
         >
-          EK-Plan
+          Aktionspläne bearbeiten
         </StyledButton>
         <DokuButton
           variant="text"

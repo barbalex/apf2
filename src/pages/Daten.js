@@ -52,8 +52,6 @@ const DatenPage = ({ location }) => {
   // TODO:
   // depend on activeNodeArray
   // same as when click in tree on AP-Berichte
-
-  console.log('Daten, activeForm:', activeForm)
   const form =
     activeForm.form === 'ekplan'
       ? 'ekplan'
