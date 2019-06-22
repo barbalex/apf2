@@ -73,6 +73,7 @@ const ProjekteAppBar = () => {
     setUrlQuery,
     cloneTree2From1,
     treeActiveNodes,
+    tree,
   } = store
 
   /**
@@ -133,7 +134,10 @@ const ProjekteAppBar = () => {
   const setViewNormal = useCallback(() => setView('normal'))
   const setViewEkf = useCallback(() => setView('ekf'))
   const toggleUserOpen = useCallback(() => setUserOpen(!userOpen), [userOpen])
-  const onClickEkPlanung = useCallback(() => console.log('TODO'))
+  const onClickEkPlanung = useCallback(() => {
+    console.log('activeNodeArray', tree.activeNodeArray.slice())
+    tree.setActiveNodeArray([...tree.activeNodeArray.slice(1), 'EK-Planung'])
+  })
 
   return (
     <>

@@ -33,7 +33,7 @@ const DatenPage = ({ location }) => {
   const { idb } = useContext(idbContext)
   const { view, showDeletions, user } = store
   const { pathname } = location
-  const { setActiveNodeArray } = store.tree
+  const { setActiveNodeArray, activeForm } = store.tree
   useEffect(() => {
     // TODO:
     // is initiateDataFromUrl and setActiveNodeArray double?
@@ -51,6 +51,8 @@ const DatenPage = ({ location }) => {
   // TODO:
   // depend on activeNodeArray
   // same as when click in tree on AP-Berichte
+
+  console.log('Daten, activeForm:', activeForm)
 
   return (
     <ErrorBoundary>

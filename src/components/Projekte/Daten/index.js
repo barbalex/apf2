@@ -1,7 +1,6 @@
 import React, { useContext, useMemo } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import get from 'lodash/get'
 import loadable from '@loadable/component'
 
 /**
@@ -9,7 +8,6 @@ import loadable from '@loadable/component'
  */
 
 //import Fallback from '../../shared/Fallback'
-import getTableNameFromActiveNode from '../../../modules/getTableNameFromActiveNode'
 import storeContext from '../../../storeContext'
 
 const Container = styled.div`
@@ -25,51 +23,19 @@ const Container = styled.div`
 
 const Daten = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { activeNodeArray, activeNode } = store[treeName]
-  const activeTable = get(store, `nodeFilter.${treeName}.activeTable`, '')
+  const { activeForm } = store[treeName]
 
-  const key = useMemo(() => {
-    if (activeNodeArray.length > 2 && activeNodeArray[2] === 'Exporte') {
-      return 'exporte'
-    } else if (
-      activeNodeArray.length > 4 &&
-      activeNodeArray[4] === 'Qualitaetskontrollen'
-    ) {
-      return 'qk'
-    } else if (
-      activeNodeArray.length > 5 &&
-      activeNodeArray[4] === 'nicht-zuzuordnende-Beobachtungen'
-    ) {
-      return 'beobNichtZuzuordnen'
-    } else if (
-      activeNodeArray.length > 5 &&
-      activeNodeArray[4] === 'nicht-beurteilte-Beobachtungen'
-    ) {
-      return 'beobNichtBeurteilt'
-    } else if (
-      activeNodeArray.length > 9 &&
-      activeNodeArray[6] === 'Teil-Populationen' &&
-      activeNodeArray[8] === 'Beobachtungen'
-    ) {
-      return 'beobZugeordnet'
-    }
-    return getTableNameFromActiveNode(activeNode)
-  }, [activeNodeArray, activeNode])
-
-  const fOKey = activeTable || key
   const form = useMemo(() => {
     let form
-    switch (fOKey) {
+    switch (activeForm.form) {
       case 'adresse': {
         const Adresse = loadable(() => import('./Adresse'))
         form = <Adresse treeName={treeName} />
         break
       }
-      case 'tpopApberrelevantGrundWerte': {
+      case 'werte': {
         const Werte = loadable(() => import('./Werte'))
-        form = (
-          <Werte treeName={treeName} table="tpop_apberrelevant_grund_werte" />
-        )
+        form = <Werte treeName={treeName} table={activeForm.type} />
         break
       }
       case 'ap': {
@@ -97,19 +63,9 @@ const Daten = ({ treeName }) => {
         form = <Assozart treeName={treeName} />
         break
       }
-      case 'beobNichtBeurteilt': {
+      case 'beobzuordnung': {
         const Beobzuordnung = loadable(() => import('./Beobzuordnung'))
-        form = <Beobzuordnung treeName={treeName} type="nichtBeurteilt" />
-        break
-      }
-      case 'beobNichtZuzuordnen': {
-        const Beobzuordnung = loadable(() => import('./Beobzuordnung'))
-        form = <Beobzuordnung treeName={treeName} type="nichtZuzuordnen" />
-        break
-      }
-      case 'beobZugeordnet': {
-        const Beobzuordnung = loadable(() => import('./Beobzuordnung'))
-        form = <Beobzuordnung treeName={treeName} type="zugeordnet" />
+        form = <Beobzuordnung treeName={treeName} type={activeForm.type} />
         break
       }
       case 'ber': {
@@ -192,13 +148,6 @@ const Daten = ({ treeName }) => {
         form = <Tpopkontrzaehl treeName={treeName} />
         break
       }
-      case 'tpopkontrzaehlEinheitWerte': {
-        const Werte = loadable(() => import('./Werte'))
-        form = (
-          <Werte treeName={treeName} table="tpopkontrzaehl_einheit_werte" />
-        )
-        break
-      }
       case 'tpopmassn': {
         const Tpopmassn = loadable(() => import('./Tpopmassn'))
         form = <Tpopmassn treeName={treeName} />
@@ -228,9 +177,9 @@ const Daten = ({ treeName }) => {
         form = null
     }
     return form
-  }, [fOKey])
+  }, [activeForm])
 
-  //console.log('Daten', { form, fOKey, activeTable, key })
+  //console.log('Daten', { form, fOKey, activeFilterTable, key })
 
   if (!form) return null
 
