@@ -4,6 +4,12 @@
 // see: https://github.com/guyonroche/exceljs/issues/313
 import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
 
+/**
+ * Does exceljs not work properly in v1.12.2?
+ * in dev all o.k., in prod it silently fails
+ * https://github.com/exceljs/exceljs/issues/871
+ */
+
 import getDataArrayFromExportObjects from './getDataArrayFromExportObjects'
 
 export default async ({ data, store }) => {
@@ -50,7 +56,9 @@ export default async ({ data, store }) => {
   }
   let buffer
   try {
+    console.log('getXlsxBuffer 1')
     buffer = await workbook.xlsx.writeBuffer()
+    console.log('getXlsxBuffer 2')
   } catch (error) {
     return store.enqueNotification({
       message: error.message,
