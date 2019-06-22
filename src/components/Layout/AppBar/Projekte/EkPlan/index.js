@@ -76,8 +76,6 @@ const EkPlanAppBar = () => {
   const tokenDecoded = token ? jwtDecode(token) : null
   const role = tokenDecoded ? tokenDecoded.role : null
 
-  const isEkPlan = tree.activeForm.form === 'ekplan'
-
   const onClickButton = useCallback(
     name => {
       if (isMobile) {
