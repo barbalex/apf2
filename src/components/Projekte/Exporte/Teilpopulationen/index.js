@@ -418,14 +418,16 @@ const Teilpopulationen = ({ treeName }) => {
               <Li>letzte Zählung</Li>
               <Li>letzter Teilpopulationsbericht</Li>
             </ul>
-            <EwmDiv>{'= "Eier legende Wollmilchsau"'}</EwmDiv>
+            <EwmDiv>
+              {'= "Eier legende Wollmilchsau". Vorsicht: Dauert > 2 Minuten!'}
+            </EwmDiv>
           </DownloadCardButton>
           <AutocompleteContainer>
             <SelectLoadingOptions
               row={{}}
               field="ewm"
               valueLabelPath="aeEigenschaftenByArtId.artname"
-              label={`"Eier legende Wollmilchsau": Art wählen`}
+              label={`"Eier legende Wollmilchsau" für einzelne Arten: Art wählen`}
               labelSize={14}
               saveToDb={async e => {
                 const aeId = e.target.value
