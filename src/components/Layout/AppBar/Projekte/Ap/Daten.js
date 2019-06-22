@@ -4,9 +4,9 @@ import remove from 'lodash/remove'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
-import isMobilePhone from '../../../../modules/isMobilePhone'
-import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
-import storeContext from '../../../../storeContext'
+import isMobilePhone from '../../../../../modules/isMobilePhone'
+import setUrlQueryValue from '../../../../../modules/setUrlQueryValue'
+import storeContext from '../../../../../storeContext'
 
 const StyledButton = styled(Button)`
   color: white !important;

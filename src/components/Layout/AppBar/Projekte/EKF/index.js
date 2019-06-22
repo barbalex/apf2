@@ -10,7 +10,7 @@ import isMobilePhone from '../../../../../modules/isMobilePhone'
 import setUrlQueryValue from '../../../../../modules/setUrlQueryValue'
 import More from '../More'
 import EkfYear from '../EkfYear'
-import User from '../User'
+import User from './User'
 import storeContext from '../../../../../storeContext'
 
 const SiteTitle = styled(Button)`

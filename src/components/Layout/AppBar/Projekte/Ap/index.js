@@ -9,7 +9,7 @@ import { Link } from 'gatsby'
 import isMobilePhone from '../../../../../modules/isMobilePhone'
 import setUrlQueryValue from '../../../../../modules/setUrlQueryValue'
 import More from '../More'
-import Daten from '../Daten'
+import Daten from './Daten'
 import storeContext from '../../../../../storeContext'
 
 const SiteTitle = styled(Button)`
