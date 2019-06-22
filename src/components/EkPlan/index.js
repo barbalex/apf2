@@ -1,7 +1,7 @@
 import React from 'react'
 
 const EkPlan = () => {
-  return <div>TODO</div>
+  return <div>Hier ist was im Aufbau</div>
 }
 
 export default EkPlan
