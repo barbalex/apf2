@@ -136,9 +136,10 @@ const Teilpopulationen = ({ treeName }) => {
     !!inputValue
       ? {
           artname: { includesInsensitive: inputValue },
-          apByArtIdExists: true,
+          // needed to turn this off because the postgraphile addon caused cors issues in production
+          /*apByArtIdExists: true,*/
         }
-      : { artname: { isNull: false }, apByArtIdExists: true },
+      : { artname: { isNull: false } /*, apByArtIdExists: true*/ },
   )
 
   return (
@@ -374,6 +375,7 @@ const Teilpopulationen = ({ treeName }) => {
                     './allVTpopErsteUndLetzteKontrolleUndLetzterTpopbers'
                   ).then(m => m.default),
                 })
+                console.log('Teilpopulationen Export, onClickEwm 1', { data })
                 exportModule({
                   data: get(
                     data,
@@ -385,6 +387,7 @@ const Teilpopulationen = ({ treeName }) => {
                   store,
                 })
               } catch (error) {
+                console.log('Teilpopulationen Export, onClickEwm', { error })
                 enqueNotification({
                   message: error.message,
                   options: { variant: 'error' },
@@ -393,7 +396,7 @@ const Teilpopulationen = ({ treeName }) => {
               removeNotification(notif)
               closeSnackbar(notif)
             }}
-            disabled={isRemoteHost}
+            disabled={false /*isRemoteHost*/}
             title={
               isRemoteHost
                 ? 'nur aktiv, wenn apflora lokal installiert wird'
