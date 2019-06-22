@@ -1,8 +1,9 @@
 import getTableNameFromActiveNode from './getTableNameFromActiveNode'
 
 export default ({ url, activeNode, activeFilterTable }) => {
+  console.log('activeFormFromActiveNodeArray', { url: url.slice() })
   let key
-  if (url.length === 2 && url[2] === 'EK-Planung') {
+  if (url.length === 3 && url[0] === 'Projekte' && url[2] === 'EK-Planung') {
     key = 'ekplan'
   } else if (url.length > 2 && url[2] === 'Exporte') {
     key = 'exporte'
@@ -18,10 +19,16 @@ export default ({ url, activeNode, activeFilterTable }) => {
     url[8] === 'Beobachtungen'
   ) {
     key = 'beobZugeordnet'
+  } else {
+    key = getTableNameFromActiveNode(activeNode)
   }
-  key = getTableNameFromActiveNode(activeNode)
 
   const fOKey = activeFilterTable || key
+  console.log('activeFormFromActiveNodeArray', {
+    fOKey,
+    key,
+    activeFilterTable,
+  })
   switch (fOKey) {
     case 'adresse':
     case 'ap':

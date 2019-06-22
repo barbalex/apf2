@@ -14,6 +14,7 @@ import UpdateAvailable from '../components/UpdateAvailable'
 import Messages from '../components/Messages'
 import Ekf from '../components/Ekf'
 import Deletions from '../components/Deletions'
+import EkPlan from '../components/EkPlan'
 import initiateDataFromUrl from '../modules/initiateDataFromUrl'
 
 const Container = styled.div`
@@ -53,6 +54,12 @@ const DatenPage = ({ location }) => {
   // same as when click in tree on AP-Berichte
 
   console.log('Daten, activeForm:', activeForm)
+  const form =
+    activeForm.form === 'ekplan'
+      ? 'ekplan'
+      : view === 'ekf'
+      ? 'ekf'
+      : 'projekte'
 
   return (
     <ErrorBoundary>
@@ -60,8 +67,9 @@ const DatenPage = ({ location }) => {
         <Container>
           {!!user.token && (
             <>
-              {view === 'ekf' && <Ekf />}
-              {view === 'normal' && <Projekte />}
+              {form === 'ekf' && <Ekf />}
+              {form === 'projekte' && <Projekte />}
+              {form === 'ekplan' && <EkPlan />}
               <UpdateAvailable />
               <Messages />
               {showDeletions && <Deletions />}

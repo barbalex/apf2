@@ -38,11 +38,13 @@ const MyAppBarDaten = ({ treeNr = '' }) => {
     urlQuery,
     setUrlQuery,
     cloneTree2From1,
+    tree,
   } = useContext(storeContext)
 
   const projekteTabs = urlQuery.projekteTabs.slice().filter(el => !!el)
   const isDaten = projekteTabs.includes(`daten${treeNr}`)
   const isTree = projekteTabs.includes(`tree${treeNr}`)
+  const isEkPlan = tree.activeForm.form === 'ekplan'
 
   const onClickButton = useCallback(() => {
     const copyOfProjekteTabs = [...projekteTabs]
@@ -80,7 +82,7 @@ const MyAppBarDaten = ({ treeNr = '' }) => {
 
   return (
     <StyledButton
-      variant={isDaten ? 'outlined' : 'text'}
+      variant={!isEkPlan && isDaten ? 'outlined' : 'text'}
       preceded={isTree.toString()}
       followed={followed.toString()}
       onClick={onClickButton}
