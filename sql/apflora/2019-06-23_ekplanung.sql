@@ -120,7 +120,7 @@ insert into apflora.ekfrequenz (ap_id,ek,anwendungsfall,kuerzel,name,anzahl_min,
 ('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population angepflanzt','NC','seit > 6 J. etabliert',null,null,'C: jedes 8. Jahr',7),
 ('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population angepflanzt','ND','angesiedelt',0,0,'keine Kontrolle mehr',8),
 ('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population angesät','A',null,0,0,'1. Kontrolle nach 4-6 Jahren. Falls Etablierung: NB, NC',9),
-('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Sonderfall','A',null,0,0,'Keine Kontrollen',10);
+('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Spezialfall','SA',null,0,0,'Keine Kontrollen',10);
 -- TODO: build ui for ekfrequenz
 
 DROP TABLE IF EXISTS apflora.ek_abrechnungstyp_werte;
