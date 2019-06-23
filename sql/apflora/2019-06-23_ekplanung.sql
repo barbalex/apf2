@@ -142,6 +142,7 @@ COMMENT ON COLUMN apflora.tpop.ek_abrechnungstyp IS 'Fremdschlüssel aus Tabelle
 alter table apflora.tpop drop column kontrollfrequenz cascade;
 alter table apflora.tpop drop column kontrollfrequenz_freiwillige cascade;
 DROP TABLE IF EXISTS apflora.tpopkontr_frequenz_werte cascade;
+-- re-run all views
 
 create type ek_type as enum ('ek', 'ekf');
 

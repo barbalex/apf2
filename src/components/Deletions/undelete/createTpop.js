@@ -31,7 +31,9 @@ export default gql`
     $nutzungszone: String
     $bewirtschafter: String
     $bewirtschaftung: String
-    $kontrollfrequenz: Int
+    $ekfrequenz: UUID
+    $ekfrequenzAbweichend: Boolean
+    $ekAbrechnungstyp: UUID
     $bemerkungen: String
     $statusUnklar: Boolean
   ) {
@@ -61,7 +63,9 @@ export default gql`
           nutzungszone: $nutzungszone
           bewirtschafter: $bewirtschafter
           bewirtschaftung: $bewirtschaftung
-          kontrollfrequenz: $kontrollfrequenz
+          ekfrequenz: $ekfrequenz
+          ekfrequenzAbweichend: $ekfrequenzAbweichend
+          ekAbrechnungstyp: $ekAbrechnungstyp
           bemerkungen: $bemerkungen
           statusUnklar: $statusUnklar
         }

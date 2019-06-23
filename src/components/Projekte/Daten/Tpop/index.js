@@ -180,12 +180,13 @@ const Tpop = ({ treeName, showFilter = false }) => {
                     field === 'bewirtschafter' ? value : row.bewirtschafter,
                   bewirtschaftung:
                     field === 'bewirtschaftung' ? value : row.bewirtschaftung,
-                  kontrollfrequenz:
-                    field === 'kontrollfrequenz' ? value : row.kontrollfrequenz,
-                  kontrollfrequenzFreiwillige:
-                    field === 'kontrollfrequenzFreiwillige'
+                  ekfrequenz: field === 'ekfrequenz' ? value : row.ekfrequenz,
+                  ekfrequenzAbweichend:
+                    field === 'ekfrequenzAbweichend'
                       ? value
-                      : row.kontrollfrequenzFreiwillige,
+                      : row.ekfrequenzAbweichend,
+                  ekAbrechnungstyp:
+                    field === 'ekAbrechnungstyp' ? value : row.ekAbrechnungstyp,
                   bemerkungen:
                     field === 'bemerkungen' ? value : row.bemerkungen,
                   statusUnklar:

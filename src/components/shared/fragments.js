@@ -160,6 +160,45 @@ export const currentIssue = gql`
   }
 `
 
+export const ekAbrechnungstypWerte = gql`
+  fragment EkAbrechnungstypWerteFields on EkAbrechnungstypWerte {
+    id
+    code
+    text
+    sort
+    changedBy
+  }
+`
+
+export const ekfrequenz = gql`
+  fragment EkfrequenzFields on Ekfrequenz {
+    id
+    apId
+    ek
+    ekf
+    anwendungsfall
+    kuerzel
+    name
+    periodizitaet
+    kontrolljahre
+    anzahlMin
+    anzahlMax
+    bemerkungen
+    sort
+    changedBy
+  }
+`
+
+export const ekplan = gql`
+  fragment EkplanFields on Ekplan {
+    id
+    tpopkontrId
+    jahr
+    type
+    changedBy
+  }
+`
+
 export const ekzaehleinheit = gql`
   fragment EkzaehleinheitFields on Ekzaehleinheit {
     id
@@ -301,8 +340,9 @@ export const tpop = gql`
     nutzungszone
     bewirtschafter
     bewirtschaftung
-    kontrollfrequenz
-    kontrollfrequenzFreiwillige
+    ekfrequenz
+    ekfrequenzAbweichend
+    ekAbrechnungstyp
     bemerkungen
     statusUnklar
     changedBy
