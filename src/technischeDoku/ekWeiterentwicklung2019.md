@@ -43,8 +43,8 @@ Das soll mit folgenden Massnahmen umgesetzt werden:<br/><br/>
 - neue Tabelle `abrechnungstyp_werte` mit den für Wertelisten üblichen Feldern
 - neue Felder auf tpop:
   - `ekfrequenz`
-  - `abrechnungstyp`: Auswahl aus der Tabelle `abrechnungstyp_werte`
-  - `abweichend`: Diese Frequenz entspricht nicht derjenigen, welche gemäss Populationsgrösse vergeben worden wäre
+  - `ekfrequenz_abweichend`: Diese Frequenz entspricht nicht derjenigen, welche gemäss Populationsgrösse vergeben worden wäre
+  - `ek_abrechnungstyp`: Auswahl aus der Tabelle `abrechnungstyp_werte`
   - bestehende zwei kontrollfrequenz-Felder wieder entfernen
 - neue Felder auf tpopkontr:
   - `apber_nicht_relevant`: Wenn "ja" soll diese Kontrolle für den Jahresbericht nicht berücksichtigt werden (ist umgesetzt)

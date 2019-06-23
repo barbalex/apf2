@@ -550,28 +550,22 @@ CREATE TABLE apflora.tpop (
   nutzungszone text DEFAULT NULL,
   bewirtschafter text DEFAULT NULL,
   bewirtschaftung text DEFAULT NULL,
-  kontrollfrequenz integer DEFAULT null REFERENCES apflora.tpopkontr_frequenz_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  kontrollfrequenz_freiwillige integer DEFAULT null REFERENCES apflora.tpopkontr_frequenz_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  ekfrequenz uuid DEFAULT null REFERENCES apflora.ekfrequenz (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  ekfrequenz_abweichend boolean DEFAULT false,
+  ek_abrechnungstyp uuid DEFAULT null REFERENCES apflora.ek_abrechnungstyp (id) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null
 );
--- 2018-09-25, remove later:
-ALTER TABLE apflora.tpop ADD COLUMN kontrollfrequenz integer DEFAULT null REFERENCES apflora.tpopkontr_frequenz_werte (code) ON DELETE SET NULL ON UPDATE CASCADE;
-CREATE INDEX ON apflora.tpop USING btree (kontrollfrequenz);
-COMMENT ON COLUMN apflora.tpop.kontrollfrequenz IS 'Wert aus Tabelle tpopkontr_frequenz_werte. Bestimmt, wie häufig kontrolliert werden soll';
-ALTER TABLE apflora.tpop ADD COLUMN kontrollfrequenz_freiwillige integer DEFAULT null REFERENCES apflora.tpopkontr_frequenz_werte (code) ON DELETE SET NULL ON UPDATE CASCADE;
-CREATE INDEX ON apflora.tpop USING btree (kontrollfrequenz_freiwillige);
-COMMENT ON COLUMN apflora.tpop.kontrollfrequenz_freiwillige IS 'Wert aus Tabelle tpopkontr_frequenz_werte. Bestimmt, wie häufig durch Freiwillige kontrolliert werden soll';
---
 CREATE INDEX ON apflora.tpop USING btree (id);
 CREATE INDEX ON apflora.tpop USING btree (pop_id);
 CREATE INDEX ON apflora.tpop USING btree (status);
 CREATE INDEX ON apflora.tpop USING btree (apber_relevant);
 CREATE INDEX ON apflora.tpop USING btree (nr);
 CREATE INDEX ON apflora.tpop USING btree (flurname);
-CREATE INDEX ON apflora.tpop USING btree (kontrollfrequenz);
-CREATE INDEX ON apflora.tpop USING btree (kontrollfrequenz_freiwillige);
+CREATE INDEX ON apflora.tpop USING btree (ekfrequenz);
+CREATE INDEX ON apflora.tpop USING btree (ekfrequenz_abweichend);
+CREATE INDEX ON apflora.tpop USING btree (ek_abrechnungstyp);
 COMMENT ON COLUMN apflora.tpop.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpop.pop_id IS 'Zugehörige Population. Fremdschlüssel aus der Tabelle "pop"';
 COMMENT ON COLUMN apflora.tpop.nr IS 'Nummer der Teilpopulation';
@@ -595,10 +589,11 @@ COMMENT ON COLUMN apflora.tpop.nutzungszone IS 'Nutzungszone';
 COMMENT ON COLUMN apflora.tpop.bewirtschafter IS 'Wer bewirtschaftet die Fläche?';
 COMMENT ON COLUMN apflora.tpop.bewirtschaftung IS 'Wie wird die Fläche bewirtschaftet?';
 COMMENT ON COLUMN apflora.tpop.bemerkungen IS 'Bemerkungen zur Teilpopulation';
+COMMENT ON COLUMN apflora.tpop.ekfrequenz IS 'Wert aus Tabelle ekfrequenz. Bestimmt, wie häufig kontrolliert werden soll';
+COMMENT ON COLUMN apflora.tpop.ekfrequenz_abweichend IS 'Diese Frequenz entspricht nicht derjenigen, welche gemäss Populationsgrösse vergeben worden wäre';
+COMMENT ON COLUMN apflora.tpop.ek_abrechnungstyp IS 'Fremdschlüssel aus Tabelle ek_abrechnungstyp_werte. Bestimmt, wie Kontrollen abgerechnet werden sollen';
 COMMENT ON COLUMN apflora.tpop.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpop.changed IS 'Von wem wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.tpop.kontrollfrequenz IS 'Wert aus Tabelle tpopkontr_frequenz_werte. Bestimmt, wie häufig kontrolliert werden soll';
-COMMENT ON COLUMN apflora.tpop.kontrollfrequenz_freiwillige IS 'Wert aus Tabelle tpopkontr_frequenz_werte. Bestimmt, wie häufig durch Freiwillige kontrolliert werden soll';
 
 DROP TABLE IF EXISTS apflora.tpop_apberrelevant_werte;
 
@@ -1278,29 +1273,6 @@ CREATE POLICY writer ON apflora.ekfzaehleinheit
     current_user = 'apflora_manager'
     OR current_user = 'apflora_artverantwortlich'
   );
-
-DROP TABLE IF EXISTS apflora.tpopkontr_frequenz_werte;
-CREATE TABLE apflora.tpopkontr_frequenz_werte (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  code serial,
-  text varchar(50) DEFAULT NULL,
-  sort smallint DEFAULT NULL,
-  changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT NULL
-);
-create sequence apflora.tpopkontr_frequenz_werte_code_seq owned by apflora.tpopkontr_frequenz_werte.code;
-alter table apflora.tpopkontr_frequenz_werte alter column code set default nextval('apflora.tpopkontr_frequenz_werte_code_seq');
-select setval('apflora.tpopkontr_frequenz_werte_code_seq', (select max(code)+1 from apflora.tpopkontr_frequenz_werte), false);
-alter table apflora.tpopkontr_frequenz_werte alter column changed_by drop not null, alter column changed_by set default null;
-
-CREATE INDEX ON apflora.tpopkontr_frequenz_werte USING btree (id);
-CREATE INDEX ON apflora.tpopkontr_frequenz_werte USING btree (code);
-CREATE INDEX ON apflora.tpopkontr_frequenz_werte USING btree (sort);
-COMMENT ON COLUMN apflora.tpopkontr_frequenz_werte.id IS 'Primärschlüssel';
-COMMENT ON COLUMN apflora.tpopkontr_frequenz_werte.text IS 'Beschreibung der Kontroll-Frequenz';
-COMMENT ON COLUMN apflora.tpopkontr_frequenz_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.tpopkontr_frequenz_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-insert into apflora.tpopkontr_frequenz_werte (code, text, sort, changed_by) values (0, 'nie', 1, 'alex'), (1, 'jährlich', 2, 'alex'), (2, 'alle 2 Jahre', 3, 'alex'), (3, 'alle 3 Jahre', 4, 'alex');
 
 drop table if exists apflora.evab_personen;
 create table apflora.evab_personen (
