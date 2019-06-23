@@ -80,3 +80,26 @@ CREATE POLICY writer ON apflora.ekfrequenz
   WITH CHECK (
     current_user = 'apflora_manager'
   );
+
+DROP TABLE IF EXISTS apflora.abrechnungstyp_werte;
+CREATE TABLE apflora.abrechnungstyp_werte (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  code serial,
+  text varchar(50) DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  ansiedlung smallint NOT NULL,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT NULL
+);
+create sequence apflora.abrechnungstyp_werte_code_seq owned by apflora.abrechnungstyp_werte.code;
+alter table apflora.abrechnungstyp_werte alter column code set default nextval('apflora.abrechnungstyp_werte_code_seq');
+select setval('apflora.abrechnungstyp_werte_code_seq', (select max(code)+1 from apflora.abrechnungstyp_werte), false);
+alter table apflora.abrechnungstyp_werte alter column changed_by drop not null, alter column changed_by set default null;
+
+CREATE INDEX ON apflora.abrechnungstyp_werte USING btree (id);
+CREATE INDEX ON apflora.abrechnungstyp_werte USING btree (code);
+CREATE INDEX ON apflora.abrechnungstyp_werte USING btree (sort);
+COMMENT ON COLUMN apflora.abrechnungstyp_werte.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.abrechnungstyp_werte.ansiedlung IS 'Handelt es sich um eine Ansiedlung?';
+COMMENT ON COLUMN apflora.abrechnungstyp_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.abrechnungstyp_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
