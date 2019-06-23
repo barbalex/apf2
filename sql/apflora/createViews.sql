@@ -3950,7 +3950,7 @@ ORDER BY
 
 DROP VIEW IF EXISTS apflora.v_q_tpop_bekanntseit_juenger_als_aelteste_beob CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_tpop_bekanntseit_juenger_als_aelteste_beob AS
-SELECT
+SELECT distinct
   apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   apflora.pop.id as pop_id,
@@ -3965,6 +3965,8 @@ FROM
       apflora.pop
       INNER JOIN
         apflora.tpop
+          inner join apflora.beob
+          on apflora.beob.tpop_id = apflora.tpop.id
         ON apflora.tpop.pop_id = apflora.pop.id
       ON apflora.pop.ap_id = apflora.ap.id
     ON apflora.projekt.id = apflora.ap.proj_id
@@ -3977,6 +3979,9 @@ WHERE
     WHERE tpop_id = apflora.tpop.id
     GROUP BY tpop_id
   )
+  -- Baumann-Manuskript enthält viele Beobachtungen ohne Datum
+  -- Müssen ausgeschlossen werden
+  and apflora.beob.datum <> '0001-01-01 BC'
 ORDER BY
   apflora.projekt.id,
   apflora.ap.id,
