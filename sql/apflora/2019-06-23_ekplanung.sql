@@ -31,9 +31,36 @@ CREATE POLICY writer ON apflora.ekzaehleinheit
 -- TODO:
 -- move data from ekfzaehleinheit to ekzaehleinheit
 insert into apflora.ekzaehleinheit (id, ap_id, zaehleinheit_id, bemerkungen, changed, changed_by)
-select id, ap_id, zaehleinheit_id, bemerkungen, changed, changed_by from ekfzaehleinheit;
+select id, ap_id, zaehleinheit_id, bemerkungen, changed, changed_by from apflora.ekfzaehleinheit;
+
+drop function if exists apflora.ekzaehleinheit_label(ekzaehleinheit apflora.ekzaehleinheit);
+create or replace function apflora.ekzaehleinheit_label(ekzaehleinheit apflora.ekzaehleinheit) returns text as $$
+  select coalesce((select text from apflora.tpopkontrzaehl_einheit_werte where apflora.tpopkontrzaehl_einheit_werte.id = ekzaehleinheit.zaehleinheit_id), '(keine zähleinheit gewählt)')
+$$ language sql stable;
+comment on function apflora.ekzaehleinheit_label(apflora.ekzaehleinheit) is e'@sortable';
+
+DROP TRIGGER IF EXISTS ekzaehleinheit_max_3_per_ap ON apflora.ekzaehleinheit;
+DROP FUNCTION IF EXISTS apflora.ekzaehleinheit_max_3_per_ap();
+CREATE FUNCTION apflora.ekzaehleinheit_max_3_per_ap() RETURNS trigger AS $ekzaehleinheit_max_3_per_ap$
+  DECLARE
+    count integer;
+  BEGIN
+    -- check if 3 ekzaehleinheit already exists for this ap
+    count := (SELECT count(*) FROM apflora.ekzaehleinheit WHERE ap_id = NEW.ap_id);
+    IF count > 2 THEN
+      RAISE EXCEPTION  'Pro Aktionsplan dürfen maximal drei EK-Zähleinheiten erfasst werden';
+    END IF;
+    RETURN NEW;
+  END;
+$ekzaehleinheit_max_3_per_ap$ LANGUAGE plpgsql;
+CREATE TRIGGER ekzaehleinheit_max_3_per_ap BEFORE INSERT ON apflora.ekzaehleinheit
+  FOR EACH ROW EXECUTE PROCEDURE apflora.ekzaehleinheit_max_3_per_ap();
+
 -- change ui from ekfzaehleinheit to ekzaehleinheit
--- drop table if exists apflora.ekfzaehleinheit;
+drop table if exists apflora.ekfzaehleinheit;
+drop function if exists apflora.ekfzaehleinheit_label(ekfzaehleinheit apflora.ekfzaehleinheit);
+DROP TRIGGER IF EXISTS ekfzaehleinheit_max_3_per_ap ON apflora.ekfzaehleinheit;
+DROP FUNCTION IF EXISTS apflora.ekfzaehleinheit_max_3_per_ap();
 
 drop table if exists apflora.ekfrequenz;
 create table apflora.ekfrequenz(

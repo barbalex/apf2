@@ -170,20 +170,20 @@ CREATE TRIGGER ap_update_add_apart AFTER UPDATE ON apflora.ap
 
 
 
--- ensure max 3 ekfzaehleinheit per ap
-DROP TRIGGER IF EXISTS ekfzaehleinheit_max_3_per_ap ON apflora.ekfzaehleinheit;
-DROP FUNCTION IF EXISTS apflora.ekfzaehleinheit_max_3_per_ap();
-CREATE FUNCTION apflora.ekfzaehleinheit_max_3_per_ap() RETURNS trigger AS $ekfzaehleinheit_max_3_per_ap$
+-- ensure max 3 ekzaehleinheit per ap
+DROP TRIGGER IF EXISTS ekzaehleinheit_max_3_per_ap ON apflora.ekzaehleinheit;
+DROP FUNCTION IF EXISTS apflora.ekzaehleinheit_max_3_per_ap();
+CREATE FUNCTION apflora.ekzaehleinheit_max_3_per_ap() RETURNS trigger AS $ekzaehleinheit_max_3_per_ap$
   DECLARE
     count integer;
   BEGIN
-    -- check if 3 ekfzaehleinheit already exists for this ap
-    count := (SELECT count(*) FROM apflora.ekfzaehleinheit WHERE ap_id = NEW.ap_id);
+    -- check if 3 ekzaehleinheit already exists for this ap
+    count := (SELECT count(*) FROM apflora.ekzaehleinheit WHERE ap_id = NEW.ap_id);
     IF count > 2 THEN
-      RAISE EXCEPTION  'Pro Aktionsplan dürfen maximal drei EKF-Zähleinheiten erfasst werden';
+      RAISE EXCEPTION  'Pro Aktionsplan dürfen maximal drei EK-Zähleinheiten erfasst werden';
     END IF;
     RETURN NEW;
   END;
-$ekfzaehleinheit_max_3_per_ap$ LANGUAGE plpgsql;
-CREATE TRIGGER ekfzaehleinheit_max_3_per_ap BEFORE INSERT ON apflora.ekfzaehleinheit
-  FOR EACH ROW EXECUTE PROCEDURE apflora.ekfzaehleinheit_max_3_per_ap();
+$ekzaehleinheit_max_3_per_ap$ LANGUAGE plpgsql;
+CREATE TRIGGER ekzaehleinheit_max_3_per_ap BEFORE INSERT ON apflora.ekzaehleinheit
+  FOR EACH ROW EXECUTE PROCEDURE apflora.ekzaehleinheit_max_3_per_ap();

@@ -1247,33 +1247,6 @@ COMMENT ON COLUMN apflora.apart.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüs
 COMMENT ON COLUMN apflora.apart.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.apart.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
 
-DROP TABLE IF EXISTS apflora.ekfzaehleinheit;
-CREATE TABLE apflora.ekfzaehleinheit (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  ap_id UUID DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  zaehleinheit_id UUID DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  bemerkungen text,
-  changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT null
-);
-alter table apflora.ekfzaehleinheit alter column changed_by set default null;
-CREATE INDEX ON apflora.ekfzaehleinheit USING btree (id);
-CREATE INDEX ON apflora.ekfzaehleinheit USING btree (ap_id);
-CREATE INDEX ON apflora.ekfzaehleinheit USING btree (zaehleinheit_id);
-COMMENT ON COLUMN apflora.ekfzaehleinheit.id IS 'Primärschlüssel';
-COMMENT ON COLUMN apflora.ekfzaehleinheit.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
-COMMENT ON COLUMN apflora.ekfzaehleinheit.zaehleinheit_id IS 'Zugehörige Zähleinheit. Fremdschlüssel aus der Tabelle "tpopkontrzaehl_einheit_werte"';
-COMMENT ON COLUMN apflora.ekfzaehleinheit.bemerkungen IS 'Bemerkungen zur EKF-Zaehleinheit';
-COMMENT ON COLUMN apflora.ekfzaehleinheit.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.ekfzaehleinheit.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
-DROP POLICY IF EXISTS writer ON apflora.ekfzaehleinheit;
-CREATE POLICY writer ON apflora.ekfzaehleinheit
-  USING (true)
-  WITH CHECK (
-    current_user = 'apflora_manager'
-    OR current_user = 'apflora_artverantwortlich'
-  );
-
 drop table if exists apflora.evab_personen;
 create table apflora.evab_personen (
   idperson UUID PRIMARY KEY,

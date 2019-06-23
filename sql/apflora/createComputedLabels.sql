@@ -51,11 +51,11 @@ $$ language sql stable;
 -- make label sortable, as of postgraphile 4.4/postgraphile@next
 comment on function apflora.apberuebersicht_label(apflora.apberuebersicht) is e'@sortable';
 
-drop function if exists apflora.ekfzaehleinheit_label(ekfzaehleinheit apflora.ekfzaehleinheit);
-create or replace function apflora.ekfzaehleinheit_label(ekfzaehleinheit apflora.ekfzaehleinheit) returns text as $$
-  select coalesce((select text from apflora.tpopkontrzaehl_einheit_werte where apflora.tpopkontrzaehl_einheit_werte.id = ekfzaehleinheit.zaehleinheit_id), '(keine zähleinheit gewählt)')
+drop function if exists apflora.ekzaehleinheit_label(ekzaehleinheit apflora.ekzaehleinheit);
+create or replace function apflora.ekzaehleinheit_label(ekzaehleinheit apflora.ekzaehleinheit) returns text as $$
+  select coalesce((select text from apflora.tpopkontrzaehl_einheit_werte where apflora.tpopkontrzaehl_einheit_werte.id = ekzaehleinheit.zaehleinheit_id), '(keine zähleinheit gewählt)')
 $$ language sql stable;
-comment on function apflora.ekfzaehleinheit_label(apflora.ekfzaehleinheit) is e'@sortable';
+comment on function apflora.ekzaehleinheit_label(apflora.ekzaehleinheit) is e'@sortable';
 
 drop function if exists apflora.erfkrit_label(erfkrit apflora.erfkrit);
 create function apflora.erfkrit_label(erfkrit apflora.erfkrit) returns text as $$
