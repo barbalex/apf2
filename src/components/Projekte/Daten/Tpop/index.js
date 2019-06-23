@@ -464,6 +464,32 @@ const Tpop = ({ treeName, showFilter = false }) => {
             errors={errors}
           />
           <TextField
+            key={`${row.id}ekfrequenz`}
+            name="ekfrequenz"
+            label="EK-Frequenz"
+            row={row}
+            type="text"
+            saveToDb={saveToDb}
+            errors={errors}
+          />
+          <RadioButton
+            key={`${row.id}ekfrequenzAbweichend`}
+            name="ekfrequenzAbweichend"
+            label="EK-Frequenz abweichend"
+            value={row.ekfrequenzAbweichend}
+            saveToDb={saveToDb}
+            error={errors.ekfrequenzAbweichend}
+          />
+          <TextField
+            key={`${row.id}ekAbrechnungstyp`}
+            name="ekAbrechnungstyp"
+            label="EK-Abrechnungstyp"
+            row={row}
+            type="text"
+            saveToDb={saveToDb}
+            errors={errors}
+          />
+          <TextField
             key={`${row.id}bemerkungen`}
             name="bemerkungen"
             label="Bemerkungen"
