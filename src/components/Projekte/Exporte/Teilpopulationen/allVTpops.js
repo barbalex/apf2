@@ -44,8 +44,9 @@ export default gql`
         nutzungszone
         bewirtschafter
         bewirtschaftung
-        kontrollfrequenz
-        kontrollfrequenz_freiwillige: kontrollfrequenzFreiwillige
+        ekfrequenz
+        ekfrequenz_abweichend: ekfrequenzAbweichend
+        ek_abrechnungstyp: ekAbrechnungstyp
         changed
         changed_by: changedBy
       }

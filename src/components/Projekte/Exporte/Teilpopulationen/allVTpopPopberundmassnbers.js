@@ -41,8 +41,9 @@ export default gql`
         tpop_nutzungszone: tpopNutzungszone
         tpop_bewirtschafter: tpopBewirtschafter
         tpop_bewirtschaftung: tpopBewirtschaftung
-        tpop_kontrollfrequenz: tpopKontrollfrequenz
-        tpop_kontrollfrequenz_freiwillige: tpopKontrollfrequenzFreiwillige
+        tpop_ekfrequenz: tpopEkfrequenz
+        tpop_ekfrequenz_abweichend: tpopEkfrequenzAbweichend
+        tpop_ek_abrechnungstyp: tpopEkAbrechnungstyp
         tpopber_id: tpopberId
         tpopber_jahr: tpopberJahr
         tpopber_entwicklung: tpopberEntwicklung

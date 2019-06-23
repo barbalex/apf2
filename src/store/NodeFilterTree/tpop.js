@@ -61,9 +61,13 @@ export const type = types.model({
     types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
-  kontrollfrequenz: types.optional(types.maybeNull(types.number), null),
-  kontrollfrequenzFreiwillige: types.optional(
-    types.maybeNull(types.number),
+  ekfrequenz: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
+    null,
+  ),
+  ekfrequenzAbweichend: types.optional(types.maybeNull(types.boolean), null),
+  ekAbrechnungstyp: types.optional(
+    types.maybeNull(types.union(types.string, types.number)),
     null,
   ),
   bemerkungen: types.optional(
@@ -93,8 +97,9 @@ export const initial = {
   nutzungszone: null,
   bewirtschafter: null,
   bewirtschaftung: null,
-  kontrollfrequenz: null,
-  kontrollfrequenzFreiwillige: null,
+  ekfrequenz: null,
+  ekfrequenzAbweichend: null,
+  ekAbrechnungstyp: null,
   bemerkungen: null,
 }
 
@@ -120,7 +125,8 @@ export const simpleTypes = {
   nutzungszone: 'string',
   bewirtschafter: 'string',
   bewirtschaftung: 'string',
-  kontrollfrequenz: 'number',
-  kontrollfrequenzFreiwillige: 'number',
+  ekfrequenz: 'string',
+  ekfrequenzAbweichend: 'boolean',
+  ekAbrechnungstyp: 'string',
   bemerkungen: 'string',
 }

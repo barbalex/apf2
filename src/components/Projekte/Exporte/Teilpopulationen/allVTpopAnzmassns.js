@@ -42,8 +42,9 @@ export default gql`
         kontakt
         nutzungszone
         bewirtschafter
-        kontrollfrequenz
-        kontrollfrequenz_freiwillige: kontrollfrequenzFreiwillige
+        ekfrequenz
+        ekfrequenz_abweichend: ekfrequenzAbweichend
+        ek_abrechnungstyp: ekAbrechnungstyp
         anzahlMassnahmen
       }
     }
