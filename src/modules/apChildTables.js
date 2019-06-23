@@ -3,7 +3,7 @@ export default [
   'popmassnber',
   'apart',
   'assozart',
-  'ekfzaehleinheit',
+  'ekzaehleinheit',
   'idealbiotop',
   'ber',
   'apber',

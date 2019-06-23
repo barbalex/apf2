@@ -33,7 +33,7 @@ export default ({ url, activeNode, activeFilterTable }) => {
     case 'ber':
     case 'currentIssue':
     case 'ekplan':
-    case 'ekfzaehleinheit':
+    case 'ekzaehleinheit':
     case 'erfkrit':
     case 'exporte':
     case 'idealbiotop':

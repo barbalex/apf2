@@ -190,10 +190,10 @@ export default [
     parentIdField: 'ap_id',
   },
   {
-    table: 'ekfzaehleinheit',
+    table: 'ekzaehleinheit',
     parentTable: 'ap',
-    label: 'EKF-Zähleinheiten',
-    labelSingular: 'EKF-Zähleinheite',
+    label: 'EK-Zähleinheiten',
+    labelSingular: 'EK-Zähleinheit',
     idField: 'id',
     parentIdField: 'ap_id',
   },
@@ -286,13 +286,6 @@ export default [
   {
     table: 'ap_bearbstand_werte',
     label: 'AP-Bearbeitungsstand-Werte',
-    idField: 'id',
-    parentIdField: 'none',
-    stammdaten: true,
-  },
-  {
-    table: 'tpopkontr_frequenz_werte',
-    label: 'Kontroll-Frequenz-Werte',
     idField: 'id',
     parentIdField: 'none',
     stammdaten: true,

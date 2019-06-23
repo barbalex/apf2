@@ -71,7 +71,7 @@ export default gql`
             ...PopFields
             apByApId {
               id
-              ekfzaehleinheitsByApId {
+              ekzaehleinheitsByApId {
                 nodes {
                   id
                   tpopkontrzaehlEinheitWerteByZaehleinheitId {

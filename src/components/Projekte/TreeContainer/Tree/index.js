@@ -38,7 +38,7 @@ import queryApbers from './queryApbers'
 import queryBers from './queryBers'
 import queryAparts from './queryAparts'
 import queryAssozarts from './queryAssozarts'
-import queryEkfzaehleinheits from './queryEkfzaehleinheits'
+import queryEkzaehleinheits from './queryEkzaehleinheits'
 import queryBeobNichtBeurteilts from './queryBeobNichtBeurteilts'
 import queryBeobNichtZuzuordnens from './queryBeobNichtZuzuordnens'
 import buildNodes from '../nodes'
@@ -493,23 +493,23 @@ const Tree = ({ treeName }) => {
     key: 'assozarts',
     value: refetchAssozarts,
   })
-  const queryEkfzaehleinheitsFilter = { apId: { in: ap } }
-  if (!!nodeLabelFilter.ekfzaehleinheit) {
-    queryEkfzaehleinheitsFilter.label = {
-      includesInsensitive: nodeLabelFilter.ekfzaehleinheit,
+  const queryEkzaehleinheitsFilter = { apId: { in: ap } }
+  if (!!nodeLabelFilter.ekzaehleinheit) {
+    queryEkzaehleinheitsFilter.label = {
+      includesInsensitive: nodeLabelFilter.ekzaehleinheit,
     }
   }
   const {
-    data: dataEkfzaehleinheits,
-    error: errorEkfzaehleinheits,
-    loading: loadingEkfzaehleinheits,
-    refetch: refetchEkfzaehleinheits,
-  } = useQuery(queryEkfzaehleinheits, {
-    variables: { isAp, filter: queryEkfzaehleinheitsFilter },
+    data: dataEkzaehleinheits,
+    error: errorEkzaehleinheits,
+    loading: loadingEkzaehleinheits,
+    refetch: refetchEkzaehleinheits,
+  } = useQuery(queryEkzaehleinheits, {
+    variables: { isAp, filter: queryEkzaehleinheitsFilter },
   })
   setRefetchKey({
-    key: 'ekfzaehleinheits',
-    value: refetchEkfzaehleinheits,
+    key: 'ekzaehleinheits',
+    value: refetchEkzaehleinheits,
   })
   const queryBeobNichtBeurteiltsFilter = {
     nichtZuordnen: { equalTo: false },
@@ -645,7 +645,7 @@ const Tree = ({ treeName }) => {
     loadingBers,
     loadingAparts,
     loadingAssozarts,
-    loadingEkfzaehleinheits,
+    loadingEkzaehleinheits,
     loadingBeobNichtBeurteilts,
     loadingBeobNichtZuzuordnens,
   ]
@@ -677,7 +677,7 @@ const Tree = ({ treeName }) => {
     errorBers,
     errorAparts,
     errorAssozarts,
-    errorEkfzaehleinheits,
+    errorEkzaehleinheits,
     errorBeobNichtBeurteilts,
     errorBeobNichtZuzuordnens,
   ].filter(e => !!e)
@@ -709,7 +709,7 @@ const Tree = ({ treeName }) => {
     ...dataBers,
     ...dataAparts,
     ...dataAssozarts,
-    ...dataEkfzaehleinheits,
+    ...dataEkzaehleinheits,
     ...dataBeobNichtBeurteilts,
     ...dataBeobNichtZuzuordnens,
   }
@@ -746,7 +746,7 @@ const Tree = ({ treeName }) => {
     dataApbers,
     dataBers,
     dataAssozarts,
-    dataEkfzaehleinheits,
+    dataEkzaehleinheits,
     dataBeobNichtBeurteilts,
     dataBeobNichtZuzuordnens,
     loadingAdresses,
@@ -775,7 +775,7 @@ const Tree = ({ treeName }) => {
     loadingBers,
     loadingAparts,
     loadingAssozarts,
-    loadingEkfzaehleinheits,
+    loadingEkzaehleinheits,
     loadingBeobNichtBeurteilts,
     loadingBeobNichtZuzuordnens,
     store,

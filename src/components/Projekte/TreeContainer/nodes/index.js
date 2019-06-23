@@ -22,7 +22,7 @@ import qkFolderNodes from './qkFolder'
 import buildBeobNichtZuzuordnenFolderNodes from './beobNichtZuzuordnenFolder'
 import buildBeobNichtBeurteiltFolderNodes from './beobNichtBeurteiltFolder'
 import buildAssozartFolderNodes from './assozartFolder'
-import buildEkfzaehleinheitFolderNodes from './ekfzaehleinheitFolder'
+import buildEkzaehleinheitFolderNodes from './ekzaehleinheitFolder'
 import buildApartFolderNodes from './apartFolder'
 import buildIdealbiotopFolderNodes from './idealbiotopFolder'
 import buildBerFolderNodes from './berFolder'
@@ -37,7 +37,7 @@ import buildPopNodes from './pop'
 import buildBeobNichtZuzuordnenNodes from './beobNichtZuzuordnen'
 import buildBeobNichtBeurteiltNodes from './beobNichtBeurteilt'
 import buildAssozartNodes from './assozart'
-import buildEkfzaehleinheitNodes from './ekfzaehleinheit'
+import buildEkzaehleinheitNodes from './ekzaehleinheit'
 import buildApartNodes from './apart'
 import buildBerNodes from './ber'
 import buildApberNodes from './apber'
@@ -90,7 +90,7 @@ export default ({
   dataBeobNichtZuzuordnens,
   dataBeobZugeordnets,
   dataBers,
-  dataEkfzaehleinheits,
+  dataEkzaehleinheits,
   dataErfkrits,
   dataPops,
   dataProjekts,
@@ -131,7 +131,7 @@ export default ({
   loadingIdealbiotops,
   loadingAparts,
   loadingAssozarts,
-  loadingEkfzaehleinheits,
+  loadingEkzaehleinheits,
   loadingBeobNichtBeurteilts,
   loadingBeobNichtZuzuordnens,
   store,
@@ -361,11 +361,11 @@ export default ({
             }),
           )(),
           ...memoizeOne(() =>
-            buildEkfzaehleinheitFolderNodes({
+            buildEkzaehleinheitFolderNodes({
               nodes,
-              data: dataEkfzaehleinheits,
+              data: dataEkzaehleinheits,
               treeName,
-              loading: loadingEkfzaehleinheits,
+              loading: loadingEkzaehleinheits,
               apNodes,
               projektNodes,
               projId,
@@ -599,15 +599,15 @@ export default ({
           )(),
         ]
       }
-      if (nodeUrl.length === 5 && nodeUrl[4] === 'EKF-Zähleinheiten') {
+      if (nodeUrl.length === 5 && nodeUrl[4] === 'EK-Zähleinheiten') {
         nodes = [
           ...nodes,
           ...memoizeOne(() =>
-            buildEkfzaehleinheitNodes({
+            buildEkzaehleinheitNodes({
               nodes,
-              data: dataEkfzaehleinheits,
+              data: dataEkzaehleinheits,
               treeName,
-              loading: loadingEkfzaehleinheits,
+              loading: loadingEkzaehleinheits,
               apNodes,
               projektNodes,
               projId,

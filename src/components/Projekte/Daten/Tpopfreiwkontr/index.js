@@ -199,9 +199,9 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
     },
   })
 
-  const ekfzaehleinheits = get(
+  const ekzaehleinheits = get(
     data,
-    'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekfzaehleinheitsByApId.nodes',
+    'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekzaehleinheitsByApId.nodes',
     [],
   )
     .map(n => get(n, 'tpopkontrzaehlEinheitWerteByZaehleinheitId', {}))
@@ -218,18 +218,18 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
   const zaehl1WasAttributed =
     zaehls1 && (zaehls1.anzahl || zaehls1.anzahl === 0 || zaehls1.einheit)
   const zaehl2ShowNew =
-    zaehl1WasAttributed && !zaehls2 && ekfzaehleinheits.length > 1
-  const zaehl1ShowEmpty = ekfzaehleinheits.length === 0 && zaehls.length === 0
+    zaehl1WasAttributed && !zaehls2 && ekzaehleinheits.length > 1
+  const zaehl1ShowEmpty = ekzaehleinheits.length === 0 && zaehls.length === 0
   const zaehl2ShowEmpty =
-    (!zaehl1WasAttributed && !zaehls2) || ekfzaehleinheits.length < 2
+    (!zaehl1WasAttributed && !zaehls2) || ekzaehleinheits.length < 2
   const zaehl2WasAttributed =
     zaehl1WasAttributed &&
     zaehls2 &&
     (zaehls2.anzahl || zaehls2.anzahl === 0 || zaehls2.einheit)
   const zaehl3ShowNew =
-    zaehl2WasAttributed && !zaehls3 && ekfzaehleinheits.length > 2
+    zaehl2WasAttributed && !zaehls3 && ekzaehleinheits.length > 2
   const zaehl3ShowEmpty =
-    (!zaehl2WasAttributed && !zaehls3) || ekfzaehleinheits.length < 3
+    (!zaehl2WasAttributed && !zaehls3) || ekzaehleinheits.length < 3
   const einheitsUsed = get(
     data,
     'tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes',
@@ -396,21 +396,21 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
         [],
       ).length
       if (tpopkontrCount === 0) {
-        // add counts for all ekfzaehleinheit
-        // BUT DANGER: only for ekfzaehleinheit with zaehleinheit_id
-        const ekfzaehleinheits = get(
+        // add counts for all ekzaehleinheit
+        // BUT DANGER: only for ekzaehleinheit with zaehleinheit_id
+        const ekzaehleinheits = get(
           data,
-          'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekfzaehleinheitsByApId.nodes',
+          'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekzaehleinheitsByApId.nodes',
           [],
         )
-          // remove ekfzaehleinheits without zaehleinheit_id
+          // remove ekzaehleinheits without zaehleinheit_id
           .filter(
             z =>
               !!get(z, 'tpopkontrzaehlEinheitWerteByZaehleinheitId.code', null),
           )
 
         Promise.all(
-          ekfzaehleinheits.map(z =>
+          ekzaehleinheits.map(z =>
             client.mutate({
               mutation: createTpopkontrzaehl,
               variables: {
@@ -497,13 +497,13 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
               errors={errors}
               refetch={refetch}
               einheitsUsed={einheitsUsed}
-              ekfzaehleinheits={ekfzaehleinheits}
+              ekzaehleinheits={ekzaehleinheits}
               treeName={treeName}
             />
           )}
           {!showFilter && zaehl1ShowEmpty && (
             <CountHint>
-              Sie müssen auf Ebene Aktionsplan EKF-Zähleinheiten definieren, um
+              Sie müssen auf Ebene Aktionsplan EK-Zähleinheiten definieren, um
               hier Zählungen erfassen zu können.
             </CountHint>
           )}
@@ -515,7 +515,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
               errors={errors}
               refetch={refetch}
               einheitsUsed={einheitsUsed}
-              ekfzaehleinheits={ekfzaehleinheits}
+              ekzaehleinheits={ekzaehleinheits}
               treeName={treeName}
             />
           )}
@@ -528,7 +528,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
               errors={errors}
               showNew
               einheitsUsed={einheitsUsed}
-              ekfzaehleinheits={ekfzaehleinheits}
+              ekzaehleinheits={ekzaehleinheits}
               refetch={refetch}
               treeName={treeName}
             />
@@ -543,7 +543,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
               errors={errors}
               showNew
               einheitsUsed={einheitsUsed}
-              ekfzaehleinheits={ekfzaehleinheits}
+              ekzaehleinheits={ekzaehleinheits}
               refetch={refetch}
               treeName={treeName}
             />
@@ -556,7 +556,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
               errors={errors}
               refetch={refetch}
               einheitsUsed={einheitsUsed}
-              ekfzaehleinheits={ekfzaehleinheits}
+              ekzaehleinheits={ekzaehleinheits}
               treeName={treeName}
             />
           )}
@@ -569,7 +569,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
               errors={errors}
               showNew
               einheitsUsed={einheitsUsed}
-              ekfzaehleinheits={ekfzaehleinheits}
+              ekzaehleinheits={ekzaehleinheits}
               refetch={refetch}
               treeName={treeName}
             />
@@ -584,7 +584,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
               errors={errors}
               showNew
               einheitsUsed={einheitsUsed}
-              ekfzaehleinheits={ekfzaehleinheits}
+              ekzaehleinheits={ekzaehleinheits}
               refetch={refetch}
               treeName={treeName}
             />

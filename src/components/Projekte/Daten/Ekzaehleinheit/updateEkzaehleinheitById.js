@@ -1,38 +1,42 @@
 import gql from 'graphql-tag'
 
 import {
-  ekfzaehleinheit,
+  ekzaehleinheit,
   tpopkontrzaehlEinheitWerte,
 } from '../../../shared/fragments'
 
 export default gql`
-  mutation updateEkfzaehleinheit(
+  mutation updateEkzaehleinheit(
     $id: UUID!
     $bemerkungen: String
     $apId: UUID
     $zaehleinheitId: UUID
+    $zielrelevant: Boolean
+    $sort: Int
     $changedBy: String
   ) {
-    updateEkfzaehleinheitById(
+    updateEkzaehleinheitById(
       input: {
         id: $id
-        ekfzaehleinheitPatch: {
+        ekzaehleinheitPatch: {
           id: $id
           bemerkungen: $bemerkungen
           apId: $apId
           zaehleinheitId: $zaehleinheitId
+          zielrelevant: $zielrelevant
+          sort: $sort
           changedBy: $changedBy
         }
       }
     ) {
-      ekfzaehleinheit {
-        ...EkfzaehleinheitFields
+      ekzaehleinheit {
+        ...EkzaehleinheitFields
         tpopkontrzaehlEinheitWerteByZaehleinheitId {
           ...TpopkontrzaehlEinheitWerteFields
         }
       }
     }
   }
-  ${ekfzaehleinheit}
+  ${ekzaehleinheit}
   ${tpopkontrzaehlEinheitWerte}
 `

@@ -20,17 +20,17 @@ export default ({
 
   // map through all elements and create array of nodes
   const nodes = memoizeOne(() =>
-    get(data, 'allEkfzaehleinheits.nodes', [])
+    get(data, 'allEkzaehleinheits.nodes', [])
       // only show if parent node exists
       .filter(el =>
-        nodesPassed.map(n => n.id).includes(`${el.apId}Ekfzaehleinheit`),
+        nodesPassed.map(n => n.id).includes(`${el.apId}Ekzaehleinheit`),
       )
       // only show nodes of this parent
       .filter(el => el.apId === apId)
       .map(el => ({
         nodeType: 'table',
-        menuType: 'ekfzaehleinheit',
-        filterTable: 'ekfzaehleinheit',
+        menuType: 'ekzaehleinheit',
+        filterTable: 'ekzaehleinheit',
         id: el.id,
         parentId: el.apId,
         parentTableId: el.apId,
@@ -41,7 +41,7 @@ export default ({
           projId,
           'Aktionspläne',
           apId,
-          'EKF-Zähleinheiten',
+          'EK-Zähleinheiten',
           el.id,
         ],
         hasChildren: false,

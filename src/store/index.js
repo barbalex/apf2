@@ -138,7 +138,7 @@ const myTypes = types
       self.toDeleteTable = table
       self.toDeleteId = id
       self.toDeleteLabel = label
-      // without slicing deleting ekfzaehleinheit errored
+      // without slicing deleting ekzaehleinheit errored
       self.toDeleteUrl = url.slice()
       self.toDeleteAfterDeletionHook = afterDeletionHook
     },
@@ -311,7 +311,7 @@ const myTypes = types
         ber: null,
         idealbiotop: null,
         assozart: null,
-        ekfzaehleinheit: null,
+        ekzaehleinheit: null,
         popber: null,
         popmassnber: null,
         tpopber: null,

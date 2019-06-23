@@ -57,7 +57,7 @@ CREATE TRIGGER ekzaehleinheit_max_3_per_ap BEFORE INSERT ON apflora.ekzaehleinhe
   FOR EACH ROW EXECUTE PROCEDURE apflora.ekzaehleinheit_max_3_per_ap();
 
 -- change ui from ekfzaehleinheit to ekzaehleinheit
-drop table if exists apflora.ekfzaehleinheit;
+drop table if exists apflora.ekfzaehleinheit cascade;
 drop function if exists apflora.ekfzaehleinheit_label(ekfzaehleinheit apflora.ekfzaehleinheit);
 DROP TRIGGER IF EXISTS ekfzaehleinheit_max_3_per_ap ON apflora.ekfzaehleinheit;
 DROP FUNCTION IF EXISTS apflora.ekfzaehleinheit_max_3_per_ap();
@@ -80,29 +80,29 @@ create table apflora.ekfrequenz(
   changed date default now(),
   changed_by varchar(20) default null
 );
-CREATE INDEX ON apflora.ekzaehleinheit USING btree (id);
-CREATE INDEX ON apflora.ekzaehleinheit USING btree (ap_id);
-CREATE INDEX ON apflora.ekzaehleinheit USING btree (ek);
-CREATE INDEX ON apflora.ekzaehleinheit USING btree (ekf);
-CREATE INDEX ON apflora.ekzaehleinheit USING btree (anwendungsfall);
-CREATE INDEX ON apflora.ekzaehleinheit USING btree (kuerzel);
-CREATE INDEX ON apflora.ekzaehleinheit USING btree (anzahl_min);
-CREATE INDEX ON apflora.ekzaehleinheit USING btree (anzahl_max);
-CREATE INDEX ON apflora.ekzaehleinheit USING btree (sort);
-COMMENT ON COLUMN apflora.ekzaehleinheit.id IS 'Primärschlüssel';
-COMMENT ON COLUMN apflora.ekzaehleinheit.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
-COMMENT ON COLUMN apflora.ekzaehleinheit.ek IS 'Diese Frequenz ist für EK anwendbar';
-COMMENT ON COLUMN apflora.ekzaehleinheit.ekf IS 'Diese Frequenz ist für EKF anwendbar';
-COMMENT ON COLUMN apflora.ekzaehleinheit.anwendungsfall IS 'Beschreibt, in welchen Fällen diese Frequenz angewandt wird. Wahrscheinliche Werte: autochthone Population, angepflanzte Population, angesäte Population, Spezialfall';
-COMMENT ON COLUMN apflora.ekzaehleinheit.kuerzel IS 'Wird für den Import verwendet';
-COMMENT ON COLUMN apflora.ekzaehleinheit.name IS 'Was genau?';
-COMMENT ON COLUMN apflora.ekzaehleinheit.periodizitaet IS 'Beispielswerte: jedes 2. Jahr, nie';
-COMMENT ON COLUMN apflora.ekzaehleinheit.kontrolljahre IS ' Definiert, in welchen Jahren eine Kontrolle üblicherweise stattfinden soll. Bei Anpflanzungen sind das Jahre ab der letzten Anpflanzung. Bei autochthonen Populationen?';
-COMMENT ON COLUMN apflora.ekzaehleinheit.anzahl_min IS 'Ab dieser Anzahl Individuen wird diese Frequenz bei autochthonen Populationen (normalerweise) gewählt. Bei Anpflanzungen nicht relevant';
-COMMENT ON COLUMN apflora.ekzaehleinheit.anzahl_max IS 'Bis zu dieser Anzahl Individuen wird diese Frequenz bei autochthonen Populationen (normalerweise) gewählt. Bei Anpflanzungen nicht relevant';
-COMMENT ON COLUMN apflora.ekzaehleinheit.sort IS 'Damit EK-Zähleinheiten untereinander sortiert werden können';
-COMMENT ON COLUMN apflora.ekzaehleinheit.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.ekzaehleinheit.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.ekfrequenz USING btree (id);
+CREATE INDEX ON apflora.ekfrequenz USING btree (ap_id);
+CREATE INDEX ON apflora.ekfrequenz USING btree (ek);
+CREATE INDEX ON apflora.ekfrequenz USING btree (ekf);
+CREATE INDEX ON apflora.ekfrequenz USING btree (anwendungsfall);
+CREATE INDEX ON apflora.ekfrequenz USING btree (kuerzel);
+CREATE INDEX ON apflora.ekfrequenz USING btree (anzahl_min);
+CREATE INDEX ON apflora.ekfrequenz USING btree (anzahl_max);
+CREATE INDEX ON apflora.ekfrequenz USING btree (sort);
+COMMENT ON COLUMN apflora.ekfrequenz.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.ekfrequenz.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
+COMMENT ON COLUMN apflora.ekfrequenz.ek IS 'Diese Frequenz ist für EK anwendbar';
+COMMENT ON COLUMN apflora.ekfrequenz.ekf IS 'Diese Frequenz ist für EKF anwendbar';
+COMMENT ON COLUMN apflora.ekfrequenz.anwendungsfall IS 'Beschreibt, in welchen Fällen diese Frequenz angewandt wird. Wahrscheinliche Werte: autochthone Population, angepflanzte Population, angesäte Population, Spezialfall';
+COMMENT ON COLUMN apflora.ekfrequenz.kuerzel IS 'Wird für den Import verwendet';
+COMMENT ON COLUMN apflora.ekfrequenz.name IS 'Was genau?';
+COMMENT ON COLUMN apflora.ekfrequenz.periodizitaet IS 'Beispielswerte: jedes 2. Jahr, nie';
+COMMENT ON COLUMN apflora.ekfrequenz.kontrolljahre IS ' Definiert, in welchen Jahren eine Kontrolle üblicherweise stattfinden soll. Bei Anpflanzungen sind das Jahre ab der letzten Anpflanzung. Bei autochthonen Populationen?';
+COMMENT ON COLUMN apflora.ekfrequenz.anzahl_min IS 'Ab dieser Anzahl Individuen wird diese Frequenz bei autochthonen Populationen (normalerweise) gewählt. Bei Anpflanzungen nicht relevant';
+COMMENT ON COLUMN apflora.ekfrequenz.anzahl_max IS 'Bis zu dieser Anzahl Individuen wird diese Frequenz bei autochthonen Populationen (normalerweise) gewählt. Bei Anpflanzungen nicht relevant';
+COMMENT ON COLUMN apflora.ekfrequenz.sort IS 'Damit EK-Zähleinheiten untereinander sortiert werden können';
+COMMENT ON COLUMN apflora.ekfrequenz.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.ekfrequenz.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
 DROP POLICY IF EXISTS writer ON apflora.ekfrequenz;
 CREATE POLICY writer ON apflora.ekfrequenz
   USING (true)
@@ -133,7 +133,7 @@ COMMENT ON COLUMN apflora.tpop.ekfrequenz IS 'Wert aus Tabelle ekfrequenz. Besti
 ALTER TABLE apflora.tpop ADD COLUMN ekfrequenz_abweichend boolean DEFAULT false;
 CREATE INDEX ON apflora.tpop USING btree (ekfrequenz_abweichend);
 COMMENT ON COLUMN apflora.tpop.ekfrequenz_abweichend IS 'Diese Frequenz entspricht nicht derjenigen, welche gemäss Populationsgrösse vergeben worden wäre';
-ALTER TABLE apflora.tpop ADD COLUMN ek_abrechnungstyp uuid DEFAULT null REFERENCES apflora.ek_abrechnungstyp (id) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE apflora.tpop ADD COLUMN ek_abrechnungstyp uuid DEFAULT null REFERENCES apflora.ek_abrechnungstyp_werte (id) ON DELETE SET NULL ON UPDATE CASCADE;
 CREATE INDEX ON apflora.tpop USING btree (ek_abrechnungstyp);
 COMMENT ON COLUMN apflora.tpop.ek_abrechnungstyp IS 'Fremdschlüssel aus Tabelle ek_abrechnungstyp_werte. Bestimmt, wie Kontrollen abgerechnet werden sollen';
 
@@ -143,7 +143,7 @@ alter table apflora.tpop drop column kontrollfrequenz cascade;
 alter table apflora.tpop drop column kontrollfrequenz_freiwillige cascade;
 DROP TABLE IF EXISTS apflora.tpopkontr_frequenz_werte cascade;
 
-create or replace type ek_type as enum ('ek', 'ekf');
+create type ek_type as enum ('ek', 'ekf');
 
 DROP TABLE IF EXISTS apflora.ekplan;
 CREATE TABLE apflora.ekplan (

@@ -6,11 +6,12 @@ import { useApolloClient, useQuery } from 'react-apollo-hooks'
 
 import TextField from '../../../shared/TextField2'
 import Select from '../../../shared/Select'
+import RadioButton from '../../../shared/RadioButton'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
 import queryLists from './queryLists'
-import updateEkfzaehleinheitByIdGql from './updateEkfzaehleinheitById'
+import updateEkzaehleinheitByIdGql from './updateEkzaehleinheitById'
 import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 
@@ -25,7 +26,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Ekfzaehleinheit = ({ treeName }) => {
+const Ekzaehleinheit = ({ treeName }) => {
   const store = useContext(storeContext)
   const { refetch } = store
   const client = useApolloClient()
@@ -41,17 +42,17 @@ const Ekfzaehleinheit = ({ treeName }) => {
     },
   })
 
-  const row = get(data, 'ekfzaehleinheitById', {})
+  const row = get(data, 'ekzaehleinheitById', {})
 
   useEffect(() => setErrors({}), [row])
 
-  const ekfzaehleinheitenOfAp = get(
+  const ekzaehleinheitenOfAp = get(
     row,
-    'apByApId.ekfzaehleinheitsByApId.nodes',
+    'apByApId.ekzaehleinheitsByApId.nodes',
     [],
   ).map(o => o.zaehleinheitId)
   // re-add this ones id
-  const notToShow = ekfzaehleinheitenOfAp.filter(o => o !== row.zaehleinheitId)
+  const notToShow = ekzaehleinheitenOfAp.filter(o => o !== row.zaehleinheitId)
   const zaehleinheitWerteFilter = notToShow.length
     ? { id: { notIn: notToShow } }
     : { id: { isNull: false } }
@@ -71,7 +72,7 @@ const Ekfzaehleinheit = ({ treeName }) => {
       const value = ifIsNumericAsNumber(event.target.value)
       try {
         await client.mutate({
-          mutation: updateEkfzaehleinheitByIdGql,
+          mutation: updateEkzaehleinheitByIdGql,
           variables: {
             id: row.id,
             [field]: value,
@@ -79,19 +80,22 @@ const Ekfzaehleinheit = ({ treeName }) => {
           },
           optimisticResponse: {
             __typename: 'Mutation',
-            updateEkfzaehleinheitById: {
-              ekfzaehleinheit: {
+            updateEkzaehleinheitById: {
+              ekzaehleinheit: {
                 id: row.id,
                 bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
                 zaehleinheitId:
                   field === 'zaehleinheitId' ? value : row.zaehleinheitId,
                 apId: field === 'apId' ? value : row.apId,
+                zielrelevant:
+                  field === 'zielrelevant' ? value : row.zielrelevant,
+                sort: field === 'sort' ? value : row.sort,
                 tpopkontrzaehlEinheitWerteByZaehleinheitId:
                   row.tpopkontrzaehlEinheitWerteByZaehleinheitId,
                 apByApId: row.apByApId,
-                __typename: 'Ekfzaehleinheit',
+                __typename: 'Ekzaehleinheit',
               },
-              __typename: 'Ekfzaehleinheit',
+              __typename: 'Ekzaehleinheit',
             },
           },
         })
@@ -99,7 +103,7 @@ const Ekfzaehleinheit = ({ treeName }) => {
         return setErrors({ [field]: error.message })
       }
       setErrors({})
-      if (['zaehleinheitId'].includes(field)) refetch.ekfzaehleinheits()
+      if (['zaehleinheitId'].includes(field)) refetch.ekzaehleinheits()
     },
     [row],
   )
@@ -120,9 +124,9 @@ const Ekfzaehleinheit = ({ treeName }) => {
       <Container>
         <FormTitle
           apId={row.apId}
-          title="EKF-Zähleinheit"
+          title="EK-Zähleinheit"
           treeName={treeName}
-          table="ekfzaehleinheit"
+          table="ekzaehleinheit"
         />
         <FieldsContainer>
           <Select
@@ -135,6 +139,23 @@ const Ekfzaehleinheit = ({ treeName }) => {
             loading={loadingLists}
             saveToDb={saveToDb}
             error={errors.zaehleinheitId}
+          />
+          <RadioButton
+            key={`${row.id}zielrelevant`}
+            name="zielrelevant"
+            label="zielrelevant"
+            value={row.zielrelevant}
+            saveToDb={saveToDb}
+            error={errors.zielrelevant}
+          />
+          <TextField
+            key={`${row.id}sort`}
+            name="sort"
+            label="Sortierung"
+            row={row}
+            type="number"
+            saveToDb={saveToDb}
+            errors={errors}
           />
           <TextField
             key={`${row.id}bemerkungen`}
@@ -152,4 +173,4 @@ const Ekfzaehleinheit = ({ treeName }) => {
   )
 }
 
-export default observer(Ekfzaehleinheit)
+export default observer(Ekzaehleinheit)

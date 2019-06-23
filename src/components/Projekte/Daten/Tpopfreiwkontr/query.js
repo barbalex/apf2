@@ -31,7 +31,7 @@ export default gql`
             aeEigenschaftenByArtId {
               ...AeEigenschaftenFields
             }
-            ekfzaehleinheitsByApId {
+            ekzaehleinheitsByApId {
               nodes {
                 id
                 tpopkontrzaehlEinheitWerteByZaehleinheitId {

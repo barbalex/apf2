@@ -66,7 +66,7 @@ export default types
       types.maybeNull(types.union(types.string, types.number)),
       null,
     ),
-    ekfzaehleinheit: types.optional(
+    ekzaehleinheit: types.optional(
       types.maybeNull(types.union(types.string, types.number)),
       null,
     ),
@@ -155,7 +155,7 @@ export const defaultValue = {
   ber: null,
   idealbiotop: null,
   assozart: null,
-  ekfzaehleinheit: null,
+  ekzaehleinheit: null,
   popber: null,
   popmassnber: null,
   tpopber: null,

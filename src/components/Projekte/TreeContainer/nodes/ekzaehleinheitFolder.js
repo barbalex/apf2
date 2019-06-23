@@ -13,7 +13,7 @@ export default ({
   apId,
   store,
 }) => {
-  const ekfzaehleinheits = get(data, 'allEkfzaehleinheits.nodes', [])
+  const ekzaehleinheits = get(data, 'allEkzaehleinheits.nodes', [])
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
@@ -23,18 +23,18 @@ export default ({
     id: apId,
   })
   const nodeLabelFilterString =
-    get(store, `${treeName}.nodeLabelFilter.ekfzaehleinheit`) || ''
+    get(store, `${treeName}.nodeLabelFilter.ekzaehleinheit`) || ''
 
-  const ekfzaehleinheitNodesLength = memoizeOne(
-    () => ekfzaehleinheits.filter(el => el.apId === apId).length,
+  const ekzaehleinheitNodesLength = memoizeOne(
+    () => ekzaehleinheits.filter(el => el.apId === apId).length,
   )()
   const message = loading
     ? '...'
     : !!nodeLabelFilterString
-    ? `${ekfzaehleinheitNodesLength} gefiltert`
-    : ekfzaehleinheitNodesLength
+    ? `${ekzaehleinheitNodesLength} gefiltert`
+    : ekzaehleinheitNodesLength
 
-  const url = ['Projekte', projId, 'Aktionspläne', apId, 'EKF-Zähleinheiten']
+  const url = ['Projekte', projId, 'Aktionspläne', apId, 'EK-Zähleinheiten']
 
   // only show if parent node exists
   const apNodesIds = nodesPassed.map(n => n.id)
@@ -43,15 +43,15 @@ export default ({
   return [
     {
       nodeType: 'folder',
-      menuType: 'ekfzaehleinheitFolder',
-      filterTable: 'ekfzaehleinheit',
-      id: `${apId}Ekfzaehleinheit`,
+      menuType: 'ekzaehleinheitFolder',
+      filterTable: 'ekzaehleinheit',
+      id: `${apId}Ekzaehleinheit`,
       tableId: apId,
-      urlLabel: 'EKF-Zähleinheiten',
-      label: `EKF-Zähleinheiten (${message})`,
+      urlLabel: 'EK-Zähleinheiten',
+      label: `EK-Zähleinheiten (${message})`,
       url,
       sort: [projIndex, 1, apIndex, 9],
-      hasChildren: ekfzaehleinheitNodesLength > 0,
+      hasChildren: ekzaehleinheitNodesLength > 0,
     },
   ]
 }

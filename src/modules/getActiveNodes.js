@@ -44,10 +44,10 @@ export default activeNodeArray => {
       activeNodeArray.length > 4 &&
       activeNodeArray[4] === 'assoziierte-Arten') ||
     false
-  const ekfzaehleinheitFolder =
+  const ekzaehleinheitFolder =
     (ap &&
       activeNodeArray.length > 4 &&
-      activeNodeArray[4] === 'EKF-Zähleinheiten') ||
+      activeNodeArray[4] === 'EK-Zähleinheiten') ||
     false
   const apArtFolder =
     (ap && activeNodeArray.length > 4 && activeNodeArray[4] === 'AP-Arten') ||
@@ -59,8 +59,8 @@ export default activeNodeArray => {
     false
   const assozart =
     assozartFolder && activeNodeArray.length > 5 ? activeNodeArray[5] : null
-  const ekfzaehleinheit =
-    ekfzaehleinheitFolder && activeNodeArray.length > 5
+  const ekzaehleinheit =
+    ekzaehleinheitFolder && activeNodeArray.length > 5
       ? activeNodeArray[5]
       : null
   const apart =
@@ -234,10 +234,10 @@ export default activeNodeArray => {
     apFolder,
     ap,
     assozartFolder,
-    ekfzaehleinheitFolder,
+    ekzaehleinheitFolder,
     apArtFolder,
     assozart,
-    ekfzaehleinheit,
+    ekzaehleinheit,
     apart,
     qk,
     idealbiotopFolder,

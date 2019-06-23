@@ -78,9 +78,9 @@ const Daten = ({ treeName }) => {
         form = <CurrentIssue treeName={treeName} />
         break
       }
-      case 'ekfzaehleinheit': {
-        const Ekfzaehleinheit = loadable(() => import('./Ekfzaehleinheit'))
-        form = <Ekfzaehleinheit treeName={treeName} />
+      case 'ekzaehleinheit': {
+        const Ekzaehleinheit = loadable(() => import('./Ekzaehleinheit'))
+        form = <Ekzaehleinheit treeName={treeName} />
         break
       }
       case 'erfkrit': {

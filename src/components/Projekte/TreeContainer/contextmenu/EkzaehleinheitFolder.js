@@ -9,16 +9,16 @@ import storeContext from '../../../../storeContext'
 // create objects outside render
 const insertData = {
   action: 'insert',
-  table: 'ekfzaehleinheit',
+  table: 'ekzaehleinheit',
 }
 
-const EkfzaehleinheitFolder = ({ onClick, treeName }) => {
+const EkzaehleinheitFolder = ({ onClick, treeName }) => {
   const { user } = useContext(storeContext)
 
   return (
     <ErrorBoundary>
-      <ContextMenu id={`${treeName}ekfzaehleinheitFolder`}>
-        <div className="react-contextmenu-title">EKF-Zähleinheit</div>
+      <ContextMenu id={`${treeName}ekzaehleinheitFolder`}>
+        <div className="react-contextmenu-title">EK-Zähleinheit</div>
         {!userIsReadOnly(user.token) && (
           <MenuItem onClick={onClick} data={insertData}>
             erstelle neue
@@ -29,4 +29,4 @@ const EkfzaehleinheitFolder = ({ onClick, treeName }) => {
   )
 }
 
-export default observer(EkfzaehleinheitFolder)
+export default observer(EkzaehleinheitFolder)

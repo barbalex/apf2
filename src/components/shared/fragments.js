@@ -160,12 +160,14 @@ export const currentIssue = gql`
   }
 `
 
-export const ekfzaehleinheit = gql`
-  fragment EkfzaehleinheitFields on Ekfzaehleinheit {
+export const ekzaehleinheit = gql`
+  fragment EkzaehleinheitFields on Ekzaehleinheit {
     id
     apId
     label
     zaehleinheitId
+    zielrelevant
+    sort
     bemerkungen
     changedBy
   }
@@ -608,16 +610,6 @@ export const tpopApberrelevantGrundWerte = gql`
 
 export const tpopEntwicklungWerte = gql`
   fragment TpopEntwicklungWerteFields on TpopEntwicklungWerte {
-    id
-    code
-    text
-    sort
-    changedBy
-  }
-`
-
-export const tpopkontrFrequenzWerte = gql`
-  fragment TpopkontrFrequenzWerteFields on TpopkontrFrequenzWerte {
     id
     code
     text

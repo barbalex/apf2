@@ -164,7 +164,7 @@ const Count = ({
   showNew,
   refetch,
   einheitsUsed = [],
-  ekfzaehleinheits = [],
+  ekzaehleinheits = [],
   treeName,
 }) => {
   const store = useContext(storeContext)
@@ -198,7 +198,7 @@ const Count = ({
   const allEinheits = get(dataLists, 'allTpopkontrzaehlEinheitWertes.nodes', [])
   // do list this count's einheit
   const einheitsNotToList = einheitsUsed.filter(e => e !== row.einheit)
-  let zaehleinheitWerte = ekfzaehleinheits
+  let zaehleinheitWerte = ekzaehleinheits
     // remove already set values
     .filter(e => !einheitsNotToList.includes(e.code))
   // add this zaehleineits value if missing

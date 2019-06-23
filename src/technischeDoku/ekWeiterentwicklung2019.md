@@ -14,7 +14,7 @@ Erfolgskontrollen sind gleichzeitig wichtig und aufwändig. Sie beginnen mit der
 Das soll mit folgenden Massnahmen umgesetzt werden:<br/><br/>
 
 #### Tabellen-Struktur
-- neue Tabelle `ekzaehleinheit`. Hier wird pro Art bestimmt, welche Einheiten gezählt werden sollen. Umwandlung der bestehenden Tabelle `ekfzaehleinheit`. Mit folgenden Feldern:
+- neue Tabelle `ekzaehleinheit`. Hier wird pro Art bestimmt, welche Einheiten gezählt werden sollen. Ersetzt die bestehende Tabelle `ekfzaehleinheit`. Mit folgenden Feldern:
   - `id`
   - `ap_id`
   - `zaehleinheit_id`
