@@ -108,6 +108,19 @@ CREATE POLICY writer ON apflora.ekfrequenz
   WITH CHECK (
     current_user = 'apflora_manager'
   );
+-- insert some test data:
+-- TODO: will this be the standard for every art?
+insert into apflora.ekfrequenz (ap_id,ek,anwendungsfall,kuerzel,name,anzahl_min,anzahl_max,periodizitaet,sort) values 
+('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population autochthon','GA','stark gefährdet',1,20,'A: jedes 2. Jahr',1),
+('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population autochthon','GB','mittel gefährdet',21,500,'B: jedes 4. Jahr',2),
+('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population autochthon','GC','wenig gefährdet',501,100000,'C: jedes 8. Jahr',3),
+('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population autochthon','GD','erloschen?',0,0,'nochmals Kontrolle im Folgejahr, ob erloschen',4),
+('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population angepflanzt','NA','seit 1-2 Jahren angepflanzt/etabliert',null,null,'A: im 2. Jahr',5),
+('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population angepflanzt','NB','seit > 2 Jahren etabliert',null,null,'B: jedes 4. Jahr',6),
+('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population angepflanzt','NC','seit > 6 J. etabliert',null,null,'C: jedes 8. Jahr',7),
+('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population angepflanzt','ND','angesiedelt',0,0,'keine Kontrolle mehr',8),
+('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population angesät','A',null,0,0,'1. Kontrolle nach 4-6 Jahren. Falls Etablierung: NB, NC',9),
+('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Sonderfall','A',null,0,0,'Keine Kontrollen',10);
 -- TODO: build ui for ekfrequenz
 
 DROP TABLE IF EXISTS apflora.ek_abrechnungstyp_werte;
