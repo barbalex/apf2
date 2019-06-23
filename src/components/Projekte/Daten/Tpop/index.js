@@ -464,6 +464,16 @@ const Tpop = ({ treeName, showFilter = false }) => {
             errors={errors}
           />
           <TextField
+            key={`${row.id}bemerkungen`}
+            name="bemerkungen"
+            label="Bemerkungen"
+            row={row}
+            type="text"
+            multiline
+            saveToDb={saveToDb}
+            errors={errors}
+          />
+          <TextField
             key={`${row.id}ekfrequenz`}
             name="ekfrequenz"
             label="EK-Frequenz"
@@ -486,16 +496,6 @@ const Tpop = ({ treeName, showFilter = false }) => {
             label="EK-Abrechnungstyp"
             row={row}
             type="text"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}bemerkungen`}
-            name="bemerkungen"
-            label="Bemerkungen"
-            row={row}
-            type="text"
-            multiline
             saveToDb={saveToDb}
             errors={errors}
           />

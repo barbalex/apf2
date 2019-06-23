@@ -28,7 +28,6 @@ CREATE POLICY writer ON apflora.ekzaehleinheit
     current_user = 'apflora_manager'
     OR current_user = 'apflora_artverantwortlich'
   );
--- TODO:
 -- move data from ekfzaehleinheit to ekzaehleinheit
 insert into apflora.ekzaehleinheit (id, ap_id, zaehleinheit_id, bemerkungen, changed, changed_by)
 select id, ap_id, zaehleinheit_id, bemerkungen, changed, changed_by from apflora.ekfzaehleinheit;
@@ -56,7 +55,7 @@ $ekzaehleinheit_max_3_per_ap$ LANGUAGE plpgsql;
 CREATE TRIGGER ekzaehleinheit_max_3_per_ap BEFORE INSERT ON apflora.ekzaehleinheit
   FOR EACH ROW EXECUTE PROCEDURE apflora.ekzaehleinheit_max_3_per_ap();
 
--- change ui from ekfzaehleinheit to ekzaehleinheit
+-- change ui from ekfzaehleinheit to ekzaehleinheit (done)
 drop table if exists apflora.ekfzaehleinheit cascade;
 drop function if exists apflora.ekfzaehleinheit_label(ekfzaehleinheit apflora.ekfzaehleinheit);
 DROP TRIGGER IF EXISTS ekfzaehleinheit_max_3_per_ap ON apflora.ekfzaehleinheit;
@@ -109,6 +108,7 @@ CREATE POLICY writer ON apflora.ekfrequenz
   WITH CHECK (
     current_user = 'apflora_manager'
   );
+-- TODO: build ui for ekfrequenz
 
 DROP TABLE IF EXISTS apflora.ek_abrechnungstyp_werte;
 CREATE TABLE apflora.ek_abrechnungstyp_werte (
@@ -125,6 +125,7 @@ CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree (sort);
 COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+-- TODO: build ui for ek_abrechnungstyp_werte
 
 
 ALTER TABLE apflora.tpop ADD COLUMN ekfrequenz uuid DEFAULT null REFERENCES apflora.ekfrequenz (id) ON DELETE SET NULL ON UPDATE CASCADE;
@@ -136,9 +137,10 @@ COMMENT ON COLUMN apflora.tpop.ekfrequenz_abweichend IS 'Diese Frequenz entspric
 ALTER TABLE apflora.tpop ADD COLUMN ek_abrechnungstyp uuid DEFAULT null REFERENCES apflora.ek_abrechnungstyp_werte (id) ON DELETE SET NULL ON UPDATE CASCADE;
 CREATE INDEX ON apflora.tpop USING btree (ek_abrechnungstyp);
 COMMENT ON COLUMN apflora.tpop.ek_abrechnungstyp IS 'Fremdschlüssel aus Tabelle ek_abrechnungstyp_werte. Bestimmt, wie Kontrollen abgerechnet werden sollen';
+-- TODO: add to tpop form
 
 -- remove not any more needed
--- TODO: remove its ui elements
+-- remove its ui elements (done)
 alter table apflora.tpop drop column kontrollfrequenz cascade;
 alter table apflora.tpop drop column kontrollfrequenz_freiwillige cascade;
 DROP TABLE IF EXISTS apflora.tpopkontr_frequenz_werte cascade;
@@ -171,3 +173,4 @@ CREATE POLICY writer ON apflora.ekplan
     current_user = 'apflora_manager'
     OR current_user = 'apflora_artverantwortlich'
   );
+-- TODO: build form for ekplan
