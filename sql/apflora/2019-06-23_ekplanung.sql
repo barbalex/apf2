@@ -30,6 +30,8 @@ CREATE POLICY writer ON apflora.ekzaehleinheit
   );
 -- TODO:
 -- move data from ekfzaehleinheit to ekzaehleinheit
+insert into apflora.ekzaehleinheit (id, ap_id, zaehleinheit_id, bemerkungen, changed, changed_by)
+select id, ap_id, zaehleinheit_id, bemerkungen, changed, changed_by from ekfzaehleinheit;
 -- change ui from ekfzaehleinheit to ekzaehleinheit
 -- drop table if exists apflora.ekfzaehleinheit;
 
@@ -84,22 +86,42 @@ CREATE POLICY writer ON apflora.ekfrequenz
 DROP TABLE IF EXISTS apflora.abrechnungstyp_werte;
 CREATE TABLE apflora.abrechnungstyp_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  code serial,
+  code text,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
-  ansiedlung smallint NOT NULL,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
-create sequence apflora.abrechnungstyp_werte_code_seq owned by apflora.abrechnungstyp_werte.code;
-alter table apflora.abrechnungstyp_werte alter column code set default nextval('apflora.abrechnungstyp_werte_code_seq');
-select setval('apflora.abrechnungstyp_werte_code_seq', (select max(code)+1 from apflora.abrechnungstyp_werte), false);
-alter table apflora.abrechnungstyp_werte alter column changed_by drop not null, alter column changed_by set default null;
-
 CREATE INDEX ON apflora.abrechnungstyp_werte USING btree (id);
 CREATE INDEX ON apflora.abrechnungstyp_werte USING btree (code);
 CREATE INDEX ON apflora.abrechnungstyp_werte USING btree (sort);
 COMMENT ON COLUMN apflora.abrechnungstyp_werte.id IS 'Primärschlüssel';
-COMMENT ON COLUMN apflora.abrechnungstyp_werte.ansiedlung IS 'Handelt es sich um eine Ansiedlung?';
 COMMENT ON COLUMN apflora.abrechnungstyp_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.abrechnungstyp_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+
+create type ek_type as enum ('ek', 'ekf');
+DROP TABLE IF EXISTS apflora.ekplan;
+CREATE TABLE apflora.ekplan (
+  id uuid primary key default uuid_generate_v1mc(),
+  tpopkontr_id uuid default null references apflora.tpopkontr (id) on delete cascade on update cascade,
+  jahr smallint DEFAULT NULL,
+  type ek_type default null,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT NULL
+);
+CREATE INDEX ON apflora.ekplan USING btree (id);
+CREATE INDEX ON apflora.ekplan USING btree (tpopkontr_id);
+CREATE INDEX ON apflora.ekplan USING btree (jahr);
+CREATE INDEX ON apflora.ekplan USING btree (type);
+COMMENT ON COLUMN apflora.abrechnungstyp_werte.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.abrechnungstyp_werte.tpopkontr_id IS 'Fremdschlüssel aus der Tabelle tpopkontr';
+COMMENT ON COLUMN apflora.abrechnungstyp_werte.jahr IS 'Jahr, in dem eine EK geplant ist';
+COMMENT ON COLUMN apflora.abrechnungstyp_werte.type IS 'ek oder ekf';
+COMMENT ON COLUMN apflora.abrechnungstyp_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.abrechnungstyp_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE POLICY writer ON apflora.ekplan
+  USING (true)
+  WITH CHECK (
+    current_user = 'apflora_manager'
+    OR current_user = 'apflora_artverantwortlich'
+  );
