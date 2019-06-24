@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useRef, useEffect } from 'react'
+import React, { useCallback, useContext, useRef } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import camelCase from 'lodash/camelCase'
