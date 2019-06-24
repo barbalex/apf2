@@ -47,6 +47,7 @@ const EkfrequenzOptionsContainer = styled.div`
     font-size: 12px;
     white-space: pre;
     line-height: 1.5rem;
+    font-weight: 500;
   }
 `
 
