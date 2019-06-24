@@ -131,6 +131,10 @@ const Tpop = ({ treeName, showFilter = false }) => {
     row = get(data, 'tpopById', {})
   }
 
+  useEffect(() => {
+    console.log('Tpop mounting')
+    return () => console.log('Tpop unmounting')
+  }, [])
   useEffect(() => setErrors({}), [row])
 
   const saveToDb = useCallback(
@@ -271,6 +275,8 @@ const Tpop = ({ treeName, showFilter = false }) => {
       label: `${kuerzel}: ${anwendungsfall} | ${name} | ${o.periodizitaet}`,
     }
   })
+
+  console.log('Tpop rendering')
 
   if (!showFilter && loading) {
     return (
