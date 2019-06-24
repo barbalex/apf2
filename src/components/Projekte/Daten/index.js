@@ -57,6 +57,7 @@ const Daten = ({ treeName }) => {
   switch (activeForm.form) {
     case 'adresse': {
       form = <Adresse treeName={treeName} />
+      break
     }
     case 'werte': {
       form = <Werte treeName={treeName} table={activeForm.type} />
