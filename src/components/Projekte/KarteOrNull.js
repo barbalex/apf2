@@ -1,5 +1,6 @@
 import React from 'react'
-import loadable from '@loadable/component'
+
+import Karte from './Karte'
 
 /**
  * ReactDOMServer does not yet support Suspense
@@ -7,6 +8,5 @@ import loadable from '@loadable/component'
 
 export default ({ treeName }) => {
   if (typeof window === 'undefined') return null
-  const Karte = loadable(() => import('./Karte'))
   return <Karte treeName={treeName} />
 }
