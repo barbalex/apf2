@@ -1,7 +1,6 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import loadable from '@loadable/component'
 
 /**
  * ReactDOMServer does not yet support Suspense
@@ -9,6 +8,35 @@ import loadable from '@loadable/component'
 
 //import Fallback from '../../shared/Fallback'
 import storeContext from '../../../storeContext'
+import Adresse from './Adresse'
+import Ap from './Ap'
+import Apart from './Apart'
+import Apber from './Apber'
+import Apberuebersicht from './Apberuebersicht'
+import Assozart from './Assozart'
+import Beobzuordnung from './Beobzuordnung'
+import Ber from './Ber'
+import CurrentIssue from './CurrentIssue'
+import Ekzaehleinheit from './Ekzaehleinheit'
+import Erfkrit from './Erfkrit'
+import Exporte from '../Exporte'
+import Idealbiotop from './Idealbiotop'
+import Pop from './Pop'
+import Popber from './Popber'
+import Popmassnber from './Popmassnber'
+import Projekt from './Projekt'
+import Qk from './Qk'
+import Tpop from './Tpop'
+import Tpopber from './Tpopber'
+import Tpopfeldkontr from './Tpopfeldkontr'
+import Tpopfreiwkontr from './Tpopfreiwkontr'
+import Tpopkontrzaehl from './Tpopkontrzaehl'
+import Tpopmassn from './Tpopmassn'
+import Tpopmassnber from './Tpopmassnber'
+import User from './User'
+import Werte from './Werte'
+import Ziel from './Ziel'
+import Zielber from './Zielber'
 
 const Container = styled.div`
   height: 100%;
@@ -25,159 +53,126 @@ const Daten = ({ treeName }) => {
   const store = useContext(storeContext)
   const { activeForm } = store[treeName]
 
-  const form = useMemo(() => {
-    let form
-    switch (activeForm.form) {
-      case 'adresse': {
-        const Adresse = loadable(() => import('./Adresse'))
-        form = <Adresse treeName={treeName} />
-        break
-      }
-      case 'werte': {
-        const Werte = loadable(() => import('./Werte'))
-        form = <Werte treeName={treeName} table={activeForm.type} />
-        break
-      }
-      case 'ap': {
-        const Ap = loadable(() => import('./Ap'))
-        form = <Ap treeName={treeName} />
-        break
-      }
-      case 'apberuebersicht': {
-        const Apberuebersicht = loadable(() => import('./Apberuebersicht'))
-        form = <Apberuebersicht treeName={treeName} />
-        break
-      }
-      case 'apart': {
-        const Apart = loadable(() => import('./Apart'))
-        form = <Apart treeName={treeName} />
-        break
-      }
-      case 'apber': {
-        const Apber = loadable(() => import('./Apber'))
-        form = <Apber treeName={treeName} />
-        break
-      }
-      case 'assozart': {
-        const Assozart = loadable(() => import('./Assozart'))
-        form = <Assozart treeName={treeName} />
-        break
-      }
-      case 'beobzuordnung': {
-        const Beobzuordnung = loadable(() => import('./Beobzuordnung'))
-        form = <Beobzuordnung treeName={treeName} type={activeForm.type} />
-        break
-      }
-      case 'ber': {
-        const Ber = loadable(() => import('./Ber'))
-        form = <Ber treeName={treeName} />
-        break
-      }
-      case 'currentIssue': {
-        const CurrentIssue = loadable(() => import('./CurrentIssue'))
-        form = <CurrentIssue treeName={treeName} />
-        break
-      }
-      case 'ekzaehleinheit': {
-        const Ekzaehleinheit = loadable(() => import('./Ekzaehleinheit'))
-        form = <Ekzaehleinheit treeName={treeName} />
-        break
-      }
-      case 'erfkrit': {
-        const Erfkrit = loadable(() => import('./Erfkrit'))
-        form = <Erfkrit treeName={treeName} />
-        break
-      }
-      case 'exporte': {
-        const Exporte = loadable(() => import('../Exporte'))
-        form = <Exporte />
-        break
-      }
-      case 'idealbiotop': {
-        const Idealbiotop = loadable(() => import('./Idealbiotop'))
-        form = <Idealbiotop treeName={treeName} />
-        break
-      }
-      case 'pop': {
-        const Pop = loadable(() => import('./Pop'))
-        form = <Pop treeName={treeName} />
-        break
-      }
-      case 'popber': {
-        const Popber = loadable(() => import('./Popber'))
-        form = <Popber treeName={treeName} />
-        break
-      }
-      case 'popmassnber': {
-        const Popmassnber = loadable(() => import('./Popmassnber'))
-        form = <Popmassnber treeName={treeName} />
-        break
-      }
-      case 'projekt': {
-        const Projekt = loadable(() => import('./Projekt'))
-        form = <Projekt treeName={treeName} />
-        break
-      }
-      case 'qk': {
-        const Qk = loadable(() => import('./Qk'))
-        form = <Qk treeName={treeName} />
-        break
-      }
-      case 'tpop': {
-        const Tpop = loadable(() => import('./Tpop'))
-        form = <Tpop treeName={treeName} />
-        break
-      }
-      case 'tpopber': {
-        const Tpopber = loadable(() => import('./Tpopber'))
-        form = <Tpopber treeName={treeName} />
-        break
-      }
-      case 'tpopfeldkontr': {
-        const Tpopfeldkontr = loadable(() => import('./Tpopfeldkontr'))
-        form = <Tpopfeldkontr treeName={treeName} />
-        break
-      }
-      case 'tpopfreiwkontr': {
-        const Tpopfreiwkontr = loadable(() => import('./Tpopfreiwkontr'))
-        form = <Tpopfreiwkontr treeName={treeName} />
-        break
-      }
-      case 'tpopkontrzaehl': {
-        const Tpopkontrzaehl = loadable(() => import('./Tpopkontrzaehl'))
-        form = <Tpopkontrzaehl treeName={treeName} />
-        break
-      }
-      case 'tpopmassn': {
-        const Tpopmassn = loadable(() => import('./Tpopmassn'))
-        form = <Tpopmassn treeName={treeName} />
-        break
-      }
-      case 'tpopmassnber': {
-        const Tpopmassnber = loadable(() => import('./Tpopmassnber'))
-        form = <Tpopmassnber treeName={treeName} />
-        break
-      }
-      case 'user': {
-        const User = loadable(() => import('./User'))
-        form = <User treeName={treeName} />
-        break
-      }
-      case 'ziel': {
-        const Ziel = loadable(() => import('./Ziel'))
-        form = <Ziel treeName={treeName} />
-        break
-      }
-      case 'zielber': {
-        const Zielber = loadable(() => import('./Zielber'))
-        form = <Zielber treeName={treeName} />
-        break
-      }
-      default:
-        form = null
+  let form
+  switch (activeForm.form) {
+    case 'adresse': {
+      form = <Adresse treeName={treeName} />
     }
-    return form
-  }, [activeForm])
+    case 'werte': {
+      form = <Werte treeName={treeName} table={activeForm.type} />
+      break
+    }
+    case 'ap': {
+      form = <Ap treeName={treeName} />
+      break
+    }
+    case 'apberuebersicht': {
+      form = <Apberuebersicht treeName={treeName} />
+      break
+    }
+    case 'apart': {
+      form = <Apart treeName={treeName} />
+      break
+    }
+    case 'apber': {
+      form = <Apber treeName={treeName} />
+      break
+    }
+    case 'assozart': {
+      form = <Assozart treeName={treeName} />
+      break
+    }
+    case 'beobzuordnung': {
+      form = <Beobzuordnung treeName={treeName} type={activeForm.type} />
+      break
+    }
+    case 'ber': {
+      form = <Ber treeName={treeName} />
+      break
+    }
+    case 'currentIssue': {
+      form = <CurrentIssue treeName={treeName} />
+      break
+    }
+    case 'ekzaehleinheit': {
+      form = <Ekzaehleinheit treeName={treeName} />
+      break
+    }
+    case 'erfkrit': {
+      form = <Erfkrit treeName={treeName} />
+      break
+    }
+    case 'exporte': {
+      form = <Exporte />
+      break
+    }
+    case 'idealbiotop': {
+      form = <Idealbiotop treeName={treeName} />
+      break
+    }
+    case 'pop': {
+      form = <Pop treeName={treeName} />
+      break
+    }
+    case 'popber': {
+      form = <Popber treeName={treeName} />
+      break
+    }
+    case 'popmassnber': {
+      form = <Popmassnber treeName={treeName} />
+      break
+    }
+    case 'projekt': {
+      form = <Projekt treeName={treeName} />
+      break
+    }
+    case 'qk': {
+      form = <Qk treeName={treeName} />
+      break
+    }
+    case 'tpop': {
+      form = <Tpop treeName={treeName} />
+      break
+    }
+    case 'tpopber': {
+      form = <Tpopber treeName={treeName} />
+      break
+    }
+    case 'tpopfeldkontr': {
+      form = <Tpopfeldkontr treeName={treeName} />
+      break
+    }
+    case 'tpopfreiwkontr': {
+      form = <Tpopfreiwkontr treeName={treeName} />
+      break
+    }
+    case 'tpopkontrzaehl': {
+      form = <Tpopkontrzaehl treeName={treeName} />
+      break
+    }
+    case 'tpopmassn': {
+      form = <Tpopmassn treeName={treeName} />
+      break
+    }
+    case 'tpopmassnber': {
+      form = <Tpopmassnber treeName={treeName} />
+      break
+    }
+    case 'user': {
+      form = <User treeName={treeName} />
+      break
+    }
+    case 'ziel': {
+      form = <Ziel treeName={treeName} />
+      break
+    }
+    case 'zielber': {
+      form = <Zielber treeName={treeName} />
+      break
+    }
+    default:
+      form = null
+  }
 
   //console.log('Daten', { form, fOKey, activeFilterTable, key })
 

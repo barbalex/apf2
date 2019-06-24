@@ -1150,14 +1150,6 @@
   dependencies:
     core-js "^2.5.7"
 
-"@loadable/component@5.10.1":
-  version "5.10.1"
-  resolved "https://registry.yarnpkg.com/@loadable/component/-/component-5.10.1.tgz#09613e46d409ffacb3b4403658ed90adbc01ba24"
-  integrity sha512-nYb38UbPWCWB9R8US4Za0JzgjS1QaY13STJhU7ZUsfO2qG3k5huppVF92eX2iauhfpdrRkCDQqi+Fg/US4FXIg==
-  dependencies:
-    "@babel/runtime" "^7.4.4"
-    hoist-non-react-statics "^3.3.0"
-
 "@material-ui/core@4.1.2":
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-4.1.2.tgz#395eeeb7e24d77bec58f586577221617a5b3d368"
