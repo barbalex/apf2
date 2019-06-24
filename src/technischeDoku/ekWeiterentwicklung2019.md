@@ -14,14 +14,14 @@ Erfolgskontrollen sind gleichzeitig wichtig und aufwändig. Sie beginnen mit der
 Das soll mit folgenden Massnahmen umgesetzt werden:<br/><br/>
 
 #### Tabellen-Struktur
-- neue Tabelle `ekzaehleinheit`. Hier wird pro Art bestimmt, welche Einheiten gezählt werden sollen. Ersetzt die bestehende Tabelle `ekfzaehleinheit`. Mit folgenden Feldern:
+- :white_check_mark: neue Tabelle `ekzaehleinheit`. Hier wird pro Art bestimmt, welche Einheiten gezählt werden sollen. Ersetzt die bestehende Tabelle `ekfzaehleinheit`. Mit folgenden Feldern:
   - `id`
   - `ap_id`
   - `zaehleinheit_id`
   - `zielrelevant` (neu): ja/nein. Die zielrelevanten sind die Einheiten, deren Anzahlen ausgewertet und mit den Zielen verglichen werden
   - `sort` (neu): Einheiten sollen in einer bestimmten Reihenfolge angezeigt werden
   - `bemerkungen`
-- neue Tabelle `ekfrequenz`, nur von managern bearbeitbar. Felder:
+- :white_check_mark: neue Tabelle `ekfrequenz`, nur von managern bearbeitbar. Felder:
   - `ap_id`: Frequenzen werden pro Aktionsplan definiert. Anfänglich werden dieselben Frequenzen in alle Aktionspläne importiert.
   - `id`
   - `ek`: ja/nein. Diese Frequenz ist für EK anwendbar
@@ -40,16 +40,16 @@ Das soll mit folgenden Massnahmen umgesetzt werden:<br/><br/>
   - `anzahl_min`: Ab dieser Anzahl Individuen wird diese Frequenz bei autochthonen Populationen (normalerweise) gewählt. Bei Anpflanzungen nicht relevant.
   - `anzahl_max`: Bis zu dieser Anzahl Individuen wird diese Frequenz bei autochthonen Populationen (normalerweise) gewählt. Bei Anpflanzungen nicht relevant.
   - `bemerkungen`
-- neue Tabelle `abrechnungstyp_werte` mit den für Wertelisten üblichen Feldern
-- neue Felder auf tpop:
+- :white_check_mark: neue Tabelle `abrechnungstyp_werte` mit den für Wertelisten üblichen Feldern
+- :white_check_mark: neue Felder auf tpop:
   - `ekfrequenz`
   - `ekfrequenz_abweichend`: Diese Frequenz entspricht nicht derjenigen, welche gemäss Populationsgrösse vergeben worden wäre
   - `ek_abrechnungstyp`: Auswahl aus der Tabelle `abrechnungstyp_werte`
   - bestehende zwei kontrollfrequenz-Felder wieder entfernen
-- neue Felder auf tpopkontr:
+- :white_check_mark: neue Felder auf tpopkontr:
   - `apber_nicht_relevant`: Wenn "ja" soll diese Kontrolle für den Jahresbericht nicht berücksichtigt werden (ist umgesetzt)
   - `apber_nicht_relevant_grund`: Begründen, wieso nicht berücksichtigt (ist umgesetzt)
-- neue Tabelle: `ekplan` mit Feldern:
+- :white_check_mark: neue Tabelle: `ekplan` mit Feldern:
   - `tpopkontr_id`
   - `jahr`
   - `typ`: `ek` oder `ekf`
@@ -121,12 +121,11 @@ Das Formular, um Kontrollen zu planen.
 - TPop mit Abrechnungstyp D (Anpflanzung), deren Anpflanzung mehr als 4 Jahre her ist
 
 #### Navigation
-Wenn ein Projekt geöffnet ist, steht in der Menüzeile rechts vom "Strukturbaum 2" eine neue Schaltfläche zur Verfügung: "EK-Planung".<br/><br/>
-
-Befindet man sich im Formular EK-Planung, gibt es in der Menüzeile oben rechts folgende Befehle:
-- Aktionspläne bearbeiten
-- Dokumentation
-- Mehr
+- :white_check_mark: Wenn ein Projekt geöffnet ist, steht in der Menüzeile rechts vom "Strukturbaum 2" eine neue Schaltfläche zur Verfügung: "EK-Plan"
+- :white_check_mark: Befindet man sich im Formular EK-Planung, gibt es in der Menüzeile oben rechts folgende Befehle:
+  - Aktionspläne bearbeiten
+  - Dokumentation
+  - Mehr
 
 #### Termin
 Sollte möglichst bald nach den Sommerferien bereit sein.
