@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useRef } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import camelCase from 'lodash/camelCase'
@@ -31,9 +31,6 @@ const Werte = ({ treeName, table }) => {
   const { refetch: refetchTree } = store
   const { activeNodeArray } = store[treeName]
 
-  const handleSubmitRef = useRef(null)
-  const dirtyRef = useRef(null)
-
   const tableCamelCased = camelCase(table)
   const id =
     activeNodeArray.length > 2
@@ -58,19 +55,6 @@ const Werte = ({ treeName, table }) => {
   const row = get(data, `${tableCamelCased}ById`, {})
 
   //console.log('Werte rendering, row:', row)
-
-  // save on change row
-  // did not work when returning to same dataset
-  /*useEffect(() => {
-    return () => {
-      const dirty = dirtyRef.current
-      console.log('Werte changing row', { dirty })
-      if (dirty) {
-        console.log('Werte submitting on changing row')
-        handleSubmitRef.current()
-      }
-    }
-  }, [row])*/
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
@@ -154,33 +138,28 @@ const Werte = ({ treeName, table }) => {
         />
         <FieldsContainer>
           <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
-            {({ isSubmitting, handleSubmit, dirty }) => {
-              handleSubmitRef.current = handleSubmit
-              dirtyRef.current = dirty
-
-              return (
-                <Form onBlur={() => dirty && handleSubmit()}>
-                  <Field
-                    component={TextField}
-                    name="text"
-                    label="Text"
-                    type="text"
-                  />
-                  <Field
-                    component={TextField}
-                    name="code"
-                    label="Code"
-                    type="number"
-                  />
-                  <Field
-                    component={TextField}
-                    name="sort"
-                    label="Sort"
-                    type="number"
-                  />
-                </Form>
-              )
-            }}
+            {({ isSubmitting, handleSubmit, dirty }) => (
+              <Form onBlur={() => dirty && handleSubmit()}>
+                <Field
+                  component={TextField}
+                  name="text"
+                  label="Text"
+                  type="text"
+                />
+                <Field
+                  component={TextField}
+                  name="code"
+                  label="Code"
+                  type="number"
+                />
+                <Field
+                  component={TextField}
+                  name="sort"
+                  label="Sort"
+                  type="number"
+                />
+              </Form>
+            )}
           </Formik>
         </FieldsContainer>
       </Container>
