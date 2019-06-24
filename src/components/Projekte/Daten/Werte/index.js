@@ -32,14 +32,7 @@ const Werte = ({ treeName, table }) => {
   const { activeNodeArray } = store[treeName]
 
   const handleSubmitRef = useRef(null)
-  // save on unmount
-  useEffect(() => {
-    console.log('Werte mounting')
-    return () => {
-      //console.log('submitting on unmount')
-      handleSubmitRef.current()
-    }
-  }, [])
+  const dirtyRef = useRef(null)
 
   const tableCamelCased = camelCase(table)
   const id =
@@ -62,13 +55,26 @@ const Werte = ({ treeName, table }) => {
     },
   })
 
-  console.log('Werte rendering')
-
   const row = get(data, `${tableCamelCased}ById`, {})
+
+  //console.log('Werte rendering, row:', row)
+
+  // save on change row
+  // did not work when returning to same dataset
+  /*useEffect(() => {
+    return () => {
+      const dirty = dirtyRef.current
+      console.log('Werte changing row', { dirty })
+      if (dirty) {
+        console.log('Werte submitting on changing row')
+        handleSubmitRef.current()
+      }
+    }
+  }, [row])*/
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
-      console.log('submitting')
+      //console.log('submitting')
       const typename = upperFirst(tableCamelCased)
       try {
         const mutation = gql`
@@ -147,11 +153,13 @@ const Werte = ({ treeName, table }) => {
           table={table}
         />
         <FieldsContainer>
-          <Formik initialValues={row} onSubmit={onSubmit}>
+          <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
             {({ isSubmitting, handleSubmit, dirty }) => {
               handleSubmitRef.current = handleSubmit
+              dirtyRef.current = dirty
+
               return (
-                <Form>
+                <Form onBlur={() => dirty && handleSubmit()}>
                   <Field
                     component={TextField}
                     name="text"
@@ -170,9 +178,6 @@ const Werte = ({ treeName, table }) => {
                     label="Sort"
                     type="number"
                   />
-                  <button type="submit" disabled={!dirty || isSubmitting}>
-                    speichern
-                  </button>
                 </Form>
               )
             }}
