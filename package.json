@@ -45,6 +45,7 @@
     "dexie": "2.0.4",
     "exceljs": "1.10.0",
     "file-saver": "2.0.2",
+    "formik": "1.5.7",
     "gatsby": "2.10.0",
     "gatsby-image": "2.2.1",
     "gatsby-mdx": "0.6.3",

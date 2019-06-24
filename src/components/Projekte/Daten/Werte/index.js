@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useContext } from 'react'
+import React, { useCallback, useContext, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import camelCase from 'lodash/camelCase'
@@ -6,9 +6,10 @@ import upperFirst from 'lodash/upperFirst'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
+import { Formik, Form, Field } from 'formik'
 
-import TextField from '../../../shared/TextField2'
 import FormTitle from '../../../shared/FormTitle'
+import TextField from '../../../shared/TextFieldFormik'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
@@ -28,8 +29,17 @@ const Werte = ({ treeName, table }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
   const { refetch: refetchTree } = store
-  const [errors, setErrors] = useState({})
   const { activeNodeArray } = store[treeName]
+
+  const handleSubmitRef = useRef(null)
+  // save on unmount
+  useEffect(() => {
+    console.log('Werte mounting')
+    return () => {
+      //console.log('submitting on unmount')
+      handleSubmitRef.current()
+    }
+  }, [])
 
   const tableCamelCased = camelCase(table)
   const id =
@@ -52,15 +62,14 @@ const Werte = ({ treeName, table }) => {
     },
   })
 
+  console.log('Werte rendering')
+
   const row = get(data, `${tableCamelCased}ById`, {})
 
-  useEffect(() => setErrors({}), [row])
-
-  const saveToDb = useCallback(
-    async event => {
-      const field = event.target.name
+  const onSubmit = useCallback(
+    async (values, { setErrors }) => {
+      console.log('submitting')
       const typename = upperFirst(tableCamelCased)
-      const value = ifIsNumericAsNumber(event.target.value)
       try {
         const mutation = gql`
           mutation updateWert(
@@ -95,23 +104,29 @@ const Werte = ({ treeName, table }) => {
         await client.mutate({
           mutation,
           variables: {
-            id: row.id,
-            [field]: value,
+            id: values.id,
+            code: ifIsNumericAsNumber(values.code),
+            text: values.text,
+            sort: ifIsNumericAsNumber(values.sort),
             changedBy: store.user.name,
           },
         })
       } catch (error) {
-        return setErrors({ [field]: error.message })
+        const { message } = error
+        const field = message.includes('$code')
+          ? 'code'
+          : message.includes('$text')
+          ? 'text'
+          : 'sort'
+        return setErrors({ [field]: message })
       }
       refetch()
       const refetchTableName = `${table}s`
       refetchTree[refetchTableName] && refetchTree[refetchTableName]()
       setErrors({})
     },
-    [row],
+    [row.id, table],
   )
-
-  //console.log('Werte')
 
   if (loading) {
     return (
@@ -132,35 +147,36 @@ const Werte = ({ treeName, table }) => {
           table={table}
         />
         <FieldsContainer>
-          <TextField
-            key={`${row.id}text`}
-            name="text"
-            label="Text"
-            row={row}
-            type="text"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}code`}
-            name="code"
-            label="Code"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-            errors={errors}
-            hintText="Dieser Wert ist erforderlich"
-            required
-          />
-          <TextField
-            key={`${row.id}sort`}
-            name="sort"
-            label="Sort"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
+          <Formik initialValues={row} onSubmit={onSubmit}>
+            {({ isSubmitting, handleSubmit, dirty }) => {
+              handleSubmitRef.current = handleSubmit
+              return (
+                <Form>
+                  <Field
+                    component={TextField}
+                    name="text"
+                    label="Text"
+                    type="text"
+                  />
+                  <Field
+                    component={TextField}
+                    name="code"
+                    label="Code"
+                    type="number"
+                  />
+                  <Field
+                    component={TextField}
+                    name="sort"
+                    label="Sort"
+                    type="number"
+                  />
+                  <button type="submit" disabled={!dirty || isSubmitting}>
+                    speichern
+                  </button>
+                </Form>
+              )
+            }}
+          </Formik>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
