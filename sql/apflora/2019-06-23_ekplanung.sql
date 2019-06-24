@@ -111,22 +111,28 @@ CREATE POLICY writer ON apflora.ekfrequenz
 -- insert some test data:
 -- TODO: will this be the standard for every art?
 insert into apflora.ekfrequenz (ap_id,ek,anwendungsfall,kuerzel,name,anzahl_min,anzahl_max,periodizitaet,sort) values 
-('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population autochthon','GA','stark gefährdet',1,20,'A: jedes 2. Jahr',1),
-('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population autochthon','GB','mittel gefährdet',21,500,'B: jedes 4. Jahr',2),
-('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population autochthon','GC','wenig gefährdet',501,100000,'C: jedes 8. Jahr',3),
+('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population autochthon','GA','stark gefährdet',1,20,'jedes 2. Jahr',1),
+('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population autochthon','GB','mittel gefährdet',21,500,'jedes 4. Jahr',2),
+('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population autochthon','GC','wenig gefährdet',501,100000,'jedes 8. Jahr',3),
 ('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population autochthon','GD','erloschen?',0,0,'nochmals Kontrolle im Folgejahr, ob erloschen',4),
-('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population angepflanzt','NA','seit 1-2 Jahren angepflanzt/etabliert',null,null,'A: im 2. Jahr',5),
-('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population angepflanzt','NB','seit > 2 Jahren etabliert',null,null,'B: jedes 4. Jahr',6),
-('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population angepflanzt','NC','seit > 6 J. etabliert',null,null,'C: jedes 8. Jahr',7),
+('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population angepflanzt','NA','seit 1-2 Jahren angepflanzt',null,null,'im 2. Jahr',5),
+('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population angepflanzt','NB','seit > 2 Jahren etabliert',null,null,'jedes 4. Jahr',6),
+('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population angepflanzt','NC','seit > 6 Jahren etabliert',null,null,'jedes 8. Jahr',7),
 ('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population angepflanzt','ND','angesiedelt',0,0,'keine Kontrolle mehr',8),
-('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population angesät','A',null,0,0,'1. Kontrolle nach 4-6 Jahren. Falls Etablierung: NB, NC',9),
+('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population angesät','A',null,0,0,'1. Kontrolle nach 4-6 Jahren. Falls etabliert: NB, NC',9),
 ('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Spezialfall','SA',null,0,0,'Keine Kontrollen',10);
+
+drop function if exists apflora.ekfrequenz_label(ekfrequenz apflora.ekfrequenz);
+create or replace function apflora.ekfrequenz_label(ekfrequenz apflora.ekfrequenz) returns text as $$
+  select coalesce((select text from apflora.tpopkontrzaehl_einheit_werte where apflora.tpopkontrzaehl_einheit_werte.id = ekfrequenz.zaehleinheit_id), '(keine zähleinheit gewählt)')
+$$ language sql stable;
+comment on function apflora.ekfrequenz_label(apflora.ekfrequenz) is e'@sortable';
 -- TODO: build ui for ekfrequenz
 
 DROP TABLE IF EXISTS apflora.ek_abrechnungstyp_werte;
 CREATE TABLE apflora.ek_abrechnungstyp_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  code text,
+  code text unique,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
@@ -138,6 +144,13 @@ CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree (sort);
 COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+insert into apflora.ek_abrechnungstyp_werte (code,text,sort) values
+('a','a',1),
+('b','b',2),
+('c','c',3),
+('d','d',4),
+('e','e',5),
+('f','f',6);
 -- TODO: build ui for ek_abrechnungstyp_werte
 
 
@@ -147,7 +160,7 @@ COMMENT ON COLUMN apflora.tpop.ekfrequenz IS 'Wert aus Tabelle ekfrequenz. Besti
 ALTER TABLE apflora.tpop ADD COLUMN ekfrequenz_abweichend boolean DEFAULT false;
 CREATE INDEX ON apflora.tpop USING btree (ekfrequenz_abweichend);
 COMMENT ON COLUMN apflora.tpop.ekfrequenz_abweichend IS 'Diese Frequenz entspricht nicht derjenigen, welche gemäss Populationsgrösse vergeben worden wäre';
-ALTER TABLE apflora.tpop ADD COLUMN ek_abrechnungstyp uuid DEFAULT null REFERENCES apflora.ek_abrechnungstyp_werte (id) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE apflora.tpop ADD COLUMN ek_abrechnungstyp text DEFAULT null REFERENCES apflora.ek_abrechnungstyp_werte (code) ON DELETE SET NULL ON UPDATE CASCADE;
 CREATE INDEX ON apflora.tpop USING btree (ek_abrechnungstyp);
 COMMENT ON COLUMN apflora.tpop.ek_abrechnungstyp IS 'Fremdschlüssel aus Tabelle ek_abrechnungstyp_werte. Bestimmt, wie Kontrollen abgerechnet werden sollen';
 -- TODO: add to tpop form

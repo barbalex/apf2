@@ -33,7 +33,7 @@ export default gql`
     $bewirtschaftung: String
     $ekfrequenz: UUID
     $ekfrequenzAbweichend: Boolean
-    $ekAbrechnungstyp: UUID
+    $ekAbrechnungstyp: String
     $bemerkungen: String
     $statusUnklar: Boolean
     $changedBy: String

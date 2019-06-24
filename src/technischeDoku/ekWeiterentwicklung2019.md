@@ -40,11 +40,11 @@ Das soll mit folgenden Massnahmen umgesetzt werden:<br/><br/>
   - `anzahl_min`: Ab dieser Anzahl Individuen wird diese Frequenz bei autochthonen Populationen (normalerweise) gewählt. Bei Anpflanzungen nicht relevant.
   - `anzahl_max`: Bis zu dieser Anzahl Individuen wird diese Frequenz bei autochthonen Populationen (normalerweise) gewählt. Bei Anpflanzungen nicht relevant.
   - `bemerkungen`
-- :white_check_mark: neue Tabelle `abrechnungstyp_werte` mit den für Wertelisten üblichen Feldern
+- :white_check_mark: neue Tabelle `ek_abrechnungstyp_werte` mit den für Wertelisten üblichen Feldern
 - :white_check_mark: neue Felder auf tpop:
   - `ekfrequenz`
   - `ekfrequenz_abweichend`: Diese Frequenz entspricht nicht derjenigen, welche gemäss Populationsgrösse vergeben worden wäre
-  - `ek_abrechnungstyp`: Auswahl aus der Tabelle `abrechnungstyp_werte`
+  - `ek_abrechnungstyp`: Auswahl aus der Tabelle `ek_abrechnungstyp_werte`
   - bestehende zwei kontrollfrequenz-Felder wieder entfernen
 - :white_check_mark: neue Felder auf tpopkontr:
   - `apber_nicht_relevant`: Wenn "ja" soll diese Kontrolle für den Jahresbericht nicht berücksichtigt werden (ist umgesetzt)
@@ -55,7 +55,7 @@ Das soll mit folgenden Massnahmen umgesetzt werden:<br/><br/>
   - `typ`: `ek` oder `ekf`
 
 #### Strukturbaum
-- Neuer Knoten im AP: `EK-Frequenz-Typen`. Mit Formular, um die Daten zu erfassen.
+- Neuer Knoten im AP: `EK-Frequenzen`. Mit Formular, um die Daten zu erfassen.
 - Neuer Knoten in den Werte-Listen: `EK: Abrechnungs-Typen`
 - Bestehender Knoten `EKF-Zähleinheiten` wird neu `EK-Zähleinheiten`
 

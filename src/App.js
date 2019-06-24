@@ -25,6 +25,7 @@ import { SnackbarProvider } from 'notistack'
 //import { onPatch } from 'mobx-state-tree'
 
 import 'typeface-roboto'
+import 'typeface-roboto-mono'
 
 // import components
 import initializeIdb from './modules/initializeIdb'

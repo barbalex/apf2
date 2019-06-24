@@ -10,14 +10,15 @@ import Status from '../../../shared/Status'
 import SelectCreatable from '../../../shared/SelectCreatableGemeinde'
 import RadioButton from '../../../shared/RadioButton'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
+import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import FormTitle from '../../../shared/FormTitle'
 import FilterTitle from '../../../shared/FilterTitle'
 import TpopAbBerRelevantInfoPopover from '../TpopAbBerRelevantInfoPopover'
-import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
 import queryLists from './queryLists'
 import queryTpops from './queryTpops'
+import queryEkfrequenzs from './queryEkfrequenzs'
 import updateTpopByIdGql from './updateTpopById'
 import getGemeindeForKoord from '../../../../modules/getGemeindeForKoord'
 import storeContext from '../../../../storeContext'
@@ -33,14 +34,19 @@ const Container = styled.div`
 `
 const FieldsContainer = styled.div`
   padding: 10px;
-  overflow: auto !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
   height: 100%;
-  column-width: ${props =>
-    props['data-width'] > 2 * constants.columnWidth
-      ? `${constants.columnWidth}px`
-      : 'auto'};
   fieldset {
     padding-right: 30px;
+  }
+`
+const EkfrequenzOptionsContainer = styled.div`
+  span {
+    font-family: 'Roboto Mono' !important;
+    font-size: 12px;
+    white-space: pre;
+    line-height: 1.5rem;
   }
 `
 
@@ -90,6 +96,12 @@ const Tpop = ({ treeName, showFilter = false }) => {
       showFilter,
       allTpopsFilter,
       tpopFilter,
+      apId,
+    },
+  })
+
+  const { data: dataEkfrequenzs } = useQuery(queryEkfrequenzs, {
+    variables: {
       apId,
     },
   })
@@ -239,6 +251,25 @@ const Tpop = ({ treeName, showFilter = false }) => {
     },
     [row],
   )
+
+  const ekfrequenzOptions = get(
+    dataEkfrequenzs,
+    'allEkfrequenzs.nodes',
+    [],
+  ).map(o => {
+    const ekTypeArray = [o.ek ? 'ek' : null, o.ekf ? 'ekf' : null].filter(
+      v => !!v,
+    )
+    const kuerzel = (o.kuerzel || '').padEnd(2)
+    const anwendungsfall = (
+      `${o.anwendungsfall}, ${ekTypeArray.join(' und ')}` || ''
+    ).padEnd(26)
+    const name = (o.name || '').padEnd(27)
+    return {
+      value: o.id,
+      label: `${kuerzel}: ${anwendungsfall} | ${name} | ${o.periodizitaet}`,
+    }
+  })
 
   if (!showFilter && loading) {
     return (
@@ -473,15 +504,17 @@ const Tpop = ({ treeName, showFilter = false }) => {
             saveToDb={saveToDb}
             errors={errors}
           />
-          <TextField
-            key={`${row.id}ekfrequenz`}
-            name="ekfrequenz"
-            label="EK-Frequenz"
-            row={row}
-            type="text"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
+          <EkfrequenzOptionsContainer>
+            <RadioButtonGroup
+              value={row.ekfrequenz}
+              name="ekfrequenz"
+              dataSource={ekfrequenzOptions}
+              loading={loadingLists}
+              label="EK-Frequenz"
+              saveToDb={saveToDb}
+              error={errors.ekfrequenz}
+            />
+          </EkfrequenzOptionsContainer>
           <RadioButton
             key={`${row.id}ekfrequenzAbweichend`}
             name="ekfrequenzAbweichend"
@@ -490,15 +523,17 @@ const Tpop = ({ treeName, showFilter = false }) => {
             saveToDb={saveToDb}
             error={errors.ekfrequenzAbweichend}
           />
-          <TextField
-            key={`${row.id}ekAbrechnungstyp`}
-            name="ekAbrechnungstyp"
-            label="EK-Abrechnungstyp"
-            row={row}
-            type="text"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
+          <div>
+            <RadioButtonGroup
+              value={row.ekAbrechnungstyp}
+              name="ekAbrechnungstyp"
+              dataSource={get(dataLists, 'allEkAbrechnungstypWertes.nodes', [])}
+              loading={loadingLists}
+              label="EK-Abrechnungstyp"
+              saveToDb={saveToDb}
+              error={errors.ekAbrechnungstyp}
+            />
+          </div>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
