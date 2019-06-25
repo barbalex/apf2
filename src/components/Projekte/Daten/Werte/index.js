@@ -58,7 +58,6 @@ const Werte = ({ treeName, table }) => {
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
-      //console.log('submitting')
       const typename = upperFirst(tableCamelCased)
       try {
         const mutation = gql`
