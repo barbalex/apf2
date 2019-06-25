@@ -1,19 +1,20 @@
-import React, { useState, useCallback, useEffect, useContext } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import { Formik, Form, Field } from 'formik'
 
-import RadioButtonGroup from '../../../shared/RadioButtonGroup'
-import TextField from '../../../shared/TextField2'
-import Select from '../../../shared/Select'
-import SelectLoadingOptionsTypable from '../../../shared/SelectLoadingOptionsTypable'
-import RadioButton from '../../../shared/RadioButton'
+import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
+import TextField from '../../../shared/TextFieldFormik'
+import Select from '../../../shared/SelectFormik'
+import SelectLoadingOptionsTypable from '../../../shared/SelectLoadingOptionsTypableFormik'
+import RadioButton from '../../../shared/RadioButtonFormik'
+import DateFieldWithPicker from '../../../shared/DateFieldWithPickerFormik'
 import StringToCopy from '../../../shared/StringToCopy'
 import FormTitle from '../../../shared/FormTitle'
 import FilterTitle from '../../../shared/FilterTitle'
-import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
 import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
@@ -23,8 +24,9 @@ import queryAdresses from './queryAdresses'
 import queryAeEigenschaftens from './queryAeEigenschaftens'
 import updateTpopmassnByIdGql from './updateTpopmassnById'
 import storeContext from '../../../../storeContext'
-import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { simpleTypes as tpopmassnType } from '../../../../store/NodeFilterTree/tpopmassn'
+import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
+import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -47,7 +49,6 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
   const client = useApolloClient()
   const { nodeFilter, nodeFilterSetValue, refetch } = store
 
-  const [errors, setErrors] = useState({})
   const { activeNodeArray, datenWidth, filterWidth } = store[treeName]
 
   let id =
@@ -129,17 +130,15 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
     row = get(data, 'tpopmassnById', {})
   }
 
-  useEffect(() => setErrors({}), [row])
-
-  const saveToDb = useCallback(
-    async event => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
+  const onSubmit = useCallback(
+    async (values, { setErrors }) => {
+      const changedField = objectsFindChangedKey(values, row)
+      const value = values[changedField]
       if (showFilter) {
         nodeFilterSetValue({
           treeName,
           table: 'tpopmassn',
-          key: field,
+          key: changedField,
           value,
         })
       } else {
@@ -148,22 +147,15 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
          * with same update
          */
         const variables = {
-          id: row.id,
-          [field]: value,
+          ...objectsEmptyValuesToNull(values),
           changedBy: store.user.name,
         }
-        let field2
-        if (field === 'jahr') field2 = 'datum'
-        if (field === 'datum') field2 = 'jahr'
-        let value2
-        if (field === 'jahr') value2 = null
-        if (field === 'datum') {
-          // this broke 13.2.2019
-          //value2 = !!value ? +format(new Date(value), 'yyyy') : null
-          // value can be null so check if substring method exists
-          value2 = value.substring ? +value.substring(0, 4) : value
+        if (changedField === 'jahr') {
+          variables.datum = null
         }
-        if (field2) variables[field2] = value2
+        if (changedField === 'datum') {
+          variables.jahr = value.substring ? +value.substring(0, 4) : value
+        }
         try {
           await client.mutate({
             mutation: updateTpopmassnByIdGql,
@@ -172,46 +164,7 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
               __typename: 'Mutation',
               updateTpopmassnById: {
                 tpopmassn: {
-                  id: row.id,
-                  typ: field === 'typ' ? value : row.typ,
-                  beschreibung:
-                    field === 'beschreibung' ? value : row.beschreibung,
-                  jahr:
-                    field === 'jahr'
-                      ? value
-                      : field2 === 'jahr'
-                      ? value2
-                      : row.jahr,
-                  datum:
-                    field === 'datum'
-                      ? value
-                      : field2 === 'datum'
-                      ? value2
-                      : row.datum,
-                  bemerkungen:
-                    field === 'bemerkungen' ? value : row.bemerkungen,
-                  planBezeichnung:
-                    field === 'planBezeichnung' ? value : row.planBezeichnung,
-                  flaeche: field === 'flaeche' ? value : row.flaeche,
-                  markierung: field === 'markierung' ? value : row.markierung,
-                  anzTriebe: field === 'anzTriebe' ? value : row.anzTriebe,
-                  anzPflanzen:
-                    field === 'anzPflanzen' ? value : row.anzPflanzen,
-                  anzPflanzstellen:
-                    field === 'anzPflanzstellen' ? value : row.anzPflanzstellen,
-                  wirtspflanze:
-                    field === 'wirtspflanze' ? value : row.wirtspflanze,
-                  herkunftPop:
-                    field === 'herkunftPop' ? value : row.herkunftPop,
-                  sammeldatum:
-                    field === 'sammeldatum' ? value : row.sammeldatum,
-                  form: field === 'form' ? value : row.form,
-                  pflanzanordnung:
-                    field === 'pflanzanordnung' ? value : row.pflanzanordnung,
-                  tpopId: field === 'tpopId' ? value : row.tpopId,
-                  bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
-                  planVorhanden:
-                    field === 'planVorhanden' ? value : row.planVorhanden,
+                  ...variables,
                   __typename: 'Tpopmassn',
                 },
                 __typename: 'Tpopmassn',
@@ -219,14 +172,18 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
             },
           })
         } catch (error) {
-          return setErrors({ [field]: error.message })
+          return setErrors({ [changedField]: error.message })
         }
         setErrors({})
-        if (['typ'].includes(field)) refetch.tpopmassns()
+        if ([('typ', 'jahr', 'datum')].includes(changedField)) {
+          refetch.tpopmassns()
+        }
       }
     },
     [row, showFilter],
   )
+
+  //console.log('Tpopmassn rendering')
 
   if (loading) {
     return (
@@ -259,172 +216,129 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
           />
         )}
         <FieldsContainer data-width={showFilter ? filterWidth : datenWidth}>
-          <TextField
-            key={`${row.id}jahr`}
-            name="jahr"
-            label="Jahr"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <DateFieldWithPicker
-            key={`${row.id}datum`}
-            name="datum"
-            label="Datum"
-            value={row.datum}
-            saveToDb={saveToDb}
-            error={errors.datum}
-          />
-          <RadioButtonGroup
-            key={`${row.id}typ`}
-            name="typ"
-            label="Typ"
-            value={row.typ}
-            dataSource={get(dataLists, 'allTpopmassnTypWertes.nodes', [])}
-            loading={loadingLists}
-            saveToDb={saveToDb}
-            error={errors.typ}
-          />
-          <TextField
-            key={`${row.id}beschreibung`}
-            name="beschreibung"
-            label="Massnahme"
-            row={row}
-            type="text"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <Select
-            key={`${row.id}bearbeiter`}
-            name="bearbeiter"
-            value={row.bearbeiter}
-            field="bearbeiter"
-            label="BearbeiterIn"
-            options={get(dataAdresses, 'allAdresses.nodes', [])}
-            loading={loadingAdresses}
-            saveToDb={saveToDb}
-            error={errors.bearbeiter}
-          />
-          <TextField
-            key={`${row.id}bemerkungen`}
-            name="bemerkungen"
-            label="Bemerkungen"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <RadioButton
-            key={`${row.id}planVorhanden`}
-            name="planVorhanden"
-            label="Plan vorhanden"
-            value={row.planVorhanden}
-            saveToDb={saveToDb}
-            error={errors.planVorhanden}
-          />
-          <TextField
-            key={`${row.id}planBezeichnung`}
-            name="planBezeichnung"
-            label="Plan Bezeichnung"
-            row={row}
-            type="text"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}flaeche`}
-            name="flaeche"
-            label="Fläche (m2)"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}form`}
-            name="form"
-            label="Form der Ansiedlung"
-            row={row}
-            type="text"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}pflanzanordnung`}
-            name="pflanzanordnung"
-            label="Pflanzanordnung"
-            row={row}
-            type="text"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}markierung`}
-            name="markierung"
-            label="Markierung"
-            row={row}
-            type="text"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}anzTriebe`}
-            name="anzTriebe"
-            label="Anzahl Triebe"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}anzPflanzen`}
-            name="anzPflanzen"
-            label="Anzahl Pflanzen"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}anzPflanzstellen`}
-            name="anzPflanzstellen"
-            label="Anzahl Pflanzstellen"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <SelectLoadingOptionsTypable
-            key={`${row.id}wirtspflanze`}
-            field="wirtspflanze"
-            label="Wirtspflanze"
-            row={row}
-            saveToDb={saveToDb}
-            error={errors.wirtspflanze}
-            query={queryAeEigenschaftens}
-            queryNodesName="allAeEigenschaftens"
-          />
-          <TextField
-            key={`${row.id}herkunftPop`}
-            name="herkunftPop"
-            label="Herkunftspopulation"
-            row={row}
-            type="text"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}sammeldatum`}
-            name="sammeldatum"
-            label="Sammeldatum"
-            row={row}
-            type="text"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <StringToCopy text={row.id} label="id" />
+          <Formik
+            key={showFilter ? JSON.stringify(row) : row.id}
+            initialValues={row}
+            onSubmit={onSubmit}
+            enableReinitialize
+          >
+            {({ handleSubmit, dirty }) => (
+              <Form onBlur={() => dirty && handleSubmit()}>
+                <Field
+                  name="jahr"
+                  label="Jahr"
+                  type="number"
+                  component={TextField}
+                />
+                <Field
+                  name="datum"
+                  label="Datum"
+                  component={DateFieldWithPicker}
+                />
+                <Field
+                  name="typ"
+                  label="Typ"
+                  component={RadioButtonGroup}
+                  dataSource={get(dataLists, 'allTpopmassnTypWertes.nodes', [])}
+                  loading={loadingLists}
+                />
+                <Field
+                  name="beschreibung"
+                  label="Massnahme"
+                  type="text"
+                  component={TextField}
+                />
+                <Field
+                  name="bearbeiter"
+                  value={row.bearbeiter}
+                  label="BearbeiterIn"
+                  component={Select}
+                  options={get(dataAdresses, 'allAdresses.nodes', [])}
+                  loading={loadingAdresses}
+                />
+                <Field
+                  name="bemerkungen"
+                  label="Bemerkungen"
+                  type="text"
+                  component={TextField}
+                  multiLine
+                />
+                <Field
+                  name="planVorhanden"
+                  label="Plan vorhanden"
+                  component={RadioButton}
+                />
+                <Field
+                  name="planBezeichnung"
+                  label="Plan Bezeichnung"
+                  type="text"
+                  component={TextField}
+                />
+                <Field
+                  name="flaeche"
+                  label="Fläche (m2)"
+                  type="number"
+                  component={TextField}
+                />
+                <Field
+                  name="form"
+                  label="Form der Ansiedlung"
+                  type="text"
+                  component={TextField}
+                />
+                <Field
+                  name="pflanzanordnung"
+                  label="Pflanzanordnung"
+                  type="text"
+                  component={TextField}
+                />
+                <Field
+                  name="markierung"
+                  label="Markierung"
+                  type="text"
+                  component={TextField}
+                />
+                <Field
+                  name="anzTriebe"
+                  label="Anzahl Triebe"
+                  type="number"
+                  component={TextField}
+                />
+                <Field
+                  name="anzPflanzen"
+                  label="Anzahl Pflanzen"
+                  type="number"
+                  component={TextField}
+                />
+                <Field
+                  name="anzPflanzstellen"
+                  label="Anzahl Pflanzstellen"
+                  type="number"
+                  component={TextField}
+                />
+                <Field
+                  field="wirtspflanze"
+                  label="Wirtspflanze"
+                  component={SelectLoadingOptionsTypable}
+                  query={queryAeEigenschaftens}
+                  queryNodesName="allAeEigenschaftens"
+                />
+                <Field
+                  name="herkunftPop"
+                  label="Herkunftspopulation"
+                  type="text"
+                  component={TextField}
+                />
+                <Field
+                  name="sammeldatum"
+                  label="Sammeldatum"
+                  type="text"
+                  component={TextField}
+                />
+                <StringToCopy text={row.id} label="id" />
+              </Form>
+            )}
+          </Formik>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
