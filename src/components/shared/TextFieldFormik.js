@@ -25,12 +25,11 @@ const MyTextField = ({
   required = false,
 }) => {
   const { onChange, onBlur, value, name } = field
-  const { touched, errors } = form
+  const { touched, errors, handleSubmit } = form
   const error = errors[name]
+
   const onKeyPress = useCallback(event => {
-    if (event.key === 'Enter') {
-      onBlur(event)
-    }
+    event.key === 'Enter' && handleSubmit()
   })
 
   return (
