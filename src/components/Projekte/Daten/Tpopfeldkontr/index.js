@@ -247,8 +247,6 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
     .map(e => `${e.label}: ${e.einheit ? e.einheit.replace(/  +/g, ' ') : ''}`)
     .map(o => ({ value: o, label: o }))
 
-  console.log('EK rendering')
-
   if (loading) {
     return (
       <Container>
