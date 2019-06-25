@@ -3,9 +3,10 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import { Formik, Form, Field } from 'formik'
 
-import RadioButtonGroup from '../../../shared/RadioButtonGroup'
-import TextField from '../../../shared/TextField2'
+import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
+import TextField from '../../../shared/TextFieldFormik'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
@@ -13,6 +14,7 @@ import queryLists from './queryLists'
 import updatePopmassnberByIdGql from './updatePopmassnberById'
 import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
+import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -51,30 +53,29 @@ const Popmassnber = ({ treeName }) => {
 
   useEffect(() => setErrors({}), [row])
 
-  const saveToDb = useCallback(
-    async event => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
+  const onSubmit = useCallback(
+    async (values, { setErrors }) => {
+      const changedField = objectsFindChangedKey(values, row)
       try {
         await client.mutate({
           mutation: updatePopmassnberByIdGql,
           variables: {
-            id: row.id,
-            [field]: value,
+            id: values.id,
+            popId: values.popId,
+            jahr: values.jahr,
+            beurteilung: values.beurteilung,
+            bemerkungen: values.bemerkungen,
             changedBy: store.user.name,
           },
           optimisticResponse: {
             __typename: 'Mutation',
             updatePopmassnberById: {
               popmassnber: {
-                id: row.id,
-                popId: field === 'popId' ? value : row.popId,
-                jahr: field === 'jahr' ? value : row.jahr,
-                beurteilung: field === 'beurteilung' ? value : row.beurteilung,
-                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-                tpopmassnErfbeurtWerteByBeurteilung:
-                  row.tpopmassnErfbeurtWerteByBeurteilung,
-                popByPopId: row.popByPopId,
+                id: values.id,
+                popId: values.popId,
+                jahr: values.jahr,
+                beurteilung: values.beurteilung,
+                bemerkungen: values.bemerkungen,
                 __typename: 'Popmassnber',
               },
               __typename: 'Popmassnber',
@@ -82,10 +83,10 @@ const Popmassnber = ({ treeName }) => {
           },
         })
       } catch (error) {
-        return setErrors({ [field]: error.message })
+        return setErrors({ [changedField]: error.message })
       }
       setErrors({})
-      if (['beurteilung'].includes(field)) refetch.popmassnbers()
+      changedField === 'beurteilung' && refetch.popmassnbers()
     },
     [row],
   )
@@ -111,35 +112,36 @@ const Popmassnber = ({ treeName }) => {
           table="popmassnber"
         />
         <FieldsContainer>
-          <TextField
-            key={`${row.id}jahr`}
-            name="jahr"
-            label="Jahr"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <RadioButtonGroup
-            key={`${row.id}beurteilung`}
-            name="beurteilung"
-            label="Entwicklung"
-            value={row.beurteilung}
-            dataSource={get(dataLists, 'allTpopmassnErfbeurtWertes.nodes', [])}
-            loading={loadingLists}
-            saveToDb={saveToDb}
-            error={errors.beurteilung}
-          />
-          <TextField
-            key={`${row.id}bemerkungen`}
-            name="bemerkungen"
-            label="Interpretation"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
+          <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
+            {({ handleSubmit, dirty }) => (
+              <Form onBlur={() => dirty && handleSubmit()}>
+                <Field
+                  name="jahr"
+                  label="Jahr"
+                  type="number"
+                  component={TextField}
+                />
+                <Field
+                  name="beurteilung"
+                  label="Entwicklung"
+                  component={RadioButtonGroup}
+                  dataSource={get(
+                    dataLists,
+                    'allTpopmassnErfbeurtWertes.nodes',
+                    [],
+                  )}
+                  loading={loadingLists}
+                />
+                <Field
+                  name="bemerkungen"
+                  label="Interpretation"
+                  type="text"
+                  component={TextField}
+                  multiLine
+                />
+              </Form>
+            )}
+          </Formik>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
