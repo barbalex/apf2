@@ -1,18 +1,20 @@
-import React, { useState, useCallback, useEffect, useContext } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import { Formik, Form, Field } from 'formik'
 
-import RadioButtonGroup from '../../../shared/RadioButtonGroup'
-import TextField from '../../../shared/TextField2'
+import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
+import TextField from '../../../shared/TextFieldFormik'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
 import queryLists from './queryLists'
 import updateTpopmassnberByIdGql from './updateTpopmassnberById'
 import storeContext from '../../../../storeContext'
-import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
+import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
+import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -29,7 +31,6 @@ const Tpopmassnber = ({ treeName }) => {
   const store = useContext(storeContext)
   const { refetch } = store
   const client = useApolloClient()
-  const [errors, setErrors] = useState({})
   const { activeNodeArray } = store[treeName]
 
   const { data, loading, error } = useQuery(query, {
@@ -49,30 +50,21 @@ const Tpopmassnber = ({ treeName }) => {
 
   const row = get(data, 'tpopmassnberById', {})
 
-  useEffect(() => setErrors({}), [row])
-
-  const saveToDb = useCallback(
-    async event => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
+  const onSubmit = useCallback(
+    async (values, { setErrors }) => {
+      const changedField = objectsFindChangedKey(values, row)
       try {
         await client.mutate({
           mutation: updateTpopmassnberByIdGql,
           variables: {
-            id: row.id,
-            [field]: value,
+            ...objectsEmptyValuesToNull(values),
             changedBy: store.user.name,
           },
           optimisticResponse: {
             __typename: 'Mutation',
             updateTpopmassnberById: {
               tpopmassnber: {
-                id: row.id,
-                tpopId: field === 'tpopId' ? value : row.tpopId,
-                jahr: field === 'jahr' ? value : row.jahr,
-                beurteilung: field === 'beurteilung' ? value : row.beurteilung,
-                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-                tpopByTpopId: row.tpopByTpopId,
+                ...values,
                 __typename: 'Tpopmassnber',
               },
               __typename: 'Tpopmassnber',
@@ -80,10 +72,10 @@ const Tpopmassnber = ({ treeName }) => {
           },
         })
       } catch (error) {
-        return setErrors({ [field]: error.message })
+        return setErrors({ [changedField]: error.message })
       }
       setErrors({})
-      if (['beurteilung'].includes(field)) refetch.tpopmassnbers()
+      changedField === 'beurteilung' && refetch.tpopmassnbers()
     },
     [row],
   )
@@ -109,35 +101,36 @@ const Tpopmassnber = ({ treeName }) => {
           table="tpopmassnber"
         />
         <FieldsContainer>
-          <TextField
-            key={`${row.id}jahr`}
-            name="jahr"
-            label="Jahr"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <RadioButtonGroup
-            key={`${row.id}beurteilung`}
-            name="beurteilung"
-            label="Entwicklung"
-            value={row.beurteilung}
-            dataSource={get(dataLists, 'allTpopmassnErfbeurtWertes.nodes', [])}
-            loading={loadingLists}
-            saveToDb={saveToDb}
-            error={errors.beurteilung}
-          />
-          <TextField
-            key={`${row.id}bemerkungen`}
-            name="bemerkungen"
-            label="Interpretation"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
+          <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
+            {({ handleSubmit, dirty }) => (
+              <Form onBlur={() => dirty && handleSubmit()}>
+                <Field
+                  name="jahr"
+                  label="Jahr"
+                  type="number"
+                  component={TextField}
+                />
+                <Field
+                  name="beurteilung"
+                  label="Entwicklung"
+                  component={RadioButtonGroup}
+                  dataSource={get(
+                    dataLists,
+                    'allTpopmassnErfbeurtWertes.nodes',
+                    [],
+                  )}
+                  loading={loadingLists}
+                />
+                <Field
+                  name="bemerkungen"
+                  label="Interpretation"
+                  type="text"
+                  component={TextField}
+                  multiLine
+                />
+              </Form>
+            )}
+          </Formik>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
