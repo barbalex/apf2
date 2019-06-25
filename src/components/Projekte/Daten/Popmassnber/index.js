@@ -14,6 +14,7 @@ import queryLists from './queryLists'
 import updatePopmassnberByIdGql from './updatePopmassnberById'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
+import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -56,22 +57,14 @@ const Popmassnber = ({ treeName }) => {
         await client.mutate({
           mutation: updatePopmassnberByIdGql,
           variables: {
-            id: values.id,
-            popId: values.popId,
-            jahr: values.jahr,
-            beurteilung: values.beurteilung,
-            bemerkungen: values.bemerkungen,
+            ...objectsEmptyValuesToNull(values),
             changedBy: store.user.name,
           },
           optimisticResponse: {
             __typename: 'Mutation',
             updatePopmassnberById: {
               popmassnber: {
-                id: values.id,
-                popId: values.popId,
-                jahr: values.jahr,
-                beurteilung: values.beurteilung,
-                bemerkungen: values.bemerkungen,
+                ...values,
                 __typename: 'Popmassnber',
               },
               __typename: 'Popmassnber',

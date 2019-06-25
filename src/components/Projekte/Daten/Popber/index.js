@@ -14,6 +14,7 @@ import queryLists from './queryLists'
 import updatePopberByIdGql from './updatePopberById'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
+import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -56,22 +57,14 @@ const Popber = ({ treeName }) => {
         await client.mutate({
           mutation: updatePopberByIdGql,
           variables: {
-            id: values.id,
-            popId: values.popId,
-            jahr: values.jahr,
-            entwicklung: values.entwicklung,
-            bemerkungen: values.bemerkungen,
+            ...objectsEmptyValuesToNull(values),
             changedBy: store.user.name,
           },
           optimisticResponse: {
             __typename: 'Mutation',
             updatePopberById: {
               popber: {
-                id: values.id,
-                popId: values.popId,
-                jahr: values.jahr,
-                entwicklung: values.entwicklung,
-                bemerkungen: values.bemerkungen,
+                ...values,
                 __typename: 'Popber',
               },
               __typename: 'Popber',

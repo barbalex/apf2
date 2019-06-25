@@ -18,6 +18,7 @@ import storeContext from '../../../../storeContext'
 import Files from '../../../shared/Files'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
+import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -84,54 +85,13 @@ const Idealbiotop = ({ treeName }) => {
         await client.mutate({
           mutation: updateIdealbiotopByIdGql,
           variables: {
-            id: row.id,
-            apId: values.apId,
-            erstelldatum: values.erstelldatum,
-            hoehenlage: values.hoehenlage,
-            region: values.region,
-            exposition: values.exposition,
-            besonnung: values.besonnung,
-            hangneigung: values.hangneigung,
-            bodenTyp: values.bodenTyp,
-            bodenKalkgehalt: values.bodenKalkgehalt,
-            bodenDurchlaessigkeit: values.bodenDurchlaessigkeit,
-            bodenHumus: values.bodenHumus,
-            bodenNaehrstoffgehalt: values.bodenNaehrstoffgehalt,
-            wasserhaushalt: values.wasserhaushalt,
-            konkurrenz: values.konkurrenz,
-            moosschicht: values.moosschicht,
-            krautschicht: values.krautschicht,
-            strauchschicht: values.strauchschicht,
-            baumschicht: values.baumschicht,
-            bemerkungen: values.bemerkungen,
+            ...objectsEmptyValuesToNull(values),
             changedBy: store.user.name,
           },
           optimisticResponse: {
             __typename: 'Mutation',
             updateIdealbiotopById: {
-              idealbiotop: {
-                id: row.id,
-                apId: values.apId,
-                erstelldatum: values.erstelldatum,
-                hoehenlage: values.hoehenlage,
-                region: values.region,
-                exposition: values.exposition,
-                besonnung: values.besonnung,
-                hangneigung: values.hangneigung,
-                bodenTyp: values.bodenTyp,
-                bodenKalkgehalt: values.bodenKalkgehalt,
-                bodenDurchlaessigkeit: values.bodenDurchlaessigkeit,
-                bodenHumus: values.bodenHumus,
-                bodenNaehrstoffgehalt: values.bodenNaehrstoffgehalt,
-                wasserhaushalt: values.wasserhaushalt,
-                konkurrenz: values.konkurrenz,
-                moosschicht: values.moosschicht,
-                krautschicht: values.krautschicht,
-                strauchschicht: values.strauchschicht,
-                baumschicht: values.baumschicht,
-                bemerkungen: values.bemerkungen,
-                __typename: 'Idealbiotop',
-              },
+              idealbiotop: { ...values, __typename: 'Idealbiotop' },
               __typename: 'Idealbiotop',
             },
           },

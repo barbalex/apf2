@@ -12,8 +12,8 @@ import FormTitle from '../../../shared/FormTitle'
 import TextField from '../../../shared/TextFieldFormik'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import storeContext from '../../../../storeContext'
-import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
+import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -55,8 +55,6 @@ const Werte = ({ treeName, table }) => {
 
   const row = get(data, `${tableCamelCased}ById`, {})
 
-  //console.log('Werte rendering, row:', row)
-
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
@@ -95,10 +93,7 @@ const Werte = ({ treeName, table }) => {
         await client.mutate({
           mutation,
           variables: {
-            id: values.id,
-            code: ifIsNumericAsNumber(values.code),
-            text: values.text,
-            sort: ifIsNumericAsNumber(values.sort),
+            ...objectsEmptyValuesToNull(values),
             changedBy: store.user.name,
           },
         })
