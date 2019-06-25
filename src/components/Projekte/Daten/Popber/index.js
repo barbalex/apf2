@@ -51,7 +51,7 @@ const Popber = ({ treeName }) => {
   const row = get(data, 'popberById', {})
 
   const onSubmit = useCallback(
-    async (values, { setErrors, name }) => {
+    async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
       try {
         await client.mutate({
