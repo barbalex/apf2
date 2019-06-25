@@ -34,7 +34,7 @@ const RadioButtonGroup = ({
   dataSource = [],
 }) => {
   const { onChange, onBlur, value, name } = field
-  const { touched, errors, handleSubmit } = form
+  const { errors, handleSubmit } = form
   const error = errors[name]
 
   const onClickButton = useCallback(
@@ -121,7 +121,7 @@ const RadioButtonGroup = ({
           />
         ))}
       </RadioGroup>
-      {touched[name] && !!error && (
+      {!!error && (
         <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
       )}
       {!!helperText && (

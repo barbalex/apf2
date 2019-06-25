@@ -25,7 +25,7 @@ const StyledDatePicker = styled(DatePicker)`
 
 const DateFieldWithPicker = ({ field, form, label }) => {
   const { onChange, onBlur, value: propsValue, name } = field
-  const { touched, errors, handleSubmit } = form
+  const { errors, handleSubmit } = form
   const error = errors[name]
 
   const [stateValue, setStateValue] = useState(
@@ -96,7 +96,7 @@ const DateFieldWithPicker = ({ field, form, label }) => {
         spellCheck="off"
         data-id={name}
       />
-      {touched[name] && !!error && (
+      {!!error && (
         <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
       )}
     </>

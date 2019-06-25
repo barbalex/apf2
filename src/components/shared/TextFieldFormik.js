@@ -25,7 +25,7 @@ const MyTextField = ({
   required = false,
 }) => {
   const { onChange, onBlur, value, name } = field
-  const { touched, errors, handleSubmit } = form
+  const { errors, handleSubmit } = form
   const error = errors[name]
 
   const onKeyPress = useCallback(event => {
@@ -59,7 +59,7 @@ const MyTextField = ({
           event.preventDefault()
         }}
       />
-      {touched[name] && !!error && (
+      {!!error && (
         <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
       )}
       {!!helperText && (
