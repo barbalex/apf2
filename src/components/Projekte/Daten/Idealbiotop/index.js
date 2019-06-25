@@ -105,7 +105,7 @@ const Idealbiotop = ({ treeName }) => {
   )
   const onChangeTab = useCallback((event, value) => {
     setUrlQueryValue({
-      key: 'feldkontrTab',
+      key: 'idealbiotopTab',
       value,
       urlQuery,
       setUrlQuery,

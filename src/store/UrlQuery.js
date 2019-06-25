@@ -5,6 +5,10 @@ export default types
   .model('UrlQuery', {
     projekteTabs: types.optional(types.array(types.string), ['tree', 'daten']),
     feldkontrTab: types.optional(types.maybeNull(types.string), 'entwicklung'),
+    idealbiotopTab: types.optional(
+      types.maybeNull(types.string),
+      'idealbiotop',
+    ),
   })
   .actions(self => ({
     addProjekteTab(tab) {
@@ -15,4 +19,5 @@ export default types
 export const defaultValue = {
   projekteTabs: ['tree', 'daten'],
   feldkontrTab: 'entwicklung',
+  idealbiotopTab: 'idealbiotop',
 }

@@ -1,8 +1,8 @@
-import getActiveNodeArrayFromPathname from "./getActiveNodeArrayFromPathname"
-import getUrlQuery from "../modules/getUrlQuery"
-import isMobilePhone from "../modules/isMobilePhone"
-import setUrlQueryValue from "../modules/setUrlQueryValue"
-import setOpenNodesFromActiveNodeArray from "../modules/setOpenNodesFromActiveNodeArray"
+import getActiveNodeArrayFromPathname from './getActiveNodeArrayFromPathname'
+import getUrlQuery from '../modules/getUrlQuery'
+import isMobilePhone from '../modules/isMobilePhone'
+import setUrlQueryValue from '../modules/setUrlQueryValue'
+import setOpenNodesFromActiveNodeArray from '../modules/setOpenNodesFromActiveNodeArray'
 
 export default ({ activeNodeArray: activeNodeArrayPassed, store }) => {
   const { setUrlQuery, cloneTree2From1 } = store
@@ -11,7 +11,7 @@ export default ({ activeNodeArray: activeNodeArrayPassed, store }) => {
   let initialActiveNodeArray = [...activeNodeArrayFromPathname]
   // fetch query here, BEFORE mutating active node array
   const urlQuery = getUrlQuery()
-  const { projekteTabs, feldkontrTab } = urlQuery
+  const { projekteTabs, feldkontrTab, idealbiotopTab } = urlQuery
 
   store.tree.setActiveNodeArray(initialActiveNodeArray)
   // need to set openNodes
@@ -21,24 +21,24 @@ export default ({ activeNodeArray: activeNodeArrayPassed, store }) => {
   })
   // clone tree2 in case tree2 is open
   cloneTree2From1()
-  setUrlQuery({ projekteTabs, feldkontrTab })
+  setUrlQuery({ projekteTabs, feldkontrTab, idealbiotopTab })
 
   // set projekte tabs of not yet existing
   if (
-    activeNodeArrayFromPathname[0] === "Projekte" &&
+    activeNodeArrayFromPathname[0] === 'Projekte' &&
     (!projekteTabs || !projekteTabs.length || projekteTabs.length === 0)
   ) {
     if (isMobilePhone()) {
       setUrlQueryValue({
-        key: "projekteTabs",
-        value: ["tree"],
+        key: 'projekteTabs',
+        value: ['tree'],
         urlQuery,
         setUrlQuery,
       })
     } else {
       setUrlQueryValue({
-        key: "projekteTabs",
-        value: ["tree", "daten"],
+        key: 'projekteTabs',
+        value: ['tree', 'daten'],
         urlQuery,
         setUrlQuery,
       })
