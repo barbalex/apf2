@@ -13,7 +13,6 @@ import query from './query'
 import queryLists from './queryLists'
 import updatePopberByIdGql from './updatePopberById'
 import storeContext from '../../../../storeContext'
-import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 
 const Container = styled.div`
@@ -70,8 +69,8 @@ const Popber = ({ treeName }) => {
               popber: {
                 id: values.id,
                 popId: values.popId,
-                jahr: ifIsNumericAsNumber(values.jahr),
-                entwicklung: ifIsNumericAsNumber(values.entwicklung),
+                jahr: values.jahr,
+                entwicklung: values.entwicklung,
                 bemerkungen: values.bemerkungen,
                 __typename: 'Popber',
               },

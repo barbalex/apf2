@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useContext } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
@@ -13,7 +13,6 @@ import query from './query'
 import queryLists from './queryLists'
 import updatePopmassnberByIdGql from './updatePopmassnberById'
 import storeContext from '../../../../storeContext'
-import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 
 const Container = styled.div`
@@ -31,7 +30,6 @@ const Popmassnber = ({ treeName }) => {
   const store = useContext(storeContext)
   const { refetch } = store
   const client = useApolloClient()
-  const [errors, setErrors] = useState({})
   const { activeNodeArray } = store[treeName]
 
   const { data, loading, error } = useQuery(query, {
@@ -50,8 +48,6 @@ const Popmassnber = ({ treeName }) => {
   } = useQuery(queryLists)
 
   const row = get(data, 'popmassnberById', {})
-
-  useEffect(() => setErrors({}), [row])
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
