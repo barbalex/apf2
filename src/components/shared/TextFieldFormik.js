@@ -45,7 +45,7 @@ const MyTextField = ({
       <Input
         id={name}
         name={name}
-        value={value}
+        value={value || ''}
         type={type}
         multiline={multiLine}
         onChange={onChange}
