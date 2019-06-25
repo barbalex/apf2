@@ -187,8 +187,6 @@ const Idealbiotop = ({ treeName }) => {
     setTab(value)
   })
 
-  console.log('Idealbiotop rendering')
-
   if (loading) {
     return (
       <Container>
