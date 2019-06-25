@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useContext } from 'react'
+import React, { useState, useCallback, useContext } from 'react'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import styled from 'styled-components'
@@ -6,16 +6,17 @@ import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import { Formik, Form, Field } from 'formik'
 
-import RadioButtonGroup from '../../../shared/RadioButtonGroup'
-import RadioButton from '../../../shared/RadioButton'
-import TextField from '../../../shared/TextField2'
-import Select from '../../../shared/Select'
-import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
+import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
+import RadioButton from '../../../shared/RadioButtonFormik'
+import TextField from '../../../shared/TextFieldFormik'
+import Select from '../../../shared/SelectFormik'
+import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfoFormik'
+import DateFieldWithPicker from '../../../shared/DateFieldWithPickerFormik'
 import StringToCopy from '../../../shared/StringToCopy'
 import FilterTitle from '../../../shared/FilterTitle'
 import FormTitle from '../../../shared/FormTitle'
-import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
 import TpopfeldkontrentwicklungPopover from '../TpopfeldkontrentwicklungPopover'
 import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -26,9 +27,10 @@ import queryTpopkontrs from './queryTpopkontrs'
 import updateTpopkontrByIdGql from './updateTpopkontrById'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import storeContext from '../../../../storeContext'
-import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { simpleTypes as tpopfeldkontrType } from '../../../../store/NodeFilterTree/tpopfeldkontr'
 import Files from '../../../shared/Files'
+import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
+import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -151,7 +153,6 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
     error: errorLists,
   } = useQuery(queryLists)
 
-  const [errors, setErrors] = useState({})
   const [tab, setTab] = useState(get(urlQuery, 'feldkontrTab', 'entwicklung'))
 
   let tpopkontrTotalCount
@@ -183,41 +184,29 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
     row = get(data, 'tpopkontrById', {})
   }
 
-  useEffect(() => setErrors({}), [row])
-
-  const saveToDb = useCallback(
-    async event => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
+  const onSubmit = useCallback(
+    async (values, { setErrors }) => {
+      const changedField = objectsFindChangedKey(values, row)
+      const value = values[changedField]
       if (showFilter) {
         nodeFilterSetValue({
           treeName,
           table: 'tpopfeldkontr',
-          key: field,
+          key: changedField,
           value,
         })
       } else {
-        /**
-         * enable passing two values
-         * with same update
-         */
         const variables = {
-          id: row.id,
-          [field]: value,
+          ...objectsEmptyValuesToNull(values),
           changedBy: store.user.name,
         }
-        let field2
-        if (field === 'jahr') field2 = 'datum'
-        if (field === 'datum') field2 = 'jahr'
-        let value2
-        if (field === 'jahr') value2 = null
-        if (field === 'datum') {
-          // this broke 13.2.2019
-          // value2 = !!value ? +format(new Date(value), 'yyyy') : null
-          // value can be null so check if substring method exists
-          value2 = value.substring ? +value.substring(0, 4) : value
+        if (changedField === 'jahr') {
+          variables.datum = null
         }
-        if (field2) variables[field2] = value2
+        if (changedField === 'datum') {
+          // value can be null so check if substring method exists
+          variables.jahr = value.substring ? +value.substring(0, 4) : value
+        }
         try {
           await client.mutate({
             mutation: updateTpopkontrByIdGql,
@@ -226,115 +215,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
               __typename: 'Mutation',
               updateTpopkontrById: {
                 tpopkontr: {
-                  id: row.id,
-                  typ: field === 'typ' ? value : row.typ,
-                  jahr:
-                    field === 'jahr'
-                      ? value
-                      : field2 === 'jahr'
-                      ? value2
-                      : row.jahr,
-                  datum:
-                    field === 'datum'
-                      ? value
-                      : field2 === 'datum'
-                      ? value2
-                      : row.datum,
-                  vitalitaet: field === 'vitalitaet' ? value : row.vitalitaet,
-                  ueberlebensrate:
-                    field === 'ueberlebensrate' ? value : row.ueberlebensrate,
-                  entwicklung:
-                    field === 'entwicklung' ? value : row.entwicklung,
-                  ursachen: field === 'ursachen' ? value : row.ursachen,
-                  erfolgsbeurteilung:
-                    field === 'erfolgsbeurteilung'
-                      ? value
-                      : row.erfolgsbeurteilung,
-                  umsetzungAendern:
-                    field === 'umsetzungAendern' ? value : row.umsetzungAendern,
-                  kontrolleAendern:
-                    field === 'kontrolleAendern' ? value : row.kontrolleAendern,
-                  bemerkungen:
-                    field === 'bemerkungen' ? value : row.bemerkungen,
-                  lrDelarze: field === 'lrDelarze' ? value : row.lrDelarze,
-                  flaeche: field === 'flaeche' ? value : row.flaeche,
-                  lrUmgebungDelarze:
-                    field === 'lrUmgebungDelarze'
-                      ? value
-                      : row.lrUmgebungDelarze,
-                  vegetationstyp:
-                    field === 'vegetationstyp' ? value : row.vegetationstyp,
-                  konkurrenz: field === 'konkurrenz' ? value : row.konkurrenz,
-                  moosschicht:
-                    field === 'moosschicht' ? value : row.moosschicht,
-                  krautschicht:
-                    field === 'krautschicht' ? value : row.krautschicht,
-                  strauchschicht:
-                    field === 'strauchschicht' ? value : row.strauchschicht,
-                  baumschicht:
-                    field === 'baumschicht' ? value : row.baumschicht,
-                  bodenTyp: field === 'bodenTyp' ? value : row.bodenTyp,
-                  bodenKalkgehalt:
-                    field === 'bodenKalkgehalt' ? value : row.bodenKalkgehalt,
-                  bodenDurchlaessigkeit:
-                    field === 'bodenDurchlaessigkeit'
-                      ? value
-                      : row.bodenDurchlaessigkeit,
-                  bodenHumus: field === 'bodenHumus' ? value : row.bodenHumus,
-                  bodenNaehrstoffgehalt:
-                    field === 'bodenNaehrstoffgehalt'
-                      ? value
-                      : row.bodenNaehrstoffgehalt,
-                  bodenAbtrag:
-                    field === 'bodenAbtrag' ? value : row.bodenAbtrag,
-                  wasserhaushalt:
-                    field === 'wasserhaushalt' ? value : row.wasserhaushalt,
-                  idealbiotopUebereinstimmung:
-                    field === 'idealbiotopUebereinstimmung'
-                      ? value
-                      : row.idealbiotopUebereinstimmung,
-                  handlungsbedarf:
-                    field === 'handlungsbedarf' ? value : row.handlungsbedarf,
-                  flaecheUeberprueft:
-                    field === 'flaecheUeberprueft'
-                      ? value
-                      : row.flaecheUeberprueft,
-                  deckungVegetation:
-                    field === 'deckungVegetation'
-                      ? value
-                      : row.deckungVegetation,
-                  deckungNackterBoden:
-                    field === 'deckungNackterBoden'
-                      ? value
-                      : row.deckungNackterBoden,
-                  deckungApArt:
-                    field === 'deckungApArt' ? value : row.deckungApArt,
-                  vegetationshoeheMaximum:
-                    field === 'vegetationshoeheMaximum'
-                      ? value
-                      : row.vegetationshoeheMaximum,
-                  vegetationshoeheMittel:
-                    field === 'vegetationshoeheMittel'
-                      ? value
-                      : row.vegetationshoeheMittel,
-                  gefaehrdung:
-                    field === 'gefaehrdung' ? value : row.gefaehrdung,
-                  tpopId: field === 'tpopId' ? value : row.tpopId,
-                  bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
-                  planVorhanden:
-                    field === 'planVorhanden' ? value : row.planVorhanden,
-                  jungpflanzenVorhanden:
-                    field === 'jungpflanzenVorhanden'
-                      ? value
-                      : row.jungpflanzenVorhanden,
-                  apberNichtRelevant:
-                    field === 'apberNichtRelevant'
-                      ? value
-                      : row.apberNichtRelevant,
-                  apberNichtRelevantGrund:
-                    field === 'apberNichtRelevantGrund'
-                      ? value
-                      : row.apberNichtRelevantGrund,
+                  ...values,
                   __typename: 'Tpopkontr',
                 },
                 __typename: 'Tpopkontr',
@@ -342,10 +223,12 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
             },
           })
         } catch (error) {
-          return setErrors({ [field]: error.message })
+          return setErrors({ [changedField]: error.message })
         }
         setErrors({})
-        if (['typ'].includes(field)) refetch.tpopfeldkontrs()
+        if ([('typ', 'jahr', 'datum')].includes(changedField)) {
+          refetch.tpopfeldkontrs()
+        }
       }
     },
     [row, showFilter],
@@ -363,6 +246,8 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
   const aeLrWerte = get(dataLists, 'allAeLrdelarzes.nodes', [])
     .map(e => `${e.label}: ${e.einheit ? e.einheit.replace(/  +/g, ' ') : ''}`)
     .map(o => ({ value: o, label: o }))
+
+  console.log('EK rendering')
 
   if (loading) {
     return (
@@ -414,333 +299,251 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
           </Tabs>
           {tab === 'entwicklung' && (
             <FormContainer data-width={showFilter ? filterWidth : datenWidth}>
-              <TextField
-                key={`${row.id}jahr`}
-                name="jahr"
-                label="Jahr"
-                row={row}
-                type="number"
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-              <DateFieldWithPicker
-                key={`${row.id}datum`}
-                name="datum"
-                label="Datum"
-                value={row.datum}
-                saveToDb={saveToDb}
-                error={errors.datum}
-              />
-              <RadioButtonGroup
-                key={`${row.id}typ`}
-                name="typ"
-                label="Kontrolltyp"
-                value={row.typ}
-                dataSource={tpopkontrTypWerte}
-                saveToDb={saveToDb}
-                error={errors.typ}
-              />
-              <Select
-                key={`${row.id}bearbeiter`}
-                name="bearbeiter"
-                value={row.bearbeiter}
-                field="bearbeiter"
-                label="BearbeiterIn"
-                options={get(dataAdresses, 'allAdresses.nodes', [])}
-                loading={loadingAdresses}
-                saveToDb={saveToDb}
-                error={errors.bearbeiter}
-              />
-              <RadioButton
-                key={`${row.id}jungpflanzenVorhanden`}
-                name="jungpflanzenVorhanden"
-                label="Jungpflanzen vorhanden"
-                value={row.jungpflanzenVorhanden}
-                saveToDb={saveToDb}
-                error={errors.jungpflanzenVorhanden}
-              />
-              <TextField
-                key={`${row.id}vitalitaet`}
-                name="vitalitaet"
-                label="Vitalität"
-                row={row}
-                type="text"
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-              <TextField
-                key={`${row.id}ueberlebensrate`}
-                name="ueberlebensrate"
-                label="Überlebensrate"
-                row={row}
-                type="number"
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-              <RadioButtonGroupWithInfo
-                key={`${row.id}entwicklung`}
-                name="entwicklung"
-                label="Entwicklung"
-                value={row.entwicklung}
-                dataSource={get(
-                  dataLists,
-                  'allTpopEntwicklungWertes.nodes',
-                  [],
+              <Formik
+                initialValues={row}
+                onSubmit={onSubmit}
+                enableReinitialize
+              >
+                {({ handleSubmit, dirty }) => (
+                  <Form onBlur={() => dirty && handleSubmit()}>
+                    <Field
+                      name="jahr"
+                      label="Jahr"
+                      type="number"
+                      component={TextField}
+                    />
+                    <Field
+                      name="datum"
+                      label="Datum"
+                      component={DateFieldWithPicker}
+                    />
+                    <Field
+                      name="typ"
+                      label="Kontrolltyp"
+                      component={RadioButtonGroup}
+                      dataSource={tpopkontrTypWerte}
+                    />
+                    <Field
+                      name="bearbeiter"
+                      label="BearbeiterIn"
+                      component={Select}
+                      options={get(dataAdresses, 'allAdresses.nodes', [])}
+                      loading={loadingAdresses}
+                    />
+                    <Field
+                      name="jungpflanzenVorhanden"
+                      label="Jungpflanzen vorhanden"
+                      component={RadioButton}
+                    />
+                    <Field
+                      name="vitalitaet"
+                      label="Vitalität"
+                      type="text"
+                      component={TextField}
+                    />
+                    <Field
+                      name="ueberlebensrate"
+                      label="Überlebensrate"
+                      type="number"
+                      component={TextField}
+                    />
+                    <Field
+                      name="entwicklung"
+                      label="Entwicklung"
+                      component={RadioButtonGroupWithInfo}
+                      dataSource={get(
+                        dataLists,
+                        'allTpopEntwicklungWertes.nodes',
+                        [],
+                      )}
+                      loading={loadingLists}
+                      popover={TpopfeldkontrentwicklungPopover}
+                    />
+                    <Field
+                      name="ursachen"
+                      label="Ursachen"
+                      hintText="Standort: ..., Klima: ..., anderes: ..."
+                      type="text"
+                      component={TextField}
+                      multiLine
+                    />
+                    <Field
+                      name="erfolgsbeurteilung"
+                      label="Erfolgsbeurteilung"
+                      type="text"
+                      component={TextField}
+                      multiLine
+                    />
+                    <Field
+                      name="umsetzungAendern"
+                      label="Änderungs-Vorschläge Umsetzung"
+                      type="text"
+                      component={TextField}
+                      multiLine
+                    />
+                    <Field
+                      name="kontrolleAendern"
+                      label="Änderungs-Vorschläge Kontrolle"
+                      type="text"
+                      component={TextField}
+                      multiLine
+                    />
+                    <Field
+                      name="bemerkungen"
+                      label="Bemerkungen"
+                      type="text"
+                      component={TextField}
+                      multiLine
+                    />
+                    <Field
+                      name="apberNichtRelevant"
+                      label="Im Jahresbericht nicht berücksichtigen"
+                      component={RadioButton}
+                    />
+                    <Field
+                      name="apberNichtRelevantGrund"
+                      label="Wieso im Jahresbericht nicht berücksichtigen?"
+                      type="text"
+                      component={TextField}
+                      multiLine
+                    />
+                    <StringToCopy text={row.id} label="id" />
+                  </Form>
                 )}
-                loading={loadingLists}
-                saveToDb={saveToDb}
-                error={errors.entwicklung}
-                popover={TpopfeldkontrentwicklungPopover}
-              />
-              <TextField
-                key={`${row.id}ursachen`}
-                name="ursachen"
-                label="Ursachen"
-                row={row}
-                hintText="Standort: ..., Klima: ..., anderes: ..."
-                type="text"
-                multiLine
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-              <TextField
-                key={`${row.id}erfolgsbeurteilung`}
-                name="erfolgsbeurteilung"
-                label="Erfolgsbeurteilung"
-                row={row}
-                type="text"
-                multiLine
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-              <TextField
-                key={`${row.id}umsetzung_aendern`}
-                name="umsetzungAendern"
-                label="Änderungs-Vorschläge Umsetzung"
-                row={row}
-                type="text"
-                multiLine
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-              <TextField
-                key={`${row.id}kontrolle_aendern`}
-                name="kontrolleAendern"
-                label="Änderungs-Vorschläge Kontrolle"
-                row={row}
-                type="text"
-                multiLine
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-              <TextField
-                key={`${row.id}bemerkungen`}
-                name="bemerkungen"
-                label="Bemerkungen"
-                row={row}
-                type="text"
-                multiLine
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-              <RadioButton
-                key={`${row.id}apberNichtRelevant`}
-                name="apberNichtRelevant"
-                label="Im Jahresbericht nicht berücksichtigen"
-                value={row.apberNichtRelevant}
-                saveToDb={saveToDb}
-                error={errors.apberNichtRelevant}
-              />
-              <TextField
-                key={`${row.id}apberNichtRelevantGrund`}
-                name="apberNichtRelevantGrund"
-                label="Wieso im Jahresbericht nicht berücksichtigen?"
-                row={row}
-                type="text"
-                multiLine
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-              <StringToCopy text={row.id} label="id" />
+              </Formik>
             </FormContainer>
           )}
           {tab === 'biotop' && (
             <FormContainer data-width={datenWidth}>
-              <TextField
-                key={`${row.id}flaeche`}
-                name="flaeche"
-                label="Fläche"
-                row={row}
-                type="number"
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-              <Section>Vegetation</Section>
-              <Select
-                key={`${row.id}lrDelarze`}
-                name="lrDelarze"
-                value={row.lrDelarze}
-                field="lrDelarze"
-                label="Lebensraum nach Delarze"
-                options={aeLrWerte}
-                loading={loadingLists}
-                saveToDb={saveToDb}
-                error={errors.lrDelarze}
-              />
-              <Select
-                key={`${row.id}lrUmgebungDelarze`}
-                name="lrUmgebungDelarze"
-                value={row.lrUmgebungDelarze}
-                field="lrUmgebungDelarze"
-                label="Umgebung nach Delarze"
-                options={aeLrWerte}
-                loading={loadingLists}
-                saveToDb={saveToDb}
-                error={errors.lrUmgebungDelarze}
-              />
-              <TextField
-                key={`${row.id}vegetationstyp`}
-                name="vegetationstyp"
-                label="Vegetationstyp"
-                row={row}
-                type="text"
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-              <TextField
-                key={`${row.id}konkurrenz`}
-                name="konkurrenz"
-                label="Konkurrenz"
-                row={row}
-                type="text"
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-              <TextField
-                key={`${row.id}moosschicht`}
-                name="moosschicht"
-                label="Moosschicht"
-                row={row}
-                type="text"
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-              <TextField
-                key={`${row.id}krautschicht`}
-                name="krautschicht"
-                label="Krautschicht"
-                row={row}
-                type="text"
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-              <TextField
-                key={`${row.id}strauchschicht`}
-                name="strauchschicht"
-                label="Strauchschicht"
-                row={row}
-                type="text"
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-              <TextField
-                key={`${row.id}baumschicht`}
-                name="baumschicht"
-                label="Baumschicht"
-                row={row}
-                type="text"
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-              <Section>Boden</Section>
-              <TextField
-                key={`${row.id}boden_typ`}
-                name="bodenTyp"
-                label="Typ"
-                row={row}
-                type="text"
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-              <TextField
-                key={`${row.id}boden_kalkgehalt`}
-                name="bodenKalkgehalt"
-                label="Kalkgehalt"
-                row={row}
-                type="text"
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-              <TextField
-                key={`${row.id}boden_durchlaessigkeit`}
-                name="bodenDurchlaessigkeit"
-                label="Durchlässigkeit"
-                row={row}
-                type="text"
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-              <TextField
-                key={`${row.id}boden_humus`}
-                name="bodenHumus"
-                label="Humusgehalt"
-                row={row}
-                type="text"
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-              <TextField
-                key={`${row.id}boden_naehrstoffgehalt`}
-                name="bodenNaehrstoffgehalt"
-                label="Nährstoffgehalt"
-                row={row}
-                type="text"
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-              <TextField
-                key={`${row.id}boden_abtrag`}
-                name="bodenAbtrag"
-                label="Bodenabtrag"
-                row={row}
-                type="text"
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-              <TextField
-                key={`${row.id}wasserhaushalt`}
-                name="wasserhaushalt"
-                label="Wasserhaushalt"
-                row={row}
-                type="text"
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-              <Section>Beurteilung</Section>
-              <TextField
-                key={`${row.id}handlungsbedarf`}
-                name="handlungsbedarf"
-                label="Handlungsbedarf"
-                row={row}
-                type="text"
-                multiline
-                saveToDb={saveToDb}
-                errors={errors}
-              />
-              <RadioButtonGroup
-                key={`${row.id}idealbiotop_uebereinstimmung`}
-                name="idealbiotopUebereinstimmung"
-                label="Übereinstimmung mit Idealbiotop"
-                value={row.idealbiotopUebereinstimmung}
-                dataSource={get(
-                  dataLists,
-                  'allTpopkontrIdbiotuebereinstWertes.nodes',
-                  [],
+              <Formik
+                initialValues={row}
+                onSubmit={onSubmit}
+                enableReinitialize
+              >
+                {({ handleSubmit, dirty }) => (
+                  <Form onBlur={() => dirty && handleSubmit()}>
+                    <Field
+                      name="flaeche"
+                      label="Fläche"
+                      type="number"
+                      component={TextField}
+                    />
+                    <Section>Vegetation</Section>
+                    <Field
+                      name="lrDelarze"
+                      label="Lebensraum nach Delarze"
+                      component={Select}
+                      options={aeLrWerte}
+                      loading={loadingLists}
+                    />
+                    <Field
+                      name="lrUmgebungDelarze"
+                      label="Umgebung nach Delarze"
+                      component={Select}
+                      options={aeLrWerte}
+                      loading={loadingLists}
+                    />
+                    <Field
+                      name="vegetationstyp"
+                      label="Vegetationstyp"
+                      type="text"
+                      component={TextField}
+                    />
+                    <Field
+                      name="konkurrenz"
+                      label="Konkurrenz"
+                      type="text"
+                      component={TextField}
+                    />
+                    <Field
+                      name="moosschicht"
+                      label="Moosschicht"
+                      type="text"
+                      component={TextField}
+                    />
+                    <Field
+                      name="krautschicht"
+                      label="Krautschicht"
+                      type="text"
+                      component={TextField}
+                    />
+                    <Field
+                      name="strauchschicht"
+                      label="Strauchschicht"
+                      type="text"
+                      component={TextField}
+                    />
+                    <Field
+                      name="baumschicht"
+                      label="Baumschicht"
+                      type="text"
+                      component={TextField}
+                    />
+                    <Section>Boden</Section>
+                    <Field
+                      name="bodenTyp"
+                      label="Typ"
+                      type="text"
+                      component={TextField}
+                    />
+                    <Field
+                      name="bodenKalkgehalt"
+                      label="Kalkgehalt"
+                      type="text"
+                      component={TextField}
+                    />
+                    <Field
+                      name="bodenDurchlaessigkeit"
+                      label="Durchlässigkeit"
+                      type="text"
+                      component={TextField}
+                    />
+                    <Field
+                      name="bodenHumus"
+                      label="Humusgehalt"
+                      type="text"
+                      component={TextField}
+                    />
+                    <Field
+                      name="bodenNaehrstoffgehalt"
+                      label="Nährstoffgehalt"
+                      type="text"
+                      component={TextField}
+                    />
+                    <Field
+                      name="bodenAbtrag"
+                      label="Bodenabtrag"
+                      type="text"
+                      component={TextField}
+                    />
+                    <Field
+                      name="wasserhaushalt"
+                      label="Wasserhaushalt"
+                      type="text"
+                      component={TextField}
+                    />
+                    <Section>Beurteilung</Section>
+                    <Field
+                      name="handlungsbedarf"
+                      label="Handlungsbedarf"
+                      type="text"
+                      component={TextField}
+                      multiline
+                    />
+                    <Field
+                      name="idealbiotopUebereinstimmung"
+                      label="Übereinstimmung mit Idealbiotop"
+                      component={RadioButtonGroup}
+                      dataSource={get(
+                        dataLists,
+                        'allTpopkontrIdbiotuebereinstWertes.nodes',
+                        [],
+                      )}
+                      loading={loadingLists}
+                    />
+                  </Form>
                 )}
-                loading={loadingLists}
-                saveToDb={saveToDb}
-                error={errors.idealbiotopUebereinstimmung}
-              />
+              </Formik>
             </FormContainer>
           )}
           {tab === 'dateien' && !showFilter && (
