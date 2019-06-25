@@ -13,6 +13,7 @@ import TextField from '../../../shared/TextFieldFormik'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
+import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -58,6 +59,7 @@ const Werte = ({ treeName, table }) => {
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
+      const changedField = objectsFindChangedKey(values, row)
       const typename = upperFirst(tableCamelCased)
       try {
         const mutation = gql`
@@ -101,13 +103,7 @@ const Werte = ({ treeName, table }) => {
           },
         })
       } catch (error) {
-        const { message } = error
-        const field = message.includes('$code')
-          ? 'code'
-          : message.includes('$text')
-          ? 'text'
-          : 'sort'
-        return setErrors({ [field]: message })
+        return setErrors({ [changedField]: error.message })
       }
       refetch()
       const refetchTableName = `${table}s`
@@ -136,26 +132,31 @@ const Werte = ({ treeName, table }) => {
           table={table}
         />
         <FieldsContainer>
-          <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
-            {({ isSubmitting, handleSubmit, dirty }) => (
+          <Formik
+            row={row}
+            initialValues={row}
+            onSubmit={onSubmit}
+            enableReinitialize
+          >
+            {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
                 <Field
-                  component={TextField}
                   name="text"
                   label="Text"
                   type="text"
+                  component={TextField}
                 />
                 <Field
-                  component={TextField}
                   name="code"
                   label="Code"
                   type="number"
+                  component={TextField}
                 />
                 <Field
-                  component={TextField}
                   name="sort"
                   label="Sort"
                   type="number"
+                  component={TextField}
                 />
               </Form>
             )}

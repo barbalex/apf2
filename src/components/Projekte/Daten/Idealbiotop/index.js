@@ -17,6 +17,7 @@ import updateIdealbiotopByIdGql from './updateIdealbiotopById'
 import storeContext from '../../../../storeContext'
 import Files from '../../../shared/Files'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
+import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -78,6 +79,7 @@ const Idealbiotop = ({ treeName }) => {
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
+      const changedField = objectsFindChangedKey(values, row)
       try {
         await client.mutate({
           mutation: updateIdealbiotopByIdGql,
@@ -135,43 +137,7 @@ const Idealbiotop = ({ treeName }) => {
           },
         })
       } catch (error) {
-        const { message } = error
-        const field = message.includes('$erstelldatum')
-          ? 'erstelldatum'
-          : message.includes('$hoehenlage')
-          ? 'hoehenlage'
-          : message.includes('$region')
-          ? 'region'
-          : message.includes('$exposition')
-          ? 'exposition'
-          : message.includes('$besonnung')
-          ? 'besonnung'
-          : message.includes('$hangneigung')
-          ? 'hangneigung'
-          : message.includes('$bodenTyp')
-          ? 'bodenTyp'
-          : message.includes('$bodenKalkgehalt')
-          ? 'bodenKalkgehalt'
-          : message.includes('$bodenDurchlaessigkeit')
-          ? 'bodenDurchlaessigkeit'
-          : message.includes('$bodenHumus')
-          ? 'bodenHumus'
-          : message.includes('$bodenNaehrstoffgehalt')
-          ? 'bodenNaehrstoffgehalt'
-          : message.includes('$wasserhaushalt')
-          ? 'wasserhaushalt'
-          : message.includes('$konkurrenz')
-          ? 'konkurrenz'
-          : message.includes('$moosschicht')
-          ? 'moosschicht'
-          : message.includes('$krautschicht')
-          ? 'krautschicht'
-          : message.includes('$strauchschicht')
-          ? 'strauchschicht'
-          : message.includes('$baumschicht')
-          ? 'baumschicht'
-          : 'bemerkungen'
-        return setErrors({ [field]: message })
+        return setErrors({ [changedField]: error.message })
       }
       setErrors({})
     },
@@ -226,7 +192,7 @@ const Idealbiotop = ({ treeName }) => {
                 onSubmit={onSubmit}
                 enableReinitialize
               >
-                {({ isSubmitting, handleSubmit, dirty }) => (
+                {({ handleSubmit, dirty }) => (
                   <Form onBlur={() => dirty && handleSubmit()}>
                     <Field
                       name="erstelldatum"
