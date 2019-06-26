@@ -78,36 +78,40 @@ const Img = styled.img`
   max-width: inherit;
 `
 
-const Date = ({ saveToDb, row, errors }) => (
-  <Container>
-    <DeckApArtLabel>Deckung überprüfte Art</DeckApArtLabel>
-    <DeckApArtVal>
-      <TextField
-        key={`${row.id}deckungApArt`}
-        name="deckungApArt"
-        row={row}
-        type="number"
-        saveToDb={saveToDb}
-        errors={errors}
-      />
-    </DeckApArtVal>
-    <DeckApArtMass>%</DeckApArtMass>
-    <DeckNaBoLabel>Flächenanteil nackter Boden</DeckNaBoLabel>
-    <DeckNaBoVal>
-      <TextField
-        key={`${row.id}deckungNackterBoden`}
-        name="deckungNackterBoden"
-        row={row}
-        type="number"
-        saveToDb={saveToDb}
-        errors={errors}
-      />
-    </DeckNaBoVal>
-    <DeckNaBoMass>%</DeckNaBoMass>
-    <DeckImage>
-      <Img src={anteilImg} alt="Flächen-Anteile" />
-    </DeckImage>
-  </Container>
-)
+const Cover = ({ saveToDb, row, errors }) => {
+  //console.log('Cover rendering')
 
-export default observer(Date)
+  return (
+    <Container>
+      <DeckApArtLabel>Deckung überprüfte Art</DeckApArtLabel>
+      <DeckApArtVal>
+        <TextField
+          key={`${row.id}deckungApArt`}
+          name="deckungApArt"
+          row={row}
+          type="number"
+          saveToDb={saveToDb}
+          errors={errors}
+        />
+      </DeckApArtVal>
+      <DeckApArtMass>%</DeckApArtMass>
+      <DeckNaBoLabel>Flächenanteil nackter Boden</DeckNaBoLabel>
+      <DeckNaBoVal>
+        <TextField
+          key={`${row.id}deckungNackterBoden`}
+          name="deckungNackterBoden"
+          row={row}
+          type="number"
+          saveToDb={saveToDb}
+          errors={errors}
+        />
+      </DeckNaBoVal>
+      <DeckNaBoMass>%</DeckNaBoMass>
+      <DeckImage>
+        <Img src={anteilImg} alt="Flächen-Anteile" />
+      </DeckImage>
+    </Container>
+  )
+}
+
+export default observer(Cover)

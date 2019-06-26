@@ -34,27 +34,31 @@ const RemarksVal = styled.div`
   }
 `
 
-const Remarks = ({ saveToDb, row, errors }) => (
-  <Container>
-    <RemarksLabel>
-      Spezielle Bemerkungen
-      <RemarksSubLabel>
-        (z.B. allgemeiner Eindruck, Zunahme / Abnahme Begründung, spezielle
-        Begebenheiten)
-      </RemarksSubLabel>
-    </RemarksLabel>
-    <RemarksVal>
-      <TextField
-        key={`${row.id}bemerkungen`}
-        name="bemerkungen"
-        row={row}
-        type="text"
-        multiLine
-        saveToDb={saveToDb}
-        errors={errors}
-      />
-    </RemarksVal>
-  </Container>
-)
+const Remarks = ({ saveToDb, row, errors }) => {
+  console.log('Remarks rendering')
+
+  return (
+    <Container>
+      <RemarksLabel>
+        Spezielle Bemerkungen
+        <RemarksSubLabel>
+          (z.B. allgemeiner Eindruck, Zunahme / Abnahme Begründung, spezielle
+          Begebenheiten)
+        </RemarksSubLabel>
+      </RemarksLabel>
+      <RemarksVal>
+        <TextField
+          key={`${row.id}bemerkungen`}
+          name="bemerkungen"
+          row={row}
+          type="text"
+          multiLine
+          saveToDb={saveToDb}
+          errors={errors}
+        />
+      </RemarksVal>
+    </Container>
+  )
+}
 
 export default observer(Remarks)

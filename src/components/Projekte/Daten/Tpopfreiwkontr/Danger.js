@@ -34,26 +34,30 @@ const DangerVal = styled.div`
   }
 `
 
-const Danger = ({ saveToDb, row, errors }) => (
-  <Container>
-    <DangerLabel>
-      Gefährdung{' '}
-      <DangerSubLabel>
-        (Problemarten, Verbuschung, Tritt, Hunde, ...), welche?
-      </DangerSubLabel>
-    </DangerLabel>
-    <DangerVal>
-      <TextField
-        key={`${row.id}gefaehrdung`}
-        name="gefaehrdung"
-        row={row}
-        type="text"
-        multiLine
-        saveToDb={saveToDb}
-        errors={errors}
-      />
-    </DangerVal>
-  </Container>
-)
+const Danger = ({ saveToDb, row, errors }) => {
+  //console.log('Danger rendering')
+
+  return (
+    <Container>
+      <DangerLabel>
+        Gefährdung{' '}
+        <DangerSubLabel>
+          (Problemarten, Verbuschung, Tritt, Hunde, ...), welche?
+        </DangerSubLabel>
+      </DangerLabel>
+      <DangerVal>
+        <TextField
+          key={`${row.id}gefaehrdung`}
+          name="gefaehrdung"
+          row={row}
+          type="text"
+          multiLine
+          saveToDb={saveToDb}
+          errors={errors}
+        />
+      </DangerVal>
+    </Container>
+  )
+}
 
 export default observer(Danger)

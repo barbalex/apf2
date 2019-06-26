@@ -37,6 +37,8 @@ const HerkunftContainer = styled.div`
 const HerkunftColumnContainer = styled.div`
   padding-right: 25px;
   overflow: visible !important;
+  display: flex;
+  flex-direction: column;
 `
 const HerkunftColumnContainerLast = styled.div`
   overflow: visible !important;
@@ -130,6 +132,8 @@ const Status = ({
     )
   }, [bekanntSeitValue])
 
+  console.log('Status rendering')
+
   return (
     <div>
       <FieldWithInfoContainer>
@@ -154,14 +158,14 @@ const Status = ({
       </FieldWithInfoContainer>
       <StatusContainer>
         <Label label="Status" />
-        <HerkunftContainer>
-          <HerkunftColumnContainer>
-            <GroupLabelContainer>ursprünglich:</GroupLabelContainer>
-            <RadioGroup
-              aria-label="Status"
-              value={valueSelected.toString()}
-              onChange={onChangeStatus}
-            >
+        <RadioGroup
+          aria-label="Status"
+          value={valueSelected.toString()}
+          onChange={onChangeStatus}
+        >
+          <HerkunftContainer>
+            <HerkunftColumnContainer>
+              <GroupLabelContainer>ursprünglich:</GroupLabelContainer>
               <FormControlLabel
                 value="100"
                 control={<StyledRadio data-id="status_100" color="primary" />}
@@ -176,15 +180,9 @@ const Status = ({
                 disabled={disabled}
                 onClick={onClickButton}
               />
-            </RadioGroup>
-          </HerkunftColumnContainer>
-          <HerkunftColumnContainer>
-            <GroupLabelContainer>{angesiedeltLabel}</GroupLabelContainer>
-            <RadioGroup
-              aria-label="Status"
-              value={valueSelected.toString()}
-              onChange={onChangeStatus}
-            >
+            </HerkunftColumnContainer>
+            <HerkunftColumnContainer>
+              <GroupLabelContainer>{angesiedeltLabel}</GroupLabelContainer>
               <FormControlLabel
                 value="200"
                 control={<StyledRadio data-id="status_200" color="primary" />}
@@ -206,16 +204,9 @@ const Status = ({
                 disabled={disabled}
                 onClick={onClickButton}
               />
-            </RadioGroup>
-          </HerkunftColumnContainer>
-          <HerkunftColumnContainerLast>
-            <GroupLabelContainer>potenziell:</GroupLabelContainer>
-            <RadioGroup
-              aria-label="Status"
-              value={valueSelected.toString()}
-              onChange={onChangeStatus}
-              onClick={onClickButton}
-            >
+            </HerkunftColumnContainer>
+            <HerkunftColumnContainerLast>
+              <GroupLabelContainer>potenziell:</GroupLabelContainer>
               <FormControlLabel
                 value="300"
                 control={<StyledRadio data-id="status_300" color="primary" />}
@@ -223,9 +214,9 @@ const Status = ({
                 disabled={disabled}
                 onClick={onClickButton}
               />
-            </RadioGroup>
-          </HerkunftColumnContainerLast>
-        </HerkunftContainer>
+            </HerkunftColumnContainerLast>
+          </HerkunftContainer>
+        </RadioGroup>
       </StatusContainer>
     </div>
   )

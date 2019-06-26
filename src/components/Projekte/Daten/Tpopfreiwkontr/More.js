@@ -146,75 +146,81 @@ const Img = styled.img`
   max-width: inherit;
 `
 
-const More = ({ saveToDb, row, errors }) => (
-  <Container>
-    <MoreFlLabel>Überprüfte Fläche</MoreFlLabel>
-    <MoreFlVal>
-      <TextField
-        key={`${row.id}flaecheUeberprueft`}
-        name="flaecheUeberprueft"
-        row={row}
-        type="number"
-        saveToDb={saveToDb}
-        errors={errors}
-      />
-    </MoreFlVal>
-    <MoreFlMeasure>
-      m<sup>2</sup>
-    </MoreFlMeasure>
-    <JungPflLabel0>Werden junge neben alten Pflanzen beobachtet?</JungPflLabel0>
-    <JungPflLabel1>ja</JungPflLabel1>
-    <JungPflVal1 data-id="jungpflanzenVorhanden_true">
-      <RadioButton
-        key={`${row.id}jungpflanzenVorhanden1`}
-        name="jungpflanzenVorhanden"
-        value={row.jungpflanzenVorhanden}
-        saveToDb={saveToDb}
-      />
-    </JungPflVal1>
-    <JungPflLabel2>nein</JungPflLabel2>
-    <JungPflVal2 data-id="jungpflanzenVorhanden_false">
-      <RadioButton
-        key={`${row.id}jungpflanzenVorhanden2`}
-        name="jungpflanzenVorhanden"
-        value={row.jungpflanzenVorhanden === false}
-        saveToDb={() => {
-          const fakeEvent = {
-            target: { name: 'jungpflanzenVorhanden', value: false },
-          }
-          saveToDb(fakeEvent)
-        }}
-        error={errors.jungpflanzenVorhanden}
-      />
-    </JungPflVal2>
-    <VeghoeheLabel0>Vegetationshöhe</VeghoeheLabel0>
-    <VeghoeheImg>
-      <Img src={veghoeheImg} alt="Flächen-Anteile" />
-    </VeghoeheImg>
-    <VeghoeheMaxLabel>Maximum (cm)</VeghoeheMaxLabel>
-    <VeghoeheMaxVal>
-      <TextField
-        key={`${row.id}vegetationshoeheMaximum`}
-        name="vegetationshoeheMaximum"
-        row={row}
-        type="number"
-        saveToDb={saveToDb}
-        errors={errors}
-      />
-    </VeghoeheMaxVal>
-    <VeghoeheMittLabel>Mittel (cm)</VeghoeheMittLabel>
-    <VeghoeheMittVal>
-      <TextField
-        key={`${row.id}vegetationshoeheMittel`}
-        name="vegetationshoeheMittel"
-        row={row}
-        type="number"
-        saveToDb={saveToDb}
-        errors={errors}
-      />
-    </VeghoeheMittVal>
-    <VeghoeheMinLabel>(Minimum)</VeghoeheMinLabel>
-  </Container>
-)
+const More = ({ saveToDb, row, errors }) => {
+  //console.log('More rendering')
+
+  return (
+    <Container>
+      <MoreFlLabel>Überprüfte Fläche</MoreFlLabel>
+      <MoreFlVal>
+        <TextField
+          key={`${row.id}flaecheUeberprueft`}
+          name="flaecheUeberprueft"
+          row={row}
+          type="number"
+          saveToDb={saveToDb}
+          errors={errors}
+        />
+      </MoreFlVal>
+      <MoreFlMeasure>
+        m<sup>2</sup>
+      </MoreFlMeasure>
+      <JungPflLabel0>
+        Werden junge neben alten Pflanzen beobachtet?
+      </JungPflLabel0>
+      <JungPflLabel1>ja</JungPflLabel1>
+      <JungPflVal1 data-id="jungpflanzenVorhanden_true">
+        <RadioButton
+          key={`${row.id}jungpflanzenVorhanden1`}
+          name="jungpflanzenVorhanden"
+          value={row.jungpflanzenVorhanden}
+          saveToDb={saveToDb}
+        />
+      </JungPflVal1>
+      <JungPflLabel2>nein</JungPflLabel2>
+      <JungPflVal2 data-id="jungpflanzenVorhanden_false">
+        <RadioButton
+          key={`${row.id}jungpflanzenVorhanden2`}
+          name="jungpflanzenVorhanden"
+          value={row.jungpflanzenVorhanden === false}
+          saveToDb={() => {
+            const fakeEvent = {
+              target: { name: 'jungpflanzenVorhanden', value: false },
+            }
+            saveToDb(fakeEvent)
+          }}
+          error={errors.jungpflanzenVorhanden}
+        />
+      </JungPflVal2>
+      <VeghoeheLabel0>Vegetationshöhe</VeghoeheLabel0>
+      <VeghoeheImg>
+        <Img src={veghoeheImg} alt="Flächen-Anteile" />
+      </VeghoeheImg>
+      <VeghoeheMaxLabel>Maximum (cm)</VeghoeheMaxLabel>
+      <VeghoeheMaxVal>
+        <TextField
+          key={`${row.id}vegetationshoeheMaximum`}
+          name="vegetationshoeheMaximum"
+          row={row}
+          type="number"
+          saveToDb={saveToDb}
+          errors={errors}
+        />
+      </VeghoeheMaxVal>
+      <VeghoeheMittLabel>Mittel (cm)</VeghoeheMittLabel>
+      <VeghoeheMittVal>
+        <TextField
+          key={`${row.id}vegetationshoeheMittel`}
+          name="vegetationshoeheMittel"
+          row={row}
+          type="number"
+          saveToDb={saveToDb}
+          errors={errors}
+        />
+      </VeghoeheMittVal>
+      <VeghoeheMinLabel>(Minimum)</VeghoeheMinLabel>
+    </Container>
+  )
+}
 
 export default observer(More)

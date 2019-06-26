@@ -37,19 +37,23 @@ const DateVal = styled.div`
   }
 `
 
-const Date = ({ saveToDb, row, errors }) => (
-  <Container>
-    <DateLabel>Aufnahme-datum</DateLabel>
-    <DateVal>
-      <DateFieldWithPicker
-        key={`${row.id}datum`}
-        name="datum"
-        value={row.datum}
-        saveToDb={saveToDb}
-        error={errors.datum}
-      />
-    </DateVal>
-  </Container>
-)
+const Date = ({ saveToDb, row, errors }) => {
+  //console.log('Date rendering')
+
+  return (
+    <Container>
+      <DateLabel>Aufnahme-datum</DateLabel>
+      <DateVal>
+        <DateFieldWithPicker
+          key={`${row.id}datum`}
+          name="datum"
+          value={row.datum}
+          saveToDb={saveToDb}
+          error={errors.datum}
+        />
+      </DateVal>
+    </Container>
+  )
+}
 
 export default observer(Date)

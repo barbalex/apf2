@@ -280,8 +280,6 @@ const Count = ({
     [row, activeNodeArray],
   )
 
-  console.log('Count rendering')
-
   if (showNew) {
     return (
       <Container nr={nr} shownew={showNew}>

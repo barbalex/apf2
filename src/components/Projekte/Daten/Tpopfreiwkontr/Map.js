@@ -61,6 +61,8 @@ const Map = ({ saveToDb, row, errors, showFilter }) => {
     saveToDb(fakeEvent)
   })
 
+  //console.log('Map rendering')
+
   return (
     <Container>
       <MapLabel0>Plan ergänzt</MapLabel0>
