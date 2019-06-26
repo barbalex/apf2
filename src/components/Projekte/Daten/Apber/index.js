@@ -1,13 +1,14 @@
-import React, { useEffect, useState, useCallback, useContext } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import { Formik, Form, Field } from 'formik'
 
-import RadioButtonGroup from '../../../shared/RadioButtonGroup'
-import TextField2 from '../../../shared/TextField2'
-import Select from '../../../shared/Select'
-import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
+import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
+import TextField from '../../../shared/TextFieldFormik'
+import Select from '../../../shared/SelectFormik'
+import DateFieldWithPicker from '../../../shared/DateFieldWithPickerFormik'
 import FormTitle from '../../../shared/FormTitle'
 import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -16,7 +17,8 @@ import query from './query'
 import queryAdresses from './queryAdresses'
 import queryApErfkritWertes from './queryApErfkritWertes'
 import storeContext from '../../../../storeContext'
-import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
+import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
+import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -41,7 +43,6 @@ const veraenGegenVorjahrWerte = [
 const Apber = ({ treeName }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
-  const [errors, setErrors] = useState({})
   const { activeNodeArray, datenWidth } = store[treeName]
 
   const { data, loading, error } = useQuery(query, {
@@ -66,65 +67,20 @@ const Apber = ({ treeName }) => {
 
   const row = get(data, 'apberById', {})
 
-  useEffect(() => {
-    setErrors({})
-  }, [row])
-
-  const saveToDb = useCallback(async event => {
-    const field = event.target.name
-    const value = ifIsNumericAsNumber(event.target.value)
-    const row = get(data, 'apberById', {})
+  const onSubmit = useCallback(async (values, { setErrors }) => {
+    const changedField = objectsFindChangedKey(values, row)
     try {
       await client.mutate({
         mutation: updateApberByIdGql,
         variables: {
-          id: row.id,
-          [field]: value,
+          ...objectsEmptyValuesToNull(values),
           changedBy: store.user.name,
         },
         optimisticResponse: {
           __typename: 'Mutation',
           updateApberById: {
             apber: {
-              id: row.id,
-              jahr: field === 'jahr' ? value : row.jahr,
-              situation: field === 'situation' ? value : row.situation,
-              vergleichVorjahrGesamtziel:
-                field === 'vergleichVorjahrGesamtziel'
-                  ? value
-                  : row.vergleichVorjahrGesamtziel,
-              beurteilung: field === 'beurteilung' ? value : row.beurteilung,
-              veraenderungZumVorjahr:
-                field === 'veraenderungZumVorjahr'
-                  ? value
-                  : row.veraenderungZumVorjahr,
-              apberAnalyse: field === 'apberAnalyse' ? value : row.apberAnalyse,
-              konsequenzenUmsetzung:
-                field === 'konsequenzenUmsetzung'
-                  ? value
-                  : row.konsequenzenUmsetzung,
-              konsequenzenErfolgskontrolle:
-                field === 'konsequenzenErfolgskontrolle'
-                  ? value
-                  : row.konsequenzenErfolgskontrolle,
-              biotopeNeue: field === 'biotopeNeue' ? value : row.biotopeNeue,
-              biotopeOptimieren:
-                field === 'biotopeOptimieren' ? value : row.biotopeOptimieren,
-              massnahmenOptimieren:
-                field === 'massnahmenOptimieren'
-                  ? value
-                  : row.massnahmenOptimieren,
-              wirkungAufArt:
-                field === 'wirkungAufArt' ? value : row.wirkungAufArt,
-              datum: field === 'datum' ? value : row.datum,
-              massnahmenApBearb:
-                field === 'massnahmenApBearb' ? value : row.massnahmenApBearb,
-              massnahmenPlanungVsAusfuehrung:
-                field === 'massnahmenPlanungVsAusfuehrung'
-                  ? value
-                  : row.massnahmenPlanungVsAusfuehrung,
-              apId: field === 'apId' ? value : row.apId,
-              bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
+              ...values,
               __typename: 'Apber',
             },
             __typename: 'Apber',
@@ -132,7 +88,7 @@ const Apber = ({ treeName }) => {
         },
       })
     } catch (error) {
-      return setErrors({ [field]: error.message })
+      return setErrors({ [changedField]: error.message })
     }
     setErrors({})
   })
@@ -160,157 +116,117 @@ const Apber = ({ treeName }) => {
           table="apber"
         />
         <FieldsContainer width={datenWidth}>
-          <TextField2
-            key={`${row.id}jahr`}
-            name="jahr"
-            label="Jahr"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField2
-            key={`${row.id}vergleichVorjahrGesamtziel`}
-            name="vergleichVorjahrGesamtziel"
-            label="Vergleich Vorjahr - Gesamtziel"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <RadioButtonGroup
-            key={`${row.id}beurteilung`}
-            name="beurteilung"
-            value={row.beurteilung}
-            label="Beurteilung"
-            dataSource={get(
-              dataApErfkritWertes,
-              'allApErfkritWertes.nodes',
-              [],
+          <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
+            {({ handleSubmit, dirty }) => (
+              <Form onBlur={() => dirty && handleSubmit()}>
+                <Field
+                  name="jahr"
+                  label="Jahr"
+                  type="number"
+                  component={TextField}
+                />
+                <Field
+                  name="vergleichVorjahrGesamtziel"
+                  label="Vergleich Vorjahr - Gesamtziel"
+                  type="text"
+                  multiLine
+                  component={TextField}
+                />
+                <Field
+                  name="beurteilung"
+                  label="Beurteilung"
+                  dataSource={get(
+                    dataApErfkritWertes,
+                    'allApErfkritWertes.nodes',
+                    [],
+                  )}
+                  loading={loadingApErfkritWertes}
+                  component={RadioButtonGroup}
+                />
+                <Field
+                  name="veraenderungZumVorjahr"
+                  label="Veränderung zum Vorjahr"
+                  dataSource={veraenGegenVorjahrWerte}
+                  component={RadioButtonGroup}
+                />
+                <Field
+                  name="apberAnalyse"
+                  label="Analyse"
+                  type="text"
+                  multiLine
+                  component={TextField}
+                />
+                <Field
+                  name="konsequenzenUmsetzung"
+                  label="Konsequenzen für die Umsetzung"
+                  type="text"
+                  multiLine
+                  component={TextField}
+                />
+                <Field
+                  name="konsequenzenErfolgskontrolle"
+                  label="Konsequenzen für die Erfolgskontrolle"
+                  type="text"
+                  multiLine
+                  component={TextField}
+                />
+                <Field
+                  name="biotopeNeue"
+                  label="A. Grundmengen: Bemerkungen/Folgerungen für nächstes Jahr: neue Biotope"
+                  type="text"
+                  multiLine
+                  component={TextField}
+                />
+                <Field
+                  name="biotopeOptimieren"
+                  label="B. Bestandesentwicklung: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Biotope"
+                  type="text"
+                  multiLine
+                  component={TextField}
+                />
+                <Field
+                  name="massnahmenApBearb"
+                  label="C. Zwischenbilanz zur Wirkung von Massnahmen: Weitere Aktivitäten der Aktionsplan-Verantwortlichen"
+                  type="text"
+                  multiLine
+                  component={TextField}
+                />
+                <Field
+                  name="massnahmenPlanungVsAusfuehrung"
+                  label="C. Zwischenbilanz zur Wirkung von Massnahmen: Vergleich Ausführung/Planung"
+                  type="text"
+                  multiLine
+                  component={TextField}
+                />
+                <Field
+                  name="massnahmenOptimieren"
+                  label="C. Zwischenbilanz zur Wirkung von Massnahmen: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Massnahmen"
+                  type="text"
+                  multiLine
+                  component={TextField}
+                />
+                <Field
+                  name="wirkungAufArt"
+                  label="D. Einschätzung der Wirkung des AP insgesamt auf die Art: Bemerkungen"
+                  type="text"
+                  multiLine
+                  component={TextField}
+                />
+                <Field
+                  name="datum"
+                  label="Datum"
+                  component={DateFieldWithPicker}
+                />
+                <Field
+                  name="bearbeiter"
+                  label="BearbeiterIn"
+                  options={get(dataAdresses, 'allAdresses.nodes', [])}
+                  loading={loadingAdresses}
+                  component={Select}
+                />
+              </Form>
             )}
-            loading={loadingApErfkritWertes}
-            saveToDb={saveToDb}
-            error={errors.beurteilung}
-          />
-          <RadioButtonGroup
-            key={`${row.id}veraenderungZumVorjahr`}
-            name="veraenderungZumVorjahr"
-            value={row.veraenderungZumVorjahr}
-            label="Veränderung zum Vorjahr"
-            dataSource={veraenGegenVorjahrWerte}
-            saveToDb={saveToDb}
-            error={errors.veraenderungZumVorjahr}
-          />
-          <TextField2
-            key={`${row.id}apberAnalyse`}
-            name="apberAnalyse"
-            label="Analyse"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField2
-            key={`${row.id}konsequenzenUmsetzung`}
-            name="konsequenzenUmsetzung"
-            label="Konsequenzen für die Umsetzung"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField2
-            key={`${row.id}konsequenzenErfolgskontrolle`}
-            name="konsequenzenErfolgskontrolle"
-            label="Konsequenzen für die Erfolgskontrolle"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField2
-            key={`${row.id}biotopeNeue`}
-            name="biotopeNeue"
-            label="A. Grundmengen: Bemerkungen/Folgerungen für nächstes Jahr: neue Biotope"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField2
-            key={`${row.id}biotopeOptimieren`}
-            name="biotopeOptimieren"
-            label="B. Bestandesentwicklung: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Biotope"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField2
-            key={`${row.id}massnahmenApBearb`}
-            name="massnahmenApBearb"
-            label="C. Zwischenbilanz zur Wirkung von Massnahmen: Weitere Aktivitäten der Aktionsplan-Verantwortlichen"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField2
-            key={`${row.id}massnahmenPlanungVsAusfuehrung`}
-            name="massnahmenPlanungVsAusfuehrung"
-            label="C. Zwischenbilanz zur Wirkung von Massnahmen: Vergleich Ausführung/Planung"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField2
-            key={`${row.id}massnahmenOptimieren`}
-            name="massnahmenOptimieren"
-            label="C. Zwischenbilanz zur Wirkung von Massnahmen: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Massnahmen"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField2
-            key={`${row.id}wirkungAufArt`}
-            name="wirkungAufArt"
-            label="D. Einschätzung der Wirkung des AP insgesamt auf die Art: Bemerkungen"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <DateFieldWithPicker
-            key={`${row.id}datum`}
-            name="datum"
-            label="Datum"
-            value={row.datum}
-            saveToDb={saveToDb}
-            error={errors.datum}
-          />
-          <Select
-            key={`${row.id}bearbeiter`}
-            name="bearbeiter"
-            value={row.bearbeiter}
-            field="bearbeiter"
-            label="BearbeiterIn"
-            options={get(dataAdresses, 'allAdresses.nodes', [])}
-            loading={loadingAdresses}
-            saveToDb={saveToDb}
-            error={errors.bearbeiter}
-          />
+          </Formik>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
