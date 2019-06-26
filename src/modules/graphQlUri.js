@@ -8,5 +8,4 @@ export default () => {
   return isLocalhost
     ? 'http://localhost:5000/graphql'
     : 'https://api.apflora.ch/graphql'
-  //: 'https://${window.location.hostname}/graphql'
 }

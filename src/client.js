@@ -33,7 +33,6 @@ export default ({ idb, store }) => {
       if (object.id && isNaN(object.id)) return object.id
       return defaultDataIdFromObject(object)
     },
-    //resultCaching: false
   })
   // use httpLink _instead_ of batchHttpLink to _not_ batch
 
@@ -45,7 +44,6 @@ export default ({ idb, store }) => {
     link: ApolloLink.from([authLink, batchHttpLink]),
     cache,
     defaultOptions: { fetchPolicy: 'cache-and-network' },
-    //defaultOptions: { fetchPolicy: 'cache-first' },
   })
   return client
 }
