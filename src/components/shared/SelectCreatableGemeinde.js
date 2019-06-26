@@ -12,11 +12,11 @@ const Container = styled.div`
 `
 const Label = styled.div`
   font-size: 12px;
-  color: rgb(0, 0, 0, 0.54);
+  color: ${props => (props.error ? '#f44336' : 'rgb(0, 0, 0, 0.54)')};
 `
 const Error = styled.div`
   font-size: 12px;
-  color: red;
+  color: #f44336;
 `
 const Field = styled.div`
   display: flex;
@@ -143,7 +143,7 @@ const SharedSelectCreatable = ({
 
   return (
     <Container data-id={name}>
-      {label && <Label>{label}</Label>}
+      {label && <Label error={!!error}>{label}</Label>}
       <Field>
         <StyledSelect
           id={name}
