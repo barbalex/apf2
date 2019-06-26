@@ -1,17 +1,19 @@
-import React, { useState, useCallback, useEffect, useContext } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import { observer } from 'mobx-react-lite'
+import { Formik, Form, Field } from 'formik'
 
-import RadioButton from '../../../shared/RadioButton'
-import TextField from '../../../shared/TextField2'
+import RadioButton from '../../../shared/RadioButtonFormik'
+import TextField from '../../../shared/TextFieldFormik'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updateAdresseByIdGql from './updateAdresseById'
 import query from './query'
 import storeContext from '../../../../storeContext'
-import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
+import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
+import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -35,38 +37,24 @@ const Adresse = ({ treeName }) => {
     variables: { id },
   })
   const client = useApolloClient()
-  const [errors, setErrors] = useState({})
 
   const row = get(data, 'adresseById', {})
 
-  useEffect(() => setErrors({}), [row])
-
-  const saveToDb = useCallback(
-    async event => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
+  const onSubmit = useCallback(
+    async (values, { setErrors }) => {
+      const changedField = objectsFindChangedKey(values, row)
       try {
         await client.mutate({
           mutation: updateAdresseByIdGql,
           variables: {
-            id: row.id,
-            [field]: value,
+            ...objectsEmptyValuesToNull(values),
             changedBy: store.user.name,
           },
           optimisticResponse: {
             __typename: 'Mutation',
             updateAdresseById: {
               adresse: {
-                id: row.id,
-                name: field === 'name' ? value : row.name,
-                email: field === 'email' ? value : row.email,
-                adresse: field === 'adresse' ? value : row.adresse,
-                telefon: field === 'telefon' ? value : row.telefon,
-                freiwErfko: field === 'freiwErfko' ? value : row.freiwErfko,
-                evabVorname: field === 'evabVorname' ? value : row.evabVorname,
-                evabNachname:
-                  field === 'evabNachname' ? value : row.evabNachname,
-                evabOrt: field === 'evabOrt' ? value : row.evabOrt,
+                ...values,
                 __typename: 'Adresse',
               },
               __typename: 'Adresse',
@@ -74,12 +62,10 @@ const Adresse = ({ treeName }) => {
           },
         })
       } catch (error) {
-        return setErrors({ [field]: error.message })
+        return setErrors({ [changedField]: error.message })
       }
+      ;[('name', 'role')].includes(changedField) && refetch.adresses()
       setErrors({})
-      if (['name', 'role'].includes(field) && refetch && refetch.adresses) {
-        refetch.adresses()
-      }
     },
     [row],
   )
@@ -105,73 +91,62 @@ const Adresse = ({ treeName }) => {
           table="adresse"
         />
         <FieldsContainer>
-          <TextField
-            key={`${row.id}name`}
-            name="name"
-            label="Name"
-            row={row}
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}adresse`}
-            name="adresse"
-            label="Adresse"
-            row={row}
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}telefon`}
-            name="telefon"
-            label="Telefon"
-            row={row}
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}email`}
-            name="email"
-            label="Email"
-            row={row}
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <RadioButton
-            key={`${row.id}freiwErfko`}
-            name="freiwErfko"
-            label="freiwillige ErfolgskontrolleurIn"
-            value={row.freiwErfko}
-            saveToDb={saveToDb}
-            error={errors.freiwErfko}
-          />
-          <TextField
-            key={`${row.id}evabVorname`}
-            name="evabVorname"
-            label="EvAB Vorname"
-            row={row}
-            saveToDb={saveToDb}
-            errors={errors}
-            helperText="Wird für den Export in EvAB benötigt"
-          />
-          <TextField
-            key={`${row.id}evabNachname`}
-            name="evabNachname"
-            label="EvAB Nachname"
-            row={row}
-            saveToDb={saveToDb}
-            errors={errors}
-            helperText="Wird für den Export in EvAB benötigt"
-          />
-          <TextField
-            key={`${row.id}evabOrt`}
-            name="evabOrt"
-            label="EvAB Ort"
-            row={row}
-            saveToDb={saveToDb}
-            errors={errors}
-            helperText="Wird für den Export in EvAB benötigt. Muss immer einen Wert enthalten. Ist keine Ort bekannt, bitte - eintragen"
-          />
+          <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
+            {({ handleSubmit, dirty }) => (
+              <Form onBlur={() => dirty && handleSubmit()}>
+                <Field
+                  name="name"
+                  label="Name"
+                  type="text"
+                  component={TextField}
+                />
+                <Field
+                  name="adresse"
+                  label="Adresse"
+                  type="text"
+                  component={TextField}
+                />
+                <Field
+                  name="telefon"
+                  label="Telefon"
+                  type="text"
+                  component={TextField}
+                />
+                <Field
+                  name="email"
+                  label="Email"
+                  type="email"
+                  component={TextField}
+                />
+                <Field
+                  name="freiwErfko"
+                  label="freiwillige ErfolgskontrolleurIn"
+                  component={RadioButton}
+                />
+                <Field
+                  name="evabVorname"
+                  label="EvAB Vorname"
+                  type="text"
+                  helperText="Wird für den Export in EvAB benötigt"
+                  component={TextField}
+                />
+                <Field
+                  name="evabNachname"
+                  label="EvAB Nachname"
+                  type="text"
+                  helperText="Wird für den Export in EvAB benötigt"
+                  component={TextField}
+                />
+                <Field
+                  name="evabOrt"
+                  label="EvAB Ort"
+                  type="text"
+                  helperText="Wird für den Export in EvAB benötigt. Muss immer einen Wert enthalten. Ist keine Ort bekannt, bitte - eintragen"
+                  component={TextField}
+                />
+              </Form>
+            )}
+          </Formik>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
