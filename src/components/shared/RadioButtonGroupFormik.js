@@ -82,7 +82,6 @@ const RadioButtonGroup = ({
           name,
         },
       }
-      console.log('RadioButtonGroup', { targetValue, valueToUse })
       onChange(fakeEvent)
       onBlur(fakeEvent)
       setTimeout(() => handleSubmit())

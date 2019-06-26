@@ -1,16 +1,18 @@
-import React, { useState, useCallback, useEffect, useContext } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import { Formik, Form, Field } from 'formik'
 
-import TextField from '../../../shared/TextField2'
+import TextField from '../../../shared/TextFieldFormik'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
 import updateProjektByIdGql from './updateProjektById'
 import storeContext from '../../../../storeContext'
-import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
+import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
+import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -26,9 +28,8 @@ const FieldsContainer = styled.div`
 const Projekt = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const { refetch } = store
   const { activeNodeArray } = store[treeName]
-
-  const [errors, setErrors] = useState({})
 
   const { data, loading, error } = useQuery(query, {
     variables: {
@@ -41,28 +42,23 @@ const Projekt = ({ treeName }) => {
 
   const row = get(data, 'projektById', {})
 
-  useEffect(() => setErrors({}), [row])
-
   const filterTable = activeNodeArray.length === 2 ? 'projekt' : 'ap'
 
-  const saveToDb = useCallback(
-    async event => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
+  const onSubmit = useCallback(
+    async (values, { setErrors }) => {
+      const changedField = objectsFindChangedKey(values, row)
       try {
         await client.mutate({
           mutation: updateProjektByIdGql,
           variables: {
-            id: row.id,
-            [field]: value,
+            ...objectsEmptyValuesToNull(values),
             changedBy: store.user.name,
           },
           optimisticResponse: {
             __typename: 'Mutation',
             updateProjektById: {
               projekt: {
-                id: row.id,
-                name: field === 'name' ? value : row.name,
+                ...values,
                 __typename: 'Projekt',
               },
               __typename: 'Projekt',
@@ -70,9 +66,10 @@ const Projekt = ({ treeName }) => {
           },
         })
       } catch (error) {
-        return setErrors({ [field]: error.message })
+        return setErrors({ [changedField]: error.message })
       }
       setErrors({})
+      if (changedField === 'name') refetch.projekts()
     },
     [row],
   )
@@ -90,15 +87,18 @@ const Projekt = ({ treeName }) => {
       <Container>
         <FormTitle title="Projekt" treeName={treeName} table={filterTable} />
         <FieldsContainer>
-          <TextField
-            key={`${row.id}name`}
-            name="name"
-            label="Name"
-            row={row}
-            type="text"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
+          <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
+            {({ handleSubmit, dirty }) => (
+              <Form onBlur={() => dirty && handleSubmit()}>
+                <Field
+                  name="name"
+                  label="Name"
+                  type="text"
+                  component={TextField}
+                />
+              </Form>
+            )}
+          </Formik>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

@@ -1,18 +1,20 @@
-import React, { useState, useCallback, useEffect, useContext } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import { Formik, Form, Field } from 'formik'
 
-import RadioButtonGroup from '../../../shared/RadioButtonGroup'
-import TextField from '../../../shared/TextField2'
+import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
+import TextField from '../../../shared/TextFieldFormik'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
 import queryLists from './queryLists'
 import updateErfkritByIdGql from './updateErfkritById'
 import storeContext from '../../../../storeContext'
-import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
+import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
+import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -29,7 +31,6 @@ const Erfkrit = ({ treeName }) => {
   const store = useContext(storeContext)
   const { refetch } = store
   const client = useApolloClient()
-  const [errors, setErrors] = useState({})
   const { activeNodeArray } = store[treeName]
 
   const { data, loading, error } = useQuery(query, {
@@ -49,28 +50,21 @@ const Erfkrit = ({ treeName }) => {
 
   const row = get(data, 'erfkritById', {})
 
-  useEffect(() => setErrors({}), [row])
-
-  const saveToDb = useCallback(
-    async event => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
+  const onSubmit = useCallback(
+    async (values, { setErrors }) => {
+      const changedField = objectsFindChangedKey(values, row)
       try {
         await client.mutate({
           mutation: updateErfkritByIdGql,
           variables: {
-            id: row.id,
-            [field]: value,
+            ...objectsEmptyValuesToNull(values),
             changedBy: store.user.name,
           },
           optimisticResponse: {
             __typename: 'Mutation',
             updateErfkritById: {
               erfkrit: {
-                id: row.id,
-                apId: field === 'apId' ? value : row.apId,
-                erfolg: field === 'erfolg' ? value : row.erfolg,
-                kriterien: field === 'kriterien' ? value : row.kriterien,
+                ...values,
                 __typename: 'Erfkrit',
               },
               __typename: 'Erfkrit',
@@ -78,10 +72,10 @@ const Erfkrit = ({ treeName }) => {
           },
         })
       } catch (error) {
-        return setErrors({ [field]: error.message })
+        return setErrors({ [changedField]: error.message })
       }
       setErrors({})
-      if (['erfolg'].includes(field)) refetch.erfkrits()
+      if (changedField === 'erfolg') refetch.erfkrits()
     },
     [row],
   )
@@ -107,26 +101,26 @@ const Erfkrit = ({ treeName }) => {
           table="erfkrit"
         />
         <FieldsContainer>
-          <RadioButtonGroup
-            key={`${row.id}erfolg`}
-            name="erfolg"
-            label="Beurteilung"
-            value={row.erfolg}
-            dataSource={get(dataLists, 'allApErfkritWertes.nodes', [])}
-            loading={loadingLists}
-            saveToDb={saveToDb}
-            error={errors.erfolg}
-          />
-          <TextField
-            key={`${row.id}kriterien`}
-            name="kriterien"
-            label="Kriterien"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
+          <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
+            {({ handleSubmit, dirty }) => (
+              <Form onBlur={() => dirty && handleSubmit()}>
+                <Field
+                  name="erfolg"
+                  label="Beurteilung"
+                  dataSource={get(dataLists, 'allApErfkritWertes.nodes', [])}
+                  loading={loadingLists}
+                  component={RadioButtonGroup}
+                />
+                <Field
+                  name="kriterien"
+                  label="Kriterien"
+                  type="text"
+                  multiLine
+                  component={TextField}
+                />
+              </Form>
+            )}
+          </Formik>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
