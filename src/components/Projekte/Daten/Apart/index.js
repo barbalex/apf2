@@ -11,6 +11,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updateApartByIdGql from './updateApartById'
 import query from './query'
 import queryAeEigenschaftens from './queryAeEigenschaftens'
+import queryAeEigById from './queryAeEigById'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
@@ -42,6 +43,16 @@ const ApArt = ({ treeName }) => {
   })
 
   const row = get(data, 'apartById', {})
+
+  const {
+    data: dataAeEigById,
+    loading: loadingAeEigById,
+    error: errorAeEigById,
+  } = useQuery(queryAeEigById, {
+    variables: {
+      id: row && row.artId ? row.artId : '99999999-9999-9999-9999-999999999999',
+    },
+  })
 
   // do not include already choosen assozarten
   const apartenOfAp = get(row, 'apByApId.apartsByApId.nodes', [])
@@ -98,7 +109,7 @@ const ApArt = ({ treeName }) => {
     [row],
   )
 
-  if (loading) {
+  if (loading || loadingAeEigById) {
     return (
       <Container>
         <FieldsContainer>Lade...</FieldsContainer>
@@ -106,6 +117,9 @@ const ApArt = ({ treeName }) => {
     )
   }
   if (error) return `Fehler: ${error.message}`
+  if (errorAeEigById) return `Fehler: ${errorAeEigById.message}`
+
+  console.log('Apart rendering')
 
   return (
     <ErrorBoundary>
@@ -150,10 +164,17 @@ const ApArt = ({ treeName }) => {
           </div>
           <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
             {({ handleSubmit, dirty }) => (
-              <Form onBlur={() => dirty && handleSubmit()}>
+              <Form
+                key={row ? row.id : 'artid'}
+                onBlur={() => dirty && handleSubmit()}
+              >
                 <Field
                   name="artId"
-                  valueLabelPath="aeEigenschaftenByArtId.artname"
+                  valueLabel={
+                    dataAeEigById.aeEigenschaftenById
+                      ? dataAeEigById.aeEigenschaftenById.artname
+                      : ''
+                  }
                   label="Art"
                   row={row}
                   query={queryAeEigenschaftens}

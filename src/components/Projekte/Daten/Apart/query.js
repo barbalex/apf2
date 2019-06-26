@@ -6,10 +6,6 @@ export default gql`
   query apartByIdQuery($id: UUID!) {
     apartById(id: $id) {
       ...ApartFields
-      aeEigenschaftenByArtId {
-        id
-        artname
-      }
       apByApId {
         id
         apartsByApId {

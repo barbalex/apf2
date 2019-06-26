@@ -78,6 +78,7 @@ const SelectTypable = ({
   form,
   row,
   valueLabelPath,
+  valueLabel,
   label,
   labelSize,
   query,
@@ -128,7 +129,7 @@ const SelectTypable = ({
 
   const value = {
     value: valuePassed || '',
-    label: get(row, valueLabelPath) || '',
+    label: valueLabel ? valueLabel : get(row, valueLabelPath) || '',
   }
 
   return (

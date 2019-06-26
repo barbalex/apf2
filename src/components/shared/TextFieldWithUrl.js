@@ -29,37 +29,22 @@ const StyledFormControl = styled(FormControl)`
 `
 
 const TextFieldWithUrl = ({
-  value: propsValue,
+  field,
+  form,
   label,
-  name,
   type = 'text',
   multiLine = false,
   disabled = false,
   hintText = '',
-  error,
-  saveToDb,
 }) => {
-  const [stateValue, setStateValue] = useState(
-    propsValue || propsValue === 0 ? propsValue : '',
-  )
+  const { onChange, onBlur, value, name } = field
+  const { errors, handleSubmit } = form
+  const error = errors[name]
 
-  const onChange = useCallback(event => setStateValue(event.target.value))
-  const onOpen = useCallback(
-    e =>
-      typeof window !== 'undefined' &&
-      window.open(e.target.dataset.url, '_blank'),
-  )
-
-  useEffect(() => {
-    setStateValue(propsValue || propsValue === 0 ? propsValue : '')
-  }, [propsValue])
-
-  const urls = stateValue ? getUrls(stateValue) : []
+  const urls = value ? getUrls(value) : []
 
   const onKeyPress = useCallback(event => {
-    if (event.key === 'Enter') {
-      saveToDb(event)
-    }
+    event.key === 'Enter' && handleSubmit()
   })
 
   return (
@@ -75,12 +60,12 @@ const TextFieldWithUrl = ({
         </InputLabel>
         <Input
           id={name}
-          name={name}
-          value={stateValue}
+          data-id={name}
+          value={value || ''}
           type={type}
           multiline={multiLine}
           onChange={onChange}
-          onBlur={saveToDb}
+          onBlur={onBlur}
           onKeyPress={onKeyPress}
           autoComplete="off"
           autoCorrect="off"
@@ -94,8 +79,9 @@ const TextFieldWithUrl = ({
       {Array.from(urls).map((url, index) => (
         <div key={index} title={`${url} öffnen`}>
           <StyledOpenInNewIcon
-            onClick={onOpen}
-            data-url={url}
+            onClick={() =>
+              typeof window !== 'undefined' && window.open(url, '_blank')
+            }
             data-id="open-url"
           />
         </div>

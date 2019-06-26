@@ -1,18 +1,20 @@
-import React, { useState, useCallback, useEffect, useContext } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import { Formik, Form, Field } from 'formik'
 
-import TextField from '../../../shared/TextField2'
-import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
+import TextField from '../../../shared/TextFieldFormik'
+import SelectLoadingOptions from '../../../shared/SelectLoadingOptionsFormik'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updateAssozartByIdGql from './updateAssozartById'
 import query from './query'
 import queryAeEigenschaftens from './queryAeEigenschaftens'
 import storeContext from '../../../../storeContext'
-import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
+import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
+import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -29,7 +31,6 @@ const Assozart = ({ treeName }) => {
   const store = useContext(storeContext)
   const { refetch } = store
   const client = useApolloClient()
-  const [errors, setErrors] = useState({})
   const { activeNodeArray } = store[treeName]
 
   const { data, loading, error } = useQuery(query, {
@@ -42,8 +43,6 @@ const Assozart = ({ treeName }) => {
   })
 
   const row = get(data, 'assozartById', {})
-
-  useEffect(() => setErrors({}), [row])
 
   // do not include already choosen assozarten
   const assozartenOfAp = get(row, 'apByApId.assozartsByApId.nodes', [])
@@ -60,28 +59,21 @@ const Assozart = ({ treeName }) => {
         : { artname: { includesInsensitive: inputValue } }
       : { artname: { isNull: false } }
 
-  const saveToDb = useCallback(
-    async event => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
+  const onSubmit = useCallback(
+    async (values, { setErrors }) => {
+      const changedField = objectsFindChangedKey(values, row)
       try {
         await client.mutate({
           mutation: updateAssozartByIdGql,
           variables: {
-            id: row.id,
-            [field]: value,
+            ...objectsEmptyValuesToNull(values),
             changedBy: store.user.name,
           },
           optimisticResponse: {
             __typename: 'Mutation',
             updateAssozartById: {
               assozart: {
-                id: row.id,
-                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-                aeId: field === 'aeId' ? value : row.aeId,
-                apId: field === 'apId' ? value : row.apId,
-                aeEigenschaftenByAeId: row.aeEigenschaftenByAeId,
-                apByApId: row.apByApId,
+                ...values,
                 __typename: 'Assozart',
               },
               __typename: 'Assozart',
@@ -89,10 +81,10 @@ const Assozart = ({ treeName }) => {
           },
         })
       } catch (error) {
-        return setErrors({ [field]: error.message })
+        return setErrors({ [changedField]: error.message })
       }
       setErrors({})
-      if (['aeId'].includes(field)) refetch.assozarts()
+      if (['aeId'].includes(changedField)) refetch.assozarts()
     },
     [row],
   )
@@ -116,28 +108,29 @@ const Assozart = ({ treeName }) => {
           table="assozart"
         />
         <FieldsContainer>
-          <SelectLoadingOptions
-            key={`${row.id}aeId2`}
-            field="aeId"
-            valueLabelPath="aeEigenschaftenByAeId.artname"
-            label="Art"
-            row={row}
-            saveToDb={saveToDb}
-            error={errors.aeId}
-            query={queryAeEigenschaftens}
-            filter={aeEigenschaftenfilter}
-            queryNodesName="allAeEigenschaftens"
-          />
-          <TextField
-            key={`${row.id}bemerkungen`}
-            name="bemerkungen"
-            label="Bemerkungen zur Assoziation"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
+          <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
+            {({ handleSubmit, dirty }) => (
+              <Form onBlur={() => dirty && handleSubmit()}>
+                <Field
+                  name="aeId"
+                  valueLabelPath="aeEigenschaftenByAeId.artname"
+                  label="Art"
+                  row={row}
+                  query={queryAeEigenschaftens}
+                  filter={aeEigenschaftenfilter}
+                  queryNodesName="allAeEigenschaftens"
+                  component={SelectLoadingOptions}
+                />
+                <Field
+                  name="bemerkungen"
+                  label="Bemerkungen zur Assoziation"
+                  type="text"
+                  multiLine
+                  component={TextField}
+                />
+              </Form>
+            )}
+          </Formik>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
