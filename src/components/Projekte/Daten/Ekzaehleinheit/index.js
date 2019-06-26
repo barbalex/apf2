@@ -1,19 +1,21 @@
-import React, { useState, useCallback, useEffect, useContext } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import { Formik, Form, Field } from 'formik'
 
-import TextField from '../../../shared/TextField2'
-import Select from '../../../shared/Select'
-import RadioButton from '../../../shared/RadioButton'
+import TextField from '../../../shared/TextFieldFormik'
+import Select from '../../../shared/SelectFormik'
+import RadioButton from '../../../shared/RadioButtonFormik'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
 import queryLists from './queryLists'
 import updateEkzaehleinheitByIdGql from './updateEkzaehleinheitById'
 import storeContext from '../../../../storeContext'
-import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
+import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
+import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -30,7 +32,6 @@ const Ekzaehleinheit = ({ treeName }) => {
   const store = useContext(storeContext)
   const { refetch } = store
   const client = useApolloClient()
-  const [errors, setErrors] = useState({})
   const { activeNodeArray } = store[treeName]
 
   const { data, loading, error } = useQuery(query, {
@@ -43,8 +44,6 @@ const Ekzaehleinheit = ({ treeName }) => {
   })
 
   const row = get(data, 'ekzaehleinheitById', {})
-
-  useEffect(() => setErrors({}), [row])
 
   const ekzaehleinheitenOfAp = get(
     row,
@@ -66,33 +65,21 @@ const Ekzaehleinheit = ({ treeName }) => {
     },
   })
 
-  const saveToDb = useCallback(
-    async event => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
+  const onSubmit = useCallback(
+    async (values, { setErrors }) => {
+      const changedField = objectsFindChangedKey(values, row)
       try {
         await client.mutate({
           mutation: updateEkzaehleinheitByIdGql,
           variables: {
-            id: row.id,
-            [field]: value,
+            ...objectsEmptyValuesToNull(values),
             changedBy: store.user.name,
           },
           optimisticResponse: {
             __typename: 'Mutation',
             updateEkzaehleinheitById: {
               ekzaehleinheit: {
-                id: row.id,
-                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-                zaehleinheitId:
-                  field === 'zaehleinheitId' ? value : row.zaehleinheitId,
-                apId: field === 'apId' ? value : row.apId,
-                zielrelevant:
-                  field === 'zielrelevant' ? value : row.zielrelevant,
-                sort: field === 'sort' ? value : row.sort,
-                tpopkontrzaehlEinheitWerteByZaehleinheitId:
-                  row.tpopkontrzaehlEinheitWerteByZaehleinheitId,
-                apByApId: row.apByApId,
+                ...values,
                 __typename: 'Ekzaehleinheit',
               },
               __typename: 'Ekzaehleinheit',
@@ -100,10 +87,10 @@ const Ekzaehleinheit = ({ treeName }) => {
           },
         })
       } catch (error) {
-        return setErrors({ [field]: error.message })
+        return setErrors({ [changedField]: error.message })
       }
       setErrors({})
-      if (['zaehleinheitId'].includes(field)) refetch.ekzaehleinheits()
+      if (changedField === 'zaehleinheitId') refetch.ekzaehleinheits()
     },
     [row],
   )
@@ -129,44 +116,41 @@ const Ekzaehleinheit = ({ treeName }) => {
           table="ekzaehleinheit"
         />
         <FieldsContainer>
-          <Select
-            key={`${row.id}zaehleinheitId`}
-            name="zaehleinheitId"
-            value={row.zaehleinheitId}
-            field="zaehleinheitId"
-            label="Zähleinheit"
-            options={get(dataLists, 'allTpopkontrzaehlEinheitWertes.nodes', [])}
-            loading={loadingLists}
-            saveToDb={saveToDb}
-            error={errors.zaehleinheitId}
-          />
-          <RadioButton
-            key={`${row.id}zielrelevant`}
-            name="zielrelevant"
-            label="zielrelevant"
-            value={row.zielrelevant}
-            saveToDb={saveToDb}
-            error={errors.zielrelevant}
-          />
-          <TextField
-            key={`${row.id}sort`}
-            name="sort"
-            label="Sortierung"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}bemerkungen`}
-            name="bemerkungen"
-            label="Bemerkungen"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
+          <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
+            {({ handleSubmit, dirty }) => (
+              <Form onBlur={() => dirty && handleSubmit()}>
+                <Field
+                  name="zaehleinheitId"
+                  label="Zähleinheit"
+                  options={get(
+                    dataLists,
+                    'allTpopkontrzaehlEinheitWertes.nodes',
+                    [],
+                  )}
+                  loading={loadingLists}
+                  component={Select}
+                />
+                <Field
+                  name="zielrelevant"
+                  label="zielrelevant"
+                  component={RadioButton}
+                />
+                <Field
+                  name="sort"
+                  label="Sortierung"
+                  type="number"
+                  component={TextField}
+                />
+                <Field
+                  name="bemerkungen"
+                  label="Bemerkungen"
+                  type="text"
+                  multiLine
+                  component={TextField}
+                />
+              </Form>
+            )}
+          </Formik>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
