@@ -1,16 +1,17 @@
-import React, { useState, useCallback, useEffect, useContext } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import { Formik, Form, Field } from 'formik'
 
-import TextField from '../../../shared/TextField2'
-import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
+import TextField from '../../../shared/TextFieldFormik'
+import TextFieldWithInfo from '../../../shared/TextFieldWithInfoFormik'
 import Status from '../../../shared/Status'
 import SelectCreatable from '../../../shared/SelectCreatableGemeinde'
-import RadioButton from '../../../shared/RadioButton'
-import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
-import RadioButtonGroup from '../../../shared/RadioButtonGroup'
+import RadioButton from '../../../shared/RadioButtonFormik'
+import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfoFormik'
+import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import FormTitle from '../../../shared/FormTitle'
 import FilterTitle from '../../../shared/FilterTitle'
 import TpopAbBerRelevantInfoPopover from '../TpopAbBerRelevantInfoPopover'
@@ -25,6 +26,8 @@ import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { simpleTypes as tpopType } from '../../../../store/NodeFilterTree/tpop'
 import Coordinates from '../../../shared/Coordinates'
+import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
+import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -55,8 +58,6 @@ const Tpop = ({ treeName, showFilter = false }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { nodeFilter, nodeFilterSetValue, refetch } = store
-
-  const [errors, setErrors] = useState({})
 
   const { activeNodeArray, datenWidth, filterWidth } = store[treeName]
 
@@ -131,21 +132,15 @@ const Tpop = ({ treeName, showFilter = false }) => {
     row = get(data, 'tpopById', {})
   }
 
-  useEffect(() => {
-    console.log('Tpop mounting')
-    return () => console.log('Tpop unmounting')
-  }, [])
-  useEffect(() => setErrors({}), [row])
-
-  const saveToDb = useCallback(
-    async event => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
+  const onSubmit = useCallback(
+    async (values, { setErrors }) => {
+      const changedField = objectsFindChangedKey(values, row)
+      const value = values[changedField]
       if (showFilter) {
         nodeFilterSetValue({
           treeName,
           table: 'tpop',
-          key: field,
+          key: changedField,
           value,
         })
       } else {
@@ -153,65 +148,14 @@ const Tpop = ({ treeName, showFilter = false }) => {
           await client.mutate({
             mutation: updateTpopByIdGql,
             variables: {
-              id: row.id,
-              [field]: value,
+              ...objectsEmptyValuesToNull(values),
               changedBy: store.user.name,
             },
             optimisticResponse: {
               __typename: 'Mutation',
               updateTpopById: {
                 tpop: {
-                  id: row.id,
-                  popId: field === 'popId' ? value : row.popId,
-                  nr: field === 'nr' ? value : row.nr,
-                  gemeinde: field === 'gemeinde' ? value : row.gemeinde,
-                  flurname: field === 'flurname' ? value : row.flurname,
-                  geomPoint: field === 'geomPoint' ? value : row.geomPoint,
-                  radius: field === 'radius' ? value : row.radius,
-                  hoehe: field === 'hoehe' ? value : row.hoehe,
-                  exposition: field === 'exposition' ? value : row.exposition,
-                  klima: field === 'klima' ? value : row.klima,
-                  neigung: field === 'neigung' ? value : row.neigung,
-                  beschreibung:
-                    field === 'beschreibung' ? value : row.beschreibung,
-                  katasterNr: field === 'katasterNr' ? value : row.katasterNr,
-                  status: field === 'status' ? value : row.status,
-                  statusUnklarGrund:
-                    field === 'statusUnklarGrund'
-                      ? value
-                      : row.statusUnklarGrund,
-                  apberRelevant:
-                    field === 'apberRelevant' ? value : row.apberRelevant,
-                  apberRelevantGrund:
-                    field === 'apberRelevantGrund'
-                      ? value
-                      : row.apberRelevantGrund,
-                  bekanntSeit:
-                    field === 'bekanntSeit' ? value : row.bekanntSeit,
-                  eigentuemer:
-                    field === 'eigentuemer' ? value : row.eigentuemer,
-                  kontakt: field === 'kontakt' ? value : row.kontakt,
-                  nutzungszone:
-                    field === 'nutzungszone' ? value : row.nutzungszone,
-                  bewirtschafter:
-                    field === 'bewirtschafter' ? value : row.bewirtschafter,
-                  bewirtschaftung:
-                    field === 'bewirtschaftung' ? value : row.bewirtschaftung,
-                  ekfrequenz: field === 'ekfrequenz' ? value : row.ekfrequenz,
-                  ekfrequenzAbweichend:
-                    field === 'ekfrequenzAbweichend'
-                      ? value
-                      : row.ekfrequenzAbweichend,
-                  ekAbrechnungstyp:
-                    field === 'ekAbrechnungstyp' ? value : row.ekAbrechnungstyp,
-                  bemerkungen:
-                    field === 'bemerkungen' ? value : row.bemerkungen,
-                  statusUnklar:
-                    field === 'statusUnklar' ? value : row.statusUnklar,
-                  popStatusWerteByStatus: row.popStatusWerteByStatus,
-                  tpopApberrelevantWerteByApberRelevant:
-                    row.tpopApberrelevantWerteByApberRelevant,
-                  popByPopId: row.popByPopId,
+                  ...values,
                   __typename: 'Tpop',
                 },
                 __typename: 'Tpop',
@@ -219,14 +163,14 @@ const Tpop = ({ treeName, showFilter = false }) => {
             },
           })
         } catch (error) {
-          return setErrors({ [field]: error.message })
+          return setErrors({ [changedField]: error.message })
         }
         // update tpop on map
         if (
           (value &&
-            ((field === 'ylv95Y' && row.lv95X) ||
-              (field === 'lv95X' && row.y))) ||
-          (!value && (field === 'ylv95Y' || field === 'lv95X'))
+            ((changedField === 'ylv95Y' && row.lv95X) ||
+              (changedField === 'lv95X' && row.y))) ||
+          (!value && (changedField === 'ylv95Y' || changedField === 'lv95X'))
         ) {
           if (refetch.tpopForMap) refetch.tpopForMap()
         }
@@ -251,7 +195,9 @@ const Tpop = ({ treeName, showFilter = false }) => {
         const fakeEvent = {
           target: { value: gemeinde, name: 'gemeinde' },
         }
-        saveToDb(fakeEvent)
+        onChange(fakeEvent)
+        onBlur(fakeEvent)
+        setTimeout(() => handleSubmit())
       }
     },
     [row],
@@ -276,7 +222,7 @@ const Tpop = ({ treeName, showFilter = false }) => {
     }
   })
 
-  console.log('Tpop rendering')
+  //console.log('Tpop rendering')
 
   if (!showFilter && loading) {
     return (
@@ -308,239 +254,187 @@ const Tpop = ({ treeName, showFilter = false }) => {
           />
         )}
         <FieldsContainer data-width={showFilter ? filterWidth : datenWidth}>
-          <TextField
-            key={`${row.id}nr`}
-            name="nr"
-            label="Nr."
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextFieldWithInfo
-            key={`${row.id}flurname`}
-            name="flurname"
-            label="Flurname"
-            value={row.flurname}
-            type="text"
-            saveToDb={saveToDb}
-            popover="Dieses Feld möglichst immer ausfüllen"
-            error={errors.flurname}
-          />
-          <Status
-            key={`${row.id}status`}
-            apJahr={get(data, 'tpopById.popByPopId.apByApId.startJahr', null)}
-            herkunftValue={row.status}
-            bekanntSeitValue={row.bekanntSeit}
-            saveToDb={saveToDb}
-            treeName={treeName}
-            showFilter={showFilter}
-          />
-          <RadioButton
-            key={`${row.id}statusUnklar`}
-            name="statusUnklar"
-            label="Status unklar"
-            value={row.statusUnklar}
-            saveToDb={saveToDb}
-            error={errors.statusUnklar}
-          />
-          <TextField
-            key={`${row.id}statusUnklarGrund`}
-            name="statusUnklarGrund"
-            label="Begründung"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <RadioButton
-            key={`${row.id}apberRelevant`}
-            name="apberRelevant"
-            label="Für AP-Bericht relevant"
-            value={row.apberRelevant}
-            saveToDb={saveToDb}
-            error={errors.apberRelevant}
-          />
-          <RadioButtonGroupWithInfo
-            value={row.apberRelevantGrund}
-            name="apberRelevantGrund"
-            dataSource={get(
-              dataLists,
-              'allTpopApberrelevantGrundWertes.nodes',
-              [],
+          <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
+            {({ handleSubmit, dirty }) => (
+              <Form onBlur={() => dirty && handleSubmit()}>
+                <Field
+                  name="nr"
+                  label="Nr."
+                  type="number"
+                  component={TextField}
+                />
+                <Field
+                  name="flurname"
+                  label="Flurname"
+                  type="text"
+                  popover="Dieses Feld möglichst immer ausfüllen"
+                  component={TextFieldWithInfo}
+                />
+                <Field
+                  apJahr={get(
+                    data,
+                    'tpopById.popByPopId.apByApId.startJahr',
+                    null,
+                  )}
+                  treeName={treeName}
+                  showFilter={showFilter}
+                  component={Status}
+                />
+                <Field
+                  name="statusUnklar"
+                  label="Status unklar"
+                  component={RadioButton}
+                />
+                <Field
+                  name="statusUnklarGrund"
+                  label="Begründung"
+                  type="text"
+                  multiLine
+                  component={TextField}
+                />
+                <Field
+                  name="apberRelevant"
+                  label="Für AP-Bericht relevant"
+                  component={RadioButton}
+                />
+                <Field
+                  name="apberRelevantGrund"
+                  dataSource={get(
+                    dataLists,
+                    'allTpopApberrelevantGrundWertes.nodes',
+                    [],
+                  )}
+                  loading={loadingLists}
+                  popover={TpopAbBerRelevantInfoPopover}
+                  label="Grund für AP-Bericht (Nicht-)Relevanz"
+                  component={RadioButtonGroupWithInfo}
+                />
+                {!showFilter && (
+                  <Coordinates
+                    row={row}
+                    refetchForm={refetchTpop}
+                    table="tpop"
+                  />
+                )}
+                <Field
+                  name="gemeinde"
+                  label="Gemeinde"
+                  options={get(dataLists, 'allGemeindes.nodes', [])}
+                  loading={loadingLists}
+                  showLocate={!showFilter}
+                  onClickLocate={onClickLocate}
+                  component={SelectCreatable}
+                />
+                <Field
+                  name="radius"
+                  label="Radius (m)"
+                  type="number"
+                  component={TextField}
+                />
+                <Field
+                  name="hoehe"
+                  label="Höhe (m.ü.M.)"
+                  type="number"
+                  component={TextField}
+                />
+                <Field
+                  name="exposition"
+                  label="Exposition, Besonnung"
+                  type="text"
+                  component={TextField}
+                />
+                <Field
+                  name="klima"
+                  label="Klima"
+                  type="text"
+                  component={TextField}
+                />
+                <Field
+                  name="neigung"
+                  label="Hangneigung"
+                  type="text"
+                  component={TextField}
+                />
+                <Field
+                  name="beschreibung"
+                  label="Beschreibung"
+                  type="text"
+                  multiline
+                  component={TextField}
+                />
+                <Field
+                  name="katasterNr"
+                  label="Kataster-Nr."
+                  type="text"
+                  component={TextField}
+                />
+                <Field
+                  name="eigentuemer"
+                  label="EigentümerIn"
+                  type="text"
+                  component={TextField}
+                />
+                <Field
+                  name="kontakt"
+                  label="Kontakt vor Ort"
+                  type="text"
+                  component={TextField}
+                />
+                <Field
+                  name="nutzungszone"
+                  label="Nutzungszone"
+                  type="text"
+                  component={TextField}
+                />
+                <Field
+                  name="bewirtschafter"
+                  label="BewirtschafterIn"
+                  type="text"
+                  component={TextField}
+                />
+                <Field
+                  name="bewirtschaftung"
+                  label="Bewirtschaftung"
+                  type="text"
+                  component={TextField}
+                />
+                <Field
+                  name="bemerkungen"
+                  label="Bemerkungen"
+                  type="text"
+                  multiline
+                  component={TextField}
+                />
+                <EkfrequenzOptionsContainer>
+                  <Field
+                    name="ekfrequenz"
+                    dataSource={ekfrequenzOptions}
+                    loading={loadingLists}
+                    label="EK-Frequenz"
+                    component={RadioButtonGroup}
+                  />
+                </EkfrequenzOptionsContainer>
+                <Field
+                  name="ekfrequenzAbweichend"
+                  label="EK-Frequenz abweichend"
+                  component={RadioButton}
+                />
+                <div>
+                  <Field
+                    name="ekAbrechnungstyp"
+                    dataSource={get(
+                      dataLists,
+                      'allEkAbrechnungstypWertes.nodes',
+                      [],
+                    )}
+                    loading={loadingLists}
+                    label="EK-Abrechnungstyp"
+                    component={RadioButtonGroup}
+                  />
+                </div>
+              </Form>
             )}
-            loading={loadingLists}
-            popover={TpopAbBerRelevantInfoPopover}
-            label="Grund für AP-Bericht (Nicht-)Relevanz"
-            saveToDb={saveToDb}
-            error={errors.apberRelevantGrund}
-          />
-          {!showFilter && (
-            <Coordinates row={row} refetchForm={refetchTpop} table="tpop" />
-          )}
-          <SelectCreatable
-            key={`${row.id}gemeinde`}
-            name="gemeinde"
-            value={row.gemeinde}
-            field="gemeinde"
-            label="Gemeinde"
-            options={get(dataLists, 'allGemeindes.nodes', [])}
-            loading={loadingLists}
-            saveToDb={saveToDb}
-            showLocate={!showFilter}
-            onClickLocate={onClickLocate}
-            error={errors.gemeinde}
-          />
-          <TextField
-            key={`${row.id}radius`}
-            name="radius"
-            label="Radius (m)"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}hoehe`}
-            name="hoehe"
-            label="Höhe (m.ü.M.)"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}exposition`}
-            name="exposition"
-            label="Exposition, Besonnung"
-            row={row}
-            type="text"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}klima`}
-            name="klima"
-            label="Klima"
-            row={row}
-            type="text"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}neigung`}
-            name="neigung"
-            label="Hangneigung"
-            row={row}
-            type="text"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}beschreibung`}
-            name="beschreibung"
-            label="Beschreibung"
-            row={row}
-            type="text"
-            multiline
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}katasterNr`}
-            name="katasterNr"
-            label="Kataster-Nr."
-            row={row}
-            type="text"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}eigentuemer`}
-            name="eigentuemer"
-            label="EigentümerIn"
-            row={row}
-            type="text"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}kontakt`}
-            name="kontakt"
-            label="Kontakt vor Ort"
-            row={row}
-            type="text"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}nutzungszone`}
-            name="nutzungszone"
-            label="Nutzungszone"
-            row={row}
-            type="text"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}bewirtschafter`}
-            name="bewirtschafter"
-            label="BewirtschafterIn"
-            row={row}
-            type="text"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}bewirtschaftung`}
-            name="bewirtschaftung"
-            label="Bewirtschaftung"
-            row={row}
-            type="text"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}bemerkungen`}
-            name="bemerkungen"
-            label="Bemerkungen"
-            row={row}
-            type="text"
-            multiline
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <EkfrequenzOptionsContainer>
-            <RadioButtonGroup
-              value={row.ekfrequenz}
-              name="ekfrequenz"
-              dataSource={ekfrequenzOptions}
-              loading={loadingLists}
-              label="EK-Frequenz"
-              saveToDb={saveToDb}
-              error={errors.ekfrequenz}
-            />
-          </EkfrequenzOptionsContainer>
-          <RadioButton
-            key={`${row.id}ekfrequenzAbweichend`}
-            name="ekfrequenzAbweichend"
-            label="EK-Frequenz abweichend"
-            value={row.ekfrequenzAbweichend}
-            saveToDb={saveToDb}
-            error={errors.ekfrequenzAbweichend}
-          />
-          <div>
-            <RadioButtonGroup
-              value={row.ekAbrechnungstyp}
-              name="ekAbrechnungstyp"
-              dataSource={get(dataLists, 'allEkAbrechnungstypWertes.nodes', [])}
-              loading={loadingLists}
-              label="EK-Abrechnungstyp"
-              saveToDb={saveToDb}
-              error={errors.ekAbrechnungstyp}
-            />
-          </div>
+          </Formik>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

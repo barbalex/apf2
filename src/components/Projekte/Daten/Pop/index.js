@@ -1,13 +1,14 @@
-import React, { useContext, useState, useCallback, useEffect } from 'react'
+import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import { Formik, Form, Field } from 'formik'
 
-import TextField from '../../../shared/TextField2'
-import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
+import TextField from '../../../shared/TextFieldFormik'
+import TextFieldWithInfo from '../../../shared/TextFieldWithInfoFormik'
 import Status from '../../../shared/Status'
-import RadioButton from '../../../shared/RadioButton'
+import RadioButton from '../../../shared/RadioButtonFormik'
 import FormTitle from '../../../shared/FormTitle'
 import FilterTitle from '../../../shared/FilterTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
@@ -15,9 +16,10 @@ import updatePopByIdGql from './updatePopById'
 import query from './query'
 import queryPops from './queryPops'
 import storeContext from '../../../../storeContext'
-import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { simpleTypes as popType } from '../../../../store/NodeFilterTree/pop'
 import Coordinates from '../../../shared/Coordinates'
+import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
+import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -96,19 +98,15 @@ const Pop = ({ treeName, showFilter = false }) => {
     row = get(data, 'popById', {})
   }
 
-  const [errors, setErrors] = useState({})
-
-  useEffect(() => setErrors({}), [row])
-
-  const saveToDb = useCallback(
-    async event => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
+  const onSubmit = useCallback(
+    async (values, { setErrors }) => {
+      const changedField = objectsFindChangedKey(values, row)
+      const value = values[changedField]
       if (showFilter) {
         nodeFilterSetValue({
           treeName,
           table: 'pop',
-          key: field,
+          key: changedField,
           value,
         })
       } else {
@@ -116,29 +114,14 @@ const Pop = ({ treeName, showFilter = false }) => {
           await client.mutate({
             mutation: updatePopByIdGql,
             variables: {
-              id: row.id,
-              [field]: value,
+              ...objectsEmptyValuesToNull(values),
               changedBy: store.user.name,
             },
             optimisticResponse: {
               __typename: 'Mutation',
               updatePopById: {
                 pop: {
-                  id: row.id,
-                  apId: field === 'apId' ? value : row.apId,
-                  nr: field === 'nr' ? value : row.nr,
-                  name: field === 'name' ? value : row.name,
-                  status: field === 'status' ? value : row.status,
-                  statusUnklar:
-                    field === 'statusUnklar' ? value : row.statusUnklar,
-                  statusUnklarBegruendung:
-                    field === 'statusUnklarBegruendung'
-                      ? value
-                      : row.statusUnklarBegruendung,
-                  bekanntSeit:
-                    field === 'bekanntSeit' ? value : row.bekanntSeit,
-                  geomPoint: field === 'geomPoint' ? value : row.geomPoint,
-                  apByApId: row.apByApId,
+                  ...values,
                   __typename: 'Pop',
                 },
                 __typename: 'Pop',
@@ -146,14 +129,14 @@ const Pop = ({ treeName, showFilter = false }) => {
             },
           })
         } catch (error) {
-          return setErrors({ [field]: error.message })
+          return setErrors({ [changedField]: error.message })
         }
         // update pop on map
         if (
           (value &&
-            ((field === 'lv95Y' && row.lv95X) ||
-              (field === 'lv95X' && row.lv95Y))) ||
-          (!value && (field === 'lv95Y' || field === 'lv95X'))
+            ((changedField === 'lv95Y' && row.lv95X) ||
+              (changedField === 'lv95X' && row.lv95Y))) ||
+          (!value && (changedField === 'lv95Y' || changedField === 'lv95X'))
         ) {
           if (refetch.popForMap) refetch.popForMap()
         }
@@ -162,6 +145,8 @@ const Pop = ({ treeName, showFilter = false }) => {
     },
     [row, showFilter],
   )
+
+  //console.log('Pop rendering')
 
   if (!showFilter && loading) {
     return (
@@ -192,55 +177,46 @@ const Pop = ({ treeName, showFilter = false }) => {
           />
         )}
         <FieldsContainer>
-          <TextField
-            key={`${row.id}nr`}
-            label="Nr."
-            name="nr"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextFieldWithInfo
-            key={`${row.id}name`}
-            label="Name"
-            name="name"
-            value={row.name}
-            type="text"
-            saveToDb={saveToDb}
-            error={errors.name}
-            popover="Dieses Feld möglichst immer ausfüllen"
-          />
-          <Status
-            key={`${row.id}status`}
-            apJahr={get(row, 'apByApId.startJahr')}
-            herkunftValue={row.status}
-            bekanntSeitValue={row.bekanntSeit}
-            saveToDb={saveToDb}
-            treeName={treeName}
-            showFilter={showFilter}
-          />
-          <RadioButton
-            key={`${row.id}statusUnklar`}
-            label="Status unklar"
-            name="statusUnklar"
-            value={row.statusUnklar}
-            saveToDb={saveToDb}
-            error={errors.statusUnklar}
-          />
-          <TextField
-            key={`${row.id}statusUnklarBegruendung`}
-            label="Begründung"
-            name="statusUnklarBegruendung"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          {!showFilter && (
-            <Coordinates row={row} refetchForm={refetchPop} table="pop" />
-          )}
+          <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
+            {({ handleSubmit, dirty }) => (
+              <Form onBlur={() => dirty && handleSubmit()}>
+                <Field
+                  label="Nr."
+                  name="nr"
+                  type="number"
+                  component={TextField}
+                />
+                <Field
+                  label="Name"
+                  name="name"
+                  type="text"
+                  popover="Dieses Feld möglichst immer ausfüllen"
+                  component={TextFieldWithInfo}
+                />
+                <Field
+                  apJahr={get(row, 'apByApId.startJahr')}
+                  treeName={treeName}
+                  showFilter={showFilter}
+                  component={Status}
+                />
+                <Field
+                  label="Status unklar"
+                  name="statusUnklar"
+                  component={RadioButton}
+                />
+                <Field
+                  label="Begründung"
+                  name="statusUnklarBegruendung"
+                  type="text"
+                  multiLine
+                  component={TextField}
+                />
+                {!showFilter && (
+                  <Coordinates row={row} refetchForm={refetchPop} table="pop" />
+                )}
+              </Form>
+            )}
+          </Formik>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

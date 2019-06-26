@@ -5,11 +5,12 @@ import FormControl from '@material-ui/core/FormControl'
 import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
+import FormHelperText from '@material-ui/core/FormHelperText'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
-import Label from './Label'
 import InfoWithPopover from './InfoWithPopover'
+import ifIsNumericAsNumber from '../../modules/ifIsNumericAsNumber'
 
 const FieldWithInfoContainer = styled.div`
   display: flex;
@@ -54,21 +55,30 @@ const StyledInput = styled(Input)`
 const StyledRadio = styled(Radio)`
   height: 2px !important;
 `
+const StyledLabel = styled.div`
+  margin-top: 10px;
+  cursor: text;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  user-select: none;
+  padding-bottom: 8px;
+  color: ${props => (props.error ? '#f44336' : 'unset')};
+`
 
-const Status = ({
-  apJahr,
-  herkunftValue,
-  bekanntSeitValue,
-  saveToDb,
-  treeName,
-  showFilter,
-}) => {
+const Status = ({ apJahr, treeName, showFilter, field, form }) => {
+  const { values, errors, handleSubmit, handleChange, handleBlur } = form
+  const herkunftValue = values.status
+  const bekanntSeitValue = values.bekanntSeit
+  const error = errors.status || errors.bekanntSeit
+
   const [bekanntSeitStateValue, setBekanntSeitStateValue] = useState(
     bekanntSeitValue || bekanntSeitValue === 0 ? bekanntSeitValue : '',
   )
 
-  const valueSelected =
+  const statusSelected =
     herkunftValue !== null && herkunftValue !== undefined ? herkunftValue : ''
+
   let angesiedeltLabel = 'angesiedelt:'
   if (!!apJahr && !!bekanntSeitStateValue) {
     if (apJahr <= bekanntSeitStateValue) {
@@ -77,8 +87,8 @@ const Status = ({
       angesiedeltLabel = 'angesiedelt (vor Beginn AP):'
     }
   }
-  let disabled = !bekanntSeitStateValue && bekanntSeitStateValue !== 0
-  if (showFilter) disabled = false
+  let statusDisabled = !bekanntSeitStateValue && bekanntSeitStateValue !== 0
+  if (showFilter) statusDisabled = false
 
   const onClickButton = useCallback(
     event => {
@@ -96,7 +106,10 @@ const Status = ({
         const fakeEvent = {
           target: { value: null, name: 'status' },
         }
-        return saveToDb(fakeEvent)
+        handleChange(fakeEvent)
+        handleBlur(fakeEvent)
+        setTimeout(() => handleSubmit())
+        return
       }
     },
     [herkunftValue],
@@ -107,11 +120,13 @@ const Status = ({
       // if clicked element is active herkunftValue: set null
       const fakeEvent = {
         target: {
-          value: valuePassed == herkunftValue ? null : valuePassed, // eslint-disable-line eqeqeq
+          value: ifIsNumericAsNumber(valuePassed),
           name: 'status',
         },
       }
-      saveToDb(fakeEvent)
+      handleChange(fakeEvent)
+      handleBlur(fakeEvent)
+      setTimeout(() => handleSubmit())
     },
     [herkunftValue],
   )
@@ -121,9 +136,11 @@ const Status = ({
   const onBlurBekanntSeit = useCallback(event => {
     const { value } = event.target
     const fakeEvent = {
-      target: { value: value === '' ? null : value, name: 'bekanntSeit' },
+      target: { value: ifIsNumericAsNumber(value), name: 'bekanntSeit' },
     }
-    saveToDb(fakeEvent)
+    handleChange(fakeEvent)
+    handleBlur(fakeEvent)
+    setTimeout(() => handleSubmit())
   })
 
   useEffect(() => {
@@ -132,7 +149,7 @@ const Status = ({
     )
   }, [bekanntSeitValue])
 
-  console.log('Status rendering')
+  //console.log('Status rendering')
 
   return (
     <div>
@@ -157,66 +174,75 @@ const Status = ({
         </FormControl>
       </FieldWithInfoContainer>
       <StatusContainer>
-        <Label label="Status" />
-        <RadioGroup
-          aria-label="Status"
-          value={valueSelected.toString()}
-          onChange={onChangeStatus}
+        <FormControl
+          component="fieldset"
+          error={!!error}
+          aria-describedby="StatusErrorText"
         >
-          <HerkunftContainer>
-            <HerkunftColumnContainer>
-              <GroupLabelContainer>ursprünglich:</GroupLabelContainer>
-              <FormControlLabel
-                value="100"
-                control={<StyledRadio data-id="status_100" color="primary" />}
-                label="aktuell"
-                disabled={disabled}
-                onClick={onClickButton}
-              />
-              <FormControlLabel
-                value="101"
-                control={<StyledRadio data-id="status_101" color="primary" />}
-                label="erloschen"
-                disabled={disabled}
-                onClick={onClickButton}
-              />
-            </HerkunftColumnContainer>
-            <HerkunftColumnContainer>
-              <GroupLabelContainer>{angesiedeltLabel}</GroupLabelContainer>
-              <FormControlLabel
-                value="200"
-                control={<StyledRadio data-id="status_200" color="primary" />}
-                label="aktuell"
-                disabled={disabled}
-                onClick={onClickButton}
-              />
-              <FormControlLabel
-                value="201"
-                control={<StyledRadio data-id="status_201" color="primary" />}
-                label="Ansaatversuch"
-                disabled={disabled}
-                onClick={onClickButton}
-              />
-              <FormControlLabel
-                value="202"
-                control={<StyledRadio data-id="status_202" color="primary" />}
-                label="erloschen / nicht etabliert"
-                disabled={disabled}
-                onClick={onClickButton}
-              />
-            </HerkunftColumnContainer>
-            <HerkunftColumnContainerLast>
-              <GroupLabelContainer>potenziell:</GroupLabelContainer>
-              <FormControlLabel
-                value="300"
-                control={<StyledRadio data-id="status_300" color="primary" />}
-                label="potenzieller Wuchs-/Ansiedlungsort"
-                disabled={disabled}
-                onClick={onClickButton}
-              />
-            </HerkunftColumnContainerLast>
-          </HerkunftContainer>
-        </RadioGroup>
+          <StyledLabel error={!!error}>Status</StyledLabel>
+          <RadioGroup
+            aria-label="Status"
+            value={statusSelected.toString()}
+            onChange={onChangeStatus}
+          >
+            <HerkunftContainer>
+              <HerkunftColumnContainer>
+                <GroupLabelContainer>ursprünglich:</GroupLabelContainer>
+                <FormControlLabel
+                  value="100"
+                  control={<StyledRadio data-id="status_100" color="primary" />}
+                  label="aktuell"
+                  disabled={statusDisabled}
+                  onClick={onClickButton}
+                />
+                <FormControlLabel
+                  value="101"
+                  control={<StyledRadio data-id="status_101" color="primary" />}
+                  label="erloschen"
+                  disabled={statusDisabled}
+                  onClick={onClickButton}
+                />
+              </HerkunftColumnContainer>
+              <HerkunftColumnContainer>
+                <GroupLabelContainer>{angesiedeltLabel}</GroupLabelContainer>
+                <FormControlLabel
+                  value="200"
+                  control={<StyledRadio data-id="status_200" color="primary" />}
+                  label="aktuell"
+                  disabled={statusDisabled}
+                  onClick={onClickButton}
+                />
+                <FormControlLabel
+                  value="201"
+                  control={<StyledRadio data-id="status_201" color="primary" />}
+                  label="Ansaatversuch"
+                  disabled={statusDisabled}
+                  onClick={onClickButton}
+                />
+                <FormControlLabel
+                  value="202"
+                  control={<StyledRadio data-id="status_202" color="primary" />}
+                  label="erloschen / nicht etabliert"
+                  disabled={statusDisabled}
+                  onClick={onClickButton}
+                />
+              </HerkunftColumnContainer>
+              <HerkunftColumnContainerLast>
+                <GroupLabelContainer>potenziell:</GroupLabelContainer>
+                <FormControlLabel
+                  value="300"
+                  control={<StyledRadio data-id="status_300" color="primary" />}
+                  label="potenzieller Wuchs-/Ansiedlungsort"
+                  disabled={statusDisabled}
+                  onClick={onClickButton}
+                />
+              </HerkunftColumnContainerLast>
+            </HerkunftContainer>
+          </RadioGroup>
+          {!!error && (
+            <FormHelperText id="StatusErrorText">{error}</FormHelperText>
+          )}
+        </FormControl>
       </StatusContainer>
     </div>
   )

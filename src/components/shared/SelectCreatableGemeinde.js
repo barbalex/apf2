@@ -77,22 +77,23 @@ const StyledIconButton = styled(IconButton)`
 `
 
 const SharedSelectCreatable = ({
-  value,
-  field = '',
+  field,
+  form,
   label,
-  name,
-  error,
   options: optionsIn,
   loading,
   showLocate,
   onClickLocate,
   maxHeight = null,
   noCaret = false,
-  saveToDb,
 }) => {
+  const { onChange, onBlur, value, name } = field
+  const { errors, handleSubmit } = form
+  const error = errors[name]
+
   const [stateValue, setStateValue] = useState(null)
 
-  const onChange = useCallback(
+  const onMyChange = useCallback(
     option => {
       const fakeEvent = {
         target: {
@@ -100,12 +101,14 @@ const SharedSelectCreatable = ({
           value: option ? option.value : null,
         },
       }
-      saveToDb(fakeEvent)
+      onChange(fakeEvent)
+      onBlur(fakeEvent)
+      setTimeout(() => handleSubmit())
     },
     [name],
   )
   const onInputChange = useCallback(value => setStateValue(value))
-  const onBlur = useCallback(
+  const onMyBlur = useCallback(
     event => {
       if (stateValue) {
         const fakeEvent = {
@@ -114,7 +117,9 @@ const SharedSelectCreatable = ({
             value: stateValue,
           },
         }
-        saveToDb(fakeEvent)
+        onChange(fakeEvent)
+        onBlur(fakeEvent)
+        setTimeout(() => handleSubmit())
       }
     },
     [stateValue, name],
@@ -137,16 +142,16 @@ const SharedSelectCreatable = ({
   const selectValue = optionsToUse.find(o => o.value === value)
 
   return (
-    <Container data-id={field}>
+    <Container data-id={name}>
       {label && <Label>{label}</Label>}
       <Field>
         <StyledSelect
-          id={field}
-          name={field}
+          id={name}
+          name={name}
           value={selectValue}
           options={options}
-          onChange={onChange}
-          onBlur={onBlur}
+          onChange={onMyChange}
+          onBlur={onMyBlur}
           onInputChange={onInputChange}
           hideSelectedOptions
           placeholder=""
