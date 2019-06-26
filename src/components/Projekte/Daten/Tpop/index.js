@@ -179,29 +179,6 @@ const Tpop = ({ treeName, showFilter = false }) => {
     },
     [showFilter, row],
   )
-  const onClickLocate = useCallback(
-    async setStateValue => {
-      if (!row.lv95X) {
-        return setErrors({
-          gemeinde: 'Es fehlen Koordinaten',
-        })
-      }
-      const gemeinde = await getGemeindeForKoord({
-        lv95X: row.lv95X,
-        lv95Y: row.lv95Y,
-        store,
-      })
-      if (gemeinde) {
-        const fakeEvent = {
-          target: { value: gemeinde, name: 'gemeinde' },
-        }
-        onChange(fakeEvent)
-        onBlur(fakeEvent)
-        setTimeout(() => handleSubmit())
-      }
-    },
-    [row],
-  )
 
   const ekfrequenzOptions = get(
     dataEkfrequenzs,
@@ -255,7 +232,7 @@ const Tpop = ({ treeName, showFilter = false }) => {
         )}
         <FieldsContainer data-width={showFilter ? filterWidth : datenWidth}>
           <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
-            {({ handleSubmit, dirty }) => (
+            {({ handleSubmit, handleChange, handleBlur, dirty, setErrors }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
                 <Field
                   name="nr"
@@ -322,7 +299,26 @@ const Tpop = ({ treeName, showFilter = false }) => {
                   options={get(dataLists, 'allGemeindes.nodes', [])}
                   loading={loadingLists}
                   showLocate={!showFilter}
-                  onClickLocate={onClickLocate}
+                  onClickLocate={async setStateValue => {
+                    if (!row.lv95X) {
+                      return setErrors({
+                        gemeinde: 'Es fehlen Koordinaten',
+                      })
+                    }
+                    const gemeinde = await getGemeindeForKoord({
+                      lv95X: row.lv95X,
+                      lv95Y: row.lv95Y,
+                      store,
+                    })
+                    if (gemeinde) {
+                      const fakeEvent = {
+                        target: { value: gemeinde, name: 'gemeinde' },
+                      }
+                      handleChange(fakeEvent)
+                      handleBlur(fakeEvent)
+                      setTimeout(() => handleSubmit())
+                    }
+                  }}
                   component={SelectCreatable}
                 />
                 <Field
