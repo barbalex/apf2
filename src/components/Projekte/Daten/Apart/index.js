@@ -1,17 +1,19 @@
-import React, { useState, useCallback, useEffect, useContext } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import { Formik, Form, Field } from 'formik'
 
-import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
+import SelectLoadingOptions from '../../../shared/SelectLoadingOptionsFormik'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import updateApartByIdGql from './updateApartById'
 import query from './query'
 import queryAeEigenschaftens from './queryAeEigenschaftens'
 import storeContext from '../../../../storeContext'
-import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
+import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
+import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -28,7 +30,6 @@ const ApArt = ({ treeName }) => {
   const store = useContext(storeContext)
   const { refetch } = store
   const client = useApolloClient()
-  const [errors, setErrors] = useState({})
   const { activeNodeArray } = store[treeName]
 
   const { data, loading, error } = useQuery(query, {
@@ -47,6 +48,8 @@ const ApArt = ({ treeName }) => {
     .map(o => o.artId)
     // but do include the art included in the row
     .filter(o => o !== row.artId)
+    // no null values
+    .filter(o => !!o)
   const aeEigenschaftenfilter = useCallback(
     inputValue =>
       !!inputValue
@@ -65,27 +68,21 @@ const ApArt = ({ treeName }) => {
   // because apart did not exist...
   // maybe do later
 
-  useEffect(() => setErrors({}), [row.id])
-
-  const saveToDb = useCallback(
-    async event => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
+  const onSubmit = useCallback(
+    async (values, { setErrors }) => {
+      const changedField = objectsFindChangedKey(values, row)
       try {
         await client.mutate({
           mutation: updateApartByIdGql,
           variables: {
-            id: row.id,
-            [field]: value,
+            ...objectsEmptyValuesToNull(values),
             changedBy: store.user.name,
           },
           optimisticResponse: {
             __typename: 'Mutation',
             updateApartById: {
               apart: {
-                id: row.id,
-                apId: field === 'apId' ? value : row.apId,
-                artId: field === 'artId' ? value : row.artId,
+                ...values,
                 __typename: 'Apart',
               },
               __typename: 'Apart',
@@ -93,12 +90,12 @@ const ApArt = ({ treeName }) => {
           },
         })
       } catch (error) {
-        return setErrors({ [field]: error.message })
+        return setErrors({ [changedField]: error.message })
       }
       setErrors({})
-      if (['artId'].includes(field)) refetch.aparts()
+      changedField === 'artId' && refetch.aparts()
     },
-    [row.id],
+    [row],
   )
 
   if (loading) {
@@ -151,18 +148,22 @@ const ApArt = ({ treeName }) => {
             <br />
             <br />
           </div>
-          <SelectLoadingOptions
-            key={`${row.id}artId`}
-            field="artId"
-            valueLabelPath="aeEigenschaftenByArtId.artname"
-            label="Art"
-            row={row}
-            saveToDb={saveToDb}
-            error={errors.artId}
-            query={queryAeEigenschaftens}
-            filter={aeEigenschaftenfilter}
-            queryNodesName="allAeEigenschaftens"
-          />
+          <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
+            {({ handleSubmit, dirty }) => (
+              <Form onBlur={() => dirty && handleSubmit()}>
+                <Field
+                  name="artId"
+                  valueLabelPath="aeEigenschaftenByArtId.artname"
+                  label="Art"
+                  row={row}
+                  query={queryAeEigenschaftens}
+                  filter={aeEigenschaftenfilter}
+                  queryNodesName="allAeEigenschaftens"
+                  component={SelectLoadingOptions}
+                />
+              </Form>
+            )}
+          </Formik>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

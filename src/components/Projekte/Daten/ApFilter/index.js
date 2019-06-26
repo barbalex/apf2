@@ -1,19 +1,14 @@
-import React, {
-  useContext,
-  useState,
-  useCallback,
-  useEffect,
-  useMemo,
-} from 'react'
+import React, { useContext, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from 'react-apollo-hooks'
+import { Formik, Form, Field } from 'formik'
 
-import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
-import TextField from '../../../shared/TextField2'
-import Select from '../../../shared/Select'
-import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
+import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfoFormik'
+import TextField from '../../../shared/TextFieldFormik'
+import Select from '../../../shared/SelectFormik'
+import SelectLoadingOptions from '../../../shared/SelectLoadingOptionsFormik'
 import FilterTitle from '../../../shared/FilterTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import queryAeEigenschaftenById from './queryAeEigenschaftenById'
@@ -22,8 +17,8 @@ import queryAps from './queryAps'
 import queryAdresses from './queryAdresses'
 import queryAeEigenschaftens from './queryAeEigenschaftens'
 import storeContext from '../../../../storeContext'
-import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
 import { simpleTypes as apType } from '../../../../store/NodeFilterTree/ap'
+import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -117,22 +112,16 @@ const ApFilter = ({ treeName }) => {
       ? get(dataAeEigenschaftenById, 'aeEigenschaftenById.artname') || ''
       : ''
 
-  const [errors, setErrors] = useState({})
-
   const row = nodeFilter[treeName].ap
 
-  useEffect(() => {
-    setErrors({})
-  }, [row])
-
-  const saveToDb = useCallback(
-    event => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
+  const onSubmit = useCallback(
+    (values, { setErrors }) => {
+      const changedField = objectsFindChangedKey(values, row)
+      const value = values[changedField]
       nodeFilterSetValue({
         treeName,
         table: 'ap',
-        key: field,
+        key: changedField,
         value,
       })
       refetch.aps()
@@ -169,118 +158,117 @@ const ApFilter = ({ treeName }) => {
           filteredNr={get(apsData, 'filteredAps.totalCount', '...')}
         />
         <FieldsContainer>
-          <SelectLoadingOptions
-            key={`${row.id}artId`}
-            field="artId"
-            valueLabelPath="aeEigenschaftenByArtId.artname"
-            label="Art (gibt dem Aktionsplan den Namen)"
-            row={{
-              ...row,
-              ...{
-                aeEigenschaftenByArtId: {
-                  artname,
-                },
-              },
-            }}
-            saveToDb={saveToDb}
-            error={errors.artId}
-            query={queryAeEigenschaftens}
-            filter={aeEigenschaftenFilter}
-            queryNodesName="allAeEigenschaftens"
-          />
-          <RadioButtonGroupWithInfo
-            key={`${row.id}bearbeitung`}
-            name="bearbeitung"
-            value={row.bearbeitung}
-            dataSource={get(dataLists, 'allApBearbstandWertes.nodes', [])}
-            loading={loadingLists}
-            saveToDb={saveToDb}
-            error={errors.bearbeitung}
-            popover={
-              <>
-                <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
-                <LabelPopoverContentRow>
-                  <LabelPopoverRowColumnLeft>keiner:</LabelPopoverRowColumnLeft>
-                  <LabelPopoverRowColumnRight>
-                    kein Aktionsplan vorgesehen
-                  </LabelPopoverRowColumnRight>
-                </LabelPopoverContentRow>
-                <LabelPopoverContentRow>
-                  <LabelPopoverRowColumnLeft>
-                    erstellt:
-                  </LabelPopoverRowColumnLeft>
-                  <LabelPopoverRowColumnRight>
-                    Aktionsplan fertig, auf der Webseite der FNS
-                  </LabelPopoverRowColumnRight>
-                </LabelPopoverContentRow>
-              </>
-            }
-            label="Aktionsplan"
-          />
-          <TextField
-            key={`${row.id}startJahr`}
-            name="startJahr"
-            label="Start im Jahr"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <FieldContainer>
-            <RadioButtonGroupWithInfo
-              key={`${row.id}umsetzung`}
-              name="umsetzung"
-              value={row.umsetzung}
-              dataSource={get(dataLists, 'allApUmsetzungWertes.nodes', [])}
-              loading={loadingLists}
-              saveToDb={saveToDb}
-              error={errors.umsetzung}
-              popover={
-                <>
-                  <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
-                  <LabelPopoverContentRow>
-                    <LabelPopoverRowColumnLeft>
-                      noch keine
-                      <br />
-                      Umsetzung:
-                    </LabelPopoverRowColumnLeft>
-                    <LabelPopoverRowColumnRight>
-                      noch keine Massnahmen ausgeführt
-                    </LabelPopoverRowColumnRight>
-                  </LabelPopoverContentRow>
-                  <LabelPopoverContentRow>
-                    <LabelPopoverRowColumnLeft>
-                      in Umsetzung:
-                    </LabelPopoverRowColumnLeft>
-                    <LabelPopoverRowColumnRight>
-                      bereits Massnahmen ausgeführt (auch wenn AP noch nicht
-                      erstellt)
-                    </LabelPopoverRowColumnRight>
-                  </LabelPopoverContentRow>
-                </>
-              }
-              label="Stand Umsetzung"
-            />
-          </FieldContainer>
-          <Select
-            key={`${row.id}bearbeiter`}
-            name="bearbeiter"
-            value={row.bearbeiter}
-            field="bearbeiter"
-            label="Verantwortlich"
-            options={get(dataAdresses, 'allAdresses.nodes', [])}
-            loading={loadingAdresses}
-            saveToDb={saveToDb}
-            error={errors.bearbeiter}
-          />
-          <TextField
-            key={`${row.id}ekfBeobachtungszeitpunkt`}
-            name="ekfBeobachtungszeitpunkt"
-            label="Bester Beobachtungszeitpunkt für EKF (Freiwilligen-Kontrollen)"
-            row={row}
-            saveToDb={saveToDb}
-            errors={errors}
-          />
+          <Formik
+            key={JSON.stringify(row)}
+            initialValues={row}
+            onSubmit={onSubmit}
+            enableReinitialize
+          >
+            {({ handleSubmit, dirty }) => (
+              <Form onBlur={() => dirty && handleSubmit()}>
+                <Field
+                  name="artId"
+                  valueLabelPath="aeEigenschaftenByArtId.artname"
+                  label="Art (gibt dem Aktionsplan den Namen)"
+                  row={{
+                    ...row,
+                    ...{
+                      aeEigenschaftenByArtId: {
+                        artname,
+                      },
+                    },
+                  }}
+                  query={queryAeEigenschaftens}
+                  filter={aeEigenschaftenFilter}
+                  queryNodesName="allAeEigenschaftens"
+                  component={SelectLoadingOptions}
+                />
+                <Field
+                  name="bearbeitung"
+                  dataSource={get(dataLists, 'allApBearbstandWertes.nodes', [])}
+                  loading={loadingLists}
+                  popover={
+                    <>
+                      <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
+                      <LabelPopoverContentRow>
+                        <LabelPopoverRowColumnLeft>
+                          keiner:
+                        </LabelPopoverRowColumnLeft>
+                        <LabelPopoverRowColumnRight>
+                          kein Aktionsplan vorgesehen
+                        </LabelPopoverRowColumnRight>
+                      </LabelPopoverContentRow>
+                      <LabelPopoverContentRow>
+                        <LabelPopoverRowColumnLeft>
+                          erstellt:
+                        </LabelPopoverRowColumnLeft>
+                        <LabelPopoverRowColumnRight>
+                          Aktionsplan fertig, auf der Webseite der FNS
+                        </LabelPopoverRowColumnRight>
+                      </LabelPopoverContentRow>
+                    </>
+                  }
+                  label="Aktionsplan"
+                  component={RadioButtonGroupWithInfo}
+                />
+                <Field
+                  name="startJahr"
+                  label="Start im Jahr"
+                  type="number"
+                  component={TextField}
+                />
+                <FieldContainer>
+                  <Field
+                    name="umsetzung"
+                    dataSource={get(
+                      dataLists,
+                      'allApUmsetzungWertes.nodes',
+                      [],
+                    )}
+                    loading={loadingLists}
+                    popover={
+                      <>
+                        <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
+                        <LabelPopoverContentRow>
+                          <LabelPopoverRowColumnLeft>
+                            noch keine
+                            <br />
+                            Umsetzung:
+                          </LabelPopoverRowColumnLeft>
+                          <LabelPopoverRowColumnRight>
+                            noch keine Massnahmen ausgeführt
+                          </LabelPopoverRowColumnRight>
+                        </LabelPopoverContentRow>
+                        <LabelPopoverContentRow>
+                          <LabelPopoverRowColumnLeft>
+                            in Umsetzung:
+                          </LabelPopoverRowColumnLeft>
+                          <LabelPopoverRowColumnRight>
+                            bereits Massnahmen ausgeführt (auch wenn AP noch
+                            nicht erstellt)
+                          </LabelPopoverRowColumnRight>
+                        </LabelPopoverContentRow>
+                      </>
+                    }
+                    label="Stand Umsetzung"
+                    component={RadioButtonGroupWithInfo}
+                  />
+                </FieldContainer>
+                <Field
+                  name="bearbeiter"
+                  label="Verantwortlich"
+                  options={get(dataAdresses, 'allAdresses.nodes', [])}
+                  loading={loadingAdresses}
+                  component={Select}
+                />
+                <Field
+                  name="ekfBeobachtungszeitpunkt"
+                  label="Bester Beobachtungszeitpunkt für EKF (Freiwilligen-Kontrollen)"
+                  component={TextField}
+                />
+              </Form>
+            )}
+          </Formik>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

@@ -82,6 +82,7 @@ const RadioButtonGroup = ({
           name,
         },
       }
+      console.log('RadioButtonGroup', { targetValue, valueToUse })
       onChange(fakeEvent)
       onBlur(fakeEvent)
       setTimeout(() => handleSubmit())
@@ -104,22 +105,24 @@ const RadioButtonGroup = ({
         value={valueSelected}
         onChange={onChangeGroup}
       >
-        {dataSource.map((e, index) => (
-          <FormControlLabel
-            key={index}
-            value={e.value && e.value.toString ? e.value.toString() : e.value}
-            control={
-              <StyledRadio
-                data-id={`${name}_${
-                  e.value && e.value.toString ? e.value.toString() : e.value
-                }`}
-                color="primary"
-              />
-            }
-            label={e.label}
-            onClick={onClickButton}
-          />
-        ))}
+        {dataSource.map((e, index) => {
+          const valueToUse = e.value.toString ? e.value.toString() : e.value
+
+          return (
+            <FormControlLabel
+              key={index}
+              value={valueToUse}
+              control={
+                <StyledRadio
+                  data-id={`${name}_${valueToUse}`}
+                  color="primary"
+                />
+              }
+              label={e.label}
+              onClick={onClickButton}
+            />
+          )
+        })}
       </RadioGroup>
       {!!error && (
         <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>

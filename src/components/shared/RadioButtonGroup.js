@@ -101,11 +101,11 @@ const RadioButtonGroup = ({
         {dataSource.map((e, index) => (
           <FormControlLabel
             key={index}
-            value={e.value && e.value.toString ? e.value.toString() : e.value}
+            value={e.value.toString ? e.value.toString() : e.value}
             control={
               <StyledRadio
                 data-id={`${name}_${
-                  e.value && e.value.toString ? e.value.toString() : e.value
+                  e.value.toString ? e.value.toString() : e.value
                 }`}
                 color="primary"
               />
