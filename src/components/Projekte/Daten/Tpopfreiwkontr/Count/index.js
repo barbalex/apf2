@@ -10,7 +10,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
 import { Formik, Form, Field } from 'formik'
 
-import Select from '../../../../shared/SelectFormik'
+import Einheit from './Einheit'
 import TextField from '../../../../shared/TextFieldFormik'
 import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById'
 import query from './query'
@@ -19,6 +19,7 @@ import createTpopkontrzaehl from './createTpopkontrzaehl'
 import storeContext from '../../../../../storeContext'
 import objectsFindChangedKey from '../../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../../modules/objectsEmptyValuesToNull'
+
 const Container = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
   border-radius: 6px;
@@ -89,21 +90,6 @@ const EinheitLabel = styled(Label)`
   grid-area: einheitLabel;
   hyphens: auto;
   margin-top: 5px;
-`
-const EinheitVal = styled.div`
-  grid-area: einheitVal;
-  > div {
-    margin-top: -5px;
-    padding-bottom: 0;
-    @media print {
-      margin-bottom: 0;
-    }
-  }
-  @media print {
-    input {
-      font-size: 11px;
-    }
-  }
 `
 const GezaehltLabel = styled.div`
   grid-area: gezaehltLabel;
@@ -331,16 +317,13 @@ const Count = ({
           data-id={`count${nr}`}
           nr={nr}
         >
-          <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
-          <EinheitVal>
-            <Field
-              name="einheit"
-              field="einheit"
-              component={Select}
-              options={zaehleinheitWerte}
-              noCaret
-            />
-          </EinheitVal>
+          <Field
+            name="einheit"
+            component={Einheit}
+            options={zaehleinheitWerte}
+            noCaret
+            nr={nr}
+          />
           <GezaehltLabel>gezählt</GezaehltLabel>
           <GeschaetztLabel>geschätzt</GeschaetztLabel>
           <GezaehltVal>
