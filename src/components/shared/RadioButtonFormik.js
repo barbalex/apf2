@@ -51,7 +51,9 @@ const RadioButton = ({ field, form, label }) => {
       <StyledFormLabel component="legend">{label}</StyledFormLabel>
       <RadioGroup
         aria-label={label}
-        value={value === null ? 'false' : value.toString()}
+        value={
+          value === null || value === undefined ? 'false' : value.toString()
+        }
       >
         <FormControlLabel
           value="true"

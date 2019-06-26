@@ -177,7 +177,12 @@ const Pop = ({ treeName, showFilter = false }) => {
           />
         )}
         <FieldsContainer>
-          <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
+          <Formik
+            key={showFilter ? JSON.stringify(row) : row.id}
+            initialValues={row}
+            onSubmit={onSubmit}
+            enableReinitialize
+          >
             {({ handleSubmit, dirty }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
                 <Field

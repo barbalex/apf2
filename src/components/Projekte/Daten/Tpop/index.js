@@ -230,7 +230,12 @@ const Tpop = ({ treeName, showFilter = false }) => {
           />
         )}
         <FieldsContainer data-width={showFilter ? filterWidth : datenWidth}>
-          <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
+          <Formik
+            key={showFilter ? JSON.stringify(row) : row.id}
+            initialValues={row}
+            onSubmit={onSubmit}
+            enableReinitialize
+          >
             {({ handleSubmit, handleChange, handleBlur, dirty, setErrors }) => (
               <Form onBlur={() => dirty && handleSubmit()}>
                 <Field
