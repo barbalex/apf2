@@ -61,7 +61,7 @@ Das soll mit folgenden Massnahmen umgesetzt werden:<br/><br/>
 
 #### Formular TPop
 - :white_check_mark: Neue Felder der Tabelle tpop ergänzen (bearbeitbar)
-- Liste aller Kontrolljahre anzeigen. Ist hier nicht bearbeitbar.
+- :ballot_box_with_check: Liste aller Kontrolljahre anzeigen. Ist hier nicht bearbeitbar.
 
 #### Neues Formular EK-Planung
 Das Formular, um Kontrollen zu planen.
