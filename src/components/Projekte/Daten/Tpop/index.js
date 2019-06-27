@@ -60,6 +60,9 @@ const FormContainerNoColumns = styled.div`
   height: calc(100% - 20px);
 `
 const EkfrequenzOptionsContainer = styled.div`
+  label:hover {
+    background: rgba(128, 128, 128, 0.2);
+  }
   span {
     font-family: 'Roboto Mono' !important;
     font-size: 14px;
