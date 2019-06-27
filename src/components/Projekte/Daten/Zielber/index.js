@@ -1,16 +1,18 @@
-import React, { useState, useCallback, useEffect, useContext } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import { Formik, Form, Field } from 'formik'
 
-import TextField from '../../../shared/TextField2'
+import TextField from '../../../shared/TextFieldFormik'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
 import updateZielberByIdGql from './updateZielberById'
 import storeContext from '../../../../storeContext'
-import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
+import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
+import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -26,7 +28,6 @@ const FieldsContainer = styled.div`
 const Zielber = ({ treeName }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
-  const [errors, setErrors] = useState({})
 
   const { activeNodeArray } = store[treeName]
 
@@ -41,29 +42,21 @@ const Zielber = ({ treeName }) => {
 
   const row = get(data, 'zielberById', {})
 
-  useEffect(() => setErrors({}), [row])
-
-  const saveToDb = useCallback(
-    async event => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
+  const onSubmit = useCallback(
+    async (values, { setErrors }) => {
+      const changedField = objectsFindChangedKey(values, row)
       try {
         await client.mutate({
           mutation: updateZielberByIdGql,
           variables: {
-            id: row.id,
-            [field]: value,
+            ...objectsEmptyValuesToNull(values),
             changedBy: store.user.name,
           },
           optimisticResponse: {
             __typename: 'Mutation',
             updateZielberById: {
               zielber: {
-                id: row.id,
-                zielId: field === 'zielId' ? value : row.zielId,
-                jahr: field === 'jahr' ? value : row.jahr,
-                erreichung: field === 'erreichung' ? value : row.erreichung,
-                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+                ...values,
                 __typename: 'Zielber',
               },
               __typename: 'Zielber',
@@ -71,7 +64,7 @@ const Zielber = ({ treeName }) => {
           },
         })
       } catch (error) {
-        return setErrors({ [field]: error.message })
+        return setErrors({ [changedField]: error.message })
       }
       setErrors({})
     },
@@ -96,34 +89,31 @@ const Zielber = ({ treeName }) => {
           table="zielber"
         />
         <FieldsContainer>
-          <TextField
-            key={`${row.id}jahr`}
-            name="jahr"
-            label="Jahr"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}erreichung`}
-            name="erreichung"
-            label="Ziel-Erreichung"
-            row={row}
-            type="text"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <TextField
-            key={`${row.id}bemerkungen`}
-            name="bemerkungen"
-            label="Bemerkungen"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
+          <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
+            {({ handleSubmit, dirty }) => (
+              <Form onBlur={() => dirty && handleSubmit()}>
+                <Field
+                  name="jahr"
+                  label="Jahr"
+                  type="number"
+                  component={TextField}
+                />
+                <Field
+                  name="erreichung"
+                  label="Ziel-Erreichung"
+                  type="text"
+                  component={TextField}
+                />
+                <Field
+                  name="bemerkungen"
+                  label="Bemerkungen"
+                  type="text"
+                  multiLine
+                  component={TextField}
+                />
+              </Form>
+            )}
+          </Formik>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

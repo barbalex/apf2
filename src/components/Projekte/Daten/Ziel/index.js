@@ -1,19 +1,21 @@
-import React, { useState, useCallback, useEffect, useContext } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import { Formik, Form, Field } from 'formik'
 
-import RadioButtonGroup from '../../../shared/RadioButtonGroup'
-import TextField from '../../../shared/TextField2'
+import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
+import TextField from '../../../shared/TextFieldFormik'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
 import queryLists from './queryLists'
 import updateZielByIdGql from './updateZielById'
 import storeContext from '../../../../storeContext'
-import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
+import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
+import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -37,8 +39,6 @@ const Ziel = ({ treeName }) => {
     setOpenNodes,
   } = store[treeName]
 
-  const [errors, setErrors] = useState({})
-
   const { data, loading, error } = useQuery(query, {
     variables: {
       id:
@@ -56,29 +56,22 @@ const Ziel = ({ treeName }) => {
 
   const row = get(data, 'zielById', {})
 
-  useEffect(() => setErrors({}), [row])
-
-  const saveToDb = useCallback(
-    async event => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
+  const onSubmit = useCallback(
+    async (values, { setErrors }) => {
+      const changedField = objectsFindChangedKey(values, row)
+      const value = values[changedField]
       try {
         await client.mutate({
           mutation: updateZielByIdGql,
           variables: {
-            id: row.id,
-            [field]: value,
+            ...objectsEmptyValuesToNull(values),
             changedBy: store.user.name,
           },
           optimisticResponse: {
             __typename: 'Mutation',
             updateZielById: {
               ziel: {
-                id: row.id,
-                apId: field === 'apId' ? value : row.apId,
-                typ: field === 'typ' ? value : row.typ,
-                jahr: field === 'jahr' ? value : row.jahr,
-                bezeichnung: field === 'bezeichnung' ? value : row.bezeichnung,
+                ...values,
                 __typename: 'Ziel',
               },
               __typename: 'Ziel',
@@ -86,11 +79,11 @@ const Ziel = ({ treeName }) => {
           },
         })
       } catch (error) {
-        return setErrors({ [field]: error.message })
+        return setErrors({ [changedField]: error.message })
       }
       setErrors({})
       // if jahr of ziel is updated, activeNodeArray und openNodes need to change
-      if (field === 'jahr') {
+      if (changedField === 'jahr') {
         const newActiveNodeArray = [...activeNodeArray]
         newActiveNodeArray[5] = +value
         const oldParentNodeUrl = [...activeNodeArray]
@@ -104,7 +97,7 @@ const Ziel = ({ treeName }) => {
         })
         setActiveNodeArray(newActiveNodeArray)
         setOpenNodes(newOpenNodes)
-        if (['typ'].includes(field)) refetch.ziels()
+        if (['typ'].includes(changedField)) refetch.ziels()
       }
     },
     [row, activeNodeArray, openNodes, treeName],
@@ -133,35 +126,32 @@ const Ziel = ({ treeName }) => {
           table="ziel"
         />
         <FieldsContainer>
-          <TextField
-            key={`${row.id}jahr`}
-            name="jahr"
-            label="Jahr"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <RadioButtonGroup
-            key={`${row.id}typ`}
-            name="typ"
-            label="Zieltyp"
-            value={row.typ}
-            dataSource={get(dataLists, 'allZielTypWertes.nodes', [])}
-            loading={loadingLists}
-            saveToDb={saveToDb}
-            error={errors.typ}
-          />
-          <TextField
-            key={`${row.id}bezeichnung`}
-            name="bezeichnung"
-            label="Ziel"
-            row={row}
-            type="text"
-            multiLine
-            saveToDb={saveToDb}
-            errors={errors}
-          />
+          <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
+            {({ handleSubmit, dirty }) => (
+              <Form onBlur={() => dirty && handleSubmit()}>
+                <Field
+                  name="jahr"
+                  label="Jahr"
+                  type="number"
+                  component={TextField}
+                />
+                <Field
+                  name="typ"
+                  label="Zieltyp"
+                  dataSource={get(dataLists, 'allZielTypWertes.nodes', [])}
+                  loading={loadingLists}
+                  component={RadioButtonGroup}
+                />
+                <Field
+                  name="bezeichnung"
+                  label="Ziel"
+                  type="text"
+                  multiLine
+                  component={TextField}
+                />
+              </Form>
+            )}
+          </Formik>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
