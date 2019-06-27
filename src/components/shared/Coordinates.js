@@ -215,7 +215,9 @@ const Coordinates = ({ row, refetchForm, table }) => {
           error={!!wgs84LatError}
           aria-describedby={`${id}wgs84LatErrorText`}
         >
-          <InputLabel htmlFor={`${id}wgs84Lat`}>Breitengrad</InputLabel>
+          <InputLabel htmlFor={`${id}wgs84Lat`} shrink>
+            Breitengrad
+          </InputLabel>
           <Input
             id={`${id}wgs84Lat`}
             data-id="wgs84Lat"
@@ -242,7 +244,9 @@ const Coordinates = ({ row, refetchForm, table }) => {
           error={!!wgs84LongError}
           aria-describedby={`${id}wgs84LongErrorText`}
         >
-          <InputLabel htmlFor={`${id}wgs84Long`}>Längengrad</InputLabel>
+          <InputLabel htmlFor={`${id}wgs84Long`} shrink>
+            Längengrad
+          </InputLabel>
           <Input
             id={`${id}wgs84Long`}
             data-id="wgs84Long"
@@ -271,7 +275,9 @@ const Coordinates = ({ row, refetchForm, table }) => {
           error={!!xError}
           aria-describedby={`${id}lv95XErrorText`}
         >
-          <InputLabel htmlFor={`${id}lv95X`}>X-Koordinate</InputLabel>
+          <InputLabel htmlFor={`${id}lv95X`} shrink>
+            X-Koordinate
+          </InputLabel>
           <Input
             id={`${id}lv95X`}
             data-id="lv95X"
@@ -295,7 +301,9 @@ const Coordinates = ({ row, refetchForm, table }) => {
           error={!!yError}
           aria-describedby={`${id}lv95YErrorText`}
         >
-          <InputLabel htmlFor={`${id}lv95Y`}>Y-Koordinate</InputLabel>
+          <InputLabel htmlFor={`${id}lv95Y`} shrink>
+            Y-Koordinate
+          </InputLabel>
           <Input
             id={`${id}lv95Y`}
             data-id="lv95Y"
