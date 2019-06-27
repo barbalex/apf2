@@ -1,8 +1,11 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query TpopkontrzaehlListsQuery {
-    allTpopkontrzaehlEinheitWertes(orderBy: SORT_ASC) {
+  query TpopkontrzaehlListsQuery($codes: [Int!]) {
+    allTpopkontrzaehlEinheitWertes(
+      orderBy: SORT_ASC
+      filter: { code: { notIn: $codes } }
+    ) {
       nodes {
         value: code
         label: text

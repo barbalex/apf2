@@ -1,19 +1,22 @@
-import React, { useState, useCallback, useEffect, useContext } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import { Formik, Form, Field } from 'formik'
 
-import RadioButtonGroup from '../../../shared/RadioButtonGroup'
-import TextField from '../../../shared/TextField2'
+import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
+import TextField from '../../../shared/TextFieldFormik'
+import Select from '../../../shared/SelectFormik'
 import FormTitle from '../../../shared/FormTitle'
-import Select from '../../../shared/Select'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
 import queryLists from './queryLists'
+import queryZaehlOfEk from './queryZaehlOfEk'
 import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById'
 import storeContext from '../../../../storeContext'
-import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
+import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
+import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -30,48 +33,62 @@ const Tpopkontrzaehl = ({ treeName }) => {
   const store = useContext(storeContext)
   const { refetch } = store
   const client = useApolloClient()
-  const [errors, setErrors] = useState({})
   const { activeNodeArray } = store[treeName]
 
+  const tpopkontrzaehlId =
+    activeNodeArray.length > 11
+      ? activeNodeArray[11]
+      : '99999999-9999-9999-9999-999999999999'
+  const tpopkontrId =
+    activeNodeArray.length > 9
+      ? activeNodeArray[9]
+      : '99999999-9999-9999-9999-999999999999'
   const { data, loading, error } = useQuery(query, {
     variables: {
-      id:
-        activeNodeArray.length > 11
-          ? activeNodeArray[11]
-          : '99999999-9999-9999-9999-999999999999',
+      id: tpopkontrzaehlId,
     },
   })
 
+  const { data: dataZaehlOfEk, error: errorZaehlOfEk } = useQuery(
+    queryZaehlOfEk,
+    {
+      variables: {
+        tpopkontrId,
+        id: tpopkontrzaehlId,
+      },
+    },
+  )
+
+  const codes = get(dataZaehlOfEk, 'allTpopkontrzaehls.nodes', []).map(
+    n => n.einheit,
+  )
   const {
     data: dataLists,
     loading: loadingLists,
     error: errorLists,
-  } = useQuery(queryLists)
+  } = useQuery(queryLists, {
+    variables: {
+      codes,
+    },
+  })
 
   const row = get(data, 'tpopkontrzaehlById', {})
 
-  useEffect(() => setErrors({}), [row])
-
-  const saveToDb = useCallback(
-    async event => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
+  const onSubmit = useCallback(
+    async (values, { setErrors }) => {
+      const changedField = objectsFindChangedKey(values, row)
       try {
         await client.mutate({
           mutation: updateTpopkontrzaehlByIdGql,
           variables: {
-            id: row.id,
-            [field]: value,
+            ...objectsEmptyValuesToNull(values),
             changedBy: store.user.name,
           },
           optimisticResponse: {
             __typename: 'Mutation',
             updateTpopkontrzaehlById: {
               tpopkontrzaehl: {
-                id: row.id,
-                anzahl: field === 'anzahl' ? value : row.anzahl,
-                einheit: field === 'einheit' ? value : row.einheit,
-                methode: field === 'methode' ? value : row.methode,
+                ...values,
                 __typename: 'Tpopkontrzaehl',
               },
               __typename: 'Tpopkontrzaehl',
@@ -79,10 +96,12 @@ const Tpopkontrzaehl = ({ treeName }) => {
           },
         })
       } catch (error) {
-        return setErrors({ [field]: error.message })
+        return setErrors({ [changedField]: error.message })
       }
       setErrors({})
-      if (['einheit', 'methode'].includes(field)) refetch.tpopkontrzaehls()
+      if (['einheit', 'methode'].includes(changedField)) {
+        refetch.tpopkontrzaehls()
+      }
     },
     [row],
   )
@@ -94,10 +113,9 @@ const Tpopkontrzaehl = ({ treeName }) => {
       </Container>
     )
   }
-  if (error) return `Fehler: ${error.message}`
-  if (errorLists) {
-    return `Fehler: ${errorLists.message}`
-  }
+  if (error) return error.message
+  if (errorLists) return errorLists.message
+  if (errorZaehlOfEk) return errorZaehlOfEk.message
   return (
     <ErrorBoundary>
       <Container>
@@ -108,39 +126,39 @@ const Tpopkontrzaehl = ({ treeName }) => {
           table="tpopkontrzaehl"
         />
         <FieldsContainer>
-          <Select
-            key={`${row.id}einheit`}
-            name="einheit"
-            value={row.einheit}
-            field="einheit"
-            label="Einheit"
-            options={get(dataLists, 'allTpopkontrzaehlEinheitWertes.nodes', [])}
-            loading={loadingLists}
-            saveToDb={saveToDb}
-            error={errors.einheit}
-          />
-          <TextField
-            key={`${row.id}anzahl`}
-            name="anzahl"
-            label="Anzahl (nur ganze Zahlen)"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-            errors={errors}
-          />
-          <RadioButtonGroup
-            key={`${row.id}methode`}
-            name="methode"
-            label="Methode"
-            value={row.methode}
-            dataSource={get(
-              dataLists,
-              'allTpopkontrzaehlMethodeWertes.nodes',
-              [],
+          <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
+            {({ handleSubmit, dirty }) => (
+              <Form onBlur={() => dirty && handleSubmit()}>
+                <Field
+                  name="einheit"
+                  label="Einheit"
+                  options={get(
+                    dataLists,
+                    'allTpopkontrzaehlEinheitWertes.nodes',
+                    [],
+                  )}
+                  loading={loadingLists}
+                  component={Select}
+                />
+                <Field
+                  name="anzahl"
+                  label="Anzahl (nur ganze Zahlen)"
+                  type="number"
+                  component={TextField}
+                />
+                <Field
+                  name="methode"
+                  label="Methode"
+                  dataSource={get(
+                    dataLists,
+                    'allTpopkontrzaehlMethodeWertes.nodes',
+                    [],
+                  )}
+                  component={RadioButtonGroup}
+                />
+              </Form>
             )}
-            saveToDb={saveToDb}
-            error={errors.methode}
-          />
+          </Formik>
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
