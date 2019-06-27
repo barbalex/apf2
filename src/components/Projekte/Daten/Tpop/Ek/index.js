@@ -14,7 +14,7 @@ import { Formik, Form, Field } from 'formik'
 import RadioButton from '../../../../shared/RadioButtonFormik'
 import RadioButtonGroup from '../../../../shared/RadioButtonGroupFormik'
 import ErrorBoundary from '../../../../shared/ErrorBoundary'
-import queryLists from '../queryLists'
+import queryLists from './queryLists'
 import queryEk from './queryEk'
 import queryEkfrequenzs from './queryEkfrequenzs'
 import storeContext from '../../../../../storeContext'
@@ -56,6 +56,11 @@ const StyledTable = styled(Table)`
   td:first-child {
     padding-left: 10px;
   }
+`
+const EkplanTitle = styled.h5`
+  margin-top: -30px;
+  margin-left: 10px;
+  margin-bottom: 10px;
 `
 
 const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
@@ -167,22 +172,35 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
             )}
           </Formik>
           {!showFilter && (
-            <StyledTable size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Jahr</TableCell>
-                  <TableCell>geplant</TableCell>
-                  <TableCell>ausgeführt</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {Object.keys(ekGroupedByYear)
-                  .reverse()
-                  .map(year => (
-                    <EkYear data={ekGroupedByYear[year]} />
-                  ))}
-              </TableBody>
-            </StyledTable>
+            <>
+              <EkplanTitle>EK-Plan</EkplanTitle>
+              <StyledTable size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Jahr</TableCell>
+                    <TableCell>geplant</TableCell>
+                    <TableCell>ausgeführt</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {loadingEk ? (
+                    <TableRow>
+                      <TableCell>Lade...</TableCell>
+                    </TableRow>
+                  ) : errorEk ? (
+                    <TableRow>
+                      <TableCell>errorEk.message</TableCell>
+                    </TableRow>
+                  ) : (
+                    Object.keys(ekGroupedByYear)
+                      .reverse()
+                      .map(year => (
+                        <EkYear key={year} data={ekGroupedByYear[year]} />
+                      ))
+                  )}
+                </TableBody>
+              </StyledTable>
+            </>
           )}
         </FormContainerNoColumns>
       </>

@@ -33,6 +33,9 @@ const FieldsContainer = styled.div`
     padding-right: 30px;
   }
 `
+const LoadingDiv = styled.div`
+  padding: 10px;
+`
 
 const TpopForm = ({ treeName, showFilter = false }) => {
   const client = useApolloClient()
@@ -199,7 +202,7 @@ const TpopForm = ({ treeName, showFilter = false }) => {
             <Tab label="EK" value="ek" data-id="ek" />
           </Tabs>
           {!showFilter && loading ? (
-            <div>Lade...</div>
+            <LoadingDiv>Lade...</LoadingDiv>
           ) : tab === 'tpop' ? (
             <Tpop
               treeName={treeName}
