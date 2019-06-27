@@ -173,18 +173,18 @@ CREATE TABLE apflora.ekplan (
   id uuid primary key default uuid_generate_v1mc(),
   tpopkontr_id uuid default null references apflora.tpopkontr (id) on delete cascade on update cascade,
   jahr smallint DEFAULT NULL,
-  type ek_type default null,
+  typ ek_type default null,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 CREATE INDEX ON apflora.ekplan USING btree (id);
 CREATE INDEX ON apflora.ekplan USING btree (tpopkontr_id);
 CREATE INDEX ON apflora.ekplan USING btree (jahr);
-CREATE INDEX ON apflora.ekplan USING btree (type);
+CREATE INDEX ON apflora.ekplan USING btree (typ);
 COMMENT ON COLUMN apflora.ekplan.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.ekplan.tpopkontr_id IS 'Fremdschlüssel aus der Tabelle tpopkontr';
 COMMENT ON COLUMN apflora.ekplan.jahr IS 'Jahr, in dem eine EK geplant ist';
-COMMENT ON COLUMN apflora.ekplan.type IS 'ek oder ekf';
+COMMENT ON COLUMN apflora.ekplan.typ IS 'ek oder ekf';
 COMMENT ON COLUMN apflora.ekplan.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ekplan.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 CREATE POLICY writer ON apflora.ekplan
