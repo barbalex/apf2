@@ -177,7 +177,7 @@ export const ekfrequenz = gql`
     ek
     ekf
     anwendungsfall
-    kuerzel
+    code
     name
     periodizitaet
     kontrolljahre

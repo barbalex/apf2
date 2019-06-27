@@ -1,4 +1,6 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
@@ -22,6 +24,7 @@ import queryTpops from './queryTpops'
 import queryEkfrequenzs from './queryEkfrequenzs'
 import updateTpopByIdGql from './updateTpopById'
 import getGemeindeForKoord from '../../../../modules/getGemeindeForKoord'
+import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import storeContext from '../../../../storeContext'
 import { simpleTypes as tpopType } from '../../../../store/NodeFilterTree/tpop'
 import Coordinates from '../../../shared/Coordinates'
@@ -56,9 +59,25 @@ const EkfrequenzOptionsContainer = styled.div`
 const Tpop = ({ treeName, showFilter = false }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { nodeFilter, nodeFilterSetValue, refetch } = store
+  const {
+    nodeFilter,
+    nodeFilterSetValue,
+    refetch,
+    urlQuery,
+    setUrlQuery,
+  } = store
 
   const { activeNodeArray, datenWidth, filterWidth } = store[treeName]
+  const [tab, setTab] = useState(get(urlQuery, 'tpopTab', 'tpop'))
+  const onChangeTab = useCallback((event, value) => {
+    setUrlQueryValue({
+      key: 'tpopTab',
+      value,
+      urlQuery,
+      setUrlQuery,
+    })
+    setTab(value)
+  })
 
   let id =
     activeNodeArray.length > 7
@@ -187,14 +206,14 @@ const Tpop = ({ treeName, showFilter = false }) => {
     const ekTypeArray = [o.ek ? 'ek' : null, o.ekf ? 'ekf' : null].filter(
       v => !!v,
     )
-    const kuerzel = (o.kuerzel || '').padEnd(2)
+    const code = (o.code || '').padEnd(2)
     const anwendungsfall = (
       `${o.anwendungsfall}, ${ekTypeArray.join(' und ')}` || ''
     ).padEnd(26)
     const name = (o.name || '').padEnd(27)
     return {
       value: o.id,
-      label: `${kuerzel}: ${anwendungsfall} | ${name} | ${o.periodizitaet}`,
+      label: `${code}: ${anwendungsfall} | ${name} | ${o.periodizitaet}`,
     }
   })
 
@@ -230,211 +249,248 @@ const Tpop = ({ treeName, showFilter = false }) => {
           />
         )}
         <FieldsContainer data-width={showFilter ? filterWidth : datenWidth}>
-          <Formik
-            key={showFilter ? JSON.stringify(row) : row.id}
-            initialValues={row}
-            onSubmit={onSubmit}
-            enableReinitialize
+          <Tabs
+            value={tab}
+            onChange={onChangeTab}
+            indicatorColor="primary"
+            textColor="primary"
+            centered
           >
-            {({ handleSubmit, handleChange, handleBlur, dirty, setErrors }) => (
-              <Form onBlur={() => dirty && handleSubmit()}>
-                <Field
-                  name="nr"
-                  label="Nr."
-                  type="number"
-                  component={TextField}
-                />
-                <Field
-                  name="flurname"
-                  label="Flurname"
-                  type="text"
-                  popover="Dieses Feld möglichst immer ausfüllen"
-                  component={TextFieldWithInfo}
-                />
-                <Field
-                  apJahr={get(
-                    data,
-                    'tpopById.popByPopId.apByApId.startJahr',
-                    null,
-                  )}
-                  treeName={treeName}
-                  showFilter={showFilter}
-                  component={Status}
-                />
-                <Field
-                  name="statusUnklar"
-                  label="Status unklar"
-                  component={RadioButton}
-                />
-                <Field
-                  name="statusUnklarGrund"
-                  label="Begründung"
-                  type="text"
-                  multiLine
-                  component={TextField}
-                />
-                <Field
-                  name="apberRelevant"
-                  label="Für AP-Bericht relevant"
-                  component={RadioButton}
-                />
-                <Field
-                  name="apberRelevantGrund"
-                  dataSource={get(
-                    dataLists,
-                    'allTpopApberrelevantGrundWertes.nodes',
-                    [],
-                  )}
-                  loading={loadingLists}
-                  popover={TpopAbBerRelevantInfoPopover}
-                  label="Grund für AP-Bericht (Nicht-)Relevanz"
-                  component={RadioButtonGroupWithInfo}
-                />
-                {!showFilter && (
-                  <Coordinates
-                    row={row}
-                    refetchForm={refetchTpop}
-                    table="tpop"
-                  />
-                )}
-                <Field
-                  name="gemeinde"
-                  label="Gemeinde"
-                  options={get(dataLists, 'allGemeindes.nodes', [])}
-                  loading={loadingLists}
-                  showLocate={!showFilter}
-                  onClickLocate={async setStateValue => {
-                    if (!row.lv95X) {
-                      return setErrors({
-                        gemeinde: 'Es fehlen Koordinaten',
-                      })
-                    }
-                    const gemeinde = await getGemeindeForKoord({
-                      lv95X: row.lv95X,
-                      lv95Y: row.lv95Y,
-                      store,
-                    })
-                    if (gemeinde) {
-                      const fakeEvent = {
-                        target: { value: gemeinde, name: 'gemeinde' },
-                      }
-                      handleChange(fakeEvent)
-                      handleBlur(fakeEvent)
-                      setTimeout(() => handleSubmit())
-                    }
-                  }}
-                  component={SelectCreatable}
-                />
-                <Field
-                  name="radius"
-                  label="Radius (m)"
-                  type="number"
-                  component={TextField}
-                />
-                <Field
-                  name="hoehe"
-                  label="Höhe (m.ü.M.)"
-                  type="number"
-                  component={TextField}
-                />
-                <Field
-                  name="exposition"
-                  label="Exposition, Besonnung"
-                  type="text"
-                  component={TextField}
-                />
-                <Field
-                  name="klima"
-                  label="Klima"
-                  type="text"
-                  component={TextField}
-                />
-                <Field
-                  name="neigung"
-                  label="Hangneigung"
-                  type="text"
-                  component={TextField}
-                />
-                <Field
-                  name="beschreibung"
-                  label="Beschreibung"
-                  type="text"
-                  multiline
-                  component={TextField}
-                />
-                <Field
-                  name="katasterNr"
-                  label="Kataster-Nr."
-                  type="text"
-                  component={TextField}
-                />
-                <Field
-                  name="eigentuemer"
-                  label="EigentümerIn"
-                  type="text"
-                  component={TextField}
-                />
-                <Field
-                  name="kontakt"
-                  label="Kontakt vor Ort"
-                  type="text"
-                  component={TextField}
-                />
-                <Field
-                  name="nutzungszone"
-                  label="Nutzungszone"
-                  type="text"
-                  component={TextField}
-                />
-                <Field
-                  name="bewirtschafter"
-                  label="BewirtschafterIn"
-                  type="text"
-                  component={TextField}
-                />
-                <Field
-                  name="bewirtschaftung"
-                  label="Bewirtschaftung"
-                  type="text"
-                  component={TextField}
-                />
-                <Field
-                  name="bemerkungen"
-                  label="Bemerkungen"
-                  type="text"
-                  multiline
-                  component={TextField}
-                />
-                <EkfrequenzOptionsContainer>
+            <Tab label="Teil-Population" value="tpop" data-id="tpop" />
+            <Tab label="EK" value="ek" data-id="ek" />
+          </Tabs>
+          {tab === 'tpop' && (
+            <Formik
+              key={showFilter ? JSON.stringify(row) : row.id}
+              initialValues={row}
+              onSubmit={onSubmit}
+              enableReinitialize
+            >
+              {({
+                handleSubmit,
+                handleChange,
+                handleBlur,
+                dirty,
+                setErrors,
+              }) => (
+                <Form onBlur={() => dirty && handleSubmit()}>
                   <Field
-                    name="ekfrequenz"
-                    dataSource={ekfrequenzOptions}
-                    loading={loadingLists}
-                    label="EK-Frequenz"
-                    component={RadioButtonGroup}
+                    name="nr"
+                    label="Nr."
+                    type="number"
+                    component={TextField}
                   />
-                </EkfrequenzOptionsContainer>
-                <Field
-                  name="ekfrequenzAbweichend"
-                  label="EK-Frequenz abweichend"
-                  component={RadioButton}
-                />
-                <div>
                   <Field
-                    name="ekAbrechnungstyp"
+                    name="flurname"
+                    label="Flurname"
+                    type="text"
+                    popover="Dieses Feld möglichst immer ausfüllen"
+                    component={TextFieldWithInfo}
+                  />
+                  <Field
+                    apJahr={get(
+                      data,
+                      'tpopById.popByPopId.apByApId.startJahr',
+                      null,
+                    )}
+                    treeName={treeName}
+                    showFilter={showFilter}
+                    component={Status}
+                  />
+                  <Field
+                    name="statusUnklar"
+                    label="Status unklar"
+                    component={RadioButton}
+                  />
+                  <Field
+                    name="statusUnklarGrund"
+                    label="Begründung"
+                    type="text"
+                    multiLine
+                    component={TextField}
+                  />
+                  <Field
+                    name="apberRelevant"
+                    label="Für AP-Bericht relevant"
+                    component={RadioButton}
+                  />
+                  <Field
+                    name="apberRelevantGrund"
                     dataSource={get(
                       dataLists,
-                      'allEkAbrechnungstypWertes.nodes',
+                      'allTpopApberrelevantGrundWertes.nodes',
                       [],
                     )}
                     loading={loadingLists}
-                    label="EK-Abrechnungstyp"
-                    component={RadioButtonGroup}
+                    popover={TpopAbBerRelevantInfoPopover}
+                    label="Grund für AP-Bericht (Nicht-)Relevanz"
+                    component={RadioButtonGroupWithInfo}
                   />
-                </div>
-              </Form>
-            )}
-          </Formik>
+                  {!showFilter && (
+                    <Coordinates
+                      row={row}
+                      refetchForm={refetchTpop}
+                      table="tpop"
+                    />
+                  )}
+                  <Field
+                    name="gemeinde"
+                    label="Gemeinde"
+                    options={get(dataLists, 'allGemeindes.nodes', [])}
+                    loading={loadingLists}
+                    showLocate={!showFilter}
+                    onClickLocate={async setStateValue => {
+                      if (!row.lv95X) {
+                        return setErrors({
+                          gemeinde: 'Es fehlen Koordinaten',
+                        })
+                      }
+                      const gemeinde = await getGemeindeForKoord({
+                        lv95X: row.lv95X,
+                        lv95Y: row.lv95Y,
+                        store,
+                      })
+                      if (gemeinde) {
+                        const fakeEvent = {
+                          target: { value: gemeinde, name: 'gemeinde' },
+                        }
+                        handleChange(fakeEvent)
+                        handleBlur(fakeEvent)
+                        setTimeout(() => handleSubmit())
+                      }
+                    }}
+                    component={SelectCreatable}
+                  />
+                  <Field
+                    name="radius"
+                    label="Radius (m)"
+                    type="number"
+                    component={TextField}
+                  />
+                  <Field
+                    name="hoehe"
+                    label="Höhe (m.ü.M.)"
+                    type="number"
+                    component={TextField}
+                  />
+                  <Field
+                    name="exposition"
+                    label="Exposition, Besonnung"
+                    type="text"
+                    component={TextField}
+                  />
+                  <Field
+                    name="klima"
+                    label="Klima"
+                    type="text"
+                    component={TextField}
+                  />
+                  <Field
+                    name="neigung"
+                    label="Hangneigung"
+                    type="text"
+                    component={TextField}
+                  />
+                  <Field
+                    name="beschreibung"
+                    label="Beschreibung"
+                    type="text"
+                    multiline
+                    component={TextField}
+                  />
+                  <Field
+                    name="katasterNr"
+                    label="Kataster-Nr."
+                    type="text"
+                    component={TextField}
+                  />
+                  <Field
+                    name="eigentuemer"
+                    label="EigentümerIn"
+                    type="text"
+                    component={TextField}
+                  />
+                  <Field
+                    name="kontakt"
+                    label="Kontakt vor Ort"
+                    type="text"
+                    component={TextField}
+                  />
+                  <Field
+                    name="nutzungszone"
+                    label="Nutzungszone"
+                    type="text"
+                    component={TextField}
+                  />
+                  <Field
+                    name="bewirtschafter"
+                    label="BewirtschafterIn"
+                    type="text"
+                    component={TextField}
+                  />
+                  <Field
+                    name="bewirtschaftung"
+                    label="Bewirtschaftung"
+                    type="text"
+                    component={TextField}
+                  />
+                  <Field
+                    name="bemerkungen"
+                    label="Bemerkungen"
+                    type="text"
+                    multiline
+                    component={TextField}
+                  />
+                </Form>
+              )}
+            </Formik>
+          )}
+          {tab === 'ek' && (
+            <Formik
+              key={showFilter ? JSON.stringify(row) : row.id}
+              initialValues={row}
+              onSubmit={onSubmit}
+              enableReinitialize
+            >
+              {({
+                handleSubmit,
+                handleChange,
+                handleBlur,
+                dirty,
+                setErrors,
+              }) => (
+                <Form onBlur={() => dirty && handleSubmit()}>
+                  <EkfrequenzOptionsContainer>
+                    <Field
+                      name="ekfrequenz"
+                      dataSource={ekfrequenzOptions}
+                      loading={loadingLists}
+                      label="EK-Frequenz"
+                      component={RadioButtonGroup}
+                    />
+                  </EkfrequenzOptionsContainer>
+                  <Field
+                    name="ekfrequenzAbweichend"
+                    label="EK-Frequenz abweichend"
+                    component={RadioButton}
+                  />
+                  <div>
+                    <Field
+                      name="ekAbrechnungstyp"
+                      dataSource={get(
+                        dataLists,
+                        'allEkAbrechnungstypWertes.nodes',
+                        [],
+                      )}
+                      loading={loadingLists}
+                      label="EK-Abrechnungstyp"
+                      component={RadioButtonGroup}
+                    />
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          )}
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

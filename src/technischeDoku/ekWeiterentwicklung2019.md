@@ -31,7 +31,7 @@ Das soll mit folgenden Massnahmen umgesetzt werden:<br/><br/>
     - `angepflanzte Population`
     - `angesäte Population`
     - `Spezialfall`
-  - `kuerzel`: Wird für den Import verwendet
+  - `code`: Definiert die EK-Frequenz. Wird für den Import verwendet
   - `name`
   - `periodizitaet`. Beispielswerte:
     - `jedes 2. Jahr`
@@ -57,7 +57,7 @@ Das soll mit folgenden Massnahmen umgesetzt werden:<br/><br/>
 #### Strukturbaum
 - Neuer Knoten im AP: `EK-Frequenzen`. Mit Formular, um die Daten zu erfassen.
 - Neuer Knoten in den Werte-Listen: `EK: Abrechnungs-Typen`
-- Bestehender Knoten `EKF-Zähleinheiten` wird neu `EK-Zähleinheiten`
+- :white_check_mark: Bestehender Knoten `EKF-Zähleinheiten` wird neu `EK-Zähleinheiten`
 
 #### Formular TPop
 - Neue Felder der Tabelle tpop ergänzen (bearbeitbar)

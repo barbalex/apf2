@@ -11,7 +11,7 @@ export default ({ activeNodeArray: activeNodeArrayPassed, store }) => {
   let initialActiveNodeArray = [...activeNodeArrayFromPathname]
   // fetch query here, BEFORE mutating active node array
   const urlQuery = getUrlQuery()
-  const { projekteTabs, feldkontrTab, idealbiotopTab } = urlQuery
+  const { projekteTabs } = urlQuery
 
   store.tree.setActiveNodeArray(initialActiveNodeArray)
   // need to set openNodes
@@ -21,7 +21,7 @@ export default ({ activeNodeArray: activeNodeArrayPassed, store }) => {
   })
   // clone tree2 in case tree2 is open
   cloneTree2From1()
-  setUrlQuery({ projekteTabs, feldkontrTab, idealbiotopTab })
+  setUrlQuery(urlQuery)
 
   // set projekte tabs of not yet existing
   if (

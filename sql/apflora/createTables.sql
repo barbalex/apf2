@@ -550,9 +550,9 @@ CREATE TABLE apflora.tpop (
   nutzungszone text DEFAULT NULL,
   bewirtschafter text DEFAULT NULL,
   bewirtschaftung text DEFAULT NULL,
-  ekfrequenz uuid DEFAULT null REFERENCES apflora.ekfrequenz (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  ekfrequenz text DEFAULT null REFERENCES apflora.ekfrequenz (code) ON DELETE SET NULL ON UPDATE CASCADE,
   ekfrequenz_abweichend boolean DEFAULT false,
-  ek_abrechnungstyp uuid DEFAULT null REFERENCES apflora.ek_abrechnungstyp (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  ek_abrechnungstyp text DEFAULT null REFERENCES apflora.ek_abrechnungstyp (code) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null
@@ -1294,7 +1294,7 @@ create table apflora.ekfrequenz(
   ek boolean default false,
   ekf boolean default false,
   anwendungsfall text default null,
-  kuerzel text default null,
+  code text default null unique,
   name text default null,
   periodizitaet text default null,
   kontrolljahre integer[],
@@ -1310,7 +1310,7 @@ CREATE INDEX ON apflora.ekfrequenz USING btree (ap_id);
 CREATE INDEX ON apflora.ekfrequenz USING btree (ek);
 CREATE INDEX ON apflora.ekfrequenz USING btree (ekf);
 CREATE INDEX ON apflora.ekfrequenz USING btree (anwendungsfall);
-CREATE INDEX ON apflora.ekfrequenz USING btree (kuerzel);
+CREATE INDEX ON apflora.ekfrequenz USING btree (code);
 CREATE INDEX ON apflora.ekfrequenz USING btree (anzahl_min);
 CREATE INDEX ON apflora.ekfrequenz USING btree (anzahl_max);
 CREATE INDEX ON apflora.ekfrequenz USING btree (sort);
@@ -1319,7 +1319,7 @@ COMMENT ON COLUMN apflora.ekfrequenz.ap_id IS 'Zugehöriger Aktionsplan. Fremdsc
 COMMENT ON COLUMN apflora.ekfrequenz.ek IS 'Diese Frequenz ist für EK anwendbar';
 COMMENT ON COLUMN apflora.ekfrequenz.ekf IS 'Diese Frequenz ist für EKF anwendbar';
 COMMENT ON COLUMN apflora.ekfrequenz.anwendungsfall IS 'Beschreibt, in welchen Fällen diese Frequenz angewandt wird. Wahrscheinliche Werte: autochthone Population, angepflanzte Population, angesäte Population, Spezialfall';
-COMMENT ON COLUMN apflora.ekfrequenz.kuerzel IS 'Wird für den Import verwendet';
+COMMENT ON COLUMN apflora.ekfrequenz.code IS 'Definierend für die eqfrequenz';
 COMMENT ON COLUMN apflora.ekfrequenz.name IS 'Was genau?';
 COMMENT ON COLUMN apflora.ekfrequenz.periodizitaet IS 'Beispielswerte: jedes 2. Jahr, nie';
 COMMENT ON COLUMN apflora.ekfrequenz.kontrolljahre IS ' Definiert, in welchen Jahren eine Kontrolle üblicherweise stattfinden soll. Bei Anpflanzungen sind das Jahre ab der letzten Anpflanzung. Bei autochthonen Populationen?';

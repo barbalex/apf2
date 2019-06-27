@@ -10,6 +10,7 @@ export default () => {
   // set initial values
   if (!query.projekteTabs) query.projekteTabs = ['tree', 'daten']
   if (!query.feldkontrTab) query.feldkontrTab = 'entwicklung'
+  if (!query.tpopTab) query.tpopTab = 'tpop'
   if (!query.idealbiotopTab) query.idealbiotopTab = 'idealbiotop'
   /**
    * arrays are converted to strings in url if only one element is contained

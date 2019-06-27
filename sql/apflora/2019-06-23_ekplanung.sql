@@ -61,14 +61,14 @@ drop function if exists apflora.ekfzaehleinheit_label(ekfzaehleinheit apflora.ek
 DROP TRIGGER IF EXISTS ekfzaehleinheit_max_3_per_ap ON apflora.ekfzaehleinheit;
 DROP FUNCTION IF EXISTS apflora.ekfzaehleinheit_max_3_per_ap();
 
-drop table if exists apflora.ekfrequenz;
+drop table if exists apflora.ekfrequenz cascade;
 create table apflora.ekfrequenz(
   id uuid primary key default uuid_generate_v1mc(),
   ap_id uuid not null references apflora.ap (id) on delete cascade on update cascade,
   ek boolean default false,
   ekf boolean default false,
   anwendungsfall text default null,
-  kuerzel text default null,
+  code text default null unique,
   name text default null,
   periodizitaet text default null,
   kontrolljahre integer[],
@@ -84,7 +84,7 @@ CREATE INDEX ON apflora.ekfrequenz USING btree (ap_id);
 CREATE INDEX ON apflora.ekfrequenz USING btree (ek);
 CREATE INDEX ON apflora.ekfrequenz USING btree (ekf);
 CREATE INDEX ON apflora.ekfrequenz USING btree (anwendungsfall);
-CREATE INDEX ON apflora.ekfrequenz USING btree (kuerzel);
+CREATE INDEX ON apflora.ekfrequenz USING btree (code);
 CREATE INDEX ON apflora.ekfrequenz USING btree (anzahl_min);
 CREATE INDEX ON apflora.ekfrequenz USING btree (anzahl_max);
 CREATE INDEX ON apflora.ekfrequenz USING btree (sort);
@@ -93,7 +93,7 @@ COMMENT ON COLUMN apflora.ekfrequenz.ap_id IS 'Zugehöriger Aktionsplan. Fremdsc
 COMMENT ON COLUMN apflora.ekfrequenz.ek IS 'Diese Frequenz ist für EK anwendbar';
 COMMENT ON COLUMN apflora.ekfrequenz.ekf IS 'Diese Frequenz ist für EKF anwendbar';
 COMMENT ON COLUMN apflora.ekfrequenz.anwendungsfall IS 'Beschreibt, in welchen Fällen diese Frequenz angewandt wird. Wahrscheinliche Werte: autochthone Population, angepflanzte Population, angesäte Population, Spezialfall';
-COMMENT ON COLUMN apflora.ekfrequenz.kuerzel IS 'Wird für den Import verwendet';
+COMMENT ON COLUMN apflora.ekfrequenz.code IS 'Definierend für die eqfrequenz';
 COMMENT ON COLUMN apflora.ekfrequenz.name IS 'Was genau?';
 COMMENT ON COLUMN apflora.ekfrequenz.periodizitaet IS 'Beispielswerte: jedes 2. Jahr, nie';
 COMMENT ON COLUMN apflora.ekfrequenz.kontrolljahre IS ' Definiert, in welchen Jahren eine Kontrolle üblicherweise stattfinden soll. Bei Anpflanzungen sind das Jahre ab der letzten Anpflanzung. Bei autochthonen Populationen?';
@@ -110,7 +110,7 @@ CREATE POLICY writer ON apflora.ekfrequenz
   );
 -- insert some test data:
 -- TODO: will this be the standard for every art?
-insert into apflora.ekfrequenz (ap_id,ek,anwendungsfall,kuerzel,name,anzahl_min,anzahl_max,periodizitaet,sort) values 
+insert into apflora.ekfrequenz (ap_id,ek,anwendungsfall,code,name,anzahl_min,anzahl_max,periodizitaet,sort) values 
 ('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population autochthon','GA','stark gefährdet',1,20,'jedes 2. Jahr',1),
 ('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population autochthon','GB','mittel gefährdet',21,500,'jedes 4. Jahr',2),
 ('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population autochthon','GC','wenig gefährdet',501,100000,'jedes 8. Jahr',3),
@@ -121,12 +121,6 @@ insert into apflora.ekfrequenz (ap_id,ek,anwendungsfall,kuerzel,name,anzahl_min,
 ('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population angepflanzt','ND','angesiedelt',0,0,'keine Kontrolle mehr',8),
 ('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Population angesät','A',null,0,0,'1. Kontrolle nach 4-6 Jahren. Falls etabliert: NB, NC',9),
 ('6c52d174-4f62-11e7-aebe-67a303eb0640',true,'Spezialfall','SA',null,0,0,'Keine Kontrollen',10);
-
-drop function if exists apflora.ekfrequenz_label(ekfrequenz apflora.ekfrequenz);
-create or replace function apflora.ekfrequenz_label(ekfrequenz apflora.ekfrequenz) returns text as $$
-  select coalesce((select text from apflora.tpopkontrzaehl_einheit_werte where apflora.tpopkontrzaehl_einheit_werte.id = ekfrequenz.zaehleinheit_id), '(keine zähleinheit gewählt)')
-$$ language sql stable;
-comment on function apflora.ekfrequenz_label(apflora.ekfrequenz) is e'@sortable';
 -- TODO: build ui for ekfrequenz
 
 DROP TABLE IF EXISTS apflora.ek_abrechnungstyp_werte;
@@ -154,7 +148,7 @@ insert into apflora.ek_abrechnungstyp_werte (code,text,sort) values
 -- TODO: build ui for ek_abrechnungstyp_werte
 
 
-ALTER TABLE apflora.tpop ADD COLUMN ekfrequenz uuid DEFAULT null REFERENCES apflora.ekfrequenz (id) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE apflora.tpop ADD COLUMN ekfrequenz text DEFAULT null REFERENCES apflora.ekfrequenz (code) ON DELETE SET NULL ON UPDATE CASCADE;
 CREATE INDEX ON apflora.tpop USING btree (ekfrequenz);
 COMMENT ON COLUMN apflora.tpop.ekfrequenz IS 'Wert aus Tabelle ekfrequenz. Bestimmt, wie häufig kontrolliert werden soll';
 ALTER TABLE apflora.tpop ADD COLUMN ekfrequenz_abweichend boolean DEFAULT false;
