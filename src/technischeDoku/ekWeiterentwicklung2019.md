@@ -60,7 +60,7 @@ Das soll mit folgenden Massnahmen umgesetzt werden:<br/><br/>
 - :white_check_mark: Bestehender Knoten `EKF-Zähleinheiten` wird neu `EK-Zähleinheiten`
 
 #### Formular TPop
-- Neue Felder der Tabelle tpop ergänzen (bearbeitbar)
+- :white_check_mark: Neue Felder der Tabelle tpop ergänzen (bearbeitbar)
 - Liste aller Kontrolljahre anzeigen. Ist hier nicht bearbeitbar.
 
 #### Neues Formular EK-Planung
