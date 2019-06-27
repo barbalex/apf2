@@ -212,7 +212,7 @@ const Tpop = ({ treeName, showFilter = false }) => {
     ).padEnd(26)
     const name = (o.name || '').padEnd(27)
     return {
-      value: o.id,
+      value: o.code,
       label: `${code}: ${anwendungsfall} | ${name} | ${o.periodizitaet}`,
     }
   })
