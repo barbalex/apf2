@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import { useApolloClient } from 'react-apollo-hooks'
@@ -7,9 +7,10 @@ import { FaTimes, FaDownload } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
+import { Formik, Form, Field } from 'formik'
 
 //import storeContext from '../../../storeContext'
-import TextField from '../../shared/TextField'
+import TextField from '../TextFieldFormik'
 import ErrorBoundary from '../ErrorBoundary'
 import {
   idealbiotopFile as idealbiotopFileFragment,
@@ -17,6 +18,8 @@ import {
 } from '../fragments'
 import isImageFile from './isImageFile'
 import { upperFirst } from 'graphql-compose'
+import objectsFindChangedKey from '../../../modules/objectsFindChangedKey'
+import objectsEmptyValuesToNull from '../../../modules/objectsEmptyValuesToNull'
 
 const Container = styled.div`
   display: flex;
@@ -79,12 +82,8 @@ const File = ({ file, parent, refetch }) => {
   const client = useApolloClient()
   //const store = useContext(storeContext)
 
-  const [errors, setErrors] = useState({})
-
   const [delMenuAnchorEl, setDelMenuAnchorEl] = React.useState(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
-
-  useEffect(() => setErrors({}), [file])
 
   const tableName = `${parent}File`
 
@@ -124,30 +123,34 @@ const File = ({ file, parent, refetch }) => {
     [file],
   )
 
-  const saveToDb = useCallback(
-    async event => {
-      const field = event.target.name
-      const value = event.target.value || null
+  const onSubmit = useCallback(
+    async (values, { setErrors }) => {
+      const changedField = objectsFindChangedKey(values, file)
       try {
-        let valueToSet
-        if (value === undefined || value === null) {
-          valueToSet = null
-        } else {
-          valueToSet = `"${value}"`
-        }
         const mutationName = `update${upperFirst(parent)}FileById`
         const fields = `${upperFirst(parent)}FileFields`
         const fragment = fragmentObject[parent]
+        const parentId = `${parent}Id`
         await client.mutate({
           mutation: gql`
               mutation UpdateFile(
                 $id: UUID!
+                $${parentId}: UUID
+                $fileId: UUID
+                $fileMimeType: String
+                $name: String
+                $beschreibung: String
               ) {
                 ${mutationName}(
                   input: {
                     id: $id
                     ${tableName}Patch: {
-                      ${field}: ${valueToSet}
+                      id: $id
+                      ${parentId}: $${parentId}
+                      fileId: $fileId
+                      fileMimeType: $fileMimeType
+                      name: $name
+                      beschreibung: $beschreibung
                     }
                   }
                 ) {
@@ -158,12 +161,10 @@ const File = ({ file, parent, refetch }) => {
               }
               ${fragment}
             `,
-          variables: {
-            id: file.id,
-          },
+          variables: objectsEmptyValuesToNull(values),
         })
       } catch (error) {
-        return setErrors({ [field]: error.message })
+        return setErrors({ [changedField]: error.message })
       }
       setErrors({})
       refetch()
@@ -177,83 +178,80 @@ const File = ({ file, parent, refetch }) => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        {isImage ? (
-          <Img
-            src={`https://ucarecdn.com/${
-              file.fileId
-            }/-/resize/80x/-/quality/lightest/${file.name}`}
-          />
-        ) : (
-          <ImgReplacement>...</ImgReplacement>
+      <Formik initialValues={file} onSubmit={onSubmit} enableReinitialize>
+        {({ handleSubmit, dirty }) => (
+          <Form onBlur={() => dirty && handleSubmit()}>
+            <Container>
+              {isImage ? (
+                <Img
+                  src={`https://ucarecdn.com/${file.fileId}/-/resize/80x/-/quality/lightest/${file.name}`}
+                />
+              ) : (
+                <ImgReplacement>...</ImgReplacement>
+              )}
+              <DateiTypField>
+                <Field
+                  name="fileMimeType"
+                  label="Datei-Typ"
+                  disabled
+                  schrinkLabel
+                  component={TextField}
+                />
+              </DateiTypField>
+              <Spacer />
+              <DateiNameField>
+                <Field
+                  name="name"
+                  label="Datei-Name"
+                  disabled
+                  schrinkLabel
+                  component={TextField}
+                />
+              </DateiNameField>
+              <Spacer />
+              <BeschreibungField>
+                <Field
+                  name="beschreibung"
+                  label="Beschreibung"
+                  multiLine
+                  schrinkLabel
+                  component={TextField}
+                />
+              </BeschreibungField>
+              <DownloadIcon title="herunterladen" onClick={onClickDownload}>
+                <FaDownload />
+              </DownloadIcon>
+              <DelIcon
+                title="löschen"
+                aria-label="löschen"
+                aria-owns={delMenuOpen ? 'delMenu' : undefined}
+                aria-haspopup="true"
+                onClick={event => setDelMenuAnchorEl(event.currentTarget)}
+              >
+                <FaTimes />
+              </DelIcon>
+              <Menu
+                id="delMenu"
+                anchorEl={delMenuAnchorEl}
+                open={delMenuOpen}
+                onClose={() => setDelMenuAnchorEl(null)}
+                PaperProps={{
+                  style: {
+                    maxHeight: 48 * 4.5,
+                    width: 120,
+                  },
+                }}
+              >
+                <MenuTitle>löschen?</MenuTitle>
+                <MenuItem onClick={onClickDelete}>ja</MenuItem>
+                <MenuItem onClick={() => setDelMenuAnchorEl(null)}>
+                  nein
+                </MenuItem>
+              </Menu>
+            </Container>
+          </Form>
         )}
-        <DateiTypField>
-          <TextField
-            key={`${file.id}fileMimeType`}
-            name="fileMimeType"
-            label="Datei-Typ"
-            value={file.fileMimeType}
-            saveToDb={saveToDb}
-            error={errors.fileMimeType}
-            disabled
-            schrinkLabel
-          />
-        </DateiTypField>
-        <Spacer />
-        <DateiNameField>
-          <TextField
-            key={`${file.id}name`}
-            name="name"
-            label="Datei-Name"
-            value={file.name}
-            saveToDb={saveToDb}
-            error={errors.name}
-            disabled
-            schrinkLabel
-          />
-        </DateiNameField>
-        <Spacer />
-        <BeschreibungField>
-          <TextField
-            key={`${file.id}beschreibung`}
-            name="beschreibung"
-            label="Beschreibung"
-            value={file.beschreibung}
-            saveToDb={saveToDb}
-            error={errors.beschreibung}
-            multiLine
-            schrinkLabel
-          />
-        </BeschreibungField>
-        <DownloadIcon title="herunterladen" onClick={onClickDownload}>
-          <FaDownload />
-        </DownloadIcon>
-        <DelIcon
-          title="löschen"
-          aria-label="löschen"
-          aria-owns={delMenuOpen ? 'delMenu' : undefined}
-          aria-haspopup="true"
-          onClick={event => setDelMenuAnchorEl(event.currentTarget)}
-        >
-          <FaTimes />
-        </DelIcon>
-        <Menu
-          id="delMenu"
-          anchorEl={delMenuAnchorEl}
-          open={delMenuOpen}
-          onClose={() => setDelMenuAnchorEl(null)}
-          PaperProps={{
-            style: {
-              maxHeight: 48 * 4.5,
-              width: 120,
-            },
-          }}
-        >
-          <MenuTitle>löschen?</MenuTitle>
-          <MenuItem onClick={onClickDelete}>ja</MenuItem>
-          <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
-        </Menu>
-      </Container>
+      </Formik>
     </ErrorBoundary>
   )
 }
