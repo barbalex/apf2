@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
+import ErrorBoundary from 'react-error-boundary'
 
-import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import storeContext from '../../../../storeContext'
 
