@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 export default gql`
   query TpopEkQuery($id: UUID!, $isEk: Boolean!) {
     allEkplans(
-      filter: { tpopkontrByTpopkontrId: { tpopId: { equalTo: $id } } }
+      filter:  { tpopId: { equalTo: $id }  }
     ) @include(if: $isEk) {
       nodes {
         id

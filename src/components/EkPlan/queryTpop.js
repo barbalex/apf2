@@ -1,21 +1,41 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query EkplanTpopQuery($id: UUID!, $isEk: Boolean!) {
-    allEkplans(
-      filter: { tpopkontrByTpopkontrId: { tpopId: { equalTo: $id } } }
-    ) @include(if: $isEk) {
+  query EkplanTpopQuery($aps: [UUID!]) {
+    allTpops(filter: { popByPopId: { apId: { in: $aps } } }) {
+      totalCount
       nodes {
         id
-        jahr
-        typ
-      }
-    }
-    allTpopkontrs(filter: { tpopId: { equalTo: $id } }) @include(if: $isEk) {
-      nodes {
-        id
-        jahr
-        typ
+        nr
+        gemeinde
+        flurname
+        popStatusWerteByStatus {
+          text
+        }
+        bekanntSeit
+        tpopkontrsByTpopId {
+          nodes {
+            id
+            jahr
+            typ
+          }
+        }
+        ekplansByTpopId {
+          nodes {
+            id
+            jahr
+            typ
+          }
+        }
+        popByPopId {
+          id
+          nr
+          name
+          apByApId {
+            id
+            label
+          }
+        }
       }
     }
   }
