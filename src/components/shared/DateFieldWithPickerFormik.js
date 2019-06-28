@@ -7,7 +7,6 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { DatePicker } from 'material-ui-pickers'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import moment from 'moment'
-import isValid from 'date-fns/isValid'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
