@@ -26,8 +26,17 @@ const StyledTable = styled(Table)`
     background: rgba(128, 128, 128, 0.2);
   }
   thead tr th {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     color: black;
+    padding: 2px 4px;
+    line-height: 1rem;
+  }
+  tbody tr td {
+    font-size: 0.75rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding: 2px 4px;
   }
   tbody tr:nth-of-type(even) {
     background: rgba(128, 128, 128, 0.05);
@@ -37,6 +46,7 @@ const StyledTable = styled(Table)`
     padding-left: 10px;
   }
 `
+const StyledTableBody = styled(TableBody)``
 
 const ektypRenamed = e => {
   switch (e.typ) {
@@ -151,7 +161,11 @@ const EkPlan = () => {
       },
     },
   )
-  const tpops = get(dataTpop, 'allTpops.nodes', [])
+  const tpops = sortBy(get(dataTpop, 'allTpops.nodes', []), t => [
+    t.popByPopId.apByApId.label,
+    t.popByPopId.nr,
+    t.nr,
+  ])
   const years = yearsFromTpops(tpops)
   const rows = tpops.map(tpop => rowsFromTpop({ tpop, years }))
   const fields = rows.length
@@ -162,6 +176,7 @@ const EkPlan = () => {
     : []
   const apsToChoose = get(dataApsToChoose, 'allAps.nodes', [])
   console.log('EkPlan', {
+    tpops,
     rows,
     years,
     aps,
@@ -180,7 +195,7 @@ const EkPlan = () => {
               ))}
             </TableRow>
           </TableHead>
-          <TableBody>
+          <StyledTableBody>
             {aps.length === 0 ? (
               <TableRow>
                 <TableCell>Bitte AP wählen</TableCell>
@@ -211,7 +226,7 @@ const EkPlan = () => {
                 </TableRow>
               ))
             )}
-          </TableBody>
+          </StyledTableBody>
         </StyledTable>
       </Container>
     </ErrorBoundary>
