@@ -10,7 +10,6 @@ import ErrorBoundary from 'react-error-boundary'
 import Layout from '../components/Layout'
 
 const Container = styled.div`
-  margin-top: 64px;
   min-height: calc(100vh - 64px);
 `
 const TextContainer = styled.div`

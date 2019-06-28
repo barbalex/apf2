@@ -1,13 +1,13 @@
-import React, { useContext } from "react"
-import styled from "styled-components"
-import get from "lodash/get"
-import flatten from "lodash/flatten"
-import sortBy from "lodash/sortBy"
-import { useQuery } from "react-apollo-hooks"
+import React, { useContext } from 'react'
+import styled from 'styled-components'
+import get from 'lodash/get'
+import flatten from 'lodash/flatten'
+import sortBy from 'lodash/sortBy'
+import { useQuery } from 'react-apollo-hooks'
+import ErrorBoundary from 'react-error-boundary'
 
-import ErrorBoundary from "../../../shared/ErrorBoundary"
-import storeContext from "../../../../storeContext"
-import query from "./query"
+import storeContext from '../../../../storeContext'
+import query from './query'
 
 const Container = styled.div`
   display: flex;
@@ -75,33 +75,33 @@ const AktPopList = () => {
       projektId,
     },
   })
-  const aps = get(data, "allAps.nodes", [])
-  const pops100 = flatten(aps.map(ap => get(ap, "pops100.nodes", []))).filter(
-    p => get(p, "tpopsByPopId.totalCount") > 0
+  const aps = get(data, 'allAps.nodes', [])
+  const pops100 = flatten(aps.map(ap => get(ap, 'pops100.nodes', []))).filter(
+    p => get(p, 'tpopsByPopId.totalCount') > 0,
   )
-  const pops200 = flatten(aps.map(ap => get(ap, "pops200.nodes", []))).filter(
-    p => get(p, "tpopsByPopId.totalCount") > 0
+  const pops200 = flatten(aps.map(ap => get(ap, 'pops200.nodes', []))).filter(
+    p => get(p, 'tpopsByPopId.totalCount') > 0,
   )
   const popsUrspr = pops100.length
   const popsAnges = pops200.length
   const popsTotal = popsUrspr + popsAnges
   const apRows = sortBy(
     aps.map(ap => {
-      const urspr = get(ap, "pops100.nodes", []).filter(
-        p => get(p, "tpopsByPopId.totalCount") > 0
+      const urspr = get(ap, 'pops100.nodes', []).filter(
+        p => get(p, 'tpopsByPopId.totalCount') > 0,
       ).length
-      const anges = get(ap, "pops200.nodes", []).filter(
-        p => get(p, "tpopsByPopId.totalCount") > 0
+      const anges = get(ap, 'pops200.nodes', []).filter(
+        p => get(p, 'tpopsByPopId.totalCount') > 0,
       ).length
 
       return {
-        ap: get(ap, "aeEigenschaftenByArtId.artname"),
+        ap: get(ap, 'aeEigenschaftenByArtId.artname'),
         urspr,
         anges,
         total: urspr + anges,
       }
     }),
-    "ap"
+    'ap',
   )
 
   if (dataError) {

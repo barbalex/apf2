@@ -1,10 +1,9 @@
-import React from "react"
-import styled from "styled-components"
-import get from "lodash/get"
-import groupBy from "lodash/groupBy"
-import sortBy from "lodash/sortBy"
-
-import ErrorBoundary from "../../shared/ErrorBoundary"
+import React from 'react'
+import styled from 'styled-components'
+import get from 'lodash/get'
+import groupBy from 'lodash/groupBy'
+import sortBy from 'lodash/sortBy'
+import ErrorBoundary from 'react-error-boundary'
 
 const Container = styled.div`
   display: flex;
@@ -41,11 +40,11 @@ const Title = styled.p`
 
 const AvList = ({ data }) => {
   const avGrouped = groupBy(
-    get(data, "allAps.nodes", []).map(ap => ({
-      av: get(ap, "adresseByBearbeiter.name", "(kein Wert)"),
-      art: get(ap, "aeEigenschaftenByArtId.artname", "(keine Art gewählt)"),
+    get(data, 'allAps.nodes', []).map(ap => ({
+      av: get(ap, 'adresseByBearbeiter.name', '(kein Wert)'),
+      art: get(ap, 'aeEigenschaftenByArtId.artname', '(keine Art gewählt)'),
     })),
-    "av"
+    'av',
   )
   const avs = Object.keys(avGrouped).sort()
 
@@ -54,7 +53,7 @@ const AvList = ({ data }) => {
       <Container>
         <Title>Artverantwortliche</Title>
         {avs.map(av => {
-          const array = sortBy(avGrouped[av], "art")
+          const array = sortBy(avGrouped[av], 'art')
           return array.map((o, i) => {
             if (i === 0)
               return (

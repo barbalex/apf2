@@ -21,7 +21,7 @@ import { simpleTypes as apType } from '../../../../store/NodeFilterTree/ap'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 
 const Container = styled.div`
-  height: calc(100vh - 64px);
+  height: calc(100vh - 145px);
   display: flex;
   flex-direction: column;
   background-color: #ffd3a7;

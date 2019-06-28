@@ -29,7 +29,8 @@ import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 
 const Container = styled.div`
-  height: calc(100vh - 64px);
+  height: ${props =>
+    props.showfilter ? 'calc(100vh - 145px)' : 'calc(100vh - 64px)'};
   display: flex;
   flex-direction: column;
   background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};

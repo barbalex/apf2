@@ -11,7 +11,6 @@ import Layout from '../components/Layout'
 const ScrollContainer = styled.div`
   height: calc(100vh - 64px);
   overflow-y: auto;
-  margin-top: 64px;
 `
 const Container = styled.div`
   padding: 15px;

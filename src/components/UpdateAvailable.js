@@ -8,13 +8,13 @@
  * ...then triggers again some time later, passing an empty error object
  */
 
-import React, { useCallback, useContext } from "react"
-import Snackbar from "@material-ui/core/Snackbar"
-import Button from "@material-ui/core/Button"
-import styled from "styled-components"
+import React, { useCallback, useContext } from 'react'
+import Snackbar from '@material-ui/core/Snackbar'
+import Button from '@material-ui/core/Button'
+import styled from 'styled-components'
+import ErrorBoundary from 'react-error-boundary'
 
-import ErrorBoundary from "./shared/ErrorBoundary"
-import storeContext from "../storeContext"
+import storeContext from '../storeContext'
 
 const StyledSnackbar = styled(Snackbar)`
   > div {
@@ -28,7 +28,7 @@ const UpdateAvailable = () => {
   const onClose = useCallback(() => setUpdateAvailable(false))
   const onClickIntall = useCallback(event => {
     event.preventDefault()
-    typeof window !== "undefined" && window.location.reload(false)
+    typeof window !== 'undefined' && window.location.reload(false)
   })
 
   return (
@@ -37,9 +37,9 @@ const UpdateAvailable = () => {
         open={updateAvailable}
         message={<span id="message-id">Ein Update steht zur Verfügung</span>}
         SnackbarContentProps={{
-          "aria-describedby": "message-id",
+          'aria-describedby': 'message-id',
         }}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         action={
           <Button color="primary" size="small" onClick={onClickIntall}>
             installieren
@@ -52,6 +52,6 @@ const UpdateAvailable = () => {
   )
 }
 
-UpdateAvailable.displayName = "UpdateAvailable"
+UpdateAvailable.displayName = 'UpdateAvailable'
 
 export default UpdateAvailable

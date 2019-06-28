@@ -1,20 +1,20 @@
-import React, { useContext } from "react"
-import styled from "styled-components"
-import get from "lodash/get"
-import sortBy from "lodash/sortBy"
-import format from "date-fns/format"
-import { observer } from "mobx-react-lite"
-import { useQuery } from "react-apollo-hooks"
+import React, { useContext } from 'react'
+import styled from 'styled-components'
+import get from 'lodash/get'
+import sortBy from 'lodash/sortBy'
+import format from 'date-fns/format'
+import { observer } from 'mobx-react-lite'
+import { useQuery } from 'react-apollo-hooks'
+import ErrorBoundary from 'react-error-boundary'
 
-import ErrorBoundary from "../../shared/ErrorBoundary"
-import query1 from "./query1"
-import query2 from "./query2"
-import fnslogo from "./fnslogo.png"
-import AvList from "./AvList"
-import AktPopList from "./AktPopList"
-import ErfolgList from "./ErfolgList"
-import ApberForAp from "../ApberForAp"
-import storeContext from "../../../storeContext"
+import query1 from './query1'
+import query2 from './query2'
+import fnslogo from './fnslogo.png'
+import AvList from './AvList'
+import AktPopList from './AktPopList'
+import ErfolgList from './ErfolgList'
+import ApberForAp from '../ApberForAp'
+import storeContext from '../../../storeContext'
 
 const LoadingContainer = styled.div`
   padding: 15px;
@@ -113,10 +113,10 @@ const ApberForYear = () => {
       variables: {
         apberuebersichtId,
       },
-    }
+    },
   )
   const { projekt: projektId } = activeNodes
-  const jahr = get(data1, "apberuebersichtById.jahr", 0)
+  const jahr = get(data1, 'apberuebersichtById.jahr', 0)
   const { data: data2, loading: data2Loading, error: data2Error } = useQuery(
     query2,
     {
@@ -124,16 +124,16 @@ const ApberForYear = () => {
         projektId,
         jahr,
       },
-    }
+    },
   )
 
   const data = { ...data1, ...data2 }
-  const apberuebersicht = get(data1, "apberuebersichtById")
+  const apberuebersicht = get(data1, 'apberuebersichtById')
   const aps = sortBy(
-    get(data2, "allAps.nodes", []).filter(
-      ap => get(ap, "apbersByApId.totalCount", 0) > 0
+    get(data2, 'allAps.nodes', []).filter(
+      ap => get(ap, 'apbersByApId.totalCount', 0) > 0,
     ),
-    ap => get(ap, "aeEigenschaftenByArtId.artname")
+    ap => get(ap, 'aeEigenschaftenByArtId.artname'),
   )
 
   if (data1Loading || data2Loading) {
@@ -161,7 +161,7 @@ const ApberForYear = () => {
           </FirstPageTitle>
           <FirstPageSubTitle>{`Jahresbericht ${jahr}`}</FirstPageSubTitle>
           <FirstPageFnsLogo src={fnslogo} alt="FNS" width="350" />
-          <FirstPageDate>{format(new Date(), "dd.MM.yyyy")}</FirstPageDate>
+          <FirstPageDate>{format(new Date(), 'dd.MM.yyyy')}</FirstPageDate>
           <FirstPageBearbeiter>Karin Marti, topos</FirstPageBearbeiter>
           {!!apberuebersicht.bemerkungen && (
             <SecondPage>
