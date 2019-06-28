@@ -8,6 +8,9 @@ import TableRow from '@material-ui/core/TableRow'
 import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
+import minBy from 'lodash/minBy'
+import max from 'lodash/max'
+import sortBy from 'lodash/sortBy'
 
 import queryApsToChoose from './queryApsToChoose'
 import queryTpop from './queryTpop'
@@ -35,55 +38,91 @@ const StyledTable = styled(Table)`
   }
 `
 
-const fields = {
-  ap: {
-    label: 'AP',
-    value(tpop) {
-      return get(tpop, 'popByPopId.apByApId.label')
+const ektypRenamed = e => {
+  switch (e.typ) {
+    case 'Freiwilligen-Erfolgskontrolle':
+      return 'EKF'
+    case 'Zwischenbeurteilung':
+      return 'EK'
+    default:
+      return e.typ
+  }
+}
+
+const yearsFromTpops = tpops => {
+  const ekplans = tpops.flatMap(tpop => get(tpop, 'ekplansByTpopId.nodes'))
+  const kontrs = tpops.flatMap(tpop => get(tpop, 'tpopkontrsByTpopId.nodes'))
+  const firstEk = minBy([...ekplans, ...kontrs], 'jahr')
+  // ensure never before 1993
+  let firstYear = max([firstEk ? firstEk.jahr : 0, 1993])
+  const currentYear = new Date().getFullYear()
+  const lastYear = currentYear + 15
+  const years = []
+  while (firstYear <= lastYear) {
+    years.push(firstYear++)
+  }
+  return years
+}
+
+const rowsFromTpop = ({ tpop, years }) => {
+  const ekplans = get(tpop, 'ekplansByTpopId.nodes')
+  const kontrs = get(tpop, 'tpopkontrsByTpopId.nodes')
+
+  const fields = {
+    id: tpop.id,
+    ap: {
+      label: 'AP',
+      value: get(tpop, 'popByPopId.apByApId.label'),
+      sort: 1,
     },
-  },
-  popNr: {
-    label: 'Pop Nr',
-    value(tpop) {
-      return get(tpop, 'popByPopId.nr') || '-'
+    popNr: {
+      label: 'Pop Nr',
+      value: get(tpop, 'popByPopId.nr') || '-',
+      sort: 2,
     },
-  },
-  popName: {
-    label: 'Pop Name',
-    value(tpop) {
-      return get(tpop, 'popByPopId.name') || '-'
+    popName: {
+      label: 'Pop Name',
+      value: get(tpop, 'popByPopId.name') || '-',
+      sort: 3,
     },
-  },
-  tpopNr: {
-    label: 'TPop Nr',
-    value(tpop) {
-      return get(tpop, 'nr') || '-'
+    tpopNr: {
+      label: 'TPop Nr',
+      value: get(tpop, 'nr') || '-',
+      sort: 4,
     },
-  },
-  tpopGemeinde: {
-    label: 'TPop Gemeinde',
-    value(tpop) {
-      return get(tpop, 'gemeinde') || '-'
+    tpopGemeinde: {
+      label: 'TPop Gemeinde',
+      value: get(tpop, 'gemeinde') || '-',
+      sort: 5,
     },
-  },
-  tpopFlurname: {
-    label: 'TPop Flurname',
-    value(tpop) {
-      return get(tpop, 'flurname') || '-'
+    tpopFlurname: {
+      label: 'TPop Flurname',
+      value: get(tpop, 'flurname') || '-',
+      sort: 6,
     },
-  },
-  tpopStatus: {
-    label: 'TPop Status',
-    value(tpop) {
-      return get(tpop, 'popStatusWerteByStatus.text') || '-'
+    tpopStatus: {
+      label: 'TPop Status',
+      value: get(tpop, 'popStatusWerteByStatus.text') || '-',
+      sort: 7,
     },
-  },
-  tpopBekanntSeit: {
-    label: 'TPop bekannt seit',
-    value(tpop) {
-      return get(tpop, 'bekanntSeit') || '-'
+    tpopBekanntSeit: {
+      label: 'TPop bekannt seit',
+      value: get(tpop, 'bekanntSeit') || '-',
+      sort: 8,
     },
-  },
+  }
+  years.forEach(
+    year =>
+      (fields[year.toString()] = {
+        label: year,
+        value: {
+          plan: ekplans.filter(o => o.jahr === year),
+          ek: kontrs.filter(o => o.jahr === year),
+        },
+        sort: year,
+      }),
+  )
+  return fields
 }
 
 const EkPlan = () => {
@@ -113,14 +152,20 @@ const EkPlan = () => {
     },
   )
   const tpops = get(dataTpop, 'allTpops.nodes', [])
-
+  const years = yearsFromTpops(tpops)
+  const rows = tpops.map(tpop => rowsFromTpop({ tpop, years }))
+  const fields = rows.length
+    ? sortBy(Object.entries(rows[0]), row => row[1].sort)
+        .map(o => o[1].label)
+        // id has no keys
+        .filter(o => !!o)
+    : []
   const apsToChoose = get(dataApsToChoose, 'allAps.nodes', [])
   console.log('EkPlan', {
-    dataApsToChoose,
-    apsToChoose,
-    projId,
+    rows,
+    years,
     aps,
-    tpops,
+    fields,
   })
 
   return (
@@ -130,9 +175,9 @@ const EkPlan = () => {
         <StyledTable size="small">
           <TableHead>
             <TableRow>
-              <TableCell>Jahr</TableCell>
-              <TableCell>geplant</TableCell>
-              <TableCell>ausgeführt</TableCell>
+              {fields.map(f => (
+                <TableCell key={f}>{f}</TableCell>
+              ))}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -149,7 +194,22 @@ const EkPlan = () => {
                 <TableCell>{errorTpop.message}</TableCell>
               </TableRow>
             ) : (
-              <TableCell>TODO</TableCell>
+              rows.map(r => (
+                <TableRow key={r.id}>
+                  {sortBy(
+                    Object.values(r).filter(o => typeof o === 'object'),
+                    'sort',
+                  ).map(v => (
+                    <TableCell key={v.label}>
+                      {typeof v.value === 'object'
+                        ? v.value.ek.map(e => (
+                            <div key={e.id}>{ektypRenamed(e)}</div>
+                          ))
+                        : v.value}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
             )}
           </TableBody>
         </StyledTable>
