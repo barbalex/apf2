@@ -1,7 +1,6 @@
 import React from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
-
-import ErrorBoundary from '../../../shared/ErrorBoundary'
+import ErrorBoundary from 'react-error-boundary'
 
 // create objects outside render
 const insertData = {
