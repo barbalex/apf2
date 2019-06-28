@@ -336,7 +336,7 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
                   type="text"
                   component={TextField}
                 />
-                <StringToCopy text={row.id} label="id" />
+                {!showFilter && <StringToCopy text={row.id} label="id" />}
               </Form>
             )}
           </Formik>

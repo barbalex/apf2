@@ -407,7 +407,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                       component={TextField}
                       multiLine
                     />
-                    <StringToCopy text={row.id} label="id" />
+                    {!showFilter && <StringToCopy text={row.id} label="id" />}
                   </Form>
                 )}
               </Formik>
