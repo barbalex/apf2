@@ -18,10 +18,12 @@ import storeContext from '../../storeContext'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
+  width: 100%;
 `
 const StyledTable = styled(Table)`
   padding-left: 10px;
   padding-right: 10px;
+  height: calc(100vh - 64px - 23px);
   thead {
     background: rgba(128, 128, 128, 0.2);
   }
@@ -30,6 +32,10 @@ const StyledTable = styled(Table)`
     color: black;
     padding: 2px 4px;
     line-height: 1rem;
+  }
+  tbody {
+    height: calc(100vh - 64px - 23px - 52px);
+    overflow: auto !important;
   }
   tbody tr td {
     font-size: 0.75rem;
