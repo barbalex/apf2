@@ -64,6 +64,13 @@ describe('Teil-Population form', () => {
       .check()
       .should('have.value', '1')
   })*/
+  it('updates apberRelevantGrund', () => {
+    cy.get('[data-id=apberRelevantGrund_2] input')
+      .check()
+      .get('[data-id=apberRelevantGrund_3] input')
+      .check()
+      .should('have.value', '3')
+  })
   it.skip('updates gemeinde', () => {
     cy.clearSelect({
       selector: '[data-id=gemeinde]',
