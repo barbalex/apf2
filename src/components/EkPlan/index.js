@@ -10,6 +10,7 @@ import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
 
 import queryApsToChoose from './queryApsToChoose'
+import queryTpop from './queryTpop'
 import storeContext from '../../storeContext'
 
 const Container = styled.div`
@@ -34,6 +35,33 @@ const StyledTable = styled(Table)`
   }
 `
 
+const fields = {
+  ap: {
+    label: 'AP',
+    value(tpop) {
+      return get(tpop, 'popByPopId.apByApId.label')
+    },
+  },
+  popNr: {
+    label: 'Pop Nr',
+    value(tpop) {
+      return get(tpop, 'popByPopId.nr') || '-'
+    },
+  },
+  popName: {
+    label: 'Pop Name',
+    value(tpop) {
+      return get(tpop, 'popByPopId.name') || '-'
+    },
+  },
+  tpopNr: {
+    label: 'TPop Nr',
+    value(tpop) {
+      return get(tpop, 'nr') || '-'
+    },
+  },
+}
+
 const EkPlan = () => {
   const store = useContext(storeContext)
 
@@ -52,6 +80,15 @@ const EkPlan = () => {
       projId,
     },
   })
+  const { data: dataTpop, loading: loadingTpop, error: errorTpop } = useQuery(
+    queryTpop,
+    {
+      variables: {
+        aps,
+      },
+    },
+  )
+  const tpops = get(dataTpop, 'allTpops.nodes', [])
 
   const apsToChoose = get(dataApsToChoose, 'allAps.nodes', [])
   console.log('EkPlan', {
@@ -59,8 +96,7 @@ const EkPlan = () => {
     apsToChoose,
     projId,
     aps,
-    errorApsToChoose,
-    loadingApsToChoose,
+    tpops,
   })
 
   return (
@@ -80,18 +116,16 @@ const EkPlan = () => {
               <TableRow>
                 <TableCell>Bitte AP wählen</TableCell>
               </TableRow>
-            ) : loadingEk ? (
+            ) : loadingTpop ? (
               <TableRow>
                 <TableCell>Lade...</TableCell>
               </TableRow>
-            ) : errorEk ? (
+            ) : errorTpop ? (
               <TableRow>
-                <TableCell>errorEk.message</TableCell>
+                <TableCell>{errorTpop.message}</TableCell>
               </TableRow>
             ) : (
-              Object.keys(ekGroupedByYear)
-                .reverse()
-                .map(year => <EkYear key={year} data={ekGroupedByYear[year]} />)
+              <TableCell>TODO</TableCell>
             )}
           </TableBody>
         </StyledTable>

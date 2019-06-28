@@ -189,7 +189,7 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
                     </TableRow>
                   ) : errorEk ? (
                     <TableRow>
-                      <TableCell>errorEk.message</TableCell>
+                      <TableCell>{errorEk.message}</TableCell>
                     </TableRow>
                   ) : (
                     Object.keys(ekGroupedByYear)
