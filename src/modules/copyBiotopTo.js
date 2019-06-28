@@ -8,7 +8,7 @@ export default async ({ id, client, copyingBiotop }) => {
   const previousId = copyingBiotop.id
   const { data: dataFrom } = await client.query({
     query: gql`
-      query myquery($id: UUID!) {
+      query tpopkontrByIdForCopyBiotopToQuery($id: UUID!) {
         tpopkontrById(id: $id) {
           ...TpopfeldkontrFields
         }

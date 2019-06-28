@@ -7,7 +7,7 @@ export default async ({ popIdFrom, popIdTo, client, store }) => {
   // 1. fetch all tpops
   const { data } = await client.query({
     query: gql`
-      query myquery($popId: UUID!) {
+      query tpopsForCopyTpopsOfPopQuery($popId: UUID!) {
         allTpops(filter: { popId: { equalTo: $popId } }) {
           nodes {
             id

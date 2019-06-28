@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query MyQuery($name: String!) {
+  query UsermessagesQuery($name: String!) {
     allMessages(filter: { active: { equalTo: true } }, orderBy: TIME_ASC) {
       nodes {
         id
