@@ -48,6 +48,7 @@ const Container = styled.div`
 `
 const InnerContainer = styled.div`
   padding: 10px;
+  overflow-y: auto !important;
 `
 const GridContainer = styled.div`
   display: grid;
