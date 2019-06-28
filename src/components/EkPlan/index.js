@@ -67,6 +67,34 @@ const EkPlan = () => {
     <ErrorBoundary>
       <Container>
         <div>Hier ist was im Aufbau</div>
+        <StyledTable size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>Jahr</TableCell>
+              <TableCell>geplant</TableCell>
+              <TableCell>ausgeführt</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {aps.length === 0 ? (
+              <TableRow>
+                <TableCell>Bitte AP wählen</TableCell>
+              </TableRow>
+            ) : loadingEk ? (
+              <TableRow>
+                <TableCell>Lade...</TableCell>
+              </TableRow>
+            ) : errorEk ? (
+              <TableRow>
+                <TableCell>errorEk.message</TableCell>
+              </TableRow>
+            ) : (
+              Object.keys(ekGroupedByYear)
+                .reverse()
+                .map(year => <EkYear key={year} data={ekGroupedByYear[year]} />)
+            )}
+          </TableBody>
+        </StyledTable>
       </Container>
     </ErrorBoundary>
   )
