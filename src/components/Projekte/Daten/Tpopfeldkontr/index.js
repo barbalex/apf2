@@ -206,7 +206,8 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
         }
         if (changedField === 'datum') {
           // value can be null so check if substring method exists
-          variables.jahr = value.substring ? +value.substring(0, 4) : value
+          variables.jahr =
+            value && value.substring ? +value.substring(0, 4) : value
         }
         try {
           await client.mutate({
@@ -430,6 +431,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                     />
                     <Section>Vegetation</Section>
                     <Field
+                      data-id="lrDelarze"
                       name="lrDelarze"
                       label="Lebensraum nach Delarze"
                       component={Select}

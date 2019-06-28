@@ -307,7 +307,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
         // this broke 13.2.2019
         // value2 = !!value ? +format(new Date(value), 'yyyy') : null
         // value can be null so check if substring method exists
-        value2 = value.substring ? +value.substring(0, 4) : value
+        value2 = value&& value.substring ? +value.substring(0, 4) : value
       }
       if (field2) variables[field2] = value2
       try {

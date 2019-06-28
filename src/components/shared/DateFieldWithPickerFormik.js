@@ -28,9 +28,7 @@ const DateFieldWithPicker = ({ field, form, label }) => {
   const { errors, handleSubmit } = form
   const error = errors[name]
 
-  const [stateValue, setStateValue] = useState(
-    isValid(propsValue) ? propsValue : null,
-  )
+  const [stateValue, setStateValue] = useState(propsValue || null)
 
   const onOwnChange = useCallback(
     valuePassed => {

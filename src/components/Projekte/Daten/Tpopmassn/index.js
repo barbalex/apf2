@@ -155,7 +155,8 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
           variables.datum = null
         }
         if (changedField === 'datum') {
-          variables.jahr = value.substring ? +value.substring(0, 4) : value
+          variables.jahr =
+            value && value.substring ? +value.substring(0, 4) : value
         }
         try {
           await client.mutate({

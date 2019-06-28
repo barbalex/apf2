@@ -4,24 +4,23 @@ describe('Teil-Population Feldkontrolle Biotop form', () => {
   before(() => {
     cy.visit(
       '/Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Aktionspläne/6c52d174-4f62-11e7-aebe-67a303eb0640/Populationen/70d2b98f-4f62-11e7-aebe-d3b09a4611dd/Teil-Populationen/76c7fe44-4f62-11e7-aebe-6b56ab796555/Feld-Kontrollen/68364eb3-8be6-11e7-a848-0b73d4b76fcd',
-    )
+    ).wait(1000)
   })
-  it('opens Biotop', () => {
-    cy.wait(5000)
-      .get('[data-id=biotop]')
+  it.skip('opens Biotop', () => {
+    cy.get('[data-id=biotop]')
       .click()
       .get('[data-id=lrDelarze]')
       .find('.css-10nd86i input:text')
       .focus()
   })
-  it('updates lrDelarze', () => {
+  it.skip('updates lrDelarze', () => {
     cy.setSelectOption({
       selector: '[data-id=lrDelarze]',
       option: '1: Gewässer',
       value: '1: Gewässer',
     })
   })
-  it('updates lrUmgebungDelarze', () => {
+  it.skip('updates lrUmgebungDelarze', () => {
     cy.setSelectOption({
       selector: '[data-id=lrUmgebungDelarze]',
       option: '1: Gewässer',

@@ -15,8 +15,8 @@ describe('AppBar', () => {
     */
   })
   it('logs out correctly', () => {
-    cy.get('.appbar-more').click()
-    cy.get('.appbar-more-logout').click()
+    cy.get('[data-id=appbar-more]').click()
+    cy.get('[data-id=appbar-more-logout]').click()
     cy.get('#name').should('exist')
   })
   it('logs back in correctly', () => {

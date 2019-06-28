@@ -99,9 +99,10 @@ const SharedSelect = ({
   const selectValue = optionsToUse.find(o => o.value === value)
 
   return (
-    <Container data-id={name}>
+    <Container>
       {label && <Label labelsize={labelSize}>{label}</Label>}
       <StyledSelect
+        data-id={name}
         id={name}
         name={name}
         value={selectValue}

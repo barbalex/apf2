@@ -79,15 +79,15 @@ const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
     <Container>
       <MehrButton
         aria-label="Mehr"
-        aria-owns={anchorEl ? 'long-menu' : null}
+        aria-owns={anchorEl ? 'appbar-more-menu' : null}
         aria-haspopup="true"
         onClick={onClickMehrButton}
-        className="appbar-more"
+        data-id="appbar-more"
       >
         Mehr
       </MehrButton>
       <Menu
-        id="long-menu"
+        id="appbar-more-menu"
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={onClose}
@@ -112,7 +112,7 @@ const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
         <MenuItem onClick={watchVideos}>Video-Anleitungen</MenuItem>
         <MenuItem
           onClick={onClickLogout}
-          className="appbar-more-logout"
+          data-id="appbar-more-logout"
         >{`${user.name} abmelden`}</MenuItem>
         <Version>Version: 1.9.1 vom 12.06.2019</Version>
       </Menu>
