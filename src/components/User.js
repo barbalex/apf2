@@ -16,8 +16,8 @@ import get from 'lodash/get'
 import gql from 'graphql-tag'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from 'react-apollo-hooks'
+import ErrorBoundary from 'react-error-boundary'
 
-import ErrorBoundary from './shared/ErrorBoundary'
 import idbContext from '../idbContext'
 import storeContext from '../storeContext'
 

@@ -8,10 +8,10 @@ import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import { Formik, Form, Field } from 'formik'
+import ErrorBoundary from 'react-error-boundary'
 
 //import storeContext from '../../../storeContext'
 import TextField from '../TextFieldFormik'
-import ErrorBoundary from '../ErrorBoundary'
 import {
   idealbiotopFile as idealbiotopFileFragment,
   tpopkontrFile as tpopkontrFileFragment,

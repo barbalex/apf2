@@ -4,10 +4,10 @@ import Switch from '@material-ui/core/Switch'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from 'react-apollo-hooks'
+import ErrorBoundary from 'react-error-boundary'
 
 import apById from './apById'
 import Label from '../../../shared/Label'
-import ErrorBoundary from '../../../shared/ErrorBoundarySingleChild'
 import storeContext from '../../../../storeContext'
 
 const NurApDiv = styled.div`

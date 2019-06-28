@@ -5,9 +5,9 @@ import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from 'react-apollo-hooks'
+import ErrorBoundary from 'react-error-boundary'
 
 import tables from '../../../../modules/tables'
-import ErrorBoundary from '../../../shared/ErrorBoundary'
 import deleteDataset from './delete'
 import storeContext from '../../../../storeContext'
 

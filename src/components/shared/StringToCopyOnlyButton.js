@@ -3,8 +3,7 @@ import CopyToClipboard from 'react-copy-to-clipboard'
 import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-
-import ErrorBoundary from './ErrorBoundary'
+import ErrorBoundary from 'react-error-boundary'
 
 const Container = styled.div`
   padding-top: 10px;

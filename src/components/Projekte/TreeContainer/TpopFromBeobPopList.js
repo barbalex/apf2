@@ -9,8 +9,8 @@ import ListItem from '@material-ui/core/ListItem'
 import { observer } from 'mobx-react-lite'
 import gql from 'graphql-tag'
 import get from 'lodash/get'
+import ErrorBoundary from 'react-error-boundary'
 
-import ErrorBoundary from '../../shared/ErrorBoundarySingleChild'
 import storeContext from '../../../storeContext'
 import createNewTpopFromBeob from '../../../modules/createNewTpopFromBeob'
 
