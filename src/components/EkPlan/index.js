@@ -25,12 +25,12 @@ const StyledTable = styled(Table)`
   padding-right: 10px;
   thead {
     background: rgba(128, 128, 128, 0.2);
-    height: 52px;
+    height: 40px;
   }
   thead > tr {
     position: relative;
     display: block;
-    height: 52px;
+    height: 40px;
   }
   thead tr th {
     font-size: 0.75rem;
@@ -40,7 +40,7 @@ const StyledTable = styled(Table)`
   }
   tbody {
     display: block;
-    height: calc(100vh - 64px - 23px - 52px);
+    height: calc(100vh - 64px - 23px - 40px);
     width: 100vw;
     overflow: auto !important;
   }
