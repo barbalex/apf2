@@ -7,9 +7,9 @@ import React from 'react'
 import Helmet from 'react-helmet'
 import { useStaticQuery, graphql } from 'gatsby'
 import styled from 'styled-components'
+import ErrorBoundary from 'react-error-boundary'
 
 import AppBar from './AppBar'
-import ErrorBoundary from '../shared/ErrorBoundary'
 //import Fallback from '../shared/Fallback'
 
 const Container = styled.div`

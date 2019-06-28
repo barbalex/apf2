@@ -4,9 +4,9 @@ import get from 'lodash/get'
 import { useQuery } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 import ReactMarkdown from 'react-markdown'
+import ErrorBoundary from 'react-error-boundary'
 
 import FormTitle from '../../../shared/FormTitle'
-import ErrorBoundary from '../../../shared/ErrorBoundary'
 import storeContext from '../../../../storeContext'
 import { currentIssue as currentIssueFragment } from '../../../shared/fragments'
 

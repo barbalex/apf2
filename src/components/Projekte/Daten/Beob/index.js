@@ -3,10 +3,10 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from 'react-apollo-hooks'
+import ErrorBoundary from 'react-error-boundary'
 
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import constants from '../../../../modules/constants'
-import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
 import storeContext from '../../../../storeContext'
 

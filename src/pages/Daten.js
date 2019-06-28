@@ -1,8 +1,8 @@
 import React, { useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+import ErrorBoundary from 'react-error-boundary'
 
-import ErrorBoundary from '../components/shared/ErrorBoundary'
 import Layout from '../components/Layout'
 import storeContext from '../storeContext'
 import idbContext from '../idbContext'
@@ -18,8 +18,6 @@ import EkPlan from '../components/EkPlan'
 import initiateDataFromUrl from '../modules/initiateDataFromUrl'
 
 const Container = styled.div`
-  height: calc(100vh - 64px);
-  margin-top: 64px;
   background-color: #fffde7;
   @media print {
     margin-top: 0;
@@ -59,6 +57,7 @@ const DatenPage = ({ location }) => {
       ? 'ekf'
       : 'projekte'
 
+  // Error boundary made appbar appear twice!!!???
   return (
     <ErrorBoundary>
       <Layout>

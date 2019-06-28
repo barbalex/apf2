@@ -11,8 +11,8 @@ import format from 'date-fns/format'
 import TextField from '@material-ui/core/TextField'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from 'react-apollo-hooks'
+import ErrorBoundary from 'react-error-boundary'
 
-import ErrorBoundary from '../shared/ErrorBoundary'
 import undelete from './undelete'
 import storeContext from '../../storeContext'
 

@@ -5,10 +5,10 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import ErrorBoundary from 'react-error-boundary'
 
 import FormTitle from '../../../shared/FormTitle'
 import FilterTitle from '../../../shared/FilterTitle'
-import ErrorBoundary from '../../../shared/ErrorBoundary'
 import query from './query'
 import queryTpops from './queryTpops'
 import updateTpopByIdGql from './updateTpopById'
@@ -21,7 +21,8 @@ import Ek from './Ek'
 import Tpop from './Tpop'
 
 const Container = styled.div`
-  height: calc(100vh - 64px);
+  height: ${props =>
+    props.showfilter ? 'calc(100vh - 145px)' : 'calc(100vh - 64px)'};
   display: flex;
   flex-direction: column;
   background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};

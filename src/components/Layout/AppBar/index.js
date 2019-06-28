@@ -4,8 +4,8 @@ import Toolbar from '@material-ui/core/Toolbar'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { Location } from '@reach/router'
+import ErrorBoundary from 'react-error-boundary'
 
-import ErrorBoundary from '../../shared/ErrorBoundary'
 import Home from './Home'
 import Doku from './Doku'
 import Projekte from './Projekte'
@@ -32,7 +32,7 @@ const MyAppBar = () => {
 
         return (
           <ErrorBoundary>
-            <StyledAppBar position="fixed">
+            <StyledAppBar position="static">
               <StyledToolbar>
                 {isHome ? <Home /> : isProjekte ? <Projekte /> : <Doku />}
               </StyledToolbar>

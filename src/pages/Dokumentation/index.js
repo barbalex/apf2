@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
+import ErrorBoundary from 'react-error-boundary'
 
 import Layout from '../../components/Layout'
-import ErrorBoundary from '../../components/shared/ErrorBoundary'
 
 const Container = styled.div`
   margin-top: 64px;

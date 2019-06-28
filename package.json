@@ -100,6 +100,7 @@
     "react-contextmenu": "2.11.0",
     "react-copy-to-clipboard": "5.0.1",
     "react-dom": "16.8.6",
+    "react-error-boundary": "^1.2.5",
     "react-helmet": "5.2.1",
     "react-icons": "3.7.0",
     "react-image-lightbox": "5.1.0",
