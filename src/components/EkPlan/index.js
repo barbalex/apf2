@@ -23,7 +23,6 @@ const Container = styled.div`
 const StyledTable = styled(Table)`
   padding-left: 10px;
   padding-right: 10px;
-  height: calc(100vh - 64px - 23px);
   thead {
     background: rgba(128, 128, 128, 0.2);
     height: 52px;
@@ -42,6 +41,7 @@ const StyledTable = styled(Table)`
   tbody {
     display: block;
     height: calc(100vh - 64px - 23px - 52px);
+    width: 100vw;
     overflow: auto !important;
   }
   tbody tr td {
@@ -59,6 +59,11 @@ const StyledTable = styled(Table)`
     padding-left: 10px;
   }
 `
+const StyledTableCell = styled(TableCell)`
+  width: ${props => `${props.width}px`};
+  min-width: ${props => `${props.width}px`};
+  max-width: ${props => `${props.width}px`};
+`
 const StyledTableBody = styled(TableBody)``
 
 const ektypRenamed = e => {
@@ -67,6 +72,8 @@ const ektypRenamed = e => {
       return 'EKF'
     case 'Zwischenbeurteilung':
       return 'EK'
+    case 'Ausgangszustand':
+      return 'AZ'
     default:
       return e.typ
   }
@@ -103,7 +110,7 @@ const rowsFromTpop = ({ tpop, years }) => {
       label: 'Pop Nr',
       value: get(tpop, 'popByPopId.nr') || '-',
       sort: 2,
-      width: 30,
+      width: 40,
     },
     popName: {
       label: 'Pop Name',
@@ -112,34 +119,34 @@ const rowsFromTpop = ({ tpop, years }) => {
       width: 200,
     },
     tpopNr: {
-      label: 'TPop Nr',
+      label: 'Nr',
       value: get(tpop, 'nr') || '-',
       sort: 4,
-      width: 30,
+      width: 50,
     },
     tpopGemeinde: {
-      label: 'TPop Gemeinde',
+      label: 'Gemeinde',
       value: get(tpop, 'gemeinde') || '-',
       sort: 5,
-      width: 200,
+      width: 130,
     },
     tpopFlurname: {
-      label: 'TPop Flurname',
+      label: 'Flurname',
       value: get(tpop, 'flurname') || '-',
       sort: 6,
       width: 200,
     },
     tpopStatus: {
-      label: 'TPop Status',
+      label: 'Status',
       value: get(tpop, 'popStatusWerteByStatus.text') || '-',
       sort: 7,
       width: 150,
     },
     tpopBekanntSeit: {
-      label: 'TPop bekannt seit',
+      label: 'bekannt seit',
       value: get(tpop, 'bekanntSeit') || '-',
       sort: 8,
-      width: 40,
+      width: 60,
     },
   }
   years.forEach(
@@ -191,11 +198,9 @@ const EkPlan = () => {
   const years = yearsFromTpops(tpops)
   const rows = tpops.map(tpop => rowsFromTpop({ tpop, years }))
   const fields = rows.length
-    ? sortBy(Object.entries(rows[0]), row => row[1].sort)
-        .map(o => o[1].label)
-        // id has no keys
-        .filter(o => !!o)
+    ? sortBy(Object.values(rows[0]).filter(o => typeof o === 'object'), 'sort')
     : []
+
   const apsToChoose = get(dataApsToChoose, 'allAps.nodes', [])
   console.log('EkPlan', {
     tpops,
@@ -213,7 +218,9 @@ const EkPlan = () => {
           <TableHead>
             <TableRow>
               {fields.map(f => (
-                <TableCell key={f}>{f}</TableCell>
+                <StyledTableCell key={f.label} width={f.width}>
+                  {f.label}
+                </StyledTableCell>
               ))}
             </TableRow>
           </TableHead>
@@ -237,13 +244,13 @@ const EkPlan = () => {
                     Object.values(r).filter(o => typeof o === 'object'),
                     'sort',
                   ).map(v => (
-                    <TableCell key={v.label}>
+                    <StyledTableCell key={v.label} width={v.width}>
                       {typeof v.value === 'object'
                         ? v.value.ek.map(e => (
                             <div key={e.id}>{ektypRenamed(e)}</div>
                           ))
                         : v.value}
-                    </TableCell>
+                    </StyledTableCell>
                   ))}
                 </TableRow>
               ))
