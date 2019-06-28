@@ -158,7 +158,7 @@ const rowsFromTpop = ({ tpop, years }) => {
           ek: kontrs.filter(o => o.jahr === year),
         },
         sort: year,
-        width: 50,
+        width: 37,
       }),
   )
   return fields
