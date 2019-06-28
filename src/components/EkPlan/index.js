@@ -26,6 +26,12 @@ const StyledTable = styled(Table)`
   height: calc(100vh - 64px - 23px);
   thead {
     background: rgba(128, 128, 128, 0.2);
+    height: 52px;
+  }
+  thead > tr {
+    position: relative;
+    display: block;
+    height: 52px;
   }
   thead tr th {
     font-size: 0.75rem;
@@ -34,6 +40,7 @@ const StyledTable = styled(Table)`
     line-height: 1rem;
   }
   tbody {
+    display: block;
     height: calc(100vh - 64px - 23px - 52px);
     overflow: auto !important;
   }
@@ -90,41 +97,49 @@ const rowsFromTpop = ({ tpop, years }) => {
       label: 'AP',
       value: get(tpop, 'popByPopId.apByApId.label'),
       sort: 1,
+      width: 200,
     },
     popNr: {
       label: 'Pop Nr',
       value: get(tpop, 'popByPopId.nr') || '-',
       sort: 2,
+      width: 30,
     },
     popName: {
       label: 'Pop Name',
       value: get(tpop, 'popByPopId.name') || '-',
       sort: 3,
+      width: 200,
     },
     tpopNr: {
       label: 'TPop Nr',
       value: get(tpop, 'nr') || '-',
       sort: 4,
+      width: 30,
     },
     tpopGemeinde: {
       label: 'TPop Gemeinde',
       value: get(tpop, 'gemeinde') || '-',
       sort: 5,
+      width: 200,
     },
     tpopFlurname: {
       label: 'TPop Flurname',
       value: get(tpop, 'flurname') || '-',
       sort: 6,
+      width: 200,
     },
     tpopStatus: {
       label: 'TPop Status',
       value: get(tpop, 'popStatusWerteByStatus.text') || '-',
       sort: 7,
+      width: 150,
     },
     tpopBekanntSeit: {
       label: 'TPop bekannt seit',
       value: get(tpop, 'bekanntSeit') || '-',
       sort: 8,
+      width: 40,
     },
   }
   years.forEach(
@@ -136,6 +151,7 @@ const rowsFromTpop = ({ tpop, years }) => {
           ek: kontrs.filter(o => o.jahr === year),
         },
         sort: year,
+        width: 50,
       }),
   )
   return fields
