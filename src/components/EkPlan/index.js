@@ -60,6 +60,30 @@ const fields = {
       return get(tpop, 'nr') || '-'
     },
   },
+  tpopGemeinde: {
+    label: 'TPop Gemeinde',
+    value(tpop) {
+      return get(tpop, 'gemeinde') || '-'
+    },
+  },
+  tpopFlurname: {
+    label: 'TPop Flurname',
+    value(tpop) {
+      return get(tpop, 'flurname') || '-'
+    },
+  },
+  tpopStatus: {
+    label: 'TPop Status',
+    value(tpop) {
+      return get(tpop, 'popStatusWerteByStatus.text') || '-'
+    },
+  },
+  tpopBekanntSeit: {
+    label: 'TPop bekannt seit',
+    value(tpop) {
+      return get(tpop, 'bekanntSeit') || '-'
+    },
+  },
 }
 
 const EkPlan = () => {
