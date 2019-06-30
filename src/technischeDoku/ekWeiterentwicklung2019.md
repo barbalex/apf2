@@ -65,11 +65,11 @@ Das soll mit folgenden Massnahmen umgesetzt werden:<br/><br/>
 
 #### Neues Formular EK-Planung
 Das Formular, um Kontrollen zu planen.
-- Es besteht aus einer Liste von Teil-Populationen...
+- :white_check_mark: Es besteht aus einer Liste von Teil-Populationen...
 - ...aus einem oder mehreren Aktionsplänen (Benutzer wählt)
-- Sortiert nach: AP, Pop-Nr, TPop-Nr
+- :white_check_mark: Sortiert nach: AP, Pop-Nr, TPop-Nr
 - Ein Symbol, um die Teil-Population in einem neuen Fenster zu öffnen
-- Felder aus AP, Pop und Tpop (nicht bearbeitbar). Namentlich:
+- :white_check_mark: Felder aus AP, Pop und Tpop (nicht bearbeitbar). Namentlich:
   - Artname
   - Pop Nr
   - Pop Name
@@ -81,7 +81,7 @@ Das Formular, um Kontrollen zu planen.
   - TPop Bekannt seit
 - Diese Felder können ein- und ausgeblendet werden
 - Abrechnungstyp und EK-Frequenz können bearbeitet werden
-- Für den Bereich zwischen 1996 und 20 Jahre in die Zukunft werden für jedes Jahr Spalten generiert
+- :white_check_mark: Für den Bereich zwischen der ersten Kontrolle und 15 Jahre in die Zukunft werden für jedes Jahr Spalten generiert
 - Der Jahres-Spalten-Bereich kann horizontal gescrollt werden, wenn der Platz für die Anzeige aller nicht ausreicht
 - Eine Jahres-Spalte zeigt folgende Informationen an:
   - EK geplant, bearbeitbar
