@@ -34,17 +34,17 @@ const CardContainer = styled.div`
   @media (min-width: 700px) {
     grid-template-columns: 1fr 1fr;
     grid-column-gap: 30px;
-    grid-row-gap: 40px;
+    grid-row-gap: 30px;
   }
   @media (min-width: 1200px) {
     grid-template-columns: 1fr 1fr 1fr;
     grid-column-gap: 40px;
-    grid-row-gap: 80px;
+    grid-row-gap: 60px;
   }
   @media (min-width: 1700px) {
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-column-gap: 65px;
-    grid-row-gap: 130px;
+    grid-row-gap: 90px;
   }
   p {
     margin-bottom: 10px !important;
