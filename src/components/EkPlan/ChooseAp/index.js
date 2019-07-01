@@ -121,6 +121,10 @@ const EkPlan = ({ apValues, addAp }) => {
     option && option.value && addAp(option)
   }
 
+  const label = apValues.length
+    ? 'Aktionsplan hinzufügen'
+    : 'Aktionsplan wählen'
+
   console.log('EkPlan', {
     apValues,
   })
@@ -132,14 +136,13 @@ const EkPlan = ({ apValues, addAp }) => {
   return (
     <ErrorBoundary>
       <SelectContainer>
-        <Label>Art wählen</Label>
+        <Label>{label}</Label>
         <StyledSelect
           defaultOptions
           onChange={onChange}
           value={value}
           hideSelectedOptions
-          placeholder=""
-          isClearable
+          placeholder="Bitte Tippen für Vorschläge"
           isSearchable
           // remove as can't select without typing
           nocaret

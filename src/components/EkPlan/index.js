@@ -22,6 +22,9 @@ const Container = styled.div`
   height: calc(100vh - 64px);
   width: 100%;
 `
+const Header = styled.div`
+  padding: 5px 10px;
+`
 const StyledTable = styled(Table)`
   padding-left: 10px;
   padding-right: 10px;
@@ -67,6 +70,12 @@ const StyledTableCell = styled(TableCell)`
   max-width: ${props => `${props.width}px`};
 `
 const StyledTableBody = styled(TableBody)``
+const ApTitle = styled.h5`
+  margin: 4px 0;
+`
+const TpopTitle = styled.h5`
+  margin: 0 10px 4px 10px;
+`
 
 const ektypRenamed = e => {
   switch (e.typ) {
@@ -169,9 +178,7 @@ const rowsFromTpop = ({ tpop, years }) => {
 const EkPlan = () => {
   //const store = useContext(storeContext)
 
-  const [aps, setAps] = useState([
-    { value: '6c52d174-4f62-11e7-aebe-67a303eb0640', label: 'Abies alba' },
-  ])
+  const [aps, setAps] = useState([])
   const apValues = useMemo(() => aps.map(a => a.value), [aps])
   const addAp = useCallback(
     ap => {
@@ -216,52 +223,48 @@ const EkPlan = () => {
   return (
     <ErrorBoundary>
       <Container>
-        <div>Hier ist was im Aufbau</div>
-        <ChooseAp addAp={addAp} apValues={apValues} />
-        <ApList aps={aps} removeAp={removeAp} />
-        <StyledTable size="small">
-          <TableHead>
-            <TableRow>
-              {fields.map(f => (
-                <StyledTableCell key={f.label} width={f.width}>
-                  {f.label}
-                </StyledTableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <StyledTableBody>
-            {aps.length === 0 ? (
-              <TableRow>
-                <TableCell>Bitte AP wählen</TableCell>
-              </TableRow>
-            ) : loadingTpop ? (
-              <TableRow>
-                <TableCell>Lade...</TableCell>
-              </TableRow>
-            ) : errorTpop ? (
-              <TableRow>
-                <TableCell>{errorTpop.message}</TableCell>
-              </TableRow>
-            ) : (
-              rows.map(r => (
-                <TableRow key={r.id}>
-                  {sortBy(
-                    Object.values(r).filter(o => typeof o === 'object'),
-                    'sort',
-                  ).map(v => (
-                    <StyledTableCell key={v.label} width={v.width}>
-                      {typeof v.value === 'object'
-                        ? v.value.ek.map(e => (
-                            <div key={e.id}>{ektypRenamed(e)}</div>
-                          ))
-                        : v.value}
+        <Header>
+          <div>Das ist eine Baustelle - bitte noch nicht benutzen</div>
+          <ApTitle>Aktionspläne</ApTitle>
+          <ApList aps={aps} removeAp={removeAp} />
+          <ChooseAp addAp={addAp} apValues={apValues} />
+          {aps.length > 0 && loadingTpop && 'Lade...'}
+          {errorTpop && errorTpop.message}
+        </Header>
+        {rows.length > 0 && (
+          <>
+            <TpopTitle>{`Teilpopulationen (${rows.length})`}</TpopTitle>
+            <StyledTable size="small">
+              <TableHead>
+                <TableRow>
+                  {fields.map(f => (
+                    <StyledTableCell key={f.label} width={f.width}>
+                      {f.label}
                     </StyledTableCell>
                   ))}
                 </TableRow>
-              ))
-            )}
-          </StyledTableBody>
-        </StyledTable>
+              </TableHead>
+              <StyledTableBody>
+                {rows.map(r => (
+                  <TableRow key={r.id}>
+                    {sortBy(
+                      Object.values(r).filter(o => typeof o === 'object'),
+                      'sort',
+                    ).map(v => (
+                      <StyledTableCell key={v.label} width={v.width}>
+                        {typeof v.value === 'object'
+                          ? v.value.ek.map(e => (
+                              <div key={e.id}>{ektypRenamed(e)}</div>
+                            ))
+                          : v.value}
+                      </StyledTableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </StyledTableBody>
+            </StyledTable>
+          </>
+        )}
       </Container>
     </ErrorBoundary>
   )

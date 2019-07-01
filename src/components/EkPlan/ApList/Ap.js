@@ -26,7 +26,11 @@ const Ap = ({ ap, removeAp }) => {
   return (
     <Container>
       <ApDiv>{ap.label}</ApDiv>
-      <DelIcon title="löschen" aria-label="löschen" onClick={onClickDelete}>
+      <DelIcon
+        title={`${ap.label} entfernen`}
+        aria-label={`${ap.label} entfernen`}
+        onClick={onClickDelete}
+      >
         <FaTimes />
       </DelIcon>
     </Container>
