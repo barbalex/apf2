@@ -12,7 +12,7 @@ const ApList = ({ aps, removeAp }) => {
   return (
     <Container>
       {aps.map(ap => (
-        <Ap ap={ap} removeAp={removeAp} />
+        <Ap key={ap.value} ap={ap} removeAp={removeAp} />
       ))}
     </Container>
   )
