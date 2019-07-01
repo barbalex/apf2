@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 /**
- * load not on server
+ * do not load Karte on server
+ * because leaflet calls windows
  * see: https://github.com/PaulLeCam/react-leaflet/issues/45#issuecomment-257712370
  */
 export default ({ treeName }) => {
   const [Karte, setKarte] = useState(null)
-  useEffect(() => {
-    setKarte(require('./Karte'))
-  }, [])
 
   if (typeof window === 'undefined') return null
 
+  import('./Karte').then(module => setKarte(module.default))
+
+  if (!Karte) return null
   return <Karte treeName={treeName} />
 }
