@@ -33,6 +33,7 @@ export default gql`
           name
           apByApId {
             id
+            projId
             label
           }
         }

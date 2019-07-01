@@ -94,7 +94,6 @@ const EkPlan = ({ apValues, addAp }) => {
             projId: { equalTo: projId },
           }
       let result
-      console.log('ChooseAp, loadOptions', { inputValue, filter })
       try {
         result = await client.query({
           query: queryApsToChoose,
@@ -103,31 +102,22 @@ const EkPlan = ({ apValues, addAp }) => {
           },
         })
       } catch (err) {
-        console.log('ChooseAp, loadOptions', { err })
         error = err
       }
-      console.log('ChooseAp, loadOptions', { result })
       data = result.data
-      console.log('ChooseAp, loadOptions', { data })
       const options = get(data, 'allAps.nodes', [])
-      console.log('ChooseAp, loadOptions', { options })
       cb(options)
     },
     [apValues, projId],
   )
 
   const onChange = option => {
-    console.log('ChooseAp, onChange', { option })
     option && option.value && addAp(option)
   }
 
   const label = apValues.length
     ? 'Aktionsplan hinzufügen'
     : 'Aktionsplan wählen'
-
-  console.log('EkPlan', {
-    apValues,
-  })
   const value = {
     value: '',
     label: '',

@@ -5,6 +5,7 @@ import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
+import { FaExternalLinkAlt } from 'react-icons/fa'
 import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
@@ -17,6 +18,7 @@ import queryTpop from './queryTpop'
 //import storeContext from '../../storeContext'
 import ChooseAp from './ChooseAp'
 import ApList from './ApList'
+import appBaseUrl from '../../modules/appBaseUrl'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -82,6 +84,15 @@ const ApTitle = styled.h5`
 `
 const TpopTitle = styled.h5`
   margin: 0 10px 4px 10px;
+`
+const OutsideLink = styled.div`
+  margin-left: 8px;
+  margin-bottom: -2px;
+  cursor: pointer;
+  svg {
+    font-size: 0.9em;
+    color: rgba(0, 0, 0, 0.77);
+  }
 `
 
 const ektypRenamed = e => {
@@ -166,6 +177,16 @@ const rowsFromTpop = ({ tpop, years }) => {
       sort: 8,
       width: 60,
     },
+    tpopLink: {
+      label: 'Link',
+      value: `${appBaseUrl()}Daten/Projekte/${
+        tpop.popByPopId.apByApId.projId
+      }/Aktionspläne/${tpop.popByPopId.apByApId.id}/Populationen/${
+        tpop.popByPopId.id
+      }/Teil-Populationen/${tpop.id}`,
+      sort: 9,
+      width: 37,
+    },
   }
   years.forEach(
     year =>
@@ -184,7 +205,6 @@ const rowsFromTpop = ({ tpop, years }) => {
 
 const EkPlan = () => {
   //const store = useContext(storeContext)
-
   const [aps, setAps] = useState([])
   const apValues = useMemo(() => aps.map(a => a.value), [aps])
   const addAp = useCallback(
@@ -219,14 +239,6 @@ const EkPlan = () => {
     ? sortBy(Object.values(rows[0]).filter(o => typeof o === 'object'), 'sort')
     : []
 
-  console.log('EkPlan', {
-    tpops,
-    rows,
-    years,
-    aps,
-    fields,
-  })
-
   return (
     <ErrorBoundary>
       <Container>
@@ -259,11 +271,23 @@ const EkPlan = () => {
                       'sort',
                     ).map(v => (
                       <StyledTableCell key={v.label} width={v.width}>
-                        {typeof v.value === 'object'
-                          ? v.value.ek.map(e => (
-                              <div key={e.id}>{ektypRenamed(e)}</div>
-                            ))
-                          : v.value}
+                        {typeof v.value === 'object' ? (
+                          v.value.ek.map(e => (
+                            <div key={e.id}>{ektypRenamed(e)}</div>
+                          ))
+                        ) : v.label === 'Link' ? (
+                          <OutsideLink
+                            onClick={() => {
+                              typeof window !== 'undefined' &&
+                                window.open(v.value)
+                            }}
+                            title="in neuem Tab öffnen"
+                          >
+                            <FaExternalLinkAlt />
+                          </OutsideLink>
+                        ) : (
+                          v.value
+                        )}
                       </StyledTableCell>
                     ))}
                   </StyledTableRow>

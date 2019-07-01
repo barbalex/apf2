@@ -68,7 +68,7 @@ Das Formular, um Kontrollen zu planen.
 - :white_check_mark: Es besteht aus einer Liste von Teil-Populationen...
 - :white_check_mark: ...aus einem oder mehreren Aktionsplänen (Benutzer wählt)
 - :white_check_mark: Sortiert nach: AP, Pop-Nr, TPop-Nr
-- Ein Symbol, um die Teil-Population in einem neuen Fenster zu öffnen
+- :white_check_mark: Ein Symbol, um die Teil-Population in einem neuen Fenster zu öffnen
 - :white_check_mark: Felder aus AP, Pop und Tpop (nicht bearbeitbar). Namentlich:
   - Artname
   - Pop Nr

@@ -8,14 +8,12 @@ const Container = styled.div`
   flex-direction: column;
 `
 
-const ApList = ({ aps, removeAp }) => {
-  return (
-    <Container>
-      {aps.map(ap => (
-        <Ap key={ap.value} ap={ap} removeAp={removeAp} />
-      ))}
-    </Container>
-  )
-}
+const ApList = ({ aps, removeAp }) => (
+  <Container>
+    {aps.map(ap => (
+      <Ap key={ap.value} ap={ap} removeAp={removeAp} />
+    ))}
+  </Container>
+)
 
 export default ApList
