@@ -67,6 +67,11 @@ const StyledTable = styled(Table)`
     padding-left: 10px;
   }
 `
+const StyledTableHeaderCell = styled(TableCell)`
+  width: ${props => `${props.width}px`};
+  min-width: ${props => `${props.width}px`};
+  max-width: ${props => `${props.width}px`};
+`
 const StyledTableCell = styled(TableCell)`
   width: ${props => `${props.width}px`};
   min-width: ${props => `${props.width}px`};
@@ -240,9 +245,9 @@ const EkPlan = () => {
               <TableHead>
                 <TableRow>
                   {fields.map(f => (
-                    <StyledTableCell key={f.label} width={f.width}>
+                    <StyledTableHeaderCell key={f.label} width={f.width}>
                       {f.label}
-                    </StyledTableCell>
+                    </StyledTableHeaderCell>
                   ))}
                 </TableRow>
               </TableHead>
