@@ -28,54 +28,54 @@ const Header = styled.div`
 const StyledTable = styled(Table)`
   padding-left: 10px;
   padding-right: 10px;
-  thead {
-    background: rgba(128, 128, 128, 0.2);
-    height: 40px;
-  }
-  thead > tr {
-    position: relative;
-    display: block;
-    height: 40px;
-  }
-  thead tr th {
-    font-size: 0.75rem;
-    color: black;
-    padding: 2px 4px;
-    line-height: 1rem;
-  }
-  tbody {
-    display: block;
-    height: calc(100vh - 64px - 23px - 40px);
-    width: 100vw;
-    overflow: auto !important;
-  }
-  tbody tr:hover {
-    background: rgba(255, 211, 167, 0.3) !important;
-  }
-  tbody tr td {
-    font-size: 0.75rem;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    padding: 2px 4px;
-  }
-  tbody tr:nth-of-type(even) {
-    background: rgba(128, 128, 128, 0.05);
-  }
-  th:first-child,
-  td:first-child {
-    padding-left: 10px;
-  }
+`
+const StyledTableHead = styled(TableHead)`
+  background: rgba(128, 128, 128, 0.2) !important;
+  height: 40px !important;
+`
+const StyledTableBody = styled(TableBody)`
+  display: block !important;
+  height: calc(100vh - 64px - 23px - 40px) !important;
+  width: 100vw !important;
+  overflow: auto !important;
+`
+const StyledTableHeaderRow = styled(TableRow)`
+  position: relative !important;
+  display: block !important;
+  height: 40px !important;
 `
 const StyledTableHeaderCell = styled(TableCell)`
   width: ${props => `${props.width}px`};
   min-width: ${props => `${props.width}px`};
   max-width: ${props => `${props.width}px`};
+  font-size: 0.75rem !important;
+  color: black !important;
+  padding: 2px 4px !important;
+  line-height: 1rem !important;
+  &:first-child {
+    padding-left: 10px !important;
+  }
+`
+const StyledTableRow = styled(TableRow)`
+  &:hover {
+    background: rgba(255, 211, 167, 0.3) !important;
+  }
+  &:nth-of-type(even) {
+    background: rgba(128, 128, 128, 0.05);
+  }
 `
 const StyledTableCell = styled(TableCell)`
   width: ${props => `${props.width}px`};
   min-width: ${props => `${props.width}px`};
   max-width: ${props => `${props.width}px`};
+  font-size: 0.75rem !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  overflow: hidden !important;
+  padding: 2px 4px !important;
+  &:first-child {
+    padding-left: 10px !important;
+  }
 `
 const ApTitle = styled.h5`
   margin: 4px 0;
@@ -242,18 +242,18 @@ const EkPlan = () => {
           <>
             <TpopTitle>{`${rows.length} Teilpopulationen`}</TpopTitle>
             <StyledTable size="small">
-              <TableHead>
-                <TableRow>
+              <StyledTableHead>
+                <StyledTableHeaderRow>
                   {fields.map(f => (
                     <StyledTableHeaderCell key={f.label} width={f.width}>
                       {f.label}
                     </StyledTableHeaderCell>
                   ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
+                </StyledTableHeaderRow>
+              </StyledTableHead>
+              <StyledTableBody>
                 {rows.map(r => (
-                  <TableRow key={r.id}>
+                  <StyledTableRow key={r.id}>
                     {sortBy(
                       Object.values(r).filter(o => typeof o === 'object'),
                       'sort',
@@ -266,9 +266,9 @@ const EkPlan = () => {
                           : v.value}
                       </StyledTableCell>
                     ))}
-                  </TableRow>
+                  </StyledTableRow>
                 ))}
-              </TableBody>
+              </StyledTableBody>
             </StyledTable>
           </>
         )}
