@@ -88,7 +88,6 @@ const ProjekteAppBar = () => {
   const isFreiwillig = role === 'apflora_freiwillig'
 
   const isProjekt = tree.activeNodeArray[0] === 'Projekte'
-  const isEkPlan = tree.activeForm.form === 'ekplan'
 
   const onClickButton = useCallback(
     name => {
@@ -155,11 +154,7 @@ const ProjekteAppBar = () => {
               )}
               <StyledButton
                 name="tree"
-                variant={
-                  !isEkPlan && projekteTabs.includes('tree')
-                    ? 'outlined'
-                    : 'text'
-                }
+                variant={projekteTabs.includes('tree') ? 'outlined' : 'text'}
                 followed={projekteTabs.includes('daten')}
                 onClick={onClickTree}
                 data-id="nav-tree1"
@@ -168,11 +163,7 @@ const ProjekteAppBar = () => {
               </StyledButton>
               <Daten />
               <StyledButton
-                variant={
-                  !isEkPlan && projekteTabs.includes('filter')
-                    ? 'outlined'
-                    : 'text'
-                }
+                variant={projekteTabs.includes('filter') ? 'outlined' : 'text'}
                 preceded={projekteTabs.includes('daten')}
                 followed={projekteTabs.includes('karte')}
                 onClick={onClickFilter}
@@ -182,11 +173,7 @@ const ProjekteAppBar = () => {
                 Filter
               </StyledButton>
               <StyledButton
-                variant={
-                  isEkPlan && projekteTabs.includes('karte')
-                    ? 'outlined'
-                    : 'text'
-                }
+                variant={projekteTabs.includes('karte') ? 'outlined' : 'text'}
                 preceded={projekteTabs.includes('filter')}
                 followed={
                   (!isMobile &&
@@ -204,9 +191,7 @@ const ProjekteAppBar = () => {
               {!isMobile && exporteIsActive && (
                 <StyledButton
                   variant={
-                    isEkPlan && projekteTabs.includes('exporte')
-                      ? 'outlined'
-                      : 'text'
+                    projekteTabs.includes('exporte') ? 'outlined' : 'text'
                   }
                   preceded={projekteTabs.includes('karte')}
                   followed={projekteTabs.includes('tree2')}
@@ -218,11 +203,7 @@ const ProjekteAppBar = () => {
               )}
               {!isMobile && (
                 <StyledButton
-                  variant={
-                    isEkPlan && projekteTabs.includes('tree2')
-                      ? 'outlined'
-                      : 'text'
-                  }
+                  variant={projekteTabs.includes('tree2') ? 'outlined' : 'text'}
                   preceded={
                     (exporteIsActive && projekteTabs.includes('exporte')) ||
                     (!exporteIsActive && projekteTabs.includes('karte'))
@@ -240,9 +221,7 @@ const ProjekteAppBar = () => {
               {!isMobile && projekteTabs.includes('tree2') && (
                 <StyledButton
                   variant={
-                    isEkPlan && projekteTabs.includes('filter2')
-                      ? 'outlined'
-                      : 'text'
+                    projekteTabs.includes('filter2') ? 'outlined' : 'text'
                   }
                   preceded={projekteTabs.includes('daten2')}
                   followed={projekteTabs.includes('karte2')}
@@ -255,7 +234,7 @@ const ProjekteAppBar = () => {
               )}
               {!isMobile && isProjekt && (
                 <StyledButton
-                  variant={isEkPlan ? 'outlined' : 'text'}
+                  variant="text"
                   preceded={false}
                   followed={false}
                   onClick={onClickEkPlanung}
