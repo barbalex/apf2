@@ -49,6 +49,9 @@ const StyledTable = styled(Table)`
     width: 100vw;
     overflow: auto !important;
   }
+  tbody tr:hover {
+    background: rgba(255, 211, 167, 0.3) !important;
+  }
   tbody tr td {
     font-size: 0.75rem;
     white-space: nowrap;
@@ -69,7 +72,6 @@ const StyledTableCell = styled(TableCell)`
   min-width: ${props => `${props.width}px`};
   max-width: ${props => `${props.width}px`};
 `
-const StyledTableBody = styled(TableBody)``
 const ApTitle = styled.h5`
   margin: 4px 0;
 `
@@ -233,7 +235,7 @@ const EkPlan = () => {
         </Header>
         {rows.length > 0 && (
           <>
-            <TpopTitle>{`Teilpopulationen (${rows.length})`}</TpopTitle>
+            <TpopTitle>{`${rows.length} Teilpopulationen`}</TpopTitle>
             <StyledTable size="small">
               <TableHead>
                 <TableRow>
@@ -244,7 +246,7 @@ const EkPlan = () => {
                   ))}
                 </TableRow>
               </TableHead>
-              <StyledTableBody>
+              <TableBody>
                 {rows.map(r => (
                   <TableRow key={r.id}>
                     {sortBy(
@@ -261,7 +263,7 @@ const EkPlan = () => {
                     ))}
                   </TableRow>
                 ))}
-              </StyledTableBody>
+              </TableBody>
             </StyledTable>
           </>
         )}
