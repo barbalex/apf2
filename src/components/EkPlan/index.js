@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import { useQuery } from 'react-apollo-hooks'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -11,10 +11,11 @@ import get from 'lodash/get'
 import minBy from 'lodash/minBy'
 import max from 'lodash/max'
 import sortBy from 'lodash/sortBy'
+import { observer } from 'mobx-react-lite'
 
-import queryApsToChoose from './queryApsToChoose'
 import queryTpop from './queryTpop'
-import storeContext from '../../storeContext'
+//import storeContext from '../../storeContext'
+import ChooseAp from './ChooseAp'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -165,28 +166,24 @@ const rowsFromTpop = ({ tpop, years }) => {
 }
 
 const EkPlan = () => {
-  const store = useContext(storeContext)
+  //const store = useContext(storeContext)
 
-  const { activeNodeArray } = store.tree
-
-  const [aps, setAps] = useState(['6c52d174-4f62-11e7-aebe-67a303eb0640'])
-  const projId = activeNodeArray[1] || '99999999-9999-9999-9999-999999999999'
-
-  const {
-    data: dataApsToChoose,
-    loading: loadingApsToChoose,
-    error: errorApsToChoose,
-  } = useQuery(queryApsToChoose, {
-    variables: {
-      aps,
-      projId,
+  const [aps, setAps] = useState([
+    { value: '6c52d174-4f62-11e7-aebe-67a303eb0640', label: 'Abies alba' },
+  ])
+  const apValues = useMemo(() => aps.map(a => a.value), [aps])
+  const addAp = useCallback(
+    ap => {
+      setAps([...aps, ap])
     },
-  })
+    [aps],
+  )
+
   const { data: dataTpop, loading: loadingTpop, error: errorTpop } = useQuery(
     queryTpop,
     {
       variables: {
-        aps,
+        aps: apValues,
       },
     },
   )
@@ -201,7 +198,6 @@ const EkPlan = () => {
     ? sortBy(Object.values(rows[0]).filter(o => typeof o === 'object'), 'sort')
     : []
 
-  const apsToChoose = get(dataApsToChoose, 'allAps.nodes', [])
   console.log('EkPlan', {
     tpops,
     rows,
@@ -214,6 +210,8 @@ const EkPlan = () => {
     <ErrorBoundary>
       <Container>
         <div>Hier ist was im Aufbau</div>
+        <div>{`AP's: ${aps.map(a => a.label).join(', ')}`}</div>
+        <ChooseAp addAp={addAp} apValues={apValues} />
         <StyledTable size="small">
           <TableHead>
             <TableRow>
@@ -262,4 +260,4 @@ const EkPlan = () => {
   )
 }
 
-export default EkPlan
+export default observer(EkPlan)
