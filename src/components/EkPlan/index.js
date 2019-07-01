@@ -16,6 +16,7 @@ import { observer } from 'mobx-react-lite'
 import queryTpop from './queryTpop'
 //import storeContext from '../../storeContext'
 import ChooseAp from './ChooseAp'
+import ApList from './ApList'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -178,6 +179,12 @@ const EkPlan = () => {
     },
     [aps],
   )
+  const removeAp = useCallback(
+    ap => {
+      setAps(aps.filter(a => a.value !== ap.value))
+    },
+    [aps],
+  )
 
   const { data: dataTpop, loading: loadingTpop, error: errorTpop } = useQuery(
     queryTpop,
@@ -210,8 +217,8 @@ const EkPlan = () => {
     <ErrorBoundary>
       <Container>
         <div>Hier ist was im Aufbau</div>
-        <div>{`AP's: ${aps.map(a => a.label).join(', ')}`}</div>
         <ChooseAp addAp={addAp} apValues={apValues} />
+        <ApList aps={aps} removeAp={removeAp} />
         <StyledTable size="small">
           <TableHead>
             <TableRow>
