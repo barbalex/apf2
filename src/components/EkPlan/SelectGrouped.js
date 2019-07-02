@@ -28,11 +28,11 @@ const Option = styled.option`
   font-size: 1rem;
 `
 
-const EkfreqzenzSelect = ({ ekfO, row, val }) => {
+const SelectComponent = ({ optionsGrouped, row, val, field }) => {
   const store = useContext(storeContext)
   const { enqueNotification } = store
   const client = useApolloClient()
-  const [ekfrequenzFocused, setEkfrequenzFocused] = useState(false)
+  const [focused, setFocused] = useState(false)
 
   const onChange = useCallback(
     async e => {
@@ -42,7 +42,7 @@ const EkfreqzenzSelect = ({ ekfO, row, val }) => {
           mutation: gql`
             mutation updateTpop(
               $id: UUID!
-              $ekfrequenz: String
+              $${field}: String
               $changedBy: String
             ) {
               updateTpopById(
@@ -50,7 +50,7 @@ const EkfreqzenzSelect = ({ ekfO, row, val }) => {
                   id: $id
                   tpopPatch: {
                     id: $id
-                    ekfrequenz: $ekfrequenz
+                    ${field}: $${field}
                     changedBy: $changedBy
                   }
                 }
@@ -64,7 +64,7 @@ const EkfreqzenzSelect = ({ ekfO, row, val }) => {
           `,
           variables: {
             id: row.id,
-            ekfrequenz: value,
+            [field]: value,
             changedBy: store.user.name,
           },
           optimisticResponse: {
@@ -72,7 +72,7 @@ const EkfreqzenzSelect = ({ ekfO, row, val }) => {
             updateTpopById: {
               tpop: {
                 ...row.tpop,
-                ekfrequenz: value,
+                [field]: value,
               },
               __typename: 'Tpop',
             },
@@ -90,10 +90,10 @@ const EkfreqzenzSelect = ({ ekfO, row, val }) => {
     [row.id],
   )
   const onFocus = useCallback(() => {
-    setEkfrequenzFocused(true)
+    setFocused(true)
   }, [])
   const onBlur = useCallback(() => {
-    setEkfrequenzFocused(false)
+    setFocused(false)
   }, [])
 
   return (
@@ -103,15 +103,15 @@ const EkfreqzenzSelect = ({ ekfO, row, val }) => {
       onFocus={onFocus}
       onBlur={onBlur}
     >
-      {ekfrequenzFocused ? (
-        ekfO[row.apId] ? (
+      {focused ? (
+        optionsGrouped ? (
           <>
-            <Option key="ekfrequenzOption1" value={null}>
+            <Option key="option1" value={null}>
               {''}
             </Option>
-            {Object.keys(ekfO[row.apId]).map(key => (
+            {Object.keys(optionsGrouped).map(key => (
               <Optgroup key={key} label={key}>
-                {ekfO[row.apId][key].map(o => (
+                {optionsGrouped[key].map(o => (
                   <Option key={o.value} value={o.value}>
                     {o.label}
                   </Option>
@@ -121,7 +121,7 @@ const EkfreqzenzSelect = ({ ekfO, row, val }) => {
           </>
         ) : null
       ) : (
-        <Option key="ekfrequenzOption1" value={val.value || ''}>
+        <Option key="option1" value={val.value || ''}>
           {val.value || ''}
         </Option>
       )}
@@ -129,4 +129,4 @@ const EkfreqzenzSelect = ({ ekfO, row, val }) => {
   )
 }
 
-export default observer(EkfreqzenzSelect)
+export default observer(SelectComponent)

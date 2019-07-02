@@ -20,7 +20,8 @@ import queryLists from './queryLists'
 //import storeContext from '../../storeContext'
 import ApList from './ApList'
 import appBaseUrl from '../../modules/appBaseUrl'
-import EkfreqzenzSelect from './EkfreqzenzSelect'
+import SelectGrouped from './SelectGrouped'
+import Select from './Select'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -297,8 +298,14 @@ const EkPlan = () => {
       }
     },
   )
-  const ekfO = groupBy(ekfrequenzOptions, 'apId')
-  Object.keys(ekfO).forEach(k => (ekfO[k] = groupBy(ekfO[k], 'anwendungsfall')))
+  const ekfOptionsGroupedPerAp = groupBy(ekfrequenzOptions, 'apId')
+  Object.keys(ekfOptionsGroupedPerAp).forEach(
+    k =>
+      (ekfOptionsGroupedPerAp[k] = groupBy(
+        ekfOptionsGroupedPerAp[k],
+        'anwendungsfall',
+      )),
+  )
 
   console.log('EkPlan rendering')
 
@@ -333,10 +340,31 @@ const EkPlan = () => {
                         .filter(o => !!o.label),
                       'sort',
                     ).map(v => {
+                      if (v.label === 'EK Abrechnung Typ') {
+                        return (
+                          <TableCellForSelect key={v.label} width={v.width}>
+                            <Select
+                              options={get(
+                                dataLists,
+                                'allEkAbrechnungstypWertes.nodes',
+                                [],
+                              )}
+                              row={r}
+                              val={v}
+                              field="ekAbrechnungstyp"
+                            />
+                          </TableCellForSelect>
+                        )
+                      }
                       if (v.label === 'EK Frequenz') {
                         return (
                           <TableCellForSelect key={v.label} width={v.width}>
-                            <EkfreqzenzSelect ekfO={ekfO} row={r} val={v} />
+                            <SelectGrouped
+                              optionsGrouped={ekfOptionsGroupedPerAp[r.apId]}
+                              row={r}
+                              val={v}
+                              field="ekfrequenz"
+                            />
                           </TableCellForSelect>
                         )
                       }
