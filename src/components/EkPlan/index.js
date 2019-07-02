@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react'
+import React, { useState, useCallback, useMemo, useRef } from 'react'
 import { useQuery } from 'react-apollo-hooks'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -34,6 +34,8 @@ const Header = styled.div`
 const StyledTable = styled(Table)`
   padding-left: 10px;
   padding-right: 10px;
+  width: 100vw !important;
+  overflow-x: auto !important;
 `
 const StyledTableHead = styled(TableHead)`
   background: rgba(128, 128, 128, 0.2) !important;
@@ -41,9 +43,10 @@ const StyledTableHead = styled(TableHead)`
 `
 const StyledTableBody = styled(TableBody)`
   display: block !important;
-  height: calc(100vh - 64px - 23px - 40px) !important;
+  height: ${props =>
+    `calc(100vh - 64px - ${props.headerheight}px - 17.6px - 51.2px) !important`};
   width: 100vw !important;
-  overflow: auto !important;
+  overflow-y: auto !important;
 `
 const StyledTableHeaderRow = styled(TableRow)`
   position: relative !important;
@@ -235,6 +238,7 @@ const rowsFromTpop = ({ tpop, years }) => {
 
 const EkPlan = () => {
   //const store = useContext(storeContext)
+  const headerComponent = useRef(null)
 
   const [aps, setAps] = useState([])
   const apValues = useMemo(() => aps.map(a => a.value), [aps])
@@ -307,12 +311,16 @@ const EkPlan = () => {
       )),
   )
 
-  console.log('EkPlan rendering')
+  const headerheight =
+    headerComponent && headerComponent.current
+      ? headerComponent.current.clientHeight
+      : 0
+  console.log('EkPlan rendering, header height:', headerheight)
 
   return (
     <ErrorBoundary>
       <Container>
-        <Header>
+        <Header ref={headerComponent}>
           <div>Das ist eine Baustelle - bitte noch nicht benutzen</div>
           <ApList aps={aps} removeAp={removeAp} addAp={addAp} />
           {aps.length > 0 && loadingTpop && 'Lade...'}
@@ -331,7 +339,7 @@ const EkPlan = () => {
                   ))}
                 </StyledTableHeaderRow>
               </StyledTableHead>
-              <StyledTableBody>
+              <StyledTableBody headerheight={headerheight}>
                 {rows.map(r => (
                   <StyledTableRow key={r.id}>
                     {sortBy(
