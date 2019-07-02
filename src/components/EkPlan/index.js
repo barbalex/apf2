@@ -251,16 +251,14 @@ const EkPlan = () => {
     [aps],
   )
 
-  const {
-    data: dataTpop,
-    loading: loadingTpop,
-    error: errorTpop,
-    refetch: refetchTpop,
-  } = useQuery(queryTpop, {
-    variables: {
-      aps: apValues,
+  const { data: dataTpop, loading: loadingTpop, error: errorTpop } = useQuery(
+    queryTpop,
+    {
+      variables: {
+        aps: apValues,
+      },
     },
-  })
+  )
   const tpops = sortBy(
     get(dataTpop, 'allTpops.nodes', []),
     t => t.popByPopId.apByApId.label,

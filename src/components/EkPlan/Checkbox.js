@@ -20,7 +20,7 @@ const Icon = styled.svg`
 const StyledCheckbox = styled.div`
   width: 19px;
   height: 19px;
-  background: ${props => (props.checked ? 'salmon' : 'papayawhip')};
+  background: ${props => (props.checked ? '#2e7d32' : 'rgba(46,125,50,0.1)')};
   border-radius: 3px;
   transition: all 150ms;
   margin-left: auto;
