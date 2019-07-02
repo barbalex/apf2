@@ -187,6 +187,24 @@ const rowsFromTpop = ({ tpop, years }) => {
       sort: 9,
       width: 37,
     },
+    ekAbrechnungstyp: {
+      label: 'EK-Abrechnungstyp',
+      value: get(tpop, 'ekAbrechnungstyp') || null,
+      sort: 9,
+      width: 70,
+    },
+    ekfrequenz: {
+      label: 'EK-Frequenz',
+      value: get(tpop, 'ekfrequenz') || null,
+      sort: 10,
+      width: 70,
+    },
+    ekfrequenzAbweichend: {
+      label: 'EK-Frequenz abweichend',
+      value: get(tpop, 'ekfrequenzAbweichend') || null,
+      sort: 11,
+      width: 70,
+    },
   }
   years.forEach(
     year =>
@@ -269,27 +287,38 @@ const EkPlan = () => {
                     {sortBy(
                       Object.values(r).filter(o => typeof o === 'object'),
                       'sort',
-                    ).map(v => (
-                      <StyledTableCell key={v.label} width={v.width}>
-                        {typeof v.value === 'object' ? (
-                          v.value.ek.map(e => (
-                            <div key={e.id}>{ektypRenamed(e)}</div>
-                          ))
-                        ) : v.label === 'Link' ? (
-                          <OutsideLink
-                            onClick={() => {
-                              typeof window !== 'undefined' &&
-                                window.open(v.value)
-                            }}
-                            title="in neuem Tab öffnen"
-                          >
-                            <FaExternalLinkAlt />
-                          </OutsideLink>
-                        ) : (
-                          v.value
-                        )}
-                      </StyledTableCell>
-                    ))}
+                    ).map(v => {
+                      if (v.label === 'Link') {
+                        return (
+                          <StyledTableCell key={v.label} width={v.width}>
+                            <OutsideLink
+                              onClick={() => {
+                                typeof window !== 'undefined' &&
+                                  window.open(v.value)
+                              }}
+                              title="in neuem Tab öffnen"
+                            >
+                              <FaExternalLinkAlt />
+                            </OutsideLink>
+                          </StyledTableCell>
+                        )
+                      }
+                      // DANGER: null is also an object!!
+                      if (v.value && typeof v.value === 'object') {
+                        return (
+                          <StyledTableCell key={v.label} width={v.width}>
+                            {v.value.ek.map(e => (
+                              <div key={e.id}>{ektypRenamed(e)}</div>
+                            ))}
+                          </StyledTableCell>
+                        )
+                      }
+                      return (
+                        <StyledTableCell key={v.label} width={v.width}>
+                          {v.value ? v.value : null}
+                        </StyledTableCell>
+                      )
+                    })}
                   </StyledTableRow>
                 ))}
               </StyledTableBody>
