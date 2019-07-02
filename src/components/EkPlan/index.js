@@ -98,22 +98,6 @@ const OutsideLink = styled.div`
     color: rgba(0, 0, 0, 0.77);
   }
 `
-const Select = styled.select`
-  width: 100%;
-  height: 100% !important;
-  background: transparent;
-  border: none;
-  border-collapse: collapse;
-  font-size: 0.75rem;
-`
-const Optgroup = styled.optgroup`
-  font-family: 'Roboto', 'Helvetica', 'Arial' !important;
-  font-size: 1rem;
-`
-const Option = styled.option`
-  font-family: 'Roboto', 'Helvetica', 'Arial' !important;
-  font-size: 1rem;
-`
 
 const ektypRenamed = e => {
   switch (e.typ) {
@@ -284,7 +268,6 @@ const EkPlan = () => {
     },
   })
 
-  const [ekfrequenzFocused, setEkfrequenzFocused] = useState(false)
   const ekfrequenzOptions = get(dataLists, 'allEkfrequenzs.nodes', []).map(
     o => {
       const ekTypeArray = [o.ek ? 'ek' : null, o.ekf ? 'ekf' : null].filter(
@@ -371,7 +354,7 @@ const EkPlan = () => {
                       }
                       return (
                         <StyledTableCell key={v.label} width={v.width}>
-                          {v.value}
+                          <div>{v.value}</div>
                         </StyledTableCell>
                       )
                     })}

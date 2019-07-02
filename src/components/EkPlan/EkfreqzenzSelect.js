@@ -25,21 +25,26 @@ const EkfreqzenzSelect = ({ ekfO, row, val }) => {
   return (
     <Select
       value={val.value || ''}
-      onChange={() => console.log('TODO')}
+      onChange={e => console.log('TODO', { value: e.target.value })}
       onFocus={() => setEkfrequenzFocused(true)}
       onBlur={() => setEkfrequenzFocused(false)}
     >
       {ekfrequenzFocused ? (
         ekfO[row.apId] ? (
-          Object.keys(ekfO[row.apId]).map(key => (
-            <Optgroup key={key} label={key}>
-              {ekfO[row.apId][key].map(o => (
-                <Option key={o.value} value={o.value}>
-                  {o.label}
-                </Option>
-              ))}
-            </Optgroup>
-          ))
+          <>
+            <Option key="ekfrequenzOption1" value={null}>
+              {''}
+            </Option>
+            {Object.keys(ekfO[row.apId]).map(key => (
+              <Optgroup key={key} label={key}>
+                {ekfO[row.apId][key].map(o => (
+                  <Option key={o.value} value={o.value}>
+                    {o.label}
+                  </Option>
+                ))}
+              </Optgroup>
+            ))}
+          </>
         ) : null
       ) : (
         <Option key="ekfrequenzOption1" value={val.value || ''}>
