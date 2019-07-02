@@ -1,19 +1,58 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
+import { FaPlus } from 'react-icons/fa'
+import IconButton from '@material-ui/core/IconButton'
 import styled from 'styled-components'
 
 import Ap from './Ap'
+import ChooseAp from './ChooseAp'
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  width: 550px;
+`
+const TitleRow = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+`
+const ApTitle = styled.h4`
+  margin: 4px 0;
+`
+const PlusIcon = styled(IconButton)`
+  font-size: 1rem !important;
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
 `
 
-const ApList = ({ aps, removeAp }) => (
-  <Container>
-    {aps.map(ap => (
-      <Ap key={ap.value} ap={ap} removeAp={removeAp} />
-    ))}
-  </Container>
-)
+const ApList = ({ aps, removeAp, addAp }) => {
+  const [showChoose, setShowChoose] = useState(aps.length === 0)
+  const onClickAdd = useCallback(() => {
+    setShowChoose(true)
+  }, [])
+
+  return (
+    <Container>
+      <TitleRow>
+        <ApTitle>Aktionspläne</ApTitle>
+        {!showChoose && (
+          <PlusIcon
+            title="Aktionsplan hinzufügen"
+            aria-label="Aktionsplan hinzufügen"
+            onClick={onClickAdd}
+          >
+            <FaPlus />
+          </PlusIcon>
+        )}
+      </TitleRow>
+      {aps.map(ap => (
+        <Ap key={ap.value} ap={ap} removeAp={removeAp} />
+      ))}
+      {showChoose && (
+        <ChooseAp addAp={addAp} aps={aps} setShowChoose={setShowChoose} />
+      )}
+    </Container>
+  )
+}
 
 export default ApList

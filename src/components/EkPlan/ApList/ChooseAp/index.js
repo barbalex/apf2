@@ -7,7 +7,7 @@ import { useApolloClient } from 'react-apollo-hooks'
 import { observer } from 'mobx-react-lite'
 
 import queryApsToChoose from './queryApsToChoose'
-import storeContext from '../../../storeContext'
+import storeContext from '../../../../storeContext'
 
 const StyledSelect = styled(AsyncSelect)`
   .react-select__control {
@@ -71,12 +71,14 @@ const Error = styled.div`
   color: red;
 `
 
-const EkPlan = ({ apValues, addAp }) => {
+const EkPlan = ({ aps, addAp, setShowChoose }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
 
   const { activeNodeArray } = store.tree
   const projId = activeNodeArray[1] || '99999999-9999-9999-9999-999999999999'
+
+  const apValues = aps.map(a => a.value)
 
   let data
   let error
@@ -112,7 +114,10 @@ const EkPlan = ({ apValues, addAp }) => {
   )
 
   const onChange = option => {
-    option && option.value && addAp(option)
+    if (option && option.value) {
+      addAp(option)
+      setShowChoose(false)
+    }
   }
 
   const label = apValues.length
@@ -145,6 +150,7 @@ const EkPlan = ({ apValues, addAp }) => {
           classNamePrefix="react-select"
           loadOptions={loadOptions}
           openMenuOnFocus
+          autoFocus
         />
         {error && <Error>{error.message}</Error>}
       </SelectContainer>

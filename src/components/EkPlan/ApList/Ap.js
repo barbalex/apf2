@@ -6,12 +6,8 @@ import styled from 'styled-components'
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
-  width: 100%;
 `
-const ApDiv = styled.div`
-  min-width: 200px;
-  flex-grow: 1;
-`
+const ApDiv = styled.div``
 const DelIcon = styled(IconButton)`
   font-size: 1rem !important;
   padding-top: 4px !important;

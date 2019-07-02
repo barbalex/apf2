@@ -16,7 +16,6 @@ import { observer } from 'mobx-react-lite'
 
 import queryTpop from './queryTpop'
 //import storeContext from '../../storeContext'
-import ChooseAp from './ChooseAp'
 import ApList from './ApList'
 import appBaseUrl from '../../modules/appBaseUrl'
 
@@ -79,10 +78,7 @@ const StyledTableCell = styled(TableCell)`
     padding-left: 10px !important;
   }
 `
-const ApTitle = styled.h5`
-  margin: 4px 0;
-`
-const TpopTitle = styled.h5`
+const TpopTitle = styled.h4`
   margin: 0 10px 4px 10px;
 `
 const OutsideLink = styled.div`
@@ -188,22 +184,22 @@ const rowsFromTpop = ({ tpop, years }) => {
       width: 37,
     },
     ekAbrechnungstyp: {
-      label: 'EK-Abrechnungstyp',
+      label: 'EK Abrechnung Typ',
       value: get(tpop, 'ekAbrechnungstyp') || null,
       sort: 9,
-      width: 70,
+      width: 75,
     },
     ekfrequenz: {
-      label: 'EK-Frequenz',
+      label: 'EK Frequenz',
       value: get(tpop, 'ekfrequenz') || null,
       sort: 10,
       width: 70,
     },
     ekfrequenzAbweichend: {
-      label: 'EK-Frequenz abweichend',
+      label: 'EK Frequenz abweichend',
       value: get(tpop, 'ekfrequenzAbweichend') || null,
       sort: 11,
-      width: 70,
+      width: 75,
     },
   }
   years.forEach(
@@ -257,14 +253,14 @@ const EkPlan = () => {
     ? sortBy(Object.values(rows[0]).filter(o => typeof o === 'object'), 'sort')
     : []
 
+  console.log('EkPlan rendering')
+
   return (
     <ErrorBoundary>
       <Container>
         <Header>
           <div>Das ist eine Baustelle - bitte noch nicht benutzen</div>
-          <ApTitle>Aktionspläne</ApTitle>
-          <ApList aps={aps} removeAp={removeAp} />
-          <ChooseAp addAp={addAp} apValues={apValues} />
+          <ApList aps={aps} removeAp={removeAp} addAp={addAp} />
           {aps.length > 0 && loadingTpop && 'Lade...'}
           {errorTpop && errorTpop.message}
         </Header>
