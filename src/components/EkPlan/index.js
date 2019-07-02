@@ -213,7 +213,7 @@ const rowsFromTpop = ({ tpop, years }) => {
     },
     ekfrequenzAbweichend: {
       label: 'EK Frequenz abweichend',
-      value: get(tpop, 'ekfrequenzAbweichend') || null,
+      value: get(tpop, 'ekfrequenzAbweichend') === true,
       sort: 11,
       width: 75,
     },

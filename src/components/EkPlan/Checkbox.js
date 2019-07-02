@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
@@ -36,8 +36,13 @@ const CheckboxComponent = ({ row, value, field }) => {
   const { enqueNotification } = store
   const client = useApolloClient()
 
+  const [checked, setChecked] = useState(value === null ? false : value)
+  useEffect(() => {
+    setChecked(row[field] === true)
+  }, [row, value])
+
   const onClick = useCallback(async () => {
-    console.log('Checkbox, onClick, newValue:', !value)
+    setChecked(!checked)
     try {
       await client.mutate({
         mutation: gql`
@@ -65,22 +70,22 @@ const CheckboxComponent = ({ row, value, field }) => {
           `,
         variables: {
           id: row.id,
-          [field]: !value,
+          [field]: !checked,
           changedBy: store.user.name,
         },
-        /*optimisticResponse: {
+        optimisticResponse: {
           __typename: 'Mutation',
           updateTpopById: {
             tpop: {
               ...row,
-              [field]: !value,
+              [field]: !checked,
             },
             __typename: 'Tpop',
           },
-        },*/
+        },
       })
     } catch (error) {
-      console.log('Checkbox, onClick, error:', error)
+      setChecked(!checked)
       enqueNotification({
         message: error.message,
         options: {
@@ -88,11 +93,11 @@ const CheckboxComponent = ({ row, value, field }) => {
         },
       })
     }
-  }, [row.id])
+  }, [row.id, checked])
 
   return (
     <CheckboxContainer onClick={onClick}>
-      <StyledCheckbox checked={value}>
+      <StyledCheckbox checked={checked}>
         <Icon viewBox="0 0 24 24">
           <polyline points="20 6 9 17 4 12" />
         </Icon>
