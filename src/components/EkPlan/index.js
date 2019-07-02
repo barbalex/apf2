@@ -22,6 +22,7 @@ import ApList from './ApList'
 import appBaseUrl from '../../modules/appBaseUrl'
 import SelectGrouped from './SelectGrouped'
 import Select from './Select'
+import Checkbox from './Checkbox'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -365,6 +366,13 @@ const EkPlan = () => {
                               val={v}
                               field="ekfrequenz"
                             />
+                          </TableCellForSelect>
+                        )
+                      }
+                      if (v.label === 'EK Frequenz abweichend') {
+                        return (
+                          <TableCellForSelect key={v.label} width={v.width}>
+                            <Checkbox row={r} field="ekfrequenzAbweichend" />
                           </TableCellForSelect>
                         )
                       }
