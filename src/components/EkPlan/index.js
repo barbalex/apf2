@@ -133,7 +133,6 @@ const yearsFromTpops = tpops => {
   }
   return years
 }
-const nonFields = ['id', 'tpop', 'apId']
 const rowsFromTpop = ({ tpop, years }) => {
   const ekplans = get(tpop, 'ekplansByTpopId.nodes')
   const kontrs = get(tpop, 'tpopkontrsByTpopId.nodes')
@@ -202,7 +201,7 @@ const rowsFromTpop = ({ tpop, years }) => {
     },
     ekAbrechnungstyp: {
       label: 'EK Abrechnung Typ',
-      value: get(tpop, 'ekAbrechnungstyp') || null,
+      value: get(tpop, 'ekAbrechnungstyp'),
       sort: 9,
       width: 75,
     },
@@ -252,14 +251,16 @@ const EkPlan = () => {
     [aps],
   )
 
-  const { data: dataTpop, loading: loadingTpop, error: errorTpop } = useQuery(
-    queryTpop,
-    {
-      variables: {
-        aps: apValues,
-      },
+  const {
+    data: dataTpop,
+    loading: loadingTpop,
+    error: errorTpop,
+    refetch: refetchTpop,
+  } = useQuery(queryTpop, {
+    variables: {
+      aps: apValues,
     },
-  )
+  })
   const tpops = sortBy(
     get(dataTpop, 'allTpops.nodes', []),
     t => t.popByPopId.apByApId.label,
@@ -372,7 +373,11 @@ const EkPlan = () => {
                       if (v.label === 'EK Frequenz abweichend') {
                         return (
                           <TableCellForSelect key={v.label} width={v.width}>
-                            <Checkbox row={r} field="ekfrequenzAbweichend" />
+                            <Checkbox
+                              row={r.tpop}
+                              value={v.value}
+                              field="ekfrequenzAbweichend"
+                            />
                           </TableCellForSelect>
                         )
                       }
