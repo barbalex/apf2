@@ -12,12 +12,15 @@ import get from 'lodash/get'
 import minBy from 'lodash/minBy'
 import max from 'lodash/max'
 import sortBy from 'lodash/sortBy'
+import groupBy from 'lodash/groupBy'
 import { observer } from 'mobx-react-lite'
 
 import queryTpop from './queryTpop'
+import queryLists from './queryLists'
 //import storeContext from '../../storeContext'
 import ApList from './ApList'
 import appBaseUrl from '../../modules/appBaseUrl'
+import EkfreqzenzSelect from './EkfreqzenzSelect'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -58,6 +61,7 @@ const StyledTableHeaderCell = styled(TableCell)`
   }
 `
 const StyledTableRow = styled(TableRow)`
+  height: 100%;
   &:hover {
     background: rgba(255, 211, 167, 0.3) !important;
   }
@@ -78,6 +82,10 @@ const StyledTableCell = styled(TableCell)`
     padding-left: 10px !important;
   }
 `
+const TableCellForSelect = styled(StyledTableCell)`
+  padding: 0 !important;
+  font-size: unset !important;
+`
 const TpopTitle = styled.h4`
   margin: 0 10px 4px 10px;
 `
@@ -89,6 +97,22 @@ const OutsideLink = styled.div`
     font-size: 0.9em;
     color: rgba(0, 0, 0, 0.77);
   }
+`
+const Select = styled.select`
+  width: 100%;
+  height: 100% !important;
+  background: transparent;
+  border: none;
+  border-collapse: collapse;
+  font-size: 0.75rem;
+`
+const Optgroup = styled.optgroup`
+  font-family: 'Roboto', 'Helvetica', 'Arial' !important;
+  font-size: 1rem;
+`
+const Option = styled.option`
+  font-family: 'Roboto', 'Helvetica', 'Arial' !important;
+  font-size: 1rem;
 `
 
 const ektypRenamed = e => {
@@ -125,6 +149,7 @@ const rowsFromTpop = ({ tpop, years }) => {
 
   const fields = {
     id: tpop.id,
+    apId: get(tpop, 'popByPopId.apByApId.id'),
     ap: {
       label: 'AP',
       value: get(tpop, 'popByPopId.apByApId.label'),
@@ -219,6 +244,7 @@ const rowsFromTpop = ({ tpop, years }) => {
 
 const EkPlan = () => {
   //const store = useContext(storeContext)
+
   const [aps, setAps] = useState([])
   const apValues = useMemo(() => aps.map(a => a.value), [aps])
   const addAp = useCallback(
@@ -242,16 +268,43 @@ const EkPlan = () => {
       },
     },
   )
-  const tpops = sortBy(get(dataTpop, 'allTpops.nodes', []), t => [
-    t.popByPopId.apByApId.label,
-    t.popByPopId.nr,
-    t.nr,
-  ])
+  const tpops = sortBy(
+    get(dataTpop, 'allTpops.nodes', []),
+    t => t.popByPopId.apByApId.label,
+  )
   const years = yearsFromTpops(tpops)
   const rows = tpops.map(tpop => rowsFromTpop({ tpop, years }))
   const fields = rows.length
     ? sortBy(Object.values(rows[0]).filter(o => typeof o === 'object'), 'sort')
     : []
+
+  const { data: dataLists } = useQuery(queryLists, {
+    variables: {
+      apIds: apValues,
+    },
+  })
+
+  const [ekfrequenzFocused, setEkfrequenzFocused] = useState(false)
+  const ekfrequenzOptions = get(dataLists, 'allEkfrequenzs.nodes', []).map(
+    o => {
+      const ekTypeArray = [o.ek ? 'ek' : null, o.ekf ? 'ekf' : null].filter(
+        v => !!v,
+      )
+      const code = (o.code || '').padEnd(2)
+      const anwendungsfall = (
+        `${o.anwendungsfall}, ${ekTypeArray.join(' und ')}` || ''
+      ).padEnd(26)
+      const name = (o.name || '').padEnd(27)
+      return {
+        value: o.code,
+        label: `${code}: ${name} | ${o.periodizitaet}`,
+        anwendungsfall,
+        apId: o.apId,
+      }
+    },
+  )
+  const ekfO = groupBy(ekfrequenzOptions, 'apId')
+  Object.keys(ekfO).forEach(k => (ekfO[k] = groupBy(ekfO[k], 'anwendungsfall')))
 
   console.log('EkPlan rendering')
 
@@ -284,6 +337,13 @@ const EkPlan = () => {
                       Object.values(r).filter(o => typeof o === 'object'),
                       'sort',
                     ).map(v => {
+                      if (v.label === 'EK Frequenz') {
+                        return (
+                          <TableCellForSelect key={v.label} width={v.width}>
+                            <EkfreqzenzSelect ekfO={ekfO} row={r} val={v} />
+                          </TableCellForSelect>
+                        )
+                      }
                       if (v.label === 'Link') {
                         return (
                           <StyledTableCell key={v.label} width={v.width}>
@@ -311,7 +371,7 @@ const EkPlan = () => {
                       }
                       return (
                         <StyledTableCell key={v.label} width={v.width}>
-                          {v.value ? v.value : null}
+                          {v.value}
                         </StyledTableCell>
                       )
                     })}
