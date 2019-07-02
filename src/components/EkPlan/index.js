@@ -65,8 +65,8 @@ const StyledTableRow = styled(TableRow)`
   &:hover {
     background: rgba(255, 211, 167, 0.3) !important;
   }
-  &:nth-of-type(even) {
-    background: rgba(128, 128, 128, 0.05);
+  &:nth-of-type(odd) {
+    background: #fefdf5;
   }
 `
 const StyledTableCell = styled(TableCell)`
@@ -85,6 +85,11 @@ const StyledTableCell = styled(TableCell)`
 const TableCellForSelect = styled(StyledTableCell)`
   padding: 0 !important;
   font-size: unset !important;
+  border-left: solid green 1px;
+  border-right: solid green 1px;
+  &:focus-within {
+    border: solid orange 3px;
+  }
 `
 const TpopTitle = styled.h4`
   margin: 0 10px 4px 10px;
@@ -126,13 +131,14 @@ const yearsFromTpops = tpops => {
   }
   return years
 }
-
+const nonFields = ['id', 'tpop', 'apId']
 const rowsFromTpop = ({ tpop, years }) => {
   const ekplans = get(tpop, 'ekplansByTpopId.nodes')
   const kontrs = get(tpop, 'tpopkontrsByTpopId.nodes')
 
   const fields = {
     id: tpop.id,
+    tpop: tpop,
     apId: get(tpop, 'popByPopId.apByApId.id'),
     ap: {
       label: 'AP',
@@ -259,7 +265,12 @@ const EkPlan = () => {
   const years = yearsFromTpops(tpops)
   const rows = tpops.map(tpop => rowsFromTpop({ tpop, years }))
   const fields = rows.length
-    ? sortBy(Object.values(rows[0]).filter(o => typeof o === 'object'), 'sort')
+    ? sortBy(
+        Object.values(rows[0])
+          .filter(o => typeof o === 'object')
+          .filter(o => !!o.label),
+        'sort',
+      )
     : []
 
   const { data: dataLists } = useQuery(queryLists, {
@@ -317,7 +328,9 @@ const EkPlan = () => {
                 {rows.map(r => (
                   <StyledTableRow key={r.id}>
                     {sortBy(
-                      Object.values(r).filter(o => typeof o === 'object'),
+                      Object.values(r)
+                        .filter(o => typeof o === 'object')
+                        .filter(o => !!o.label),
                       'sort',
                     ).map(v => {
                       if (v.label === 'EK Frequenz') {
