@@ -26,32 +26,40 @@ import Checkbox from './Checkbox'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
-  width: 100%;
+  width: 100vw;
 `
 const Header = styled.div`
   padding: 5px 10px;
 `
+const TableContainer = styled.div`
+  position: relative;
+  overflow-x: auto;
+  width: 100vw;
+  height: ${props =>
+    `calc(100vh - 64px - ${props.headerheight}px - 17.6px) !important`};
+`
 const StyledTable = styled(Table)`
+  position: relative;
   padding-left: 10px;
   padding-right: 10px;
-  width: 100vw !important;
-  overflow-x: auto !important;
 `
 const StyledTableHead = styled(TableHead)`
-  background: rgba(128, 128, 128, 0.2) !important;
-  height: 40px !important;
+  display: block !important;
+  background: #d9e8d9 !important;
+  height: 50px !important;
+  position: sticky;
+  top: 0;
 `
 const StyledTableBody = styled(TableBody)`
   display: block !important;
+  overflow-y: auto;
   height: ${props =>
-    `calc(100vh - 64px - ${props.headerheight}px - 17.6px - 51.2px) !important`};
-  width: 100vw !important;
-  overflow-y: auto !important;
+    `calc(100vh - 64px - ${props.headerheight}px - 17.6px - 50px) !important`};
 `
 const StyledTableHeaderRow = styled(TableRow)`
   position: relative !important;
   display: block !important;
-  height: 40px !important;
+  height: 50px !important;
 `
 const StyledTableHeaderCell = styled(TableCell)`
   width: ${props => `${props.width}px`};
@@ -329,99 +337,101 @@ const EkPlan = () => {
         {rows.length > 0 && (
           <>
             <TpopTitle>{`${rows.length} Teilpopulationen`}</TpopTitle>
-            <StyledTable size="small">
-              <StyledTableHead>
-                <StyledTableHeaderRow>
-                  {fields.map(f => (
-                    <StyledTableHeaderCell key={f.label} width={f.width}>
-                      {f.label}
-                    </StyledTableHeaderCell>
+            <TableContainer headerheight={headerheight}>
+              <StyledTable headerheight={headerheight} size="small">
+                <StyledTableHead headerheight={headerheight}>
+                  <StyledTableHeaderRow headerheight={headerheight}>
+                    {fields.map(f => (
+                      <StyledTableHeaderCell key={f.label} width={f.width}>
+                        {f.label}
+                      </StyledTableHeaderCell>
+                    ))}
+                  </StyledTableHeaderRow>
+                </StyledTableHead>
+                <StyledTableBody>
+                  {rows.map(r => (
+                    <StyledTableRow key={r.id}>
+                      {sortBy(
+                        Object.values(r)
+                          .filter(o => typeof o === 'object')
+                          .filter(o => !!o.label),
+                        'sort',
+                      ).map(v => {
+                        if (v.label === 'EK Abrechnung Typ') {
+                          return (
+                            <TableCellForSelect key={v.label} width={v.width}>
+                              <Select
+                                options={get(
+                                  dataLists,
+                                  'allEkAbrechnungstypWertes.nodes',
+                                  [],
+                                )}
+                                row={r}
+                                val={v}
+                                field="ekAbrechnungstyp"
+                              />
+                            </TableCellForSelect>
+                          )
+                        }
+                        if (v.label === 'EK Frequenz') {
+                          return (
+                            <TableCellForSelect key={v.label} width={v.width}>
+                              <SelectGrouped
+                                optionsGrouped={ekfOptionsGroupedPerAp[r.apId]}
+                                row={r}
+                                val={v}
+                                field="ekfrequenz"
+                              />
+                            </TableCellForSelect>
+                          )
+                        }
+                        if (v.label === 'EK Frequenz abweichend') {
+                          return (
+                            <TableCellForSelect key={v.label} width={v.width}>
+                              <Checkbox
+                                row={r.tpop}
+                                value={v.value}
+                                field="ekfrequenzAbweichend"
+                              />
+                            </TableCellForSelect>
+                          )
+                        }
+                        if (v.label === 'Link') {
+                          return (
+                            <StyledTableCell key={v.label} width={v.width}>
+                              <OutsideLink
+                                onClick={() => {
+                                  typeof window !== 'undefined' &&
+                                    window.open(v.value)
+                                }}
+                                title="in neuem Tab öffnen"
+                              >
+                                <FaExternalLinkAlt />
+                              </OutsideLink>
+                            </StyledTableCell>
+                          )
+                        }
+                        // DANGER: null is also an object!!
+                        if (v.value && typeof v.value === 'object') {
+                          return (
+                            <StyledTableCell key={v.label} width={v.width}>
+                              {v.value.ek.map(e => (
+                                <div key={e.id}>{ektypRenamed(e)}</div>
+                              ))}
+                            </StyledTableCell>
+                          )
+                        }
+                        return (
+                          <StyledTableCell key={v.label} width={v.width}>
+                            <div>{v.value}</div>
+                          </StyledTableCell>
+                        )
+                      })}
+                    </StyledTableRow>
                   ))}
-                </StyledTableHeaderRow>
-              </StyledTableHead>
-              <StyledTableBody headerheight={headerheight}>
-                {rows.map(r => (
-                  <StyledTableRow key={r.id}>
-                    {sortBy(
-                      Object.values(r)
-                        .filter(o => typeof o === 'object')
-                        .filter(o => !!o.label),
-                      'sort',
-                    ).map(v => {
-                      if (v.label === 'EK Abrechnung Typ') {
-                        return (
-                          <TableCellForSelect key={v.label} width={v.width}>
-                            <Select
-                              options={get(
-                                dataLists,
-                                'allEkAbrechnungstypWertes.nodes',
-                                [],
-                              )}
-                              row={r}
-                              val={v}
-                              field="ekAbrechnungstyp"
-                            />
-                          </TableCellForSelect>
-                        )
-                      }
-                      if (v.label === 'EK Frequenz') {
-                        return (
-                          <TableCellForSelect key={v.label} width={v.width}>
-                            <SelectGrouped
-                              optionsGrouped={ekfOptionsGroupedPerAp[r.apId]}
-                              row={r}
-                              val={v}
-                              field="ekfrequenz"
-                            />
-                          </TableCellForSelect>
-                        )
-                      }
-                      if (v.label === 'EK Frequenz abweichend') {
-                        return (
-                          <TableCellForSelect key={v.label} width={v.width}>
-                            <Checkbox
-                              row={r.tpop}
-                              value={v.value}
-                              field="ekfrequenzAbweichend"
-                            />
-                          </TableCellForSelect>
-                        )
-                      }
-                      if (v.label === 'Link') {
-                        return (
-                          <StyledTableCell key={v.label} width={v.width}>
-                            <OutsideLink
-                              onClick={() => {
-                                typeof window !== 'undefined' &&
-                                  window.open(v.value)
-                              }}
-                              title="in neuem Tab öffnen"
-                            >
-                              <FaExternalLinkAlt />
-                            </OutsideLink>
-                          </StyledTableCell>
-                        )
-                      }
-                      // DANGER: null is also an object!!
-                      if (v.value && typeof v.value === 'object') {
-                        return (
-                          <StyledTableCell key={v.label} width={v.width}>
-                            {v.value.ek.map(e => (
-                              <div key={e.id}>{ektypRenamed(e)}</div>
-                            ))}
-                          </StyledTableCell>
-                        )
-                      }
-                      return (
-                        <StyledTableCell key={v.label} width={v.width}>
-                          <div>{v.value}</div>
-                        </StyledTableCell>
-                      )
-                    })}
-                  </StyledTableRow>
-                ))}
-              </StyledTableBody>
-            </StyledTable>
+                </StyledTableBody>
+              </StyledTable>
+            </TableContainer>
           </>
         )}
       </Container>
