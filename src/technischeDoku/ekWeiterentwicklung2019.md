@@ -81,7 +81,7 @@ Das Formular, um Kontrollen zu planen.
   - TPop Bekannt seit
 - Diese Felder können ein- und ausgeblendet werden
 - :white_check_mark: Abrechnungstyp, EK-Frequenz und EK-Frequenz abweichend können bearbeitet werden
-- :white_check_mark: Für den Bereich zwischen der ersten Kontrolle und 15 Jahre in die Zukunft werden für jedes Jahr Spalten generiert
+- :white_check_mark: Für den Bereich zwischen der ersten Kontrolle, die ab 1993 erfolgte und 15 Jahre in die Zukunft werden für jedes Jahr Spalten generiert
 - Der Jahres-Spalten-Bereich kann horizontal gescrollt werden, wenn der Platz für die Anzeige aller nicht ausreicht
 - Eine Jahres-Spalte zeigt folgende Informationen an:
   - EK geplant, bearbeitbar

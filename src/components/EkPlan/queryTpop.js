@@ -19,7 +19,8 @@ export default gql`
           text
         }
         bekanntSeit
-        tpopkontrsByTpopId {
+        # ensure never before 1993
+        tpopkontrsByTpopId(filter: { jahr: { greaterThanOrEqualTo: 1993 } }) {
           nodes {
             id
             jahr

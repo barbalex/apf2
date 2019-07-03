@@ -14,6 +14,10 @@ import max from 'lodash/max'
 import sortBy from 'lodash/sortBy'
 import groupBy from 'lodash/groupBy'
 import { observer } from 'mobx-react-lite'
+// this will be for Massnahmen
+import { GiSpade } from 'react-icons/gi'
+import { GoArrowRight } from 'react-icons/go'
+import { GoZap } from 'react-icons/go'
 
 import queryTpop from './queryTpop'
 import queryLists from './queryLists'
@@ -23,6 +27,8 @@ import appBaseUrl from '../../modules/appBaseUrl'
 import SelectGrouped from './SelectGrouped'
 import Select from './Select'
 import Checkbox from './Checkbox'
+import EkfIcon from '../../icons/Ekf'
+import EkIcon from '../../icons/Ek'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -116,27 +122,27 @@ const OutsideLink = styled.div`
     color: rgba(0, 0, 0, 0.77);
   }
 `
-
-const ektypRenamed = e => {
-  switch (e.typ) {
-    case 'Freiwilligen-Erfolgskontrolle':
-      return 'EKF'
-    case 'Zwischenbeurteilung':
-      return 'EK'
-    case 'Ausgangszustand':
-      return 'AZ'
-    default:
-      return e.typ
-  }
-}
+const AzContainer = styled.div`
+  display: flex;
+  height: 25px;
+`
+const AzIcon = styled(GoArrowRight)`
+  font-size: 1.5rem;
+`
+const NrOfEvents = styled.span`
+  bottom: 12px;
+  left: -2px;
+  position: relative;
+`
 
 const yearsFromTpops = tpops => {
   const ekplans = tpops.flatMap(tpop => get(tpop, 'ekplansByTpopId.nodes'))
   const kontrs = tpops.flatMap(tpop => get(tpop, 'tpopkontrsByTpopId.nodes'))
   const firstEk = minBy([...ekplans, ...kontrs], 'jahr')
-  // ensure never before 1993
-  let firstYear = max([firstEk ? firstEk.jahr : 0, 1993])
   const currentYear = new Date().getFullYear()
+  const firstEkYear = firstEk ? firstEk.jahr : null
+  // ensure never before 1993
+  let firstYear = firstEkYear || currentYear
   const lastYear = currentYear + 15
   const years = []
   while (firstYear <= lastYear) {
@@ -235,7 +241,15 @@ const rowsFromTpop = ({ tpop, years }) => {
         label: year,
         value: {
           plan: ekplans.filter(o => o.jahr === year),
-          ek: kontrs.filter(o => o.jahr === year),
+          az: kontrs
+            .filter(o => o.jahr === year)
+            .filter(o => o.typ === 'Ausgangszustand'),
+          ek: kontrs
+            .filter(o => o.jahr === year)
+            .filter(o => o.typ === 'Zwischenbeurteilung'),
+          ekf: kontrs
+            .filter(o => o.jahr === year)
+            .filter(o => o.typ === 'Freiwilligen-Erfolgskontrolle'),
         },
         sort: year,
         width: 37,
@@ -323,7 +337,6 @@ const EkPlan = () => {
     headerComponent && headerComponent.current
       ? headerComponent.current.clientHeight
       : 0
-  console.log('EkPlan rendering, header height:', headerheight)
 
   return (
     <ErrorBoundary>
@@ -415,9 +428,41 @@ const EkPlan = () => {
                         if (v.value && typeof v.value === 'object') {
                           return (
                             <StyledTableCell key={v.label} width={v.width}>
-                              {v.value.ek.map(e => (
-                                <div key={e.id}>{ektypRenamed(e)}</div>
-                              ))}
+                              <>
+                                {!!v.value.az.length && (
+                                  <AzContainer>
+                                    <AzIcon
+                                      title="Ausgangszustand"
+                                      aria-label="Ausgangszustand"
+                                    />
+                                    {v.value.az.length > 1 && (
+                                      <NrOfEvents>
+                                        {v.value.az.length}
+                                      </NrOfEvents>
+                                    )}
+                                  </AzContainer>
+                                )}
+                                {!!v.value.ek.length && (
+                                  <div title="EK" aria-label="EK">
+                                    <EkIcon width="25px" height="20px" />
+                                    {v.value.ek.length > 1 && (
+                                      <NrOfEvents>
+                                        {v.value.ek.length}
+                                      </NrOfEvents>
+                                    )}
+                                  </div>
+                                )}
+                                {!!v.value.ekf.length && (
+                                  <div title="EKF" aria-label="EKF">
+                                    <EkfIcon width="25px" height="20px" />
+                                    {v.value.ekf.length > 1 && (
+                                      <NrOfEvents>
+                                        {v.value.ekf.length}
+                                      </NrOfEvents>
+                                    )}
+                                  </div>
+                                )}
+                              </>
                             </StyledTableCell>
                           )
                         }
