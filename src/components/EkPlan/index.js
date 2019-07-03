@@ -88,7 +88,7 @@ const StyledTableRow = styled(TableRow)`
     background: #fefdf5;
   }
 `
-const StyledTableCell = styled(TableCell)`
+const EkTableCell = styled(TableCell)`
   width: ${props => `${props.width}px`};
   min-width: ${props => `${props.width}px`};
   max-width: ${props => `${props.width}px`};
@@ -97,15 +97,29 @@ const StyledTableCell = styled(TableCell)`
   text-overflow: ellipsis !important;
   overflow: hidden !important;
   padding: 2px 4px !important;
+  border-left: solid rgba(0, 128, 0, 0.1) 1px;
+  border-right: solid rgba(0, 128, 0, 0.1) 1px;
   &:first-child {
     padding-left: 10px !important;
   }
+  div {
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    overflow: hidden !important;
+  }
 `
-const TableCellForSelect = styled(StyledTableCell)`
+const TableCellForSelect = styled(EkTableCell)`
   padding: 0 !important;
   font-size: unset !important;
   border-left: solid green 1px;
   border-right: solid green 1px;
+  &:focus-within {
+    border: solid orange 3px;
+  }
+`
+const TableCellForYear = styled(EkTableCell)`
+  border-left: solid rgba(0, 128, 0, 0.1) 1px;
+  border-right: solid rgba(0, 128, 0, 0.1) 1px;
   &:focus-within {
     border: solid orange 3px;
   }
@@ -411,7 +425,7 @@ const EkPlan = () => {
                         }
                         if (v.label === 'Link') {
                           return (
-                            <StyledTableCell key={v.label} width={v.width}>
+                            <EkTableCell key={v.label} width={v.width}>
                               <OutsideLink
                                 onClick={() => {
                                   typeof window !== 'undefined' &&
@@ -421,13 +435,13 @@ const EkPlan = () => {
                               >
                                 <FaExternalLinkAlt />
                               </OutsideLink>
-                            </StyledTableCell>
+                            </EkTableCell>
                           )
                         }
                         // DANGER: null is also an object!!
                         if (v.value && typeof v.value === 'object') {
                           return (
-                            <StyledTableCell key={v.label} width={v.width}>
+                            <TableCellForYear key={v.label} width={v.width}>
                               <>
                                 {!!v.value.az.length && (
                                   <AzContainer>
@@ -463,13 +477,13 @@ const EkPlan = () => {
                                   </div>
                                 )}
                               </>
-                            </StyledTableCell>
+                            </TableCellForYear>
                           )
                         }
                         return (
-                          <StyledTableCell key={v.label} width={v.width}>
+                          <EkTableCell key={v.label} width={v.width}>
                             <div>{v.value}</div>
-                          </StyledTableCell>
+                          </EkTableCell>
                         )
                       })}
                     </StyledTableRow>
