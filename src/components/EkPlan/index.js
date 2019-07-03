@@ -74,8 +74,8 @@ const StyledTableHeaderCell = styled(TableCell)`
   color: black !important;
   padding: 2px 4px !important;
   line-height: 1rem !important;
-  border-left: solid rgba(0, 0, 0, 0.1) 1px;
-  border-right: solid rgba(0, 0, 0, 0.1) 1px;
+  border-left: solid hsla(120, 25%, 70%, 1) 1px;
+  border-right: solid hsla(120, 25%, 70%, 1) 1px;
   background: ${props =>
     props['data-columnishovered']
       ? 'hsla(120,25%,82%,1)'
@@ -116,8 +116,8 @@ const EkTableCell = styled(TableCell)`
   text-overflow: ellipsis !important;
   overflow: hidden !important;
   padding: 2px 4px !important;
-  border-left: solid rgba(0, 128, 0, 0.1) 1px;
-  border-right: solid rgba(0, 128, 0, 0.1) 1px;
+  border-left: solid hsla(70, 80%, 75%, 1) 1px;
+  border-right: solid hsla(70, 80%, 75%, 1) 1px;
   background: ${props =>
     props['data-columnishovered']
       ? 'hsla(45, 100%, 90%, 1) !important'
@@ -144,8 +144,6 @@ const TableCellForSelect = styled(EkTableCell)`
   }
 `
 const TableCellForYear = styled(EkTableCell)`
-  border-left: solid rgba(0, 128, 0, 0.1) 1px;
-  border-right: solid rgba(0, 128, 0, 0.1) 1px;
   &:focus-within {
     border: solid orange 3px;
   }
