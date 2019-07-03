@@ -80,10 +80,11 @@ const StyledTableHeaderCell = styled(TableCell)`
     props['data-columnishovered']
       ? 'hsla(120,25%,82%,1)'
       : 'hsla(120,25%,88%,1)'};
+  left: ${props =>
+    props['data-left'] === undefined ? 'unset' : `${props['data-left']}px`};
+  z-index: ${props => (props['data-left'] === undefined ? 0 : 1)};
   &:first-child {
     padding-left: 10px !important;
-    left: 0;
-    z-index: 1;
   }
 `
 const StyledTableBody = styled(TableBody)`
@@ -121,10 +122,11 @@ const EkTableCell = styled(TableCell)`
     props['data-columnishovered']
       ? 'hsla(45, 100%, 90%, 1) !important'
       : 'unset'};
+  left: ${props =>
+    props['data-left'] === undefined ? 'unset' : `${props['data-left']}px`};
+  z-index: ${props => (props['data-left'] === undefined ? 0 : 1)};
   &:first-child {
     padding-left: 10px !important;
-    left: 0;
-    z-index: 1;
   }
   div {
     white-space: nowrap !important;
@@ -197,54 +199,63 @@ const rowsFromTpop = ({ tpop, years }) => {
     tpop: tpop,
     apId: get(tpop, 'popByPopId.apByApId.id'),
     ap: {
+      name: 'ap',
       label: 'AP',
       value: get(tpop, 'popByPopId.apByApId.label'),
       sort: 1,
       width: 200,
     },
     popNr: {
+      name: 'popNr',
       label: 'Pop Nr',
       value: get(tpop, 'popByPopId.nr') || '-',
       sort: 2,
       width: 40,
     },
     popName: {
+      name: 'popName',
       label: 'Pop Name',
       value: get(tpop, 'popByPopId.name') || '-',
       sort: 3,
       width: 200,
     },
     tpopNr: {
+      name: 'nr',
       label: 'Nr',
       value: get(tpop, 'nr') || '-',
       sort: 4,
       width: 50,
     },
     tpopGemeinde: {
+      name: 'gemeinde',
       label: 'Gemeinde',
       value: get(tpop, 'gemeinde') || '-',
       sort: 5,
       width: 130,
     },
     tpopFlurname: {
+      name: 'flurname',
       label: 'Flurname',
       value: get(tpop, 'flurname') || '-',
       sort: 6,
       width: 200,
     },
     tpopStatus: {
+      name: 'status',
       label: 'Status',
       value: get(tpop, 'popStatusWerteByStatus.text') || '-',
       sort: 7,
       width: 150,
     },
     tpopBekanntSeit: {
+      name: 'bekanntSeit',
       label: 'bekannt seit',
       value: get(tpop, 'bekanntSeit') || '-',
       sort: 8,
       width: 60,
     },
     tpopLink: {
+      name: 'link',
       label: 'Link',
       value: `${appBaseUrl()}Daten/Projekte/${
         tpop.popByPopId.apByApId.projId
@@ -255,18 +266,21 @@ const rowsFromTpop = ({ tpop, years }) => {
       width: 37,
     },
     ekAbrechnungstyp: {
+      name: 'ekAbrechnungstyp',
       label: 'EK Abrechnung Typ',
       value: get(tpop, 'ekAbrechnungstyp'),
       sort: 9,
       width: 80,
     },
     ekfrequenz: {
+      name: 'ekfrequenz',
       label: 'EK Frequenz',
       value: get(tpop, 'ekfrequenz') || null,
       sort: 10,
       width: 70,
     },
     ekfrequenzAbweichend: {
+      name: 'ekfrequenzAbweichend',
       label: 'EK Frequenz abweichend',
       value: get(tpop, 'ekfrequenzAbweichend') === true,
       sort: 11,
@@ -299,7 +313,32 @@ const rowsFromTpop = ({ tpop, years }) => {
 const EkPlan = () => {
   //const store = useContext(storeContext)
   const headerRef = useRef(null)
-  const ekfAbweichendHeaderRef = useRef(null)
+  const apRef = useRef(null)
+  const popNrRef = useRef(null)
+  const popNameRef = useRef(null)
+  const nrRef = useRef(null)
+  const gemeindeRef = useRef(null)
+  const flurnameRef = useRef(null)
+  const statusRef = useRef(null)
+  const bekanntSeitRef = useRef(null)
+  const linkRef = useRef(null)
+  const ekAbrechnungstypRef = useRef(null)
+  const ekfrequenzRef = useRef(null)
+  const ekfrequenzAbweichendRef = useRef(null)
+  const refs = {
+    ap: apRef,
+    popNr: popNrRef,
+    popName: popNameRef,
+    nr: nrRef,
+    gemeinde: gemeindeRef,
+    flurname: flurnameRef,
+    status: statusRef,
+    bekanntSeit: bekanntSeitRef,
+    link: linkRef,
+    ekAbrechnungstyp: ekAbrechnungstypRef,
+    ekfrequenz: ekfrequenzRef,
+    ekfrequenzAbweichend: ekfrequenzAbweichendRef,
+  }
 
   const [columnHovered, setColumnHovered] = useState(null)
   const resetYearHovered = useCallback(() => setColumnHovered(null), [])
@@ -377,14 +416,36 @@ const EkPlan = () => {
 
   const headerheight =
     headerRef && headerRef.current ? headerRef.current.clientHeight : 0
-  const ekfAbweichend = ekfAbweichendHeaderRef.current
-  console.log(
-    'EkPlan, ekfAbweichendComponentBoundingClient:',
-    ekfAbweichend && ekfAbweichend.getBoundingClientRect
-      ? ekfAbweichend.getBoundingClientRect()
-      : null,
-  )
-  const scrollPosition = ''
+  const scrollPositions = {
+    ap: apRef.current ? apRef.current.getBoundingClientRect().left : 0,
+    popNr: popNrRef.current ? popNrRef.current.getBoundingClientRect().left : 0,
+    popName: popNameRef.current
+      ? popNameRef.current.getBoundingClientRect().left
+      : 0,
+    nr: nrRef.current ? nrRef.current.getBoundingClientRect().left : 0,
+    gemeinde: gemeindeRef.current
+      ? gemeindeRef.current.getBoundingClientRect().left
+      : 0,
+    flurname: flurnameRef.current
+      ? flurnameRef.current.getBoundingClientRect().left
+      : 0,
+    status: statusRef.current
+      ? statusRef.current.getBoundingClientRect().left
+      : 0,
+    bekanntSeit: bekanntSeitRef.current
+      ? bekanntSeitRef.current.getBoundingClientRect().left
+      : 0,
+    link: linkRef.current ? linkRef.current.getBoundingClientRect().left : 0,
+    ekAbrechnungstyp: ekAbrechnungstypRef.current
+      ? ekAbrechnungstypRef.current.getBoundingClientRect().left
+      : 0,
+    ekfrequenz: ekfrequenzRef.current
+      ? ekfrequenzRef.current.getBoundingClientRect().left
+      : 0,
+    ekfrequenzAbweichend: ekfrequenzAbweichendRef.current
+      ? ekfrequenzAbweichendRef.current.getBoundingClientRect().left
+      : 0,
+  }
 
   return (
     <ErrorBoundary>
@@ -402,40 +463,23 @@ const EkPlan = () => {
               <StyledTable headerheight={headerheight} size="small">
                 <StyledTableHead headerheight={headerheight}>
                   <StyledTableHeaderRow headerheight={headerheight}>
-                    {fields.map(f => {
-                      if (f.label === 'EK Frequenz abweichend')
-                        return (
-                          <StyledTableHeaderCell
-                            key={f.label}
-                            ref={ekfAbweichendHeaderRef}
-                            width={f.width}
-                            data-columnishovered={columnHovered === f.label}
-                            onMouseEnter={() =>
-                              f.label > 1000 &&
-                              f.label < 3000 &&
-                              setColumnHovered(f.label)
-                            }
-                            onMouseLeave={resetYearHovered}
-                          >
-                            {f.label}
-                          </StyledTableHeaderCell>
-                        )
-                      return (
-                        <StyledTableHeaderCell
-                          key={f.label}
-                          width={f.width}
-                          data-columnishovered={columnHovered === f.label}
-                          onMouseEnter={() =>
-                            f.label > 1000 &&
-                            f.label < 3000 &&
-                            setColumnHovered(f.label)
-                          }
-                          onMouseLeave={resetYearHovered}
-                        >
-                          {f.label}
-                        </StyledTableHeaderCell>
-                      )
-                    })}
+                    {fields.map(f => (
+                      <StyledTableHeaderCell
+                        key={f.label}
+                        ref={refs[f.name] ? refs[f.name] : null}
+                        width={f.width}
+                        data-columnishovered={columnHovered === f.label}
+                        onMouseEnter={() =>
+                          f.label > 1000 &&
+                          f.label < 3000 &&
+                          setColumnHovered(f.label)
+                        }
+                        onMouseLeave={resetYearHovered}
+                        data-left={scrollPositions[f.name]}
+                      >
+                        {f.label}
+                      </StyledTableHeaderCell>
+                    ))}
                   </StyledTableHeaderRow>
                 </StyledTableHead>
                 <StyledTableBody>
@@ -455,6 +499,7 @@ const EkPlan = () => {
                               onMouseEnter={() => setColumnHovered(v.label)}
                               onMouseLeave={resetYearHovered}
                               data-columnishovered={columnHovered === v.label}
+                              data-left={scrollPositions[v.name]}
                             >
                               <Select
                                 options={get(
@@ -477,6 +522,7 @@ const EkPlan = () => {
                               onMouseEnter={() => setColumnHovered(v.label)}
                               onMouseLeave={resetYearHovered}
                               data-columnishovered={columnHovered === v.label}
+                              data-left={scrollPositions[v.name]}
                             >
                               <SelectGrouped
                                 optionsGrouped={ekfOptionsGroupedPerAp[r.apId]}
@@ -495,6 +541,7 @@ const EkPlan = () => {
                               onMouseEnter={() => setColumnHovered(v.label)}
                               onMouseLeave={resetYearHovered}
                               data-columnishovered={columnHovered === v.label}
+                              data-left={scrollPositions[v.name]}
                             >
                               <Checkbox
                                 row={r.tpop}
@@ -512,6 +559,7 @@ const EkPlan = () => {
                               onMouseEnter={() => setColumnHovered(v.label)}
                               onMouseLeave={resetYearHovered}
                               data-columnishovered={columnHovered === v.label}
+                              data-left={scrollPositions[v.name]}
                             >
                               <OutsideLink
                                 onClick={() => {
@@ -580,6 +628,7 @@ const EkPlan = () => {
                             onMouseEnter={() => setColumnHovered(v.label)}
                             onMouseLeave={resetYearHovered}
                             data-columnishovered={columnHovered === v.label}
+                            data-left={scrollPositions[v.name]}
                           >
                             <div>{v.value}</div>
                           </EkTableCell>
