@@ -38,7 +38,7 @@ const Header = styled.div`
 `
 const TableContainer = styled.div`
   position: relative;
-  overflow-x: auto;
+  overflow: auto;
   width: 100vw;
   height: ${props =>
     `calc(100vh - 64px - ${props.headerheight}px - 17.6px) !important`};
@@ -52,16 +52,11 @@ const StyledTable = styled(Table)`
 `
 const StyledTableHead = styled(TableHead)`
   display: block !important;
-  background: #d9e8d9 !important;
+  background: hsla(120, 25%, 88%, 1) !important;
   height: 50px !important;
   position: sticky;
   top: 0;
-`
-const StyledTableBody = styled(TableBody)`
-  display: block !important;
-  overflow-y: auto;
-  height: ${props =>
-    `calc(100vh - 64px - ${props.headerheight}px - 17.6px - 50px) !important`};
+  z-index: 2;
 `
 const StyledTableHeaderRow = styled(TableRow)`
   position: relative !important;
@@ -69,11 +64,12 @@ const StyledTableHeaderRow = styled(TableRow)`
   height: 50px !important;
 `
 const StyledTableHeaderCell = styled(TableCell)`
+  position: sticky;
   width: ${props => `${props.width}px`};
   min-width: ${props => `${props.width}px`};
   max-width: ${props => `${props.width}px`};
   font-weight: ${props =>
-    props.columnIsHovered ? '800 !important' : '500 !important'};
+    props['data-columnishovered'] ? '800 !important' : '500 !important'};
   font-size: 0.75rem !important;
   color: black !important;
   padding: 2px 4px !important;
@@ -81,21 +77,36 @@ const StyledTableHeaderCell = styled(TableCell)`
   border-left: solid rgba(0, 0, 0, 0.1) 1px;
   border-right: solid rgba(0, 0, 0, 0.1) 1px;
   background: ${props =>
-    props.columnIsHovered ? 'rgba(0, 0, 0, 0.05)' : 'rgba(0, 0, 0, 0)'};
+    props['data-columnishovered']
+      ? 'hsla(120,25%,82%,1)'
+      : 'hsla(120,25%,88%,1)'};
   &:first-child {
     padding-left: 10px !important;
+    left: 0;
+    z-index: 1;
   }
 `
+const StyledTableBody = styled(TableBody)`
+  display: block !important;
+  height: ${props =>
+    `calc(100vh - 64px - ${props.headerheight}px - 17.6px - 50px) !important`};
+`
 const StyledTableRow = styled(TableRow)`
+  position: relative !important;
+  display: block !important;
   height: 100%;
-  &:hover {
-    background: rgba(255, 211, 167, 0.3) !important;
+  &:hover td {
+    background: hsla(45, 100%, 90%, 1) !important;
   }
-  &:nth-of-type(odd) {
-    background: #fefdf5;
+  td {
+    background: #fffde7;
+  }
+  &:nth-of-type(odd) td {
+    background: #fffffc;
   }
 `
 const EkTableCell = styled(TableCell)`
+  position: sticky;
   width: ${props => `${props.width}px`};
   min-width: ${props => `${props.width}px`};
   max-width: ${props => `${props.width}px`};
@@ -107,9 +118,13 @@ const EkTableCell = styled(TableCell)`
   border-left: solid rgba(0, 128, 0, 0.1) 1px;
   border-right: solid rgba(0, 128, 0, 0.1) 1px;
   background: ${props =>
-    props.columnIsHovered ? 'rgba(0, 0, 0, 0.05)' : 'rgba(0, 0, 0, 0)'};
+    props['data-columnishovered']
+      ? 'hsla(45, 100%, 90%, 1) !important'
+      : 'unset'};
   &:first-child {
     padding-left: 10px !important;
+    left: 0;
+    z-index: 1;
   }
   div {
     white-space: nowrap !important;
@@ -283,7 +298,8 @@ const rowsFromTpop = ({ tpop, years }) => {
 
 const EkPlan = () => {
   //const store = useContext(storeContext)
-  const headerComponent = useRef(null)
+  const headerRef = useRef(null)
+  const ekfAbweichendHeaderRef = useRef(null)
 
   const [columnHovered, setColumnHovered] = useState(null)
   const resetYearHovered = useCallback(() => setColumnHovered(null), [])
@@ -360,14 +376,20 @@ const EkPlan = () => {
   )
 
   const headerheight =
-    headerComponent && headerComponent.current
-      ? headerComponent.current.clientHeight
-      : 0
+    headerRef && headerRef.current ? headerRef.current.clientHeight : 0
+  const ekfAbweichend = ekfAbweichendHeaderRef.current
+  console.log(
+    'EkPlan, ekfAbweichendComponentBoundingClient:',
+    ekfAbweichend && ekfAbweichend.getBoundingClientRect
+      ? ekfAbweichend.getBoundingClientRect()
+      : null,
+  )
+  const scrollPosition = ''
 
   return (
     <ErrorBoundary>
       <Container>
-        <Header ref={headerComponent}>
+        <Header ref={headerRef}>
           <div>Das ist eine Baustelle - bitte noch nicht benutzen</div>
           <ApList aps={aps} removeAp={removeAp} addAp={addAp} />
           {aps.length > 0 && loadingTpop && 'Lade...'}
@@ -380,21 +402,40 @@ const EkPlan = () => {
               <StyledTable headerheight={headerheight} size="small">
                 <StyledTableHead headerheight={headerheight}>
                   <StyledTableHeaderRow headerheight={headerheight}>
-                    {fields.map(f => (
-                      <StyledTableHeaderCell
-                        key={f.label}
-                        width={f.width}
-                        columnIsHovered={columnHovered === f.label}
-                        onMouseEnter={() =>
-                          f.label > 1000 &&
-                          f.label < 3000 &&
-                          setColumnHovered(f.label)
-                        }
-                        onMouseLeave={resetYearHovered}
-                      >
-                        {f.label}
-                      </StyledTableHeaderCell>
-                    ))}
+                    {fields.map(f => {
+                      if (f.label === 'EK Frequenz abweichend')
+                        return (
+                          <StyledTableHeaderCell
+                            key={f.label}
+                            ref={ekfAbweichendHeaderRef}
+                            width={f.width}
+                            data-columnishovered={columnHovered === f.label}
+                            onMouseEnter={() =>
+                              f.label > 1000 &&
+                              f.label < 3000 &&
+                              setColumnHovered(f.label)
+                            }
+                            onMouseLeave={resetYearHovered}
+                          >
+                            {f.label}
+                          </StyledTableHeaderCell>
+                        )
+                      return (
+                        <StyledTableHeaderCell
+                          key={f.label}
+                          width={f.width}
+                          data-columnishovered={columnHovered === f.label}
+                          onMouseEnter={() =>
+                            f.label > 1000 &&
+                            f.label < 3000 &&
+                            setColumnHovered(f.label)
+                          }
+                          onMouseLeave={resetYearHovered}
+                        >
+                          {f.label}
+                        </StyledTableHeaderCell>
+                      )
+                    })}
                   </StyledTableHeaderRow>
                 </StyledTableHead>
                 <StyledTableBody>
@@ -413,7 +454,7 @@ const EkPlan = () => {
                               width={v.width}
                               onMouseEnter={() => setColumnHovered(v.label)}
                               onMouseLeave={resetYearHovered}
-                              columnIsHovered={columnHovered === v.label}
+                              data-columnishovered={columnHovered === v.label}
                             >
                               <Select
                                 options={get(
@@ -435,7 +476,7 @@ const EkPlan = () => {
                               width={v.width}
                               onMouseEnter={() => setColumnHovered(v.label)}
                               onMouseLeave={resetYearHovered}
-                              columnIsHovered={columnHovered === v.label}
+                              data-columnishovered={columnHovered === v.label}
                             >
                               <SelectGrouped
                                 optionsGrouped={ekfOptionsGroupedPerAp[r.apId]}
@@ -453,7 +494,7 @@ const EkPlan = () => {
                               width={v.width}
                               onMouseEnter={() => setColumnHovered(v.label)}
                               onMouseLeave={resetYearHovered}
-                              columnIsHovered={columnHovered === v.label}
+                              data-columnishovered={columnHovered === v.label}
                             >
                               <Checkbox
                                 row={r.tpop}
@@ -470,7 +511,7 @@ const EkPlan = () => {
                               width={v.width}
                               onMouseEnter={() => setColumnHovered(v.label)}
                               onMouseLeave={resetYearHovered}
-                              columnIsHovered={columnHovered === v.label}
+                              data-columnishovered={columnHovered === v.label}
                             >
                               <OutsideLink
                                 onClick={() => {
@@ -492,7 +533,7 @@ const EkPlan = () => {
                               width={v.width}
                               onMouseEnter={() => setColumnHovered(v.label)}
                               onMouseLeave={resetYearHovered}
-                              columnIsHovered={columnHovered === v.label}
+                              data-columnishovered={columnHovered === v.label}
                             >
                               <>
                                 {!!v.value.az.length && (
@@ -538,7 +579,7 @@ const EkPlan = () => {
                             width={v.width}
                             onMouseEnter={() => setColumnHovered(v.label)}
                             onMouseLeave={resetYearHovered}
-                            columnIsHovered={columnHovered === v.label}
+                            data-columnishovered={columnHovered === v.label}
                           >
                             <div>{v.value}</div>
                           </EkTableCell>
