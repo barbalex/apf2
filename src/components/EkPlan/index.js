@@ -48,6 +48,8 @@ const StyledTable = styled(Table)`
   position: relative;
   padding-left: 10px;
   padding-right: 10px;
+  border-collapse: separate;
+  border-spacing: 0;
 `
 const StyledTableHead = styled(TableHead)`
   display: block !important;
@@ -71,10 +73,16 @@ const StyledTableHeaderCell = styled(TableCell)`
   width: ${props => `${props.width}px`};
   min-width: ${props => `${props.width}px`};
   max-width: ${props => `${props.width}px`};
+  font-weight: ${props =>
+    props.yearishovered ? '800 !important' : '500 !important'};
   font-size: 0.75rem !important;
   color: black !important;
   padding: 2px 4px !important;
   line-height: 1rem !important;
+  border-left: solid rgba(0, 0, 0, 0.1) 1px;
+  border-right: solid rgba(0, 0, 0, 0.1) 1px;
+  background: ${props =>
+    props.yearishovered ? 'rgba(0, 0, 0, 0.05)' : 'rgba(0, 0, 0, 0)'};
   &:first-child {
     padding-left: 10px !important;
   }
@@ -120,6 +128,8 @@ const TableCellForSelect = styled(EkTableCell)`
 const TableCellForYear = styled(EkTableCell)`
   border-left: solid rgba(0, 128, 0, 0.1) 1px;
   border-right: solid rgba(0, 128, 0, 0.1) 1px;
+  background: ${props =>
+    props.yearishovered ? 'rgba(0, 0, 0, 0.05)' : 'rgba(0, 0, 0, 0)'};
   &:focus-within {
     border: solid orange 3px;
   }
@@ -266,7 +276,7 @@ const rowsFromTpop = ({ tpop, years }) => {
             .filter(o => o.typ === 'Freiwilligen-Erfolgskontrolle'),
         },
         sort: year,
-        width: 37,
+        width: 38,
       }),
   )
   return fields
@@ -275,6 +285,9 @@ const rowsFromTpop = ({ tpop, years }) => {
 const EkPlan = () => {
   //const store = useContext(storeContext)
   const headerComponent = useRef(null)
+
+  const [yearHovered, setYearHovered] = useState(null)
+  const resetYearHovered = useCallback(() => setYearHovered(null), [])
 
   const [aps, setAps] = useState([])
   const apValues = useMemo(() => aps.map(a => a.value), [aps])
@@ -369,7 +382,17 @@ const EkPlan = () => {
                 <StyledTableHead headerheight={headerheight}>
                   <StyledTableHeaderRow headerheight={headerheight}>
                     {fields.map(f => (
-                      <StyledTableHeaderCell key={f.label} width={f.width}>
+                      <StyledTableHeaderCell
+                        key={f.label}
+                        width={f.width}
+                        yearishovered={yearHovered === f.label}
+                        onMouseEnter={() =>
+                          f.label > 1000 &&
+                          f.label < 3000 &&
+                          setYearHovered(f.label)
+                        }
+                        onMouseLeave={resetYearHovered}
+                      >
                         {f.label}
                       </StyledTableHeaderCell>
                     ))}
@@ -441,7 +464,13 @@ const EkPlan = () => {
                         // DANGER: null is also an object!!
                         if (v.value && typeof v.value === 'object') {
                           return (
-                            <TableCellForYear key={v.label} width={v.width}>
+                            <TableCellForYear
+                              key={v.label}
+                              width={v.width}
+                              onMouseEnter={() => setYearHovered(v.label)}
+                              onMouseLeave={resetYearHovered}
+                              yearishovered={yearHovered === v.label}
+                            >
                               <>
                                 {!!v.value.az.length && (
                                   <AzContainer>
