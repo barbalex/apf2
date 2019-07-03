@@ -73,7 +73,7 @@ const StyledTableHeaderCell = styled(TableCell)`
   min-width: ${props => `${props.width}px`};
   max-width: ${props => `${props.width}px`};
   font-weight: ${props =>
-    props.yearishovered ? '800 !important' : '500 !important'};
+    props.columnIsHovered ? '800 !important' : '500 !important'};
   font-size: 0.75rem !important;
   color: black !important;
   padding: 2px 4px !important;
@@ -81,7 +81,7 @@ const StyledTableHeaderCell = styled(TableCell)`
   border-left: solid rgba(0, 0, 0, 0.1) 1px;
   border-right: solid rgba(0, 0, 0, 0.1) 1px;
   background: ${props =>
-    props.yearishovered ? 'rgba(0, 0, 0, 0.05)' : 'rgba(0, 0, 0, 0)'};
+    props.columnIsHovered ? 'rgba(0, 0, 0, 0.05)' : 'rgba(0, 0, 0, 0)'};
   &:first-child {
     padding-left: 10px !important;
   }
@@ -106,6 +106,8 @@ const EkTableCell = styled(TableCell)`
   padding: 2px 4px !important;
   border-left: solid rgba(0, 128, 0, 0.1) 1px;
   border-right: solid rgba(0, 128, 0, 0.1) 1px;
+  background: ${props =>
+    props.columnIsHovered ? 'rgba(0, 0, 0, 0.05)' : 'rgba(0, 0, 0, 0)'};
   &:first-child {
     padding-left: 10px !important;
   }
@@ -127,8 +129,6 @@ const TableCellForSelect = styled(EkTableCell)`
 const TableCellForYear = styled(EkTableCell)`
   border-left: solid rgba(0, 128, 0, 0.1) 1px;
   border-right: solid rgba(0, 128, 0, 0.1) 1px;
-  background: ${props =>
-    props.yearishovered ? 'rgba(0, 0, 0, 0.05)' : 'rgba(0, 0, 0, 0)'};
   &:focus-within {
     border: solid orange 3px;
   }
@@ -243,7 +243,7 @@ const rowsFromTpop = ({ tpop, years }) => {
       label: 'EK Abrechnung Typ',
       value: get(tpop, 'ekAbrechnungstyp'),
       sort: 9,
-      width: 75,
+      width: 80,
     },
     ekfrequenz: {
       label: 'EK Frequenz',
@@ -255,7 +255,7 @@ const rowsFromTpop = ({ tpop, years }) => {
       label: 'EK Frequenz abweichend',
       value: get(tpop, 'ekfrequenzAbweichend') === true,
       sort: 11,
-      width: 75,
+      width: 76,
     },
   }
   years.forEach(
@@ -285,8 +285,8 @@ const EkPlan = () => {
   //const store = useContext(storeContext)
   const headerComponent = useRef(null)
 
-  const [yearHovered, setYearHovered] = useState(null)
-  const resetYearHovered = useCallback(() => setYearHovered(null), [])
+  const [columnHovered, setColumnHovered] = useState(null)
+  const resetYearHovered = useCallback(() => setColumnHovered(null), [])
 
   const [aps, setAps] = useState([])
   const apValues = useMemo(() => aps.map(a => a.value), [aps])
@@ -384,11 +384,11 @@ const EkPlan = () => {
                       <StyledTableHeaderCell
                         key={f.label}
                         width={f.width}
-                        yearishovered={yearHovered === f.label}
+                        columnIsHovered={columnHovered === f.label}
                         onMouseEnter={() =>
                           f.label > 1000 &&
                           f.label < 3000 &&
-                          setYearHovered(f.label)
+                          setColumnHovered(f.label)
                         }
                         onMouseLeave={resetYearHovered}
                       >
@@ -408,7 +408,13 @@ const EkPlan = () => {
                       ).map(v => {
                         if (v.label === 'EK Abrechnung Typ') {
                           return (
-                            <TableCellForSelect key={v.label} width={v.width}>
+                            <TableCellForSelect
+                              key={v.label}
+                              width={v.width}
+                              onMouseEnter={() => setColumnHovered(v.label)}
+                              onMouseLeave={resetYearHovered}
+                              columnIsHovered={columnHovered === v.label}
+                            >
                               <Select
                                 options={get(
                                   dataLists,
@@ -424,7 +430,13 @@ const EkPlan = () => {
                         }
                         if (v.label === 'EK Frequenz') {
                           return (
-                            <TableCellForSelect key={v.label} width={v.width}>
+                            <TableCellForSelect
+                              key={v.label}
+                              width={v.width}
+                              onMouseEnter={() => setColumnHovered(v.label)}
+                              onMouseLeave={resetYearHovered}
+                              columnIsHovered={columnHovered === v.label}
+                            >
                               <SelectGrouped
                                 optionsGrouped={ekfOptionsGroupedPerAp[r.apId]}
                                 row={r}
@@ -436,7 +448,13 @@ const EkPlan = () => {
                         }
                         if (v.label === 'EK Frequenz abweichend') {
                           return (
-                            <TableCellForSelect key={v.label} width={v.width}>
+                            <TableCellForSelect
+                              key={v.label}
+                              width={v.width}
+                              onMouseEnter={() => setColumnHovered(v.label)}
+                              onMouseLeave={resetYearHovered}
+                              columnIsHovered={columnHovered === v.label}
+                            >
                               <Checkbox
                                 row={r.tpop}
                                 value={v.value}
@@ -447,7 +465,13 @@ const EkPlan = () => {
                         }
                         if (v.label === 'Link') {
                           return (
-                            <EkTableCell key={v.label} width={v.width}>
+                            <EkTableCell
+                              key={v.label}
+                              width={v.width}
+                              onMouseEnter={() => setColumnHovered(v.label)}
+                              onMouseLeave={resetYearHovered}
+                              columnIsHovered={columnHovered === v.label}
+                            >
                               <OutsideLink
                                 onClick={() => {
                                   typeof window !== 'undefined' &&
@@ -466,9 +490,9 @@ const EkPlan = () => {
                             <TableCellForYear
                               key={v.label}
                               width={v.width}
-                              onMouseEnter={() => setYearHovered(v.label)}
+                              onMouseEnter={() => setColumnHovered(v.label)}
                               onMouseLeave={resetYearHovered}
-                              yearishovered={yearHovered === v.label}
+                              columnIsHovered={columnHovered === v.label}
                             >
                               <>
                                 {!!v.value.az.length && (
@@ -509,7 +533,13 @@ const EkPlan = () => {
                           )
                         }
                         return (
-                          <EkTableCell key={v.label} width={v.width}>
+                          <EkTableCell
+                            key={v.label}
+                            width={v.width}
+                            onMouseEnter={() => setColumnHovered(v.label)}
+                            onMouseLeave={resetYearHovered}
+                            columnIsHovered={columnHovered === v.label}
+                          >
                             <div>{v.value}</div>
                           </EkTableCell>
                         )
