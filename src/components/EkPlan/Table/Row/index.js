@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useCallback, useState } from 'react'
 import { useQuery } from 'react-apollo-hooks'
 import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
@@ -15,6 +15,7 @@ import CellForEkAbrechnungstyp from './CellForEkAbrechnungstyp'
 import CellForEkfrequenzAbweichend from './CellForEkfrequenzAbweichend'
 import CellForTpopLink from './CellForTpopLink'
 import CellForYear from './CellForYear'
+import CellForYearMenu from './CellForYearMenu'
 
 const StyledTableRow = styled(TableRow)`
   position: relative !important;
@@ -81,6 +82,25 @@ const EkPlanTableRow = ({
   resetYearHovered,
   scrollPositions,
 }) => {
+  const [yearMenuAnchor, setYearMenuAnchor] = useState(null)
+  const [lastClickedYearCell, setLastClickedYearCell] = useState({
+    year: null,
+    tpopId: null,
+    tpop: null,
+    ekPlan: false,
+    ekfPlan: false,
+  })
+  const closeYearCellMenu = useCallback(event => {
+    setYearMenuAnchor(null)
+    setLastClickedYearCell({
+      year: null,
+      tpopId: null,
+      tpop: null,
+      ekPlan: false,
+      ekfPlan: false,
+    })
+  }, [])
+
   const apValues = useMemo(() => aps.map(a => a.value), [aps])
 
   const { data: dataLists } = useQuery(queryLists, {
@@ -190,6 +210,8 @@ const EkPlanTableRow = ({
                   setColumnHovered={setColumnHovered}
                   resetYearHovered={resetYearHovered}
                   scrollPositions={scrollPositions}
+                  setLastClickedYearCell={setLastClickedYearCell}
+                  setYearMenuAnchor={setYearMenuAnchor}
                 />
               )
             }
@@ -207,6 +229,11 @@ const EkPlanTableRow = ({
             )
           })}
         </StyledTableRow>
+        <CellForYearMenu
+          yearMenuAnchor={yearMenuAnchor}
+          lastClickedYearCell={lastClickedYearCell}
+          closeYearCellMenu={closeYearCellMenu}
+        />
       </>
     </ErrorBoundary>
   )
