@@ -17,12 +17,12 @@ import { GiSpade } from 'react-icons/gi'
 import { GoZap } from 'react-icons/go'
 
 import queryLists from './queryLists'
-import Checkbox from './Checkbox'
 import EkfIcon from '../../../../icons/Ekf'
 import EkIcon from '../../../../icons/Ek'
 import CellForEkfrequenz from './CellForEkfrequenz'
 import CellForEkAbrechnungstyp from './CellForEkAbrechnungstyp'
 import CellForEkfrequenzAbweichend from './CellForEkfrequenzAbweichend'
+import CellForTpopLink from './CellForTpopLink'
 
 const StyledTableRow = styled(TableRow)`
   position: relative !important;
@@ -38,7 +38,7 @@ const StyledTableRow = styled(TableRow)`
     background: #fffffc;
   }
 `
-const EkTableCell = styled(TableCell)`
+export const EkTableCell = styled(TableCell)`
   position: sticky;
   width: ${props => `${props.width}px`};
   min-width: ${props => `${props.width}px`};
@@ -78,15 +78,6 @@ export const TableCellForSelect = styled(EkTableCell)`
 const TableCellForYear = styled(EkTableCell)`
   &:focus-within {
     border: solid orange 3px;
-  }
-`
-const OutsideLink = styled.div`
-  margin-left: 8px;
-  margin-bottom: -2px;
-  cursor: pointer;
-  svg {
-    font-size: 0.9em;
-    color: rgba(0, 0, 0, 0.77);
   }
 `
 const AzContainer = styled.div`
@@ -225,23 +216,14 @@ const EkPlanTableRow = ({
             }
             if (field.label === 'Link') {
               return (
-                <EkTableCell
+                <CellForTpopLink
                   key={field.label}
-                  width={field.width}
-                  onMouseEnter={() => setColumnHovered(field.label)}
-                  onMouseLeave={resetYearHovered}
-                  data-columnishovered={columnHovered === field.label}
-                  data-left={scrollPositions[field.name]}
-                >
-                  <OutsideLink
-                    onClick={() => {
-                      typeof window !== 'undefined' && window.open(field.value)
-                    }}
-                    title="in neuem Tab öffnen"
-                  >
-                    <FaExternalLinkAlt />
-                  </OutsideLink>
-                </EkTableCell>
+                  field={field}
+                  columnHovered={columnHovered}
+                  setColumnHovered={setColumnHovered}
+                  resetYearHovered={resetYearHovered}
+                  scrollPositions={scrollPositions}
+                />
               )
             }
             // DANGER: null is also an object!!
