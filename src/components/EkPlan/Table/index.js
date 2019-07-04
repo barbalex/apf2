@@ -16,6 +16,9 @@ import queryTpop from './queryTpop'
 import appBaseUrl from '../../../modules/appBaseUrl'
 import Row from './Row'
 
+const Container = styled.div`
+  padding: 10px;
+`
 const TableContainer = styled.div`
   position: relative;
   overflow: auto;
@@ -302,8 +305,8 @@ const EkPlanTable = ({ aps }) => {
       : 0,
   }
 
-  if (aps.length > 0 && loadingTpop) return 'Lade...'
-  if (errorTpop) return errorTpop.message
+  if (aps.length > 0 && loadingTpop) return <Container>Lade...</Container>
+  if (errorTpop) return <Container>errorTpop.message</Container>
   return (
     <ErrorBoundary>
       {rows.length > 0 && (

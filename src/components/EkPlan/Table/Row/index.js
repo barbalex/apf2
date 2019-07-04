@@ -17,11 +17,12 @@ import { GiSpade } from 'react-icons/gi'
 import { GoZap } from 'react-icons/go'
 
 import queryLists from './queryLists'
-import SelectGrouped from './SelectGrouped'
-import Select from './Select'
 import Checkbox from './Checkbox'
 import EkfIcon from '../../../../icons/Ekf'
 import EkIcon from '../../../../icons/Ek'
+import CellForEkfrequenz from './CellForEkfrequenz'
+import CellForEkAbrechnungstyp from './CellForEkAbrechnungstyp'
+import CellForEkfrequenzAbweichend from './CellForEkfrequenzAbweichend'
 
 const StyledTableRow = styled(TableRow)`
   position: relative !important;
@@ -65,7 +66,7 @@ const EkTableCell = styled(TableCell)`
     overflow: hidden !important;
   }
 `
-const TableCellForSelect = styled(EkTableCell)`
+export const TableCellForSelect = styled(EkTableCell)`
   padding: 0 !important;
   font-size: unset !important;
   border-left: solid green 1px;
@@ -147,7 +148,7 @@ const EkPlanTableRow = ({
   const ekfrequenzOptions = get(dataLists, 'allEkfrequenzs.nodes', []).map(
     o => {
       const ekTypeArray = [o.ek ? 'ek' : null, o.ekf ? 'ekf' : null].filter(
-        v => !!v,
+        field => !!field,
       )
       const code = (o.code || '').padEnd(2)
       const anwendungsfall = (
@@ -174,86 +175,67 @@ const EkPlanTableRow = ({
   return (
     <ErrorBoundary>
       <>
-        <StyledTableRow key={row.id}>
+        <StyledTableRow>
           {sortBy(
             Object.values(row)
               .filter(o => typeof o === 'object')
               .filter(o => !!o.label),
             'sort',
-          ).map(v => {
-            if (v.label === 'EK Abrechnung Typ') {
+          ).map(field => {
+            if (field.label === 'EK Abrechnung Typ') {
               return (
-                <TableCellForSelect
-                  key={v.label}
-                  width={v.width}
-                  onMouseEnter={() => setColumnHovered(v.label)}
-                  onMouseLeave={resetYearHovered}
-                  data-columnishovered={columnHovered === v.label}
-                  data-left={scrollPositions[v.name]}
-                >
-                  <Select
-                    options={get(
-                      dataLists,
-                      'allEkAbrechnungstypWertes.nodes',
-                      [],
-                    )}
-                    row={row}
-                    val={v}
-                    field="ekAbrechnungstyp"
-                  />
-                </TableCellForSelect>
+                <CellForEkAbrechnungstyp
+                  key={field.label}
+                  row={row}
+                  field={field}
+                  columnHovered={columnHovered}
+                  setColumnHovered={setColumnHovered}
+                  resetYearHovered={resetYearHovered}
+                  scrollPositions={scrollPositions}
+                  dataLists={dataLists}
+                />
               )
             }
-            if (v.label === 'EK Frequenz') {
+            if (field.label === 'EK Frequenz') {
               return (
-                <TableCellForSelect
-                  key={v.label}
-                  width={v.width}
-                  onMouseEnter={() => setColumnHovered(v.label)}
-                  onMouseLeave={resetYearHovered}
-                  data-columnishovered={columnHovered === v.label}
-                  data-left={scrollPositions[v.name]}
-                >
-                  <SelectGrouped
-                    optionsGrouped={ekfOptionsGroupedPerAp[row.apId]}
-                    row={row}
-                    val={v}
-                    field="ekfrequenz"
-                  />
-                </TableCellForSelect>
+                <CellForEkfrequenz
+                  key={field.label}
+                  row={row}
+                  field={field}
+                  columnHovered={columnHovered}
+                  setColumnHovered={setColumnHovered}
+                  resetYearHovered={resetYearHovered}
+                  scrollPositions={scrollPositions}
+                  ekfOptionsGroupedPerAp={ekfOptionsGroupedPerAp}
+                />
               )
             }
-            if (v.label === 'EK Frequenz abweichend') {
+            if (field.label === 'EK Frequenz abweichend') {
               return (
-                <TableCellForSelect
-                  key={v.label}
-                  width={v.width}
-                  onMouseEnter={() => setColumnHovered(v.label)}
-                  onMouseLeave={resetYearHovered}
-                  data-columnishovered={columnHovered === v.label}
-                  data-left={scrollPositions[v.name]}
-                >
-                  <Checkbox
-                    row={row.tpop}
-                    value={v.value}
-                    field="ekfrequenzAbweichend"
-                  />
-                </TableCellForSelect>
+                <CellForEkfrequenzAbweichend
+                  key={field.label}
+                  row={row}
+                  field={field}
+                  columnHovered={columnHovered}
+                  setColumnHovered={setColumnHovered}
+                  resetYearHovered={resetYearHovered}
+                  scrollPositions={scrollPositions}
+                />
               )
             }
-            if (v.label === 'Link') {
+            if (field.label === 'Link') {
               return (
                 <EkTableCell
-                  key={v.label}
-                  width={v.width}
-                  onMouseEnter={() => setColumnHovered(v.label)}
+                  key={field.label}
+                  width={field.width}
+                  onMouseEnter={() => setColumnHovered(field.label)}
                   onMouseLeave={resetYearHovered}
-                  data-columnishovered={columnHovered === v.label}
-                  data-left={scrollPositions[v.name]}
+                  data-columnishovered={columnHovered === field.label}
+                  data-left={scrollPositions[field.name]}
                 >
                   <OutsideLink
                     onClick={() => {
-                      typeof window !== 'undefined' && window.open(v.value)
+                      typeof window !== 'undefined' && window.open(field.value)
                     }}
                     title="in neuem Tab öffnen"
                   >
@@ -263,51 +245,51 @@ const EkPlanTableRow = ({
               )
             }
             // DANGER: null is also an object!!
-            if (v.value && typeof v.value === 'object') {
+            if (field.value && typeof field.value === 'object') {
               return (
                 <TableCellForYear
-                  key={v.label}
-                  width={v.width}
-                  onMouseEnter={() => setColumnHovered(v.label)}
+                  key={field.label}
+                  width={field.width}
+                  onMouseEnter={() => setColumnHovered(field.label)}
                   onMouseLeave={resetYearHovered}
-                  data-columnishovered={columnHovered === v.label}
+                  data-columnishovered={columnHovered === field.label}
                   onClick={event => {
                     setLastClickedYearCell({
-                      year: v.label,
+                      year: field.label,
                       tpopId: row.id,
                       tpop: `${row.ap.value} Pop: ${row.popNr.value}, TPop: ${row.tpopNr.value}`,
-                      ekPlan: !!v.value.ek.length,
-                      ekfPlan: !!v.value.ekf.length,
+                      ekPlan: !!field.value.ek.length,
+                      ekfPlan: !!field.value.ekf.length,
                     })
                     const currentTarget = event.currentTarget
                     setTimeout(() => setYearMenuAnchor(currentTarget))
                   }}
                 >
                   <>
-                    {!!v.value.az.length && (
+                    {!!field.value.az.length && (
                       <AzContainer>
                         <AzIcon
                           title="Ausgangszustand"
                           aria-label="Ausgangszustand"
                         />
-                        {v.value.az.length > 1 && (
-                          <NrOfEvents>{v.value.az.length}</NrOfEvents>
+                        {field.value.az.length > 1 && (
+                          <NrOfEvents>{field.value.az.length}</NrOfEvents>
                         )}
                       </AzContainer>
                     )}
-                    {!!v.value.ek.length && (
+                    {!!field.value.ek.length && (
                       <div title="EK" aria-label="EK">
                         <EkIcon width="25px" height="20px" />
-                        {v.value.ek.length > 1 && (
-                          <NrOfEvents>{v.value.ek.length}</NrOfEvents>
+                        {field.value.ek.length > 1 && (
+                          <NrOfEvents>{field.value.ek.length}</NrOfEvents>
                         )}
                       </div>
                     )}
-                    {!!v.value.ekf.length && (
+                    {!!field.value.ekf.length && (
                       <div title="EKF" aria-label="EKF">
                         <EkfIcon width="25px" height="20px" />
-                        {v.value.ekf.length > 1 && (
-                          <NrOfEvents>{v.value.ekf.length}</NrOfEvents>
+                        {field.value.ekf.length > 1 && (
+                          <NrOfEvents>{field.value.ekf.length}</NrOfEvents>
                         )}
                       </div>
                     )}
@@ -317,14 +299,14 @@ const EkPlanTableRow = ({
             }
             return (
               <EkTableCell
-                key={v.label}
-                width={v.width}
-                onMouseEnter={() => setColumnHovered(v.label)}
+                key={field.label}
+                width={field.width}
+                onMouseEnter={() => setColumnHovered(field.label)}
                 onMouseLeave={resetYearHovered}
-                data-columnishovered={columnHovered === v.label}
-                data-left={scrollPositions[v.name]}
+                data-columnishovered={columnHovered === field.label}
+                data-left={scrollPositions[field.name]}
               >
-                <div>{v.value}</div>
+                <div>{field.value}</div>
               </EkTableCell>
             )
           })}
