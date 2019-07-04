@@ -109,7 +109,7 @@ const YearCellMenuTitle = styled.h5`
   color: grey;
 `
 
-const EkPlanTable = ({
+const EkPlanTableRow = ({
   aps,
   row,
   columnHovered,
@@ -381,4 +381,4 @@ const EkPlanTable = ({
   )
 }
 
-export default observer(EkPlanTable)
+export default observer(EkPlanTableRow)
