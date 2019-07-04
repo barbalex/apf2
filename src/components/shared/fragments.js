@@ -192,9 +192,9 @@ export const ekfrequenz = gql`
 export const ekplan = gql`
   fragment EkplanFields on Ekplan {
     id
-    tpopkontrId
+    tpopId
     jahr
-    type
+    typ
     changedBy
   }
 `
