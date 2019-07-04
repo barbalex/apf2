@@ -30,21 +30,13 @@ const CellForYear = ({
   setColumnHovered,
   resetYearHovered,
   scrollPositions,
-  lastClickedYearCell,
-  setLastClickedYearCell,
+  yearClickedState,
+  yearClickedDispatch,
   setYearMenuAnchor,
 }) => {
   const onMouseEnter = useCallback(() => setColumnHovered(field.label), [field])
-  const { year, tpopId } = lastClickedYearCell
+  const { year, tpopId } = yearClickedState
   const clicked = year === field.label && tpopId === row.id
-  console.log('CellForYear', {
-    lastClickedYearCell,
-    year,
-    tpopId,
-    field,
-    row,
-    clicked,
-  })
 
   return (
     <TableCellForYear
@@ -55,12 +47,15 @@ const CellForYear = ({
       data-columnishovered={columnHovered === field.label}
       data-clicked={clicked}
       onClick={event => {
-        setLastClickedYearCell({
-          year: field.label,
-          tpopId: row.id,
-          tpop: `${row.ap.value} Pop: ${row.popNr.value}, TPop: ${row.tpopNr.value}`,
-          ekPlan: !!field.value.ek.length,
-          ekfPlan: !!field.value.ekf.length,
+        yearClickedDispatch({
+          type: 'set',
+          payload: {
+            year: field.label,
+            tpopId: row.id,
+            tpop: `${row.ap.value} Pop: ${row.popNr.value}, TPop: ${row.tpopNr.value}`,
+            ekPlan: !!field.value.ek.length,
+            ekfPlan: !!field.value.ekf.length,
+          },
         })
         const currentTarget = event.currentTarget
         setTimeout(() => setYearMenuAnchor(currentTarget))

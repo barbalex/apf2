@@ -1,4 +1,10 @@
-import React, { useState, useCallback, useMemo, useRef } from 'react'
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  useRef,
+  useReducer,
+} from 'react'
 import { useQuery } from 'react-apollo-hooks'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -15,6 +21,7 @@ import { observer } from 'mobx-react-lite'
 import queryTpop from './queryTpop'
 import appBaseUrl from '../../../modules/appBaseUrl'
 import Row from './Row'
+import CellForYearMenu from './Row/CellForYearMenu'
 
 const Container = styled.div`
   padding: 10px;
@@ -214,6 +221,24 @@ const rowsFromTpop = ({ tpop, years }) => {
   return fields
 }
 
+const initialYearClickedState = {
+  year: null,
+  tpopId: null,
+  tpop: null,
+  ekPlan: false,
+  ekfPlan: false,
+}
+const yearClickedReducer = (state, action) => {
+  switch (action.type) {
+    case 'set':
+      return action.payload
+    case 'reset':
+      return initialYearClickedState
+    default:
+      throw new Error('no appropriate action found')
+  }
+}
+
 const EkPlanTable = ({ aps }) => {
   //const store = useContext(storeContext)
   const headerRef = useRef(null)
@@ -244,8 +269,20 @@ const EkPlanTable = ({ aps }) => {
     ekfrequenzAbweichend: ekfrequenzAbweichendRef,
   }
 
+  const [yearMenuAnchor, setYearMenuAnchor] = useState(null)
+  const [yearClickedState, yearClickedDispatch] = useReducer(
+    yearClickedReducer,
+    initialYearClickedState,
+  )
+  const closeYearCellMenu = useCallback(event => {
+    setYearMenuAnchor(null)
+    yearClickedDispatch({ type: 'reset' })
+  }, [])
+
   const [columnHovered, setColumnHovered] = useState(null)
-  const resetYearHovered = useCallback(() => setColumnHovered(null), [])
+  const resetYearHovered = useCallback(() => {
+    if (!yearClickedState.year) setColumnHovered(null)
+  }, [yearClickedState])
 
   const apValues = useMemo(() => aps.map(a => a.value), [aps])
 
@@ -311,49 +348,61 @@ const EkPlanTable = ({ aps }) => {
   if (errorTpop) return <Container>errorTpop.message</Container>
   return (
     <ErrorBoundary>
-      {rows.length > 0 && (
-        <>
-          <TpopTitle>{`${rows.length} Teilpopulationen`}</TpopTitle>
-          <TableContainer headerheight={headerheight}>
-            <StyledTable headerheight={headerheight} size="small">
-              <StyledTableHead headerheight={headerheight}>
-                <StyledTableHeaderRow headerheight={headerheight}>
-                  {fields.map(f => (
-                    <StyledTableHeaderCell
-                      key={f.label}
-                      ref={refs[f.name] ? refs[f.name] : null}
-                      width={f.width}
-                      data-columnishovered={columnHovered === f.label}
-                      onMouseEnter={() =>
-                        f.label > 1000 &&
-                        f.label < 3000 &&
-                        setColumnHovered(f.label)
-                      }
-                      onMouseLeave={resetYearHovered}
-                      data-left={scrollPositions[f.name]}
-                    >
-                      {f.label}
-                    </StyledTableHeaderCell>
+      <>
+        {rows.length > 0 && (
+          <>
+            <TpopTitle>{`${rows.length} Teilpopulationen`}</TpopTitle>
+            <TableContainer headerheight={headerheight}>
+              <StyledTable headerheight={headerheight} size="small">
+                <StyledTableHead headerheight={headerheight}>
+                  <StyledTableHeaderRow headerheight={headerheight}>
+                    {fields.map(f => (
+                      <StyledTableHeaderCell
+                        key={f.label}
+                        ref={refs[f.name] ? refs[f.name] : null}
+                        width={f.width}
+                        data-columnishovered={columnHovered === f.label}
+                        onMouseEnter={() =>
+                          f.label > 1000 &&
+                          f.label < 3000 &&
+                          setColumnHovered(f.label)
+                        }
+                        onMouseLeave={resetYearHovered}
+                        data-left={scrollPositions[f.name]}
+                      >
+                        {f.label}
+                      </StyledTableHeaderCell>
+                    ))}
+                  </StyledTableHeaderRow>
+                </StyledTableHead>
+                <StyledTableBody>
+                  {rows.map(row => (
+                    <Row
+                      key={row.id}
+                      aps={aps}
+                      row={row}
+                      columnHovered={columnHovered}
+                      setColumnHovered={setColumnHovered}
+                      resetYearHovered={resetYearHovered}
+                      scrollPositions={scrollPositions}
+                      yearClickedState={yearClickedState}
+                      yearClickedDispatch={yearClickedDispatch}
+                      yearMenuAnchor={yearMenuAnchor}
+                      setYearMenuAnchor={setYearMenuAnchor}
+                      closeYearCellMenu={closeYearCellMenu}
+                    />
                   ))}
-                </StyledTableHeaderRow>
-              </StyledTableHead>
-              <StyledTableBody>
-                {rows.map(row => (
-                  <Row
-                    key={row.id}
-                    aps={aps}
-                    row={row}
-                    columnHovered={columnHovered}
-                    setColumnHovered={setColumnHovered}
-                    resetYearHovered={resetYearHovered}
-                    scrollPositions={scrollPositions}
-                  />
-                ))}
-              </StyledTableBody>
-            </StyledTable>
-          </TableContainer>
-        </>
-      )}
+                </StyledTableBody>
+              </StyledTable>
+            </TableContainer>
+          </>
+        )}
+        <CellForYearMenu
+          yearMenuAnchor={yearMenuAnchor}
+          yearClickedState={yearClickedState}
+          closeYearCellMenu={closeYearCellMenu}
+        />
+      </>
     </ErrorBoundary>
   )
 }

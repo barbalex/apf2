@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useState } from 'react'
+import React, { useMemo } from 'react'
 import { useQuery } from 'react-apollo-hooks'
 import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
@@ -15,7 +15,6 @@ import CellForEkAbrechnungstyp from './CellForEkAbrechnungstyp'
 import CellForEkfrequenzAbweichend from './CellForEkfrequenzAbweichend'
 import CellForTpopLink from './CellForTpopLink'
 import CellForYear from './CellForYear'
-import CellForYearMenu from './CellForYearMenu'
 
 const StyledTableRow = styled(TableRow)`
   position: relative !important;
@@ -44,7 +43,9 @@ export const EkTableCell = styled(TableCell)`
   border-left: solid hsla(70, 80%, 75%, 1) 1px;
   border-right: solid hsla(70, 80%, 75%, 1) 1px;
   background: ${props =>
-    props['data-columnishovered']
+    props['data-clicked']
+      ? 'rgb(255,211,167) !important'
+      : props['data-columnishovered']
       ? 'hsla(45, 100%, 90%, 1) !important'
       : 'unset'};
   left: ${props =>
@@ -69,18 +70,6 @@ export const TableCellForSelect = styled(EkTableCell)`
   }
 `
 export const TableCellForYear = styled(EkTableCell)`
-  border-left: ${props =>
-    props['data-clicked']
-      ? 'border: solid orange 3px;'
-      : 'solid hsla(70, 80%, 75%, 1) 1px'};
-  border-right: ${props =>
-    props['data-clicked']
-      ? 'border: solid orange 3px;'
-      : 'solid hsla(70, 80%, 75%, 1) 1px'};
-  border-top: ${props =>
-    props['data-clicked'] ? 'border: solid orange 3px;' : 'unset'};
-  border-bottom: ${props =>
-    props['data-clicked'] ? 'border: solid orange 3px;' : 'unset'};
   &:focus-within {
     border: solid orange 3px;
   }
@@ -93,26 +82,10 @@ const EkPlanTableRow = ({
   setColumnHovered,
   resetYearHovered,
   scrollPositions,
+  yearClickedState,
+  yearClickedDispatch,
+  setYearMenuAnchor,
 }) => {
-  const [yearMenuAnchor, setYearMenuAnchor] = useState(null)
-  const [lastClickedYearCell, setLastClickedYearCell] = useState({
-    year: null,
-    tpopId: null,
-    tpop: null,
-    ekPlan: false,
-    ekfPlan: false,
-  })
-  const closeYearCellMenu = useCallback(event => {
-    setYearMenuAnchor(null)
-    setLastClickedYearCell({
-      year: null,
-      tpopId: null,
-      tpop: null,
-      ekPlan: false,
-      ekfPlan: false,
-    })
-  }, [])
-
   const apValues = useMemo(() => aps.map(a => a.value), [aps])
 
   const { data: dataLists } = useQuery(queryLists, {
@@ -148,7 +121,7 @@ const EkPlanTableRow = ({
       )),
   )
 
-  console.log('Row rendering')
+  //console.log('Row rendering')
 
   return (
     <ErrorBoundary>
@@ -224,8 +197,8 @@ const EkPlanTableRow = ({
                   setColumnHovered={setColumnHovered}
                   resetYearHovered={resetYearHovered}
                   scrollPositions={scrollPositions}
-                  lastClickedYearCell={lastClickedYearCell}
-                  setLastClickedYearCell={setLastClickedYearCell}
+                  yearClickedState={yearClickedState}
+                  yearClickedDispatch={yearClickedDispatch}
                   setYearMenuAnchor={setYearMenuAnchor}
                 />
               )
@@ -244,11 +217,6 @@ const EkPlanTableRow = ({
             )
           })}
         </StyledTableRow>
-        <CellForYearMenu
-          yearMenuAnchor={yearMenuAnchor}
-          lastClickedYearCell={lastClickedYearCell}
-          closeYearCellMenu={closeYearCellMenu}
-        />
       </>
     </ErrorBoundary>
   )

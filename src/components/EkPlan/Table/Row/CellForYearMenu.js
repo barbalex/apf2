@@ -16,7 +16,7 @@ const anchorOrigin = { horizontal: 'right', vertical: 'bottom' }
 
 const CellForYearMenu = ({
   yearMenuAnchor,
-  lastClickedYearCell,
+  yearClickedState,
   closeYearCellMenu,
 }) => {
   return (
@@ -28,8 +28,8 @@ const CellForYearMenu = ({
       onClose={closeYearCellMenu}
       anchorOrigin={anchorOrigin}
     >
-      <YearCellMenuTitle>{`${lastClickedYearCell.tpop}, ${lastClickedYearCell.year}`}</YearCellMenuTitle>
-      {lastClickedYearCell.ekPlan ? (
+      <YearCellMenuTitle>{`${yearClickedState.tpop}, ${yearClickedState.year}`}</YearCellMenuTitle>
+      {yearClickedState.ekPlan ? (
         <MenuItem
           onClick={() => {
             console.log('TODO')
@@ -48,7 +48,7 @@ const CellForYearMenu = ({
           EK planen
         </MenuItem>
       )}
-      {lastClickedYearCell.ekfPlan ? (
+      {yearClickedState.ekfPlan ? (
         <MenuItem
           onClick={() => {
             console.log('TODO')
