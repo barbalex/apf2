@@ -43,6 +43,23 @@ const createEkplanMutation = gql`
   }
   ${ekplan}
 `
+const ekplansOfTpopQuery = gql`
+  query EkplansOfTpopQuery($tpopId: UUID!) {
+    allEkplans(filter: { tpopId: { equalTo: $tpopId } }) {
+      nodes {
+        id
+        typ
+      }
+    }
+  }
+`
+const deleteEkplanMutation = gql`
+  mutation deleteEkplanById($id: UUID!) {
+    deleteEkplanById(input: { id: $id }) {
+      deletedEkplanId
+    }
+  }
+`
 
 const CellForYearMenu = ({
   yearMenuAnchor,
@@ -51,16 +68,52 @@ const CellForYearMenu = ({
 }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
-  const { year, tpopId, tpop, ekPlan, ekfPlan } = yearClickedState
-  const variables = {
-    tpopId,
-    jahr: year,
-    typ: 'EK',
-    changedBy: store.user.name,
-  }
-  const onClickEkPlanen = useCallback(async () => planen('EK'), [])
-  const onClickEkfPlanen = useCallback(async () => planen('EKF'), [])
-  const planen = useCallback(
+  const { year, tpopId } = yearClickedState
+
+  const onClickEkEntfernen = useCallback(async () => removeEkfPlan('EK'), [])
+  const onClickEkfEntfernen = useCallback(async () => removeEkfPlan('EKF'), [])
+  const removeEkfPlan = useCallback(
+    async typ => {
+      let id
+      try {
+        id = await client.query({
+          query: ekplansOfTpopQuery,
+          variables: {
+            tpopId,
+          },
+        })
+      } catch (error) {
+        closeYearCellMenu()
+        return store.enqueNotification({
+          message: error.message,
+          options: {
+            variant: 'error',
+          },
+        })
+      }
+      try {
+        await client.mutate({
+          mutation: deleteEkplanMutation,
+          variables: {
+            id,
+          },
+        })
+      } catch (error) {
+        store.enqueNotification({
+          message: error.message,
+          options: {
+            variant: 'error',
+          },
+        })
+      }
+      closeYearCellMenu()
+    },
+    [yearClickedState],
+  )
+
+  const onClickEkPlanen = useCallback(async () => addEkfPlan('EK'), [])
+  const onClickEkfPlanen = useCallback(async () => addEkfPlan('EKF'), [])
+  const addEkfPlan = useCallback(
     async typ => {
       const variables = {
         tpopId,
@@ -104,26 +157,12 @@ const CellForYearMenu = ({
     >
       <YearCellMenuTitle>{`${yearClickedState.tpop}, ${yearClickedState.year}`}</YearCellMenuTitle>
       {yearClickedState.ekPlan ? (
-        <MenuItem
-          onClick={() => {
-            console.log('TODO')
-            closeYearCellMenu()
-          }}
-        >
-          EK-Planung entfernen
-        </MenuItem>
+        <MenuItem onClick={onClickEkEntfernen}>EK-Planung entfernen</MenuItem>
       ) : (
         <MenuItem onClick={onClickEkPlanen}>EK planen</MenuItem>
       )}
       {yearClickedState.ekfPlan ? (
-        <MenuItem
-          onClick={() => {
-            console.log('TODO')
-            closeYearCellMenu()
-          }}
-        >
-          EKF-Planung entfernen
-        </MenuItem>
+        <MenuItem onClick={onClickEkfEntfernen}>EKF-Planung entfernen</MenuItem>
       ) : (
         <MenuItem onClick={onClickEkfPlanen}>EKF planen</MenuItem>
       )}
