@@ -5,6 +5,8 @@ import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
@@ -172,6 +174,14 @@ const NrOfEvents = styled.span`
   left: -2px;
   position: relative;
 `
+const YearCellMenuTitle = styled.h5`
+  padding-top: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-bottom: 8px;
+  font-size: 0.75rem;
+  color: grey;
+`
 
 const yearsFromTpops = tpops => {
   const ekplans = tpops.flatMap(tpop => get(tpop, 'ekplansByTpopId.nodes'))
@@ -337,6 +347,23 @@ const EkPlan = () => {
     ekfrequenz: ekfrequenzRef,
     ekfrequenzAbweichend: ekfrequenzAbweichendRef,
   }
+
+  const [yearMenuAnchor, setYearMenuAnchor] = useState(null)
+  const [lastClickedYearCell, setLastClickedYearCell] = useState({
+    year: null,
+    tpopId: null,
+    ekPlan: false,
+    ekfPlan: false,
+  })
+  const closeYearCellMenu = useCallback(event => {
+    setYearMenuAnchor(null)
+    setLastClickedYearCell({
+      year: null,
+      tpopId: null,
+      ekPlan: false,
+      ekfPlan: false,
+    })
+  }, [])
 
   const [columnHovered, setColumnHovered] = useState(null)
   const resetYearHovered = useCallback(() => setColumnHovered(null), [])
@@ -580,6 +607,18 @@ const EkPlan = () => {
                               onMouseEnter={() => setColumnHovered(v.label)}
                               onMouseLeave={resetYearHovered}
                               data-columnishovered={columnHovered === v.label}
+                              onClick={event => {
+                                setLastClickedYearCell({
+                                  year: v.label,
+                                  tpop: `${r.ap.value} Pop: ${r.popNr.value}, TPop: ${r.tpopNr.value}`,
+                                  ekPlan: !!v.value.ek.length,
+                                  ekfPlan: !!v.value.ekf.length,
+                                })
+                                const currentTarget = event.currentTarget
+                                setTimeout(() =>
+                                  setYearMenuAnchor(currentTarget),
+                                )
+                              }}
                             >
                               <>
                                 {!!v.value.az.length && (
@@ -639,6 +678,53 @@ const EkPlan = () => {
             </TableContainer>
           </>
         )}
+        <Menu
+          id="yearCellMenu"
+          anchorEl={yearMenuAnchor}
+          keepMounted
+          open={Boolean(yearMenuAnchor)}
+          onClose={closeYearCellMenu}
+        >
+          <YearCellMenuTitle>{`${lastClickedYearCell.tpop}, ${lastClickedYearCell.year}`}</YearCellMenuTitle>
+          {lastClickedYearCell.ekPlan ? (
+            <MenuItem
+              onClick={() => {
+                console.log('TODO')
+                closeYearCellMenu()
+              }}
+            >
+              EK-Planung entfernen
+            </MenuItem>
+          ) : (
+            <MenuItem
+              onClick={() => {
+                console.log('TODO')
+                closeYearCellMenu()
+              }}
+            >
+              EK planen
+            </MenuItem>
+          )}
+          {lastClickedYearCell.ekfPlan ? (
+            <MenuItem
+              onClick={() => {
+                console.log('TODO')
+                closeYearCellMenu()
+              }}
+            >
+              EKF-Planung entfernen
+            </MenuItem>
+          ) : (
+            <MenuItem
+              onClick={() => {
+                console.log('TODO')
+                closeYearCellMenu()
+              }}
+            >
+              EKF planen
+            </MenuItem>
+          )}
+        </Menu>
       </Container>
     </ErrorBoundary>
   )
