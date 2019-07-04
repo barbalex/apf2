@@ -34,27 +34,28 @@ const CellForYear = ({
   yearClickedDispatch,
   setYearMenuAnchor,
 }) => {
-  const onMouseEnter = useCallback(() => setColumnHovered(field.label), [field])
+  const { label, value, width } = field
+  const onMouseEnter = useCallback(() => setColumnHovered(label), [label])
   const { year, tpopId } = yearClickedState
-  const clicked = year === field.label && tpopId === row.id
+  const clicked = year === label && tpopId === row.id
 
   return (
     <TableCellForYear
-      key={field.label}
-      width={field.width}
+      key={label}
+      width={width}
       onMouseEnter={onMouseEnter}
       onMouseLeave={resetYearHovered}
-      data-columnishovered={columnHovered === field.label}
+      data-columnishovered={columnHovered === label}
       data-clicked={clicked}
       onClick={event => {
         yearClickedDispatch({
           type: 'set',
           payload: {
-            year: field.label,
+            year: label,
             tpopId: row.id,
             tpop: `${row.ap.value} Pop: ${row.popNr.value}, TPop: ${row.tpopNr.value}`,
-            ekPlan: !!field.value.ek.length,
-            ekfPlan: !!field.value.ekf.length,
+            ekPlan: value.ekPlan,
+            ekfPlan: value.ekfPlan,
           },
         })
         const currentTarget = event.currentTarget
@@ -62,27 +63,33 @@ const CellForYear = ({
       }}
     >
       <>
-        {!!field.value.az.length && (
-          <AzContainer>
-            <AzIcon title="Ausgangszustand" aria-label="Ausgangszustand" />
-            {field.value.az.length > 1 && (
-              <NrOfEvents>{field.value.az.length}</NrOfEvents>
-            )}
-          </AzContainer>
-        )}
-        {!!field.value.ek.length && (
-          <div title="EK" aria-label="EK">
-            <EkIcon width="25px" height="20px" />
-            {field.value.ek.length > 1 && (
-              <NrOfEvents>{field.value.ek.length}</NrOfEvents>
-            )}
+        {value.ekPlan && (
+          <div title="EK geplant" aria-label="EK geplant">
+            EK!
           </div>
         )}
-        {!!field.value.ekf.length && (
+        {value.ekfPlan && (
+          <div title="EKF geplant" aria-label="EKF geplant">
+            EKF!
+          </div>
+        )}
+        {!!value.az.length && (
+          <AzContainer>
+            <AzIcon title="Ausgangszustand" aria-label="Ausgangszustand" />
+            {value.az.length > 1 && <NrOfEvents>{value.az.length}</NrOfEvents>}
+          </AzContainer>
+        )}
+        {!!value.ek.length && (
+          <div title="EK" aria-label="EK">
+            <EkIcon width="25px" height="20px" />
+            {value.ek.length > 1 && <NrOfEvents>{value.ek.length}</NrOfEvents>}
+          </div>
+        )}
+        {!!value.ekf.length && (
           <div title="EKF" aria-label="EKF">
             <EkfIcon width="25px" height="20px" />
-            {field.value.ekf.length > 1 && (
-              <NrOfEvents>{field.value.ekf.length}</NrOfEvents>
+            {value.ekf.length > 1 && (
+              <NrOfEvents>{value.ekf.length}</NrOfEvents>
             )}
           </div>
         )}

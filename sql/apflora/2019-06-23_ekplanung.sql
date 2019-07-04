@@ -175,7 +175,8 @@ CREATE TABLE apflora.ekplan (
   jahr smallint DEFAULT NULL,
   typ ek_type default null,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT NULL
+  changed_by varchar(20) DEFAULT NULL,
+    unique (tpop_id, jahr, typ)
 );
 CREATE INDEX ON apflora.ekplan USING btree (id);
 CREATE INDEX ON apflora.ekplan USING btree (tpop_id);

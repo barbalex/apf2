@@ -65,18 +65,23 @@ const CellForYearMenu = ({
   yearMenuAnchor,
   yearClickedState,
   closeYearCellMenu,
+  refetch,
 }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
   const { year, tpopId } = yearClickedState
 
-  const onClickEkEntfernen = useCallback(async () => removeEkfPlan('EK'), [])
-  const onClickEkfEntfernen = useCallback(async () => removeEkfPlan('EKF'), [])
-  const removeEkfPlan = useCallback(
+  const onClickEkEntfernen = useCallback(async () => removeEkPlan('EK'), [
+    yearClickedState,
+  ])
+  const onClickEkfEntfernen = useCallback(async () => removeEkPlan('EKF'), [
+    yearClickedState,
+  ])
+  const removeEkPlan = useCallback(
     async typ => {
-      let id
+      let qResult
       try {
-        id = await client.query({
+        qResult = await client.query({
           query: ekplansOfTpopQuery,
           variables: {
             tpopId,
@@ -91,6 +96,7 @@ const CellForYearMenu = ({
           },
         })
       }
+      const id = qResult.data.allEkplans.nodes.find(o => o.typ === typ).id
       try {
         await client.mutate({
           mutation: deleteEkplanMutation,
@@ -106,14 +112,19 @@ const CellForYearMenu = ({
           },
         })
       }
+      refetch()
       closeYearCellMenu()
     },
     [yearClickedState],
   )
 
-  const onClickEkPlanen = useCallback(async () => addEkfPlan('EK'), [])
-  const onClickEkfPlanen = useCallback(async () => addEkfPlan('EKF'), [])
-  const addEkfPlan = useCallback(
+  const onClickEkPlanen = useCallback(async () => addEkPlan('EK'), [
+    yearClickedState,
+  ])
+  const onClickEkfPlanen = useCallback(async () => addEkPlan('EKF'), [
+    yearClickedState,
+  ])
+  const addEkPlan = useCallback(
     async typ => {
       const variables = {
         tpopId,
@@ -141,9 +152,10 @@ const CellForYearMenu = ({
           },
         })
       }
+      refetch()
       closeYearCellMenu()
     },
-    [yearClickedState],
+    [store.user.name, yearClickedState],
   )
 
   return (

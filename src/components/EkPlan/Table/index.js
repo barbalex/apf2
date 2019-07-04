@@ -203,7 +203,12 @@ const rowsFromTpop = ({ tpop, years }) => {
       (fields[year.toString()] = {
         label: year,
         value: {
-          plan: ekplans.filter(o => o.jahr === year),
+          ekPlan:
+            ekplans.filter(o => o.jahr === year).filter(o => o.typ === 'EK')
+              .length > 0,
+          ekfPlan:
+            ekplans.filter(o => o.jahr === year).filter(o => o.typ === 'EKF')
+              .length > 0,
           az: kontrs
             .filter(o => o.jahr === year)
             .filter(o => o.typ === 'Ausgangszustand'),
@@ -286,14 +291,16 @@ const EkPlanTable = ({ aps }) => {
 
   const apValues = useMemo(() => aps.map(a => a.value), [aps])
 
-  const { data: dataTpop, loading: loadingTpop, error: errorTpop } = useQuery(
-    queryTpop,
-    {
-      variables: {
-        aps: apValues,
-      },
+  const {
+    data: dataTpop,
+    loading: loadingTpop,
+    error: errorTpop,
+    refetch,
+  } = useQuery(queryTpop, {
+    variables: {
+      aps: apValues,
     },
-  )
+  })
   const tpops = sortBy(
     get(dataTpop, 'allTpops.nodes', []),
     t => t.popByPopId.apByApId.label,
@@ -342,7 +349,11 @@ const EkPlanTable = ({ aps }) => {
       : 0,
   }
 
-  console.log('Table rendering')
+  console.log('Table rendering, yearClickedState:', {
+    yearClickedState,
+    rows,
+    tpops,
+  })
 
   if (aps.length > 0 && loadingTpop) return <Container>Lade...</Container>
   if (errorTpop) return <Container>errorTpop.message</Container>
@@ -401,6 +412,7 @@ const EkPlanTable = ({ aps }) => {
           yearMenuAnchor={yearMenuAnchor}
           yearClickedState={yearClickedState}
           closeYearCellMenu={closeYearCellMenu}
+          refetch={refetch}
         />
       </>
     </ErrorBoundary>
