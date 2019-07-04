@@ -86,7 +86,7 @@
     "material-ui-pickers": "2.2.4",
     "md5-hex": "3.0.0",
     "memoize-one": "5.0.4",
-    "mobx": "5.10.1",
+    "mobx": "5.11.0",
     "mobx-react-lite": "1.4.1",
     "mobx-state-tree": "3.14.0",
     "moment": "2.24.0",
