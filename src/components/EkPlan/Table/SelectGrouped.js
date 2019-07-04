@@ -4,8 +4,8 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 
-import { tpop } from '../shared/fragments'
-import storeContext from '../../storeContext'
+import { tpop } from '../../shared/fragments'
+import storeContext from '../../../storeContext'
 
 const Select = styled.select`
   width: 100%;
@@ -19,12 +19,16 @@ const Select = styled.select`
     outline-color: transparent;
   }
 `
+const Optgroup = styled.optgroup`
+  font-family: inherit !important;
+  font-size: 1rem;
+`
 const Option = styled.option`
   font-family: inherit !important;
   font-size: 1rem;
 `
 
-const SelectComponent = ({ options, row, val, field }) => {
+const SelectComponent = ({ optionsGrouped, row, val, field }) => {
   const store = useContext(storeContext)
   const { enqueNotification } = store
   const client = useApolloClient()
@@ -100,15 +104,19 @@ const SelectComponent = ({ options, row, val, field }) => {
       onBlur={onBlur}
     >
       {focused ? (
-        options ? (
+        optionsGrouped ? (
           <>
             <Option key="option1" value={null}>
               {''}
             </Option>
-            {options.map(o => (
-              <Option key={o.value} value={o.value}>
-                {o.label}
-              </Option>
+            {Object.keys(optionsGrouped).map(key => (
+              <Optgroup key={key} label={key}>
+                {optionsGrouped[key].map(o => (
+                  <Option key={o.value} value={o.value}>
+                    {o.label}
+                  </Option>
+                ))}
+              </Optgroup>
             ))}
           </>
         ) : null
