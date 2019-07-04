@@ -30,10 +30,21 @@ const CellForYear = ({
   setColumnHovered,
   resetYearHovered,
   scrollPositions,
+  lastClickedYearCell,
   setLastClickedYearCell,
   setYearMenuAnchor,
 }) => {
   const onMouseEnter = useCallback(() => setColumnHovered(field.label), [field])
+  const { year, tpopId } = lastClickedYearCell
+  const clicked = year === field.label && tpopId === row.id
+  console.log('CellForYear', {
+    lastClickedYearCell,
+    year,
+    tpopId,
+    field,
+    row,
+    clicked,
+  })
 
   return (
     <TableCellForYear
@@ -42,6 +53,7 @@ const CellForYear = ({
       onMouseEnter={onMouseEnter}
       onMouseLeave={resetYearHovered}
       data-columnishovered={columnHovered === field.label}
+      data-clicked={clicked}
       onClick={event => {
         setLastClickedYearCell({
           year: field.label,

@@ -305,6 +305,8 @@ const EkPlanTable = ({ aps }) => {
       : 0,
   }
 
+  console.log('Table rendering')
+
   if (aps.length > 0 && loadingTpop) return <Container>Lade...</Container>
   if (errorTpop) return <Container>errorTpop.message</Container>
   return (

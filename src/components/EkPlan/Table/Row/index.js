@@ -69,6 +69,18 @@ export const TableCellForSelect = styled(EkTableCell)`
   }
 `
 export const TableCellForYear = styled(EkTableCell)`
+  border-left: ${props =>
+    props['data-clicked']
+      ? 'border: solid orange 3px;'
+      : 'solid hsla(70, 80%, 75%, 1) 1px'};
+  border-right: ${props =>
+    props['data-clicked']
+      ? 'border: solid orange 3px;'
+      : 'solid hsla(70, 80%, 75%, 1) 1px'};
+  border-top: ${props =>
+    props['data-clicked'] ? 'border: solid orange 3px;' : 'unset'};
+  border-bottom: ${props =>
+    props['data-clicked'] ? 'border: solid orange 3px;' : 'unset'};
   &:focus-within {
     border: solid orange 3px;
   }
@@ -135,6 +147,8 @@ const EkPlanTableRow = ({
         'anwendungsfall',
       )),
   )
+
+  console.log('Row rendering')
 
   return (
     <ErrorBoundary>
@@ -210,6 +224,7 @@ const EkPlanTableRow = ({
                   setColumnHovered={setColumnHovered}
                   resetYearHovered={resetYearHovered}
                   scrollPositions={scrollPositions}
+                  lastClickedYearCell={lastClickedYearCell}
                   setLastClickedYearCell={setLastClickedYearCell}
                   setYearMenuAnchor={setYearMenuAnchor}
                 />

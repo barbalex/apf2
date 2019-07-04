@@ -12,6 +12,7 @@ const YearCellMenuTitle = styled.h5`
   font-size: 0.75rem;
   color: grey;
 `
+const anchorOrigin = { horizontal: 'right', vertical: 'bottom' }
 
 const CellForYearMenu = ({
   yearMenuAnchor,
@@ -25,6 +26,7 @@ const CellForYearMenu = ({
       keepMounted
       open={Boolean(yearMenuAnchor)}
       onClose={closeYearCellMenu}
+      anchorOrigin={anchorOrigin}
     >
       <YearCellMenuTitle>{`${lastClickedYearCell.tpop}, ${lastClickedYearCell.year}`}</YearCellMenuTitle>
       {lastClickedYearCell.ekPlan ? (
