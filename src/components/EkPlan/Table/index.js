@@ -4,6 +4,7 @@ import React, {
   useMemo,
   useRef,
   useReducer,
+  useEffect,
 } from 'react'
 import { useQuery } from 'react-apollo-hooks'
 import Table from '@material-ui/core/Table'
@@ -30,7 +31,7 @@ const TableContainer = styled.div`
   position: relative;
   overflow: auto;
   width: 100vw;
-  height: ${props => `calc(100vh - ${props['data-headtop']}px) !important`};
+  height: 100%;
 `
 const StyledTable = styled(Table)`
   position: relative;
@@ -299,7 +300,6 @@ const yearClickedReducer = (state, action) => {
 
 const EkPlanTable = ({ aps }) => {
   //const store = useContext(storeContext)
-  const headerRef = useRef(null)
   const apRef = useRef(null)
   const popNrRef = useRef(null)
   const popNameRef = useRef(null)
@@ -313,7 +313,6 @@ const EkPlanTable = ({ aps }) => {
   const ekfrequenzRef = useRef(null)
   const ekfrequenzAbweichendRef = useRef(null)
   const yearTitleRef = useRef(null)
-  const tableHeadRef = useRef(null)
   const refs = {
     ap: apRef,
     popNr: popNrRef,
@@ -372,10 +371,6 @@ const EkPlanTable = ({ aps }) => {
       )
     : []
 
-  const tableHeadTop = tableHeadRef.current
-    ? tableHeadRef.current.getBoundingClientRect().top
-    : 163.6
-  console.log('Table rendering:', { tableHeadTop })
   const scrollPositions = {
     ap: apRef.current ? apRef.current.getBoundingClientRect().left : 0,
     popNr: popNrRef.current ? popNrRef.current.getBoundingClientRect().left : 0,
@@ -420,9 +415,9 @@ const EkPlanTable = ({ aps }) => {
         {rows.length > 0 && (
           <>
             <TpopTitle>{`${rows.length} Teilpopulationen`}</TpopTitle>
-            <TableContainer data-headtop={tableHeadTop}>
+            <TableContainer>
               <StyledTable size="small">
-                <StyledTableHead ref={tableHeadRef}>
+                <StyledTableHead>
                   <StyledTableHeaderRow>
                     {fields.map(f => (
                       <StyledTableHeaderCell
