@@ -91,7 +91,13 @@ const EkPlanTableRow = ({
             'sort',
           ).map(field => {
             if (field.name === 'yearTitle') {
-              return <CellForYearTitle key={field.name} field={field} />
+              return (
+                <CellForYearTitle
+                  key={field.name}
+                  field={field}
+                  scrollPositions={scrollPositions}
+                />
+              )
             }
             if (field.name === 'ekAbrechnungstyp') {
               return (

@@ -30,8 +30,7 @@ const TableContainer = styled.div`
   position: relative;
   overflow: auto;
   width: 100vw;
-  height: ${props =>
-    `calc(100vh - 64px - ${props.headerheight}px - 17.6px) !important`};
+  height: ${props => `calc(100vh - ${props['data-headtop']}px) !important`};
 `
 const StyledTable = styled(Table)`
   position: relative;
@@ -79,8 +78,6 @@ const StyledTableHeaderCell = styled(TableCell)`
 `
 const StyledTableBody = styled(TableBody)`
   display: block !important;
-  height: ${props =>
-    `calc(100vh - 64px - ${props.headerheight}px - 17.6px - 50px) !important`};
 `
 export const EkTableCell = styled(TableCell)`
   position: sticky;
@@ -125,6 +122,11 @@ export const TableCellForYear = styled(EkTableCell)`
   &:focus-within {
     border: solid orange 3px;
   }
+`
+export const InfoRow = styled.div`
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 `
 const TpopTitle = styled.h4`
   margin: 0 10px 4px 10px;
@@ -310,6 +312,8 @@ const EkPlanTable = ({ aps }) => {
   const ekAbrechnungstypRef = useRef(null)
   const ekfrequenzRef = useRef(null)
   const ekfrequenzAbweichendRef = useRef(null)
+  const yearTitleRef = useRef(null)
+  const tableHeadRef = useRef(null)
   const refs = {
     ap: apRef,
     popNr: popNrRef,
@@ -323,6 +327,7 @@ const EkPlanTable = ({ aps }) => {
     ekAbrechnungstyp: ekAbrechnungstypRef,
     ekfrequenz: ekfrequenzRef,
     ekfrequenzAbweichend: ekfrequenzAbweichendRef,
+    yearTitle: yearTitleRef,
   }
 
   const [yearMenuAnchor, setYearMenuAnchor] = useState(null)
@@ -367,8 +372,10 @@ const EkPlanTable = ({ aps }) => {
       )
     : []
 
-  const headerheight =
-    headerRef && headerRef.current ? headerRef.current.clientHeight : 0
+  const tableHeadTop = tableHeadRef.current
+    ? tableHeadRef.current.getBoundingClientRect().top
+    : 163.6
+  console.log('Table rendering:', { tableHeadTop })
   const scrollPositions = {
     ap: apRef.current ? apRef.current.getBoundingClientRect().left : 0,
     popNr: popNrRef.current ? popNrRef.current.getBoundingClientRect().left : 0,
@@ -398,6 +405,9 @@ const EkPlanTable = ({ aps }) => {
     ekfrequenzAbweichend: ekfrequenzAbweichendRef.current
       ? ekfrequenzAbweichendRef.current.getBoundingClientRect().left
       : 0,
+    yearTitle: yearTitleRef.current
+      ? yearTitleRef.current.getBoundingClientRect().left
+      : 0,
   }
 
   //console.log('Table rendering, yearClickedState:', yearClickedState)
@@ -410,10 +420,10 @@ const EkPlanTable = ({ aps }) => {
         {rows.length > 0 && (
           <>
             <TpopTitle>{`${rows.length} Teilpopulationen`}</TpopTitle>
-            <TableContainer headerheight={headerheight}>
-              <StyledTable headerheight={headerheight} size="small">
-                <StyledTableHead headerheight={headerheight}>
-                  <StyledTableHeaderRow headerheight={headerheight}>
+            <TableContainer data-headtop={tableHeadTop}>
+              <StyledTable size="small">
+                <StyledTableHead ref={tableHeadRef}>
+                  <StyledTableHeaderRow>
                     {fields.map(f => (
                       <StyledTableHeaderCell
                         key={f.name}
