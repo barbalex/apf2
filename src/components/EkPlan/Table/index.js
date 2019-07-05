@@ -4,7 +4,6 @@ import React, {
   useMemo,
   useRef,
   useReducer,
-  useEffect,
 } from 'react'
 import { useQuery } from 'react-apollo-hooks'
 import Table from '@material-ui/core/Table'
