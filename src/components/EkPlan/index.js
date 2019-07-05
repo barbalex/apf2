@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useRef } from 'react'
 import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Checkbox from '@material-ui/core/Checkbox'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from 'react-apollo-hooks'
 import groupBy from 'lodash/groupBy'
@@ -18,10 +20,20 @@ const Container = styled.div`
 `
 const Header = styled.div`
   padding: 5px 10px;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
 `
+const ChooseContainer = styled.div``
 
 const EkPlan = () => {
   const headerRef = useRef(null)
+
+  const [showEk, setShowEk] = useState(true)
+  const [showEkf, setShowEkf] = useState(true)
+  const [showCount, setShowCount] = useState(true)
+  const [showEkCount, setShowEkCount] = useState(true)
+  const [showMassn, setShowMassn] = useState(true)
 
   const [aps, setAps] = useState([])
   const addAp = useCallback(
@@ -64,6 +76,18 @@ const EkPlan = () => {
             addAp={addAp}
             queryApsResult={queryApsResult}
           />
+          <ChooseContainer>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={showEk}
+                  onChange={() => console.log('TODO')}
+                />
+              }
+              label="EK anzeigen"
+              labelPlacement="start"
+            />
+          </ChooseContainer>
         </Header>
         <Table aps={aps} einheitsByAp={einheitsByAp} />
       </Container>

@@ -7,19 +7,19 @@ import { TableCellForSelect } from '../index'
 const CellForEkfrequenzAbweichend = ({
   field,
   row,
-  columnHovered,
   setColumnHovered,
   resetYearHovered,
   scrollPositions,
 }) => {
-  const onMouseEnter = useCallback(() => setColumnHovered(field.label), [field])
+  const onMouseEnter = useCallback(() => setColumnHovered(`_${field.label}_`), [
+    field,
+  ])
 
   return (
     <TableCellForSelect
       width={field.width}
       onMouseEnter={onMouseEnter}
       onMouseLeave={resetYearHovered}
-      data-columnishovered={columnHovered === field.label}
       data-left={scrollPositions[field.name]}
     >
       <Checkbox

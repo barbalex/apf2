@@ -7,20 +7,20 @@ import SelectGrouped from './SelectGrouped'
 const CellForEkfrequenz = ({
   row,
   field,
-  columnHovered,
   setColumnHovered,
   resetYearHovered,
   scrollPositions,
   ekfOptionsGroupedPerAp,
 }) => {
-  const onMouseEnter = useCallback(() => setColumnHovered(field.label), [field])
+  const onMouseEnter = useCallback(() => setColumnHovered(`_${field.label}_`), [
+    field,
+  ])
 
   return (
     <TableCellForSelect
       width={field.width}
       onMouseEnter={onMouseEnter}
       onMouseLeave={resetYearHovered}
-      data-columnishovered={columnHovered === field.label}
       data-left={scrollPositions[field.name]}
     >
       <SelectGrouped

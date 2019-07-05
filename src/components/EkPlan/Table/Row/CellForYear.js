@@ -11,7 +11,6 @@ import { InfoRow } from '../index'
 const CellForYearTitle = ({
   field,
   row,
-  columnHovered,
   setColumnHovered,
   resetYearHovered,
   scrollPositions,
@@ -20,8 +19,10 @@ const CellForYearTitle = ({
   setYearMenuAnchor,
   einheitsByAp,
 }) => {
-  const { label, value, width } = field
-  const onMouseEnter = useCallback(() => setColumnHovered(label), [label])
+  const { label, value, width, name } = field
+  const onMouseEnter = useCallback(() => setColumnHovered(`_${label}_`), [
+    label,
+  ])
   const { year, tpopId } = yearClickedState
   const clicked = year === label && tpopId === row.id
   const einheits = einheitsByAp[row.apId]
@@ -31,7 +32,6 @@ const CellForYearTitle = ({
       width={width}
       onMouseEnter={onMouseEnter}
       onMouseLeave={resetYearHovered}
-      data-columnishovered={columnHovered === label}
       data-clicked={clicked}
       onClick={event => {
         yearClickedDispatch({
@@ -47,6 +47,7 @@ const CellForYearTitle = ({
         const currentTarget = event.currentTarget
         setTimeout(() => setYearMenuAnchor(currentTarget))
       }}
+      className={`_${name}_`}
     >
       <InfoRow>
         <EkIcon planned={value.ekPlan} eks={value.ek} einheits={einheits} />

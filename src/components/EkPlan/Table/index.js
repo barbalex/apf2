@@ -39,6 +39,13 @@ const StyledTable = styled(Table)`
   padding-right: 10px;
   border-collapse: separate;
   border-spacing: 0;
+  thead > tr > th.${props => props.colhovered} {
+    background: hsla(120, 25%, 82%, 1) !important;
+    font-weight: 800 !important;
+  }
+  tbody > tr > td.${props => props.colhovered} {
+    background: hsla(45, 100%, 90%, 1) !important;
+  }
 `
 const StyledTableHead = styled(TableHead)`
   display: block !important;
@@ -60,18 +67,14 @@ const StyledTableHeaderCell = styled(TableCell)`
   max-width: ${props => `${props.width}px`};
   text-align: ${props =>
     props['data-centertext'] ? 'center !important' : 'inherit'};
-  font-weight: ${props =>
-    props['data-columnishovered'] ? '800 !important' : '500 !important'};
+  font-weight: 500 !important;
   font-size: 0.75rem !important;
   color: black !important;
   padding: 2px 4px !important;
   line-height: 1rem !important;
   border-left: solid hsla(120, 25%, 70%, 1) 1px;
   border-right: solid hsla(120, 25%, 70%, 1) 1px;
-  background: ${props =>
-    props['data-columnishovered']
-      ? 'hsla(120,25%,82%,1)'
-      : 'hsla(120,25%,88%,1)'};
+  background: hsla(120, 25%, 88%, 1);
   left: ${props =>
     props['data-left'] === undefined ? 'unset' : `${props['data-left']}px`};
   z-index: ${props => (props['data-left'] === undefined ? 0 : 1)};
@@ -95,11 +98,7 @@ export const EkTableCell = styled(TableCell)`
   border-left: solid hsla(70, 80%, 75%, 1) 1px;
   border-right: solid hsla(70, 80%, 75%, 1) 1px;
   background: ${props =>
-    props['data-clicked']
-      ? 'rgb(255,211,167) !important'
-      : props['data-columnishovered']
-      ? 'hsla(45, 100%, 90%, 1) !important'
-      : 'unset'};
+    props['data-clicked'] ? 'rgb(255,211,167) !important' : 'unset'};
   left: ${props =>
     props['data-left'] === undefined ? 'unset' : `${props['data-left']}px`};
   z-index: ${props => (props['data-left'] === undefined ? 0 : 1)};
@@ -415,7 +414,7 @@ const EkPlanTable = ({ aps, einheitsByAp }) => {
           <>
             <TpopTitle>{`${rows.length} Teilpopulationen`}</TpopTitle>
             <TableContainer>
-              <StyledTable size="small">
+              <StyledTable size="small" colhovered={columnHovered}>
                 <StyledTableHead>
                   <StyledTableHeaderRow>
                     {fields.map(f => (
@@ -426,12 +425,12 @@ const EkPlanTable = ({ aps, einheitsByAp }) => {
                         onMouseEnter={() =>
                           f.label > 1000 &&
                           f.label < 3000 &&
-                          setColumnHovered(f.label)
+                          setColumnHovered(`_${f.label}_`)
                         }
                         onMouseLeave={resetYearHovered}
-                        data-columnishovered={columnHovered === f.label}
                         data-left={scrollPositions[f.name]}
                         data-centertext={f.label > 1000 && f.label < 3000}
+                        className={`_${f.name}_`}
                       >
                         {f.label}
                       </StyledTableHeaderCell>
@@ -444,7 +443,6 @@ const EkPlanTable = ({ aps, einheitsByAp }) => {
                       key={row.id}
                       aps={aps}
                       row={row}
-                      columnHovered={columnHovered}
                       setColumnHovered={setColumnHovered}
                       resetYearHovered={resetYearHovered}
                       scrollPositions={scrollPositions}

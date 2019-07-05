@@ -17,12 +17,13 @@ const Link = styled.div`
 
 const CellForTpopLink = ({
   field,
-  columnHovered,
   setColumnHovered,
   resetYearHovered,
   scrollPositions,
 }) => {
-  const onMouseEnter = useCallback(() => setColumnHovered(field.label), [field])
+  const onMouseEnter = useCallback(() => setColumnHovered(`_${field.label}_`), [
+    field,
+  ])
   const onClickLink = useCallback(() => {
     typeof window !== 'undefined' && window.open(field.value)
   }, [])
@@ -32,7 +33,6 @@ const CellForTpopLink = ({
       width={field.width}
       onMouseEnter={onMouseEnter}
       onMouseLeave={resetYearHovered}
-      data-columnishovered={columnHovered === field.label}
       data-left={scrollPositions[field.name]}
     >
       <Link onClick={onClickLink} title="in neuem Fenster öffnen">

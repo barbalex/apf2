@@ -35,7 +35,6 @@ const StyledTableRow = styled(TableRow)`
 const EkPlanTableRow = ({
   aps,
   row,
-  columnHovered,
   setColumnHovered,
   resetYearHovered,
   scrollPositions,
@@ -106,7 +105,6 @@ const EkPlanTableRow = ({
                   key={field.name}
                   row={row}
                   field={field}
-                  columnHovered={columnHovered}
                   setColumnHovered={setColumnHovered}
                   resetYearHovered={resetYearHovered}
                   scrollPositions={scrollPositions}
@@ -120,7 +118,6 @@ const EkPlanTableRow = ({
                   key={field.name}
                   row={row}
                   field={field}
-                  columnHovered={columnHovered}
                   setColumnHovered={setColumnHovered}
                   resetYearHovered={resetYearHovered}
                   scrollPositions={scrollPositions}
@@ -134,7 +131,6 @@ const EkPlanTableRow = ({
                   key={field.name}
                   row={row}
                   field={field}
-                  columnHovered={columnHovered}
                   setColumnHovered={setColumnHovered}
                   resetYearHovered={resetYearHovered}
                   scrollPositions={scrollPositions}
@@ -146,7 +142,6 @@ const EkPlanTableRow = ({
                 <CellForTpopLink
                   key={field.name}
                   field={field}
-                  columnHovered={columnHovered}
                   setColumnHovered={setColumnHovered}
                   resetYearHovered={resetYearHovered}
                   scrollPositions={scrollPositions}
@@ -160,7 +155,6 @@ const EkPlanTableRow = ({
                   key={field.label}
                   row={row}
                   field={field}
-                  columnHovered={columnHovered}
                   setColumnHovered={setColumnHovered}
                   resetYearHovered={resetYearHovered}
                   scrollPositions={scrollPositions}
@@ -177,7 +171,6 @@ const EkPlanTableRow = ({
                 width={field.width}
                 onMouseEnter={() => setColumnHovered(field.label)}
                 onMouseLeave={resetYearHovered}
-                data-columnishovered={columnHovered === field.label}
                 data-left={scrollPositions[field.name]}
               >
                 <div>{field.value}</div>
