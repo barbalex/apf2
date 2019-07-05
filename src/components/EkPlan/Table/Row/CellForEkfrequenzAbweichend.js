@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import Checkbox from './Checkbox'
-import { TableCellForSelect } from './index'
+import { TableCellForSelect } from '../index'
 
 const CellForEkfrequenzAbweichend = ({
   field,
@@ -16,7 +16,6 @@ const CellForEkfrequenzAbweichend = ({
 
   return (
     <TableCellForSelect
-      key={field.label}
       width={field.width}
       onMouseEnter={onMouseEnter}
       onMouseLeave={resetYearHovered}

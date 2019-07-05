@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
-import { TableCellForSelect } from './index'
+import { TableCellForSelect } from '../index'
 
 import SelectGrouped from './SelectGrouped'
 

@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react'
 import { useQuery } from 'react-apollo-hooks'
-import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
 import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
@@ -15,6 +14,8 @@ import CellForEkAbrechnungstyp from './CellForEkAbrechnungstyp'
 import CellForEkfrequenzAbweichend from './CellForEkfrequenzAbweichend'
 import CellForTpopLink from './CellForTpopLink'
 import CellForYear from './CellForYear'
+import CellForYearTitle from './CellForYearTitle'
+import { EkTableCell } from '../index'
 
 const StyledTableRow = styled(TableRow)`
   position: relative !important;
@@ -28,50 +29,6 @@ const StyledTableRow = styled(TableRow)`
   }
   &:nth-of-type(odd) td {
     background: #fffffc;
-  }
-`
-export const EkTableCell = styled(TableCell)`
-  position: sticky;
-  width: ${props => `${props.width}px`};
-  min-width: ${props => `${props.width}px`};
-  max-width: ${props => `${props.width}px`};
-  font-size: 0.75rem !important;
-  white-space: nowrap !important;
-  text-overflow: ellipsis !important;
-  overflow: hidden !important;
-  padding: 2px 4px !important;
-  border-left: solid hsla(70, 80%, 75%, 1) 1px;
-  border-right: solid hsla(70, 80%, 75%, 1) 1px;
-  background: ${props =>
-    props['data-clicked']
-      ? 'rgb(255,211,167) !important'
-      : props['data-columnishovered']
-      ? 'hsla(45, 100%, 90%, 1) !important'
-      : 'unset'};
-  left: ${props =>
-    props['data-left'] === undefined ? 'unset' : `${props['data-left']}px`};
-  z-index: ${props => (props['data-left'] === undefined ? 0 : 1)};
-  &:first-child {
-    padding-left: 10px !important;
-  }
-  div {
-    white-space: nowrap !important;
-    text-overflow: ellipsis !important;
-    overflow: hidden !important;
-  }
-`
-export const TableCellForSelect = styled(EkTableCell)`
-  padding: 0 !important;
-  font-size: unset !important;
-  border-left: solid green 1px;
-  border-right: solid green 1px;
-  &:focus-within {
-    border: solid orange 3px;
-  }
-`
-export const TableCellForYear = styled(EkTableCell)`
-  &:focus-within {
-    border: solid orange 3px;
   }
 `
 
@@ -130,13 +87,16 @@ const EkPlanTableRow = ({
           {sortBy(
             Object.values(row)
               .filter(o => typeof o === 'object')
-              .filter(o => !!o.label),
+              .filter(o => !!o.name),
             'sort',
           ).map(field => {
-            if (field.label === 'EK Abrechnung Typ') {
+            if (field.name === 'yearTitle') {
+              return <CellForYearTitle key={field.name} field={field} />
+            }
+            if (field.name === 'ekAbrechnungstyp') {
               return (
                 <CellForEkAbrechnungstyp
-                  key={field.label}
+                  key={field.name}
                   row={row}
                   field={field}
                   columnHovered={columnHovered}
@@ -147,10 +107,10 @@ const EkPlanTableRow = ({
                 />
               )
             }
-            if (field.label === 'EK Frequenz') {
+            if (field.name === 'ekfrequenz') {
               return (
                 <CellForEkfrequenz
-                  key={field.label}
+                  key={field.name}
                   row={row}
                   field={field}
                   columnHovered={columnHovered}
@@ -161,10 +121,10 @@ const EkPlanTableRow = ({
                 />
               )
             }
-            if (field.label === 'EK Frequenz abweichend') {
+            if (field.name === 'ekfrequenzAbweichend') {
               return (
                 <CellForEkfrequenzAbweichend
-                  key={field.label}
+                  key={field.name}
                   row={row}
                   field={field}
                   columnHovered={columnHovered}
@@ -174,10 +134,10 @@ const EkPlanTableRow = ({
                 />
               )
             }
-            if (field.label === 'Link') {
+            if (field.name === 'link') {
               return (
                 <CellForTpopLink
-                  key={field.label}
+                  key={field.name}
                   field={field}
                   columnHovered={columnHovered}
                   setColumnHovered={setColumnHovered}

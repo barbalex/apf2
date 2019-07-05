@@ -3,7 +3,7 @@ import { FaExternalLinkAlt } from 'react-icons/fa'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
-import { EkTableCell } from './index'
+import { EkTableCell } from '../index'
 
 const Link = styled.div`
   margin-left: 8px;
@@ -29,7 +29,6 @@ const CellForTpopLink = ({
 
   return (
     <EkTableCell
-      key={field.label}
       width={field.width}
       onMouseEnter={onMouseEnter}
       onMouseLeave={resetYearHovered}

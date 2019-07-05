@@ -82,6 +82,50 @@ const StyledTableBody = styled(TableBody)`
   height: ${props =>
     `calc(100vh - 64px - ${props.headerheight}px - 17.6px - 50px) !important`};
 `
+export const EkTableCell = styled(TableCell)`
+  position: sticky;
+  width: ${props => `${props.width}px`};
+  min-width: ${props => `${props.width}px`};
+  max-width: ${props => `${props.width}px`};
+  font-size: 0.75rem !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  overflow: hidden !important;
+  padding: 2px 4px !important;
+  border-left: solid hsla(70, 80%, 75%, 1) 1px;
+  border-right: solid hsla(70, 80%, 75%, 1) 1px;
+  background: ${props =>
+    props['data-clicked']
+      ? 'rgb(255,211,167) !important'
+      : props['data-columnishovered']
+      ? 'hsla(45, 100%, 90%, 1) !important'
+      : 'unset'};
+  left: ${props =>
+    props['data-left'] === undefined ? 'unset' : `${props['data-left']}px`};
+  z-index: ${props => (props['data-left'] === undefined ? 0 : 1)};
+  &:first-child {
+    padding-left: 10px !important;
+  }
+  div {
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    overflow: hidden !important;
+  }
+`
+export const TableCellForSelect = styled(EkTableCell)`
+  padding: 0 !important;
+  font-size: unset !important;
+  border-left: solid green 1px;
+  border-right: solid green 1px;
+  &:focus-within {
+    border: solid orange 3px;
+  }
+`
+export const TableCellForYear = styled(EkTableCell)`
+  &:focus-within {
+    border: solid orange 3px;
+  }
+`
 const TpopTitle = styled.h4`
   margin: 0 10px 4px 10px;
 `
@@ -197,10 +241,17 @@ const rowsFromTpop = ({ tpop, years }) => {
       sort: 11,
       width: 76,
     },
+    yearTitle: {
+      name: 'yearTitle',
+      label: '',
+      sort: 12,
+      width: 40,
+    },
   }
   years.forEach(
     year =>
       (fields[year.toString()] = {
+        name: year,
         label: year,
         value: {
           ekPlan:
@@ -311,7 +362,7 @@ const EkPlanTable = ({ aps }) => {
     ? sortBy(
         Object.values(rows[0])
           .filter(o => typeof o === 'object')
-          .filter(o => !!o.label),
+          .filter(o => !!o.name),
         'sort',
       )
     : []
@@ -349,11 +400,7 @@ const EkPlanTable = ({ aps }) => {
       : 0,
   }
 
-  /*console.log('Table rendering, yearClickedState:', {
-    yearClickedState,
-    rows,
-    tpops,
-  })*/
+  //console.log('Table rendering, yearClickedState:', yearClickedState)
 
   if (aps.length > 0 && loadingTpop) return <Container>Lade...</Container>
   if (errorTpop) return <Container>errorTpop.message</Container>
@@ -369,7 +416,7 @@ const EkPlanTable = ({ aps }) => {
                   <StyledTableHeaderRow headerheight={headerheight}>
                     {fields.map(f => (
                       <StyledTableHeaderCell
-                        key={f.label}
+                        key={f.name}
                         ref={refs[f.name] ? refs[f.name] : null}
                         width={f.width}
                         data-columnishovered={columnHovered === f.label}

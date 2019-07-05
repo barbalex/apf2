@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { GiSpade } from 'react-icons/gi'
 import { GoZap } from 'react-icons/go'
 
-import { TableCellForYear } from './index'
+import { TableCellForYear } from '../index'
 import EkfIcon from '../../../../icons/Ekf'
 import EkIcon from '../../../../icons/Ek'
 
@@ -23,7 +23,7 @@ const NrOfEvents = styled.span`
   position: relative;
 `
 
-const CellForYear = ({
+const CellForYearTitle = ({
   field,
   row,
   columnHovered,
@@ -41,7 +41,6 @@ const CellForYear = ({
 
   return (
     <TableCellForYear
-      key={label}
       width={width}
       onMouseEnter={onMouseEnter}
       onMouseLeave={resetYearHovered}
@@ -98,4 +97,4 @@ const CellForYear = ({
   )
 }
 
-export default observer(CellForYear)
+export default observer(CellForYearTitle)

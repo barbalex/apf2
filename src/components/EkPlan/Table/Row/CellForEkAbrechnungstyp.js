@@ -3,7 +3,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
 import Select from './Select'
-import { TableCellForSelect } from './index'
+import { TableCellForSelect } from '../index'
 
 const CellForEkAbrechnungstyp = ({
   field,
@@ -18,7 +18,6 @@ const CellForEkAbrechnungstyp = ({
 
   return (
     <TableCellForSelect
-      key={field.label}
       width={field.width}
       onMouseEnter={onMouseEnter}
       onMouseLeave={resetYearHovered}

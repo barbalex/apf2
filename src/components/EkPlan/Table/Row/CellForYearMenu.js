@@ -44,8 +44,10 @@ const createEkplanMutation = gql`
   ${ekplan}
 `
 const ekplansOfTpopQuery = gql`
-  query EkplansOfTpopQuery($tpopId: UUID!) {
-    allEkplans(filter: { tpopId: { equalTo: $tpopId } }) {
+  query EkplansOfTpopQuery($tpopId: UUID!, $jahr: Int) {
+    allEkplans(
+      filter: { tpopId: { equalTo: $tpopId }, jahr: { equalTo: $jahr } }
+    ) {
       nodes {
         id
         typ
@@ -85,6 +87,7 @@ const CellForYearMenu = ({
           query: ekplansOfTpopQuery,
           variables: {
             tpopId,
+            jahr: year,
           },
         })
       } catch (error) {
