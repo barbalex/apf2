@@ -44,7 +44,7 @@ const StyledTable = styled(Table)`
     font-weight: 800 !important;
   }
   tbody > tr > td.${props => props.colhovered} {
-    background: hsla(45, 100%, 90%, 1) !important;
+    background: hsla(45, 100%, 90%, 1);
   }
 `
 const StyledTableHead = styled(TableHead)`
