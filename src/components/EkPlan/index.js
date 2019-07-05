@@ -37,7 +37,6 @@ const EkPlan = () => {
     <ErrorBoundary>
       <Container>
         <Header ref={headerRef}>
-          <div>Das ist eine Baustelle - bitte noch nicht benutzen</div>
           <ApList aps={aps} removeAp={removeAp} addAp={addAp} />
         </Header>
         <Table aps={aps} />

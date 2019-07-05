@@ -9,7 +9,7 @@ import ChooseAp from './ChooseAp'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 550px;
+  width: 100%;
 `
 const TitleRow = styled.div`
   display: flex;
@@ -27,9 +27,7 @@ const PlusIcon = styled(IconButton)`
 
 const ApList = ({ aps, removeAp, addAp }) => {
   const [showChoose, setShowChoose] = useState(aps.length === 0)
-  const onClickAdd = useCallback(() => {
-    setShowChoose(true)
-  }, [])
+  const onClickAdd = useCallback(() => setShowChoose(true), [])
 
   return (
     <Container>

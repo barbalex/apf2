@@ -25,6 +25,7 @@ import CellForYearMenu from './Row/CellForYearMenu'
 
 const Container = styled.div`
   padding: 10px;
+  user-select: none !important;
 `
 const TableContainer = styled.div`
   position: relative;

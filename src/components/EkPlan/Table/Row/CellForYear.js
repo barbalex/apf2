@@ -8,7 +8,9 @@ import { GoZap } from 'react-icons/go'
 
 import { TableCellForYear } from '../index'
 import EkfIcon from '../../../../icons/Ekf'
-import EkIcon from '../../../../icons/Ek'
+import EkSymbol from '../../../../icons/Ek'
+import EkIcon from './EkIcon'
+import { InfoRow } from '../index'
 
 const AzContainer = styled.div`
   display: flex;
@@ -61,38 +63,15 @@ const CellForYearTitle = ({
         setTimeout(() => setYearMenuAnchor(currentTarget))
       }}
     >
-      <>
-        {value.ekPlan && (
-          <div title="EK geplant" aria-label="EK geplant">
-            EK!
-          </div>
-        )}
-        {value.ekfPlan && (
-          <div title="EKF geplant" aria-label="EKF geplant">
-            EKF!
-          </div>
-        )}
-        {!!value.az.length && (
-          <AzContainer>
-            <AzIcon title="Ausgangszustand" aria-label="Ausgangszustand" />
-            {value.az.length > 1 && <NrOfEvents>{value.az.length}</NrOfEvents>}
-          </AzContainer>
-        )}
-        {!!value.ek.length && (
-          <div title="EK" aria-label="EK">
-            <EkIcon width="25px" height="20px" />
-            {value.ek.length > 1 && <NrOfEvents>{value.ek.length}</NrOfEvents>}
-          </div>
-        )}
-        {!!value.ekf.length && (
-          <div title="EKF" aria-label="EKF">
-            <EkfIcon width="25px" height="20px" />
-            {value.ekf.length > 1 && (
-              <NrOfEvents>{value.ekf.length}</NrOfEvents>
-            )}
-          </div>
-        )}
-      </>
+      <InfoRow>
+        <EkIcon
+          planned={value.ekPlan}
+          done={value.az.length + value.ek.length}
+        />
+      </InfoRow>
+      <InfoRow>
+        <EkIcon planned={value.ekfPlan} done={value.ekf.length} />
+      </InfoRow>
     </TableCellForYear>
   )
 }
