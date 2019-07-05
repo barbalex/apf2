@@ -87,11 +87,11 @@ Das Formular, um Kontrollen zu planen.
   - EK:
     - :white_check_mark: wieviele durchgeführt
     - Summen für die zielrelevante(n) Zähleinheit(en) aus für den Jahresbericht relevanten Kontrollen
-  - EK geplant, bearbeitbar
+  - :white_check_mark: EK geplant, bearbeitbar
   - EKF: 
     - :white_check_mark: wieviele durchgeführt
     - Summen für die zielrelevante(n) Zähleinheit(en) aus für den Jahresbericht relevanten Kontrollen
-  - EKF geplant, bearbeitbar
+  - :white_check_mark: EKF geplant, bearbeitbar
   - Massnahmen des Typs Ansiedlung (unterscheiden nach Anpflanzung/Ansaat?)
 - Der Benutzer kann wählen, welche der obigen Informationen angezeigt werden
 - Fährt man mit der Maus über EK, EKF und Massnahmen, werden deren wichtigsten Angaben angezeigt. Und ein Link, um das Objekt in einem neuen Fenster zu öffnen
