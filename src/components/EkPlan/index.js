@@ -7,6 +7,7 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from 'react-apollo-hooks'
 import groupBy from 'lodash/groupBy'
 import get from 'lodash/get'
+import { withStyles } from '@material-ui/core/styles'
 
 import ApList from './ApList'
 import Table from './Table'
@@ -24,7 +25,33 @@ const Header = styled.div`
   flex-wrap: nowrap;
   justify-content: space-between;
 `
-const ChooseContainer = styled.div``
+const ChooseContainer = styled.div`
+  position: relative;
+  flex-basis: 200px;
+  flex-shrink: 0;
+  flex-grow: 0;
+  align-self: flex-start;
+  justify-self: end;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 90px;
+`
+const ChooseTitle = styled.h5`
+  position: relative;
+  left: 4px;
+  margin-bottom: 10px;
+`
+const Label = styled(FormControlLabel)`
+  float: right;
+  span {
+    font-size: 0.75rem;
+  }
+`
+
+const DenserPrimaryAction = withStyles(theme => ({
+  root: { margin: '-8px 2px -8px -4px' },
+}))(props => <div className={props.classes.root}>{props.children}</div>)
 
 const EkPlan = () => {
   const headerRef = useRef(null)
@@ -77,14 +104,70 @@ const EkPlan = () => {
             queryApsResult={queryApsResult}
           />
           <ChooseContainer>
-            <FormControlLabel
+            <ChooseTitle>anzeigen:</ChooseTitle>
+            <Label
               control={
-                <Checkbox
-                  checked={showEk}
-                  onChange={() => console.log('TODO')}
-                />
+                <DenserPrimaryAction>
+                  <Checkbox
+                    checked={showEk}
+                    onChange={() => setShowEk(!showEk)}
+                    color="primary"
+                  />
+                </DenserPrimaryAction>
               }
-              label="EK anzeigen"
+              label="EK"
+              labelPlacement="start"
+            />
+            <Label
+              control={
+                <DenserPrimaryAction>
+                  <Checkbox
+                    checked={showEkf}
+                    onChange={() => setShowEkf(!showEkf)}
+                    color="primary"
+                  />
+                </DenserPrimaryAction>
+              }
+              label="EKF"
+              labelPlacement="start"
+            />
+            <Label
+              control={
+                <DenserPrimaryAction>
+                  <Checkbox
+                    checked={showCount}
+                    onChange={() => setShowCount(!showCount)}
+                    color="primary"
+                  />
+                </DenserPrimaryAction>
+              }
+              label="Zählungen"
+              labelPlacement="start"
+            />
+            <Label
+              control={
+                <DenserPrimaryAction>
+                  <Checkbox
+                    checked={showEkCount}
+                    onChange={() => setShowEkCount(!showEkCount)}
+                    color="primary"
+                  />
+                </DenserPrimaryAction>
+              }
+              label="Mehrfache EK(F)"
+              labelPlacement="start"
+            />
+            <Label
+              control={
+                <DenserPrimaryAction>
+                  <Checkbox
+                    checked={showMassn}
+                    onChange={() => setShowMassn(!showMassn)}
+                    color="primary"
+                  />
+                </DenserPrimaryAction>
+              }
+              label="Massnahmen"
               labelPlacement="start"
             />
           </ChooseContainer>
