@@ -24,10 +24,9 @@ const StyledCheckbox = styled.div`
   border-radius: 3px;
   border: ${props => (props.planned ? '1px solid #2e7d32' : 'none')};
   transition: all 150ms;
-  margin-left: auto;
-  margin-right: auto;
   flex-grow: 0;
   flex-basis: 19px;
+  flex-shrink: 0;
 `
 const NrOfEk = styled.div`
   font-weight: 900;
@@ -40,7 +39,7 @@ const NrOfEk = styled.div`
 const SumCounted = styled.div`
   margin-left: 3px;
   flex-grow: 0;
-  flex-basis: 19px;
+  flex-basis: 32px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;

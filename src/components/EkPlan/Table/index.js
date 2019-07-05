@@ -59,7 +59,7 @@ const StyledTableHeaderCell = styled(TableCell)`
   min-width: ${props => `${props.width}px`};
   max-width: ${props => `${props.width}px`};
   text-align: ${props =>
-    props['data-centertext' ? 'center !important' : 'inherit']};
+    props['data-centertext'] ? 'center !important' : 'inherit'};
   font-weight: ${props =>
     props['data-columnishovered'] ? '800 !important' : '500 !important'};
   font-size: 0.75rem !important;
@@ -273,7 +273,7 @@ const rowsFromTpop = ({ tpop, years }) => {
             .filter(o => o.typ === 'Freiwilligen-Erfolgskontrolle'),
         },
         sort: year,
-        width: 48,
+        width: 52,
       }),
   )
   return fields
@@ -423,13 +423,13 @@ const EkPlanTable = ({ aps, einheitsByAp }) => {
                         key={f.name}
                         ref={refs[f.name] ? refs[f.name] : null}
                         width={f.width}
-                        data-columnishovered={columnHovered === f.label}
                         onMouseEnter={() =>
                           f.label > 1000 &&
                           f.label < 3000 &&
                           setColumnHovered(f.label)
                         }
                         onMouseLeave={resetYearHovered}
+                        data-columnishovered={columnHovered === f.label}
                         data-left={scrollPositions[f.name]}
                         data-centertext={f.label > 1000 && f.label < 3000}
                       >
