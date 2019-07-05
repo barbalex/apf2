@@ -25,6 +25,29 @@ export default gql`
             id
             jahr
             typ
+            tpopkontrzaehlsByTpopkontrId(
+              filter: {
+                tpopkontrzaehlEinheitWerteByEinheit: {
+                  ekzaehleinheitsByZaehleinheitId: {
+                    every: { zielrelevant: { equalTo: true } }
+                  }
+                }
+              }
+            ) {
+              nodes {
+                id
+                einheit
+                tpopkontrzaehlEinheitWerteByEinheit {
+                  id
+                  ekzaehleinheitsByZaehleinheitId {
+                    nodes {
+                      id
+                      zielrelevant
+                    }
+                  }
+                }
+              }
+            }
           }
         }
         ekplansByTpopId {

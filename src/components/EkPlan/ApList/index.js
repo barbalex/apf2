@@ -25,7 +25,7 @@ const PlusIcon = styled(IconButton)`
   padding-bottom: 4px !important;
 `
 
-const ApList = ({ aps, removeAp, addAp }) => {
+const ApList = ({ aps, removeAp, addAp, queryApsResult }) => {
   const [showChoose, setShowChoose] = useState(aps.length === 0)
   const onClickAdd = useCallback(() => setShowChoose(true), [])
 
@@ -44,7 +44,12 @@ const ApList = ({ aps, removeAp, addAp }) => {
         )}
       </TitleRow>
       {aps.map(ap => (
-        <Ap key={ap.value} ap={ap} removeAp={removeAp} />
+        <Ap
+          key={ap.value}
+          ap={ap}
+          removeAp={removeAp}
+          queryApsResult={queryApsResult}
+        />
       ))}
       {showChoose && (
         <ChooseAp addAp={addAp} aps={aps} setShowChoose={setShowChoose} />

@@ -64,10 +64,7 @@ const CellForYearTitle = ({
       }}
     >
       <InfoRow>
-        <EkIcon
-          planned={value.ekPlan}
-          done={value.az.length + value.ek.length}
-        />
+        <EkIcon planned={value.ekPlan} done={value.ek.length} />
       </InfoRow>
       <InfoRow>
         <EkIcon planned={value.ekfPlan} done={value.ekf.length} />

@@ -135,6 +135,7 @@ const Pop = ({ treeName, showFilter = false }) => {
         // update pop on map
         if (
           (value &&
+            row &&
             ((changedField === 'lv95Y' && row.lv95X) ||
               (changedField === 'lv95X' && row.lv95Y))) ||
           (!value && (changedField === 'lv95Y' || changedField === 'lv95X'))

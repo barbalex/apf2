@@ -42,7 +42,7 @@ const Tpop = ({ treeName, showFilter, onSubmit, row, apJahr, refetchTpop }) => {
   return (
     <FormContainer data-width={showFilter ? filterWidth : datenWidth}>
       <Formik
-        key={showFilter ? JSON.stringify(row) : row.id}
+        key={showFilter ? JSON.stringify(row) : row ? row.id : 'tpop'}
         initialValues={row}
         onSubmit={onSubmit}
         enableReinitialize

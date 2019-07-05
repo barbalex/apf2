@@ -263,12 +263,9 @@ const rowsFromTpop = ({ tpop, years }) => {
           ekfPlan:
             ekplans.filter(o => o.jahr === year).filter(o => o.typ === 'EKF')
               .length > 0,
-          az: kontrs
-            .filter(o => o.jahr === year)
-            .filter(o => o.typ === 'Ausgangszustand'),
           ek: kontrs
             .filter(o => o.jahr === year)
-            .filter(o => o.typ === 'Zwischenbeurteilung'),
+            .filter(o => o.typ !== 'Freiwilligen-Erfolgskontrolle'),
           ekf: kontrs
             .filter(o => o.jahr === year)
             .filter(o => o.typ === 'Freiwilligen-Erfolgskontrolle'),
@@ -298,7 +295,7 @@ const yearClickedReducer = (state, action) => {
   }
 }
 
-const EkPlanTable = ({ aps }) => {
+const EkPlanTable = ({ aps, queryApsResult }) => {
   //const store = useContext(storeContext)
   const apRef = useRef(null)
   const popNrRef = useRef(null)
@@ -345,6 +342,11 @@ const EkPlanTable = ({ aps }) => {
   }, [yearClickedState])
 
   const apValues = useMemo(() => aps.map(a => a.value), [aps])
+
+  const { data: dataAps, loading: dataApsLoading } = queryApsResult
+  !dataApsLoading && console.log('Table, dataAps:', dataAps)
+  const apsData = get(dataAps, 'allAps.nodes', [])
+  //const einheits = get
 
   const {
     data: dataTpop,

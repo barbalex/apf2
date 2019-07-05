@@ -43,7 +43,7 @@ const Row = styled.div`
 `
 
 const Coordinates = ({ row, refetchForm, table }) => {
-  const { lv95X, lv95Y, wgs84Lat, wgs84Long, id } = row
+  const { lv95X, lv95Y, wgs84Lat, wgs84Long, id } = row || {}
 
   const client = useApolloClient()
   const store = useContext(storeContext)

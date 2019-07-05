@@ -27,14 +27,11 @@ const DelIcon = styled(IconButton)`
   padding-bottom: 4px !important;
 `
 
-const Ap = ({ ap, removeAp }) => {
+const Ap = ({ ap, removeAp, queryApsResult }) => {
   const onClickDelete = useCallback(() => removeAp(ap), [ap])
-  const { data, loading } = useQuery(queryAp, {
-    variables: {
-      id: ap.value,
-    },
-  })
-  const einheits = get(data, 'apById.ekzaehleinheitsByApId.nodes', []).map(e =>
+  const { data, loading } = queryApsResult
+  const thisApData = get(data, 'allAps.nodes', []).find(a => a.id === ap.value)
+  const einheits = get(thisApData, 'ekzaehleinheitsByApId.nodes', []).map(e =>
     get(e, 'tpopkontrzaehlEinheitWerteByZaehleinheitId.text'),
   )
   const einheitsText =

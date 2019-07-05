@@ -2,9 +2,11 @@ import React, { useState, useCallback, useRef } from 'react'
 import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
 import { observer } from 'mobx-react-lite'
+import { useQuery } from 'react-apollo-hooks'
 
 import ApList from './ApList'
 import Table from './Table'
+import queryAps from './queryAps'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -32,14 +34,24 @@ const EkPlan = () => {
     },
     [aps],
   )
+  const queryApsResult = useQuery(queryAps, {
+    variables: {
+      ids: aps.map(ap => ap.value),
+    },
+  })
 
   return (
     <ErrorBoundary>
       <Container>
         <Header ref={headerRef}>
-          <ApList aps={aps} removeAp={removeAp} addAp={addAp} />
+          <ApList
+            aps={aps}
+            removeAp={removeAp}
+            addAp={addAp}
+            queryApsResult={queryApsResult}
+          />
         </Header>
-        <Table aps={aps} />
+        <Table aps={aps} queryApsResult={queryApsResult} />
       </Container>
     </ErrorBoundary>
   )
