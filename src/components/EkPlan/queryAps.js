@@ -11,9 +11,9 @@ export default gql`
         ) {
           nodes {
             id
-            zaehleinheitId
             tpopkontrzaehlEinheitWerteByZaehleinheitId {
               id
+              code
               text
             }
           }

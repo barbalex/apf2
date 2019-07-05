@@ -42,6 +42,7 @@ const EkPlanTableRow = ({
   yearClickedState,
   yearClickedDispatch,
   setYearMenuAnchor,
+  einheitsByAp,
 }) => {
   const apValues = useMemo(() => aps.map(a => a.value), [aps])
 
@@ -166,6 +167,7 @@ const EkPlanTableRow = ({
                   yearClickedState={yearClickedState}
                   yearClickedDispatch={yearClickedDispatch}
                   setYearMenuAnchor={setYearMenuAnchor}
+                  einheitsByAp={einheitsByAp}
                 />
               )
             }

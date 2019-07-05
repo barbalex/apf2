@@ -1,29 +1,12 @@
 import React, { useCallback } from 'react'
-import { GoArrowRight } from 'react-icons/go'
 import { observer } from 'mobx-react-lite'
-import styled from 'styled-components'
 // this will be for Massnahmen
 import { GiSpade } from 'react-icons/gi'
 import { GoZap } from 'react-icons/go'
 
 import { TableCellForYear } from '../index'
-import EkfIcon from '../../../../icons/Ekf'
-import EkSymbol from '../../../../icons/Ek'
 import EkIcon from './EkIcon'
 import { InfoRow } from '../index'
-
-const AzContainer = styled.div`
-  display: flex;
-  height: 25px;
-`
-const AzIcon = styled(GoArrowRight)`
-  font-size: 1.5rem;
-`
-const NrOfEvents = styled.span`
-  bottom: 12px;
-  left: -2px;
-  position: relative;
-`
 
 const CellForYearTitle = ({
   field,
@@ -35,11 +18,13 @@ const CellForYearTitle = ({
   yearClickedState,
   yearClickedDispatch,
   setYearMenuAnchor,
+  einheitsByAp,
 }) => {
   const { label, value, width } = field
   const onMouseEnter = useCallback(() => setColumnHovered(label), [label])
   const { year, tpopId } = yearClickedState
   const clicked = year === label && tpopId === row.id
+  const einheits = einheitsByAp[row.apId]
 
   return (
     <TableCellForYear
@@ -64,10 +49,10 @@ const CellForYearTitle = ({
       }}
     >
       <InfoRow>
-        <EkIcon planned={value.ekPlan} done={value.ek.length} />
+        <EkIcon planned={value.ekPlan} eks={value.ek} einheits={einheits} />
       </InfoRow>
       <InfoRow>
-        <EkIcon planned={value.ekfPlan} done={value.ekf.length} />
+        <EkIcon planned={value.ekfPlan} eks={value.ekf} einheits={einheits} />
       </InfoRow>
     </TableCellForYear>
   )

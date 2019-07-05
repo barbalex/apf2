@@ -29,6 +29,7 @@ export default gql`
               nodes {
                 id
                 einheit
+                anzahl
                 tpopkontrzaehlEinheitWerteByEinheit {
                   id
                   text

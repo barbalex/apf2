@@ -2,10 +2,7 @@ import React, { useCallback } from 'react'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import styled from 'styled-components'
-import { useQuery } from 'react-apollo-hooks'
 import get from 'lodash/get'
-
-import queryAp from './queryAp'
 
 const Container = styled.div`
   display: flex;

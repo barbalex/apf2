@@ -58,6 +58,8 @@ const StyledTableHeaderCell = styled(TableCell)`
   width: ${props => `${props.width}px`};
   min-width: ${props => `${props.width}px`};
   max-width: ${props => `${props.width}px`};
+  text-align: ${props =>
+    props['data-centertext' ? 'center !important' : 'inherit']};
   font-weight: ${props =>
     props['data-columnishovered'] ? '800 !important' : '500 !important'};
   font-size: 0.75rem !important;
@@ -271,7 +273,7 @@ const rowsFromTpop = ({ tpop, years }) => {
             .filter(o => o.typ === 'Freiwilligen-Erfolgskontrolle'),
         },
         sort: year,
-        width: 38,
+        width: 48,
       }),
   )
   return fields
@@ -295,7 +297,7 @@ const yearClickedReducer = (state, action) => {
   }
 }
 
-const EkPlanTable = ({ aps, queryApsResult }) => {
+const EkPlanTable = ({ aps, einheitsByAp }) => {
   //const store = useContext(storeContext)
   const apRef = useRef(null)
   const popNrRef = useRef(null)
@@ -342,11 +344,6 @@ const EkPlanTable = ({ aps, queryApsResult }) => {
   }, [yearClickedState])
 
   const apValues = useMemo(() => aps.map(a => a.value), [aps])
-
-  const { data: dataAps, loading: dataApsLoading } = queryApsResult
-  !dataApsLoading && console.log('Table, dataAps:', dataAps)
-  const apsData = get(dataAps, 'allAps.nodes', [])
-  //const einheits = get
 
   const {
     data: dataTpop,
@@ -434,6 +431,7 @@ const EkPlanTable = ({ aps, queryApsResult }) => {
                         }
                         onMouseLeave={resetYearHovered}
                         data-left={scrollPositions[f.name]}
+                        data-centertext={f.label > 1000 && f.label < 3000}
                       >
                         {f.label}
                       </StyledTableHeaderCell>
@@ -455,6 +453,7 @@ const EkPlanTable = ({ aps, queryApsResult }) => {
                       yearMenuAnchor={yearMenuAnchor}
                       setYearMenuAnchor={setYearMenuAnchor}
                       closeYearCellMenu={closeYearCellMenu}
+                      einheitsByAp={einheitsByAp}
                     />
                   ))}
                 </StyledTableBody>
