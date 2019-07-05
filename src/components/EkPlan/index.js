@@ -49,6 +49,8 @@ const Label = styled(FormControlLabel)`
   }
 `
 
+// placing mateiral-ui checkboxes denser
+// see: https://github.com/mui-org/material-ui/issues/6098#issuecomment-380451242
 const DenserPrimaryAction = withStyles(theme => ({
   root: { margin: '-8px 2px -8px -4px' },
 }))(props => <div className={props.classes.root}>{props.children}</div>)
