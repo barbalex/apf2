@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from 'react-apollo-hooks'
+import groupBy from 'lodash/groupBy'
+import get from 'lodash/get'
 
 import ApList from './ApList'
 import Table from './Table'
@@ -39,6 +41,20 @@ const EkPlan = () => {
       ids: aps.map(ap => ap.value),
     },
   })
+  const einheitsByAp0 = groupBy(
+    get(queryApsResult, 'data.allAps.nodes', []),
+    'id',
+  )
+  const einheitsByAp = {}
+  Object.keys(einheitsByAp0).forEach(
+    apId =>
+      (einheitsByAp[apId] = get(
+        einheitsByAp0[apId][0],
+        'ekzaehleinheitsByApId.nodes',
+        [],
+      ).map(o => o.zaehleinheitId)),
+  )
+  console.log('EkPlan, einheitsByAp:', { einheitsByAp, einheitsByAp0 })
 
   return (
     <ErrorBoundary>
