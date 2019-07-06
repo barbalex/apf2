@@ -1,5 +1,4 @@
 import { types } from 'mobx-state-tree'
-import isEqual from 'lodash/isEqual'
 
 import Ap from './Ap'
 

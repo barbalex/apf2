@@ -1,4 +1,4 @@
-import React, { useMemo, useContext } from 'react'
+import React, { useContext } from 'react'
 import { useQuery } from 'react-apollo-hooks'
 import TableRow from '@material-ui/core/TableRow'
 import styled from 'styled-components'
@@ -15,7 +15,7 @@ import CellForEkfrequenzAbweichend from './CellForEkfrequenzAbweichend'
 import CellForTpopLink from './CellForTpopLink'
 import CellForYear from './CellForYear'
 import CellForYearTitle from './CellForYearTitle'
-import { EkTableCell } from '../index'
+import CellForValue from './CellForValue'
 import storeContext from '../../../../storeContext'
 
 const StyledTableRow = styled(TableRow)`
@@ -167,15 +167,13 @@ const EkPlanTableRow = ({
               )
             }
             return (
-              <EkTableCell
+              <CellForValue
                 key={field.label}
-                width={field.width}
-                onMouseEnter={() => setColumnHovered(field.label)}
-                onMouseLeave={resetYearHovered}
-                data-left={scrollPositions[field.name]}
-              >
-                <div>{field.value}</div>
-              </EkTableCell>
+                field={field}
+                setColumnHovered={setColumnHovered}
+                resetYearHovered={resetYearHovered}
+                scrollPositions={scrollPositions}
+              />
             )
           })}
         </StyledTableRow>
