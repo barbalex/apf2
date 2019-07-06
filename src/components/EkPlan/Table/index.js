@@ -150,7 +150,7 @@ const yearsFromTpops = tpops => {
   }
   return years
 }
-const rowsFromTpop = ({ tpop, years }) => {
+const rowsFromTpop = ({ tpop, years, showCount }) => {
   const ekplans = get(tpop, 'ekplansByTpopId.nodes')
   const kontrs = get(tpop, 'tpopkontrsByTpopId.nodes')
 
@@ -273,7 +273,7 @@ const rowsFromTpop = ({ tpop, years }) => {
             .filter(o => o.typ === 'Freiwilligen-Erfolgskontrolle'),
         },
         sort: year,
-        width: 52,
+        width: showCount ? 52 : 38,
       }),
   )
   return fields
@@ -299,7 +299,7 @@ const yearClickedReducer = (state, action) => {
 
 const EkPlanTable = ({ einheitsByAp }) => {
   const store = useContext(storeContext)
-  const { aps, apValues } = store.ekPlan
+  const { aps, apValues, showCount } = store.ekPlan
 
   const apRef = useRef(null)
   const popNrRef = useRef(null)
@@ -360,7 +360,7 @@ const EkPlanTable = ({ einheitsByAp }) => {
     t => t.popByPopId.apByApId.label,
   )
   const years = yearsFromTpops(tpops)
-  const rows = tpops.map(tpop => rowsFromTpop({ tpop, years }))
+  const rows = tpops.map(tpop => rowsFromTpop({ tpop, years, showCount }))
   const fields = rows.length
     ? sortBy(
         Object.values(rows[0])

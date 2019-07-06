@@ -1,14 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sum from 'lodash/sum'
+
+import storeContext from '../../../../storeContext'
 
 const CheckboxContainer = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
   flex-wrap: nowrap;
-  justify-content: space-between;
+  justify-content: ${props => (props.showcount ? 'space-between' : 'center')};
 `
 
 const Icon = styled.svg`
@@ -46,6 +48,9 @@ const SumCounted = styled.div`
 `
 
 const EkIcon = ({ planned, eks, einheits }) => {
+  const store = useContext(storeContext)
+  const { showCount, showEkCount } = store.ekPlan
+
   if (!planned && !eks.length) {
     return <CheckboxContainer>&nbsp;</CheckboxContainer>
   }
@@ -72,16 +77,18 @@ const EkIcon = ({ planned, eks, einheits }) => {
   }
 
   return (
-    <CheckboxContainer>
+    <CheckboxContainer showcount={showCount}>
       <StyledCheckbox planned={planned}>
         {!!eks.length && (
           <Icon viewBox="0 0 24 24">
             <polyline points="20 6 9 17 4 12" />
           </Icon>
         )}
-        {eks.length > 1 && <NrOfEk>{eks.length}</NrOfEk>}
+        {showEkCount && eks.length > 1 && <NrOfEk>{eks.length}</NrOfEk>}
       </StyledCheckbox>
-      <SumCounted>{sumCounted !== null ? sumCounted : ' '}</SumCounted>
+      {showCount && (
+        <SumCounted>{sumCounted !== null ? sumCounted : ' '}</SumCounted>
+      )}
     </CheckboxContainer>
   )
 }

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 // this will be for Massnahmen
 import { GiSpade } from 'react-icons/gi'
@@ -7,6 +7,7 @@ import { GoZap } from 'react-icons/go'
 import { TableCellForYear } from '../index'
 import EkIcon from './EkIcon'
 import { InfoRow } from '../index'
+import storeContext from '../../../../storeContext'
 
 const CellForYearTitle = ({
   field,
@@ -19,6 +20,9 @@ const CellForYearTitle = ({
   setYearMenuAnchor,
   einheitsByAp,
 }) => {
+  const store = useContext(storeContext)
+  const { showEk, showEkf } = store.ekPlan
+
   const { label, value, width, name } = field
   const onMouseEnter = useCallback(() => setColumnHovered(`_${label}_`), [
     label,
@@ -50,10 +54,14 @@ const CellForYearTitle = ({
       className={`_${name}_`}
     >
       <InfoRow>
-        <EkIcon planned={value.ekPlan} eks={value.ek} einheits={einheits} />
+        {showEk && (
+          <EkIcon planned={value.ekPlan} eks={value.ek} einheits={einheits} />
+        )}
       </InfoRow>
       <InfoRow>
-        <EkIcon planned={value.ekfPlan} eks={value.ekf} einheits={einheits} />
+        {showEkf && (
+          <EkIcon planned={value.ekfPlan} eks={value.ekf} einheits={einheits} />
+        )}
       </InfoRow>
     </TableCellForYear>
   )
