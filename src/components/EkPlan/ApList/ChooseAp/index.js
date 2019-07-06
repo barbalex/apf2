@@ -71,8 +71,9 @@ const Error = styled.div`
   color: red;
 `
 
-const EkPlan = ({ aps, addAp, setShowChoose }) => {
+const EkPlan = ({ setShowChoose }) => {
   const store = useContext(storeContext)
+  const { aps, addAp } = store.ekPlan
   const client = useApolloClient()
 
   const { activeNodeArray } = store.tree

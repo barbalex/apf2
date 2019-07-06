@@ -1,10 +1,11 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useContext } from 'react'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import styled from 'styled-components'
 
 import Ap from './Ap'
 import ChooseAp from './ChooseAp'
+import storeContext from '../../../storeContext'
 
 const Container = styled.div`
   display: flex;
@@ -25,7 +26,10 @@ const PlusIcon = styled(IconButton)`
   padding-bottom: 4px !important;
 `
 
-const ApList = ({ aps, removeAp, addAp, queryApsResult }) => {
+const ApList = ({ queryApsResult }) => {
+  const store = useContext(storeContext)
+  const { aps, removeAp } = store.ekPlan
+
   const [showChoose, setShowChoose] = useState(aps.length === 0)
   const onClickAdd = useCallback(() => setShowChoose(true), [])
 
@@ -44,16 +48,9 @@ const ApList = ({ aps, removeAp, addAp, queryApsResult }) => {
         )}
       </TitleRow>
       {aps.map(ap => (
-        <Ap
-          key={ap.value}
-          ap={ap}
-          removeAp={removeAp}
-          queryApsResult={queryApsResult}
-        />
+        <Ap key={ap.value} ap={ap} queryApsResult={queryApsResult} />
       ))}
-      {showChoose && (
-        <ChooseAp addAp={addAp} aps={aps} setShowChoose={setShowChoose} />
-      )}
+      {showChoose && <ChooseAp setShowChoose={setShowChoose} />}
     </Container>
   )
 }

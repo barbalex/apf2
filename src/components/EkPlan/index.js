@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react'
+import React, { useRef, useContext } from 'react'
 import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
@@ -12,6 +12,7 @@ import { withStyles } from '@material-ui/core/styles'
 import ApList from './ApList'
 import Table from './Table'
 import queryAps from './queryAps'
+import storeContext from '../../storeContext'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -56,27 +57,25 @@ const DenserPrimaryAction = withStyles(theme => ({
 }))(props => <div className={props.classes.root}>{props.children}</div>)
 
 const EkPlan = () => {
+  const store = useContext(storeContext)
+  const {
+    aps,
+    addAp,
+    removeAp,
+    showEk,
+    setShowEk,
+    showEkf,
+    setShowEkf,
+    showCount,
+    setShowCount,
+    showEkCount,
+    setShowEkCount,
+    showMassn,
+    setShowMassn,
+  } = store.ekPlan
+
   const headerRef = useRef(null)
 
-  const [showEk, setShowEk] = useState(true)
-  const [showEkf, setShowEkf] = useState(true)
-  const [showCount, setShowCount] = useState(true)
-  const [showEkCount, setShowEkCount] = useState(true)
-  const [showMassn, setShowMassn] = useState(true)
-
-  const [aps, setAps] = useState([])
-  const addAp = useCallback(
-    ap => {
-      setAps([...aps, ap])
-    },
-    [aps],
-  )
-  const removeAp = useCallback(
-    ap => {
-      setAps(aps.filter(a => a.value !== ap.value))
-    },
-    [aps],
-  )
   const queryApsResult = useQuery(queryAps, {
     variables: {
       ids: aps.map(ap => ap.value),
@@ -99,12 +98,7 @@ const EkPlan = () => {
     <ErrorBoundary>
       <Container>
         <Header ref={headerRef}>
-          <ApList
-            aps={aps}
-            removeAp={removeAp}
-            addAp={addAp}
-            queryApsResult={queryApsResult}
-          />
+          <ApList queryApsResult={queryApsResult} />
           <ChooseContainer>
             <ChooseTitle>anzeigen:</ChooseTitle>
             <Label
@@ -174,7 +168,7 @@ const EkPlan = () => {
             />
           </ChooseContainer>
         </Header>
-        <Table aps={aps} einheitsByAp={einheitsByAp} />
+        <Table einheitsByAp={einheitsByAp} />
       </Container>
     </ErrorBoundary>
   )

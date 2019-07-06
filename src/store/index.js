@@ -21,6 +21,7 @@ import standardOverlays from '../components/Projekte/Karte/overlays'
 import initialNodeFilterTreeValues from './NodeFilterTree/initialValues'
 import User, { defaultValue as defaultUser } from './User'
 import Tree, { defaultValue as defaultTree } from './Tree'
+import EkPlan, { defaultValue as defaultEkPlan } from './EkPlan'
 import getActiveNodes from '../modules/getActiveNodes'
 import getOpenNodesFromActiveNodeArray from '../modules/getOpenNodesFromActiveNodeArray'
 
@@ -73,6 +74,7 @@ const myTypes = types
     assigningBeob: types.optional(types.boolean, false),
     tree: types.optional(Tree, defaultTree),
     tree2: types.optional(Tree, defaultTree),
+    ekPlan: types.optional(EkPlan, defaultEkPlan),
     showDeletions: types.optional(types.boolean, false),
     technDokuFilter: types.optional(
       types.union(types.string, types.number),

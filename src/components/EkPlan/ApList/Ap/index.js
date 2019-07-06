@@ -1,8 +1,10 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@material-ui/core/IconButton'
 import styled from 'styled-components'
 import get from 'lodash/get'
+
+import storeContext from '../../../../storeContext'
 
 const Container = styled.div`
   display: flex;
@@ -24,7 +26,10 @@ const DelIcon = styled(IconButton)`
   padding-bottom: 4px !important;
 `
 
-const Ap = ({ ap, removeAp, queryApsResult }) => {
+const Ap = ({ ap, queryApsResult }) => {
+  const store = useContext(storeContext)
+  const { removeAp } = store.ekPlan
+
   const onClickDelete = useCallback(() => removeAp(ap), [ap])
   const { data, loading } = queryApsResult
   const thisApData = get(data, 'allAps.nodes', []).find(a => a.id === ap.value)

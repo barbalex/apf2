@@ -1,9 +1,9 @@
 import React, {
   useState,
   useCallback,
-  useMemo,
   useRef,
   useReducer,
+  useContext,
 } from 'react'
 import { useQuery } from 'react-apollo-hooks'
 import Table from '@material-ui/core/Table'
@@ -22,6 +22,7 @@ import queryTpop from './queryTpop'
 import appBaseUrl from '../../../modules/appBaseUrl'
 import Row from './Row'
 import CellForYearMenu from './Row/CellForYearMenu'
+import storeContext from '../../../storeContext'
 
 const Container = styled.div`
   padding: 10px;
@@ -296,8 +297,10 @@ const yearClickedReducer = (state, action) => {
   }
 }
 
-const EkPlanTable = ({ aps, einheitsByAp }) => {
-  //const store = useContext(storeContext)
+const EkPlanTable = ({ einheitsByAp }) => {
+  const store = useContext(storeContext)
+  const { aps, apValues } = store.ekPlan
+
   const apRef = useRef(null)
   const popNrRef = useRef(null)
   const popNameRef = useRef(null)
@@ -342,8 +345,6 @@ const EkPlanTable = ({ aps, einheitsByAp }) => {
     if (!yearClickedState.year) setColumnHovered(null)
   }, [yearClickedState])
 
-  const apValues = useMemo(() => aps.map(a => a.value), [aps])
-
   const {
     data: dataTpop,
     loading: loadingTpop,
@@ -354,6 +355,7 @@ const EkPlanTable = ({ aps, einheitsByAp }) => {
       aps: apValues,
     },
   })
+  console.log('Table', { aps, apValues, dataTpop })
   const tpops = sortBy(
     get(dataTpop, 'allTpops.nodes', []),
     t => t.popByPopId.apByApId.label,
