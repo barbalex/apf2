@@ -13,6 +13,7 @@ const Container = styled.div`
   width: 100%;
   font-size: 0.8rem !important;
   line-height: 1rem !important;
+  padding-bottom: 5px;
 `
 const TitleRow = styled.div`
   display: flex;

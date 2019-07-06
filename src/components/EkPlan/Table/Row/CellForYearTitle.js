@@ -13,7 +13,7 @@ const CellForYearTitle = ({ field, scrollPositions }) => {
     <EkTableCell width={width} data-left={scrollPositions[field.name]}>
       {showEk && <InfoRow>EK:</InfoRow>}
       {showEkf && <InfoRow>EKF:</InfoRow>}
-      {showMassn && <InfoRow>Massn:</InfoRow>}
+      {showMassn && <InfoRow>Ansied:</InfoRow>}
     </EkTableCell>
   )
 }

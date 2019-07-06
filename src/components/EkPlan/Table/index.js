@@ -28,6 +28,9 @@ const Container = styled.div`
   padding: 10px;
   user-select: none !important;
 `
+const OuterTableContainer = styled.div`
+  position: relative;
+`
 const TableContainer = styled.div`
   position: relative;
   overflow: auto;
@@ -132,7 +135,9 @@ export const InfoRow = styled.div`
   overflow: hidden;
 `
 const TpopTitle = styled.h4`
-  margin: 0 10px 4px 10px;
+  position: absolute;
+  left: 10px;
+  z-index: 3;
 `
 
 const yearsFromTpops = tpops => {
@@ -414,7 +419,7 @@ const EkPlanTable = ({ einheitsByAp }) => {
     <ErrorBoundary>
       <>
         {rows.length > 0 && (
-          <>
+          <OuterTableContainer>
             <TpopTitle>{`${rows.length} Teilpopulationen`}</TpopTitle>
             <TableContainer>
               <StyledTable size="small" colhovered={columnHovered}>
@@ -459,7 +464,7 @@ const EkPlanTable = ({ einheitsByAp }) => {
                 </StyledTableBody>
               </StyledTable>
             </TableContainer>
-          </>
+          </OuterTableContainer>
         )}
         <CellForYearMenu
           yearMenuAnchor={yearMenuAnchor}

@@ -48,10 +48,8 @@ export default gql`
             beschreibung
             anzTriebe
             anzPflanzen
-            anzPflanzstellen
             tpopmassnTypWerteByTyp {
               id
-              ansiedlung
               text
             }
           }

@@ -21,7 +21,7 @@ const Container = styled.div`
   flex-direction: column;
 `
 const Header = styled.div`
-  padding: 5px 10px;
+  padding: 5px 10px 0 10px;
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-between;
@@ -37,6 +37,7 @@ const ChooseContainer = styled.div`
   flex-direction: column;
   flex-wrap: wrap;
   height: 90px;
+  margin-bottom: -7px;
 `
 const ChooseTitle = styled.h5`
   position: relative;
@@ -159,7 +160,7 @@ const EkPlan = () => {
                   />
                 </DenserPrimaryAction>
               }
-              label="Massnahmen"
+              label="Ansiedlungen"
               labelPlacement="start"
             />
             <Label
