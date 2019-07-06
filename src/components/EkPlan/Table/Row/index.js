@@ -42,6 +42,7 @@ const EkPlanTableRow = ({
   yearClickedDispatch,
   setYearMenuAnchor,
   einheitsByAp,
+  refetch,
 }) => {
   const store = useContext(storeContext)
   const { apValues } = store
@@ -88,7 +89,8 @@ const EkPlanTableRow = ({
           {sortBy(
             Object.values(row)
               .filter(o => typeof o === 'object')
-              .filter(o => !!o.name),
+              .filter(o => !!o.name)
+              .filter(o => o.show),
             'sort',
           ).map(field => {
             if (field.name === 'yearTitle') {

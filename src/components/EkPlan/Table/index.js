@@ -4,6 +4,7 @@ import React, {
   useRef,
   useReducer,
   useContext,
+  useMemo,
 } from 'react'
 import { useQuery } from 'react-apollo-hooks'
 import Table from '@material-ui/core/Table'
@@ -155,7 +156,23 @@ const yearsFromTpops = tpops => {
   }
   return years
 }
-const rowsFromTpop = ({ tpop, years, showCount }) => {
+const rowsFromTpop = ({
+  tpop,
+  years,
+  showCount,
+  showAp,
+  showPopNr,
+  showPopName,
+  showTpopNr,
+  showTpopGemeinde,
+  showTpopFlurname,
+  showTpopStatus,
+  showTpopBekanntSeit,
+  showLink,
+  showEkAbrechnungstyp,
+  showEkfrequenz,
+  showEkfrequenzAbweichend,
+}) => {
   const ekplans = get(tpop, 'ekplansByTpopId.nodes')
   const kontrs = get(tpop, 'tpopkontrsByTpopId.nodes')
   const ansiedlungs = get(tpop, 'tpopmassnsByTpopId.nodes')
@@ -170,6 +187,7 @@ const rowsFromTpop = ({ tpop, years, showCount }) => {
       value: get(tpop, 'popByPopId.apByApId.label'),
       sort: 1,
       width: 200,
+      show: showAp,
     },
     popNr: {
       name: 'popNr',
@@ -177,6 +195,7 @@ const rowsFromTpop = ({ tpop, years, showCount }) => {
       value: get(tpop, 'popByPopId.nr') || '-',
       sort: 2,
       width: 40,
+      show: showPopNr,
     },
     popName: {
       name: 'popName',
@@ -184,6 +203,7 @@ const rowsFromTpop = ({ tpop, years, showCount }) => {
       value: get(tpop, 'popByPopId.name') || '-',
       sort: 3,
       width: 200,
+      show: showPopName,
     },
     tpopNr: {
       name: 'nr',
@@ -191,6 +211,7 @@ const rowsFromTpop = ({ tpop, years, showCount }) => {
       value: get(tpop, 'nr') || '-',
       sort: 4,
       width: 50,
+      show: showTpopNr,
     },
     tpopGemeinde: {
       name: 'gemeinde',
@@ -198,6 +219,7 @@ const rowsFromTpop = ({ tpop, years, showCount }) => {
       value: get(tpop, 'gemeinde') || '-',
       sort: 5,
       width: 130,
+      show: showTpopGemeinde,
     },
     tpopFlurname: {
       name: 'flurname',
@@ -205,6 +227,7 @@ const rowsFromTpop = ({ tpop, years, showCount }) => {
       value: get(tpop, 'flurname') || '-',
       sort: 6,
       width: 200,
+      show: showTpopFlurname,
     },
     tpopStatus: {
       name: 'status',
@@ -212,6 +235,7 @@ const rowsFromTpop = ({ tpop, years, showCount }) => {
       value: get(tpop, 'popStatusWerteByStatus.text') || '-',
       sort: 7,
       width: 150,
+      show: showTpopStatus,
     },
     tpopBekanntSeit: {
       name: 'bekanntSeit',
@@ -219,6 +243,7 @@ const rowsFromTpop = ({ tpop, years, showCount }) => {
       value: get(tpop, 'bekanntSeit') || '-',
       sort: 8,
       width: 60,
+      show: showTpopBekanntSeit,
     },
     tpopLink: {
       name: 'link',
@@ -230,6 +255,7 @@ const rowsFromTpop = ({ tpop, years, showCount }) => {
       }/Teil-Populationen/${tpop.id}`,
       sort: 9,
       width: 37,
+      show: showLink,
     },
     ekAbrechnungstyp: {
       name: 'ekAbrechnungstyp',
@@ -237,6 +263,7 @@ const rowsFromTpop = ({ tpop, years, showCount }) => {
       value: get(tpop, 'ekAbrechnungstyp'),
       sort: 9,
       width: 80,
+      show: showEkAbrechnungstyp,
     },
     ekfrequenz: {
       name: 'ekfrequenz',
@@ -244,6 +271,7 @@ const rowsFromTpop = ({ tpop, years, showCount }) => {
       value: get(tpop, 'ekfrequenz') || null,
       sort: 10,
       width: 70,
+      show: showEkfrequenz,
     },
     ekfrequenzAbweichend: {
       name: 'ekfrequenzAbweichend',
@@ -251,12 +279,14 @@ const rowsFromTpop = ({ tpop, years, showCount }) => {
       value: get(tpop, 'ekfrequenzAbweichend') === true,
       sort: 11,
       width: 76,
+      show: showEkfrequenzAbweichend,
     },
     yearTitle: {
       name: 'yearTitle',
       label: '',
       sort: 12,
       width: 50,
+      show: true,
     },
   }
   years.forEach(
@@ -281,6 +311,7 @@ const rowsFromTpop = ({ tpop, years, showCount }) => {
         },
         sort: year,
         width: showCount ? 52 : 38,
+        show: true,
       }),
   )
   return fields
@@ -306,7 +337,23 @@ const yearClickedReducer = (state, action) => {
 
 const EkPlanTable = ({ einheitsByAp }) => {
   const store = useContext(storeContext)
-  const { aps, apValues, showCount } = store.ekPlan
+  const {
+    aps,
+    apValues,
+    showCount,
+    showAp,
+    showPopNr,
+    showPopName,
+    showTpopNr,
+    showTpopGemeinde,
+    showTpopFlurname,
+    showTpopStatus,
+    showTpopBekanntSeit,
+    showLink,
+    showEkAbrechnungstyp,
+    showEkfrequenz,
+    showEkfrequenzAbweichend,
+  } = store.ekPlan
 
   const apRef = useRef(null)
   const popNrRef = useRef(null)
@@ -367,49 +414,144 @@ const EkPlanTable = ({ einheitsByAp }) => {
     t => t.popByPopId.apByApId.label,
   )
   const years = yearsFromTpops(tpops)
-  const rows = tpops.map(tpop => rowsFromTpop({ tpop, years, showCount }))
-  const fields = rows.length
-    ? sortBy(
-        Object.values(rows[0])
-          .filter(o => typeof o === 'object')
-          .filter(o => !!o.name),
-        'sort',
-      )
-    : []
+  const rows = useMemo(
+    () =>
+      tpops.map(tpop =>
+        rowsFromTpop({
+          tpop,
+          years,
+          showCount,
+          showAp,
+          showPopNr,
+          showPopName,
+          showTpopNr,
+          showTpopGemeinde,
+          showTpopFlurname,
+          showTpopStatus,
+          showTpopBekanntSeit,
+          showLink,
+          showEkAbrechnungstyp,
+          showEkfrequenz,
+          showEkfrequenzAbweichend,
+        }),
+      ),
+    [
+      tpops,
+      years,
+      showCount,
+      showAp,
+      showPopNr,
+      showPopName,
+      showTpopNr,
+      showTpopGemeinde,
+      showTpopFlurname,
+      showTpopStatus,
+      showTpopBekanntSeit,
+      showLink,
+      showEkAbrechnungstyp,
+      showEkfrequenz,
+      showEkfrequenzAbweichend,
+    ],
+  )
+  const fields = useMemo(
+    () =>
+      rows.length
+        ? sortBy(
+            Object.values(rows[0])
+              .filter(o => typeof o === 'object')
+              .filter(o => !!o.name)
+              .filter(o => o.show),
+            'sort',
+          )
+        : [],
+    [
+      rows[0],
+      showAp,
+      showPopNr,
+      showPopName,
+      showTpopNr,
+      showTpopGemeinde,
+      showTpopFlurname,
+      showTpopStatus,
+      showTpopBekanntSeit,
+      showLink,
+      showEkAbrechnungstyp,
+      showEkfrequenz,
+      showEkfrequenzAbweichend,
+    ],
+  )
 
-  const scrollPositions = {
-    ap: apRef.current ? apRef.current.getBoundingClientRect().left : 0,
-    popNr: popNrRef.current ? popNrRef.current.getBoundingClientRect().left : 0,
-    popName: popNameRef.current
-      ? popNameRef.current.getBoundingClientRect().left
-      : 0,
-    nr: nrRef.current ? nrRef.current.getBoundingClientRect().left : 0,
-    gemeinde: gemeindeRef.current
-      ? gemeindeRef.current.getBoundingClientRect().left
-      : 0,
-    flurname: flurnameRef.current
-      ? flurnameRef.current.getBoundingClientRect().left
-      : 0,
-    status: statusRef.current
-      ? statusRef.current.getBoundingClientRect().left
-      : 0,
-    bekanntSeit: bekanntSeitRef.current
-      ? bekanntSeitRef.current.getBoundingClientRect().left
-      : 0,
-    link: linkRef.current ? linkRef.current.getBoundingClientRect().left : 0,
-    ekAbrechnungstyp: ekAbrechnungstypRef.current
-      ? ekAbrechnungstypRef.current.getBoundingClientRect().left
-      : 0,
-    ekfrequenz: ekfrequenzRef.current
-      ? ekfrequenzRef.current.getBoundingClientRect().left
-      : 0,
-    ekfrequenzAbweichend: ekfrequenzAbweichendRef.current
-      ? ekfrequenzAbweichendRef.current.getBoundingClientRect().left
-      : 0,
-    yearTitle: yearTitleRef.current
-      ? yearTitleRef.current.getBoundingClientRect().left
-      : 0,
-  }
+  console.log('Table, fields:', fields)
+
+  const scrollPositions = useMemo(
+    () => ({
+      ap:
+        apRef.current && showAp
+          ? apRef.current.getBoundingClientRect().left
+          : 0,
+      popNr:
+        popNrRef.current && showPopNr
+          ? popNrRef.current.getBoundingClientRect().left
+          : 0,
+      popName:
+        popNameRef.current && showPopName
+          ? popNameRef.current.getBoundingClientRect().left
+          : 0,
+      nr:
+        nrRef.current && showTpopNr
+          ? nrRef.current.getBoundingClientRect().left
+          : 0,
+      gemeinde:
+        gemeindeRef.current && showTpopGemeinde
+          ? gemeindeRef.current.getBoundingClientRect().left
+          : 0,
+      flurname:
+        flurnameRef.current && showTpopFlurname
+          ? flurnameRef.current.getBoundingClientRect().left
+          : 0,
+      status:
+        statusRef.current && showTpopStatus
+          ? statusRef.current.getBoundingClientRect().left
+          : 0,
+      bekanntSeit:
+        bekanntSeitRef.current && showTpopBekanntSeit
+          ? bekanntSeitRef.current.getBoundingClientRect().left
+          : 0,
+      link:
+        linkRef.current && showLink
+          ? linkRef.current.getBoundingClientRect().left
+          : 0,
+      ekAbrechnungstyp:
+        ekAbrechnungstypRef.current && showEkAbrechnungstyp
+          ? ekAbrechnungstypRef.current.getBoundingClientRect().left
+          : 0,
+      ekfrequenz:
+        ekfrequenzRef.current && showEkfrequenz
+          ? ekfrequenzRef.current.getBoundingClientRect().left
+          : 0,
+      ekfrequenzAbweichend:
+        ekfrequenzAbweichendRef.current && showEkfrequenzAbweichend
+          ? ekfrequenzAbweichendRef.current.getBoundingClientRect().left
+          : 0,
+      yearTitle: yearTitleRef.current
+        ? yearTitleRef.current.getBoundingClientRect().left
+        : 0,
+    }),
+    [
+      showAp,
+      showPopNr,
+      showPopName,
+      showTpopNr,
+      showTpopGemeinde,
+      showTpopFlurname,
+      showTpopStatus,
+      showTpopBekanntSeit,
+      showLink,
+      showEkAbrechnungstyp,
+      showEkfrequenz,
+      showEkfrequenzAbweichend,
+    ],
+  )
 
   //console.log('Table rendering, yearClickedState:', yearClickedState)
 
@@ -459,6 +601,7 @@ const EkPlanTable = ({ einheitsByAp }) => {
                       setYearMenuAnchor={setYearMenuAnchor}
                       closeYearCellMenu={closeYearCellMenu}
                       einheitsByAp={einheitsByAp}
+                      refetch={refetch}
                     />
                   ))}
                 </StyledTableBody>
