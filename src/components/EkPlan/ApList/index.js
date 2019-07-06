@@ -11,6 +11,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  font-size: 0.8rem !important;
+  line-height: 1rem !important;
 `
 const TitleRow = styled.div`
   display: flex;

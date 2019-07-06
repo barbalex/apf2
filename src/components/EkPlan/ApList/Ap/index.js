@@ -22,8 +22,8 @@ const Label = styled.span`
 `
 const DelIcon = styled(IconButton)`
   font-size: 1rem !important;
-  padding-top: 4px !important;
-  padding-bottom: 4px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 `
 
 const Ap = ({ ap, queryApsResult }) => {
