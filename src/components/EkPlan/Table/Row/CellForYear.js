@@ -1,11 +1,9 @@
 import React, { useCallback, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-// this will be for Massnahmen
-import { GiSpade } from 'react-icons/gi'
-import { GoZap } from 'react-icons/go'
 
 import { TableCellForYear } from '../index'
 import EkIcon from './EkIcon'
+import MassnIcon from './MassnIcon'
 import { InfoRow } from '../index'
 import storeContext from '../../../../storeContext'
 
@@ -63,7 +61,9 @@ const CellForYearTitle = ({
           <EkIcon planned={value.ekfPlan} eks={value.ekf} einheits={einheits} />
         )}
       </InfoRow>
-      <InfoRow>{showMassn && 'TODO'}</InfoRow>
+      <InfoRow>
+        {showMassn && <MassnIcon ansiedlungs={value.ansiedlungs} />}
+      </InfoRow>
     </TableCellForYear>
   )
 }

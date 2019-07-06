@@ -28,7 +28,7 @@ const Header = styled.div`
 `
 const ChooseContainer = styled.div`
   position: relative;
-  flex-basis: 200px;
+  flex-basis: 225px;
   flex-shrink: 0;
   flex-grow: 0;
   align-self: flex-start;
@@ -153,19 +153,6 @@ const EkPlan = () => {
               control={
                 <DenserPrimaryAction>
                   <Checkbox
-                    checked={showEkCount}
-                    onChange={onChangeShowEkCount}
-                    color="primary"
-                  />
-                </DenserPrimaryAction>
-              }
-              label="Mehrfache EK(F)"
-              labelPlacement="start"
-            />
-            <Label
-              control={
-                <DenserPrimaryAction>
-                  <Checkbox
                     checked={showMassn}
                     onChange={onChangeShowMassn}
                     color="primary"
@@ -173,6 +160,19 @@ const EkPlan = () => {
                 </DenserPrimaryAction>
               }
               label="Massnahmen"
+              labelPlacement="start"
+            />
+            <Label
+              control={
+                <DenserPrimaryAction>
+                  <Checkbox
+                    checked={showEkCount}
+                    onChange={onChangeShowEkCount}
+                    color="primary"
+                  />
+                </DenserPrimaryAction>
+              }
+              label="mehrmals ausgeführt"
               labelPlacement="start"
             />
           </ChooseContainer>

@@ -153,6 +153,7 @@ const yearsFromTpops = tpops => {
 const rowsFromTpop = ({ tpop, years, showCount }) => {
   const ekplans = get(tpop, 'ekplansByTpopId.nodes')
   const kontrs = get(tpop, 'tpopkontrsByTpopId.nodes')
+  const ansiedlungs = get(tpop, 'tpopmassnsByTpopId.nodes')
 
   const fields = {
     id: tpop.id,
@@ -271,6 +272,7 @@ const rowsFromTpop = ({ tpop, years, showCount }) => {
           ekf: kontrs
             .filter(o => o.jahr === year)
             .filter(o => o.typ === 'Freiwilligen-Erfolgskontrolle'),
+          ansiedlungs: ansiedlungs.filter(o => o.jahr === year),
         },
         sort: year,
         width: showCount ? 52 : 38,
