@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from 'react'
+import React, { useRef, useContext, useCallback } from 'react'
 import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
@@ -60,8 +60,6 @@ const EkPlan = () => {
   const store = useContext(storeContext)
   const {
     aps,
-    addAp,
-    removeAp,
     showEk,
     setShowEk,
     showEkf,
@@ -93,6 +91,17 @@ const EkPlan = () => {
         [],
       ).map(o => o.tpopkontrzaehlEinheitWerteByZaehleinheitId.code)),
   )
+  const onChangeShowEk = useCallback(() => setShowEk(!showEk), [showEk])
+  const onChangeShowEkf = useCallback(() => setShowEkf(!showEkf), [showEkf])
+  const onChangeShowCount = useCallback(() => setShowCount(!showCount), [
+    showCount,
+  ])
+  const onChangeShowEkCount = useCallback(() => setShowEkCount(!showEkCount), [
+    showEkCount,
+  ])
+  const onChangeShowMassn = useCallback(() => setShowMassn(!showMassn), [
+    showMassn,
+  ])
 
   return (
     <ErrorBoundary>
@@ -106,7 +115,7 @@ const EkPlan = () => {
                 <DenserPrimaryAction>
                   <Checkbox
                     checked={showEk}
-                    onChange={() => setShowEk(!showEk)}
+                    onChange={onChangeShowEk}
                     color="primary"
                   />
                 </DenserPrimaryAction>
@@ -119,7 +128,7 @@ const EkPlan = () => {
                 <DenserPrimaryAction>
                   <Checkbox
                     checked={showEkf}
-                    onChange={() => setShowEkf(!showEkf)}
+                    onChange={onChangeShowEkf}
                     color="primary"
                   />
                 </DenserPrimaryAction>
@@ -132,7 +141,7 @@ const EkPlan = () => {
                 <DenserPrimaryAction>
                   <Checkbox
                     checked={showCount}
-                    onChange={() => setShowCount(!showCount)}
+                    onChange={onChangeShowCount}
                     color="primary"
                   />
                 </DenserPrimaryAction>
@@ -145,7 +154,7 @@ const EkPlan = () => {
                 <DenserPrimaryAction>
                   <Checkbox
                     checked={showEkCount}
-                    onChange={() => setShowEkCount(!showEkCount)}
+                    onChange={onChangeShowEkCount}
                     color="primary"
                   />
                 </DenserPrimaryAction>
@@ -158,8 +167,9 @@ const EkPlan = () => {
                 <DenserPrimaryAction>
                   <Checkbox
                     checked={showMassn}
-                    onChange={() => setShowMassn(!showMassn)}
+                    onChange={onChangeShowMassn}
                     color="primary"
+                    disabled
                   />
                 </DenserPrimaryAction>
               }

@@ -28,7 +28,7 @@ const PlusIcon = styled(IconButton)`
 
 const ApList = ({ queryApsResult }) => {
   const store = useContext(storeContext)
-  const { aps, removeAp } = store.ekPlan
+  const { aps } = store.ekPlan
 
   const [showChoose, setShowChoose] = useState(aps.length === 0)
   const onClickAdd = useCallback(() => setShowChoose(true), [])
