@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useContext } from 'react'
 import { useQuery } from 'react-apollo-hooks'
 import TableRow from '@material-ui/core/TableRow'
 import styled from 'styled-components'
@@ -16,6 +16,7 @@ import CellForTpopLink from './CellForTpopLink'
 import CellForYear from './CellForYear'
 import CellForYearTitle from './CellForYearTitle'
 import { EkTableCell } from '../index'
+import storeContext from '../../../../storeContext'
 
 const StyledTableRow = styled(TableRow)`
   position: relative !important;
@@ -33,7 +34,6 @@ const StyledTableRow = styled(TableRow)`
 `
 
 const EkPlanTableRow = ({
-  aps,
   row,
   setColumnHovered,
   resetYearHovered,
@@ -43,7 +43,8 @@ const EkPlanTableRow = ({
   setYearMenuAnchor,
   einheitsByAp,
 }) => {
-  const apValues = useMemo(() => aps.map(a => a.value), [aps])
+  const store = useContext(storeContext)
+  const { apValues } = store
 
   const { data: dataLists } = useQuery(queryLists, {
     variables: {

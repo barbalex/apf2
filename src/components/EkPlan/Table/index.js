@@ -355,7 +355,6 @@ const EkPlanTable = ({ einheitsByAp }) => {
       aps: apValues,
     },
   })
-  console.log('Table', { aps, apValues, dataTpop })
   const tpops = sortBy(
     get(dataTpop, 'allTpops.nodes', []),
     t => t.popByPopId.apByApId.label,
@@ -443,7 +442,6 @@ const EkPlanTable = ({ einheitsByAp }) => {
                   {rows.map(row => (
                     <Row
                       key={row.id}
-                      aps={aps}
                       row={row}
                       setColumnHovered={setColumnHovered}
                       resetYearHovered={resetYearHovered}
