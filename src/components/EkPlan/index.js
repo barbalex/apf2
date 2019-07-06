@@ -169,7 +169,6 @@ const EkPlan = () => {
                     checked={showMassn}
                     onChange={onChangeShowMassn}
                     color="primary"
-                    disabled
                   />
                 </DenserPrimaryAction>
               }

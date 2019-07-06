@@ -250,7 +250,7 @@ const rowsFromTpop = ({ tpop, years, showCount }) => {
       name: 'yearTitle',
       label: '',
       sort: 12,
-      width: 40,
+      width: 50,
     },
   }
   years.forEach(

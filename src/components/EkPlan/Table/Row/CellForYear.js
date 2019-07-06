@@ -21,7 +21,7 @@ const CellForYearTitle = ({
   einheitsByAp,
 }) => {
   const store = useContext(storeContext)
-  const { showEk, showEkf } = store.ekPlan
+  const { showEk, showEkf, showMassn } = store.ekPlan
 
   const { label, value, width, name } = field
   const onMouseEnter = useCallback(() => setColumnHovered(`_${label}_`), [
@@ -63,6 +63,7 @@ const CellForYearTitle = ({
           <EkIcon planned={value.ekfPlan} eks={value.ekf} einheits={einheits} />
         )}
       </InfoRow>
+      <InfoRow>{showMassn && 'TODO'}</InfoRow>
     </TableCellForYear>
   )
 }

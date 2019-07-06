@@ -38,6 +38,24 @@ export default gql`
             }
           }
         }
+        tpopmassnsByTpopId(
+          filter: { tpopmassnTypWerteByTyp: { ansiedlung: { equalTo: -1 } } }
+        ) {
+          nodes {
+            id
+            jahr
+            typ
+            beschreibung
+            anzTriebe
+            anzPflanzen
+            anzPflanzstellen
+            tpopmassnTypWerteByTyp {
+              id
+              ansiedlung
+              text
+            }
+          }
+        }
         ekplansByTpopId {
           nodes {
             id

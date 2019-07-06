@@ -6,13 +6,14 @@ import storeContext from '../../../../storeContext'
 
 const CellForYearTitle = ({ field, scrollPositions }) => {
   const store = useContext(storeContext)
-  const { showEk, showEkf } = store.ekPlan
+  const { showEk, showEkf, showMassn } = store.ekPlan
   const { width } = field
 
   return (
     <EkTableCell width={width} data-left={scrollPositions[field.name]}>
       {showEk && <InfoRow>EK:</InfoRow>}
       {showEkf && <InfoRow>EKF:</InfoRow>}
+      {showMassn && <InfoRow>Massn:</InfoRow>}
     </EkTableCell>
   )
 }
