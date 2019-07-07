@@ -20,6 +20,8 @@ import MomentUtils from '@date-io/moment'
 import { MuiPickersUtilsProvider } from 'material-ui-pickers'
 import { ApolloProvider } from 'react-apollo'
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
+import localForage from 'localforage'
+import { persist } from 'mst-persist'
 import MobxStore from './store'
 import { SnackbarProvider } from 'notistack'
 //import { onPatch } from 'mobx-state-tree'
@@ -59,6 +61,13 @@ const App = ({ element }) => {
   const store = MobxStore.create()
   const client = buildClient({ idb, store })
   const idbContext = { idb }
+
+  persist('store', store, {
+    storage: localForage,
+    jsonify: false,
+  }).then(() => {
+    console.log('store has been hydrated')
+  })
 
   //onPatch(store, patch => console.log(patch))
 
