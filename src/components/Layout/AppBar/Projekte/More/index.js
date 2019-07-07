@@ -4,6 +4,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+import localForage from 'localforage'
 
 import isMobilePhone from '../../../../../modules/isMobilePhone'
 import logout from '../../../../../modules/logout'
@@ -74,6 +75,13 @@ const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
     // before setAnchor has finished
     setTimeout(() => logout(idb))
   })
+  const onClickReload = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      localForage.clear()
+      idb.delete()
+      window.location.reload(true)
+    }
+  })
 
   return (
     <Container>
@@ -114,6 +122,9 @@ const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
           onClick={onClickLogout}
           data-id="appbar-more-logout"
         >{`${user.name} abmelden`}</MenuItem>
+        <MenuItem onClick={onClickReload}>
+          Cache leeren und apflora neu laden
+        </MenuItem>
         <Version>Version: 1.9.3 vom 03.07.2019</Version>
       </Menu>
     </Container>
