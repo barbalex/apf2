@@ -67,6 +67,8 @@ const App = ({ element }) => {
     jsonify: false,
   }).then(() => {
     console.log('store has been hydrated')
+    // navigate to last activeNodeArray
+    store.tree.setActiveNodeArray(store.tree.activeNodeArray)
   })
 
   //onPatch(store, patch => console.log(patch))
@@ -77,6 +79,8 @@ const App = ({ element }) => {
     window.__store__ = store
     window.__idb__ = idb
   }
+
+  if (typeof window !== 'undefined') window.store = store
 
   return (
     <IdbProvider value={idbContext}>
