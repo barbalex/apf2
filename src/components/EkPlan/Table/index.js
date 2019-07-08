@@ -459,7 +459,7 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
   //console.log('Table rendering, yearClickedState:', yearClickedState)
 
   if (aps.length > 0 && loadingTpop) return <Container>Lade...</Container>
-  if (errorTpop) return <Container>errorTpop.message</Container>
+  if (errorTpop) return <Container>{errorTpop.message}</Container>
   return (
     <ErrorBoundary>
       <>

@@ -108,18 +108,17 @@ const EkPlan = () => {
       ids: aps.map(ap => ap.value),
     },
   })
-  const einheitsByAp = groupBy(
-    get(queryApsResult, 'data.allAps.nodes', []),
-    'id',
-  )
-  Object.keys(einheitsByAp).forEach(
-    apId =>
-      (einheitsByAp[apId] = get(
-        einheitsByAp[apId][0],
-        'ekzaehleinheitsByApId.nodes',
-        [],
-      ).map(o => o.tpopkontrzaehlEinheitWerteByZaehleinheitId.code)),
-  )
+  const einheitsByAp = useMemo(() => {
+    const e = groupBy(get(queryApsResult, 'data.allAps.nodes', []), 'id')
+    Object.keys(e).forEach(
+      apId =>
+        (e[apId] = get(e[apId][0], 'ekzaehleinheitsByApId.nodes', []).map(
+          o => o.tpopkontrzaehlEinheitWerteByZaehleinheitId.code,
+        )),
+    )
+    return e
+  }, [queryApsResult])
+
   const onChangeShowEk = useCallback(() => setShowEk(!showEk), [showEk])
   const onChangeShowEkf = useCallback(() => setShowEkf(!showEkf), [showEkf])
   const onChangeShowCount = useCallback(() => setShowCount(!showCount), [
@@ -136,7 +135,7 @@ const EkPlan = () => {
   const closeFieldsDialog = useCallback(() => setFieldsDialogOpen(false), [])
   const felderButtonTitle = useMemo(
     () => `Felder wählen (${fields.length}/${defaultFields.length})`,
-    [fields],
+    [fields.length, defaultFields.length],
   )
 
   return (
