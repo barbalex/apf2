@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
 import Select from './Select'
@@ -11,7 +10,7 @@ const CellForEkAbrechnungstyp = ({
   setColumnHovered,
   resetYearHovered,
   scrollPositions,
-  dataLists,
+  ekAbrechnungstypOptions,
 }) => {
   const onMouseEnter = useCallback(() => setColumnHovered(`_${field.label}_`), [
     field,
@@ -25,7 +24,7 @@ const CellForEkAbrechnungstyp = ({
       data-left={scrollPositions[field.name]}
     >
       <Select
-        options={get(dataLists, 'allEkAbrechnungstypWertes.nodes', [])}
+        options={ekAbrechnungstypOptions}
         row={row}
         val={field}
         field="ekAbrechnungstyp"

@@ -1,14 +1,10 @@
 import React, { useContext } from 'react'
-import { useQuery } from 'react-apollo-hooks'
 import TableRow from '@material-ui/core/TableRow'
 import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
-import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
-import groupBy from 'lodash/groupBy'
 import { observer } from 'mobx-react-lite'
 
-import queryLists from './queryLists'
 import CellForEkfrequenz from './CellForEkfrequenz'
 import CellForEkAbrechnungstyp from './CellForEkAbrechnungstyp'
 import CellForEkfrequenzAbweichend from './CellForEkfrequenzAbweichend'
@@ -42,44 +38,12 @@ const EkPlanTableRow = ({
   yearClickedDispatch,
   setYearMenuAnchor,
   einheitsByAp,
+  ekfOptionsGroupedPerAp,
+  ekAbrechnungstypOptions,
   refetch,
 }) => {
   const store = useContext(storeContext)
-  const { apValues } = store
   const { fields } = store.ekPlan
-
-  const { data: dataLists } = useQuery(queryLists, {
-    variables: {
-      apIds: apValues,
-    },
-  })
-
-  const ekfrequenzOptions = get(dataLists, 'allEkfrequenzs.nodes', []).map(
-    o => {
-      const ekTypeArray = [o.ek ? 'ek' : null, o.ekf ? 'ekf' : null].filter(
-        field => !!field,
-      )
-      const code = (o.code || '').padEnd(2)
-      const anwendungsfall = (
-        `${o.anwendungsfall}, ${ekTypeArray.join(' und ')}` || ''
-      ).padEnd(26)
-      const name = (o.name || '').padEnd(27)
-      return {
-        value: o.code,
-        label: `${code}: ${name} | ${o.periodizitaet}`,
-        anwendungsfall,
-        apId: o.apId,
-      }
-    },
-  )
-  const ekfOptionsGroupedPerAp = groupBy(ekfrequenzOptions, 'apId')
-  Object.keys(ekfOptionsGroupedPerAp).forEach(
-    k =>
-      (ekfOptionsGroupedPerAp[k] = groupBy(
-        ekfOptionsGroupedPerAp[k],
-        'anwendungsfall',
-      )),
-  )
 
   //console.log('Row rendering')
 
@@ -112,7 +76,7 @@ const EkPlanTableRow = ({
                   setColumnHovered={setColumnHovered}
                   resetYearHovered={resetYearHovered}
                   scrollPositions={scrollPositions}
-                  dataLists={dataLists}
+                  ekAbrechnungstypOptions={ekAbrechnungstypOptions}
                 />
               )
             }

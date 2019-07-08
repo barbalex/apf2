@@ -17,9 +17,11 @@ import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
 import minBy from 'lodash/minBy'
 import sortBy from 'lodash/sortBy'
+import groupBy from 'lodash/groupBy'
 import { observer } from 'mobx-react-lite'
 
 import queryTpop from './queryTpop'
+import queryLists from './queryLists'
 import appBaseUrl from '../../../modules/appBaseUrl'
 import Row from './Row'
 import CellForYearMenu from './Row/CellForYearMenu'
@@ -396,6 +398,44 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
     [rows[0]],
   )
 
+  const { data: dataLists } = useQuery(queryLists, {
+    variables: {
+      apIds: apValues,
+    },
+  })
+
+  const ekfrequenzOptions = get(dataLists, 'allEkfrequenzs.nodes', []).map(
+    o => {
+      const ekTypeArray = [o.ek ? 'ek' : null, o.ekf ? 'ekf' : null].filter(
+        field => !!field,
+      )
+      const code = (o.code || '').padEnd(2)
+      const anwendungsfall = (
+        `${o.anwendungsfall}, ${ekTypeArray.join(' und ')}` || ''
+      ).padEnd(26)
+      const name = (o.name || '').padEnd(27)
+      return {
+        value: o.code,
+        label: `${code}: ${name} | ${o.periodizitaet}`,
+        anwendungsfall,
+        apId: o.apId,
+      }
+    },
+  )
+  const ekfOptionsGroupedPerAp = groupBy(ekfrequenzOptions, 'apId')
+  Object.keys(ekfOptionsGroupedPerAp).forEach(
+    k =>
+      (ekfOptionsGroupedPerAp[k] = groupBy(
+        ekfOptionsGroupedPerAp[k],
+        'anwendungsfall',
+      )),
+  )
+  const ekAbrechnungstypOptions = get(
+    dataLists,
+    'allEkAbrechnungstypWertes.nodes',
+    [],
+  )
+
   //console.log('Table:', { fields, fieldsShown: fieldsShown.slice() })
 
   const scrollPositions = useMemo(
@@ -504,6 +544,8 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
                       setYearMenuAnchor={setYearMenuAnchor}
                       closeYearCellMenu={closeYearCellMenu}
                       einheitsByAp={einheitsByAp}
+                      ekfOptionsGroupedPerAp={ekfOptionsGroupedPerAp}
+                      ekAbrechnungstypOptions={ekAbrechnungstypOptions}
                       refetch={refetch}
                     />
                   ))}

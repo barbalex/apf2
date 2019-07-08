@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { ekfrequenz } from '../../../shared/fragments'
+import { ekfrequenz } from '../../shared/fragments'
 
 export default gql`
   query TpopListsQuery($apIds: [UUID!]) {

@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { TableCellForYear } from '../index'
@@ -45,7 +45,7 @@ const CellForYearTitle = ({
     },
     [row],
   )
-  const className = useCallback(() => `_${name}_`, [name])
+  const className = useMemo(() => `_${name}_`, [name])
 
   return (
     <TableCellForYear
