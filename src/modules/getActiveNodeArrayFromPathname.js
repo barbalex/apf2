@@ -1,11 +1,15 @@
 export default pathnamePassed => {
-  if (typeof window !== "undefined") {
+  if (typeof window !== 'undefined') {
     const pathname = pathnamePassed || window.location.pathname
+    /*console.log('getActiveNodeArrayFromPathname', {
+      pathnamePassed,
+      windowPathname: window.location.pathname,
+    })*/
     return (
       pathname
-        .split("/")
+        .split('/')
         .filter(e => !!e && e !== 0)
-        .filter(e => e !== "Daten")
+        .filter(e => e !== 'Daten')
         // need to decode in case of Umlaute
         .map(e => decodeURIComponent(e))
         // convert numbers to numbers
