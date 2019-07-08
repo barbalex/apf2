@@ -28,6 +28,24 @@ const CellForYearTitle = ({
   const { year, tpopId } = yearClickedState
   const clicked = year === label && tpopId === row.id
   const einheits = einheitsByAp[row.apId]
+  const onClickCell = useCallback(
+    event => {
+      yearClickedDispatch({
+        type: 'set',
+        payload: {
+          year: label,
+          tpopId: row.id,
+          tpop: `${row.ap.value} Pop: ${row.popNr.value}, TPop: ${row.tpopNr.value}`,
+          ekPlan: value.ekPlan,
+          ekfPlan: value.ekfPlan,
+        },
+      })
+      const currentTarget = event.currentTarget
+      setTimeout(() => setYearMenuAnchor(currentTarget))
+    },
+    [row],
+  )
+  const className = useCallback(() => `_${name}_`, [name])
 
   return (
     <TableCellForYear
@@ -35,21 +53,8 @@ const CellForYearTitle = ({
       onMouseEnter={onMouseEnter}
       onMouseLeave={resetYearHovered}
       data-clicked={clicked}
-      onClick={event => {
-        yearClickedDispatch({
-          type: 'set',
-          payload: {
-            year: label,
-            tpopId: row.id,
-            tpop: `${row.ap.value} Pop: ${row.popNr.value}, TPop: ${row.tpopNr.value}`,
-            ekPlan: value.ekPlan,
-            ekfPlan: value.ekfPlan,
-          },
-        })
-        const currentTarget = event.currentTarget
-        setTimeout(() => setYearMenuAnchor(currentTarget))
-      }}
-      className={`_${name}_`}
+      onClick={onClickCell}
+      className={className}
     >
       <InfoRow>
         {showEk && (

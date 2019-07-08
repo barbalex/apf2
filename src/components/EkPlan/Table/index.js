@@ -156,23 +156,7 @@ const yearsFromTpops = tpops => {
   }
   return years
 }
-const rowsFromTpop = ({
-  tpop,
-  years,
-  showCount,
-  showAp,
-  showPopNr,
-  showPopName,
-  showTpopNr,
-  showTpopGemeinde,
-  showTpopFlurname,
-  showTpopStatus,
-  showTpopBekanntSeit,
-  showLink,
-  showEkAbrechnungstyp,
-  showEkfrequenz,
-  showEkfrequenzAbweichend,
-}) => {
+const rowsFromTpop = ({ tpop, years, showCount }) => {
   const ekplans = get(tpop, 'ekplansByTpopId.nodes')
   const kontrs = get(tpop, 'tpopkontrsByTpopId.nodes')
   const ansiedlungs = get(tpop, 'tpopmassnsByTpopId.nodes')
@@ -187,7 +171,6 @@ const rowsFromTpop = ({
       value: get(tpop, 'popByPopId.apByApId.label'),
       sort: 1,
       width: 200,
-      show: showAp,
     },
     popNr: {
       name: 'popNr',
@@ -195,7 +178,6 @@ const rowsFromTpop = ({
       value: get(tpop, 'popByPopId.nr') || '-',
       sort: 2,
       width: 40,
-      show: showPopNr,
     },
     popName: {
       name: 'popName',
@@ -203,7 +185,6 @@ const rowsFromTpop = ({
       value: get(tpop, 'popByPopId.name') || '-',
       sort: 3,
       width: 200,
-      show: showPopName,
     },
     tpopNr: {
       name: 'nr',
@@ -211,7 +192,6 @@ const rowsFromTpop = ({
       value: get(tpop, 'nr') || '-',
       sort: 4,
       width: 50,
-      show: showTpopNr,
     },
     tpopGemeinde: {
       name: 'gemeinde',
@@ -219,7 +199,6 @@ const rowsFromTpop = ({
       value: get(tpop, 'gemeinde') || '-',
       sort: 5,
       width: 130,
-      show: showTpopGemeinde,
     },
     tpopFlurname: {
       name: 'flurname',
@@ -227,7 +206,6 @@ const rowsFromTpop = ({
       value: get(tpop, 'flurname') || '-',
       sort: 6,
       width: 200,
-      show: showTpopFlurname,
     },
     tpopStatus: {
       name: 'status',
@@ -235,7 +213,6 @@ const rowsFromTpop = ({
       value: get(tpop, 'popStatusWerteByStatus.text') || '-',
       sort: 7,
       width: 150,
-      show: showTpopStatus,
     },
     tpopBekanntSeit: {
       name: 'bekanntSeit',
@@ -243,7 +220,6 @@ const rowsFromTpop = ({
       value: get(tpop, 'bekanntSeit') || '-',
       sort: 8,
       width: 60,
-      show: showTpopBekanntSeit,
     },
     tpopLink: {
       name: 'link',
@@ -255,7 +231,6 @@ const rowsFromTpop = ({
       }/Teil-Populationen/${tpop.id}`,
       sort: 9,
       width: 37,
-      show: showLink,
     },
     ekAbrechnungstyp: {
       name: 'ekAbrechnungstyp',
@@ -263,7 +238,6 @@ const rowsFromTpop = ({
       value: get(tpop, 'ekAbrechnungstyp'),
       sort: 9,
       width: 80,
-      show: showEkAbrechnungstyp,
     },
     ekfrequenz: {
       name: 'ekfrequenz',
@@ -271,7 +245,6 @@ const rowsFromTpop = ({
       value: get(tpop, 'ekfrequenz') || null,
       sort: 10,
       width: 70,
-      show: showEkfrequenz,
     },
     ekfrequenzAbweichend: {
       name: 'ekfrequenzAbweichend',
@@ -279,14 +252,13 @@ const rowsFromTpop = ({
       value: get(tpop, 'ekfrequenzAbweichend') === true,
       sort: 11,
       width: 76,
-      show: showEkfrequenzAbweichend,
     },
     yearTitle: {
       name: 'yearTitle',
       label: '',
       sort: 12,
       width: 50,
-      show: true,
+      alwaysShow: true,
     },
   }
   years.forEach(
@@ -294,6 +266,7 @@ const rowsFromTpop = ({
       (fields[year.toString()] = {
         name: year,
         label: year,
+        alwaysShow: true,
         value: {
           ekPlan:
             ekplans.filter(o => o.jahr === year).filter(o => o.typ === 'EK')
@@ -311,7 +284,6 @@ const rowsFromTpop = ({
         },
         sort: year,
         width: showCount ? 52 : 38,
-        show: true,
       }),
   )
   return fields
@@ -337,23 +309,7 @@ const yearClickedReducer = (state, action) => {
 
 const EkPlanTable = ({ einheitsByAp }) => {
   const store = useContext(storeContext)
-  const {
-    aps,
-    apValues,
-    showCount,
-    showAp,
-    showPopNr,
-    showPopName,
-    showTpopNr,
-    showTpopGemeinde,
-    showTpopFlurname,
-    showTpopStatus,
-    showTpopBekanntSeit,
-    showLink,
-    showEkAbrechnungstyp,
-    showEkfrequenz,
-    showEkfrequenzAbweichend,
-  } = store.ekPlan
+  const { aps, apValues, showCount, fields: fieldsShown } = store.ekPlan
 
   const apRef = useRef(null)
   const popNrRef = useRef(null)
@@ -421,37 +377,9 @@ const EkPlanTable = ({ einheitsByAp }) => {
           tpop,
           years,
           showCount,
-          showAp,
-          showPopNr,
-          showPopName,
-          showTpopNr,
-          showTpopGemeinde,
-          showTpopFlurname,
-          showTpopStatus,
-          showTpopBekanntSeit,
-          showLink,
-          showEkAbrechnungstyp,
-          showEkfrequenz,
-          showEkfrequenzAbweichend,
         }),
       ),
-    [
-      tpops,
-      years,
-      showCount,
-      showAp,
-      showPopNr,
-      showPopName,
-      showTpopNr,
-      showTpopGemeinde,
-      showTpopFlurname,
-      showTpopStatus,
-      showTpopBekanntSeit,
-      showLink,
-      showEkAbrechnungstyp,
-      showEkfrequenz,
-      showEkfrequenzAbweichend,
-    ],
+    [tpops, years, showCount],
   )
   const fields = useMemo(
     () =>
@@ -460,97 +388,71 @@ const EkPlanTable = ({ einheitsByAp }) => {
             Object.values(rows[0])
               .filter(o => typeof o === 'object')
               .filter(o => !!o.name)
-              .filter(o => o.show),
+              .filter(o => fieldsShown.includes(o.name) || !!o.alwaysShow),
             'sort',
           )
         : [],
-    [
-      rows[0],
-      showAp,
-      showPopNr,
-      showPopName,
-      showTpopNr,
-      showTpopGemeinde,
-      showTpopFlurname,
-      showTpopStatus,
-      showTpopBekanntSeit,
-      showLink,
-      showEkAbrechnungstyp,
-      showEkfrequenz,
-      showEkfrequenzAbweichend,
-    ],
+    [rows[0]],
   )
 
-  console.log('Table, fields:', fields)
+  console.log('Table:', { fields, fieldsShown: fieldsShown.slice() })
 
   const scrollPositions = useMemo(
     () => ({
       ap:
-        apRef.current && showAp
+        apRef.current && fieldsShown.includes('ap')
           ? apRef.current.getBoundingClientRect().left
           : 0,
       popNr:
-        popNrRef.current && showPopNr
+        popNrRef.current && fieldsShown.includes('popNr')
           ? popNrRef.current.getBoundingClientRect().left
           : 0,
       popName:
-        popNameRef.current && showPopName
+        popNameRef.current && fieldsShown.includes('popName')
           ? popNameRef.current.getBoundingClientRect().left
           : 0,
       nr:
-        nrRef.current && showTpopNr
+        nrRef.current && fieldsShown.includes('nr')
           ? nrRef.current.getBoundingClientRect().left
           : 0,
       gemeinde:
-        gemeindeRef.current && showTpopGemeinde
+        gemeindeRef.current && fieldsShown.includes('gemeinde')
           ? gemeindeRef.current.getBoundingClientRect().left
           : 0,
       flurname:
-        flurnameRef.current && showTpopFlurname
+        flurnameRef.current && fieldsShown.includes('flurname')
           ? flurnameRef.current.getBoundingClientRect().left
           : 0,
       status:
-        statusRef.current && showTpopStatus
+        statusRef.current && fieldsShown.includes('status')
           ? statusRef.current.getBoundingClientRect().left
           : 0,
       bekanntSeit:
-        bekanntSeitRef.current && showTpopBekanntSeit
+        bekanntSeitRef.current && fieldsShown.includes('bekanntSeit')
           ? bekanntSeitRef.current.getBoundingClientRect().left
           : 0,
       link:
-        linkRef.current && showLink
+        linkRef.current && fieldsShown.includes('link')
           ? linkRef.current.getBoundingClientRect().left
           : 0,
       ekAbrechnungstyp:
-        ekAbrechnungstypRef.current && showEkAbrechnungstyp
+        ekAbrechnungstypRef.current && fieldsShown.includes('ekAbrechnungstyp')
           ? ekAbrechnungstypRef.current.getBoundingClientRect().left
           : 0,
       ekfrequenz:
-        ekfrequenzRef.current && showEkfrequenz
+        ekfrequenzRef.current && fieldsShown.includes('ekfrequenz')
           ? ekfrequenzRef.current.getBoundingClientRect().left
           : 0,
       ekfrequenzAbweichend:
-        ekfrequenzAbweichendRef.current && showEkfrequenzAbweichend
+        ekfrequenzAbweichendRef.current &&
+        fieldsShown.includes('ekfrequenzAbweichend')
           ? ekfrequenzAbweichendRef.current.getBoundingClientRect().left
           : 0,
       yearTitle: yearTitleRef.current
         ? yearTitleRef.current.getBoundingClientRect().left
         : 0,
     }),
-    [
-      showAp,
-      showPopNr,
-      showPopName,
-      showTpopNr,
-      showTpopGemeinde,
-      showTpopFlurname,
-      showTpopStatus,
-      showTpopBekanntSeit,
-      showLink,
-      showEkAbrechnungstyp,
-      showEkfrequenz,
-      showEkfrequenzAbweichend,
-    ],
+    [fieldsShown],
   )
 
   //console.log('Table rendering, yearClickedState:', yearClickedState)

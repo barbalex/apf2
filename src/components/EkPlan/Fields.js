@@ -15,177 +15,150 @@ const StyledDialogContent = styled(DialogContent)`
 
 const Fields = () => {
   const store = useContext(storeContext)
-  const {
-    showAp,
-    setShowAp,
-    showPopNr,
-    setShowPopNr,
-    showPopName,
-    setShowPopName,
-    showTpopNr,
-    setShowTpopNr,
-    showTpopGemeinde,
-    setShowTpopGemeinde,
-    showTpopFlurname,
-    setShowTpopFlurname,
-    showTpopStatus,
-    setShowTpopStatus,
-    showTpopBekanntSeit,
-    setShowTpopBekanntSeit,
-    showLink,
-    setShowLink,
-    showEkAbrechnungstyp,
-    setShowEkAbrechnungstyp,
-    showEkfrequenz,
-    setShowEkfrequenz,
-    showEkfrequenzAbweichend,
-    setShowEkfrequenzAbweichend,
-  } = store.ekPlan
+  const { fields, toggleField } = store.ekPlan
 
   return (
     <ErrorBoundary>
       <StyledDialogContent>
         <FormControlLabel
-          value={showAp.toString()}
+          value={fields.includes('ap').toString()}
           control={
             <Radio
               color="primary"
-              checked={showAp}
-              onClick={() => setShowAp(!showAp)}
+              checked={fields.includes('ap')}
+              onClick={() => toggleField('ap')}
             />
           }
           label="AP"
           labelPlacement="end"
         />
         <FormControlLabel
-          value={showPopNr.toString()}
+          value={fields.includes('popNr').toString()}
           control={
             <Radio
               color="primary"
-              checked={showPopNr}
-              onClick={() => setShowPopNr(!showPopNr)}
+              checked={fields.includes('popNr')}
+              onClick={() => toggleField('popNr')}
             />
           }
           label="Pop Nr"
           labelPlacement="end"
         />
         <FormControlLabel
-          value={showPopName.toString()}
+          value={fields.includes('popName').toString()}
           control={
             <Radio
               color="primary"
-              checked={showPopName}
-              onClick={() => setShowPopName(!showPopName)}
+              checked={fields.includes('popName')}
+              onClick={() => toggleField('popName')}
             />
           }
           label="Pop Name"
           labelPlacement="end"
         />
         <FormControlLabel
-          value={showTpopNr.toString()}
+          value={fields.includes('nr').toString()}
           control={
             <Radio
               color="primary"
-              checked={showTpopNr}
-              onClick={() => setShowTpopNr(!showTpopNr)}
+              checked={fields.includes('nr')}
+              onClick={() => toggleField('nr')}
             />
           }
           label="Nr"
           labelPlacement="end"
         />
         <FormControlLabel
-          value={showTpopGemeinde.toString()}
+          value={fields.includes('gemeinde').toString()}
           control={
             <Radio
               color="primary"
-              checked={showTpopGemeinde}
-              onClick={() => setShowTpopGemeinde(!showTpopGemeinde)}
+              checked={fields.includes('gemeinde')}
+              onClick={() => toggleField('gemeinde')}
             />
           }
           label="Gemeinde"
           labelPlacement="end"
         />
         <FormControlLabel
-          value={showTpopFlurname.toString()}
+          value={fields.includes('flurname').toString()}
           control={
             <Radio
               color="primary"
-              checked={showTpopFlurname}
-              onClick={() => setShowTpopFlurname(!showTpopFlurname)}
+              checked={fields.includes('flurname')}
+              onClick={() => toggleField('flurname')}
             />
           }
           label="Flurname"
           labelPlacement="end"
         />
         <FormControlLabel
-          value={showTpopStatus.toString()}
+          value={fields.includes('status').toString()}
           control={
             <Radio
               color="primary"
-              checked={showTpopStatus}
-              onClick={() => setShowTpopStatus(!showTpopStatus)}
+              checked={fields.includes('status')}
+              onClick={() => toggleField('status')}
             />
           }
           label="Status"
           labelPlacement="end"
         />
         <FormControlLabel
-          value={showTpopBekanntSeit.toString()}
+          value={fields.includes('bekanntSeit').toString()}
           control={
             <Radio
               color="primary"
-              checked={showTpopBekanntSeit}
-              onClick={() => setShowTpopBekanntSeit(!showTpopBekanntSeit)}
+              checked={fields.includes('bekanntSeit')}
+              onClick={() => toggleField('bekanntSeit')}
             />
           }
           label="bekannt seit"
           labelPlacement="end"
         />
         <FormControlLabel
-          value={showLink.toString()}
+          value={fields.includes('link').toString()}
           control={
             <Radio
               color="primary"
-              checked={showLink}
-              onClick={() => setShowLink(!showLink)}
+              checked={fields.includes('link')}
+              onClick={() => toggleField('link')}
             />
           }
           label="Link"
           labelPlacement="end"
         />
         <FormControlLabel
-          value={showEkAbrechnungstyp.toString()}
+          value={fields.includes('ekAbrechnungstyp').toString()}
           control={
             <Radio
               color="primary"
-              checked={showEkAbrechnungstyp}
-              onClick={() => setShowEkAbrechnungstyp(!showEkAbrechnungstyp)}
+              checked={fields.includes('ekAbrechnungstyp')}
+              onClick={() => toggleField('ekAbrechnungstyp')}
             />
           }
           label="EK Abrechnung Typ"
           labelPlacement="end"
         />
         <FormControlLabel
-          value={showEkfrequenz.toString()}
+          value={fields.includes('ekfrequenz').toString()}
           control={
             <Radio
               color="primary"
-              checked={showEkfrequenz}
-              onClick={() => setShowEkfrequenz(!showEkfrequenz)}
+              checked={fields.includes('ekfrequenz')}
+              onClick={() => toggleField('ekfrequenz')}
             />
           }
           label="EK Frequenz"
           labelPlacement="end"
         />
         <FormControlLabel
-          value={showEkfrequenzAbweichend.toString()}
+          value={fields.includes('ekfrequenzAbweichend').toString()}
           control={
             <Radio
               color="primary"
-              checked={showEkfrequenzAbweichend}
-              onClick={() =>
-                setShowEkfrequenzAbweichend(!showEkfrequenzAbweichend)
-              }
+              checked={fields.includes('ekfrequenzAbweichend')}
+              onClick={() => toggleField('ekfrequenzAbweichend')}
             />
           }
           label="EK Frequenz abweichend"

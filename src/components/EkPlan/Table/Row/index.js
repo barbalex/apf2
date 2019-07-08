@@ -46,6 +46,7 @@ const EkPlanTableRow = ({
 }) => {
   const store = useContext(storeContext)
   const { apValues } = store
+  const { fields } = store.ekPlan
 
   const { data: dataLists } = useQuery(queryLists, {
     variables: {
@@ -90,7 +91,7 @@ const EkPlanTableRow = ({
             Object.values(row)
               .filter(o => typeof o === 'object')
               .filter(o => !!o.name)
-              .filter(o => o.show),
+              .filter(o => fields.includes(o.name) || !!o.alwaysShow),
             'sort',
           ).map(field => {
             if (field.name === 'yearTitle') {
