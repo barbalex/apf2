@@ -70,6 +70,10 @@ export default types
       types.maybeNull(types.union(types.string, types.number)),
       null,
     ),
+    ekfrequenz: types.optional(
+      types.maybeNull(types.union(types.string, types.number)),
+      null,
+    ),
     popber: types.optional(
       types.maybeNull(types.union(types.string, types.number)),
       null,
@@ -156,6 +160,7 @@ export const defaultValue = {
   idealbiotop: null,
   assozart: null,
   ekzaehleinheit: null,
+  ekfrequenz: null,
   popber: null,
   popmassnber: null,
   tpopber: null,

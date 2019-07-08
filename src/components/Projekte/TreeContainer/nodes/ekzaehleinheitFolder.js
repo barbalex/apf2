@@ -50,7 +50,7 @@ export default ({
       urlLabel: 'EK-Zähleinheiten',
       label: `EK-Zähleinheiten (${message})`,
       url,
-      sort: [projIndex, 1, apIndex, 9],
+      sort: [projIndex, 1, apIndex, 10],
       hasChildren: ekzaehleinheitNodesLength > 0,
     },
   ]

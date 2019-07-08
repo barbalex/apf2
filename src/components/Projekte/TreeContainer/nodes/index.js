@@ -23,6 +23,7 @@ import buildBeobNichtZuzuordnenFolderNodes from './beobNichtZuzuordnenFolder'
 import buildBeobNichtBeurteiltFolderNodes from './beobNichtBeurteiltFolder'
 import buildAssozartFolderNodes from './assozartFolder'
 import buildEkzaehleinheitFolderNodes from './ekzaehleinheitFolder'
+import buildEkfrequenzFolderNodes from './ekfrequenzFolder'
 import buildApartFolderNodes from './apartFolder'
 import buildIdealbiotopFolderNodes from './idealbiotopFolder'
 import buildBerFolderNodes from './berFolder'
@@ -38,6 +39,7 @@ import buildBeobNichtZuzuordnenNodes from './beobNichtZuzuordnen'
 import buildBeobNichtBeurteiltNodes from './beobNichtBeurteilt'
 import buildAssozartNodes from './assozart'
 import buildEkzaehleinheitNodes from './ekzaehleinheit'
+import buildEkfrequenzNodes from './ekfrequenz'
 import buildApartNodes from './apart'
 import buildBerNodes from './ber'
 import buildApberNodes from './apber'
@@ -91,6 +93,7 @@ export default ({
   dataBeobZugeordnets,
   dataBers,
   dataEkzaehleinheits,
+  dataEkfrequenzs,
   dataErfkrits,
   dataPops,
   dataProjekts,
@@ -132,6 +135,7 @@ export default ({
   loadingAparts,
   loadingAssozarts,
   loadingEkzaehleinheits,
+  loadingEkfrequenzs,
   loadingBeobNichtBeurteilts,
   loadingBeobNichtZuzuordnens,
   store,
@@ -374,6 +378,19 @@ export default ({
             }),
           )(),
           ...memoizeOne(() =>
+            buildEkfrequenzFolderNodes({
+              nodes,
+              data: dataEkfrequenzs,
+              treeName,
+              loading: loadingEkfrequenzs,
+              apNodes,
+              projektNodes,
+              projId,
+              apId,
+              store,
+            }),
+          )(),
+          ...memoizeOne(() =>
             buildApartFolderNodes({
               nodes,
               data,
@@ -608,6 +625,24 @@ export default ({
               data: dataEkzaehleinheits,
               treeName,
               loading: loadingEkzaehleinheits,
+              apNodes,
+              projektNodes,
+              projId,
+              apId: nodeUrl[3],
+              store,
+            }),
+          )(),
+        ]
+      }
+      if (nodeUrl.length === 5 && nodeUrl[4] === 'EK-Frequenzen') {
+        nodes = [
+          ...nodes,
+          ...memoizeOne(() =>
+            buildEkfrequenzNodes({
+              nodes,
+              data: dataEkfrequenzs,
+              treeName,
+              loading: loadingEkfrequenzs,
               apNodes,
               projektNodes,
               projId,

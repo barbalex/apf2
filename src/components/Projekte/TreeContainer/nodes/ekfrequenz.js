@@ -20,34 +20,25 @@ export default ({
 
   // map through all elements and create array of nodes
   const nodes = memoizeOne(() =>
-    get(data, 'allEkzaehleinheits.nodes', [])
+    get(data, 'allEkfrequenzs.nodes', [])
       // only show if parent node exists
-      .filter(el =>
-        nodesPassed.map(n => n.id).includes(`${el.apId}Ekzaehleinheit`),
-      )
+      .filter(el => nodesPassed.map(n => n.id).includes(`${el.apId}Ekfrequenz`))
       // only show nodes of this parent
       .filter(el => el.apId === apId)
       .map(el => ({
         nodeType: 'table',
-        menuType: 'ekzaehleinheit',
-        filterTable: 'ekzaehleinheit',
+        menuType: 'ekfrequenz',
+        filterTable: 'ekfrequenz',
         id: el.id,
         parentId: el.apId,
         parentTableId: el.apId,
         urlLabel: el.id,
-        label: el.label,
-        url: [
-          'Projekte',
-          projId,
-          'Aktionspläne',
-          apId,
-          'EK-Zähleinheiten',
-          el.id,
-        ],
+        label: el.code,
+        url: ['Projekte', projId, 'Aktionspläne', apId, 'EK-Frequenzen', el.id],
         hasChildren: false,
       }))
       .map((el, index) => {
-        el.sort = [projIndex, 1, apIndex, 10, index]
+        el.sort = [projIndex, 1, apIndex, 9, index]
         return el
       }),
   )()

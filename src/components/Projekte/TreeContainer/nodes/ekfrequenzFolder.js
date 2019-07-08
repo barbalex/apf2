@@ -13,6 +13,8 @@ export default ({
   apId,
   store,
 }) => {
+  const ekfrequenzs = get(data, 'allEkfrequenzs.nodes', [])
+
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
@@ -21,25 +23,18 @@ export default ({
     id: apId,
   })
   const nodeLabelFilterString =
-    get(store, `${treeName}.nodeLabelFilter.beob`) || ''
+    get(store, `${treeName}.nodeLabelFilter.ekfrequenz`) || ''
 
-  const beobNichtBeurteiltNodesLength = memoizeOne(
-    () =>
-      get(data, 'allVApbeobs.nodes', []).filter(el => el.apId === apId).length,
+  const ekfrequenzNodesLength = memoizeOne(
+    () => ekfrequenzs.filter(el => el.apId === apId).length,
   )()
   const message = loading
     ? '...'
     : !!nodeLabelFilterString
-    ? `${beobNichtBeurteiltNodesLength} gefiltert`
-    : beobNichtBeurteiltNodesLength
+    ? `${ekfrequenzNodesLength} gefiltert`
+    : ekfrequenzNodesLength
 
-  const url = [
-    'Projekte',
-    projId,
-    'Aktionspläne',
-    apId,
-    'nicht-beurteilte-Beobachtungen',
-  ]
+  const url = ['Projekte', projId, 'Aktionspläne', apId, 'EK-Frequenzen']
 
   // only show if parent node exists
   const apNodesIds = nodesPassed.map(n => n.id)
@@ -48,15 +43,15 @@ export default ({
   return [
     {
       nodeType: 'folder',
-      menuType: 'beobNichtBeurteiltFolder',
-      filterTable: 'beob',
-      id: `${apId}BeobNichtBeurteiltFolder`,
+      menuType: 'ekfrequenzFolder',
+      filterTable: 'ekfrequenz',
+      id: `${apId}Ekfrequenz`,
       tableId: apId,
-      urlLabel: 'nicht-beurteilte-Beobachtungen',
-      label: `Beobachtungen nicht beurteilt (${message})`,
+      urlLabel: 'EK-Frequenzen',
+      label: `EK-Frequenzen (${message})`,
       url,
-      sort: [projIndex, 1, apIndex, 11],
-      hasChildren: beobNichtBeurteiltNodesLength > 0,
+      sort: [projIndex, 1, apIndex, 9],
+      hasChildren: ekfrequenzNodesLength > 0,
     },
   ]
 }

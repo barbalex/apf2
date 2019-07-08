@@ -18,6 +18,7 @@ import Beobzuordnung from './Beobzuordnung'
 import Ber from './Ber'
 import CurrentIssue from './CurrentIssue'
 import Ekzaehleinheit from './Ekzaehleinheit'
+import Ekfrequenz from './Ekfrequenz'
 import Erfkrit from './Erfkrit'
 import Exporte from '../Exporte'
 import Idealbiotop from './Idealbiotop'
@@ -97,6 +98,10 @@ const Daten = ({ treeName }) => {
     }
     case 'ekzaehleinheit': {
       form = <Ekzaehleinheit treeName={treeName} />
+      break
+    }
+    case 'ekfrequenz': {
+      form = <Ekfrequenz treeName={treeName} />
       break
     }
     case 'erfkrit': {

@@ -49,6 +49,11 @@ export default activeNodeArray => {
       activeNodeArray.length > 4 &&
       activeNodeArray[4] === 'EK-Zähleinheiten') ||
     false
+  const ekfrequenzFolder =
+    (ap &&
+      activeNodeArray.length > 4 &&
+      activeNodeArray[4] === 'EK-Frequenzen') ||
+    false
   const apArtFolder =
     (ap && activeNodeArray.length > 4 && activeNodeArray[4] === 'AP-Arten') ||
     false
@@ -63,6 +68,8 @@ export default activeNodeArray => {
     ekzaehleinheitFolder && activeNodeArray.length > 5
       ? activeNodeArray[5]
       : null
+  const ekfrequenz =
+    ekfrequenzFolder && activeNodeArray.length > 5 ? activeNodeArray[5] : null
   const apart =
     apArtFolder && activeNodeArray.length > 5 ? activeNodeArray[5] : null
   const idealbiotopFolder =
@@ -235,9 +242,11 @@ export default activeNodeArray => {
     ap,
     assozartFolder,
     ekzaehleinheitFolder,
+    ekfrequenzFolder,
     apArtFolder,
     assozart,
     ekzaehleinheit,
+    ekfrequenz,
     apart,
     qk,
     idealbiotopFolder,

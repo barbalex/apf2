@@ -31,7 +31,7 @@ export default ({
       urlLabel: 'Qualitaetskontrollen',
       label: 'Qualitätskontrollen',
       url,
-      sort: [projIndex, 1, apIndex, 12],
+      sort: [projIndex, 1, apIndex, 13],
       hasChildren: false,
     },
   ]

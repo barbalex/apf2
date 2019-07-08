@@ -21,6 +21,7 @@ import { MuiPickersUtilsProvider } from 'material-ui-pickers'
 import { ApolloProvider } from 'react-apollo'
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
 import localForage from 'localforage'
+import isEqual from 'lodash/isEqual'
 import MobxStore from './store'
 import { SnackbarProvider } from 'notistack'
 //import { onPatch } from 'mobx-state-tree'
@@ -68,13 +69,30 @@ const App = ({ element }) => {
         .default('store', store, {
           storage: localForage,
           jsonify: false,
+          blacklist: [
+            'user',
+            'updateAvailable',
+            'urlQuery',
+            'refetch',
+            'notifications',
+          ],
         })
         .then(() => {
           console.log('store has been hydrated')
           // navigate to last activeNodeArray
           // but only if url is inside daten
           const activeNodeArray = getActiveNodeArrayFromPathname()
-          if (activeNodeArray[0] === 'Daten') {
+          const storeActiveNodeArray = store.tree.activeNodeArray.slice()
+          console.log('App, rehydrating', {
+            activeNodeArray,
+            storeActiveNodeArray,
+            isEqual: isEqual(activeNodeArray, storeActiveNodeArray),
+          })
+          if (
+            (activeNodeArray[0] === 'Daten' || activeNodeArray.length === 0) &&
+            !isEqual(activeNodeArray, storeActiveNodeArray)
+          ) {
+            console.log('App, rehydrating, will set active nodearray')
             store.tree.setActiveNodeArray(store.tree.activeNodeArray)
           }
         }),

@@ -52,7 +52,7 @@ export default ({
         }
       })
       .map((el, index) => {
-        el.sort = [projIndex, 1, apIndex, 11, index]
+        el.sort = [projIndex, 1, apIndex, 12, index]
         return el
       }),
   )()

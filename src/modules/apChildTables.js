@@ -4,6 +4,7 @@ export default [
   'apart',
   'assozart',
   'ekzaehleinheit',
+  'ekfrequenz',
   'idealbiotop',
   'ber',
   'apber',

@@ -316,6 +316,7 @@ const myTypes = types
         idealbiotop: null,
         assozart: null,
         ekzaehleinheit: null,
+        ekfrequenz: null,
         popber: null,
         popmassnber: null,
         tpopber: null,

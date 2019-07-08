@@ -34,6 +34,7 @@ export default ({ url, activeNode, activeFilterTable }) => {
     case 'currentIssue':
     case 'ekplan':
     case 'ekzaehleinheit':
+    case 'ekfrequenz':
     case 'erfkrit':
     case 'exporte':
     case 'idealbiotop':

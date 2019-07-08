@@ -198,6 +198,14 @@ export default [
     parentIdField: 'ap_id',
   },
   {
+    table: 'ekfrequenz',
+    parentTable: 'ap',
+    label: 'EK-Frequenzen',
+    labelSingular: 'EK-Frequenz',
+    idField: 'id',
+    parentIdField: 'ap_id',
+  },
+  {
     table: 'popber',
     parentTable: 'pop',
     label: 'Kontroll-Berichte',

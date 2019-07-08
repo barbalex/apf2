@@ -39,6 +39,7 @@ import queryBers from './queryBers'
 import queryAparts from './queryAparts'
 import queryAssozarts from './queryAssozarts'
 import queryEkzaehleinheits from './queryEkzaehleinheits'
+import queryEkfrequenzs from './queryEkfrequenzs'
 import queryBeobNichtBeurteilts from './queryBeobNichtBeurteilts'
 import queryBeobNichtZuzuordnens from './queryBeobNichtZuzuordnens'
 import buildNodes from '../nodes'
@@ -511,6 +512,26 @@ const Tree = ({ treeName }) => {
     key: 'ekzaehleinheits',
     value: refetchEkzaehleinheits,
   })
+
+  const queryEkfrequenzsFilter = { apId: { in: ap } }
+  if (!!nodeLabelFilter.ekfrequenz) {
+    queryEkfrequenzsFilter.label = {
+      includesInsensitive: nodeLabelFilter.ekfrequenz,
+    }
+  }
+  const {
+    data: dataEkfrequenzs,
+    error: errorEkfrequenzs,
+    loading: loadingEkfrequenzs,
+    refetch: refetchEkfrequenzs,
+  } = useQuery(queryEkfrequenzs, {
+    variables: { isAp, filter: queryEkfrequenzsFilter },
+  })
+  setRefetchKey({
+    key: 'ekfrequenzs',
+    value: refetchEkfrequenzs,
+  })
+
   const queryBeobNichtBeurteiltsFilter = {
     nichtZuordnen: { equalTo: false },
     apId: { in: ap },
@@ -646,6 +667,7 @@ const Tree = ({ treeName }) => {
     loadingAparts,
     loadingAssozarts,
     loadingEkzaehleinheits,
+    loadingEkfrequenzs,
     loadingBeobNichtBeurteilts,
     loadingBeobNichtZuzuordnens,
   ]
@@ -678,6 +700,7 @@ const Tree = ({ treeName }) => {
     errorAparts,
     errorAssozarts,
     errorEkzaehleinheits,
+    errorEkfrequenzs,
     errorBeobNichtBeurteilts,
     errorBeobNichtZuzuordnens,
   ].filter(e => !!e)
@@ -710,6 +733,7 @@ const Tree = ({ treeName }) => {
     ...dataAparts,
     ...dataAssozarts,
     ...dataEkzaehleinheits,
+    ...dataEkfrequenzs,
     ...dataBeobNichtBeurteilts,
     ...dataBeobNichtZuzuordnens,
   }
@@ -747,6 +771,7 @@ const Tree = ({ treeName }) => {
     dataBers,
     dataAssozarts,
     dataEkzaehleinheits,
+    dataEkfrequenzs,
     dataBeobNichtBeurteilts,
     dataBeobNichtZuzuordnens,
     loadingAdresses,
@@ -776,6 +801,7 @@ const Tree = ({ treeName }) => {
     loadingAparts,
     loadingAssozarts,
     loadingEkzaehleinheits,
+    loadingEkfrequenzs,
     loadingBeobNichtBeurteilts,
     loadingBeobNichtZuzuordnens,
     store,

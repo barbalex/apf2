@@ -55,7 +55,7 @@ export default ({
       urlLabel: 'nicht-zuzuordnende-Beobachtungen',
       label: `Beobachtungen nicht zuzuordnen (${message})`,
       url,
-      sort: [projIndex, 1, apIndex, 11],
+      sort: [projIndex, 1, apIndex, 12],
       hasChildren: beobNichtZuzuordnenNodesLength > 0,
     },
   ]
