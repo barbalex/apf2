@@ -83,16 +83,16 @@ const App = ({ element }) => {
           // but only if url is inside daten
           const activeNodeArray = getActiveNodeArrayFromPathname()
           const storeActiveNodeArray = store.tree.activeNodeArray.slice()
-          console.log('App, rehydrating', {
+          /*console.log('App, rehydrating', {
             activeNodeArray,
             storeActiveNodeArray,
             isEqual: isEqual(activeNodeArray, storeActiveNodeArray),
-          })
+          })*/
           if (
             (activeNodeArray[0] === 'Daten' || activeNodeArray.length === 0) &&
             !isEqual(activeNodeArray, storeActiveNodeArray)
           ) {
-            console.log('App, rehydrating, will set active nodearray')
+            //console.log('App, rehydrating, will set active nodearray')
             store.tree.setActiveNodeArray(store.tree.activeNodeArray)
           }
         }),
