@@ -36,7 +36,7 @@ const TableContainer = styled.div`
   position: relative;
   overflow: auto;
   width: 100vw;
-  height: 100%;
+  height: ${props => `calc(100vh - ${props.headerbottom}px)`};
 `
 const StyledTable = styled(Table)`
   position: relative;
@@ -55,7 +55,7 @@ const StyledTable = styled(Table)`
 const StyledTableHead = styled(TableHead)`
   display: block !important;
   background: hsla(120, 25%, 88%, 1) !important;
-  height: 50px !important;
+  height: 60px !important;
   position: sticky;
   top: 0;
   z-index: 2;
@@ -63,10 +63,11 @@ const StyledTableHead = styled(TableHead)`
 const StyledTableHeaderRow = styled(TableRow)`
   position: relative !important;
   display: block !important;
-  height: 50px !important;
+  height: 60px !important;
 `
 const StyledTableHeaderCell = styled(TableCell)`
   position: sticky;
+  height: 60px;
   width: ${props => `${props.width}px`};
   min-width: ${props => `${props.width}px`};
   max-width: ${props => `${props.width}px`};
@@ -307,7 +308,7 @@ const yearClickedReducer = (state, action) => {
   }
 }
 
-const EkPlanTable = ({ einheitsByAp }) => {
+const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
   const store = useContext(storeContext)
   const { aps, apValues, showCount, fields: fieldsShown } = store.ekPlan
 
@@ -395,7 +396,7 @@ const EkPlanTable = ({ einheitsByAp }) => {
     [rows[0]],
   )
 
-  console.log('Table:', { fields, fieldsShown: fieldsShown.slice() })
+  //console.log('Table:', { fields, fieldsShown: fieldsShown.slice() })
 
   const scrollPositions = useMemo(
     () => ({
@@ -465,7 +466,7 @@ const EkPlanTable = ({ einheitsByAp }) => {
         {rows.length > 0 && (
           <OuterTableContainer>
             <TpopTitle>{`${rows.length} Teilpopulationen`}</TpopTitle>
-            <TableContainer>
+            <TableContainer headerbottom={headerBottom}>
               <StyledTable size="small" colhovered={columnHovered}>
                 <StyledTableHead>
                   <StyledTableHeaderRow>

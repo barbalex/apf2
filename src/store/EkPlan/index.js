@@ -3,7 +3,7 @@ import uniq from 'lodash/uniq'
 
 import Ap from './Ap'
 
-const defaultFields = [
+export const defaultFields = [
   'ap',
   'popNr',
   'popName',

@@ -1,4 +1,10 @@
-import React, { useRef, useContext, useCallback, useState } from 'react'
+import React, {
+  useRef,
+  useContext,
+  useCallback,
+  useState,
+  useMemo,
+} from 'react'
 import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
@@ -18,6 +24,7 @@ import Table from './Table'
 import Fields from './Fields'
 import queryAps from './queryAps'
 import storeContext from '../../storeContext'
+import { defaultFields } from '../../store/EkPlan'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -33,7 +40,7 @@ const Header = styled.div`
 `
 const ChooseContainer = styled.div`
   position: relative;
-  flex-basis: 250px;
+  flex-basis: 295px;
   flex-shrink: 0;
   flex-grow: 0;
   align-self: flex-start;
@@ -41,12 +48,12 @@ const ChooseContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  height: 90px;
+  height: 88px;
   margin-bottom: -7px;
 `
 const ChooseTitle = styled.h5`
   position: absolute;
-  left: -70px;
+  left: -77px;
   top: 3px;
   margin-bottom: 0;
 `
@@ -78,6 +85,7 @@ const EkPlan = () => {
   const store = useContext(storeContext)
   const {
     aps,
+    fields,
     showEk,
     setShowEk,
     showEkf,
@@ -91,6 +99,9 @@ const EkPlan = () => {
   } = store.ekPlan
 
   const headerRef = useRef(null)
+  const headerBottom = headerRef.current
+    ? headerRef.current.getBoundingClientRect().bottom
+    : 150
 
   const queryApsResult = useQuery(queryAps, {
     variables: {
@@ -123,6 +134,10 @@ const EkPlan = () => {
   const [fieldsDialogOpen, setFieldsDialogOpen] = useState(false)
   const onClickChooseFields = useCallback(() => setFieldsDialogOpen(true), [])
   const closeFieldsDialog = useCallback(() => setFieldsDialogOpen(false), [])
+  const felderButtonTitle = useMemo(
+    () => `Felder wählen (${fields.length}/${defaultFields.length})`,
+    [fields],
+  )
 
   return (
     <ErrorBoundary>
@@ -137,7 +152,7 @@ const EkPlan = () => {
                 size="small"
                 onClick={onClickChooseFields}
               >
-                Felder wählen
+                {felderButtonTitle}
               </FelderButton>
               <Label
                 control={
@@ -206,7 +221,7 @@ const EkPlan = () => {
               />
             </ChooseContainer>
           </Header>
-          <Table einheitsByAp={einheitsByAp} />
+          <Table einheitsByAp={einheitsByAp} headerBottom={headerBottom} />
         </Container>
         <StyledDialog
           open={fieldsDialogOpen}
