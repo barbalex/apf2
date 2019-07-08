@@ -14,7 +14,7 @@ Erfolgskontrollen sind gleichzeitig wichtig und aufwändig. Sie beginnen mit der
 Das soll mit folgenden Massnahmen umgesetzt werden:<br/><br/>
 
 #### Strukturbaum
-- :white_medium_square: Neuer Knoten im AP: `EK-Frequenzen`. Mit Formular, um die Daten zu erfassen.
+- :ballot_box_with_check: Neuer Knoten im AP: `EK-Frequenzen`. Mit Formular, um die Daten zu erfassen.
 - :white_medium_square: Neuer Knoten in den Werte-Listen: `EK: Abrechnungs-Typen`
 - :white_check_mark: Bestehender Knoten `EKF-Zähleinheiten` wird neu `EK-Zähleinheiten`
 
