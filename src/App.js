@@ -39,6 +39,7 @@ import { Provider as IdbProvider } from './idbContext'
 
 import Notifier from './components/shared/Notifier'
 import NotificationDismisser from './components/shared/NotificationDismisser'
+import getActiveNodeArrayFromPathname from './modules/getActiveNodeArrayFromPathname'
 
 import 'react-leaflet-markercluster/dist/styles.min.css'
 
@@ -71,7 +72,11 @@ const App = ({ element }) => {
         .then(() => {
           console.log('store has been hydrated')
           // navigate to last activeNodeArray
-          store.tree.setActiveNodeArray(store.tree.activeNodeArray)
+          // but only if url is inside daten
+          const activeNodeArray = getActiveNodeArrayFromPathname()
+          if (activeNodeArray[0] === 'Daten') {
+            store.tree.setActiveNodeArray(store.tree.activeNodeArray)
+          }
         }),
     )
   }
