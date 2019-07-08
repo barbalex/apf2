@@ -65,10 +65,10 @@ drop table if exists apflora.ekfrequenz cascade;
 create table apflora.ekfrequenz(
   id uuid primary key default uuid_generate_v1mc(),
   ap_id uuid not null references apflora.ap (id) on delete cascade on update cascade,
+  code text default null unique,
   ek boolean default false,
   ekf boolean default false,
   anwendungsfall text default null,
-  code text default null unique,
   name text default null,
   periodizitaet text default null,
   kontrolljahre integer[],
