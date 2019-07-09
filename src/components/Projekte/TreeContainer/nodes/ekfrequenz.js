@@ -33,7 +33,7 @@ export default ({
         parentId: el.apId,
         parentTableId: el.apId,
         urlLabel: el.id,
-        label: el.code,
+        label: el.code || '(kein Code)',
         url: ['Projekte', projId, 'Aktionspläne', apId, 'EK-Frequenzen', el.id],
         hasChildren: false,
       }))
