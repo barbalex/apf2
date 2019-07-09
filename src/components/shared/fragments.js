@@ -164,6 +164,7 @@ export const ekAbrechnungstypWerte = gql`
   fragment EkAbrechnungstypWerteFields on EkAbrechnungstypWerte {
     id
     code
+    label
     text
     sort
     changedBy

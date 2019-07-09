@@ -55,6 +55,13 @@ const Werte = ({ treeName, table }) => {
 
   const row = get(data, `${tableCamelCased}ById`, {})
 
+  let codeGqlType = 'Int'
+  let codeFieldType = 'number'
+  if (['ekAbrechnungstypWerte'].includes(tableCamelCased)) {
+    codeGqlType = 'String'
+    codeFieldType='text'
+  }
+
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
@@ -63,7 +70,7 @@ const Werte = ({ treeName, table }) => {
         const mutation = gql`
           mutation updateWert(
             $id: UUID!
-            $code: Int
+            $code: ${codeGqlType}
             $text: String
             $sort: Int
             $changedBy: String
@@ -144,7 +151,7 @@ const Werte = ({ treeName, table }) => {
                 <Field
                   name="code"
                   label="Code"
-                  type="number"
+                  type={codeFieldType}
                   component={TextField}
                 />
                 <Field

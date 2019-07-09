@@ -5,6 +5,7 @@ import React, { useCallback, useContext, useState } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import uniq from 'lodash/uniq'
+import camelCase from 'lodash/camelCase'
 import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from 'react-apollo-hooks'
@@ -27,6 +28,8 @@ import CmTpopApberrelevantGrundWerteFolder from './contextmenu/TpopApberrelevant
 import CmTpopApberrelevantGrundWerte from './contextmenu/TpopApberrelevantGrundWerte'
 import CmTpopkontrzaehlEinheitWerteFolder from './contextmenu/TpopkontrzaehlEinheitWerteFolder'
 import CmTpopkontrzaehlEinheitWerte from './contextmenu/TpopkontrzaehlEinheitWerte'
+import CmEkAbrechnungstypWerteFolder from './contextmenu/EkAbrechnungstypWerteFolder'
+import CmEkAbrechnungstypWerte from './contextmenu/EkAbrechnungstypWerte'
 import CmApberuebersichtFolder from './contextmenu/ApberuebersichtFolder'
 import CmApberuebersicht from './contextmenu/Apberuebersicht'
 import CmAssozartFolder from './contextmenu/AssozartFolder'
@@ -382,7 +385,7 @@ const TreeContainer = ({ treeName }) => {
               'tpopfreiwkontrzaehl',
             ].includes(table)
               ? 'tpopkontrzaehl'
-              : table
+              : camelCase(table)
             refetch[`${tableToUse}s`]()
             refetch.aps()
             refetch.projekts()
@@ -619,16 +622,21 @@ const TreeContainer = ({ treeName }) => {
           onClick={handleClick}
           treeName={treeName}
         />
+        <CmEkAbrechnungstypWerteFolder
+          onClick={handleClick}
+          treeName={treeName}
+        />
+        <CmEkAbrechnungstypWerte onClick={handleClick} treeName={treeName} />
         <CmTpopkontrzaehlEinheitWerteFolder
+          onClick={handleClick}
+          treeName={treeName}
+        />
+        <CmTpopkontrzaehlEinheitWerte
           onClick={handleClick}
           treeName={treeName}
         />
         <CmAdresse onClick={handleClick} treeName={treeName} />
         <CmTpopApberrelevantGrundWerte
-          onClick={handleClick}
-          treeName={treeName}
-        />
-        <CmTpopkontrzaehlEinheitWerte
           onClick={handleClick}
           treeName={treeName}
         />

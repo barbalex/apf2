@@ -11,6 +11,8 @@ import buildApberrelevantGrundWerteFolderNodes from './apberrelevantGrundWerteFo
 import buildApberrelevantGrundWerteNodes from './apberrelevantGrundWerte'
 import buildTpopkontrzaehlEinheitWerteFolderNodes from './tpopkontrzaehlEinheitWerteFolder'
 import buildTpopkontrzaehlEinheitWerteNodes from './tpopkontrzaehlEinheitWerte'
+import buildEkAbrechnungstypWerteFolderNodes from './ekAbrechnungstypWerteFolder'
+import buildEkAbrechnungstypWerteNodes from './ekAbrechnungstypWerte'
 import buildUserNodes from './user'
 import buildCurrentIssuesNodes from './currentIssues'
 import buildApFolderNodes from './apFolder'
@@ -84,6 +86,7 @@ export default ({
   dataAdresses,
   dataApberrelevantGrundWertes,
   dataTpopkontrzaehlEinheitWertes,
+  dataEkAbrechnungstypWertes,
   dataApbers,
   dataApberuebersichts,
   dataAps,
@@ -111,6 +114,7 @@ export default ({
   loadingAdresses,
   loadingApberrelevantGrundWertes,
   loadingTpopkontrzaehlEinheitWertes,
+  loadingEkAbrechnungstypWertes,
   loadingUsers,
   loadingProjekts,
   loadingApberuebersichts,
@@ -1292,6 +1296,16 @@ export default ({
           }),
         )(),
         ...memoizeOne(() =>
+          buildEkAbrechnungstypWerteFolderNodes({
+            nodes,
+            data: dataEkAbrechnungstypWertes,
+            treeName,
+            loading: loadingEkAbrechnungstypWertes,
+            projektNodes,
+            store,
+          }),
+        )(),
+        ...memoizeOne(() =>
           buildTpopkontrzaehlEinheitWerteFolderNodes({
             nodes,
             data: dataTpopkontrzaehlEinheitWertes,
@@ -1337,6 +1351,26 @@ export default ({
             data: dataApberrelevantGrundWertes,
             treeName,
             loading: loadingApberrelevantGrundWertes,
+            projektNodes,
+            store,
+          }),
+        )(),
+      ]
+    }
+    if (
+      role === 'apflora_manager' &&
+      nodeUrl.length === 2 &&
+      nodeUrl[0] === 'Werte-Listen' &&
+      nodeUrl[1] === 'EkAbrechnungstypWerte'
+    ) {
+      nodes = [
+        ...nodes,
+        ...memoizeOne(() =>
+          buildEkAbrechnungstypWerteNodes({
+            nodes,
+            data: dataEkAbrechnungstypWertes,
+            treeName,
+            loading: loadingEkAbrechnungstypWertes,
             projektNodes,
             store,
           }),

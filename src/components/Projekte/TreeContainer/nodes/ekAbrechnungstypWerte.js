@@ -8,31 +8,31 @@ export default ({
   projektNodes,
   store,
 }) => {
-  const tpopkontrzaehlEinheitWertes = get(
+  const ekAbrechnungstypWertes = get(
     data,
-    'allTpopkontrzaehlEinheitWertes.nodes',
+    'allEkAbrechnungstypWertes.nodes',
     [],
   )
   const wlIndex = projektNodes.length + 2
   const nodes = memoizeOne(() =>
-    tpopkontrzaehlEinheitWertes
+    ekAbrechnungstypWertes
       // only show if parent node exists
       .filter(el =>
-        nodesPassed.map(n => n.id).includes('tpopkontrzaehlEinheitWerteFolder'),
+        nodesPassed.map(n => n.id).includes('ekAbrechnungstypWerteFolder'),
       )
       .map(el => ({
         nodeType: 'table',
-        menuType: 'tpopkontrzaehlEinheitWerte',
-        filterTable: 'tpopkontrzaehlEinheitWerte',
+        menuType: 'ekAbrechnungstypWerte',
+        filterTable: 'ekAbrechnungstypWerte',
         id: el.id,
-        parentId: 'tpopkontrzaehlEinheitWerteFolder',
+        parentId: 'ekAbrechnungstypWerteFolder',
         urlLabel: el.id,
         label: el.label,
-        url: ['Werte-Listen', 'TpopkontrzaehlEinheitWerte', el.id],
+        url: ['Werte-Listen', 'EkAbrechnungstypWerte', el.id],
         hasChildren: false,
       }))
       .map((el, index) => {
-        el.sort = [wlIndex, 4, index]
+        el.sort = [wlIndex, 3, index]
         return el
       }),
   )()

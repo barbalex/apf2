@@ -11,11 +11,14 @@ import {
   tpopApberrelevantGrundWerte as tpopApberrelevantGrundWerteFragment,
   // eslint-disable-next-line no-unused-vars
   tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
+  // eslint-disable-next-line no-unused-vars
+  ekAbrechnungstypWerte as ekAbrechnungstypWerteFragment,
 } from '../../shared/fragments'
 
 const fragments = {
   tpopApberrelevantGrundWerte: tpopApberrelevantGrundWerteFragment,
   tpopkontrzaehlEinheitWerte: tpopkontrzaehlEinheitWerteFragment,
+  ekAbrechnungstypWerte: ekAbrechnungstypWerteFragment,
 }
 
 export default async ({
@@ -196,6 +199,8 @@ export default async ({
     newOpenNodes = [...openNodes, urlWithoutJahr, newActiveNodeArray]
   }
   setOpenNodes(newOpenNodes)
-  const refetchName = `${table === 'tpopkontrzaehl' ? table : tablePassed}s`
+  const refetchName = `${
+    table === 'tpopkontrzaehl' ? table : camelCase(tablePassed)
+  }s`
   refetch[refetchName]()
 }

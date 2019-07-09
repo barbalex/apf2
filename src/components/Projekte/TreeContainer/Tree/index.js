@@ -15,6 +15,7 @@ import buildVariables from './buildVariables'
 import queryAdresses from './queryAdresses'
 import queryApberrelevantGrundWertes from './queryApberrelevantGrundWertes'
 import queryTpopkontrzaehlEinheitWertes from './queryTpopkontrzaehlEinheitWertes'
+import queryEkAbrechnungstypWertes from './queryEkAbrechnungstypWertes'
 import queryCurrentIssues from './queryCurrentIssues'
 import queryUsers from './queryUsers'
 import queryProjekts from './queryProjekts'
@@ -608,13 +609,15 @@ const Tree = ({ treeName }) => {
     variables: { isWerteListen, filter: queryApberrelevantGrundWertesFilter },
   })
   setRefetchKey({
-    key: 'tpop_apberrelevant_grund_wertes',
+    key: 'tpopApberrelevantGrundWertes',
     value: refetchApberrelevantGrundWertes,
   })
 
-  const queryTpopkontrzaehlEinheitWertesFilter = nodeLabelFilter.apberrelevantGrundWerte
+  const queryTpopkontrzaehlEinheitWertesFilter = nodeLabelFilter.tpopkontrzaehlEinheitWerte
     ? {
-        label: { includesInsensitive: nodeLabelFilter.apberrelevantGrundWerte },
+        label: {
+          includesInsensitive: nodeLabelFilter.tpopkontrzaehlEinheitWerte,
+        },
       }
     : { id: { isNull: false } }
   const {
@@ -629,8 +632,29 @@ const Tree = ({ treeName }) => {
     },
   })
   setRefetchKey({
-    key: 'tpopkontrzaehl_einheit_wertes',
+    key: 'tpopkontrzaehlEinheitWertes',
     value: refetchTpopkontrzaehlEinheitWertes,
+  })
+
+  const queryEkAbrechnungstypWertesFilter = nodeLabelFilter.ekAbrechnungstypWerte
+    ? {
+        label: { includesInsensitive: nodeLabelFilter.ekAbrechnungstypWerte },
+      }
+    : { id: { isNull: false } }
+  const {
+    data: dataEkAbrechnungstypWertes,
+    error: errorEkAbrechnungstypWertes,
+    loading: loadingEkAbrechnungstypWertes,
+    refetch: refetchEkAbrechnungstypWertes,
+  } = useQuery(queryEkAbrechnungstypWertes, {
+    variables: {
+      isWerteListen,
+      filter: queryEkAbrechnungstypWertesFilter,
+    },
+  })
+  setRefetchKey({
+    key: 'ekAbrechnungstypWertes',
+    value: refetchEkAbrechnungstypWertes,
   })
 
   const {
@@ -644,6 +668,7 @@ const Tree = ({ treeName }) => {
     loadingAdresses,
     loadingApberrelevantGrundWertes,
     loadingTpopkontrzaehlEinheitWertes,
+    loadingEkAbrechnungstypWertes,
     loadingUsers,
     loadingProjekts,
     loadingApberuebersichts,
@@ -677,6 +702,7 @@ const Tree = ({ treeName }) => {
     errorAdresses,
     errorApberrelevantGrundWertes,
     errorTpopkontrzaehlEinheitWertes,
+    errorEkAbrechnungstypWertes,
     errorUsers,
     errorProjekts,
     errorApberuebersichts,
@@ -710,6 +736,7 @@ const Tree = ({ treeName }) => {
     ...dataAdresses,
     ...dataApberrelevantGrundWertes,
     ...dataTpopkontrzaehlEinheitWertes,
+    ...dataEkAbrechnungstypWertes,
     ...dataUsers,
     ...dataProjekts,
     ...dataApberuebersichts,
@@ -751,6 +778,7 @@ const Tree = ({ treeName }) => {
     dataAdresses,
     dataApberrelevantGrundWertes,
     dataTpopkontrzaehlEinheitWertes,
+    dataEkAbrechnungstypWertes,
     dataUsers,
     dataProjekts,
     dataApberuebersichts,
@@ -777,6 +805,7 @@ const Tree = ({ treeName }) => {
     loadingAdresses,
     loadingApberrelevantGrundWertes,
     loadingTpopkontrzaehlEinheitWertes,
+    loadingEkAbrechnungstypWertes,
     loadingCurrentIssues,
     loadingUsers,
     loadingProjekts,

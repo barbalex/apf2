@@ -41,7 +41,7 @@ export default ({
       urlLabel: 'TpopkontrzaehlEinheitWerte',
       label: `Teil-Population: Zähl-Einheiten (${message})`,
       url: ['Werte-Listen', 'TpopkontrzaehlEinheitWerte'],
-      sort: [wlIndex, 3],
+      sort: [wlIndex, 4],
       hasChildren: tpopkontrzaehlEinheitWerteNodesLength > 0,
     },
   ]

@@ -324,6 +324,12 @@ export default [
     parentIdField: 'none',
   },
   {
+    table: 'ek_abrechnungstyp_werte',
+    label: 'EK-Abrechnungstypen',
+    idField: 'id',
+    parentIdField: 'none',
+  },
+  {
     table: 'ap_erfkrit_werte',
     label: 'AP-Erfolgskriterium-Werte',
     idField: 'id',

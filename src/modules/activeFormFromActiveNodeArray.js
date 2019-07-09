@@ -61,6 +61,9 @@ export default ({ url, activeNode, activeFilterTable }) => {
     case 'tpopkontrzaehlEinheitWerte': {
       return { form: 'werte', type: 'tpopkontrzaehl_einheit_werte' }
     }
+    case 'ekAbrechnungstypWerte': {
+      return { form: 'werte', type: 'ek_abrechnungstyp_werte' }
+    }
     case 'beobNichtBeurteilt': {
       return { form: 'beobzuordnung', type: 'nichtBeurteilt' }
     }
