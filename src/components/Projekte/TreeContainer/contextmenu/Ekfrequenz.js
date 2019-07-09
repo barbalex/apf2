@@ -16,7 +16,7 @@ const deleteData = {
   table: 'ekfrequenz',
 }
 
-const EkzaehleinheitFolder = ({ onClick, treeName }) => {
+const Ekfrequenz = ({ onClick, treeName }) => {
   const { user } = useContext(storeContext)
 
   return (
@@ -38,4 +38,4 @@ const EkzaehleinheitFolder = ({ onClick, treeName }) => {
   )
 }
 
-export default observer(EkzaehleinheitFolder)
+export default observer(Ekfrequenz)
