@@ -33,6 +33,8 @@ import CmAssozartFolder from './contextmenu/AssozartFolder'
 import CmAssozart from './contextmenu/Assozart'
 import CmEkzaehleinheitFolder from './contextmenu/EkzaehleinheitFolder'
 import CmEkzaehleinheit from './contextmenu/Ekzaehleinheit'
+import CmEkfrequenzFolder from './contextmenu/EkfrequenzFolder'
+import CmEkfrequenz from './contextmenu/Ekfrequenz'
 import CmApartFolder from './contextmenu/ApartFolder'
 import CmApart from './contextmenu/Apart'
 import CmBeobZugeordnetFolder from './contextmenu/BeobZugeordnetFolder'
@@ -566,9 +568,11 @@ const TreeContainer = ({ treeName }) => {
         <CmApberuebersichtFolder onClick={handleClick} treeName={treeName} />
         <CmApberuebersicht onClick={handleClick} treeName={treeName} />
         <CmAssozartFolder onClick={handleClick} treeName={treeName} />
-        <CmEkzaehleinheitFolder onClick={handleClick} treeName={treeName} />
         <CmAssozart onClick={handleClick} treeName={treeName} />
+        <CmEkzaehleinheitFolder onClick={handleClick} treeName={treeName} />
         <CmEkzaehleinheit onClick={handleClick} treeName={treeName} />
+        <CmEkfrequenzFolder onClick={handleClick} treeName={treeName} />
+        <CmEkfrequenz onClick={handleClick} treeName={treeName} />
         <CmApartFolder onClick={handleClick} treeName={treeName} />
         <CmApart onClick={handleClick} treeName={treeName} />
         <CmBeobZugeordnetFolder onClick={handleClick} treeName={treeName} />
