@@ -3,13 +3,14 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from 'react-apollo-hooks'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form, Field, FieldArray } from 'formik'
 import ErrorBoundary from 'react-error-boundary'
 
 import TextField from '../../../shared/TextFieldFormik'
 import RadioButton from '../../../shared/RadioButtonFormik'
+import KontrolljahrField from './KontrolljahrField'
 import FormTitle from '../../../shared/FormTitle'
-import Kontrolljahre from './Kontrolljahre'
+import Label from '../../../shared/Label'
 import query from './query'
 import updateEkfrequenzByIdGql from './updateEkfrequenzById'
 import storeContext from '../../../../storeContext'
@@ -47,13 +48,11 @@ const Ekfrequenz = ({ treeName }) => {
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
-      console.log('kontrolljahre:', values.kontrolljahre)
       try {
         await client.mutate({
           mutation: updateEkfrequenzByIdGql,
           variables: {
             ...objectsEmptyValuesToNull(values),
-            kontrolljahre: JSON.parse(`"[${values.kontrolljahre}]"`),
             changedBy: store.user.name,
           },
           optimisticResponse: {
@@ -61,7 +60,6 @@ const Ekfrequenz = ({ treeName }) => {
             updateEkfrequenzById: {
               ekfrequenz: {
                 ...values,
-                kontrolljahre: JSON.parse(`"[${values.kontrolljahre}]"`),
                 __typename: 'Ekfrequenz',
               },
               __typename: 'Ekfrequenz',
@@ -85,7 +83,6 @@ const Ekfrequenz = ({ treeName }) => {
     )
   }
   if (error) return `Fehler: ${error.message}`
-  console.log('Ekfrequenz rendering, kontrolljahre:', row.kontrolljahre)
   return (
     <ErrorBoundary>
       <Container>
@@ -97,8 +94,14 @@ const Ekfrequenz = ({ treeName }) => {
         />
         <FieldsContainer>
           <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
-            {({ handleSubmit, dirty }) => (
-              <Form onBlur={() => dirty && handleSubmit()}>
+            {({ handleSubmit, dirty, values }) => (
+              <Form
+                onBlur={event => {
+                  // prevent submitting when button blurs
+                  if (event.target.type === 'button') return
+                  dirty && handleSubmit()
+                }}
+              >
                 <Field name="ek" label="EK" component={RadioButton} />
                 <Field name="ekf" label="EKF" component={RadioButton} />
                 <Field
@@ -125,7 +128,58 @@ const Ekfrequenz = ({ treeName }) => {
                   type="text"
                   component={TextField}
                 />
-                <Kontrolljahre kontrolljahre={row.kontrolljahre} />
+                <FieldArray
+                  name="kontrolljahre"
+                  render={arrayHelpers => (
+                    <div>
+                      <Label label="Kontrolljahre" />
+                      {values.kontrolljahre &&
+                      values.kontrolljahre.length > 0 ? (
+                        <>
+                          {values.kontrolljahre
+                            .sort((a, b) => {
+                              if (a === '') return -1
+                              if (b === '') return -1
+                              return a - b
+                            })
+                            .map((kontrolljahr, index) => (
+                              <div key={index}>
+                                <Field
+                                  name={`kontrolljahre.${index}`}
+                                  component={KontrolljahrField}
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => arrayHelpers.remove(index)}
+                                >
+                                  -
+                                </button>
+                              </div>
+                            ))}
+                          <button
+                            type="button"
+                            onClick={() =>
+                              arrayHelpers.insert(
+                                values.kontrolljahre.length - 1,
+                                '',
+                              )
+                            }
+                          >
+                            +
+                          </button>
+                        </>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => arrayHelpers.push(0)}
+                        >
+                          {/* show this when user has removed all kontrolljahre from the list */}
+                          Neues Kontrolljahr
+                        </button>
+                      )}
+                    </div>
+                  )}
+                />
                 <Field
                   name="anzahl_min"
                   label="Anzahl von"
