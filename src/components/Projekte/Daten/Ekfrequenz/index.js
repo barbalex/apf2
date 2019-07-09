@@ -192,37 +192,24 @@ const Ekfrequenz = ({ treeName }) => {
                           <FaPlus />
                         </PlusIcon>
                       </LabelRow>
-                      {values.kontrolljahre &&
-                      values.kontrolljahre.length > 0 ? (
-                        <>
-                          {values.kontrolljahre
-                            // do not sort here as sorting happens on every change of value
-                            // so after typing every number - bad for multiple digits
-                            .map((kontrolljahr, index) => (
-                              <div key={index}>
-                                <Field
-                                  name={`kontrolljahre.${index}`}
-                                  component={KontrolljahrField}
-                                />
-                                <DelIcon
-                                  title={`${values.kontrolljahre[index]} entfernen`}
-                                  aria-label={`${values.kontrolljahre[index]} entfernen`}
-                                  onClick={() => arrayHelpers.remove(index)}
-                                >
-                                  <FaTimes />
-                                </DelIcon>
-                              </div>
-                            ))}
-                        </>
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={() => arrayHelpers.push(0)}
-                        >
-                          {/* show this when user has removed all kontrolljahre from the list */}
-                          Neues Kontrolljahr
-                        </button>
-                      )}
+                      {values.kontrolljahre
+                        // do not sort here as sorting happens on every change of value
+                        // so after typing every number - bad for multiple digits
+                        .map((kontrolljahr, index) => (
+                          <div key={index}>
+                            <Field
+                              name={`kontrolljahre.${index}`}
+                              component={KontrolljahrField}
+                            />
+                            <DelIcon
+                              title={`${values.kontrolljahre[index]} entfernen`}
+                              aria-label={`${values.kontrolljahre[index]} entfernen`}
+                              onClick={() => arrayHelpers.remove(index)}
+                            >
+                              <FaTimes />
+                            </DelIcon>
+                          </div>
+                        ))}
                     </KontrolljahrContainer>
                   )}
                 />
