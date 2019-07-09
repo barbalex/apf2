@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import styled from 'styled-components'
@@ -187,6 +187,10 @@ const CellForYearMenu = ({
   const { year, tpopId } = yearClickedState
   const { showEk, showEkf, showMassn } = store.ekPlan
 
+  const [eksAnchor, setEksAnchor] = useState(null)
+  const [ekfsAnchor, setEkfsAnchor] = useState(null)
+  const [massnsAnchor, setMassnsAnchor] = useState(null)
+
   const onClickEkEntfernen = useCallback(async () => removeEkPlan('EK'), [
     yearClickedState,
   ])
@@ -312,12 +316,20 @@ const CellForYearMenu = ({
       ) : (
         <StyledMenuItem onClick={onClickEkfPlanen}>EKF planen</StyledMenuItem>
       )}
-      {!!eks.length && <StyledMenuItem>{`EK (${eks.length})`}</StyledMenuItem>}
+      {!!eks.length && (
+        <StyledMenuItem
+          onClick={e => setEksAnchor(e.currentTarget)}
+        >{`EK (${eks.length})`}</StyledMenuItem>
+      )}
       {!!ekfs.length && (
-        <StyledMenuItem>{`EKF (${ekfs.length})`}</StyledMenuItem>
+        <StyledMenuItem
+          onClick={e => setEkfsAnchor(e.currentTarget)}
+        >{`EKF (${ekfs.length})`}</StyledMenuItem>
       )}
       {!!massns.length && (
-        <StyledMenuItem>{`Ansiedlungen (${massns.length})`}</StyledMenuItem>
+        <StyledMenuItem
+          onClick={e => setMassnsAnchor(e.currentTarget)}
+        >{`Ansiedlungen (${massns.length})`}</StyledMenuItem>
       )}
     </Menu>
   )
