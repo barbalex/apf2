@@ -1,4 +1,6 @@
 import React, { useCallback, useContext } from 'react'
+import { FaPlus, FaTimes } from 'react-icons/fa'
+import IconButton from '@material-ui/core/IconButton'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
@@ -10,7 +12,6 @@ import TextField from '../../../shared/TextFieldFormik'
 import RadioButton from '../../../shared/RadioButtonFormik'
 import KontrolljahrField from './KontrolljahrField'
 import FormTitle from '../../../shared/FormTitle'
-import Label from '../../../shared/Label'
 import query from './query'
 import updateEkfrequenzByIdGql from './updateEkfrequenzById'
 import storeContext from '../../../../storeContext'
@@ -26,6 +27,34 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
   padding: 10px;
   height: 100%;
+`
+const KontrolljahrContainer = styled.div`
+  margin-bottom: 20px;
+`
+const LabelRow = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-top: -5px;
+`
+const StyledLabel = styled.div`
+  margin-top: 10px;
+  cursor: text;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  user-select: none;
+  padding-bottom: 6px;
+`
+const PlusIcon = styled(IconButton)`
+  font-size: 1rem !important;
+  padding-top: 4px !important;
+  padding-bottom: 2px !important;
+`
+const DelIcon = styled(IconButton)`
+  font-size: 1rem !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 `
 
 const Ekfrequenz = ({ treeName }) => {
@@ -60,6 +89,14 @@ const Ekfrequenz = ({ treeName }) => {
             updateEkfrequenzById: {
               ekfrequenz: {
                 ...values,
+                // sort kontrolljahre here
+                kontrolljahre: values.kontrolljahre
+                  ? values.kontrolljahre.sort((a, b) => {
+                      if (a === '') return -1
+                      if (b === '') return -1
+                      return a - b
+                    })
+                  : null,
                 __typename: 'Ekfrequenz',
               },
               __typename: 'Ekfrequenz',
@@ -93,7 +130,12 @@ const Ekfrequenz = ({ treeName }) => {
           table="ekfrequenz"
         />
         <FieldsContainer>
-          <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
+          <Formik
+            key={JSON.stringify(row.kontrolljahre)}
+            initialValues={row}
+            onSubmit={onSubmit}
+            enableReinitialize
+          >
             {({ handleSubmit, dirty, values }) => (
               <Form
                 onBlur={event => {
@@ -131,42 +173,46 @@ const Ekfrequenz = ({ treeName }) => {
                 <FieldArray
                   name="kontrolljahre"
                   render={arrayHelpers => (
-                    <div>
-                      <Label label="Kontrolljahre" />
+                    <KontrolljahrContainer>
+                      <LabelRow>
+                        <StyledLabel>Kontrolljahre</StyledLabel>
+                        <PlusIcon
+                          title="Kontrolljahr hinzufügen"
+                          aria-label="Kontrolljahr hinzufügen"
+                          onClick={() =>
+                            values.kontrolljahre &&
+                            values.kontrolljahre.length > 0
+                              ? arrayHelpers.insert(
+                                  values.kontrolljahre.length,
+                                  '',
+                                )
+                              : arrayHelpers.push(0)
+                          }
+                        >
+                          <FaPlus />
+                        </PlusIcon>
+                      </LabelRow>
                       {values.kontrolljahre &&
                       values.kontrolljahre.length > 0 ? (
                         <>
                           {values.kontrolljahre
-                            .sort((a, b) => {
-                              if (a === '') return -1
-                              if (b === '') return -1
-                              return a - b
-                            })
+                            // do not sort here as sorting happens on every change of value
+                            // so after typing every number - bad for multiple digits
                             .map((kontrolljahr, index) => (
                               <div key={index}>
                                 <Field
                                   name={`kontrolljahre.${index}`}
                                   component={KontrolljahrField}
                                 />
-                                <button
-                                  type="button"
+                                <DelIcon
+                                  title={`${values.kontrolljahre[index]} entfernen`}
+                                  aria-label={`${values.kontrolljahre[index]} entfernen`}
                                   onClick={() => arrayHelpers.remove(index)}
                                 >
-                                  -
-                                </button>
+                                  <FaTimes />
+                                </DelIcon>
                               </div>
                             ))}
-                          <button
-                            type="button"
-                            onClick={() =>
-                              arrayHelpers.insert(
-                                values.kontrolljahre.length - 1,
-                                '',
-                              )
-                            }
-                          >
-                            +
-                          </button>
                         </>
                       ) : (
                         <button
@@ -177,7 +223,7 @@ const Ekfrequenz = ({ treeName }) => {
                           Neues Kontrolljahr
                         </button>
                       )}
-                    </div>
+                    </KontrolljahrContainer>
                   )}
                 />
                 <Field

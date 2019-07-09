@@ -1,7 +1,14 @@
 import React, { useCallback } from 'react'
 import Input from '@material-ui/core/Input'
-//import styled from 'styled-components'
+import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+
+const StyledInput = styled(Input)`
+  width: 40px;
+  &:before {
+    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+  }
+`
 
 const MyTextField = ({ field, form }) => {
   const { onChange, onBlur, value, name } = field
@@ -12,7 +19,7 @@ const MyTextField = ({ field, form }) => {
   })
 
   return (
-    <Input
+    <StyledInput
       id={name}
       name={name}
       value={value || ''}
