@@ -3,8 +3,9 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import styled from 'styled-components'
 import gql from 'graphql-tag'
+import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from 'react-apollo-hooks'
+import { useQuery, useApolloClient } from 'react-apollo-hooks'
 
 import { ekplan } from '../../../shared/fragments'
 import storeContext from '../../../../storeContext'
@@ -17,6 +18,10 @@ const YearCellMenuTitle = styled.h5`
   font-size: 0.75rem;
   color: grey;
 `
+const StyledMenuItem = styled(MenuItem)`
+  min-height: 36px !important;
+`
+
 const anchorOrigin = { horizontal: 'right', vertical: 'bottom' }
 
 const createEkplanMutation = gql`
@@ -62,6 +67,114 @@ const deleteEkplanMutation = gql`
     }
   }
 `
+const tpopQuery = gql`
+  query EkplanmenuTpopQuery(
+    $tpopId: UUID!
+    $jahr: Int
+    $showEk: Boolean!
+    $showEkf: Boolean!
+    $showMassn: Boolean!
+  ) {
+    tpopById(id: $tpopId) {
+      id
+      ek: tpopkontrsByTpopId(
+        filter: {
+          jahr: { equalTo: $jahr }
+          typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
+        }
+        orderBy: DATUM_ASC
+      ) @include(if: $showEk) {
+        nodes {
+          id
+          datum
+          typ
+          adresseByBearbeiter {
+            id
+            name
+          }
+          tpopkontrzaehlsByTpopkontrId {
+            nodes {
+              id
+              einheit
+              anzahl
+              tpopkontrzaehlEinheitWerteByEinheit {
+                id
+                text
+              }
+              tpopkontrzaehlMethodeWerteByMethode {
+                id
+                text
+              }
+            }
+          }
+        }
+      }
+      ekf: tpopkontrsByTpopId(
+        filter: {
+          jahr: { equalTo: $jahr }
+          typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+        }
+        orderBy: DATUM_ASC
+      ) @include(if: $showEkf) {
+        nodes {
+          id
+          datum
+          typ
+          adresseByBearbeiter {
+            id
+            name
+          }
+          tpopkontrzaehlsByTpopkontrId {
+            nodes {
+              id
+              einheit
+              anzahl
+              tpopkontrzaehlEinheitWerteByEinheit {
+                id
+                text
+              }
+              tpopkontrzaehlMethodeWerteByMethode {
+                id
+                text
+              }
+            }
+          }
+        }
+      }
+      massn: tpopmassnsByTpopId(
+        filter: {
+          jahr: { equalTo: $jahr }
+          tpopmassnTypWerteByTyp: { ansiedlung: { equalTo: -1 } }
+        }
+        orderBy: DATUM_ASC
+      ) @include(if: $showMassn) {
+        nodes {
+          id
+          datum
+          tpopmassnTypWerteByTyp {
+            id
+            text
+          }
+          beschreibung
+          anzTriebe
+          anzPflanzen
+          bemerkungen
+          adresseByBearbeiter {
+            id
+            name
+          }
+        }
+      }
+      popByPopId {
+        id
+        apByApId {
+          id
+          projId
+        }
+      }
+    }
+  }
+`
 
 const CellForYearMenu = ({
   yearMenuAnchor,
@@ -72,6 +185,7 @@ const CellForYearMenu = ({
   const store = useContext(storeContext)
   const client = useApolloClient()
   const { year, tpopId } = yearClickedState
+  const { showEk, showEkf, showMassn } = store.ekPlan
 
   const onClickEkEntfernen = useCallback(async () => removeEkPlan('EK'), [
     yearClickedState,
@@ -161,6 +275,19 @@ const CellForYearMenu = ({
     [store.user.name, yearClickedState],
   )
 
+  const { data } = useQuery(tpopQuery, {
+    variables: {
+      tpopId,
+      jahr: year,
+      showEk,
+      showEkf,
+      showMassn,
+    },
+  })
+  const eks = get(data, 'tpopById.ek.nodes', [])
+  const ekfs = get(data, 'tpopById.ekf.nodes', [])
+  const massns = get(data, 'tpopById.massn.nodes', [])
+
   return (
     <Menu
       id="yearCellMenu"
@@ -172,14 +299,25 @@ const CellForYearMenu = ({
     >
       <YearCellMenuTitle>{`${yearClickedState.tpop}, ${yearClickedState.year}`}</YearCellMenuTitle>
       {yearClickedState.ekPlan ? (
-        <MenuItem onClick={onClickEkEntfernen}>EK-Planung entfernen</MenuItem>
+        <StyledMenuItem onClick={onClickEkEntfernen}>
+          EK-Planung entfernen
+        </StyledMenuItem>
       ) : (
-        <MenuItem onClick={onClickEkPlanen}>EK planen</MenuItem>
+        <StyledMenuItem onClick={onClickEkPlanen}>EK planen</StyledMenuItem>
       )}
       {yearClickedState.ekfPlan ? (
-        <MenuItem onClick={onClickEkfEntfernen}>EKF-Planung entfernen</MenuItem>
+        <StyledMenuItem onClick={onClickEkfEntfernen}>
+          EKF-Planung entfernen
+        </StyledMenuItem>
       ) : (
-        <MenuItem onClick={onClickEkfPlanen}>EKF planen</MenuItem>
+        <StyledMenuItem onClick={onClickEkfPlanen}>EKF planen</StyledMenuItem>
+      )}
+      {!!eks.length && <StyledMenuItem>{`EK (${eks.length})`}</StyledMenuItem>}
+      {!!ekfs.length && (
+        <StyledMenuItem>{`EKF (${ekfs.length})`}</StyledMenuItem>
+      )}
+      {!!massns.length && (
+        <StyledMenuItem>{`Ansiedlungen (${massns.length})`}</StyledMenuItem>
       )}
     </Menu>
   )
