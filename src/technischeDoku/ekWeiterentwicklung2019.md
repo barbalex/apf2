@@ -15,7 +15,7 @@ Das soll mit folgenden Massnahmen umgesetzt werden:<br/><br/>
 
 #### Strukturbaum
 - :white_check_mark: Neuer Knoten im AP: `EK-Frequenzen`. Mit Formular, um die Daten zu erfassen.
-- :white_medium_square: Neuer Knoten in den Werte-Listen: `EK: Abrechnungs-Typen`
+- :white_check_mark: Neuer Knoten in den Werte-Listen: `EK: Abrechnungs-Typen`
 - :white_check_mark: Bestehender Knoten `EKF-Zähleinheiten` wird neu `EK-Zähleinheiten`
 
 #### Formular TPop
