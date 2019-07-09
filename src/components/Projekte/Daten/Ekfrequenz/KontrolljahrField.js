@@ -1,10 +1,11 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import Input from '@material-ui/core/Input'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
 const StyledInput = styled(Input)`
-  width: 40px;
+  width: 45px;
+  touch-action: none;
   &:before {
     border-bottom-color: rgba(0, 0, 0, 0.1) !important;
   }
@@ -14,25 +15,39 @@ const MyTextField = ({ field, form }) => {
   const { onChange, onBlur, value, name } = field
   const { handleSubmit } = form
 
-  const onKeyPress = useCallback(event => {
-    event.key === 'Enter' && handleSubmit()
-  })
+  // only working solution
+  // see: https://github.com/mui-org/material-ui/issues/7960#issuecomment-497945204
+  const textFieldRef = useRef(null)
+  useEffect(() => {
+    const handleWheel = e => e.preventDefault()
+    textFieldRef.current.addEventListener('wheel', handleWheel)
+
+    return () => {
+      textFieldRef.current.removeEventListener('wheel', handleWheel)
+    }
+  }, [])
+  useEffect(() => {
+    const handleKeyPress = e => e.key === 'Enter' && handleSubmit()
+    textFieldRef.current.addEventListener('keyPress', handleKeyPress)
+
+    return () => {
+      textFieldRef.current.removeEventListener('keyPress', handleKeyPress)
+    }
+  }, [])
 
   return (
     <StyledInput
       id={name}
+      ref={textFieldRef}
       name={name}
-      value={value || ''}
+      value={value || value === 0 ? value : ''}
       type="number"
       onChange={onChange}
       onBlur={onBlur}
-      onKeyPress={onKeyPress}
       autoComplete="off"
       autoCorrect="off"
       autoCapitalize="off"
-      onWheel={event => {
-        event.preventDefault()
-      }}
+      autoFocus={!(value || value === 0)}
     />
   )
 }

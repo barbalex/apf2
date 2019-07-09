@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
@@ -28,6 +28,18 @@ const MyTextField = ({
   const { errors, handleSubmit } = form
   const error = errors[name]
 
+  // only working solution
+  // see: https://github.com/mui-org/material-ui/issues/7960#issuecomment-497945204
+  const textFieldRef = useRef(null)
+  useEffect(() => {
+    const handleWheel = e => e.preventDefault()
+    textFieldRef.current.addEventListener('wheel', handleWheel)
+
+    return () => {
+      textFieldRef.current.removeEventListener('wheel', handleWheel)
+    }
+  }, [])
+
   const onKeyPress = useCallback(event => {
     event.key === 'Enter' && handleSubmit()
   })
@@ -44,6 +56,7 @@ const MyTextField = ({
       </InputLabel>
       <Input
         id={name}
+        ref={textFieldRef}
         name={name}
         value={value || ''}
         type={type}
@@ -55,9 +68,6 @@ const MyTextField = ({
         autoComplete="off"
         autoCorrect="off"
         autoCapitalize="off"
-        onWheel={event => {
-          event.preventDefault()
-        }}
       />
       {!!error && (
         <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>

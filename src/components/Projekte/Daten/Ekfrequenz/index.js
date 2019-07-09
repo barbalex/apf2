@@ -179,23 +179,30 @@ const Ekfrequenz = ({ treeName }) => {
                         <PlusIcon
                           title="Kontrolljahr hinzufügen"
                           aria-label="Kontrolljahr hinzufügen"
-                          onClick={() =>
+                          onClick={() => {
+                            // only accept one empty value
+                            if (
+                              values.kontrolljahre &&
+                              values.kontrolljahre.filter(v => !v).length > 1
+                            ) {
+                              return
+                            }
                             values.kontrolljahre &&
                             values.kontrolljahre.length > 0
                               ? arrayHelpers.insert(
                                   values.kontrolljahre.length,
                                   '',
                                 )
-                              : arrayHelpers.push(0)
-                          }
+                              : arrayHelpers.push('')
+                          }}
                         >
                           <FaPlus />
                         </PlusIcon>
                       </LabelRow>
-                      {values.kontrolljahre
+                      {!!values.kontrolljahre &&
                         // do not sort here as sorting happens on every change of value
                         // so after typing every number - bad for multiple digits
-                        .map((kontrolljahr, index) => (
+                        values.kontrolljahre.map((kontrolljahr, index) => (
                           <div key={index}>
                             <Field
                               name={`kontrolljahre.${index}`}
