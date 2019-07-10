@@ -8,6 +8,7 @@ import { onError } from 'apollo-link-error'
 import jwtDecode from 'jwt-decode'
 
 import graphQlUri from './modules/graphQlUri'
+import logout from './modules/logout'
 
 export default ({ idb, store }) => {
   const { enqueNotification } = store
@@ -36,6 +37,12 @@ export default ({ idb, store }) => {
         console.log(
           `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
         )
+        if (
+          message.includes('permission denied') ||
+          message.includes('keine Berechtigung')
+        ) {
+          logout(idb)
+        }
         return enqueNotification({
           message: `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
           options: {
