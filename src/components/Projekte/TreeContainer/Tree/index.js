@@ -44,6 +44,8 @@ import queryEkfrequenzs from './queryEkfrequenzs'
 import queryBeobNichtBeurteilts from './queryBeobNichtBeurteilts'
 import queryBeobNichtZuzuordnens from './queryBeobNichtZuzuordnens'
 import buildNodes from '../nodes'
+import logout from '../../../../modules/logout'
+import anyQueryReturnsPermissionError from '../../../../modules/anyQueryReturnsPermissionError'
 import anyQueryIsLoading from '../../../../modules/anyQueryIsLoading'
 import anyQueryReturnsError from '../../../../modules/anyQueryReturnsError'
 import idbContext from '../../../../idbContext'
@@ -63,6 +65,9 @@ const StyledList = styled(List)`
 `
 const ErrorContainer = styled.div`
   padding: 15px;
+`
+const LogoutButton = styled(Button)`
+  margin-top: 10px !important;
 `
 
 const Tree = ({ treeName }) => {
@@ -864,6 +869,25 @@ const Tree = ({ treeName }) => {
     }
   }, [loading, activeNodeArray, nodes, listRef])
 
+  if (anyQueryReturnsPermissionError(queryErrorArray)) {
+    // during login don't show permission error
+    if (!token) return null
+    // if token is not accepted, ask user to logout
+    return (
+      <ErrorContainer>
+        <div>Ihre Anmeldung ist nicht mehr gültig.</div>
+        <div>Bitte melden Sie sich neu an.</div>
+        <LogoutButton
+          variant="outlined"
+          onClick={() => {
+            logout(idb)
+          }}
+        >
+          Neu anmelden
+        </LogoutButton>
+      </ErrorContainer>
+    )
+  }
   const error = anyQueryReturnsError(queryErrorArray)
   if (error) {
     return <ErrorContainer>{`Fehler: ${error.message}`}</ErrorContainer>
