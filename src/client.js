@@ -32,23 +32,26 @@ export default ({ idb, store }) => {
   })
 
   const errorLink = onError(({ graphQLErrors, networkError }) => {
-    if (graphQLErrors)
+    if (graphQLErrors) {
+      const existsPermissionsError = graphQLErrors.some(
+        message =>
+          message.includes('permission denied') ||
+          message.includes('keine Berechtigung'),
+      )
+      if (existsPermissionsError) {
+        console.log('should log out?')
+        enqueNotification({
+          message: `Sie wurden automatisch abgemeldet, weil die Datenbank eine Berechtigung verweigert hat`,
+          options: {
+            variant: 'warning',
+          },
+        })
+        return logout(idb)
+      }
       graphQLErrors.map(({ message, locations, path }) => {
         console.log(
           `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
         )
-        if (
-          message.includes('permission denied') ||
-          message.includes('keine Berechtigung')
-        ) {
-          enqueNotification({
-            message: `Sie wurden automatisch abgemeldet, weil die Datenbank eine Berechtigung verweigert hat`,
-            options: {
-              variant: 'warning',
-            },
-          })
-          logout(idb)
-        }
         return enqueNotification({
           message: `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
           options: {
@@ -56,6 +59,7 @@ export default ({ idb, store }) => {
           },
         })
       })
+    }
     if (networkError) {
       console.log(`[Network error]: ${networkError}`)
       enqueNotification({
