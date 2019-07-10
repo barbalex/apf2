@@ -160,6 +160,7 @@ const CellForYearMenu = ({
       showMassn,
     },
   })
+  const tpop = get(data, 'tpopById', {})
   const eks = get(data, 'tpopById.eks.nodes', [])
   const ekfs = get(data, 'tpopById.ekfs.nodes', [])
   const massns = get(data, 'tpopById.massns.nodes', [])
@@ -241,10 +242,16 @@ const CellForYearMenu = ({
         )}
       </Menu>
       {!!eksAnchor && (
-        <EksMenu eks={eks} eksAnchor={eksAnchor} closeEksMenu={closeEksMenu} />
+        <EksMenu
+          tpop={tpop}
+          eks={eks}
+          eksAnchor={eksAnchor}
+          closeEksMenu={closeEksMenu}
+        />
       )}
       {!!ekfsAnchor && (
         <EkfsMenu
+          tpop={tpop}
           ekfs={ekfs}
           ekfsAnchor={ekfsAnchor}
           closeEkfsMenu={closeEkfsMenu}
@@ -252,6 +259,7 @@ const CellForYearMenu = ({
       )}
       {!!massnsAnchor && (
         <MassnsMenu
+          tpop={tpop}
           massns={massns}
           massnsAnchor={massnsAnchor}
           closeMassnsMenu={closeMassnsMenu}

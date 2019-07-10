@@ -5,7 +5,7 @@ import Ek from './Ek'
 
 const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 
-const EksMenu = ({ eks, eksAnchor, closeEksMenu }) => (
+const EksMenu = ({ tpop, eks, eksAnchor, closeEksMenu }) => (
   <Menu
     id="eksMenu"
     anchorEl={eksAnchor}
@@ -16,7 +16,7 @@ const EksMenu = ({ eks, eksAnchor, closeEksMenu }) => (
     getContentAnchorEl={null}
   >
     {eks.map((ek, i) => (
-      <Ek key={ek.id} ek={ek} border={i + 1 < eks.length} />
+      <Ek key={ek.id} tpop={tpop} ek={ek} border={i + 1 < eks.length} />
     ))}
   </Menu>
 )

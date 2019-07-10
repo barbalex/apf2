@@ -5,7 +5,7 @@ import Massn from './Massn'
 
 const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 
-const MassnsMenu = ({ massns, massnsAnchor, closeMassnsMenu }) => {
+const MassnsMenu = ({ tpop, massns, massnsAnchor, closeMassnsMenu }) => {
   return (
     <Menu
       id="massnsMenu"
@@ -17,7 +17,12 @@ const MassnsMenu = ({ massns, massnsAnchor, closeMassnsMenu }) => {
       getContentAnchorEl={null}
     >
       {massns.map((massn, i) => (
-        <Massn key={massn.id} massn={massn} border={i + 1 < massns.length} />
+        <Massn
+          key={massn.id}
+          tpop={tpop}
+          massn={massn}
+          border={i + 1 < massns.length}
+        />
       ))}
     </Menu>
   )

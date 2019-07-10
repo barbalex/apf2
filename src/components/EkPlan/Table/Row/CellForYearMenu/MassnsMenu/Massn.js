@@ -7,8 +7,11 @@ import {
   MdExpandMore as ExpandIcon,
   MdExpandLess as CloseIcon,
 } from 'react-icons/md'
+import { FaExternalLinkAlt } from 'react-icons/fa'
 import get from 'lodash/get'
 import styled from 'styled-components'
+
+import appBaseUrl from '../../../../../../modules/appBaseUrl'
 
 const OuterList = styled(List)`
   border-bottom: ${props =>
@@ -31,8 +34,18 @@ const SyledListItem = styled(ListItem)`
   padding-bottom: 0 !important;
   font-size: 0.85rem !important;
 `
+const OutsideLink = styled.div`
+  margin-left: 2px;
+  margin-right: 6px;
+  margin-bottom: -2px;
+  cursor: pointer;
+  svg {
+    font-size: 0.9em;
+    color: rgba(0, 0, 0, 0.77);
+  }
+`
 
-const MassnMenu = ({ massn, border }) => {
+const MassnMenu = ({ tpop, massn, border }) => {
   const [open, setOpen] = useState(true)
   const toggleOpen = useCallback(() => setOpen(!open), [open])
   const bearbeiter =
@@ -43,11 +56,24 @@ const MassnMenu = ({ massn, border }) => {
     massn.anzTriebe !== null ? massn.anzTriebe : '(nicht erfasst)'
   const anzPflanzen =
     massn.anzPflanzen !== null ? massn.anzPflanzen : '(nicht erfasst)'
+  const projId = get(tpop, 'popByPopId.apByApId.projId')
+  const apId = get(tpop, 'popByPopId.apByApId.id')
+  const popId = get(tpop, 'popByPopId.id')
+  const tpopId = tpop.id
+  const url = `${appBaseUrl()}Daten/Projekte/${projId}/Aktionspläne/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen/${
+    massn.id
+  }`
 
   return (
     <OuterList component="nav" border={border.toString()}>
       <SyledListItem button onClick={toggleOpen}>
         <StyledListItemText primary={title} />
+        <OutsideLink
+          onClick={() => typeof window !== 'undefined' && window.open(url)}
+          title="in neuem Tab öffnen"
+        >
+          <FaExternalLinkAlt />
+        </OutsideLink>
         {open ? <CloseIcon /> : <ExpandIcon />}
       </SyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>

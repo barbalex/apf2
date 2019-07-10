@@ -5,7 +5,7 @@ import Ekf from './Ekf'
 
 const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 
-const EkfsMenu = ({ ekfs, ekfsAnchor, closeEkfsMenu }) => (
+const EkfsMenu = ({ tpop, ekfs, ekfsAnchor, closeEkfsMenu }) => (
   <Menu
     id="ekfsMenu"
     anchorEl={ekfsAnchor}
@@ -16,7 +16,7 @@ const EkfsMenu = ({ ekfs, ekfsAnchor, closeEkfsMenu }) => (
     getContentAnchorEl={null}
   >
     {ekfs.map((ekf, i) => (
-      <Ekf key={ekf.id} ekf={ekf} border={i + 1 < ekfs.length} />
+      <Ekf key={ekf.id} tpop={tpop} ekf={ekf} border={i + 1 < ekfs.length} />
     ))}
   </Menu>
 )
