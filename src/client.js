@@ -39,7 +39,6 @@ export default ({ idb, store }) => {
           message.includes('keine Berechtigung'),
       )
       if (existsPermissionsError) {
-        console.log('should log out?')
         enqueNotification({
           message: `Sie wurden automatisch abgemeldet, weil die Datenbank eine Berechtigung verweigert hat`,
           options: {
