@@ -11,7 +11,8 @@ import get from 'lodash/get'
 import styled from 'styled-components'
 
 const OuterList = styled(List)`
-  border-bottom: ${props => (props.border ? '1px solid #d6d6d6' : 'none')};
+  border-bottom: ${props =>
+    props.border === 'true' ? '1px solid #d6d6d6' : 'none'};
   padding-top: 4px !important;
   padding-bottom: 4px !important;
 `
@@ -39,7 +40,7 @@ const EkfMenu = ({ ekf, border }) => {
   const title = `${ekf.datum || '(kein Datum)'}, ${bearbeiter}`
 
   return (
-    <OuterList component="nav" border={border}>
+    <OuterList component="nav" border={border.toString()}>
       <SyledListItem button onClick={toggleOpen}>
         <StyledListItemText primary={title} />
         {open ? <CloseIcon /> : <ExpandIcon />}

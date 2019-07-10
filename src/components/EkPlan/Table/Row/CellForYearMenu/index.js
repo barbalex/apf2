@@ -33,7 +33,7 @@ export const StyledMenuItem = styled(MenuItem)`
   padding-top: 2px !important;
   padding-bottom: 2px !important;
   background-color: ${props =>
-    props.active ? 'rgba(0, 0, 0, 0.08) !important' : 'unset'};
+    props.active === 'true' ? 'rgba(0, 0, 0, 0.08) !important' : 'unset'};
 `
 const StyledListItemText = styled(ListItemText)`
   span {
@@ -209,7 +209,7 @@ const CellForYearMenu = ({
         {!!eks.length && (
           <StyledMenuItem
             onClick={e => setEksAnchor(e.currentTarget)}
-            active={!!eksAnchor}
+            active={Boolean(eksAnchor).toString()}
           >
             <StyledListItemIcon>
               <ListIcon />
@@ -220,7 +220,7 @@ const CellForYearMenu = ({
         {!!ekfs.length && (
           <StyledMenuItem
             onClick={e => setEkfsAnchor(e.currentTarget)}
-            active={!!ekfsAnchor}
+            active={Boolean(ekfsAnchor).toString()}
           >
             <StyledListItemIcon>
               <ListIcon />
@@ -231,7 +231,7 @@ const CellForYearMenu = ({
         {!!massns.length && (
           <StyledMenuItem
             onClick={e => setMassnsAnchor(e.currentTarget)}
-            active={!!massnsAnchor}
+            active={Boolean(massnsAnchor).toString()}
           >
             <StyledListItemIcon>
               <ListIcon />
