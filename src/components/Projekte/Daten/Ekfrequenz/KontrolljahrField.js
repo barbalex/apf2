@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useCallback } from 'react'
 import Input from '@material-ui/core/Input'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
@@ -26,14 +26,8 @@ const MyTextField = ({ field, form }) => {
       textFieldRef.current.removeEventListener('wheel', handleWheel)
     }
   }, [])
-  useEffect(() => {
-    const handleKeyPress = e => e.key === 'Enter' && handleSubmit()
-    textFieldRef.current.addEventListener('keyPress', handleKeyPress)
 
-    return () => {
-      textFieldRef.current.removeEventListener('keyPress', handleKeyPress)
-    }
-  }, [])
+  const onKeyDown = useCallback(e => e.key === 'Enter' && handleSubmit())
 
   return (
     <StyledInput
@@ -44,6 +38,7 @@ const MyTextField = ({ field, form }) => {
       type="number"
       onChange={onChange}
       onBlur={onBlur}
+      onKeyDown={onKeyDown}
       autoComplete="off"
       autoCorrect="off"
       autoCapitalize="off"
