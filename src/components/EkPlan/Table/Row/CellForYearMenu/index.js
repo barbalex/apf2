@@ -28,7 +28,17 @@ const YearCellMenuTitle = styled.h5`
   color: grey;
 `
 export const StyledMenuItem = styled(MenuItem)`
-  min-height: 25px !important;
+  min-height: 17px !important;
+  line-height: 1rem !important;
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+  background-color: ${props =>
+    props.active ? 'rgba(0, 0, 0, 0.08) !important' : 'unset'};
+`
+const StyledListItemText = styled(ListItemText)`
+  span {
+    font-size: 0.85rem !important;
+  }
 `
 const StyledListItemIcon = styled(ListItemIcon)`
   min-width: 36px !important;
@@ -150,9 +160,9 @@ const CellForYearMenu = ({
       showMassn,
     },
   })
-  const eks = get(data, 'tpopById.ek.nodes', [])
-  const ekfs = get(data, 'tpopById.ekf.nodes', [])
-  const massns = get(data, 'tpopById.massn.nodes', [])
+  const eks = get(data, 'tpopById.eks.nodes', [])
+  const ekfs = get(data, 'tpopById.ekfs.nodes', [])
+  const massns = get(data, 'tpopById.massns.nodes', [])
 
   return (
     <>
@@ -171,14 +181,14 @@ const CellForYearMenu = ({
             <StyledListItemIcon>
               <EditIcon />
             </StyledListItemIcon>
-            <ListItemText primary="EK-Planung entfernen" />
+            <StyledListItemText primary="EK-Planung entfernen" />
           </StyledMenuItem>
         ) : (
           <StyledMenuItem onClick={onClickEkPlanen}>
             <StyledListItemIcon>
               <EditIcon />
             </StyledListItemIcon>
-            <ListItemText primary="EK planen" />
+            <StyledListItemText primary="EK planen" />
           </StyledMenuItem>
         )}
         {yearClickedState.ekfPlan ? (
@@ -186,38 +196,47 @@ const CellForYearMenu = ({
             <StyledListItemIcon>
               <EditIcon />
             </StyledListItemIcon>
-            <ListItemText primary="EKF-Planung entfernen" />
+            <StyledListItemText primary="EKF-Planung entfernen" />
           </StyledMenuItem>
         ) : (
           <StyledMenuItem onClick={onClickEkfPlanen}>
             <StyledListItemIcon>
               <EditIcon />
             </StyledListItemIcon>
-            <ListItemText primary="EKF planen" />
+            <StyledListItemText primary="EKF planen" />
           </StyledMenuItem>
         )}
         {!!eks.length && (
-          <StyledMenuItem onClick={e => setEksAnchor(e.currentTarget)}>
+          <StyledMenuItem
+            onClick={e => setEksAnchor(e.currentTarget)}
+            active={!!eksAnchor}
+          >
             <StyledListItemIcon>
               <ListIcon />
             </StyledListItemIcon>
-            <ListItemText primary={`EK (${eks.length})`} />
+            <StyledListItemText primary={`EK (${eks.length})`} />
           </StyledMenuItem>
         )}
         {!!ekfs.length && (
-          <StyledMenuItem onClick={e => setEkfsAnchor(e.currentTarget)}>
+          <StyledMenuItem
+            onClick={e => setEkfsAnchor(e.currentTarget)}
+            active={!!ekfsAnchor}
+          >
             <StyledListItemIcon>
               <ListIcon />
             </StyledListItemIcon>
-            <ListItemText primary={`EKF (${ekfs.length})`} />
+            <StyledListItemText primary={`EKF (${ekfs.length})`} />
           </StyledMenuItem>
         )}
         {!!massns.length && (
-          <StyledMenuItem onClick={e => setMassnsAnchor(e.currentTarget)}>
+          <StyledMenuItem
+            onClick={e => setMassnsAnchor(e.currentTarget)}
+            active={!!massnsAnchor}
+          >
             <StyledListItemIcon>
               <ListIcon />
             </StyledListItemIcon>
-            <ListItemText primary={`Ansiedlungen (${massns.length})`} />
+            <StyledListItemText primary={`Ansiedlungen (${massns.length})`} />
           </StyledMenuItem>
         )}
       </Menu>

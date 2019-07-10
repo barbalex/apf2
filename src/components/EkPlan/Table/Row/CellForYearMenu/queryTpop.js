@@ -10,7 +10,7 @@ export default gql`
   ) {
     tpopById(id: $tpopId) {
       id
-      ek: tpopkontrsByTpopId(
+      eks: tpopkontrsByTpopId(
         filter: {
           jahr: { equalTo: $jahr }
           typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
@@ -28,7 +28,6 @@ export default gql`
           tpopkontrzaehlsByTpopkontrId {
             nodes {
               id
-              einheit
               anzahl
               tpopkontrzaehlEinheitWerteByEinheit {
                 id
@@ -42,7 +41,7 @@ export default gql`
           }
         }
       }
-      ekf: tpopkontrsByTpopId(
+      ekfs: tpopkontrsByTpopId(
         filter: {
           jahr: { equalTo: $jahr }
           typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
@@ -74,7 +73,7 @@ export default gql`
           }
         }
       }
-      massn: tpopmassnsByTpopId(
+      massns: tpopmassnsByTpopId(
         filter: {
           jahr: { equalTo: $jahr }
           tpopmassnTypWerteByTyp: { ansiedlung: { equalTo: -1 } }
