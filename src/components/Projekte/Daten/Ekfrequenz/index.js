@@ -221,13 +221,13 @@ const Ekfrequenz = ({ treeName }) => {
                   )}
                 />
                 <Field
-                  name="anzahl_min"
+                  name="anzahlMin"
                   label="Anzahl von"
                   type="number"
                   component={TextField}
                 />
                 <Field
-                  name="anzahl_max"
+                  name="anzahlMax"
                   label="Anzahl bis und mit"
                   type="number"
                   component={TextField}
