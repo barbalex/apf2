@@ -26,7 +26,7 @@ export const StyledMenuItem = styled(MenuItem)`
   min-height: 36px !important;
 `
 
-const anchorOrigin = { horizontal: 'right', vertical: 'bottom' }
+const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 
 const CellForYearMenu = ({
   yearMenuAnchor,
@@ -155,6 +155,7 @@ const CellForYearMenu = ({
         open={Boolean(yearMenuAnchor)}
         onClose={closeYearCellMenu}
         anchorOrigin={anchorOrigin}
+        getContentAnchorEl={null}
       >
         <YearCellMenuTitle>{`${yearClickedState.tpop}, ${yearClickedState.year}`}</YearCellMenuTitle>
         {yearClickedState.ekPlan ? (

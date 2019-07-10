@@ -7,7 +7,7 @@ export const StyledMenuItem = styled(MenuItem)`
   min-height: 36px !important;
 `
 
-const anchorOrigin = { horizontal: 'right', vertical: 'bottom' }
+const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 
 const MyEksMenu = ({ eks, eksAnchor, closeEksMenu }) => {
   const [ekAnchor, setEkAnchor] = useState(null)
@@ -20,9 +20,11 @@ const MyEksMenu = ({ eks, eksAnchor, closeEksMenu }) => {
       open={Boolean(eksAnchor)}
       onClose={closeEksMenu}
       anchorOrigin={anchorOrigin}
+      getContentAnchorEl={null}
     >
       {eks.map(ek => (
         <StyledMenuItem
+          key={ek.id}
           onClick={e => setEkAnchor(e.currentTarget)}
         >{`${ek.datum || '(kein Datum)'}: ${ek.typ}`}</StyledMenuItem>
       ))}
