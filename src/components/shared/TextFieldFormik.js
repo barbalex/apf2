@@ -28,7 +28,7 @@ const MyTextField = ({
   const { errors, handleSubmit } = form
   const error = errors[name]
 
-  // only working solution
+  // only working solution to prevent whell scrolling from changing number values
   // see: https://github.com/mui-org/material-ui/issues/7960#issuecomment-497945204
   const textFieldRef = useRef(null)
   useEffect(() => {
@@ -40,8 +40,13 @@ const MyTextField = ({
     }
   }, [])
 
-  const onKeyPress = useCallback(event => {
-    event.key === 'Enter' && handleSubmit()
+  // value should immediately update when pressing Enter
+  const onKeyDown = useCallback(e => {
+    if (e.key === 'Enter') {
+      handleSubmit()
+      // show user something happened
+      e.currentTarget.blur()
+    }
   })
 
   return (
@@ -63,7 +68,7 @@ const MyTextField = ({
         multiline={multiLine}
         onChange={onChange}
         onBlur={onBlur}
-        onKeyPress={onKeyPress}
+        onKeyDown={onKeyDown}
         placeholder={hintText}
         autoComplete="off"
         autoCorrect="off"
