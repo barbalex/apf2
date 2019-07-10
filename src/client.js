@@ -33,8 +33,13 @@ export default ({ idb, store }) => {
 
   const errorLink = onError(({ graphQLErrors, networkError }) => {
     if (graphQLErrors) {
-      const existsPermissionsError = graphQLErrors.some(
-        message =>
+      /**
+       * TODO
+       * Test this at night
+       * make sure message is what is wanted by logging it out
+       */
+      /*const existsPermissionsError = graphQLErrors.some(
+        ({ message }) =>
           message.includes('permission denied') ||
           message.includes('keine Berechtigung'),
       )
@@ -46,7 +51,7 @@ export default ({ idb, store }) => {
           },
         })
         return logout(idb)
-      }
+      }*/
       graphQLErrors.map(({ message, locations, path }) => {
         console.log(
           `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
