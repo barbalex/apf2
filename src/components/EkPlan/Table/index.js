@@ -554,12 +554,14 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
             </TableContainer>
           </OuterTableContainer>
         )}
-        <CellForYearMenu
-          yearMenuAnchor={yearMenuAnchor}
-          yearClickedState={yearClickedState}
-          closeYearCellMenu={closeYearCellMenu}
-          refetch={refetch}
-        />
+        {!!yearMenuAnchor && (
+          <CellForYearMenu
+            yearMenuAnchor={yearMenuAnchor}
+            yearClickedState={yearClickedState}
+            closeYearCellMenu={closeYearCellMenu}
+            refetch={refetch}
+          />
+        )}
       </>
     </ErrorBoundary>
   )
