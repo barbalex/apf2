@@ -8,7 +8,7 @@ import { onError } from 'apollo-link-error'
 import jwtDecode from 'jwt-decode'
 
 import graphQlUri from './modules/graphQlUri'
-import logout from './modules/logout'
+//import logout from './modules/logout'
 
 export default ({ idb, store }) => {
   const { enqueNotification } = store
@@ -54,7 +54,9 @@ export default ({ idb, store }) => {
       }*/
       graphQLErrors.map(({ message, locations, path }) => {
         console.log(
-          `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+          `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
+            locations,
+          )}, Path: ${path}`,
         )
         return enqueNotification({
           message: `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
