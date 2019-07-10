@@ -42,7 +42,7 @@ export default ({ idb, store }) => {
           message.includes('keine Berechtigung')
         ) {
           enqueNotification({
-            message: `Sie wurden abgemeldet, weil die Datenbank eine Berechtigung verweigert hat`,
+            message: `Sie wurden automatisch abgemeldet, weil die Datenbank eine Berechtigung verweigert hat`,
             options: {
               variant: 'warning',
             },
