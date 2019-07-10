@@ -1,0 +1,33 @@
+import React, { useState } from 'react'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
+import styled from 'styled-components'
+
+export const StyledMenuItem = styled(MenuItem)`
+  min-height: 36px !important;
+`
+
+const anchorOrigin = { horizontal: 'right', vertical: 'bottom' }
+
+const MyEksMenu = ({ eks, eksAnchor, closeEksMenu }) => {
+  const [ekAnchor, setEkAnchor] = useState(null)
+
+  return (
+    <Menu
+      id="yearCellMenu"
+      anchorEl={eksAnchor}
+      keepMounted
+      open={Boolean(eksAnchor)}
+      onClose={closeEksMenu}
+      anchorOrigin={anchorOrigin}
+    >
+      {eks.map(ek => (
+        <StyledMenuItem
+          onClick={e => setEkAnchor(e.currentTarget)}
+        >{`${ek.datum || '(kein Datum)'}: ${ek.typ}`}</StyledMenuItem>
+      ))}
+    </Menu>
+  )
+}
+
+export default MyEksMenu

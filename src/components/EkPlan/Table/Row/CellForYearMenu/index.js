@@ -12,6 +12,8 @@ import queryEkplansOfTpop from './queryEkplansOfTpop'
 import mutationCreateEkplan from './mutationCreateEkplan'
 import mutationDeleteEkplan from './mutationDeleteEkplan'
 
+import EksMenu from './EksMenu'
+
 const YearCellMenuTitle = styled.h5`
   padding-top: 8px;
   padding-left: 16px;
@@ -40,6 +42,10 @@ const CellForYearMenu = ({
   const [eksAnchor, setEksAnchor] = useState(null)
   const [ekfsAnchor, setEkfsAnchor] = useState(null)
   const [massnsAnchor, setMassnsAnchor] = useState(null)
+
+  const closeEksMenu = useCallback(event => setEksAnchor(null), [])
+  const closeEkfsMenu = useCallback(event => setEkfsAnchor(null), [])
+  const closeMassnsMenu = useCallback(event => setMassnsAnchor(null), [])
 
   const onClickEkEntfernen = useCallback(() => removeEkPlan('EK'), [
     yearClickedState,
@@ -141,45 +147,48 @@ const CellForYearMenu = ({
   const massns = get(data, 'tpopById.massn.nodes', [])
 
   return (
-    <Menu
-      id="yearCellMenu"
-      anchorEl={yearMenuAnchor}
-      keepMounted
-      open={Boolean(yearMenuAnchor)}
-      onClose={closeYearCellMenu}
-      anchorOrigin={anchorOrigin}
-    >
-      <YearCellMenuTitle>{`${yearClickedState.tpop}, ${yearClickedState.year}`}</YearCellMenuTitle>
-      {yearClickedState.ekPlan ? (
-        <StyledMenuItem onClick={onClickEkEntfernen}>
-          EK-Planung entfernen
-        </StyledMenuItem>
-      ) : (
-        <StyledMenuItem onClick={onClickEkPlanen}>EK planen</StyledMenuItem>
-      )}
-      {yearClickedState.ekfPlan ? (
-        <StyledMenuItem onClick={onClickEkfEntfernen}>
-          EKF-Planung entfernen
-        </StyledMenuItem>
-      ) : (
-        <StyledMenuItem onClick={onClickEkfPlanen}>EKF planen</StyledMenuItem>
-      )}
-      {!!eks.length && (
-        <StyledMenuItem
-          onClick={e => setEksAnchor(e.currentTarget)}
-        >{`EK (${eks.length})`}</StyledMenuItem>
-      )}
-      {!!ekfs.length && (
-        <StyledMenuItem
-          onClick={e => setEkfsAnchor(e.currentTarget)}
-        >{`EKF (${ekfs.length})`}</StyledMenuItem>
-      )}
-      {!!massns.length && (
-        <StyledMenuItem
-          onClick={e => setMassnsAnchor(e.currentTarget)}
-        >{`Ansiedlungen (${massns.length})`}</StyledMenuItem>
-      )}
-    </Menu>
+    <>
+      <Menu
+        id="yearCellMenu"
+        anchorEl={yearMenuAnchor}
+        keepMounted
+        open={Boolean(yearMenuAnchor)}
+        onClose={closeYearCellMenu}
+        anchorOrigin={anchorOrigin}
+      >
+        <YearCellMenuTitle>{`${yearClickedState.tpop}, ${yearClickedState.year}`}</YearCellMenuTitle>
+        {yearClickedState.ekPlan ? (
+          <StyledMenuItem onClick={onClickEkEntfernen}>
+            EK-Planung entfernen
+          </StyledMenuItem>
+        ) : (
+          <StyledMenuItem onClick={onClickEkPlanen}>EK planen</StyledMenuItem>
+        )}
+        {yearClickedState.ekfPlan ? (
+          <StyledMenuItem onClick={onClickEkfEntfernen}>
+            EKF-Planung entfernen
+          </StyledMenuItem>
+        ) : (
+          <StyledMenuItem onClick={onClickEkfPlanen}>EKF planen</StyledMenuItem>
+        )}
+        {!!eks.length && (
+          <StyledMenuItem
+            onClick={e => setEksAnchor(e.currentTarget)}
+          >{`EK (${eks.length})`}</StyledMenuItem>
+        )}
+        {!!ekfs.length && (
+          <StyledMenuItem
+            onClick={e => setEkfsAnchor(e.currentTarget)}
+          >{`EKF (${ekfs.length})`}</StyledMenuItem>
+        )}
+        {!!massns.length && (
+          <StyledMenuItem
+            onClick={e => setMassnsAnchor(e.currentTarget)}
+          >{`Ansiedlungen (${massns.length})`}</StyledMenuItem>
+        )}
+      </Menu>
+      <EksMenu eks={eks} eksAnchor={eksAnchor} closeEksMenu={closeEksMenu} />
+    </>
   )
 }
 
