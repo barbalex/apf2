@@ -1,6 +1,9 @@
 import React, { useCallback, useContext, useState } from 'react'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
+import { MdEdit as EditIcon, MdViewList as ListIcon } from 'react-icons/md'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
@@ -13,6 +16,8 @@ import mutationCreateEkplan from './mutationCreateEkplan'
 import mutationDeleteEkplan from './mutationDeleteEkplan'
 
 import EksMenu from './EksMenu'
+import EkfsMenu from './EkfsMenu'
+import MassnsMenu from './MassnsMenu'
 
 const YearCellMenuTitle = styled.h5`
   padding-top: 8px;
@@ -23,7 +28,10 @@ const YearCellMenuTitle = styled.h5`
   color: grey;
 `
 export const StyledMenuItem = styled(MenuItem)`
-  min-height: 36px !important;
+  min-height: 25px !important;
+`
+const StyledListItemIcon = styled(ListItemIcon)`
+  min-width: 36px !important;
 `
 
 const anchorOrigin = { horizontal: 'right', vertical: 'top' }
@@ -160,35 +168,76 @@ const CellForYearMenu = ({
         <YearCellMenuTitle>{`${yearClickedState.tpop}, ${yearClickedState.year}`}</YearCellMenuTitle>
         {yearClickedState.ekPlan ? (
           <StyledMenuItem onClick={onClickEkEntfernen}>
-            EK-Planung entfernen
+            <StyledListItemIcon>
+              <EditIcon />
+            </StyledListItemIcon>
+            <ListItemText primary="EK-Planung entfernen" />
           </StyledMenuItem>
         ) : (
-          <StyledMenuItem onClick={onClickEkPlanen}>EK planen</StyledMenuItem>
+          <StyledMenuItem onClick={onClickEkPlanen}>
+            <StyledListItemIcon>
+              <EditIcon />
+            </StyledListItemIcon>
+            <ListItemText primary="EK planen" />
+          </StyledMenuItem>
         )}
         {yearClickedState.ekfPlan ? (
           <StyledMenuItem onClick={onClickEkfEntfernen}>
-            EKF-Planung entfernen
+            <StyledListItemIcon>
+              <EditIcon />
+            </StyledListItemIcon>
+            <ListItemText primary="EKF-Planung entfernen" />
           </StyledMenuItem>
         ) : (
-          <StyledMenuItem onClick={onClickEkfPlanen}>EKF planen</StyledMenuItem>
+          <StyledMenuItem onClick={onClickEkfPlanen}>
+            <StyledListItemIcon>
+              <EditIcon />
+            </StyledListItemIcon>
+            <ListItemText primary="EKF planen" />
+          </StyledMenuItem>
         )}
         {!!eks.length && (
-          <StyledMenuItem
-            onClick={e => setEksAnchor(e.currentTarget)}
-          >{`EK (${eks.length})`}</StyledMenuItem>
+          <StyledMenuItem onClick={e => setEksAnchor(e.currentTarget)}>
+            <StyledListItemIcon>
+              <ListIcon />
+            </StyledListItemIcon>
+            <ListItemText primary={`EK (${eks.length})`} />
+          </StyledMenuItem>
         )}
         {!!ekfs.length && (
-          <StyledMenuItem
-            onClick={e => setEkfsAnchor(e.currentTarget)}
-          >{`EKF (${ekfs.length})`}</StyledMenuItem>
+          <StyledMenuItem onClick={e => setEkfsAnchor(e.currentTarget)}>
+            <StyledListItemIcon>
+              <ListIcon />
+            </StyledListItemIcon>
+            <ListItemText primary={`EKF (${ekfs.length})`} />
+          </StyledMenuItem>
         )}
         {!!massns.length && (
-          <StyledMenuItem
-            onClick={e => setMassnsAnchor(e.currentTarget)}
-          >{`Ansiedlungen (${massns.length})`}</StyledMenuItem>
+          <StyledMenuItem onClick={e => setMassnsAnchor(e.currentTarget)}>
+            <StyledListItemIcon>
+              <ListIcon />
+            </StyledListItemIcon>
+            <ListItemText primary={`Ansiedlungen (${massns.length})`} />
+          </StyledMenuItem>
         )}
       </Menu>
-      <EksMenu eks={eks} eksAnchor={eksAnchor} closeEksMenu={closeEksMenu} />
+      {!!eksAnchor && (
+        <EksMenu eks={eks} eksAnchor={eksAnchor} closeEksMenu={closeEksMenu} />
+      )}
+      {!!ekfsAnchor && (
+        <EkfsMenu
+          ekfs={ekfs}
+          ekfsAnchor={ekfsAnchor}
+          closeEkfsMenu={closeEkfsMenu}
+        />
+      )}
+      {!!massnsAnchor && (
+        <MassnsMenu
+          massns={massns}
+          massnsAnchor={massnsAnchor}
+          closeMassnsMenu={closeMassnsMenu}
+        />
+      )}
     </>
   )
 }

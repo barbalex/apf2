@@ -9,27 +9,27 @@ export const StyledMenuItem = styled(MenuItem)`
 
 const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 
-const EksMenu = ({ eks, eksAnchor, closeEksMenu }) => {
-  const [ekAnchor, setEkAnchor] = useState(null)
+const EkfsMenu = ({ ekfs, ekfsAnchor, closeEkfsMenu }) => {
+  const [ekfAnchor, setEkfAnchor] = useState(null)
 
   return (
     <Menu
-      id="eksMenu"
-      anchorEl={eksAnchor}
+      id="ekfsMenu"
+      anchorEl={ekfsAnchor}
       keepMounted
-      open={Boolean(eksAnchor)}
-      onClose={closeEksMenu}
+      open={Boolean(ekfsAnchor)}
+      onClose={closeEkfsMenu}
       anchorOrigin={anchorOrigin}
       getContentAnchorEl={null}
     >
-      {eks.map(ek => (
+      {ekfs.map(ek => (
         <StyledMenuItem
           key={ek.id}
-          onClick={e => setEkAnchor(e.currentTarget)}
+          onClick={e => setEkfAnchor(e.currentTarget)}
         >{`${ek.datum || '(kein Datum)'}: ${ek.typ}`}</StyledMenuItem>
       ))}
     </Menu>
   )
 }
 
-export default EksMenu
+export default EkfsMenu
