@@ -41,6 +41,12 @@ export default ({ idb, store }) => {
           message.includes('permission denied') ||
           message.includes('keine Berechtigung')
         ) {
+          enqueNotification({
+            message: `Sie wurden abgemeldet, weil die Datenbank eine Berechtigung verweigert hat`,
+            options: {
+              variant: 'warning',
+            },
+          })
           logout(idb)
         }
         return enqueNotification({
