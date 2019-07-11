@@ -519,6 +519,18 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
         ? flurname.right + fields.status.width
         : flurname.right,
     }
+    const bekanntSeit = {
+      left: status.right,
+      right: fieldsShown.includes('bekanntSeit')
+        ? status.right + fields.bekanntSeit.width
+        : status.right,
+    }
+    const link = {
+      left: bekanntSeit.right,
+      right: fieldsShown.includes('link')
+        ? bekanntSeit.right + fields.link.width
+        : bekanntSeit.right,
+    }
 
     return {
       ap: ap.left,
@@ -528,14 +540,8 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
       gemeinde: gemeinde.left,
       flurname: flurname.left,
       status: status.left,
-      bekanntSeit:
-        bekanntSeitRef.current && fieldsShown.includes('bekanntSeit')
-          ? bekanntSeitRef.current.getBoundingClientRect().left
-          : 0,
-      link:
-        linkRef.current && fieldsShown.includes('link')
-          ? linkRef.current.getBoundingClientRect().left
-          : 0,
+      bekanntSeit: bekanntSeit.left,
+      link: link.left,
       ekAbrechnungstyp:
         ekAbrechnungstypRef.current && fieldsShown.includes('ekAbrechnungstyp')
           ? ekAbrechnungstypRef.current.getBoundingClientRect().left
