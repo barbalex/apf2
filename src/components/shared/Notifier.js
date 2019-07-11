@@ -23,7 +23,7 @@ const Notifier = () => {
     })
   }, [notifications])
 
-  console.log('Notifier rendering')
+  //console.log('Notifier rendering')
 
   return null
 }
