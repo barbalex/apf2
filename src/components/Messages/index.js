@@ -54,7 +54,7 @@ const OkButton = styled(Button)`
 const UserMessages = ({ open }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { user, updateAvailable } = store
+  const { user } = store
   const userName = user.name
   const { data, error, loading, refetch } = useQuery(query, {
     variables: { name: userName },
@@ -96,8 +96,6 @@ const UserMessages = ({ open }) => {
         open={
           unreadMessages.length > 0 &&
           !!userName &&
-          // do not open if update is available
-          updateAvailable === false &&
           // don't show while loading data
           !loading
         }

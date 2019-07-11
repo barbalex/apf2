@@ -1,12 +1,4 @@
-// @flow
-/**
- * app.js
- *
- * This is the entry file for the application.
- * Contains only setup, theming and boilerplate code
- *
- */
-
+// This is the entry file for the application
 import 'babel-polyfill'
 
 import React from 'react'
@@ -21,7 +13,6 @@ import { MuiPickersUtilsProvider } from 'material-ui-pickers'
 import { ApolloProvider } from 'react-apollo'
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
 import localForage from 'localforage'
-import isEqual from 'lodash/isEqual'
 import MobxStore from './store'
 import { SnackbarProvider } from 'notistack'
 //import { onPatch } from 'mobx-state-tree'
@@ -29,7 +20,6 @@ import { SnackbarProvider } from 'notistack'
 import 'typeface-roboto'
 import 'typeface-roboto-mono'
 
-// import components
 import initializeIdb from './modules/initializeIdb'
 import buildClient from './client'
 
@@ -40,6 +30,9 @@ import { Provider as IdbProvider } from './idbContext'
 
 import Notifier from './components/shared/Notifier'
 import NotificationDismisser from './components/shared/NotificationDismisser'
+
+import setUserFromIdb from './modules/setUserFromIdb'
+import initiateDataFromUrl from './modules/initiateDataFromUrl'
 import getActiveNodeArrayFromPathname from './modules/getActiveNodeArrayFromPathname'
 
 import 'react-leaflet-markercluster/dist/styles.min.css'
@@ -53,36 +46,36 @@ const App = ({ element }) => {
   const idbContext = { idb }
 
   if (typeof window !== 'undefined') {
+    const visitedTopDomain = window.location.pathname === '/'
+    const blacklist = [
+      'user',
+      'urlQuery',
+      'refetch',
+      'notifications',
+      'rehydrating',
+    ]
+    store.setRehydrating(true)
     import('mst-persist').then(module =>
       module
         .default('store', store, {
           storage: localForage,
           jsonify: false,
-          blacklist: [
-            'user',
-            'updateAvailable',
-            'urlQuery',
-            'refetch',
-            'notifications',
-          ],
+          blacklist,
         })
-        .then(() => {
-          console.log('store has been hydrated')
-          // navigate to last activeNodeArray
-          // but only if url is inside daten
+        .then(async () => {
+          const username = await setUserFromIdb({ idb, store })
+          store.setRehydrating(false)
+          const isUser = !!username
+          // set last activeNodeArray
+          // only if top domain was visited
+          if (isUser && visitedTopDomain) {
+            return store.tree.setActiveNodeArray(store.tree.activeNodeArray)
+          }
           const activeNodeArray = getActiveNodeArrayFromPathname()
-          const storeActiveNodeArray = store.tree.activeNodeArray.slice()
-          /*console.log('App, rehydrating', {
-            activeNodeArray,
-            storeActiveNodeArray,
-            isEqual: isEqual(activeNodeArray, storeActiveNodeArray),
-          })*/
-          if (
-            (activeNodeArray[0] === 'Daten' || activeNodeArray.length === 0) &&
-            !isEqual(activeNodeArray, storeActiveNodeArray)
-          ) {
-            //console.log('App, rehydrating, will set active nodearray')
-            store.tree.setActiveNodeArray(store.tree.activeNodeArray)
+          if (activeNodeArray[0] === 'Projekte') {
+            initiateDataFromUrl({
+              store,
+            })
           }
         }),
     )
@@ -98,6 +91,8 @@ const App = ({ element }) => {
   }
 
   if (typeof window !== 'undefined') window.store = store
+
+  console.log('App rendering')
 
   return (
     <IdbProvider value={idbContext}>

@@ -1,21 +1,16 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import ErrorBoundary from 'react-error-boundary'
 
 import Layout from '../components/Layout'
 import storeContext from '../storeContext'
-import idbContext from '../idbContext'
-import getActiveNodeArrayFromPathname from '../modules/getActiveNodeArrayFromPathname'
-import setUserFromIdb from '../modules/setUserFromIdb'
 import Projekte from '../components/Projekte'
 import User from '../components/User'
-import UpdateAvailable from '../components/UpdateAvailable'
 import Messages from '../components/Messages'
 import Ekf from '../components/Ekf'
 import Deletions from '../components/Deletions'
 import EkPlan from '../components/EkPlan'
-import initiateDataFromUrl from '../modules/initiateDataFromUrl'
 
 const Container = styled.div`
   background-color: #fffde7;
@@ -29,35 +24,39 @@ const Container = styled.div`
 
 const DatenPage = ({ location }) => {
   const store = useContext(storeContext)
-  const { idb } = useContext(idbContext)
   const { view, showDeletions, user } = store
-  const { pathname } = location
-  const { setActiveNodeArray, activeForm } = store.tree
-  useEffect(() => {
-    // TODO:
-    // is initiateDataFromUrl and setActiveNodeArray double?
-    initiateDataFromUrl({
-      store,
-    })
-    setUserFromIdb({ idb, store })
-  }, [])
-  const activeNodeArray = getActiveNodeArrayFromPathname(pathname)
+  const { activeForm } = store.tree
   // when pathname changes, update activeNodeArray
-  useEffect(() => {
-    setActiveNodeArray(activeNodeArray)
-  }, [pathname])
+  /*useEffect(() => {
+    const activeNodeArrayFromPathname = getActiveNodeArrayFromPathname(
+      location.pathname,
+    )
+    if (
+      !rehydrating &&
+      !isEqual(activeNodeArrayFromPathname, activeNodeArray)
+    ) {
+      console.log('page Daten setting activeNodeArray from pathname')
+      setActiveNodeArray(activeNodeArrayFromPathname)
+    }
+  }, [location.pathname, rehydrating, activeNodeArray])*/
 
-  // TODO:
-  // depend on activeNodeArray
-  // same as when click in tree on AP-Berichte
-  const form =
-    activeForm.form === 'ekplan'
-      ? 'ekplan'
-      : view === 'ekf'
-      ? 'ekf'
-      : 'projekte'
+  const form = useMemo(
+    () =>
+      activeForm.form === 'ekplan'
+        ? 'ekplan'
+        : view === 'ekf'
+        ? 'ekf'
+        : 'projekte',
+    [activeForm.form, view],
+  )
 
-  // Error boundary made appbar appear twice!!!???
+  console.log('page Daten rendering', {
+    pathname: location.pathname,
+    activeFormForm: activeForm.form,
+    view,
+    showDeletions,
+    userToken: user.token,
+  })
   return (
     <ErrorBoundary>
       <Layout>
@@ -67,7 +66,6 @@ const DatenPage = ({ location }) => {
               {form === 'ekf' && <Ekf />}
               {form === 'projekte' && <Projekte />}
               {form === 'ekplan' && <EkPlan />}
-              <UpdateAvailable />
               <Messages />
               {showDeletions && <Deletions />}
             </>

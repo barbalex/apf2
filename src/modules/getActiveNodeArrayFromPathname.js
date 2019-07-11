@@ -1,10 +1,6 @@
 export default pathnamePassed => {
   if (typeof window !== 'undefined') {
     const pathname = pathnamePassed || window.location.pathname
-    /*console.log('getActiveNodeArrayFromPathname', {
-      pathnamePassed,
-      windowPathname: window.location.pathname,
-    })*/
     return (
       pathname
         .split('/')
