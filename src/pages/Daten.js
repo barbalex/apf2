@@ -38,13 +38,7 @@ const DatenPage = ({ location }) => {
   )
 
   console.log('page Daten rendering')
-  /*console.log('page Daten rendering', {
-    pathname: location.pathname,
-    activeFormForm: activeForm.form,
-    view,
-    showDeletions,
-    userToken: user.token,
-  })*/
+
   return (
     <ErrorBoundary>
       <Layout>
