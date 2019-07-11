@@ -1,7 +1,6 @@
 import React, {
   useState,
   useCallback,
-  useRef,
   useReducer,
   useContext,
   useMemo,
@@ -144,21 +143,6 @@ const TpopTitle = styled.h4`
   z-index: 3;
 `
 
-const yearsFromTpops = tpops => {
-  const ekplans = tpops.flatMap(tpop => get(tpop, 'ekplansByTpopId.nodes'))
-  const kontrs = tpops.flatMap(tpop => get(tpop, 'tpopkontrsByTpopId.nodes'))
-  const firstEk = minBy([...ekplans, ...kontrs], 'jahr')
-  const currentYear = new Date().getFullYear()
-  const firstEkYear = firstEk ? firstEk.jahr : null
-  // ensure never before 1993
-  let firstYear = firstEkYear || currentYear
-  const lastYear = currentYear + 15
-  const years = []
-  while (firstYear <= lastYear) {
-    years.push(firstYear++)
-  }
-  return years
-}
 const fields = {
   ap: {
     name: 'ap',
@@ -239,6 +223,21 @@ const fields = {
     width: 50,
     alwaysShow: true,
   },
+}
+const yearsFromTpops = tpops => {
+  const ekplans = tpops.flatMap(tpop => get(tpop, 'ekplansByTpopId.nodes'))
+  const kontrs = tpops.flatMap(tpop => get(tpop, 'tpopkontrsByTpopId.nodes'))
+  const firstEk = minBy([...ekplans, ...kontrs], 'jahr')
+  const currentYear = new Date().getFullYear()
+  const firstEkYear = firstEk ? firstEk.jahr : null
+  // ensure never before 1993
+  let firstYear = firstEkYear || currentYear
+  const lastYear = currentYear + 15
+  const years = []
+  while (firstYear <= lastYear) {
+    years.push(firstYear++)
+  }
+  return years
 }
 const fieldsFromTpop = tpop => ({
   id: tpop.id,
@@ -354,35 +353,6 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
   const store = useContext(storeContext)
   const { aps, apValues, showCount, fields: fieldsShown } = store.ekPlan
 
-  const apRef = useRef(null)
-  const popNrRef = useRef(null)
-  const popNameRef = useRef(null)
-  const nrRef = useRef(null)
-  const gemeindeRef = useRef(null)
-  const flurnameRef = useRef(null)
-  const statusRef = useRef(null)
-  const bekanntSeitRef = useRef(null)
-  const linkRef = useRef(null)
-  const ekAbrechnungstypRef = useRef(null)
-  const ekfrequenzRef = useRef(null)
-  const ekfrequenzAbweichendRef = useRef(null)
-  const yearTitleRef = useRef(null)
-  const refs = {
-    ap: apRef,
-    popNr: popNrRef,
-    popName: popNameRef,
-    nr: nrRef,
-    gemeinde: gemeindeRef,
-    flurname: flurnameRef,
-    status: statusRef,
-    bekanntSeit: bekanntSeitRef,
-    link: linkRef,
-    ekAbrechnungstyp: ekAbrechnungstypRef,
-    ekfrequenz: ekfrequenzRef,
-    ekfrequenzAbweichend: ekfrequenzAbweichendRef,
-    yearTitle: yearTitleRef,
-  }
-
   const [yearMenuAnchor, setYearMenuAnchor] = useState(null)
   const [yearClickedState, yearClickedDispatch] = useReducer(
     yearClickedReducer,
@@ -412,7 +382,7 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
     get(dataTpop, 'allTpops.nodes', []),
     t => t.popByPopId.apByApId.label,
   )
-  const years = yearsFromTpops(tpops)
+  const years = useMemo(() => yearsFromTpops(tpops), [tpops])
   const rows = useMemo(
     () =>
       tpops.map(tpop =>
@@ -435,7 +405,7 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
             'sort',
           )
         : [],
-    [rows[0], JSON.stringify(fieldsShown)],
+    [rows[0], fieldsShown],
   )
 
   const { data: dataLists } = useQuery(queryLists, {
@@ -444,24 +414,27 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
     },
   })
 
-  const ekfrequenzOptions = get(dataLists, 'allEkfrequenzs.nodes', []).map(
-    o => {
-      const ekTypeArray = [o.ek ? 'ek' : null, o.ekf ? 'ekf' : null].filter(
-        field => !!field,
-      )
-      const code = (o.code || '').padEnd(2)
-      const anwendungsfall = (
-        `${o.anwendungsfall}, ${ekTypeArray.join(' und ')}` || ''
-      ).padEnd(26)
-      const name = (o.name || '').padEnd(27)
-      return {
-        value: o.code,
-        label: `${code}: ${name} | ${o.periodizitaet}`,
-        anwendungsfall,
-        apId: o.apId,
-      }
-    },
+  const ekfrequenzOptions = useMemo(
+    () =>
+      get(dataLists, 'allEkfrequenzs.nodes', []).map(o => {
+        const ekTypeArray = [o.ek ? 'ek' : null, o.ekf ? 'ekf' : null].filter(
+          field => !!field,
+        )
+        const code = (o.code || '').padEnd(2)
+        const anwendungsfall = (
+          `${o.anwendungsfall}, ${ekTypeArray.join(' und ')}` || ''
+        ).padEnd(26)
+        const name = (o.name || '').padEnd(27)
+        return {
+          value: o.code,
+          label: `${code}: ${name} | ${o.periodizitaet}`,
+          anwendungsfall,
+          apId: o.apId,
+        }
+      }),
+    [dataLists],
   )
+
   const ekfOptionsGroupedPerAp = groupBy(ekfrequenzOptions, 'apId')
   Object.keys(ekfOptionsGroupedPerAp).forEach(
     k =>
@@ -475,8 +448,6 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
     'allEkAbrechnungstypWertes.nodes',
     [],
   )
-
-  //console.log('Table:', { fields, fieldsShown: fieldsShown.slice() })
 
   const scrollPositions = useMemo(() => {
     const ap = {
@@ -531,6 +502,30 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
         ? bekanntSeit.right + fields.link.width
         : bekanntSeit.right,
     }
+    const ekAbrechnungstyp = {
+      left: link.right,
+      right: fieldsShown.includes('ekAbrechnungstyp')
+        ? link.right + fields.ekAbrechnungstyp.width
+        : link.right,
+    }
+    const ekfrequenz = {
+      left: ekAbrechnungstyp.right,
+      right: fieldsShown.includes('ekfrequenz')
+        ? ekAbrechnungstyp.right + fields.ekfrequenz.width
+        : ekAbrechnungstyp.right,
+    }
+    const ekfrequenzAbweichend = {
+      left: ekfrequenz.right,
+      right: fieldsShown.includes('ekfrequenzAbweichend')
+        ? ekfrequenz.right + fields.ekfrequenzAbweichend.width
+        : ekfrequenz.right,
+    }
+    const yearTitle = {
+      left: ekfrequenzAbweichend.right,
+      right: fieldsShown.includes('yearTitle')
+        ? ekfrequenzAbweichend.right + fields.yearTitle.width
+        : ekfrequenzAbweichend.right,
+    }
 
     return {
       ap: ap.left,
@@ -542,41 +537,12 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
       status: status.left,
       bekanntSeit: bekanntSeit.left,
       link: link.left,
-      ekAbrechnungstyp:
-        ekAbrechnungstypRef.current && fieldsShown.includes('ekAbrechnungstyp')
-          ? ekAbrechnungstypRef.current.getBoundingClientRect().left
-          : 0,
-      ekfrequenz:
-        ekfrequenzRef.current && fieldsShown.includes('ekfrequenz')
-          ? ekfrequenzRef.current.getBoundingClientRect().left
-          : 0,
-      ekfrequenzAbweichend:
-        ekfrequenzAbweichendRef.current &&
-        fieldsShown.includes('ekfrequenzAbweichend')
-          ? ekfrequenzAbweichendRef.current.getBoundingClientRect().left
-          : 0,
-      yearTitle: yearTitleRef.current
-        ? yearTitleRef.current.getBoundingClientRect().left
-        : 0,
+      ekAbrechnungstyp: ekAbrechnungstyp.left,
+      ekfrequenz: ekfrequenz.left,
+      ekfrequenzAbweichend: ekfrequenzAbweichend.left,
+      yearTitle: yearTitle.left,
     }
-  }, [
-    JSON.stringify(fieldsShown),
-    apRef.current,
-    popNrRef.current,
-    popNameRef.current,
-    nrRef.current,
-    gemeindeRef.current,
-    flurnameRef.current,
-    statusRef.current,
-    bekanntSeitRef.current,
-    linkRef.current,
-    ekAbrechnungstypRef.current,
-    ekfrequenzRef.current,
-    ekfrequenzAbweichendRef.current,
-    yearTitleRef.current,
-  ])
-
-  console.log('Table rendering, scrollPositions:', scrollPositions)
+  }, [fieldsShown])
 
   if (aps.length > 0 && loadingTpop) return <Container>Lade...</Container>
   if (errorTpop) return <Container>{errorTpop.message}</Container>
@@ -593,7 +559,6 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
                     {headerFields.map(f => (
                       <StyledTableHeaderCell
                         key={f.name}
-                        ref={refs[f.name] ? refs[f.name] : null}
                         width={f.width}
                         onMouseEnter={() =>
                           f.label > 1000 &&
