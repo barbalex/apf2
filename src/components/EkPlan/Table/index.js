@@ -178,37 +178,37 @@ const fields = {
     sort: 3,
     width: 200,
   },
-  tpopNr: {
+  nr: {
     name: 'nr',
     label: 'Nr',
     sort: 4,
     width: 50,
   },
-  tpopGemeinde: {
+  gemeinde: {
     name: 'gemeinde',
     label: 'Gemeinde',
     sort: 5,
     width: 130,
   },
-  tpopFlurname: {
+  flurname: {
     name: 'flurname',
     label: 'Flurname',
     sort: 6,
     width: 200,
   },
-  tpopStatus: {
+  status: {
     name: 'status',
     label: 'Status',
     sort: 7,
     width: 150,
   },
-  tpopBekanntSeit: {
+  bekanntSeit: {
     name: 'bekanntSeit',
     label: 'bekannt seit',
     sort: 8,
     width: 60,
   },
-  tpopLink: {
+  link: {
     name: 'link',
     label: 'Link',
     sort: 9,
@@ -256,28 +256,28 @@ const fieldsFromTpop = tpop => ({
     ...fields.popName,
     value: get(tpop, 'popByPopId.name') || '-',
   },
-  tpopNr: {
-    ...fields.tpopNr,
+  nr: {
+    ...fields.nr,
     value: get(tpop, 'nr') || '-',
   },
-  tpopGemeinde: {
-    ...fields.tpopGemeinde,
+  gemeinde: {
+    ...fields.gemeinde,
     value: get(tpop, 'gemeinde') || '-',
   },
-  tpopFlurname: {
-    ...fields.tpopFlurname,
+  flurname: {
+    ...fields.flurname,
     value: get(tpop, 'flurname') || '-',
   },
-  tpopStatus: {
-    ...fields.tpopStatus,
+  status: {
+    ...fields.status,
     value: get(tpop, 'popStatusWerteByStatus.text') || '-',
   },
-  tpopBekanntSeit: {
-    ...fields.tpopBekanntSeit,
+  bekanntSeit: {
+    ...fields.bekanntSeit,
     value: get(tpop, 'bekanntSeit') || '-',
   },
-  tpopLink: {
-    ...fields.tpopLink,
+  link: {
+    ...fields.link,
     value: `${appBaseUrl()}Daten/Projekte/${
       tpop.popByPopId.apByApId.projId
     }/Aktionspläne/${tpop.popByPopId.apByApId.id}/Populationen/${
@@ -478,34 +478,56 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
 
   //console.log('Table:', { fields, fieldsShown: fieldsShown.slice() })
 
-  const scrollPositions = useMemo(
-    () => ({
-      ap: 0,
-      popNr: fieldsShown.includes('popNr')
-        ? fieldsShown.includes('ap')
-          ? fields.ap.width
-          : 0
-        : 0,
-      popName:
-        popNameRef.current && fieldsShown.includes('popName')
-          ? popNameRef.current.getBoundingClientRect().left
-          : 0,
-      nr:
-        nrRef.current && fieldsShown.includes('nr')
-          ? nrRef.current.getBoundingClientRect().left
-          : 0,
-      gemeinde:
-        gemeindeRef.current && fieldsShown.includes('gemeinde')
-          ? gemeindeRef.current.getBoundingClientRect().left
-          : 0,
-      flurname:
-        flurnameRef.current && fieldsShown.includes('flurname')
-          ? flurnameRef.current.getBoundingClientRect().left
-          : 0,
-      status:
-        statusRef.current && fieldsShown.includes('status')
-          ? statusRef.current.getBoundingClientRect().left
-          : 0,
+  const scrollPositions = useMemo(() => {
+    const ap = {
+      left: 0,
+      right: fieldsShown.includes('ap') ? fields.ap.width : 0,
+    }
+    const popNr = {
+      left: ap.right,
+      right: fieldsShown.includes('popNr')
+        ? ap.right + fields.popNr.width
+        : ap.right,
+    }
+    const popName = {
+      left: popNr.right,
+      right: fieldsShown.includes('popName')
+        ? popNr.right + fields.popName.width
+        : popNr.right,
+    }
+    const nr = {
+      left: popName.right,
+      right: fieldsShown.includes('nr')
+        ? popName.right + fields.nr.width
+        : popName.right,
+    }
+    const gemeinde = {
+      left: nr.right,
+      right: fieldsShown.includes('gemeinde')
+        ? nr.right + fields.gemeinde.width
+        : nr.right,
+    }
+    const flurname = {
+      left: gemeinde.right,
+      right: fieldsShown.includes('flurname')
+        ? gemeinde.right + fields.flurname.width
+        : gemeinde.right,
+    }
+    const status = {
+      left: flurname.right,
+      right: fieldsShown.includes('status')
+        ? flurname.right + fields.status.width
+        : flurname.right,
+    }
+
+    return {
+      ap: ap.left,
+      popNr: popNr.left,
+      popName: popName.left,
+      nr: nr.left,
+      gemeinde: gemeinde.left,
+      flurname: flurname.left,
+      status: status.left,
       bekanntSeit:
         bekanntSeitRef.current && fieldsShown.includes('bekanntSeit')
           ? bekanntSeitRef.current.getBoundingClientRect().left
@@ -530,24 +552,23 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
       yearTitle: yearTitleRef.current
         ? yearTitleRef.current.getBoundingClientRect().left
         : 0,
-    }),
-    [
-      JSON.stringify(fieldsShown),
-      apRef.current,
-      popNrRef.current,
-      popNameRef.current,
-      nrRef.current,
-      gemeindeRef.current,
-      flurnameRef.current,
-      statusRef.current,
-      bekanntSeitRef.current,
-      linkRef.current,
-      ekAbrechnungstypRef.current,
-      ekfrequenzRef.current,
-      ekfrequenzAbweichendRef.current,
-      yearTitleRef.current,
-    ],
-  )
+    }
+  }, [
+    JSON.stringify(fieldsShown),
+    apRef.current,
+    popNrRef.current,
+    popNameRef.current,
+    nrRef.current,
+    gemeindeRef.current,
+    flurnameRef.current,
+    statusRef.current,
+    bekanntSeitRef.current,
+    linkRef.current,
+    ekAbrechnungstypRef.current,
+    ekfrequenzRef.current,
+    ekfrequenzAbweichendRef.current,
+    yearTitleRef.current,
+  ])
 
   console.log('Table rendering, scrollPositions:', scrollPositions)
 
