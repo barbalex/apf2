@@ -40,7 +40,6 @@ const EkPlanTableRow = ({
   einheitsByAp,
   ekfOptionsGroupedPerAp,
   ekAbrechnungstypOptions,
-  refetch,
 }) => {
   const store = useContext(storeContext)
   const { fields } = store.ekPlan

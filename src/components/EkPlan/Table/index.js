@@ -542,6 +542,8 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
     }
   }, [fieldsShown])
 
+  console.log('Table rendering')
+
   if (aps.length > 0 && loadingTpop) return <Container>Lade...</Container>
   if (errorTpop) return <Container>{errorTpop.message}</Container>
   return (
@@ -589,8 +591,6 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
                       einheitsByAp={einheitsByAp}
                       ekfOptionsGroupedPerAp={ekfOptionsGroupedPerAp}
                       ekAbrechnungstypOptions={ekAbrechnungstypOptions}
-                      refetch={refetch}
-                      //fieldsShown={fieldsShown}
                     />
                   ))}
                 </StyledTableBody>
