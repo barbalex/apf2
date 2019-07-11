@@ -435,14 +435,12 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
     [dataLists],
   )
 
-  const ekfOptionsGroupedPerAp = groupBy(ekfrequenzOptions, 'apId')
-  Object.keys(ekfOptionsGroupedPerAp).forEach(
-    k =>
-      (ekfOptionsGroupedPerAp[k] = groupBy(
-        ekfOptionsGroupedPerAp[k],
-        'anwendungsfall',
-      )),
-  )
+  const ekfOptionsGroupedPerAp = useMemo(() => {
+    const os = groupBy(ekfrequenzOptions, 'apId')
+    Object.keys(os).forEach(k => (os[k] = groupBy(os[k], 'anwendungsfall')))
+    return os
+  }, [ekfrequenzOptions])
+
   const ekAbrechnungstypOptions = get(
     dataLists,
     'allEkAbrechnungstypWertes.nodes',
