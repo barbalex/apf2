@@ -511,7 +511,7 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
     ],
   )
 
-  console.log('Table rendering, scrollPositions:', scrollPositions)
+  //console.log('Table rendering, scrollPositions:', scrollPositions)
 
   if (aps.length > 0 && loadingTpop) return <Container>Lade...</Container>
   if (errorTpop) return <Container>{errorTpop.message}</Container>
