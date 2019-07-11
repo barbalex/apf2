@@ -47,7 +47,7 @@
     "exceljs": "1.13.0",
     "file-saver": "2.0.2",
     "formik": "1.5.7",
-    "gatsby": "2.10.0",
+    "gatsby": "2.10.5",
     "gatsby-image": "2.2.5",
     "gatsby-mdx": "0.6.3",
     "gatsby-plugin-create-client-paths": "2.1.2",
