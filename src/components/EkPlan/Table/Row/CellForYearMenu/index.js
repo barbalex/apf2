@@ -177,37 +177,45 @@ const CellForYearMenu = ({
         getContentAnchorEl={null}
       >
         <YearCellMenuTitle>{`${yearClickedState.tpop}, ${yearClickedState.year}`}</YearCellMenuTitle>
-        {yearClickedState.ekPlan ? (
-          <StyledMenuItem onClick={onClickEkEntfernen}>
-            <StyledListItemIcon>
-              <EditIcon />
-            </StyledListItemIcon>
-            <StyledListItemText primary="EK-Planung entfernen" />
-          </StyledMenuItem>
-        ) : (
-          <StyledMenuItem onClick={onClickEkPlanen}>
-            <StyledListItemIcon>
-              <EditIcon />
-            </StyledListItemIcon>
-            <StyledListItemText primary="EK planen" />
-          </StyledMenuItem>
+        {showEk && (
+          <div>
+            {yearClickedState.ekPlan ? (
+              <StyledMenuItem onClick={onClickEkEntfernen}>
+                <StyledListItemIcon>
+                  <EditIcon />
+                </StyledListItemIcon>
+                <StyledListItemText primary="EK-Planung entfernen" />
+              </StyledMenuItem>
+            ) : (
+              <StyledMenuItem onClick={onClickEkPlanen}>
+                <StyledListItemIcon>
+                  <EditIcon />
+                </StyledListItemIcon>
+                <StyledListItemText primary="EK planen" />
+              </StyledMenuItem>
+            )}
+          </div>
         )}
-        {yearClickedState.ekfPlan ? (
-          <StyledMenuItem onClick={onClickEkfEntfernen}>
-            <StyledListItemIcon>
-              <EditIcon />
-            </StyledListItemIcon>
-            <StyledListItemText primary="EKF-Planung entfernen" />
-          </StyledMenuItem>
-        ) : (
-          <StyledMenuItem onClick={onClickEkfPlanen}>
-            <StyledListItemIcon>
-              <EditIcon />
-            </StyledListItemIcon>
-            <StyledListItemText primary="EKF planen" />
-          </StyledMenuItem>
+        {showEkf && (
+          <div>
+            {yearClickedState.ekfPlan ? (
+              <StyledMenuItem onClick={onClickEkfEntfernen}>
+                <StyledListItemIcon>
+                  <EditIcon />
+                </StyledListItemIcon>
+                <StyledListItemText primary="EKF-Planung entfernen" />
+              </StyledMenuItem>
+            ) : (
+              <StyledMenuItem onClick={onClickEkfPlanen}>
+                <StyledListItemIcon>
+                  <EditIcon />
+                </StyledListItemIcon>
+                <StyledListItemText primary="EKF planen" />
+              </StyledMenuItem>
+            )}
+          </div>
         )}
-        {!!eks.length && (
+        {showEk && !!eks.length && (
           <StyledMenuItem
             onClick={e => setEksAnchor(e.currentTarget)}
             active={Boolean(eksAnchor).toString()}
@@ -218,7 +226,7 @@ const CellForYearMenu = ({
             <StyledListItemText primary={`EK (${eks.length})`} />
           </StyledMenuItem>
         )}
-        {!!ekfs.length && (
+        {showEkf && !!ekfs.length && (
           <StyledMenuItem
             onClick={e => setEkfsAnchor(e.currentTarget)}
             active={Boolean(ekfsAnchor).toString()}
@@ -229,7 +237,7 @@ const CellForYearMenu = ({
             <StyledListItemText primary={`EKF (${ekfs.length})`} />
           </StyledMenuItem>
         )}
-        {!!massns.length && (
+        {showMassn && !!massns.length && (
           <StyledMenuItem
             onClick={e => setMassnsAnchor(e.currentTarget)}
             active={Boolean(massnsAnchor).toString()}
