@@ -47,14 +47,7 @@ const App = ({ element }) => {
 
   if (typeof window !== 'undefined') {
     const visitedTopDomain = window.location.pathname === '/'
-    const blacklist = [
-      'user',
-      'urlQuery',
-      'refetch',
-      'notifications',
-      'rehydrating',
-    ]
-    store.setRehydrating(true)
+    const blacklist = ['user', 'refetch', 'notifications']
     import('mst-persist').then(module =>
       module
         .default('store', store, {
@@ -64,7 +57,6 @@ const App = ({ element }) => {
         })
         .then(async () => {
           const username = await setUserFromIdb({ idb, store })
-          store.setRehydrating(false)
           const isUser = !!username
           // set last activeNodeArray
           // only if top domain was visited

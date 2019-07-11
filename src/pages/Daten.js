@@ -26,19 +26,6 @@ const DatenPage = ({ location }) => {
   const store = useContext(storeContext)
   const { view, showDeletions, user } = store
   const { activeForm } = store.tree
-  // when pathname changes, update activeNodeArray
-  /*useEffect(() => {
-    const activeNodeArrayFromPathname = getActiveNodeArrayFromPathname(
-      location.pathname,
-    )
-    if (
-      !rehydrating &&
-      !isEqual(activeNodeArrayFromPathname, activeNodeArray)
-    ) {
-      console.log('page Daten setting activeNodeArray from pathname')
-      setActiveNodeArray(activeNodeArrayFromPathname)
-    }
-  }, [location.pathname, rehydrating, activeNodeArray])*/
 
   const form = useMemo(
     () =>
@@ -50,13 +37,14 @@ const DatenPage = ({ location }) => {
     [activeForm.form, view],
   )
 
-  console.log('page Daten rendering', {
+  console.log('page Daten rendering')
+  /*console.log('page Daten rendering', {
     pathname: location.pathname,
     activeFormForm: activeForm.form,
     view,
     showDeletions,
     userToken: user.token,
-  })
+  })*/
   return (
     <ErrorBoundary>
       <Layout>
