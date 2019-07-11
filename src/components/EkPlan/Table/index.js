@@ -392,7 +392,7 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
           showCount,
         }),
       ),
-    [tpops, years, showCount, fieldsShown],
+    [tpops, years, showCount],
   )
   const headerFields = useMemo(
     () =>
@@ -540,7 +540,7 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
       ekfrequenzAbweichend: ekfrequenzAbweichend.left,
       yearTitle: yearTitle.left,
     }
-  }, [fieldsShown])
+  }, [JSON.stringify(fieldsShown), fields])
 
   //console.log('Table rendering')
 
