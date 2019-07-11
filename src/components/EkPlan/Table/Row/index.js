@@ -45,7 +45,7 @@ const EkPlanTableRow = ({
   const store = useContext(storeContext)
   const { fields } = store.ekPlan
 
-  //console.log('Row rendering')
+  console.log('Row rendering')
 
   return (
     <ErrorBoundary>
@@ -63,7 +63,7 @@ const EkPlanTableRow = ({
                 <CellForYearTitle
                   key={field.name}
                   field={field}
-                  scrollPositions={scrollPositions}
+                  scrollPosition={scrollPositions[field.name]}
                 />
               )
             }
@@ -75,7 +75,7 @@ const EkPlanTableRow = ({
                   field={field}
                   setColumnHovered={setColumnHovered}
                   resetYearHovered={resetYearHovered}
-                  scrollPositions={scrollPositions}
+                  scrollPosition={scrollPositions[field.name]}
                   ekAbrechnungstypOptions={ekAbrechnungstypOptions}
                 />
               )
@@ -88,7 +88,7 @@ const EkPlanTableRow = ({
                   field={field}
                   setColumnHovered={setColumnHovered}
                   resetYearHovered={resetYearHovered}
-                  scrollPositions={scrollPositions}
+                  scrollPosition={scrollPositions[field.name]}
                   ekfOptionsGroupedPerAp={ekfOptionsGroupedPerAp}
                 />
               )
@@ -101,7 +101,7 @@ const EkPlanTableRow = ({
                   field={field}
                   setColumnHovered={setColumnHovered}
                   resetYearHovered={resetYearHovered}
-                  scrollPositions={scrollPositions}
+                  scrollPosition={scrollPositions[field.name]}
                 />
               )
             }
@@ -112,7 +112,7 @@ const EkPlanTableRow = ({
                   field={field}
                   setColumnHovered={setColumnHovered}
                   resetYearHovered={resetYearHovered}
-                  scrollPositions={scrollPositions}
+                  scrollPosition={scrollPositions[field.name]}
                 />
               )
             }
@@ -125,7 +125,6 @@ const EkPlanTableRow = ({
                   field={field}
                   setColumnHovered={setColumnHovered}
                   resetYearHovered={resetYearHovered}
-                  scrollPositions={scrollPositions}
                   yearClickedState={yearClickedState}
                   yearClickedDispatch={yearClickedDispatch}
                   setYearMenuAnchor={setYearMenuAnchor}
@@ -139,7 +138,7 @@ const EkPlanTableRow = ({
                 field={field}
                 setColumnHovered={setColumnHovered}
                 resetYearHovered={resetYearHovered}
-                scrollPositions={scrollPositions}
+                scrollPosition={scrollPositions[field.name]}
               />
             )
           })}

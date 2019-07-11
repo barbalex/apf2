@@ -9,7 +9,7 @@ const CellForEkAbrechnungstyp = ({
   row,
   setColumnHovered,
   resetYearHovered,
-  scrollPositions,
+  scrollPosition,
   ekAbrechnungstypOptions,
 }) => {
   const onMouseEnter = useCallback(() => setColumnHovered(`_${field.label}_`), [
@@ -21,7 +21,7 @@ const CellForEkAbrechnungstyp = ({
       width={field.width}
       onMouseEnter={onMouseEnter}
       onMouseLeave={resetYearHovered}
-      data-left={scrollPositions[field.name]}
+      data-left={scrollPosition}
     >
       <Select
         options={ekAbrechnungstypOptions}

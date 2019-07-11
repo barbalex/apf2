@@ -7,9 +7,9 @@ const CellForValue = ({
   field,
   setColumnHovered,
   resetYearHovered,
-  scrollPositions,
+  scrollPosition,
 }) => {
-  const { label, value, width, name } = field
+  const { label, value, width } = field
   const onMouseEnter = useCallback(() => setColumnHovered(`_${label}_`), [
     label,
   ])
@@ -20,7 +20,7 @@ const CellForValue = ({
       width={width}
       onMouseEnter={onMouseEnter}
       onMouseLeave={resetYearHovered}
-      data-left={scrollPositions[name]}
+      data-left={scrollPosition}
     >
       <div>{value}</div>
     </EkTableCell>

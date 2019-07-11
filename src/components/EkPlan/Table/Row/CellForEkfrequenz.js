@@ -9,7 +9,7 @@ const CellForEkfrequenz = ({
   field,
   setColumnHovered,
   resetYearHovered,
-  scrollPositions,
+  scrollPosition,
   ekfOptionsGroupedPerAp,
 }) => {
   const onMouseEnter = useCallback(() => setColumnHovered(`_${field.label}_`), [
@@ -21,7 +21,7 @@ const CellForEkfrequenz = ({
       width={field.width}
       onMouseEnter={onMouseEnter}
       onMouseLeave={resetYearHovered}
-      data-left={scrollPositions[field.name]}
+      data-left={scrollPosition}
     >
       <SelectGrouped
         optionsGrouped={ekfOptionsGroupedPerAp[row.apId]}

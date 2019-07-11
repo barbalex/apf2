@@ -9,7 +9,7 @@ const CellForEkfrequenzAbweichend = ({
   row,
   setColumnHovered,
   resetYearHovered,
-  scrollPositions,
+  scrollPosition,
 }) => {
   const onMouseEnter = useCallback(() => setColumnHovered(`_${field.label}_`), [
     field,
@@ -20,7 +20,7 @@ const CellForEkfrequenzAbweichend = ({
       width={field.width}
       onMouseEnter={onMouseEnter}
       onMouseLeave={resetYearHovered}
-      data-left={scrollPositions[field.name]}
+      data-left={scrollPosition}
     >
       <Checkbox
         row={row.tpop}

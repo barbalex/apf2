@@ -19,7 +19,7 @@ const CellForTpopLink = ({
   field,
   setColumnHovered,
   resetYearHovered,
-  scrollPositions,
+  scrollPosition,
 }) => {
   const onMouseEnter = useCallback(() => setColumnHovered(`_${field.label}_`), [
     field,
@@ -33,7 +33,7 @@ const CellForTpopLink = ({
       width={field.width}
       onMouseEnter={onMouseEnter}
       onMouseLeave={resetYearHovered}
-      data-left={scrollPositions[field.name]}
+      data-left={scrollPosition}
     >
       <Link onClick={onClickLink} title="in neuem Fenster öffnen">
         <FaExternalLinkAlt />

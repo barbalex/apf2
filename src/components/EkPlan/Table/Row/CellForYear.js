@@ -12,7 +12,6 @@ const CellForYearTitle = ({
   row,
   setColumnHovered,
   resetYearHovered,
-  scrollPositions,
   yearClickedState,
   yearClickedDispatch,
   setYearMenuAnchor,

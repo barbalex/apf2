@@ -27,7 +27,7 @@ const Header = styled.div`
 
 const EkPlan = () => {
   const store = useContext(storeContext)
-  const { aps } = store.ekPlan
+  const { aps, fieldsShown } = store.ekPlan
 
   const headerRef = useRef(null)
   const headerBottom = headerRef.current
@@ -49,6 +49,8 @@ const EkPlan = () => {
     )
     return e
   }, [queryApsResult])
+
+  console.log('EkPlan rendering, fieldsShown:', fieldsShown)
 
   return (
     <ErrorBoundary>

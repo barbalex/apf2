@@ -159,111 +159,151 @@ const yearsFromTpops = tpops => {
   }
   return years
 }
+const fields = {
+  ap: {
+    name: 'ap',
+    label: 'AP',
+    sort: 1,
+    width: 200,
+  },
+  popNr: {
+    name: 'popNr',
+    label: 'Pop Nr',
+    sort: 2,
+    width: 40,
+  },
+  popName: {
+    name: 'popName',
+    label: 'Pop Name',
+    sort: 3,
+    width: 200,
+  },
+  tpopNr: {
+    name: 'nr',
+    label: 'Nr',
+    sort: 4,
+    width: 50,
+  },
+  tpopGemeinde: {
+    name: 'gemeinde',
+    label: 'Gemeinde',
+    sort: 5,
+    width: 130,
+  },
+  tpopFlurname: {
+    name: 'flurname',
+    label: 'Flurname',
+    sort: 6,
+    width: 200,
+  },
+  tpopStatus: {
+    name: 'status',
+    label: 'Status',
+    sort: 7,
+    width: 150,
+  },
+  tpopBekanntSeit: {
+    name: 'bekanntSeit',
+    label: 'bekannt seit',
+    sort: 8,
+    width: 60,
+  },
+  tpopLink: {
+    name: 'link',
+    label: 'Link',
+    sort: 9,
+    width: 37,
+  },
+  ekAbrechnungstyp: {
+    name: 'ekAbrechnungstyp',
+    label: 'EK Abrechnung Typ',
+    sort: 9,
+    width: 80,
+  },
+  ekfrequenz: {
+    name: 'ekfrequenz',
+    label: 'EK Frequenz',
+    sort: 10,
+    width: 70,
+  },
+  ekfrequenzAbweichend: {
+    name: 'ekfrequenzAbweichend',
+    label: 'EK Frequenz abweichend',
+    sort: 11,
+    width: 76,
+  },
+  yearTitle: {
+    name: 'yearTitle',
+    label: '',
+    sort: 12,
+    width: 50,
+    alwaysShow: true,
+  },
+}
+const fieldsFromTpop = tpop => ({
+  id: tpop.id,
+  tpop: tpop,
+  apId: get(tpop, 'popByPopId.apByApId.id'),
+  ap: {
+    ...fields.ap,
+    value: get(tpop, 'popByPopId.apByApId.label'),
+  },
+  popNr: {
+    ...fields.popNr,
+    value: get(tpop, 'popByPopId.nr') || '-',
+  },
+  popName: {
+    ...fields.popName,
+    value: get(tpop, 'popByPopId.name') || '-',
+  },
+  tpopNr: {
+    ...fields.tpopNr,
+    value: get(tpop, 'nr') || '-',
+  },
+  tpopGemeinde: {
+    ...fields.tpopGemeinde,
+    value: get(tpop, 'gemeinde') || '-',
+  },
+  tpopFlurname: {
+    ...fields.tpopFlurname,
+    value: get(tpop, 'flurname') || '-',
+  },
+  tpopStatus: {
+    ...fields.tpopStatus,
+    value: get(tpop, 'popStatusWerteByStatus.text') || '-',
+  },
+  tpopBekanntSeit: {
+    ...fields.tpopBekanntSeit,
+    value: get(tpop, 'bekanntSeit') || '-',
+  },
+  tpopLink: {
+    ...fields.tpopLink,
+    value: `${appBaseUrl()}Daten/Projekte/${
+      tpop.popByPopId.apByApId.projId
+    }/Aktionspläne/${tpop.popByPopId.apByApId.id}/Populationen/${
+      tpop.popByPopId.id
+    }/Teil-Populationen/${tpop.id}`,
+  },
+  ekAbrechnungstyp: {
+    ...fields.ekAbrechnungstyp,
+    value: get(tpop, 'ekAbrechnungstyp'),
+  },
+  ekfrequenz: {
+    ...fields.ekfrequenz,
+    value: get(tpop, 'ekfrequenz') || null,
+  },
+  ekfrequenzAbweichend: {
+    ...fields.ekfrequenzAbweichend,
+    value: get(tpop, 'ekfrequenzAbweichend') === true,
+  },
+  yearTitle: fields.yearTitle,
+})
 const rowsFromTpop = ({ tpop, years, showCount }) => {
   const ekplans = get(tpop, 'ekplansByTpopId.nodes')
   const kontrs = get(tpop, 'tpopkontrsByTpopId.nodes')
   const ansiedlungs = get(tpop, 'tpopmassnsByTpopId.nodes')
 
-  const fields = {
-    id: tpop.id,
-    tpop: tpop,
-    apId: get(tpop, 'popByPopId.apByApId.id'),
-    ap: {
-      name: 'ap',
-      label: 'AP',
-      value: get(tpop, 'popByPopId.apByApId.label'),
-      sort: 1,
-      width: 200,
-    },
-    popNr: {
-      name: 'popNr',
-      label: 'Pop Nr',
-      value: get(tpop, 'popByPopId.nr') || '-',
-      sort: 2,
-      width: 40,
-    },
-    popName: {
-      name: 'popName',
-      label: 'Pop Name',
-      value: get(tpop, 'popByPopId.name') || '-',
-      sort: 3,
-      width: 200,
-    },
-    tpopNr: {
-      name: 'nr',
-      label: 'Nr',
-      value: get(tpop, 'nr') || '-',
-      sort: 4,
-      width: 50,
-    },
-    tpopGemeinde: {
-      name: 'gemeinde',
-      label: 'Gemeinde',
-      value: get(tpop, 'gemeinde') || '-',
-      sort: 5,
-      width: 130,
-    },
-    tpopFlurname: {
-      name: 'flurname',
-      label: 'Flurname',
-      value: get(tpop, 'flurname') || '-',
-      sort: 6,
-      width: 200,
-    },
-    tpopStatus: {
-      name: 'status',
-      label: 'Status',
-      value: get(tpop, 'popStatusWerteByStatus.text') || '-',
-      sort: 7,
-      width: 150,
-    },
-    tpopBekanntSeit: {
-      name: 'bekanntSeit',
-      label: 'bekannt seit',
-      value: get(tpop, 'bekanntSeit') || '-',
-      sort: 8,
-      width: 60,
-    },
-    tpopLink: {
-      name: 'link',
-      label: 'Link',
-      value: `${appBaseUrl()}Daten/Projekte/${
-        tpop.popByPopId.apByApId.projId
-      }/Aktionspläne/${tpop.popByPopId.apByApId.id}/Populationen/${
-        tpop.popByPopId.id
-      }/Teil-Populationen/${tpop.id}`,
-      sort: 9,
-      width: 37,
-    },
-    ekAbrechnungstyp: {
-      name: 'ekAbrechnungstyp',
-      label: 'EK Abrechnung Typ',
-      value: get(tpop, 'ekAbrechnungstyp'),
-      sort: 9,
-      width: 80,
-    },
-    ekfrequenz: {
-      name: 'ekfrequenz',
-      label: 'EK Frequenz',
-      value: get(tpop, 'ekfrequenz') || null,
-      sort: 10,
-      width: 70,
-    },
-    ekfrequenzAbweichend: {
-      name: 'ekfrequenzAbweichend',
-      label: 'EK Frequenz abweichend',
-      value: get(tpop, 'ekfrequenzAbweichend') === true,
-      sort: 11,
-      width: 76,
-    },
-    yearTitle: {
-      name: 'yearTitle',
-      label: '',
-      sort: 12,
-      width: 50,
-      alwaysShow: true,
-    },
-  }
+  const fields = fieldsFromTpop(tpop)
   years.forEach(
     year =>
       (fields[year.toString()] = {
@@ -382,9 +422,9 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
           showCount,
         }),
       ),
-    [tpops, years, showCount],
+    [tpops, years, showCount, fieldsShown],
   )
-  const fields = useMemo(
+  const headerFields = useMemo(
     () =>
       rows.length
         ? sortBy(
@@ -395,7 +435,7 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
             'sort',
           )
         : [],
-    [rows[0]],
+    [rows[0], JSON.stringify(fieldsShown)],
   )
 
   const { data: dataLists } = useQuery(queryLists, {
@@ -440,14 +480,12 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
 
   const scrollPositions = useMemo(
     () => ({
-      ap:
-        apRef.current && fieldsShown.includes('ap')
-          ? apRef.current.getBoundingClientRect().left
-          : 0,
-      popNr:
-        popNrRef.current && fieldsShown.includes('popNr')
-          ? popNrRef.current.getBoundingClientRect().left
-          : 0,
+      ap: 0,
+      popNr: fieldsShown.includes('popNr')
+        ? fieldsShown.includes('ap')
+          ? fields.ap.width
+          : 0
+        : 0,
       popName:
         popNameRef.current && fieldsShown.includes('popName')
           ? popNameRef.current.getBoundingClientRect().left
@@ -511,7 +549,7 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
     ],
   )
 
-  //console.log('Table rendering, scrollPositions:', scrollPositions)
+  console.log('Table rendering, scrollPositions:', scrollPositions)
 
   if (aps.length > 0 && loadingTpop) return <Container>Lade...</Container>
   if (errorTpop) return <Container>{errorTpop.message}</Container>
@@ -525,7 +563,7 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
               <StyledTable size="small" colhovered={columnHovered}>
                 <StyledTableHead>
                   <StyledTableHeaderRow>
-                    {fields.map(f => (
+                    {headerFields.map(f => (
                       <StyledTableHeaderCell
                         key={f.name}
                         ref={refs[f.name] ? refs[f.name] : null}
@@ -562,6 +600,7 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
                       ekfOptionsGroupedPerAp={ekfOptionsGroupedPerAp}
                       ekAbrechnungstypOptions={ekAbrechnungstypOptions}
                       refetch={refetch}
+                      //fieldsShown={fieldsShown}
                     />
                   ))}
                 </StyledTableBody>
