@@ -493,10 +493,25 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
         ? yearTitleRef.current.getBoundingClientRect().left
         : 0,
     }),
-    [fieldsShown],
+    [
+      JSON.stringify(fieldsShown),
+      apRef.current,
+      popNrRef.current,
+      popNameRef.current,
+      nrRef.current,
+      gemeindeRef.current,
+      flurnameRef.current,
+      statusRef.current,
+      bekanntSeitRef.current,
+      linkRef.current,
+      ekAbrechnungstypRef.current,
+      ekfrequenzRef.current,
+      ekfrequenzAbweichendRef.current,
+      yearTitleRef.current,
+    ],
   )
 
-  //console.log('Table rendering, yearClickedState:', yearClickedState)
+  console.log('Table rendering, scrollPositions:', scrollPositions)
 
   if (aps.length > 0 && loadingTpop) return <Container>Lade...</Container>
   if (errorTpop) return <Container>{errorTpop.message}</Container>
