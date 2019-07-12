@@ -16,9 +16,9 @@ const Link = styled.div`
   }
 `
 
-const CellForTpopLink = ({ field, scrollPosition }) => {
+const CellForTpopLink = ({ field }) => {
   const store = useContext(storeContext)
-  const { resetYearHovered, setColumnHovered } = store.ekPlan
+  const { resetYearHovered, setColumnHovered, scrollPositions } = store.ekPlan
 
   const onMouseEnter = useCallback(() => setColumnHovered(`_${field.label}_`), [
     field,
@@ -32,7 +32,7 @@ const CellForTpopLink = ({ field, scrollPosition }) => {
       width={field.width}
       onMouseEnter={onMouseEnter}
       onMouseLeave={resetYearHovered}
-      data-left={scrollPosition}
+      data-left={scrollPositions[field.name]}
     >
       <Link onClick={onClickLink} title="in neuem Fenster öffnen">
         <FaExternalLinkAlt />

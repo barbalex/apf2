@@ -29,10 +29,11 @@ const CellForYearTitle = ({ field, row, einheitsByAp }) => {
   const einheits = einheitsByAp[row.apId]
   const onClickCell = useCallback(
     event => {
+      console.log('CellForYear, onClickCell', { row, label, value })
       setYearClicked({
         year: label,
         tpopId: row.id,
-        title: `${row.ap.value} Pop: ${row.popNr.value}, TPop: ${row.tpopNr.value}, ${label}`,
+        title: `${row.ap.value} Pop: ${row.popNr.value}, TPop: ${row.nr.value}, ${label}`,
         ekPlan: value.ekPlan,
         ekfPlan: value.ekfPlan,
       })

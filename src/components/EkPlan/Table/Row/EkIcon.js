@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sum from 'lodash/sum'
+import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../../storeContext'
 
@@ -93,4 +94,4 @@ const EkIcon = ({ planned, eks, einheits }) => {
   )
 }
 
-export default EkIcon
+export default observer(EkIcon)

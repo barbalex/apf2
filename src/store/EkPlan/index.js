@@ -2,6 +2,7 @@ import { types } from 'mobx-state-tree'
 import uniq from 'lodash/uniq'
 
 import Ap from './Ap'
+import { fields } from '../../components/EkPlan/Table'
 
 export const defaultFields = [
   'ap',
@@ -42,6 +43,7 @@ export default types
   .volatile(() => ({
     yearMenuAnchor: null,
     yearClicked: initialYearClicked,
+    scrollPositions: null,
   }))
   .actions(self => ({
     setShowEk(val) {
@@ -99,10 +101,108 @@ export default types
     resetYearHovered() {
       if (!self.yearClicked.year) self.columnHovered = 'none'
     },
+    setScrollPositions(val) {
+      self.scrollPositions = val
+    },
   }))
   .views(self => ({
     get apValues() {
       return self.aps.map(a => a.value)
+    },
+    get scrollPositions() {
+      const fieldsShown = self.fields
+      const ap = {
+        left: 0,
+        right: fieldsShown.includes('ap') ? fields.ap.width : 0,
+      }
+      const popNr = {
+        left: ap.right,
+        right: fieldsShown.includes('popNr')
+          ? ap.right + fields.popNr.width
+          : ap.right,
+      }
+      const popName = {
+        left: popNr.right,
+        right: fieldsShown.includes('popName')
+          ? popNr.right + fields.popName.width
+          : popNr.right,
+      }
+      const nr = {
+        left: popName.right,
+        right: fieldsShown.includes('nr')
+          ? popName.right + fields.nr.width
+          : popName.right,
+      }
+      const gemeinde = {
+        left: nr.right,
+        right: fieldsShown.includes('gemeinde')
+          ? nr.right + fields.gemeinde.width
+          : nr.right,
+      }
+      const flurname = {
+        left: gemeinde.right,
+        right: fieldsShown.includes('flurname')
+          ? gemeinde.right + fields.flurname.width
+          : gemeinde.right,
+      }
+      const status = {
+        left: flurname.right,
+        right: fieldsShown.includes('status')
+          ? flurname.right + fields.status.width
+          : flurname.right,
+      }
+      const bekanntSeit = {
+        left: status.right,
+        right: fieldsShown.includes('bekanntSeit')
+          ? status.right + fields.bekanntSeit.width
+          : status.right,
+      }
+      const link = {
+        left: bekanntSeit.right,
+        right: fieldsShown.includes('link')
+          ? bekanntSeit.right + fields.link.width
+          : bekanntSeit.right,
+      }
+      const ekAbrechnungstyp = {
+        left: link.right,
+        right: fieldsShown.includes('ekAbrechnungstyp')
+          ? link.right + fields.ekAbrechnungstyp.width
+          : link.right,
+      }
+      const ekfrequenz = {
+        left: ekAbrechnungstyp.right,
+        right: fieldsShown.includes('ekfrequenz')
+          ? ekAbrechnungstyp.right + fields.ekfrequenz.width
+          : ekAbrechnungstyp.right,
+      }
+      const ekfrequenzAbweichend = {
+        left: ekfrequenz.right,
+        right: fieldsShown.includes('ekfrequenzAbweichend')
+          ? ekfrequenz.right + fields.ekfrequenzAbweichend.width
+          : ekfrequenz.right,
+      }
+      const yearTitle = {
+        left: ekfrequenzAbweichend.right,
+        right: fieldsShown.includes('yearTitle')
+          ? ekfrequenzAbweichend.right + fields.yearTitle.width
+          : ekfrequenzAbweichend.right,
+      }
+
+      return {
+        ap: ap.left,
+        popNr: popNr.left,
+        popName: popName.left,
+        nr: nr.left,
+        gemeinde: gemeinde.left,
+        flurname: flurname.left,
+        status: status.left,
+        bekanntSeit: bekanntSeit.left,
+        link: link.left,
+        ekAbrechnungstyp: ekAbrechnungstyp.left,
+        ekfrequenz: ekfrequenz.left,
+        ekfrequenzAbweichend: ekfrequenzAbweichend.left,
+        yearTitle: yearTitle.left,
+      }
     },
   }))
 

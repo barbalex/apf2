@@ -5,14 +5,9 @@ import { TableCellForSelect } from '../index'
 import storeContext from '../../../../storeContext'
 import SelectGrouped from './SelectGrouped'
 
-const CellForEkfrequenz = ({
-  row,
-  field,
-  scrollPosition,
-  ekfOptionsGroupedPerAp,
-}) => {
+const CellForEkfrequenz = ({ row, field, ekfOptionsGroupedPerAp }) => {
   const store = useContext(storeContext)
-  const { resetYearHovered, setColumnHovered } = store.ekPlan
+  const { resetYearHovered, setColumnHovered, scrollPositions } = store.ekPlan
 
   const onMouseEnter = useCallback(() => setColumnHovered(`_${field.label}_`), [
     field,
@@ -23,7 +18,7 @@ const CellForEkfrequenz = ({
       width={field.width}
       onMouseEnter={onMouseEnter}
       onMouseLeave={resetYearHovered}
-      data-left={scrollPosition}
+      data-left={scrollPositions[field.name]}
     >
       <SelectGrouped
         optionsGrouped={ekfOptionsGroupedPerAp[row.apId]}

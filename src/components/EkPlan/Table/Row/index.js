@@ -31,13 +31,12 @@ const StyledTableRow = styled(TableRow)`
 
 const EkPlanTableRow = ({
   row,
-  scrollPositions,
   einheitsByAp,
   ekfOptionsGroupedPerAp,
   ekAbrechnungstypOptions,
 }) => {
   const store = useContext(storeContext)
-  const { fields } = store.ekPlan
+  const { fields, scrollPositions } = store.ekPlan
 
   //console.log('Row rendering')
 
@@ -53,13 +52,7 @@ const EkPlanTableRow = ({
             'sort',
           ).map(field => {
             if (field.name === 'yearTitle') {
-              return (
-                <CellForYearTitle
-                  key={field.name}
-                  field={field}
-                  scrollPosition={scrollPositions[field.name]}
-                />
-              )
+              return <CellForYearTitle key={field.name} field={field} />
             }
             if (field.name === 'ekAbrechnungstyp') {
               return (
@@ -67,7 +60,6 @@ const EkPlanTableRow = ({
                   key={field.name}
                   row={row}
                   field={field}
-                  scrollPosition={scrollPositions[field.name]}
                   ekAbrechnungstypOptions={ekAbrechnungstypOptions}
                 />
               )
@@ -78,7 +70,6 @@ const EkPlanTableRow = ({
                   key={field.name}
                   row={row}
                   field={field}
-                  scrollPosition={scrollPositions[field.name]}
                   ekfOptionsGroupedPerAp={ekfOptionsGroupedPerAp}
                 />
               )
@@ -89,18 +80,11 @@ const EkPlanTableRow = ({
                   key={field.name}
                   row={row}
                   field={field}
-                  scrollPosition={scrollPositions[field.name]}
                 />
               )
             }
             if (field.name === 'link') {
-              return (
-                <CellForTpopLink
-                  key={field.name}
-                  field={field}
-                  scrollPosition={scrollPositions[field.name]}
-                />
-              )
+              return <CellForTpopLink key={field.name} field={field} />
             }
             // DANGER: null is also an object!!
             if (field.value && typeof field.value === 'object') {
@@ -113,13 +97,7 @@ const EkPlanTableRow = ({
                 />
               )
             }
-            return (
-              <CellForValue
-                key={field.label}
-                field={field}
-                scrollPosition={scrollPositions[field.name]}
-              />
-            )
+            return <CellForValue key={field.label} field={field} />
           })}
         </StyledTableRow>
       </>

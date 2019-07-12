@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import styled from 'styled-components'
 import sum from 'lodash/sum'
 import { GoZap } from 'react-icons/go'
+import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../../storeContext'
 
@@ -79,4 +80,4 @@ const MassnIcon = ({ ansiedlungs }) => {
   )
 }
 
-export default MassnIcon
+export default observer(MassnIcon)

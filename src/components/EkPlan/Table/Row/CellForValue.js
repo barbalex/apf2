@@ -4,9 +4,9 @@ import { observer } from 'mobx-react-lite'
 import storeContext from '../../../../storeContext'
 import { EkTableCell } from '../index'
 
-const CellForValue = ({ field, scrollPosition }) => {
+const CellForValue = ({ field }) => {
   const store = useContext(storeContext)
-  const { resetYearHovered, setColumnHovered } = store.ekPlan
+  const { resetYearHovered, setColumnHovered, scrollPositions } = store.ekPlan
 
   const { label, value, width } = field
   const onMouseEnter = useCallback(() => setColumnHovered(`_${label}_`), [
@@ -19,7 +19,7 @@ const CellForValue = ({ field, scrollPosition }) => {
       width={width}
       onMouseEnter={onMouseEnter}
       onMouseLeave={resetYearHovered}
-      data-left={scrollPosition}
+      data-left={scrollPositions[field.name]}
     >
       <div>{value}</div>
     </EkTableCell>

@@ -5,9 +5,9 @@ import storeContext from '../../../../storeContext'
 import Checkbox from './Checkbox'
 import { TableCellForSelect } from '../index'
 
-const CellForEkfrequenzAbweichend = ({ field, row, scrollPosition }) => {
+const CellForEkfrequenzAbweichend = ({ field, row }) => {
   const store = useContext(storeContext)
-  const { resetYearHovered, setColumnHovered } = store.ekPlan
+  const { resetYearHovered, setColumnHovered, scrollPositions } = store.ekPlan
 
   const onMouseEnter = useCallback(() => setColumnHovered(`_${field.label}_`), [
     field,
@@ -18,7 +18,7 @@ const CellForEkfrequenzAbweichend = ({ field, row, scrollPosition }) => {
       width={field.width}
       onMouseEnter={onMouseEnter}
       onMouseLeave={resetYearHovered}
-      data-left={scrollPosition}
+      data-left={scrollPositions[field.name]}
     >
       <Checkbox
         row={row.tpop}

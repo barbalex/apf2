@@ -134,19 +134,6 @@ const EkPlanChoose = () => {
             control={
               <DenserPrimaryAction>
                 <Checkbox
-                  checked={showCount}
-                  onChange={onChangeShowCount}
-                  color="primary"
-                />
-              </DenserPrimaryAction>
-            }
-            label="Zählungen"
-            labelPlacement="start"
-          />
-          <Label
-            control={
-              <DenserPrimaryAction>
-                <Checkbox
                   checked={showMassn}
                   onChange={onChangeShowMassn}
                   color="primary"
@@ -154,6 +141,19 @@ const EkPlanChoose = () => {
               </DenserPrimaryAction>
             }
             label="Ansiedlungen"
+            labelPlacement="start"
+          />
+          <Label
+            control={
+              <DenserPrimaryAction>
+                <Checkbox
+                  checked={showCount}
+                  onChange={onChangeShowCount}
+                  color="primary"
+                />
+              </DenserPrimaryAction>
+            }
+            label="Zählungen"
             labelPlacement="start"
           />
           <Label

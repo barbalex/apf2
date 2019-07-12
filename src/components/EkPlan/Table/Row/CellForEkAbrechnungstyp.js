@@ -5,14 +5,9 @@ import storeContext from '../../../../storeContext'
 import Select from './Select'
 import { TableCellForSelect } from '../index'
 
-const CellForEkAbrechnungstyp = ({
-  field,
-  row,
-  scrollPosition,
-  ekAbrechnungstypOptions,
-}) => {
+const CellForEkAbrechnungstyp = ({ field, row, ekAbrechnungstypOptions }) => {
   const store = useContext(storeContext)
-  const { resetYearHovered, setColumnHovered } = store.ekPlan
+  const { resetYearHovered, setColumnHovered, scrollPositions } = store.ekPlan
 
   const onMouseEnter = useCallback(() => setColumnHovered(`_${field.label}_`), [
     field,
@@ -23,7 +18,7 @@ const CellForEkAbrechnungstyp = ({
       width={field.width}
       onMouseEnter={onMouseEnter}
       onMouseLeave={resetYearHovered}
-      data-left={scrollPosition}
+      data-left={scrollPositions[field.name]}
     >
       <Select
         options={ekAbrechnungstypOptions}
