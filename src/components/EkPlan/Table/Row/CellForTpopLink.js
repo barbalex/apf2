@@ -18,22 +18,13 @@ const Link = styled.div`
 
 const CellForTpopLink = ({ field }) => {
   const store = useContext(storeContext)
-  const { resetYearHovered, setColumnHovered, scrollPositions } = store.ekPlan
 
-  const onMouseEnter = useCallback(() => setColumnHovered(`_${field.label}_`), [
-    field,
-  ])
   const onClickLink = useCallback(() => {
     typeof window !== 'undefined' && window.open(field.value)
   }, [])
 
   return (
-    <EkTableCell
-      width={field.width}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={resetYearHovered}
-      data-left={scrollPositions[field.name]}
-    >
+    <EkTableCell width={field.width}>
       <Link onClick={onClickLink} title="in neuem Fenster öffnen">
         <FaExternalLinkAlt />
       </Link>

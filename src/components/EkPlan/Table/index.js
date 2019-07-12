@@ -11,7 +11,11 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import sumBy from 'lodash/sumBy'
 import { observer } from 'mobx-react-lite'
-import { FixedSizeGrid as Grid, VariableSizeList as List } from 'react-window'
+import {
+  FixedSizeGrid as Grid,
+  VariableSizeList as List,
+  FixedSizeList,
+} from 'react-window'
 
 import queryTpop from './queryTpop'
 import queryLists from './queryLists'
@@ -38,6 +42,7 @@ const Container = styled.div`
 `
 const HeaderContainer = styled.div`
   display: flex;
+  flex-direction: row;
   width: 100%;
 `
 const BodyContainer = styled.div`
@@ -73,8 +78,6 @@ const StyledTableHeaderRow = styled(TableRow)`
   height: 60px !important;
 `
 export const StyledYearHeaderCell = styled.div`
-  height: 100%;
-  width: 100%;
   text-align: center;
   font-weight: 500;
   font-size: 0.75rem;
@@ -91,6 +94,10 @@ export const StyledYearHeaderCell = styled.div`
   }
   &:first-child span {
     padding-left: 10px;
+  }
+  &.hovered {
+    background: hsla(120, 25%, 82%, 1) !important;
+    font-weight: 800 !important;
   }
 `
 export const StyledFixedHeaderCell = styled(StyledYearHeaderCell)`
@@ -147,7 +154,7 @@ const TpopTitle = styled.h4`
   z-index: 3;
 `
 
-const EkPlanTable = ({ headerBottom }) => {
+const EkPlanTable = ({ headerBottom, headerWidth }) => {
   const store = useContext(storeContext)
   const {
     aps,
@@ -156,8 +163,6 @@ const EkPlanTable = ({ headerBottom }) => {
     fields: fieldsShown,
     yearMenuAnchor,
     resetYearHovered,
-    columnHovered,
-    setColumnHovered,
     scrollPositions,
     setEkfrequenzs,
     setEkAbrechnungstypOptions,
@@ -209,9 +214,15 @@ const EkPlanTable = ({ headerBottom }) => {
     get(dataLists, 'allEkAbrechnungstypWertes.nodes', []),
   )
 
+  const yearColWidth = yearColumnWidth(showCount)
+  const headerYearFieldsWidth = headerWidth - headerFieldsFixedWidth
+
   console.log('Table rendering:', {
-    headerFieldsFixed,
-    fieldsShown: fieldsShown.slice(),
+    yearColWidth,
+    years,
+    headerFieldsFixedWidth,
+    headerYearFieldsWidth,
+    headerWidth,
   })
 
   if (aps.length > 0 && loadingTpop)
@@ -220,8 +231,8 @@ const EkPlanTable = ({ headerBottom }) => {
   return (
     <ErrorBoundary>
       <Container headerbottom={headerBottom}>
+        <TpopTitle>{`${rows.length} Teilpopulationen`}</TpopTitle>
         <HeaderContainer>
-          <TpopTitle>{`${rows.length} Teilpopulationen`}</TpopTitle>
           <List
             key={headerFieldsFixed.length}
             height={60}
@@ -237,6 +248,17 @@ const EkPlanTable = ({ headerBottom }) => {
               />
             )}
           </List>
+          <FixedSizeList
+            height={60}
+            itemCount={years.length}
+            itemSize={yearColWidth}
+            layout="horizontal"
+            width={headerYearFieldsWidth}
+          >
+            {({ index, style }) => (
+              <YearHeaderCell style={style} column={years[index]} />
+            )}
+          </FixedSizeList>
         </HeaderContainer>
         <BodyContainer>TODO</BodyContainer>
       </Container>

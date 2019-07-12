@@ -2,7 +2,7 @@ import React from 'react'
 
 import { StyledFixedHeaderCell } from './index'
 
-const FixedHeaderCell = ({ index, style, column }) => {
+const FixedHeaderCell = ({ style, column }) => {
   const { label, name } = column
 
   return (

@@ -17,14 +17,13 @@ const CellForYearTitle = ({ field, row }) => {
     yearClicked,
     setYearClicked,
     resetYearHovered,
+    columnHovered,
     setColumnHovered,
     einheitsByAp,
   } = store.ekPlan
 
   const { label, value, width, name } = field
-  const onMouseEnter = useCallback(() => setColumnHovered(`_${label}_`), [
-    label,
-  ])
+  const onMouseEnter = useCallback(() => setColumnHovered(label), [label])
   const { year, tpopId } = yearClicked
   const clicked = year === label && tpopId === row.id
   const einheits = einheitsByAp[row.apId]
@@ -43,7 +42,7 @@ const CellForYearTitle = ({ field, row }) => {
     },
     [row],
   )
-  const className = useMemo(() => `_${name}_`, [name])
+  const className = columnHovered === label ? 'hovered' : ''
 
   return (
     <TableCellForYear

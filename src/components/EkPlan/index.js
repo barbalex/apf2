@@ -31,6 +31,9 @@ const EkPlan = () => {
   const headerBottom = headerRef.current
     ? headerRef.current.getBoundingClientRect().bottom
     : 150
+  const headerWidth = headerRef.current
+    ? headerRef.current.getBoundingClientRect().width
+    : 150
 
   const { data, loading } = useQuery(queryAps, {
     variables: {
@@ -47,7 +50,7 @@ const EkPlan = () => {
           <ApList />
           <Choose />
         </Header>
-        <Table headerBottom={headerBottom} />
+        <Table headerBottom={headerBottom} headerWidth={headerWidth} />
       </Container>
     </ErrorBoundary>
   )

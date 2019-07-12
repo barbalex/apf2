@@ -4,22 +4,22 @@ import { observer } from 'mobx-react-lite'
 import storeContext from '../../../storeContext'
 import { StyledYearHeaderCell } from './index'
 
-const YearHeaderCell = ({ index, style, column }) => {
+const YearHeaderCell = ({ style, column }) => {
   const store = useContext(storeContext)
-  const { resetYearHovered, setColumnHovered } = store.ekPlan
+  const { resetYearHovered, columnHovered, setColumnHovered } = store.ekPlan
 
-  const onMouseEnter = useCallback(() => setColumnHovered(`_${column}_`), [
-    column,
-  ])
+  const onMouseEnter = useCallback(() => setColumnHovered(column), [column])
+  const className = columnHovered === column ? 'hovered' : ''
+  //console.log('YearHeaderCell',{columnHovered})
 
   return (
     <StyledYearHeaderCell
-      key={column}
+      style={style}
       onMouseEnter={onMouseEnter}
       onMouseLeave={resetYearHovered}
-      className={`_${column}_`}
+      className={className}
     >
-      {column}
+      <span>{column}</span>
     </StyledYearHeaderCell>
   )
 }

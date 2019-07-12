@@ -40,7 +40,7 @@ export default types
       types.array(types.union(types.string, types.number)),
       defaultFields,
     ),
-    columnHovered: types.optional(types.union(types.string, types.number), ''),
+    columnHovered: types.optional(types.maybeNull(types.number), null),
     apsDataLoading: types.optional(types.boolean, true),
   })
   .volatile(() => ({
@@ -117,7 +117,7 @@ export default types
       self.columnHovered = val
     },
     resetYearHovered() {
-      if (!self.yearClicked.year) self.columnHovered = 'none'
+      if (!self.yearClicked.year) self.columnHovered = null
     },
     setScrollPositions(val) {
       self.scrollPositions = val
@@ -263,7 +263,7 @@ export const defaultValue = {
   showMassn: true,
   aps: [],
   fields: defaultFields,
-  columnHovered: 'none',
+  columnHovered: null,
   yearMenuAnchor: null,
   yearClicked: initialYearClicked,
   apsDataLoading: true,
