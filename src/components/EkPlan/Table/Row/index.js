@@ -31,12 +31,7 @@ const StyledTableRow = styled(TableRow)`
 
 const EkPlanTableRow = ({
   row,
-  setColumnHovered,
-  resetYearHovered,
   scrollPositions,
-  yearClickedState,
-  yearClickedDispatch,
-  setYearMenuAnchor,
   einheitsByAp,
   ekfOptionsGroupedPerAp,
   ekAbrechnungstypOptions,
@@ -72,8 +67,6 @@ const EkPlanTableRow = ({
                   key={field.name}
                   row={row}
                   field={field}
-                  setColumnHovered={setColumnHovered}
-                  resetYearHovered={resetYearHovered}
                   scrollPosition={scrollPositions[field.name]}
                   ekAbrechnungstypOptions={ekAbrechnungstypOptions}
                 />
@@ -85,8 +78,6 @@ const EkPlanTableRow = ({
                   key={field.name}
                   row={row}
                   field={field}
-                  setColumnHovered={setColumnHovered}
-                  resetYearHovered={resetYearHovered}
                   scrollPosition={scrollPositions[field.name]}
                   ekfOptionsGroupedPerAp={ekfOptionsGroupedPerAp}
                 />
@@ -98,8 +89,6 @@ const EkPlanTableRow = ({
                   key={field.name}
                   row={row}
                   field={field}
-                  setColumnHovered={setColumnHovered}
-                  resetYearHovered={resetYearHovered}
                   scrollPosition={scrollPositions[field.name]}
                 />
               )
@@ -109,8 +98,6 @@ const EkPlanTableRow = ({
                 <CellForTpopLink
                   key={field.name}
                   field={field}
-                  setColumnHovered={setColumnHovered}
-                  resetYearHovered={resetYearHovered}
                   scrollPosition={scrollPositions[field.name]}
                 />
               )
@@ -122,11 +109,6 @@ const EkPlanTableRow = ({
                   key={field.label}
                   row={row}
                   field={field}
-                  setColumnHovered={setColumnHovered}
-                  resetYearHovered={resetYearHovered}
-                  yearClickedState={yearClickedState}
-                  yearClickedDispatch={yearClickedDispatch}
-                  setYearMenuAnchor={setYearMenuAnchor}
                   einheitsByAp={einheitsByAp}
                 />
               )
@@ -135,8 +117,6 @@ const EkPlanTableRow = ({
               <CellForValue
                 key={field.label}
                 field={field}
-                setColumnHovered={setColumnHovered}
-                resetYearHovered={resetYearHovered}
                 scrollPosition={scrollPositions[field.name]}
               />
             )

@@ -1,8 +1,9 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
 
+import storeContext from '../../../../storeContext'
 import { EkTableCell } from '../index'
 
 const Link = styled.div`
@@ -15,12 +16,10 @@ const Link = styled.div`
   }
 `
 
-const CellForTpopLink = ({
-  field,
-  setColumnHovered,
-  resetYearHovered,
-  scrollPosition,
-}) => {
+const CellForTpopLink = ({ field, scrollPosition }) => {
+  const store = useContext(storeContext)
+  const { resetYearHovered, setColumnHovered } = store.ekPlan
+
   const onMouseEnter = useCallback(() => setColumnHovered(`_${field.label}_`), [
     field,
   ])

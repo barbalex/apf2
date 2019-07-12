@@ -1,17 +1,19 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { TableCellForSelect } from '../index'
 
+import storeContext from '../../../../storeContext'
 import SelectGrouped from './SelectGrouped'
 
 const CellForEkfrequenz = ({
   row,
   field,
-  setColumnHovered,
-  resetYearHovered,
   scrollPosition,
   ekfOptionsGroupedPerAp,
 }) => {
+  const store = useContext(storeContext)
+  const { resetYearHovered, setColumnHovered } = store.ekPlan
+
   const onMouseEnter = useCallback(() => setColumnHovered(`_${field.label}_`), [
     field,
   ])

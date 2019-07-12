@@ -1,16 +1,14 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
+import storeContext from '../../../../storeContext'
 import Checkbox from './Checkbox'
 import { TableCellForSelect } from '../index'
 
-const CellForEkfrequenzAbweichend = ({
-  field,
-  row,
-  setColumnHovered,
-  resetYearHovered,
-  scrollPosition,
-}) => {
+const CellForEkfrequenzAbweichend = ({ field, row, scrollPosition }) => {
+  const store = useContext(storeContext)
+  const { resetYearHovered, setColumnHovered } = store.ekPlan
+
   const onMouseEnter = useCallback(() => setColumnHovered(`_${field.label}_`), [
     field,
   ])

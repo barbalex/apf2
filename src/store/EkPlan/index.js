@@ -17,6 +17,13 @@ export const defaultFields = [
   'ekfrequenz',
   'ekfrequenzAbweichend',
 ]
+const initialYearClicked = {
+  year: null,
+  tpopId: null,
+  title: null,
+  ekPlan: false,
+  ekfPlan: false,
+}
 
 export default types
   .model('EkPlan', {
@@ -30,7 +37,12 @@ export default types
       types.array(types.union(types.string, types.number)),
       defaultFields,
     ),
+    columnHovered: types.optional(types.union(types.string, types.number), ''),
   })
+  .volatile(() => ({
+    yearMenuAnchor: null,
+    yearClicked: initialYearClicked,
+  }))
   .actions(self => ({
     setShowEk(val) {
       self.showEk = val
@@ -71,6 +83,22 @@ export default types
     removeField(field) {
       self.fields = self.fields.filter(f => f !== field)
     },
+    setYearMenuAnchor(anchor) {
+      self.yearMenuAnchor = anchor
+    },
+    setYearClicked(val) {
+      self.yearClicked = val
+    },
+    closeYearCellMenu() {
+      self.yearMenuAnchor = null
+      self.yearClicked = initialYearClicked
+    },
+    setColumnHovered(val) {
+      self.columnHovered = val
+    },
+    resetYearHovered() {
+      if (!self.yearClicked.year) self.columnHovered = 'none'
+    },
   }))
   .views(self => ({
     get apValues() {
@@ -86,4 +114,7 @@ export const defaultValue = {
   showMassn: true,
   aps: [],
   fields: defaultFields,
+  columnHovered: 'none',
+  yearMenuAnchor: null,
+  yearClicked: initialYearClicked,
 }

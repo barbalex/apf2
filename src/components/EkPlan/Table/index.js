@@ -331,42 +331,19 @@ const rowsFromTpop = ({ tpop, years, showCount }) => {
   return fields
 }
 
-const initialYearClickedState = {
-  year: null,
-  tpopId: null,
-  tpop: null,
-  ekPlan: false,
-  ekfPlan: false,
-}
-const yearClickedReducer = (state, action) => {
-  switch (action.type) {
-    case 'set':
-      return action.payload
-    case 'reset':
-      return initialYearClickedState
-    default:
-      throw new Error('no appropriate action found')
-  }
-}
-
 const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
   const store = useContext(storeContext)
-  const { aps, apValues, showCount, fields: fieldsShown } = store.ekPlan
-
-  const [yearMenuAnchor, setYearMenuAnchor] = useState(null)
-  const [yearClickedState, yearClickedDispatch] = useReducer(
-    yearClickedReducer,
-    initialYearClickedState,
-  )
-  const closeYearCellMenu = useCallback(event => {
-    setYearMenuAnchor(null)
-    yearClickedDispatch({ type: 'reset' })
-  }, [])
-
-  const [columnHovered, setColumnHovered] = useState(null)
-  const resetYearHovered = useCallback(() => {
-    if (!yearClickedState.year) setColumnHovered(null)
-  }, [yearClickedState])
+  const {
+    aps,
+    apValues,
+    showCount,
+    fields: fieldsShown,
+    yearMenuAnchor,
+    resetYearHovered,
+    columnHovered,
+    setColumnHovered,
+  } = store.ekPlan
+  console.log('EkPlanTable, ekPlan:', store.ekPlan)
 
   const {
     data: dataTpop,
@@ -580,14 +557,7 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
                     <Row
                       key={row.id}
                       row={row}
-                      setColumnHovered={setColumnHovered}
-                      resetYearHovered={resetYearHovered}
                       scrollPositions={scrollPositions}
-                      yearClickedState={yearClickedState}
-                      yearClickedDispatch={yearClickedDispatch}
-                      yearMenuAnchor={yearMenuAnchor}
-                      setYearMenuAnchor={setYearMenuAnchor}
-                      closeYearCellMenu={closeYearCellMenu}
                       einheitsByAp={einheitsByAp}
                       ekfOptionsGroupedPerAp={ekfOptionsGroupedPerAp}
                       ekAbrechnungstypOptions={ekAbrechnungstypOptions}
@@ -598,14 +568,7 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
             </TableContainer>
           </OuterTableContainer>
         )}
-        {!!yearMenuAnchor && (
-          <CellForYearMenu
-            yearMenuAnchor={yearMenuAnchor}
-            yearClickedState={yearClickedState}
-            closeYearCellMenu={closeYearCellMenu}
-            refetch={refetch}
-          />
-        )}
+        {!!yearMenuAnchor && <CellForYearMenu refetch={refetch} />}
       </>
     </ErrorBoundary>
   )

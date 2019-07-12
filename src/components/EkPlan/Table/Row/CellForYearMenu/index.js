@@ -46,16 +46,18 @@ const StyledListItemIcon = styled(ListItemIcon)`
 
 const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 
-const CellForYearMenu = ({
-  yearMenuAnchor,
-  yearClickedState,
-  closeYearCellMenu,
-  refetch,
-}) => {
+const CellForYearMenu = ({ refetch }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
-  const { year, tpopId } = yearClickedState
-  const { showEk, showEkf, showMassn } = store.ekPlan
+  const {
+    showEk,
+    showEkf,
+    showMassn,
+    yearClicked,
+    yearMenuAnchor,
+    closeYearCellMenu,
+  } = store.ekPlan
+  const { year, tpopId } = yearClicked
 
   const [eksAnchor, setEksAnchor] = useState(null)
   const [ekfsAnchor, setEkfsAnchor] = useState(null)
@@ -66,10 +68,10 @@ const CellForYearMenu = ({
   const closeMassnsMenu = useCallback(event => setMassnsAnchor(null), [])
 
   const onClickEkEntfernen = useCallback(() => removeEkPlan('EK'), [
-    yearClickedState,
+    yearClicked,
   ])
   const onClickEkfEntfernen = useCallback(() => removeEkPlan('EKF'), [
-    yearClickedState,
+    yearClicked,
   ])
   const removeEkPlan = useCallback(
     async typ => {
@@ -110,13 +112,11 @@ const CellForYearMenu = ({
       refetch()
       closeYearCellMenu()
     },
-    [yearClickedState],
+    [yearClicked],
   )
 
-  const onClickEkPlanen = useCallback(() => addEkPlan('EK'), [yearClickedState])
-  const onClickEkfPlanen = useCallback(() => addEkPlan('EKF'), [
-    yearClickedState,
-  ])
+  const onClickEkPlanen = useCallback(() => addEkPlan('EK'), [yearClicked])
+  const onClickEkfPlanen = useCallback(() => addEkPlan('EKF'), [yearClicked])
   const addEkPlan = useCallback(
     async typ => {
       const variables = {
@@ -148,7 +148,7 @@ const CellForYearMenu = ({
       refetch()
       closeYearCellMenu()
     },
-    [store.user.name, yearClickedState],
+    [store.user.name, yearClicked],
   )
 
   const { data } = useQuery(queryTpop, {
@@ -176,10 +176,10 @@ const CellForYearMenu = ({
         anchorOrigin={anchorOrigin}
         getContentAnchorEl={null}
       >
-        <YearCellMenuTitle>{`${yearClickedState.tpop}, ${yearClickedState.year}`}</YearCellMenuTitle>
+        <YearCellMenuTitle>{yearClicked.title}</YearCellMenuTitle>
         {showEk && (
           <div>
-            {yearClickedState.ekPlan ? (
+            {yearClicked.ekPlan ? (
               <StyledMenuItem onClick={onClickEkEntfernen}>
                 <StyledListItemIcon>
                   <EditIcon />
@@ -198,7 +198,7 @@ const CellForYearMenu = ({
         )}
         {showEkf && (
           <div>
-            {yearClickedState.ekfPlan ? (
+            {yearClicked.ekfPlan ? (
               <StyledMenuItem onClick={onClickEkfEntfernen}>
                 <StyledListItemIcon>
                   <EditIcon />

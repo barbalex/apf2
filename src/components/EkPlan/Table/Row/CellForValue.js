@@ -1,14 +1,13 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
+import storeContext from '../../../../storeContext'
 import { EkTableCell } from '../index'
 
-const CellForValue = ({
-  field,
-  setColumnHovered,
-  resetYearHovered,
-  scrollPosition,
-}) => {
+const CellForValue = ({ field, scrollPosition }) => {
+  const store = useContext(storeContext)
+  const { resetYearHovered, setColumnHovered } = store.ekPlan
+
   const { label, value, width } = field
   const onMouseEnter = useCallback(() => setColumnHovered(`_${label}_`), [
     label,

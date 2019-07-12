@@ -1,17 +1,19 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
+import storeContext from '../../../../storeContext'
 import Select from './Select'
 import { TableCellForSelect } from '../index'
 
 const CellForEkAbrechnungstyp = ({
   field,
   row,
-  setColumnHovered,
-  resetYearHovered,
   scrollPosition,
   ekAbrechnungstypOptions,
 }) => {
+  const store = useContext(storeContext)
+  const { resetYearHovered, setColumnHovered } = store.ekPlan
+
   const onMouseEnter = useCallback(() => setColumnHovered(`_${field.label}_`), [
     field,
   ])
