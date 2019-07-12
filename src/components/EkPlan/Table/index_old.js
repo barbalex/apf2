@@ -8,16 +8,16 @@ import TableRow from '@material-ui/core/TableRow'
 import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
+import minBy from 'lodash/minBy'
 import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
 
 import queryTpop from './queryTpop'
 import queryLists from './queryLists'
+import appBaseUrl from '../../../modules/appBaseUrl'
 import Row from './Row'
 import CellForYearMenu from './Row/CellForYearMenu'
 import storeContext from '../../../storeContext'
-import yearsFromTpops from './yearsFromTpops'
-import fieldsFromTpop from './fieldsFromTpop'
 
 const Container = styled.div`
   padding: 10px;
@@ -135,6 +135,161 @@ const TpopTitle = styled.h4`
   left: 10px;
   z-index: 3;
 `
+
+export const fields = {
+  ap: {
+    name: 'ap',
+    label: 'AP',
+    sort: 1,
+    width: 200,
+  },
+  popNr: {
+    name: 'popNr',
+    label: 'Pop Nr',
+    sort: 2,
+    width: 40,
+  },
+  popName: {
+    name: 'popName',
+    label: 'Pop Name',
+    sort: 3,
+    width: 200,
+  },
+  nr: {
+    name: 'nr',
+    label: 'Nr',
+    sort: 4,
+    width: 50,
+  },
+  gemeinde: {
+    name: 'gemeinde',
+    label: 'Gemeinde',
+    sort: 5,
+    width: 130,
+  },
+  flurname: {
+    name: 'flurname',
+    label: 'Flurname',
+    sort: 6,
+    width: 200,
+  },
+  status: {
+    name: 'status',
+    label: 'Status',
+    sort: 7,
+    width: 150,
+  },
+  bekanntSeit: {
+    name: 'bekanntSeit',
+    label: 'bekannt seit',
+    sort: 8,
+    width: 60,
+  },
+  link: {
+    name: 'link',
+    label: 'Link',
+    sort: 9,
+    width: 37,
+  },
+  ekAbrechnungstyp: {
+    name: 'ekAbrechnungstyp',
+    label: 'EK Abrechnung Typ',
+    sort: 9,
+    width: 80,
+  },
+  ekfrequenz: {
+    name: 'ekfrequenz',
+    label: 'EK Frequenz',
+    sort: 10,
+    width: 70,
+  },
+  ekfrequenzAbweichend: {
+    name: 'ekfrequenzAbweichend',
+    label: 'EK Frequenz abweichend',
+    sort: 11,
+    width: 76,
+  },
+  yearTitle: {
+    name: 'yearTitle',
+    label: '',
+    sort: 12,
+    width: 50,
+    alwaysShow: true,
+  },
+}
+const yearsFromTpops = tpops => {
+  const ekplans = tpops.flatMap(tpop => get(tpop, 'ekplansByTpopId.nodes'))
+  const kontrs = tpops.flatMap(tpop => get(tpop, 'tpopkontrsByTpopId.nodes'))
+  const firstEk = minBy([...ekplans, ...kontrs], 'jahr')
+  const currentYear = new Date().getFullYear()
+  const firstEkYear = firstEk ? firstEk.jahr : null
+  // ensure never before 1993
+  let firstYear = firstEkYear || currentYear
+  const lastYear = currentYear + 15
+  const years = []
+  while (firstYear <= lastYear) {
+    years.push(firstYear++)
+  }
+  return years
+}
+const fieldsFromTpop = tpop => ({
+  id: tpop.id,
+  tpop: tpop,
+  apId: get(tpop, 'popByPopId.apByApId.id'),
+  ap: {
+    ...fields.ap,
+    value: get(tpop, 'popByPopId.apByApId.label'),
+  },
+  popNr: {
+    ...fields.popNr,
+    value: get(tpop, 'popByPopId.nr') || '-',
+  },
+  popName: {
+    ...fields.popName,
+    value: get(tpop, 'popByPopId.name') || '-',
+  },
+  nr: {
+    ...fields.nr,
+    value: get(tpop, 'nr') || '-',
+  },
+  gemeinde: {
+    ...fields.gemeinde,
+    value: get(tpop, 'gemeinde') || '-',
+  },
+  flurname: {
+    ...fields.flurname,
+    value: get(tpop, 'flurname') || '-',
+  },
+  status: {
+    ...fields.status,
+    value: get(tpop, 'popStatusWerteByStatus.text') || '-',
+  },
+  bekanntSeit: {
+    ...fields.bekanntSeit,
+    value: get(tpop, 'bekanntSeit') || '-',
+  },
+  link: {
+    ...fields.link,
+    value: `${appBaseUrl()}Daten/Projekte/${
+      tpop.popByPopId.apByApId.projId
+    }/Aktionspläne/${tpop.popByPopId.apByApId.id}/Populationen/${
+      tpop.popByPopId.id
+    }/Teil-Populationen/${tpop.id}`,
+  },
+  ekAbrechnungstyp: {
+    ...fields.ekAbrechnungstyp,
+    value: get(tpop, 'ekAbrechnungstyp'),
+  },
+  ekfrequenz: {
+    ...fields.ekfrequenz,
+    value: get(tpop, 'ekfrequenz') || null,
+  },
+  ekfrequenzAbweichend: {
+    ...fields.ekfrequenzAbweichend,
+    value: get(tpop, 'ekfrequenzAbweichend') === true,
+  },
+  yearTitle: fields.yearTitle,
+})
 const rowsFromTpop = ({ tpop, years, showCount }) => {
   const ekplans = get(tpop, 'ekplansByTpopId.nodes')
   const kontrs = get(tpop, 'tpopkontrsByTpopId.nodes')

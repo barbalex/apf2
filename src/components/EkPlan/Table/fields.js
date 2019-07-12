@@ -1,0 +1,81 @@
+export default {
+  ap: {
+    name: 'ap',
+    label: 'AP',
+    sort: 1,
+    width: 200,
+  },
+  popNr: {
+    name: 'popNr',
+    label: 'Pop Nr',
+    sort: 2,
+    width: 40,
+  },
+  popName: {
+    name: 'popName',
+    label: 'Pop Name',
+    sort: 3,
+    width: 200,
+  },
+  nr: {
+    name: 'nr',
+    label: 'Nr',
+    sort: 4,
+    width: 50,
+  },
+  gemeinde: {
+    name: 'gemeinde',
+    label: 'Gemeinde',
+    sort: 5,
+    width: 130,
+  },
+  flurname: {
+    name: 'flurname',
+    label: 'Flurname',
+    sort: 6,
+    width: 200,
+  },
+  status: {
+    name: 'status',
+    label: 'Status',
+    sort: 7,
+    width: 150,
+  },
+  bekanntSeit: {
+    name: 'bekanntSeit',
+    label: 'bekannt seit',
+    sort: 8,
+    width: 60,
+  },
+  link: {
+    name: 'link',
+    label: 'Link',
+    sort: 9,
+    width: 37,
+  },
+  ekAbrechnungstyp: {
+    name: 'ekAbrechnungstyp',
+    label: 'EK Abrechnung Typ',
+    sort: 9,
+    width: 80,
+  },
+  ekfrequenz: {
+    name: 'ekfrequenz',
+    label: 'EK Frequenz',
+    sort: 10,
+    width: 70,
+  },
+  ekfrequenzAbweichend: {
+    name: 'ekfrequenzAbweichend',
+    label: 'EK Frequenz abweichend',
+    sort: 11,
+    width: 76,
+  },
+  yearTitle: {
+    name: 'yearTitle',
+    label: '',
+    sort: 12,
+    width: 50,
+    alwaysShow: true,
+  },
+}

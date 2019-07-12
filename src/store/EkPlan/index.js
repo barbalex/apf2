@@ -4,7 +4,7 @@ import groupBy from 'lodash/groupBy'
 import get from 'lodash/get'
 
 import Ap from './Ap'
-import { fields } from '../../components/EkPlan/Table'
+import fields from '../../components/EkPlan/Table/fields'
 
 export const defaultFields = [
   'ap',
