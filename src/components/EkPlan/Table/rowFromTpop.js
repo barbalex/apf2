@@ -1,6 +1,7 @@
 import get from 'lodash/get'
 
 import fieldsFromTpop from './fieldsFromTpop'
+import yearColumnWidth from './yearColumnWidth'
 
 export default ({ tpop, years, showCount }) => {
   const ekplans = get(tpop, 'ekplansByTpopId.nodes')
@@ -30,7 +31,7 @@ export default ({ tpop, years, showCount }) => {
           ansiedlungs: ansiedlungs.filter(o => o.jahr === year),
         },
         sort: year,
-        width: showCount ? 52 : 38,
+        width: yearColumnWidth(showCount),
       }),
   )
   return fields

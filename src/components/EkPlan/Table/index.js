@@ -9,7 +9,9 @@ import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
+import sumBy from 'lodash/sumBy'
 import { observer } from 'mobx-react-lite'
+import { FixedSizeGrid as Grid, VariableSizeList as List } from 'react-window'
 
 import queryTpop from './queryTpop'
 import queryLists from './queryLists'
@@ -18,19 +20,30 @@ import CellForYearMenu from './Row/CellForYearMenu'
 import storeContext from '../../../storeContext'
 import yearsFromTpops from './yearsFromTpops'
 import rowFromTpop from './rowFromTpop'
+import fields from './fields'
+import yearColumnWidth from './yearColumnWidth'
+import FixedHeaderCell from './FixedHeaderCell'
+import YearHeaderCell from './YearHeaderCell'
 
-const Container = styled.div`
+const TempContainer = styled.div`
   padding: 10px;
   user-select: none !important;
 `
-const OuterTableContainer = styled.div`
+const Container = styled.div`
   position: relative;
-`
-const TableContainer = styled.div`
-  position: relative;
-  overflow: auto;
   width: 100vw;
   height: ${props => `calc(100vh - ${props.headerbottom}px)`};
+  display: flex;
+  flex-direction: column;
+`
+const HeaderContainer = styled.div`
+  display: flex;
+  width: 100%;
+`
+const BodyContainer = styled.div`
+  display: flex;
+  height: 100%;
+  width: 100%;
 `
 const StyledTable = styled(Table)`
   position: relative;
@@ -59,31 +72,24 @@ const StyledTableHeaderRow = styled(TableRow)`
   display: block !important;
   height: 60px !important;
 `
-const StyledTableHeaderCell = styled(TableCell)`
-  position: sticky;
-  height: 60px;
-  width: ${props => `${props.width}px`};
-  min-width: ${props => `${props.width}px`};
-  max-width: ${props => `${props.width}px`};
-  text-align: ${props =>
-    props['data-centertext'] ? 'center !important' : 'inherit'};
-  font-weight: 500 !important;
-  font-size: 0.75rem !important;
-  color: black !important;
-  padding: 2px 4px !important;
-  line-height: 1rem !important;
+export const StyledYearHeaderCell = styled.div`
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  font-weight: 500;
+  font-size: 0.75rem;
+  color: black;
+  padding: 2px 4px;
+  line-height: 1rem;
   border-left: solid hsla(120, 25%, 70%, 1) 1px;
   border-right: solid hsla(120, 25%, 70%, 1) 1px;
   background: hsla(120, 25%, 88%, 1);
-  left: ${props =>
-    props['data-left'] === undefined ? 'unset' : `${props['data-left']}px`};
-  z-index: ${props => (props['data-left'] === undefined ? 0 : 1)};
   &:first-child {
-    padding-left: 10px !important;
+    padding-left: 10px;
   }
 `
-const StyledTableBody = styled(TableBody)`
-  display: block !important;
+export const StyledFixedHeaderCell = styled(StyledYearHeaderCell)`
+  text-align: left;
 `
 export const EkTableCell = styled(TableCell)`
   position: sticky;
@@ -178,19 +184,15 @@ const EkPlanTable = ({ headerBottom }) => {
       ),
     [tpops, years, showCount],
   )
-  const headerFields = useMemo(
-    () =>
-      rows.length
-        ? sortBy(
-            Object.values(rows[0])
-              .filter(o => typeof o === 'object')
-              .filter(o => !!o.name)
-              .filter(o => fieldsShown.includes(o.name) || !!o.alwaysShow),
-            'sort',
-          )
-        : [],
-    [rows[0], fieldsShown],
-  )
+  const headerFieldsFixed = rows.length
+    ? sortBy(
+        Object.values(fields).filter(
+          o => fieldsShown.includes(o.name) || !!o.alwaysShow,
+        ),
+        'sort',
+      )
+    : []
+  const headerFieldsFixedWidth = sumBy(headerFieldsFixed, 'width')
 
   const { data: dataLists } = useQuery(queryLists, {
     variables: {
@@ -202,50 +204,36 @@ const EkPlanTable = ({ headerBottom }) => {
     get(dataLists, 'allEkAbrechnungstypWertes.nodes', []),
   )
 
-  //console.log('Table rendering')
+  console.log('Table rendering:', {
+    headerFieldsFixed,
+    fieldsShown: fieldsShown.slice(),
+  })
 
-  if (aps.length > 0 && loadingTpop) return <Container>Lade...</Container>
-  if (errorTpop) return <Container>{errorTpop.message}</Container>
+  if (aps.length > 0 && loadingTpop)
+    return <TempContainer>Lade...</TempContainer>
+  if (errorTpop) return <TempContainer>{errorTpop.message}</TempContainer>
   return (
     <ErrorBoundary>
-      <>
-        {rows.length > 0 && (
-          <OuterTableContainer>
-            <TpopTitle>{`${rows.length} Teilpopulationen`}</TpopTitle>
-            <TableContainer headerbottom={headerBottom}>
-              <StyledTable size="small" colhovered={columnHovered}>
-                <StyledTableHead>
-                  <StyledTableHeaderRow>
-                    {headerFields.map(f => (
-                      <StyledTableHeaderCell
-                        key={f.name}
-                        width={f.width}
-                        onMouseEnter={() =>
-                          f.label > 1000 &&
-                          f.label < 3000 &&
-                          setColumnHovered(`_${f.label}_`)
-                        }
-                        onMouseLeave={resetYearHovered}
-                        data-left={scrollPositions[f.name]}
-                        data-centertext={f.label > 1000 && f.label < 3000}
-                        className={`_${f.name}_`}
-                      >
-                        {f.label}
-                      </StyledTableHeaderCell>
-                    ))}
-                  </StyledTableHeaderRow>
-                </StyledTableHead>
-                <StyledTableBody>
-                  {rows.map(row => (
-                    <Row key={row.id} row={row} />
-                  ))}
-                </StyledTableBody>
-              </StyledTable>
-            </TableContainer>
-          </OuterTableContainer>
-        )}
-        {!!yearMenuAnchor && <CellForYearMenu refetch={refetch} />}
-      </>
+      <Container headerbottom={headerBottom}>
+        <HeaderContainer>
+          <List
+            key={headerFieldsFixed.length}
+            height={60}
+            itemCount={headerFieldsFixed.length}
+            itemSize={index => headerFieldsFixed[index].width}
+            layout="horizontal"
+            width={headerFieldsFixedWidth}
+          >
+            {({ index, style }) => (
+              <FixedHeaderCell
+                style={style}
+                column={headerFieldsFixed[index]}
+              />
+            )}
+          </List>
+        </HeaderContainer>
+        <BodyContainer>TODO</BodyContainer>
+      </Container>
     </ErrorBoundary>
   )
 }
