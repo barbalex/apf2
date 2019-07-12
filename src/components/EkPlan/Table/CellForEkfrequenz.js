@@ -5,12 +5,12 @@ import { StyledCellForSelect } from './index'
 import storeContext from '../../../storeContext'
 import SelectGrouped from './Row/SelectGrouped'
 
-const CellForEkfrequenz = ({ row, field }) => {
+const CellForEkfrequenz = ({ row, field, style }) => {
   const store = useContext(storeContext)
   const { ekfOptionsGroupedPerAp } = store.ekPlan
 
   return (
-    <StyledCellForSelect>
+    <StyledCellForSelect style={style}>
       <SelectGrouped
         optionsGrouped={ekfOptionsGroupedPerAp[row.apId]}
         row={row}

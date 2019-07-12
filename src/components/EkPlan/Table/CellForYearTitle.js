@@ -4,12 +4,12 @@ import { observer } from 'mobx-react-lite'
 import { StyledTableCell, InfoRow } from './index'
 import storeContext from '../../../storeContext'
 
-const CellForYearTitle = () => {
+const CellForYearTitle = ({ style }) => {
   const store = useContext(storeContext)
   const { showEk, showEkf, showMassn } = store.ekPlan
 
   return (
-    <StyledTableCell>
+    <StyledTableCell style={style}>
       {showEk && <InfoRow>EK:</InfoRow>}
       {showEkf && <InfoRow>EKF:</InfoRow>}
       {showMassn && <InfoRow>Ansied:</InfoRow>}

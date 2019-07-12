@@ -4,8 +4,8 @@ import { observer } from 'mobx-react-lite'
 import Checkbox from './Row/Checkbox'
 import { StyledCellForSelect } from './index'
 
-const CellForEkfrequenzAbweichend = ({ field, row }) => (
-  <StyledCellForSelect>
+const CellForEkfrequenzAbweichend = ({ field, row, style }) => (
+  <StyledCellForSelect style={style}>
     <Checkbox row={row.tpop} value={field.value} field="ekfrequenzAbweichend" />
   </StyledCellForSelect>
 )

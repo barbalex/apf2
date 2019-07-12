@@ -1,0 +1,74 @@
+import React, { useCallback, useContext } from 'react'
+import { observer } from 'mobx-react-lite'
+
+import { TableCellForYear } from './index'
+import EkIcon from './Row/EkIcon'
+import MassnIcon from './Row/MassnIcon'
+import { InfoRow } from './index'
+import storeContext from '../../../storeContext'
+
+const CellForYear = ({ field, row, style }) => {
+  const store = useContext(storeContext)
+  const {
+    showEk,
+    showEkf,
+    showMassn,
+    setYearMenuAnchor,
+    yearClicked,
+    setYearClicked,
+    resetYearHovered,
+    columnHovered,
+    setColumnHovered,
+    einheitsByAp,
+  } = store.ekPlan
+
+  const { label, value, width } = field
+  const onMouseEnter = useCallback(() => setColumnHovered(label), [label])
+  const { year, tpopId } = yearClicked
+  const clicked = year === label && tpopId === row.id
+  const einheits = einheitsByAp[row.apId]
+  const onClickCell = useCallback(
+    event => {
+      setYearClicked({
+        year: label,
+        tpopId: row.id,
+        title: `${row.ap.value} Pop: ${row.popNr.value}, TPop: ${row.nr.value}, ${label}`,
+        ekPlan: value.ekPlan,
+        ekfPlan: value.ekfPlan,
+      })
+      // need to catch target before setTimeout
+      const currentTarget = event.currentTarget
+      setTimeout(() => setYearMenuAnchor(currentTarget))
+    },
+    [row],
+  )
+  const className = columnHovered === label ? 'hovered' : ''
+
+  return (
+    <TableCellForYear
+      width={width}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={resetYearHovered}
+      data-clicked={clicked}
+      onClick={onClickCell}
+      className={className}
+      style={style}
+    >
+      <InfoRow>
+        {showEk && (
+          <EkIcon planned={value.ekPlan} eks={value.ek} einheits={einheits} />
+        )}
+      </InfoRow>
+      <InfoRow>
+        {showEkf && (
+          <EkIcon planned={value.ekfPlan} eks={value.ekf} einheits={einheits} />
+        )}
+      </InfoRow>
+      <InfoRow>
+        {showMassn && <MassnIcon ansiedlungs={value.ansiedlungs} />}
+      </InfoRow>
+    </TableCellForYear>
+  )
+}
+
+export default observer(CellForYear)

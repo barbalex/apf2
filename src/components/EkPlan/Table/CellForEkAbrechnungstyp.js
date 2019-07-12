@@ -5,12 +5,12 @@ import storeContext from '../../../storeContext'
 import Select from './Row/Select'
 import { StyledCellForSelect } from './index'
 
-const CellForEkAbrechnungstyp = ({ field, row }) => {
+const CellForEkAbrechnungstyp = ({ field, row, style }) => {
   const store = useContext(storeContext)
   const { ekAbrechnungstypOptions } = store.ekPlan
 
   return (
-    <StyledCellForSelect>
+    <StyledCellForSelect style={style}>
       <Select
         options={ekAbrechnungstypOptions}
         row={row}

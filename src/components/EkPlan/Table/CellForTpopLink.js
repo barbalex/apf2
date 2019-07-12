@@ -15,13 +15,13 @@ const Link = styled.div`
   }
 `
 
-const CellForTpopLink = ({ field }) => {
+const CellForTpopLink = ({ field, style }) => {
   const onClickLink = useCallback(() => {
     typeof window !== 'undefined' && window.open(field.value)
   }, [])
 
   return (
-    <StyledTableCell>
+    <StyledTableCell style={style}>
       <Link onClick={onClickLink} title="in neuem Fenster öffnen">
         <FaExternalLinkAlt />
       </Link>
