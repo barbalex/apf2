@@ -218,11 +218,7 @@ const EkPlanTable = ({ headerBottom, headerWidth }) => {
   const headerYearFieldsWidth = headerWidth - headerFieldsFixedWidth
 
   console.log('Table rendering:', {
-    yearColWidth,
-    years,
-    headerFieldsFixedWidth,
     headerYearFieldsWidth,
-    headerWidth,
   })
 
   if (aps.length > 0 && loadingTpop)
