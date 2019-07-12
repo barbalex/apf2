@@ -7,7 +7,7 @@ const FixedHeaderCell = ({ index, style, column }) => {
 
   return (
     <StyledFixedHeaderCell style={style} className={`_${name}_`}>
-      {label}
+      <span>{label}</span>
     </StyledFixedHeaderCell>
   )
 }

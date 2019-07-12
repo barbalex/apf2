@@ -79,12 +79,17 @@ export const StyledYearHeaderCell = styled.div`
   font-weight: 500;
   font-size: 0.75rem;
   color: black;
-  padding: 2px 4px;
-  line-height: 1rem;
+  line-height: 60px;
   border-left: solid hsla(120, 25%, 70%, 1) 1px;
   border-right: solid hsla(120, 25%, 70%, 1) 1px;
   background: hsla(120, 25%, 88%, 1);
-  &:first-child {
+  span {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+    padding: 2px 4px;
+  }
+  &:first-child span {
     padding-left: 10px;
   }
 `
@@ -216,6 +221,7 @@ const EkPlanTable = ({ headerBottom }) => {
     <ErrorBoundary>
       <Container headerbottom={headerBottom}>
         <HeaderContainer>
+          <TpopTitle>{`${rows.length} Teilpopulationen`}</TpopTitle>
           <List
             key={headerFieldsFixed.length}
             height={60}
