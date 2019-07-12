@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useCallback,
-  useReducer,
-  useContext,
-  useMemo,
-} from 'react'
+import React, { useContext, useMemo } from 'react'
 import { useQuery } from 'react-apollo-hooks'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -16,7 +10,6 @@ import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
 import minBy from 'lodash/minBy'
 import sortBy from 'lodash/sortBy'
-import groupBy from 'lodash/groupBy'
 import { observer } from 'mobx-react-lite'
 
 import queryTpop from './queryTpop'
