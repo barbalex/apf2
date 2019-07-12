@@ -56,12 +56,16 @@ const CellForYear = ({ field, row, style }) => {
     >
       <InfoRow>
         {showEk && (
-          <EkIcon planned={value.ekPlan} eks={value.ek} einheits={einheits} />
+          <EkIcon planned={value.ekPlan} eks={value.eks} einheits={einheits} />
         )}
       </InfoRow>
       <InfoRow>
         {showEkf && (
-          <EkIcon planned={value.ekfPlan} eks={value.ekf} einheits={einheits} />
+          <EkIcon
+            planned={value.ekfPlan}
+            eks={value.ekfs}
+            einheits={einheits}
+          />
         )}
       </InfoRow>
       <InfoRow>

@@ -1,6 +1,7 @@
 import get from 'lodash/get'
 
 import yearColumnWidth from './yearColumnWidth'
+import fields from './fields'
 
 export default ({ tpop, years, showCount }) => {
   const ekplans = get(tpop, 'ekplansByTpopId.nodes')
@@ -11,6 +12,18 @@ export default ({ tpop, years, showCount }) => {
     id: tpop.id,
     tpop: tpop,
     apId: get(tpop, 'popByPopId.apByApId.id'),
+    ap: {
+      ...fields.ap,
+      value: get(tpop, 'popByPopId.apByApId.label'),
+    },
+    popNr: {
+      ...fields.popNr,
+      value: get(tpop, 'popByPopId.nr') || '-',
+    },
+    nr: {
+      ...fields.nr,
+      value: get(tpop, 'nr') || '-',
+    },
   }
   years.forEach(
     year =>
@@ -25,10 +38,10 @@ export default ({ tpop, years, showCount }) => {
           ekfPlan:
             ekplans.filter(o => o.jahr === year).filter(o => o.typ === 'EKF')
               .length > 0,
-          ek: kontrs
+          eks: kontrs
             .filter(o => o.jahr === year)
             .filter(o => o.typ !== 'Freiwilligen-Erfolgskontrolle'),
-          ekf: kontrs
+          ekfs: kontrs
             .filter(o => o.jahr === year)
             .filter(o => o.typ === 'Freiwilligen-Erfolgskontrolle'),
           ansiedlungs: ansiedlungs.filter(o => o.jahr === year),
