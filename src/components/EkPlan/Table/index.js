@@ -1,10 +1,7 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useMemo, useCallback, useReducer } from 'react'
 import { useQuery } from 'react-apollo-hooks'
 import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
 import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
@@ -16,6 +13,7 @@ import {
   VariableSizeList as List,
   FixedSizeList,
 } from 'react-window'
+import ReactResizeDetector from 'react-resize-detector'
 
 import queryTpop from './queryTpop'
 import queryLists from './queryLists'
@@ -36,7 +34,7 @@ const TempContainer = styled.div`
 const Container = styled.div`
   position: relative;
   width: 100vw;
-  height: ${props => `calc(100vh - ${props.headerbottom}px)`};
+  height: 100%;
   display: flex;
   flex-direction: column;
 `
@@ -63,19 +61,6 @@ const StyledTable = styled(Table)`
   tbody > tr > td.${props => props.colhovered} {
     background: hsla(45, 100%, 90%, 1);
   }
-`
-const StyledTableHead = styled(TableHead)`
-  display: block !important;
-  background: hsla(120, 25%, 88%, 1) !important;
-  height: 60px !important;
-  position: sticky;
-  top: 0;
-  z-index: 2;
-`
-const StyledTableHeaderRow = styled(TableRow)`
-  position: relative !important;
-  display: block !important;
-  height: 60px !important;
 `
 export const StyledYearHeaderCell = styled.div`
   text-align: center;
@@ -153,8 +138,11 @@ const TpopTitle = styled.h4`
   left: 10px;
   z-index: 3;
 `
+function sizeReducer(state, action) {
+  return action.payload
+}
 
-const EkPlanTable = ({ headerBottom, width, height }) => {
+const EkPlanTable = () => {
   const store = useContext(storeContext)
   const {
     aps,
@@ -163,7 +151,6 @@ const EkPlanTable = ({ headerBottom, width, height }) => {
     fields: fieldsShown,
     yearMenuAnchor,
     resetYearHovered,
-    scrollPositions,
     setEkfrequenzs,
     setEkAbrechnungstypOptions,
   } = store.ekPlan
@@ -214,13 +201,22 @@ const EkPlanTable = ({ headerBottom, width, height }) => {
     get(dataLists, 'allEkAbrechnungstypWertes.nodes', []),
   )
 
+  const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
+    width: 0,
+    height: 0,
+  })
+  const onResize = useCallback(
+    (width, height) => sizeDispatch({ payload: { width, height } }),
+    [],
+  )
+
   const yearColWidth = yearColumnWidth(showCount)
-  const headerYearFieldsWidth = width - headerFieldsFixedWidth
+  const headerYearFieldsWidth = sizeState.width - headerFieldsFixedWidth
 
   console.log('Table rendering:', {
     headerYearFieldsWidth,
-    width,
-    height,
+    width: sizeState.width,
+    height: sizeState.height,
   })
 
   if (aps.length > 0 && loadingTpop)
@@ -228,9 +224,10 @@ const EkPlanTable = ({ headerBottom, width, height }) => {
   if (errorTpop) return <TempContainer>{errorTpop.message}</TempContainer>
   return (
     <ErrorBoundary>
-      <Container headerbottom={headerBottom}>
-        <TpopTitle>{`${rows.length} Teilpopulationen`}</TpopTitle>
+      <Container>
+        <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
         <HeaderContainer>
+          <TpopTitle>{`${rows.length} Teilpopulationen`}</TpopTitle>
           <List
             key={headerFieldsFixed.length}
             height={60}

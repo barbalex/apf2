@@ -1,9 +1,8 @@
-import React, { useRef, useContext } from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from 'react-apollo-hooks'
-import ReactResizeDetector from 'react-resize-detector'
 
 import ApList from './ApList'
 import Table from './Table'
@@ -28,13 +27,6 @@ const EkPlan = () => {
   const store = useContext(storeContext)
   const { aps, setApsData, setApsDataLoading } = store.ekPlan
 
-  // TODO:
-  // recalculate on resize
-  const headerRef = useRef(null)
-  const headerBottom = headerRef.current
-    ? headerRef.current.getBoundingClientRect().bottom
-    : 150
-
   const { data, loading } = useQuery(queryAps, {
     variables: {
       ids: aps.map(ap => ap.value),
@@ -46,13 +38,12 @@ const EkPlan = () => {
   return (
     <ErrorBoundary>
       <Container>
-        <Header ref={headerRef}>
+        <Header>
           <ApList />
           <Choose />
         </Header>
-        <ReactResizeDetector handleWidth handleHeight>
-          <Table headerBottom={headerBottom} />
-        </ReactResizeDetector>
+
+        <Table />
       </Container>
     </ErrorBoundary>
   )
