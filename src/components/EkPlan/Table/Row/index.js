@@ -33,7 +33,7 @@ const EkPlanTableRow = ({ row }) => {
   const store = useContext(storeContext)
   const { fields } = store.ekPlan
 
-  //console.log('Row rendering')
+  console.log('Row rendering')
 
   return (
     <ErrorBoundary>

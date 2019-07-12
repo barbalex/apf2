@@ -398,7 +398,7 @@ const EkPlanTable = ({ headerBottom }) => {
     get(dataLists, 'allEkAbrechnungstypWertes.nodes', []),
   )
 
-  //console.log('Table rendering')
+  console.log('Table rendering')
 
   if (aps.length > 0 && loadingTpop) return <Container>Lade...</Container>
   if (errorTpop) return <Container>{errorTpop.message}</Container>
@@ -433,10 +433,7 @@ const EkPlanTable = ({ headerBottom }) => {
                 </StyledTableHead>
                 <StyledTableBody>
                   {rows.map(row => (
-                    <Row
-                      key={row.id}
-                      row={row}
-                    />
+                    <Row key={row.id} row={row} />
                   ))}
                 </StyledTableBody>
               </StyledTable>
