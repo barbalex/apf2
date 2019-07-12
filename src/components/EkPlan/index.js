@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from 'react-apollo-hooks'
+import ReactResizeDetector from 'react-resize-detector'
 
 import ApList from './ApList'
 import Table from './Table'
@@ -33,9 +34,6 @@ const EkPlan = () => {
   const headerBottom = headerRef.current
     ? headerRef.current.getBoundingClientRect().bottom
     : 150
-  const headerWidth = headerRef.current
-    ? headerRef.current.getBoundingClientRect().width
-    : 150
 
   const { data, loading } = useQuery(queryAps, {
     variables: {
@@ -52,7 +50,9 @@ const EkPlan = () => {
           <ApList />
           <Choose />
         </Header>
-        <Table headerBottom={headerBottom} headerWidth={headerWidth} />
+        <ReactResizeDetector handleWidth handleHeight>
+          <Table headerBottom={headerBottom} />
+        </ReactResizeDetector>
       </Container>
     </ErrorBoundary>
   )

@@ -154,7 +154,7 @@ const TpopTitle = styled.h4`
   z-index: 3;
 `
 
-const EkPlanTable = ({ headerBottom, headerWidth }) => {
+const EkPlanTable = ({ headerBottom, width, height }) => {
   const store = useContext(storeContext)
   const {
     aps,
@@ -215,10 +215,12 @@ const EkPlanTable = ({ headerBottom, headerWidth }) => {
   )
 
   const yearColWidth = yearColumnWidth(showCount)
-  const headerYearFieldsWidth = headerWidth - headerFieldsFixedWidth
+  const headerYearFieldsWidth = width - headerFieldsFixedWidth
 
   console.log('Table rendering:', {
     headerYearFieldsWidth,
+    width,
+    height,
   })
 
   if (aps.length > 0 && loadingTpop)
