@@ -30,7 +30,6 @@ const CellForYearTitle = ({ field, row }) => {
   const einheits = einheitsByAp[row.apId]
   const onClickCell = useCallback(
     event => {
-      console.log('CellForYear, onClickCell', { row, label, value })
       setYearClicked({
         year: label,
         tpopId: row.id,
@@ -38,8 +37,7 @@ const CellForYearTitle = ({ field, row }) => {
         ekPlan: value.ekPlan,
         ekfPlan: value.ekfPlan,
       })
-      const currentTarget = event.currentTarget
-      setTimeout(() => setYearMenuAnchor(currentTarget))
+      setTimeout(() => setYearMenuAnchor(event.currentTarget))
     },
     [row],
   )
