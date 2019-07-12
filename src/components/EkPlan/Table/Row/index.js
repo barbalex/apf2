@@ -29,11 +29,7 @@ const StyledTableRow = styled(TableRow)`
   }
 `
 
-const EkPlanTableRow = ({
-  row,
-  ekfOptionsGroupedPerAp,
-  ekAbrechnungstypOptions,
-}) => {
+const EkPlanTableRow = ({ row }) => {
   const store = useContext(storeContext)
   const { fields } = store.ekPlan
 
@@ -59,18 +55,12 @@ const EkPlanTableRow = ({
                   key={field.name}
                   row={row}
                   field={field}
-                  ekAbrechnungstypOptions={ekAbrechnungstypOptions}
                 />
               )
             }
             if (field.name === 'ekfrequenz') {
               return (
-                <CellForEkfrequenz
-                  key={field.name}
-                  row={row}
-                  field={field}
-                  ekfOptionsGroupedPerAp={ekfOptionsGroupedPerAp}
-                />
+                <CellForEkfrequenz key={field.name} row={row} field={field} />
               )
             }
             if (field.name === 'ekfrequenzAbweichend') {
@@ -87,13 +77,7 @@ const EkPlanTableRow = ({
             }
             // DANGER: null is also an object!!
             if (field.value && typeof field.value === 'object') {
-              return (
-                <CellForYear
-                  key={field.label}
-                  row={row}
-                  field={field}
-                />
-              )
+              return <CellForYear key={field.label} row={row} field={field} />
             }
             return <CellForValue key={field.label} field={field} />
           })}

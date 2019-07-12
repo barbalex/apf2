@@ -343,6 +343,8 @@ const EkPlanTable = ({ headerBottom }) => {
     columnHovered,
     setColumnHovered,
     scrollPositions,
+    setEkfrequenzs,
+    setEkAbrechnungstypOptions,
   } = store.ekPlan
 
   const {
@@ -390,38 +392,10 @@ const EkPlanTable = ({ headerBottom }) => {
       apIds: apValues,
     },
   })
+  setEkfrequenzs(get(dataLists, 'allEkfrequenzs.nodes', []))
 
-  const ekfrequenzOptions = useMemo(
-    () =>
-      get(dataLists, 'allEkfrequenzs.nodes', []).map(o => {
-        const ekTypeArray = [o.ek ? 'ek' : null, o.ekf ? 'ekf' : null].filter(
-          field => !!field,
-        )
-        const code = (o.code || '').padEnd(2)
-        const anwendungsfall = (
-          `${o.anwendungsfall}, ${ekTypeArray.join(' und ')}` || ''
-        ).padEnd(26)
-        const name = (o.name || '').padEnd(27)
-        return {
-          value: o.code,
-          label: `${code}: ${name} | ${o.periodizitaet}`,
-          anwendungsfall,
-          apId: o.apId,
-        }
-      }),
-    [dataLists],
-  )
-
-  const ekfOptionsGroupedPerAp = useMemo(() => {
-    const os = groupBy(ekfrequenzOptions, 'apId')
-    Object.keys(os).forEach(k => (os[k] = groupBy(os[k], 'anwendungsfall')))
-    return os
-  }, [ekfrequenzOptions])
-
-  const ekAbrechnungstypOptions = get(
-    dataLists,
-    'allEkAbrechnungstypWertes.nodes',
-    [],
+  setEkAbrechnungstypOptions(
+    get(dataLists, 'allEkAbrechnungstypWertes.nodes', []),
   )
 
   //console.log('Table rendering')
@@ -462,8 +436,6 @@ const EkPlanTable = ({ headerBottom }) => {
                     <Row
                       key={row.id}
                       row={row}
-                      ekfOptionsGroupedPerAp={ekfOptionsGroupedPerAp}
-                      ekAbrechnungstypOptions={ekAbrechnungstypOptions}
                     />
                   ))}
                 </StyledTableBody>

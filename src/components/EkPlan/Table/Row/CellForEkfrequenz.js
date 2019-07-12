@@ -5,9 +5,14 @@ import { TableCellForSelect } from '../index'
 import storeContext from '../../../../storeContext'
 import SelectGrouped from './SelectGrouped'
 
-const CellForEkfrequenz = ({ row, field, ekfOptionsGroupedPerAp }) => {
+const CellForEkfrequenz = ({ row, field }) => {
   const store = useContext(storeContext)
-  const { resetYearHovered, setColumnHovered, scrollPositions } = store.ekPlan
+  const {
+    resetYearHovered,
+    setColumnHovered,
+    scrollPositions,
+    ekfOptionsGroupedPerAp,
+  } = store.ekPlan
 
   const onMouseEnter = useCallback(() => setColumnHovered(`_${field.label}_`), [
     field,

@@ -55,6 +55,7 @@ const StyledSelect = styled(AsyncSelect)`
   .react-select__menu-list {
     height: 130px;
     height: ${props => (props.maxheight ? `${props.maxheight}px` : 'unset')};
+    z-index: 4;
   }
 `
 const SelectContainer = styled.div`
@@ -136,6 +137,7 @@ const EkPlan = ({ setShowChoose }) => {
         <StyledSelect
           defaultOptions
           onChange={onChange}
+          onBlur={() => setShowChoose(false)}
           value={value}
           hideSelectedOptions
           placeholder="Bitte Tippen für Vorschläge"

@@ -48,8 +48,16 @@ export default types
     yearClicked: initialYearClicked,
     scrollPositions: null,
     apsData: [],
+    ekfrequenzs: [],
+    ekAbrechnungstypOptions: [],
   }))
   .actions(self => ({
+    setEkAbrechnungstypOptions(val) {
+      self.ekAbrechnungstypOptions = val
+    },
+    setEkfrequenzs(val) {
+      self.ekfrequenzs = val
+    },
     setApsDataLoading(val) {
       self.apsDataLoading = val
     },
@@ -118,6 +126,27 @@ export default types
   .views(self => ({
     get apValues() {
       return self.aps.map(a => a.value)
+    },
+    get ekfOptionsGroupedPerAp() {
+      const options = self.ekfrequenzs.map(o => {
+        const ekTypeArray = [o.ek ? 'ek' : null, o.ekf ? 'ekf' : null].filter(
+          field => !!field,
+        )
+        const code = (o.code || '').padEnd(2)
+        const anwendungsfall = (
+          `${o.anwendungsfall}, ${ekTypeArray.join(' und ')}` || ''
+        ).padEnd(26)
+        const name = (o.name || '').padEnd(27)
+        return {
+          value: o.code,
+          label: `${code}: ${name} | ${o.periodizitaet}`,
+          anwendungsfall,
+          apId: o.apId,
+        }
+      })
+      const os = groupBy(options, 'apId')
+      Object.keys(os).forEach(k => (os[k] = groupBy(os[k], 'anwendungsfall')))
+      return os
     },
     get einheitsByAp() {
       const e = groupBy(get(self.apsData, 'allAps.nodes', []), 'id')
