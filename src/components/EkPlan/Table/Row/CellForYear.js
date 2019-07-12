@@ -22,7 +22,7 @@ const CellForYearTitle = ({ field, row }) => {
     einheitsByAp,
   } = store.ekPlan
 
-  const { label, value, width, name } = field
+  const { label, value, width } = field
   const onMouseEnter = useCallback(() => setColumnHovered(label), [label])
   const { year, tpopId } = yearClicked
   const clicked = year === label && tpopId === row.id

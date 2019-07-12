@@ -24,8 +24,8 @@ import yearsFromTpops from './yearsFromTpops'
 import rowFromTpop from './rowFromTpop'
 import fields from './fields'
 import yearColumnWidth from './yearColumnWidth'
-import FixedHeaderCell from './FixedHeaderCell'
-import YearHeaderCell from './YearHeaderCell'
+import CellHeaderFixed from './CellHeaderFixed'
+import CellHeaderYear from './CellHeaderYear'
 
 const TempContainer = styled.div`
   padding: 10px;
@@ -237,7 +237,7 @@ const EkPlanTable = () => {
             width={headerFieldsFixedWidth}
           >
             {({ index, style }) => (
-              <FixedHeaderCell
+              <CellHeaderFixed
                 style={style}
                 column={headerFieldsFixed[index]}
               />
@@ -251,7 +251,7 @@ const EkPlanTable = () => {
             width={headerYearFieldsWidth}
           >
             {({ index, style }) => (
-              <YearHeaderCell style={style} column={years[index]} />
+              <CellHeaderYear style={style} column={years[index]} />
             )}
           </FixedSizeList>
         </HeaderContainer>
