@@ -1,6 +1,5 @@
 import get from 'lodash/get'
 
-import fieldsFromTpop from './fieldsFromTpop'
 import yearColumnWidth from './yearColumnWidth'
 
 export default ({ tpop, years, showCount }) => {
@@ -8,10 +7,14 @@ export default ({ tpop, years, showCount }) => {
   const kontrs = get(tpop, 'tpopkontrsByTpopId.nodes')
   const ansiedlungs = get(tpop, 'tpopmassnsByTpopId.nodes')
 
-  const fields = fieldsFromTpop(tpop)
+  const row = {
+    id: tpop.id,
+    tpop: tpop,
+    apId: get(tpop, 'popByPopId.apByApId.id'),
+  }
   years.forEach(
     year =>
-      (fields[year.toString()] = {
+      (row[year.toString()] = {
         name: year,
         label: year,
         alwaysShow: true,
@@ -34,5 +37,5 @@ export default ({ tpop, years, showCount }) => {
         width: yearColumnWidth(showCount),
       }),
   )
-  return fields
+  return row
 }

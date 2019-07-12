@@ -9,7 +9,8 @@ import sortBy from 'lodash/sortBy'
 import sumBy from 'lodash/sumBy'
 import { observer } from 'mobx-react-lite'
 import {
-  FixedSizeGrid as Grid,
+  FixedSizeGrid,
+  VariableSizeGrid,
   VariableSizeList as List,
   FixedSizeList,
 } from 'react-window'
@@ -17,15 +18,21 @@ import ReactResizeDetector from 'react-resize-detector'
 
 import queryTpop from './queryTpop'
 import queryLists from './queryLists'
-import Row from './Row'
 import CellForYearMenu from './Row/CellForYearMenu'
 import storeContext from '../../../storeContext'
 import yearsFromTpops from './yearsFromTpops'
-import rowFromTpop from './rowFromTpop'
+import tpopRowFromTpop from './tpopRowFromTpop'
+import yearRowFromTpop from './yearRowFromTpop'
 import fields from './fields'
 import yearColumnWidth from './yearColumnWidth'
 import CellHeaderFixed from './CellHeaderFixed'
 import CellHeaderYear from './CellHeaderYear'
+import CellForYearTitle from './CellForYearTitle'
+import CellForEkAbrechnungstyp from './CellForEkAbrechnungstyp'
+import CellForEkfrequenz from './CellForEkfrequenz'
+import CellForEkfrequenzAbweichend from './CellForEkfrequenzAbweichend'
+import CellForTpopLink from './CellForTpopLink'
+import CellForValue from './CellForValue'
 
 const TempContainer = styled.div`
   padding: 10px;
@@ -88,11 +95,7 @@ export const StyledYearHeaderCell = styled.div`
 export const StyledFixedHeaderCell = styled(StyledYearHeaderCell)`
   text-align: left;
 `
-export const EkTableCell = styled(TableCell)`
-  position: sticky;
-  width: ${props => `${props.width}px`};
-  min-width: ${props => `${props.width}px`};
-  max-width: ${props => `${props.width}px`};
+export const StyledTableCell = styled.div`
   font-size: 0.75rem !important;
   white-space: nowrap !important;
   text-overflow: ellipsis !important;
@@ -102,9 +105,6 @@ export const EkTableCell = styled(TableCell)`
   border-right: solid hsla(70, 80%, 75%, 1) 1px;
   background: ${props =>
     props['data-clicked'] ? 'rgb(255,211,167) !important' : 'unset'};
-  left: ${props =>
-    props['data-left'] === undefined ? 'unset' : `${props['data-left']}px`};
-  z-index: ${props => (props['data-left'] === undefined ? 0 : 1)};
   &:first-child {
     padding-left: 10px !important;
   }
@@ -114,7 +114,7 @@ export const EkTableCell = styled(TableCell)`
     overflow: hidden !important;
   }
 `
-export const TableCellForSelect = styled(EkTableCell)`
+export const StyledCellForSelect = styled(StyledTableCell)`
   padding: 0 !important;
   font-size: unset !important;
   border-left: solid green 1px;
@@ -123,7 +123,7 @@ export const TableCellForSelect = styled(EkTableCell)`
     border: solid orange 3px;
   }
 `
-export const TableCellForYear = styled(EkTableCell)`
+export const TableCellForYear = styled(StyledTableCell)`
   &:focus-within {
     border: solid orange 3px;
   }
@@ -170,10 +170,10 @@ const EkPlanTable = () => {
     t => t.popByPopId.apByApId.label,
   )
   const years = useMemo(() => yearsFromTpops(tpops), [tpops])
-  const rows = useMemo(
+  const yearRows = useMemo(
     () =>
       tpops.map(tpop =>
-        rowFromTpop({
+        yearRowFromTpop({
           tpop,
           years,
           showCount,
@@ -181,7 +181,19 @@ const EkPlanTable = () => {
       ),
     [tpops, years, showCount],
   )
-  const headerFieldsFixed = rows.length
+  const tpopRows = useMemo(() => tpops.map(tpopRowFromTpop), [tpops])
+  console.log({ tpopRows, fields })
+  const tpopColumns = tpopRows.length
+    ? sortBy(
+        Object.values(tpopRows[0])
+          .filter(o => typeof o === 'object')
+          .filter(o => !!o.name)
+          .filter(o => fieldsShown.includes(o.name) || !!o.alwaysShow),
+        'sort',
+      )
+    : []
+  console.log({ tpopColumns })
+  const headerFieldsFixed = tpops.length
     ? sortBy(
         Object.values(fields).filter(
           o => fieldsShown.includes(o.name) || !!o.alwaysShow,
@@ -214,8 +226,8 @@ const EkPlanTable = () => {
   const headerYearFieldsWidth = sizeState.width - headerFieldsFixedWidth
 
   console.log('Table rendering:', {
-    headerYearFieldsWidth,
-    width: sizeState.width,
+    yearRows,
+    tpopRows,
     height: sizeState.height,
   })
 
@@ -227,7 +239,7 @@ const EkPlanTable = () => {
       <Container>
         <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
         <HeaderContainer>
-          <TpopTitle>{`${rows.length} Teilpopulationen`}</TpopTitle>
+          <TpopTitle>{`${tpops.length} Teilpopulationen`}</TpopTitle>
           <List
             key={headerFieldsFixed.length}
             height={60}
@@ -255,7 +267,61 @@ const EkPlanTable = () => {
             )}
           </FixedSizeList>
         </HeaderContainer>
-        <BodyContainer>TODO</BodyContainer>
+        <BodyContainer>
+          <VariableSizeGrid
+            style={{ overflowY: 'hidden' }}
+            className="Grid"
+            columnCount={tpopColumns.length}
+            columnWidth={index => tpopColumns[index].width}
+            height={sizeState.height - 60}
+            rowCount={tpopRows.length}
+            rowHeight={index => 55}
+            width={headerFieldsFixedWidth}
+          >
+            {({ columnIndex, rowIndex, style }) => {
+              const row = tpopRows[rowIndex]
+              const column = tpopColumns[columnIndex].name
+              const value = row[column]
+              /*console.log('Table', {
+                columnIndex,
+                rowIndex,
+                row,
+                column,
+                value,
+              })*/
+              if (value.name === 'yearTitle') {
+                return <CellForYearTitle key={value.name} />
+              }
+              if (value.name === 'ekAbrechnungstyp') {
+                return (
+                  <CellForEkAbrechnungstyp
+                    key={value.name}
+                    row={row}
+                    field={value}
+                  />
+                )
+              }
+              if (value.name === 'ekfrequenz') {
+                return (
+                  <CellForEkfrequenz key={value.name} row={row} field={value} />
+                )
+              }
+              if (value.name === 'ekfrequenzAbweichend') {
+                return (
+                  <CellForEkfrequenzAbweichend
+                    key={value.name}
+                    row={row}
+                    field={value}
+                  />
+                )
+              }
+              if (value.name === 'link') {
+                return <CellForTpopLink key={value.name} field={value} />
+              }
+              return <CellForValue key={value.label} field={value} />
+            }}
+          </VariableSizeGrid>
+        </BodyContainer>
       </Container>
     </ErrorBoundary>
   )

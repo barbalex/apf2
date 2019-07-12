@@ -17,7 +17,7 @@ import Row from './Row'
 import CellForYearMenu from './Row/CellForYearMenu'
 import storeContext from '../../../storeContext'
 import yearsFromTpops from './yearsFromTpops'
-import rowFromTpop from './rowFromTpop'
+import rowFromTpop from './yearRowFromTpop'
 
 const Container = styled.div`
   padding: 10px;
