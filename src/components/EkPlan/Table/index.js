@@ -17,7 +17,7 @@ import Row from './Row'
 import CellForYearMenu from './Row/CellForYearMenu'
 import storeContext from '../../../storeContext'
 import yearsFromTpops from './yearsFromTpops'
-import fieldsFromTpop from './fieldsFromTpop'
+import rowFromTpop from './rowFromTpop'
 
 const Container = styled.div`
   padding: 10px;
@@ -135,39 +135,6 @@ const TpopTitle = styled.h4`
   left: 10px;
   z-index: 3;
 `
-const rowsFromTpop = ({ tpop, years, showCount }) => {
-  const ekplans = get(tpop, 'ekplansByTpopId.nodes')
-  const kontrs = get(tpop, 'tpopkontrsByTpopId.nodes')
-  const ansiedlungs = get(tpop, 'tpopmassnsByTpopId.nodes')
-
-  const fields = fieldsFromTpop(tpop)
-  years.forEach(
-    year =>
-      (fields[year.toString()] = {
-        name: year,
-        label: year,
-        alwaysShow: true,
-        value: {
-          ekPlan:
-            ekplans.filter(o => o.jahr === year).filter(o => o.typ === 'EK')
-              .length > 0,
-          ekfPlan:
-            ekplans.filter(o => o.jahr === year).filter(o => o.typ === 'EKF')
-              .length > 0,
-          ek: kontrs
-            .filter(o => o.jahr === year)
-            .filter(o => o.typ !== 'Freiwilligen-Erfolgskontrolle'),
-          ekf: kontrs
-            .filter(o => o.jahr === year)
-            .filter(o => o.typ === 'Freiwilligen-Erfolgskontrolle'),
-          ansiedlungs: ansiedlungs.filter(o => o.jahr === year),
-        },
-        sort: year,
-        width: showCount ? 52 : 38,
-      }),
-  )
-  return fields
-}
 
 const EkPlanTable = ({ headerBottom }) => {
   const store = useContext(storeContext)
@@ -203,7 +170,7 @@ const EkPlanTable = ({ headerBottom }) => {
   const rows = useMemo(
     () =>
       tpops.map(tpop =>
-        rowsFromTpop({
+        rowFromTpop({
           tpop,
           years,
           showCount,
@@ -231,7 +198,6 @@ const EkPlanTable = ({ headerBottom }) => {
     },
   })
   setEkfrequenzs(get(dataLists, 'allEkfrequenzs.nodes', []))
-
   setEkAbrechnungstypOptions(
     get(dataLists, 'allEkAbrechnungstypWertes.nodes', []),
   )
