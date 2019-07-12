@@ -37,7 +37,9 @@ const CellForYearTitle = ({ field, row }) => {
         ekPlan: value.ekPlan,
         ekfPlan: value.ekfPlan,
       })
-      setTimeout(() => setYearMenuAnchor(event.currentTarget))
+      // need to catch target before setTimeout
+      const currentTarget = event.currentTarget
+      setTimeout(() => setYearMenuAnchor(currentTarget))
     },
     [row],
   )
