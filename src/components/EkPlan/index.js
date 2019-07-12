@@ -1,10 +1,8 @@
-import React, { useRef, useContext, useMemo } from 'react'
+import React, { useRef, useContext } from 'react'
 import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from 'react-apollo-hooks'
-import groupBy from 'lodash/groupBy'
-import get from 'lodash/get'
 
 import ApList from './ApList'
 import Table from './Table'
@@ -27,37 +25,29 @@ const Header = styled.div`
 
 const EkPlan = () => {
   const store = useContext(storeContext)
-  const { aps } = store.ekPlan
+  const { aps, setApsData, setApsDataLoading } = store.ekPlan
 
   const headerRef = useRef(null)
   const headerBottom = headerRef.current
     ? headerRef.current.getBoundingClientRect().bottom
     : 150
 
-  const queryApsResult = useQuery(queryAps, {
+  const { data, loading } = useQuery(queryAps, {
     variables: {
       ids: aps.map(ap => ap.value),
     },
   })
-  const einheitsByAp = useMemo(() => {
-    const e = groupBy(get(queryApsResult, 'data.allAps.nodes', []), 'id')
-    Object.keys(e).forEach(
-      apId =>
-        (e[apId] = get(e[apId][0], 'ekzaehleinheitsByApId.nodes', []).map(
-          o => o.tpopkontrzaehlEinheitWerteByZaehleinheitId.code,
-        )),
-    )
-    return e
-  }, [queryApsResult])
+  setApsData(data)
+  setApsDataLoading(loading)
 
   return (
     <ErrorBoundary>
       <Container>
         <Header ref={headerRef}>
-          <ApList queryApsResult={queryApsResult} />
+          <ApList />
           <Choose />
         </Header>
-        <Table einheitsByAp={einheitsByAp} headerBottom={headerBottom} />
+        <Table headerBottom={headerBottom} />
       </Container>
     </ErrorBoundary>
   )

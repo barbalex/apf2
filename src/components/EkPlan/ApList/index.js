@@ -29,7 +29,7 @@ const PlusIcon = styled(IconButton)`
   padding-bottom: 4px !important;
 `
 
-const ApList = ({ queryApsResult }) => {
+const ApList = () => {
   const store = useContext(storeContext)
   const { aps } = store.ekPlan
 
@@ -51,9 +51,11 @@ const ApList = ({ queryApsResult }) => {
         )}
       </TitleRow>
       {aps.map(ap => (
-        <Ap key={ap.value} ap={ap} queryApsResult={queryApsResult} />
+        <Ap key={ap.value} ap={ap} />
       ))}
-      {showChoose && <ChooseAp setShowChoose={setShowChoose} />}
+      {(aps.length === 0 || showChoose) && (
+        <ChooseAp setShowChoose={setShowChoose} />
+      )}
     </Container>
   )
 }

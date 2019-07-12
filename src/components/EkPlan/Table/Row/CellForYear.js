@@ -7,7 +7,7 @@ import MassnIcon from './MassnIcon'
 import { InfoRow } from '../index'
 import storeContext from '../../../../storeContext'
 
-const CellForYearTitle = ({ field, row, einheitsByAp }) => {
+const CellForYearTitle = ({ field, row }) => {
   const store = useContext(storeContext)
   const {
     showEk,
@@ -18,6 +18,7 @@ const CellForYearTitle = ({ field, row, einheitsByAp }) => {
     setYearClicked,
     resetYearHovered,
     setColumnHovered,
+    einheitsByAp,
   } = store.ekPlan
 
   const { label, value, width, name } = field

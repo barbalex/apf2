@@ -331,7 +331,7 @@ const rowsFromTpop = ({ tpop, years, showCount }) => {
   return fields
 }
 
-const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
+const EkPlanTable = ({ headerBottom }) => {
   const store = useContext(storeContext)
   const {
     aps,
@@ -462,7 +462,6 @@ const EkPlanTable = ({ einheitsByAp, headerBottom }) => {
                     <Row
                       key={row.id}
                       row={row}
-                      einheitsByAp={einheitsByAp}
                       ekfOptionsGroupedPerAp={ekfOptionsGroupedPerAp}
                       ekAbrechnungstypOptions={ekAbrechnungstypOptions}
                     />

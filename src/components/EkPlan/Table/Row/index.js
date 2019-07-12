@@ -31,12 +31,11 @@ const StyledTableRow = styled(TableRow)`
 
 const EkPlanTableRow = ({
   row,
-  einheitsByAp,
   ekfOptionsGroupedPerAp,
   ekAbrechnungstypOptions,
 }) => {
   const store = useContext(storeContext)
-  const { fields, scrollPositions } = store.ekPlan
+  const { fields } = store.ekPlan
 
   //console.log('Row rendering')
 
@@ -93,7 +92,6 @@ const EkPlanTableRow = ({
                   key={field.label}
                   row={row}
                   field={field}
-                  einheitsByAp={einheitsByAp}
                 />
               )
             }

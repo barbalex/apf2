@@ -1,5 +1,7 @@
 import { types } from 'mobx-state-tree'
 import uniq from 'lodash/uniq'
+import groupBy from 'lodash/groupBy'
+import get from 'lodash/get'
 
 import Ap from './Ap'
 import { fields } from '../../components/EkPlan/Table'
@@ -39,13 +41,21 @@ export default types
       defaultFields,
     ),
     columnHovered: types.optional(types.union(types.string, types.number), ''),
+    apsDataLoading: types.optional(types.boolean, true),
   })
   .volatile(() => ({
     yearMenuAnchor: null,
     yearClicked: initialYearClicked,
     scrollPositions: null,
+    apsData: [],
   }))
   .actions(self => ({
+    setApsDataLoading(val) {
+      self.apsDataLoading = val
+    },
+    setApsData(val) {
+      self.apsData = val
+    },
     setShowEk(val) {
       self.showEk = val
     },
@@ -108,6 +118,16 @@ export default types
   .views(self => ({
     get apValues() {
       return self.aps.map(a => a.value)
+    },
+    get einheitsByAp() {
+      const e = groupBy(get(self.apsData, 'allAps.nodes', []), 'id')
+      Object.keys(e).forEach(
+        apId =>
+          (e[apId] = get(e[apId][0], 'ekzaehleinheitsByApId.nodes', []).map(
+            o => o.tpopkontrzaehlEinheitWerteByZaehleinheitId.code,
+          )),
+      )
+      return e
     },
     get scrollPositions() {
       const fieldsShown = self.fields
@@ -217,4 +237,6 @@ export const defaultValue = {
   columnHovered: 'none',
   yearMenuAnchor: null,
   yearClicked: initialYearClicked,
+  apsDataLoading: true,
+  apsData: [],
 }

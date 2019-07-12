@@ -26,13 +26,14 @@ const DelIcon = styled(IconButton)`
   padding-bottom: 0 !important;
 `
 
-const Ap = ({ ap, queryApsResult }) => {
+const Ap = ({ ap }) => {
   const store = useContext(storeContext)
-  const { removeAp } = store.ekPlan
+  const { removeAp, dataAps, dataApsLoading } = store.ekPlan
 
   const onClickDelete = useCallback(() => removeAp(ap), [ap])
-  const { data, loading } = queryApsResult
-  const thisApData = get(data, 'allAps.nodes', []).find(a => a.id === ap.value)
+  const thisApData = get(dataAps, 'allAps.nodes', []).find(
+    a => a.id === ap.value,
+  )
   const einheits = get(thisApData, 'ekzaehleinheitsByApId.nodes', []).map(e =>
     get(e, 'tpopkontrzaehlEinheitWerteByZaehleinheitId.text'),
   )
@@ -48,7 +49,7 @@ const Ap = ({ ap, queryApsResult }) => {
   return (
     <Container>
       <ApDiv>{`${ap.label}.`}</ApDiv>
-      {!loading && (
+      {!dataApsLoading && (
         <EinheitsDiv data-warn={einheits.length === 0}>
           <Label>{labelText}</Label> {einheitsText}
         </EinheitsDiv>
