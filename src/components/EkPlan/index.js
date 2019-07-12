@@ -27,6 +27,8 @@ const EkPlan = () => {
   const store = useContext(storeContext)
   const { aps, setApsData, setApsDataLoading } = store.ekPlan
 
+  // TODO:
+  // recalculate on resize
   const headerRef = useRef(null)
   const headerBottom = headerRef.current
     ? headerRef.current.getBoundingClientRect().bottom
