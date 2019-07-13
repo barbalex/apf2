@@ -94,7 +94,7 @@ export const StyledYearHeaderCell = styled.div`
   &:first-child span {
     padding-left: 10px;
   }
-  &.hovered {
+  &.column-hovered {
     background: hsla(120, 25%, 82%, 1) !important;
     font-weight: 800 !important;
   }
@@ -115,6 +115,12 @@ export const StyledTableCell = styled.div`
   &:first-child {
     padding-left: 10px !important;
   }
+  &.tpop-hovered {
+    background-color: hsla(45, 100%, 90%, 1);
+  }
+  &.column-hovered {
+    background-color: hsla(45, 100%, 90%, 1);
+  }
   div {
     white-space: nowrap !important;
     text-overflow: ellipsis !important;
@@ -131,9 +137,6 @@ export const StyledCellForSelect = styled(StyledTableCell)`
   }
 `
 export const TableCellForYear = styled(StyledTableCell)`
-  &.hovered {
-    background-color: hsla(45, 100%, 90%, 1);
-  }
   &:focus-within {
     border: solid orange 3px;
   }
@@ -319,7 +322,13 @@ const EkPlanTable = () => {
                 const column = tpopColumns[columnIndex].name
                 const value = row[column]
                 if (value.name === 'yearTitle') {
-                  return <CellForYearTitle key={value.name} style={style} />
+                  return (
+                    <CellForYearTitle
+                      key={value.name}
+                      style={style}
+                      row={row}
+                    />
+                  )
                 }
                 if (value.name === 'ekAbrechnungstyp') {
                   return (
@@ -357,11 +366,17 @@ const EkPlanTable = () => {
                       key={value.name}
                       field={value}
                       style={style}
+                      row={row}
                     />
                   )
                 }
                 return (
-                  <CellForValue key={value.label} field={value} style={style} />
+                  <CellForValue
+                    key={value.label}
+                    field={value}
+                    style={style}
+                    row={row}
+                  />
                 )
               }}
             </VariableSizeGrid>

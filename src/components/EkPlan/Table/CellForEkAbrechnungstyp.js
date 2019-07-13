@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../storeContext'
@@ -7,10 +7,17 @@ import { StyledCellForSelect } from './index'
 
 const CellForEkAbrechnungstyp = ({ field, row, style }) => {
   const store = useContext(storeContext)
-  const { ekAbrechnungstypOptions } = store.ekPlan
+  const { ekAbrechnungstypOptions, hovered } = store.ekPlan
+  const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
+  const onMouseEnter = useCallback(() => hovered.setTpopId(row.id), [row.id])
 
   return (
-    <StyledCellForSelect style={style}>
+    <StyledCellForSelect
+      style={style}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={hovered.reset}
+      className={className}
+    >
       <Select
         options={ekAbrechnungstypOptions}
         row={row}

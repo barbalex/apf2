@@ -4,6 +4,7 @@ import groupBy from 'lodash/groupBy'
 import get from 'lodash/get'
 
 import Ap from './Ap'
+import Hovered, { defaultValue as defaultHovered } from './Hovered'
 import fields from '../../components/EkPlan/Table/fields'
 
 export const defaultFields = [
@@ -40,7 +41,7 @@ export default types
       types.array(types.union(types.string, types.number)),
       defaultFields,
     ),
-    columnHovered: types.optional(types.maybeNull(types.number), null),
+    hovered: types.optional(Hovered, defaultHovered),
     apsDataLoading: types.optional(types.boolean, true),
   })
   .volatile(() => ({
@@ -112,12 +113,6 @@ export default types
     closeYearCellMenu() {
       self.yearMenuAnchor = null
       self.yearClicked = initialYearClicked
-    },
-    setColumnHovered(val) {
-      self.columnHovered = val
-    },
-    resetYearHovered() {
-      if (!self.yearClicked.year) self.columnHovered = null
     },
     setScrollPositions(val) {
       self.scrollPositions = val
@@ -263,7 +258,7 @@ export const defaultValue = {
   showMassn: true,
   aps: [],
   fields: defaultFields,
-  columnHovered: null,
+  hovered: defaultHovered,
   yearMenuAnchor: null,
   yearClicked: initialYearClicked,
   apsDataLoading: true,

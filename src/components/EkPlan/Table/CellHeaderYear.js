@@ -6,16 +6,16 @@ import { StyledYearHeaderCell } from './index'
 
 const CellHeaderYear = ({ style, column }) => {
   const store = useContext(storeContext)
-  const { resetYearHovered, columnHovered, setColumnHovered } = store.ekPlan
+  const { hovered } = store.ekPlan
 
-  const onMouseEnter = useCallback(() => setColumnHovered(column), [column])
-  const className = columnHovered === column ? 'hovered' : ''
+  const onMouseEnter = useCallback(() => hovered.setYear(column), [column])
+  const className = hovered.year === column ? 'column-hovered' : ''
 
   return (
     <StyledYearHeaderCell
       style={style}
       onMouseEnter={onMouseEnter}
-      onMouseLeave={resetYearHovered}
+      onMouseLeave={hovered.reset}
       className={className}
     >
       <span>{column}</span>

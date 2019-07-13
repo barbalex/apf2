@@ -1,13 +1,25 @@
-import React from 'react'
+import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { StyledTableCell } from './index'
+import storeContext from '../../../storeContext'
 
-const CellForValue = ({ field, style }) => {
+const CellForValue = ({ field, style, row }) => {
+  const store = useContext(storeContext)
+
   const { value } = field
 
+  const { hovered } = store.ekPlan
+  const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
+  const onMouseEnter = useCallback(() => hovered.setTpopId(row.id), [row.id])
+
   return (
-    <StyledTableCell style={style}>
+    <StyledTableCell
+      style={style}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={hovered.reset}
+      className={className}
+    >
       <div>{value}</div>
     </StyledTableCell>
   )

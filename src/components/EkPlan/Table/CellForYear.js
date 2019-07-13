@@ -16,14 +16,15 @@ const CellForYear = ({ field, row, style }) => {
     setYearMenuAnchor,
     yearClicked,
     setYearClicked,
-    resetYearHovered,
-    columnHovered,
-    setColumnHovered,
     einheitsByAp,
+    hovered,
   } = store.ekPlan
 
   const { label, value, width } = field
-  const onMouseEnter = useCallback(() => setColumnHovered(label), [label])
+  const onMouseEnter = useCallback(
+    () => hovered.set({ year: label, tpopId: row.id }),
+    [label, row.id],
+  )
   const { year, tpopId } = yearClicked
   const clicked = year === label && tpopId === row.id
   const einheits = einheitsByAp[row.apId]
@@ -43,13 +44,16 @@ const CellForYear = ({ field, row, style }) => {
     },
     [row],
   )
-  const className = columnHovered === label ? 'hovered' : ''
+  const classes = []
+  if (hovered.year === label) classes.push('column-hovered')
+  if (hovered.tpopId === row.id) classes.push('tpop-hovered')
+  const className = classes.join(' ')
 
   return (
     <TableCellForYear
       width={width}
       onMouseEnter={onMouseEnter}
-      onMouseLeave={resetYearHovered}
+      onMouseLeave={hovered.reset}
       data-clicked={clicked}
       onClick={onClickCell}
       className={className}
