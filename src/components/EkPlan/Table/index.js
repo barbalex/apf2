@@ -69,6 +69,7 @@ export const StyledYearHeaderCell = styled.div`
   line-height: 60px;
   border-left: solid hsla(120, 25%, 70%, 1) 1px;
   border-right: solid hsla(120, 25%, 70%, 1) 1px;
+  border-bottom: solid #e6e6e6 1px;
   background: hsla(120, 25%, 88%, 1);
   span {
     display: inline-block;
@@ -95,6 +96,7 @@ export const StyledTableCell = styled.div`
   padding: 2px 4px !important;
   border-left: solid hsla(70, 80%, 75%, 1) 1px;
   border-right: solid hsla(70, 80%, 75%, 1) 1px;
+  border-bottom: solid #e6e6e6 1px;
   background: ${props =>
     props['data-clicked']
       ? 'rgb(255,211,167) !important'
