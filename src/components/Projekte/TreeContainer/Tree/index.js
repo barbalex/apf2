@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from 'react-apollo-hooks'
 import jwtDecode from 'jwt-decode'
 
-import Row from './Row'
+import Row from '.'
 
 import storeContext from '../../../../storeContext'
 import buildVariables from './buildVariables'

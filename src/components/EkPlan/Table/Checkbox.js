@@ -4,8 +4,8 @@ import { useApolloClient } from 'react-apollo-hooks'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 
-import { tpop } from '../../../shared/fragments'
-import storeContext from '../../../../storeContext'
+import { tpop } from '../../shared/fragments'
+import storeContext from '../../../storeContext'
 
 const CheckboxContainer = styled.div`
   width: 100%;

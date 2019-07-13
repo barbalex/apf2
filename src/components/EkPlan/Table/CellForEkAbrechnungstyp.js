@@ -2,7 +2,7 @@ import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../../storeContext'
-import Select from './Row/Select'
+import Select from './Select'
 import { StyledCellForSelect } from './index'
 
 const CellForEkAbrechnungstyp = ({ field, row, style }) => {

@@ -62,20 +62,6 @@ const BodyContainer = styled.div`
   height: 100%;
   width: 100%;
 `
-const StyledTable = styled(Table)`
-  position: relative;
-  padding-left: 10px;
-  padding-right: 10px;
-  border-collapse: separate;
-  border-spacing: 0;
-  thead > tr > th.${props => props.colhovered} {
-    background: hsla(120, 25%, 82%, 1) !important;
-    font-weight: 800 !important;
-  }
-  tbody > tr > td.${props => props.colhovered} {
-    background: hsla(45, 100%, 90%, 1);
-  }
-`
 export const StyledYearHeaderCell = styled.div`
   text-align: center;
   font-weight: 500;

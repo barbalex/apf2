@@ -1,7 +1,7 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import Checkbox from './Row/Checkbox'
+import Checkbox from './Checkbox'
 import { StyledCellForSelect } from './index'
 import storeContext from '../../../storeContext'
 

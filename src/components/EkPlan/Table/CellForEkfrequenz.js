@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { StyledCellForSelect } from './index'
 
 import storeContext from '../../../storeContext'
-import SelectGrouped from './Row/SelectGrouped'
+import SelectGrouped from './SelectGrouped'
 
 const CellForEkfrequenz = ({ row, field, style }) => {
   const store = useContext(storeContext)
