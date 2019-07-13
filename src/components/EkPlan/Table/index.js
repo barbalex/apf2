@@ -162,6 +162,15 @@ const EkPlanTable = () => {
     setEkAbrechnungstypOptions,
   } = store.ekPlan
 
+  const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
+    width: 0,
+    height: 0,
+  })
+  const onResize = useCallback(
+    (width, height) => sizeDispatch({ payload: { width, height } }),
+    [],
+  )
+
   const {
     data: dataTpop,
     loading: loadingTpop,
@@ -192,6 +201,7 @@ const EkPlanTable = () => {
     ? sortBy(
         Object.values(yearRows[0])
           .filter(o => typeof o === 'object')
+          .filter(o => !!o.value && !!o.value.eks)
           .filter(o => !!o.name),
         'sort',
       )
@@ -216,7 +226,9 @@ const EkPlanTable = () => {
         'sort',
       )
     : []
-  const headerFieldsFixedWidth = sumBy(headerFieldsFixed, 'width')
+  let headerFieldsFixedWidth = sumBy(headerFieldsFixed, 'width')
+  if (headerFieldsFixedWidth > sizeState.width)
+    headerFieldsFixedWidth = sizeState.width
 
   const tpopGrid = useRef(null)
   const yearHeaderGrid = useRef(null)
@@ -231,23 +243,18 @@ const EkPlanTable = () => {
     get(dataLists, 'allEkAbrechnungstypWertes.nodes', []),
   )
 
-  const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
-    width: 0,
-    height: 0,
-  })
-  const onResize = useCallback(
-    (width, height) => sizeDispatch({ payload: { width, height } }),
-    [],
-  )
-
   const yearColWidth = yearColumnWidth(showCount)
-  const headerYearFieldsWidth = sizeState.width - headerFieldsFixedWidth
+  let headerYearFieldsWidth = sizeState.width - headerFieldsFixedWidth
+  if (headerYearFieldsWidth < 0) headerYearFieldsWidth = 0
 
-  /*console.log('Table rendering:', {
+  console.log('Table rendering:', {
     yearRows,
     tpopRows,
-    height: sizeState.height,
-  })*/
+    yearColumns,
+    headerYearFieldsWidth,
+    headerFieldsFixedWidth,
+    width: sizeState.width,
+  })
   const onScroll = ({ scrollTop, scrollLeft, scrollUpdateWasRequested }) => {
     if (!scrollUpdateWasRequested) {
       tpopGrid.current && tpopGrid.current.scrollTo({ scrollTop })
@@ -371,6 +378,7 @@ const EkPlanTable = () => {
                 const row = yearRows[rowIndex]
                 const column = yearColumns[columnIndex].name
                 const value = row[column]
+                //console.log('Table, rendering Grid', { column, row, value })
 
                 return <CellForYear row={row} field={value} style={style} />
               }}

@@ -52,6 +52,8 @@ const EkIcon = ({ planned, eks, einheits }) => {
   const store = useContext(storeContext)
   const { showCount, showEkCount } = store.ekPlan
 
+  //console.log('EkIcon', { planned, eks, einheits })
+
   if (!planned && !eks.length) {
     return <CheckboxContainer>&nbsp;</CheckboxContainer>
   }

@@ -43,6 +43,7 @@ const CellForYear = ({ field, row, style }) => {
     [row],
   )
   const className = columnHovered === label ? 'hovered' : ''
+  //console.log('CellForYear, value:', value)
 
   return (
     <TableCellForYear
