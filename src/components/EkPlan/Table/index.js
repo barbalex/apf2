@@ -151,6 +151,9 @@ const EkPlanTable = () => {
     yearMenuAnchor,
     setEkfrequenzs,
     setEkAbrechnungstypOptions,
+    showEk,
+    showEkf,
+    showMassn,
   } = store.ekPlan
 
   const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
@@ -237,6 +240,9 @@ const EkPlanTable = () => {
   let headerYearFieldsWidth = sizeState.width - headerFieldsFixedWidth
   if (headerYearFieldsWidth < 0) headerYearFieldsWidth = 0
 
+  const showsLength = [showEk, showEkf, showMassn].filter(s => !!s).length
+  const rowHeight = 31 + (!!showsLength ? showsLength - 1 : 0) * 12
+
   /*console.log('Table rendering:', {
     yearRows,
     tpopRows,
@@ -301,7 +307,7 @@ const EkPlanTable = () => {
               columnWidth={index => tpopColumns[index].width}
               height={sizeState.height - 60}
               rowCount={tpopRows.length}
-              rowHeight={index => 55}
+              rowHeight={() => rowHeight}
               width={headerFieldsFixedWidth}
             >
               {({ columnIndex, rowIndex, style }) => {
@@ -372,7 +378,7 @@ const EkPlanTable = () => {
               columnWidth={yearColWidth}
               height={sizeState.height - 60}
               rowCount={yearRows.length}
-              rowHeight={55}
+              rowHeight={rowHeight}
               width={sizeState.width - headerFieldsFixedWidth}
               onScroll={onScroll}
             >
