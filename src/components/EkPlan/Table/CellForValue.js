@@ -19,6 +19,7 @@ const CellForValue = ({ field, style, row }) => {
       onMouseEnter={onMouseEnter}
       onMouseLeave={hovered.reset}
       className={className}
+      data-isodd={row.isOdd}
     >
       <div>{value}</div>
     </StyledTableCell>

@@ -17,6 +17,7 @@ const CellForEkfrequenz = ({ row, field, style }) => {
       onMouseEnter={onMouseEnter}
       onMouseLeave={hovered.reset}
       className={className}
+      data-isodd={row.isOdd}
     >
       <SelectGrouped
         optionsGrouped={ekfOptionsGroupedPerAp[row.apId]}

@@ -3,7 +3,10 @@ import get from 'lodash/get'
 import fields from './fields'
 import appBaseUrl from '../../../modules/appBaseUrl'
 
-export default tpop => ({
+const isOdd = num => num % 2 === 0
+
+export default (tpop, index) => ({
+  isOdd: isOdd(index),
   id: tpop.id,
   tpop: tpop,
   apId: get(tpop, 'popByPopId.apByApId.id'),

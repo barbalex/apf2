@@ -18,6 +18,7 @@ const CellForEkfrequenzAbweichend = ({ field, row, style }) => {
       onMouseEnter={onMouseEnter}
       onMouseLeave={hovered.reset}
       className={className}
+      data-isodd={row.isOdd}
     >
       <Checkbox
         row={row.tpop}

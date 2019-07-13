@@ -6,7 +6,6 @@ import React, {
   useRef,
 } from 'react'
 import { useQuery } from 'react-apollo-hooks'
-import Table from '@material-ui/core/Table'
 import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
@@ -97,7 +96,11 @@ export const StyledTableCell = styled.div`
   border-left: solid hsla(70, 80%, 75%, 1) 1px;
   border-right: solid hsla(70, 80%, 75%, 1) 1px;
   background: ${props =>
-    props['data-clicked'] ? 'rgb(255,211,167) !important' : 'unset'};
+    props['data-clicked']
+      ? 'rgb(255,211,167) !important'
+      : props['data-isodd']
+      ? 'rgb(255, 255, 252)'
+      : 'unset'};
   &:first-child {
     padding-left: 10px !important;
   }
@@ -118,11 +121,6 @@ export const StyledCellForSelect = styled(StyledTableCell)`
   font-size: unset !important;
   border-left: solid green 1px;
   border-right: solid green 1px;
-  &:focus-within {
-    border: solid orange 3px;
-  }
-`
-export const TableCellForYear = styled(StyledTableCell)`
   &:focus-within {
     border: solid orange 3px;
   }
@@ -179,11 +177,12 @@ const EkPlanTable = () => {
   const years = useMemo(() => yearsFromTpops(tpops), [tpops])
   const yearRows = useMemo(
     () =>
-      tpops.map(tpop =>
+      tpops.map((tpop, index) =>
         yearRowFromTpop({
           tpop,
           years,
           showCount,
+          index,
         }),
       ),
     [tpops, years, showCount],

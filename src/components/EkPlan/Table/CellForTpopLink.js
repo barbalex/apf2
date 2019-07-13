@@ -33,6 +33,7 @@ const CellForTpopLink = ({ field, style, row }) => {
       onMouseEnter={onMouseEnter}
       onMouseLeave={hovered.reset}
       className={className}
+      data-isodd={row.isOdd}
     >
       <Link onClick={onClickLink} title="in neuem Fenster öffnen">
         <FaExternalLinkAlt />

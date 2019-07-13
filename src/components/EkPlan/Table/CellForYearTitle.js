@@ -16,6 +16,7 @@ const CellForYearTitle = ({ style, row }) => {
       onMouseEnter={onMouseEnter}
       onMouseLeave={hovered.reset}
       className={className}
+      data-isodd={row.isOdd}
     >
       {showEk && <InfoRow>EK:</InfoRow>}
       {showEkf && <InfoRow>EKF:</InfoRow>}

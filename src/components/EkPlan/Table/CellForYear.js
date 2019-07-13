@@ -1,7 +1,7 @@
 import React, { useCallback, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { TableCellForYear } from './index'
+import { StyledTableCell } from './index'
 import EkIcon from './EkIcon'
 import MassnIcon from './MassnIcon'
 import { InfoRow } from './index'
@@ -50,11 +50,12 @@ const CellForYear = ({ field, row, style }) => {
   const className = classes.join(' ')
 
   return (
-    <TableCellForYear
+    <StyledTableCell
       width={width}
       onMouseEnter={onMouseEnter}
       onMouseLeave={hovered.reset}
       data-clicked={clicked}
+      data-isodd={row.isOdd}
       onClick={onClickCell}
       className={className}
       style={style}
@@ -76,7 +77,7 @@ const CellForYear = ({ field, row, style }) => {
       <InfoRow>
         {showMassn && <MassnIcon ansiedlungs={value.ansiedlungs} />}
       </InfoRow>
-    </TableCellForYear>
+    </StyledTableCell>
   )
 }
 

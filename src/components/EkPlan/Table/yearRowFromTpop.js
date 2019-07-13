@@ -3,12 +3,15 @@ import get from 'lodash/get'
 import yearColumnWidth from './yearColumnWidth'
 import fields from './fields'
 
-export default ({ tpop, years, showCount }) => {
+const isOdd = num => num % 2 === 0
+
+export default ({ tpop, years, showCount, index }) => {
   const ekplans = get(tpop, 'ekplansByTpopId.nodes')
   const kontrs = get(tpop, 'tpopkontrsByTpopId.nodes')
   const ansiedlungs = get(tpop, 'tpopmassnsByTpopId.nodes')
 
   const row = {
+    isOdd: isOdd(index),
     id: tpop.id,
     tpop: tpop,
     apId: get(tpop, 'popByPopId.apByApId.id'),

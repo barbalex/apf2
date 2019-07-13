@@ -17,6 +17,7 @@ const CellForEkAbrechnungstyp = ({ field, row, style }) => {
       onMouseEnter={onMouseEnter}
       onMouseLeave={hovered.reset}
       className={className}
+      data-isodd={row.isOdd}
     >
       <Select
         options={ekAbrechnungstypOptions}
