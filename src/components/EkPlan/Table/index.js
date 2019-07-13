@@ -131,6 +131,9 @@ export const StyledCellForSelect = styled(StyledTableCell)`
   }
 `
 export const TableCellForYear = styled(StyledTableCell)`
+  &.hovered {
+    background-color: hsla(45, 100%, 90%, 1);
+  }
   &:focus-within {
     border: solid orange 3px;
   }
