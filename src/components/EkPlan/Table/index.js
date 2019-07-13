@@ -23,7 +23,7 @@ import ReactResizeDetector from 'react-resize-detector'
 
 import queryTpop from './queryTpop'
 import queryLists from './queryLists'
-import CellForYearMenu from './Row/CellForYearMenu'
+import CellForYearMenu from './CellForYearMenu'
 import storeContext from '../../../storeContext'
 import yearsFromTpops from './yearsFromTpops'
 import tpopRowFromTpop from './tpopRowFromTpop'
@@ -157,7 +157,6 @@ const EkPlanTable = () => {
     showCount,
     fields: fieldsShown,
     yearMenuAnchor,
-    resetYearHovered,
     setEkfrequenzs,
     setEkAbrechnungstypOptions,
   } = store.ekPlan
@@ -207,7 +206,6 @@ const EkPlanTable = () => {
       )
     : []
   const tpopRows = useMemo(() => tpops.map(tpopRowFromTpop), [tpops])
-  //console.log({ tpopRows, fields })
   const tpopColumns = tpopRows.length
     ? sortBy(
         Object.values(tpopRows[0])
@@ -217,7 +215,6 @@ const EkPlanTable = () => {
         'sort',
       )
     : []
-  //console.log({ tpopColumns })
   const headerFieldsFixed = tpops.length
     ? sortBy(
         Object.values(fields).filter(
@@ -247,14 +244,14 @@ const EkPlanTable = () => {
   let headerYearFieldsWidth = sizeState.width - headerFieldsFixedWidth
   if (headerYearFieldsWidth < 0) headerYearFieldsWidth = 0
 
-  console.log('Table rendering:', {
+  /*console.log('Table rendering:', {
     yearRows,
     tpopRows,
     yearColumns,
     headerYearFieldsWidth,
     headerFieldsFixedWidth,
     width: sizeState.width,
-  })
+  })*/
   const onScroll = ({ scrollTop, scrollLeft, scrollUpdateWasRequested }) => {
     if (!scrollUpdateWasRequested) {
       tpopGrid.current && tpopGrid.current.scrollTo({ scrollTop })

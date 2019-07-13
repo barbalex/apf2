@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { ekplan } from '../../../../shared/fragments'
+import { ekplan } from '../../../shared/fragments'
 
 export default gql`
   mutation createEkplan(

@@ -11,7 +11,7 @@ import { FaExternalLinkAlt } from 'react-icons/fa'
 import get from 'lodash/get'
 import styled from 'styled-components'
 
-import appBaseUrl from '../../../../../../modules/appBaseUrl'
+import appBaseUrl from '../../../../../modules/appBaseUrl'
 
 const OuterList = styled(List)`
   border-bottom: ${props =>
@@ -45,18 +45,23 @@ const OutsideLink = styled.div`
   }
 `
 
-const EkfMenu = ({ tpop, ekf, border }) => {
+const MassnMenu = ({ tpop, massn, border }) => {
   const [open, setOpen] = useState(true)
   const toggleOpen = useCallback(() => setOpen(!open), [open])
-  const zaehls = get(ekf, 'tpopkontrzaehlsByTpopkontrId.nodes', [])
-  const bearbeiter = get(ekf, 'adresseByBearbeiter.name') || '(kein Bearbeiter)'
-  const title = `${ekf.datum || '(kein Datum)'}, ${bearbeiter}`
+  const bearbeiter =
+    get(massn, 'adresseByBearbeiter.name') || '(kein Bearbeiter)'
+  const typ = get(massn, 'tpopmassnTypWerteByTyp.text') || '(kein Typ)'
+  const title = `${massn.datum || '(kein Datum)'}: ${typ}, ${bearbeiter}`
+  const anzTriebe =
+    massn.anzTriebe !== null ? massn.anzTriebe : '(nicht erfasst)'
+  const anzPflanzen =
+    massn.anzPflanzen !== null ? massn.anzPflanzen : '(nicht erfasst)'
   const projId = get(tpop, 'popByPopId.apByApId.projId')
   const apId = get(tpop, 'popByPopId.apByApId.id')
   const popId = get(tpop, 'popByPopId.id')
   const tpopId = tpop.id
-  const url = `${appBaseUrl()}Daten/Projekte/${projId}/Aktionspläne/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Freiwilligen-Kontrollen/${
-    ekf.id
+  const url = `${appBaseUrl()}Daten/Projekte/${projId}/Aktionspläne/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen/${
+    massn.id
   }`
 
   return (
@@ -73,26 +78,21 @@ const EkfMenu = ({ tpop, ekf, border }) => {
       </SyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <InnerList>
-          {zaehls.map(z => {
-            const einheit =
-              get(z, 'tpopkontrzaehlEinheitWerteByEinheit.text') ||
-              '(keine Einheit)'
-            const methode =
-              get(z, 'tpopkontrzaehlMethodeWerteByMethode.text') ||
-              '(keine Methode)'
-            const anzahl =
-              z.anzahl !== null ? z.anzahl : '(Anzahl nicht erfasst)'
-
-            return (
-              <SyledListItem key={z.id} component="div" disablePadding>
-                {`${anzahl} ${einheit}, ${methode}`}
-              </SyledListItem>
-            )
-          })}
+          <SyledListItem component="div" disablePadding>
+            {`Triebe: ${anzTriebe}`}
+          </SyledListItem>
+          <SyledListItem component="div" disablePadding>
+            {`Pflanzen: ${anzPflanzen}`}
+          </SyledListItem>
+          {!!massn.bemerkungen && (
+            <SyledListItem component="div" disablePadding>
+              {`Bemerkungen: ${massn.bemerkungen}`}
+            </SyledListItem>
+          )}
         </InnerList>
       </Collapse>
     </OuterList>
   )
 }
 
-export default EkfMenu
+export default MassnMenu

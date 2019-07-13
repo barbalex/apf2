@@ -9,7 +9,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useQuery, useApolloClient } from 'react-apollo-hooks'
 
-import storeContext from '../../../../../storeContext'
+import storeContext from '../../../../storeContext'
 import queryTpop from './queryTpop'
 import queryEkplansOfTpop from './queryEkplansOfTpop'
 import mutationCreateEkplan from './mutationCreateEkplan'
@@ -164,16 +164,20 @@ const CellForYearMenu = ({ refetch }) => {
   const eks = get(data, 'tpopById.eks.nodes', [])
   const ekfs = get(data, 'tpopById.ekfs.nodes', [])
   const massns = get(data, 'tpopById.massns.nodes', [])
+  console.log('YearMenu, yearMenuAnchor:', {
+    yearMenuAnchor,
+    right: yearMenuAnchor.right,
+  })
 
   return (
     <>
       <Menu
-        id="yearCellMenu"
-        anchorEl={yearMenuAnchor}
+        anchorReference="anchorPosition"
+        anchorPosition={{ top: yearMenuAnchor.top, left: yearMenuAnchor.right }}
+        anchorOrigin={anchorOrigin}
         keepMounted
         open={Boolean(yearMenuAnchor)}
         onClose={closeYearCellMenu}
-        anchorOrigin={anchorOrigin}
         getContentAnchorEl={null}
       >
         <YearCellMenuTitle>{yearClicked.title}</YearCellMenuTitle>

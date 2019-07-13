@@ -11,7 +11,7 @@ import { FaExternalLinkAlt } from 'react-icons/fa'
 import get from 'lodash/get'
 import styled from 'styled-components'
 
-import appBaseUrl from '../../../../../../modules/appBaseUrl'
+import appBaseUrl from '../../../../../modules/appBaseUrl'
 
 const OuterList = styled(List)`
   border-bottom: ${props =>
@@ -45,18 +45,18 @@ const OutsideLink = styled.div`
   }
 `
 
-const EkMenu = ({ tpop, ek, border }) => {
+const EkfMenu = ({ tpop, ekf, border }) => {
   const [open, setOpen] = useState(true)
   const toggleOpen = useCallback(() => setOpen(!open), [open])
-  const zaehls = get(ek, 'tpopkontrzaehlsByTpopkontrId.nodes', [])
-  const bearbeiter = get(ek, 'adresseByBearbeiter.name') || '(kein Bearbeiter)'
-  const title = `${ek.datum || '(kein Datum)'}: ${ek.typ}, ${bearbeiter}`
+  const zaehls = get(ekf, 'tpopkontrzaehlsByTpopkontrId.nodes', [])
+  const bearbeiter = get(ekf, 'adresseByBearbeiter.name') || '(kein Bearbeiter)'
+  const title = `${ekf.datum || '(kein Datum)'}, ${bearbeiter}`
   const projId = get(tpop, 'popByPopId.apByApId.projId')
   const apId = get(tpop, 'popByPopId.apByApId.id')
   const popId = get(tpop, 'popByPopId.id')
   const tpopId = tpop.id
-  const url = `${appBaseUrl()}Daten/Projekte/${projId}/Aktionspläne/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen/${
-    ek.id
+  const url = `${appBaseUrl()}Daten/Projekte/${projId}/Aktionspläne/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Freiwilligen-Kontrollen/${
+    ekf.id
   }`
 
   return (
@@ -95,4 +95,4 @@ const EkMenu = ({ tpop, ek, border }) => {
   )
 }
 
-export default EkMenu
+export default EkfMenu

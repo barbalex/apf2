@@ -36,9 +36,10 @@ const CellForYear = ({ field, row, style }) => {
         ekPlan: value.ekPlan,
         ekfPlan: value.ekfPlan,
       })
-      // need to catch target before setTimeout
-      const currentTarget = event.currentTarget
-      setTimeout(() => setYearMenuAnchor(currentTarget))
+      // can't pass currentTarget directly as anchorEl
+      // because it does not exist any more until the menu wants to look it up
+      // need to pass measurements instead
+      setYearMenuAnchor(event.currentTarget.getBoundingClientRect())
     },
     [row],
   )
