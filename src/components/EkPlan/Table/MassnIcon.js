@@ -15,8 +15,8 @@ const CheckboxContainer = styled.div`
 `
 const MassnContainer = styled.div`
   position: relative;
-  width: 19px;
-  height: 19px;
+  width: 17px;
+  height: 17px;
   flex-grow: 0;
   flex-basis: 19px;
   flex-shrink: 0;

@@ -21,8 +21,8 @@ const Icon = styled.svg`
 `
 const StyledCheckbox = styled.div`
   position: relative;
-  width: 19px;
-  height: 19px;
+  width: 17px;
+  height: 17px;
   background: ${props => (props.planned ? 'rgba(46, 125, 50, 0.05)' : 'none')};
   border-radius: 3px;
   border: ${props => (props.planned ? '1px solid #2e7d32' : 'none')};
