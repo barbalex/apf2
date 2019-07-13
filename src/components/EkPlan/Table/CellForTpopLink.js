@@ -7,9 +7,14 @@ import { StyledTableCell } from './index'
 import storeContext from '../../../storeContext'
 
 const Link = styled.div`
-  margin-left: 8px;
-  margin-bottom: -2px;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  div {
+    margin: auto;
+  }
   svg {
     font-size: 0.9em;
     color: rgba(0, 0, 0, 0.77);
@@ -36,7 +41,9 @@ const CellForTpopLink = ({ field, style, row }) => {
       data-isodd={row.isOdd}
     >
       <Link onClick={onClickLink} title="in neuem Fenster öffnen">
-        <FaExternalLinkAlt />
+        <div>
+          <FaExternalLinkAlt />
+        </div>
       </Link>
     </StyledTableCell>
   )

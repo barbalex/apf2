@@ -1,8 +1,16 @@
 import React, { useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
+import styled from 'styled-components'
 
 import { StyledTableCell } from './index'
 import storeContext from '../../../storeContext'
+
+const Container = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`
 
 const CellForValue = ({ field, style, row }) => {
   const store = useContext(storeContext)
@@ -21,7 +29,9 @@ const CellForValue = ({ field, style, row }) => {
       className={className}
       data-isodd={row.isOdd}
     >
-      <div>{value}</div>
+      <Container>
+        <div>{value}</div>
+      </Container>
     </StyledTableCell>
   )
 }

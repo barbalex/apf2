@@ -10,6 +10,7 @@ import storeContext from '../../../storeContext'
 const CheckboxContainer = styled.div`
   width: 100%;
   height: 100%;
+  display: flex;
 `
 
 const Icon = styled.svg`
@@ -23,8 +24,7 @@ const StyledCheckbox = styled.div`
   background: ${props => (props.checked ? '#2e7d32' : 'rgba(46,125,50,0.1)')};
   border-radius: 3px;
   transition: all 150ms;
-  margin-left: auto;
-  margin-right: auto;
+  margin: auto;
 
   ${Icon} {
     visibility: ${props => (props.checked ? 'visible' : 'hidden')};
