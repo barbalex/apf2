@@ -266,7 +266,7 @@ const EkPlanTable = () => {
           <HeaderContainer>
             <TpopTitle>{`${tpops.length} Teilpopulationen`}</TpopTitle>
             <VariableSizeList
-              key={headerFieldsFixed.length}
+              key={`${headerFieldsFixed.length}${fieldsShown.join()}`}
               height={60}
               itemCount={headerFieldsFixed.length}
               itemSize={index => headerFieldsFixed[index].width}
@@ -296,7 +296,7 @@ const EkPlanTable = () => {
           </HeaderContainer>
           <BodyContainer>
             <VariableSizeGrid
-              key={rowHeight}
+              key={`${rowHeight}${fieldsShown.join()}`}
               ref={tpopGrid}
               style={{ overflowY: 'hidden' }}
               columnCount={tpopColumns.length}
