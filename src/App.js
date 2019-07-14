@@ -45,7 +45,7 @@ const App = ({ element }) => {
   const client = buildClient({ idb, store })
   const idbContext = { idb }
 
-  /*if (typeof window !== 'undefined') {
+  if (typeof window !== 'undefined') {
     const visitedTopDomain = window.location.pathname === '/'
     const blacklist = ['user', 'refetch', 'notifications']
     import('mst-persist').then(module =>
@@ -71,7 +71,7 @@ const App = ({ element }) => {
           }
         }),
     )
-  }*/
+  }
 
   //onPatch(store, patch => console.log(patch))
 

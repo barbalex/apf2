@@ -528,6 +528,7 @@ const Tree = ({ treeName }) => {
   } = useQuery(queryEkfrequenzs, {
     variables: { isAp, filter: queryEkfrequenzsFilter },
   })
+  //console.log('Tree', { dataEkfrequenzs, errorEkfrequenzs, loadingEkfrequenzs })
   setRefetchKey({
     key: 'ekfrequenzs',
     value: refetchEkfrequenzs,
@@ -554,6 +555,7 @@ const Tree = ({ treeName }) => {
       filter: queryBeobNichtBeurteiltsFilter,
     },
   })
+  //console.log('Tree', { loadingBeobNichtBeurteilts })
   setRefetchKey({
     key: 'beobNichtBeurteilts',
     value: refetchBeobNichtBeurteilts,
@@ -575,6 +577,9 @@ const Tree = ({ treeName }) => {
   } = useQuery(queryBeobNichtZuzuordnens, {
     variables: { isAp, filter: queryBeobNichtZuzuordnensFilter },
   })
+  console.log('Tree', {
+    loadingBeobNichtZuzuordnens,
+  })
   setRefetchKey({
     key: 'beobNichtZuzuordnens',
     value: refetchBeobNichtZuzuordnens,
@@ -589,6 +594,13 @@ const Tree = ({ treeName }) => {
     refetch: refetchAdresses,
   } = useQuery(queryAdresses, {
     variables: { isWerteListen, filter: queryAdressesFilter },
+  })
+  console.log('Tree', {
+    loadingAdresses,
+    errorAdresses,
+    dataAdresses,
+    queryAdressesFilter,
+    isWerteListen,
   })
   setRefetchKey({
     key: 'adresses',
@@ -608,6 +620,7 @@ const Tree = ({ treeName }) => {
   } = useQuery(queryApberrelevantGrundWertes, {
     variables: { isWerteListen, filter: queryApberrelevantGrundWertesFilter },
   })
+  console.log('Tree', { loadingApberrelevantGrundWertes })
   setRefetchKey({
     key: 'tpopApberrelevantGrundWertes',
     value: refetchApberrelevantGrundWertes,
@@ -631,6 +644,7 @@ const Tree = ({ treeName }) => {
       filter: queryTpopkontrzaehlEinheitWertesFilter,
     },
   })
+  //console.log('Tree', { loadingTpopkontrzaehlEinheitWertes })
   setRefetchKey({
     key: 'tpopkontrzaehlEinheitWertes',
     value: refetchTpopkontrzaehlEinheitWertes,
@@ -652,6 +666,9 @@ const Tree = ({ treeName }) => {
       filter: queryEkAbrechnungstypWertesFilter,
     },
   })
+  /*console.log('Tree', {
+    loadingEkAbrechnungstypWertes,
+  })*/
   setRefetchKey({
     key: 'ekAbrechnungstypWertes',
     value: refetchEkAbrechnungstypWertes,
@@ -838,12 +855,10 @@ const Tree = ({ treeName }) => {
   setNodes(nodes)
 
   useEffect(() => {
-    /**
-     * if activeNodeArray.length === 1
-     * and there is only one projekt
-     * open it
-     * dont do this in render!
-     */
+    // if activeNodeArray.length === 1
+    // and there is only one projekt
+    // open it
+    // dont do this in render!
     const projekteNodes = nodes.filter(n => n.menuType === 'projekt')
     const existsOnlyOneProjekt = projekteNodes.length === 1
     const projektNode = projekteNodes[0]
@@ -868,6 +883,8 @@ const Tree = ({ treeName }) => {
       listRef.current.scrollToItem(index)
     }
   }, [loading, activeNodeArray, nodes, listRef])
+
+  console.log('Tree rendering')
 
   if (anyQueryReturnsPermissionError(queryErrorArray)) {
     // during login don't show permission error
