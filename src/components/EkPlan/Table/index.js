@@ -242,10 +242,20 @@ const EkPlanTable = () => {
   const showsLength = [showEk, showEkf, showMassn].filter(s => !!s).length
   const rowHeight = 23 + (!!showsLength ? showsLength - 1 : 0) * 16
 
-  /*console.log('Table rendering:', {
-    rowHeight,
-  })*/
+  /**
+   * See https://github.com/bvaughn/react-window/issues/69
+   * for sticky columns,
+   * https://codesandbox.io/s/y3pyp85zm1
+   * for sticky headers
+   */
   const onScroll = ({ scrollTop, scrollLeft, scrollUpdateWasRequested }) => {
+    console.log('Table, onScroll', {
+      scrollTop,
+      scrollLeft,
+      scrollUpdateWasRequested,
+      tpopGridCurrent: tpopGrid.current,
+      yearHeaderGridCurrent: yearHeaderGrid.current,
+    })
     if (!scrollUpdateWasRequested) {
       tpopGrid.current && tpopGrid.current.scrollTo({ scrollTop })
       yearHeaderGrid.current &&
@@ -253,6 +263,13 @@ const EkPlanTable = () => {
         yearHeaderGrid.current.scrollTo({ scrollLeft })
     }
   }
+
+  console.log('Table rendering:', {
+    yearHeaderGrid,
+    years,
+    yearColWidth,
+    headerYearFieldsWidth,
+  })
 
   if (aps.length > 0 && loadingTpop)
     return <TempContainer>Lade...</TempContainer>
@@ -382,7 +399,6 @@ const EkPlanTable = () => {
                 const row = yearRows[rowIndex]
                 const column = yearColumns[columnIndex].name
                 const value = row[column]
-                //console.log('Table, rendering Grid', { column, row, value })
 
                 return <CellForYear row={row} field={value} style={style} />
               }}
