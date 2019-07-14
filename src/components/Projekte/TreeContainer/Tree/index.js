@@ -525,7 +525,6 @@ const Tree = ({ treeName }) => {
   } = useQuery(queryEkfrequenzs, {
     variables: { isAp, filter: queryEkfrequenzsFilter },
   })
-  //console.log('Tree', { dataEkfrequenzs, errorEkfrequenzs, loadingEkfrequenzs })
   setRefetchKey({
     key: 'ekfrequenzs',
     value: refetchEkfrequenzs,
@@ -552,7 +551,6 @@ const Tree = ({ treeName }) => {
       filter: queryBeobNichtBeurteiltsFilter,
     },
   })
-  //console.log('Tree', { loadingBeobNichtBeurteilts })
   setRefetchKey({
     key: 'beobNichtBeurteilts',
     value: refetchBeobNichtBeurteilts,
@@ -573,9 +571,6 @@ const Tree = ({ treeName }) => {
     refetch: refetchBeobNichtZuzuordnens,
   } = useQuery(queryBeobNichtZuzuordnens, {
     variables: { isAp, filter: queryBeobNichtZuzuordnensFilter },
-  })
-  console.log('Tree', {
-    loadingBeobNichtZuzuordnens,
   })
   setRefetchKey({
     key: 'beobNichtZuzuordnens',
@@ -632,7 +627,6 @@ const Tree = ({ treeName }) => {
     key: 'ekAbrechnungstypWertes',
     value: refetchWertes,
   })
-  console.log('Tree', { loadingWertes })
 
   const {
     data: dataCurrentIssues,
@@ -835,7 +829,7 @@ const Tree = ({ treeName }) => {
     }
   }, [loading, activeNodeArray, nodes, listRef])
 
-  console.log('Tree rendering')
+  //console.log('Tree rendering')
 
   if (anyQueryReturnsPermissionError(queryErrorArray)) {
     // during login don't show permission error
