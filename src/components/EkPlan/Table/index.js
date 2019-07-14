@@ -241,15 +241,10 @@ const EkPlanTable = () => {
   if (headerYearFieldsWidth < 0) headerYearFieldsWidth = 0
 
   const showsLength = [showEk, showEkf, showMassn].filter(s => !!s).length
-  const rowHeight = 31 + (!!showsLength ? showsLength - 1 : 0) * 12
+  const rowHeight = 23 + (!!showsLength ? showsLength - 1 : 0) * 16
 
   /*console.log('Table rendering:', {
-    yearRows,
-    tpopRows,
-    yearColumns,
-    headerYearFieldsWidth,
-    headerFieldsFixedWidth,
-    width: sizeState.width,
+    rowHeight,
   })*/
   const onScroll = ({ scrollTop, scrollLeft, scrollUpdateWasRequested }) => {
     if (!scrollUpdateWasRequested) {
@@ -301,6 +296,7 @@ const EkPlanTable = () => {
           </HeaderContainer>
           <BodyContainer>
             <VariableSizeGrid
+              key={rowHeight}
               ref={tpopGrid}
               style={{ overflowY: 'hidden' }}
               columnCount={tpopColumns.length}
