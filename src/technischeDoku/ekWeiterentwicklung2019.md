@@ -54,6 +54,7 @@ Das Formular, um Kontrollen zu planen.
   - Massnahmen des Typs Ansiedlung
 - :white_check_mark: Der Benutzer kann wählen, welche der obigen Informationen angezeigt werden
 - :white_check_mark: Klickt man auf eine Tabellen-Zelle, werden die wichtigsten Angaben für EK, EKF und Massnahmen angezeigt. Und ein Link, um das Objekt in einem neuen Fenster zu öffnen
+- :white_check_mark: schnell machen
 - :white_medium_square: "Schulden" 1: Felder in der Jahres-Spalte, bei denen eine EK/EKF geplant aber nicht durchgeführt wurde und die in der Vergangenheit liegen, werden farblich hervorgehoben
 - :white_medium_square: "Schulden" 2: Später geplante Ergänzung: Wenn die geplante Kontrolle nicht im nächsten Jahr nachgeholt wurde und das nächste Jahr in der Vergangenheit ligt: besonders auffällig markieren.
 - :white_medium_square: "Schulden" 3: Später geplante Ergänzung: Benutzer kann wählen, Schulden anzuzeigen oder nicht
