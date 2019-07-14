@@ -20,7 +20,7 @@ export default ({
   let tpopkontrzaehlEinheitWerteNodesLength = tpopkontrzaehlEinheitWertes.length
   // before TpopkontrzaehlEinheitWerte folder is active, only total count was fetched, not yet any tpopkontrzaehlEinheitWerten nodes
   if (tpopkontrzaehlEinheitWertes.length === 0)
-    tpopkontrzaehlEinheitWerteNodesLength = get(data, 'unfiltered.totalCount')
+    tpopkontrzaehlEinheitWerteNodesLength = get(data, 'tpopkontrzaehlEinheitWertesUnfiltered.totalCount')
   let message =
     loading && !tpopkontrzaehlEinheitWerteNodesLength
       ? '...'

@@ -20,7 +20,7 @@ export default ({
   let apberrelevantGrundWerteNodesLength = apberrelevantGrundWertes.length
   // before ApberrelevantGrundWerte folder is active, only total count was fetched, not yet any apberrelevantGrundWerten nodes
   if (apberrelevantGrundWertes.length === 0)
-    apberrelevantGrundWerteNodesLength = get(data, 'unfiltered.totalCount')
+    apberrelevantGrundWerteNodesLength = get(data, 'tpopApberrelevantGrundWertesUnfiltered.totalCount')
   let message =
     loading && !apberrelevantGrundWerteNodesLength
       ? '...'

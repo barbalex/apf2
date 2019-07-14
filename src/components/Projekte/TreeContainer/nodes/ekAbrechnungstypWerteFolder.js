@@ -20,7 +20,7 @@ export default ({
   let ekAbrechnungstypWerteNodesLength = ekAbrechnungstypWertes.length
   // before EkAbrechnungstypWerte folder is active, only total count was fetched, not yet any ekAbrechnungstypWerten nodes
   if (ekAbrechnungstypWertes.length === 0)
-    ekAbrechnungstypWerteNodesLength = get(data, 'unfiltered.totalCount')
+    ekAbrechnungstypWerteNodesLength = get(data, 'ekAbrechnungstypWertesUnfiltered.totalCount')
   let message =
     loading && !ekAbrechnungstypWerteNodesLength
       ? '...'

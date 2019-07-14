@@ -16,7 +16,7 @@ export default ({
   let adresseNodesLength = adresses.length
   // before Adressen folder is active, only total count was fetched, not yet any adressen nodes
   if (adresses.length === 0)
-    adresseNodesLength = get(data, 'unfiltered.totalCount')
+    adresseNodesLength = get(data, 'adressesUnfiltered.totalCount')
   let message = loading && !adresseNodesLength ? '...' : adresseNodesLength
   if (nodeLabelFilterString) {
     message = `${adresseNodesLength} gefiltert`

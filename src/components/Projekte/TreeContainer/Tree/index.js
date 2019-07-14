@@ -12,10 +12,6 @@ import Row from '.'
 
 import storeContext from '../../../../storeContext'
 import buildVariables from './buildVariables'
-import queryAdresses from './queryAdresses'
-import queryApberrelevantGrundWertes from './queryApberrelevantGrundWertes'
-import queryTpopkontrzaehlEinheitWertes from './queryTpopkontrzaehlEinheitWertes'
-import queryEkAbrechnungstypWertes from './queryEkAbrechnungstypWertes'
 import queryCurrentIssues from './queryCurrentIssues'
 import queryUsers from './queryUsers'
 import queryProjekts from './queryProjekts'
@@ -43,6 +39,7 @@ import queryEkzaehleinheits from './queryEkzaehleinheits'
 import queryEkfrequenzs from './queryEkfrequenzs'
 import queryBeobNichtBeurteilts from './queryBeobNichtBeurteilts'
 import queryBeobNichtZuzuordnens from './queryBeobNichtZuzuordnens'
+import queryWerte from './queryWerte'
 import buildNodes from '../nodes'
 import logout from '../../../../modules/logout'
 import anyQueryReturnsPermissionError from '../../../../modules/anyQueryReturnsPermissionError'
@@ -584,95 +581,58 @@ const Tree = ({ treeName }) => {
     key: 'beobNichtZuzuordnens',
     value: refetchBeobNichtZuzuordnens,
   })
-  const queryAdressesFilter = nodeLabelFilter.adresse
+
+  const adressesFilter = nodeLabelFilter.adresse
     ? { label: { includesInsensitive: nodeLabelFilter.adresse } }
     : { id: { isNull: false } }
-  const {
-    data: dataAdresses,
-    error: errorAdresses,
-    loading: loadingAdresses,
-    refetch: refetchAdresses,
-  } = useQuery(queryAdresses, {
-    variables: { isWerteListen, filter: queryAdressesFilter },
-  })
-  console.log('Tree', {
-    loadingAdresses,
-    errorAdresses,
-    dataAdresses,
-    queryAdressesFilter,
-    isWerteListen,
-  })
-  setRefetchKey({
-    key: 'adresses',
-    value: refetchAdresses,
-  })
-
-  const queryApberrelevantGrundWertesFilter = nodeLabelFilter.apberrelevantGrundWerte
+  const apberrelevantGrundWertesFilter = nodeLabelFilter.apberrelevantGrundWerte
     ? {
         label: { includesInsensitive: nodeLabelFilter.apberrelevantGrundWerte },
       }
     : { id: { isNull: false } }
-  const {
-    data: dataApberrelevantGrundWertes,
-    error: errorApberrelevantGrundWertes,
-    loading: loadingApberrelevantGrundWertes,
-    refetch: refetchApberrelevantGrundWertes,
-  } = useQuery(queryApberrelevantGrundWertes, {
-    variables: { isWerteListen, filter: queryApberrelevantGrundWertesFilter },
-  })
-  console.log('Tree', { loadingApberrelevantGrundWertes })
-  setRefetchKey({
-    key: 'tpopApberrelevantGrundWertes',
-    value: refetchApberrelevantGrundWertes,
-  })
-
-  const queryTpopkontrzaehlEinheitWertesFilter = nodeLabelFilter.tpopkontrzaehlEinheitWerte
+  const tpopkontrzaehlEinheitWertesFilter = nodeLabelFilter.tpopkontrzaehlEinheitWerte
     ? {
         label: {
           includesInsensitive: nodeLabelFilter.tpopkontrzaehlEinheitWerte,
         },
       }
     : { id: { isNull: false } }
-  const {
-    data: dataTpopkontrzaehlEinheitWertes,
-    error: errorTpopkontrzaehlEinheitWertes,
-    loading: loadingTpopkontrzaehlEinheitWertes,
-    refetch: refetchTpopkontrzaehlEinheitWertes,
-  } = useQuery(queryTpopkontrzaehlEinheitWertes, {
-    variables: {
-      isWerteListen,
-      filter: queryTpopkontrzaehlEinheitWertesFilter,
-    },
-  })
-  //console.log('Tree', { loadingTpopkontrzaehlEinheitWertes })
-  setRefetchKey({
-    key: 'tpopkontrzaehlEinheitWertes',
-    value: refetchTpopkontrzaehlEinheitWertes,
-  })
-
-  const queryEkAbrechnungstypWertesFilter = nodeLabelFilter.ekAbrechnungstypWerte
+  const ekAbrechnungstypWertesFilter = nodeLabelFilter.ekAbrechnungstypWerte
     ? {
         label: { includesInsensitive: nodeLabelFilter.ekAbrechnungstypWerte },
       }
     : { id: { isNull: false } }
   const {
-    data: dataEkAbrechnungstypWertes,
-    error: errorEkAbrechnungstypWertes,
-    loading: loadingEkAbrechnungstypWertes,
-    refetch: refetchEkAbrechnungstypWertes,
-  } = useQuery(queryEkAbrechnungstypWertes, {
+    data: dataWertes,
+    error: errorWertes,
+    loading: loadingWertes,
+    refetch: refetchWertes,
+  } = useQuery(queryWerte, {
     variables: {
       isWerteListen,
-      filter: queryEkAbrechnungstypWertesFilter,
+      adressesFilter,
+      apberrelevantGrundWertesFilter,
+      tpopkontrzaehlEinheitWertesFilter,
+      ekAbrechnungstypWertesFilter,
     },
   })
-  /*console.log('Tree', {
-    loadingEkAbrechnungstypWertes,
-  })*/
+  setRefetchKey({
+    key: 'adresses',
+    value: refetchWertes,
+  })
+  setRefetchKey({
+    key: 'tpopApberrelevantGrundWertes',
+    value: refetchWertes,
+  })
+  setRefetchKey({
+    key: 'tpopkontrzaehlEinheitWertes',
+    value: refetchWertes,
+  })
   setRefetchKey({
     key: 'ekAbrechnungstypWertes',
-    value: refetchEkAbrechnungstypWertes,
+    value: refetchWertes,
   })
+  console.log('Tree', { loadingWertes })
 
   const {
     data: dataCurrentIssues,
@@ -682,10 +642,7 @@ const Tree = ({ treeName }) => {
 
   const queryLoadingArray = [
     loadingCurrentIssues,
-    loadingAdresses,
-    loadingApberrelevantGrundWertes,
-    loadingTpopkontrzaehlEinheitWertes,
-    loadingEkAbrechnungstypWertes,
+    loadingWertes,
     loadingUsers,
     loadingProjekts,
     loadingApberuebersichts,
@@ -716,10 +673,7 @@ const Tree = ({ treeName }) => {
 
   const queryErrorArray = [
     errorCurrentIssues,
-    errorAdresses,
-    errorApberrelevantGrundWertes,
-    errorTpopkontrzaehlEinheitWertes,
-    errorEkAbrechnungstypWertes,
+    errorWertes,
     errorUsers,
     errorProjekts,
     errorApberuebersichts,
@@ -750,10 +704,7 @@ const Tree = ({ treeName }) => {
 
   const data = {
     ...dataCurrentIssues,
-    ...dataAdresses,
-    ...dataApberrelevantGrundWertes,
-    ...dataTpopkontrzaehlEinheitWertes,
-    ...dataEkAbrechnungstypWertes,
+    ...dataWertes,
     ...dataUsers,
     ...dataProjekts,
     ...dataApberuebersichts,
@@ -792,10 +743,10 @@ const Tree = ({ treeName }) => {
     nodeFilter,
     data,
     dataCurrentIssues,
-    dataAdresses,
-    dataApberrelevantGrundWertes,
-    dataTpopkontrzaehlEinheitWertes,
-    dataEkAbrechnungstypWertes,
+    dataAdresses: dataWertes,
+    dataApberrelevantGrundWertes: dataWertes,
+    dataTpopkontrzaehlEinheitWertes: dataWertes,
+    dataEkAbrechnungstypWertes: dataWertes,
     dataUsers,
     dataProjekts,
     dataApberuebersichts,
@@ -819,10 +770,10 @@ const Tree = ({ treeName }) => {
     dataEkfrequenzs,
     dataBeobNichtBeurteilts,
     dataBeobNichtZuzuordnens,
-    loadingAdresses,
-    loadingApberrelevantGrundWertes,
-    loadingTpopkontrzaehlEinheitWertes,
-    loadingEkAbrechnungstypWertes,
+    loadingAdresses: loadingWertes,
+    loadingApberrelevantGrundWertes: loadingWertes,
+    loadingTpopkontrzaehlEinheitWertes: loadingWertes,
+    loadingEkAbrechnungstypWertes: loadingWertes,
     loadingCurrentIssues,
     loadingUsers,
     loadingProjekts,
