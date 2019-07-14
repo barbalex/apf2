@@ -42,6 +42,7 @@
     "babel-polyfill": "6.26.0",
     "date-fns": "2.0.0-alpha.27",
     "dexie": "2.0.4",
+    "dom-helpers": "^3.4.0",
     "exceljs": "1.13.0",
     "file-saver": "2.0.2",
     "formik": "1.5.8",

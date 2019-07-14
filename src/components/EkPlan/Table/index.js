@@ -12,12 +12,8 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import sumBy from 'lodash/sumBy'
 import { observer } from 'mobx-react-lite'
-import {
-  FixedSizeGrid,
-  VariableSizeGrid,
-  VariableSizeList,
-  FixedSizeList,
-} from 'react-window'
+import { FixedSizeGrid, VariableSizeGrid, VariableSizeList } from 'react-window'
+import scrollbarSize from 'dom-helpers/util/scrollbarSize'
 import ReactResizeDetector from 'react-resize-detector'
 
 import queryTpop from './queryTpop'
@@ -241,6 +237,7 @@ const EkPlanTable = () => {
 
   const showsLength = [showEk, showEkf, showMassn].filter(s => !!s).length
   const rowHeight = 23 + (!!showsLength ? showsLength - 1 : 0) * 16
+  const sbSize = scrollbarSize()
 
   /**
    * See https://github.com/bvaughn/react-window/issues/69
@@ -249,13 +246,6 @@ const EkPlanTable = () => {
    * for sticky headers
    */
   const onScroll = ({ scrollTop, scrollLeft, scrollUpdateWasRequested }) => {
-    console.log('Table, onScroll', {
-      scrollTop,
-      scrollLeft,
-      scrollUpdateWasRequested,
-      tpopGridCurrent: tpopGrid.current,
-      yearHeaderGridCurrent: yearHeaderGrid.current,
-    })
     if (!scrollUpdateWasRequested) {
       tpopGrid.current && tpopGrid.current.scrollTo({ scrollTop })
       yearHeaderGrid.current &&
@@ -265,10 +255,8 @@ const EkPlanTable = () => {
   }
 
   console.log('Table rendering:', {
-    yearHeaderGrid,
-    years,
-    yearColWidth,
     headerYearFieldsWidth,
+    scrollbarSize: scrollbarSize(),
   })
 
   if (aps.length > 0 && loadingTpop)
@@ -296,20 +284,25 @@ const EkPlanTable = () => {
                 />
               )}
             </VariableSizeList>
-            <FixedSizeGrid
+            <VariableSizeGrid
               style={{ overflow: 'hidden' }}
               ref={yearHeaderGrid}
               height={60}
               width={headerYearFieldsWidth}
-              rowHeight={60}
+              rowHeight={() => 60}
               columnCount={yearColumns.length}
               rowCount={1}
-              columnWidth={yearColWidth}
+              columnWidth={index => {
+                if (index === yearColumns.length - 1) {
+                  return yearColWidth + sbSize
+                }
+                return yearColWidth
+              }}
             >
               {({ columnIndex, rowIndex, style }) => (
                 <CellHeaderYear style={style} column={years[columnIndex]} />
               )}
-            </FixedSizeGrid>
+            </VariableSizeGrid>
           </HeaderContainer>
           <BodyContainer>
             <VariableSizeGrid
