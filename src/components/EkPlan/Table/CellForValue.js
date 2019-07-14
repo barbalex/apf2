@@ -12,7 +12,7 @@ const Container = styled.div`
   justify-content: center;
 `
 
-const CellForValue = ({ field, style, row }) => {
+const CellForValue = ({ field, style, row, firstChild }) => {
   const store = useContext(storeContext)
 
   const { value } = field
@@ -28,6 +28,7 @@ const CellForValue = ({ field, style, row }) => {
       onMouseLeave={hovered.reset}
       className={className}
       data-isodd={row.isOdd}
+      data-firstchild={firstChild}
     >
       <Container>
         <div>{value}</div>

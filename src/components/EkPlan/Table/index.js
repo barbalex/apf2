@@ -77,9 +77,6 @@ export const StyledYearHeaderCell = styled.div`
     line-height: normal;
     padding: 2px 4px;
   }
-  &:first-child span {
-    padding-left: 10px;
-  }
   &.column-hovered {
     background: hsla(120, 25%, 82%, 1) !important;
     font-weight: 800 !important;
@@ -87,6 +84,9 @@ export const StyledYearHeaderCell = styled.div`
 `
 export const StyledFixedHeaderCell = styled(StyledYearHeaderCell)`
   text-align: left;
+  &:first-child span {
+    padding-left: 10px;
+  }
 `
 export const StyledTableCell = styled.div`
   font-size: 0.75rem !important;
@@ -94,6 +94,8 @@ export const StyledTableCell = styled.div`
   text-overflow: ellipsis !important;
   overflow: hidden !important;
   padding: 2px 4px !important;
+  padding-left: ${props =>
+    props['data-firstchild'] ? '10px !important' : '2px'};
   border-left: solid hsla(70, 80%, 75%, 1) 1px;
   border-right: solid hsla(70, 80%, 75%, 1) 1px;
   border-bottom: solid #e6e6e6 1px;
@@ -103,9 +105,6 @@ export const StyledTableCell = styled.div`
       : props['data-isodd']
       ? 'rgb(255, 255, 252)'
       : 'unset'};
-  &:first-child {
-    padding-left: 10px !important;
-  }
   &.tpop-hovered {
     background-color: hsla(45, 100%, 90%, 1);
   }
@@ -365,6 +364,7 @@ const EkPlanTable = () => {
                     field={value}
                     style={style}
                     row={row}
+                    firstChild={columnIndex === 0}
                   />
                 )
               }}
