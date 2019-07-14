@@ -254,10 +254,10 @@ const EkPlanTable = () => {
     }
   }
 
-  console.log('Table rendering:', {
+  /*console.log('Table rendering:', {
     headerYearFieldsWidth,
     scrollbarSize: scrollbarSize(),
-  })
+  })*/
 
   if (aps.length > 0 && loadingTpop)
     return <TempContainer>Lade...</TempContainer>

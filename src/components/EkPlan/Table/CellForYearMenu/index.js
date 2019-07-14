@@ -164,10 +164,6 @@ const CellForYearMenu = ({ refetch }) => {
   const eks = get(data, 'tpopById.eks.nodes', [])
   const ekfs = get(data, 'tpopById.ekfs.nodes', [])
   const massns = get(data, 'tpopById.massns.nodes', [])
-  console.log('YearMenu, yearMenuAnchor:', {
-    yearMenuAnchor,
-    right: yearMenuAnchor.right,
-  })
 
   return (
     <>
