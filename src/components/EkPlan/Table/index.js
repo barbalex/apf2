@@ -296,19 +296,20 @@ const EkPlanTable = () => {
                 />
               )}
             </VariableSizeList>
-            <FixedSizeList
+            <FixedSizeGrid
               style={{ overflow: 'hidden' }}
               ref={yearHeaderGrid}
               height={60}
-              itemCount={years.length}
-              itemSize={yearColWidth}
-              layout="horizontal"
               width={headerYearFieldsWidth}
+              rowHeight={60}
+              columnCount={yearColumns.length}
+              rowCount={1}
+              columnWidth={yearColWidth}
             >
-              {({ index, style }) => (
-                <CellHeaderYear style={style} column={years[index]} />
+              {({ columnIndex, rowIndex, style }) => (
+                <CellHeaderYear style={style} column={years[columnIndex]} />
               )}
-            </FixedSizeList>
+            </FixedSizeGrid>
           </HeaderContainer>
           <BodyContainer>
             <VariableSizeGrid
