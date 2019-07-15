@@ -3,7 +3,7 @@ typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/Karte-Massstab"
 date: "2019-04-18"
 title: "Karte: Massstab"
-sort: 14
+sort: 15
 ---
 
 Wurde am 14.09.2018 eingeführt.<br/><br/>

@@ -3,7 +3,7 @@ typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/Koordinaten"
 date: "2019-06-02"
 title: "Koordinaten"
-sort: 15
+sort: 16
 ---
 
 Früher wurden Koordinaten in apflora in der Projektion [LV03](https://www.swisstopo.admin.ch/de/wissen-fakten/geodaesie-vermessung/bezugsrahmen/lokal/lv03.html) erfasst. ca. Anfang 2018 wurde [LV95](https://www.swisstopo.admin.ch/de/wissen-fakten/geodaesie-vermessung/bezugsrahmen/lokal/lv95.html) übernommen.<br/><br/>
