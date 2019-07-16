@@ -24,6 +24,7 @@ const MenuItem = ({ node }) => {
     <Location>
       {({ location }) => {
         const active = (
+          `${node.frontmatter.path}` === location.pathname ||
           `${node.frontmatter.path}/` === location.pathname
         ).toString()
 
