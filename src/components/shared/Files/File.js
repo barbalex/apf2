@@ -9,6 +9,7 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import { Formik, Form, Field } from 'formik'
 import ErrorBoundary from 'react-error-boundary'
+import upperFirst from 'lodash/upperFirst'
 
 //import storeContext from '../../../storeContext'
 import TextField from '../TextFieldFormik'
@@ -17,7 +18,6 @@ import {
   tpopkontrFile as tpopkontrFileFragment,
 } from '../fragments'
 import isImageFile from './isImageFile'
-import { upperFirst } from 'graphql-compose'
 import objectsFindChangedKey from '../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../modules/objectsEmptyValuesToNull'
 
