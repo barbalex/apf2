@@ -270,6 +270,7 @@ const EkPlanTable = () => {
           <HeaderContainer>
             <TpopTitle>{`${tpops.length} Teilpopulationen`}</TpopTitle>
             <VariableSizeList
+              style={{ overflow: 'hidden' }}
               key={`${headerFieldsFixed.length}${fieldsShown.join()}`}
               height={60}
               itemCount={headerFieldsFixed.length}
