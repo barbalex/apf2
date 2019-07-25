@@ -8,7 +8,7 @@ import { onError } from 'apollo-link-error'
 import jwtDecode from 'jwt-decode'
 
 import graphQlUri from './modules/graphQlUri'
-import logout from './modules/logout'
+//import logout from './modules/logout'
 
 export default ({ idb, store }) => {
   const { enqueNotification } = store
