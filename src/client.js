@@ -44,13 +44,8 @@ export default ({ idb, store }) => {
           message.includes('keine Berechtigung'),
       )
       if (existsPermissionsError) {
-        enqueNotification({
-          message: `Sie wurden automatisch abgemeldet, weil die Datenbank eine Berechtigung verweigert hat`,
-          options: {
-            variant: 'warning',
-          },
-        })
-        return graphQLErrors[0].map(({ message, locations, path }) => {
+        if (graphQLErrors[0]) {
+          const { message, locations, path } = graphQLErrors[0]
           console.log(
             `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
               locations,
@@ -62,10 +57,16 @@ export default ({ idb, store }) => {
               variant: 'error',
             },
           })
-        })
+        }
         // TODO:
         // build better ux for when login does not work any more
-        //return logout(idb)
+        /*enqueNotification({
+          message: `Sie wurden automatisch abgemeldet, weil die Datenbank eine Berechtigung verweigert hat`,
+          options: {
+            variant: 'warning',
+          },
+        })
+        return logout(idb)*/
       }
       graphQLErrors.map(({ message, locations, path }) => {
         console.log(
