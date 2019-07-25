@@ -124,9 +124,6 @@
     "typography": "0.16.19",
     "uploadcare-widget": "3.7.6"
   },
-  "resolutions": {
-    "terser": "4.0.0"
-  },
   "devDependencies": {
     "@svgr/cli": "4.3.2",
     "copyfiles": "2.1.1",
