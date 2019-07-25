@@ -63,6 +63,8 @@ export default ({ idb, store }) => {
             },
           })
         })
+        // TODO:
+        // build better ux for when login does not work any more
         //return logout(idb)
       }
       graphQLErrors.map(({ message, locations, path }) => {
