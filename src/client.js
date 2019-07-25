@@ -8,7 +8,7 @@ import { onError } from 'apollo-link-error'
 import jwtDecode from 'jwt-decode'
 
 import graphQlUri from './modules/graphQlUri'
-//import logout from './modules/logout'
+import logout from './modules/logout'
 
 export default ({ idb, store }) => {
   const { enqueNotification } = store
@@ -38,7 +38,7 @@ export default ({ idb, store }) => {
        * Test this at night
        * make sure message is what is wanted by logging it out
        */
-      /*const existsPermissionsError = graphQLErrors.some(
+      const existsPermissionsError = graphQLErrors.some(
         ({ message }) =>
           message.includes('permission denied') ||
           message.includes('keine Berechtigung'),
@@ -50,8 +50,21 @@ export default ({ idb, store }) => {
             variant: 'warning',
           },
         })
-        return logout(idb)
-      }*/
+        return graphQLErrors[0].map(({ message, locations, path }) => {
+          console.log(
+            `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
+              locations,
+            )}, Path: ${path}`,
+          )
+          return enqueNotification({
+            message: `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+            options: {
+              variant: 'error',
+            },
+          })
+        })
+        //return logout(idb)
+      }
       graphQLErrors.map(({ message, locations, path }) => {
         console.log(
           `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
