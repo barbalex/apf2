@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import AsyncSelect from 'react-select/Async'
+import AsyncSelect from 'react-select/async'
 import styled from 'styled-components'
 
 const Container = styled.div`

@@ -1,5 +1,5 @@
 import React, { useContext, useCallback } from 'react'
-import AsyncSelect from 'react-select/Async'
+import AsyncSelect from 'react-select/async'
 import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
