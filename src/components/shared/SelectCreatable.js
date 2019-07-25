@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import CreatableSelect from 'react-select/Creatable'
+import CreatableSelect from 'react-select/creatable'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
