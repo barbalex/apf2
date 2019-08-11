@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import groupBy from 'lodash/groupBy'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from 'react-apollo-hooks'
+import { useQuery } from '@apollo/react-hooks'
 import { Formik, Form, Field } from 'formik'
 import ErrorBoundary from 'react-error-boundary'
 

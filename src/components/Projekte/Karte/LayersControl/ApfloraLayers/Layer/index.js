@@ -14,7 +14,7 @@ import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import { getSnapshot } from 'mobx-state-tree'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from 'react-apollo-hooks'
+import { useQuery } from '@apollo/react-hooks'
 
 import Checkbox from '../../shared/Checkbox'
 import getBounds from '../../../../../../modules/getBounds'

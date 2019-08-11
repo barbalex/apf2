@@ -2,7 +2,7 @@ import React, { useContext, useCallback } from 'react'
 import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from 'react-apollo-hooks'
+import { useQuery } from '@apollo/react-hooks'
 import Button from '@material-ui/core/Button'
 
 import ApList from './ApList'

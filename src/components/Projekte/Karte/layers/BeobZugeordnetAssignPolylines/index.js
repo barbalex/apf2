@@ -1,7 +1,7 @@
 import React, { useContext, useMemo } from 'react'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
-import { useQuery } from 'react-apollo-hooks'
+import { useQuery } from '@apollo/react-hooks'
 import { observer } from 'mobx-react-lite'
 
 import Polyline from './Polyline'

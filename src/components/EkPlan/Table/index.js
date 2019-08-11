@@ -5,7 +5,7 @@ import React, {
   useReducer,
   useRef,
 } from 'react'
-import { useQuery } from 'react-apollo-hooks'
+import { useQuery } from '@apollo/react-hooks'
 import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'

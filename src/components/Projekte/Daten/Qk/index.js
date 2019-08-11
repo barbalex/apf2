@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import Paper from '@material-ui/core/Paper'
 import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from 'react-apollo-hooks'
+import { useQuery } from '@apollo/react-hooks'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import ErrorBoundary from 'react-error-boundary'
 
