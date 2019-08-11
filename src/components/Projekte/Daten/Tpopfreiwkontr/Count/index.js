@@ -63,7 +63,7 @@ const StyledForm = styled(Form)`
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   grid-template-areas: ${props =>
-    props.showdelete
+    props.showdelete === 'true'
       ? `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
              'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel .'
              'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal delete'`
@@ -74,7 +74,7 @@ const StyledForm = styled(Form)`
   break-inside: avoid;
   @media print {
     grid-template-areas: ${props =>
-      props.showdelete
+      props.showdelete === 'true'
         ? `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
              'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
              'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`
@@ -311,7 +311,7 @@ const Count = ({
       {({ handleSubmit, dirty }) => (
         <StyledForm
           onBlur={() => dirty && handleSubmit()}
-          showdelete={showDelete}
+          showdelete={showDelete.toString()}
           data-id={`count${nr}`}
           nr={nr}
         >
