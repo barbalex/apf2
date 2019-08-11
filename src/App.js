@@ -10,7 +10,7 @@ import moment from 'moment'
 import 'moment/locale/de-ch' // this is the important bit, you have to import the locale your'e trying to use.
 import MomentUtils from '@date-io/moment'
 import { MuiPickersUtilsProvider } from 'material-ui-pickers'
-import { ApolloProvider } from 'react-apollo'
+import { ApolloProvider } from '@apollo/react-hooks'
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
 import localForage from 'localforage'
 import MobxStore from './store'
