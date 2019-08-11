@@ -7,7 +7,7 @@ import { MdEdit as EditIcon, MdViewList as ListIcon } from 'react-icons/md'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { useQuery, useApolloClient } from 'react-apollo-hooks'
+import { useQuery, useApolloClient } from '@apollo/react-hooks'
 
 import storeContext from '../../../../storeContext'
 import queryTpop from './queryTpop'

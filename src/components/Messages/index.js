@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import Linkify from 'react-linkify'
-import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import { observer } from 'mobx-react-lite'
 import ErrorBoundary from 'react-error-boundary'
 

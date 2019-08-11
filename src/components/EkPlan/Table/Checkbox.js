@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from 'react-apollo-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 

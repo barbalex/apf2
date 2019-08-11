@@ -2,7 +2,7 @@ import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import { Formik, Form, Field } from 'formik'
 import ErrorBoundary from 'react-error-boundary'
 

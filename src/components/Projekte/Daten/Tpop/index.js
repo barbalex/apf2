@@ -4,7 +4,7 @@ import Tab from '@material-ui/core/Tab'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import ErrorBoundary from 'react-error-boundary'
 
 import FormTitle from '../../../shared/FormTitle'

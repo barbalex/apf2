@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from 'react-apollo-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 
 import { tpop } from '../../shared/fragments'

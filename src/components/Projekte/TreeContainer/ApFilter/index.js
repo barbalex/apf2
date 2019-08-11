@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Switch from '@material-ui/core/Switch'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from 'react-apollo-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 import ErrorBoundary from 'react-error-boundary'
 
 import apById from './apById'

@@ -1,10 +1,10 @@
-import React from "react"
-import styled from "styled-components"
-import get from "lodash/get"
-import sum from "lodash/sum"
-import { useQuery } from "react-apollo-hooks"
+import React from 'react'
+import styled from 'styled-components'
+import get from 'lodash/get'
+import sum from 'lodash/sum'
+import { useQuery } from '@apollo/react-hooks'
 
-import query from "./query"
+import query from './query'
 
 const Container = styled.div`
   padding: 0.2cm 0;
@@ -85,59 +85,59 @@ const AMengen = ({ apId, jahr, startJahr }) => {
   const { data, error, loading } = useQuery(query, {
     variables: { apId, startJahr },
   })
-  const threeLPop = get(data, "apById.threeLPop.nodes", []).filter(
-    p => get(p, "tpopsByPopId.totalCount") > 0
+  const threeLPop = get(data, 'apById.threeLPop.nodes', []).filter(
+    p => get(p, 'tpopsByPopId.totalCount') > 0,
   ).length
   const threeLTpop = sum(
-    get(data, "apById.threeLTpop.nodes", []).map(p =>
-      get(p, "tpopsByPopId.totalCount")
-    )
+    get(data, 'apById.threeLTpop.nodes', []).map(p =>
+      get(p, 'tpopsByPopId.totalCount'),
+    ),
   )
-  const fourLPop = get(data, "apById.fourLPop.nodes", []).filter(
-    p => get(p, "tpopsByPopId.totalCount") > 0
+  const fourLPop = get(data, 'apById.fourLPop.nodes', []).filter(
+    p => get(p, 'tpopsByPopId.totalCount') > 0,
   ).length
   const fourLTpop = sum(
-    get(data, "apById.fourLTpop.nodes", []).map(p =>
-      get(p, "tpopsByPopId.totalCount")
-    )
+    get(data, 'apById.fourLTpop.nodes', []).map(p =>
+      get(p, 'tpopsByPopId.totalCount'),
+    ),
   )
-  const fiveLPop = get(data, "apById.fiveLPop.nodes", []).filter(
-    p => get(p, "tpopsByPopId.totalCount") > 0
+  const fiveLPop = get(data, 'apById.fiveLPop.nodes', []).filter(
+    p => get(p, 'tpopsByPopId.totalCount') > 0,
   ).length
   const fiveLTpop = sum(
-    get(data, "apById.fiveLTpop.nodes", []).map(p =>
-      get(p, "tpopsByPopId.totalCount")
-    )
+    get(data, 'apById.fiveLTpop.nodes', []).map(p =>
+      get(p, 'tpopsByPopId.totalCount'),
+    ),
   )
-  const sevenLPop = get(data, "apById.sevenLPop.nodes", []).filter(
-    p => get(p, "tpopsByPopId.totalCount") > 0
+  const sevenLPop = get(data, 'apById.sevenLPop.nodes', []).filter(
+    p => get(p, 'tpopsByPopId.totalCount') > 0,
   ).length
   const sevenLTpop = sum(
-    get(data, "apById.sevenLTpop.nodes", []).map(p =>
-      get(p, "tpopsByPopId.totalCount")
-    )
+    get(data, 'apById.sevenLTpop.nodes', []).map(p =>
+      get(p, 'tpopsByPopId.totalCount'),
+    ),
   )
-  const eightLPop = get(data, "apById.eightLPop.nodes", []).filter(
-    p => get(p, "tpopsByPopId.totalCount") > 0
+  const eightLPop = get(data, 'apById.eightLPop.nodes', []).filter(
+    p => get(p, 'tpopsByPopId.totalCount') > 0,
   ).length
   const eightLTpop = sum(
-    get(data, "apById.eightLTpop.nodes", []).map(p =>
-      get(p, "tpopsByPopId.totalCount")
-    )
+    get(data, 'apById.eightLTpop.nodes', []).map(p =>
+      get(p, 'tpopsByPopId.totalCount'),
+    ),
   )
-  const nineLPop = get(data, "apById.nineLPop.nodes", []).filter(
-    p => get(p, "tpopsByPopId.totalCount") > 0
+  const nineLPop = get(data, 'apById.nineLPop.nodes', []).filter(
+    p => get(p, 'tpopsByPopId.totalCount') > 0,
   ).length
   const nineLTpop = sum(
-    get(data, "apById.nineLTpop.nodes", []).map(p =>
-      get(p, "tpopsByPopId.totalCount")
-    )
+    get(data, 'apById.nineLTpop.nodes', []).map(p =>
+      get(p, 'tpopsByPopId.totalCount'),
+    ),
   )
-  const tenLPop = get(data, "apById.tenLPop.totalCount", 0)
+  const tenLPop = get(data, 'apById.tenLPop.totalCount', 0)
   const tenLTpop = sum(
-    get(data, "apById.tenLTpop.nodes", []).map(p =>
-      get(p, "tpopsByPopId.totalCount")
-    )
+    get(data, 'apById.tenLTpop.nodes', []).map(p =>
+      get(p, 'tpopsByPopId.totalCount'),
+    ),
   )
 
   if (error) return `Fehler: ${error.message}`
@@ -159,7 +159,7 @@ const AMengen = ({ apId, jahr, startJahr }) => {
         <Label1>Anzahl bekannt</Label1>
         <PopBerJahr>
           {loading
-            ? "..."
+            ? '...'
             : threeLPop +
               fourLPop +
               fiveLPop +
@@ -169,7 +169,7 @@ const AMengen = ({ apId, jahr, startJahr }) => {
         </PopBerJahr>
         <TpopBerJahr>
           {loading
-            ? "..."
+            ? '...'
             : threeLTpop +
               fourLTpop +
               fiveLTpop +
@@ -183,10 +183,10 @@ const AMengen = ({ apId, jahr, startJahr }) => {
       <TotalRow>
         <Label2>aktuell</Label2>
         <PopBerJahr>
-          {loading ? "..." : threeLPop + fourLPop + fiveLPop}
+          {loading ? '...' : threeLPop + fourLPop + fiveLPop}
         </PopBerJahr>
         <TpopBerJahr>
-          {loading ? "..." : threeLTpop + fourLTpop + fiveLTpop}
+          {loading ? '...' : threeLTpop + fourLTpop + fiveLTpop}
         </TpopBerJahr>
         <PopSeit />
         <TpopSeit />
@@ -194,29 +194,29 @@ const AMengen = ({ apId, jahr, startJahr }) => {
       <Row>
         <Label2Davon>davon:</Label2Davon>
         <Label2AfterDavon>ursprünglich</Label2AfterDavon>
-        <PopBerJahr>{loading ? "..." : threeLPop}</PopBerJahr>
-        <TpopBerJahr>{loading ? "..." : threeLTpop}</TpopBerJahr>
+        <PopBerJahr>{loading ? '...' : threeLPop}</PopBerJahr>
+        <TpopBerJahr>{loading ? '...' : threeLTpop}</TpopBerJahr>
         <PopSeit />
         <TpopSeit />
       </Row>
       <Row>
         <Label3>angesiedelt (vor Beginn AP)</Label3>
-        <PopBerJahr>{loading ? "..." : fourLPop}</PopBerJahr>
-        <TpopBerJahr>{loading ? "..." : fourLTpop}</TpopBerJahr>
+        <PopBerJahr>{loading ? '...' : fourLPop}</PopBerJahr>
+        <TpopBerJahr>{loading ? '...' : fourLTpop}</TpopBerJahr>
         <PopSeit />
         <TpopSeit />
       </Row>
       <Row>
         <Label3>angesiedelt (nach Beginn AP)</Label3>
-        <PopBerJahr>{loading ? "..." : fiveLPop}</PopBerJahr>
-        <TpopBerJahr>{loading ? "..." : fiveLTpop}</TpopBerJahr>
+        <PopBerJahr>{loading ? '...' : fiveLPop}</PopBerJahr>
+        <TpopBerJahr>{loading ? '...' : fiveLTpop}</TpopBerJahr>
         <PopSeit />
         <TpopSeit />
       </Row>
       <Row>
         <Label2>erloschen:</Label2>
-        <PopBerJahr>{loading ? "..." : sevenLPop + eightLPop}</PopBerJahr>
-        <TpopBerJahr>{loading ? "..." : sevenLTpop + eightLTpop}</TpopBerJahr>
+        <PopBerJahr>{loading ? '...' : sevenLPop + eightLPop}</PopBerJahr>
+        <TpopBerJahr>{loading ? '...' : sevenLTpop + eightLTpop}</TpopBerJahr>
         <PopSeit />
         <TpopSeit />
       </Row>
@@ -225,30 +225,30 @@ const AMengen = ({ apId, jahr, startJahr }) => {
         <Label2AfterDavon>
           zuvor autochthon oder vor AP angesiedelt
         </Label2AfterDavon>
-        <PopBerJahr>{loading ? "..." : sevenLPop}</PopBerJahr>
-        <TpopBerJahr>{loading ? "..." : sevenLTpop}</TpopBerJahr>
+        <PopBerJahr>{loading ? '...' : sevenLPop}</PopBerJahr>
+        <TpopBerJahr>{loading ? '...' : sevenLTpop}</TpopBerJahr>
         <PopSeit />
         <TpopSeit />
       </Row>
       <Row>
         <Label3>nach Beginn Aktionsplan angesiedelt</Label3>
-        <PopBerJahr>{loading ? "..." : eightLPop}</PopBerJahr>
-        <TpopBerJahr>{loading ? "..." : eightLTpop}</TpopBerJahr>
+        <PopBerJahr>{loading ? '...' : eightLPop}</PopBerJahr>
+        <TpopBerJahr>{loading ? '...' : eightLTpop}</TpopBerJahr>
         <PopSeit />
         <TpopSeit />
       </Row>
       <Row>
         <Label2>Ansaatversuche:</Label2>
-        <PopBerJahr>{loading ? "..." : nineLPop}</PopBerJahr>
-        <TpopBerJahr>{loading ? "..." : nineLTpop}</TpopBerJahr>
+        <PopBerJahr>{loading ? '...' : nineLPop}</PopBerJahr>
+        <TpopBerJahr>{loading ? '...' : nineLTpop}</TpopBerJahr>
         <PopSeit />
         <TpopSeit />
       </Row>
       <FernerRow>Ferner:</FernerRow>
       <Row>
         <Label1>potentieller Wuchs-/Ansiedlungsort:</Label1>
-        <PopBerJahr>{loading ? "..." : tenLPop}</PopBerJahr>
-        <TpopBerJahr>{loading ? "..." : tenLTpop}</TpopBerJahr>
+        <PopBerJahr>{loading ? '...' : tenLPop}</PopBerJahr>
+        <TpopBerJahr>{loading ? '...' : tenLTpop}</TpopBerJahr>
         <PopSeit />
         <TpopSeit />
       </Row>

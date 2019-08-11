@@ -2,7 +2,7 @@ import React, { useCallback, useState, useEffect } from 'react'
 import AsyncSelect from 'react-select/async'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from 'react-apollo-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 import get from 'lodash/get'
 
 const Container = styled.div`

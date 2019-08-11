@@ -3,7 +3,7 @@ import AsyncSelect from 'react-select/async'
 import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
-import { useApolloClient } from 'react-apollo-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 import { observer } from 'mobx-react-lite'
 
 import queryApsToChoose from './queryApsToChoose'

@@ -6,7 +6,7 @@ import min from "lodash/min"
 import sum from "lodash/sum"
 import maxBy from "lodash/maxBy"
 import groupBy from "lodash/groupBy"
-import { useQuery } from "react-apollo-hooks"
+import { useQuery } from "@apollo/react-hooks"
 
 import query from "./query"
 

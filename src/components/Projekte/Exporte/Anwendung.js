@@ -11,7 +11,7 @@ import styled from 'styled-components'
 import gql from 'graphql-tag'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from 'react-apollo-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 import { useSnackbar } from 'notistack'
 
 import beziehungen from '../../../etc/beziehungen.png'

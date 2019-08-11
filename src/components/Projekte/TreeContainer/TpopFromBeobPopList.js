@@ -3,7 +3,7 @@
  */
 import React, { useContext } from 'react'
 import styled from 'styled-components'
-import { useApolloClient, useQuery } from 'react-apollo-hooks'
+import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import { observer } from 'mobx-react-lite'

@@ -11,7 +11,6 @@ import 'moment/locale/de-ch' // this is the important bit, you have to import th
 import MomentUtils from '@date-io/moment'
 import { MuiPickersUtilsProvider } from 'material-ui-pickers'
 import { ApolloProvider } from '@apollo/react-hooks'
-import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
 import localForage from 'localforage'
 import MobxStore from './store'
 import { SnackbarProvider } from 'notistack'
@@ -90,28 +89,26 @@ const App = ({ element }) => {
     <IdbProvider value={idbContext}>
       <MobxProvider value={store}>
         <ApolloProvider client={client}>
-          <ApolloHooksProvider client={client}>
-            <MuiThemeProvider theme={theme}>
-              <MuiPickersUtilsProvider
-                utils={MomentUtils}
-                moment={moment}
-                locale="de-ch"
+          <MuiThemeProvider theme={theme}>
+            <MuiPickersUtilsProvider
+              utils={MomentUtils}
+              moment={moment}
+              locale="de-ch"
+            >
+              <SnackbarProvider
+                maxSnack={5}
+                preventDuplicate
+                autoHideDuration={10000}
+                action={key => <NotificationDismisser nKey={key} />}
               >
-                <SnackbarProvider
-                  maxSnack={5}
-                  preventDuplicate
-                  autoHideDuration={10000}
-                  action={key => <NotificationDismisser nKey={key} />}
-                >
-                  <>
-                    <GlobalStyle />
-                    {element}
-                    <Notifier />
-                  </>
-                </SnackbarProvider>
-              </MuiPickersUtilsProvider>
-            </MuiThemeProvider>
-          </ApolloHooksProvider>
+                <>
+                  <GlobalStyle />
+                  {element}
+                  <Notifier />
+                </>
+              </SnackbarProvider>
+            </MuiPickersUtilsProvider>
+          </MuiThemeProvider>
         </ApolloProvider>
       </MobxProvider>
     </IdbProvider>
