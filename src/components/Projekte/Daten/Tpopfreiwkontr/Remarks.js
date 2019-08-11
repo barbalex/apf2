@@ -35,7 +35,7 @@ const RemarksVal = styled.div`
 `
 
 const Remarks = ({ saveToDb, row, errors }) => {
-  console.log('Remarks rendering')
+  //console.log('Remarks rendering')
 
   return (
     <Container>
