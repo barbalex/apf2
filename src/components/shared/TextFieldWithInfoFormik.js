@@ -54,7 +54,7 @@ const TextFieldWithInfo = ({
       <Input
         id={name}
         name={name}
-        value={value || ''}
+        value={value || value === 0 ? value : ''}
         type={type}
         multiline={multiLine}
         onChange={onChange}

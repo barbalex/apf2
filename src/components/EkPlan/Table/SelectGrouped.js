@@ -95,10 +95,11 @@ const SelectComponent = ({ optionsGrouped, row, val, field }) => {
   const onBlur = useCallback(() => {
     setFocused(false)
   }, [])
+  const valueToShow = val.value || val.value === 0 ? val.value : ''
 
   return (
     <Select
-      value={val.value || ''}
+      value={valueToShow}
       onChange={onChange}
       onFocus={onFocus}
       onBlur={onBlur}
@@ -121,8 +122,8 @@ const SelectComponent = ({ optionsGrouped, row, val, field }) => {
           </>
         ) : null
       ) : (
-        <Option key="option1" value={val.value || ''}>
-          {val.value || ''}
+        <Option key="option1" value={valueToShow}>
+          {valueToShow}
         </Option>
       )}
     </Select>

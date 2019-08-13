@@ -61,7 +61,7 @@ const TextFieldWithUrl = ({
         <Input
           id={name}
           data-id={name}
-          value={value || ''}
+          value={value || value === 0 ? value : ''}
           type={type}
           multiline={multiLine}
           onChange={onChange}

@@ -63,7 +63,7 @@ const MyTextField = ({
         id={name}
         ref={textFieldRef}
         name={name}
-        value={value || ''}
+        value={value || value === 0 ? value : ''}
         type={type}
         multiline={multiLine}
         onChange={onChange}

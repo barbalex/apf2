@@ -73,9 +73,11 @@ const SelectTypable = ({ field, form, label, query, queryNodesName }) => {
   const saveToDbError = errors[name]
 
   const client = useApolloClient()
-  const [inputValue, setInputValue] = useState(value || '')
+  const [inputValue, setInputValue] = useState(
+    value || value === 0 ? value : '',
+  )
 
-  useEffect(() => setInputValue(value || ''), [value])
+  useEffect(() => setInputValue(value || value === 0 ? value : ''), [value])
 
   const loadOptions = useCallback(async (inputValue, cb) => {
     const filter = !!inputValue
@@ -126,8 +128,8 @@ const SelectTypable = ({ field, form, label, query, queryNodesName }) => {
   })
 
   const selectValue = {
-    value: value || '',
-    label: value || '',
+    value: value || value === 0 ? value : '',
+    label: value || value === 0 ? value : '',
   }
 
   return (
