@@ -56,9 +56,7 @@ export default async ({ data, store }) => {
   }
   let buffer
   try {
-    console.log('getXlsxBuffer 1')
     buffer = await workbook.xlsx.writeBuffer()
-    console.log('getXlsxBuffer 2')
   } catch (error) {
     return store.enqueNotification({
       message: error.message,
