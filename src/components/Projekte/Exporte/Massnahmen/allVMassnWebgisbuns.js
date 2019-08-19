@@ -13,6 +13,8 @@ export default gql`
         TPOP_X: tpopX
         TPOP_Y: tpopY
         TPOPSTATUS: tpopstatus
+        tpopapberrelevant: tPopApberRelevant
+        tpopapberrelevantgrund: tPopApberRelevantGrund
         MASSNGUID: massnguid
         MASSNJAHR: massnjahr
         MASSNDAT: massndat

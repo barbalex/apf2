@@ -83,7 +83,7 @@ const App = ({ element }) => {
 
   if (typeof window !== 'undefined') window.store = store
 
-  //console.log('App rendering')
+  //console.log('App', { element })
 
   return (
     <IdbProvider value={idbContext}>

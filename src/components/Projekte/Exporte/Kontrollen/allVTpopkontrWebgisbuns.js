@@ -10,11 +10,13 @@ export default gql`
         POPNR: popnr
         TPOPGUID: tpopguid
         TPOPNR: tpopnr
+        TPOPSTATUS: tpopstatus
+        tpopapberrelevant: tPopApberRelevant
+        tpopapberrelevantgrund: tPopApberRelevantGrund
         KONTRGUID: kontrguid
         KONTRJAHR: kontrjahr
         KONTRDAT: kontrdat
         KONTRTYP: kontrtyp
-        TPOPSTATUS: tpopstatus
         KONTRBEARBEITER: kontrbearbeiter
         KONTRUEBERLEBENSRATE: kontrueberlebensrate
         KONTRVITALITAET: kontrvitalitaet

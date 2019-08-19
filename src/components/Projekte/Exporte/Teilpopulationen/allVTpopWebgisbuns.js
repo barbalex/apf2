@@ -24,6 +24,8 @@ export default gql`
         TPOPGEMEINDE: tpopgemeinde
         TPOPFLURNAME: tpopflurname
         TPOPSTATUS: tpopstatus
+        tpopapberrelevant: tPopApberRelevant
+        tpopapberrelevantgrund: tPopApberRelevantGrund
         TPOPSTATUSUNKLAR: tpopstatusunklar
         TPOPUNKLARGRUND: tpopunklargrund
         TPOP_X: tpopX

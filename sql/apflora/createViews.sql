@@ -247,6 +247,8 @@ SELECT
   apflora.tpop.lv95_y AS "TPOP_Y",
   apflora.tpop.wgs84_lat AS "TPOP_WGS84LAT",
   apflora.tpop.wgs84_long AS "TPOP_WGS84LONG",
+  apflora.tpop.apber_relevant AS "TPop_apber_relevant",
+  apberrelevant_grund_werte.text AS "TPop_apber_relevant_grund",
   pop_status_werte_2.text AS "TPOPSTATUS",
   apflora.tpopmassn.id AS "MASSNGUID",
   apflora.tpopmassn.jahr AS "MASSNJAHR",
@@ -277,6 +279,9 @@ FROM
       ((apflora.pop
       INNER JOIN
         apflora.tpop
+          LEFT JOIN
+            apflora.tpop_apberrelevant_grund_werte AS apberrelevant_grund_werte
+            ON apflora.tpop.apber_relevant_grund = apberrelevant_grund_werte.code
         ON apflora.pop.id = apflora.tpop.pop_id)
       INNER JOIN
         (apflora.tpopmassn
@@ -1101,6 +1106,8 @@ SELECT
   apflora.tpop.nr AS "TPOPNR",
   apflora.tpop.gemeinde AS "TPOPGEMEINDE",
   apflora.tpop.flurname AS "TPOPFLURNAME",
+  apflora.tpop.apber_relevant AS "TPop_apber_relevant",
+  apberrelevant_grund_werte.text AS "TPop_apber_relevant_grund",
   pop_status_werte_2.text AS "TPOPSTATUS",
   apflora.tpop.status_unklar AS "TPOPSTATUSUNKLAR",
   apflora.tpop.status_unklar_grund AS "TPOPUNKLARGRUND",
@@ -1135,6 +1142,9 @@ FROM
     (apflora.pop
     INNER JOIN
       apflora.tpop
+        LEFT JOIN
+          apflora.tpop_apberrelevant_grund_werte AS apberrelevant_grund_werte
+          ON apflora.tpop.apber_relevant_grund = apberrelevant_grund_werte.code
       ON apflora.pop.id = apflora.tpop.pop_id)
     ON apflora.ap.id = apflora.pop.ap_id)
   LEFT JOIN
@@ -2341,6 +2351,8 @@ SELECT
   apflora.pop.nr AS "POPNR",
   apflora.tpop.id AS "TPOPGUID",
   apflora.tpop.nr AS "TPOPNR",
+  apflora.tpop.apber_relevant AS "TPop_apber_relevant",
+  apberrelevant_grund_werte.text AS "TPop_apber_relevant_grund",
   apflora.tpopkontr.id AS "KONTRGUID",
   apflora.tpopkontr.jahr AS "KONTRJAHR",
   to_char(apflora.tpopkontr.datum, 'DD.MM.YY') AS "KONTRDAT",
@@ -2403,6 +2415,9 @@ FROM
         LEFT JOIN
           apflora.pop_status_werte AS pop_status_werte_2
           ON apflora.tpop.status = pop_status_werte_2.code
+        LEFT JOIN
+          apflora.tpop_apberrelevant_grund_werte AS apberrelevant_grund_werte
+          ON apflora.tpop.apber_relevant_grund = apberrelevant_grund_werte.code
         INNER JOIN
           ((((((apflora.tpopkontr
           LEFT JOIN
@@ -2468,6 +2483,8 @@ GROUP BY
   apflora.tpop.lv95_y,
   apflora.tpop.wgs84_lat,
   apflora.tpop.wgs84_long,
+  apflora.tpop.apber_relevant,
+  apberrelevant_grund_werte.text,
   apflora.tpopkontr.bemerkungen,
   apflora.tpopkontr.lr_delarze,
   apflora.tpopkontr.lr_umgebung_delarze,
