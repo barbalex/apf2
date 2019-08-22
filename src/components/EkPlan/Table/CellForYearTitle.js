@@ -8,7 +8,10 @@ const CellForYearTitle = ({ style, row }) => {
   const store = useContext(storeContext)
   const { showEk, showEkf, showMassn, hovered } = store.ekPlan
   const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
-  const onMouseEnter = useCallback(() => hovered.setTpopId(row.id), [row.id])
+  const onMouseEnter = useCallback(() => hovered.setTpopId(row.id), [
+    hovered,
+    row.id,
+  ])
 
   return (
     <StyledTableCell

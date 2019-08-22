@@ -23,7 +23,7 @@ const CellForYear = ({ field, row, style }) => {
   const { label, value, width } = field
   const onMouseEnter = useCallback(
     () => hovered.set({ year: label, tpopId: row.id }),
-    [label, row.id],
+    [hovered, label, row.id],
   )
   const { year, tpopId } = yearClicked
   const clicked = year === label && tpopId === row.id
@@ -42,7 +42,17 @@ const CellForYear = ({ field, row, style }) => {
       // need to pass measurements instead
       setYearMenuAnchor(event.currentTarget.getBoundingClientRect())
     },
-    [row],
+    [
+      label,
+      row.ap.value,
+      row.id,
+      row.nr.value,
+      row.popNr.value,
+      setYearClicked,
+      setYearMenuAnchor,
+      value.ekPlan,
+      value.ekfPlan,
+    ],
   )
   const classes = []
   if (hovered.year === label) classes.push('column-hovered')

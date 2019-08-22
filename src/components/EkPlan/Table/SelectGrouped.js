@@ -87,7 +87,7 @@ const SelectComponent = ({ optionsGrouped, row, val, field }) => {
         })
       }
     },
-    [row.id],
+    [client, enqueNotification, field, row.id, row.tpop, store.user.name],
   )
   const onFocus = useCallback(() => {
     setFocused(true)

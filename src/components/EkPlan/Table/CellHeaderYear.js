@@ -8,7 +8,10 @@ const CellHeaderYear = ({ style, column }) => {
   const store = useContext(storeContext)
   const { hovered } = store.ekPlan
 
-  const onMouseEnter = useCallback(() => hovered.setYear(column), [column])
+  const onMouseEnter = useCallback(() => hovered.setYear(column), [
+    column,
+    hovered,
+  ])
   const className = hovered.year === column ? 'column-hovered' : ''
 
   return (

@@ -39,7 +39,7 @@ const CheckboxComponent = ({ row, value, field }) => {
   const [checked, setChecked] = useState(value === null ? false : value)
   useEffect(() => {
     setChecked(row[field] === true)
-  }, [row, value])
+  }, [field, row, value])
 
   const onClick = useCallback(async () => {
     setChecked(!checked)
@@ -93,7 +93,7 @@ const CheckboxComponent = ({ row, value, field }) => {
         },
       })
     }
-  }, [row.id, checked])
+  }, [checked, client, field, row, store.user.name, enqueNotification])
 
   return (
     <CheckboxContainer onClick={onClick}>
