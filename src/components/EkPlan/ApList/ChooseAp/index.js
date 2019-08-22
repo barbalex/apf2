@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useRef } from 'react'
 import AsyncSelect from 'react-select/async'
 import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
@@ -82,8 +82,8 @@ const EkPlan = ({ setShowChoose }) => {
 
   const apValues = aps.map(a => a.value)
 
-  let data
-  let error
+  const data = useRef({})
+  const error = useRef({})
   const loadOptions = useCallback(
     async (inputValue, cb) => {
       const filter = !!inputValue
@@ -106,13 +106,13 @@ const EkPlan = ({ setShowChoose }) => {
           },
         })
       } catch (err) {
-        error = err
+        error.current = err
       }
-      data = result.data
-      const options = get(data, 'allAps.nodes', [])
+      data.current = result.data
+      const options = get(data.current, 'allAps.nodes', [])
       cb(options)
     },
-    [apValues, projId],
+    [apValues, client, projId],
   )
 
   const onChange = option => {
@@ -155,7 +155,7 @@ const EkPlan = ({ setShowChoose }) => {
           openMenuOnFocus
           autoFocus
         />
-        {error && <Error>{error.message}</Error>}
+        {error.current && <Error>{error.current.message}</Error>}
       </SelectContainer>
     </ErrorBoundary>
   )

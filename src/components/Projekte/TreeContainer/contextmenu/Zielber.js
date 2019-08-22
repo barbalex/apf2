@@ -21,7 +21,10 @@ const Zielber = ({ treeName, onClick }) => {
 
   // eslint-disable-next-line no-unused-vars
   const [label, changeLabel] = useState('')
-  const onShow = useCallback(event => changeLabel(event.detail.data.nodeLabel))
+  const onShow = useCallback(
+    event => changeLabel(event.detail.data.nodeLabel),
+    [],
+  )
 
   return (
     <ErrorBoundary>

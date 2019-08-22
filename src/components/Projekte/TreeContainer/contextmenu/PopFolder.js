@@ -3,7 +3,6 @@ import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { observer } from 'mobx-react-lite'
 import ErrorBoundary from 'react-error-boundary'
 
-
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import storeContext from '../../../../storeContext'
 
@@ -39,7 +38,10 @@ const PopFolder = ({ treeName, onClick }) => {
 
   // according to https://github.com/vkbansal/react-contextmenu/issues/65
   // this is how to pass data from ContextMenuTrigger to ContextMenu
-  const onShow = useCallback(event => changeLabel(event.detail.data.nodeLabel))
+  const onShow = useCallback(
+    event => changeLabel(event.detail.data.nodeLabel),
+    [],
+  )
 
   return (
     <ErrorBoundary>

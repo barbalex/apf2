@@ -22,7 +22,7 @@ const BeobZugeordnetFolder = ({ treeName, onClick }) => {
   // this is how to pass data from ContextMenuTrigger to ContextMenu
   const onShow = useCallback(event => {
     changeId(event.detail.data.nodeId)
-  })
+  }, [])
 
   return (
     <ErrorBoundary>

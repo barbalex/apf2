@@ -112,20 +112,20 @@ const ProjektContainer = ({ treeName, tabs: tabsPassed, projekteTabs }) => {
     } else {
       setFilterWidth(standardWidth)
     }
-  }, [treeEl.current, datenEl.current, filterEl.current])
+  }, [setTreeWidth, setTreeHeight, setDatenWidth, setFilterWidth])
 
-  const onChange = useCallback(() => setDimensions())
+  const onChange = useCallback(() => setDimensions(), [setDimensions])
 
   // reset dimensions when window resizes
   useEffect(() => {
     window.addEventListener('resize', setDimensions)
     return () => window.removeEventListener('resize', setDimensions)
-  }, [])
+  }, [setDimensions])
 
   // reset dimensions when tabs are toggled
   useEffect(() => {
     setDimensions()
-  }, [tabs.length, isPrint])
+  }, [tabs.length, isPrint, setDimensions])
 
   if (isPrint && showApberForAp) {
     return <ApberForApFromAp />

@@ -59,7 +59,7 @@ const Pop = ({ onClick, treeName }) => {
   const onShow = useCallback(event => {
     changeId(event.detail.data.nodeId)
     changeLabel(event.detail.data.nodeLabel)
-  })
+  }, [])
 
   return (
     <ErrorBoundary>

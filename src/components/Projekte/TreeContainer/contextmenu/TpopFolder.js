@@ -38,7 +38,7 @@ const TpopFolder = ({ treeName, onClick }) => {
 
   // according to https://github.com/vkbansal/react-contextmenu/issues/65
   // this is how to pass data from ContextMenuTrigger to ContextMenu
-  const onShow = useCallback(event => changeId(event.detail.data.nodeId))
+  const onShow = useCallback(event => changeId(event.detail.data.nodeId), [])
 
   return (
     <ErrorBoundary>

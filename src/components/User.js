@@ -98,7 +98,7 @@ const User = () => {
       // as client is rebuilt with new settings
       typeof window !== 'undefined' && window.location.reload(true)
     },
-    [name, password],
+    [client, idb.currentUser, name, password],
   )
   const onBlurName = useCallback(
     e => {
@@ -111,7 +111,7 @@ const User = () => {
         setTimeout(() => fetchLogin({ name }))
       }
     },
-    [password],
+    [fetchLogin, password],
   )
   const onBlurPassword = useCallback(
     e => {
@@ -124,20 +124,17 @@ const User = () => {
         setTimeout(() => fetchLogin({ password }))
       }
     },
-    [name],
+    [fetchLogin, name],
   )
-  const onKeyPressName = useCallback(e => {
-    if (e.key === 'Enter') {
-      onBlurName(e)
-    }
-  })
-  const onKeyPressPassword = useCallback(e => {
-    if (e.key === 'Enter') {
-      onBlurPassword(e)
-    }
-  })
+  const onKeyPressName = useCallback(e => e.key === 'Enter' && onBlurName(e), [
+    onBlurName,
+  ])
+  const onKeyPressPassword = useCallback(
+    e => e.key === 'Enter' && onBlurPassword(e),
+    [onBlurPassword],
+  )
   const onClickShowPass = useCallback(() => setShowPass(!showPass), [showPass])
-  const onMouseDownShowPass = useCallback(e => e.preventDefault())
+  const onMouseDownShowPass = useCallback(e => e.preventDefault(), [])
 
   idb.currentUser.toArray().then(users => {
     setToken(get(users, '[0].token', null))
