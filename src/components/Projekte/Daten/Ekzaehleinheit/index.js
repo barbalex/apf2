@@ -92,7 +92,7 @@ const Ekzaehleinheit = ({ treeName }) => {
       setErrors({})
       if (changedField === 'zaehleinheitId') refetch.ekzaehleinheits()
     },
-    [row],
+    [client, refetch, row, store.user.name],
   )
 
   if (loading) {

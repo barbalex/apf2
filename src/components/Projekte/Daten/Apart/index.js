@@ -106,7 +106,7 @@ const ApArt = ({ treeName }) => {
       setErrors({})
       changedField === 'artId' && refetch.aparts()
     },
-    [row],
+    [client, refetch, row, store.user.name],
   )
 
   if (loading || loadingAeEigById) {

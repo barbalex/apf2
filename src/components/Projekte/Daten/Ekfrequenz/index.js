@@ -109,7 +109,7 @@ const Ekfrequenz = ({ treeName }) => {
       setErrors({})
       if (changedField === 'zaehleinheitId') refetch.ekfrequenzs()
     },
-    [row],
+    [client, refetch, row, store.user.name],
   )
 
   if (loading) {

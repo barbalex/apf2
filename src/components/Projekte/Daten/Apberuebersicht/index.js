@@ -68,7 +68,7 @@ const Apberuebersicht = ({ treeName }) => {
       }
       setErrors({})
     },
-    [row],
+    [client, row, store.user.name],
   )
 
   if (loading) {

@@ -101,17 +101,20 @@ const Idealbiotop = ({ treeName }) => {
       }
       setErrors({})
     },
-    [row],
+    [client, row, store.user.name],
   )
-  const onChangeTab = useCallback((event, value) => {
-    setUrlQueryValue({
-      key: 'idealbiotopTab',
-      value,
-      urlQuery,
-      setUrlQuery,
-    })
-    setTab(value)
-  })
+  const onChangeTab = useCallback(
+    (event, value) => {
+      setUrlQueryValue({
+        key: 'idealbiotopTab',
+        value,
+        urlQuery,
+        setUrlQuery,
+      })
+      setTab(value)
+    },
+    [setUrlQuery, urlQuery],
+  )
 
   if (loading) {
     return (

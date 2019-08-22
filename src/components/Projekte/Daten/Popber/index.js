@@ -77,7 +77,7 @@ const Popber = ({ treeName }) => {
       setErrors({})
       changedField === 'entwicklung' && refetch.popbers()
     },
-    [row],
+    [client, refetch, row, store.user.name],
   )
 
   if (loading) {

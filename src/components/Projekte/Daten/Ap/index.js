@@ -116,7 +116,7 @@ const Ap = ({ treeName, showFilter = false }) => {
       setErrors({})
       if (['artId'].includes(changedField)) refetch.aps()
     },
-    [row],
+    [client, refetch, row, user.name],
   )
 
   const aeEigenschaftenfilterForData = useCallback(

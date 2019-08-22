@@ -86,7 +86,7 @@ const Assozart = ({ treeName }) => {
       setErrors({})
       if (['aeId'].includes(changedField)) refetch.assozarts()
     },
-    [row],
+    [client, refetch, row, store.user.name],
   )
 
   if (loading) {

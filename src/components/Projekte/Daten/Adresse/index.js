@@ -67,7 +67,7 @@ const Adresse = ({ treeName }) => {
       ;[('name', 'role')].includes(changedField) && refetch.adresses()
       setErrors({})
     },
-    [row],
+    [client, refetch, row, store.user.name],
   )
 
   //console.log('Adresse')

@@ -77,7 +77,7 @@ const Erfkrit = ({ treeName }) => {
       setErrors({})
       if (changedField === 'erfolg') refetch.erfkrits()
     },
-    [row],
+    [client, refetch, row, store.user.name],
   )
 
   if (loading) {

@@ -140,7 +140,7 @@ const Beobzuordnung = ({ type, treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const tree = store[treeName]
-  const { activeNodeArray } = store[treeName]
+  const { activeNodeArray } = tree
   const id = activeNodeArray[activeNodeArray.length - 1]
   const apId =
     activeNodeArray.length > 3
@@ -157,13 +157,15 @@ const Beobzuordnung = ({ type, treeName }) => {
   const row = get(data, 'beobById', {})
 
   // only include ap-arten (otherwise makes no sense, plus: error when app sets new activeNodeArray to non-existing ap)
-  const aeEigenschaftenfilter = useCallback(inputValue =>
-    !!inputValue
-      ? {
-          artname: { includesInsensitive: inputValue },
-          apartsByArtIdExist: true,
-        }
-      : { artname: { isNull: false }, apartsByArtIdExist: true },
+  const aeEigenschaftenfilter = useCallback(
+    inputValue =>
+      !!inputValue
+        ? {
+            artname: { includesInsensitive: inputValue },
+            apartsByArtIdExist: true,
+          }
+        : { artname: { isNull: false }, apartsByArtIdExist: true },
+    [],
   )
 
   const onSaveArtIdToDb = useCallback(
@@ -171,7 +173,7 @@ const Beobzuordnung = ({ type, treeName }) => {
       const { value } = event.target
       saveArtIdToDb({ value, row, treeName, client, store })
     },
-    [row, tree],
+    [client, row, store, treeName],
   )
   const onSaveNichtZuordnenToDb = useCallback(
     value => {
@@ -184,25 +186,28 @@ const Beobzuordnung = ({ type, treeName }) => {
         store,
       })
     },
-    [id, tree],
+    [client, data.refetch, id, store, treeName],
   )
   const onSaveTpopIdToDb = useCallback(
     event => {
       const { value } = event.target
       saveTpopIdToDb({ value, id, treeName, type, client, store })
     },
-    [id, tree, type],
+    [client, id, store, treeName, type],
   )
-  const onUpdateBemerkungen = useCallback(event => {
-    client.mutate({
-      mutation: updateBeobByIdGql,
-      variables: {
-        id,
-        bemerkungen: event.target.value,
-        changedBy: store.user.name,
-      },
-    })
-  })
+  const onUpdateBemerkungen = useCallback(
+    event => {
+      client.mutate({
+        mutation: updateBeobByIdGql,
+        variables: {
+          id,
+          bemerkungen: event.target.value,
+          changedBy: store.user.name,
+        },
+      })
+    },
+    [client, id, store.user.name],
+  )
 
   if (loading) {
     return (

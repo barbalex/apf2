@@ -126,18 +126,20 @@ const ApFilter = ({ treeName }) => {
       })
       refetch.aps()
     },
-    [row],
+    [nodeFilterSetValue, refetch, row, treeName],
   )
 
-  const aeEigenschaftenFilter = useCallback(inputValue =>
-    !!inputValue
-      ? {
-          apByArtIdExists: true,
-          artname: { includesInsensitive: inputValue },
-        }
-      : {
-          apByArtIdExists: true,
-        },
+  const aeEigenschaftenFilter = useCallback(
+    inputValue =>
+      !!inputValue
+        ? {
+            apByArtIdExists: true,
+            artname: { includesInsensitive: inputValue },
+          }
+        : {
+            apByArtIdExists: true,
+          },
+    [],
   )
 
   if (errorAdresses) return `Fehler: ${errorAdresses.message}`

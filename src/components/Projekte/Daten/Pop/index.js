@@ -145,7 +145,15 @@ const Pop = ({ treeName, showFilter = false }) => {
         setErrors({})
       }
     },
-    [row, showFilter],
+    [
+      client,
+      nodeFilterSetValue,
+      refetch,
+      row,
+      showFilter,
+      store.user.name,
+      treeName,
+    ],
   )
 
   //console.log('Pop rendering')

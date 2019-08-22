@@ -67,31 +67,34 @@ const Apber = ({ treeName }) => {
 
   const row = get(data, 'apberById', {})
 
-  const onSubmit = useCallback(async (values, { setErrors }) => {
-    const changedField = objectsFindChangedKey(values, row)
-    try {
-      await client.mutate({
-        mutation: updateApberByIdGql,
-        variables: {
-          ...objectsEmptyValuesToNull(values),
-          changedBy: store.user.name,
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateApberById: {
-            apber: {
-              ...values,
+  const onSubmit = useCallback(
+    async (values, { setErrors }) => {
+      const changedField = objectsFindChangedKey(values, row)
+      try {
+        await client.mutate({
+          mutation: updateApberByIdGql,
+          variables: {
+            ...objectsEmptyValuesToNull(values),
+            changedBy: store.user.name,
+          },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateApberById: {
+              apber: {
+                ...values,
+                __typename: 'Apber',
+              },
               __typename: 'Apber',
             },
-            __typename: 'Apber',
           },
-        },
-      })
-    } catch (error) {
-      return setErrors({ [changedField]: error.message })
-    }
-    setErrors({})
-  })
+        })
+      } catch (error) {
+        return setErrors({ [changedField]: error.message })
+      }
+      setErrors({})
+    },
+    [client, row, store.user.name],
+  )
 
   if (loading) {
     return (

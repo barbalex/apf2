@@ -20,14 +20,17 @@ const MyTextField = ({ field, form }) => {
   const textFieldRef = useRef(null)
   useEffect(() => {
     const handleWheel = e => e.preventDefault()
-    textFieldRef.current.addEventListener('wheel', handleWheel)
+    const current = textFieldRef.current
+    current.addEventListener('wheel', handleWheel)
 
     return () => {
-      textFieldRef.current.removeEventListener('wheel', handleWheel)
+      current.removeEventListener('wheel', handleWheel)
     }
   }, [])
 
-  const onKeyDown = useCallback(e => e.key === 'Enter' && handleSubmit())
+  const onKeyDown = useCallback(e => e.key === 'Enter' && handleSubmit(), [
+    handleSubmit,
+  ])
 
   return (
     <StyledInput
