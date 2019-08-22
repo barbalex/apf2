@@ -5,7 +5,7 @@ import { useSnackbar } from 'notistack'
 
 const NotificationDismisser = ({ nKey }) => {
   const { closeSnackbar } = useSnackbar()
-  const onClick = useCallback(() => closeSnackbar(nKey), [])
+  const onClick = useCallback(() => closeSnackbar(nKey), [closeSnackbar, nKey])
 
   return (
     <IconButton

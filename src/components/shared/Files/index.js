@@ -9,7 +9,10 @@ import Lightbox from 'react-image-lightbox'
 import Button from '@material-ui/core/Button'
 import ErrorBoundary from 'react-error-boundary'
 
-import { idealbiotopFile as idealbiotopFileFragment, tpopkontrFile as tpopkontrFileFragment } from '../fragments'
+import {
+  idealbiotopFile as idealbiotopFileFragment,
+  tpopkontrFile as tpopkontrFileFragment,
+} from '../fragments'
 import Uploader from '../Uploader'
 import File from './File'
 import 'react-image-lightbox/style.css'
@@ -108,15 +111,13 @@ const Files = ({ parentId, parent }) => {
         })
       }
     },
-    [parentId, refetch],
+    [client, fields, fragment, parent, parentId, refetch],
   )
 
   const images = files.filter(f => isImageFile(f))
   const imageUrls = images.map(
     f =>
-      `https://ucarecdn.com/${f.fileId}/-/resize/1200x/-/quality/lightest/${
-        f.name
-      }`,
+      `https://ucarecdn.com/${f.fileId}/-/resize/1200x/-/quality/lightest/${f.name}`,
   )
   const onClickLightboxButton = useCallback(() => setLightboxIsOpen(true), [])
   const onCloseLightboxRequest = useCallback(() => setLightboxIsOpen(false), [])

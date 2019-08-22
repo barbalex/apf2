@@ -21,7 +21,7 @@ const Notifier = () => {
       // Dispatch action to remove snackbar from mobx store
       removeNotification(notification.key)
     })
-  }, [notifications])
+  }, [displayed, enqueueSnackbar, notifications, removeNotification])
 
   //console.log('Notifier rendering')
 

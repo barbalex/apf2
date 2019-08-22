@@ -1,11 +1,11 @@
-import React, { useContext, useCallback } from "react"
-import styled from "styled-components"
-import DeleteFilterIcon from "@material-ui/icons/DeleteSweep"
-import DeleteFilterIcon2 from "@material-ui/icons/DeleteSweepOutlined"
-import IconButton from "@material-ui/core/IconButton"
-import { observer } from "mobx-react-lite"
+import React, { useContext, useCallback } from 'react'
+import styled from 'styled-components'
+import DeleteFilterIcon from '@material-ui/icons/DeleteSweep'
+import DeleteFilterIcon2 from '@material-ui/icons/DeleteSweepOutlined'
+import IconButton from '@material-ui/core/IconButton'
+import { observer } from 'mobx-react-lite'
 
-import storeContext from "../../storeContext"
+import storeContext from '../../storeContext'
 
 const Container = styled.div`
   background-color: #ffd3a7;
@@ -68,9 +68,10 @@ const FormTitle = ({
 
   const onEmptyTable = useCallback(
     () => nodeFilterEmptyTable({ treeName, table }),
-    [treeName, table]
+    [nodeFilterEmptyTable, treeName, table],
   )
   const onEmptyTree = useCallback(() => nodeFilterEmptyTree(treeName), [
+    nodeFilterEmptyTree,
     treeName,
   ])
 

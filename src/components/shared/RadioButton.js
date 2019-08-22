@@ -34,7 +34,7 @@ const RadioButton = ({ label, name, value, error, saveToDb }) => {
       },
     }
     saveToDb(fakeEvent)
-  }, [value, name])
+  }, [value, name, saveToDb])
 
   return (
     <StyledFormControl

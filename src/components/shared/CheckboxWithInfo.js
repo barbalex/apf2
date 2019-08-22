@@ -29,7 +29,7 @@ const StyledFormControlLabel = styled(FormControlLabel)`
 `
 
 const CheckboxWithInfo = ({ value, label, name, popover, saveToDb, error }) => {
-  const onCheck = useCallback((e, val) => saveToDb(val))
+  const onCheck = useCallback((e, val) => saveToDb(val), [saveToDb])
 
   return (
     <Container>

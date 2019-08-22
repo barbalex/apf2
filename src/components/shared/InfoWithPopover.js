@@ -25,7 +25,7 @@ const InfoWithPopover = ({ children }) => {
     },
     [popupOpen],
   )
-  const onRequestClosePopover = useCallback(() => changePopupOpen(false))
+  const onRequestClosePopover = useCallback(() => changePopupOpen(false), [])
 
   return (
     <>

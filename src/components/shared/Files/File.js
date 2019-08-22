@@ -117,7 +117,7 @@ const File = ({ file, parent, refetch }) => {
       })*/
     }
     refetch()
-  }, [file])
+  }, [client, file.id, parent, refetch, tableName])
   const onClickDownload = useCallback(
     () => window.open(`https://ucarecdn.com/${file.fileId}/-/inline/no/`),
     [file],
@@ -169,7 +169,7 @@ const File = ({ file, parent, refetch }) => {
       setErrors({})
       refetch()
     },
-    [file],
+    [client, file, parent, refetch, tableName],
   )
 
   if (!file) return null

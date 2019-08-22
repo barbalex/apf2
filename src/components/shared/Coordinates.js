@@ -73,90 +73,6 @@ const Coordinates = ({ row, refetchForm, table }) => {
     const value = ifIsNumericAsNumber(event.target.value)
     setLv95XState(value)
   }, [])
-  const onBlurX = useCallback(
-    event => {
-      const value = ifIsNumericAsNumber(event.target.value)
-      const isValid = xIsValid(value)
-      if (!isValid) return setXError(xMessage)
-      setXError('')
-      // only save if changed
-      if (value === lv95X) return
-      if ((value && lv95YState) || (!value && !lv95YState)) {
-        saveToDbLv95(value, lv95YState)
-      }
-    },
-    [lv95YState],
-  )
-  const onChangeY = useCallback(event => {
-    const value = ifIsNumericAsNumber(event.target.value)
-    setLv95YState(value)
-  }, [])
-  const onBlurY = useCallback(
-    event => {
-      const value = ifIsNumericAsNumber(event.target.value)
-      const isValid = yIsValid(value)
-      if (!isValid) return setYError(yMessage)
-      setYError('')
-      // only save if changed
-      if (value === lv95Y) return
-      if ((value && lv95XState) || (!value && !lv95XState))
-        saveToDbLv95(lv95XState, value)
-    },
-    [lv95XState],
-  )
-
-  const onChangeWgs84Lat = useCallback(event => {
-    const value = ifIsNumericAsNumber(event.target.value)
-    setWgs84LatState(value)
-  }, [])
-  const onBlurWgs84Lat = useCallback(
-    event => {
-      const value = ifIsNumericAsNumber(event.target.value)
-      const isValid = wgs84LatIsValid(value)
-      if (!isValid) return setWgs84LatError(wgs84LatMessage)
-      setWgs84LatError('')
-      // only save if changed
-      if (value === wgs84Lat) return
-      if ((value && wgs84LongState) || (!value && !wgs84LongState)) {
-        saveToDbWgs84(value, wgs84LongState)
-      }
-    },
-    [wgs84LongState],
-  )
-  const onChangeWgs84Long = useCallback(event => {
-    const value = ifIsNumericAsNumber(event.target.value)
-    setWgs84LongState(value)
-  }, [])
-  const onBlurWgs84Long = useCallback(
-    event => {
-      const value = ifIsNumericAsNumber(event.target.value)
-      const isValid = wgs84LongIsValid(value)
-      if (!isValid) return setWgs84LongError(wgs84LongMessage)
-      setWgs84LongError('')
-      // only save if changed
-      if (value === wgs84Long) return
-      if ((value && wgs84LatState) || (!value && !wgs84LatState)) {
-        saveToDbWgs84(wgs84LatState, value)
-      }
-    },
-    [wgs84LatState],
-  )
-
-  const saveToDbLv95 = useCallback((x, y) => {
-    let geomPoint = null
-    if (x && y) {
-      const [lat, long] = epsg2056to4326(x, y)
-      geomPoint = `SRID=4326;POINT(${long} ${lat})`
-    }
-    saveToDb(geomPoint, 'lv95')
-  }, [])
-  const saveToDbWgs84 = useCallback((lat, long) => {
-    let geomPoint = null
-    if (lat && long) {
-      geomPoint = `SRID=4326;POINT(${long} ${lat})`
-    }
-    saveToDb(geomPoint, 'wgs84')
-  }, [])
 
   const saveToDb = useCallback(
     async (geomPoint, projection) => {
@@ -204,7 +120,96 @@ const Coordinates = ({ row, refetchForm, table }) => {
       setWgs84LatError('')
       setWgs84LongError('')
     },
-    [row],
+    [client, refetch, refetchForm, row.id, store.user.name, table],
+  )
+  const saveToDbLv95 = useCallback(
+    (x, y) => {
+      let geomPoint = null
+      if (x && y) {
+        const [lat, long] = epsg2056to4326(x, y)
+        geomPoint = `SRID=4326;POINT(${long} ${lat})`
+      }
+      saveToDb(geomPoint, 'lv95')
+    },
+    [saveToDb],
+  )
+  const saveToDbWgs84 = useCallback(
+    (lat, long) => {
+      let geomPoint = null
+      if (lat && long) {
+        geomPoint = `SRID=4326;POINT(${long} ${lat})`
+      }
+      saveToDb(geomPoint, 'wgs84')
+    },
+    [saveToDb],
+  )
+  const onBlurX = useCallback(
+    event => {
+      const value = ifIsNumericAsNumber(event.target.value)
+      const isValid = xIsValid(value)
+      if (!isValid) return setXError(xMessage)
+      setXError('')
+      // only save if changed
+      if (value === lv95X) return
+      if ((value && lv95YState) || (!value && !lv95YState)) {
+        saveToDbLv95(value, lv95YState)
+      }
+    },
+    [lv95X, lv95YState, saveToDbLv95],
+  )
+  const onChangeY = useCallback(event => {
+    const value = ifIsNumericAsNumber(event.target.value)
+    setLv95YState(value)
+  }, [])
+  const onBlurY = useCallback(
+    event => {
+      const value = ifIsNumericAsNumber(event.target.value)
+      const isValid = yIsValid(value)
+      if (!isValid) return setYError(yMessage)
+      setYError('')
+      // only save if changed
+      if (value === lv95Y) return
+      if ((value && lv95XState) || (!value && !lv95XState))
+        saveToDbLv95(lv95XState, value)
+    },
+    [lv95XState, lv95Y, saveToDbLv95],
+  )
+
+  const onChangeWgs84Lat = useCallback(event => {
+    const value = ifIsNumericAsNumber(event.target.value)
+    setWgs84LatState(value)
+  }, [])
+  const onBlurWgs84Lat = useCallback(
+    event => {
+      const value = ifIsNumericAsNumber(event.target.value)
+      const isValid = wgs84LatIsValid(value)
+      if (!isValid) return setWgs84LatError(wgs84LatMessage)
+      setWgs84LatError('')
+      // only save if changed
+      if (value === wgs84Lat) return
+      if ((value && wgs84LongState) || (!value && !wgs84LongState)) {
+        saveToDbWgs84(value, wgs84LongState)
+      }
+    },
+    [saveToDbWgs84, wgs84Lat, wgs84LongState],
+  )
+  const onChangeWgs84Long = useCallback(event => {
+    const value = ifIsNumericAsNumber(event.target.value)
+    setWgs84LongState(value)
+  }, [])
+  const onBlurWgs84Long = useCallback(
+    event => {
+      const value = ifIsNumericAsNumber(event.target.value)
+      const isValid = wgs84LongIsValid(value)
+      if (!isValid) return setWgs84LongError(wgs84LongMessage)
+      setWgs84LongError('')
+      // only save if changed
+      if (value === wgs84Long) return
+      if ((value && wgs84LatState) || (!value && !wgs84LatState)) {
+        saveToDbWgs84(wgs84LatState, value)
+      }
+    },
+    [saveToDbWgs84, wgs84LatState, wgs84Long],
   )
 
   return (

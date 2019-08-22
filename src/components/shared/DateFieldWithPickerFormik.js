@@ -49,20 +49,25 @@ const DateFieldWithPicker = ({ field, form, label }) => {
       onBlur(fakeEvent)
       setStateValue(newValue)
     },
-    [name],
+    [name, onBlur, onChange, stateValue],
   )
 
-  const onOwnBlur = useCallback(event => onOwnChange(event.target.value))
+  const onOwnBlur = useCallback(event => onOwnChange(event.target.value), [
+    onOwnChange,
+  ])
 
   useEffect(() => {
     setStateValue(propsValue)
   }, [propsValue])
 
-  const onKeyPress = useCallback(event => {
-    if (event.key === 'Enter') {
-      event.key === 'Enter' && handleSubmit()
-    }
-  })
+  const onKeyPress = useCallback(
+    event => {
+      if (event.key === 'Enter') {
+        event.key === 'Enter' && handleSubmit()
+      }
+    },
+    [handleSubmit],
+  )
 
   return (
     <>

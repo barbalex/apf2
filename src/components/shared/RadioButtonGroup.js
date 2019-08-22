@@ -57,7 +57,7 @@ const RadioButtonGroup = ({
         return saveToDb(fakeEvent)
       }
     },
-    [value, name],
+    [value, name, saveToDb],
   )
   const onChangeGroup = useCallback(
     event => {
@@ -80,7 +80,7 @@ const RadioButtonGroup = ({
       }
       saveToDb(fakeEvent)
     },
-    [name],
+    [name, saveToDb],
   )
 
   const valueSelected =

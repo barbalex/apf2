@@ -53,20 +53,23 @@ const DateFieldWithPicker = ({
       saveToDb(fakeEvent)
       setStateValue(newValue)
     },
-    [name],
+    [name, saveToDb, stateValue],
   )
 
-  const onBlur = useCallback(event => onChange(event.target.value))
+  const onBlur = useCallback(event => onChange(event.target.value), [onChange])
 
   useEffect(() => {
     setStateValue(propsValue)
   }, [propsValue])
 
-  const onKeyPress = useCallback(event => {
-    if (event.key === 'Enter') {
-      onBlur(event)
-    }
-  })
+  const onKeyPress = useCallback(
+    event => {
+      if (event.key === 'Enter') {
+        onBlur(event)
+      }
+    },
+    [onBlur],
+  )
 
   return (
     <>

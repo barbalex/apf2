@@ -40,7 +40,7 @@ const RadioButton = ({ field, form, label }) => {
     onChange(fakeEvent)
     onBlur(fakeEvent)
     setTimeout(() => handleSubmit())
-  }, [value, name])
+  }, [value, name, onChange, onBlur, handleSubmit])
 
   return (
     <div>
