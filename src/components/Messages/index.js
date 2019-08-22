@@ -72,7 +72,7 @@ const UserMessages = ({ open }) => {
       })
       refetch()
     },
-    [userName],
+    [client, refetch, userName],
   )
   const onClickReadAll = useCallback(async () => {
     await Promise.all(
@@ -84,7 +84,7 @@ const UserMessages = ({ open }) => {
       }),
     )
     return refetch()
-  }, [unreadMessages, userName])
+  }, [client, refetch, unreadMessages, userName])
 
   if (error) {
     return dealWithError({ error, store, component: 'Messages' })

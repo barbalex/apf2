@@ -56,9 +56,8 @@ const Print = () => {
 
   const onClickBack = useCallback(
     () => typeof window !== 'undefined' && window.history.back(),
+    [],
   )
-
-  console.log('Print', { showApberForAp, showApberForYear })
 
   if (!showApberForAp && !showApberForYear) return null
 

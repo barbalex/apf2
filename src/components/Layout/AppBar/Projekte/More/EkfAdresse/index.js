@@ -17,14 +17,17 @@ const EkfAdresse = ({ setAnchorEl }) => {
   const { data, error, loading } = useQuery(queryAdresses)
   const store = useContext(storeContext)
   const { setView, setEkfAdresseId } = store
-  const choose = useCallback(async event => {
-    setAnchorEl(null)
-    // prevent this happening before seAnchor happened
-    setTimeout(() => {
-      setEkfAdresseId(event.target.value)
-      setView('ekf')
-    })
-  })
+  const choose = useCallback(
+    async event => {
+      setAnchorEl(null)
+      // prevent this happening before seAnchor happened
+      setTimeout(() => {
+        setEkfAdresseId(event.target.value)
+        setView('ekf')
+      })
+    },
+    [setAnchorEl, setEkfAdresseId, setView],
+  )
 
   if (loading) return '...'
   if (error) {

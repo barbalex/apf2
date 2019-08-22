@@ -108,14 +108,23 @@ const EkPlanAppBar = () => {
         })
       }
     },
-    [projekteTabs],
+    [
+      cloneTree2From1,
+      isMobile,
+      nodeFilterClone1To2,
+      projekteTabs,
+      setUrlQuery,
+      urlQuery,
+    ],
   )
-  const onClickExporte = useCallback(() => onClickButton('exporte'))
+  const onClickExporte = useCallback(() => onClickButton('exporte'), [
+    onClickButton,
+  ])
   const onClickAp = useCallback(() => {
     // eslint-disable-next-line no-unused-vars
     const [projectTitle, projectId, ...rest] = tree.activeNodeArray
     tree.setActiveNodeArray([projectTitle, projectId])
-  })
+  }, [tree])
 
   return (
     <>

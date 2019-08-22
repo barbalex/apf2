@@ -39,8 +39,9 @@ const EkfYear = () => {
 
   useEffect(() => setStateValue(ekfYear), [ekfYear])
 
-  const onChange = useCallback(event =>
-    setStateValue(event.target.value ? +event.target.value : ''),
+  const onChange = useCallback(
+    event => setStateValue(event.target.value ? +event.target.value : ''),
+    [],
   )
   const onBlur = useCallback(
     event => {
@@ -53,7 +54,7 @@ const EkfYear = () => {
         })
       }
     },
-    [ekfYear],
+    [ekfYear, setEkfYear, stateValue, store],
   )
 
   return (

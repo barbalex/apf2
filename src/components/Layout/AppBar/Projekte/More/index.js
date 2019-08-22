@@ -52,36 +52,37 @@ const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
       window.open(
         'https://www.youtube.com/playlist?list=PLTz8Xt5SOQPS-dbvpJ_DrB4-o3k3yj09J',
       )
-  })
+  }, [])
   const showDeletedDatasets = useCallback(() => {
     setAnchorEl(null)
     // prevent following from happening
     // before setAnchor has finished
     setTimeout(() => setShowDeletions(true))
-  })
-  const onClickMehrButton = useCallback(event =>
-    setAnchorEl(event.currentTarget),
+  }, [setShowDeletions])
+  const onClickMehrButton = useCallback(
+    event => setAnchorEl(event.currentTarget),
+    [],
   )
-  const onClose = useCallback(() => setAnchorEl(null))
+  const onClose = useCallback(() => setAnchorEl(null), [])
   const onClickExporte = useCallback(() => {
     setAnchorEl(null)
     // prevent following from happening
     // before setAnchor has finished
     setTimeout(() => passedOnClickExporte())
-  })
+  }, [passedOnClickExporte])
   const onClickLogout = useCallback(() => {
     setAnchorEl(null)
     // prevent following from happening
     // before setAnchor has finished
     setTimeout(() => logout(idb))
-  })
+  }, [idb])
   const onClickReload = useCallback(() => {
     if (typeof window !== 'undefined') {
       localForage.clear()
       idb.delete()
       window.location.reload(true)
     }
-  })
+  }, [idb])
 
   return (
     <Container>
