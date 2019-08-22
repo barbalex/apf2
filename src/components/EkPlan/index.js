@@ -62,7 +62,6 @@ const EkPlan = () => {
             </StyledButton>
             <Choose />
           </Header>
-
           <Table />
         </Container>
       </>
