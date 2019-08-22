@@ -87,6 +87,15 @@ const Ekzaehleinheit = ({ treeName }) => {
           },
         })
       } catch (error) {
+        if (
+          changedField === 'zielrelevant' &&
+          error.message.includes('doppelter Schlüsselwert')
+        ) {
+          return setErrors({
+            [changedField]:
+              'Pro Aktionsplan darf nur eine Einheit zielrelevant sein',
+          })
+        }
         return setErrors({ [changedField]: error.message })
       }
       setErrors({})
