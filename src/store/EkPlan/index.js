@@ -19,6 +19,7 @@ export const defaultFields = [
   'link',
   'ekAbrechnungstyp',
   'ekfrequenz',
+  'ekfrequenzStartjahr',
   'ekfrequenzAbweichend',
 ]
 const initialYearClicked = {
@@ -216,11 +217,17 @@ export default types
           ? ekAbrechnungstyp.right + fields.ekfrequenz.width
           : ekAbrechnungstyp.right,
       }
-      const ekfrequenzAbweichend = {
+      const ekfrequenzStartjahr = {
         left: ekfrequenz.right,
-        right: fieldsShown.includes('ekfrequenzAbweichend')
-          ? ekfrequenz.right + fields.ekfrequenzAbweichend.width
+        right: fieldsShown.includes('ekfrequenzStartjahr')
+          ? ekfrequenz.right + fields.ekfrequenzStartjahr.width
           : ekfrequenz.right,
+      }
+      const ekfrequenzAbweichend = {
+        left: ekfrequenzStartjahr.right,
+        right: fieldsShown.includes('ekfrequenzAbweichend')
+          ? ekfrequenzStartjahr.right + fields.ekfrequenzAbweichend.width
+          : ekfrequenzStartjahr.right,
       }
       const yearTitle = {
         left: ekfrequenzAbweichend.right,
@@ -241,6 +248,7 @@ export default types
         link: link.left,
         ekAbrechnungstyp: ekAbrechnungstyp.left,
         ekfrequenz: ekfrequenz.left,
+        ekfrequenzStartjahr: ekfrequenzStartjahr.left,
         ekfrequenzAbweichend: ekfrequenzAbweichend.left,
         yearTitle: yearTitle.left,
       }

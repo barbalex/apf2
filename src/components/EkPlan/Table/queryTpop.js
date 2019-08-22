@@ -13,6 +13,7 @@ export default gql`
         gemeinde
         flurname
         ekfrequenz
+        ekfrequenzStartjahr
         ekfrequenzAbweichend
         ekAbrechnungstyp
         popStatusWerteByStatus {

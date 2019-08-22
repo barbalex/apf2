@@ -30,6 +30,7 @@ import CellHeaderYear from './CellHeaderYear'
 import CellForYearTitle from './CellForYearTitle'
 import CellForEkAbrechnungstyp from './CellForEkAbrechnungstyp'
 import CellForEkfrequenz from './CellForEkfrequenz'
+import CellForEkfrequenzStartjahr from './CellForEkfrequenzStartjahr'
 import CellForEkfrequenzAbweichend from './CellForEkfrequenzAbweichend'
 import CellForTpopLink from './CellForTpopLink'
 import CellForValue from './CellForValue'
@@ -346,6 +347,15 @@ const EkPlanTable = () => {
                       key={value.name}
                       row={row}
                       field={value}
+                      style={style}
+                    />
+                  )
+                }
+                if (value.name === 'ekfrequenzStartjahr') {
+                  return (
+                    <CellForEkfrequenzStartjahr
+                      key={value.name}
+                      row={row}
                       style={style}
                     />
                   )

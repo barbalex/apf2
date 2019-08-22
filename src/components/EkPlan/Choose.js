@@ -73,6 +73,8 @@ const EkPlanChoose = () => {
     setShowMassn,
   } = store.ekPlan
 
+  console.log('EkPlanChoose, fields:', fields.slice())
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const onChangeShowEk = useCallback(() => setShowEk(!showEk), [showEk])
   const onChangeShowEkf = useCallback(() => setShowEkf(!showEkf), [

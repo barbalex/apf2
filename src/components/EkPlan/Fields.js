@@ -153,6 +153,18 @@ const Fields = () => {
           labelPlacement="end"
         />
         <FormControlLabel
+          value={fields.includes('ekfrequenzStartjahr').toString()}
+          control={
+            <Radio
+              color="primary"
+              checked={fields.includes('ekfrequenzStartjahr')}
+              onClick={() => toggleField('ekfrequenzStartjahr')}
+            />
+          }
+          label="EK Frequenz Startjahr"
+          labelPlacement="end"
+        />
+        <FormControlLabel
           value={fields.includes('ekfrequenzAbweichend').toString()}
           control={
             <Radio

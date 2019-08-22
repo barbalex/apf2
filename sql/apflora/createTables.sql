@@ -551,6 +551,7 @@ CREATE TABLE apflora.tpop (
   bewirtschafter text DEFAULT NULL,
   bewirtschaftung text DEFAULT NULL,
   ekfrequenz text DEFAULT null REFERENCES apflora.ekfrequenz (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  ekfrequenz_startjahr smallint default null,
   ekfrequenz_abweichend boolean DEFAULT false,
   ek_abrechnungstyp text DEFAULT null REFERENCES apflora.ek_abrechnungstyp (code) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
@@ -590,6 +591,7 @@ COMMENT ON COLUMN apflora.tpop.bewirtschafter IS 'Wer bewirtschaftet die Fläche
 COMMENT ON COLUMN apflora.tpop.bewirtschaftung IS 'Wie wird die Fläche bewirtschaftet?';
 COMMENT ON COLUMN apflora.tpop.bemerkungen IS 'Bemerkungen zur Teilpopulation';
 COMMENT ON COLUMN apflora.tpop.ekfrequenz IS 'Wert aus Tabelle ekfrequenz. Bestimmt, wie häufig kontrolliert werden soll';
+comment on column apflora.tpop.ekfrequenz_startjahr is 'Das Basisjahr, von dem aus ekpläne gemäss eqfrequenz gesetzt werden';
 COMMENT ON COLUMN apflora.tpop.ekfrequenz_abweichend IS 'Diese Frequenz entspricht nicht derjenigen, welche gemäss Populationsgrösse vergeben worden wäre';
 COMMENT ON COLUMN apflora.tpop.ek_abrechnungstyp IS 'Fremdschlüssel aus Tabelle ek_abrechnungstyp_werte. Bestimmt, wie Kontrollen abgerechnet werden sollen';
 COMMENT ON COLUMN apflora.tpop.changed IS 'Wann wurde der Datensatz zuletzt geändert?';

@@ -58,6 +58,10 @@ export default (tpop, index) => ({
     ...fields.ekfrequenz,
     value: get(tpop, 'ekfrequenz') || null,
   },
+  ekfrequenzStartjahr: {
+    ...fields.ekfrequenzStartjahr,
+    value: get(tpop, 'ekfrequenzStartjahr') || null,
+  },
   ekfrequenzAbweichend: {
     ...fields.ekfrequenzAbweichend,
     value: get(tpop, 'ekfrequenzAbweichend') === true,
