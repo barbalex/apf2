@@ -33,6 +33,14 @@ export default gql`
                 tpopkontrzaehlEinheitWerteByEinheit {
                   id
                   text
+                  ekzaehleinheitsByZaehleinheitId(
+                    filter: { zielrelevant: { equalTo: true } }
+                  ) {
+                    nodes {
+                      id
+                      zielrelevant
+                    }
+                  }
                 }
               }
             }

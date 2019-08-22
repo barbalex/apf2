@@ -64,7 +64,14 @@ const EkIcon = ({ planned, eks, einheits }) => {
       eks
         .flatMap(ek =>
           get(ek, 'tpopkontrzaehlsByTpopkontrId.nodes', []).filter(
-            z => einheits.includes(z.einheit) && z.anzahl !== null,
+            z =>
+              einheits.includes(z.einheit) &&
+              z.anzahl !== null &&
+              get(
+                z,
+                'tpopkontrzaehlEinheitWerteByEinheit.ekzaehleinheitsByZaehleinheitId.nodes',
+                [],
+              ).length > 0,
           ),
         )
         .filter(o => !!o).length > 0
@@ -73,7 +80,16 @@ const EkIcon = ({ planned, eks, einheits }) => {
     sumCounted = sum(
       eks.flatMap(ek =>
         get(ek, 'tpopkontrzaehlsByTpopkontrId.nodes', [])
-          .filter(z => einheits.includes(z.einheit) && z.anzahl !== null)
+          .filter(
+            z =>
+              einheits.includes(z.einheit) &&
+              z.anzahl !== null &&
+              get(
+                z,
+                'tpopkontrzaehlEinheitWerteByEinheit.ekzaehleinheitsByZaehleinheitId.nodes',
+                [],
+              ).length > 0,
+          )
           .flatMap(z => z.anzahl),
       ),
     )
