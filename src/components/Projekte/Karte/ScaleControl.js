@@ -45,7 +45,7 @@ const ScaleControl = () => {
     if (typeof window === 'undefined') return
     const switchScaleControl = new window.L.Control.SwitchScaleControl(options)
     switchScaleControl.addTo(map)
-  }, [])
+  }, [map])
 
   return <div style={style} />
 }

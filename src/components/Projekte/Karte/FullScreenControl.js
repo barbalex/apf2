@@ -20,7 +20,7 @@ const FullScreenControl = () => {
     if (typeof window === 'undefined') return
     const fullscreenControl = window.L.control.fullscreen(options)
     fullscreenControl.addTo(map)
-  }, [])
+  }, [map])
 
   return <div style={{ display: 'none' }} />
 }

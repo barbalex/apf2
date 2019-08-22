@@ -1,19 +1,19 @@
-import React, { useContext, useCallback } from "react"
-import styled from "styled-components"
-import Button from "@material-ui/core/Button"
-import DragHandleIcon from "@material-ui/icons/DragHandle"
-import InfoOutlineIcon from "@material-ui/icons/InfoOutlined"
+import React, { useContext, useCallback } from 'react'
+import styled from 'styled-components'
+import Button from '@material-ui/core/Button'
+import DragHandleIcon from '@material-ui/icons/DragHandle'
+import InfoOutlineIcon from '@material-ui/icons/InfoOutlined'
 import {
   SortableContainer,
   SortableElement,
   SortableHandle,
   arrayMove,
-} from "react-sortable-hoc"
-import { observer } from "mobx-react-lite"
-import { getSnapshot } from "mobx-state-tree"
+} from 'react-sortable-hoc'
+import { observer } from 'mobx-react-lite'
+import { getSnapshot } from 'mobx-state-tree'
 
-import Checkbox from "./shared/Checkbox"
-import storeContext from "../../../../storeContext"
+import Checkbox from './shared/Checkbox'
+import storeContext from '../../../../storeContext'
 
 const CardContent = styled.div`
   color: rgb(48, 48, 48);
@@ -65,9 +65,9 @@ const IconsDiv = styled.div`
 // for layers with legend
 const layerLegends = {
   ZhSvoColor:
-    "http://wms.zh.ch/FnsSVOZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=zonen-schutzverordnungen&format=image/png&STYLE=default",
+    'http://wms.zh.ch/FnsSVOZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=zonen-schutzverordnungen&format=image/png&STYLE=default',
   ZhPflegeplan:
-    "http://wms.zh.ch/FnsPflegeZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=pfpl&format=image/png&STYLE=default",
+    'http://wms.zh.ch/FnsPflegeZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=pfpl&format=image/png&STYLE=default',
 }
 const DragHandle = SortableHandle(() => (
   <StyledIconButton title="ziehen, um Layer höher/tiefer zu stapeln">
@@ -85,7 +85,7 @@ const SortableItem = SortableElement(
         onChange={() => {
           if (activeOverlays.includes(overlay.value)) {
             return setActiveOverlays(
-              activeOverlays.filter(o => o !== overlay.value)
+              activeOverlays.filter(o => o !== overlay.value),
             )
           }
           return setActiveOverlays([...activeOverlays, overlay.value])
@@ -98,7 +98,7 @@ const SortableItem = SortableElement(
               <StyledIconButton
                 title="Legende öffnen"
                 onClick={() => {
-                  typeof window !== "undefined" &&
+                  typeof window !== 'undefined' &&
                     window.open(layerLegends[overlay.value])
                 }}
               >
@@ -114,7 +114,7 @@ const SortableItem = SortableElement(
         </IconsDiv>
       </IconsDivs>
     </LayerDiv>
-  )
+  ),
 )
 
 const SortableList = SortableContainer(
@@ -130,7 +130,7 @@ const SortableList = SortableContainer(
         />
       ))}
     </div>
-  )
+  ),
 )
 
 const Overlays = () => {
@@ -144,7 +144,7 @@ const Overlays = () => {
   const onSortEnd = useCallback(
     ({ oldIndex, newIndex }) =>
       setOverlays(arrayMove(overlays, oldIndex, newIndex)),
-    [overlays]
+    [overlays, setOverlays],
   )
 
   return (

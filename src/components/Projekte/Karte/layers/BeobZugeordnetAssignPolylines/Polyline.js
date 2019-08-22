@@ -24,14 +24,19 @@ const Line = ({ treeName, beob }) => {
   const { ap, projekt } = activeNodes
   const { idsFiltered } = store[treeName].map
 
-  if (typeof window === 'undefined') return null
-
   const isHighlighted = idsFiltered.includes(beob.id)
-  const beobLatLng = new window.L.LatLng(beob.wgs84Lat, beob.wgs84Long)
+  const beobLatLng =
+    typeof window !== 'undefined'
+      ? new window.L.LatLng(beob.wgs84Lat, beob.wgs84Long)
+      : []
   const tpopLong = get(beob, 'tpopByTpopId.wgs84Long')
   const tpopLat = get(beob, 'tpopByTpopId.wgs84Lat')
   const tpopLatLng =
-    tpopLong && tpopLat ? new window.L.LatLng(tpopLat, tpopLong) : beobLatLng
+    tpopLong && tpopLat
+      ? typeof window !== 'undefined'
+        ? new window.L.LatLng(tpopLat, tpopLong)
+        : []
+      : beobLatLng
   // some dates are not valid
   // need to account for that
   let datum = '(kein Datum)'

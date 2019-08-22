@@ -16,7 +16,10 @@ const LayerDiv = styled.div`
 const BaseLayer = ({ layer }) => {
   const store = useContext(storeContext)
   const { activeBaseLayer, setActiveBaseLayer } = store
-  const onChange = useCallback(() => setActiveBaseLayer(layer.value), [layer])
+  const onChange = useCallback(() => setActiveBaseLayer(layer.value), [
+    layer.value,
+    setActiveBaseLayer,
+  ])
 
   return (
     <LayerDiv

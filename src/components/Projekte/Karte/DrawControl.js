@@ -82,7 +82,7 @@ const DrawControl = () => {
         type: 'FeatureCollection',
       })
     }
-  }, [])
+  }, [map, setMapFilter])
 
   return <div style={{ display: 'none' }} />
 }

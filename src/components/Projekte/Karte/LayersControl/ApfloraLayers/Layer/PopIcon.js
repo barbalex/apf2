@@ -36,24 +36,39 @@ const PopIcon = ({ treeName }) => {
   const { map } = store[treeName]
   const { setPopIcon, setPopLabel } = map
   const [anchorEl, setAnchorEl] = useState(null)
-  const onClickIconContainer = useCallback(e => setAnchorEl(e.currentTarget))
-  const onClose = useCallback(() => setAnchorEl(null))
-  const onClickAllSame = useCallback(e => {
-    setPopIcon('normal')
-    onClose()
-  })
-  const onClickByStatusGroup = useCallback(e => {
-    setPopIcon('statusGroup')
-    onClose()
-  })
-  const onClickPopTpopNr = useCallback(e => {
-    setPopLabel('nr')
-    onClose()
-  })
-  const onClickFlurname = useCallback(e => {
-    setPopLabel('name')
-    onClose()
-  })
+  const onClickIconContainer = useCallback(
+    e => setAnchorEl(e.currentTarget),
+    [],
+  )
+  const onClose = useCallback(() => setAnchorEl(null), [])
+  const onClickAllSame = useCallback(
+    e => {
+      setPopIcon('normal')
+      onClose()
+    },
+    [onClose, setPopIcon],
+  )
+  const onClickByStatusGroup = useCallback(
+    e => {
+      setPopIcon('statusGroup')
+      onClose()
+    },
+    [onClose, setPopIcon],
+  )
+  const onClickPopTpopNr = useCallback(
+    e => {
+      setPopLabel('nr')
+      onClose()
+    },
+    [onClose, setPopLabel],
+  )
+  const onClickFlurname = useCallback(
+    e => {
+      setPopLabel('name')
+      onClose()
+    },
+    [onClose, setPopLabel],
+  )
 
   return (
     <>

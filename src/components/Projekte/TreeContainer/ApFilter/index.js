@@ -76,7 +76,17 @@ const ApFilter = ({ treeName }) => {
         setOpenNodes(newOpenNodes)
       }
     }
-  }, [treeName, activeNodeArray, openNodes, apFilter])
+  }, [
+    apFilter,
+    setApFilter,
+    refetch,
+    activeNodes,
+    activeNodeArray,
+    client,
+    setActiveNodeArray,
+    openNodes,
+    setOpenNodes,
+  ])
 
   return (
     <ErrorBoundary>

@@ -73,7 +73,7 @@ const PopMarker = ({ treeName, pop }) => {
       'Populationen',
       pop.id,
     ])
-  }, [pop.id])
+  }, [ap, openTree2WithActiveNodeArray, pop.id, projekt])
   const openPopInTab = useCallback(() => {
     typeof window !== 'undefined' &&
       window.open(
@@ -81,7 +81,7 @@ const PopMarker = ({ treeName, pop }) => {
           pop.id
         }`,
       )
-  }, [pop.id])
+  }, [ap, pop.id, projekt])
 
   if (typeof window === 'undefined') return null
   const latLng = new window.L.LatLng(pop.wgs84Lat, pop.wgs84Long)

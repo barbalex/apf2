@@ -163,19 +163,19 @@ const MySortableItem = ({ treeName, apfloraLayer, index }) => {
       )
     }
     return setActiveApfloraLayers([...activeApfloraLayers, apfloraLayer.value])
-  }, [activeApfloraLayers, apfloraLayer])
+  }, [activeApfloraLayers, apfloraLayer.value, setActiveApfloraLayers])
   const onClickZuordnen = useCallback(() => {
     if (activeApfloraLayers.includes('tpop')) {
       setAssigningBeob(!assigningBeob)
     }
-  }, [assigningBeob, activeApfloraLayers])
+  }, [activeApfloraLayers, setAssigningBeob, assigningBeob])
   const onClickZoomToAll = useCallback(() => {
     // only zoom if there is data to zoom on
     if (layerData.length === 0) return
     if (activeApfloraLayers.includes(apfloraLayer.value)) {
       setBounds(getBounds(layerData))
     }
-  }, [layerData, activeApfloraLayers, apfloraLayer])
+  }, [layerData, activeApfloraLayers, apfloraLayer.value, setBounds])
   const onClickZoomToActive = useCallback(() => {
     // only zoom if a tpop is highlighted
     if (layerDataHighlighted.length === 0) return
@@ -183,7 +183,7 @@ const MySortableItem = ({ treeName, apfloraLayer, index }) => {
       const newBounds = getBounds(layerDataHighlighted)
       setBounds(newBounds)
     }
-  }, [layerDataHighlighted, activeApfloraLayers, apfloraLayer])
+  }, [layerDataHighlighted, activeApfloraLayers, apfloraLayer.value, setBounds])
   const zoomToAllIconStyle = useMemo(
     () => ({
       color:

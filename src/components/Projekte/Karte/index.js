@@ -434,10 +434,13 @@ const Karte = ({ treeName }) => {
 
   const mapRef = useRef(null)
 
-  const setMouseCoords = useCallback(e => {
-    const [x, y] = epsg4326to2056(e.latlng.lng, e.latlng.lat)
-    setMapMouseCoordinates({ x, y })
-  })
+  const setMouseCoords = useCallback(
+    e => {
+      const [x, y] = epsg4326to2056(e.latlng.lng, e.latlng.lat)
+      setMapMouseCoordinates({ x, y })
+    },
+    [setMapMouseCoordinates],
+  )
 
   const onMouseMove = debounce(setMouseCoords, 50)
 
@@ -445,34 +448,40 @@ const Karte = ({ treeName }) => {
     assigningBeob ||
     activeApfloraLayers.includes('beobZugeordnetAssignPolylines')
   )
-  const OverlayComponents = useMemo(() => ({
-    ZhUep: () => <ZhUepOverlay />,
-    Detailplaene: () => <Detailplaene />,
-    Markierungen: () => <Markierungen />,
-    ZhGemeindegrenzen: () => <ZhGemeindegrenzen />,
-    ZhSvoColor: () => <ZhSvoColor />,
-    ZhSvoGrey: () => <ZhSvoGrey />,
-    ZhPflegeplan: () => <ZhPflegeplan />,
-    ZhLrVegKartierungen: () => <ZhLrVegKartierungen />,
-    ZhLichteWaelder: () => <ZhLichteWaelder />,
-    ZhWaelderVegetation: () => <ZhWaelderVegetation />,
-  }))
-  const BaseLayerComponents = useMemo(() => ({
-    OsmColor: () => <OsmColor />,
-    OsmBw: () => <OsmBw />,
-    SwissTopoPixelFarbe: () => <SwissTopoPixelFarbe />,
-    SwissTopoPixelGrau: () => <SwissTopoPixelGrau />,
-    SwisstopoSiegfried: () => <SwisstopoSiegfried />,
-    SwisstopoDufour: () => <SwisstopoDufour />,
-    ZhUep: () => <ZhUep />,
-    //BingAerial: () => <BingAerial />,
-    ZhOrtho2018Rgb: () => <ZhOrtho2018Rgb />,
-    ZhOrtho2018Ir: () => <ZhOrtho2018Ir />,
-    ZhOrtho2015Rgb: () => <ZhOrtho2015Rgb />,
-    ZhOrtho2015Ir: () => <ZhOrtho2015Ir />,
-    ZhOrtho2014Rgb: () => <ZhOrtho2014Rgb />,
-    ZhOrtho2014Ir: () => <ZhOrtho2014Ir />,
-  }))
+  const OverlayComponents = useMemo(
+    () => ({
+      ZhUep: () => <ZhUepOverlay />,
+      Detailplaene: () => <Detailplaene />,
+      Markierungen: () => <Markierungen />,
+      ZhGemeindegrenzen: () => <ZhGemeindegrenzen />,
+      ZhSvoColor: () => <ZhSvoColor />,
+      ZhSvoGrey: () => <ZhSvoGrey />,
+      ZhPflegeplan: () => <ZhPflegeplan />,
+      ZhLrVegKartierungen: () => <ZhLrVegKartierungen />,
+      ZhLichteWaelder: () => <ZhLichteWaelder />,
+      ZhWaelderVegetation: () => <ZhWaelderVegetation />,
+    }),
+    [],
+  )
+  const BaseLayerComponents = useMemo(
+    () => ({
+      OsmColor: () => <OsmColor />,
+      OsmBw: () => <OsmBw />,
+      SwissTopoPixelFarbe: () => <SwissTopoPixelFarbe />,
+      SwissTopoPixelGrau: () => <SwissTopoPixelGrau />,
+      SwisstopoSiegfried: () => <SwisstopoSiegfried />,
+      SwisstopoDufour: () => <SwisstopoDufour />,
+      ZhUep: () => <ZhUep />,
+      //BingAerial: () => <BingAerial />,
+      ZhOrtho2018Rgb: () => <ZhOrtho2018Rgb />,
+      ZhOrtho2018Ir: () => <ZhOrtho2018Ir />,
+      ZhOrtho2015Rgb: () => <ZhOrtho2015Rgb />,
+      ZhOrtho2015Ir: () => <ZhOrtho2015Ir />,
+      ZhOrtho2014Rgb: () => <ZhOrtho2014Rgb />,
+      ZhOrtho2014Ir: () => <ZhOrtho2014Ir />,
+    }),
+    [],
+  )
   const BaseLayerComponent = BaseLayerComponents[activeBaseLayer]
   const activeOverlaysSorted = sortBy(activeOverlays, activeOverlay =>
     overlays.findIndex(o => o.value === activeOverlay),

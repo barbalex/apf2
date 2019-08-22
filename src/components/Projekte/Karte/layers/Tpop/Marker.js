@@ -74,7 +74,7 @@ const TpopMarker = ({ treeName, tpop }) => {
       'Teil-Populationen',
       tpop.id,
     ])
-  }, [tpop.id])
+  }, [ap, openTree2WithActiveNodeArray, popId, projekt, tpop.id])
   const openTpopInTab = useCallback(() => {
     typeof window !== 'undefined' &&
       window.open(
@@ -82,7 +82,7 @@ const TpopMarker = ({ treeName, tpop }) => {
           tpop.id
         }`,
       )
-  }, [tpop.id])
+  }, [ap, popId, projekt, tpop.id])
 
   if (typeof window === 'undefined') return null
   const latLng = new window.L.LatLng(tpop.wgs84Lat, tpop.wgs84Long)

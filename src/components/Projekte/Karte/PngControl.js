@@ -35,16 +35,19 @@ const PngControl = () => {
   const [printPlugin, changePrintPlugin] = useState({})
   const { map } = useLeaflet()
 
-  const savePng = useCallback(event => {
-    event.preventDefault()
-    printPlugin.printMap('CurrentSize', 'apfloraKarte')
-  })
+  const savePng = useCallback(
+    event => {
+      event.preventDefault()
+      printPlugin.printMap('CurrentSize', 'apfloraKarte')
+    },
+    [printPlugin],
+  )
 
   useEffect(() => {
     if (typeof window === 'undefined') return
     const pp = window.L.easyPrint(options).addTo(map)
     changePrintPlugin(pp)
-  }, [])
+  }, [map])
 
   return (
     <div>

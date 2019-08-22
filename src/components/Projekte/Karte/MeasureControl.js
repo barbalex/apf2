@@ -25,7 +25,7 @@ const MeasureControl = () => {
     if (typeof window === 'undefined') return
     const measureControl = new window.L.Control.Measure(options)
     measureControl.addTo(map)
-  }, [])
+  }, [map])
 
   return <div style={style} />
 }

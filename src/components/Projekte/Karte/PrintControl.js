@@ -16,7 +16,7 @@ const PrintControl = () => {
   const { map } = useLeaflet()
   useEffect(() => {
     typeof window !== 'undefined' && window.L.easyPrint(options).addTo(map)
-  }, [])
+  }, [map])
 
   return <div style={style} />
 }
