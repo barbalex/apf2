@@ -121,20 +121,37 @@ const ProjekteAppBar = () => {
         })
       }
     },
-    [projekteTabs],
+    [
+      cloneTree2From1,
+      isMobile,
+      nodeFilterClone1To2,
+      projekteTabs,
+      setUrlQuery,
+      urlQuery,
+    ],
   )
-  const onClickTree = useCallback(() => onClickButton('tree'))
-  const onClickKarte = useCallback(() => onClickButton('karte'))
-  const onClickFilter = useCallback(() => onClickButton('filter'))
-  const onClickFilter2 = useCallback(() => onClickButton('filter2'))
-  const onClickExporte = useCallback(() => onClickButton('exporte'))
-  const onClickTree2 = useCallback(() => onClickButton('tree2'))
-  const setViewEkf = useCallback(() => setView('ekf'))
+  const onClickTree = useCallback(() => onClickButton('tree'), [onClickButton])
+  const onClickKarte = useCallback(() => onClickButton('karte'), [
+    onClickButton,
+  ])
+  const onClickFilter = useCallback(() => onClickButton('filter'), [
+    onClickButton,
+  ])
+  const onClickFilter2 = useCallback(() => onClickButton('filter2'), [
+    onClickButton,
+  ])
+  const onClickExporte = useCallback(() => onClickButton('exporte'), [
+    onClickButton,
+  ])
+  const onClickTree2 = useCallback(() => onClickButton('tree2'), [
+    onClickButton,
+  ])
+  const setViewEkf = useCallback(() => setView('ekf'), [setView])
   const onClickEkPlanung = useCallback(() => {
     // eslint-disable-next-line no-unused-vars
     const [projectTitle, projectId, ...rest] = tree.activeNodeArray
     tree.setActiveNodeArray([projectTitle, projectId, 'EK-Planung'])
-  })
+  }, [tree])
 
   return (
     <>

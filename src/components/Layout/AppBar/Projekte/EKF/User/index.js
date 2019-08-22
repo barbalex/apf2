@@ -88,7 +88,7 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
       setErrors({})
       //if (['name', 'role'].includes(changedField)) refetch.users()
     },
-    [row.id],
+    [client, row],
   )
   const onBlurPassword = useCallback(e => {
     setPasswordErrorText('')
@@ -99,7 +99,7 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
     } else {
       setPassword2('')
     }
-  })
+  }, [])
   const onBlurPassword2 = useCallback(
     async event => {
       let value = event.target.value
@@ -138,7 +138,7 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
         setEditPassword(false)
       }
     },
-    [password, row.id],
+    [client, password, row.id],
   )
 
   console.log('User rendering')

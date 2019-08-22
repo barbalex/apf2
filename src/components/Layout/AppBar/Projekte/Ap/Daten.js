@@ -73,7 +73,7 @@ const MyAppBarDaten = ({ treeNr = '' }) => {
         setUrlQuery,
       })
     }
-  }, [projekteTabs, urlQuery])
+  }, [cloneTree2From1, nodeFilterClone1To2, projekteTabs, setUrlQuery, treeNr, urlQuery])
 
   let followed = projekteTabs.includes('filter')
   if (treeNr === '2') {

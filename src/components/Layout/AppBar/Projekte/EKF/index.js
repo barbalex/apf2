@@ -98,10 +98,19 @@ const ProjekteAppBar = () => {
         })
       }
     },
-    [projekteTabs],
+    [
+      cloneTree2From1,
+      isMobile,
+      nodeFilterClone1To2,
+      projekteTabs,
+      setUrlQuery,
+      urlQuery,
+    ],
   )
-  const onClickExporte = useCallback(() => onClickButton('exporte'))
-  const setViewNormal = useCallback(() => setView('normal'))
+  const onClickExporte = useCallback(() => onClickButton('exporte'), [
+    onClickButton,
+  ])
+  const setViewNormal = useCallback(() => setView('normal'), [setView])
   const toggleUserOpen = useCallback(() => setUserOpen(!userOpen), [userOpen])
 
   return (

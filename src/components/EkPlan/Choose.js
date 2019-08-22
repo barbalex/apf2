@@ -73,15 +73,22 @@ const EkPlanChoose = () => {
     setShowMassn,
   } = store.ekPlan
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const onChangeShowEk = useCallback(() => setShowEk(!showEk), [showEk])
-  const onChangeShowEkf = useCallback(() => setShowEkf(!showEkf), [showEkf])
+  const onChangeShowEkf = useCallback(() => setShowEkf(!showEkf), [
+    setShowEkf,
+    showEkf,
+  ])
   const onChangeShowCount = useCallback(() => setShowCount(!showCount), [
+    setShowCount,
     showCount,
   ])
   const onChangeShowEkCount = useCallback(() => setShowEkCount(!showEkCount), [
+    setShowEkCount,
     showEkCount,
   ])
   const onChangeShowMassn = useCallback(() => setShowMassn(!showMassn), [
+    setShowMassn,
     showMassn,
   ])
   const [fieldsDialogOpen, setFieldsDialogOpen] = useState(false)
@@ -89,7 +96,7 @@ const EkPlanChoose = () => {
   const closeFieldsDialog = useCallback(() => setFieldsDialogOpen(false), [])
   const felderButtonTitle = useMemo(
     () => `Felder wählen (${fields.length}/${defaultFields.length})`,
-    [fields.length, defaultFields.length],
+    [fields.length],
   )
 
   return (
