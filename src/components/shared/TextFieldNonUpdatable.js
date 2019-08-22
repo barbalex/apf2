@@ -19,7 +19,7 @@ const MyTextField = ({ label, value = '' }) => {
     setError('Dieser Wert ist nicht veränderbar')
     // can fire after component was unmounted...
     setTimeout(() => setError(null), 5000)
-  })
+  }, [])
 
   return (
     <StyledFormControl
@@ -27,7 +27,9 @@ const MyTextField = ({ label, value = '' }) => {
       fullWidth
       aria-describedby={`${label}-helper`}
     >
-      <InputLabel htmlFor={label} shrink>{label}</InputLabel>
+      <InputLabel htmlFor={label} shrink>
+        {label}
+      </InputLabel>
       <Input
         id={label}
         value={value || value === 0 ? value : ''}

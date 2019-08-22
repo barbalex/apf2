@@ -30,16 +30,19 @@ const MyTextField = ({
   const [stateValue, setStateValue] = useState(
     value || value === 0 ? value : '',
   )
-  const onChange = useCallback(event => setStateValue(event.target.value))
+  const onChange = useCallback(event => setStateValue(event.target.value), [])
   useEffect(() => {
     setStateValue(value || value === 0 ? value : '')
   }, [value])
 
-  const onKeyPress = useCallback(event => {
-    if (event.key === 'Enter') {
-      saveToDb(event)
-    }
-  })
+  const onKeyPress = useCallback(
+    event => {
+      if (event.key === 'Enter') {
+        saveToDb(event)
+      }
+    },
+    [saveToDb],
+  )
   const error = errors ? errors[name] : null
 
   return (

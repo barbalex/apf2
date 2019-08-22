@@ -46,7 +46,7 @@ const bgImageStyle = {
 }
 
 const FourOFour = ({ data }) => {
-  const onClickBack = useCallback(() => navigate('/'))
+  const onClickBack = useCallback(() => navigate('/'), [])
 
   return (
     <ErrorBoundary>

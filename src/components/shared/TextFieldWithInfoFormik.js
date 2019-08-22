@@ -37,9 +37,12 @@ const TextFieldWithInfo = ({
   const { errors, handleSubmit } = form
   const error = errors[name]
 
-  const onKeyPress = useCallback(event => {
-    event.key === 'Enter' && handleSubmit()
-  })
+  const onKeyPress = useCallback(
+    event => {
+      event.key === 'Enter' && handleSubmit()
+    },
+    [handleSubmit],
+  )
 
   return (
     <StyledFormControl

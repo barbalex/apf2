@@ -33,21 +33,25 @@ const MyTextField = ({
   const textFieldRef = useRef(null)
   useEffect(() => {
     const handleWheel = e => e.preventDefault()
-    textFieldRef.current.addEventListener('wheel', handleWheel)
+    const current = textFieldRef.current
+    current.addEventListener('wheel', handleWheel)
 
     return () => {
-      textFieldRef.current.removeEventListener('wheel', handleWheel)
+      current.removeEventListener('wheel', handleWheel)
     }
   }, [])
 
   // value should immediately update when pressing Enter
-  const onKeyDown = useCallback(e => {
-    if (e.key === 'Enter') {
-      handleSubmit()
-      // show user something happened
-      e.currentTarget.blur()
-    }
-  })
+  const onKeyDown = useCallback(
+    e => {
+      if (e.key === 'Enter') {
+        handleSubmit()
+        // show user something happened
+        e.currentTarget.blur()
+      }
+    },
+    [handleSubmit],
+  )
 
   return (
     <StyledFormControl

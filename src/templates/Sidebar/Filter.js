@@ -22,8 +22,8 @@ const StyledDeleteFilterIcon = styled(DeleteFilterIcon)`
 `
 
 const Filter = ({ filter, setFilter }) => {
-  const onChange = useCallback(e => setFilter(e.target.value))
-  const onClickEmptyFilter = useCallback(() => setFilter(''))
+  const onChange = useCallback(e => setFilter(e.target.value), [setFilter])
+  const onClickEmptyFilter = useCallback(() => setFilter(''), [setFilter])
 
   return (
     <FormControl fullWidth>
