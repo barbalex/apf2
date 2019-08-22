@@ -307,6 +307,8 @@ FROM
     ON apflora.tpopmassn.bearbeiter = apflora.adresse.id
 WHERE
   apflora.ae_eigenschaften.taxid > 150
+  and apflora.tpop.status not in (202, 300)
+  and (apflora.tpop.apber_relevant_grund != 3 or apflora.tpop.apber_relevant_grund is null)
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop.nr,
@@ -1164,6 +1166,8 @@ FROM
     ON apflora.ap.bearbeiter = apflora.adresse.id
 WHERE
   apflora.ae_eigenschaften.taxid > 150
+  and apflora.tpop.status not in (202, 300)
+  and (apflora.tpop.apber_relevant_grund != 3 or apflora.tpop.apber_relevant_grund is null)
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop.nr,
@@ -2458,6 +2462,8 @@ FROM
     ON apflora.ap.bearbeiter = apflora_adresse_1.id)
 WHERE
   apflora.ae_eigenschaften.taxid > 150
+  and apflora.tpop.status not in (202, 300)
+  and (apflora.tpop.apber_relevant_grund != 3 or apflora.tpop.apber_relevant_grund is null)
 GROUP BY
   apflora.ap.id,
   apflora.ae_eigenschaften.artname,
