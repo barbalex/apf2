@@ -37,7 +37,6 @@ const Ap = ({ ap }) => {
   const einheits = get(thisApData, 'ekzaehleinheitsByApId.nodes', []).map(e =>
     get(e, 'tpopkontrzaehlEinheitWerteByZaehleinheitId.text'),
   )
-  console.log('Ap', { apsData, thisApData, ap, einheits })
   const einheitsText =
     einheits.length === 0
       ? 'Keine! Bitte erfassen Sie eine zielrelevante EK-Zähleinheit'
