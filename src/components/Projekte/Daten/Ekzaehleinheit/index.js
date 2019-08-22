@@ -89,7 +89,8 @@ const Ekzaehleinheit = ({ treeName }) => {
       } catch (error) {
         if (
           changedField === 'zielrelevant' &&
-          error.message.includes('doppelter Schlüsselwert')
+          (error.message.includes('doppelter Schlüsselwert') ||
+            error.message.includes('duplicate key value'))
         ) {
           return setErrors({
             [changedField]:
