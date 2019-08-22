@@ -91,7 +91,7 @@ const BeobNichtBeurteiltMarker = ({ treeName, beob }) => {
       refetch.beobZugeordnetForMap()
       refetch.beobAssignLines()
     },
-    [beob.id],
+    [activeNodes, beob.id, client, refetch, setActiveNodeArray],
   )
   const openBeobInTree2 = useCallback(() => {
     openTree2WithActiveNodeArray([
@@ -102,7 +102,7 @@ const BeobNichtBeurteiltMarker = ({ treeName, beob }) => {
       'nicht-beurteilte-Beobachtungen',
       beob.id,
     ])
-  }, [beob.id])
+  }, [ap, beob.id, openTree2WithActiveNodeArray, projekt])
   const openBeobInTab = useCallback(() => {
     typeof window !== 'undefined' &&
       window.open(
@@ -110,7 +110,7 @@ const BeobNichtBeurteiltMarker = ({ treeName, beob }) => {
           beob.id
         }`,
       )
-  }, [beob.id])
+  }, [ap, beob.id, projekt])
 
   return (
     <Marker

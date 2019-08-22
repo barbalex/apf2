@@ -59,7 +59,7 @@ const BeobNichtZuzuordnenMarker = ({ treeName, beob }) => {
       'nicht-zuzuordnende-Beobachtungen',
       beob.id,
     ])
-  }, [beob.id])
+  }, [ap, beob.id, openTree2WithActiveNodeArray, projekt])
   const openBeobInTab = useCallback(() => {
     typeof window !== 'undefined' &&
       window.open(
@@ -67,7 +67,7 @@ const BeobNichtZuzuordnenMarker = ({ treeName, beob }) => {
           beob.id
         }`,
       )
-  }, [beob.id])
+  }, [ap, beob.id, projekt])
 
   return (
     <Marker position={latLng} icon={icon} title={label}>

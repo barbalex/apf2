@@ -76,12 +76,7 @@ const Teilpopulationen = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
 
-  const {
-    exportApplyMapFilter,
-    exportFileType,
-    enqueNotification,
-    removeNotification,
-  } = store
+  const { enqueNotification, removeNotification } = store
 
   const [expanded, setExpanded] = useState(false)
   const { closeSnackbar } = useSnackbar()
@@ -130,16 +125,18 @@ const Teilpopulationen = ({ treeName }) => {
     }
     removeNotification(notif)
     closeSnackbar(notif)
-  }, [exportFileType, exportApplyMapFilter])
+  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
-  const aeEigenschaftenfilter = useCallback(inputValue =>
-    !!inputValue
-      ? {
-          artname: { includesInsensitive: inputValue },
-          // needed to turn this off because the postgraphile addon caused cors issues in production
-          /*apByArtIdExists: true,*/
-        }
-      : { artname: { isNull: false } /*, apByArtIdExists: true*/ },
+  const aeEigenschaftenfilter = useCallback(
+    inputValue =>
+      !!inputValue
+        ? {
+            artname: { includesInsensitive: inputValue },
+            // needed to turn this off because the postgraphile addon caused cors issues in production
+            /*apByArtIdExists: true,*/
+          }
+        : { artname: { isNull: false } /*, apByArtIdExists: true*/ },
+    [],
   )
 
   return (

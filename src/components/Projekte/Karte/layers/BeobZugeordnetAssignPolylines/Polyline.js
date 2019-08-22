@@ -58,7 +58,7 @@ const Line = ({ treeName, beob }) => {
       'Beobachtungen',
       beob.id,
     ])
-  }, [beob.id])
+  }, [ap, beob.id, openTree2WithActiveNodeArray, popId, projekt, tpopId])
   const openBeobInTab = useCallback(() => {
     typeof window !== 'undefined' &&
       window.open(
@@ -66,7 +66,7 @@ const Line = ({ treeName, beob }) => {
           beob.id
         }`,
       )
-  }, [beob.id])
+  }, [ap, beob.id, popId, projekt, tpopId])
 
   const openTpopInTree2 = useCallback(() => {
     openTree2WithActiveNodeArray([
@@ -79,13 +79,13 @@ const Line = ({ treeName, beob }) => {
       'Teil-Populationen',
       tpopId,
     ])
-  }, [tpopId])
+  }, [ap, openTree2WithActiveNodeArray, popId, projekt, tpopId])
   const openTpopInTab = useCallback(() => {
     typeof window !== 'undefined' &&
       window.open(
         `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}`,
       )
-  }, [tpopId])
+  }, [ap, popId, projekt, tpopId])
 
   return (
     <Polyline

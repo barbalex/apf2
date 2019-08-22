@@ -54,7 +54,10 @@ const SharedSelect = ({
   saveToDb,
   maxHeight = null,
 }) => {
-  const onChange = useCallback(option => saveToDb(option ? option.value : null))
+  const onChange = useCallback(
+    option => saveToDb(option ? option.value : null),
+    [saveToDb],
+  )
 
   return (
     <Container>

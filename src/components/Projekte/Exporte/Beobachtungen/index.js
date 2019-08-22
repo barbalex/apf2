@@ -98,7 +98,7 @@ const Beobachtungen = () => {
     }
     removeNotification(notif)
     closeSnackbar(notif)
-  }, [exportFileType, exportApplyMapFilter])
+  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   return (
     <StyledCard>

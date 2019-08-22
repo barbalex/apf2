@@ -22,7 +22,7 @@ const ShowCoordinates = ({ setControlType }) => {
   const x = mapMouseCoordinates.x.toLocaleString('de-ch')
   const y = mapMouseCoordinates.y.toLocaleString('de-ch')
 
-  const onClick = useCallback(() => setControlType('goto'))
+  const onClick = useCallback(() => setControlType('goto'), [setControlType])
 
   return (
     <StyledDiv onClick={onClick} title="Klicken um Koordinaten zu suchen">

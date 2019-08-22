@@ -125,7 +125,7 @@ const AP = () => {
     }
     removeNotification(notif)
     closeSnackbar(notif)
-  }, [exportFileType, exportApplyMapFilter, mapFilter])
+  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickAnzMassnProAp = useCallback(async () => {
     const notif = enqueNotification({
@@ -154,7 +154,7 @@ const AP = () => {
     }
     removeNotification(notif)
     closeSnackbar(notif)
-  }, [exportFileType, exportApplyMapFilter, mapFilter])
+  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickAnzKontrProAp = useCallback(async () => {
     const notif = enqueNotification({
@@ -183,7 +183,7 @@ const AP = () => {
     }
     removeNotification(notif)
     closeSnackbar(notif)
-  }, [exportFileType, exportApplyMapFilter, mapFilter])
+  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickApBer = useCallback(async () => {
     const notif = enqueNotification({
@@ -212,7 +212,7 @@ const AP = () => {
     }
     removeNotification(notif)
     closeSnackbar(notif)
-  }, [exportFileType, exportApplyMapFilter, mapFilter])
+  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickApBerUndMassn = useCallback(async () => {
     const notif = enqueNotification({
@@ -241,7 +241,7 @@ const AP = () => {
     }
     removeNotification(notif)
     closeSnackbar(notif)
-  }, [exportFileType, exportApplyMapFilter, mapFilter])
+  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickZiele = useCallback(async () => {
     const notif = enqueNotification({
@@ -270,7 +270,7 @@ const AP = () => {
     }
     removeNotification(notif)
     closeSnackbar(notif)
-  }, [exportFileType, exportApplyMapFilter, mapFilter])
+  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickZielber = useCallback(async () => {
     const notif = enqueNotification({
@@ -299,7 +299,7 @@ const AP = () => {
     }
     removeNotification(notif)
     closeSnackbar(notif)
-  }, [exportFileType, exportApplyMapFilter, mapFilter])
+  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickBer = useCallback(async () => {
     const notif = enqueNotification({
@@ -328,7 +328,7 @@ const AP = () => {
     }
     removeNotification(notif)
     closeSnackbar(notif)
-  }, [exportFileType, exportApplyMapFilter, mapFilter])
+  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickErfkrit = useCallback(async () => {
     const notif = enqueNotification({
@@ -357,7 +357,7 @@ const AP = () => {
     }
     removeNotification(notif)
     closeSnackbar(notif)
-  }, [exportFileType, exportApplyMapFilter, mapFilter])
+  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickIdealbiotop = useCallback(async () => {
     const notif = enqueNotification({
@@ -386,7 +386,7 @@ const AP = () => {
     }
     removeNotification(notif)
     closeSnackbar(notif)
-  }, [exportFileType, exportApplyMapFilter, mapFilter])
+  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickAssozarten = useCallback(async () => {
     const notif = enqueNotification({
@@ -415,7 +415,7 @@ const AP = () => {
     }
     removeNotification(notif)
     closeSnackbar(notif)
-  }, [exportFileType, exportApplyMapFilter, mapFilter])
+  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   return (
     <StyledCard>

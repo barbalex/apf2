@@ -92,7 +92,7 @@ const BeobZugeordnetMarker = ({ treeName, beob }) => {
       refetch.beobAssignLines()
       //map.redraw()
     },
-    [beob.id],
+    [activeNodes, beob.id, client, refetch, setActiveNodeArray],
   )
   const popId = get(beob, 'tpopByTpopId.popId', '')
   const tpopId = get(beob, 'tpopByTpopId.id', '')
@@ -109,7 +109,7 @@ const BeobZugeordnetMarker = ({ treeName, beob }) => {
       'Beobachtungen',
       beob.id,
     ])
-  }, [beob.id])
+  }, [ap, beob.id, openTree2WithActiveNodeArray, popId, projekt, tpopId])
   const openBeobInTab = useCallback(() => {
     typeof window !== 'undefined' &&
       window.open(
@@ -117,7 +117,7 @@ const BeobZugeordnetMarker = ({ treeName, beob }) => {
           beob.id
         }`,
       )
-  }, [beob.id])
+  }, [ap, beob.id, popId, projekt, tpopId])
 
   return (
     <Marker
