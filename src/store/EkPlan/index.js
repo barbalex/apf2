@@ -80,9 +80,6 @@ export default types
     setShowMassn(val) {
       self.showMassn = val
     },
-    setAps(aps) {
-      self.aps = aps
-    },
     addAp(ap) {
       self.aps = [...self.aps, ap]
     },
