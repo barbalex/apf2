@@ -90,7 +90,7 @@ const SharedSelect = ({
       onBlur(fakeEvent)
       setTimeout(() => handleSubmit())
     },
-    [name],
+    [handleSubmit, name, onBlur, onChange],
   )
 
   // show ... while options are loading

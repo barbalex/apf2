@@ -112,7 +112,7 @@ const Status = ({ apJahr, treeName, showFilter, field, form }) => {
         return
       }
     },
-    [herkunftValue],
+    [handleBlur, handleChange, handleSubmit, herkunftValue],
   )
   const onChangeStatus = useCallback(
     event => {
@@ -128,20 +128,25 @@ const Status = ({ apJahr, treeName, showFilter, field, form }) => {
       handleBlur(fakeEvent)
       setTimeout(() => handleSubmit())
     },
-    [herkunftValue],
+    [handleBlur, handleChange, handleSubmit],
   )
-  const onChangeBekanntSeit = useCallback(event =>
-    setBekanntSeitStateValue(event.target.value ? +event.target.value : ''),
+  const onChangeBekanntSeit = useCallback(
+    event =>
+      setBekanntSeitStateValue(event.target.value ? +event.target.value : ''),
+    [],
   )
-  const onBlurBekanntSeit = useCallback(event => {
-    const { value } = event.target
-    const fakeEvent = {
-      target: { value: ifIsNumericAsNumber(value), name: 'bekanntSeit' },
-    }
-    handleChange(fakeEvent)
-    handleBlur(fakeEvent)
-    setTimeout(() => handleSubmit())
-  })
+  const onBlurBekanntSeit = useCallback(
+    event => {
+      const { value } = event.target
+      const fakeEvent = {
+        target: { value: ifIsNumericAsNumber(value), name: 'bekanntSeit' },
+      }
+      handleChange(fakeEvent)
+      handleBlur(fakeEvent)
+      setTimeout(() => handleSubmit())
+    },
+    [handleBlur, handleChange, handleSubmit],
+  )
 
   useEffect(() => {
     setBekanntSeitStateValue(

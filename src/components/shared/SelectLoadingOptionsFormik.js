@@ -111,21 +111,24 @@ const SelectTypable = ({
       const options = get(data, `${queryNodesName}.nodes`, [])
       cb(options)
     },
-    [filter],
+    [client, filter, query, queryNodesName],
   )
 
-  const onMyChange = useCallback(option => {
-    const value = option && option.value ? option.value : null
-    const fakeEvent = {
-      target: {
-        name,
-        value,
-      },
-    }
-    onChange(fakeEvent)
-    onBlur(fakeEvent)
-    setTimeout(() => handleSubmit())
-  })
+  const onMyChange = useCallback(
+    option => {
+      const value = option && option.value ? option.value : null
+      const fakeEvent = {
+        target: {
+          name,
+          value,
+        },
+      }
+      onChange(fakeEvent)
+      onBlur(fakeEvent)
+      setTimeout(() => handleSubmit())
+    },
+    [handleSubmit, name, onBlur, onChange],
+  )
 
   const value = {
     value: valuePassed || '',

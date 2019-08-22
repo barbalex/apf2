@@ -87,7 +87,7 @@ const SharedSelect = ({
       }
       saveToDb(fakeEvent)
     },
-    [name],
+    [name, saveToDb],
   )
 
   // show ... while options are loading

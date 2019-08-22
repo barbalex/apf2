@@ -53,7 +53,7 @@ const StringToCopy = ({ text, label }) => {
     setTimeout(() => {
       setCopied(false)
     }, 3000)
-  })
+  }, [])
 
   return (
     <ErrorBoundary>

@@ -105,9 +105,9 @@ const SharedSelectCreatable = ({
       onBlur(fakeEvent)
       setTimeout(() => handleSubmit())
     },
-    [name],
+    [handleSubmit, name, onBlur, onChange],
   )
-  const onInputChange = useCallback(value => setStateValue(value))
+  const onInputChange = useCallback(value => setStateValue(value), [])
   const onMyBlur = useCallback(
     event => {
       if (stateValue) {
@@ -122,7 +122,7 @@ const SharedSelectCreatable = ({
         setTimeout(() => handleSubmit())
       }
     },
-    [stateValue, name],
+    [stateValue, name, onChange, onBlur, handleSubmit],
   )
 
   useEffect(() => {

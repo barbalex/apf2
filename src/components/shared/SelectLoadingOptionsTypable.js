@@ -81,51 +81,60 @@ const SelectTypable = ({
 
   useEffect(() => setInputValue(row.wirtspflanze || ''), [row.wirtspflanze])
 
-  const loadOptions = useCallback(async (inputValue, cb) => {
-    const filter = !!inputValue
-      ? { artname: { includesInsensitive: inputValue } }
-      : { artname: { isNull: false } }
-    const { data } = await client.query({
-      query,
-      variables: {
-        filter,
-      },
-    })
-    const options = get(data, `${queryNodesName}.nodes`, [])
-    cb(options)
-  })
+  const loadOptions = useCallback(
+    async (inputValue, cb) => {
+      const filter = !!inputValue
+        ? { artname: { includesInsensitive: inputValue } }
+        : { artname: { isNull: false } }
+      const { data } = await client.query({
+        query,
+        variables: {
+          filter,
+        },
+      })
+      const options = get(data, `${queryNodesName}.nodes`, [])
+      cb(options)
+    },
+    [client, query, queryNodesName],
+  )
 
-  const onInputChange = useCallback((value, { action }) => {
-    // update inputValue when typing in the input
-    if (!['input-blur', 'menu-close'].includes(action)) {
-      if (!value) {
-        // if inputValue was one character long, user must be deleting it
-        // THIS IS A BAD HACK BUT NECCESSARY BECAUSE AFTER CHOOSING AN OPTION
-        // onInputChange GETS A VALUE OF '', NOT THE OPTION CHOOSEN
-        if (inputValue.length === 1) {
-          onChange({ value: null, label: null })
-        }
+  const onChange = useCallback(
+    option => {
+      const value = option && option.value ? option.value : null
+      const fakeEvent = {
+        target: {
+          name: 'wirtspflanze',
+          value,
+        },
       }
-      setInputValue(value)
-    }
-  })
+      saveToDb(fakeEvent)
+    },
+    [saveToDb],
+  )
+
+  const onInputChange = useCallback(
+    (value, { action }) => {
+      // update inputValue when typing in the input
+      if (!['input-blur', 'menu-close'].includes(action)) {
+        if (!value) {
+          // if inputValue was one character long, user must be deleting it
+          // THIS IS A BAD HACK BUT NECCESSARY BECAUSE AFTER CHOOSING AN OPTION
+          // onInputChange GETS A VALUE OF '', NOT THE OPTION CHOOSEN
+          if (inputValue.length === 1) {
+            onChange({ value: null, label: null })
+          }
+        }
+        setInputValue(value)
+      }
+    },
+    [inputValue.length, onChange],
+  )
 
   const onBlur = useCallback(() => {
     if (!!inputValue) {
       onChange({ value: inputValue, label: inputValue })
     }
-  }, [inputValue])
-
-  const onChange = useCallback(option => {
-    const value = option && option.value ? option.value : null
-    const fakeEvent = {
-      target: {
-        name: 'wirtspflanze',
-        value,
-      },
-    }
-    saveToDb(fakeEvent)
-  })
+  }, [inputValue, onChange])
 
   const value = { value: row.wirtspflanze || '', label: row.wirtspflanze || '' }
 

@@ -92,9 +92,9 @@ const SharedSelectCreatable = ({
       }
       saveToDb(fakeEvent)
     },
-    [name],
+    [name, saveToDb],
   )
-  const onInputChange = useCallback(value => setStateValue(value))
+  const onInputChange = useCallback(value => setStateValue(value), [])
   const onBlur = useCallback(
     event => {
       if (stateValue) {
@@ -107,7 +107,7 @@ const SharedSelectCreatable = ({
         saveToDb(fakeEvent)
       }
     },
-    [stateValue, name],
+    [stateValue, name, saveToDb],
   )
 
   useEffect(() => {

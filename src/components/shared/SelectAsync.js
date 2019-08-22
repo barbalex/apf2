@@ -77,12 +77,15 @@ const SharedSelect = ({
   noCaret = false,
   saveToDb,
 }) => {
-  const onInputChange = useCallback(newValue => {
-    const inputValue = newValue.replace(/\W/g, '')
-    setInputValue(inputValue)
-    loadOptions(inputValue)
-    return inputValue
-  })
+  const onInputChange = useCallback(
+    newValue => {
+      const inputValue = newValue.replace(/\W/g, '')
+      setInputValue(inputValue)
+      loadOptions(inputValue)
+      return inputValue
+    },
+    [loadOptions, setInputValue],
+  )
   const onChange = useCallback(
     option => {
       const fakeEvent = {
@@ -93,7 +96,7 @@ const SharedSelect = ({
       }
       saveToDb(fakeEvent)
     },
-    [name],
+    [name, saveToDb],
   )
 
   return (
