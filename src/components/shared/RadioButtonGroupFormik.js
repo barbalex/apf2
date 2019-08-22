@@ -61,7 +61,7 @@ const RadioButtonGroup = ({
         setTimeout(() => handleSubmit())
       }
     },
-    [value, name],
+    [value, name, onChange, onBlur, handleSubmit],
   )
   const onChangeGroup = useCallback(
     event => {
@@ -86,7 +86,7 @@ const RadioButtonGroup = ({
       onBlur(fakeEvent)
       setTimeout(() => handleSubmit())
     },
-    [name],
+    [handleSubmit, name, onBlur, onChange],
   )
 
   const valueSelected =

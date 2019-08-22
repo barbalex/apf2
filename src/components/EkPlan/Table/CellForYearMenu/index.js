@@ -67,12 +67,6 @@ const CellForYearMenu = ({ refetch }) => {
   const closeEkfsMenu = useCallback(event => setEkfsAnchor(null), [])
   const closeMassnsMenu = useCallback(event => setMassnsAnchor(null), [])
 
-  const onClickEkEntfernen = useCallback(() => removeEkPlan('EK'), [
-    yearClicked,
-  ])
-  const onClickEkfEntfernen = useCallback(() => removeEkPlan('EKF'), [
-    yearClicked,
-  ])
   const removeEkPlan = useCallback(
     async typ => {
       let qResult
@@ -112,11 +106,15 @@ const CellForYearMenu = ({ refetch }) => {
       refetch()
       closeYearCellMenu()
     },
-    [yearClicked],
+    [client, closeYearCellMenu, refetch, store, tpopId, year],
   )
+  const onClickEkEntfernen = useCallback(() => removeEkPlan('EK'), [
+    removeEkPlan,
+  ])
+  const onClickEkfEntfernen = useCallback(() => removeEkPlan('EKF'), [
+    removeEkPlan,
+  ])
 
-  const onClickEkPlanen = useCallback(() => addEkPlan('EK'), [yearClicked])
-  const onClickEkfPlanen = useCallback(() => addEkPlan('EKF'), [yearClicked])
   const addEkPlan = useCallback(
     async typ => {
       const variables = {
@@ -148,8 +146,10 @@ const CellForYearMenu = ({ refetch }) => {
       refetch()
       closeYearCellMenu()
     },
-    [store.user.name, yearClicked],
+    [client, closeYearCellMenu, refetch, store, tpopId, year],
   )
+  const onClickEkPlanen = useCallback(() => addEkPlan('EK'), [addEkPlan])
+  const onClickEkfPlanen = useCallback(() => addEkPlan('EKF'), [addEkPlan])
 
   const { data } = useQuery(queryTpop, {
     variables: {

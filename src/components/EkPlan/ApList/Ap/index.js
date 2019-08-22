@@ -30,7 +30,7 @@ const Ap = ({ ap }) => {
   const store = useContext(storeContext)
   const { removeAp, dataAps, dataApsLoading } = store.ekPlan
 
-  const onClickDelete = useCallback(() => removeAp(ap), [ap])
+  const onClickDelete = useCallback(() => removeAp(ap), [ap, removeAp])
   const thisApData = get(dataAps, 'allAps.nodes', []).find(
     a => a.id === ap.value,
   )

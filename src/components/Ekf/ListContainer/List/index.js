@@ -94,7 +94,7 @@ const EkfList = ({ data, loading }) => {
         store,
       })
     }
-  }, [ekfYear, ekf.length])
+  }, [ekfYear, ekf.length, ekf, activeTpopkontrId, store])
   if (!loading && ekf.length === 0) {
     return (
       <NoDataContainer>

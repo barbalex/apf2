@@ -92,9 +92,9 @@ const Ekf = () => {
     } else {
       setDatenWidth(standardWidth)
     }
-  }, [treeEl.current, datenEl.current])
+  }, [setTreeWidth, setTreeHeight, setDatenWidth])
 
-  const onDragFinished = useCallback(() => setDimensions())
+  const onDragFinished = useCallback(() => setDimensions(), [setDimensions])
 
   // reset dimensions when window resizes
   useEffect(() => {
@@ -104,7 +104,7 @@ const Ekf = () => {
     return () =>
       typeof window !== 'undefined' &&
       window.removeEventListener('resize', setDimensions)
-  }, [])
+  }, [setDimensions])
 
   if (isPrint && tpopkontrId) {
     return <Tpopfreiwkontr treeName={treeName} role={role} />

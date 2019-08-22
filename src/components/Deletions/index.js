@@ -81,7 +81,14 @@ const Deletions = () => {
     if (choosenDeletions.length === deletedDatasets.length) {
       setShowDeletions(false)
     }
-  }, [choosenDeletions, deletedDatasets])
+  }, [
+    choosenDeletions,
+    client,
+    deletedDatasets,
+    removeDeletedDatasetById,
+    setShowDeletions,
+    store,
+  ])
   const toggleChoosenDeletions = useCallback(
     event => {
       let id = event.target.value
@@ -95,7 +102,9 @@ const Deletions = () => {
     },
     [choosenDeletions],
   )
-  const onClickClose = useCallback(() => setShowDeletions(false))
+  const onClickClose = useCallback(() => setShowDeletions(false), [
+    setShowDeletions,
+  ])
 
   return (
     <ErrorBoundary>
