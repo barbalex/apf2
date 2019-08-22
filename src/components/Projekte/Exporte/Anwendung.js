@@ -59,12 +59,7 @@ const DownloadCardButton = styled(Button)`
 const Anwendung = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const {
-    enqueNotification,
-    removeNotification,
-    exportApplyMapFilter,
-    exportFileType,
-  } = store
+  const { enqueNotification, removeNotification } = store
 
   const [expanded, setExpanded] = useState(false)
   const { closeSnackbar } = useSnackbar()

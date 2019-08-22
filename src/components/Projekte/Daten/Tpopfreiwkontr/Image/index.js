@@ -46,7 +46,7 @@ const Image = ({ row, artname, apId }) => {
   const [image, setImage] = useState(null)
   useEffect(() => {
     fetchImageIfNeeded({ apId, image, setImage })
-  })
+  }, [apId, image])
 
   return (
     <Container>
