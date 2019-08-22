@@ -78,7 +78,7 @@ const Projekte = () => {
         })
       }
     }
-  }, [])
+  }, [setIsPrint])
 
   if (tree2Tabs.length === 0 || isPrint) {
     return (

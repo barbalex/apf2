@@ -38,7 +38,7 @@ const Title = styled.div`
 export default ({ treeName }) => {
   const [activeTab, setActiveTab] = useState('ap')
 
-  const onChangeTab = useCallback((event, value) => setActiveTab(value))
+  const onChangeTab = useCallback((event, value) => setActiveTab(value), [])
 
   const formObject = {
     ap: <ApFilter treeName={treeName} />,

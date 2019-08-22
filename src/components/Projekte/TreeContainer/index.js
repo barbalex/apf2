@@ -276,7 +276,6 @@ const TreeContainer = ({ treeName }) => {
   const {
     activeApfloraLayers,
     setActiveApfloraLayers,
-    activeOverlays,
     setIdOfTpopBeingLocalized,
     enqueNotification,
     toDeleteId,
@@ -301,6 +300,20 @@ const TreeContainer = ({ treeName }) => {
     [],
   )
 
+  const showMapIfNotYetVisible = useCallback(
+    projekteTabs => {
+      const isVisible = projekteTabs.includes('karte')
+      if (!isVisible) {
+        setUrlQueryValue({
+          key: 'projekteTabs',
+          value: [...projekteTabs, 'karte'],
+          urlQuery,
+          setUrlQuery,
+        })
+      }
+    },
+    [setUrlQuery, urlQuery],
+  )
   const handleClick = useCallback(
     (e, data, element) => {
       if (!data) {
@@ -539,19 +552,27 @@ const TreeContainer = ({ treeName }) => {
         })
       }
     },
-    [treeName, activeApfloraLayers, activeOverlays, toDeleteId],
+    [
+      enqueNotification,
+      treeName,
+      client,
+      store,
+      setToDelete,
+      openNodes,
+      setActiveNodeArray,
+      setOpenNodes,
+      refetch,
+      urlQuery,
+      showMapIfNotYetVisible,
+      activeApfloraLayers,
+      setActiveApfloraLayers,
+      setIdOfTpopBeingLocalized,
+      setMoving,
+      setCopying,
+      setCopyingBiotop,
+      copyingBiotop,
+    ],
   )
-  const showMapIfNotYetVisible = useCallback(projekteTabs => {
-    const isVisible = projekteTabs.includes('karte')
-    if (!isVisible) {
-      setUrlQueryValue({
-        key: 'projekteTabs',
-        value: [...projekteTabs, 'karte'],
-        urlQuery,
-        setUrlQuery,
-      })
-    }
-  })
 
   //console.log('TreeContainer',{data})
 

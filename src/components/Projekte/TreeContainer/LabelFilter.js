@@ -68,9 +68,9 @@ const LabelFilter = ({ treeName }) => {
 
   useEffect(() => {
     setValue(filterValue)
-  }, [tableName, treeName])
+  }, [filterValue, tableName, treeName])
 
-  const onChange = useCallback(e => setValue(e.target.value))
+  const onChange = useCallback(e => setValue(e.target.value), [])
   const save = useCallback(
     e => {
       if (labelText === '(filtern nicht möglich)') return
@@ -96,17 +96,28 @@ const LabelFilter = ({ treeName }) => {
         key: filterTable,
       })
     },
-    [activeNode, treeName, openNodes],
+    [
+      labelText,
+      activeNode,
+      setNodeLabelFilterKey,
+      treeName,
+      openNodes,
+      setActiveNodeArray,
+      setOpenNodes,
+    ],
   )
-  const onKeyPress = useCallback(event => {
-    if (event.key === 'Enter') {
-      save(event)
-    }
-  })
+  const onKeyPress = useCallback(
+    event => {
+      if (event.key === 'Enter') {
+        save(event)
+      }
+    },
+    [save],
+  )
   const onClickEmptyFilter = useCallback(() => {
     empty()
     setValue('')
-  })
+  }, [empty])
 
   return (
     <StyledFormControl fullWidth>

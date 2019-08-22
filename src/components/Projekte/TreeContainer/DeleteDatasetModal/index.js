@@ -34,11 +34,13 @@ const DatasetDeleteModal = () => {
     question = `${tableName} löschen?`
   }
 
-  const onClickLoeschen = useCallback(() =>
-    deleteDataset({
-      client,
-      store,
-    }),
+  const onClickLoeschen = useCallback(
+    () =>
+      deleteDataset({
+        client,
+        store,
+      }),
+    [client, store],
   )
 
   return (

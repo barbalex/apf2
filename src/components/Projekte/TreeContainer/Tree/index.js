@@ -818,7 +818,15 @@ const Tree = ({ treeName }) => {
       // add projekt to open nodes
       setOpenNodes([...openNodes, projektUrl])
     }
-  }, [loading])
+  }, [
+    activeNodes.projekt,
+    activeNodes.projektFolder,
+    loading,
+    nodes,
+    openNodes,
+    setActiveNodeArray,
+    setOpenNodes,
+  ])
 
   const listRef = React.createRef()
 

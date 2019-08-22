@@ -19,6 +19,4 @@ const sort = (a, b, i) => {
   if (aI.toLowerCase() > bI.toLowerCase()) return 1
 }
 
-export default (a, b) => {
-  return sort(a, b, 0)
-}
+export default (a, b) => sort(a, b, 0)
