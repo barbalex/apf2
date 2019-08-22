@@ -307,7 +307,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
         // this broke 13.2.2019
         // value2 = !!value ? +format(new Date(value), 'yyyy') : null
         // value can be null so check if substring method exists
-        value2 = value&& value.substring ? +value.substring(0, 4) : value
+        value2 = value && value.substring ? +value.substring(0, 4) : value
       }
       if (field2) variables[field2] = value2
       try {
@@ -385,7 +385,34 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
       }
       setErrors({})
     },
-    [showFilter, row],
+    [
+      showFilter,
+      row.id,
+      row.typ,
+      row.jahr,
+      row.datum,
+      row.bemerkungen,
+      row.flaecheUeberprueft,
+      row.deckungVegetation,
+      row.deckungNackterBoden,
+      row.deckungApArt,
+      row.vegetationshoeheMaximum,
+      row.vegetationshoeheMittel,
+      row.gefaehrdung,
+      row.tpopId,
+      row.bearbeiter,
+      row.planVorhanden,
+      row.jungpflanzenVorhanden,
+      row.apberNichtRelevant,
+      row.apberNichtRelevantGrund,
+      row.ekfBemerkungen,
+      row.tpopByTpopId,
+      row.tpopkontrzaehlsByTpopkontrId,
+      user.name,
+      nodeFilterSetValue,
+      treeName,
+      client,
+    ],
   )
 
   useEffect(() => {
@@ -438,7 +465,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
           )
       }
     }
-  }, [loading])
+  }, [client, data, enqueNotification, loading, refetch, row.id, user.name])
 
   useEffect(() => setErrors({}), [row])
 

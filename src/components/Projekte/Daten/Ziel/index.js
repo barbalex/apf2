@@ -100,7 +100,16 @@ const Ziel = ({ treeName }) => {
         if (['typ'].includes(changedField)) refetch.ziels()
       }
     },
-    [row, activeNodeArray, openNodes, treeName],
+    [
+      row,
+      client,
+      store.user.name,
+      activeNodeArray,
+      openNodes,
+      setActiveNodeArray,
+      setOpenNodes,
+      refetch,
+    ],
   )
 
   if (loading) {

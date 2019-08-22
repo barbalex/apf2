@@ -112,7 +112,16 @@ const Werte = ({ treeName, table }) => {
       refetchTree[refetchTableName] && refetchTree[refetchTableName]()
       setErrors({})
     },
-    [row.id, table],
+    [
+      client,
+      codeGqlType,
+      refetch,
+      refetchTree,
+      row,
+      store.user.name,
+      table,
+      tableCamelCased,
+    ],
   )
 
   if (loading) {

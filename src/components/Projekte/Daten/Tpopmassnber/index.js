@@ -77,7 +77,7 @@ const Tpopmassnber = ({ treeName }) => {
       setErrors({})
       changedField === 'beurteilung' && refetch.tpopmassnbers()
     },
-    [row],
+    [client, refetch, row, store.user.name],
   )
 
   if (loading) {

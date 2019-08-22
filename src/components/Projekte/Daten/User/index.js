@@ -132,7 +132,16 @@ const User = ({ treeName }) => {
       setErrors({})
       if (['name', 'role'].includes(field)) refetch.users()
     },
-    [row],
+    [
+      client,
+      refetch,
+      row.adresseId,
+      row.email,
+      row.id,
+      row.name,
+      row.pass,
+      row.role,
+    ],
   )
   const onBlurPassword = useCallback(event => {
     setPasswordErrorText('')
@@ -143,7 +152,7 @@ const User = ({ treeName }) => {
     } else {
       setPassword2('')
     }
-  })
+  }, [])
   const onBlurPassword2 = useCallback(
     async event => {
       setPassword2ErrorText('')
@@ -177,7 +186,7 @@ const User = ({ treeName }) => {
         setEditPassword(false)
       }
     },
-    [password, password2],
+    [password, saveToDb],
   )
 
   if (loading) {

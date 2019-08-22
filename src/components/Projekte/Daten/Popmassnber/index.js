@@ -77,7 +77,7 @@ const Popmassnber = ({ treeName }) => {
       setErrors({})
       changedField === 'beurteilung' && refetch.popmassnbers()
     },
-    [row],
+    [client, refetch, row, store.user.name],
   )
 
   if (loading) {

@@ -59,7 +59,7 @@ const Map = ({ saveToDb, row, errors, showFilter }) => {
       target: { name: 'planVorhanden', value: false },
     }
     saveToDb(fakeEvent)
-  })
+  }, [saveToDb])
 
   //console.log('Map rendering')
 

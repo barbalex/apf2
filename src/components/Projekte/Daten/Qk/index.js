@@ -100,10 +100,11 @@ const Qk = ({ treeName }) => {
     },
   })
 
-  const onChangeBerichtjahr = useCallback(event =>
-    setBerichtjahr(+event.target.value),
+  const onChangeBerichtjahr = useCallback(
+    event => setBerichtjahr(+event.target.value),
+    [],
   )
-  const onChangeFilter = useCallback(event => setFilter(event.target.value))
+  const onChangeFilter = useCallback(event => setFilter(event.target.value), [])
 
   const gqlMessageGroups = sortBy(qk({ berichtjahr, data }), 'title')
     .filter(q => !q.query)
@@ -122,9 +123,7 @@ const Qk = ({ treeName }) => {
     return true
   })
 
-  useEffect(() => {
-    if (!ktZh) fetchKtZh(store)
-  }, [])
+  useEffect(() => !ktZh && fetchKtZh(store), [ktZh, store])
 
   if (error) return `Fehler: ${error.message}`
   return (

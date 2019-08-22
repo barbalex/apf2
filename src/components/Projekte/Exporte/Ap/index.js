@@ -96,7 +96,7 @@ const AP = () => {
     }
     removeNotification(notif)
     closeSnackbar(notif)
-  }, [exportFileType, exportApplyMapFilter, mapFilter])
+  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickApOhnePop = useCallback(async () => {
     const notif = enqueNotification({

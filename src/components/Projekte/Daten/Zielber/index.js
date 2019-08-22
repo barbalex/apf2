@@ -68,7 +68,7 @@ const Zielber = ({ treeName }) => {
       }
       setErrors({})
     },
-    [row],
+    [client, row, store.user.name],
   )
 
   if (loading) {

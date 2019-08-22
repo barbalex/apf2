@@ -71,7 +71,7 @@ const Projekt = ({ treeName }) => {
       setErrors({})
       if (changedField === 'name') refetch.projekts()
     },
-    [row],
+    [client, refetch, row, store.user.name],
   )
 
   if (loading) {

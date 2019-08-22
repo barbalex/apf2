@@ -198,7 +198,7 @@ const Count = ({
         variables: { tpopkontrId },
       })
       .then(() => refetch())
-  }, [tpopkontrId])
+  }, [client, refetch, tpopkontrId])
 
   const allEinheits = get(dataLists, 'allTpopkontrzaehlEinheitWertes.nodes', [])
   // do list this count's einheit
@@ -265,7 +265,7 @@ const Count = ({
       }
       setErrors({})
     },
-    [row],
+    [client, row, store.user.name],
   )
   const remove = useCallback(
     ({ row }) => {
@@ -277,7 +277,7 @@ const Count = ({
         afterDeletionHook: refetch,
       })
     },
-    [row, activeNodeArray],
+    [setToDelete, activeNodeArray, refetch],
   )
 
   if (showNew) {

@@ -233,17 +233,28 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
         }
       }
     },
-    [row, showFilter],
+    [
+      client,
+      nodeFilterSetValue,
+      refetch,
+      row,
+      showFilter,
+      store.user.name,
+      treeName,
+    ],
   )
-  const onChangeTab = useCallback((event, value) => {
-    setUrlQueryValue({
-      key: 'feldkontrTab',
-      value,
-      urlQuery,
-      setUrlQuery,
-    })
-    setTab(value)
-  })
+  const onChangeTab = useCallback(
+    (event, value) => {
+      setUrlQueryValue({
+        key: 'feldkontrTab',
+        value,
+        urlQuery,
+        setUrlQuery,
+      })
+      setTab(value)
+    },
+    [setUrlQuery, urlQuery],
+  )
 
   const aeLrWerte = get(dataLists, 'allAeLrdelarzes.nodes', [])
     .map(e => `${e.label}: ${e.einheit ? e.einheit.replace(/  +/g, ' ') : ''}`)

@@ -103,7 +103,7 @@ const Tpopkontrzaehl = ({ treeName }) => {
         refetch.tpopkontrzaehls()
       }
     },
-    [row],
+    [client, refetch, row, store.user.name],
   )
 
   if (loading) {

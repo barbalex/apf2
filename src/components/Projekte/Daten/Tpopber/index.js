@@ -77,7 +77,7 @@ const Tpopber = ({ treeName }) => {
       setErrors({})
       changedField === 'entwicklung' && refetch.tpopbers()
     },
-    [row],
+    [client, refetch, row, store.user.name],
   )
 
   if (loading) {

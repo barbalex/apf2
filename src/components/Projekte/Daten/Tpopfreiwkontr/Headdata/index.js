@@ -135,7 +135,33 @@ const Headdata = ({ pop, tpop, row, showFilter, treeName }) => {
       }
       setErrors(null)
     },
-    [showFilter, row],
+    [
+      showFilter,
+      row.id,
+      row.typ,
+      row.jahr,
+      row.datum,
+      row.bemerkungen,
+      row.flaecheUeberprueft,
+      row.deckungVegetation,
+      row.deckungNackterBoden,
+      row.deckungApArt,
+      row.vegetationshoeheMaximum,
+      row.vegetationshoeheMittel,
+      row.gefaehrdung,
+      row.tpopId,
+      row.planVorhanden,
+      row.jungpflanzenVorhanden,
+      row.apberNichtRelevant,
+      row.apberNichtRelevantGrund,
+      row.ekfBemerkungen,
+      row.tpopByTpopId,
+      row.tpopkontrzaehlsByTpopkontrId,
+      user.name,
+      nodeFilterSetValue,
+      treeName,
+      client,
+    ],
   )
 
   const userCount = get(

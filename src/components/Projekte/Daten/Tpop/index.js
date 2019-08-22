@@ -51,15 +51,18 @@ const TpopForm = ({ treeName, showFilter = false }) => {
 
   const { activeNodeArray } = store[treeName]
   const [tab, setTab] = useState(get(urlQuery, 'tpopTab', 'tpop'))
-  const onChangeTab = useCallback((event, value) => {
-    setUrlQueryValue({
-      key: 'tpopTab',
-      value,
-      urlQuery,
-      setUrlQuery,
-    })
-    setTab(value)
-  })
+  const onChangeTab = useCallback(
+    (event, value) => {
+      setUrlQueryValue({
+        key: 'tpopTab',
+        value,
+        urlQuery,
+        setUrlQuery,
+      })
+      setTab(value)
+    },
+    [setUrlQuery, urlQuery],
+  )
 
   let id =
     activeNodeArray.length > 7
@@ -167,7 +170,15 @@ const TpopForm = ({ treeName, showFilter = false }) => {
         setErrors({})
       }
     },
-    [showFilter, row],
+    [
+      row,
+      showFilter,
+      nodeFilterSetValue,
+      treeName,
+      client,
+      store.user.name,
+      refetch,
+    ],
   )
 
   if (error) return `Fehler: ${error.message}`

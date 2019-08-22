@@ -182,7 +182,15 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
         }
       }
     },
-    [row, showFilter],
+    [
+      client,
+      nodeFilterSetValue,
+      refetch,
+      row,
+      showFilter,
+      store.user.name,
+      treeName,
+    ],
   )
 
   //console.log('Tpopmassn rendering')
