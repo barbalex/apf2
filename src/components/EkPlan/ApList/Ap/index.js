@@ -28,15 +28,16 @@ const DelIcon = styled(IconButton)`
 
 const Ap = ({ ap }) => {
   const store = useContext(storeContext)
-  const { removeAp, dataAps, dataApsLoading } = store.ekPlan
+  const { removeAp, apsData, dataApsLoading } = store.ekPlan
 
   const onClickDelete = useCallback(() => removeAp(ap), [ap, removeAp])
-  const thisApData = get(dataAps, 'allAps.nodes', []).find(
+  const thisApData = get(apsData, 'allAps.nodes', []).find(
     a => a.id === ap.value,
   )
   const einheits = get(thisApData, 'ekzaehleinheitsByApId.nodes', []).map(e =>
     get(e, 'tpopkontrzaehlEinheitWerteByZaehleinheitId.text'),
   )
+  console.log('Ap', { apsData, thisApData, ap, einheits })
   const einheitsText =
     einheits.length === 0
       ? 'Keine! Bitte erfassen Sie eine zielrelevante EK-Zähleinheit'
