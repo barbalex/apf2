@@ -141,6 +141,11 @@ const CellForEkfrequenz = ({ row, style }) => {
         })
       }
       // TODO: set ekplan and tell user it is happening
+      console.log('CellForEkfrequenzStartjahr, row:', row)
+      if (row.ekfrequenz.value) {
+        // TODO: set ekplan and tell user it is happening
+        console.log('TODO: set ekplan')
+      }
     },
     [client, enqueNotification, row.id, row.tpop, store.user.name],
   )

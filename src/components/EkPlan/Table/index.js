@@ -195,7 +195,11 @@ const EkPlanTable = () => {
         'sort',
       )
     : []
-  const tpopRows = useMemo(() => tpops.map(tpopRowFromTpop), [tpops])
+  // tpopRows does not update when a single tpop changes if passed tpops
+  // solution is to pass stringified version
+  const tpopsStringified = JSON.stringify(tpops)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const tpopRows = useMemo(() => tpops.map(tpopRowFromTpop), [tpopsStringified])
   const tpopColumns = tpopRows.length
     ? sortBy(
         Object.values(tpopRows[0])
