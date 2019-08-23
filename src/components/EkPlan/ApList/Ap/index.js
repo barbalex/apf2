@@ -28,7 +28,7 @@ const DelIcon = styled(IconButton)`
 
 const Ap = ({ ap }) => {
   const store = useContext(storeContext)
-  const { removeAp, apsData, dataApsLoading } = store.ekPlan
+  const { removeAp, apsData, apsDataLoading } = store.ekPlan
 
   const onClickDelete = useCallback(() => removeAp(ap), [ap, removeAp])
   const thisApData = get(apsData, 'allAps.nodes', []).find(
@@ -49,18 +49,20 @@ const Ap = ({ ap }) => {
   return (
     <Container>
       <ApDiv>{`${ap.label}.`}</ApDiv>
-      {!dataApsLoading && (
-        <EinheitsDiv data-warn={einheits.length === 0}>
-          <Label>{labelText}</Label> {einheitsText}
-        </EinheitsDiv>
+      {!apsDataLoading && (
+        <>
+          <EinheitsDiv data-warn={einheits.length === 0}>
+            <Label>{labelText}</Label> {einheitsText}
+          </EinheitsDiv>
+          <DelIcon
+            title={`${ap.label} entfernen`}
+            aria-label={`${ap.label} entfernen`}
+            onClick={onClickDelete}
+          >
+            <FaTimes />
+          </DelIcon>
+        </>
       )}
-      <DelIcon
-        title={`${ap.label} entfernen`}
-        aria-label={`${ap.label} entfernen`}
-        onClick={onClickDelete}
-      >
-        <FaTimes />
-      </DelIcon>
     </Container>
   )
 }
