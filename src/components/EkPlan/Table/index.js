@@ -114,7 +114,7 @@ export const StyledTableCell = styled.div`
   }
 `
 export const StyledCellForSelect = styled(StyledTableCell)`
-  padding: 0 !important;
+  padding: 0 12px !important;
   font-size: unset !important;
   border-left: solid green 1px;
   border-right: solid green 1px;

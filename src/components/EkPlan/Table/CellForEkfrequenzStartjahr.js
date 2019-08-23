@@ -140,6 +140,7 @@ const CellForEkfrequenz = ({ row, style }) => {
           },
         })
       }
+      // TODO: set ekplan and tell user it is happening
     },
     [client, enqueNotification, row.id, row.tpop, store.user.name],
   )
