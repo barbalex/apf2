@@ -50,8 +50,6 @@ const StyledLabel = styled.div`
 `
 const PlusIcon = styled(IconButton)`
   font-size: 1rem !important;
-  padding-top: 4px !important;
-  padding-bottom: 2px !important;
 `
 const DelIcon = styled(IconButton)`
   font-size: 1rem !important;
@@ -183,7 +181,10 @@ const Ekfrequenz = ({ treeName }) => {
                   render={arrayHelpers => (
                     <KontrolljahrContainer>
                       <LabelRow>
-                        <StyledLabel>Kontrolljahre</StyledLabel>
+                        <StyledLabel>
+                          Kontrolljahre (= Anzahl Jahre nach Start bzw.
+                          Ansiedlung)
+                        </StyledLabel>
                         <PlusIcon
                           title="Kontrolljahr hinzufügen"
                           aria-label="Kontrolljahr hinzufügen"
