@@ -51,12 +51,8 @@ export default types
     scrollPositions: null,
     apsData: [],
     ekfrequenzs: [],
-    ekAbrechnungstypOptions: [],
   }))
   .actions(self => ({
-    setEkAbrechnungstypOptions(val) {
-      self.ekAbrechnungstypOptions = val
-    },
     setEkfrequenzs(val) {
       self.ekfrequenzs = val
     },

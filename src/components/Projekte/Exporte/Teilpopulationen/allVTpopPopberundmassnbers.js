@@ -43,7 +43,6 @@ export default gql`
         tpop_bewirtschaftung: tpopBewirtschaftung
         tpop_ekfrequenz: tpopEkfrequenz
         tpop_ekfrequenz_abweichend: tpopEkfrequenzAbweichend
-        tpop_ek_abrechnungstyp: tpopEkAbrechnungstyp
         tpopber_id: tpopberId
         tpopber_jahr: tpopberJahr
         tpopber_entwicklung: tpopberEntwicklung

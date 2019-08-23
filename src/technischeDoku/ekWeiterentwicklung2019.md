@@ -118,11 +118,11 @@ Das Formular, um Kontrollen zu planen.
   - `anzahl_min`: Ab dieser Anzahl Individuen wird diese Frequenz bei autochthonen Populationen (normalerweise) gewählt. Bei Anpflanzungen nicht relevant.
   - `anzahl_max`: Bis zu dieser Anzahl Individuen wird diese Frequenz bei autochthonen Populationen (normalerweise) gewählt. Bei Anpflanzungen nicht relevant.
   - `bemerkungen`
+  - `ek_abrechnungstyp`: Auswahl aus der Tabelle `ek_abrechnungstyp_werte`
 - neue Tabelle `ek_abrechnungstyp_werte` mit den für Wertelisten üblichen Feldern
 - neue Felder auf tpop:
   - `ekfrequenz`
   - `ekfrequenz_abweichend`: Diese Frequenz entspricht nicht derjenigen, welche gemäss Populationsgrösse vergeben worden wäre
-  - `ek_abrechnungstyp`: Auswahl aus der Tabelle `ek_abrechnungstyp_werte`
   - bestehende zwei kontrollfrequenz-Felder wieder entfernen
 - neue Felder auf tpopkontr:
   - `apber_nicht_relevant`: Wenn "ja" soll diese Kontrolle für den Jahresbericht nicht berücksichtigt werden (ist umgesetzt)

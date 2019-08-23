@@ -553,11 +553,12 @@ CREATE TABLE apflora.tpop (
   ekfrequenz text DEFAULT null REFERENCES apflora.ekfrequenz (code) ON DELETE SET NULL ON UPDATE CASCADE,
   ekfrequenz_startjahr smallint default null,
   ekfrequenz_abweichend boolean DEFAULT false,
-  ek_abrechnungstyp text DEFAULT null REFERENCES apflora.ek_abrechnungstyp (code) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null
 );
+--TODO: apflora.tpop DROP COLUMN ek_abrechnungstyp;
+
 CREATE INDEX ON apflora.tpop USING btree (id);
 CREATE INDEX ON apflora.tpop USING btree (pop_id);
 CREATE INDEX ON apflora.tpop USING btree (status);
@@ -566,7 +567,6 @@ CREATE INDEX ON apflora.tpop USING btree (nr);
 CREATE INDEX ON apflora.tpop USING btree (flurname);
 CREATE INDEX ON apflora.tpop USING btree (ekfrequenz);
 CREATE INDEX ON apflora.tpop USING btree (ekfrequenz_abweichend);
-CREATE INDEX ON apflora.tpop USING btree (ek_abrechnungstyp);
 COMMENT ON COLUMN apflora.tpop.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpop.pop_id IS 'Zugehörige Population. Fremdschlüssel aus der Tabelle "pop"';
 COMMENT ON COLUMN apflora.tpop.nr IS 'Nummer der Teilpopulation';
@@ -593,7 +593,6 @@ COMMENT ON COLUMN apflora.tpop.bemerkungen IS 'Bemerkungen zur Teilpopulation';
 COMMENT ON COLUMN apflora.tpop.ekfrequenz IS 'Wert aus Tabelle ekfrequenz. Bestimmt, wie häufig kontrolliert werden soll';
 comment on column apflora.tpop.ekfrequenz_startjahr is 'Das Basisjahr, von dem aus ekpläne gemäss eqfrequenz gesetzt werden';
 COMMENT ON COLUMN apflora.tpop.ekfrequenz_abweichend IS 'Diese Frequenz entspricht nicht derjenigen, welche gemäss Populationsgrösse vergeben worden wäre';
-COMMENT ON COLUMN apflora.tpop.ek_abrechnungstyp IS 'Fremdschlüssel aus Tabelle ek_abrechnungstyp_werte. Bestimmt, wie Kontrollen abgerechnet werden sollen';
 COMMENT ON COLUMN apflora.tpop.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpop.changed IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -1305,6 +1304,7 @@ create table apflora.ekfrequenz(
   anzahl_max integer default null,
   bemerkungen text default null,
   sort smallint default null,
+  ek_abrechnungstyp text DEFAULT null REFERENCES apflora.ek_abrechnungstyp_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   changed date default now(),
   changed_by varchar(20) default null
 );
@@ -1317,6 +1317,7 @@ CREATE INDEX ON apflora.ekfrequenz USING btree (code);
 CREATE INDEX ON apflora.ekfrequenz USING btree (anzahl_min);
 CREATE INDEX ON apflora.ekfrequenz USING btree (anzahl_max);
 CREATE INDEX ON apflora.ekfrequenz USING btree (sort);
+CREATE INDEX ON apflora.ekfrequenz USING btree (ek_abrechnungstyp);
 COMMENT ON COLUMN apflora.ekfrequenz.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.ekfrequenz.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
 COMMENT ON COLUMN apflora.ekfrequenz.ek IS 'Diese Frequenz ist für EK anwendbar';
@@ -1329,6 +1330,7 @@ COMMENT ON COLUMN apflora.ekfrequenz.kontrolljahre IS ' Definiert, in welchen Ja
 COMMENT ON COLUMN apflora.ekfrequenz.anzahl_min IS 'Ab dieser Anzahl Individuen wird diese Frequenz bei autochthonen Populationen (normalerweise) gewählt. Bei Anpflanzungen nicht relevant';
 COMMENT ON COLUMN apflora.ekfrequenz.anzahl_max IS 'Bis zu dieser Anzahl Individuen wird diese Frequenz bei autochthonen Populationen (normalerweise) gewählt. Bei Anpflanzungen nicht relevant';
 COMMENT ON COLUMN apflora.ekfrequenz.sort IS 'Damit EK-Zähleinheiten untereinander sortiert werden können';
+COMMENT ON COLUMN apflora.ekfrequenz.ek_abrechnungstyp IS 'Fremdschlüssel aus Tabelle ek_abrechnungstyp_werte. Bestimmt, wie Kontrollen abgerechnet werden sollen';
 COMMENT ON COLUMN apflora.ekfrequenz.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ekfrequenz.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
 DROP POLICY IF EXISTS writer ON apflora.ekfrequenz;

@@ -48,7 +48,6 @@ SELECT
   eulk.bewirtschaftung,
   eulk.ekfrequenz,
   eulk.ekfrequenz_abweichend,
-  eulk.ek_abrechnungstyp,
   eulk.changed,
   eulk.changed_by,
   eulk.anzahl_kontrollen,

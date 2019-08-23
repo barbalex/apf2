@@ -186,6 +186,7 @@ export const ekfrequenz = gql`
     anzahlMax
     bemerkungen
     sort
+    ekAbrechnungstyp
     changedBy
   }
 `
@@ -343,7 +344,6 @@ export const tpop = gql`
     bewirtschaftung
     ekfrequenz
     ekfrequenzAbweichend
-    ekAbrechnungstyp
     bemerkungen
     statusUnklar
     changedBy

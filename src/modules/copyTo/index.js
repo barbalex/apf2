@@ -290,7 +290,6 @@ export default async ({
           bewirtschaftung: row.bewirtschaftung,
           ekfrequenz: row.ekfrequenz,
           ekfrequenzAbweichend: row.ekfrequenzAbweichend,
-          ekAbrechnungstyp: row.ekAbrechnungstyp,
           bemerkungen: row.bemerkungen,
           statusUnklar: row.statusUnklar,
         },

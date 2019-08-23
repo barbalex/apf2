@@ -13,6 +13,10 @@ export default gql`
         gemeinde
         flurname
         ekfrequenz
+        ekAbrechnungstypWerteByEkAbrechnungstyp {
+          id
+          text
+        }
         ekfrequenzStartjahr
         ekfrequenzAbweichend
         ekAbrechnungstyp

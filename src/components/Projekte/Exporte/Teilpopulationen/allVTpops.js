@@ -46,7 +46,6 @@ export default gql`
         bewirtschaftung
         ekfrequenz
         ekfrequenz_abweichend: ekfrequenzAbweichend
-        ek_abrechnungstyp: ekAbrechnungstyp
         changed
         changed_by: changedBy
       }

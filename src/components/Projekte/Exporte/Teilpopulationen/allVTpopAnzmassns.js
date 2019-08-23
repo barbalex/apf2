@@ -44,7 +44,6 @@ export default gql`
         bewirtschafter
         ekfrequenz
         ekfrequenz_abweichend: ekfrequenzAbweichend
-        ek_abrechnungstyp: ekAbrechnungstyp
         anzahlMassnahmen
       }
     }

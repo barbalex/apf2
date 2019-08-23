@@ -14,7 +14,6 @@ import ErrorBoundary from 'react-error-boundary'
 
 import RadioButton from '../../../../shared/RadioButtonFormik'
 import RadioButtonGroup from '../../../../shared/RadioButtonGroupFormik'
-import queryLists from './queryLists'
 import queryEk from './queryEk'
 import queryEkfrequenzs from './queryEkfrequenzs'
 import storeContext from '../../../../../storeContext'
@@ -70,12 +69,6 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
 
   const apId = activeNodeArray[3]
 
-  const {
-    data: dataLists,
-    loading: loadingLists,
-    error: errorLists,
-  } = useQuery(queryLists)
-
   const { data: dataEk, loading: loadingEk, error: errorEk } = useQuery(
     queryEk,
     {
@@ -86,11 +79,14 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
     },
   )
 
-  const { data: dataEkfrequenzs } = useQuery(queryEkfrequenzs, {
-    variables: {
-      apId,
+  const { data: dataEkfrequenzs, loading: loadingEkfrequenzs } = useQuery(
+    queryEkfrequenzs,
+    {
+      variables: {
+        apId,
+      },
     },
-  })
+  )
 
   const ekfrequenzOptions = get(
     dataEkfrequenzs,
@@ -140,7 +136,7 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
                     <Field
                       name="ekfrequenz"
                       dataSource={ekfrequenzOptions}
-                      loading={loadingLists}
+                      loading={loadingEkfrequenzs}
                       label="EK-Frequenz"
                       component={RadioButtonGroup}
                     />
@@ -150,23 +146,6 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
                     label="EK-Frequenz abweichend"
                     component={RadioButton}
                   />
-                  <div>
-                    {errorLists ? (
-                      errorLists.message
-                    ) : (
-                      <Field
-                        name="ekAbrechnungstyp"
-                        dataSource={get(
-                          dataLists,
-                          'allEkAbrechnungstypWertes.nodes',
-                          [],
-                        )}
-                        loading={loadingLists}
-                        label="EK-Abrechnungstyp"
-                        component={RadioButtonGroup}
-                      />
-                    )}
-                  </div>
                 </FormContainerNoColumnsInner>
               </Form>
             )}

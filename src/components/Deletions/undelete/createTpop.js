@@ -33,7 +33,6 @@ export default gql`
     $bewirtschaftung: String
     $ekfrequenz: String
     $ekfrequenzAbweichend: Boolean
-    $ekAbrechnungstyp: String
     $bemerkungen: String
     $statusUnklar: Boolean
   ) {
@@ -65,7 +64,6 @@ export default gql`
           bewirtschaftung: $bewirtschaftung
           ekfrequenz: $ekfrequenz
           ekfrequenzAbweichend: $ekfrequenzAbweichend
-          ekAbrechnungstyp: $ekAbrechnungstyp
           bemerkungen: $bemerkungen
           statusUnklar: $statusUnklar
         }

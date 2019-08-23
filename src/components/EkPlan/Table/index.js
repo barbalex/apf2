@@ -28,7 +28,6 @@ import yearColumnWidth from './yearColumnWidth'
 import CellHeaderFixed from './CellHeaderFixed'
 import CellHeaderYear from './CellHeaderYear'
 import CellForYearTitle from './CellForYearTitle'
-import CellForEkAbrechnungstyp from './CellForEkAbrechnungstyp'
 import CellForEkfrequenz from './CellForEkfrequenz'
 import CellForEkfrequenzStartjahr from './CellForEkfrequenzStartjahr'
 import CellForEkfrequenzAbweichend from './CellForEkfrequenzAbweichend'
@@ -146,7 +145,6 @@ const EkPlanTable = () => {
     fields: fieldsShown,
     yearMenuAnchor,
     setEkfrequenzs,
-    setEkAbrechnungstypOptions,
     showEk,
     showEkf,
     showMassn,
@@ -228,9 +226,6 @@ const EkPlanTable = () => {
     },
   })
   setEkfrequenzs(get(dataLists, 'allEkfrequenzs.nodes', []))
-  setEkAbrechnungstypOptions(
-    get(dataLists, 'allEkAbrechnungstypWertes.nodes', []),
-  )
 
   const yearColWidth = yearColumnWidth(showCount)
   let headerYearFieldsWidth = sizeState.width - headerFieldsFixedWidth
@@ -333,11 +328,12 @@ const EkPlanTable = () => {
                 }
                 if (value.name === 'ekAbrechnungstyp') {
                   return (
-                    <CellForEkAbrechnungstyp
+                    <CellForValue
                       key={value.name}
-                      row={row}
                       field={value}
                       style={style}
+                      row={row}
+                      firstChild={columnIndex === 0}
                     />
                   )
                 }

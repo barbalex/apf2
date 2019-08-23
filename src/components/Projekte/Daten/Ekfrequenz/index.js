@@ -10,9 +10,11 @@ import ErrorBoundary from 'react-error-boundary'
 
 import TextField from '../../../shared/TextFieldFormik'
 import RadioButton from '../../../shared/RadioButtonFormik'
+import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import KontrolljahrField from './KontrolljahrField'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
+import queryEkAbrechnungstypWertes from './queryEkAbrechnungstypWertes'
 import updateEkfrequenzByIdGql from './updateEkfrequenzById'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
@@ -71,6 +73,12 @@ const Ekfrequenz = ({ treeName }) => {
           : '99999999-9999-9999-9999-999999999999',
     },
   })
+
+  const {
+    data: dataEkAbrechnungstypWertes,
+    loading: loadingEkAbrechnungstypWertes,
+    error: errorEkAbrechnungstypWertes,
+  } = useQuery(queryEkAbrechnungstypWertes)
 
   const row = get(data, 'ekfrequenzById', {})
 
@@ -245,6 +253,23 @@ const Ekfrequenz = ({ treeName }) => {
                   type="number"
                   component={TextField}
                 />
+                <div>
+                  {errorEkAbrechnungstypWertes ? (
+                    errorEkAbrechnungstypWertes.message
+                  ) : (
+                    <Field
+                      name="ekAbrechnungstyp"
+                      dataSource={get(
+                        dataEkAbrechnungstypWertes,
+                        'allEkAbrechnungstypWertes.nodes',
+                        [],
+                      )}
+                      loading={loadingEkAbrechnungstypWertes}
+                      label="EK-Abrechnungstyp"
+                      component={RadioButtonGroup}
+                    />
+                  )}
+                </div>
               </Form>
             )}
           </Formik>

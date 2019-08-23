@@ -171,7 +171,6 @@ SELECT
   apflora.tpop.bewirtschaftung AS tpop_bewirtschaftung,
   apflora.tpop.ekfrequenz AS tpop_ekfrequenz,
   apflora.tpop.ekfrequenz_abweichend AS tpop_ekfrequenz_abweichend,
-  apflora.tpop.ek_abrechnungstyp AS tpop_ek_abrechnungstyp,
   apflora.tpopmassn.id,
   apflora.tpopmassn.jahr,
   apflora.tpopmassn.datum,
@@ -488,7 +487,6 @@ SELECT
   apflora.tpop.bewirtschaftung,
   apflora.tpop.ekfrequenz,
   apflora.tpop.ekfrequenz_abweichend,
-  apflora.tpop.ek_abrechnungstyp,
   count(apflora.tpopmassn.id) AS anzahl_massnahmen
 FROM
   apflora.ae_eigenschaften
@@ -1048,7 +1046,6 @@ SELECT
   apflora.tpop.bewirtschaftung,
   apflora.tpop.ekfrequenz,
   apflora.tpop.ekfrequenz_abweichend,
-  apflora.tpop.ek_abrechnungstyp,
   apflora.tpop.changed,
   apflora.tpop.changed_by
 FROM
@@ -2151,7 +2148,6 @@ SELECT
   apflora.tpop.bewirtschaftung AS tpop_bewirtschaftung,
   apflora.tpop.ekfrequenz AS tpop_ekfrequenz,
   apflora.tpop.ekfrequenz_abweichend AS tpop_ekfrequenz_abweichend,
-  apflora.tpop.ek_abrechnungstyp AS tpop_ek_abrechnungstyp,
   apflora.tpopkontr.id,
   apflora.tpopkontr.jahr,
   apflora.tpopkontr.datum,
@@ -2291,7 +2287,6 @@ GROUP BY
   apflora.tpop.bewirtschaftung,
   apflora.tpop.ekfrequenz,
   apflora.tpop.ekfrequenz_abweichend,
-  apflora.tpop.ek_abrechnungstyp,
   apflora.tpopkontr.id,
   apflora.tpopkontr.tpop_id,
   apflora.tpopkontr.id,
@@ -3684,7 +3679,6 @@ SELECT
   apflora.tpop.bewirtschaftung AS tpop_bewirtschaftung,
   apflora.tpop.ekfrequenz AS tpop_ekfrequenz,
   apflora.tpop.ekfrequenz_abweichend AS tpop_ekfrequenz_abweichend,
-  apflora.tpop.ek_abrechnungstyp AS tpop_ek_abrechnungstyp,
   apflora.tpopkontr.id AS kontr_id,
   apflora.tpopkontr.jahr AS kontr_jahr,
   apflora.tpopkontr.datum AS kontr_datum,

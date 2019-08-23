@@ -17,6 +17,7 @@ export default gql`
     $anzahlMax: Int
     $bemerkungen: String
     $sort: Int
+    $ekAbrechnungstyp: String
     $changedBy: String
   ) {
     updateEkfrequenzById(
@@ -36,6 +37,7 @@ export default gql`
           anzahlMax: $anzahlMax
           bemerkungen: $bemerkungen
           sort: $sort
+          ekAbrechnungstyp: $ekAbrechnungstyp
           changedBy: $changedBy
         }
       }
