@@ -2,6 +2,9 @@
 import 'babel-polyfill'
 
 import React from 'react'
+// importing isomorphic-fetch is essential
+// otherwise apollo errors during the build
+// see: https://github.com/gatsbyjs/gatsby/issues/11225#issuecomment-457211628
 import 'isomorphic-fetch'
 
 import { MuiThemeProvider } from '@material-ui/core/styles'
