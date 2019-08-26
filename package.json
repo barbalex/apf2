@@ -42,7 +42,7 @@
     "date-fns": "2.0.1",
     "dexie": "2.0.4",
     "dom-helpers": "3.4.0",
-    "exceljs": "1.10.0",
+    "exceljs": "~1.10.0",
     "file-saver": "2.0.2",
     "formik": "1.5.8",
     "gatsby": "2.13.82",
