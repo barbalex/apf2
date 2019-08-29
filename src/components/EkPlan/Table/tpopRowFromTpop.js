@@ -22,6 +22,10 @@ export default (tpop, index) => ({
     ...fields.popName,
     value: get(tpop, 'popByPopId.name') || '-',
   },
+  popStatus: {
+    ...fields.popStatus,
+    value: get(tpop, 'popByPopId.popStatusWerteByStatus.text') || '-',
+  },
   nr: {
     ...fields.nr,
     value: get(tpop, 'nr') || '-',

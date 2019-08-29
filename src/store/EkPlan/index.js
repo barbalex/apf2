@@ -12,6 +12,7 @@ export const defaultFields = [
   'ap',
   'popNr',
   'popName',
+  'popStatus',
   'nr',
   'gemeinde',
   'flurname',
@@ -169,11 +170,17 @@ export default types
           ? popNr.right + fields.popName.width
           : popNr.right,
       }
-      const nr = {
+      const popStatus = {
         left: popName.right,
-        right: fieldsShown.includes('nr')
-          ? popName.right + fields.nr.width
+        right: fieldsShown.includes('popStatus')
+          ? popName.right + fields.popStatus.width
           : popName.right,
+      }
+      const nr = {
+        left: popStatus.right,
+        right: fieldsShown.includes('nr')
+          ? popStatus.right + fields.nr.width
+          : popStatus.right,
       }
       const gemeinde = {
         left: nr.right,
@@ -240,6 +247,7 @@ export default types
         ap: ap.left,
         popNr: popNr.left,
         popName: popName.left,
+        popStatus: popStatus.left,
         nr: nr.left,
         gemeinde: gemeinde.left,
         flurname: flurname.left,

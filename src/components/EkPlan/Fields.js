@@ -57,6 +57,18 @@ const Fields = () => {
           labelPlacement="end"
         />
         <FormControlLabel
+          value={fields.includes('popStatus').toString()}
+          control={
+            <Radio
+              color="primary"
+              checked={fields.includes('popStatus')}
+              onClick={() => toggleField('popStatus')}
+            />
+          }
+          label="Pop Status"
+          labelPlacement="end"
+        />
+        <FormControlLabel
           value={fields.includes('nr').toString()}
           control={
             <Radio

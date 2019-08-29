@@ -78,6 +78,9 @@ export default gql`
           id
           nr
           name
+          popStatusWerteByStatus {
+            text
+          }
           apByApId {
             id
             projId
