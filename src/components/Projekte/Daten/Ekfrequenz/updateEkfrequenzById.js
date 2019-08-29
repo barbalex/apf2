@@ -11,8 +11,6 @@ export default gql`
     $anwendungsfall: String
     $code: String
     $kontrolljahre: [Int]
-    $anzahlMin: Int
-    $anzahlMax: Int
     $bemerkungen: String
     $sort: Int
     $ekAbrechnungstyp: String
@@ -29,8 +27,6 @@ export default gql`
           anwendungsfall: $anwendungsfall
           code: $code
           kontrolljahre: $kontrolljahre
-          anzahlMin: $anzahlMin
-          anzahlMax: $anzahlMax
           bemerkungen: $bemerkungen
           sort: $sort
           ekAbrechnungstyp: $ekAbrechnungstyp

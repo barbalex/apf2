@@ -180,8 +180,6 @@ export const ekfrequenz = gql`
     anwendungsfall
     code
     kontrolljahre
-    anzahlMin
-    anzahlMax
     bemerkungen
     sort
     ekAbrechnungstyp

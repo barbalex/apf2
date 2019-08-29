@@ -110,8 +110,8 @@ Das Formular, um Kontrollen zu planen.
     - `angesäte Population`
   - `code`: Definiert die EK-Frequenz. Wird für den Import verwendet
   - `kontrolljahre`. Z.B.: `[2, 4, 6, 8, 10]`. Definiert, in welchen Jahren eine Kontrolle üblicherweise stattfinden soll. Bei Anpflanzungen sind das Jahre ab der letzten Anpflanzung. Bei autochthonen Populationen?
-  - `anzahl_min`: Ab dieser Anzahl Individuen wird diese Frequenz bei autochthonen Populationen (normalerweise) gewählt. Bei Anpflanzungen nicht relevant.
-  - `anzahl_max`: Bis zu dieser Anzahl Individuen wird diese Frequenz bei autochthonen Populationen (normalerweise) gewählt. Bei Anpflanzungen nicht relevant.
+  - `anzahl_min`: Ab dieser Anzahl Individuen wird diese Frequenz bei autochthonen Populationen (normalerweise) gewählt. Bei Anpflanzungen nicht relevant. Momentan nicht implementiert, weil EK-Frequenz-Typen nicht automatisch gesetzt werden
+  - `anzahl_max`: Bis zu dieser Anzahl Individuen wird diese Frequenz bei autochthonen Populationen (normalerweise) gewählt. Bei Anpflanzungen nicht relevant. Momentan nicht implementiert, weil EK-Frequenz-Typen nicht automatisch gesetzt werden
   - `bemerkungen`
   - `ek_abrechnungstyp`: Auswahl aus der Tabelle `ek_abrechnungstyp_werte`
 - neue Tabelle `ek_abrechnungstyp_werte` mit den für Wertelisten üblichen Feldern

@@ -1297,8 +1297,6 @@ create table apflora.ekfrequenz(
   ekf boolean default false,
   anwendungsfall text default null,
   code text default null unique,
-  name text default null,
-  periodizitaet text default null,
   kontrolljahre integer[],
   anzahl_min integer default null,
   anzahl_max integer default null,
