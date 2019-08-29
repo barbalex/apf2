@@ -6,6 +6,7 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import styled from 'styled-components'
 import get from 'lodash/get'
+import max from 'lodash/max'
 import groupBy from 'lodash/groupBy'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
@@ -88,18 +89,19 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
     },
   )
 
-  const ekfrequenzOptions = get(
-    dataEkfrequenzs,
-    'allEkfrequenzs.nodes',
-    [],
-  ).map(o => {
+  const ekfrequenzOptions0 = get(dataEkfrequenzs, 'allEkfrequenzs.nodes', [])
+  const longestAnwendungsfall = max(
+    ekfrequenzOptions0.map(a => a.anwendungsfall.length),
+  )
+  const ekfrequenzOptions = ekfrequenzOptions0.map(o => {
     const ekTypeArray = [o.ek ? 'ek' : null, o.ekf ? 'ekf' : null].filter(
       v => !!v,
     )
     const code = (o.code || '').padEnd(2)
-    const anwendungsfall = (
-      `${o.anwendungsfall}, ${ekTypeArray.join(' und ')}` || ''
-    ).padEnd(26)
+    const anwendungsfall =
+      `${o.anwendungsfall.padEnd(longestAnwendungsfall)}, ${ekTypeArray.join(
+        ' und ',
+      )}` || ''
     return {
       value: o.code,
       label: `${code}: ${anwendungsfall}`,

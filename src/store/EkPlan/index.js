@@ -2,6 +2,7 @@ import { types } from 'mobx-state-tree'
 import uniq from 'lodash/uniq'
 import groupBy from 'lodash/groupBy'
 import get from 'lodash/get'
+import max from 'lodash/max'
 
 import Ap from './Ap'
 import Hovered, { defaultValue as defaultHovered } from './Hovered'
@@ -117,24 +118,27 @@ export default types
       return self.aps.map(a => a.value)
     },
     get ekfOptionsGroupedPerAp() {
+      const longestAnwendungsfall = max(
+        self.ekfrequenzs.map(a => a.anwendungsfall.length),
+      )
       const options = self.ekfrequenzs.map(o => {
         const ekTypeArray = [o.ek ? 'ek' : null, o.ekf ? 'ekf' : null].filter(
           field => !!field,
         )
-        const code = (o.code || '').padEnd(2)
-        const anwendungsfall = (
-          `${o.anwendungsfall}, ${ekTypeArray.join(' und ')}` || ''
-        ).padEnd(26)
-        const name = (o.name || '').padEnd(27)
+        const code = (o.code || '').padEnd(2, '\xA0')
+        const anwendungsfall =
+          `${o.anwendungsfall.padEnd(
+            longestAnwendungsfall,
+            '\xA0',
+          )}, ${ekTypeArray.join(' und ')}` || ''
         return {
           value: o.code,
-          label: `${code}: ${name}`,
+          label: `${code}: ${anwendungsfall}`,
           anwendungsfall,
           apId: o.apId,
         }
       })
       const os = groupBy(options, 'apId')
-      Object.keys(os).forEach(k => (os[k] = groupBy(os[k], 'anwendungsfall')))
       return os
     },
     get einheitsByAp() {

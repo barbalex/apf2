@@ -21,13 +21,9 @@ const Select = styled.select`
     outline-color: transparent;
   }
 `
-const Optgroup = styled.optgroup`
-  font-family: inherit !important;
-  font-size: 1rem;
-`
 const Option = styled.option`
-  font-family: inherit !important;
-  font-size: 1rem;
+  font-family: 'Roboto Mono';
+  font-size: 0.85rem;
 `
 
 const CellForEkfrequenz = ({ row, field, style }) => {
@@ -136,14 +132,10 @@ const CellForEkfrequenz = ({ row, field, style }) => {
               <Option key="option1" value={null}>
                 {''}
               </Option>
-              {Object.keys(optionsGrouped).map(key => (
-                <Optgroup key={key} label={key}>
-                  {optionsGrouped[key].map(o => (
-                    <Option key={o.value} value={o.value}>
-                      {o.label}
-                    </Option>
-                  ))}
-                </Optgroup>
+              {optionsGrouped.map(o => (
+                <Option key={o.value} value={o.value}>
+                  {o.label}
+                </Option>
               ))}
             </>
           ) : null
