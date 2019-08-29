@@ -100,7 +100,7 @@ const CellForEkfrequenz = ({ row, field, style }) => {
         console.log('TODO: set ekplan')
       }
     },
-    [client, enqueNotification, row.id, row.tpop, store.user.name],
+    [client, enqueNotification, row, store.user.name],
   )
   const onFocus = useCallback(() => {
     setFocused(true)
