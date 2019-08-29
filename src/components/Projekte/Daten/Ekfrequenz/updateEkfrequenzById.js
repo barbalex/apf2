@@ -10,8 +10,6 @@ export default gql`
     $ekf: Boolean
     $anwendungsfall: String
     $code: String
-    $name: String
-    $periodizitaet: String
     $kontrolljahre: [Int]
     $anzahlMin: Int
     $anzahlMax: Int
@@ -30,8 +28,6 @@ export default gql`
           ekf: $ekf
           anwendungsfall: $anwendungsfall
           code: $code
-          name: $name
-          periodizitaet: $periodizitaet
           kontrolljahre: $kontrolljahre
           anzahlMin: $anzahlMin
           anzahlMax: $anzahlMax

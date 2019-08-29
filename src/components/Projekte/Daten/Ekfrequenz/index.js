@@ -150,14 +150,6 @@ const Ekfrequenz = ({ treeName }) => {
                   dirty && handleSubmit()
                 }}
               >
-                <Field name="ek" label="EK" component={RadioButton} />
-                <Field name="ekf" label="EKF" component={RadioButton} />
-                <Field
-                  name="anwendungsfall"
-                  label="Anwendungsfall"
-                  type="text"
-                  component={TextField}
-                />
                 <Field
                   name="code"
                   label="Kürzel"
@@ -165,17 +157,13 @@ const Ekfrequenz = ({ treeName }) => {
                   component={TextField}
                 />
                 <Field
-                  name="name"
-                  label="Name"
+                  name="anwendungsfall"
+                  label="Anwendungsfall"
                   type="text"
                   component={TextField}
                 />
-                <Field
-                  name="periodizitaet"
-                  label="Periodizität"
-                  type="text"
-                  component={TextField}
-                />
+                <Field name="ek" label="EK" component={RadioButton} />
+                <Field name="ekf" label="EKF" component={RadioButton} />
                 <FieldArray
                   name="kontrolljahre"
                   render={arrayHelpers => (
@@ -229,31 +217,6 @@ const Ekfrequenz = ({ treeName }) => {
                     </KontrolljahrContainer>
                   )}
                 />
-                <Field
-                  name="anzahlMin"
-                  label="Anzahl von"
-                  type="number"
-                  component={TextField}
-                />
-                <Field
-                  name="anzahlMax"
-                  label="Anzahl bis und mit"
-                  type="number"
-                  component={TextField}
-                />
-                <Field
-                  name="bemerkungen"
-                  label="Bemerkungen"
-                  type="text"
-                  multiLine
-                  component={TextField}
-                />
-                <Field
-                  name="sort"
-                  label="Sortierung"
-                  type="number"
-                  component={TextField}
-                />
                 <div>
                   {errorEkAbrechnungstypWertes ? (
                     errorEkAbrechnungstypWertes.message
@@ -271,6 +234,19 @@ const Ekfrequenz = ({ treeName }) => {
                     />
                   )}
                 </div>
+                <Field
+                  name="bemerkungen"
+                  label="Bemerkungen"
+                  type="text"
+                  multiLine
+                  component={TextField}
+                />
+                <Field
+                  name="sort"
+                  label="Sortierung"
+                  type="number"
+                  component={TextField}
+                />
               </Form>
             )}
           </Formik>

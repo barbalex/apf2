@@ -1308,6 +1308,9 @@ create table apflora.ekfrequenz(
   changed date default now(),
   changed_by varchar(20) default null
 );
+ALTER TABLE apflora.ekfrequenz DROP COLUMN name;
+ALTER TABLE apflora.ekfrequenz DROP COLUMN periodizitaet;
+
 CREATE INDEX ON apflora.ekfrequenz USING btree (id);
 CREATE INDEX ON apflora.ekfrequenz USING btree (ap_id);
 CREATE INDEX ON apflora.ekfrequenz USING btree (ek);
@@ -1324,8 +1327,6 @@ COMMENT ON COLUMN apflora.ekfrequenz.ek IS 'Diese Frequenz ist für EK anwendbar
 COMMENT ON COLUMN apflora.ekfrequenz.ekf IS 'Diese Frequenz ist für EKF anwendbar';
 COMMENT ON COLUMN apflora.ekfrequenz.anwendungsfall IS 'Beschreibt, in welchen Fällen diese Frequenz angewandt wird. Wahrscheinliche Werte: autochthone Population, angepflanzte Population, angesäte Population, Spezialfall';
 COMMENT ON COLUMN apflora.ekfrequenz.code IS 'Definierend für die eqfrequenz';
-COMMENT ON COLUMN apflora.ekfrequenz.name IS 'Was genau?';
-COMMENT ON COLUMN apflora.ekfrequenz.periodizitaet IS 'Beispielswerte: jedes 2. Jahr, nie';
 COMMENT ON COLUMN apflora.ekfrequenz.kontrolljahre IS ' Definiert, in welchen Jahren eine Kontrolle üblicherweise stattfinden soll. Bei Anpflanzungen sind das Jahre ab der letzten Anpflanzung. Bei autochthonen Populationen?';
 COMMENT ON COLUMN apflora.ekfrequenz.anzahl_min IS 'Ab dieser Anzahl Individuen wird diese Frequenz bei autochthonen Populationen (normalerweise) gewählt. Bei Anpflanzungen nicht relevant';
 COMMENT ON COLUMN apflora.ekfrequenz.anzahl_max IS 'Bis zu dieser Anzahl Individuen wird diese Frequenz bei autochthonen Populationen (normalerweise) gewählt. Bei Anpflanzungen nicht relevant';

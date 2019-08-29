@@ -128,7 +128,7 @@ export default types
         const name = (o.name || '').padEnd(27)
         return {
           value: o.code,
-          label: `${code}: ${name} | ${o.periodizitaet}`,
+          label: `${code}: ${name}`,
           anwendungsfall,
           apId: o.apId,
         }

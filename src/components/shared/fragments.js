@@ -179,8 +179,6 @@ export const ekfrequenz = gql`
     ekf
     anwendungsfall
     code
-    name
-    periodizitaet
     kontrolljahre
     anzahlMin
     anzahlMax

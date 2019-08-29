@@ -100,10 +100,9 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
     const anwendungsfall = (
       `${o.anwendungsfall}, ${ekTypeArray.join(' und ')}` || ''
     ).padEnd(26)
-    const name = (o.name || '').padEnd(27)
     return {
       value: o.code,
-      label: `${code}: ${anwendungsfall} | ${name} | ${o.periodizitaet}`,
+      label: `${code}: ${anwendungsfall}`,
     }
   })
 
