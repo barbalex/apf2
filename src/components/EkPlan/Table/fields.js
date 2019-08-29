@@ -63,7 +63,7 @@ export default {
     name: 'ekAbrechnungstyp',
     label: 'EK Abrechnung Typ',
     sort: 11,
-    width: 80,
+    width: 240,
   },
   ekfrequenz: {
     name: 'ekfrequenz',
