@@ -1306,9 +1306,6 @@ create table apflora.ekfrequenz(
   changed date default now(),
   changed_by varchar(20) default null
 );
-ALTER TABLE apflora.ekfrequenz DROP COLUMN name;
-ALTER TABLE apflora.ekfrequenz DROP COLUMN periodizitaet;
-
 CREATE INDEX ON apflora.ekfrequenz USING btree (id);
 CREATE INDEX ON apflora.ekfrequenz USING btree (ap_id);
 CREATE INDEX ON apflora.ekfrequenz USING btree (ek);
@@ -1326,8 +1323,8 @@ COMMENT ON COLUMN apflora.ekfrequenz.ekf IS 'Diese Frequenz ist für EKF anwendb
 COMMENT ON COLUMN apflora.ekfrequenz.anwendungsfall IS 'Beschreibt, in welchen Fällen diese Frequenz angewandt wird. Wahrscheinliche Werte: autochthone Population, angepflanzte Population, angesäte Population, Spezialfall';
 COMMENT ON COLUMN apflora.ekfrequenz.code IS 'Definierend für die eqfrequenz';
 COMMENT ON COLUMN apflora.ekfrequenz.kontrolljahre IS ' Definiert, in welchen Jahren eine Kontrolle üblicherweise stattfinden soll. Bei Anpflanzungen sind das Jahre ab der letzten Anpflanzung. Bei autochthonen Populationen?';
-COMMENT ON COLUMN apflora.ekfrequenz.anzahl_min IS 'Ab dieser Anzahl Individuen wird diese Frequenz bei autochthonen Populationen (normalerweise) gewählt. Bei Anpflanzungen nicht relevant';
-COMMENT ON COLUMN apflora.ekfrequenz.anzahl_max IS 'Bis zu dieser Anzahl Individuen wird diese Frequenz bei autochthonen Populationen (normalerweise) gewählt. Bei Anpflanzungen nicht relevant';
+COMMENT ON COLUMN apflora.ekfrequenz.anzahl_min IS 'Ab dieser Anzahl Individuen wird diese Frequenz bei autochthonen Populationen (normalerweise) gewählt. Bei Anpflanzungen nicht relevant. Momentan nicht implementiert, weil Ekfrequenz-Typen nicht automatisch gesetzt werden';
+COMMENT ON COLUMN apflora.ekfrequenz.anzahl_max IS 'Bis zu dieser Anzahl Individuen wird diese Frequenz bei autochthonen Populationen (normalerweise) gewählt. Bei Anpflanzungen nicht relevant. Momentan nicht implementiert, weil Ekfrequenz-Typen nicht automatisch gesetzt werden';
 COMMENT ON COLUMN apflora.ekfrequenz.sort IS 'Damit EK-Zähleinheiten untereinander sortiert werden können';
 COMMENT ON COLUMN apflora.ekfrequenz.ek_abrechnungstyp IS 'Fremdschlüssel aus Tabelle ek_abrechnungstyp_werte. Bestimmt, wie Kontrollen abgerechnet werden sollen';
 COMMENT ON COLUMN apflora.ekfrequenz.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
