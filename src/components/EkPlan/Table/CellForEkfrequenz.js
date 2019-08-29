@@ -7,6 +7,7 @@ import { observer } from 'mobx-react-lite'
 import { StyledCellForSelect } from './index'
 import { tpop } from '../../shared/fragments'
 import storeContext from '../../../storeContext'
+import setEkplans from './setEkplans'
 
 const Select = styled.select`
   width: 100%;
@@ -94,10 +95,14 @@ const CellForEkfrequenz = ({ row, field, style }) => {
           },
         })
       }
-      console.log('CellForEkfrequenz, row:', row)
       if (row.ekfrequenzStartjahr.value) {
-        // TODO: set ekplan and tell user it is happening
-        console.log('TODO: set ekplan')
+        console.log('CellForEkfrequenz, row:', row)
+        setEkplans({
+          tpopId: row.id,
+          ekfrequenzCode: value,
+          ekfrequenzStartjahr: row.ekfrequenzStartjahr.value,
+          client,
+        })
       }
     },
     [client, enqueNotification, row, store.user.name],

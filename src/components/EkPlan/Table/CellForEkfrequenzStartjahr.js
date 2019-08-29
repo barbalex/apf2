@@ -6,6 +6,7 @@ import styled from 'styled-components'
 
 import storeContext from '../../../storeContext'
 import { tpop } from '../../shared/fragments'
+import setEkplans from './setEkplans'
 
 const Container = styled.div`
   font-size: 0.75rem !important;
@@ -140,14 +141,17 @@ const CellForEkfrequenz = ({ row, style }) => {
           },
         })
       }
-      // TODO: set ekplan and tell user it is happening
-      console.log('CellForEkfrequenzStartjahr, row:', row)
       if (row.ekfrequenz.value) {
-        // TODO: set ekplan and tell user it is happening
-        console.log('TODO: set ekplan')
+        console.log('CellForEkfrequenzStartjahr, row:', row)
+        setEkplans({
+          tpopId: row.id,
+          ekfrequenzCode: row.ekfrequenz.value,
+          ekfrequenzStartjahr: value,
+          client,
+        })
       }
     },
-    [client, enqueNotification, row.id, row.tpop, store.user.name],
+    [client, enqueNotification, row, store.user.name],
   )
 
   return (
