@@ -348,6 +348,7 @@ const EkPlanTable = () => {
                       row={row}
                       field={value}
                       style={style}
+                      refetchTpop={refetch}
                     />
                   )
                 }
@@ -357,6 +358,7 @@ const EkPlanTable = () => {
                       key={value.name}
                       row={row}
                       style={style}
+                      refetchTpop={refetch}
                     />
                   )
                 }

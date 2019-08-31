@@ -59,7 +59,7 @@ const Input = styled.input`
   }
 `
 
-const CellForEkfrequenz = ({ row, style }) => {
+const CellForEkfrequenz = ({ row, style, refetchTpop }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
@@ -147,12 +147,13 @@ const CellForEkfrequenz = ({ row, style }) => {
           tpopId: row.id,
           ekfrequenzCode: row.ekfrequenz.value,
           ekfrequenzStartjahr: value,
+          refetchTpop,
           client,
           store,
         })
       }
     },
-    [client, enqueNotification, row, store],
+    [client, enqueNotification, row, store, refetchTpop],
   )
 
   return (

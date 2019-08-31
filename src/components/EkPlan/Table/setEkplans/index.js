@@ -7,6 +7,7 @@ export default async ({
   tpopId,
   ekfrequenzCode,
   ekfrequenzStartjahr,
+  refetchTpop,
   client,
   store,
 }) => {
@@ -37,15 +38,16 @@ export default async ({
     e => e.id,
   )
   // 2. delete them
-  ekplansToDelete.map(id => {
+  ekplansToDelete.map(id =>
     client.mutate({
       mutation: mutationDeleteEkplans,
       variables: {
         id,
       },
-    })
-  })
+    }),
+  )
   // 3. fetch ekfrequenz.kontrolljahre for this tpop.ekfrequenz
   // 4. add kontrolljahre to ekplan
   // 5. tell user how it went
+  setTimeout(() => refetchTpop())
 }

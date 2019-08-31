@@ -26,7 +26,7 @@ const Option = styled.option`
   font-size: 0.85rem;
 `
 
-const CellForEkfrequenz = ({ row, field, style }) => {
+const CellForEkfrequenz = ({ row, field, style, refetchTpop }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
@@ -97,12 +97,13 @@ const CellForEkfrequenz = ({ row, field, style }) => {
           tpopId: row.id,
           ekfrequenzCode: value,
           ekfrequenzStartjahr: row.ekfrequenzStartjahr.value,
+          refetchTpop,
           client,
           store,
         })
       }
     },
-    [client, enqueNotification, row, store],
+    [client, enqueNotification, row, store, refetchTpop],
   )
   const onFocus = useCallback(() => {
     setFocused(true)
