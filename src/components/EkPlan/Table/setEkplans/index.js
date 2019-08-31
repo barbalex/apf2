@@ -16,7 +16,7 @@ export default async ({
 }) => {
   const { enqueNotification, removeNotification } = store
   const notif = enqueNotification({
-    message: `EK-Pläne werden ab ${ekfrequenzStartjahr} gesetzt...`,
+    message: `EK-Pläne werden berechnet...`,
     options: {
       variant: 'info',
       persist: true,
