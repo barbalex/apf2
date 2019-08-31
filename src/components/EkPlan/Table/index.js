@@ -13,7 +13,7 @@ import sortBy from 'lodash/sortBy'
 import sumBy from 'lodash/sumBy'
 import { observer } from 'mobx-react-lite'
 import { FixedSizeGrid, VariableSizeGrid, VariableSizeList } from 'react-window'
-import scrollbarSize from 'dom-helpers/util/scrollbarSize'
+import scrollbarSize from 'dom-helpers/scrollbarSize'
 import ReactResizeDetector from 'react-resize-detector'
 
 import queryTpop from './queryTpop'
