@@ -20,6 +20,7 @@ export default async ({
     ekplansResult = await client.query({
       query: queryEkplans,
       variables: {
+        tpopId,
         jahr: ekfrequenzStartjahr,
       },
     })
@@ -31,6 +32,7 @@ export default async ({
       },
     })
   }
+  console.log('setEkplans', { ekplansResult })
   // 2. delete them
   // 3. fetch ekfrequenz.kontrolljahre for this tpop.ekfrequenz
   // 4. add kontrolljahre to ekplan
