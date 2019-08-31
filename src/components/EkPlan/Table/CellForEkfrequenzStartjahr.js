@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
+import { useSnackbar } from 'notistack'
 
 import storeContext from '../../../storeContext'
 import { tpop } from '../../shared/fragments'
@@ -71,6 +72,7 @@ const CellForEkfrequenz = ({ row, style, refetchTpop }) => {
       ? row.ekfrequenzStartjahr.value
       : '',
   )
+  const { closeSnackbar } = useSnackbar()
 
   useEffect(() => {
     setStateValue(
@@ -150,10 +152,11 @@ const CellForEkfrequenz = ({ row, style, refetchTpop }) => {
           refetchTpop,
           client,
           store,
+          closeSnackbar,
         })
       }
     },
-    [client, enqueNotification, row, store, refetchTpop],
+    [row, client, store, enqueNotification, refetchTpop, closeSnackbar],
   )
 
   return (

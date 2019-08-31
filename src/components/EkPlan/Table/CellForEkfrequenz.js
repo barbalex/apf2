@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { useApolloClient } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import { observer } from 'mobx-react-lite'
+import { useSnackbar } from 'notistack'
 
 import { StyledCellForSelect } from './index'
 import { tpop } from '../../shared/fragments'
@@ -34,6 +35,7 @@ const CellForEkfrequenz = ({ row, field, style, refetchTpop }) => {
   const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
 
   const [focused, setFocused] = useState(false)
+  const { closeSnackbar } = useSnackbar()
 
   const onMouseEnter = useCallback(() => hovered.setTpopId(row.id), [
     hovered,
@@ -100,10 +102,11 @@ const CellForEkfrequenz = ({ row, field, style, refetchTpop }) => {
           refetchTpop,
           client,
           store,
+          closeSnackbar,
         })
       }
     },
-    [client, enqueNotification, row, store, refetchTpop],
+    [row, client, store, enqueNotification, refetchTpop, closeSnackbar],
   )
   const onFocus = useCallback(() => {
     setFocused(true)
