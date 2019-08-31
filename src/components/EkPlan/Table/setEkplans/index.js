@@ -1,4 +1,7 @@
+import get from 'lodash/get'
+
 import queryEkplans from './queryEkplans'
+import mutationDeleteEkplans from './mutationDeleteEkplans'
 
 export default async ({
   tpopId,
@@ -32,8 +35,19 @@ export default async ({
       },
     })
   }
-  console.log('setEkplans', { ekplansResult })
+  const ekplansToDelete = get(ekplansResult, 'data.allEkplans.nodes').map(
+    e => e.id,
+  )
+  console.log('setEkplans', { ekplansResult, ekplansToDelete })
   // 2. delete them
+  ekplansToDelete.map(id => {
+    client.mutate({
+      mutation: mutationDeleteEkplans,
+      variables: {
+        id,
+      },
+    })
+  })
   // 3. fetch ekfrequenz.kontrolljahre for this tpop.ekfrequenz
   // 4. add kontrolljahre to ekplan
   // 5. tell user how it went
