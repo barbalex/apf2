@@ -148,10 +148,11 @@ const CellForEkfrequenz = ({ row, style }) => {
           ekfrequenzCode: row.ekfrequenz.value,
           ekfrequenzStartjahr: value,
           client,
+          store,
         })
       }
     },
-    [client, enqueNotification, row, store.user.name],
+    [client, enqueNotification, row, store],
   )
 
   return (

@@ -98,10 +98,11 @@ const CellForEkfrequenz = ({ row, field, style }) => {
           ekfrequenzCode: value,
           ekfrequenzStartjahr: row.ekfrequenzStartjahr.value,
           client,
+          store,
         })
       }
     },
-    [client, enqueNotification, row, store.user.name],
+    [client, enqueNotification, row, store],
   )
   const onFocus = useCallback(() => {
     setFocused(true)
