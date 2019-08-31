@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { aeEigenschaften, projekt } from '../shared/fragments'
 
 export default gql`
-  query ekfDataQuery($id: UUID!, $jahr: Int!) {
+  query dataByAdresseQuery($id: UUID!, $jahr: Int!) {
     adresseById(id: $id) {
       id
       tpopkontrsByBearbeiter(

@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { aeEigenschaften, projekt } from '../shared/fragments'
 
 export default gql`
-  query ekfDataQuery($userName: String!, $jahr: Int!) {
+  query dataByUserNameQuery($userName: String!, $jahr: Int!) {
     userByName(name: $userName) {
       id
       adresseByAdresseId {
