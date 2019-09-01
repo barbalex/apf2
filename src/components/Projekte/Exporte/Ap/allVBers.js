@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query view {
+  query viewBers {
     allVBers {
       nodes {
         ap_id: apId
