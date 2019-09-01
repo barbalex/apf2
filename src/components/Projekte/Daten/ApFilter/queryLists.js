@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query apListsQuery {
+  query apFilterListsQuery {
     allApBearbstandWertes(orderBy: SORT_ASC) {
       nodes {
         value: code

@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query ApAeEigenschaftensQuery($filter: AeEigenschaftenFilter!) {
+  query ApFilterAeEigenschaftensQuery($filter: AeEigenschaftenFilter!) {
     allAeEigenschaftens(first: 8, filter: $filter, orderBy: ARTNAME_ASC) {
       nodes {
         value: id

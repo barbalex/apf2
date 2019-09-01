@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { ap, aeEigenschaften } from '../../../shared/fragments'
 
 export default gql`
-  mutation updateAp(
+  mutation updateApForFilter(
     $id: UUID!
     $bearbeitung: Int
     $startJahr: Int
