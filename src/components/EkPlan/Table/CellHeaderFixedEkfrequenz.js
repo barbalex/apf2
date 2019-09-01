@@ -1,13 +1,41 @@
 import React, { useState, useCallback } from 'react'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
-
-import { StyledFixedHeaderCell } from './index'
+import { FaSortDown as Caret } from 'react-icons/fa'
+import styled from 'styled-components'
 
 /**
  * TODO:
  * enable "Filter: Leerwerte"
  */
+
+export const StyledCell = styled.div`
+  display: flex;
+  font-weight: 500;
+  font-size: 0.75rem;
+  color: black;
+  line-height: 60px;
+  border-left: solid hsla(120, 25%, 70%, 1) 1px;
+  border-right: solid hsla(120, 25%, 70%, 1) 1px;
+  border-bottom: solid #e6e6e6 1px;
+  background: hsla(120, 25%, 88%, 1);
+  &.column-hovered {
+    background: hsla(120, 25%, 82%, 1) !important;
+    font-weight: 800 !important;
+  }
+`
+const Title = styled.div`
+  text-align: left;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: normal;
+  padding: 2px 4px;
+  margin-top: auto;
+  margin-bottom: auto;
+`
+const Dropdown = styled.div`
+  font-size: 1.4em;
+`
 
 const CellHeaderFixed = ({ style, column }) => {
   const [anchorEl, setAnchorEl] = useState(null)
@@ -18,22 +46,27 @@ const CellHeaderFixed = ({ style, column }) => {
 
   return (
     <>
-      <StyledFixedHeaderCell
+      <StyledCell
         style={style}
         aria-controls="ekfrequenzHeaderMenu"
         aria-haspopup="true"
         onClick={handleClick}
       >
-        <span>{label}</span>
-      </StyledFixedHeaderCell>
+        <Title>{label}</Title>
+        <Dropdown>
+          <Caret />
+        </Dropdown>
+      </StyledCell>
       <Menu
         id="ekfrequenzHeaderMenu"
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
         onClose={closeMenu}
+        anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+        getContentAnchorEl={null}
       >
-        <MenuItem onClick={closeMenu}>Filter: Leerwerte</MenuItem>
+        <MenuItem onClick={closeMenu}>Leerwerte filtern</MenuItem>
       </Menu>
     </>
   )

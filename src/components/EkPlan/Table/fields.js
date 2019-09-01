@@ -69,7 +69,7 @@ export default {
     name: 'ekfrequenz',
     label: 'EK Frequenz',
     sort: 12,
-    width: 70,
+    width: 76,
   },
   ekfrequenzStartjahr: {
     name: 'ekfrequenzStartjahr',
