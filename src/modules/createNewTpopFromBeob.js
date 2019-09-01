@@ -94,7 +94,7 @@ export default async ({ treeName, pop, beobId, client, store }) => {
   try {
     beobResult = await client.query({
       query: gql`
-        query Query($beobId: UUID!) {
+        query creteNewTpopFromBeobQuery($beobId: UUID!) {
           beobById(id: $beobId) {
             ...BeobFields
           }

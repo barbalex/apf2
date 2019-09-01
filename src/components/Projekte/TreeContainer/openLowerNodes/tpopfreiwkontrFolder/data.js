@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query Query($id: UUID!) {
+  query ekfFolderOpenLowerNodesQuery($id: UUID!) {
     tpopById(id: $id) {
       id
       tpopkontrsByTpopId(
