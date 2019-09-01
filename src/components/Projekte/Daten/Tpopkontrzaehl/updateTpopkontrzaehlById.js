@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { tpopkontrzaehl } from '../../../shared/fragments'
 
 export default gql`
-  mutation updateAnzahl(
+  mutation updateAnzahlForEkZaehl(
     $id: UUID!
     $anzahl: Int
     $einheit: Int
