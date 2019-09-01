@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query zielByIdQuery {
+  query zielTypWertesQueryForZiel {
     allZielTypWertes(orderBy: SORT_ASC) {
       nodes {
         value: code

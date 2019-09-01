@@ -76,7 +76,7 @@ const Anwendung = () => {
     try {
       const { data } = await client.query({
         query: gql`
-          query view {
+          query viewDatenstruktursForExporte {
             allVDatenstrukturs {
               nodes {
                 tabelle_schema: tabelleSchema
