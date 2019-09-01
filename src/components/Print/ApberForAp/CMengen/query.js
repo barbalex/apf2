@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { tpopmassnber } from '../../../shared/fragments'
 
 export default gql`
-  query apById($apId: UUID!, $jahr: Int!) {
+  query apByIdForCMengen($apId: UUID!, $jahr: Int!) {
     apById(id: $apId) {
       id
       oneLTpop: popsByApId(

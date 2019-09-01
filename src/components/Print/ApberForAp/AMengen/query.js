@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query apById($apId: UUID!, $startJahr: Int!) {
+  query apByIdForAMengen($apId: UUID!, $startJahr: Int!) {
     apById(id: $apId) {
       id
       threeLPop: popsByApId(filter: { status: { equalTo: 100 } }) {
