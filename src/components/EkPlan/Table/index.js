@@ -26,6 +26,8 @@ import yearRowFromTpop from './yearRowFromTpop'
 import fields from './fields'
 import yearColumnWidth from './yearColumnWidth'
 import CellHeaderFixed from './CellHeaderFixed'
+import CellHeaderFixedEkfrequenz from './CellHeaderFixedEkfrequenz'
+import CellHeaderFixedEkfrequenzStartjahr from './CellHeaderFixedEkfrequenzStartjahr'
 import CellHeaderYear from './CellHeaderYear'
 import CellForYearTitle from './CellForYearTitle'
 import CellForEkfrequenz from './CellForEkfrequenz'
@@ -278,17 +280,21 @@ const EkPlanTable = () => {
               width={headerFieldsFixedWidth}
             >
               {({ index, style }) => {
-                /**
-                 * TODO:
-                 * Return specifically built components for columns with menu
-                 */
                 const column = headerFieldsFixed[index]
                 const field = column.name
+                // Return specifically built components for columns with menu
                 if (field === 'ekfrequenz') {
-                  return <CellHeaderFixed style={style} column={column} />
+                  return (
+                    <CellHeaderFixedEkfrequenz style={style} column={column} />
+                  )
                 }
                 if (field === 'ekfrequenzStartjahr') {
-                  return <CellHeaderFixed style={style} column={column} />
+                  return (
+                    <CellHeaderFixedEkfrequenzStartjahr
+                      style={style}
+                      column={column}
+                    />
+                  )
                 }
                 return <CellHeaderFixed style={style} column={column} />
               }}
