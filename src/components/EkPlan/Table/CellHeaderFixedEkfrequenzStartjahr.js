@@ -1,20 +1,76 @@
-import React from 'react'
-
-import { StyledFixedHeaderCell } from './index'
+import React, { useState, useCallback } from 'react'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
+import { FaSortDown as Caret } from 'react-icons/fa'
+import styled from 'styled-components'
 
 /**
  * TODO:
  * enable "Filter: Leerwerte"
  */
 
-const CellHeaderFixed = ({ style, column }) => {
+export const StyledCell = styled.div`
+  display: flex;
+  font-weight: 500;
+  font-size: 0.75rem;
+  color: black;
+  line-height: 60px;
+  border-left: solid hsla(120, 25%, 70%, 1) 1px;
+  border-right: solid hsla(120, 25%, 70%, 1) 1px;
+  border-bottom: solid #e6e6e6 1px;
+  background: hsla(120, 25%, 88%, 1);
+  cursor: pointer;
+  &.column-hovered {
+    background: hsla(120, 25%, 82%, 1) !important;
+    font-weight: 800 !important;
+  }
+`
+const Title = styled.div`
+  text-align: left;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: normal;
+  padding: 2px 4px;
+  margin-top: auto;
+  margin-bottom: auto;
+`
+const Dropdown = styled.div`
+  font-size: 1.3em;
+`
+
+const CellHeaderFixedEkfrequenzStartjahr = ({ style, column }) => {
+  const [anchorEl, setAnchorEl] = useState(null)
+  const closeMenu = useCallback(() => setAnchorEl(null), [])
+  const handleClick = useCallback(e => setAnchorEl(e.currentTarget), [])
+
   const { label } = column
 
   return (
-    <StyledFixedHeaderCell style={style}>
-      <span>{label}</span>
-    </StyledFixedHeaderCell>
+    <>
+      <StyledCell
+        style={style}
+        aria-controls="ekfrequenzStartjahrHeaderMenu"
+        aria-haspopup="true"
+        onClick={handleClick}
+      >
+        <Title>{label}</Title>
+        <Dropdown>
+          <Caret />
+        </Dropdown>
+      </StyledCell>
+      <Menu
+        id="ekfrequenzStartjahrHeaderMenu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={closeMenu}
+        anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+        getContentAnchorEl={null}
+      >
+        <MenuItem onClick={closeMenu}>Leerwerte filtern</MenuItem>
+      </Menu>
+    </>
   )
 }
 
-export default CellHeaderFixed
+export default CellHeaderFixedEkfrequenzStartjahr

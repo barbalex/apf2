@@ -19,6 +19,7 @@ export const StyledCell = styled.div`
   border-right: solid hsla(120, 25%, 70%, 1) 1px;
   border-bottom: solid #e6e6e6 1px;
   background: hsla(120, 25%, 88%, 1);
+  cursor: pointer;
   &.column-hovered {
     background: hsla(120, 25%, 82%, 1) !important;
     font-weight: 800 !important;
@@ -34,10 +35,10 @@ const Title = styled.div`
   margin-bottom: auto;
 `
 const Dropdown = styled.div`
-  font-size: 1.4em;
+  font-size: 1.3em;
 `
 
-const CellHeaderFixed = ({ style, column }) => {
+const CellHeaderFixedEkfrequenz = ({ style, column }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const closeMenu = useCallback(() => setAnchorEl(null), [])
   const handleClick = useCallback(e => setAnchorEl(e.currentTarget), [])
@@ -72,4 +73,4 @@ const CellHeaderFixed = ({ style, column }) => {
   )
 }
 
-export default CellHeaderFixed
+export default CellHeaderFixedEkfrequenz
