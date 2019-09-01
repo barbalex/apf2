@@ -16,7 +16,6 @@ export default gql`
         }
         ekfrequenzStartjahr
         ekfrequenzAbweichend
-        ekAbrechnungstyp
         popStatusWerteByStatus {
           text
         }
