@@ -115,7 +115,7 @@
     "react-split-pane": "0.1.87",
     "react-typography": "0.16.19",
     "react-window": "1.8.5",
-    "styled-components": "4.3.2",
+    "styled-components": "5.0.0-beta.8",
     "typeface-roboto": "0.0.75",
     "typeface-roboto-mono": "0.0.75",
     "typography": "0.16.19",
@@ -123,6 +123,9 @@
   },
   "dependenciesComments": {
     "exceljs": "Do not upgrade past 1.10.0, will break in production. See: https://github.com/exceljs/exceljs/issues/871"
+  },
+  "peerDependencies": {
+    "react-is": "16.9.0"
   },
   "devDependencies": {
     "@graphile-contrib/pg-order-by-related": "1.0.0-beta.6",
