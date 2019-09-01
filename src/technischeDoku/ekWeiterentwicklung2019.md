@@ -66,9 +66,10 @@ Das Formular, um Kontrollen zu planen.
   - Die Art der Darstellung macht es einfach, zu erkennen, wo Planung und Ausführung nicht übereinstimmen
 - :white_check_mark: Der Benutzer kann wählen, welche der obigen Informationen angezeigt werden
 - :white_check_mark: Klickt man auf eine Tabellen-Zelle, werden die wichtigsten Angaben für EK, EKF und Massnahmen angezeigt. Und ein Link, um das Objekt in einem neuen Fenster zu öffnen
-- :white_medium_square: Folgende Filter können gewählt werden:
-  - EK-Frequenz fehlt
-  - Ansiedlung in bestimmtem Jahr (im Spaltentitel wählen?)
+- Folgende Filter können gewählt werden:
+  - :white_check_mark: EK-Frequenz fehlt
+  - :white_check_mark: EK-Frequenz Startjahr fehlt
+  - :white_medium_square: Ansiedlung in bestimmtem Jahr
 - :white_check_mark: das Formular funktioniert brauchbar schnell
 
 #### Import
