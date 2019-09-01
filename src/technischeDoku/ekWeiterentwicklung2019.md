@@ -66,6 +66,9 @@ Das Formular, um Kontrollen zu planen.
   - Die Art der Darstellung macht es einfach, zu erkennen, wo Planung und Ausführung nicht übereinstimmen
 - :white_check_mark: Der Benutzer kann wählen, welche der obigen Informationen angezeigt werden
 - :white_check_mark: Klickt man auf eine Tabellen-Zelle, werden die wichtigsten Angaben für EK, EKF und Massnahmen angezeigt. Und ein Link, um das Objekt in einem neuen Fenster zu öffnen
+- :white_medium_square: Folgende Filter können gewählt werden:
+  - EK-Frequenz fehlt
+  - Ansiedlung in bestimmtem Jahr (im Spaltentitel wählen?)
 - :white_check_mark: das Formular funktioniert brauchbar schnell
 
 #### Import
@@ -87,6 +90,7 @@ Das Formular, um Kontrollen zu planen.
   - zusätzlich "Anzahl inkl. neu angesiedelt, noch nicht kontrolliert" rechnen. Anzahl aus der Anzahl Pflanzen oder Triebe der Massnahme entnehmen.
 
 #### Qualitätskontrollen
+- :white_medium_square: Aktionsplan ohne zielrelevante Zähleinheit
 - :white_medium_square: Erloschene TPop mit geplanten Kontrollen
 - :white_medium_square: TPop, die gemäss `ekfrequenz` kontrolliert werden sollten, ohne EK-Pläne
 - :white_medium_square: TPop mit Kontrollen im Bericht-Jahr. Mindestens eine der zielrelevanten Einheiten wurde nicht erfasst
