@@ -25,7 +25,7 @@ export default async ({ value, row, treeName, client, store }) => {
     let result = {}
     result = await client.query({
       query: gql`
-        query Query($id: UUID!) {
+        query saveArtIdToDbQuery($id: UUID!) {
           aeEigenschaftenById(id: $id) {
             id
             apByArtId {

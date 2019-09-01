@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query Query {
+  query allVPopsQuery {
     allVPops {
       nodes {
         ap_id: apId

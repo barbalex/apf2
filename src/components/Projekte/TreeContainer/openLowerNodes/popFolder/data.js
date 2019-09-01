@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query Query($id: UUID!) {
+  query popFolderQuery($id: UUID!) {
     apById(id: $id) {
       id
       popsByApId {

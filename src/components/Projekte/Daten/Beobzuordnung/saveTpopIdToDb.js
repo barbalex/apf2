@@ -32,7 +32,7 @@ export default async ({ value, id, treeName, type, client, store }) => {
     let result = {}
     result = await client.query({
       query: gql`
-        query Query($id: UUID!) {
+        query saveTpopIdToDbQuery($id: UUID!) {
           tpopById(id: $id) {
             id
             popId
