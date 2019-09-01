@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query view {
+  query viewPopMitLetzterPopmassnbers {
     allVPopMitLetzterPopmassnbers {
       nodes {
         ap_id: apId

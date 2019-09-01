@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query view {
+  query viewTpopkontrWebgisbuns {
     allVTpopkontrWebgisbuns {
       nodes {
         APARTID: apartid

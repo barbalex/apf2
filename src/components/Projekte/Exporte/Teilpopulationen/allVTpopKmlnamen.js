@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query view {
+  query viewTpopKmlnamen {
     allVTpopKmlnamen {
       nodes {
         art
