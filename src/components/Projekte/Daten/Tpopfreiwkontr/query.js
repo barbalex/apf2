@@ -11,7 +11,7 @@ import {
 } from '../../../shared/fragments'
 
 export default gql`
-  query tpopkontrByIdQuery($id: UUID!) {
+  query tpopkontrByIdQueryForEkf($id: UUID!) {
     tpopkontrById(id: $id) {
       ...TpopfreiwkontrFields
       adresseByBearbeiter {

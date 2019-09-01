@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { tpopkontrzaehl } from '../../components/shared/fragments'
 
 export default gql`
-  mutation createTpopkontrzaehl(
+  mutation createTpopkontrzaehlForCopyTo(
     $anzahl: Int
     $einheit: Int
     $methode: Int

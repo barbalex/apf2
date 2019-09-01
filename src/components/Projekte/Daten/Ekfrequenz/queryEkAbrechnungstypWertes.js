@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query TpopListsQuery {
+  query EkAbrechnungstypWertesQueryForEkfrequenz {
     allEkAbrechnungstypWertes(
       orderBy: SORT_ASC
       filter: { code: { isNull: false } }
