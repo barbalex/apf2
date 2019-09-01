@@ -84,6 +84,14 @@ export default async ({
   // 4. add kontrolljahre to ekplan
   const typ = ekfrequenz.ek ? 'EK' : 'EKF'
   const kontrolljahre = ekfrequenz.kontrolljahre
+  if (kontrolljahre.length === 0) {
+    return enqueNotification({
+      message: `Ab ${ekfrequenzStartjahr} wurden die bestehenden EK-Pläne gelöscht. Weil aber für die gewählte EK-Frequenz keine Kontrolljahre existieren, wurden keine neuen Kontrolljahre gesetzt`,
+      options: {
+        variant: 'info',
+      },
+    })
+  }
   for (let jahr of kontrolljahre) {
     try {
       await client.mutate({
