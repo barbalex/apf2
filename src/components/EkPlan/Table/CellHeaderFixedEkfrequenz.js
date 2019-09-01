@@ -41,7 +41,11 @@ const Dropdown = styled.div`
 const CellHeaderFixedEkfrequenz = ({ style, column }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const closeMenu = useCallback(() => setAnchorEl(null), [])
-  const handleClick = useCallback(e => setAnchorEl(e.currentTarget), [])
+  const onClickCell = useCallback(e => setAnchorEl(e.currentTarget), [])
+  const onClickFilterEmptyValues = useCallback(() => {
+    console.log('TODO: filter empty values')
+    setAnchorEl(null)
+  }, [])
 
   const { label } = column
 
@@ -51,7 +55,7 @@ const CellHeaderFixedEkfrequenz = ({ style, column }) => {
         style={style}
         aria-controls="ekfrequenzHeaderMenu"
         aria-haspopup="true"
-        onClick={handleClick}
+        onClick={onClickCell}
       >
         <Title>{label}</Title>
         <Dropdown>
@@ -67,7 +71,9 @@ const CellHeaderFixedEkfrequenz = ({ style, column }) => {
         anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
         getContentAnchorEl={null}
       >
-        <MenuItem onClick={closeMenu}>Leerwerte filtern</MenuItem>
+        <MenuItem onClick={onClickFilterEmptyValues}>
+          Leerwerte filtern
+        </MenuItem>
       </Menu>
     </>
   )
