@@ -4,6 +4,11 @@ import { observer } from 'mobx-react-lite'
 import storeContext from '../../../storeContext'
 import { StyledYearHeaderCell } from './index'
 
+/**
+ * TODO:
+ * enable filtering for "mit Ansiedlung"
+ */
+
 const CellHeaderYear = ({ style, column }) => {
   const store = useContext(storeContext)
   const { hovered } = store.ekPlan

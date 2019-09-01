@@ -254,10 +254,9 @@ const EkPlanTable = () => {
     }
   }
 
-  /*console.log('Table rendering:', {
-    headerYearFieldsWidth,
-    scrollbarSize: scrollbarSize(),
-  })*/
+  console.log('Table rendering:', {
+    headerFieldsFixed,
+  })
 
   if (aps.length > 0 && loadingTpop)
     return <TempContainer>Lade...</TempContainer>
@@ -278,12 +277,21 @@ const EkPlanTable = () => {
               layout="horizontal"
               width={headerFieldsFixedWidth}
             >
-              {({ index, style }) => (
-                <CellHeaderFixed
-                  style={style}
-                  column={headerFieldsFixed[index]}
-                />
-              )}
+              {({ index, style }) => {
+                /**
+                 * TODO:
+                 * Return specifically built components for columns with menu
+                 */
+                const column = headerFieldsFixed[index]
+                const field = column.name
+                if (field === 'ekfrequenz') {
+                  return <CellHeaderFixed style={style} column={column} />
+                }
+                if (field === 'ekfrequenzStartjahr') {
+                  return <CellHeaderFixed style={style} column={column} />
+                }
+                return <CellHeaderFixed style={style} column={column} />
+              }}
             </VariableSizeList>
             <VariableSizeGrid
               style={{ overflow: 'hidden' }}
