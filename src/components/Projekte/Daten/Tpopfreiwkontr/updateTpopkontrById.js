@@ -9,7 +9,7 @@ import {
 } from '../../../shared/fragments'
 
 export default gql`
-  mutation updateTpopkontr(
+  mutation updateTpopkontrForEkf(
     $id: UUID!
     $typ: String
     $datum: Date

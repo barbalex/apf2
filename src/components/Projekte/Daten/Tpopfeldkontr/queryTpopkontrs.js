@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query tpopkontrQuery(
+  query tpopkontrQueryForEk(
     $showFilter: Boolean!
     $tpopkontrFilter: TpopkontrFilter!
     $allTpopkontrFilter: TpopkontrFilter!

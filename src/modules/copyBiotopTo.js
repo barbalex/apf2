@@ -20,7 +20,7 @@ export default async ({ id, client, copyingBiotop }) => {
   const from = get(dataFrom, 'tpopkontrById')
   await client.mutate({
     mutation: gql`
-      mutation updateTpopkontr(
+      mutation updateTpopkontrForCopyBiotopTo(
         $id: UUID!
         $flaeche: Int
         $lrDelarze: String
