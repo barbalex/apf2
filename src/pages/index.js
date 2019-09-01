@@ -221,7 +221,7 @@ export default ({ data }) => (
 )
 
 export const query = graphql`
-  query Query {
+  query indexPageQuery {
     file(relativePath: { eq: "ophr-ara.jpg" }) {
       childImageSharp {
         fluid {

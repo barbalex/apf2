@@ -13,7 +13,7 @@ export default async ({ activeNodes, latLng, client }) => {
   const myPoint = point([lat, lng])
   const { data } = await client.query({
     query: gql`
-      query Query($apId: UUID!) {
+      query getNearestTpopQuery($apId: UUID!) {
         apById(id: $apId) {
           id
           popsByApId {

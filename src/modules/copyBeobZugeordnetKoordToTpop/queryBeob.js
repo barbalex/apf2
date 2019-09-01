@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { beob } from '../../components/shared/fragments'
 
 export default gql`
-  query Query($id: UUID!) {
+  query copyBeobZugeordnetKoordToTpopQuery($id: UUID!) {
     beobById(id: $id) {
       ...BeobFields
     }

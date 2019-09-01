@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { tpopkontrTypWerte } from '../../components/shared/fragments'
 
 export default gql`
-  query Query($tpop: UUID!) {
+  query copyEkfToQuery($tpop: UUID!) {
     allTpopkontrs(
       filter: {
         typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
