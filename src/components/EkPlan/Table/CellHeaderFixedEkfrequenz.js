@@ -1,8 +1,10 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useContext } from 'react'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import { FaSortDown as Caret } from 'react-icons/fa'
 import styled from 'styled-components'
+
+import storeContext from '../../../storeContext'
 
 /**
  * TODO:
@@ -39,13 +41,17 @@ const Dropdown = styled.div`
 `
 
 const CellHeaderFixedEkfrequenz = ({ style, column }) => {
+  const store = useContext(storeContext)
+  const { filterEmptyEkfrequenz, setFilterEmptyEkfrequenz } = store.ekPlan
+
   const [anchorEl, setAnchorEl] = useState(null)
+
   const closeMenu = useCallback(() => setAnchorEl(null), [])
   const onClickCell = useCallback(e => setAnchorEl(e.currentTarget), [])
   const onClickFilterEmptyValues = useCallback(() => {
-    console.log('TODO: filter empty values')
+    setFilterEmptyEkfrequenz(!filterEmptyEkfrequenz)
     setAnchorEl(null)
-  }, [])
+  }, [filterEmptyEkfrequenz, setFilterEmptyEkfrequenz])
 
   const { label } = column
 
@@ -72,7 +78,7 @@ const CellHeaderFixedEkfrequenz = ({ style, column }) => {
         getContentAnchorEl={null}
       >
         <MenuItem onClick={onClickFilterEmptyValues}>
-          Leerwerte filtern
+          {filterEmptyEkfrequenz ? 'alle Werte anzeigen' : 'Leerwerte filtern'}
         </MenuItem>
       </Menu>
     </>

@@ -1,11 +1,8 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query EkplanTpopQuery($aps: [UUID!]) {
-    allTpops(
-      filter: { popByPopId: { apId: { in: $aps } } }
-      orderBy: [POP_BY_POP_ID__NR_ASC, NR_ASC]
-    ) {
+  query EkplanTpopQuery($filter: TpopFilter!) {
+    allTpops(filter: $filter, orderBy: [POP_BY_POP_ID__NR_ASC, NR_ASC]) {
       totalCount
       nodes {
         id

@@ -46,6 +46,8 @@ export default types
     ),
     hovered: types.optional(Hovered, defaultHovered),
     apsDataLoading: types.optional(types.boolean, true),
+    filterEmptyEkfrequenz: types.optional(types.boolean, false),
+    filterEmptyEkfrequenzStartjahr: types.optional(types.boolean, false),
   })
   .volatile(() => ({
     yearMenuAnchor: null,
@@ -60,6 +62,12 @@ export default types
     },
     setApsDataLoading(val) {
       self.apsDataLoading = val
+    },
+    setFilterEmptyEkfrequenz(val) {
+      self.filterEmptyEkfrequenz = val
+    },
+    setFilterEmptyEkfrequenzStartjahr(val) {
+      self.filterEmptyEkfrequenzStartjahr = val
     },
     setApsData(val) {
       self.apsData = val
@@ -275,5 +283,7 @@ export const defaultValue = {
   yearMenuAnchor: null,
   yearClicked: initialYearClicked,
   apsDataLoading: true,
+  filterEmptyEkfrequenz: false,
+  filterEmptyEkfrequenzStartjahr: false,
   apsData: [],
 }

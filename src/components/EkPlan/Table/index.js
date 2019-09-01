@@ -150,6 +150,8 @@ const EkPlanTable = () => {
     showEk,
     showEkf,
     showMassn,
+    filterEmptyEkfrequenz,
+    filterEmptyEkfrequenzStartjahr,
   } = store.ekPlan
 
   const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
@@ -161,6 +163,13 @@ const EkPlanTable = () => {
     [],
   )
 
+  const tpopFilter = { popByPopId: { apId: { in: apValues } } }
+  if (filterEmptyEkfrequenz) {
+    tpopFilter.ekfrequenz = { isNull: true }
+  }
+  if (filterEmptyEkfrequenzStartjahr) {
+    tpopFilter.ekfrequenzStartjahr = { isNull: true }
+  }
   const {
     data: dataTpop,
     loading: loadingTpop,
@@ -168,7 +177,7 @@ const EkPlanTable = () => {
     refetch,
   } = useQuery(queryTpop, {
     variables: {
-      aps: apValues,
+      filter: tpopFilter,
     },
   })
   const tpops = sortBy(
