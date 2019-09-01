@@ -26,7 +26,7 @@ Erfolgskontrollen sind gleichzeitig wichtig und aufwändig. Im Jahr 2019 wird di
 
 **Pro Teilpopulation** (Artverantwortliche):
 - Aus den für den AP bestimmten Frequenzen wird die für diese Teil-Population passende gewählt
-- Weicht die EK-Frequenz von der auf AP-Ebene für diesen Fall bestimmten Wert ab, wird das besonders markiert ("EK-Freqzenz abweichend")
+- Weicht die EK-Frequenz von der auf AP-Ebene für diesen Fall bestimmten Wert ab, wird das besonders markiert ("EK-Frequenz abweichend")
 - In welchen Jahren Kontrollen erfolgen sollen, differenziert nach EK und EKF
 - Abrechnungstyp
 
