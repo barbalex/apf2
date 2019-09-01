@@ -36,7 +36,7 @@ const SelectComponent = ({ options, row, val, field }) => {
       try {
         await client.mutate({
           mutation: gql`
-            mutation updateTpop(
+            mutation updateTpopSelect(
               $id: UUID!
               $${field}: String
               $changedBy: String

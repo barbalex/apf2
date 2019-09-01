@@ -47,7 +47,7 @@ const CellForEkfrequenz = ({ row, field, style, refetchTpop }) => {
       try {
         await client.mutate({
           mutation: gql`
-            mutation updateTpop(
+            mutation updateTpopEkfrequenz(
               $id: UUID!
               $ekfrequenz: String
               $changedBy: String
@@ -95,6 +95,10 @@ const CellForEkfrequenz = ({ row, field, style, refetchTpop }) => {
       }
       if (row.ekfrequenzStartjahr.value) {
         console.log('CellForEkfrequenz, row:', row)
+        /**
+         * TODO:
+         *
+         */
         setEkplans({
           tpopId: row.id,
           ekfrequenzCode: value,

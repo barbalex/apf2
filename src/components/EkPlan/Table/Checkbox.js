@@ -46,7 +46,7 @@ const CheckboxComponent = ({ row, value, field }) => {
     try {
       await client.mutate({
         mutation: gql`
-            mutation updateTpop(
+            mutation updateTpopCheckbox(
               $id: UUID!
               $${field}: Boolean
               $changedBy: String

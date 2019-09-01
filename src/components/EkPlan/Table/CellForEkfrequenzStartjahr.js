@@ -97,7 +97,7 @@ const CellForEkfrequenz = ({ row, style, refetchTpop }) => {
       try {
         await client.mutate({
           mutation: gql`
-            mutation updateTpop(
+            mutation updateTpopEkfrequenzStartjahr(
               $id: UUID!
               $ekfrequenzStartjahr: Int
               $changedBy: String

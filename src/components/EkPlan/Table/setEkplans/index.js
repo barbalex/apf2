@@ -2,7 +2,7 @@ import get from 'lodash/get'
 
 import queryEkplans from './queryEkplans'
 import queryEkfrequenz from './queryEkfrequenz'
-import mutationDeleteEkplans from './mutationDeleteEkplans'
+import mutationDeleteEkplan from './mutationDeleteEkplan'
 import mutationCreateEkplan from './mutationCreateEkplan'
 
 export default async ({
@@ -49,7 +49,7 @@ export default async ({
   for (let id of ekplansToDelete) {
     try {
       await client.mutate({
-        mutation: mutationDeleteEkplans,
+        mutation: mutationDeleteEkplan,
         variables: {
           id,
         },
