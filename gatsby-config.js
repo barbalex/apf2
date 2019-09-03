@@ -134,11 +134,12 @@ module.exports = {
             },
           },
           {
-            resolve: `gatsby-remark-images-medium-zoom`,
+            resolve: 'gatsby-remark-images-medium-zoom',
             options: {
               background: 'rgba(128,128,128,0.5)',
             },
           },
+          'gatsby-remark-copy-linked-files',
         ],
       },
     },
