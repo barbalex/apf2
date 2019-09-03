@@ -77,7 +77,7 @@ const Fields = () => {
               onClick={() => toggleField('nr')}
             />
           }
-          label="Nr"
+          label="TPop Nr"
           labelPlacement="end"
         />
         <FormControlLabel
@@ -89,7 +89,7 @@ const Fields = () => {
               onClick={() => toggleField('gemeinde')}
             />
           }
-          label="Gemeinde"
+          label="TPop Gemeinde"
           labelPlacement="end"
         />
         <FormControlLabel
@@ -101,7 +101,7 @@ const Fields = () => {
               onClick={() => toggleField('flurname')}
             />
           }
-          label="Flurname"
+          label="TPop Flurname"
           labelPlacement="end"
         />
         <FormControlLabel
@@ -113,7 +113,7 @@ const Fields = () => {
               onClick={() => toggleField('status')}
             />
           }
-          label="Status"
+          label="TPop Status"
           labelPlacement="end"
         />
         <FormControlLabel
@@ -125,7 +125,7 @@ const Fields = () => {
               onClick={() => toggleField('bekanntSeit')}
             />
           }
-          label="bekannt seit"
+          label="TPop bekannt seit"
           labelPlacement="end"
         />
         <FormControlLabel
@@ -137,7 +137,7 @@ const Fields = () => {
               onClick={() => toggleField('link')}
             />
           }
-          label="Link"
+          label="TPop Link"
           labelPlacement="end"
         />
         <FormControlLabel
