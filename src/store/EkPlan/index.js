@@ -48,6 +48,8 @@ export default types
     apsDataLoading: types.optional(types.boolean, true),
     filterEmptyEkfrequenz: types.optional(types.boolean, false),
     filterEmptyEkfrequenzStartjahr: types.optional(types.boolean, false),
+    filterAnsiedlungYear: types.maybeNull(types.number, null),
+    filterKontrolleYear: types.maybeNull(types.number, null),
   })
   .volatile(() => ({
     yearMenuAnchor: null,
@@ -65,6 +67,12 @@ export default types
     },
     setFilterEmptyEkfrequenz(val) {
       self.filterEmptyEkfrequenz = val
+    },
+    setFilterAnsiedlungYear(val) {
+      self.filterAnsiedlungYear = val
+    },
+    setFilterKontrolleYear(val) {
+      self.filterKontrolleYear = val
     },
     setFilterEmptyEkfrequenzStartjahr(val) {
       self.filterEmptyEkfrequenzStartjahr = val

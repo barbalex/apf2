@@ -59,33 +59,6 @@ const BodyContainer = styled.div`
   height: 100%;
   width: 100%;
 `
-export const StyledYearHeaderCell = styled.div`
-  text-align: center;
-  font-weight: 500;
-  font-size: 0.75rem;
-  color: black;
-  line-height: 60px;
-  border-left: solid hsla(120, 25%, 70%, 1) 1px;
-  border-right: solid hsla(120, 25%, 70%, 1) 1px;
-  border-bottom: solid #e6e6e6 1px;
-  background: hsla(120, 25%, 88%, 1);
-  span {
-    display: inline-block;
-    vertical-align: middle;
-    line-height: normal;
-    padding: 2px 4px;
-  }
-  &.column-hovered {
-    background: hsla(120, 25%, 82%, 1) !important;
-    font-weight: 800 !important;
-  }
-`
-export const StyledFixedHeaderCell = styled(StyledYearHeaderCell)`
-  text-align: left;
-  &:first-child span {
-    padding-left: 10px;
-  }
-`
 export const StyledTableCell = styled.div`
   font-size: 0.75rem !important;
   white-space: nowrap !important;
@@ -152,6 +125,8 @@ const EkPlanTable = () => {
     showMassn,
     filterEmptyEkfrequenz,
     filterEmptyEkfrequenzStartjahr,
+    filterAnsiedlungYear,
+    filterKontrolleYear,
   } = store.ekPlan
 
   const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
@@ -170,6 +145,11 @@ const EkPlanTable = () => {
   if (filterEmptyEkfrequenzStartjahr) {
     tpopFilter.ekfrequenzStartjahr = { isNull: true }
   }
+  const kontrFilter = { jahr: { greaterThanOrEqualTo: 1993 } }
+  if (filterKontrolleYear) {
+    // TODO:
+    kontrFilter = { jahr: { greaterThanOrEqualTo: 1993 } }
+  }
   const {
     data: dataTpop,
     loading: loadingTpop,
@@ -177,7 +157,8 @@ const EkPlanTable = () => {
     refetch,
   } = useQuery(queryTpop, {
     variables: {
-      filter: tpopFilter,
+      tpopFilter,
+      kontrFilter,
     },
   })
   const tpops = sortBy(

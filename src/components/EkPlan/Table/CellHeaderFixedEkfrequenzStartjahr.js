@@ -6,11 +6,6 @@ import styled from 'styled-components'
 
 import storeContext from '../../../storeContext'
 
-/**
- * TODO:
- * enable "Filter: Leerwerte"
- */
-
 export const StyledCell = styled.div`
   display: flex;
   font-weight: 500;

@@ -1,8 +1,11 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query EkplanTpopQuery($filter: TpopFilter!) {
-    allTpops(filter: $filter, orderBy: [POP_BY_POP_ID__NR_ASC, NR_ASC]) {
+  query EkplanTpopQuery(
+    $tpopFilter: TpopFilter!
+    $kontrFilter: TpopkontrFilter!
+  ) {
+    allTpops(filter: $tpopFilter, orderBy: [POP_BY_POP_ID__NR_ASC, NR_ASC]) {
       totalCount
       nodes {
         id
@@ -21,7 +24,7 @@ export default gql`
         }
         bekanntSeit
         # ensure never before 1993
-        tpopkontrsByTpopId(filter: { jahr: { greaterThanOrEqualTo: 1993 } }) {
+        tpopkontrsByTpopId(filter: $kontrFilter) {
           nodes {
             id
             jahr
