@@ -34,6 +34,7 @@ const Title = styled.div`
 const Dropdown = styled.div`
   font-size: 1.3em;
 `
+const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
 const CellHeaderFixedEkfrequenz = ({ style, column }) => {
   const store = useContext(storeContext)
@@ -69,10 +70,10 @@ const CellHeaderFixedEkfrequenz = ({ style, column }) => {
         keepMounted
         open={Boolean(anchorEl)}
         onClose={closeMenu}
-        anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+        anchorOrigin={anchorOrigin}
         getContentAnchorEl={null}
       >
-        <MenuItem onClick={onClickFilterEmptyValues}>
+        <MenuItem onClick={onClickFilterEmptyValues} dense>
           {filterEmptyEkfrequenz ? 'alle Werte anzeigen' : 'Leerwerte filtern'}
         </MenuItem>
       </Menu>

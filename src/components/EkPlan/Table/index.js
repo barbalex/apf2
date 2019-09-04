@@ -152,8 +152,10 @@ const EkPlanTable = () => {
   }
   if (filterAnsiedlungYear) {
     tpopFilter.tpopmassnsByTpopId = {
-      some: { jahr: { equalTo: filterAnsiedlungYear } },
-      every: { tpopmassnTypWerteByTyp: { ansiedlung: { equalTo: -1 } } },
+      some: {
+        jahr: { equalTo: filterAnsiedlungYear },
+        tpopmassnTypWerteByTyp: { ansiedlung: { equalTo: -1 } },
+      },
     }
   }
   /*console.log('Table', {
@@ -314,7 +316,11 @@ const EkPlanTable = () => {
             }}
           >
             {({ columnIndex, rowIndex, style }) => (
-              <CellHeaderYear style={style} column={years[columnIndex]} />
+              <CellHeaderYear
+                style={style}
+                column={years[columnIndex]}
+                rows={tpopRows}
+              />
             )}
           </VariableSizeGrid>
         </HeaderContainer>

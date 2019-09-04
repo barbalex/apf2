@@ -1,17 +1,18 @@
-import React, { useState, useCallback, useContext } from 'react'
+import React, { useState, useCallback, useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import { FaSortDown as Caret } from 'react-icons/fa'
 import styled from 'styled-components'
+import get from 'lodash/get'
 
 import storeContext from '../../../storeContext'
 
 const StyledCell = styled.div`
   display: flex;
+  color: black;
   font-weight: 500;
   font-size: 0.75rem;
-  color: black;
   line-height: 60px;
   border-left: solid hsla(120, 25%, 70%, 1) 1px;
   border-right: solid hsla(120, 25%, 70%, 1) 1px;
@@ -35,13 +36,12 @@ const Title = styled.div`
 const Dropdown = styled.div`
   font-size: 1.3em;
 `
+const StyledMenuItem = styled(MenuItem)`
+  color: ${props => (props.active ? 'black' : 'rgba(0,0,0,0.3) !important')};
+`
+const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
-/**
- * TODO:
- * enable filtering for "mit Ansiedlung"
- */
-
-const CellHeaderYear = ({ style, column }) => {
+const CellHeaderYear = ({ style, column, rows }) => {
   const store = useContext(storeContext)
   const {
     hovered,
@@ -53,16 +53,45 @@ const CellHeaderYear = ({ style, column }) => {
 
   const [anchorEl, setAnchorEl] = useState(null)
 
+  const yearHasKontrollen = useMemo(() => {
+    if (filterKontrolleYear && filterKontrolleYear !== column) return false
+    return (
+      rows.filter(
+        row =>
+          get(row, 'tpop.tpopkontrsByTpopId.nodes', []).filter(
+            node => node.jahr === column,
+          ).length > 0,
+      ).length > 0
+    )
+  }, [column, filterKontrolleYear, rows])
+  const yearHasAnsiedlungen = useMemo(() => {
+    if (filterAnsiedlungYear && filterAnsiedlungYear !== column) return false
+    return (
+      rows.filter(
+        row =>
+          get(row, 'tpop.tpopmassnsByTpopId.nodes', []).filter(
+            node => node.jahr === column,
+          ).length > 0,
+      ).length > 0
+    )
+  }, [column, filterAnsiedlungYear, rows])
   const closeMenu = useCallback(() => setAnchorEl(null), [])
   const onClickCell = useCallback(e => setAnchorEl(e.currentTarget), [])
   const onClickFilterAnsiedlungYear = useCallback(() => {
+    if (!yearHasAnsiedlungen) return
     setFilterAnsiedlungYear(filterAnsiedlungYear ? null : column)
     setAnchorEl(null)
-  }, [column, filterAnsiedlungYear, setFilterAnsiedlungYear])
+  }, [
+    column,
+    filterAnsiedlungYear,
+    setFilterAnsiedlungYear,
+    yearHasAnsiedlungen,
+  ])
   const onClickFilterKontrolleYear = useCallback(() => {
+    if (!yearHasKontrollen) return
     setFilterKontrolleYear(filterKontrolleYear ? null : column)
     setAnchorEl(null)
-  }, [column, filterKontrolleYear, setFilterKontrolleYear])
+  }, [column, filterKontrolleYear, setFilterKontrolleYear, yearHasKontrollen])
 
   const onMouseEnter = useCallback(() => hovered.setYear(column), [
     column,
@@ -92,19 +121,27 @@ const CellHeaderYear = ({ style, column }) => {
         keepMounted
         open={Boolean(anchorEl)}
         onClose={closeMenu}
-        anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+        anchorOrigin={anchorOrigin}
         getContentAnchorEl={null}
       >
-        <MenuItem onClick={onClickFilterKontrolleYear}>
+        <StyledMenuItem
+          onClick={onClickFilterKontrolleYear}
+          active={yearHasKontrollen ? 1 : 0}
+          dense
+        >
           {filterKontrolleYear === column
-            ? 'nicht nach Kontrollen filtern'
+            ? `nicht TPop mit Kontrollen in ${column} filtern`
             : `TPop mit Kontrollen in ${column} filtern`}
-        </MenuItem>
-        <MenuItem onClick={onClickFilterAnsiedlungYear}>
+        </StyledMenuItem>
+        <StyledMenuItem
+          onClick={onClickFilterAnsiedlungYear}
+          active={yearHasAnsiedlungen ? 1 : 0}
+          dense
+        >
           {filterAnsiedlungYear === column
-            ? 'nicht nach Ansiedlungen filtern'
+            ? `nicht TPop mit Ansiedlungen in ${column} filtern`
             : `TPop mit Ansiedlungen in ${column} filtern`}
-        </MenuItem>
+        </StyledMenuItem>
       </Menu>
     </>
   )
