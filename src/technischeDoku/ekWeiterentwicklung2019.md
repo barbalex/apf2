@@ -71,6 +71,7 @@ Das Formular, um Kontrollen zu planen.
   - :white_check_mark: EK-Frequenz Startjahr fehlt
   - :white_check_mark: Ansiedlung in bestimmtem Jahr
   - :white_check_mark: Kontrolle in bestimmtem Jahr
+  - :white_check_mark: EK-Plan in bestimmtem Jahr
 - :white_check_mark: das Formular funktioniert brauchbar schnell
 
 #### Import

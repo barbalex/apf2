@@ -49,6 +49,8 @@ const CellHeaderYear = ({ style, column, rows }) => {
     setFilterAnsiedlungYear,
     filterKontrolleYear,
     setFilterKontrolleYear,
+    filterEkplanYear,
+    setFilterEkplanYear,
   } = store.ekPlan
 
   const [anchorEl, setAnchorEl] = useState(null)
@@ -75,6 +77,18 @@ const CellHeaderYear = ({ style, column, rows }) => {
       ).length > 0
     )
   }, [column, filterAnsiedlungYear, rows])
+  const yearHasEkplan = useMemo(() => {
+    if (filterEkplanYear && filterEkplanYear !== column) return false
+    return (
+      rows.filter(
+        row =>
+          get(row, 'tpop.ekplansByTpopId.nodes', []).filter(
+            node => node.jahr === column,
+          ).length > 0,
+      ).length > 0
+    )
+  }, [column, filterEkplanYear, rows])
+
   const closeMenu = useCallback(() => setAnchorEl(null), [])
   const onClickCell = useCallback(e => setAnchorEl(e.currentTarget), [])
   const onClickFilterAnsiedlungYear = useCallback(() => {
@@ -92,6 +106,11 @@ const CellHeaderYear = ({ style, column, rows }) => {
     setFilterKontrolleYear(filterKontrolleYear ? null : column)
     setAnchorEl(null)
   }, [column, filterKontrolleYear, setFilterKontrolleYear, yearHasKontrollen])
+  const onClickFilterEkplanYear = useCallback(() => {
+    if (!yearHasEkplan) return
+    setFilterEkplanYear(filterEkplanYear ? null : column)
+    setAnchorEl(null)
+  }, [column, filterEkplanYear, setFilterEkplanYear, yearHasEkplan])
 
   const onMouseEnter = useCallback(() => hovered.setYear(column), [
     column,
@@ -132,6 +151,15 @@ const CellHeaderYear = ({ style, column, rows }) => {
           {filterKontrolleYear === column
             ? `nicht TPop mit Kontrollen in ${column} filtern`
             : `TPop mit Kontrollen in ${column} filtern`}
+        </StyledMenuItem>
+        <StyledMenuItem
+          onClick={onClickFilterEkplanYear}
+          active={yearHasEkplan ? 1 : 0}
+          dense
+        >
+          {filterEkplanYear === column
+            ? `nicht TPop mit Ekplan in ${column} filtern`
+            : `TPop mit Ekplan in ${column} filtern`}
         </StyledMenuItem>
         <StyledMenuItem
           onClick={onClickFilterAnsiedlungYear}

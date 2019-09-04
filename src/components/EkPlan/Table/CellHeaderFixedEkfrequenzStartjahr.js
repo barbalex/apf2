@@ -78,7 +78,7 @@ const CellHeaderFixedEkfrequenzStartjahr = ({ style, column }) => {
       >
         <MenuItem onClick={onClickFilterEmptyValues} dense>
           {filterEmptyEkfrequenzStartjahr
-            ? 'alle Werte anzeigen'
+            ? 'nicht Leerwerte filtern'
             : 'Leerwerte filtern'}
         </MenuItem>
       </Menu>

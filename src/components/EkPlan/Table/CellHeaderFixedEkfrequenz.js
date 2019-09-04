@@ -74,7 +74,9 @@ const CellHeaderFixedEkfrequenz = ({ style, column }) => {
         getContentAnchorEl={null}
       >
         <MenuItem onClick={onClickFilterEmptyValues} dense>
-          {filterEmptyEkfrequenz ? 'alle Werte anzeigen' : 'Leerwerte filtern'}
+          {filterEmptyEkfrequenz
+            ? 'nicht Leerwerte filtern'
+            : 'Leerwerte filtern'}
         </MenuItem>
       </Menu>
     </>

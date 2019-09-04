@@ -127,6 +127,7 @@ const EkPlanTable = () => {
     filterEmptyEkfrequenzStartjahr,
     filterAnsiedlungYear,
     filterKontrolleYear,
+    filterEkplanYear,
   } = store.ekPlan
 
   const [sizeState, sizeDispatch] = useReducer(sizeReducer, {
@@ -156,6 +157,11 @@ const EkPlanTable = () => {
         jahr: { equalTo: filterAnsiedlungYear },
         tpopmassnTypWerteByTyp: { ansiedlung: { equalTo: -1 } },
       },
+    }
+  }
+  if (filterEkplanYear) {
+    tpopFilter.ekplansByTpopId = {
+      some: { jahr: { equalTo: filterEkplanYear } },
     }
   }
   /*console.log('Table', {

@@ -50,6 +50,7 @@ export default types
     filterEmptyEkfrequenzStartjahr: types.optional(types.boolean, false),
     filterAnsiedlungYear: types.maybeNull(types.number, null),
     filterKontrolleYear: types.maybeNull(types.number, null),
+    filterEkplanYear: types.maybeNull(types.number, null),
   })
   .volatile(() => ({
     yearMenuAnchor: null,
@@ -73,6 +74,9 @@ export default types
     },
     setFilterKontrolleYear(val) {
       self.filterKontrolleYear = val
+    },
+    setFilterEkplanYear(val) {
+      self.filterEkplanYear = val
     },
     setFilterEmptyEkfrequenzStartjahr(val) {
       self.filterEmptyEkfrequenzStartjahr = val
