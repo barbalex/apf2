@@ -145,11 +145,22 @@ const EkPlanTable = () => {
   if (filterEmptyEkfrequenzStartjahr) {
     tpopFilter.ekfrequenzStartjahr = { isNull: true }
   }
-  const kontrFilter = { jahr: { greaterThanOrEqualTo: 1993 } }
   if (filterKontrolleYear) {
-    // TODO:
-    kontrFilter = { jahr: { greaterThanOrEqualTo: 1993 } }
+    tpopFilter.tpopkontrsByTpopId = {
+      some: { jahr: { equalTo: filterKontrolleYear } },
+    }
   }
+  if (filterAnsiedlungYear) {
+    tpopFilter.tpopmassnsByTpopId = {
+      some: { jahr: { equalTo: filterAnsiedlungYear } },
+      every: { tpopmassnTypWerteByTyp: { ansiedlung: { equalTo: -1 } } },
+    }
+  }
+  /*console.log('Table', {
+    filterKontrolleYear,
+    filterAnsiedlungYear,
+    tpopFilter,
+  })*/
   const {
     data: dataTpop,
     loading: loadingTpop,
@@ -158,7 +169,6 @@ const EkPlanTable = () => {
   } = useQuery(queryTpop, {
     variables: {
       tpopFilter,
-      kontrFilter,
     },
   })
   const tpops = sortBy(

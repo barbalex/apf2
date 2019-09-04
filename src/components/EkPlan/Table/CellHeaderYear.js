@@ -96,14 +96,14 @@ const CellHeaderYear = ({ style, column }) => {
         getContentAnchorEl={null}
       >
         <MenuItem onClick={onClickFilterKontrolleYear}>
-          {filterKontrolleYear
-            ? 'alle Teilpopulationen anzeigen'
-            : 'Kontrollen in diesem Jahr filtern'}
+          {filterKontrolleYear === column
+            ? 'nicht nach Kontrollen filtern'
+            : `TPop mit Kontrollen in ${column} filtern`}
         </MenuItem>
         <MenuItem onClick={onClickFilterAnsiedlungYear}>
-          {filterAnsiedlungYear
-            ? 'alle Teilpopulationen anzeigen'
-            : 'Ansiedlungen in diesem Jahr filtern'}
+          {filterAnsiedlungYear === column
+            ? 'nicht nach Ansiedlungen filtern'
+            : `TPop mit Ansiedlungen in ${column} filtern`}
         </MenuItem>
       </Menu>
     </>
