@@ -61,4 +61,7 @@ EK's und EKF's plant man folgendermassen:
 - Manuell, indem man eine Jahres-Zelle (Teilpopulation in Jahr) mit der Linken Maustaste anklickt. Es erscheint ein Menü. Hier wählt man den entsprechenden Eintrag.
 ![Manuell planen](_media/ekplanen_manuell.png)<br/>
 
-Weiterführende Infos zu EK, EKF und Ansiedlungen sowie Links um sie zu öffnen findet man im selben Menü. Darin finden sich auch Links, um die Kontrolle oder Ansiedlung in einem neuen Fenster zu öffnen. ![Infos zu Ereignissen](_media/ekplanen_infos.png)<br/>
+Weiterführende Infos zu EK, EKF und Ansiedlungen sowie Links um sie zu öffnen findet man im selben Menü. Darin finden sich auch Links, um die Kontrolle oder Ansiedlung in einem neuen Fenster zu öffnen.<br/>![Infos zu Ereignissen](_media/ekplanen_infos.png)<br/>
+
+Bei den Feldern "EK-Frequenz" und "EK-Frequenz Startjahr" kann nach Nullwerten gefiltert werden:<br/>
+![Automatisch planen](_media/ekplanen_frequenz_filtern.gif)
