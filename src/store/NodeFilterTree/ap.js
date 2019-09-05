@@ -8,7 +8,7 @@ export const type = types.model({
   bearbeitung: types.optional(types.maybeNull(types.number), null),
   startJahr: types.optional(types.maybeNull(types.number), null),
   umsetzung: types.optional(types.maybeNull(types.number), null),
-  bearbeiter: types.optional(types.maybeNull(types.number), null),
+  bearbeiter: types.optional(types.maybeNull(types.string), null),
   ekfBeobachtungszeitpunkt: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
@@ -29,6 +29,6 @@ export const simpleTypes = {
   bearbeitung: 'number',
   startJahr: 'number',
   umsetzung: 'number',
-  bearbeiter: 'number',
+  bearbeiter: 'uuid',
   ekfBeobachtungszeitpunkt: 'string',
 }
