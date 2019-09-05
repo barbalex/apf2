@@ -125,7 +125,7 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
       <>
         <FormContainerNoColumns>
           <Formik
-            key={showFilter ? JSON.stringify(row) : row.id}
+            key={showFilter ? row : row.id}
             initialValues={row}
             onSubmit={onSubmit}
             enableReinitialize

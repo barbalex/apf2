@@ -137,7 +137,7 @@ const Ekfrequenz = ({ treeName }) => {
         />
         <FieldsContainer>
           <Formik
-            key={JSON.stringify(row.kontrolljahre)}
+            key={row.kontrolljahre}
             initialValues={row}
             onSubmit={onSubmit}
             enableReinitialize

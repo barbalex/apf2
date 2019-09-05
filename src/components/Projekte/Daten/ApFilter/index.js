@@ -161,7 +161,7 @@ const ApFilter = ({ treeName }) => {
         />
         <FieldsContainer>
           <Formik
-            key={JSON.stringify(row)}
+            key={row}
             initialValues={row}
             onSubmit={onSubmit}
             enableReinitialize
