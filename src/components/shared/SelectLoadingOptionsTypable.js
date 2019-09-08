@@ -79,7 +79,9 @@ const SelectTypable = ({
   const client = useApolloClient()
   const [inputValue, setInputValue] = useState(row.wirtspflanze || '')
 
-  useEffect(() => setInputValue(row.wirtspflanze || ''), [row.wirtspflanze])
+  useEffect(() => {
+    setInputValue(row.wirtspflanze || '')
+  }, [row.wirtspflanze])
 
   const loadOptions = useCallback(
     async (inputValue, cb) => {

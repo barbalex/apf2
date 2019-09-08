@@ -27,7 +27,9 @@ const CoordinatesControl = () => {
   const { map } = useLeaflet()
   // hack to get control to show on first load
   // see: https://github.com/LiveBy/react-leaflet-control/issues/27#issuecomment-430564722
-  useEffect(() => setControlType('coordinates'), [])
+  useEffect(() => {
+    setControlType('coordinates')
+  }, [])
 
   return (
     <StyledControl position="bottomright">

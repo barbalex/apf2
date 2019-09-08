@@ -467,7 +467,9 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
     }
   }, [client, data, enqueNotification, loading, refetch, row.id, user.name])
 
-  useEffect(() => setErrors({}), [row])
+  useEffect(() => {
+    setErrors({})
+  }, [row])
 
   if (error) return `Fehler: ${error.message}`
   if (loading) {

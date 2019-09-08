@@ -123,7 +123,9 @@ const Qk = ({ treeName }) => {
     return true
   })
 
-  useEffect(() => !ktZh && fetchKtZh(store), [ktZh, store])
+  useEffect(() => {
+    !ktZh && fetchKtZh(store)
+  }, [ktZh, store])
 
   if (error) return `Fehler: ${error.message}`
   return (

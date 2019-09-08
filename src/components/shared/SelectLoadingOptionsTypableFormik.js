@@ -77,7 +77,9 @@ const SelectTypable = ({ field, form, label, query, queryNodesName }) => {
     value || value === 0 ? value : '',
   )
 
-  useEffect(() => setInputValue(value || value === 0 ? value : ''), [value])
+  useEffect(() => {
+    setInputValue(value || value === 0 ? value : '')
+  }, [value])
 
   const loadOptions = useCallback(
     async (inputValue, cb) => {
