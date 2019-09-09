@@ -311,7 +311,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
           {tab === 'entwicklung' && (
             <FormContainer data-width={showFilter ? filterWidth : datenWidth}>
               <Formik
-                key={showFilter ? row : row.id}
+                key={showFilter ? JSON.stringify(row) : row.id}
                 initialValues={row}
                 onSubmit={onSubmit}
                 enableReinitialize

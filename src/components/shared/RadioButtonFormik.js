@@ -1,9 +1,7 @@
 import React, { useCallback } from 'react'
-import Switch from '@material-ui/core/Switch'
-import RadioGroup from '@material-ui/core/RadioGroup'
+import Radio from '@material-ui/core/Radio'
 import FormLabel from '@material-ui/core/FormLabel'
 import FormControl from '@material-ui/core/FormControl'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
@@ -21,8 +19,9 @@ const StyledFormLabel = styled(FormLabel)`
   user-select: none;
   pointer-events: none;
 `
-const StyledRadio = styled(Switch)`
+const StyledRadio = styled(Radio)`
   height: 2px !important;
+  width: 24px;
 `
 
 const RadioButton = ({ field, form, label }) => {
@@ -37,14 +36,10 @@ const RadioButton = ({ field, form, label }) => {
         name,
       },
     }
-    console.log('RadioButtonFormik, onClickButton', { value, name, fakeEvent })
     onChange(fakeEvent)
     onBlur(fakeEvent)
     setTimeout(() => handleSubmit())
   }, [value, name, onChange, onBlur, handleSubmit])
-
-  label === 'Jungpflanzen vorhanden' &&
-    console.log('RadioButtonFormik', { value, form, name })
 
   return (
     <div>
@@ -54,19 +49,12 @@ const RadioButton = ({ field, form, label }) => {
         aria-describedby={`${label}ErrorText`}
       >
         <StyledFormLabel component="legend">{label}</StyledFormLabel>
-        <RadioGroup
-          aria-label={label}
-          value={
-            value === null || value === undefined ? 'false' : value.toString()
-          }
-        >
-          <FormControlLabel
-            value="true"
-            control={
-              <Switch data-id={name} onClick={onClickButton} color="primary" />
-            }
-          />
-        </RadioGroup>
+        <StyledRadio
+          data-id={name}
+          onClick={onClickButton}
+          color="primary"
+          checked={value}
+        />
         {!!error && (
           <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
         )}
