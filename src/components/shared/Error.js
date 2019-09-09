@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import uniqBy from 'lodash/uniqBy'
 
-import storeContext from '../../storeContext'
+//import storeContext from '../../storeContext'
 import logout from '../../modules/logout'
 import idbContext from '../../idbContext'
 import existsPermissionError from '../../modules/existsPermissionError'
@@ -17,13 +17,13 @@ const LogoutButton = styled(Button)`
 `
 
 const Error = errors => {
-  const store = useContext(storeContext)
+  //const store = useContext(storeContext)
   const { idb } = useContext(idbContext)
-  const { token } = store.user
+  //const { token } = store.user
 
   if (existsPermissionError(errors)) {
     // during login don't show permission error
-    if (!token) return null
+    //if (!token) return null
     // if token is not accepted, ask user to logout
     return (
       <ErrorContainer>
