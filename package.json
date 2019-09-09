@@ -1,7 +1,7 @@
 {
   "name": "apf2",
   "description": "Aktionspläne für Flora-Projekte",
-  "version": "1.9.24",
+  "version": "1.9.25",
   "repository": {
     "type": "git",
     "url": "git://github.com/barbalex/apf2.git"
@@ -13,7 +13,6 @@
     "build": "gatsby clean && gatsby build",
     "postbuild": "copyfiles now.json public",
     "dev": "gatsby develop",
-    "format": "prettier --write src/**/*.{js,jsx}",
     "start": "npm run develop",
     "serve": "gatsby serve",
     "test": "cypress open",
