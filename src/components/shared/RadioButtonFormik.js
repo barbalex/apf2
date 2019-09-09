@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import Radio from '@material-ui/core/Radio'
+import Switch from '@material-ui/core/Switch'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import FormLabel from '@material-ui/core/FormLabel'
 import FormControl from '@material-ui/core/FormControl'
@@ -21,7 +21,7 @@ const StyledFormLabel = styled(FormLabel)`
   user-select: none;
   pointer-events: none;
 `
-const StyledRadio = styled(Radio)`
+const StyledRadio = styled(Switch)`
   height: 2px !important;
 `
 
@@ -37,10 +37,14 @@ const RadioButton = ({ field, form, label }) => {
         name,
       },
     }
+    console.log('RadioButtonFormik, onClickButton', { value, name, fakeEvent })
     onChange(fakeEvent)
     onBlur(fakeEvent)
     setTimeout(() => handleSubmit())
   }, [value, name, onChange, onBlur, handleSubmit])
+
+  label === 'Jungpflanzen vorhanden' &&
+    console.log('RadioButtonFormik', { value, form, name })
 
   return (
     <div>
@@ -59,11 +63,7 @@ const RadioButton = ({ field, form, label }) => {
           <FormControlLabel
             value="true"
             control={
-              <StyledRadio
-                data-id={name}
-                onClick={onClickButton}
-                color="primary"
-              />
+              <Switch data-id={name} onClick={onClickButton} color="primary" />
             }
           />
         </RadioGroup>
