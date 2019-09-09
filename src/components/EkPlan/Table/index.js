@@ -272,9 +272,9 @@ const EkPlanTable = () => {
   if (aps.length > 0 && loadingTpop)
     return <TempContainer>Lade...</TempContainer>
   if (errorTpop || errorLists) {
-    const errors = []
-    errorTpop && errors.push(errorTpop)
-    errorLists && errors.push(errorLists)
+    let errors = []
+    if (errorTpop) errors = [errorTpop]
+    if (errorLists) errors = [...errors, errorLists]
 
     return <Error errors={errors} />
   }
