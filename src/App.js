@@ -99,7 +99,7 @@ const App = ({ element }) => {
               locale="de-ch"
             >
               <SnackbarProvider
-                maxSnack={5}
+                maxSnack={3}
                 preventDuplicate
                 autoHideDuration={10000}
                 action={key => <NotificationDismisser nKey={key} />}
