@@ -162,7 +162,7 @@ const ShowNew = styled.div`
 `
 
 const Count = ({
-  id = '99999999-9999-9999-9999-999999999999',
+  id,
   tpopkontrId,
   nr,
   updateTpopkontr,
@@ -181,13 +181,13 @@ const Count = ({
 
   const { data, loading, error } = useQuery(query, {
     variables: {
-      id,
+      id: id || '99999999-9999-9999-9999-999999999999',
     },
   })
 
   const { data: dataLists, error: errorLists } = useQuery(queryLists)
 
-  const row = get(data, 'tpopkontrzaehlById', {})
+  const row = get(data, 'tpopkontrzaehlById', {}) || {}
   row.anzahl1 = row.methode === 1 ? row.anzahl : null
   row.anzahl2 = row.methode === 2 ? row.anzahl : null
 
