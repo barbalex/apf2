@@ -11,6 +11,11 @@ const Area = styled.div`
   border-color: red;
   padding: 10px;
   break-inside: avoid;
+  legend,
+  label {
+    color: rgba(0, 0, 0, 0.87) !important;
+    font-weight: bold;
+  }
 `
 const Container = styled(Area)`
   grid-area: verification;
@@ -20,11 +25,6 @@ const Container = styled(Area)`
     'title title'
     'relevant grund';
   grid-column-gap: 10px;
-`
-const Title = styled.div`
-  grid-area: title;
-  font-weight: 700;
-  margin-bottom: 8px;
 `
 const Relevant = styled.div`
   grid-area: relevant;
@@ -44,7 +44,6 @@ const Grund = styled.div`
 
 const Verification = ({ saveToDb, row, errors }) => (
   <Container>
-    <Title>Verifikation</Title>
     <Relevant>
       <RadioButton
         key={`${row.id}apberNichtRelevant`}
