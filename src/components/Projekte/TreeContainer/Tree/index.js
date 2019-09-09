@@ -42,7 +42,7 @@ import queryBeobNichtZuzuordnens from './queryBeobNichtZuzuordnens'
 import queryWerte from './queryWerte'
 import buildNodes from '../nodes'
 import logout from '../../../../modules/logout'
-import anyQueryReturnsPermissionError from '../../../../modules/anyQueryReturnsPermissionError'
+import existsPermissionError from '../../../../modules/existsPermissionError'
 import anyQueryIsLoading from '../../../../modules/anyQueryIsLoading'
 import anyQueryReturnsError from '../../../../modules/anyQueryReturnsError'
 import idbContext from '../../../../idbContext'
@@ -839,7 +839,7 @@ const Tree = ({ treeName }) => {
 
   //console.log('Tree rendering')
 
-  if (anyQueryReturnsPermissionError(queryErrorArray)) {
+  if (existsPermissionError(queryErrorArray)) {
     // during login don't show permission error
     if (!token) return null
     // if token is not accepted, ask user to logout

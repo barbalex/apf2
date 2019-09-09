@@ -36,6 +36,7 @@ import CellForEkfrequenzAbweichend from './CellForEkfrequenzAbweichend'
 import CellForTpopLink from './CellForTpopLink'
 import CellForValue from './CellForValue'
 import CellForYear from './CellForYear'
+import Error from '../../shared/Error'
 
 const TempContainer = styled.div`
   padding: 10px;
@@ -234,7 +235,7 @@ const EkPlanTable = () => {
   const tpopGrid = useRef(null)
   const yearHeaderGrid = useRef(null)
 
-  const { data: dataLists } = useQuery(queryLists, {
+  const { data: dataLists, error: errorLists } = useQuery(queryLists, {
     variables: {
       apIds: apValues,
     },
@@ -270,7 +271,13 @@ const EkPlanTable = () => {
 
   if (aps.length > 0 && loadingTpop)
     return <TempContainer>Lade...</TempContainer>
-  if (errorTpop) return <TempContainer>{errorTpop.message}</TempContainer>
+  if (errorTpop || errorLists) {
+    const errors = []
+    errorTpop && errors.push(errorTpop)
+    errorLists && errors.push(errorLists)
+
+    return <Error errors={errors} />
+  }
   return (
     <ErrorBoundary>
       <Container>

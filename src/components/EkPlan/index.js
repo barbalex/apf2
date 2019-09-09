@@ -11,6 +11,7 @@ import Choose from './Choose'
 import queryAps from './queryAps'
 import storeContext from '../../storeContext'
 import appBaseUrl from '../../modules/appBaseUrl'
+import Error from '../shared/Error'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -38,7 +39,7 @@ const EkPlan = () => {
   const store = useContext(storeContext)
   const { aps, setApsData, setApsDataLoading } = store.ekPlan
 
-  const { data, loading } = useQuery(queryAps, {
+  const { data, loading, error } = useQuery(queryAps, {
     variables: {
       ids: aps.map(ap => ap.value),
     },
@@ -50,6 +51,8 @@ const EkPlan = () => {
     const url = `${appBaseUrl()}Dokumentation/Benutzer/Erfolgs-Kontrollen-planen`
     typeof window !== 'undefined' && window.open(url)
   }, [])
+
+  if (error) return <Error errors={[error]} />
 
   return (
     <ErrorBoundary>
