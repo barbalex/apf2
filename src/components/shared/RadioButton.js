@@ -1,9 +1,7 @@
 import React, { useCallback } from 'react'
 import Radio from '@material-ui/core/Radio'
-import RadioGroup from '@material-ui/core/RadioGroup'
 import FormLabel from '@material-ui/core/FormLabel'
 import FormControl from '@material-ui/core/FormControl'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
@@ -23,6 +21,7 @@ const StyledFormLabel = styled(FormLabel)`
 `
 const StyledRadio = styled(Radio)`
   height: 2px !important;
+  width: 24px;
 `
 
 const RadioButton = ({ label, name, value, error, saveToDb }) => {
@@ -43,21 +42,12 @@ const RadioButton = ({ label, name, value, error, saveToDb }) => {
       aria-describedby={`${label}ErrorText`}
     >
       <StyledFormLabel component="legend">{label}</StyledFormLabel>
-      <RadioGroup
-        aria-label={label}
-        value={value === null ? 'false' : value.toString()}
-      >
-        <FormControlLabel
-          value="true"
-          control={
-            <StyledRadio
-              data-id={name}
-              onClick={onClickButton}
-              color="primary"
-            />
-          }
-        />
-      </RadioGroup>
+      <StyledRadio
+        data-id={name}
+        onClick={onClickButton}
+        color="primary"
+        checked={value}
+      />
       {!!error && (
         <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
       )}
