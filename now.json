@@ -1,10 +1,6 @@
 {
   "version": 2,
   "name": "apflora",
-  "alias": [
-    "apflora.ch",
-    "www.apflora.ch"
-  ],
   "routes": [
     {
       "src": "/Daten/.*",
