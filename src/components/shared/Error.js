@@ -22,8 +22,9 @@ const Error = errors => {
   //const { token } = store.user
 
   if (existsPermissionError(errors)) {
+    console.log('Error logging out', { errors })
     // during login don't show permission error
-    //if (!token) return null
+    logout(idb)
     // if token is not accepted, ask user to logout
     return (
       <ErrorContainer>

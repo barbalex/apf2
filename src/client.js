@@ -6,8 +6,10 @@ import { InMemoryCache, defaultDataIdFromObject } from 'apollo-cache-inmemory'
 import { ApolloLink } from 'apollo-link'
 import { onError } from 'apollo-link-error'
 import jwtDecode from 'jwt-decode'
+import uniqBy from 'lodash/uniqBy'
 
 import graphQlUri from './modules/graphQlUri'
+import existsPermissionsError from './modules/existsPermissionError'
 //import logout from './modules/logout'
 
 export default ({ idb, store }) => {
@@ -32,20 +34,17 @@ export default ({ idb, store }) => {
   })
 
   const errorLink = onError(({ graphQLErrors, networkError }) => {
-    if (graphQLErrors) {
+    const uniqueQraphQLErrors = uniqBy(graphQLErrors, 'message')
+    console.log('client, errorLink', { graphQLErrors, uniqueQraphQLErrors })
+    if (uniqueQraphQLErrors) {
       /**
        * TODO
        * Test this at night
        * make sure message is what is wanted by logging it out
        */
-      const existsPermissionsError = graphQLErrors.some(
-        ({ message }) =>
-          message.includes('permission denied') ||
-          message.includes('keine Berechtigung'),
-      )
-      if (existsPermissionsError) {
-        if (graphQLErrors[0]) {
-          const { message, locations, path } = graphQLErrors[0]
+      if (existsPermissionsError(uniqueQraphQLErrors)) {
+        if (uniqueQraphQLErrors[0]) {
+          const { message, locations, path } = uniqueQraphQLErrors[0]
           console.log(
             `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
               locations,
@@ -68,7 +67,7 @@ export default ({ idb, store }) => {
         })
         return logout(idb)*/
       }
-      graphQLErrors.map(({ message, locations, path }) => {
+      uniqueQraphQLErrors.map(({ message, locations, path }) => {
         console.log(
           `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
             locations,

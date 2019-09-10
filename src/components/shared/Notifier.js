@@ -23,8 +23,6 @@ const Notifier = () => {
     })
   }, [displayed, enqueueSnackbar, notifications, removeNotification])
 
-  //console.log('Notifier rendering')
-
   return null
 }
 
