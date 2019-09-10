@@ -95,14 +95,17 @@ const CellForEkfrequenz = ({ row, field, style, refetchTpop }) => {
         })
       }
       // set EK-Frequenz Startjahr
-      const ekfrequenzStartjahr = await setStartjahr({
-        row,
-        ekfrequenzCode: value,
-        client,
-        store,
-      })
+      let ekfrequenzStartjahr
+      if (!!value) {
+        ekfrequenzStartjahr = await setStartjahr({
+          row,
+          ekfrequenzCode: value,
+          client,
+          store,
+        })
+      }
       // set ekplans if startjahr exists
-      if (!!ekfrequenzStartjahr) {
+      if (!!ekfrequenzStartjahr && !!value) {
         setEkplans({
           tpopId: row.id,
           ekfrequenzCode: value,

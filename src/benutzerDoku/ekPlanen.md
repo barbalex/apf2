@@ -56,12 +56,28 @@ In den Zeilen für die Teilpopulationen werden in den Jahres-Spalten dargestellt
 - Direkt rechts des Blitzes erscheint eine rote Zahl, wenn im selben Jahr mehrere Ansiedlungen stattfanden. Sie stellt die Anzahl Ansiedlungen dar ![mehrere Ansiedlungen](_media/ekplanen_blitz_multiple.png)
 - Etwas weiter rechts neben dem Blitz stellt eine schwarze Zahl die Anzahl Planzen und Triebe dar, falls erfasst ![Ansiedlung mit Zählung](_media/ekplanen_blitz_zaehlung.png)
 
-EK's und EKF's plant man folgendermassen:
-- Automatisch: Ändert man EK-Frequenz oder Startjahr und existieren sowohl Frequenz wie Startjahr, setzt apflora aufgrund der in der gewählten EK-Frequenz definierten Kontrolljahre die Pläne automatisch ![Automatisch planen](_media/ekplanen_auto.gif)
-- Manuell, indem man eine Jahres-Zelle (Teilpopulation in Jahr) mit der Linken Maustaste anklickt. Es erscheint ein Menü. Hier wählt man den entsprechenden Eintrag.
+#### Kontrollen plant man folgendermassen:
+
+**Automatisch**<br/>
+![Automatisch planen](_media/ekplanen_auto.gif)
+
+Ändert man EK-Frequenz:<br/>
+1. Berechnet apflora zunächst das Startjahr, beruhend auf der gewählten EK-Frequenz mit:
+  - EK-Typ (EK oder EKF)
+  - "Kontrolljahre ab letzter" (Kontrolle oder Ansiedlung)
+  - letzte Kontrolle oder Ansiedlung
+2. Dann berechnet apflora die EK-Pläne, beruhend auf
+  - Startjahr und
+  - Kontrolljahre gemäss EK-Frequenz<br/>
+
+Ändert man das Kontrolljahr, berechnet apflora die EK-Pläne.<br/><br/>
+
+**Manuell**<br/>
+Indem man eine Jahres-Zelle (Teilpopulation in Jahr) mit der Linken Maustaste anklickt. Es erscheint ein Menü. Hier wählt man den entsprechenden Eintrag.
 ![Manuell planen](_media/ekplanen_manuell.png)<br/>
 
-Weiterführende Infos zu EK, EKF und Ansiedlungen sowie Links um sie zu öffnen findet man im selben Menü. Darin finden sich auch Links, um die Kontrolle oder Ansiedlung in einem neuen Fenster zu öffnen.<br/>![Infos zu Ereignissen](_media/ekplanen_infos.png)<br/>
+Im gleichen Menü findet man weiterführende Infos zu EK, EKF und Ansiedlungen sowie Links um sie zu öffnen:<br/>
+![Infos zu Ereignissen](_media/ekplanen_infos.png)<br/>
 
 Bei den Feldern "EK-Frequenz" und "EK-Frequenz Startjahr" kann nach Nullwerten gefiltert werden:<br/>
 ![Filtern](_media/ekplanen_frequenz_filtern.gif)

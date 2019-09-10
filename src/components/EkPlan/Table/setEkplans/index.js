@@ -14,6 +14,7 @@ export default async ({
   store,
   closeSnackbar,
 }) => {
+  if (!ekfrequenzStartjahr) return
   const { enqueNotification } = store
   // 1. query all ekplans beginning with ekfrequenzStartJahr
   let ekplansToDeleteResult

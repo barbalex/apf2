@@ -46,11 +46,19 @@ Das Formular, um Kontrollen zu planen.
   - EK-Frequenz Startjahr (bearbeitbar)
   - EK-Frequenz abweichend (bearbeitbar)
 - :white_check_mark: Alle bisher erwähnten Felder können ein- und ausgeblendet werden
-- :white_check_mark: Ändert man im Formular EK-Plan die Felder "EK-Frequenz" oder "EK-Frequenz Startjahr" und sind in beiden Feldern Werte erfasst, macht die Anwendung folgendes:
+- :white_check_mark: Ändert man im Formular EK-Plan das Feld "EK-Frequenz", macht die Anwendung folgendes:
+  - Sie berechnet beruhend auf ekfrequenz.kontrolljahre_ab, ekfrequenz.ektyp und je nach EK-Typ der letzen Kontrolle oder Massnahme das neue EK-Frequenz-Starjahr und setzt es
   - Sie löscht alle bestehenden EK-Pläne ab dem Startjahr
   - Sie liest die Kontrolljahre aus der EK-Frequenz aus
   - Sie erzeugt neue Kontrolljahre, basierend auf dem Startjahr und den Kontrolljahren
-  - Sie meldet dem Benutzer dabei, was sie macht bzw. gemacht hat
+  - Sie bricht den Vorgang ab, wenn ein Fehler passiert oder eine Voraussetzung nicht erfüllt ist
+  - Sie meldet dem Benutzer, was geschieht
+- :white_check_mark: Ändert man im Formular EK-Plan das Feld "EK-Frequenz Startjahr" und ist eine EK-Frequenz erfasst, macht die Anwendung folgendes:
+  - Sie löscht alle bestehenden EK-Pläne ab dem Startjahr
+  - Sie liest die Kontrolljahre aus der EK-Frequenz aus
+  - Sie erzeugt neue Kontrolljahre, basierend auf dem Startjahr und den Kontrolljahren
+  - Sie bricht den Vorgang ab, wenn ein Fehler passiert oder eine Voraussetzung nicht erfüllt ist
+  - Sie meldet dem Benutzer, was geschieht
 - :white_check_mark: Für den Bereich zwischen der ersten Kontrolle, die ab 1993 erfolgte und 15 Jahre in die Zukunft werden für jedes Jahr Spalten generiert
 - :white_check_mark: Der Jahres-Spalten-Bereich kann horizontal gescrollt werden, wenn der Platz für die Anzeige aller nicht ausreicht
 - :white_check_mark: Eine Jahres-Spalte zeigt folgende Informationen an:
