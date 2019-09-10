@@ -12,7 +12,7 @@ import dataByAdresseIdGql from './dataByAdresseId'
 import dataWithDateByUserNameGql from './dataWithDateByUserName'
 import dataWithDateByAdresseIdGql from './dataWithDateByAdresseId'
 import List from './List'
-import dealWithError from '../../../modules/dealWithError'
+import Error from '../../shared/Error'
 
 const EkfListContainer = () => {
   const store = useContext(storeContext)
@@ -36,7 +36,8 @@ const EkfListContainer = () => {
   })
 
   if (error) {
-    return dealWithError({ error, store, component: 'ListContainer' })
+    const errors = [error]
+    return <Error errors={errors} />
   }
   return <List data={data} loading={loading} />
 }

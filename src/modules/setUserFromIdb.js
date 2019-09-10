@@ -1,10 +1,10 @@
-import get from 'lodash/get'
 import jwtDecode from 'jwt-decode'
 
+import getUserFromIdb from './getUserFromIdb'
+
 export default async ({ idb, store }) => {
-  const users = await idb.currentUser.toArray()
-  const name = get(users, '[0].name', '')
-  const token = get(users, '[0].token', null)
+  const user = await getUserFromIdb({ idb })
+  const { name, token } = user
 
   const tokenDecoded = token ? jwtDecode(token) : null
   const userIsFreiw =

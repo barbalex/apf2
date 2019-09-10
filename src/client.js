@@ -10,7 +10,6 @@ import uniqBy from 'lodash/uniqBy'
 
 import graphQlUri from './modules/graphQlUri'
 import existsPermissionsError from './modules/existsPermissionError'
-//import logout from './modules/logout'
 
 export default ({ idb, store }) => {
   const { enqueNotification } = store
@@ -35,7 +34,6 @@ export default ({ idb, store }) => {
 
   const errorLink = onError(({ graphQLErrors, networkError }) => {
     const uniqueQraphQLErrors = uniqBy(graphQLErrors, 'message')
-    console.log('client, errorLink', { graphQLErrors, uniqueQraphQLErrors })
     if (uniqueQraphQLErrors) {
       /**
        * TODO
@@ -43,29 +41,13 @@ export default ({ idb, store }) => {
        * make sure message is what is wanted by logging it out
        */
       if (existsPermissionsError(uniqueQraphQLErrors)) {
-        if (uniqueQraphQLErrors[0]) {
-          const { message, locations, path } = uniqueQraphQLErrors[0]
-          console.log(
-            `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
-              locations,
-            )}, Path: ${path}`,
-          )
-          return enqueNotification({
-            message: `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
-            options: {
-              variant: 'error',
-            },
-          })
-        }
-        // TODO:
-        // build better ux for when login does not work any more
-        /*enqueNotification({
-          message: `Sie wurden automatisch abgemeldet, weil die Datenbank eine Berechtigung verweigert hat`,
-          options: {
-            variant: 'warning',
-          },
-        })
-        return logout(idb)*/
+        // DO NOT notify
+        // The User component will open and let user log in
+        return
+        // DO NOT logout here:
+        // logout reloads the window
+        // this must be controlled by the User component inside Daten
+        // otherwise UI keeps reloading forever!
       }
       uniqueQraphQLErrors.map(({ message, locations, path }) => {
         console.log(

@@ -1,4 +1,4 @@
-﻿import React, { useState, useCallback, useContext } from 'react'
+﻿import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import Dialog from '@material-ui/core/Dialog'
@@ -19,9 +19,8 @@ import ErrorBoundary from 'react-error-boundary'
 
 import query from './data'
 import TextField from '../../../../../shared/TextFieldFormik'
+import Error from '../../../../../shared/Error'
 import updateUserByIdGql from './updateUserById'
-import storeContext from '../../../../../../storeContext'
-import dealWithError from '../../../../../../modules/dealWithError'
 import objectsFindChangedKey from '../../../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../../../modules/objectsEmptyValuesToNull'
 
@@ -46,7 +45,6 @@ const PasswordMessage = styled.div`
 `
 
 const User = ({ username, userOpen, toggleUserOpen }) => {
-  const store = useContext(storeContext)
   const { data, error, loading } = useQuery(query, {
     variables: { name: username },
   })
@@ -145,7 +143,8 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
 
   if (loading) return null
   if (error) {
-    return dealWithError({ error, store, component: 'AppBar > User' })
+    const errors = [error]
+    return <Error errors={errors} />
   }
 
   return (

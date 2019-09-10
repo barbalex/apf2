@@ -1,4 +1,10 @@
-import React, { useState, useCallback, useContext } from 'react'
+import React, {
+  useState,
+  useCallback,
+  useContext,
+  useReducer,
+  useEffect,
+} from 'react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogActions from '@material-ui/core/DialogActions'
@@ -20,6 +26,7 @@ import ErrorBoundary from 'react-error-boundary'
 
 import idbContext from '../idbContext'
 import storeContext from '../storeContext'
+import getUserFromIdb from '../modules/getUserFromIdb'
 
 const StyledDialog = styled(Dialog)``
 const StyledDiv = styled.div`
@@ -33,6 +40,17 @@ const StyledInput = styled(Input)`
   }
 `
 
+function tokenStateReducer(state, action) {
+  switch (action.type) {
+    case 'reset':
+      return { token: null, fetchingToken: true }
+    case 'set':
+      return { token: action.payload, fetchingToken: false }
+    default:
+      throw new Error()
+  }
+}
+
 const User = () => {
   const client = useApolloClient()
   const { idb } = useContext(idbContext)
@@ -44,8 +62,11 @@ const User = () => {
   const [showPass, setShowPass] = useState(false)
   const [nameErrorText, setNameErrorText] = useState('')
   const [passwordErrorText, setPasswordErrorText] = useState('')
-  const [token, setToken] = useState(user.token)
-  const [fetchingToken, setFetchingToken] = useState(true)
+
+  const [tokenState, dispatchTokenState] = useReducer(tokenStateReducer, {
+    token: user.token,
+    fetchingToken: true,
+  })
 
   const fetchLogin = useCallback(
     // callbacks pass name or password
@@ -136,10 +157,20 @@ const User = () => {
   const onClickShowPass = useCallback(() => setShowPass(!showPass), [showPass])
   const onMouseDownShowPass = useCallback(e => e.preventDefault(), [])
 
-  idb.currentUser.toArray().then(users => {
-    setToken(get(users, '[0].token', null))
-    setFetchingToken(false)
-  })
+  useEffect(() => {
+    getUserFromIdb({ idb }).then(user => {
+      dispatchTokenState({
+        type: 'set',
+        payload: user.token,
+      })
+      if (store.user.token !== user.token) {
+        //console.log('User: setting store.user from idb.user')
+        store.setUser({ name: user.name, token: user.token })
+      }
+    })
+  }, [idb, store, store.user.token])
+
+  const { token, fetchingToken } = tokenState
 
   return (
     <ErrorBoundary>

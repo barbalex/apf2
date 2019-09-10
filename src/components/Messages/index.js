@@ -12,7 +12,7 @@ import ErrorBoundary from 'react-error-boundary'
 import query from './data'
 import createUsermessage from './createUsermessage'
 import storeContext from '../../storeContext'
-import dealWithError from '../../modules/dealWithError'
+import Error from '../shared/Error'
 
 const StyledDialog = styled(Dialog)`
   > div > div {
@@ -87,7 +87,8 @@ const UserMessages = ({ open }) => {
   }, [client, refetch, unreadMessages, userName])
 
   if (error) {
-    return dealWithError({ error, store, component: 'Messages' })
+    const errors = [error]
+    return <Error errors={errors} />
   }
 
   return (

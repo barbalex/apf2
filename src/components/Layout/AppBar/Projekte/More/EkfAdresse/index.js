@@ -5,9 +5,9 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
 
 import Select from '../../../../../shared/Select'
+import Error from '../../../../../shared/Error'
 import queryAdresses from './queryAdresses'
 import storeContext from '../../../../../../storeContext'
-import dealWithError from '../../../../../../modules/dealWithError'
 
 const Container = styled.div`
   padding: 0 16px;
@@ -31,7 +31,8 @@ const EkfAdresse = ({ setAnchorEl }) => {
 
   if (loading) return '...'
   if (error) {
-    return dealWithError({ error, store, component: 'EKFAdresse' })
+    const errors = [error]
+    return <Error errors={errors} />
   }
 
   return (
