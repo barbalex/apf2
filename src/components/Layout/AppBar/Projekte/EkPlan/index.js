@@ -130,7 +130,7 @@ const EkPlanAppBar = () => {
     <>
       {!isMobile && (
         <SiteTitle variant="outlined" component={Link} to="/" title="Home">
-          AP Flora: EK-Plan (Vorsicht Baustelle!)
+          AP Flora: EK-Plan
         </SiteTitle>
       )}
       <MenuDiv>
