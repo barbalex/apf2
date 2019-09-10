@@ -258,7 +258,7 @@ const ProjekteAppBar = () => {
                   data-id="ek-planung"
                   title="EK und EKF planen"
                 >
-                  EK-Plan
+                  EK-Planung
                 </StyledButton>
               )}
             </>

@@ -29,14 +29,14 @@ Durch Koordinationsstelle und Artverantwortliche.
 ![im Strukturbaum](_media/ekplanen_ap.png)
 
 #### Pro Teilpopulation
-Durch Artverantwortliche. Im Formular EK-Plan(ung).
+Durch Artverantwortliche.
 - Aus den für den AP bestimmten Frequenzen wird die für diese Teil-Population passende gewählt
 - Weicht die EK-Frequenz von der auf AP-Ebene für diesen Fall bestimmten Wert ab, wird das besonders markiert ("EK-Frequenz abweichend")
 - In welchen Jahren Kontrollen erfolgen sollen, differenziert nach EK und EKF
 
-Letzteres ist die eigentliche "EK-Planung" und sie geschieht primär im entsprechenden Formular:<br/><br/>
+Letzteres ist die eigentliche EK-Planung und sie geschieht primär im entsprechenden Formular:<br/><br/>
 
-## 2. Formular EK-Plan(ung)
+## 2. Formular EK-Planung
 Das Formular ist für die Darstellung und Bearbeitung grosser Datenmengen konzipiert.<br/>
 Je grösser und höher aufgelöst der Bildschirm, desto übersichtlicher kann man arbeiten. Auf kleinen Bildschirmen (z.B. Handy) ist es kaum brauchbar.<br/><br/>
 
