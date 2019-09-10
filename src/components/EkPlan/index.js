@@ -52,7 +52,11 @@ const EkPlan = () => {
     typeof window !== 'undefined' && window.open(url)
   }, [])
 
-  if (error) return <Error errors={[error]} />
+  if (error) {
+    const errors = [error]
+    console.log('EkPlan', { error, errors })
+    return <Error errors={errors} />
+  }
 
   return (
     <ErrorBoundary>

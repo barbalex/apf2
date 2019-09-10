@@ -45,14 +45,14 @@ const Error = errors => {
       return <ErrorContainer>{`Fehler: ${uniqueMessages[0]}`}</ErrorContainer>
     } else {
       return (
-        <ErrorContainer>
-          <div>Fehler:</div>
+        <h5>
+          <h5>Fehler:</h5>
           <ul>
             {uniqueMessages.map(message => (
               <li>{message}</li>
             ))}
           </ul>
-        </ErrorContainer>
+        </h5>
       )
     }
   }
