@@ -6,6 +6,23 @@ title: "Erfolgs-Kontrollen planen"
 sort: 10
 ---
 
+**Inhalt**<br/>
+
+1. [Ziele](#1-ziele)
+1. [Diese Daten werden erfasst](#2-diese-daten-werden-erfasst)
+   - [Global](#global)
+   - [Pro Aktionsplan](#pro-aktionsplan)
+   - [Pro Teilpopulation](#pro-teilpopulation)
+1. [Formular EK-Planung](#3-formular-ek-planung)
+   - [AP's wählen](#aps-wählen)
+   - [Dargestellte Informationen wählen](#dargestellte-informationen-wählen)
+   - [Kontrollen planen](#kontrollen-planen)
+   - [Mehr Informationen](#mehr-informationen)
+   - [Filter setzen](#filter-setzen)
+<br/><br/>
+
+## 1. Ziele
+
 Erfolgskontrollen sind gleichzeitig wichtig und aufwändig. Im Jahr 2019 wird die Verwaltung und Planung der eigentlichen Kontrollen in apflora weiter entwickelt. Ziele:
 - Die Durchführung von Erfolgskontrollen kann sorgfältig geplant werden
 - Topos und Artverantwortliche erhalten eine gute Übersicht über:
@@ -14,21 +31,21 @@ Erfolgskontrollen sind gleichzeitig wichtig und aufwändig. Im Jahr 2019 wird di
   - Ansiedlungen
 - Es wird sicher gestellt, dass für jede Art die zielrelevanten Einheiten gezählt und dokumentiert werden
 
-## 1. Diese Daten werden erfasst
+## 2. Diese Daten werden erfasst
 
-#### Global
+### Global
 Durch die Koordinationsstelle. Im Strukturbaum in den Werte-Listen.
 - EK-Abrechnungstypen
 - Zähleinheiten
 ![im Strukturbaum](_media/ekplanen_global.png)
 
-#### Pro Aktionsplan
+### Pro Aktionsplan
 Durch Koordinationsstelle und Artverantwortliche.
 - Welche Zähleinheiten sind zielrelevant und sollen daher immer erfasst werden
 - Frequenzen, nach denen in diesem AP kontrolliert werden soll. Inklusive Abrechnungstyp (EK-Frequenzen)
 ![im Strukturbaum](_media/ekplanen_ap.png)
 
-#### Pro Teilpopulation
+### Pro Teilpopulation
 Durch Artverantwortliche.
 - Aus den für den AP bestimmten Frequenzen wird die für diese Teil-Population passende gewählt
 - Weicht die EK-Frequenz von der auf AP-Ebene für diesen Fall bestimmten Wert ab, wird das besonders markiert ("EK-Frequenz abweichend")
@@ -36,7 +53,7 @@ Durch Artverantwortliche.
 
 Letzteres ist die eigentliche EK-Planung und sie geschieht primär im entsprechenden Formular:<br/><br/>
 
-## 2. Formular EK-Planung
+## 3. Formular EK-Planung
 Das Formular ist für die Darstellung und Bearbeitung grosser Datenmengen konzipiert.<br/>
 Je grösser und höher aufgelöst der Bildschirm, desto übersichtlicher kann man arbeiten. Auf kleinen Bildschirmen (z.B. Handy) ist es kaum brauchbar.<br/><br/>
 
@@ -92,7 +109,7 @@ Im gleichen Menü findet man weiterführende Infos zu EK, EKF und Ansiedlungen s
 ### Filter setzen
 
 Bei den Feldern "EK-Frequenz" und "EK-Frequenz Startjahr" kann nach Nullwerten gefiltert werden:<br/>
-![Filtern](_media/ekplanen_frequenz_filtern.gif)
+![Filtern](_media/ekplanen_frequenz_filtern.gif)<br/>
 
 In den Jahres-Spalten kann nach dem Vorhandensein von Kontrollen, EK-Plänen und Ansiedlungen gefiltert werden:<br/>
 ![Filtern](_media/ekplan_filtern_jahr.gif)
