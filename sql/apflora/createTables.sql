@@ -1314,26 +1314,14 @@ create table apflora.ekfrequenz(
   changed date default now(),
   changed_by varchar(20) default null
 );
--- alterations 2019 09 10:
-create type ek_kontrolljahre_ab as enum ('ek', 'ansiedlung');
-alter table apflora.ekfrequenz add column ektyp ek_type default null;
-CREATE INDEX ON apflora.ekfrequenz USING btree (ektyp);
-COMMENT ON COLUMN apflora.ekfrequenz.ektyp IS 'Ob diese Frequenz für EK oder EKF anwendbar ist';
-alter table apflora.ekfrequenz add column kontrolljahre_ab ek_kontrolljahre_ab default null;
-CREATE INDEX ON apflora.ekfrequenz USING btree (kontrolljahre_ab);
-COMMENT ON COLUMN apflora.ekfrequenz.kontrolljahre_ab IS 'Referenzjahr für die Kontrolljahre';
--- TODO: after rebuilding app:
--- ALTER TABLE apflora.ekfrequenz DROP COLUMN ek;
--- ALTER TABLE apflora.ekfrequenz DROP COLUMN ekf;
-
 CREATE INDEX ON apflora.ekfrequenz USING btree (id);
 CREATE INDEX ON apflora.ekfrequenz USING btree (ap_id);
-CREATE INDEX ON apflora.ekfrequenz USING btree (ek);
-CREATE INDEX ON apflora.ekfrequenz USING btree (ekf);
+CREATE INDEX ON apflora.ekfrequenz USING btree (ektyp);
+COMMENT ON COLUMN apflora.ekfrequenz.ektyp IS 'Ob diese Frequenz für EK oder EKF anwendbar ist';
 CREATE INDEX ON apflora.ekfrequenz USING btree (anwendungsfall);
 CREATE INDEX ON apflora.ekfrequenz USING btree (code);
-CREATE INDEX ON apflora.ekfrequenz USING btree (anzahl_min);
-CREATE INDEX ON apflora.ekfrequenz USING btree (anzahl_max);
+CREATE INDEX ON apflora.ekfrequenz USING btree (kontrolljahre_ab);
+COMMENT ON COLUMN apflora.ekfrequenz.kontrolljahre_ab IS 'Referenzjahr für die Kontrolljahre';
 CREATE INDEX ON apflora.ekfrequenz USING btree (sort);
 CREATE INDEX ON apflora.ekfrequenz USING btree (ek_abrechnungstyp);
 COMMENT ON COLUMN apflora.ekfrequenz.id IS 'Primärschlüssel';
