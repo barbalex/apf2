@@ -115,7 +115,7 @@ export default async ({
     jahreList = formatter.format(kontrolljahre.map(j => j.toString()))
   }
   enqueNotification({
-    message: `Ab ${ekfrequenzStartjahr} wurden allfällige bestehende EK-Pläne gelöscht und ab dem Startjahr ${ekfrequenzStartjahr} gemäss EK-Frequenz neue für ${
+    message: `Ab ${ekfrequenzStartjahr} wurden allfällige bestehende EK-Pläne gelöscht und gemäss EK-Frequenz neue für ${
       kontrolljahre.length > 1 ? 'die Jahre' : 'das Jahr'
     } ${jahreList} gesetzt`,
     options: {

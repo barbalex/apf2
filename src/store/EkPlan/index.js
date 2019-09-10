@@ -143,15 +143,11 @@ export default types
         self.ekfrequenzs.map(a => a.anwendungsfall.length),
       )
       const options = self.ekfrequenzs.map(o => {
-        const ekTypeArray = [o.ek ? 'ek' : null, o.ekf ? 'ekf' : null].filter(
-          field => !!field,
-        )
         const code = (o.code || '').padEnd(2, '\xA0')
         const anwendungsfall =
-          `${o.anwendungsfall.padEnd(
-            longestAnwendungsfall,
-            '\xA0',
-          )}, ${ekTypeArray.join(' und ')}` || ''
+          `${o.anwendungsfall.padEnd(longestAnwendungsfall, '\xA0')}, ${
+            o.ektyp
+          }` || ''
         return {
           value: o.code,
           label: `${code}: ${anwendungsfall}`,
