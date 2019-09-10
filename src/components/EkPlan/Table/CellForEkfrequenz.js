@@ -93,12 +93,12 @@ const CellForEkfrequenz = ({ row, field, style, refetchTpop }) => {
           },
         })
       }
+      /**
+       * TODO:
+       * set ekfrequenzStartjahr depending on last ek/ekf or ansiedlung?
+       */
       if (row.ekfrequenzStartjahr.value) {
         console.log('CellForEkfrequenz, row:', row)
-        /**
-         * TODO:
-         * set ekfrequenzStartjahr depending on last ek/ekf or ansiedlung?
-         */
         setEkplans({
           tpopId: row.id,
           ekfrequenzCode: value,
