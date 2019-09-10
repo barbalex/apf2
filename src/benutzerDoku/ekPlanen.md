@@ -1,7 +1,7 @@
 ---
 typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/Erfolgs-Kontrollen-planen"
-date: "2019-07-15"
+date: "2019-09-10"
 title: "Erfolgs-Kontrollen planen"
 sort: 10
 ---
@@ -14,21 +14,21 @@ Erfolgskontrollen sind gleichzeitig wichtig und aufwändig. Im Jahr 2019 wird di
   - Ansiedlungen
 - Es wird sicher gestellt, dass für jede Art die zielrelevanten Einheiten gezählt und dokumentiert werden
 
-### Diese Daten werden erfasst
+## 1. Diese Daten werden erfasst
 
-**Global**<br/>
+#### Global
 Durch die Koordinationsstelle. Im Strukturbaum in den Werte-Listen.
 - EK-Abrechnungstypen
 - Zähleinheiten
-![im Strukturbaum](_media/ekplanen_global.png)<br/>
+![im Strukturbaum](_media/ekplanen_global.png)
 
-**Pro Aktionsplan**<br/>
+#### Pro Aktionsplan
 Durch Koordinationsstelle und Artverantwortliche.
 - Welche Zähleinheiten sind zielrelevant und sollen daher immer erfasst werden
 - Frequenzen, nach denen in diesem AP kontrolliert werden soll. Inklusive Abrechnungstyp (EK-Frequenzen)
-![im Strukturbaum](_media/ekplanen_ap.png)<br/>
+![im Strukturbaum](_media/ekplanen_ap.png)
 
-**Pro Teilpopulation**<br/>
+#### Pro Teilpopulation
 Durch Artverantwortliche. Im Formular EK-Plan(ung).
 - Aus den für den AP bestimmten Frequenzen wird die für diese Teil-Population passende gewählt
 - Weicht die EK-Frequenz von der auf AP-Ebene für diesen Fall bestimmten Wert ab, wird das besonders markiert ("EK-Frequenz abweichend")
@@ -36,15 +36,23 @@ Durch Artverantwortliche. Im Formular EK-Plan(ung).
 
 Letzteres ist die eigentliche "EK-Planung" und sie geschieht primär im entsprechenden Formular:<br/><br/>
 
-### Formular EK-Plan(ung)
-Das Formular ist für die Darstellung und Bearbeitung grosser Datenmengen konzipiert. Je grösser und höher aufgelöst der Bildschirm, desto übersichtlicher kann man arbeiten. Auf kleinen Bildschirmen (z.B. Handy) ist es kaum brauchbar.<br/><br/>
+## 2. Formular EK-Plan(ung)
+Das Formular ist für die Darstellung und Bearbeitung grosser Datenmengen konzipiert.<br/>
+Je grösser und höher aufgelöst der Bildschirm, desto übersichtlicher kann man arbeiten. Auf kleinen Bildschirmen (z.B. Handy) ist es kaum brauchbar.<br/><br/>
+
+### AP's wählen
 
 Oben links wählt man, von welchen Aktionsplänen Teil-Populationen angezeigt werden sollen:<br/>
 ![Formular](_media/ekplanen_form_2.png)<br/>
-Sobald ein AP gewählt wurde, erscheinen die zugehörigen Teil-Populationen in der Liste. Rechts davon werden für Jahre Splaten aufgebaut. Beginnend mit dem ersten Jahr nach 1993, in dem in einer der aufgelisteten Teil-Populationen eine Kontrolle stattfand, bis 15 Jahre in die Zukunft.<br/>
+
+Sobald ein AP gewählt wurde, erscheinen die zugehörigen Teil-Populationen in der Liste.<br/>
+Rechts davon werden für Jahre Splaten aufgebaut. Beginnend mit dem ersten Jahr nach 1993, in dem in einer der aufgelisteten Teil-Populationen eine Kontrolle stattfand, bis 15 Jahre in die Zukunft.<br/>
 ![Formular](_media/ekplanen_form_1.png)<br/>
 
-Oben rechts wählt man, welche Informationen in den Teil-Populationen angezeigt werden.<br/>![Formular](_media/ekplanen_form_3.png)<br/>
+### Dargestellte Informationen wählen
+
+Oben rechts wählt man, welche Informationen in den Teil-Populationen angezeigt werden:<br/>
+![Formular](_media/ekplanen_form_3.png)<br/>
 
 In den Zeilen für die Teilpopulationen werden in den Jahres-Spalten dargestellt:
 - Grüne Haken symbolisieren ausgeführte Kontrollen ![Kontrolle](_media/ekplanen_haken.png)
@@ -56,9 +64,9 @@ In den Zeilen für die Teilpopulationen werden in den Jahres-Spalten dargestellt
 - Direkt rechts des Blitzes erscheint eine rote Zahl, wenn im selben Jahr mehrere Ansiedlungen stattfanden. Sie stellt die Anzahl Ansiedlungen dar ![mehrere Ansiedlungen](_media/ekplanen_blitz_multiple.png)
 - Etwas weiter rechts neben dem Blitz stellt eine schwarze Zahl die Anzahl Planzen und Triebe dar, falls erfasst ![Ansiedlung mit Zählung](_media/ekplanen_blitz_zaehlung.png)
 
-#### Kontrollen plant man folgendermassen:
+### Kontrollen planen
 
-**Automatisch**<br/>
+#### Automatisch
 ![Automatisch planen](_media/ekplanen_auto.gif)
 
 Ändert man EK-Frequenz:<br/>
@@ -72,12 +80,16 @@ In den Zeilen für die Teilpopulationen werden in den Jahres-Spalten dargestellt
 
 Ändert man das Kontrolljahr, berechnet apflora die EK-Pläne.<br/><br/>
 
-**Manuell**<br/>
+#### Manuell
 Indem man eine Jahres-Zelle (Teilpopulation in Jahr) mit der Linken Maustaste anklickt. Es erscheint ein Menü. Hier wählt man den entsprechenden Eintrag.
 ![Manuell planen](_media/ekplanen_manuell.png)<br/>
 
+### Mehr Informationen
+
 Im gleichen Menü findet man weiterführende Infos zu EK, EKF und Ansiedlungen sowie Links um sie zu öffnen:<br/>
 ![Infos zu Ereignissen](_media/ekplanen_infos.png)<br/>
+
+### Filter setzen
 
 Bei den Feldern "EK-Frequenz" und "EK-Frequenz Startjahr" kann nach Nullwerten gefiltert werden:<br/>
 ![Filtern](_media/ekplanen_frequenz_filtern.gif)
