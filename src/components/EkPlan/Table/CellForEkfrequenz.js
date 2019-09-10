@@ -8,6 +8,7 @@ import { useSnackbar } from 'notistack'
 import { StyledCellForSelect } from './index'
 import { tpop } from '../../shared/fragments'
 import storeContext from '../../../storeContext'
+import setStartjahr from './setStartjahr'
 import setEkplans from './setEkplans'
 
 const Select = styled.select`
@@ -93,16 +94,19 @@ const CellForEkfrequenz = ({ row, field, style, refetchTpop }) => {
           },
         })
       }
-      /**
-       * TODO:
-       * set ekfrequenzStartjahr depending on last ek/ekf or ansiedlung?
-       */
-      if (row.ekfrequenzStartjahr.value) {
-        console.log('CellForEkfrequenz, row:', row)
+      // set EK-Frequenz Startjahr
+      const ekfrequenzStartjahr = await setStartjahr({
+        row,
+        ekfrequenzCode: value,
+        client,
+        store,
+      })
+      // set ekplans if startjahr exists
+      if (!!ekfrequenzStartjahr) {
         setEkplans({
           tpopId: row.id,
           ekfrequenzCode: value,
-          ekfrequenzStartjahr: row.ekfrequenzStartjahr.value,
+          ekfrequenzStartjahr,
           refetchTpop,
           client,
           store,

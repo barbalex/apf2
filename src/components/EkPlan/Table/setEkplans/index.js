@@ -14,14 +14,7 @@ export default async ({
   store,
   closeSnackbar,
 }) => {
-  const { enqueNotification, removeNotification } = store
-  const notif = enqueNotification({
-    message: `EK-Pläne werden berechnet...`,
-    options: {
-      variant: 'info',
-      persist: true,
-    },
-  })
+  const { enqueNotification } = store
   // 1. query all ekplans beginning with ekfrequenzStartJahr
   let ekplansToDeleteResult
   try {
@@ -34,7 +27,7 @@ export default async ({
       },
     })
   } catch (error) {
-    return store.enqueNotification({
+    return enqueNotification({
       message: `Fehler beim Abfragen der bisherigen EK-Pläne: ${error.message}`,
       options: {
         variant: 'error',
@@ -55,7 +48,7 @@ export default async ({
         },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return enqueNotification({
         message: `Fehler beim Löschen der bisherigen EK-Pläne: ${error.message}`,
         options: {
           variant: 'error',
@@ -73,7 +66,7 @@ export default async ({
       },
     })
   } catch (error) {
-    return store.enqueNotification({
+    return enqueNotification({
       message: `Fehler beim Abfragen der Kontrolljahre: ${error.message}`,
       options: {
         variant: 'error',
@@ -103,7 +96,7 @@ export default async ({
         },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return enqueNotification({
         message: `Fehler beim Schaffen neuer EK-Pläne: ${error.message}`,
         options: {
           variant: 'error',
@@ -112,8 +105,6 @@ export default async ({
     }
   }
   // 5. tell user how it went
-  removeNotification(notif)
-  closeSnackbar(notif)
   let jahreList = kontrolljahre.join(', ')
   if (typeof window !== 'undefined') {
     const formatter = new Intl.ListFormat('de', {
@@ -123,7 +114,7 @@ export default async ({
     jahreList = formatter.format(kontrolljahre.map(j => j.toString()))
   }
   enqueNotification({
-    message: `Ab ${ekfrequenzStartjahr} wurden die bestehenden EK-Pläne gelöscht und ab dem Startjahr ${ekfrequenzStartjahr} gemäss EK-Frequenz neue für ${
+    message: `Ab ${ekfrequenzStartjahr} wurden allfällige bestehende EK-Pläne gelöscht und ab dem Startjahr ${ekfrequenzStartjahr} gemäss EK-Frequenz neue für ${
       kontrolljahre.length > 1 ? 'die Jahre' : 'das Jahr'
     } ${jahreList} gesetzt`,
     options: {

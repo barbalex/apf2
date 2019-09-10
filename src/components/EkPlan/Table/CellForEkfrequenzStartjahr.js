@@ -143,8 +143,7 @@ const CellForEkfrequenz = ({ row, style, refetchTpop }) => {
           },
         })
       }
-      if (row.ekfrequenz.value) {
-        console.log('CellForEkfrequenzStartjahr, row:', row)
+      if (row.ekfrequenz.value && value) {
         setEkplans({
           tpopId: row.id,
           ekfrequenzCode: row.ekfrequenz.value,
@@ -154,6 +153,8 @@ const CellForEkfrequenz = ({ row, style, refetchTpop }) => {
           store,
           closeSnackbar,
         })
+      } else {
+        refetchTpop()
       }
     },
     [row, client, store, enqueNotification, refetchTpop, closeSnackbar],

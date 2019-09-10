@@ -3,9 +3,8 @@ import max from 'lodash/max'
 
 import queryEkfrequenz from './queryEkfrequenz'
 import mutationUpdateTpop from './mutationUpdateTpop'
-import { value } from 'pg-sql2'
 
-export default async ({ tpopId, row, ekfrequenzCode, client, store }) => {
+export default async ({ row, ekfrequenzCode, client, store }) => {
   const { enqueNotification } = store
   // 1  get ekfrequenz's kontrolljahreAb
   let ekfrequenzResult
@@ -41,14 +40,30 @@ export default async ({ tpopId, row, ekfrequenzCode, client, store }) => {
   // 2a if ek: get last ek
   if (kontrolljahreAb === 'EK') {
     ekfrequenzStartjahr = max(
-      get(row, 'tpopkontrsByTpopId.nodes', []).map(n => n.jahr),
+      get(row, 'tpop.tpopkontrsByTpopId.nodes', []).map(n => n.jahr),
     )
+    if (!ekfrequenzStartjahr) {
+      return enqueNotification({
+        message: `Offenbar gibt es keine Kontrolle. Daher kann das EK-Frequenz-Startjahr nicht gesetzt werden`,
+        options: {
+          variant: 'info',
+        },
+      })
+    }
   }
   // 2b if ansiedlung: get last ansiedlung
   if (kontrolljahreAb === 'ANSIEDLUNG') {
     ekfrequenzStartjahr = max(
-      get(row, 'tpopmassnsByTpopId.nodes', []).map(n => n.jahr),
+      get(row, 'tpop.tpopmassnsByTpopId.nodes', []).map(n => n.jahr),
     )
+    if (!ekfrequenzStartjahr) {
+      return enqueNotification({
+        message: `Offenbar gibt es keine Ansiedlung. Daher kann das EK-Frequenz-Startjahr nicht gesetzt werden`,
+        options: {
+          variant: 'info',
+        },
+      })
+    }
   }
   // 3 set tpop.ekfrequenzStartjahr
   try {
@@ -68,6 +83,17 @@ export default async ({ tpopId, row, ekfrequenzCode, client, store }) => {
       },
     })
   }
-  // 4 return startjahr
+  // 4inform user
+  const message =
+    kontrolljahreAb === 'EK'
+      ? `Entsprechend der letzten Kontrolle wird als EK-Frequenz-Startjahr ${ekfrequenzStartjahr} gesetzt`
+      : `Entsprechend der letzten Ansiedlung wird als EK-Frequenz-Startjahr ${ekfrequenzStartjahr} gesetzt`
+  enqueNotification({
+    message,
+    options: {
+      variant: 'success',
+    },
+  })
+  // 5 return startjahr
   return ekfrequenzStartjahr
 }
