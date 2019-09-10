@@ -86,19 +86,19 @@ In den Zeilen für die Teilpopulationen werden in den Jahres-Spalten dargestellt
 #### Automatisch
 ![Automatisch planen](_media/ekplanen_auto.gif)
 
-Ändert man EK-Frequenz:<br/>
-1. Berechnet apflora zunächst das Startjahr, beruhend auf der gewählten EK-Frequenz mit:
+Ändert man die EK-Frequenz:<br/>
+1. Setzt apflora zunächst das Startjahr, beruhend auf der gewählten EK-Frequenz mit:
   - EK-Typ (EK oder EKF)
   - "Kontrolljahre ab letzter" (Kontrolle oder Ansiedlung)
   - letzte Kontrolle oder Ansiedlung
-2. Dann berechnet apflora die EK-Pläne, beruhend auf
+2. Dann setzt apflora die EK-Pläne, beruhend auf
   - Startjahr und
   - Kontrolljahre gemäss EK-Frequenz<br/>
 
-Ändert man das Kontrolljahr, berechnet apflora die EK-Pläne.<br/><br/>
+Ändert man das Kontrolljahr, setzt apflora die EK-Pläne.<br/><br/>
 
 #### Manuell
-Indem man eine Jahres-Zelle (Teilpopulation in Jahr) mit der Linken Maustaste anklickt. Es erscheint ein Menü. Hier wählt man den entsprechenden Eintrag.
+Wenn man eine Jahres-Zelle (Teilpopulation in Jahr) mit der Linken Maustaste anklickt, erscheint ein Menü. Hier wählt man den entsprechenden Eintrag:
 ![Manuell planen](_media/ekplanen_manuell.png)<br/>
 
 ### Mehr Informationen
