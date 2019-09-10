@@ -1,7 +1,7 @@
 ---
 typ: 'technDoku'
 path: '/Dokumentation/Technisch/EK-Weiterentwicklung-2019'
-date: '2019-09-01'
+date: '2019-09-10'
 title: 'EK-Weiterentwicklung 2019'
 sort: 11
 ---
