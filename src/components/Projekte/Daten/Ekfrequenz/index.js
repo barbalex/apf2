@@ -9,7 +9,6 @@ import { Formik, Form, Field, FieldArray } from 'formik'
 import ErrorBoundary from 'react-error-boundary'
 
 import TextField from '../../../shared/TextFieldFormik'
-import RadioButton from '../../../shared/RadioButtonFormik'
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import KontrolljahrField from './KontrolljahrField'
 import FormTitle from '../../../shared/FormTitle'
@@ -56,6 +55,15 @@ const DelIcon = styled(IconButton)`
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 `
+
+const ektypeWertes = [
+  { value: 'EK', label: 'EK' },
+  { value: 'EKF', label: 'EKF' },
+]
+const kontrolljahreAbWertes = [
+  { value: 'EK', label: 'Kontrolle' },
+  { value: 'ANSIEDLUNG', label: 'Ansiedlung' },
+]
 
 const Ekfrequenz = ({ treeName }) => {
   const store = useContext(storeContext)
@@ -162,8 +170,13 @@ const Ekfrequenz = ({ treeName }) => {
                   type="text"
                   component={TextField}
                 />
-                <Field name="ek" label="EK" component={RadioButton} />
-                <Field name="ekf" label="EKF" component={RadioButton} />
+                <Field
+                  name="ektyp"
+                  dataSource={ektypeWertes}
+                  loading={false}
+                  label="EK-Typ"
+                  component={RadioButtonGroup}
+                />
                 <FieldArray
                   name="kontrolljahre"
                   render={arrayHelpers => (
@@ -216,6 +229,13 @@ const Ekfrequenz = ({ treeName }) => {
                         ))}
                     </KontrolljahrContainer>
                   )}
+                />
+                <Field
+                  name="kontrolljahreAb"
+                  dataSource={kontrolljahreAbWertes}
+                  loading={false}
+                  label="Kontrolljahre ab letzter"
+                  component={RadioButtonGroup}
                 />
                 <div>
                   {errorEkAbrechnungstypWertes ? (

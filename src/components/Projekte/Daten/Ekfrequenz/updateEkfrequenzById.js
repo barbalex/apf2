@@ -6,11 +6,11 @@ export default gql`
   mutation updateEkfrequenz(
     $id: UUID!
     $apId: UUID
-    $ek: Boolean
-    $ekf: Boolean
+    $ektyp: EkType
     $anwendungsfall: String
     $code: String
     $kontrolljahre: [Int]
+    $kontrolljahreAb: EkKontrolljahreAb
     $bemerkungen: String
     $sort: Int
     $ekAbrechnungstyp: String
@@ -22,11 +22,11 @@ export default gql`
         ekfrequenzPatch: {
           id: $id
           apId: $apId
-          ek: $ek
-          ekf: $ekf
+          ektyp: $ektyp
           anwendungsfall: $anwendungsfall
           code: $code
           kontrolljahre: $kontrolljahre
+          kontrolljahreAb: $kontrolljahreAb
           bemerkungen: $bemerkungen
           sort: $sort
           ekAbrechnungstyp: $ekAbrechnungstyp

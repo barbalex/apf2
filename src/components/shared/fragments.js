@@ -175,11 +175,11 @@ export const ekfrequenz = gql`
   fragment EkfrequenzFields on Ekfrequenz {
     id
     apId
-    ek
-    ekf
+    ektyp
     anwendungsfall
     code
     kontrolljahre
+    kontrolljahreAb
     bemerkungen
     sort
     ekAbrechnungstyp

@@ -1289,15 +1289,23 @@ CREATE POLICY writer ON apflora.ekzaehleinheit
     OR current_user = 'apflora_artverantwortlich'
   );
 
+  
+drop type if exists ek_type;
+create type ek_type as enum ('ek', 'ekf');
+drop type if exists ek_kontrolljahre_ab;
+create type ek_kontrolljahre_ab as enum ('ek', 'ansiedlung');
+
 drop table if exists apflora.ekfrequenz;
 create table apflora.ekfrequenz(
   id uuid primary key default uuid_generate_v1mc(),
   ap_id uuid not null references apflora.ap (id) on delete cascade on update cascade,
   ek boolean default false,
   ekf boolean default false,
+  ektyp ek_type default null,
   anwendungsfall text default null,
   code text default null unique,
   kontrolljahre integer[],
+  kontrolljahre_ab ek_kontrolljahre_ab default null,
   anzahl_min integer default null,
   anzahl_max integer default null,
   bemerkungen text default null,
@@ -1306,6 +1314,18 @@ create table apflora.ekfrequenz(
   changed date default now(),
   changed_by varchar(20) default null
 );
+-- alterations 2019 09 10:
+create type ek_kontrolljahre_ab as enum ('ek', 'ansiedlung');
+alter table apflora.ekfrequenz add column ektyp ek_type default null;
+CREATE INDEX ON apflora.ekfrequenz USING btree (ektyp);
+COMMENT ON COLUMN apflora.ekfrequenz.ektyp IS 'Ob diese Frequenz für EK oder EKF anwendbar ist';
+alter table apflora.ekfrequenz add column kontrolljahre_ab ek_kontrolljahre_ab default null;
+CREATE INDEX ON apflora.ekfrequenz USING btree (kontrolljahre_ab);
+COMMENT ON COLUMN apflora.ekfrequenz.kontrolljahre_ab IS 'Referenzjahr für die Kontrolljahre';
+-- TODO: after rebuilding app:
+-- ALTER TABLE apflora.ekfrequenz DROP COLUMN ek;
+-- ALTER TABLE apflora.ekfrequenz DROP COLUMN ekf;
+
 CREATE INDEX ON apflora.ekfrequenz USING btree (id);
 CREATE INDEX ON apflora.ekfrequenz USING btree (ap_id);
 CREATE INDEX ON apflora.ekfrequenz USING btree (ek);
@@ -1351,8 +1371,6 @@ CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree (sort);
 COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
-create type ek_type as enum ('ek', 'ekf');
 
 DROP TABLE IF EXISTS apflora.ekplan;
 CREATE TABLE apflora.ekplan (

@@ -82,7 +82,7 @@ export default async ({
   }
   const ekfrequenz = get(ekfrequenzsResult, 'data.allEkfrequenzs.nodes.[0]')
   // 4. add kontrolljahre to ekplan
-  const typ = ekfrequenz.ek ? 'EK' : 'EKF'
+  const typ = ekfrequenz.ektyp.toUpperCase()
   const kontrolljahre = ekfrequenz.kontrolljahre
   if (kontrolljahre.length === 0) {
     return enqueNotification({
