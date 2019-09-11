@@ -88,6 +88,8 @@ const UserMessages = ({ open }) => {
 
   if (error) {
     const errors = [error]
+    //console.log('Messages, error:', error)
+    //console.log('Messages, errors:', errors)
     return <Error errors={errors} />
   }
 

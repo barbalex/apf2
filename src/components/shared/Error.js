@@ -18,13 +18,19 @@ const LogoutButton = styled(Button)`
 `*/
 
 const Error = errors => {
+  // PROBLEM
+  // something passes in an object instead of an array
+  // so need to check and extract the errors array from the object if necessary
+  const errorsToUse = errors.map ? errors : errors.errors
   //const store = useContext(storeContext)
   const { idb } = useContext(idbContext)
   //const { token } = store.user
   console.log('Error, errors:', errors)
+  console.log('Error, errors.map:', errors.map)
+  console.log('Error, errorsToUse:', errorsToUse)
 
-  if (existsPermissionError(errors)) {
-    console.log('Error logging out')
+  if (existsPermissionError(errorsToUse)) {
+    console.log('Error will log out')
     // during login don't show permission error
     return logout(idb)
     /*// if token is not accepted, ask user to logout
@@ -43,7 +49,8 @@ const Error = errors => {
       </ErrorContainer>
     )*/
   } else {
-    const errorMessages = errors.map(e => e.message)
+    console.log('Error will list messages')
+    const errorMessages = errorsToUse.map(e => e.message)
     console.log('Error errorMessages:', errorMessages)
     const uniqueMessages = uniq(errorMessages)
     console.log('Error uniqueMessages:', uniqueMessages)
