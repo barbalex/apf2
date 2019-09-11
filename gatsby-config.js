@@ -55,7 +55,7 @@ module.exports = {
       resolve: 'gatsby-plugin-typography',
       options: {
         pathToConfigModule: './src/utils/typography.js',
-        omitGoogleFont: true,
+        omitGoogleFont: false,
       },
     },
     'gatsby-plugin-react-helmet',
