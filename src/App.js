@@ -17,9 +17,6 @@ import MobxStore from './store'
 import { SnackbarProvider } from 'notistack'
 //import { onPatch } from 'mobx-state-tree'
 
-import 'typeface-roboto'
-import 'typeface-roboto-mono'
-
 import initializeIdb from './modules/initializeIdb'
 import buildClient from './client'
 
