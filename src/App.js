@@ -1,6 +1,4 @@
 // This is the entry file for the application
-import 'babel-polyfill'
-
 import React from 'react'
 // importing isomorphic-fetch is essential
 // otherwise apollo errors during the build
