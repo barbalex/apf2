@@ -55,24 +55,21 @@ const MoreFlMeasure = styled.div`
 const JungPflLabel0 = styled.div`
   grid-area: jungPflLabel0;
   font-weight: 700;
+  padding-bottom: 5px;
 `
 const JungPflLabel1 = styled.div`
   grid-area: jungPflLabel1;
+  margin-top: -15px;
 `
 const JungPflVal1 = styled.div`
   grid-area: jungPflVal1;
-  > fieldset {
-    padding-bottom: 0 !important;
-  }
 `
 const JungPflLabel2 = styled.div`
   grid-area: jungPflLabel2;
+  margin-top: -15px;
 `
 const JungPflVal2 = styled.div`
   grid-area: jungPflVal2;
-  > fieldset {
-    padding-bottom: 0 !important;
-  }
 `
 const VeghoeheLabel0 = styled.div`
   grid-area: veghoeheLabel0;
@@ -147,7 +144,7 @@ const Img = styled.img`
 `
 
 const More = ({ saveToDb, row, errors }) => {
-  //console.log('More rendering')
+  console.log('More, row.jungpflanzenVorhanden:', row.jungpflanzenVorhanden)
 
   return (
     <Container>
@@ -171,7 +168,7 @@ const More = ({ saveToDb, row, errors }) => {
       <JungPflLabel1>ja</JungPflLabel1>
       <JungPflVal1 data-id="jungpflanzenVorhanden_true">
         <RadioButton
-          key={`${row.id}jungpflanzenVorhanden1`}
+          key={`${row.id}${row.jungpflanzenVorhanden}jungpflanzenVorhanden1`}
           name="jungpflanzenVorhanden"
           value={row.jungpflanzenVorhanden}
           saveToDb={saveToDb}
@@ -181,7 +178,7 @@ const More = ({ saveToDb, row, errors }) => {
       <JungPflVal2 data-id="jungpflanzenVorhanden_false">
         <RadioButton
           key={`${row.id}jungpflanzenVorhanden2`}
-          name="jungpflanzenVorhanden"
+          name="jungpflanzenVorhandenNein"
           value={row.jungpflanzenVorhanden === false}
           saveToDb={() => {
             const fakeEvent = {

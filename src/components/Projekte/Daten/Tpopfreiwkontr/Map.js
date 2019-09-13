@@ -53,7 +53,7 @@ const MapVal2 = styled(Label)`
   }
 `
 
-const Map = ({ saveToDb, row, errors, showFilter }) => {
+const Map = ({ saveToDb, row, errors }) => {
   const onSaveFalse = useCallback(() => {
     const fakeEvent = {
       target: { name: 'planVorhanden', value: false },

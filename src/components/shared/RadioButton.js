@@ -35,6 +35,9 @@ const RadioButton = ({ label, name, value, error, saveToDb }) => {
     saveToDb(fakeEvent)
   }, [value, name, saveToDb])
 
+  name === 'jungpflanzenVorhanden' &&
+    console.log('RadioButton', { name, value })
+
   return (
     <StyledFormControl
       component="fieldset"
