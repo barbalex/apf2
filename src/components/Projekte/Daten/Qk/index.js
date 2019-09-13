@@ -156,10 +156,10 @@ const Qk = ({ treeName }) => {
             {loading ? 'Die Daten werden analysiert...' : 'neu analysieren'}
           </StyledButton>
           {messageGroupsFiltered.map((messageGroup, index) => (
-            <StyledPaper key={index} elevation={2}>
+            <StyledPaper key={messageGroup.title} elevation={2}>
               <Title>{messageGroup.title}</Title>
-              {messageGroup.messages.map(m => (
-                <Row key={m.url.join()}>
+              {messageGroup.messages.map((m, i) => (
+                <Row key={`${m.text}Index${i}`}>
                   <StyledA
                     onClick={() => openTree2WithActiveNodeArray(m.url)}
                     title="in Strukturbaum 2 öffnen"
