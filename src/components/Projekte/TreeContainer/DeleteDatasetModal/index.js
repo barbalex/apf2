@@ -52,7 +52,6 @@ const DatasetDeleteModal = () => {
           <Button color="primary" onClick={onClickLoeschen}>
             Löschen
           </Button>
-          ,
         </DialogActions>
       </StyledDialog>
     </ErrorBoundary>
