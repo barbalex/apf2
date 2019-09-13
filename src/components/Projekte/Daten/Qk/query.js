@@ -945,6 +945,7 @@ export default gql`
               ) {
                 nodes {
                   id
+                  nr
                   popByPopId {
                     id
                     nr
@@ -970,6 +971,7 @@ export default gql`
               ) {
                 nodes {
                   id
+                  nr
                   popByPopId {
                     id
                     nr
@@ -995,6 +997,7 @@ export default gql`
               ) {
                 nodes {
                   id
+                  nr
                   popByPopId {
                     id
                     nr
@@ -1020,6 +1023,7 @@ export default gql`
               ) {
                 nodes {
                   id
+                  nr
                   popByPopId {
                     id
                     nr
@@ -1045,6 +1049,7 @@ export default gql`
               ) {
                 nodes {
                   id
+                  nr
                   popByPopId {
                     id
                     nr
@@ -1073,6 +1078,7 @@ export default gql`
               ) {
                 nodes {
                   id
+                  nr
                   popByPopId {
                     id
                     nr
@@ -1113,6 +1119,7 @@ export default gql`
               ) {
                 nodes {
                   id
+                  nr
                   popByPopId {
                     id
                     nr
@@ -1792,6 +1799,14 @@ export default gql`
                       ) {
                         nodes {
                           id
+                        }
+                      }
+                      tpopByTpopId {
+                        id
+                        nr
+                        popByPopId {
+                          id
+                          nr
                         }
                       }
                     }
