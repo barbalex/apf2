@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import Radio from '@material-ui/core/Radio'
+import Checkbox from '@material-ui/core/Checkbox'
 import FormLabel from '@material-ui/core/FormLabel'
 import FormControl from '@material-ui/core/FormControl'
 import FormHelperText from '@material-ui/core/FormHelperText'
@@ -19,7 +19,7 @@ const StyledFormLabel = styled(FormLabel)`
   user-select: none;
   pointer-events: none;
 `
-const StyledRadio = styled(Radio)`
+const StyledCheckbox = styled(Checkbox)`
   height: 2px !important;
   width: 24px;
 `
@@ -30,9 +30,13 @@ const RadioButton = ({ field, form, label }) => {
   const error = errors[name]
 
   const onClickButton = useCallback(() => {
+    let newValue = null
+    if (value === true) newValue = false
+    if (value === false) newValue = null
+    if (value === null) newValue = true
     const fakeEvent = {
       target: {
-        value: !value,
+        value: newValue,
         name,
       },
     }
@@ -40,6 +44,15 @@ const RadioButton = ({ field, form, label }) => {
     onBlur(fakeEvent)
     setTimeout(() => handleSubmit())
   }, [value, name, onChange, onBlur, handleSubmit])
+
+  const indeterminate = value === null
+  const checked = value === true
+  const title =
+    value === true
+      ? `Ja. Nach nächstem Klick 'Nein'`
+      : value === false
+      ? `Nein. Nach nächstem Klick 'Unbestimmt'`
+      : `Unbestimmt. Nach nächstem Klick 'Ja'`
 
   return (
     <div>
@@ -49,11 +62,13 @@ const RadioButton = ({ field, form, label }) => {
         aria-describedby={`${label}ErrorText`}
       >
         <StyledFormLabel component="legend">{label}</StyledFormLabel>
-        <StyledRadio
+        <StyledCheckbox
           data-id={name}
           onClick={onClickButton}
           color="primary"
-          checked={value}
+          checked={checked}
+          indeterminate={indeterminate}
+          title={title}
         />
         {!!error && (
           <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
