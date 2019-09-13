@@ -542,7 +542,7 @@ CREATE TABLE apflora.tpop (
   status integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   status_unklar boolean default false,
   status_unklar_grund text DEFAULT NULL,
-  apber_relevant boolean default null,
+  apber_relevant boolean default true,
   apber_relevant_grund integer DEFAULT NULL REFERENCES apflora.tpop_apberrelevant_grund_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   bekannt_seit smallint DEFAULT NULL,
   eigentuemer text DEFAULT NULL,
@@ -557,8 +557,6 @@ CREATE TABLE apflora.tpop (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null
 );
---TODO: apflora.tpop DROP COLUMN ek_abrechnungstyp;
-
 CREATE INDEX ON apflora.tpop USING btree (id);
 CREATE INDEX ON apflora.tpop USING btree (pop_id);
 CREATE INDEX ON apflora.tpop USING btree (status);
