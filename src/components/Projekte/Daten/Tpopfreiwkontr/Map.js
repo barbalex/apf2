@@ -20,21 +20,19 @@ const Container = styled(Area)`
   grid-column-gap: 10px;
   align-items: center;
 `
-const Label = styled.div`
+const MapLabel0 = styled.div`
+  grid-area: mapLabel0;
   font-weight: 700;
 `
-const MapLabel0 = styled(Label)`
-  grid-area: mapLabel0;
-`
-const MapLabel1 = styled(Label)`
+const MapLabel1 = styled.div`
   grid-area: mapLabel1;
   justify-self: end;
 `
-const MapLabel2 = styled(Label)`
+const MapLabel2 = styled.div`
   grid-area: mapLabel2;
   justify-self: end;
 `
-const MapVal1 = styled(Label)`
+const MapVal1 = styled.div`
   grid-area: mapVal1;
   > fieldset {
     padding-bottom: 0 !important;
@@ -43,7 +41,7 @@ const MapVal1 = styled(Label)`
     padding-top: 0 !important;
   }
 `
-const MapVal2 = styled(Label)`
+const MapVal2 = styled.div`
   grid-area: mapVal2;
   > fieldset {
     padding-bottom: 0 !important;
