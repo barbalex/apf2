@@ -122,7 +122,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
       setWgs84LatError('')
       setWgs84LongError('')
     },
-    [client, refetch, refetchForm, row.id, store.user.name, table],
+    [client, id, refetch, refetchForm, row.id, store.user.name, table],
   )
   const saveToDbLv95 = useCallback(
     (x, y) => {
