@@ -469,7 +469,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
 
   useEffect(() => {
     setErrors({})
-  }, [row])
+  }, [row.id])
 
   if (error) return `Fehler: ${error.message}`
   if (loading) {

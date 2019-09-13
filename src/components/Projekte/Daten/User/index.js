@@ -97,7 +97,7 @@ const User = ({ treeName }) => {
 
   useEffect(() => {
     setErrors({})
-  }, [row])
+  }, [row.id])
 
   const saveToDb = useCallback(
     async event => {
