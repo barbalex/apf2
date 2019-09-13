@@ -165,7 +165,6 @@ const Count = ({
   id,
   tpopkontrId,
   nr,
-  updateTpopkontr,
   showEmpty,
   showNew,
   refetch,

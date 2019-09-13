@@ -523,9 +523,8 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
           {!showFilter && zaehls1 && (
             <Count
               id={zaehls1.id}
+              tpopkontrId={row.id}
               nr="1"
-              saveToDb={saveToDb}
-              errors={errors}
               refetch={refetch}
               einheitsUsed={einheitsUsed}
               ekzaehleinheits={ekzaehleinheits}
@@ -541,9 +540,8 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
           {!showFilter && zaehls2 && (
             <Count
               id={zaehls2.id}
+              tpopkontrId={row.id}
               nr="2"
-              saveToDb={saveToDb}
-              errors={errors}
               refetch={refetch}
               einheitsUsed={einheitsUsed}
               ekzaehleinheits={ekzaehleinheits}
@@ -555,12 +553,10 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
               id={null}
               tpopkontrId={row.id}
               nr="2"
-              saveToDb={saveToDb}
-              errors={errors}
               showNew
+              refetch={refetch}
               einheitsUsed={einheitsUsed}
               ekzaehleinheits={ekzaehleinheits}
-              refetch={refetch}
               treeName={treeName}
             />
           )}
@@ -570,21 +566,18 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
               tpopkontrId={row.id}
               nr="2"
               showEmpty
-              saveToDb={saveToDb}
-              errors={errors}
               showNew
+              refetch={refetch}
               einheitsUsed={einheitsUsed}
               ekzaehleinheits={ekzaehleinheits}
-              refetch={refetch}
               treeName={treeName}
             />
           )}
           {!showFilter && zaehls3 && (
             <Count
               id={zaehls3.id}
+              tpopkontrId={row.id}
               nr="3"
-              saveToDb={saveToDb}
-              errors={errors}
               refetch={refetch}
               einheitsUsed={einheitsUsed}
               ekzaehleinheits={ekzaehleinheits}
@@ -596,12 +589,10 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
               id={null}
               tpopkontrId={row.id}
               nr="3"
-              saveToDb={saveToDb}
-              errors={errors}
               showNew
+              refetch={refetch}
               einheitsUsed={einheitsUsed}
               ekzaehleinheits={ekzaehleinheits}
-              refetch={refetch}
               treeName={treeName}
             />
           )}
@@ -611,12 +602,10 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
               tpopkontrId={row.id}
               nr="3"
               showEmpty
-              saveToDb={saveToDb}
-              errors={errors}
               showNew
+              refetch={refetch}
               einheitsUsed={einheitsUsed}
               ekzaehleinheits={ekzaehleinheits}
-              refetch={refetch}
               treeName={treeName}
             />
           )}
