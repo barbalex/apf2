@@ -76,6 +76,8 @@ const Coordinates = ({ row, refetchForm, table }) => {
 
   const saveToDb = useCallback(
     async (geomPoint, projection) => {
+      // _somehow_ this managed to be called without id when deleting a tpop????
+      if (!id) return
       try {
         const mutationName = `update${upperFirst(table)}ById`
         const patchName = `${table}Patch`
@@ -211,6 +213,8 @@ const Coordinates = ({ row, refetchForm, table }) => {
     },
     [saveToDbWgs84, wgs84LatState, wgs84Long],
   )
+
+  if (!row) return null
 
   return (
     <>
