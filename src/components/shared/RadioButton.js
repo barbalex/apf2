@@ -33,10 +33,7 @@ const RadioButton = ({ label, name, value, error, saveToDb }) => {
       },
     }
     saveToDb(fakeEvent)
-  }, [value, name, saveToDb])
-
-  name === 'jungpflanzenVorhanden' &&
-    console.log('RadioButton', { name, value })
+  }, [name, value, saveToDb])
 
   return (
     <StyledFormControl
@@ -56,10 +53,6 @@ const RadioButton = ({ label, name, value, error, saveToDb }) => {
       )}
     </StyledFormControl>
   )
-}
-
-RadioButton.defaultProps = {
-  value: 'false',
 }
 
 export default observer(RadioButton)
