@@ -178,7 +178,7 @@ const Count = ({
 
   const { activeNodeArray } = store[treeName]
 
-  const { data, loading, error } = useQuery(query, {
+  const { data, loading, error, refetch: refetchMe } = useQuery(query, {
     variables: {
       id: id || '99999999-9999-9999-9999-999999999999',
     },
@@ -248,23 +248,14 @@ const Count = ({
         await client.mutate({
           mutation: updateTpopkontrzaehlByIdGql,
           variables,
-          optimisticResponse: {
-            __typename: 'Mutation',
-            updateTpopkontrzaehlById: {
-              tpopkontrzaehl: {
-                ...valuesCorrected,
-                __typename: 'Tpopkontrzaehl',
-              },
-              __typename: 'Tpopkontrzaehl',
-            },
-          },
         })
       } catch (error) {
         return setErrors({ [changedField]: error.message })
       }
       setErrors({})
+      refetchMe()
     },
-    [client, row, store.user.name],
+    [client, refetchMe, row, store.user.name],
   )
   const remove = useCallback(
     ({ row }) => {
