@@ -3,7 +3,7 @@ typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/Gedächtnis"
 date: "2019-07-08"
 title: "apflora erinnert sich an euch"
-sort: 18
+sort: 19
 ---
 
 Wurde am 8.7.2019 eingeführt.<br/><br/>
