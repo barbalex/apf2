@@ -57,7 +57,7 @@ import MeasureControl from './MeasureControl'
 import FullScreenControl from './FullScreenControl'
 import SwitchScaleControl from './ScaleControl'
 import DrawControl from './DrawControl'
-// import PrintControl from './PrintControl'
+import PrintControl from './PrintControl'
 import PngControl from './PngControl'
 import CoordinatesControl from './CoordinatesControl'
 import epsg4326to2056 from '../../../modules/epsg4326to2056'
@@ -292,9 +292,8 @@ const StyledMap = styled(Map)`
     line-height: 30px;
   }
 
-  #leafletEasyPrint {
-    width: 44px;
-    height: 44px;
+  .easyPrintHolder {
+    height: 36px !important;
   }
 
   /*
@@ -583,14 +582,11 @@ const Karte = ({ treeName }) => {
             activeOverlaysString={activeOverlays.join()}
             activeApfloraLayersString={activeApfloraLayers.join()}
           />
+          <PrintControl />
           <MeasureControl />
           <SwitchScaleControl />
           <FullScreenControl />
           {activeApfloraLayers.includes('mapFilter') && <DrawControl />}
-          {/*
-            need to get background maps to show when printing A4
-            <PrintControl />
-            */}
           <PngControl />
           <CoordinatesControl />
         </StyledMap>

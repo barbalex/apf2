@@ -6,6 +6,9 @@ import Control from 'react-leaflet-control'
 import styled from 'styled-components'
 import FileDownloadIcon from '@material-ui/icons/GetApp'
 
+//import { baseLayers } from './LayersControl/BaseLayers'
+//import storeContext from '../../../storeContext'
+
 const StyledButton = styled.button`
   background-color: white;
   width: 34px;
@@ -24,16 +27,16 @@ const StyledButton = styled.button`
 const options = {
   hidden: true,
   position: 'topright',
-  // sizeModes may not be needed?
-  sizeModes: ['Current'],
   exportOnly: true,
   filename: 'apfloraKarte',
   hideControlContainer: true,
 }
 
 const PngControl = () => {
-  const [printPlugin, changePrintPlugin] = useState({})
+  //const { activeBaseLayer } = useContext(storeContext)
   const { map } = useLeaflet()
+
+  const [printPlugin, changePrintPlugin] = useState({})
 
   const savePng = useCallback(
     event => {
@@ -48,6 +51,10 @@ const PngControl = () => {
     const pp = window.L.easyPrint(options).addTo(map)
     changePrintPlugin(pp)
   }, [map])
+
+  //const layer = baseLayers.find(l => l.value === activeBaseLayer)
+  //const sendsCors = layer && layer.cors
+  //if (!sendsCors) return null
 
   return (
     <div>
