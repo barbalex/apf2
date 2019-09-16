@@ -14,9 +14,7 @@ export default gql`
         message
         time
         usermessagesByMessageId(filter: { userName: { equalTo: $name } }) {
-          nodes {
-            id
-          }
+          totalCount
         }
       }
     }

@@ -65,6 +65,7 @@ const UserMessages = () => {
   }, [])
 
   const { data, error, loading, refetch } = useQuery(query, {
+    fetchPolicy: 'network-only',
     variables: { name: userName, aYearAgo },
   })
   const allMessages = get(data, 'allMessages.nodes', [])
