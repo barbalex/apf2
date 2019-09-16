@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Button from '@material-ui/core/Button'
@@ -8,6 +8,7 @@ import Linkify from 'react-linkify'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import { observer } from 'mobx-react-lite'
 import ErrorBoundary from 'react-error-boundary'
+import moment from 'moment'
 
 import query from './data'
 import createUsermessage from './createUsermessage'
@@ -51,17 +52,24 @@ const OkButton = styled(Button)`
   right: 12px;
 `
 
-const UserMessages = ({ open }) => {
+const UserMessages = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { user } = store
   const userName = user.name
+
+  const aYearAgo = useMemo(() => {
+    const now = new Date()
+    now.setDate(now.getDate() - 365)
+    return now.toISOString()
+  }, [])
+
   const { data, error, loading, refetch } = useQuery(query, {
-    variables: { name: userName },
+    variables: { name: userName, aYearAgo },
   })
   const allMessages = get(data, 'allMessages.nodes', [])
   const unreadMessages = allMessages.filter(
-    m => get(m, 'usermessagesByMessageId.nodes', []).length === 0,
+    m => get(m, 'usermessagesByMessageId.totalCount', 0) === 0,
   )
 
   const onClickRead = useCallback(
@@ -96,12 +104,7 @@ const UserMessages = ({ open }) => {
   return (
     <ErrorBoundary>
       <StyledDialog
-        open={
-          unreadMessages.length > 0 &&
-          !!userName &&
-          // don't show while loading data
-          !loading
-        }
+        open={unreadMessages.length > 0 && !!userName && !loading}
         aria-labelledby="dialog-title"
       >
         <TitleRow>
@@ -111,10 +114,12 @@ const UserMessages = ({ open }) => {
         <div>
           {unreadMessages.map((m, index) => {
             const paddBottom = index === unreadMessages.length - 1
+            const date = moment(m.time).format('YYYY.MM.DD')
+
             return (
               <MessageRow key={m.id} paddBottom={paddBottom}>
                 <Linkify properties={{ target: '_blank' }}>
-                  <MessageDiv>{m.message}</MessageDiv>
+                  <MessageDiv>{`${date}: ${m.message}`}</MessageDiv>
                 </Linkify>
                 <OkButton onClick={() => onClickRead(m)}>o.k.</OkButton>
               </MessageRow>
