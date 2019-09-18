@@ -16,8 +16,13 @@ const Geschaetzt = ({ row, refetch }) => {
   const onChange = useCallback(
     async event => {
       const val = ifIsNumericAsNumber(event.target.value)
+      /*console.log('Geschaetzt, onChange:', {
+        row,
+        val,
+        targetValue: event.target.value,
+      })*/
       if (val === null && row.methode === 2) return
-      if (row.anzahl === val) return
+      if (row.anzahl === val && row.methode === 1) return
       const variables = {
         id: row.id,
         anzahl: val,
@@ -47,6 +52,8 @@ const Geschaetzt = ({ row, refetch }) => {
       store.user.name,
     ],
   )
+  //console.log('Geschaetzt, row:', row)
+
   return (
     <TextField
       value={row.methode === 1 ? row.anzahl : null}

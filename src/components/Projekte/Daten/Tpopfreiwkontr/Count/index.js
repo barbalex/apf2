@@ -245,6 +245,8 @@ const Count = ({
     [setToDelete, activeNodeArray, refetch, store.refetch],
   )
 
+  //console.log('Count, row:', row)
+
   if (showNew) {
     return (
       <Container nr={nr} shownew={showNew}>

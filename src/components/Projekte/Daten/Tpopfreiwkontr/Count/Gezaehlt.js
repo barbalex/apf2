@@ -17,7 +17,7 @@ const Gezaehlt = ({ row, refetch }) => {
     async event => {
       const val = ifIsNumericAsNumber(event.target.value)
       if (val === null && row.methode === 1) return
-      if (row.anzahl === val) return
+      if (row.anzahl === val && row.methode === 2) return
       const variables = {
         id: row.id,
         anzahl: val,
@@ -47,6 +47,8 @@ const Gezaehlt = ({ row, refetch }) => {
       store.user.name,
     ],
   )
+  //console.log('Gezaehlt, row:', row)
+
   return (
     <TextField
       value={row.methode === 2 ? row.anzahl : null}

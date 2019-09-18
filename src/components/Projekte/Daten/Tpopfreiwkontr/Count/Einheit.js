@@ -48,7 +48,6 @@ const Einheit = ({ nr, row, refetch, zaehleinheitWerte }) => {
         einheit: val,
         changedBy: store.user.name,
       }
-      console.log('Einheit', { val, userName: store.user.name })
       try {
         await client.mutate({
           mutation: updateTpopkontrzaehlByIdGql,
