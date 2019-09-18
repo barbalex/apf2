@@ -38,7 +38,7 @@ const Relevant = styled.div`
 const Grund = styled.div`
   grid-area: grund;
   > div {
-    margin-bottom: -15px;
+    margin-bottom: -25px;
   }
 `
 

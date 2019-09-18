@@ -17,9 +17,9 @@ const RemarksLabel = styled.div`
 `
 const RemarksVal = styled.div`
   > div {
-    margin-bottom: -15px;
+    margin-bottom: -25px;
   }
-  > div > div > div > textarea {
+  textarea {
     @media print {
       font-size: 11px !important;
     }

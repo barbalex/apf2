@@ -30,7 +30,7 @@ const DeckApArtLabel = styled(Label)`
 const DeckApArtVal = styled.div`
   grid-area: deckApArtVal;
   > div {
-    margin-top: -25px;
+    margin-top: -20px;
     padding-bottom: 5px !important;
   }
   > div > div > input {
