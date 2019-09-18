@@ -24,7 +24,7 @@ const StyledCheckbox = styled(Checkbox)`
   width: 24px;
 `
 
-const RadioButton = ({ field, form, label }) => {
+const Checkbox2StatesFormik = ({ field, form, label }) => {
   const { onChange, onBlur, value, name } = field
   const { errors, handleSubmit } = form
   const error = errors[name]
@@ -65,8 +65,4 @@ const RadioButton = ({ field, form, label }) => {
   )
 }
 
-RadioButton.defaultProps = {
-  value: 'false',
-}
-
-export default observer(RadioButton)
+export default observer(Checkbox2StatesFormik)

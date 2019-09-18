@@ -10,8 +10,7 @@ import { Formik, Form, Field } from 'formik'
 import ErrorBoundary from 'react-error-boundary'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
-import RadioButton from '../../../shared/RadioButtonFormik'
-import Checkbox2States from '../../../shared/Checkbox2StatesFormik'
+import Checkbox3States from '../../../shared/Checkbox3StatesFormik'
 import TextField from '../../../shared/TextFieldFormik'
 import Select from '../../../shared/SelectFormik'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfoFormik'
@@ -346,7 +345,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                     <Field
                       name="jungpflanzenVorhanden"
                       label="Jungpflanzen vorhanden"
-                      component={RadioButton}
+                      component={Checkbox3States}
                     />
                     <Field
                       name="vitalitaet"
@@ -411,7 +410,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                     <Field
                       name="apberNichtRelevant"
                       label="Im Jahresbericht nicht berücksichtigen"
-                      component={RadioButton}
+                      component={Checkbox3States}
                     />
                     <Field
                       name="apberNichtRelevantGrund"
