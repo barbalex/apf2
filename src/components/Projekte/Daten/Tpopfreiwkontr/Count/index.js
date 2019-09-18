@@ -191,11 +191,14 @@ const Count = ({
       .then(() => refetch())
   }, [client, refetch, tpopkontrId])
 
-  const allEinheits = get(dataLists, 'allTpopkontrzaehlEinheitWertes.nodes', [])
-  // do list this count's einheit
-  const einheitsNotToList = einheitsUsed.filter(e => e !== row.einheit)
-
   const zaehleinheitWerte = useMemo(() => {
+    const allEinheits = get(
+      dataLists,
+      'allTpopkontrzaehlEinheitWertes.nodes',
+      [],
+    )
+    // do list this count's einheit
+    const einheitsNotToList = einheitsUsed.filter(e => e !== row.einheit)
     let zaehleinheitWerte = ekzaehleinheits
       // remove already set values
       .filter(e => !einheitsNotToList.includes(e.code))
@@ -216,8 +219,8 @@ const Count = ({
       label: el.text,
     }))
   }, [
-    allEinheits,
-    einheitsNotToList,
+    dataLists,
+    einheitsUsed,
     ekzaehleinheits,
     ekzaehleinheitsOriginal,
     row.einheit,
