@@ -147,7 +147,7 @@ const Beobzuordnung = ({ type, treeName }) => {
       ? activeNodeArray[3]
       : '99999999-9999-9999-9999-999999999999'
 
-  const { data, loading, error } = useQuery(query, {
+  const { data, loading, error, refetch } = useQuery(query, {
     variables: {
       id,
       apId,
@@ -181,12 +181,12 @@ const Beobzuordnung = ({ type, treeName }) => {
         value,
         id,
         treeName,
-        refetch: data.refetch,
+        refetch,
         client,
         store,
       })
     },
-    [client, data.refetch, id, store, treeName],
+    [client, id, refetch, store, treeName],
   )
   const onSaveTpopIdToDb = useCallback(
     event => {

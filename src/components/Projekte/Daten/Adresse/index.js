@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { Formik, Form, Field } from 'formik'
 import ErrorBoundary from 'react-error-boundary'
 
-import RadioButton from '../../../shared/RadioButtonFormik'
+import Checkbox2States from '../../../shared/Checkbox2StatesFormik'
 import TextField from '../../../shared/TextFieldFormik'
 import FormTitle from '../../../shared/FormTitle'
 import updateAdresseByIdGql from './updateAdresseById'
@@ -121,7 +121,7 @@ const Adresse = ({ treeName }) => {
                 <Field
                   name="freiwErfko"
                   label="freiwillige ErfolgskontrolleurIn"
-                  component={RadioButton}
+                  component={Checkbox2States}
                 />
                 <Field
                   name="evabVorname"

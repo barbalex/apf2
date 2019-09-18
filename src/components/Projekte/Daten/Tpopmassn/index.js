@@ -11,7 +11,7 @@ import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import TextField from '../../../shared/TextFieldFormik'
 import Select from '../../../shared/SelectFormik'
 import SelectLoadingOptionsTypable from '../../../shared/SelectLoadingOptionsTypableFormik'
-import RadioButton from '../../../shared/RadioButtonFormik'
+import Checkbox2States from '../../../shared/Checkbox2StatesFormik'
 import DateFieldWithPicker from '../../../shared/DateFieldWithPickerFormik'
 import StringToCopy from '../../../shared/StringToCopy'
 import FormTitle from '../../../shared/FormTitle'
@@ -227,7 +227,7 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
         )}
         <FieldsContainer data-width={showFilter ? filterWidth : datenWidth}>
           <Formik
-            key={showFilter ? (row) : row.id}
+            key={showFilter ? row : row.id}
             initialValues={row}
             onSubmit={onSubmit}
             enableReinitialize
@@ -276,7 +276,7 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
                 <Field
                   name="planVorhanden"
                   label="Plan vorhanden"
-                  component={RadioButton}
+                  component={Checkbox2States}
                 />
                 <Field
                   name="planBezeichnung"

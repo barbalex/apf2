@@ -10,6 +10,7 @@ import TextFieldWithInfo from '../../../../shared/TextFieldWithInfoFormik'
 import Status from '../../../../shared/Status'
 import SelectCreatable from '../../../../shared/SelectCreatableGemeinde'
 import RadioButton from '../../../../shared/RadioButtonFormik'
+import Checkbox2States from '../../../../shared/Checkbox2StatesFormik'
 import RadioButtonGroupWithInfo from '../../../../shared/RadioButtonGroupWithInfoFormik'
 import TpopAbBerRelevantInfoPopover from '../../TpopAbBerRelevantInfoPopover'
 import queryLists from './queryLists'
@@ -66,7 +67,7 @@ const Tpop = ({ treeName, showFilter, onSubmit, row, apJahr, refetchTpop }) => {
             <Field
               name="statusUnklar"
               label="Status unklar"
-              component={RadioButton}
+              component={Checkbox2States}
             />
             <Field
               name="statusUnklarGrund"
@@ -78,7 +79,7 @@ const Tpop = ({ treeName, showFilter, onSubmit, row, apJahr, refetchTpop }) => {
             <Field
               name="apberRelevant"
               label="Für AP-Bericht relevant"
-              component={RadioButton}
+              component={Checkbox2States}
             />
             {errorLists ? (
               <div>errorLists.message</div>

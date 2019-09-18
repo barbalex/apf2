@@ -8,7 +8,7 @@ import ErrorBoundary from 'react-error-boundary'
 
 import TextField from '../../../shared/TextFieldFormik'
 import Select from '../../../shared/SelectFormik'
-import RadioButton from '../../../shared/RadioButtonFormik'
+import Checkbox2States from '../../../shared/Checkbox2StatesFormik'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
 import queryLists from './queryLists'
@@ -143,7 +143,7 @@ const Ekzaehleinheit = ({ treeName }) => {
                 <Field
                   name="zielrelevant"
                   label="zielrelevant"
-                  component={RadioButton}
+                  component={Checkbox2States}
                 />
                 <Field
                   name="sort"

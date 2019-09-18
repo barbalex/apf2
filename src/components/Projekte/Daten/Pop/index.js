@@ -9,7 +9,7 @@ import ErrorBoundary from 'react-error-boundary'
 import TextField from '../../../shared/TextFieldFormik'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfoFormik'
 import Status from '../../../shared/Status'
-import RadioButton from '../../../shared/RadioButtonFormik'
+import Checkbox2States from '../../../shared/Checkbox2StatesFormik'
 import FormTitle from '../../../shared/FormTitle'
 import FilterTitle from '../../../shared/FilterTitle'
 import updatePopByIdGql from './updatePopById'
@@ -217,7 +217,7 @@ const Pop = ({ treeName, showFilter = false }) => {
                 <Field
                   label="Status unklar"
                   name="statusUnklar"
-                  component={RadioButton}
+                  component={Checkbox2States}
                 />
                 <Field
                   label="Begründung"

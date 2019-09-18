@@ -11,6 +11,7 @@ import ErrorBoundary from 'react-error-boundary'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import RadioButton from '../../../shared/RadioButtonFormik'
+import Checkbox2States from '../../../shared/Checkbox2StatesFormik'
 import TextField from '../../../shared/TextFieldFormik'
 import Select from '../../../shared/SelectFormik'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfoFormik'

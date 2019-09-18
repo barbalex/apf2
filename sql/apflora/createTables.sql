@@ -1297,8 +1297,6 @@ drop table if exists apflora.ekfrequenz;
 create table apflora.ekfrequenz(
   id uuid primary key default uuid_generate_v1mc(),
   ap_id uuid not null references apflora.ap (id) on delete cascade on update cascade,
-  ek boolean default false,
-  ekf boolean default false,
   ektyp ek_type default null,
   anwendungsfall text default null,
   code text default null unique,
@@ -1324,8 +1322,6 @@ CREATE INDEX ON apflora.ekfrequenz USING btree (sort);
 CREATE INDEX ON apflora.ekfrequenz USING btree (ek_abrechnungstyp);
 COMMENT ON COLUMN apflora.ekfrequenz.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.ekfrequenz.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
-COMMENT ON COLUMN apflora.ekfrequenz.ek IS 'Diese Frequenz ist für EK anwendbar';
-COMMENT ON COLUMN apflora.ekfrequenz.ekf IS 'Diese Frequenz ist für EKF anwendbar';
 COMMENT ON COLUMN apflora.ekfrequenz.anwendungsfall IS 'Beschreibt, in welchen Fällen diese Frequenz angewandt wird. Wahrscheinliche Werte: autochthone Population, angepflanzte Population, angesäte Population, Spezialfall';
 COMMENT ON COLUMN apflora.ekfrequenz.code IS 'Definierend für die eqfrequenz';
 COMMENT ON COLUMN apflora.ekfrequenz.kontrolljahre IS ' Definiert, in welchen Jahren eine Kontrolle üblicherweise stattfinden soll. Bei Anpflanzungen sind das Jahre ab der letzten Anpflanzung. Bei autochthonen Populationen?';

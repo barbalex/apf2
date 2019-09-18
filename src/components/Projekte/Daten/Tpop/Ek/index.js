@@ -13,7 +13,7 @@ import { useQuery } from '@apollo/react-hooks'
 import { Formik, Form, Field } from 'formik'
 import ErrorBoundary from 'react-error-boundary'
 
-import RadioButton from '../../../../shared/RadioButtonFormik'
+import Checkbox2States from '../../../../shared/Checkbox2StatesFormik'
 import RadioButtonGroup from '../../../../shared/RadioButtonGroupFormik'
 import queryEk from './queryEk'
 import queryEkfrequenzs from './queryEkfrequenzs'
@@ -145,7 +145,7 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
                   <Field
                     name="ekfrequenzAbweichend"
                     label="EK-Frequenz abweichend"
-                    component={RadioButton}
+                    component={Checkbox2States}
                   />
                 </FormContainerNoColumnsInner>
               </Form>
