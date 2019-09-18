@@ -355,7 +355,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                     />
                     <Field
                       name="ueberlebensrate"
-                      label="Überlebensrate"
+                      label="Überlebensrate (in Prozent)"
                       type="number"
                       component={TextField}
                     />
