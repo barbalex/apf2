@@ -77,6 +77,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
   const saveToDb = useCallback(
     async (geomPoint, projection) => {
       // _somehow_ this managed to be called without id when deleting a tpop????
+      //console.log('Coordinates, saveToDb', { row })
       if (!id) return
       try {
         const mutationName = `update${upperFirst(table)}ById`
@@ -115,14 +116,16 @@ const Coordinates = ({ row, refetchForm, table }) => {
       // update on map
       if (table === 'pop' && refetch.popForMap) refetch.popForMap()
       if (table === 'tpop' && refetch.tpopForMap) refetch.tpopForMap()
-      // refetch form
+      // refetch form ONLY if id exists
+      // if user has right clicked tpop without activating it, there is now row id
       refetchForm()
       setYError('')
       setXError('')
       setWgs84LatError('')
       setWgs84LongError('')
     },
-    [client, id, refetch, refetchForm, row.id, store.user.name, table],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [client, id, refetch, refetchForm, row, row.id, store.user.name, table],
   )
   const saveToDbLv95 = useCallback(
     (x, y) => {
