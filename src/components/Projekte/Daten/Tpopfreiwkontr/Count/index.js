@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
@@ -163,6 +163,7 @@ const Count = ({
   refetch,
   einheitsUsed = [],
   ekzaehleinheits = [],
+  ekzaehleinheitsOriginal = [],
   treeName,
 }) => {
   const store = useContext(storeContext)
@@ -193,21 +194,35 @@ const Count = ({
   const allEinheits = get(dataLists, 'allTpopkontrzaehlEinheitWertes.nodes', [])
   // do list this count's einheit
   const einheitsNotToList = einheitsUsed.filter(e => e !== row.einheit)
-  console.log('Count', { ekzaehleinheits, einheitsNotToList, allEinheits })
-  let zaehleinheitWerte = ekzaehleinheits
-    //.map(e => e.tpopkontrzaehlEinheitWerteByZaehleinheitId)
-    // remove already set values
-    .filter(e => !einheitsNotToList.includes(e.code))
-  // add this zaehleineits value if missing
-  // so as to show values input in earlier years that shall not be input any more
-  const thisRowsEinheit = allEinheits.find(e => e.code === row.einheit)
-  if (thisRowsEinheit) {
-    zaehleinheitWerte = uniqBy([thisRowsEinheit, ...zaehleinheitWerte], 'id')
-  }
-  zaehleinheitWerte = sortBy(zaehleinheitWerte, 'sort').map(el => ({
-    value: el.code,
-    label: el.text,
-  }))
+
+  const zaehleinheitWerte = useMemo(() => {
+    let zaehleinheitWerte = ekzaehleinheits
+      // remove already set values
+      .filter(e => !einheitsNotToList.includes(e.code))
+    // add this zaehleineits value if missing
+    // so as to show values input in earlier years that shall not be input any more
+    const thisRowsEinheit = allEinheits.find(e => e.code === row.einheit)
+    if (thisRowsEinheit) {
+      zaehleinheitWerte = uniqBy([thisRowsEinheit, ...zaehleinheitWerte], 'id')
+    }
+    return sortBy(zaehleinheitWerte, z => {
+      const ekzaehleinheitOriginal = ekzaehleinheitsOriginal.find(
+        e => e.tpopkontrzaehlEinheitWerteByZaehleinheitId.code === z.code,
+      )
+      if (!ekzaehleinheitOriginal) return 999
+      return ekzaehleinheitOriginal.sort || 999
+    }).map(el => ({
+      value: el.code,
+      label: el.text,
+    }))
+  }, [
+    allEinheits,
+    einheitsNotToList,
+    ekzaehleinheits,
+    ekzaehleinheitsOriginal,
+    row.einheit,
+  ])
+
   const showDelete = nr > 1
 
   const remove = useCallback(
@@ -253,9 +268,12 @@ const Count = ({
   if (errorLists) {
     return `Fehler: ${errorLists.message}`
   }
-  console.log('Count, row:', { row, zaehleinheitWerte })
   return (
-    <StyledForm nr={nr} data-id={`count${nr}`}>
+    <StyledForm
+      nr={nr}
+      data-id={`count${nr}`}
+      showdelete={showDelete.toString()}
+    >
       <Einheit
         row={row}
         refetch={refetch}

@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
+import sortBy from 'lodash/sortBy'
 import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
@@ -201,11 +202,12 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
     },
   })
 
-  const ekzaehleinheits = get(
+  const ekzaehleinheitsOriginal = get(
     data,
     'tpopkontrById.tpopByTpopId.popByPopId.apByApId.ekzaehleinheitsByApId.nodes',
     [],
   )
+  const ekzaehleinheits = ekzaehleinheitsOriginal
     .map(n => get(n, 'tpopkontrzaehlEinheitWerteByZaehleinheitId', {}))
     // remove null values stemming from efkzaehleinheit without zaehleinheit_id
     .filter(n => n !== null)
@@ -214,15 +216,22 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
     'tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes',
     [],
   )
-  console.log('Tpopfreiwkontr, zaehls:', zaehls)
-  const zaehls1 = zaehls[0]
-  const zaehls2 = zaehls[1]
-  const zaehls3 = zaehls[2]
+  const zaehlsSorted = sortBy(zaehls, z => {
+    const ekzaehleinheitOriginal = ekzaehleinheitsOriginal.find(
+      e => e.tpopkontrzaehlEinheitWerteByZaehleinheitId.code === z.einheit,
+    )
+    if (!ekzaehleinheitOriginal) return 999
+    return ekzaehleinheitOriginal.sort || 999
+  })
+  const zaehls1 = zaehlsSorted[0]
+  const zaehls2 = zaehlsSorted[1]
+  const zaehls3 = zaehlsSorted[2]
   const zaehl1WasAttributed =
     zaehls1 && (zaehls1.anzahl || zaehls1.anzahl === 0 || zaehls1.einheit)
   const zaehl2ShowNew =
     zaehl1WasAttributed && !zaehls2 && ekzaehleinheits.length > 1
-  const zaehl1ShowEmpty = ekzaehleinheits.length === 0 && zaehls.length === 0
+  const zaehl1ShowEmpty =
+    ekzaehleinheits.length === 0 && zaehlsSorted.length === 0
   const zaehl2ShowEmpty =
     (!zaehl1WasAttributed && !zaehls2) || ekzaehleinheits.length < 2
   const zaehl2WasAttributed =
@@ -233,7 +242,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
     zaehl2WasAttributed && !zaehls3 && ekzaehleinheits.length > 2
   const zaehl3ShowEmpty =
     (!zaehl2WasAttributed && !zaehls3) || ekzaehleinheits.length < 3
-  const einheitsUsed = zaehls.filter(n => !!n.einheit).map(n => n.einheit)
+  const einheitsUsed = zaehlsSorted.filter(n => !!n.einheit).map(n => n.einheit)
   const isFreiwillig = role === 'apflora_freiwillig'
 
   let tpopkontrTotalCount
@@ -511,94 +520,108 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
             showFilter={showFilter}
           />
           <Image apId={apId} row={row} artname={artname} />
-          {!showFilter && zaehls1 && (
-            <Count
-              id={zaehls1.id}
-              tpopkontrId={row.id}
-              nr="1"
-              refetch={refetch}
-              einheitsUsed={einheitsUsed}
-              ekzaehleinheits={ekzaehleinheits}
-              treeName={treeName}
-            />
-          )}
-          {!showFilter && zaehl1ShowEmpty && (
-            <CountHint>
-              Sie müssen auf Ebene Aktionsplan EK-Zähleinheiten definieren, um
-              hier Zählungen erfassen zu können.
-            </CountHint>
-          )}
-          {!showFilter && zaehls2 && (
-            <Count
-              id={zaehls2.id}
-              tpopkontrId={row.id}
-              nr="2"
-              refetch={refetch}
-              einheitsUsed={einheitsUsed}
-              ekzaehleinheits={ekzaehleinheits}
-              treeName={treeName}
-            />
-          )}
-          {!showFilter && zaehl2ShowNew && (
-            <Count
-              id={null}
-              tpopkontrId={row.id}
-              nr="2"
-              showNew
-              refetch={refetch}
-              einheitsUsed={einheitsUsed}
-              ekzaehleinheits={ekzaehleinheits}
-              treeName={treeName}
-            />
-          )}
-          {!showFilter && zaehl2ShowEmpty && !zaehl1ShowEmpty && (
-            <Count
-              id={null}
-              tpopkontrId={row.id}
-              nr="2"
-              showEmpty
-              showNew
-              refetch={refetch}
-              einheitsUsed={einheitsUsed}
-              ekzaehleinheits={ekzaehleinheits}
-              treeName={treeName}
-            />
-          )}
-          {!showFilter && zaehls3 && (
-            <Count
-              id={zaehls3.id}
-              tpopkontrId={row.id}
-              nr="3"
-              refetch={refetch}
-              einheitsUsed={einheitsUsed}
-              ekzaehleinheits={ekzaehleinheits}
-              treeName={treeName}
-            />
-          )}
-          {!showFilter && zaehl3ShowNew && (
-            <Count
-              id={null}
-              tpopkontrId={row.id}
-              nr="3"
-              showNew
-              refetch={refetch}
-              einheitsUsed={einheitsUsed}
-              ekzaehleinheits={ekzaehleinheits}
-              treeName={treeName}
-            />
-          )}
-          {!showFilter && zaehl3ShowEmpty && !zaehl2ShowEmpty && (
-            <Count
-              id={null}
-              tpopkontrId={row.id}
-              nr="3"
-              showEmpty
-              showNew
-              refetch={refetch}
-              einheitsUsed={einheitsUsed}
-              ekzaehleinheits={ekzaehleinheits}
-              treeName={treeName}
-            />
+          {!showFilter && (
+            <>
+              {zaehls1 && (
+                <Count
+                  key={zaehls1.id}
+                  id={zaehls1.id}
+                  tpopkontrId={row.id}
+                  nr="1"
+                  refetch={refetch}
+                  einheitsUsed={einheitsUsed}
+                  ekzaehleinheits={ekzaehleinheits}
+                  ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+                  treeName={treeName}
+                />
+              )}
+              {zaehl1ShowEmpty && (
+                <CountHint>
+                  Sie müssen auf Ebene Aktionsplan EK-Zähleinheiten definieren,
+                  um hier Zählungen erfassen zu können.
+                </CountHint>
+              )}
+              {zaehls2 && (
+                <Count
+                  key={zaehls2.id}
+                  id={zaehls2.id}
+                  tpopkontrId={row.id}
+                  nr="2"
+                  refetch={refetch}
+                  einheitsUsed={einheitsUsed}
+                  ekzaehleinheits={ekzaehleinheits}
+                  ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+                  treeName={treeName}
+                />
+              )}
+              {zaehl2ShowNew && (
+                <Count
+                  id={null}
+                  tpopkontrId={row.id}
+                  nr="2"
+                  showNew
+                  refetch={refetch}
+                  einheitsUsed={einheitsUsed}
+                  ekzaehleinheits={ekzaehleinheits}
+                  ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+                  treeName={treeName}
+                />
+              )}
+              {zaehl2ShowEmpty && !zaehl1ShowEmpty && (
+                <Count
+                  id={null}
+                  tpopkontrId={row.id}
+                  nr="2"
+                  showEmpty
+                  showNew
+                  refetch={refetch}
+                  einheitsUsed={einheitsUsed}
+                  ekzaehleinheits={ekzaehleinheits}
+                  ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+                  treeName={treeName}
+                />
+              )}
+              {zaehls3 && (
+                <Count
+                  key={zaehls3.id}
+                  id={zaehls3.id}
+                  tpopkontrId={row.id}
+                  nr="3"
+                  refetch={refetch}
+                  einheitsUsed={einheitsUsed}
+                  ekzaehleinheits={ekzaehleinheits}
+                  ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+                  treeName={treeName}
+                />
+              )}
+              {zaehl3ShowNew && (
+                <Count
+                  id={null}
+                  tpopkontrId={row.id}
+                  nr="3"
+                  showNew
+                  refetch={refetch}
+                  einheitsUsed={einheitsUsed}
+                  ekzaehleinheits={ekzaehleinheits}
+                  ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+                  treeName={treeName}
+                />
+              )}
+              {zaehl3ShowEmpty && !zaehl2ShowEmpty && (
+                <Count
+                  id={null}
+                  tpopkontrId={row.id}
+                  nr="3"
+                  showEmpty
+                  showNew
+                  refetch={refetch}
+                  einheitsUsed={einheitsUsed}
+                  ekzaehleinheits={ekzaehleinheits}
+                  ekzaehleinheitsOriginal={ekzaehleinheitsOriginal}
+                  treeName={treeName}
+                />
+              )}
+            </>
           )}
           <Cover saveToDb={saveToDb} row={row} errors={errors} />
           <More saveToDb={saveToDb} row={row} errors={errors} />
