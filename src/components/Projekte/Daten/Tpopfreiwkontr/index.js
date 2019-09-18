@@ -214,6 +214,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
     'tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes',
     [],
   )
+  console.log('Tpopfreiwkontr, zaehls:', zaehls)
   const zaehls1 = zaehls[0]
   const zaehls2 = zaehls[1]
   const zaehls3 = zaehls[2]
@@ -232,13 +233,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
     zaehl2WasAttributed && !zaehls3 && ekzaehleinheits.length > 2
   const zaehl3ShowEmpty =
     (!zaehl2WasAttributed && !zaehls3) || ekzaehleinheits.length < 3
-  const einheitsUsed = get(
-    data,
-    'tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes',
-    [],
-  )
-    .filter(n => !!n.einheit)
-    .map(n => n.einheit)
+  const einheitsUsed = zaehls.filter(n => !!n.einheit).map(n => n.einheit)
   const isFreiwillig = role === 'apflora_freiwillig'
 
   let tpopkontrTotalCount
@@ -419,11 +414,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
     if (!loading) {
       // loading data just finished
       // check if tpopkontr exist
-      const tpopkontrCount = get(
-        data,
-        'tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes',
-        [],
-      ).length
+      const tpopkontrCount = zaehls.length
       if (tpopkontrCount === 0) {
         // add counts for all ekzaehleinheit
         // BUT DANGER: only for ekzaehleinheit with zaehleinheit_id

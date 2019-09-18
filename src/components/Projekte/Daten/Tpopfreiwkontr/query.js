@@ -3,6 +3,7 @@ import gql from 'graphql-tag'
 import {
   aeEigenschaften,
   adresse,
+  ekzaehleinheit,
   pop,
   tpop,
   tpopfreiwkontr,
@@ -32,7 +33,7 @@ export default gql`
             }
             ekzaehleinheitsByApId {
               nodes {
-                id
+                ...EkzaehleinheitFields
                 tpopkontrzaehlEinheitWerteByZaehleinheitId {
                   ...TpopkontrzaehlEinheitWerteFields
                 }
@@ -50,6 +51,7 @@ export default gql`
   }
   ${aeEigenschaften}
   ${adresse}
+  ${ekzaehleinheit}
   ${pop}
   ${tpop}
   ${tpopfreiwkontr}

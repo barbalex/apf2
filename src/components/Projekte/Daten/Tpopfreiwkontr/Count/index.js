@@ -8,17 +8,14 @@ import DeleteIcon from '@material-ui/icons/DeleteForever'
 import AddIcon from '@material-ui/icons/AddCircleOutline'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
-import { Formik, Form, Field } from 'formik'
 
 import Einheit from './Einheit'
-import TextField from '../../../../shared/TextFieldFormik'
-import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById'
+import Gezaehlt from './Gezaehlt'
+import Geschaetzt from './Geschaetzt'
 import query from './query'
 import queryLists from './queryLists'
 import createTpopkontrzaehl from './createTpopkontrzaehl'
 import storeContext from '../../../../../storeContext'
-import objectsFindChangedKey from '../../../../../modules/objectsFindChangedKey'
-import objectsEmptyValuesToNull from '../../../../../modules/objectsEmptyValuesToNull'
 
 const Container = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -54,7 +51,7 @@ const Container = styled.div`
            'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`};
   }
 `
-const StyledForm = styled(Form)`
+const StyledForm = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
   border-radius: 6px;
   padding: 10px;
@@ -73,14 +70,10 @@ const StyledForm = styled(Form)`
   grid-column-gap: 10px;
   break-inside: avoid;
   @media print {
-    grid-template-areas: ${props =>
-      props.showdelete === 'true'
-        ? `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
-             'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
-             'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`
-        : `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
-             'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
-             'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`};
+    grid-template-areas:
+      'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
+      'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
+      'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal';
   }
 `
 const Label = styled.div`
@@ -187,8 +180,6 @@ const Count = ({
   const { data: dataLists, error: errorLists } = useQuery(queryLists)
 
   const row = get(data, 'tpopkontrzaehlById', {}) || {}
-  row.anzahl1 = row.methode === 1 ? row.anzahl : null
-  row.anzahl2 = row.methode === 2 ? row.anzahl : null
 
   const createNew = useCallback(() => {
     client
@@ -202,7 +193,9 @@ const Count = ({
   const allEinheits = get(dataLists, 'allTpopkontrzaehlEinheitWertes.nodes', [])
   // do list this count's einheit
   const einheitsNotToList = einheitsUsed.filter(e => e !== row.einheit)
+  console.log('Count', { ekzaehleinheits, einheitsNotToList, allEinheits })
   let zaehleinheitWerte = ekzaehleinheits
+    //.map(e => e.tpopkontrzaehlEinheitWerteByZaehleinheitId)
     // remove already set values
     .filter(e => !einheitsNotToList.includes(e.code))
   // add this zaehleineits value if missing
@@ -217,57 +210,21 @@ const Count = ({
   }))
   const showDelete = nr > 1
 
-  const onSubmit = useCallback(
-    async (values, { setErrors }) => {
-      const changedFieldOriginal = objectsFindChangedKey(values, row)
-      const valuesCorrected = { ...values, anzahl: null }
-      delete valuesCorrected.anzahl1
-      delete valuesCorrected.anzahl2
-      if (values.anzahl1 || values.anzahl1 === 0) {
-        valuesCorrected.anzahl = values.anzahl1
-      }
-      if (values.anzahl2 || values.anzahl2 === 0) {
-        valuesCorrected.anzahl = values.anzahl2
-      }
-      if (changedFieldOriginal === 'anzahl1') {
-        valuesCorrected.methode = 1
-      }
-      if (changedFieldOriginal === 'anzahl2') {
-        valuesCorrected.methode = 2
-      }
-      const changedField = ['anzahl1', 'anzahl2'].includes(changedFieldOriginal)
-        ? 'anzahl'
-        : changedFieldOriginal
-      const variables = {
-        ...objectsEmptyValuesToNull(valuesCorrected),
-        changedBy: store.user.name,
-      }
-      // catch case when empty anzahl field blurs
-      //if (value === null && field2 && row[field2] !== value2) return
-      try {
-        await client.mutate({
-          mutation: updateTpopkontrzaehlByIdGql,
-          variables,
-        })
-      } catch (error) {
-        return setErrors({ [changedField]: error.message })
-      }
-      setErrors({})
-      refetchMe()
-    },
-    [client, refetchMe, row, store.user.name],
-  )
   const remove = useCallback(
     ({ row }) => {
+      const afterDeletionHook = () => {
+        refetch()
+        store.refetch.tpopkontrzaehls()
+      }
       setToDelete({
         table: 'tpopkontrzaehl',
         id: row.id,
         label: null,
         url: activeNodeArray,
-        afterDeletionHook: refetch,
+        afterDeletionHook,
       })
     },
-    [setToDelete, activeNodeArray, refetch],
+    [setToDelete, activeNodeArray, refetch, store.refetch],
   )
 
   if (showNew) {
@@ -296,43 +253,31 @@ const Count = ({
   if (errorLists) {
     return `Fehler: ${errorLists.message}`
   }
+  console.log('Count, row:', { row, zaehleinheitWerte })
   return (
-    <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
-      {({ handleSubmit, dirty }) => (
-        <StyledForm
-          onBlur={() => dirty && handleSubmit()}
-          showdelete={showDelete.toString()}
-          data-id={`count${nr}`}
-          nr={nr}
-        >
-          <Field
-            name="einheit"
-            component={Einheit}
-            options={zaehleinheitWerte}
-            noCaret
-            nr={nr}
-          />
-          <GezaehltLabel>gezählt</GezaehltLabel>
-          <GeschaetztLabel>geschätzt</GeschaetztLabel>
-          <GezaehltVal>
-            <Field name="anzahl2" type="number" component={TextField} />
-          </GezaehltVal>
-          <GeschaetztVal>
-            <Field name="anzahl1" type="number" component={TextField} />
-          </GeschaetztVal>
-          {showDelete && (
-            <Delete>
-              <StyledDeleteButton
-                title="löschen"
-                onClick={() => remove({ row })}
-              >
-                <DeleteIcon />
-              </StyledDeleteButton>
-            </Delete>
-          )}
-        </StyledForm>
+    <StyledForm nr={nr} data-id={`count${nr}`}>
+      <Einheit
+        row={row}
+        refetch={refetch}
+        zaehleinheitWerte={zaehleinheitWerte}
+        nr={nr}
+      />
+      <GezaehltLabel>gezählt</GezaehltLabel>
+      <GeschaetztLabel>geschätzt</GeschaetztLabel>
+      <GezaehltVal>
+        <Gezaehlt row={row} refetch={refetchMe} />
+      </GezaehltVal>
+      <GeschaetztVal>
+        <Geschaetzt row={row} refetch={refetchMe} />
+      </GeschaetztVal>
+      {showDelete && (
+        <Delete>
+          <StyledDeleteButton title="löschen" onClick={() => remove({ row })}>
+            <DeleteIcon />
+          </StyledDeleteButton>
+        </Delete>
       )}
-    </Formik>
+    </StyledForm>
   )
 }
 

@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+import { useApolloClient } from '@apollo/react-hooks'
 
-import Select from '../../../../shared/SelectFormik'
+import Select from '../../../../shared/Select'
+import storeContext from '../../../../../storeContext'
+import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById'
+import ifIsNumericAsNumber from '../../../../../modules/ifIsNumericAsNumber'
 
 const EinheitVal = styled.div`
   grid-area: einheitVal;
@@ -28,12 +32,58 @@ const EinheitLabel = styled(Label)`
   margin-top: 5px;
 `
 
-const Einheit = ({ nr, ...rest }) => {
+const Einheit = ({ nr, row, refetch, zaehleinheitWerte }) => {
+  const store = useContext(storeContext)
+  const client = useApolloClient()
+
+  const [error, setErrors] = useState(null)
+
+  const onChange = useCallback(
+    async event => {
+      const val = ifIsNumericAsNumber(event.target.value)
+      const variables = {
+        id: row.id,
+        anzahl: row.anzahl,
+        methode: row.methode,
+        einheit: val,
+        changedBy: store.user.name,
+      }
+      console.log('Einheit', { val, userName: store.user.name })
+      try {
+        await client.mutate({
+          mutation: updateTpopkontrzaehlByIdGql,
+          variables,
+        })
+      } catch (error) {
+        return setErrors(error.message)
+      }
+      refetch()
+      store.refetch.tpopkontrzaehls()
+    },
+    [
+      client,
+      refetch,
+      row.anzahl,
+      row.id,
+      row.methode,
+      store.refetch,
+      store.user.name,
+    ],
+  )
+
   return (
     <>
       <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
       <EinheitVal>
-        <Select {...rest} />
+        <Select
+          value={row.einheit}
+          label=""
+          name="einheit"
+          error={error}
+          options={zaehleinheitWerte}
+          saveToDb={onChange}
+          noCaret
+        />
       </EinheitVal>
     </>
   )
