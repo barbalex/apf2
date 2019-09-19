@@ -116,7 +116,7 @@ const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
         <MenuItem onClick={onClickLogout}>
           Cache leeren und apflora neu laden
         </MenuItem>
-        <Version>Version: 1.11.4 vom 18.09.2019</Version>
+        <Version>Version: 1.11.5 vom 19.09.2019</Version>
       </Menu>
     </Container>
   )
