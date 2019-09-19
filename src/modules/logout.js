@@ -1,5 +1,10 @@
+import localForage from 'localforage'
+
 export default async idb => {
-  console.log("LOGGING OUT")
-  idb.currentUser.clear()
-  typeof window !== "undefined" && window.location.reload(false)
+  console.log('LOGGING OUT')
+  if (typeof window !== 'undefined') {
+    localForage.clear()
+    idb.delete()
+    window.location.reload(true)
+  }
 }

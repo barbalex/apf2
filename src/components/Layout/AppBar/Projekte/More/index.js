@@ -71,17 +71,7 @@ const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
     setTimeout(() => passedOnClickExporte())
   }, [passedOnClickExporte])
   const onClickLogout = useCallback(() => {
-    setAnchorEl(null)
-    // prevent following from happening
-    // before setAnchor has finished
-    setTimeout(() => logout(idb))
-  }, [idb])
-  const onClickReload = useCallback(() => {
-    if (typeof window !== 'undefined') {
-      localForage.clear()
-      idb.delete()
-      window.location.reload(true)
-    }
+    logout(idb)
   }, [idb])
 
   return (
@@ -123,7 +113,7 @@ const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
           onClick={onClickLogout}
           data-id="appbar-more-logout"
         >{`${user.name} abmelden`}</MenuItem>
-        <MenuItem onClick={onClickReload}>
+        <MenuItem onClick={onClickLogout}>
           Cache leeren und apflora neu laden
         </MenuItem>
         <Version>Version: 1.11.4 vom 18.09.2019</Version>
