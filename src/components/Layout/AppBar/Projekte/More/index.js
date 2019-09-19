@@ -21,7 +21,7 @@ const MehrButton = styled(Button)`
 `
 const Version = styled.div`
   padding: 12px 16px;
-  color: rgba(0, 0, 0, 0.87);
+  color: rgba(0, 0, 0, 0.54);
   user-select: none;
 `
 
@@ -111,10 +111,7 @@ const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
         <MenuItem
           onClick={onClickLogout}
           data-id="appbar-more-logout"
-        >{`${user.name} abmelden`}</MenuItem>
-        <MenuItem onClick={onClickLogout}>
-          Cache leeren und apflora neu laden
-        </MenuItem>
+        >{`${user.name} abmelden (und Cache leeren)`}</MenuItem>
         <Version>Version: 1.11.5 vom 19.09.2019</Version>
       </Menu>
     </Container>
