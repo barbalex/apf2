@@ -3,6 +3,7 @@ import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 import Button from '@material-ui/core/Button'
+import Badge from '@material-ui/core/Badge'
 import styled from 'styled-components'
 import Paper from '@material-ui/core/Paper'
 import sortBy from 'lodash/sortBy'
@@ -148,13 +149,18 @@ const Qk = ({ treeName }) => {
             </InputLabel>
             <Input id="filter" value={filter} onChange={onChangeFilter} />
           </StyledFormControl>
-          <StyledButton
-            onClick={() => refetch()}
-            variant="outlined"
-            loading={loading.toString()}
+          <Badge
+            badgeContent={loading ? '...' : messageGroupsFiltered.length}
+            color="primary"
           >
-            {loading ? 'Die Daten werden analysiert...' : 'neu analysieren'}
-          </StyledButton>
+            <StyledButton
+              onClick={() => refetch()}
+              variant="outlined"
+              loading={loading.toString()}
+            >
+              {loading ? 'Die Daten werden analysiert...' : 'neu analysieren'}
+            </StyledButton>
+          </Badge>
           {messageGroupsFiltered.map((messageGroup, index) => (
             <StyledPaper key={messageGroup.title} elevation={2}>
               <Title>{messageGroup.title}</Title>
