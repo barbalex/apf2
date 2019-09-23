@@ -148,11 +148,6 @@ const layerLegends = {
         'http://wms.zh.ch/FnsLRKZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=feucht-76-77&format=image/png&STYLE=default',
     },
     {
-      name: 'Feuchtgebietskartierung 1976/77',
-      url:
-        'http://wms.zh.ch/FnsLRKZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=feucht-76-77&format=image/png&STYLE=default',
-    },
-    {
       name: 'Feuchtgebietskartierung 1964 Neeracherried Klötzli',
       url:
         'http://wms.zh.ch/FnsLRKZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=feucht-64&format=image/png&STYLE=default',
