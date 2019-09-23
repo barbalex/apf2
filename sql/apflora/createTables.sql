@@ -1267,6 +1267,7 @@ create table apflora.ekzaehleinheit(
   changed_by varchar(20) default null
 );
 CREATE UNIQUE INDEX ekzaehleinheit_single_zielrelevant_for_ap_idx ON apflora.ekzaehleinheit (ap_id, zielrelevant) WHERE zielrelevant = 'true';
+CREATE UNIQUE INDEX ekzaehleinheit_zaehleinheit_unique_for_ap_idx ON apflora.ekzaehleinheit (ap_id, zaehleinheit_id);
 CREATE INDEX ON apflora.ekzaehleinheit USING btree (id);
 CREATE INDEX ON apflora.ekzaehleinheit USING btree (ap_id);
 CREATE INDEX ON apflora.ekzaehleinheit USING btree (zaehleinheit_id);
