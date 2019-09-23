@@ -53,7 +53,9 @@ export default types
       self.openNodes = Array.from(set).map(JSON.parse)
     },
     setOpenNodes(val) {
-      self.openNodes = val
+      // need set to ensure contained arrays are unique
+      const set = new Set(val.map(JSON.stringify))
+      self.openNodes = Array.from(set).map(JSON.parse)
     },
     setApFilter(val) {
       self.apFilter = val
