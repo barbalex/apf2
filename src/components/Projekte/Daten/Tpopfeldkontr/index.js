@@ -188,6 +188,11 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
+      /*console.log('Tpopfeldkontr, onSubmit', {
+        row,
+        values,
+        changedField,
+      })*/
       const value = values[changedField]
       if (showFilter) {
         nodeFilterSetValue({
@@ -201,14 +206,22 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
           ...objectsEmptyValuesToNull(values),
           changedBy: store.user.name,
         }
+        /*console.log(
+          'Tpopfeldkontr, onSubmit, variables before maybe changing:',
+          variables,
+        )*/
         if (changedField === 'jahr') {
+          //console.log('Tpopfeldkontr, onSubmit, setting datum null:')
           variables.datum = null
         }
         if (changedField === 'datum') {
           // value can be null so check if substring method exists
-          variables.jahr =
+          const newJahr =
             value && value.substring ? +value.substring(0, 4) : value
+          //console.log('Tpopfeldkontr, onSubmit, newJahr:', newJahr)
+          variables.jahr = newJahr
         }
+        //console.log('Tpopfeldkontr, onSubmit, variables:', variables)
         try {
           await client.mutate({
             mutation: updateTpopkontrByIdGql,
