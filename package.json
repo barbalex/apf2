@@ -21,8 +21,8 @@
   "dependencies": {
     "@apollo/react-hooks": "3.1.1",
     "@date-io/moment": "1.3.11",
-    "@material-ui/core": "4.4.2",
-    "@material-ui/icons": "4.4.1",
+    "@material-ui/core": "4.4.3",
+    "@material-ui/icons": "4.4.3",
     "@turf/bbox-polygon": "6.0.1",
     "@turf/boolean-point-in-polygon": "6.0.1",
     "@turf/helpers": "6.1.4",
@@ -56,7 +56,7 @@
     "gatsby-plugin-web-font-loader": "1.0.4",
     "gatsby-remark-autolink-headers": "2.1.11",
     "gatsby-remark-copy-linked-files": "2.1.20",
-    "gatsby-remark-embed-video": "1.7.1",
+    "gatsby-remark-embed-video": "2.0.0",
     "gatsby-remark-emojis": "0.3.2",
     "gatsby-remark-external-links": "0.0.4",
     "gatsby-remark-images": "3.1.23",
@@ -77,7 +77,7 @@
     "leaflet-image": "0.4.0",
     "leaflet-measure": "3.1.0",
     "leaflet-switch-scale-control": "https://github.com/victorzinho/leaflet-switch-scale-control",
-    "leaflet.fullscreen": "1.5.1",
+    "leaflet.fullscreen": "1.6.0",
     "leaflet.markercluster": "1.4.1",
     "localforage": "1.7.3",
     "lodash": "4.17.15",
@@ -134,7 +134,7 @@
     "postgraphile": "4.4.3",
     "postgraphile-plugin-connection-filter": "1.1.3",
     "prettier": "1.18.2",
-    "source-map-explorer": "2.0.1"
+    "source-map-explorer": "2.1.0"
   },
   "eslintConfig": {
     "extends": "react-app"
