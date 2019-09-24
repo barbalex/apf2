@@ -23,10 +23,10 @@ const Container = styled.div`
 `
 const FieldsContainer = styled.div`
   padding: 10px;
-  overflow-x: auto;
-  height: 100%;
+  /* somehow height was not correct with 100% so scrollbar missbehaved*/
+  height: calc(100vh - 64px - 42px);
   padding-bottom: 10px;
-  overflow: auto !important;
+  overflow-x: auto !important;
 `
 const ExporteContainer = styled.div`
   height: 100%;
