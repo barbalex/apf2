@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/react-hooks'
@@ -34,7 +35,10 @@ const Gezaehlt = ({ row, refetch }) => {
         return setErrors({ anzahl: error.message })
       }
       refetch()
-      store.refetch.tpopkontrzaehls()
+      store &&
+        store.refetch &&
+        store.refetch.tpopkontrzaehls &&
+        store.refetch.tpopkontrzaehls()
     },
     [
       client,
