@@ -57,7 +57,7 @@ CREATE OR REPLACE FUNCTION apflora.q_tpop_ohne_tpopber(projid uuid, apid uuid, b
         and apflora.ap.id = $2
         and apflora.ap.proj_id = $1
     )
-    ORDER BY apflora.tpop.nr, apflora.tpop.nr
+    ORDER BY apflora.pop.nr, apflora.tpop.nr
   $$
   LANGUAGE sql STABLE;
 ALTER FUNCTION apflora.q_tpop_ohne_tpopber(projid uuid, apid uuid, berichtjahr integer)
