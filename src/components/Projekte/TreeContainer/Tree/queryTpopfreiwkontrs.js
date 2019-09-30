@@ -4,7 +4,8 @@ import { tpopfreiwkontr } from '../../../shared/fragments'
 
 export default gql`
   query TpopfreiwkontrsQuery($isTpop: Boolean!, $filter: TpopkontrFilter!) {
-    allTpopkontrs(filter: $filter, orderBy: DATUM_ASC) @include(if: $isTpop) {
+    allTpopkontrs(filter: $filter, orderBy: [JAHR_ASC, DATUM_ASC])
+      @include(if: $isTpop) {
       nodes {
         ...TpopfreiwkontrFields
       }
