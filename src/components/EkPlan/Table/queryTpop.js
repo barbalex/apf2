@@ -13,6 +13,11 @@ export default gql`
         ekfrequenzByEkfrequenz {
           id
           code
+          ekAbrechnungstyp
+          ekAbrechnungstypWerteByEkAbrechnungstyp {
+            id
+            text
+          }
         }
         ekfrequenzStartjahr
         ekfrequenzAbweichend

@@ -56,7 +56,11 @@ export default (tpop, index) => ({
   },
   ekAbrechnungstyp: {
     ...fields.ekAbrechnungstyp,
-    value: get(tpop, 'ekfrequenzByEkfrequenz.code'),
+    //value: get(tpop, 'ekfrequenzByEkfrequenz.ekAbrechnungstyp'),
+    value: get(
+      tpop,
+      'ekfrequenzByEkfrequenz.ekAbrechnungstypWerteByEkAbrechnungstyp.text',
+    ),
   },
   ekfrequenz: {
     ...fields.ekfrequenz,
