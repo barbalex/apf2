@@ -40,10 +40,6 @@ export default () => createGlobalStyle`
     color: black;
   }
 
-.ReactVirtualized__Grid {
-  outline: none;
-}
-
   /* scrollbars */
 
   ::-webkit-scrollbar {
