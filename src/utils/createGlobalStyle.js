@@ -44,7 +44,6 @@ export default () => createGlobalStyle`
 
   ::-webkit-scrollbar {
     width: 12px;
-    background: rgba(255, 253, 231, 0.1);
   }
 
   ::-webkit-scrollbar:horizontal {
