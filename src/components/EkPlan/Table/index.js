@@ -59,7 +59,7 @@ const BodyContainer = styled.div`
   flex-direction: row;
   height: 100%;
   width: 100%;
-  div:nth-child(2) {
+  > div:nth-child(2) {
     overflow-y: overlay !important;
   }
 `
