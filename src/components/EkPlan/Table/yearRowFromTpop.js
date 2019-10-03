@@ -50,7 +50,7 @@ export default ({ tpop, years, showCount, index }) => {
           ansiedlungs: ansiedlungs.filter(o => o.jahr === year),
         },
         sort: year,
-        width: yearColumnWidth(showCount),
+        width: yearColumnWidth,
       }),
   )
   return row
