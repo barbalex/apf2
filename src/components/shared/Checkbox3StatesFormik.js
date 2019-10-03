@@ -23,6 +23,16 @@ const StyledCheckbox = styled(Checkbox)`
   height: 2px !important;
   width: 24px;
 `
+const Aside = styled.div`
+  position: relative;
+  bottom: 20px;
+  left: 28px;
+`
+const AsideComment = styled.span`
+  padding-left: 6px;
+  font-size: 0.8em;
+  color: rgba(0, 0, 0, 0.54);
+`
 
 const RadioButton = ({ field, form, label }) => {
   const { onChange, onBlur, value, name } = field
@@ -53,6 +63,14 @@ const RadioButton = ({ field, form, label }) => {
       : value === false
       ? `Nein. Nach nächstem Klick 'Unbestimmt'`
       : `Unbestimmt. Nach nächstem Klick 'Ja'`
+  const asideText =
+    value === true ? `Ja` : value === false ? `Nein` : `Unbestimmt`
+  const asideComment =
+    value === true
+      ? `(nach nächstem Klick 'Nein')`
+      : value === false
+      ? `(nach nächstem Klick 'Unbestimmt')`
+      : `(nach nächstem Klick 'Ja')`
 
   return (
     <div>
@@ -70,6 +88,10 @@ const RadioButton = ({ field, form, label }) => {
           indeterminate={indeterminate}
           title={title}
         />
+        <Aside>
+          {asideText}
+          <AsideComment>{asideComment}</AsideComment>
+        </Aside>
         {!!error && (
           <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
         )}
