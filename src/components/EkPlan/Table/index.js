@@ -59,6 +59,9 @@ const BodyContainer = styled.div`
   flex-direction: row;
   height: 100%;
   width: 100%;
+  div:nth-child(2) {
+    overflow-y: overlay !important;
+  }
 `
 export const StyledTableCell = styled.div`
   font-size: 0.75rem !important;
@@ -229,8 +232,9 @@ const EkPlanTable = () => {
       )
     : []
   let headerFieldsFixedWidth = sumBy(headerFieldsFixed, 'width')
-  if (headerFieldsFixedWidth > sizeState.width)
+  if (headerFieldsFixedWidth > sizeState.width) {
     headerFieldsFixedWidth = sizeState.width
+  }
 
   const tpopGrid = useRef(null)
   const yearHeaderGrid = useRef(null)
@@ -242,7 +246,7 @@ const EkPlanTable = () => {
   })
   setEkfrequenzs(get(dataLists, 'allEkfrequenzs.nodes', []))
 
-  const yearColWidth = yearColumnWidth(showCount)
+  const yearColWidth = yearColumnWidth
   let headerYearFieldsWidth = sizeState.width - headerFieldsFixedWidth
   if (headerYearFieldsWidth < 0) headerYearFieldsWidth = 0
 
