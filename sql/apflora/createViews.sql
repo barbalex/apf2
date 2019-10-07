@@ -3003,8 +3003,11 @@ SELECT
   END AS "Eroeffnung",
   '{7C71B8AF-DF3E-4844-A83B-55735F80B993}'::UUID AS "fkAutor",
   concat(
-    'Aktionsplan: ',
-    apflora.ap_bearbstand_werte.text,
+    CASE
+      WHEN apflora.ap_bearbstand_werte.text IS NOT NULL
+      THEN concat('Aktionsplan: ', apflora.ap_bearbstand_werte.text)
+      ELSE 'Aktionsplan: (keine Angabe)'
+    END,
     CASE
       WHEN apflora.ap.start_jahr IS NOT NULL
       THEN concat('; Start im Jahr: ', apflora.ap.start_jahr)
@@ -3019,7 +3022,7 @@ SELECT
   ) AS "Bemerkungen"
 FROM
   (((apflora.ap
-  INNER JOIN
+  LEFT JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
   LEFT JOIN
