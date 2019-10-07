@@ -28,8 +28,8 @@ Beobachtung:
 - `VITALITE_PLANTE`: Feld `vitalitaet` der Kontrolle
 - `MENACES`: Feld `gefaehrdung` der Kontrolle
 - `fkAAPRESENCE` (Vorhandensein, wird wohl nach `PRESENCE` exportiert):
-  - Wenn 0 Pflanzen gezählt wurden und "erloschen" berichtet wurde: `erloschen/zerstört`
-  - Wenn 0 Pflanzen gezählt wurden: `nicht festgestellt/gesehen (ohne Angabe der Wahrscheinlichkeit)`
+  - Wenn 0 Pflanzen gezählt wurden _und im Jahr der Kontrolle "erloschen" berichtet wurde_: `erloschen/zerstört`
+  - Sonst, wenn 0 Pflanzen gezählt wurden: `nicht festgestellt/gesehen (ohne Angabe der Wahrscheinlichkeit)`
   - Übrige: `vorhanden`
 - `fkAAINTRODUIT` (Herkunft, wird wohl nach `INTRODUIT` exportiert):
   - Status ist ursprünglich:
