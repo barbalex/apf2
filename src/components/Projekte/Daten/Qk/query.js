@@ -1,6 +1,12 @@
 import gql from 'graphql-tag'
 
-import { aeEigenschaften, pop, projekt, ziel } from '../../../shared/fragments'
+import {
+  ap,
+  aeEigenschaften,
+  pop,
+  projekt,
+  ziel,
+} from '../../../shared/fragments'
 
 export default gql`
   query QkQuery(
@@ -35,6 +41,40 @@ export default gql`
           aeEigenschaftenByArtId {
             ...AeEigenschaftenFields
           }
+        }
+      }
+    }
+    apOhneBearbeitung: projektById(id: $projId) {
+      id
+      apsByProjId(
+        filter: { id: { equalTo: $apId }, bearbeitung: { isNull: true } }
+      ) {
+        nodes {
+          ...ApFields
+        }
+      }
+    }
+    apMitApOhneUmsetzung: projektById(id: $projId) {
+      id
+      apsByProjId(
+        filter: {
+          id: { equalTo: $apId }
+          bearbeitung: { lessThan: 4 }
+          umsetzung: { isNull: true }
+        }
+      ) {
+        nodes {
+          ...ApFields
+        }
+      }
+    }
+    apOhneVerantwortlich: projektById(id: $projId) {
+      id
+      apsByProjId(
+        filter: { id: { equalTo: $apId }, bearbeiter: { isNull: true } }
+      ) {
+        nodes {
+          ...ApFields
         }
       }
     }
@@ -1970,6 +2010,7 @@ export default gql`
       }
     }
   }
+  ${ap}
   ${aeEigenschaften}
   ${pop}
   ${projekt}

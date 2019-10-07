@@ -7,7 +7,33 @@ export default ({ data, berichtjahr }) => {
 
   return [
     // 1. Art
-
+    {
+      title: 'Fehlende Aktionsplan-Angabe:',
+      messages: (get(data, 'apOhneBearbeitung.apsByProjId.nodes') || []).map(
+        n => ({
+          url: ['Projekte', projId, 'Aktionspläne', apId],
+          text: `Feld "Aktionsplan" ist leer`,
+        }),
+      ),
+    },
+    {
+      title: 'Aktionsplan ohne Angaben zur Umsetzung:',
+      messages: (get(data, 'apMitApOhneUmsetzung.apsByProjId.nodes') || []).map(
+        n => ({
+          url: ['Projekte', projId, 'Aktionspläne', apId],
+          text: `Feld "Umsetzung" ist leer`,
+        }),
+      ),
+    },
+    {
+      title: 'Aktionsplan ohne Verantwortliche:',
+      messages: (get(data, 'apOhneVerantwortlich.apsByProjId.nodes') || []).map(
+        n => ({
+          url: ['Projekte', projId, 'Aktionspläne', apId],
+          text: `Feld "Verantwortlich" ist leer`,
+        }),
+      ),
+    },
     // Ziel ohne Jahr/Zieltyp/Ziel
     {
       title: 'Ziel ohne Jahr:',
