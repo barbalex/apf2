@@ -17,6 +17,7 @@ import queryUsers from './queryUsers'
 import queryProjekts from './queryProjekts'
 import queryApberuebersichts from './queryApberuebersichts'
 import queryAps from './queryAps'
+import queryMessages from './queryMessages'
 import queryPops from './queryPops'
 import queryPopbers from './queryPopbers'
 import queryPopmassnbers from './queryPopmassnbers'
@@ -633,9 +634,15 @@ const Tree = ({ treeName }) => {
     error: errorCurrentIssues,
     loading: loadingCurrentIssues,
   } = useQuery(queryCurrentIssues)
+  const {
+    data: dataMessages,
+    error: errorMessages,
+    loading: loadingMessages,
+  } = useQuery(queryMessages)
 
   const queryLoadingArray = [
     loadingCurrentIssues,
+    loadingMessages,
     loadingWertes,
     loadingUsers,
     loadingProjekts,
@@ -667,6 +674,7 @@ const Tree = ({ treeName }) => {
 
   const queryErrorArray = [
     errorCurrentIssues,
+    errorMessages,
     errorWertes,
     errorUsers,
     errorProjekts,
@@ -698,6 +706,7 @@ const Tree = ({ treeName }) => {
 
   const data = {
     ...dataCurrentIssues,
+    ...dataMessages,
     ...dataWertes,
     ...dataUsers,
     ...dataProjekts,
@@ -737,6 +746,7 @@ const Tree = ({ treeName }) => {
     nodeFilter,
     data,
     dataCurrentIssues,
+    dataMessages,
     dataAdresses: dataWertes,
     dataApberrelevantGrundWertes: dataWertes,
     dataTpopkontrzaehlEinheitWertes: dataWertes,
@@ -769,6 +779,7 @@ const Tree = ({ treeName }) => {
     loadingTpopkontrzaehlEinheitWertes: loadingWertes,
     loadingEkAbrechnungstypWertes: loadingWertes,
     loadingCurrentIssues,
+    loadingMessages,
     loadingUsers,
     loadingProjekts,
     loadingApberuebersichts,

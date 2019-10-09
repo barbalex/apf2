@@ -32,6 +32,7 @@ export default ({ url, activeNode, activeFilterTable }) => {
     case 'assozart':
     case 'ber':
     case 'currentIssue':
+    case 'message':
     case 'ekplan':
     case 'ekzaehleinheit':
     case 'ekfrequenz':

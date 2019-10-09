@@ -380,7 +380,7 @@ export default [
   },
   {
     table: 'message',
-    label: 'Meldung',
+    label: 'Mitteilungen',
     idField: 'id',
     parentIdField: 'none',
   },

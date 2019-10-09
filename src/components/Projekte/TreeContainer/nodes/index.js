@@ -4,6 +4,7 @@ import allParentNodesAreOpenModule from '../allParentNodesAreOpen'
 import buildProjektNodes from './projekt'
 import buildUserFolderNodes from './userFolder'
 import buildCurrentIssuesFolderNodes from './currentIssuesFolder'
+import buildMessagesFolderNodes from './messagesFolder'
 import buildWlFolderNodes from './wlFolder'
 import buildAdresseFolderNodes from './adresseFolder'
 import buildAdresseNodes from './adresse'
@@ -83,6 +84,7 @@ const compare = (a, b) => {
 export default ({
   data,
   dataCurrentIssues,
+  dataMessages,
   dataAdresses,
   dataApberrelevantGrundWertes,
   dataTpopkontrzaehlEinheitWertes,
@@ -111,6 +113,7 @@ export default ({
   dataZielbers,
   dataZiels,
   loadingCurrentIssues,
+  loadingMessages,
   loadingAdresses,
   loadingApberrelevantGrundWertes,
   loadingTpopkontrzaehlEinheitWertes,
@@ -171,6 +174,15 @@ export default ({
     ...memoizeOne(() =>
       buildCurrentIssuesFolderNodes({
         data: dataCurrentIssues,
+        treeName,
+        projektNodes,
+        loading: loadingUsers,
+        store,
+      }),
+    )(),
+    ...memoizeOne(() =>
+      buildMessagesFolderNodes({
+        data: dataMessages,
         treeName,
         projektNodes,
         loading: loadingUsers,

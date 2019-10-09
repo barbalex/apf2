@@ -17,6 +17,7 @@ import Assozart from './Assozart'
 import Beobzuordnung from './Beobzuordnung'
 import Ber from './Ber'
 import CurrentIssue from './CurrentIssue'
+import Messages from './Messages'
 import Ekzaehleinheit from './Ekzaehleinheit'
 import Ekfrequenz from './Ekfrequenz'
 import Erfkrit from './Erfkrit'
@@ -94,6 +95,10 @@ const Daten = ({ treeName }) => {
     }
     case 'currentIssue': {
       form = <CurrentIssue treeName={treeName} />
+      break
+    }
+    case 'message': {
+      form = <Messages />
       break
     }
     case 'ekzaehleinheit': {

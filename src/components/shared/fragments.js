@@ -256,6 +256,14 @@ export const idealbiotopFile = gql`
     beschreibung
   }
 `
+export const message = gql`
+  fragment MessageFields on Message {
+    id
+    message
+    time
+    active
+  }
+`
 
 export const pop = gql`
   fragment PopFields on Pop {
