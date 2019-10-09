@@ -12,9 +12,13 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/react-hooks'
 import { useSnackbar } from 'notistack'
+import gql from 'graphql-tag'
+import { getSnapshot } from 'mobx-state-tree'
 
 import exportModule from '../../../../modules/export'
+import exists from '../../../../modules/exists'
 import storeContext from '../../../../storeContext'
+import simpleTypes from '../../../../store/NodeFilterTree/simpleTypes'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -57,7 +61,12 @@ const DownloadCardButton = styled(Button)`
 const AP = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { enqueNotification, removeNotification } = store
+  const {
+    enqueNotification,
+    removeNotification,
+    nodeFilter,
+    nodeFilterTableIsFiltered,
+  } = store
 
   const [expanded, setExpanded] = useState(false)
   const { closeSnackbar } = useSnackbar()
@@ -72,11 +81,66 @@ const AP = () => {
       },
     })
     try {
+      console.log('Exporte AP')
+      const isFiltered = nodeFilterTableIsFiltered({
+        treeName: 'tree',
+        table: 'ap',
+      })
+      console.log('Exporte AP', {
+        isFiltered,
+        simpleTypes,
+      })
+      let filteredIds = []
       const { data } = await client.query({
         query: await import('./allVAps').then(m => m.default),
       })
+      // how to filter by nodeFilter?
+      // query table ap using criteria
+      // then filter result by ids
+      if (isFiltered) {
+        const filter = Object.fromEntries(
+          Object.entries(getSnapshot(nodeFilter.tree.ap))
+            .filter(([key, value]) => exists(value))
+            .map(([key, value]) => {
+              // if is string: includes, else: equalTo
+              const type = simpleTypes.ap[key]
+              if (type === 'string') {
+                return [key, { includes: value }]
+              }
+              return [key, { equalTo: value }]
+            }),
+        )
+        console.log('Exporte AP', {
+          data: get(data, 'allVAps.nodes', []),
+          nodeFilter: getSnapshot(nodeFilter.tree.ap),
+          filter,
+        })
+        const { data: idsData } = await client.query({
+          query: gql`
+            query apForExportQuery($filter: ApFilter) {
+              allAps(filter: $filter) {
+                nodes {
+                  id
+                }
+              }
+            }
+          `,
+          variables: {
+            filter,
+          },
+        })
+        filteredIds = (get(idsData, 'allAps.nodes') || []).map(n => n.id)
+        console.log('Exporte AP', {
+          idsData,
+          filteredIds,
+        })
+      }
+      let dataToExport = get(data, 'allVAps.nodes', [])
+      if (filteredIds.length) {
+        dataToExport = dataToExport.filter(n => filteredIds.includes(n.id))
+      }
       exportModule({
-        data: get(data, 'allVAps.nodes', []),
+        data: dataToExport,
         fileName: 'AP',
         store,
       })
@@ -90,7 +154,15 @@ const AP = () => {
     }
     removeNotification(notif)
     closeSnackbar(notif)
-  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
+  }, [
+    enqueNotification,
+    removeNotification,
+    closeSnackbar,
+    nodeFilterTableIsFiltered,
+    client,
+    store,
+    nodeFilter.tree.ap,
+  ])
 
   const onClickApOhnePop = useCallback(async () => {
     const notif = enqueNotification({
