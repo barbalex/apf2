@@ -145,7 +145,7 @@ export default types
       const options = self.ekfrequenzs.map(o => {
         const code = (o.code || '').padEnd(2, '\xA0')
         const anwendungsfall =
-          `${o.anwendungsfall.padEnd(longestAnwendungsfall, '\xA0')}, ${
+          `${(o.anwendungsfall || '').padEnd(longestAnwendungsfall, '\xA0')}, ${
             o.ektyp
           }` || ''
         return {
