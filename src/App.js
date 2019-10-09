@@ -68,7 +68,7 @@ const App = ({ element }) => {
           }
         }),
     )
-
+    // inform users of old browsers
     const browserUpdateConfiguration = {
       required: { e: -2, f: -2, o: -2, s: -2, c: -2 },
       text: {
