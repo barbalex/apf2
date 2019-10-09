@@ -140,7 +140,7 @@ export default types
     },
     get ekfOptionsGroupedPerAp() {
       const longestAnwendungsfall = max(
-        self.ekfrequenzs.map(a => a.anwendungsfall.length),
+        self.ekfrequenzs.map(a => (a.anwendungsfall || '').length),
       )
       const options = self.ekfrequenzs.map(o => {
         const code = (o.code || '').padEnd(2, '\xA0')
