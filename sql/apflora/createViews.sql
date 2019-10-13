@@ -1509,34 +1509,6 @@ FROM
 GROUP BY
   apflora.tpopber.tpop_id;
 
-DROP VIEW IF EXISTS apflora.v_ap CASCADE;
-CREATE OR REPLACE VIEW apflora.v_ap AS
-SELECT
-  apflora.ap.id,
-  apflora.ae_eigenschaften.artname,
-  apflora.ap_bearbstand_werte.text AS bearbeitung,
-  apflora.ap.start_jahr,
-  apflora.ap_umsetzung_werte.text AS umsetzung,
-  apflora.adresse.name AS bearbeiter,
-  apflora.ap.changed,
-  apflora.ap.changed_by
-FROM
-  (((apflora.ae_eigenschaften
-  INNER JOIN
-    apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
-  LEFT JOIN
-    apflora.ap_bearbstand_werte
-    ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
-  LEFT JOIN
-    apflora.ap_umsetzung_werte
-    ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
-  LEFT JOIN
-    apflora.adresse
-    ON apflora.ap.bearbeiter = apflora.adresse.id
-ORDER BY
-  apflora.ae_eigenschaften.artname;
-
 DROP VIEW IF EXISTS apflora.v_idealbiotop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_idealbiotop AS
 SELECT
@@ -5385,3 +5357,4 @@ order by
 
 DROP VIEW IF EXISTS apflora.v_tpopmassnber_fueraktap0 CASCADE;
 DROP VIEW IF EXISTS apflora.v_bertpopfuerangezeigteap0 CASCADE;
+DROP VIEW IF EXISTS apflora.v_ap CASCADE;

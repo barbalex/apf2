@@ -42,7 +42,6 @@ DROP VIEW if exists  apflora.v_tpop_mitapaberohnestatus cascade;
 DROP VIEW if exists  apflora.v_tpop_ohnebekanntseit cascade;
 DROP VIEW if exists  apflora.v_tpop_ohnekoord cascade;
 DROP VIEW if exists  apflora.v_tpopber_letzterber cascade;
-DROP VIEW if exists  apflora.v_ap cascade;
 DROP VIEW if exists  apflora.v_idealbiotop cascade;
 DROP VIEW if exists  apflora.v_ber cascade;
 DROP VIEW if exists  apflora.v_assozart cascade;

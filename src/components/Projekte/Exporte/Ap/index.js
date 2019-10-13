@@ -13,12 +13,9 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/react-hooks'
 import { useSnackbar } from 'notistack'
 import gql from 'graphql-tag'
-import { getSnapshot } from 'mobx-state-tree'
 
 import exportModule from '../../../../modules/export'
-import exists from '../../../../modules/exists'
 import storeContext from '../../../../storeContext'
-import simpleTypes from '../../../../store/NodeFilterTree/simpleTypes'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -64,7 +61,7 @@ const AP = () => {
   const {
     enqueNotification,
     removeNotification,
-    nodeFilter,
+    apGqlFilter,
     nodeFilterTableIsFiltered,
   } = store
 
@@ -81,64 +78,44 @@ const AP = () => {
       },
     })
     try {
-      console.log('Exporte AP')
-      const isFiltered = nodeFilterTableIsFiltered({
-        treeName: 'tree',
-        table: 'ap',
-      })
-      console.log('Exporte AP', {
-        isFiltered,
-        simpleTypes,
-      })
-      let filteredIds = []
       const { data } = await client.query({
-        query: await import('./allVAps').then(m => m.default),
-      })
-      // how to filter by nodeFilter?
-      // query table ap using criteria
-      // then filter result by ids
-      if (isFiltered) {
-        const filter = Object.fromEntries(
-          Object.entries(getSnapshot(nodeFilter.tree.ap))
-            .filter(([key, value]) => exists(value))
-            .map(([key, value]) => {
-              // if is string: includes, else: equalTo
-              const type = simpleTypes.ap[key]
-              if (type === 'string') {
-                return [key, { includes: value }]
-              }
-              return [key, { equalTo: value }]
-            }),
-        )
-        console.log('Exporte AP', {
-          data: get(data, 'allVAps.nodes', []),
-          nodeFilter: getSnapshot(nodeFilter.tree.ap),
-          filter,
-        })
-        const { data: idsData } = await client.query({
-          query: gql`
-            query apForExportQuery($filter: ApFilter) {
-              allAps(filter: $filter) {
-                nodes {
+        query: gql`
+          query apForExportQuery($filter: ApFilter) {
+            allAps(filter: $filter) {
+              nodes {
+                id
+                aeEigenschaftenByArtId {
                   id
+                  artname
                 }
+                apBearbstandWerteByBearbeitung {
+                  id
+                  text
+                }
+                startJahr
+                apUmsetzungWerteByUmsetzung {
+                  id
+                  text
+                }
+                changed
+                changedBy
               }
             }
-          `,
-          variables: {
-            filter,
-          },
-        })
-        filteredIds = (get(idsData, 'allAps.nodes') || []).map(n => n.id)
-        console.log('Exporte AP', {
-          idsData,
-          filteredIds,
-        })
-      }
-      let dataToExport = get(data, 'allVAps.nodes', [])
-      if (filteredIds.length) {
-        dataToExport = dataToExport.filter(n => filteredIds.includes(n.id))
-      }
+          }
+        `,
+        variables: {
+          filter: apGqlFilter,
+        },
+      })
+      const dataToExport = get(data, 'allAps.nodes', []).map(n => ({
+        id: n.id,
+        artname: get(n, 'aeEigenschaftenByArtId.artname') || null,
+        bearbeitung: get(n, 'apBearbstandWerteByBearbeitung.text') || null,
+        startJahr: n.startJahr,
+        umsetzung: get(n, 'apUmsetzungWerteByUmsetzung.text') || null,
+        changed: n.changed,
+        changedBy: n.changedBy,
+      }))
       exportModule({
         data: dataToExport,
         fileName: 'AP',
@@ -155,13 +132,12 @@ const AP = () => {
     removeNotification(notif)
     closeSnackbar(notif)
   }, [
+    apGqlFilter,
+    client,
+    closeSnackbar,
     enqueNotification,
     removeNotification,
-    closeSnackbar,
-    nodeFilterTableIsFiltered,
-    client,
     store,
-    nodeFilter.tree.ap,
   ])
 
   const onClickApOhnePop = useCallback(async () => {
@@ -483,6 +459,11 @@ const AP = () => {
     closeSnackbar(notif)
   }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
+  const apIsFiltered = nodeFilterTableIsFiltered({
+    treeName: 'tree',
+    table: 'ap',
+  })
+
   return (
     <StyledCard>
       <StyledCardActions disableSpacing onClick={onClickAction}>
@@ -500,7 +481,7 @@ const AP = () => {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <StyledCardContent>
           <DownloadCardButton onClick={onClickAp}>
-            Aktionspläne
+            {apIsFiltered ? 'Aktionspläne (gefiltert)' : 'Aktionspläne'}
           </DownloadCardButton>
           <DownloadCardButton onClick={onClickApOhnePop}>
             Aktionspläne ohne Populationen

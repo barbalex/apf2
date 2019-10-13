@@ -3,6 +3,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import isEqual from 'lodash/isEqual'
 import queryString from 'query-string'
 import { navigate } from 'gatsby'
+import { getSnapshot } from 'mobx-state-tree'
 
 import ApfloraLayer from './ApfloraLayer'
 import MapFilter from './MapFilter'
@@ -24,6 +25,8 @@ import Tree, { defaultValue as defaultTree } from './Tree'
 import EkPlan, { defaultValue as defaultEkPlan } from './EkPlan'
 import getActiveNodes from '../modules/getActiveNodes'
 import getOpenNodesFromActiveNodeArray from '../modules/getOpenNodesFromActiveNodeArray'
+import exists from '../modules/exists'
+import simpleTypes from './NodeFilterTree/simpleTypes'
 
 // substract 3 Months to now so user sees previous year in February
 const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
@@ -101,6 +104,24 @@ const myTypes = types
     },
     get tree2ActiveNodes() {
       return getActiveNodes(self.tree2.activeNodeArray)
+    },
+    get apGqlFilter() {
+      const result = Object.fromEntries(
+        Object.entries(getSnapshot(self.nodeFilter.tree.ap))
+          .filter(([key, value]) => exists(value))
+          .map(([key, value]) => {
+            // if is string: includes, else: equalTo
+            const type = simpleTypes.ap[key]
+            if (type === 'string') {
+              return [key, { includes: value }]
+            }
+            return [key, { equalTo: value }]
+          }),
+      )
+      // return a valid filter even if no filter criterias exist
+      // but ensure it returns all rows
+      if (Object.entries(result).length === 0) return { id: { isNull: false } }
+      return result
     },
   }))
   .actions(self => ({
