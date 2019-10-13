@@ -123,6 +123,96 @@ const myTypes = types
       if (Object.entries(result).length === 0) return { id: { isNull: false } }
       return result
     },
+    get popGqlFilter() {
+      const result = Object.fromEntries(
+        Object.entries(getSnapshot(self.nodeFilter.tree.pop))
+          .filter(([key, value]) => exists(value))
+          .map(([key, value]) => {
+            // if is string: includes, else: equalTo
+            const type = simpleTypes.pop[key]
+            if (type === 'string') {
+              return [key, { includes: value }]
+            }
+            return [key, { equalTo: value }]
+          }),
+      )
+      // return a valid filter even if no filter criterias exist
+      // but ensure it returns all rows
+      if (Object.entries(result).length === 0) return { id: { isNull: false } }
+      return result
+    },
+    get tpopGqlFilter() {
+      const result = Object.fromEntries(
+        Object.entries(getSnapshot(self.nodeFilter.tree.tpop))
+          .filter(([key, value]) => exists(value))
+          .map(([key, value]) => {
+            // if is string: includes, else: equalTo
+            const type = simpleTypes.tpop[key]
+            if (type === 'string') {
+              return [key, { includes: value }]
+            }
+            return [key, { equalTo: value }]
+          }),
+      )
+      // return a valid filter even if no filter criterias exist
+      // but ensure it returns all rows
+      if (Object.entries(result).length === 0) return { id: { isNull: false } }
+      return result
+    },
+    get tpopmassnGqlFilter() {
+      const result = Object.fromEntries(
+        Object.entries(getSnapshot(self.nodeFilter.tree.tpopmassn))
+          .filter(([key, value]) => exists(value))
+          .map(([key, value]) => {
+            // if is string: includes, else: equalTo
+            const type = simpleTypes.tpopmassn[key]
+            if (type === 'string') {
+              return [key, { includes: value }]
+            }
+            return [key, { equalTo: value }]
+          }),
+      )
+      // return a valid filter even if no filter criterias exist
+      // but ensure it returns all rows
+      if (Object.entries(result).length === 0) return { id: { isNull: false } }
+      return result
+    },
+    get tpopfeldkontrGqlFilter() {
+      const result = Object.fromEntries(
+        Object.entries(getSnapshot(self.nodeFilter.tree.tpopfeldkontr))
+          .filter(([key, value]) => exists(value))
+          .map(([key, value]) => {
+            // if is string: includes, else: equalTo
+            const type = simpleTypes.tpopfeldkontr[key]
+            if (type === 'string') {
+              return [key, { includes: value }]
+            }
+            return [key, { equalTo: value }]
+          }),
+      )
+      // return a valid filter even if no filter criterias exist
+      // but ensure it returns all rows
+      if (Object.entries(result).length === 0) return { id: { isNull: false } }
+      return result
+    },
+    get tpopfreiwkontrGqlFilter() {
+      const result = Object.fromEntries(
+        Object.entries(getSnapshot(self.nodeFilter.tree.tpopfreiwkontr))
+          .filter(([key, value]) => exists(value))
+          .map(([key, value]) => {
+            // if is string: includes, else: equalTo
+            const type = simpleTypes.tpopfreiwkontr[key]
+            if (type === 'string') {
+              return [key, { includes: value }]
+            }
+            return [key, { equalTo: value }]
+          }),
+      )
+      // return a valid filter even if no filter criterias exist
+      // but ensure it returns all rows
+      if (Object.entries(result).length === 0) return { id: { isNull: false } }
+      return result
+    },
   }))
   .actions(self => ({
     enqueNotification(note) {
