@@ -12,6 +12,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/react-hooks'
 import { useSnackbar } from 'notistack'
+import gql from 'graphql-tag'
 
 import exportModule from '../../../../modules/export'
 import storeContext from '../../../../storeContext'
@@ -57,9 +58,19 @@ const DownloadCardButton = styled(Button)`
 const Populationen = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { enqueNotification, removeNotification } = store
+  const {
+    enqueNotification,
+    removeNotification,
+    nodeFilterTableIsFiltered,
+    popGqlFilter,
+  } = store
   const [expanded, setExpanded] = useState(false)
   const { closeSnackbar } = useSnackbar()
+
+  const popIsFiltered = nodeFilterTableIsFiltered({
+    treeName: 'tree',
+    table: 'pop',
+  })
 
   return (
     <StyledCard>
@@ -88,10 +99,73 @@ const Populationen = () => {
               })
               try {
                 const { data } = await client.query({
-                  query: await import('./allVPops').then(m => m.default),
+                  query: gql`
+                    query popForExportQuery($filter: PopFilter) {
+                      allPops(filter: $filter) {
+                        nodes {
+                          apId
+                          apByApId {
+                            id
+                            aeEigenschaftenByArtId {
+                              id
+                              artname
+                            }
+                            apBearbstandWerteByBearbeitung {
+                              id
+                              text
+                            }
+                            startJahr
+                            apUmsetzungWerteByUmsetzung {
+                              id
+                              text
+                            }
+                          }
+                          id
+                          nr
+                          name
+                          popStatusWerteByStatus {
+                            id
+                            text
+                          }
+                          bekanntSeit
+                          statusUnklar
+                          statusUnklarBegruendung
+                          x: lv95X
+                          y: lv95Y
+                          changed
+                          changedBy
+                        }
+                      }
+                    }
+                  `,
+                  variables: {
+                    filter: popGqlFilter,
+                  },
                 })
+                const dataToExport = get(data, 'allPops.nodes', []).map(n => ({
+                  apId: get(n, 'apByApId.id') || null,
+                  apArtname:
+                    get(n, 'apByApId.aeEigenschaftenByArtId.artname') || null,
+                  apBearbeitung:
+                    get(n, 'apByApId.apBearbstandWerteByBearbeitung.text') ||
+                    null,
+                  apStartJahr: get(n, 'apByApId.startJahr') || null,
+                  apUmsetzung:
+                    get(n, 'apByApId.apUmsetzungWerteByUmsetzung.text') || null,
+                  id: n.id,
+                  nr: n.nr,
+                  name: n.name,
+                  status: get(n, 'popStatusWerteByStatus.text') || null,
+                  bekanntSeit: n.bekanntSeit,
+                  statusUnklar: n.statusUnklar,
+                  statusUnklarBegruendung: n.statusUnklarBegruendung,
+                  x: n.x,
+                  y: n.y,
+                  changed: n.changed,
+                  changedBy: n.changedBy,
+                }))
                 exportModule({
-                  data: get(data, 'allVPops.nodes', []),
+                  data: dataToExport,
                   fileName: 'Populationen',
                   store,
                 })
@@ -107,7 +181,7 @@ const Populationen = () => {
               closeSnackbar(notif)
             }}
           >
-            Populationen
+            {popIsFiltered ? 'Populationen (gefiltert)' : 'Populationen'}
           </DownloadCardButton>
           <DownloadCardButton
             onClick={async () => {

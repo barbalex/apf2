@@ -755,46 +755,6 @@ GROUP BY
 ORDER BY
   apflora.ae_eigenschaften.artname;
 
-DROP VIEW IF EXISTS apflora.v_pop CASCADE;
-CREATE OR REPLACE VIEW apflora.v_pop AS
-SELECT
-  apflora.ap.id AS ap_id,
-  apflora.ae_eigenschaften.artname,
-  apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
-  apflora.ap.start_jahr AS ap_start_jahr,
-  apflora.ap_umsetzung_werte.text AS ap_umsetzung,
-  apflora.pop.id,
-  apflora.pop.nr,
-  apflora.pop.name,
-  pop_status_werte.text AS status,
-  apflora.pop.bekannt_seit,
-  apflora.pop.status_unklar,
-  apflora.pop.status_unklar_begruendung,
-  apflora.pop.lv95_x as x,
-  apflora.pop.lv95_y as y,
-  apflora.pop.changed,
-  apflora.pop.changed_by
-FROM
-  apflora.ae_eigenschaften
-  INNER JOIN
-    (((apflora.ap
-    LEFT JOIN
-      apflora.ap_bearbstand_werte
-      ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
-    LEFT JOIN
-      apflora.ap_umsetzung_werte
-      ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
-    INNER JOIN
-      (apflora.pop
-      LEFT JOIN
-        apflora.pop_status_werte
-        ON apflora.pop.status  = pop_status_werte.code)
-      ON apflora.ap.id = apflora.pop.ap_id)
-    ON apflora.ae_eigenschaften.id = apflora.ap.art_id
-ORDER BY
-  apflora.ae_eigenschaften.artname,
-  apflora.pop.nr;
-
 DROP VIEW IF EXISTS apflora.v_pop_ohnekoord CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_ohnekoord AS
 SELECT
@@ -5358,3 +5318,4 @@ order by
 DROP VIEW IF EXISTS apflora.v_tpopmassnber_fueraktap0 CASCADE;
 DROP VIEW IF EXISTS apflora.v_bertpopfuerangezeigteap0 CASCADE;
 DROP VIEW IF EXISTS apflora.v_ap CASCADE;
+DROP VIEW IF EXISTS apflora.v_pop CASCADE;

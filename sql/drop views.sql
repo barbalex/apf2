@@ -22,7 +22,6 @@ DROP VIEW if exists  apflora.v_pop_anzmassn cascade;
 DROP VIEW if exists  apflora.v_pop_anzkontr cascade;
 DROP VIEW if exists  apflora.v_ap_anzmassn cascade;
 DROP VIEW if exists  apflora.v_ap_anzkontr cascade;
-DROP VIEW if exists  apflora.v_pop cascade;
 DROP VIEW if exists  apflora.v_pop_ohnekoord cascade;
 DROP VIEW if exists  apflora.v_pop_fuergis_write cascade;
 DROP VIEW if exists  apflora.v_pop_fuergis_read cascade;
