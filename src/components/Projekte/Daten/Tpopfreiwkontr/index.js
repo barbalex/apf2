@@ -639,7 +639,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
           {((isPrint && ekfBemerkungen) || !isPrint) && (
             <EkfRemarks saveToDb={saveToDb} row={row} errors={errors} />
           )}
-          {!isPrint && <Files row={row} />}
+          {!isPrint && !showFilter && <Files row={row} />}
           {!isPrint && !isFreiwillig && !(view === 'ekf') && (
             <Verification saveToDb={saveToDb} row={row} errors={errors} />
           )}
