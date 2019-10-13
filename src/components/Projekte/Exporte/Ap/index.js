@@ -81,7 +81,10 @@ const AP = () => {
       const { data } = await client.query({
         query: gql`
           query apForExportQuery($filter: ApFilter) {
-            allAps(filter: $filter) {
+            allAps(
+              filter: $filter
+              orderBy: AE_EIGENSCHAFTEN_BY_ART_ID__ARTNAME_ASC
+            ) {
               nodes {
                 id
                 aeEigenschaftenByArtId {

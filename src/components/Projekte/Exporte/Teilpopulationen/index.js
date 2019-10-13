@@ -12,6 +12,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/react-hooks'
 import { useSnackbar } from 'notistack'
+import gql from 'graphql-tag'
 
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
 import exportModule from '../../../../modules/export'
@@ -76,7 +77,12 @@ const Teilpopulationen = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
 
-  const { enqueNotification, removeNotification } = store
+  const {
+    enqueNotification,
+    removeNotification,
+    nodeFilterTableIsFiltered,
+    tpopGqlFilter,
+  } = store
 
   const [expanded, setExpanded] = useState(false)
   const { closeSnackbar } = useSnackbar()
@@ -93,23 +99,153 @@ const Teilpopulationen = ({ treeName }) => {
     })
     try {
       const { data } = await client.query({
-        query: await import('./allVTpops').then(m => m.default),
+        query: gql`
+          query tpopForExportQuery($filter: TpopFilter) {
+            allTpops(
+              filter: $filter
+              orderBy: [AP_NAME_ASC, POP_BY_POP_ID__NR_ASC, NR_ASC]
+            ) {
+              nodes {
+                popByPopId {
+                  id
+                  apByApId {
+                    id
+                    aeEigenschaftenByArtId {
+                      id
+                      artname
+                      familie
+                    }
+                    apBearbstandWerteByBearbeitung {
+                      id
+                      text
+                    }
+                    startJahr
+                    apUmsetzungWerteByUmsetzung {
+                      id
+                      text
+                    }
+                  }
+                  id
+                  nr
+                  name
+                  popStatusWerteByStatus {
+                    id
+                    text
+                  }
+                  bekanntSeit
+                  statusUnklar
+                  statusUnklarBegruendung
+                  x: lv95X
+                  y: lv95Y
+                }
+                id
+                nr
+                gemeinde
+                flurname
+                status
+                popStatusWerteByStatus {
+                  id
+                  text
+                }
+                bekanntSeit
+                statusUnklar
+                statusUnklarGrund
+                x: lv95X
+                y: lv95Y
+                radius
+                hoehe
+                exposition
+                klima
+                neigung
+                beschreibung
+                katasterNr
+                apberRelevant
+                apberRelevantGrund
+                eigentuemer
+                kontakt
+                nutzungszone
+                bewirtschafter
+                bewirtschaftung
+                ekfrequenz
+                ekfrequenzAbweichend
+                changed
+                changedBy
+              }
+            }
+          }
+        `,
+        variables: {
+          filter: tpopGqlFilter,
+        },
       })
-      const enrichedData = get(data, 'allVTpops.nodes', []).map(oWithout => {
+      const dataToExport = get(data, 'allTpops.nodes', []).map(n => ({
+        apId: get(n, 'popByPopId.apByApId.id') || null,
+        apFamilie:
+          get(n, 'popByPopId.apByApId.aeEigenschaftenByArtId.familie') || null,
+        apArtname:
+          get(n, 'popByPopId.apByApId.aeEigenschaftenByArtId.artname') || null,
+        apBearbeitung:
+          get(n, 'popByPopId.apByApId.apBearbstandWerteByBearbeitung.text') ||
+          null,
+        apStartJahr: get(n, 'popByPopId.apByApId.startJahr') || null,
+        apUmsetzung:
+          get(n, 'popByPopId.apByApId.apUmsetzungWerteByUmsetzung.text') ||
+          null,
+        popId: get(n, 'popByPopId.id') || null,
+        popNr: get(n, 'popByPopId.nr') || null,
+        popName: get(n, 'popByPopId.name') || null,
+        popStatus: get(n, 'popByPopId.popStatusWerteByStatus.text') || null,
+        popBekanntSeit: get(n, 'popByPopId.bekanntSeit') || null,
+        popStatusUnklar: get(n, 'popByPopId.statusUnklar') || null,
+        popStatusUnklarBegruendung:
+          get(n, 'popByPopId.statusUnklarBegruendung') || null,
+        popX: get(n, 'popByPopId.x') || null,
+        popY: get(n, 'popByPopId.y') || null,
+        id: n.id,
+        nr: n.nr,
+        gemeinde: n.gemeinde,
+        flurname: n.flurname,
+        status: n.status,
+        statusDecodiert: get(n, 'popStatusWerteByStatus.text') || null,
+        bekanntSeit: n.bekanntSeit,
+        statusUnklar: n.statusUnklar,
+        statusUnklarGrund: n.statusUnklarGrund,
+        x: n.x,
+        y: n.y,
+        radius: n.radius,
+        hoehe: n.hoehe,
+        exposition: n.exposition,
+        klima: n.klima,
+        neigung: n.neigung,
+        beschreibung: n.beschreibung,
+        katasterNr: n.katasterNr,
+        apberRelevant: n.apberRelevant,
+        apberRelevantGrund: n.apberRelevantGrund,
+        eigentuemer: n.eigentuemer,
+        kontakt: n.kontakt,
+        nutzungszone: n.nutzungszone,
+        bewirtschafter: n.bewirtschafter,
+        bewirtschaftung: n.bewirtschaftung,
+        ekfrequenz: n.ekfrequenz,
+        ekfrequenzAbweichend: n.ekfrequenzAbweichend,
+        changed: n.changed,
+        changedBy: n.changedBy,
+      }))
+      const enrichedData = dataToExport.map(oWithout => {
         let o = { ...oWithout }
         let nachBeginnAp = null
         if (
-          o.ap_start_jahr &&
-          o.bekannt_seit &&
+          o.apStartJahr &&
+          o.bekanntSeit &&
           [200, 201, 202].includes(o.status)
         ) {
-          if (o.ap_start_jahr <= o.bekannt_seit) {
+          if (o.apStartJahr <= o.bekanntSeit) {
             nachBeginnAp = true
           } else {
             nachBeginnAp = false
           }
         }
-        o.angesiedelt_nach_beginn_ap = nachBeginnAp
+        o.angesiedeltNachBeginnAp = nachBeginnAp
         return o
       })
       exportModule({
@@ -125,7 +261,14 @@ const Teilpopulationen = ({ treeName }) => {
     }
     removeNotification(notif)
     closeSnackbar(notif)
-  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
+  }, [
+    client,
+    closeSnackbar,
+    enqueNotification,
+    removeNotification,
+    store,
+    tpopGqlFilter,
+  ])
 
   const aeEigenschaftenfilter = useCallback(
     inputValue =>
@@ -138,6 +281,11 @@ const Teilpopulationen = ({ treeName }) => {
         : { artname: { isNull: false } /*, apByArtIdExists: true*/ },
     [],
   )
+
+  const tpopIsFiltered = nodeFilterTableIsFiltered({
+    treeName: 'tree',
+    table: 'tpop',
+  })
 
   return (
     <StyledCard>
@@ -156,7 +304,9 @@ const Teilpopulationen = ({ treeName }) => {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <StyledCardContent>
           <DownloadCardButton onClick={onClickButton}>
-            Teilpopulationen
+            {tpopIsFiltered
+              ? 'Teilpopulationen (gefiltert)'
+              : 'Teilpopulationen'}
           </DownloadCardButton>
           <DownloadCardButton
             onClick={async () => {

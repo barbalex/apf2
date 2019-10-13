@@ -101,7 +101,10 @@ const Populationen = () => {
                 const { data } = await client.query({
                   query: gql`
                     query popForExportQuery($filter: PopFilter) {
-                      allPops(filter: $filter) {
+                      allPops(
+                        filter: $filter
+                        orderBy: [AP_BY_AP_ID__LABEL_ASC, NR_ASC]
+                      ) {
                         nodes {
                           apId
                           apByApId {

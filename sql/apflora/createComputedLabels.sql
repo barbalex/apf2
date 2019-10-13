@@ -141,6 +141,25 @@ $$ language sql stable;
 -- make label sortable, as of postgraphile 4.4/postgraphile@next
 comment on function apflora.tpop_label(apflora.tpop) is e'@sortable';
 
+drop function if exists apflora.tpop_ap_name(apflora.tpop);
+create function apflora.tpop_ap_name(tpop apflora.tpop) returns text as $$
+  select coalesce(
+    (
+      select apflora.ae_eigenschaften.artname
+      from
+        apflora.pop
+          inner join apflora.ap
+            inner join apflora.ae_eigenschaften
+            on apflora.ap.art_id = apflora.ae_eigenschaften.id
+          on apflora.pop.ap_id = apflora.ap.id
+      where apflora.pop.id = tpop.pop_id
+    )
+    , '(kein Name)'
+  )
+$$ language sql stable;
+-- make label sortable, as of postgraphile 4.4/postgraphile@next
+comment on function apflora.tpop_ap_name(apflora.tpop) is e'@sortable';
+
 drop function if exists apflora.tpopber_label(tpopber apflora.tpopber);
 create function apflora.tpopber_label(tpopber apflora.tpopber) returns text as $$
   select coalesce(lpad(tpopber.jahr::text, 4, '0'), '(kein Jahr)') || ': ' || coalesce((select text from apflora.tpop_entwicklung_werte where apflora.tpop_entwicklung_werte.code = tpopber.entwicklung), '(nicht beurteilt)')
