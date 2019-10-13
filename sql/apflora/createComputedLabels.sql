@@ -201,6 +201,49 @@ $$ language sql stable;
 -- make label sortable, as of postgraphile 4.4/postgraphile@next
 comment on function apflora.tpopmassn_label(apflora.tpopmassn) is e'@sortable';
 
+drop function if exists apflora.tpopmassn_ap_name(apflora.tpopmassn);
+create function apflora.tpopmassn_ap_name(tpopmassn apflora.tpopmassn) returns text as $$
+  select coalesce(
+    (
+      select apflora.ae_eigenschaften.artname
+      from
+        apflora.tpop
+        inner join apflora.pop
+          inner join apflora.ap
+            inner join apflora.ae_eigenschaften
+            on apflora.ap.art_id = apflora.ae_eigenschaften.id
+          on apflora.pop.ap_id = apflora.ap.id
+        on apflora.tpop.pop_id = apflora.pop.id
+      where apflora.tpop.id = tpopmassn.tpop_id
+    )
+    , '(kein Name)'
+  )
+$$ language sql stable;
+-- make label sortable, as of postgraphile 4.4/postgraphile@next
+comment on function apflora.tpopmassn_ap_name(apflora.tpopmassn) is e'@sortable';
+
+drop function if exists apflora.tpopmassn_pop_nr(apflora.tpopmassn);
+create function apflora.tpopmassn_pop_nr(tpopmassn apflora.tpopmassn) returns integer as $$
+  select coalesce(
+    (
+      select apflora.pop.nr
+      from
+        apflora.tpop
+        inner join apflora.pop
+        on apflora.tpop.pop_id = apflora.pop.id
+      where apflora.tpop.id = tpopmassn.tpop_id
+    )
+    , 0
+  )
+$$ language sql stable;
+-- make label sortable, as of postgraphile 4.4/postgraphile@next
+comment on function apflora.tpopmassn_pop_nr(apflora.tpopmassn) is e'@sortable';
+
+
+
+
+
+
 drop function if exists apflora.user_label(u apflora.user);
 create function apflora.user_label(u apflora.user) returns text as $$
   select coalesce(u.name || ' (' || replace(u.role, 'apflora_', '') || ')', '(kein Name)')

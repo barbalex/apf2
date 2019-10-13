@@ -13,7 +13,6 @@ DROP VIEW if exists  apflora.v_popmassnber_anzmassn0 cascade;
 DROP VIEW if exists  apflora.v_massn_jahre cascade;
 DROP VIEW if exists  apflora.v_ap_anzmassnprojahr0 cascade;
 DROP VIEW if exists  apflora.v_ap_apberrelevant cascade;
-DROP VIEW if exists  apflora.v_massn cascade;
 DROP VIEW if exists  apflora.v_massn_webgisbun cascade;
 DROP VIEW if exists  apflora.v_massn_fuergis_write cascade;
 DROP VIEW if exists  apflora.v_massn_fuergis_read cascade;

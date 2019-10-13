@@ -12,6 +12,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/react-hooks'
 import { useSnackbar } from 'notistack'
+import gql from 'graphql-tag'
 
 import exportModule from '../../../../modules/export'
 import storeContext from '../../../../storeContext'
@@ -57,9 +58,19 @@ const DownloadCardButton = styled(Button)`
 const Massnahmen = () => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { enqueNotification, removeNotification } = store
+  const {
+    enqueNotification,
+    removeNotification,
+    nodeFilterTableIsFiltered,
+    tpopmassnGqlFilter,
+  } = store
   const [expanded, setExpanded] = useState(false)
   const { closeSnackbar } = useSnackbar()
+
+  const tpopmassnIsFiltered = nodeFilterTableIsFiltered({
+    treeName: 'tree',
+    table: 'tpopmassn',
+  })
 
   return (
     <StyledCard>
@@ -88,10 +99,224 @@ const Massnahmen = () => {
               })
               try {
                 const { data } = await client.query({
-                  query: await import('./allVMassns').then(m => m.default),
+                  query: gql`
+                    query tpopmassnForExportQuery($filter: TpopmassnFilter) {
+                      allTpopmassns(
+                        filter: $filter
+                        orderBy: [
+                          AP_NAME_ASC
+                          POP_NR_ASC
+                          TPOP_BY_TPOP_ID__NR_ASC
+                          DATUM_ASC
+                        ]
+                      ) {
+                        nodes {
+                          tpopByTpopId {
+                            popByPopId {
+                              apByApId {
+                                id
+                                aeEigenschaftenByArtId {
+                                  id
+                                  artname
+                                  familie
+                                }
+                                apBearbstandWerteByBearbeitung {
+                                  id
+                                  text
+                                }
+                                startJahr
+                                apUmsetzungWerteByUmsetzung {
+                                  id
+                                  text
+                                }
+                              }
+                              id
+                              nr
+                              name
+                              popStatusWerteByStatus {
+                                id
+                                text
+                              }
+                              bekanntSeit
+                              statusUnklar
+                              statusUnklarBegruendung
+                              x: lv95X
+                              y: lv95Y
+                            }
+                            id
+                            nr
+                            gemeinde
+                            flurname
+                            status
+                            popStatusWerteByStatus {
+                              id
+                              text
+                            }
+                            bekanntSeit
+                            statusUnklar
+                            statusUnklarGrund
+                            x: lv95X
+                            y: lv95Y
+                            radius
+                            hoehe
+                            exposition
+                            klima
+                            neigung
+                            beschreibung
+                            katasterNr
+                            apberRelevant
+                            apberRelevantGrund
+                            eigentuemer
+                            kontakt
+                            nutzungszone
+                            bewirtschafter
+                            bewirtschaftung
+                            ekfrequenz
+                            ekfrequenzAbweichend
+                          }
+                          id
+                          jahr
+                          datum
+                          tpopmassnTypWerteByTyp {
+                            id
+                            text
+                          }
+                          beschreibung
+                          adresseByBearbeiter {
+                            id
+                            name
+                          }
+                          bemerkungen
+                          planVorhanden
+                          planBezeichnung
+                          flaeche
+                          form
+                          pflanzanordnung
+                          markierung
+                          anzTriebe
+                          anzPflanzen
+                          anzPflanzstellen
+                          wirtspflanze
+                          herkunftPop
+                          sammeldatum
+                          changed
+                          changedBy
+                        }
+                      }
+                    }
+                  `,
+                  variables: {
+                    filter: tpopmassnGqlFilter,
+                  },
                 })
+                console.log('Massnahmen, data:', data)
+                const dataToExport = get(data, 'allTpopmassns.nodes', []).map(
+                  n => ({
+                    apId: get(n, 'tpopByTpopId.popByPopId.apByApId.id') || null,
+                    apFamilie:
+                      get(
+                        n,
+                        'tpopByTpopId.popByPopId.apByApId.aeEigenschaftenByArtId.familie',
+                      ) || null,
+                    apArtname:
+                      get(
+                        n,
+                        'tpopByTpopId.popByPopId.apByApId.aeEigenschaftenByArtId.artname',
+                      ) || null,
+                    apBearbeitung:
+                      get(
+                        n,
+                        'tpopByTpopId.popByPopId.apByApId.apBearbstandWerteByBearbeitung.text',
+                      ) || null,
+                    apStartJahr:
+                      get(n, 'tpopByTpopId.popByPopId.apByApId.startJahr') ||
+                      null,
+                    apUmsetzung:
+                      get(
+                        n,
+                        'tpopByTpopId.popByPopId.apByApId.apUmsetzungWerteByUmsetzung.text',
+                      ) || null,
+                    popId: get(n, 'tpopByTpopId.popByPopId.id') || null,
+                    popNr: get(n, 'tpopByTpopId.popByPopId.nr') || null,
+                    popName: get(n, 'tpopByTpopId.popByPopId.name') || null,
+                    popStatus:
+                      get(
+                        n,
+                        'tpopByTpopId.popByPopId.popStatusWerteByStatus.text',
+                      ) || null,
+                    popBekanntSeit:
+                      get(n, 'tpopByTpopId.popByPopId.bekanntSeit') || null,
+                    popStatusUnklar:
+                      get(n, 'tpopByTpopId.popByPopId.statusUnklar') || null,
+                    popStatusUnklarBegruendung:
+                      get(
+                        n,
+                        'tpopByTpopId.popByPopId.statusUnklarBegruendung',
+                      ) || null,
+                    popX: get(n, 'tpopByTpopId.popByPopId.x') || null,
+                    popY: get(n, 'tpopByTpopId.popByPopId.y') || null,
+                    tpopId: get(n, 'tpopByTpopId.id') || null,
+                    tpopNr: get(n, 'tpopByTpopId.nr') || null,
+                    tpopGemeinde: get(n, 'tpopByTpopId.gemeinde') || null,
+                    tpopFlurname: get(n, 'tpopByTpopId.flurname') || null,
+                    tpopStatus: get(n, 'tpopByTpopId.status') || null,
+                    statusDecodiert:
+                      get(n, 'tpopByTpopId.popStatusWerteByStatus.text') ||
+                      null,
+                    tpopBekanntSeit: get(n, 'tpopByTpopId.bekanntSeit') || null,
+                    tpopStatusUnklar:
+                      get(n, 'tpopByTpopId.statusUnklar') || null,
+                    tpopStatusUnklarGrund:
+                      get(n, 'tpopByTpopId.statusUnklarGrund') || null,
+                    tpopX: get(n, 'tpopByTpopId.x') || null,
+                    tpopY: get(n, 'tpopByTpopId.y'),
+                    tpopRadius: get(n, 'tpopByTpopId.radius'),
+                    tpopHoehe: get(n, 'tpopByTpopId.hoehe'),
+                    tpopExposition: get(n, 'tpopByTpopId.exposition'),
+                    tpopKlima: get(n, 'tpopByTpopId.klima'),
+                    tpopNeigung: get(n, 'tpopByTpopId.neigung'),
+                    tpopBeschreibung: get(n, 'tpopByTpopId.beschreibung'),
+                    tpopKatasterNr: get(n, 'tpopByTpopId.katasterNr'),
+                    tpopApberRelevant: get(n, 'tpopByTpopId.apberRelevant'),
+                    tpopApberRelevantGrund: get(
+                      n,
+                      'tpopByTpopId.apberRelevantGrund',
+                    ),
+                    tpopEigentuemer: get(n, 'tpopByTpopId.eigentuemer'),
+                    tpopKontakt: get(n, 'tpopByTpopId.kontakt'),
+                    tpopNutzungszone: get(n, 'tpopByTpopId.nutzungszone'),
+                    tpopBewirtschafter: get(n, 'tpopByTpopId.bewirtschafter'),
+                    tpopBewirtschaftung: get(n, 'tpopByTpopId.bewirtschaftung'),
+                    tpopEkfrequenz: get(n, 'tpopByTpopId.ekfrequenz'),
+                    tpopEkfrequenzAbweichend: get(
+                      n,
+                      'tpopByTpopId.ekfrequenzAbweichend',
+                    ),
+                    id: n.id,
+                    jahr: n.jahr,
+                    datum: n.datum,
+                    typ: get(n, 'tpopmassnTypWerteByTyp.text'),
+                    beschreibung: n.beschreibung,
+                    bearbeiter: get(n, 'adresseByBearbeiter.name'),
+                    bemerkungen: n.bemerkungen,
+                    planVorhanden: n.planVorhanden,
+                    planBezeichnung: n.planBezeichnung,
+                    flaeche: n.flaeche,
+                    form: n.form,
+                    pflanzanordnung: n.pflanzanordnung,
+                    markierung: n.markierung,
+                    anzTriebe: n.anzTriebe,
+                    anzPflanzen: n.anzPflanzen,
+                    anzPflanzstellen: n.anzPflanzstellen,
+                    wirtspflanze: n.wirtspflanze,
+                    herkunftPop: n.herkunftPop,
+                    sammeldatum: n.sammeldatum,
+                    changed: n.changed,
+                    changedBy: n.changedBy,
+                  }),
+                )
                 exportModule({
-                  data: get(data, 'allVMassns.nodes', []),
+                  data: dataToExport,
                   fileName: 'Massnahmen',
                   idKey: 'tpop_id',
                   xKey: 'tpop_wgs84lat',
@@ -110,7 +335,7 @@ const Massnahmen = () => {
               closeSnackbar(notif)
             }}
           >
-            Massnahmen
+            {tpopmassnIsFiltered ? 'Massnahmen (gefiltert)' : 'Massnahmen'}
           </DownloadCardButton>
           <DownloadCardButton
             onClick={async () => {

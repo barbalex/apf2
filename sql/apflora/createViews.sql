@@ -123,116 +123,6 @@ WHERE
 GROUP BY
   apflora.ap.id;
 
-
-DROP VIEW IF EXISTS apflora.v_erstemassnproap CASCADE;
-drop view if exists apflora.v_apber_erstemassnjahr cascade;
-
-DROP VIEW IF EXISTS apflora.v_massn CASCADE;
-CREATE OR REPLACE VIEW apflora.v_massn AS
-SELECT
-  apflora.ap.id AS ap_id,
-  apflora.ae_eigenschaften.familie,
-  apflora.ae_eigenschaften.artname,
-  apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
-  apflora.ap.start_jahr AS ap_start_jahr,
-  apflora.ap_umsetzung_werte.text AS ap_umsetzung,
-  apflora.pop.id as pop_id,
-  apflora.pop.nr AS pop_nr,
-  apflora.pop.name AS pop_name,
-  pop_status_werte.text AS pop_status,
-  apflora.pop.bekannt_seit AS pop_bekannt_seit,
-  apflora.pop.status_unklar AS pop_status_unklar,
-  apflora.pop.status_unklar_begruendung AS pop_status_unklar_begruendung,
-  apflora.pop.lv95_x AS pop_x,
-  apflora.pop.lv95_y AS pop_y,
-  apflora.tpop.id AS tpop_id,
-  apflora.tpop.nr AS tpop_nr,
-  apflora.tpop.gemeinde AS tpop_gemeinde,
-  apflora.tpop.flurname AS tpop_flurname,
-  pop_status_werte_2.text AS tpop_status,
-  apflora.tpop.bekannt_seit AS tpop_bekannt_seit,
-  apflora.tpop.status_unklar AS tpop_status_unklar,
-  apflora.tpop.status_unklar_grund AS tpop_status_unklar_grund,
-  apflora.tpop.lv95_x AS tpop_x,
-  apflora.tpop.lv95_y AS tpop_y,
-  apflora.tpop.radius AS tpop_radius,
-  apflora.tpop.hoehe AS tpop_hoehe,
-  apflora.tpop.exposition AS tpop_exposition,
-  apflora.tpop.klima AS tpop_klima,
-  apflora.tpop.neigung AS tpop_neigung,
-  apflora.tpop.beschreibung AS tpop_beschreibung,
-  apflora.tpop.kataster_nr AS tpop_kataster_nr,
-  apflora.tpop.apber_relevant AS tpop_apber_relevant,
-  apflora.tpop.apber_relevant_grund AS tpop_apber_relevant_grund,
-  apflora.tpop.eigentuemer AS tpop_eigentuemer,
-  apflora.tpop.kontakt AS tpop_kontakt,
-  apflora.tpop.nutzungszone AS tpop_nutzungszone,
-  apflora.tpop.bewirtschafter AS tpop_bewirtschafter,
-  apflora.tpop.bewirtschaftung AS tpop_bewirtschaftung,
-  apflora.tpop.ekfrequenz AS tpop_ekfrequenz,
-  apflora.tpop.ekfrequenz_abweichend AS tpop_ekfrequenz_abweichend,
-  apflora.tpopmassn.id,
-  apflora.tpopmassn.jahr,
-  apflora.tpopmassn.datum,
-  tpopmassn_typ_werte.text AS typ,
-  apflora.tpopmassn.beschreibung,
-  apflora.adresse.name AS bearbeiter,
-  apflora.tpopmassn.bemerkungen,
-  apflora.tpopmassn.plan_vorhanden,
-  apflora.tpopmassn.plan_bezeichnung,
-  apflora.tpopmassn.flaeche,
-  apflora.tpopmassn.form,
-  apflora.tpopmassn.pflanzanordnung,
-  apflora.tpopmassn.markierung,
-  apflora.tpopmassn.anz_triebe,
-  apflora.tpopmassn.anz_pflanzen,
-  apflora.tpopmassn.anz_pflanzstellen,
-  apflora.tpopmassn.wirtspflanze,
-  apflora.tpopmassn.herkunft_pop,
-  apflora.tpopmassn.sammeldatum,
-  apflora.tpopmassn.changed,
-  apflora.tpopmassn.changed_by
-FROM
-  ((((((apflora.ae_eigenschaften
-  INNER JOIN
-    apflora.ap ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
-    INNER JOIN
-      ((apflora.pop
-      INNER JOIN
-        apflora.tpop
-        ON apflora.pop.id = apflora.tpop.pop_id)
-      INNER JOIN
-        (apflora.tpopmassn
-        LEFT JOIN
-          apflora.tpopmassn_typ_werte
-          ON apflora.tpopmassn.typ = tpopmassn_typ_werte.code)
-        ON apflora.tpop.id = apflora.tpopmassn.tpop_id)
-    ON apflora.ap.id = apflora.pop.ap_id)
-  LEFT JOIN
-    apflora.ap_bearbstand_werte
-    ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
-  LEFT JOIN
-    apflora.ap_umsetzung_werte
-    ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
-  LEFT JOIN
-    apflora.pop_status_werte
-    ON apflora.pop.status  = pop_status_werte.code)
-  LEFT JOIN
-    apflora.pop_status_werte AS pop_status_werte_2
-    ON apflora.tpop.status = pop_status_werte_2.code)
-  LEFT JOIN
-    apflora.adresse
-    ON apflora.tpopmassn.bearbeiter = apflora.adresse.id
-WHERE
-  apflora.ae_eigenschaften.taxid > 150
-ORDER BY
-  apflora.ae_eigenschaften.artname,
-  apflora.pop.nr,
-  apflora.tpop.nr,
-  apflora.tpopmassn.jahr,
-  apflora.tpopmassn.datum,
-  tpopmassn_typ_werte.text;
-
 DROP VIEW IF EXISTS apflora.v_massn_webgisbun CASCADE;
 CREATE OR REPLACE VIEW apflora.v_massn_webgisbun AS
 SELECT
@@ -5319,3 +5209,6 @@ DROP VIEW IF EXISTS apflora.v_tpopmassnber_fueraktap0 CASCADE;
 DROP VIEW IF EXISTS apflora.v_bertpopfuerangezeigteap0 CASCADE;
 DROP VIEW IF EXISTS apflora.v_ap CASCADE;
 DROP VIEW IF EXISTS apflora.v_pop CASCADE;
+DROP VIEW IF EXISTS apflora.v_erstemassnproap CASCADE;
+drop view if exists apflora.v_apber_erstemassnjahr cascade;
+DROP VIEW IF EXISTS apflora.v_massn CASCADE;
