@@ -6,6 +6,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { observer } from 'mobx-react-lite'
 
 import storeContext from '../../storeContext'
+import exists from '../../modules/exists'
 
 const Container = styled.div`
   background-color: #ffd3a7;
@@ -79,7 +80,7 @@ const FormTitle = ({
     <Container>
       <TitleRow>
         <FilterNumbers>
-          {filteredApNr && (
+          {exists(filteredApNr) && (
             <>
               {`AP: `}
               <span title="gefilterte Anzahl im Aktionsplan">
