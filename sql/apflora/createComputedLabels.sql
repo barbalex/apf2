@@ -188,6 +188,44 @@ $$ language sql stable;
 -- make label sortable, as of postgraphile 4.4/postgraphile@next
 comment on function apflora.tpopkontr_label_ekf(apflora.tpopkontr) is e'@sortable';
 
+drop function if exists apflora.tpopkontr_ap_name(apflora.tpopkontr);
+create function apflora.tpopkontr_ap_name(tpopkontr apflora.tpopkontr) returns text as $$
+  select coalesce(
+    (
+      select apflora.ae_eigenschaften.artname
+      from
+        apflora.tpop
+        inner join apflora.pop
+          inner join apflora.ap
+            inner join apflora.ae_eigenschaften
+            on apflora.ap.art_id = apflora.ae_eigenschaften.id
+          on apflora.pop.ap_id = apflora.ap.id
+        on apflora.tpop.pop_id = apflora.pop.id
+      where apflora.tpop.id = tpopkontr.tpop_id
+    )
+    , '(kein Name)'
+  )
+$$ language sql stable;
+-- make label sortable, as of postgraphile 4.4/postgraphile@next
+comment on function apflora.tpopkontr_ap_name(apflora.tpopkontr) is e'@sortable';
+
+drop function if exists apflora.tpopkontr_pop_nr(apflora.tpopkontr);
+create function apflora.tpopkontr_pop_nr(tpopkontr apflora.tpopkontr) returns integer as $$
+  select coalesce(
+    (
+      select apflora.pop.nr
+      from
+        apflora.tpop
+        inner join apflora.pop
+        on apflora.tpop.pop_id = apflora.pop.id
+      where apflora.tpop.id = tpopkontr.tpop_id
+    )
+    , 0
+  )
+$$ language sql stable;
+-- make label sortable, as of postgraphile 4.4/postgraphile@next
+comment on function apflora.tpopkontr_pop_nr(apflora.tpopkontr) is e'@sortable';
+
 drop function if exists apflora.tpopkontrzaehl_label(tpopkontrzaehl apflora.tpopkontrzaehl);
 create or replace function apflora.tpopkontrzaehl_label(tpopkontrzaehl apflora.tpopkontrzaehl) returns text as $$
   select coalesce((select text from apflora.tpopkontrzaehl_einheit_werte where apflora.tpopkontrzaehl_einheit_werte.code = tpopkontrzaehl.einheit), '(keine Einheit)') || ': ' || COALESCE(tpopkontrzaehl.anzahl::text, '(keine Anzahl)') || ' ' || COALESCE((select text from apflora.tpopkontrzaehl_methode_werte where apflora.tpopkontrzaehl_methode_werte.code = tpopkontrzaehl.methode), '(keine Methode)')
@@ -238,11 +276,6 @@ create function apflora.tpopmassn_pop_nr(tpopmassn apflora.tpopmassn) returns in
 $$ language sql stable;
 -- make label sortable, as of postgraphile 4.4/postgraphile@next
 comment on function apflora.tpopmassn_pop_nr(apflora.tpopmassn) is e'@sortable';
-
-
-
-
-
 
 drop function if exists apflora.user_label(u apflora.user);
 create function apflora.user_label(u apflora.user) returns text as $$

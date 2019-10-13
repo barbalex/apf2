@@ -177,8 +177,8 @@ const myTypes = types
       if (Object.entries(result).length === 0) return { id: { isNull: false } }
       return result
     },
-    get tpopfeldkontrGqlFilter() {
-      const result = Object.fromEntries(
+    get tpopkontrGqlFilter() {
+      const ek = Object.fromEntries(
         Object.entries(getSnapshot(self.nodeFilter.tree.tpopfeldkontr))
           .filter(([key, value]) => exists(value))
           .map(([key, value]) => {
@@ -190,13 +190,7 @@ const myTypes = types
             return [key, { equalTo: value }]
           }),
       )
-      // return a valid filter even if no filter criterias exist
-      // but ensure it returns all rows
-      if (Object.entries(result).length === 0) return { id: { isNull: false } }
-      return result
-    },
-    get tpopfreiwkontrGqlFilter() {
-      const result = Object.fromEntries(
+      const ekf = Object.fromEntries(
         Object.entries(getSnapshot(self.nodeFilter.tree.tpopfreiwkontr))
           .filter(([key, value]) => exists(value))
           .map(([key, value]) => {
@@ -208,10 +202,11 @@ const myTypes = types
             return [key, { equalTo: value }]
           }),
       )
+      const k = { ...ekf, ...ek }
       // return a valid filter even if no filter criterias exist
       // but ensure it returns all rows
-      if (Object.entries(result).length === 0) return { id: { isNull: false } }
-      return result
+      if (Object.entries(k).length === 0) return { id: { isNull: false } }
+      return k
     },
   }))
   .actions(self => ({

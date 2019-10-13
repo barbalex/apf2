@@ -171,7 +171,7 @@ export const simpleTypes = {
   typ: 'string',
   datum: 'date',
   jahr: 'number',
-  bearbeiter: 'string',
+  bearbeiter: 'uuid',
   vitalitaet: 'string',
   ueberlebensrate: 'number',
   entwicklung: 'number',

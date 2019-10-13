@@ -209,7 +209,6 @@ const Massnahmen = () => {
                     filter: tpopmassnGqlFilter,
                   },
                 })
-                console.log('Massnahmen, data:', data)
                 const dataToExport = get(data, 'allTpopmassns.nodes', []).map(
                   n => ({
                     apId: get(n, 'tpopByTpopId.popByPopId.apByApId.id') || null,
@@ -269,35 +268,36 @@ const Massnahmen = () => {
                     tpopStatusUnklarGrund:
                       get(n, 'tpopByTpopId.statusUnklarGrund') || null,
                     tpopX: get(n, 'tpopByTpopId.x') || null,
-                    tpopY: get(n, 'tpopByTpopId.y'),
-                    tpopRadius: get(n, 'tpopByTpopId.radius'),
-                    tpopHoehe: get(n, 'tpopByTpopId.hoehe'),
-                    tpopExposition: get(n, 'tpopByTpopId.exposition'),
-                    tpopKlima: get(n, 'tpopByTpopId.klima'),
-                    tpopNeigung: get(n, 'tpopByTpopId.neigung'),
-                    tpopBeschreibung: get(n, 'tpopByTpopId.beschreibung'),
-                    tpopKatasterNr: get(n, 'tpopByTpopId.katasterNr'),
-                    tpopApberRelevant: get(n, 'tpopByTpopId.apberRelevant'),
-                    tpopApberRelevantGrund: get(
-                      n,
-                      'tpopByTpopId.apberRelevantGrund',
-                    ),
-                    tpopEigentuemer: get(n, 'tpopByTpopId.eigentuemer'),
-                    tpopKontakt: get(n, 'tpopByTpopId.kontakt'),
-                    tpopNutzungszone: get(n, 'tpopByTpopId.nutzungszone'),
-                    tpopBewirtschafter: get(n, 'tpopByTpopId.bewirtschafter'),
-                    tpopBewirtschaftung: get(n, 'tpopByTpopId.bewirtschaftung'),
-                    tpopEkfrequenz: get(n, 'tpopByTpopId.ekfrequenz'),
-                    tpopEkfrequenzAbweichend: get(
-                      n,
-                      'tpopByTpopId.ekfrequenzAbweichend',
-                    ),
+                    tpopY: get(n, 'tpopByTpopId.y') || null,
+                    tpopRadius: get(n, 'tpopByTpopId.radius') || null,
+                    tpopHoehe: get(n, 'tpopByTpopId.hoehe') || null,
+                    tpopExposition: get(n, 'tpopByTpopId.exposition') || null,
+                    tpopKlima: get(n, 'tpopByTpopId.klima') || null,
+                    tpopNeigung: get(n, 'tpopByTpopId.neigung') || null,
+                    tpopBeschreibung:
+                      get(n, 'tpopByTpopId.beschreibung') || null,
+                    tpopKatasterNr: get(n, 'tpopByTpopId.katasterNr') || null,
+                    tpopApberRelevant:
+                      get(n, 'tpopByTpopId.apberRelevant') || null,
+                    tpopApberRelevantGrund:
+                      get(n, 'tpopByTpopId.apberRelevantGrund') || null,
+                    tpopEigentuemer: get(n, 'tpopByTpopId.eigentuemer') || null,
+                    tpopKontakt: get(n, 'tpopByTpopId.kontakt') || null,
+                    tpopNutzungszone:
+                      get(n, 'tpopByTpopId.nutzungszone') || null,
+                    tpopBewirtschafter:
+                      get(n, 'tpopByTpopId.bewirtschafter') || null,
+                    tpopBewirtschaftung:
+                      get(n, 'tpopByTpopId.bewirtschaftung') || null,
+                    tpopEkfrequenz: get(n, 'tpopByTpopId.ekfrequenz') || null,
+                    tpopEkfrequenzAbweichend:
+                      get(n, 'tpopByTpopId.ekfrequenzAbweichend') || null,
                     id: n.id,
                     jahr: n.jahr,
                     datum: n.datum,
-                    typ: get(n, 'tpopmassnTypWerteByTyp.text'),
+                    typ: get(n, 'tpopmassnTypWerteByTyp.text') || null,
                     beschreibung: n.beschreibung,
-                    bearbeiter: get(n, 'adresseByBearbeiter.name'),
+                    bearbeiter: get(n, 'adresseByBearbeiter.name') || null,
                     bemerkungen: n.bemerkungen,
                     planVorhanden: n.planVorhanden,
                     planBezeichnung: n.planBezeichnung,
