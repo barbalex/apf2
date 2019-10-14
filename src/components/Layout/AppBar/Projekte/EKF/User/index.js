@@ -49,7 +49,7 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
     variables: { name: username },
   })
   const client = useApolloClient()
-  const row = get(data, 'userByName', {})
+  const row = get(data, 'userByName') || {}
 
   const [editPassword, setEditPassword] = useState(false)
   const [password, setPassword] = useState('')
