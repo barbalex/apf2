@@ -25,6 +25,7 @@ const StyledDatePicker = styled(DatePicker)`
 
 const DateFieldWithPicker = ({
   label,
+  shrinkLabel = false,
   name,
   value: propsValue,
   saveToDb,
@@ -76,6 +77,7 @@ const DateFieldWithPicker = ({
       <StyledDatePicker
         keyboard
         label={label}
+        InputLabelProps={{ shrink: shrinkLabel }}
         format="DD.MM.YYYY"
         value={stateValue}
         // change happens when data is picked in picker

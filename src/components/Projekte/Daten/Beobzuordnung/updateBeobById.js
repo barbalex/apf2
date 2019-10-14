@@ -18,6 +18,7 @@ export default gql`
     $data: JSON
     $artId: UUID
     $artIdOriginal: UUID
+    $infofloraInformiertDatum: Date
     $tpopId: UUID
     $nichtZuordnen: Boolean
     $bemerkungen: String
@@ -36,6 +37,7 @@ export default gql`
           data: $data
           artId: $artId
           artIdOriginal: $artIdOriginal
+          infofloraInformiertDatum: $infofloraInformiertDatum
           tpopId: $tpopId
           nichtZuordnen: $nichtZuordnen
           bemerkungen: $bemerkungen

@@ -13,6 +13,7 @@ import FormTitle from '../../../shared/FormTitle'
 import TextField from '../../../shared/TextField2'
 import CheckboxWithInfo from '../../../shared/CheckboxWithInfo'
 import Select from '../../../shared/Select'
+import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
 import Beob from '../Beob'
 import query from './query'
@@ -41,17 +42,14 @@ const DataContainer = styled.div`
 `
 const FieldsContainer = styled.div`
   padding: 10px;
+  padding-bottom: 0;
 `
 const Title = styled.div`
   padding: 10px 10px 0 10px;
   color: #b3b3b3;
   font-weight: bold;
   background-color: #424242;
-  margin-top: 10px;
   padding-bottom: 10px;
-`
-const ZuordnenDiv = styled.div`
-  margin-bottom: -10px;
 `
 const LabelPopoverRow = styled.div`
   padding: 2px 5px 2px 5px;
@@ -76,13 +74,16 @@ const LabelPopoverContentRow = styled(LabelPopoverRow)`
 const OriginalArtDiv = styled.div`
   margin-bottom: 10px;
 `
-const EmailButton = styled(Button)`
-  margin-top: -8px !important;
-  margin-bottom: -10px !important;
-`
-const EmailButtonRow = styled.div`
+const InfofloraRow = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+`
+const EmailButton = styled(Button)`
+  margin-top: 12px !important;
+  margin-left: 15px !important;
+  flex-basis: 320px;
+  height: 36px;
+  text-transform: none !important;
 `
 const StyledSendIcon = styled(SendIcon)`
   margin-right: 8px;
@@ -253,21 +254,19 @@ const Beobzuordnung = ({ type, treeName }) => {
               saveToDb={onSaveNichtZuordnenToDb}
               popover={nichtZuordnenPopover}
             />
-            <ZuordnenDiv>
-              <Select
-                key={`${row.id}tpopId`}
-                name="tpopId"
-                value={row.tpopId ? row.tpopId : ''}
-                field="tpopId"
-                label={
-                  !!row.tpopId
-                    ? 'Einer anderen Teilpopulation zuordnen'
-                    : 'Einer Teilpopulation zuordnen'
-                }
-                options={getTpopZuordnenSource(row, apId)}
-                saveToDb={onSaveTpopIdToDb}
-              />
-            </ZuordnenDiv>
+            <Select
+              key={`${row.id}tpopId`}
+              name="tpopId"
+              value={row.tpopId ? row.tpopId : ''}
+              field="tpopId"
+              label={
+                !!row.tpopId
+                  ? 'Einer anderen Teilpopulation zuordnen'
+                  : 'Einer Teilpopulation zuordnen'
+              }
+              options={getTpopZuordnenSource(row, apId)}
+              saveToDb={onSaveTpopIdToDb}
+            />
             <TextField
               key={`${row.id}bemerkungen`}
               name="bemerkungen"
@@ -277,7 +276,16 @@ const Beobzuordnung = ({ type, treeName }) => {
               multiLine
               saveToDb={onUpdateBemerkungen}
             />
-            <EmailButtonRow>
+            <InfofloraRow>
+              <DateFieldWithPicker
+                key={`${row.id}infofloraInformiertDatum`}
+                name="infofloraInformiertDatum"
+                label="Info Flora informiert am:"
+                value={row.infofloraInformiertDatum}
+                saveToDb={onUpdateBemerkungen}
+                shrinkLabel={true}
+                //error={errors.datum}
+              />
               <EmailButton
                 variant="outlined"
                 onClick={() => {
@@ -318,7 +326,7 @@ const Beobzuordnung = ({ type, treeName }) => {
                 <StyledSendIcon />
                 Email an Info Flora senden
               </EmailButton>
-            </EmailButtonRow>
+            </InfofloraRow>
           </FieldsContainer>
           <Title>{`Informationen aus ${get(
             row,

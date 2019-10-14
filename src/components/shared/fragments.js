@@ -131,6 +131,7 @@ export const beob = gql`
     bemerkungen
     quelleId
     artIdOriginal
+    infofloraInformiertDatum
     changedBy
   }
 `

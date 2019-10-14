@@ -1186,6 +1186,7 @@ CREATE TABLE apflora.beob (
   quelle_id uuid Default Null REFERENCES apflora.beob_quelle_werte (id) ON DELETE SET NULL ON UPDATE CASCADE,
   tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE SET NULL ON UPDATE CASCADE,
   nicht_zuordnen boolean default false,
+  infoflora_informiert_datum date default null,
   bemerkungen text,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null
@@ -1197,9 +1198,11 @@ CREATE INDEX ON apflora.beob USING btree (art_id_original);
 CREATE INDEX ON apflora.beob USING btree (quelle_id);
 CREATE INDEX ON apflora.beob USING btree (tpop_id);
 CREATE INDEX ON apflora.beob USING btree (nicht_zuordnen);
+CREATE INDEX ON apflora.beob USING btree (infoflora_informiert_datum);
 COMMENT ON COLUMN apflora.beob.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.beob.tpop_id IS 'Dieser Teilpopulation wurde die Beobachtung zugeordnet. Fremdschlüssel aus der Tabelle "tpop"';
 COMMENT ON COLUMN apflora.beob.nicht_zuordnen IS 'Wird ja gesetzt, wenn eine Beobachtung keiner Teilpopulation zugeordnet werden kann. Sollte im Bemerkungsfeld begründet werden. In der Regel ist die Artbestimmung zweifelhaft. Oder die Beobachtung ist nicht (genau genug) lokalisierbar';
+COMMENT ON COLUMN apflora.beob.infoflora_informiert_datum IS 'Datum, an dem Info Flora über die Verifikation der Beobachtung informiert wurde';
 COMMENT ON COLUMN apflora.beob.bemerkungen IS 'Bemerkungen zur Zuordnung';
 COMMENT ON COLUMN apflora.beob.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.beob.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
