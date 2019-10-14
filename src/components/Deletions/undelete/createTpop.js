@@ -33,6 +33,7 @@ export default gql`
     $bewirtschaftung: String
     $ekfrequenz: String
     $ekfrequenzAbweichend: Boolean
+    $ekfKontrolleur: UUID
     $bemerkungen: String
     $statusUnklar: Boolean
   ) {
@@ -64,6 +65,7 @@ export default gql`
           bewirtschaftung: $bewirtschaftung
           ekfrequenz: $ekfrequenz
           ekfrequenzAbweichend: $ekfrequenzAbweichend
+          ekfKontrolleur: $ekfKontrolleur
           bemerkungen: $bemerkungen
           statusUnklar: $statusUnklar
         }

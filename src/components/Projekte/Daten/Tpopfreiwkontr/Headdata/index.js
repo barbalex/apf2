@@ -202,7 +202,7 @@ const Headdata = ({ pop, tpop, row, showFilter, treeName }) => {
           saveToDb={saveToDb}
           error={
             !showFilter && row.bearbeiter && !userCount
-              ? 'Es ist kein Benutzer mit dieser Adresse verbunden. Damit dieser Benutzer Kontrollen erfassen kann, muss er ein Benutzerkonto haben, in dem obige Adresse als zugehörig erfasst wurde.'
+              ? 'Es ist kein Benutzer mit dieser Adresse verbunden. Damit dieser Benutzer Kontrollen erfassen kann, muss er ein Benutzerkonto haben, dem diese Adresse zugeordnet wurde.'
               : errors
           }
         />

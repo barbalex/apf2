@@ -168,6 +168,10 @@ const Teilpopulationen = ({ treeName }) => {
                 bewirtschaftung
                 ekfrequenz
                 ekfrequenzAbweichend
+                adresseByEkfKontrolleur {
+                  id
+                  name
+                }
                 changed
                 changedBy
               }
@@ -228,6 +232,7 @@ const Teilpopulationen = ({ treeName }) => {
         bewirtschaftung: n.bewirtschaftung,
         ekfrequenz: n.ekfrequenz,
         ekfrequenzAbweichend: n.ekfrequenzAbweichend,
+        ekfKontrolleur: get(n, 'adresseByEkfKontrolleur.name') || null,
         changed: n.changed,
         changedBy: n.changedBy,
       }))

@@ -66,6 +66,7 @@ export const type = types.model({
     null,
   ),
   ekfrequenzAbweichend: types.optional(types.maybeNull(types.boolean), null),
+  ekfKontrolleur: types.optional(types.maybeNull(types.string), null),
   bemerkungen: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,
@@ -95,6 +96,7 @@ export const initial = {
   bewirtschaftung: null,
   ekfrequenz: null,
   ekfrequenzAbweichend: null,
+  ekfKontrolleur: null,
   bemerkungen: null,
 }
 
@@ -122,5 +124,6 @@ export const simpleTypes = {
   bewirtschaftung: 'string',
   ekfrequenz: 'string',
   ekfrequenzAbweichend: 'boolean',
+  ekfKontrolleur: 'uuid',
   bemerkungen: 'string',
 }

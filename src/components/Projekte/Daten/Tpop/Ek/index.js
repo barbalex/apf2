@@ -15,8 +15,10 @@ import ErrorBoundary from 'react-error-boundary'
 
 import Checkbox2States from '../../../../shared/Checkbox2StatesFormik'
 import RadioButtonGroup from '../../../../shared/RadioButtonGroupFormik'
+import Select from '../../../../shared/SelectFormik'
 import queryEk from './queryEk'
 import queryEkfrequenzs from './queryEkfrequenzs'
+import queryAdresses from './queryAdresses'
 import storeContext from '../../../../../storeContext'
 import EkYear from './EkYear'
 
@@ -89,6 +91,10 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
     },
   )
 
+  const { data: dataAdresses, loading: loadingAdresses } = useQuery(
+    queryAdresses,
+  )
+
   const ekfrequenzOptions0 = get(dataEkfrequenzs, 'allEkfrequenzs.nodes', [])
   const longestAnwendungsfall = max(
     ekfrequenzOptions0.map(a => (a.anwendungsfall || '').length),
@@ -146,6 +152,13 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
                     name="ekfrequenzAbweichend"
                     label="EK-Frequenz abweichend"
                     component={Checkbox2States}
+                  />
+                  <Field
+                    name="ekfKontrolleur"
+                    label="EKF-KontrolleurIn"
+                    component={Select}
+                    options={get(dataAdresses, 'allAdresses.nodes', [])}
+                    loading={loadingAdresses}
                   />
                 </FormContainerNoColumnsInner>
               </Form>

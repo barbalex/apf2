@@ -173,6 +173,10 @@ const Massnahmen = () => {
                             bewirtschaftung
                             ekfrequenz
                             ekfrequenzAbweichend
+                            adresseByEkfKontrolleur {
+                              id
+                              name
+                            }
                           }
                           id
                           jahr
@@ -292,6 +296,9 @@ const Massnahmen = () => {
                     tpopEkfrequenz: get(n, 'tpopByTpopId.ekfrequenz') || null,
                     tpopEkfrequenzAbweichend:
                       get(n, 'tpopByTpopId.ekfrequenzAbweichend') || null,
+                    tpopEkfKontrolleur:
+                      get(n, 'tpopByTpopId.adresseByEkfKontrolleur.name') ||
+                      null,
                     id: n.id,
                     jahr: n.jahr,
                     datum: n.datum,

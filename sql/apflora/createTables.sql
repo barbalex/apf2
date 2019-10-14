@@ -553,6 +553,7 @@ CREATE TABLE apflora.tpop (
   ekfrequenz text DEFAULT null REFERENCES apflora.ekfrequenz (code) ON DELETE SET NULL ON UPDATE CASCADE,
   ekfrequenz_startjahr smallint default null,
   ekfrequenz_abweichend boolean DEFAULT false,
+  ekf_kontrolleur uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null
@@ -565,6 +566,7 @@ CREATE INDEX ON apflora.tpop USING btree (nr);
 CREATE INDEX ON apflora.tpop USING btree (flurname);
 CREATE INDEX ON apflora.tpop USING btree (ekfrequenz);
 CREATE INDEX ON apflora.tpop USING btree (ekfrequenz_abweichend);
+CREATE INDEX ON apflora.tpop USING btree (ekf_kontrolleur);
 COMMENT ON COLUMN apflora.tpop.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpop.pop_id IS 'Zugehörige Population. Fremdschlüssel aus der Tabelle "pop"';
 COMMENT ON COLUMN apflora.tpop.nr IS 'Nummer der Teilpopulation';
@@ -591,6 +593,7 @@ COMMENT ON COLUMN apflora.tpop.bemerkungen IS 'Bemerkungen zur Teilpopulation';
 COMMENT ON COLUMN apflora.tpop.ekfrequenz IS 'Wert aus Tabelle ekfrequenz. Bestimmt, wie häufig kontrolliert werden soll';
 comment on column apflora.tpop.ekfrequenz_startjahr is 'Das Basisjahr, von dem aus ekpläne gemäss eqfrequenz gesetzt werden';
 COMMENT ON COLUMN apflora.tpop.ekfrequenz_abweichend IS 'Diese Frequenz entspricht nicht derjenigen, welche gemäss Populationsgrösse vergeben worden wäre';
+COMMENT ON COLUMN apflora.tpop.ekfrequenz_abweichend IS 'Wer diese TPop freiwillig kontrolliert. Dient dazu, Formulare für die EKF zu generieren';
 COMMENT ON COLUMN apflora.tpop.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpop.changed IS 'Von wem wurde der Datensatz zuletzt geändert?';
 

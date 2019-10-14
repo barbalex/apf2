@@ -349,6 +349,7 @@ export const tpop = gql`
     bewirtschaftung
     ekfrequenz
     ekfrequenzAbweichend
+    ekfKontrolleur
     bemerkungen
     statusUnklar
     changedBy
