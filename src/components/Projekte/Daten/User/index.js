@@ -19,6 +19,7 @@ import TextField from '../../../shared/TextField2'
 import FormTitle from '../../../shared/FormTitle'
 import query from './query'
 import queryAdresses from './queryAdresses'
+import queryEkfTpops from './queryEkfTpops'
 import updateUserByIdGql from './updateUserById'
 import Select from '../../../shared/Select'
 import storeContext from '../../../../storeContext'
@@ -104,6 +105,28 @@ const User = ({ treeName }) => {
   } = useQuery(queryAdresses, { variables: { id } })
 
   const row = get(data, 'userById', {})
+
+  const thisYear = new Date().getFullYear()
+  const { data: dataEkfTpops } = useQuery(queryEkfTpops, {
+    variables: {
+      id: row.adresseId || 9999999999999999999999999,
+      jahr: thisYear,
+      include: !!row.adresseId,
+    },
+  })
+  const ekfTpops = get(dataEkfTpops, 'ekfTpops.nodes') || []
+  const hasEkfTpops = !!ekfTpops.length
+  const ekfTpopsWithoutEkfThisYear = ekfTpops
+    .filter(e => get(e, 'ekfInJahr.totalCount', 0) > 0)
+    .map(e => e.id)
+  const hasEkfTpopsWithoutEkfThisYear = !!ekfTpopsWithoutEkfThisYear.length
+  console.log('User:', {
+    row,
+    thisYear,
+    dataEkfTpops,
+    ekfTpopsWithoutEkfThisYear,
+    hasEkfTpopsWithoutEkfThisYear,
+  })
 
   useEffect(() => {
     setErrors({})
@@ -230,15 +253,19 @@ const User = ({ treeName }) => {
                   Passwort ändern
                 </StyledButton>
               )}
-              <StyledButton
-                variant="outlined"
-                onClick={() => {
-                  console.log('TODO')
-                }}
-                title="Erzeugt in allen Teil-Populationen, in denen dieser Benutzer als EKF-Kontrolleur erfasst wurde, EKF-Formulare für das aktuelle Jahr"
-              >
-                EKF-Formulare erzeugen
-              </StyledButton>
+              {hasEkfTpopsWithoutEkfThisYear && (
+                <StyledButton
+                  variant="outlined"
+                  onClick={() => {
+                    console.log('TODO')
+                  }}
+                  title={`Erzeugt in ${ekfTpops.length} Teil-Population${
+                    ekfTpops.length > 1 ? 'en' : ''
+                  }, in denen dieser Benutzer als EKF-Kontrolleur erfasst ist, EKF-Formulare für das Jahr ${thisYear}`}
+                >
+                  {`EKF-Formulare für ${thisYear} erzeugen`}
+                </StyledButton>
+              )}
             </>
           }
         />
