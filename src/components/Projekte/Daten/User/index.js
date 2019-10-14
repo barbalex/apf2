@@ -87,12 +87,13 @@ const User = ({ treeName }) => {
   const [password2ErrorText, setPassword2ErrorText] = useState('')
   const [passwordMessage, setPasswordMessage] = useState('')
 
+  const id =
+    activeNodeArray.length > 1
+      ? activeNodeArray[1]
+      : '99999999-9999-9999-9999-999999999999'
   const { data, loading, error } = useQuery(query, {
     variables: {
-      id:
-        activeNodeArray.length > 1
-          ? activeNodeArray[1]
-          : '99999999-9999-9999-9999-999999999999',
+      id,
     },
   })
 
@@ -100,7 +101,7 @@ const User = ({ treeName }) => {
     data: dataAdresses,
     loading: loadingAdresses,
     error: errorAdresses,
-  } = useQuery(queryAdresses)
+  } = useQuery(queryAdresses, { variables: { id } })
 
   const row = get(data, 'userById', {})
 
