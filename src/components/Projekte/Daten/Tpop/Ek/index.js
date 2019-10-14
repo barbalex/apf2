@@ -155,7 +155,7 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
                   />
                   <Field
                     name="ekfKontrolleur"
-                    label="EKF-KontrolleurIn"
+                    label="EKF-KontrolleurIn (nur Adressen mit zugeordnetem Benutzer-Konto)"
                     component={Select}
                     options={get(dataAdresses, 'allAdresses.nodes', [])}
                     loading={loadingAdresses}
