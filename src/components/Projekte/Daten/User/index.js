@@ -13,6 +13,7 @@ import Button from '@material-ui/core/Button'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import ErrorBoundary from 'react-error-boundary'
+import gql from 'graphql-tag'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField2'
@@ -24,6 +25,7 @@ import updateUserByIdGql from './updateUserById'
 import Select from '../../../shared/Select'
 import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
+import { tpopkontr as tpopkontrFragment } from '../../../shared/fragments'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -255,8 +257,128 @@ const User = ({ treeName }) => {
               {hasEkfTpopsWithoutEkfThisYear && (
                 <StyledButton
                   variant="outlined"
-                  onClick={() => {
+                  onClick={async () => {
                     console.log('TODO')
+                    for (const tpopId of ekfTpopsWithoutEkfThisYear) {
+                      try {
+                        await client.mutate({
+                          mutation: gql`
+                            mutation createTpopkontr(
+                              $id: UUID
+                              $typ: String
+                              $datum: Date
+                              $jahr: Int
+                              $vitalitaet: String
+                              $ueberlebensrate: Int
+                              $entwicklung: Int
+                              $ursachen: String
+                              $erfolgsbeurteilung: String
+                              $umsetzungAendern: String
+                              $kontrolleAendern: String
+                              $bemerkungen: String
+                              $lrDelarze: String
+                              $flaeche: Int
+                              $lrUmgebungDelarze: String
+                              $vegetationstyp: String
+                              $konkurrenz: String
+                              $moosschicht: String
+                              $krautschicht: String
+                              $strauchschicht: String
+                              $baumschicht: String
+                              $bodenTyp: String
+                              $bodenKalkgehalt: String
+                              $bodenDurchlaessigkeit: String
+                              $bodenHumus: String
+                              $bodenNaehrstoffgehalt: String
+                              $bodenAbtrag: String
+                              $wasserhaushalt: String
+                              $idealbiotopUebereinstimmung: Int
+                              $handlungsbedarf: String
+                              $flaecheUeberprueft: Int
+                              $deckungVegetation: Int
+                              $deckungNackterBoden: Int
+                              $deckungApArt: Int
+                              $vegetationshoeheMaximum: Int
+                              $vegetationshoeheMittel: Int
+                              $gefaehrdung: String
+                              $tpopId: UUID
+                              $bearbeiter: UUID
+                              $planVorhanden: Boolean
+                              $jungpflanzenVorhanden: Boolean
+                              $apberNichtRelevant: Boolean
+                              $apberNichtRelevantGrund: String
+                              $ekfBemerkungen: String
+                            ) {
+                              createTpopkontr(
+                                input: {
+                                  tpopkontr: {
+                                    id: $id
+                                    typ: $typ
+                                    datum: $datum
+                                    jahr: $jahr
+                                    vitalitaet: $vitalitaet
+                                    ueberlebensrate: $ueberlebensrate
+                                    entwicklung: $entwicklung
+                                    ursachen: $ursachen
+                                    erfolgsbeurteilung: $erfolgsbeurteilung
+                                    umsetzungAendern: $umsetzungAendern
+                                    kontrolleAendern: $kontrolleAendern
+                                    bemerkungen: $bemerkungen
+                                    lrDelarze: $lrDelarze
+                                    flaeche: $flaeche
+                                    lrUmgebungDelarze: $lrUmgebungDelarze
+                                    vegetationstyp: $vegetationstyp
+                                    konkurrenz: $konkurrenz
+                                    moosschicht: $moosschicht
+                                    krautschicht: $krautschicht
+                                    strauchschicht: $strauchschicht
+                                    baumschicht: $baumschicht
+                                    bodenTyp: $bodenTyp
+                                    bodenKalkgehalt: $bodenKalkgehalt
+                                    bodenDurchlaessigkeit: $bodenDurchlaessigkeit
+                                    bodenHumus: $bodenHumus
+                                    bodenNaehrstoffgehalt: $bodenNaehrstoffgehalt
+                                    bodenAbtrag: $bodenAbtrag
+                                    wasserhaushalt: $wasserhaushalt
+                                    idealbiotopUebereinstimmung: $idealbiotopUebereinstimmung
+                                    handlungsbedarf: $handlungsbedarf
+                                    flaecheUeberprueft: $flaecheUeberprueft
+                                    deckungVegetation: $deckungVegetation
+                                    deckungNackterBoden: $deckungNackterBoden
+                                    deckungApArt: $deckungApArt
+                                    vegetationshoeheMaximum: $vegetationshoeheMaximum
+                                    vegetationshoeheMittel: $vegetationshoeheMittel
+                                    gefaehrdung: $gefaehrdung
+                                    tpopId: $tpopId
+                                    bearbeiter: $bearbeiter
+                                    planVorhanden: $planVorhanden
+                                    jungpflanzenVorhanden: $jungpflanzenVorhanden
+                                    apberNichtRelevant: $apberNichtRelevant
+                                    apberNichtRelevantGrund: $apberNichtRelevantGrund
+                                    ekfBemerkungen: $ekfBemerkungen
+                                  }
+                                }
+                              ) {
+                                tpopkontr {
+                                  ...TpopkontrFields
+                                }
+                              }
+                            }
+                            ${tpopkontrFragment}
+                          `,
+                          variables: {
+                            id: row.id,
+                          },
+                        })
+                      } catch (error) {
+                        return store.enqueNotification({
+                          message: error.message,
+                          options: {
+                            variant: 'error',
+                          },
+                        })
+                      }
+                    }
                   }}
                   title={`Erzeugt in ${ekfTpops.length} Teil-Population${
                     ekfTpops.length > 1 ? 'en' : ''
