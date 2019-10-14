@@ -42,6 +42,15 @@ const StyledInput = styled(Input)`
 const PasswordMessage = styled.div`
   padding-bottom: 10px;
 `
+const StyledButton = styled(Button)`
+  text-transform: none !important;
+  margin-right: 10px !important;
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  &:hover {
+    background-color: rgba(28, 74, 30, 0.2) !important;
+  }
+`
 
 const roleWerte = [
   {
@@ -207,16 +216,31 @@ const User = ({ treeName }) => {
           title="Benutzer"
           treeName={treeName}
           table="user"
+          buttons={
+            <>
+              {!editPassword && !passwordMessage && (
+                <StyledButton
+                  variant="outlined"
+                  color="primary"
+                  onClick={() => {
+                    setEditPassword(true)
+                    setPasswordMessage('')
+                  }}
+                >
+                  Passwort ändern
+                </StyledButton>
+              )}
+            </>
+          }
         />
         <FieldsContainer>
           <TextField
             key={`${row.id}name`}
             name="name"
-            label="Name"
+            label="Name (nur von Managern veränderbar)"
             row={row}
             saveToDb={saveToDb}
             errors={errors}
-            helperText="Nur von Managern veränderbar"
           />
           <TextField
             key={`${row.id}email`}
@@ -225,7 +249,7 @@ const User = ({ treeName }) => {
             row={row}
             saveToDb={saveToDb}
             errors={errors}
-            helperText="Bitte aktuell halten, damit wir Sie bei Bedarf kontaktieren können"
+            helperText="Bitte email aktuell halten, damit wir Sie bei Bedarf kontaktieren können"
           />
           <RadioButtonGroup
             key={`${row.id}role`}
@@ -234,8 +258,7 @@ const User = ({ treeName }) => {
             dataSource={roleWerte}
             saveToDb={saveToDb}
             error={errors.role}
-            label="Rolle"
-            helperText="Nur von Managern veränderbar"
+            label="Rolle (nur von Managern veränderbar)"
           />
           <Select
             key={`${row.id}adresseId`}
@@ -250,20 +273,6 @@ const User = ({ treeName }) => {
           />
           {!!passwordMessage && (
             <PasswordMessage>{passwordMessage}</PasswordMessage>
-          )}
-          {!editPassword && !passwordMessage && (
-            <div>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={() => {
-                  setEditPassword(true)
-                  setPasswordMessage('')
-                }}
-              >
-                Passwort ändern
-              </Button>
-            </div>
           )}
           {(editPassword || errors.pass) && (
             <FormControl
