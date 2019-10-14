@@ -202,7 +202,7 @@ const Beobzuordnung = ({ type, treeName }) => {
         mutation: updateBeobByIdGql,
         variables: {
           id,
-          bemerkungen: event.target.value,
+          [event.target.name]: event.target.value,
           changedBy: store.user.name,
         },
       })
