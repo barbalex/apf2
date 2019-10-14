@@ -274,8 +274,9 @@ const User = ({ treeName }) => {
                   onClick={() => {
                     console.log('TODO')
                   }}
+                  title={`Druckt alle ${ekfTpops.length} EKF-Formulare für ${thisYear}`}
                 >
-                  {`Alle EKF-Formulare für ${thisYear} drucken`}
+                  {`EKF-Formulare für ${thisYear} drucken`}
                 </StyledButton>
               )}
             </>
