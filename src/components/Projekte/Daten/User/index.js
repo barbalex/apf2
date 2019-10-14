@@ -109,25 +109,22 @@ const User = ({ treeName }) => {
   const row = get(data, 'userById', {})
 
   const thisYear = new Date().getFullYear()
-  const { data: dataEkfTpops } = useQuery(queryEkfTpops, {
-    variables: {
-      id: row.adresseId || 9999999999999999999999999,
-      jahr: thisYear,
-      include: !!row.adresseId,
+  const { data: dataEkfTpops, refetch: refetchEkfTpops } = useQuery(
+    queryEkfTpops,
+    {
+      variables: {
+        id: row.adresseId || 9999999999999999999999999,
+        jahr: thisYear,
+        include: !!row.adresseId,
+      },
     },
-  })
+  )
   const ekfTpops = get(dataEkfTpops, 'ekfTpops.nodes') || []
   const hasEkfTpops = !!ekfTpops.length
   const ekfTpopsWithoutEkfThisYear = ekfTpops
-    .filter(e => get(e, 'ekfInJahr.totalCount', 0) > 0)
+    .filter(e => get(e, 'ekfInJahr.totalCount') === 0)
     .map(e => e.id)
   const hasEkfTpopsWithoutEkfThisYear = !!ekfTpopsWithoutEkfThisYear.length
-  console.log('User:', {
-    thisYear,
-    dataEkfTpops,
-    ekfTpopsWithoutEkfThisYear,
-    hasEkfTpopsWithoutEkfThisYear,
-  })
 
   useEffect(() => {
     setErrors({})
@@ -222,6 +219,72 @@ const User = ({ treeName }) => {
     },
     [password, saveToDb],
   )
+  const onClickCreateEkfForms = useCallback(async () => {
+    let errors = []
+    for (const tpopId of ekfTpopsWithoutEkfThisYear) {
+      try {
+        await client.mutate({
+          mutation: gql`
+            mutation createTpopkontr(
+              $typ: String
+              $tpopId: UUID
+              $bearbeiter: UUID
+              $jahr: Int
+            ) {
+              createTpopkontr(
+                input: {
+                  tpopkontr: {
+                    typ: $typ
+                    tpopId: $tpopId
+                    bearbeiter: $bearbeiter
+                    jahr: $jahr
+                  }
+                }
+              ) {
+                tpopkontr {
+                  ...TpopkontrFields
+                }
+              }
+            }
+            ${tpopkontrFragment}
+          `,
+          variables: {
+            tpopId,
+            typ: 'Freiwilligen-Erfolgskontrolle',
+            bearbeiter: row.adresseId,
+            jahr: thisYear,
+          },
+        })
+      } catch (error) {
+        errors.push(error)
+      }
+    }
+    if (errors.length) {
+      errors.forEach(error =>
+        store.enqueNotification({
+          message: error.message,
+          options: {
+            variant: 'error',
+          },
+        }),
+      )
+    } else {
+      store.enqueNotification({
+        message: `${ekfTpopsWithoutEkfThisYear.length} EKF-Formulare erzeugt`,
+        options: {
+          variant: 'info',
+        },
+      })
+      refetchEkfTpops()
+    }
+  }, [
+    client,
+    ekfTpopsWithoutEkfThisYear,
+    refetchEkfTpops,
+    row.adresseId,
+    store,
+    thisYear,
+  ])
 
   if (loading) {
     return (
@@ -257,129 +320,7 @@ const User = ({ treeName }) => {
               {hasEkfTpopsWithoutEkfThisYear && (
                 <StyledButton
                   variant="outlined"
-                  onClick={async () => {
-                    console.log('TODO')
-                    for (const tpopId of ekfTpopsWithoutEkfThisYear) {
-                      try {
-                        await client.mutate({
-                          mutation: gql`
-                            mutation createTpopkontr(
-                              $id: UUID
-                              $typ: String
-                              $datum: Date
-                              $jahr: Int
-                              $vitalitaet: String
-                              $ueberlebensrate: Int
-                              $entwicklung: Int
-                              $ursachen: String
-                              $erfolgsbeurteilung: String
-                              $umsetzungAendern: String
-                              $kontrolleAendern: String
-                              $bemerkungen: String
-                              $lrDelarze: String
-                              $flaeche: Int
-                              $lrUmgebungDelarze: String
-                              $vegetationstyp: String
-                              $konkurrenz: String
-                              $moosschicht: String
-                              $krautschicht: String
-                              $strauchschicht: String
-                              $baumschicht: String
-                              $bodenTyp: String
-                              $bodenKalkgehalt: String
-                              $bodenDurchlaessigkeit: String
-                              $bodenHumus: String
-                              $bodenNaehrstoffgehalt: String
-                              $bodenAbtrag: String
-                              $wasserhaushalt: String
-                              $idealbiotopUebereinstimmung: Int
-                              $handlungsbedarf: String
-                              $flaecheUeberprueft: Int
-                              $deckungVegetation: Int
-                              $deckungNackterBoden: Int
-                              $deckungApArt: Int
-                              $vegetationshoeheMaximum: Int
-                              $vegetationshoeheMittel: Int
-                              $gefaehrdung: String
-                              $tpopId: UUID
-                              $bearbeiter: UUID
-                              $planVorhanden: Boolean
-                              $jungpflanzenVorhanden: Boolean
-                              $apberNichtRelevant: Boolean
-                              $apberNichtRelevantGrund: String
-                              $ekfBemerkungen: String
-                            ) {
-                              createTpopkontr(
-                                input: {
-                                  tpopkontr: {
-                                    id: $id
-                                    typ: $typ
-                                    datum: $datum
-                                    jahr: $jahr
-                                    vitalitaet: $vitalitaet
-                                    ueberlebensrate: $ueberlebensrate
-                                    entwicklung: $entwicklung
-                                    ursachen: $ursachen
-                                    erfolgsbeurteilung: $erfolgsbeurteilung
-                                    umsetzungAendern: $umsetzungAendern
-                                    kontrolleAendern: $kontrolleAendern
-                                    bemerkungen: $bemerkungen
-                                    lrDelarze: $lrDelarze
-                                    flaeche: $flaeche
-                                    lrUmgebungDelarze: $lrUmgebungDelarze
-                                    vegetationstyp: $vegetationstyp
-                                    konkurrenz: $konkurrenz
-                                    moosschicht: $moosschicht
-                                    krautschicht: $krautschicht
-                                    strauchschicht: $strauchschicht
-                                    baumschicht: $baumschicht
-                                    bodenTyp: $bodenTyp
-                                    bodenKalkgehalt: $bodenKalkgehalt
-                                    bodenDurchlaessigkeit: $bodenDurchlaessigkeit
-                                    bodenHumus: $bodenHumus
-                                    bodenNaehrstoffgehalt: $bodenNaehrstoffgehalt
-                                    bodenAbtrag: $bodenAbtrag
-                                    wasserhaushalt: $wasserhaushalt
-                                    idealbiotopUebereinstimmung: $idealbiotopUebereinstimmung
-                                    handlungsbedarf: $handlungsbedarf
-                                    flaecheUeberprueft: $flaecheUeberprueft
-                                    deckungVegetation: $deckungVegetation
-                                    deckungNackterBoden: $deckungNackterBoden
-                                    deckungApArt: $deckungApArt
-                                    vegetationshoeheMaximum: $vegetationshoeheMaximum
-                                    vegetationshoeheMittel: $vegetationshoeheMittel
-                                    gefaehrdung: $gefaehrdung
-                                    tpopId: $tpopId
-                                    bearbeiter: $bearbeiter
-                                    planVorhanden: $planVorhanden
-                                    jungpflanzenVorhanden: $jungpflanzenVorhanden
-                                    apberNichtRelevant: $apberNichtRelevant
-                                    apberNichtRelevantGrund: $apberNichtRelevantGrund
-                                    ekfBemerkungen: $ekfBemerkungen
-                                  }
-                                }
-                              ) {
-                                tpopkontr {
-                                  ...TpopkontrFields
-                                }
-                              }
-                            }
-                            ${tpopkontrFragment}
-                          `,
-                          variables: {
-                            id: row.id,
-                          },
-                        })
-                      } catch (error) {
-                        return store.enqueNotification({
-                          message: error.message,
-                          options: {
-                            variant: 'error',
-                          },
-                        })
-                      }
-                    }
-                  }}
+                  onClick={onClickCreateEkfForms}
                   title={`Erzeugt in ${ekfTpops.length} Teil-Population${
                     ekfTpops.length > 1 ? 'en' : ''
                   }, in de${
