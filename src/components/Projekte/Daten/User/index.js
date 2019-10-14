@@ -121,7 +121,6 @@ const User = ({ treeName }) => {
     .map(e => e.id)
   const hasEkfTpopsWithoutEkfThisYear = !!ekfTpopsWithoutEkfThisYear.length
   console.log('User:', {
-    row,
     thisYear,
     dataEkfTpops,
     ekfTpopsWithoutEkfThisYear,
