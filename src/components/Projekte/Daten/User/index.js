@@ -261,9 +261,21 @@ const User = ({ treeName }) => {
                   }}
                   title={`Erzeugt in ${ekfTpops.length} Teil-Population${
                     ekfTpops.length > 1 ? 'en' : ''
-                  }, in denen dieser Benutzer als EKF-Kontrolleur erfasst ist, EKF-Formulare für das Jahr ${thisYear}`}
+                  }, in de${
+                    ekfTpops.length > 1 ? 'nen' : 'r'
+                  } dieser Benutzer als EKF-Kontrolleur erfasst ist, EKF-Formulare für das Jahr ${thisYear}`}
                 >
                   {`EKF-Formulare für ${thisYear} erzeugen`}
+                </StyledButton>
+              )}
+              {hasEkfTpops && !hasEkfTpopsWithoutEkfThisYear && (
+                <StyledButton
+                  variant="outlined"
+                  onClick={() => {
+                    console.log('TODO')
+                  }}
+                >
+                  {`Alle EKF-Formulare für ${thisYear} drucken`}
                 </StyledButton>
               )}
             </>
