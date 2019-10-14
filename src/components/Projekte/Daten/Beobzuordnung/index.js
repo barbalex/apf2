@@ -196,7 +196,7 @@ const Beobzuordnung = ({ type, treeName }) => {
     },
     [client, id, store, treeName, type],
   )
-  const onUpdateBemerkungen = useCallback(
+  const onUpdateField = useCallback(
     event => {
       client.mutate({
         mutation: updateBeobByIdGql,
@@ -274,7 +274,7 @@ const Beobzuordnung = ({ type, treeName }) => {
               row={row}
               type="text"
               multiLine
-              saveToDb={onUpdateBemerkungen}
+              saveToDb={onUpdateField}
             />
             <InfofloraRow>
               <DateFieldWithPicker
@@ -282,7 +282,7 @@ const Beobzuordnung = ({ type, treeName }) => {
                 name="infofloraInformiertDatum"
                 label="Info Flora informiert am:"
                 value={row.infofloraInformiertDatum}
-                saveToDb={onUpdateBemerkungen}
+                saveToDb={onUpdateField}
                 shrinkLabel={true}
                 //error={errors.datum}
               />
