@@ -13,21 +13,20 @@ import Qk from './Qk'
 import Choose from './Choose'
 
 const Container = styled.div`
-  height: ${props =>
-    props.showfilter ? 'calc(100vh - 145px)' : 'calc(100vh - 64px)'};
+  height: calc(100vh - 64px);
   display: flex;
   flex-direction: column;
   background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
 const FieldsContainer = styled.div`
   overflow: hidden !important;
-  height: 100%;
+  height: calc(100vh - 64px - 43px);
   fieldset {
     padding-right: 30px;
   }
 `
 
-const QkForm = ({ treeName, showFilter = false }) => {
+const QkForm = ({ treeName }) => {
   const store = useContext(storeContext)
   const { urlQuery, setUrlQuery } = store
 
@@ -47,7 +46,7 @@ const QkForm = ({ treeName, showFilter = false }) => {
 
   return (
     <ErrorBoundary>
-      <Container showfilter={showFilter}>
+      <Container>
         <FormTitle title="Qualitätskontrollen" />
         <FieldsContainer>
           <Tabs

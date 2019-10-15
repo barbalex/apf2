@@ -8,7 +8,7 @@ import query from './query'
 import storeContext from '../../../../../storeContext'
 
 const Container = styled.div`
-  height: calc(100vh - 64px);
+  height: calc(100vh - 64px - 43px - 48px);
   display: flex;
   flex-direction: column;
 `
