@@ -1,8 +1,7 @@
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 
-export default ({ data, berichtjahr, projId, apId }) => {
-  return {
+export default ({ data, berichtjahr, projId, apId }) => ({
     apOhneBearbeitung: () => ({
       title: 'Fehlende Aktionsplan-Angabe:',
       messages: (get(data, 'apOhneBearbeitung.apsByProjId.nodes') || []).map(
@@ -2086,10 +2085,7 @@ export default ({ data, berichtjahr, projId, apId }) => {
         })
       })(),
     }),
-  }
-
-  return [
-    {
+    feldkontrzaehlungOhneMethode: () => ({
       title: `Zählung ohne Methode (Feld-Kontrolle):`,
       messages: (function() {
         const popNodes = get(
@@ -2143,8 +2139,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
           }
         })
       })(),
-    },
-    {
+    }),
+    freiwkontrzaehlungOhneMethode: () => ({
       title: `Alle Zählungen ohne Methode (Freiwilligen-Kontrolle):`,
       messages: (function() {
         const popNodes = get(
@@ -2195,8 +2191,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
           }
         })
       })(),
-    },
-    {
+    }),
+    feldkontrzaehlungOhneAnzahl: () => ({
       title: `Zählung ohne Anzahl (Feld-Kontrolle):`,
       messages: (function() {
         const popNodes = get(
@@ -2250,8 +2246,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
           }
         })
       })(),
-    },
-    {
+    }),
+    freiwkontrzaehlungOhneAnzahl: () => ({
       title: `Alle Zählungen ohne Anzahl (Freiwilligen-Kontrolle):`,
       messages: (function() {
         const popNodes = get(
@@ -2300,6 +2296,5 @@ export default ({ data, berichtjahr, projId, apId }) => {
           }
         })
       })(),
-    },
-  ]
-}
+    }),
+  })
