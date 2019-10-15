@@ -1386,3 +1386,33 @@ CREATE POLICY writer ON apflora.ekplan
     current_user = 'apflora_manager'
     OR current_user = 'apflora_artverantwortlich'
   );
+
+drop table if exists apflora.qk;
+create table apflora.qk (
+  name text primary key,
+  titel text,
+  beschreibung text,
+  sort smallint default null
+);
+create index on apflora.qk using btree (name);
+comment on column apflora.qk.name is 'Primärschlüssel. Wird auch in Abfragen und createMessageFunctions benutzt';
+CREATE POLICY writer ON apflora.qk
+  USING (true)
+  WITH CHECK (
+    current_user = 'apflora_manager'
+  );
+
+drop table if exists apflora.apqk;
+create table apflora.apqk (
+  ap_id UUID NOT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  qk_name text NOT NULL REFERENCES apflora.qk (name) ON DELETE CASCADE ON UPDATE CASCADE,
+  unique(ap_id, qk_name)
+);
+create index on apflora.apqk using btree (ap_id);
+create index on apflora.apqk using btree (qk_name);
+CREATE POLICY writer ON apflora.apqk
+  USING (true)
+  WITH CHECK (
+    current_user = 'apflora_manager'
+    OR current_user = 'apflora_artverantwortlich'
+  );
