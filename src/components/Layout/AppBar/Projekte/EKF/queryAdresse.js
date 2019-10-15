@@ -13,6 +13,9 @@ export default gql`
         }
       ) {
         totalCount
+        nodes {
+          id
+        }
       }
     }
   }

@@ -64,7 +64,7 @@ const standardWidth = 500
 const standardHeight = 800
 
 const Ekf = () => {
-  const { user, isPrint, tree } = useContext(storeContext)
+  const { user, isPrint, tree, ekfIds } = useContext(storeContext)
   const { token } = user
   const tokenDecoded = token ? jwtDecode(token) : null
   const role = tokenDecoded ? tokenDecoded.role : null
@@ -105,6 +105,16 @@ const Ekf = () => {
       typeof window !== 'undefined' &&
       window.removeEventListener('resize', setDimensions)
   }, [setDimensions])
+
+  if (isPrint && ekfIds.length > 0) {
+    return (
+      <>
+        {ekfIds.map(id => (
+          <Tpopfreiwkontr treeName={treeName} role={role} id={id} key={id} />
+        ))}
+      </>
+    )
+  }
 
   if (isPrint && tpopkontrId) {
     return <Tpopfreiwkontr treeName={treeName} role={role} />

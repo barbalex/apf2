@@ -59,7 +59,7 @@ const tree2TabValues = ['tree2', 'daten2', 'filter2', 'karte2', 'exporte2']
 
 const Projekte = () => {
   const store = useContext(storeContext)
-  const { isPrint, setIsPrint, urlQuery } = store
+  const { isPrint, setIsPrint, setEkfIds, urlQuery } = store
 
   const { projekteTabs } = urlQuery
   const treeTabs = intersection(treeTabValues, projekteTabs)
@@ -69,6 +69,7 @@ const Projekte = () => {
     if (typeof window !== 'undefined') {
       window.matchMedia('print').addListener(mql => {
         setIsPrint(mql.matches)
+        if (!mql.matches) setEkfIds([])
       })
     }
     return () => {
@@ -78,7 +79,7 @@ const Projekte = () => {
         })
       }
     }
-  }, [setIsPrint])
+  }, [setEkfIds, setIsPrint])
 
   if (tree2Tabs.length === 0 || isPrint) {
     return (

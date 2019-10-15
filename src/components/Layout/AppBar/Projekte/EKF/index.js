@@ -68,6 +68,7 @@ const ProjekteAppBar = () => {
     ekfAdresseId,
     ekfYear,
     setIsPrint,
+    setEkfIds,
   } = store
   const { activeNodeArray } = store.tree
   const ekfIsActive = !!getActiveNodes(activeNodeArray).tpopfreiwkontr
@@ -90,8 +91,9 @@ const ProjekteAppBar = () => {
   const adresseName = get(data, 'adresseById.name') || null
   const ekfCount =
     get(data, 'adresseById.tpopkontrsByBearbeiter.totalCount') || 0
-
-  console.log('Appbar EKF:', { ekfCount, g1: ekfCount > 1 })
+  const ekfIds = (
+    get(data, 'adresseById.tpopkontrsByBearbeiter.nodes') || []
+  ).map(n => n.id)
 
   const [userOpen, setUserOpen] = useState(false)
 
@@ -148,14 +150,13 @@ const ProjekteAppBar = () => {
     }
   }, [setIsPrint])
   const onClickPrintAll = useCallback(() => {
-    console.log('TODO')
-    // TODO:
-    // open form that maps tpopfreiwkontr
-    /*if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined') {
+      setEkfIds(ekfIds)
       setIsPrint(true)
-      setTimeout(() => window.print())
-    }*/
-  }, [])
+      // TODO: need to know when all tpopfreiwkontr forms have finisched rendering
+      setTimeout(() => window.print(), 1500)
+    }
+  }, [ekfIds, setEkfIds, setIsPrint])
 
   return (
     <>

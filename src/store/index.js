@@ -63,6 +63,7 @@ const myTypes = types
     view: types.optional(types.string, 'normal'),
     ekfYear: types.optional(types.number, ekfYear),
     ekfAdresseId: types.optional(types.maybeNull(types.string), null),
+    ekfIds: types.optional(types.array(types.string), []),
     copying: types.optional(Copying, defaultCopying),
     copyingBiotop: types.optional(CopyingBiotop, defaultCopyingBiotop),
     urlQuery: types.optional(UrlQuery, defaultUrlQuery),
@@ -210,6 +211,9 @@ const myTypes = types
     },
   }))
   .actions(self => ({
+    setEkfIds(ids) {
+      self.ekfIds = [...ids]
+    },
     enqueNotification(note) {
       const key = note.options && note.options.key
       self.notifications = [

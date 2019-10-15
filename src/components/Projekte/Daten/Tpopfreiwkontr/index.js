@@ -45,6 +45,7 @@ const Container = styled.div`
     margin: 0 !important;
     padding: 0.5cm !important;
     overflow: hidden;
+    page-break-after: always;
   }
 `
 const InnerContainer = styled.div`
@@ -143,7 +144,7 @@ const CountHint = styled.div`
   padding: 10px;
 `
 
-const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
+const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const {
@@ -161,10 +162,11 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false }) => {
 
   const [errors, setErrors] = useState({})
 
-  let id =
-    activeNodeArray.length > 9
-      ? activeNodeArray[9]
-      : '99999999-9999-9999-9999-999999999999'
+  let id = idPassed
+    ? idPassed
+    : activeNodeArray.length > 9
+    ? activeNodeArray[9]
+    : '99999999-9999-9999-9999-999999999999'
   const apId = activeNodeArray[3]
   if (showFilter) id = '99999999-9999-9999-9999-999999999999'
   const { data, loading, error, refetch } = useQuery(query, {
