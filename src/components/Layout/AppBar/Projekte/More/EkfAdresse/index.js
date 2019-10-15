@@ -43,7 +43,7 @@ const EkfAdresse = ({ setAnchorEl }) => {
         options={get(data, 'allAdresses.nodes', [])}
         loading={loading}
         saveToDb={choose}
-        maxHeight={130}
+        maxHeight={120}
       />
     </Container>
   )
