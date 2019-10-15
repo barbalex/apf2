@@ -9,6 +9,7 @@ import { Link } from 'gatsby'
 import get from 'lodash/get'
 import { MdPrint } from 'react-icons/md'
 import IconButton from '@material-ui/core/IconButton'
+import Badge from '@material-ui/core/Badge'
 
 import isMobilePhone from '../../../../../modules/isMobilePhone'
 import setUrlQueryValue from '../../../../../modules/setUrlQueryValue'
@@ -43,6 +44,16 @@ const StyledButton = styled(Button)`
 `
 const StyledIconButton = styled(IconButton)`
   color: white !important;
+  span {
+    top: -5px !important;
+    right: -5px !important;
+  }
+`
+const StyledBadge = styled(Badge)`
+  .MuiBadge-anchorOriginTopRightRectangle {
+    top: 9px !important;
+    right: 9px !important;
+  }
 `
 
 const ProjekteAppBar = () => {
@@ -55,6 +66,8 @@ const ProjekteAppBar = () => {
     setUrlQuery,
     cloneTree2From1,
     ekfAdresseId,
+    ekfYear,
+    setIsPrint,
   } = store
   const { activeNodeArray } = store.tree
   const ekfIsActive = !!getActiveNodes(activeNodeArray).tpopfreiwkontr
@@ -72,9 +85,13 @@ const ProjekteAppBar = () => {
   const isFreiwillig = role === 'apflora_freiwillig'
 
   const { data } = useQuery(queryAdresse, {
-    variables: { id: ekfAdresseId },
+    variables: { id: ekfAdresseId, jahr: ekfYear },
   })
   const adresseName = get(data, 'adresseById.name') || null
+  const ekfCount =
+    get(data, 'adresseById.tpopkontrsByBearbeiter.totalCount') || 0
+
+  console.log('Appbar EKF:', { ekfCount, g1: ekfCount > 1 })
 
   const [userOpen, setUserOpen] = useState(false)
 
@@ -124,6 +141,21 @@ const ProjekteAppBar = () => {
   ])
   const setViewNormal = useCallback(() => setView('normal'), [setView])
   const toggleUserOpen = useCallback(() => setUserOpen(!userOpen), [userOpen])
+  const onClickPrintSingle = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      setIsPrint(true)
+      setTimeout(() => window.print())
+    }
+  }, [setIsPrint])
+  const onClickPrintAll = useCallback(() => {
+    console.log('TODO')
+    // TODO:
+    // open form that maps tpopfreiwkontr
+    /*if (typeof window !== 'undefined') {
+      setIsPrint(true)
+      setTimeout(() => window.print())
+    }*/
+  }, [])
 
   return (
     <>
@@ -136,11 +168,23 @@ const ProjekteAppBar = () => {
       )}
       <MenuDiv>
         <>
-          {ekfIsActive && (
-            <StyledIconButton>
-              <MdPrint />
-            </StyledIconButton>
+          {ekfCount > 1 && (
+            <StyledBadge badgeContent={ekfCount}>
+              <StyledIconButton
+                onClick={onClickPrintAll}
+                title={`Alle ${ekfCount} EKF drucken`}
+              >
+                <MdPrint />
+              </StyledIconButton>
+            </StyledBadge>
           )}
+          <StyledIconButton
+            onClick={onClickPrintSingle}
+            disabled={!ekfIsActive}
+            title="Angezeigte EKF drucken"
+          >
+            <MdPrint />
+          </StyledIconButton>
           <EkfYear />
           {!isFreiwillig && (
             <StyledButton onClick={setViewNormal}>Normal-Ansicht</StyledButton>
