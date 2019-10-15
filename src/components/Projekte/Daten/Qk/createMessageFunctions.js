@@ -2,36 +2,24 @@ import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 
 export default ({ data, berichtjahr, projId, apId }) => ({
-    apOhneBearbeitung: () => ({
-      title: 'Fehlende Aktionsplan-Angabe:',
-      messages: (get(data, 'apOhneBearbeitung.apsByProjId.nodes') || []).map(
+    apOhneBearbeitung: () => (get(data, 'apOhneBearbeitung.apsByProjId.nodes') || []).map(
         n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId],
           text: `Feld "Aktionsplan" ist leer`,
-        }),
-      ),
-    }),
-    apMitApOhneUmsetzung: () => ({
-      title: 'Aktionsplan ohne Angaben zur Umsetzung:',
-      messages: (get(data, 'apMitApOhneUmsetzung.apsByProjId.nodes') || []).map(
+        })),
+    apMitApOhneUmsetzung: () => (get(data, 'apMitApOhneUmsetzung.apsByProjId.nodes') || []).map(
         n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId],
           text: `Feld "Umsetzung" ist leer`,
         }),
       ),
-    }),
-    apOhneVerantwortlich: () => ({
-      title: 'Aktionsplan ohne Verantwortliche:',
-      messages: (get(data, 'apOhneVerantwortlich.apsByProjId.nodes') || []).map(
+    apOhneVerantwortlich: () => (get(data, 'apOhneVerantwortlich.apsByProjId.nodes') || []).map(
         n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId],
           text: `Feld "Verantwortlich" ist leer`,
         }),
       ),
-    }),
-    zielOhneJahr: () => ({
-      title: 'Ziel ohne Jahr:',
-      messages: get(
+    zielOhneJahr: () => get(
         data,
         'zielOhneJahr.apsByProjId.nodes[0].zielsByApId.nodes',
         [],
@@ -47,10 +35,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Ziel: ${n.id}`,
       })),
-    }),
-    zielOhneTyp: () => ({
-      title: 'Ziel ohne Typ:',
-      messages: get(
+    zielOhneTyp: () => get(
         data,
         'zielOhneTyp.apsByProjId.nodes[0].zielsByApId.nodes',
         [],
@@ -66,10 +51,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Ziel: ${n.jahr || n.id}`,
       })),
-    }),
-    zielOhneZiel: () => ({
-      title: 'Ziel ohne Ziel:',
-      messages: get(
+    zielOhneZiel: () => get(
         data,
         'zielOhneZiel.apsByProjId.nodes[0].zielsByApId.nodes',
         [],
@@ -85,10 +67,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Ziel: ${n.jahr || n.id}`,
       })),
-    }),
-    zielberOhneJahr: () => ({
-      title: 'Ziel-Bericht ohne Jahr:',
-      messages: (function() {
+    zielberOhneJahr: () => {
         const zielNodes = get(
           data,
           'zielberOhneJahr.apsByProjId.nodes[0].zielsByApId.nodes',
@@ -115,11 +94,8 @@ export default ({ data, berichtjahr, projId, apId }) => ({
             text: `Ziel: ${zielJahr || zielId}, Bericht: ${n.id}`,
           }
         })
-      })(),
-    }),
-    zielberOhneEntwicklung: () => ({
-      title: 'Ziel-Bericht ohne Erreichung:',
-      messages: (function() {
+      },
+    zielberOhneEntwicklung: () => {
         const zielNodes = get(
           data,
           'zielberOhneEntwicklung.apsByProjId.nodes[0].zielsByApId.nodes',
@@ -146,11 +122,8 @@ export default ({ data, berichtjahr, projId, apId }) => ({
             text: `Ziel: ${zielJahr || zielId}, Bericht: ${n.jahr || n.id}`,
           }
         })
-      })(),
-    }),
-    erfkritOhneBeurteilung: () => ({
-      title: 'Erfolgskriterium ohne Beurteilung:',
-      messages: get(
+      },
+    erfkritOhneBeurteilung: () => get(
         data,
         'erfkritOhneBeurteilung.apsByProjId.nodes[0].erfkritsByApId.nodes',
         [],
@@ -165,10 +138,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Erfolgskriterium: ${n.id}`,
       })),
-    }),
-    erfkritOhneKriterien: () => ({
-      title: 'Erfolgskriterium ohne Kriterien:',
-      messages: get(
+    erfkritOhneKriterien: () => get(
         data,
         'erfkritOhneKriterien.apsByProjId.nodes[0].erfkritsByApId.nodes',
         [],
@@ -183,10 +153,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Erfolgskriterium: ${n.id}`,
       })),
-    }),
-    apberOhneJahr: () => ({
-      title: 'AP-Bericht ohne Jahr:',
-      messages: get(
+    apberOhneJahr: () => get(
         data,
         'apberOhneJahr.apsByProjId.nodes[0].apbersByApId.nodes',
         [],
@@ -194,10 +161,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Berichte', n.id],
         text: `AP-Bericht: ${n.id}`,
       })),
-    }),
-    apberOhneVergleichVorjahrGesamtziel: () => ({
-      title: 'AP-Bericht ohne Vergleich Vorjahr - Gesamtziel:',
-      messages: get(
+    apberOhneVergleichVorjahrGesamtziel: () => get(
         data,
         'apberOhneVergleichVorjahrGesamtziel.apsByProjId.nodes[0].apbersByApId.nodes',
         [],
@@ -205,10 +169,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Berichte', n.id],
         text: `AP-Bericht: ${n.jahr || n.id}`,
       })),
-    }),
-    apberOhneBeurteilung: () => ({
-      title: 'AP-Bericht ohne Beurteilung:',
-      messages: get(
+    apberOhneBeurteilung: () => get(
         data,
         'apberOhneBeurteilung.apsByProjId.nodes[0].apbersByApId.nodes',
         [],
@@ -216,10 +177,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Berichte', n.id],
         text: `AP-Bericht: ${n.jahr || n.id}`,
       })),
-    }),
-    assozartOhneArt: () => ({
-      title: 'Assoziierte Art ohne Art:',
-      messages: get(
+    assozartOhneArt: () => get(
         data,
         'assozartOhneArt.apsByProjId.nodes[0].assozartsByApId.nodes',
         [],
@@ -234,10 +192,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Assoziierte Art: ${n.id}`,
       })),
-    }),
-    popOhneNr: () => ({
-      title: 'Population ohne Nr.:',
-      messages: get(
+    popOhneNr: () => get(
         data,
         'popOhneNr.apsByProjId.nodes[0].popsByApId.nodes',
         [],
@@ -245,10 +200,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
         text: `Population: ${n.name || n.id}`,
       })),
-    }),
-    popOhneName: () => ({
-      title: 'Population ohne Name:',
-      messages: get(
+    popOhneName: () => get(
         data,
         'popOhneName.apsByProjId.nodes[0].popsByApId.nodes',
         [],
@@ -256,10 +208,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
         text: `Population: ${n.nr || n.id}`,
       })),
-    }),
-    popOhneStatus: () => ({
-      title: 'Population ohne Status:',
-      messages: get(
+    popOhneStatus: () => get(
         data,
         'popOhneStatus.apsByProjId.nodes[0].popsByApId.nodes',
         [],
@@ -267,10 +216,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
         text: `Population: ${n.nr || n.id}`,
       })),
-    }),
-    popOhneBekanntSeit: () => ({
-      title: 'Population ohne "bekannt seit":',
-      messages: get(
+    popOhneBekanntSeit: () => get(
         data,
         'popOhneBekanntSeit.apsByProjId.nodes[0].popsByApId.nodes',
         [],
@@ -278,10 +224,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
         text: `Population: ${n.nr || n.id}`,
       })),
-    }),
-    popOhneKoord: () => ({
-      title: 'Population: Mindestens eine Koordinate fehlt:',
-      messages: get(
+    popOhneKoord: () => get(
         data,
         'popOhneKoord.apsByProjId.nodes[0].popsByApId.nodes',
         [],
@@ -289,10 +232,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
         text: `Population: ${n.nr || n.id}`,
       })),
-    }),
-    popOhneTpop: () => ({
-      title: 'Population ohne Teilpopulation:',
-      messages: get(
+    popOhneTpop: () => get(
         data,
         'popOhneTpop.apsByProjId.nodes[0].popsByApId.nodes',
         [],
@@ -302,10 +242,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
           text: `Population: ${n.nr || n.id}`,
         })),
-    }),
-    popMitStatusUnklarOhneBegruendung: () => ({
-      title: 'Population mit "Status unklar", ohne Begründung:',
-      messages: get(
+    popMitStatusUnklarOhneBegruendung: () => get(
         data,
         'popMitStatusUnklarOhneBegruendung.apsByProjId.nodes[0].popsByApId.nodes',
         [],
@@ -313,11 +250,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
         text: `Population: ${n.nr || n.id}`,
       })),
-    }),
-    popBekanntSeitNichtAeltesteTpop: () => ({
-      title:
-        'Population: "Bekannt seit" der Population entspricht nicht dem Wert der am längsten bekannten Teil-Population:',
-      messages: get(data, 'popBekanntSeitNichtAeltesteTpop.nodes', []).map(
+    popBekanntSeitNichtAeltesteTpop: () => get(data, 'popBekanntSeitNichtAeltesteTpop.nodes', []).map(
         n => ({
           url: [
             'Projekte',
@@ -330,10 +263,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
           text: `Population: ${n.nr || n.id}`,
         }),
       ),
-    }),
-    popMitMehrdeutigerNr: () => ({
-      title: 'Population: Die Nr. ist mehrdeutig:',
-      messages: get(data, 'popMitMehrdeutigerNr.nodes', []).map(n => ({
+    popMitMehrdeutigerNr: () => get(data, 'popMitMehrdeutigerNr.nodes', []).map(n => ({
         url: [
           'Projekte',
           n.projId,
@@ -344,11 +274,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Population: ${n.nr || n.id}`,
       })),
-    }),
-    popOhnePopber: () => ({
-      title:
-        'Population mit angesiedelten Teilpopulationen (vor dem Berichtjahr), die (im Berichtjahr) kontrolliert wurden, aber ohne Populations-Bericht (im Berichtjahr):',
-      messages: get(data, 'popOhnePopber.nodes', []).map(n => ({
+    popOhnePopber: () => get(data, 'popOhnePopber.nodes', []).map(n => ({
         url: [
           'Projekte',
           n.projId,
@@ -359,11 +285,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Population: ${n.nr || n.id}`,
       })),
-    }),
-    popMitBerZunehmendOhneTpopberZunehmend: () => ({
-      title:
-        'Populationen mit Bericht "zunehmend" ohne Teil-Population mit Bericht "zunehmend":',
-      messages: get(
+    popMitBerZunehmendOhneTpopberZunehmend: () => get(
         data,
         'popMitBerZunehmendOhneTpopberZunehmend.nodes',
         [],
@@ -378,11 +300,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Population: ${n.nr || n.id}`,
       })),
-    }),
-    popMitBerAbnehmendOhneTpopberAbnehmend: () => ({
-      title:
-        'Populationen mit Bericht "abnehmend" ohne Teil-Population mit Bericht "abnehmend":',
-      messages: get(
+    popMitBerAbnehmendOhneTpopberAbnehmend: () => get(
         data,
         'popMitBerAbnehmendOhneTpopberAbnehmend.nodes',
         [],
@@ -397,11 +315,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Population: ${n.nr || n.id}`,
       })),
-    }),
-    popMitBerErloschenOhneTpopberErloschen: () => ({
-      title:
-        'Populationen mit Bericht "erloschen" ohne Teil-Population mit Bericht "erloschen":',
-      messages: get(
+    popMitBerErloschenOhneTpopberErloschen: () => get(
         data,
         'popMitBerErloschenOhneTpopberErloschen.nodes',
         [],
@@ -416,11 +330,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Population: ${n.nr || n.id}`,
       })),
-    }),
-    popMitBerErloschenUndTpopberNichtErloschen: () => ({
-      title:
-        'Populationen mit Bericht "erloschen" und mindestens einer gemäss Bericht nicht erloschenen Teil-Population:',
-      messages: get(
+    popMitBerErloschenUndTpopberNichtErloschen: () => get(
         data,
         'popMitBerErloschenUndTpopberNichtErloschen.nodes',
         [],
@@ -435,10 +345,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Population: ${n.nr || n.id}`,
       })),
-    }),
-    popOhneTpopMitGleichemStatus: () => ({
-      title: 'Population: Keine Teil-Population hat den Status der Population:',
-      messages: get(data, 'popOhneTpopMitGleichemStatus.nodes', []).map(n => ({
+    popOhneTpopMitGleichemStatus: () => get(data, 'popOhneTpopMitGleichemStatus.nodes', []).map(n => ({
         url: [
           'Projekte',
           n.projId,
@@ -449,11 +356,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Population: ${n.nr || n.id}`,
       })),
-    }),
-    popStatus300TpopStatusAnders: () => ({
-      title:
-        'Population: Status ist "potentieller Wuchs-/Ansiedlungsort". Es gibt aber Teil-Populationen mit abweichendem Status:',
-      messages: get(data, 'popStatus300TpopStatusAnders.nodes', []).map(n => ({
+    popStatus300TpopStatusAnders: () => get(data, 'popStatus300TpopStatusAnders.nodes', []).map(n => ({
         url: [
           'Projekte',
           n.projId,
@@ -464,11 +367,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Population: ${n.nr || n.id}`,
       })),
-    }),
-    popStatus201TpopStatusUnzulaessig: () => ({
-      title:
-        'Population: Status ist "Ansaatversuch". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich" oder "angesiedelt, aktuell:',
-      messages: get(data, 'popStatus201TpopStatusUnzulaessig.nodes', []).map(
+    popStatus201TpopStatusUnzulaessig: () => get(data, 'popStatus201TpopStatusUnzulaessig.nodes', []).map(
         n => ({
           url: [
             'Projekte',
@@ -481,11 +380,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
           text: `Population: ${n.nr || n.id}`,
         }),
       ),
-    }),
-    popStatus202TpopStatusAnders: () => ({
-      title:
-        'Population: Status ist "angesiedelt nach Beginn AP, erloschen/nicht etabliert". Es gibt Teil-Populationen mit abweichendem Status:',
-      messages: get(data, 'popStatus202TpopStatusAnders.nodes', []).map(n => ({
+    popStatus202TpopStatusAnders: () => get(data, 'popStatus202TpopStatusAnders.nodes', []).map(n => ({
         url: [
           'Projekte',
           n.projId,
@@ -496,11 +391,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Population: ${n.nr || n.id}`,
       })),
-    }),
-    popStatus200TpopStatusUnzulaessig: () => ({
-      title:
-        'Population: Status ist "angesiedelt nach Beginn AP, aktuell". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich", "angesiedelt vor Beginn AP, aktuell"):',
-      messages: get(data, 'popStatus200TpopStatusUnzulaessig.nodes', []).map(
+    popStatus200TpopStatusUnzulaessig: () => get(data, 'popStatus200TpopStatusUnzulaessig.nodes', []).map(
         n => ({
           url: [
             'Projekte',
@@ -513,11 +404,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
           text: `Population: ${n.nr || n.id}`,
         }),
       ),
-    }),
-    popStatus101TpopStatusAnders: () => ({
-      title:
-        'Population: Status ist "ursprünglich, erloschen". Es gibt Teil-Populationen (ausser potentiellen Wuchs-/Ansiedlungsorten) mit abweichendem Status:',
-      messages: get(data, 'popStatus101TpopStatusAnders.nodes', []).map(n => ({
+    popStatus101TpopStatusAnders: () => get(data, 'popStatus101TpopStatusAnders.nodes', []).map(n => ({
         url: [
           'Projekte',
           n.projId,
@@ -528,11 +415,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Population: ${n.nr || n.id}`,
       })),
-    }),
-    popStatusErloschenLetzterPopberZunehmend: () => ({
-      title:
-        'Population: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "zunehmend" und es gab seither keine Ansiedlung:',
-      messages: get(
+    popStatusErloschenLetzterPopberZunehmend: () => get(
         data,
         'popStatusErloschenLetzterPopberZunehmend.nodes',
         [],
@@ -547,11 +430,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Population: ${n.nr || n.id}`,
       })),
-    }),
-    popStatusErloschenLetzterPopberStabil: () => ({
-      title:
-        'Population: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "stabil" und es gab seither keine Ansiedlung:',
-      messages: get(
+    popStatusErloschenLetzterPopberStabil: () => get(
         data,
         'popStatusErloschenLetzterPopberStabil.nodes',
         [],
@@ -566,11 +445,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Population: ${n.nr || n.id}`,
       })),
-    }),
-    popStatusErloschenLetzterPopberAbnehmend: () => ({
-      title:
-        'Population: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "abnehmend" und es gab seither keine Ansiedlung:',
-      messages: get(
+    popStatusErloschenLetzterPopberAbnehmend: () => get(
         data,
         'popStatusErloschenLetzterPopberAbnehmend.nodes',
         [],
@@ -585,11 +460,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Population: ${n.nr || n.id}`,
       })),
-    }),
-    popStatusErloschenLetzterPopberUnsicher: () => ({
-      title:
-        'Population: Status ist "erloschen" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "unsicher" und es gab seither keine Ansiedlung:',
-      messages: get(
+    popStatusErloschenLetzterPopberUnsicher: () => get(
         data,
         'popStatusErloschenLetzterPopberUnsicher.nodes',
         [],
@@ -604,11 +475,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Population: ${n.nr || n.id}`,
       })),
-    }),
-    popOhnePopmassnber: () => ({
-      title:
-        'Population mit angesiedelten Teilpopulationen (vor dem Berichtjahr), die (im Berichtjahr) kontrolliert wurden, aber ohne Massnahmen-Bericht (im Berichtjahr):',
-      messages: get(data, 'popOhnePopmassnber.nodes', []).map(n => ({
+    popOhnePopmassnber: () => get(data, 'popOhnePopmassnber.nodes', []).map(n => ({
         url: [
           'Projekte',
           n.projId,
@@ -619,10 +486,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Population: ${n.nr || n.id}`,
       })),
-    }),
-    popKoordEntsprechenKeinerTpop: () => ({
-      title: 'Population: Koordinaten entsprechen keiner Teilpopulation:',
-      messages: get(data, 'popKoordEntsprechenKeinerTpop.nodes', []).map(n => ({
+    popKoordEntsprechenKeinerTpop: () => get(data, 'popKoordEntsprechenKeinerTpop.nodes', []).map(n => ({
         url: [
           'Projekte',
           n.projId,
@@ -633,11 +497,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Population: ${n.nr || n.id}`,
       })),
-    }),
-    popStatusAnsaatversuchTpopAktuell: () => ({
-      title:
-        'Population: Status ist "angesiedelt, Ansaatversuch", es gibt aber eine aktuelle Teilpopulation oder eine ursprüngliche erloschene:',
-      messages: get(data, 'popStatusAnsaatversuchTpopAktuell.nodes', []).map(
+    popStatusAnsaatversuchTpopAktuell: () => get(data, 'popStatusAnsaatversuchTpopAktuell.nodes', []).map(
         n => ({
           url: [
             'Projekte',
@@ -650,11 +510,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
           text: `Population: ${n.nr || n.id}`,
         }),
       ),
-    }),
-    popStatusAnsaatversuchAlleTpopErloschen: () => ({
-      title:
-        'Population: Status ist "angesiedelt, Ansaatversuch", alle Teilpopulationen sind gemäss Status erloschen:',
-      messages: get(
+    popStatusAnsaatversuchAlleTpopErloschen: () => get(
         data,
         'popStatusAnsaatversuchAlleTpopErloschen.nodes',
         [],
@@ -669,11 +525,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Population: ${n.nr}`,
       })),
-    }),
-    popStatusAnsaatversuchMitTpopUrspruenglichErloschen: () => ({
-      title:
-        'Population: Status ist "angesiedelt, Ansaatversuch", es gibt aber eine Teilpopulation mit Status "urspruenglich, erloschen:',
-      messages: get(
+    popStatusAnsaatversuchMitTpopUrspruenglichErloschen: () => get(
         data,
         'popStatusAnsaatversuchMitTpopUrspruenglichErloschen.nodes',
         [],
@@ -688,11 +540,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Population: ${n.nr || n.id}`,
       })),
-    }),
-    popStatusErloschenMitTpopAktuell: () => ({
-      title:
-        'Population: Status ist "erloschen" (urspruenglich oder angesiedelt), es gibt aber eine Teilpopulation mit Status "aktuell" (urspruenglich oder angesiedelt):',
-      messages: get(data, 'popStatusErloschenMitTpopAktuell.nodes', []).map(
+    popStatusErloschenMitTpopAktuell: () => get(data, 'popStatusErloschenMitTpopAktuell.nodes', []).map(
         n => ({
           url: [
             'Projekte',
@@ -705,11 +553,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
           text: `Population: ${n.nr || n.id}`,
         }),
       ),
-    }),
-    popStatusErloschenMitTpopAnsaatversuch: () => ({
-      title:
-        'Population: Status ist "erloschen" (urspruenglich oder angesiedelt), es gibt aber eine Teilpopulation mit Status "angesiedelt, Ansaatversuch":',
-      messages: get(
+    popStatusErloschenMitTpopAnsaatversuch: () => get(
         data,
         'popStatusErloschenMitTpopAnsaatversuch.nodes',
         [],
@@ -724,11 +568,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Population: ${n.nr || n.id}`,
       })),
-    }),
-    popStatusAngesiedeltMitTpopUrspruenglich: () => ({
-      title:
-        'Population: Status ist "angesiedelt", es gibt aber eine Teilpopulation mit Status "urspruenglich":',
-      messages: get(
+    popStatusAngesiedeltMitTpopUrspruenglich: () => get(
         data,
         'popStatusAngesiedeltMitTpopUrspruenglich.nodes',
         [],
@@ -743,11 +583,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Population: ${n.nr || n.id}`,
       })),
-    }),
-    popStatusAktuellLetzterPopberErloschen: () => ({
-      title:
-        'Population: Status ist "aktuell" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "erloschen" und es gab seither keine Ansiedlung:',
-      messages: get(
+    popStatusAktuellLetzterPopberErloschen: () => get(
         data,
         'popStatusAktuellLetzterPopberErloschen.nodes',
         [],
@@ -762,11 +598,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Population: ${n.nr || n.id}`,
       })),
-    }),
-    popStatusErloschenLetzterPopberAktuell: () => ({
-      title:
-        'Population: Status ist "erloschen", der letzte Populations-Bericht meldet aber "aktuell":',
-      messages: get(
+    popStatusErloschenLetzterPopberAktuell: () => get(
         data,
         'popStatusErloschenLetzterPopberAktuell.nodes',
         [],
@@ -781,11 +613,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Population: ${n.nr || n.id}`,
       })),
-    }),
-    popStatusErloschenLetzterPopberErloschenMitAnsiedlung: () => ({
-      title:
-        'Population: Status ist "erloschen" (ursprünglich oder angesiedelt); der letzte Populations-Bericht meldet "erloschen". Seither gab es aber eine Ansiedlung:',
-      messages: get(
+    popStatusErloschenLetzterPopberErloschenMitAnsiedlung: () => get(
         data,
         'popStatusErloschenLetzterPopberErloschenMitAnsiedlung.nodes',
         [],
@@ -800,7 +628,6 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         ],
         text: `Population: ${n.nr || n.id}`,
       })),
-    }),
     popberOhneJahr: () => ({
       title: 'Populations-Bericht ohne Jahr:',
       messages: (function() {
