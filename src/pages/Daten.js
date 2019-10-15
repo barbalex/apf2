@@ -38,9 +38,6 @@ const DatenPage = ({ location }) => {
     [activeForm.form, view],
   )
 
-  // this renders FAR too often
-  //console.log('page Daten rendering')
-
   return (
     <ErrorBoundary>
       <Layout>
