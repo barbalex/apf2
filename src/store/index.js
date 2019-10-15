@@ -357,12 +357,12 @@ const myTypes = types
     setCopyingBiotop({ id, label }) {
       self.copyingBiotop = { id, label }
     },
-    setUrlQuery({ projekteTabs, tpopTab, feldkontrTab, idealbiotopTab }) {
+    setUrlQuery({ projekteTabs, tpopTab, feldkontrTab, idealbiotopTab, qkTab }) {
       const newUrlQuery = {
         projekteTabs,
         tpopTab,
         feldkontrTab,
-        idealbiotopTab,
+        idealbiotopTab, qkTab,
       }
       // only write if changed
       if (!isEqual(self.urlQuery, newUrlQuery)) {

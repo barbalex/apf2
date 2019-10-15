@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { qk } from '../../../shared/fragments'
+import { qk } from '../../../../shared/fragments'
 
 export default gql`
   query QkQuery($apId: UUID!) {

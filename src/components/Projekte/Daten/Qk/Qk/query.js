@@ -6,7 +6,7 @@ import {
   pop,
   projekt,
   ziel,
-} from '../../../shared/fragments'
+} from '../../../../shared/fragments'
 
 export default gql`
   query QkQuery(

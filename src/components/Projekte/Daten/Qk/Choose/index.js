@@ -1,14 +1,12 @@
-import React, { useState, useContext } from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
 import ErrorBoundary from 'react-error-boundary'
 
-import FormTitle from '../../../shared/FormTitle'
-import standardQkYear from '../../../../modules/standardQkYear'
+import FormTitle from '../../../../shared/FormTitle'
 import query from './query'
-import queryQk from './queryQk'
-import storeContext from '../../../../storeContext'
+import storeContext from '../../../../../storeContext'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -21,12 +19,15 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Qk = ({ treeName }) => {
+const ChooseQk = ({ treeName }) => {
   const store = useContext(storeContext)
+  const { activeNodeArray } = store[treeName]
+  const apId = activeNodeArray[3]
 
-  const { data, error, loading } = useQuery(queryQk)
+  const { data, error, loading } = useQuery(query, { variables: { apId } })
 
   if (error) return `Fehler: ${error.message}`
+  if (loading) return <Container>`Lade Daten...`</Container>
   return (
     <ErrorBoundary>
       <Container>
@@ -37,4 +38,4 @@ const Qk = ({ treeName }) => {
   )
 }
 
-export default observer(Qk)
+export default observer(ChooseQk)
