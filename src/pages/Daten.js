@@ -9,6 +9,7 @@ import Projekte from '../components/Projekte'
 import User from '../components/User'
 import Messages from '../components/Messages'
 import Ekf from '../components/Ekf'
+import EkfMulti from '../components/EkfMulti'
 import Deletions from '../components/Deletions'
 import EkPlan from '../components/EkPlan'
 
@@ -47,6 +48,7 @@ const DatenPage = ({ location }) => {
           {!!user.token && (
             <>
               {form === 'ekf' && <Ekf />}
+              {form === 'ekfMulti' && <EkfMulti />}
               {form === 'projekte' && <Projekte />}
               {form === 'ekplan' && <EkPlan />}
               <Messages />
