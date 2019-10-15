@@ -1018,10 +1018,7 @@ export default ({ data, berichtjahr, projId, apId }) => {
           n.id}`,
       })),
     }),
-  }
-
-  return [
-    {
+    tpopStatusErloschenLetzterTpopberZunehmend: () => ({
       title: `Teilpopulation:
         Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort;
         der letzte Teilpopulations-Bericht meldet aber "zunehmend" und es gab seither keine Ansiedlung:`,
@@ -1043,8 +1040,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
         text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr ||
           n.id}`,
       })),
-    },
-    {
+    }),
+    tpopStatusErloschenLetzterTpopberAktuell: () => ({
       title: `Teilpopulation:
         Status ist "erloschen",
         der letzte Teilpopulations-Bericht meldet aber "abnehmend", "stabil", "zunehmend" oder "unsicher":`,
@@ -1064,8 +1061,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
         text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr ||
           n.id}`,
       })),
-    },
-    {
+    }),
+    tpopStatusErloschenLetzterTpopberErloschenMitAnsiedlung: () => ({
       title: `Teilpopulation:
         Status ist "erloschen" (ursprünglich oder angesiedelt);
         der letzte Teilpopulations-Bericht meldet "erloschen". Seither gab es aber eine Ansiedlung:`,
@@ -1087,9 +1084,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
         text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr ||
           n.id}`,
       })),
-    },
-    // tpop ohne gewollte Werte
-    {
+    }),
+    tpopOhneNr: () => ({
       title: 'Teilpopulation ohne Nr.:',
       messages: (function() {
         const popNodes = get(
@@ -1115,8 +1111,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
             get(n, 'popByPopId.id')}, Teil-Population: ${n.id}`,
         }))
       })(),
-    },
-    {
+    }),
+    tpopOhneFlurname: () => ({
       title: `Teilpopulation ohne Flurname:`,
       messages: (function() {
         const popNodes = get(
@@ -1142,8 +1138,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
             get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`,
         }))
       })(),
-    },
-    {
+    }),
+    tpopOhneStatus: () => ({
       title: `Teilpopulation ohne Status:`,
       messages: (function() {
         const popNodes = get(
@@ -1169,8 +1165,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
             get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`,
         }))
       })(),
-    },
-    {
+    }),
+    tpopOhneBekanntSeit: () => ({
       title: `Teilpopulation ohne "bekannt seit":`,
       messages: (function() {
         const popNodes = get(
@@ -1196,8 +1192,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
             get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`,
         }))
       })(),
-    },
-    {
+    }),
+    tpopOhneApberRelevant: () => ({
       title: `Teilpopulation ohne "Fuer AP-Bericht relevant":`,
       messages: (function() {
         const popNodes = get(
@@ -1223,8 +1219,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
             get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`,
         }))
       })(),
-    },
-    {
+    }),
+    tpopOhneKoord: () => ({
       title: `Teilpopulation: Mindestens eine Koordinate fehlt:`,
       messages: (function() {
         const popNodes = get(
@@ -1250,8 +1246,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
             get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`,
         }))
       })(),
-    },
-    {
+    }),
+    tpopStatusPotentiellApberrelevant: () => ({
       title: `Teilpopulation
               mit Status "potenzieller Wuchs-/Ansiedlungsort"
               und für AP-Bericht relevant`,
@@ -1279,8 +1275,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
             get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`,
         }))
       })(),
-    },
-    {
+    }),
+    tpopErloschenUndRelevantLetzteBeobVor1950: () => ({
       title: `Teilpopulation
               erloschen,
               für AP-Bericht relevant
@@ -1303,8 +1299,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
         text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr ||
           n.id}`,
       })),
-    },
-    {
+    }),
+    tpopStatusUnklarOhneBegruendung: () => ({
       title: `Teilpopulation
               mit "Status unklar", ohne Begruendung:`,
       messages: (function() {
@@ -1331,8 +1327,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
             get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`,
         }))
       })(),
-    },
-    {
+    }),
+    tpopPopnrTponrMehrdeutig: () => ({
       title: `Teilpopulation:
               Die Nummer ist mehrdeutig:`,
       messages: get(data, 'tpopPopnrTponrMehrdeutig.nodes', []).map(n => ({
@@ -1349,8 +1345,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
         text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr ||
           n.id}`,
       })),
-    },
-    {
+    }),
+    tpopOhneTpopber: () => ({
       title: `Teilpopulation
               mit Kontrolle (im Berichtjahr)
               aber ohne Teilpopulations-Bericht (im Berichtjahr):`,
@@ -1368,8 +1364,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
         text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr ||
           n.id}`,
       })),
-    },
-    {
+    }),
+    tpopOhneMassnber: () => ({
       title: `Teilpopulation
               mit Ansiedlung (vor dem Berichtjahr)
               und Kontrolle (im Berichtjahr)
@@ -1388,8 +1384,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
         text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr ||
           n.id}`,
       })),
-    },
-    {
+    }),
+    tpopCountedEinheitMultipleTimesInYear: () => ({
       title: `Teilpopulation:
               dieselbe Einheit wurde im Berichtjahr mehrmals gezählt
               (und alle Kontrollen sind im Jahresbericht zu berücksichtigen)`,
@@ -1411,8 +1407,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
         text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr ||
           n.id}: "${n.einheit}" wurde ${n.anzahl} mal gezählt`,
       })),
-    },
-    {
+    }),
+    tpopMitStatusAnsaatversuchUndZaehlungMitAnzahl: () => ({
       title: `Teilpopulation
               mit Status "Ansaatversuch",
               und in der letzten Kontrolle eine Anzahl:`,
@@ -1434,8 +1430,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
         text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr ||
           n.id}`,
       })),
-    },
-    {
+    }),
+    tpopMitStatusPotentiellUndZaehlungMitAnzahl: () => ({
       title: `Teilpopulation
               mit Status "potentieller Wuchs-/Ansiedlungsort",
               bei der in einer Kontrolle eine Anzahl festgestellt wurde:`,
@@ -1457,8 +1453,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
         text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr ||
           n.id}`,
       })),
-    },
-    {
+    }),
+    tpopMitStatusPotentiellUndAnsiedlung: () => ({
       title: `Teilpopulation
               mit Status "potentieller Wuchs-/Ansiedlungsort"
               und Massnahme des Typs "Ansiedlung":`,
@@ -1478,9 +1474,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
             n.id}`,
         }),
       ),
-    },
-    // TPop-Bericht ohne Jahr/Entwicklung
-    {
+    }),
+    tpopberOhneJahr: () => ({
       title: `Teilpopulations-Bericht
               ohne Jahr:`,
       messages: (function() {
@@ -1519,8 +1514,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
           }
         })
       })(),
-    },
-    {
+    }),
+    tpopberOhneEntwicklung: () => ({
       title: `Teilpopulations-Bericht ohne Entwicklung:`,
       messages: (function() {
         const popNodes = get(
@@ -1557,8 +1552,10 @@ export default ({ data, berichtjahr, projId, apId }) => {
           }
         })
       })(),
-    },
+    }),
+  }
 
+  return [
     // 4. Massnahmen
 
     // Massn ohne gewollte Felder
