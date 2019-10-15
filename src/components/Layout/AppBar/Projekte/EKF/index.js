@@ -7,6 +7,8 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
 import { Link } from 'gatsby'
 import get from 'lodash/get'
+import { MdPrint } from 'react-icons/md'
+import IconButton from '@material-ui/core/IconButton'
 
 import isMobilePhone from '../../../../../modules/isMobilePhone'
 import setUrlQueryValue from '../../../../../modules/setUrlQueryValue'
@@ -38,6 +40,9 @@ const StyledButton = styled(Button)`
   color: white !important;
   text-transform: none !important;
 `
+const StyledIconButton = styled(IconButton)`
+  color: white !important;
+`
 
 const ProjekteAppBar = () => {
   const store = useContext(storeContext)
@@ -50,6 +55,9 @@ const ProjekteAppBar = () => {
     cloneTree2From1,
     ekfAdresseId,
   } = store
+  const { activeForm } = store.tree
+  console.log('Appbar EKF, activeForm', activeForm)
+  const ekfIsActive = activeForm.form === 'tpopfreiwkontr'
 
   /**
    * need to clone projekteTabs
@@ -128,6 +136,11 @@ const ProjekteAppBar = () => {
       )}
       <MenuDiv>
         <>
+          {ekfIsActive && (
+            <StyledIconButton>
+              <MdPrint />
+            </StyledIconButton>
+          )}
           <EkfYear />
           {!isFreiwillig && (
             <StyledButton onClick={setViewNormal}>Normal-Ansicht</StyledButton>
