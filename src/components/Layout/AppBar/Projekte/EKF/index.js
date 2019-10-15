@@ -17,6 +17,7 @@ import EkfYear from '../EkfYear'
 import User from './User'
 import storeContext from '../../../../../storeContext'
 import queryAdresse from './queryAdresse'
+import getActiveNodes from '../../../../../modules/getActiveNodes'
 
 const SiteTitle = styled(Button)`
   display: none !important;
@@ -55,9 +56,8 @@ const ProjekteAppBar = () => {
     cloneTree2From1,
     ekfAdresseId,
   } = store
-  const { activeForm } = store.tree
-  console.log('Appbar EKF, activeForm', activeForm)
-  const ekfIsActive = activeForm.form === 'tpopfreiwkontr'
+  const { activeNodeArray } = store.tree
+  const ekfIsActive = !!getActiveNodes(activeNodeArray).tpopfreiwkontr
 
   /**
    * need to clone projekteTabs
