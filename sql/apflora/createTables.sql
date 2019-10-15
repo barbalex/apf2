@@ -1417,5 +1417,7 @@ CREATE POLICY writer ON apflora.apqk
     OR current_user = 'apflora_artverantwortlich'
   );
 
--- TODO: import into qk
+-- DONE: import into qk
 -- TODO: add all qk to apqk for all ap's with bearbeitung < 4
+--insert into apflora.apqk(ap_id, qk_name)
+--select distinct apflora.ap.id, apflora.qk.name from apflora.ap, apflora.qk where apflora.ap.bearbeitung < 4
