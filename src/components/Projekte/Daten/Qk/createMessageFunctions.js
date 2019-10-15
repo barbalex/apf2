@@ -1553,13 +1553,7 @@ export default ({ data, berichtjahr, projId, apId }) => {
         })
       })(),
     }),
-  }
-
-  return [
-    // 4. Massnahmen
-
-    // Massn ohne gewollte Felder
-    {
+    tpopmassnOhneJahr: () => ({
       title: `Massnahme ohne Jahr:`,
       messages: (function() {
         const popNodes = get(
@@ -1596,8 +1590,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
           }
         })
       })(),
-    },
-    {
+    }),
+    tpopmassnOhneBearb: () => ({
       title: `Massnahme ohne BearbeiterIn:`,
       messages: (function() {
         const popNodes = get(
@@ -1634,8 +1628,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
           }
         })
       })(),
-    },
-    {
+    }),
+    tpopmassnOhneTyp: () => ({
       title: `Massnahme ohne Typ:`,
       messages: (function() {
         const popNodes = get(
@@ -1672,9 +1666,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
           }
         })
       })(),
-    },
-    // Massn.-Bericht ohne gewollte Felder
-    {
+    }),
+    tpopmassnberOhneJahr: () => ({
       title: `Massnahmen-Bericht ohne Jahr:`,
       messages: (function() {
         const popNodes = get(
@@ -1711,8 +1704,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
           }
         })
       })(),
-    },
-    {
+    }),
+    tpopmassnberOhneBeurteilung: () => ({
       title: `Massnahmen-Bericht ohne Entwicklung:`,
       messages: (function() {
         const popNodes = get(
@@ -1749,12 +1742,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
           }
         })
       })(),
-    },
-
-    // 5. Kontrollen
-
-    // Kontrolle ohne Jahr/Zählung/Kontrolltyp
-    {
+    }),
+    tpopfeldkontrOhneJahr: () => ({
       title: `Feldkontrolle ohne Jahr:`,
       messages: (function() {
         const popNodes = get(
@@ -1792,8 +1781,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
           }
         })
       })(),
-    },
-    {
+    }),
+    tpopfreiwkontrOhneJahr: () => ({
       title: `Freiwilligen-Kontrolle ohne Jahr:`,
       messages: (function() {
         const popNodes = get(
@@ -1830,8 +1819,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
           }
         })
       })(),
-    },
-    {
+    }),
+    tpopfeldkontrOhneBearb: () => ({
       title: `Feldkontrolle ohne BearbeiterIn:`,
       messages: (function() {
         const popNodes = get(
@@ -1868,8 +1857,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
           }
         })
       })(),
-    },
-    {
+    }),
+    tpopfreiwkontrOhneBearb: () => ({
       title: `Freiwilligen-Kontrolle ohne BearbeiterIn:`,
       messages: (function() {
         const popNodes = get(
@@ -1906,8 +1895,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
           }
         })
       })(),
-    },
-    {
+    }),
+    tpopfeldkontrOhneZaehlung: () => ({
       title: `Feldkontrolle ohne Zählung:`,
       messages: (function() {
         const popNodes = get(
@@ -1946,8 +1935,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
             }
           })
       })(),
-    },
-    {
+    }),
+    tpopfreiwkontrOhneZaehlung: () => ({
       title: `Freiwilligen-Kontrolle ohne Zählung:`,
       messages: (function() {
         const popNodes = get(
@@ -1986,9 +1975,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
             }
           })
       })(),
-    },
-    // Zählung ohne gewollte Felder
-    {
+    }),
+    feldkontrzaehlungOhneEinheit: () => ({
       title: `Zählung ohne Einheit (Feld-Kontrolle):`,
       messages: (function() {
         const popNodes = get(
@@ -2042,8 +2030,8 @@ export default ({ data, berichtjahr, projId, apId }) => {
           }
         })
       })(),
-    },
-    {
+    }),
+    freiwkontrzaehlungOhneEinheit: () => ({
       title: `Zählung ohne Einheit (Freiwilligen-Kontrolle):`,
       messages: (function() {
         const popNodes = get(
@@ -2097,7 +2085,10 @@ export default ({ data, berichtjahr, projId, apId }) => {
           }
         })
       })(),
-    },
+    }),
+  }
+
+  return [
     {
       title: `Zählung ohne Methode (Feld-Kontrolle):`,
       messages: (function() {
