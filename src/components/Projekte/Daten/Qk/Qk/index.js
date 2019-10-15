@@ -12,7 +12,6 @@ import { useQuery } from '@apollo/react-hooks'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import ErrorBoundary from 'react-error-boundary'
 
-import FormTitle from '../../../../shared/FormTitle'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import standardQkYear from '../../../../../modules/standardQkYear'
 import fetchKtZh from '../../../../../modules/fetchKtZh'
@@ -132,7 +131,6 @@ const Qk = ({ treeName }) => {
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle title="Qualitätskontrollen" />
         <FieldsContainer>
           <StyledFormControl fullWidth>
             <InputLabel htmlFor="berichtjahr">Berichtjahr</InputLabel>

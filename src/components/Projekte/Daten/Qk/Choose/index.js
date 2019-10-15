@@ -4,7 +4,6 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
 import ErrorBoundary from 'react-error-boundary'
 
-import FormTitle from '../../../../shared/FormTitle'
 import query from './query'
 import storeContext from '../../../../../storeContext'
 
@@ -31,8 +30,9 @@ const ChooseQk = ({ treeName }) => {
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle title="Qualitätskontrollen" />
-        <FieldsContainer>TODO</FieldsContainer>
+        <FieldsContainer>
+          Hier soll man bald Qualitäts-Kontrollen auswählen können
+        </FieldsContainer>
       </Container>
     </ErrorBoundary>
   )

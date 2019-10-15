@@ -102,7 +102,7 @@ export const apberuebersicht = gql`
   }
 `
 export const apqk = gql`
-  fragment apqkFields on Apqk {
+  fragment ApqkFields on Apqk {
     apId
     qkName
   }
@@ -325,7 +325,7 @@ export const projekt = gql`
 `
 
 export const qk = gql`
-  fragment qkFields on Qk {
+  fragment QkFields on Qk {
     name
     titel
     beschreibung
