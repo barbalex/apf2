@@ -34,13 +34,8 @@ const MenuDiv = styled.div`
   display: flex;
   flex-wrap: wrap;
 `
-const DokuButton = styled(Button)`
+const StyledButton = styled(Button)`
   color: white !important;
-  text-transform: none !important;
-`
-const NormalViewButton = styled(Button)`
-  color: white !important;
-  border-color: rgba(255, 255, 255, 0.5) !important;
   text-transform: none !important;
 `
 
@@ -135,15 +130,13 @@ const ProjekteAppBar = () => {
         <>
           <EkfYear />
           {!isFreiwillig && (
-            <NormalViewButton onClick={setViewNormal}>
-              Normal-Ansicht
-            </NormalViewButton>
+            <StyledButton onClick={setViewNormal}>Normal-Ansicht</StyledButton>
           )}
           {isFreiwillig && (
             <>
-              <NormalViewButton onClick={toggleUserOpen}>
+              <StyledButton onClick={toggleUserOpen}>
                 {`Benutzer: ${username}`}
-              </NormalViewButton>
+              </StyledButton>
               <User
                 username={username}
                 userOpen={userOpen}
@@ -151,13 +144,13 @@ const ProjekteAppBar = () => {
               />
             </>
           )}
-          <DokuButton
+          <StyledButton
             variant="text"
             component={Link}
             to="/Dokumentation/Benutzer/"
           >
             Dokumentation
-          </DokuButton>
+          </StyledButton>
           <More onClickExporte={onClickExporte} role={role} />
         </>
       </MenuDiv>
