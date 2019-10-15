@@ -68,10 +68,9 @@ const ProjekteAppBar = () => {
   const role = tokenDecoded ? tokenDecoded.role : null
   const isFreiwillig = role === 'apflora_freiwillig'
 
-  const { data, loading, error } = useQuery(queryAdresse, {
+  const { data } = useQuery(queryAdresse, {
     variables: { id: ekfAdresseId },
   })
-  console.log('Appbar EKF:', { data, ekfAdresseId })
   const adresseName = get(data, 'adresseById.name') || null
 
   const [userOpen, setUserOpen] = useState(false)
