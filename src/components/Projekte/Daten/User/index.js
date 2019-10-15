@@ -76,7 +76,7 @@ const roleWerte = [
 
 const User = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { refetch } = store
+  const { refetch, setEkfAdresseId, setView } = store
   const { activeNodeArray } = store[treeName]
   const client = useApolloClient()
 
@@ -334,14 +334,11 @@ const User = ({ treeName }) => {
                 <StyledButton
                   variant="outlined"
                   onClick={() => {
-                    console.log(
-                      'TODO: print all forms for ekfTpops:',
-                      ekfTpops.map(e => e.id),
-                    )
+                    setEkfAdresseId(row.adresseId)
+                    setView('ekf')
                   }}
-                  title={`Druckt alle ${ekfTpops.length} EKF-Formulare für ${thisYear}`}
                 >
-                  {`EKF-Formulare für ${thisYear} drucken`}
+                  {`EKF-Formulare für ${thisYear} öffnen`}
                 </StyledButton>
               )}
             </>
