@@ -334,7 +334,10 @@ const User = ({ treeName }) => {
                 <StyledButton
                   variant="outlined"
                   onClick={() => {
-                    console.log('TODO: print all forms')
+                    console.log(
+                      'TODO: print all forms for ekfTpops:',
+                      ekfTpops.map(e => e.id),
+                    )
                   }}
                   title={`Druckt alle ${ekfTpops.length} EKF-Formulare für ${thisYear}`}
                 >

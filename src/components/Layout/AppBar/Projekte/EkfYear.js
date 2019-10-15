@@ -10,9 +10,6 @@ const StyledInput = styled(Input)`
   width: 60px;
   color: white !important;
   padding-left: 5px;
-  > input {
-    padding-top: 9px;
-  }
   &:before {
     border: none !important;
   }

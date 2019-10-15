@@ -4,7 +4,9 @@ import remove from 'lodash/remove'
 import styled from 'styled-components'
 import jwtDecode from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
+import { useQuery } from '@apollo/react-hooks'
 import { Link } from 'gatsby'
+import get from 'lodash/get'
 
 import isMobilePhone from '../../../../../modules/isMobilePhone'
 import setUrlQueryValue from '../../../../../modules/setUrlQueryValue'
@@ -12,6 +14,7 @@ import More from '../More'
 import EkfYear from '../EkfYear'
 import User from './User'
 import storeContext from '../../../../../storeContext'
+import queryAdresse from './queryAdresse'
 
 const SiteTitle = styled(Button)`
   display: none !important;
@@ -50,6 +53,7 @@ const ProjekteAppBar = () => {
     urlQuery,
     setUrlQuery,
     cloneTree2From1,
+    ekfAdresseId,
   } = store
 
   /**
@@ -63,6 +67,12 @@ const ProjekteAppBar = () => {
   const tokenDecoded = token ? jwtDecode(token) : null
   const role = tokenDecoded ? tokenDecoded.role : null
   const isFreiwillig = role === 'apflora_freiwillig'
+
+  const { data, loading, error } = useQuery(queryAdresse, {
+    variables: { id: ekfAdresseId },
+  })
+  console.log('Appbar EKF:', { data, ekfAdresseId })
+  const adresseName = get(data, 'adresseById.name') || null
 
   const [userOpen, setUserOpen] = useState(false)
 
@@ -117,7 +127,9 @@ const ProjekteAppBar = () => {
     <>
       {!isMobile && (
         <SiteTitle variant="outlined" component={Link} to="/" title="Home">
-          AP Flora: Erfolgs-Kontrolle Freiwillige
+          {!!adresseName
+            ? `AP Flora: EKF von ${adresseName}`
+            : 'AP Flora: Erfolgs-Kontrolle Freiwillige'}
         </SiteTitle>
       )}
       <MenuDiv>
