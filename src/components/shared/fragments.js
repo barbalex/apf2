@@ -101,6 +101,12 @@ export const apberuebersicht = gql`
     changedBy
   }
 `
+export const apqk = gql`
+  fragment apqkFields on Apqk {
+    apId
+    qkName
+  }
+`
 
 export const assozart = gql`
   fragment AssozartFields on Assozart {
@@ -315,6 +321,15 @@ export const projekt = gql`
     label
     name
     changedBy
+  }
+`
+
+export const qk = gql`
+  fragment qkFields on Qk {
+    name
+    titel
+    beschreibung
+    sort
   }
 `
 

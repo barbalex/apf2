@@ -1169,11 +1169,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
         text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr ||
           n.id}`,
       })),
-    tpopMitStatusPotentiellUndAnsiedlung: () => ({
-      title: `Teilpopulation
-              mit Status "potentieller Wuchs-/Ansiedlungsort"
-              und Massnahme des Typs "Ansiedlung":`,
-      messages: get(data, 'tpopMitStatusPotentiellUndAnsiedlung.nodes', []).map(
+    tpopMitStatusPotentiellUndAnsiedlung: () => get(data, 'tpopMitStatusPotentiellUndAnsiedlung.nodes', []).map(
         n => ({
           url: [
             'Projekte',
@@ -1189,11 +1185,7 @@ export default ({ data, berichtjahr, projId, apId }) => ({
             n.id}`,
         }),
       ),
-    }),
-    tpopberOhneJahr: () => ({
-      title: `Teilpopulations-Bericht
-              ohne Jahr:`,
-      messages: (function() {
+    tpopberOhneJahr: () => {
         const popNodes = get(
           data,
           'tpopberOhneJahr.apsByProjId.nodes[0].popsByApId.nodes',
@@ -1228,11 +1220,8 @@ export default ({ data, berichtjahr, projId, apId }) => ({
               tpopId}, Kontroll-Bericht: ${n.id}`,
           }
         })
-      })(),
-    }),
-    tpopberOhneEntwicklung: () => ({
-      title: `Teilpopulations-Bericht ohne Entwicklung:`,
-      messages: (function() {
+      },
+    tpopberOhneEntwicklung: () => {
         const popNodes = get(
           data,
           'tpopberOhneEntwicklung.apsByProjId.nodes[0].popsByApId.nodes',
@@ -1266,11 +1255,8 @@ export default ({ data, berichtjahr, projId, apId }) => ({
               tpopId}, Kontroll-Bericht: ${n.nr || n.id}`,
           }
         })
-      })(),
-    }),
-    tpopmassnOhneJahr: () => ({
-      title: `Massnahme ohne Jahr:`,
-      messages: (function() {
+      },
+    tpopmassnOhneJahr: () => {
         const popNodes = get(
           data,
           'tpopmassnOhneJahr.apsByProjId.nodes[0].popsByApId.nodes',
@@ -1304,11 +1290,8 @@ export default ({ data, berichtjahr, projId, apId }) => ({
               tpopId}, Massnahme: ${n.jahr || n.id}`,
           }
         })
-      })(),
-    }),
-    tpopmassnOhneBearb: () => ({
-      title: `Massnahme ohne BearbeiterIn:`,
-      messages: (function() {
+      },
+    tpopmassnOhneBearb: () => {
         const popNodes = get(
           data,
           'tpopmassnOhneBearb.apsByProjId.nodes[0].popsByApId.nodes',
@@ -1342,11 +1325,8 @@ export default ({ data, berichtjahr, projId, apId }) => ({
               tpopId}, Massnahme: ${n.jahr || n.id}`,
           }
         })
-      })(),
-    }),
-    tpopmassnOhneTyp: () => ({
-      title: `Massnahme ohne Typ:`,
-      messages: (function() {
+      },
+    tpopmassnOhneTyp: () => {
         const popNodes = get(
           data,
           'tpopmassnOhneTyp.apsByProjId.nodes[0].popsByApId.nodes',
@@ -1380,11 +1360,8 @@ export default ({ data, berichtjahr, projId, apId }) => ({
               tpopId}, Massnahme: ${n.jahr || n.id}`,
           }
         })
-      })(),
-    }),
-    tpopmassnberOhneJahr: () => ({
-      title: `Massnahmen-Bericht ohne Jahr:`,
-      messages: (function() {
+      },
+    tpopmassnberOhneJahr: () => {
         const popNodes = get(
           data,
           'tpopmassnberOhneJahr.apsByProjId.nodes[0].popsByApId.nodes',
@@ -1418,11 +1395,8 @@ export default ({ data, berichtjahr, projId, apId }) => ({
               tpopId}, Massnahmen-Bericht: ${n.jahr || n.id}`,
           }
         })
-      })(),
-    }),
-    tpopmassnberOhneBeurteilung: () => ({
-      title: `Massnahmen-Bericht ohne Entwicklung:`,
-      messages: (function() {
+      },
+    tpopmassnberOhneBeurteilung: () => {
         const popNodes = get(
           data,
           'tpopmassnberOhneBeurteilung.apsByProjId.nodes[0].popsByApId.nodes',
@@ -1456,11 +1430,8 @@ export default ({ data, berichtjahr, projId, apId }) => ({
               tpopId}, Massnahmen-Bericht: ${n.jahr || n.id}`,
           }
         })
-      })(),
-    }),
-    tpopfeldkontrOhneJahr: () => ({
-      title: `Feldkontrolle ohne Jahr:`,
-      messages: (function() {
+      },
+    tpopfeldkontrOhneJahr: () => {
         const popNodes = get(
           data,
           'tpopfeldkontrOhneJahr.apsByProjId.nodes[0].popsByApId.nodes',
@@ -1495,11 +1466,8 @@ export default ({ data, berichtjahr, projId, apId }) => ({
               tpopId}, Kontrolle: ${n.jahr || n.id}`,
           }
         })
-      })(),
-    }),
-    tpopfreiwkontrOhneJahr: () => ({
-      title: `Freiwilligen-Kontrolle ohne Jahr:`,
-      messages: (function() {
+      },
+    tpopfreiwkontrOhneJahr: () => {
         const popNodes = get(
           data,
           'tpopfreiwkontrOhneJahr.apsByProjId.nodes[0].popsByApId.nodes',
@@ -1533,11 +1501,8 @@ export default ({ data, berichtjahr, projId, apId }) => ({
               tpopId}, Kontrolle: ${n.jahr || n.id}`,
           }
         })
-      })(),
-    }),
-    tpopfeldkontrOhneBearb: () => ({
-      title: `Feldkontrolle ohne BearbeiterIn:`,
-      messages: (function() {
+      },
+    tpopfeldkontrOhneBearb: () => {
         const popNodes = get(
           data,
           'tpopfeldkontrOhneBearb.apsByProjId.nodes[0].popsByApId.nodes',
@@ -1571,11 +1536,8 @@ export default ({ data, berichtjahr, projId, apId }) => ({
               tpopId}, Kontrolle: ${n.jahr || n.id}`,
           }
         })
-      })(),
-    }),
-    tpopfreiwkontrOhneBearb: () => ({
-      title: `Freiwilligen-Kontrolle ohne BearbeiterIn:`,
-      messages: (function() {
+      },
+    tpopfreiwkontrOhneBearb: () => {
         const popNodes = get(
           data,
           'tpopfreiwkontrOhneBearb.apsByProjId.nodes[0].popsByApId.nodes',
@@ -1609,11 +1571,8 @@ export default ({ data, berichtjahr, projId, apId }) => ({
               tpopId}, Kontrolle: ${n.jahr || n.id}`,
           }
         })
-      })(),
-    }),
-    tpopfeldkontrOhneZaehlung: () => ({
-      title: `Feldkontrolle ohne Zählung:`,
-      messages: (function() {
+      },
+    tpopfeldkontrOhneZaehlung: () => {
         const popNodes = get(
           data,
           'tpopfeldkontrOhneZaehlung.apsByProjId.nodes[0].popsByApId.nodes',
@@ -1649,11 +1608,8 @@ export default ({ data, berichtjahr, projId, apId }) => ({
                 tpopId}, Kontrolle: ${n.jahr || n.id}`,
             }
           })
-      })(),
-    }),
-    tpopfreiwkontrOhneZaehlung: () => ({
-      title: `Freiwilligen-Kontrolle ohne Zählung:`,
-      messages: (function() {
+      },
+    tpopfreiwkontrOhneZaehlung: () => {
         const popNodes = get(
           data,
           'tpopfreiwkontrOhneZaehlung.apsByProjId.nodes[0].popsByApId.nodes',
@@ -1689,11 +1645,8 @@ export default ({ data, berichtjahr, projId, apId }) => ({
                 tpopId}, Kontrolle: ${n.jahr || n.id}`,
             }
           })
-      })(),
-    }),
-    feldkontrzaehlungOhneEinheit: () => ({
-      title: `Zählung ohne Einheit (Feld-Kontrolle):`,
-      messages: (function() {
+      },
+    feldkontrzaehlungOhneEinheit: () => {
         const popNodes = get(
           data,
           'feldkontrzaehlungOhneEinheit.apsByProjId.nodes[0].popsByApId.nodes',
@@ -1744,11 +1697,8 @@ export default ({ data, berichtjahr, projId, apId }) => ({
             }`,
           }
         })
-      })(),
-    }),
-    freiwkontrzaehlungOhneEinheit: () => ({
-      title: `Zählung ohne Einheit (Freiwilligen-Kontrolle):`,
-      messages: (function() {
+      },
+    freiwkontrzaehlungOhneEinheit: () => {
         const popNodes = get(
           data,
           'freiwkontrzaehlungOhneEinheit.apsByProjId.nodes[0].popsByApId.nodes',
@@ -1799,11 +1749,8 @@ export default ({ data, berichtjahr, projId, apId }) => ({
             }`,
           }
         })
-      })(),
-    }),
-    feldkontrzaehlungOhneMethode: () => ({
-      title: `Zählung ohne Methode (Feld-Kontrolle):`,
-      messages: (function() {
+      },
+    feldkontrzaehlungOhneMethode: () => {
         const popNodes = get(
           data,
           'feldkontrzaehlungOhneMethode.apsByProjId.nodes[0].popsByApId.nodes',
@@ -1854,11 +1801,8 @@ export default ({ data, berichtjahr, projId, apId }) => ({
             }`,
           }
         })
-      })(),
-    }),
-    freiwkontrzaehlungOhneMethode: () => ({
-      title: `Alle Zählungen ohne Methode (Freiwilligen-Kontrolle):`,
-      messages: (function() {
+      },
+    freiwkontrzaehlungOhneMethode: () => {
         const popNodes = get(
           data,
           'freiwkontrzaehlungOhneMethode.apsByProjId.nodes[0].popsByApId.nodes',
@@ -1906,11 +1850,8 @@ export default ({ data, berichtjahr, projId, apId }) => ({
               tpopId}, Kontrolle: ${n.jahr || n.id}`,
           }
         })
-      })(),
-    }),
-    feldkontrzaehlungOhneAnzahl: () => ({
-      title: `Zählung ohne Anzahl (Feld-Kontrolle):`,
-      messages: (function() {
+      },
+    feldkontrzaehlungOhneAnzahl: () => {
         const popNodes = get(
           data,
           'feldkontrzaehlungOhneAnzahl.apsByProjId.nodes[0].popsByApId.nodes',
@@ -1961,11 +1902,8 @@ export default ({ data, berichtjahr, projId, apId }) => ({
             }`,
           }
         })
-      })(),
-    }),
-    freiwkontrzaehlungOhneAnzahl: () => ({
-      title: `Alle Zählungen ohne Anzahl (Freiwilligen-Kontrolle):`,
-      messages: (function() {
+      },
+    freiwkontrzaehlungOhneAnzahl: () => {
         const popNodes = get(
           data,
           'freiwkontrzaehlungOhneAnzahl.apsByProjId.nodes[0].popsByApId.nodes',
@@ -2011,6 +1949,5 @@ export default ({ data, berichtjahr, projId, apId }) => ({
               tpopId}, Kontrolle: ${n.jahr || n.id}`,
           }
         })
-      })(),
-    }),
+      },
   })
