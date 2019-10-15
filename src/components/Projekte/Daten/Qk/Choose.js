@@ -21,8 +21,10 @@ const FieldsContainer = styled.div`
 
 const Qk = ({ treeName }) => {
   const store = useContext(storeContext)
+  const { activeNodeArray } = store[treeName]
+  const apId = activeNodeArray[3]
 
-  const { data, error, loading } = useQuery(query)
+  const { data, error, loading } = useQuery(query, { variables: { apId } })
 
   if (error) return `Fehler: ${error.message}`
   return (
