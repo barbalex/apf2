@@ -7,6 +7,7 @@ import Badge from '@material-ui/core/Badge'
 import styled from 'styled-components'
 import Paper from '@material-ui/core/Paper'
 import sortBy from 'lodash/sortBy'
+import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
 import { FaExternalLinkAlt } from 'react-icons/fa'
@@ -16,6 +17,7 @@ import appBaseUrl from '../../../../../modules/appBaseUrl'
 import standardQkYear from '../../../../../modules/standardQkYear'
 import fetchKtZh from '../../../../../modules/fetchKtZh'
 import query from './query'
+import queryQk from './queryQk'
 import qk from './qk'
 import checkTpopOutsideZh from './checkTpopOutsideZh'
 import storeContext from '../../../../../storeContext'
@@ -78,21 +80,32 @@ const Qk = ({ treeName }) => {
   const store = useContext(storeContext)
   const { ktZh, openTree2WithActiveNodeArray } = store
   const { activeNodeArray } = store[treeName]
+  const apId = activeNodeArray[3]
 
   const [berichtjahr, setBerichtjahr] = useState(standardQkYear())
   const [filter, setFilter] = useState('')
+
+  const { data: dataQk, loading: loadingQk, error: errorQk } = useQuery(
+    queryQk,
+    { variables: { apId } },
+  )
+  const qkNameQueries = Object.fromEntries(
+    (get(dataQk, 'allQks.nodes') || []).map(n => [
+      n.name,
+      get(n, 'apqksByQkName.totalCount') === 1,
+    ]),
+  )
+  console.log('Qk, qkNameQueries:', qkNameQueries)
 
   const { data, error, loading, refetch } = useQuery(query, {
     // want to explicitly show user re-loading
     fetchPolicy: 'no-cache',
     notifyOnNetworkStatusChange: true,
     variables: {
+      ...qkNameQueries,
       berichtjahr,
-      isBerichtjahr: !!berichtjahr,
-      apId:
-        activeNodeArray.length > 3
-          ? activeNodeArray[3]
-          : '99999999-9999-9999-9999-999999999999',
+      notIsBerichtjahr: !berichtjahr,
+      apId,
       projId:
         activeNodeArray.length > 1
           ? activeNodeArray[1]
@@ -127,6 +140,7 @@ const Qk = ({ treeName }) => {
     !ktZh && fetchKtZh(store)
   }, [ktZh, store])
 
+  if (errorQk) return `Fehler: ${errorQk.message}`
   if (error) return `Fehler: ${error.message}`
   return (
     <ErrorBoundary>

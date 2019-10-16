@@ -11,9 +11,105 @@ import {
 export default gql`
   query QkQuery(
     $berichtjahr: Int
-    $isBerichtjahr: Boolean!
+    $notIsBerichtjahr: Boolean!
     $projId: UUID!
     $apId: UUID!
+    $apMitApOhneUmsetzung: Boolean!
+    $apOhneBearbeitung: Boolean!
+    $apOhneVerantwortlich: Boolean!
+    $apberOhneBeurteilung: Boolean!
+    $apberOhneJahr: Boolean!
+    $apberOhneVergleichVorjahrGesamtziel: Boolean!
+    $assozartOhneArt: Boolean!
+    $erfkritOhneBeurteilung: Boolean!
+    $erfkritOhneKriterien: Boolean!
+    $feldkontrzaehlungOhneAnzahl: Boolean!
+    $feldkontrzaehlungOhneEinheit: Boolean!
+    $feldkontrzaehlungOhneMethode: Boolean!
+    $freiwkontrzaehlungOhneAnzahl: Boolean!
+    $freiwkontrzaehlungOhneEinheit: Boolean!
+    $freiwkontrzaehlungOhneMethode: Boolean!
+    $popBekanntSeitNichtAeltesteTpop: Boolean!
+    $popKoordEntsprechenKeinerTpop: Boolean!
+    $popMitBerAbnehmendOhneTpopberAbnehmend: Boolean!
+    $popMitBerErloschenOhneTpopberErloschen: Boolean!
+    $popMitBerErloschenUndTpopberNichtErloschen: Boolean!
+    $popMitBerZunehmendOhneTpopberZunehmend: Boolean!
+    $popMitMehrdeutigerNr: Boolean!
+    $popMitStatusUnklarOhneBegruendung: Boolean!
+    $popOhneBekanntSeit: Boolean!
+    $popOhneKoord: Boolean!
+    $popOhneName: Boolean!
+    $popOhneNr: Boolean!
+    $popOhnePopber: Boolean!
+    $popOhnePopmassnber: Boolean!
+    $popOhneStatus: Boolean!
+    $popOhneTpop: Boolean!
+    $popOhneTpopMitGleichemStatus: Boolean!
+    $popStatus101TpopStatusAnders: Boolean!
+    $popStatus200TpopStatusUnzulaessig: Boolean!
+    $popStatus201TpopStatusUnzulaessig: Boolean!
+    $popStatus202TpopStatusAnders: Boolean!
+    $popStatus300TpopStatusAnders: Boolean!
+    $popStatusAktuellLetzterPopberErloschen: Boolean!
+    $popStatusAngesiedeltMitTpopUrspruenglich: Boolean!
+    $popStatusAnsaatversuchAlleTpopErloschen: Boolean!
+    $popStatusAnsaatversuchMitTpopUrspruenglichErloschen: Boolean!
+    $popStatusAnsaatversuchTpopAktuell: Boolean!
+    $popStatusErloschenLetzterPopberAbnehmend: Boolean!
+    $popStatusErloschenLetzterPopberAktuell: Boolean!
+    $popStatusErloschenLetzterPopberErloschenMitAnsiedlung: Boolean!
+    $popStatusErloschenLetzterPopberStabil: Boolean!
+    $popStatusErloschenLetzterPopberUnsicher: Boolean!
+    $popStatusErloschenLetzterPopberZunehmend: Boolean!
+    $popStatusErloschenMitTpopAktuell: Boolean!
+    $popStatusErloschenMitTpopAnsaatversuch: Boolean!
+    $popberOhneEntwicklung: Boolean!
+    $popberOhneJahr: Boolean!
+    $popmassnberOhneEntwicklung: Boolean!
+    $popmassnberOhneJahr: Boolean!
+    $tpopBekanntSeitJuengerAlsAeltesteBeob: Boolean!
+    $tpopCountedEinheitMultipleTimesInYear: Boolean!
+    $tpopErloschenUndRelevantLetzteBeobVor1950: Boolean!
+    $tpopMitStatusAnsaatversuchUndZaehlungMitAnzahl: Boolean!
+    $tpopMitStatusPotentiellUndAnsiedlung: Boolean!
+    $tpopMitStatusPotentiellUndZaehlungMitAnzahl: Boolean!
+    $tpopOhneApberRelevant: Boolean!
+    $tpopOhneBekanntSeit: Boolean!
+    $tpopOhneFlurname: Boolean!
+    $tpopOhneKoord: Boolean!
+    $tpopOhneMassnber: Boolean!
+    $tpopOhneNr: Boolean!
+    $tpopOhneStatus: Boolean!
+    $tpopOhneTpopber: Boolean!
+    $tpopPopnrTponrMehrdeutig: Boolean!
+    $tpopStatusAktuellLetzterTpopberErloschen: Boolean!
+    $tpopStatusErloschenLetzterTpopberAbnehmend: Boolean!
+    $tpopStatusErloschenLetzterTpopberAktuell: Boolean!
+    $tpopStatusErloschenLetzterTpopberErloschenMitAnsiedlung: Boolean!
+    $tpopStatusErloschenLetzterTpopberStabil: Boolean!
+    $tpopStatusErloschenLetzterTpopberUnsicher: Boolean!
+    $tpopStatusErloschenLetzterTpopberZunehmend: Boolean!
+    $tpopStatusPotentiellApberrelevant: Boolean!
+    $tpopStatusUnklarOhneBegruendung: Boolean!
+    $tpopberOhneEntwicklung: Boolean!
+    $tpopberOhneJahr: Boolean!
+    $tpopfeldkontrOhneBearb: Boolean!
+    $tpopfeldkontrOhneJahr: Boolean!
+    $tpopfeldkontrOhneZaehlung: Boolean!
+    $tpopfreiwkontrOhneBearb: Boolean!
+    $tpopfreiwkontrOhneJahr: Boolean!
+    $tpopfreiwkontrOhneZaehlung: Boolean!
+    $tpopmassnOhneBearb: Boolean!
+    $tpopmassnOhneJahr: Boolean!
+    $tpopmassnOhneTyp: Boolean!
+    $tpopmassnberOhneBeurteilung: Boolean!
+    $tpopmassnberOhneJahr: Boolean!
+    $zielOhneJahr: Boolean!
+    $zielOhneTyp: Boolean!
+    $zielOhneZiel: Boolean!
+    $zielberOhneEntwicklung: Boolean!
+    $zielberOhneJahr: Boolean!
   ) {
     projektById(id: $projId) {
       ...ProjektFields
@@ -44,7 +140,8 @@ export default gql`
         }
       }
     }
-    apOhneBearbeitung: projektById(id: $projId) {
+    apOhneBearbeitung: projektById(id: $projId)
+      @include(if: $apOhneBearbeitung) {
       id
       apsByProjId(
         filter: { id: { equalTo: $apId }, bearbeitung: { isNull: true } }
@@ -54,7 +151,8 @@ export default gql`
         }
       }
     }
-    apMitApOhneUmsetzung: projektById(id: $projId) {
+    apMitApOhneUmsetzung: projektById(id: $projId)
+      @include(if: $apMitApOhneUmsetzung) {
       id
       apsByProjId(
         filter: {
@@ -68,7 +166,8 @@ export default gql`
         }
       }
     }
-    apOhneVerantwortlich: projektById(id: $projId) {
+    apOhneVerantwortlich: projektById(id: $projId)
+      @include(if: $apOhneVerantwortlich) {
       id
       apsByProjId(
         filter: { id: { equalTo: $apId }, bearbeiter: { isNull: true } }
@@ -78,7 +177,7 @@ export default gql`
         }
       }
     }
-    zielOhneJahr: projektById(id: $projId) {
+    zielOhneJahr: projektById(id: $projId) @include(if: $zielOhneJahr) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -96,7 +195,7 @@ export default gql`
         }
       }
     }
-    zielOhneTyp: projektById(id: $projId) {
+    zielOhneTyp: projektById(id: $projId) @include(if: $zielOhneTyp) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -112,7 +211,7 @@ export default gql`
         }
       }
     }
-    zielOhneZiel: projektById(id: $projId) {
+    zielOhneZiel: projektById(id: $projId) @include(if: $zielOhneZiel) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -131,7 +230,7 @@ export default gql`
         }
       }
     }
-    zielberOhneJahr: projektById(id: $projId) {
+    zielberOhneJahr: projektById(id: $projId) @include(if: $zielberOhneJahr) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -156,7 +255,8 @@ export default gql`
         }
       }
     }
-    zielberOhneEntwicklung: projektById(id: $projId) {
+    zielberOhneEntwicklung: projektById(id: $projId)
+      @include(if: $zielberOhneEntwicklung) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -185,7 +285,8 @@ export default gql`
         }
       }
     }
-    erfkritOhneBeurteilung: projektById(id: $projId) {
+    erfkritOhneBeurteilung: projektById(id: $projId)
+      @include(if: $erfkritOhneBeurteilung) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -201,7 +302,8 @@ export default gql`
         }
       }
     }
-    erfkritOhneKriterien: projektById(id: $projId) {
+    erfkritOhneKriterien: projektById(id: $projId)
+      @include(if: $erfkritOhneKriterien) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -217,7 +319,7 @@ export default gql`
         }
       }
     }
-    apberOhneJahr: projektById(id: $projId) {
+    apberOhneJahr: projektById(id: $projId) @include(if: $apberOhneJahr) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -230,7 +332,8 @@ export default gql`
         }
       }
     }
-    apberOhneVergleichVorjahrGesamtziel: projektById(id: $projId) {
+    apberOhneVergleichVorjahrGesamtziel: projektById(id: $projId)
+      @include(if: $apberOhneVergleichVorjahrGesamtziel) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -250,7 +353,8 @@ export default gql`
         }
       }
     }
-    apberOhneBeurteilung: projektById(id: $projId) {
+    apberOhneBeurteilung: projektById(id: $projId)
+      @include(if: $apberOhneBeurteilung) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -270,7 +374,7 @@ export default gql`
         }
       }
     }
-    assozartOhneArt: projektById(id: $projId) {
+    assozartOhneArt: projektById(id: $projId) @include(if: $assozartOhneArt) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -283,7 +387,7 @@ export default gql`
         }
       }
     }
-    popOhneNr: projektById(id: $projId) {
+    popOhneNr: projektById(id: $projId) @include(if: $popOhneNr) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -297,7 +401,7 @@ export default gql`
         }
       }
     }
-    popOhneName: projektById(id: $projId) {
+    popOhneName: projektById(id: $projId) @include(if: $popOhneName) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -311,7 +415,7 @@ export default gql`
         }
       }
     }
-    popOhneStatus: projektById(id: $projId) {
+    popOhneStatus: projektById(id: $projId) @include(if: $popOhneStatus) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -325,7 +429,8 @@ export default gql`
         }
       }
     }
-    popOhneBekanntSeit: projektById(id: $projId) {
+    popOhneBekanntSeit: projektById(id: $projId)
+      @include(if: $popOhneBekanntSeit) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -342,7 +447,7 @@ export default gql`
         }
       }
     }
-    popOhneKoord: projektById(id: $projId) {
+    popOhneKoord: projektById(id: $projId) @include(if: $popOhneKoord) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -357,7 +462,7 @@ export default gql`
       }
     }
     # need to filter totalCount = 0 from this result
-    popOhneTpop: projektById(id: $projId) {
+    popOhneTpop: projektById(id: $projId) @include(if: $popOhneTpop) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -374,7 +479,8 @@ export default gql`
         }
       }
     }
-    popMitStatusUnklarOhneBegruendung: projektById(id: $projId) {
+    popMitStatusUnklarOhneBegruendung: projektById(id: $projId)
+      @include(if: $popMitStatusUnklarOhneBegruendung) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -397,7 +503,7 @@ export default gql`
     popBekanntSeitNichtAeltesteTpop: allVQPopBekanntseitNichtAeltestetpops(
       filter: { apId: { equalTo: $apId } }
       orderBy: NR_ASC
-    ) {
+    ) @include(if: $popBekanntSeitNichtAeltesteTpop) {
       nodes {
         projId
         apId
@@ -408,7 +514,7 @@ export default gql`
     popMitMehrdeutigerNr: allVQPopPopnrmehrdeutigs(
       filter: { apId: { equalTo: $apId } }
       orderBy: NR_ASC
-    ) {
+    ) @include(if: $popMitMehrdeutigerNr) {
       nodes {
         projId
         apId
@@ -420,7 +526,7 @@ export default gql`
       berichtjahr: $berichtjahr
       apid: $apId
       projid: $projId
-    ) @include(if: $isBerichtjahr) {
+    ) @include(if: $popOhnePopber) @skip(if: $notIsBerichtjahr) {
       nodes {
         projId
         apId
@@ -435,7 +541,9 @@ export default gql`
         apId: { equalTo: $apId }
         berichtjahr: { equalTo: $berichtjahr }
       }
-    ) @include(if: $isBerichtjahr) {
+    )
+      @include(if: $popMitBerZunehmendOhneTpopberZunehmend)
+      @skip(if: $notIsBerichtjahr) {
       nodes {
         projId
         apId
@@ -450,7 +558,9 @@ export default gql`
         apId: { equalTo: $apId }
         berichtjahr: { equalTo: $berichtjahr }
       }
-    ) @include(if: $isBerichtjahr) {
+    )
+      @include(if: $popMitBerAbnehmendOhneTpopberAbnehmend)
+      @skip(if: $notIsBerichtjahr) {
       nodes {
         projId
         apId
@@ -465,7 +575,9 @@ export default gql`
         apId: { equalTo: $apId }
         berichtjahr: { equalTo: $berichtjahr }
       }
-    ) @include(if: $isBerichtjahr) {
+    )
+      @include(if: $popMitBerErloschenOhneTpopberErloschen)
+      @skip(if: $notIsBerichtjahr) {
       nodes {
         projId
         apId
@@ -480,7 +592,9 @@ export default gql`
         apId: { equalTo: $apId }
         berichtjahr: { equalTo: $berichtjahr }
       }
-    ) @include(if: $isBerichtjahr) {
+    )
+      @include(if: $popMitBerErloschenUndTpopberNichtErloschen)
+      @skip(if: $notIsBerichtjahr) {
       nodes {
         projId
         apId
@@ -491,7 +605,7 @@ export default gql`
     }
     popOhneTpopMitGleichemStatus: allVQPopOhnetpopmitgleichemstatuses(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $popOhneTpopMitGleichemStatus) {
       nodes {
         projId
         apId
@@ -501,7 +615,7 @@ export default gql`
     }
     popStatus300TpopStatusAnders: allVQPopStatus300Tpopstatusanders(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $popStatus300TpopStatusAnders) {
       nodes {
         projId
         apId
@@ -511,7 +625,7 @@ export default gql`
     }
     popStatus201TpopStatusUnzulaessig: allVQPopStatus201Tpopstatusunzulaessigs(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $popStatus201TpopStatusUnzulaessig) {
       nodes {
         projId
         apId
@@ -521,7 +635,7 @@ export default gql`
     }
     popStatus202TpopStatusAnders: allVQPopStatus202Tpopstatusanders(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $popStatus202TpopStatusAnders) {
       nodes {
         projId
         apId
@@ -531,7 +645,7 @@ export default gql`
     }
     popStatus200TpopStatusUnzulaessig: allVQPopStatus200Tpopstatusunzulaessigs(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $popStatus200TpopStatusUnzulaessig) {
       nodes {
         projId
         apId
@@ -541,7 +655,7 @@ export default gql`
     }
     popStatus101TpopStatusAnders: allVQPopStatus101Tpopstatusanders(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $popStatus101TpopStatusAnders) {
       nodes {
         projId
         apId
@@ -551,7 +665,7 @@ export default gql`
     }
     popStatusErloschenLetzterPopberZunehmend: allVQPopStatuserloschenletzterpopberzunehmends(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $popStatusErloschenLetzterPopberZunehmend) {
       nodes {
         projId
         apId
@@ -561,7 +675,7 @@ export default gql`
     }
     popStatusErloschenLetzterPopberStabil: allVQPopStatuserloschenletzterpopberstabils(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $popStatusErloschenLetzterPopberStabil) {
       nodes {
         projId
         apId
@@ -571,7 +685,7 @@ export default gql`
     }
     popStatusErloschenLetzterPopberAbnehmend: allVQPopStatuserloschenletzterpopberabnehmends(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $popStatusErloschenLetzterPopberAbnehmend) {
       nodes {
         projId
         apId
@@ -581,7 +695,7 @@ export default gql`
     }
     popStatusErloschenLetzterPopberUnsicher: allVQPopStatuserloschenletzterpopberunsichers(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $popStatusErloschenLetzterPopberUnsicher) {
       nodes {
         projId
         apId
@@ -593,7 +707,7 @@ export default gql`
       berichtjahr: $berichtjahr
       apid: $apId
       projid: $projId
-    ) @include(if: $isBerichtjahr) {
+    ) @include(if: $popOhnePopmassnber) @skip(if: $notIsBerichtjahr) {
       nodes {
         projId
         apId
@@ -603,7 +717,7 @@ export default gql`
     }
     popKoordEntsprechenKeinerTpop: allVQPopKoordentsprechenkeinertpops(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $popKoordEntsprechenKeinerTpop) {
       nodes {
         projId
         apId
@@ -613,7 +727,7 @@ export default gql`
     }
     popStatusAnsaatversuchTpopAktuell: allVQPopStatusansaatversuchmitaktuellentpops(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $popStatusAnsaatversuchTpopAktuell) {
       nodes {
         projId
         apId
@@ -623,7 +737,7 @@ export default gql`
     }
     popStatusAnsaatversuchAlleTpopErloschen: allVQPopStatusansaatversuchalletpoperloschens(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $popStatusAnsaatversuchAlleTpopErloschen) {
       nodes {
         projId
         apId
@@ -633,7 +747,7 @@ export default gql`
     }
     popStatusAnsaatversuchMitTpopUrspruenglichErloschen: allVQPopStatusansaatversuchmittpopursprerloschens(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $popStatusAnsaatversuchMitTpopUrspruenglichErloschen) {
       nodes {
         projId
         apId
@@ -643,7 +757,7 @@ export default gql`
     }
     popStatusErloschenMitTpopAktuell: allVQPopStatuserloschenmittpopaktuells(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $popStatusErloschenMitTpopAktuell) {
       nodes {
         projId
         apId
@@ -653,7 +767,7 @@ export default gql`
     }
     popStatusErloschenMitTpopAnsaatversuch: allVQPopStatuserloschenmittpopansaatversuches(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $popStatusErloschenMitTpopAnsaatversuch) {
       nodes {
         projId
         apId
@@ -663,7 +777,7 @@ export default gql`
     }
     popStatusAngesiedeltMitTpopUrspruenglich: allVQPopStatusangesiedeltmittpopurspruengliches(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $popStatusAngesiedeltMitTpopUrspruenglich) {
       nodes {
         projId
         apId
@@ -673,7 +787,7 @@ export default gql`
     }
     popStatusAktuellLetzterPopberErloschen: allVQPopStatusaktuellletzterpopbererloschens(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $popStatusAktuellLetzterPopberErloschen) {
       nodes {
         projId
         apId
@@ -683,7 +797,7 @@ export default gql`
     }
     popStatusErloschenLetzterPopberAktuell: allVQPopStatuserloschenletzterpopberaktuells(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $popStatusErloschenLetzterPopberAktuell) {
       nodes {
         projId
         apId
@@ -693,7 +807,7 @@ export default gql`
     }
     popStatusErloschenLetzterPopberErloschenMitAnsiedlung: allVQPopStatuserloschenletzterpopbererloschenmitansiedlungs(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $popStatusErloschenLetzterPopberErloschenMitAnsiedlung) {
       nodes {
         projId
         apId
@@ -701,7 +815,7 @@ export default gql`
         nr
       }
     }
-    popberOhneJahr: projektById(id: $projId) {
+    popberOhneJahr: projektById(id: $projId) @include(if: $popberOhneJahr) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -726,7 +840,8 @@ export default gql`
         }
       }
     }
-    popberOhneEntwicklung: projektById(id: $projId) {
+    popberOhneEntwicklung: projektById(id: $projId)
+      @include(if: $popberOhneEntwicklung) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -755,7 +870,8 @@ export default gql`
         }
       }
     }
-    popmassnberOhneJahr: projektById(id: $projId) {
+    popmassnberOhneJahr: projektById(id: $projId)
+      @include(if: $popmassnberOhneJahr) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -780,7 +896,8 @@ export default gql`
         }
       }
     }
-    popmassnberOhneEntwicklung: projektById(id: $projId) {
+    popmassnberOhneEntwicklung: projektById(id: $projId)
+      @include(if: $popmassnberOhneEntwicklung) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -813,7 +930,7 @@ export default gql`
       berichtjahr: $berichtjahr
       apid: $apId
       projid: $projId
-    ) @include(if: $isBerichtjahr) {
+    ) @include(if: $tpopOhneTpopber) @skip(if: $notIsBerichtjahr) {
       nodes {
         projId
         apId
@@ -827,7 +944,7 @@ export default gql`
       berichtjahr: $berichtjahr
       apid: $apId
       projid: $projId
-    ) @include(if: $isBerichtjahr) {
+    ) @include(if: $tpopOhneMassnber) @skip(if: $notIsBerichtjahr) {
       nodes {
         projId
         apId
@@ -841,7 +958,9 @@ export default gql`
       berichtjahr: $berichtjahr
       apid: $apId
       projid: $projId
-    ) @include(if: $isBerichtjahr) {
+    )
+      @include(if: $tpopCountedEinheitMultipleTimesInYear)
+      @skip(if: $notIsBerichtjahr) {
       nodes {
         projId
         apId
@@ -855,7 +974,7 @@ export default gql`
     }
     tpopBekanntSeitJuengerAlsAeltesteBeob: allVQTpopBekanntseitJuengerAlsAeltesteBeobs(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $tpopBekanntSeitJuengerAlsAeltesteBeob) {
       nodes {
         projId
         apId
@@ -867,7 +986,7 @@ export default gql`
     }
     tpopStatusAktuellLetzterTpopberErloschen: allVQTpopStatusaktuellletztertpopbererloschens(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $tpopStatusAktuellLetzterTpopberErloschen) {
       nodes {
         projId
         apId
@@ -879,7 +998,7 @@ export default gql`
     }
     tpopStatusErloschenLetzterTpopberStabil: allVQTpopStatuserloschenletztertpopberstabils(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $tpopStatusErloschenLetzterTpopberStabil) {
       nodes {
         projId
         apId
@@ -891,7 +1010,7 @@ export default gql`
     }
     tpopStatusErloschenLetzterTpopberAbnehmend: allVQTpopStatuserloschenletztertpopberabnehmends(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $tpopStatusErloschenLetzterTpopberAbnehmend) {
       nodes {
         projId
         apId
@@ -903,7 +1022,7 @@ export default gql`
     }
     tpopStatusErloschenLetzterTpopberUnsicher: allVQTpopStatuserloschenletztertpopberunsichers(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $tpopStatusErloschenLetzterTpopberUnsicher) {
       nodes {
         projId
         apId
@@ -915,7 +1034,7 @@ export default gql`
     }
     tpopStatusErloschenLetzterTpopberZunehmend: allVQTpopStatuserloschenletztertpopberzunehmends(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $tpopStatusErloschenLetzterTpopberZunehmend) {
       nodes {
         projId
         apId
@@ -927,7 +1046,7 @@ export default gql`
     }
     tpopStatusErloschenLetzterTpopberAktuell: allVQTpopStatuserloschenletzterpopberaktuells(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $tpopStatusErloschenLetzterTpopberAktuell) {
       nodes {
         projId
         apId
@@ -939,7 +1058,7 @@ export default gql`
     }
     tpopStatusErloschenLetzterTpopberErloschenMitAnsiedlung: allVQTpopStatuserloschenletztertpopbererloschenmitansiedlungs(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $tpopStatusErloschenLetzterTpopberErloschenMitAnsiedlung) {
       nodes {
         projId
         apId
@@ -949,7 +1068,7 @@ export default gql`
         nr
       }
     }
-    tpopOhneNr: projektById(id: $projId) {
+    tpopOhneNr: projektById(id: $projId) @include(if: $tpopOhneNr) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -971,7 +1090,7 @@ export default gql`
         }
       }
     }
-    tpopOhneFlurname: projektById(id: $projId) {
+    tpopOhneFlurname: projektById(id: $projId) @include(if: $tpopOhneFlurname) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -997,7 +1116,7 @@ export default gql`
         }
       }
     }
-    tpopOhneStatus: projektById(id: $projId) {
+    tpopOhneStatus: projektById(id: $projId) @include(if: $tpopOhneStatus) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -1023,7 +1142,8 @@ export default gql`
         }
       }
     }
-    tpopOhneBekanntSeit: projektById(id: $projId) {
+    tpopOhneBekanntSeit: projektById(id: $projId)
+      @include(if: $tpopOhneBekanntSeit) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -1049,7 +1169,8 @@ export default gql`
         }
       }
     }
-    tpopOhneApberRelevant: projektById(id: $projId) {
+    tpopOhneApberRelevant: projektById(id: $projId)
+      @include(if: $tpopOhneApberRelevant) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -1075,7 +1196,7 @@ export default gql`
         }
       }
     }
-    tpopOhneKoord: projektById(id: $projId) {
+    tpopOhneKoord: projektById(id: $projId) @include(if: $tpopOhneKoord) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -1101,7 +1222,8 @@ export default gql`
         }
       }
     }
-    tpopStatusPotentiellApberrelevant: projektById(id: $projId) {
+    tpopStatusPotentiellApberrelevant: projektById(id: $projId)
+      @include(if: $tpopStatusPotentiellApberrelevant) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -1132,7 +1254,7 @@ export default gql`
     }
     tpopErloschenUndRelevantLetzteBeobVor1950: allVQTpopErloschenundrelevantaberletztebeobvor1950S(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $tpopErloschenUndRelevantLetzteBeobVor1950) {
       nodes {
         projId
         apId
@@ -1142,7 +1264,8 @@ export default gql`
         nr
       }
     }
-    tpopStatusUnklarOhneBegruendung: projektById(id: $projId) {
+    tpopStatusUnklarOhneBegruendung: projektById(id: $projId)
+      @include(if: $tpopStatusUnklarOhneBegruendung) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -1173,7 +1296,7 @@ export default gql`
     }
     tpopPopnrTponrMehrdeutig: allVQTpopPopnrtpopnrmehrdeutigs(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $tpopPopnrTponrMehrdeutig) {
       nodes {
         projId
         apId
@@ -1185,7 +1308,7 @@ export default gql`
     }
     tpopMitStatusAnsaatversuchUndZaehlungMitAnzahl: allVQTpopMitstatusansaatversuchundzaehlungmitanzahls(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $tpopMitStatusAnsaatversuchUndZaehlungMitAnzahl) {
       nodes {
         projId
         apId
@@ -1197,7 +1320,7 @@ export default gql`
     }
     tpopMitStatusPotentiellUndZaehlungMitAnzahl: allVQTpopMitstatuspotentiellundzaehlungmitanzahls(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $tpopMitStatusPotentiellUndZaehlungMitAnzahl) {
       nodes {
         projId
         apId
@@ -1209,7 +1332,7 @@ export default gql`
     }
     tpopMitStatusPotentiellUndAnsiedlung: allVQTpopMitstatuspotentiellundmassnansiedlungs(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
-    ) {
+    ) @include(if: $tpopMitStatusPotentiellUndAnsiedlung) {
       nodes {
         projId
         apId
@@ -1219,7 +1342,7 @@ export default gql`
         nr
       }
     }
-    tpopberOhneJahr: projektById(id: $projId) {
+    tpopberOhneJahr: projektById(id: $projId) @include(if: $tpopberOhneJahr) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -1253,7 +1376,8 @@ export default gql`
         }
       }
     }
-    tpopberOhneEntwicklung: projektById(id: $projId) {
+    tpopberOhneEntwicklung: projektById(id: $projId)
+      @include(if: $tpopberOhneEntwicklung) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -1287,7 +1411,8 @@ export default gql`
         }
       }
     }
-    tpopmassnOhneJahr: projektById(id: $projId) {
+    tpopmassnOhneJahr: projektById(id: $projId)
+      @include(if: $tpopmassnOhneJahr) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -1322,7 +1447,8 @@ export default gql`
         }
       }
     }
-    tpopmassnOhneBearb: projektById(id: $projId) {
+    tpopmassnOhneBearb: projektById(id: $projId)
+      @include(if: $tpopmassnOhneBearb) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -1360,7 +1486,7 @@ export default gql`
         }
       }
     }
-    tpopmassnOhneTyp: projektById(id: $projId) {
+    tpopmassnOhneTyp: projektById(id: $projId) @include(if: $tpopmassnOhneTyp) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -1398,7 +1524,8 @@ export default gql`
         }
       }
     }
-    tpopmassnberOhneJahr: projektById(id: $projId) {
+    tpopmassnberOhneJahr: projektById(id: $projId)
+      @include(if: $tpopmassnberOhneJahr) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -1433,7 +1560,8 @@ export default gql`
         }
       }
     }
-    tpopmassnberOhneBeurteilung: projektById(id: $projId) {
+    tpopmassnberOhneBeurteilung: projektById(id: $projId)
+      @include(if: $tpopmassnberOhneBeurteilung) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -1471,7 +1599,8 @@ export default gql`
         }
       }
     }
-    tpopfeldkontrOhneJahr: projektById(id: $projId) {
+    tpopfeldkontrOhneJahr: projektById(id: $projId)
+      @include(if: $tpopfeldkontrOhneJahr) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -1509,7 +1638,8 @@ export default gql`
         }
       }
     }
-    tpopfreiwkontrOhneJahr: projektById(id: $projId) {
+    tpopfreiwkontrOhneJahr: projektById(id: $projId)
+      @include(if: $tpopfreiwkontrOhneJahr) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -1547,7 +1677,8 @@ export default gql`
         }
       }
     }
-    tpopfeldkontrOhneBearb: projektById(id: $projId) {
+    tpopfeldkontrOhneBearb: projektById(id: $projId)
+      @include(if: $tpopfeldkontrOhneBearb) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -1586,7 +1717,8 @@ export default gql`
         }
       }
     }
-    tpopfreiwkontrOhneBearb: projektById(id: $projId) {
+    tpopfreiwkontrOhneBearb: projektById(id: $projId)
+      @include(if: $tpopfreiwkontrOhneBearb) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -1625,7 +1757,8 @@ export default gql`
         }
       }
     }
-    tpopfeldkontrOhneZaehlung: projektById(id: $projId) {
+    tpopfeldkontrOhneZaehlung: projektById(id: $projId)
+      @include(if: $tpopfeldkontrOhneZaehlung) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -1666,7 +1799,8 @@ export default gql`
         }
       }
     }
-    tpopfreiwkontrOhneZaehlung: projektById(id: $projId) {
+    tpopfreiwkontrOhneZaehlung: projektById(id: $projId)
+      @include(if: $tpopfreiwkontrOhneZaehlung) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -1707,7 +1841,8 @@ export default gql`
         }
       }
     }
-    freiwkontrzaehlungOhneEinheit: projektById(id: $projId) {
+    freiwkontrzaehlungOhneEinheit: projektById(id: $projId)
+      @include(if: $freiwkontrzaehlungOhneEinheit) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -1757,7 +1892,8 @@ export default gql`
         }
       }
     }
-    feldkontrzaehlungOhneEinheit: projektById(id: $projId) {
+    feldkontrzaehlungOhneEinheit: projektById(id: $projId)
+      @include(if: $feldkontrzaehlungOhneEinheit) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -1807,7 +1943,8 @@ export default gql`
         }
       }
     }
-    freiwkontrzaehlungOhneMethode: projektById(id: $projId) {
+    freiwkontrzaehlungOhneMethode: projektById(id: $projId)
+      @include(if: $freiwkontrzaehlungOhneMethode) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -1858,7 +1995,8 @@ export default gql`
         }
       }
     }
-    feldkontrzaehlungOhneMethode: projektById(id: $projId) {
+    feldkontrzaehlungOhneMethode: projektById(id: $projId)
+      @include(if: $feldkontrzaehlungOhneMethode) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -1908,7 +2046,8 @@ export default gql`
         }
       }
     }
-    freiwkontrzaehlungOhneAnzahl: projektById(id: $projId) {
+    freiwkontrzaehlungOhneAnzahl: projektById(id: $projId)
+      @include(if: $freiwkontrzaehlungOhneAnzahl) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
@@ -1959,7 +2098,8 @@ export default gql`
         }
       }
     }
-    feldkontrzaehlungOhneAnzahl: projektById(id: $projId) {
+    feldkontrzaehlungOhneAnzahl: projektById(id: $projId)
+      @include(if: $feldkontrzaehlungOhneAnzahl) {
       id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
