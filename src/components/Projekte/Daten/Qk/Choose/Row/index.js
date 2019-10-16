@@ -71,7 +71,7 @@ const ChooseQkRow = ({ apId, qk, refetchTab }) => {
     }
     // 3. refetch data
     refetch()
-    refetchTab()
+    setTimeout(() => refetchTab())
   }, [apId, checked, client, qk.name, refetch, refetchTab])
 
   if (error)

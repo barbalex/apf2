@@ -7,7 +7,6 @@ import Badge from '@material-ui/core/Badge'
 import styled from 'styled-components'
 import Paper from '@material-ui/core/Paper'
 import sortBy from 'lodash/sortBy'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
 import { FaExternalLinkAlt } from 'react-icons/fa'
@@ -17,7 +16,6 @@ import appBaseUrl from '../../../../../modules/appBaseUrl'
 import standardQkYear from '../../../../../modules/standardQkYear'
 import fetchKtZh from '../../../../../modules/fetchKtZh'
 import query from './query'
-import queryQk from './queryQk'
 import qk from './qk'
 import checkTpopOutsideZh from './checkTpopOutsideZh'
 import storeContext from '../../../../../storeContext'
@@ -76,7 +74,7 @@ const StyledButton = styled(Button)`
       : 'rgb(46, 125, 50) !important'};
 `
 
-const Qk = ({ treeName }) => {
+const Qk = ({ treeName, qkNameQueries }) => {
   const store = useContext(storeContext)
   const { ktZh, openTree2WithActiveNodeArray } = store
   const { activeNodeArray } = store[treeName]
@@ -84,18 +82,6 @@ const Qk = ({ treeName }) => {
 
   const [berichtjahr, setBerichtjahr] = useState(standardQkYear())
   const [filter, setFilter] = useState('')
-
-  const { data: dataQk, loading: loadingQk, error: errorQk } = useQuery(
-    queryQk,
-    { variables: { apId } },
-  )
-  const qkNameQueries = Object.fromEntries(
-    (get(dataQk, 'allQks.nodes') || []).map(n => [
-      n.name,
-      get(n, 'apqksByQkName.totalCount') === 1,
-    ]),
-  )
-  console.log('Qk, qkNameQueries:', qkNameQueries)
 
   const { data, error, loading, refetch } = useQuery(query, {
     // want to explicitly show user re-loading
@@ -140,7 +126,8 @@ const Qk = ({ treeName }) => {
     !ktZh && fetchKtZh(store)
   }, [ktZh, store])
 
-  if (errorQk) return `Fehler: ${errorQk.message}`
+  console.log('QK')
+
   if (error) return `Fehler: ${error.message}`
   return (
     <ErrorBoundary>

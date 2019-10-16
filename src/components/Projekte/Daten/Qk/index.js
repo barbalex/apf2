@@ -13,6 +13,7 @@ import storeContext from '../../../../storeContext'
 import Qk from './Qk'
 import Choose from './Choose'
 import query from './query'
+import queryQk from './queryQk'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -27,12 +28,26 @@ const FieldsContainer = styled.div`
     padding-right: 30px;
   }
 `
+const LoadingContainer = styled.div`
+  padding: 8px;
+`
 
 const QkForm = ({ treeName }) => {
   const store = useContext(storeContext)
   const { urlQuery, setUrlQuery } = store
   const { activeNodeArray } = store[treeName]
   const apId = activeNodeArray[3]
+
+  const { data: dataQk, loading: loadingQk, error: errorQk } = useQuery(
+    queryQk,
+    { variables: { apId }, fetchPolicy: 'no-cache' },
+  )
+  const qkNameQueries = Object.fromEntries(
+    (get(dataQk, 'allQks.nodes') || []).map(n => [
+      n.name,
+      get(n, 'apqksByQkName.totalCount') === 1,
+    ]),
+  )
 
   const { data, loading, refetch } = useQuery(query, { variables: { apId } })
   const qkCount = loading ? '...' : get(data, 'allQks.totalCount')
@@ -52,6 +67,9 @@ const QkForm = ({ treeName }) => {
     [setUrlQuery, urlQuery],
   )
 
+  console.log('QK TOP', { qkNameQueries, nodes: get(dataQk, 'allQks.nodes') })
+
+  if (errorQk) return `Fehler: ${errorQk.message}`
   return (
     <ErrorBoundary>
       <Container>
@@ -74,7 +92,17 @@ const QkForm = ({ treeName }) => {
             />
           </Tabs>
           {tab === 'qk' ? (
-            <Qk treeName={treeName} />
+            <>
+              {loadingQk ? (
+                <LoadingContainer>Lade Daten...</LoadingContainer>
+              ) : (
+                <Qk
+                  key={qkCount}
+                  treeName={treeName}
+                  qkNameQueries={qkNameQueries}
+                />
+              )}
+            </>
           ) : (
             <Choose treeName={treeName} refetchTab={refetch} />
           )}

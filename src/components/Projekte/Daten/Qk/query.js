@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query QkApqkQuery($apId: UUID!) {
+  query QkApqkQueryForQkTop($apId: UUID!) {
     allQks {
       totalCount
     }

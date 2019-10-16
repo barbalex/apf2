@@ -6,8 +6,8 @@ import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
 
 import query from './query'
-import storeContext from '../../../../../storeContext'
 import RowComponent from './Row'
+import storeContext from '../../../../../storeContext'
 
 const Container = styled.div`
   height: calc(100vh - 64px - 43px - 48px);
