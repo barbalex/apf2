@@ -79,7 +79,7 @@ const ChooseQkRow = ({ apId, qk, refetchTab }) => {
       <Row>
         <Check>Fehler</Check>
         <Titel>{qk.titel}</Titel>
-        <Beschreibung>{qk.Beschreibung}</Beschreibung>
+        <Beschreibung>{qk.beschreibung}</Beschreibung>
       </Row>
     )
   return (
@@ -88,7 +88,7 @@ const ChooseQkRow = ({ apId, qk, refetchTab }) => {
         <Checkbox checked={checked} onChange={onChange} color="primary" />
       </Check>
       <Titel>{qk.titel}</Titel>
-      <Beschreibung>{qk.Beschreibung}</Beschreibung>
+      <Beschreibung>{qk.beschreibung}</Beschreibung>
     </Row>
   )
 }
