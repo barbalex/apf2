@@ -126,8 +126,6 @@ const Qk = ({ treeName, qkNameQueries }) => {
     !ktZh && fetchKtZh(store)
   }, [ktZh, store])
 
-  console.log('QK')
-
   if (error) return `Fehler: ${error.message}`
   return (
     <ErrorBoundary>
