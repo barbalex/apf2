@@ -1,12 +1,6 @@
 import gql from 'graphql-tag'
 
-import {
-  ap,
-  aeEigenschaften,
-  pop,
-  projekt,
-  ziel,
-} from '../../../../shared/fragments'
+import { ap, pop, ziel } from '../../../../shared/fragments'
 
 export default gql`
   query QkQuery(
@@ -110,9 +104,10 @@ export default gql`
     $zielOhneZiel: Boolean!
     $zielberOhneEntwicklung: Boolean!
     $zielberOhneJahr: Boolean!
+    $tpopsOutsideZh: Boolean!
   ) {
-    projektById(id: $projId) {
-      ...ProjektFields
+    tpopsOutsideZh: projektById(id: $projId) @include(if: $tpopsOutsideZh) {
+      projId: id
       apsByProjId(filter: { id: { equalTo: $apId } }) {
         nodes {
           id
@@ -133,9 +128,6 @@ export default gql`
                 }
               }
             }
-          }
-          aeEigenschaftenByArtId {
-            ...AeEigenschaftenFields
           }
         }
       }
@@ -2151,8 +2143,6 @@ export default gql`
     }
   }
   ${ap}
-  ${aeEigenschaften}
   ${pop}
-  ${projekt}
   ${ziel}
 `

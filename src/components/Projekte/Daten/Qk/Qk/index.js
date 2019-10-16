@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useContext } from 'react'
+import React, { useState, useCallback, useContext } from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
@@ -6,7 +6,6 @@ import Button from '@material-ui/core/Button'
 import Badge from '@material-ui/core/Badge'
 import styled from 'styled-components'
 import Paper from '@material-ui/core/Paper'
-import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
 import { FaExternalLinkAlt } from 'react-icons/fa'
@@ -14,10 +13,8 @@ import ErrorBoundary from 'react-error-boundary'
 
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import standardQkYear from '../../../../../modules/standardQkYear'
-import fetchKtZh from '../../../../../modules/fetchKtZh'
 import query from './query'
 import createMessageFunctions from './createMessageFunctions'
-import checkTpopOutsideZh from './checkTpopOutsideZh'
 import storeContext from '../../../../../storeContext'
 
 const Container = styled.div`
@@ -108,30 +105,26 @@ const Qk = ({ treeName, qkNameQueries, qks }) => {
     berichtjahr,
     projId,
     apId,
+    ktZh,
   })
-  const gqlMessageGroups = qks
-    .map(qk => ({
-      title: qk.titel,
-      messages: messageFunctions[qk.name](),
-    }))
-    .filter(q => q.messages.length)
-  if (ktZh) {
-    const outsideZhMessageGroup = checkTpopOutsideZh({ data, ktZh })
-    if (outsideZhMessageGroup.messages.length)
-      gqlMessageGroups.push(outsideZhMessageGroup)
+  let messageGroups = []
+  if (!!ktZh) {
+    messageGroups = qks
+      .map(qk => ({
+        title: qk.titel,
+        messages: messageFunctions[qk.name](),
+      }))
+      .filter(q => q.messages.length)
   }
 
-  const messageGroups = sortBy([...gqlMessageGroups], 'title')
+  console.log('Qk, ktZh:', ktZh)
+
   const messageGroupsFiltered = messageGroups.filter(messageGroup => {
     if (!!filter && messageGroup.title && messageGroup.title.toLowerCase) {
       return messageGroup.title.toLowerCase().includes(filter.toLowerCase())
     }
     return true
   })
-
-  useEffect(() => {
-    !ktZh && fetchKtZh(store)
-  }, [ktZh, store])
 
   if (error) return `Fehler: ${error.message}`
   return (
