@@ -16,7 +16,6 @@ export default ({ data, berichtjahr, projId, apId }) => ({
     )
     const tpops = flatten(pops.map(p => get(p, 'tpopsByPopId.nodes', [])))
 
-    console.log('createMessageFunctions, toposOutsideZh, ktZh:', ktZh)
   
     // kontrolliere die Relevanz ausserkantonaler Tpop
     let tpopsOutsideZh = tpops.filter(
