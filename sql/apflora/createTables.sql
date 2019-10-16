@@ -1395,6 +1395,8 @@ create table apflora.qk (
   sort smallint default null
 );
 create index on apflora.qk using btree (name);
+create index on apflora.qk using btree (titel);
+create index on apflora.qk using btree (sort);
 comment on column apflora.qk.name is 'Primärschlüssel. Wird auch in Abfragen und createMessageFunctions benutzt';
 CREATE POLICY writer ON apflora.qk
   USING (true)
