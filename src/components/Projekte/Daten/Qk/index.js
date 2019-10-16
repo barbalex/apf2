@@ -5,12 +5,14 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import ErrorBoundary from 'react-error-boundary'
+import { useQuery } from '@apollo/react-hooks'
 
 import FormTitle from '../../../shared/FormTitle'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import storeContext from '../../../../storeContext'
 import Qk from './Qk'
 import Choose from './Choose'
+import query from './query'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -29,6 +31,12 @@ const FieldsContainer = styled.div`
 const QkForm = ({ treeName }) => {
   const store = useContext(storeContext)
   const { urlQuery, setUrlQuery } = store
+  const { activeNodeArray } = store[treeName]
+  const apId = activeNodeArray[3]
+
+  const { data, loading, refetch } = useQuery(query, { variables: { apId } })
+  const qkCount = loading ? '...' : get(data, 'allQks.totalCount')
+  const apqkCount = loading ? '...' : get(data, 'allApqks.totalCount')
 
   const [tab, setTab] = useState(get(urlQuery, 'tpqkb', 'qk'))
   const onChangeTab = useCallback(
@@ -57,12 +65,18 @@ const QkForm = ({ treeName }) => {
             centered
           >
             <Tab label="ausführen" value="qk" data-id="qk" />
-            <Tab label="auswählen" value="waehlen" data-id="waehlen" />
+            <Tab
+              label={`auswählen${
+                !!qkCount ? ` (${apqkCount}/${qkCount})` : ''
+              }`}
+              value="waehlen"
+              data-id="waehlen"
+            />
           </Tabs>
           {tab === 'qk' ? (
             <Qk treeName={treeName} />
           ) : (
-            <Choose treeName={treeName} />
+            <Choose treeName={treeName} refetchTab={refetch} />
           )}
         </FieldsContainer>
       </Container>

@@ -20,7 +20,7 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const ChooseQk = ({ treeName }) => {
+const ChooseQk = ({ treeName, refetchTab }) => {
   const store = useContext(storeContext)
   const { activeNodeArray } = store[treeName]
   const apId = activeNodeArray[3]
@@ -35,7 +35,12 @@ const ChooseQk = ({ treeName }) => {
       <Container>
         <FieldsContainer>
           {rows.map(row => (
-            <RowComponent key={row.name} apId={apId} qk={row} />
+            <RowComponent
+              key={row.name}
+              apId={apId}
+              qk={row}
+              refetchTab={refetchTab}
+            />
           ))}
         </FieldsContainer>
       </Container>

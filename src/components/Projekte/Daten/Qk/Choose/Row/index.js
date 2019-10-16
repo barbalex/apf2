@@ -13,7 +13,7 @@ const Row = styled.div`
   display: flex;
   padding: 5px;
   border-bottom: 1px solid #e8e8e8;
-  height: 52px;
+  min-height: 52px;
 `
 const Check = styled.div`
   padding: 0 5px;
@@ -29,7 +29,7 @@ const Beschreibung = styled.div`
   align-items: center;
 `
 
-const ChooseQkRow = ({ apId, qk }) => {
+const ChooseQkRow = ({ apId, qk, refetchTab }) => {
   const client = useApolloClient()
 
   const { data, error, refetch } = useQuery(query, {
@@ -71,7 +71,8 @@ const ChooseQkRow = ({ apId, qk }) => {
     }
     // 3. refetch data
     refetch()
-  }, [apId, checked, client, qk.name, refetch])
+    refetchTab()
+  }, [apId, checked, client, qk.name, refetch, refetchTab])
 
   if (error)
     return (
