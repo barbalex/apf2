@@ -8,9 +8,9 @@ export default gql`
       totalCount
       nodes {
         ...QkFields
-        apqksByQkName(filter: { apId: { equalTo: $apId } }) {
-          totalCount
-        }
+        #apqksByQkName(filter: { apId: { equalTo: $apId } }) {
+        #  totalCount
+        #}
       }
     }
     allApqks(filter: { apId: { equalTo: $apId } }) {
