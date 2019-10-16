@@ -45,8 +45,13 @@ const QkForm = ({ treeName }) => {
    * DO NOT get allQks.nodes.apqksByQkName.totalCount
    * AS THIS IS NEVER UPDATED
    */
+  const allQks = get(data, 'allQks.nodes') || []
+  const qks = allQks.filter(
+    qk =>
+      !!(get(data, 'allApqks.nodes') || []).find(no => no.qkName === qk.name),
+  )
   const qkNameQueries = Object.fromEntries(
-    (get(data, 'allQks.nodes') || []).map(n => [
+    allQks.map(n => [
       n.name,
       !!(get(data, 'allApqks.nodes') || []).find(no => no.qkName === n.name),
     ]),
@@ -100,6 +105,7 @@ const QkForm = ({ treeName }) => {
                   key={qkCount}
                   treeName={treeName}
                   qkNameQueries={qkNameQueries}
+                  qks={qks}
                 />
               )}
             </>

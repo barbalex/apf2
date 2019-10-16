@@ -16,7 +16,7 @@ import appBaseUrl from '../../../../../modules/appBaseUrl'
 import standardQkYear from '../../../../../modules/standardQkYear'
 import fetchKtZh from '../../../../../modules/fetchKtZh'
 import query from './query'
-import qk from './qk'
+import createMessageFunctions from './createMessageFunctions'
 import checkTpopOutsideZh from './checkTpopOutsideZh'
 import storeContext from '../../../../../storeContext'
 
@@ -74,11 +74,12 @@ const StyledButton = styled(Button)`
       : 'rgb(46, 125, 50) !important'};
 `
 
-const Qk = ({ treeName, qkNameQueries }) => {
+const Qk = ({ treeName, qkNameQueries, qks }) => {
   const store = useContext(storeContext)
   const { ktZh, openTree2WithActiveNodeArray } = store
   const { activeNodeArray } = store[treeName]
   const apId = activeNodeArray[3]
+  const projId = activeNodeArray[1]
 
   const [berichtjahr, setBerichtjahr] = useState(standardQkYear())
   const [filter, setFilter] = useState('')
@@ -92,10 +93,7 @@ const Qk = ({ treeName, qkNameQueries }) => {
       berichtjahr,
       notIsBerichtjahr: !berichtjahr,
       apId,
-      projId:
-        activeNodeArray.length > 1
-          ? activeNodeArray[1]
-          : '99999999-9999-9999-9999-999999999999',
+      projId,
     },
   })
 
@@ -105,8 +103,17 @@ const Qk = ({ treeName, qkNameQueries }) => {
   )
   const onChangeFilter = useCallback(event => setFilter(event.target.value), [])
 
-  const gqlMessageGroups = sortBy(qk({ berichtjahr, data }), 'title')
-    .filter(q => !q.query)
+  const messageFunctions = createMessageFunctions({
+    data,
+    berichtjahr,
+    projId,
+    apId,
+  })
+  const gqlMessageGroups = qks
+    .map(qk => ({
+      title: qk.titel,
+      messages: messageFunctions[qk.name](),
+    }))
     .filter(q => q.messages.length)
   if (ktZh) {
     const outsideZhMessageGroup = checkTpopOutsideZh({ data, ktZh })
