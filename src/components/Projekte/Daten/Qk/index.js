@@ -12,7 +12,6 @@ import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import storeContext from '../../../../storeContext'
 import Qk from './Qk'
 import Choose from './Choose'
-import query from './query'
 import queryQk from './queryQk'
 
 const Container = styled.div`
@@ -38,18 +37,21 @@ const QkForm = ({ treeName }) => {
   const { activeNodeArray } = store[treeName]
   const apId = activeNodeArray[3]
 
-  const { data: dataQk, loading: loadingQk, error: errorQk } = useQuery(
-    queryQk,
-    { variables: { apId }, fetchPolicy: 'no-cache' },
-  )
+  const { data, loading, error, refetch } = useQuery(queryQk, {
+    variables: { apId },
+    fetchPolicy: 'no-cache',
+  })
+  /**
+   * DO NOT get allQks.nodes.apqksByQkName.totalCount
+   * AS THIS IS NEVER UPDATED
+   */
   const qkNameQueries = Object.fromEntries(
-    (get(dataQk, 'allQks.nodes') || []).map(n => [
+    (get(data, 'allQks.nodes') || []).map(n => [
       n.name,
-      get(n, 'apqksByQkName.totalCount') === 1,
+      !!(get(data, 'allApqks.nodes') || []).find(no => no.qkName === n.name),
     ]),
   )
 
-  const { data, loading, refetch } = useQuery(query, { variables: { apId } })
   const qkCount = loading ? '...' : get(data, 'allQks.totalCount')
   const apqkCount = loading ? '...' : get(data, 'allApqks.totalCount')
 
@@ -67,9 +69,7 @@ const QkForm = ({ treeName }) => {
     [setUrlQuery, urlQuery],
   )
 
-  console.log('QK TOP', { qkNameQueries, nodes: get(dataQk, 'allQks.nodes') })
-
-  if (errorQk) return `Fehler: ${errorQk.message}`
+  if (error) return `Fehler: ${error.message}`
   return (
     <ErrorBoundary>
       <Container>
@@ -93,7 +93,7 @@ const QkForm = ({ treeName }) => {
           </Tabs>
           {tab === 'qk' ? (
             <>
-              {loadingQk ? (
+              {loading ? (
                 <LoadingContainer>Lade Daten...</LoadingContainer>
               ) : (
                 <Qk
