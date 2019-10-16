@@ -73,7 +73,7 @@ const StyledButton = styled(Button)`
 
 const Qk = ({ treeName, qkNameQueries, qks }) => {
   const store = useContext(storeContext)
-  const { ktZh, openTree2WithActiveNodeArray } = store
+  const { openTree2WithActiveNodeArray } = store
   const { activeNodeArray } = store[treeName]
   const apId = activeNodeArray[3]
   const projId = activeNodeArray[1]
@@ -105,19 +105,14 @@ const Qk = ({ treeName, qkNameQueries, qks }) => {
     berichtjahr,
     projId,
     apId,
-    ktZh,
   })
   let messageGroups = []
-  if (!!ktZh) {
-    messageGroups = qks
-      .map(qk => ({
-        title: qk.titel,
-        messages: messageFunctions[qk.name](),
-      }))
-      .filter(q => q.messages.length)
-  }
-
-  console.log('Qk, ktZh:', ktZh)
+  messageGroups = qks
+    .map(qk => ({
+      title: qk.titel,
+      messages: messageFunctions[qk.name](),
+    }))
+    .filter(q => q.messages.length)
 
   const messageGroupsFiltered = messageGroups.filter(messageGroup => {
     if (!!filter && messageGroup.title && messageGroup.title.toLowerCase) {

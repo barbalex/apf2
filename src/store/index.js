@@ -93,7 +93,6 @@ const myTypes = types
   .volatile(() => ({
     detailplaene: null,
     markierungen: null,
-    ktZh: null,
     toDeleteAfterDeletionHook: null,
     deletedDatasets: [],
     refetch: {},
@@ -289,9 +288,6 @@ const myTypes = types
     },
     setMarkierungen(val) {
       self.markierungen = val
-    },
-    setKtZh(val) {
-      self.ktZh = val
     },
     nodeFilterSet({ treeName, nodeFilter }) {
       self.nodeFilter[treeName] = nodeFilter
