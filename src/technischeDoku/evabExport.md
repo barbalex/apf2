@@ -1,7 +1,7 @@
 ---
 typ: 'technDoku'
 path: "/Dokumentation/Technisch/EvAB-Export"
-date: "2019-10-07"
+date: "2019-10-17"
 title: "EvAB-Export"
 sort: 10
 ---
