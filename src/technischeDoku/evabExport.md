@@ -94,7 +94,6 @@ Die FNS gibt vor, dass in eine Access-GEO-DB importiert werden muss. Leider gibt
    1. Tabellen-Verknüpfungs-Manager öffnen
    1. Neues Datenbank-Template verknüpfen
 1. Adressen Vorbereiten
-   1. Aktuelle tblPersonen aus `EvabGeoDB_apflora.mdb` in apflora.evab_personen importieren
    1. Prüfen, bei welchen Adressen benötigte Felder leer sind (evab_nachname, evab_vorname, evab_ort). Diese ergänzen:
       ```sql
       select name from apflora.adresse
@@ -107,12 +106,18 @@ Die FNS gibt vor, dass in eine Access-GEO-DB importiert werden muss. Leider gibt
         )
       order by name;
       ```
-   1. In `beob_nach_evab.accdb`, Tabelle `apflora_adresse`: leeren, dann die aktuellen Daten importieren
+   1. Aktuelle tblPersonen aus `EvabGeoDB_apflora.mdb` in apflora.evab_personen importieren
+   1. In `beob_nach_evab.accdb`, Tabelle `apflora_adresse`: leeren, dann die aktuellen Daten importieren. Vorsicht: 1. neue Felder entfernen. 2. Guids mit geschweiften Klammern umgeben
 1. Alle `v_exportevab...` views: In PgAdmin öffnen, als .csv speichern
-1. Alle `apflora_v_exportevab...`-Tabellen in `beob_nach_evab.accdb`: leeren, dann aus den views importieren. WICHTIG: Im ersten Dialog in Access UTF-8 einstellen
+1. Alle `apflora_v_exportevab...`-Tabellen in `beob_nach_evab.accdb`: leeren, dann aus den views importieren. WICHTIG: 
+   - Im ersten Dialog in Access UTF-8 einstellen
+   - Peinlich genau aufpassen, ob in den jeweiligen Schritten im Access-Import-Assistent die Einstellungen der vorigen Schritte übernommen wurden oder verloren gingen
+   - Peinlich genau aufpassen, wie der Access-Import-Assistent mit den Daten umgeht. Es können jederzeit ein Teil der Felder ignoriert werden, worauf diese Daten verloren gehen!
+   - Peinlich genau aufpassen, dass der Access-Import-Assistent keine nicht existenten Felder erfindet und vorhandene Daten darauf verteilt
+   - Jede Tabelle nach dem Import genau prüfen: Anzahl Datensätze, Anzahl Felder, Daten in den Feldern... Der Access-Import-Assistent ist NICHT vertrauenswürdig
 1. Es braucht in tblPersonen einen Datensatz für Topos (`{7C71B8AF-DF3E-4844-A83B-55735F80B993}	topos Marti & Müller AG	-	Zürich`). Der wird zwar jedes Jahr hinzugefügt, er taucht aber trotzdem nie im Template auf. Daher muss er aus dem Vorjahr hinein kopiert werden
 1. Jetzt die Import-Abfragen in `beob_nach_evab.accdb` nacheinander ausführen. Dabei darauf achten, dass immer alle Datensätze importiert wurden. Falls nicht, muss dem nachgegangen werden. Es kann z.B. an veränderten Stammdaten in EvAB liegen
 1. `EvabGeoDB_apflora.mdb` ist nun bereit
 1. `EvabGeoDB_apflora.mdb` in EvAB öffnen und prüfen, ob es i.O. aussieht
-1. `EvabGeoDB_apflora.mdb`: Abfrage `vExportZDSF` nach Excel exportieren: Damit Topos die Daten in Tabellenform prüfen kann
+1. Daten nach Excel exportieren, damit Topos die Daten in Tabellenform prüfen kann. Achtung: der in EvAB eingebaute ZDSF-Export stürzt oft ab. Und wenn er einmal funktioniert, ist das generierte CSV-Format leider weder standard-konform noch für den Zweck genügend: Es gibt keine Text-Trenner, wieso es nicht möglich ist, Felder zuverlässig abzugrenzen! Darum in `EvabGeoDB_apflora.mdb` die Abfrage `vExportZDSF` verwenden. Aber nochmals Achtung: Die Abfrage enthält mehrere Kriterien, die für diesen Export unnötig sind und offenbar den Export verhindern. Einfach löschen. Und hoffen, dass der Export aus Access gelingt - oft stürzt Access dabei ab :-(
 1. `EvabGeoDB_apflora.mdb` und `vExportZDSF.xlsx` Topos zur Prüfung und Weiterleitung an die FNS übermitteln
