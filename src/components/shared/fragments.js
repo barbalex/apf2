@@ -22,11 +22,9 @@ export const aeEigenschaften = gql`
     taxid
     familie
     artname
-    namedeutsch
     status
     artwert
     kefkontrolljahr
-    fnsjahresartjahr
     kefart
   }
 `
