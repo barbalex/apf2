@@ -32,11 +32,10 @@ export const aeEigenschaften = gql`
 `
 
 export const aeLrDelarze = gql`
-  fragment AeLrDelarzeFields on AeLrdelarze {
+  fragment AeLrDelarzeFields on AeLrDelarze {
     id
     label
     einheit
-    sort
   }
 `
 

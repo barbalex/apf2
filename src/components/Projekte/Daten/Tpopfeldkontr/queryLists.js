@@ -14,7 +14,7 @@ export default gql`
         label: text
       }
     }
-    allAeLrdelarzes(orderBy: SORT_ASC) {
+    allAeLrDelarzes(orderBy: LABEL_ASC) {
       nodes {
         id
         label

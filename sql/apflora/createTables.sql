@@ -1140,20 +1140,6 @@ CREATE INDEX ON apflora.ae_eigenschaften USING btree (taxid);
 CREATE INDEX ON apflora.ae_eigenschaften USING btree (artname);
 COMMENT ON COLUMN apflora.ae_eigenschaften.id IS 'Primärschlüssel';
 
--- TODO:
--- replace with direct GraphQL call to ae
--- when graphql installed
-DROP TABLE IF EXISTS apflora.ae_lrdelarze;
-CREATE TABLE apflora.ae_lrdelarze (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  label varchar(50) DEFAULT NULL,
-  einheit varchar(255) DEFAULT NULL,
-  sort integer DEFAULT NULL
-);
-CREATE INDEX ON apflora.ae_lrdelarze USING btree (id);
-CREATE INDEX ON apflora.ae_lrdelarze USING btree (sort);
-COMMENT ON COLUMN apflora.ae_lrdelarze.id IS 'Primärschlüssel';
-
 --
 -- beob can collect beob of any provenience by following this convention:
 -- - fields that are used in apflora.ch are appended as regular fields, that is:
@@ -1422,3 +1408,5 @@ CREATE POLICY writer ON apflora.apqk
 --truncate apflora.apqk
 --insert into apflora.apqk(ap_id, qk_name)
 --select distinct apflora.ap.id, apflora.qk.name from apflora.ap, apflora.qk where apflora.ap.bearbeitung is null
+
+DROP TABLE IF EXISTS apflora.ae_lrdelarze;

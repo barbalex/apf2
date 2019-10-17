@@ -269,7 +269,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
     [setUrlQuery, urlQuery],
   )
 
-  const aeLrWerte = get(dataLists, 'allAeLrdelarzes.nodes', [])
+  const aeLrWerte = get(dataLists, 'allAeLrDelarzes.nodes', [])
     .map(e => `${e.label}: ${e.einheit ? e.einheit.replace(/  +/g, ' ') : ''}`)
     .map(o => ({ value: o, label: o }))
 

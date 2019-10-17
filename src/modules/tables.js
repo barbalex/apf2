@@ -372,7 +372,7 @@ export default [
     stammdaten: true,
   },
   {
-    table: 'ae_lrdelarze',
+    table: 'ae_lr_delarze',
     label: 'LR-Delarze-Werte',
     idField: 'id',
     parentIdField: 'none',
