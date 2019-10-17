@@ -1128,12 +1128,12 @@ CREATE TABLE apflora.ae_eigenschaften (
   taxid integer DEFAULT NULL,
   familie varchar(100) DEFAULT NULL,
   artname varchar(100) DEFAULT NULL,
-  namedeutsch varchar(100) DEFAULT NULL,
+  --namedeutsch varchar(100) DEFAULT NULL,
   status varchar(47) DEFAULT NULL,
   artwert smallint DEFAULT NULL,
   kefart boolean DEFAULT false,
   kefkontrolljahr smallint DEFAULT NULL,
-  fnsjahresartjahr smallint DEFAULT NULL
+  --fnsjahresartjahr smallint DEFAULT NULL
 );
 CREATE INDEX ON apflora.ae_eigenschaften USING btree (id);
 CREATE INDEX ON apflora.ae_eigenschaften USING btree (taxid);
