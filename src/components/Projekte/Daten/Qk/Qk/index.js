@@ -106,8 +106,7 @@ const Qk = ({ treeName, qkNameQueries, qks }) => {
     projId,
     apId,
   })
-  let messageGroups = []
-  messageGroups = qks
+  const messageGroups = qks
     .map(qk => ({
       title: qk.titel,
       messages: messageFunctions[qk.name](),

@@ -167,9 +167,6 @@ $ap_update_add_apart$ LANGUAGE plpgsql;
 CREATE TRIGGER ap_update_add_apart AFTER UPDATE ON apflora.ap
   FOR EACH ROW EXECUTE PROCEDURE apflora.ap_update_add_apart();
 
-
-
-
 -- ensure max 3 ekzaehleinheit per ap
 DROP TRIGGER IF EXISTS ekzaehleinheit_max_3_per_ap ON apflora.ekzaehleinheit;
 DROP FUNCTION IF EXISTS apflora.ekzaehleinheit_max_3_per_ap();
@@ -187,3 +184,17 @@ CREATE FUNCTION apflora.ekzaehleinheit_max_3_per_ap() RETURNS trigger AS $ekzaeh
 $ekzaehleinheit_max_3_per_ap$ LANGUAGE plpgsql;
 CREATE TRIGGER ekzaehleinheit_max_3_per_ap BEFORE INSERT ON apflora.ekzaehleinheit
   FOR EACH ROW EXECUTE PROCEDURE apflora.ekzaehleinheit_max_3_per_ap();
+
+-- ensure new ap have apqk
+DROP TRIGGER IF EXISTS ap_has_apqk ON apflora.apqk cascade;
+DROP FUNCTION IF EXISTS ap_has_apqk() cascade;
+CREATE FUNCTION ap_has_apqk() RETURNS trigger AS $ap_has_apqk$
+BEGIN
+  insert into apflora.apqk(ap_id, qk_name)
+  select distinct apflora.ap.id, apflora.qk.name from apflora.ap, apflora.qk where apflora.ap.id = NEW.id;
+  RETURN NEW;
+END;
+$ap_has_apqk$ LANGUAGE plpgsql;
+
+CREATE TRIGGER ap_has_apqk AFTER INSERT ON apflora.ap
+  FOR EACH ROW EXECUTE PROCEDURE ap_has_apqk();

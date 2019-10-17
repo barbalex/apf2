@@ -1421,4 +1421,4 @@ CREATE POLICY writer ON apflora.apqk
 
 --truncate apflora.apqk
 --insert into apflora.apqk(ap_id, qk_name)
---select distinct apflora.ap.id, apflora.qk.name from apflora.ap, apflora.qk where apflora.ap.bearbeitung < 4
+--select distinct apflora.ap.id, apflora.qk.name from apflora.ap, apflora.qk where apflora.ap.bearbeitung is null
