@@ -9,7 +9,9 @@ sort: 10
 Feld- und Freiwilligen-Kontrollen entsprechen Beobachtungen. Ein mal jährlich (ca. im April) werden sie daher ins EvAB exportiert. Von dort gelangen sie zu InfoFlora.<br/><br/>
 
 ### Folgende Kontrollen werden exportiert
-- Art: Keine Testart, keine von der FNS ergänzte Art
+- Art: Grundsätzlich alle. Ausnahmen:
+  - Keine Testart
+  - keine von der FNS ergänzte Art
 - Teilpopulation: Enthält gültige Koordinaten
 - Teilpopulation: Enthält einen Flurnamen
 - Teilpopulation: Ist kein Ansaatversuch
@@ -83,18 +85,18 @@ Projekt:
 - `Bemerkungen`: Bearbeitungsstand, Startjahr und Umsetzungsstand des Aktionsplans (sofern vorhanden)
 
 ### Vorgehen
-Die FNS gibt vor, dass in eine Access-GEO-DB importiert werden muss. Leider gibt es keine vernünftigen Treiber, um Access mit PostgreSQL (oder irgend einer anderen Datenbank) zu verbinden. Und ODBC verträgt sich schlecht mit modernem und sicherem Hosting. Darum müssen alle benötigten Daten zuerst aus apflora.ch exportiert werden, in eine Access DB importiert und von dort in die GEO-DB importiert werden. Der ganze Prozess ist leider - soweit Access involviert ist - nicht sehr zuverlässig und bedingt bei jedem Schritt dauernde sorgfälltige Kontrollen.<br/><br/>
+Die FNS gibt vor, dass in eine Access-GEO-DB importiert werden muss. Leider gibt es keine vernünftigen Treiber, um Access mit PostgreSQL (oder irgend einer anderen Datenbank) zu verbinden. Und ODBC verträgt sich schlecht mit modernem und sicherem Hosting. Darum müssen alle benötigten Daten zuerst aus apflora.ch exportiert werden, in eine Access DB importiert und von dort in die GEO-DB importiert werden. Zusätzlich eine Excel-Tabelle, damit Topos kontrollieren kann. Der ganze Prozess ist leider - soweit Access involviert ist - langsam, manuell, nicht automatisierbar, unzuverlässig und bedingt bei jedem Schritt dauernde sorgfälltige Kontrollen.<br/><br/>
 
 1. Dateien vorbereiten:
    1. Neuen Ordner gründen (z.B. `...\projekte\apflora\data_out\2019 05 16 nach EvAB`)
-   1. `beob_nach_evab.accdb` vom letzten Export kopieren
+   1. `beob_nach_evab.accdb` ist die Access-DB, in welche die Daten aus apflora importiert und danach in die EvabGeoDB exportiert werden. Sie muss vom letzten Export kopiert werden
    1. Auf [naturschutz.zh.ch](https://aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html) das aktuelle Datenbank-Template für EvAB downloaden
    1. Datenbank-Template umbenennen zu: `EvabGeoDB_apflora.mdb`
    1. `beob_nach_evab.accdb` öffnen
    1. Tabellen-Verknüpfungs-Manager öffnen
-   1. Neues Datenbank-Template verknüpfen
+   1. Neue EvabGeoDB verknüpfen
 1. Adressen vorbereiten
-   1. EvAB gibt Adressen eigene GUIDS. Daher müssten eigentlich bei jedem Export für alle Adressen aus apflora neue Adressen in EvAB geschaffen werden!!! Um das zu vermeiden, wurde sehr aufwändig versucht, die GUID's von in EvAB bereits vorhandenen Adressen in apflora aufzunehmen und beim Export wo möglich mitzugeben. Das funktioniert leider nur sehr unbefriedigend, weil 1. Access sich bei GUID's im Gegensatz zu PostgreSQL nicht an das standardisierte Format hält 2. der Vorgang extrem aufwändig und kompliziert ist, 3. In den vorjahren erfasste Adressen oft nicht im Template erscheinen und 4. mühsam in apflora übernommene EvAB-Guids oft doch nicht mit den Adressen im EvAB-Template verbunden werden können, weil sie offenbar (teilweise) dort nicht vorkommen :-(. Dieser Prozess ist viel zu aufwändig und mühsam und wir werden wohl dazu übergehen müssen, immer alle Adressen neu aufzunehmen. Vorläufig funktioniert es so:
+   1. EvAB gibt Adressen eigene GUID's. Daher müssten eigentlich bei jedem Export für alle Adressen aus apflora neue Adressen in EvAB geschaffen werden!!! Um das zu vermeiden, wurde sehr aufwändig versucht, die GUID's von in EvAB bereits vorhandenen Adressen in apflora aufzunehmen und beim Export wo möglich mitzugeben. Das funktioniert leider nur sehr unbefriedigend, weil 1. Access sich bei GUID's im Gegensatz zu PostgreSQL nicht an das standardisierte Format hält 2. der Vorgang extrem aufwändig und kompliziert ist, 3. In den vorjahren erfasste Adressen oft nicht im Template erscheinen und 4. mühsam in apflora übernommene EvAB-Guids oft doch nicht mit den Adressen im EvAB-Template verbunden werden können, weil sie offenbar (teilweise) dort nicht vorkommen :-(. Dieser Prozess ist viel zu aufwändig und mühsam und wir werden wohl dazu übergehen müssen, immer alle Adressen mit jeweils neuen GUID's neu aufzunehmen. Vorläufig funktioniert es so:
    1. Prüfen, bei welchen Adressen benötigte Felder leer sind (evab_nachname, evab_vorname, evab_ort). Diese ergänzen:
       ```sql
       select name from apflora.adresse
