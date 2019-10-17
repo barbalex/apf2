@@ -12,6 +12,7 @@ CREATE EXTENSION postgres_fdw;
 CREATE SERVER ae_server
   FOREIGN DATA WRAPPER postgres_fdw
   OPTIONS (host '207.154.212.35', port '5432', dbname 'ae');
+
 -- need to use this view
 -- because joining tables is way too slow
 create foreign table apflora.ae_lr_delarze (
@@ -22,8 +23,19 @@ create foreign table apflora.ae_lr_delarze (
 )
 server ae_server options (schema_name 'ae', table_name 'v_apflora_lr_delarze');
 
--- necessary?
 CREATE USER MAPPING
     FOR postgres
+ SERVER ae_server
+OPTIONS (user 'fdw_user', password 'secret');
+CREATE USER MAPPING
+    FOR apflora_manager
+ SERVER ae_server
+OPTIONS (user 'fdw_user', password 'secret');
+CREATE USER MAPPING
+    FOR apflora_artverantwortlich
+ SERVER ae_server
+OPTIONS (user 'fdw_user', password 'secret');
+CREATE USER MAPPING
+    FOR apflora_freiwillig
  SERVER ae_server
 OPTIONS (user 'fdw_user', password 'secret');
