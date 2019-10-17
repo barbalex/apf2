@@ -6,6 +6,7 @@
 -- so no problem not to use a secure one
 create user fdw_user with encrypted password 'secret';
 grant select on table ae.v_apflora_lr_delarze to fdw_user;
+grant select on table ae.v_apflora_sisf2 to fdw_user;
 
 -- on apflora
 CREATE EXTENSION postgres_fdw;
@@ -22,6 +23,18 @@ create foreign table apflora.ae_lr_delarze (
   einheit text
 )
 server ae_server options (schema_name 'ae', table_name 'v_apflora_lr_delarze');
+
+create foreign table apflora.ae_sisf2 (
+  id UUID,
+  taxid integer,
+  familie text,
+  artname text,
+  status text,
+  artwert integer,
+  kefart boolean,
+  kefkontrolljahr integer
+)
+server ae_server options (schema_name 'ae', table_name 'v_apflora_sisf2');
 
 CREATE USER MAPPING
     FOR postgres
