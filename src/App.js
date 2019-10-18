@@ -54,48 +54,45 @@ const App = ({ element }) => {
           jsonify: false,
           blacklist,
         })
-        .then(() => {
-          // ensure apf2NetworkError has time to arrive
-          setTimeout(async () => {
+        .then(async () => {
+          console.log(
+            'App, mst-persist: time of last network error:',
+            window.apf2NetworkError,
+          )
+          // only do this if no network error happened recently
+          // to prevent endles cycle of reloading
+          // due to setting activeNodeArray causing navigation event
+          if (
+            !!window.apf2NetworkError &&
+            window.apf2NetworkError - Date.now() < 1000
+          ) {
             console.log(
-              'App, mst-persist: time of last network error:',
-              window.apf2NetworkError,
+              'App, mst-persist: backing out because of recent network error',
             )
-            // only do this if no network error happened recently
-            // to prevent endles cycle of reloading
-            // due to setting activeNodeArray causing navigation event
-            if (
-              !!window.apf2NetworkError &&
-              window.apf2NetworkError - Date.now() < 10
-            ) {
-              console.log(
-                'App, mst-persist: backing out because of recent network error',
-              )
-              return
-            }
-            const username = await setUserFromIdb({ idb, store })
-            const isUser = !!username
-            // set last activeNodeArray
-            // only if top domain was visited
-            if (isUser && visitedTopDomain) {
-              console.log('App, mst-persist: will navigate')
-              const { urlQuery } = store
-              const search = queryString.stringify(urlQuery)
-              const query = `${
-                Object.keys(urlQuery).length > 0 ? `?${search}` : ''
-              }`
-              return navigate(
-                `/Daten/${store.tree.activeNodeArray.join('/')}${query}`,
-              )
-            }
-            const activeNodeArray = getActiveNodeArrayFromPathname()
-            if (activeNodeArray[0] === 'Projekte') {
-              console.log('App, mst-persist: will initiate data from url')
-              initiateDataFromUrl({
-                store,
-              })
-            }
-          })
+            return
+          }
+          const username = await setUserFromIdb({ idb, store })
+          const isUser = !!username
+          // set last activeNodeArray
+          // only if top domain was visited
+          if (isUser && visitedTopDomain) {
+            console.log('App, mst-persist: will navigate')
+            const { urlQuery } = store
+            const search = queryString.stringify(urlQuery)
+            const query = `${
+              Object.keys(urlQuery).length > 0 ? `?${search}` : ''
+            }`
+            return navigate(
+              `/Daten/${store.tree.activeNodeArray.join('/')}${query}`,
+            )
+          }
+          const activeNodeArray = getActiveNodeArrayFromPathname()
+          if (activeNodeArray[0] === 'Projekte') {
+            console.log('App, mst-persist: will initiate data from url')
+            initiateDataFromUrl({
+              store,
+            })
+          }
         }),
     )
     // inform users of old browsers

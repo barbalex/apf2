@@ -72,7 +72,7 @@ export default ({ idb, store }) => {
       // or else there will be a perpetual reload-cycle
       if (typeof window !== 'undefined') {
         console.log(`apollo client setting apf2NetworkError to`, Date.now())
-        var apf2NetworkError = Date.now()
+        window.apf2NetworkError = Date.now()
       }
       enqueNotification({
         message: `apollo client Network error: ${networkError}`,
