@@ -285,7 +285,7 @@ export default [
     parentIdField: 'proj_id',
   },
   {
-    table: 'ae_eigenschaften',
+    table: 'ae_taxonomies',
     label: 'none',
     idField: 'id',
     parentIdField: 'none',

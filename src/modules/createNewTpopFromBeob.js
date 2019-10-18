@@ -7,7 +7,7 @@ import gql from 'graphql-tag'
 import {
   beob as beobFragment,
   tpop,
-  aeEigenschaften,
+  aeTaxonomies,
   beobQuelleWerte,
   popStatusWerte,
 } from '../components/shared/fragments'
@@ -48,8 +48,8 @@ const updateBeobById = gql`
     ) {
       beob {
         ...BeobFields
-        aeEigenschaftenByArtId {
-          ...AeEigenschaftenFields
+        aeTaxonomyByArtId {
+          ...AeTaxonomiesFields
           apByArtId {
             id
             popsByApId {
@@ -77,7 +77,7 @@ const updateBeobById = gql`
       }
     }
   }
-  ${aeEigenschaften}
+  ${aeTaxonomies}
   ${beobFragment}
   ${beobQuelleWerte}
   ${popStatusWerte}

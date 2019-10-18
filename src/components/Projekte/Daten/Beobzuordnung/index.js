@@ -17,7 +17,7 @@ import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
 import Beob from '../Beob'
 import query from './query'
-import queryAeEigenschaftens from './queryAeEigenschaftens'
+import queryAeTaxonomies from './queryAeTaxonomies'
 import updateBeobByIdGql from './updateBeobById'
 import saveNichtZuordnenToDb from './saveNichtZuordnenToDb'
 import saveArtIdToDb from './saveArtIdToDb'
@@ -103,7 +103,7 @@ const nichtZuordnenPopover = (
 
 const getTpopZuordnenSource = (row, apId) => {
   // get all popIds of active ap
-  const apArt = get(row, 'aeEigenschaftenByArtId.apartsByArtId.nodes[0]', [])
+  const apArt = get(row, 'aeTaxonomyByArtId.apartsByArtId.nodes[0]', [])
   if (!apArt) return []
   const popList = get(apArt, 'apByApId.popsByApId.nodes', [])
   // get all tpop
@@ -158,7 +158,7 @@ const Beobzuordnung = ({ type, treeName }) => {
   const row = get(data, 'beobById', {})
 
   // only include ap-arten (otherwise makes no sense, plus: error when app sets new activeNodeArray to non-existing ap)
-  const aeEigenschaftenfilter = useCallback(
+  const aeTaxonomiesfilter = useCallback(
     inputValue =>
       !!inputValue
         ? {
@@ -222,7 +222,7 @@ const Beobzuordnung = ({ type, treeName }) => {
     <ErrorBoundary>
       <FormContainer>
         <FormTitle
-          apId={get(row, 'aeEigenschaftenByArtId.apByArtId.id', null)}
+          apId={get(row, 'aeTaxonomyByArtId.apByArtId.id', null)}
           title="Beobachtung"
           treeName={treeName}
           table="beob"
@@ -232,19 +232,19 @@ const Beobzuordnung = ({ type, treeName }) => {
             {row && row.artId !== row.artIdOriginal && (
               <OriginalArtDiv>{`Art gemäss Original-Meldung: ${get(
                 row,
-                'aeEigenschaftenByArtIdOriginal.artname',
+                'aeTaxonomyByArtIdOriginal.artname',
               )}`}</OriginalArtDiv>
             )}
             <SelectLoadingOptions
               key={`${row.id}artId`}
               field="artId"
-              valueLabelPath="aeEigenschaftenByArtId.artname"
+              valueLabelPath="aeTaxonomyByArtId.artname"
               label="Art"
               row={row}
               saveToDb={onSaveArtIdToDb}
-              query={queryAeEigenschaftens}
-              filter={aeEigenschaftenfilter}
-              queryNodesName="allAeEigenschaftens"
+              query={queryAeTaxonomies}
+              filter={aeTaxonomiesfilter}
+              queryNodesName="allAeTaxonomies"
             />
             <CheckboxWithInfo
               key={`${row.id}nichtZuordnen`}
@@ -291,15 +291,12 @@ const Beobzuordnung = ({ type, treeName }) => {
                 onClick={() => {
                   const origArt = `Art gemäss Beobachtung: SISF-Nr: ${get(
                     row,
-                    'aeEigenschaftenByArtId.taxid',
-                  )}, Artname: ${get(row, 'aeEigenschaftenByArtId.artname')}`
+                    'aeTaxonomyByArtId.taxid',
+                  )}, Artname: ${get(row, 'aeTaxonomyByArtId.artname')}`
                   const neueArt = `Korrigierte Art: SISF-Nr: ${get(
                     row,
-                    'aeEigenschaftenByArtIdOriginal.taxid',
-                  )}, Artname: ${get(
-                    row,
-                    'aeEigenschaftenByArtIdOriginal.artname',
-                  )}`
+                    'aeTaxonomyByArtIdOriginal.taxid',
+                  )}, Artname: ${get(row, 'aeTaxonomyByArtIdOriginal.artname')}`
                   const bemerkungen = row.bemerkungen
                   // remove all keys with null
                   const dataArray = Object.entries(JSON.parse(row.data)).filter(

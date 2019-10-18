@@ -42,7 +42,7 @@ const AvList = ({ data }) => {
   const avGrouped = groupBy(
     get(data, 'allAps.nodes', []).map(ap => ({
       av: get(ap, 'adresseByBearbeiter.name', '(kein Wert)'),
-      art: get(ap, 'aeEigenschaftenByArtId.artname', '(keine Art gewählt)'),
+      art: get(ap, 'aeTaxonomyByArtId.artname', '(keine Art gewählt)'),
     })),
     'av',
   )

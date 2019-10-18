@@ -11,7 +11,7 @@ import SelectLoadingOptions from '../../../shared/SelectLoadingOptionsFormik'
 import FormTitle from '../../../shared/FormTitle'
 import updateAssozartByIdGql from './updateAssozartById'
 import query from './query'
-import queryAeEigenschaftens from './queryAeEigenschaftens'
+import queryAeTaxonomies from './queryAeTaxonomies'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
@@ -49,7 +49,7 @@ const Assozart = ({ treeName }) => {
     .map(o => o.aeId)
     // but do include the art included in the row
     .filter(o => o !== row.aeId)
-  const aeEigenschaftenfilter = inputValue =>
+  const aeTaxonomiesfilter = inputValue =>
     !!inputValue
       ? assozartenOfAp.length
         ? {
@@ -113,12 +113,12 @@ const Assozart = ({ treeName }) => {
               <Form onBlur={() => dirty && handleSubmit()}>
                 <Field
                   name="aeId"
-                  valueLabelPath="aeEigenschaftenByAeId.artname"
+                  valueLabelPath="aeTaxonomyByAeId.artname"
                   label="Art"
                   row={row}
-                  query={queryAeEigenschaftens}
-                  filter={aeEigenschaftenfilter}
-                  queryNodesName="allAeEigenschaftens"
+                  query={queryAeTaxonomies}
+                  filter={aeTaxonomiesfilter}
+                  queryNodesName="allAeTaxonomies"
                   component={SelectLoadingOptions}
                 />
                 <Field

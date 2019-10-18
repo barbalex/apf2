@@ -133,7 +133,7 @@ const ApberForYear = () => {
     get(data2, 'allAps.nodes', []).filter(
       ap => get(ap, 'apbersByApId.totalCount', 0) > 0,
     ),
-    ap => get(ap, 'aeEigenschaftenByArtId.artname'),
+    ap => get(ap, 'aeTaxonomyByArtId.artname'),
   )
 
   if (data1Loading || data2Loading) {

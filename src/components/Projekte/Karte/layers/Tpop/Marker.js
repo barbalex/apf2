@@ -95,7 +95,7 @@ const TpopMarker = ({ treeName, tpop }) => {
   if (tpopLabelName === 'name') title = tpop.flurname
   const artname = get(
     tpop,
-    'popByPopId.apByApId.aeEigenschaftenByArtId.artname',
+    'popByPopId.apByApId.aeTaxonomyByArtId.artname',
     '',
   )
 

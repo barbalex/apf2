@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { aeEigenschaften, projekt } from '../../shared/fragments'
+import { aeTaxonomies, projekt } from '../../shared/fragments'
 
 export default gql`
   query ekfDataWithDateByAdresseIdQuery($id: UUID!, $jahr: Int!) {
@@ -26,8 +26,8 @@ export default gql`
               name
               apByApId {
                 id
-                aeEigenschaftenByArtId {
-                  ...AeEigenschaftenFields
+                aeTaxonomyByArtId {
+                  ...AeTaxonomiesFields
                 }
                 projektByProjId {
                   ...ProjektFields
@@ -39,6 +39,6 @@ export default gql`
       }
     }
   }
-  ${aeEigenschaften}
+  ${aeTaxonomies}
   ${projekt}
 `

@@ -75,7 +75,7 @@ const BeobNichtZuzuordnenMarker = ({ treeName, beob }) => {
         <>
           <div>{`Beobachtung von ${get(
             beob,
-            'aeEigenschaftenByArtId.artname',
+            'aeTaxonomyByArtId.artname',
             '',
           )}`}</div>
           <StyledH3>{label}</StyledH3>

@@ -120,7 +120,7 @@ const Kontrollen = () => {
                             popByPopId {
                               apByApId {
                                 id
-                                aeEigenschaftenByArtId {
+                                aeTaxonomyByArtId {
                                   id
                                   artname
                                   familie
@@ -268,12 +268,12 @@ const Kontrollen = () => {
                     apFamilie:
                       get(
                         n,
-                        'tpopByTpopId.popByPopId.apByApId.aeEigenschaftenByArtId.familie',
+                        'tpopByTpopId.popByPopId.apByApId.aeTaxonomyByArtId.familie',
                       ) || null,
                     apArtname:
                       get(
                         n,
-                        'tpopByTpopId.popByPopId.apByApId.aeEigenschaftenByArtId.artname',
+                        'tpopByTpopId.popByPopId.apByApId.aeTaxonomyByArtId.artname',
                       ) || null,
                     apBearbeitung:
                       get(

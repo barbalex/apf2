@@ -55,7 +55,7 @@ const BeobZugeordnetAssignPolylines = ({ treeName }) => {
     () =>
       flatten(
         aparts.map(a =>
-          get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []),
+          get(a, 'aeTaxonomyByArtId.beobsByArtId.nodes', []),
         ),
       ),
     [aparts],

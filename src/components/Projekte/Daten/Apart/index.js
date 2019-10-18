@@ -10,7 +10,7 @@ import SelectLoadingOptions from '../../../shared/SelectLoadingOptionsFormik'
 import FormTitle from '../../../shared/FormTitle'
 import updateApartByIdGql from './updateApartById'
 import query from './query'
-import queryAeEigenschaftens from './queryAeEigenschaftens'
+import queryAeTaxonomies from './queryAeTaxonomies'
 import queryAeEigById from './queryAeEigById'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
@@ -61,7 +61,7 @@ const ApArt = ({ treeName }) => {
     .filter(o => o !== row.artId)
     // no null values
     .filter(o => !!o)
-  const aeEigenschaftenfilter = useCallback(
+  const aeTaxonomiesfilter = useCallback(
     inputValue =>
       !!inputValue
         ? apartenOfAp.length
@@ -171,15 +171,15 @@ const ApArt = ({ treeName }) => {
                 <Field
                   name="artId"
                   valueLabel={
-                    dataAeEigById.aeEigenschaftenById
-                      ? dataAeEigById.aeEigenschaftenById.artname
+                    dataAeEigById.aeTaxonomyById
+                      ? dataAeEigById.aeTaxonomyById.artname
                       : ''
                   }
                   label="Art"
                   row={row}
-                  query={queryAeEigenschaftens}
-                  filter={aeEigenschaftenfilter}
-                  queryNodesName="allAeEigenschaftens"
+                  query={queryAeTaxonomies}
+                  filter={aeTaxonomiesfilter}
+                  queryNodesName="allAeTaxonomies"
                   component={SelectLoadingOptions}
                 />
               </Form>

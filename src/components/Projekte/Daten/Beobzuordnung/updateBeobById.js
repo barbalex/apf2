@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 import {
-  aeEigenschaften,
+  aeTaxonomies,
   beob,
   beobQuelleWerte,
   pop,
@@ -48,8 +48,8 @@ export default gql`
     ) {
       beob {
         ...BeobFields
-        aeEigenschaftenByArtId {
-          ...AeEigenschaftenFields
+        aeTaxonomyByArtId {
+          ...AeTaxonomiesFields
           apByArtId {
             id
             popsByApId {
@@ -73,7 +73,7 @@ export default gql`
             }
           }
         }
-        aeEigenschaftenByArtIdOriginal {
+        aeTaxonomyByArtIdOriginal {
           id
           artname
         }
@@ -83,7 +83,7 @@ export default gql`
       }
     }
   }
-  ${aeEigenschaften}
+  ${aeTaxonomies}
   ${beob}
   ${beobQuelleWerte}
   ${pop}

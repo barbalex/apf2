@@ -95,7 +95,7 @@ const AktPopList = () => {
       ).length
 
       return {
-        ap: get(ap, 'aeEigenschaftenByArtId.artname'),
+        ap: get(ap, 'aeTaxonomyByArtId.artname'),
         urspr,
         anges,
         total: urspr + anges,

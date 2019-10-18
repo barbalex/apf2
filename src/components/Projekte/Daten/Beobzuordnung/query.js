@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 import {
-  aeEigenschaften,
+  aeTaxonomies,
   apart,
   beob,
   beobQuelleWerte,
@@ -13,8 +13,8 @@ export default gql`
   query beobByIdQueryForZuordnung($id: UUID!, $apId: UUID!) {
     beobById(id: $id) {
       ...BeobFields
-      aeEigenschaftenByArtId {
-        ...AeEigenschaftenFields
+      aeTaxonomyByArtId {
+        ...AeTaxonomiesFields
         apartsByArtId(filter: { apId: { equalTo: $apId } }) {
           nodes {
             ...ApartFields
@@ -43,7 +43,7 @@ export default gql`
           }
         }
       }
-      aeEigenschaftenByArtIdOriginal {
+      aeTaxonomyByArtIdOriginal {
         id
         taxid
         artname
@@ -53,7 +53,7 @@ export default gql`
       }
     }
   }
-  ${aeEigenschaften}
+  ${aeTaxonomies}
   ${apart}
   ${beob}
   ${beobQuelleWerte}

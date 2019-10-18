@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 import {
-  aeEigenschaften,
+  aeTaxonomies,
   pop,
   popStatusWerte,
   tpop,
@@ -32,8 +32,8 @@ export default gql`
               }
               apByApId {
                 id
-                aeEigenschaftenByArtId {
-                  ...AeEigenschaftenFields
+                aeTaxonomyByArtId {
+                  ...AeTaxonomiesFields
                 }
               }
               tpopsByPopId(filter: $tpopFilter)
@@ -62,8 +62,8 @@ export default gql`
               }
               apByApId {
                 id
-                aeEigenschaftenByArtId {
-                  ...AeEigenschaftenFields
+                aeTaxonomyByArtId {
+                  ...AeTaxonomiesFields
                 }
               }
               tpopsByPopId(filter: $tpopFilter)
@@ -83,7 +83,7 @@ export default gql`
       }
     }
   }
-  ${aeEigenschaften}
+  ${aeTaxonomies}
   ${pop}
   ${popStatusWerte}
   ${tpop}

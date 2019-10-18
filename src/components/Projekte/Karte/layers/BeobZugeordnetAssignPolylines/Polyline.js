@@ -101,7 +101,7 @@ const Line = ({ treeName, beob }) => {
         <>
           <StyledH3>Zuordnung</StyledH3>
           <div>einer Beobachtung</div>
-          <div>{`von ${get(beob, 'aeEigenschaftenByArtId.artname', '')}`}</div>
+          <div>{`von ${get(beob, 'aeTaxonomyByArtId.artname', '')}`}</div>
           <div>{`am ${datum}`}</div>
           <div>{`durch ${autor}`}</div>
           <div>

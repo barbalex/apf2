@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { aeEigenschaften, apart, beob } from '../../../../shared/fragments'
+import { aeTaxonomies, apart, beob } from '../../../../shared/fragments'
 
 export default gql`
   query BeobNichtZuzuordnenForMapQuery(
@@ -17,7 +17,7 @@ export default gql`
           apartsByApId {
             nodes {
               ...ApartFields
-              aeEigenschaftenByArtId {
+              aeTaxonomyByArtId {
                 id
                 beobsByArtId(filter: $beobFilter) {
                   nodes {
@@ -26,8 +26,8 @@ export default gql`
                       id
                       name
                     }
-                    aeEigenschaftenByArtId {
-                      ...AeEigenschaftenFields
+                    aeTaxonomyByArtId {
+                      ...AeTaxonomiesFields
                     }
                   }
                 }
@@ -38,7 +38,7 @@ export default gql`
       }
     }
   }
-  ${aeEigenschaften}
+  ${aeTaxonomies}
   ${apart}
   ${beob}
 `

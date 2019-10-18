@@ -26,7 +26,7 @@ export default async ({ value, row, treeName, client, store }) => {
     result = await client.query({
       query: gql`
         query saveArtIdToDbQuery($id: UUID!) {
-          aeEigenschaftenById(id: $id) {
+          aeTaxonomyById(id: $id) {
             id
             apByArtId {
               id
@@ -37,7 +37,7 @@ export default async ({ value, row, treeName, client, store }) => {
       variables: { id: value },
     })
     // aNA = activeNodeArray
-    const newApId = get(result, 'data.aeEigenschaftenById.apByArtId.id')
+    const newApId = get(result, 'data.aeTaxonomyById.apByArtId.id')
     const newANA = [aNA[0], aNA[1], aNA[2], newApId, aNA[4], aNA[5]]
     const oldParentNodeUrl = [...aNA]
     oldParentNodeUrl.pop()

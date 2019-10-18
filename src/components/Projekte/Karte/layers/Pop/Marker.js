@@ -93,7 +93,7 @@ const PopMarker = ({ treeName, pop }) => {
   const zIndexOffset = -apfloraLayers.findIndex(
     apfloraLayer => apfloraLayer.value === 'pop',
   )
-  const artname = get(pop, 'apByApId.aeEigenschaftenByArtId.artname', '')
+  const artname = get(pop, 'apByApId.aeTaxonomyByArtId.artname', '')
 
   return (
     <Marker

@@ -6,7 +6,7 @@ export default gql`
   query assozartByIdQuery($id: UUID!) {
     assozartById(id: $id) {
       ...AssozartFields
-      aeEigenschaftenByAeId {
+      aeTaxonomyByAeId {
         id
         artname
       }

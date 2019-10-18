@@ -83,11 +83,11 @@ const AP = () => {
           query apForExportQuery($filter: ApFilter) {
             allAps(
               filter: $filter
-              orderBy: AE_EIGENSCHAFTEN_BY_ART_ID__ARTNAME_ASC
+              orderBy: AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC
             ) {
               nodes {
                 id
-                aeEigenschaftenByArtId {
+                aeTaxonomyByArtId {
                   id
                   artname
                 }
@@ -112,7 +112,7 @@ const AP = () => {
       })
       const dataToExport = get(data, 'allAps.nodes', []).map(n => ({
         id: n.id,
-        artname: get(n, 'aeEigenschaftenByArtId.artname') || null,
+        artname: get(n, 'aeTaxonomyByArtId.artname') || null,
         bearbeitung: get(n, 'apBearbstandWerteByBearbeitung.text') || null,
         startJahr: n.startJahr,
         umsetzung: get(n, 'apUmsetzungWerteByUmsetzung.text') || null,

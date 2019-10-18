@@ -21,7 +21,7 @@ import query from './query'
 import queryLists from './queryLists'
 import queryTpopmassns from './queryTpopmassns'
 import queryAdresses from './queryAdresses'
-import queryAeEigenschaftens from './queryAeEigenschaftens'
+import queryAeTaxonomies from './queryAeTaxonomies'
 import updateTpopmassnByIdGql from './updateTpopmassnById'
 import storeContext from '../../../../storeContext'
 import { simpleTypes as tpopmassnType } from '../../../../store/NodeFilterTree/tpopmassn'
@@ -330,8 +330,8 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
                   field="wirtspflanze"
                   label="Wirtspflanze"
                   component={SelectLoadingOptionsTypable}
-                  query={queryAeEigenschaftens}
-                  queryNodesName="allAeEigenschaftens"
+                  query={queryAeTaxonomies}
+                  queryNodesName="allAeTaxonomies"
                 />
                 <Field
                   name="herkunftPop"

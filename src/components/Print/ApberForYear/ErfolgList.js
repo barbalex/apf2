@@ -215,14 +215,14 @@ const ErfolgList = ({ jahr, data }) => {
       const anzMassn = flatten(
         tpops.map(t => get(t, 'tpopmassnsByTpopId.nodes', [])),
       ).length
-      const kefKontrollJahr = get(ap, 'aeEigenschaftenByArtId.kefkontrolljahr')
+      const kefKontrollJahr = get(ap, 'aeTaxonomyByArtId.kefkontrolljahr')
       const isKefKontrollJahr =
         !!kefKontrollJahr &&
         typeof window !== 'undefined' &&
         window.Math.floor((jahr - kefKontrollJahr) / 4) ===
           (jahr - kefKontrollJahr) / 4
       return {
-        ap: get(ap, 'aeEigenschaftenByArtId.artname'),
+        ap: get(ap, 'aeTaxonomyByArtId.artname'),
         erfolgNicht: beurteilung === 3 ? 'X' : '',
         erfolgWenig: beurteilung === 6 ? 'X' : '',
         erfolgMaessig: beurteilung === 5 ? 'X' : '',
@@ -238,7 +238,7 @@ const ErfolgList = ({ jahr, data }) => {
           '',
         ),
         keineMassnahme: anzMassn === 0 ? 'X' : '',
-        kefArt: !!get(ap, 'aeEigenschaftenByArtId.kefart') ? 'X' : '',
+        kefArt: !!get(ap, 'aeTaxonomyByArtId.kefart') ? 'X' : '',
         kefKontrolle: isKefKontrollJahr ? 'X' : '',
       }
     }),

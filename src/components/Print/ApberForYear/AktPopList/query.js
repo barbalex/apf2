@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { aeEigenschaften } from '../../../shared/fragments'
+import { aeTaxonomies } from '../../../shared/fragments'
 
 export default gql`
   query AktPopListAps($projektId: UUID!) {
@@ -12,8 +12,8 @@ export default gql`
     ) {
       nodes {
         id
-        aeEigenschaftenByArtId {
-          ...AeEigenschaftenFields
+        aeTaxonomyByArtId {
+          ...AeTaxonomiesFields
         }
         pops100: popsByApId(filter: { status: { equalTo: 100 } }) {
           nodes {
@@ -36,5 +36,5 @@ export default gql`
       }
     }
   }
-  ${aeEigenschaften}
+  ${aeTaxonomies}
 `

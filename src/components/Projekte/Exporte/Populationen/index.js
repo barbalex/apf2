@@ -109,7 +109,7 @@ const Populationen = () => {
                           apId
                           apByApId {
                             id
-                            aeEigenschaftenByArtId {
+                            aeTaxonomyByArtId {
                               id
                               artname
                             }
@@ -148,7 +148,7 @@ const Populationen = () => {
                 const dataToExport = get(data, 'allPops.nodes', []).map(n => ({
                   apId: get(n, 'apByApId.id') || null,
                   apArtname:
-                    get(n, 'apByApId.aeEigenschaftenByArtId.artname') || null,
+                    get(n, 'apByApId.aeTaxonomyByArtId.artname') || null,
                   apBearbeitung:
                     get(n, 'apByApId.apBearbstandWerteByBearbeitung.text') ||
                     null,

@@ -24,7 +24,7 @@ export default gql`
     ) {
       assozart {
         ...AssozartFields
-        aeEigenschaftenByAeId {
+        aeTaxonomyByAeId {
           id
           artname
         }

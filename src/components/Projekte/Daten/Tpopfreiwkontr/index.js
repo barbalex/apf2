@@ -278,7 +278,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
 
   const artname = get(
     row,
-    'tpopByTpopId.popByPopId.apByApId.aeEigenschaftenByArtId.artname',
+    'tpopByTpopId.popByPopId.apByApId.aeTaxonomyByArtId.artname',
     '',
   )
   const pop = get(row, 'tpopByTpopId.popByPopId', {})

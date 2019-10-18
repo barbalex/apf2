@@ -47,13 +47,13 @@ FROM
     apflora.beob AS beob2
     ON beob2.id = beob.id
   INNER JOIN
-    apflora.ae_eigenschaften AS ae_artid
+    apflora.ae_taxonomies AS ae_artid
     INNER JOIN
       apflora.ap as artidsap
       ON artidsap.art_id = ae_artid.id
     ON apflora.beob.art_id = ae_artid.id
   INNER JOIN
-    apflora.ae_eigenschaften AS ae_artidoriginal
+    apflora.ae_taxonomies AS ae_artidoriginal
     INNER JOIN
       apflora.ap as artidoriginalsap
       ON artidoriginalsap.art_id = ae_artidoriginal.id

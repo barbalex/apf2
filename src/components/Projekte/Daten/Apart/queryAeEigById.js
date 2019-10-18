@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 
 export default gql`
   query aeEigByIdQuery($id: UUID!) {
-    aeEigenschaftenById(id: $id) {
+    aeTaxonomyById(id: $id) {
       id
       artname
     }

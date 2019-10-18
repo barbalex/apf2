@@ -32,7 +32,7 @@ Struktur der Tabelle "beob":
 * data: Unveränderte Originaldaten im JSONB Format
 * id_field: Feld in den Originaldaten, welches die Original-ID enthält. Dient dazu, gemeinsam mit dem Feld `quelle_id` jederzeit mit neuen Versionen von Originaldaten verbinden zu können
 * quelle_id: Woher die Beobachtung stammt (z.B. Info Spezies). Fremdschlüssel aus der Tabelle `beob_quelle_werte`
-* art_id: beschreibt die Art. Fremdschlüssel aus Tabelle `ae_eigenschaften`
+* art_id: beschreibt die Art. Fremdschlüssel aus Tabelle `ae_taxonomies`
 * art_id_original: Am Unterschied zwischen art_id_original und art_id wird erkenntlich, wenn die Art-Bestimmung verändert wurde
 * autor: Autor der Beobachtung
 * datum: Datum der Beobachtung

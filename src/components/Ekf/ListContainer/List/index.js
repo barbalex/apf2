@@ -35,7 +35,7 @@ const getEkfFromData = ({ data, ekfAdresseId }) => {
     projId: get(e, 'tpopByTpopId.popByPopId.apByApId.projektByProjId.id'),
     art: get(
       e,
-      'tpopByTpopId.popByPopId.apByApId.aeEigenschaftenByArtId.artname',
+      'tpopByTpopId.popByPopId.apByApId.aeTaxonomyByArtId.artname',
       '',
     ),
     apId: get(e, 'tpopByTpopId.popByPopId.apByApId.id'),

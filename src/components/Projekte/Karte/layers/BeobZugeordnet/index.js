@@ -78,7 +78,7 @@ const BeobZugeordnetMarker = ({ treeName, clustered }) => {
     () =>
       flatten(
         aparts.map(a =>
-          get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []),
+          get(a, 'aeTaxonomyByArtId.beobsByArtId.nodes', []),
         ),
       ),
     [aparts],
@@ -93,7 +93,7 @@ const BeobZugeordnetMarker = ({ treeName, clustered }) => {
     () =>
       flatten(
         beobZugeordnetForMapAparts.map(n =>
-          get(n, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []),
+          get(n, 'aeTaxonomyByArtId.beobsByArtId.nodes', []),
         ),
       ),
     [beobZugeordnetForMapAparts],

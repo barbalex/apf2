@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 import {
-  aeEigenschaften,
+  aeTaxonomies,
   adresse,
   ekzaehleinheit,
   pop,
@@ -28,8 +28,8 @@ export default gql`
           apByApId {
             id
             ekfBeobachtungszeitpunkt
-            aeEigenschaftenByArtId {
-              ...AeEigenschaftenFields
+            aeTaxonomyByArtId {
+              ...AeTaxonomiesFields
             }
             ekzaehleinheitsByApId {
               nodes {
@@ -49,7 +49,7 @@ export default gql`
       }
     }
   }
-  ${aeEigenschaften}
+  ${aeTaxonomies}
   ${adresse}
   ${ekzaehleinheit}
   ${pop}

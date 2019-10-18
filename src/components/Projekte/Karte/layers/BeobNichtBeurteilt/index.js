@@ -76,7 +76,7 @@ const BeobNichtBeurteiltMarker = ({ treeName, clustered }) => {
     () =>
       flatten(
         aparts.map(a =>
-          get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []),
+          get(a, 'aeTaxonomyByArtId.beobsByArtId.nodes', []),
         ),
       ),
     [aparts],
@@ -91,7 +91,7 @@ const BeobNichtBeurteiltMarker = ({ treeName, clustered }) => {
     () =>
       flatten(
         beobNichtBeurteiltForMapAparts.map(n =>
-          get(n, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []),
+          get(n, 'aeTaxonomyByArtId.beobsByArtId.nodes', []),
         ),
       ),
     [beobNichtBeurteiltForMapAparts],

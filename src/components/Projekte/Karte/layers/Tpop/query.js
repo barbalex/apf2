@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 import {
-  aeEigenschaften,
+  aeTaxonomies,
   pop,
   popStatusWerte,
   tpop,
@@ -23,8 +23,8 @@ export default gql`
         @include(if: $perAp) {
         nodes {
           id
-          aeEigenschaftenByArtId {
-            ...AeEigenschaftenFields
+          aeTaxonomyByArtId {
+            ...AeTaxonomiesFields
           }
           popsByApId(filter: $popFilter) {
             nodes {
@@ -39,8 +39,8 @@ export default gql`
                     ...PopFields
                     apByApId {
                       id
-                      aeEigenschaftenByArtId {
-                        ...AeEigenschaftenFields
+                      aeTaxonomyByArtId {
+                        ...AeTaxonomiesFields
                       }
                     }
                   }
@@ -53,8 +53,8 @@ export default gql`
       perProj: apsByProjId @include(if: $perProj) {
         nodes {
           id
-          aeEigenschaftenByArtId {
-            ...AeEigenschaftenFields
+          aeTaxonomyByArtId {
+            ...AeTaxonomiesFields
           }
           popsByApId(filter: $popFilter) {
             nodes {
@@ -69,8 +69,8 @@ export default gql`
                     ...PopFields
                     apByApId {
                       id
-                      aeEigenschaftenByArtId {
-                        ...AeEigenschaftenFields
+                      aeTaxonomyByArtId {
+                        ...AeTaxonomiesFields
                       }
                     }
                   }
@@ -82,7 +82,7 @@ export default gql`
       }
     }
   }
-  ${aeEigenschaften}
+  ${aeTaxonomies}
   ${pop}
   ${popStatusWerte}
   ${tpop}

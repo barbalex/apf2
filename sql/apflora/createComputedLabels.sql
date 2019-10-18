@@ -32,14 +32,14 @@ comment on function apflora.ek_abrechnungstyp_werte_label(apflora.ek_abrechnungs
 
 drop function if exists apflora.ap_label(ap apflora.ap);
 create function apflora.ap_label(ap apflora.ap) returns text as $$
-  select coalesce((select artname from apflora.ae_eigenschaften where apflora.ae_eigenschaften.id = ap.art_id), '(kein Name)')
+  select coalesce((select artname from apflora.ae_taxonomies where apflora.ae_taxonomies.id = ap.art_id), '(kein Name)')
 $$ language sql stable;
 -- make label sortable, as of postgraphile 4.4/postgraphile@next
 comment on function apflora.ap_label(apflora.ap) is e'@sortable';
 
 drop function if exists apflora.apart_label(apart apflora.apart);
 create function apflora.apart_label(apart apflora.apart) returns text as $$
-  select coalesce((select artname from apflora.ae_eigenschaften where apflora.ae_eigenschaften.id = apart.art_id), '(kein Name)')
+  select coalesce((select artname from apflora.ae_taxonomies where apflora.ae_taxonomies.id = apart.art_id), '(kein Name)')
 $$ language sql stable;
 -- make label sortable, as of postgraphile 4.4/postgraphile@next
 comment on function apflora.apart_label(apflora.apart) is e'@sortable';
@@ -87,7 +87,7 @@ comment on function apflora.zielber_label(apflora.zielber) is e'@sortable';
 
 drop function if exists apflora.assozart_label(assozart apflora.assozart);
 create function apflora.assozart_label(assozart apflora.assozart) returns text as $$
-  select coalesce((select artname from apflora.ae_eigenschaften where apflora.ae_eigenschaften.id = assozart.ae_id), '(keine Art gewählt)')
+  select coalesce((select artname from apflora.ae_taxonomies where apflora.ae_taxonomies.id = assozart.ae_id), '(keine Art gewählt)')
 $$ language sql stable;
 -- make label sortable, as of postgraphile 4.4/postgraphile@next
 comment on function apflora.assozart_label(apflora.assozart) is e'@sortable';
@@ -145,12 +145,12 @@ drop function if exists apflora.tpop_ap_name(apflora.tpop);
 create function apflora.tpop_ap_name(tpop apflora.tpop) returns text as $$
   select coalesce(
     (
-      select apflora.ae_eigenschaften.artname
+      select apflora.ae_taxonomies.artname
       from
         apflora.pop
           inner join apflora.ap
-            inner join apflora.ae_eigenschaften
-            on apflora.ap.art_id = apflora.ae_eigenschaften.id
+            inner join apflora.ae_taxonomies
+            on apflora.ap.art_id = apflora.ae_taxonomies.id
           on apflora.pop.ap_id = apflora.ap.id
       where apflora.pop.id = tpop.pop_id
     )
@@ -192,13 +192,13 @@ drop function if exists apflora.tpopkontr_ap_name(apflora.tpopkontr);
 create function apflora.tpopkontr_ap_name(tpopkontr apflora.tpopkontr) returns text as $$
   select coalesce(
     (
-      select apflora.ae_eigenschaften.artname
+      select apflora.ae_taxonomies.artname
       from
         apflora.tpop
         inner join apflora.pop
           inner join apflora.ap
-            inner join apflora.ae_eigenschaften
-            on apflora.ap.art_id = apflora.ae_eigenschaften.id
+            inner join apflora.ae_taxonomies
+            on apflora.ap.art_id = apflora.ae_taxonomies.id
           on apflora.pop.ap_id = apflora.ap.id
         on apflora.tpop.pop_id = apflora.pop.id
       where apflora.tpop.id = tpopkontr.tpop_id
@@ -243,13 +243,13 @@ drop function if exists apflora.tpopmassn_ap_name(apflora.tpopmassn);
 create function apflora.tpopmassn_ap_name(tpopmassn apflora.tpopmassn) returns text as $$
   select coalesce(
     (
-      select apflora.ae_eigenschaften.artname
+      select apflora.ae_taxonomies.artname
       from
         apflora.tpop
         inner join apflora.pop
           inner join apflora.ap
-            inner join apflora.ae_eigenschaften
-            on apflora.ap.art_id = apflora.ae_eigenschaften.id
+            inner join apflora.ae_taxonomies
+            on apflora.ap.art_id = apflora.ae_taxonomies.id
           on apflora.pop.ap_id = apflora.ap.id
         on apflora.tpop.pop_id = apflora.pop.id
       where apflora.tpop.id = tpopmassn.tpop_id

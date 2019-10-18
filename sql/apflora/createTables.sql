@@ -82,7 +82,7 @@ CREATE POLICY writer ON apflora.adresse
 DROP TABLE IF EXISTS apflora.ap;
 CREATE TABLE apflora.ap (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  art_id UUID UNIQUE DEFAULT NULL REFERENCES apflora.ae_eigenschaften(id) on delete set null on update cascade,
+  art_id UUID UNIQUE DEFAULT NULL REFERENCES apflora.ae_taxonomies(id) on delete no action on update cascade,
   proj_id uuid DEFAULT NULL REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE,
   bearbeitung integer DEFAULT NULL REFERENCES apflora.ap_bearbstand_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   start_jahr smallint DEFAULT NULL,
@@ -109,7 +109,6 @@ COMMENT ON COLUMN apflora.ap.bearbeiter IS 'Verantwortliche(r) für die Art';
 COMMENT ON COLUMN apflora.ap.ekf_beobachtungszeitpunkt IS 'bester Beobachtungszeitpunkt';
 COMMENT ON COLUMN apflora.ap.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-alter table apflora.ap add column ekf_beobachtungszeitpunkt text default null;
 
 -- this table is NOT YET IN USE
 DROP TABLE IF EXISTS apflora.userprojekt;
@@ -282,7 +281,7 @@ DROP TABLE IF EXISTS apflora.assozart;
 CREATE TABLE apflora.assozart (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   ap_id UUID DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  ae_id UUID DEFAULT NULL REFERENCES apflora.ae_eigenschaften (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  ae_id UUID DEFAULT NULL REFERENCES apflora.ae_taxonomies (id) ON DELETE no action ON UPDATE CASCADE,
   bemerkungen text,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null
@@ -1119,27 +1118,8 @@ CREATE TABLE apflora.evab_typologie (
   "Alliance" varchar(100)
 );
 
--- TODO:
--- replace with direct GraphQL call to ae
--- when graphql installed
-DROP TABLE IF EXISTS apflora.ae_eigenschaften;
-CREATE TABLE apflora.ae_eigenschaften (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  taxid integer DEFAULT NULL,
-  familie varchar(100) DEFAULT NULL,
-  artname varchar(100) DEFAULT NULL,
-  --namedeutsch varchar(100) DEFAULT NULL,
-  status varchar(47) DEFAULT NULL,
-  artwert smallint DEFAULT NULL,
-  kefart boolean DEFAULT false,
-  kefkontrolljahr smallint DEFAULT NULL,
-  --fnsjahresartjahr smallint DEFAULT NULL
-);
-CREATE INDEX ON apflora.ae_eigenschaften USING btree (id);
-CREATE INDEX ON apflora.ae_eigenschaften USING btree (taxid);
-CREATE INDEX ON apflora.ae_eigenschaften USING btree (artname);
-COMMENT ON COLUMN apflora.ae_eigenschaften.id IS 'Primärschlüssel';
-
+-- this table can not be used as foreign table
+-- because it needs to be referenced
 drop table if exists apflora.ae_taxonomies;
 create table apflora.ae_taxonomies (
   taxonomie_id UUID,
@@ -1160,8 +1140,9 @@ create index on apflora.ae_taxonomies (taxid);
 create index on apflora.ae_taxonomies (artname);
 
 -- to update data run:
---insert into apflora.ae_taxonomies(taxonomie_id, taxonomie_name, id, taxid, familie, artname, status, artwert, kefart, kefkontrolljahr)
---select taxonomie_id, taxonomie_name, id, taxid, familie, artname, status, artwert, kefart, kefkontrolljahr from apflora.ae_taxonomies_download;
+truncate apflora.ae_taxonomies;
+insert into apflora.ae_taxonomies(taxonomie_id, taxonomie_name, id, taxid, familie, artname, status, artwert, kefart, kefkontrolljahr)
+select taxonomie_id, taxonomie_name, id, taxid, familie, artname, status, artwert, kefart, kefkontrolljahr from apflora.ae_taxonomies_download;
 
 --
 -- beob can collect beob of any provenience by following this convention:
@@ -1182,9 +1163,9 @@ CREATE TABLE apflora.beob (
   quelle_id uuid Default Null,
   -- this field in data contains this datasets id
   id_field varchar(38) DEFAULT NULL,
-  art_id UUID DEFAULT NULL REFERENCES apflora.ae_eigenschaften(id) on delete set null on update cascade,
+  art_id UUID DEFAULT NULL REFERENCES apflora.ae_taxonomies(id) on delete no action on update cascade,
   -- art_id can be changed. art_id_original documents this change
-  art_id_original UUID DEFAULT NULL REFERENCES apflora.ae_eigenschaften(id) on delete set null on update cascade,
+  art_id_original UUID DEFAULT NULL REFERENCES apflora.ae_taxonomies(id) on delete no action on update cascade,
   -- data without year is not imported
   -- when no month exists: month = 01
   -- when no day exists: day = 01
@@ -1218,10 +1199,6 @@ COMMENT ON COLUMN apflora.beob.infoflora_informiert_datum IS 'Datum, an dem Info
 COMMENT ON COLUMN apflora.beob.bemerkungen IS 'Bemerkungen zur Zuordnung';
 COMMENT ON COLUMN apflora.beob.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.beob.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
--- alter table add art_id_original:
---alter table apflora.beob add column art_id_original UUID DEFAULT NULL REFERENCES apflora.ae_eigenschaften(id) on delete set null on update cascade;
---update apflora.beob set art_id_original = art_id;
---CREATE INDEX ON apflora.beob USING btree (art_id_original);
 
 -- beobprojekt is used to control
 -- what beob are seen in what projekt
@@ -1246,7 +1223,7 @@ CREATE INDEX ON apflora.beob_quelle_werte USING btree (id);
 DROP TABLE IF EXISTS apflora.apart;
 CREATE TABLE apflora.apart (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  art_id UUID DEFAULT NULL REFERENCES apflora.ae_eigenschaften (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  art_id UUID DEFAULT NULL REFERENCES apflora.ae_taxonomies (id) ON DELETE NO ACTION ON UPDATE CASCADE,
   ap_id UUID DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   changed date DEFAULT NULL,
   changed_by varchar(20) DEFAULT NULL
@@ -1256,7 +1233,7 @@ CREATE INDEX ON apflora.apart USING btree (id);
 CREATE INDEX ON apflora.apart USING btree (ap_id);
 CREATE INDEX ON apflora.apart USING btree (art_id);
 COMMENT ON COLUMN apflora.apart.id IS 'Primärschlüssel';
-COMMENT ON COLUMN apflora.apart.art_id IS 'Zugehörige Art. Aus der Tabelle "ae_eigenschaften"';
+COMMENT ON COLUMN apflora.apart.art_id IS 'Zugehörige Art. Aus der Tabelle "ae_taxonomies"';
 COMMENT ON COLUMN apflora.apart.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
 COMMENT ON COLUMN apflora.apart.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.apart.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';

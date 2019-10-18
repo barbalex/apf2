@@ -16,23 +16,10 @@ export const adresse = gql`
   }
 `
 
-export const aeEigenschaften = gql`
-  fragment AeEigenschaftenFields on AeEigenschaften {
-    id
-    taxid
-    familie
-    artname
-    status
-    artwert
-    kefkontrolljahr
-    kefart
-  }
-`
-
 export const aeTaxonomies = gql`
-  fragment AeTaxonomiesFields on AeTaxonomies {
-    taxonomie_id
-    taxonomie_name
+  fragment AeTaxonomiesFields on AeTaxonomy {
+    taxonomieId
+    taxonomieName
     id
     taxid
     familie

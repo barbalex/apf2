@@ -121,7 +121,7 @@ const ApberForAp = ({
   isSubReport,
 }) => {
   const apData = isSubReport ? apDataPassed : apDataPassed.apById
-  const artname = get(apData, 'aeEigenschaftenByArtId.artname', '(Art fehlt)')
+  const artname = get(apData, 'aeTaxonomyByArtId.artname', '(Art fehlt)')
   const apber = get(apData, 'apbersByApId.nodes[0]', {})
   const apberDatum = get(apber, 'datum')
   const erfkrit = sortBy(get(apData, 'erfkritsByApId.nodes', []), e =>

@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 
 import {
   adresse,
-  aeEigenschaften,
+  aeTaxonomies,
   ap,
   apber,
   tpopber,
@@ -17,8 +17,8 @@ export default gql`
   query apByIdJahr($apId: UUID!, $jahr: Int!) {
     apById(id: $apId) {
       ...ApFields
-      aeEigenschaftenByArtId {
-        ...AeEigenschaftenFields
+      aeTaxonomyByArtId {
+        ...AeTaxonomiesFields
       }
       popsByApId {
         nodes {
@@ -98,7 +98,7 @@ export default gql`
     }
   }
   ${adresse}
-  ${aeEigenschaften}
+  ${aeTaxonomies}
   ${ap}
   ${apber}
   ${apErfkritWerte}

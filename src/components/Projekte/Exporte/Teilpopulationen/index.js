@@ -16,7 +16,7 @@ import gql from 'graphql-tag'
 
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
 import exportModule from '../../../../modules/export'
-import queryAeEigenschaftens from './queryAeEigenschaftens'
+import queryAeTaxonomies from './queryAeTaxonomies'
 import storeContext from '../../../../storeContext'
 
 const StyledCard = styled(Card)`
@@ -110,7 +110,7 @@ const Teilpopulationen = ({ treeName }) => {
                   id
                   apByApId {
                     id
-                    aeEigenschaftenByArtId {
+                    aeTaxonomyByArtId {
                       id
                       artname
                       familie
@@ -185,9 +185,9 @@ const Teilpopulationen = ({ treeName }) => {
       const dataToExport = get(data, 'allTpops.nodes', []).map(n => ({
         apId: get(n, 'popByPopId.apByApId.id') || null,
         apFamilie:
-          get(n, 'popByPopId.apByApId.aeEigenschaftenByArtId.familie') || null,
+          get(n, 'popByPopId.apByApId.aeTaxonomyByArtId.familie') || null,
         apArtname:
-          get(n, 'popByPopId.apByApId.aeEigenschaftenByArtId.artname') || null,
+          get(n, 'popByPopId.apByApId.aeTaxonomyByArtId.artname') || null,
         apBearbeitung:
           get(n, 'popByPopId.apByApId.apBearbstandWerteByBearbeitung.text') ||
           null,
@@ -275,7 +275,7 @@ const Teilpopulationen = ({ treeName }) => {
     tpopGqlFilter,
   ])
 
-  const aeEigenschaftenfilter = useCallback(
+  const aeTaxonomiesfilter = useCallback(
     inputValue =>
       !!inputValue
         ? {
@@ -578,7 +578,7 @@ const Teilpopulationen = ({ treeName }) => {
             <SelectLoadingOptions
               row={{}}
               field="ewm"
-              valueLabelPath="aeEigenschaftenByArtId.artname"
+              valueLabelPath="aeTaxonomyByArtId.artname"
               label={`"Eier legende Wollmilchsau" für einzelne Arten: Art wählen`}
               labelSize={14}
               saveToDb={async e => {
@@ -618,9 +618,9 @@ const Teilpopulationen = ({ treeName }) => {
                 }
                 setEwmMessage('')
               }}
-              query={queryAeEigenschaftens}
-              filter={aeEigenschaftenfilter}
-              queryNodesName="allAeEigenschaftens"
+              query={queryAeTaxonomies}
+              filter={aeTaxonomiesfilter}
+              queryNodesName="allAeTaxonomies"
               error={ewmMessage}
             />
           </AutocompleteContainer>

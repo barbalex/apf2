@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 
 import {
   adresse,
-  aeEigenschaften,
+  aeTaxonomies,
   apber,
   tpopber,
   ziel,
@@ -23,8 +23,8 @@ export default gql`
       nodes {
         id
         startJahr
-        aeEigenschaftenByArtId {
-          ...AeEigenschaftenFields
+        aeTaxonomyByArtId {
+          ...AeTaxonomiesFields
         }
         adresseByBearbeiter {
           ...AdresseFields
@@ -112,7 +112,7 @@ export default gql`
     }
   }
   ${adresse}
-  ${aeEigenschaften}
+  ${aeTaxonomies}
   ${apber}
   ${apErfkritWerte}
   ${tpopber}

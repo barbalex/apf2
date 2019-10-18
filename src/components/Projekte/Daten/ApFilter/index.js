@@ -11,11 +11,11 @@ import TextField from '../../../shared/TextFieldFormik'
 import Select from '../../../shared/SelectFormik'
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptionsFormik'
 import FilterTitle from '../../../shared/FilterTitle'
-import queryAeEigenschaftenById from './queryAeEigenschaftenById'
+import queryAeTaxonomiesById from './queryAeTaxonomiesById'
 import queryLists from './queryLists'
 import queryAps from './queryAps'
 import queryAdresses from './queryAdresses'
-import queryAeEigenschaftens from './queryAeEigenschaftens'
+import queryAeTaxonomies from './queryAeTaxonomies'
 import storeContext from '../../../../storeContext'
 import { simpleTypes as apType } from '../../../../store/NodeFilterTree/ap'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
@@ -97,10 +97,10 @@ const ApFilter = ({ treeName }) => {
   } = useQuery(queryLists)
 
   const {
-    data: dataAeEigenschaftenById,
-    error: errorAeEigenschaftenById,
-    loading: loadingAeEigenschaftenById,
-  } = useQuery(queryAeEigenschaftenById, {
+    data: dataAeTaxonomiesById,
+    error: errorAeTaxonomiesById,
+    loading: loadingAeTaxonomiesById,
+  } = useQuery(queryAeTaxonomiesById, {
     variables: {
       id: nodeFilter[treeName].ap.artId,
       run: !!nodeFilter[treeName].ap.artId,
@@ -108,8 +108,8 @@ const ApFilter = ({ treeName }) => {
   })
 
   const artname =
-    !!nodeFilter[treeName].ap.artId && !loadingAeEigenschaftenById
-      ? get(dataAeEigenschaftenById, 'aeEigenschaftenById.artname') || ''
+    !!nodeFilter[treeName].ap.artId && !loadingAeTaxonomiesById
+      ? get(dataAeTaxonomiesById, 'aeTaxonomyById.artname') || ''
       : ''
 
   const row = nodeFilter[treeName].ap
@@ -129,7 +129,7 @@ const ApFilter = ({ treeName }) => {
     [nodeFilterSetValue, refetch, row, treeName],
   )
 
-  const aeEigenschaftenFilter = useCallback(
+  const aeTaxonomiesFilter = useCallback(
     inputValue =>
       !!inputValue
         ? {
@@ -145,8 +145,8 @@ const ApFilter = ({ treeName }) => {
   if (errorAdresses) return `Fehler: ${errorAdresses.message}`
   if (apsError) return `Fehler: ${apsError.message}`
   if (errorLists) return `Fehler: ${errorLists.message}`
-  if (errorAeEigenschaftenById) {
-    return `Fehler: ${errorAeEigenschaftenById.message}`
+  if (errorAeTaxonomiesById) {
+    return `Fehler: ${errorAeTaxonomiesById.message}`
   }
 
   return (
@@ -170,19 +170,19 @@ const ApFilter = ({ treeName }) => {
               <Form onBlur={() => dirty && handleSubmit()}>
                 <Field
                   name="artId"
-                  valueLabelPath="aeEigenschaftenByArtId.artname"
+                  valueLabelPath="aeTaxonomyByArtId.artname"
                   label="Art (gibt dem Aktionsplan den Namen)"
                   row={{
                     ...row,
                     ...{
-                      aeEigenschaftenByArtId: {
+                      aeTaxonomyByArtId: {
                         artname,
                       },
                     },
                   }}
-                  query={queryAeEigenschaftens}
-                  filter={aeEigenschaftenFilter}
-                  queryNodesName="allAeEigenschaftens"
+                  query={queryAeTaxonomies}
+                  filter={aeTaxonomiesFilter}
+                  queryNodesName="allAeTaxonomies"
                   component={SelectLoadingOptions}
                 />
                 <Field

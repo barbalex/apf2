@@ -16,7 +16,7 @@ import updateApByIdGql from './updateApById'
 import query from './query'
 import queryLists from './queryLists'
 import queryAdresses from './queryAdresses'
-import queryAeEigenschaftens from './queryAeEigenschaftens'
+import queryAeTaxonomies from './queryAeTaxonomies'
 import storeContext from '../../../../storeContext'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
@@ -119,7 +119,7 @@ const Ap = ({ treeName, showFilter = false }) => {
     [client, refetch, row, user.name],
   )
 
-  const aeEigenschaftenfilterForData = useCallback(
+  const aeTaxonomiesfilterForData = useCallback(
     inputValue =>
       !!inputValue
         ? {
@@ -159,12 +159,12 @@ const Ap = ({ treeName, showFilter = false }) => {
               <Form onBlur={() => dirty && handleSubmit()}>
                 <Field
                   name="artId"
-                  valueLabelPath="aeEigenschaftenByArtId.artname"
+                  valueLabelPath="aeTaxonomyByArtId.artname"
                   label="Art (gibt dem Aktionsplan den Namen)"
                   row={row}
-                  query={queryAeEigenschaftens}
-                  filter={aeEigenschaftenfilterForData}
-                  queryNodesName="allAeEigenschaftens"
+                  query={queryAeTaxonomies}
+                  filter={aeTaxonomiesfilterForData}
+                  queryNodesName="allAeTaxonomies"
                   component={SelectLoadingOptions}
                 />
                 <Field
@@ -256,7 +256,7 @@ const Ap = ({ treeName, showFilter = false }) => {
                   label="Artwert"
                   value={get(
                     row,
-                    'aeEigenschaftenByArtId.artwert',
+                    'aeTaxonomyByArtId.artwert',
                     'Diese Art hat keinen Artwert',
                   )}
                 />
