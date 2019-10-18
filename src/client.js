@@ -51,12 +51,14 @@ export default ({ idb, store }) => {
       }
       uniqueQraphQLErrors.map(({ message, locations, path }) => {
         console.log(
-          `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
+          `apollo client GraphQL error: Message: ${message}, Location: ${JSON.stringify(
             locations,
           )}, Path: ${path}`,
         )
         return enqueNotification({
-          message: `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+          message: `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
+            locations,
+          )}, Path: ${path}`,
           options: {
             variant: 'error',
           },
@@ -64,7 +66,7 @@ export default ({ idb, store }) => {
       })
     }
     if (networkError) {
-      console.log(`apollo client [Network error]: ${networkError}`)
+      console.log(`apollo client Network error: ${networkError}`)
       enqueNotification({
         message: `[Network error]: ${networkError}`,
         options: {
