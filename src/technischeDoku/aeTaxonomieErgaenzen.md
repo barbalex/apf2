@@ -15,7 +15,7 @@ Arten können in drei Formularen gewählt werden:
 - Aktionsplan-Art
 - assoziierte Art
 
-Sobald der SISF Index 3 in arteigenschaften.ch eingeführt wird, sollten Arten in der Regel in dieser Taxonomie gewählt werden. Damit bei der Art-Auswahl die Taxonomie berücksichtigt werden kann, wird der Art ein Kürzel für die Taxonomie vorangestellt. Für "SISF Index 2 (2005)" ist das zum Beispiel "SISF2".<br/><br/>
+Sobald der SISF Index 3 in arteigenschaften.ch eingeführt wird, sollten Arten in der Regel in dieser Taxonomie gewählt werden. Bei den AP-Arten ist es sinnvoll, Synonyme aus allen gängigen Taxonomien aufzulisten. Damit bei der Art-Auswahl die Taxonomie berücksichtigt werden kann, wird der Art ein Kürzel für die Taxonomie vorangestellt. Für "SISF Index 2 (2005)" ist das zum Beispiel "SISF2".<br/><br/>
 
 ### Technische Umsetzung
 apflora ist auf künftige Indizes vorbereitet. Es muss einzig die Artenliste um den neuen Index ergänzt werden. Anschliessend können in den Formularen (oder mittels Abfragen) die Arten des neuen Index gewählt werden.<br/><br/>
