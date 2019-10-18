@@ -65,7 +65,7 @@ const App = ({ element }) => {
             // to prevent endles cycle of reloading
             // due to setting activeNodeArray causing navigation event
             if (
-              window.apf2NetworkError &&
+              !!window.apf2NetworkError &&
               window.apf2NetworkError - Date.now() < 10
             ) {
               console.log(
