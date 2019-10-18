@@ -1,5 +1,3 @@
-DROP VIEW IF EXISTS apflora.v_tpopbeob CASCADE;
-
 DROP VIEW IF EXISTS apflora.v_tpop_for_ap CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_for_ap AS
 SELECT
