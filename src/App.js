@@ -53,18 +53,18 @@ const App = ({ element }) => {
           blacklist,
         })
         .then(async () => {
+          // only do this if no network error happened
+          // to prevent endles cycle of reloading due to setting activeNodeArray
+          if (!!store.networkError && store.networkError - Date.now() < 10) {
+            return
+          }
           const username = await setUserFromIdb({ idb, store })
           const isUser = !!username
           // set last activeNodeArray
           // only if top domain was visited
           if (isUser && visitedTopDomain) {
-            console.log('App, mst-persist: would set activeNodeArray')
-            if (window.confirm('Fortfahren, wo Sie aufgehört haben?')) {
-              store.tree.setActiveNodeArray(store.tree.activeNodeArray)
-            }
-            return
-            // uncomented becaus of endless reload cycles on first load after update
-            //return store.tree.setActiveNodeArray(store.tree.activeNodeArray)
+            console.log('App, mst-persist: will set activeNodeArray')
+            return store.tree.setActiveNodeArray(store.tree.activeNodeArray)
           }
           const activeNodeArray = getActiveNodeArrayFromPathname()
           if (activeNodeArray[0] === 'Projekte') {

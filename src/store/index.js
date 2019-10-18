@@ -97,6 +97,8 @@ const myTypes = types
     deletedDatasets: [],
     refetch: {},
     notifications: [],
+    // time this last happended
+    networkError: null,
   }))
   .views(self => ({
     get treeActiveNodes() {
@@ -210,6 +212,9 @@ const myTypes = types
     },
   }))
   .actions(self => ({
+    setNetworkError(time) {
+      self.networkError = time
+    },
     setEkfIds(ids) {
       self.ekfIds = [...ids]
     },
@@ -353,12 +358,19 @@ const myTypes = types
     setCopyingBiotop({ id, label }) {
       self.copyingBiotop = { id, label }
     },
-    setUrlQuery({ projekteTabs, tpopTab, feldkontrTab, idealbiotopTab, qkTab }) {
+    setUrlQuery({
+      projekteTabs,
+      tpopTab,
+      feldkontrTab,
+      idealbiotopTab,
+      qkTab,
+    }) {
       const newUrlQuery = {
         projekteTabs,
         tpopTab,
         feldkontrTab,
-        idealbiotopTab, qkTab,
+        idealbiotopTab,
+        qkTab,
       }
       // only write if changed
       if (!isEqual(self.urlQuery, newUrlQuery)) {

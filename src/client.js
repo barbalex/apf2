@@ -12,7 +12,7 @@ import graphQlUri from './modules/graphQlUri'
 import existsPermissionsError from './modules/existsPermissionError'
 
 export default ({ idb, store }) => {
-  const { enqueNotification } = store
+  const { enqueNotification, setNetworkError } = store
   const authLink = setContext((_, { headers }) => {
     const { token } = store.user
     if (token) {
@@ -67,6 +67,7 @@ export default ({ idb, store }) => {
     }
     if (networkError) {
       console.log(`apollo client Network error: ${networkError}`)
+      typeof window !== 'undefined' && setNetworkError(Date.now())
       // tried letting user confirm to block endless error cycles
       // but completely blocked ui as confirmation window kept reopening
       /*if (
