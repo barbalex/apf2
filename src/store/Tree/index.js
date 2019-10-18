@@ -61,6 +61,12 @@ export default types
       self.apFilter = val
     },
     setActiveNodeArray(val) {
+      if (isEqual(val, self.activeNodeArray)) {
+        // do not do this if already set
+        // trying to stop vicious cycle of reloading in first start after update
+        console.log('Store, setActiveNodeArray: Will not set as is same')
+        return
+      }
       if (self.name === 'tree') {
         const store = getParent(self)
         const { urlQuery } = store

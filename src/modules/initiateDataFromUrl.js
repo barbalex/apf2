@@ -13,11 +13,7 @@ export default ({ activeNodeArray: activeNodeArrayPassed, store }) => {
   // fetch query here, BEFORE mutating active node array
   const urlQuery = getUrlQuery()
   const { projekteTabs } = urlQuery
-  // do not do this if already set
-  // trying to stop vicious cycle of reloading in first start after update
-  if (!isEqual(store.tree.activeNodeArray, initialActiveNodeArray)) {
-    store.tree.setActiveNodeArray(initialActiveNodeArray)
-  }
+  store.tree.setActiveNodeArray(initialActiveNodeArray)
   // need to set openNodes
   setOpenNodesFromActiveNodeArray({
     activeNodeArray: initialActiveNodeArray,
