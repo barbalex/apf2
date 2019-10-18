@@ -15,6 +15,7 @@ import { ApolloProvider } from '@apollo/react-hooks'
 import localForage from 'localforage'
 import MobxStore from './store'
 import { SnackbarProvider } from 'notistack'
+import { navigate } from 'gatsby'
 //import { onPatch } from 'mobx-state-tree'
 
 import initializeIdb from './modules/initializeIdb'
@@ -71,8 +72,9 @@ const App = ({ element }) => {
           // set last activeNodeArray
           // only if top domain was visited
           if (isUser && visitedTopDomain) {
-            console.log('App, mst-persist: will set activeNodeArray')
-            return store.tree.setActiveNodeArray(store.tree.activeNodeArray)
+            console.log('App, mst-persist: will navigate')
+            return navigate(`/Daten/${store.tree.activeNodeArray.join('/')}`)
+            //return store.tree.setActiveNodeArray(store.tree.activeNodeArray)
           }
           const activeNodeArray = getActiveNodeArrayFromPathname()
           if (activeNodeArray[0] === 'Projekte') {
