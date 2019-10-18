@@ -44,16 +44,16 @@ const Error = errors => {
       </ErrorContainer>
     )*/
   } else {
-    console.log('Error will list messages')
+    //console.log('Error will list messages')
     const errorMessages = errorsToUse.map(e => e.message)
-    console.log('Error errorMessages:', errorMessages)
+    //console.log('Error errorMessages:', errorMessages)
     const uniqueMessages = uniq(errorMessages)
-    console.log('Error uniqueMessages:', uniqueMessages)
+    //console.log('Error uniqueMessages:', uniqueMessages)
     if (uniqueMessages.length === 1) {
-      console.log('Error returning uniqueMessages[0]:', uniqueMessages[0])
+      //console.log('Error returning uniqueMessages[0]:', uniqueMessages[0])
       return <ErrorContainer>{`Fehler: ${uniqueMessages[0]}`}</ErrorContainer>
     } else {
-      console.log('Error returning all uniqueMessages')
+      //console.log('Error returning all uniqueMessages')
       return (
         <h5>
           <h5>Fehler:</h5>
