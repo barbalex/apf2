@@ -98,7 +98,7 @@ const UserMessages = () => {
   if (error) {
     const errors = [error]
     //console.log('Messages, error:', error)
-    //console.log('Messages, errors:', errors)
+    console.log('Messages, error:', error)
     return <Error errors={errors} />
   }
 
