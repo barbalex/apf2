@@ -1140,6 +1140,29 @@ CREATE INDEX ON apflora.ae_eigenschaften USING btree (taxid);
 CREATE INDEX ON apflora.ae_eigenschaften USING btree (artname);
 COMMENT ON COLUMN apflora.ae_eigenschaften.id IS 'Primärschlüssel';
 
+drop table if exists apflora.ae_taxonomies;
+create table apflora.ae_taxonomies (
+  taxonomie_id UUID,
+  taxonomie_name text,
+  id UUID PRIMARY KEY,
+  taxid integer,
+  familie text,
+  artname text,
+  status text,
+  artwert integer,
+  kefart boolean,
+  kefkontrolljahr integer
+);
+create index on apflora.ae_taxonomies (taxonomie_id);
+create index on apflora.ae_taxonomies (taxonomie_name);
+create index on apflora.ae_taxonomies (id);
+create index on apflora.ae_taxonomies (taxid);
+create index on apflora.ae_taxonomies (artname);
+
+-- to update data run:
+--insert into apflora.ae_taxonomies(taxonomie_id, taxonomie_name, id, taxid, familie, artname, status, artwert, kefart, kefkontrolljahr)
+--select taxonomie_id, taxonomie_name, id, taxid, familie, artname, status, artwert, kefart, kefkontrolljahr from apflora.ae_taxonomies_download;
+
 --
 -- beob can collect beob of any provenience by following this convention:
 -- - fields that are used in apflora.ch are appended as regular fields, that is:

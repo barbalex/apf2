@@ -29,6 +29,21 @@ export const aeEigenschaften = gql`
   }
 `
 
+export const aeTaxonomies = gql`
+  fragment AeTaxonomiesFields on AeTaxonomies {
+    taxonomie_id
+    taxonomie_name
+    id
+    taxid
+    familie
+    artname
+    status
+    artwert
+    kefkontrolljahr
+    kefart
+  }
+`
+
 export const aeLrDelarze = gql`
   fragment AeLrDelarzeFields on AeLrDelarze {
     id
