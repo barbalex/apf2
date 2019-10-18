@@ -97,8 +97,6 @@ const myTypes = types
     deletedDatasets: [],
     refetch: {},
     notifications: [],
-    // time this last happended
-    networkError: null,
   }))
   .views(self => ({
     get treeActiveNodes() {
@@ -212,9 +210,6 @@ const myTypes = types
     },
   }))
   .actions(self => ({
-    setNetworkError(time) {
-      self.networkError = time
-    },
     setEkfIds(ids) {
       self.ekfIds = [...ids]
     },

@@ -12,7 +12,7 @@ import graphQlUri from './modules/graphQlUri'
 import existsPermissionsError from './modules/existsPermissionError'
 
 export default ({ idb, store }) => {
-  const { enqueNotification, setNetworkError } = store
+  const { enqueNotification } = store
   const authLink = setContext((_, { headers }) => {
     const { token } = store.user
     if (token) {
@@ -70,8 +70,7 @@ export default ({ idb, store }) => {
       // write time of last network error to store
       // so mst-persist in App.js can back out from reloading if there was a network error
       // or else there will be a perpetual reload-cycle
-      typeof window !== 'undefined' && setNetworkError(Date.now())
-      typeof window !== 'undefined' && window.apf2.networkError(Date.now())
+      typeof window !== 'undefined' && window.apf2NetworkError(Date.now())
       enqueNotification({
         message: `apollo client Network error: ${networkError}`,
         options: {

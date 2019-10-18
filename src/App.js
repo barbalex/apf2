@@ -4,6 +4,7 @@ import React from 'react'
 // otherwise apollo errors during the build
 // see: https://github.com/gatsbyjs/gatsby/issues/11225#issuecomment-457211628
 import 'isomorphic-fetch'
+import queryString from 'query-string'
 
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import theme from './utils/materialTheme'
@@ -53,44 +54,47 @@ const App = ({ element }) => {
           jsonify: false,
           blacklist,
         })
-        .then(async () => {
-          console.log('App, mst-persist: time of last network error:', {
-            storeNetworkError: store.networkError,
-            windowNetworkError:
-              window.apf2 && window.apf2.networkError
-                ? window.apf2.networkError
-                : '',
-          })
-          // only do this if no network error happened recently
-          // to prevent endles cycle of reloading
-          // due to setting activeNodeArray causing navigation event
-          if (
-            (!!store.networkError && store.networkError - Date.now() < 10) ||
-            (window.apf2 &&
-              window.apf2.networkError &&
-              window.apf2.networkError - Date.now() < 10)
-          ) {
-            console.log(
-              'App, mst-persist: backing out because of recent network error',
-            )
-            return
-          }
-          const username = await setUserFromIdb({ idb, store })
-          const isUser = !!username
-          // set last activeNodeArray
-          // only if top domain was visited
-          if (isUser && visitedTopDomain) {
-            console.log('App, mst-persist: will navigate')
-            return navigate(`/Daten/${store.tree.activeNodeArray.join('/')}`)
-            //return store.tree.setActiveNodeArray(store.tree.activeNodeArray)
-          }
-          const activeNodeArray = getActiveNodeArrayFromPathname()
-          if (activeNodeArray[0] === 'Projekte') {
-            console.log('App, mst-persist: will initiate data from url')
-            initiateDataFromUrl({
-              store,
+        .then(() => {
+          // ensure window.apf2NetworkError has time to arrive
+          setTimeout(async () => {
+            console.log('App, mst-persist: time of last network error:', {
+              windowNetworkError: window.apf2NetworkError,
             })
-          }
+            // only do this if no network error happened recently
+            // to prevent endles cycle of reloading
+            // due to setting activeNodeArray causing navigation event
+            if (
+              window.apf2NetworkError &&
+              window.apf2NetworkError - Date.now() < 10
+            ) {
+              console.log(
+                'App, mst-persist: backing out because of recent network error',
+              )
+              return
+            }
+            const username = await setUserFromIdb({ idb, store })
+            const isUser = !!username
+            // set last activeNodeArray
+            // only if top domain was visited
+            if (isUser && visitedTopDomain) {
+              console.log('App, mst-persist: will navigate')
+              const { urlQuery } = store
+              const search = queryString.stringify(urlQuery)
+              const query = `${
+                Object.keys(urlQuery).length > 0 ? `?${search}` : ''
+              }`
+              return navigate(
+                `/Daten/${store.tree.activeNodeArray.join('/')}${query}`,
+              )
+            }
+            const activeNodeArray = getActiveNodeArrayFromPathname()
+            if (activeNodeArray[0] === 'Projekte') {
+              console.log('App, mst-persist: will initiate data from url')
+              initiateDataFromUrl({
+                store,
+              })
+            }
+          })
         }),
     )
     // inform users of old browsers
