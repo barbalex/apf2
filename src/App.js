@@ -55,7 +55,7 @@ const App = ({ element }) => {
           blacklist,
         })
         .then(() => {
-          // ensure window.apf2NetworkError has time to arrive
+          // ensure apf2NetworkError has time to arrive
           setTimeout(async () => {
             console.log(
               'App, mst-persist: time of last network error:',
