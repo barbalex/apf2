@@ -64,7 +64,7 @@ export default ({ idb, store }) => {
       })
     }
     if (networkError) {
-      console.log(`[Network error]: ${networkError}`)
+      console.log(`apollo client [Network error]: ${networkError}`)
       enqueNotification({
         message: `[Network error]: ${networkError}`,
         options: {
