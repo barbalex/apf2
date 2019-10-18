@@ -56,6 +56,9 @@ const App = ({ element }) => {
           // only do this if no network error happened
           // to prevent endles cycle of reloading due to setting activeNodeArray
           if (!!store.networkError && store.networkError - Date.now() < 10) {
+            console.log(
+              'App, mst-persist: backing out because of recent network error',
+            )
             return
           }
           const username = await setUserFromIdb({ idb, store })
