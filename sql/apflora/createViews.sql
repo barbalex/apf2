@@ -1,3 +1,12 @@
+drop view if exists apflora.v_tax_list cascade;
+drop view if exists apflora.v_ae_tax_list cascade;
+create or replace view apflora.v_ae_tax_list as
+select distinct
+  taxonomie_id,
+  taxonomie_name
+from apflora.ae_taxonomies
+order by taxonomie_name;
+
 DROP VIEW IF EXISTS apflora.v_tpop_for_ap CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_for_ap AS
 SELECT
