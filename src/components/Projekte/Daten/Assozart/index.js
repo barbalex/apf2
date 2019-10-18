@@ -53,11 +53,11 @@ const Assozart = ({ treeName }) => {
     !!inputValue
       ? assozartenOfAp.length
         ? {
-            artname: { includesInsensitive: inputValue },
+            taxArtName: { includesInsensitive: inputValue },
             id: { notIn: assozartenOfAp },
           }
-        : { artname: { includesInsensitive: inputValue } }
-      : { artname: { isNull: false } }
+        : { taxArtName: { includesInsensitive: inputValue } }
+      : { taxArtName: { isNull: false } }
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
@@ -113,7 +113,7 @@ const Assozart = ({ treeName }) => {
               <Form onBlur={() => dirty && handleSubmit()}>
                 <Field
                   name="aeId"
-                  valueLabelPath="aeTaxonomyByAeId.artname"
+                  valueLabelPath="aeTaxonomyByAeId.taxArtName"
                   label="Art"
                   row={row}
                   query={queryAeTaxonomies}

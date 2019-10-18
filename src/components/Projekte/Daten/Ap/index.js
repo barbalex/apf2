@@ -127,7 +127,7 @@ const Ap = ({ treeName, showFilter = false }) => {
               { apByArtIdExists: false },
               { apByArtId: { id: { equalTo: id } } },
             ],
-            artname: { includesInsensitive: inputValue },
+            taxArtName: { includesInsensitive: inputValue },
           }
         : {
             or: [
@@ -159,7 +159,7 @@ const Ap = ({ treeName, showFilter = false }) => {
               <Form onBlur={() => dirty && handleSubmit()}>
                 <Field
                   name="artId"
-                  valueLabelPath="aeTaxonomyByArtId.artname"
+                  valueLabelPath="aeTaxonomyByArtId.taxArtName"
                   label="Art (gibt dem Aktionsplan den Namen)"
                   row={row}
                   query={queryAeTaxonomies}

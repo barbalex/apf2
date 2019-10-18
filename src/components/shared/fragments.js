@@ -24,6 +24,7 @@ export const aeTaxonomies = gql`
     taxid
     familie
     artname
+    taxArtName
     status
     artwert
     kefkontrolljahr

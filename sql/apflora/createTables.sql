@@ -1128,6 +1128,7 @@ create table apflora.ae_taxonomies (
   taxid integer,
   familie text,
   artname text,
+  tax_art_name text,
   status text,
   artwert integer,
   kefart boolean,
@@ -1138,11 +1139,30 @@ create index on apflora.ae_taxonomies (taxonomie_name);
 create index on apflora.ae_taxonomies (id);
 create index on apflora.ae_taxonomies (taxid);
 create index on apflora.ae_taxonomies (artname);
+create index on apflora.ae_taxonomies (tax_art_name);
 
 -- to update data run:
-truncate apflora.ae_taxonomies;
-insert into apflora.ae_taxonomies(taxonomie_id, taxonomie_name, id, taxid, familie, artname, status, artwert, kefart, kefkontrolljahr)
-select taxonomie_id, taxonomie_name, id, taxid, familie, artname, status, artwert, kefart, kefkontrolljahr from apflora.ae_taxonomies_download;
+--truncate apflora.ae_taxonomies;
+--insert into apflora.ae_taxonomies(taxonomie_id, taxonomie_name, id, taxid, familie, artname, tax_art_name, status, artwert, kefart, kefkontrolljahr)
+--select
+--  taxonomie_id,
+--  taxonomie_name,
+--  id,
+--  taxid,
+--  familie,
+--  artname,
+--  case
+--    when taxonomie_id = 'aed47d41-7b0e-11e8-b9a5-bd4f79edbcc4'
+--    then concat('SISF2: ', artname)
+--    else concat('(Taxonomie unbekannt): ', artname)
+--  end,
+--  status,
+--  artwert,
+--  kefart,
+--  kefkontrolljahr
+--from apflora.ae_taxonomies_download;
+--update apflora.ae_taxonomies
+--set tax_art_name = concat('SISF2: ', artname);
 
 --
 -- beob can collect beob of any provenience by following this convention:

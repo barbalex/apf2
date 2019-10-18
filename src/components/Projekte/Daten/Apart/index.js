@@ -66,11 +66,11 @@ const ApArt = ({ treeName }) => {
       !!inputValue
         ? apartenOfAp.length
           ? {
-              artname: { includesInsensitive: inputValue },
+              taxArtName: { includesInsensitive: inputValue },
               id: { notIn: apartenOfAp },
             }
-          : { artname: { includesInsensitive: inputValue } }
-        : { artname: { isNull: false } },
+          : { taxArtName: { includesInsensitive: inputValue } }
+        : { taxArtName: { isNull: false } },
     [apartenOfAp],
   )
 
@@ -172,7 +172,7 @@ const ApArt = ({ treeName }) => {
                   name="artId"
                   valueLabel={
                     dataAeEigById.aeTaxonomyById
-                      ? dataAeEigById.aeTaxonomyById.artname
+                      ? dataAeEigById.aeTaxonomyById.taxArtName
                       : ''
                   }
                   label="Art"

@@ -8,7 +8,7 @@ export default gql`
       ...AssozartFields
       aeTaxonomyByAeId {
         id
-        artname
+        taxArtName
       }
       apByApId {
         artId
