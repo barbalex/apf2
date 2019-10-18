@@ -32,7 +32,7 @@ const EkfAdresse = ({ setAnchorEl }) => {
   if (loading) return '...'
   if (error) {
     const errors = [error]
-    console.log('AppBar More EkfAdresse, error:', error.message)
+    //console.log('AppBar More EkfAdresse, error:', error.message)
     return <Error errors={errors} />
   }
 

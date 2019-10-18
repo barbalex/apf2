@@ -144,7 +144,7 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
   if (loading) return null
   if (error) {
     const errors = [error]
-    console.log('AppBar Projekte Ekf User, error:', error.message)
+    //console.log('AppBar Projekte Ekf User, error:', error.message)
     return <Error errors={errors} />
   }
 
