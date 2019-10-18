@@ -57,9 +57,10 @@ const App = ({ element }) => {
         .then(() => {
           // ensure window.apf2NetworkError has time to arrive
           setTimeout(async () => {
-            console.log('App, mst-persist: time of last network error:', {
-              windowNetworkError: window.apf2NetworkError,
-            })
+            console.log(
+              'App, mst-persist: time of last network error:',
+              window.apf2NetworkError,
+            )
             // only do this if no network error happened recently
             // to prevent endles cycle of reloading
             // due to setting activeNodeArray causing navigation event
