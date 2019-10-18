@@ -58,10 +58,17 @@ const App = ({ element }) => {
           // set last activeNodeArray
           // only if top domain was visited
           if (isUser && visitedTopDomain) {
-            return store.tree.setActiveNodeArray(store.tree.activeNodeArray)
+            console.log('App, mst-persist: would set activeNodeArray')
+            if (window.confirm('Fortfahren, wo Sie aufgehört haben?')) {
+              store.tree.setActiveNodeArray(store.tree.activeNodeArray)
+            }
+            return
+            // uncomented becaus of endless reload cycles on first load after update
+            //return store.tree.setActiveNodeArray(store.tree.activeNodeArray)
           }
           const activeNodeArray = getActiveNodeArrayFromPathname()
           if (activeNodeArray[0] === 'Projekte') {
+            console.log('App, mst-persist: will initiate data from url')
             initiateDataFromUrl({
               store,
             })
