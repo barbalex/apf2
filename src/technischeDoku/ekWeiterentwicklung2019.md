@@ -3,7 +3,7 @@ typ: 'technDoku'
 path: '/Dokumentation/Technisch/EK-Weiterentwicklung-2019'
 date: '2019-09-10'
 title: 'EK-Weiterentwicklung 2019'
-sort: 11
+sort: 12
 ---
 
 Erfolgskontrollen sind gleichzeitig wichtig und aufwändig. Sie beginnen mit der Zielsetzung und enden mit der Berichterstattung. Im Jahr 2019 wird die Verwaltung und Planung der eigentlichen Kontrollen in apflora weiter entwickelt. Ziele:
