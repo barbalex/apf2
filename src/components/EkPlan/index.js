@@ -54,7 +54,7 @@ const EkPlan = () => {
 
   if (error) {
     const errors = [error]
-    console.log('EkPlan', { error, errors })
+    console.log('EkPlan, error:', error.message)
     return <Error errors={errors} />
   }
 

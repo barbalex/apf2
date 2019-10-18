@@ -280,7 +280,7 @@ const EkPlanTable = () => {
     if (errorTpop) errors = [errorTpop]
     if (errorLists) errors = [...errors, errorLists]
 
-    console.log('Table', { errorTpop, errorLists, errors })
+    console.log('EkPlan Table', { errorTpop, errorLists, errors })
 
     return <Error errors={errors} />
   }
