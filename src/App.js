@@ -53,8 +53,13 @@ const App = ({ element }) => {
           blacklist,
         })
         .then(async () => {
-          // only do this if no network error happened
-          // to prevent endles cycle of reloading due to setting activeNodeArray
+          console.log(
+            'App, mst-persist: time of last network error:',
+            store.networkError,
+          )
+          // only do this if no network error happened recently
+          // to prevent endles cycle of reloading
+          // due to setting activeNodeArray causing navigation event
           if (!!store.networkError && store.networkError - Date.now() < 10) {
             console.log(
               'App, mst-persist: backing out because of recent network error',

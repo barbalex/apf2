@@ -67,22 +67,16 @@ export default ({ idb, store }) => {
     }
     if (networkError) {
       console.log(`apollo client Network error: ${networkError}`)
+      // write time of last network error to store
+      // so mst-persist in App.js can back out from reloading if there was a network error
+      // or else there will be a perpetual reload-cycle
       typeof window !== 'undefined' && setNetworkError(Date.now())
-      // tried letting user confirm to block endless error cycles
-      // but completely blocked ui as confirmation window kept reopening
-      /*if (
-        window.confirm(
-          'Es besteht ein Netzwerk-Problem. apflora neu laden, um die Verbindung neu aufzubauen?',
-        )
-      ) {
-        window.location.reload(true)
-      }*/
-      /*enqueNotification({
-        message: `[Network error]: ${networkError}`,
+      enqueNotification({
+        message: `apollo client Network error: ${networkError}`,
         options: {
           variant: 'error',
         },
-      })*/
+      })
     }
   })
 
