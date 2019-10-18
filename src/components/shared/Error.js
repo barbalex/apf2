@@ -1,10 +1,8 @@
 import React, { useContext } from 'react'
-//import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import uniq from 'lodash/uniq'
 
-//import storeContext from '../../storeContext'
 import logout from '../../modules/logout'
 import idbContext from '../../idbContext'
 import existsPermissionError from '../../modules/existsPermissionError'
@@ -22,11 +20,8 @@ const Error = errors => {
   // something passes in an object instead of an array
   // so need to check and extract the errors array from the object if necessary
   const errorsToUse = errors.map ? errors : errors.errors
-  //const store = useContext(storeContext)
   const { idb } = useContext(idbContext)
-  //const { token } = store.user
   console.log('Error, errors:', errors)
-  console.log('Error, errors.map:', errors.map)
   console.log('Error, errorsToUse:', errorsToUse)
 
   if (existsPermissionError(errorsToUse)) {
