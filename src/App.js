@@ -56,7 +56,10 @@ const App = ({ element }) => {
         .then(async () => {
           console.log('App, mst-persist: time of last network error:', {
             storeNetworkError: store.networkError,
-            windowNetworkError: window.apf2.networkError,
+            windowNetworkError:
+              window.apf2 && window.apf2.networkError
+                ? window.apf2.networkError
+                : '',
           })
           // only do this if no network error happened recently
           // to prevent endles cycle of reloading
