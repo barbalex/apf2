@@ -67,12 +67,19 @@ export default ({ idb, store }) => {
     }
     if (networkError) {
       console.log(`apollo client Network error: ${networkError}`)
-      enqueNotification({
+      if (
+        window.confirm(
+          'Es besteht ein Netzwerk-Problem. apflora neu laden, um die Verbindung neu aufzubauen?',
+        )
+      ) {
+        window.location.reload(true)
+      }
+      /*enqueNotification({
         message: `[Network error]: ${networkError}`,
         options: {
           variant: 'error',
         },
-      })
+      })*/
     }
   })
 
