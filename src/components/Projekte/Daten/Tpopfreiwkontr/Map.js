@@ -1,8 +1,9 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
 import RadioButton from '../../../shared/RadioButton'
+import storeContext from '../../../../storeContext'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -52,6 +53,9 @@ const MapVal2 = styled.div`
 `
 
 const Map = ({ saveToDb, row, errors }) => {
+  const store = useContext(storeContext)
+  const { isPrint } = store
+
   const onSaveFalse = useCallback(() => {
     const fakeEvent = {
       target: { name: 'planVorhanden', value: false },
@@ -59,7 +63,8 @@ const Map = ({ saveToDb, row, errors }) => {
     saveToDb(fakeEvent)
   }, [saveToDb])
 
-  //console.log('Map rendering')
+  // in print nein shall not be set as it is preset in db
+  const falseValue = isPrint ? false : row.planVorhanden === false
 
   return (
     <Container>
@@ -78,7 +83,7 @@ const Map = ({ saveToDb, row, errors }) => {
         <RadioButton
           key={`${row.id}planVorhanden2`}
           name="planVorhanden"
-          value={row.planVorhanden === false}
+          value={falseValue}
           saveToDb={onSaveFalse}
           error={errors.planVorhanden}
         />
