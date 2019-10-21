@@ -47,7 +47,7 @@ const App = ({ element }) => {
   if (typeof window !== 'undefined') {
     const visitedTopDomain = window.location.pathname === '/'
     const blacklist = ['user', 'refetch', 'notifications', 'ekfIds']
-    import('mst-persist').then(module =>
+    /*import('mst-persist').then(module =>
       module
         .default('store', store, {
           storage: localForage,
@@ -93,7 +93,7 @@ const App = ({ element }) => {
               store,
             })
           }
-        }),
+        }),*/
     )
     // inform users of old browsers
     const browserUpdateConfiguration = {
