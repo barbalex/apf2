@@ -164,8 +164,6 @@ const ProjekteAppBar = () => {
     }
   }, [ekfIds, setEkfIds, setIsPrint])
 
-  console.log('ApBar EKF:', { ekfCount, data })
-
   return (
     <>
       {!isMobile && (
