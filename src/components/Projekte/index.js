@@ -66,18 +66,14 @@ const Projekte = () => {
   const tree2Tabs = intersection(tree2TabValues, projekteTabs)
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.matchMedia('print').addListener(mql => {
-        setIsPrint(mql.matches)
-        if (!mql.matches) setEkfIds([])
-      })
-    }
+    window.matchMedia('print').addListener(mql => {
+      setIsPrint(mql.matches)
+      if (!mql.matches) setEkfIds([])
+    })
     return () => {
-      if (typeof window !== 'undefined') {
-        window.matchMedia('print').removeListener(mql => {
-          setIsPrint(mql.matches)
-        })
-      }
+      window.matchMedia('print').removeListener(mql => {
+        setIsPrint(mql.matches)
+      })
     }
   }, [setEkfIds, setIsPrint])
 
