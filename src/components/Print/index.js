@@ -68,14 +68,12 @@ const Print = () => {
   return (
     <ErrorBoundary>
       <Container>
-        {/*<Suspense fallback={<Fallback />}></Suspense>*/}
         <BackButton variant="outlined" onClick={onClickBack}>
           <StyledArrowBack />
           zurück
         </BackButton>
         {showApberForAp && <ApberForApFromAp />}
         {showApberForYear && <ApberForYear />}
-        {/*</Suspense>*/}
       </Container>
     </ErrorBoundary>
   )
