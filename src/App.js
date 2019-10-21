@@ -4,7 +4,7 @@ import React from 'react'
 // otherwise apollo errors during the build
 // see: https://github.com/gatsbyjs/gatsby/issues/11225#issuecomment-457211628
 import 'isomorphic-fetch'
-import queryString from 'query-string'
+//import queryString from 'query-string'
 
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import theme from './utils/materialTheme'
@@ -13,10 +13,10 @@ import 'moment/locale/de-ch' // this is the important bit, you have to import th
 import MomentUtils from '@date-io/moment'
 import { MuiPickersUtilsProvider } from 'material-ui-pickers'
 import { ApolloProvider } from '@apollo/react-hooks'
-import localForage from 'localforage'
+//import localForage from 'localforage'
 import MobxStore from './store'
 import { SnackbarProvider } from 'notistack'
-import { navigate } from 'gatsby'
+//import { navigate } from 'gatsby'
 //import { onPatch } from 'mobx-state-tree'
 
 import initializeIdb from './modules/initializeIdb'
@@ -30,7 +30,7 @@ import { Provider as IdbProvider } from './idbContext'
 import Notifier from './components/shared/Notifier'
 import NotificationDismisser from './components/shared/NotificationDismisser'
 
-import setUserFromIdb from './modules/setUserFromIdb'
+//import setUserFromIdb from './modules/setUserFromIdb'
 import initiateDataFromUrl from './modules/initiateDataFromUrl'
 import getActiveNodeArrayFromPathname from './modules/getActiveNodeArrayFromPathname'
 
@@ -45,9 +45,9 @@ const App = ({ element }) => {
   const idbContext = { idb }
 
   if (typeof window !== 'undefined') {
-    const visitedTopDomain = window.location.pathname === '/'
+    /*const visitedTopDomain = window.location.pathname === '/'
     const blacklist = ['user', 'refetch', 'notifications', 'ekfIds']
-    /*import('mst-persist').then(module =>
+    import('mst-persist').then(module =>
       module
         .default('store', store, {
           storage: localForage,
@@ -93,8 +93,14 @@ const App = ({ element }) => {
               store,
             })
           }
-        }),*/
-    )
+        }),
+    )*/
+    const activeNodeArray = getActiveNodeArrayFromPathname()
+    if (activeNodeArray[0] === 'Projekte') {
+      initiateDataFromUrl({
+        store,
+      })
+    }
     // inform users of old browsers
     const browserUpdateConfiguration = {
       required: { e: -2, f: -2, o: -2, s: -2, c: -2 },
