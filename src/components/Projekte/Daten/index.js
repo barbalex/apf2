@@ -195,9 +195,7 @@ const Daten = ({ treeName }) => {
 
   return (
     <Container data-id={`daten-container${treeName === 'tree' ? 1 : 2}`}>
-      {/*<Suspense fallback={<Fallback />}>*/}
       {form}
-      {/*</Suspense>*/}
     </Container>
   )
 }
