@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useMemo, useEffect } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 import ErrorBoundary from 'react-error-boundary'
@@ -24,7 +24,23 @@ const Container = styled.div`
 
 const DatenPage = ({ location }) => {
   const store = useContext(storeContext)
-  const { view, showDeletions, user } = store
+  const { view, showDeletions, user, setIsPrint, setEkfIds } = store
+
+  /**
+   * In Firefox this does not work! Bug is open since 7 years:
+   * see: https://bugzilla.mozilla.org/show_bug.cgi?id=774398
+   */
+  useEffect(() => {
+    window.matchMedia('print').addListener(mql => {
+      setIsPrint(mql.matches)
+      if (!mql.matches) setEkfIds([])
+    })
+    return () => {
+      window.matchMedia('print').removeListener(mql => {
+        setIsPrint(mql.matches)
+      })
+    }
+  }, [setEkfIds, setIsPrint])
   const { activeForm } = store.tree
 
   const form = useMemo(

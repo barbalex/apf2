@@ -18,6 +18,8 @@ const TitleRow = styled.div`
   justify-content: space-between;
 `
 const Title = styled.div`
+  margin-top: auto;
+  margin-bottom: auto;
   padding: 10px;
   color: white;
   font-weight: bold;

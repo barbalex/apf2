@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import SplitPane from 'react-split-pane'
 import intersection from 'lodash/intersection'
@@ -59,23 +59,11 @@ const tree2TabValues = ['tree2', 'daten2', 'filter2', 'karte2', 'exporte2']
 
 const Projekte = () => {
   const store = useContext(storeContext)
-  const { isPrint, setIsPrint, setEkfIds, urlQuery } = store
+  const { isPrint, urlQuery } = store
 
   const { projekteTabs } = urlQuery
   const treeTabs = intersection(treeTabValues, projekteTabs)
   const tree2Tabs = intersection(tree2TabValues, projekteTabs)
-
-  useEffect(() => {
-    window.matchMedia('print').addListener(mql => {
-      setIsPrint(mql.matches)
-      if (!mql.matches) setEkfIds([])
-    })
-    return () => {
-      window.matchMedia('print').removeListener(mql => {
-        setIsPrint(mql.matches)
-      })
-    }
-  }, [setEkfIds, setIsPrint])
 
   if (tree2Tabs.length === 0 || isPrint) {
     return (

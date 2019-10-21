@@ -6,6 +6,8 @@ import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import jwtDecode from 'jwt-decode'
+import { MdPrint } from 'react-icons/md'
+import IconButton from '@material-ui/core/IconButton'
 
 import StringToCopy from '../../../shared/StringToCopyOnlyButton'
 import query from './query'
@@ -143,6 +145,10 @@ const CountHint = styled.div`
   border-radius: 6px;
   padding: 10px;
 `
+const StyledIconButton = styled(IconButton)`
+  color: white !important;
+  margin-right: 10px !important;
+`
 
 const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
   const client = useApolloClient()
@@ -152,6 +158,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
     nodeFilter,
     nodeFilterSetValue,
     isPrint,
+    setIsPrint,
     view,
     user,
   } = store
@@ -482,6 +489,16 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
     setErrors({})
   }, [row.id])
 
+  const onClickPrint = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      setIsPrint(true)
+      setTimeout(() => {
+        window.print()
+        setIsPrint(false)
+      })
+    }
+  }, [setIsPrint])
+
   if (error) return `Fehler: ${error.message}`
   if (loading) {
     return (
@@ -510,6 +527,13 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
           apId={apId}
           title="Freiwilligen-Kontrolle"
           treeName={treeName}
+          buttons={
+            <>
+              <StyledIconButton onClick={onClickPrint} title="drucken">
+                <MdPrint />
+              </StyledIconButton>
+            </>
+          }
         />
       )}
       <InnerContainer>
