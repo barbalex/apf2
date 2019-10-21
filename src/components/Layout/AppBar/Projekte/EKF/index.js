@@ -146,7 +146,10 @@ const ProjekteAppBar = () => {
   const onClickPrintSingle = useCallback(() => {
     if (typeof window !== 'undefined') {
       setIsPrint(true)
-      setTimeout(() => window.print())
+      setTimeout(() => {
+        window.print()
+        setIsPrint(false)
+      })
     }
   }, [setIsPrint])
   const onClickPrintAll = useCallback(() => {
