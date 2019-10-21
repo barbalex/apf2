@@ -1,4 +1,3 @@
-import isEqual from 'lodash/isEqual'
 import getActiveNodeArrayFromPathname from './getActiveNodeArrayFromPathname'
 import getUrlQuery from '../modules/getUrlQuery'
 import isMobilePhone from '../modules/isMobilePhone'
