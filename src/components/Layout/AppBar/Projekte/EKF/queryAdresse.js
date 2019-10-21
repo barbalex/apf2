@@ -8,8 +8,16 @@ export default gql`
       ...AdresseFields
       tpopkontrsByBearbeiter(
         filter: {
-          typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
-          jahr: { equalTo: $jahr }
+          or: [
+            {
+              typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+              jahr: { equalTo: $jahr }
+            }
+            {
+              typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+              jahr: { isNull: true }
+            }
+          ]
         }
       ) {
         totalCount
