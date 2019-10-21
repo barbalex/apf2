@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
@@ -6,12 +6,15 @@ import minBy from 'lodash/minBy'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
 import ErrorBoundary from 'react-error-boundary'
+import { MdPrint } from 'react-icons/md'
+import Fab from '@material-ui/core/Fab'
 
 import Ziele from './Ziele'
 import Massnahmen from './Massnahmen'
 import AMengen from './AMengen'
 import BMengen from './BMengen'
 import CMengen from './CMengen'
+import storeContext from '../../../storeContext'
 
 const Container = styled.div`
   /* this part is for when page preview is shown */
@@ -109,6 +112,22 @@ const ErfkritErfolg = styled.div`
 const ErfkritKriterium = styled.div`
   width: 100%;
 `
+const StyledFab = styled(Fab)`
+  position: fixed !important;
+  top: 74px;
+  right: 20px;
+  > span {
+    height: 24px;
+    width: 24px;
+  }
+  > span > svg {
+    height: 24px;
+    width: 24px;
+  }
+  @media print {
+    display: none !important;
+  }
+`
 
 const ApberForAp = ({
   apId,
@@ -119,7 +138,13 @@ const ApberForAp = ({
    * isSubReport is passed
    */
   isSubReport,
+  // and need to build print button only once
+  // so only when index is 0
+  subReportIndex,
 }) => {
+  const store = useContext(storeContext)
+  const { setIsPrint } = store
+
   const apData = isSubReport ? apDataPassed : apDataPassed.apById
   const artname = get(apData, 'aeTaxonomyByArtId.artname', '(Art fehlt)')
   const apber = get(apData, 'apbersByApId.nodes[0]', {})
@@ -157,6 +182,16 @@ const ApberForAp = ({
   const yearOfFirstTpopber = !!firstTpopber ? firstTpopber.jahr : 0
   const startJahr = get(apData, 'startJahr', 0)
 
+  const onClickPrint = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      setIsPrint(true)
+      setTimeout(() => {
+        window.print()
+        setIsPrint(false)
+      })
+    }
+  }, [setIsPrint])
+
   if (startJahr === 0)
     return (
       <ErrorBoundary>
@@ -171,6 +206,16 @@ const ApberForAp = ({
   return (
     <ErrorBoundary>
       <Container issubreport={isSubReport}>
+        {!subReportIndex && (
+          <StyledFab
+            onClick={onClickPrint}
+            title="drucken"
+            aria-label="drucken"
+            color="primary"
+          >
+            <MdPrint />
+          </StyledFab>
+        )}
         <ContentContainer>
           <Header>
             {`Jahresbericht ${get(apber, 'jahr', '(Jahr fehlt)')},
