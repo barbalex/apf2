@@ -96,7 +96,7 @@
     "prop-types": "15.7.2",
     "query-string": "6.8.3",
     "react": "16.11.0",
-    "react-contextmenu": "2.12.0",
+    "react-contextmenu": "2.11.0",
     "react-copy-to-clipboard": "5.0.1",
     "react-dom": "16.11.0",
     "react-error-boundary": "1.2.5",
@@ -122,7 +122,8 @@
     "uploadcare-widget": "3.7.9"
   },
   "dependenciesComments": {
-    "exceljs": "Do not upgrade past 1.10.1, will break in production. See: https://github.com/exceljs/exceljs/issues/871"
+    "exceljs": "Do not upgrade past 1.10.1, will break in production. See: https://github.com/exceljs/exceljs/issues/871",
+    "react-contextmenu": "in 2.12.0 menu would not close"
   },
   "peerDependencies": {
     "react-is": "16.11.0"
