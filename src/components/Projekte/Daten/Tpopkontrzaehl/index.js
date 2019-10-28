@@ -59,9 +59,10 @@ const Tpopkontrzaehl = ({ treeName }) => {
     },
   )
 
-  const codes = get(dataZaehlOfEk, 'allTpopkontrzaehls.nodes', []).map(
-    n => n.einheit,
-  )
+  const codes = get(dataZaehlOfEk, 'allTpopkontrzaehls.nodes', [])
+    .map(n => n.einheit)
+    // prevent null values which cause error in query
+    .filter(e => !!e)
   const {
     data: dataLists,
     loading: loadingLists,
