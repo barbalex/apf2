@@ -832,8 +832,10 @@ CREATE TABLE apflora.tpopkontrzaehl (
   einheit integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   methode integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_methode_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT null
+  changed_by varchar(20) DEFAULT null,
+  unique (id, einheit)
 );
+-- 2019 10 29: alter table apflora.tpopkontrzaehl add constraint id_einheit_unique unique (id, einheit);
 COMMENT ON COLUMN apflora.tpopkontrzaehl.anzahl IS 'Anzahl Zaehleinheiten';
 COMMENT ON COLUMN apflora.tpopkontrzaehl.einheit IS 'Verwendete Zaehleinheit. Auswahl aus Tabelle "tpopkontrzaehl_einheit_werte"';
 COMMENT ON COLUMN apflora.tpopkontrzaehl.methode IS 'Verwendete Methodik. Auswahl aus Tabelle "tpopkontrzaehl_methode_werte"';
