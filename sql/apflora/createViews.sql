@@ -3831,12 +3831,13 @@ WHERE
       date_part('year', apflora.beob.datum)
     ) AS "MinJahr"
     FROM apflora.beob
-    WHERE tpop_id = apflora.tpop.id
+    WHERE
+      tpop_id = apflora.tpop.id
+      -- Baumann-Manuskript enthält viele Beobachtungen ohne Datum
+      -- Müssen ausgeschlossen werden
+      and apflora.beob.datum <> '0001-01-01 BC'
     GROUP BY tpop_id
   )
-  -- Baumann-Manuskript enthält viele Beobachtungen ohne Datum
-  -- Müssen ausgeschlossen werden
-  and apflora.beob.datum <> '0001-01-01 BC'
 ORDER BY
   apflora.projekt.id,
   apflora.ap.id,
