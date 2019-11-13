@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query EkfrequenzQueryForSetStartjahr($code: String!) {
-    ekfrequenzByCode(code: $code) {
+  query EkfrequenzQueryForSetStartjahr($id: UUID!) {
+    ekfrequenzById(id: $id) {
       id
       kontrolljahreAb
     }

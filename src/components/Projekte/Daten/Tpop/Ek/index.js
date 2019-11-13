@@ -109,7 +109,7 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
         longestAnwendungsfall,
       )}, ${ekTypeArray.join(' und ')}` || ''
     return {
-      value: o.code,
+      value: o.id,
       label: `${code}: ${anwendungsfall}`,
     }
   })

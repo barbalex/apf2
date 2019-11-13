@@ -122,7 +122,7 @@ export const simpleTypes = {
   nutzungszone: 'string',
   bewirtschafter: 'string',
   bewirtschaftung: 'string',
-  ekfrequenz: 'string',
+  ekfrequenz: 'uuid',
   ekfrequenzAbweichend: 'boolean',
   ekfKontrolleur: 'uuid',
   bemerkungen: 'string',

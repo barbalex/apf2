@@ -4,7 +4,7 @@ import max from 'lodash/max'
 import queryEkfrequenz from './queryEkfrequenz'
 import mutationUpdateTpop from './mutationUpdateTpop'
 
-export default async ({ row, ekfrequenzCode, client, store }) => {
+export default async ({ row, ekfrequenz, client, store }) => {
   const { enqueNotification } = store
   // 1  get ekfrequenz's kontrolljahreAb
   let ekfrequenzResult
@@ -12,7 +12,7 @@ export default async ({ row, ekfrequenzCode, client, store }) => {
     ekfrequenzResult = await client.query({
       query: queryEkfrequenz,
       variables: {
-        code: ekfrequenzCode,
+        id: ekfrequenz,
       },
     })
   } catch (error) {
@@ -25,7 +25,7 @@ export default async ({ row, ekfrequenzCode, client, store }) => {
   }
   const kontrolljahreAb = get(
     ekfrequenzResult,
-    'data.ekfrequenzByCode.kontrolljahreAb',
+    'data.ekfrequenzById.kontrolljahreAb',
     null,
   )
   if (!kontrolljahreAb) {

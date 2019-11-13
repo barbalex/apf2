@@ -31,7 +31,7 @@ export default gql`
     $nutzungszone: String
     $bewirtschafter: String
     $bewirtschaftung: String
-    $ekfrequenz: String
+    $ekfrequenz: UUID
     $ekfrequenzAbweichend: Boolean
     $ekfKontrolleur: UUID
     $ekfrequenzStartjahr: Int

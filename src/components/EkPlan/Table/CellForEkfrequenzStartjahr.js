@@ -60,7 +60,7 @@ const Input = styled.input`
   }
 `
 
-const CellForEkfrequenz = ({ row, style, refetchTpop }) => {
+const CellForEkfrequenzStartjahr = ({ row, style, refetchTpop }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
@@ -146,7 +146,7 @@ const CellForEkfrequenz = ({ row, style, refetchTpop }) => {
       if (row.ekfrequenz.value && value) {
         setEkplans({
           tpopId: row.id,
-          ekfrequenzCode: row.ekfrequenz.value,
+          ekfrequenz: row.ekfrequenz.value,
           ekfrequenzStartjahr: value,
           refetchTpop,
           client,
@@ -173,4 +173,4 @@ const CellForEkfrequenz = ({ row, style, refetchTpop }) => {
   )
 }
 
-export default observer(CellForEkfrequenz)
+export default observer(CellForEkfrequenzStartjahr)

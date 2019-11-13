@@ -28,7 +28,7 @@ const Option = styled.option`
   font-size: 0.85rem;
 `
 
-const CellForEkfrequenz = ({ row, field, style, refetchTpop }) => {
+const CellForEkfrequenz = ({ row, field, style, refetchTpop, ekfrequenzs }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { enqueNotification } = store
@@ -50,7 +50,7 @@ const CellForEkfrequenz = ({ row, field, style, refetchTpop }) => {
           mutation: gql`
             mutation updateTpopEkfrequenz(
               $id: UUID!
-              $ekfrequenz: String
+              $ekfrequenz: UUID
               $changedBy: String
             ) {
               updateTpopById(
@@ -99,7 +99,7 @@ const CellForEkfrequenz = ({ row, field, style, refetchTpop }) => {
       if (!!value) {
         ekfrequenzStartjahr = await setStartjahr({
           row,
-          ekfrequenzCode: value,
+          ekfrequenz: value,
           client,
           store,
         })
@@ -108,7 +108,7 @@ const CellForEkfrequenz = ({ row, field, style, refetchTpop }) => {
       if (!!ekfrequenzStartjahr && !!value) {
         setEkplans({
           tpopId: row.id,
-          ekfrequenzCode: value,
+          ekfrequenz: value,
           ekfrequenzStartjahr,
           refetchTpop,
           client,
@@ -125,8 +125,9 @@ const CellForEkfrequenz = ({ row, field, style, refetchTpop }) => {
   const onBlur = useCallback(() => {
     setFocused(false)
   }, [])
-  const valueToShow = field.value || field.value === 0 ? field.value : ''
   const optionsGrouped = ekfOptionsGroupedPerAp[row.apId]
+  const ekfrequenz = ekfrequenzs.find(f => f.id === field.value)
+  const valueToShow = ekfrequenz ? ekfrequenz.code : ''
 
   return (
     <StyledCellForSelect
@@ -156,7 +157,7 @@ const CellForEkfrequenz = ({ row, field, style, refetchTpop }) => {
             </>
           ) : null
         ) : (
-          <Option key="option1" value={valueToShow}>
+          <Option key="option1" value={field.value}>
             {valueToShow}
           </Option>
         )}

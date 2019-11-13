@@ -7,7 +7,7 @@ import mutationCreateEkplan from './mutationCreateEkplan'
 
 export default async ({
   tpopId,
-  ekfrequenzCode,
+  ekfrequenz: ekfrequenzValue,
   ekfrequenzStartjahr,
   refetchTpop,
   client,
@@ -63,7 +63,7 @@ export default async ({
     ekfrequenzsResult = await client.query({
       query: queryEkfrequenz,
       variables: {
-        code: ekfrequenzCode,
+        id: ekfrequenzValue,
       },
     })
   } catch (error) {

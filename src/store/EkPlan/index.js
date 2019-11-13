@@ -149,7 +149,7 @@ export default types
             o.ektyp
           }` || ''
         return {
-          value: o.code,
+          value: o.id,
           label: `${code}: ${anwendungsfall}`,
           anwendungsfall,
           apId: o.apId,

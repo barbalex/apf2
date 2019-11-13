@@ -174,7 +174,8 @@ const EkPlanTable = () => {
       apIds: apValues,
     },
   })
-  setEkfrequenzs(get(dataLists, 'allEkfrequenzs.nodes', []))
+  const ekfrequenzs = get(dataLists, 'allEkfrequenzs.nodes', [])
+  setEkfrequenzs(ekfrequenzs)
 
   const {
     data: dataTpop,
@@ -380,6 +381,7 @@ const EkPlanTable = () => {
                   <CellForEkfrequenz
                     key={value.name}
                     row={row}
+                    ekfrequenzs={ekfrequenzs}
                     field={value}
                     style={style}
                     refetchTpop={refetch}
