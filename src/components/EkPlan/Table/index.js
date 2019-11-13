@@ -168,11 +168,14 @@ const EkPlanTable = () => {
       some: { jahr: { equalTo: filterEkplanYear } },
     }
   }
-  /*console.log('Table', {
-    filterKontrolleYear,
-    filterAnsiedlungYear,
-    tpopFilter,
-  })*/
+
+  const { data: dataLists, error: errorLists } = useQuery(queryLists, {
+    variables: {
+      apIds: apValues,
+    },
+  })
+  setEkfrequenzs(get(dataLists, 'allEkfrequenzs.nodes', []))
+
   const {
     data: dataTpop,
     loading: loadingTpop,
@@ -212,8 +215,12 @@ const EkPlanTable = () => {
   // tpopRows does not update when a single tpop changes if passed tpops
   // solution is to pass stringified version
   const tpopsStringified = JSON.stringify(tpops)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const tpopRows = useMemo(() => tpops.map(tpopRowFromTpop), [tpopsStringified])
+  const tpopRows = useMemo(
+    () =>
+      tpops.map((tpop, index) => tpopRowFromTpop({ tpop, index, dataLists })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [dataLists, tpopsStringified],
+  )
   const tpopColumns = tpopRows.length
     ? sortBy(
         Object.values(tpopRows[0])
@@ -238,13 +245,6 @@ const EkPlanTable = () => {
 
   const tpopGrid = useRef(null)
   const yearHeaderGrid = useRef(null)
-
-  const { data: dataLists, error: errorLists } = useQuery(queryLists, {
-    variables: {
-      apIds: apValues,
-    },
-  })
-  setEkfrequenzs(get(dataLists, 'allEkfrequenzs.nodes', []))
 
   const yearColWidth = yearColumnWidth
   let headerYearFieldsWidth = sizeState.width - headerFieldsFixedWidth
