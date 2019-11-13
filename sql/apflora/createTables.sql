@@ -549,7 +549,7 @@ CREATE TABLE apflora.tpop (
   nutzungszone text DEFAULT NULL,
   bewirtschafter text DEFAULT NULL,
   bewirtschaftung text DEFAULT NULL,
-  ekfrequenz text DEFAULT null REFERENCES apflora.ekfrequenz (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  ekfrequenz text DEFAULT null, -- REFERENCES apflora.ekfrequenz (code) ON DELETE SET NULL ON UPDATE CASCADE, not possible as connected via ap_id
   ekfrequenz_startjahr smallint default null,
   ekfrequenz_abweichend boolean DEFAULT false,
   ekf_kontrolleur uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -1325,6 +1325,11 @@ create table apflora.ekfrequenz(
   changed date default now(),
   changed_by varchar(20) default null
 );
+ALTER TABLE apflora.tpop DROP CONSTRAINT tpop_ekfrequenz_fkey;
+ALTER TABLE apflora.ekfrequenz DROP CONSTRAINT ekfrequenz_code_key;
+ALTER TABLE apflora.ekfrequenz
+    ADD CONSTRAINT ekfrequenz_code_key UNIQUE (ap_id, code);
+
 CREATE INDEX ON apflora.ekfrequenz USING btree (id);
 CREATE INDEX ON apflora.ekfrequenz USING btree (ap_id);
 CREATE INDEX ON apflora.ekfrequenz USING btree (ektyp);
