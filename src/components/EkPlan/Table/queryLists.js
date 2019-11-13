@@ -7,6 +7,10 @@ export default gql`
     allEkfrequenzs(filter: { apId: { in: $apIds } }, orderBy: SORT_ASC) {
       nodes {
         ...EkfrequenzFields
+        ekAbrechnungstypWerteByEkAbrechnungstyp {
+          id
+          text
+        }
       }
     }
   }
