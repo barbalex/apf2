@@ -1314,7 +1314,7 @@ create table apflora.ekfrequenz(
   ap_id uuid not null references apflora.ap (id) on delete cascade on update cascade,
   ektyp ek_type default null,
   anwendungsfall text default null,
-  code text default null unique,
+  code text default null,
   kontrolljahre integer[],
   kontrolljahre_ab ek_kontrolljahre_ab default null,
   anzahl_min integer default null,
