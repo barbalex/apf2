@@ -40,7 +40,43 @@ select
   f.ektyp,
   f.kontrolljahre_ab
 from ids, f 
--- 4. import ekplan data from tmp_ekplan in 11 queries (one for every year)
+
+-- 4. import tpop.ekfrequenz
+with ekfrequenzs as (
+select
+  tmp_ekplan.tpop_id,
+  (select id from apflora.ekfrequenz where code = tmp_ekplan.ekfrequenz_code and ap_id = ap.id) as ekfrequenzid
+from
+  apflora.tmp_ekplan tmp_ekplan
+  inner join apflora.tpop
+    inner join apflora.pop pop
+      inner join apflora.ap ap
+      on ap.id = pop.ap_id
+    on pop.id = apflora.tpop.pop_id
+  on apflora.tpop.id = tmp_ekplan.tpop_id
+)
+update apflora.tpop 
+set ekfrequenz = ekfrequenzs.ekfrequenzid
+from ekfrequenzs
+where ekfrequenzs.tpop_id = apflora.tpop.id;
+
+-- 5. import ekplan data from tmp_ekplan in 11 queries (one for every year)
+select 
+  tpop_id,
+  typ,
+  2018 as jahr,
+  '2019-11-13' as changed,
+  'ag' as changed_by
+from
+  apflora.tmp_ekplan tmp_ekplan
+  inner join apflora.tpop tpop
+    inner join apflora.pop pop
+      inner join apflora.ap ap
+        inner join apflora.ekfrequenz ekfrequenz
+        on ekfrequenz.ap_id = ap.id and ekfrequenz.code = tmp_ekplan.code
+      on ap.id = pop.ap_id
+    on pop.id = tpop.pop_id
+  on tpop.id = tmp_ekplan.tpop_id
 
 -- delete tmp_ekplan_ap and tmp_ekplan
 
