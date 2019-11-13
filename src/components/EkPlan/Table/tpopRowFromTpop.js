@@ -5,7 +5,7 @@ import appBaseUrl from '../../../modules/appBaseUrl'
 
 const isOdd = num => num % 2 === 0
 
-export default (tpop, index) => ({
+export default ({ tpop, index, dataLists }) => ({
   isOdd: isOdd(index),
   id: tpop.id,
   tpop: tpop,
@@ -56,10 +56,11 @@ export default (tpop, index) => ({
   },
   ekAbrechnungstyp: {
     ...fields.ekAbrechnungstyp,
-    //value: get(tpop, 'ekfrequenzByEkfrequenz.ekAbrechnungstyp'),
     value: get(
-      tpop,
-      'ekfrequenzByEkfrequenz.ekAbrechnungstypWerteByEkAbrechnungstyp.text',
+      get(dataLists, 'allEkfrequenzs.nodes', []).find(
+        e => e.code === get(tpop, 'ekfrequenz'),
+      ),
+      'ekAbrechnungstypWerteByEkAbrechnungstyp.text',
     ),
   },
   ekfrequenz: {
