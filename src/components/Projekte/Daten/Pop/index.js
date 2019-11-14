@@ -103,6 +103,10 @@ const Pop = ({ treeName, showFilter = false }) => {
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
       const value = values[changedField]
+      const variables = {
+        ...objectsEmptyValuesToNull(values),
+        changedBy: store.user.name,
+      }
       if (showFilter) {
         nodeFilterSetValue({
           treeName,
@@ -114,15 +118,12 @@ const Pop = ({ treeName, showFilter = false }) => {
         try {
           await client.mutate({
             mutation: updatePopByIdGql,
-            variables: {
-              ...objectsEmptyValuesToNull(values),
-              changedBy: store.user.name,
-            },
+            variables,
             optimisticResponse: {
               __typename: 'Mutation',
               updatePopById: {
                 pop: {
-                  ...values,
+                  ...variables,
                   __typename: 'Pop',
                 },
                 __typename: 'Pop',

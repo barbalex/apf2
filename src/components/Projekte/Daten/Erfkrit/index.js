@@ -53,18 +53,19 @@ const Erfkrit = ({ treeName }) => {
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
+      const variables = {
+        ...objectsEmptyValuesToNull(values),
+        changedBy: store.user.name,
+      }
       try {
         await client.mutate({
           mutation: updateErfkritByIdGql,
-          variables: {
-            ...objectsEmptyValuesToNull(values),
-            changedBy: store.user.name,
-          },
+          variables,
           optimisticResponse: {
             __typename: 'Mutation',
             updateErfkritById: {
               erfkrit: {
-                ...values,
+                ...variables,
                 __typename: 'Erfkrit',
               },
               __typename: 'Erfkrit',

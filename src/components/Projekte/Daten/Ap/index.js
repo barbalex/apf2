@@ -92,18 +92,19 @@ const Ap = ({ treeName, showFilter = false }) => {
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
+      const variables = {
+        ...objectsEmptyValuesToNull(values),
+        changedBy: user.name,
+      }
       try {
         await client.mutate({
           mutation: updateApByIdGql,
-          variables: {
-            ...objectsEmptyValuesToNull(values),
-            changedBy: user.name,
-          },
+          variables,
           optimisticResponse: {
             __typename: 'Mutation',
             updateApById: {
               ap: {
-                ...values,
+                ...variables,
                 __typename: 'Ap',
               },
               __typename: 'Ap',

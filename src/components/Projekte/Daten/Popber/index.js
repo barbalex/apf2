@@ -53,18 +53,19 @@ const Popber = ({ treeName }) => {
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
+      const variables = {
+        ...objectsEmptyValuesToNull(values),
+        changedBy: store.user.name,
+      }
       try {
         await client.mutate({
           mutation: updatePopberByIdGql,
-          variables: {
-            ...objectsEmptyValuesToNull(values),
-            changedBy: store.user.name,
-          },
+          variables,
           optimisticResponse: {
             __typename: 'Mutation',
             updatePopberById: {
               popber: {
-                ...values,
+                ...variables,
                 __typename: 'Popber',
               },
               __typename: 'Popber',

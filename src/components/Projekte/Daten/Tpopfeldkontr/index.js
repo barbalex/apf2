@@ -206,10 +206,6 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
           ...objectsEmptyValuesToNull(values),
           changedBy: store.user.name,
         }
-        /*console.log(
-          'Tpopfeldkontr, onSubmit, variables before maybe changing:',
-          variables,
-        )*/
         if (changedField === 'jahr') {
           //console.log('Tpopfeldkontr, onSubmit, setting datum null:')
           variables.datum = null
@@ -221,7 +217,6 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
           //console.log('Tpopfeldkontr, onSubmit, newJahr:', newJahr)
           variables.jahr = newJahr
         }
-        //console.log('Tpopfeldkontr, onSubmit, variables:', variables)
         try {
           await client.mutate({
             mutation: updateTpopkontrByIdGql,
@@ -230,7 +225,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
               __typename: 'Mutation',
               updateTpopkontrById: {
                 tpopkontr: {
-                  ...values,
+                  ...variables,
                   __typename: 'Tpopkontr',
                 },
                 __typename: 'Tpopkontr',

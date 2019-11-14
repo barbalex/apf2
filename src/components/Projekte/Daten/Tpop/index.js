@@ -129,6 +129,10 @@ const TpopForm = ({ treeName, showFilter = false }) => {
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
       const value = values[changedField]
+      const variables = {
+        ...objectsEmptyValuesToNull(values),
+        changedBy: store.user.name,
+      }
       if (showFilter) {
         nodeFilterSetValue({
           treeName,
@@ -140,15 +144,12 @@ const TpopForm = ({ treeName, showFilter = false }) => {
         try {
           await client.mutate({
             mutation: updateTpopByIdGql,
-            variables: {
-              ...objectsEmptyValuesToNull(values),
-              changedBy: store.user.name,
-            },
+            variables,
             optimisticResponse: {
               __typename: 'Mutation',
               updateTpopById: {
                 tpop: {
-                  ...values,
+                  ...variables,
                   __typename: 'Tpop',
                 },
                 __typename: 'Tpop',

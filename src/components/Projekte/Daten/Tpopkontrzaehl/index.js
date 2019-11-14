@@ -78,18 +78,19 @@ const Tpopkontrzaehl = ({ treeName }) => {
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
+      const variables = {
+        ...objectsEmptyValuesToNull(values),
+        changedBy: store.user.name,
+      }
       try {
         await client.mutate({
           mutation: updateTpopkontrzaehlByIdGql,
-          variables: {
-            ...objectsEmptyValuesToNull(values),
-            changedBy: store.user.name,
-          },
+          variables,
           optimisticResponse: {
             __typename: 'Mutation',
             updateTpopkontrzaehlById: {
               tpopkontrzaehl: {
-                ...values,
+                ...variables,
                 __typename: 'Tpopkontrzaehl',
               },
               __typename: 'Tpopkontrzaehl',

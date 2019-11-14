@@ -91,18 +91,19 @@ const Ekfrequenz = ({ treeName }) => {
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
+      const variables = {
+        ...objectsEmptyValuesToNull(values),
+        changedBy: store.user.name,
+      }
       try {
         await client.mutate({
           mutation: updateEkfrequenzByIdGql,
-          variables: {
-            ...objectsEmptyValuesToNull(values),
-            changedBy: store.user.name,
-          },
+          variables,
           optimisticResponse: {
             __typename: 'Mutation',
             updateEkfrequenzById: {
               ekfrequenz: {
-                ...values,
+                ...variables,
                 // sort kontrolljahre here
                 kontrolljahre: values.kontrolljahre
                   ? values.kontrolljahre.sort((a, b) => {

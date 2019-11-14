@@ -60,18 +60,19 @@ const Ziel = ({ treeName }) => {
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
       const value = values[changedField]
+      const variables = {
+        ...objectsEmptyValuesToNull(values),
+        changedBy: store.user.name,
+      }
       try {
         await client.mutate({
           mutation: updateZielByIdGql,
-          variables: {
-            ...objectsEmptyValuesToNull(values),
-            changedBy: store.user.name,
-          },
+          variables,
           optimisticResponse: {
             __typename: 'Mutation',
             updateZielById: {
               ziel: {
-                ...values,
+                ...variables,
                 __typename: 'Ziel',
               },
               __typename: 'Ziel',

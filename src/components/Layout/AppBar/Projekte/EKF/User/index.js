@@ -63,17 +63,16 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
+      const variables = objectsEmptyValuesToNull(values)
       try {
         await client.mutate({
           mutation: updateUserByIdGql,
-          variables: {
-            ...objectsEmptyValuesToNull(values),
-          },
+          variables,
           optimisticResponse: {
             __typename: 'Mutation',
             updateUserById: {
               user: {
-                ...values,
+                ...variables,
                 __typename: 'User',
               },
               __typename: 'User',
