@@ -67,13 +67,6 @@ export default ({ idb, store }) => {
     }
     if (networkError) {
       console.log(`apollo client Network error:`, networkError)
-      // write time of last network error to store
-      // so mst-persist in App.js can back out from reloading if there was a network error
-      // or else there will be a perpetual reload-cycle
-      if (typeof window !== 'undefined') {
-        console.log(`apollo client setting apf2NetworkError to`, Date.now())
-        window.apf2NetworkError = Date.now()
-      }
       enqueNotification({
         message: `apollo client Network error: ${networkError}`,
         options: {
