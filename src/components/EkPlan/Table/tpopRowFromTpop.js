@@ -58,7 +58,7 @@ export default ({ tpop, index, dataLists }) => ({
     ...fields.ekAbrechnungstyp,
     value: get(
       get(dataLists, 'allEkfrequenzs.nodes', []).find(
-        e => e.code === get(tpop, 'ekfrequenz'),
+        e => e.id === get(tpop, 'ekfrequenz'),
       ),
       'ekAbrechnungstypWerteByEkAbrechnungstyp.text',
     ),
