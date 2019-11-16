@@ -100,14 +100,9 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
     ekfrequenzOptions0.map(a => (a.anwendungsfall || '').length),
   )
   const ekfrequenzOptions = ekfrequenzOptions0.map(o => {
-    const ekTypeArray = [o.ek ? 'ek' : null, o.ekf ? 'ekf' : null].filter(
-      v => !!v,
-    )
-    const code = (o.code || '').padEnd(2)
+    const code = (o.code || '').padEnd(8)
     const anwendungsfall =
-      `${(o.anwendungsfall || '').padEnd(
-        longestAnwendungsfall,
-      )}, ${ekTypeArray.join(' und ')}` || ''
+      `${(o.anwendungsfall || '').padEnd(longestAnwendungsfall)}` || ''
     return {
       value: o.id,
       label: `${code}: ${anwendungsfall}`,
