@@ -84,3 +84,55 @@ order by
 -- we need qk for ekfrequenz without kontrolljahre_ab
 
 -- set missing ekfrequenz
+with tpop_without as (
+  select
+    tpop.id
+  from apflora.tpop tpop
+    inner join apflora.pop pop
+      inner join apflora.ap ap
+        inner join apflora.ae_taxonomies tax
+        on ap.art_id = tax.id
+      on ap.id = pop.ap_id
+    on pop.id = tpop.pop_id
+  where
+    -- ohne ekfrequenz
+    tpop.ekfrequenz is null
+    -- nur mit ap
+    and ap.bearbeitung < 4
+    -- ohne erloschene
+    and tpop.status not in (101, 202)
+    -- ohne nicht relevante
+    and tpop.apber_relevant = true
+    -- ohne Testarten
+    and tax.taxid > 150
+  )
+  update apflora.tpop as tpop
+  set ekfrequenz =
+    case
+      when
+        pop.status = 100
+        and tpop.status = 100
+        and 'TODO: stark gefährdet (< 20 Ind.)'
+      then 'GA'
+      when
+        pop.status = 100
+        and tpop.status = 100
+        and 'TODO: mittel gefährdet (> 20 Ind.)'
+      then 'GB'
+      when
+        pop.status = 100
+        and tpop.status = 100
+        and 'TODO: wenig gefährdet (> 500 Ind.)'
+      then 'GC'
+      when
+        pop.status = 100
+        and tpop.status = 100
+        and 'TODO: erloschen? (0 Ind.)'
+      then 'GD'
+      when pop.status = 200 and tpop.status = 200 then 'SA'
+      when pop.status = 100 and tpop.status = 200 then 'SB'
+      --when pop.status in (100, 200) and tpop.status = 200 then 'D' -- do not set because is special case?
+      when tpop.status = 201 then 'A'
+      else null
+    end
+  where id in (select id from tpop_without);
