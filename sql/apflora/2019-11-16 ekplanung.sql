@@ -82,6 +82,7 @@ order by
   tpop.nr;
 
 -- we need qk for ekfrequenz without kontrolljahre_ab
+-- we need qk for no zielrelevante ekfrequenz
 
 -- set missing ekfrequenz
 with tpop_without as (
