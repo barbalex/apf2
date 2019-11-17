@@ -87,7 +87,9 @@ order by
 -- set missing ekfrequenz
 with tpop_without as (
   select
-    tpop.id
+    tpop.id,
+    pop.status as pop_status,
+    tpop.status as tpop_status
   from apflora.tpop tpop
     inner join apflora.pop pop
       inner join apflora.ap ap
@@ -111,29 +113,79 @@ with tpop_without as (
   set ekfrequenz =
     case
       when
-        pop.status = 100
-        and tpop.status = 100
+        pop_status = 100
+        and tpop_status = 100
         and 'TODO: stark gefährdet (< 20 Ind.)'
-      then 'GA'
+      then (
+        select id
+        from apflora.ekrequenz
+        where
+          ap_id = ap.id
+          and code = 'GA'
+      )
       when
-        pop.status = 100
-        and tpop.status = 100
+        pop_status = 100
+        and tpop_status = 100
         and 'TODO: mittel gefährdet (> 20 Ind.)'
-      then 'GB'
+      then (
+        select id
+        from apflora.ekrequenz
+        where
+          ap_id = ap.id
+          and code = 'GB'
+      )
       when
-        pop.status = 100
-        and tpop.status = 100
+        pop_status = 100
+        and tpop_status = 100
         and 'TODO: wenig gefährdet (> 500 Ind.)'
-      then 'GC'
+      then (
+        select id
+        from apflora.ekrequenz
+        where
+          ap_id = ap.id
+          and code = 'GC'
+      )
       when
-        pop.status = 100
-        and tpop.status = 100
+        pop_status = 100
+        and tpop_status = 100
         and 'TODO: erloschen? (0 Ind.)'
-      then 'GD'
-      when pop.status = 200 and tpop.status = 200 then 'SA'
-      when pop.status = 100 and tpop.status = 200 then 'SB'
-      --when pop.status in (100, 200) and tpop.status = 200 then 'D' -- do not set because is special case?
-      when tpop.status = 201 then 'A'
+      then (
+        select id
+        from apflora.ekrequenz
+        where
+          ap_id = ap.id
+          and code = 'GD'
+      )
+      when
+        pop_status = 200
+        and tpop_status = 200
+      then (
+        select id
+        from apflora.ekrequenz
+        where
+          ap_id = ap.id
+          and code = 'SA'
+      )
+      when
+        pop_status = 100
+        and tpop_status = 200
+      then (
+        select id
+        from apflora.ekrequenz
+        where
+          ap_id = ap.id
+          and code = 'SB'
+      )
+      --when pop_status in (100, 200) and tpop_status = 200 then 'D' -- do not set because is special case?
+      when
+        tpop_status = 201
+      then (
+        select id
+        from apflora.ekrequenz
+        where
+          ap_id = ap.id
+          and code = 'A'
+      )
       else null
     end
   where id in (select id from tpop_without);
