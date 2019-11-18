@@ -7,7 +7,6 @@ import DeleteFilterIcon from '@material-ui/icons/DeleteSweep'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { useDebounce } from 'use-debounce'
 
 import tables from '../../../modules/tables'
 import storeContext from '../../../storeContext'
@@ -66,48 +65,47 @@ const LabelFilter = ({ treeName }) => {
   const openNodes = get(store, `${treeName}.openNodes`, [])
 
   const [value, setValue] = useState('')
-  const [valueDebounced] = useDebounce(value, 300)
 
   useEffect(() => {
     setValue(filterValue)
   }, [filterValue, tableName, treeName])
 
-  useEffect(() => {
-    if (labelText === '(filtern nicht möglich)') return
-    const { filterTable, url, label } = activeNode
-    // pop if is not folder and label does not comply to filter
-    if (
-      activeNode.nodeType === 'table' &&
-      !label.includes(
-        valueDebounced && valueDebounced.toLowerCase
-          ? valueDebounced.toLowerCase()
-          : valueDebounced,
-      )
-    ) {
-      const newActiveNodeArray = [...url]
-      const newActiveUrl = [...url]
-      newActiveNodeArray.pop()
-      let newOpenNodes = openNodes.filter(n => n !== newActiveUrl)
-      setActiveNodeArray(newActiveNodeArray)
-      setOpenNodes(newOpenNodes)
-    }
-    setNodeLabelFilterKey({
-      value: valueDebounced,
-      tree: treeName,
-      key: filterTable,
-    })
-  }, [
-    activeNode,
-    labelText,
-    openNodes,
-    setActiveNodeArray,
-    setNodeLabelFilterKey,
-    setOpenNodes,
-    treeName,
-    valueDebounced,
-  ])
-
-  const onChange = useCallback(e => setValue(e.target.value), [])
+  const onChange = useCallback(
+    e => {
+      const { value } = e.target
+      setValue(value)
+      if (labelText === '(filtern nicht möglich)') return
+      const { filterTable, url, label } = activeNode
+      // pop if is not folder and label does not comply to filter
+      if (
+        activeNode.nodeType === 'table' &&
+        !label.includes(
+          value && value.toLowerCase ? value.toLowerCase() : value,
+        )
+      ) {
+        const newActiveNodeArray = [...url]
+        const newActiveUrl = [...url]
+        newActiveNodeArray.pop()
+        let newOpenNodes = openNodes.filter(n => n !== newActiveUrl)
+        setActiveNodeArray(newActiveNodeArray)
+        setOpenNodes(newOpenNodes)
+      }
+      setNodeLabelFilterKey({
+        value,
+        tree: treeName,
+        key: filterTable,
+      })
+    },
+    [
+      activeNode,
+      labelText,
+      openNodes,
+      setActiveNodeArray,
+      setNodeLabelFilterKey,
+      setOpenNodes,
+      treeName,
+    ],
+  )
   const onClickEmptyFilter = useCallback(() => {
     empty()
     setValue('')
