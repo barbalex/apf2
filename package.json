@@ -119,7 +119,8 @@
     "typeface-roboto": "0.0.75",
     "typeface-roboto-mono": "0.0.75",
     "typography": "0.16.19",
-    "uploadcare-widget": "3.8.0"
+    "uploadcare-widget": "3.8.0",
+    "use-debounce": "3.1.0"
   },
   "dependenciesComments": {
     "react-contextmenu": "in 2.12.0 menu would not close"
