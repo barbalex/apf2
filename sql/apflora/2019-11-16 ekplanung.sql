@@ -85,36 +85,40 @@ order by
 -- we need qk for no zielrelevante ekfrequenz
 
 -- set missing ekfrequenz
-with tpop_without as (
+with letzte_anzahl as (
+  select distinct on (apflora.tpop.id)
+    apflora.tpop.id,
+    apflora.tpopkontrzaehl.anzahl
+  from
+    apflora.tpopkontrzaehl
+    inner join apflora.tpopkontr
+      inner join apflora.tpop
+        inner join apflora.pop
+          inner join apflora.ap
+            inner join apflora.ekzaehleinheit
+            on apflora.ap.id = apflora.ekzaehleinheit.ap_id and apflora.ekzaehleinheit.zielrelevant = true
+          on apflora.ap.id = apflora.pop.ap_id
+        on apflora.pop.id = apflora.tpop.pop_id
+      on apflora.tpop.id = apflora.tpopkontr.tpop_id
+    on apflora.tpopkontrzaehl.tpopkontr_id = apflora.tpopkontr.id
+  where
+    apflora.tpopkontr.jahr is not null
+    and apflora.tpopkontrzaehl.einheit = (select code from apflora.tpopkontrzaehl_einheit_werte where id = apflora.ekzaehleinheit.zaehleinheit_id)
+    -- exclude zahlungen with no anzahl
+	  and apflora.tpopkontrzaehl.anzahl is not null
+  order by
+    apflora.tpop.id,
+    apflora.tpopkontr.jahr desc,
+    apflora.tpopkontr.datum desc
+) tpop_without as (
   select
     tpop.id,
     pop.status as pop_status,
     tpop.status as tpop_status,
-    (
-      select
-        apflora.tpopkontrzaehl.anzahl
-      from
-        apflora.tpopkontrzaehl
-        inner join apflora.tpopkontr
-          inner join apflora.tpop
-            inner join apflora.pop
-              inner join apflora.ap
-                inner join apflora.ekzaehleinheit
-                on apflora.ap.id = apflora.ekzaehleinheit.ap_id and apflora.ekzaehleinheit.zielrelevant = true
-              on apflora.ap.id = apflora.pop.ap_id
-            on apflora.pop.id = apflora.tpop.pop_id
-          on apflora.tpop.id = apflora.tpopkontr.tpop_id
-        on apflora.tpopkontrzaehl.tpopkontr_id = apflora.tpopkontr.id
-      where
-        apflora.tpopkontr.tpop_id = tpop.id
-        and apflora.tpopkontr.jahr is not null
-        and apflora.tpopkontrzaehl.einheit = (select code from apflora.tpopkontrzaehl_einheit_werte where id = apflora.ekzaehleinheit.zaehleinheit_id)
-      order by
-        jahr desc,
-        datum desc
-      limit 1
-    ) as letzte_anzahl
+    la.anzahl as letzte_anzahl
   from apflora.tpop tpop
+    inner join letzte_anzahl la
+    on la.id = tpop.id
     inner join apflora.pop pop
       inner join apflora.ap ap
         inner join apflora.ae_taxonomies tax
