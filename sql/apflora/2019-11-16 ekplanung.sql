@@ -81,8 +81,8 @@ order by
   pop.nr,
   tpop.nr;
 
--- we need qk for ekfrequenz without kontrolljahre_ab
--- we need qk for no zielrelevante ekfrequenz
+-- wir brauchen qk für EK-Frequenz ohne kontrolljahre_ab
+-- wir brauchen qk für AP's ohne zielrelevante EK-Zähleinheit
 
 -- set missing ekfrequenz
 with letzte_anzahl as (
