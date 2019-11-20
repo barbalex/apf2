@@ -95,6 +95,7 @@ with letzte_anzahl as (
       inner join apflora.tpop
         inner join apflora.pop
           inner join apflora.ap
+            -- nur AP's berücksichtigen, bei denen eine EK-Zähleinheit als zielrelevant definiert wurde
             inner join apflora.ekzaehleinheit
             on apflora.ap.id = apflora.ekzaehleinheit.ap_id and apflora.ekzaehleinheit.zielrelevant = true
           on apflora.ap.id = apflora.pop.ap_id
@@ -102,9 +103,11 @@ with letzte_anzahl as (
       on apflora.tpop.id = apflora.tpopkontr.tpop_id
     on apflora.tpopkontrzaehl.tpopkontr_id = apflora.tpopkontr.id
   where
+    -- nur Kontrollen mit Jahr berücksichtigen
     apflora.tpopkontr.jahr is not null
+    -- nur Zählungen mit zielrelevanter Einheit berücksichtigen
     and apflora.tpopkontrzaehl.einheit = (select code from apflora.tpopkontrzaehl_einheit_werte where id = apflora.ekzaehleinheit.zaehleinheit_id)
-    -- exclude zahlungen with no anzahl
+    -- nur Zählungen mit Anzahl berücksichtigen
 	  and apflora.tpopkontrzaehl.anzahl is not null
   order by
     apflora.tpop.id,
@@ -117,7 +120,7 @@ with letzte_anzahl as (
       when
         pop.status = 100
         and tpop.status = 100
-        and la.anzahl < 20 -- 'stark gefährdet (< 20 Ind.)'
+        and la.anzahl < 20 -- stark gefährdet (< 20 Ind.)
       then (
         select id
         from apflora.ekfrequenz
@@ -128,7 +131,7 @@ with letzte_anzahl as (
       when
         pop.status = 100
         and tpop.status = 100
-        and la.anzahl > 20 -- 'mittel gefährdet (> 20 Ind.)'
+        and la.anzahl > 20 -- mittel gefährdet (> 20 Ind.)
       then (
         select id
         from apflora.ekfrequenz
@@ -139,7 +142,7 @@ with letzte_anzahl as (
       when
         pop.status = 100
         and tpop.status = 100
-        and la.anzahl > 500 -- 'wenig gefährdet (> 500 Ind.)'
+        and la.anzahl > 500 -- wenig gefährdet (> 500 Ind.)
       then (
         select id
         from apflora.ekfrequenz
@@ -150,7 +153,7 @@ with letzte_anzahl as (
       when
         pop.status = 100
         and tpop.status = 100
-        and la.anzahl = 0 -- 'erloschen? (0 Ind.)'
+        and la.anzahl = 0 -- erloschen? (0 Ind.)
       then (
         select id
         from apflora.ekfrequenz
@@ -178,7 +181,8 @@ with letzte_anzahl as (
           ap_id = ap.id
           and code = 'SB'
       )
-      --when pop_status in (100, 200) and tpop_status = 200 then 'D' -- do not set because is special case?
+      -- when pop.status in (100, 200) and tpop.status = 200 then 'D' 
+      -- dieser Fall kann hier nicht von obigen zwei (SA, SB) unterschieden werden, oder?
       when
         tpop.status = 201
       then (
@@ -191,8 +195,10 @@ with letzte_anzahl as (
       else null
     end
   from apflora.tpop tpop
+    -- nur TPop berücksichtigen, für die eine letzte Anzahl berechnet wurde
     inner join letzte_anzahl la
     on la.id = tpop.id
+    -- nur TPop berücksichtigen, welche über Pop, AP und Taxonomie verfügen
     inner join apflora.pop pop
       inner join apflora.ap ap
         inner join apflora.ae_taxonomies tax
@@ -200,13 +206,13 @@ with letzte_anzahl as (
       on ap.id = pop.ap_id
     on pop.id = tpop.pop_id
   where
-    -- ohne ekfrequenz
+    -- nur TPop ohne ekfrequenz berücksichtigen
     tpop.ekfrequenz is null
-    -- nur mit ap
+    -- nur TPop von AP's mit bearbeitung 'erstellt', 'in Bearbeitung' oder 'vorgesehen' berücksichtigen
     and ap.bearbeitung < 4
-    -- ohne erloschene
+    -- nur TPop, die nicht erloschen sind berücksichtigen
     and tpop.status not in (101, 202)
-    -- ohne nicht relevante
+    -- nur relevante TPop berücksichtigen
     and tpop.apber_relevant = true
-    -- ohne Testarten
+    -- nur TPop von Nicht-Testarten berücksichtigen
     and tax.taxid > 150;
