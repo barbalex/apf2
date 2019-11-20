@@ -110,12 +110,86 @@ with letzte_anzahl as (
     apflora.tpop.id,
     apflora.tpopkontr.jahr desc,
     apflora.tpopkontr.datum desc
-) tpop_without as (
-  select
-    tpop.id,
-    pop.status as pop_status,
-    tpop.status as tpop_status,
-    la.anzahl as letzte_anzahl
+)
+  update apflora.tpop as tpop
+  set ekfrequenz =
+    case
+      when
+        pop.status = 100
+        and tpop.status = 100
+        and la.anzahl < 20 -- 'stark gefährdet (< 20 Ind.)'
+      then (
+        select id
+        from apflora.ekfrequenz
+        where
+          ap_id = ap.id
+          and code = 'GA'
+      )
+      when
+        pop.status = 100
+        and tpop.status = 100
+        and la.anzahl > 20 -- 'mittel gefährdet (> 20 Ind.)'
+      then (
+        select id
+        from apflora.ekfrequenz
+        where
+          ap_id = ap.id
+          and code = 'GB'
+      )
+      when
+        pop.status = 100
+        and tpop.status = 100
+        and la.anzahl > 500 -- 'wenig gefährdet (> 500 Ind.)'
+      then (
+        select id
+        from apflora.ekfrequenz
+        where
+          ap_id = ap.id
+          and code = 'GC'
+      )
+      when
+        pop.status = 100
+        and tpop.status = 100
+        and la.anzahl = 0 -- 'erloschen? (0 Ind.)'
+      then (
+        select id
+        from apflora.ekfrequenz
+        where
+          ap_id = ap.id
+          and code = 'GD'
+      )
+      when
+        pop.status = 200
+        and tpop.status = 200
+      then (
+        select id
+        from apflora.ekfrequenz
+        where
+          ap_id = ap.id
+          and code = 'SA'
+      )
+      when
+        pop.status = 100
+        and tpop.status = 200
+      then (
+        select id
+        from apflora.ekfrequenz
+        where
+          ap_id = ap.id
+          and code = 'SB'
+      )
+      --when pop_status in (100, 200) and tpop_status = 200 then 'D' -- do not set because is special case?
+      when
+        tpop.status = 201
+      then (
+        select id
+        from apflora.ekfrequenz
+        where
+          ap_id = ap.id
+          and code = 'A'
+      )
+      else null
+    end
   from apflora.tpop tpop
     inner join letzte_anzahl la
     on la.id = tpop.id
@@ -135,85 +209,4 @@ with letzte_anzahl as (
     -- ohne nicht relevante
     and tpop.apber_relevant = true
     -- ohne Testarten
-    and tax.taxid > 150
-  )
-  update apflora.tpop as tpop
-  set ekfrequenz =
-    case
-      when
-        pop_status = 100
-        and tpop_status = 100
-        and 'TODO: stark gefährdet (< 20 Ind.)'
-      then (
-        select id
-        from apflora.ekrequenz
-        where
-          ap_id = ap.id
-          and code = 'GA'
-      )
-      when
-        pop_status = 100
-        and tpop_status = 100
-        and 'TODO: mittel gefährdet (> 20 Ind.)'
-      then (
-        select id
-        from apflora.ekrequenz
-        where
-          ap_id = ap.id
-          and code = 'GB'
-      )
-      when
-        pop_status = 100
-        and tpop_status = 100
-        and 'TODO: wenig gefährdet (> 500 Ind.)'
-      then (
-        select id
-        from apflora.ekrequenz
-        where
-          ap_id = ap.id
-          and code = 'GC'
-      )
-      when
-        pop_status = 100
-        and tpop_status = 100
-        and 'TODO: erloschen? (0 Ind.)'
-      then (
-        select id
-        from apflora.ekrequenz
-        where
-          ap_id = ap.id
-          and code = 'GD'
-      )
-      when
-        pop_status = 200
-        and tpop_status = 200
-      then (
-        select id
-        from apflora.ekrequenz
-        where
-          ap_id = ap.id
-          and code = 'SA'
-      )
-      when
-        pop_status = 100
-        and tpop_status = 200
-      then (
-        select id
-        from apflora.ekrequenz
-        where
-          ap_id = ap.id
-          and code = 'SB'
-      )
-      --when pop_status in (100, 200) and tpop_status = 200 then 'D' -- do not set because is special case?
-      when
-        tpop_status = 201
-      then (
-        select id
-        from apflora.ekrequenz
-        where
-          ap_id = ap.id
-          and code = 'A'
-      )
-      else null
-    end
-  where id in (select id from tpop_without);
+    and tax.taxid > 150;
