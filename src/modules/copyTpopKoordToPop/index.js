@@ -4,6 +4,7 @@ import queryTpop from './queryTpop'
 import updatePopById from './updatePopById'
 
 export default async ({ id, store, client }) => {
+  const { refetch } = store
   // fetch tpop
   let tpopResult
   try {
@@ -40,4 +41,6 @@ export default async ({ id, store, client }) => {
       },
     })
   }
+  if (refetch.popForMap) refetch.popForMap()
+  if (refetch.tpopForMap) refetch.tpopForMap()
 }

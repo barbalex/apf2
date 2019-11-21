@@ -115,7 +115,11 @@ const Coordinates = ({ row, refetchForm, table }) => {
       }
       // update on map
       if (table === 'pop' && refetch.popForMap) refetch.popForMap()
-      if (table === 'tpop' && refetch.tpopForMap) refetch.tpopForMap()
+      if (table === 'tpop' && refetch.tpopForMap) {
+        // need to also refetch pop in case pop is new
+        refetch.popForMap && refetch.popForMap()
+        refetch.tpopForMap()
+      }
       // refetch form ONLY if id exists
       // if user has right clicked tpop without activating it, there is now row id
       refetchForm()

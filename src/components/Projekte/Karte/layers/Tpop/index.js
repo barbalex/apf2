@@ -54,7 +54,9 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
   const perAp = apId !== '99999999-9999-9999-9999-999999999999'
 
   const popFilter = {
-    wgs84Lat: { isNull: false },
+    // used to filter: wgs84Lat: { isNull: false }
+    // but then tpop with wgs84Lat with pop without would not show
+    id: { isNull: false },
   }
   const popFilterValues = Object.entries(nodeFilter[treeName].pop).filter(
     e => e[1] || e[1] === 0,
@@ -98,9 +100,7 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
 
   if (error) {
     enqueNotification({
-      message: `Fehler beim Laden der Teil-Populationen für die Karte: ${
-        error.message
-      }`,
+      message: `Fehler beim Laden der Teil-Populationen für die Karte: ${error.message}`,
       options: {
         variant: 'error',
       },

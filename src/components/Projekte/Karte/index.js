@@ -549,7 +549,11 @@ const Karte = ({ treeName }) => {
                   },
                 })
                 // refetch so it appears on map
-                if (refetch.tpopForMap) refetch.tpopForMap()
+                if (refetch.tpopForMap) {
+                  // need to also refetch pop in case it was new
+                  refetch.popForMap && refetch.popForMap()
+                  refetch.tpopForMap()
+                }
               } catch (error) {
                 enqueNotification({
                   message: error.message,

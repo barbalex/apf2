@@ -166,7 +166,11 @@ const TpopForm = ({ treeName, showFilter = false }) => {
               (changedField === 'lv95X' && row.y))) ||
           (!value && (changedField === 'ylv95Y' || changedField === 'lv95X'))
         ) {
-          if (refetch.tpopForMap) refetch.tpopForMap()
+          if (refetch.tpopForMap) {
+            // need to also refetch pop in case pop was new
+            refetch.popForMap && refetch.popForMap()
+            refetch.tpopForMap()
+          }
         }
         setErrors({})
       }
