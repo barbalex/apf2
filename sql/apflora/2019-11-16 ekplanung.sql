@@ -324,3 +324,33 @@ with letzte_anzahl as (
     tax.artname,
     pop.nr,
     tpop.nr;
+  
+  -- query ap-arten plus arten with ekplan without zielrelevante zähleinheit
+  with ap_with_ekplan as (
+    select distinct apflora.ap.id
+    from
+      apflora.ekplan
+      inner join apflora.tpop
+        inner join apflora.pop
+          inner join apflora.ap
+          on apflora.ap.id = apflora.pop.ap_id
+        on apflora.pop.id = apflora.tpop.pop_id
+      on apflora.tpop.id = apflora.ekplan.tpop_id
+  )
+  select
+    tax.artname as ap,
+    ew.text as zielrelevante_zaehleinheit
+  from
+    apflora.ap ap
+      inner join apflora.ae_taxonomies tax
+      on ap.art_id = tax.id
+      -- nur AP's berücksichtigen, bei denen eine EK-Zähleinheit als zielrelevant definiert wurde
+      left join apflora.ekzaehleinheit ekze
+        inner join apflora.tpopkontrzaehl_einheit_werte ew
+        on ew.id = ekze.zaehleinheit_id
+      on ap.id = ekze.ap_id and ekze.zielrelevant = true
+  where
+    ap.bearbeitung < 4
+    or ap.id in (select * from ap_with_ekplan)
+  order by
+    tax.artname;
