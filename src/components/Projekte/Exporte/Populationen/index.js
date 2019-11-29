@@ -577,7 +577,7 @@ const Populationen = () => {
           <DownloadCardButton
             onClick={async () => {
               const notif = enqueNotification({
-                message: `Export "PopLetzteZaehlungenMitMassn" wird vorbereitet...`,
+                message: `Export "PopLetzteZaehlungenInklMassn" wird vorbereitet...`,
                 options: {
                   variant: 'info',
                   persist: true,
@@ -591,7 +591,7 @@ const Populationen = () => {
                 })
                 exportModule({
                   data: get(data, 'allVPopLastCountWithMassns.nodes', []),
-                  fileName: 'PopLetzteZaehlungenMitMassn',
+                  fileName: 'PopLetzteZaehlungenInklMassn',
                   idKey: 'pop_id',
                   store,
                 })

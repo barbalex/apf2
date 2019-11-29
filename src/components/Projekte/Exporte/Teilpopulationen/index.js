@@ -694,6 +694,41 @@ const Teilpopulationen = ({ treeName }) => {
           >
             Letzte Zählungen
           </DownloadCardButton>
+          <DownloadCardButton
+            onClick={async () => {
+              const notif = enqueNotification({
+                message: `Export "TPopLetzteZaehlungenInklMassn" wird vorbereitet...`,
+                options: {
+                  variant: 'info',
+                  persist: true,
+                },
+              })
+              try {
+                const { data } = await client.query({
+                  query: await import('./allVTpopLastCountWithMassns').then(
+                    m => m.default,
+                  ),
+                })
+                exportModule({
+                  data: get(data, 'allVTpopLastCountWithMassns.nodes', []),
+                  fileName: 'TPopLetzteZaehlungenInklMassn',
+                  idKey: 'pop_id',
+                  store,
+                })
+              } catch (error) {
+                enqueNotification({
+                  message: error.message,
+                  options: {
+                    variant: 'error',
+                  },
+                })
+              }
+              removeNotification(notif)
+              closeSnackbar(notif)
+            }}
+          >
+            Letzte Zählungen inklusive noch nicht kontrollierter Anpflanzungen
+          </DownloadCardButton>
         </StyledCardContent>
       </Collapse>
     </StyledCard>
