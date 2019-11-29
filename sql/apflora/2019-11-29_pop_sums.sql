@@ -1,6 +1,26 @@
-select *
+with nr_of_kontr as (
+  select apflora.tpop.id, count(apflora.tpopkontr.id) as anzahl
+  from 
+    apflora.tpop
+    left join apflora.tpopkontr
+    on apflora.tpopkontr.tpop_id = apflora.tpop.id
+  group by apflora.tpop.id
+)
+select
+  tpop.id
 from
-  apflora.tpop
+  apflora.tpop tpop
+  inner join nr_of_kontr
+  on nr_of_kontr.id = tpop.id
+where
+  status in (200, 201)
+  and nr_of_kontr.anzahl = 0
+
+tpopmassn
+anz_triebe > Triebe (3)
+anz_pflanzen > Pflanzen (1)
+anz_pflanzstellen > Pflanzstellen (70)
+
 
 -- get sums per pop
 with tpop_sums as (
