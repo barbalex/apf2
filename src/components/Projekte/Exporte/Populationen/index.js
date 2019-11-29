@@ -539,6 +539,42 @@ const Populationen = () => {
           >
             Populationen mit dem letzten Massnahmen-Bericht
           </DownloadCardButton>
+
+          <DownloadCardButton
+            onClick={async () => {
+              const notif = enqueNotification({
+                message: `Export "PopulationenLetzteZaehlungen" wird vorbereitet...`,
+                options: {
+                  variant: 'info',
+                  persist: true,
+                },
+              })
+              try {
+                const { data } = await client.query({
+                  query: await import('./allVPopLastCounts').then(
+                    m => m.default,
+                  ),
+                })
+                exportModule({
+                  data: get(data, 'allVPopLastCounts.nodes', []),
+                  fileName: 'PopLetzteZaehlungen',
+                  idKey: 'pop_id',
+                  store,
+                })
+              } catch (error) {
+                enqueNotification({
+                  message: error.message,
+                  options: {
+                    variant: 'error',
+                  },
+                })
+              }
+              removeNotification(notif)
+              closeSnackbar(notif)
+            }}
+          >
+            Letzte Zählungen
+          </DownloadCardButton>
         </StyledCardContent>
       </Collapse>
     </StyledCard>
