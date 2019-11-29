@@ -6,6 +6,67 @@ with nr_of_kontr as (
     on apflora.tpopkontr.tpop_id = apflora.tpop.id
   group by apflora.tpop.id
 )
+select distinct on (apflora.tpop.id)
+  apflora.pop.id as pop_id,
+  apflora.tpop.id as tpop_id,
+  'Triebe' as zaehleinheit,
+  apflora.tpopmassn.anz_triebe as anzahl
+from
+  apflora.tpopmassn
+  inner join apflora.tpop
+    inner join nr_of_kontr
+    on nr_of_kontr.id = apflora.tpop.id
+    inner join apflora.pop
+    on apflora.pop.id = apflora.tpop.pop_id
+  on apflora.tpop.id = apflora.tpopmassn.tpop_id
+where
+  apflora.tpopmassn.jahr is not null
+  and apflora.tpop.status in (200, 201)
+  and nr_of_kontr.anzahl = 0
+  and apflora.tpopmassn.anz_triebe is not null
+order by
+  apflora.tpop.id,
+  apflora.tpopmassn.jahr desc,
+  apflora.tpopmassn.datum desc
+union
+select distinct on (apflora.tpop.id)
+  apflora.pop.id as pop_id,
+  apflora.tpop.id as tpop_id,
+  'Pflanzen' as zaehleinheit,
+  apflora.tpopmassn.anz_pflanzen as anzahl
+from
+  apflora.tpopmassn
+  inner join apflora.tpop
+    inner join nr_of_kontr
+    on nr_of_kontr.id = apflora.tpop.id
+    inner join apflora.pop
+    on apflora.pop.id = apflora.tpop.pop_id
+  on apflora.tpop.id = apflora.tpopmassn.tpop_id
+where
+  apflora.tpopmassn.jahr is not null
+  and apflora.tpop.status in (200, 201)
+  and nr_of_kontr.anzahl = 0
+  and apflora.tpopmassn.anz_pflanzen is not null
+order by
+  apflora.tpop.id,
+  apflora.tpopmassn.jahr desc,
+  apflora.tpopmassn.datum desc
+
+tpopmassn
+anz_triebe > Triebe (3)
+anz_pflanzen > Pflanzen (1)
+anz_pflanzstellen > Pflanzstellen (70)
+
+
+
+with nr_of_kontr as (
+  select apflora.tpop.id, count(apflora.tpopkontr.id) as anzahl
+  from 
+    apflora.tpop
+    left join apflora.tpopkontr
+    on apflora.tpopkontr.tpop_id = apflora.tpop.id
+  group by apflora.tpop.id
+)
 select
   tpop.id
 from
@@ -15,11 +76,6 @@ from
 where
   status in (200, 201)
   and nr_of_kontr.anzahl = 0
-
-tpopmassn
-anz_triebe > Triebe (3)
-anz_pflanzen > Pflanzen (1)
-anz_pflanzstellen > Pflanzstellen (70)
 
 
 -- get sums per pop
