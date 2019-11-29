@@ -574,6 +574,41 @@ const Populationen = () => {
           >
             Letzte Zählungen
           </DownloadCardButton>
+          <DownloadCardButton
+            onClick={async () => {
+              const notif = enqueNotification({
+                message: `Export "PopLetzteZaehlungenMitMassn" wird vorbereitet...`,
+                options: {
+                  variant: 'info',
+                  persist: true,
+                },
+              })
+              try {
+                const { data } = await client.query({
+                  query: await import('./allVPopLastCountWithMassns').then(
+                    m => m.default,
+                  ),
+                })
+                exportModule({
+                  data: get(data, 'allVPopLastCountWithMassns.nodes', []),
+                  fileName: 'PopLetzteZaehlungenMitMassn',
+                  idKey: 'pop_id',
+                  store,
+                })
+              } catch (error) {
+                enqueNotification({
+                  message: error.message,
+                  options: {
+                    variant: 'error',
+                  },
+                })
+              }
+              removeNotification(notif)
+              closeSnackbar(notif)
+            }}
+          >
+            Letzte Zählungen inklusive noch nicht kontrollierter Anpflanzungen
+          </DownloadCardButton>
         </StyledCardContent>
       </Collapse>
     </StyledCard>
