@@ -1,0 +1,112 @@
+select distinct on (tax.artname, apflora.pop.nr, apflora.tpopkontrzaehl_einheit_werte.text)
+  tax.artname,
+  apflora.pop.nr as pop_nr,
+  apflora.tpopkontrzaehl_einheit_werte.text as zaehleinheit,
+  apflora.tpopkontrzaehl.anzahl || ' (' || apflora.tpopkontr.jahr || ')' as anzahl
+from
+  apflora.tpopkontrzaehl
+  inner join apflora.tpopkontrzaehl_einheit_werte
+  on apflora.tpopkontrzaehl_einheit_werte.code = apflora.tpopkontrzaehl.einheit
+  inner join apflora.tpopkontr
+    inner join apflora.tpop
+      inner join apflora.pop
+        inner join apflora.ap
+          inner join apflora.ae_taxonomies tax
+          on ap.art_id = tax.id
+        on apflora.ap.id = apflora.pop.ap_id
+      on apflora.pop.id = apflora.tpop.pop_id
+    on apflora.tpop.id = apflora.tpopkontr.tpop_id
+  on apflora.tpopkontrzaehl.tpopkontr_id = apflora.tpopkontr.id
+where
+  -- nur Kontrollen mit Jahr berücksichtigen
+  apflora.tpopkontr.jahr is not null
+  -- nur Zählungen mit Anzahl berücksichtigen
+  and apflora.tpopkontrzaehl.anzahl is not null
+order by
+  tax.artname,
+  apflora.pop.nr,
+  apflora.tpopkontrzaehl_einheit_werte.text,
+  apflora.tpopkontr.jahr desc,
+  apflora.tpopkontr.datum desc
+
+-- get einheiten
+select text from apflora.tpopkontrzaehl_einheit_werte order by sort, text;
+
+-- crosstab
+with last_counts as (
+  select distinct on (tax.artname, apflora.pop.nr, apflora.tpopkontrzaehl_einheit_werte.text)
+    tax.artname,
+    apflora.pop.nr as pop_nr,
+    apflora.tpopkontrzaehl_einheit_werte.text as zaehleinheit,
+    apflora.tpopkontrzaehl.anzahl || ' (' || apflora.tpopkontr.jahr || ')' as anzahl
+  from
+    apflora.tpopkontrzaehl
+    inner join apflora.tpopkontrzaehl_einheit_werte
+    on apflora.tpopkontrzaehl_einheit_werte.code = apflora.tpopkontrzaehl.einheit
+    inner join apflora.tpopkontr
+      inner join apflora.tpop
+        inner join apflora.pop
+          inner join apflora.ap
+            inner join apflora.ae_taxonomies tax
+            on ap.art_id = tax.id
+          on apflora.ap.id = apflora.pop.ap_id
+        on apflora.pop.id = apflora.tpop.pop_id
+      on apflora.tpop.id = apflora.tpopkontr.tpop_id
+    on apflora.tpopkontrzaehl.tpopkontr_id = apflora.tpopkontr.id
+  where
+    -- nur Kontrollen mit Jahr berücksichtigen
+    apflora.tpopkontr.jahr is not null
+    -- nur Zählungen mit Anzahl berücksichtigen
+    and apflora.tpopkontrzaehl.anzahl is not null
+  order by
+    tax.artname,
+    apflora.pop.nr,
+    apflora.tpopkontrzaehl_einheit_werte.text,
+    apflora.tpopkontr.jahr desc,
+    apflora.tpopkontr.datum desc
+)
+select *
+from crosstab(
+  'select artname, pop_nr, zaehleinheit, anzahl
+  from last_counts
+  order by 1,2,3',
+  $$SELECT unnest('{Pflanzen, Pflanzen (ohne Jungpflanzen), Triebe, Triebe Beweidung, Keimlinge, Rosetten, Jungpflanzen, Blätter, blühende Pflanzen, blühende Triebe, Blüten, Fertile Pflanzen, fruchtende Triebe, Blütenstände, Fruchtstände, Gruppen, Deckung (%), Pflanzen/5m2, Triebe in 30 m2, Triebe/50m2, Triebe Mähfläche, Fläche (m2), Pflanzstellen, Stellen, andere Zaehleinheit, Art ist vorhanden}'::text[])$$
+) as anzahl ("artname" text, "pop_nr" int, "Pflanzen" text, "Pflanzen (ohne Jungpflanzen)" text, "Triebe" text, "Triebe Beweidung" text, "Keimlinge" text, "Rosetten" text, "Jungpflanzen" text, "Blätter" text, "blühende Pflanzen" text, "blühende Triebe" text, "Blüten" text, "Fertile Pflanzen" text, "fruchtende Triebe" text, "Blütenstände" text, "Fruchtstände" text, "Gruppen" text, "Deckung (%)" text, "Pflanzen/5m2" text, "Triebe in 30 m2" text, "Triebe/50m2" text, "Triebe Mähfläche" text, "Fläche (m2)" text, "Pflanzstellen" text, "Stellen" text, "andere Zaehleinheit" text, "Art ist vorhanden" text);
+
+-- direct
+select *
+from crosstab($$
+  select pop_id, zaehleinheit, anzahl
+  from 
+    (select distinct on (apflora.pop.id, apflora.tpopkontrzaehl_einheit_werte.text)
+      apflora.pop.id as pop_id,
+      apflora.tpopkontrzaehl_einheit_werte.text as zaehleinheit,
+      apflora.tpopkontrzaehl.anzahl || ' (' || apflora.tpopkontr.jahr || ')' as anzahl
+    from
+      apflora.tpopkontrzaehl
+      inner join apflora.tpopkontrzaehl_einheit_werte
+      on apflora.tpopkontrzaehl_einheit_werte.code = apflora.tpopkontrzaehl.einheit
+      inner join apflora.tpopkontr
+        inner join apflora.tpop
+          inner join apflora.pop
+            inner join apflora.ap
+              inner join apflora.ae_taxonomies tax
+              on ap.art_id = tax.id
+            on apflora.ap.id = apflora.pop.ap_id
+          on apflora.pop.id = apflora.tpop.pop_id
+        on apflora.tpop.id = apflora.tpopkontr.tpop_id
+      on apflora.tpopkontrzaehl.tpopkontr_id = apflora.tpopkontr.id
+    where
+      -- nur Kontrollen mit Jahr berücksichtigen
+      apflora.tpopkontr.jahr is not null
+      -- nur Zählungen mit Anzahl berücksichtigen
+      and apflora.tpopkontrzaehl.anzahl is not null
+    order by
+      apflora.pop.id,
+      apflora.tpopkontrzaehl_einheit_werte.text,
+      apflora.tpopkontr.jahr desc,
+      apflora.tpopkontr.datum desc) as tbl
+  order by 1,2,3
+  $$,
+  $$SELECT unnest('{Pflanzen, Pflanzen (ohne Jungpflanzen), Triebe, Triebe Beweidung, Keimlinge, Rosetten, Jungpflanzen, Blätter, blühende Pflanzen, blühende Triebe, Blüten, Fertile Pflanzen, fruchtende Triebe, Blütenstände, Fruchtstände, Gruppen, Deckung (%), Pflanzen/5m2, Triebe in 30 m2, Triebe/50m2, Triebe Mähfläche, Fläche (m2), Pflanzstellen, Stellen, andere Zaehleinheit, Art ist vorhanden}'::text[])$$
+) as anzahl ("pop_id" uuid, "Pflanzen" text, "Pflanzen (ohne Jungpflanzen)" text, "Triebe" text, "Triebe Beweidung" text, "Keimlinge" text, "Rosetten" text, "Jungpflanzen" text, "Blätter" text, "blühende Pflanzen" text, "blühende Triebe" text, "Blüten" text, "Fertile Pflanzen" text, "fruchtende Triebe" text, "Blütenstände" text, "Fruchtstände" text, "Gruppen" text, "Deckung (%)" text, "Pflanzen/5m2" text, "Triebe in 30 m2" text, "Triebe/50m2" text, "Triebe Mähfläche" text, "Fläche (m2)" text, "Pflanzstellen" text, "Stellen" text, "andere Zaehleinheit" text, "Art ist vorhanden" text);
