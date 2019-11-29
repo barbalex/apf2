@@ -1,8 +1,12 @@
-select distinct on (tax.artname, apflora.pop.nr, apflora.tpopkontrzaehl_einheit_werte.text)
-  tax.artname,
-  apflora.pop.nr as pop_nr,
+select *
+from
+  apflora.tpop
+
+select distinct on (apflora.tpop.id, apflora.tpopkontrzaehl_einheit_werte.text)
+  apflora.pop.id as pop_id,
+  apflora.tpop.id as tpop_id,
   apflora.tpopkontrzaehl_einheit_werte.text as zaehleinheit,
-  apflora.tpopkontrzaehl.anzahl || ' (' || apflora.tpopkontr.jahr || ')' as anzahl
+  apflora.tpopkontrzaehl.anzahl as anzahl
 from
   apflora.tpopkontrzaehl
   inner join apflora.tpopkontrzaehl_einheit_werte
@@ -10,10 +14,6 @@ from
   inner join apflora.tpopkontr
     inner join apflora.tpop
       inner join apflora.pop
-        inner join apflora.ap
-          inner join apflora.ae_taxonomies tax
-          on ap.art_id = tax.id
-        on apflora.ap.id = apflora.pop.ap_id
       on apflora.pop.id = apflora.tpop.pop_id
     on apflora.tpop.id = apflora.tpopkontr.tpop_id
   on apflora.tpopkontrzaehl.tpopkontr_id = apflora.tpopkontr.id
@@ -23,11 +23,12 @@ where
   -- nur Zählungen mit Anzahl berücksichtigen
   and apflora.tpopkontrzaehl.anzahl is not null
 order by
-  tax.artname,
-  apflora.pop.nr,
+  apflora.tpop.id,
   apflora.tpopkontrzaehl_einheit_werte.text,
   apflora.tpopkontr.jahr desc,
   apflora.tpopkontr.datum desc
+
+
 
 -- get einheiten
 select text from apflora.tpopkontrzaehl_einheit_werte order by sort, text;
@@ -43,7 +44,7 @@ from crosstab($$
     (select distinct on (apflora.pop.id, apflora.tpopkontrzaehl_einheit_werte.text)
       apflora.pop.id as pop_id,
       apflora.tpopkontrzaehl_einheit_werte.text as zaehleinheit,
-      apflora.tpopkontrzaehl.anzahl || ' (' || apflora.tpopkontr.jahr || ')' as anzahl
+      apflora.tpopkontrzaehl.anzahl as anzahl
     from
       apflora.tpopkontrzaehl
       inner join apflora.tpopkontrzaehl_einheit_werte

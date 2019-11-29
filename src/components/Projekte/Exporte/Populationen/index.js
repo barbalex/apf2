@@ -539,7 +539,6 @@ const Populationen = () => {
           >
             Populationen mit dem letzten Massnahmen-Bericht
           </DownloadCardButton>
-
           <DownloadCardButton
             onClick={async () => {
               const notif = enqueNotification({
