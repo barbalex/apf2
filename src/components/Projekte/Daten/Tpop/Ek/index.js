@@ -150,7 +150,7 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
                     component={Checkbox2States}
                   />
                   <Field
-                    name="ekfrequenz_startjahr"
+                    name="ekfrequenzStartjahr"
                     label="Startjahr"
                     type="number"
                     component={TextField}

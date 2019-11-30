@@ -208,6 +208,7 @@ select
     tpop.id as tpop_id,
     tpop.nr as tpop_nr,
     tpop.status as tpop_status,
+    ekf.kontrolljahre_ab,
     -- ekfrequenz_startjahr depends on letze_kontrolle OR letzte_ansiedlung depending on kontrolljahre_ab
     case
       when ekf.kontrolljahre_ab = 'ek' then tp.jahr
