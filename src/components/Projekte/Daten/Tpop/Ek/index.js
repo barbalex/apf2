@@ -16,6 +16,7 @@ import ErrorBoundary from 'react-error-boundary'
 import Checkbox2States from '../../../../shared/Checkbox2StatesFormik'
 import RadioButtonGroup from '../../../../shared/RadioButtonGroupFormik'
 import Select from '../../../../shared/SelectFormik'
+import TextField from '../../../../shared/TextFieldFormik'
 import queryEk from './queryEk'
 import queryEkfrequenzs from './queryEkfrequenzs'
 import queryAdresses from './queryAdresses'
@@ -147,6 +148,12 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
                     name="ekfrequenzAbweichend"
                     label="EK-Frequenz abweichend"
                     component={Checkbox2States}
+                  />
+                  <Field
+                    name="ekfrequenz_startjahr"
+                    label="Startjahr"
+                    type="number"
+                    component={TextField}
                   />
                   <Field
                     name="ekfKontrolleur"
