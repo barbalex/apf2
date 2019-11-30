@@ -187,10 +187,8 @@ tpop_plus as (
       on ap.id = pop.ap_id
     on pop.id = tpop.pop_id
   where
-    -- nur TPop ohne ekfrequenz berücksichtigen
-    --tpop.ekfrequenz is null
-    -- NUR EINMAL: ekfrequenzen wurden ausnahmsweise schon gesetzt
-    tpop.ekfrequenz is not null
+    -- nur TPop ohne ekfrequenz und startjahr berücksichtigen
+    tpop.ekfrequenz is null
     and tpop.ekfrequenz_startjahr is null
     -- nur TPop von AP's mit bearbeitung 'erstellt', 'in Bearbeitung' oder 'vorgesehen' berücksichtigen
     --and ap.bearbeitung < 4
