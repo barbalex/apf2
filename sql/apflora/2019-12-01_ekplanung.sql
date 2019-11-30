@@ -1,3 +1,6 @@
+-- DO NOT RUN ON APFLORA_LIVE YET
+-- TEST RESULTS MORE BEFORE
+-- SOME SEEM TO BE WRONG
 with kontrolljahre as (
   select
     tpop1.id,
