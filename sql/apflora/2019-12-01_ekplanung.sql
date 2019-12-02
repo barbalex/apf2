@@ -1,6 +1,6 @@
 -- DO NOT RUN ON APFLORA_LIVE YET
 -- TEST RESULTS MORE BEFORE
--- SOME SEEM TO BE WRONG
+-- sent email to topos
 with kontrolljahre as (
   select
     tpop1.id,
