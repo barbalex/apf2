@@ -84,7 +84,7 @@ const EkMenu = ({ tpop, ek, border }) => {
               z.anzahl !== null ? z.anzahl : '(Anzahl nicht erfasst)'
 
             return (
-              <SyledListItem key={z.id} component="div" disablePadding>
+              <SyledListItem key={z.id} component="div">
                 {`${anzahl} ${einheit}, ${methode}`}
               </SyledListItem>
             )

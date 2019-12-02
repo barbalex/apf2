@@ -78,14 +78,14 @@ const MassnMenu = ({ tpop, massn, border }) => {
       </SyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <InnerList>
-          <SyledListItem component="div" disablePadding>
+          <SyledListItem component="div">
             {`Triebe: ${anzTriebe}`}
           </SyledListItem>
-          <SyledListItem component="div" disablePadding>
+          <SyledListItem component="div">
             {`Pflanzen: ${anzPflanzen}`}
           </SyledListItem>
           {!!massn.bemerkungen && (
-            <SyledListItem component="div" disablePadding>
+            <SyledListItem component="div">
               {`Bemerkungen: ${massn.bemerkungen}`}
             </SyledListItem>
           )}
