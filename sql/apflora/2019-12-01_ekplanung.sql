@@ -41,6 +41,4 @@ select
   typ::ek_type,
   changed::date,
   changed_by
-from ekplans
-  --inner join apflora.tpop
-  --on apflora.tpop.id = ekplans.tpop_id;
+from ekplans;
