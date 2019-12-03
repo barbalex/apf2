@@ -29,7 +29,7 @@ select
   sum("Stellen") as "Stellen", 
   sum("andere Zaehleinheit") as "andere Zaehleinheit", 
   count("Art ist vorhanden") as "Art ist vorhanden"
-from apflora.v_tpop_last_count
+from apflora.v_tpop_last_count_with_massn
 group by
   artname,
   ap_id,
@@ -37,4 +37,4 @@ group by
   pop_nr
 order by
   artname,
-  pop_nr
+  pop_nr;

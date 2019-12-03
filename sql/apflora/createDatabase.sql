@@ -5,6 +5,7 @@ create extension if not exists postgis;
 CREATE EXTENSION if not exists pgcrypto;
 CREATE EXTENSION if not exists "uuid-ossp";
 create extension if not exists tablefunc;
+CREATE EXTENSION intarray;
 
 -- 2. create role reader in pgAdmin, then:
 create role apflora_reader;
