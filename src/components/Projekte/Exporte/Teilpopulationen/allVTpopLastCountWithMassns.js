@@ -5,9 +5,12 @@ export default gql`
     allVTpopLastCountWithMassns {
       nodes {
         artname
+        apId
         popNr
+        popId
         tpopNr
         tpopId
+        jahr
         pflanzen
         pflanzenOhneJungpflanzen
         triebe

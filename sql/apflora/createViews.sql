@@ -5225,34 +5225,73 @@ DROP VIEW IF EXISTS apflora.v_tpop_last_count CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_last_count AS
 select 
   tax.artname,
+  ap.id as ap_id,
+  pop.id as pop_id,
   pop.nr as pop_nr,
   tpop.nr as tpop_nr,
+  (
+    select
+      kontr4.jahr
+    from
+      apflora.tpopkontrzaehl zaehl3
+      inner join apflora.tpopkontr kontr4
+        inner join apflora.tpop tpop3
+        on tpop3.id = kontr4.tpop_id
+      on zaehl3.tpopkontr_id = kontr4.id
+    where
+      kontr4.jahr is not null
+      and zaehl3.anzahl is not null
+      and kontr4.tpop_id = tpop.id
+    order by
+      kontr4.jahr desc,
+      kontr4.datum desc
+    limit 1
+  ) as jahr,
   anzahl.*
 from crosstab($$
   select tpop_id, zaehleinheit, anzahl
-  from 
-    (select distinct on (apflora.tpop.id, apflora.tpopkontrzaehl_einheit_werte.text)
-      apflora.tpop.id as tpop_id,
+  from (
+    select distinct on (tpop2.id, apflora.tpopkontrzaehl_einheit_werte.text)
+      tpop2.id as tpop_id,
       apflora.tpopkontrzaehl_einheit_werte.text as zaehleinheit,
-      apflora.tpopkontrzaehl.anzahl || ' (' || apflora.tpopkontr.jahr || ')' as anzahl
+      zaehl2.anzahl
     from
-      apflora.tpopkontrzaehl
+      apflora.tpopkontrzaehl zaehl2
       inner join apflora.tpopkontrzaehl_einheit_werte
-      on apflora.tpopkontrzaehl_einheit_werte.code = apflora.tpopkontrzaehl.einheit
-      inner join apflora.tpopkontr
-        inner join apflora.tpop
-        on apflora.tpop.id = apflora.tpopkontr.tpop_id
-      on apflora.tpopkontrzaehl.tpopkontr_id = apflora.tpopkontr.id
+      on apflora.tpopkontrzaehl_einheit_werte.code = zaehl2.einheit
+      inner join apflora.tpopkontr kontr2
+        inner join apflora.tpop tpop2
+        on tpop2.id = kontr2.tpop_id
+      on zaehl2.tpopkontr_id = kontr2.id
     where
       -- nur Kontrollen mit Jahr berücksichtigen
-      apflora.tpopkontr.jahr is not null
+      kontr2.jahr is not null
       -- nur Zählungen mit Anzahl berücksichtigen
-      and apflora.tpopkontrzaehl.anzahl is not null
+      and zaehl2.anzahl is not null
+      and kontr2.id = (
+        select
+          kontr3.id
+        from
+          apflora.tpopkontrzaehl zaehl3
+          inner join apflora.tpopkontr kontr3
+            inner join apflora.tpop tpop3
+            on tpop3.id = kontr3.tpop_id
+          on zaehl3.tpopkontr_id = kontr3.id
+        where
+          kontr3.jahr is not null
+          and zaehl3.anzahl is not null
+          and kontr3.tpop_id = tpop2.id
+        order by
+          kontr3.jahr desc,
+          kontr3.datum desc
+        limit 1
+      )
     order by
-      apflora.tpop.id,
+      tpop2.id,
       apflora.tpopkontrzaehl_einheit_werte.text,
-      apflora.tpopkontr.jahr desc,
-      apflora.tpopkontr.datum desc) as tbl
+      kontr2.jahr desc,
+      kontr2.datum desc
+    ) as tbl
   order by 1,2,3
   $$,
   $$SELECT unnest('{Pflanzen, Pflanzen (ohne Jungpflanzen), Triebe, Triebe Beweidung, Keimlinge, Rosetten, Jungpflanzen, Blätter, blühende Pflanzen, blühende Triebe, Blüten, Fertile Pflanzen, fruchtende Triebe, Blütenstände, Fruchtstände, Gruppen, Deckung (%), Pflanzen/5m2, Triebe in 30 m2, Triebe/50m2, Triebe Mähfläche, Fläche (m2), Pflanzstellen, Stellen, andere Zaehleinheit, Art ist vorhanden}'::text[])$$
