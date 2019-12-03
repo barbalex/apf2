@@ -5,8 +5,10 @@ export default gql`
     allVPopLastCounts {
       nodes {
         artname
+        apId
         popNr
         popId
+        jahre
         pflanzen
         pflanzenOhneJungpflanzen
         triebe

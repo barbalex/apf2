@@ -5317,10 +5317,11 @@ order BY
 DROP VIEW IF EXISTS apflora.v_pop_last_count CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_last_count AS
 select
-  artname, ap_id, 
+  artname,
+  ap_id, 
   pop_id, 
   pop_nr, 
-  string_agg(jahr::text, ', ' order by jahr) as jahre,
+  array_to_string (array(SELECT unnest(array_agg(jahr)) AS x group by x ORDER BY x), ', ') as jahre,
   sum("Pflanzen") as "Pflanzen", 
   sum("Pflanzen (ohne Jungpflanzen)") as "Pflanzen (ohne Jungpflanzen)", 
   sum("Triebe") as "Triebe", 
@@ -5544,7 +5545,7 @@ select
   artname, ap_id, 
   pop_id, 
   pop_nr, 
-  string_agg(jahr::text, ', ' order by jahr) as jahre,
+  array_to_string (array(SELECT unnest(array_agg(jahr)) AS x group by x ORDER BY x), ', ') as jahre,
   sum("Pflanzen") as "Pflanzen", 
   sum("Pflanzen (ohne Jungpflanzen)") as "Pflanzen (ohne Jungpflanzen)", 
   sum("Triebe") as "Triebe", 
