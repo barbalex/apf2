@@ -7,7 +7,7 @@ select
   tpop.nr as tpop_nr,
   anzahl.*
 from crosstab($$
-  select tpop_id, zaehleinheit, anzahl
+  select tpop_id, jahr, zaehleinheit, anzahl
   from 
     (
       with nr_of_kontr as (
@@ -44,6 +44,7 @@ from crosstab($$
       select * from (
         select distinct on (tpop2.id)
           tpop2.id as tpop_id,
+          massn2.jahr,
           'Triebe' as zaehleinheit,
           massn2.anz_triebe as anzahl
         from
@@ -68,6 +69,7 @@ from crosstab($$
       select * from (
         select distinct on (tpop3.id)
           tpop3.id as tpop_id,
+          massn3.jahr,
           'Pflanzen' as zaehleinheit,
           massn3.anz_pflanzen as anzahl
         from
@@ -92,6 +94,7 @@ from crosstab($$
       select * from (
         select distinct on (tpop4.id)
           tpop4.id as tpop_id,
+          massn4.jahr,
           'Pflanzstellen' as zaehleinheit,
           massn4.anz_pflanzstellen as anzahl
         from
@@ -116,6 +119,7 @@ from crosstab($$
       select * from (
         select distinct on (tpop5.id, apflora.tpopkontrzaehl_einheit_werte.text)
           tpop5.id as tpop_id,
+          kontr5.jahr,
           apflora.tpopkontrzaehl_einheit_werte.text as zaehleinheit,
           zaehl5.anzahl
         from
@@ -159,7 +163,7 @@ from crosstab($$
   order by 1,2,3
   $$,
   $$SELECT unnest('{Pflanzen, Pflanzen (ohne Jungpflanzen), Triebe, Triebe Beweidung, Keimlinge, Rosetten, Jungpflanzen, Blätter, blühende Pflanzen, blühende Triebe, Blüten, Fertile Pflanzen, fruchtende Triebe, Blütenstände, Fruchtstände, Gruppen, Deckung (%), Pflanzen/5m2, Triebe in 30 m2, Triebe/50m2, Triebe Mähfläche, Fläche (m2), Pflanzstellen, Stellen, andere Zaehleinheit, Art ist vorhanden}'::text[])$$
-) as anzahl ("tpop_id" uuid, "Pflanzen" text, "Pflanzen (ohne Jungpflanzen)" text, "Triebe" text, "Triebe Beweidung" text, "Keimlinge" text, "Rosetten" text, "Jungpflanzen" text, "Blätter" text, "blühende Pflanzen" text, "blühende Triebe" text, "Blüten" text, "Fertile Pflanzen" text, "fruchtende Triebe" text, "Blütenstände" text, "Fruchtstände" text, "Gruppen" text, "Deckung (%)" text, "Pflanzen/5m2" text, "Triebe in 30 m2" text, "Triebe/50m2" text, "Triebe Mähfläche" text, "Fläche (m2)" text, "Pflanzstellen" text, "Stellen" text, "andere Zaehleinheit" text, "Art ist vorhanden" text)
+) as anzahl ("tpop_id" uuid, "jahr" integer, "Pflanzen" text, "Pflanzen (ohne Jungpflanzen)" text, "Triebe" text, "Triebe Beweidung" text, "Keimlinge" text, "Rosetten" text, "Jungpflanzen" text, "Blätter" text, "blühende Pflanzen" text, "blühende Triebe" text, "Blüten" text, "Fertile Pflanzen" text, "fruchtende Triebe" text, "Blütenstände" text, "Fruchtstände" text, "Gruppen" text, "Deckung (%)" text, "Pflanzen/5m2" text, "Triebe in 30 m2" text, "Triebe/50m2" text, "Triebe Mähfläche" text, "Fläche (m2)" text, "Pflanzstellen" text, "Stellen" text, "andere Zaehleinheit" text, "Art ist vorhanden" text)
 inner join apflora.tpop tpop
   inner join apflora.pop pop
     inner join apflora.ap
