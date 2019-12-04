@@ -8,6 +8,7 @@ export default gql`
         apId
         popNr
         popId
+        popStatus
         jahre
         pflanzen
         pflanzenOhneJungpflanzen

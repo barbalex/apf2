@@ -5233,7 +5233,9 @@ select
   ap.id as ap_id,
   pop.id as pop_id,
   pop.nr as pop_nr,
+  psw.text as pop_status,
   tpop.nr as tpop_nr,
+  tpsw.text as tpop_status,
   (
     select
       kontr4.jahr
@@ -5302,7 +5304,11 @@ from crosstab($$
   $$SELECT unnest('{Pflanzen, Pflanzen (ohne Jungpflanzen), Triebe, Triebe Beweidung, Keimlinge, Rosetten, Jungpflanzen, Blätter, blühende Pflanzen, blühende Triebe, Blüten, Fertile Pflanzen, fruchtende Triebe, Blütenstände, Fruchtstände, Gruppen, Deckung (%), Pflanzen/5m2, Triebe in 30 m2, Triebe/50m2, Triebe Mähfläche, Fläche (m2), Pflanzstellen, Stellen, andere Zaehleinheit, Art ist vorhanden}'::text[])$$
 ) as anzahl ("tpop_id" uuid, "Pflanzen" integer, "Pflanzen (ohne Jungpflanzen)" integer, "Triebe" integer, "Triebe Beweidung" integer, "Keimlinge" integer, "Rosetten" integer, "Jungpflanzen" integer, "Blätter" integer, "blühende Pflanzen" integer, "blühende Triebe" integer, "Blüten" integer, "Fertile Pflanzen" integer, "fruchtende Triebe" integer, "Blütenstände" integer, "Fruchtstände" integer, "Gruppen" integer, "Deckung (%)" integer, "Pflanzen/5m2" integer, "Triebe in 30 m2" integer, "Triebe/50m2" integer, "Triebe Mähfläche" integer, "Fläche (m2)" integer, "Pflanzstellen" integer, "Stellen" integer, "andere Zaehleinheit" integer, "Art ist vorhanden" text)
 inner join apflora.tpop tpop
+  inner join apflora.pop_status_werte tpsw
+  on tpsw.code = tpop.status
   inner join apflora.pop pop
+    inner join apflora.pop_status_werte psw
+    on psw.code = pop.status
     inner join apflora.ap
       inner join apflora.ae_taxonomies tax
       on ap.art_id = tax.id
@@ -5320,7 +5326,8 @@ select
   artname,
   ap_id, 
   pop_id, 
-  pop_nr, 
+  pop_nr,
+  pop_status,
   array_to_string (array(SELECT unnest(array_agg(jahr)) AS x group by x ORDER BY x), ', ') as jahre,
   sum("Pflanzen") as "Pflanzen", 
   sum("Pflanzen (ohne Jungpflanzen)") as "Pflanzen (ohne Jungpflanzen)", 
@@ -5353,7 +5360,8 @@ group by
   artname,
   ap_id,
   pop_id,
-  pop_nr
+  pop_nr,
+  pop_status
 order by
   artname,
   pop_nr;
@@ -5365,7 +5373,9 @@ select
   ap.id as ap_id,
   pop.nr as pop_nr,
   pop.id as pop_id,
+  psw.text as pop_status,
   tpop.nr as tpop_nr,
+  tpsw.text as tpop_status,
   anzahl.*
 from crosstab($$
   select tpop_id, jahr, zaehleinheit, anzahl
@@ -5526,7 +5536,11 @@ from crosstab($$
   $$SELECT unnest('{Pflanzen, Pflanzen (ohne Jungpflanzen), Triebe, Triebe Beweidung, Keimlinge, Rosetten, Jungpflanzen, Blätter, blühende Pflanzen, blühende Triebe, Blüten, Fertile Pflanzen, fruchtende Triebe, Blütenstände, Fruchtstände, Gruppen, Deckung (%), Pflanzen/5m2, Triebe in 30 m2, Triebe/50m2, Triebe Mähfläche, Fläche (m2), Pflanzstellen, Stellen, andere Zaehleinheit, Art ist vorhanden}'::text[])$$
 ) as anzahl ("tpop_id" uuid, "jahr" integer, "Pflanzen" integer, "Pflanzen (ohne Jungpflanzen)" integer, "Triebe" integer, "Triebe Beweidung" integer, "Keimlinge" integer, "Rosetten" integer, "Jungpflanzen" integer, "Blätter" integer, "blühende Pflanzen" integer, "blühende Triebe" integer, "Blüten" integer, "Fertile Pflanzen" integer, "fruchtende Triebe" integer, "Blütenstände" integer, "Fruchtstände" integer, "Gruppen" integer, "Deckung (%)" integer, "Pflanzen/5m2" integer, "Triebe in 30 m2" integer, "Triebe/50m2" integer, "Triebe Mähfläche" integer, "Fläche (m2)" integer, "Pflanzstellen" integer, "Stellen" integer, "andere Zaehleinheit" integer, "Art ist vorhanden" text)
 inner join apflora.tpop tpop
+  inner join apflora.pop_status_werte tpsw
+  on tpsw.code = tpop.status
   inner join apflora.pop pop
+    inner join apflora.pop_status_werte psw
+    on psw.code = pop.status
     inner join apflora.ap
       inner join apflora.ae_taxonomies tax
       on ap.art_id = tax.id
@@ -5542,9 +5556,11 @@ order BY
 DROP VIEW IF EXISTS apflora.v_pop_last_count_with_massn CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_last_count_with_massn AS
 select
-  artname, ap_id, 
+  artname,
+  ap_id, 
   pop_id, 
   pop_nr, 
+  pop_status,
   array_to_string (array(SELECT unnest(array_agg(jahr)) AS x group by x ORDER BY x), ', ') as jahre,
   sum("Pflanzen") as "Pflanzen", 
   sum("Pflanzen (ohne Jungpflanzen)") as "Pflanzen (ohne Jungpflanzen)", 
@@ -5577,7 +5593,8 @@ group by
   artname,
   ap_id,
   pop_id,
-  pop_nr
+  pop_nr,
+  pop_status
 order by
   artname,
   pop_nr;

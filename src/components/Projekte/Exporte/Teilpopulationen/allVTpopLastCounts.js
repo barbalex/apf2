@@ -8,8 +8,10 @@ export default gql`
         apId
         popNr
         popId
+        popStatus
         tpopNr
         tpopId
+        tpopStatus
         jahr
         pflanzen
         pflanzenOhneJungpflanzen
