@@ -1,6 +1,3 @@
--- DO NOT RUN ON APFLORA_LIVE YET
--- TEST RESULTS MORE BEFORE
--- sent email to topos
 with kontrolljahre as (
   select
     tpop1.id,
@@ -29,7 +26,7 @@ ekplans as (
     id as tpop_id,
     kontrolljahr + ekfrequenz_startjahr as jahr,
     ektyp as typ,
-    '2019-12-01' as changed,
+    '2019-12-04' as changed,
     'ag' as changed_by
   from
     kontrolljahre
