@@ -2364,13 +2364,15 @@ FROM
     ON apflora.tpop.id = apflora.tpopkontr.tpop_id
 WHERE
   (
-    apflora.tpopkontr.typ NOT IN ('Ziel', 'Zwischenziel')
-    AND apflora.tpopkontr.jahr IS NOT NULL
-  )
-  OR (
-    apflora.tpopkontr.typ IS NULL
-    AND apflora.tpopkontr.jahr IS NULL
-  )
+    (
+      apflora.tpopkontr.typ NOT IN ('Ziel', 'Zwischenziel')
+      AND apflora.tpopkontr.jahr IS NOT NULL
+    )
+    OR (
+      apflora.tpopkontr.typ IS NULL
+      AND apflora.tpopkontr.jahr IS NULL
+    )
+  ) and apflora.tpopkontr.apber_nicht_relevant is not true
 GROUP BY
   apflora.tpop.id;
 
@@ -5246,9 +5248,11 @@ select
         on tpop3.id = kontr4.tpop_id
       on zaehl3.tpopkontr_id = kontr4.id
     where
-      kontr4.jahr is not null
+      tpop3.apber_relevant is true
+      and kontr4.jahr is not null
       and zaehl3.anzahl is not null
       and kontr4.tpop_id = tpop.id
+      and kontr4.apber_nicht_relevant is not true
     order by
       kontr4.jahr desc,
       kontr4.datum desc
@@ -5271,8 +5275,10 @@ from crosstab($$
         on tpop2.id = kontr2.tpop_id
       on zaehl2.tpopkontr_id = kontr2.id
     where
+      tpop2.apber_relevant is true
       -- nur Kontrollen mit Jahr berücksichtigen
-      kontr2.jahr is not null
+      and kontr2.jahr is not null
+      and kontr2.apber_nicht_relevant is not true
       -- nur Zählungen mit Anzahl berücksichtigen
       and zaehl2.anzahl is not null
       and kontr2.id = (
@@ -5285,9 +5291,11 @@ from crosstab($$
             on tpop3.id = kontr3.tpop_id
           on zaehl3.tpopkontr_id = kontr3.id
         where
-          kontr3.jahr is not null
+          tpop3.apber_relevant is true
+          and kontr3.jahr is not null
           and zaehl3.anzahl is not null
           and kontr3.tpop_id = tpop2.id
+          and kontr3.apber_nicht_relevant is not true
         order by
           kontr3.jahr desc,
           kontr3.datum desc
@@ -5387,6 +5395,9 @@ from crosstab($$
           apflora.tpop
           left join apflora.tpopkontr
           on apflora.tpopkontr.tpop_id = apflora.tpop.id
+        where
+          apflora.tpop.apber_relevant is true
+          and apflora.tpopkontr.apber_nicht_relevant is not true
         group by apflora.tpop.id
       ), letzte_ansiedlungen as (
         select distinct on (tpop1.id)
@@ -5399,7 +5410,8 @@ from crosstab($$
           inner join apflora.tpopmassn_typ_werte
           on apflora.tpopmassn_typ_werte.code = massn1.typ
         where
-          massn1.jahr is not null
+          tpop1.apber_relevant is true
+          and massn1.jahr is not null
           and tpopmassn_typ_werte.ansiedlung = -1
           and (
             massn1.anz_triebe is not null
@@ -5427,7 +5439,8 @@ from crosstab($$
             on nr_of_kontr.id = tpop2.id
           on tpop2.id = massn2.tpop_id
         where
-          massn2.jahr is not null
+          tpop2.apber_relevant is true
+          and massn2.jahr is not null
           and tpop2.status in (200, 201)
           and nr_of_kontr.anzahl = 0
           and massn2.anz_triebe is not null
@@ -5452,7 +5465,8 @@ from crosstab($$
             on nr_of_kontr.id = tpop3.id
           on tpop3.id = massn3.tpop_id
         where
-          massn3.jahr is not null
+          tpop3.apber_relevant is true
+          and massn3.jahr is not null
           and tpop3.status in (200, 201)
           and nr_of_kontr.anzahl = 0
           and massn3.anz_pflanzen is not null
@@ -5477,7 +5491,8 @@ from crosstab($$
             on nr_of_kontr.id = tpop4.id
           on tpop4.id = massn4.tpop_id
         where
-          massn4.jahr is not null
+          tpop4.apber_relevant is true
+          and massn4.jahr is not null
           and tpop4.status in (200, 201)
           and nr_of_kontr.anzahl = 0
           and massn4.anz_pflanzstellen is not null
@@ -5502,8 +5517,10 @@ from crosstab($$
             on tpop5.id = kontr5.tpop_id
           on zaehl5.tpopkontr_id = kontr5.id
         where
+          tpop5.apber_relevant is true
           -- nur Kontrollen mit Jahr berücksichtigen
-          kontr5.jahr is not null
+          and kontr5.jahr is not null
+          and kontr5.apber_nicht_relevant is not true
           -- nur Zählungen mit Anzahl berücksichtigen
           and zaehl5.anzahl is not null
           and kontr5.id = (
@@ -5516,7 +5533,9 @@ from crosstab($$
                 on tpop6.id = kontr6.tpop_id
               on zaehl6.tpopkontr_id = kontr6.id
             where
-              kontr6.jahr is not null
+              tpop6.apber_relevant is true
+              and kontr6.jahr is not null
+              and kontr6.apber_nicht_relevant is not true
               and zaehl6.anzahl is not null
               and kontr6.tpop_id = tpop5.id
             order by
