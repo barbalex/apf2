@@ -2,7 +2,7 @@ import React, { useState, useCallback, useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
-import { FaSortDown as Caret } from 'react-icons/fa'
+import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
 import styled from 'styled-components'
 import get from 'lodash/get'
 
@@ -54,6 +54,11 @@ const CellHeaderYear = ({ style, column, rows }) => {
   } = store.ekPlan
 
   const [anchorEl, setAnchorEl] = useState(null)
+
+  const filterSet =
+    filterAnsiedlungYear === column ||
+    filterKontrolleYear === column ||
+    filterEkplanYear === column
 
   const yearHasKontrollen = useMemo(() => {
     if (filterKontrolleYear && filterKontrolleYear !== column) return false
@@ -130,9 +135,7 @@ const CellHeaderYear = ({ style, column, rows }) => {
         onClick={onClickCell}
       >
         <Title>{column}</Title>
-        <Dropdown>
-          <Caret />
-        </Dropdown>
+        <Dropdown>{filterSet ? <FaFilter /> : <Caret />}</Dropdown>
       </StyledCell>
       <Menu
         id="yearHeaderMenu"
