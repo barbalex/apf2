@@ -270,6 +270,18 @@ const EkPlanTable = () => {
     }
   }
 
+  // when this value changes, year columns are re-rendered as it is added as key
+  // needed because otherwise when changing filters column widths can be off
+  const yearHeaderRerenderValue = useMemo(
+    () =>
+      JSON.stringify([
+        filterAnsiedlungYear,
+        filterKontrolleYear,
+        filterEkplanYear,
+      ]),
+    [filterAnsiedlungYear, filterEkplanYear, filterKontrolleYear],
+  )
+
   /*console.log('Table rendering:', {
     headerFieldsFixed,
   })*/
@@ -321,6 +333,7 @@ const EkPlanTable = () => {
             }}
           </VariableSizeList>
           <VariableSizeGrid
+            key={yearHeaderRerenderValue}
             style={{ overflow: 'hidden' }}
             ref={yearHeaderGrid}
             height={60}
