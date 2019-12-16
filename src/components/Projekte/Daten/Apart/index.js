@@ -29,7 +29,6 @@ const FieldsContainer = styled.div`
 
 const ApArt = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { refetch } = store
   const client = useApolloClient()
   const { activeNodeArray } = store[treeName]
 
@@ -105,9 +104,8 @@ const ApArt = ({ treeName }) => {
         return setErrors({ [changedField]: error.message })
       }
       setErrors({})
-      changedField === 'artId' && refetch.aparts()
     },
-    [client, refetch, row, store.user.name],
+    [client, row, store.user.name],
   )
 
   if (loading || loadingAeEigById) {

@@ -29,7 +29,6 @@ const FieldsContainer = styled.div`
 
 const Tpopmassnber = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { refetch } = store
   const client = useApolloClient()
   const { activeNodeArray } = store[treeName]
 
@@ -76,9 +75,8 @@ const Tpopmassnber = ({ treeName }) => {
         return setErrors({ [changedField]: error.message })
       }
       setErrors({})
-      changedField === 'beurteilung' && refetch.tpopmassnbers()
     },
-    [client, refetch, row, store.user.name],
+    [client, row, store.user.name],
   )
 
   if (loading) {

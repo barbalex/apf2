@@ -65,7 +65,7 @@ const Werte = ({ treeName, table }) => {
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
-      const typename = upperFirst(tableCamelCased)
+      const __typename = upperFirst(tableCamelCased)
       try {
         const mutation = gql`
           mutation updateWert(
@@ -75,7 +75,7 @@ const Werte = ({ treeName, table }) => {
             $sort: Int
             $changedBy: String
           ) {
-            update${typename}ById(
+            update${__typename}ById(
               input: {
                 id: $id
                 ${tableCamelCased}Patch: {
@@ -97,11 +97,22 @@ const Werte = ({ treeName, table }) => {
             }
           }
         `
+        const variables = {
+          ...objectsEmptyValuesToNull(values),
+          changedBy: store.user.name,
+        }
+        const updateName = `update${__typename}`
+        //console.log('Werte:', { variables, __typename, updateName })
         await client.mutate({
           mutation,
-          variables: {
-            ...objectsEmptyValuesToNull(values),
-            changedBy: store.user.name,
+          variables,
+          optimisticResponse: {
+            __typename: 'Mutation',
+            [updateName]: {
+              id: row.id,
+              __typename,
+              content: variables,
+            },
           },
         })
       } catch (error) {
@@ -109,6 +120,7 @@ const Werte = ({ treeName, table }) => {
       }
       refetch()
       const refetchTableName = `${table}s`
+      // for unknown reason refetching is necessary here
       refetchTree[refetchTableName] && refetchTree[refetchTableName]()
       setErrors({})
     },

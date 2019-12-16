@@ -28,7 +28,7 @@ const FieldsContainer = styled.div`
 
 const Adresse = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { activeNodeArray, refetch } = store[treeName]
+  const { activeNodeArray } = store[treeName]
   const id =
     activeNodeArray.length > 2
       ? activeNodeArray[2]
@@ -65,10 +65,9 @@ const Adresse = ({ treeName }) => {
       } catch (error) {
         return setErrors({ [changedField]: error.message })
       }
-      ;[('name', 'role')].includes(changedField) && refetch.adresses()
       setErrors({})
     },
-    [client, refetch, row, store.user.name],
+    [client, row, store.user.name],
   )
 
   //console.log('Adresse')

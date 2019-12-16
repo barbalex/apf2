@@ -29,7 +29,6 @@ const FieldsContainer = styled.div`
 
 const Assozart = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { refetch } = store
   const client = useApolloClient()
   const { activeNodeArray } = store[treeName]
 
@@ -85,9 +84,8 @@ const Assozart = ({ treeName }) => {
         return setErrors({ [changedField]: error.message })
       }
       setErrors({})
-      if (['aeId'].includes(changedField)) refetch.assozarts()
     },
-    [client, refetch, row, store.user.name],
+    [client, row, store.user.name],
   )
 
   if (loading) {

@@ -28,7 +28,6 @@ const FieldsContainer = styled.div`
 const Projekt = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { refetch } = store
   const { activeNodeArray } = store[treeName]
 
   const { data, loading, error } = useQuery(query, {
@@ -70,9 +69,8 @@ const Projekt = ({ treeName }) => {
         return setErrors({ [changedField]: error.message })
       }
       setErrors({})
-      if (changedField === 'name') refetch.projekts()
     },
-    [client, refetch, row, store.user.name],
+    [client, row, store.user.name],
   )
 
   if (loading) {

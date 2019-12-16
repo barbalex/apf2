@@ -86,13 +86,7 @@ const tpopkontrTypWerte = [
 const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const {
-    nodeFilter,
-    nodeFilterSetValue,
-    urlQuery,
-    setUrlQuery,
-    refetch,
-  } = store
+  const { nodeFilter, nodeFilterSetValue, urlQuery, setUrlQuery } = store
   const { activeNodeArray, datenWidth, filterWidth } = store[treeName]
 
   let id =
@@ -236,20 +230,9 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
           return setErrors({ [changedField]: error.message })
         }
         setErrors({})
-        if ([('typ', 'jahr', 'datum')].includes(changedField)) {
-          refetch.tpopfeldkontrs()
-        }
       }
     },
-    [
-      client,
-      nodeFilterSetValue,
-      refetch,
-      row,
-      showFilter,
-      store.user.name,
-      treeName,
-    ],
+    [client, nodeFilterSetValue, row, showFilter, store.user.name, treeName],
   )
   const onChangeTab = useCallback(
     (event, value) => {

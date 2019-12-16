@@ -48,7 +48,7 @@ const FieldsContainer = styled.div`
 const Tpopmassn = ({ treeName, showFilter = false }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
-  const { nodeFilter, nodeFilterSetValue, refetch } = store
+  const { nodeFilter, nodeFilterSetValue } = store
 
   const { activeNodeArray, datenWidth, filterWidth } = store[treeName]
 
@@ -177,20 +177,9 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
           return setErrors({ [changedField]: error.message })
         }
         setErrors({})
-        if ([('typ', 'jahr', 'datum')].includes(changedField)) {
-          refetch.tpopmassns()
-        }
       }
     },
-    [
-      client,
-      nodeFilterSetValue,
-      refetch,
-      row,
-      showFilter,
-      store.user.name,
-      treeName,
-    ],
+    [client, nodeFilterSetValue, row, showFilter, store.user.name, treeName],
   )
 
   //console.log('Tpopmassn rendering')

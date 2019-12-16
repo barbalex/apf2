@@ -30,7 +30,6 @@ const FieldsContainer = styled.div`
 
 const Ekzaehleinheit = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { refetch } = store
   const client = useApolloClient()
   const { activeNodeArray } = store[treeName]
 
@@ -101,9 +100,8 @@ const Ekzaehleinheit = ({ treeName }) => {
         return setErrors({ [changedField]: error.message })
       }
       setErrors({})
-      if (changedField === 'zaehleinheitId') refetch.ekzaehleinheits()
     },
-    [client, refetch, row, store.user.name],
+    [client, row, store.user.name],
   )
 
   if (loading) {

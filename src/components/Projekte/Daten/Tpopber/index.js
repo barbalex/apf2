@@ -29,7 +29,6 @@ const FieldsContainer = styled.div`
 
 const Tpopber = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { refetch } = store
   const client = useApolloClient()
   const { activeNodeArray } = store[treeName]
 
@@ -76,9 +75,8 @@ const Tpopber = ({ treeName }) => {
         return setErrors({ [changedField]: error.message })
       }
       setErrors({})
-      changedField === 'entwicklung' && refetch.tpopbers()
     },
-    [client, refetch, row, store.user.name],
+    [client, row, store.user.name],
   )
 
   if (loading) {

@@ -65,7 +65,7 @@ const LabelPopoverRowColumnRight = styled.div`
 const Ap = ({ treeName, showFilter = false }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { user, refetch } = store
+  const { user } = store
   const { activeNodeArray } = store[treeName]
 
   let id =
@@ -115,9 +115,8 @@ const Ap = ({ treeName, showFilter = false }) => {
         return setErrors({ [changedField]: error.message })
       }
       setErrors({})
-      if (['artId'].includes(changedField)) refetch.aps()
     },
-    [client, refetch, row, user.name],
+    [client, row, user.name],
   )
 
   const aeTaxonomiesfilterForData = useCallback(

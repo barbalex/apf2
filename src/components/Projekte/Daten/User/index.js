@@ -76,7 +76,7 @@ const roleWerte = [
 
 const User = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { refetch, setEkfAdresseId, setView } = store
+  const { setEkfAdresseId, setView } = store
   const { activeNodeArray } = store[treeName]
   const client = useApolloClient()
 
@@ -161,18 +161,8 @@ const User = ({ treeName }) => {
         return setErrors({ [field]: error.message })
       }
       setErrors({})
-      if (['name', 'role'].includes(field)) refetch.users()
     },
-    [
-      client,
-      refetch,
-      row.adresseId,
-      row.email,
-      row.id,
-      row.name,
-      row.pass,
-      row.role,
-    ],
+    [client, row.adresseId, row.email, row.id, row.name, row.pass, row.role],
   )
   const onBlurPassword = useCallback(event => {
     setPasswordErrorText('')

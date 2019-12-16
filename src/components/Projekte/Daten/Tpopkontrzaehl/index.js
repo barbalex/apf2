@@ -31,7 +31,6 @@ const FieldsContainer = styled.div`
 
 const Tpopkontrzaehl = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { refetch } = store
   const client = useApolloClient()
   const { activeNodeArray } = store[treeName]
 
@@ -101,11 +100,8 @@ const Tpopkontrzaehl = ({ treeName }) => {
         return setErrors({ [changedField]: error.message })
       }
       setErrors({})
-      if (['einheit', 'methode'].includes(changedField)) {
-        refetch.tpopkontrzaehls()
-      }
     },
-    [client, refetch, row, store.user.name],
+    [client, row, store.user.name],
   )
 
   if (loading) {

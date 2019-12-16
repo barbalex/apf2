@@ -31,7 +31,6 @@ const FieldsContainer = styled.div`
 const Ziel = ({ treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { refetch } = store
   const {
     activeNodeArray,
     setActiveNodeArray,
@@ -98,7 +97,6 @@ const Ziel = ({ treeName }) => {
         })
         setActiveNodeArray(newActiveNodeArray)
         setOpenNodes(newOpenNodes)
-        if (['typ'].includes(changedField)) refetch.ziels()
       }
     },
     [
@@ -109,7 +107,6 @@ const Ziel = ({ treeName }) => {
       openNodes,
       setActiveNodeArray,
       setOpenNodes,
-      refetch,
     ],
   )
 
