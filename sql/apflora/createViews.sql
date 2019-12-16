@@ -5235,8 +5235,11 @@ select
   ap.id as ap_id,
   pop.id as pop_id,
   pop.nr as pop_nr,
+  pop.name as pop_name,
   psw.text as pop_status,
   tpop.nr as tpop_nr,
+  tpop.gemeinde as tpop_gemeinde,
+  tpop.flurname as tpop_flurname,
   tpsw.text as tpop_status,
   (
     select
@@ -5335,6 +5338,7 @@ select
   ap_id, 
   pop_id, 
   pop_nr,
+  pop_name,
   pop_status,
   array_to_string (array(SELECT unnest(array_agg(jahr)) AS x group by x ORDER BY x), ', ') as jahre,
   sum("Pflanzen") as "Pflanzen", 
@@ -5369,6 +5373,7 @@ group by
   ap_id,
   pop_id,
   pop_nr,
+  pop_name,
   pop_status
 order by
   artname,
@@ -5380,9 +5385,12 @@ select
   tax.artname,
   ap.id as ap_id,
   pop.nr as pop_nr,
+  pop.name as pop_name,
   pop.id as pop_id,
   psw.text as pop_status,
   tpop.nr as tpop_nr,
+  tpop.gemeinde as tpop_gemeinde,
+  tpop.flurname as tpop_flurname,
   tpsw.text as tpop_status,
   anzahl.*
 from crosstab($$
@@ -5579,6 +5587,7 @@ select
   ap_id, 
   pop_id, 
   pop_nr, 
+  pop_name,
   pop_status,
   array_to_string (array(SELECT unnest(array_agg(jahr)) AS x group by x ORDER BY x), ', ') as jahre,
   sum("Pflanzen") as "Pflanzen", 
@@ -5613,6 +5622,7 @@ group by
   ap_id,
   pop_id,
   pop_nr,
+  pop_name,
   pop_status
 order by
   artname,

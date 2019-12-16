@@ -6,11 +6,14 @@ export default gql`
       nodes {
         artname
         apId
-        popNr
         popId
+        popNr
+        popName
         popStatus
-        tpopNr
         tpopId
+        tpopNr
+        tpopGemeinde
+        tpopFlurname
         tpopStatus
         jahr
         pflanzen
