@@ -1,3 +1,5 @@
 -- 1. for all ap with ekfrequenz do:
 -- 1.1 ekfrequenz "Spez EK" becomes: "Spez EK S"
 -- 1.2 insert ekfrequenz "Spez EK G", copying "Spez EK S", ekabrechnungstyp is "B (Umsetzungsbudget Überwachung ursprüngliche Pop)"
+-- 1.3 ekfrequenz "Spez A" becomes: "Spez A S"
+-- 1.2 insert ekfrequenz "Spez A G", copying "Spez EK S", ekabrechnungstyp is "B (Umsetzungsbudget Überwachung ursprüngliche Pop)"
