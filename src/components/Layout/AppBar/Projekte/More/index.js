@@ -45,13 +45,6 @@ const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
   const exporteIsActive = !!treeActiveNodes.projekt
   const isMobile = isMobilePhone()
 
-  const watchVideos = useCallback(() => {
-    setAnchorEl(null)
-    typeof window !== 'undefined' &&
-      window.open(
-        'https://www.youtube.com/playlist?list=PLTz8Xt5SOQPS-dbvpJ_DrB4-o3k3yj09J',
-      )
-  }, [])
   const showDeletedDatasets = useCallback(() => {
     setAnchorEl(null)
     // prevent following from happening
@@ -107,7 +100,6 @@ const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
         {['apflora_manager', 'apflora_artverantwortlich'].includes(role) && (
           <EkfAdresse setAnchorEl={setAnchorEl} />
         )}
-        <MenuItem onClick={watchVideos}>Video-Anleitungen</MenuItem>
         <MenuItem
           onClick={onClickLogout}
           data-id="appbar-more-logout"
