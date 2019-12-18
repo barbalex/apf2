@@ -167,6 +167,7 @@ const Ekfrequenz = ({ treeName }) => {
                   name="anwendungsfall"
                   label="Anwendungsfall"
                   type="text"
+                  multiLine
                   component={TextField}
                 />
                 <Field
