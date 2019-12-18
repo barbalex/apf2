@@ -109,3 +109,11 @@ set ekfrequenz = (
 )
 from tpops
 where tpops.id = apflora.tpop.id;
+
+-- 7 sort
+update apflora.ekfrequenz set sort = 12 where code = 'Spez EK G';
+update apflora.ekfrequenz set sort = 13 where code = 'Spez A S';
+update apflora.ekfrequenz set sort = 14 where code = 'Spez A G';
+update apflora.ekfrequenz set sort = 15 where code = 'F1';
+update apflora.ekfrequenz set sort = 16 where code = 'F2';
+update apflora.ekfrequenz set sort = 17 where code = 'Spez EKF';
