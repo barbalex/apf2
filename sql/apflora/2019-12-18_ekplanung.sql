@@ -5,7 +5,7 @@ update apflora.ekfrequenz
 set 
   code = 'Spez EK S',
   anwendungsfall = 'Spezialfälle in EK, Population ist angesiedelt',
-  changed = '2019-12-18',
+  changed = '2019-12-19',
   changed_by = 'ag'
 where code = 'Spez EK';
 
@@ -27,7 +27,7 @@ select
   'Spez EK G' as code,
   bemerkungen,
   sort,
-  '2019-12-18' as changed,
+  '2019-12-19' as changed,
   'ag' as changed_by,
   'B' as ek_abrechnungstyp,
   ektyp
@@ -40,8 +40,8 @@ where
 update apflora.ekfrequenz
 set 
   code = 'Spez A S',
-  anwendungsfall = 'TODO: Population ist angesiedelt',
-  changed = '2019-12-18',
+  anwendungsfall = 'Spezialfälle in EK von Ansaatversuchen, Population ist angesiedelt',
+  changed = '2019-12-19',
   changed_by = 'ag'
 where code = 'Spez A';
 
@@ -59,11 +59,11 @@ insert into apflora.ekfrequenz(
 )
 select
   ap_id,
-  'TODO: Population ist ursprünglich' as anwendungsfall,
+  'Spezialfälle in EK von Ansaatversuchen, Population ist ursprünglich' as anwendungsfall,
   'Spez A G' as code,
   bemerkungen,
   sort,
-  '2019-12-18' as changed,
+  '2019-12-19' as changed,
   'ag' as changed_by,
   'B' as ek_abrechnungstyp,
   ektyp
@@ -112,6 +112,7 @@ where tpops.id = apflora.tpop.id;
 
 -- 7 sort
 -- TODO: asjust to Topos answer
+update apflora.ekfrequenz set sort = 11 where code = 'Spez EK S';
 update apflora.ekfrequenz set sort = 12 where code = 'Spez EK G';
 update apflora.ekfrequenz set sort = 13 where code = 'Spez A S';
 update apflora.ekfrequenz set sort = 14 where code = 'Spez A G';
