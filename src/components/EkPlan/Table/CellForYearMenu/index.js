@@ -46,7 +46,7 @@ const StyledListItemIcon = styled(ListItemIcon)`
 
 const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 
-const CellForYearMenu = ({ refetch }) => {
+const CellForYearMenu = () => {
   const store = useContext(storeContext)
   const client = useApolloClient()
   const {
@@ -94,6 +94,7 @@ const CellForYearMenu = ({ refetch }) => {
           variables: {
             id,
           },
+          refetchQueries: ['EkplanTpopQuery'],
         })
       } catch (error) {
         store.enqueNotification({
@@ -103,10 +104,9 @@ const CellForYearMenu = ({ refetch }) => {
           },
         })
       }
-      refetch()
       closeYearCellMenu()
     },
-    [client, closeYearCellMenu, refetch, store, tpopId, year],
+    [client, closeYearCellMenu, store, tpopId, year],
   )
   const onClickEkEntfernen = useCallback(() => removeEkPlan('EK'), [
     removeEkPlan,
@@ -127,6 +127,7 @@ const CellForYearMenu = ({ refetch }) => {
         await client.mutate({
           mutation: mutationCreateEkplan,
           variables,
+          refetchQueries: ['EkplanTpopQuery'],
           optimisticResponse: {
             __typename: 'Mutation',
             updateTpopById: {
@@ -143,10 +144,9 @@ const CellForYearMenu = ({ refetch }) => {
           },
         })
       }
-      refetch()
       closeYearCellMenu()
     },
-    [client, closeYearCellMenu, refetch, store, tpopId, year],
+    [client, closeYearCellMenu, store, tpopId, year],
   )
   const onClickEkPlanen = useCallback(() => addEkPlan('EK'), [addEkPlan])
   const onClickEkfPlanen = useCallback(() => addEkPlan('EKF'), [addEkPlan])

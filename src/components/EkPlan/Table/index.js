@@ -461,7 +461,7 @@ const EkPlanTable = () => {
           </FixedSizeGrid>
         </BodyContainer>
       </Container>
-      {!!yearMenuAnchor && <CellForYearMenu refetch={refetch} />}
+      {!!yearMenuAnchor && <CellForYearMenu />}
     </ErrorBoundary>
   )
 }
