@@ -10,7 +10,6 @@ export default async ({
   client,
   store,
 }) => {
-  const { refetch } = store
   const variables = {
     id,
     nichtZuordnen: value,
@@ -20,6 +19,15 @@ export default async ({
   await client.mutate({
     mutation: updateBeobByIdGql,
     variables,
+    refetchQueries: [
+      'TreeApsQuery',
+      'TreePopsQuery',
+      'TreeTpopQuery',
+      'TreeBeobNichtZuzuordnensQuery',
+      'TreeBeobNichtBeurteiltsQuery',
+      'TreeBeobZugeordnetsQuery',
+      'KarteBeobNichtZuzuordnenQuery',
+    ],
   })
   // need to update activeNodeArray and openNodes
   const {
@@ -47,11 +55,4 @@ export default async ({
   addOpenNodes(newOpenNodes)
   if (refetchPassed) refetchPassed()
   //refetchTree('local')
-  refetch.aps()
-  refetch.pops()
-  refetch.tpops()
-  refetch.beobNichtZuzuordnens()
-  if (refetch.beobNichtZuzuordnenForMap) refetch.beobNichtZuzuordnenForMap()
-  refetch.beobNichtBeurteilts()
-  refetch.beobZugeordnets()
 }

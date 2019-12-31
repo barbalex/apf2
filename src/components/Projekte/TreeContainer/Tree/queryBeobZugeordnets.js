@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query BeobZugeordnetsQuery($filter: VApbeobFilter!, $isTpop: Boolean!) {
+  query TreeBeobZugeordnetsQuery($filter: VApbeobFilter!, $isTpop: Boolean!) {
     allVApbeobs(filter: $filter) @include(if: $isTpop) {
       nodes {
         id

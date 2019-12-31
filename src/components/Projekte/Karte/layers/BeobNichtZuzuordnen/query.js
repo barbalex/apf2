@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { aeTaxonomies, apart, beob } from '../../../../shared/fragments'
 
 export default gql`
-  query BeobNichtZuzuordnenForMapQuery(
+  query KarteBeobNichtZuzuordnenQuery(
     $projId: UUID!
     $apId: UUID
     $isActiveInMap: Boolean!
