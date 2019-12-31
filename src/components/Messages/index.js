@@ -78,10 +78,10 @@ const UserMessages = () => {
       await client.mutate({
         mutation: createUsermessage,
         variables: { userName, id: message.id },
+        refetchQueries: ['UsermessagesQuery'],
       })
-      refetch()
     },
-    [client, refetch, userName],
+    [client, userName],
   )
   const onClickReadAll = useCallback(async () => {
     await Promise.all(

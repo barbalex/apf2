@@ -83,7 +83,6 @@ const User = ({ username, userOpen, toggleUserOpen }) => {
         return setErrors({ [changedField]: error.message })
       }
       setErrors({})
-      //if (['name', 'role'].includes(changedField)) refetch.users()
     },
     [client, row],
   )
