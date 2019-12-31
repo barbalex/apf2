@@ -321,7 +321,7 @@ const Beobzuordnung = ({ type, treeName }) => {
                 }}
               >
                 <StyledSendIcon />
-                Email an Info Flora senden
+                Email an Info Flora
               </EmailButton>
             </InfofloraRow>
           </FieldsContainer>
