@@ -11,7 +11,7 @@ export default gql`
     $statusUnklar: Boolean
     $statusUnklarBegruendung: String
     $bekanntSeit: Int
-    $geomPoint: String
+    $geomPoint: GeometryPoint
   ) {
     createPop(
       input: {
