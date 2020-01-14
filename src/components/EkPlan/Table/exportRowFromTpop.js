@@ -80,13 +80,13 @@ export default ({ tpop, dataLists, years, store }) => {
       const ekplanCount = ekplans
         .filter(o => o.jahr === year)
         .filter(o => o.typ === 'EK').length
-      row[`_${year}_EK_geplant`] = ekplanCount > 0 ? ekplanCount : ''
+      row[`${year}_EK_geplant`] = ekplanCount > 0 ? ekplanCount : ''
 
       const eks = kontrs
         .filter(o => o.jahr === year)
         .filter(o => o.typ !== 'Freiwilligen-Erfolgskontrolle')
       const eksCount = eks.length
-      row[`_${year}_EK`] = eksCount > 0 ? eksCount : ''
+      row[`${year}_EK`] = eksCount > 0 ? eksCount : ''
 
       if (showCount) {
         const ekSumCounted = sum(
@@ -105,7 +105,7 @@ export default ({ tpop, dataLists, years, store }) => {
               .flatMap(z => z.anzahl),
           ),
         )
-        row[`_${year}_EK_Anzahl`] = ekSumCounted > 0 ? ekSumCounted : ''
+        row[`${year}_EK_Anzahl`] = ekSumCounted > 0 ? ekSumCounted : ''
       }
     }
 
@@ -113,13 +113,13 @@ export default ({ tpop, dataLists, years, store }) => {
       const ekfPlanCount = ekplans
         .filter(o => o.jahr === year)
         .filter(o => o.typ === 'EKF').length
-      row[`_${year}_EKF_geplant`] = ekfPlanCount > 0 ? ekfPlanCount : ''
+      row[`${year}_EKF_geplant`] = ekfPlanCount > 0 ? ekfPlanCount : ''
 
       const ekfs = kontrs
         .filter(o => o.jahr === year)
         .filter(o => o.typ === 'Freiwilligen-Erfolgskontrolle')
       const ekfsCount = ekfs.length
-      row[`_${year}_EKF`] = ekfsCount > 0 ? ekfsCount : ''
+      row[`${year}_EKF`] = ekfsCount > 0 ? ekfsCount : ''
 
       if (showCount) {
         const ekfSumCounted = sum(
@@ -138,15 +138,14 @@ export default ({ tpop, dataLists, years, store }) => {
               .flatMap(z => z.anzahl),
           ),
         )
-        row[`_${year}_EKF_Anzahl`] = ekfSumCounted > 0 ? ekfSumCounted : ''
+        row[`${year}_EKF_Anzahl`] = ekfSumCounted > 0 ? ekfSumCounted : ''
       }
     }
 
     if (showMassn) {
       const ansiedlungsOfYear = ansiedlungs.filter(o => o.jahr === year)
       const ansiedlungsCount = ansiedlungsOfYear.length
-      row[`_${year}_Ansiedlungen`] =
-        ansiedlungsCount > 0 ? ansiedlungsCount : ''
+      row[`${year}_Ansiedlungen`] = ansiedlungsCount > 0 ? ansiedlungsCount : ''
 
       if (showCount) {
         const ansiedlungsSumCounted = sum(
@@ -158,7 +157,7 @@ export default ({ tpop, dataLists, years, store }) => {
                 (ans.anzPflanzen !== null ? ans.anzPflanzen : 0),
             ),
         )
-        row[`_${year}_Ansiedlungen_Anzahl`] =
+        row[`${year}_Ansiedlungen_Anzahl`] =
           ansiedlungsSumCounted > 0 ? ansiedlungsSumCounted : ''
       }
     }
