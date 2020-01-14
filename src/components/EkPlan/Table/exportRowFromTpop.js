@@ -4,34 +4,70 @@ import sum from 'lodash/sum'
 import appBaseUrl from '../../../modules/appBaseUrl'
 
 export default ({ tpop, dataLists, years, store }) => {
-  const { einheitsByAp } = store.ekPlan
+  const {
+    einheitsByAp,
+    showCount,
+    fields,
+    showEk,
+    showEkf,
+    showMassn,
+  } = store.ekPlan
   const row = {
     apId: get(tpop, 'popByPopId.apByApId.id'),
-    apName: get(tpop, 'popByPopId.apByApId.label'),
-    popId: get(tpop, 'popByPopId.id'),
-    popNr: get(tpop, 'popByPopId.nr') || '-',
-    popName: get(tpop, 'popByPopId.name') || '-',
-    popStatus: get(tpop, 'popByPopId.popStatusWerteByStatus.text') || '-',
-    tpopId: tpop.id,
-    tpopNr: get(tpop, 'nr') || '-',
-    tpopGemeinde: get(tpop, 'gemeinde') || '-',
-    tpopFlurname: get(tpop, 'flurname') || '-',
-    tpopStatus: get(tpop, 'popStatusWerteByStatus.text') || '-',
-    tpopBekanntSeit: get(tpop, 'bekanntSeit') || '-',
-    tpopLink: `${appBaseUrl()}Daten/Projekte/${
+  }
+  if (fields.includes('ap')) {
+    row.apName = get(tpop, 'popByPopId.apByApId.label')
+  }
+  row.popId = get(tpop, 'popByPopId.id')
+  if (fields.includes('popNr')) {
+    row.popNr = get(tpop, 'popByPopId.nr') || '-'
+  }
+  if (fields.includes('popName')) {
+    row.popName = get(tpop, 'popByPopId.name') || '-'
+  }
+  if (fields.includes('popStatus')) {
+    row.popStatus = get(tpop, 'popByPopId.popStatusWerteByStatus.text') || '-'
+  }
+  row.tpopId = tpop.id
+  if (fields.includes('nr')) {
+    row.tpopNr = get(tpop, 'nr') || '-'
+  }
+  if (fields.includes('gemeinde')) {
+    row.tpopGemeinde = get(tpop, 'gemeinde') || '-'
+  }
+  if (fields.includes('flurname')) {
+    row.tpopFlurname = get(tpop, 'flurname') || '-'
+  }
+  if (fields.includes('status')) {
+    row.tpopStatus = get(tpop, 'popStatusWerteByStatus.text') || '-'
+  }
+  // check till here
+  if (fields.includes('bekanntSeit')) {
+    row.tpopBekanntSeit = get(tpop, 'bekanntSeit') || '-'
+  }
+  if (fields.includes('link')) {
+    row.tpopLink = `${appBaseUrl()}Daten/Projekte/${
       tpop.popByPopId.apByApId.projId
     }/Aktionspläne/${tpop.popByPopId.apByApId.id}/Populationen/${
       tpop.popByPopId.id
-    }/Teil-Populationen/${tpop.id}`,
-    ekAbrechnungstyp: get(
+    }/Teil-Populationen/${tpop.id}`
+  }
+  if (fields.includes('ekAbrechnungstyp')) {
+    row.ekAbrechnungstyp = get(
       get(dataLists, 'allEkfrequenzs.nodes', []).find(
         e => e.id === get(tpop, 'ekfrequenz'),
       ),
       'ekAbrechnungstypWerteByEkAbrechnungstyp.text',
-    ),
-    ekfrequenz: get(tpop, 'ekfrequenz') || null,
-    ekfrequenzStartjahr: get(tpop, 'ekfrequenzStartjahr') || null,
-    ekfrequenzAbweichend: get(tpop, 'ekfrequenzAbweichend') === true,
+    )
+  }
+  if (fields.includes('ekfrequenz')) {
+    row.ekfrequenz = get(tpop, 'ekfrequenz') || null
+  }
+  if (fields.includes('ekfrequenzStartjahr')) {
+    row.ekfrequenzStartjahr = get(tpop, 'ekfrequenzStartjahr') || null
+  }
+  if (fields.includes('ekfrequenzAbweichend')) {
+    row.ekfrequenzAbweichend = get(tpop, 'ekfrequenzAbweichend') === true
   }
 
   const ekplans = get(tpop, 'ekplansByTpopId.nodes')
@@ -40,79 +76,92 @@ export default ({ tpop, dataLists, years, store }) => {
   const einheits = einheitsByAp[row.apId]
 
   years.forEach(year => {
-    const ekplanCount = ekplans
-      .filter(o => o.jahr === year)
-      .filter(o => o.typ === 'EK').length
-    row[`_${year}_EK_geplant`] = ekplanCount > 0 ? ekplanCount : ''
+    if (showEk) {
+      const ekplanCount = ekplans
+        .filter(o => o.jahr === year)
+        .filter(o => o.typ === 'EK').length
+      row[`_${year}_EK_geplant`] = ekplanCount > 0 ? ekplanCount : ''
 
-    const eks = kontrs
-      .filter(o => o.jahr === year)
-      .filter(o => o.typ !== 'Freiwilligen-Erfolgskontrolle')
-    const eksCount = eks.length
-    row[`_${year}_EK`] = eksCount > 0 ? eksCount : ''
+      const eks = kontrs
+        .filter(o => o.jahr === year)
+        .filter(o => o.typ !== 'Freiwilligen-Erfolgskontrolle')
+      const eksCount = eks.length
+      row[`_${year}_EK`] = eksCount > 0 ? eksCount : ''
 
-    const ekSumCounted = sum(
-      eks.flatMap(ek =>
-        get(ek, 'tpopkontrzaehlsByTpopkontrId.nodes', [])
-          .filter(
-            z =>
-              einheits.includes(z.einheit) &&
-              z.anzahl !== null &&
-              get(
-                z,
-                'tpopkontrzaehlEinheitWerteByEinheit.ekzaehleinheitsByZaehleinheitId.nodes',
-                [],
-              ).length > 0,
-          )
-          .flatMap(z => z.anzahl),
-      ),
-    )
-    row[`_${year}_EK_Anzahl`] = ekSumCounted > 0 ? ekSumCounted : ''
+      if (showCount) {
+        const ekSumCounted = sum(
+          eks.flatMap(ek =>
+            get(ek, 'tpopkontrzaehlsByTpopkontrId.nodes', [])
+              .filter(
+                z =>
+                  einheits.includes(z.einheit) &&
+                  z.anzahl !== null &&
+                  get(
+                    z,
+                    'tpopkontrzaehlEinheitWerteByEinheit.ekzaehleinheitsByZaehleinheitId.nodes',
+                    [],
+                  ).length > 0,
+              )
+              .flatMap(z => z.anzahl),
+          ),
+        )
+        row[`_${year}_EK_Anzahl`] = ekSumCounted > 0 ? ekSumCounted : ''
+      }
+    }
 
-    const ekfPlanCount = ekplans
-      .filter(o => o.jahr === year)
-      .filter(o => o.typ === 'EKF').length
-    row[`_${year}_EKF_geplant`] = ekfPlanCount > 0 ? ekfPlanCount : ''
+    if (showEkf) {
+      const ekfPlanCount = ekplans
+        .filter(o => o.jahr === year)
+        .filter(o => o.typ === 'EKF').length
+      row[`_${year}_EKF_geplant`] = ekfPlanCount > 0 ? ekfPlanCount : ''
 
-    const ekfs = kontrs
-      .filter(o => o.jahr === year)
-      .filter(o => o.typ === 'Freiwilligen-Erfolgskontrolle')
-    const ekfsCount = ekfs.length
-    row[`_${year}_EKF`] = ekfsCount > 0 ? ekfsCount : ''
+      const ekfs = kontrs
+        .filter(o => o.jahr === year)
+        .filter(o => o.typ === 'Freiwilligen-Erfolgskontrolle')
+      const ekfsCount = ekfs.length
+      row[`_${year}_EKF`] = ekfsCount > 0 ? ekfsCount : ''
 
-    const ekfSumCounted = sum(
-      ekfs.flatMap(ek =>
-        get(ek, 'tpopkontrzaehlsByTpopkontrId.nodes', [])
-          .filter(
-            z =>
-              einheits.includes(z.einheit) &&
-              z.anzahl !== null &&
-              get(
-                z,
-                'tpopkontrzaehlEinheitWerteByEinheit.ekzaehleinheitsByZaehleinheitId.nodes',
-                [],
-              ).length > 0,
-          )
-          .flatMap(z => z.anzahl),
-      ),
-    )
-    row[`_${year}_EKF_Anzahl`] = ekfSumCounted > 0 ? ekfSumCounted : ''
+      if (showCount) {
+        const ekfSumCounted = sum(
+          ekfs.flatMap(ek =>
+            get(ek, 'tpopkontrzaehlsByTpopkontrId.nodes', [])
+              .filter(
+                z =>
+                  einheits.includes(z.einheit) &&
+                  z.anzahl !== null &&
+                  get(
+                    z,
+                    'tpopkontrzaehlEinheitWerteByEinheit.ekzaehleinheitsByZaehleinheitId.nodes',
+                    [],
+                  ).length > 0,
+              )
+              .flatMap(z => z.anzahl),
+          ),
+        )
+        row[`_${year}_EKF_Anzahl`] = ekfSumCounted > 0 ? ekfSumCounted : ''
+      }
+    }
 
-    const ansiedlungsOfYear = ansiedlungs.filter(o => o.jahr === year)
-    const ansiedlungsCount = ansiedlungsOfYear.length
-    row[`_${year}_Ansiedlungen`] = ansiedlungsCount > 0 ? ansiedlungsCount : ''
+    if (showMassn) {
+      const ansiedlungsOfYear = ansiedlungs.filter(o => o.jahr === year)
+      const ansiedlungsCount = ansiedlungsOfYear.length
+      row[`_${year}_Ansiedlungen`] =
+        ansiedlungsCount > 0 ? ansiedlungsCount : ''
 
-    const ansiedlungsSumCounted = sum(
-      ansiedlungsOfYear
-        .filter(ans => ans.anzTriebe !== null || ans.anzPflanzen !== null)
-        .map(
-          ans =>
-            (ans.anzTriebe !== null ? ans.anzTriebe : 0) +
-            (ans.anzPflanzen !== null ? ans.anzPflanzen : 0),
-        ),
-    )
-    row[`_${year}_Ansiedlungen_Anzahl`] =
-      ansiedlungsSumCounted > 0 ? ansiedlungsSumCounted : ''
+      if (showCount) {
+        const ansiedlungsSumCounted = sum(
+          ansiedlungsOfYear
+            .filter(ans => ans.anzTriebe !== null || ans.anzPflanzen !== null)
+            .map(
+              ans =>
+                (ans.anzTriebe !== null ? ans.anzTriebe : 0) +
+                (ans.anzPflanzen !== null ? ans.anzPflanzen : 0),
+            ),
+        )
+        row[`_${year}_Ansiedlungen_Anzahl`] =
+          ansiedlungsSumCounted > 0 ? ansiedlungsSumCounted : ''
+      }
+    }
   })
   return row
 }
