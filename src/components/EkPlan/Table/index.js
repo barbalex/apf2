@@ -117,7 +117,7 @@ const TpopTitle = styled.h4`
 const ExportButton = styled(Button)`
   position: absolute !important;
   top: 70px !important;
-  right: 400px !important;
+  right: 430px !important;
   text-transform: none !important;
   height: 2.2em;
   top: 30px;
@@ -300,7 +300,7 @@ const EkPlanTable = () => {
 
   const onClickExport = useCallback(() => {
     const data = tpops.map(tpop =>
-      exportRowFromTpop({ tpop, dataLists, years }),
+      exportRowFromTpop({ tpop, dataLists, years, store }),
     )
     exportModule({
       data,
@@ -321,7 +321,7 @@ const EkPlanTable = () => {
   return (
     <ErrorBoundary>
       <ExportButton variant="outlined" onClick={onClickExport}>
-        Exportieren
+        exportieren
       </ExportButton>
       <Container>
         <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
