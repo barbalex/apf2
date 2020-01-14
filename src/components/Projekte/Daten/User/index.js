@@ -215,7 +215,7 @@ const User = ({ treeName }) => {
       try {
         await client.mutate({
           mutation: gql`
-            mutation createTpopkontr(
+            mutation createTpopkontrFromUser(
               $typ: String
               $tpopId: UUID
               $bearbeiter: UUID
