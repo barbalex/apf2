@@ -28,9 +28,10 @@ const Header = styled.div`
 const StyledButton = styled(Button)`
   text-transform: none !important;
   height: 2.2em;
-  top: 30px;
+  width: 117px;
   font-size: 0.75rem !important;
-  right: 10px;
+  top: 30px;
+  right: 125px;
   padding: 2px 15px !important;
   line-height: unset !important;
 `
