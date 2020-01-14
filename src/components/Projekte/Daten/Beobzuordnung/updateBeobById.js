@@ -9,7 +9,7 @@ import {
 } from '../../../shared/fragments'
 
 export default gql`
-  mutation updateBeob(
+  mutation updateBeobForBeobzuordnung(
     $id: UUID!
     $idField: String
     $datum: Date

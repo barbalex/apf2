@@ -39,7 +39,7 @@ const createTpop = gql`
   ${tpop}
 `
 const updateBeobById = gql`
-  mutation updateBeob($beobId: UUID!, $tpopId: UUID) {
+  mutation updateBeobToCreateNewTpopFromBeob($beobId: UUID!, $tpopId: UUID) {
     updateBeobById(
       input: {
         id: $beobId
