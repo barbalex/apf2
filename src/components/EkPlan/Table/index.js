@@ -118,6 +118,7 @@ const ExportButton = styled(Button)`
   position: absolute !important;
   top: 70px !important;
   right: 420px !important;
+  min-width: 100px !important;
   text-transform: none !important;
   height: 2.2em;
   top: 30px;
