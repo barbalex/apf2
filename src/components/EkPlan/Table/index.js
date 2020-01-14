@@ -37,6 +37,7 @@ import CellForTpopLink from './CellForTpopLink'
 import CellForValue from './CellForValue'
 import CellForYear from './CellForYear'
 import Error from '../../shared/Error'
+import exportRowFromTpop from './exportRowFromTpop'
 
 const TempContainer = styled.div`
   padding: 10px;
@@ -281,6 +282,12 @@ const EkPlanTable = () => {
       ]),
     [filterAnsiedlungYear, filterEkplanYear, filterKontrolleYear],
   )
+
+  const exportRows = useMemo(
+    () => tpops.map(tpop => exportRowFromTpop({ tpop, dataLists, years })),
+    [tpops, dataLists, years],
+  )
+  console.log('Table:', { tpopRows, yearRows, exportRows })
 
   /*console.log('Table rendering:', {
     headerFieldsFixed,
