@@ -68,9 +68,12 @@ const UserMessages = () => {
     fetchPolicy: 'network-only',
     variables: { name: userName, aYearAgo },
   })
-  // DANGER: if no userName, results are returned!
-  //const allMessages = get(data, 'allMessages.nodes', [])
-  const allMessages = userName ? get(data, 'allMessages.nodes', []) : []
+  // ensure username exists
+  const userNames = (get(data, 'allUsers.nodes') || []).map(u => u.name)
+  const userNameExists = userNames.includes(userName)
+  // DANGER: if no userName or non-existing, results are returned!
+  const allMessages =
+    userName && userNameExists ? get(data, 'allMessages.nodes', []) : []
   const unreadMessages = allMessages.filter(
     m => get(m, 'usermessagesByMessageId.totalCount', 0) === 0,
   )

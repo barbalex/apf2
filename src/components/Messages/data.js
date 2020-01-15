@@ -18,5 +18,11 @@ export default gql`
         }
       }
     }
+    allUsers {
+      nodes {
+        id
+        name
+      }
+    }
   }
 `
