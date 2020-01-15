@@ -68,7 +68,9 @@ const UserMessages = () => {
     fetchPolicy: 'network-only',
     variables: { name: userName, aYearAgo },
   })
-  const allMessages = get(data, 'allMessages.nodes', [])
+  // DANGER: if no userName, results are returned!
+  //const allMessages = get(data, 'allMessages.nodes', [])
+  const allMessages = userName ? get(data, 'allMessages.nodes', []) : []
   const unreadMessages = allMessages.filter(
     m => get(m, 'usermessagesByMessageId.totalCount', 0) === 0,
   )
