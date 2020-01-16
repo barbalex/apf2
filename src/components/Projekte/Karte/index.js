@@ -517,7 +517,10 @@ const Karte = ({ treeName }) => {
              */
             if (!!idOfTpopBeingLocalized) {
               const { lat, lng } = event.latlng
-              const geomPoint = `SRID=4326;POINT(${lng} ${lat})`
+              const geomPoint = {
+                type: 'Point',
+                coordinates: [lng, lat],
+              }
               // DANGER:
               // need to stop propagation of the event
               // if not it is called a second time

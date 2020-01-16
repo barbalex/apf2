@@ -263,6 +263,8 @@ export default async ({
       newId = get(response, 'data.createTpopmassn.tpopmassn.id')
       break
     case 'tpop':
+      let geomPointTpop = get(row, 'geomPoint.geojson') || null
+      if (geomPointTpop) geomPointTpop = JSON.parse(geomPointTpop)
       response = await client.mutate({
         mutation: createTpop,
         variables: {
@@ -270,7 +272,7 @@ export default async ({
           nr: row.nr,
           gemeinde: row.gemeinde,
           flurname: row.flurname,
-          geomPoint: row.geomPoint,
+          geomPoint: geomPointTpop,
           radius: row.radius,
           hoehe: row.hoehe,
           exposition: row.exposition,
@@ -298,6 +300,8 @@ export default async ({
       newId = get(response, 'data.createTpop.tpop.id')
       break
     case 'pop':
+      let geomPointPop = get(row, 'geomPoint.geojson') || null
+      if (geomPointPop) geomPointPop = JSON.parse(geomPointPop)
       response = await client.mutate({
         mutation: createPop,
         variables: {
@@ -308,7 +312,7 @@ export default async ({
           statusUnklar: row.statusUnklar,
           statusUnklarBegruendung: row.statusUnklarBegruendung,
           bekanntSeit: row.bekanntSeit,
-          geomPoint: row.geomPoint,
+          geomPoint: geomPointPop,
         },
       })
       newId = get(response, 'data.createPop.pop.id')

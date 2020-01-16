@@ -5,7 +5,11 @@ export default gql`
     tpopById(id: $id) {
       id
       popId
-      geomPoint
+      geomPoint {
+        geojson
+        x
+        y
+      }
     }
   }
 `

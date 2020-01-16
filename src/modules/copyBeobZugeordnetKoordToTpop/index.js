@@ -21,7 +21,10 @@ export default async ({ id, store, client }) => {
   }
   const beob = get(beobResult, 'data.beobById')
   const { wgs84Lat, wgs84Long, tpopId } = beob
-  const geomPoint = `SRID=4326;POINT(${wgs84Long} ${wgs84Lat})`
+  const geomPoint = {
+    type: 'Point',
+    coordinates: [wgs84Long, wgs84Lat],
+  }
 
   // set tpop coordinates
   try {

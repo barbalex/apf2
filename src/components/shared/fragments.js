@@ -130,6 +130,11 @@ export const beob = gql`
     wgs84Lat
     lv95Y
     wgs84Long
+    geomPoint {
+      geojson
+      x
+      y
+    }
     data
     artId
     tpopId

@@ -21,10 +21,17 @@ export default async ({ id, store, client }) => {
     })
   }
   const tpop = get(tpopResult, 'data.tpopById')
-  const { geomPoint, popId } = tpop
+  const { geomPoint: geomPoint0, popId } = tpop
 
   // set pop coordinates
   try {
+    let geomPoint = null
+    if (geomPoint0.x) {
+      geomPoint = {
+        type: 'Point',
+        coordinates: [geomPoint0.x, geomPoint0.y],
+      }
+    }
     await client.mutate({
       mutation: updatePopById,
       variables: {

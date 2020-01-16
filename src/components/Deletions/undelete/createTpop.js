@@ -2,10 +2,6 @@ import gql from 'graphql-tag'
 
 import { tpop } from '../../shared/fragments'
 
-/**
- * add geomPoint: "SRID=4326;POINT(47.3021 8.5530)"
- */
-
 export default gql`
   mutation createTpopForUndelete(
     $id: UUID
