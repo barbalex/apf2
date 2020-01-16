@@ -13,7 +13,7 @@ export default gql`
     $nr: Int
     $gemeinde: String
     $flurname: String
-    $geomPoint: GeometryPoint
+    $geomPoint: GeoJSON
     $radius: Int
     $hoehe: Int
     $exposition: String

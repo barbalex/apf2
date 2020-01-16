@@ -17,7 +17,7 @@ const createTpop = gql`
     $popId: UUID
     $gemeinde: String
     $flurname: String
-    $geomPoint: GeometryPoint
+    $geomPoint: GeoJSON
     $bekanntSeit: Int
   ) {
     createTpop(
@@ -39,7 +39,7 @@ const createTpop = gql`
   ${tpop}
 `
 const updateBeobById = gql`
-  mutation updateBeob($beobId: UUID!, $tpopId: UUID) {
+  mutation updateBeobForCreateNewTpopFromBeob($beobId: UUID!, $tpopId: UUID) {
     updateBeobById(
       input: {
         id: $beobId
