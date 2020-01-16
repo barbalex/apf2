@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query allBeobs {
+  query ZugeordnetForExport {
     allVBeobs(filter: { tpopId: { isNull: false } }) {
       nodes {
         id

@@ -9,7 +9,7 @@ import {
 } from '../../components/shared/fragments'
 
 export default gql`
-  mutation updateBeob($id: UUID!, $tpopId: UUID) {
+  mutation updateBeobForCreateNewPopFromBeob($id: UUID!, $tpopId: UUID) {
     updateBeobById(
       input: {
         id: $id
