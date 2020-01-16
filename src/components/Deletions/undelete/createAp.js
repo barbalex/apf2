@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { ap } from '../../shared/fragments'
 
 export default gql`
-  mutation createAp(
+  mutation createApForUndelete(
     $id: UUID
     $projId: UUID
     $bearbeitung: Int

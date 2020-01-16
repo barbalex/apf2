@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { adresse } from '../../shared/fragments'
 
 export default gql`
-  mutation createAdresse(
+  mutation createAdresseForUndelete(
     $id: UUID
     $name: String
     $adresse: String
