@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { assozart } from '../../shared/fragments'
 
 export default gql`
-  mutation createAssozart(
+  mutation createAssozartForUndelete(
     $id: UUID
     $bemerkungen: String
     $aeId: UUID

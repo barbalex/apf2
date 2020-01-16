@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { apberuebersicht } from '../../shared/fragments'
 
 export default gql`
-  mutation createApberuebersicht(
+  mutation createApberuebersichtForUndelete(
     $id: UUID
     $projId: UUID
     $jahr: Int
