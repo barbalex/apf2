@@ -99,8 +99,6 @@ const Pop = ({ treeName, showFilter = false }) => {
     row = get(data, 'popById', {})
   }
 
-  console.log('Pop row:', row)
-
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
