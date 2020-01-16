@@ -9,12 +9,12 @@ import {
 } from '../../../shared/fragments'
 
 export default gql`
-  mutation updateBeob(
+  mutation updateBeobForBeobzuordnung(
     $id: UUID!
     $idField: String
     $datum: Date
     $autor: String
-    $geomPoint: GeometryPoint
+    $geomPoint: GeoJSON
     $data: JSON
     $artId: UUID
     $artIdOriginal: UUID

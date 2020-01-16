@@ -12,7 +12,7 @@ export default gql`
     $statusUnklar: Boolean
     $statusUnklarBegruendung: String
     $bekanntSeit: Int
-    $geomPoint: GeometryPoint
+    $geomPoint: GeoJSON
     $changedBy: String
   ) {
     updatePopById(

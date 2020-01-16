@@ -16,7 +16,7 @@ export default gql`
     $statusUnklar: Boolean
     $statusUnklarBegruendung: String
     $bekanntSeit: Int
-    $geomPoint: GeometryPoint
+    $geomPoint: GeoJSON
   ) {
     createPop(
       input: {
