@@ -5,7 +5,7 @@ import upperFirst from 'lodash/upperFirst'
 export default table => {
   const tableName = camelCase(table)
   const mutation = gql`
-      mutation createWerte(
+      mutation createWerteForUndelete(
         $id: UUID
         $code: Int
         $text: String

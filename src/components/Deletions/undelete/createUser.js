@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { user } from '../../shared/fragments'
 
 export default gql`
-  mutation createUser(
+  mutation createUserForUndelete(
     $id: UUID
     $name: String
     $email: String
