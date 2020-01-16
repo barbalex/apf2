@@ -3,11 +3,7 @@ import gql from 'graphql-tag'
 import { pop } from '../../components/shared/fragments'
 
 export default gql`
-  mutation createPop(
-    $apId: UUID
-    $bekanntSeit: Int
-    $geomPoint: GeometryPoint
-  ) {
+  mutation createPop($apId: UUID, $bekanntSeit: Int, $geomPoint: GeoJSON) {
     createPop(
       input: {
         pop: { apId: $apId, bekanntSeit: $bekanntSeit, geomPoint: $geomPoint }
