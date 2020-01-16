@@ -7,7 +7,7 @@ import { tpop } from '../../shared/fragments'
  */
 
 export default gql`
-  mutation createTpop(
+  mutation createTpopForUndelete(
     $id: UUID
     $popId: UUID
     $nr: Int

@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { tpopmassn } from '../../shared/fragments'
 
 export default gql`
-  mutation createTpopmassn(
+  mutation createTpopmassnForUndelete(
     $id: UUID
     $typ: Int
     $beschreibung: String
