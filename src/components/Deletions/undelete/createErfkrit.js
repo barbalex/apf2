@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { erfkrit } from '../../shared/fragments'
 
 export default gql`
-  mutation createErfkrit(
+  mutation createErfkritForUndelete(
     $id: UUID
     $apId: UUID
     $erfolg: Int

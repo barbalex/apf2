@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { popber } from '../../shared/fragments'
 
 export default gql`
-  mutation createPopber(
+  mutation createPopberForUndelete(
     $id: UUID
     $popId: UUID
     $jahr: Int
