@@ -105,13 +105,14 @@ const Pop = ({ treeName, showFilter = false }) => {
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
       const value = values[changedField]
-      const geomPoint = get(values, 'geomPoint.geojson') || null
+      let geomPoint = get(values, 'geomPoint.geojson') || null
+      if (geomPoint) geomPoint = JSON.parse(geomPoint)
       const variables = {
         ...objectsEmptyValuesToNull(values),
-        //geomPoint,
+        // need to pass geomPoint as GeoJSON
+        geomPoint,
         changedBy: store.user.name,
       }
-      console.log('Pop, variables:', variables)
       if (showFilter) {
         nodeFilterSetValue({
           treeName,
@@ -124,16 +125,18 @@ const Pop = ({ treeName, showFilter = false }) => {
           await client.mutate({
             mutation: updatePopByIdGql,
             variables,
-            /*optimisticResponse: {
+            optimisticResponse: {
               __typename: 'Mutation',
               updatePopById: {
                 pop: {
                   ...variables,
+                  // need to pass geomPoint with its typename
+                  geomPoint: values.geomPoint,
                   __typename: 'Pop',
                 },
                 __typename: 'Pop',
               },
-            },*/
+            },
           })
         } catch (error) {
           return setErrors({ [changedField]: error.message })

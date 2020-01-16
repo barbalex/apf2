@@ -83,15 +83,14 @@ const Coordinates = ({ row, refetchForm, table }) => {
       //console.log('Coordinates, saveToDb', { row })
       if (!id) return
       try {
+        const mutationTitle = `update${upperFirst(table)}ByIdForCoordinates`
         const mutationName = `update${upperFirst(table)}ById`
         const patchName = `${table}Patch`
-        console.log('Coordinates, will save geomPoint:', geomPoint)
-        console.log('Coordinates, mutationName:', mutationName)
         await client.mutate({
           mutation: gql`
-            mutation ${mutationName}(
+            mutation ${mutationTitle}(
               $id: UUID!
-              $geomPoint: GeometryPoint
+              $geomPoint: GeoJSON
               $changedBy: String
             ) {
               ${mutationName}(
@@ -102,7 +101,12 @@ const Coordinates = ({ row, refetchForm, table }) => {
               ) {
                 ${table} {
                   id
-                  geomPoint
+                  geomPoint {
+                    geojson
+                    srid
+                    x
+                    y
+                  }
                 }
               }
             }
@@ -141,7 +145,6 @@ const Coordinates = ({ row, refetchForm, table }) => {
       let geomPoint = null
       if (x && y) {
         const [lat, long] = epsg2056to4326(x, y)
-        //geomPoint = `SRID=4326;POINT(${long} ${lat})`
         geomPoint = {
           type: 'Point',
           coordinates: [long, lat],
@@ -155,7 +158,6 @@ const Coordinates = ({ row, refetchForm, table }) => {
     (lat, long) => {
       let geomPoint = null
       if (lat && long) {
-        //geomPoint = `SRID=4326;POINT(${long} ${lat})`
         geomPoint = {
           type: 'Point',
           coordinates: [long, lat],
