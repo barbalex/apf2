@@ -11,6 +11,7 @@ export default ({ tpop, dataLists, years, store }) => {
     showEk,
     showEkf,
     showMassn,
+    ekfrequenzs,
   } = store.ekPlan
   const row = {
     apId: get(tpop, 'popByPopId.apByApId.id'),
@@ -61,7 +62,15 @@ export default ({ tpop, dataLists, years, store }) => {
     )
   }
   if (fields.includes('ekfrequenz')) {
-    row.ekfrequenz = get(tpop, 'ekfrequenz') || null
+    let ekfrequenz = get(tpop, 'ekfrequenz') || null
+    if (ekfrequenz) {
+      ekfrequenz = get(
+        ekfrequenzs.find(f => f.id === ekfrequenz),
+        'code',
+        null,
+      )
+    }
+    row.ekfrequenz = ekfrequenz
   }
   if (fields.includes('ekfrequenzStartjahr')) {
     row.ekfrequenzStartjahr = get(tpop, 'ekfrequenzStartjahr') || null
