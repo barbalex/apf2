@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { zielber } from '../../shared/fragments'
 
 export default gql`
-  mutation createZielber(
+  mutation createZielberForUndelete(
     $id: UUID
     $zielId: UUID
     $jahr: Int

@@ -130,6 +130,11 @@ export const beob = gql`
     wgs84Lat
     lv95Y
     wgs84Long
+    geomPoint {
+      geojson
+      x
+      y
+    }
     data
     artId
     tpopId
@@ -287,7 +292,12 @@ export const pop = gql`
     wgs84Lat
     lv95Y
     wgs84Long
-    #geomPoint
+    geomPoint {
+      geojson
+      srid
+      x
+      y
+    }
     changedBy
   }
 `
@@ -346,7 +356,11 @@ export const tpop = gql`
     wgs84Lat
     lv95Y
     wgs84Long
-    #geomPoint
+    geomPoint {
+      geojson
+      x
+      y
+    }
     radius
     hoehe
     exposition

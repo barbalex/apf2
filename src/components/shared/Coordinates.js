@@ -8,6 +8,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import upperFirst from 'lodash/upperFirst'
+import get from 'lodash/get'
 
 import storeContext from '../../storeContext'
 import ifIsNumericAsNumber from '../../modules/ifIsNumericAsNumber'
@@ -43,7 +44,9 @@ const Row = styled.div`
 `
 
 const Coordinates = ({ row, refetchForm, table }) => {
-  const { lv95X, lv95Y, wgs84Lat, wgs84Long, id } = row || {}
+  const { lv95X, lv95Y, id } = row || {}
+  const wgs84Lat = get(row, 'geomPoint.x')
+  const wgs84Long = get(row, 'geomPoint.y')
 
   const client = useApolloClient()
   const store = useContext(storeContext)
@@ -77,16 +80,16 @@ const Coordinates = ({ row, refetchForm, table }) => {
   const saveToDb = useCallback(
     async (geomPoint, projection) => {
       // _somehow_ this managed to be called without id when deleting a tpop????
-      //console.log('Coordinates, saveToDb', { row })
       if (!id) return
       try {
+        const mutationTitle = `update${upperFirst(table)}ByIdForCoordinates`
         const mutationName = `update${upperFirst(table)}ById`
         const patchName = `${table}Patch`
         await client.mutate({
           mutation: gql`
-            mutation ${mutationName}(
+            mutation ${mutationTitle}(
               $id: UUID!
-              $geomPoint: String
+              $geomPoint: GeoJSON
               $changedBy: String
             ) {
               ${mutationName}(
@@ -97,7 +100,12 @@ const Coordinates = ({ row, refetchForm, table }) => {
               ) {
                 ${table} {
                   id
-                  geomPoint
+                  geomPoint {
+                    geojson
+                    srid
+                    x
+                    y
+                  }
                 }
               }
             }
@@ -136,7 +144,10 @@ const Coordinates = ({ row, refetchForm, table }) => {
       let geomPoint = null
       if (x && y) {
         const [lat, long] = epsg2056to4326(x, y)
-        geomPoint = `SRID=4326;POINT(${long} ${lat})`
+        geomPoint = {
+          type: 'Point',
+          coordinates: [long, lat],
+        }
       }
       saveToDb(geomPoint, 'lv95')
     },
@@ -146,7 +157,10 @@ const Coordinates = ({ row, refetchForm, table }) => {
     (lat, long) => {
       let geomPoint = null
       if (lat && long) {
-        geomPoint = `SRID=4326;POINT(${long} ${lat})`
+        geomPoint = {
+          type: 'Point',
+          coordinates: [long, lat],
+        }
       }
       saveToDb(geomPoint, 'wgs84')
     },

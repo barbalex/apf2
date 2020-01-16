@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { ber } from '../../shared/fragments'
 
 export default gql`
-  mutation createBer(
+  mutation createBerForUndelete(
     $id: UUID
     $apId: UUID
     $autor: String

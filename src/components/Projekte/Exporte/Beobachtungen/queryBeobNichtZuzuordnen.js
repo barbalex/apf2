@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query allBeobsZuzuordnen {
+  query allBeobsNichtZuzuordnenForExport {
     allVBeobs(filter: { nichtZuordnen: { equalTo: true } }) {
       nodes {
         id

@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  mutation updateTpopById($id: UUID!, $geomPoint: String) {
+  mutation updateTpopById($id: UUID!, $geomPoint: GeoJSON) {
     updateTpopById(input: { id: $id, tpopPatch: { geomPoint: $geomPoint } }) {
       tpop {
         id

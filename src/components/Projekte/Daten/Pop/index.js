@@ -103,8 +103,12 @@ const Pop = ({ treeName, showFilter = false }) => {
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
       const value = values[changedField]
+      let geomPoint = get(values, 'geomPoint.geojson') || null
+      if (geomPoint) geomPoint = JSON.parse(geomPoint)
       const variables = {
         ...objectsEmptyValuesToNull(values),
+        // need to pass geomPoint as GeoJSON
+        geomPoint,
         changedBy: store.user.name,
       }
       if (showFilter) {
@@ -124,6 +128,8 @@ const Pop = ({ treeName, showFilter = false }) => {
               updatePopById: {
                 pop: {
                   ...variables,
+                  // need to pass geomPoint with its typename
+                  geomPoint: values.geomPoint,
                   __typename: 'Pop',
                 },
                 __typename: 'Pop',

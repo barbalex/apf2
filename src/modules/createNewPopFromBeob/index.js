@@ -33,6 +33,9 @@ export default async ({ treeName, id, client, store }) => {
   const datumIsValid = isValid(new Date(datum))
   const bekanntSeit = datumIsValid ? +format(new Date(datum), 'yyyy') : null
 
+  let newGeomPoint = geomPoint.geojson || null
+  if (newGeomPoint) newGeomPoint = JSON.parse(newGeomPoint)
+
   // create new pop for ap
   let popResult
   try {
@@ -40,7 +43,7 @@ export default async ({ treeName, id, client, store }) => {
       mutation: createPop,
       variables: {
         apId: ap,
-        geomPoint,
+        geomPoint: newGeomPoint,
         bekanntSeit,
       },
     })
@@ -61,7 +64,7 @@ export default async ({ treeName, id, client, store }) => {
       mutation: createTpop,
       variables: {
         popId: pop.id,
-        geomPoint,
+        geomPoint: newGeomPoint,
         bekannt_seit: bekanntSeit,
         gemeinde: data.NOM_COMMUNE ? data.NOM_COMMUNE : null,
         flurname: data.DESC_LOCALITE_ ? data.DESC_LOCALITE_ : null,

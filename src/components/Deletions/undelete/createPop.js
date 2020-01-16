@@ -2,12 +2,8 @@ import gql from 'graphql-tag'
 
 import { pop } from '../../shared/fragments'
 
-/**
- * add geomPoint: "SRID=4326;POINT(47.3021 8.5530)"
- */
-
 export default gql`
-  mutation createPop(
+  mutation createPopForUndelete(
     $id: UUID
     $apId: UUID
     $nr: Int
@@ -16,7 +12,7 @@ export default gql`
     $statusUnklar: Boolean
     $statusUnklarBegruendung: String
     $bekanntSeit: Int
-    $geomPoint: String
+    $geomPoint: GeoJSON
   ) {
     createPop(
       input: {

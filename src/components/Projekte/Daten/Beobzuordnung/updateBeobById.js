@@ -14,7 +14,7 @@ export default gql`
     $idField: String
     $datum: Date
     $autor: String
-    $geomPoint: String
+    $geomPoint: GeoJSON
     $data: JSON
     $artId: UUID
     $artIdOriginal: UUID

@@ -8,7 +8,7 @@ import {
 } from '../../../../shared/fragments'
 
 export default gql`
-  mutation updateBeobzugeordnetForKarte($id: UUID!, $tpopId: UUID) {
+  mutation updateBeobForKarteBeobZugeordnet($id: UUID!, $tpopId: UUID) {
     updateBeobById(
       input: { id: $id, beobPatch: { id: $id, tpopId: $tpopId } }
     ) {

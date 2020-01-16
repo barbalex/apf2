@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { tpopkontr } from '../../shared/fragments'
 
 export default gql`
-  mutation createTpopkontr(
+  mutation createTpopkontrForUndelete(
     $id: UUID
     $typ: String
     $datum: Date

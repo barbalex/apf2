@@ -7,7 +7,7 @@ export default gql`
     $popId: UUID
     $gemeinde: String
     $flurname: String
-    $geomPoint: String
+    $geomPoint: GeoJSON
     $bekanntSeit: Int
   ) {
     createTpop(
