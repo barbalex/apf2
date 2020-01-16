@@ -15,6 +15,7 @@ import { observer } from 'mobx-react-lite'
 import { FixedSizeGrid, VariableSizeGrid, VariableSizeList } from 'react-window'
 import scrollbarSize from 'dom-helpers/scrollbarSize'
 import ReactResizeDetector from 'react-resize-detector'
+import Button from '@material-ui/core/Button'
 
 import queryTpop from './queryTpop'
 import queryLists from './queryLists'
@@ -37,6 +38,8 @@ import CellForTpopLink from './CellForTpopLink'
 import CellForValue from './CellForValue'
 import CellForYear from './CellForYear'
 import Error from '../../shared/Error'
+import exportRowFromTpop from './exportRowFromTpop'
+import exportModule from '../../../modules/export'
 
 const TempContainer = styled.div`
   padding: 10px;
@@ -110,6 +113,20 @@ const TpopTitle = styled.h4`
   position: absolute;
   left: 10px;
   z-index: 3;
+`
+const ExportButton = styled(Button)`
+  position: absolute !important;
+  top: 70px !important;
+  right: 420px !important;
+  min-width: 100px !important;
+  text-transform: none !important;
+  height: 2.2em;
+  top: 30px;
+  font-size: 0.75rem !important;
+  right: 10px;
+  padding: 2px 15px !important;
+  line-height: unset !important;
+  z-index: 5;
 `
 function sizeReducer(state, action) {
   return action.payload
@@ -282,9 +299,16 @@ const EkPlanTable = () => {
     [filterAnsiedlungYear, filterEkplanYear, filterKontrolleYear],
   )
 
-  /*console.log('Table rendering:', {
-    headerFieldsFixed,
-  })*/
+  const onClickExport = useCallback(() => {
+    const data = tpops.map(tpop =>
+      exportRowFromTpop({ tpop, dataLists, years, store }),
+    )
+    exportModule({
+      data,
+      fileName: 'ek-planung',
+      store,
+    })
+  }, [tpops, store, dataLists, years])
 
   if (aps.length > 0 && loadingTpop)
     return <TempContainer>Lade...</TempContainer>
@@ -293,12 +317,13 @@ const EkPlanTable = () => {
     if (errorTpop) errors = [errorTpop]
     if (errorLists) errors = [...errors, errorLists]
 
-    //console.log('EkPlan Table', { errorTpop, errorLists, errors })
-
     return <Error errors={errors} />
   }
   return (
     <ErrorBoundary>
+      <ExportButton variant="outlined" onClick={onClickExport}>
+        exportieren
+      </ExportButton>
       <Container>
         <ReactResizeDetector handleWidth handleHeight onResize={onResize} />
         <HeaderContainer>

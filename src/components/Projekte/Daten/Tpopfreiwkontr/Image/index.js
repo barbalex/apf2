@@ -3,6 +3,10 @@ import styled from 'styled-components'
 
 import padding from './padding'
 
+/**
+ * see https://stackoverflow.com/a/21160150/712005 to force printing background image
+ */
+
 const Container = styled.div`
   grid-area: image;
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -15,6 +19,9 @@ const Container = styled.div`
   grid-template-areas:
     'title'
     'myImage';
+  @media print {
+    -webkit-print-color-adjust: exact;
+  }
 `
 const Title = styled.div`
   grid-area: title;
@@ -24,7 +31,7 @@ const Title = styled.div`
 // https://www.voorhoede.nl/en/blog/say-no-to-image-reflow/
 const ImageContainer = styled.div`
   grid-area: myImage;
-  background-image: ${props => `url("${props.src}")`};
+  background-image: ${props => `url("${props.src}") !important`};
   background-origin: border-box;
   background-size: contain;
   background-repeat: no-repeat;
@@ -37,7 +44,9 @@ const fetchImageIfNeeded = async ({ image, setImage, apId }) => {
     let newImage
     try {
       newImage = await import(`./${apId}.png`) //.then(m => m.default)
-    } catch (error) {}
+    } catch (error) {
+      console.log('Image not loaded, error:', error)
+    }
     if (newImage && newImage.default) setImage(newImage.default)
   }
 }

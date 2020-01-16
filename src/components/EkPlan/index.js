@@ -25,12 +25,13 @@ const Header = styled.div`
   flex-wrap: nowrap;
   justify-content: space-between;
 `
-const StyledButton = styled(Button)`
+const AnleitungButton = styled(Button)`
   text-transform: none !important;
   height: 2.2em;
-  top: 30px;
+  min-width: 100px !important;
   font-size: 0.75rem !important;
-  right: 10px;
+  top: 30px;
+  right: 115px;
   padding: 2px 15px !important;
   line-height: unset !important;
 `
@@ -64,9 +65,9 @@ const EkPlan = () => {
         <Container>
           <Header>
             <ApList />
-            <StyledButton variant="outlined" onClick={onClickAnleitung}>
+            <AnleitungButton variant="outlined" onClick={onClickAnleitung}>
               Anleitung
-            </StyledButton>
+            </AnleitungButton>
             <Choose />
           </Header>
           <Table />
