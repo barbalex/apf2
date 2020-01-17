@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { beob } from '../../../../shared/fragments'
 
 export default gql`
-  query beobById($id: UUID!) {
+  query beobByIdForDelete($id: UUID!) {
     beobById(id: $id) {
       ...BeobFields
     }
