@@ -7,7 +7,7 @@ export default gql`
       popId
       geomPoint {
         geojson
-        srid
+        #srid
         x
         y
       }

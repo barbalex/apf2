@@ -132,7 +132,7 @@ export const beob = gql`
     wgs84Long
     geomPoint {
       geojson
-      srid
+      #srid
       x
       y
     }
@@ -295,7 +295,7 @@ export const pop = gql`
     wgs84Long
     geomPoint {
       geojson
-      srid
+      #srid
       x
       y
     }
@@ -359,7 +359,7 @@ export const tpop = gql`
     wgs84Long
     geomPoint {
       geojson
-      srid
+      #srid
       x
       y
     }
