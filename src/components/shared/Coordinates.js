@@ -102,7 +102,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
                   id
                   geomPoint {
                     geojson
-                    srid
+                    #srid
                     x
                     y
                   }
