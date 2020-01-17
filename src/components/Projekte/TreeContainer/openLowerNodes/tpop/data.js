@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query tpopFolderOpenLowerNodesQuery($id: UUID!) {
+  query treeContainerOpenLowerNodesQuery($id: UUID!) {
     tpopById(id: $id) {
       id
       tpopmassnsByTpopId {
