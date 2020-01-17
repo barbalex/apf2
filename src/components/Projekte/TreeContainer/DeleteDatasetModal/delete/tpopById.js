@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
 
-import {tpop} from '../../../../shared/fragments'
+import { tpop } from '../../../../shared/fragments'
 
 export default gql`
-  query tpopById($id: UUID!) {
+  query tpopByIdForDelete($id: UUID!) {
     tpopById(id: $id) {
       ...TpopFields
     }
