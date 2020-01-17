@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { adresse } from '../../../shared/fragments'
 
 export default gql`
-  query adresseById($id: UUID!) {
+  query adresseByIdForAdresse($id: UUID!) {
     adresseById(id: $id) {
       ...AdresseFields
     }
