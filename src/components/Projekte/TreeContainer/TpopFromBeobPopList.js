@@ -30,7 +30,7 @@ const TpopFromBeobPopList = ({
   const apId = activeNodeArray[3]
 
   const query = gql`
-    query allPopsQuery($apId: UUID!) {
+    query allPopsQueryForTpopFromBeobPopList($apId: UUID!) {
       allPops(
         filter: { apId: { equalTo: $apId } }
         orderBy: [NR_ASC, NAME_ASC]
