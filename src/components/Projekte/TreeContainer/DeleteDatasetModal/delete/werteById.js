@@ -4,7 +4,7 @@ import camelCase from 'lodash/camelCase'
 export default table => {
   const tableName = camelCase(table)
   return gql`
-    query werteById($id: UUID!) {
+    query werteByIdForDelete($id: UUID!) {
       ${tableName}ById(id: $id) {
         id
         code
