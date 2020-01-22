@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { tpop } from '../../shared/fragments'
 
 export default gql`
-  mutation updateTpopById($id: UUID!, $geomPoint: GeoJSON) {
+  mutation updateTpopByIdForKarte($id: UUID!, $geomPoint: GeoJSON) {
     updateTpopById(input: { id: $id, tpopPatch: { geomPoint: $geomPoint } }) {
       tpop {
         ...TpopFields
