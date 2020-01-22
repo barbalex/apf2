@@ -105,6 +105,12 @@ const Pop = ({ treeName, showFilter = false }) => {
       const value = values[changedField]
       let geomPoint = get(values, 'geomPoint.geojson') || null
       if (geomPoint) geomPoint = JSON.parse(geomPoint)
+      geomPoint.crs = {
+        type: 'name',
+        properties: {
+          name: 'urn:ogc:def:crs:EPSG::4326',
+        },
+      }
       const variables = {
         ...objectsEmptyValuesToNull(values),
         // need to pass geomPoint as GeoJSON
