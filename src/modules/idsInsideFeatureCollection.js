@@ -29,6 +29,12 @@ export default ({
         type: 'Point',
         // convert koordinates to wgs84
         coordinates: [p[xKey], p[yKey]],
+        crs: {
+          type: 'name',
+          properties: {
+            name: 'urn:ogc:def:crs:EPSG::4326',
+          },
+        },
       },
     })),
   }

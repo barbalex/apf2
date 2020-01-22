@@ -26,6 +26,12 @@ export default ({ mapFilter, data, idKey = 'id', xKey = 'x', yKey = 'y' }) => {
         type: 'Point',
         // convert koordinates to wgs84
         coordinates: epsg2056to4326(p[xKey], p[yKey]),
+        crs: {
+          type: 'name',
+          properties: {
+            name: 'urn:ogc:def:crs:EPSG::4326',
+          },
+        },
       },
     })),
   }

@@ -7,6 +7,12 @@ export default (polygon, lat, long) => {
     geometry: {
       type: 'Point',
       coordinates: [long, lat],
+      crs: {
+        type: 'name',
+        properties: {
+          name: 'urn:ogc:def:crs:EPSG::4326',
+        },
+      },
     },
   }
   // let turf check if the point is in zh

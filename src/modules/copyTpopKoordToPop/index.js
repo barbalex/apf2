@@ -30,6 +30,12 @@ export default async ({ id, store, client }) => {
       geomPoint = {
         type: 'Point',
         coordinates: [geomPoint0.x, geomPoint0.y],
+        crs: {
+          type: 'name',
+          properties: {
+            name: 'urn:ogc:def:crs:EPSG::4326',
+          },
+        },
       }
     }
     await client.mutate({

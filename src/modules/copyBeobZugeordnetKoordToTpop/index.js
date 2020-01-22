@@ -24,6 +24,12 @@ export default async ({ id, store, client }) => {
   const geomPoint = {
     type: 'Point',
     coordinates: [wgs84Long, wgs84Lat],
+    crs: {
+      type: 'name',
+      properties: {
+        name: 'urn:ogc:def:crs:EPSG::4326',
+      },
+    },
   }
 
   // set tpop coordinates

@@ -520,6 +520,12 @@ const Karte = ({ treeName }) => {
               const geomPoint = {
                 type: 'Point',
                 coordinates: [lng, lat],
+                crs: {
+                  type: 'name',
+                  properties: {
+                    name: 'urn:ogc:def:crs:EPSG::4326',
+                  },
+                },
               }
               // DANGER:
               // need to stop propagation of the event
