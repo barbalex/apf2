@@ -24,6 +24,7 @@ export default async ({ id, store, client }) => {
   const geomPoint = {
     type: 'Point',
     coordinates: [wgs84Long, wgs84Lat],
+    // need to add crs otherwise PostGIS v2.5 (on server) errors
     crs: {
       type: 'name',
       properties: {

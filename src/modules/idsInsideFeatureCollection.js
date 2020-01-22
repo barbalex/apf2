@@ -29,6 +29,7 @@ export default ({
         type: 'Point',
         // convert koordinates to wgs84
         coordinates: [p[xKey], p[yKey]],
+        // need to add crs otherwise PostGIS v2.5 (on server) errors
         crs: {
           type: 'name',
           properties: {

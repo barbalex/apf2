@@ -7,6 +7,7 @@ export default (polygon, lat, long) => {
     geometry: {
       type: 'Point',
       coordinates: [long, lat],
+      // need to add crs otherwise PostGIS v2.5 (on server) errors
       crs: {
         type: 'name',
         properties: {

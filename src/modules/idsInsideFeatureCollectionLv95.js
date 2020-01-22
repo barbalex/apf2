@@ -26,6 +26,7 @@ export default ({ mapFilter, data, idKey = 'id', xKey = 'x', yKey = 'y' }) => {
         type: 'Point',
         // convert koordinates to wgs84
         coordinates: epsg2056to4326(p[xKey], p[yKey]),
+        // need to add crs otherwise PostGIS v2.5 (on server) errors
         crs: {
           type: 'name',
           properties: {

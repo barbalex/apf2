@@ -520,6 +520,7 @@ const Karte = ({ treeName }) => {
               const geomPoint = {
                 type: 'Point',
                 coordinates: [lng, lat],
+                // need to add crs otherwise PostGIS v2.5 (on server) errors
                 crs: {
                   type: 'name',
                   properties: {
