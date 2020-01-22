@@ -149,18 +149,31 @@ const TpopForm = ({ treeName, showFilter = false }) => {
           await client.mutate({
             mutation: updateTpopByIdGql,
             variables,
-            optimisticResponse: {
+            // no optimistic responce as geomPoint
+            /*optimisticResponse: {
               __typename: 'Mutation',
               updateTpopById: {
                 tpop: {
                   ...variables,
                   // need to pass geomPoint with its typename
-                  geomPoint: values.geomPoint,
+                  //geomPoint: values.geomPoint,
+                  geomPoint: JSON.stringify({
+                    ...values.geomPoint,
+                    geojson: {
+                      ...geomPoint,
+                      crs: {
+                        type: 'name',
+                        properties: {
+                          name: 'urn:ogc:def:crs:EPSG::4326',
+                        },
+                      },
+                    },
+                  }),
                   __typename: 'Tpop',
                 },
                 __typename: 'Tpop',
               },
-            },
+            },*/
           })
         } catch (error) {
           return setErrors({ [changedField]: error.message })

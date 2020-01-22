@@ -123,7 +123,8 @@ const Pop = ({ treeName, showFilter = false }) => {
           await client.mutate({
             mutation: updatePopByIdGql,
             variables,
-            optimisticResponse: {
+            // no optimistic responce as geomPoint
+            /*optimisticResponse: {
               __typename: 'Mutation',
               updatePopById: {
                 pop: {
@@ -134,7 +135,7 @@ const Pop = ({ treeName, showFilter = false }) => {
                 },
                 __typename: 'Pop',
               },
-            },
+            },*/
           })
         } catch (error) {
           return setErrors({ [changedField]: error.message })

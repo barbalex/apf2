@@ -121,6 +121,7 @@ const Coordinates = ({ row, refetchForm, table }) => {
               }
             }
           `,
+          // no optimistic responce as geomPoint
           variables: {
             id: row.id,
             geomPoint,

@@ -546,7 +546,8 @@ const Karte = ({ treeName }) => {
                     id: idOfTpopBeingLocalized,
                     geomPoint,
                   },
-                  optimisticResponse: {
+                  // no optimistic responce as geomPoint
+                  /*optimisticResponse: {
                     __typename: 'Mutation',
                     updateTpopById: {
                       tpop: {
@@ -555,7 +556,7 @@ const Karte = ({ treeName }) => {
                       },
                       __typename: 'Tpop',
                     },
-                  },
+                  },*/
                 })
                 // refetch so it appears on map
                 if (refetch.tpopForMap) {

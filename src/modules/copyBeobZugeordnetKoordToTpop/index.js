@@ -40,7 +40,8 @@ export default async ({ id, store, client }) => {
         id: tpopId,
         geomPoint,
       },
-      optimisticResponse: {
+      // no optimistic responce as geomPoint
+      /*optimisticResponse: {
         __typename: 'Mutation',
         updateTpopById: {
           tpop: {
@@ -49,7 +50,7 @@ export default async ({ id, store, client }) => {
           },
           __typename: 'Tpop',
         },
-      },
+      },*/
     })
   } catch (error) {
     return store.enqueNotification({
