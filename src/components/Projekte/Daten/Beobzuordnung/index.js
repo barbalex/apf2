@@ -13,7 +13,7 @@ import FormTitle from '../../../shared/FormTitle'
 import TextField from '../../../shared/TextField2'
 import CheckboxWithInfo from '../../../shared/CheckboxWithInfo'
 import Select from '../../../shared/Select'
-import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
+import DateField from '../../../shared/Date'
 import SelectLoadingOptions from '../../../shared/SelectLoadingOptions'
 import Beob from '../Beob'
 import query from './query'
@@ -277,14 +277,12 @@ const Beobzuordnung = ({ type, treeName }) => {
               saveToDb={onUpdateField}
             />
             <InfofloraRow>
-              <DateFieldWithPicker
+              <DateField
                 key={`${row.id}infofloraInformiertDatum`}
                 name="infofloraInformiertDatum"
                 label="Info Flora informiert am:"
                 value={row.infofloraInformiertDatum}
                 saveToDb={onUpdateField}
-                shrinkLabel={true}
-                //error={errors.datum}
               />
               <EmailButton
                 variant="outlined"

@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
-import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
+import DateField from '../../../shared/Date'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -37,23 +37,19 @@ const DateVal = styled.div`
   }
 `
 
-const Date = ({ saveToDb, row, errors }) => {
-  //console.log('Date rendering')
-
-  return (
-    <Container>
-      <DateLabel>Aufnahme-datum</DateLabel>
-      <DateVal>
-        <DateFieldWithPicker
-          key={`${row.id}datum`}
-          name="datum"
-          value={row.datum}
-          saveToDb={saveToDb}
-          error={errors.datum}
-        />
-      </DateVal>
-    </Container>
-  )
-}
+const Date = ({ saveToDb, row, errors }) => (
+  <Container>
+    <DateLabel>Aufnahme-datum</DateLabel>
+    <DateVal>
+      <DateField
+        key={`${row.id}datum`}
+        name="datum"
+        value={row.datum}
+        saveToDb={saveToDb}
+        error={errors.datum}
+      />
+    </DateVal>
+  </Container>
+)
 
 export default observer(Date)

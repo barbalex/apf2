@@ -12,6 +12,8 @@ import moment from 'moment'
 import 'moment/locale/de-ch' // this is the important bit, you have to import the locale your'e trying to use.
 import MomentUtils from '@date-io/moment'
 import { MuiPickersUtilsProvider } from 'material-ui-pickers'
+import { registerLocale, setDefaultLocale } from 'react-datepicker'
+import { de } from 'date-fns/locale'
 import { ApolloProvider } from '@apollo/react-hooks'
 import localForage from 'localforage'
 import MobxStore from './store'
@@ -35,8 +37,12 @@ import initiateDataFromUrl from './modules/initiateDataFromUrl'
 import getActiveNodeArrayFromPathname from './modules/getActiveNodeArrayFromPathname'
 
 import 'react-leaflet-markercluster/dist/styles.min.css'
+import 'react-datepicker/dist/react-datepicker.css'
 
 const GlobalStyle = createGlobalStyle()
+
+registerLocale('de', de)
+setDefaultLocale('de')
 
 const App = ({ element }) => {
   const idb = initializeIdb()
