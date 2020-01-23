@@ -14,7 +14,7 @@ import Checkbox3States from '../../../shared/Checkbox3StatesFormik'
 import TextField from '../../../shared/TextFieldFormik'
 import Select from '../../../shared/SelectFormik'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfoFormik'
-import DateFieldWithPicker from '../../../shared/DateFieldWithPickerFormik'
+import DateField from '../../../shared/DateFormik'
 import StringToCopy from '../../../shared/StringToCopy'
 import FilterTitle from '../../../shared/FilterTitle'
 import FormTitle from '../../../shared/FormTitle'
@@ -315,11 +315,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                       type="number"
                       component={TextField}
                     />
-                    <Field
-                      name="datum"
-                      label="Datum"
-                      component={DateFieldWithPicker}
-                    />
+                    <Field name="datum" label="Datum" component={DateField} />
                     <Field
                       name="typ"
                       label="Kontrolltyp"

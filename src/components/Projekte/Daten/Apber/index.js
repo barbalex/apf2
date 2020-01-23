@@ -9,7 +9,7 @@ import ErrorBoundary from 'react-error-boundary'
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import TextField from '../../../shared/TextFieldFormik'
 import Select from '../../../shared/SelectFormik'
-import DateFieldWithPicker from '../../../shared/DateFieldWithPickerFormik'
+import DateField from '../../../shared/DateFormik'
 import FormTitle from '../../../shared/FormTitle'
 import constants from '../../../../modules/constants'
 import updateApberByIdGql from './updateApberById'
@@ -216,11 +216,7 @@ const Apber = ({ treeName }) => {
                   multiLine
                   component={TextField}
                 />
-                <Field
-                  name="datum"
-                  label="Datum"
-                  component={DateFieldWithPicker}
-                />
+                <Field name="datum" label="Datum" component={DateField} />
                 <Field
                   name="bearbeiter"
                   label="BearbeiterIn"

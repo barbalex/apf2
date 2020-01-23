@@ -8,10 +8,7 @@ import queryString from 'query-string'
 
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import theme from './utils/materialTheme'
-import moment from 'moment'
-import 'moment/locale/de-ch' // this is the important bit, you have to import the locale your'e trying to use.
-import MomentUtils from '@date-io/moment'
-import { MuiPickersUtilsProvider } from 'material-ui-pickers'
+import 'moment/locale/de-ch' // this is the important bit,
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
 import { de } from 'date-fns/locale'
 import { ApolloProvider } from '@apollo/react-hooks'
@@ -127,24 +124,18 @@ const App = ({ element }) => {
       <MobxProvider value={store}>
         <ApolloProvider client={client}>
           <MuiThemeProvider theme={theme}>
-            <MuiPickersUtilsProvider
-              utils={MomentUtils}
-              moment={moment}
-              locale="de-ch"
+            <SnackbarProvider
+              maxSnack={3}
+              preventDuplicate
+              autoHideDuration={10000}
+              action={key => <NotificationDismisser nKey={key} />}
             >
-              <SnackbarProvider
-                maxSnack={3}
-                preventDuplicate
-                autoHideDuration={10000}
-                action={key => <NotificationDismisser nKey={key} />}
-              >
-                <>
-                  <GlobalStyle />
-                  {element}
-                  <Notifier />
-                </>
-              </SnackbarProvider>
-            </MuiPickersUtilsProvider>
+              <>
+                <GlobalStyle />
+                {element}
+                <Notifier />
+              </>
+            </SnackbarProvider>
           </MuiThemeProvider>
         </ApolloProvider>
       </MobxProvider>

@@ -12,7 +12,7 @@ import TextField from '../../../shared/TextFieldFormik'
 import Select from '../../../shared/SelectFormik'
 import SelectLoadingOptionsTypable from '../../../shared/SelectLoadingOptionsTypableFormik'
 import Checkbox2States from '../../../shared/Checkbox2StatesFormik'
-import DateFieldWithPicker from '../../../shared/DateFieldWithPickerFormik'
+import DateField from '../../../shared/DateFormik'
 import StringToCopy from '../../../shared/StringToCopy'
 import FormTitle from '../../../shared/FormTitle'
 import FilterTitle from '../../../shared/FilterTitle'
@@ -229,11 +229,7 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
                   type="number"
                   component={TextField}
                 />
-                <Field
-                  name="datum"
-                  label="Datum"
-                  component={DateFieldWithPicker}
-                />
+                <Field name="datum" label="Datum" component={DateField} />
                 <Field
                   name="typ"
                   label="Typ"

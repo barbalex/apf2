@@ -9,7 +9,7 @@ import { Formik, Form, Field } from 'formik'
 import ErrorBoundary from 'react-error-boundary'
 
 import TextField from '../../../shared/TextFieldFormik'
-import DateFieldWithPicker from '../../../shared/DateFieldWithPickerFormik'
+import DateField from '../../../shared/DateFormik'
 import FormTitle from '../../../shared/FormTitle'
 import constants from '../../../../modules/constants'
 import query from './query'
@@ -161,7 +161,7 @@ const Idealbiotop = ({ treeName }) => {
                     <Field
                       name="erstelldatum"
                       label="Erstelldatum"
-                      component={DateFieldWithPicker}
+                      component={DateField}
                     />
                     <Section>Lage</Section>
                     <Field
