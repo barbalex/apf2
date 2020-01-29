@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import uniqBy from 'lodash/uniqBy'
 import min from 'lodash/min'
-import flatten from 'lodash/flatten'
 import groupBy from 'lodash/groupBy'
 import maxBy from 'lodash/maxBy'
 import { observer } from 'mobx-react-lite'
@@ -84,22 +83,25 @@ const TpopSeit = styled(Number)``
 const CMengen = ({ apId, jahr, startJahr, mengenResult }) => {
   const { data, error, loading } = mengenResult
   const oneLTpop_pop = get(data, 'apById.c1LTpop.nodes', [])
-  const oneLTpop_tpop = flatten(
-    oneLTpop_pop.map(p => get(p, 'tpopsByPopId.nodes', [])),
-  ).filter(p => get(p, 'tpopmassnsByTpopId.totalCount', 0) > 0)
+  const oneLTpop_tpop = oneLTpop_pop
+    .flatMap(p => get(p, 'tpopsByPopId.nodes', []))
+    .filter(p => get(p, 'tpopmassnsByTpopId.totalCount', 0) > 0)
   const oneLTpop = oneLTpop_tpop.length
   const oneLPop = uniqBy(oneLTpop_tpop, 'popId').length
 
   const oneRTpop_pop = get(data, 'apById.c1RTpop.nodes', [])
-  const oneRTpop_tpop = flatten(
-    oneRTpop_pop.map(p => get(p, 'tpopsByPopId.nodes', [])),
+  const oneRTpop_tpop = oneRTpop_pop.flatMap(p =>
+    get(p, 'tpopsByPopId.nodes', []),
   )
-  const massns = flatten(
-    oneRTpop_tpop.map(p => get(p, 'tpopmassnsByTpopId.nodes', [])),
+
+  const massns = oneRTpop_tpop.flatMap(p =>
+    get(p, 'tpopmassnsByTpopId.nodes', []),
   )
-  const massnbers = flatten(
-    oneRTpop_tpop.map(p => get(p, 'tpopmassnbersByTpopId.nodes', [])),
+
+  const massnbers = oneRTpop_tpop.flatMap(p =>
+    get(p, 'tpopmassnbersByTpopId.nodes', []),
   )
+
   const oneRTpop_firstYear = min(massns.map(b => b.jahr))
   const oneRPop_massnbersByPopId = groupBy(massnbers, b =>
     get(b, 'tpopByTpopId.popId'),

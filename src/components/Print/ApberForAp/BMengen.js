@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import flatten from 'lodash/flatten'
 import min from 'lodash/min'
 import sum from 'lodash/sum'
 import maxBy from 'lodash/maxBy'
@@ -81,49 +80,51 @@ const TpopSeit = styled(Number)``
 const BMengen = ({ apId, jahr, startJahr, mengenResult }) => {
   const { data, error, loading } = mengenResult
   // 1.
-  const oneLPop_pop = get(data, 'apById.b1LPop.nodes', [])
-    .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
-    .filter(p => get(p, 'popbersByPopId.totalCount') > 0)
+  const oneLPop_pop = get(data, 'apById.b1LPop.nodes', []).filter(
+    p => get(p, 'popbersByPopId.totalCount') > 0,
+  )
   const oneLPop = oneLPop_pop.length
-  const oneLPop_popbers = flatten(
-    oneLPop_pop.map(p => get(p, 'popbersByPopId.nodes', [])),
+  const oneLPop_popbers = oneLPop_pop.flatMap(p =>
+    get(p, 'popbersByPopId.nodes', []),
   )
 
   const oneLTpop_pop = get(data, 'apById.b1LTpop.nodes', [])
-  const oneLTpop_tpop = flatten(
-    oneLTpop_pop.map(p => get(p, 'tpopsByPopId.nodes', [])),
-  )
-  const oneLTpop = flatten(
-    oneLTpop_tpop.map(p => get(p, 'tpopbersByTpopId.totalCount', 0)),
-  ).filter(tpopbersCount => tpopbersCount > 0).length
-  const oneLTpop_tpopbers = flatten(
-    oneLTpop_tpop.map(t => get(t, 'tpopbersByTpopId.nodes', [])),
+  const oneLTpop_tpop = oneLTpop_pop.flatMap(p =>
+    get(p, 'tpopsByPopId.nodes', []),
   )
 
-  const oneRPop = get(data, 'apById.b1RPop.nodes', [])
-    .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
-    .filter(p => get(p, 'popbersByPopId.totalCount') > 0).length
-  const oneRPop_pop = get(data, 'apById.b1RPop.nodes', []).filter(
-    p => get(p, 'tpopsByPopId.totalCount') > 0,
+  const oneLTpop = oneLTpop_tpop
+    .flatMap(p => get(p, 'tpopbersByTpopId.totalCount', 0))
+    .filter(tpopbersCount => tpopbersCount > 0).length
+  const oneLTpop_tpopbers = oneLTpop_tpop.flatMap(t =>
+    get(t, 'tpopbersByTpopId.nodes', []),
   )
-  const oneRPop_popbers = flatten(
-    oneRPop_pop.map(p => get(p, 'popbersByPopId.nodes', [])),
+
+  const oneRPop = get(data, 'apById.b1RPop.nodes', []).filter(
+    p => get(p, 'popbersByPopId.totalCount') > 0,
+  ).length
+  const oneRPop_pop = get(data, 'apById.b1RPop.nodes', [])
+  const oneRPop_popbers = oneRPop_pop.flatMap(p =>
+    get(p, 'popbersByPopId.nodes', []),
   )
+
   const oneRPop_popbersByPopId = groupBy(oneRPop_popbers, b => b.popId)
   const oneRPop_lastPopbers = Object.keys(oneRPop_popbersByPopId).map(b =>
     maxBy(oneRPop_popbersByPopId[b], 'jahr'),
   )
 
   const oneRTpop_pop = get(data, 'apById.b1RTpop.nodes', [])
-  const oneRTpop_tpop = flatten(
-    oneRTpop_pop.map(p => get(p, 'tpopsByPopId.nodes', [])),
+  const oneRTpop_tpop = oneRTpop_pop.flatMap(p =>
+    get(p, 'tpopsByPopId.nodes', []),
   )
-  const oneRTpop = flatten(
-    oneRTpop_tpop.map(p => get(p, 'tpopbersByTpopId.totalCount', 0)),
-  ).filter(tpopbersCount => tpopbersCount > 0).length
-  const oneRTpop_tpopbers = flatten(
-    oneRTpop_tpop.map(p => get(p, 'tpopbersByTpopId.nodes', [])),
+
+  const oneRTpop = oneRTpop_tpop
+    .flatMap(p => get(p, 'tpopbersByTpopId.totalCount', 0))
+    .filter(tpopbersCount => tpopbersCount > 0).length
+  const oneRTpop_tpopbers = oneRTpop_tpop.flatMap(p =>
+    get(p, 'tpopbersByTpopId.nodes', []),
   )
+
   const oneRTpop_tpopbersByTpopId = groupBy(oneRTpop_tpopbers, b => b.tpopId)
   const oneRTpop_lastTpopbers = Object.keys(oneRTpop_tpopbersByTpopId).map(b =>
     maxBy(oneRTpop_tpopbersByTpopId[b], 'jahr'),
