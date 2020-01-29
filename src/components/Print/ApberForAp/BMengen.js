@@ -77,7 +77,7 @@ const PopSeit = styled(Number)`
 `
 const TpopSeit = styled(Number)``
 
-const BMengen = ({ apId, jahr, startJahr, mengenResult, a1LPop }) => {
+const BMengen = ({ apId, jahr, startJahr, mengenResult, a1LPop, a1LTpop }) => {
   const { data, error, loading } = mengenResult
   // 1.
   const b1LPop_pop = get(data, 'apById.b1LPop.nodes', []).filter(
@@ -162,18 +162,10 @@ const BMengen = ({ apId, jahr, startJahr, mengenResult, a1LPop }) => {
   const b6RTpop = b1RTpop_lastTpopbers.filter(b => b.entwicklung === 8).length
 
   // 7.
-  const b7LPop_allPops = get(data, 'apById.b7LPop.totalCount', 0)
   const b7LPop = a1LPop - b1LPop
-  const b7LTpop_allTpops = sum(
-    get(data, 'apById.b7LTpop.nodes', []).map(p =>
-      get(p, 'tpopsByPopId.totalCount'),
-    ),
-  )
-  const b7LTpop = b7LTpop_allTpops - b1LTpop
+  const b7LTpop = a1LTpop - b1LTpop
   const b7RPop = a1LPop - b1RPop
-  const b7RTpop = b7LTpop_allTpops - b1RTpop
-
-  console.log('BMengen', { b7RPop, b1RPop })
+  const b7RTpop = a1LTpop - b1RTpop
 
   if (error) return `Fehler: ${error.message}`
 

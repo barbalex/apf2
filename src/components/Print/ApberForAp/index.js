@@ -333,6 +333,7 @@ const ApberForAp = ({
             startJahr={startJahr}
             mengenResult={mengenResult}
             a1LPop={a1LPop}
+            a1LTpop={a1LTpop}
           />
           {!!apber.biotopeOptimieren && (
             <FieldRowFullWidth>
