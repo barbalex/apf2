@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import min from 'lodash/min'
-import sum from 'lodash/sum'
 import maxBy from 'lodash/maxBy'
 import groupBy from 'lodash/groupBy'
 
