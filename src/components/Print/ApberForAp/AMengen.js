@@ -2,9 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sum from 'lodash/sum'
-import { useQuery } from '@apollo/react-hooks'
-
-import query from './query'
 
 const Container = styled.div`
   padding: 0.2cm 0;
@@ -81,61 +78,59 @@ const PopSeit = styled(Number)`
 `
 const TpopSeit = styled(Number)``
 
-const AMengen = ({ apId, jahr, startJahr }) => {
-  const { data, error, loading } = useQuery(query, {
-    variables: { apId, startJahr },
-  })
-  const threeLPop = get(data, 'apById.threeLPop.nodes', []).filter(
+const AMengen = ({ apId, jahr, startJahr, mengenResult }) => {
+  const { data, error, loading } = mengenResult
+  const threeLPop = get(data, 'apById.aThreeLPop.nodes', []).filter(
     p => get(p, 'tpopsByPopId.totalCount') > 0,
   ).length
   const threeLTpop = sum(
-    get(data, 'apById.threeLTpop.nodes', []).map(p =>
+    get(data, 'apById.aThreeLTpop.nodes', []).map(p =>
       get(p, 'tpopsByPopId.totalCount'),
     ),
   )
-  const fourLPop = get(data, 'apById.fourLPop.nodes', []).filter(
+  const fourLPop = get(data, 'apById.aFourLPop.nodes', []).filter(
     p => get(p, 'tpopsByPopId.totalCount') > 0,
   ).length
   const fourLTpop = sum(
-    get(data, 'apById.fourLTpop.nodes', []).map(p =>
+    get(data, 'apById.aFourLTpop.nodes', []).map(p =>
       get(p, 'tpopsByPopId.totalCount'),
     ),
   )
-  const fiveLPop = get(data, 'apById.fiveLPop.nodes', []).filter(
+  const fiveLPop = get(data, 'apById.aFiveLPop.nodes', []).filter(
     p => get(p, 'tpopsByPopId.totalCount') > 0,
   ).length
   const fiveLTpop = sum(
-    get(data, 'apById.fiveLTpop.nodes', []).map(p =>
+    get(data, 'apById.aFiveLTpop.nodes', []).map(p =>
       get(p, 'tpopsByPopId.totalCount'),
     ),
   )
-  const sevenLPop = get(data, 'apById.sevenLPop.nodes', []).filter(
+  const sevenLPop = get(data, 'apById.aSevenLPop.nodes', []).filter(
     p => get(p, 'tpopsByPopId.totalCount') > 0,
   ).length
   const sevenLTpop = sum(
-    get(data, 'apById.sevenLTpop.nodes', []).map(p =>
+    get(data, 'apById.aSevenLTpop.nodes', []).map(p =>
       get(p, 'tpopsByPopId.totalCount'),
     ),
   )
-  const eightLPop = get(data, 'apById.eightLPop.nodes', []).filter(
+  const eightLPop = get(data, 'apById.aEightLPop.nodes', []).filter(
     p => get(p, 'tpopsByPopId.totalCount') > 0,
   ).length
   const eightLTpop = sum(
-    get(data, 'apById.eightLTpop.nodes', []).map(p =>
+    get(data, 'apById.aEightLTpop.nodes', []).map(p =>
       get(p, 'tpopsByPopId.totalCount'),
     ),
   )
-  const nineLPop = get(data, 'apById.nineLPop.nodes', []).filter(
+  const nineLPop = get(data, 'apById.aNineLPop.nodes', []).filter(
     p => get(p, 'tpopsByPopId.totalCount') > 0,
   ).length
   const nineLTpop = sum(
-    get(data, 'apById.nineLTpop.nodes', []).map(p =>
+    get(data, 'apById.aNineLTpop.nodes', []).map(p =>
       get(p, 'tpopsByPopId.totalCount'),
     ),
   )
-  const tenLPop = get(data, 'apById.tenLPop.totalCount', 0)
+  const tenLPop = get(data, 'apById.aTenLPop.totalCount', 0)
   const tenLTpop = sum(
-    get(data, 'apById.tenLTpop.nodes', []).map(p =>
+    get(data, 'apById.aTenLTpop.nodes', []).map(p =>
       get(p, 'tpopsByPopId.totalCount'),
     ),
   )

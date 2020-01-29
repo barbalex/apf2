@@ -8,7 +8,9 @@ import format from 'date-fns/format'
 import ErrorBoundary from 'react-error-boundary'
 import { MdPrint } from 'react-icons/md'
 import Fab from '@material-ui/core/Fab'
+import { useQuery } from '@apollo/react-hooks'
 
+import queryMengen from './queryMengen'
 import Ziele from './Ziele'
 import Massnahmen from './Massnahmen'
 import AMengen from './AMengen'
@@ -182,6 +184,10 @@ const ApberForAp = ({
   const yearOfFirstTpopber = !!firstTpopber ? firstTpopber.jahr : 0
   const startJahr = get(apData, 'startJahr', 0)
 
+  const mengenResult = useQuery(queryMengen, {
+    variables: { apId, startJahr, jahr },
+  })
+
   const onClickPrint = useCallback(() => {
     if (typeof window !== 'undefined') {
       setIsPrint(true)
@@ -235,7 +241,12 @@ const ApberForAp = ({
             <p>{`Erste Kontrolle: ${yearOfFirstTpopber}`}</p>
           </Row>
 
-          <AMengen apId={apId} jahr={jahr} startJahr={startJahr} />
+          <AMengen
+            apId={apId}
+            jahr={jahr}
+            startJahr={startJahr}
+            mengenResult={mengenResult}
+          />
           {!!apber.biotopeNeue && (
             <FieldRowFullWidth>
               <TitledLabel>
@@ -245,7 +256,12 @@ const ApberForAp = ({
             </FieldRowFullWidth>
           )}
 
-          <BMengen apId={apId} jahr={jahr} startJahr={startJahr} />
+          <BMengen
+            apId={apId}
+            jahr={jahr}
+            startJahr={startJahr}
+            mengenResult={mengenResult}
+          />
           {!!apber.biotopeOptimieren && (
             <FieldRowFullWidth>
               <TitledLabel>
@@ -257,7 +273,12 @@ const ApberForAp = ({
             </FieldRowFullWidth>
           )}
 
-          <CMengen apId={apId} jahr={jahr} startJahr={startJahr} />
+          <CMengen
+            apId={apId}
+            jahr={jahr}
+            startJahr={startJahr}
+            mengenResult={mengenResult}
+          />
           {!!apber.massnahmenPlanungVsAusfuehrung && (
             <FieldRowFullWidth>
               <TitledLabel>Vergleich Ausführung/Planung</TitledLabel>

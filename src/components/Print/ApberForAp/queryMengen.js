@@ -1,10 +1,12 @@
 import gql from 'graphql-tag'
 
+import { popber, tpopber } from '../../shared/fragments'
+
 export default gql`
-  query apByIdForAMengen($apId: UUID!, $startJahr: Int!) {
+  query apByIdForMengen($apId: UUID!, $startJahr: Int!, $jahr: Int!) {
     apById(id: $apId) {
       id
-      threeLPop: popsByApId(filter: { status: { equalTo: 100 } }) {
+      aThreeLPop: popsByApId(filter: { status: { equalTo: 100 } }) {
         nodes {
           id
           tpopsByPopId(filter: { apberRelevant: { equalTo: true } }) {
@@ -12,7 +14,7 @@ export default gql`
           }
         }
       }
-      threeLTpop: popsByApId(
+      aThreeLTpop: popsByApId(
         filter: {
           and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
         }
@@ -29,7 +31,7 @@ export default gql`
           }
         }
       }
-      fourLPop: popsByApId(
+      aFourLPop: popsByApId(
         filter: {
           status: { equalTo: 200 }
           bekanntSeit: { lessThan: $startJahr }
@@ -42,7 +44,7 @@ export default gql`
           }
         }
       }
-      fourLTpop: popsByApId(
+      aFourLTpop: popsByApId(
         filter: {
           and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
         }
@@ -60,7 +62,7 @@ export default gql`
           }
         }
       }
-      fiveLPop: popsByApId(
+      aFiveLPop: popsByApId(
         filter: {
           status: { equalTo: 200 }
           bekanntSeit: { greaterThanOrEqualTo: $startJahr }
@@ -73,7 +75,7 @@ export default gql`
           }
         }
       }
-      fiveLTpop: popsByApId(
+      aFiveLTpop: popsByApId(
         filter: {
           and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
         }
@@ -91,7 +93,7 @@ export default gql`
           }
         }
       }
-      sevenLPop: popsByApId(
+      aSevenLPop: popsByApId(
         filter: {
           status: { equalTo: 101 }
           or: [
@@ -112,7 +114,7 @@ export default gql`
           }
         }
       }
-      sevenLTpop: popsByApId(
+      aSevenLTpop: popsByApId(
         filter: {
           and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
         }
@@ -138,7 +140,7 @@ export default gql`
           }
         }
       }
-      eightLPop: popsByApId(
+      aEightLPop: popsByApId(
         filter: {
           status: { equalTo: 202 }
           bekanntSeit: { greaterThanOrEqualTo: $startJahr }
@@ -151,7 +153,7 @@ export default gql`
           }
         }
       }
-      eightLTpop: popsByApId(
+      aEightLTpop: popsByApId(
         filter: {
           or: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
         }
@@ -169,7 +171,7 @@ export default gql`
           }
         }
       }
-      nineLPop: popsByApId(filter: { status: { equalTo: 201 } }) {
+      aNineLPop: popsByApId(filter: { status: { equalTo: 201 } }) {
         nodes {
           id
           tpopsByPopId(filter: { apberRelevant: { equalTo: true } }) {
@@ -177,7 +179,7 @@ export default gql`
           }
         }
       }
-      nineLTpop: popsByApId {
+      aNineLTpop: popsByApId {
         nodes {
           id
           tpopsByPopId(
@@ -190,10 +192,10 @@ export default gql`
           }
         }
       }
-      tenLPop: popsByApId(filter: { status: { equalTo: 300 } }) {
+      aTenLPop: popsByApId(filter: { status: { equalTo: 300 } }) {
         totalCount
       }
-      tenLTpop: popsByApId {
+      aTenLTpop: popsByApId {
         nodes {
           id
           tpopsByPopId(filter: { status: { equalTo: 300 } }) {
@@ -201,6 +203,146 @@ export default gql`
           }
         }
       }
+      bOneLPop: popsByApId(
+        filter: {
+          and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
+        }
+      ) {
+        nodes {
+          id
+          tpopsByPopId(filter: { apberRelevant: { equalTo: true } }) {
+            totalCount
+          }
+          popbersByPopId(filter: { jahr: { equalTo: $jahr } }) {
+            totalCount
+            nodes {
+              ...PopberFields
+            }
+          }
+        }
+      }
+      bOneLTpop: popsByApId(
+        filter: {
+          and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
+        }
+      ) {
+        nodes {
+          id
+          tpopsByPopId(
+            filter: {
+              and: [
+                { status: { notEqualTo: 300 } }
+                { status: { isNull: false } }
+                { apberRelevant: { equalTo: true } }
+              ]
+            }
+          ) {
+            totalCount
+            nodes {
+              id
+              tpopbersByTpopId(filter: { jahr: { equalTo: $jahr } }) {
+                totalCount
+                nodes {
+                  ...TpopberFields
+                }
+              }
+            }
+          }
+        }
+      }
+      bOneRPop: popsByApId(
+        filter: {
+          and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
+        }
+      ) {
+        nodes {
+          id
+          tpopsByPopId(filter: { apberRelevant: { equalTo: true } }) {
+            totalCount
+          }
+          popbersByPopId(
+            filter: {
+              and: [
+                { jahr: { isNull: false } }
+                { jahr: { lessThanOrEqualTo: $jahr } }
+                { entwicklung: { isNull: false } }
+              ]
+            }
+          ) {
+            totalCount
+            nodes {
+              ...PopberFields
+            }
+          }
+        }
+      }
+      bOneRTpop: popsByApId(
+        filter: {
+          and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
+        }
+      ) {
+        nodes {
+          id
+          tpopsByPopId(
+            filter: {
+              and: [
+                { status: { notEqualTo: 300 } }
+                { status: { isNull: false } }
+                { apberRelevant: { equalTo: true } }
+              ]
+            }
+          ) {
+            totalCount
+            nodes {
+              id
+              tpopbersByTpopId(
+                filter: {
+                  and: [
+                    { jahr: { isNull: false } }
+                    { jahr: { lessThanOrEqualTo: $jahr } }
+                    { entwicklung: { isNull: false } }
+                  ]
+                }
+              ) {
+                totalCount
+                nodes {
+                  ...TpopberFields
+                }
+              }
+            }
+          }
+        }
+      }
+      bSevenLPop: popsByApId(filter: { status: { lessThan: 300 } }) {
+        nodes {
+          id
+          tpopsByPopId(filter: { apberRelevant: { equalTo: true } }) {
+            totalCount
+          }
+        }
+      }
+      bSevenLTpop: popsByApId(
+        filter: {
+          and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
+        }
+      ) {
+        nodes {
+          id
+          tpopsByPopId(
+            filter: {
+              and: [
+                { status: { notEqualTo: 300 } }
+                { status: { isNull: false } }
+                { apberRelevant: { equalTo: true } }
+              ]
+            }
+          ) {
+            totalCount
+          }
+        }
+      }
     }
   }
+  ${popber}
+  ${tpopber}
 `
