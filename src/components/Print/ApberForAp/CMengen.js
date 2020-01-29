@@ -83,14 +83,14 @@ const TpopSeit = styled(Number)``
 
 const CMengen = ({ apId, jahr, startJahr, mengenResult }) => {
   const { data, error, loading } = mengenResult
-  const oneLTpop_pop = get(data, 'apById.cOneLTpop.nodes', [])
+  const oneLTpop_pop = get(data, 'apById.c1LTpop.nodes', [])
   const oneLTpop_tpop = flatten(
     oneLTpop_pop.map(p => get(p, 'tpopsByPopId.nodes', [])),
   ).filter(p => get(p, 'tpopmassnsByTpopId.totalCount', 0) > 0)
   const oneLTpop = oneLTpop_tpop.length
   const oneLPop = uniqBy(oneLTpop_tpop, 'popId').length
 
-  const oneRTpop_pop = get(data, 'apById.cOneRTpop.nodes', [])
+  const oneRTpop_pop = get(data, 'apById.c1RTpop.nodes', [])
   const oneRTpop_tpop = flatten(
     oneRTpop_pop.map(p => get(p, 'tpopsByPopId.nodes', [])),
   )

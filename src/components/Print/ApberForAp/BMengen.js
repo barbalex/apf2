@@ -81,7 +81,7 @@ const TpopSeit = styled(Number)``
 const BMengen = ({ apId, jahr, startJahr, mengenResult }) => {
   const { data, error, loading } = mengenResult
   // 1.
-  const oneLPop_pop = get(data, 'apById.bOneLPop.nodes', [])
+  const oneLPop_pop = get(data, 'apById.b1LPop.nodes', [])
     .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
     .filter(p => get(p, 'popbersByPopId.totalCount') > 0)
   const oneLPop = oneLPop_pop.length
@@ -89,7 +89,7 @@ const BMengen = ({ apId, jahr, startJahr, mengenResult }) => {
     oneLPop_pop.map(p => get(p, 'popbersByPopId.nodes', [])),
   )
 
-  const oneLTpop_pop = get(data, 'apById.bOneLTpop.nodes', [])
+  const oneLTpop_pop = get(data, 'apById.b1LTpop.nodes', [])
   const oneLTpop_tpop = flatten(
     oneLTpop_pop.map(p => get(p, 'tpopsByPopId.nodes', [])),
   )
@@ -100,10 +100,10 @@ const BMengen = ({ apId, jahr, startJahr, mengenResult }) => {
     oneLTpop_tpop.map(t => get(t, 'tpopbersByTpopId.nodes', [])),
   )
 
-  const oneRPop = get(data, 'apById.bOneRPop.nodes', [])
+  const oneRPop = get(data, 'apById.b1RPop.nodes', [])
     .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
     .filter(p => get(p, 'popbersByPopId.totalCount') > 0).length
-  const oneRPop_pop = get(data, 'apById.bOneRPop.nodes', []).filter(
+  const oneRPop_pop = get(data, 'apById.b1RPop.nodes', []).filter(
     p => get(p, 'tpopsByPopId.totalCount') > 0,
   )
   const oneRPop_popbers = flatten(
@@ -114,7 +114,7 @@ const BMengen = ({ apId, jahr, startJahr, mengenResult }) => {
     maxBy(oneRPop_popbersByPopId[b], 'jahr'),
   )
 
-  const oneRTpop_pop = get(data, 'apById.bOneRTpop.nodes', [])
+  const oneRTpop_pop = get(data, 'apById.b1RTpop.nodes', [])
   const oneRTpop_tpop = flatten(
     oneRTpop_pop.map(p => get(p, 'tpopsByPopId.nodes', [])),
   )
@@ -164,12 +164,12 @@ const BMengen = ({ apId, jahr, startJahr, mengenResult }) => {
   const sixRTpop = oneRTpop_lastTpopbers.filter(b => b.entwicklung === 8).length
 
   // 7.
-  const sevenLPop_allPops = get(data, 'apById.bSevenLPop.nodes', []).filter(
+  const sevenLPop_allPops = get(data, 'apById.b7LPop.nodes', []).filter(
     p => get(p, 'tpopsByPopId.totalCount') > 0,
   ).length
   const sevenLPop = sevenLPop_allPops - oneLPop
   const sevenLTpop_allTpops = sum(
-    get(data, 'apById.bSevenLTpop.nodes', []).map(p =>
+    get(data, 'apById.b7LTpop.nodes', []).map(p =>
       get(p, 'tpopsByPopId.totalCount'),
     ),
   )

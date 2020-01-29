@@ -6,7 +6,7 @@ export default gql`
   query apByIdForMengen($apId: UUID!, $startJahr: Int!, $jahr: Int!) {
     apById(id: $apId) {
       id
-      aThreeLPop: popsByApId(filter: { status: { equalTo: 100 } }) {
+      a3LPop: popsByApId(filter: { status: { equalTo: 100 } }) {
         nodes {
           id
           tpopsByPopId(filter: { apberRelevant: { equalTo: true } }) {
@@ -14,7 +14,7 @@ export default gql`
           }
         }
       }
-      aThreeLTpop: popsByApId(
+      a3LTpop: popsByApId(
         filter: {
           and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
         }
@@ -31,7 +31,7 @@ export default gql`
           }
         }
       }
-      aFourLPop: popsByApId(
+      a4LPop: popsByApId(
         filter: {
           status: { equalTo: 200 }
           bekanntSeit: { lessThan: $startJahr }
@@ -44,7 +44,7 @@ export default gql`
           }
         }
       }
-      aFourLTpop: popsByApId(
+      a4LTpop: popsByApId(
         filter: {
           and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
         }
@@ -62,7 +62,7 @@ export default gql`
           }
         }
       }
-      aFiveLPop: popsByApId(
+      a5LPop: popsByApId(
         filter: {
           status: { equalTo: 200 }
           bekanntSeit: { greaterThanOrEqualTo: $startJahr }
@@ -75,7 +75,7 @@ export default gql`
           }
         }
       }
-      aFiveLTpop: popsByApId(
+      a5LTpop: popsByApId(
         filter: {
           and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
         }
@@ -93,7 +93,7 @@ export default gql`
           }
         }
       }
-      aSevenLPop: popsByApId(
+      a7LPop: popsByApId(
         filter: {
           status: { equalTo: 101 }
           or: [
@@ -114,7 +114,7 @@ export default gql`
           }
         }
       }
-      aSevenLTpop: popsByApId(
+      a7LTpop: popsByApId(
         filter: {
           and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
         }
@@ -140,7 +140,7 @@ export default gql`
           }
         }
       }
-      aEightLPop: popsByApId(
+      a8LPop: popsByApId(
         filter: {
           status: { equalTo: 202 }
           bekanntSeit: { greaterThanOrEqualTo: $startJahr }
@@ -153,7 +153,7 @@ export default gql`
           }
         }
       }
-      aEightLTpop: popsByApId(
+      a8LTpop: popsByApId(
         filter: {
           or: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
         }
@@ -171,7 +171,7 @@ export default gql`
           }
         }
       }
-      aNineLPop: popsByApId(filter: { status: { equalTo: 201 } }) {
+      a9LPop: popsByApId(filter: { status: { equalTo: 201 } }) {
         nodes {
           id
           tpopsByPopId(filter: { apberRelevant: { equalTo: true } }) {
@@ -179,7 +179,7 @@ export default gql`
           }
         }
       }
-      aNineLTpop: popsByApId {
+      a9LTpop: popsByApId {
         nodes {
           id
           tpopsByPopId(
@@ -192,10 +192,10 @@ export default gql`
           }
         }
       }
-      aTenLPop: popsByApId(filter: { status: { equalTo: 300 } }) {
+      a10LPop: popsByApId(filter: { status: { equalTo: 300 } }) {
         totalCount
       }
-      aTenLTpop: popsByApId {
+      a10LTpop: popsByApId {
         nodes {
           id
           tpopsByPopId(filter: { status: { equalTo: 300 } }) {
@@ -203,7 +203,7 @@ export default gql`
           }
         }
       }
-      bOneLPop: popsByApId(
+      b1LPop: popsByApId(
         filter: {
           and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
         }
@@ -221,7 +221,7 @@ export default gql`
           }
         }
       }
-      bOneLTpop: popsByApId(
+      b1LTpop: popsByApId(
         filter: {
           and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
         }
@@ -250,7 +250,7 @@ export default gql`
           }
         }
       }
-      bOneRPop: popsByApId(
+      b1RPop: popsByApId(
         filter: {
           and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
         }
@@ -276,7 +276,7 @@ export default gql`
           }
         }
       }
-      bOneRTpop: popsByApId(
+      b1RTpop: popsByApId(
         filter: {
           and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
         }
@@ -313,7 +313,7 @@ export default gql`
           }
         }
       }
-      bSevenLPop: popsByApId(filter: { status: { lessThan: 300 } }) {
+      b7LPop: popsByApId(filter: { status: { lessThan: 300 } }) {
         nodes {
           id
           tpopsByPopId(filter: { apberRelevant: { equalTo: true } }) {
@@ -321,7 +321,7 @@ export default gql`
           }
         }
       }
-      bSevenLTpop: popsByApId(
+      b7LTpop: popsByApId(
         filter: {
           and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
         }
@@ -341,7 +341,7 @@ export default gql`
           }
         }
       }
-      cOneLTpop: popsByApId(
+      c1LTpop: popsByApId(
         filter: {
           and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
         }
@@ -368,7 +368,7 @@ export default gql`
           }
         }
       }
-      cOneRTpop: popsByApId(
+      c1RTpop: popsByApId(
         filter: {
           and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
         }
