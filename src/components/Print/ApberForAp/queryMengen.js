@@ -6,12 +6,14 @@ export default gql`
   query apByIdForMengen($apId: UUID!, $startJahr: Int!, $jahr: Int!) {
     apById(id: $apId) {
       id
-      a3LPop: popsByApId(filter: { status: { equalTo: 100 } }) {
+      a3LPop: popsByApId(
+        filter: {
+          status: { equalTo: 100 }
+          tpopsByPopId: { some: { apberRelevant: { equalTo: true } } }
+        }
+      ) {
         nodes {
           id
-          tpopsByPopId(filter: { apberRelevant: { equalTo: true } }) {
-            totalCount
-          }
         }
       }
       a3LTpop: popsByApId(

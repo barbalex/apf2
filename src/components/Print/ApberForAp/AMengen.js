@@ -80,9 +80,7 @@ const TpopSeit = styled(Number)``
 
 const AMengen = ({ apId, jahr, startJahr, mengenResult }) => {
   const { data, error, loading } = mengenResult
-  const threeLPop = get(data, 'apById.a3LPop.nodes', []).filter(
-    p => get(p, 'tpopsByPopId.totalCount') > 0,
-  ).length
+  const threeLPop = get(data, 'apById.a3LPop.nodes', []).length
   const threeLTpop = sum(
     get(data, 'apById.a3LTpop.nodes', []).map(p =>
       get(p, 'tpopsByPopId.totalCount'),
