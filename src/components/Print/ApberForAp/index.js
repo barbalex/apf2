@@ -1,6 +1,7 @@
 import React, { useCallback, useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
+import sum from 'lodash/sum'
 import sortBy from 'lodash/sortBy'
 import minBy from 'lodash/minBy'
 import flatten from 'lodash/flatten'
@@ -198,6 +199,58 @@ const ApberForAp = ({
     }
   }, [setIsPrint])
 
+  const { data, error, loading } = mengenResult
+  const a3LPop = get(data, 'apById.a3LPop.totalCount', 0)
+  const a3LTpop = sum(
+    get(data, 'apById.a3LTpop.nodes', []).map(p =>
+      get(p, 'tpopsByPopId.totalCount'),
+    ),
+  )
+  const a4LPop = get(data, 'apById.a4LPop.totalCount', 0)
+  const a4LTpop = sum(
+    get(data, 'apById.a4LTpop.nodes', []).map(p =>
+      get(p, 'tpopsByPopId.totalCount'),
+    ),
+  )
+  const a5LPop = get(data, 'apById.a5LPop.totalCount', 0)
+  const a5LTpop = sum(
+    get(data, 'apById.a5LTpop.nodes', []).map(p =>
+      get(p, 'tpopsByPopId.totalCount'),
+    ),
+  )
+  const a7LPop = get(data, 'apById.a7LPop.totalCount', 0)
+  const a7LTpop = sum(
+    get(data, 'apById.a7LTpop.nodes', []).map(p =>
+      get(p, 'tpopsByPopId.totalCount'),
+    ),
+  )
+  const a8LPop = get(data, 'apById.a8LPop.totalCount', 0)
+  const a8LTpop = sum(
+    get(data, 'apById.a8LTpop.nodes', []).map(p =>
+      get(p, 'tpopsByPopId.totalCount'),
+    ),
+  )
+  const a9LPop = get(data, 'apById.a9LPop.totalCount', 0)
+  const a9LTpop = sum(
+    get(data, 'apById.a9LTpop.nodes', []).map(p =>
+      get(p, 'tpopsByPopId.totalCount'),
+    ),
+  )
+  const a10LPop = get(data, 'apById.a10LPop.totalCount', 0)
+  const a10LTpop = sum(
+    get(data, 'apById.a10LTpop.nodes', []).map(p =>
+      get(p, 'tpopsByPopId.totalCount'),
+    ),
+  )
+  const a1LPop = a3LPop + a4LPop + a5LPop + a7LPop + a8LPop + a9LPop
+  const a1LTpop = a3LTpop + a4LTpop + a5LTpop + a7LTpop + a8LTpop + a9LTpop
+  const a2LPop = a3LPop + a4LPop + a5LPop
+  const a2LTpop = a3LTpop + a4LTpop + a5LTpop
+  const a6LPop = a7LPop + a8LPop
+  const a6LTpop = a7LTpop + a8LTpop
+
+  if (error) return `Fehler: ${error.message}`
+
   if (startJahr === 0)
     return (
       <ErrorBoundary>
@@ -242,10 +295,28 @@ const ApberForAp = ({
           </Row>
 
           <AMengen
-            apId={apId}
+            loading={loading}
             jahr={jahr}
-            startJahr={startJahr}
-            mengenResult={mengenResult}
+            a1LPop={a1LPop}
+            a1LTpop={a1LTpop}
+            a2LPop={a2LPop}
+            a2LTpop={a2LTpop}
+            a3LPop={a3LPop}
+            a3LTpop={a3LTpop}
+            a4LPop={a4LPop}
+            a4LTpop={a4LTpop}
+            a5LPop={a5LPop}
+            a5LTpop={a5LTpop}
+            a6LPop={a6LPop}
+            a6LTpop={a6LTpop}
+            a7LPop={a7LPop}
+            a7LTpop={a7LTpop}
+            a8LPop={a8LPop}
+            a8LTpop={a8LTpop}
+            a9LPop={a9LPop}
+            a9LTpop={a9LTpop}
+            a10LPop={a10LPop}
+            a10LTpop={a10LTpop}
           />
           {!!apber.biotopeNeue && (
             <FieldRowFullWidth>
@@ -261,6 +332,7 @@ const ApberForAp = ({
             jahr={jahr}
             startJahr={startJahr}
             mengenResult={mengenResult}
+            a1LPop={a1LPop}
           />
           {!!apber.biotopeOptimieren && (
             <FieldRowFullWidth>

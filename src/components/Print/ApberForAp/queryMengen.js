@@ -259,27 +259,6 @@ export default gql`
           }
         }
       }
-      b7LPop: popsByApId(
-        filter: {
-          and: [
-            { status: { lessThan: 300 } }
-            { status: { isNull: false } }
-            {
-              tpopsByPopId: {
-                some: {
-                  and: [
-                    { apberRelevant: { equalTo: true } }
-                    { status: { lessThan: 300 } }
-                    { status: { isNull: false } }
-                  ]
-                }
-              }
-            }
-          ]
-        }
-      ) {
-        totalCount
-      }
       b7LTpop: popsByApId(filter: { status: { lessThan: 300 } }) {
         nodes {
           id
