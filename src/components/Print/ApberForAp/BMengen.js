@@ -164,9 +164,7 @@ const BMengen = ({ apId, jahr, startJahr, mengenResult }) => {
   const sixRTpop = oneRTpop_lastTpopbers.filter(b => b.entwicklung === 8).length
 
   // 7.
-  const sevenLPop_allPops = get(data, 'apById.b7LPop.nodes', []).filter(
-    p => get(p, 'tpopsByPopId.totalCount') > 0,
-  ).length
+  const sevenLPop_allPops = get(data, 'apById.b7LPop.totalCount', 0)
   const sevenLPop = sevenLPop_allPops - oneLPop
   const sevenLTpop_allTpops = sum(
     get(data, 'apById.b7LTpop.nodes', []).map(p =>

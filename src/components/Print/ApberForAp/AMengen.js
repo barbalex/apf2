@@ -80,47 +80,37 @@ const TpopSeit = styled(Number)``
 
 const AMengen = ({ apId, jahr, startJahr, mengenResult }) => {
   const { data, error, loading } = mengenResult
-  const threeLPop = get(data, 'apById.a3LPop.nodes', []).length
+  const threeLPop = get(data, 'apById.a3LPop.totalCount', 0)
   const threeLTpop = sum(
     get(data, 'apById.a3LTpop.nodes', []).map(p =>
       get(p, 'tpopsByPopId.totalCount'),
     ),
   )
-  const fourLPop = get(data, 'apById.a4LPop.nodes', []).filter(
-    p => get(p, 'tpopsByPopId.totalCount') > 0,
-  ).length
+  const fourLPop = get(data, 'apById.a4LPop.totalCount', 0)
   const fourLTpop = sum(
     get(data, 'apById.a4LTpop.nodes', []).map(p =>
       get(p, 'tpopsByPopId.totalCount'),
     ),
   )
-  const fiveLPop = get(data, 'apById.a5LPop.nodes', []).filter(
-    p => get(p, 'tpopsByPopId.totalCount') > 0,
-  ).length
+  const fiveLPop = get(data, 'apById.a5LPop.totalCount', 0)
   const fiveLTpop = sum(
     get(data, 'apById.a5LTpop.nodes', []).map(p =>
       get(p, 'tpopsByPopId.totalCount'),
     ),
   )
-  const sevenLPop = get(data, 'apById.a7LPop.nodes', []).filter(
-    p => get(p, 'tpopsByPopId.totalCount') > 0,
-  ).length
+  const sevenLPop = get(data, 'apById.a7LPop.totalCount', 0)
   const sevenLTpop = sum(
     get(data, 'apById.a7LTpop.nodes', []).map(p =>
       get(p, 'tpopsByPopId.totalCount'),
     ),
   )
-  const eightLPop = get(data, 'apById.a8LPop.nodes', []).filter(
-    p => get(p, 'tpopsByPopId.totalCount') > 0,
-  ).length
+  const eightLPop = get(data, 'apById.a8LPop.totalCount', 0)
   const eightLTpop = sum(
     get(data, 'apById.a8LTpop.nodes', []).map(p =>
       get(p, 'tpopsByPopId.totalCount'),
     ),
   )
-  const nineLPop = get(data, 'apById.a9LPop.nodes', []).filter(
-    p => get(p, 'tpopsByPopId.totalCount') > 0,
-  ).length
+  const nineLPop = get(data, 'apById.a9LPop.totalCount', 0)
   const nineLTpop = sum(
     get(data, 'apById.a9LTpop.nodes', []).map(p =>
       get(p, 'tpopsByPopId.totalCount'),

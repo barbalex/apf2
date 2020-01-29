@@ -12,15 +12,9 @@ export default gql`
           tpopsByPopId: { some: { apberRelevant: { equalTo: true } } }
         }
       ) {
-        nodes {
-          id
-        }
+        totalCount
       }
-      a3LTpop: popsByApId(
-        filter: {
-          and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
-        }
-      ) {
+      a3LTpop: popsByApId(filter: { status: { lessThan: 300 } }) {
         nodes {
           id
           tpopsByPopId(
@@ -37,20 +31,12 @@ export default gql`
         filter: {
           status: { equalTo: 200 }
           bekanntSeit: { lessThan: $startJahr }
+          tpopsByPopId: { some: { apberRelevant: { equalTo: true } } }
         }
       ) {
-        nodes {
-          id
-          tpopsByPopId(filter: { apberRelevant: { equalTo: true } }) {
-            totalCount
-          }
-        }
+        totalCount
       }
-      a4LTpop: popsByApId(
-        filter: {
-          and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
-        }
-      ) {
+      a4LTpop: popsByApId(filter: { status: { lessThan: 300 } }) {
         nodes {
           id
           tpopsByPopId(
@@ -68,20 +54,12 @@ export default gql`
         filter: {
           status: { equalTo: 200 }
           bekanntSeit: { greaterThanOrEqualTo: $startJahr }
+          tpopsByPopId: { some: { apberRelevant: { equalTo: true } } }
         }
       ) {
-        nodes {
-          id
-          tpopsByPopId(filter: { apberRelevant: { equalTo: true } }) {
-            totalCount
-          }
-        }
+        totalCount
       }
-      a5LTpop: popsByApId(
-        filter: {
-          and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
-        }
-      ) {
+      a5LTpop: popsByApId(filter: { status: { lessThan: 300 } }) {
         nodes {
           id
           tpopsByPopId(
@@ -98,6 +76,7 @@ export default gql`
       a7LPop: popsByApId(
         filter: {
           status: { equalTo: 101 }
+          tpopsByPopId: { some: { apberRelevant: { equalTo: true } } }
           or: [
             { status: { equalTo: 202 } }
             {
@@ -109,18 +88,9 @@ export default gql`
           ]
         }
       ) {
-        nodes {
-          id
-          tpopsByPopId(filter: { apberRelevant: { equalTo: true } }) {
-            totalCount
-          }
-        }
+        totalCount
       }
-      a7LTpop: popsByApId(
-        filter: {
-          and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
-        }
-      ) {
+      a7LTpop: popsByApId(filter: { status: { lessThan: 300 } }) {
         nodes {
           id
           tpopsByPopId(
@@ -146,20 +116,12 @@ export default gql`
         filter: {
           status: { equalTo: 202 }
           bekanntSeit: { greaterThanOrEqualTo: $startJahr }
+          tpopsByPopId: { some: { apberRelevant: { equalTo: true } } }
         }
       ) {
-        nodes {
-          id
-          tpopsByPopId(filter: { apberRelevant: { equalTo: true } }) {
-            totalCount
-          }
-        }
+        totalCount
       }
-      a8LTpop: popsByApId(
-        filter: {
-          or: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
-        }
-      ) {
+      a8LTpop: popsByApId(filter: { status: { lessThan: 300 } }) {
         nodes {
           id
           tpopsByPopId(
@@ -173,13 +135,13 @@ export default gql`
           }
         }
       }
-      a9LPop: popsByApId(filter: { status: { equalTo: 201 } }) {
-        nodes {
-          id
-          tpopsByPopId(filter: { apberRelevant: { equalTo: true } }) {
-            totalCount
-          }
+      a9LPop: popsByApId(
+        filter: {
+          status: { equalTo: 201 }
+          tpopsByPopId: { some: { apberRelevant: { equalTo: true } } }
         }
+      ) {
+        totalCount
       }
       a9LTpop: popsByApId {
         nodes {
@@ -205,11 +167,7 @@ export default gql`
           }
         }
       }
-      b1LPop: popsByApId(
-        filter: {
-          and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
-        }
-      ) {
+      b1LPop: popsByApId(filter: { status: { lessThan: 300 } }) {
         nodes {
           id
           tpopsByPopId(filter: { apberRelevant: { equalTo: true } }) {
@@ -223,20 +181,13 @@ export default gql`
           }
         }
       }
-      b1LTpop: popsByApId(
-        filter: {
-          and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
-        }
-      ) {
+      b1LTpop: popsByApId(filter: { status: { lessThan: 300 } }) {
         nodes {
           id
           tpopsByPopId(
             filter: {
-              and: [
-                { status: { notEqualTo: 300 } }
-                { status: { isNull: false } }
-                { apberRelevant: { equalTo: true } }
-              ]
+              status: { lessThan: 300 }
+              apberRelevant: { equalTo: true }
             }
           ) {
             totalCount
@@ -252,11 +203,7 @@ export default gql`
           }
         }
       }
-      b1RPop: popsByApId(
-        filter: {
-          and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
-        }
-      ) {
+      b1RPop: popsByApId(filter: { status: { lessThan: 300 } }) {
         nodes {
           id
           tpopsByPopId(filter: { apberRelevant: { equalTo: true } }) {
@@ -278,20 +225,13 @@ export default gql`
           }
         }
       }
-      b1RTpop: popsByApId(
-        filter: {
-          and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
-        }
-      ) {
+      b1RTpop: popsByApId(filter: { status: { lessThan: 300 } }) {
         nodes {
           id
           tpopsByPopId(
             filter: {
-              and: [
-                { status: { notEqualTo: 300 } }
-                { status: { isNull: false } }
-                { apberRelevant: { equalTo: true } }
-              ]
+              status: { lessThan: 300 }
+              apberRelevant: { equalTo: true }
             }
           ) {
             totalCount
@@ -315,48 +255,34 @@ export default gql`
           }
         }
       }
-      b7LPop: popsByApId(filter: { status: { lessThan: 300 } }) {
-        nodes {
-          id
-          tpopsByPopId(filter: { apberRelevant: { equalTo: true } }) {
-            totalCount
-          }
-        }
-      }
-      b7LTpop: popsByApId(
+      b7LPop: popsByApId(
         filter: {
-          and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
+          status: { lessThan: 300 }
+          tpopsByPopId: { some: { apberRelevant: { equalTo: true } } }
         }
       ) {
+        totalCount
+      }
+      b7LTpop: popsByApId(filter: { status: { lessThan: 300 } }) {
         nodes {
           id
           tpopsByPopId(
             filter: {
-              and: [
-                { status: { notEqualTo: 300 } }
-                { status: { isNull: false } }
-                { apberRelevant: { equalTo: true } }
-              ]
+              status: { lessThan: 300 }
+              apberRelevant: { equalTo: true }
             }
           ) {
             totalCount
           }
         }
       }
-      c1LTpop: popsByApId(
-        filter: {
-          and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
-        }
-      ) {
+      c1LTpop: popsByApId(filter: { status: { lessThan: 300 } }) {
         nodes {
           id
           tpopsByPopId(
             filter: {
-              and: [
-                { status: { notEqualTo: 300 } }
-                { status: { isNull: false } }
-                { apberRelevant: { equalTo: true } }
-              ]
+              status: { lessThan: 300 }
+              apberRelevant: { equalTo: true }
             }
           ) {
             totalCount
@@ -370,18 +296,13 @@ export default gql`
           }
         }
       }
-      c1RTpop: popsByApId(
-        filter: {
-          and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
-        }
-      ) {
+      c1RTpop: popsByApId(filter: { status: { lessThan: 300 } }) {
         nodes {
           id
           tpopsByPopId(
             filter: {
               and: [
-                { status: { notEqualTo: 300 } }
-                { status: { isNull: false } }
+                { status: { lessThan: 300 } }
                 { apberRelevant: { equalTo: true } }
               ]
             }
