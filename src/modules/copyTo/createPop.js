@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { pop } from '../../components/shared/fragments'
 
 export default gql`
-  mutation createPop(
+  mutation createPopForCopyTo(
     $apId: UUID
     $nr: Int
     $name: String
