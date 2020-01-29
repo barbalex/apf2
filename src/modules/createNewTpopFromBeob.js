@@ -13,7 +13,7 @@ import {
 } from '../components/shared/fragments'
 
 const createTpop = gql`
-  mutation createTpop(
+  mutation createTpopFroCreateNewTpopFromBeob(
     $popId: UUID
     $gemeinde: String
     $flurname: String

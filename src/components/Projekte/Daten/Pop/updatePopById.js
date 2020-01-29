@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import { pop } from '../../../shared/fragments'
 
 export default gql`
-  mutation updatePop(
+  mutation updatePopForPop(
     $id: UUID!
     $apId: UUID
     $nr: Int
