@@ -6,10 +6,7 @@ import min from 'lodash/min'
 import flatten from 'lodash/flatten'
 import groupBy from 'lodash/groupBy'
 import maxBy from 'lodash/maxBy'
-import { useQuery } from '@apollo/react-hooks'
 import { observer } from 'mobx-react-lite'
-
-import query from './query'
 
 const Container = styled.div`
   padding: 0.2cm 0;
@@ -84,18 +81,16 @@ const PopSeit = styled(Number)`
 `
 const TpopSeit = styled(Number)``
 
-const CMengen = ({ apId, jahr, startJahr }) => {
-  const { data, error, loading } = useQuery(query, {
-    variables: { apId, jahr },
-  })
-  const oneLTpop_pop = get(data, 'apById.oneLTpop.nodes', [])
+const CMengen = ({ apId, jahr, startJahr, mengenResult }) => {
+  const { data, error, loading } = mengenResult
+  const oneLTpop_pop = get(data, 'apById.cOneLTpop.nodes', [])
   const oneLTpop_tpop = flatten(
     oneLTpop_pop.map(p => get(p, 'tpopsByPopId.nodes', [])),
   ).filter(p => get(p, 'tpopmassnsByTpopId.totalCount', 0) > 0)
   const oneLTpop = oneLTpop_tpop.length
   const oneLPop = uniqBy(oneLTpop_tpop, 'popId').length
 
-  const oneRTpop_pop = get(data, 'apById.oneRTpop.nodes', [])
+  const oneRTpop_pop = get(data, 'apById.cOneRTpop.nodes', [])
   const oneRTpop_tpop = flatten(
     oneRTpop_pop.map(p => get(p, 'tpopsByPopId.nodes', [])),
   )

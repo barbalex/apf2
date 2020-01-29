@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { popber, tpopber } from '../../shared/fragments'
+import { popber, tpopber, tpopmassnber } from '../../shared/fragments'
 
 export default gql`
   query apByIdForMengen($apId: UUID!, $startJahr: Int!, $jahr: Int!) {
@@ -341,8 +341,97 @@ export default gql`
           }
         }
       }
+      cOneLTpop: popsByApId(
+        filter: {
+          and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
+        }
+      ) {
+        nodes {
+          id
+          tpopsByPopId(
+            filter: {
+              and: [
+                { status: { notEqualTo: 300 } }
+                { status: { isNull: false } }
+                { apberRelevant: { equalTo: true } }
+              ]
+            }
+          ) {
+            totalCount
+            nodes {
+              id
+              popId
+              tpopmassnsByTpopId(filter: { jahr: { equalTo: $jahr } }) {
+                totalCount
+              }
+            }
+          }
+        }
+      }
+      cOneRTpop: popsByApId(
+        filter: {
+          and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
+        }
+      ) {
+        nodes {
+          id
+          tpopsByPopId(
+            filter: {
+              and: [
+                { status: { notEqualTo: 300 } }
+                { status: { isNull: false } }
+                { apberRelevant: { equalTo: true } }
+              ]
+            }
+          ) {
+            totalCount
+            nodes {
+              id
+              popId
+              tpopmassnsByTpopId(
+                filter: {
+                  and: [
+                    { jahr: { isNull: false } }
+                    { jahr: { lessThanOrEqualTo: $jahr } }
+                    { typ: { isNull: false } }
+                  ]
+                }
+              ) {
+                totalCount
+                nodes {
+                  id
+                  jahr
+                  tpopByTpopId {
+                    id
+                    popId
+                  }
+                }
+              }
+              tpopmassnbersByTpopId(
+                filter: {
+                  and: [
+                    { jahr: { isNull: false } }
+                    { jahr: { lessThanOrEqualTo: $jahr } }
+                    { beurteilung: { isNull: false } }
+                  ]
+                }
+              ) {
+                totalCount
+                nodes {
+                  ...TpopmassnberFields
+                  tpopByTpopId {
+                    id
+                    popId
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
   ${popber}
   ${tpopber}
+  ${tpopmassnber}
 `
