@@ -13,6 +13,8 @@ const Container = styled.div`
   }
   @media print {
     padding-top: 0.3cm !important;
+    /* get background colors to show */
+    -webkit-print-color-adjust: exact;
   }
 `
 const Table = styled.div`
