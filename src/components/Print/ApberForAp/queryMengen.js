@@ -75,14 +75,18 @@ export default gql`
       }
       a7LPop: popsByApId(
         filter: {
-          status: { equalTo: 101 }
           tpopsByPopId: { some: { apberRelevant: { equalTo: true } } }
           or: [
-            { status: { equalTo: 202 } }
+            { status: { equalTo: 101 } }
             {
-              or: [
-                { bekanntSeit: { isNull: true } }
-                { bekanntSeit: { lessThan: $startJahr } }
+              and: [
+                { status: { equalTo: 202 } }
+                {
+                  or: [
+                    { bekanntSeit: { isNull: true } }
+                    { bekanntSeit: { lessThan: $startJahr } }
+                  ]
+                }
               ]
             }
           ]
