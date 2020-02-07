@@ -230,22 +230,24 @@ const SortableItem = SortableElement(
         }}
       />
       <IconsDivs>
-        {(layerLegends[overlay.value] || []).map(layer => (
-          <IconsDiv key={layer.name}>
-            <div>
-              <StyledIconButton
-                title={`Legende für ${layer.name} öffnen`}
-                onClick={() => {
-                  if (typeof window !== 'undefined') {
-                    window.open(layer.url, '_blank')
-                  }
-                }}
-              >
-                <StyledLegendIcon />
-              </StyledIconButton>
-            </div>
-          </IconsDiv>
-        ))}
+        {(layerLegends[overlay.value] || [])
+          .filter(layer => !!layer.url)
+          .map(layer => (
+            <IconsDiv key={layer.name}>
+              <div>
+                <StyledIconButton
+                  title={`Legende für ${layer.name} öffnen`}
+                  onClick={() => {
+                    if (typeof window !== 'undefined') {
+                      window.open(layer.url, '_blank')
+                    }
+                  }}
+                >
+                  <StyledLegendIcon />
+                </StyledIconButton>
+              </div>
+            </IconsDiv>
+          ))}
         <IconsDiv>
           <div>
             <DragHandle />
@@ -279,6 +281,10 @@ const Overlays = () => {
     activeOverlays,
     setActiveOverlays,
   } = useContext(storeContext)
+
+  console.log('Karte, LayersControl, Overlays', {
+    overlays: getSnapshot(overlays),
+  })
 
   const onSortEnd = useCallback(
     ({ oldIndex, newIndex }) =>

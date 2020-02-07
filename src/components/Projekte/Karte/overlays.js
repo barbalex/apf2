@@ -1,6 +1,7 @@
 export default [
   { label: 'Markierungen', value: 'Markierungen' },
   { label: 'Detailpläne', value: 'Detailplaene' },
+  { label: 'Massnahmenpläne', value: 'Massnahmen' },
   { label: 'ZH Übersichtsplan', value: 'ZhUep' },
   { label: 'ZH Gemeindegrenzen', value: 'ZhGemeindegrenzen' },
   { label: 'SVO grau', value: 'ZhSvoGrey' },

@@ -1,37 +1,54 @@
 // https://stackoverflow.com/a/25296972/712005
 // also: https://gis.stackexchange.com/a/130553/13491
-import React, { useEffect } from 'react'
+import React, { useEffect, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useLeaflet } from 'react-leaflet'
+//import { useLeaflet } from 'react-leaflet'
 import 'leaflet'
+import axios from 'axios'
 
-import popupFromProperties from './popupFromProperties'
+import storeContext from '../../../../storeContext'
 
-const style = () => ({ fill: false, color: 'red', weight: 1 })
-const onEachFeature = (feature, layer) => {
-  if (feature.properties) {
-    layer.bindPopup(popupFromProperties(feature.properties))
-  }
-}
+const MassnahmenLayer = () => {
+  const { enqueNotification } = useContext(storeContext)
+  //const { map } = useLeaflet()
 
-const DetailplaeneLayer = () => {
-  const { map } = useLeaflet()
   useEffect(() => {
     if (typeof window === 'undefined') return
-    new window.L.WFS({
-      url: 'http://maps.zh.ch/wfs/FnsAPFloraWFS',
-      typeNS: 'topp',
+    const baseUrl = 'http://maps.zh.ch/wfs/FnsAPFloraWFS'
+    const params = {
+      service: 'WFS',
+      version: '1.0.0',
+      request: 'getFeature',
       typeName: 'ms:massnahmenflaechen',
-      crs: window.L.CRS.EPSG2056,
-      user: 'barbalex',
-      style: {
-        color: 'blue',
-        weight: 2,
-      },
-    }).addTo(map)
-  }, [map])
+      maxFeatures: 3000,
+      outputFormat: 'application/json',
+    }
+    const url = `${baseUrl}${window.L.Util.getParamString(params)}`
+    console.log('Massnahmen, url:', url)
+    let response
+    try {
+      response = axios({
+        method: 'get',
+        url,
+        auth: {
+          username: window.process.env.MAPS_ZH_CH_USER,
+          password: window.process.env.MAPS_ZH_CH_SECRET,
+        },
+      })
+    } catch (error) {
+      enqueNotification({
+        message: `Fehler beim Laden der Massnahmen für die Karte: ${error.message}`,
+        options: {
+          variant: 'error',
+        },
+      })
+      return console.log(error)
+    }
+    console.log('Massnahmen, response:', response)
+    //const layer = new window.L.GeoJSON()
+  }, [enqueNotification])
 
   return <div style={{ display: 'none' }} />
 }
 
-export default observer(DetailplaeneLayer)
+export default observer(MassnahmenLayer)

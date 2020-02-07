@@ -34,6 +34,7 @@ import ZhOrtho2018Ir from './layers/ZhOrtho2018Ir'
 import ZhOrtho2015Ir from './layers/ZhOrtho2015Ir'
 import ZhUep from './layers/ZhUep'
 import Detailplaene from './layers/Detailplaene'
+import Massnahmen from './layers/Massnahmen'
 import Markierungen from './layers/Markierungen'
 import ZhSvoColor from './layers/ZhSvoColor'
 import ZhPflegeplan from './layers/ZhPflegeplan'
@@ -452,6 +453,7 @@ const Karte = ({ treeName }) => {
       ZhUep: () => <ZhUepOverlay />,
       Detailplaene: () => <Detailplaene />,
       Markierungen: () => <Markierungen />,
+      Massnahmen: () => <Massnahmen />,
       ZhGemeindegrenzen: () => <ZhGemeindegrenzen />,
       ZhSvoColor: () => <ZhSvoColor />,
       ZhSvoGrey: () => <ZhSvoGrey />,
