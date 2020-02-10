@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import styled from 'styled-components'
 
 import padding from './padding'
+import storeContext from '../../../../../storeContext'
 
 /**
  * see https://stackoverflow.com/a/21160150/712005 to force printing background image
@@ -39,23 +40,30 @@ const ImageContainer = styled.div`
   padding-bottom: ${props => (props.padding ? props.padding : 85)}%;
 `
 
-const fetchImageIfNeeded = async ({ image, setImage, apId }) => {
-  if (!image) {
+const fetchImageIfNeeded = async ({ image, setImage, apId, store }) => {
+  if (!image && !!apId) {
     let newImage
     try {
       newImage = await import(`./${apId}.png`) //.then(m => m.default)
     } catch (error) {
       console.log('Image not loaded, error:', error)
+      return store.enqueNotification({
+        message: 'Für diese Art wurde kein Bild gefunden',
+        options: {
+          variant: 'error',
+        },
+      })
     }
     if (newImage && newImage.default) setImage(newImage.default)
   }
 }
 
 const Image = ({ row, artname, apId }) => {
+  const store = useContext(storeContext)
   const [image, setImage] = useState(null)
   useEffect(() => {
-    fetchImageIfNeeded({ apId, image, setImage })
-  }, [apId, image])
+    fetchImageIfNeeded({ apId, image, setImage, store })
+  }, [apId, image, store])
 
   return (
     <Container>
