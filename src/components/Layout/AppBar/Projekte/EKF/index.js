@@ -164,8 +164,9 @@ const ProjekteAppBar = () => {
           variant: 'info',
         },
       })
-      setEkfIds(ekfIds)
+      //console.log('printing these ekfIds:', ekfIds)
       setIsPrint(true)
+      setEkfIds(ekfIds)
       // TODO: need to know when all tpopfreiwkontr forms have finisched rendering
       // idea for hack: use ekfCount to set timeout value?
       setTimeout(() => {
