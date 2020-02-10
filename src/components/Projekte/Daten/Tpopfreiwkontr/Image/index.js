@@ -50,7 +50,7 @@ const fetchImageIfNeeded = async ({ image, setImage, apId, store }) => {
       return store.enqueNotification({
         message: 'Für diese Art wurde kein Bild gefunden',
         options: {
-          variant: 'error',
+          variant: 'warning',
         },
       })
     }
