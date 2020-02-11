@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import padding from './padding'
-import storeContext from '../../../../../storeContext'
 
 /**
  * see https://stackoverflow.com/a/21160150/712005 to force printing background image
@@ -39,36 +38,52 @@ const ImageContainer = styled.div`
   background-position: center;
   padding-bottom: ${props => (props.padding ? props.padding : 85)}%;
 `
+const NotifContainer = styled.div`
+  grid-area: myImage;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 
-const fetchImageIfNeeded = async ({ image, setImage, apId, store }) => {
+const fetchImageIfNeeded = async ({
+  image,
+  setImage,
+  setNotif,
+  apId,
+  artname,
+}) => {
   if (!image && !!apId) {
     let newImage
     try {
       newImage = await import(`./${apId}.png`) //.then(m => m.default)
     } catch (error) {
       console.log('Image not loaded, error:', error)
-      return store.enqueNotification({
-        message: 'Für diese Art wurde kein Bild gefunden',
-        options: {
-          variant: 'warning',
-        },
-      })
+      return setNotif(`Für ${artname} wurde kein Bild gefunden`)
     }
     if (newImage && newImage.default) setImage(newImage.default)
   }
 }
 
-const Image = ({ row, artname, apId }) => {
-  const store = useContext(storeContext)
+const Image = ({ artname, apId }) => {
   const [image, setImage] = useState(null)
+  const [notif, setNotif] = useState(null)
+
   useEffect(() => {
-    fetchImageIfNeeded({ apId, image, setImage, store })
-  }, [apId, image, store])
+    setImage(null)
+    setNotif(null)
+  }, [apId])
+
+  useEffect(() => {
+    console.log('Image, fetching image for:', artname)
+    fetchImageIfNeeded({ apId, artname, image, setImage, setNotif })
+  }, [apId, artname, image])
+  console.log('Image', { image, artname })
 
   return (
     <Container>
       <Title>{artname}</Title>
       {!!image && <ImageContainer src={image} padding={padding[apId]} />}
+      {!!notif && <NotifContainer>{notif}</NotifContainer>}
     </Container>
   )
 }
