@@ -554,7 +554,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
             errors={errors}
             showFilter={showFilter}
           />
-          <Image apId={apId} row={row} artname={artname} />
+          <Image apId={apId} artname={artname} />
           {!showFilter && (
             <>
               {zaehls1 && (
