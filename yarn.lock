@@ -3196,10 +3196,10 @@ brorand@^1.0.1:
   resolved "https://registry.yarnpkg.com/brorand/-/brorand-1.1.0.tgz#12c25efe40a45e3c323eb8675a0a0ce57b22371f"
   integrity sha1-EsJe/kCkXjwyPrhnWgoM5XsiNx8=
 
-browser-update@3.3.12:
-  version "3.3.12"
-  resolved "https://registry.yarnpkg.com/browser-update/-/browser-update-3.3.12.tgz#ce961e4dbc68e842e400f2a094d799a277e13703"
-  integrity sha512-TjGBPRl0OvWjetbWC766JXUZV7EOn3tErm7osGsf51f3VyhIoh/a4RO/nAJOOEWvBkpgzSkM2ryQYfzF8ZFsYg==
+browser-update@3.3.13:
+  version "3.3.13"
+  resolved "https://registry.yarnpkg.com/browser-update/-/browser-update-3.3.13.tgz#0375a79f888d6da896d0701c0bec2dd74fee1ec8"
+  integrity sha512-AYi8tBBai+A4FH3VT8lKjOWzKYbKFOzoEEzbPx78P+IWC3YWVxiRZVufp60HUUovcPvtnFZnAhGyry1ar8mWrw==
 
 browserify-aes@^1.0.0, browserify-aes@^1.0.4:
   version "1.2.0"
@@ -6605,10 +6605,10 @@ gatsby-plugin-eslint@2.0.8:
   resolved "https://registry.yarnpkg.com/gatsby-plugin-eslint/-/gatsby-plugin-eslint-2.0.8.tgz#1ff7f546a427d274dc2de3932ba29822aae330c3"
   integrity sha512-vAMy37povmQJNg6ZxY78fkWR3pKwG8MNMhO3u+4vXj2MYT5avhFvHPJTAb126ZCuygf30gAWlpwbV50zP894Jw==
 
-gatsby-plugin-manifest@2.2.41:
-  version "2.2.41"
-  resolved "https://registry.yarnpkg.com/gatsby-plugin-manifest/-/gatsby-plugin-manifest-2.2.41.tgz#c6952e466b163145b74aa071822a97a797a68e01"
-  integrity sha512-eKbnpDSLbGUzmnfE65uLit/J8XS4LYslyRHtqMhTja6JcdzjXVWFsO9043tqUXfL8+JBw5PccCxZM8BIN23+Vw==
+gatsby-plugin-manifest@2.2.42:
+  version "2.2.42"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-manifest/-/gatsby-plugin-manifest-2.2.42.tgz#ad069b04576eb995ad6ceaa4712db90e600eb500"
+  integrity sha512-3YWq2zfv6LR0FWlfhZL//mrueuTr+u9cSr8K9HIXKBVby1FZ2CndzaMPbmj61/FSqXHXX2/bhvOx5imFuZCxmw==
   dependencies:
     "@babel/runtime" "^7.7.6"
     gatsby-core-utils "^1.0.28"
@@ -6861,10 +6861,10 @@ gatsby-transformer-sharp@2.3.14:
     semver "^5.7.1"
     sharp "^0.23.4"
 
-gatsby@2.19.19:
-  version "2.19.19"
-  resolved "https://registry.yarnpkg.com/gatsby/-/gatsby-2.19.19.tgz#8d4aa54e8c8da9cb38c5c7a15cfa358aec496f65"
-  integrity sha512-Is2s9qJ5p9fSzwhAf2LpKcv5l3/03Le3ZMJiU4ZOOauFhzLbsEIWK/Fu90GwnC8T7t9iWH3myI9NGh3a9+6cAQ==
+gatsby@2.19.20:
+  version "2.19.20"
+  resolved "https://registry.yarnpkg.com/gatsby/-/gatsby-2.19.20.tgz#cbe0e282ee21e9b4efe55f30d48de2adcfb0d7e3"
+  integrity sha512-15x+NdtNWhaYko6Vaml8Z/F1KXaR+A7jZlLZ8Ln7fGykLXfOyJ2Y2O7A05oN9wnD07DSkFtir/jq2CT3832NVA==
   dependencies:
     "@babel/code-frame" "^7.5.5"
     "@babel/core" "^7.7.5"
@@ -14565,9 +14565,9 @@ terser-webpack-plugin@^1.4.2, terser-webpack-plugin@^1.4.3:
     worker-farm "^1.7.0"
 
 terser@^4.1.2:
-  version "4.6.3"
-  resolved "https://registry.yarnpkg.com/terser/-/terser-4.6.3.tgz#e33aa42461ced5238d352d2df2a67f21921f8d87"
-  integrity sha512-Lw+ieAXmY69d09IIc/yqeBqXpEQIpDGZqT34ui1QWXIUpR2RjbqEkT8X7Lgex19hslSqcWM5iMN2kM11eMsESQ==
+  version "4.6.4"
+  resolved "https://registry.yarnpkg.com/terser/-/terser-4.6.4.tgz#40a0b37afbe5b57e494536815efa68326840fc00"
+  integrity sha512-5fqgBPLgVHZ/fVvqRhhUp9YUiGXhFJ9ZkrZWD9vQtFBR4QIGTnbsb+/kKqSqfgp3WnBwGWAFnedGTtmX1YTn0w==
   dependencies:
     commander "^2.20.0"
     source-map "~0.6.1"
@@ -15226,10 +15226,10 @@ update-notifier@^3.0.1:
     semver-diff "^2.0.0"
     xdg-basedir "^3.0.0"
 
-uploadcare-widget@3.8.2:
-  version "3.8.2"
-  resolved "https://registry.yarnpkg.com/uploadcare-widget/-/uploadcare-widget-3.8.2.tgz#2be55ffcf130a693178a5b7b684cc53016281610"
-  integrity sha512-4bmvmDyyH4xX6bpR4qI5EQqiOqIT7ZLuCzMfJDB4bRM6OrVJ4y7IXArZ+ccoVbt2xUOCHBwuV9OrGiUgukgq0g==
+uploadcare-widget@3.8.3:
+  version "3.8.3"
+  resolved "https://registry.yarnpkg.com/uploadcare-widget/-/uploadcare-widget-3.8.3.tgz#647a6cbcdecbc162f07e28ab02515f9650364bfb"
+  integrity sha512-pOOQWYrbyk5cAsN/MTEVVJO6HT5NVLcZts8kStMdES83faIDs8o6QrRTMvuF13hGgzKpyMFa1d1FsuiMOukb4w==
   dependencies:
     escape-html "^1.0.3"
     jquery "^3.4.1"
