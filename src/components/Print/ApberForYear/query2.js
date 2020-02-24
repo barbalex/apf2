@@ -23,6 +23,7 @@ export default gql`
       nodes {
         id
         startJahr
+        bearbeitung
         aeTaxonomyByArtId {
           ...AeTaxonomiesFields
         }

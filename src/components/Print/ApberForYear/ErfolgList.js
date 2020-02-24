@@ -19,7 +19,7 @@ const Container = styled.div`
 `
 const Table = styled.div`
   display: grid;
-  grid-template-columns: 11fr repeat(11, 1fr);
+  grid-template-columns: 12fr repeat(10, 1fr);
   grid-column-gap: 0;
   grid-row-gap: 0;
   justify-items: stretch;
@@ -107,33 +107,30 @@ const KeineMassnahme = styled(Cell)`
   grid-column: 10 / span 1;
   text-align: center;
 `
-const KefArt = styled(Cell)`
+const ApExists = styled(Cell)`
   grid-column: 11 / span 1;
   text-align: center;
-`
-const KefKontrolle = styled(Cell)`
-  grid-column: 12 / span 1;
-  text-align: center;
-`
-const KefSpanningTitle = styled(Title)`
-  grid-column: 11 / span 2;
-  grid-row: 1 / span 1;
-  text-align: center;
-  padding-top: 4px;
 `
 const KeineMassnTitle = styled(Title)`
   grid-column: 10 / span 1;
   grid-row: 1 / span 2;
   writing-mode: vertical-lr;
-  padding-bottom: 3px;
-  padding-top: 3px;
-  /* needed because of bug (?) in print mode
-   * where not full height is taken */
-  height: 98px;
+  padding: 3px;
   > div {
     transform: rotate(180deg);
     transform-origin: center center 0;
-    line-height: 2.6em;
+    line-height: 1em;
+  }
+`
+const ApExistsTitle = styled(Title)`
+  grid-column: 11 / span 1;
+  grid-row: 1 / span 2;
+  writing-mode: vertical-lr;
+  padding: 3px;
+  > div {
+    transform: rotate(180deg);
+    transform-origin: center center 0;
+    line-height: 1em;
   }
 `
 const ErfolgNichtBeurteiltTitle = styled(Title)`
@@ -142,9 +139,6 @@ const ErfolgNichtBeurteiltTitle = styled(Title)`
   writing-mode: vertical-lr;
   padding-bottom: 3px;
   padding-top: 3px;
-  /* needed because of bug (?) in print mode
-   * where not full height is taken */
-  height: 98px;
   > div {
     transform: rotate(180deg);
     transform-origin: center center 0;
@@ -198,14 +192,6 @@ const ErfolgUnsicherTitle = styled(ErfolgTitle)`
   grid-row: 2 / span 1;
   background-color: #afafaf;
 `
-const KefArtTitle = styled(ErfolgTitle)`
-  grid-column: 11 / span 1;
-  grid-row: 2 / span 1;
-`
-const KefKontrolleTitle = styled(ErfolgTitle)`
-  grid-column: 12 / span 1;
-  grid-row: 2 / span 1;
-`
 
 const ErfolgList = ({ jahr, data }) => {
   const aps = get(data, 'allAps.nodes', [])
@@ -217,12 +203,6 @@ const ErfolgList = ({ jahr, data }) => {
       const anzMassn = flatten(
         tpops.map(t => get(t, 'tpopmassnsByTpopId.nodes', [])),
       ).length
-      const kefKontrollJahr = get(ap, 'aeTaxonomyByArtId.kefkontrolljahr')
-      const isKefKontrollJahr =
-        !!kefKontrollJahr &&
-        typeof window !== 'undefined' &&
-        window.Math.floor((jahr - kefKontrollJahr) / 4) ===
-          (jahr - kefKontrollJahr) / 4
       return {
         ap: get(ap, 'aeTaxonomyByArtId.artname'),
         erfolgNicht: beurteilung === 3 ? 'X' : '',
@@ -240,8 +220,7 @@ const ErfolgList = ({ jahr, data }) => {
           '',
         ),
         keineMassnahme: anzMassn === 0 ? 'X' : '',
-        kefArt: !!get(ap, 'aeTaxonomyByArtId.kefart') ? 'X' : '',
-        kefKontrolle: isKefKontrollJahr ? 'X' : '',
+        apExists: ap.bearbeitung === 3 ? 'X' : '',
       }
     }),
     'ap',
@@ -256,8 +235,12 @@ const ErfolgList = ({ jahr, data }) => {
           <ErfolgSpanningTitle>Erfolg</ErfolgSpanningTitle>
           <KeineMassnTitle>
             <div>keine Massnahme</div>
+            <div>im Berichtsjahr</div>
           </KeineMassnTitle>
-          <KefSpanningTitle>KEF</KefSpanningTitle>
+          <ApExistsTitle>
+            <div>Aktionsplan</div>
+            <div>erstellt</div>
+          </ApExistsTitle>
           <ErfolgNichtTitle>
             <div>nicht</div>
           </ErfolgNichtTitle>
@@ -282,12 +265,6 @@ const ErfolgList = ({ jahr, data }) => {
           <ErfolgNichtBeurteiltTitle>
             <div>nicht beurteilt</div>
           </ErfolgNichtBeurteiltTitle>
-          <KefArtTitle>
-            <div>Art</div>
-          </KefArtTitle>
-          <KefKontrolleTitle>
-            <div>Kontrolle</div>
-          </KefKontrolleTitle>
           {apRows.map(row => (
             <Fragment key={row.ap}>
               <Ap>{row.ap}</Ap>
@@ -312,10 +289,7 @@ const ErfolgList = ({ jahr, data }) => {
               <KeineMassnahme val={!!row.keineMassnahme}>
                 {row.keineMassnahme}
               </KeineMassnahme>
-              <KefArt val={!!row.kefArt}>{row.kefArt}</KefArt>
-              <KefKontrolle val={!!row.kefKontrolle}>
-                {row.kefKontrolle}
-              </KefKontrolle>
+              <ApExists val={!!row.apExists}>{row.apExists}</ApExists>
             </Fragment>
           ))}
         </Table>

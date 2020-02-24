@@ -27,8 +27,6 @@ export const aeTaxonomies = gql`
     taxArtName
     status
     artwert
-    kefkontrolljahr
-    kefart
   }
 `
 

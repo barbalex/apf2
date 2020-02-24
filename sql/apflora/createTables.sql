@@ -1140,9 +1140,7 @@ create table apflora.ae_taxonomies (
   artname text,
   tax_art_name text,
   status text,
-  artwert integer,
-  kefart boolean,
-  kefkontrolljahr integer
+  artwert integer
 );
 create index on apflora.ae_taxonomies (taxonomie_id);
 create index on apflora.ae_taxonomies (taxonomie_name);
@@ -1153,7 +1151,7 @@ create index on apflora.ae_taxonomies (tax_art_name);
 
 -- to update data run:
 --truncate apflora.ae_taxonomies;
---insert into apflora.ae_taxonomies(taxonomie_id, taxonomie_name, id, taxid, familie, artname, tax_art_name, status, artwert, kefart, kefkontrolljahr)
+--insert into apflora.ae_taxonomies(taxonomie_id, taxonomie_name, id, taxid, familie, artname, tax_art_name, status, artwert)
 --select
 --  taxonomie_id,
 --  taxonomie_name,
@@ -1167,9 +1165,7 @@ create index on apflora.ae_taxonomies (tax_art_name);
 --    else concat('(Taxonomie unbekannt): ', artname)
 --  end,
 --  status,
---  artwert,
---  kefart,
---  kefkontrolljahr
+--  artwert
 --from apflora.ae_taxonomies_download;
 --update apflora.ae_taxonomies
 --set tax_art_name = concat('SISF2: ', artname);
