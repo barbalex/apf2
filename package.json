@@ -11,7 +11,7 @@
   "scripts": {
     "analyze": "npx source-map-explorer build/static/js/main.*",
     "build": "gatsby clean && gatsby build",
-    "postbuild": "copyfiles now.json public",
+    "postbuild": "copyfiles .now/* public",
     "dev": "gatsby develop",
     "start": "npm run develop",
     "serve": "gatsby serve",
