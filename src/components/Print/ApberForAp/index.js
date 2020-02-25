@@ -327,14 +327,7 @@ const ApberForAp = ({
             </FieldRowFullWidth>
           )}
 
-          <BMengen
-            apId={apId}
-            jahr={jahr}
-            startJahr={startJahr}
-            mengenResult={mengenResult}
-            a1LPop={a1LPop}
-            a1LTpop={a1LTpop}
-          />
+          <BMengen apId={apId} jahr={jahr} mengenResult={mengenResult} />
           {!!apber.biotopeOptimieren && (
             <FieldRowFullWidth>
               <TitledLabel>
@@ -347,7 +340,6 @@ const ApberForAp = ({
           )}
 
           <CMengen
-            apId={apId}
             jahr={jahr}
             startJahr={startJahr}
             mengenResult={mengenResult}
