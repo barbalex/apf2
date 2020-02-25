@@ -227,9 +227,6 @@ export default gql`
             }
           ) {
             totalCount
-            nodes {
-              ...PopberFields
-            }
           }
         }
       }
