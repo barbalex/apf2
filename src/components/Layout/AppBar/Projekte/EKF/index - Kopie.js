@@ -10,7 +10,6 @@ import get from 'lodash/get'
 import { MdPrint } from 'react-icons/md'
 import IconButton from '@material-ui/core/IconButton'
 import Badge from '@material-ui/core/Badge'
-import { useSnackbar } from 'notistack'
 
 import isMobilePhone from '../../../../../modules/isMobilePhone'
 import setUrlQueryValue from '../../../../../modules/setUrlQueryValue'
@@ -70,12 +69,9 @@ const ProjekteAppBar = () => {
     ekfYear,
     setIsPrint,
     setEkfIds,
-    enqueNotification,
-    removeNotification,
   } = store
   const { activeNodeArray } = store.tree
   const ekfIsActive = !!getActiveNodes(activeNodeArray).tpopfreiwkontr
-  const { closeSnackbar } = useSnackbar()
 
   /**
    * need to clone projekteTabs
@@ -158,36 +154,16 @@ const ProjekteAppBar = () => {
   }, [setIsPrint])
   const onClickPrintAll = useCallback(() => {
     if (typeof window !== 'undefined') {
-      const notif = enqueNotification({
-        message: 'Der Druck wird vorbereitet...',
-        options: {
-          variant: 'info',
-          onClose: () => console.log('Notification was closed'),
-        },
-      })
-      //console.log('printing these ekfIds:', ekfIds)
       setIsPrint(true)
       setEkfIds(ekfIds)
       // TODO: need to know when all tpopfreiwkontr forms have finisched rendering
       // idea for hack: use ekfCount to set timeout value?
       setTimeout(() => {
-        removeNotification(notif)
-        closeSnackbar(notif)
-        setTimeout(() => {
-          window.print()
-          setIsPrint(false)
-        }, 1000)
+        window.print()
+        setIsPrint(false)
       }, 3000 + ekfCount * 300)
     }
-  }, [
-    closeSnackbar,
-    ekfCount,
-    ekfIds,
-    enqueNotification,
-    removeNotification,
-    setEkfIds,
-    setIsPrint,
-  ])
+  }, [ekfCount, ekfIds, setEkfIds, setIsPrint])
 
   return (
     <>
