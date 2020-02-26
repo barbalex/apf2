@@ -64,7 +64,9 @@ const standardWidth = 500
 const standardHeight = 800
 
 const Ekf = () => {
-  const { user, isPrint, tree, ekfIds } = useContext(storeContext)
+  const { user, isPrint, isEkfPrintPreview, tree, ekfIds } = useContext(
+    storeContext,
+  )
   const { token } = user
   const tokenDecoded = token ? jwtDecode(token) : null
   const role = tokenDecoded ? tokenDecoded.role : null
@@ -118,6 +120,10 @@ const Ekf = () => {
 
   if (isPrint && tpopkontrId) {
     return <Tpopfreiwkontr treeName={treeName} role={role} />
+  }
+
+  if (isEkfPrintPreview) {
+    return 'TODO:'
   }
 
   return (
