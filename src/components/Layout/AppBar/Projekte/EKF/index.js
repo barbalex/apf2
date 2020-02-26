@@ -77,8 +77,8 @@ const ProjekteAppBar = () => {
     setUrlQuery,
     cloneTree2From1,
     ekfAdresseId,
-    ekfYear,
     setIsPrint,
+    ekfIds,
   } = store
   const { activeNodeArray } = store.tree
   const ekfIsActive = !!getActiveNodes(activeNodeArray).tpopfreiwkontr
@@ -96,11 +96,10 @@ const ProjekteAppBar = () => {
   const isFreiwillig = role === 'apflora_freiwillig'
 
   const { data } = useQuery(queryAdresse, {
-    variables: { id: ekfAdresseId, jahr: ekfYear },
+    variables: { id: ekfAdresseId },
   })
   const adresseName = get(data, 'adresseById.name') || null
-  const ekfCount =
-    get(data, 'adresseById.tpopkontrsByBearbeiter.totalCount') || 0
+  const ekfCount = ekfIds.length
 
   const [userOpen, setUserOpen] = useState(false)
   const [preparingEkfMultiprint, setPreparingEkfMultiprint] = useState(false)
