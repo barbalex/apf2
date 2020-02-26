@@ -1,13 +1,13 @@
 import React, { useContext, useState, useCallback } from 'react'
 import Button from '@material-ui/core/Button'
 import remove from 'lodash/remove'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import jwtDecode from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
 import { Link } from 'gatsby'
 import get from 'lodash/get'
-import { MdPrint } from 'react-icons/md'
+import { MdPrint, MdHourglassEmpty } from 'react-icons/md'
 import IconButton from '@material-ui/core/IconButton'
 import Badge from '@material-ui/core/Badge'
 
@@ -55,6 +55,17 @@ const StyledBadge = styled(Badge)`
     right: 9px !important;
   }
 `
+const spinning = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+`
+const StyledMdHourglassEmpty = styled(MdHourglassEmpty)`
+  animation: ${spinning} 3s linear infinite;
+`
 
 const ProjekteAppBar = () => {
   const store = useContext(storeContext)
@@ -96,6 +107,7 @@ const ProjekteAppBar = () => {
   ).map(n => n.id)
 
   const [userOpen, setUserOpen] = useState(false)
+  const [preparingEkfMultiprint, setPreparingEkfMultiprint] = useState(false)
 
   const onClickButton = useCallback(
     name => {
@@ -154,6 +166,7 @@ const ProjekteAppBar = () => {
   }, [setIsPrint])
   const onClickPrintAll = useCallback(() => {
     if (typeof window !== 'undefined') {
+      setPreparingEkfMultiprint(true)
       setIsPrint(true)
       setEkfIds(ekfIds)
       // TODO: need to know when all tpopfreiwkontr forms have finisched rendering
@@ -161,6 +174,7 @@ const ProjekteAppBar = () => {
       setTimeout(() => {
         window.print()
         setIsPrint(false)
+        setPreparingEkfMultiprint(false)
       }, 3000 + ekfCount * 300)
     }
   }, [ekfCount, ekfIds, setEkfIds, setIsPrint])
@@ -182,7 +196,11 @@ const ProjekteAppBar = () => {
                 onClick={onClickPrintAll}
                 title={`Alle ${ekfCount} EKF drucken`}
               >
-                <MdPrint />
+                {preparingEkfMultiprint ? (
+                  <StyledMdHourglassEmpty />
+                ) : (
+                  <MdPrint />
+                )}
               </StyledIconButton>
             </StyledBadge>
           )}
