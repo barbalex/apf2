@@ -55,9 +55,8 @@ const fetchImageIfNeeded = async ({
   if (!image && !!apId) {
     let newImage
     try {
-      newImage = await import(`./${apId}.png`) //.then(m => m.default)
+      newImage = await import(`./${apId}.png`)
     } catch (error) {
-      console.log('Image not loaded, error:', error)
       return setNotif(`Für ${artname} wurde kein Bild gefunden`)
     }
     if (newImage && newImage.default) setImage(newImage.default)
@@ -74,10 +73,8 @@ const Image = ({ artname, apId }) => {
   }, [apId])
 
   useEffect(() => {
-    console.log('Image, fetching image for:', artname)
     fetchImageIfNeeded({ apId, artname, image, setImage, setNotif })
   }, [apId, artname, image])
-  console.log('Image', { image, artname })
 
   return (
     <Container>

@@ -60,7 +60,6 @@ const myTypes = types
     nodeFilter: types.optional(NodeFilter, defaultNodeFilter),
     user: types.optional(User, defaultUser),
     isPrint: types.optional(types.boolean, false),
-    isEkfPrintPreview: types.optional(types.boolean, false),
     view: types.optional(types.string, 'normal'),
     ekfYear: types.optional(types.number, ekfYear),
     ekfAdresseId: types.optional(types.maybeNull(types.string), null),
@@ -338,9 +337,6 @@ const myTypes = types
     },
     setIsPrint(val) {
       self.isPrint = val
-    },
-    setIsEkfPrintPreview(val) {
-      self.isEkfPrintPreview = val
     },
     setView(val) {
       self.view = val
