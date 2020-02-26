@@ -79,7 +79,6 @@ const ProjekteAppBar = () => {
     ekfAdresseId,
     ekfYear,
     setIsPrint,
-    setEkfIds,
   } = store
   const { activeNodeArray } = store.tree
   const ekfIsActive = !!getActiveNodes(activeNodeArray).tpopfreiwkontr
@@ -168,7 +167,6 @@ const ProjekteAppBar = () => {
     if (typeof window !== 'undefined') {
       setPreparingEkfMultiprint(true)
       setIsPrint(true)
-      setEkfIds(ekfIds)
       // TODO: need to know when all tpopfreiwkontr forms have finisched rendering
       // idea for hack: use ekfCount to set timeout value?
       setTimeout(() => {
@@ -177,7 +175,7 @@ const ProjekteAppBar = () => {
         setPreparingEkfMultiprint(false)
       }, 3000 + ekfCount * 300)
     }
-  }, [ekfCount, ekfIds, setEkfIds, setIsPrint])
+  }, [ekfCount, setIsPrint])
 
   return (
     <>
