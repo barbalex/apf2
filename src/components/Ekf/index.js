@@ -106,12 +106,6 @@ const Ekf = () => {
       window.removeEventListener('resize', setDimensions)
   }, [setDimensions])
 
-  console.log('Ekf', {
-    isPrint,
-    ekfIdsLength: ekfIds.length,
-    ekfIds: ekfIds.slice(),
-  })
-
   if (isPrint && ekfIds.length > 0) {
     return (
       <>
