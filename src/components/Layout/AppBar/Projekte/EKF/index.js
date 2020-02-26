@@ -101,9 +101,6 @@ const ProjekteAppBar = () => {
   const adresseName = get(data, 'adresseById.name') || null
   const ekfCount =
     get(data, 'adresseById.tpopkontrsByBearbeiter.totalCount') || 0
-  const ekfIds = (
-    get(data, 'adresseById.tpopkontrsByBearbeiter.nodes') || []
-  ).map(n => n.id)
 
   const [userOpen, setUserOpen] = useState(false)
   const [preparingEkfMultiprint, setPreparingEkfMultiprint] = useState(false)
