@@ -149,7 +149,7 @@ const AMengen = ({
       <TpopSeit />
     </Row>
     <Row>
-      <Label2>erloschen:</Label2>
+      <Label2>erloschen (nach 1950):</Label2>
       <PopBerJahr>{loading ? '...' : a6LPop}</PopBerJahr>
       <TpopBerJahr>{loading ? '...' : a6LTpop}</TpopBerJahr>
       <PopSeit />

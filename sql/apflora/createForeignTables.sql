@@ -35,9 +35,7 @@ create foreign table apflora.ae_taxonomies_download (
   familie text,
   artname text,
   status text,
-  artwert integer,
-  kefart boolean,
-  kefkontrolljahr integer
+  artwert integer
 )
 server ae_server options (schema_name 'ae', table_name 'v_apflora_taxonomies');
 

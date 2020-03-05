@@ -79,3 +79,5 @@ cypress/videos
 .env*
 
 schema.json
+
+.now

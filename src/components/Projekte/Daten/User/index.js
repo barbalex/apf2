@@ -317,10 +317,10 @@ const User = ({ treeName }) => {
                     ekfTpops.length > 1 ? 'nen' : 'r'
                   } dieser Benutzer als EKF-Kontrolleur erfasst ist, EKF-Formulare für das Jahr ${thisYear}`}
                 >
-                  {`EKF-Formulare für ${thisYear} erzeugen`}
+                  {`(Fehlende) EKF-Formulare für ${thisYear} erzeugen`}
                 </StyledButton>
               )}
-              {hasEkfTpops && !hasEkfTpopsWithoutEkfThisYear && (
+              {hasEkfTpops && (
                 <StyledButton
                   variant="outlined"
                   onClick={() => {

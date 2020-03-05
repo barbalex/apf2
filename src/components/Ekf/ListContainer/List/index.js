@@ -60,8 +60,9 @@ const getEkfFromData = ({ data, ekfAdresseId }) => {
 
 const EkfList = ({ data, loading }) => {
   const store = useContext(storeContext)
-  const { ekfYear, ekfAdresseId, tree } = store
+  const { ekfYear, ekfAdresseId, tree, setEkfIds } = store
   const ekf = getEkfFromData({ data, ekfAdresseId })
+  setEkfIds(ekf.map(e => e.id))
 
   const { activeNodeArray, treeWidth, treeHeight } = tree
   const activeTpopkontrId =

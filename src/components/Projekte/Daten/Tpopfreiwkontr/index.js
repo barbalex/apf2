@@ -174,13 +174,15 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
     : activeNodeArray.length > 9
     ? activeNodeArray[9]
     : '99999999-9999-9999-9999-999999999999'
-  const apId = activeNodeArray[3]
   if (showFilter) id = '99999999-9999-9999-9999-999999999999'
   const { data, loading, error, refetch } = useQuery(query, {
     variables: {
       id,
     },
   })
+  // DO NOT fetch apId from activeNodeArray because this form is also used for mass prints
+  //const apId = activeNodeArray[3]
+  const apId = get(data, 'tpopkontrById.tpopByTpopId.popByPopId.apId')
 
   const allTpopkontrFilter = {
     typ: { equalTo: 'Freiwilligen-Erfolgskontrolle' },
