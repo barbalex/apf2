@@ -81,3 +81,5 @@ cypress/videos
 schema.json
 
 .now
+
+reduxcache*
