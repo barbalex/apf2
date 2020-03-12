@@ -11,14 +11,16 @@ Feld- und Freiwilligen-Kontrollen entsprechen Beobachtungen. Ein mal jährlich (
 ### Folgende Kontrollen werden exportiert
 - Art: Grundsätzlich alle. Ausnahmen:
   - Keine Testart
-  - keine von der FNS ergänzte Art
-- Teilpopulation: Enthält gültige Koordinaten
-- Teilpopulation: Enthält einen Flurnamen
-- Teilpopulation: Ist kein Ansaatversuch
-- Teilpopulation: Es wurde erfasst, seit wann sie bekannt ist
-- Teilpopulation: Status ist ursprünglich oder die Ansiedlung ist mindestens 5 Jahre her (= sie ist seit mindestens 5 Jahren bekannt)
-- Kontrolle: Ein gültiger Bearbeiter ist erfasst (nicht der Bearbeiter "Unbekannt")
-- Kontrolle: Es existiert ein Kontrolljahr. Es liegt vor dem aktuellen (Kontrollen aus dem aktuellen Jahr wurden ev. noch nicht verifiziert)
+  - Keine von der FNS ergänzte Art
+- Teilpopulation: 
+  - Enthält gültige Koordinaten
+  - Enthält einen Flurnamen
+  - Ist kein Ansaatversuch
+  - Es wurde erfasst, seit wann sie bekannt ist
+  - Status ist ursprünglich oder die Ansiedlung ist mindestens 5 Jahre her (= sie ist seit mindestens 5 Jahren bekannt)
+- Kontrolle:
+  - Ein gültiger Bearbeiter ist erfasst (nicht der Bearbeiter "Unbekannt")
+  - Es existiert ein Kontrolljahr. Es liegt vor dem aktuellen (Kontrollen aus dem aktuellen Jahr wurden ev. noch nicht verifiziert)
 
 ### Folgende Felder werden exportiert
 Die Feldnamen werden durch EvAB bestimmt. Die Listen-Titel bezeichnen die Tabelle bzw. Hierarchiestufe, in welche die Daten in EvAB importiert werden.<br/><br/>
@@ -96,7 +98,7 @@ Die FNS gibt vor, dass in eine Access-GEO-DB importiert werden muss. Leider gibt
    1. Tabellen-Verknüpfungs-Manager öffnen
    1. Neue EvabGeoDB verknüpfen
 1. Adressen vorbereiten
-   1. EvAB gibt Adressen eigene GUID's. Daher müssten eigentlich bei jedem Export für alle Adressen aus apflora neue Adressen in EvAB geschaffen werden!!! Um das zu vermeiden, wurde sehr aufwändig versucht, die GUID's von in EvAB bereits vorhandenen Adressen in apflora aufzunehmen und beim Export wo möglich mitzugeben. Das funktioniert leider nur sehr unbefriedigend, weil 1. Access sich bei GUID's im Gegensatz zu PostgreSQL nicht an das standardisierte Format hält 2. der Vorgang extrem aufwändig und kompliziert ist, 3. In den vorjahren erfasste Adressen oft nicht im Template erscheinen und 4. mühsam in apflora übernommene EvAB-Guids oft doch nicht mit den Adressen im EvAB-Template verbunden werden können, weil sie offenbar (teilweise) dort nicht vorkommen :-(. Dieser Prozess ist viel zu aufwändig und mühsam und wir werden wohl dazu übergehen müssen, immer alle Adressen mit jeweils neuen GUID's neu aufzunehmen. Vorläufig funktioniert es so:
+   1. EvAB gibt Adressen eigene GUID's. Daher müssten eigentlich bei jedem Export für alle Adressen aus apflora neue Adressen in EvAB geschaffen werden!!! Um das zu vermeiden, wurde sehr aufwändig versucht, die GUID's von in EvAB bereits vorhandenen Adressen in apflora aufzunehmen und beim Export wo möglich mitzugeben. Das funktioniert leider nur sehr unbefriedigend, weil 1. Access sich bei GUID's im Gegensatz zu PostgreSQL nicht an das standardisierte Format hält 2. der Vorgang extrem aufwändig und kompliziert ist, 3. In den Vorjahren erfasste Adressen bisher kaum je im Template erschienen und 4. mühsam in apflora übernommene EvAB-Guids oft doch nicht mit den Adressen im EvAB-Template verbunden werden können, weil sie offenbar (teilweise) dort nicht vorkommen :-(. Dieser Prozess ist viel zu aufwändig und mühsam und wir werden wohl dazu übergehen müssen, immer alle Adressen mit jeweils neuen GUID's neu aufzunehmen. Vorläufig funktioniert es so:
    1. Prüfen, bei welchen Adressen benötigte Felder leer sind (evab_nachname, evab_vorname, evab_ort). Diese ergänzen:
       ```sql
       select name from apflora.adresse
@@ -118,9 +120,11 @@ Die FNS gibt vor, dass in eine Access-GEO-DB importiert werden muss. Leider gibt
    - Peinlich genau aufpassen, wie der Access-Import-Assistent mit den Daten umgeht. Es können jederzeit ein Teil der Felder ignoriert werden, worauf diese Daten verloren gehen!
    - Peinlich genau aufpassen, dass der Access-Import-Assistent keine nicht existenten Felder erfindet und vorhandene Daten darauf verteilt oder dafür ignoriert
    - Jede Tabelle nach dem Import genau prüfen: Anzahl Datensätze, Anzahl Felder, Daten in den Feldern... Der Access-Import-Assistent ist NICHT vertrauenswürdig!
+   - NULL werte leeren
+   - Alternative zum Import: Copy/Paste (!)
 1. Es braucht in tblPersonen einen Datensatz für Topos (`{7C71B8AF-DF3E-4844-A83B-55735F80B993}	topos Marti & Müller AG	-	Zürich`). Der wird zwar jedes Jahr hinzugefügt, er taucht aber trotzdem nie im Template auf. Daher muss er aus dem Vorjahr hinein kopiert werden
 1. Jetzt die Import-Abfragen in `beob_nach_evab.accdb` nacheinander ausführen. Dabei darauf achten, dass immer alle Datensätze importiert wurden. Falls nicht, muss dem nachgegangen werden. Es kann z.B. an veränderten Stammdaten in EvAB liegen
 1. `EvabGeoDB_apflora.mdb` ist nun bereit
 1. `EvabGeoDB_apflora.mdb` in EvAB öffnen und prüfen, ob es i.O. aussieht
-1. Daten nach Excel exportieren, damit Topos die Daten in Tabellenform prüfen kann. Achtung: der in EvAB eingebaute ZDSF-Export stürzt oft ab. Und wenn er einmal funktioniert, ist das generierte CSV-Format leider weder standard-konform noch für den Zweck genügend: Es gibt keine Text-Trenner, wieso es nicht möglich ist, Felder zuverlässig abzugrenzen! Darum in `EvabGeoDB_apflora.mdb` die Abfrage `vExportZDSF` verwenden. Aber nochmals Achtung: Die Abfrage enthält mehrere Kriterien, die für diesen Export unnötig sind und offenbar den Export verhindern. Einfach löschen. Und hoffen, dass der Export aus Access gelingt - oft stürzt Access dabei ab :-(
+1. Daten nach Excel exportieren, damit Topos die Daten in Tabellenform prüfen kann. Achtung: der in EvAB eingebaute ZDSF-Export stürzt oft ab. Und wenn er einmal funktioniert, ist das generierte CSV-Format leider weder standard-konform noch für den Zweck genügend: Es gibt keine Text-Trenner, wieso es nicht möglich ist, Felder zuverlässig abzugrenzen! Darum in `EvabGeoDB_apflora.mdb` die Abfrage `vExportZDSF` verwenden. Aber nochmals Achtung: Die Abfrage enthielt 2019 mehrere Kriterien, die für diesen Export unnötig sind und offenbar den Export verhindern (2020 nicht mehr). Einfach löschen. Und hoffen, dass der Export aus Access gelingt - oft stürzt Access dabei ab :-(
 1. `EvabGeoDB_apflora.mdb` und `vExportZDSF.xlsx` Topos zur Prüfung und Weiterleitung an die FNS übermitteln
