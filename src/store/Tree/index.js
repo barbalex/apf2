@@ -44,9 +44,6 @@ export default types
     setFilterWidth(val) {
       self.filterWidth = val
     },
-    setNodes(val) {
-      self.nodes = val
-    },
     setOpenNodes(val) {
       // need set to ensure contained arrays are unique
       const set = new Set(val.map(JSON.stringify))
