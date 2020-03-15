@@ -12,7 +12,6 @@ import Row from './Row'
 
 import storeContext from '../../../../storeContext'
 import buildVariables from './buildVariables'
-import queryCurrentIssues from './queryCurrentIssues'
 import queryUsers from './queryUsers'
 import queryProjekts from './queryProjekts'
 import queryMessages from './queryMessages'
@@ -536,18 +535,12 @@ const Tree = ({ treeName }) => {
   })
 
   const {
-    data: dataCurrentIssues,
-    error: errorCurrentIssues,
-    loading: loadingCurrentIssues,
-  } = useQuery(queryCurrentIssues)
-  const {
     data: dataMessages,
     error: errorMessages,
     loading: loadingMessages,
   } = useQuery(queryMessages)
 
   const queryLoadingArray = [
-    loadingCurrentIssues,
     loadingMessages,
     loadingWertes,
     loadingUsers,
@@ -571,7 +564,6 @@ const Tree = ({ treeName }) => {
   ]
 
   const queryErrorArray = [
-    errorCurrentIssues,
     errorMessages,
     errorWertes,
     errorUsers,
@@ -595,7 +587,6 @@ const Tree = ({ treeName }) => {
   ].filter(e => !!e)
 
   const data = {
-    ...dataCurrentIssues,
     ...dataMessages,
     ...dataWertes,
     ...dataUsers,
@@ -632,7 +623,6 @@ const Tree = ({ treeName }) => {
         role,
         nodeFilter,
         data,
-        dataCurrentIssues,
         dataMessages,
         dataAdresses: dataWertes,
         dataApberrelevantGrundWertes: dataWertes,
@@ -657,7 +647,6 @@ const Tree = ({ treeName }) => {
         loadingApberrelevantGrundWertes: loadingWertes,
         loadingTpopkontrzaehlEinheitWertes: loadingWertes,
         loadingEkAbrechnungstypWertes: loadingWertes,
-        loadingCurrentIssues,
         loadingMessages,
         loadingUsers,
         loadingProjekts,

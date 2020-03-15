@@ -83,7 +83,6 @@ const compare = (a, b) => {
 
 export default ({
   data,
-  dataCurrentIssues,
   dataMessages,
   dataAdresses,
   dataApberrelevantGrundWertes,
@@ -104,7 +103,6 @@ export default ({
   dataUsers,
   dataZielbers,
   dataZiels,
-  loadingCurrentIssues,
   loadingMessages,
   loadingAdresses,
   loadingApberrelevantGrundWertes,
@@ -157,7 +155,7 @@ export default ({
     )(),
     ...memoizeOne(() =>
       buildCurrentIssuesFolderNodes({
-        data: dataCurrentIssues,
+        data,
         treeName,
         projektNodes,
         loading: loadingUsers,
@@ -1256,7 +1254,7 @@ export default ({
         ...memoizeOne(() =>
           buildCurrentIssuesNodes({
             nodes,
-            data: dataCurrentIssues,
+            data,
             treeName,
             projektNodes,
             store,

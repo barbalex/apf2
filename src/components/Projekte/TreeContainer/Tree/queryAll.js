@@ -1,6 +1,12 @@
 import gql from 'graphql-tag'
 
-import { ap, apart, apberuebersicht, ber } from '../../../shared/fragments'
+import {
+  ap,
+  apart,
+  apberuebersicht,
+  ber,
+  currentIssue,
+} from '../../../shared/fragments'
 
 export default gql`
   query TreeAllQuery(
@@ -88,9 +94,15 @@ export default gql`
         ...BerFields
       }
     }
+    allCurrentissues(orderBy: SORT_ASC) {
+      nodes {
+        ...CurrentIssueFields
+      }
+    }
   }
   ${ap}
   ${apart}
   ${apberuebersicht}
   ${ber}
+  ${currentIssue}
 `
