@@ -307,8 +307,19 @@ const Tree = ({ treeName }) => {
         store,
       }),
     )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading, activeNodeArray, openNodes, openNodes.length, activeNodes])
+  }, [
+    loading,
+    //activeNodeArray,
+    openNodes,
+    openNodes.length,
+    //activeNodes,
+    data,
+    nodeFilter,
+    treeName,
+    role,
+    store,
+  ])
+  //}, [loading, activeNodeArray, openNodes, openNodes.length, activeNodes, data])
 
   useEffect(() => {
     // if activeNodeArray.length === 1
