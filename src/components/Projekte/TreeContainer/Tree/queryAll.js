@@ -13,6 +13,7 @@ import {
   popmassnber,
   pop,
   projekt,
+  tpopber,
 } from '../../../shared/fragments'
 
 export default gql`
@@ -32,6 +33,7 @@ export default gql`
     $popbersFilter: PopberFilter!
     $popmassnbersFilter: PopmassnberFilter!
     $popsFilter: PopFilter!
+    $tpopbersFilter: TpopberFilter!
     $isProjekt: Boolean!
     $isAp: Boolean!
     $isPop: Boolean!
@@ -159,6 +161,12 @@ export default gql`
         ...ProjektFields
       }
     }
+    allTpopbers(filter: $tpopbersFilter, orderBy: LABEL_ASC)
+      @include(if: $isTpop) {
+      nodes {
+        ...TpopberFields
+      }
+    }
   }
   ${ap}
   ${apart}
@@ -172,4 +180,5 @@ export default gql`
   ${popmassnber}
   ${pop}
   ${projekt}
+  ${tpopber}
 `

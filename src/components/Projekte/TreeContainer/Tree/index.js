@@ -19,7 +19,6 @@ import queryTpopmassnbers from './queryTpopmassnbers'
 import queryTpopfeldkontrs from './queryTpopfeldkontrs'
 import queryTpopfreiwkontrs from './queryTpopfreiwkontrs'
 import queryTpopkontrzaehls from './queryTpopkontrzaehls'
-import queryTpopbers from './queryTpopbers'
 import queryZiels from './queryZiels'
 import queryZielbers from './queryZielbers'
 import queryAll from './queryAll'
@@ -216,24 +215,6 @@ const Tree = ({ treeName }) => {
     key: 'tpopkontrzaehls',
     value: refetchTpopkontrzaehls,
   })
-  const queryTpopbersFilter = { tpopId: { in: tpop } }
-  if (!!nodeLabelFilter.tpopber) {
-    queryTpopbersFilter.label = {
-      includesInsensitive: nodeLabelFilter.tpopber,
-    }
-  }
-  const {
-    data: dataTpopbers,
-    error: errorTpopbers,
-    loading: loadingTpopbers,
-    refetch: refetchTpopbers,
-  } = useQuery(queryTpopbers, {
-    variables: { isTpop, filter: queryTpopbersFilter },
-  })
-  setRefetchKey({
-    key: 'tpopbers',
-    value: refetchTpopbers,
-  })
   const queryZielsFilter = { apId: { in: ap } }
   if (!!nodeLabelFilter.ziel) {
     queryZielsFilter.label = {
@@ -362,6 +343,12 @@ const Tree = ({ treeName }) => {
       includesInsensitive: nodeLabelFilter.pop,
     }
   }
+  const queryTpopbersFilter = { tpopId: { in: tpop } }
+  if (!!nodeLabelFilter.tpopber) {
+    queryTpopbersFilter.label = {
+      includesInsensitive: nodeLabelFilter.tpopber,
+    }
+  }
   const {
     data: dataAll,
     error: errorAll,
@@ -388,6 +375,7 @@ const Tree = ({ treeName }) => {
       popbersFilter: queryPopbersFilter,
       popmassnbersFilter: queryPopmassnbersFilter,
       popsFilter: queryPopsFilter,
+      tpopbersFilter: queryTpopbersFilter,
     },
   })
   setRefetchKey({
@@ -455,7 +443,6 @@ const Tree = ({ treeName }) => {
     loadingTpopfeldkontrs,
     loadingTpopfreiwkontrs,
     loadingTpopkontrzaehls,
-    loadingTpopbers,
     loadingZiels,
     loadingZielbers,
     loadingAll,
@@ -470,7 +457,6 @@ const Tree = ({ treeName }) => {
     errorTpopfeldkontrs,
     errorTpopfreiwkontrs,
     errorTpopkontrzaehls,
-    errorTpopbers,
     errorZiels,
     errorZielbers,
     errorAll,
@@ -485,7 +471,6 @@ const Tree = ({ treeName }) => {
     ...dataTpopfeldkontrs,
     ...dataTpopfreiwkontrs,
     ...dataTpopkontrzaehls,
-    ...dataTpopbers,
     ...dataZiels,
     ...dataZielbers,
     ...dataAll,
@@ -516,7 +501,6 @@ const Tree = ({ treeName }) => {
         dataTpopfeldkontrs,
         dataTpopfreiwkontrs,
         dataTpopkontrzaehls,
-        dataTpopbers,
         dataZiels,
         dataZielbers,
         loadingAdresses: loadingWertes,
@@ -530,7 +514,6 @@ const Tree = ({ treeName }) => {
         loadingTpopfeldkontrs,
         loadingTpopfreiwkontrs,
         loadingTpopkontrzaehls,
-        loadingTpopbers,
         loadingZiels,
         loadingZielbers,
         loadingAll,
