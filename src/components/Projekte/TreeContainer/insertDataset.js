@@ -199,8 +199,5 @@ export default async ({
     newOpenNodes = [...openNodes, urlWithoutJahr, newActiveNodeArray]
   }
   setOpenNodes(newOpenNodes)
-  const refetchName = `${
-    table === 'tpopkontrzaehl' ? table : camelCase(tablePassed)
-  }s`
-  refetch[refetchName]()
+  refetch.tree()
 }
