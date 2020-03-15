@@ -34,7 +34,6 @@ import queryBers from './queryBers'
 import queryAll from './queryAll'
 import queryEkzaehleinheits from './queryEkzaehleinheits'
 import queryEkfrequenzs from './queryEkfrequenzs'
-import queryBeobNichtBeurteilts from './queryBeobNichtBeurteilts'
 import queryBeobNichtZuzuordnens from './queryBeobNichtZuzuordnens'
 import queryWerte from './queryWerte'
 import buildNodes from '../nodes'
@@ -429,6 +428,16 @@ const Tree = ({ treeName }) => {
       includesInsensitive: nodeLabelFilter.assozart,
     }
   }
+  const queryBeobNichtBeurteiltsFilter = {
+    nichtZuordnen: { equalTo: false },
+    apId: { in: ap },
+    tpopId: { isNull: true },
+  }
+  if (!!nodeLabelFilter.beob) {
+    queryBeobNichtBeurteiltsFilter.label = {
+      includesInsensitive: nodeLabelFilter.beob,
+    }
+  }
   const {
     data: dataAll,
     error: errorAll,
@@ -443,6 +452,7 @@ const Tree = ({ treeName }) => {
       apberuebersichtsFilter: queryApberuebersichtsFilter,
       apsFilter: queryApsFilter,
       assozartFilter: queryAssozartsFilter,
+      beobNichtBeurteiltsFilter: queryBeobNichtBeurteiltsFilter,
     },
   })
   setRefetchKey({
@@ -488,31 +498,6 @@ const Tree = ({ treeName }) => {
     value: refetchEkfrequenzs,
   })
 
-  const queryBeobNichtBeurteiltsFilter = {
-    nichtZuordnen: { equalTo: false },
-    apId: { in: ap },
-    tpopId: { isNull: true },
-  }
-  if (!!nodeLabelFilter.beob) {
-    queryBeobNichtBeurteiltsFilter.label = {
-      includesInsensitive: nodeLabelFilter.beob,
-    }
-  }
-  const {
-    data: dataBeobNichtBeurteilts,
-    error: errorBeobNichtBeurteilts,
-    loading: loadingBeobNichtBeurteilts,
-    refetch: refetchBeobNichtBeurteilts,
-  } = useQuery(queryBeobNichtBeurteilts, {
-    variables: {
-      isAp,
-      filter: queryBeobNichtBeurteiltsFilter,
-    },
-  })
-  setRefetchKey({
-    key: 'beobNichtBeurteilts',
-    value: refetchBeobNichtBeurteilts,
-  })
   const queryBeobNichtZuzuordnensFilter = {
     nichtZuordnen: { equalTo: true },
     apId: { in: ap },
@@ -621,7 +606,6 @@ const Tree = ({ treeName }) => {
     loadingAll,
     loadingEkzaehleinheits,
     loadingEkfrequenzs,
-    loadingBeobNichtBeurteilts,
     loadingBeobNichtZuzuordnens,
   ]
 
@@ -649,7 +633,6 @@ const Tree = ({ treeName }) => {
     errorAll,
     errorEkzaehleinheits,
     errorEkfrequenzs,
-    errorBeobNichtBeurteilts,
     errorBeobNichtZuzuordnens,
   ].filter(e => !!e)
 
@@ -677,7 +660,6 @@ const Tree = ({ treeName }) => {
     ...dataAll,
     ...dataEkzaehleinheits,
     ...dataEkfrequenzs,
-    ...dataBeobNichtBeurteilts,
     ...dataBeobNichtZuzuordnens,
   }
 
@@ -718,7 +700,6 @@ const Tree = ({ treeName }) => {
         dataBers,
         dataEkzaehleinheits,
         dataEkfrequenzs,
-        dataBeobNichtBeurteilts,
         dataBeobNichtZuzuordnens,
         loadingAdresses: loadingWertes,
         loadingApberrelevantGrundWertes: loadingWertes,
@@ -746,7 +727,6 @@ const Tree = ({ treeName }) => {
         loadingAll,
         loadingEkzaehleinheits,
         loadingEkfrequenzs,
-        loadingBeobNichtBeurteilts,
         loadingBeobNichtZuzuordnens,
         store,
       }),

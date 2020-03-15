@@ -172,6 +172,6 @@ export default async ({ treeName, id, client, store }) => {
   refetch.tpops()
   refetch.beobNichtZuzuordnens()
   if (refetch.beobNichtZuzuordnenForMap) refetch.beobNichtZuzuordnenForMap()
-  refetch.beobNichtBeurteilts()
+  refetch.all()
   refetch.beobZugeordnets()
 }

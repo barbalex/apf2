@@ -9,6 +9,7 @@ export default gql`
     $apbersFilter: ApberFilter!
     $apberuebersichtsFilter: ApberuebersichtFilter!
     $assozartFilter: AssozartFilter!
+    $beobNichtBeurteiltsFilter: VApbeobFilter
     $isAp: Boolean!
     $isProjekt: Boolean!
   ) {
@@ -49,6 +50,13 @@ export default gql`
         label
         apId
         aeId
+      }
+    }
+    allVApbeobs(filter: $beobNichtBeurteiltsFilter) @include(if: $isAp) {
+      nodes {
+        id
+        label
+        apId
       }
     }
   }

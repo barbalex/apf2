@@ -221,7 +221,7 @@ export default async ({ value, id, treeName, type, client, store }) => {
   //refetchTree('local')
   refetch.beobNichtZuzuordnens()
   if (refetch.beobNichtZuzuordnenForMap) refetch.beobNichtZuzuordnenForMap()
-  refetch.beobNichtBeurteilts()
+  refetch.all()
   refetch.beobZugeordnets()
   if (refetch.beobZugeordnetForMap) refetch.beobZugeordnetForMap()
   if (refetch.beobNichtBeurteiltForMap) refetch.beobNichtBeurteiltForMap()

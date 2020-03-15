@@ -89,7 +89,6 @@ export default ({
   dataApberrelevantGrundWertes,
   dataTpopkontrzaehlEinheitWertes,
   dataEkAbrechnungstypWertes,
-  dataBeobNichtBeurteilts,
   dataBeobNichtZuzuordnens,
   dataBeobZugeordnets,
   dataBers,
@@ -135,7 +134,6 @@ export default ({
   loadingIdealbiotops,
   loadingEkzaehleinheits,
   loadingEkfrequenzs,
-  loadingBeobNichtBeurteilts,
   loadingBeobNichtZuzuordnens,
   store,
   nodeFilter,
@@ -414,9 +412,9 @@ export default ({
           ...memoizeOne(() =>
             buildBeobNichtBeurteiltFolderNodes({
               nodes,
-              data: dataBeobNichtBeurteilts,
+              data: data,
               treeName,
-              loading: loadingBeobNichtBeurteilts,
+              loading: loadingAll,
               apNodes,
               projektNodes,
               projId,
@@ -594,9 +592,9 @@ export default ({
           ...memoizeOne(() =>
             buildBeobNichtBeurteiltNodes({
               nodes,
-              data: dataBeobNichtBeurteilts,
+              data,
               treeName,
-              loading: loadingBeobNichtBeurteilts,
+              loading: loadingAll,
               apNodes,
               projektNodes,
               projId,
