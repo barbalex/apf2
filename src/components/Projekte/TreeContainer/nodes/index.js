@@ -81,15 +81,7 @@ const compare = (a, b) => {
   return a - b
 }
 
-export default ({
-  data,
-  loading,
-  loadingIdealbiotops,
-  store,
-  nodeFilter,
-  role,
-  treeName,
-}) => {
+export default ({ data, loading, store, nodeFilter, role, treeName }) => {
   const openNodes = store[treeName].openNodes
     .toJSON()
     // need to sort so folders are added in correct order
@@ -297,7 +289,7 @@ export default ({
             buildIdealbiotopFolderNodes({
               nodes,
               treeName,
-              loading: loadingIdealbiotops,
+              loading,
               apNodes,
               projektNodes,
               projId,
