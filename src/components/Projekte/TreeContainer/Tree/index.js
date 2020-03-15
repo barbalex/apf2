@@ -16,7 +16,6 @@ import queryUsers from './queryUsers'
 import queryTpops from './queryTpops'
 import queryTpopmassns from './queryTpopmassns'
 import queryTpopmassnbers from './queryTpopmassnbers'
-import queryTpopkontrzaehls from './queryTpopkontrzaehls'
 import queryZiels from './queryZiels'
 import queryZielbers from './queryZielbers'
 import queryAll from './queryAll'
@@ -158,24 +157,6 @@ const Tree = ({ treeName }) => {
   setRefetchKey({
     key: 'tpopmassnbers',
     value: refetchTpopmassnbers,
-  })
-  const queryTpopkontrzaehlsFilter = { tpopkontrId: { in: tpopkontr } }
-  if (!!nodeLabelFilter.tpopkontrzaehl) {
-    queryTpopkontrzaehlsFilter.label = {
-      includesInsensitive: nodeLabelFilter.tpopkontrzaehl,
-    }
-  }
-  const {
-    data: dataTpopkontrzaehls,
-    error: errorTpopkontrzaehls,
-    loading: loadingTpopkontrzaehls,
-    refetch: refetchTpopkontrzaehls,
-  } = useQuery(queryTpopkontrzaehls, {
-    variables: { isTpopkontr, filter: queryTpopkontrzaehlsFilter },
-  })
-  setRefetchKey({
-    key: 'tpopkontrzaehls',
-    value: refetchTpopkontrzaehls,
   })
   const queryZielsFilter = { apId: { in: ap } }
   if (!!nodeLabelFilter.ziel) {
@@ -323,6 +304,12 @@ const Tree = ({ treeName }) => {
       includesInsensitive: nodeLabelFilter.tpopkontr,
     }
   }
+  const queryTpopkontrzaehlsFilter = { tpopkontrId: { in: tpopkontr } }
+  if (!!nodeLabelFilter.tpopkontrzaehl) {
+    queryTpopkontrzaehlsFilter.label = {
+      includesInsensitive: nodeLabelFilter.tpopkontrzaehl,
+    }
+  }
   const {
     data: dataAll,
     error: errorAll,
@@ -334,6 +321,7 @@ const Tree = ({ treeName }) => {
       isAp,
       isPop,
       isTpop,
+      isTpopkontr,
       apartsFilter: queryApartsFilter,
       apbersFilter: queryApbersFilter,
       apberuebersichtsFilter: queryApberuebersichtsFilter,
@@ -352,6 +340,7 @@ const Tree = ({ treeName }) => {
       tpopbersFilter: queryTpopbersFilter,
       tpopfeldkontrsFilter: queryTpopfeldkontrsFilter,
       tpopfreiwkontrsFilter: queryTpopfreiwkontrsFilter,
+      tpopkontrzaehlsFilter: queryTpopkontrzaehlsFilter,
     },
   })
   setRefetchKey({
@@ -416,7 +405,6 @@ const Tree = ({ treeName }) => {
     loadingTpops,
     loadingTpopmassns,
     loadingTpopmassnbers,
-    loadingTpopkontrzaehls,
     loadingZiels,
     loadingZielbers,
     loadingAll,
@@ -428,7 +416,6 @@ const Tree = ({ treeName }) => {
     errorTpops,
     errorTpopmassns,
     errorTpopmassnbers,
-    errorTpopkontrzaehls,
     errorZiels,
     errorZielbers,
     errorAll,
@@ -440,7 +427,6 @@ const Tree = ({ treeName }) => {
     ...dataTpops,
     ...dataTpopmassns,
     ...dataTpopmassnbers,
-    ...dataTpopkontrzaehls,
     ...dataZiels,
     ...dataZielbers,
     ...dataAll,
@@ -468,7 +454,6 @@ const Tree = ({ treeName }) => {
         dataTpops,
         dataTpopmassns,
         dataTpopmassnbers,
-        dataTpopkontrzaehls,
         dataZiels,
         dataZielbers,
         loadingAdresses: loadingWertes,
@@ -479,7 +464,6 @@ const Tree = ({ treeName }) => {
         loadingTpops,
         loadingTpopmassns,
         loadingTpopmassnbers,
-        loadingTpopkontrzaehls,
         loadingZiels,
         loadingZielbers,
         loadingAll,

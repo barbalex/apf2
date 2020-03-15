@@ -232,7 +232,7 @@ const Count = ({
     ({ row }) => {
       const afterDeletionHook = () => {
         refetch()
-        store.refetch.tpopkontrzaehls()
+        store.refetch.all()
       }
       setToDelete({
         table: 'tpopkontrzaehl',

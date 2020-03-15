@@ -39,7 +39,7 @@ const Geschaetzt = ({ row, refetch }) => {
         return setErrors({ anzahl: error.message })
       }
       refetch()
-      store.refetch.tpopkontrzaehls()
+      store.refetch.all()
     },
     [
       client,

@@ -35,10 +35,7 @@ const Gezaehlt = ({ row, refetch }) => {
         return setErrors({ anzahl: error.message })
       }
       refetch()
-      !!store &&
-        store.refetch &&
-        store.refetch.tpopkontrzaehls &&
-        store.refetch.tpopkontrzaehls()
+      !!store && store.refetch && store.refetch.all && store.refetch.all()
     },
     [
       client,

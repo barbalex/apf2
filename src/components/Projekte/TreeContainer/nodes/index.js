@@ -87,7 +87,6 @@ export default ({
   dataApberrelevantGrundWertes,
   dataTpopkontrzaehlEinheitWertes,
   dataEkAbrechnungstypWertes,
-  dataTpopkontrzaehls,
   dataTpopmassnbers,
   dataTpopmassns,
   dataTpops,
@@ -103,7 +102,6 @@ export default ({
   loadingTpops,
   loadingTpopmassns,
   loadingTpopmassnbers,
-  loadingTpopkontrzaehls,
   loadingZiels,
   loadingZielbers,
   loadingIdealbiotops,
@@ -1106,9 +1104,9 @@ export default ({
           ...memoizeOne(() =>
             buildTpopfeldkontrzaehlFolderNodes({
               nodes,
-              data: dataTpopkontrzaehls,
+              data,
               treeName,
-              loading: loadingTpopkontrzaehls,
+              loading: loadingAll,
               projId,
               projektNodes,
               apId: nodeUrl[3],
@@ -1135,9 +1133,9 @@ export default ({
           ...memoizeOne(() =>
             buildTpopfreiwkontrzaehlFolderNodes({
               nodes,
-              data: dataTpopkontrzaehls,
+              data,
               treeName,
-              loading: loadingTpopkontrzaehls,
+              loading: loadingAll,
               projId,
               projektNodes,
               apId: nodeUrl[3],
@@ -1164,9 +1162,9 @@ export default ({
           ...memoizeOne(() =>
             buildTpopfeldkontrzaehlNodes({
               nodes,
-              data: dataTpopkontrzaehls,
+              data,
               treeName,
-              loading: loadingTpopkontrzaehls,
+              loading: loadingAll,
               projId,
               projektNodes,
               apId: nodeUrl[3],
@@ -1193,9 +1191,9 @@ export default ({
           ...memoizeOne(() =>
             buildTpopfreiwkontrzaehlNodes({
               nodes,
-              data: dataTpopkontrzaehls,
+              data,
               treeName,
-              loading: loadingTpopkontrzaehls,
+              loading: loadingAll,
               projId,
               projektNodes,
               apId: nodeUrl[3],
