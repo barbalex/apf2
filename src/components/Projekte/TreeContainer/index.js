@@ -5,7 +5,6 @@ import React, { useCallback, useContext, useState } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import uniq from 'lodash/uniq'
-import camelCase from 'lodash/camelCase'
 import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/react-hooks'
@@ -288,7 +287,7 @@ const TreeContainer = ({ treeName }) => {
     setUrlQuery,
     refetch,
   } = store
-  const { openNodes, setOpenNodes, setActiveNodeArray } = store[treeName]
+  const { openNodes, setOpenNodes } = store[treeName]
   const { projekt } = store[`${treeName}ActiveNodes`]
 
   const [newTpopFromBeobDialogOpen, setNewTpopFromBeobDialogOpen] = useState(
@@ -358,11 +357,10 @@ const TreeContainer = ({ treeName }) => {
             // db sets year 1 as standard
             url.push(1)
           }
-          const idToPass = parentId || id
           insertDataset({
             treeName,
             tablePassed: table,
-            parentId: idToPass,
+            parentId: parentId || id,
             url,
             menuType,
             id,
@@ -388,26 +386,16 @@ const TreeContainer = ({ treeName }) => {
           })
         },
         delete() {
-          const afterDeletionHook = () => {
-            // set it as new activeNodeArray and open node
-            const newOpenNodes = openNodes.filter(n => !isEqual(n, url))
-            setActiveNodeArray(url)
-            setOpenNodes(newOpenNodes)
-            const tableToUse = [
-              'tpopfeldkontrzaehl',
-              'tpopfreiwkontrzaehl',
-            ].includes(table)
-              ? 'tpopkontrzaehl'
-              : camelCase(table)
-            refetch[`${tableToUse}s`]()
-            refetch.tree()
-          }
           setToDelete({
             table,
             id,
             label,
             url,
-            afterDeletionHook,
+            afterDeletionHook: () => {
+              const newOpenNodes = openNodes.filter(n => !isEqual(n, url))
+              setOpenNodes(newOpenNodes)
+              refetch.tree()
+            },
           })
         },
         showBeobOnMap() {
@@ -558,7 +546,6 @@ const TreeContainer = ({ treeName }) => {
       store,
       setToDelete,
       openNodes,
-      setActiveNodeArray,
       setOpenNodes,
       refetch,
       urlQuery,
