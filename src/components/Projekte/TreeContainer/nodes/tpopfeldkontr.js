@@ -24,7 +24,7 @@ export default ({
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
 
   // map through all elements and create array of nodes
-  let nodes = get(data, 'allTpopkontrs.nodes', [])
+  let nodes = get(data, 'allTpopfeldkontrs.nodes', [])
     // only show if parent node exists
     .filter(el =>
       nodesPassed.map(n => n.id).includes(`${el.tpopId}TpopfeldkontrFolder`),

@@ -15,6 +15,7 @@ import {
   projekt,
   tpopber,
   tpopfeldkontr,
+  tpopfreiwkontr,
 } from '../../../shared/fragments'
 
 export default gql`
@@ -36,6 +37,7 @@ export default gql`
     $popsFilter: PopFilter!
     $tpopbersFilter: TpopberFilter!
     $tpopfeldkontrsFilter: TpopkontrFilter!
+    $tpopfreiwkontrsFilter: TpopkontrFilter!
     $isProjekt: Boolean!
     $isAp: Boolean!
     $isPop: Boolean!
@@ -169,12 +171,20 @@ export default gql`
         ...TpopberFields
       }
     }
-    allTpopkontrs(
+    allTpopfeldkontrs: allTpopkontrs(
       filter: $tpopfeldkontrsFilter
       orderBy: [JAHR_ASC, DATUM_ASC]
     ) @include(if: $isTpop) {
       nodes {
         ...TpopfeldkontrFields
+      }
+    }
+    allTpopfreiwkontrs: allTpopkontrs(
+      filter: $tpopfreiwkontrsFilter
+      orderBy: [JAHR_ASC, DATUM_ASC]
+    ) @include(if: $isTpop) {
+      nodes {
+        ...TpopfreiwkontrFields
       }
     }
   }
@@ -192,4 +202,5 @@ export default gql`
   ${projekt}
   ${tpopber}
   ${tpopfeldkontr}
+  ${tpopfreiwkontr}
 `

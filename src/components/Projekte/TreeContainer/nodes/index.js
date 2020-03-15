@@ -87,7 +87,6 @@ export default ({
   dataApberrelevantGrundWertes,
   dataTpopkontrzaehlEinheitWertes,
   dataEkAbrechnungstypWertes,
-  dataTpopfreiwkontrs,
   dataTpopkontrzaehls,
   dataTpopmassnbers,
   dataTpopmassns,
@@ -104,7 +103,6 @@ export default ({
   loadingTpops,
   loadingTpopmassns,
   loadingTpopmassnbers,
-  loadingTpopfreiwkontrs,
   loadingTpopkontrzaehls,
   loadingZiels,
   loadingZielbers,
@@ -889,9 +887,9 @@ export default ({
           ...memoizeOne(() =>
             buildTpopfreiwkontrFolderNodes({
               nodes,
-              data: dataTpopfreiwkontrs,
+              data,
               treeName,
-              loading: loadingTpopfreiwkontrs,
+              loading: loadingAll,
               projId,
               projektNodes,
               apId,
@@ -1002,9 +1000,9 @@ export default ({
         tpopfreiwkontrNodes = memoizeOne(() =>
           buildTpopfreiwkontrNodes({
             nodes,
-            data: dataTpopfreiwkontrs,
+            data,
             treeName,
-            loading: loadingTpopfreiwkontrs,
+            loading: loadingAll,
             projId,
             projektNodes,
             apId: nodeUrl[3],

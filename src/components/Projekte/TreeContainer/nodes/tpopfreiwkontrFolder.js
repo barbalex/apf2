@@ -28,7 +28,9 @@ export default ({
     get(store, `${treeName}.nodeLabelFilter.tpopkontr`) || ''
 
   let children = memoizeOne(() =>
-    get(data, 'allTpopkontrs.nodes', []).filter(el => el.tpopId === tpopId),
+    get(data, 'allTpopfreiwkontrs.nodes', []).filter(
+      el => el.tpopId === tpopId,
+    ),
   )()
 
   const childrenLength = children.length

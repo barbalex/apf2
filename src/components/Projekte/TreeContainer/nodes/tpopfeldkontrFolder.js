@@ -27,7 +27,7 @@ export default ({
   const nodeLabelFilterString =
     get(store, `${treeName}.nodeLabelFilter.tpopkontr`) || ''
 
-  let children = get(data, 'allTpopkontrs.nodes', []).filter(
+  let children = get(data, 'allTpopfeldkontrs.nodes', []).filter(
     el => el.tpopId === tpopId,
   )
 
