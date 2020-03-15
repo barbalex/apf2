@@ -89,7 +89,6 @@ export default ({
   dataApberrelevantGrundWertes,
   dataTpopkontrzaehlEinheitWertes,
   dataEkAbrechnungstypWertes,
-  dataBeobNichtZuzuordnens,
   dataBeobZugeordnets,
   dataBers,
   dataEkzaehleinheits,
@@ -134,7 +133,6 @@ export default ({
   loadingIdealbiotops,
   loadingEkzaehleinheits,
   loadingEkfrequenzs,
-  loadingBeobNichtZuzuordnens,
   store,
   nodeFilter,
   role,
@@ -425,9 +423,9 @@ export default ({
           ...memoizeOne(() =>
             buildBeobNichtZuzuordnenFolderNodes({
               nodes,
-              data: dataBeobNichtZuzuordnens,
+              data,
               treeName,
-              loading: loadingBeobNichtZuzuordnens,
+              loading: loadingAll,
               apNodes,
               projektNodes,
               projId,
@@ -571,9 +569,9 @@ export default ({
           ...memoizeOne(() =>
             buildBeobNichtZuzuordnenNodes({
               nodes,
-              data: dataBeobNichtZuzuordnens,
+              data,
               treeName,
-              loading: loadingBeobNichtZuzuordnens,
+              loading: loadingAll,
               apNodes,
               projektNodes,
               projId,

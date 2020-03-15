@@ -25,7 +25,9 @@ export default ({
 
   const beobNichtZuzuordnenNodesLength = memoizeOne(
     () =>
-      get(data, 'allVApbeobs.nodes', []).filter(el => el.apId === apId).length,
+      get(data, 'allVApbeobsNichtZuzuordnen.nodes', []).filter(
+        el => el.apId === apId,
+      ).length,
   )()
   const message = loading
     ? '...'

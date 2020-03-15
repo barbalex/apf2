@@ -10,6 +10,7 @@ export default gql`
     $apberuebersichtsFilter: ApberuebersichtFilter!
     $assozartFilter: AssozartFilter!
     $beobNichtBeurteiltsFilter: VApbeobFilter
+    $beobNichtZuzuordnensFilter: VApbeobFilter
     $isAp: Boolean!
     $isProjekt: Boolean!
   ) {
@@ -52,11 +53,22 @@ export default gql`
         aeId
       }
     }
-    allVApbeobs(filter: $beobNichtBeurteiltsFilter) @include(if: $isAp) {
+    allVApbeobsNichtBeurteilt: allVApbeobs(filter: $beobNichtBeurteiltsFilter)
+      @include(if: $isAp) {
       nodes {
         id
         label
         apId
+      }
+    }
+    allVApbeobsNichtZuzuordnen: allVApbeobs(
+      filter: $beobNichtZuzuordnensFilter
+    ) @include(if: $isAp) {
+      nodes {
+        id
+        label
+        apId
+        artId
       }
     }
   }
