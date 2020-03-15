@@ -6,6 +6,7 @@ import {
   apberuebersicht,
   ber,
   currentIssue,
+  ekfrequenz,
 } from '../../../shared/fragments'
 
 export default gql`
@@ -19,6 +20,7 @@ export default gql`
     $beobNichtZuzuordnensFilter: VApbeobFilter
     $beobZugeordnetsFilter: VApbeobFilter!
     $bersFilter: BerFilter!
+    $ekfrequenzsFilter: EkfrequenzFilter!
     $isProjekt: Boolean!
     $isAp: Boolean!
     $isTpop: Boolean!
@@ -99,10 +101,17 @@ export default gql`
         ...CurrentIssueFields
       }
     }
+    allEkfrequenzs(filter: $ekfrequenzsFilter, orderBy: SORT_ASC)
+      @include(if: $isAp) {
+      nodes {
+        ...EkfrequenzFields
+      }
+    }
   }
   ${ap}
   ${apart}
   ${apberuebersicht}
   ${ber}
   ${currentIssue}
+  ${ekfrequenz}
 `

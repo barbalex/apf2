@@ -30,7 +30,6 @@ import queryZielbers from './queryZielbers'
 import queryErfkrits from './queryErfkrits'
 import queryAll from './queryAll'
 import queryEkzaehleinheits from './queryEkzaehleinheits'
-import queryEkfrequenzs from './queryEkfrequenzs'
 import queryWerte from './queryWerte'
 import buildNodes from '../nodes'
 import logout from '../../../../modules/logout'
@@ -419,6 +418,12 @@ const Tree = ({ treeName }) => {
       includesInsensitive: nodeLabelFilter.ber,
     }
   }
+  const queryEkfrequenzsFilter = { apId: { in: ap } }
+  if (!!nodeLabelFilter.ekfrequenz) {
+    queryEkfrequenzsFilter.label = {
+      includesInsensitive: nodeLabelFilter.ekfrequenz,
+    }
+  }
   const {
     data: dataAll,
     error: errorAll,
@@ -438,6 +443,7 @@ const Tree = ({ treeName }) => {
       beobNichtZuzuordnensFilter: queryBeobNichtZuzuordnensFilter,
       beobZugeordnetsFilter: queryBeobZugeordnetsFilter,
       bersFilter: queryBersFilter,
+      ekfrequenzsFilter: queryEkfrequenzsFilter,
     },
   })
   setRefetchKey({
@@ -462,25 +468,6 @@ const Tree = ({ treeName }) => {
   setRefetchKey({
     key: 'ekzaehleinheits',
     value: refetchEkzaehleinheits,
-  })
-
-  const queryEkfrequenzsFilter = { apId: { in: ap } }
-  if (!!nodeLabelFilter.ekfrequenz) {
-    queryEkfrequenzsFilter.label = {
-      includesInsensitive: nodeLabelFilter.ekfrequenz,
-    }
-  }
-  const {
-    data: dataEkfrequenzs,
-    error: errorEkfrequenzs,
-    loading: loadingEkfrequenzs,
-    refetch: refetchEkfrequenzs,
-  } = useQuery(queryEkfrequenzs, {
-    variables: { isAp, filter: queryEkfrequenzsFilter },
-  })
-  setRefetchKey({
-    key: 'ekfrequenzs',
-    value: refetchEkfrequenzs,
   })
 
   const adressesFilter = nodeLabelFilter.adresse
@@ -560,7 +547,6 @@ const Tree = ({ treeName }) => {
     loadingErfkrits,
     loadingAll,
     loadingEkzaehleinheits,
-    loadingEkfrequenzs,
   ]
 
   const queryErrorArray = [
@@ -583,7 +569,6 @@ const Tree = ({ treeName }) => {
     errorErfkrits,
     errorAll,
     errorEkzaehleinheits,
-    errorEkfrequenzs,
   ].filter(e => !!e)
 
   const data = {
@@ -606,7 +591,6 @@ const Tree = ({ treeName }) => {
     ...dataErfkrits,
     ...dataAll,
     ...dataEkzaehleinheits,
-    ...dataEkfrequenzs,
   }
 
   const loading = anyQueryIsLoading(queryLoadingArray)
@@ -642,7 +626,6 @@ const Tree = ({ treeName }) => {
         dataZielbers,
         dataErfkrits,
         dataEkzaehleinheits,
-        dataEkfrequenzs,
         loadingAdresses: loadingWertes,
         loadingApberrelevantGrundWertes: loadingWertes,
         loadingTpopkontrzaehlEinheitWertes: loadingWertes,
@@ -665,7 +648,6 @@ const Tree = ({ treeName }) => {
         loadingErfkrits,
         loadingAll,
         loadingEkzaehleinheits,
-        loadingEkfrequenzs,
         store,
       }),
     )
