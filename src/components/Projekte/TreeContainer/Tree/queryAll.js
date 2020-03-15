@@ -10,6 +10,7 @@ import {
   ekzaehleinheit,
   erfkrit,
   popber,
+  popmassnber,
 } from '../../../shared/fragments'
 
 export default gql`
@@ -27,6 +28,7 @@ export default gql`
     $ekzaehleinheitsFilter: EkzaehleinheitFilter!
     $erfkritsFilter: ErfkritFilter!
     $popbersFilter: PopberFilter!
+    $popmassnbersFilter: PopmassnberFilter!
     $isProjekt: Boolean!
     $isAp: Boolean!
     $isPop: Boolean!
@@ -137,6 +139,12 @@ export default gql`
         ...PopberFields
       }
     }
+    allPopmassnbers(filter: $popmassnbersFilter, orderBy: LABEL_ASC)
+      @include(if: $isPop) {
+      nodes {
+        ...PopmassnberFields
+      }
+    }
   }
   ${ap}
   ${apart}
@@ -147,4 +155,5 @@ export default gql`
   ${ekzaehleinheit}
   ${erfkrit}
   ${popber}
+  ${popmassnber}
 `

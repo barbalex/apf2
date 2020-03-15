@@ -15,7 +15,6 @@ import buildVariables from './buildVariables'
 import queryUsers from './queryUsers'
 import queryProjekts from './queryProjekts'
 import queryPops from './queryPops'
-import queryPopmassnbers from './queryPopmassnbers'
 import queryTpops from './queryTpops'
 import queryTpopmassns from './queryTpopmassns'
 import queryTpopmassnbers from './queryTpopmassnbers'
@@ -141,24 +140,6 @@ const Tree = ({ treeName }) => {
   setRefetchKey({
     key: 'pops',
     value: refetchPops,
-  })
-  const queryPopmassnbersFilter = { popId: { in: pop } }
-  if (!!nodeLabelFilter.popmassnber) {
-    queryPopmassnbersFilter.label = {
-      includesInsensitive: nodeLabelFilter.popmassnber,
-    }
-  }
-  const {
-    data: dataPopmassnbers,
-    error: errorPopmassnbers,
-    loading: loadingPopmassnbers,
-    refetch: refetchPopmassnbers,
-  } = useQuery(queryPopmassnbers, {
-    variables: { isPop, filter: queryPopmassnbersFilter },
-  })
-  setRefetchKey({
-    key: 'popmassnbers',
-    value: refetchPopmassnbers,
   })
   const queryTpopsFilter = { ...tpopFilter }
   if (!!nodeLabelFilter.tpop) {
@@ -402,6 +383,12 @@ const Tree = ({ treeName }) => {
       includesInsensitive: nodeLabelFilter.popber,
     }
   }
+  const queryPopmassnbersFilter = { popId: { in: pop } }
+  if (!!nodeLabelFilter.popmassnber) {
+    queryPopmassnbersFilter.label = {
+      includesInsensitive: nodeLabelFilter.popmassnber,
+    }
+  }
   const {
     data: dataAll,
     error: errorAll,
@@ -426,6 +413,7 @@ const Tree = ({ treeName }) => {
       ekzaehleinheitsFilter: queryEkzaehleinheitsFilter,
       erfkritsFilter: queryErfkritsFilter,
       popbersFilter: queryPopbersFilter,
+      popmassnbersFilter: queryPopmassnbersFilter,
     },
   })
   setRefetchKey({
@@ -489,7 +477,6 @@ const Tree = ({ treeName }) => {
     loadingUsers,
     loadingProjekts,
     loadingPops,
-    loadingPopmassnbers,
     loadingTpops,
     loadingTpopmassns,
     loadingTpopmassnbers,
@@ -507,7 +494,6 @@ const Tree = ({ treeName }) => {
     errorUsers,
     errorProjekts,
     errorPops,
-    errorPopmassnbers,
     errorTpops,
     errorTpopmassns,
     errorTpopmassnbers,
@@ -525,7 +511,6 @@ const Tree = ({ treeName }) => {
     ...dataUsers,
     ...dataProjekts,
     ...dataPops,
-    ...dataPopmassnbers,
     ...dataTpops,
     ...dataTpopmassns,
     ...dataTpopmassnbers,
@@ -575,7 +560,6 @@ const Tree = ({ treeName }) => {
         loadingUsers,
         loadingProjekts,
         loadingPops,
-        loadingPopmassnbers,
         loadingTpops,
         loadingTpopmassns,
         loadingTpopmassnbers,
