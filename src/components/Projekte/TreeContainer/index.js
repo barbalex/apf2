@@ -400,7 +400,7 @@ const TreeContainer = ({ treeName }) => {
               ? 'tpopkontrzaehl'
               : camelCase(table)
             refetch[`${tableToUse}s`]()
-            refetch.aps()
+            refetch.all()
             refetch.projekts()
           }
           setToDelete({

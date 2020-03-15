@@ -224,7 +224,7 @@ export default async ({ treeName, pop, beobId, client, store }) => {
   addOpenNodes(newOpenNodes)
   setActiveNodeArray(newActiveNodeArray)
 
-  refetch.aps()
+  refetch.all()
   refetch.pops()
   refetch.tpops()
   refetch.beobNichtZuzuordnens()

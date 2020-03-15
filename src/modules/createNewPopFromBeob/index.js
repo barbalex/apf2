@@ -167,7 +167,7 @@ export default async ({ treeName, id, client, store }) => {
 
   // TODO: what is this for?
   //refetchTree('local')
-  refetch.aps()
+  refetch.all()
   refetch.pops()
   refetch.tpops()
   refetch.beobNichtZuzuordnens()

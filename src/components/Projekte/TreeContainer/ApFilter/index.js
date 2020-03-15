@@ -41,7 +41,7 @@ const ApFilter = ({ treeName }) => {
     setApFilter(!apFilter)
     if (!previousApFilter) {
       // need to fetch previously not had aps
-      refetch.aps()
+      refetch.all()
       // apFilter was set to true
       const { ap: apId } = activeNodes
       let result

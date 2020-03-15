@@ -124,7 +124,7 @@ const ApFilter = ({ treeName }) => {
         key: changedField,
         value,
       })
-      refetch.aps()
+      refetch.all()
     },
     [nodeFilterSetValue, refetch, row, treeName],
   )

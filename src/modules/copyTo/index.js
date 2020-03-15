@@ -322,7 +322,7 @@ export default async ({
       break
   }
   if (table) refetch[`${table}s`]()
-  refetch.aps()
+  refetch.all()
   refetch.pops()
   refetch.tpops()
   refetch.tpopfeldkontrs()

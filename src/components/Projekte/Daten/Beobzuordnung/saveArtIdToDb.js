@@ -67,7 +67,7 @@ export default async ({ value, row, treeName, client, store }) => {
     setActiveNodeArray(newANA)
     setOpenNodes(newOpenNodes)
     //refetchTree('local')
-    refetch.aps()
+    refetch.all()
     refetch.pops()
     refetch.tpops()
     refetch.beobNichtZuzuordnens()

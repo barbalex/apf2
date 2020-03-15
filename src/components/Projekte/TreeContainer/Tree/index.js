@@ -15,8 +15,6 @@ import buildVariables from './buildVariables'
 import queryCurrentIssues from './queryCurrentIssues'
 import queryUsers from './queryUsers'
 import queryProjekts from './queryProjekts'
-import queryApberuebersichts from './queryApberuebersichts'
-import queryAps from './queryAps'
 import queryMessages from './queryMessages'
 import queryPops from './queryPops'
 import queryPopbers from './queryPopbers'
@@ -32,9 +30,8 @@ import queryBeobZugeordnets from './queryBeobZugeordnets'
 import queryZiels from './queryZiels'
 import queryZielbers from './queryZielbers'
 import queryErfkrits from './queryErfkrits'
-import queryApbers from './queryApbers'
 import queryBers from './queryBers'
-import queryAparts from './queryAparts'
+import queryAll from './queryAll'
 import queryAssozarts from './queryAssozarts'
 import queryEkzaehleinheits from './queryEkzaehleinheits'
 import queryEkfrequenzs from './queryEkfrequenzs'
@@ -134,40 +131,6 @@ const Tree = ({ treeName }) => {
   setRefetchKey({
     key: 'users',
     value: refetchUsers,
-  })
-  const queryApberuebersichtsFilter = { projId: { in: projekt } }
-  if (!!nodeLabelFilter.apberuebersicht) {
-    queryApberuebersichtsFilter.label = {
-      includesInsensitive: nodeLabelFilter.apberuebersicht,
-    }
-  }
-  const {
-    data: dataApberuebersichts,
-    error: errorApberuebersichts,
-    loading: loadingApberuebersichts,
-    refetch: refetchApberuebersichts,
-  } = useQuery(queryApberuebersichts, {
-    variables: { isProjekt, filter: queryApberuebersichtsFilter },
-  })
-  setRefetchKey({
-    key: 'apberuebersichts',
-    value: refetchApberuebersichts,
-  })
-  const queryApsFilter = { ...apFilter }
-  if (nodeLabelFilter.ap) {
-    queryApsFilter.label = { includesInsensitive: nodeLabelFilter.ap }
-  }
-  const {
-    data: dataAps,
-    error: errorAps,
-    loading: loadingAps,
-    refetch: refetchAps,
-  } = useQuery(queryAps, {
-    variables: { isProjekt, filter: queryApsFilter },
-  })
-  setRefetchKey({
-    key: 'aps',
-    value: refetchAps,
   })
   const queryPopsFilter = { ...popFilter }
   if (!!nodeLabelFilter.pop) {
@@ -424,22 +387,6 @@ const Tree = ({ treeName }) => {
     key: 'erfkrits',
     value: refetchErfkrits,
   })
-  const queryApbersFilter = { apId: { in: ap } }
-  if (!!nodeLabelFilter.apber) {
-    queryApbersFilter.label = { includesInsensitive: nodeLabelFilter.apber }
-  }
-  const {
-    data: dataApbers,
-    error: errorApbers,
-    loading: loadingApbers,
-    refetch: refetchApbers,
-  } = useQuery(queryApbers, {
-    variables: { isAp, filter: queryApbersFilter },
-  })
-  setRefetchKey({
-    key: 'apbers',
-    value: refetchApbers,
-  })
   const queryBersFilter = { apId: { in: ap } }
   if (!!nodeLabelFilter.ber) {
     queryBersFilter.label = {
@@ -458,22 +405,45 @@ const Tree = ({ treeName }) => {
     key: 'bers',
     value: refetchBers,
   })
+
+  const queryApsFilter = { ...apFilter }
+  if (nodeLabelFilter.ap) {
+    queryApsFilter.label = { includesInsensitive: nodeLabelFilter.ap }
+  }
+  const queryApberuebersichtsFilter = { projId: { in: projekt } }
+  if (!!nodeLabelFilter.apberuebersicht) {
+    queryApberuebersichtsFilter.label = {
+      includesInsensitive: nodeLabelFilter.apberuebersicht,
+    }
+  }
+  const queryApbersFilter = { apId: { in: ap } }
+  if (!!nodeLabelFilter.apber) {
+    queryApbersFilter.label = { includesInsensitive: nodeLabelFilter.apber }
+  }
   const queryApartsFilter = { apId: { in: ap } }
   if (!!nodeLabelFilter.apart) {
     queryApartsFilter.label = { includesInsensitive: nodeLabelFilter.apart }
   }
   const {
-    data: dataAparts,
-    error: errorAparts,
-    loading: loadingAparts,
-    refetch: refetchAparts,
-  } = useQuery(queryAparts, {
-    variables: { isAp, filter: queryApartsFilter },
+    data: dataAll,
+    error: errorAll,
+    loading: loadingAll,
+    refetch: refetchAll,
+  } = useQuery(queryAll, {
+    variables: {
+      isAp,
+      isProjekt,
+      apartsFilter: queryApartsFilter,
+      apbersFilter: queryApbersFilter,
+      apberuebersichtsFilter: queryApberuebersichtsFilter,
+      apsFilter: queryApsFilter,
+    },
   })
   setRefetchKey({
-    key: 'aparts',
-    value: refetchAparts,
+    key: 'all',
+    value: refetchAll,
   })
+
   const queryAssozartsFilter = { apId: { in: ap } }
   if (!!nodeLabelFilter.assozart) {
     queryAssozartsFilter.label = {
@@ -645,8 +615,6 @@ const Tree = ({ treeName }) => {
     loadingWertes,
     loadingUsers,
     loadingProjekts,
-    loadingApberuebersichts,
-    loadingAps,
     loadingPops,
     loadingPopbers,
     loadingPopmassnbers,
@@ -661,9 +629,8 @@ const Tree = ({ treeName }) => {
     loadingZiels,
     loadingZielbers,
     loadingErfkrits,
-    loadingApbers,
     loadingBers,
-    loadingAparts,
+    loadingAll,
     loadingAssozarts,
     loadingEkzaehleinheits,
     loadingEkfrequenzs,
@@ -677,8 +644,6 @@ const Tree = ({ treeName }) => {
     errorWertes,
     errorUsers,
     errorProjekts,
-    errorApberuebersichts,
-    errorAps,
     errorPops,
     errorPopbers,
     errorPopmassnbers,
@@ -693,9 +658,8 @@ const Tree = ({ treeName }) => {
     errorZiels,
     errorZielbers,
     errorErfkrits,
-    errorApbers,
     errorBers,
-    errorAparts,
+    errorAll,
     errorAssozarts,
     errorEkzaehleinheits,
     errorEkfrequenzs,
@@ -709,8 +673,6 @@ const Tree = ({ treeName }) => {
     ...dataWertes,
     ...dataUsers,
     ...dataProjekts,
-    ...dataApberuebersichts,
-    ...dataAps,
     ...dataPops,
     ...dataPopbers,
     ...dataPopmassnbers,
@@ -725,9 +687,8 @@ const Tree = ({ treeName }) => {
     ...dataZiels,
     ...dataZielbers,
     ...dataErfkrits,
-    ...dataApbers,
     ...dataBers,
-    ...dataAparts,
+    ...dataAll,
     ...dataAssozarts,
     ...dataEkzaehleinheits,
     ...dataEkfrequenzs,
@@ -757,8 +718,6 @@ const Tree = ({ treeName }) => {
         dataEkAbrechnungstypWertes: dataWertes,
         dataUsers,
         dataProjekts,
-        dataApberuebersichts,
-        dataAps,
         dataPops,
         dataTpops,
         dataTpopmassns,
@@ -771,7 +730,6 @@ const Tree = ({ treeName }) => {
         dataZiels,
         dataZielbers,
         dataErfkrits,
-        dataApbers,
         dataBers,
         dataAssozarts,
         dataEkzaehleinheits,
@@ -786,8 +744,6 @@ const Tree = ({ treeName }) => {
         loadingMessages,
         loadingUsers,
         loadingProjekts,
-        loadingApberuebersichts,
-        loadingAps,
         loadingPops,
         loadingPopbers,
         loadingPopmassnbers,
@@ -802,9 +758,8 @@ const Tree = ({ treeName }) => {
         loadingZiels,
         loadingZielbers,
         loadingErfkrits,
-        loadingApbers,
         loadingBers,
-        loadingAparts,
+        loadingAll,
         loadingAssozarts,
         loadingEkzaehleinheits,
         loadingEkfrequenzs,
@@ -813,7 +768,8 @@ const Tree = ({ treeName }) => {
         store,
       }),
     )
-  }, [loading])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading, activeNodeArray, openNodes, openNodes.length, activeNodes])
 
   useEffect(() => {
     // if activeNodeArray.length === 1
