@@ -15,7 +15,6 @@ import buildVariables from './buildVariables'
 import queryZiels from './queryZiels'
 import queryZielbers from './queryZielbers'
 import queryAll from './queryAll'
-import queryWerte from './queryWerte'
 import buildNodes from '../nodes'
 import logout from '../../../../modules/logout'
 import existsPermissionError from '../../../../modules/existsPermissionError'
@@ -256,6 +255,26 @@ const Tree = ({ treeName }) => {
       includesInsensitive: nodeLabelFilter.user,
     }
   }
+  const adressesFilter = nodeLabelFilter.adresse
+    ? { label: { includesInsensitive: nodeLabelFilter.adresse } }
+    : { id: { isNull: false } }
+  const apberrelevantGrundWertesFilter = nodeLabelFilter.apberrelevantGrundWerte
+    ? {
+        label: { includesInsensitive: nodeLabelFilter.apberrelevantGrundWerte },
+      }
+    : { id: { isNull: false } }
+  const tpopkontrzaehlEinheitWertesFilter = nodeLabelFilter.tpopkontrzaehlEinheitWerte
+    ? {
+        label: {
+          includesInsensitive: nodeLabelFilter.tpopkontrzaehlEinheitWerte,
+        },
+      }
+    : { id: { isNull: false } }
+  const ekAbrechnungstypWertesFilter = nodeLabelFilter.ekAbrechnungstypWerte
+    ? {
+        label: { includesInsensitive: nodeLabelFilter.ekAbrechnungstypWerte },
+      }
+    : { id: { isNull: false } }
   const {
     data: dataAll,
     error: errorAll,
@@ -268,6 +287,7 @@ const Tree = ({ treeName }) => {
       isPop,
       isTpop,
       isTpopkontr,
+      isWerteListen,
       apartsFilter: queryApartsFilter,
       apbersFilter: queryApbersFilter,
       apberuebersichtsFilter: queryApberuebersichtsFilter,
@@ -291,41 +311,6 @@ const Tree = ({ treeName }) => {
       tpopmassnsFilter: queryTpopmassnsFilter,
       tpopsFilter: queryTpopsFilter,
       usersFilter: queryUsersFilter,
-    },
-  })
-  setRefetchKey({
-    key: 'all',
-    value: refetchAll,
-  })
-
-  const adressesFilter = nodeLabelFilter.adresse
-    ? { label: { includesInsensitive: nodeLabelFilter.adresse } }
-    : { id: { isNull: false } }
-  const apberrelevantGrundWertesFilter = nodeLabelFilter.apberrelevantGrundWerte
-    ? {
-        label: { includesInsensitive: nodeLabelFilter.apberrelevantGrundWerte },
-      }
-    : { id: { isNull: false } }
-  const tpopkontrzaehlEinheitWertesFilter = nodeLabelFilter.tpopkontrzaehlEinheitWerte
-    ? {
-        label: {
-          includesInsensitive: nodeLabelFilter.tpopkontrzaehlEinheitWerte,
-        },
-      }
-    : { id: { isNull: false } }
-  const ekAbrechnungstypWertesFilter = nodeLabelFilter.ekAbrechnungstypWerte
-    ? {
-        label: { includesInsensitive: nodeLabelFilter.ekAbrechnungstypWerte },
-      }
-    : { id: { isNull: false } }
-  const {
-    data: dataWertes,
-    error: errorWertes,
-    loading: loadingWertes,
-    refetch: refetchWertes,
-  } = useQuery(queryWerte, {
-    variables: {
-      isWerteListen,
       adressesFilter,
       apberrelevantGrundWertesFilter,
       tpopkontrzaehlEinheitWertesFilter,
@@ -333,38 +318,15 @@ const Tree = ({ treeName }) => {
     },
   })
   setRefetchKey({
-    key: 'adresses',
-    value: refetchWertes,
-  })
-  setRefetchKey({
-    key: 'tpopApberrelevantGrundWertes',
-    value: refetchWertes,
-  })
-  setRefetchKey({
-    key: 'tpopkontrzaehlEinheitWertes',
-    value: refetchWertes,
-  })
-  setRefetchKey({
-    key: 'ekAbrechnungstypWertes',
-    value: refetchWertes,
+    key: 'all',
+    value: refetchAll,
   })
 
-  const queryLoadingArray = [
-    loadingWertes,
-    loadingZiels,
-    loadingZielbers,
-    loadingAll,
-  ]
+  const queryLoadingArray = [loadingZiels, loadingZielbers, loadingAll]
 
-  const queryErrorArray = [
-    errorWertes,
-    errorZiels,
-    errorZielbers,
-    errorAll,
-  ].filter(e => !!e)
+  const queryErrorArray = [errorZiels, errorZielbers, errorAll].filter(e => !!e)
 
   const data = {
-    ...dataWertes,
     ...dataZiels,
     ...dataZielbers,
     ...dataAll,
@@ -384,16 +346,8 @@ const Tree = ({ treeName }) => {
         role,
         nodeFilter,
         data,
-        dataAdresses: dataWertes,
-        dataApberrelevantGrundWertes: dataWertes,
-        dataTpopkontrzaehlEinheitWertes: dataWertes,
-        dataEkAbrechnungstypWertes: dataWertes,
         dataZiels,
         dataZielbers,
-        loadingAdresses: loadingWertes,
-        loadingApberrelevantGrundWertes: loadingWertes,
-        loadingTpopkontrzaehlEinheitWertes: loadingWertes,
-        loadingEkAbrechnungstypWertes: loadingWertes,
         loadingZiels,
         loadingZielbers,
         loadingAll,

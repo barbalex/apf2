@@ -83,16 +83,8 @@ const compare = (a, b) => {
 
 export default ({
   data,
-  dataAdresses,
-  dataApberrelevantGrundWertes,
-  dataTpopkontrzaehlEinheitWertes,
-  dataEkAbrechnungstypWertes,
   dataZielbers,
   dataZiels,
-  loadingAdresses,
-  loadingApberrelevantGrundWertes,
-  loadingTpopkontrzaehlEinheitWertes,
-  loadingEkAbrechnungstypWertes,
   loadingAll,
   loadingZiels,
   loadingZielbers,
@@ -1240,9 +1232,9 @@ export default ({
         ...memoizeOne(() =>
           buildAdresseFolderNodes({
             nodes,
-            data: dataAdresses,
+            data,
             treeName,
-            loading: loadingAdresses,
+            loading: loadingAll,
             projektNodes,
             store,
           }),
@@ -1250,9 +1242,9 @@ export default ({
         ...memoizeOne(() =>
           buildApberrelevantGrundWerteFolderNodes({
             nodes,
-            data: dataApberrelevantGrundWertes,
+            data,
             treeName,
-            loading: loadingApberrelevantGrundWertes,
+            loading: loadingAll,
             projektNodes,
             store,
           }),
@@ -1260,9 +1252,9 @@ export default ({
         ...memoizeOne(() =>
           buildEkAbrechnungstypWerteFolderNodes({
             nodes,
-            data: dataEkAbrechnungstypWertes,
+            data,
             treeName,
-            loading: loadingEkAbrechnungstypWertes,
+            loading: loadingAll,
             projektNodes,
             store,
           }),
@@ -1270,9 +1262,9 @@ export default ({
         ...memoizeOne(() =>
           buildTpopkontrzaehlEinheitWerteFolderNodes({
             nodes,
-            data: dataTpopkontrzaehlEinheitWertes,
+            data,
             treeName,
-            loading: loadingTpopkontrzaehlEinheitWertes,
+            loading: loadingAll,
             projektNodes,
             store,
           }),
@@ -1290,9 +1282,9 @@ export default ({
         ...memoizeOne(() =>
           buildAdresseNodes({
             nodes,
-            data: dataAdresses,
+            data,
             treeName,
-            loading: loadingAdresses,
+            loading: loadingAll,
             projektNodes,
             store,
           }),
@@ -1310,9 +1302,9 @@ export default ({
         ...memoizeOne(() =>
           buildApberrelevantGrundWerteNodes({
             nodes,
-            data: dataApberrelevantGrundWertes,
+            data,
             treeName,
-            loading: loadingApberrelevantGrundWertes,
+            loading: loadingAll,
             projektNodes,
             store,
           }),
@@ -1330,9 +1322,9 @@ export default ({
         ...memoizeOne(() =>
           buildEkAbrechnungstypWerteNodes({
             nodes,
-            data: dataEkAbrechnungstypWertes,
+            data,
             treeName,
-            loading: loadingEkAbrechnungstypWertes,
+            loading: loadingAll,
             projektNodes,
             store,
           }),
@@ -1350,9 +1342,9 @@ export default ({
         ...memoizeOne(() =>
           buildTpopkontrzaehlEinheitWerteNodes({
             nodes,
-            data: dataTpopkontrzaehlEinheitWertes,
+            data,
             treeName,
-            loading: loadingTpopkontrzaehlEinheitWertes,
+            loading: loadingAll,
             projektNodes,
             store,
           }),

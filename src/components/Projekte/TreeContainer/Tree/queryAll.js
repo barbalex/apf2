@@ -21,6 +21,9 @@ import {
   tpopmassn,
   tpop,
   user,
+  ekAbrechnungstypWerte,
+  tpopApberrelevantGrundWerte,
+  tpopkontrzaehlEinheitWerte,
 } from '../../../shared/fragments'
 
 export default gql`
@@ -48,11 +51,16 @@ export default gql`
     $tpopmassnsFilter: TpopmassnFilter!
     $tpopsFilter: TpopFilter!
     $usersFilter: UserFilter!
+    $adressesFilter: AdresseFilter!
+    $apberrelevantGrundWertesFilter: TpopApberrelevantGrundWerteFilter!
+    $ekAbrechnungstypWertesFilter: EkAbrechnungstypWerteFilter!
+    $tpopkontrzaehlEinheitWertesFilter: TpopkontrzaehlEinheitWerteFilter!
     $isProjekt: Boolean!
     $isAp: Boolean!
     $isPop: Boolean!
     $isTpop: Boolean!
     $isTpopkontr: Boolean!
+    $isWerteListen: Boolean!
   ) {
     allAps(filter: $apsFilter, orderBy: LABEL_ASC) @include(if: $isProjekt) {
       totalCount
@@ -227,6 +235,54 @@ export default gql`
         ...UserFields
       }
     }
+    adressesUnfiltered: allAdresses {
+      totalCount
+    }
+    allAdresses(filter: $adressesFilter, orderBy: LABEL_ASC)
+      @include(if: $isWerteListen) {
+      totalCount
+      nodes {
+        id
+        name
+        label
+      }
+    }
+    tpopApberrelevantGrundWertesUnfiltered: allTpopApberrelevantGrundWertes {
+      totalCount
+    }
+    allTpopApberrelevantGrundWertes(
+      filter: $apberrelevantGrundWertesFilter
+      orderBy: SORT_ASC
+    ) @include(if: $isWerteListen) {
+      totalCount
+      nodes {
+        ...TpopApberrelevantGrundWerteFields
+      }
+    }
+    ekAbrechnungstypWertesUnfiltered: allEkAbrechnungstypWertes {
+      totalCount
+    }
+    allEkAbrechnungstypWertes(
+      filter: $ekAbrechnungstypWertesFilter
+      orderBy: SORT_ASC
+    ) @include(if: $isWerteListen) {
+      totalCount
+      nodes {
+        ...EkAbrechnungstypWerteFields
+      }
+    }
+    tpopkontrzaehlEinheitWertesUnfiltered: allTpopkontrzaehlEinheitWertes {
+      totalCount
+    }
+    allTpopkontrzaehlEinheitWertes(
+      filter: $tpopkontrzaehlEinheitWertesFilter
+      orderBy: SORT_ASC
+    ) @include(if: $isWerteListen) {
+      totalCount
+      nodes {
+        ...TpopkontrzaehlEinheitWerteFields
+      }
+    }
   }
   ${ap}
   ${apart}
@@ -248,4 +304,7 @@ export default gql`
   ${tpopmassn}
   ${tpop}
   ${user}
+  ${ekAbrechnungstypWerte}
+  ${tpopApberrelevantGrundWerte}
+  ${tpopkontrzaehlEinheitWerte}
 `
