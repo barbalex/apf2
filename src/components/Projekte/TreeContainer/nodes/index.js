@@ -88,7 +88,6 @@ export default ({
   dataApberrelevantGrundWertes,
   dataTpopkontrzaehlEinheitWertes,
   dataEkAbrechnungstypWertes,
-  dataEkzaehleinheits,
   dataErfkrits,
   dataPops,
   dataProjekts,
@@ -124,7 +123,6 @@ export default ({
   loadingZielbers,
   loadingErfkrits,
   loadingIdealbiotops,
-  loadingEkzaehleinheits,
   store,
   nodeFilter,
   role,
@@ -363,9 +361,9 @@ export default ({
           ...memoizeOne(() =>
             buildEkzaehleinheitFolderNodes({
               nodes,
-              data: dataEkzaehleinheits,
+              data,
               treeName,
-              loading: loadingEkzaehleinheits,
+              loading: loadingAll,
               apNodes,
               projektNodes,
               projId,
@@ -618,9 +616,9 @@ export default ({
           ...memoizeOne(() =>
             buildEkzaehleinheitNodes({
               nodes,
-              data: dataEkzaehleinheits,
+              data,
               treeName,
-              loading: loadingEkzaehleinheits,
+              loading: loadingAll,
               apNodes,
               projektNodes,
               projId,

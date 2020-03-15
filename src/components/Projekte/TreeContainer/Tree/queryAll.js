@@ -7,6 +7,7 @@ import {
   ber,
   currentIssue,
   ekfrequenz,
+  ekzaehleinheit,
 } from '../../../shared/fragments'
 
 export default gql`
@@ -21,6 +22,7 @@ export default gql`
     $beobZugeordnetsFilter: VApbeobFilter!
     $bersFilter: BerFilter!
     $ekfrequenzsFilter: EkfrequenzFilter!
+    $ekzaehleinheitsFilter: EkzaehleinheitFilter!
     $isProjekt: Boolean!
     $isAp: Boolean!
     $isTpop: Boolean!
@@ -107,6 +109,14 @@ export default gql`
         ...EkfrequenzFields
       }
     }
+    allEkzaehleinheits(
+      filter: $ekzaehleinheitsFilter
+      orderBy: [SORT_ASC, LABEL_ASC]
+    ) @include(if: $isAp) {
+      nodes {
+        ...EkzaehleinheitFields
+      }
+    }
   }
   ${ap}
   ${apart}
@@ -114,4 +124,5 @@ export default gql`
   ${ber}
   ${currentIssue}
   ${ekfrequenz}
+  ${ekzaehleinheit}
 `

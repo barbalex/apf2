@@ -29,7 +29,6 @@ import queryZiels from './queryZiels'
 import queryZielbers from './queryZielbers'
 import queryErfkrits from './queryErfkrits'
 import queryAll from './queryAll'
-import queryEkzaehleinheits from './queryEkzaehleinheits'
 import queryWerte from './queryWerte'
 import buildNodes from '../nodes'
 import logout from '../../../../modules/logout'
@@ -424,6 +423,12 @@ const Tree = ({ treeName }) => {
       includesInsensitive: nodeLabelFilter.ekfrequenz,
     }
   }
+  const queryEkzaehleinheitsFilter = { apId: { in: ap } }
+  if (!!nodeLabelFilter.ekzaehleinheit) {
+    queryEkzaehleinheitsFilter.label = {
+      includesInsensitive: nodeLabelFilter.ekzaehleinheit,
+    }
+  }
   const {
     data: dataAll,
     error: errorAll,
@@ -444,30 +449,12 @@ const Tree = ({ treeName }) => {
       beobZugeordnetsFilter: queryBeobZugeordnetsFilter,
       bersFilter: queryBersFilter,
       ekfrequenzsFilter: queryEkfrequenzsFilter,
+      ekzaehleinheitsFilter: queryEkzaehleinheitsFilter,
     },
   })
   setRefetchKey({
     key: 'all',
     value: refetchAll,
-  })
-
-  const queryEkzaehleinheitsFilter = { apId: { in: ap } }
-  if (!!nodeLabelFilter.ekzaehleinheit) {
-    queryEkzaehleinheitsFilter.label = {
-      includesInsensitive: nodeLabelFilter.ekzaehleinheit,
-    }
-  }
-  const {
-    data: dataEkzaehleinheits,
-    error: errorEkzaehleinheits,
-    loading: loadingEkzaehleinheits,
-    refetch: refetchEkzaehleinheits,
-  } = useQuery(queryEkzaehleinheits, {
-    variables: { isAp, filter: queryEkzaehleinheitsFilter },
-  })
-  setRefetchKey({
-    key: 'ekzaehleinheits',
-    value: refetchEkzaehleinheits,
   })
 
   const adressesFilter = nodeLabelFilter.adresse
@@ -546,7 +533,6 @@ const Tree = ({ treeName }) => {
     loadingZielbers,
     loadingErfkrits,
     loadingAll,
-    loadingEkzaehleinheits,
   ]
 
   const queryErrorArray = [
@@ -568,7 +554,6 @@ const Tree = ({ treeName }) => {
     errorZielbers,
     errorErfkrits,
     errorAll,
-    errorEkzaehleinheits,
   ].filter(e => !!e)
 
   const data = {
@@ -590,7 +575,6 @@ const Tree = ({ treeName }) => {
     ...dataZielbers,
     ...dataErfkrits,
     ...dataAll,
-    ...dataEkzaehleinheits,
   }
 
   const loading = anyQueryIsLoading(queryLoadingArray)
@@ -625,7 +609,6 @@ const Tree = ({ treeName }) => {
         dataZiels,
         dataZielbers,
         dataErfkrits,
-        dataEkzaehleinheits,
         loadingAdresses: loadingWertes,
         loadingApberrelevantGrundWertes: loadingWertes,
         loadingTpopkontrzaehlEinheitWertes: loadingWertes,
@@ -647,7 +630,6 @@ const Tree = ({ treeName }) => {
         loadingZielbers,
         loadingErfkrits,
         loadingAll,
-        loadingEkzaehleinheits,
         store,
       }),
     )
