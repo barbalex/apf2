@@ -12,7 +12,6 @@ import Row from './Row'
 
 import storeContext from '../../../../storeContext'
 import buildVariables from './buildVariables'
-import queryUsers from './queryUsers'
 import queryZiels from './queryZiels'
 import queryZielbers from './queryZielbers'
 import queryAll from './queryAll'
@@ -81,26 +80,6 @@ const Tree = ({ treeName }) => {
     tpopfreiwkontrFilter,
   } = buildVariables({ treeName, store })
 
-  const queryUsersFilter = { id: { isNull: false } }
-  if (!!nodeLabelFilter.user) {
-    queryUsersFilter.label = {
-      includesInsensitive: nodeLabelFilter.user,
-    }
-  }
-  const {
-    data: dataUsers,
-    error: errorUsers,
-    loading: loadingUsers,
-    refetch: refetchUsers,
-  } = useQuery(queryUsers, {
-    variables: {
-      filter: queryUsersFilter,
-    },
-  })
-  setRefetchKey({
-    key: 'users',
-    value: refetchUsers,
-  })
   const queryZielsFilter = { apId: { in: ap } }
   if (!!nodeLabelFilter.ziel) {
     queryZielsFilter.label = {
@@ -271,6 +250,12 @@ const Tree = ({ treeName }) => {
       includesInsensitive: nodeLabelFilter.tpop,
     }
   }
+  const queryUsersFilter = { id: { isNull: false } }
+  if (!!nodeLabelFilter.user) {
+    queryUsersFilter.label = {
+      includesInsensitive: nodeLabelFilter.user,
+    }
+  }
   const {
     data: dataAll,
     error: errorAll,
@@ -305,6 +290,7 @@ const Tree = ({ treeName }) => {
       tpopmassnbersFilter: queryTpopmassnbersFilter,
       tpopmassnsFilter: queryTpopmassnsFilter,
       tpopsFilter: queryTpopsFilter,
+      usersFilter: queryUsersFilter,
     },
   })
   setRefetchKey({
@@ -365,7 +351,6 @@ const Tree = ({ treeName }) => {
 
   const queryLoadingArray = [
     loadingWertes,
-    loadingUsers,
     loadingZiels,
     loadingZielbers,
     loadingAll,
@@ -373,7 +358,6 @@ const Tree = ({ treeName }) => {
 
   const queryErrorArray = [
     errorWertes,
-    errorUsers,
     errorZiels,
     errorZielbers,
     errorAll,
@@ -381,7 +365,6 @@ const Tree = ({ treeName }) => {
 
   const data = {
     ...dataWertes,
-    ...dataUsers,
     ...dataZiels,
     ...dataZielbers,
     ...dataAll,
@@ -405,14 +388,12 @@ const Tree = ({ treeName }) => {
         dataApberrelevantGrundWertes: dataWertes,
         dataTpopkontrzaehlEinheitWertes: dataWertes,
         dataEkAbrechnungstypWertes: dataWertes,
-        dataUsers,
         dataZiels,
         dataZielbers,
         loadingAdresses: loadingWertes,
         loadingApberrelevantGrundWertes: loadingWertes,
         loadingTpopkontrzaehlEinheitWertes: loadingWertes,
         loadingEkAbrechnungstypWertes: loadingWertes,
-        loadingUsers,
         loadingZiels,
         loadingZielbers,
         loadingAll,

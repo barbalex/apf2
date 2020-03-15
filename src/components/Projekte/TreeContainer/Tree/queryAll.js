@@ -20,6 +20,7 @@ import {
   tpopmassnber,
   tpopmassn,
   tpop,
+  user,
 } from '../../../shared/fragments'
 
 export default gql`
@@ -46,6 +47,7 @@ export default gql`
     $tpopmassnbersFilter: TpopmassnberFilter!
     $tpopmassnsFilter: TpopmassnFilter!
     $tpopsFilter: TpopFilter!
+    $usersFilter: UserFilter!
     $isProjekt: Boolean!
     $isAp: Boolean!
     $isPop: Boolean!
@@ -220,6 +222,11 @@ export default gql`
         ...TpopFields
       }
     }
+    allUsers(filter: $usersFilter, orderBy: LABEL_ASC) {
+      nodes {
+        ...UserFields
+      }
+    }
   }
   ${ap}
   ${apart}
@@ -240,4 +247,5 @@ export default gql`
   ${tpopmassnber}
   ${tpopmassn}
   ${tpop}
+  ${user}
 `
