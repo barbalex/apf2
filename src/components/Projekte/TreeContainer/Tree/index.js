@@ -13,7 +13,6 @@ import Row from './Row'
 import storeContext from '../../../../storeContext'
 import buildVariables from './buildVariables'
 import queryZiels from './queryZiels'
-import queryZielbers from './queryZielbers'
 import queryAll from './queryAll'
 import buildNodes from '../nodes'
 import logout from '../../../../modules/logout'
@@ -96,24 +95,6 @@ const Tree = ({ treeName }) => {
   setRefetchKey({
     key: 'ziels',
     value: refetchZiels,
-  })
-  const queryZielbersFilter = { zielId: { in: ziel } }
-  if (!!nodeLabelFilter.zielber) {
-    queryZielbersFilter.label = {
-      includesInsensitive: nodeLabelFilter.zielber,
-    }
-  }
-  const {
-    data: dataZielbers,
-    error: errorZielbers,
-    loading: loadingZielbers,
-    refetch: refetchZielbers,
-  } = useQuery(queryZielbers, {
-    variables: { isZiel, filter: queryZielbersFilter },
-  })
-  setRefetchKey({
-    key: 'zielbers',
-    value: refetchZielbers,
   })
 
   const queryApsFilter = { ...apFilter }
@@ -275,6 +256,12 @@ const Tree = ({ treeName }) => {
         label: { includesInsensitive: nodeLabelFilter.ekAbrechnungstypWerte },
       }
     : { id: { isNull: false } }
+  const queryZielbersFilter = { zielId: { in: ziel } }
+  if (!!nodeLabelFilter.zielber) {
+    queryZielbersFilter.label = {
+      includesInsensitive: nodeLabelFilter.zielber,
+    }
+  }
   const {
     data: dataAll,
     error: errorAll,
@@ -288,6 +275,7 @@ const Tree = ({ treeName }) => {
       isTpop,
       isTpopkontr,
       isWerteListen,
+      isZiel,
       apartsFilter: queryApartsFilter,
       apbersFilter: queryApbersFilter,
       apberuebersichtsFilter: queryApberuebersichtsFilter,
@@ -315,6 +303,7 @@ const Tree = ({ treeName }) => {
       apberrelevantGrundWertesFilter,
       tpopkontrzaehlEinheitWertesFilter,
       ekAbrechnungstypWertesFilter,
+      zielbersFilter: queryZielbersFilter,
     },
   })
   setRefetchKey({
@@ -322,13 +311,12 @@ const Tree = ({ treeName }) => {
     value: refetchAll,
   })
 
-  const queryLoadingArray = [loadingZiels, loadingZielbers, loadingAll]
+  const queryLoadingArray = [loadingZiels, loadingAll]
 
-  const queryErrorArray = [errorZiels, errorZielbers, errorAll].filter(e => !!e)
+  const queryErrorArray = [errorZiels, errorAll].filter(e => !!e)
 
   const data = {
     ...dataZiels,
-    ...dataZielbers,
     ...dataAll,
   }
 
@@ -347,9 +335,7 @@ const Tree = ({ treeName }) => {
         nodeFilter,
         data,
         dataZiels,
-        dataZielbers,
         loadingZiels,
-        loadingZielbers,
         loadingAll,
         store,
       }),

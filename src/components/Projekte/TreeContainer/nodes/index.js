@@ -83,11 +83,9 @@ const compare = (a, b) => {
 
 export default ({
   data,
-  dataZielbers,
   dataZiels,
   loadingAll,
   loadingZiels,
-  loadingZielbers,
   loadingIdealbiotops,
   store,
   nodeFilter,
@@ -453,9 +451,9 @@ export default ({
           ...memoizeOne(() =>
             buildApzielberFolderNodes({
               nodes,
-              data: dataZielbers,
+              data,
               treeName,
-              loading: loadingZielbers,
+              loading: loadingAll,
               apNodes,
               openNodes,
               projektNodes,
@@ -481,9 +479,9 @@ export default ({
           ...memoizeOne(() =>
             buildApzielberNodes({
               nodes,
-              data: dataZielbers,
+              data,
               treeName,
-              loading: loadingZielbers,
+              loading: loadingAll,
               apNodes,
               openNodes,
               projektNodes,

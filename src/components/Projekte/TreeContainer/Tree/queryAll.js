@@ -24,6 +24,7 @@ import {
   ekAbrechnungstypWerte,
   tpopApberrelevantGrundWerte,
   tpopkontrzaehlEinheitWerte,
+  zielber,
 } from '../../../shared/fragments'
 
 export default gql`
@@ -55,12 +56,14 @@ export default gql`
     $apberrelevantGrundWertesFilter: TpopApberrelevantGrundWerteFilter!
     $ekAbrechnungstypWertesFilter: EkAbrechnungstypWerteFilter!
     $tpopkontrzaehlEinheitWertesFilter: TpopkontrzaehlEinheitWerteFilter!
+    $zielbersFilter: ZielberFilter!
     $isProjekt: Boolean!
     $isAp: Boolean!
     $isPop: Boolean!
     $isTpop: Boolean!
     $isTpopkontr: Boolean!
     $isWerteListen: Boolean!
+    $isZiel: Boolean!
   ) {
     allAps(filter: $apsFilter, orderBy: LABEL_ASC) @include(if: $isProjekt) {
       totalCount
@@ -283,6 +286,12 @@ export default gql`
         ...TpopkontrzaehlEinheitWerteFields
       }
     }
+    allZielbers(filter: $zielbersFilter, orderBy: LABEL_ASC)
+      @include(if: $isZiel) {
+      nodes {
+        ...ZielberFields
+      }
+    }
   }
   ${ap}
   ${apart}
@@ -307,4 +316,5 @@ export default gql`
   ${ekAbrechnungstypWerte}
   ${tpopApberrelevantGrundWerte}
   ${tpopkontrzaehlEinheitWerte}
+  ${zielber}
 `
