@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { ap, apart, apberuebersicht } from '../../../shared/fragments'
+import { ap, apart, apberuebersicht, ber } from '../../../shared/fragments'
 
 export default gql`
   query TreeAllQuery(
@@ -12,6 +12,7 @@ export default gql`
     $beobNichtBeurteiltsFilter: VApbeobFilter
     $beobNichtZuzuordnensFilter: VApbeobFilter
     $beobZugeordnetsFilter: VApbeobFilter!
+    $bersFilter: BerFilter!
     $isProjekt: Boolean!
     $isAp: Boolean!
     $isTpop: Boolean!
@@ -82,8 +83,14 @@ export default gql`
         artId
       }
     }
+    allBers(filter: $bersFilter, orderBy: LABEL_ASC) @include(if: $isAp) {
+      nodes {
+        ...BerFields
+      }
+    }
   }
   ${ap}
   ${apart}
   ${apberuebersicht}
+  ${ber}
 `

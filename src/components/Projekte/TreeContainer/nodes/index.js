@@ -89,7 +89,6 @@ export default ({
   dataApberrelevantGrundWertes,
   dataTpopkontrzaehlEinheitWertes,
   dataEkAbrechnungstypWertes,
-  dataBers,
   dataEkzaehleinheits,
   dataEkfrequenzs,
   dataErfkrits,
@@ -127,7 +126,6 @@ export default ({
   loadingZiels,
   loadingZielbers,
   loadingErfkrits,
-  loadingBers,
   loadingIdealbiotops,
   loadingEkzaehleinheits,
   loadingEkfrequenzs,
@@ -331,9 +329,9 @@ export default ({
           ...memoizeOne(() =>
             buildBerFolderNodes({
               nodes,
-              data: dataBers,
+              data,
               treeName,
-              loading: loadingBers,
+              loading: loadingAll,
               apNodes,
               projektNodes,
               projId,
@@ -678,9 +676,9 @@ export default ({
           ...memoizeOne(() =>
             buildBerNodes({
               nodes,
-              data: dataBers,
+              data,
               treeName,
-              loading: loadingBers,
+              loading: loadingAll,
               apNodes,
               projektNodes,
               projId,

@@ -29,7 +29,6 @@ import queryTpopbers from './queryTpopbers'
 import queryZiels from './queryZiels'
 import queryZielbers from './queryZielbers'
 import queryErfkrits from './queryErfkrits'
-import queryBers from './queryBers'
 import queryAll from './queryAll'
 import queryEkzaehleinheits from './queryEkzaehleinheits'
 import queryEkfrequenzs from './queryEkfrequenzs'
@@ -365,24 +364,6 @@ const Tree = ({ treeName }) => {
     key: 'erfkrits',
     value: refetchErfkrits,
   })
-  const queryBersFilter = { apId: { in: ap } }
-  if (!!nodeLabelFilter.ber) {
-    queryBersFilter.label = {
-      includesInsensitive: nodeLabelFilter.ber,
-    }
-  }
-  const {
-    data: dataBers,
-    error: errorBers,
-    loading: loadingBers,
-    refetch: refetchBers,
-  } = useQuery(queryBers, {
-    variables: { isAp, filter: queryBersFilter },
-  })
-  setRefetchKey({
-    key: 'bers',
-    value: refetchBers,
-  })
 
   const queryApsFilter = { ...apFilter }
   if (nodeLabelFilter.ap) {
@@ -433,6 +414,12 @@ const Tree = ({ treeName }) => {
       includesInsensitive: nodeLabelFilter.beob,
     }
   }
+  const queryBersFilter = { apId: { in: ap } }
+  if (!!nodeLabelFilter.ber) {
+    queryBersFilter.label = {
+      includesInsensitive: nodeLabelFilter.ber,
+    }
+  }
   const {
     data: dataAll,
     error: errorAll,
@@ -451,6 +438,7 @@ const Tree = ({ treeName }) => {
       beobNichtBeurteiltsFilter: queryBeobNichtBeurteiltsFilter,
       beobNichtZuzuordnensFilter: queryBeobNichtZuzuordnensFilter,
       beobZugeordnetsFilter: queryBeobZugeordnetsFilter,
+      bersFilter: queryBersFilter,
     },
   })
   setRefetchKey({
@@ -577,7 +565,6 @@ const Tree = ({ treeName }) => {
     loadingZiels,
     loadingZielbers,
     loadingErfkrits,
-    loadingBers,
     loadingAll,
     loadingEkzaehleinheits,
     loadingEkfrequenzs,
@@ -602,7 +589,6 @@ const Tree = ({ treeName }) => {
     errorZiels,
     errorZielbers,
     errorErfkrits,
-    errorBers,
     errorAll,
     errorEkzaehleinheits,
     errorEkfrequenzs,
@@ -627,7 +613,6 @@ const Tree = ({ treeName }) => {
     ...dataZiels,
     ...dataZielbers,
     ...dataErfkrits,
-    ...dataBers,
     ...dataAll,
     ...dataEkzaehleinheits,
     ...dataEkfrequenzs,
@@ -666,7 +651,6 @@ const Tree = ({ treeName }) => {
         dataZiels,
         dataZielbers,
         dataErfkrits,
-        dataBers,
         dataEkzaehleinheits,
         dataEkfrequenzs,
         loadingAdresses: loadingWertes,
@@ -690,7 +674,6 @@ const Tree = ({ treeName }) => {
         loadingZiels,
         loadingZielbers,
         loadingErfkrits,
-        loadingBers,
         loadingAll,
         loadingEkzaehleinheits,
         loadingEkfrequenzs,
