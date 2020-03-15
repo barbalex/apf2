@@ -87,7 +87,6 @@ export default ({
   dataApberrelevantGrundWertes,
   dataTpopkontrzaehlEinheitWertes,
   dataEkAbrechnungstypWertes,
-  dataTpopmassnbers,
   dataTpopmassns,
   dataTpops,
   dataUsers,
@@ -101,7 +100,6 @@ export default ({
   loadingAll,
   loadingTpops,
   loadingTpopmassns,
-  loadingTpopmassnbers,
   loadingZiels,
   loadingZielbers,
   loadingIdealbiotops,
@@ -851,9 +849,9 @@ export default ({
           ...memoizeOne(() =>
             buildTpopmassnberFolderNodes({
               nodes,
-              data: dataTpopmassnbers,
+              data,
               treeName,
-              loading: loadingTpopmassnbers,
+              loading: loadingAll,
               projId,
               projektNodes,
               apId,
@@ -1050,9 +1048,9 @@ export default ({
           ...memoizeOne(() =>
             buildTpopmassnberNodes({
               nodes,
-              data: dataTpopmassnbers,
+              data,
               treeName,
-              loading: loadingTpopmassnbers,
+              loading: loadingAll,
               projId,
               projektNodes,
               apId: nodeUrl[3],
