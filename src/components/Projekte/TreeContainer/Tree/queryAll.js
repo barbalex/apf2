@@ -9,6 +9,7 @@ import {
   ekfrequenz,
   ekzaehleinheit,
   erfkrit,
+  popber,
 } from '../../../shared/fragments'
 
 export default gql`
@@ -25,8 +26,10 @@ export default gql`
     $ekfrequenzsFilter: EkfrequenzFilter!
     $ekzaehleinheitsFilter: EkzaehleinheitFilter!
     $erfkritsFilter: ErfkritFilter!
+    $popbersFilter: PopberFilter!
     $isProjekt: Boolean!
     $isAp: Boolean!
+    $isPop: Boolean!
     $isTpop: Boolean!
   ) {
     allAps(filter: $apsFilter, orderBy: LABEL_ASC) @include(if: $isProjekt) {
@@ -128,6 +131,12 @@ export default gql`
     allMessages {
       totalCount
     }
+    allPopbers(filter: $popbersFilter, orderBy: LABEL_ASC)
+      @include(if: $isPop) {
+      nodes {
+        ...PopberFields
+      }
+    }
   }
   ${ap}
   ${apart}
@@ -137,4 +146,5 @@ export default gql`
   ${ekfrequenz}
   ${ekzaehleinheit}
   ${erfkrit}
+  ${popber}
 `
