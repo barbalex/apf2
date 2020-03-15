@@ -14,7 +14,6 @@ import storeContext from '../../../../storeContext'
 import buildVariables from './buildVariables'
 import queryUsers from './queryUsers'
 import queryTpops from './queryTpops'
-import queryTpopmassns from './queryTpopmassns'
 import queryZiels from './queryZiels'
 import queryZielbers from './queryZielbers'
 import queryAll from './queryAll'
@@ -120,24 +119,6 @@ const Tree = ({ treeName }) => {
   setRefetchKey({
     key: 'tpops',
     value: refetchTpops,
-  })
-  const queryTpopmassnsFilter = { ...tpopmassnFilter }
-  if (!!nodeLabelFilter.tpopmassn) {
-    queryTpopmassnsFilter.label = {
-      includesInsensitive: nodeLabelFilter.tpopmassn,
-    }
-  }
-  const {
-    data: dataTpopmassns,
-    error: errorTpopmassns,
-    loading: loadingTpopmassns,
-    refetch: refetchTpopmassns,
-  } = useQuery(queryTpopmassns, {
-    variables: { isTpop, filter: queryTpopmassnsFilter },
-  })
-  setRefetchKey({
-    key: 'tpopmassns',
-    value: refetchTpopmassns,
   })
   const queryZielsFilter = { apId: { in: ap } }
   if (!!nodeLabelFilter.ziel) {
@@ -297,6 +278,12 @@ const Tree = ({ treeName }) => {
       includesInsensitive: nodeLabelFilter.tpopmassnber,
     }
   }
+  const queryTpopmassnsFilter = { ...tpopmassnFilter }
+  if (!!nodeLabelFilter.tpopmassn) {
+    queryTpopmassnsFilter.label = {
+      includesInsensitive: nodeLabelFilter.tpopmassn,
+    }
+  }
   const {
     data: dataAll,
     error: errorAll,
@@ -329,6 +316,7 @@ const Tree = ({ treeName }) => {
       tpopfreiwkontrsFilter: queryTpopfreiwkontrsFilter,
       tpopkontrzaehlsFilter: queryTpopkontrzaehlsFilter,
       tpopmassnbersFilter: queryTpopmassnbersFilter,
+      tpopmassnsFilter: queryTpopmassnsFilter,
     },
   })
   setRefetchKey({
@@ -391,7 +379,6 @@ const Tree = ({ treeName }) => {
     loadingWertes,
     loadingUsers,
     loadingTpops,
-    loadingTpopmassns,
     loadingZiels,
     loadingZielbers,
     loadingAll,
@@ -401,7 +388,6 @@ const Tree = ({ treeName }) => {
     errorWertes,
     errorUsers,
     errorTpops,
-    errorTpopmassns,
     errorZiels,
     errorZielbers,
     errorAll,
@@ -411,7 +397,6 @@ const Tree = ({ treeName }) => {
     ...dataWertes,
     ...dataUsers,
     ...dataTpops,
-    ...dataTpopmassns,
     ...dataZiels,
     ...dataZielbers,
     ...dataAll,
@@ -437,7 +422,6 @@ const Tree = ({ treeName }) => {
         dataEkAbrechnungstypWertes: dataWertes,
         dataUsers,
         dataTpops,
-        dataTpopmassns,
         dataZiels,
         dataZielbers,
         loadingAdresses: loadingWertes,
@@ -446,7 +430,6 @@ const Tree = ({ treeName }) => {
         loadingEkAbrechnungstypWertes: loadingWertes,
         loadingUsers,
         loadingTpops,
-        loadingTpopmassns,
         loadingZiels,
         loadingZielbers,
         loadingAll,
