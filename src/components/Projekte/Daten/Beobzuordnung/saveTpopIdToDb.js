@@ -218,9 +218,8 @@ export default async ({ value, id, treeName, type, client, store }) => {
   }
   setActiveNodeArray(newANA)
   setOpenNodes(newOpenNodes)
-  //refetchTree('local')
+  refetch.tree()
   if (refetch.beobNichtZuzuordnenForMap) refetch.beobNichtZuzuordnenForMap()
-  refetch.all()
   if (refetch.beobZugeordnetForMap) refetch.beobZugeordnetForMap()
   if (refetch.beobNichtBeurteiltForMap) refetch.beobNichtBeurteiltForMap()
   if (refetch.beobAssignLines) refetch.beobAssignLines()

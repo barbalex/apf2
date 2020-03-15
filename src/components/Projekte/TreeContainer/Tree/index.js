@@ -245,7 +245,7 @@ const Tree = ({ treeName }) => {
       includesInsensitive: nodeLabelFilter.ziel,
     }
   }
-  const { data, error, loading, refetch: refetchAll } = useQuery(queryAll, {
+  const { data, error, loading, refetch } = useQuery(queryAll, {
     variables: {
       isProjekt,
       isAp,
@@ -286,8 +286,8 @@ const Tree = ({ treeName }) => {
     },
   })
   setRefetchKey({
-    key: 'all',
-    value: refetchAll,
+    key: 'tree',
+    value: refetch,
   })
 
   const { token } = user
@@ -348,7 +348,7 @@ const Tree = ({ treeName }) => {
     }
   }, [loading, activeNodeArray, nodes, listRef])
 
-  //console.log('Tree rendering')
+  console.log('Tree rendering')
 
   const existsPermissionError =
     !!error &&

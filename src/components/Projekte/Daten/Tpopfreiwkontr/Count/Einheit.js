@@ -57,7 +57,7 @@ const Einheit = ({ nr, row, refetch, zaehleinheitWerte }) => {
         return setErrors(error.message)
       }
       refetch()
-      store.refetch.all()
+      store.refetch.tree()
     },
     [
       client,

@@ -88,5 +88,5 @@ export default async ({ treeName, id, client, store }) => {
   addOpenNodes(newOpenNodes)
 
   // 4. refresh tree
-  refetch.all()
+  refetch.tree()
 }

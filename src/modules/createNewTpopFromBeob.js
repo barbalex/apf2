@@ -224,6 +224,6 @@ export default async ({ treeName, pop, beobId, client, store }) => {
   addOpenNodes(newOpenNodes)
   setActiveNodeArray(newActiveNodeArray)
 
-  refetch.all()
+  refetch.tree()
   if (refetch.beobNichtZuzuordnenForMap) refetch.beobNichtZuzuordnenForMap()
 }

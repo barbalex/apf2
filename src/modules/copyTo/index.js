@@ -322,7 +322,7 @@ export default async ({
       break
   }
   if (table) refetch[`${table}s`]()
-  refetch.all()
+  refetch.tree()
 
   // copy tpop if needed
   if (table === 'pop' && withNextLevel) {

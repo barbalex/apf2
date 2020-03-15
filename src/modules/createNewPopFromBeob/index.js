@@ -167,6 +167,6 @@ export default async ({ treeName, id, client, store }) => {
 
   // TODO: what is this for?
   //refetchTree('local')
-  refetch.all()
+  refetch.tree()
   if (refetch.beobNichtZuzuordnenForMap) refetch.beobNichtZuzuordnenForMap()
 }
