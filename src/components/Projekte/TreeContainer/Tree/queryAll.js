@@ -11,8 +11,10 @@ export default gql`
     $assozartFilter: AssozartFilter!
     $beobNichtBeurteiltsFilter: VApbeobFilter
     $beobNichtZuzuordnensFilter: VApbeobFilter
-    $isAp: Boolean!
+    $beobZugeordnetsFilter: VApbeobFilter!
     $isProjekt: Boolean!
+    $isAp: Boolean!
+    $isTpop: Boolean!
   ) {
     allAps(filter: $apsFilter, orderBy: LABEL_ASC) @include(if: $isProjekt) {
       totalCount
@@ -68,6 +70,15 @@ export default gql`
         id
         label
         apId
+        artId
+      }
+    }
+    allVApbeobsZugeordnet: allVApbeobs(filter: $beobZugeordnetsFilter)
+      @include(if: $isTpop) {
+      nodes {
+        id
+        label
+        tpopId
         artId
       }
     }

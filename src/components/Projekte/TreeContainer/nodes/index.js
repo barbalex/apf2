@@ -89,7 +89,6 @@ export default ({
   dataApberrelevantGrundWertes,
   dataTpopkontrzaehlEinheitWertes,
   dataEkAbrechnungstypWertes,
-  dataBeobZugeordnets,
   dataBers,
   dataEkzaehleinheits,
   dataEkfrequenzs,
@@ -125,7 +124,6 @@ export default ({
   loadingTpopfreiwkontrs,
   loadingTpopkontrzaehls,
   loadingTpopbers,
-  loadingBeobZugeordnets,
   loadingZiels,
   loadingZielbers,
   loadingErfkrits,
@@ -949,9 +947,9 @@ export default ({
           ...memoizeOne(() =>
             buildBeobZugeordnetFolderNodes({
               nodes,
-              data: dataBeobZugeordnets,
+              data,
               treeName,
-              loading: loadingBeobZugeordnets,
+              loading: loadingAll,
               projId,
               projektNodes,
               apId,
@@ -976,9 +974,9 @@ export default ({
           ...memoizeOne(() =>
             buildBeobZugeordnetNodes({
               nodes,
-              data: dataBeobZugeordnets,
+              data,
               treeName,
-              loading: loadingBeobZugeordnets,
+              loading: loadingAll,
               projId,
               projektNodes,
               apId: nodeUrl[3],

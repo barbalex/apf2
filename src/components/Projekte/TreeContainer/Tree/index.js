@@ -26,7 +26,6 @@ import queryTpopfeldkontrs from './queryTpopfeldkontrs'
 import queryTpopfreiwkontrs from './queryTpopfreiwkontrs'
 import queryTpopkontrzaehls from './queryTpopkontrzaehls'
 import queryTpopbers from './queryTpopbers'
-import queryBeobZugeordnets from './queryBeobZugeordnets'
 import queryZiels from './queryZiels'
 import queryZielbers from './queryZielbers'
 import queryErfkrits from './queryErfkrits'
@@ -312,24 +311,6 @@ const Tree = ({ treeName }) => {
     key: 'tpopbers',
     value: refetchTpopbers,
   })
-  const queryBeobZugeordnetsFilter = { tpopId: { in: tpop } }
-  if (!!nodeLabelFilter.beob) {
-    queryBeobZugeordnetsFilter.label = {
-      includesInsensitive: nodeLabelFilter.beob,
-    }
-  }
-  const {
-    data: dataBeobZugeordnets,
-    error: errorBeobZugeordnets,
-    loading: loadingBeobZugeordnets,
-    refetch: refetchBeobZugeordnets,
-  } = useQuery(queryBeobZugeordnets, {
-    variables: { isTpop, filter: queryBeobZugeordnetsFilter },
-  })
-  setRefetchKey({
-    key: 'beobZugeordnets',
-    value: refetchBeobZugeordnets,
-  })
   const queryZielsFilter = { apId: { in: ap } }
   if (!!nodeLabelFilter.ziel) {
     queryZielsFilter.label = {
@@ -446,6 +427,12 @@ const Tree = ({ treeName }) => {
       includesInsensitive: nodeLabelFilter.beob,
     }
   }
+  const queryBeobZugeordnetsFilter = { tpopId: { in: tpop } }
+  if (!!nodeLabelFilter.beob) {
+    queryBeobZugeordnetsFilter.label = {
+      includesInsensitive: nodeLabelFilter.beob,
+    }
+  }
   const {
     data: dataAll,
     error: errorAll,
@@ -453,8 +440,9 @@ const Tree = ({ treeName }) => {
     refetch: refetchAll,
   } = useQuery(queryAll, {
     variables: {
-      isAp,
       isProjekt,
+      isAp,
+      isTpop,
       apartsFilter: queryApartsFilter,
       apbersFilter: queryApbersFilter,
       apberuebersichtsFilter: queryApberuebersichtsFilter,
@@ -462,6 +450,7 @@ const Tree = ({ treeName }) => {
       assozartFilter: queryAssozartsFilter,
       beobNichtBeurteiltsFilter: queryBeobNichtBeurteiltsFilter,
       beobNichtZuzuordnensFilter: queryBeobNichtZuzuordnensFilter,
+      beobZugeordnetsFilter: queryBeobZugeordnetsFilter,
     },
   })
   setRefetchKey({
@@ -585,7 +574,6 @@ const Tree = ({ treeName }) => {
     loadingTpopfreiwkontrs,
     loadingTpopkontrzaehls,
     loadingTpopbers,
-    loadingBeobZugeordnets,
     loadingZiels,
     loadingZielbers,
     loadingErfkrits,
@@ -611,7 +599,6 @@ const Tree = ({ treeName }) => {
     errorTpopfreiwkontrs,
     errorTpopkontrzaehls,
     errorTpopbers,
-    errorBeobZugeordnets,
     errorZiels,
     errorZielbers,
     errorErfkrits,
@@ -637,7 +624,6 @@ const Tree = ({ treeName }) => {
     ...dataTpopfreiwkontrs,
     ...dataTpopkontrzaehls,
     ...dataTpopbers,
-    ...dataBeobZugeordnets,
     ...dataZiels,
     ...dataZielbers,
     ...dataErfkrits,
@@ -677,7 +663,6 @@ const Tree = ({ treeName }) => {
         dataTpopfreiwkontrs,
         dataTpopkontrzaehls,
         dataTpopbers,
-        dataBeobZugeordnets,
         dataZiels,
         dataZielbers,
         dataErfkrits,
@@ -702,7 +687,6 @@ const Tree = ({ treeName }) => {
         loadingTpopfreiwkontrs,
         loadingTpopkontrzaehls,
         loadingTpopbers,
-        loadingBeobZugeordnets,
         loadingZiels,
         loadingZielbers,
         loadingErfkrits,

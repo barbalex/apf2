@@ -228,5 +228,4 @@ export default async ({ treeName, pop, beobId, client, store }) => {
   refetch.pops()
   refetch.tpops()
   if (refetch.beobNichtZuzuordnenForMap) refetch.beobNichtZuzuordnenForMap()
-  refetch.beobZugeordnets()
 }

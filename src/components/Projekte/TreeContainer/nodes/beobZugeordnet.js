@@ -26,7 +26,7 @@ export default ({
 
   // map through all elements and create array of nodes
   const nodes = memoizeOne(() =>
-    get(data, 'allVApbeobs.nodes', [])
+    get(data, 'allVApbeobsZugeordnet.nodes', [])
       // only show if parent node exists
       .filter(el =>
         nodesPassed.map(n => n.id).includes(`${el.tpopId}BeobZugeordnetFolder`),

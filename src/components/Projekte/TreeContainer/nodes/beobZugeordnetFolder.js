@@ -29,8 +29,9 @@ export default ({
 
   const childrenLength = memoizeOne(
     () =>
-      get(data, 'allVApbeobs.nodes', []).filter(el => el.tpopId === tpopId)
-        .length,
+      get(data, 'allVApbeobsZugeordnet.nodes', []).filter(
+        el => el.tpopId === tpopId,
+      ).length,
   )()
   const message = loading
     ? '...'
