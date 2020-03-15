@@ -88,7 +88,6 @@ export default ({
   dataApberrelevantGrundWertes,
   dataTpopkontrzaehlEinheitWertes,
   dataEkAbrechnungstypWertes,
-  dataErfkrits,
   dataPops,
   dataProjekts,
   dataTpopbers,
@@ -121,7 +120,6 @@ export default ({
   loadingTpopbers,
   loadingZiels,
   loadingZielbers,
-  loadingErfkrits,
   loadingIdealbiotops,
   store,
   nodeFilter,
@@ -297,9 +295,9 @@ export default ({
           ...memoizeOne(() =>
             buildAperfkritFolderNodes({
               nodes,
-              data: dataErfkrits,
+              data,
               treeName,
-              loading: loadingErfkrits,
+              loading: loadingAll,
               apNodes,
               projektNodes,
               projId,
@@ -706,9 +704,9 @@ export default ({
           ...memoizeOne(() =>
             buildAperfkritNodes({
               nodes,
-              data: dataErfkrits,
+              data,
               treeName,
-              loading: loadingErfkrits,
+              loading: loadingAll,
               apNodes,
               projektNodes,
               projId,

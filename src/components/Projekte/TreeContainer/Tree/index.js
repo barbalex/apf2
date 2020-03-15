@@ -27,7 +27,6 @@ import queryTpopkontrzaehls from './queryTpopkontrzaehls'
 import queryTpopbers from './queryTpopbers'
 import queryZiels from './queryZiels'
 import queryZielbers from './queryZielbers'
-import queryErfkrits from './queryErfkrits'
 import queryAll from './queryAll'
 import queryWerte from './queryWerte'
 import buildNodes from '../nodes'
@@ -343,24 +342,6 @@ const Tree = ({ treeName }) => {
     key: 'zielbers',
     value: refetchZielbers,
   })
-  const queryErfkritsFilter = { apId: { in: ap } }
-  if (!!nodeLabelFilter.erfkrit) {
-    queryErfkritsFilter.label = {
-      includesInsensitive: nodeLabelFilter.erfkrit,
-    }
-  }
-  const {
-    data: dataErfkrits,
-    error: errorErfkrits,
-    loading: loadingErfkrits,
-    refetch: refetchErfkrits,
-  } = useQuery(queryErfkrits, {
-    variables: { isAp, filter: queryErfkritsFilter },
-  })
-  setRefetchKey({
-    key: 'erfkrits',
-    value: refetchErfkrits,
-  })
 
   const queryApsFilter = { ...apFilter }
   if (nodeLabelFilter.ap) {
@@ -429,6 +410,12 @@ const Tree = ({ treeName }) => {
       includesInsensitive: nodeLabelFilter.ekzaehleinheit,
     }
   }
+  const queryErfkritsFilter = { apId: { in: ap } }
+  if (!!nodeLabelFilter.erfkrit) {
+    queryErfkritsFilter.label = {
+      includesInsensitive: nodeLabelFilter.erfkrit,
+    }
+  }
   const {
     data: dataAll,
     error: errorAll,
@@ -450,6 +437,7 @@ const Tree = ({ treeName }) => {
       bersFilter: queryBersFilter,
       ekfrequenzsFilter: queryEkfrequenzsFilter,
       ekzaehleinheitsFilter: queryEkzaehleinheitsFilter,
+      erfkritsFilter: queryErfkritsFilter,
     },
   })
   setRefetchKey({
@@ -531,7 +519,6 @@ const Tree = ({ treeName }) => {
     loadingTpopbers,
     loadingZiels,
     loadingZielbers,
-    loadingErfkrits,
     loadingAll,
   ]
 
@@ -552,7 +539,6 @@ const Tree = ({ treeName }) => {
     errorTpopbers,
     errorZiels,
     errorZielbers,
-    errorErfkrits,
     errorAll,
   ].filter(e => !!e)
 
@@ -573,7 +559,6 @@ const Tree = ({ treeName }) => {
     ...dataTpopbers,
     ...dataZiels,
     ...dataZielbers,
-    ...dataErfkrits,
     ...dataAll,
   }
 
@@ -608,7 +593,6 @@ const Tree = ({ treeName }) => {
         dataTpopbers,
         dataZiels,
         dataZielbers,
-        dataErfkrits,
         loadingAdresses: loadingWertes,
         loadingApberrelevantGrundWertes: loadingWertes,
         loadingTpopkontrzaehlEinheitWertes: loadingWertes,
@@ -628,7 +612,6 @@ const Tree = ({ treeName }) => {
         loadingTpopbers,
         loadingZiels,
         loadingZielbers,
-        loadingErfkrits,
         loadingAll,
         store,
       }),

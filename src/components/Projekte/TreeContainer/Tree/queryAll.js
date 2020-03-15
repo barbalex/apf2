@@ -8,6 +8,7 @@ import {
   currentIssue,
   ekfrequenz,
   ekzaehleinheit,
+  erfkrit,
 } from '../../../shared/fragments'
 
 export default gql`
@@ -23,6 +24,7 @@ export default gql`
     $bersFilter: BerFilter!
     $ekfrequenzsFilter: EkfrequenzFilter!
     $ekzaehleinheitsFilter: EkzaehleinheitFilter!
+    $erfkritsFilter: ErfkritFilter!
     $isProjekt: Boolean!
     $isAp: Boolean!
     $isTpop: Boolean!
@@ -117,6 +119,12 @@ export default gql`
         ...EkzaehleinheitFields
       }
     }
+    allErfkrits(filter: $erfkritsFilter, orderBy: LABEL_ASC)
+      @include(if: $isAp) {
+      nodes {
+        ...ErfkritFields
+      }
+    }
   }
   ${ap}
   ${apart}
@@ -125,4 +133,5 @@ export default gql`
   ${currentIssue}
   ${ekfrequenz}
   ${ekzaehleinheit}
+  ${erfkrit}
 `
