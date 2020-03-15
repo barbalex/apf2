@@ -89,8 +89,6 @@ export default ({
   dataApberrelevantGrundWertes,
   dataTpopkontrzaehlEinheitWertes,
   dataEkAbrechnungstypWertes,
-  dataAps,
-  dataAssozarts,
   dataBeobNichtBeurteilts,
   dataBeobNichtZuzuordnens,
   dataBeobZugeordnets,
@@ -135,7 +133,6 @@ export default ({
   loadingErfkrits,
   loadingBers,
   loadingIdealbiotops,
-  loadingAssozarts,
   loadingEkzaehleinheits,
   loadingEkfrequenzs,
   loadingBeobNichtBeurteilts,
@@ -365,9 +362,9 @@ export default ({
           ...memoizeOne(() =>
             buildAssozartFolderNodes({
               nodes,
-              data: dataAssozarts,
+              data,
               treeName,
-              loading: loadingAssozarts,
+              loading: loadingAll,
               apNodes,
               projektNodes,
               projId,
@@ -615,9 +612,9 @@ export default ({
           ...memoizeOne(() =>
             buildAssozartNodes({
               nodes,
-              data: dataAssozarts,
+              data,
               treeName,
-              loading: loadingAssozarts,
+              loading: loadingAll,
               apNodes,
               projektNodes,
               projId,

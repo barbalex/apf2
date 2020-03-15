@@ -8,6 +8,7 @@ export default gql`
     $apartsFilter: ApartFilter!
     $apbersFilter: ApberFilter!
     $apberuebersichtsFilter: ApberuebersichtFilter!
+    $assozartFilter: AssozartFilter!
     $isAp: Boolean!
     $isProjekt: Boolean!
   ) {
@@ -39,6 +40,15 @@ export default gql`
       @include(if: $isProjekt) {
       nodes {
         ...ApberuebersichtFields
+      }
+    }
+    allAssozarts(filter: $assozartFilter, orderBy: LABEL_ASC)
+      @include(if: $isAp) {
+      nodes {
+        id
+        label
+        apId
+        aeId
       }
     }
   }

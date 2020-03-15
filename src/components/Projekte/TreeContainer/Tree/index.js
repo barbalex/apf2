@@ -32,7 +32,6 @@ import queryZielbers from './queryZielbers'
 import queryErfkrits from './queryErfkrits'
 import queryBers from './queryBers'
 import queryAll from './queryAll'
-import queryAssozarts from './queryAssozarts'
 import queryEkzaehleinheits from './queryEkzaehleinheits'
 import queryEkfrequenzs from './queryEkfrequenzs'
 import queryBeobNichtBeurteilts from './queryBeobNichtBeurteilts'
@@ -424,6 +423,12 @@ const Tree = ({ treeName }) => {
   if (!!nodeLabelFilter.apart) {
     queryApartsFilter.label = { includesInsensitive: nodeLabelFilter.apart }
   }
+  const queryAssozartsFilter = { apId: { in: ap } }
+  if (!!nodeLabelFilter.assozart) {
+    queryAssozartsFilter.label = {
+      includesInsensitive: nodeLabelFilter.assozart,
+    }
+  }
   const {
     data: dataAll,
     error: errorAll,
@@ -437,6 +442,7 @@ const Tree = ({ treeName }) => {
       apbersFilter: queryApbersFilter,
       apberuebersichtsFilter: queryApberuebersichtsFilter,
       apsFilter: queryApsFilter,
+      assozartFilter: queryAssozartsFilter,
     },
   })
   setRefetchKey({
@@ -444,24 +450,6 @@ const Tree = ({ treeName }) => {
     value: refetchAll,
   })
 
-  const queryAssozartsFilter = { apId: { in: ap } }
-  if (!!nodeLabelFilter.assozart) {
-    queryAssozartsFilter.label = {
-      includesInsensitive: nodeLabelFilter.assozart,
-    }
-  }
-  const {
-    data: dataAssozarts,
-    error: errorAssozarts,
-    loading: loadingAssozarts,
-    refetch: refetchAssozarts,
-  } = useQuery(queryAssozarts, {
-    variables: { isAp, filter: queryAssozartsFilter },
-  })
-  setRefetchKey({
-    key: 'assozarts',
-    value: refetchAssozarts,
-  })
   const queryEkzaehleinheitsFilter = { apId: { in: ap } }
   if (!!nodeLabelFilter.ekzaehleinheit) {
     queryEkzaehleinheitsFilter.label = {
@@ -631,7 +619,6 @@ const Tree = ({ treeName }) => {
     loadingErfkrits,
     loadingBers,
     loadingAll,
-    loadingAssozarts,
     loadingEkzaehleinheits,
     loadingEkfrequenzs,
     loadingBeobNichtBeurteilts,
@@ -660,7 +647,6 @@ const Tree = ({ treeName }) => {
     errorErfkrits,
     errorBers,
     errorAll,
-    errorAssozarts,
     errorEkzaehleinheits,
     errorEkfrequenzs,
     errorBeobNichtBeurteilts,
@@ -689,7 +675,6 @@ const Tree = ({ treeName }) => {
     ...dataErfkrits,
     ...dataBers,
     ...dataAll,
-    ...dataAssozarts,
     ...dataEkzaehleinheits,
     ...dataEkfrequenzs,
     ...dataBeobNichtBeurteilts,
@@ -731,7 +716,6 @@ const Tree = ({ treeName }) => {
         dataZielbers,
         dataErfkrits,
         dataBers,
-        dataAssozarts,
         dataEkzaehleinheits,
         dataEkfrequenzs,
         dataBeobNichtBeurteilts,
@@ -760,7 +744,6 @@ const Tree = ({ treeName }) => {
         loadingErfkrits,
         loadingBers,
         loadingAll,
-        loadingAssozarts,
         loadingEkzaehleinheits,
         loadingEkfrequenzs,
         loadingBeobNichtBeurteilts,
