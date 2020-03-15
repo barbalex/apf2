@@ -319,7 +319,6 @@ const Tree = ({ treeName }) => {
     role,
     store,
   ])
-  //}, [loading, activeNodeArray, openNodes, openNodes.length, activeNodes, data])
 
   useEffect(() => {
     // if activeNodeArray.length === 1
