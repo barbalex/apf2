@@ -83,7 +83,6 @@ const compare = (a, b) => {
 
 export default ({
   data,
-  dataMessages,
   dataAdresses,
   dataApberrelevantGrundWertes,
   dataTpopkontrzaehlEinheitWertes,
@@ -100,7 +99,6 @@ export default ({
   dataUsers,
   dataZielbers,
   dataZiels,
-  loadingMessages,
   loadingAdresses,
   loadingApberrelevantGrundWertes,
   loadingTpopkontrzaehlEinheitWertes,
@@ -158,7 +156,7 @@ export default ({
     )(),
     ...memoizeOne(() =>
       buildMessagesFolderNodes({
-        data: dataMessages,
+        data,
         treeName,
         projektNodes,
         loading: loadingUsers,

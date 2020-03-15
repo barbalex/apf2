@@ -125,6 +125,9 @@ export default gql`
         ...ErfkritFields
       }
     }
+    allMessages {
+      totalCount
+    }
   }
   ${ap}
   ${apart}

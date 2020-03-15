@@ -14,7 +14,6 @@ import storeContext from '../../../../storeContext'
 import buildVariables from './buildVariables'
 import queryUsers from './queryUsers'
 import queryProjekts from './queryProjekts'
-import queryMessages from './queryMessages'
 import queryPops from './queryPops'
 import queryPopbers from './queryPopbers'
 import queryPopmassnbers from './queryPopmassnbers'
@@ -496,14 +495,7 @@ const Tree = ({ treeName }) => {
     value: refetchWertes,
   })
 
-  const {
-    data: dataMessages,
-    error: errorMessages,
-    loading: loadingMessages,
-  } = useQuery(queryMessages)
-
   const queryLoadingArray = [
-    loadingMessages,
     loadingWertes,
     loadingUsers,
     loadingProjekts,
@@ -523,7 +515,6 @@ const Tree = ({ treeName }) => {
   ]
 
   const queryErrorArray = [
-    errorMessages,
     errorWertes,
     errorUsers,
     errorProjekts,
@@ -543,7 +534,6 @@ const Tree = ({ treeName }) => {
   ].filter(e => !!e)
 
   const data = {
-    ...dataMessages,
     ...dataWertes,
     ...dataUsers,
     ...dataProjekts,
@@ -576,7 +566,6 @@ const Tree = ({ treeName }) => {
         role,
         nodeFilter,
         data,
-        dataMessages,
         dataAdresses: dataWertes,
         dataApberrelevantGrundWertes: dataWertes,
         dataTpopkontrzaehlEinheitWertes: dataWertes,
@@ -597,7 +586,6 @@ const Tree = ({ treeName }) => {
         loadingApberrelevantGrundWertes: loadingWertes,
         loadingTpopkontrzaehlEinheitWertes: loadingWertes,
         loadingEkAbrechnungstypWertes: loadingWertes,
-        loadingMessages,
         loadingUsers,
         loadingProjekts,
         loadingPops,
