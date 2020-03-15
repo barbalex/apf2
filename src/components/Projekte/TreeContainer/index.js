@@ -401,7 +401,6 @@ const TreeContainer = ({ treeName }) => {
               : camelCase(table)
             refetch[`${tableToUse}s`]()
             refetch.all()
-            refetch.projekts()
           }
           setToDelete({
             table,

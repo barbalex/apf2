@@ -87,8 +87,6 @@ export default ({
   dataApberrelevantGrundWertes,
   dataTpopkontrzaehlEinheitWertes,
   dataEkAbrechnungstypWertes,
-  dataPops,
-  dataProjekts,
   dataTpopbers,
   dataTpopfeldkontrs,
   dataTpopfreiwkontrs,
@@ -104,9 +102,7 @@ export default ({
   loadingTpopkontrzaehlEinheitWertes,
   loadingEkAbrechnungstypWertes,
   loadingUsers,
-  loadingProjekts,
   loadingAll,
-  loadingPops,
   loadingTpops,
   loadingTpopmassns,
   loadingTpopmassnbers,
@@ -128,9 +124,7 @@ export default ({
     // because every lower folder gets previous nodes passed
     .sort(sort)
   //console.log('nodes', { data, openNodes })
-  const projektNodes = [
-    ...buildProjektNodes({ data: dataProjekts, treeName, store }),
-  ]
+  const projektNodes = [...buildProjektNodes({ data, treeName, store })]
 
   let nodes = [
     ...projektNodes,
@@ -264,9 +258,9 @@ export default ({
           ...memoizeOne(() =>
             buildPopFolderNode({
               nodes,
-              data: dataPops,
+              data,
               treeName,
-              loading: loadingPops,
+              loading: loadingAll,
               projektNodes,
               projId,
               apNodes,
@@ -532,9 +526,9 @@ export default ({
         popNodes = memoizeOne(() =>
           buildPopNodes({
             nodes,
-            data: dataPops,
+            data,
             treeName,
-            loading: loadingPops,
+            loading: loadingAll,
             apNodes,
             projektNodes,
             projId,

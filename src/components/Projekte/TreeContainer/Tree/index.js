@@ -13,8 +13,6 @@ import Row from './Row'
 import storeContext from '../../../../storeContext'
 import buildVariables from './buildVariables'
 import queryUsers from './queryUsers'
-import queryProjekts from './queryProjekts'
-import queryPops from './queryPops'
 import queryTpops from './queryTpops'
 import queryTpopmassns from './queryTpopmassns'
 import queryTpopmassnbers from './queryTpopmassnbers'
@@ -90,16 +88,6 @@ const Tree = ({ treeName }) => {
     tpopfreiwkontrFilter,
   } = buildVariables({ treeName, store })
 
-  const {
-    data: dataProjekts,
-    error: errorProjekts,
-    loading: loadingProjekts,
-    refetch: refetchProjekts,
-  } = useQuery(queryProjekts)
-  setRefetchKey({
-    key: 'projekts',
-    value: refetchProjekts,
-  })
   const queryUsersFilter = { id: { isNull: false } }
   if (!!nodeLabelFilter.user) {
     queryUsersFilter.label = {
@@ -119,27 +107,6 @@ const Tree = ({ treeName }) => {
   setRefetchKey({
     key: 'users',
     value: refetchUsers,
-  })
-  const queryPopsFilter = { ...popFilter }
-  if (!!nodeLabelFilter.pop) {
-    queryPopsFilter.label = {
-      includesInsensitive: nodeLabelFilter.pop,
-    }
-  }
-  const {
-    data: dataPops,
-    error: errorPops,
-    loading: loadingPops,
-    refetch: refetchPops,
-  } = useQuery(queryPops, {
-    variables: {
-      isAp,
-      filter: queryPopsFilter,
-    },
-  })
-  setRefetchKey({
-    key: 'pops',
-    value: refetchPops,
   })
   const queryTpopsFilter = { ...tpopFilter }
   if (!!nodeLabelFilter.tpop) {
@@ -389,6 +356,12 @@ const Tree = ({ treeName }) => {
       includesInsensitive: nodeLabelFilter.popmassnber,
     }
   }
+  const queryPopsFilter = { ...popFilter }
+  if (!!nodeLabelFilter.pop) {
+    queryPopsFilter.label = {
+      includesInsensitive: nodeLabelFilter.pop,
+    }
+  }
   const {
     data: dataAll,
     error: errorAll,
@@ -414,6 +387,7 @@ const Tree = ({ treeName }) => {
       erfkritsFilter: queryErfkritsFilter,
       popbersFilter: queryPopbersFilter,
       popmassnbersFilter: queryPopmassnbersFilter,
+      popsFilter: queryPopsFilter,
     },
   })
   setRefetchKey({
@@ -475,8 +449,6 @@ const Tree = ({ treeName }) => {
   const queryLoadingArray = [
     loadingWertes,
     loadingUsers,
-    loadingProjekts,
-    loadingPops,
     loadingTpops,
     loadingTpopmassns,
     loadingTpopmassnbers,
@@ -492,8 +464,6 @@ const Tree = ({ treeName }) => {
   const queryErrorArray = [
     errorWertes,
     errorUsers,
-    errorProjekts,
-    errorPops,
     errorTpops,
     errorTpopmassns,
     errorTpopmassnbers,
@@ -509,8 +479,6 @@ const Tree = ({ treeName }) => {
   const data = {
     ...dataWertes,
     ...dataUsers,
-    ...dataProjekts,
-    ...dataPops,
     ...dataTpops,
     ...dataTpopmassns,
     ...dataTpopmassnbers,
@@ -542,8 +510,6 @@ const Tree = ({ treeName }) => {
         dataTpopkontrzaehlEinheitWertes: dataWertes,
         dataEkAbrechnungstypWertes: dataWertes,
         dataUsers,
-        dataProjekts,
-        dataPops,
         dataTpops,
         dataTpopmassns,
         dataTpopmassnbers,
@@ -558,8 +524,6 @@ const Tree = ({ treeName }) => {
         loadingTpopkontrzaehlEinheitWertes: loadingWertes,
         loadingEkAbrechnungstypWertes: loadingWertes,
         loadingUsers,
-        loadingProjekts,
-        loadingPops,
         loadingTpops,
         loadingTpopmassns,
         loadingTpopmassnbers,

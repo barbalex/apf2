@@ -323,9 +323,6 @@ export default async ({
   }
   if (table) refetch[`${table}s`]()
   refetch.all()
-  refetch.pops()
-  refetch.tpops()
-  refetch.tpopfeldkontrs()
 
   // copy tpop if needed
   if (table === 'pop' && withNextLevel) {

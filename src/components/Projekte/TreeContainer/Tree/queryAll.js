@@ -11,6 +11,8 @@ import {
   erfkrit,
   popber,
   popmassnber,
+  pop,
+  projekt,
 } from '../../../shared/fragments'
 
 export default gql`
@@ -29,6 +31,7 @@ export default gql`
     $erfkritsFilter: ErfkritFilter!
     $popbersFilter: PopberFilter!
     $popmassnbersFilter: PopmassnberFilter!
+    $popsFilter: PopFilter!
     $isProjekt: Boolean!
     $isAp: Boolean!
     $isPop: Boolean!
@@ -145,6 +148,17 @@ export default gql`
         ...PopmassnberFields
       }
     }
+    allPops(filter: $popsFilter, orderBy: [NR_ASC, NAME_ASC])
+      @include(if: $isAp) {
+      nodes {
+        ...PopFields
+      }
+    }
+    allProjekts(orderBy: NAME_ASC) {
+      nodes {
+        ...ProjektFields
+      }
+    }
   }
   ${ap}
   ${apart}
@@ -156,4 +170,6 @@ export default gql`
   ${erfkrit}
   ${popber}
   ${popmassnber}
+  ${pop}
+  ${projekt}
 `

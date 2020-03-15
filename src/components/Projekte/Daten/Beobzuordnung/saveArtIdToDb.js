@@ -68,8 +68,6 @@ export default async ({ value, row, treeName, client, store }) => {
     setOpenNodes(newOpenNodes)
     //refetchTree('local')
     refetch.all()
-    refetch.pops()
-    refetch.tpops()
     if (refetch.beobNichtZuzuordnenForMap) refetch.beobNichtZuzuordnenForMap()
   }
 }
