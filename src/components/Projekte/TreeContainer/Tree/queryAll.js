@@ -19,6 +19,7 @@ import {
   tpopkontrzaehl,
   tpopmassnber,
   tpopmassn,
+  tpop,
 } from '../../../shared/fragments'
 
 export default gql`
@@ -44,6 +45,7 @@ export default gql`
     $tpopkontrzaehlsFilter: TpopkontrzaehlFilter!
     $tpopmassnbersFilter: TpopmassnberFilter!
     $tpopmassnsFilter: TpopmassnFilter!
+    $tpopsFilter: TpopFilter!
     $isProjekt: Boolean!
     $isAp: Boolean!
     $isPop: Boolean!
@@ -212,6 +214,12 @@ export default gql`
         ...TpopmassnFields
       }
     }
+    allTpops(filter: $tpopsFilter, orderBy: [NR_ASC, FLURNAME_ASC])
+      @include(if: $isPop) {
+      nodes {
+        ...TpopFields
+      }
+    }
   }
   ${ap}
   ${apart}
@@ -231,4 +239,5 @@ export default gql`
   ${tpopkontrzaehl}
   ${tpopmassnber}
   ${tpopmassn}
+  ${tpop}
 `

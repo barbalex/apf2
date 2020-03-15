@@ -13,7 +13,6 @@ import Row from './Row'
 import storeContext from '../../../../storeContext'
 import buildVariables from './buildVariables'
 import queryUsers from './queryUsers'
-import queryTpops from './queryTpops'
 import queryZiels from './queryZiels'
 import queryZielbers from './queryZielbers'
 import queryAll from './queryAll'
@@ -101,24 +100,6 @@ const Tree = ({ treeName }) => {
   setRefetchKey({
     key: 'users',
     value: refetchUsers,
-  })
-  const queryTpopsFilter = { ...tpopFilter }
-  if (!!nodeLabelFilter.tpop) {
-    queryTpopsFilter.label = {
-      includesInsensitive: nodeLabelFilter.tpop,
-    }
-  }
-  const {
-    data: dataTpops,
-    error: errorTpops,
-    loading: loadingTpops,
-    refetch: refetchTpops,
-  } = useQuery(queryTpops, {
-    variables: { isPop, filter: queryTpopsFilter },
-  })
-  setRefetchKey({
-    key: 'tpops',
-    value: refetchTpops,
   })
   const queryZielsFilter = { apId: { in: ap } }
   if (!!nodeLabelFilter.ziel) {
@@ -284,6 +265,12 @@ const Tree = ({ treeName }) => {
       includesInsensitive: nodeLabelFilter.tpopmassn,
     }
   }
+  const queryTpopsFilter = { ...tpopFilter }
+  if (!!nodeLabelFilter.tpop) {
+    queryTpopsFilter.label = {
+      includesInsensitive: nodeLabelFilter.tpop,
+    }
+  }
   const {
     data: dataAll,
     error: errorAll,
@@ -317,6 +304,7 @@ const Tree = ({ treeName }) => {
       tpopkontrzaehlsFilter: queryTpopkontrzaehlsFilter,
       tpopmassnbersFilter: queryTpopmassnbersFilter,
       tpopmassnsFilter: queryTpopmassnsFilter,
+      tpopsFilter: queryTpopsFilter,
     },
   })
   setRefetchKey({
@@ -378,7 +366,6 @@ const Tree = ({ treeName }) => {
   const queryLoadingArray = [
     loadingWertes,
     loadingUsers,
-    loadingTpops,
     loadingZiels,
     loadingZielbers,
     loadingAll,
@@ -387,7 +374,6 @@ const Tree = ({ treeName }) => {
   const queryErrorArray = [
     errorWertes,
     errorUsers,
-    errorTpops,
     errorZiels,
     errorZielbers,
     errorAll,
@@ -396,7 +382,6 @@ const Tree = ({ treeName }) => {
   const data = {
     ...dataWertes,
     ...dataUsers,
-    ...dataTpops,
     ...dataZiels,
     ...dataZielbers,
     ...dataAll,
@@ -421,7 +406,6 @@ const Tree = ({ treeName }) => {
         dataTpopkontrzaehlEinheitWertes: dataWertes,
         dataEkAbrechnungstypWertes: dataWertes,
         dataUsers,
-        dataTpops,
         dataZiels,
         dataZielbers,
         loadingAdresses: loadingWertes,
@@ -429,7 +413,6 @@ const Tree = ({ treeName }) => {
         loadingTpopkontrzaehlEinheitWertes: loadingWertes,
         loadingEkAbrechnungstypWertes: loadingWertes,
         loadingUsers,
-        loadingTpops,
         loadingZiels,
         loadingZielbers,
         loadingAll,
