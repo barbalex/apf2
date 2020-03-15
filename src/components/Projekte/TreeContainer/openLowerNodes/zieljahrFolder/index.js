@@ -71,5 +71,5 @@ export default async ({
   addOpenNodes(newOpenNodes)
 
   // 4. refresh tree
-  refetch.ziels()
+  refetch.all()
 }

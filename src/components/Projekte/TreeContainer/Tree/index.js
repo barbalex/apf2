@@ -12,13 +12,9 @@ import Row from './Row'
 
 import storeContext from '../../../../storeContext'
 import buildVariables from './buildVariables'
-import queryZiels from './queryZiels'
 import queryAll from './queryAll'
 import buildNodes from '../nodes'
 import logout from '../../../../modules/logout'
-import existsPermissionError from '../../../../modules/existsPermissionError'
-import anyQueryIsLoading from '../../../../modules/anyQueryIsLoading'
-import anyQueryReturnsError from '../../../../modules/anyQueryReturnsError'
 import idbContext from '../../../../idbContext'
 
 const singleRowHeight = 23
@@ -77,25 +73,6 @@ const Tree = ({ treeName }) => {
     tpopfeldkontrFilter,
     tpopfreiwkontrFilter,
   } = buildVariables({ treeName, store })
-
-  const queryZielsFilter = { apId: { in: ap } }
-  if (!!nodeLabelFilter.ziel) {
-    queryZielsFilter.label = {
-      includesInsensitive: nodeLabelFilter.ziel,
-    }
-  }
-  const {
-    data: dataZiels,
-    error: errorZiels,
-    loading: loadingZiels,
-    refetch: refetchZiels,
-  } = useQuery(queryZiels, {
-    variables: { isAp, filter: queryZielsFilter },
-  })
-  setRefetchKey({
-    key: 'ziels',
-    value: refetchZiels,
-  })
 
   const queryApsFilter = { ...apFilter }
   if (nodeLabelFilter.ap) {
@@ -262,12 +239,13 @@ const Tree = ({ treeName }) => {
       includesInsensitive: nodeLabelFilter.zielber,
     }
   }
-  const {
-    data: dataAll,
-    error: errorAll,
-    loading: loadingAll,
-    refetch: refetchAll,
-  } = useQuery(queryAll, {
+  const queryZielsFilter = { apId: { in: ap } }
+  if (!!nodeLabelFilter.ziel) {
+    queryZielsFilter.label = {
+      includesInsensitive: nodeLabelFilter.ziel,
+    }
+  }
+  const { data, error, loading, refetch: refetchAll } = useQuery(queryAll, {
     variables: {
       isProjekt,
       isAp,
@@ -304,6 +282,7 @@ const Tree = ({ treeName }) => {
       tpopkontrzaehlEinheitWertesFilter,
       ekAbrechnungstypWertesFilter,
       zielbersFilter: queryZielbersFilter,
+      zielsFilter: queryZielsFilter,
     },
   })
   setRefetchKey({
@@ -311,16 +290,6 @@ const Tree = ({ treeName }) => {
     value: refetchAll,
   })
 
-  const queryLoadingArray = [loadingZiels, loadingAll]
-
-  const queryErrorArray = [errorZiels, errorAll].filter(e => !!e)
-
-  const data = {
-    ...dataZiels,
-    ...dataAll,
-  }
-
-  const loading = anyQueryIsLoading(queryLoadingArray)
   const { token } = user
   const role = token ? jwtDecode(token).role : null
 
@@ -334,9 +303,7 @@ const Tree = ({ treeName }) => {
         role,
         nodeFilter,
         data,
-        dataZiels,
-        loadingZiels,
-        loadingAll,
+        loading,
         store,
       }),
     )
@@ -383,7 +350,11 @@ const Tree = ({ treeName }) => {
 
   //console.log('Tree rendering')
 
-  if (existsPermissionError(queryErrorArray)) {
+  const existsPermissionError =
+    !!error &&
+    (error.message.includes('permission denied') ||
+      error.message.includes('keine Berechtigung'))
+  if (existsPermissionError) {
     // during login don't show permission error
     if (!token) return null
     // if token is not accepted, ask user to logout
@@ -402,7 +373,6 @@ const Tree = ({ treeName }) => {
       </ErrorContainer>
     )
   }
-  const error = anyQueryReturnsError(queryErrorArray)
   if (error) {
     return <ErrorContainer>{`Fehler: ${error.message}`}</ErrorContainer>
   }
