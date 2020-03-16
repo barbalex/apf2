@@ -78,7 +78,6 @@ const Projekte = () => {
   const treeTabs = intersection(treeTabValues, projekteTabs)
   const tree2Tabs = intersection(tree2TabValues, projekteTabs)
 
-  console.log('Projekte, store.nodeFilter.tree:', store.nodeFilter.tree)
   const treeNodeFilter = getSnapshot(store.nodeFilter.tree)
   const treeNodeLabelFilter = getSnapshot(store.tree.nodeLabelFilter)
   const treeActiveNodeArray = getSnapshot(store.tree.activeNodeArray)
