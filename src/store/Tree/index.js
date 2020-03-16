@@ -69,11 +69,6 @@ export default types
       self.activeNodeArray = val
     },
   }))
-  .views(self => ({
-    get activeNode() {
-      return self.nodes.find(n => isEqual(n.url, self.activeNodeArray))
-    },
-  }))
 
 export const defaultValue = {
   name: 'tree',
