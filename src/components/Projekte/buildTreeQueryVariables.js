@@ -7,20 +7,17 @@ import { simpleTypes as tpopmassnType } from '../../store/NodeFilterTree/tpopmas
 import { simpleTypes as tpopfeldkontrType } from '../../store/NodeFilterTree/tpopfeldkontr'
 import { simpleTypes as tpopfreiwkontrType } from '../../store/NodeFilterTree/tpopfreiwkontr'
 
-export default ({ treeName, store }) => {
-  const { nodeFilter: nodeFilterPassed } = store
-  // apFilter is used for form filter AND apFilter of tree :-(
-  const { openNodes, activeNodeArray, apFilter: apFilterSet } = store[treeName]
-  const nodeFilter = nodeFilterPassed[treeName]
-
+export default ({
+  treeName,
+  nodeFilter,
+  openNodes,
+  activeNodeArray,
+  apFilter: apFilterSet,
+  nodeLabelFilter,
+}) => {
+  // apFilter is used for form nodeLabelFilter AND apFilter of tree :-(
   const isWerteListen = openNodes.some(
     nodeArray => nodeArray[0] === 'Werte-Listen',
-  )
-  const isAdresse = openNodes.some(
-    nodeArray =>
-      nodeArray[0] === 'Werte-Listen' &&
-      activeNodeArray.length > 1 &&
-      nodeArray[1] === 'Adressen',
   )
   const projekt = uniq(
     openNodes
@@ -181,28 +178,215 @@ export default ({ treeName, store }) => {
     tpopmassnFilter[key] = { [expression]: value }
   })
 
-  const variables = {
-    projekt,
+  const apsFilter = { ...apFilter }
+  if (nodeLabelFilter.ap) {
+    apsFilter.label = { includesInsensitive: nodeLabelFilter.ap }
+  }
+  const apberuebersichtsFilter = { projId: { in: projekt } }
+  if (!!nodeLabelFilter.apberuebersicht) {
+    apberuebersichtsFilter.label = {
+      includesInsensitive: nodeLabelFilter.apberuebersicht,
+    }
+  }
+  const apbersFilter = { apId: { in: ap } }
+  if (!!nodeLabelFilter.apber) {
+    apbersFilter.label = { includesInsensitive: nodeLabelFilter.apber }
+  }
+  const apartsFilter = { apId: { in: ap } }
+  if (!!nodeLabelFilter.apart) {
+    apartsFilter.label = { includesInsensitive: nodeLabelFilter.apart }
+  }
+  const assozartFilter = { apId: { in: ap } }
+  if (!!nodeLabelFilter.assozart) {
+    assozartFilter.label = {
+      includesInsensitive: nodeLabelFilter.assozart,
+    }
+  }
+  const beobNichtBeurteiltsFilter = {
+    nichtZuordnen: { equalTo: false },
+    apId: { in: ap },
+    tpopId: { isNull: true },
+  }
+  if (!!nodeLabelFilter.beob) {
+    beobNichtBeurteiltsFilter.label = {
+      includesInsensitive: nodeLabelFilter.beob,
+    }
+  }
+  const beobNichtZuzuordnensFilter = {
+    nichtZuordnen: { equalTo: true },
+    apId: { in: ap },
+  }
+  if (!!nodeLabelFilter.beob) {
+    beobNichtZuzuordnensFilter.label = {
+      includesInsensitive: nodeLabelFilter.beob,
+    }
+  }
+  const beobZugeordnetsFilter = { tpopId: { in: tpop } }
+  if (!!nodeLabelFilter.beob) {
+    beobZugeordnetsFilter.label = {
+      includesInsensitive: nodeLabelFilter.beob,
+    }
+  }
+  const bersFilter = { apId: { in: ap } }
+  if (!!nodeLabelFilter.ber) {
+    bersFilter.label = {
+      includesInsensitive: nodeLabelFilter.ber,
+    }
+  }
+  const ekfrequenzsFilter = { apId: { in: ap } }
+  if (!!nodeLabelFilter.ekfrequenz) {
+    ekfrequenzsFilter.label = {
+      includesInsensitive: nodeLabelFilter.ekfrequenz,
+    }
+  }
+  const ekzaehleinheitsFilter = { apId: { in: ap } }
+  if (!!nodeLabelFilter.ekzaehleinheit) {
+    ekzaehleinheitsFilter.label = {
+      includesInsensitive: nodeLabelFilter.ekzaehleinheit,
+    }
+  }
+  const erfkritsFilter = { apId: { in: ap } }
+  if (!!nodeLabelFilter.erfkrit) {
+    erfkritsFilter.label = {
+      includesInsensitive: nodeLabelFilter.erfkrit,
+    }
+  }
+  const popbersFilter = { popId: { in: pop } }
+  if (!!nodeLabelFilter.popber) {
+    popbersFilter.label = {
+      includesInsensitive: nodeLabelFilter.popber,
+    }
+  }
+  const popmassnbersFilter = { popId: { in: pop } }
+  if (!!nodeLabelFilter.popmassnber) {
+    popmassnbersFilter.label = {
+      includesInsensitive: nodeLabelFilter.popmassnber,
+    }
+  }
+  const popsFilter = { ...popFilter }
+  if (!!nodeLabelFilter.pop) {
+    popsFilter.label = {
+      includesInsensitive: nodeLabelFilter.pop,
+    }
+  }
+  const tpopbersFilter = { tpopId: { in: tpop } }
+  if (!!nodeLabelFilter.tpopber) {
+    tpopbersFilter.label = {
+      includesInsensitive: nodeLabelFilter.tpopber,
+    }
+  }
+  const tpopfeldkontrsFilter = { ...tpopfeldkontrFilter }
+  if (!!nodeLabelFilter.tpopkontr) {
+    tpopfeldkontrsFilter.labelEk = {
+      includesInsensitive: nodeLabelFilter.tpopkontr,
+    }
+  }
+  const tpopfreiwkontrsFilter = { ...tpopfreiwkontrFilter }
+  if (!!nodeLabelFilter.tpopkontr) {
+    tpopfreiwkontrsFilter.labelEkf = {
+      includesInsensitive: nodeLabelFilter.tpopkontr,
+    }
+  }
+  const tpopkontrzaehlsFilter = { tpopkontrId: { in: tpopkontr } }
+  if (!!nodeLabelFilter.tpopkontrzaehl) {
+    tpopkontrzaehlsFilter.label = {
+      includesInsensitive: nodeLabelFilter.tpopkontrzaehl,
+    }
+  }
+  const tpopmassnbersFilter = { tpopId: { in: tpop } }
+  if (!!nodeLabelFilter.tpopmassnber) {
+    tpopmassnbersFilter.label = {
+      includesInsensitive: nodeLabelFilter.tpopmassnber,
+    }
+  }
+  const tpopmassnsFilter = { ...tpopmassnFilter }
+  if (!!nodeLabelFilter.tpopmassn) {
+    tpopmassnsFilter.label = {
+      includesInsensitive: nodeLabelFilter.tpopmassn,
+    }
+  }
+  const tpopsFilter = { ...tpopFilter }
+  if (!!nodeLabelFilter.tpop) {
+    tpopsFilter.label = {
+      includesInsensitive: nodeLabelFilter.tpop,
+    }
+  }
+  const usersFilter = { id: { isNull: false } }
+  if (!!nodeLabelFilter.user) {
+    usersFilter.label = {
+      includesInsensitive: nodeLabelFilter.user,
+    }
+  }
+  const adressesFilter = nodeLabelFilter.adresse
+    ? { label: { includesInsensitive: nodeLabelFilter.adresse } }
+    : { id: { isNull: false } }
+  const apberrelevantGrundWertesFilter = nodeLabelFilter.apberrelevantGrundWerte
+    ? {
+        label: {
+          includesInsensitive: nodeLabelFilter.apberrelevantGrundWerte,
+        },
+      }
+    : { id: { isNull: false } }
+  const tpopkontrzaehlEinheitWertesFilter = nodeLabelFilter.tpopkontrzaehlEinheitWerte
+    ? {
+        label: {
+          includesInsensitive: nodeLabelFilter.tpopkontrzaehlEinheitWerte,
+        },
+      }
+    : { id: { isNull: false } }
+  const ekAbrechnungstypWertesFilter = nodeLabelFilter.ekAbrechnungstypWerte
+    ? {
+        label: { includesInsensitive: nodeLabelFilter.ekAbrechnungstypWerte },
+      }
+    : { id: { isNull: false } }
+  const zielbersFilter = { zielId: { in: ziel } }
+  if (!!nodeLabelFilter.zielber) {
+    zielbersFilter.label = {
+      includesInsensitive: nodeLabelFilter.zielber,
+    }
+  }
+  const zielsFilter = { apId: { in: ap } }
+  if (!!nodeLabelFilter.ziel) {
+    zielsFilter.label = {
+      includesInsensitive: nodeLabelFilter.ziel,
+    }
+  }
+  return {
     isProjekt,
-    apFilter,
-    ap,
     isAp,
-    ziel,
-    isZiel,
-    pop,
     isPop,
-    popFilter,
-    tpop,
     isTpop,
-    tpopFilter,
-    tpopkontr,
     isTpopkontr,
     isWerteListen,
-    isAdresse,
-    tpopmassnFilter,
-    tpopfeldkontrFilter,
-    tpopfreiwkontrFilter,
+    isZiel,
+    apartsFilter,
+    apbersFilter,
+    apberuebersichtsFilter,
+    apsFilter,
+    assozartFilter,
+    beobNichtBeurteiltsFilter,
+    beobNichtZuzuordnensFilter,
+    beobZugeordnetsFilter,
+    bersFilter,
+    ekfrequenzsFilter,
+    ekzaehleinheitsFilter,
+    erfkritsFilter,
+    popbersFilter,
+    popmassnbersFilter,
+    popsFilter,
+    tpopbersFilter,
+    tpopfeldkontrsFilter,
+    tpopfreiwkontrsFilter,
+    tpopkontrzaehlsFilter,
+    tpopmassnbersFilter,
+    tpopmassnsFilter,
+    tpopsFilter,
+    usersFilter,
+    adressesFilter,
+    apberrelevantGrundWertesFilter,
+    tpopkontrzaehlEinheitWertesFilter,
+    ekAbrechnungstypWertesFilter,
+    zielbersFilter,
+    zielsFilter,
   }
-  //console.log('buildVariables, variables:', variables)
-  return variables
 }

@@ -12,6 +12,7 @@ import intersection from 'lodash/intersection'
 import { observer } from 'mobx-react-lite'
 import jwtDecode from 'jwt-decode'
 import { useQuery } from '@apollo/react-hooks'
+import { getSnapshot } from 'mobx-state-tree'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
@@ -77,477 +78,54 @@ const Projekte = () => {
   const treeTabs = intersection(treeTabValues, projekteTabs)
   const tree2Tabs = intersection(tree2TabValues, projekteTabs)
 
-  const queryTreeVariables = useMemo(() => {
-    const {
-      projekt,
-      isProjekt,
-      apFilter,
-      ap,
-      isAp,
-      ziel,
-      isZiel,
-      pop,
-      isPop,
-      popFilter,
-      tpop,
-      isTpop,
-      tpopFilter,
-      tpopkontr,
-      isTpopkontr,
-      isWerteListen,
-      tpopmassnFilter,
-      tpopfeldkontrFilter,
-      tpopfreiwkontrFilter,
-    } = buildTreeQueryVariables({ treeName: 'tree', store })
-    const { nodeLabelFilter } = store.tree
+  console.log('Projekte, store.nodeFilter.tree:', store.nodeFilter.tree)
+  const treeNodeFilter = getSnapshot(store.nodeFilter.tree)
+  const treeNodeLabelFilter = getSnapshot(store.tree.nodeLabelFilter)
+  const treeActiveNodeArray = getSnapshot(store.tree.activeNodeArray)
+  const treeOpenNodes = getSnapshot(store.tree.openNodes)
+  const treeApFilter = store.tree.apFilter
+  const tree2NodeFilter = getSnapshot(store.nodeFilter.tree2)
+  const tree2NodeLabelFilter = getSnapshot(store.tree2.nodeLabelFilter)
+  const tree2ActiveNodeArray = getSnapshot(store.tree2.activeNodeArray)
+  const tree2OpenNodes = getSnapshot(store.tree2.openNodes)
+  const tree2ApFilter = store.tree2.apFilter
 
-    const apsFilter = { ...apFilter }
-    if (nodeLabelFilter.ap) {
-      apsFilter.label = { includesInsensitive: nodeLabelFilter.ap }
-    }
-    const apberuebersichtsFilter = { projId: { in: projekt } }
-    if (!!nodeLabelFilter.apberuebersicht) {
-      apberuebersichtsFilter.label = {
-        includesInsensitive: nodeLabelFilter.apberuebersicht,
-      }
-    }
-    const apbersFilter = { apId: { in: ap } }
-    if (!!nodeLabelFilter.apber) {
-      apbersFilter.label = { includesInsensitive: nodeLabelFilter.apber }
-    }
-    const apartsFilter = { apId: { in: ap } }
-    if (!!nodeLabelFilter.apart) {
-      apartsFilter.label = { includesInsensitive: nodeLabelFilter.apart }
-    }
-    const assozartFilter = { apId: { in: ap } }
-    if (!!nodeLabelFilter.assozart) {
-      assozartFilter.label = {
-        includesInsensitive: nodeLabelFilter.assozart,
-      }
-    }
-    const beobNichtBeurteiltsFilter = {
-      nichtZuordnen: { equalTo: false },
-      apId: { in: ap },
-      tpopId: { isNull: true },
-    }
-    if (!!nodeLabelFilter.beob) {
-      beobNichtBeurteiltsFilter.label = {
-        includesInsensitive: nodeLabelFilter.beob,
-      }
-    }
-    const beobNichtZuzuordnensFilter = {
-      nichtZuordnen: { equalTo: true },
-      apId: { in: ap },
-    }
-    if (!!nodeLabelFilter.beob) {
-      beobNichtZuzuordnensFilter.label = {
-        includesInsensitive: nodeLabelFilter.beob,
-      }
-    }
-    const beobZugeordnetsFilter = { tpopId: { in: tpop } }
-    if (!!nodeLabelFilter.beob) {
-      beobZugeordnetsFilter.label = {
-        includesInsensitive: nodeLabelFilter.beob,
-      }
-    }
-    const bersFilter = { apId: { in: ap } }
-    if (!!nodeLabelFilter.ber) {
-      bersFilter.label = {
-        includesInsensitive: nodeLabelFilter.ber,
-      }
-    }
-    const ekfrequenzsFilter = { apId: { in: ap } }
-    if (!!nodeLabelFilter.ekfrequenz) {
-      ekfrequenzsFilter.label = {
-        includesInsensitive: nodeLabelFilter.ekfrequenz,
-      }
-    }
-    const ekzaehleinheitsFilter = { apId: { in: ap } }
-    if (!!nodeLabelFilter.ekzaehleinheit) {
-      ekzaehleinheitsFilter.label = {
-        includesInsensitive: nodeLabelFilter.ekzaehleinheit,
-      }
-    }
-    const erfkritsFilter = { apId: { in: ap } }
-    if (!!nodeLabelFilter.erfkrit) {
-      erfkritsFilter.label = {
-        includesInsensitive: nodeLabelFilter.erfkrit,
-      }
-    }
-    const popbersFilter = { popId: { in: pop } }
-    if (!!nodeLabelFilter.popber) {
-      popbersFilter.label = {
-        includesInsensitive: nodeLabelFilter.popber,
-      }
-    }
-    const popmassnbersFilter = { popId: { in: pop } }
-    if (!!nodeLabelFilter.popmassnber) {
-      popmassnbersFilter.label = {
-        includesInsensitive: nodeLabelFilter.popmassnber,
-      }
-    }
-    const popsFilter = { ...popFilter }
-    if (!!nodeLabelFilter.pop) {
-      popsFilter.label = {
-        includesInsensitive: nodeLabelFilter.pop,
-      }
-    }
-    const tpopbersFilter = { tpopId: { in: tpop } }
-    if (!!nodeLabelFilter.tpopber) {
-      tpopbersFilter.label = {
-        includesInsensitive: nodeLabelFilter.tpopber,
-      }
-    }
-    const tpopfeldkontrsFilter = { ...tpopfeldkontrFilter }
-    if (!!nodeLabelFilter.tpopkontr) {
-      tpopfeldkontrsFilter.labelEk = {
-        includesInsensitive: nodeLabelFilter.tpopkontr,
-      }
-    }
-    const tpopfreiwkontrsFilter = { ...tpopfreiwkontrFilter }
-    if (!!nodeLabelFilter.tpopkontr) {
-      tpopfreiwkontrsFilter.labelEkf = {
-        includesInsensitive: nodeLabelFilter.tpopkontr,
-      }
-    }
-    const tpopkontrzaehlsFilter = { tpopkontrId: { in: tpopkontr } }
-    if (!!nodeLabelFilter.tpopkontrzaehl) {
-      tpopkontrzaehlsFilter.label = {
-        includesInsensitive: nodeLabelFilter.tpopkontrzaehl,
-      }
-    }
-    const tpopmassnbersFilter = { tpopId: { in: tpop } }
-    if (!!nodeLabelFilter.tpopmassnber) {
-      tpopmassnbersFilter.label = {
-        includesInsensitive: nodeLabelFilter.tpopmassnber,
-      }
-    }
-    const tpopmassnsFilter = { ...tpopmassnFilter }
-    if (!!nodeLabelFilter.tpopmassn) {
-      tpopmassnsFilter.label = {
-        includesInsensitive: nodeLabelFilter.tpopmassn,
-      }
-    }
-    const tpopsFilter = { ...tpopFilter }
-    if (!!nodeLabelFilter.tpop) {
-      tpopsFilter.label = {
-        includesInsensitive: nodeLabelFilter.tpop,
-      }
-    }
-    const usersFilter = { id: { isNull: false } }
-    if (!!nodeLabelFilter.user) {
-      usersFilter.label = {
-        includesInsensitive: nodeLabelFilter.user,
-      }
-    }
-    const adressesFilter = nodeLabelFilter.adresse
-      ? { label: { includesInsensitive: nodeLabelFilter.adresse } }
-      : { id: { isNull: false } }
-    const apberrelevantGrundWertesFilter = nodeLabelFilter.apberrelevantGrundWerte
-      ? {
-          label: {
-            includesInsensitive: nodeLabelFilter.apberrelevantGrundWerte,
-          },
-        }
-      : { id: { isNull: false } }
-    const tpopkontrzaehlEinheitWertesFilter = nodeLabelFilter.tpopkontrzaehlEinheitWerte
-      ? {
-          label: {
-            includesInsensitive: nodeLabelFilter.tpopkontrzaehlEinheitWerte,
-          },
-        }
-      : { id: { isNull: false } }
-    const ekAbrechnungstypWertesFilter = nodeLabelFilter.ekAbrechnungstypWerte
-      ? {
-          label: { includesInsensitive: nodeLabelFilter.ekAbrechnungstypWerte },
-        }
-      : { id: { isNull: false } }
-    const zielbersFilter = { zielId: { in: ziel } }
-    if (!!nodeLabelFilter.zielber) {
-      zielbersFilter.label = {
-        includesInsensitive: nodeLabelFilter.zielber,
-      }
-    }
-    const zielsFilter = { apId: { in: ap } }
-    if (!!nodeLabelFilter.ziel) {
-      zielsFilter.label = {
-        includesInsensitive: nodeLabelFilter.ziel,
-      }
-    }
-    return {
-      isProjekt,
-      isAp,
-      isPop,
-      isTpop,
-      isTpopkontr,
-      isWerteListen,
-      isZiel,
-      apartsFilter,
-      apbersFilter,
-      apberuebersichtsFilter,
-      apsFilter,
-      assozartFilter,
-      beobNichtBeurteiltsFilter,
-      beobNichtZuzuordnensFilter,
-      beobZugeordnetsFilter,
-      bersFilter,
-      ekfrequenzsFilter,
-      ekzaehleinheitsFilter,
-      erfkritsFilter,
-      popbersFilter,
-      popmassnbersFilter,
-      popsFilter,
-      tpopbersFilter,
-      tpopfeldkontrsFilter,
-      tpopfreiwkontrsFilter,
-      tpopkontrzaehlsFilter,
-      tpopmassnbersFilter,
-      tpopmassnsFilter,
-      tpopsFilter,
-      usersFilter,
-      adressesFilter,
-      apberrelevantGrundWertesFilter,
-      tpopkontrzaehlEinheitWertesFilter,
-      ekAbrechnungstypWertesFilter,
-      zielbersFilter,
-      zielsFilter,
-    }
-  }, [store])
-  const queryTree2Variables = useMemo(() => {
-    const {
-      projekt,
-      isProjekt,
-      apFilter,
-      ap,
-      isAp,
-      ziel,
-      isZiel,
-      pop,
-      isPop,
-      popFilter,
-      tpop,
-      isTpop,
-      tpopFilter,
-      tpopkontr,
-      isTpopkontr,
-      isWerteListen,
-      tpopmassnFilter,
-      tpopfeldkontrFilter,
-      tpopfreiwkontrFilter,
-    } = buildTreeQueryVariables({ treeName: 'tree2', store })
-    const { nodeLabelFilter } = store.tree2
-    const apsFilter = { ...apFilter }
-    if (nodeLabelFilter.ap) {
-      apsFilter.label = { includesInsensitive: nodeLabelFilter.ap }
-    }
-    const apberuebersichtsFilter = { projId: { in: projekt } }
-    if (!!nodeLabelFilter.apberuebersicht) {
-      apberuebersichtsFilter.label = {
-        includesInsensitive: nodeLabelFilter.apberuebersicht,
-      }
-    }
-    const apbersFilter = { apId: { in: ap } }
-    if (!!nodeLabelFilter.apber) {
-      apbersFilter.label = { includesInsensitive: nodeLabelFilter.apber }
-    }
-    const apartsFilter = { apId: { in: ap } }
-    if (!!nodeLabelFilter.apart) {
-      apartsFilter.label = { includesInsensitive: nodeLabelFilter.apart }
-    }
-    const assozartFilter = { apId: { in: ap } }
-    if (!!nodeLabelFilter.assozart) {
-      assozartFilter.label = {
-        includesInsensitive: nodeLabelFilter.assozart,
-      }
-    }
-    const beobNichtBeurteiltsFilter = {
-      nichtZuordnen: { equalTo: false },
-      apId: { in: ap },
-      tpopId: { isNull: true },
-    }
-    if (!!nodeLabelFilter.beob) {
-      beobNichtBeurteiltsFilter.label = {
-        includesInsensitive: nodeLabelFilter.beob,
-      }
-    }
-    const beobNichtZuzuordnensFilter = {
-      nichtZuordnen: { equalTo: true },
-      apId: { in: ap },
-    }
-    if (!!nodeLabelFilter.beob) {
-      beobNichtZuzuordnensFilter.label = {
-        includesInsensitive: nodeLabelFilter.beob,
-      }
-    }
-    const beobZugeordnetsFilter = { tpopId: { in: tpop } }
-    if (!!nodeLabelFilter.beob) {
-      beobZugeordnetsFilter.label = {
-        includesInsensitive: nodeLabelFilter.beob,
-      }
-    }
-    const bersFilter = { apId: { in: ap } }
-    if (!!nodeLabelFilter.ber) {
-      bersFilter.label = {
-        includesInsensitive: nodeLabelFilter.ber,
-      }
-    }
-    const ekfrequenzsFilter = { apId: { in: ap } }
-    if (!!nodeLabelFilter.ekfrequenz) {
-      ekfrequenzsFilter.label = {
-        includesInsensitive: nodeLabelFilter.ekfrequenz,
-      }
-    }
-    const ekzaehleinheitsFilter = { apId: { in: ap } }
-    if (!!nodeLabelFilter.ekzaehleinheit) {
-      ekzaehleinheitsFilter.label = {
-        includesInsensitive: nodeLabelFilter.ekzaehleinheit,
-      }
-    }
-    const erfkritsFilter = { apId: { in: ap } }
-    if (!!nodeLabelFilter.erfkrit) {
-      erfkritsFilter.label = {
-        includesInsensitive: nodeLabelFilter.erfkrit,
-      }
-    }
-    const popbersFilter = { popId: { in: pop } }
-    if (!!nodeLabelFilter.popber) {
-      popbersFilter.label = {
-        includesInsensitive: nodeLabelFilter.popber,
-      }
-    }
-    const popmassnbersFilter = { popId: { in: pop } }
-    if (!!nodeLabelFilter.popmassnber) {
-      popmassnbersFilter.label = {
-        includesInsensitive: nodeLabelFilter.popmassnber,
-      }
-    }
-    const popsFilter = { ...popFilter }
-    if (!!nodeLabelFilter.pop) {
-      popsFilter.label = {
-        includesInsensitive: nodeLabelFilter.pop,
-      }
-    }
-    const tpopbersFilter = { tpopId: { in: tpop } }
-    if (!!nodeLabelFilter.tpopber) {
-      tpopbersFilter.label = {
-        includesInsensitive: nodeLabelFilter.tpopber,
-      }
-    }
-    const tpopfeldkontrsFilter = { ...tpopfeldkontrFilter }
-    if (!!nodeLabelFilter.tpopkontr) {
-      tpopfeldkontrsFilter.labelEk = {
-        includesInsensitive: nodeLabelFilter.tpopkontr,
-      }
-    }
-    const tpopfreiwkontrsFilter = { ...tpopfreiwkontrFilter }
-    if (!!nodeLabelFilter.tpopkontr) {
-      tpopfreiwkontrsFilter.labelEkf = {
-        includesInsensitive: nodeLabelFilter.tpopkontr,
-      }
-    }
-    const tpopkontrzaehlsFilter = { tpopkontrId: { in: tpopkontr } }
-    if (!!nodeLabelFilter.tpopkontrzaehl) {
-      tpopkontrzaehlsFilter.label = {
-        includesInsensitive: nodeLabelFilter.tpopkontrzaehl,
-      }
-    }
-    const tpopmassnbersFilter = { tpopId: { in: tpop } }
-    if (!!nodeLabelFilter.tpopmassnber) {
-      tpopmassnbersFilter.label = {
-        includesInsensitive: nodeLabelFilter.tpopmassnber,
-      }
-    }
-    const tpopmassnsFilter = { ...tpopmassnFilter }
-    if (!!nodeLabelFilter.tpopmassn) {
-      tpopmassnsFilter.label = {
-        includesInsensitive: nodeLabelFilter.tpopmassn,
-      }
-    }
-    const tpopsFilter = { ...tpopFilter }
-    if (!!nodeLabelFilter.tpop) {
-      tpopsFilter.label = {
-        includesInsensitive: nodeLabelFilter.tpop,
-      }
-    }
-    const usersFilter = { id: { isNull: false } }
-    if (!!nodeLabelFilter.user) {
-      usersFilter.label = {
-        includesInsensitive: nodeLabelFilter.user,
-      }
-    }
-    const adressesFilter = nodeLabelFilter.adresse
-      ? { label: { includesInsensitive: nodeLabelFilter.adresse } }
-      : { id: { isNull: false } }
-    const apberrelevantGrundWertesFilter = nodeLabelFilter.apberrelevantGrundWerte
-      ? {
-          label: {
-            includesInsensitive: nodeLabelFilter.apberrelevantGrundWerte,
-          },
-        }
-      : { id: { isNull: false } }
-    const tpopkontrzaehlEinheitWertesFilter = nodeLabelFilter.tpopkontrzaehlEinheitWerte
-      ? {
-          label: {
-            includesInsensitive: nodeLabelFilter.tpopkontrzaehlEinheitWerte,
-          },
-        }
-      : { id: { isNull: false } }
-    const ekAbrechnungstypWertesFilter = nodeLabelFilter.ekAbrechnungstypWerte
-      ? {
-          label: { includesInsensitive: nodeLabelFilter.ekAbrechnungstypWerte },
-        }
-      : { id: { isNull: false } }
-    const zielbersFilter = { zielId: { in: ziel } }
-    if (!!nodeLabelFilter.zielber) {
-      zielbersFilter.label = {
-        includesInsensitive: nodeLabelFilter.zielber,
-      }
-    }
-    const zielsFilter = { apId: { in: ap } }
-    if (!!nodeLabelFilter.ziel) {
-      zielsFilter.label = {
-        includesInsensitive: nodeLabelFilter.ziel,
-      }
-    }
-    return {
-      isProjekt,
-      isAp,
-      isPop,
-      isTpop,
-      isTpopkontr,
-      isWerteListen,
-      isZiel,
-      apartsFilter,
-      apbersFilter,
-      apberuebersichtsFilter,
-      apsFilter,
-      assozartFilter,
-      beobNichtBeurteiltsFilter,
-      beobNichtZuzuordnensFilter,
-      beobZugeordnetsFilter,
-      bersFilter,
-      ekfrequenzsFilter,
-      ekzaehleinheitsFilter,
-      erfkritsFilter,
-      popbersFilter,
-      popmassnbersFilter,
-      popsFilter,
-      tpopbersFilter,
-      tpopfeldkontrsFilter,
-      tpopfreiwkontrsFilter,
-      tpopkontrzaehlsFilter,
-      tpopmassnbersFilter,
-      tpopmassnsFilter,
-      tpopsFilter,
-      usersFilter,
-      adressesFilter,
-      apberrelevantGrundWertesFilter,
-      tpopkontrzaehlEinheitWertesFilter,
-      ekAbrechnungstypWertesFilter,
-      zielbersFilter,
-      zielsFilter,
-    }
-  }, [store])
+  const queryTreeVariables = useMemo(
+    () =>
+      buildTreeQueryVariables({
+        treeName: 'tree',
+        nodeFilter: treeNodeFilter,
+        openNodes: treeOpenNodes,
+        activeNodeArray: treeActiveNodeArray,
+        apFilter: treeApFilter,
+        nodeLabelFilter: treeNodeLabelFilter,
+      }),
+    [
+      treeNodeFilter,
+      treeActiveNodeArray,
+      treeApFilter,
+      treeNodeLabelFilter,
+      treeOpenNodes,
+    ],
+  )
+  const queryTree2Variables = useMemo(
+    () =>
+      buildTreeQueryVariables({
+        treeName: 'tree2',
+        nodeFilter: tree2NodeFilter,
+        openNodes: tree2OpenNodes,
+        activeNodeArray: tree2ActiveNodeArray,
+        apFilter: tree2ApFilter,
+        nodeLabelFilter: tree2NodeLabelFilter,
+      }),
+    [
+      tree2NodeFilter,
+      tree2ActiveNodeArray,
+      tree2ApFilter,
+      tree2NodeLabelFilter,
+      tree2OpenNodes,
+    ],
+  )
 
   const {
     data: treeData,
