@@ -2,6 +2,8 @@ import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
+import getActiveForm from '../../../modules/getActiveForm'
+
 /**
  * ReactDOMServer does not yet support Suspense
  */
@@ -51,9 +53,9 @@ const Container = styled.div`
   }
 `
 
-const Daten = ({ treeName }) => {
+const Daten = ({ treeName, nodes }) => {
   const store = useContext(storeContext)
-  const { activeForm } = store[treeName]
+  const activeForm = getActiveForm({ store, treeName, nodes })
 
   let form
   switch (activeForm.form) {
@@ -184,8 +186,6 @@ const Daten = ({ treeName }) => {
     default:
       form = null
   }
-
-  //console.log('Daten', { form, fOKey, activeFilterTable, key })
 
   if (!form) return null
 

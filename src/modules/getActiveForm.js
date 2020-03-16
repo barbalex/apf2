@@ -1,24 +1,44 @@
+import get from 'lodash/get'
+import isEqual from 'lodash/isEqual'
+
 import getTableNameFromActiveNode from './getTableNameFromActiveNode'
 
-export default ({ url, activeNode, activeFilterTable }) => {
+export default ({ store, treeName, nodes }) => {
+  const { activeNodeArray } = store[treeName]
+  const activeFilterTable = get(store, `nodeFilter.${treeName}.activeTable`, '')
+
   let key
-  if (url.length === 3 && url[0] === 'Projekte' && url[2] === 'EK-Planung') {
+  if (
+    activeNodeArray.length === 3 &&
+    activeNodeArray[0] === 'Projekte' &&
+    activeNodeArray[2] === 'EK-Planung'
+  ) {
     key = 'ekplan'
-  } else if (url.length > 2 && url[2] === 'Exporte') {
+  } else if (activeNodeArray.length > 2 && activeNodeArray[2] === 'Exporte') {
     key = 'exporte'
-  } else if (url.length > 4 && url[4] === 'Qualitaetskontrollen') {
+  } else if (
+    activeNodeArray.length > 4 &&
+    activeNodeArray[4] === 'Qualitaetskontrollen'
+  ) {
     key = 'qk'
-  } else if (url.length > 5 && url[4] === 'nicht-zuzuordnende-Beobachtungen') {
+  } else if (
+    activeNodeArray.length > 5 &&
+    activeNodeArray[4] === 'nicht-zuzuordnende-Beobachtungen'
+  ) {
     key = 'beobNichtZuzuordnen'
-  } else if (url.length > 5 && url[4] === 'nicht-beurteilte-Beobachtungen') {
+  } else if (
+    activeNodeArray.length > 5 &&
+    activeNodeArray[4] === 'nicht-beurteilte-Beobachtungen'
+  ) {
     key = 'beobNichtBeurteilt'
   } else if (
-    url.length > 9 &&
-    url[6] === 'Teil-Populationen' &&
-    url[8] === 'Beobachtungen'
+    activeNodeArray.length > 9 &&
+    activeNodeArray[6] === 'Teil-Populationen' &&
+    activeNodeArray[8] === 'Beobachtungen'
   ) {
     key = 'beobZugeordnet'
   } else {
+    const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))
     key = getTableNameFromActiveNode(activeNode)
   }
 

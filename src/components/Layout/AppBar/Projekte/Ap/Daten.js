@@ -40,11 +40,15 @@ const MyAppBarDaten = ({ treeNr = '' }) => {
     cloneTree2From1,
     tree,
   } = useContext(storeContext)
+  const { activeNodeArray } = tree
 
   const projekteTabs = urlQuery.projekteTabs.slice().filter(el => !!el)
   const isDaten = projekteTabs.includes(`daten${treeNr}`)
   const isTree = projekteTabs.includes(`tree${treeNr}`)
-  const isEkPlan = tree.activeForm.form === 'ekplan'
+  const isEkPlan =
+    activeNodeArray.length === 3 &&
+    activeNodeArray[0] === 'Projekte' &&
+    activeNodeArray[2] === 'EK-Planung'
 
   const onClickButton = useCallback(() => {
     const copyOfProjekteTabs = [...projekteTabs]
@@ -73,7 +77,14 @@ const MyAppBarDaten = ({ treeNr = '' }) => {
         setUrlQuery,
       })
     }
-  }, [cloneTree2From1, nodeFilterClone1To2, projekteTabs, setUrlQuery, treeNr, urlQuery])
+  }, [
+    cloneTree2From1,
+    nodeFilterClone1To2,
+    projekteTabs,
+    setUrlQuery,
+    treeNr,
+    urlQuery,
+  ])
 
   let followed = projekteTabs.includes('filter')
   if (treeNr === '2') {

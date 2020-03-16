@@ -25,6 +25,7 @@ const Container = styled.div`
 const DatenPage = ({ location }) => {
   const store = useContext(storeContext)
   const { view, showDeletions, user, setIsPrint, setEkfIds } = store
+  const { activeNodeArray } = store.tree
 
   /**
    * In Firefox this does not work! Bug is open since 7 years:
@@ -41,16 +42,14 @@ const DatenPage = ({ location }) => {
       })
     }
   }, [setEkfIds, setIsPrint])
-  const { activeForm } = store.tree
+  const isEkPlan =
+    activeNodeArray.length === 3 &&
+    activeNodeArray[0] === 'Projekte' &&
+    activeNodeArray[2] === 'EK-Planung'
 
   const form = useMemo(
-    () =>
-      activeForm.form === 'ekplan'
-        ? 'ekplan'
-        : view === 'ekf'
-        ? 'ekf'
-        : 'projekte',
-    [activeForm.form, view],
+    () => (isEkPlan ? 'ekplan' : view === 'ekf' ? 'ekf' : 'projekte'),
+    [isEkPlan, view],
   )
 
   return (

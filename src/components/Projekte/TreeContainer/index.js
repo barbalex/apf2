@@ -1,7 +1,7 @@
 /**
  * need to keep class because of ref
  */
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useCallback, useContext, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import uniq from 'lodash/uniq'
@@ -17,6 +17,8 @@ import ErrorBoundary from 'react-error-boundary'
 import LabelFilter from './LabelFilter'
 import ApFilter from './ApFilter'
 import Tree from './Tree'
+import idbContext from '../../../idbContext'
+import logout from '../../../modules/logout'
 import CmApFolder from './contextmenu/ApFolder'
 import CmAp from './contextmenu/Ap'
 import CmUserFolder from './contextmenu/UserFolder'
@@ -202,6 +204,12 @@ const StyledDialog = styled(Dialog)`
     overflow-y: hidden;
   }
 `
+const ErrorContainer = styled.div`
+  padding: 15px;
+`
+const LogoutButton = styled(Button)`
+  margin-top: 10px !important;
+`
 
 const getAndValidateCoordinatesOfTpop = async ({
   id,
@@ -269,9 +277,17 @@ const getAndValidateCoordinatesOfBeob = async ({
   return { lv95X, lv95Y }
 }
 
-const TreeContainer = ({ treeName }) => {
+const TreeContainer = ({
+  treeName,
+  nodes,
+  treeLoading,
+  treeRefetch,
+  treeError,
+}) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
+  const { idb } = useContext(idbContext)
+
   const {
     activeApfloraLayers,
     setActiveApfloraLayers,
@@ -285,10 +301,39 @@ const TreeContainer = ({ treeName }) => {
     setCopyingBiotop,
     urlQuery,
     setUrlQuery,
-    refetch,
   } = store
-  const { openNodes, setOpenNodes } = store[treeName]
-  const { projekt } = store[`${treeName}ActiveNodes`]
+  const tree = store[treeName]
+  const { setActiveNodeArray, openNodes, setOpenNodes } = tree
+
+  const activeNodes = store[`${treeName}ActiveNodes`]
+  useEffect(() => {
+    // if activeNodeArray.length === 1
+    // and there is only one projekt
+    // open it
+    // dont do this in render!
+    const projekteNodes = nodes.filter(n => n.menuType === 'projekt')
+    const existsOnlyOneProjekt = projekteNodes.length === 1
+    const projektNode = projekteNodes[0]
+    if (
+      activeNodes.projektFolder &&
+      !activeNodes.projekt &&
+      existsOnlyOneProjekt &&
+      projektNode
+    ) {
+      const projektUrl = [...projektNode.url]
+      setActiveNodeArray(projektUrl)
+      // add projekt to open nodes
+      setOpenNodes([...openNodes, projektUrl])
+    }
+  }, [
+    activeNodes.projekt,
+    activeNodes.projektFolder,
+    treeLoading,
+    nodes,
+    openNodes,
+    setActiveNodeArray,
+    setOpenNodes,
+  ])
 
   const [newTpopFromBeobDialogOpen, setNewTpopFromBeobDialogOpen] = useState(
     false,
@@ -394,7 +439,7 @@ const TreeContainer = ({ treeName }) => {
             afterDeletionHook: () => {
               const newOpenNodes = openNodes.filter(n => !isEqual(n, url))
               setOpenNodes(newOpenNodes)
-              refetch.tree()
+              treeRefetch()
             },
           })
         },
@@ -547,7 +592,7 @@ const TreeContainer = ({ treeName }) => {
       setToDelete,
       openNodes,
       setOpenNodes,
-      refetch,
+      treeRefetch,
       urlQuery,
       showMapIfNotYetVisible,
       activeApfloraLayers,
@@ -562,16 +607,45 @@ const TreeContainer = ({ treeName }) => {
 
   //console.log('TreeContainer',{data})
 
+  const { token } = store.user
+  const existsPermissionError =
+    !!treeError &&
+    (treeError.message.includes('permission denied') ||
+      treeError.message.includes('keine Berechtigung'))
+  if (existsPermissionError) {
+    // during login don't show permission error
+    if (!token) return null
+    // if token is not accepted, ask user to logout
+    return (
+      <ErrorContainer>
+        <div>Ihre Anmeldung ist nicht mehr gültig.</div>
+        <div>Bitte melden Sie sich neu an.</div>
+        <LogoutButton
+          variant="outlined"
+          onClick={() => {
+            logout(idb)
+          }}
+        >
+          Neu anmelden
+        </LogoutButton>
+      </ErrorContainer>
+    )
+  }
+  if (treeError) {
+    return <ErrorContainer>{`Fehler: ${treeError.message}`}</ErrorContainer>
+  }
+  const { projekt } = store[`${treeName}ActiveNodes`]
+
   return (
     <ErrorBoundary>
       <Container data-id={`tree-container${treeName === 'tree' ? 1 : 2}`}>
         {!!toDeleteId && <DeleteDatasetModal treeName={treeName} />}
         <LabelFilterContainer>
-          <LabelFilter treeName={treeName} />
+          <LabelFilter treeName={treeName} nodes={nodes} />
           {!!projekt && <ApFilter treeName={treeName} />}
         </LabelFilterContainer>
         <InnerTreeContainer>
-          <Tree treeName={treeName} />
+          <Tree treeName={treeName} nodes={nodes} loading={treeLoading} />
         </InnerTreeContainer>
         <CmApFolder onClick={handleClick} treeName={treeName} />
         <CmAp onClick={handleClick} treeName={treeName} />

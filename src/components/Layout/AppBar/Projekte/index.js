@@ -9,8 +9,12 @@ import EkfPlanAppBar from './EKF'
 const ProjekteAppBar = () => {
   const store = useContext(storeContext)
   const { view, tree } = store
+  const { activeNodeArray } = tree
 
-  const isEkPlan = tree.activeForm.form === 'ekplan'
+  const isEkPlan =
+    activeNodeArray.length === 3 &&
+    activeNodeArray[0] === 'Projekte' &&
+    activeNodeArray[2] === 'EK-Planung'
 
   if (isEkPlan) return <EkPlanAppBar />
   if (view === 'ekf') return <EkfPlanAppBar />

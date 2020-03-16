@@ -67,7 +67,14 @@ const InnerContainer = styled.div`
 const standardWidth = 500
 const standardHeight = 800
 
-const ProjektContainer = ({ treeName, tabs: tabsPassed, projekteTabs }) => {
+const ProjektContainer = ({
+  treeName,
+  tabs: tabsPassed,
+  projekteTabs,
+  nodes,
+  treeLoading,
+  treeRefetch,
+}) => {
   const store = useContext(storeContext)
   const { isPrint } = store
   const {
@@ -136,18 +143,23 @@ const ProjektContainer = ({ treeName, tabs: tabsPassed, projekteTabs }) => {
   }
 
   if (isPrint) {
-    return <Daten treeName={treeName} />
+    return <Daten treeName={treeName} nodes={nodes} />
   }
 
   const elObj = {
     tree: (
       <InnerContainer ref={treeEl}>
-        <TreeContainer treeName={treeName} />
+        <TreeContainer
+          treeName={treeName}
+          nodes={nodes}
+          treeLoading={treeLoading}
+          treeRefetch={treeRefetch}
+        />
       </InnerContainer>
     ),
     daten: (
       <InnerContainer ref={datenEl}>
-        <Daten treeName={treeName} />
+        <Daten treeName={treeName} nodes={nodes} />
       </InnerContainer>
     ),
     filter: (

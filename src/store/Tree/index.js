@@ -1,6 +1,5 @@
 import { types, getParent } from 'mobx-state-tree'
 import isEqual from 'lodash/isEqual'
-import get from 'lodash/get'
 import queryString from 'query-string'
 import { navigate } from 'gatsby'
 
@@ -8,8 +7,6 @@ import NodeLabelFilter, {
   defaultValue as defaultNodeLabelFilter,
 } from './NodeLabelFilter'
 import Map, { defaultValue as defaultMap } from './Map'
-import Node from './Node'
-import activeFormFromActiveNodeArray from '../../modules/activeFormFromActiveNodeArray'
 
 export default types
   .model('Tree', {
@@ -25,7 +22,6 @@ export default types
     apFilter: types.optional(types.boolean, false),
     nodeLabelFilter: types.optional(NodeLabelFilter, defaultNodeLabelFilter),
     map: types.optional(Map, defaultMap),
-    nodes: types.optional(types.array(Node), []),
     treeWidth: types.optional(types.number, 500),
     treeHeight: types.optional(types.number, 800),
     datenWidth: types.optional(types.number, 500),
@@ -77,21 +73,6 @@ export default types
     get activeNode() {
       return self.nodes.find(n => isEqual(n.url, self.activeNodeArray))
     },
-    get activeForm() {
-      const store = getParent(self)
-      return activeFormFromActiveNodeArray({
-        url: self.activeNodeArray,
-        // Do not know if directly accessing activeNode is a problem here
-        // because may cause extra renders or be late
-        // so re-calculate
-        activeNode: self.nodes.find(n => isEqual(n.url, self.activeNodeArray)),
-        activeFilterTable: get(
-          store,
-          `nodeFilter.${self.name}.activeTable`,
-          '',
-        ),
-      })
-    },
   }))
 
 export const defaultValue = {
@@ -101,5 +82,4 @@ export const defaultValue = {
   apFilter: false,
   nodeLabelFilter: defaultNodeLabelFilter,
   map: defaultMap,
-  nodes: [],
 }

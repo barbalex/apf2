@@ -6,6 +6,7 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import DeleteFilterIcon from '@material-ui/icons/DeleteSweep'
 import styled from 'styled-components'
 import get from 'lodash/get'
+import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
 
 import tables from '../../../modules/tables'
@@ -29,11 +30,10 @@ const StyledDeleteFilterIcon = styled(DeleteFilterIcon)`
   color: rgba(0, 0, 0, 0.7);
 `
 
-const LabelFilter = ({ treeName }) => {
+const LabelFilter = ({ treeName, nodes }) => {
   const store = useContext(storeContext)
   const {
     nodeLabelFilter,
-    activeNode,
     activeNodeArray,
     setActiveNodeArray,
     setOpenNodes,
@@ -44,6 +44,7 @@ const LabelFilter = ({ treeName }) => {
     empty,
   } = nodeLabelFilter
   const isFiltered = runIsFiltered()
+  const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))
   const tableName = activeNode ? activeNode.filterTable : null
 
   let labelText = '(filtern nicht möglich)'

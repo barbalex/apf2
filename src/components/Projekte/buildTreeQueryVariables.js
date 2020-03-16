@@ -1,11 +1,11 @@
 import uniq from 'lodash/uniq'
 
-import { simpleTypes as apType } from '../../../../store/NodeFilterTree/ap'
-import { simpleTypes as popType } from '../../../../store/NodeFilterTree/pop'
-import { simpleTypes as tpopType } from '../../../../store/NodeFilterTree/tpop'
-import { simpleTypes as tpopmassnType } from '../../../../store/NodeFilterTree/tpopmassn'
-import { simpleTypes as tpopfeldkontrType } from '../../../../store/NodeFilterTree/tpopfeldkontr'
-import { simpleTypes as tpopfreiwkontrType } from '../../../../store/NodeFilterTree/tpopfreiwkontr'
+import { simpleTypes as apType } from '../../store/NodeFilterTree/ap'
+import { simpleTypes as popType } from '../../store/NodeFilterTree/pop'
+import { simpleTypes as tpopType } from '../../store/NodeFilterTree/tpop'
+import { simpleTypes as tpopmassnType } from '../../store/NodeFilterTree/tpopmassn'
+import { simpleTypes as tpopfeldkontrType } from '../../store/NodeFilterTree/tpopfeldkontr'
+import { simpleTypes as tpopfreiwkontrType } from '../../store/NodeFilterTree/tpopfreiwkontr'
 
 export default ({ treeName, store }) => {
   const { nodeFilter: nodeFilterPassed } = store
