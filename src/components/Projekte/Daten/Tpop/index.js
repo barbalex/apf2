@@ -123,29 +123,29 @@ const TpopForm = ({ treeName, showFilter = false }) => {
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
       const value = values[changedField]
-      let geomPoint = get(values, 'geomPoint.geojson') || null
-      if (geomPoint) geomPoint = JSON.parse(geomPoint)
-      // need to add crs otherwise PostGIS v2.5 (on server) errors
-      geomPoint.crs = {
-        type: 'name',
-        properties: {
-          name: 'urn:ogc:def:crs:EPSG::4326',
-        },
-      }
-      const variables = {
-        ...objectsEmptyValuesToNull(values),
-        // need to pass geomPoint as GeoJSON
-        geomPoint,
-        changedBy: store.user.name,
-      }
       if (showFilter) {
-        dataFilterSetValue({
+        return dataFilterSetValue({
           treeName,
           table: 'tpop',
           key: changedField,
           value,
         })
       } else {
+        let geomPoint = get(values, 'geomPoint.geojson') || null
+        if (geomPoint) geomPoint = JSON.parse(geomPoint)
+        // need to add crs otherwise PostGIS v2.5 (on server) errors
+        geomPoint.crs = {
+          type: 'name',
+          properties: {
+            name: 'urn:ogc:def:crs:EPSG::4326',
+          },
+        }
+        const variables = {
+          ...objectsEmptyValuesToNull(values),
+          // need to pass geomPoint as GeoJSON
+          geomPoint,
+          changedBy: store.user.name,
+        }
         try {
           await client.mutate({
             mutation: updateTpopByIdGql,
