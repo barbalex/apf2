@@ -31,8 +31,8 @@ const MassnahmenLayer = () => {
         method: 'get',
         url,
         auth: {
-          username: window.process.env.MAPS_ZH_CH_USER,
-          password: window.process.env.MAPS_ZH_CH_SECRET,
+          username: process.env.GATSBY_MAPS_ZH_CH_USER,
+          password: process.env.GATSBY_MAPS_ZH_CH_SECRET,
         },
       })
     } catch (error) {
