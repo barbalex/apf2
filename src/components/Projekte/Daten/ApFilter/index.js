@@ -64,11 +64,12 @@ const LabelPopoverRowColumnRight = styled.div`
 
 const ApFilter = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { dataFilterSetValue, refetch } = store
+  const { dataFilterSetValue } = store
   const { activeNodeArray, dataFilter } = store[treeName]
 
   const projId = activeNodeArray[1]
   const dataFilterAp = { ...dataFilter.ap }
+
   const apFilter = useMemo(() => {
     const apFilter = { projId: { equalTo: projId } }
     const apFilterValues = Object.entries(dataFilterAp).filter(
@@ -124,9 +125,8 @@ const ApFilter = ({ treeName }) => {
         key: changedField,
         value,
       })
-      refetch.tree()
     },
-    [dataFilterSetValue, refetch, row, treeName],
+    [dataFilterSetValue, row, treeName],
   )
 
   const aeTaxonomiesFilter = useCallback(
