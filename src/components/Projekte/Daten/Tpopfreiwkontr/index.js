@@ -181,7 +181,9 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
   })
   // DO NOT fetch apId from activeNodeArray because this form is also used for mass prints
   //const apId = activeNodeArray[3]
-  const apId = get(data, 'tpopkontrById.tpopByTpopId.popByPopId.apId')
+  const apId =
+    get(data, 'tpopkontrById.tpopByTpopId.popByPopId.apId') ||
+    '99999999-9999-9999-9999-999999999999'
 
   const allTpopkontrFilter = {
     typ: { equalTo: 'Freiwilligen-Erfolgskontrolle' },
@@ -555,9 +557,9 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
             errors={errors}
             showFilter={showFilter}
           />
-          <Image key={apId} apId={apId} artname={artname} />
           {!showFilter && (
             <>
+              <Image key={apId} apId={apId} artname={artname} />
               {zaehls1 && (
                 <Count
                   key={zaehls1.id}
