@@ -14,7 +14,7 @@ const MassnahmenLayer = () => {
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    const baseUrl = 'http://maps.zh.ch/wfs/FnsAPFloraWFS'
+    const baseUrl = 'https://maps.zh.ch/wfs/FnsAPFloraWFS'
     const params = {
       service: 'WFS',
       version: '1.0.0',
