@@ -8,14 +8,14 @@ export default ({ fileName, data }) => {
   const file = `${fileName}_${format(new Date(), 'yyyy-MM-dd_HH-mm-ss')}`
   const dataByArt = groupBy(data, 'art')
   const kml = `<?xml version='1.0' encoding='UTF-8'?>
-  <kml xmlns='http://earth.google.com/kml/2.1'>
+  <kml xmlns='https://earth.google.com/kml/2.1'>
     <Document>
       <name>${file}</name>
       <Style id='MyStyle'>
         <IconStyle>
           <Icon>
             <href>
-              http://maps.google.com/mapfiles/kml/pushpin/red-pushpin.png
+              https://maps.google.com/mapfiles/kml/pushpin/red-pushpin.png
             </href>
           </Icon>
         </IconStyle>

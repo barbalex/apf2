@@ -19,10 +19,10 @@ sort: 1
 
 ### Beobachtungen den Teilpopulationen zuordnen
 
-- Alle Beobachtungen der [Info Flora](https://www.infoflora.ch) innerhalb des Kantons Zürich und im nahen Umfeld
+- Alle Beobachtungen der [Info Flora](https://infoflora.ch) innerhalb des Kantons Zürich und im nahen Umfeld
 - Von InfoFlora bezogene Beobachtungen können korrigiert und die Änderung per mail an InfoFlora gemeldet werden [(Anleitung)](/Dokumentation/Benutzer/Falsch-bestimmte-Beobachtungen/)
 - Alle Beobachtungen aus Projekten der Fachstelle Naturschutz des Kantons Zürich
-- Eigene Beobachtungen aus [EvAB](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content)
+- Eigene Beobachtungen aus [EvAB](https://aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content)
 - Grundsätzlich alle verfügbaren Beobachtungen, unabhängig von ihrer Datenstruktur
 - Beobachtungen von beliebigen (synonymen) Arten im selben Aktionsplan zuordnen
 - [Anleitung](./docs/beobZuordnen)
@@ -101,8 +101,8 @@ Die nachfolgend aufgelisteten Funktionen werden nur von Topos und Gabriel-Softwa
 - Adressen verwalten (in apflora, nur für Benutzer mit der Rolle "manager" sichtbar)
 - Logins verwalten und Schreibrechte vergeben (in apflora, nur für Benutzer mit der Rolle "manager" sichtbar)
 - Mit dem GIS auf die Daten zugreifen
-- Beobachtungen nach [EvAB](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content) exportieren (separate Access-Anwendung)
-- Beobachtungen aus einem [EvAB](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content) importieren (um sie danach in apflora Teilpopulationen zuzuordnen) (separate Access-Anwendung)
+- Beobachtungen nach [EvAB](https://aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content) exportieren (separate Access-Anwendung)
+- Beobachtungen aus einem [EvAB](https://aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content) importieren (um sie danach in apflora Teilpopulationen zuzuordnen) (separate Access-Anwendung)
 
 ### Daten nach Verlust wiederherstellen
 

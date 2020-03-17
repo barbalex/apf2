@@ -12,7 +12,7 @@ sort: 4
 
   Der Begriff "Aktionsplan" wurde gewählt, weil es keine Arten sind, sondern Massnahmen, Kontrollen und Berichte für/mit/über Arten.
 
-  "Aktionsplan" kennzeichnet im Grunde genommen Förderprograme für [ein paar Dutzend besonders geförderte Arten](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/artenfoerderung/ap_fl.html). Daher wäre wohl ein Begriff wie "Artförderprogramm" angebrachter.
+  "Aktionsplan" kennzeichnet im Grunde genommen Förderprograme für [ein paar Dutzend besonders geförderte Arten](https://aln.zh.ch/internet/baudirektion/aln/de/naturschutz/artenfoerderung/ap_fl.html). Daher wäre wohl ein Begriff wie "Artförderprogramm" angebrachter.
 * Die __Menübefehle__ erscheinen, wenn ihr mit der rechten Maustaste im Strukturbaum auf ein Objekt (z.B. eine Population) klickt. Mit dem Finger: lange drücken
 * Ein Teil der __Objekte können verschoben werden__: Populationen, Teil-Populationen, Massnahmen, Feldkontrollen und Freiwilligen-Kontrollen. Das macht ihr mittels "ausschneiden"/"kopieren" und anschliessendem "einfügen" mit dem Menu
 * Um wiederholtes Kopieren / Verschieben effizienter zu gestalten, __kann man einen zweiten Satz von Strukturbaum und Daten öffnen__

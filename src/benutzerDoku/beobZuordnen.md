@@ -33,5 +33,5 @@ Hier gibt es zwei Methoden, die mit einem einzigen Klick ausgelöst werden könn
 
 ## 2. Verfügbare Beobachtungen
 
-- Im September 2017 wurden zuletzt alle Beobachtungen der [Info Spezies](http://www.infoflora.ch/de/allgemeines/info-species.html) und der Fachstelle Naturschutz für den Kanton Zürich integriert
-- Im April 2017 wurden die Beobachtungen des Projekts [Floz](http://www.floz.zbg.ch/) integriert
+- Im September 2017 wurden zuletzt alle Beobachtungen der [Info Spezies](https://www.infoflora.ch/de/allgemeines/info-species.html) und der Fachstelle Naturschutz für den Kanton Zürich integriert
+- Im April 2017 wurden die Beobachtungen des Projekts [Floz](https://www.floz.zbg.ch/) integriert

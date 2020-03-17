@@ -360,7 +360,7 @@ const StyledMap = styled(Map)`
     background-size: 26px 26px;
   }
 
-  /* one selector per rule as explained here : http://www.sitepoint.com/html5-full-screen-api/ */
+  /* one selector per rule as explained here : https://www.sitepoint.com/html5-full-screen-api/ */
 
   .leaflet-container:-webkit-full-screen {
     width: 100% !important;
