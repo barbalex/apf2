@@ -56,6 +56,19 @@ export default gql`
     beobNichtZuzuordnen: allVApbeobs(
       filter: {
         apId: { in: $ap }
+        nichtZuordnen: { equalTo: true }
+        tpopId: { isNull: true }
+      }
+    ) @include(if: $beobNichtZuzuordnen) {
+      nodes {
+        id
+        wgs84Lat
+        wgs84Long
+      }
+    }
+    beobZugeordnet: allVApbeobs(
+      filter: {
+        apId: { in: $ap }
         nichtZuordnen: { equalTo: false }
         tpopId: { isNull: false }
       }
