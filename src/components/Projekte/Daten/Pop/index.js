@@ -16,7 +16,7 @@ import updatePopByIdGql from './updatePopById'
 import query from './query'
 import queryPops from './queryPops'
 import storeContext from '../../../../storeContext'
-import { simpleTypes as popType } from '../../../../store/NodeFilterTree/pop'
+import { simpleTypes as popType } from '../../../../store/Tree/DataFilter/pop'
 import Coordinates from '../../../shared/Coordinates'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
@@ -36,8 +36,8 @@ const FieldsContainer = styled.div`
 const Pop = ({ treeName, showFilter = false }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
-  const { nodeFilter, nodeFilterSetValue, refetch } = store
-  const { activeNodeArray } = store[treeName]
+  const { dataFilterSetValue, refetch } = store
+  const { activeNodeArray, dataFilter } = store[treeName]
 
   let id =
     activeNodeArray.length > 5
@@ -59,7 +59,7 @@ const Pop = ({ treeName, showFilter = false }) => {
     apId: { isNull: false },
     apByApId: { projId: { equalTo: activeNodeArray[1] } },
   }
-  const popFilterValues = Object.entries(nodeFilter[treeName].pop).filter(
+  const popFilterValues = Object.entries(dataFilter.pop).filter(
     e => e[1] || e[1] === 0,
   )
   popFilterValues.forEach(([key, value]) => {
@@ -67,7 +67,7 @@ const Pop = ({ treeName, showFilter = false }) => {
     popFilter[key] = { [expression]: value }
   })
   const popApFilter = { apId: { equalTo: apId } }
-  const popApFilterValues = Object.entries(nodeFilter[treeName].pop).filter(
+  const popApFilterValues = Object.entries(dataFilter.pop).filter(
     e => e[1] || e[1] === 0,
   )
   popApFilterValues.forEach(([key, value]) => {
@@ -90,7 +90,7 @@ const Pop = ({ treeName, showFilter = false }) => {
   let popOfApFilteredCount
   let row
   if (showFilter) {
-    row = nodeFilter[treeName].pop
+    row = dataFilter.pop
     popTotalCount = get(dataPops, 'allPops.totalCount', '...')
     popFilteredCount = get(dataPops, 'popsFiltered.totalCount', '...')
     popOfApTotalCount = get(dataPops, 'popsOfAp.totalCount', '...')
@@ -119,7 +119,7 @@ const Pop = ({ treeName, showFilter = false }) => {
         changedBy: store.user.name,
       }
       if (showFilter) {
-        nodeFilterSetValue({
+        dataFilterSetValue({
           treeName,
           table: 'pop',
           key: changedField,
@@ -162,7 +162,7 @@ const Pop = ({ treeName, showFilter = false }) => {
     },
     [
       client,
-      nodeFilterSetValue,
+      dataFilterSetValue,
       refetch,
       row,
       showFilter,

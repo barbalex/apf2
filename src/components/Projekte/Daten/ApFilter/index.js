@@ -17,7 +17,7 @@ import queryAps from './queryAps'
 import queryAdresses from './queryAdresses'
 import queryAeTaxonomies from './queryAeTaxonomies'
 import storeContext from '../../../../storeContext'
-import { simpleTypes as apType } from '../../../../store/NodeFilterTree/ap'
+import { simpleTypes as apType } from '../../../../store/Tree/DataFilter/ap'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 
 const Container = styled.div`
@@ -64,14 +64,14 @@ const LabelPopoverRowColumnRight = styled.div`
 
 const ApFilter = ({ treeName }) => {
   const store = useContext(storeContext)
-  const { nodeFilter, nodeFilterSetValue, refetch } = store
-  const { activeNodeArray } = store[treeName]
+  const { dataFilterSetValue, refetch } = store
+  const { activeNodeArray, dataFilter } = store[treeName]
 
   const projId = activeNodeArray[1]
-  const nodeFilterAp = { ...nodeFilter[treeName].ap }
+  const dataFilterAp = { ...dataFilter.ap }
   const apFilter = useMemo(() => {
     const apFilter = { projId: { equalTo: projId } }
-    const apFilterValues = Object.entries(nodeFilterAp).filter(
+    const apFilterValues = Object.entries(dataFilterAp).filter(
       e => e[1] || e[1] === 0,
     )
     apFilterValues.forEach(([key, value]) => {
@@ -79,7 +79,7 @@ const ApFilter = ({ treeName }) => {
       apFilter[key] = { [expression]: value }
     })
     return apFilter
-  }, [projId, nodeFilterAp])
+  }, [projId, dataFilterAp])
   const { data: apsData, error: apsError } = useQuery(queryAps, {
     variables: { apFilter },
   })
@@ -102,23 +102,23 @@ const ApFilter = ({ treeName }) => {
     loading: loadingAeTaxonomiesById,
   } = useQuery(queryAeTaxonomiesById, {
     variables: {
-      id: nodeFilter[treeName].ap.artId,
-      run: !!nodeFilter[treeName].ap.artId,
+      id: dataFilter.ap.artId,
+      run: !!dataFilter.ap.artId,
     },
   })
 
   const artname =
-    !!nodeFilter[treeName].ap.artId && !loadingAeTaxonomiesById
+    !!dataFilter.ap.artId && !loadingAeTaxonomiesById
       ? get(dataAeTaxonomiesById, 'aeTaxonomyById.artname') || ''
       : ''
 
-  const row = nodeFilter[treeName].ap
+  const row = dataFilter.ap
 
   const onSubmit = useCallback(
     (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
       const value = values[changedField]
-      nodeFilterSetValue({
+      dataFilterSetValue({
         treeName,
         table: 'ap',
         key: changedField,
@@ -126,7 +126,7 @@ const ApFilter = ({ treeName }) => {
       })
       refetch.tree()
     },
-    [nodeFilterSetValue, refetch, row, treeName],
+    [dataFilterSetValue, refetch, row, treeName],
   )
 
   const aeTaxonomiesFilter = useCallback(

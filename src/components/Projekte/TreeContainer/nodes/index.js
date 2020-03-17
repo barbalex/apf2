@@ -81,7 +81,7 @@ const compare = (a, b) => {
   return a - b
 }
 
-export default ({ data, loading, store, nodeFilter, role, treeName }) => {
+export default ({ data, loading, store, role, treeName, dataFilter }) => {
   const openNodes = store[treeName].openNodes
     .toJSON()
     // need to sort so folders are added in correct order
@@ -229,7 +229,7 @@ export default ({ data, loading, store, nodeFilter, role, treeName }) => {
               projId,
               apNodes,
               apId,
-              nodeFilter: nodeFilter[treeName],
+              dataFilter: dataFilter[treeName],
               store,
             }),
           )(),
@@ -787,7 +787,7 @@ export default ({ data, loading, store, nodeFilter, role, treeName }) => {
             apNodes,
             popId: nodeUrl[5],
             popNodes,
-            nodeFilter: nodeFilter[treeName],
+            dataFilter: dataFilter[treeName],
             store,
           }),
         )()

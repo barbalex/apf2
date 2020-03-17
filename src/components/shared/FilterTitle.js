@@ -55,24 +55,24 @@ const FormTitle = ({
 }) => {
   const store = useContext(storeContext)
   const {
-    nodeFilterTableIsFiltered,
-    nodeFilterTreeIsFiltered,
-    nodeFilterEmptyTable,
-    nodeFilterEmptyTree,
+    dataFilterTableIsFiltered,
+    dataFilterTreeIsFiltered,
+    dataFilterEmptyTable,
+    dataFilterEmptyTree,
   } = store
 
-  const existsTableFilter = nodeFilterTableIsFiltered({
+  const existsTableFilter = dataFilterTableIsFiltered({
     treeName,
     table,
   })
-  const existsTreeFilter = nodeFilterTreeIsFiltered(treeName)
+  const existsTreeFilter = dataFilterTreeIsFiltered(treeName)
 
   const onEmptyTable = useCallback(
-    () => nodeFilterEmptyTable({ treeName, table }),
-    [nodeFilterEmptyTable, treeName, table],
+    () => dataFilterEmptyTable({ treeName, table }),
+    [dataFilterEmptyTable, treeName, table],
   )
-  const onEmptyTree = useCallback(() => nodeFilterEmptyTree(treeName), [
-    nodeFilterEmptyTree,
+  const onEmptyTree = useCallback(() => dataFilterEmptyTree(treeName), [
+    dataFilterEmptyTree,
     treeName,
   ])
 

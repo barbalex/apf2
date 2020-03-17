@@ -14,7 +14,7 @@ import queryTpops from './queryTpops'
 import updateTpopByIdGql from './updateTpopById'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import storeContext from '../../../../storeContext'
-import { simpleTypes as tpopType } from '../../../../store/NodeFilterTree/tpop'
+import { simpleTypes as tpopType } from '../../../../store/Tree/DataFilter/tpop'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import Ek from './Ek'
@@ -41,15 +41,9 @@ const LoadingDiv = styled.div`
 const TpopForm = ({ treeName, showFilter = false }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const {
-    nodeFilter,
-    nodeFilterSetValue,
-    refetch,
-    urlQuery,
-    setUrlQuery,
-  } = store
+  const { dataFilterSetValue, refetch, urlQuery, setUrlQuery } = store
 
-  const { activeNodeArray } = store[treeName]
+  const { activeNodeArray, dataFilter } = store[treeName]
   const [tab, setTab] = useState(get(urlQuery, 'tpopTab', 'tpop'))
   const onChangeTab = useCallback(
     (event, value) => {
@@ -84,7 +78,7 @@ const TpopForm = ({ treeName, showFilter = false }) => {
     popId: { isNull: false },
     popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
   }
-  const tpopFilterValues = Object.entries(nodeFilter[treeName].tpop).filter(
+  const tpopFilterValues = Object.entries(dataFilter.tpop).filter(
     e => e[1] || e[1] === 0,
   )
   tpopFilterValues.forEach(([key, value]) => {
@@ -107,7 +101,7 @@ const TpopForm = ({ treeName, showFilter = false }) => {
   let tpopOfApFilteredCount
   let row
   if (showFilter) {
-    row = nodeFilter[treeName].tpop
+    row = dataFilter.tpop
     tpopTotalCount = get(dataTpops, 'allTpops.totalCount', '...')
     tpopFilteredCount = get(dataTpops, 'tpopsFiltered.totalCount', '...')
     const popsOfAp = get(dataTpops, 'popsOfAp.nodes', [])
@@ -145,7 +139,7 @@ const TpopForm = ({ treeName, showFilter = false }) => {
         changedBy: store.user.name,
       }
       if (showFilter) {
-        nodeFilterSetValue({
+        dataFilterSetValue({
           treeName,
           table: 'tpop',
           key: changedField,
@@ -204,7 +198,7 @@ const TpopForm = ({ treeName, showFilter = false }) => {
     [
       row,
       showFilter,
-      nodeFilterSetValue,
+      dataFilterSetValue,
       treeName,
       client,
       store.user.name,

@@ -1,12 +1,12 @@
-// filter by nodeFilter
+// filter by dataFilter
 // 2019 03 19: not any more in use: filtering happens directly in queries
 
-import types from '../../../store/NodeFilterTree/simpleTypes'
+import types from '../../../store/Tree/DataFilter/simpleTypes'
 
-export default ({ node, nodeFilterArray, table }) => {
-  if (nodeFilterArray.length === 0) return true
+export default ({ node, dataFilterArray, table }) => {
+  if (dataFilterArray.length === 0) return true
   let type = 'string'
-  return nodeFilterArray.every(([key, value]) => {
+  return dataFilterArray.every(([key, value]) => {
     if (node[key] === null || node[key] === undefined) return false
     if (table && types[table] && types[table][key]) {
       type = types[table][key]

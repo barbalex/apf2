@@ -61,13 +61,13 @@ const Populationen = () => {
   const {
     enqueNotification,
     removeNotification,
-    nodeFilterTableIsFiltered,
+    dataFilterTableIsFiltered,
     popGqlFilter,
   } = store
   const [expanded, setExpanded] = useState(false)
   const { closeSnackbar } = useSnackbar()
 
-  const popIsFiltered = nodeFilterTableIsFiltered({
+  const popIsFiltered = dataFilterTableIsFiltered({
     treeName: 'tree',
     table: 'pop',
   })

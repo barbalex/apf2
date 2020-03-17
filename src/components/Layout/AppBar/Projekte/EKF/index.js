@@ -70,7 +70,7 @@ const StyledMdHourglassEmpty = styled(MdHourglassEmpty)`
 const ProjekteAppBar = () => {
   const store = useContext(storeContext)
   const {
-    nodeFilterClone1To2,
+    dataFilterClone1To2,
     user,
     setView,
     urlQuery,
@@ -125,7 +125,7 @@ const ProjekteAppBar = () => {
           projekteTabs.push(name)
           if (name === 'tree2') {
             cloneTree2From1()
-            nodeFilterClone1To2()
+            dataFilterClone1To2()
           }
         }
         setUrlQueryValue({
@@ -139,7 +139,7 @@ const ProjekteAppBar = () => {
     [
       cloneTree2From1,
       isMobile,
-      nodeFilterClone1To2,
+      dataFilterClone1To2,
       projekteTabs,
       setUrlQuery,
       urlQuery,

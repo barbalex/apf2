@@ -61,18 +61,18 @@ const Kontrollen = () => {
   const {
     enqueNotification,
     removeNotification,
-    nodeFilterTableIsFiltered,
+    dataFilterTableIsFiltered,
     tpopkontrGqlFilter,
   } = store
   const [expanded, setExpanded] = useState(false)
   const { closeSnackbar } = useSnackbar()
 
   const tpopkontrIsFiltered =
-    nodeFilterTableIsFiltered({
+    dataFilterTableIsFiltered({
       treeName: 'tree',
       table: 'tpopfreiwkontr',
     }) ||
-    nodeFilterTableIsFiltered({
+    dataFilterTableIsFiltered({
       treeName: 'tree',
       table: 'tpopfeldkontr',
     })

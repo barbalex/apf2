@@ -72,18 +72,18 @@ const tree2TabValues = ['tree2', 'daten2', 'filter2', 'karte2', 'exporte2']
 
 const Projekte = () => {
   const store = useContext(storeContext)
-  const { isPrint, urlQuery, setRefetchKey, user, nodeFilter } = store
+  const { isPrint, urlQuery, setRefetchKey, user } = store
 
   const { projekteTabs } = urlQuery
   const treeTabs = intersection(treeTabValues, projekteTabs)
   const tree2Tabs = intersection(tree2TabValues, projekteTabs)
 
-  const treeNodeFilter = getSnapshot(store.nodeFilter.tree)
+  const treeDataFilter = getSnapshot(store.tree.dataFilter)
   const treeNodeLabelFilter = getSnapshot(store.tree.nodeLabelFilter)
   const treeActiveNodeArray = getSnapshot(store.tree.activeNodeArray)
   const treeOpenNodes = getSnapshot(store.tree.openNodes)
   const treeApFilter = store.tree.apFilter
-  const tree2NodeFilter = getSnapshot(store.nodeFilter.tree2)
+  const tree2DataFilter = getSnapshot(store.tree2.dataFilter)
   const tree2NodeLabelFilter = getSnapshot(store.tree2.nodeLabelFilter)
   const tree2ActiveNodeArray = getSnapshot(store.tree2.activeNodeArray)
   const tree2OpenNodes = getSnapshot(store.tree2.openNodes)
@@ -93,14 +93,14 @@ const Projekte = () => {
     () =>
       buildTreeQueryVariables({
         treeName: 'tree',
-        nodeFilter: treeNodeFilter,
+        dataFilter: treeDataFilter,
         openNodes: treeOpenNodes,
         activeNodeArray: treeActiveNodeArray,
         apFilter: treeApFilter,
         nodeLabelFilter: treeNodeLabelFilter,
       }),
     [
-      treeNodeFilter,
+      treeDataFilter,
       treeActiveNodeArray,
       treeApFilter,
       treeNodeLabelFilter,
@@ -111,14 +111,14 @@ const Projekte = () => {
     () =>
       buildTreeQueryVariables({
         treeName: 'tree2',
-        nodeFilter: tree2NodeFilter,
+        dataFilter: tree2DataFilter,
         openNodes: tree2OpenNodes,
         activeNodeArray: tree2ActiveNodeArray,
         apFilter: tree2ApFilter,
         nodeLabelFilter: tree2NodeLabelFilter,
       }),
     [
-      tree2NodeFilter,
+      tree2DataFilter,
       tree2ActiveNodeArray,
       tree2ApFilter,
       tree2NodeLabelFilter,
@@ -154,17 +154,16 @@ const Projekte = () => {
   const [treeNodes, setTreeNodes] = useState([])
   const [tree2Nodes, setTree2Nodes] = useState([])
 
-  // TODO: make nodeFilter tree dependant
   useEffect(() => {
     //console.log('Projekte, building treeNodes')
     setTreeNodes(
       buildNodes({
         treeName: 'tree',
         role,
-        nodeFilter,
         data: treeData,
         loading: treeLoading,
         store,
+        dataFilter: treeDataFilter,
       }),
     )
   }, [
@@ -173,7 +172,7 @@ const Projekte = () => {
     store.tree.openNodes,
     store.tree.openNodes.length,
     treeData,
-    nodeFilter,
+    treeDataFilter,
     role,
     store,
   ])
@@ -184,7 +183,7 @@ const Projekte = () => {
         buildNodes({
           treeName: 'tree2',
           role,
-          nodeFilter,
+          dataFilter: tree2DataFilter,
           data: tree2Data,
           loading: tree2Loading,
           store,
@@ -197,7 +196,7 @@ const Projekte = () => {
     store.tree2.openNodes,
     store.tree2.openNodes.length,
     tree2Data,
-    nodeFilter,
+    tree2DataFilter,
     role,
     store,
     tree2Tabs.length,

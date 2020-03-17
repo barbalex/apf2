@@ -11,7 +11,6 @@ export default ({
   projId,
   apNodes,
   apId,
-  nodeFilter,
   store,
 }) => {
   const pops = get(data, 'allPops.nodes', [])

@@ -1,15 +1,15 @@
 import uniq from 'lodash/uniq'
 
-import { simpleTypes as apType } from '../../store/NodeFilterTree/ap'
-import { simpleTypes as popType } from '../../store/NodeFilterTree/pop'
-import { simpleTypes as tpopType } from '../../store/NodeFilterTree/tpop'
-import { simpleTypes as tpopmassnType } from '../../store/NodeFilterTree/tpopmassn'
-import { simpleTypes as tpopfeldkontrType } from '../../store/NodeFilterTree/tpopfeldkontr'
-import { simpleTypes as tpopfreiwkontrType } from '../../store/NodeFilterTree/tpopfreiwkontr'
+import { simpleTypes as apType } from '../../store/Tree/DataFilter/ap'
+import { simpleTypes as popType } from '../../store/Tree/DataFilter/pop'
+import { simpleTypes as tpopType } from '../../store/Tree/DataFilter/tpop'
+import { simpleTypes as tpopmassnType } from '../../store/Tree/DataFilter/tpopmassn'
+import { simpleTypes as tpopfeldkontrType } from '../../store/Tree/DataFilter/tpopfeldkontr'
+import { simpleTypes as tpopfreiwkontrType } from '../../store/Tree/DataFilter/tpopfreiwkontr'
 
 export default ({
   treeName,
-  nodeFilter,
+  dataFilter,
   openNodes,
   activeNodeArray,
   apFilter: apFilterSet,
@@ -31,7 +31,7 @@ export default ({
     nArray => nArray[0] === 'Projekte' && nArray[1],
   )
   const apFilter = { projId: { in: projId } }
-  const apFilterValues = Object.entries(nodeFilter.ap).filter(
+  const apFilterValues = Object.entries(dataFilter.ap).filter(
     e => e[1] || e[1] === 0,
   )
   apFilterValues.forEach(([key, value]) => {
@@ -86,7 +86,7 @@ export default ({
   const isPop =
     isAp && openNodes.some(nArray => nArray[4] === 'Populationen' && nArray[5])
   const popFilter = { apId: { in: ap } }
-  const popFilterValues = Object.entries(nodeFilter.pop).filter(
+  const popFilterValues = Object.entries(dataFilter.pop).filter(
     e => e[1] || e[1] === 0,
   )
   popFilterValues.forEach(([key, value]) => {
@@ -110,7 +110,7 @@ export default ({
     isPop &&
     openNodes.some(nArray => nArray[6] === 'Teil-Populationen' && nArray[7])
   const tpopFilter = { popId: { in: pop } }
-  const tpopFilterValues = Object.entries(nodeFilter.tpop).filter(
+  const tpopFilterValues = Object.entries(dataFilter.tpop).filter(
     e => e[1] || e[1] === 0,
   )
   tpopFilterValues.forEach(([key, value]) => {
@@ -148,7 +148,7 @@ export default ({
     tpopId: { in: tpop },
   }
   const tpopfeldkontrFilterValues = Object.entries(
-    nodeFilter.tpopfeldkontr,
+    dataFilter.tpopfeldkontr,
   ).filter(e => e[1] || e[1] === 0)
   tpopfeldkontrFilterValues.forEach(([key, value]) => {
     const expression =
@@ -161,7 +161,7 @@ export default ({
     tpopId: { in: tpop },
   }
   const tpopfreiwkontrFilterValues = Object.entries(
-    nodeFilter.tpopfreiwkontr,
+    dataFilter.tpopfreiwkontr,
   ).filter(e => e[1] || e[1] === 0)
   tpopfreiwkontrFilterValues.forEach(([key, value]) => {
     const expression =
@@ -170,7 +170,7 @@ export default ({
   })
 
   const tpopmassnFilter = { tpopId: { in: tpop } }
-  const tpopmassnFilterValues = Object.entries(nodeFilter.tpopmassn).filter(
+  const tpopmassnFilterValues = Object.entries(dataFilter.tpopmassn).filter(
     e => e[1] || e[1] === 0,
   )
   tpopmassnFilterValues.forEach(([key, value]) => {

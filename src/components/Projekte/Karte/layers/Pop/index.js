@@ -9,8 +9,8 @@ import Marker from './Marker'
 import storeContext from '../../../../../storeContext'
 import query from './query'
 import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
-import { simpleTypes as popType } from '../../../../../store/NodeFilterTree/pop'
-import { simpleTypes as tpopType } from '../../../../../store/NodeFilterTree/tpop'
+import { simpleTypes as popType } from '../../../../../store/Tree/DataFilter/pop'
+import { simpleTypes as tpopType } from '../../../../../store/Tree/DataFilter/tpop'
 
 const iconCreateFunction = function(cluster) {
   const markers = cluster.getAllChildMarkers()
@@ -29,14 +29,13 @@ const iconCreateFunction = function(cluster) {
 const Pop = ({ treeName }) => {
   const store = useContext(storeContext)
   const {
-    nodeFilter,
     activeApfloraLayers,
     enqueNotification,
     mapFilter,
     setRefetchKey,
   } = store
   const tree = store[treeName]
-  const { map } = tree
+  const { map, dataFilter } = tree
   const { setPopIdsFiltered } = map
 
   const activeNodes = store[`${treeName}ActiveNodes`]
@@ -48,7 +47,7 @@ const Pop = ({ treeName }) => {
   const perAp = apId !== '99999999-9999-9999-9999-999999999999'
 
   const popFilter = { wgs84Lat: { isNull: false } }
-  const popFilterValues = Object.entries(nodeFilter[treeName].pop).filter(
+  const popFilterValues = Object.entries(dataFilter.pop).filter(
     e => e[1] || e[1] === 0,
   )
   popFilterValues.forEach(([key, value]) => {
@@ -62,7 +61,7 @@ const Pop = ({ treeName }) => {
   }
 
   const tpopFilter = { wgs84Lat: { isNull: false } }
-  const tpopFilterValues = Object.entries(nodeFilter[treeName].tpop).filter(
+  const tpopFilterValues = Object.entries(dataFilter.tpop).filter(
     e => e[1] || e[1] === 0,
   )
   tpopFilterValues.forEach(([key, value]) => {
@@ -91,9 +90,7 @@ const Pop = ({ treeName }) => {
 
   if (error) {
     enqueNotification({
-      message: `Fehler beim Laden der Populationen für die Karte: ${
-        error.message
-      }`,
+      message: `Fehler beim Laden der Populationen für die Karte: ${error.message}`,
       options: {
         variant: 'error',
       },

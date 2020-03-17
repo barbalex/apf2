@@ -35,10 +35,10 @@ export default async ({
     })
     data = data.filter(d => ids.includes(d[idKey]))
   }
-  // TODO: filter by nodeFilterState
-  // 1. add field to choose to filter by nodeFilterState
+  // TODO: filter by dataFilterState
+  // 1. add field to choose to filter by dataFilterState
   // 2. depending on typename check if this table is filtered
-  // 3. if yes: filter by nodeFilterState by converting camelCase to lower_case
+  // 3. if yes: filter by dataFilterState by converting camelCase to lower_case
   if (data.length === 0) {
     return store.enqueNotification({
       message: 'Es gibt offenbar keine Daten, welche exportiert werden können',

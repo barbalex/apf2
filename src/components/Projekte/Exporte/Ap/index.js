@@ -62,7 +62,7 @@ const AP = () => {
     enqueNotification,
     removeNotification,
     apGqlFilter,
-    nodeFilterTableIsFiltered,
+    dataFilterTableIsFiltered,
   } = store
 
   const [expanded, setExpanded] = useState(false)
@@ -462,7 +462,7 @@ const AP = () => {
     closeSnackbar(notif)
   }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
-  const apIsFiltered = nodeFilterTableIsFiltered({
+  const apIsFiltered = dataFilterTableIsFiltered({
     treeName: 'tree',
     table: 'ap',
   })

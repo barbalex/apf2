@@ -5,7 +5,7 @@ import getTableNameFromActiveNode from './getTableNameFromActiveNode'
 
 export default ({ store, treeName, nodes }) => {
   const { activeNodeArray } = store[treeName]
-  const activeFilterTable = get(store, `nodeFilter.${treeName}.activeTable`, '')
+  const activeFilterTable = get(store, `${treeName}.dataFilter.activeTable`, '')
 
   let key
   if (

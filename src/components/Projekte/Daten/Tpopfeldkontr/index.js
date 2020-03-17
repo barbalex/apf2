@@ -27,7 +27,7 @@ import queryTpopkontrs from './queryTpopkontrs'
 import updateTpopkontrByIdGql from './updateTpopkontrById'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 import storeContext from '../../../../storeContext'
-import { simpleTypes as tpopfeldkontrType } from '../../../../store/NodeFilterTree/tpopfeldkontr'
+import { simpleTypes as tpopfeldkontrType } from '../../../../store/Tree/DataFilter/tpopfeldkontr'
 import Files from '../../../shared/Files'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
@@ -86,8 +86,10 @@ const tpopkontrTypWerte = [
 const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { nodeFilter, nodeFilterSetValue, urlQuery, setUrlQuery } = store
-  const { activeNodeArray, datenWidth, filterWidth } = store[treeName]
+  const { dataFilterSetValue, urlQuery, setUrlQuery } = store
+  const { activeNodeArray, datenWidth, filterWidth, dataFilter } = store[
+    treeName
+  ]
 
   let id =
     activeNodeArray.length > 9
@@ -120,7 +122,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
     },
   }
   const tpopfeldkontrFilterValues = Object.entries(
-    nodeFilter[treeName].tpopfeldkontr,
+    dataFilter.tpopfeldkontr,
   ).filter(e => e[1] || e[1] === 0)
   tpopfeldkontrFilterValues.forEach(([key, value]) => {
     const expression =
@@ -156,7 +158,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
   let tpopkontrsOfApFilteredCount
   let row
   if (showFilter) {
-    row = nodeFilter[treeName].tpopfeldkontr
+    row = dataFilter.tpopfeldkontr
     tpopkontrTotalCount = get(dataTpopkontrs, 'allTpopkontrs.totalCount', '...')
     tpopkontrFilteredCount = get(
       dataTpopkontrs,
@@ -189,7 +191,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
       })*/
       const value = values[changedField]
       if (showFilter) {
-        nodeFilterSetValue({
+        dataFilterSetValue({
           treeName,
           table: 'tpopfeldkontr',
           key: changedField,
@@ -232,7 +234,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
         setErrors({})
       }
     },
-    [client, nodeFilterSetValue, row, showFilter, store.user.name, treeName],
+    [client, dataFilterSetValue, row, showFilter, store.user.name, treeName],
   )
   const onChangeTab = useCallback(
     (event, value) => {

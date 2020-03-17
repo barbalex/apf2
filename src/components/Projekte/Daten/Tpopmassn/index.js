@@ -24,7 +24,7 @@ import queryAdresses from './queryAdresses'
 import queryAeTaxonomies from './queryAeTaxonomies'
 import updateTpopmassnByIdGql from './updateTpopmassnById'
 import storeContext from '../../../../storeContext'
-import { simpleTypes as tpopmassnType } from '../../../../store/NodeFilterTree/tpopmassn'
+import { simpleTypes as tpopmassnType } from '../../../../store/Tree/DataFilter/tpopmassn'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 
@@ -48,9 +48,11 @@ const FieldsContainer = styled.div`
 const Tpopmassn = ({ treeName, showFilter = false }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
-  const { nodeFilter, nodeFilterSetValue } = store
+  const { dataFilterSetValue } = store
 
-  const { activeNodeArray, datenWidth, filterWidth } = store[treeName]
+  const { activeNodeArray, datenWidth, filterWidth, dataFilter } = store[
+    treeName
+  ]
 
   let id =
     activeNodeArray.length > 9
@@ -75,9 +77,9 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
       popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
     },
   }
-  const tpopmassnFilterValues = Object.entries(
-    nodeFilter[treeName].tpopmassn,
-  ).filter(e => e[1] || e[1] === 0)
+  const tpopmassnFilterValues = Object.entries(dataFilter.tpopmassn).filter(
+    e => e[1] || e[1] === 0,
+  )
   tpopmassnFilterValues.forEach(([key, value]) => {
     const expression = tpopmassnType[key] === 'string' ? 'includes' : 'equalTo'
     tpopmassnFilter[key] = { [expression]: value }
@@ -108,7 +110,7 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
   let tpopmassnsOfApFilteredCount
   let row
   if (showFilter) {
-    row = nodeFilter[treeName].tpopmassn
+    row = dataFilter.tpopmassn
     tpopmassnTotalCount = get(dataTpopmassns, 'allTpopmassns.totalCount', '...')
     tpopmassnFilteredCount = get(
       dataTpopmassns,
@@ -136,7 +138,7 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
       const changedField = objectsFindChangedKey(values, row)
       const value = values[changedField]
       if (showFilter) {
-        nodeFilterSetValue({
+        dataFilterSetValue({
           treeName,
           table: 'tpopmassn',
           key: changedField,
@@ -179,7 +181,7 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
         setErrors({})
       }
     },
-    [client, nodeFilterSetValue, row, showFilter, store.user.name, treeName],
+    [client, dataFilterSetValue, row, showFilter, store.user.name, treeName],
   )
 
   //console.log('Tpopmassn rendering')

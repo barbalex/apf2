@@ -16,17 +16,16 @@ import Moving, { defaultValue as defaultMoving } from './Moving'
 import MapMouseCoordinates, {
   defaultValue as defaultMapMouseCoordinates,
 } from './MapMouseCoordinates'
-import NodeFilter, { defaultValue as defaultNodeFilter } from './NodeFilter'
 import standardApfloraLayers from '../components/Projekte/Karte/apfloraLayers'
 import standardOverlays from '../components/Projekte/Karte/overlays'
-import initialNodeFilterTreeValues from './NodeFilterTree/initialValues'
+import initialDataFilterTreeValues from './Tree/DataFilter/initialValues'
 import User, { defaultValue as defaultUser } from './User'
 import Tree, { defaultValue as defaultTree } from './Tree'
 import EkPlan, { defaultValue as defaultEkPlan } from './EkPlan'
 import getActiveNodes from '../modules/getActiveNodes'
 import getOpenNodesFromActiveNodeArray from '../modules/getOpenNodesFromActiveNodeArray'
 import exists from '../modules/exists'
-import simpleTypes from './NodeFilterTree/simpleTypes'
+import simpleTypes from './Tree/DataFilter/simpleTypes'
 
 // substract 3 Months to now so user sees previous year in February
 const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
@@ -57,7 +56,6 @@ const myTypes = types
     toDeleteUrl: types.maybeNull(
       types.array(types.union(types.string, types.number)),
     ),
-    nodeFilter: types.optional(NodeFilter, defaultNodeFilter),
     user: types.optional(User, defaultUser),
     isPrint: types.optional(types.boolean, false),
     view: types.optional(types.string, 'normal'),
@@ -107,7 +105,7 @@ const myTypes = types
     },
     get apGqlFilter() {
       const result = Object.fromEntries(
-        Object.entries(getSnapshot(self.nodeFilter.tree.ap))
+        Object.entries(getSnapshot(self.tree.dataFilter.ap))
           .filter(([key, value]) => exists(value))
           .map(([key, value]) => {
             // if is string: includes, else: equalTo
@@ -125,7 +123,7 @@ const myTypes = types
     },
     get popGqlFilter() {
       const result = Object.fromEntries(
-        Object.entries(getSnapshot(self.nodeFilter.tree.pop))
+        Object.entries(getSnapshot(self.tree.dataFilter.pop))
           .filter(([key, value]) => exists(value))
           .map(([key, value]) => {
             // if is string: includes, else: equalTo
@@ -143,7 +141,7 @@ const myTypes = types
     },
     get tpopGqlFilter() {
       const result = Object.fromEntries(
-        Object.entries(getSnapshot(self.nodeFilter.tree.tpop))
+        Object.entries(getSnapshot(self.tree.dataFilter.tpop))
           .filter(([key, value]) => exists(value))
           .map(([key, value]) => {
             // if is string: includes, else: equalTo
@@ -161,7 +159,7 @@ const myTypes = types
     },
     get tpopmassnGqlFilter() {
       const result = Object.fromEntries(
-        Object.entries(getSnapshot(self.nodeFilter.tree.tpopmassn))
+        Object.entries(getSnapshot(self.tree.dataFilter.tpopmassn))
           .filter(([key, value]) => exists(value))
           .map(([key, value]) => {
             // if is string: includes, else: equalTo
@@ -179,7 +177,7 @@ const myTypes = types
     },
     get tpopkontrGqlFilter() {
       const ek = Object.fromEntries(
-        Object.entries(getSnapshot(self.nodeFilter.tree.tpopfeldkontr))
+        Object.entries(getSnapshot(self.tree.dataFilter.tpopfeldkontr))
           .filter(([key, value]) => exists(value))
           .map(([key, value]) => {
             // if is string: includes, else: equalTo
@@ -191,7 +189,7 @@ const myTypes = types
           }),
       )
       const ekf = Object.fromEntries(
-        Object.entries(getSnapshot(self.nodeFilter.tree.tpopfreiwkontr))
+        Object.entries(getSnapshot(self.tree.dataFilter.tpopfreiwkontr))
           .filter(([key, value]) => exists(value))
           .map(([key, value]) => {
             // if is string: includes, else: equalTo
@@ -289,25 +287,22 @@ const myTypes = types
     setMarkierungen(val) {
       self.markierungen = val
     },
-    nodeFilterSet({ treeName, nodeFilter }) {
-      self.nodeFilter[treeName] = nodeFilter
+    dataFilterClone1To2() {
+      self.tree2.dataFilter = cloneDeep(self.tree.dataFilter)
     },
-    nodeFilterClone1To2() {
-      self.nodeFilter.tree2 = cloneDeep(self.nodeFilter.tree)
+    dataFilterSetValue({ treeName, table, key, value }) {
+      self[treeName].dataFilter[table][key] = value
     },
-    nodeFilterSetValue({ treeName, table, key, value }) {
-      self.nodeFilter[treeName][table][key] = value
+    dataFilterEmptyTree(treeName) {
+      self[treeName].dataFilter = initialDataFilterTreeValues
     },
-    nodeFilterEmptyTree(treeName) {
-      self.nodeFilter[treeName] = initialNodeFilterTreeValues
+    dataFilterEmptyTable({ treeName, table }) {
+      self[treeName].dataFilter[table] = initialDataFilterTreeValues[table]
     },
-    nodeFilterEmptyTable({ treeName, table }) {
-      self.nodeFilter[treeName][table] = initialNodeFilterTreeValues[table]
+    dataFilterSetActiveTable({ treeName, activeTable }) {
+      self[treeName].dataFilter.activeTable = activeTable
     },
-    nodeFilterSetActiveTable({ treeName, activeTable }) {
-      self.nodeFilter[treeName].activeTable = activeTable
-    },
-    nodeFilterTableIsFiltered({ treeName, table }) {
+    dataFilterTableIsFiltered({ treeName, table }) {
       if (
         ![
           'ap',
@@ -321,15 +316,15 @@ const myTypes = types
         // there exist no filter for this table
         return false
       }
-      const tableFilter = self.nodeFilter[treeName][table]
+      const tableFilter = self[treeName].dataFilter[table]
       return Object.values(tableFilter).filter(v => v || v === 0).length > 0
     },
-    nodeFilterTreeIsFiltered(treeName) {
-      const tables = Object.keys(self.nodeFilter[treeName]).filter(
+    dataFilterTreeIsFiltered(treeName) {
+      const tables = Object.keys(self[treeName].dataFilter).filter(
         t => t !== 'activeTable',
       )
       return tables.some(table =>
-        self.nodeFilterTableIsFiltered({ treeName, table }),
+        self.dataFilterTableIsFiltered({ treeName, table }),
       )
     },
     setUser(val) {

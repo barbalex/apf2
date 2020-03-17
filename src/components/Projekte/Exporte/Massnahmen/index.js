@@ -61,13 +61,13 @@ const Massnahmen = () => {
   const {
     enqueNotification,
     removeNotification,
-    nodeFilterTableIsFiltered,
+    dataFilterTableIsFiltered,
     tpopmassnGqlFilter,
   } = store
   const [expanded, setExpanded] = useState(false)
   const { closeSnackbar } = useSnackbar()
 
-  const tpopmassnIsFiltered = nodeFilterTableIsFiltered({
+  const tpopmassnIsFiltered = dataFilterTableIsFiltered({
     treeName: 'tree',
     table: 'tpopmassn',
   })

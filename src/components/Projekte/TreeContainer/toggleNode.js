@@ -3,13 +3,13 @@ import openNode from './openNode'
 
 export default ({ treeName, node, store }) => {
   if (!node.url) throw new Error('passed node has no url')
-  const { nodeFilterSetActiveTable, nodeFilter } = store
-  const { openNodes, setActiveNodeArray } = store[treeName]
+  const { dataFilterSetActiveTable } = store
+  const { openNodes, setActiveNodeArray, dataFilter } = store[treeName]
 
-  if (nodeFilter) {
-    const show = !!nodeFilter[treeName].activeTable
+  if (dataFilter) {
+    const show = !!dataFilter.activeTable
     if (show) {
-      nodeFilterSetActiveTable({ treeName: treeName, activeTable: null })
+      dataFilterSetActiveTable({ treeName: treeName, activeTable: null })
     }
   }
 

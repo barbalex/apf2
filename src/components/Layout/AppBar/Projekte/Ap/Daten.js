@@ -34,7 +34,7 @@ const StyledButton = styled(Button)`
 
 const MyAppBarDaten = ({ treeNr = '' }) => {
   const {
-    nodeFilterClone1To2,
+    dataFilterClone1To2,
     urlQuery,
     setUrlQuery,
     cloneTree2From1,
@@ -67,7 +67,7 @@ const MyAppBarDaten = ({ treeNr = '' }) => {
         copyOfProjekteTabs.push(`daten${treeNr}`)
         if (treeNr === '2') {
           cloneTree2From1()
-          nodeFilterClone1To2()
+          dataFilterClone1To2()
         }
       }
       setUrlQueryValue({
@@ -79,7 +79,7 @@ const MyAppBarDaten = ({ treeNr = '' }) => {
     }
   }, [
     cloneTree2From1,
-    nodeFilterClone1To2,
+    dataFilterClone1To2,
     projekteTabs,
     setUrlQuery,
     treeNr,

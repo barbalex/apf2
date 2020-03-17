@@ -75,7 +75,7 @@ const StatusLabel = styled(Label)`
 const Headdata = ({ pop, tpop, row, showFilter, treeName }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
-  const { nodeFilterSetValue, user } = store
+  const { dataFilterSetValue, user } = store
   const { data, loading, error } = useQuery(queryAdresses)
   const [errors, setErrors] = useState(null)
 
@@ -83,7 +83,7 @@ const Headdata = ({ pop, tpop, row, showFilter, treeName }) => {
     async event => {
       const { value } = event.target
       if (showFilter) {
-        return nodeFilterSetValue({
+        return dataFilterSetValue({
           treeName,
           table: 'tpopfreiwkontr',
           key: 'bearbeiter',
@@ -158,7 +158,7 @@ const Headdata = ({ pop, tpop, row, showFilter, treeName }) => {
       row.tpopByTpopId,
       row.tpopkontrzaehlsByTpopkontrId,
       user.name,
-      nodeFilterSetValue,
+      dataFilterSetValue,
       treeName,
       client,
     ],

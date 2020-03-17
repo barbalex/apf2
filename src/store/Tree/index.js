@@ -7,6 +7,8 @@ import NodeLabelFilter, {
   defaultValue as defaultNodeLabelFilter,
 } from './NodeLabelFilter'
 import Map, { defaultValue as defaultMap } from './Map'
+import initialDataFilterValues from './DataFilter/initialValues'
+import DataFilter from './DataFilter/types'
 
 export default types
   .model('Tree', {
@@ -21,6 +23,7 @@ export default types
     ),
     apFilter: types.optional(types.boolean, false),
     nodeLabelFilter: types.optional(NodeLabelFilter, defaultNodeLabelFilter),
+    dataFilter: types.optional(DataFilter, initialDataFilterValues),
     map: types.optional(Map, defaultMap),
     treeWidth: types.optional(types.number, 500),
     treeHeight: types.optional(types.number, 800),

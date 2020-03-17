@@ -11,8 +11,8 @@ import storeContext from '../../../../../storeContext'
 import query from './query'
 import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
 import objectsInsideBounds from '../../../../../modules/objectsInsideBounds'
-import { simpleTypes as popType } from '../../../../../store/NodeFilterTree/pop'
-import { simpleTypes as tpopType } from '../../../../../store/NodeFilterTree/tpop'
+import { simpleTypes as popType } from '../../../../../store/Tree/DataFilter/pop'
+import { simpleTypes as tpopType } from '../../../../../store/Tree/DataFilter/tpop'
 
 const iconCreateFunction = function(cluster) {
   const markers = cluster.getAllChildMarkers()
@@ -35,7 +35,6 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
   const { map: leafletMap } = useLeaflet()
   const store = useContext(storeContext)
   const {
-    nodeFilter,
     mapFilter,
     activeApfloraLayers,
     setActiveApfloraLayers,
@@ -43,7 +42,7 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
     enqueNotification,
   } = store
   const tree = store[treeName]
-  const { map } = tree
+  const { map, dataFilter } = tree
   const { setTpopIdsFiltered } = map
 
   const activeNodes = store[`${treeName}ActiveNodes`]
@@ -58,7 +57,7 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
     // but then tpop with wgs84Lat with pop without would not show
     id: { isNull: false },
   }
-  const popFilterValues = Object.entries(nodeFilter[treeName].pop).filter(
+  const popFilterValues = Object.entries(dataFilter.pop).filter(
     e => e[1] || e[1] === 0,
   )
   popFilterValues.forEach(([key, value]) => {
@@ -72,7 +71,7 @@ const Tpop = ({ treeName, clustered, leaflet }) => {
   }
 
   const tpopFilter = { wgs84Lat: { isNull: false } }
-  const tpopFilterValues = Object.entries(nodeFilter[treeName].tpop).filter(
+  const tpopFilterValues = Object.entries(dataFilter.tpop).filter(
     e => e[1] || e[1] === 0,
   )
   tpopFilterValues.forEach(([key, value]) => {

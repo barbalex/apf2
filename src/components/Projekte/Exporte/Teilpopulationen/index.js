@@ -80,7 +80,7 @@ const Teilpopulationen = ({ treeName }) => {
   const {
     enqueNotification,
     removeNotification,
-    nodeFilterTableIsFiltered,
+    dataFilterTableIsFiltered,
     tpopGqlFilter,
   } = store
 
@@ -287,7 +287,7 @@ const Teilpopulationen = ({ treeName }) => {
     [],
   )
 
-  const tpopIsFiltered = nodeFilterTableIsFiltered({
+  const tpopIsFiltered = dataFilterTableIsFiltered({
     treeName: 'tree',
     table: 'tpop',
   })

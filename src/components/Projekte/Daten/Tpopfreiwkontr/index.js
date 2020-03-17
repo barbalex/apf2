@@ -32,7 +32,7 @@ import FormTitle from '../../../shared/FormTitle'
 import FilterTitle from '../../../shared/FilterTitle'
 import storeContext from '../../../../storeContext'
 import ifIsNumericAsNumber from '../../../../modules/ifIsNumericAsNumber'
-import { simpleTypes as tpopfreiwkontrType } from '../../../../store/NodeFilterTree/tpopfreiwkontr'
+import { simpleTypes as tpopfreiwkontrType } from '../../../../store/Tree/DataFilter/tpopfreiwkontr'
 
 const Container = styled.div`
   height: ${props =>
@@ -155,15 +155,14 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
   const store = useContext(storeContext)
   const {
     enqueNotification,
-    nodeFilter,
-    nodeFilterSetValue,
+    dataFilterSetValue,
     isPrint,
     setIsPrint,
     view,
     user,
   } = store
   const tree = store[treeName]
-  const { activeNodeArray, datenWidth, filterWidth } = tree
+  const { activeNodeArray, datenWidth, filterWidth, dataFilter } = tree
   const { token } = user
   const role = token ? jwtDecode(token).role : null
 
@@ -197,7 +196,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
     },
   }
   const tpopkontrFilterValues = Object.entries(
-    nodeFilter[treeName].tpopfreiwkontr,
+    dataFilter.tpopfreiwkontr,
   ).filter(e => e[1] || e[1] === 0)
   tpopkontrFilterValues.forEach(([key, value]) => {
     const expression =
@@ -262,7 +261,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
   let tpopkontrsOfApFilteredCount
   let row
   if (showFilter) {
-    row = nodeFilter[treeName].tpopfreiwkontr
+    row = dataFilter.tpopfreiwkontr
     tpopkontrTotalCount = get(dataTpopkontrs, 'allTpopkontrs.totalCount', '...')
     tpopkontrFilteredCount = get(
       dataTpopkontrs,
@@ -299,7 +298,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
       const field = event.target.name
       let value = ifIsNumericAsNumber(event.target.value)
       if (showFilter) {
-        return nodeFilterSetValue({
+        return dataFilterSetValue({
           treeName,
           table: 'tpopfreiwkontr',
           key: field,
@@ -424,7 +423,7 @@ const Tpopfreiwkontr = ({ treeName, showFilter = false, id: idPassed }) => {
       row.tpopByTpopId,
       row.tpopkontrzaehlsByTpopkontrId,
       user.name,
-      nodeFilterSetValue,
+      dataFilterSetValue,
       treeName,
       client,
     ],

@@ -57,7 +57,7 @@ const DokuButton = styled(Button)`
 const EkPlanAppBar = () => {
   const store = useContext(storeContext)
   const {
-    nodeFilterClone1To2,
+    dataFilterClone1To2,
     user,
     urlQuery,
     setUrlQuery,
@@ -97,7 +97,7 @@ const EkPlanAppBar = () => {
           projekteTabs.push(name)
           if (name === 'tree2') {
             cloneTree2From1()
-            nodeFilterClone1To2()
+            dataFilterClone1To2()
           }
         }
         setUrlQueryValue({
@@ -111,7 +111,7 @@ const EkPlanAppBar = () => {
     [
       cloneTree2From1,
       isMobile,
-      nodeFilterClone1To2,
+      dataFilterClone1To2,
       projekteTabs,
       setUrlQuery,
       urlQuery,
