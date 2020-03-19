@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { signature, expire } from '../../utils/uploadcareSignature'
 
 if (typeof window !== 'undefined') {
-  window.GATSBY_UPLOADCARE_PUBLIC_KEY = process.env.GATSBY_UPLOADCARE_PUBLIC_KEY
+  window.UPLOADCARE_PUBLIC_KEY = process.env.GATSBY_UPLOADCARE_PUBLIC_KEY
   window.UPLOADCARE_LOCALE = 'de'
   window.UPLOADCARE_TABS =
     'file camera url gdrive gphotos dropbox onedrive box instagram'
