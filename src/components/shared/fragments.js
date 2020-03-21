@@ -568,6 +568,8 @@ export const tpopmassn = gql`
     anzTriebe
     anzPflanzen
     anzPflanzstellen
+    zieleinheitEinheit
+    zieleinheitAnzahl
     wirtspflanze
     herkunftPop
     sammeldatum

@@ -915,6 +915,8 @@ CREATE TABLE apflora.tpopmassn (
   anz_triebe integer DEFAULT NULL,
   anz_pflanzen integer DEFAULT NULL,
   anz_pflanzstellen integer DEFAULT NULL,
+  zieleinheit_einheit integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  zieleinheit_anzahl integer DEFAULT NULL,
   wirtspflanze text DEFAULT NULL,
   herkunft_pop text DEFAULT NULL,
   sammeldatum varchar(50) DEFAULT NULL,
