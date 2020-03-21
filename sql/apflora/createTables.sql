@@ -945,6 +945,8 @@ COMMENT ON COLUMN apflora.tpopmassn.markierung IS 'Markierung der Massnahme bzw.
 COMMENT ON COLUMN apflora.tpopmassn.anz_triebe IS 'Anzahl angesiedelte Triebe';
 COMMENT ON COLUMN apflora.tpopmassn.anz_pflanzen IS 'Anzahl angesiedelte Pflanzen';
 COMMENT ON COLUMN apflora.tpopmassn.anz_pflanzstellen IS 'Anzahl Töpfe/Pflanzstellen';
+COMMENT ON COLUMN apflora.tpopmassn.zieleinheit_einheit IS 'Gezählte Zieleinheit';
+COMMENT ON COLUMN apflora.tpopmassn.zieleinheit_anzahl IS 'Anzahl Zieleinheiten';
 COMMENT ON COLUMN apflora.tpopmassn.wirtspflanze IS 'Wirtspflanze';
 COMMENT ON COLUMN apflora.tpopmassn.herkunft_pop IS 'Aus welcher Population stammt das Pflanzenmaterial?';
 COMMENT ON COLUMN apflora.tpopmassn.sammeldatum IS 'Datum, an dem die angesiedelten Pflanzen gesammelt wurden';
