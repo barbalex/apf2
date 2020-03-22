@@ -1,10 +1,12 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import styled from 'styled-components'
+import Button from '@material-ui/core/Button'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import { Formik, Form, Field } from 'formik'
 import ErrorBoundary from 'react-error-boundary'
+import jwtDecode from 'jwt-decode'
 
 import TextField from '../../../shared/TextFieldFormik'
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
@@ -26,10 +28,22 @@ const FieldsContainer = styled.div`
   padding: 10px;
   height: 100%;
 `
+const StyledButton = styled(Button)`
+  text-transform: none !important;
+  border-color: rgba(46, 125, 50, 0.3) !important;
+  margin-bottom: 15px !important;
+  &:hover {
+    background-color: rgba(46, 125, 50, 0.1) !important;
+  }
+`
 
 const Apberuebersicht = ({ treeName }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
+  const { user } = store
+  const { token } = user
+  const role = token ? jwtDecode(token).role : null
+  const isManager = role === 'apflora_manager'
   const { activeNodeArray } = store[treeName]
 
   const { data, loading, error } = useQuery(query, {
@@ -72,6 +86,18 @@ const Apberuebersicht = ({ treeName }) => {
     },
     [client, row, store.user.name],
   )
+  const now = new Date()
+  const currentMonth = now.getMonth()
+  const isJanuaryThroughMarch = currentMonth < 3
+  const notHistorizedYet = !row.historyDate
+  const showHistorize = isManager && isJanuaryThroughMarch && notHistorizedYet
+  const onClickHistorize = useCallback(() => {
+    const previousYear = now.getFullYear() - 1
+    console.log('previousYear', previousYear)
+    // 1. add ap's to ap_history
+    // 2. add pop's to pop_history
+    // 3. add tpop's to tpop_history
+  }, [])
 
   if (loading) {
     return (
@@ -100,14 +126,21 @@ const Apberuebersicht = ({ treeName }) => {
                   type="number"
                   component={TextField}
                 />
-                {row.historyDate ? (
+                {!!row.historyDate && (
                   <TextFieldNonUpdatable
                     name="historyDate"
                     label="Datum, an dem AP, Pop und TPop historisiert wurden"
                     component={TextField}
                   />
-                ) : (
-                  'TODO: add button to historize'
+                )}{' '}
+                {showHistorize && (
+                  <StyledButton
+                    variant="outlined"
+                    onClick={onClickHistorize}
+                    title="Diese Option ist nur sichtbar: 1. Wenn Benutzer Manager ist 2. Noch nicht historisiert wurde und 3. zwischen Januar und März"
+                  >
+                    {`AP, Pop und TPop historisieren, um den zeitlichen Verlauf auswerten zu können`}
+                  </StyledButton>
                 )}
                 <Field
                   name="bemerkungen"
