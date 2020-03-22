@@ -162,7 +162,7 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
         }
         if (changedField === 'typ') {
           // IF typ is anpflanzung
-          // have to setzieleinheit_einheit to
+          // have to set zieleinheit_einheit to
           // ekfzaehleinheit with zielrelevant = true
         }
         try {
