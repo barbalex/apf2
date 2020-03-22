@@ -984,7 +984,8 @@ CREATE TABLE apflora.tpopmassn_typ_werte (
   code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
-  ansiedlung smallint NOT NULL,
+  ansiedlung boolean default false,
+  anpflanzung boolean default false,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
@@ -996,6 +997,8 @@ alter table apflora.tpopmassn_typ_werte alter column changed_by drop not null, a
 CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (id);
 CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (code);
 CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (sort);
+CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (ansiedlung);
+CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (anpflanzung);
 COMMENT ON COLUMN apflora.tpopmassn_typ_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpopmassn_typ_werte.ansiedlung IS 'Handelt es sich um eine Ansiedlung?';
 COMMENT ON COLUMN apflora.tpopmassn_typ_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';

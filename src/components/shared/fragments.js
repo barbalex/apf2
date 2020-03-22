@@ -757,6 +757,7 @@ export const tpopmassnTypWerte = gql`
     text
     sort
     ansiedlung
+    anpflanzung
     changedBy
   }
 `

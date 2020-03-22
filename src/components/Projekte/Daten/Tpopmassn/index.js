@@ -160,6 +160,11 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
           variables.jahr =
             value && value.substring ? +value.substring(0, 4) : value
         }
+        if (changedField === 'typ') {
+          // IF typ is anpflanzung
+          // have to setzieleinheit_einheit to
+          // ekfzaehleinheit with zielrelevant = true
+        }
         try {
           await client.mutate({
             mutation: updateTpopmassnByIdGql,

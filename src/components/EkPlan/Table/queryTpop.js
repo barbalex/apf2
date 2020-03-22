@@ -44,7 +44,7 @@ export default gql`
           }
         }
         tpopmassnsByTpopId(
-          filter: { tpopmassnTypWerteByTyp: { ansiedlung: { equalTo: -1 } } }
+          filter: { tpopmassnTypWerteByTyp: { ansiedlung: { equalTo: true } } }
         ) {
           nodes {
             id

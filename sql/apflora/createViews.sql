@@ -5206,7 +5206,7 @@ from crosstab($$
         where
           tpop1.apber_relevant is true
           and massn1.jahr is not null
-          and tpopmassn_typ_werte.ansiedlung = -1
+          and tpopmassn_typ_werte.ansiedlung = true
           and (
             massn1.anz_triebe is not null
             or massn1.anz_pflanzen is not null

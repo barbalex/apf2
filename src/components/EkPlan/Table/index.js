@@ -176,7 +176,7 @@ const EkPlanTable = () => {
     tpopFilter.tpopmassnsByTpopId = {
       some: {
         jahr: { equalTo: filterAnsiedlungYear },
-        tpopmassnTypWerteByTyp: { ansiedlung: { equalTo: -1 } },
+        tpopmassnTypWerteByTyp: { ansiedlung: { equalTo: true } },
       },
     }
   }

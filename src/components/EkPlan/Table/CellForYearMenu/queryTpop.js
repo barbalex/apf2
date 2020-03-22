@@ -76,7 +76,7 @@ export default gql`
       massns: tpopmassnsByTpopId(
         filter: {
           jahr: { equalTo: $jahr }
-          tpopmassnTypWerteByTyp: { ansiedlung: { equalTo: -1 } }
+          tpopmassnTypWerteByTyp: { ansiedlung: { equalTo: true } }
         }
         orderBy: DATUM_ASC
       ) @include(if: $showMassn) {
