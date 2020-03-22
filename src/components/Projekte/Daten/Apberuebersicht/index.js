@@ -86,17 +86,20 @@ const Apberuebersicht = ({ treeName }) => {
     },
     [client, row, store.user.name],
   )
-  const now = new Date()
-  const currentMonth = now.getMonth()
-  const isJanuaryThroughMarch = currentMonth < 3
+
+  const isJanuaryThroughMarch = useMemo(() => {
+    const now = new Date()
+    const currentMonth = now.getMonth()
+    return currentMonth < 3
+  }, [])
   const notHistorizedYet = !row.historyDate
   const showHistorize = isManager && isJanuaryThroughMarch && notHistorizedYet
+
   const onClickHistorize = useCallback(() => {
-    const previousYear = now.getFullYear() - 1
-    console.log('previousYear', previousYear)
-    // 1. add ap's to ap_history
-    // 2. add pop's to pop_history
-    // 3. add tpop's to tpop_history
+    const now = new Date()
+    const year = now.getFullYear() - 1
+    // 1. mutate historyDate
+    //client.mutate({mutation: historize, variables: {year }})
   }, [])
 
   if (loading) {
