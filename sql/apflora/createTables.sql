@@ -110,6 +110,41 @@ COMMENT ON COLUMN apflora.ap.ekf_beobachtungszeitpunkt IS 'bester Beobachtungsze
 COMMENT ON COLUMN apflora.ap.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
+DROP TABLE IF EXISTS apflora.ap_history;
+CREATE TABLE apflora.ap_history (
+  year integer not null,
+  id UUID not null references apflora.ap (id) on delete no action on update cascade,
+  art_id UUID UNIQUE DEFAULT NULL REFERENCES apflora.ae_taxonomies (id) on delete no action on update cascade,
+  proj_id uuid DEFAULT NULL REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  bearbeitung integer DEFAULT NULL REFERENCES apflora.ap_bearbstand_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  start_jahr smallint DEFAULT NULL,
+  umsetzung integer DEFAULT NULL REFERENCES apflora.ap_umsetzung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  bearbeiter uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  ekf_beobachtungszeitpunkt text default null,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT null,
+  primary key (id, year)
+);
+CREATE INDEX ON apflora.ap_history USING btree (id);
+CREATE INDEX ON apflora.ap_history USING btree (year);
+CREATE INDEX ON apflora.ap_history USING btree (art_id);
+CREATE INDEX ON apflora.ap_history USING btree (proj_id);
+CREATE INDEX ON apflora.ap_history USING btree (bearbeitung);
+CREATE INDEX ON apflora.ap_history USING btree (start_jahr);
+CREATE INDEX ON apflora.ap_history USING btree (umsetzung);
+CREATE INDEX ON apflora.ap_history USING btree (bearbeiter);
+COMMENT ON COLUMN apflora.ap_history.year IS 'Jahr: ap_history wurde beim Erstellen des Jahresberichts im Februar des Folgejahrs von ap kopiert';
+COMMENT ON COLUMN apflora.ap_history.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.ap_history.proj_id IS 'Zugehöriges Projekt. Fremdschlüssel aus der Tabelle "proj"';
+COMMENT ON COLUMN apflora.ap_history.art_id IS 'Namensgebende Art. Unter ihrem Namen bzw. Nummer werden Kontrollen an InfoFlora geliefert';
+COMMENT ON COLUMN apflora.ap_history.bearbeitung IS 'In welchem Bearbeitungsstand befindet sich der AP?';
+COMMENT ON COLUMN apflora.ap_history.start_jahr IS 'Wann wurde mit der Umsetzung des Aktionsplans begonnen?';
+COMMENT ON COLUMN apflora.ap_history.umsetzung IS 'In welchem Umsetzungsstand befindet sich der AP?';
+COMMENT ON COLUMN apflora.ap_history.bearbeiter IS 'Verantwortliche(r) für die Art';
+COMMENT ON COLUMN apflora.ap_history.ekf_beobachtungszeitpunkt IS 'bester Beobachtungszeitpunkt';
+COMMENT ON COLUMN apflora.ap_history.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.ap_history.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+
 -- this table is NOT YET IN USE
 DROP TABLE IF EXISTS apflora.userprojekt;
 CREATE TABLE apflora.userprojekt (
@@ -455,6 +490,32 @@ COMMENT ON COLUMN apflora.pop.bekannt_seit IS 'Seit wann ist die Population beka
 COMMENT ON COLUMN apflora.pop.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.pop.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
+DROP TABLE IF EXISTS apflora.pop_history;
+CREATE TABLE apflora.pop_history (
+  year integer not null,
+  id UUID not null references apflora.pop (id) on delete no action on update cascade,
+  ap_id UUID DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  nr integer DEFAULT NULL,
+  name varchar(150) DEFAULT NULL,
+  status integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  status_unklar boolean default false,
+  status_unklar_begruendung text DEFAULT NULL,
+  bekannt_seit smallint DEFAULT NULL,
+  geom_point geometry(Point, 4326) default null,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT null,
+  primary key (id, year)
+);
+CREATE INDEX ON apflora.pop_history USING btree (id);
+CREATE INDEX ON apflora.pop_history USING btree (year);
+CREATE INDEX ON apflora.pop_history USING btree (ap_id);
+CREATE INDEX ON apflora.pop_history USING btree (status);
+CREATE INDEX ON apflora.pop_history USING btree (nr);
+CREATE INDEX ON apflora.pop_history USING btree (name);
+CREATE INDEX ON apflora.pop_history USING btree (bekannt_seit);
+COMMENT ON COLUMN apflora.pop_history.year IS 'Jahr: pop_history wurde beim Erstellen des Jahresberichts im Februar des Folgejahrs von pop kopiert';
+COMMENT ON COLUMN apflora.pop_history.id IS 'Primärschlüssel der Tabelle "pop"';
+
 DROP TABLE IF EXISTS apflora.pop_status_werte;
 CREATE TABLE apflora.pop_status_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -549,7 +610,7 @@ CREATE TABLE apflora.tpop (
   nutzungszone text DEFAULT NULL,
   bewirtschafter text DEFAULT NULL,
   bewirtschaftung text DEFAULT NULL,
-  ekfrequenz text DEFAULT null REFERENCES apflora.ekfrequenz (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  ekfrequenz UUID DEFAULT null REFERENCES apflora.ekfrequenz (id) ON DELETE SET NULL ON UPDATE CASCADE,
   ekfrequenz_startjahr smallint default null,
   ekfrequenz_abweichend boolean DEFAULT false,
   ekf_kontrolleur uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -557,14 +618,6 @@ CREATE TABLE apflora.tpop (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null
 );
--- first empty apflora.ekfrequenz
--- delete all views
-update apflora.tpop set ekfrequenz = null;
-alter table apflora.tpop alter column ekfrequenz type uuid USING ekfrequenz::uuid;
-ALTER TABLE apflora.tpop ADD CONSTRAINT tpop_ekfrequenz_fkey foreign key (ekfrequenz) REFERENCES apflora.ekfrequenz (id) ON DELETE SET NULL ON UPDATE CASCADE;
--- re-create all views
-
-
 CREATE INDEX ON apflora.tpop USING btree (id);
 CREATE INDEX ON apflora.tpop USING btree (pop_id);
 CREATE INDEX ON apflora.tpop USING btree (status);
@@ -603,6 +656,52 @@ COMMENT ON COLUMN apflora.tpop.ekfrequenz_abweichend IS 'Diese Frequenz entspric
 COMMENT ON COLUMN apflora.tpop.ekfrequenz_abweichend IS 'Wer diese TPop freiwillig kontrolliert. Dient dazu, Formulare für die EKF zu generieren';
 COMMENT ON COLUMN apflora.tpop.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpop.changed IS 'Von wem wurde der Datensatz zuletzt geändert?';
+
+DROP TABLE IF EXISTS apflora.tpop_history;
+CREATE TABLE apflora.tpop_history (
+  year integer not null,
+  id UUID not null references apflora.tpop (id) on delete no action on update cascade,
+  pop_id uuid DEFAULT NULL REFERENCES apflora.pop (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  nr integer DEFAULT NULL,
+  gemeinde text DEFAULT NULL,
+  flurname text DEFAULT NULL,
+  geom_point geometry(Point, 4326) default null,
+  radius smallint DEFAULT NULL,
+  hoehe smallint DEFAULT NULL,
+  exposition varchar(50) DEFAULT NULL,
+  klima varchar(50) DEFAULT NULL,
+  neigung varchar(50) DEFAULT NULL,
+  beschreibung text DEFAULT NULL,
+  kataster_nr text DEFAULT NULL,
+  status integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  status_unklar boolean default false,
+  status_unklar_grund text DEFAULT NULL,
+  apber_relevant boolean default true,
+  apber_relevant_grund integer DEFAULT NULL REFERENCES apflora.tpop_apberrelevant_grund_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  bekannt_seit smallint DEFAULT NULL,
+  eigentuemer text DEFAULT NULL,
+  kontakt text DEFAULT NULL,
+  nutzungszone text DEFAULT NULL,
+  bewirtschafter text DEFAULT NULL,
+  bewirtschaftung text DEFAULT NULL,
+  ekfrequenz UUID DEFAULT null REFERENCES apflora.ekfrequenz (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  ekfrequenz_startjahr smallint default null,
+  ekfrequenz_abweichend boolean DEFAULT false,
+  ekf_kontrolleur uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  bemerkungen text,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT null,
+  primary key (id, year)
+);
+CREATE INDEX ON apflora.tpop_history USING btree (id);
+CREATE INDEX ON apflora.tpop_history USING btree (year);
+CREATE INDEX ON apflora.tpop_history USING btree (pop_id);
+CREATE INDEX ON apflora.tpop_history USING btree (status);
+CREATE INDEX ON apflora.tpop_history USING btree (apber_relevant);
+CREATE INDEX ON apflora.tpop_history USING btree (nr);
+CREATE INDEX ON apflora.tpop_history USING btree (flurname);
+COMMENT ON COLUMN apflora.tpop_history.year IS 'Jahr: tpop_history wurde beim Erstellen des Jahresberichts im Februar des Folgejahrs von tpop kopiert';
+COMMENT ON COLUMN apflora.tpop_history.id IS 'Primärschlüssel der Tabelle tpop';
 
 DROP TABLE IF EXISTS apflora.tpop_apberrelevant_werte;
 
