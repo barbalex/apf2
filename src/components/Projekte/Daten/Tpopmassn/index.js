@@ -6,6 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import { Formik, Form, Field } from 'formik'
 import ErrorBoundary from 'react-error-boundary'
+import gql from 'graphql-tag'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import TextField from '../../../shared/TextFieldFormik'
@@ -22,6 +23,7 @@ import queryLists from './queryLists'
 import queryTpopmassns from './queryTpopmassns'
 import queryAdresses from './queryAdresses'
 import queryAeTaxonomies from './queryAeTaxonomies'
+import queryIsMassnTypAnpflanzung from './queryIsMassnTypAnpflanzung'
 import updateTpopmassnByIdGql from './updateTpopmassnById'
 import storeContext from '../../../../storeContext'
 import { simpleTypes as tpopmassnType } from '../../../../store/Tree/DataFilter/tpopmassn'
@@ -133,6 +135,17 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
     row = get(data, 'tpopmassnById', {})
   }
 
+  const { data: dataIsMassnTypAnpflanzung } = useQuery(
+    queryIsMassnTypAnpflanzung,
+    {
+      variables: { typ: row.typ || '9999999999' },
+    },
+  )
+  const isAnpflanzung = get(
+    dataIsMassnTypAnpflanzung,
+    'allTpopmassnTypWertes.nodes[0].anpflanzung',
+  )
+
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
@@ -163,7 +176,51 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
         if (changedField === 'typ') {
           // IF typ is anpflanzung
           // have to set zieleinheit_einheit to
-          // ekfzaehleinheit with zielrelevant = true
+          // ekzaehleinheit with zielrelevant = true
+          let zieleinheitIdResult
+          try {
+            zieleinheitIdResult = await client.query({
+              query: gql`
+                query tpopmassnZieleinheitQuery($apId: UUID!, $typ: Int!) {
+                  allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
+                    nodes {
+                      id
+                      anpflanzung
+                    }
+                  }
+                  allEkzaehleinheits(
+                    filter: {
+                      zielrelevant: { equalTo: true }
+                      apId: { equalTo: $apId }
+                    }
+                  ) {
+                    nodes {
+                      id
+                      tpopkontrzaehlEinheitWerteByZaehleinheitId {
+                        id
+                        code
+                      }
+                    }
+                  }
+                }
+              `,
+              variables: { apId, typ: variables.typ },
+            })
+          } catch (error) {
+            return setErrors({ [changedField]: error.message })
+          }
+          const isAnpflanzung = get(
+            zieleinheitIdResult,
+            'data.allTpopmassnTypWertes.nodes[0].anpflanzung',
+          )
+          const zieleinheitCode =
+            get(
+              zieleinheitIdResult,
+              'data.allEkzaehleinheits.nodes[0].tpopkontrzaehlEinheitWerteByZaehleinheitId.code',
+            ) || null
+          if (isAnpflanzung && zieleinheitCode) {
+            variables.zieleinheitEinheit = zieleinheitCode
+          }
         }
         try {
           await client.mutate({
@@ -186,7 +243,15 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
         setErrors({})
       }
     },
-    [client, dataFilterSetValue, row, showFilter, store.user.name, treeName],
+    [
+      apId,
+      client,
+      dataFilterSetValue,
+      row,
+      showFilter,
+      store.user.name,
+      treeName,
+    ],
   )
 
   //console.log('Tpopmassn rendering')
@@ -318,23 +383,27 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
                   type="number"
                   component={TextField}
                 />
-                <Field
-                  name="zieleinheitEinheit"
-                  label="Ziel-Einheit: Einheit"
-                  options={get(
-                    dataLists,
-                    'allTpopkontrzaehlEinheitWertes.nodes',
-                    [],
-                  )}
-                  loading={loadingLists}
-                  component={Select}
-                />
-                <Field
-                  name="zieleinheitAnzahl"
-                  label="Ziel-Einheit: Anzahl (nur ganze Zahlen)"
-                  type="number"
-                  component={TextField}
-                />
+                {isAnpflanzung && (
+                  <>
+                    <Field
+                      name="zieleinheitEinheit"
+                      label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
+                      options={get(
+                        dataLists,
+                        'allTpopkontrzaehlEinheitWertes.nodes',
+                        [],
+                      )}
+                      loading={loadingLists}
+                      component={Select}
+                    />
+                    <Field
+                      name="zieleinheitAnzahl"
+                      label="Ziel-Einheit: Anzahl (nur ganze Zahlen)"
+                      type="number"
+                      component={TextField}
+                    />
+                  </>
+                )}
                 <Field
                   field="wirtspflanze"
                   label="Wirtspflanze"
