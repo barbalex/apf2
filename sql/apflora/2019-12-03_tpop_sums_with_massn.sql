@@ -29,7 +29,7 @@ from crosstab($$
           on apflora.tpopmassn_typ_werte.code = massn1.typ
         where
           massn1.jahr is not null
-          and tpopmassn_typ_werte.ansiedlung = -1
+          and tpopmassn_typ_werte.ansiedlung = true
           and (
             massn1.anz_triebe is not null
             or massn1.anz_pflanzen is not null
