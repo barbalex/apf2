@@ -32,6 +32,8 @@ export const type = types.model({
   anzTriebe: types.optional(types.maybeNull(types.number), null),
   anzPflanzen: types.optional(types.maybeNull(types.number), null),
   anzPflanzstellen: types.optional(types.maybeNull(types.number), null),
+  zieleinheitEinheit: types.optional(types.maybeNull(types.number), null),
+  zieleinheitAnzahl: types.optional(types.maybeNull(types.number), null),
   wirtspflanze: types.optional(
     types.maybeNull(types.union(types.string, types.number)),
     null,

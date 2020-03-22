@@ -16,6 +16,8 @@ export default gql`
     $anzTriebe: Int
     $anzPflanzen: Int
     $anzPflanzstellen: Int
+    $zieleinheitEinheit: Int
+    $zieleinheitAnzahl: Int
     $wirtspflanze: String
     $herkunftPop: String
     $sammeldatum: String
@@ -40,6 +42,8 @@ export default gql`
           anzTriebe: $anzTriebe
           anzPflanzen: $anzPflanzen
           anzPflanzstellen: $anzPflanzstellen
+          zieleinheitEinheit: $zieleinheitEinheit
+          zieleinheitAnzahl: $zieleinheitAnzahl
           wirtspflanze: $wirtspflanze
           herkunftPop: $herkunftPop
           sammeldatum: $sammeldatum

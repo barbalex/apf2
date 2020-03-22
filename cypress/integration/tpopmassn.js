@@ -23,10 +23,7 @@ describe('Teil-Population Massnahme form', () => {
   })
   it('datum only accepts valid values', () => {
     const typedText = '01.02.1001'
-    cy.get('[data-id=datum] input')
-      .clear()
-      .type(typedText)
-      .blur()
+    cy.get('[data-id=datum] input').clear().type(typedText).blur()
     cy.contains('[data-id=datum] p', 'minimal')
   })
   it('updates datum', () => {
@@ -139,6 +136,22 @@ describe('Teil-Population Massnahme form', () => {
   it('updates anzPflanzstellen', () => {
     const typedText = '1'
     cy.get('#anzPflanzstellen')
+      .clear()
+      .type(typedText)
+      .blur()
+      .should('have.value', typedText)
+  })
+  it('updates zieleinheitEinheit', () => {
+    const typedText = '1'
+    cy.get('#zieleinheitEinheit')
+      .clear()
+      .type(typedText)
+      .blur()
+      .should('have.value', typedText)
+  })
+  it('updates zieleinheitAnzahl', () => {
+    const typedText = '1'
+    cy.get('#zieleinheitAnzahl')
       .clear()
       .type(typedText)
       .blur()

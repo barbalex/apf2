@@ -251,6 +251,8 @@ export default async ({
           anzTriebe: row.anzTriebe,
           anzPflanzen: row.anzPflanzen,
           anzPflanzstellen: row.anzPflanzstellen,
+          zieleinheitEinheit: row.zieleinheitEinheit,
+          zieleinheitAnzahl: row.zieleinheitAnzahl,
           wirtspflanze: row.wirtspflanze,
           herkunftPop: row.herkunftPop,
           sammeldatum: row.sammeldatum,

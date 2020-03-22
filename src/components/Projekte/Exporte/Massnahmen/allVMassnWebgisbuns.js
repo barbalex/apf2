@@ -31,6 +31,8 @@ export default gql`
         MASSNANZTRIEBE: massnanztriebe
         MASSNANZPFLANZEN: massnanzpflanzen
         MASSNANZPFLANZSTELLEN: massnanzpflanzstellen
+        MASSNZIELEINHEITEINHEIT: massnzieleinheiteinheit
+        MASSNZIELEINHEITANZAHL: massnzieleinheitanzahl
         MASSNWIRTSPFLANZEN: massnwirtspflanzen
         MASSNHERKUNFTSPOP: massnherkunftspop
         MASSNSAMMELDAT: massnsammeldat

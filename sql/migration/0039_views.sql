@@ -368,6 +368,8 @@ SELECT
   apflora.tpopmassn.anz_triebe AS "massnanztriebe",
   apflora.tpopmassn.anz_pflanzen AS "massnpflanzen",
   apflora.tpopmassn.anz_pflanzstellen AS "massnanzpflanzstellen",
+  apflora.tpopmassn.anz_pflanzstellen AS "massnanzpflanzstellen",
+  apflora.tpopmassn.anz_pflanzstellen AS "massnanzpflanzstellen",
   apflora.tpopmassn.wirtspflanze AS "massnwirtspflanze",
   apflora.tpopmassn.herkunft_pop AS "massnherkunftspopulation",
   apflora.tpopmassn.sammeldatum AS "massnsammeldatum",

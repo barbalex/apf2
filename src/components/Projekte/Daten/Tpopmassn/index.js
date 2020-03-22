@@ -314,6 +314,23 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
                   component={TextField}
                 />
                 <Field
+                  name="zieleinheitEinheit"
+                  label="Ziel-Einheit: Einheit"
+                  options={get(
+                    dataLists,
+                    'allTpopkontrzaehlEinheitWertes.nodes',
+                    [],
+                  )}
+                  loading={loadingLists}
+                  component={Select}
+                />
+                <Field
+                  name="zieleinheitAnzahl"
+                  label="Ziel-Einheit: Anzahl (nur ganze Zahlen)"
+                  type="number"
+                  component={TextField}
+                />
+                <Field
                   field="wirtspflanze"
                   label="Wirtspflanze"
                   component={SelectLoadingOptionsTypable}

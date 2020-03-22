@@ -8,5 +8,11 @@ export default gql`
         label: text
       }
     }
+    allTpopkontrzaehlEinheitWertes(orderBy: SORT_ASC) {
+      nodes {
+        value: code
+        label: text
+      }
+    }
   }
 `

@@ -162,7 +162,7 @@ SELECT
   apflora.tpopmassn.anz_triebe AS "MASSNANZTRIEBE",
   apflora.tpopmassn.anz_pflanzen AS "MASSNANZPFLANZEN",
   apflora.tpopmassn.anz_pflanzstellen AS "MASSNANZPFLANZSTELLEN",
-  tpopkontrzaehl_einheit_werte.text AS "MASSNZIELEINHEIT",
+  tpopkontrzaehl_einheit_werte.text AS "MASSNZIELEINHEITEINHEIT",
   apflora.tpopmassn.zieleinheit_anzahl AS "MASSNZIELEINHEITANZAHL",
   apflora.tpopmassn.wirtspflanze AS "MASSNWIRTSPFLANZEN",
   apflora.tpopmassn.herkunft_pop AS "MASSNHERKUNFTSPOP",

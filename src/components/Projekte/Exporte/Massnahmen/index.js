@@ -200,6 +200,11 @@ const Massnahmen = () => {
                           anzTriebe
                           anzPflanzen
                           anzPflanzstellen
+                          tpopkontrzaehlEinheitWerteByZieleinheitEinheit {
+                            id
+                            text
+                          }
+                          zieleinheitAnzahl
                           wirtspflanze
                           herkunftPop
                           sammeldatum
@@ -315,6 +320,12 @@ const Massnahmen = () => {
                     anzTriebe: n.anzTriebe,
                     anzPflanzen: n.anzPflanzen,
                     anzPflanzstellen: n.anzPflanzstellen,
+                    zieleinheitEinheit:
+                      get(
+                        n,
+                        'tpopkontrzaehlEinheitWerteByZieleinheitEinheit.text',
+                      ) || null,
+                    zieleinheitAnzahl: n.zieleinheitAnzahl,
                     wirtspflanze: n.wirtspflanze,
                     herkunftPop: n.herkunftPop,
                     sammeldatum: n.sammeldatum,
