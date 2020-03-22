@@ -7,6 +7,7 @@ export default gql`
     $id: UUID!
     $projId: UUID
     $jahr: Int
+    $historyDate: Date
     $bemerkungen: String
     $changedBy: String
   ) {
@@ -17,6 +18,7 @@ export default gql`
           id: $id
           projId: $projId
           jahr: $jahr
+          historyDate: $historyDate
           bemerkungen: $bemerkungen
           changedBy: $changedBy
         }

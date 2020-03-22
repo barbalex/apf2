@@ -95,6 +95,7 @@ export const apberuebersicht = gql`
     label
     projId
     jahr
+    historyDate
     bemerkungen
     changedBy
   }

@@ -7,6 +7,7 @@ import { Formik, Form, Field } from 'formik'
 import ErrorBoundary from 'react-error-boundary'
 
 import TextField from '../../../shared/TextFieldFormik'
+import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import FormTitle from '../../../shared/FormTitle'
 import updateApberuebersichtByIdGql from './updateApberuebersichtById'
 import query from './query'
@@ -99,6 +100,15 @@ const Apberuebersicht = ({ treeName }) => {
                   type="number"
                   component={TextField}
                 />
+                {row.historyDate ? (
+                  <TextFieldNonUpdatable
+                    name="historyDate"
+                    label="Datum, an dem AP, Pop und TPop historisiert wurden"
+                    component={TextField}
+                  />
+                ) : (
+                  'TODO: add button to historize'
+                )}
                 <Field
                   name="bemerkungen"
                   label="Bemerkungen"

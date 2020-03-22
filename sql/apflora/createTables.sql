@@ -296,6 +296,7 @@ CREATE TABLE apflora.apberuebersicht (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   proj_id uuid DEFAULT NULL REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint,
+  history_date date default null,
   bemerkungen text,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT null,
@@ -307,6 +308,7 @@ CREATE INDEX ON apflora.apberuebersicht USING btree (proj_id);
 COMMENT ON COLUMN apflora.apberuebersicht.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.apberuebersicht.proj_id IS 'Zugehöriges Projekt. Zusammen mit jahr eindeutig';
 COMMENT ON COLUMN apflora.apberuebersicht.jahr IS 'Berichtsjahr. Zusammen mit proj_id eindeutig';
+COMMENT ON COLUMN apflora.apberuebersicht.history_date IS 'Datum, an dem die Daten von AP, Pop und TPop historisiert wurden';
 COMMENT ON COLUMN apflora.apberuebersicht.bemerkungen IS 'Bemerkungen zur Artübersicht';
 COMMENT ON COLUMN apflora.apberuebersicht.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.apberuebersicht.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
