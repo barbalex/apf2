@@ -1,27 +1,78 @@
-CREATE OR REPLACE FUNCTION apflora.historize(year int)
- RETURNS boolean AS $$
- BEGIN
+CREATE OR REPLACE FUNCTION apflora.historize()
+  RETURNS boolean AS $$
+  BEGIN
 
-  -- three inserts from queries for ap, pop and tpop
-   UPDATE apflora.pop
-   SET status = 210
-   WHERE id IN (
-     SELECT
-       pop.id
-     FROM
-       apflora.pop
-         INNER JOIN apflora.ap
-         ON apflora.pop.ap_id = apflora.ap.id
-     WHERE
-       apflora.pop.status = 200
-       AND apflora.ap.start_jahr > apflora.pop.bekannt_seit
-       AND apflora.ap.id = $1
-   );
+  insert into apflora.ap_history
+  select
+    date_part('year', CURRENT_DATE) - 1 as year,
+    id,
+    art_id,
+    proj_id,
+    bearbeitung,
+    start_jahr,
+    umsetzung,
+    bearbeiter,
+    ekf_beobachtungszeitpunkt,
+    changed,
+    changed_by
+  from apflora.ap;
 
-   RETURN FOUND;
+  insert into apflora.pop_history
+  select
+    date_part('year', CURRENT_DATE) - 1 as year,
+    id,
+    ap_id,
+    nr,
+    name,
+    status,
+    status_unklar,
+    status_unklar_begruendung,
+    bekannt_seit,
+    geom_point,
+    changed,
+    changed_by
+  from apflora.pop;
+
+  insert into apflora.tpop_history
+  select
+    date_part('year', CURRENT_DATE) - 1 as year,
+    id,
+    pop_id,
+    nr,
+    gemeinde,
+    flurname,
+    geom_point,
+    radius,
+    hoehe,
+    exposition,
+    klima,
+    neigung,
+    beschreibung,
+    kataster_nr,
+    status,
+    status_unklar,
+    status_unklar_grund,
+    apber_relevant,
+    apber_relevant_grund,
+    bekannt_seit,
+    eigentuemer,
+    kontakt,
+    nutzungszone,
+    bewirtschafter,
+    bewirtschaftung,
+    ekfrequenz,
+    ekfrequenz_startjahr,
+    ekfrequenz_abweichend,
+    ekf_kontrolleur,
+    bemerkungen,
+    changed,
+    changed_by
+  from apflora.tpop;
+
+  RETURN FOUND;
 
  END;
  $$ LANGUAGE plpgsql;
 
-ALTER FUNCTION apflora.historize(apid uuid)
-   OWNER TO postgres;
+ALTER FUNCTION apflora.historize()
+  OWNER TO postgres;

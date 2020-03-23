@@ -32,8 +32,14 @@ export default ({ idb, store }) => {
     return { headers }
   })
 
-  const errorLink = onError(({ graphQLErrors, networkError }) => {
-    const uniqueQraphQLErrors = uniqBy(graphQLErrors, 'message')
+  const errorLink = onError(({ response, graphQLErrors, networkError }) => {
+    const graphQLErrorsToShow = graphQLErrors.filter(({ message, path }) => {
+      if (path.includes('historize') && message.includes('Unique-Constraint')) {
+        return false
+      }
+      return true
+    })
+    const uniqueQraphQLErrors = uniqBy(graphQLErrorsToShow, 'message')
     if (uniqueQraphQLErrors) {
       /**
        * TODO

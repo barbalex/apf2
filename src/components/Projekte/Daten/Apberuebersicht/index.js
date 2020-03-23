@@ -7,6 +7,8 @@ import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import { Formik, Form, Field } from 'formik'
 import ErrorBoundary from 'react-error-boundary'
 import jwtDecode from 'jwt-decode'
+import format from 'date-fns/format'
+import gql from 'graphql-tag'
 
 import TextField from '../../../shared/TextFieldFormik'
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
@@ -40,13 +42,13 @@ const StyledButton = styled(Button)`
 const Apberuebersicht = ({ treeName }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
-  const { user } = store
+  const { user, enqueNotification } = store
   const { token } = user
   const role = token ? jwtDecode(token).role : null
   const isManager = role === 'apflora_manager'
   const { activeNodeArray } = store[treeName]
 
-  const { data, loading, error } = useQuery(query, {
+  const { data, loading, error, refetch } = useQuery(query, {
     variables: {
       id:
         activeNodeArray.length > 3
@@ -95,12 +97,72 @@ const Apberuebersicht = ({ treeName }) => {
   const notHistorizedYet = !row.historyDate
   const showHistorize = isManager && isJanuaryThroughMarch && notHistorizedYet
 
-  const onClickHistorize = useCallback(() => {
-    const now = new Date()
-    const year = now.getFullYear() - 1
-    // 1. mutate historyDate
-    //client.mutate({mutation: historize, variables: {year }})
-  }, [])
+  const onClickHistorize = useCallback(async () => {
+    // 1. historize
+    try {
+      await client.mutate({
+        mutation: gql`
+          mutation historize {
+            historize(input: { clientMutationId: "bla" }) {
+              boolean
+            }
+          }
+        `,
+      })
+    } catch (error) {
+      console.log('Error from mutating historize:', error)
+      if (error.message.includes('Unique-Constraint')) {
+        return enqueNotification({
+          message: `Die Historisierung ist gescheitert, weil sie schon einmal durchgeführt wurde. Kontaktieren Sie alex@gabriel-software, wenn sie wiederholt werden soll`,
+          options: {
+            variant: 'error',
+          },
+        })
+      }
+      return enqueNotification({
+        message: `Die Historisierung ist gescheitert. Fehlermeldung: ${error.message}`,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    // 2. if it worked: mutate historyDate
+    try {
+      const variables = {
+        ...row,
+        historyDate: format(new Date(), 'yyyy-MM-dd'),
+      }
+      await client.mutate({
+        mutation: updateApberuebersichtByIdGql,
+        variables,
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updateApberuebersichtById: {
+            apberuebersicht: {
+              ...variables,
+              __typename: 'Apberuebersicht',
+            },
+            __typename: 'Apberuebersicht',
+          },
+        },
+      })
+    } catch (error) {
+      return enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    const year = new Date().getFullYear() - 1
+    enqueNotification({
+      message: `AP, Pop und TPop wurden für das Jahr ${year} historisiert`,
+      options: {
+        variant: 'info',
+      },
+    })
+    refetch()
+  }, [client, enqueNotification, refetch, row])
 
   if (loading) {
     return (
@@ -131,9 +193,8 @@ const Apberuebersicht = ({ treeName }) => {
                 />
                 {!!row.historyDate && (
                   <TextFieldNonUpdatable
-                    name="historyDate"
+                    value={format(new Date(row.historyDate), 'dd.MM.yyyy')}
                     label="Datum, an dem AP, Pop und TPop historisiert wurden"
-                    component={TextField}
                   />
                 )}{' '}
                 {showHistorize && (
