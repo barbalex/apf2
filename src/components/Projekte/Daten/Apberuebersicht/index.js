@@ -45,7 +45,7 @@ const Apberuebersicht = ({ treeName }) => {
   const { user, enqueNotification } = store
   const { token } = user
   const role = token ? jwtDecode(token).role : null
-  const isManager = role === 'apflora_manager'
+  const userIsManager = role === 'apflora_manager'
   const { activeNodeArray } = store[treeName]
 
   const { data, loading, error, refetch } = useQuery(query, {
@@ -89,13 +89,15 @@ const Apberuebersicht = ({ treeName }) => {
     [client, row, store.user.name],
   )
 
-  const isJanuaryThroughMarch = useMemo(() => {
+  const isJanuaryThroughMarchOfFollowingYear = useMemo(() => {
     const now = new Date()
     const currentMonth = now.getMonth()
-    return currentMonth < 3
-  }, [])
+    const previousYear = now.getFullYear() - 1
+    return currentMonth < 3 && previousYear === row.jahr
+  }, [row.jahr])
   const notHistorizedYet = !row.historyDate
-  const showHistorize = isManager && isJanuaryThroughMarch && notHistorizedYet
+  const showHistorize =
+    userIsManager && isJanuaryThroughMarchOfFollowingYear && notHistorizedYet
 
   const onClickHistorize = useCallback(async () => {
     // 1. historize
@@ -196,7 +198,7 @@ const Apberuebersicht = ({ treeName }) => {
                     value={format(new Date(row.historyDate), 'dd.MM.yyyy')}
                     label="Datum, an dem AP, Pop und TPop historisiert wurden"
                   />
-                )}{' '}
+                )}
                 {showHistorize && (
                   <StyledButton
                     variant="outlined"
