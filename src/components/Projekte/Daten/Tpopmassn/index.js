@@ -138,7 +138,7 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
   const { data: dataIsMassnTypAnpflanzung } = useQuery(
     queryIsMassnTypAnpflanzung,
     {
-      variables: { typ: row.typ || '9999999999' },
+      variables: { typ: row.typ || 999999999 },
     },
   )
   const isAnpflanzung = get(
