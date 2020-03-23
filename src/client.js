@@ -34,7 +34,12 @@ export default ({ idb, store }) => {
 
   const errorLink = onError(({ response, graphQLErrors, networkError }) => {
     const graphQLErrorsToShow = graphQLErrors.filter(({ message, path }) => {
-      if (path.includes('historize') && message.includes('Unique-Constraint')) {
+      if (
+        path &&
+        path.includes('historize') &&
+        message &&
+        message.includes('Unique-Constraint')
+      ) {
         return false
       }
       return true
