@@ -114,7 +114,7 @@ DROP TABLE IF EXISTS apflora.ap_history;
 CREATE TABLE apflora.ap_history (
   year integer not null,
   id UUID not null references apflora.ap (id) on delete no action on update cascade,
-  art_id UUID UNIQUE DEFAULT NULL REFERENCES apflora.ae_taxonomies (id) on delete no action on update cascade,
+  art_id UUID DEFAULT NULL REFERENCES apflora.ae_taxonomies (id) on delete no action on update cascade,
   proj_id uuid DEFAULT NULL REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE,
   bearbeitung integer DEFAULT NULL REFERENCES apflora.ap_bearbstand_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   start_jahr smallint DEFAULT NULL,
