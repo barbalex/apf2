@@ -4,7 +4,6 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/react-hooks'
 import ErrorBoundary from 'react-error-boundary'
 
 import Ap from './Ap'
@@ -19,12 +18,15 @@ const Container = styled.div`
 `
 const FieldsContainer = styled.div`
   padding: 10px;
+  padding-top: 0;
   overflow: auto !important;
   height: 100%;
 `
+const StyledTabs = styled(Tabs)`
+  margin-bottom: 10px;
+`
 
-const ApTabs = ({ treeName, showFilter = false }) => {
-  const client = useApolloClient()
+const ApTabs = ({ treeName }) => {
   const store = useContext(storeContext)
   const { urlQuery, setUrlQuery } = store
   const { activeNodeArray } = store[treeName]
@@ -53,7 +55,17 @@ const ApTabs = ({ treeName, showFilter = false }) => {
       <Container>
         <FormTitle apId={id} title="Aktionsplan" treeName={treeName} />
         <FieldsContainer>
-          <Ap treeName={treeName} showFilter={showFilter} />
+          <StyledTabs
+            value={tab}
+            onChange={onChangeTab}
+            indicatorColor="primary"
+            textColor="primary"
+            centered
+          >
+            <Tab label="AP" value="ap" data-id="ap" />
+            <Tab label="Auswertung" value="aw" data-id="aw" />
+          </StyledTabs>
+          {tab === 'ap' && <Ap treeName={treeName} id={id} />}
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
