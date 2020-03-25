@@ -7,6 +7,7 @@ import { observer } from 'mobx-react-lite'
 import ErrorBoundary from 'react-error-boundary'
 
 import Ap from './Ap'
+import Auswertung from './Auswertung'
 import FormTitle from '../../../shared/FormTitle'
 import storeContext from '../../../../storeContext'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
@@ -63,9 +64,10 @@ const ApTabs = ({ treeName }) => {
             centered
           >
             <Tab label="AP" value="ap" data-id="ap" />
-            <Tab label="Auswertung" value="aw" data-id="aw" />
+            <Tab label="Auswertung" value="auswertung" data-id="auswertung" />
           </StyledTabs>
           {tab === 'ap' && <Ap treeName={treeName} id={id} />}
+          {tab === 'auswertung' && <Auswertung treeName={treeName} id={id} />}
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
