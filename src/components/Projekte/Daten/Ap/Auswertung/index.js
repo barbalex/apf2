@@ -21,6 +21,7 @@ import styled from 'styled-components'
 
 import queryErfolg from './queryErfolg'
 import queryPopStatus from './queryPopStatus'
+import CustomTooltip from './CustomTooltip'
 
 const SpinnerContainer = styled.div`
   height: 400px;
@@ -51,13 +52,20 @@ const labelFromValue = {
   4: 'gut',
   5: 'sehr',
 }
+const color = {
+  'ursprünglich, aktuell': '#2e7d32',
+  'ursprünglich, erloschen': 'rgba(46,125,50,0.5)',
+  'angesiedelt, aktuell': 'rgba(245,141,66,1)',
+  Ansaatversuch: 'brown',
+  'angesiedelt, erloschen/nicht etabliert': 'rgba(245,141,66,0.5)',
+  'potentieller Wuchs-/Ansiedlungsort': 'grey',
+}
 const findErfolg = ({ jahr, erfolgRawData }) =>
   erfolgRawData.find(e => e.jahr === jahr)
 const makeErfolg = jahr => ({ jahr, value: 0 })
 const getErfolg = ({ jahr, erfolgRawData }) =>
   findErfolg({ jahr, erfolgRawData }) || makeErfolg(jahr)
 const addMissingErfolgData = erfolgRawData => {
-  // 1. create list of all needed years
   const years = erfolgRawData.map(e => e.jahr)
   const allYears = range(min(years), max(years))
   return allYears.map(jahr => getErfolg({ jahr, erfolgRawData }))
@@ -206,45 +214,45 @@ const ApAuswertung = ({ treeName, id }) => {
               type="monotone"
               dataKey="ursprünglich, aktuell"
               stackId="1"
-              stroke="#2e7d32"
-              fill="#2e7d32"
+              stroke={color['ursprünglich, aktuell']}
+              fill={color['ursprünglich, aktuell']}
             />
             <Area
               type="monotone"
               dataKey="ursprünglich, erloschen"
               stackId="1"
-              stroke="rgba(46,125,50,0.5)"
-              fill="rgba(46,125,50,0.5)"
+              stroke={color['ursprünglich, erloschen']}
+              fill={color['ursprünglich, erloschen']}
             />
             <Area
               type="monotone"
               dataKey="angesiedelt, aktuell"
               stackId="1"
-              stroke="rgba(245,141,66,1)"
-              fill="rgba(245,141,66,1)"
+              stroke={color['angesiedelt, aktuell']}
+              fill={color['angesiedelt, aktuell']}
             />
             <Area
               type="monotone"
               dataKey="Ansaatversuch"
               stackId="1"
-              stroke="brown"
-              fill="brown"
+              stroke={color['Ansaatversuch']}
+              fill={color['Ansaatversuch']}
             />
             <Area
               type="monotone"
               dataKey="angesiedelt, erloschen/nicht etabliert"
               stackId="1"
-              stroke="rgba(245,141,66,0.5)"
-              fill="rgba(245,141,66,0.5)"
+              stroke={color['angesiedelt, erloschen/nicht etabliert']}
+              fill={color['angesiedelt, erloschen/nicht etabliert']}
             />
             <Area
               type="monotone"
               dataKey="potentieller Wuchs-/Ansiedlungsort"
               stackId="1"
-              stroke="grey"
-              fill="grey"
+              stroke={color['potentieller Wuchs-/Ansiedlungsort']}
+              fill={color['potentieller Wuchs-/Ansiedlungsort']}
             />
-            <Tooltip itemStyle={{ padding: 0, margin: 0, fontSize: '0.9em' }} />
+            <Tooltip content={<CustomTooltip color={color} />} />
             <Legend
               layout="horizontal"
               align="center"
