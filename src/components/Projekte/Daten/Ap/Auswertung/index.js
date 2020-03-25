@@ -67,7 +67,7 @@ const color = {
 }
 const findErfolg = ({ jahr, erfolgRawData }) =>
   erfolgRawData.find(e => e.jahr === jahr)
-const makeErfolg = jahr => ({ jahr, value: 0 })
+const makeErfolg = jahr => ({ jahr, value: null })
 const getErfolg = ({ jahr, erfolgRawData }) =>
   findErfolg({ jahr, erfolgRawData }) || makeErfolg(jahr)
 const addMissingErfolgData = erfolgRawData => {
@@ -144,6 +144,9 @@ const ApAuswertung = ({ treeName, id }) => {
     return `Fehler beim Laden der Daten: ${errorPopStatus.message}`
   }
 
+  // need to disable animation on lines or labels will not show on first render
+  // https://github.com/recharts/recharts/issues/1821
+
   return (
     <>
       {loadingErfolg ? (
@@ -164,7 +167,7 @@ const ApAuswertung = ({ treeName, id }) => {
               width={600}
               height={300}
               data={erfolgData}
-              margin={{ top: 10 }}
+              margin={{ top: 10, right: 10 }}
             >
               <XAxis dataKey="jahr" />
               <YAxis
@@ -177,8 +180,11 @@ const ApAuswertung = ({ treeName, id }) => {
               <Line
                 type="monotone"
                 dataKey="value"
-                fill="#2e7d32"
+                fill="white"
                 stroke="#2e7d32"
+                isAnimationActive={false}
+                strokeWidth={2}
+                dot={{ strokeWidth: 4 }}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -206,7 +212,7 @@ const ApAuswertung = ({ treeName, id }) => {
               width={600}
               height={300}
               data={popStatusData}
-              margin={{ top: 10 }}
+              margin={{ top: 10, right: 10 }}
             >
               <XAxis dataKey="jahr" />
               <YAxis interval={0} />
@@ -216,6 +222,7 @@ const ApAuswertung = ({ treeName, id }) => {
                 stackId="1"
                 stroke={color['ursprünglich, aktuell']}
                 fill={color['ursprünglich, aktuell']}
+                legendType="square"
               />
               <Area
                 type="monotone"
@@ -223,6 +230,7 @@ const ApAuswertung = ({ treeName, id }) => {
                 stackId="1"
                 stroke={color['ursprünglich, erloschen']}
                 fill={color['ursprünglich, erloschen']}
+                legendType="square"
               />
               <Area
                 type="monotone"
@@ -230,6 +238,7 @@ const ApAuswertung = ({ treeName, id }) => {
                 stackId="1"
                 stroke={color['angesiedelt, aktuell']}
                 fill={color['angesiedelt, aktuell']}
+                legendType="square"
               />
               <Area
                 type="monotone"
@@ -237,6 +246,7 @@ const ApAuswertung = ({ treeName, id }) => {
                 stackId="1"
                 stroke={color['Ansaatversuch']}
                 fill={color['Ansaatversuch']}
+                legendType="square"
               />
               <Area
                 type="monotone"
@@ -244,6 +254,7 @@ const ApAuswertung = ({ treeName, id }) => {
                 stackId="1"
                 stroke={color['angesiedelt, erloschen/nicht etabliert']}
                 fill={color['angesiedelt, erloschen/nicht etabliert']}
+                legendType="square"
               />
               <Area
                 type="monotone"
@@ -251,12 +262,13 @@ const ApAuswertung = ({ treeName, id }) => {
                 stackId="1"
                 stroke={color['potentieller Wuchs-/Ansiedlungsort']}
                 fill={color['potentieller Wuchs-/Ansiedlungsort']}
+                legendType="square"
               />
               <Tooltip content={<CustomTooltip color={color} />} />
               <Legend
                 layout="horizontal"
                 align="center"
-                iconSize={20}
+                iconSize={12}
                 wrapperStyle={{ bottom: 0, fontSize: 12 }}
               />
             </AreaChart>
