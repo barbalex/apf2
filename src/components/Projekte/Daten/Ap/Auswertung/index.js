@@ -14,6 +14,7 @@ import {
   ResponsiveContainer,
   Tooltip,
   Legend,
+  CartesianGrid,
 } from 'recharts'
 import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
 import styled from 'styled-components'
@@ -172,14 +173,15 @@ const ApAuswertung = ({ treeName, id }) => {
                 interval={0}
                 ticks={[0, 1, 2, 3, 4, 5]}
               />
+              <CartesianGrid strokeDasharray="3 3" horizontal={false} />
               <Line
                 type="monotone"
                 dataKey="value"
-                fill="white"
                 stroke="#2e7d32"
+                strokeWidth={1}
                 isAnimationActive={false}
-                strokeWidth={2}
-                dot={{ strokeWidth: 4 }}
+                dot={{ strokeWidth: 2, r: 4 }}
+                fill="rgba(255,253,231,0)"
               />
             </LineChart>
           </ResponsiveContainer>
@@ -218,6 +220,11 @@ const ApAuswertung = ({ treeName, id }) => {
                 stroke={color['ursprünglich, aktuell']}
                 fill={color['ursprünglich, aktuell']}
                 legendType="square"
+                /*dot={{
+                  strokeWidth: 2,
+                  r: 5,
+                  color: color['ursprünglich, aktuell'],
+                }}*/
               />
               <Area
                 type="monotone"
@@ -226,6 +233,11 @@ const ApAuswertung = ({ treeName, id }) => {
                 stroke={color['ursprünglich, erloschen']}
                 fill={color['ursprünglich, erloschen']}
                 legendType="square"
+                /*dot={{
+                  strokeWidth: 2,
+                  r: 5,
+                  color: color['ursprünglich, erloschen'],
+                }}*/
               />
               <Area
                 type="monotone"
@@ -234,6 +246,11 @@ const ApAuswertung = ({ treeName, id }) => {
                 stroke={color['angesiedelt, aktuell']}
                 fill={color['angesiedelt, aktuell']}
                 legendType="square"
+                /*dot={{
+                  strokeWidth: 2,
+                  r: 5,
+                  color: color['angesiedelt, aktuell'],
+                }}*/
               />
               <Area
                 type="monotone"
@@ -242,6 +259,11 @@ const ApAuswertung = ({ treeName, id }) => {
                 stroke={color['Ansaatversuch']}
                 fill={color['Ansaatversuch']}
                 legendType="square"
+                /*dot={{
+                  strokeWidth: 2,
+                  r: 5,
+                  color: color['Ansaatversuch'],
+                }}*/
               />
               <Area
                 type="monotone"
@@ -250,6 +272,11 @@ const ApAuswertung = ({ treeName, id }) => {
                 stroke={color['angesiedelt, erloschen/nicht etabliert']}
                 fill={color['angesiedelt, erloschen/nicht etabliert']}
                 legendType="square"
+                /*dot={{
+                  strokeWidth: 2,
+                  r: 5,
+                  color: color['angesiedelt, erloschen/nicht etabliert'],
+                }}*/
               />
               <Area
                 type="monotone"
@@ -258,8 +285,14 @@ const ApAuswertung = ({ treeName, id }) => {
                 stroke={color['potentieller Wuchs-/Ansiedlungsort']}
                 fill={color['potentieller Wuchs-/Ansiedlungsort']}
                 legendType="square"
+                /*dot={{
+                  strokeWidth: 2,
+                  r: 5,
+                  color: color['potentieller Wuchs-/Ansiedlungsort'],
+                }}*/
               />
               <Tooltip content={<CustomTooltip color={color} />} />
+              <CartesianGrid strokeDasharray="3 3" horizontal={false} />
               <Legend
                 layout="horizontal"
                 align="center"
