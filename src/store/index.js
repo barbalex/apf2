@@ -351,6 +351,7 @@ const myTypes = types
     setUrlQuery({
       projekteTabs,
       tpopTab,
+      apTab,
       feldkontrTab,
       idealbiotopTab,
       qkTab,
@@ -358,6 +359,7 @@ const myTypes = types
       const newUrlQuery = {
         projekteTabs,
         tpopTab,
+        apTab,
         feldkontrTab,
         idealbiotopTab,
         qkTab,

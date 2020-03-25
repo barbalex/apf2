@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-import { ap, aeTaxonomies } from '../../../shared/fragments'
+import { ap, aeTaxonomies } from '../../../../shared/fragments'
 
 export default gql`
   mutation updateAp(

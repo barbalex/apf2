@@ -4,6 +4,7 @@ import uniq from 'lodash/uniq'
 export default types
   .model('UrlQuery', {
     projekteTabs: types.optional(types.array(types.string), ['tree', 'daten']),
+    apTab: types.optional(types.maybeNull(types.string), 'ap'),
     tpopTab: types.optional(types.maybeNull(types.string), 'tpop'),
     feldkontrTab: types.optional(types.maybeNull(types.string), 'entwicklung'),
     idealbiotopTab: types.optional(
@@ -20,6 +21,7 @@ export default types
 export const defaultValue = {
   projekteTabs: ['tree', 'daten'],
   tpopTab: 'tpop',
+  apTab: 'ap',
   feldkontrTab: 'entwicklung',
   idealbiotopTab: 'idealbiotop',
 }

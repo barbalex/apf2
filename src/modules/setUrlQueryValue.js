@@ -1,9 +1,18 @@
 export default async ({ key, value, urlQuery, setUrlQuery }) => {
-  let { projekteTabs, tpopTab, feldkontrTab, idealbiotopTab, qkTab } = urlQuery
+  let {
+    projekteTabs,
+    tpopTab,
+    apTab,
+    feldkontrTab,
+    idealbiotopTab,
+    qkTab,
+  } = urlQuery
   if (key === 'projekteTabs') {
     projekteTabs = value
   } else if (key === 'tpopTab') {
     tpopTab = value
+  } else if (key === 'apTab') {
+    apTab = value
   } else if (key === 'feldkontrTab') {
     feldkontrTab = value
   } else if (key === 'qkTab') {
@@ -11,5 +20,12 @@ export default async ({ key, value, urlQuery, setUrlQuery }) => {
   } else {
     idealbiotopTab = value
   }
-  setUrlQuery({ projekteTabs, tpopTab, feldkontrTab, idealbiotopTab, qkTab })
+  setUrlQuery({
+    projekteTabs,
+    tpopTab,
+    apTab,
+    feldkontrTab,
+    idealbiotopTab,
+    qkTab,
+  })
 }

@@ -11,6 +11,7 @@ export default () => {
   if (!query.projekteTabs) query.projekteTabs = ['tree', 'daten']
   if (!query.feldkontrTab) query.feldkontrTab = 'entwicklung'
   if (!query.tpopTab) query.tpopTab = 'tpop'
+  if (!query.apTab) query.apTab = 'ap'
   if (!query.idealbiotopTab) query.idealbiotopTab = 'idealbiotop'
   /**
    * arrays are converted to strings in url if only one element is contained
