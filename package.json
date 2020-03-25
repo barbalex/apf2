@@ -114,6 +114,7 @@
     "react-split-pane": "0.1.91",
     "react-typography": "0.16.19",
     "react-window": "1.8.5",
+    "recharts": "1.8.5",
     "styled-components": "5.0.1",
     "typeface-roboto": "0.0.75",
     "typeface-roboto-mono": "0.0.75",
