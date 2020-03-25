@@ -5,13 +5,12 @@ import range from 'lodash/range'
 import min from 'lodash/min'
 import max from 'lodash/max'
 import {
-  BarChart,
+  LineChart,
   AreaChart,
   Area,
   XAxis,
   YAxis,
-  Label,
-  Bar,
+  Line,
   ResponsiveContainer,
   Tooltip,
   Legend,
@@ -35,6 +34,12 @@ const SpinnerText = styled.div`
 `
 const NoDataContainer = styled.div`
   margin: 10px;
+`
+const Title = styled.h4`
+  width: 100%;
+  text-align: center;
+  margin-bottom: 0;
+  margin-top: 15px;
 `
 
 const erfValueFromCode = {
@@ -152,32 +157,32 @@ const ApAuswertung = ({ treeName, id }) => {
           <SpinnerText>lade AP-Erfolg...</SpinnerText>
         </SpinnerContainer>
       ) : erfolgRawData.length ? (
-        <ResponsiveContainer width="99%" height={400}>
-          <BarChart
-            width={600}
-            height={300}
-            data={erfolgData}
-            margin={{ left: 27, top: 10 }}
-          >
-            <XAxis dataKey="jahr" />
-            <YAxis
-              dataKey="value"
-              domain={[0, 5]}
-              tick={<CustomTick />}
-              interval={0}
-              ticks={[0, 1, 2, 3, 4, 5]}
-              offset={10}
+        <>
+          <Title>AP-Erfolg</Title>
+          <ResponsiveContainer width="99%" height={400}>
+            <LineChart
+              width={600}
+              height={300}
+              data={erfolgData}
+              margin={{ top: 10 }}
             >
-              <Label
-                value="AP-Erfolg"
-                angle={-90}
-                position="insideLeft"
-                offset={-15}
+              <XAxis dataKey="jahr" />
+              <YAxis
+                dataKey="value"
+                domain={[0, 5]}
+                tick={<CustomTick />}
+                interval={0}
+                ticks={[0, 1, 2, 3, 4, 5]}
               />
-            </YAxis>
-            <Bar dataKey="value" fill="#2e7d32" />
-          </BarChart>
-        </ResponsiveContainer>
+              <Line
+                type="monotone"
+                dataKey="value"
+                fill="#2e7d32"
+                stroke="#2e7d32"
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </>
       ) : (
         <NoDataContainer>
           Sorry, es gibt keine Daten zum AP-Erfolg
@@ -194,72 +199,69 @@ const ApAuswertung = ({ treeName, id }) => {
           <SpinnerText>lade Populations-Stati...</SpinnerText>
         </SpinnerContainer>
       ) : popStatusRawData.length ? (
-        <ResponsiveContainer width="99%" height={400}>
-          <AreaChart
-            width={600}
-            height={300}
-            data={popStatusData}
-            margin={{ left: 27, top: 10 }}
-          >
-            <XAxis dataKey="jahr" />
-            <YAxis interval={0} offset={10}>
-              <Label
-                value=" Stati von Populationen"
-                angle={-90}
-                position="insideBottomLeft"
-                //offset={-15}
+        <>
+          <Title>Stati von Populationen</Title>
+          <ResponsiveContainer width="99%" height={400}>
+            <AreaChart
+              width={600}
+              height={300}
+              data={popStatusData}
+              margin={{ top: 10 }}
+            >
+              <XAxis dataKey="jahr" />
+              <YAxis interval={0} />
+              <Area
+                type="monotone"
+                dataKey="ursprünglich, aktuell"
+                stackId="1"
+                stroke={color['ursprünglich, aktuell']}
+                fill={color['ursprünglich, aktuell']}
               />
-            </YAxis>
-            <Area
-              type="monotone"
-              dataKey="ursprünglich, aktuell"
-              stackId="1"
-              stroke={color['ursprünglich, aktuell']}
-              fill={color['ursprünglich, aktuell']}
-            />
-            <Area
-              type="monotone"
-              dataKey="ursprünglich, erloschen"
-              stackId="1"
-              stroke={color['ursprünglich, erloschen']}
-              fill={color['ursprünglich, erloschen']}
-            />
-            <Area
-              type="monotone"
-              dataKey="angesiedelt, aktuell"
-              stackId="1"
-              stroke={color['angesiedelt, aktuell']}
-              fill={color['angesiedelt, aktuell']}
-            />
-            <Area
-              type="monotone"
-              dataKey="Ansaatversuch"
-              stackId="1"
-              stroke={color['Ansaatversuch']}
-              fill={color['Ansaatversuch']}
-            />
-            <Area
-              type="monotone"
-              dataKey="angesiedelt, erloschen/nicht etabliert"
-              stackId="1"
-              stroke={color['angesiedelt, erloschen/nicht etabliert']}
-              fill={color['angesiedelt, erloschen/nicht etabliert']}
-            />
-            <Area
-              type="monotone"
-              dataKey="potentieller Wuchs-/Ansiedlungsort"
-              stackId="1"
-              stroke={color['potentieller Wuchs-/Ansiedlungsort']}
-              fill={color['potentieller Wuchs-/Ansiedlungsort']}
-            />
-            <Tooltip content={<CustomTooltip color={color} />} />
-            <Legend
-              layout="horizontal"
-              align="center"
-              wrapperStyle={{ bottom: 0, fontSize: 12 }}
-            />
-          </AreaChart>
-        </ResponsiveContainer>
+              <Area
+                type="monotone"
+                dataKey="ursprünglich, erloschen"
+                stackId="1"
+                stroke={color['ursprünglich, erloschen']}
+                fill={color['ursprünglich, erloschen']}
+              />
+              <Area
+                type="monotone"
+                dataKey="angesiedelt, aktuell"
+                stackId="1"
+                stroke={color['angesiedelt, aktuell']}
+                fill={color['angesiedelt, aktuell']}
+              />
+              <Area
+                type="monotone"
+                dataKey="Ansaatversuch"
+                stackId="1"
+                stroke={color['Ansaatversuch']}
+                fill={color['Ansaatversuch']}
+              />
+              <Area
+                type="monotone"
+                dataKey="angesiedelt, erloschen/nicht etabliert"
+                stackId="1"
+                stroke={color['angesiedelt, erloschen/nicht etabliert']}
+                fill={color['angesiedelt, erloschen/nicht etabliert']}
+              />
+              <Area
+                type="monotone"
+                dataKey="potentieller Wuchs-/Ansiedlungsort"
+                stackId="1"
+                stroke={color['potentieller Wuchs-/Ansiedlungsort']}
+                fill={color['potentieller Wuchs-/Ansiedlungsort']}
+              />
+              <Tooltip content={<CustomTooltip color={color} />} />
+              <Legend
+                layout="horizontal"
+                align="center"
+                iconSize={20}
+                wrapperStyle={{ bottom: 0, fontSize: 12 }}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </>
       ) : (
         <NoDataContainer>
           Sorry, es gibt keine Daten zu den Populations-Stati
