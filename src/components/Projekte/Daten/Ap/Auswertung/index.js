@@ -116,7 +116,6 @@ const ApAuswertung = ({ treeName, id }) => {
   } = useQuery(queryPopStatus, {
     variables: { id },
   })
-  const popStati = get(dataPopStatus, 'allPopStatusWertes.nodes') || []
   const popStatusRawData =
     get(dataPopStatus, 'allVApAuswPopStatuses.nodes') || []
   const popStatusData = popStatusRawData.map(e => {
@@ -131,10 +130,6 @@ const ApAuswertung = ({ treeName, id }) => {
       'angesiedelt, erloschen/nicht etabliert': val[202] || 0,
       'potentieller Wuchs-/Ansiedlungsort': val[300] || 0,
     }
-  })
-  console.log('ApAuswertung', {
-    popStati,
-    popStatusData,
   })
 
   if (errorErfolg) {

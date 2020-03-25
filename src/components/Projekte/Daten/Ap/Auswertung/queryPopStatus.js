@@ -1,7 +1,5 @@
 import gql from 'graphql-tag'
 
-import { popStatusWerte } from '../../../../shared/fragments'
-
 export default gql`
   query apAuswertungPopStatus($id: UUID!) {
     allVApAuswPopStatuses(
@@ -13,11 +11,5 @@ export default gql`
         values
       }
     }
-    allPopStatusWertes(orderBy: SORT_ASC) {
-      nodes {
-        ...PopStatusWerteFields
-      }
-    }
   }
-  ${popStatusWerte}
 `
