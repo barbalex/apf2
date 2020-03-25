@@ -37,6 +37,9 @@ const FieldsContainer = styled.div`
 const LoadingDiv = styled.div`
   padding: 10px;
 `
+const StyledTab = styled(Tab)`
+  text-transform: none !important;
+`
 
 const TpopForm = ({ treeName, showFilter = false }) => {
   const client = useApolloClient()
@@ -235,8 +238,8 @@ const TpopForm = ({ treeName, showFilter = false }) => {
             textColor="primary"
             centered
           >
-            <Tab label="Teil-Population" value="tpop" data-id="tpop" />
-            <Tab label="EK" value="ek" data-id="ek" />
+            <StyledTab label="Teil-Population" value="tpop" data-id="tpop" />
+            <StyledTab label="EK" value="ek" data-id="ek" />
           </Tabs>
           {!showFilter && loading ? (
             <LoadingDiv>Lade...</LoadingDiv>

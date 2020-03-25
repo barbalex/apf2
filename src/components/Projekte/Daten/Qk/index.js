@@ -30,6 +30,9 @@ const FieldsContainer = styled.div`
 const LoadingContainer = styled.div`
   padding: 8px;
 `
+const StyledTab = styled(Tab)`
+  text-transform: none !important;
+`
 
 const QkForm = ({ treeName }) => {
   const store = useContext(storeContext)
@@ -87,8 +90,8 @@ const QkForm = ({ treeName }) => {
             textColor="primary"
             centered
           >
-            <Tab label="ausführen" value="qk" data-id="qk" />
-            <Tab
+            <StyledTab label="ausführen" value="qk" data-id="qk" />
+            <StyledTab
               label={`auswählen${
                 !!qkCount ? ` (${apqkCount}/${qkCount})` : ''
               }`}

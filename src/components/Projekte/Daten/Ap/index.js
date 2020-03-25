@@ -26,6 +26,9 @@ const FieldsContainer = styled.div`
 const StyledTabs = styled(Tabs)`
   margin-bottom: 10px;
 `
+const StyledTab = styled(Tab)`
+  text-transform: none !important;
+`
 
 const ApTabs = ({ treeName }) => {
   const store = useContext(storeContext)
@@ -63,8 +66,12 @@ const ApTabs = ({ treeName }) => {
             textColor="primary"
             centered
           >
-            <Tab label="AP" value="ap" data-id="ap" />
-            <Tab label="Auswertung" value="auswertung" data-id="auswertung" />
+            <StyledTab label="AP" value="ap" data-id="ap" />
+            <StyledTab
+              label="Auswertung"
+              value="auswertung"
+              data-id="auswertung"
+            />
           </StyledTabs>
           {tab === 'ap' && <Ap treeName={treeName} id={id} />}
           {tab === 'auswertung' && <Auswertung treeName={treeName} id={id} />}

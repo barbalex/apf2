@@ -58,6 +58,9 @@ const Section = styled.div`
     content: ':';
   }
 `
+const StyledTab = styled(Tab)`
+  text-transform: none !important;
+`
 
 const Idealbiotop = ({ treeName }) => {
   const store = useContext(storeContext)
@@ -142,12 +145,12 @@ const Idealbiotop = ({ treeName }) => {
             textColor="primary"
             centered
           >
-            <Tab
+            <StyledTab
               label="Idealbiotop"
               value="idealbiotop"
               data-id="idealbiotop"
             />
-            <Tab label="Dateien" value="dateien" data-id="dateien" />
+            <StyledTab label="Dateien" value="dateien" data-id="dateien" />
           </Tabs>
           {tab === 'idealbiotop' && (
             <FormContainer data-width={datenWidth}>

@@ -72,6 +72,10 @@ const Section = styled.div`
     content: ':';
   }
 `
+const StyledTab = styled(Tab)`
+  text-transform: none !important;
+`
+
 const tpopkontrTypWerte = [
   {
     value: 'Ausgangszustand',
@@ -284,14 +288,14 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
             textColor="primary"
             centered
           >
-            <Tab
+            <StyledTab
               label="Entwicklung"
               value="entwicklung"
               data-id="entwicklung"
             />
-            <Tab label="Biotop" value="biotop" data-id="biotop" />
+            <StyledTab label="Biotop" value="biotop" data-id="biotop" />
             {!showFilter && (
-              <Tab label="Dateien" value="dateien" data-id="dateien" />
+              <StyledTab label="Dateien" value="dateien" data-id="dateien" />
             )}
           </Tabs>
           {tab === 'entwicklung' && (

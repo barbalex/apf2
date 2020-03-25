@@ -25,6 +25,7 @@ const StyledTabs = styled(Tabs)`
 `
 const StyledTab = styled(Tab)`
   min-width: 70px !important;
+  text-transform: none !important;
 `
 const TitleRow = styled.div`
   background-color: #d84315;
