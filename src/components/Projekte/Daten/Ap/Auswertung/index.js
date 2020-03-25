@@ -83,7 +83,7 @@ const ApAuswertung = ({ treeName, id }) => {
         width={600}
         height={300}
         data={erfolgData}
-        margin={{ left: 25, top: 10 }}
+        margin={{ left: 27, top: 10 }}
       >
         <XAxis dataKey="jahr" />
         <YAxis
