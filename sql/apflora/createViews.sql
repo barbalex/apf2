@@ -5443,6 +5443,33 @@ order by
   artname,
   pop_nr;
 
-  
-DROP VIEW IF EXISTS apflora.v_auswapbearbmassninjahr0 CASCADE;
-DROP VIEW IF EXISTS apflora.v_ap_mitmassninjahr0 CASCADE;
+
+
+
+DROP VIEW IF EXISTS apflora.v_ap_ausw_pop_status CASCADE;
+CREATE OR REPLACE VIEW apflora.v_ap_ausw_pop_status AS
+with data as (
+  select
+    ap_id,
+    year,
+    status,
+    count(*) as anzahl
+    from
+      apflora.pop_history
+    where status is not null
+    group by
+      ap_id,
+      year,
+      status
+    order by
+      ap_id,
+      year,
+      status
+)
+select
+  ap_id,
+  year as jahr,
+  json_object_agg(status, anzahl) as values
+from data
+group by ap_id, year
+order by ap_id, year;

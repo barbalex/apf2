@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query apAuswertung($id: UUID!) {
+  query apAuswertungErfolg($id: UUID!) {
     allApbers(
       filter: { apId: { equalTo: $id }, beurteilung: { in: [1, 3, 4, 5, 6] } }
       orderBy: JAHR_ASC
