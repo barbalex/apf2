@@ -157,16 +157,22 @@ const ApAuswertung = ({ treeName, id }) => {
         </SpinnerContainer>
       ) : erfolgRawData.length ? (
         <>
-          <Title>AP-Erfolg</Title>
+          <Title>Erfolg des Aktionsplans</Title>
           <ResponsiveContainer width="99%" height={400}>
             <LineChart
               width={600}
               height={300}
               data={erfolgData}
-              margin={{ top: 10, right: 10 }}
+              margin={{ top: 10, right: 10, left: 27 }}
             >
               <XAxis dataKey="jahr" />
               <YAxis
+                label={{
+                  value: 'Erfolg',
+                  angle: -90,
+                  position: 'insideLeft',
+                  offset: -15,
+                }}
                 dataKey="value"
                 domain={[0, 5]}
                 tick={<CustomTick />}
@@ -203,16 +209,24 @@ const ApAuswertung = ({ treeName, id }) => {
         </SpinnerContainer>
       ) : popStatusRawData.length ? (
         <>
-          <Title>Stati von Populationen</Title>
+          <Title>Stati der Populationen</Title>
           <ResponsiveContainer width="99%" height={400}>
             <AreaChart
               width={600}
               height={300}
               data={popStatusData}
-              margin={{ top: 10, right: 10 }}
+              margin={{ top: 10, right: 10, left: 27 }}
             >
               <XAxis dataKey="jahr" />
-              <YAxis interval={0} />
+              <YAxis
+                interval={0}
+                label={{
+                  value: 'Anzahl Populationen',
+                  angle: -90,
+                  position: 'insideLeft',
+                  offset: -15,
+                }}
+              />
               <Area
                 type="monotone"
                 dataKey="ursprünglich, aktuell"
