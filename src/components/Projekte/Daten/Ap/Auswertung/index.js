@@ -12,8 +12,24 @@ import {
   Bar,
   ResponsiveContainer,
 } from 'recharts'
+import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
+import styled from 'styled-components'
 
 import queryErfolg from './queryErfolg'
+
+const SpinnerContainer = styled.div`
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
+const SpinnerText = styled.div`
+  padding: 10px;
+`
+const NoDataContainer = styled.div`
+  margin: 10px;
+`
 
 const erfValueFromCode = {
   3: 1, // nicht erfolgreich
@@ -77,33 +93,59 @@ const ApAuswertung = ({ treeName, id }) => {
 
   const erfolgData = addMissingErfolgData(erfolgRawData)
 
+  if (loadingErfolg) {
+    return (
+      <SpinnerContainer>
+        <Spinner
+          size={50}
+          frontColor="#2e7d32"
+          backColor="#4a148c1a"
+          loading={true}
+        />
+        <SpinnerText>lade Daten...</SpinnerText>
+      </SpinnerContainer>
+    )
+  }
+
+  if (errorErfolg) {
+    return `Fehler beim Laden der Daten: ${errorErfolg.message}`
+  }
+
   return (
-    <ResponsiveContainer width="99%" height={400}>
-      <BarChart
-        width={600}
-        height={300}
-        data={erfolgData}
-        margin={{ left: 27, top: 10 }}
-      >
-        <XAxis dataKey="jahr" />
-        <YAxis
-          dataKey="value"
-          domain={[0, 5]}
-          tick={<CustomTick />}
-          interval={0}
-          ticks={[0, 1, 2, 3, 4, 5]}
-          offset={10}
-        >
-          <Label
-            value="AP-Erfolg"
-            angle={-90}
-            position="insideLeft"
-            offset={-15}
-          />
-        </YAxis>
-        <Bar dataKey="value" fill="#2e7d32" />
-      </BarChart>
-    </ResponsiveContainer>
+    <>
+      {erfolgRawData.length ? (
+        <ResponsiveContainer width="99%" height={400}>
+          <BarChart
+            width={600}
+            height={300}
+            data={erfolgData}
+            margin={{ left: 27, top: 10 }}
+          >
+            <XAxis dataKey="jahr" />
+            <YAxis
+              dataKey="value"
+              domain={[0, 5]}
+              tick={<CustomTick />}
+              interval={0}
+              ticks={[0, 1, 2, 3, 4, 5]}
+              offset={10}
+            >
+              <Label
+                value="AP-Erfolg"
+                angle={-90}
+                position="insideLeft"
+                offset={-15}
+              />
+            </YAxis>
+            <Bar dataKey="value" fill="#2e7d32" />
+          </BarChart>
+        </ResponsiveContainer>
+      ) : (
+        <NoDataContainer>
+          Sorry, es gibt keine Daten zum AP-Erfolg
+        </NoDataContainer>
+      )}
+    </>
   )
 }
 
