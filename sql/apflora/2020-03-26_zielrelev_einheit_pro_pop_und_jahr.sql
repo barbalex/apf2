@@ -38,7 +38,7 @@ massnjahre as (
 ),
 zaehljahre as (
   select distinct on (tpop2.id, kontr2.jahr)
-    tpop2.id,
+    tpop2.id as tpop_id,
     kontr2.jahr,
     kontr2.id as kontr_id,
     ze2.text as zaehleinheit,
@@ -73,14 +73,30 @@ jahre as (
     (select jahr from massnjahre union select jahr from zaehljahre order by jahr asc limit 1)::int,
     extract(year from now())::int
   ) as jahr
-)
-select * from jahre
-letzte_anzahl as (
-  select *
+),
+tpop_ids as (
+  select tpop_id from massnjahre 
+  union select tpop_id from zaehljahre 
+  order by tpop_id
+),
+tpops_with_year as (
+  select tpop_id, jahr from tpop_ids, jahre
+  order by tpop_id, jahr
+),
+letzte_zaehlung_oder_kontrolle as (
+  select
+    ty.jahr,
+    ty.tpop_id,
+    (select jahr from massnjahre where jahr <= ty.jahr order by jahr desc limit 1) as last_massnahmenjahr,
+    (select jahr from zaehljahre where jahr <= ty.jahr order by jahr desc limit 1) as last_zaehlungjahr
   from 
-    apflora.tpop
-
+    tpops_with_year ty
+    left join massnjahre mj
+    on mj.jahr = ty.jahr and mj.tpop_id = ty.tpop_id
+    left join zaehljahre zj
+    on zj.jahr = ty.jahr and zj.tpop_id = ty.tpop_id
 )
+select * from letzte_zaehlung_oder_kontrolle
 
 
 
