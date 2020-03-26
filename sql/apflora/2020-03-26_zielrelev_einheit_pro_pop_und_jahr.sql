@@ -1,7 +1,7 @@
 DROP VIEW IF EXISTS apflora.v_ap_ausw_pop_zielrelev_einheit CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_ausw_pop_zielrelev_einheit AS
 with
-  last_count_per_tpop_per_year as (
+  sums_per_tpop_per_year as (
     select
       tpop.id as tpop_id,
       anzahl.*
@@ -9,13 +9,25 @@ with
       select tpop_id, jahr, zaehleinheit, anzahl
       from 
         (
-          with nr_of_kontr as (
-            select apflora.tpop.id, count(apflora.tpopkontr.id) as anzahl
+          with nr_of_kontr as ( -- TODO: der ziel-einheit
+            select tpop0.id, count(kontr0.id) as anzahl
             from 
-              apflora.tpop
-              left join apflora.tpopkontr
-              on apflora.tpopkontr.tpop_id = apflora.tpop.id
-            group by apflora.tpop.id
+              apflora.tpop tpop0
+              left join apflora.tpopkontr kontr0
+                inner join apflora.tpopkontrzaehl zaehl0
+                on zaehl0.tpopkontr_id = kontr0.id
+              on kontr0.tpop_id = tpop0.id
+              inner join apflora.pop pop0
+                inner join apflora.ap ap0
+                  inner join apflora.ekzaehleinheit ekze0
+                    inner join apflora.tpopkontrzaehl_einheit_werte ze0
+                    on ze0.id = ekze0.zaehleinheit_id
+                  on ekze0.ap_id = ap0.id and ekze0.zielrelevant = true
+                on ap0.id = pop0.ap_id
+              on pop0.id = tpop0.pop_id
+            where
+              zaehl0.einheit = ze0.code
+            group by tpop0.id
           ), 
           letzte_ansiedlungen as (
             select distinct on (tpop1.id)
@@ -24,29 +36,33 @@ with
             from
               apflora.tpopmassn massn1
               inner join apflora.tpop tpop1
+                inner join apflora.pop pop1
+                  inner join apflora.ap ap1
+                    inner join apflora.ekzaehleinheit ekze1
+                      inner join apflora.tpopkontrzaehl_einheit_werte ze1
+                      on ze1.id = ekze1.zaehleinheit_id
+                    on ekze1.ap_id = ap1.id and ekze1.zielrelevant = true
+                  on ap1.id = pop1.ap_id
+                on pop1.id = tpop1.pop_id
               on tpop1.id = massn1.tpop_id
               inner join apflora.tpopmassn_typ_werte
               on apflora.tpopmassn_typ_werte.code = massn1.typ
             where
               massn1.jahr is not null
-              and tpopmassn_typ_werte.ansiedlung = true
-              and (
-                massn1.anz_triebe is not null
-                or massn1.anz_pflanzen is not null
-                or massn1.anz_pflanzstellen is not null
-              )
+              and tpopmassn_typ_werte.anpflanzung = true
+              and massn1.zieleinheit_einheit = ze1.code -- = ziel-einheit
+              and massn1.zieleinheit_anzahl is not null
             order by
               tpop1.id,
               massn1.jahr desc,
               massn1.datum desc
-
           )
           select * from (
             select distinct on (tpop2.id)
               tpop2.id as tpop_id,
               massn2.jahr,
-              'Triebe' as zaehleinheit,
-              massn2.anz_triebe as anzahl
+              ze2.text as zaehleinheit,
+              massn2.zieleinheit_anzahl as anzahl
             from
               apflora.tpopmassn massn2
               inner join letzte_ansiedlungen
@@ -54,17 +70,25 @@ with
               inner join apflora.tpop tpop2
                 inner join nr_of_kontr
                 on nr_of_kontr.id = tpop2.id
+                inner join apflora.pop pop2
+                  inner join apflora.ap ap2
+                    inner join apflora.ekzaehleinheit ekze2
+                      inner join apflora.tpopkontrzaehl_einheit_werte ze2
+                      on ze2.id = ekze2.zaehleinheit_id
+                    on ekze2.ap_id = ap2.id and ekze2.zielrelevant = true
+                  on ap2.id = pop2.ap_id
+                on pop2.id = tpop2.pop_id
               on tpop2.id = massn2.tpop_id
             where
               massn2.jahr is not null
               and tpop2.status in (200, 201)
               and nr_of_kontr.anzahl = 0
-              and massn2.anz_triebe is not null
+              and massn2.zieleinheit_anzahl is not null
             order by
               tpop2.id,
               massn2.jahr desc,
               massn2.datum desc
-          ) as triebe
+          ) as massn_menge
           union
           select * from (
             select distinct on (tpop3.id, apflora.tpopkontrzaehl_einheit_werte.text)
@@ -78,11 +102,21 @@ with
               on apflora.tpopkontrzaehl_einheit_werte.code = zaehl3.einheit
               inner join apflora.tpopkontr kontr3
                 inner join apflora.tpop tpop3
+                  inner join apflora.pop pop3
+                    inner join apflora.ap ap3
+                      inner join apflora.ekzaehleinheit ekze3
+                        inner join apflora.tpopkontrzaehl_einheit_werte ze3
+                        on ze3.id = ekze3.zaehleinheit_id
+                      on ekze3.ap_id = ap3.id and ekze3.zielrelevant = true
+                    on ap3.id = pop3.ap_id
+                  on pop3.id = tpop3.pop_id
                 on tpop3.id = kontr3.tpop_id
               on zaehl3.tpopkontr_id = kontr3.id
             where
               -- nur Kontrollen mit Jahr berücksichtigen
               kontr3.jahr is not null
+              -- nur Zählungen mit der Ziel-Einheit
+              and ze3.code = zaehl3.einheit
               -- nur Zählungen mit Anzahl berücksichtigen
               and zaehl3.anzahl is not null
               and kontr3.id = (
@@ -108,7 +142,7 @@ with
               apflora.tpopkontrzaehl_einheit_werte.text,
               kontr3.jahr desc,
               kontr3.datum desc
-          ) as others
+          ) as zaehl_menge
         ) as tbl
       order by 1,2,3
       $$,
