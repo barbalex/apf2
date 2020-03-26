@@ -16,7 +16,7 @@ import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
 import styled from 'styled-components'
 
 import queryErfolg from './queryErfolg'
-import CustomTick from '../CustomTick'
+import CustomTick from './CustomTick'
 
 const SpinnerContainer = styled.div`
   height: 400px;
