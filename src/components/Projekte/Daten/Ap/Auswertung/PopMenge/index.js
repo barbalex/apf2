@@ -131,7 +131,6 @@ const ApAuswertungPopMenge = ({ id }) => {
                 }}
               />
               {popIdsWithData.map(id => {
-                console.log({ id })
                 return (
                   <Area
                     key={id}
