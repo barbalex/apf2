@@ -87,8 +87,8 @@ letzte_zaehlung_oder_kontrolle as (
   select
     ty.jahr,
     ty.tpop_id,
-    (select jahr from massnjahre where jahr <= ty.jahr order by jahr desc limit 1) as last_massnahmenjahr,
-    (select jahr from zaehljahre where jahr <= ty.jahr order by jahr desc limit 1) as last_zaehlungjahr
+    (select jahr from massnjahre where jahr <= ty.jahr and tpop_id = ty.tpop_id order by jahr desc limit 1) as last_massnahmenjahr,
+    (select jahr from zaehljahre where jahr <= ty.jahr and tpop_id = ty.tpop_id order by jahr desc limit 1) as last_zaehlungjahr
   from 
     tpops_with_year ty
     left join massnjahre mj
