@@ -1,9 +1,8 @@
 
 
-
-DROP VIEW IF EXISTS apflora.v_ap_ausw_pop_zielrelev_einheit CASCADE;
-CREATE OR REPLACE VIEW apflora.v_ap_ausw_pop_zielrelev_einheit AS
-
+refresh materialized view apflora.v_ap_ausw_pop_menge;
+DROP materialized VIEW IF EXISTS apflora.v_ap_ausw_pop_menge CASCADE;
+CREATE materialized VIEW apflora.v_ap_ausw_pop_menge AS
 with
 massnjahre as (
   select distinct on (tpop0.id, massn0.jahr)
@@ -32,6 +31,7 @@ massnjahre as (
     and pop0.year = massn0.jahr
     and tpop0.year = massn0.jahr
     and tpop0.status in (200, 201)
+    and tpop0.apber_relevant = true
     and massn0.zieleinheit_einheit = ze0.code
     and massn0.zieleinheit_anzahl is not null
   order by
@@ -66,6 +66,7 @@ zaehljahre as (
     and pop2.year = kontr2.jahr
     and tpop2.year = kontr2.jahr
     and tpop2.status in (100, 200, 201)
+    and tpop2.apber_relevant = true
     and zaehl2.anzahl is not null
     -- nur Zählungen mit der Ziel-Einheit
     and ze2.code = zaehl2.einheit
@@ -74,7 +75,7 @@ zaehljahre as (
     kontr2.jahr desc,
     kontr2.datum desc
 ),
-tpop_mit_letzten as (
+tpop_letzte_menge as (
   select
     tpop3.id as tpop_id,
     tpop3.year as jahr,
@@ -116,53 +117,23 @@ tpop_mit_letzten as (
     tpop3.id,
     tpop3.year
 )
-select * from tpop_mit_letzten
-
-
-
-
-
-
-
-
-
-
-
-pop_data as (
-  select
-    ap.id as ap_id,
-    ew.text as zaehleinheit,
-    pop.year,
-    pop.id as pop_id,
-    count(tpop.id) as anzahl
-    from
-      apflora.pop_history pop
-      inner join apflora.ap_history ap
-        inner join apflora.ekzaehleinheit ekze
-          inner join apflora.tpopkontrzaehl_einheit_werte ew
-          on ekze.zaehleinheit_id = ew.id
-        on ap.id = ekze.ap_id and ekze.zielrelevant = true
-      on ap.id = pop.ap_id
-      inner join apflora.tpop_history tpop
-      on pop.id = tpop.pop_id
-    where 
-      pop.status in (100, 200, 201)
-      and tpop.status in (100, 200, 201)
-      and tpop.apber_relevant = true
-    group by
-      ap.id,
-      ew.text,
-      pop.year,
-      pop.id
-    order by
-      ap.id,
-      pop.year
-  )
 select
-  ap_id,
-  zaehleinheit,
-  year as jahr,
-  json_object_agg(pop_id, anzahl) as values
-from pop_data
-group by ap_id, zaehleinheit, year
-order by ap_id, year;
+  pop4.id as pop_id,
+  pop4.year as jahr,
+  tplm.zaehleinheit,
+  sum(anzahl) as anzahl
+from 
+  tpop_letzte_menge tplm
+  inner join apflora.tpop_history tpop4
+    inner join apflora.pop_history pop4
+    on pop4.id = tpop4.pop_id and pop4.year = tpop4.year
+  on tpop4.id = tplm.tpop_id and tpop4.year = tplm.jahr
+where
+  pop4.status in (100, 200, 201)
+group by
+  pop4.id,
+  pop4.year,
+  tplm.zaehleinheit
+order by
+  pop4.id,
+  pop4.year;
