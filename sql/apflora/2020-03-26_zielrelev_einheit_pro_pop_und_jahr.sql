@@ -1,5 +1,3 @@
-
-
 refresh materialized view apflora.v_ap_ausw_pop_menge;
 DROP materialized VIEW IF EXISTS apflora.v_ap_ausw_pop_menge CASCADE;
 CREATE materialized VIEW apflora.v_ap_ausw_pop_menge AS
@@ -118,7 +116,10 @@ tpop_letzte_menge as (
     tpop3.year
 )
 select
+  ap4.id as ap_id,
   pop4.id as pop_id,
+  pop4.nr as pop_nr,
+  pop4.name as pop_name,
   pop4.year as jahr,
   tplm.zaehleinheit,
   sum(anzahl) as anzahl
@@ -126,14 +127,20 @@ from
   tpop_letzte_menge tplm
   inner join apflora.tpop_history tpop4
     inner join apflora.pop_history pop4
+      inner join apflora.ap_history ap4
+      on ap4.id = pop4.ap_id
     on pop4.id = tpop4.pop_id and pop4.year = tpop4.year
   on tpop4.id = tplm.tpop_id and tpop4.year = tplm.jahr
 where
   pop4.status in (100, 200, 201)
 group by
+  ap4.id,
   pop4.id,
   pop4.year,
   tplm.zaehleinheit
 order by
+  ap4.id,
   pop4.id,
+  pop4.nr,
+  pop4.name,
   pop4.year;
