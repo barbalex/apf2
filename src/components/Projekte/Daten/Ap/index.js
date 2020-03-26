@@ -74,7 +74,7 @@ const ApTabs = ({ treeName }) => {
             />
           </StyledTabs>
           {tab === 'ap' && <Ap treeName={treeName} id={id} />}
-          {tab === 'auswertung' && <Auswertung treeName={treeName} id={id} />}
+          {tab === 'auswertung' && <Auswertung id={id} />}
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
