@@ -3,7 +3,7 @@ typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/Karte-Symbole-und-Label-fuer-Populationen-und-Teil-Populationen-waehlen"
 date: "2019-01-30"
 title: "Karte: Symbole und Label für (Teil-)Populationen wählen"
-sort: 15
+sort: 17
 ---
 
 Seit dem 26.12.2018 ist das Blumen-Symbol für Populationen und Teil-Populationen im Layer-Tool der Karte interaktiv:<br/>

@@ -3,7 +3,7 @@ typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/Erfolgs-Kontrollen-planen"
 date: "2019-09-10"
 title: "Erfolgs-Kontrollen planen"
-sort: 11
+sort: 12
 ---
 
 **Inhalt**<br/>

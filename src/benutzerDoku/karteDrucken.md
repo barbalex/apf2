@@ -3,7 +3,7 @@ typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/Karte-Drucken"
 date: "2019-09-14"
 title: "Karte: Drucken"
-sort: 17
+sort: 19
 ---
 
 Auf der Karte gibt es zwei Schaltflächen, um:

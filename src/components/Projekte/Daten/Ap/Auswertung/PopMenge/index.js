@@ -15,6 +15,7 @@ import {
 import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
 import styled, { keyframes } from 'styled-components'
 import { FaRedo } from 'react-icons/fa'
+import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@material-ui/core/IconButton'
 
 import queryPopMenge from './queryPopMenge'
@@ -112,6 +113,13 @@ const ApAuswertungPopMenge = ({ id }) => {
     setRefreshing(false)
   }, [refetchPopMenge, refreshData, refreshing])
 
+  const onClickMoreInfo = useCallback(() => {
+    typeof window !== 'undefined' &&
+      window.open(
+        'https://apflora.ch/Dokumentation/Benutzer/ap-auswertung-pop-menge',
+      )
+  }, [])
+
   if (errorPopMenge) {
     return `Fehler beim Laden der Daten: ${errorPopMenge.message}`
   }
@@ -156,6 +164,13 @@ const ApAuswertungPopMenge = ({ id }) => {
                 <FaRedo />
               </RefreshButton>
             )}
+            <IconButton
+              aria-label="Mehr Informationen"
+              title="Mehr Informationen"
+              onClick={onClickMoreInfo}
+            >
+              <IoMdInformationCircleOutline />
+            </IconButton>
           </TitleRow>
           <ResponsiveContainer width="99%" height={400}>
             <AreaChart
