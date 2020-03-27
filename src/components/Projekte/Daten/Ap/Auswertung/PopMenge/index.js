@@ -62,6 +62,13 @@ const RefreshButtonSpinning = styled(IconButton)`
 const RefreshButton = styled(IconButton)``
 
 const color = 'rgba(46,125,50,0.3)'
+const formatNumber = tickItem => {
+  const value =
+    exists(tickItem) && tickItem.toLocaleString
+      ? tickItem.toLocaleString('de-ch')
+      : null
+  return value
+}
 
 const ApAuswertungPopMenge = ({ id }) => {
   const {
@@ -188,6 +195,7 @@ const ApAuswertungPopMenge = ({ id }) => {
                   position: 'insideLeft',
                   offset: -15,
                 }}
+                tickFormatter={formatNumber}
               />
               {popIdsWithDataSorted.reverse().map(id => (
                 <Area

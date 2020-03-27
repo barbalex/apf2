@@ -40,10 +40,14 @@ const CustomTooltip = ({ payload, label, active, popsData }) => {
         if (pop) {
           label = `${pop.nr || '(keine Nr)'}: ${pop.name || '(kein Name)'}`
         }
+        const value =
+          p.value && p.value.toLocaleString
+            ? p.value.toLocaleString('de-ch')
+            : null
         return (
           <Row key={p.dataKey}>
             <Label>{`${label}:`}</Label>
-            <Value>{p.value}</Value>
+            <Value>{value}</Value>
           </Row>
         )
       })}

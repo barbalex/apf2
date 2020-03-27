@@ -28,12 +28,19 @@ const CustomTooltip = ({ payload, label, active, color }) => {
   return (
     <Popup>
       <Title>{label}</Title>
-      {payload.reverse().map((o, i) => (
-        <Row key={o.dataKey} color={color[o.dataKey]}>
-          <Label>{`${o.dataKey}:`}</Label>
-          <Value>{o.value}</Value>
-        </Row>
-      ))}
+      {payload.reverse().map((o, i) => {
+        const value =
+          o.value && o.value.toLocaleString
+            ? o.value.toLocaleString('de-ch')
+            : null
+
+        return (
+          <Row key={o.dataKey} color={color[o.dataKey]}>
+            <Label>{`${o.dataKey}:`}</Label>
+            <Value>{value}</Value>
+          </Row>
+        )
+      })}
     </Popup>
   )
 }
