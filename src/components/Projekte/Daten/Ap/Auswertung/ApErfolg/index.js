@@ -29,7 +29,9 @@ const SpinnerText = styled.div`
   padding: 10px;
 `
 const NoDataContainer = styled.div`
-  margin: 10px;
+  margin: 20px;
+  margin-bottom: 40px;
+  text-align: center;
 `
 const Title = styled.h4`
   width: 100%;
@@ -127,9 +129,10 @@ const ApAuswertungApErfolg = ({ id }) => {
           </ResponsiveContainer>
         </>
       ) : (
-        <NoDataContainer>
-          Sorry, es gibt keine Daten zum AP-Erfolg
-        </NoDataContainer>
+        <>
+          <Title>Erfolg des Aktionsplans</Title>
+          <NoDataContainer>Keine Daten gefunden</NoDataContainer>
+        </>
       )}
     </>
   )

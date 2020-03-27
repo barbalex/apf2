@@ -1,6 +1,7 @@
 import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import get from 'lodash/get'
+import sortBy from 'lodash/sortBy'
 import {
   AreaChart,
   Area,
@@ -8,14 +9,13 @@ import {
   YAxis,
   ResponsiveContainer,
   Tooltip,
-  Legend,
   CartesianGrid,
 } from 'recharts'
 import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
 import styled from 'styled-components'
 
 import queryPopMenge from './queryPopMenge'
-import CustomTooltip from '../CustomTooltip'
+import CustomTooltip from './CustomTooltip'
 import exists from '../../../../../../modules/exists'
 
 const SpinnerContainer = styled.div`
@@ -29,7 +29,9 @@ const SpinnerText = styled.div`
   padding: 10px;
 `
 const NoDataContainer = styled.div`
-  margin: 10px;
+  margin: 20px;
+  margin-bottom: 40px;
+  text-align: center;
 `
 const Title = styled.h4`
   width: 100%;
@@ -37,15 +39,7 @@ const Title = styled.h4`
   margin-bottom: 0;
   margin-top: 15px;
 `
-
-const color = {
-  'ursprünglich, aktuell': '#2e7d32',
-  'ursprünglich, erloschen': 'rgba(46,125,50,0.5)',
-  'angesiedelt, aktuell': 'rgba(245,141,66,1)',
-  Ansaatversuch: 'brown',
-  'angesiedelt, erloschen/nicht etabliert': 'rgba(245,141,66,0.5)',
-  'potentieller Wuchs-/Ansiedlungsort': 'grey',
-}
+const color = 'rgba(46,125,50,0.3)'
 
 const ApAuswertungPopMenge = ({ id }) => {
   const {
@@ -62,29 +56,13 @@ const ApAuswertungPopMenge = ({ id }) => {
     jahr: e.jahr,
     ...JSON.parse(e.values),
   }))
-  console.log('ApAuswertungPopMenge:', {
-    popMengeData,
-    popsData,
-  })
-  const unfilteredPopIdsWithData = popMengeData.flatMap(d =>
+  const nonUniquePopIdsWithData = popMengeData.flatMap(d =>
     Object.entries(d)
       .filter(([key, value]) => key !== 'jahr')
       .filter(([key, value]) => exists(value))
       .map(([key, value]) => key),
   )
-  const popIdsWithData = Array.from(new Set(unfilteredPopIdsWithData))
-  console.log('ApAuswertungPopMenge:', {
-    popIdsWithData,
-  })
-  const popMengeDataWithAllPops = popMengeData.map(o => {
-    return {
-      ...Object.fromEntries(popIdsWithData.map(v => [v, null])),
-      ...o,
-    }
-  })
-  console.log('ApAuswertungPopMenge:', {
-    popMengeDataWithAllPops,
-  })
+  const popIdsWithData = [...new Set(nonUniquePopIdsWithData)]
 
   const zielEinheit = get(
     dataPopMenge,
@@ -108,16 +86,16 @@ const ApAuswertungPopMenge = ({ id }) => {
             backColor="#4a148c1a"
             loading={true}
           />
-          <SpinnerText>lade Populations-Zählungen...</SpinnerText>
+          <SpinnerText>lade Mengen nach Populationen...</SpinnerText>
         </SpinnerContainer>
       ) : popMengeData.length ? (
         <>
-          <Title>{`Zählungen von "${zielEinheit}" in Populationen`}</Title>
+          <Title>{`"${zielEinheit}" nach Populationen`}</Title>
           <ResponsiveContainer width="99%" height={400}>
             <AreaChart
               width={600}
               height={300}
-              data={popMengeDataWithAllPops}
+              data={popMengeData}
               margin={{ top: 10, right: 10, left: 27 }}
             >
               <XAxis dataKey="jahr" />
@@ -130,34 +108,27 @@ const ApAuswertungPopMenge = ({ id }) => {
                   offset: -15,
                 }}
               />
-              {popIdsWithData.map(id => {
-                return (
-                  <Area
-                    key={id}
-                    type="monotone"
-                    dataKey={id}
-                    stackId="1"
-                    stroke={color['ursprünglich, aktuell']}
-                    fill={color['ursprünglich, aktuell']}
-                    legendType="square"
-                  />
-                )
-              })}
-              <Tooltip content={<CustomTooltip color={color} />} />
+              {popIdsWithData.map(id => (
+                <Area
+                  key={id}
+                  type="linear"
+                  dataKey={id}
+                  stackId="1"
+                  stroke={color}
+                  strokeWidth={2}
+                  fill={color}
+                />
+              ))}
+              <Tooltip content={<CustomTooltip popsData={popsData} />} />
               <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-              <Legend
-                layout="horizontal"
-                align="center"
-                iconSize={12}
-                wrapperStyle={{ bottom: 0, fontSize: 12 }}
-              />
             </AreaChart>
           </ResponsiveContainer>
         </>
       ) : (
-        <NoDataContainer>
-          Sorry, es gibt keine Daten zu den Populations-Zählungen
-        </NoDataContainer>
+        <>
+          <Title>{`"${zielEinheit}" nach Populationen`}</Title>
+          <NoDataContainer>Keine Daten gefunden</NoDataContainer>
+        </>
       )}
     </>
   )

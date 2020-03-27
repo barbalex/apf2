@@ -28,7 +28,9 @@ const SpinnerText = styled.div`
   padding: 10px;
 `
 const NoDataContainer = styled.div`
-  margin: 10px;
+  margin: 20px;
+  margin-bottom: 40px;
+  text-align: center;
 `
 const Title = styled.h4`
   width: 100%;
@@ -116,11 +118,6 @@ const ApAuswertungPopStatus = ({ id }) => {
                 stroke={color['ursprünglich, aktuell']}
                 fill={color['ursprünglich, aktuell']}
                 legendType="square"
-                /*dot={{
-                  strokeWidth: 2,
-                  r: 5,
-                  color: color['ursprünglich, aktuell'],
-                }}*/
               />
               <Area
                 type="monotone"
@@ -129,11 +126,6 @@ const ApAuswertungPopStatus = ({ id }) => {
                 stroke={color['ursprünglich, erloschen']}
                 fill={color['ursprünglich, erloschen']}
                 legendType="square"
-                /*dot={{
-                  strokeWidth: 2,
-                  r: 5,
-                  color: color['ursprünglich, erloschen'],
-                }}*/
               />
               <Area
                 type="monotone"
@@ -142,11 +134,6 @@ const ApAuswertungPopStatus = ({ id }) => {
                 stroke={color['angesiedelt, aktuell']}
                 fill={color['angesiedelt, aktuell']}
                 legendType="square"
-                /*dot={{
-                  strokeWidth: 2,
-                  r: 5,
-                  color: color['angesiedelt, aktuell'],
-                }}*/
               />
               <Area
                 type="monotone"
@@ -155,11 +142,6 @@ const ApAuswertungPopStatus = ({ id }) => {
                 stroke={color['Ansaatversuch']}
                 fill={color['Ansaatversuch']}
                 legendType="square"
-                /*dot={{
-                  strokeWidth: 2,
-                  r: 5,
-                  color: color['Ansaatversuch'],
-                }}*/
               />
               <Area
                 type="monotone"
@@ -168,11 +150,6 @@ const ApAuswertungPopStatus = ({ id }) => {
                 stroke={color['angesiedelt, erloschen/nicht etabliert']}
                 fill={color['angesiedelt, erloschen/nicht etabliert']}
                 legendType="square"
-                /*dot={{
-                  strokeWidth: 2,
-                  r: 5,
-                  color: color['angesiedelt, erloschen/nicht etabliert'],
-                }}*/
               />
               <Area
                 type="monotone"
@@ -181,11 +158,6 @@ const ApAuswertungPopStatus = ({ id }) => {
                 stroke={color['potentieller Wuchs-/Ansiedlungsort']}
                 fill={color['potentieller Wuchs-/Ansiedlungsort']}
                 legendType="square"
-                /*dot={{
-                  strokeWidth: 2,
-                  r: 5,
-                  color: color['potentieller Wuchs-/Ansiedlungsort'],
-                }}*/
               />
               <Tooltip content={<CustomTooltip color={color} />} />
               <CartesianGrid strokeDasharray="3 3" horizontal={false} />
@@ -199,9 +171,10 @@ const ApAuswertungPopStatus = ({ id }) => {
           </ResponsiveContainer>
         </>
       ) : (
-        <NoDataContainer>
-          Sorry, es gibt keine Daten zu den Populations-Stati
-        </NoDataContainer>
+        <>
+          <Title>Stati der Populationen</Title>
+          <NoDataContainer>Keine Daten gefunden</NoDataContainer>
+        </>
       )}
     </>
   )
