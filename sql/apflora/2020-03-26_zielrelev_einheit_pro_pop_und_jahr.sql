@@ -6,7 +6,6 @@ massnjahre as (
   select distinct on (tpop0.id, massn0.jahr)
     tpop0.id as tpop_id,
     massn0.jahr,
-    massn0.id,
     massn0.zieleinheit_anzahl as anzahl
   from 
     apflora.tpopmassn massn0
@@ -19,14 +18,11 @@ massnjahre as (
             inner join apflora.tpopkontrzaehl_einheit_werte ze0
             on ze0.id = ekze0.zaehleinheit_id
           on ekze0.ap_id = ap0.id and ekze0.zielrelevant = true
-        on ap0.id = pop0.ap_id
-      on pop0.id = tpop0.pop_id
-    on tpop0.id = massn0.tpop_id
+        on ap0.id = pop0.ap_id and ap0.year = pop0.year
+      on pop0.id = tpop0.pop_id and pop0.year = tpop0.year
+    on tpop0.id = massn0.tpop_id and tpop0.year = massn0.jahr
   where
     massn0.jahr is not null
-    and ap0.year = massn0.jahr
-    and pop0.year = massn0.jahr
-    and tpop0.year = massn0.jahr
     and tpop0.status in (200, 201)
     and tpop0.apber_relevant = true
     and massn0.zieleinheit_einheit = ze0.code
@@ -40,7 +36,6 @@ zaehljahre as (
   select distinct on (tpop2.id, kontr2.jahr)
     tpop2.id as tpop_id,
     kontr2.jahr,
-    kontr2.id,
     zaehl2.anzahl
   from
     apflora.tpopkontrzaehl zaehl2
@@ -52,15 +47,12 @@ zaehljahre as (
               inner join apflora.tpopkontrzaehl_einheit_werte ze2
               on ze2.id = ekze2.zaehleinheit_id
             on ekze2.ap_id = ap2.id and ekze2.zielrelevant = true
-          on ap2.id = pop2.ap_id
-        on pop2.id = tpop2.pop_id 
-      on tpop2.id = kontr2.tpop_id 
+          on ap2.id = pop2.ap_id and ap2.year = pop2.year
+        on pop2.id = tpop2.pop_id and pop2.year = tpop2.year
+      on tpop2.id = kontr2.tpop_id and tpop2.year = kontr2.jahr
     on zaehl2.tpopkontr_id = kontr2.id and zaehl2.einheit = ze2.code
   where
     kontr2.jahr is not null
-    and ap2.year = kontr2.jahr
-    and pop2.year = kontr2.jahr
-    and tpop2.year = kontr2.jahr
     and tpop2.status in (100, 200, 201)
     and tpop2.apber_relevant = true
     and zaehl2.anzahl is not null
@@ -75,20 +67,6 @@ tpop_letzte_menge as (
   select
     tpop3.id as tpop_id,
     tpop3.year as jahr,
-    --case
-      --when zj.jahr is not null and mj.jahr is not null and zj.jahr >= mj.jahr then 'zaehlung'
-      --when zj.jahr is not null and mj.jahr is not null and zj.jahr < mj.jahr then 'massnahme'
-      --when zj.jahr is not null then 'zaehlung'
-      --when mj.jahr is not null then 'massnahme'
-      --else null
-    --end as typ,
-    --case
-      --when zj.jahr is not null and mj.jahr is not null and zj.jahr >= mj.jahr then zj.id
-      --when zj.jahr is not null and mj.jahr is not null and zj.jahr < mj.jahr then mj.id
-      --when zj.jahr is not null then zj.id
-      --when mj.jahr is not null then mj.id
-      --else null
-    --end as id,
     case
       when zj.jahr is not null and mj.jahr is not null and zj.jahr >= mj.jahr then zj.anzahl
       when zj.jahr is not null and mj.jahr is not null and zj.jahr < mj.jahr then mj.anzahl
@@ -117,7 +95,7 @@ pop_data as (
     inner join apflora.tpop_history tpop4
       inner join apflora.pop_history pop4
         inner join apflora.ap_history ap4
-        on ap4.id = pop4.ap_id
+        on ap4.id = pop4.ap_id and ap4.year = pop4.year
       on pop4.id = tpop4.pop_id and pop4.year = tpop4.year
     on tpop4.id = tplm.tpop_id and tpop4.year = tplm.jahr
   where
