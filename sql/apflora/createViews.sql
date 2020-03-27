@@ -5475,6 +5475,7 @@ group by ap_id, year
 order by ap_id, year;
 
 -- refresh materialized view apflora.v_ap_ausw_pop_menge;
+-- ACHTUNG: Original dieses Views in 2020-03-26_zielrelev_einheit_pro_pop_und_jahr.sql
 DROP materialized VIEW IF EXISTS apflora.v_ap_ausw_pop_menge CASCADE;
 CREATE materialized VIEW apflora.v_ap_ausw_pop_menge AS
 with
@@ -5576,6 +5577,7 @@ pop_data as (
     on tpop4.id = tplm.tpop_id and tpop4.year = tplm.jahr
   where
     pop4.status in (100, 200, 201)
+	  and tplm.anzahl is not null
   group by
     ap4.id,
     pop4.year,

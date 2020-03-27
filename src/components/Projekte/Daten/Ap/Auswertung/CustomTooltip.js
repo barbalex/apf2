@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import exists from '../../../../../modules/exists'
+
 const Popup = styled.div`
   background-color: white;
   border: 1px solid #2e7d32;
@@ -30,7 +32,7 @@ const CustomTooltip = ({ payload, label, active, color }) => {
       <Title>{label}</Title>
       {payload.reverse().map((o, i) => {
         const value =
-          o.value && o.value.toLocaleString
+          exists(o.value) && o.value.toLocaleString
             ? o.value.toLocaleString('de-ch')
             : null
 

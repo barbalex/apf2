@@ -2,6 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import sortBy from 'lodash/sortBy'
 
+import exists from '../../../../../../modules/exists'
+
 const Popup = styled.div`
   background-color: white;
   border: 1px solid #2e7d32;
@@ -41,7 +43,7 @@ const CustomTooltip = ({ payload, label, active, popsData }) => {
           label = `${pop.nr || '(keine Nr)'}: ${pop.name || '(kein Name)'}`
         }
         const value =
-          p.value && p.value.toLocaleString
+          exists(p.value) && p.value.toLocaleString
             ? p.value.toLocaleString('de-ch')
             : null
         return (

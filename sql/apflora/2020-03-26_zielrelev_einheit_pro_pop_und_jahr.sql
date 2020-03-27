@@ -100,6 +100,7 @@ pop_data as (
     on tpop4.id = tplm.tpop_id and tpop4.year = tplm.jahr
   where
     pop4.status in (100, 200, 201)
+	  and tplm.anzahl is not null
   group by
     ap4.id,
     pop4.year,
