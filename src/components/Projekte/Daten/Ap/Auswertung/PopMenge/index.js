@@ -1,5 +1,6 @@
-import React from 'react'
-import { useQuery } from '@apollo/react-hooks'
+import React, { useCallback, useState } from 'react'
+import { useQuery, useMutation } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import {
@@ -12,7 +13,9 @@ import {
   CartesianGrid,
 } from 'recharts'
 import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
+import { FaRedo } from 'react-icons/fa'
+import IconButton from '@material-ui/core/IconButton'
 
 import queryPopMenge from './queryPopMenge'
 import CustomTooltip from './CustomTooltip'
@@ -33,12 +36,30 @@ const NoDataContainer = styled.div`
   margin-bottom: 40px;
   text-align: center;
 `
-const Title = styled.h4`
+const TitleRow = styled.div`
   width: 100%;
-  text-align: center;
-  margin-bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-top: 15px;
 `
+const Title = styled.h4`
+  margin-bottom: 0;
+  padding: 0 10px;
+`
+const spinning = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+`
+const RefreshButtonSpinning = styled(IconButton)`
+  animation: ${spinning} 3s linear infinite;
+`
+const RefreshButton = styled(IconButton)``
+
 const color = 'rgba(46,125,50,0.3)'
 
 const ApAuswertungPopMenge = ({ id }) => {
@@ -46,6 +67,7 @@ const ApAuswertungPopMenge = ({ id }) => {
     data: dataPopMenge,
     error: errorPopMenge,
     loading: loadingPopMenge,
+    refetch: refetchPopMenge,
   } = useQuery(queryPopMenge, {
     variables: { id },
   })
@@ -74,6 +96,22 @@ const ApAuswertungPopMenge = ({ id }) => {
     'allEkzaehleinheits.nodes[0].tpopkontrzaehlEinheitWerteByZaehleinheitId.text',
   )
 
+  const [refreshing, setRefreshing] = useState(false)
+  const [refreshData] = useMutation(gql`
+    mutation vApAuswPopMengeRefresh {
+      vApAuswPopMengeRefresh(input: { clientMutationId: "bla" }) {
+        boolean
+      }
+    }
+  `)
+  const onClickRefresh = useCallback(async () => {
+    if (refreshing) return
+    setRefreshing(true)
+    await refreshData()
+    await refetchPopMenge()
+    setRefreshing(false)
+  }, [refetchPopMenge, refreshData, refreshing])
+
   if (errorPopMenge) {
     return `Fehler beim Laden der Daten: ${errorPopMenge.message}`
   }
@@ -95,7 +133,30 @@ const ApAuswertungPopMenge = ({ id }) => {
         </SpinnerContainer>
       ) : popMengeData.length ? (
         <>
-          <Title>{`"${zielEinheit}" nach Populationen`}</Title>
+          <TitleRow>
+            <div>
+              <Title>{`"${zielEinheit}" nach Populationen`}</Title>
+            </div>
+            {refreshing ? (
+              <RefreshButtonSpinning
+                title="Daten werden neu berechnet"
+                aria-label="Daten werden neu berechnet"
+                onClick={onClickRefresh}
+                size="small"
+              >
+                <FaRedo />
+              </RefreshButtonSpinning>
+            ) : (
+              <RefreshButton
+                title="Daten neu rechnen"
+                aria-label="Daten neu rechnen"
+                onClick={onClickRefresh}
+                size="small"
+              >
+                <FaRedo />
+              </RefreshButton>
+            )}
+          </TitleRow>
           <ResponsiveContainer width="99%" height={400}>
             <AreaChart
               width={600}
@@ -131,7 +192,9 @@ const ApAuswertungPopMenge = ({ id }) => {
         </>
       ) : (
         <>
-          <Title>{`"${zielEinheit}" nach Populationen`}</Title>
+          <TitleRow>
+            <Title>{`"${zielEinheit}" nach Populationen`}</Title>
+          </TitleRow>
           <NoDataContainer>Keine Daten gefunden</NoDataContainer>
         </>
       )}
