@@ -156,6 +156,17 @@ const Apberuebersicht = ({ treeName }) => {
         },
       })
     }
+    // 3. update materialized view
+    await client.mutate({
+      mutation: gql`
+        mutation vApAuswPopMengeRefreshFromApberuebersicht {
+          vApAuswPopMengeRefresh(input: { clientMutationId: "bla" }) {
+            boolean
+          }
+        }
+      `,
+    })
+    // notify user
     const year = new Date().getFullYear() - 1
     enqueNotification({
       message: `AP, Pop und TPop wurden für das Jahr ${year} historisiert`,

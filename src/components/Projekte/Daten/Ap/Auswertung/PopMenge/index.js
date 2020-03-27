@@ -98,7 +98,7 @@ const ApAuswertungPopMenge = ({ id }) => {
 
   const [refreshing, setRefreshing] = useState(false)
   const [refreshData] = useMutation(gql`
-    mutation vApAuswPopMengeRefresh {
+    mutation vApAuswPopMengeRefreshFromAp {
       vApAuswPopMengeRefresh(input: { clientMutationId: "bla" }) {
         boolean
       }
