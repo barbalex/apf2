@@ -3,7 +3,7 @@ typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/Falsch-bestimmte-Beobachtungen"
 date: "2019-01-30"
 title: "Falsch bestimmte Beobachtungen"
-sort: 9
+sort: 10
 ---
 
 Bei AP-Arten ist vorgesehen:

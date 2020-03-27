@@ -3,7 +3,7 @@ typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/langsam"
 date: "2019-04-18"
 title: "Ist apflora langsam?"
-sort: 7
+sort: 8
 ---
 
 Normalerweise sollte apflora nicht langsam wirken.

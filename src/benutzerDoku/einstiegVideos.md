@@ -3,7 +3,7 @@ typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/Videos-fuer-den-Einstieg"
 date: "2017-09-15"
 title: "Videos für den Einstieg"
-sort: 5
+sort: 6
 ---
 
 Die Videos wurden im September 2017 aufgenommen, als die neue Anwendung eingeführt wurde. Die Anwendung wurde seither weiter entwickelt, womit sich das eine oder andere Detail geändert hat. Aber die Videos sind immer noch eine gute Einführung.<br/><br/>

@@ -3,7 +3,7 @@ typ: 'benutzerDoku'
 path: '/Dokumentation/Benutzer/AnleitungEingabe'
 date: '2019-06-11'
 title: 'Anleitung zur Eingabe (inhaltlich), topos'
-sort: 6
+sort: 7
 pdf: true
 ---
 
