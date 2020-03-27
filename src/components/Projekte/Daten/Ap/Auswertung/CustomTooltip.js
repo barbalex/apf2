@@ -26,11 +26,13 @@ const Label = styled.div`
 `
 const Value = styled.div``
 
-const CustomTooltip = ({ payload, label, active, color }) => {
+const CustomTooltip = ({ payload, label, active, color, reverse }) => {
+  const data = reverse ? payload : payload.reverse()
+
   return (
     <Popup>
       <Title>{label}</Title>
-      {payload.reverse().map((o, i) => {
+      {data.map((o, i) => {
         const value =
           exists(o.value) && o.value.toLocaleString
             ? o.value.toLocaleString('de-ch')

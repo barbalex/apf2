@@ -134,8 +134,6 @@ const ApAuswertungPopMenge = ({ id }) => {
   // need to disable animation on lines or labels will not show on first render
   // https://github.com/recharts/recharts/issues/1821
 
-  console.log('popMengeData:', popMengeData)
-
   return (
     <>
       {loadingPopMenge ? (
