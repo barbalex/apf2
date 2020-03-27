@@ -63,6 +63,11 @@ const ApAuswertungPopMenge = ({ id }) => {
       .map(([key, value]) => key),
   )
   const popIdsWithData = [...new Set(nonUniquePopIdsWithData)]
+  const popIdsWithDataSorted = sortBy(popIdsWithData, id => {
+    const pop = popsData.find(d => d.id === id)
+    if (pop) return pop.nr
+    return id
+  })
 
   const zielEinheit = get(
     dataPopMenge,
@@ -108,7 +113,7 @@ const ApAuswertungPopMenge = ({ id }) => {
                   offset: -15,
                 }}
               />
-              {popIdsWithData.map(id => (
+              {popIdsWithDataSorted.reverse().map(id => (
                 <Area
                   key={id}
                   type="linear"
