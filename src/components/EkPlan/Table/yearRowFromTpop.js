@@ -27,14 +27,14 @@ export default ({ tpop, years, showCount, index }) => {
       ...fields.nr,
       value: get(tpop, 'nr') || '-',
     },
-    lv95X: {
+    /*lv95X: {
       ...fields.lv95X,
       value: get(tpop, 'lv95X') || '-',
     },
     lv95Y: {
       ...fields.lv95Y,
       value: get(tpop, 'lv95Y') || '-',
-    },
+    },*/
   }
   years.forEach(
     year =>
