@@ -11,6 +11,14 @@ import fields from '../../components/EkPlan/Table/fields'
 export const defaultFields = [
   'ap',
   'popNr',
+  'nr',
+  'ekfrequenz',
+  'ekfrequenzStartjahr',
+  'ekfrequenzAbweichend',
+]
+export const allFields = [
+  'ap',
+  'popNr',
   'popName',
   'popStatus',
   'nr',

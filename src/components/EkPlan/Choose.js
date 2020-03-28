@@ -12,7 +12,7 @@ import { withStyles } from '@material-ui/core/styles'
 
 import Fields from './Fields'
 import storeContext from '../../storeContext'
-import { defaultFields } from '../../store/EkPlan'
+import { allFields } from '../../store/EkPlan'
 
 const ChooseContainer = styled.div`
   position: relative;
@@ -95,7 +95,7 @@ const EkPlanChoose = () => {
   const onClickChooseFields = useCallback(() => setFieldsDialogOpen(true), [])
   const closeFieldsDialog = useCallback(() => setFieldsDialogOpen(false), [])
   const felderButtonTitle = useMemo(
-    () => `Felder wählen (${fields.length}/${defaultFields.length})`,
+    () => `Felder wählen (${fields.length}/${allFields.length})`,
     [fields.length],
   )
 
