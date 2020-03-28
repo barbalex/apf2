@@ -129,6 +129,30 @@ const Fields = () => {
           labelPlacement="end"
         />
         <FormControlLabel
+          value={fields.includes('lv95X').toString()}
+          control={
+            <Radio
+              color="primary"
+              checked={fields.includes('lv95X')}
+              onClick={() => toggleField('lv95X')}
+            />
+          }
+          label="X-Koordinate"
+          labelPlacement="end"
+        />
+        <FormControlLabel
+          value={fields.includes('lv95Y').toString()}
+          control={
+            <Radio
+              color="primary"
+              checked={fields.includes('lv95Y')}
+              onClick={() => toggleField('lv95Y')}
+            />
+          }
+          label="Y-Koordinate"
+          labelPlacement="end"
+        />
+        <FormControlLabel
           value={fields.includes('link').toString()}
           control={
             <Radio

@@ -9,6 +9,8 @@ export default gql`
         nr
         gemeinde
         flurname
+        lv95X
+        lv95Y
         ekfrequenz
         ekfrequenzStartjahr
         ekfrequenzAbweichend

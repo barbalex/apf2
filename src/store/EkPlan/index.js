@@ -26,6 +26,8 @@ export const allFields = [
   'flurname',
   'status',
   'bekanntSeit',
+  'lv95X',
+  'lv95Y',
   'link',
   'ekAbrechnungstyp',
   'ekfrequenz',
