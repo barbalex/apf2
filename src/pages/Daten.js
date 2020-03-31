@@ -53,7 +53,7 @@ const DatenPage = ({ location }) => {
     [isEkPlan, view],
   )
 
-  const unterhalt = true
+  const unterhalt = false
   if (unterhalt) {
     return (
       <Layout>
