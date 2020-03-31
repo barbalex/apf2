@@ -5,8 +5,14 @@
   #debug
 }
 
-api-test.apflora.ch
+#api-test.apflora.ch {
+#  reverse_proxy * apf_graphql:5000 {
+#    header_down Access-Control-Allow-Origin *
+#  }
+#}
 
-reverse_proxy * apf_graphql:5000 {
-  header_down Access-Control-Allow-Origin *
+api2.apflora.ch {
+  reverse_proxy * apf_graphql:5000 {
+    header_down Access-Control-Allow-Origin *
+  }
 }
