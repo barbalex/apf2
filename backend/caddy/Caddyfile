@@ -1,0 +1,11 @@
+# see: https://caddyserver.com/docs/caddyfile/concepts
+{
+  email alex.barbalex@gmail.com
+  acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+}
+
+api-test.apflora.ch
+
+reverse_proxy * apf_graphql:5000 {
+  header_down Access-Control-Allow-Origin *
+}

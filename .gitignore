@@ -83,3 +83,5 @@ schema.json
 .now
 
 reduxcache*
+
+*.backup

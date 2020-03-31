@@ -1,0 +1,84 @@
+version: '3.7'
+services:
+  db:
+    # specify container name to make it easier to run commands.
+    # for example, you could run docker exec -i postgres psql -U postgres postgres < schema.sql to run an SQL file against the Postgres database
+    container_name: apf_db
+    restart: always
+    image: db
+    build:
+      context: ./db
+    env_file:
+      - ./.env
+    networks:
+      - network
+    expose:
+      - '5432'
+    ports:
+      # make the Postgres database accessible from outside the Docker container on port 5432
+      - '5432:5432'
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - sik_data:/sik_data
+  graphql:
+    container_name: apf_graphql
+    restart: unless-stopped
+    build:
+      context: ./graphql
+    networks:
+      - network
+    expose:
+      - '5000'
+    ports:
+      - '5000:5000'
+    depends_on:
+      - db
+    env_file:
+      - ./.env
+    command:
+      [
+        '--connection',
+        '${DATABASE_URL}',
+        '--schema',
+        'apflora',
+        '--append-plugins',
+        'postgraphile-plugin-connection-filter,@graphile-contrib/pg-order-by-related,@graphile/postgis',
+        '--jwt-token-identifier',
+        'auth.jwt_token',
+        '--default-role',
+        'postgres',
+        '--jwt-secret',
+        '${JWT_SECRET}',
+        '--cors',
+        '--disable-query-log',
+        '--enable-query-batching',
+        '--retry-on-init-fail',
+      ]
+  caddy:
+    build:
+      context: ./caddy
+    container_name: apf_caddy
+    networks:
+      - network
+    depends_on:
+      - graphql
+    restart: always
+    # original image downgrades user but that seems not to work
+    # see: https://caddy.community/t/basic-docker-compose-setup-failing/6892/7?u=alexander_gabriel
+    user: root
+    ports:
+      - '80:80'
+      - '443:443'
+    env_file:
+      - ./.env
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_certs:/root/.local/share/caddy
+      - caddy_config:/root/.config/caddy
+volumes:
+  db_data:
+  sik_data:
+  caddy_certs:
+  caddy_config:
+networks:
+  network:
