@@ -33,48 +33,50 @@ export default ({ idb, store }) => {
   })
 
   const errorLink = onError(({ response, graphQLErrors, networkError }) => {
-    const graphQLErrorsToShow = graphQLErrors.filter(({ message, path }) => {
-      if (
-        path &&
-        path.includes('historize') &&
-        message &&
-        message.includes('Unique-Constraint')
-      ) {
-        return false
-      }
-      return true
-    })
-    const uniqueQraphQLErrors = uniqBy(graphQLErrorsToShow, 'message')
-    if (uniqueQraphQLErrors) {
-      /**
-       * TODO
-       * Test this at night
-       * make sure message is what is wanted by logging it out
-       */
-      if (existsPermissionsError(uniqueQraphQLErrors)) {
-        // DO NOT notify
-        // The User component will open and let user log in
-        return
-        // DO NOT logout here:
-        // logout reloads the window
-        // this must be controlled by the User component inside Daten
-        // otherwise UI keeps reloading forever!
-      }
-      uniqueQraphQLErrors.map(({ message, locations, path }) => {
-        console.log(
-          `apollo client GraphQL error: Message: ${message}, Location: ${JSON.stringify(
-            locations,
-          )}, Path: ${path}`,
-        )
-        return enqueNotification({
-          message: `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
-            locations,
-          )}, Path: ${path}`,
-          options: {
-            variant: 'error',
-          },
-        })
+    if (graphQLErrors) {
+      const graphQLErrorsToShow = graphQLErrors.filter(({ message, path }) => {
+        if (
+          path &&
+          path.includes('historize') &&
+          message &&
+          message.includes('Unique-Constraint')
+        ) {
+          return false
+        }
+        return true
       })
+      const uniqueQraphQLErrors = uniqBy(graphQLErrorsToShow, 'message')
+      if (uniqueQraphQLErrors) {
+        /**
+         * TODO
+         * Test this at night
+         * make sure message is what is wanted by logging it out
+         */
+        if (existsPermissionsError(uniqueQraphQLErrors)) {
+          // DO NOT notify
+          // The User component will open and let user log in
+          return
+          // DO NOT logout here:
+          // logout reloads the window
+          // this must be controlled by the User component inside Daten
+          // otherwise UI keeps reloading forever!
+        }
+        uniqueQraphQLErrors.map(({ message, locations, path }) => {
+          console.log(
+            `apollo client GraphQL error: Message: ${message}, Location: ${JSON.stringify(
+              locations,
+            )}, Path: ${path}`,
+          )
+          return enqueNotification({
+            message: `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
+              locations,
+            )}, Path: ${path}`,
+            options: {
+              variant: 'error',
+            },
+          })
+        })
+      }
     }
     if (networkError) {
       console.log(`apollo client Network error:`, networkError)
