@@ -11,6 +11,7 @@ import Messages from '../components/Messages'
 import Ekf from '../components/Ekf'
 import Deletions from '../components/Deletions'
 import EkPlan from '../components/EkPlan'
+import Unterhalt from '../components/Unterhalt'
 
 const Container = styled.div`
   background-color: #fffde7;
@@ -51,6 +52,15 @@ const DatenPage = ({ location }) => {
     () => (isEkPlan ? 'ekplan' : view === 'ekf' ? 'ekf' : 'projekte'),
     [isEkPlan, view],
   )
+
+  const unterhalt = true
+  if (unterhalt) {
+    return (
+      <Layout>
+        <Unterhalt />
+      </Layout>
+    )
+  }
 
   return (
     <ErrorBoundary>
