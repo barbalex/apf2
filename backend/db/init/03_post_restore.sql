@@ -7,8 +7,8 @@ revoke connect on database apflora from public;
 revoke all on all tables in schema apflora from public;
 
 -- apflora_reader can see all but change nothing
-drop role if exists apflora_reader;
-create role apflora_reader;
+--drop role if exists apflora_reader;
+--create role apflora_reader;
 grant connect on database apflora to apflora_reader;
 grant select on all tables in schema apflora to apflora_reader;
 grant usage on schema public, auth, apflora to apflora_reader;
@@ -23,8 +23,6 @@ grant apflora_reader to authenticator;
 -- apflora_artverantwortlich can do anything
 -- as far as row-level-security allows
 -- (allows only permitted projects)
-drop role if exists apflora_artverantwortlich;
-create role apflora_artverantwortlich in group apflora_reader;
 grant connect on database apflora to apflora_artverantwortlich;
 grant all on schema apflora to apflora_artverantwortlich;
 grant usage on schema public, auth to apflora_artverantwortlich;
@@ -44,8 +42,6 @@ grant apflora_artverantwortlich to authenticator;
 -- (allows only permitted projects)
 -- plus: can edit users
 -- plus: can edit typ_werte
-drop role if exists apflora_manager;
-create role apflora_manager in group apflora_reader;
 grant connect on database apflora to apflora_manager;
 grant all on schema apflora to apflora_manager;
 grant usage on schema public, auth to apflora_manager;
@@ -62,8 +58,6 @@ grant apflora_manager to authenticator;
 
 -- apflora_freiwillig can work on kontrollen
 -- need to enforce freiwilligen-kontrollen in ui
-drop role if exists apflora_freiwillig;
-create role apflora_freiwillig;
 grant apflora_reader to apflora_freiwillig;
 grant all on apflora.tpopkontr, apflora.tpopkontr_file, apflora.tpopkontrzaehl to apflora_freiwillig;
 
