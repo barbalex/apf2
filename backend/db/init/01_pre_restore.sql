@@ -1,12 +1,6 @@
 -- TODO: this is copied from ae. Apply it to apflora!
-CREATE DATABASE apflora WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'C.UTF-8' LC_CTYPE = 'C.UTF-8';
+CREATE DATABASE apflora WITH TEMPLATE = template0 ENCODING = 'UTF8';-- LC_COLLATE = 'C.UTF-8' LC_CTYPE = 'C.UTF-8';
 \c apflora
-create extension if not exists postgis;
-create extension if not exists pgcrypto;
-create extension if not exists "uuid-ossp";
-create extension if not exists tablefunc;
-create extension intarray;
-
 
 create role apflora_reader;
 create role apflora_manager in group apflora_reader;
