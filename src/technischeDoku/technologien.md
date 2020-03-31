@@ -1,7 +1,7 @@
 ---
 typ: 'technDoku'
 path: "/Dokumentation/Technisch/Technologien"
-date: "2019-01-30"
+date: "2020-03-31"
 title: "Technologien"
 sort: 2
 ---
@@ -9,11 +9,12 @@ sort: 2
 Die Anwendung ist zweigeteilt:
 
 1. Das **Backend** bietet die API (Daten-Schnittstelle) auf [api.apflora.ch/graphql](//api.apflora.ch/graphql) an.<br/>
-  Es läuft auf einem virtuellen Server mit der jeweils aktuellen Ubuntu LTS Version.
+  Es läuft auf einem virtuellen Server.
 2. Die **App** bzw. das Frontend ist auf [apflora.ch](//apflora.ch) erreichbar. Sie läuft serverless auf [Zeit/now](https://zeit.co/now)
 
 Die wichtigsten verwendeten Technologien sind:
 
+- [docker](//www.docker.com) für das Backend
 - [Gatsby](//www.gatsbyjs.org): Modernes Werkzeug, um dynamische Apps auf der Grundlage von statischen Dateien zu erzeugen (die wiederum sehr effizient gehostet werden können)
 - [GraphQL](https://github.com/facebook/graphql) in Form von [PostGraphile](https://github.com/graphile/postgraphile)
   - API-Server mit einer Zeile bauen und konfigurieren. Das sind _tausende_ weniger als zuvor!<br/>
