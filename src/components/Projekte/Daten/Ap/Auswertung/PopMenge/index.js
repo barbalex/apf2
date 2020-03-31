@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useContext } from 'react'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
 import get from 'lodash/get'
@@ -21,6 +21,7 @@ import IconButton from '@material-ui/core/IconButton'
 import queryPopMenge from './queryPopMenge'
 import CustomTooltip from './CustomTooltip'
 import exists from '../../../../../../modules/exists'
+import storeContext from '../../../../../../storeContext'
 
 const SpinnerContainer = styled.div`
   height: 400px;
@@ -71,6 +72,9 @@ const formatNumber = tickItem => {
 }
 
 const ApAuswertungPopMenge = ({ id }) => {
+  const store = useContext(storeContext)
+  const { enqueNotification } = store
+
   const {
     data: dataPopMenge,
     error: errorPopMenge,
@@ -115,10 +119,30 @@ const ApAuswertungPopMenge = ({ id }) => {
   const onClickRefresh = useCallback(async () => {
     if (refreshing) return
     setRefreshing(true)
-    await refreshData()
-    await refetchPopMenge()
+    try {
+      await refreshData()
+    } catch (error) {
+      setRefreshing(false)
+      return enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    try {
+      await refetchPopMenge()
+    } catch (error) {
+      setRefreshing(false)
+      return enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
     setRefreshing(false)
-  }, [refetchPopMenge, refreshData, refreshing])
+  }, [enqueNotification, refetchPopMenge, refreshData, refreshing])
 
   const onClickMoreInfo = useCallback(() => {
     typeof window !== 'undefined' &&
@@ -216,7 +240,35 @@ const ApAuswertungPopMenge = ({ id }) => {
       ) : (
         <>
           <TitleRow>
-            <Title>{`"${zielEinheit}" nach Populationen`}</Title>
+            <div>
+              <Title>{`"${zielEinheit}" nach Populationen`}</Title>
+            </div>
+            {refreshing ? (
+              <RefreshButtonSpinning
+                title="Daten werden neu berechnet"
+                aria-label="Daten werden neu berechnet"
+                onClick={onClickRefresh}
+                size="small"
+              >
+                <FaRedo />
+              </RefreshButtonSpinning>
+            ) : (
+              <RefreshButton
+                title="Daten neu rechnen"
+                aria-label="Daten neu rechnen"
+                onClick={onClickRefresh}
+                size="small"
+              >
+                <FaRedo />
+              </RefreshButton>
+            )}
+            <IconButton
+              aria-label="Mehr Informationen"
+              title="Mehr Informationen"
+              onClick={onClickMoreInfo}
+            >
+              <IoMdInformationCircleOutline />
+            </IconButton>
           </TitleRow>
           <NoDataContainer>Keine Daten gefunden</NoDataContainer>
         </>
