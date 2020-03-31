@@ -14,7 +14,7 @@ Die Anwendung ist zweigeteilt:
 
 Die wichtigsten verwendeten Technologien sind:
 
-- [docker](//www.docker.com) für das Backend
+- [docker](//de.wikipedia.org/wiki/Docker_(Software)) für das Backend
 - [Gatsby](//www.gatsbyjs.org): Modernes Werkzeug, um dynamische Apps auf der Grundlage von statischen Dateien zu erzeugen (die wiederum sehr effizient gehostet werden können)
 - [GraphQL](https://github.com/facebook/graphql) in Form von [PostGraphile](https://github.com/graphile/postgraphile)
   - API-Server mit einer Zeile bauen und konfigurieren. Das sind _tausende_ weniger als zuvor!<br/>
