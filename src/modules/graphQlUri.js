@@ -6,6 +6,8 @@ export default () => {
   const isLocalhost = hostnameWithoutWww === 'localhost'
 
   return isLocalhost
-    ? 'http://localhost:5000/graphql'
+    ? //? 'http://localhost:5000/graphql'
+      'https://api-test.apflora.ch/graphql'
     : 'https://api.apflora.ch/graphql'
+  //: 'https://api-test.apflora.ch/graphql'
 }
