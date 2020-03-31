@@ -10,8 +10,3 @@ create role authenticator with login password '${AUTHENTICATOR_PASSWORD}' noinhe
 grant connect on database apflora to authenticator;
 grant connect on database apflora to anon;
 grant anon to authenticator;
-
-
--- use an sql file instead of .sh script
--- using pg_restore in an .sh. script resultet in schema apflora being already created and the restore then failing
--- to use a .backup file run: pg_restore apflora.backup > apflora.sql
