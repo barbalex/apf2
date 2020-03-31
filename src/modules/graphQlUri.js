@@ -7,7 +7,7 @@ export default () => {
 
   return isLocalhost
     ? //? 'http://localhost:5000/graphql'
-      'https://api-test.apflora.ch/graphql'
+      'https://api2.apflora.ch/graphql'
     : 'https://api.apflora.ch/graphql'
   //: 'https://api-test.apflora.ch/graphql'
 }
