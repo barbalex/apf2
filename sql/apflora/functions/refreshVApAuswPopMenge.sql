@@ -7,7 +7,7 @@ CREATE OR REPLACE FUNCTION apflora.v_ap_ausw_pop_menge_refresh()
   RETURN FOUND;
 
  END;
- $$ LANGUAGE plpgsql;
+ $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 ALTER FUNCTION apflora.v_ap_ausw_pop_menge_refresh()
   OWNER TO postgres;
