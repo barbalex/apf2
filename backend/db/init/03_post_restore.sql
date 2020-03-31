@@ -1,6 +1,8 @@
 -- TODO: this is copied from ae. Apply it to apflora!
 \c apflora
 
+ALTER DATABASE apflora SET "app.jwt_secret" TO '${JWT_SECRET}';
+
 revoke connect on database apflora from public;
 revoke all on all tables in schema apflora from public;
 
@@ -76,5 +78,3 @@ grant select (id, name, email, pass, role, adresse_id), update (id, name, email,
 grant all on apflora.user to apflora_manager;
 -- even pure readers need to write to usermessage:
 grant all on apflora.usermessage to apflora_reader, apflora_freiwillig;
-
-ALTER DATABASE apflora SET "app.jwt_secret" TO '${JWT_SECRET}';
