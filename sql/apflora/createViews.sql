@@ -2591,6 +2591,20 @@ ORDER BY
   apflora.tpop.nr ASC,
   apflora.beob.datum DESC;
 
+DROP VIEW IF EXISTS apflora.v_exportevab_adresse CASCADE;
+CREATE OR REPLACE VIEW apflora.v_exportevab_adresse AS
+select
+  concat('{', upper(id::text), '}') as "idPerson",
+  evab_nachname as "Name",
+  evab_vorname as "Vorname",
+  evab_ort as "Ort"
+from
+  apflora.adresse
+order by
+  evab_nachname,
+  evab_vorname;
+
+
 DROP VIEW IF EXISTS apflora.v_exportevab_projekt CASCADE;
 CREATE OR REPLACE VIEW apflora.v_exportevab_projekt AS
 with kontrolle_mit_groesster_anzahl as (
@@ -2613,7 +2627,7 @@ SELECT
     THEN concat('01.01.', apflora.ap.start_jahr)
     ELSE to_char(current_date, 'DD.MM.YYYY')
   END AS "Eroeffnung",
-  '{7C71B8AF-DF3E-4844-A83B-55735F80B993}' AS "fkAutor",
+  '{DBC6B9D5-4375-11E8-AB21-935BE492E4DA}' AS "fkAutor",
   concat(
     CASE
       WHEN apflora.ap_bearbstand_werte.text IS NOT NULL
@@ -2721,7 +2735,7 @@ SELECT
     END
   ) AS "Name",
   to_char(current_date, 'DD.MM.YYYY') AS "Erfassungsdatum",
-  '{7C71B8AF-DF3E-4844-A83B-55735F80B993}' AS "fkAutor",
+  '{DBC6B9D5-4375-11E8-AB21-935BE492E4DA}' AS "fkAutor",
   CASE
     WHEN apflora.pop.status  IS NOT NULL
     THEN
@@ -2827,7 +2841,7 @@ SELECT
     ) from 1 for 40
   ) AS "Name",
   to_char(current_date, 'DD.MM.YYYY') AS "Erfassungsdatum",
-  '{7C71B8AF-DF3E-4844-A83B-55735F80B993}' AS "fkAutor",
+  '{DBC6B9D5-4375-11E8-AB21-935BE492E4DA}' AS "fkAutor",
   substring(max(apflora.evab_typologie."TYPO") from 1 for 9)::varchar(10) AS "fkLebensraumtyp",
   1 AS "fkGenauigkeitLage",
   1 AS "fkGeometryType",
