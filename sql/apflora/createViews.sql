@@ -2606,14 +2606,14 @@ with kontrolle_mit_groesster_anzahl as (
     zaehl0.anzahl desc
 )
 SELECT
-  apflora.ap.id AS "idProjekt",
+  concat('{', upper(apflora.ap.id::text), '}') as "idProjekt",
   concat('AP Flora ZH: ', apflora.ae_taxonomies.artname) AS "Name",
   CASE
     WHEN apflora.ap.start_jahr IS NOT NULL
     THEN concat('01.01.', apflora.ap.start_jahr)
     ELSE to_char(current_date, 'DD.MM.YYYY')
   END AS "Eroeffnung",
-  '{7C71B8AF-DF3E-4844-A83B-55735F80B993}'::UUID AS "fkAutor",
+  '{7C71B8AF-DF3E-4844-A83B-55735F80B993}' AS "fkAutor",
   concat(
     CASE
       WHEN apflora.ap_bearbstand_werte.text IS NOT NULL
@@ -2710,8 +2710,8 @@ with kontrolle_mit_groesster_anzahl as (
     zaehl0.anzahl desc
 )
 SELECT
-  apflora.ap.id AS "fkProjekt",
-  apflora.pop.id AS "idRaum",
+  concat('{', upper(apflora.ap.id::text), '}') as "fkProjekt",
+  concat('{', upper(apflora.pop.id::text), '}') as "idRaum",
   concat(
     apflora.pop.name,
     CASE
@@ -2721,7 +2721,7 @@ SELECT
     END
   ) AS "Name",
   to_char(current_date, 'DD.MM.YYYY') AS "Erfassungsdatum",
-  '{7C71B8AF-DF3E-4844-A83B-55735F80B993}'::UUID AS "fkAutor",
+  '{7C71B8AF-DF3E-4844-A83B-55735F80B993}' AS "fkAutor",
   CASE
     WHEN apflora.pop.status  IS NOT NULL
     THEN
@@ -2813,9 +2813,9 @@ with kontrolle_mit_groesster_anzahl as (
 )
 SELECT
   -- include TPopGuid to enable later views to include only tpop included here
-  apflora.tpop.id AS "TPopGuid",
-  apflora.pop.id AS "fkRaum",
-  apflora.tpop.id AS "idOrt",
+  concat('{', upper(apflora.tpop.id::text), '}') as "TPopGuid",
+  concat('{', upper(apflora.pop.id::text), '}') as "fkRaum",
+  concat('{', upper(apflora.tpop.id::text), '}') as "idOrt",
   substring(
     concat(
       apflora.tpop.flurname,
@@ -2827,7 +2827,7 @@ SELECT
     ) from 1 for 40
   ) AS "Name",
   to_char(current_date, 'DD.MM.YYYY') AS "Erfassungsdatum",
-  '{7C71B8AF-DF3E-4844-A83B-55735F80B993}'::UUID AS "fkAutor",
+  '{7C71B8AF-DF3E-4844-A83B-55735F80B993}' AS "fkAutor",
   substring(max(apflora.evab_typologie."TYPO") from 1 for 9)::varchar(10) AS "fkLebensraumtyp",
   1 AS "fkGenauigkeitLage",
   1 AS "fkGeometryType",
@@ -2938,8 +2938,8 @@ with kontrolle_mit_groesster_anzahl as (
     zaehl0.anzahl desc
 )
 SELECT
-  apflora.tpop.id AS "fkOrt",
-  apflora.tpopkontr.zeit_id AS "idZeitpunkt",
+  concat('{', upper(apflora.tpop.id::text), '}') as "fkOrt",
+  concat('{', upper(apflora.tpopkontr.zeit_id::text), '}') as "idZeitpunkt",
   CASE
     WHEN apflora.tpopkontr.datum IS NOT NULL
     THEN to_char(apflora.tpopkontr.datum, 'DD.MM.YYYY')
@@ -3027,12 +3027,10 @@ with kontrolle_mit_groesster_anzahl as (
     zaehl0.anzahl desc
 )
 SELECT
-  apflora.tpopkontr.zeit_id AS "fkZeitpunkt",
-  apflora.tpopkontr.id AS "idBeobachtung",
-  -- if no bearbeiter pass 'Unbekannt'
-  -- should not happen
-  apflora.adresse.id AS fkAutor,
-  apflora.ap.art_id AS fkArt,
+  concat('{', upper(apflora.tpopkontr.zeit_id::text), '}') as "fkZeitpunkt",
+  concat('{', upper(apflora.tpopkontr.id::text), '}') as "idBeobachtung",
+  concat('{', upper(apflora.adresse.id::text), '}') as "fkAutor",
+  concat('{', upper(apflora.ap.art_id::text), '}') as "fkArt",
   18 AS fkArtgruppe,
   1 AS fkAA1,
   /*
