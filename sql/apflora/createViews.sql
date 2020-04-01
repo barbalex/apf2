@@ -2601,8 +2601,6 @@ with kontrolle_mit_groesster_anzahl as (
     apflora.tpopkontr kontr0
     INNER JOIN apflora.tpopkontrzaehl zaehl0
     ON kontr0.id = zaehl0.tpopkontr_id
-  where
-    zaehl0.anzahl is not null
   order by
     kontr0.id,
     zaehl0.anzahl desc
@@ -2707,8 +2705,6 @@ with kontrolle_mit_groesster_anzahl as (
     apflora.tpopkontr kontr0
     INNER JOIN apflora.tpopkontrzaehl zaehl0
     ON kontr0.id = zaehl0.tpopkontr_id
-  where
-    zaehl0.anzahl is not null
   order by
     kontr0.id,
     zaehl0.anzahl desc
@@ -2811,8 +2807,6 @@ with kontrolle_mit_groesster_anzahl as (
     apflora.tpopkontr kontr0
     INNER JOIN apflora.tpopkontrzaehl zaehl0
     ON kontr0.id = zaehl0.tpopkontr_id
-  where
-    zaehl0.anzahl is not null
   order by
     kontr0.id,
     zaehl0.anzahl desc
@@ -2939,8 +2933,6 @@ with kontrolle_mit_groesster_anzahl as (
     apflora.tpopkontr kontr0
     INNER JOIN apflora.tpopkontrzaehl zaehl0
     ON kontr0.id = zaehl0.tpopkontr_id
-  where
-    zaehl0.anzahl is not null
   order by
     kontr0.id,
     zaehl0.anzahl desc
@@ -3030,8 +3022,6 @@ with kontrolle_mit_groesster_anzahl as (
     apflora.tpopkontr kontr0
     INNER JOIN apflora.tpopkontrzaehl zaehl0
     ON kontr0.id = zaehl0.tpopkontr_id
-  where
-    zaehl0.anzahl is not null
   order by
     kontr0.id,
     zaehl0.anzahl desc
