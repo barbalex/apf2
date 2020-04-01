@@ -47,7 +47,7 @@ Beobachtung:
     5 (O) (Inoffizielle Ansiedlung (offensichtlich gepflanzt/angesalbt oder eingesät, Herkunft unbekannt))
 - `fkAA1` (Typ der Meldung, wird wohl nach `TY_NOTE` exportiert): `1` (Feldbeobachtung)
 - `fkArtgruppe`: `18` (Flora)
-- `fkAutor` (Beobachter, wird wohl nach `OBSERVATEURS` exportiert): ID der Person in EvAB
+- `fkAutor`: ID der Person in EvAB. Vermutliche Namen in anderen Produkten: Info Flora `OBSERVATEURS`, vExportZDSF `NOM_PERSONNE_OBS`
 
 Zeitpunkt:
 - `Datum`: Datum der Kontrolle. 1.1. des Jahrs, wenn es nur ein Jahr geben sollte.
@@ -113,6 +113,7 @@ Die FNS gibt vor, dass in eine Access-GEO-DB importiert werden muss. Leider gibt
       ```
    1. Aktuelle tblPersonen aus `EvabGeoDB_apflora.mdb` in apflora.evab_personen importieren
    1. In `beob_nach_evab.accdb`, Tabelle `apflora_adresse`: leeren, dann die aktuellen Daten importieren. Vorsicht: 1. neu ergänzte Felder entfernen. 2. Guids mit geschweiften Klammern umgeben
+   1. Beim Import-Vorgang werden Adressen ohne `evab_id_person` neu in `tblPersonen` angefügt, mit adresse.id als `idPerson`
 1. Alle `v_exportevab...` views: In PgAdmin öffnen, als .csv speichern
 1. Alle `apflora_v_exportevab...`-Tabellen in `beob_nach_evab.accdb`: leeren, dann aus den views importieren. WICHTIG: 
    - Im ersten Dialog in Access UTF-8 einstellen
