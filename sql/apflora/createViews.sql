@@ -2591,25 +2591,22 @@ ORDER BY
   apflora.tpop.nr ASC,
   apflora.beob.datum DESC;
 
-DROP VIEW IF EXISTS apflora.v_tpopkontr_maxanzahl CASCADE;
-CREATE OR REPLACE VIEW apflora.v_tpopkontr_maxanzahl AS
-SELECT
-  apflora.tpopkontr.id,
-  max(apflora.tpopkontrzaehl.anzahl) AS anzahl
-FROM
-  apflora.tpopkontr
-  INNER JOIN
-    apflora.tpopkontrzaehl
-    ON apflora.tpopkontr.id = apflora.tpopkontrzaehl.tpopkontr_id
-GROUP BY
-  apflora.tpopkontr.id
-ORDER BY
-  apflora.tpopkontr.id;
-
--- v_exportevab_beob is in viewsGenerieren2 because dependant on v_tpopkontr_maxanzahl
-
 DROP VIEW IF EXISTS apflora.v_exportevab_projekt CASCADE;
 CREATE OR REPLACE VIEW apflora.v_exportevab_projekt AS
+with kontrolle_mit_groesster_anzahl as (
+  SELECT distinct on (kontr0.id)
+    kontr0.id,
+    zaehl0.anzahl
+  FROM
+    apflora.tpopkontr kontr0
+    INNER JOIN apflora.tpopkontrzaehl zaehl0
+    ON kontr0.id = zaehl0.tpopkontr_id
+  where
+    zaehl0.anzahl is not null
+  order by
+    kontr0.id,
+    zaehl0.anzahl desc
+)
 SELECT
   apflora.ap.id AS "idProjekt",
   concat('AP Flora ZH: ', apflora.ae_taxonomies.artname) AS "Name",
@@ -2658,8 +2655,8 @@ FROM
       INNER JOIN
         ((apflora.tpopkontr
         INNER JOIN
-          apflora.v_tpopkontr_maxanzahl
-          ON apflora.v_tpopkontr_maxanzahl.id = apflora.tpopkontr.id)
+          kontrolle_mit_groesster_anzahl
+          ON kontrolle_mit_groesster_anzahl.id = apflora.tpopkontr.id)
         LEFT JOIN
           apflora.adresse
           ON apflora.tpopkontr.bearbeiter = apflora.adresse.id)
@@ -2702,6 +2699,20 @@ GROUP BY
 
 DROP VIEW IF EXISTS apflora.v_exportevab_raum CASCADE;
 CREATE OR REPLACE VIEW apflora.v_exportevab_raum AS
+with kontrolle_mit_groesster_anzahl as (
+  SELECT distinct on (kontr0.id)
+    kontr0.id,
+    zaehl0.anzahl
+  FROM
+    apflora.tpopkontr kontr0
+    INNER JOIN apflora.tpopkontrzaehl zaehl0
+    ON kontr0.id = zaehl0.tpopkontr_id
+  where
+    zaehl0.anzahl is not null
+  order by
+    kontr0.id,
+    zaehl0.anzahl desc
+)
 SELECT
   apflora.ap.id AS "fkProjekt",
   apflora.pop.id AS "idRaum",
@@ -2745,8 +2756,8 @@ FROM
       INNER JOIN
         ((apflora.tpopkontr
         INNER JOIN
-          apflora.v_tpopkontr_maxanzahl
-          ON apflora.v_tpopkontr_maxanzahl.id = apflora.tpopkontr.id)
+          kontrolle_mit_groesster_anzahl
+          ON kontrolle_mit_groesster_anzahl.id = apflora.tpopkontr.id)
         LEFT JOIN
           apflora.adresse
           ON apflora.tpopkontr.bearbeiter = apflora.adresse.id)
@@ -2781,8 +2792,6 @@ WHERE
     OR (apflora.tpopkontr.jahr - apflora.tpop.bekannt_seit) > 5
   )
   AND apflora.tpop.flurname IS NOT NULL
-  -- ensure all idProjekt are contained in higher level
-  AND apflora.ap.id IN (Select "idProjekt" FROM apflora.v_exportevab_projekt)
 GROUP BY
   apflora.ap.id,
   apflora.pop.id,
@@ -2794,6 +2803,20 @@ GROUP BY
 
 DROP VIEW IF EXISTS apflora.v_exportevab_ort CASCADE;
 CREATE OR REPLACE VIEW apflora.v_exportevab_ort AS
+with kontrolle_mit_groesster_anzahl as (
+  SELECT distinct on (kontr0.id)
+    kontr0.id,
+    zaehl0.anzahl
+  FROM
+    apflora.tpopkontr kontr0
+    INNER JOIN apflora.tpopkontrzaehl zaehl0
+    ON kontr0.id = zaehl0.tpopkontr_id
+  where
+    zaehl0.anzahl is not null
+  order by
+    kontr0.id,
+    zaehl0.anzahl desc
+)
 SELECT
   -- include TPopGuid to enable later views to include only tpop included here
   apflora.tpop.id AS "TPopGuid",
@@ -2855,8 +2878,8 @@ FROM
       INNER JOIN
         (((apflora.tpopkontr
         INNER JOIN
-          apflora.v_tpopkontr_maxanzahl
-          ON apflora.v_tpopkontr_maxanzahl.id = apflora.tpopkontr.id)
+          kontrolle_mit_groesster_anzahl
+          ON kontrolle_mit_groesster_anzahl.id = apflora.tpopkontr.id)
         LEFT JOIN
           apflora.adresse
           ON apflora.tpopkontr.bearbeiter = apflora.adresse.id)
@@ -2893,8 +2916,6 @@ WHERE
     OR (apflora.tpopkontr.jahr - apflora.tpop.bekannt_seit) > 5
   )
   AND apflora.tpop.flurname IS NOT NULL
-  AND apflora.ap.id IN (Select "idProjekt" FROM apflora.v_exportevab_projekt)
-  AND apflora.pop.id IN (SELECT "idRaum" FROM apflora.v_exportevab_raum)
 GROUP BY
   apflora.pop.id,
   apflora.tpop.id,
@@ -2910,6 +2931,20 @@ GROUP BY
 
 DROP VIEW IF EXISTS apflora.v_exportevab_zeit CASCADE;
 CREATE OR REPLACE VIEW apflora.v_exportevab_zeit AS
+with kontrolle_mit_groesster_anzahl as (
+  SELECT distinct on (kontr0.id)
+    kontr0.id,
+    zaehl0.anzahl
+  FROM
+    apflora.tpopkontr kontr0
+    INNER JOIN apflora.tpopkontrzaehl zaehl0
+    ON kontr0.id = zaehl0.tpopkontr_id
+  where
+    zaehl0.anzahl is not null
+  order by
+    kontr0.id,
+    zaehl0.anzahl desc
+)
 SELECT
   apflora.tpop.id AS "fkOrt",
   apflora.tpopkontr.zeit_id AS "idZeitpunkt",
@@ -2948,8 +2983,8 @@ FROM
       INNER JOIN
         ((apflora.tpopkontr
         INNER JOIN
-          apflora.v_tpopkontr_maxanzahl
-          ON apflora.v_tpopkontr_maxanzahl.id = apflora.tpopkontr.id)
+          kontrolle_mit_groesster_anzahl
+          ON kontrolle_mit_groesster_anzahl.id = apflora.tpopkontr.id)
         LEFT JOIN
           apflora.adresse
           ON apflora.tpopkontr.bearbeiter = apflora.adresse.id)
@@ -2983,10 +3018,183 @@ WHERE
     -- oder bei Ansiedlungen: die Art war mindestens 5 Jahre vorhanden
     OR (apflora.tpopkontr.jahr - apflora.tpop.bekannt_seit) > 5
   )
+  AND apflora.tpop.flurname IS NOT NULL;
+
+DROP VIEW IF EXISTS apflora.v_exportevab_beob CASCADE;
+CREATE OR REPLACE VIEW apflora.v_exportevab_beob AS
+with kontrolle_mit_groesster_anzahl as (
+  SELECT distinct on (kontr0.id)
+    kontr0.id,
+    zaehl0.anzahl
+  FROM
+    apflora.tpopkontr kontr0
+    INNER JOIN apflora.tpopkontrzaehl zaehl0
+    ON kontr0.id = zaehl0.tpopkontr_id
+  where
+    zaehl0.anzahl is not null
+  order by
+    kontr0.id,
+    zaehl0.anzahl desc
+)
+SELECT
+  apflora.tpopkontr.zeit_id AS "fkZeitpunkt",
+  apflora.tpopkontr.id AS "idBeobachtung",
+  -- if no bearbeiter pass 'Unbekannt'
+  -- should not happen
+  apflora.adresse.id AS fkAutor,
+  apflora.ap.art_id AS fkArt,
+  18 AS fkArtgruppe,
+  1 AS fkAA1,
+  /*
+  Status in EvAB (offizielle Ansiedlung / inoffiziell):
+  - Status ist ursprünglich (< 200):
+    4 (N) (Natürliches Vorkommen (indigene Arten) oder eingebürgertes Vorkommen (Neophyten))
+  - Vor der Kontrolle existiert eine Ansiedlung:
+    6 (R) (Offizielle Wiederansiedlung/Populationsverstärkung (Herkunft bekannt))
+  - Status ist angesiedelt (>= 200), es gibt keine Ansiedlung und Status ist unklar:
+    3 (I) (Herkunft unklar, Verdacht auf Ansiedlung/Ansalbung,Einsaat/Anpflanzung oder sonstwie anthropogen unterstütztes Auftreten)
+    Ideal wäre: Neues Feld Herkunft uklar, Anwesenheit unklar. Hier nur Herkunft berücksichtigen
+  - Status ist angesiedelt (>= 200), es gibt keine Ansiedlung und Status ist klar:
+    5 (O) (Inoffizielle Ansiedlung (offensichtlich gepflanzt/angesalbt oder eingesät, Herkunft unbekannt))
+  */
+   CASE
+    WHEN apflora.tpop.status < 200 THEN 4
+    WHEN EXISTS(
+      SELECT
+        apflora.tpopmassn.tpop_id
+      FROM
+        apflora.tpopmassn
+      WHERE
+        apflora.tpopmassn.tpop_id = apflora.tpopkontr.tpop_id
+        AND apflora.tpopmassn.typ BETWEEN 1 AND 3
+        AND apflora.tpopmassn.jahr <= apflora.tpopkontr.jahr
+    ) THEN 6
+    WHEN apflora.tpop.status_unklar = true THEN 3
+    ELSE 5
+  END AS "fkAAINTRODUIT",
+  /*
+  Präsenz:
+  - wenn 0 gezählt wurden und der Bericht aus demselben Jahr erloschen meldet:
+    2 (erloschen/zerstört)
+  - wenn 0 gezählt wurden und der Bericht aus demselben Jahr nicht erloschen meldet:
+    3 (nicht festgestellt/gesehen (ohne Angabe der Wahrscheinlichkeit))
+  - sonst
+    1 (vorhanden)
+  */
+  CASE
+    WHEN (
+      kontrolle_mit_groesster_anzahl.anzahl = 0
+      AND EXISTS (
+        SELECT
+          tpop_id
+        FROM
+          apflora.tpopber
+        WHERE
+          apflora.tpopber.tpop_id = apflora.tpopkontr.tpop_id
+          AND apflora.tpopber.entwicklung = 8
+          AND apflora.tpopber.jahr = apflora.tpopkontr.jahr
+      )
+    ) THEN 2
+    WHEN kontrolle_mit_groesster_anzahl.anzahl = 0 THEN 3
+    ELSE 1
+  END AS "fkAAPRESENCE",
+  substring(apflora.tpopkontr.gefaehrdung from 1 for 244) AS "MENACES",
+  substring(apflora.tpopkontr.vitalitaet from 1 for 200) AS "VITALITE_PLANTE",
+  substring(apflora.tpop.beschreibung from 1 for 244) AS "STATION",
+  /*
+   * Zählungen auswerten für ABONDANCE
+   */
+  substring(
+    concat(
+      'Anzahlen: ',
+      array_to_string(array_agg(apflora.tpopkontrzaehl.anzahl), ', '),
+      ', Zaehleinheiten: ',
+      string_agg(apflora.tpopkontrzaehl_einheit_werte.text, ', '),
+      ', Methoden: ',
+      string_agg(apflora.tpopkontrzaehl_methode_werte.text, ', ')
+      )
+    from 1 for 244
+  ) AS "ABONDANCE",
+  'C'::TEXT AS "EXPERTISE_INTRODUIT",
+  /*
+   * AP-Verantwortliche oder topos als EXPERTISE_INTRODUITE_NOM setzen
+   */
+  CASE
+    WHEN apflora_adresse_2.name IS NOT NULL
+    THEN substring(apflora_adresse_2.name from 1 for 99)
+    ELSE 'topos Marti & Müller AG Zürich'
+  END AS "EXPERTISE_INTRODUITE_NOM"
+FROM
+  (apflora.ap
+  LEFT JOIN
+    apflora.adresse AS apflora_adresse_2
+    ON apflora.ap.bearbeiter = apflora_adresse_2.id)
+  INNER JOIN
+    (apflora.pop
+    INNER JOIN
+      (apflora.tpop
+      INNER JOIN
+        (((apflora.tpopkontr
+        LEFT JOIN
+          apflora.adresse
+          ON apflora.tpopkontr.bearbeiter = apflora.adresse.id)
+        INNER JOIN
+          kontrolle_mit_groesster_anzahl
+          ON kontrolle_mit_groesster_anzahl.id = apflora.tpopkontr.id)
+        LEFT JOIN
+          ((apflora.tpopkontrzaehl
+          LEFT JOIN
+            apflora.tpopkontrzaehl_einheit_werte
+            ON apflora.tpopkontrzaehl.einheit = apflora.tpopkontrzaehl_einheit_werte.code)
+          LEFT JOIN
+            apflora.tpopkontrzaehl_methode_werte
+            ON apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte.code)
+          ON apflora.tpopkontr.id = apflora.tpopkontrzaehl.tpopkontr_id)
+        ON apflora.tpop.id = apflora.tpopkontr.tpop_id)
+      ON apflora.pop.id = apflora.tpop.pop_id)
+    ON apflora.ap.id = apflora.pop.ap_id
+  INNER JOIN apflora.ae_taxonomies
+  ON apflora.ae_taxonomies.id = apflora.ap.art_id
+WHERE
+  -- keine Testarten
+  apflora.ae_taxonomies.taxid > 150
+  AND apflora.ae_taxonomies.taxid < 1000000
+  -- nur Kontrollen, deren Teilpopulationen Koordinaten besitzen
+  AND apflora.tpop.lv95_x IS NOT NULL
+  AND apflora.tpopkontr.typ IN ('Ausgangszustand', 'Zwischenbeurteilung', 'Freiwilligen-Erfolgskontrolle')
+  -- keine Ansaatversuche
+  AND apflora.tpop.status <> 201
+  -- nur wenn die Kontrolle einen bearbeiter hat
+  AND apflora.tpopkontr.bearbeiter IS NOT NULL
+  -- ...und nicht unbekannt ist
+  AND apflora.tpopkontr.bearbeiter <> 'a1146ae4-4e03-4032-8aa8-bc46ba02f468'
+  -- nur wenn Kontrolljahr existiert
+  AND apflora.tpopkontr.jahr IS NOT NULL
+  -- keine Kontrollen aus dem aktuellen Jahr - die wurden ev. noch nicht verifiziert
+  AND apflora.tpopkontr.jahr <> date_part('year', CURRENT_DATE)
+  -- nur wenn erfasst ist, seit wann die TPop bekannt ist
+  AND apflora.tpop.bekannt_seit IS NOT NULL
+  AND (
+    -- die Teilpopulation ist ursprünglich
+    apflora.tpop.status IN (100, 101)
+    -- oder bei Ansiedlungen: die Art war mindestens 5 Jahre vorhanden
+    OR (apflora.tpopkontr.jahr - apflora.tpop.bekannt_seit) > 5
+  )
   AND apflora.tpop.flurname IS NOT NULL
-  AND apflora.ap.id IN (Select "idProjekt" FROM apflora.v_exportevab_projekt)
-  AND apflora.pop.id IN (SELECT "idRaum" FROM apflora.v_exportevab_raum)
-  AND apflora.tpop.id IN (SELECT "idOrt" FROM apflora.v_exportevab_ort);
+-- grouping is necessary because zaehlungen are concatted
+GROUP BY
+  apflora.tpopkontr.zeit_id,
+  apflora.tpopkontr.tpop_id,
+  apflora.tpopkontr.id,
+  apflora.tpopkontr.jahr,
+  apflora.adresse.id,
+  apflora.ap.id,
+  "fkAAINTRODUIT",
+  kontrolle_mit_groesster_anzahl.anzahl,
+  apflora.tpopkontr.gefaehrdung,
+  apflora.tpopkontr.vitalitaet,
+  apflora.tpop.beschreibung,
+  apflora_adresse_2.name;
 
 DROP VIEW IF EXISTS apflora.v_tpopmassnber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopmassnber AS
@@ -5697,3 +5905,6 @@ group by
 order by
   ap_id,
   jahr;
+  
+
+DROP VIEW IF EXISTS apflora.v_tpopkontr_maxanzahl CASCADE;
