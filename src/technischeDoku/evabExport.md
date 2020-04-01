@@ -47,21 +47,21 @@ Beobachtung:
     5 (O) (Inoffizielle Ansiedlung (offensichtlich gepflanzt/angesalbt oder eingesät, Herkunft unbekannt))
 - `fkAA1` (Typ der Meldung, wird wohl nach `TY_NOTE` exportiert): `1` (Feldbeobachtung)
 - `fkArtgruppe`: `18` (Flora)
-- `fkAutor`: ID der Person in EvAB. Vermutliche Namen in anderen Produkten: Info Flora `OBSERVATEURS`, vExportZDSF `NOM_PERSONNE_OBS`
+- `fkAutor`: ID der Person in EvAB. Vermutliche Namen in anderen Produkten: Info Flora `OBSERVATEURS`, vExportZDSF `NOM_PERSONNE_OBS`. Es wird die id der Tabelle `adresse` aus apflora geliefert
 
 Zeitpunkt:
-- `Datum`: Datum der Kontrolle. 1.1. des Jahrs, wenn es nur ein Jahr geben sollte.
-- `fkGenauigkeitDatum`: `Tag`, wenn das Datum genau erfasst wurde. `Jahr`, wenn nur das Jahr existiert.
-- `fkGenauigkeitDatumZDSF`: `P` (genau), wenn das Datum genau erfasst wurde. `X` (nicht definiert), wenn nur das Jahr existiert.
-- `COUV_MOUSSES`: Feld `moosschicht` der Kontrolle.
-- `COUV_HERBACEES`: Feld `krautschicht` der Kontrolle.
-- `COUV_BUISSONS`: Feld `strauchschicht` der Kontrolle.
-- `COUV_ARBRES`: Feld `baumschicht` der Kontrolle.
+- `Datum`: Datum der Kontrolle. 1.1. des Jahrs, wenn es nur ein Jahr geben sollte
+- `fkGenauigkeitDatum`: `Tag`, wenn das Datum genau erfasst wurde. `Jahr`, wenn nur das Jahr existiert
+- `fkGenauigkeitDatumZDSF`: `P` (genau), wenn das Datum genau erfasst wurde. `X` (nicht definiert), wenn nur das Jahr existiert
+- `COUV_MOUSSES`: Feld `moosschicht` der Kontrolle
+- `COUV_HERBACEES`: Feld `krautschicht` der Kontrolle
+- `COUV_BUISSONS`: Feld `strauchschicht` der Kontrolle
+- `COUV_ARBRES`: Feld `baumschicht` der Kontrolle
 
 Ort:
-- `Name`: Feld `flurname` der Teilpopulation. Plus, wenn vorhanden: Teilpopulations-Nummer.
-- `Erfassungsdatum`: Export-Datum (ist in EvAB ein Mussfeld, existiert in apflora aber nicht).
-- `fkAutor`: Topos (Person, welche den Ort erfasst hat. Mussfeld in EvAB. Existiert in apflora nicht).
+- `Name`: Feld `flurname` der Teilpopulation. Plus, wenn vorhanden: Teilpopulations-Nummer
+- `Erfassungsdatum`: Export-Datum (ist in EvAB ein Mussfeld, existiert in apflora aber nicht)
+- `fkAutor`: Topos (Person, welche den Ort erfasst hat. Mussfeld in EvAB. Existiert in apflora nicht)
 - `fkLebensraumtyp`: LR-Typ nach Delarze (nicht alle Lebensraumtypen aus apflora.ch können importiert werden, weil EvAB eine ältere Version der Liste enthält als apflora, welches sich an arteigenschaften.ch ausrichtet)
 - `fkGenauigkeitLage`: `1` (± 25m)
 - `fkGeometryType`: `1` (Point)
@@ -71,34 +71,33 @@ Ort:
 - `Y`: Y-Koordinate der Teilpopulation
 - `NOM_COMMUNE`: Gemeinde der Teilpopulation
 - `DESC_LOCALITE`: Flurname der Teilpopulation
-- `ENV`: LR-Typ der Umgebung nach Delarze (nicht alle Lebensraumtypen aus apflora.ch können importiert werden, weil EvAB eine ältere Version der Liste enthält als apflora, welches sich an arteigenschaften.ch ausrichtet)
-- `Bemerkungen`: Wenn ein Status existiert, werden hier Status und Bekannt seit eingetragen.
+- `ENV`: LR-Typ der Umgebung nach Delarze. Achtung: nicht alle Lebensraumtypen aus apflora.ch können importiert werden, weil EvAB eine ältere Version der Liste enthält als apflora, welches sich an arteigenschaften.ch ausrichtet
+- `Bemerkungen`: Wenn ein Status existiert, werden hier Status und "Bekannt seit" eingetragen
 
 Raum:
-- `Name`: Name der Population. Plus ihre Nummer, wenn sie existiert.
-- `Erfassungsdatum`: Export-Datum. Ist in EvAB ein Mussfeld, wird in apfldora.ch nicht geführt.
-- `fkAutor`: Topos. In EvAB wird hier erfasst, wer den Raum erfasst hat. Mussfeld. Wird in apflora nicht geführt.
-- `Bemerkungen`: Status und Bekannt-seit-Datum der Population.
+- `Name`: Name der Population. Plus ihre Nummer, wenn sie existiert
+- `Erfassungsdatum`: Export-Datum. Ist in EvAB ein Mussfeld, wird in apfldora.ch nicht geführt
+- `fkAutor`: Topos. In EvAB wird hier erfasst, wer den Raum erfasst hat. Mussfeld. Wird in apflora nicht geführt
+- `Bemerkungen`: Status und Bekannt-seit-Datum der Population
 
 Projekt:
 - `Name`: Name der Pflanzenart (für jede Art wird in EvAB ein Projekt erstellt)
 - `Eroeffnung`: Startjahr des Aktionsplans. Oder, wenn es den nicht gibt: Export-Datum (ist in EvAB ein Mussfeld)
-- `fkAutor`: Topos. In EvAB wird hier erfasst, wer das Projekt erfasst hat. Mussfeld. Wird in apflora nicht geführt.
+- `fkAutor`: Topos. In EvAB wird hier erfasst, wer das Projekt erfasst hat. Mussfeld. Wird in apflora nicht geführt
 - `Bemerkungen`: Bearbeitungsstand, Startjahr und Umsetzungsstand des Aktionsplans (sofern vorhanden)
 
 ### Vorgehen
-Die FNS gibt vor, dass in eine Access-GEO-DB importiert werden muss. Leider gibt es keine vernünftigen Treiber, um Access mit PostgreSQL (oder irgend einer anderen Datenbank) zu verbinden. Und ODBC verträgt sich schlecht mit modernem und sicherem Hosting. Darum müssen alle benötigten Daten zuerst aus apflora.ch exportiert werden, in eine Access DB importiert und von dort in die GEO-DB importiert werden. Zusätzlich eine Excel-Tabelle, damit Topos kontrollieren kann. Der ganze Prozess ist leider - soweit Access involviert ist - langsam, manuell, nicht automatisierbar, unzuverlässig und bedingt bei jedem Schritt dauernde sorgfälltige Kontrollen.<br/><br/>
+Die FNS gibt vor, dass in eine Access-GEO-DB importiert werden muss. Leider gibt es keine vernünftigen Treiber, um Access mit PostgreSQL (oder irgend einer anderen Datenbank) zu verbinden. Und ODBC verträgt sich schlecht mit modernem und sicherem Hosting. Darum müssen alle benötigten Daten zuerst aus apflora.ch exportiert werden, in eine Access DB importiert und von dort in die GEO-DB importiert werden. Zusätzlich wird eine Excel-Tabelle exportiert, damit Topos kontrollieren kann. Der ganze Prozess ist leider - soweit Access involviert ist - langsam, manuell, nicht automatisierbar, unzuverlässig und bedingt bei jedem Schritt dauernde sorgfälltige Kontrollen.<br/><br/>
 
 1. Dateien vorbereiten:
-   1. Neuen Ordner gründen (z.B. `...\projekte\apflora\data_out\2019 05 16 nach EvAB`)
-   1. `beob_nach_evab.accdb` ist die Access-DB, in welche die Daten aus apflora importiert und danach in die EvabGeoDB exportiert werden. Sie muss vom letzten Export kopiert werden
+   1. Neuen Ordner gründen (z.B. `...\projekte\apflora\data_out\2020 04 20 nach EvAB`)
    1. Auf [naturschutz.zh.ch](https://aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html) das aktuelle Datenbank-Template für EvAB downloaden
    1. Datenbank-Template umbenennen zu: `EvabGeoDB_apflora.mdb`
-   1. `beob_nach_evab.accdb` öffnen
+   1. `beob_nach_evab.accdb` ist die Access-DB, in welche die Daten aus apflora importiert und danach in die EvabGeoDB exportiert werden. Sie muss vom letzten Export kopiert werden<br/>
+      `beob_nach_evab.accdb` öffnen
    1. Tabellen-Verknüpfungs-Manager öffnen
    1. Neue EvabGeoDB verknüpfen
 1. Adressen vorbereiten
-   1. EvAB gibt Adressen eigene GUID's. Daher müssten eigentlich bei jedem Export für alle Adressen aus apflora neue Adressen in EvAB geschaffen werden!!! Um das zu vermeiden, wurde sehr aufwändig versucht, die GUID's von in EvAB bereits vorhandenen Adressen in apflora aufzunehmen und beim Export wo möglich mitzugeben. Das funktioniert leider nur sehr unbefriedigend, weil 1. Access sich bei GUID's im Gegensatz zu PostgreSQL nicht an das standardisierte Format hält 2. der Vorgang extrem aufwändig und kompliziert ist, 3. In den Vorjahren erfasste Adressen bisher kaum je im Template erschienen und 4. mühsam in apflora übernommene EvAB-Guids oft doch nicht mit den Adressen im EvAB-Template verbunden werden können, weil sie offenbar (teilweise) dort nicht vorkommen :-(. Dieser Prozess ist viel zu aufwändig und mühsam und wir werden wohl dazu übergehen müssen, immer alle Adressen mit jeweils neuen GUID's neu aufzunehmen. Vorläufig funktioniert es so:
    1. Prüfen, bei welchen Adressen benötigte Felder leer sind (evab_nachname, evab_vorname, evab_ort). Diese ergänzen:
       ```sql
       select name from apflora.adresse
@@ -111,8 +110,9 @@ Die FNS gibt vor, dass in eine Access-GEO-DB importiert werden muss. Leider gibt
         )
       order by name;
       ```
-   1. Aktuelle tblPersonen aus `EvabGeoDB_apflora.mdb` in apflora.evab_personen importieren
-   1. In `beob_nach_evab.accdb`, Tabelle `apflora_adresse`: leeren, dann die aktuellen Daten importieren. Vorsicht: 1. neu ergänzte Felder entfernen. 2. Guids mit geschweiften Klammern umgeben
+   1. In `beob_nach_evab.accdb`, Tabelle `apflora_adresse`: leeren, dann die aktuellen Daten importieren. Vorsicht:
+      - neu ergänzte Felder entfernen
+      - Guids mit geschweiften Klammern umgeben
    1. Beim Import-Vorgang werden Adressen ohne `evab_id_person` neu in `tblPersonen` angefügt, mit adresse.id als `idPerson`
 1. Alle `v_exportevab...` views: In PgAdmin öffnen, als .csv speichern
 1. Alle `apflora_v_exportevab...`-Tabellen in `beob_nach_evab.accdb`: leeren, dann aus den views importieren. WICHTIG: 
