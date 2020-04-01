@@ -95,8 +95,9 @@ Darum müssen alle benötigten Daten zuerst aus apflora.ch exportiert werden, in
    1. Neuen Ordner gründen (z.B. `...\projekte\apflora\data_out\2020 04 20 nach EvAB`)
    1. Auf [naturschutz.zh.ch](https://aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html) das aktuelle Datenbank-Template für EvAB downloaden
    1. Datenbank-Template umbenennen zu: `EvabGeoDB_apflora.mdb`
-   1. `beob_nach_evab.accdb` ist die Access-DB, in welche die Daten aus apflora importiert und danach in die EvabGeoDB exportiert werden. Sie muss vom letzten Export kopiert werden<br/>
-      `beob_nach_evab.accdb` öffnen
+   1. `beob_nach_evab.accdb` ist die Access-DB, in welche die Daten aus apflora importiert und danach in die EvabGeoDB exportiert werden. Sie muss vom letzten Export kopiert werden
+   1. In `beob_nach_evab.accdb` alle apflora_-Tabellen leeren
+   1. `beob_nach_evab.accdb` öffnen
    1. Tabellen-Verknüpfungs-Manager öffnen
    1. Neue EvabGeoDB verknüpfen
 1. Adressen vorbereiten
@@ -104,12 +105,9 @@ Darum müssen alle benötigten Daten zuerst aus apflora.ch exportiert werden, in
       ```sql
       select name from apflora.adresse
       where
-        adresse.evab_id_person IS NULL
-        and (
-          evab_nachname is null
-          or evab_vorname is null
-          or evab_ort is null
-        )
+        evab_nachname is null
+        or evab_vorname is null
+        or evab_ort is null
       order by name;
       ```
    1. In `beob_nach_evab.accdb`, Tabelle `apflora_adresse`: leeren, dann die aktuellen Daten importieren. Vorsicht:
@@ -125,7 +123,8 @@ Darum müssen alle benötigten Daten zuerst aus apflora.ch exportiert werden, in
    - Jede Tabelle nach dem Import genau prüfen: Anzahl Datensätze, Anzahl Felder, Daten in den Feldern... Der Access-Import-Assistent ist NICHT vertrauenswürdig!
    - NULL werte leeren
    - Alternative zum Import: Copy/Paste (!)
-1. Es braucht in tblPersonen einen Datensatz für Topos (`{7C71B8AF-DF3E-4844-A83B-55735F80B993}	topos Marti & Müller AG	-	Zürich`). Der wird zwar jedes Jahr hinzugefügt, er taucht aber trotzdem nie im Template auf. Daher muss er aus dem Vorjahr hinein kopiert werden
+1. Es braucht in tblPersonen einen Datensatz für Topos (`{DBC6B9D5-4375-11E8-AB21-935BE492E4DA}	topos Marti & Müller AG	-	Zürich`). Der wird zwar jedes Jahr hinzugefügt, er taucht aber trotzdem nie im Template auf. Daher muss er aus dem Vorjahr hinein kopiert werden. 2020 04 01: Er wird jetzt aus apflora mit exportiert
+1. Achtung: Access erträgt es nicht, wenn in ein Text-Feld nur eine Zahl eingefügt wird. Daher müssen reine Zahlen entweder gelöscht oder z.B. durch Voransetzen eines _ aus Sicht von Access in einen Text umgewandelt werden
 1. Jetzt die Import-Abfragen in `beob_nach_evab.accdb` nacheinander ausführen. Dabei darauf achten, dass immer alle Datensätze importiert wurden. Falls nicht, muss dem nachgegangen werden. Es kann z.B. an veränderten Stammdaten in EvAB liegen
 1. `EvabGeoDB_apflora.mdb` ist nun bereit
 1. `EvabGeoDB_apflora.mdb` in EvAB öffnen und prüfen, ob es i.O. aussieht
