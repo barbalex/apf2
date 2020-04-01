@@ -103,29 +103,6 @@ ORDER BY
   apflora.ae_taxonomies.artname,
   apflora.v_ap_anzmassnprojahr.jahr;
 
--- dieser view ist für die Qualitätskontrolle gedacht - daher letzter popber überhaupt
-DROP VIEW IF EXISTS apflora.v_pop_letzterpopber_overall CASCADE;
-CREATE OR REPLACE VIEW apflora.v_pop_letzterpopber_overall AS
-SELECT
-  apflora.pop.ap_id,
-  apflora.pop.id,
-  apflora.v_pop_letzterpopber0_overall.jahr
-FROM
-  (apflora.pop
-  INNER JOIN
-    apflora.v_pop_letzterpopber0_overall
-    ON apflora.pop.id = apflora.v_pop_letzterpopber0_overall.pop_id)
-  INNER JOIN
-    apflora.tpop
-    ON apflora.pop.id = apflora.tpop.pop_id
-WHERE
-  apflora.tpop.apber_relevant = true
-  AND apflora.pop.status  <> 300
-GROUP BY
-  apflora.pop.ap_id,
-  apflora.pop.id,
-  apflora.v_pop_letzterpopber0_overall.jahr;
-
 DROP VIEW IF EXISTS apflora.v_apber_uebe CASCADE;
 DROP VIEW IF EXISTS apflora.v_apber_uebe_apid CASCADE;
 DROP VIEW IF EXISTS apflora.v_apber_uebkm CASCADE;
@@ -305,6 +282,18 @@ ORDER BY
 
 DROP VIEW IF EXISTS apflora.v_pop_mit_letzter_popber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_mit_letzter_popber AS
+with letzter_popber as (
+  SELECT distinct on (apflora.popber.pop_id)
+    apflora.popber.pop_id,
+    apflora.popber.jahr
+  FROM
+    apflora.popber
+  WHERE
+    apflora.popber.jahr IS NOT NULL
+  order by
+    apflora.popber.pop_id,
+    apflora.popber.jahr desc
+)
 SELECT
   apflora.ap.id AS ap_id,
   apflora.ae_taxonomies.artname,
@@ -341,16 +330,16 @@ FROM
     INNER JOIN
       ((apflora.pop
       LEFT JOIN
-        (apflora.v_pop_letzterpopber0_overall
+        (letzter_popber
         LEFT JOIN
           (apflora.popber
           LEFT JOIN
             apflora.tpop_entwicklung_werte
             ON apflora.popber.entwicklung = tpop_entwicklung_werte.code)
           ON
-            (apflora.v_pop_letzterpopber0_overall.jahr = apflora.popber.jahr)
-            AND (apflora.v_pop_letzterpopber0_overall.pop_id = apflora.popber.pop_id))
-        ON apflora.pop.id = apflora.v_pop_letzterpopber0_overall.pop_id)
+            (letzter_popber.jahr = apflora.popber.jahr)
+            AND (letzter_popber.pop_id = apflora.popber.pop_id))
+        ON apflora.pop.id = letzter_popber.pop_id)
       LEFT JOIN
         apflora.pop_status_werte
         ON apflora.pop.status  = pop_status_werte.code)
@@ -361,10 +350,22 @@ WHERE
 ORDER BY
   apflora.ae_taxonomies.artname,
   apflora.pop.nr,
-  apflora.v_pop_letzterpopber0_overall.jahr;
+  letzter_popber.jahr;
 
 DROP VIEW IF EXISTS apflora.v_pop_mit_letzter_popmassnber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_mit_letzter_popmassnber AS
+with pop_letztes_massnberjahr as (
+  SELECT distinct on (apflora.popmassnber.pop_id)
+    apflora.popmassnber.pop_id AS id,
+    apflora.popmassnber.jahr
+  FROM
+    apflora.popmassnber
+  WHERE
+    apflora.popmassnber.jahr IS NOT NULL
+  order by
+    apflora.popmassnber.pop_id,
+    apflora.popmassnber.jahr desc
+)
 SELECT
   apflora.ap.id AS ap_id,
   apflora.ae_taxonomies.artname,
@@ -401,16 +402,16 @@ FROM
     INNER JOIN
       ((apflora.pop
       LEFT JOIN
-        (apflora.v_pop_letzterpopbermassn
+        (pop_letztes_massnberjahr
         LEFT JOIN
           (apflora.popmassnber
           LEFT JOIN
             apflora.tpopmassn_erfbeurt_werte
             ON apflora.popmassnber.beurteilung = tpopmassn_erfbeurt_werte.code)
           ON
-            (apflora.v_pop_letzterpopbermassn.jahr = apflora.popmassnber.jahr)
-            AND (apflora.v_pop_letzterpopbermassn.id = apflora.popmassnber.pop_id))
-        ON apflora.pop.id = apflora.v_pop_letzterpopbermassn.id)
+            (pop_letztes_massnberjahr.jahr = apflora.popmassnber.jahr)
+            AND (pop_letztes_massnberjahr.id = apflora.popmassnber.pop_id))
+        ON apflora.pop.id = pop_letztes_massnberjahr.id)
       LEFT JOIN
         apflora.pop_status_werte
         ON apflora.pop.status  = pop_status_werte.code)
@@ -421,7 +422,7 @@ WHERE
 ORDER BY
   apflora.ae_taxonomies.artname,
   apflora.pop.nr,
-  apflora.v_pop_letzterpopbermassn.jahr;
+  pop_letztes_massnberjahr.jahr;
 
 DROP VIEW IF EXISTS apflora.v_tpop_popberundmassnber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_popberundmassnber AS
@@ -877,6 +878,18 @@ ORDER BY
 
 DROP VIEW IF EXISTS apflora.v_q_pop_statuserloschenletzterpopberaktuell CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_statuserloschenletzterpopberaktuell AS
+with letzter_popber as (
+  SELECT distinct on (apflora.popber.pop_id)
+    apflora.popber.pop_id,
+    apflora.popber.jahr
+  FROM
+    apflora.popber
+  WHERE
+    apflora.popber.jahr IS NOT NULL
+  order by
+    apflora.popber.pop_id,
+    apflora.popber.jahr desc
+)
 SELECT DISTINCT
   apflora.ap.proj_id,
   apflora.pop.ap_id,
@@ -889,10 +902,10 @@ FROM
     INNER JOIN
       (apflora.popber
       INNER JOIN
-        apflora.v_pop_letzterpopber0_overall
+        letzter_popber
         ON
-          (v_pop_letzterpopber0_overall.jahr = apflora.popber.jahr)
-          AND (v_pop_letzterpopber0_overall.pop_id = apflora.popber.pop_id))
+          (letzter_popber.jahr = apflora.popber.jahr)
+          AND (letzter_popber.pop_id = apflora.popber.pop_id))
       ON apflora.popber.pop_id = apflora.pop.id)
     INNER JOIN
       apflora.tpop

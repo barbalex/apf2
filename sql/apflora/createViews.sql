@@ -1219,32 +1219,6 @@ FROM
 ORDER BY	
   apflora.ae_taxonomies.artname;
 
--- dieser view ist für die Qualitätskontrolle gedacht - daher letzter popber überhaupt
-DROP VIEW IF EXISTS apflora.v_pop_letzterpopber0_overall CASCADE;
-CREATE OR REPLACE VIEW apflora.v_pop_letzterpopber0_overall AS
-SELECT distinct on (apflora.popber.pop_id)
-  apflora.popber.pop_id,
-  apflora.popber.jahr
-FROM
-  apflora.popber
-WHERE
-  apflora.popber.jahr IS NOT NULL
-order by
-  apflora.popber.pop_id,
-  apflora.popber.jahr;
-
-DROP VIEW IF EXISTS apflora.v_pop_letzterpopbermassn CASCADE;
-CREATE OR REPLACE VIEW apflora.v_pop_letzterpopbermassn AS
-SELECT
-  apflora.popmassnber.pop_id AS id,
-  max(apflora.popmassnber.jahr) AS jahr
-FROM
-  apflora.popmassnber
-WHERE
-  apflora.popmassnber.jahr IS NOT NULL
-GROUP BY
-  apflora.popmassnber.pop_id;
-
 -- dieser view ist für die Qualitätskontrolle gedacht - daher letzter tpopber überhaupt
 DROP VIEW IF EXISTS apflora.v_tpop_letztertpopber0_overall CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_letztertpopber0_overall AS
