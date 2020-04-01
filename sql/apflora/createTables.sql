@@ -47,7 +47,6 @@ CREATE TABLE apflora.adresse (
   telefon text DEFAULT NULL,
   email text DEFAULT NULL,
   freiw_erfko boolean DEFAULT false,
-  evab_id_person UUID DEFAULT NULL,
   evab_nachname character varying(50) DEFAULT NULL,
   evab_vorname character varying(50) DEFAULT NULL,
   evab_ort character varying(50) DEFAULT NULL,
@@ -66,7 +65,6 @@ COMMENT ON COLUMN apflora.adresse.email IS 'Email';
 COMMENT ON COLUMN apflora.adresse.freiw_erfko IS 'Ist die Person freiwillige(r) Kontrolleur(in)';
 COMMENT ON COLUMN apflora.adresse.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.adresse.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.adresse.evab_id_person IS 'Personen werden in EvAB separat und mit eigener ID erfasst. Daher muss die passende Person hier gewählt werden. Hat sich leider nicht bewährt, weil offenbar nicht immer alle Personen in EvAB enthalten sind :-(';
 COMMENT ON COLUMN apflora.adresse.evab_nachname IS 'Benötigt für den Export nach EvAB. Weil offenbar nicht immer alle Personen in EvAB enthalten sind, müssen sie jedesmal neu geschaffen werden :-(';
 COMMENT ON COLUMN apflora.adresse.evab_vorname IS 'Benötigt für den Export nach EvAB. Weil offenbar nicht immer alle Personen in EvAB enthalten sind, müssen sie jedesmal neu geschaffen werden :-(';
 COMMENT ON COLUMN apflora.adresse.evab_ort IS 'Benötigt für den Export nach EvAB. Weil offenbar nicht immer alle Personen in EvAB enthalten sind, müssen sie jedesmal neu geschaffen werden :-(';
