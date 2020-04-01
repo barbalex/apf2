@@ -1370,15 +1370,6 @@ COMMENT ON COLUMN apflora.apart.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüs
 COMMENT ON COLUMN apflora.apart.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.apart.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
 
-drop table if exists apflora.evab_personen;
-create table apflora.evab_personen (
-  idperson UUID PRIMARY KEY,
-  name varchar(50),
-  vorname varchar(50),
-  ort varchar(50)
-);
-comment on table apflora.evab_personen is 'Diese Tabelle wird nur beim EvAB-Export genutzt. Vor dem Export werden die aktuellen EvAB-Adressen hierhin importiert, um die Adressen apflora-seitig zu bereinigen.';
-
 drop table if exists apflora.ekzaehleinheit;
 create table apflora.ekzaehleinheit(
   id uuid primary key default uuid_generate_v1mc(),
