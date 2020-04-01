@@ -1,12 +1,12 @@
 ---
 typ: 'technDoku'
 path: "/Dokumentation/Technisch/EvAB-Export"
-date: "2019-10-17"
+date: "2020-04-01"
 title: "EvAB-Export"
 sort: 10
 ---
 
-Feld- und Freiwilligen-Kontrollen entsprechen Beobachtungen. Ein mal jährlich (ca. im April) werden sie daher ins EvAB exportiert. Von dort gelangen sie zu InfoFlora.<br/><br/>
+Feld- und Freiwilligen-Kontrollen entsprechen Beobachtungen. Ein mal jährlich (ca. im April) werden sie daher ins EvAB exportiert. Von dort gelangen sie zu Info Flora.<br/><br/>
 
 ### Folgende Kontrollen werden exportiert
 - Art: Grundsätzlich alle. Ausnahmen:
@@ -87,7 +87,9 @@ Projekt:
 - `Bemerkungen`: Bearbeitungsstand, Startjahr und Umsetzungsstand des Aktionsplans (sofern vorhanden)
 
 ### Vorgehen
-Die FNS gibt vor, dass in eine Access-GEO-DB importiert werden muss. Leider gibt es keine vernünftigen Treiber, um Access mit PostgreSQL (oder irgend einer anderen Datenbank) zu verbinden. Und ODBC verträgt sich schlecht mit modernem und sicherem Hosting. Darum müssen alle benötigten Daten zuerst aus apflora.ch exportiert werden, in eine Access DB importiert und von dort in die GEO-DB importiert werden. Zusätzlich wird eine Excel-Tabelle exportiert, damit Topos kontrollieren kann. Der ganze Prozess ist leider - soweit Access involviert ist - langsam, manuell, nicht automatisierbar, unzuverlässig und bedingt bei jedem Schritt dauernde sorgfälltige Kontrollen.<br/><br/>
+Die FNS gibt vor, dass in eine Access-GEO-DB importiert werden muss. Leider gibt es keine vernünftigen Treiber, um Access mit PostgreSQL (oder irgend einer anderen Datenbank) zu verbinden. Und Zugriff aus Access via ODBC verträgt sich schlecht mit modernem und sicherem Hosting.<br/><br/>
+
+Darum müssen alle benötigten Daten zuerst aus apflora.ch exportiert werden, in eine Access DB importiert und von dort in die GEO-DB importiert werden. Zusätzlich wird eine Excel-Tabelle exportiert, damit Topos kontrollieren kann. Der ganze Prozess ist leider - soweit Access involviert ist - langsam, manuell, nicht automatisierbar, unzuverlässig und bedingt bei jedem Schritt dauernde sorgfälltige Kontrollen.<br/><br/>
 
 1. Dateien vorbereiten:
    1. Neuen Ordner gründen (z.B. `...\projekte\apflora\data_out\2020 04 20 nach EvAB`)
