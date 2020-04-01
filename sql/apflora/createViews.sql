@@ -1222,15 +1222,16 @@ ORDER BY
 -- dieser view ist für die Qualitätskontrolle gedacht - daher letzter popber überhaupt
 DROP VIEW IF EXISTS apflora.v_pop_letzterpopber0_overall CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_letzterpopber0_overall AS
-SELECT
+SELECT distinct on (apflora.popber.pop_id)
   apflora.popber.pop_id,
-  max(apflora.popber.jahr) AS jahr
+  apflora.popber.jahr
 FROM
   apflora.popber
 WHERE
   apflora.popber.jahr IS NOT NULL
-GROUP BY
-  apflora.popber.pop_id;
+order by
+  apflora.popber.pop_id,
+  apflora.popber.jahr;
 
 DROP VIEW IF EXISTS apflora.v_pop_letzterpopbermassn CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_letzterpopbermassn AS
