@@ -46,6 +46,12 @@ export default ({ tpop, dataLists, years, store }) => {
   if (fields.includes('bekanntSeit')) {
     row.tpopBekanntSeit = get(tpop, 'bekanntSeit') || '-'
   }
+  if (fields.includes('lv95X')) {
+    row.lv95X = get(tpop, 'lv95X') || '-'
+  }
+  if (fields.includes('lv95Y')) {
+    row.lv95Y = get(tpop, 'lv95Y') || '-'
+  }
   if (fields.includes('link')) {
     row.tpopLink = `${appBaseUrl()}Daten/Projekte/${
       tpop.popByPopId.apByApId.projId
