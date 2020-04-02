@@ -1,11 +1,11 @@
 import React, { useCallback, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { StyledTableCell } from './index'
+import { StyledTableCell } from '../index'
 import EkIcon from './EkIcon'
 import MassnIcon from './MassnIcon'
-import { InfoRow } from './index'
-import storeContext from '../../../storeContext'
+import { InfoRow } from '../index'
+import storeContext from '../../../../storeContext'
 
 const CellForYear = ({ field, row, style }) => {
   const store = useContext(storeContext)

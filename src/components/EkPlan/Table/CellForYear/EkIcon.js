@@ -4,7 +4,7 @@ import get from 'lodash/get'
 import sum from 'lodash/sum'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../storeContext'
+import storeContext from '../../../../storeContext'
 
 const CheckboxContainer = styled.div`
   width: 100%;

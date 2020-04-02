@@ -4,7 +4,7 @@ import sum from 'lodash/sum'
 import { GoZap } from 'react-icons/go'
 import { observer } from 'mobx-react-lite'
 
-import storeContext from '../../../storeContext'
+import storeContext from '../../../../storeContext'
 
 const CheckboxContainer = styled.div`
   width: 100%;
