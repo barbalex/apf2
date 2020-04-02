@@ -18,7 +18,6 @@ alter default privileges in schema apflora
   grant select on tables to apflora_reader;
 alter default privileges in schema apflora
   grant select, usage on sequences to apflora_reader;
-grant apflora_reader to authenticator;
 
 -- apflora_artverantwortlich can do anything
 -- as far as row-level-security allows
@@ -35,7 +34,6 @@ alter default privileges in schema apflora
   grant all on sequences to apflora_artverantwortlich;
 alter default privileges in schema apflora
   grant all on functions to apflora_artverantwortlich;
-grant apflora_artverantwortlich to authenticator;
 
 -- apflora_manager can do anything
 -- as far as row-level-security allows
@@ -54,7 +52,16 @@ alter default privileges in schema apflora
   grant all on sequences to apflora_manager;
 alter default privileges in schema apflora
   grant all on functions to apflora_manager;
+
+
+grant connect on database apflora to authenticator;
 grant apflora_manager to authenticator;
+grant apflora_artverantwortlich to authenticator;
+grant apflora_reader to authenticator;
+grant anon to authenticator;
+
+
+grant connect on database apflora to anon;
 
 -- apflora_freiwillig can work on kontrollen
 -- need to enforce freiwilligen-kontrollen in ui
