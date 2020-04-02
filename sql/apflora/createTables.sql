@@ -20,6 +20,7 @@ alter table apflora.user add constraint role_length_maximum_512 check (length(ro
 CREATE INDEX ON apflora.user USING btree (id);
 CREATE INDEX ON apflora.user USING btree (name);
 CREATE INDEX ON apflora.user USING btree (adresse_id);
+comment on table apflora.user is 'Konten, um den Zugriff auf apflora.ch zu regeln';
 COMMENT ON COLUMN apflora.user.adresse_id IS 'Datensatz bzw. Fremdschlüssel des Users in der Tabelle "adresse". Wird benutzt, damit die EKF-Kontrollen von Freiwilligen-Kontrolleurinnen gefiltert werden können';
 alter table apflora.user add column adresse_id uuid DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE;
 
@@ -55,6 +56,7 @@ CREATE INDEX ON apflora.adresse USING btree (id);
 CREATE INDEX ON apflora.adresse USING btree (name);
 CREATE INDEX ON apflora.adresse USING btree (freiw_erfko);
 CREATE INDEX ON apflora.adresse USING btree (user_id);
+comment on table apflora.adresse is 'Adressen, die in anderen Tabellen zugeordent werden können. Nicht zu verwechseln mit Konten, welche den Zugriff auf apflora.ch ermöglichen (Tabelle apflora.user)';
 COMMENT ON COLUMN apflora.adresse.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.adresse.name IS 'Vor- und Nachname';
 COMMENT ON COLUMN apflora.adresse.adresse IS 'Strasse, PLZ und Ort';
