@@ -34,25 +34,27 @@ create extension if not exists pgcrypto;
 --create extension if not exists pgjwt;
 
 create or replace function apflora.encrypt_pass()
-  returns trigger
-  language plpgsql as
+  returns trigger as
 $$
 begin
-  if TG_OP = 'INSERT' or new.pass <> old.pass then
-    new.pass = crypt(new.pass, gen_salt('bf'));
+  if NULLIF(NEW.pass,'') IS NOT NULL and (TG_OP = 'INSERT' or NEW.pass <> OLD.pass) then
+    NEW.pass = crypt(NEW.pass, gen_salt('bf'));
   end if;
-  return new;
+  return NEW;
 end
-$$;
+$$ 
+language plpgsql security definer;
+comment on function apflora.encrypt_pass() is 'hashed das Passwort bei insert und update';
 
 -- We’ll use the pgcrypto extension and a trigger
 -- to keep passwords safe in the users table
 -- PROBLEM: This trigger does NOT work on insert
 drop trigger if exists encrypt_pass on apflora.user;
 create trigger encrypt_pass
-  before insert or update on apflora.user
-  for each row
-  execute procedure apflora.encrypt_pass();
+before insert or update on apflora.user
+for each row
+execute procedure apflora.encrypt_pass();
+
 GRANT EXECUTE ON FUNCTION apflora.encrypt_pass() TO apflora_reader;
 GRANT EXECUTE ON FUNCTION apflora.encrypt_pass() TO apflora_freiwillig;
 GRANT EXECUTE ON FUNCTION apflora.encrypt_pass() TO authenticator;
