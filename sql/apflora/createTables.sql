@@ -36,8 +36,6 @@ CREATE POLICY reader_writer ON apflora.user
     or current_user = 'apflora_manager'
   );
 
-DROP TABLE IF EXISTS _variable;
-
 DROP TABLE IF EXISTS adresse;
 CREATE TABLE apflora.adresse (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
