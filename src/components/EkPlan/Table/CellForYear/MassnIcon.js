@@ -51,18 +51,10 @@ const MassnIcon = ({ ansiedlungs }) => {
   }
   let sumCounted = null
   const ansiedlungsWithCount = ansiedlungs.filter(
-    ans => ans.anzTriebe !== null || ans.anzPflanzen !== null,
+    ans => ans.zieleinheitAnzahl !== null,
   )
   if (ansiedlungsWithCount.length) {
-    sumCounted = sum(
-      ansiedlungs
-        .filter(ans => ans.anzTriebe !== null || ans.anzPflanzen !== null)
-        .map(
-          ans =>
-            (ans.anzTriebe !== null ? ans.anzTriebe : 0) +
-            (ans.anzPflanzen !== null ? ans.anzPflanzen : 0),
-        ),
-    )
+    sumCounted = sum(ansiedlungsWithCount.map(ans => ans.zieleinheitAnzahl))
   }
 
   return (

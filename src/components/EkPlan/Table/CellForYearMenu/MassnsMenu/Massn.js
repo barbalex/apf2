@@ -29,7 +29,7 @@ const StyledListItemText = styled(ListItemText)`
     font-size: 0.85rem !important;
   }
 `
-const SyledListItem = styled(ListItem)`
+const StyledListItem = styled(ListItem)`
   padding-top: 0 !important;
   padding-bottom: 0 !important;
   font-size: 0.85rem !important;
@@ -52,10 +52,13 @@ const MassnMenu = ({ tpop, massn, border }) => {
     get(massn, 'adresseByBearbeiter.name') || '(kein Bearbeiter)'
   const typ = get(massn, 'tpopmassnTypWerteByTyp.text') || '(kein Typ)'
   const title = `${massn.datum || '(kein Datum)'}: ${typ}, ${bearbeiter}`
-  const anzTriebe =
-    massn.anzTriebe !== null ? massn.anzTriebe : '(nicht erfasst)'
+  const anzTriebe = massn.anzTriebe !== null ? massn.anzTriebe : 'nicht erfasst'
   const anzPflanzen =
-    massn.anzPflanzen !== null ? massn.anzPflanzen : '(nicht erfasst)'
+    massn.anzPflanzen !== null ? massn.anzPflanzen : 'nicht erfasst'
+  const anzZielrelevEinheit = massn.zieleinheitAnzahl
+  const zielrelevEinheit =
+    get(massn, 'tpopkontrzaehlEinheitWerteByZieleinheitEinheit.text') ||
+    '(ziel-relevante Einheit nicht erfasst)'
   const projId = get(tpop, 'popByPopId.apByApId.projId')
   const apId = get(tpop, 'popByPopId.apByApId.id')
   const popId = get(tpop, 'popByPopId.id')
@@ -66,7 +69,7 @@ const MassnMenu = ({ tpop, massn, border }) => {
 
   return (
     <OuterList component="nav" border={border.toString()}>
-      <SyledListItem button onClick={toggleOpen}>
+      <StyledListItem button onClick={toggleOpen}>
         <StyledListItemText primary={title} />
         <OutsideLink
           onClick={() => typeof window !== 'undefined' && window.open(url)}
@@ -75,19 +78,24 @@ const MassnMenu = ({ tpop, massn, border }) => {
           <FaExternalLinkAlt />
         </OutsideLink>
         {open ? <CloseIcon /> : <ExpandIcon />}
-      </SyledListItem>
+      </StyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <InnerList>
-          <SyledListItem component="div">
+          <StyledListItem component="div">
             {`Triebe: ${anzTriebe}`}
-          </SyledListItem>
-          <SyledListItem component="div">
+          </StyledListItem>
+          <StyledListItem component="div">
             {`Pflanzen: ${anzPflanzen}`}
-          </SyledListItem>
+          </StyledListItem>
+          {anzZielrelevEinheit !== null && (
+            <StyledListItem component="div">
+              {`${zielrelevEinheit}: ${anzZielrelevEinheit} (ziel-relevant)`}
+            </StyledListItem>
+          )}
           {!!massn.bemerkungen && (
-            <SyledListItem component="div">
+            <StyledListItem component="div">
               {`Bemerkungen: ${massn.bemerkungen}`}
-            </SyledListItem>
+            </StyledListItem>
           )}
         </InnerList>
       </Collapse>

@@ -55,6 +55,11 @@ export default gql`
             beschreibung
             anzTriebe
             anzPflanzen
+            zieleinheitAnzahl
+            tpopkontrzaehlEinheitWerteByZieleinheitEinheit {
+              id
+              text
+            }
             tpopmassnTypWerteByTyp {
               id
               text

@@ -90,6 +90,11 @@ export default gql`
           beschreibung
           anzTriebe
           anzPflanzen
+          zieleinheitAnzahl
+          tpopkontrzaehlEinheitWerteByZieleinheitEinheit {
+            id
+            text
+          }
           bemerkungen
           adresseByBearbeiter {
             id
