@@ -361,8 +361,25 @@ ORDER BY
   apflora.pop.nr,
   pop_letztes_massnberjahr.jahr;
 
+-- TODO: make this query more efficient. Takes 48s to run
 DROP VIEW IF EXISTS apflora.v_tpop_popberundmassnber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_popberundmassnber AS
+with berjahre as (
+  SELECT
+    apflora.tpop.id,
+    apflora.tpopber.jahr
+  FROM
+    apflora.tpop
+    INNER JOIN apflora.tpopber 
+    ON apflora.tpop.id = apflora.tpopber.tpop_id
+  UNION SELECT
+    apflora.tpop.id,
+    apflora.tpopmassnber.jahr
+  FROM
+    apflora.tpop
+    INNER JOIN apflora.tpopmassnber
+    ON apflora.tpop.id = apflora.tpopmassnber.tpop_id
+)
 SELECT
   apflora.ap.id AS ap_id,
   apflora.ae_taxonomies.artname,
@@ -439,21 +456,21 @@ FROM
     apflora.pop_status_werte AS "domPopHerkunft_1"
     ON apflora.tpop.status = "domPopHerkunft_1".code)
   LEFT JOIN
-    apflora.v_tpop_berjahrundmassnjahr
-    ON apflora.tpop.id = apflora.v_tpop_berjahrundmassnjahr.id)
+    berjahre
+    ON apflora.tpop.id = berjahre.id)
   LEFT JOIN
     apflora.tpopmassnber
     ON
-      (apflora.v_tpop_berjahrundmassnjahr.id = apflora.tpopmassnber.tpop_id)
-      AND (apflora.v_tpop_berjahrundmassnjahr.jahr = apflora.tpopmassnber.jahr))
+      (berjahre.id = apflora.tpopmassnber.tpop_id)
+      AND (berjahre.jahr = apflora.tpopmassnber.jahr))
   LEFT JOIN
     apflora.tpopmassn_erfbeurt_werte
     ON apflora.tpopmassnber.beurteilung = tpopmassn_erfbeurt_werte.code)
   LEFT JOIN
     apflora.tpopber
     ON
-      (apflora.v_tpop_berjahrundmassnjahr.jahr = apflora.tpopber.jahr)
-      AND (apflora.v_tpop_berjahrundmassnjahr.id = apflora.tpopber.tpop_id))
+      (berjahre.jahr = apflora.tpopber.jahr)
+      AND (berjahre.id = apflora.tpopber.tpop_id))
   LEFT JOIN
     apflora.tpop_entwicklung_werte
     ON apflora.tpopber.entwicklung = tpop_entwicklung_werte.code
@@ -461,7 +478,7 @@ ORDER BY
   apflora.ae_taxonomies.artname,
   apflora.pop.nr,
   apflora.tpop.nr,
-  apflora.v_tpop_berjahrundmassnjahr.jahr;
+  berjahre.jahr;
 
 DROP VIEW IF EXISTS apflora.v_pop_berjahrundmassnjahrvontpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_berjahrundmassnjahrvontpop AS

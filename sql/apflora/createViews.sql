@@ -4017,15 +4017,15 @@ SELECT
   apflora.tpopber.jahr
 FROM
   apflora.tpop
-  INNER JOIN apflora.tpopber ON apflora.tpop.id = apflora.tpopber.tpop_id
-UNION DISTINCT SELECT
+  INNER JOIN apflora.tpopber 
+  ON apflora.tpop.id = apflora.tpopber.tpop_id
+UNION SELECT
   apflora.tpop.id,
   apflora.tpopmassnber.jahr
 FROM
   apflora.tpop
-  INNER JOIN
-    apflora.tpopmassnber
-    ON apflora.tpop.id = apflora.tpopmassnber.tpop_id
+  INNER JOIN apflora.tpopmassnber
+  ON apflora.tpop.id = apflora.tpopmassnber.tpop_id
 ORDER BY
   jahr;
 
