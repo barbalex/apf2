@@ -4,52 +4,6 @@
  */
 
 
-DROP VIEW IF EXISTS apflora.v_q_tpop_erloschenundrelevantaberletztebeobvor1950 CASCADE;
-CREATE OR REPLACE VIEW apflora.v_q_tpop_erloschenundrelevantaberletztebeobvor1950 AS
-SELECT
-  apflora.ap.proj_id,
-  apflora.ap.id as ap_id,
-  apflora.pop.id as pop_id,
-  apflora.pop.nr as pop_nr,
-  apflora.tpop.id,
-  apflora.tpop.nr
-FROM
-  apflora.ap
-  INNER JOIN
-    (apflora.pop
-    INNER JOIN
-      apflora.tpop
-      ON apflora.pop.id = apflora.tpop.pop_id)
-    ON apflora.ap.id = apflora.pop.ap_id
-WHERE
-  apflora.tpop.status IN (101, 202)
-  AND apflora.tpop.apber_relevant = true
-  AND apflora.tpop.id NOT IN (
-    SELECT DISTINCT
-      apflora.tpopkontr.tpop_id
-    FROM
-      apflora.tpopkontr
-      INNER JOIN
-        apflora.tpopkontrzaehl
-        ON apflora.tpopkontr.id = apflora.tpopkontrzaehl.tpopkontr_id
-    WHERE
-      apflora.tpopkontr.typ NOT IN ('Zwischenziel', 'Ziel')
-      AND apflora.tpopkontrzaehl.anzahl > 0
-  )
-  AND apflora.tpop.id IN (
-    SELECT apflora.beob.tpop_id
-    FROM
-      apflora.beob
-      INNER JOIN
-        apflora.v_q_tpop_erloschenundrelevantaberletztebeobvor1950_maxbeobjahr
-        ON apflora.beob.tpop_id = apflora.v_q_tpop_erloschenundrelevantaberletztebeobvor1950_maxbeobjahr.id
-    WHERE
-      apflora.v_q_tpop_erloschenundrelevantaberletztebeobvor1950_maxbeobjahr."MaxJahr" < 1950
-  )
-ORDER BY
-  apflora.pop.nr,
-  apflora.tpop.nr;
-
 DROP VIEW IF EXISTS apflora.v_q_pop_statuserloschenletzterpopberaktuell CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_statuserloschenletzterpopberaktuell AS
 with letzter_popber as (

@@ -4951,22 +4951,60 @@ ORDER BY
   apflora.pop.nr,
   apflora.tpop.nr;
 
-DROP VIEW IF EXISTS apflora.v_q_tpop_erloschenundrelevantaberletztebeobvor1950_maxbeobjahr CASCADE;
-CREATE OR REPLACE VIEW apflora.v_q_tpop_erloschenundrelevantaberletztebeobvor1950_maxbeobjahr AS
-SELECT
- apflora.beob.tpop_id as id,
-  max(
-    date_part('year', apflora.beob.datum)
-  ) AS "MaxJahr"
-FROM
-  apflora.beob
-WHERE
-  apflora.beob.datum IS NOT NULL AND
-  apflora.beob.tpop_id IS NOT NULL
-GROUP BY
-  apflora.beob.tpop_id;
-
-DROP VIEW IF EXISTS apflora.v_apber_pop_uebersicht CASCADE;
+drop view if exists apflora.v_q_tpop_erloschenundrelevantaberletztebeobvor1950 cascade;
+create or replace view apflora.v_q_tpop_erloschenundrelevantaberletztebeobvor1950 as
+with tpop_max_beobjahr as (
+  select
+    tpop_id as id,
+    max(date_part('year', datum)) as jahr
+  from
+    apflora.beob
+  where
+    datum is not null and
+    tpop_id is not null
+  group by
+    tpop_id
+)
+select
+  apflora.ap.proj_id,
+  apflora.ap.id as ap_id,
+  apflora.pop.id as pop_id,
+  apflora.pop.nr as pop_nr,
+  apflora.tpop.id,
+  apflora.tpop.nr
+from
+  apflora.ap
+  inner join apflora.pop
+    inner join apflora.tpop
+    on apflora.pop.id = apflora.tpop.pop_id
+  on apflora.ap.id = apflora.pop.ap_id
+where
+  apflora.tpop.status in (101, 202)
+  and apflora.tpop.apber_relevant = true
+  and apflora.tpop.id not in (
+    select distinct
+      apflora.tpopkontr.tpop_id
+    from
+      apflora.tpopkontr
+      inner join apflora.tpopkontrzaehl
+      on apflora.tpopkontr.id = apflora.tpopkontrzaehl.tpopkontr_id
+    where
+      apflora.tpopkontr.typ not in ('zwischenziel', 'ziel')
+      and apflora.tpopkontrzaehl.anzahl > 0
+  )
+  and apflora.tpop.id in (
+    select
+      apflora.beob.tpop_id
+    from
+      apflora.beob
+      inner join tpop_max_beobjahr
+      on apflora.beob.tpop_id = tpop_max_beobjahr.id
+    where
+      tpop_max_beobjahr.jahr < 1950
+  )
+order by
+  apflora.pop.nr,
+  apflora.tpop.nr;
 
 -- new views beginning 2017.10.04
 
