@@ -4,48 +4,6 @@
  */
 
 
-DROP VIEW IF EXISTS apflora.v_q_pop_statuserloschenletzterpopberaktuell CASCADE;
-CREATE OR REPLACE VIEW apflora.v_q_pop_statuserloschenletzterpopberaktuell AS
-with letzter_popber as (
-  SELECT distinct on (apflora.popber.pop_id)
-    apflora.popber.pop_id,
-    apflora.popber.jahr
-  FROM
-    apflora.popber
-  WHERE
-    apflora.popber.jahr IS NOT NULL
-  order by
-    apflora.popber.pop_id,
-    apflora.popber.jahr desc
-)
-SELECT DISTINCT
-  apflora.ap.proj_id,
-  apflora.pop.ap_id,
-  apflora.pop.id,
-  apflora.pop.nr
-FROM
-  apflora.ap
-    INNER JOIN
-    (apflora.pop
-    INNER JOIN
-      (apflora.popber
-      INNER JOIN
-        letzter_popber
-        ON
-          (letzter_popber.jahr = apflora.popber.jahr)
-          AND (letzter_popber.pop_id = apflora.popber.pop_id))
-      ON apflora.popber.pop_id = apflora.pop.id)
-    INNER JOIN
-      apflora.tpop
-      ON apflora.tpop.pop_id = apflora.pop.id
-    ON apflora.pop.ap_id = apflora.ap.id
-WHERE
-  apflora.popber.entwicklung < 8
-  AND apflora.pop.status  IN (101, 202)
-  AND apflora.tpop.apber_relevant = true
-ORDER BY
-  apflora.pop.nr;
-
 DROP VIEW IF EXISTS apflora.v_q_tpop_statuserloschenletzterpopberaktuell CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_tpop_statuserloschenletzterpopberaktuell AS
 with tpop_letzterpopber as (
