@@ -920,6 +920,18 @@ ORDER BY
 
 DROP VIEW IF EXISTS apflora.v_q_tpop_statuserloschenletzterpopberaktuell CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_tpop_statuserloschenletzterpopberaktuell AS
+with tpop_letzterpopber as (
+  SELECT distinct on (tpop_id)
+    tpop_id,
+    jahr AS tpopber_jahr
+  FROM
+    apflora.tpopber
+  WHERE
+    jahr IS NOT NULL
+  order BY
+    tpop_id,
+    jahr desc
+)
 SELECT DISTINCT
   apflora.ap.proj_id,
   apflora.pop.ap_id,
@@ -936,10 +948,10 @@ FROM
       INNER JOIN
         (apflora.tpopber
         INNER JOIN
-          apflora.v_tpop_letztertpopber0_overall
+          tpop_letzterpopber
           ON
-            (v_tpop_letztertpopber0_overall.tpopber_jahr = apflora.tpopber.jahr)
-            AND (v_tpop_letztertpopber0_overall.tpop_id = apflora.tpopber.tpop_id))
+            (tpop_letzterpopber.tpopber_jahr = apflora.tpopber.jahr)
+            AND (tpop_letzterpopber.tpop_id = apflora.tpopber.tpop_id))
         ON apflora.tpopber.tpop_id = apflora.tpop.id)
       ON apflora.tpop.pop_id = apflora.pop.id
     ON apflora.pop.ap_id = apflora.ap.id

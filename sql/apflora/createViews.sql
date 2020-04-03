@@ -1219,19 +1219,6 @@ FROM
 ORDER BY	
   apflora.ae_taxonomies.artname;
 
--- dieser view ist für die Qualitätskontrolle gedacht - daher letzter tpopber überhaupt
-DROP VIEW IF EXISTS apflora.v_tpop_letztertpopber0_overall CASCADE;
-CREATE OR REPLACE VIEW apflora.v_tpop_letztertpopber0_overall AS
-SELECT
-  tpop_id,
-  max(jahr) AS tpopber_jahr
-FROM
-  apflora.tpopber
-WHERE
-  jahr IS NOT NULL
-GROUP BY
-  tpop_id;
-
 DROP VIEW IF EXISTS apflora.v_tpop_mitapaberohnestatus CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_mitapaberohnestatus AS
 SELECT
