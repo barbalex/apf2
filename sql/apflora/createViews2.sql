@@ -5,6 +5,73 @@
 
 DROP VIEW IF EXISTS apflora.v_ap_apberundmassn CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_apberundmassn AS
+with massn_jahre as (
+  SELECT
+    jahr
+  FROM
+    apflora.tpopmassn
+  GROUP BY
+    jahr
+  HAVING
+    jahr BETWEEN 1900 AND 2100
+  ORDER BY
+    jahr
+),
+ap_massn_jahre as (
+  SELECT
+    apflora.ap.id,
+    massn_jahre.jahr
+  FROM
+    apflora.ap,
+    massn_jahre
+  WHERE
+    apflora.ap.bearbeitung < 4
+  ORDER BY
+    apflora.ap.id,
+    massn_jahre.jahr
+),
+ap_anzmassnprojahr0 as (
+  SELECT
+    apflora.ap.id,
+    apflora.tpopmassn.jahr,
+    count(apflora.tpopmassn.id) AS anz_tpopmassn
+  FROM
+    apflora.ap
+    INNER JOIN
+      apflora.pop
+      INNER JOIN
+        apflora.tpop
+        ON apflora.pop.id = apflora.tpop.pop_id
+      INNER JOIN
+        apflora.tpopmassn
+        ON apflora.tpop.id = apflora.tpopmassn.tpop_id
+      ON apflora.ap.id = apflora.pop.ap_id
+  WHERE
+    apflora.ap.bearbeitung BETWEEN 1 AND 3
+    AND apflora.tpop.apber_relevant = true
+    AND apflora.pop.status  <> 300
+  GROUP BY
+    apflora.ap.id,
+    apflora.tpopmassn.jahr
+  HAVING
+    apflora.tpopmassn.jahr IS NOT NULL
+),
+ap_anzmassnprojahr as (
+  SELECT
+    ap_massn_jahre.id,
+    ap_massn_jahre.jahr,
+    COALESCE(ap_anzmassnprojahr0.anz_tpopmassn, 0) AS anzahl_massnahmen
+  FROM
+    ap_massn_jahre
+    LEFT JOIN
+      ap_anzmassnprojahr0
+      ON
+        (ap_massn_jahre.jahr = ap_anzmassnprojahr0.jahr)
+        AND (ap_massn_jahre.id = ap_anzmassnprojahr0.id)
+  ORDER BY
+    ap_massn_jahre.id,
+    ap_massn_jahre.jahr
+)
 SELECT
   apflora.ap.id,
   apflora.ae_taxonomies.artname,
@@ -13,8 +80,8 @@ SELECT
   apflora.ap_umsetzung_werte.text AS umsetzung,
   apflora.adresse.name AS bearbeiter,
   apflora.ae_taxonomies.artwert,
-  apflora.v_ap_anzmassnprojahr.jahr AS massn_jahr,
-  apflora.v_ap_anzmassnprojahr.anzahl_massnahmen AS massn_anzahl,
+  ap_anzmassnprojahr.jahr AS massn_jahr,
+  ap_anzmassnprojahr.anzahl_massnahmen AS massn_anzahl,
   apflora.v_ap_anzmassnbisjahr.anzahl_massnahmen AS massn_anzahl_bisher,
   CASE
     WHEN apflora.apber.jahr > 0
@@ -23,34 +90,27 @@ SELECT
   END AS bericht_erstellt
 FROM
   apflora.ae_taxonomies
-    INNER JOIN
-      ((((apflora.ap
-      LEFT JOIN
-        apflora.ap_bearbstand_werte
-        ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
-      LEFT JOIN
-        apflora.ap_umsetzung_werte
-        ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
-      LEFT JOIN
-        apflora.adresse
-        ON apflora.ap.bearbeiter = apflora.adresse.id)
-      INNER JOIN
-        (apflora.v_ap_anzmassnprojahr
-        INNER JOIN
-          (apflora.v_ap_anzmassnbisjahr
-          LEFT JOIN
-            apflora.apber
-            ON
-              (apflora.v_ap_anzmassnbisjahr.jahr = apflora.apber.jahr)
-              AND (apflora.v_ap_anzmassnbisjahr.id = apflora.apber.ap_id))
-          ON
-            (apflora.v_ap_anzmassnprojahr.jahr = apflora.v_ap_anzmassnbisjahr.jahr)
-            AND (apflora.v_ap_anzmassnprojahr.id = apflora.v_ap_anzmassnbisjahr.id))
-        ON apflora.ap.id = apflora.v_ap_anzmassnprojahr.id)
-      ON apflora.ae_taxonomies.id = apflora.ap.art_id
+  INNER JOIN apflora.ap
+    LEFT JOIN apflora.ap_bearbstand_werte
+    ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code
+    LEFT JOIN apflora.ap_umsetzung_werte
+    ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code
+    LEFT JOIN apflora.adresse
+    ON apflora.ap.bearbeiter = apflora.adresse.id
+    INNER JOIN ap_anzmassnprojahr
+      INNER JOIN apflora.v_ap_anzmassnbisjahr
+        LEFT JOIN apflora.apber
+        ON
+          (apflora.v_ap_anzmassnbisjahr.jahr = apflora.apber.jahr)
+          AND (apflora.v_ap_anzmassnbisjahr.id = apflora.apber.ap_id)
+      ON
+        (ap_anzmassnprojahr.jahr = apflora.v_ap_anzmassnbisjahr.jahr)
+        AND (ap_anzmassnprojahr.id = apflora.v_ap_anzmassnbisjahr.id)
+    ON apflora.ap.id = ap_anzmassnprojahr.id
+  ON apflora.ae_taxonomies.id = apflora.ap.art_id
 ORDER BY
   apflora.ae_taxonomies.artname,
-  apflora.v_ap_anzmassnprojahr.jahr;
+  ap_anzmassnprojahr.jahr;
 
 DROP VIEW IF EXISTS apflora.v_tpop_statuswidersprichtbericht CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_statuswidersprichtbericht AS
