@@ -1340,9 +1340,8 @@ ORDER BY
   apflora.pop.nr,
   apflora.tpop.nr;
 
--- TODO: make this query more efficient. Takes > 2 minutes to run!
-DROP VIEW IF EXISTS apflora.v_tpop_erste_und_letzte_kontrolle CASCADE;
-CREATE OR REPLACE VIEW apflora.v_tpop_erste_und_letzte_kontrolle AS
+DROP VIEW IF EXISTS apflora.v_tpop_erste_und_letzte_kontrolle_und_letzter_tpopber CASCADE;
+CREATE OR REPLACE VIEW apflora.v_tpop_erste_und_letzte_kontrolle_und_letzter_tpopber AS
 with kontr_anzprojahr as (
   SELECT
     apflora.tpop.id,
@@ -1440,6 +1439,49 @@ tpop_erste_kontr_id as (
     LEFT JOIN
       tpopkontr_erste_id
       ON apflora.tpop.id = tpopkontr_erste_id.id
+),
+tpopber_letzte_id as (
+  SELECT
+    apflora.tpopkontr.tpop_id,
+    (
+      select id
+      from apflora.tpopber
+      where tpop_id = apflora.tpopkontr.tpop_id
+      order by changed desc
+      limit 1
+    ) AS tpopber_letzte_id,
+    count(apflora.tpopber.id) AS tpopber_anz
+  FROM
+    apflora.tpopkontr
+    INNER JOIN
+      apflora.tpopber
+      ON apflora.tpopkontr.tpop_id = apflora.tpopber.tpop_id
+  WHERE
+    apflora.tpopkontr.typ NOT IN ('Ziel', 'Zwischenziel')
+    AND apflora.tpopber.jahr IS NOT NULL
+  GROUP BY
+    apflora.tpopkontr.tpop_id
+),
+letzte_tpopber as (
+  SELECT
+    apflora.tpopber.tpop_id,
+    tpopber_letzte_id.tpopber_anz,
+    apflora.tpopber.id,
+    apflora.tpopber.jahr,
+    apflora.tpop_entwicklung_werte.text AS entwicklung,
+    apflora.tpopber.bemerkungen,
+    apflora.tpopber.changed,
+    apflora.tpopber.changed_by
+  FROM
+    tpopber_letzte_id
+    INNER JOIN
+      apflora.tpopber
+      ON
+        (tpopber_letzte_id.tpopber_letzte_id = apflora.tpopber.id)
+        AND (tpopber_letzte_id.tpop_id = apflora.tpopber.tpop_id)
+    LEFT JOIN
+      apflora.tpop_entwicklung_werte
+      ON apflora.tpopber.entwicklung = tpop_entwicklung_werte.code
 )
 SELECT
   apflora.pop.ap_id,
@@ -1583,12 +1625,21 @@ SELECT
   ek.ekf_bemerkungen as erste_kontrolle_ekf_bemerkungen,
   ek.zaehlung_anzahlen as erste_kontrolle_zaehlung_anzahlen,
   ek.zaehlung_einheiten AS erste_kontrolle_zaehlung_einheiten,
-  ek.zaehlung_methoden AS erste_kontrolle_zaehlung_methoden
+  ek.zaehlung_methoden AS erste_kontrolle_zaehlung_methoden,
+	letzte_tpopber.tpopber_anz,
+	letzte_tpopber.id AS tpopber_id,
+	letzte_tpopber.jahr as tpopber_jahr,
+	letzte_tpopber.entwicklung as tpopber_entwicklung,
+	letzte_tpopber.bemerkungen as tpopber_bemerkungen,
+	letzte_tpopber.changed as tpopber_changed,
+	letzte_tpopber.changed_by  as tpopber_changed_by
 FROM
   apflora.ae_taxonomies
   INNER JOIN apflora.ap
     INNER JOIN apflora.pop
       INNER JOIN apflora.tpop
+        LEFT JOIN letzte_tpopber
+        ON apflora.tpop.id = letzte_tpopber.tpop_id
         INNER JOIN
           tpop_letzte_kontr_id
           ON tpop_letzte_kontr_id.id = apflora.tpop.id
@@ -1620,7 +1671,11 @@ FROM
       ON apflora.ap.bearbeiter = apflora.adresse.id
   ON apflora.ae_taxonomies.id = apflora.ap.art_id
 WHERE
-  apflora.ae_taxonomies.taxid > 150;
+  apflora.ae_taxonomies.taxid > 150
+order by
+  apflora.ae_taxonomies.artname,
+  apflora.pop.nr,
+  apflora.tpop.nr;
 
 DROP VIEW IF EXISTS apflora.v_tpop_webgisbun CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_webgisbun AS
