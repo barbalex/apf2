@@ -52,28 +52,6 @@ ORDER BY
   apflora.ae_taxonomies.artname,
   apflora.v_ap_anzmassnprojahr.jahr;
 
-DROP VIEW IF EXISTS apflora.v_apber_uebe CASCADE;
-DROP VIEW IF EXISTS apflora.v_apber_uebe_apid CASCADE;
-DROP VIEW IF EXISTS apflora.v_apber_uebkm CASCADE;
-DROP VIEW IF EXISTS apflora.v_apber_uebma CASCADE;
-DROP VIEW IF EXISTS apflora.v_apber_uebma_apid CASCADE;
-DROP VIEW IF EXISTS apflora.v_apber_uebme CASCADE;
-DROP VIEW IF EXISTS apflora.v_apber_uebme_apid CASCADE;
-DROP VIEW IF EXISTS apflora.v_apber_uebne CASCADE;
-DROP VIEW IF EXISTS apflora.v_apber_uebne_apid CASCADE;
-DROP VIEW IF EXISTS apflora.v_apber_uebse CASCADE;
-DROP VIEW IF EXISTS apflora.v_apber_uebse_apid CASCADE;
-DROP VIEW IF EXISTS apflora.v_apber_uebun CASCADE;
-DROP VIEW IF EXISTS apflora.v_apber_uebun_apid CASCADE;
-DROP VIEW IF EXISTS apflora.v_apber_uebwe CASCADE;
-DROP VIEW IF EXISTS apflora.v_apber_uebwe_apid CASCADE;
-DROP VIEW IF EXISTS apflora.v_apber_uebnb000 CASCADE;
-DROP VIEW IF EXISTS apflora.v_apber_uebnb00 CASCADE;
-DROP VIEW IF EXISTS apflora.v_apber_uebnb0 CASCADE;
-DROP VIEW IF EXISTS apflora.v_apber_uebnb CASCADE;
-DROP VIEW IF EXISTS apflora.v_apber_uet01 CASCADE;
-DROP VIEW IF EXISTS apflora.v_apber_uet_veraengegenvorjahr CASCADE;
-
 DROP VIEW IF EXISTS apflora.v_tpop_statuswidersprichtbericht CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_statuswidersprichtbericht AS
 with letzter_tpopber as (
