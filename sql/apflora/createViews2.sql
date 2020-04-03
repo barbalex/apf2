@@ -5,6 +5,49 @@
 
 DROP VIEW IF EXISTS apflora.v_tpop_erste_und_letzte_kontrolle_und_letzter_tpopber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_erste_und_letzte_kontrolle_und_letzter_tpopber AS
+with tpopber_letzte_id as (
+  SELECT
+    apflora.tpopkontr.tpop_id,
+    (
+      select id
+      from apflora.tpopber
+      where tpop_id = apflora.tpopkontr.tpop_id
+      order by changed desc
+      limit 1
+    ) AS tpopber_letzte_id,
+    count(apflora.tpopber.id) AS tpopber_anz
+  FROM
+    apflora.tpopkontr
+    INNER JOIN
+      apflora.tpopber
+      ON apflora.tpopkontr.tpop_id = apflora.tpopber.tpop_id
+  WHERE
+    apflora.tpopkontr.typ NOT IN ('Ziel', 'Zwischenziel')
+    AND apflora.tpopber.jahr IS NOT NULL
+  GROUP BY
+    apflora.tpopkontr.tpop_id
+),
+letzte_tpopber as (
+  SELECT
+    apflora.tpopber.tpop_id,
+    tpopber_letzte_id.tpopber_anz,
+    apflora.tpopber.id,
+    apflora.tpopber.jahr,
+    apflora.tpop_entwicklung_werte.text AS entwicklung,
+    apflora.tpopber.bemerkungen,
+    apflora.tpopber.changed,
+    apflora.tpopber.changed_by
+  FROM
+    tpopber_letzte_id
+    INNER JOIN
+      apflora.tpopber
+      ON
+        (tpopber_letzte_id.tpopber_letzte_id = apflora.tpopber.id)
+        AND (tpopber_letzte_id.tpop_id = apflora.tpopber.tpop_id)
+    LEFT JOIN
+      apflora.tpop_entwicklung_werte
+      ON apflora.tpopber.entwicklung = tpop_entwicklung_werte.code
+)
 SELECT
   eulk.ap_id,
   eulk.familie,
@@ -157,5 +200,5 @@ SELECT
 FROM
 	apflora.v_tpop_erste_und_letzte_kontrolle as eulk
   LEFT JOIN
-    apflora.v_tpopber_mitletzterid as letzte_tpopber
+    letzte_tpopber
     ON eulk.id = letzte_tpopber.tpop_id;

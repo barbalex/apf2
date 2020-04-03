@@ -71,50 +71,6 @@ ORDER BY
   apflora.pop.nr,
   letzter_popber.jahr;
 
-DROP VIEW IF EXISTS apflora.v_tpopber_mitletzterid CASCADE;
-CREATE OR REPLACE VIEW apflora.v_tpopber_mitletzterid AS
-with tpopber_letzteid as (
-  SELECT
-    apflora.tpopkontr.tpop_id,
-    (
-      select id
-      from apflora.tpopber
-      where tpop_id = apflora.tpopkontr.tpop_id
-      order by changed desc
-      limit 1
-    ) AS tpopber_letzte_id,
-    count(apflora.tpopber.id) AS tpopber_anz
-  FROM
-    apflora.tpopkontr
-    INNER JOIN
-      apflora.tpopber
-      ON apflora.tpopkontr.tpop_id = apflora.tpopber.tpop_id
-  WHERE
-    apflora.tpopkontr.typ NOT IN ('Ziel', 'Zwischenziel')
-    AND apflora.tpopber.jahr IS NOT NULL
-  GROUP BY
-    apflora.tpopkontr.tpop_id
-)
-SELECT
-  apflora.tpopber.tpop_id,
-  tpopber_letzteid.tpopber_anz,
-  apflora.tpopber.id,
-  apflora.tpopber.jahr,
-  apflora.tpop_entwicklung_werte.text AS entwicklung,
-  apflora.tpopber.bemerkungen,
-  apflora.tpopber.changed,
-  apflora.tpopber.changed_by
-FROM
-  tpopber_letzteid
-  INNER JOIN
-    apflora.tpopber
-    ON
-      (tpopber_letzteid.tpopber_letzte_id = apflora.tpopber.id)
-      AND (tpopber_letzteid.tpop_id = apflora.tpopber.tpop_id)
-  LEFT JOIN
-    apflora.tpop_entwicklung_werte
-    ON apflora.tpopber.entwicklung = tpop_entwicklung_werte.code;
-
 DROP VIEW IF EXISTS apflora.v_pop_mit_letzter_popmassnber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_mit_letzter_popmassnber AS
 with pop_letztes_massnberjahr as (
