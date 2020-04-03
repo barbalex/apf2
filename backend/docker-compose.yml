@@ -20,6 +20,17 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
       - sik_data:/sik_data
+  backup:
+    container_name: : apf_backup
+    restart: always
+    build:
+      context: : ./backup
+    networks:
+      - network
+    depends_on:
+      - db
+    volumes:
+      - backup_data:/etc/data
   graphql:
     container_name: apf_graphql
     restart: unless-stopped
@@ -35,8 +46,7 @@ services:
       - db
     env_file:
       - ./.env
-    command:
-      [
+    command: [
         '--connection',
         '${DATABASE_URL}',
         '--schema',
@@ -46,7 +56,8 @@ services:
         '--jwt-token-identifier',
         'auth.jwt_token',
         '--default-role',
-        'postgres',
+        # 'postgres',
+        'authenticator',
         '--jwt-secret',
         '${JWT_SECRET}',
         '--cors',

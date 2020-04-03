@@ -1,7 +1,7 @@
 # see: https://caddyserver.com/docs/caddyfile/concepts
 {
   email alex.barbalex@gmail.com
-  #acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+  acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
   #debug
 }
 
