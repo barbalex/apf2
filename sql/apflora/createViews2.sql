@@ -71,6 +71,34 @@ ap_anzmassnprojahr as (
   ORDER BY
     ap_massn_jahre.id,
     ap_massn_jahre.jahr
+),
+ap_anzmassn_alle_jahre as (
+  SELECT
+    ap_massn_jahre.id,
+    ap_massn_jahre.jahr,
+    COALESCE(ap_anzmassnprojahr0.anz_tpopmassn, 0) AS anzahl_massnahmen
+  FROM
+    ap_massn_jahre
+    LEFT JOIN
+      ap_anzmassnprojahr0
+      ON
+        (ap_massn_jahre.jahr = ap_anzmassnprojahr0.jahr)
+        AND (ap_massn_jahre.id = ap_anzmassnprojahr0.id)
+),
+  ap_anzmassnbisjahr as (SELECT
+    ap_massn_jahre.id,
+    ap_massn_jahre.jahr,
+    sum(ap_anzmassn_alle_jahre.anzahl_massnahmen) AS anzahl_massnahmen
+  FROM
+    ap_massn_jahre
+    INNER JOIN
+      ap_anzmassn_alle_jahre
+      ON ap_massn_jahre.id = ap_anzmassn_alle_jahre.id
+  WHERE
+    ap_anzmassn_alle_jahre.jahr <= ap_massn_jahre.jahr
+  GROUP BY
+    ap_massn_jahre.id,
+    ap_massn_jahre.jahr
 )
 SELECT
   apflora.ap.id,
@@ -82,7 +110,7 @@ SELECT
   apflora.ae_taxonomies.artwert,
   ap_anzmassnprojahr.jahr AS massn_jahr,
   ap_anzmassnprojahr.anzahl_massnahmen AS massn_anzahl,
-  apflora.v_ap_anzmassnbisjahr.anzahl_massnahmen AS massn_anzahl_bisher,
+  ap_anzmassnbisjahr.anzahl_massnahmen AS massn_anzahl_bisher,
   CASE
     WHEN apflora.apber.jahr > 0
     THEN 'ja'
@@ -98,14 +126,14 @@ FROM
     LEFT JOIN apflora.adresse
     ON apflora.ap.bearbeiter = apflora.adresse.id
     INNER JOIN ap_anzmassnprojahr
-      INNER JOIN apflora.v_ap_anzmassnbisjahr
+      INNER JOIN ap_anzmassnbisjahr
         LEFT JOIN apflora.apber
         ON
-          (apflora.v_ap_anzmassnbisjahr.jahr = apflora.apber.jahr)
-          AND (apflora.v_ap_anzmassnbisjahr.id = apflora.apber.ap_id)
+          (ap_anzmassnbisjahr.jahr = apflora.apber.jahr)
+          AND (ap_anzmassnbisjahr.id = apflora.apber.ap_id)
       ON
-        (ap_anzmassnprojahr.jahr = apflora.v_ap_anzmassnbisjahr.jahr)
-        AND (ap_anzmassnprojahr.id = apflora.v_ap_anzmassnbisjahr.id)
+        (ap_anzmassnprojahr.jahr = ap_anzmassnbisjahr.jahr)
+        AND (ap_anzmassnprojahr.id = ap_anzmassnbisjahr.id)
     ON apflora.ap.id = ap_anzmassnprojahr.id
   ON apflora.ae_taxonomies.id = apflora.ap.art_id
 ORDER BY
