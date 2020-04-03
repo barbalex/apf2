@@ -4010,24 +4010,35 @@ ORDER BY
   apflora.tpopber.jahr,
   tpop_entwicklung_werte.text;
 
-DROP VIEW IF EXISTS apflora.v_tpop_berjahrundmassnjahr CASCADE;
-CREATE OR REPLACE VIEW apflora.v_tpop_berjahrundmassnjahr AS
+DROP VIEW IF EXISTS apflora.v_pop_berjahrundmassnjahrvontpop CASCADE;
+CREATE OR REPLACE VIEW apflora.v_pop_berjahrundmassnjahrvontpop AS
+with berjahre as (
+  SELECT
+    apflora.tpop.id,
+    apflora.tpopber.jahr
+  FROM
+    apflora.tpop
+    INNER JOIN apflora.tpopber 
+    ON apflora.tpop.id = apflora.tpopber.tpop_id
+  UNION SELECT
+    apflora.tpop.id,
+    apflora.tpopmassnber.jahr
+  FROM
+    apflora.tpop
+    INNER JOIN apflora.tpopmassnber
+    ON apflora.tpop.id = apflora.tpopmassnber.tpop_id
+)
 SELECT
-  apflora.tpop.id,
-  apflora.tpopber.jahr
+  apflora.tpop.pop_id,
+  berjahre.jahr
 FROM
-  apflora.tpop
-  INNER JOIN apflora.tpopber 
-  ON apflora.tpop.id = apflora.tpopber.tpop_id
-UNION SELECT
-  apflora.tpop.id,
-  apflora.tpopmassnber.jahr
-FROM
-  apflora.tpop
-  INNER JOIN apflora.tpopmassnber
-  ON apflora.tpop.id = apflora.tpopmassnber.tpop_id
-ORDER BY
-  jahr;
+  berjahre
+  INNER JOIN
+    apflora.tpop
+    ON berjahre.id = apflora.tpop.id
+GROUP BY
+  apflora.tpop.pop_id,
+  berjahre.jahr;
 
 -- TODO: make this query more efficient. Takes 48s to run
 DROP VIEW IF EXISTS apflora.v_tpop_popberundmassnber CASCADE;

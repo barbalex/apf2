@@ -361,20 +361,6 @@ ORDER BY
   apflora.pop.nr,
   pop_letztes_massnberjahr.jahr;
 
-DROP VIEW IF EXISTS apflora.v_pop_berjahrundmassnjahrvontpop CASCADE;
-CREATE OR REPLACE VIEW apflora.v_pop_berjahrundmassnjahrvontpop AS
-SELECT
-  apflora.tpop.pop_id,
-  apflora.v_tpop_berjahrundmassnjahr.jahr
-FROM
-  apflora.v_tpop_berjahrundmassnjahr
-  INNER JOIN
-    apflora.tpop
-    ON apflora.v_tpop_berjahrundmassnjahr.id = apflora.tpop.id
-GROUP BY
-  apflora.tpop.pop_id,
-  apflora.v_tpop_berjahrundmassnjahr.jahr;
-
 DROP VIEW IF EXISTS apflora.v_tpopber_mitletzterid CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopber_mitletzterid AS
 with tpopber_letzteid as (
