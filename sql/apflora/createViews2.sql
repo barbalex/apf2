@@ -127,6 +127,16 @@ DROP VIEW IF EXISTS apflora.v_apber_uet_veraengegenvorjahr CASCADE;
 
 DROP VIEW IF EXISTS apflora.v_tpop_statuswidersprichtbericht CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_statuswidersprichtbericht AS
+with letzter_tpopber as (
+  SELECT distinct on (tpop_id)
+    tpop_id,
+    jahr
+  FROM
+    apflora.tpopber
+  order by
+    tpop_id,
+    jahr desc
+)
 SELECT
   apflora.ae_taxonomies.artname AS "Art",
   apflora.ap_bearbstand_werte.text AS "Bearbeitungsstand AP",
@@ -150,10 +160,10 @@ FROM
       INNER JOIN
         (apflora.tpopber
         INNER JOIN
-          apflora.v_tpopber_letzterber
+          letzter_tpopber
           ON
-            (apflora.tpopber.tpop_id = apflora.v_tpopber_letzterber.tpop_id)
-            AND (apflora.tpopber.jahr = apflora.v_tpopber_letzterber.jahr))
+            (apflora.tpopber.tpop_id = letzter_tpopber.tpop_id)
+            AND (apflora.tpopber.jahr = letzter_tpopber.jahr))
         ON apflora.tpop.id = apflora.tpopber.tpop_id)
       ON apflora.pop.id = apflora.tpop.pop_id)
     ON apflora.ap.id = apflora.pop.ap_id)

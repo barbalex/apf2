@@ -1330,16 +1330,6 @@ ORDER BY
   apflora.tpop.gemeinde,
   apflora.tpop.flurname;
 
-DROP VIEW IF EXISTS apflora.v_tpopber_letzterber CASCADE;
-CREATE OR REPLACE VIEW apflora.v_tpopber_letzterber AS
-SELECT
-  apflora.tpopber.tpop_id,
-  max(apflora.tpopber.jahr) AS jahr
-FROM
-  apflora.tpopber
-GROUP BY
-  apflora.tpopber.tpop_id;
-
 DROP VIEW IF EXISTS apflora.v_idealbiotop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_idealbiotop AS
 SELECT
