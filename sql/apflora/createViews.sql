@@ -22,28 +22,88 @@ FROM
     apflora.tpop
     ON apflora.pop.id = apflora.tpop.pop_id;
 
-DROP VIEW IF EXISTS apflora.v_tpopkoord CASCADE;
-
-DROP VIEW IF EXISTS apflora.v_pop_berundmassnjahre CASCADE;
-CREATE OR REPLACE VIEW apflora.v_pop_berundmassnjahre AS
+DROP VIEW IF EXISTS apflora.v_pop_popberundmassnber CASCADE;
+CREATE OR REPLACE VIEW apflora.v_pop_popberundmassnber AS
+with berjahre as (
+  SELECT
+    apflora.pop.id,
+    apflora.popber.jahr
+  FROM
+    apflora.pop
+    INNER JOIN
+      apflora.popber
+      ON apflora.pop.id = apflora.popber.pop_id
+  UNION DISTINCT SELECT
+    apflora.pop.id,
+    apflora.popmassnber.jahr
+  FROM
+    apflora.pop
+    INNER JOIN
+      apflora.popmassnber
+      ON apflora.pop.id = apflora.popmassnber.pop_id
+)
 SELECT
-  apflora.pop.id,
-  apflora.popber.jahr
+  apflora.ap.id AS ap_id,
+  apflora.ae_taxonomies.artname,
+  apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
+  apflora.ap.start_jahr AS ap_start_jahr,
+  apflora.ap_umsetzung_werte.text AS ap_umsetzung,
+  apflora.pop.id as pop_id,
+  apflora.pop.nr AS pop_nr,
+  apflora.pop.name AS pop_name,
+  pop_status_werte.text AS pop_status,
+  apflora.pop.bekannt_seit AS pop_bekannt_seit,
+  apflora.pop.status_unklar AS pop_status_unklar,
+  apflora.pop.status_unklar_begruendung AS pop_status_unklar_begruendung,
+  apflora.pop.lv95_x AS pop_x,
+  apflora.pop.lv95_y AS pop_y,
+  apflora.pop.changed AS pop_changed,
+  apflora.pop.changed_by AS pop_changed_by,
+  berjahre.jahr,
+  apflora.popber.id AS popber_id,
+  apflora.popber.jahr AS popber_jahr,
+  tpop_entwicklung_werte.text AS popber_entwicklung,
+  apflora.popber.bemerkungen AS popber_bemerkungen,
+  apflora.popber.changed AS popber_changed,
+  apflora.popber.changed_by AS popber_changed_by,
+  apflora.popmassnber.id AS popmassnber_id,
+  apflora.popmassnber.jahr AS popmassnber_jahr,
+  tpopmassn_erfbeurt_werte.text AS popmassnber_entwicklung,
+  apflora.popmassnber.bemerkungen AS popmassnber_bemerkungen,
+  apflora.popmassnber.changed AS popmassnber_changed,
+  apflora.popmassnber.changed_by AS popmassnber_changed_by
 FROM
-  apflora.pop
-  INNER JOIN
-    apflora.popber
-    ON apflora.pop.id = apflora.popber.pop_id
-UNION DISTINCT SELECT
-  apflora.pop.id,
-  apflora.popmassnber.jahr
-FROM
-  apflora.pop
-  INNER JOIN
-    apflora.popmassnber
-    ON apflora.pop.id = apflora.popmassnber.pop_id
+  apflora.ae_taxonomies
+  INNER JOIN apflora.ap 
+    LEFT JOIN apflora.ap_bearbstand_werte
+    ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code
+    LEFT JOIN apflora.ap_umsetzung_werte
+    ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code
+    INNER JOIN apflora.pop
+      LEFT JOIN apflora.pop_status_werte
+      ON apflora.pop.status  = pop_status_werte.code
+      LEFT JOIN berjahre
+        LEFT JOIN apflora.popber
+          LEFT JOIN apflora.tpop_entwicklung_werte
+          ON apflora.popber.entwicklung = tpop_entwicklung_werte.code
+        ON
+          (berjahre.jahr = apflora.popber.jahr)
+          AND (berjahre.id = apflora.popber.pop_id)
+        LEFT JOIN apflora.popmassnber
+          LEFT JOIN apflora.tpopmassn_erfbeurt_werte
+          ON apflora.popmassnber.beurteilung = tpopmassn_erfbeurt_werte.code
+        ON
+          (berjahre.jahr = apflora.popmassnber.jahr)
+          AND (berjahre.id = apflora.popmassnber.pop_id)
+      ON apflora.pop.id = berjahre.id
+    ON apflora.ap.id = apflora.pop.ap_id
+  ON apflora.ae_taxonomies.id = apflora.ap.art_id
+WHERE
+  apflora.ae_taxonomies.taxid > 150
 ORDER BY
-  jahr;
+  apflora.ae_taxonomies.artname,
+  apflora.pop.nr,
+  berjahre.jahr;
 
 DROP VIEW IF EXISTS apflora.v_popmassnber_anzmassn0 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_popmassnber_anzmassn0 AS
