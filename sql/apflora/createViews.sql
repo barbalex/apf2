@@ -4951,6 +4951,55 @@ ORDER BY
   apflora.pop.nr,
   apflora.tpop.nr;
 
+DROP VIEW IF EXISTS apflora.v_q_tpop_statuserloschenletzterpopberaktuell CASCADE;
+CREATE OR REPLACE VIEW apflora.v_q_tpop_statuserloschenletzterpopberaktuell AS
+with tpop_letzterpopber as (
+  SELECT distinct on (tpop_id)
+    tpop_id,
+    jahr AS tpopber_jahr
+  FROM
+    apflora.tpopber
+  WHERE
+    jahr IS NOT NULL
+  order BY
+    tpop_id,
+    jahr desc
+)
+SELECT DISTINCT
+  apflora.ap.proj_id,
+  apflora.pop.ap_id,
+  apflora.pop.id as pop_id,
+  apflora.pop.nr as pop_nr,
+  apflora.tpop.id,
+  apflora.tpop.nr
+FROM
+  apflora.ap
+  INNER JOIN apflora.pop
+    INNER JOIN apflora.tpop
+      INNER JOIN apflora.tpopber
+        INNER JOIN tpop_letzterpopber
+        ON
+          (tpop_letzterpopber.tpopber_jahr = apflora.tpopber.jahr)
+          AND (tpop_letzterpopber.tpop_id = apflora.tpopber.tpop_id)
+      ON apflora.tpopber.tpop_id = apflora.tpop.id
+    ON apflora.tpop.pop_id = apflora.pop.id
+  ON apflora.pop.ap_id = apflora.ap.id
+WHERE
+  apflora.tpopber.entwicklung < 8
+  AND apflora.tpop.status IN (101, 202)
+  AND apflora.tpop.id NOT IN (
+    -- Ansiedlungen since apflora.tpopber.jahr
+    SELECT
+      apflora.tpopmassn.tpop_id
+    FROM
+      apflora.tpopmassn
+    WHERE
+      apflora.tpopmassn.tpop_id = apflora.tpop.id
+      AND apflora.tpopmassn.typ BETWEEN 1 AND 3
+      AND apflora.tpopmassn.jahr IS NOT NULL
+      AND apflora.tpopmassn.jahr > apflora.tpopber.jahr
+  );
+
 DROP VIEW IF EXISTS apflora.v_q_pop_statuserloschenletzterpopberaktuell CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_statuserloschenletzterpopberaktuell AS
 with letzter_popber as (
