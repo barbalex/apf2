@@ -71,6 +71,70 @@ ORDER BY
   apflora.pop.nr,
   letzter_popber.jahr;
 
+DROP VIEW IF EXISTS apflora.v_pop_mit_letzter_popmassnber CASCADE;
+CREATE OR REPLACE VIEW apflora.v_pop_mit_letzter_popmassnber AS
+with pop_letztes_massnberjahr as (
+  SELECT distinct on (apflora.popmassnber.pop_id)
+    apflora.popmassnber.pop_id AS id,
+    apflora.popmassnber.jahr
+  FROM
+    apflora.popmassnber
+  WHERE
+    apflora.popmassnber.jahr IS NOT NULL
+  order by
+    apflora.popmassnber.pop_id,
+    apflora.popmassnber.jahr desc
+)
+SELECT
+  apflora.ap.id AS ap_id,
+  apflora.ae_taxonomies.artname,
+  apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
+  apflora.ap.start_jahr AS ap_start_jahr,
+  apflora.ap_umsetzung_werte.text AS ap_umsetzung,
+  apflora.pop.id as pop_id,
+  apflora.pop.nr as pop_nr,
+  apflora.pop.name AS pop_name,
+  pop_status_werte.text AS pop_status,
+  apflora.pop.bekannt_seit AS pop_bekannt_seit,
+  apflora.pop.status_unklar AS pop_status_unklar,
+  apflora.pop.status_unklar_begruendung AS pop_status_unklar_begruendung,
+  apflora.pop.lv95_x AS pop_x,
+  apflora.pop.lv95_y AS pop_y,
+  apflora.pop.changed AS pop_changed,
+  apflora.pop.changed_by AS pop_changed_by,
+  apflora.popmassnber.id AS popmassnber_id,
+  apflora.popmassnber.jahr AS popmassnber_jahr,
+  tpopmassn_erfbeurt_werte.text AS popmassnber_entwicklung,
+  apflora.popmassnber.bemerkungen AS popmassnber_bemerkungen,
+  apflora.popmassnber.changed AS popmassnber_changed,
+  apflora.popmassnber.changed_by AS popmassnber_changed_by
+FROM
+  apflora.ae_taxonomies
+  INNER JOIN apflora.ap
+    LEFT JOIN apflora.ap_bearbstand_werte
+    ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code
+    LEFT JOIN apflora.ap_umsetzung_werte
+    ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code
+    INNER JOIN apflora.pop
+      LEFT JOIN apflora.pop_status_werte
+      ON apflora.pop.status  = pop_status_werte.code
+      LEFT JOIN pop_letztes_massnberjahr
+        LEFT JOIN apflora.popmassnber
+          LEFT JOIN apflora.tpopmassn_erfbeurt_werte
+          ON apflora.popmassnber.beurteilung = tpopmassn_erfbeurt_werte.code
+        ON
+          (pop_letztes_massnberjahr.jahr = apflora.popmassnber.jahr)
+          AND (pop_letztes_massnberjahr.id = apflora.popmassnber.pop_id)
+      ON apflora.pop.id = pop_letztes_massnberjahr.id
+    ON apflora.ap.id = apflora.pop.ap_id
+  ON apflora.ae_taxonomies.id = apflora.ap.art_id
+WHERE
+  apflora.ae_taxonomies.taxid > 150
+ORDER BY
+  apflora.ae_taxonomies.artname,
+  apflora.pop.nr,
+  pop_letztes_massnberjahr.jahr;
+
 DROP VIEW IF EXISTS apflora.v_tpop_for_ap CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_for_ap AS
 SELECT
