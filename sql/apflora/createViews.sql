@@ -1036,31 +1036,28 @@ SELECT
   apflora.tpop.changed,
   apflora.tpop.changed_by
 FROM
-  ((((((apflora.ae_taxonomies
-  INNER JOIN
-    apflora.ap
-    ON apflora.ae_taxonomies.id = apflora.ap.art_id)
-  INNER JOIN
-    (apflora.pop
-    INNER JOIN
-      apflora.tpop
-      ON apflora.pop.id = apflora.tpop.pop_id)
-    ON apflora.ap.id = apflora.pop.ap_id)
-  LEFT JOIN
-    apflora.ap_bearbstand_werte
-    ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
-  LEFT JOIN
-    apflora.ap_umsetzung_werte
-    ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
-  LEFT JOIN
-    apflora.pop_status_werte
-    ON apflora.pop.status  = pop_status_werte.code)
-  LEFT JOIN
-    apflora.pop_status_werte AS pop_status_werte_2
-    ON apflora.tpop.status = pop_status_werte_2.code)
-  LEFT JOIN
-    apflora.adresse
-    ON apflora.ap.bearbeiter = apflora.adresse.id
+  apflora.ae_taxonomies
+  INNER JOIN apflora.ap
+    INNER JOIN apflora.pop
+      INNER JOIN apflora.tpop
+      ON apflora.pop.id = apflora.tpop.pop_id
+      LEFT JOIN
+        apflora.pop_status_werte
+        ON apflora.pop.status  = pop_status_werte.code
+      LEFT JOIN
+        apflora.pop_status_werte AS pop_status_werte_2
+        ON apflora.tpop.status = pop_status_werte_2.code
+    ON apflora.ap.id = apflora.pop.ap_id
+    LEFT JOIN
+      apflora.ap_bearbstand_werte
+      ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code
+    LEFT JOIN
+      apflora.ap_umsetzung_werte
+      ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code
+    LEFT JOIN
+      apflora.adresse
+      ON apflora.ap.bearbeiter = apflora.adresse.id
+  ON apflora.ae_taxonomies.id = apflora.ap.art_id
 WHERE
   apflora.ae_taxonomies.taxid > 150
 ORDER BY
