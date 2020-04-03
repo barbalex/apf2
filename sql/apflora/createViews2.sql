@@ -3,8 +3,8 @@
  * daher muss diese Date NACH viewsGenerieren.sql ausgeführt werden
  */
 
-DROP VIEW IF EXISTS apflora.v_ap_anzmassnprojahr CASCADE;
-CREATE OR REPLACE VIEW apflora.v_ap_anzmassnprojahr AS
+DROP VIEW IF EXISTS apflora.v_ap_anzmassnbisjahr CASCADE;
+CREATE OR REPLACE VIEW apflora.v_ap_anzmassnbisjahr AS
 with massn_jahre as (
   SELECT
     jahr
@@ -58,60 +58,34 @@ ap_anzmassnprojahr as (
   ORDER BY
     apflora.ap.id,
     apflora.tpopmassn.jahr
-)
-SELECT
-  ap_massn_jahre.id,
-  ap_massn_jahre.jahr,
-  COALESCE(ap_anzmassnprojahr.anz_tpopmassn, 0) AS anzahl_massnahmen
-FROM
-  ap_massn_jahre
-  LEFT JOIN
-    ap_anzmassnprojahr
-    ON
-      (ap_massn_jahre.jahr = ap_anzmassnprojahr.jahr)
-      AND (ap_massn_jahre.id = ap_anzmassnprojahr.id)
-ORDER BY
-  ap_massn_jahre.id,
-  ap_massn_jahre.jahr;
-
-DROP VIEW IF EXISTS apflora.v_ap_anzmassnbisjahr CASCADE;
-CREATE OR REPLACE VIEW apflora.v_ap_anzmassnbisjahr AS
-with massn_jahre as (
-  SELECT
-    jahr
-  FROM
-    apflora.tpopmassn
-  GROUP BY
-    jahr
-  HAVING
-    jahr BETWEEN 1900 AND 2100
-  ORDER BY
-    jahr
 ),
-ap_massn_jahre as (
+ap_anzmassn_alle_jahre as (
   SELECT
-    apflora.ap.id,
-    massn_jahre.jahr
+    ap_massn_jahre.id,
+    ap_massn_jahre.jahr,
+    COALESCE(ap_anzmassnprojahr.anz_tpopmassn, 0) AS anzahl_massnahmen
   FROM
-    apflora.ap,
-    massn_jahre
-  WHERE
-    apflora.ap.bearbeitung < 4
+    ap_massn_jahre
+    LEFT JOIN
+      ap_anzmassnprojahr
+      ON
+        (ap_massn_jahre.jahr = ap_anzmassnprojahr.jahr)
+        AND (ap_massn_jahre.id = ap_anzmassnprojahr.id)
   ORDER BY
-    apflora.ap.id,
-    massn_jahre.jahr
+    ap_massn_jahre.id,
+    ap_massn_jahre.jahr
 )
 SELECT
   ap_massn_jahre.id,
   ap_massn_jahre.jahr,
-  sum(apflora.v_ap_anzmassnprojahr.anzahl_massnahmen) AS anzahl_massnahmen
+  sum(ap_anzmassn_alle_jahre.anzahl_massnahmen) AS anzahl_massnahmen
 FROM
   ap_massn_jahre
   INNER JOIN
-    apflora.v_ap_anzmassnprojahr
-    ON ap_massn_jahre.id = apflora.v_ap_anzmassnprojahr.id
+    ap_anzmassn_alle_jahre
+    ON ap_massn_jahre.id = ap_anzmassn_alle_jahre.id
 WHERE
-  apflora.v_ap_anzmassnprojahr.jahr <= ap_massn_jahre.jahr
+  ap_anzmassn_alle_jahre.jahr <= ap_massn_jahre.jahr
 GROUP BY
   ap_massn_jahre.id,
   ap_massn_jahre.jahr
