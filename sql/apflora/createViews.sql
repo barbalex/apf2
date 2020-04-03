@@ -69,18 +69,31 @@ ORDER BY
   apflora.popmassnber.pop_id,
   apflora.popmassnber.jahr;
 
-DROP VIEW IF EXISTS apflora.v_massn_jahre CASCADE;
-CREATE OR REPLACE VIEW apflora.v_massn_jahre AS
+DROP VIEW IF EXISTS apflora.v_ap_massnjahre CASCADE;
+CREATE OR REPLACE VIEW apflora.v_ap_massnjahre AS
+with massn_jahre as (
+  SELECT
+    jahr
+  FROM
+    apflora.tpopmassn
+  GROUP BY
+    jahr
+  HAVING
+    jahr BETWEEN 1900 AND 2100
+  ORDER BY
+    jahr
+)
 SELECT
-  apflora.tpopmassn.jahr
+  apflora.ap.id,
+  massn_jahre.jahr
 FROM
-  apflora.tpopmassn
-GROUP BY
-  apflora.tpopmassn.jahr
-HAVING
-  apflora.tpopmassn.jahr BETWEEN 1900 AND 2100
+  apflora.ap,
+  massn_jahre
+WHERE
+  apflora.ap.bearbeitung < 4
 ORDER BY
-  apflora.tpopmassn.jahr;
+  apflora.ap.id,
+  massn_jahre.jahr;
 
 DROP VIEW IF EXISTS apflora.v_ap_anzmassnprojahr0 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_anzmassnprojahr0 AS

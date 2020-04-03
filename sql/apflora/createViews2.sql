@@ -3,20 +3,6 @@
  * daher muss diese Date NACH viewsGenerieren.sql ausgeführt werden
  */
 
-DROP VIEW IF EXISTS apflora.v_ap_massnjahre CASCADE;
-CREATE OR REPLACE VIEW apflora.v_ap_massnjahre AS
-SELECT
-  apflora.ap.id,
-  apflora.v_massn_jahre.jahr
-FROM
-  apflora.ap,
-  apflora.v_massn_jahre
-WHERE
-  apflora.ap.bearbeitung < 4
-ORDER BY
-  apflora.ap.id,
-  apflora.v_massn_jahre.jahr;
-
 DROP VIEW IF EXISTS apflora.v_ap_anzmassnprojahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_anzmassnprojahr AS
 SELECT
