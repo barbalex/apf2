@@ -5,40 +5,90 @@
 
 DROP VIEW IF EXISTS apflora.v_ap_anzmassnprojahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_anzmassnprojahr AS
+with massn_jahre as (
+  SELECT
+    jahr
+  FROM
+    apflora.tpopmassn
+  GROUP BY
+    jahr
+  HAVING
+    jahr BETWEEN 1900 AND 2100
+  ORDER BY
+    jahr
+),
+ap_massn_jahre as (
+  SELECT
+    apflora.ap.id,
+    massn_jahre.jahr
+  FROM
+    apflora.ap,
+    massn_jahre
+  WHERE
+    apflora.ap.bearbeitung < 4
+  ORDER BY
+    apflora.ap.id,
+    massn_jahre.jahr
+)
 SELECT
-  apflora.v_ap_massnjahre.id,
-  apflora.v_ap_massnjahre.jahr,
+  ap_massn_jahre.id,
+  ap_massn_jahre.jahr,
   COALESCE(apflora.v_ap_anzmassnprojahr0."AnzahlvonTPopMassnId", 0) AS anzahl_massnahmen
 FROM
-  apflora.v_ap_massnjahre
+  ap_massn_jahre
   LEFT JOIN
     apflora.v_ap_anzmassnprojahr0
     ON
-      (apflora.v_ap_massnjahre.jahr = apflora.v_ap_anzmassnprojahr0.jahr)
-      AND (apflora.v_ap_massnjahre.id = apflora.v_ap_anzmassnprojahr0.id)
+      (ap_massn_jahre.jahr = apflora.v_ap_anzmassnprojahr0.jahr)
+      AND (ap_massn_jahre.id = apflora.v_ap_anzmassnprojahr0.id)
 ORDER BY
-  apflora.v_ap_massnjahre.id,
-  apflora.v_ap_massnjahre.jahr;
+  ap_massn_jahre.id,
+  ap_massn_jahre.jahr;
 
 DROP VIEW IF EXISTS apflora.v_ap_anzmassnbisjahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_anzmassnbisjahr AS
+with massn_jahre as (
+  SELECT
+    jahr
+  FROM
+    apflora.tpopmassn
+  GROUP BY
+    jahr
+  HAVING
+    jahr BETWEEN 1900 AND 2100
+  ORDER BY
+    jahr
+),
+ap_massn_jahre as (
+  SELECT
+    apflora.ap.id,
+    massn_jahre.jahr
+  FROM
+    apflora.ap,
+    massn_jahre
+  WHERE
+    apflora.ap.bearbeitung < 4
+  ORDER BY
+    apflora.ap.id,
+    massn_jahre.jahr
+)
 SELECT
-  apflora.v_ap_massnjahre.id,
-  apflora.v_ap_massnjahre.jahr,
+  ap_massn_jahre.id,
+  ap_massn_jahre.jahr,
   sum(apflora.v_ap_anzmassnprojahr.anzahl_massnahmen) AS anzahl_massnahmen
 FROM
-  apflora.v_ap_massnjahre
+  ap_massn_jahre
   INNER JOIN
     apflora.v_ap_anzmassnprojahr
-    ON apflora.v_ap_massnjahre.id = apflora.v_ap_anzmassnprojahr.id
+    ON ap_massn_jahre.id = apflora.v_ap_anzmassnprojahr.id
 WHERE
-  apflora.v_ap_anzmassnprojahr.jahr <= apflora.v_ap_massnjahre.jahr
+  apflora.v_ap_anzmassnprojahr.jahr <= ap_massn_jahre.jahr
 GROUP BY
-  apflora.v_ap_massnjahre.id,
-  apflora.v_ap_massnjahre.jahr
+  ap_massn_jahre.id,
+  ap_massn_jahre.jahr
 ORDER BY
-  apflora.v_ap_massnjahre.id,
-  apflora.v_ap_massnjahre.jahr;
+  ap_massn_jahre.id,
+  ap_massn_jahre.jahr;
 
 DROP VIEW IF EXISTS apflora.v_ap_apberundmassn CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_apberundmassn AS
