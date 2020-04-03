@@ -86,6 +86,72 @@ WHERE
   AND apflora.pop.status  <> 300
 GROUP BY
   apflora.ap.id;
+DROP VIEW IF EXISTS apflora.v_tpop_statuswidersprichtbericht CASCADE;
+CREATE OR REPLACE VIEW apflora.v_tpop_statuswidersprichtbericht AS
+with letzter_tpopber as (
+  SELECT distinct on (tpop_id)
+    tpop_id,
+    jahr
+  FROM
+    apflora.tpopber
+  order by
+    tpop_id,
+    jahr desc
+)
+SELECT
+  apflora.ae_taxonomies.artname AS "Art",
+  apflora.ap_bearbstand_werte.text AS "Bearbeitungsstand AP",
+  apflora.pop.nr as pop_nr,
+  apflora.pop.name as pop_name,
+  apflora.tpop.nr,
+  apflora.tpop.gemeinde,
+  apflora.tpop.flurname,
+  apflora.tpop.status,
+  apflora.tpopber.entwicklung AS "TPopBerEntwicklung",
+  apflora.tpopber.jahr AS tpopber_jahr
+FROM
+  ((apflora.ae_taxonomies
+  INNER JOIN
+    apflora.ap
+    ON apflora.ae_taxonomies.id = apflora.ap.art_id)
+  INNER JOIN
+    (apflora.pop
+    INNER JOIN
+      (apflora.tpop
+      INNER JOIN
+        (apflora.tpopber
+        INNER JOIN
+          letzter_tpopber
+          ON
+            (apflora.tpopber.tpop_id = letzter_tpopber.tpop_id)
+            AND (apflora.tpopber.jahr = letzter_tpopber.jahr))
+        ON apflora.tpop.id = apflora.tpopber.tpop_id)
+      ON apflora.pop.id = apflora.tpop.pop_id)
+    ON apflora.ap.id = apflora.pop.ap_id)
+  INNER JOIN
+    apflora.ap_bearbstand_werte
+    ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code
+WHERE
+  (
+    apflora.ap.bearbeitung < 4
+    AND (
+      apflora.tpop.status = 101
+      OR apflora.tpop.status = 202
+    )
+    AND apflora.tpopber.entwicklung <> 8
+  )
+  OR (
+    apflora.ap.bearbeitung < 4
+    AND apflora.tpop.status NOT IN (101, 202)
+    AND apflora.tpopber.entwicklung = 8
+  )
+ORDER BY
+  apflora.ae_taxonomies.artname,
+  apflora.pop.nr,
+  apflora.pop.name,
+  apflora.tpop.nr,
+  apflora.tpop.gemeinde,
+  apflora.tpop.flurname;
 
 DROP VIEW IF EXISTS apflora.v_ap_apberundmassn CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_apberundmassn AS
