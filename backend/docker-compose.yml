@@ -21,10 +21,10 @@ services:
       - db_data:/var/lib/postgresql/data
       - sik_data:/sik_data
   backup:
-    container_name: : apf_backup
+    container_name: apf_backup
     restart: always
     build:
-      context: : ./backup
+      context: ./backup
     networks:
       - network
     depends_on:
@@ -56,8 +56,8 @@ services:
         '--jwt-token-identifier',
         'auth.jwt_token',
         '--default-role',
-        # 'postgres',
-        'authenticator',
+        'postgres',
+        #'authenticator',
         '--jwt-secret',
         '${JWT_SECRET}',
         '--cors',
@@ -91,5 +91,6 @@ volumes:
   sik_data:
   caddy_certs:
   caddy_config:
+  backup_data:
 networks:
   network:
