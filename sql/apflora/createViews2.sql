@@ -572,116 +572,60 @@ FROM
     apflora.tpop_entwicklung_werte
     ON apflora.tpopber.entwicklung = tpop_entwicklung_werte.code;
 
--- funktioniert nicht, wenn letzeKontrolle als Unterabfrage eingebunden wird.
--- Grund: Unterabfragen in der FROM-Klausel duerfen keine korrellierten Unterabfragen sein
-DROP VIEW IF EXISTS apflora.v_tpop_anzkontrinklletzter CASCADE;
-CREATE OR REPLACE VIEW apflora.v_tpop_anzkontrinklletzter AS
-SELECT
-  apflora.v_tpop.ap_id,
-  apflora.v_tpop.familie,
-  apflora.v_tpop.artname,
-  apflora.v_tpop.ap_bearbeitung,
-  apflora.v_tpop.ap_start_jahr,
-  apflora.v_tpop.ap_umsetzung,
-  apflora.v_tpop.ap_bearbeiter,
-  apflora.v_tpop.pop_id,
-  apflora.v_tpop.pop_nr,
-  apflora.v_tpop.pop_name,
-  apflora.v_tpop.pop_status,
-  apflora.v_tpop.pop_bekannt_seit,
-  apflora.v_tpop.pop_status_unklar,
-  apflora.v_tpop.pop_status_unklar_begruendung,
-  apflora.v_tpop.pop_x,
-  apflora.v_tpop.pop_y,
-  apflora.v_tpop.id,
-  apflora.v_tpop.nr,
-  apflora.v_tpop.gemeinde,
-  apflora.v_tpop.flurname,
-  apflora.v_tpop.status_decodiert as status,
-  apflora.v_tpop.status_decodiert,
-  apflora.v_tpop.bekannt_seit,
-  apflora.v_tpop.status_unklar,
-  apflora.v_tpop.status_unklar_grund,
-  apflora.v_tpop.x,
-  apflora.v_tpop.y,
-  apflora.v_tpop.radius,
-  apflora.v_tpop.hoehe,
-  apflora.v_tpop.exposition,
-  apflora.v_tpop.klima,
-  apflora.v_tpop.neigung,
-  apflora.v_tpop.beschreibung,
-  apflora.v_tpop.kataster_nr,
-  apflora.v_tpop.apber_relevant,
-  apflora.v_tpop.apber_relevant_grund,
-  apflora.v_tpop.eigentuemer,
-  apflora.v_tpop.kontakt,
-  apflora.v_tpop.nutzungszone,
-  apflora.v_tpop.bewirtschafter,
-  apflora.v_tpop.bewirtschaftung,
-  apflora.v_tpop.ekfrequenz,
-  apflora.v_tpop.ekfrequenz_abweichend,
-  apflora.v_tpop.changed,
-  apflora.v_tpop.changed_by,
-  apflora.v_tpop_letzteKontrId."AnzTPopKontr" AS anzahl_kontrollen,
-  apflora.v_tpopkontr.id as kontr_id,
-  apflora.v_tpopkontr.jahr as kontr_jahr,
-  apflora.v_tpopkontr.datum as kontr_datum,
-  apflora.v_tpopkontr.typ as kontr_typ,
-  apflora.v_tpopkontr.bearbeiter as kontr_bearbeiter,
-  apflora.v_tpopkontr.ueberlebensrate as kontr_ueberlebensrate,
-  apflora.v_tpopkontr.vitalitaet as kontr_vitalitaet,
-  apflora.v_tpopkontr.entwicklung as kontr_entwicklung,
-  apflora.v_tpopkontr.ursachen as kontr_ursachen,
-  apflora.v_tpopkontr.erfolgsbeurteilung as kontr_erfolgsbeurteilung,
-  apflora.v_tpopkontr.umsetzung_aendern as kontr_umsetzung_aendern,
-  apflora.v_tpopkontr.kontrolle_aendern as kontr_kontrolle_aendern,
-  apflora.v_tpopkontr.bemerkungen as kontr_bemerkungen,
-  apflora.v_tpopkontr.lr_delarze as kontr_lr_delarze,
-  apflora.v_tpopkontr.lr_umgebung_delarze as kontr_lr_umgebung_delarze,
-  apflora.v_tpopkontr.vegetationstyp as kontr_vegetationstyp,
-  apflora.v_tpopkontr.konkurrenz as kontr_konkurrenz,
-  apflora.v_tpopkontr.moosschicht as kontr_moosschicht,
-  apflora.v_tpopkontr.krautschicht as kontr_krautschicht,
-  apflora.v_tpopkontr.strauchschicht as kontr_strauchschicht,
-  apflora.v_tpopkontr.baumschicht as kontr_baumschicht,
-  apflora.v_tpopkontr.boden_typ as kontr_boden_typ,
-  apflora.v_tpopkontr.boden_kalkgehalt as kontr_boden_kalkgehalt,
-  apflora.v_tpopkontr.boden_durchlaessigkeit as kontr_boden_durchlaessigkeit,
-  apflora.v_tpopkontr.boden_humus as kontr_boden_humus,
-  apflora.v_tpopkontr.boden_naehrstoffgehalt as kontr_boden_naehrstoffgehalt,
-  apflora.v_tpopkontr.boden_abtrag as kontr_boden_abtrag,
-  apflora.v_tpopkontr.wasserhaushalt as kontr_wasserhaushalt,
-  apflora.v_tpopkontr.idealbiotop_uebereinstimmung as kontr_idealbiotop_uebereinstimmung,
-  apflora.v_tpopkontr.handlungsbedarf as kontr_handlungsbedarf,
-  apflora.v_tpopkontr.flaeche_ueberprueft as kontr_flaeche_ueberprueft,
-  apflora.v_tpopkontr.flaeche as kontr_flaeche,
-  apflora.v_tpopkontr.plan_vorhanden as kontr_plan_vorhanden,
-  apflora.v_tpopkontr.deckung_vegetation as kontr_deckung_vegetation,
-  apflora.v_tpopkontr.deckung_nackter_boden as kontr_deckung_nackter_boden,
-  apflora.v_tpopkontr.deckung_ap_art as kontr_deckung_ap_art,
-  apflora.v_tpopkontr.jungpflanzen_vorhanden as kontr_jungpflanzen_vorhanden,
-  apflora.v_tpopkontr.vegetationshoehe_maximum as kontr_vegetationshoehe_maximum,
-  apflora.v_tpopkontr.vegetationshoehe_mittel as kontr_vegetationshoehe_mittel,
-  apflora.v_tpopkontr.gefaehrdung as kontr_gefaehrdung,
-  apflora.v_tpopkontr.changed as kontr_changed,
-  apflora.v_tpopkontr.changed_by as kontr_changed_by,
-  apflora.v_tpopkontr.apber_nicht_relevant as kontr_apber_nicht_relevant,
-  apflora.v_tpopkontr.apber_nicht_relevant_grund as kontr_apber_nicht_relevant_grund,
-  apflora.v_tpopkontr.ekf_bemerkungen as kontr_ekf_bemerkungen,
-  apflora.v_tpopkontr.zaehlung_anzahlen as zaehlung_anzahlen,
-  apflora.v_tpopkontr.zaehlung_einheiten AS zaehlung_einheiten,
-  apflora.v_tpopkontr.zaehlung_methoden AS zaehlung_methoden
-FROM
-  apflora.v_tpop
-  INNER JOIN
-    apflora.v_tpop_letzteKontrId
-    ON apflora.v_tpop_letzteKontrId.id = apflora.v_tpop.id
-  LEFT JOIN
-    apflora.v_tpopkontr
-    ON apflora.v_tpop_letzteKontrId.tpopkontr_id = apflora.v_tpopkontr.id::text;
-
+-- TODO: make this query more efficient. Takes > 2 minutes to run!
 DROP VIEW IF EXISTS apflora.v_tpop_erste_und_letzte_kontrolle CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_erste_und_letzte_kontrolle AS
+with kontr_anzprojahr as (
+  SELECT
+    apflora.tpop.id,
+    min(apflora.tpopkontr.jahr) AS min_tpopkontr_jahr,
+    max(apflora.tpopkontr.jahr) AS max_tpopkontr_jahr,
+    count(apflora.tpopkontr.id) AS anz_tpopkontr
+  FROM
+    apflora.tpop
+    LEFT JOIN
+      apflora.tpopkontr
+      ON apflora.tpop.id = apflora.tpopkontr.tpop_id
+  WHERE
+    (
+      (
+        apflora.tpopkontr.typ NOT IN ('Ziel', 'Zwischenziel')
+        AND apflora.tpopkontr.jahr IS NOT NULL
+      )
+      OR (
+        apflora.tpopkontr.typ IS NULL
+        AND apflora.tpopkontr.jahr IS NULL
+      )
+    ) and apflora.tpopkontr.apber_nicht_relevant is not true
+  GROUP BY
+    apflora.tpop.id
+), 
+kontr_letzte_id as (
+  SELECT
+    kontr_anzprojahr.id,
+    max(apflora.tpopkontr.id::text) AS tpopkontr_id,
+    max(kontr_anzprojahr.anz_tpopkontr) AS anz_tpopkontr
+  FROM
+    apflora.tpopkontr
+    INNER JOIN
+      kontr_anzprojahr
+      ON
+        (kontr_anzprojahr.max_tpopkontr_jahr = apflora.tpopkontr.jahr)
+        AND (apflora.tpopkontr.tpop_id = kontr_anzprojahr.id)
+  GROUP BY
+    kontr_anzprojahr.id
+),
+tpop_letzte_kontr_id as (
+  SELECT
+    apflora.tpop.id,
+    kontr_letzte_id.tpopkontr_id,
+    kontr_letzte_id.anz_tpopkontr AS anz_tpopkontr
+  FROM
+    apflora.tpop
+    LEFT JOIN
+      kontr_letzte_id
+      ON apflora.tpop.id = kontr_letzte_id.id
+)
 SELECT
   apflora.v_tpop.ap_id,
   apflora.v_tpop.familie,
@@ -728,7 +672,7 @@ SELECT
   apflora.v_tpop.ekfrequenz_abweichend,
   apflora.v_tpop.changed,
   apflora.v_tpop.changed_by,
-  apflora.v_tpop_letzteKontrId."AnzTPopKontr" AS anzahl_kontrollen,
+  tpop_letzte_kontr_id.anz_tpopkontr AS anzahl_kontrollen,
   lk.id as letzte_kontrolle_id,
   lk.jahr as letzte_kontrolle_jahr,
   lk.datum as letzte_kontrolle_datum,
@@ -828,14 +772,14 @@ SELECT
 FROM
   apflora.v_tpop
   INNER JOIN
-    apflora.v_tpop_letzteKontrId
-    ON apflora.v_tpop_letzteKontrId.id = apflora.v_tpop.id
+    tpop_letzte_kontr_id
+    ON tpop_letzte_kontr_id.id = apflora.v_tpop.id
   INNER JOIN
     apflora.v_tpop_ersteKontrId
     ON apflora.v_tpop_ersteKontrId.id = apflora.v_tpop.id
   LEFT JOIN
     apflora.v_tpopkontr as lk
-    ON (apflora.v_tpop_letzteKontrId.tpopkontr_id = lk.id::text)
+    ON (tpop_letzte_kontr_id.tpopkontr_id = lk.id::text)
   LEFT JOIN
     apflora.v_tpopkontr as ek
     ON (apflora.v_tpop_ersteKontrId.tpopkontr_id = ek.id::text);    

@@ -2116,19 +2116,44 @@ GROUP BY
 
 DROP VIEW IF EXISTS apflora.v_tpopkontr_letzteid CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopkontr_letzteid AS
+with kontr_anzprojahr as (
+  SELECT
+    apflora.tpop.id,
+    min(apflora.tpopkontr.jahr) AS min_tpopkontr_jahr,
+    max(apflora.tpopkontr.jahr) AS max_tpopkontr_jahr,
+    count(apflora.tpopkontr.id) AS anz_tpopkontr
+  FROM
+    apflora.tpop
+    LEFT JOIN
+      apflora.tpopkontr
+      ON apflora.tpop.id = apflora.tpopkontr.tpop_id
+  WHERE
+    (
+      (
+        apflora.tpopkontr.typ NOT IN ('Ziel', 'Zwischenziel')
+        AND apflora.tpopkontr.jahr IS NOT NULL
+      )
+      OR (
+        apflora.tpopkontr.typ IS NULL
+        AND apflora.tpopkontr.jahr IS NULL
+      )
+    ) and apflora.tpopkontr.apber_nicht_relevant is not true
+  GROUP BY
+    apflora.tpop.id
+)
 SELECT
-  apflora.v_tpopkontr_anzprojahr.id,
+  kontr_anzprojahr.id,
   max(apflora.tpopkontr.id::text) AS tpopkontr_id,
-  max(apflora.v_tpopkontr_anzprojahr."AnzTPopKontr") AS "AnzTPopKontr"
+  max(kontr_anzprojahr.anz_tpopkontr) AS "AnzTPopKontr"
 FROM
   apflora.tpopkontr
   INNER JOIN
-    apflora.v_tpopkontr_anzprojahr
+    kontr_anzprojahr
     ON
-      (apflora.v_tpopkontr_anzprojahr."MaxTPopKontrJahr" = apflora.tpopkontr.jahr)
-      AND (apflora.tpopkontr.tpop_id = apflora.v_tpopkontr_anzprojahr.id)
+      (kontr_anzprojahr.max_tpopkontr_jahr = apflora.tpopkontr.jahr)
+      AND (apflora.tpopkontr.tpop_id = kontr_anzprojahr.id)
 GROUP BY
-  apflora.v_tpopkontr_anzprojahr.id;
+  kontr_anzprojahr.id;
 
 DROP VIEW IF EXISTS apflora.v_tpopkontr_ersteid CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopkontr_ersteid AS
@@ -2145,18 +2170,6 @@ FROM
       AND (apflora.tpopkontr.tpop_id = apflora.v_tpopkontr_anzprojahr.id)
 GROUP BY
   apflora.v_tpopkontr_anzprojahr.id;
-
-DROP VIEW IF EXISTS apflora.v_tpop_letzteKontrId CASCADE;
-CREATE OR REPLACE VIEW apflora.v_tpop_letzteKontrId AS
-SELECT
-  apflora.tpop.id,
-  apflora.v_tpopkontr_letzteid.tpopkontr_id,
-  apflora.v_tpopkontr_letzteid."AnzTPopKontr"
-FROM
-  apflora.tpop
-  LEFT JOIN
-    apflora.v_tpopkontr_letzteid
-    ON apflora.tpop.id = apflora.v_tpopkontr_letzteid.id;
 
 DROP VIEW IF EXISTS apflora.v_tpop_ersteKontrId CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_ersteKontrId AS
