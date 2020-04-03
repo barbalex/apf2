@@ -6792,6 +6792,3 @@ group by
 order by
   ap_id,
   jahr;
-  
-
-DROP VIEW IF EXISTS apflora.v_tpopkontr_maxanzahl CASCADE;
