@@ -29,18 +29,47 @@ ap_massn_jahre as (
   ORDER BY
     apflora.ap.id,
     massn_jahre.jahr
+),
+ap_anzmassnprojahr as (
+  SELECT
+    apflora.ap.id,
+    apflora.tpopmassn.jahr,
+    count(apflora.tpopmassn.id) AS anz_tpopmassn
+  FROM
+    apflora.ap
+    INNER JOIN
+      ((apflora.pop
+      INNER JOIN
+        apflora.tpop
+        ON apflora.pop.id = apflora.tpop.pop_id)
+      INNER JOIN
+        apflora.tpopmassn
+        ON apflora.tpop.id = apflora.tpopmassn.tpop_id)
+      ON apflora.ap.id = apflora.pop.ap_id
+  WHERE
+    apflora.ap.bearbeitung BETWEEN 1 AND 3
+    AND apflora.tpop.apber_relevant = true
+    AND apflora.pop.status  <> 300
+  GROUP BY
+    apflora.ap.id,
+    apflora.tpopmassn.jahr
+  HAVING
+    apflora.tpopmassn.jahr IS NOT NULL
+  ORDER BY
+    apflora.ap.id,
+    apflora.tpopmassn.jahr
 )
 SELECT
   ap_massn_jahre.id,
   ap_massn_jahre.jahr,
-  COALESCE(apflora.v_ap_anzmassnprojahr0."AnzahlvonTPopMassnId", 0) AS anzahl_massnahmen
+  COALESCE(ap_anzmassnprojahr.anz_tpopmassn, 0) AS anzahl_massnahmen
 FROM
   ap_massn_jahre
   LEFT JOIN
-    apflora.v_ap_anzmassnprojahr0
+    ap_anzmassnprojahr
     ON
-      (ap_massn_jahre.jahr = apflora.v_ap_anzmassnprojahr0.jahr)
-      AND (ap_massn_jahre.id = apflora.v_ap_anzmassnprojahr0.id)
+      (ap_massn_jahre.jahr = ap_anzmassnprojahr.jahr)
+      AND (ap_massn_jahre.id = ap_anzmassnprojahr.id)
 ORDER BY
   ap_massn_jahre.id,
   ap_massn_jahre.jahr;

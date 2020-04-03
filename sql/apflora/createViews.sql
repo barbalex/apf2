@@ -69,36 +69,6 @@ ORDER BY
   apflora.popmassnber.pop_id,
   apflora.popmassnber.jahr;
 
-DROP VIEW IF EXISTS apflora.v_ap_anzmassnprojahr0 CASCADE;
-CREATE OR REPLACE VIEW apflora.v_ap_anzmassnprojahr0 AS
-SELECT
-  apflora.ap.id,
-  apflora.tpopmassn.jahr,
-  count(apflora.tpopmassn.id) AS "AnzahlvonTPopMassnId"
-FROM
-  apflora.ap
-  INNER JOIN
-    ((apflora.pop
-    INNER JOIN
-      apflora.tpop
-      ON apflora.pop.id = apflora.tpop.pop_id)
-    INNER JOIN
-      apflora.tpopmassn
-      ON apflora.tpop.id = apflora.tpopmassn.tpop_id)
-    ON apflora.ap.id = apflora.pop.ap_id
-WHERE
-  apflora.ap.bearbeitung BETWEEN 1 AND 3
-  AND apflora.tpop.apber_relevant = true
-  AND apflora.pop.status  <> 300
-GROUP BY
-  apflora.ap.id,
-  apflora.tpopmassn.jahr
-HAVING
-  apflora.tpopmassn.jahr IS NOT NULL
-ORDER BY
-  apflora.ap.id,
-  apflora.tpopmassn.jahr;
-
 DROP VIEW IF EXISTS apflora.v_ap_apberrelevant CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_apberrelevant AS
 SELECT
