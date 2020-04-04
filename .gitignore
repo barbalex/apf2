@@ -82,6 +82,4 @@ schema.json
 .now
 reduxcache*
 *.backup
-
-backend/db/dropbox_uploader.conf
-backend/db/dropbox_uploader.conf2
+dropbox_uploader.conf
