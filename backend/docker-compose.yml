@@ -20,17 +20,22 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
       - sik_data:/sik_data
-  backup:
-    container_name: apf_backup
-    restart: always
-    build:
-      context: ./backup
-    networks:
-      - network
-    depends_on:
-      - db
-    volumes:
-      - backup_data:/etc/data
+  #backup:
+  #  container_name: apf_backup
+  #  restart: always
+  #  build:
+  #    context: ./backup
+  #  networks:
+  #    - network
+  #  depends_on:
+  #    - db
+  #  volumes:
+  #    - backup_data:/etc/data
+  #   - /var/run/docker.sock:/var/run/docker.sock
+  #   - type: bind
+  #     source: /var/run/docker.sock
+  #     target: /var/run/docker.sock
+  # command: ['-v /var/run/docker.sock:/var/run/docker.sock']
   graphql:
     container_name: apf_graphql
     restart: unless-stopped
@@ -91,6 +96,6 @@ volumes:
   sik_data:
   caddy_certs:
   caddy_config:
-  backup_data:
+  #backup_data:
 networks:
   network:
