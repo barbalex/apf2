@@ -1,5 +1,0 @@
-#täglich um 0 Uhr apflora dumpen und auf dropbox verschieben
-# 0 23 * * * root /backup.sh
-# test: every minute
-* * * * * root /backup.sh
-# An empty line is required at the end of this file for a valid cron file.
