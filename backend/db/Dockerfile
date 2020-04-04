@@ -9,7 +9,7 @@ RUN chmod +x /docker-entrypoint-initdb.d/02_restore.sh
 # TODO:
 # for unkonwn reason what follows leads to the db not starting
 
-#Install Cron and curl
+# Install Cron and curl
 #RUN apt-get update
 #RUN apt-get -y install cron
 #RUN apt-get -y install curl
