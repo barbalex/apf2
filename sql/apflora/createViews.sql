@@ -1061,172 +1061,156 @@ ORDER BY
   apflora.ae_taxonomies.artname,
   apflora.pop.nr;
 
-DROP VIEW IF EXISTS apflora.v_tpop_erste_und_letzte_kontrolle_und_letzter_tpopber CASCADE;
-CREATE OR REPLACE VIEW apflora.v_tpop_erste_und_letzte_kontrolle_und_letzter_tpopber AS
-with kontr_anzprojahr as (
-  SELECT
-    apflora.tpop.id,
-    min(apflora.tpopkontr.jahr) AS min_tpopkontr_jahr,
-    max(apflora.tpopkontr.jahr) AS max_tpopkontr_jahr,
-    count(apflora.tpopkontr.id) AS anz_tpopkontr
-  FROM
+drop view if exists apflora.v_tpop_erste_und_letzte_kontrolle_und_letzter_tpopber cascade;
+create or replace view apflora.v_tpop_erste_und_letzte_kontrolle_und_letzter_tpopber as
+with anz_kontr as (
+  select
+    apflora.tpop.id as tpop_id,
+    count(apflora.tpopkontr.id) as anz_tpopkontr
+  from
     apflora.tpop
-    LEFT JOIN
-      apflora.tpopkontr
-      ON apflora.tpop.id = apflora.tpopkontr.tpop_id
-  WHERE
-    (
-      (
-        apflora.tpopkontr.typ NOT IN ('Ziel', 'Zwischenziel')
-        AND apflora.tpopkontr.jahr IS NOT NULL
-      )
-      OR (
-        apflora.tpopkontr.typ IS NULL
-        AND apflora.tpopkontr.jahr IS NULL
-      )
-    ) and apflora.tpopkontr.apber_nicht_relevant is not true
-  GROUP BY
-    apflora.tpop.id
-), 
-kontr_letzte_id as (
-  SELECT
-    kontr_anzprojahr.id,
-    max(apflora.tpopkontr.id::text) AS tpopkontr_id,
-    max(kontr_anzprojahr.anz_tpopkontr) AS anz_tpopkontr
-  FROM
-    apflora.tpopkontr
-    INNER JOIN
-      kontr_anzprojahr
-      ON
-        (kontr_anzprojahr.max_tpopkontr_jahr = apflora.tpopkontr.jahr)
-        AND (apflora.tpopkontr.tpop_id = kontr_anzprojahr.id)
-  GROUP BY
-    kontr_anzprojahr.id
-),
-tpop_letzte_kontr_id as (
-  SELECT
-    apflora.tpop.id,
-    kontr_letzte_id.tpopkontr_id,
-    kontr_letzte_id.anz_tpopkontr AS anz_tpopkontr
-  FROM
-    apflora.tpop
-    LEFT JOIN
-      kontr_letzte_id
-      ON apflora.tpop.id = kontr_letzte_id.id
-),
-tpopkontr_anzprojahr as (
-  SELECT
-    apflora.tpop.id,
-    min(apflora.tpopkontr.jahr) AS min_tpopkontr_jahr
-  FROM
-    apflora.tpop
-    LEFT JOIN
-      apflora.tpopkontr
-      ON apflora.tpop.id = apflora.tpopkontr.tpop_id
-  WHERE
-    (
-      (
-        apflora.tpopkontr.typ NOT IN ('Ziel', 'Zwischenziel')
-        AND apflora.tpopkontr.jahr IS NOT NULL
-      )
-      OR (
-        apflora.tpopkontr.typ IS NULL
-        AND apflora.tpopkontr.jahr IS NULL
-      )
-    ) and apflora.tpopkontr.apber_nicht_relevant is not true
-  GROUP BY
+    left join apflora.tpopkontr
+    on apflora.tpop.id = apflora.tpopkontr.tpop_id
+  where
+    apflora.tpopkontr.jahr is not null
+    and apflora.tpopkontr.typ is not null
+    and apflora.tpopkontr.typ not in ('ziel', 'zwischenziel')
+    and apflora.tpopkontr.apber_nicht_relevant is not true
+  group by
     apflora.tpop.id
 ),
-tpopkontr_erste_id as (
-  SELECT
-    tpopkontr_anzprojahr.id,
-    max(apflora.tpopkontr.id::text) AS tpopkontr_id
-  FROM
-    apflora.tpopkontr
-    INNER JOIN
-      tpopkontr_anzprojahr
-      ON
-        (tpopkontr_anzprojahr.min_tpopkontr_jahr = apflora.tpopkontr.jahr)
-        AND (apflora.tpopkontr.tpop_id = tpopkontr_anzprojahr.id)
-  GROUP BY
-    tpopkontr_anzprojahr.id
-),
-tpop_erste_kontr_id as (
-  SELECT
+letzte_kontr as (
+  select distinct on (apflora.tpop.id)
     apflora.tpop.id,
-    tpopkontr_erste_id.tpopkontr_id
-  FROM
+    apflora.tpopkontr.id as tpopkontr_id
+  from 
     apflora.tpop
-    LEFT JOIN
-      tpopkontr_erste_id
-      ON apflora.tpop.id = tpopkontr_erste_id.id
+    inner join apflora.tpopkontr
+    on apflora.tpop.id = apflora.tpopkontr.tpop_id
+  where
+    apflora.tpopkontr.jahr is not null
+    and apflora.tpopkontr.typ is not null
+    and apflora.tpopkontr.typ not in ('ziel', 'zwischenziel')
+    and apflora.tpopkontr.apber_nicht_relevant is not true
+  order by
+    apflora.tpop.id,
+    tpopkontr.jahr desc,
+    tpopkontr.datum desc
 ),
-tpopber_letzte_id as (
-  SELECT
+letzte_kontr_anzahlen as (
+  select
     apflora.tpopkontr.tpop_id,
-    (
-      select id
-      from apflora.tpopber
-      where tpop_id = apflora.tpopkontr.tpop_id
-      order by changed desc
-      limit 1
-    ) AS tpopber_letzte_id,
-    count(apflora.tpopber.id) AS tpopber_anz
-  FROM
+    array_to_string(array_agg(apflora.tpopkontrzaehl.anzahl), ', ') as anzahlen,
+    string_agg(apflora.tpopkontrzaehl_einheit_werte.text, ', ') as einheiten,
+    string_agg(apflora.tpopkontrzaehl_methode_werte.text, ', ') as methoden
+  from
     apflora.tpopkontr
-    INNER JOIN
-      apflora.tpopber
-      ON apflora.tpopkontr.tpop_id = apflora.tpopber.tpop_id
-  WHERE
-    apflora.tpopkontr.typ NOT IN ('Ziel', 'Zwischenziel')
-    AND apflora.tpopber.jahr IS NOT NULL
-  GROUP BY
+    inner join apflora.tpopkontrzaehl
+      left join apflora.tpopkontrzaehl_einheit_werte
+      on apflora.tpopkontrzaehl.einheit = apflora.tpopkontrzaehl_einheit_werte.code
+      left join apflora.tpopkontrzaehl_methode_werte
+      on apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte.code
+    on apflora.tpopkontrzaehl.tpopkontr_id = apflora.tpopkontr.id
+    inner join letzte_kontr
+    on letzte_kontr.tpopkontr_id = apflora.tpopkontr.id and letzte_kontr.id = apflora.tpopkontr.tpop_id
+  group by
     apflora.tpopkontr.tpop_id
 ),
+erste_kontr as (
+  select distinct on (apflora.tpop.id)
+    apflora.tpop.id,
+    apflora.tpopkontr.id as tpopkontr_id
+  from 
+    apflora.tpop
+    inner join apflora.tpopkontr
+    on apflora.tpop.id = apflora.tpopkontr.tpop_id
+  where
+    apflora.tpopkontr.jahr is not null
+    and apflora.tpopkontr.typ is not null
+    and apflora.tpopkontr.typ not in ('ziel', 'zwischenziel')
+    and apflora.tpopkontr.apber_nicht_relevant is not true
+  order by
+    apflora.tpop.id,
+    tpopkontr.jahr asc,
+    tpopkontr.datum asc
+),
+erste_kontr_anzahlen as (
+  select
+    apflora.tpopkontr.tpop_id,
+    array_to_string(array_agg(apflora.tpopkontrzaehl.anzahl), ', ') as anzahlen,
+    string_agg(apflora.tpopkontrzaehl_einheit_werte.text, ', ') as einheiten,
+    string_agg(apflora.tpopkontrzaehl_methode_werte.text, ', ') as methoden
+  from
+    apflora.tpopkontr
+    inner join apflora.tpopkontrzaehl
+      left join apflora.tpopkontrzaehl_einheit_werte
+      on apflora.tpopkontrzaehl.einheit = apflora.tpopkontrzaehl_einheit_werte.code
+      left join apflora.tpopkontrzaehl_methode_werte
+      on apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte.code
+    on apflora.tpopkontrzaehl.tpopkontr_id = apflora.tpopkontr.id
+    inner join erste_kontr
+    on erste_kontr.tpopkontr_id = apflora.tpopkontr.id and erste_kontr.id = apflora.tpopkontr.tpop_id
+  group by
+    apflora.tpopkontr.tpop_id
+),
+anz_tpopber as (
+  select
+    apflora.tpop.id as tpop_id,
+    count(apflora.tpopber.id) as anzahl
+  from
+    apflora.tpop
+    left join apflora.tpopber
+    on apflora.tpop.id = apflora.tpopber.tpop_id
+  where
+    apflora.tpopber.jahr is not null
+    and apflora.tpopber.entwicklung is not null
+  group by
+    apflora.tpop.id
+),
 letzte_tpopber as (
-  SELECT
+  select distinct on (apflora.tpopber.tpop_id)
     apflora.tpopber.tpop_id,
-    tpopber_letzte_id.tpopber_anz,
     apflora.tpopber.id,
     apflora.tpopber.jahr,
-    apflora.tpop_entwicklung_werte.text AS entwicklung,
+    apflora.tpop_entwicklung_werte.text as entwicklung,
     apflora.tpopber.bemerkungen,
     apflora.tpopber.changed,
     apflora.tpopber.changed_by
-  FROM
-    tpopber_letzte_id
-    INNER JOIN
-      apflora.tpopber
-      ON
-        (tpopber_letzte_id.tpopber_letzte_id = apflora.tpopber.id)
-        AND (tpopber_letzte_id.tpop_id = apflora.tpopber.tpop_id)
-    LEFT JOIN
-      apflora.tpop_entwicklung_werte
-      ON apflora.tpopber.entwicklung = tpop_entwicklung_werte.code
+  from
+    apflora.tpopber
+    left join apflora.tpop_entwicklung_werte
+    on apflora.tpopber.entwicklung = tpop_entwicklung_werte.code
+  where
+    apflora.tpopber.jahr is not null
+    and apflora.tpopber.entwicklung is not null
+  order by
+    apflora.tpopber.tpop_id,
+    apflora.tpopber.jahr desc,
+    apflora.tpopber.changed desc
 )
-SELECT
+select
   apflora.pop.ap_id,
   apflora.ae_taxonomies.familie,
   apflora.ae_taxonomies.artname,
-  apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
-  apflora.ap.start_jahr AS ap_start_jahr,
-  apflora.ap_umsetzung_werte.text AS ap_umsetzung,
-  apflora.adresse.name AS ap_bearbeiter,
+  apflora.ap_bearbstand_werte.text as ap_bearbeitung,
+  apflora.ap.start_jahr as ap_start_jahr,
+  apflora.ap_umsetzung_werte.text as ap_umsetzung,
+  apflora.adresse.name as ap_bearbeiter,
   apflora.pop.id as pop_id,
-  apflora.pop.nr AS pop_nr,
-  apflora.pop.name AS pop_name,
-  pop_status_werte.text AS pop_status,
-  apflora.pop.bekannt_seit AS pop_bekannt_seit,
-  apflora.pop.status_unklar AS pop_status_unklar,
-  apflora.pop.status_unklar_begruendung AS pop_status_unklar_begruendung,
-  apflora.pop.lv95_x AS pop_x,
-  apflora.pop.lv95_y AS pop_y,
+  apflora.pop.nr as pop_nr,
+  apflora.pop.name as pop_name,
+  pop_status_werte.text as pop_status,
+  apflora.pop.bekannt_seit as pop_bekannt_seit,
+  apflora.pop.status_unklar as pop_status_unklar,
+  apflora.pop.status_unklar_begruendung as pop_status_unklar_begruendung,
+  apflora.pop.lv95_x as pop_x,
+  apflora.pop.lv95_y as pop_y,
   apflora.tpop.id,
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
   apflora.tpop.flurname,
   apflora.tpop.status,
-  pop_status_werte_2.text AS status_decodiert,
+  pop_status_werte_2.text as status_decodiert,
   apflora.tpop.bekannt_seit,
   apflora.tpop.status_unklar,
   apflora.tpop.status_unklar_grund,
@@ -1246,19 +1230,19 @@ SELECT
   apflora.tpop.nutzungszone,
   apflora.tpop.bewirtschafter,
   apflora.tpop.bewirtschaftung,
-  apflora.tpop.ekfrequenz,
+  apflora.ekfrequenz.code as ekfrequenz,
   apflora.tpop.ekfrequenz_abweichend,
   apflora.tpop.changed,
   apflora.tpop.changed_by,
-  tpop_letzte_kontr_id.anz_tpopkontr AS anzahl_kontrollen,
+  coalesce(anz_kontr.anz_tpopkontr, 0) as anzahl_kontrollen,
   lk.id as letzte_kontrolle_id,
   lk.jahr as letzte_kontrolle_jahr,
   lk.datum as letzte_kontrolle_datum,
   lk.typ as letzte_kontrolle_typ,
-  lk.bearbeiter as letzte_kontrolle_bearbeiter,
+  lk_adresse.name as letzte_kontrolle_bearbeiter,
   lk.ueberlebensrate as letzte_kontrolle_ueberlebensrate,
   lk.vitalitaet as letzte_kontrolle_vitalitaet,
-  lk.entwicklung as letzte_kontrolle_entwicklung,
+  lk_entwicklung_werte.text as letzte_kontrolle_entwicklung,
   lk.ursachen as letzte_kontrolle_ursachen,
   lk.erfolgsbeurteilung as letzte_kontrolle_erfolgsbeurteilung,
   lk.umsetzung_aendern as letzte_kontrolle_umsetzung_aendern,
@@ -1279,7 +1263,7 @@ SELECT
   lk.boden_naehrstoffgehalt as letzte_kontrolle_boden_naehrstoffgehalt,
   lk.boden_abtrag as letzte_kontrolle_boden_abtrag,
   lk.wasserhaushalt as letzte_kontrolle_wasserhaushalt,
-  lk.idealbiotop_uebereinstimmung as letzte_kontrolle_idealbiotop_uebereinstimmung,
+  lk_idbiotuebereinst_werte.text as letzte_kontrolle_idealbiotop_uebereinstimmung,
   lk.handlungsbedarf as letzte_kontrolle_handlungsbedarf,
   lk.flaeche_ueberprueft as letzte_kontrolle_flaeche_ueberprueft,
   lk.flaeche as letzte_kontrolle_flaeche,
@@ -1296,17 +1280,17 @@ SELECT
   lk.apber_nicht_relevant as letzte_kontrolle_apber_nicht_relevant,
   lk.apber_nicht_relevant_grund as letzte_kontrolle_apber_nicht_relevant_grund,
   lk.ekf_bemerkungen as letzte_kontrolle_ekf_bemerkungen,
-  lk.zaehlung_anzahlen as letzte_kontrolle_zaehlung_anzahlen,
-  lk.zaehlung_einheiten AS letzte_kontrolle_zaehlung_einheiten,
-  lk.zaehlung_methoden AS letzte_kontrolle_zaehlung_methoden,
+  letzte_kontr_anzahlen.anzahlen as letzte_kontrolle_zaehlung_anzahlen,
+  letzte_kontr_anzahlen.einheiten as letzte_kontrolle_zaehlung_einheiten,
+  letzte_kontr_anzahlen.methoden as letzte_kontrolle_zaehlung_methoden,
   ek.id as erste_kontrolle_id,
   ek.jahr as erste_kontrolle_jahr,
   ek.datum as erste_kontrolle_datum,
   ek.typ as erste_kontrolle_typ,
-  ek.bearbeiter as erste_kontrolle_bearbeiter,
+  ek_adresse.name as erste_kontrolle_bearbeiter,
   ek.ueberlebensrate as erste_kontrolle_ueberlebensrate,
   ek.vitalitaet as erste_kontrolle_vitalitaet,
-  ek.entwicklung as erste_kontrolle_entwicklung,
+  ek_entwicklung_werte.text as erste_kontrolle_entwicklung,
   ek.ursachen as erste_kontrolle_ursachen,
   ek.erfolgsbeurteilung as erste_kontrolle_erfolgsbeurteilung,
   ek.umsetzung_aendern as erste_kontrolle_umsetzung_aendern,
@@ -1327,7 +1311,7 @@ SELECT
   ek.boden_naehrstoffgehalt as erste_kontrolle_boden_naehrstoffgehalt,
   ek.boden_abtrag as erste_kontrolle_boden_abtrag,
   ek.wasserhaushalt as erste_kontrolle_wasserhaushalt,
-  ek.idealbiotop_uebereinstimmung as erste_kontrolle_idealbiotop_uebereinstimmung,
+  ek_idbiotuebereinst_werte.text as erste_kontrolle_idealbiotop_uebereinstimmung,
   ek.handlungsbedarf as erste_kontrolle_handlungsbedarf,
   ek.flaeche_ueberprueft as erste_kontrolle_flaeche_ueberprueft,
   ek.flaeche as erste_kontrolle_flaeche,
@@ -1344,54 +1328,67 @@ SELECT
   ek.apber_nicht_relevant as erste_kontrolle_apber_nicht_relevant,
   ek.apber_nicht_relevant_grund as erste_kontrolle_apber_nicht_relevant_grund,
   ek.ekf_bemerkungen as erste_kontrolle_ekf_bemerkungen,
-  ek.zaehlung_anzahlen as erste_kontrolle_zaehlung_anzahlen,
-  ek.zaehlung_einheiten AS erste_kontrolle_zaehlung_einheiten,
-  ek.zaehlung_methoden AS erste_kontrolle_zaehlung_methoden,
-	letzte_tpopber.tpopber_anz,
-	letzte_tpopber.id AS tpopber_id,
+  erste_kontr_anzahlen.anzahlen as erste_kontrolle_zaehlung_anzahlen,
+  erste_kontr_anzahlen.einheiten as erste_kontrolle_zaehlung_einheiten,
+  erste_kontr_anzahlen.methoden as erste_kontrolle_zaehlung_methoden,
+	anz_tpopber.anzahl as tpopber_anz,
+	letzte_tpopber.id as tpopber_id,
 	letzte_tpopber.jahr as tpopber_jahr,
 	letzte_tpopber.entwicklung as tpopber_entwicklung,
 	letzte_tpopber.bemerkungen as tpopber_bemerkungen,
 	letzte_tpopber.changed as tpopber_changed,
 	letzte_tpopber.changed_by  as tpopber_changed_by
-FROM
+from
   apflora.ae_taxonomies
-  INNER JOIN apflora.ap
-    INNER JOIN apflora.pop
-      INNER JOIN apflora.tpop
-        LEFT JOIN letzte_tpopber
-        ON apflora.tpop.id = letzte_tpopber.tpop_id
-        INNER JOIN
-          tpop_letzte_kontr_id
-          ON tpop_letzte_kontr_id.id = apflora.tpop.id
-        INNER JOIN
-          tpop_erste_kontr_id
-          ON tpop_erste_kontr_id.id = apflora.tpop.id
-        LEFT JOIN
-          apflora.v_tpopkontr as lk
-          ON tpop_letzte_kontr_id.tpopkontr_id = lk.id::text
-        LEFT JOIN
-          apflora.v_tpopkontr as ek
-          ON tpop_erste_kontr_id.tpopkontr_id = ek.id::text
-      ON apflora.pop.id = apflora.tpop.pop_id
-      LEFT JOIN
-        apflora.pop_status_werte
-        ON apflora.pop.status  = pop_status_werte.code
-      LEFT JOIN
-        apflora.pop_status_werte AS pop_status_werte_2
-        ON apflora.tpop.status = pop_status_werte_2.code
-    ON apflora.ap.id = apflora.pop.ap_id
-    LEFT JOIN
-      apflora.ap_bearbstand_werte
-      ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code
-    LEFT JOIN
-      apflora.ap_umsetzung_werte
-      ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code
-    LEFT JOIN
-      apflora.adresse
-      ON apflora.ap.bearbeiter = apflora.adresse.id
-  ON apflora.ae_taxonomies.id = apflora.ap.art_id
-WHERE
+  inner join apflora.ap
+    left join apflora.ap_bearbstand_werte
+    on apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code
+    left join apflora.ap_umsetzung_werte
+    on apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code
+    left join apflora.adresse
+    on apflora.ap.bearbeiter = apflora.adresse.id
+    inner join apflora.pop
+      left join apflora.pop_status_werte
+      on apflora.pop.status  = pop_status_werte.code
+      inner join apflora.tpop
+        left join apflora.ekfrequenz
+        on apflora.ekfrequenz.id = apflora.tpop.ekfrequenz
+        left join letzte_kontr_anzahlen
+        on letzte_kontr_anzahlen.tpop_id = apflora.tpop.id
+        left join erste_kontr_anzahlen
+        on erste_kontr_anzahlen.tpop_id = apflora.tpop.id
+        left join anz_tpopber
+        on anz_tpopber.tpop_id = apflora.tpop.id
+        left join anz_kontr
+        on anz_kontr.tpop_id = apflora.tpop.id
+        left join apflora.pop_status_werte as pop_status_werte_2
+        on apflora.tpop.status = pop_status_werte_2.code
+        left join letzte_tpopber
+        on apflora.tpop.id = letzte_tpopber.tpop_id
+        left join letzte_kontr
+          inner join apflora.tpopkontr as lk
+            left join apflora.adresse lk_adresse
+            on lk.bearbeiter = lk_adresse.id
+            left join apflora.tpop_entwicklung_werte lk_entwicklung_werte
+            on lk.entwicklung = lk_entwicklung_werte.code
+            left join apflora.tpopkontr_idbiotuebereinst_werte lk_idbiotuebereinst_werte
+            on lk.idealbiotop_uebereinstimmung = lk_idbiotuebereinst_werte.code
+          on letzte_kontr.tpopkontr_id = lk.id
+        on letzte_kontr.id = apflora.tpop.id
+        left join erste_kontr
+          inner join apflora.tpopkontr as ek
+            left join apflora.adresse ek_adresse
+            on ek.bearbeiter = ek_adresse.id
+            left join apflora.tpop_entwicklung_werte ek_entwicklung_werte
+            on ek.entwicklung = ek_entwicklung_werte.code
+            left join apflora.tpopkontr_idbiotuebereinst_werte ek_idbiotuebereinst_werte
+            on ek.idealbiotop_uebereinstimmung = ek_idbiotuebereinst_werte.code
+          on erste_kontr.tpopkontr_id = ek.id
+        on erste_kontr.id = apflora.tpop.id
+      on apflora.pop.id = apflora.tpop.pop_id
+    on apflora.ap.id = apflora.pop.ap_id
+  on apflora.ae_taxonomies.id = apflora.ap.art_id
+where
   apflora.ae_taxonomies.taxid > 150
 order by
   apflora.ae_taxonomies.artname,
