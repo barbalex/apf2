@@ -2556,6 +2556,7 @@ ORDER BY
   apflora.tpopkontr.jahr,
   apflora.tpopkontr.datum;
 
+-- used for export
 DROP VIEW IF EXISTS apflora.v_beob CASCADE;
 CREATE OR REPLACE VIEW apflora.v_beob AS
 SELECT
