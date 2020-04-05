@@ -5,46 +5,7 @@ SELECT 'DROP VIEW if exists  apflora.' || table_name || ' cascade;'
    AND table_name !~ '^pg_';
 
 -- then run it:
-DROP VIEW if exists  apflora.geography_columns cascade;
-DROP VIEW if exists  apflora.geometry_columns cascade;
-DROP VIEW if exists  apflora.v_massn_fuergis_read cascade;
-DROP VIEW if exists  apflora.v_ae_tax_list cascade;
-DROP VIEW if exists  apflora.v_pop_mit_letzter_popber cascade;
-DROP VIEW if exists  apflora.v_pop_mit_letzter_popmassnber cascade;
-DROP VIEW if exists  apflora.v_pop_popberundmassnber cascade;
-DROP VIEW if exists  apflora.v_popmassnber_anzmassn cascade;
-DROP VIEW if exists  apflora.v_tpop_statuswidersprichtbericht cascade;
-DROP VIEW if exists  apflora.v_ap_apberundmassn cascade;
-DROP VIEW if exists  apflora.v_massn_webgisbun cascade;
-DROP VIEW if exists  apflora.v_massn_fuergis_write cascade;
-DROP VIEW if exists  apflora.v_tpop_anzmassn cascade;
-DROP VIEW if exists  apflora.v_pop_anzmassn cascade;
-DROP VIEW if exists  apflora.v_pop_anzkontr cascade;
-DROP VIEW if exists  apflora.v_ap_anzmassn cascade;
-DROP VIEW if exists  apflora.v_ap_anzkontr cascade;
-DROP VIEW if exists  apflora.v_pop_ohnekoord cascade;
-DROP VIEW if exists  apflora.v_pop_fuergis_write cascade;
-DROP VIEW if exists  apflora.v_pop_fuergis_read cascade;
-DROP VIEW if exists  apflora.v_assozart cascade;
-DROP VIEW if exists  apflora.v_tpop_webgisbun cascade;
-DROP VIEW if exists  apflora.v_tpop_fuergis_write cascade;
-DROP VIEW if exists  apflora.v_tpop_fuergis_read cascade;
-DROP VIEW if exists  apflora.v_pop_vonapohnestatus cascade;
-DROP VIEW if exists  apflora.v_pop_massnseitbeginnap cascade;
-DROP VIEW if exists  apflora.v_apber cascade;
-DROP VIEW if exists  apflora.v_tpop_mitapaberohnestatus cascade;
-DROP VIEW if exists  apflora.v_tpop_ohnebekanntseit cascade;
-DROP VIEW if exists  apflora.v_tpop_ohnekoord cascade;
-DROP VIEW if exists  apflora.v_ber cascade;
-DROP VIEW if exists  apflora.v_ap_ohnepop cascade;
-DROP VIEW if exists  apflora.v_ap_anzkontrinjahr cascade;
-DROP VIEW if exists  apflora.v_erfkrit cascade;
-DROP VIEW if exists  apflora.v_tpopkontr_fuergis_read cascade;
-DROP VIEW if exists  apflora.v_popber_angezapbestjahr0 cascade;
-DROP VIEW if exists  apflora.v_ziel cascade;
-DROP VIEW if exists  apflora.v_zielber cascade;
-DROP VIEW if exists  apflora.v_beob cascade;
-DROP VIEW if exists  apflora.v_tpopkontr cascade;
+
 -- TODO: on checking if still needed from here
 DROP VIEW if exists  apflora.v_tpopkontr_webgisbun cascade;
 DROP VIEW if exists  apflora.v_tpopkontr_anzprojahr cascade;
