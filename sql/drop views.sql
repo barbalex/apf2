@@ -45,6 +45,7 @@ DROP VIEW if exists  apflora.v_ziel cascade;
 DROP VIEW if exists  apflora.v_zielber cascade;
 DROP VIEW if exists  apflora.v_beob cascade;
 DROP VIEW if exists  apflora.v_tpopkontr cascade;
+-- TODO: on checking if still needed from here
 DROP VIEW if exists  apflora.v_tpopkontr_webgisbun cascade;
 DROP VIEW if exists  apflora.v_tpopkontr_anzprojahr cascade;
 DROP VIEW if exists  apflora.v_tpopkontr_letzteid cascade;
