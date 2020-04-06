@@ -7,21 +7,6 @@ SELECT 'DROP VIEW if exists apflora.' || table_name || ' cascade;'
 -- then run it:
 
 -- TODO: on checking if still needed from here
-DROP VIEW if exists  apflora.v_q_pop_mit_ber_erloschen_und_tpopber_nicht_erloschen cascade;
-DROP VIEW if exists  apflora.v_q_tpop_statusaktuellletztertpopbererloschen cascade;
-DROP VIEW if exists  apflora.v_q_pop_statusaktuellletzterpopbererloschen cascade;
-DROP VIEW if exists  apflora.v_q_tpop_statuserloschenletztertpopberzunehmend cascade;
-DROP VIEW if exists  apflora.v_q_pop_statuserloschenletzterpopberzunehmend cascade;
-DROP VIEW if exists  apflora.v_q_tpop_statuserloschenletztertpopberstabil cascade;
-DROP VIEW if exists  apflora.v_q_pop_statuserloschenletzterpopberstabil cascade;
-DROP VIEW if exists  apflora.v_q_tpop_statuserloschenletztertpopberabnehmend cascade;
-DROP VIEW if exists  apflora.v_q_pop_statuserloschenletzterpopberabnehmend cascade;
-DROP VIEW if exists  apflora.v_q_tpop_statuserloschenletztertpopberunsicher cascade;
-DROP VIEW if exists  apflora.v_q_pop_statuserloschenletzterpopberunsicher cascade;
-DROP VIEW if exists  apflora.v_q_pop_ohnetpopmitgleichemstatus cascade;
-DROP VIEW if exists  apflora.v_q_pop_status300tpopstatusanders cascade;
-DROP VIEW if exists  apflora.v_q_pop_status201tpopstatusunzulaessig cascade;
-DROP VIEW if exists  apflora.v_q_pop_status202tpopstatusanders cascade;
 DROP VIEW if exists  apflora.v_q_pop_status200tpopstatusunzulaessig cascade;
 DROP VIEW if exists  apflora.v_q_pop_status101tpopstatusanders cascade;
 DROP VIEW if exists  apflora.v_q_pop_statuserloschenletzterpopbererloschenmitansiedlung cascade;
