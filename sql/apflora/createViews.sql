@@ -2103,32 +2103,6 @@ ORDER BY
   apflora.pop.nr,
   apflora.tpop.nr;
 
-DROP VIEW IF EXISTS apflora.v_tpopkontr_anzprojahr CASCADE;
-CREATE OR REPLACE VIEW apflora.v_tpopkontr_anzprojahr AS
-SELECT
-  apflora.tpop.id,
-  min(apflora.tpopkontr.jahr) AS "MinTPopKontrJahr",
-  max(apflora.tpopkontr.jahr) AS "MaxTPopKontrJahr",
-  count(apflora.tpopkontr.id) AS "AnzTPopKontr"
-FROM
-  apflora.tpop
-  LEFT JOIN
-    apflora.tpopkontr
-    ON apflora.tpop.id = apflora.tpopkontr.tpop_id
-WHERE
-  (
-    (
-      apflora.tpopkontr.typ NOT IN ('Ziel', 'Zwischenziel')
-      AND apflora.tpopkontr.jahr IS NOT NULL
-    )
-    OR (
-      apflora.tpopkontr.typ IS NULL
-      AND apflora.tpopkontr.jahr IS NULL
-    )
-  ) and apflora.tpopkontr.apber_nicht_relevant is not true
-GROUP BY
-  apflora.tpop.id;
-
 DROP VIEW IF EXISTS apflora.v_tpopkontr_letzteid CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopkontr_letzteid AS
 with kontr_anzprojahr as (
