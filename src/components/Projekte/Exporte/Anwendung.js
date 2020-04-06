@@ -1,4 +1,4 @@
-import React, { useContext, useState, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
@@ -8,15 +8,9 @@ import Icon from '@material-ui/core/Icon'
 import Button from '@material-ui/core/Button'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import styled from 'styled-components'
-import gql from 'graphql-tag'
-import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/react-hooks'
-import { useSnackbar } from 'notistack'
 
 import beziehungen from '../../../etc/beziehungen.png'
-import exportModule from '../../../modules/export'
-import storeContext from '../../../storeContext'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -28,7 +22,7 @@ const StyledCardActions = styled(CardActions)`
   height: auto !important;
 `
 const CardActionIconButton = styled(IconButton)`
-  transform: ${props => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
+  transform: ${(props) => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
 `
 const CardActionTitle = styled.div`
   padding-left: 8px;
@@ -57,56 +51,12 @@ const DownloadCardButton = styled(Button)`
 `
 
 const Anwendung = () => {
-  const client = useApolloClient()
-  const store = useContext(storeContext)
-  const { enqueNotification, removeNotification } = store
-
   const [expanded, setExpanded] = useState(false)
-  const { closeSnackbar } = useSnackbar()
 
   const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
-  const onClickButton = useCallback(async () => {
-    const notif = enqueNotification({
-      message: `Export "Datenstruktur" wird vorbereitet...`,
-      options: {
-        variant: 'info',
-        persist: true,
-      },
-    })
-    try {
-      const { data } = await client.query({
-        query: gql`
-          query viewDatenstruktursForExporte {
-            allVDatenstrukturs {
-              nodes {
-                tabelle_schema: tabelleSchema
-                tabelle_name: tabelleName
-                tabelle_anzahl_datensaetze: tabelleAnzahlDatensaetze
-                feld_name: feldName
-                feld_standardwert: feldStandardwert
-                feld_datentyp: feldDatentyp
-                feld_nullwerte: feldNullwerte
-              }
-            }
-          }
-        `,
-      })
-      exportModule({
-        data: get(data, 'allVDatenstrukturs.nodes', []),
-        fileName: 'Datenstruktur',
-        store,
-      })
-    } catch (error) {
-      enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-    removeNotification(notif)
-    closeSnackbar(notif)
-  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
+  const onClickGrafisch = useCallback(() => {
+    typeof window !== 'undefined' && window.open(beziehungen)
+  }, [])
 
   return (
     <StyledCard>
@@ -124,14 +74,7 @@ const Anwendung = () => {
       </StyledCardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <StyledCardContent>
-          <DownloadCardButton onClick={onClickButton}>
-            Tabellen und Felder
-          </DownloadCardButton>
-          <DownloadCardButton
-            onClick={() => {
-              typeof window !== 'undefined' && window.open(beziehungen)
-            }}
-          >
+          <DownloadCardButton onClick={onClickGrafisch}>
             Datenstruktur grafisch dargestellt
           </DownloadCardButton>
         </StyledCardContent>

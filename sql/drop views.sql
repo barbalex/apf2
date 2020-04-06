@@ -7,34 +7,7 @@ SELECT 'DROP VIEW if exists apflora.' || table_name || ' cascade;'
 -- then run it:
 
 -- TODO: on checking if still needed from here
-DROP VIEW if exists  apflora.v_tpopkontr_webgisbun cascade;
-DROP VIEW if exists  apflora.v_tpopkontr_anzprojahr cascade;
-DROP VIEW if exists  apflora.v_tpopkontr_letzteid cascade;
-DROP VIEW if exists  apflora.v_tpopkontr_fuergis_write cascade;
-DROP VIEW if exists  apflora.v_beob_art_changed cascade;
-DROP VIEW if exists  apflora.v_beob__mit_data cascade;
-DROP VIEW if exists  apflora.v_pop_kml cascade;
-DROP VIEW if exists  apflora.v_pop_kmlnamen cascade;
-DROP VIEW if exists  apflora.v_exportevab_adresse cascade;
-DROP VIEW if exists  apflora.v_exportevab_projekt cascade;
-DROP VIEW if exists  apflora.v_exportevab_raum cascade;
-DROP VIEW if exists  apflora.v_exportevab_ort cascade;
-DROP VIEW if exists  apflora.v_exportevab_zeit cascade;
-DROP VIEW if exists  apflora.v_exportevab_beob cascade;
-DROP VIEW if exists  apflora.v_tpopmassnber cascade;
-DROP VIEW if exists  apflora.v_tpop_kml cascade;
-DROP VIEW if exists  apflora.v_tpop_kmlnamen cascade;
-DROP VIEW if exists  apflora.v_kontrzaehl_anzproeinheit cascade;
-DROP VIEW if exists  apflora.v_tpopber cascade;
-DROP VIEW if exists  apflora.v_pop_berjahrundmassnjahrvontpop cascade;
-DROP VIEW if exists  apflora.v_q_pop_bekanntseit_nicht_aeltestetpop cascade;
-DROP VIEW if exists  apflora.v_tpop_popberundmassnber cascade;
-DROP VIEW if exists  apflora.v_tpop_kontrjahrundberjahrundmassnjahr cascade;
 DROP VIEW if exists  apflora.v_datenstruktur cascade;
-DROP VIEW if exists  apflora.v_tpop_ohneapberichtrelevant cascade;
-DROP VIEW if exists  apflora.v_q_tpop_bekanntseit_juenger_als_aelteste_beob cascade;
-DROP VIEW if exists  apflora.v_q_tpop_popnrtpopnrmehrdeutig cascade;
-DROP VIEW if exists  apflora.v_q_pop_popnrmehrdeutig cascade;
 DROP VIEW if exists  apflora.v_q_pop_koordentsprechenkeinertpop cascade;
 DROP VIEW if exists  apflora.v_q_pop_statusansaatversuchmitaktuellentpop cascade;
 DROP VIEW if exists  apflora.v_q_pop_statusansaatversuchalletpoperloschen cascade;
@@ -70,11 +43,9 @@ DROP VIEW if exists  apflora.v_q_pop_status200tpopstatusunzulaessig cascade;
 DROP VIEW if exists  apflora.v_q_pop_status101tpopstatusanders cascade;
 DROP VIEW if exists  apflora.v_q_pop_statuserloschenletzterpopbererloschenmitansiedlung cascade;
 DROP VIEW if exists  apflora.v_q_tpop_statuserloschenletztertpopbererloschenmitansiedlung cascade;
-DROP VIEW if exists  apflora.v_apbeob cascade;
 DROP VIEW if exists  apflora.v_tpop_last_count cascade;
 DROP VIEW if exists  apflora.v_pop_last_count cascade;
 DROP VIEW if exists  apflora.v_tpop_last_count_with_massn cascade;
-DROP VIEW if exists  apflora.v_pop_last_count_with_massn cascade;
 DROP VIEW if exists  apflora.v_ap_ausw_pop_status cascade;
 DROP VIEW if exists  apflora.v_ap_ausw_tpop_kontrolliert cascade;
 DROP VIEW if exists  apflora.v_tpop_ekfrequenz_to_set cascade;
