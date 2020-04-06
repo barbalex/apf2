@@ -7,10 +7,6 @@ SELECT 'DROP VIEW if exists apflora.' || table_name || ' cascade;'
 -- then run it:
 
 -- TODO: on checking if still needed from here
-DROP VIEW if exists  apflora.v_q_pop_status200tpopstatusunzulaessig cascade;
-DROP VIEW if exists  apflora.v_q_pop_status101tpopstatusanders cascade;
-DROP VIEW if exists  apflora.v_q_pop_statuserloschenletzterpopbererloschenmitansiedlung cascade;
-DROP VIEW if exists  apflora.v_q_tpop_statuserloschenletztertpopbererloschenmitansiedlung cascade;
 DROP VIEW if exists  apflora.v_tpop_last_count cascade;
 DROP VIEW if exists  apflora.v_pop_last_count cascade;
 DROP VIEW if exists  apflora.v_tpop_last_count_with_massn cascade;
