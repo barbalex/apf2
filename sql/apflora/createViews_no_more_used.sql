@@ -1,4 +1,5 @@
-
+-- 2020-04-06: these views were removed
+-- as they seemed no more used
 
 DROP VIEW IF EXISTS apflora.v_idealbiotop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_idealbiotop AS
