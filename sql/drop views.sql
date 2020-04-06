@@ -7,23 +7,6 @@ SELECT 'DROP VIEW if exists apflora.' || table_name || ' cascade;'
 -- then run it:
 
 -- TODO: on checking if still needed from here
-DROP VIEW if exists  apflora.v_datenstruktur cascade;
-DROP VIEW if exists  apflora.v_q_pop_koordentsprechenkeinertpop cascade;
-DROP VIEW if exists  apflora.v_q_pop_statusansaatversuchmitaktuellentpop cascade;
-DROP VIEW if exists  apflora.v_q_pop_statusansaatversuchalletpoperloschen cascade;
-DROP VIEW if exists  apflora.v_q_pop_statusansaatversuchmittpopursprerloschen cascade;
-DROP VIEW if exists  apflora.v_q_pop_statuserloschenmittpopaktuell cascade;
-DROP VIEW if exists  apflora.v_q_pop_statuserloschenmittpopansaatversuch cascade;
-DROP VIEW if exists  apflora.v_q_pop_statusangesiedeltmittpopurspruenglich cascade;
-DROP VIEW if exists  apflora.v_q_tpop_mitstatusansaatversuchundzaehlungmitanzahl cascade;
-DROP VIEW if exists  apflora.v_q_tpop_mitstatuspotentiellundzaehlungmitanzahl cascade;
-DROP VIEW if exists  apflora.v_q_tpop_mitstatuspotentiellundmassnansiedlung cascade;
-DROP VIEW if exists  apflora.v_q_tpop_statuserloschenletzterpopberaktuell cascade;
-DROP VIEW if exists  apflora.v_q_pop_statuserloschenletzterpopberaktuell cascade;
-DROP VIEW if exists  apflora.v_q_tpop_erloschenundrelevantaberletztebeobvor1950 cascade;
-DROP VIEW if exists  apflora.v_q_pop_mit_ber_zunehmend_ohne_tpopber_zunehmend cascade;
-DROP VIEW if exists  apflora.v_q_pop_mit_ber_abnehmend_ohne_tpopber_abnehmend cascade;
-DROP VIEW if exists  apflora.v_q_pop_mit_ber_erloschen_ohne_tpopber_erloschen cascade;
 DROP VIEW if exists  apflora.v_q_pop_mit_ber_erloschen_und_tpopber_nicht_erloschen cascade;
 DROP VIEW if exists  apflora.v_q_tpop_statusaktuellletztertpopbererloschen cascade;
 DROP VIEW if exists  apflora.v_q_pop_statusaktuellletzterpopbererloschen cascade;
