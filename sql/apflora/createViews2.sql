@@ -1,5 +1,6 @@
 -- these views depend on others
 -- so they need to be create after the others
+-- keep the used views separate because they are complicated
 
 -- used in exports
 DROP VIEW IF EXISTS apflora.v_pop_last_count CASCADE;
