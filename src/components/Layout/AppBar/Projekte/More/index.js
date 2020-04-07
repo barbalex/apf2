@@ -41,7 +41,7 @@ const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
    * need to clone projekteTabs
    * because otherwise removing elements errors out (because elements are sealed)
    */
-  const projekteTabs = urlQuery.projekteTabs.slice().filter(el => !!el)
+  const projekteTabs = urlQuery.projekteTabs.slice().filter((el) => !!el)
   const exporteIsActive = !!treeActiveNodes.projekt
   const isMobile = isMobilePhone()
 
@@ -52,7 +52,7 @@ const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
     setTimeout(() => setShowDeletions(true))
   }, [setShowDeletions])
   const onClickMehrButton = useCallback(
-    event => setAnchorEl(event.currentTarget),
+    (event) => setAnchorEl(event.currentTarget),
     [],
   )
   const onClose = useCallback(() => setAnchorEl(null), [])
@@ -104,7 +104,7 @@ const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
           onClick={onClickLogout}
           data-id="appbar-more-logout"
         >{`${user.name} abmelden (und Cache leeren)`}</MenuItem>
-        <Version>Version: 1.28.5 vom 2.04.2020</Version>
+        <Version>Version: 1.29.0 vom 7.04.2020</Version>
       </Menu>
     </Container>
   )
