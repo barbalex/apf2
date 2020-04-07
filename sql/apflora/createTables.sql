@@ -361,6 +361,8 @@ COMMENT ON COLUMN apflora.projekt.changed_by IS 'Von wem wurde der Datensatz zul
 
 -- TODO:
 DROP TABLE IF EXISTS apflora.ber;
+DROP VIEW IF EXISTS apflora.v_ber CASCADE;
+drop function if exists apflora.ber_label(ber apflora.ber);
 
 DROP TABLE IF EXISTS apflora.erfkrit;
 CREATE TABLE apflora.erfkrit (

@@ -1685,9 +1685,6 @@ ORDER BY
   apflora.tpop.gemeinde,
   apflora.tpop.flurname;
 
--- TODO:
-DROP VIEW IF EXISTS apflora.v_ber CASCADE;
-
 -- used as export
 DROP VIEW IF EXISTS apflora.v_assozart CASCADE;
 CREATE OR REPLACE VIEW apflora.v_assozart AS
