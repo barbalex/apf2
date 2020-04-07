@@ -34,6 +34,7 @@ const Container = styled.div`
 `
 const FieldsContainer = styled.div`
   padding: 10px;
+  padding-top: 0;
   overflow: auto !important;
 `
 const FilesContainer = styled.div`
@@ -228,51 +229,74 @@ const Pop = ({ treeName, showFilter = false }) => {
           />
         )}
         <FieldsContainer>
-          <Formik
-            key={showFilter ? row : row.id}
-            initialValues={row}
-            onSubmit={onSubmit}
-            enableReinitialize
+          <Tabs
+            value={tab}
+            onChange={onChangeTab}
+            indicatorColor="primary"
+            textColor="primary"
+            centered
           >
-            {({ handleSubmit, dirty }) => (
-              <Form onBlur={() => dirty && handleSubmit()}>
-                <Field
-                  label="Nr."
-                  name="nr"
-                  type="number"
-                  component={TextField}
-                />
-                <Field
-                  label="Name"
-                  name="name"
-                  type="text"
-                  popover="Dieses Feld möglichst immer ausfüllen"
-                  component={TextFieldWithInfo}
-                />
-                <Field
-                  apJahr={get(row, 'apByApId.startJahr')}
-                  treeName={treeName}
-                  showFilter={showFilter}
-                  component={Status}
-                />
-                <Field
-                  label="Status unklar"
-                  name="statusUnklar"
-                  component={Checkbox2States}
-                />
-                <Field
-                  label="Begründung"
-                  name="statusUnklarBegruendung"
-                  type="text"
-                  multiLine
-                  component={TextField}
-                />
-                {!showFilter && (
-                  <Coordinates row={row} refetchForm={refetchPop} table="pop" />
-                )}
-              </Form>
+            <StyledTab label="Population" value="pop" data-id="pop" />
+            {!showFilter && (
+              <StyledTab label="Dateien" value="dateien" data-id="dateien" />
             )}
-          </Formik>
+          </Tabs>
+          {tab === 'pop' && (
+            <Formik
+              key={showFilter ? row : row.id}
+              initialValues={row}
+              onSubmit={onSubmit}
+              enableReinitialize
+            >
+              {({ handleSubmit, dirty }) => (
+                <Form onBlur={() => dirty && handleSubmit()}>
+                  <Field
+                    label="Nr."
+                    name="nr"
+                    type="number"
+                    component={TextField}
+                  />
+                  <Field
+                    label="Name"
+                    name="name"
+                    type="text"
+                    popover="Dieses Feld möglichst immer ausfüllen"
+                    component={TextFieldWithInfo}
+                  />
+                  <Field
+                    apJahr={get(row, 'apByApId.startJahr')}
+                    treeName={treeName}
+                    showFilter={showFilter}
+                    component={Status}
+                  />
+                  <Field
+                    label="Status unklar"
+                    name="statusUnklar"
+                    component={Checkbox2States}
+                  />
+                  <Field
+                    label="Begründung"
+                    name="statusUnklarBegruendung"
+                    type="text"
+                    multiLine
+                    component={TextField}
+                  />
+                  {!showFilter && (
+                    <Coordinates
+                      row={row}
+                      refetchForm={refetchPop}
+                      table="pop"
+                    />
+                  )}
+                </Form>
+              )}
+            </Formik>
+          )}
+          {tab === 'dateien' && !showFilter && (
+            <FilesContainer data-width={datenWidth}>
+              <Files parentId={row.id} parent="pop" />
+            </FilesContainer>
+          )}
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
