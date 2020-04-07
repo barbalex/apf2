@@ -9,6 +9,7 @@ import ErrorBoundary from 'react-error-boundary'
 import Ap from './Ap'
 import Auswertung from './Auswertung'
 import FormTitle from '../../../shared/FormTitle'
+import Files from '../../../shared/Files'
 import storeContext from '../../../../storeContext'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 
@@ -29,11 +30,16 @@ const StyledTabs = styled(Tabs)`
 const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
+const FilesContainer = styled.div`
+  padding: 10px;
+  overflow-y: auto !important;
+  height: calc(100% - 20px);
+`
 
 const ApTabs = ({ treeName }) => {
   const store = useContext(storeContext)
   const { urlQuery, setUrlQuery } = store
-  const { activeNodeArray } = store[treeName]
+  const { activeNodeArray, datenWidth } = store[treeName]
 
   let id =
     activeNodeArray.length > 3
@@ -72,9 +78,15 @@ const ApTabs = ({ treeName }) => {
               value="auswertung"
               data-id="auswertung"
             />
+            <StyledTab label="Dateien" value="dateien" data-id="dateien" />
           </StyledTabs>
           {tab === 'ap' && <Ap treeName={treeName} id={id} />}
           {tab === 'auswertung' && <Auswertung id={id} />}
+          {tab === 'dateien' && (
+            <FilesContainer data-width={datenWidth}>
+              <Files parentId={id} parent="ap" />
+            </FilesContainer>
+          )}
         </FieldsContainer>
       </Container>
     </ErrorBoundary>
