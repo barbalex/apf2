@@ -14,8 +14,12 @@ import upperFirst from 'lodash/upperFirst'
 //import storeContext from '../../../storeContext'
 import TextField from '../TextFieldFormik'
 import {
+  apFile as apFileFragment,
   idealbiotopFile as idealbiotopFileFragment,
+  popFile as popFileFragment,
+  tpopFile as tpopFileFragment,
   tpopkontrFile as tpopkontrFileFragment,
+  tpopmassnFile as tpopmassnFileFragment,
 } from '../fragments'
 import isImageFile from './isImageFile'
 import objectsFindChangedKey from '../../../modules/objectsFindChangedKey'
@@ -24,7 +28,7 @@ import objectsEmptyValuesToNull from '../../../modules/objectsEmptyValuesToNull'
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
-  background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
+  background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
   width: 100%;
 `
 const Img = styled.img`
@@ -74,8 +78,12 @@ const MenuTitle = styled.h3`
 `
 
 const fragmentObject = {
+  ap: apFileFragment,
   idealbiotop: idealbiotopFileFragment,
+  pop: popFileFragment,
+  tpop: tpopFileFragment,
   tpopkontr: tpopkontrFileFragment,
+  tpopmassn: tpopmassnFileFragment,
 }
 
 const File = ({ file, parent, refetch }) => {
@@ -226,7 +234,7 @@ const File = ({ file, parent, refetch }) => {
                 aria-label="löschen"
                 aria-owns={delMenuOpen ? 'delMenu' : undefined}
                 aria-haspopup="true"
-                onClick={event => setDelMenuAnchorEl(event.currentTarget)}
+                onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
               >
                 <FaTimes />
               </DelIcon>

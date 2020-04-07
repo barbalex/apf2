@@ -10,8 +10,12 @@ import Button from '@material-ui/core/Button'
 import ErrorBoundary from 'react-error-boundary'
 
 import {
+  apFile as apFileFragment,
   idealbiotopFile as idealbiotopFileFragment,
+  popFile as popFileFragment,
+  tpopFile as tpopFileFragment,
   tpopkontrFile as tpopkontrFileFragment,
+  tpopmassnFile as tpopmassnFileFragment,
 } from '../fragments'
 import Uploader from '../Uploader'
 import File from './File'
@@ -21,7 +25,7 @@ import isImageFile from './isImageFile'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
+  background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
 const Spacer = styled.div`
   height: 10px;
@@ -35,8 +39,12 @@ const LightboxButton = styled(Button)`
 `
 
 const fragmentObject = {
+  ap: apFileFragment,
   idealbiotop: idealbiotopFileFragment,
+  pop: popFileFragment,
+  tpop: tpopFileFragment,
   tpopkontr: tpopkontrFileFragment,
+  tpopmassn: tpopmassnFileFragment,
 }
 
 const Files = ({ parentId, parent }) => {
@@ -70,9 +78,9 @@ const Files = ({ parentId, parent }) => {
   const files = get(data, `all${upperFirst(parent)}Files.nodes`, [])
 
   const onChangeUploader = useCallback(
-    file => {
+    (file) => {
       if (file) {
-        file.done(async info => {
+        file.done(async (info) => {
           try {
             await client.mutate({
               mutation: gql`
@@ -114,9 +122,9 @@ const Files = ({ parentId, parent }) => {
     [client, fields, fragment, parent, parentId, refetch],
   )
 
-  const images = files.filter(f => isImageFile(f))
+  const images = files.filter((f) => isImageFile(f))
   const imageUrls = images.map(
-    f =>
+    (f) =>
       `https://ucarecdn.com/${f.fileId}/-/resize/1200x/-/quality/lightest/${f.name}`,
   )
   const onClickLightboxButton = useCallback(() => setLightboxIsOpen(true), [])
@@ -178,7 +186,7 @@ const Files = ({ parentId, parent }) => {
           />
         )}
         <Spacer />
-        {files.map(file => (
+        {files.map((file) => (
           <File
             key={file.fileId}
             file={file}
