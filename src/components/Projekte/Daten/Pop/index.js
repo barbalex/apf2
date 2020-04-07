@@ -1,4 +1,6 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useState } from 'react'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
@@ -20,24 +22,34 @@ import { simpleTypes as popType } from '../../../../store/Tree/DataFilter/pop'
 import Coordinates from '../../../shared/Coordinates'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
+import Files from '../../../shared/Files'
+import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 
 const Container = styled.div`
-  height: ${props =>
+  height: ${(props) =>
     props.showfilter ? 'calc(100vh - 145px)' : 'calc(100vh - 64px)'};
   display: flex;
   flex-direction: column;
-  background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
+  background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
 const FieldsContainer = styled.div`
   padding: 10px;
   overflow: auto !important;
 `
+const FilesContainer = styled.div`
+  padding: 10px;
+  overflow-y: auto !important;
+  height: calc(100% - 20px);
+`
+const StyledTab = styled(Tab)`
+  text-transform: none !important;
+`
 
 const Pop = ({ treeName, showFilter = false }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
-  const { dataFilterSetValue, refetch } = store
-  const { activeNodeArray, dataFilter } = store[treeName]
+  const { dataFilterSetValue, refetch, urlQuery, setUrlQuery } = store
+  const { activeNodeArray, dataFilter, datenWidth } = store[treeName]
 
   let id =
     activeNodeArray.length > 5
@@ -60,7 +72,7 @@ const Pop = ({ treeName, showFilter = false }) => {
     apByApId: { projId: { equalTo: activeNodeArray[1] } },
   }
   const popFilterValues = Object.entries(dataFilter.pop).filter(
-    e => e[1] || e[1] === 0,
+    (e) => e[1] || e[1] === 0,
   )
   popFilterValues.forEach(([key, value]) => {
     const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
@@ -68,7 +80,7 @@ const Pop = ({ treeName, showFilter = false }) => {
   })
   const popApFilter = { apId: { equalTo: apId } }
   const popApFilterValues = Object.entries(dataFilter.pop).filter(
-    e => e[1] || e[1] === 0,
+    (e) => e[1] || e[1] === 0,
   )
   popApFilterValues.forEach(([key, value]) => {
     const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
@@ -83,6 +95,20 @@ const Pop = ({ treeName, showFilter = false }) => {
       apId,
     },
   })
+
+  const [tab, setTab] = useState(get(urlQuery, 'popTab', 'pop'))
+  const onChangeTab = useCallback(
+    (event, value) => {
+      setUrlQueryValue({
+        key: 'popTab',
+        value,
+        urlQuery,
+        setUrlQuery,
+      })
+      setTab(value)
+    },
+    [setUrlQuery, urlQuery],
+  )
 
   let popTotalCount
   let popFilteredCount
