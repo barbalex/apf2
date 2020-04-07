@@ -19,13 +19,14 @@ import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import Ek from './Ek'
 import Tpop from './Tpop'
+import Files from '../../../shared/Files'
 
 const Container = styled.div`
-  height: ${props =>
+  height: ${(props) =>
     props.showfilter ? 'calc(100vh - 145px)' : 'calc(100vh - 64px)'};
   display: flex;
   flex-direction: column;
-  background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
+  background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
 const FieldsContainer = styled.div`
   overflow: hidden !important;
@@ -40,13 +41,18 @@ const LoadingDiv = styled.div`
 const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
+const FilesContainer = styled.div`
+  padding: 10px;
+  overflow-y: auto !important;
+  height: calc(100% - 20px);
+`
 
 const TpopForm = ({ treeName, showFilter = false }) => {
   const client = useApolloClient()
   const store = useContext(storeContext)
   const { dataFilterSetValue, refetch, urlQuery, setUrlQuery } = store
 
-  const { activeNodeArray, dataFilter } = store[treeName]
+  const { activeNodeArray, dataFilter, datenWidth } = store[treeName]
   const [tab, setTab] = useState(get(urlQuery, 'tpopTab', 'tpop'))
   const onChangeTab = useCallback(
     (event, value) => {
@@ -82,7 +88,7 @@ const TpopForm = ({ treeName, showFilter = false }) => {
     popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
   }
   const tpopFilterValues = Object.entries(dataFilter.tpop).filter(
-    e => e[1] || e[1] === 0,
+    (e) => e[1] || e[1] === 0,
   )
   tpopFilterValues.forEach(([key, value]) => {
     const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
@@ -111,12 +117,12 @@ const TpopForm = ({ treeName, showFilter = false }) => {
     tpopOfApTotalCount = !popsOfAp.length
       ? '...'
       : popsOfAp
-          .map(p => get(p, 'tpops.totalCount'))
+          .map((p) => get(p, 'tpops.totalCount'))
           .reduce((acc = 0, val) => acc + val)
     tpopOfApFilteredCount = !popsOfAp.length
       ? '...'
       : popsOfAp
-          .map(p => get(p, 'tpopsFiltered.totalCount'))
+          .map((p) => get(p, 'tpopsFiltered.totalCount'))
           .reduce((acc = 0, val) => acc + val)
   } else {
     row = get(data, 'tpopById', {})
@@ -242,6 +248,9 @@ const TpopForm = ({ treeName, showFilter = false }) => {
           >
             <StyledTab label="Teil-Population" value="tpop" data-id="tpop" />
             <StyledTab label="EK" value="ek" data-id="ek" />
+            {!showFilter && (
+              <StyledTab label="Dateien" value="dateien" data-id="dateien" />
+            )}
           </Tabs>
           {!showFilter && loading ? (
             <LoadingDiv>Lade...</LoadingDiv>
@@ -254,13 +263,17 @@ const TpopForm = ({ treeName, showFilter = false }) => {
               apJahr={apJahr}
               refetchTpop={refetchTpop}
             />
-          ) : (
+          ) : tab === 'ek' ? (
             <Ek
               treeName={treeName}
               showFilter={showFilter}
               onSubmit={onSubmit}
               row={row}
             />
+          ) : (
+            <FilesContainer data-width={datenWidth}>
+              <Files parentId={row.id} parent="tpop" />
+            </FilesContainer>
           )}
         </FieldsContainer>
       </Container>
