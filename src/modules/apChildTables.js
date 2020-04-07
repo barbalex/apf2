@@ -6,7 +6,6 @@ export default [
   'ekzaehleinheit',
   'ekfrequenz',
   'idealbiotop',
-  'ber',
   'apber',
   'erfkrit',
   'ziel',

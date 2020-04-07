@@ -1685,42 +1685,8 @@ ORDER BY
   apflora.tpop.gemeinde,
   apflora.tpop.flurname;
 
--- used for export
+-- TODO:
 DROP VIEW IF EXISTS apflora.v_ber CASCADE;
-CREATE OR REPLACE VIEW apflora.v_ber AS
-SELECT
-  apflora.ap.id AS ap_id,
-  apflora.ae_taxonomies.artname,
-  apflora.ap_bearbstand_werte.text as ap_bearbeitung,
-  apflora.ap.start_jahr AS ap_start_jahr,
-  apflora.ap_umsetzung_werte.text AS ap_umsetzung,
-  apflora.adresse.name AS ap_bearbeiter,
-  apflora.ber.id,
-  apflora.ber.autor,
-  apflora.ber.jahr,
-  apflora.ber.titel,
-  apflora.ber.url,
-  apflora.ber.changed,
-  apflora.ber.changed_by
-FROM
-  ((((apflora.ae_taxonomies
-  RIGHT JOIN
-    apflora.ap
-    ON apflora.ae_taxonomies.id = apflora.ap.art_id)
-  LEFT JOIN
-    apflora.ap_bearbstand_werte
-    ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
-  LEFT JOIN
-    apflora.ap_umsetzung_werte
-    ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
-  LEFT JOIN
-    apflora.adresse
-    ON apflora.ap.bearbeiter = apflora.adresse.id)
-  RIGHT JOIN
-    apflora.ber
-    ON apflora.ap.id = apflora.ber.ap_id
-ORDER BY
-  apflora.ae_taxonomies.artname;
 
 -- used as export
 DROP VIEW IF EXISTS apflora.v_assozart CASCADE;

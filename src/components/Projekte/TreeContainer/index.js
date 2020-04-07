@@ -42,8 +42,6 @@ import CmEkfrequenz from './contextmenu/Ekfrequenz'
 import CmApartFolder from './contextmenu/ApartFolder'
 import CmApart from './contextmenu/Apart'
 import CmBeobZugeordnetFolder from './contextmenu/BeobZugeordnetFolder'
-import CmBerFolder from './contextmenu/BerFolder'
-import CmBer from './contextmenu/Ber'
 import CmApberFolder from './contextmenu/ApberFolder'
 import CmApber from './contextmenu/Apber'
 import CmErfkritFolder from './contextmenu/ErfkritFolder'
@@ -311,7 +309,7 @@ const TreeContainer = ({
     // and there is only one projekt
     // open it
     // dont do this in render!
-    const projekteNodes = nodes.filter(n => n.menuType === 'projekt')
+    const projekteNodes = nodes.filter((n) => n.menuType === 'projekt')
     const existsOnlyOneProjekt = projekteNodes.length === 1
     const projektNode = projekteNodes[0]
     if (
@@ -345,7 +343,7 @@ const TreeContainer = ({
   )
 
   const showMapIfNotYetVisible = useCallback(
-    projekteTabs => {
+    (projekteTabs) => {
       const isVisible = projekteTabs.includes('karte')
       if (!isVisible) {
         setUrlQueryValue({
@@ -437,7 +435,7 @@ const TreeContainer = ({
             label,
             url,
             afterDeletionHook: () => {
-              const newOpenNodes = openNodes.filter(n => !isEqual(n, url))
+              const newOpenNodes = openNodes.filter((n) => !isEqual(n, url))
               setOpenNodes(newOpenNodes)
               treeRefetch()
             },
@@ -450,7 +448,7 @@ const TreeContainer = ({
           // 2 add layer for actionTable
           if (activeApfloraLayers.includes(actionTable)) {
             setActiveApfloraLayers(
-              activeApfloraLayers.filter(o => o !== actionTable),
+              activeApfloraLayers.filter((o) => o !== actionTable),
             )
           } else {
             setActiveApfloraLayers([...activeApfloraLayers, actionTable])
@@ -660,8 +658,6 @@ const TreeContainer = ({
         <CmApartFolder onClick={handleClick} treeName={treeName} />
         <CmApart onClick={handleClick} treeName={treeName} />
         <CmBeobZugeordnetFolder onClick={handleClick} treeName={treeName} />
-        <CmBerFolder onClick={handleClick} treeName={treeName} />
-        <CmBer onClick={handleClick} treeName={treeName} />
         <CmApberFolder onClick={handleClick} treeName={treeName} />
         <CmApber onClick={handleClick} treeName={treeName} />
         <CmErfkritFolder onClick={handleClick} treeName={treeName} />

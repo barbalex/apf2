@@ -27,7 +27,7 @@ const StyledCardActions = styled(CardActions)`
   height: auto !important;
 `
 const CardActionIconButton = styled(IconButton)`
-  transform: ${props => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
+  transform: ${(props) => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
 `
 const CardActionTitle = styled.div`
   padding-left: 8px;
@@ -110,7 +110,7 @@ const AP = () => {
           filter: apGqlFilter,
         },
       })
-      const dataToExport = get(data, 'allAps.nodes', []).map(n => ({
+      const dataToExport = get(data, 'allAps.nodes', []).map((n) => ({
         id: n.id,
         artname: get(n, 'aeTaxonomyByArtId.artname') || null,
         bearbeitung: get(n, 'apBearbstandWerteByBearbeitung.text') || null,
@@ -153,7 +153,7 @@ const AP = () => {
     })
     try {
       const { data } = await client.query({
-        query: await import('./allVApOhnepops').then(m => m.default),
+        query: await import('./allVApOhnepops').then((m) => m.default),
       })
       exportModule({
         data: get(data, 'allVApOhnepops.nodes', []),
@@ -182,7 +182,7 @@ const AP = () => {
     })
     try {
       const { data } = await client.query({
-        query: await import('./allVApAnzmassns').then(m => m.default),
+        query: await import('./allVApAnzmassns').then((m) => m.default),
       })
       exportModule({
         data: get(data, 'allVApAnzmassns.nodes', []),
@@ -211,7 +211,7 @@ const AP = () => {
     })
     try {
       const { data } = await client.query({
-        query: await import('./allVApAnzkontrs').then(m => m.default),
+        query: await import('./allVApAnzkontrs').then((m) => m.default),
       })
       exportModule({
         data: get(data, 'allVApAnzkontrs.nodes', []),
@@ -240,7 +240,7 @@ const AP = () => {
     })
     try {
       const { data } = await client.query({
-        query: await import('./allVApbers').then(m => m.default),
+        query: await import('./allVApbers').then((m) => m.default),
       })
       exportModule({
         data: get(data, 'allVApbers.nodes', []),
@@ -269,7 +269,7 @@ const AP = () => {
     })
     try {
       const { data } = await client.query({
-        query: await import('./allVApApberundmassns').then(m => m.default),
+        query: await import('./allVApApberundmassns').then((m) => m.default),
       })
       exportModule({
         data: get(data, 'allVApApberundmassns.nodes', []),
@@ -298,7 +298,7 @@ const AP = () => {
     })
     try {
       const { data } = await client.query({
-        query: await import('./allVZiels').then(m => m.default),
+        query: await import('./allVZiels').then((m) => m.default),
       })
       exportModule({
         data: get(data, 'allVZiels.nodes', []),
@@ -327,40 +327,11 @@ const AP = () => {
     })
     try {
       const { data } = await client.query({
-        query: await import('./allVZielbers').then(m => m.default),
+        query: await import('./allVZielbers').then((m) => m.default),
       })
       exportModule({
         data: get(data, 'allVZielbers.nodes', []),
         fileName: 'Zielberichte',
-        store,
-      })
-    } catch (error) {
-      enqueNotification({
-        message: error.message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-    removeNotification(notif)
-    closeSnackbar(notif)
-  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
-
-  const onClickBer = useCallback(async () => {
-    const notif = enqueNotification({
-      message: `Export "Berichte" wird vorbereitet...`,
-      options: {
-        variant: 'info',
-        persist: true,
-      },
-    })
-    try {
-      const { data } = await client.query({
-        query: await import('./allVBers').then(m => m.default),
-      })
-      exportModule({
-        data: get(data, 'allVBers.nodes', []),
-        fileName: 'Berichte',
         store,
       })
     } catch (error) {
@@ -385,7 +356,7 @@ const AP = () => {
     })
     try {
       const { data } = await client.query({
-        query: await import('./allVErfkrits').then(m => m.default),
+        query: await import('./allVErfkrits').then((m) => m.default),
       })
       exportModule({
         data: get(data, 'allVErfkrits.nodes', []),
@@ -414,7 +385,7 @@ const AP = () => {
     })
     try {
       const { data } = await client.query({
-        query: await import('./allVIdealbiotops').then(m => m.default),
+        query: await import('./allVIdealbiotops').then((m) => m.default),
       })
       exportModule({
         data: get(data, 'allVIdealbiotops.nodes', []),
@@ -443,7 +414,7 @@ const AP = () => {
     })
     try {
       const { data } = await client.query({
-        query: await import('./allVAssozarts').then(m => m.default),
+        query: await import('./allVAssozarts').then((m) => m.default),
       })
       exportModule({
         data: get(data, 'allVAssozarts.nodes', []),
@@ -505,7 +476,6 @@ const AP = () => {
           <DownloadCardButton onClick={onClickZielber}>
             Ziel-Berichte
           </DownloadCardButton>
-          <DownloadCardButton onClick={onClickBer}>Berichte</DownloadCardButton>
           <DownloadCardButton onClick={onClickErfkrit}>
             Erfolgskriterien
           </DownloadCardButton>

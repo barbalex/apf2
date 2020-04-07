@@ -17,7 +17,6 @@ import Apber from './Apber'
 import Apberuebersicht from './Apberuebersicht'
 import Assozart from './Assozart'
 import Beobzuordnung from './Beobzuordnung'
-import Ber from './Ber'
 import CurrentIssue from './CurrentIssue'
 import Messages from './Messages'
 import Ekzaehleinheit from './Ekzaehleinheit'
@@ -89,10 +88,6 @@ const Daten = ({ treeName, nodes }) => {
     }
     case 'beobzuordnung': {
       form = <Beobzuordnung treeName={treeName} type={activeForm.type} />
-      break
-    }
-    case 'ber': {
-      form = <Ber treeName={treeName} />
       break
     }
     case 'currentIssue': {

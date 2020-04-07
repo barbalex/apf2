@@ -17,22 +17,22 @@ export default ({
 }) => {
   // apFilter is used for form nodeLabelFilter AND apFilter of tree :-(
   const isWerteListen = openNodes.some(
-    nodeArray => nodeArray[0] === 'Werte-Listen',
+    (nodeArray) => nodeArray[0] === 'Werte-Listen',
   )
   const projekt = uniq(
     openNodes
-      .map(a => (a.length > 1 && a[0] === 'Projekte' ? a[1] : null))
-      .filter(v => v !== null),
+      .map((a) => (a.length > 1 && a[0] === 'Projekte' ? a[1] : null))
+      .filter((v) => v !== null),
   )
   let projId = '99999999-9999-9999-9999-999999999999'
   if (projekt && projekt[0]) projId = projekt[0]
 
   const isProjekt = openNodes.some(
-    nArray => nArray[0] === 'Projekte' && nArray[1],
+    (nArray) => nArray[0] === 'Projekte' && nArray[1],
   )
   const apFilter = { projId: { in: projId } }
   const apFilterValues = Object.entries(dataFilter.ap).filter(
-    e => e[1] || e[1] === 0,
+    (e) => e[1] || e[1] === 0,
   )
   apFilterValues.forEach(([key, value]) => {
     const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
@@ -44,21 +44,21 @@ export default ({
   }
   const ap = uniq(
     openNodes
-      .map(a =>
+      .map((a) =>
         a.length > 3 &&
         a[0] === 'Projekte' &&
         decodeURIComponent(a[2]) === 'Aktionspläne'
           ? a[3]
           : null,
       )
-      .filter(v => v !== null),
+      .filter((v) => v !== null),
   )
   const isAp =
     isProjekt &&
-    openNodes.some(nArray => nArray[2] === 'Aktionspläne' && nArray[3])
+    openNodes.some((nArray) => nArray[2] === 'Aktionspläne' && nArray[3])
   const ziel = uniq(
     openNodes
-      .map(a =>
+      .map((a) =>
         a.length > 7 &&
         a[0] === 'Projekte' &&
         decodeURIComponent(a[2]) === 'Aktionspläne' &&
@@ -66,14 +66,16 @@ export default ({
           ? a[6]
           : null,
       )
-      .filter(v => v !== null),
+      .filter((v) => v !== null),
   )
   const isZiel =
     isAp &&
-    openNodes.some(nArray => nArray[4] === 'AP-Ziele' && nArray[5] && nArray[6])
+    openNodes.some(
+      (nArray) => nArray[4] === 'AP-Ziele' && nArray[5] && nArray[6],
+    )
   const pop = uniq(
     openNodes
-      .map(a =>
+      .map((a) =>
         a.length > 5 &&
         a[0] === 'Projekte' &&
         decodeURIComponent(a[2]) === 'Aktionspläne' &&
@@ -81,13 +83,14 @@ export default ({
           ? a[5]
           : null,
       )
-      .filter(v => v !== null),
+      .filter((v) => v !== null),
   )
   const isPop =
-    isAp && openNodes.some(nArray => nArray[4] === 'Populationen' && nArray[5])
+    isAp &&
+    openNodes.some((nArray) => nArray[4] === 'Populationen' && nArray[5])
   const popFilter = { apId: { in: ap } }
   const popFilterValues = Object.entries(dataFilter.pop).filter(
-    e => e[1] || e[1] === 0,
+    (e) => e[1] || e[1] === 0,
   )
   popFilterValues.forEach(([key, value]) => {
     const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
@@ -95,7 +98,7 @@ export default ({
   })
   const tpop = uniq(
     openNodes
-      .map(a =>
+      .map((a) =>
         a.length > 7 &&
         a[0] === 'Projekte' &&
         decodeURIComponent(a[2]) === 'Aktionspläne' &&
@@ -104,14 +107,14 @@ export default ({
           ? a[7]
           : null,
       )
-      .filter(v => v !== null),
+      .filter((v) => v !== null),
   )
   const isTpop =
     isPop &&
-    openNodes.some(nArray => nArray[6] === 'Teil-Populationen' && nArray[7])
+    openNodes.some((nArray) => nArray[6] === 'Teil-Populationen' && nArray[7])
   const tpopFilter = { popId: { in: pop } }
   const tpopFilterValues = Object.entries(dataFilter.tpop).filter(
-    e => e[1] || e[1] === 0,
+    (e) => e[1] || e[1] === 0,
   )
   tpopFilterValues.forEach(([key, value]) => {
     const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
@@ -120,7 +123,7 @@ export default ({
 
   const tpopkontr = uniq(
     openNodes
-      .map(a =>
+      .map((a) =>
         a.length > 9 &&
         a[0] === 'Projekte' &&
         decodeURIComponent(a[2]) === 'Aktionspläne' &&
@@ -130,12 +133,12 @@ export default ({
           ? a[9]
           : null,
       )
-      .filter(v => v !== null),
+      .filter((v) => v !== null),
   )
   const isTpopkontr =
     isTpop &&
     openNodes.some(
-      nArray =>
+      (nArray) =>
         ['Feld-Kontrollen', 'Freiwilligen-Kontrollen'].includes(nArray[8]) &&
         nArray[9],
     )
@@ -149,7 +152,7 @@ export default ({
   }
   const tpopfeldkontrFilterValues = Object.entries(
     dataFilter.tpopfeldkontr,
-  ).filter(e => e[1] || e[1] === 0)
+  ).filter((e) => e[1] || e[1] === 0)
   tpopfeldkontrFilterValues.forEach(([key, value]) => {
     const expression =
       tpopfeldkontrType[key] === 'string' ? 'includes' : 'equalTo'
@@ -162,7 +165,7 @@ export default ({
   }
   const tpopfreiwkontrFilterValues = Object.entries(
     dataFilter.tpopfreiwkontr,
-  ).filter(e => e[1] || e[1] === 0)
+  ).filter((e) => e[1] || e[1] === 0)
   tpopfreiwkontrFilterValues.forEach(([key, value]) => {
     const expression =
       tpopfreiwkontrType[key] === 'string' ? 'includes' : 'equalTo'
@@ -171,7 +174,7 @@ export default ({
 
   const tpopmassnFilter = { tpopId: { in: tpop } }
   const tpopmassnFilterValues = Object.entries(dataFilter.tpopmassn).filter(
-    e => e[1] || e[1] === 0,
+    (e) => e[1] || e[1] === 0,
   )
   tpopmassnFilterValues.forEach(([key, value]) => {
     const expression = tpopmassnType[key] === 'string' ? 'includes' : 'equalTo'
@@ -225,12 +228,6 @@ export default ({
   if (!!nodeLabelFilter.beob) {
     beobZugeordnetsFilter.label = {
       includesInsensitive: nodeLabelFilter.beob,
-    }
-  }
-  const bersFilter = { apId: { in: ap } }
-  if (!!nodeLabelFilter.ber) {
-    bersFilter.label = {
-      includesInsensitive: nodeLabelFilter.ber,
     }
   }
   const ekfrequenzsFilter = { apId: { in: ap } }
@@ -367,7 +364,6 @@ export default ({
     beobNichtBeurteiltsFilter,
     beobNichtZuzuordnensFilter,
     beobZugeordnetsFilter,
-    bersFilter,
     ekfrequenzsFilter,
     ekzaehleinheitsFilter,
     erfkritsFilter,

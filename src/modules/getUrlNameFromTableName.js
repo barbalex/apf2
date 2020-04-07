@@ -1,11 +1,10 @@
-export default table => {
+export default (table) => {
   const names = {
     ap: 'Aktionspläne',
     apber: 'AP-Berichte',
     apberuebersicht: 'AP-Berichte',
     assozart: 'assoziierte-Arten',
     beob: 'Beobachtung',
-    ber: 'Berichte',
     erfkrit: 'AP-Erfolgskriterien',
     idealbiotop: 'Idealbiotop',
     pop: 'Populationen',

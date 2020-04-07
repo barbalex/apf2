@@ -1,4 +1,4 @@
-export default activeNodeArray => {
+export default (activeNodeArray) => {
   const wlFolder =
     activeNodeArray.length > 0 && activeNodeArray[0] === 'Werte-Listen'
   const wlAdresseFolder =
@@ -95,11 +95,6 @@ export default activeNodeArray => {
     beobNichtBeurteiltFolder && activeNodeArray.length > 5
       ? activeNodeArray[5]
       : null
-  const berFolder =
-    (ap && activeNodeArray.length > 4 && activeNodeArray[4] === 'Berichte') ||
-    false
-  const ber =
-    berFolder && activeNodeArray.length > 5 ? activeNodeArray[5] : null
   const apberFolder =
     (ap &&
       activeNodeArray.length > 4 &&
@@ -254,8 +249,6 @@ export default activeNodeArray => {
     beobNichtZuzuordnen,
     beobNichtBeurteiltFolder,
     beobNichtBeurteilt,
-    berFolder,
-    ber,
     apberFolder,
     apber,
     apberPrint,

@@ -54,10 +54,6 @@ export default types
       types.maybeNull(types.union(types.string, types.number)),
       null,
     ),
-    ber: types.optional(
-      types.maybeNull(types.union(types.string, types.number)),
-      null,
-    ),
     idealbiotop: types.optional(
       types.maybeNull(types.union(types.string, types.number)),
       null,
@@ -119,7 +115,7 @@ export default types
       null,
     ),
   })
-  .actions(self => ({
+  .actions((self) => ({
     setKey({ key, value }) {
       const oldValue = self[key]
       // only write if changed
@@ -129,16 +125,16 @@ export default types
     },
     tableIsFiltered({ table }) {
       return (
-        Object.values(self[table] || {}).filter(v => v || v === 0).length > 0
+        Object.values(self[table] || {}).filter((v) => v || v === 0).length > 0
       )
     },
     isFiltered() {
       // DO NOT USE VIEW, THE RESULT WILL BE WRONG!!!!
       const tables = Object.keys(self)
-      return tables.some(table => self.tableIsFiltered({ table }))
+      return tables.some((table) => self.tableIsFiltered({ table }))
     },
     empty() {
-      Object.keys(self).forEach(key => (self[key] = null))
+      Object.keys(self).forEach((key) => (self[key] = null))
     },
   }))
 
@@ -156,7 +152,6 @@ export const defaultValue = {
   erfkrit: null,
   apber: null,
   apberuebersicht: null,
-  ber: null,
   idealbiotop: null,
   assozart: null,
   ekzaehleinheit: null,

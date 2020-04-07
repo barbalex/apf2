@@ -359,28 +359,8 @@ CREATE INDEX ON apflora.projekt USING btree (name);
 COMMENT ON COLUMN apflora.projekt.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.projekt.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
+-- TODO:
 DROP TABLE IF EXISTS apflora.ber;
-CREATE TABLE apflora.ber (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  ap_id UUID DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  autor varchar(150) DEFAULT NULL,
-  jahr smallint DEFAULT NULL,
-  titel text DEFAULT NULL,
-  url text DEFAULT NULL,
-  changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT null
-);
-CREATE INDEX ON apflora.ber USING btree (id);
-CREATE INDEX ON apflora.ber USING btree (ap_id);
-CREATE INDEX ON apflora.ber USING btree (jahr);
-COMMENT ON COLUMN apflora.ber.id IS 'Primärschlüssel';
-COMMENT ON COLUMN apflora.ber.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
-COMMENT ON COLUMN apflora.ber.autor IS 'Autor des Berichts';
-COMMENT ON COLUMN apflora.ber.jahr IS 'Jahr der Publikation';
-COMMENT ON COLUMN apflora.ber.titel IS 'Titel des Berichts';
-COMMENT ON COLUMN apflora.ber.url IS 'Link zum Bericht';
-COMMENT ON COLUMN apflora.ber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.ber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.erfkrit;
 CREATE TABLE apflora.erfkrit (

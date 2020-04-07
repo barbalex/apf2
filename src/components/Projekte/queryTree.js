@@ -4,7 +4,6 @@ import {
   ap,
   apart,
   apberuebersicht,
-  ber,
   currentIssue,
   ekfrequenz,
   ekzaehleinheit,
@@ -38,7 +37,6 @@ export default gql`
     $beobNichtBeurteiltsFilter: VApbeobFilter
     $beobNichtZuzuordnensFilter: VApbeobFilter
     $beobZugeordnetsFilter: VApbeobFilter!
-    $bersFilter: BerFilter!
     $ekfrequenzsFilter: EkfrequenzFilter!
     $ekzaehleinheitsFilter: EkzaehleinheitFilter!
     $erfkritsFilter: ErfkritFilter!
@@ -131,11 +129,6 @@ export default gql`
         label
         tpopId
         artId
-      }
-    }
-    allBers(filter: $bersFilter, orderBy: LABEL_ASC) @include(if: $isAp) {
-      nodes {
-        ...BerFields
       }
     }
     allCurrentissues(orderBy: SORT_ASC) {
@@ -303,7 +296,6 @@ export default gql`
   ${ap}
   ${apart}
   ${apberuebersicht}
-  ${ber}
   ${currentIssue}
   ${ekfrequenz}
   ${ekzaehleinheit}

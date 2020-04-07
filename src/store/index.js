@@ -422,7 +422,6 @@ const myTypes = types
         erfkrit: null,
         apber: null,
         apberuebersicht: null,
-        ber: null,
         idealbiotop: null,
         assozart: null,
         ekzaehleinheit: null,

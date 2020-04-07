@@ -29,7 +29,6 @@ import buildEkzaehleinheitFolderNodes from './ekzaehleinheitFolder'
 import buildEkfrequenzFolderNodes from './ekfrequenzFolder'
 import buildApartFolderNodes from './apartFolder'
 import buildIdealbiotopFolderNodes from './idealbiotopFolder'
-import buildBerFolderNodes from './berFolder'
 import buildApberFolderNodes from './apberFolder'
 import buildAperfkritFolderNodes from './aperfkritFolder'
 import buildApzielFolderNodes from './apzielFolder'
@@ -44,7 +43,6 @@ import buildAssozartNodes from './assozart'
 import buildEkzaehleinheitNodes from './ekzaehleinheit'
 import buildEkfrequenzNodes from './ekfrequenz'
 import buildApartNodes from './apart'
-import buildBerNodes from './ber'
 import buildApberNodes from './apber'
 import buildAperfkritNodes from './aperfkrit'
 import buildTpopFolderNodes from './tpopFolder'
@@ -143,7 +141,7 @@ export default ({ data, loading, store, role, treeName, dataFilter }) => {
    * for instance if a parent node is not open
    * or some filter is active
    */
-  openNodes.forEach(nodeUrl => {
+  openNodes.forEach((nodeUrl) => {
     const allParentNodesAreOpen = allParentNodesAreOpenModule(
       openNodes,
       nodeUrl,
@@ -261,19 +259,6 @@ export default ({ data, loading, store, role, treeName, dataFilter }) => {
           )(),
           ...memoizeOne(() =>
             buildApberFolderNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              apNodes,
-              projektNodes,
-              projId,
-              apId,
-              store,
-            }),
-          )(),
-          ...memoizeOne(() =>
-            buildBerFolderNodes({
               nodes,
               data,
               treeName,
@@ -603,24 +588,6 @@ export default ({ data, loading, store, role, treeName, dataFilter }) => {
           ...nodes,
           ...memoizeOne(() =>
             buildApartNodes({
-              nodes,
-              data,
-              treeName,
-              loading,
-              apNodes,
-              projektNodes,
-              projId,
-              apId: nodeUrl[3],
-              store,
-            }),
-          )(),
-        ]
-      }
-      if (nodeUrl.length === 5 && nodeUrl[4] === 'Berichte') {
-        nodes = [
-          ...nodes,
-          ...memoizeOne(() =>
-            buildBerNodes({
               nodes,
               data,
               treeName,
@@ -1341,7 +1308,7 @@ export default ({ data, loading, store, role, treeName, dataFilter }) => {
     }
   })
 
-  nodes = nodes.filter(n => allParentNodesExist(nodes, n))
+  nodes = nodes.filter((n) => allParentNodesExist(nodes, n))
 
   /**
    * As all nodes are now in one flat list,

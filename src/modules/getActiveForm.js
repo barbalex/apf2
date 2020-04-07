@@ -38,7 +38,7 @@ export default ({ store, treeName, nodes }) => {
   ) {
     key = 'beobZugeordnet'
   } else {
-    const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))
+    const activeNode = nodes.find((n) => isEqual(n.url, activeNodeArray))
     key = getTableNameFromActiveNode(activeNode)
   }
 
@@ -50,7 +50,6 @@ export default ({ store, treeName, nodes }) => {
     case 'apart':
     case 'apber':
     case 'assozart':
-    case 'ber':
     case 'currentIssue':
     case 'message':
     case 'ekplan':

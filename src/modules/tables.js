@@ -166,14 +166,6 @@ export default [
     parentIdField: 'proj_id',
   },
   {
-    table: 'ber',
-    parentTable: 'ap',
-    label: 'Berichte',
-    labelSingular: 'Bericht',
-    idField: 'id',
-    parentIdField: 'ap_id',
-  },
-  {
     table: 'idealbiotop',
     parentTable: 'ap',
     label: 'Idealbiotop',
