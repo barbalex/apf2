@@ -46,6 +46,10 @@ const FieldsContainer = styled.div`
   padding-top: 0;
   overflow: auto !important;
   height: 100%;
+`
+const ColumnContainer = styled.div`
+  height: 100%;
+  padding-top: 10px;
   column-width: ${(props) =>
     props['data-width'] > 2 * constants.columnWidth
       ? `${constants.columnWidth}px`
@@ -313,7 +317,7 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
             treeName={treeName}
           />
         )}
-        <FieldsContainer data-width={showFilter ? filterWidth : datenWidth}>
+        <FieldsContainer>
           <Tabs
             value={tab}
             onChange={onChangeTab}
@@ -331,150 +335,152 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
             )}
           </Tabs>
           {tab === 'tpopmassn' && (
-            <Formik
-              key={showFilter ? row : row.id}
-              initialValues={row}
-              onSubmit={onSubmit}
-              enableReinitialize
-            >
-              {({ handleSubmit, dirty }) => (
-                <Form onBlur={() => dirty && handleSubmit()}>
-                  <Field
-                    name="jahr"
-                    label="Jahr"
-                    type="number"
-                    component={TextField}
-                  />
-                  <Field name="datum" label="Datum" component={DateField} />
-                  <Field
-                    name="typ"
-                    label="Typ"
-                    component={RadioButtonGroup}
-                    dataSource={get(
-                      dataLists,
-                      'allTpopmassnTypWertes.nodes',
-                      [],
+            <ColumnContainer data-width={showFilter ? filterWidth : datenWidth}>
+              <Formik
+                key={showFilter ? row : row.id}
+                initialValues={row}
+                onSubmit={onSubmit}
+                enableReinitialize
+              >
+                {({ handleSubmit, dirty }) => (
+                  <Form onBlur={() => dirty && handleSubmit()}>
+                    <Field
+                      name="jahr"
+                      label="Jahr"
+                      type="number"
+                      component={TextField}
+                    />
+                    <Field name="datum" label="Datum" component={DateField} />
+                    <Field
+                      name="typ"
+                      label="Typ"
+                      component={RadioButtonGroup}
+                      dataSource={get(
+                        dataLists,
+                        'allTpopmassnTypWertes.nodes',
+                        [],
+                      )}
+                      loading={loadingLists}
+                    />
+                    <Field
+                      name="beschreibung"
+                      label="Massnahme"
+                      type="text"
+                      component={TextField}
+                    />
+                    <Field
+                      name="bearbeiter"
+                      value={row.bearbeiter}
+                      label="BearbeiterIn"
+                      component={Select}
+                      options={get(dataAdresses, 'allAdresses.nodes', [])}
+                      loading={loadingAdresses}
+                    />
+                    <Field
+                      name="bemerkungen"
+                      label="Bemerkungen"
+                      type="text"
+                      component={TextField}
+                      multiLine
+                    />
+                    <Field
+                      name="planVorhanden"
+                      label="Plan vorhanden"
+                      component={Checkbox2States}
+                    />
+                    <Field
+                      name="planBezeichnung"
+                      label="Plan Bezeichnung"
+                      type="text"
+                      component={TextField}
+                    />
+                    <Field
+                      name="flaeche"
+                      label="Fläche (m2)"
+                      type="number"
+                      component={TextField}
+                    />
+                    <Field
+                      name="form"
+                      label="Form der Ansiedlung"
+                      type="text"
+                      component={TextField}
+                    />
+                    <Field
+                      name="pflanzanordnung"
+                      label="Pflanzanordnung"
+                      type="text"
+                      component={TextField}
+                    />
+                    <Field
+                      name="markierung"
+                      label="Markierung"
+                      type="text"
+                      component={TextField}
+                    />
+                    <Field
+                      name="anzTriebe"
+                      label="Anzahl Triebe"
+                      type="number"
+                      component={TextField}
+                    />
+                    <Field
+                      name="anzPflanzen"
+                      label="Anzahl Pflanzen"
+                      type="number"
+                      component={TextField}
+                    />
+                    <Field
+                      name="anzPflanzstellen"
+                      label="Anzahl Pflanzstellen"
+                      type="number"
+                      component={TextField}
+                    />
+                    {isAnpflanzung && (
+                      <>
+                        <Field
+                          name="zieleinheitEinheit"
+                          label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
+                          options={get(
+                            dataLists,
+                            'allTpopkontrzaehlEinheitWertes.nodes',
+                            [],
+                          )}
+                          loading={loadingLists}
+                          component={Select}
+                        />
+                        <Field
+                          name="zieleinheitAnzahl"
+                          label="Ziel-Einheit: Anzahl (nur ganze Zahlen)"
+                          type="number"
+                          component={TextField}
+                        />
+                      </>
                     )}
-                    loading={loadingLists}
-                  />
-                  <Field
-                    name="beschreibung"
-                    label="Massnahme"
-                    type="text"
-                    component={TextField}
-                  />
-                  <Field
-                    name="bearbeiter"
-                    value={row.bearbeiter}
-                    label="BearbeiterIn"
-                    component={Select}
-                    options={get(dataAdresses, 'allAdresses.nodes', [])}
-                    loading={loadingAdresses}
-                  />
-                  <Field
-                    name="bemerkungen"
-                    label="Bemerkungen"
-                    type="text"
-                    component={TextField}
-                    multiLine
-                  />
-                  <Field
-                    name="planVorhanden"
-                    label="Plan vorhanden"
-                    component={Checkbox2States}
-                  />
-                  <Field
-                    name="planBezeichnung"
-                    label="Plan Bezeichnung"
-                    type="text"
-                    component={TextField}
-                  />
-                  <Field
-                    name="flaeche"
-                    label="Fläche (m2)"
-                    type="number"
-                    component={TextField}
-                  />
-                  <Field
-                    name="form"
-                    label="Form der Ansiedlung"
-                    type="text"
-                    component={TextField}
-                  />
-                  <Field
-                    name="pflanzanordnung"
-                    label="Pflanzanordnung"
-                    type="text"
-                    component={TextField}
-                  />
-                  <Field
-                    name="markierung"
-                    label="Markierung"
-                    type="text"
-                    component={TextField}
-                  />
-                  <Field
-                    name="anzTriebe"
-                    label="Anzahl Triebe"
-                    type="number"
-                    component={TextField}
-                  />
-                  <Field
-                    name="anzPflanzen"
-                    label="Anzahl Pflanzen"
-                    type="number"
-                    component={TextField}
-                  />
-                  <Field
-                    name="anzPflanzstellen"
-                    label="Anzahl Pflanzstellen"
-                    type="number"
-                    component={TextField}
-                  />
-                  {isAnpflanzung && (
-                    <>
-                      <Field
-                        name="zieleinheitEinheit"
-                        label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
-                        options={get(
-                          dataLists,
-                          'allTpopkontrzaehlEinheitWertes.nodes',
-                          [],
-                        )}
-                        loading={loadingLists}
-                        component={Select}
-                      />
-                      <Field
-                        name="zieleinheitAnzahl"
-                        label="Ziel-Einheit: Anzahl (nur ganze Zahlen)"
-                        type="number"
-                        component={TextField}
-                      />
-                    </>
-                  )}
-                  <Field
-                    field="wirtspflanze"
-                    label="Wirtspflanze"
-                    component={SelectLoadingOptionsTypable}
-                    query={queryAeTaxonomies}
-                    queryNodesName="allAeTaxonomies"
-                  />
-                  <Field
-                    name="herkunftPop"
-                    label="Herkunftspopulation"
-                    type="text"
-                    component={TextField}
-                  />
-                  <Field
-                    name="sammeldatum"
-                    label="Sammeldatum"
-                    type="text"
-                    component={TextField}
-                  />
-                  {!showFilter && <StringToCopy text={row.id} label="id" />}
-                </Form>
-              )}
-            </Formik>
+                    <Field
+                      field="wirtspflanze"
+                      label="Wirtspflanze"
+                      component={SelectLoadingOptionsTypable}
+                      query={queryAeTaxonomies}
+                      queryNodesName="allAeTaxonomies"
+                    />
+                    <Field
+                      name="herkunftPop"
+                      label="Herkunftspopulation"
+                      type="text"
+                      component={TextField}
+                    />
+                    <Field
+                      name="sammeldatum"
+                      label="Sammeldatum"
+                      type="text"
+                      component={TextField}
+                    />
+                    {!showFilter && <StringToCopy text={row.id} label="id" />}
+                  </Form>
+                )}
+              </Formik>
+            </ColumnContainer>
           )}
           {tab === 'dateien' && !showFilter && (
             <FilesContainer data-width={datenWidth}>
