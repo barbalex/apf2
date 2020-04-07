@@ -32,15 +32,19 @@ const Container = styled.div`
   flex-direction: column;
   background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
-const FieldsContainer = styled.div`
+const LoadingContainer = styled.div`
+  padding: 10px;
+`
+const FormContainer = styled.div`
   padding: 10px;
   padding-top: 0;
-  overflow: auto !important;
+  overflow-y: auto !important;
+  height: calc(100% - 43px - 48px + 4px);
 `
 const FilesContainer = styled.div`
   padding: 10px;
   overflow-y: auto !important;
-  height: calc(100% - 20px);
+  height: calc(100% - 43px);
 `
 const StyledTab = styled(Tab)`
   text-transform: none !important;
@@ -203,7 +207,7 @@ const Pop = ({ treeName, showFilter = false }) => {
   if (!showFilter && loading) {
     return (
       <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
+        <LoadingContainer>Lade...</LoadingContainer>
       </Container>
     )
   }
@@ -228,20 +232,20 @@ const Pop = ({ treeName, showFilter = false }) => {
             treeName={treeName}
           />
         )}
-        <FieldsContainer>
-          <Tabs
-            value={tab}
-            onChange={onChangeTab}
-            indicatorColor="primary"
-            textColor="primary"
-            centered
-          >
-            <StyledTab label="Population" value="pop" data-id="pop" />
-            {!showFilter && (
-              <StyledTab label="Dateien" value="dateien" data-id="dateien" />
-            )}
-          </Tabs>
-          {tab === 'pop' && (
+        <Tabs
+          value={tab}
+          onChange={onChangeTab}
+          indicatorColor="primary"
+          textColor="primary"
+          centered
+        >
+          <StyledTab label="Population" value="pop" data-id="pop" />
+          {!showFilter && (
+            <StyledTab label="Dateien" value="dateien" data-id="dateien" />
+          )}
+        </Tabs>
+        {tab === 'pop' && (
+          <FormContainer>
             <Formik
               key={showFilter ? row : row.id}
               initialValues={row}
@@ -291,13 +295,13 @@ const Pop = ({ treeName, showFilter = false }) => {
                 </Form>
               )}
             </Formik>
-          )}
-          {tab === 'dateien' && !showFilter && (
-            <FilesContainer data-width={datenWidth}>
-              <Files parentId={row.id} parent="pop" />
-            </FilesContainer>
-          )}
-        </FieldsContainer>
+          </FormContainer>
+        )}
+        {tab === 'dateien' && !showFilter && (
+          <FilesContainer data-width={datenWidth}>
+            <Files parentId={row.id} parent="pop" />
+          </FilesContainer>
+        )}
       </Container>
     </ErrorBoundary>
   )

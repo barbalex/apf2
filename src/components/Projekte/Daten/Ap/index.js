@@ -21,7 +21,6 @@ const Container = styled.div`
 const FieldsContainer = styled.div`
   padding: 10px;
   padding-top: 0;
-  overflow: auto !important;
   height: 100%;
 `
 const StyledTabs = styled(Tabs)`
@@ -64,30 +63,28 @@ const ApTabs = ({ treeName }) => {
     <ErrorBoundary>
       <Container>
         <FormTitle apId={id} title="Aktionsplan" treeName={treeName} />
-        <FieldsContainer>
-          <StyledTabs
-            value={tab}
-            onChange={onChangeTab}
-            indicatorColor="primary"
-            textColor="primary"
-            centered
-          >
-            <StyledTab label="AP" value="ap" data-id="ap" />
-            <StyledTab
-              label="Auswertung"
-              value="auswertung"
-              data-id="auswertung"
-            />
-            <StyledTab label="Dateien" value="dateien" data-id="dateien" />
-          </StyledTabs>
-          {tab === 'ap' && <Ap treeName={treeName} id={id} />}
-          {tab === 'auswertung' && <Auswertung id={id} />}
-          {tab === 'dateien' && (
-            <FilesContainer data-width={datenWidth}>
-              <Files parentId={id} parent="ap" />
-            </FilesContainer>
-          )}
-        </FieldsContainer>
+        <StyledTabs
+          value={tab}
+          onChange={onChangeTab}
+          indicatorColor="primary"
+          textColor="primary"
+          centered
+        >
+          <StyledTab label="AP" value="ap" data-id="ap" />
+          <StyledTab
+            label="Auswertung"
+            value="auswertung"
+            data-id="auswertung"
+          />
+          <StyledTab label="Dateien" value="dateien" data-id="dateien" />
+        </StyledTabs>
+        {tab === 'ap' && <Ap treeName={treeName} id={id} />}
+        {tab === 'auswertung' && <Auswertung id={id} />}
+        {tab === 'dateien' && (
+          <FilesContainer data-width={datenWidth}>
+            <Files parentId={id} parent="ap" />
+          </FilesContainer>
+        )}
       </Container>
     </ErrorBoundary>
   )

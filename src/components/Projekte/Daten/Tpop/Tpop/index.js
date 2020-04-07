@@ -22,7 +22,7 @@ const FormContainer = styled.div`
   padding: 10px;
   overflow-y: auto !important;
   height: calc(100% - 20px);
-  column-width: ${props =>
+  column-width: ${(props) =>
     props['data-width'] > 2 * constants.columnWidth
       ? `${constants.columnWidth}px`
       : 'auto'};
@@ -108,7 +108,7 @@ const Tpop = ({ treeName, showFilter, onSubmit, row, apJahr, refetchTpop }) => {
                 options={get(dataLists, 'allGemeindes.nodes', [])}
                 loading={loadingLists}
                 showLocate={!showFilter}
-                onClickLocate={async setStateValue => {
+                onClickLocate={async (setStateValue) => {
                   if (!row.lv95X) {
                     return setErrors({
                       gemeinde: 'Es fehlen Koordinaten',

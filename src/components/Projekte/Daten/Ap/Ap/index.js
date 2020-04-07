@@ -24,7 +24,13 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
-const FieldsContainer = styled.div`
+const FormContainer = styled.div`
+  padding: 10px;
+  padding-top: 0;
+  overflow-y: auto !important;
+  height: calc(100% - 43px - 48px + 4px);
+`
+const LoadingContainer = styled.div`
   padding: 10px;
   overflow: auto !important;
   height: 100%;
@@ -113,7 +119,7 @@ const ApAp = ({ treeName, id }) => {
   )
 
   const aeTaxonomiesfilterForData = useCallback(
-    inputValue =>
+    (inputValue) =>
       !!inputValue
         ? {
             or: [
@@ -134,7 +140,7 @@ const ApAp = ({ treeName, id }) => {
   if (loading) {
     return (
       <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
+        <LoadingContainer>Lade...</LoadingContainer>
       </Container>
     )
   }
@@ -143,109 +149,113 @@ const ApAp = ({ treeName, id }) => {
   if (error) return `Fehler: ${error.message}`
 
   return (
-    <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
-      {({ handleSubmit, dirty }) => (
-        <Form onBlur={() => dirty && handleSubmit()}>
-          <Field
-            name="artId"
-            valueLabelPath="aeTaxonomyByArtId.taxArtName"
-            label="Art (gibt dem Aktionsplan den Namen)"
-            row={row}
-            query={queryAeTaxonomies}
-            filter={aeTaxonomiesfilterForData}
-            queryNodesName="allAeTaxonomies"
-            component={SelectLoadingOptions}
-          />
-          <Field
-            name="bearbeitung"
-            dataSource={get(dataLists, 'allApBearbstandWertes.nodes', [])}
-            loading={loadingLists}
-            popover={
-              <>
-                <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
-                <LabelPopoverContentRow>
-                  <LabelPopoverRowColumnLeft>keiner:</LabelPopoverRowColumnLeft>
-                  <LabelPopoverRowColumnRight>
-                    kein Aktionsplan vorgesehen
-                  </LabelPopoverRowColumnRight>
-                </LabelPopoverContentRow>
-                <LabelPopoverContentRow>
-                  <LabelPopoverRowColumnLeft>
-                    erstellt:
-                  </LabelPopoverRowColumnLeft>
-                  <LabelPopoverRowColumnRight>
-                    Aktionsplan fertig, auf der Webseite der FNS
-                  </LabelPopoverRowColumnRight>
-                </LabelPopoverContentRow>
-              </>
-            }
-            label="Aktionsplan"
-            component={RadioButtonGroupWithInfo}
-          />
-          <Field
-            name="startJahr"
-            label="Start im Jahr"
-            type="number"
-            component={TextField}
-          />
-          <FieldContainer>
+    <FormContainer>
+      <Formik initialValues={row} onSubmit={onSubmit} enableReinitialize>
+        {({ handleSubmit, dirty }) => (
+          <Form onBlur={() => dirty && handleSubmit()}>
             <Field
-              name="umsetzung"
-              dataSource={get(dataLists, 'allApUmsetzungWertes.nodes', [])}
+              name="artId"
+              valueLabelPath="aeTaxonomyByArtId.taxArtName"
+              label="Art (gibt dem Aktionsplan den Namen)"
+              row={row}
+              query={queryAeTaxonomies}
+              filter={aeTaxonomiesfilterForData}
+              queryNodesName="allAeTaxonomies"
+              component={SelectLoadingOptions}
+            />
+            <Field
+              name="bearbeitung"
+              dataSource={get(dataLists, 'allApBearbstandWertes.nodes', [])}
               loading={loadingLists}
               popover={
                 <>
                   <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
                   <LabelPopoverContentRow>
                     <LabelPopoverRowColumnLeft>
-                      noch keine
-                      <br />
-                      Umsetzung:
+                      keiner:
                     </LabelPopoverRowColumnLeft>
                     <LabelPopoverRowColumnRight>
-                      noch keine Massnahmen ausgeführt
+                      kein Aktionsplan vorgesehen
                     </LabelPopoverRowColumnRight>
                   </LabelPopoverContentRow>
                   <LabelPopoverContentRow>
                     <LabelPopoverRowColumnLeft>
-                      in Umsetzung:
+                      erstellt:
                     </LabelPopoverRowColumnLeft>
                     <LabelPopoverRowColumnRight>
-                      bereits Massnahmen ausgeführt (auch wenn AP noch nicht
-                      erstellt)
+                      Aktionsplan fertig, auf der Webseite der FNS
                     </LabelPopoverRowColumnRight>
                   </LabelPopoverContentRow>
                 </>
               }
-              label="Stand Umsetzung"
+              label="Aktionsplan"
               component={RadioButtonGroupWithInfo}
             />
-          </FieldContainer>
-          <Field
-            name="bearbeiter"
-            label="Verantwortlich"
-            options={get(dataAdresses, 'allAdresses.nodes', [])}
-            loading={loadingAdresses}
-            component={Select}
-          />
-          <Field
-            key={`${row.id}ekfBeobachtungszeitpunkt`}
-            name="ekfBeobachtungszeitpunkt"
-            label="Bester Beobachtungszeitpunkt für EKF (Freiwilligen-Kontrollen)"
-            component={TextField}
-          />
-          <TextFieldNonUpdatable
-            key={`${row.id}artwert`}
-            label="Artwert"
-            value={get(
-              row,
-              'aeTaxonomyByArtId.artwert',
-              'Diese Art hat keinen Artwert',
-            )}
-          />
-        </Form>
-      )}
-    </Formik>
+            <Field
+              name="startJahr"
+              label="Start im Jahr"
+              type="number"
+              component={TextField}
+            />
+            <FieldContainer>
+              <Field
+                name="umsetzung"
+                dataSource={get(dataLists, 'allApUmsetzungWertes.nodes', [])}
+                loading={loadingLists}
+                popover={
+                  <>
+                    <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
+                    <LabelPopoverContentRow>
+                      <LabelPopoverRowColumnLeft>
+                        noch keine
+                        <br />
+                        Umsetzung:
+                      </LabelPopoverRowColumnLeft>
+                      <LabelPopoverRowColumnRight>
+                        noch keine Massnahmen ausgeführt
+                      </LabelPopoverRowColumnRight>
+                    </LabelPopoverContentRow>
+                    <LabelPopoverContentRow>
+                      <LabelPopoverRowColumnLeft>
+                        in Umsetzung:
+                      </LabelPopoverRowColumnLeft>
+                      <LabelPopoverRowColumnRight>
+                        bereits Massnahmen ausgeführt (auch wenn AP noch nicht
+                        erstellt)
+                      </LabelPopoverRowColumnRight>
+                    </LabelPopoverContentRow>
+                  </>
+                }
+                label="Stand Umsetzung"
+                component={RadioButtonGroupWithInfo}
+              />
+            </FieldContainer>
+            <Field
+              name="bearbeiter"
+              label="Verantwortlich"
+              options={get(dataAdresses, 'allAdresses.nodes', [])}
+              loading={loadingAdresses}
+              component={Select}
+            />
+            <Field
+              key={`${row.id}ekfBeobachtungszeitpunkt`}
+              name="ekfBeobachtungszeitpunkt"
+              label="Bester Beobachtungszeitpunkt für EKF (Freiwilligen-Kontrollen)"
+              component={TextField}
+            />
+            <TextFieldNonUpdatable
+              key={`${row.id}artwert`}
+              label="Artwert"
+              value={get(
+                row,
+                'aeTaxonomyByArtId.artwert',
+                'Diese Art hat keinen Artwert',
+              )}
+            />
+          </Form>
+        )}
+      </Formik>
+    </FormContainer>
   )
 }
 
