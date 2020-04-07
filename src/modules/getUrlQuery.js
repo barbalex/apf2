@@ -10,7 +10,9 @@ export default () => {
   // set initial values
   if (!query.projekteTabs) query.projekteTabs = ['tree', 'daten']
   if (!query.feldkontrTab) query.feldkontrTab = 'entwicklung'
+  if (!query.popTab) query.popTab = 'pop'
   if (!query.tpopTab) query.tpopTab = 'tpop'
+  if (!query.tpopmassnTab) query.tpopmassnTab = 'tpopmassn'
   if (!query.apTab) query.apTab = 'ap'
   if (!query.idealbiotopTab) query.idealbiotopTab = 'idealbiotop'
   /**

@@ -96,7 +96,7 @@ const myTypes = types
     refetch: {},
     notifications: [],
   }))
-  .views(self => ({
+  .views((self) => ({
     get treeActiveNodes() {
       return getActiveNodes(self.tree.activeNodeArray)
     },
@@ -207,7 +207,7 @@ const myTypes = types
       return k
     },
   }))
-  .actions(self => ({
+  .actions((self) => ({
     setEkfIds(ids) {
       self.ekfIds = [...ids]
     },
@@ -222,7 +222,7 @@ const myTypes = types
       ]
     },
     removeNotification(note) {
-      self.notifications = self.notifications.filter(n => n.key !== note)
+      self.notifications = self.notifications.filter((n) => n.key !== note)
     },
     setTechnDokuFilter(val) {
       self.technDokuFilter = val
@@ -240,7 +240,7 @@ const myTypes = types
       self.deletedDatasets = [...self.deletedDatasets, val]
     },
     removeDeletedDatasetById(id) {
-      self.deletedDatasets = self.deletedDatasets.filter(d => d.id !== id)
+      self.deletedDatasets = self.deletedDatasets.filter((d) => d.id !== id)
     },
     setToDelete({ table, id, label, url, afterDeletionHook }) {
       self.toDeleteTable = table
@@ -317,13 +317,13 @@ const myTypes = types
         return false
       }
       const tableFilter = self[treeName].dataFilter[table]
-      return Object.values(tableFilter).filter(v => v || v === 0).length > 0
+      return Object.values(tableFilter).filter((v) => v || v === 0).length > 0
     },
     dataFilterTreeIsFiltered(treeName) {
       const tables = Object.keys(self[treeName].dataFilter).filter(
-        t => t !== 'activeTable',
+        (t) => t !== 'activeTable',
       )
-      return tables.some(table =>
+      return tables.some((table) =>
         self.dataFilterTableIsFiltered({ treeName, table }),
       )
     },
@@ -350,7 +350,9 @@ const myTypes = types
     },
     setUrlQuery({
       projekteTabs,
+      popTab,
       tpopTab,
+      tpopmassnTab,
       apTab,
       feldkontrTab,
       idealbiotopTab,
@@ -358,7 +360,9 @@ const myTypes = types
     }) {
       const newUrlQuery = {
         projekteTabs,
+        popTab,
         tpopTab,
+        tpopmassnTab,
         apTab,
         feldkontrTab,
         idealbiotopTab,
