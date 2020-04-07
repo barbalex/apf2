@@ -100,6 +100,18 @@ export const apberuebersicht = gql`
     changedBy
   }
 `
+
+export const apFile = gql`
+  fragment ApFileFields on ApFile {
+    id
+    apId
+    fileId
+    fileMimeType
+    name
+    beschreibung
+  }
+`
+
 export const apqk = gql`
   fragment ApqkFields on Apqk {
     apId
@@ -314,6 +326,17 @@ export const popber = gql`
   }
 `
 
+export const popFile = gql`
+  fragment PopFileFields on PopFile {
+    id
+    popId
+    fileId
+    fileMimeType
+    name
+    beschreibung
+  }
+`
+
 export const popmassnber = gql`
   fragment PopmassnberFields on Popmassnber {
     id
@@ -457,6 +480,17 @@ export const tpopfeldkontr = gql`
   }
 `
 
+export const tpopFile = gql`
+  fragment TpopFileFields on TpopFile {
+    id
+    tpopId
+    fileId
+    fileMimeType
+    name
+    beschreibung
+  }
+`
+
 export const tpopfreiwkontr = gql`
   fragment TpopfreiwkontrFields on Tpopkontr {
     id
@@ -531,6 +565,7 @@ export const tpopkontr = gql`
     changedBy
   }
 `
+
 export const tpopkontrFile = gql`
   fragment TpopkontrFileFields on TpopkontrFile {
     id
@@ -592,6 +627,17 @@ export const tpopmassnber = gql`
     beurteilung
     bemerkungen
     changedBy
+  }
+`
+
+export const tpopmassnFile = gql`
+  fragment TpopmassnFileFields on TpopmassnFile {
+    id
+    tpopmassnId
+    fileId
+    fileMimeType
+    name
+    beschreibung
   }
 `
 
