@@ -4,6 +4,7 @@ import React from 'react'
 // otherwise apollo errors during the build
 // see: https://github.com/gatsbyjs/gatsby/issues/11225#issuecomment-457211628
 import 'isomorphic-fetch'
+import 'mobx-react-lite/batchingForReactDom'
 import queryString from 'query-string'
 
 import { MuiThemeProvider } from '@material-ui/core/styles'
@@ -50,7 +51,7 @@ const App = ({ element }) => {
   if (typeof window !== 'undefined') {
     const visitedTopDomain = window.location.pathname === '/'
     const blacklist = ['user', 'refetch', 'notifications', 'ekfIds']
-    import('mst-persist').then(module =>
+    import('mst-persist').then((module) =>
       module
         .default('store', store, {
           storage: localForage,
@@ -101,7 +102,7 @@ const App = ({ element }) => {
       style: 'bottom',
       //test: true,
     }
-    import('browser-update').then(module =>
+    import('browser-update').then((module) =>
       module.default(browserUpdateConfiguration),
     )
   }
@@ -128,7 +129,7 @@ const App = ({ element }) => {
               maxSnack={3}
               preventDuplicate
               autoHideDuration={10000}
-              action={key => <NotificationDismisser nKey={key} />}
+              action={(key) => <NotificationDismisser nKey={key} />}
             >
               <>
                 <GlobalStyle />
