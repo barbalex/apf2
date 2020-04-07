@@ -33,11 +33,11 @@ import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 
 const Container = styled.div`
-  height: ${props =>
+  height: ${(props) =>
     props.showfilter ? 'calc(100vh - 145px)' : 'calc(100vh - 64px)'};
   display: flex;
   flex-direction: column;
-  background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
+  background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
 const FieldsContainer = styled.div`
   display: flex;
@@ -53,7 +53,7 @@ const FormContainer = styled.div`
   padding: 10px;
   overflow-y: auto !important;
   height: calc(100% - 20px);
-  column-width: ${props =>
+  column-width: ${(props) =>
     props['data-width'] > 2 * constants.columnWidth
       ? `${constants.columnWidth}px`
       : 'auto'};
@@ -127,7 +127,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
   }
   const tpopfeldkontrFilterValues = Object.entries(
     dataFilter.tpopfeldkontr,
-  ).filter(e => e[1] || e[1] === 0)
+  ).filter((e) => e[1] || e[1] === 0)
   tpopfeldkontrFilterValues.forEach(([key, value]) => {
     const expression =
       tpopfeldkontrType[key] === 'string' ? 'includes' : 'equalTo'
@@ -155,6 +155,18 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
   } = useQuery(queryLists)
 
   const [tab, setTab] = useState(get(urlQuery, 'feldkontrTab', 'entwicklung'))
+  const onChangeTab = useCallback(
+    (event, value) => {
+      setUrlQueryValue({
+        key: 'feldkontrTab',
+        value,
+        urlQuery,
+        setUrlQuery,
+      })
+      setTab(value)
+    },
+    [setUrlQuery, urlQuery],
+  )
 
   let tpopkontrTotalCount
   let tpopkontrFilteredCount
@@ -170,16 +182,16 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
       '...',
     )
     const popsOfAp = get(dataTpopkontrs, 'popsOfAp.nodes', [])
-    const tpopsOfAp = flatten(popsOfAp.map(p => get(p, 'tpops.nodes', [])))
+    const tpopsOfAp = flatten(popsOfAp.map((p) => get(p, 'tpops.nodes', [])))
     tpopkontrsOfApTotalCount = !tpopsOfAp.length
       ? '...'
       : tpopsOfAp
-          .map(p => get(p, 'tpopkontrs.totalCount'))
+          .map((p) => get(p, 'tpopkontrs.totalCount'))
           .reduce((acc = 0, val) => acc + val)
     tpopkontrsOfApFilteredCount = !tpopsOfAp.length
       ? '...'
       : tpopsOfAp
-          .map(p => get(p, 'tpopkontrsFiltered.totalCount'))
+          .map((p) => get(p, 'tpopkontrsFiltered.totalCount'))
           .reduce((acc = 0, val) => acc + val)
   } else {
     row = get(data, 'tpopkontrById', {})
@@ -233,22 +245,12 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
     },
     [client, dataFilterSetValue, row, showFilter, store.user.name, treeName],
   )
-  const onChangeTab = useCallback(
-    (event, value) => {
-      setUrlQueryValue({
-        key: 'feldkontrTab',
-        value,
-        urlQuery,
-        setUrlQuery,
-      })
-      setTab(value)
-    },
-    [setUrlQuery, urlQuery],
-  )
 
   const aeLrWerte = get(dataLists, 'allAeLrDelarzes.nodes', [])
-    .map(e => `${e.label}: ${e.einheit ? e.einheit.replace(/  +/g, ' ') : ''}`)
-    .map(o => ({ value: o, label: o }))
+    .map(
+      (e) => `${e.label}: ${e.einheit ? e.einheit.replace(/  +/g, ' ') : ''}`,
+    )
+    .map((o) => ({ value: o, label: o }))
 
   if (loading) {
     return (
