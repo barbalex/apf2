@@ -108,6 +108,20 @@ COMMENT ON COLUMN apflora.ap.ekf_beobachtungszeitpunkt IS 'bester Beobachtungsze
 COMMENT ON COLUMN apflora.ap.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
+drop table if exists apflora.ap_file;
+create table apflora.ap_file (
+  id uuid primary key DEFAULT uuid_generate_v1mc(),
+  ap_id uuid default null references apflora.ap (id) on delete cascade on update cascade,
+  file_id uuid default null,
+  file_mime_type text default null,
+  name text default null,
+  beschreibung text default null
+);
+create index on apflora.ap using btree (id);
+create index on apflora.ap_file using btree (ap_id);
+create index on apflora.ap_file using btree (file_id);
+create index on apflora.ap_file using btree (file_mime_type);
+
 DROP TABLE IF EXISTS apflora.ap_history;
 CREATE TABLE apflora.ap_history (
   year integer not null,
@@ -490,6 +504,20 @@ COMMENT ON COLUMN apflora.pop.bekannt_seit IS 'Seit wann ist die Population beka
 COMMENT ON COLUMN apflora.pop.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.pop.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
+drop table if exists apflora.pop_file;
+create table apflora.pop_file (
+  id uuid primary key DEFAULT uuid_generate_v1mc(),
+  pop_id uuid default null references apflora.pop (id) on delete cascade on update cascade,
+  file_id uuid default null,
+  file_mime_type text default null,
+  name text default null,
+  beschreibung text default null
+);
+create index on apflora.pop using btree (id);
+create index on apflora.pop_file using btree (pop_id);
+create index on apflora.pop_file using btree (file_id);
+create index on apflora.pop_file using btree (file_mime_type);
+
 DROP TABLE IF EXISTS apflora.pop_history;
 CREATE TABLE apflora.pop_history (
   year integer not null,
@@ -656,6 +684,20 @@ COMMENT ON COLUMN apflora.tpop.ekfrequenz_abweichend IS 'Diese Frequenz entspric
 COMMENT ON COLUMN apflora.tpop.ekfrequenz_abweichend IS 'Wer diese TPop freiwillig kontrolliert. Dient dazu, Formulare für die EKF zu generieren';
 COMMENT ON COLUMN apflora.tpop.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpop.changed IS 'Von wem wurde der Datensatz zuletzt geändert?';
+
+drop table if exists apflora.tpop_file;
+create table apflora.tpop_file (
+  id uuid primary key DEFAULT uuid_generate_v1mc(),
+  tpop_id uuid default null references apflora.tpop (id) on delete cascade on update cascade,
+  file_id uuid default null,
+  file_mime_type text default null,
+  name text default null,
+  beschreibung text default null
+);
+create index on apflora.tpop using btree (id);
+create index on apflora.tpop_file using btree (tpop_id);
+create index on apflora.tpop_file using btree (file_id);
+create index on apflora.tpop_file using btree (file_mime_type);
 
 DROP TABLE IF EXISTS apflora.tpop_history;
 CREATE TABLE apflora.tpop_history (
@@ -1054,6 +1096,20 @@ COMMENT ON COLUMN apflora.tpopmassn.pflanzanordnung IS 'Anordnung der Pflanzung'
 COMMENT ON COLUMN apflora.tpopmassn.id IS 'GUID der Tabelle "tpopmassn"';
 COMMENT ON COLUMN apflora.tpopmassn.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopmassn.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+
+drop table if exists apflora.tpopmassn_file;
+create table apflora.tpopmassn_file (
+  id uuid primary key DEFAULT uuid_generate_v1mc(),
+  tpopmassn_id uuid default null references apflora.tpopmassn (id) on delete cascade on update cascade,
+  file_id uuid default null,
+  file_mime_type text default null,
+  name text default null,
+  beschreibung text default null
+);
+create index on apflora.tpopmassn using btree (id);
+create index on apflora.tpopmassn_file using btree (tpopmassn_id);
+create index on apflora.tpopmassn_file using btree (file_id);
+create index on apflora.tpopmassn_file using btree (file_mime_type);
 
 DROP TABLE IF EXISTS apflora.tpopmassn_erfbeurt_werte;
 CREATE TABLE apflora.tpopmassn_erfbeurt_werte (
