@@ -3783,6 +3783,45 @@ WHERE
 ORDER BY
   apflora.pop.nr;
 
+DROP VIEW IF EXISTS apflora.v_q_tpop_mitstatusansaatversuchundzaehlungmitanzahl CASCADE;
+CREATE OR REPLACE VIEW apflora.v_q_tpop_mitstatusansaatversuchundzaehlungmitanzahl AS
+SELECT DISTINCT
+  apflora.projekt.id as proj_id,
+  apflora.pop.ap_id,
+  apflora.pop.id as pop_id,
+  apflora.pop.nr as pop_nr,
+  apflora.tpop.id,
+  apflora.tpop.nr
+FROM
+  apflora.projekt
+  INNER JOIN
+    apflora.ap
+    INNER JOIN
+      apflora.pop
+      INNER JOIN
+        apflora.tpop
+        ON apflora.tpop.pop_id = apflora.pop.id
+      ON apflora.pop.ap_id = apflora.ap.id
+    ON apflora.projekt.id = apflora.ap.proj_id
+WHERE
+  apflora.tpop.status = 201
+  AND apflora.tpop.status_unklar = false
+  AND apflora.tpop.id IN (
+    SELECT DISTINCT
+      apflora.tpopkontr.tpop_id
+    FROM
+      apflora.tpopkontr
+      INNER JOIN
+        apflora.tpopkontrzaehl
+        ON apflora.tpopkontr.id = apflora.tpopkontrzaehl.tpopkontr_id
+    WHERE
+      apflora.tpopkontr.typ NOT IN ('Zwischenziel', 'Ziel')
+      AND apflora.tpopkontrzaehl.anzahl > 0
+  )
+ORDER BY
+  apflora.pop.id,
+  apflora.tpop.id;
+
 DROP VIEW IF EXISTS apflora.v_q_tpop_mitstatuspotentiellundzaehlungmitanzahl CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_tpop_mitstatuspotentiellundzaehlungmitanzahl AS
 SELECT DISTINCT
