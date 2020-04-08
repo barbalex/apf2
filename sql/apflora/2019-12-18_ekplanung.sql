@@ -111,7 +111,7 @@ from tpops
 where tpops.id = apflora.tpop.id;
 
 -- 7 sort
--- TODO: asjust to Topos answer
+-- TODO: adjust to Topos answer
 update apflora.ekfrequenz set sort = 11 where code = 'Spez EK S';
 update apflora.ekfrequenz set sort = 12 where code = 'Spez EK G';
 update apflora.ekfrequenz set sort = 13 where code = 'Spez A S';
