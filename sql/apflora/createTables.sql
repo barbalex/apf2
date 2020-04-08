@@ -1154,10 +1154,6 @@ CREATE TABLE apflora.tpopmassn_typ_werte (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
-alter table apflora.tpopmassn_typ_werte add column historic boolean default false;
-CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (historic);
-COMMENT ON COLUMN apflora.tpopmassn_typ_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
-
 create sequence apflora.tpopmassn_typ_werte_code_seq owned by apflora.tpopmassn_typ_werte.code;
 alter table apflora.tpopmassn_typ_werte alter column code set default nextval('apflora.tpopmassn_typ_werte_code_seq');
 select setval('apflora.tpopmassn_typ_werte_code_seq', (select max(code)+1 from apflora.tpopmassn_typ_werte), false);
@@ -1168,8 +1164,10 @@ CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (code);
 CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (sort);
 CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (ansiedlung);
 CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (anpflanzung);
+CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (historic);
 COMMENT ON COLUMN apflora.tpopmassn_typ_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpopmassn_typ_werte.ansiedlung IS 'Handelt es sich um eine Ansiedlung?';
+COMMENT ON COLUMN apflora.tpopmassn_typ_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 COMMENT ON COLUMN apflora.tpopmassn_typ_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopmassn_typ_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
