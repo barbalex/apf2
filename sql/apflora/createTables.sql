@@ -1026,6 +1026,7 @@ CREATE TABLE apflora.tpopkontrzaehl_methode_werte (
   code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
+  historic boolean default false,
   changed date DEFAULT NOW(),
   changed_by varchar(20) default NULL
 );
@@ -1038,7 +1039,9 @@ alter table apflora.tpopkontrzaehl_methode_werte alter column changed_by set def
 CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree (id);
 CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree (code);
 CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree (sort);
+CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree (historic);
 COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -1120,6 +1123,7 @@ CREATE TABLE apflora.tpopmassn_erfbeurt_werte (
   code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
+  historic boolean default false,
   changed date DEFAULT NOW(),
   changed_by varchar(20) default NULL
 );
@@ -1131,8 +1135,10 @@ alter table apflora.tpopmassn_erfbeurt_werte alter column changed_by drop not nu
 CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree (id);
 CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree (code);
 CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree (sort);
+CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree (historic);
 COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.text IS 'Wie werden die durchgefuehrten Massnahmen beurteilt?';
+COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -1254,6 +1260,7 @@ CREATE TABLE apflora.ziel_typ_werte (
   code serial,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
+  historic boolean default false,
   changed date DEFAULT NOW(),
   changed_by varchar(20) NOT NULL
 );
@@ -1265,8 +1272,10 @@ alter table apflora.ziel_typ_werte alter column changed_by drop not null, alter 
 CREATE INDEX ON apflora.ziel_typ_werte USING btree (id);
 CREATE INDEX ON apflora.ziel_typ_werte USING btree (code);
 CREATE INDEX ON apflora.ziel_typ_werte USING btree (sort);
+CREATE INDEX ON apflora.ziel_typ_werte USING btree (historic);
 COMMENT ON COLUMN apflora.ziel_typ_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.ziel_typ_werte.text IS 'Beschreibung des Ziels';
+COMMENT ON COLUMN apflora.ziel_typ_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 COMMENT ON COLUMN apflora.ziel_typ_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ziel_typ_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -1408,10 +1417,9 @@ CREATE TABLE apflora.beobprojekt (
 );
 
 DROP TABLE IF EXISTS apflora.beob_quelle_werte;
-CREATE TABLE apflora.beob_quelle_werte
-(
-   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-   name varchar(255) DEFAULT NULL
+CREATE TABLE apflora.beob_quelle_werte (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  name varchar(255) DEFAULT NULL
 );
 CREATE INDEX ON apflora.beob_quelle_werte USING btree (id);
 
@@ -1525,13 +1533,16 @@ CREATE TABLE apflora.ek_abrechnungstyp_werte (
   code text,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
+  historic boolean default false,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree (id);
 CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree (code);
 CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree (sort);
+CREATE INDEX ON apflora.ek_abrechnungstyp_werte USING btree (historic);
 COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.historic IS 'Wert wird nur angezeigt, wenn er in den Daten (noch) enthalten ist. Wird in Auswahl-Listen nicht mehr angeboten';
 COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
