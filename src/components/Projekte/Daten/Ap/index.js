@@ -18,11 +18,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
-const FieldsContainer = styled.div`
-  padding: 10px;
-  padding-top: 0;
-  height: 100%;
-`
 const StyledTabs = styled(Tabs)`
   margin-bottom: 10px;
 `
