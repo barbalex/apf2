@@ -2,13 +2,15 @@ import React, { useCallback } from 'react'
 import Select from 'react-select'
 import styled from 'styled-components'
 
+import exists from '../../modules/exists'
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 12px;
 `
 const Label = styled.div`
-  font-size: ${props => (props.labelsize ? `${props.labelsize}px` : '12px')};
+  font-size: ${(props) => (props.labelsize ? `${props.labelsize}px` : '12px')};
   color: rgb(0, 0, 0, 0.54);
 `
 const Error = styled.div`
@@ -41,15 +43,15 @@ const StyledSelect = styled(Select)`
   }
   .react-select__clear-indicator {
     /* ability to hide caret when not enough space */
-    padding-right: ${props => (props.nocaret ? '0' : '8px')};
+    padding-right: ${(props) => (props.nocaret ? '0' : '8px')};
   }
   .react-select__dropdown-indicator {
     /* ability to hide caret when not enough space */
-    display: ${props => (props.nocaret ? 'none' : 'flex')};
+    display: ${(props) => (props.nocaret ? 'none' : 'flex')};
   }
   .react-select__indicator-separator {
     /* ability to hide caret when not enough space */
-    width: ${props => (props.nocaret ? '0' : '1px')};
+    width: ${(props) => (props.nocaret ? '0' : '1px')};
   }
   input {
     @media print {
@@ -60,7 +62,7 @@ const StyledSelect = styled(Select)`
   .react-select__menu,
   .react-select__menu-list {
     height: 130px;
-    height: ${props => (props.maxheight ? `${props.maxheight}px` : 'unset')};
+    height: ${(props) => (props.maxheight ? `${props.maxheight}px` : 'unset')};
   }
 `
 
@@ -79,7 +81,7 @@ const SharedSelect = ({
   const error = errors[name]
 
   const onMyChange = useCallback(
-    option => {
+    (option) => {
       const fakeEvent = {
         target: {
           name,
@@ -93,10 +95,16 @@ const SharedSelect = ({
     [handleSubmit, name, onBlur, onChange],
   )
 
+  // filter out historic options - if they are not the value set
+  const realOptions = options.filter((o) => {
+    const dontShowHistoric = !exists(value) || value !== o.value
+    if (dontShowHistoric) return !o.historic
+    return true
+  })
   // show ... while options are loading
   const loadingOptions = [{ value, label: '...' }]
-  const optionsToUse = loading && value ? loadingOptions : options
-  const selectValue = optionsToUse.find(o => o.value === value)
+  const optionsToUse = loading && value ? loadingOptions : realOptions
+  const selectValue = optionsToUse.find((o) => o.value === value)
 
   return (
     <Container>

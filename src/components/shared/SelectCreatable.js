@@ -3,6 +3,8 @@ import CreatableSelect from 'react-select/creatable'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
 
+import exists from '../../modules/exists'
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -42,15 +44,15 @@ const StyledSelect = styled(CreatableSelect)`
   }
   .react-select__clear-indicator {
     /* ability to hide caret when not enough space */
-    padding-right: ${props => (props.nocaret ? '0' : '8px')};
+    padding-right: ${(props) => (props.nocaret ? '0' : '8px')};
   }
   .react-select__dropdown-indicator {
     /* ability to hide caret when not enough space */
-    display: ${props => (props.nocaret ? 'none' : 'flex')};
+    display: ${(props) => (props.nocaret ? 'none' : 'flex')};
   }
   .react-select__indicator-separator {
     /* ability to hide caret when not enough space */
-    width: ${props => (props.nocaret ? '0' : '1px')};
+    width: ${(props) => (props.nocaret ? '0' : '1px')};
   } /*
   > div > div > div {
     margin-left: 0;
@@ -64,7 +66,7 @@ const StyledSelect = styled(CreatableSelect)`
   .react-select__menu,
   .react-select__menu-list {
     height: 130px;
-    height: ${props => (props.maxheight ? `${props.maxheight}px` : 'unset')};
+    height: ${(props) => (props.maxheight ? `${props.maxheight}px` : 'unset')};
   }
 `
 
@@ -83,7 +85,7 @@ const SharedSelectCreatable = ({
   const [stateValue, setStateValue] = useState(null)
 
   const onChange = useCallback(
-    option => {
+    (option) => {
       const fakeEvent = {
         target: {
           name,
@@ -94,9 +96,9 @@ const SharedSelectCreatable = ({
     },
     [name, saveToDb],
   )
-  const onInputChange = useCallback(value => setStateValue(value), [])
+  const onInputChange = useCallback((value) => setStateValue(value), [])
   const onBlur = useCallback(
-    event => {
+    (event) => {
       if (stateValue) {
         const fakeEvent = {
           target: {
@@ -115,16 +117,23 @@ const SharedSelectCreatable = ({
   }, [value])
 
   // need to add value to options list if it is not yet included
-  const valuesArray = optionsIn.map(o => o.value)
+  const valuesArray = optionsIn.map((o) => o.value)
   const options = [...optionsIn]
   if (value && !valuesArray.includes(value)) {
     options.push({ label: value, value })
   }
 
+  // filter out historic options - if they are not the value set
+  const realOptions = options.filter((o) => {
+    const dontShowHistoric = !exists(value) || value !== o.value
+    if (dontShowHistoric) return !o.historic
+    return true
+  })
+
   // show ... while options are loading
   const loadingOptions = [{ value, label: '...' }]
-  const optionsToUse = loading && value ? loadingOptions : options
-  const selectValue = optionsToUse.find(o => o.value === value)
+  const optionsToUse = loading && value ? loadingOptions : realOptions
+  const selectValue = optionsToUse.find((o) => o.value === value)
 
   return (
     <Container>
@@ -133,7 +142,7 @@ const SharedSelectCreatable = ({
         id={field}
         name={field}
         defaultValue={selectValue}
-        options={options}
+        options={realOptions}
         onChange={onChange}
         onBlur={onBlur}
         onInputChange={onInputChange}

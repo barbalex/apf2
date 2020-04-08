@@ -6,12 +6,14 @@ export default gql`
       nodes {
         value: code
         label: text
+        historic
       }
     }
     allTpopkontrzaehlEinheitWertes(orderBy: SORT_ASC) {
       nodes {
         value: code
         label: text
+        historic
       }
     }
   }
