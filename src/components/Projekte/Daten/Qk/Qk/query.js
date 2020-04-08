@@ -81,6 +81,7 @@ export default gql`
     $tpopStatusErloschenLetzterTpopberAbnehmend: Boolean!
     $tpopStatusErloschenLetzterTpopberAktuell: Boolean!
     $tpopStatusErloschenLetzterTpopberErloschenMitAnsiedlung: Boolean!
+    $tpopErloschenMitEkplanNachLetztemTpopber: Boolean!
     $tpopStatusErloschenLetzterTpopberStabil: Boolean!
     $tpopStatusErloschenLetzterTpopberUnsicher: Boolean!
     $tpopStatusErloschenLetzterTpopberZunehmend: Boolean!
@@ -1051,6 +1052,18 @@ export default gql`
     tpopStatusErloschenLetzterTpopberErloschenMitAnsiedlung: allVQTpopStatuserloschenletztertpopbererloschenmitansiedlungs(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
     ) @include(if: $tpopStatusErloschenLetzterTpopberErloschenMitAnsiedlung) {
+      nodes {
+        projId
+        apId
+        popId
+        popNr
+        id
+        nr
+      }
+    }
+    tpopErloschenMitEkplanNachLetztemTpopber: allVQTpopErloschenMitEkplanNachLetztemTpopbers(
+      filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+    ) @include(if: $tpopErloschenMitEkplanNachLetztemTpopber) {
       nodes {
         projId
         apId

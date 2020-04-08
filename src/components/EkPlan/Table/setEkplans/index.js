@@ -38,7 +38,7 @@ export default async ({
   const ekplansToDelete = get(
     ekplansToDeleteResult,
     'data.allEkplans.nodes',
-  ).map(e => e.id)
+  ).map((e) => e.id)
   // 2. delete them
   for (let id of ekplansToDelete) {
     try {
@@ -77,8 +77,9 @@ export default async ({
   const ekfrequenz = get(ekfrequenzsResult, 'data.allEkfrequenzs.nodes.[0]')
   // 4. add kontrolljahre to ekplan
   const typ = ekfrequenz.ektyp.toUpperCase()
-  const kontrolljahre = ekfrequenz.kontrolljahre
+  const kontrolljahre = ekfrequenz.kontrolljahre || []
   if (kontrolljahre.length === 0) {
+    refetchTpop()
     return enqueNotification({
       message: `Ab ${ekfrequenzStartjahr} wurden die bestehenden EK-Pläne gelöscht. Weil aber für die gewählte EK-Frequenz keine Kontrolljahre existieren, wurden keine neuen Kontrolljahre gesetzt`,
       options: {
@@ -112,7 +113,7 @@ export default async ({
       style: 'long',
       type: 'conjunction',
     })
-    jahreList = formatter.format(kontrolljahre.map(j => j.toString()))
+    jahreList = formatter.format(kontrolljahre.map((j) => j.toString()))
   }
   enqueNotification({
     message: `Ab ${ekfrequenzStartjahr} wurden allfällige bestehende EK-Pläne gelöscht und gemäss EK-Frequenz neue für ${

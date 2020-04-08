@@ -65,7 +65,7 @@ const StyledFormControl = styled(FormControl)`
 const StyledButton = styled(Button)`
   margin-bottom: 15px !important;
   margin-top: -5px !important;
-  color: ${props =>
+  color: ${(props) =>
     props.loading === 'true'
       ? '#D84315 !important'
       : 'rgb(46, 125, 50) !important'};
@@ -95,10 +95,13 @@ const Qk = ({ treeName, qkNameQueries, qks }) => {
   })
 
   const onChangeBerichtjahr = useCallback(
-    event => setBerichtjahr(+event.target.value),
+    (event) => setBerichtjahr(+event.target.value),
     [],
   )
-  const onChangeFilter = useCallback(event => setFilter(event.target.value), [])
+  const onChangeFilter = useCallback(
+    (event) => setFilter(event.target.value),
+    [],
+  )
 
   const messageFunctions = createMessageFunctions({
     data,
@@ -106,14 +109,16 @@ const Qk = ({ treeName, qkNameQueries, qks }) => {
     projId,
     apId,
   })
+  console.log('QK', { qks, messageFunctions })
   const messageGroups = qks
-    .map(qk => ({
+    .filter((qk) => !!messageFunctions[qk.name])
+    .map((qk) => ({
       title: qk.titel,
       messages: messageFunctions[qk.name](),
     }))
-    .filter(q => q.messages.length)
+    .filter((q) => q.messages.length)
 
-  const messageGroupsFiltered = messageGroups.filter(messageGroup => {
+  const messageGroupsFiltered = messageGroups.filter((messageGroup) => {
     if (!!filter && messageGroup.title && messageGroup.title.toLowerCase) {
       return messageGroup.title.toLowerCase().includes(filter.toLowerCase())
     }
