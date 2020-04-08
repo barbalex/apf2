@@ -178,6 +178,7 @@ export const ekAbrechnungstypWerte = gql`
     label
     text
     sort
+    historic
     changedBy
   }
 `
@@ -670,6 +671,7 @@ export const apBearbstandWerte = gql`
     code
     text
     sort
+    historic
     changedBy
   }
 `
@@ -680,6 +682,7 @@ export const apErfkritWerte = gql`
     code
     text
     sort
+    historic
     changedBy
   }
 `
@@ -690,6 +693,7 @@ export const apUmsetzungWerte = gql`
     code
     text
     sort
+    historic
     changedBy
   }
 `
@@ -707,6 +711,7 @@ export const popStatusWerte = gql`
     code
     text
     sort
+    historic
     changedBy
   }
 `
@@ -718,6 +723,7 @@ export const tpopApberrelevantGrundWerte = gql`
     text
     label
     sort
+    historic
     changed
     changedBy
   }
@@ -729,6 +735,7 @@ export const tpopEntwicklungWerte = gql`
     code
     text
     sort
+    historic
     changedBy
   }
 `
@@ -739,6 +746,7 @@ export const tpopkontrIdbiotuebereinstWerte = gql`
     code
     text
     sort
+    historic
     changedBy
   }
 `
@@ -749,6 +757,7 @@ export const tpopkontrTypWerte = gql`
     code
     text
     sort
+    historic
     changedBy
   }
 `
@@ -759,6 +768,7 @@ export const tpopkontrzaehlEinheitWerte = gql`
     code
     text
     sort
+    historic
     label
     changedBy
   }
@@ -770,6 +780,7 @@ export const tpopkontrzaehlMethodeWerte = gql`
     code
     text
     sort
+    historic
     changedBy
   }
 `
@@ -780,6 +791,7 @@ export const tpopmassnErfbeurtWerte = gql`
     code
     text
     sort
+    historic
     changedBy
   }
 `
@@ -792,6 +804,7 @@ export const tpopmassnTypWerte = gql`
     sort
     ansiedlung
     anpflanzung
+    historic
     changedBy
   }
 `
@@ -802,6 +815,7 @@ export const zielTypWerte = gql`
     code
     text
     sort
+    historic
     changedBy
   }
 `
