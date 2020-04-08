@@ -109,7 +109,6 @@ const Qk = ({ treeName, qkNameQueries, qks }) => {
     projId,
     apId,
   })
-  console.log('QK', { qks, messageFunctions })
   const messageGroups = qks
     .filter((qk) => !!messageFunctions[qk.name])
     .map((qk) => ({
