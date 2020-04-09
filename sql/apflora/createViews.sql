@@ -5619,3 +5619,51 @@ FROM
 ORDER BY
   apflora.projekt.id,
   apflora.ap.id;
+
+-- used in exports
+DROP VIEW IF EXISTS apflora.v_idealbiotop CASCADE;
+CREATE OR REPLACE VIEW apflora.v_idealbiotop AS
+SELECT
+  apflora.ap.id AS ap_id,
+  apflora.ae_taxonomies.artname,
+  apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
+  apflora.ap.start_jahr AS ap_start_jahr,
+  apflora.ap_umsetzung_werte.text AS ap_umsetzung,
+  apflora.adresse.name AS ap_bearbeiter,
+  apflora.ap.changed AS ap_changed,
+  apflora.ap.changed_by AS ap_changed_by,
+  apflora.idealbiotop.erstelldatum,
+  apflora.idealbiotop.hoehenlage,
+  apflora.idealbiotop.region,
+  apflora.idealbiotop.exposition,
+  apflora.idealbiotop.besonnung,
+  apflora.idealbiotop.hangneigung,
+  apflora.idealbiotop.boden_typ,
+  apflora.idealbiotop.boden_kalkgehalt,
+  apflora.idealbiotop.boden_durchlaessigkeit,
+  apflora.idealbiotop.boden_humus,
+  apflora.idealbiotop.boden_naehrstoffgehalt,
+  apflora.idealbiotop.wasserhaushalt,
+  apflora.idealbiotop.konkurrenz,
+  apflora.idealbiotop.moosschicht,
+  apflora.idealbiotop.krautschicht,
+  apflora.idealbiotop.strauchschicht,
+  apflora.idealbiotop.baumschicht,
+  apflora.idealbiotop.bemerkungen,
+  apflora.idealbiotop.changed,
+  apflora.idealbiotop.changed_by
+FROM
+  apflora.idealbiotop
+  RIGHT JOIN apflora.ap
+    LEFT JOIN apflora.ap_bearbstand_werte
+    ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code
+    LEFT JOIN apflora.ap_umsetzung_werte
+    ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code
+    LEFT JOIN apflora.adresse
+    ON apflora.ap.bearbeiter = apflora.adresse.id
+    LEFT JOIN apflora.ae_taxonomies
+    ON apflora.ae_taxonomies.id = apflora.ap.art_id
+  ON apflora.idealbiotop.ap_id = apflora.ap.id
+ORDER BY
+  apflora.ae_taxonomies.artname,
+  apflora.idealbiotop.erstelldatum;
