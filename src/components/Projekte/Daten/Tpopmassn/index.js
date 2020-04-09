@@ -3,7 +3,6 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import flatten from 'lodash/flatten'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import { Formik, Form, Field } from 'formik'
@@ -18,30 +17,25 @@ import Checkbox2States from '../../../shared/Checkbox2StatesFormik'
 import DateField from '../../../shared/DateFormik'
 import StringToCopy from '../../../shared/StringToCopy'
 import FormTitle from '../../../shared/FormTitle'
-import FilterTitle from '../../../shared/FilterTitle'
 import constants from '../../../../modules/constants'
 import query from './query'
 import queryLists from './queryLists'
-import queryTpopmassns from './queryTpopmassns'
 import queryAdresses from './queryAdresses'
 import queryAeTaxonomies from './queryAeTaxonomies'
 import queryIsMassnTypAnpflanzung from './queryIsMassnTypAnpflanzung'
 import updateTpopmassnByIdGql from './updateTpopmassnById'
 import storeContext from '../../../../storeContext'
-import { simpleTypes as tpopmassnType } from '../../../../store/Tree/DataFilter/tpopmassn'
 import objectsFindChangedKey from '../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../modules/objectsEmptyValuesToNull'
 import Files from '../../../shared/Files'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 
 const Container = styled.div`
-  height: ${(props) =>
-    props.showfilter ? 'calc(100vh - 145px)' : 'calc(100vh - 64px)'};
+  height: calc(100vh - 64px);
   height: 100%;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  ${(props) => props.showfilter && 'background-color: #ffd3a7'};
 `
 const LoadingContainer = styled.div`
   padding: 10px;
@@ -70,11 +64,9 @@ const StyledTab = styled(Tab)`
 const Tpopmassn = ({ treeName, showFilter = false }) => {
   const store = useContext(storeContext)
   const client = useApolloClient()
-  const { dataFilterSetValue, urlQuery, setUrlQuery } = store
+  const { urlQuery, setUrlQuery } = store
 
-  const { activeNodeArray, datenWidth, filterWidth, dataFilter } = store[
-    treeName
-  ]
+  const { activeNodeArray, datenWidth } = store[treeName]
 
   let id =
     activeNodeArray.length > 9
@@ -85,33 +77,6 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
   const { data, loading, error } = useQuery(query, {
     variables: {
       id,
-    },
-  })
-
-  const allTpopmassnFilter = {
-    tpopByTpopId: {
-      popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
-    },
-  }
-  const tpopmassnFilter = {
-    tpopId: { isNull: false },
-    tpopByTpopId: {
-      popByPopId: { apByApId: { projId: { equalTo: activeNodeArray[1] } } },
-    },
-  }
-  const tpopmassnFilterValues = Object.entries(dataFilter.tpopmassn).filter(
-    (e) => e[1] || e[1] === 0,
-  )
-  tpopmassnFilterValues.forEach(([key, value]) => {
-    const expression = tpopmassnType[key] === 'string' ? 'includes' : 'equalTo'
-    tpopmassnFilter[key] = { [expression]: value }
-  })
-  const { data: dataTpopmassns } = useQuery(queryTpopmassns, {
-    variables: {
-      showFilter,
-      tpopmassnFilter,
-      allTpopmassnFilter,
-      apId,
     },
   })
 
@@ -126,34 +91,7 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
     error: errorLists,
   } = useQuery(queryLists)
 
-  let tpopmassnTotalCount
-  let tpopmassnFilteredCount
-  let tpopmassnsOfApTotalCount
-  let tpopmassnsOfApFilteredCount
-  let row
-  if (showFilter) {
-    row = dataFilter.tpopmassn
-    tpopmassnTotalCount = get(dataTpopmassns, 'allTpopmassns.totalCount', '...')
-    tpopmassnFilteredCount = get(
-      dataTpopmassns,
-      'tpopmassnsFiltered.totalCount',
-      '...',
-    )
-    const popsOfAp = get(dataTpopmassns, 'popsOfAp.nodes', [])
-    const tpopsOfAp = flatten(popsOfAp.map((p) => get(p, 'tpops.nodes', [])))
-    tpopmassnsOfApTotalCount = !tpopsOfAp.length
-      ? '...'
-      : tpopsOfAp
-          .map((p) => get(p, 'tpopmassns.totalCount'))
-          .reduce((acc = 0, val) => acc + val)
-    tpopmassnsOfApFilteredCount = !tpopsOfAp.length
-      ? '...'
-      : tpopsOfAp
-          .map((p) => get(p, 'tpopmassnsFiltered.totalCount'))
-          .reduce((acc = 0, val) => acc + val)
-  } else {
-    row = get(data, 'tpopmassnById', {})
-  }
+  const row = get(data, 'tpopmassnById', {})
 
   const { data: dataIsMassnTypAnpflanzung } = useQuery(
     queryIsMassnTypAnpflanzung,
@@ -170,108 +108,91 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
     async (values, { setErrors }) => {
       const changedField = objectsFindChangedKey(values, row)
       const value = values[changedField]
-      if (showFilter) {
-        dataFilterSetValue({
-          treeName,
-          table: 'tpopmassn',
-          key: changedField,
-          value,
-        })
-      } else {
-        /**
-         * enable passing two values
-         * with same update
-         */
-        const variables = {
-          ...objectsEmptyValuesToNull(values),
-          changedBy: store.user.name,
-        }
-        if (changedField === 'jahr') {
-          variables.datum = null
-        }
-        if (changedField === 'datum') {
-          variables.jahr =
-            value && value.substring ? +value.substring(0, 4) : value
-        }
-        if (changedField === 'typ') {
-          // IF typ is anpflanzung
-          // have to set zieleinheit_einheit to
-          // ekzaehleinheit with zielrelevant = true
-          let zieleinheitIdResult
-          try {
-            zieleinheitIdResult = await client.query({
-              query: gql`
-                query tpopmassnZieleinheitQuery($apId: UUID!, $typ: Int!) {
-                  allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
-                    nodes {
-                      id
-                      anpflanzung
-                    }
+      /**
+       * enable passing two values
+       * with same update
+       */
+      const variables = {
+        ...objectsEmptyValuesToNull(values),
+        changedBy: store.user.name,
+      }
+      if (changedField === 'jahr') {
+        variables.datum = null
+      }
+      if (changedField === 'datum') {
+        variables.jahr =
+          value && value.substring ? +value.substring(0, 4) : value
+      }
+      if (changedField === 'typ') {
+        // IF typ is anpflanzung
+        // have to set zieleinheit_einheit to
+        // ekzaehleinheit with zielrelevant = true
+        let zieleinheitIdResult
+        try {
+          zieleinheitIdResult = await client.query({
+            query: gql`
+              query tpopmassnZieleinheitQuery($apId: UUID!, $typ: Int!) {
+                allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
+                  nodes {
+                    id
+                    anpflanzung
                   }
-                  allEkzaehleinheits(
-                    filter: {
-                      zielrelevant: { equalTo: true }
-                      apId: { equalTo: $apId }
-                    }
-                  ) {
-                    nodes {
+                }
+                allEkzaehleinheits(
+                  filter: {
+                    zielrelevant: { equalTo: true }
+                    apId: { equalTo: $apId }
+                  }
+                ) {
+                  nodes {
+                    id
+                    tpopkontrzaehlEinheitWerteByZaehleinheitId {
                       id
-                      tpopkontrzaehlEinheitWerteByZaehleinheitId {
-                        id
-                        code
-                      }
+                      code
                     }
                   }
                 }
-              `,
-              variables: { apId, typ: variables.typ },
-            })
-          } catch (error) {
-            return setErrors({ [changedField]: error.message })
-          }
-          const isAnpflanzung = get(
-            zieleinheitIdResult,
-            'data.allTpopmassnTypWertes.nodes[0].anpflanzung',
-          )
-          const zieleinheitCode =
-            get(
-              zieleinheitIdResult,
-              'data.allEkzaehleinheits.nodes[0].tpopkontrzaehlEinheitWerteByZaehleinheitId.code',
-            ) || null
-          if (isAnpflanzung && zieleinheitCode) {
-            variables.zieleinheitEinheit = zieleinheitCode
-          }
-        }
-        try {
-          await client.mutate({
-            mutation: updateTpopmassnByIdGql,
-            variables,
-            optimisticResponse: {
-              __typename: 'Mutation',
-              updateTpopmassnById: {
-                tpopmassn: {
-                  ...variables,
-                  __typename: 'Tpopmassn',
-                },
-                __typename: 'Tpopmassn',
-              },
-            },
+              }
+            `,
+            variables: { apId, typ: variables.typ },
           })
         } catch (error) {
           return setErrors({ [changedField]: error.message })
         }
-        setErrors({})
+        const isAnpflanzung = get(
+          zieleinheitIdResult,
+          'data.allTpopmassnTypWertes.nodes[0].anpflanzung',
+        )
+        const zieleinheitCode =
+          get(
+            zieleinheitIdResult,
+            'data.allEkzaehleinheits.nodes[0].tpopkontrzaehlEinheitWerteByZaehleinheitId.code',
+          ) || null
+        if (isAnpflanzung && zieleinheitCode) {
+          variables.zieleinheitEinheit = zieleinheitCode
+        }
       }
+      try {
+        await client.mutate({
+          mutation: updateTpopmassnByIdGql,
+          variables,
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateTpopmassnById: {
+              tpopmassn: {
+                ...variables,
+                __typename: 'Tpopmassn',
+              },
+              __typename: 'Tpopmassn',
+            },
+          },
+        })
+      } catch (error) {
+        return setErrors({ [changedField]: error.message })
+      }
+      setErrors({})
     },
-    [
-      apId,
-      client,
-      dataFilterSetValue,
-      row,
-      showFilter,
-      store.user.name,
-      treeName,
-    ],
+    [apId, client, row, store.user.name],
   )
 
   const [tab, setTab] = useState(get(urlQuery, 'tpopmassnTab', 'tpopmassn'))
@@ -302,24 +223,12 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
   if (errorLists) return `Fehler: ${errorLists.message}`
   return (
     <ErrorBoundary>
-      <Container showfilter={showFilter}>
-        {showFilter ? (
-          <FilterTitle
-            title="Massnahmen"
-            treeName={treeName}
-            table="tpopmassn"
-            totalNr={tpopmassnTotalCount}
-            filteredNr={tpopmassnFilteredCount}
-            totalApNr={tpopmassnsOfApTotalCount}
-            filteredApNr={tpopmassnsOfApFilteredCount}
-          />
-        ) : (
-          <FormTitle
-            apId={activeNodeArray[3]}
-            title="Massnahme"
-            treeName={treeName}
-          />
-        )}
+      <Container>
+        <FormTitle
+          apId={activeNodeArray[3]}
+          title="Massnahme"
+          treeName={treeName}
+        />
         <Tabs
           value={tab}
           onChange={onChangeTab}
@@ -328,13 +237,11 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
           centered
         >
           <StyledTab label="Massnahme" value="tpopmassn" data-id="tpopmassn" />
-          {!showFilter && (
-            <StyledTab label="Dateien" value="dateien" data-id="dateien" />
-          )}
+          <StyledTab label="Dateien" value="dateien" data-id="dateien" />
         </Tabs>
         {tab === 'tpopmassn' && (
           <FormScrollContainer>
-            <ColumnContainer data-width={showFilter ? filterWidth : datenWidth}>
+            <ColumnContainer data-width={datenWidth}>
               <Formik
                 key={showFilter ? row : row.id}
                 initialValues={row}

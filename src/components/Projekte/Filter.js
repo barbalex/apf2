@@ -7,7 +7,7 @@ import ErrorBoundary from 'react-error-boundary'
 import ApFilter from './Daten/ApFilter'
 import PopFilter from './Daten/PopFilter'
 import Tpop from './Daten/Tpop'
-import Tpopmassn from './Daten/Tpopmassn'
+import TpopmassnFilter from './Daten/TpopmassnFilter'
 import Tpopfeldkontr from './Daten/Tpopfeldkontr'
 import Tpopfreiwkontr from './Daten/Tpopfreiwkontr'
 
@@ -45,7 +45,7 @@ export default ({ treeName }) => {
     ap: <ApFilter treeName={treeName} />,
     pop: <PopFilter treeName={treeName} />,
     tpop: <Tpop treeName={treeName} showFilter={true} />,
-    tpopmassn: <Tpopmassn treeName={treeName} showFilter={true} />,
+    tpopmassn: <TpopmassnFilter treeName={treeName} />,
     tpopfeldkontr: <Tpopfeldkontr treeName={treeName} showFilter={true} />,
     tpopfreiwkontr: <Tpopfreiwkontr treeName={treeName} showFilter={true} />,
   }

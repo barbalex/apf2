@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query tpopmassnsQuery(
+  query tpopmassnsFilterQuery(
     $showFilter: Boolean!
     $tpopmassnFilter: TpopmassnFilter!
     $allTpopmassnFilter: TpopmassnFilter!
