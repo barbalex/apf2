@@ -37,23 +37,26 @@ import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 const Container = styled.div`
   height: ${(props) =>
     props.showfilter ? 'calc(100vh - 145px)' : 'calc(100vh - 64px)'};
+  height: 100%;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
+  ${(props) => props.showfilter && 'background-color: #ffd3a7'};
 `
-const FieldsContainer = styled.div`
+const LoadingContainer = styled.div`
   padding: 10px;
   padding-top: 0;
-  overflow: auto !important;
   height: 100%;
 `
+const FormScrollContainer = styled.div`
+  height: calc(100% - 43px - 48px);
+  padding: 10px;
+  overflow-y: auto !important;
+`
 const ColumnContainer = styled.div`
-  height: 100%;
-  padding-top: 10px;
-  column-width: ${(props) =>
-    props['data-width'] > 2 * constants.columnWidth
-      ? `${constants.columnWidth}px`
-      : 'auto'};
+  ${(props) =>
+    props['data-width'] > 2 * constants.columnWidth &&
+    `column-width: ${constants.columnWidth}px`}
 `
 const FilesContainer = styled.div`
   padding: 10px;
@@ -290,7 +293,7 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
   if (loading) {
     return (
       <Container>
-        <FieldsContainer>Lade...</FieldsContainer>
+        <LoadingContainer>Lade...</LoadingContainer>
       </Container>
     )
   }
@@ -317,24 +320,20 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
             treeName={treeName}
           />
         )}
-        <FieldsContainer>
-          <Tabs
-            value={tab}
-            onChange={onChangeTab}
-            indicatorColor="primary"
-            textColor="primary"
-            centered
-          >
-            <StyledTab
-              label="Massnahme"
-              value="tpopmassn"
-              data-id="tpopmassn"
-            />
-            {!showFilter && (
-              <StyledTab label="Dateien" value="dateien" data-id="dateien" />
-            )}
-          </Tabs>
-          {tab === 'tpopmassn' && (
+        <Tabs
+          value={tab}
+          onChange={onChangeTab}
+          indicatorColor="primary"
+          textColor="primary"
+          centered
+        >
+          <StyledTab label="Massnahme" value="tpopmassn" data-id="tpopmassn" />
+          {!showFilter && (
+            <StyledTab label="Dateien" value="dateien" data-id="dateien" />
+          )}
+        </Tabs>
+        {tab === 'tpopmassn' && (
+          <FormScrollContainer>
             <ColumnContainer data-width={showFilter ? filterWidth : datenWidth}>
               <Formik
                 key={showFilter ? row : row.id}
@@ -481,13 +480,13 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
                 )}
               </Formik>
             </ColumnContainer>
-          )}
-          {tab === 'dateien' && !showFilter && (
-            <FilesContainer data-width={datenWidth}>
-              <Files parentId={row.id} parent="tpopmassn" />
-            </FilesContainer>
-          )}
-        </FieldsContainer>
+          </FormScrollContainer>
+        )}
+        {tab === 'dateien' && !showFilter && (
+          <FilesContainer data-width={datenWidth}>
+            <Files parentId={row.id} parent="tpopmassn" />
+          </FilesContainer>
+        )}
       </Container>
     </ErrorBoundary>
   )
