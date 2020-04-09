@@ -68,6 +68,7 @@ export default gql`
     $tpopErloschenUndRelevantLetzteBeobVor1950: Boolean!
     $tpopMitStatusAnsaatversuchUndZaehlungMitAnzahl: Boolean!
     $tpopMitStatusPotentiellUndAnsiedlung: Boolean!
+    $tpopMitAktuellenKontrollenOhneZielrelevanteEinheit: Boolean!
     $tpopMitStatusPotentiellUndZaehlungMitAnzahl: Boolean!
     $tpopOhneApberRelevant: Boolean!
     $tpopOhneBekanntSeit: Boolean!
@@ -1347,6 +1348,18 @@ export default gql`
     tpopMitStatusPotentiellUndAnsiedlung: allVQTpopMitstatuspotentiellundmassnansiedlungs(
       filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
     ) @include(if: $tpopMitStatusPotentiellUndAnsiedlung) {
+      nodes {
+        projId
+        apId
+        popId
+        popNr
+        id
+        nr
+      }
+    }
+    tpopMitAktuellenKontrollenOhneZielrelevanteEinheit: allVQTpopMitAktuellenKontrollenOhneZielrelevanteEinheits(
+      filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+    ) @include(if: $tpopMitAktuellenKontrollenOhneZielrelevanteEinheit) {
       nodes {
         projId
         apId
