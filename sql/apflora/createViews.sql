@@ -5568,3 +5568,54 @@ group by
 order by
   ap_id,
   jahr;
+
+-- original was created here: 2020-04-09_qk_tpop_mit_kontr_keine_zielrelev_einheit.sql
+DROP VIEW IF EXISTS apflora.v_q_ap_mit_aktuellen_kontrollen_ohne_zielrelevante_einheit CASCADE;
+CREATE OR REPLACE VIEW apflora.v_q_ap_mit_aktuellen_kontrollen_ohne_zielrelevante_einheit AS
+with ap_mit_zielrelevanter_zaehleinheit as (
+  select distinct apflora.ap.id
+  from
+    apflora.ap
+    inner join apflora.ekzaehleinheit
+    on apflora.ekzaehleinheit.ap_id = apflora.ap.id
+  where
+    apflora.ekzaehleinheit.zielrelevant = true
+),
+ap_ohne_zielrelevante_zaehleinheit as (
+  select distinct apflora.ap.id
+  from
+    apflora.ap
+    left join ap_mit_zielrelevanter_zaehleinheit
+    on ap_mit_zielrelevanter_zaehleinheit.id = apflora.ap.id
+  where ap_mit_zielrelevanter_zaehleinheit.id is null
+),
+tpop_mit_aktuellen_kontrollen_ohne_zielrelevante_zaehleinheit as (
+  select distinct
+    apflora.tpop.id
+  from
+    apflora.tpop
+    inner join apflora.tpopkontr
+    on apflora.tpop.id = apflora.tpopkontr.tpop_id
+    inner join apflora.pop
+      inner join ap_ohne_zielrelevante_zaehleinheit
+      on ap_ohne_zielrelevante_zaehleinheit.id = apflora.pop.ap_id
+    on apflora.pop.id = apflora.tpop.pop_id
+  where
+    apflora.tpopkontr.jahr = date_part('year', CURRENT_DATE)
+)
+SELECT distinct
+  apflora.projekt.id as proj_id,
+  apflora.ap.id as ap_id
+FROM
+  apflora.projekt
+  INNER JOIN apflora.ap
+    INNER JOIN apflora.pop
+      INNER JOIN apflora.tpop
+        inner join tpop_mit_aktuellen_kontrollen_ohne_zielrelevante_zaehleinheit
+        on tpop_mit_aktuellen_kontrollen_ohne_zielrelevante_zaehleinheit.id = apflora.tpop.id
+      ON apflora.tpop.pop_id = apflora.pop.id
+    ON apflora.pop.ap_id = apflora.ap.id
+  ON apflora.projekt.id = apflora.ap.proj_id
+ORDER BY
+  apflora.projekt.id,
+  apflora.ap.id;

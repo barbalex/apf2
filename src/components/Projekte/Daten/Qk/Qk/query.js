@@ -9,6 +9,7 @@ export default gql`
     $projId: UUID!
     $apId: UUID!
     $apMitApOhneUmsetzung: Boolean!
+    $apMitAktKontrOhneZielrelevanteEinheit: Boolean!
     $apOhneBearbeitung: Boolean!
     $apOhneVerantwortlich: Boolean!
     $apberOhneBeurteilung: Boolean!
@@ -157,6 +158,14 @@ export default gql`
         nodes {
           ...ApFields
         }
+      }
+    }
+    apMitAktKontrOhneZielrelevanteEinheit: allVQApMitAktuellenKontrollenOhneZielrelevanteEinheits(
+      filter: { apId: { equalTo: $apId } }
+    ) @include(if: $apMitAktKontrOhneZielrelevanteEinheit) {
+      nodes {
+        projId
+        apId
       }
     }
     apOhneVerantwortlich: projektById(id: $projId)

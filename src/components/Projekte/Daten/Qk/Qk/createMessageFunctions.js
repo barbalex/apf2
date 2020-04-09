@@ -54,6 +54,13 @@ export default ({ data, berichtjahr, projId, apId }) => ({
       url: ['Projekte', projId, 'Aktionspläne', apId],
       text: `Feld "Umsetzung" ist leer`,
     })),
+  apMitAktKontrOhneZielrelevanteEinheit: () =>
+    (get(data, 'apMitAktKontrOhneZielrelevanteEinheit.nodes') || []).map(
+      (n) => ({
+        url: ['Projekte', projId, 'Aktionspläne', apId],
+        text: `AP mit Kontrollen im aktuellen Jahr. Aber eine Ziel-relevante Einheit fehlt`,
+      }),
+    ),
   apOhneVerantwortlich: () =>
     (get(data, 'apOhneVerantwortlich.apsByProjId.nodes') || []).map((n) => ({
       url: ['Projekte', projId, 'Aktionspläne', apId],
