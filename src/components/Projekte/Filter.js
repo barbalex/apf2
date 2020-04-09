@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import ErrorBoundary from 'react-error-boundary'
 
 import ApFilter from './Daten/ApFilter'
-import Pop from './Daten/Pop'
+import PopFilter from './Daten/PopFilter'
 import Tpop from './Daten/Tpop'
 import Tpopmassn from './Daten/Tpopmassn'
 import Tpopfeldkontr from './Daten/Tpopfeldkontr'
@@ -43,7 +43,7 @@ export default ({ treeName }) => {
 
   const formObject = {
     ap: <ApFilter treeName={treeName} />,
-    pop: <Pop treeName={treeName} showFilter={true} />,
+    pop: <PopFilter treeName={treeName} />,
     tpop: <Tpop treeName={treeName} showFilter={true} />,
     tpopmassn: <Tpopmassn treeName={treeName} showFilter={true} />,
     tpopfeldkontr: <Tpopfeldkontr treeName={treeName} showFilter={true} />,

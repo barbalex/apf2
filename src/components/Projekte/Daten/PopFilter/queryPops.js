@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query allPopsQueryForPop(
+  query allPopsQueryForPopFilter(
     $showFilter: Boolean!
     $popFilter: PopFilter!
     $popApFilter: PopFilter!
