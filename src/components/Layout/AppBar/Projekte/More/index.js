@@ -104,7 +104,7 @@ const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
           onClick={onClickLogout}
           data-id="appbar-more-logout"
         >{`${user.name} abmelden (und Cache leeren)`}</MenuItem>
-        <Version>Version: 1.32.0 vom 8.04.2020</Version>
+        <Version>Version: 1.32.1 vom 9.04.2020</Version>
       </Menu>
     </Container>
   )
