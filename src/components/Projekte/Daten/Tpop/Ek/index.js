@@ -77,7 +77,7 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
     queryEk,
     {
       variables: {
-        id: row.id,
+        id: row.id || '99999999-9999-9999-9999-999999999999',
         isEk: true,
       },
     },
@@ -98,9 +98,9 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
 
   const ekfrequenzOptions0 = get(dataEkfrequenzs, 'allEkfrequenzs.nodes', [])
   const longestAnwendungsfall = max(
-    ekfrequenzOptions0.map(a => (a.anwendungsfall || '').length),
+    ekfrequenzOptions0.map((a) => (a.anwendungsfall || '').length),
   )
-  const ekfrequenzOptions = ekfrequenzOptions0.map(o => {
+  const ekfrequenzOptions = ekfrequenzOptions0.map((o) => {
     const code = (o.code || '').padEnd(8)
     const anwendungsfall =
       `${(o.anwendungsfall || '').padEnd(longestAnwendungsfall)}` || ''
@@ -113,11 +113,11 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
   const ekGroupedByYear = groupBy(
     [
       ...get(dataEk, 'allTpopkontrs.nodes', [])
-        .filter(e => e.jahr !== null)
-        .map(t => ({ ...t, is: 'ek' })),
+        .filter((e) => e.jahr !== null)
+        .map((t) => ({ ...t, is: 'ek' })),
       ...get(dataEk, 'allEkplans.nodes', [])
-        .filter(e => e.jahr !== null)
-        .map(t => ({ ...t, is: 'ekplan' })),
+        .filter((e) => e.jahr !== null)
+        .map((t) => ({ ...t, is: 'ekplan' })),
     ],
     'jahr',
   )
@@ -189,7 +189,7 @@ const Tpop = ({ treeName, showFilter, onSubmit, row }) => {
                   ) : (
                     Object.keys(ekGroupedByYear)
                       .reverse()
-                      .map(year => (
+                      .map((year) => (
                         <EkYear key={year} data={ekGroupedByYear[year]} />
                       ))
                   )}
