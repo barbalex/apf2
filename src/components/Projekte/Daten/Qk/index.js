@@ -77,8 +77,6 @@ const QkForm = ({ treeName }) => {
     [setUrlQuery, urlQuery],
   )
 
-  console.log('Qk, tab:', tab)
-
   if (error) return `Fehler: ${error.message}`
   return (
     <ErrorBoundary>

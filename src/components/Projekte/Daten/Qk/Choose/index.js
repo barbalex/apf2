@@ -17,6 +17,9 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
+const LoadingContainer = styled.div`
+  padding: 10px;
+`
 const FieldsContainer = styled.div`
   padding: 10px 0;
   overflow: auto !important;
@@ -57,8 +60,12 @@ const ChooseQk = ({ treeName, refetchTab }) => {
     ? `filtern: ${rowsFiltered.length}/${rows.length}`
     : 'filtern'
 
-  if (error) return <Container>{`Fehler: ${error.message}`}</Container>
-  if (loading) return <Container>Lade Daten...</Container>
+  if (error) {
+    return <LoadingContainer>{`Fehler: ${error.message}`}</LoadingContainer>
+  }
+  if (loading) {
+    return <LoadingContainer>Lade Daten...</LoadingContainer>
+  }
   return (
     <ErrorBoundary>
       <Container>
