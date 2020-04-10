@@ -223,7 +223,7 @@ const SortableItem = SortableElement(
         onChange={() => {
           if (activeOverlays.includes(overlay.value)) {
             return setActiveOverlays(
-              activeOverlays.filter(o => o !== overlay.value),
+              activeOverlays.filter((o) => o !== overlay.value),
             )
           }
           return setActiveOverlays([...activeOverlays, overlay.value])
@@ -231,8 +231,8 @@ const SortableItem = SortableElement(
       />
       <IconsDivs>
         {(layerLegends[overlay.value] || [])
-          .filter(layer => !!layer.url)
-          .map(layer => (
+          .filter((layer) => !!layer.url)
+          .map((layer) => (
             <IconsDiv key={layer.name}>
               <div>
                 <StyledIconButton
@@ -282,9 +282,9 @@ const Overlays = () => {
     setActiveOverlays,
   } = useContext(storeContext)
 
-  console.log('Karte, LayersControl, Overlays', {
+  /*console.log('Karte, LayersControl, Overlays', {
     overlays: getSnapshot(overlays),
-  })
+  })*/
 
   const onSortEnd = useCallback(
     ({ oldIndex, newIndex }) =>
