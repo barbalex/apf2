@@ -4,7 +4,7 @@
  * work there :-(
  */
 import React from 'react'
-import Helmet from 'react-helmet'
+import { Helmet } from 'react-helmet'
 import { useStaticQuery, graphql } from 'gatsby'
 import styled from 'styled-components'
 
