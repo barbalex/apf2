@@ -1,5 +1,8 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useCallback } from 'react'
 import styled from 'styled-components'
+import Input from '@material-ui/core/Input'
+import InputLabel from '@material-ui/core/InputLabel'
+import FormControl from '@material-ui/core/FormControl'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
 import ErrorBoundary from 'react-error-boundary'
@@ -19,6 +22,15 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
   height: 100%;
 `
+const FilterContainer = styled.div`
+  padding: 0 60px;
+`
+const StyledFormControl = styled(FormControl)`
+  padding-bottom: 19px !important;
+  > div:before {
+    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+  }
+`
 
 const ChooseQk = ({ treeName, refetchTab }) => {
   const store = useContext(storeContext)
@@ -28,13 +40,36 @@ const ChooseQk = ({ treeName, refetchTab }) => {
   const { data, error, loading } = useQuery(query)
   const rows = get(data, 'allQks.nodes')
 
+  const [filter, setFilter] = useState('')
+  const onChangeFilter = useCallback(
+    (event) => setFilter(event.target.value),
+    [],
+  )
+  const rowsFiltered = !!filter
+    ? rows.filter((r) => {
+        if (!r.titel) return false
+        const rTitel = r.titel.toLowerCase ? r.titel.toLowerCase() : r.titel
+        const filterValue = filter.toLowerCase ? filter.toLowerCase() : filter
+        return rTitel.includes(filterValue)
+      })
+    : rows
+  const label = !!filter
+    ? `filtern: ${rowsFiltered.length}/${rows.length}`
+    : 'filtern'
+
   if (error) return <Container>{`Fehler: ${error.message}`}</Container>
   if (loading) return <Container>Lade Daten...</Container>
   return (
     <ErrorBoundary>
       <Container>
         <FieldsContainer>
-          {rows.map(row => (
+          <FilterContainer>
+            <StyledFormControl fullWidth>
+              <InputLabel htmlFor="filter">{label}</InputLabel>
+              <Input id="filter" value={filter} onChange={onChangeFilter} />
+            </StyledFormControl>
+          </FilterContainer>
+          {rowsFiltered.map((row) => (
             <RowComponent
               key={row.name}
               apId={apId}
