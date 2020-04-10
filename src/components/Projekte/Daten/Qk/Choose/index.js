@@ -7,6 +7,7 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
 import ErrorBoundary from 'react-error-boundary'
 import get from 'lodash/get'
+import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
 
 import query from './query'
 import RowComponent from './Row'
@@ -18,6 +19,16 @@ const Container = styled.div`
   flex-direction: column;
 `
 const LoadingContainer = styled.div`
+  padding: 10px;
+`
+const SpinnerContainer = styled.div`
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
+const SpinnerText = styled.div`
   padding: 10px;
 `
 const FieldsContainer = styled.div`
@@ -64,7 +75,17 @@ const ChooseQk = ({ treeName, refetchTab }) => {
     return <LoadingContainer>{`Fehler: ${error.message}`}</LoadingContainer>
   }
   if (loading) {
-    return <LoadingContainer>Lade Daten...</LoadingContainer>
+    return (
+      <SpinnerContainer>
+        <Spinner
+          size={50}
+          frontColor="#2e7d32"
+          backColor="#4a148c1a"
+          loading={true}
+        />
+        <SpinnerText>lade Daten...</SpinnerText>
+      </SpinnerContainer>
+    )
   }
   return (
     <ErrorBoundary>
