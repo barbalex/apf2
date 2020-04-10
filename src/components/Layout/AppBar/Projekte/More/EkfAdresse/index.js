@@ -13,20 +13,20 @@ const Container = styled.div`
   padding: 0 16px;
 `
 
-const EkfAdresse = ({ setAnchorEl }) => {
+const EkfAdresse = ({ closeMenu }) => {
   const { data, error, loading } = useQuery(queryAdresses)
   const store = useContext(storeContext)
   const { setView, setEkfAdresseId } = store
   const choose = useCallback(
-    async event => {
-      setAnchorEl(null)
+    async (event) => {
+      closeMenu()
       // prevent this happening before seAnchor happened
       setTimeout(() => {
         setEkfAdresseId(event.target.value)
         setView('ekf')
       })
     },
-    [setAnchorEl, setEkfAdresseId, setView],
+    [closeMenu, setEkfAdresseId, setView],
   )
 
   if (loading) return '...'

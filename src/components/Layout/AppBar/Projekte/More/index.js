@@ -37,6 +37,7 @@ const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
   const { idb } = useContext(idbContext)
 
   const [anchorEl, setAnchorEl] = useState(null)
+  const closeMenu = useCallback(() => setAnchorEl(null), [])
   /**
    * need to clone projekteTabs
    * because otherwise removing elements errors out (because elements are sealed)
@@ -46,22 +47,21 @@ const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
   const isMobile = isMobilePhone()
 
   const showDeletedDatasets = useCallback(() => {
-    setAnchorEl(null)
+    closeMenu()
     // prevent following from happening
     // before setAnchor has finished
     setTimeout(() => setShowDeletions(true))
-  }, [setShowDeletions])
+  }, [closeMenu, setShowDeletions])
   const onClickMehrButton = useCallback(
     (event) => setAnchorEl(event.currentTarget),
     [],
   )
-  const onClose = useCallback(() => setAnchorEl(null), [])
   const onClickExporte = useCallback(() => {
-    setAnchorEl(null)
+    closeMenu()
     // prevent following from happening
     // before setAnchor has finished
     setTimeout(() => passedOnClickExporte())
-  }, [passedOnClickExporte])
+  }, [closeMenu, passedOnClickExporte])
   const onClickLogout = useCallback(() => {
     logout(idb)
   }, [idb])
@@ -81,7 +81,7 @@ const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
         id="appbar-more-menu"
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
-        onClose={onClose}
+        onClose={closeMenu}
       >
         {isMobile && exporteIsActive && (
           <MenuItem
@@ -98,7 +98,7 @@ const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
           gelöschte Datensätze wiederherstellen
         </MenuItem>
         {['apflora_manager', 'apflora_artverantwortlich'].includes(role) && (
-          <EkfAdresse setAnchorEl={setAnchorEl} />
+          <EkfAdresse closeMenu={closeMenu} />
         )}
         <MenuItem
           onClick={onClickLogout}
