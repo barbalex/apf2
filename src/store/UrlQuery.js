@@ -13,6 +13,7 @@ export default types
       types.maybeNull(types.string),
       'idealbiotop',
     ),
+    qkTab: types.optional(types.maybeNull(types.string), 'qk'),
   })
   .actions((self) => ({
     addProjekteTab(tab) {
@@ -26,6 +27,7 @@ export const defaultValue = {
   tpopTab: 'tpop',
   tpopmassnTab: 'tpopmassn',
   apTab: 'ap',
+  qkTab: 'qk',
   feldkontrTab: 'entwicklung',
   idealbiotopTab: 'idealbiotop',
 }

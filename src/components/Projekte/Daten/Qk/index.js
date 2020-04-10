@@ -18,7 +18,7 @@ const Container = styled.div`
   height: calc(100vh - 64px);
   display: flex;
   flex-direction: column;
-  background-color: ${props => (props.showfilter ? '#ffd3a7' : 'unset')};
+  background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
 `
 const FieldsContainer = styled.div`
   overflow: hidden !important;
@@ -50,20 +50,20 @@ const QkForm = ({ treeName }) => {
    */
   const allQks = get(data, 'allQks.nodes') || []
   const qks = allQks.filter(
-    qk =>
-      !!(get(data, 'allApqks.nodes') || []).find(no => no.qkName === qk.name),
+    (qk) =>
+      !!(get(data, 'allApqks.nodes') || []).find((no) => no.qkName === qk.name),
   )
   const qkNameQueries = Object.fromEntries(
-    allQks.map(n => [
+    allQks.map((n) => [
       n.name,
-      !!(get(data, 'allApqks.nodes') || []).find(no => no.qkName === n.name),
+      !!(get(data, 'allApqks.nodes') || []).find((no) => no.qkName === n.name),
     ]),
   )
 
   const qkCount = loading ? '...' : get(data, 'allQks.totalCount')
   const apqkCount = loading ? '...' : get(data, 'allApqks.totalCount')
 
-  const [tab, setTab] = useState(get(urlQuery, 'tpqkb', 'qk'))
+  const [tab, setTab] = useState(get(urlQuery, 'qkTab', 'qk'))
   const onChangeTab = useCallback(
     (event, value) => {
       setUrlQueryValue({
@@ -76,6 +76,8 @@ const QkForm = ({ treeName }) => {
     },
     [setUrlQuery, urlQuery],
   )
+
+  console.log('Qk, tab:', tab)
 
   if (error) return `Fehler: ${error.message}`
   return (
