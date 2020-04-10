@@ -60,7 +60,7 @@ const LayersControl = ({ treeName }) => {
   const [apfloraLayersExpanded, setApfloraLayersExpanded] = useState(false)
 
   const onToggleBaseLayersExpanded = useCallback(
-    event => {
+    (event) => {
       event.stopPropagation()
       setBaseLayersExpanded(!baseLayersExpanded)
       if (overlaysExpanded) {
@@ -109,10 +109,10 @@ const LayersControl = ({ treeName }) => {
     setBaseLayersExpanded(false)
   }, [])
 
-  console.log('LayersControl', {
+  /*console.log('LayersControl', {
     overlays: getSnapshot(overlays),
     overlaysExpanded,
-  })
+  })*/
 
   return (
     <Control position="topright">
@@ -135,7 +135,7 @@ const LayersControl = ({ treeName }) => {
                * overlaysString enforces rererender
                * even when only the sorting changes
                */
-              apfloraLayersString={apfloraLayers.map(o => o.value).join()}
+              apfloraLayersString={apfloraLayers.map((o) => o.value).join()}
             />
           )}
         </Card>
@@ -156,7 +156,7 @@ const LayersControl = ({ treeName }) => {
                * overlaysString enforces rererender
                * even when only the sorting changes
                */
-              overlaysString={overlays.map(o => o.value).join()}
+              overlaysString={overlays.map((o) => o.value).join()}
             />
           )}
         </Card>
