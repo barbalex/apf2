@@ -10,6 +10,7 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import ErrorBoundary from 'react-error-boundary'
+import { ImpulseSpinner as Spinner } from 'react-spinners-kit'
 
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import standardQkYear from '../../../../../modules/standardQkYear'
@@ -62,13 +63,14 @@ const StyledFormControl = styled(FormControl)`
     border-bottom-color: rgba(0, 0, 0, 0.1) !important;
   }
 `
-const StyledButton = styled(Button)`
+const AnalyzingButton = styled(Button)`
   margin-bottom: 15px !important;
   margin-top: -5px !important;
-  color: ${(props) =>
-    props.loading === 'true'
-      ? '#D84315 !important'
-      : 'rgb(46, 125, 50) !important'};
+  color: rgb(46, 125, 50) !important;
+  text-transform: none !important;
+`
+const AnalyzingSpan = styled.span`
+  padding-right: 13px;
 `
 
 const Qk = ({ treeName, qkNameQueries, qks }) => {
@@ -144,18 +146,23 @@ const Qk = ({ treeName, qkNameQueries, qks }) => {
             </InputLabel>
             <Input id="filter" value={filter} onChange={onChangeFilter} />
           </StyledFormControl>
-          <Badge
-            badgeContent={loading ? '...' : messageGroupsFiltered.length}
-            color="primary"
-          >
-            <StyledButton
-              onClick={() => refetch()}
-              variant="outlined"
-              loading={loading.toString()}
-            >
-              {loading ? 'Die Daten werden analysiert...' : 'neu analysieren'}
-            </StyledButton>
-          </Badge>
+          {loading ? (
+            <AnalyzingButton onClick={() => refetch()} variant="outlined">
+              <AnalyzingSpan>Die Daten werden analysiert</AnalyzingSpan>
+              <Spinner
+                size={50}
+                frontColor="#2e7d32"
+                backColor="#4a148c1a"
+                loading={true}
+              />
+            </AnalyzingButton>
+          ) : (
+            <Badge badgeContent={messageGroupsFiltered.length} color="primary">
+              <AnalyzingButton onClick={() => refetch()} variant="outlined">
+                neu analysieren
+              </AnalyzingButton>
+            </Badge>
+          )}
           {messageGroupsFiltered.map((messageGroup, index) => (
             <StyledPaper key={messageGroup.title} elevation={2}>
               <Title>{messageGroup.title}</Title>
