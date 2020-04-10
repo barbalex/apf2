@@ -9,7 +9,6 @@ import Overlays from './Overlays'
 import ApfloraLayers from './ApfloraLayers'
 import BaseLayers from './BaseLayers'
 import storeContext from '../../../../storeContext'
-import { getSnapshot } from 'mobx-state-tree'
 
 const CardContainer = styled.div`
   background-color: white;
