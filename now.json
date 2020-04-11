@@ -4,8 +4,8 @@
       "handle": "filesystem"
     },
     {
-      "src": "/.*",
-      "dest": "/index.html"
+      "src": "/Daten/.*",
+      "dest": "/Daten"
     }
   ]
 }
