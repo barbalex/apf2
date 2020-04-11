@@ -368,6 +368,13 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                       multiLine
                     />
                     <Field
+                      name="gefaehrdung"
+                      label="Gefährdung"
+                      type="text"
+                      component={TextField}
+                      multiLine
+                    />
+                    <Field
                       name="erfolgsbeurteilung"
                       label="Erfolgsbeurteilung"
                       type="text"

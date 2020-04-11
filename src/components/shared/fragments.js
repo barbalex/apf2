@@ -429,6 +429,7 @@ export const tpopfeldkontr = gql`
     ueberlebensrate
     entwicklung
     ursachen
+    gefaehrdung
     erfolgsbeurteilung
     umsetzungAendern
     kontrolleAendern
@@ -457,7 +458,6 @@ export const tpopfeldkontr = gql`
     deckungApArt
     vegetationshoeheMaximum
     vegetationshoeheMittel
-    gefaehrdung
     tpopId
     bearbeiter
     planVorhanden
@@ -515,6 +515,7 @@ export const tpopkontr = gql`
     ueberlebensrate
     entwicklung
     ursachen
+    gefaehrdung
     erfolgsbeurteilung
     umsetzungAendern
     kontrolleAendern
@@ -543,7 +544,6 @@ export const tpopkontr = gql`
     deckungApArt
     vegetationshoeheMaximum
     vegetationshoeheMittel
-    gefaehrdung
     tpopId
     bearbeiter
     planVorhanden

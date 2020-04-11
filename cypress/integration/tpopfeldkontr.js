@@ -27,10 +27,7 @@ describe('Teil-Population Feldkontrolle form', () => {
   })
   it('datum only accepts valid values', () => {
     const typedText = '01.02.1001'
-    cy.get('[data-id=datum] input')
-      .clear()
-      .type(typedText)
-      .blur()
+    cy.get('[data-id=datum] input').clear().type(typedText).blur()
     cy.contains('[data-id=datum] p', 'minimal')
   })
   it('updates datum', () => {
@@ -93,6 +90,14 @@ describe('Teil-Population Feldkontrolle form', () => {
   it('updates ursachen', () => {
     const typedText = 'test, bitte nicht löschen'
     cy.get('#ursachen')
+      .clear()
+      .type(typedText)
+      .blur()
+      .should('have.value', typedText)
+  })
+  it('updates gefaehrdung', () => {
+    const typedText = 'test, bitte nicht löschen'
+    cy.get('#gefaehrdung')
       .clear()
       .type(typedText)
       .blur()
