@@ -93,7 +93,7 @@ const Apberuebersicht = ({ treeName }) => {
     const now = new Date()
     const currentMonth = now.getMonth()
     const previousYear = now.getFullYear() - 1
-    return currentMonth < 4 && previousYear === row.jahr
+    return currentMonth < 3 && previousYear === row.jahr
   }, [row.jahr])
   const notHistorizedYet = !row.historyDate
   console.log('Aberuebersicht', {
