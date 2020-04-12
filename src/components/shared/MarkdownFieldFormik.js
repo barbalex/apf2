@@ -14,7 +14,7 @@ const mdParser = new MarkdownIt({ breaks: true })
 const Container = styled.div`
   position: relative;
   .rc-md-editor {
-    min-height: 98px;
+    min-height: 200px;
     resize: vertical;
     overflow: hidden;
   }
@@ -33,11 +33,18 @@ const ExpandContainer = styled.div`
   bottom: -6px;
   svg {
     font-size: 0.8em;
-    color: #333333;
+    color: #6b6b6b;
   }
 `
 const config = {
-  view: { menu: false, md: true, html: false },
+  view: { menu: true, md: true, html: false },
+  canView: {
+    menu: true,
+    md: true,
+    html: true,
+    fullScreen: true,
+    hideMenu: false,
+  },
   markdownClass: 'editorpane',
 }
 
