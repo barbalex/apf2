@@ -101,8 +101,9 @@ const SecondPageTitle = styled.label`
   font-size: 18px;
   font-weight: 700;
 `
-const SecondPageText = styled.p`
+const SecondPageText = styled.div`
   hyphens: auto;
+  padding-top: 0.2cm;
 `
 
 const ApberForYear = () => {
