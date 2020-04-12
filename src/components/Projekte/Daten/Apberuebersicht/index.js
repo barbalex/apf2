@@ -222,11 +222,13 @@ const Apberuebersicht = ({ treeName }) => {
                     {`AP, Pop und TPop historisieren, um den zeitlichen Verlauf auswerten zu können`}
                   </StyledButton>
                 )}
-                <Field
-                  name="bemerkungen"
-                  label="Bemerkungen"
-                  component={MdField}
-                />
+                {typeof window !== 'undefined' && (
+                  <Field
+                    name="bemerkungen"
+                    label="Bemerkungen"
+                    component={MdField}
+                  />
+                )}
               </Form>
             )}
           </Formik>

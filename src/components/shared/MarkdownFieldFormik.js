@@ -1,5 +1,4 @@
-import React, { useCallback } from 'react'
-import MdEditor from 'react-markdown-editor-lite'
+import React, { useCallback, Suspense, lazy } from 'react'
 import 'react-markdown-editor-lite/lib/index.css'
 import MarkdownIt from 'markdown-it'
 import FormHelperText from '@material-ui/core/FormHelperText'
@@ -8,6 +7,9 @@ import { observer } from 'mobx-react-lite'
 import { FaExpandArrowsAlt } from 'react-icons/fa'
 
 import Label from './Label'
+
+// need to lazy import because it calls navigator which busts gatsby build
+const MdEditor = lazy(() => import('react-markdown-editor-lite'))
 
 const mdParser = new MarkdownIt({ breaks: true })
 
@@ -69,19 +71,21 @@ const MarkdownField = ({ field, form, label, disabled }) => {
 
   return (
     <Container>
-      <Label label={label} />
-      <MdEditor
-        value={value}
-        renderHTML={(text) => mdParser.render(text)}
-        onChange={change}
-        config={config}
-      />
-      <ExpandContainer>
-        <FaExpandArrowsAlt />
-      </ExpandContainer>
-      {!!error && (
-        <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
-      )}
+      <Suspense fallback={<div>Lade...</div>}>
+        <Label label={label} />
+        <MdEditor
+          value={value}
+          renderHTML={(text) => mdParser.render(text)}
+          onChange={change}
+          config={config}
+        />
+        <ExpandContainer>
+          <FaExpandArrowsAlt />
+        </ExpandContainer>
+        {!!error && (
+          <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
+        )}
+      </Suspense>
     </Container>
   )
 }
