@@ -1,5 +1,5 @@
-DROP VIEW IF EXISTS apflora.v_ap_pop_prio CASCADE;
-CREATE OR REPLACE VIEW apflora.v_ap_pop_prio AS
+DROP VIEW IF EXISTS apflora.v_ap_pop_ek_prio CASCADE;
+CREATE OR REPLACE VIEW apflora.v_ap_pop_ek_prio AS
 with last_year as (
   select distinct year
   from apflora.ap_history
