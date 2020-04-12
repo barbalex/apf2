@@ -79,16 +79,27 @@ count_total_prev as (
 )
 select
   apflora.ap_history.id as ap_id,
-  previous_year.year as zuvor,
-  last_year.year as zuletzt,
+  apflora.ae_taxonomies.artname,
+  previous_year.year as jahr_zuvor,
+  last_year.year as jahr_zuletzt,
   coalesce(count_urspr_prev.anzahl, 0) as anz_pop_urspr_zuvor,
   coalesce(count_anges_prev.anzahl, 0) as anz_pop_anges_zuvor,
   coalesce(count_urspr_prev.anzahl, 0) + coalesce(count_anges_prev.anzahl, 0) as anz_pop_aktuell_zuvor,
   coalesce(count_urspr_last.anzahl, 0) as anz_pop_urspr_zuletzt,
   coalesce(count_anges_last.anzahl, 0) as anz_pop_anges_zuletzt,
-  coalesce(count_urspr_last.anzahl, 0) + coalesce(count_anges_last.anzahl, 0) as anz_pop_aktuell_zuletzt
+  coalesce(count_urspr_last.anzahl, 0) + coalesce(count_anges_last.anzahl, 0) as anz_pop_aktuell_zuletzt,
+  coalesce(count_urspr_last.anzahl, 0) - coalesce(count_urspr_prev.anzahl, 0) as diff_pop_urspr,
+  coalesce(count_anges_last.anzahl, 0) - coalesce(count_anges_prev.anzahl, 0) as diff_pop_anges,
+  (coalesce(count_urspr_last.anzahl, 0) + coalesce(count_anges_last.anzahl, 0)) - (coalesce(count_urspr_prev.anzahl, 0) + coalesce(count_anges_prev.anzahl, 0)) as diff_pop_aktuell,
+  apflora.ap_erfkrit_werte.text as beurteilung_zuletzt
 from
   apflora.ap_history
+  inner join apflora.ae_taxonomies
+  on apflora.ae_taxonomies.id = apflora.ap_history.art_id
+  left join apflora.apber
+    left join apflora.ap_erfkrit_werte
+    on apflora.ap_erfkrit_werte.code = apflora.apber.beurteilung
+  on apflora.apber.ap_id = apflora.ap_history.id
   left join count_urspr_last
   on count_urspr_last.ap_id = apflora.ap_history.id
   left join count_anges_last
@@ -100,4 +111,6 @@ from
   last_year, 
   previous_year
 where
-  apflora.ap_history.year = last_year.year;
+  apflora.ap_history.year = last_year.year
+order by
+  apflora.ae_taxonomies.artname;
