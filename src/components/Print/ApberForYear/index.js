@@ -6,6 +6,7 @@ import format from 'date-fns/format'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/react-hooks'
 import ErrorBoundary from 'react-error-boundary'
+import MarkdownIt from 'markdown-it'
 
 import query1 from './query1'
 import query2 from './query2'
@@ -15,6 +16,8 @@ import AktPopList from './AktPopList'
 import ErfolgList from './ErfolgList'
 import ApberForAp from '../ApberForAp'
 import storeContext from '../../../storeContext'
+
+const mdParser = new MarkdownIt({ breaks: true })
 
 const LoadingContainer = styled.div`
   padding: 15px;
@@ -131,9 +134,9 @@ const ApberForYear = () => {
   const apberuebersicht = get(data1, 'apberuebersichtById')
   const aps = sortBy(
     get(data2, 'allAps.nodes', []).filter(
-      ap => get(ap, 'apbersByApId.totalCount', 0) > 0,
+      (ap) => get(ap, 'apbersByApId.totalCount', 0) > 0,
     ),
-    ap => get(ap, 'aeTaxonomyByArtId.artname'),
+    (ap) => get(ap, 'aeTaxonomyByArtId.artname'),
   )
 
   if (data1Loading || data2Loading) {
@@ -167,7 +170,13 @@ const ApberForYear = () => {
             <SecondPage>
               <SecondPageTop />
               <SecondPageTitle>Zusammenfassung</SecondPageTitle>
-              <SecondPageText>{apberuebersicht.bemerkungen}</SecondPageText>
+              <SecondPageText>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: mdParser.render(apberuebersicht.bemerkungen),
+                  }}
+                />
+              </SecondPageText>
             </SecondPage>
           )}
           <AvList data={data} />

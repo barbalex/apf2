@@ -3,12 +3,14 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
-import ReactMarkdown from 'react-markdown'
+import MarkdownIt from 'markdown-it'
 import ErrorBoundary from 'react-error-boundary'
 
 import FormTitle from '../../../shared/FormTitle'
 import storeContext from '../../../../storeContext'
 import { currentIssue as currentIssueFragment } from '../../../shared/fragments'
+
+const mdParser = new MarkdownIt({ breaks: true })
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -65,10 +67,10 @@ const CurrentIssue = ({ treeName }) => {
           table="currentissue"
         />
         <FieldsContainer>
-          <ReactMarkdown
-            source={row.issue}
-            escapeHtml={false}
-            linkTarget="_blank"
+          <div
+            dangerouslySetInnerHTML={{
+              __html: mdParser.render(row.issue),
+            }}
           />
         </FieldsContainer>
       </Container>
