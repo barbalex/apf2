@@ -11,7 +11,7 @@ import format from 'date-fns/format'
 import gql from 'graphql-tag'
 
 import TextField from '../../../shared/TextFieldFormik'
-import MarkdownField from '../../../shared/MarkdownFieldFormik'
+import MdField from '../../../shared/MarkdownFieldFormik'
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import FormTitle from '../../../shared/FormTitle'
 import updateApberuebersichtByIdGql from './updateApberuebersichtById'
@@ -225,14 +225,7 @@ const Apberuebersicht = ({ treeName }) => {
                 <Field
                   name="bemerkungen"
                   label="Bemerkungen"
-                  type="text"
-                  multiLine
-                  component={TextField}
-                />
-                <Field
-                  name="bemerkungen"
-                  label="Bemerkungen"
-                  component={MarkdownField}
+                  component={MdField}
                 />
               </Form>
             )}

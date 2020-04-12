@@ -1,29 +1,44 @@
-/**
- * usinf react-mde fork https://github.com/fhessenberger/react-mde
- * because of autoGrow feature that andrerpena will not implement
- * see: https://github.com/andrerpena/react-mde/pull/209#issuecomment-583604908
- */
-import React, { useState, useCallback } from 'react'
-import ReactMde from 'react-mde'
-import ReactMarkdown from 'react-markdown'
+import React, { useCallback } from 'react'
+import MdEditor from 'react-markdown-editor-lite'
+import 'react-markdown-editor-lite/lib/index.css'
+import MarkdownIt from 'markdown-it'
 import FormHelperText from '@material-ui/core/FormHelperText'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
-import 'react-mde/lib/styles/css/react-mde-all.css'
+import { FaExpandArrowsAlt } from 'react-icons/fa'
 
 import Label from './Label'
 
-const StyledReactMde = styled(ReactMde)`
-  .mde-text,
-  .mde-header,
-  .grip {
-    background: #fffde7 !important;
+const mdParser = new MarkdownIt({ breaks: true })
+
+const Container = styled.div`
+  position: relative;
+  .rc-md-editor {
+    min-height: 98px;
+    resize: vertical;
+    overflow: hidden;
+  }
+  .editorpane {
+    overflow-y: auto !important;
+  }
+  .editorpane,
+  .html-wrap,
+  .rc-md-navigation {
+    background-color: #fffde7 !important;
   }
 `
-
-const enL18n = {
-  write: 'bearbeiten',
-  preview: 'Vorschau',
+const ExpandContainer = styled.div`
+  position: absolute;
+  right: 0;
+  bottom: -6px;
+  svg {
+    font-size: 0.8em;
+    color: #333333;
+  }
+`
+const config = {
+  view: { menu: false, md: true, html: false },
+  markdownClass: 'editorpane',
 }
 
 const MarkdownField = ({ field, form, label, disabled }) => {
@@ -31,13 +46,12 @@ const MarkdownField = ({ field, form, label, disabled }) => {
   const { errors } = form
   const error = errors[name]
 
-  const [selectedTab, setSelectedTab] = useState('write') // or: preview
   const change = useCallback(
-    (value) => {
+    ({ html, text }) => {
       const fakeEvent = {
         target: {
           name,
-          value,
+          value: text,
         },
       }
       onChange(fakeEvent)
@@ -47,22 +61,21 @@ const MarkdownField = ({ field, form, label, disabled }) => {
   )
 
   return (
-    <>
+    <Container>
       <Label label={label} />
-      <StyledReactMde
+      <MdEditor
         value={value}
+        renderHTML={(text) => mdParser.render(text)}
         onChange={change}
-        selectedTab={selectedTab}
-        onTabChange={setSelectedTab}
-        generateMarkdownPreview={(markdown) =>
-          Promise.resolve(<ReactMarkdown source={markdown} />)
-        }
-        l18n={enL18n}
+        config={config}
       />
+      <ExpandContainer>
+        <FaExpandArrowsAlt />
+      </ExpandContainer>
       {!!error && (
         <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
       )}
-    </>
+    </Container>
   )
 }
 
