@@ -38,18 +38,6 @@ count_anges_last as (
   group by
     apflora.pop_history.ap_id
 ),
-count_total_last as (
-  select
-    apflora.pop_history.ap_id,
-    count(apflora.pop_history.*) as anzahl
-  from
-    apflora.pop_history
-    inner join last_year
-    on last_year.year = apflora.pop_history.year
-  where
-    apflora.pop_history.status in (100, 200)
-  group by
-    apflora.pop_history.ap_id),
 count_urspr_prev as (
   select
     apflora.pop_history.ap_id,
@@ -88,22 +76,27 @@ count_total_prev as (
     apflora.pop_history.status in (100, 200)
   group by
     apflora.pop_history.ap_id
-),
-diff_urspr as (),
-diff_anges as (),
-diff_total as (),
+)
 select
   apflora.ap_history.id as ap_id,
-  last_year.year as zuletzt,
   previous_year.year as zuvor,
-  count_urspr_last.anzahl as anz_pop_urspr_zuletzt,
-  count_anges_last.anzahl as anz_pop_anges_zuletzt
+  last_year.year as zuletzt,
+  coalesce(count_urspr_prev.anzahl, 0) as anz_pop_urspr_zuvor,
+  coalesce(count_anges_prev.anzahl, 0) as anz_pop_anges_zuvor,
+  coalesce(count_urspr_prev.anzahl, 0) + coalesce(count_anges_prev.anzahl, 0) as anz_pop_aktuell_zuvor,
+  coalesce(count_urspr_last.anzahl, 0) as anz_pop_urspr_zuletzt,
+  coalesce(count_anges_last.anzahl, 0) as anz_pop_anges_zuletzt,
+  coalesce(count_urspr_last.anzahl, 0) + coalesce(count_anges_last.anzahl, 0) as anz_pop_aktuell_zuletzt
 from
   apflora.ap_history
   left join count_urspr_last
   on count_urspr_last.ap_id = apflora.ap_history.id
   left join count_anges_last
-  on count_anges_last.ap_id = apflora.ap_history.id,
+  on count_anges_last.ap_id = apflora.ap_history.id
+  left join count_urspr_prev
+  on count_urspr_prev.ap_id = apflora.ap_history.id
+  left join count_anges_prev
+  on count_anges_prev.ap_id = apflora.ap_history.id,
   last_year, 
   previous_year
 where
