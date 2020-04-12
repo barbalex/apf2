@@ -108,6 +108,7 @@
     "react-leaflet-markercluster": "2.0.0",
     "react-linkify": "1.0.0-alpha",
     "react-markdown": "4.3.1",
+    "react-mde": "8.2.0",
     "react-resize-detector": "4.2.1",
     "react-select": "3.1.0",
     "react-sortable-hoc": "1.11.0",

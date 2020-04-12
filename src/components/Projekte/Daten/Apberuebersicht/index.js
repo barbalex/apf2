@@ -11,6 +11,7 @@ import format from 'date-fns/format'
 import gql from 'graphql-tag'
 
 import TextField from '../../../shared/TextFieldFormik'
+import MarkdownField from '../../../shared/MarkdownFieldFormik'
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import FormTitle from '../../../shared/FormTitle'
 import updateApberuebersichtByIdGql from './updateApberuebersichtById'
@@ -61,11 +62,13 @@ const Apberuebersicht = ({ treeName }) => {
 
   const onSubmit = useCallback(
     async (values, { setErrors }) => {
+      console.log('Apberuebersicht, onSubmit', { values, row })
       const changedField = objectsFindChangedKey(values, row)
       const variables = {
         ...objectsEmptyValuesToNull(values),
         changedBy: store.user.name,
       }
+      console.log('Apberuebersicht, onSubmit', { changedField })
       try {
         await client.mutate({
           mutation: updateApberuebersichtByIdGql,
@@ -96,12 +99,6 @@ const Apberuebersicht = ({ treeName }) => {
     return currentMonth < 3 && previousYear === row.jahr
   }, [row.jahr])
   const notHistorizedYet = !row.historyDate
-  console.log('Aberuebersicht', {
-    userIsManager,
-    isJanuaryThroughMarchOfFollowingYear,
-    notHistorizedYet,
-    historyDate: row.historyDate,
-  })
   const showHistorize =
     userIsManager && isJanuaryThroughMarchOfFollowingYear && notHistorizedYet
 
@@ -231,6 +228,11 @@ const Apberuebersicht = ({ treeName }) => {
                   type="text"
                   multiLine
                   component={TextField}
+                />
+                <Field
+                  name="bemerkungen"
+                  label="Bemerkungen"
+                  component={MarkdownField}
                 />
               </Form>
             )}
