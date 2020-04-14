@@ -19,7 +19,7 @@
     "svgr": "svgr -d src/icons/ svg/"
   },
   "dependencies": {
-    "@apollo/react-hooks": "3.1.4",
+    "@apollo/react-hooks": "3.1.5",
     "@material-ui/core": "4.9.10",
     "@material-ui/icons": "4.9.1",
     "@turf/bbox-polygon": "6.0.1",
@@ -43,7 +43,7 @@
     "exceljs": "3.8.2",
     "file-saver": "2.0.2",
     "formik": "2.1.4",
-    "gatsby": "2.20.18",
+    "gatsby": "2.20.20",
     "gatsby-image": "2.3.2",
     "gatsby-plugin-create-client-paths": "2.2.1",
     "gatsby-plugin-eslint": "2.0.8",
@@ -93,7 +93,7 @@
     "proj4": "2.6.1",
     "proj4leaflet": "1.0.2",
     "prop-types": "15.7.2",
-    "query-string": "6.12.0",
+    "query-string": "6.12.1",
     "react": "16.13.1",
     "react-contextmenu": "2.13.0",
     "react-copy-to-clipboard": "5.0.2",
@@ -121,7 +121,7 @@
     "typeface-roboto": "0.0.75",
     "typeface-roboto-mono": "0.0.75",
     "typography": "0.16.19",
-    "uploadcare-widget": "3.8.3",
+    "uploadcare-widget": "3.9.1",
     "use-debounce": "3.4.1"
   },
   "dependenciesComments": {
@@ -135,7 +135,7 @@
     "@graphile/postgis": "0.1.0",
     "@svgr/cli": "5.3.1",
     "copyfiles": "2.2.0",
-    "cypress": "4.3.0",
+    "cypress": "4.4.0",
     "postgraphile": "4.6.0",
     "postgraphile-plugin-connection-filter": "1.1.3",
     "postgraphile-plugin-connection-filter-postgis": "1.0.0-alpha.5",
