@@ -45,8 +45,6 @@ const GeoJSONLayer = () => {
     geometry: JSON.parse(get(n, 'wkbGeometry.geojson')),
   }))
 
-  //console.log('Gemeinden, gemeinden:', gemeinden)
-
   if (error) console.log(error)
 
   if (!data) return null
