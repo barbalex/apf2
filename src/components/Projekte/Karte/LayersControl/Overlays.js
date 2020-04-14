@@ -220,13 +220,12 @@ const SortableItem = SortableElement(
         value={overlay.value}
         label={overlay.label}
         checked={activeOverlays.includes(overlay.value)}
-        onChange={() => {
+        onChange={async () => {
           if (activeOverlays.includes(overlay.value)) {
             return setActiveOverlays(
               activeOverlays.filter((o) => o !== overlay.value),
             )
           }
-          // TODO: load data if necessary
           return setActiveOverlays([...activeOverlays, overlay.value])
         }}
       />
@@ -282,10 +281,6 @@ const Overlays = () => {
     activeOverlays,
     setActiveOverlays,
   } = useContext(storeContext)
-
-  /*console.log('Karte, LayersControl, Overlays', {
-    overlays: getSnapshot(overlays),
-  })*/
 
   const onSortEnd = useCallback(
     ({ oldIndex, newIndex }) =>

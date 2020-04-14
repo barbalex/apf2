@@ -18,14 +18,9 @@ const DetailplaeneLayer = () => {
   const { detailplaene, setDetailplaene } = store
   !detailplaene && fetchDetailplaene({ setDetailplaene, store })
 
+  if (!detailplaene) return null
   return (
-    detailplaene && (
-      <GeoJSON
-        data={detailplaene}
-        style={style}
-        onEachFeature={onEachFeature}
-      />
-    )
+    <GeoJSON data={detailplaene} style={style} onEachFeature={onEachFeature} />
   )
 }
 

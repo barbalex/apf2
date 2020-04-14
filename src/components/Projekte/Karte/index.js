@@ -41,7 +41,7 @@ import ZhPflegeplan from './layers/ZhPflegeplan'
 import ZhSvoGrey from './layers/ZhSvoGrey'
 import ZhLrVegKartierungen from './layers/ZhLrVegKartierungen'
 import ZhLichteWaelder from './layers/ZhLichteWaelder'
-import ZhGemeindegrenzen from './layers/ZhGemeindegrenzen'
+import Gemeindegrenzen from './layers/Gemeindegrenzen'
 import ZhWaelderVegetation from './layers/ZhWaelderVegetation'
 import ZhUepOverlay from './layers/ZhUepOverlay'
 import '../../../../node_modules/leaflet/dist/leaflet.css'
@@ -454,7 +454,7 @@ const Karte = ({ treeName }) => {
       Detailplaene: () => <Detailplaene />,
       Markierungen: () => <Markierungen />,
       Massnahmen: () => <Massnahmen />,
-      ZhGemeindegrenzen: () => <ZhGemeindegrenzen />,
+      Gemeindegrenzen: () => <Gemeindegrenzen />,
       ZhSvoColor: () => <ZhSvoColor />,
       ZhSvoGrey: () => <ZhSvoGrey />,
       ZhPflegeplan: () => <ZhPflegeplan />,
@@ -462,7 +462,7 @@ const Karte = ({ treeName }) => {
       ZhLichteWaelder: () => <ZhLichteWaelder />,
       ZhWaelderVegetation: () => <ZhWaelderVegetation />,
     }),
-    [activeOverlays],
+    [],
   )
   const BaseLayerComponents = useMemo(
     () => ({
@@ -583,6 +583,9 @@ const Karte = ({ treeName }) => {
           {activeOverlaysSorted
             .map((overlayName) => {
               const OverlayComponent = OverlayComponents[overlayName]
+              // prevent bad error if wrong overlayName was passed
+              // for instance after an overlay was renamed but user still has old name in cache
+              if (!OverlayComponent) return null
               return <OverlayComponent key={overlayName} />
             })
             .reverse()}
