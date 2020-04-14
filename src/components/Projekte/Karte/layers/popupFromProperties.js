@@ -6,9 +6,9 @@ export default (p) =>
     .filter((e) => !!e[1])
     .sort()
     .map(
-      (entry) =>
+      ([key, value]) =>
         `<div style="display:flex;justify-content:space-between;">
-      <div>${entry[0]}:</div><div>${entry[1]}</div>
+      <div>${key}:</div><div>&nbsp;${value}</div>
     </div>`,
     )
     .join('')}

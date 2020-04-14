@@ -6,7 +6,17 @@ import popupFromProperties from './popupFromProperties'
 import fetchDetailplaene from '../../../../modules/fetchDetailplaene'
 import storeContext from '../../../../storeContext'
 
-const style = () => ({ fill: false, color: 'red', weight: 1 })
+// see: https://leafletjs.com/reference-1.6.0.html#path-option
+// need to fill or else popup will only happen when line is clicked
+// when fill is true, need to give stroke an opacity
+const style = () => ({
+  fill: true,
+  fillOpacity: 0,
+  color: 'red',
+  weight: 1,
+  opacity: 1,
+})
+
 const onEachFeature = (feature, layer) => {
   if (feature.properties) {
     layer.bindPopup(popupFromProperties(feature.properties))

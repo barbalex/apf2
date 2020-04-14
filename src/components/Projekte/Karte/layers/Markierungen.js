@@ -7,7 +7,13 @@ import popupFromProperties from './popupFromProperties'
 import fetchMarkierungen from '../../../../modules/fetchMarkierungen'
 import storeContext from '../../../../storeContext'
 
-const style = () => ({ fill: false, color: 'orange', weight: 1 })
+const style = () => ({
+  fill: true,
+  fillOpacity: 0,
+  color: 'orange',
+  weight: 1,
+  opacity: 1,
+})
 const onEachFeature = (feature, layer) => {
   if (feature.properties) {
     layer.bindPopup(popupFromProperties(feature.properties))
