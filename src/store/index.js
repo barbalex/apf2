@@ -269,6 +269,9 @@ const myTypes = types
     setActiveOverlays(val) {
       self.activeOverlays = val
     },
+    addActiveOverlay(val) {
+      // TODO: load data beforehand if necessary
+    },
     setActiveBaseLayer(val) {
       self.activeBaseLayer = val
     },

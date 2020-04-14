@@ -1,5 +1,8 @@
 import React from 'react'
-import { WMSTileLayer } from 'react-leaflet'
+import { WMSTileLayer, GeoJSON } from 'react-leaflet'
+import { useQuery } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
+import get from 'lodash/get'
 
 const GemeindegrenzenLayer = () => (
   <WMSTileLayer
@@ -15,4 +18,43 @@ const GemeindegrenzenLayer = () => (
   />
 )
 
-export default GemeindegrenzenLayer
+const GeoJSONLayer = () => {
+  const { data, loading, error } = useQuery(gql`
+    query test {
+      allChGemeindes {
+        nodes {
+          name
+          wkbGeometry {
+            geojson
+          }
+        }
+      }
+    }
+  `)
+
+  //if (!data) return null
+  const nodes = get(data, 'allChGemeindes.nodes') || []
+  const data2 = nodes.map((n) => {
+    const geometry = JSON.parse(get(n, 'wkbGeometry.geojson'))
+    delete geometry.crs
+    return {
+      type: 'Feature',
+      properties: { name: n.name || '' },
+      geometry,
+    }
+  })
+  data && console.log('ZhGemeindegrenzen, data2:', data2)
+
+  return (
+    <GeoJSON
+      data={data2}
+      //opacity={0.5}
+      //transparent={true}
+      //maxNativeZoom={18}
+      //minZoom={0}
+      //maxZoom={22}
+    />
+  )
+}
+
+export default GeoJSONLayer

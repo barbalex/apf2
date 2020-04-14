@@ -226,6 +226,7 @@ const SortableItem = SortableElement(
               activeOverlays.filter((o) => o !== overlay.value),
             )
           }
+          // TODO: load data if necessary
           return setActiveOverlays([...activeOverlays, overlay.value])
         }}
       />

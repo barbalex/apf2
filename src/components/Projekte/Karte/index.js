@@ -89,7 +89,7 @@ const Container = styled.div`
 `
 const StyledMap = styled(Map)`
   height: calc(100%);
-  cursor: ${props => (props.localizing ? 'crosshair' : 'grab')} !important;
+  cursor: ${(props) => (props.localizing ? 'crosshair' : 'grab')} !important;
   @media print {
     height: 100%;
     width: 100%;
@@ -435,7 +435,7 @@ const Karte = ({ treeName }) => {
   const mapRef = useRef(null)
 
   const setMouseCoords = useCallback(
-    e => {
+    (e) => {
       const [x, y] = epsg4326to2056(e.latlng.lng, e.latlng.lat)
       setMapMouseCoordinates({ x, y })
     },
@@ -462,7 +462,7 @@ const Karte = ({ treeName }) => {
       ZhLichteWaelder: () => <ZhLichteWaelder />,
       ZhWaelderVegetation: () => <ZhWaelderVegetation />,
     }),
-    [],
+    [activeOverlays],
   )
   const BaseLayerComponents = useMemo(
     () => ({
@@ -484,8 +484,8 @@ const Karte = ({ treeName }) => {
     [],
   )
   const BaseLayerComponent = BaseLayerComponents[activeBaseLayer]
-  const activeOverlaysSorted = sortBy(activeOverlays, activeOverlay =>
-    overlays.findIndex(o => o.value === activeOverlay),
+  const activeOverlaysSorted = sortBy(activeOverlays, (activeOverlay) =>
+    overlays.findIndex((o) => o.value === activeOverlay),
   )
 
   if (typeof window === 'undefined') return null
@@ -505,7 +505,7 @@ const Karte = ({ treeName }) => {
           maxZoom={22}
           minZoom={0}
           doubleClickZoom={false}
-          onDblclick={async event => {
+          onDblclick={async (event) => {
             // since 2018 10 31 using idOfTpopBeingLocalized directly
             // returns null, so need to use store.idOfTpopBeingLocalized
             const { idOfTpopBeingLocalized } = store
@@ -581,7 +581,7 @@ const Karte = ({ treeName }) => {
         >
           {activeBaseLayer && <BaseLayerComponent />}
           {activeOverlaysSorted
-            .map(overlayName => {
+            .map((overlayName) => {
               const OverlayComponent = OverlayComponents[overlayName]
               return <OverlayComponent key={overlayName} />
             })

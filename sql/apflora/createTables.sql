@@ -1602,6 +1602,11 @@ CREATE POLICY writer ON apflora.apqk
     OR current_user = 'apflora_artverantwortlich'
   );
 
+-- apflora.ch_gemeinde is imported from:
+-- https://data.geo.admin.ch/ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill/gdb/2056/ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill.zip
+create index on apflora.ch_gemeinde using btree (name);
+comment on table apflora.ch_gemeinde is 'Quelle: https://data.geo.admin.ch/ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill/gdb/2056/ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill.zip'
+
 --truncate apflora.apqk
 --insert into apflora.apqk(ap_id, qk_name)
 --select distinct apflora.ap.id, apflora.qk.name from apflora.ap, apflora.qk where apflora.ap.bearbeitung is null
