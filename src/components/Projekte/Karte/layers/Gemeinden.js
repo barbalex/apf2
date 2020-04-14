@@ -6,6 +6,7 @@ import get from 'lodash/get'
 
 import popupFromProperties from './popupFromProperties'
 const onEachFeature = (feature, layer) => {
+  console.log('onEachFeature', { feature, layer })
   if (feature.properties) {
     layer.bindPopup(popupFromProperties(feature.properties))
   }
@@ -36,18 +37,15 @@ const GeoJSONLayer = () => {
       geometry,
     }
   })
-  const gemeindenFC = {
-    type: 'FeatureCollection',
-    name: 'Gemeinden',
-    features: gemeinden,
-  }
+
+  console.log('Gemeinden, gemeinden:', gemeinden)
 
   if (error) console.log(error)
 
   if (!data) return null
 
   return (
-    <GeoJSON data={gemeindenFC} style={style} onEachFeature={onEachFeature} />
+    <GeoJSON data={gemeinden} style={style} onEachFeature={onEachFeature} />
   )
 }
 

@@ -41,7 +41,7 @@ import ZhPflegeplan from './layers/ZhPflegeplan'
 import ZhSvoGrey from './layers/ZhSvoGrey'
 import ZhLrVegKartierungen from './layers/ZhLrVegKartierungen'
 import ZhLichteWaelder from './layers/ZhLichteWaelder'
-import Gemeindegrenzen from './layers/Gemeindegrenzen'
+import Gemeinden from './layers/Gemeinden'
 import ZhWaelderVegetation from './layers/ZhWaelderVegetation'
 import ZhUepOverlay from './layers/ZhUepOverlay'
 import '../../../../node_modules/leaflet/dist/leaflet.css'
@@ -454,7 +454,7 @@ const Karte = ({ treeName }) => {
       Detailplaene: () => <Detailplaene />,
       Markierungen: () => <Markierungen />,
       Massnahmen: () => <Massnahmen />,
-      Gemeindegrenzen: () => <Gemeindegrenzen />,
+      Gemeinden: () => <Gemeinden />,
       ZhSvoColor: () => <ZhSvoColor />,
       ZhSvoGrey: () => <ZhSvoGrey />,
       ZhPflegeplan: () => <ZhPflegeplan />,

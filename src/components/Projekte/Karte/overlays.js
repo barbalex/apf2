@@ -3,7 +3,7 @@ export default [
   { label: 'Detailpläne', value: 'Detailplaene' },
   { label: 'Massnahmenpläne', value: 'Massnahmen' },
   { label: 'ZH Übersichtsplan', value: 'ZhUep' },
-  { label: 'Gemeindegrenzen', value: 'Gemeindegrenzen' },
+  { label: 'Gemeinden', value: 'Gemeinden' },
   { label: 'SVO grau', value: 'ZhSvoGrey' },
   { label: 'SVO farbig', value: 'ZhSvoColor' },
   { label: 'Pflegeplan', value: 'ZhPflegeplan' },
