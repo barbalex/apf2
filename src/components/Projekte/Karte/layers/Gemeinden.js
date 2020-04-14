@@ -50,12 +50,7 @@ const GeoJSONLayer = () => {
   if (!data) return null
 
   return (
-    <GeoJSON
-      data={gemeinden}
-      style={style}
-      onEachFeature={onEachFeature}
-      opacity={0}
-    />
+    <GeoJSON data={gemeinden} style={style} onEachFeature={onEachFeature} />
   )
 }
 
