@@ -40,7 +40,7 @@ services:
         '--schema',
         'apflora',
         '--append-plugins',
-        'postgraphile-plugin-connection-filter,@graphile-contrib/pg-order-by-related,@graphile/postgis',
+        'postgraphile-plugin-connection-filter,@graphile-contrib/pg-order-by-related,@graphile/postgis,postgraphile-plugin-connection-filter-postgis',
         '--jwt-token-identifier',
         'auth.jwt_token',
         '--default-role',
