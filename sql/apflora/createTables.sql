@@ -110,6 +110,15 @@ COMMENT ON COLUMN apflora.ap.changed_by IS 'Von wem wurde der Datensatz zuletzt 
 
 
 -- TODO: this is developing, not in use yet
+drop table if exists apflora.ap_user;
+create table apflora.ap_user (
+  id uuid primary key default uuid_generate_v1mc(),
+  ap_id uuid default null references apflora.ap (id) on delete cascade on update cascade,
+  user_name text default null references apflora.user (name) on delete cascade on update cascade
+);
+
+
+-- TODO: this is developing, not in use yet
 alter table apflora.ap enable row level security;
 drop policy if exists reader on apflora.ap;
 create policy reader on apflora.ap using 
@@ -121,15 +130,6 @@ create policy reader on apflora.ap using
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
   )
-);
-
-
--- TODO: this is developing, not in use yet
-drop table if exists apflora.ap_user;
-create table apflora.ap_user (
-  id uuid primary key default uuid_generate_v1mc(),
-  ap_id uuid default null references apflora.ap (id) on delete cascade on update cascade,
-  user_name text default null references apflora.user (name) on delete cascade on update cascade
 );
 
 
@@ -361,6 +361,19 @@ COMMENT ON COLUMN apflora.apberuebersicht.bemerkungen IS 'Bemerkungen zur Artüb
 COMMENT ON COLUMN apflora.apberuebersicht.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.apberuebersicht.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 alter table apflora.apberuebersicht alter column changed_by set default null;
+
+
+-- TODO: this is developing, not in use yet
+alter table apflora.apberuebersicht enable row level security;
+drop policy if exists reader on apflora.apberuebersicht;
+create policy reader on apflora.apberuebersicht 
+using  (
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_artverantwortlich')
+)
+with check (
+  current_user = 'apflora_manager'
+);
+
 
 DROP TABLE IF EXISTS apflora.assozart;
 CREATE TABLE apflora.assozart (
@@ -726,7 +739,7 @@ create policy reader on apflora.tpop using
   or (
     current_user = 'apflora_artverantwortlich'
     and pop_id in (
-      select distinct id 
+      select distinct apflora.pop.id 
       from apflora.pop
       inner join apflora.ap_user
       on apflora.ap_user.ap_id = apflora.pop.ap_id and apflora.ap_user.user_name = current_user_name()
@@ -981,7 +994,7 @@ create policy reader on apflora.tpopkontr using
   or (
     current_user = 'apflora_artverantwortlich'
     and tpop_id in (
-      select distinct id
+      select distinct apflora.tpop.id
       from apflora.tpop
       inner join apflora.pop
         inner join apflora.ap_user
@@ -1194,7 +1207,7 @@ create policy reader on apflora.tpopmassn using
   or (
     current_user = 'apflora_artverantwortlich'
     and tpop_id in (
-      select distinct id
+      select distinct apflora.tpop.id
       from apflora.tpop
       inner join apflora.pop
         inner join apflora.ap_user
@@ -1354,6 +1367,22 @@ COMMENT ON COLUMN apflora.ziel.bezeichnung IS 'Textliche Beschreibung des Ziels'
 COMMENT ON COLUMN apflora.ziel.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ziel.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
+
+-- TODO: this is developing, not in use yet
+alter table apflora.ziel enable row level security;
+drop policy if exists reader on apflora.ziel;
+create policy reader on apflora.ziel using 
+(
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  or (
+    current_user = 'apflora_artverantwortlich'
+    and ap_id in (
+      select ap_id from apflora.ap_user where user_name = current_user_name()
+    )
+  )
+);
+
+
 DROP TABLE IF EXISTS apflora.ziel_typ_werte;
 CREATE TABLE apflora.ziel_typ_werte (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -1399,6 +1428,25 @@ COMMENT ON COLUMN apflora.zielber.erreichung IS 'Beurteilung der Zielerreichung'
 COMMENT ON COLUMN apflora.zielber.bemerkungen IS 'Bemerkungen zur Zielerreichung';
 COMMENT ON COLUMN apflora.zielber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.zielber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+
+
+-- TODO: this is developing, not in use yet
+alter table apflora.zielber enable row level security;
+drop policy if exists reader on apflora.zielber;
+create policy reader on apflora.zielber using 
+(
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  or (
+    current_user = 'apflora_artverantwortlich'
+    and ziel_id in (
+      select distinct apflora.ziel.id 
+      from apflora.ziel
+      inner join apflora.ap_user
+      on apflora.ap_user.ap_id = apflora.ziel.ap_id and apflora.ap_user.user_name = current_user_name()
+    )
+  )
+);
+
 
 DROP TABLE IF EXISTS apflora.evab_typologie;
 CREATE TABLE apflora.evab_typologie (
