@@ -1610,6 +1610,9 @@ comment on table apflora.ch_gemeinde is 'Quelle: https://data.geo.admin.ch/ch.sw
 -- apflora.markierungen was received from topos
 comment on table apflora.markierungen is 'Markierungen, die im Rahmen von apflora gesetzt wurden. Quelle: Topos'
 
+-- apflora.detailplaene was received from topos
+comment on table apflora.detailplaene is 'Detailpläne, die im Rahmen von apflora gesetzt wurden. Quelle: Topos'
+
 --truncate apflora.apqk
 --insert into apflora.apqk(ap_id, qk_name)
 --select distinct apflora.ap.id, apflora.qk.name from apflora.ap, apflora.qk where apflora.ap.bearbeitung is null
