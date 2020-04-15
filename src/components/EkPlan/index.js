@@ -66,18 +66,16 @@ const EkPlan = () => {
 
   return (
     <ErrorBoundary>
-      <>
-        <Container>
-          <Header>
-            <ApList />
-            <AnleitungButton variant="outlined" onClick={onClickAnleitung}>
-              Anleitung
-            </AnleitungButton>
-            <Choose />
-          </Header>
-          <Table />
-        </Container>
-      </>
+      <Container>
+        <Header>
+          <ApList />
+          <AnleitungButton variant="outlined" onClick={onClickAnleitung}>
+            Anleitung
+          </AnleitungButton>
+          <Choose />
+        </Header>
+        <Table />
+      </Container>
     </ErrorBoundary>
   )
 }
