@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { GeoJSON } from 'react-leaflet'
 import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
@@ -6,6 +6,7 @@ import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
 
 import popupFromProperties from './popupFromProperties'
+import storeContext from '../../../../storeContext'
 
 const onEachFeature = (feature, layer) => {
   if (feature.properties) {
@@ -25,10 +26,13 @@ const style = () => ({
 })
 
 const GeoJSONLayer = () => {
+  const { enqueNotification } = useContext(storeContext)
+
   const { data, error } = useQuery(gql`
-    query test {
+    query karteGemeindesQuery {
       allChGemeindes {
         nodes {
+          id: ogcFid
           name
           wkbGeometry {
             geojson
@@ -45,7 +49,15 @@ const GeoJSONLayer = () => {
     geometry: JSON.parse(get(n, 'wkbGeometry.geojson')),
   }))
 
-  if (error) console.log(error)
+  if (error) {
+    console.log(error)
+    enqueNotification({
+      message: `Fehler beim Laden der Gemeinden für die Karte: ${error.message}`,
+      options: {
+        variant: 'error',
+      },
+    })
+  }
 
   if (!data) return null
 
