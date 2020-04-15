@@ -127,7 +127,7 @@ const TpopMarker = ({ treeName, tpop }) => {
             '(kein Status)',
           )}`}</div>
           <StyledButton size="small" variant="outlined" onClick={openTpopInTab}>
-            Formular in neuem Tab öffnen
+            Formular in neuem Fenster öffnen
           </StyledButton>
           <StyledButton
             size="small"

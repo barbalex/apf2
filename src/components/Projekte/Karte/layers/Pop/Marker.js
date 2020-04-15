@@ -125,7 +125,7 @@ const PopMarker = ({ treeName, pop }) => {
             '(kein Status)',
           )}`}</div>
           <StyledButton size="small" variant="outlined" onClick={openPopInTab}>
-            Formular in neuem Tab öffnen
+            Formular in neuem Fenster öffnen
           </StyledButton>
           <StyledButton
             size="small"

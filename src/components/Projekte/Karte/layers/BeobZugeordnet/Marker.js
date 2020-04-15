@@ -149,7 +149,7 @@ const BeobZugeordnetMarker = ({ treeName, beob }) => {
             '(keine Nr)',
           )}: ${get(beob, 'tpopByTpopId.flurname', '(kein Flurname)')}`}</div>
           <StyledButton size="small" variant="outlined" onClick={openBeobInTab}>
-            Formular in neuem Tab öffnen
+            Formular in neuem Fenster öffnen
           </StyledButton>
           <StyledButton
             size="small"

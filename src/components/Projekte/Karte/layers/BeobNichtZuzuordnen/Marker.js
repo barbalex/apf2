@@ -88,7 +88,7 @@ const BeobNichtZuzuordnenMarker = ({ treeName, beob }) => {
             )} / ${beob.lv95Y.toLocaleString('de-ch')}`}
           </div>
           <StyledButton size="small" variant="outlined" onClick={openBeobInTab}>
-            Formular in neuem Tab öffnen
+            Formular in neuem Fenster öffnen
           </StyledButton>
           <StyledButton
             size="small"

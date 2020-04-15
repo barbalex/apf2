@@ -187,7 +187,7 @@ const Qk = ({ treeName, qkNameQueries, qks }) => {
                         window.open(url)
                       }
                     }}
-                    title="in neuem Tab öffnen"
+                    title="in neuem Fenster öffnen"
                   >
                     <FaExternalLinkAlt />
                   </OutsideLink>
