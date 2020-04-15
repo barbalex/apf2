@@ -1795,8 +1795,8 @@ ORDER BY
   apflora.ae_taxonomies.artname;
 
 -- used for export
-DROP VIEW IF EXISTS apflora.v_ziel CASCADE;
-CREATE OR REPLACE VIEW apflora.v_ziel AS
+DROP VIEW IF EXISTS apflora.v_ziel;
+CREATE OR REPLACE VIEW apflora.v_ziel WITH (security_barrier) AS
 SELECT
   apflora.ap.id as ap_id,
   apflora.ae_taxonomies.artname,
@@ -1809,25 +1809,19 @@ SELECT
   ziel_typ_werte.text AS typ,
   apflora.ziel.bezeichnung
 FROM
-  (((((apflora.ae_taxonomies
-  RIGHT JOIN
-    apflora.ap
-    ON apflora.ae_taxonomies.id = apflora.ap.art_id)
-  LEFT JOIN
-    apflora.ap_bearbstand_werte
-    ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
-  LEFT JOIN
-    apflora.ap_umsetzung_werte
-    ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
-  LEFT JOIN
-    apflora.adresse
-    ON apflora.ap.bearbeiter = apflora.adresse.id)
-  RIGHT JOIN
-    apflora.ziel
-    ON apflora.ap.id = apflora.ziel.ap_id)
-  LEFT JOIN
-    apflora.ziel_typ_werte
-    ON apflora.ziel.typ = ziel_typ_werte.code
+  apflora.ae_taxonomies
+  inner JOIN apflora.ap
+    LEFT JOIN apflora.ap_bearbstand_werte
+    ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code
+    LEFT JOIN apflora.ap_umsetzung_werte
+    ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code
+    LEFT JOIN apflora.adresse
+    ON apflora.ap.bearbeiter = apflora.adresse.id
+    inner JOIN apflora.ziel
+      LEFT JOIN apflora.ziel_typ_werte
+      ON apflora.ziel.typ = ziel_typ_werte.code
+    ON apflora.ap.id = apflora.ziel.ap_id
+  ON apflora.ae_taxonomies.id = apflora.ap.art_id
 WHERE
   apflora.ziel.typ IN (1, 2, 1170775556)
 ORDER BY
@@ -1835,6 +1829,8 @@ ORDER BY
   apflora.ziel.jahr,
   ziel_typ_werte.text,
   apflora.ziel.typ;
+comment on view apflora.v_ziel is E'@foreignKey (id) references ziel (id)';
+
 
 -- used for export
 DROP VIEW IF EXISTS apflora.v_zielber CASCADE;
