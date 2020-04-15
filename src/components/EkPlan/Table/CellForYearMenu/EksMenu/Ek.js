@@ -14,7 +14,7 @@ import styled from 'styled-components'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 
 const OuterList = styled(List)`
-  border-bottom: ${props =>
+  border-bottom: ${(props) =>
     props.border === 'true' ? '1px solid #d6d6d6' : 'none'};
   padding-top: 4px !important;
   padding-bottom: 4px !important;
@@ -64,8 +64,15 @@ const EkMenu = ({ tpop, ek, border }) => {
       <SyledListItem button onClick={toggleOpen}>
         <StyledListItemText primary={title} />
         <OutsideLink
-          onClick={() => typeof window !== 'undefined' && window.open(url)}
-          title="in neuem Tab öffnen"
+          onClick={() => {
+            if (typeof window !== 'undefined') {
+              if (window.matchMedia('(display-mode: standalone)').matches) {
+                window.open(url, '_blank', 'toolbar=no')
+              }
+              window.open(url)
+            }
+          }}
+          title="in neuem Fenster öffnen"
         >
           <FaExternalLinkAlt />
         </OutsideLink>
@@ -73,7 +80,7 @@ const EkMenu = ({ tpop, ek, border }) => {
       </SyledListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <InnerList>
-          {zaehls.map(z => {
+          {zaehls.map((z) => {
             const einheit =
               get(z, 'tpopkontrzaehlEinheitWerteByEinheit.text') ||
               '(keine Einheit)'

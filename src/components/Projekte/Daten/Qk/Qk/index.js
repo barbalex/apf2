@@ -175,10 +175,18 @@ const Qk = ({ treeName, qkNameQueries, qks }) => {
                     {m.text}
                   </StyledA>
                   <OutsideLink
-                    onClick={() =>
-                      typeof window !== 'undefined' &&
-                      window.open(`${appBaseUrl()}Daten/${m.url.join('/')}`)
-                    }
+                    onClick={() => {
+                      const url = `${appBaseUrl()}Daten/${m.url.join('/')}`
+                      if (typeof window !== 'undefined') {
+                        if (
+                          window.matchMedia('(display-mode: standalone)')
+                            .matches
+                        ) {
+                          window.open(url, '_blank', 'toolbar=no')
+                        }
+                        window.open(url)
+                      }
+                    }}
                     title="in neuem Tab öffnen"
                   >
                     <FaExternalLinkAlt />

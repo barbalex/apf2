@@ -63,7 +63,7 @@ const RefreshButtonSpinning = styled(IconButton)`
 const RefreshButton = styled(IconButton)``
 
 const color = 'rgba(46,125,50,0.3)'
-const formatNumber = tickItem => {
+const formatNumber = (tickItem) => {
   const value =
     exists(tickItem) && tickItem.toLocaleString
       ? tickItem.toLocaleString('de-ch')
@@ -86,19 +86,19 @@ const ApAuswertungPopMenge = ({ id }) => {
 
   const popsData = get(dataPopMenge, 'allPops.nodes') || []
   const popMengeRawData = get(dataPopMenge, 'allVApAuswPopMenges.nodes') || []
-  const popMengeData = popMengeRawData.map(e => ({
+  const popMengeData = popMengeRawData.map((e) => ({
     jahr: e.jahr,
     ...JSON.parse(e.values),
   }))
-  const nonUniquePopIdsWithData = popMengeData.flatMap(d =>
+  const nonUniquePopIdsWithData = popMengeData.flatMap((d) =>
     Object.entries(d)
       .filter(([key, value]) => key !== 'jahr')
       .filter(([key, value]) => exists(value))
       .map(([key, value]) => key),
   )
   const popIdsWithData = [...new Set(nonUniquePopIdsWithData)]
-  const popIdsWithDataSorted = sortBy(popIdsWithData, id => {
-    const pop = popsData.find(d => d.id === id)
+  const popIdsWithDataSorted = sortBy(popIdsWithData, (id) => {
+    const pop = popsData.find((d) => d.id === id)
     if (pop) return pop.nr
     return id
   })
@@ -145,10 +145,14 @@ const ApAuswertungPopMenge = ({ id }) => {
   }, [enqueNotification, refetchPopMenge, refreshData, refreshing])
 
   const onClickMoreInfo = useCallback(() => {
-    typeof window !== 'undefined' &&
-      window.open(
-        'https://apflora.ch/Dokumentation/Benutzer/ap-auswertung-pop-menge',
-      )
+    const url =
+      'https://apflora.ch/Dokumentation/Benutzer/ap-auswertung-pop-menge'
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
   }, [])
 
   if (errorPopMenge) {
@@ -221,7 +225,7 @@ const ApAuswertungPopMenge = ({ id }) => {
                 }}
                 tickFormatter={formatNumber}
               />
-              {popIdsWithDataSorted.reverse().map(id => (
+              {popIdsWithDataSorted.reverse().map((id) => (
                 <Area
                   key={id}
                   type="linear"

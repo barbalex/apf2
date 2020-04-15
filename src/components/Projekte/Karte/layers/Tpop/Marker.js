@@ -76,12 +76,15 @@ const TpopMarker = ({ treeName, tpop }) => {
     ])
   }, [ap, openTree2WithActiveNodeArray, popId, projekt, tpop.id])
   const openTpopInTab = useCallback(() => {
-    typeof window !== 'undefined' &&
-      window.open(
-        `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${popId}/Teil-Populationen/${
-          tpop.id
-        }`,
-      )
+    const url = `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${popId}/Teil-Populationen/${
+      tpop.id
+    }`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
   }, [ap, popId, projekt, tpop.id])
 
   if (typeof window === 'undefined') return null
@@ -93,11 +96,7 @@ const TpopMarker = ({ treeName, tpop }) => {
   })
   let title = nrLabel
   if (tpopLabelName === 'name') title = tpop.flurname
-  const artname = get(
-    tpop,
-    'popByPopId.apByApId.aeTaxonomyByArtId.artname',
-    '',
-  )
+  const artname = get(tpop, 'popByPopId.apByApId.aeTaxonomyByArtId.artname', '')
 
   return (
     <Marker position={latLng} icon={icon} title={title}>
@@ -105,8 +104,9 @@ const TpopMarker = ({ treeName, tpop }) => {
         <>
           <div>Teil-Population</div>
           <StyledH3>
-            {`${tpop.nr || '(keine Nr)'}: ${tpop.flurname ||
-              '(kein Flurname)'}`}
+            {`${tpop.nr || '(keine Nr)'}: ${
+              tpop.flurname || '(kein Flurname)'
+            }`}
           </StyledH3>
           <div>{`Aktionsplan: ${artname}`}</div>
           <div>

@@ -32,7 +32,12 @@ const CellForTpopLink = ({ field, style, row }) => {
   ])
 
   const onClickLink = useCallback(() => {
-    typeof window !== 'undefined' && window.open(field.value)
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(field.value, '_blank', 'toolbar=no')
+      }
+      window.open(field.value)
+    }
   }, [field.value])
 
   return (

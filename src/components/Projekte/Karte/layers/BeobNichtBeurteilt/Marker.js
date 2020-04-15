@@ -57,7 +57,7 @@ const BeobNichtBeurteiltMarker = ({ treeName, beob }) => {
   const label = `${datum}: ${autor} (${quelle})`
 
   const onMoveend = useCallback(
-    async event => {
+    async (event) => {
       /**
        * assign to nearest tpop
        * point url to moved beob
@@ -104,12 +104,15 @@ const BeobNichtBeurteiltMarker = ({ treeName, beob }) => {
     ])
   }, [ap, beob.id, openTree2WithActiveNodeArray, projekt])
   const openBeobInTab = useCallback(() => {
-    typeof window !== 'undefined' &&
-      window.open(
-        `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/nicht-beurteilte-Beobachtungen/${
-          beob.id
-        }`,
-      )
+    const url = `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/nicht-beurteilte-Beobachtungen/${
+      beob.id
+    }`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
   }, [ap, beob.id, projekt])
 
   return (

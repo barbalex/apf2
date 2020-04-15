@@ -65,12 +65,15 @@ const Line = ({ treeName, beob }) => {
     ])
   }, [ap, beob.id, openTree2WithActiveNodeArray, popId, projekt, tpopId])
   const openBeobInTab = useCallback(() => {
-    typeof window !== 'undefined' &&
-      window.open(
-        `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${
-          beob.id
-        }`,
-      )
+    const url = `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${
+      beob.id
+    }`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
   }, [ap, beob.id, popId, projekt, tpopId])
 
   const openTpopInTree2 = useCallback(() => {
@@ -86,10 +89,13 @@ const Line = ({ treeName, beob }) => {
     ])
   }, [ap, openTree2WithActiveNodeArray, popId, projekt, tpopId])
   const openTpopInTab = useCallback(() => {
-    typeof window !== 'undefined' &&
-      window.open(
-        `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}`,
-      )
+    const url = `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
   }, [ap, popId, projekt, tpopId])
 
   return (

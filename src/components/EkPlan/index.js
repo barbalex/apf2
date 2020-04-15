@@ -42,7 +42,7 @@ const EkPlan = () => {
 
   const { data, loading, error } = useQuery(queryAps, {
     variables: {
-      ids: aps.map(ap => ap.value),
+      ids: aps.map((ap) => ap.value),
     },
   })
   setApsData(data)
@@ -50,7 +50,12 @@ const EkPlan = () => {
 
   const onClickAnleitung = useCallback(() => {
     const url = `${appBaseUrl()}Dokumentation/Benutzer/Erfolgs-Kontrollen-planen`
-    typeof window !== 'undefined' && window.open(url)
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
   }, [])
 
   if (error) {

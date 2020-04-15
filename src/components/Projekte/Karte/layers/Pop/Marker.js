@@ -75,12 +75,15 @@ const PopMarker = ({ treeName, pop }) => {
     ])
   }, [ap, openTree2WithActiveNodeArray, pop.id, projekt])
   const openPopInTab = useCallback(() => {
-    typeof window !== 'undefined' &&
-      window.open(
-        `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${
-          pop.id
-        }`,
-      )
+    const url = `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${
+      pop.id
+    }`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
   }, [ap, pop.id, projekt])
 
   if (typeof window === 'undefined') return null
@@ -91,7 +94,7 @@ const PopMarker = ({ treeName, pop }) => {
     className: isHighlighted ? 'popIconHighlighted' : 'popIcon',
   })
   const zIndexOffset = -apfloraLayers.findIndex(
-    apfloraLayer => apfloraLayer.value === 'pop',
+    (apfloraLayer) => apfloraLayer.value === 'pop',
   )
   const artname = get(pop, 'apByApId.aeTaxonomyByArtId.artname', '')
 

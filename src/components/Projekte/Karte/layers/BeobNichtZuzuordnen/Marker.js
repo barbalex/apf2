@@ -61,12 +61,15 @@ const BeobNichtZuzuordnenMarker = ({ treeName, beob }) => {
     ])
   }, [ap, beob.id, openTree2WithActiveNodeArray, projekt])
   const openBeobInTab = useCallback(() => {
-    typeof window !== 'undefined' &&
-      window.open(
-        `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/nicht-zuzuordnende-Beobachtungen/${
-          beob.id
-        }`,
-      )
+    const url = `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/nicht-zuzuordnende-Beobachtungen/${
+      beob.id
+    }`
+    if (typeof window !== 'undefined') {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        window.open(url, '_blank', 'toolbar=no')
+      }
+      window.open(url)
+    }
   }, [ap, beob.id, projekt])
 
   return (

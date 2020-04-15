@@ -178,7 +178,7 @@ export default ({ data }) => (
               unterstützen die Artverantwortlichen bei der Kontrolle von
               Populationen und der{' '}
               <a
-                href="//vermehrung.apflora.ch"
+                href="//vermehrung.ch"
                 target="_blank"
                 rel="noopener noreferrer"
               >
