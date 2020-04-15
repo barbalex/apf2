@@ -1607,6 +1607,9 @@ CREATE POLICY writer ON apflora.apqk
 create index on apflora.ch_gemeinde using btree (name);
 comment on table apflora.ch_gemeinde is 'Quelle: https://data.geo.admin.ch/ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill/gdb/2056/ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill.zip'
 
+-- apflora.markierungen was received from topos
+comment on table apflora.markierungen is 'Markierungen, die im Rahmen von apflora gesetzt wurden. Quelle: Topos'
+
 --truncate apflora.apqk
 --insert into apflora.apqk(ap_id, qk_name)
 --select distinct apflora.ap.id, apflora.qk.name from apflora.ap, apflora.qk where apflora.ap.bearbeitung is null

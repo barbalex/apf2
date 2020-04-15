@@ -50,7 +50,6 @@ const GeoJSONLayer = () => {
   }))
 
   if (error) {
-    console.log(error)
     enqueNotification({
       message: `Fehler beim Laden der Gemeinden für die Karte: ${error.message}`,
       options: {

@@ -1,3 +1,5 @@
+// TODO: no more used
+// remove markierungen from ucarecdn after updating version
 import axios from 'axios'
 
 export default async ({ setMarkierungen, store }) => {

@@ -90,7 +90,6 @@ const myTypes = types
   // so need to define this as volatile
   .volatile(() => ({
     detailplaene: null,
-    markierungen: null,
     toDeleteAfterDeletionHook: null,
     deletedDatasets: [],
     refetch: {},
@@ -283,9 +282,6 @@ const myTypes = types
     },
     setDetailplaene(val) {
       self.detailplaene = val
-    },
-    setMarkierungen(val) {
-      self.markierungen = val
     },
     dataFilterClone1To2() {
       self.tree2.dataFilter = cloneDeep(self.tree.dataFilter)
