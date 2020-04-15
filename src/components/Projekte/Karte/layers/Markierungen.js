@@ -7,7 +7,6 @@ import gql from 'graphql-tag'
 import get from 'lodash/get'
 
 import popupFromProperties from './popupFromProperties'
-import fetchMarkierungen from '../../../../modules/fetchMarkierungen'
 import storeContext from '../../../../storeContext'
 
 const style = () => ({
@@ -49,9 +48,6 @@ const MarkierungenLayer = () => {
           markierung
           wkbGeometry {
             geojson
-            srid
-            x
-            y
           }
         }
       }

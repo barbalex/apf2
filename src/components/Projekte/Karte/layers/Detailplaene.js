@@ -1,6 +1,9 @@
 import React, { useContext } from 'react'
 import { GeoJSON } from 'react-leaflet'
 import { observer } from 'mobx-react-lite'
+import { useQuery } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
+import get from 'lodash/get'
 
 import popupFromProperties from './popupFromProperties'
 import fetchDetailplaene from '../../../../modules/fetchDetailplaene'
@@ -24,11 +27,50 @@ const onEachFeature = (feature, layer) => {
 }
 
 const DetailplaeneLayer = () => {
-  const store = useContext(storeContext)
-  const { detailplaene, setDetailplaene } = store
-  !detailplaene && fetchDetailplaene({ setDetailplaene, store })
+  const { enqueNotification } = useContext(storeContext)
 
-  if (!detailplaene) return null
+  const { data, error } = useQuery(gql`
+    query karteMatkierungesQuery {
+      allDetailplaenes {
+        nodes {
+          id: ogcFid
+          gebiet
+          fleachennu
+          substrat
+          pflegeSzp
+          shapeArea
+          wkbGeometry {
+            geojson
+          }
+        }
+      }
+    }
+  `)
+
+  const nodes = get(data, 'allDetailplaenes.nodes') || []
+  const detailplaene = nodes.map((n) => ({
+    type: 'Feature',
+    properties: {
+      Gebiet: n.gebiet || '',
+      FlächenNr: n.fleachennu || '',
+      Substrat: n.substrat || '',
+      PflegeSzp: n.pflege_szp || '',
+      Fläche: n.shape_area || '',
+    },
+    geometry: JSON.parse(get(n, 'wkbGeometry.geojson')),
+  }))
+
+  if (error) {
+    enqueNotification({
+      message: `Fehler beim Laden der Markierungen für die Karte: ${error.message}`,
+      options: {
+        variant: 'error',
+      },
+    })
+  }
+
+  if (!data) return null
+
   return (
     <GeoJSON data={detailplaene} style={style} onEachFeature={onEachFeature} />
   )

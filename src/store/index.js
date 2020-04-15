@@ -89,7 +89,6 @@ const myTypes = types
   // structure of these variables is not controlled
   // so need to define this as volatile
   .volatile(() => ({
-    detailplaene: null,
     toDeleteAfterDeletionHook: null,
     deletedDatasets: [],
     refetch: {},
@@ -279,9 +278,6 @@ const myTypes = types
     },
     setMapFilter(val) {
       self.mapFilter = val
-    },
-    setDetailplaene(val) {
-      self.detailplaene = val
     },
     dataFilterClone1To2() {
       self.tree2.dataFilter = cloneDeep(self.tree.dataFilter)
