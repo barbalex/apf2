@@ -6,7 +6,6 @@ import gql from 'graphql-tag'
 import get from 'lodash/get'
 
 import popupFromProperties from './popupFromProperties'
-import fetchDetailplaene from '../../../../modules/fetchDetailplaene'
 import storeContext from '../../../../storeContext'
 
 // see: https://leafletjs.com/reference-1.6.0.html#path-option
