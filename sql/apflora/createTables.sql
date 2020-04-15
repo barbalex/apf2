@@ -108,6 +108,31 @@ COMMENT ON COLUMN apflora.ap.ekf_beobachtungszeitpunkt IS 'bester Beobachtungsze
 COMMENT ON COLUMN apflora.ap.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
+
+-- TODO: this is developing, not in use yet
+alter table apflora.ap enable row level security;
+drop policy if exists reader on apflora.ap;
+create policy reader on apflora.ap using 
+(
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  or (
+    current_user = 'apflora_artverantwortlich'
+    and id in (
+      select ap_id from apflora.ap_user where user_name = current_user_name()
+    )
+  )
+);
+
+
+-- TODO: this is developing, not in use yet
+drop table if exists apflora.ap_user;
+create table apflora.ap_user (
+  id uuid primary key default uuid_generate_v1mc(),
+  ap_id uuid default null references apflora.ap (id) on delete cascade on update cascade,
+  user_name text default null references apflora.user (name) on delete cascade on update cascade
+);
+
+
 drop table if exists apflora.ap_file;
 create table apflora.ap_file (
   id uuid primary key DEFAULT uuid_generate_v1mc(),
@@ -492,6 +517,22 @@ COMMENT ON COLUMN apflora.pop.bekannt_seit IS 'Seit wann ist die Population beka
 COMMENT ON COLUMN apflora.pop.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.pop.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
+
+-- TODO: this is developing, not in use yet
+alter table apflora.pop enable row level security;
+drop policy if exists reader on apflora.pop;
+create policy reader on apflora.pop using 
+(
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  or (
+    current_user = 'apflora_artverantwortlich'
+    and ap_id in (
+      select ap_id from apflora.ap_user where user_name = current_user_name()
+    )
+  )
+);
+
+
 drop table if exists apflora.pop_file;
 create table apflora.pop_file (
   id uuid primary key DEFAULT uuid_generate_v1mc(),
@@ -674,6 +715,25 @@ COMMENT ON COLUMN apflora.tpop.ekfrequenz_abweichend IS 'Diese Frequenz entspric
 COMMENT ON COLUMN apflora.tpop.ekfrequenz_abweichend IS 'Wer diese TPop freiwillig kontrolliert. Dient dazu, Formulare für die EKF zu generieren';
 COMMENT ON COLUMN apflora.tpop.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpop.changed IS 'Von wem wurde der Datensatz zuletzt geändert?';
+
+
+-- TODO: this is developing, not in use yet
+alter table apflora.tpop enable row level security;
+drop policy if exists reader on apflora.tpop;
+create policy reader on apflora.tpop using 
+(
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  or (
+    current_user = 'apflora_artverantwortlich'
+    and pop_id in (
+      select distinct id 
+      from apflora.pop
+      inner join apflora.ap_user
+      on apflora.ap_user.ap_id = apflora.pop.ap_id and apflora.ap_user.user_name = current_user_name()
+    )
+  )
+);
+
 
 drop table if exists apflora.tpop_file;
 create table apflora.tpop_file (
@@ -911,6 +971,27 @@ COMMENT ON COLUMN apflora.tpopkontr.changed_by IS 'Von wem wurde der Datensatz z
 COMMENT ON COLUMN apflora.tpopkontr.apber_nicht_relevant IS 'Pro Jahr sollte maximal eine Kontrolle AP-Bericht-relevant sein. Dient dazu Kontrollen auszuschliessen';
 COMMENT ON COLUMN apflora.tpopkontr.apber_nicht_relevant_grund IS 'Grund, wieso die Kontrolle vom AP-Bericht ausgeschlossen wurde';
 
+
+-- TODO: this is developing, not in use yet
+alter table apflora.tpopkontr enable row level security;
+drop policy if exists reader on apflora.tpopkontr;
+create policy reader on apflora.tpopkontr using 
+(
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  or (
+    current_user = 'apflora_artverantwortlich'
+    and tpop_id in (
+      select distinct id
+      from apflora.tpop
+      inner join apflora.pop
+        inner join apflora.ap_user
+        on apflora.ap_user.ap_id = apflora.pop.ap_id and apflora.ap_user.user_name = current_user_name()
+      on apflora.pop.id = apflora.tpop.pop_id
+    )
+  )
+);
+
+
 drop table if exists apflora.tpopkontr_file;
 create table apflora.tpopkontr_file (
   id uuid primary key DEFAULT uuid_generate_v1mc(),
@@ -1102,6 +1183,27 @@ COMMENT ON COLUMN apflora.tpopmassn.pflanzanordnung IS 'Anordnung der Pflanzung'
 COMMENT ON COLUMN apflora.tpopmassn.id IS 'GUID der Tabelle "tpopmassn"';
 COMMENT ON COLUMN apflora.tpopmassn.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopmassn.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+
+
+-- TODO: this is developing, not in use yet
+alter table apflora.tpopmassn enable row level security;
+drop policy if exists reader on apflora.tpopmassn;
+create policy reader on apflora.tpopmassn using 
+(
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  or (
+    current_user = 'apflora_artverantwortlich'
+    and tpop_id in (
+      select distinct id
+      from apflora.tpop
+      inner join apflora.pop
+        inner join apflora.ap_user
+        on apflora.ap_user.ap_id = apflora.pop.ap_id and apflora.ap_user.user_name = current_user_name()
+      on apflora.pop.id = apflora.tpop.pop_id
+    )
+  )
+);
+
 
 drop table if exists apflora.tpopmassn_file;
 create table apflora.tpopmassn_file (
