@@ -298,10 +298,23 @@ const AP = () => {
     })
     try {
       const { data } = await client.query({
-        query: await import('./allVZiels').then((m) => m.default),
+        query: await import('./queryZiels').then((m) => m.default),
       })
+      const ziels = get(data, 'allZiels.nodes', []).map((z) => ({
+        ap_id: z.id,
+        artname: get(z, 'apByApId.aeTaxonomyByArtId.artname') || '',
+        ap_bearbeitung:
+          get(z, 'apByApId.apBearbstandWerteByBearbeitung.text') || '',
+        ap_start_jahr: get(z, 'apByApId.startJahr') || '',
+        ap_umsetzung: get(z, 'apByApId.apUmsetzungWerteByUmsetzung.text') || '',
+        ap_bearbeiter: get(z, 'apByApId.adresseByBearbeiter.name') || '',
+        id: z.id,
+        jahr: z.jahr,
+        typ: get(z, 'zielTypWerteByTyp.text') || '',
+        bezeichnung: z.bezeichnung,
+      }))
       exportModule({
-        data: get(data, 'allVZiels.nodes', []),
+        data: ziels,
         fileName: 'ApZiele',
         store,
       })
