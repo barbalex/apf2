@@ -78,8 +78,9 @@ const AP = () => {
         persist: true,
       },
     })
+    let result
     try {
-      const { data } = await client.query({
+      result = await client.query({
         query: gql`
           query apForExportQuery($filter: ApFilter) {
             allAps(
@@ -111,20 +112,6 @@ const AP = () => {
           filter: apGqlFilter,
         },
       })
-      const dataToExport = get(data, 'allAps.nodes', []).map((n) => ({
-        id: n.id,
-        artname: get(n, 'aeTaxonomyByArtId.artname') || null,
-        bearbeitung: get(n, 'apBearbstandWerteByBearbeitung.text') || null,
-        startJahr: n.startJahr,
-        umsetzung: get(n, 'apUmsetzungWerteByUmsetzung.text') || null,
-        changed: n.changed,
-        changedBy: n.changedBy,
-      }))
-      exportModule({
-        data: dataToExport,
-        fileName: 'AP',
-        store,
-      })
     } catch (error) {
       enqueNotification({
         message: error.message,
@@ -133,8 +120,30 @@ const AP = () => {
         },
       })
     }
+    const dataToExport = get(result.data, 'allAps.nodes', []).map((n) => ({
+      id: n.id,
+      artname: get(n, 'aeTaxonomyByArtId.artname') || null,
+      bearbeitung: get(n, 'apBearbstandWerteByBearbeitung.text') || null,
+      startJahr: n.startJahr,
+      umsetzung: get(n, 'apUmsetzungWerteByUmsetzung.text') || null,
+      changed: n.changed,
+      changedBy: n.changedBy,
+    }))
+    exportModule({
+      data: dataToExport,
+      fileName: 'AP',
+      store,
+    })
     removeNotification(notif)
     closeSnackbar(notif)
+    if (dataToExport.length === 0) {
+      enqueNotification({
+        message: 'Die Abfrage ergab 0 Datensätze',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
   }, [
     apGqlFilter,
     client,
@@ -199,23 +208,10 @@ const AP = () => {
         persist: true,
       },
     })
+    let result
     try {
-      const { data } = await client.query({
+      result = await client.query({
         query: await import('./queryApAnzMassns').then((m) => m.default),
-      })
-      const apAnzMassns = get(data, 'allAps.nodes', []).map((z) => ({
-        id: z.id,
-        artname: get(z, 'aeTaxonomyByArtId.artname') || '',
-        bearbeitung: get(z, 'apBearbstandWerteByBearbeitung.text') || '',
-        start_jahr: z.startJahr,
-        umsetzung: get(z, 'apUmsetzungWerteByUmsetzung.text') || '',
-        anzahl_kontrollen:
-          get(z, 'vApAnzmassnsById.nodes[0].anzahlMassnahmen') || '',
-      }))
-      exportModule({
-        data: apAnzMassns,
-        fileName: 'ApAnzahlMassnahmen',
-        store,
       })
     } catch (error) {
       enqueNotification({
@@ -225,8 +221,30 @@ const AP = () => {
         },
       })
     }
+    const apAnzMassns = get(result.data, 'allAps.nodes', []).map((z) => ({
+      id: z.id,
+      artname: get(z, 'aeTaxonomyByArtId.artname') || '',
+      bearbeitung: get(z, 'apBearbstandWerteByBearbeitung.text') || '',
+      start_jahr: z.startJahr,
+      umsetzung: get(z, 'apUmsetzungWerteByUmsetzung.text') || '',
+      anzahl_kontrollen:
+        get(z, 'vApAnzmassnsById.nodes[0].anzahlMassnahmen') || '',
+    }))
+    exportModule({
+      data: apAnzMassns,
+      fileName: 'ApAnzahlMassnahmen',
+      store,
+    })
     removeNotification(notif)
     closeSnackbar(notif)
+    if (apAnzMassns.length === 0) {
+      enqueNotification({
+        message: 'Die Abfrage ergab 0 Datensätze',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
   }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickAnzKontrProAp = useCallback(async () => {
@@ -237,23 +255,10 @@ const AP = () => {
         persist: true,
       },
     })
+    let result
     try {
-      const { data } = await client.query({
+      result = await client.query({
         query: await import('./queryApAnzKontrs').then((m) => m.default),
-      })
-      const apAnzKontrs = get(data, 'allAps.nodes', []).map((z) => ({
-        id: z.id,
-        artname: get(z, 'aeTaxonomyByArtId.artname') || '',
-        bearbeitung: get(z, 'apBearbstandWerteByBearbeitung.text') || '',
-        start_jahr: z.startJahr,
-        umsetzung: get(z, 'apUmsetzungWerteByUmsetzung.text') || '',
-        anzahl_kontrollen:
-          get(z, 'vApAnzkontrsById.nodes[0].anzahlKontrollen') || '',
-      }))
-      exportModule({
-        data: apAnzKontrs,
-        fileName: 'ApAnzahlKontrollen',
-        store,
       })
     } catch (error) {
       enqueNotification({
@@ -263,8 +268,30 @@ const AP = () => {
         },
       })
     }
+    const apAnzKontrs = get(result.data, 'allAps.nodes', []).map((z) => ({
+      id: z.id,
+      artname: get(z, 'aeTaxonomyByArtId.artname') || '',
+      bearbeitung: get(z, 'apBearbstandWerteByBearbeitung.text') || '',
+      start_jahr: z.startJahr,
+      umsetzung: get(z, 'apUmsetzungWerteByUmsetzung.text') || '',
+      anzahl_kontrollen:
+        get(z, 'vApAnzkontrsById.nodes[0].anzahlKontrollen') || '',
+    }))
+    exportModule({
+      data: apAnzKontrs,
+      fileName: 'ApAnzahlKontrollen',
+      store,
+    })
     removeNotification(notif)
     closeSnackbar(notif)
+    if (apAnzKontrs.length === 0) {
+      enqueNotification({
+        message: 'Die Abfrage ergab 0 Datensätze',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
   }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickApBer = useCallback(async () => {
@@ -275,14 +302,10 @@ const AP = () => {
         persist: true,
       },
     })
+    let result
     try {
-      const { data } = await client.query({
+      result = await client.query({
         query: await import('./allVApbers').then((m) => m.default),
-      })
-      exportModule({
-        data: get(data, 'allVApbers.nodes', []),
-        fileName: 'Jahresberichte',
-        store,
       })
     } catch (error) {
       enqueNotification({
@@ -292,8 +315,22 @@ const AP = () => {
         },
       })
     }
+    const apbers = get(result.data, 'allVApbers.nodes', [])
+    exportModule({
+      data: apbers,
+      fileName: 'Jahresberichte',
+      store,
+    })
     removeNotification(notif)
     closeSnackbar(notif)
+    if (apbers.length === 0) {
+      enqueNotification({
+        message: 'Die Abfrage ergab 0 Datensätze',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
   }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickApBerUndMassn = useCallback(async () => {
@@ -304,14 +341,10 @@ const AP = () => {
         persist: true,
       },
     })
+    let result
     try {
-      const { data } = await client.query({
+      result = await client.query({
         query: await import('./allVApApberundmassns').then((m) => m.default),
-      })
-      exportModule({
-        data: get(data, 'allVApApberundmassns.nodes', []),
-        fileName: 'ApJahresberichteUndMassnahmen',
-        store,
       })
     } catch (error) {
       enqueNotification({
@@ -321,8 +354,22 @@ const AP = () => {
         },
       })
     }
+    const apApberundmassns = get(result.data, 'allVApApberundmassns.nodes', [])
+    exportModule({
+      data: apApberundmassns,
+      fileName: 'ApJahresberichteUndMassnahmen',
+      store,
+    })
     removeNotification(notif)
     closeSnackbar(notif)
+    if (apApberundmassns.length === 0) {
+      enqueNotification({
+        message: 'Die Abfrage ergab 0 Datensätze',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
   }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickZiele = useCallback(async () => {
@@ -333,27 +380,10 @@ const AP = () => {
         persist: true,
       },
     })
+    let result
     try {
-      const { data } = await client.query({
+      result = await client.query({
         query: await import('./queryZiels').then((m) => m.default),
-      })
-      const ziels = get(data, 'allZiels.nodes', []).map((z) => ({
-        ap_id: z.id,
-        artname: get(z, 'apByApId.aeTaxonomyByArtId.artname') || '',
-        ap_bearbeitung:
-          get(z, 'apByApId.apBearbstandWerteByBearbeitung.text') || '',
-        ap_start_jahr: get(z, 'apByApId.startJahr') || '',
-        ap_umsetzung: get(z, 'apByApId.apUmsetzungWerteByUmsetzung.text') || '',
-        ap_bearbeiter: get(z, 'apByApId.adresseByBearbeiter.name') || '',
-        id: z.id,
-        jahr: z.jahr,
-        typ: get(z, 'zielTypWerteByTyp.text') || '',
-        bezeichnung: z.bezeichnung,
-      }))
-      exportModule({
-        data: sortBy(ziels, 'artname'),
-        fileName: 'ApZiele',
-        store,
       })
     } catch (error) {
       enqueNotification({
@@ -363,8 +393,34 @@ const AP = () => {
         },
       })
     }
+    const ziels = get(result.data, 'allZiels.nodes', []).map((z) => ({
+      ap_id: z.id,
+      artname: get(z, 'apByApId.aeTaxonomyByArtId.artname') || '',
+      ap_bearbeitung:
+        get(z, 'apByApId.apBearbstandWerteByBearbeitung.text') || '',
+      ap_start_jahr: get(z, 'apByApId.startJahr') || '',
+      ap_umsetzung: get(z, 'apByApId.apUmsetzungWerteByUmsetzung.text') || '',
+      ap_bearbeiter: get(z, 'apByApId.adresseByBearbeiter.name') || '',
+      id: z.id,
+      jahr: z.jahr,
+      typ: get(z, 'zielTypWerteByTyp.text') || '',
+      bezeichnung: z.bezeichnung,
+    }))
+    exportModule({
+      data: sortBy(ziels, 'artname'),
+      fileName: 'ApZiele',
+      store,
+    })
     removeNotification(notif)
     closeSnackbar(notif)
+    if (ziels.length === 0) {
+      enqueNotification({
+        message: 'Die Abfrage ergab 0 Datensätze',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
   }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickZielber = useCallback(async () => {
@@ -375,39 +431,10 @@ const AP = () => {
         persist: true,
       },
     })
+    let result
     try {
-      const { data } = await client.query({
+      result = await client.query({
         query: await import('./queryZielbers').then((m) => m.default),
-      })
-      const zielbers = get(data, 'allZielbers.nodes', []).map((z) => ({
-        ap_id: get(z, 'zielByZielId.apByApId.id') || '',
-        artname:
-          get(z, 'zielByZielId.apByApId.aeTaxonomyByArtId.artname') || '',
-        ap_bearbeitung:
-          get(z, 'zielByZielId.apByApId.apBearbstandWerteByBearbeitung.text') ||
-          '',
-        ap_start_jahr: get(z, 'zielByZielId.apByApId.startJahr') || '',
-        ap_umsetzung:
-          get(z, 'zielByZielId.apByApId.apUmsetzungWerteByUmsetzung.text') ||
-          '',
-        ap_bearbeiter:
-          get(z, 'zielByZielId.apByApId.adresseByBearbeiter.name') || '',
-        ziel_id: get(z, 'zielByZielId.id') || '',
-        ziel_jahr: get(z, 'zielByZielId.jahr') || '',
-        ziel_typ: get(z, 'zielByZielId.zielTypWerteByTyp.text') || '',
-        ziel_bezeichnung: get(z, 'zielByZielId.bezeichnung') || '',
-        id: z.id,
-        jahr: z.jahr,
-        erreichung: z.erreichung,
-        bemerkungen: z.bemerkungen,
-        changed: z.changed,
-        changed_by: z.changed_by,
-      }))
-      console.log({ zielbers })
-      exportModule({
-        data: sortBy(zielbers, ['artname', 'ziel_jahr', 'ziel_typ', 'jahr']),
-        fileName: 'Zielberichte',
-        store,
       })
     } catch (error) {
       enqueNotification({
@@ -417,8 +444,43 @@ const AP = () => {
         },
       })
     }
+    const zielbers = get(result.data, 'allZielbers.nodes', []).map((z) => ({
+      ap_id: get(z, 'zielByZielId.apByApId.id') || '',
+      artname: get(z, 'zielByZielId.apByApId.aeTaxonomyByArtId.artname') || '',
+      ap_bearbeitung:
+        get(z, 'zielByZielId.apByApId.apBearbstandWerteByBearbeitung.text') ||
+        '',
+      ap_start_jahr: get(z, 'zielByZielId.apByApId.startJahr') || '',
+      ap_umsetzung:
+        get(z, 'zielByZielId.apByApId.apUmsetzungWerteByUmsetzung.text') || '',
+      ap_bearbeiter:
+        get(z, 'zielByZielId.apByApId.adresseByBearbeiter.name') || '',
+      ziel_id: get(z, 'zielByZielId.id') || '',
+      ziel_jahr: get(z, 'zielByZielId.jahr') || '',
+      ziel_typ: get(z, 'zielByZielId.zielTypWerteByTyp.text') || '',
+      ziel_bezeichnung: get(z, 'zielByZielId.bezeichnung') || '',
+      id: z.id,
+      jahr: z.jahr,
+      erreichung: z.erreichung,
+      bemerkungen: z.bemerkungen,
+      changed: z.changed,
+      changed_by: z.changed_by,
+    }))
+    exportModule({
+      data: sortBy(zielbers, ['artname', 'ziel_jahr', 'ziel_typ', 'jahr']),
+      fileName: 'Zielberichte',
+      store,
+    })
     removeNotification(notif)
     closeSnackbar(notif)
+    if (zielbers.length === 0) {
+      enqueNotification({
+        message: 'Die Abfrage ergab 0 Datensätze',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
   }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickErfkrit = useCallback(async () => {
@@ -429,14 +491,10 @@ const AP = () => {
         persist: true,
       },
     })
+    let result
     try {
-      const { data } = await client.query({
+      result = await client.query({
         query: await import('./allVErfkrits').then((m) => m.default),
-      })
-      exportModule({
-        data: get(data, 'allVErfkrits.nodes', []),
-        fileName: 'Erfolgskriterien',
-        store,
       })
     } catch (error) {
       enqueNotification({
@@ -446,8 +504,22 @@ const AP = () => {
         },
       })
     }
+    const erfkrits = get(result.data, 'allVErfkrits.nodes', [])
+    exportModule({
+      data: erfkrits,
+      fileName: 'Erfolgskriterien',
+      store,
+    })
     removeNotification(notif)
     closeSnackbar(notif)
+    if (erfkrits.length === 0) {
+      enqueNotification({
+        message: 'Die Abfrage ergab 0 Datensätze',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
   }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickIdealbiotop = useCallback(async () => {
@@ -458,14 +530,10 @@ const AP = () => {
         persist: true,
       },
     })
+    let result
     try {
-      const { data } = await client.query({
+      result = await client.query({
         query: await import('./allVIdealbiotops').then((m) => m.default),
-      })
-      exportModule({
-        data: get(data, 'allVIdealbiotops.nodes', []),
-        fileName: 'Idealbiotope',
-        store,
       })
     } catch (error) {
       enqueNotification({
@@ -475,8 +543,22 @@ const AP = () => {
         },
       })
     }
+    const idealbiotops = get(result.data, 'allVIdealbiotops.nodes', [])
+    exportModule({
+      data: idealbiotops,
+      fileName: 'Idealbiotope',
+      store,
+    })
     removeNotification(notif)
     closeSnackbar(notif)
+    if (idealbiotops.length === 0) {
+      enqueNotification({
+        message: 'Die Abfrage ergab 0 Datensätze',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
   }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickAssozarten = useCallback(async () => {
@@ -487,14 +569,10 @@ const AP = () => {
         persist: true,
       },
     })
+    let result
     try {
-      const { data } = await client.query({
+      result = await client.query({
         query: await import('./allVAssozarts').then((m) => m.default),
-      })
-      exportModule({
-        data: get(data, 'allVAssozarts.nodes', []),
-        fileName: 'AssoziierteArten',
-        store,
       })
     } catch (error) {
       enqueNotification({
@@ -504,8 +582,22 @@ const AP = () => {
         },
       })
     }
+    const assozarts = get(result.data, 'allVAssozarts.nodes', [])
+    exportModule({
+      data: assozarts,
+      fileName: 'AssoziierteArten',
+      store,
+    })
     removeNotification(notif)
     closeSnackbar(notif)
+    if (assozarts.length === 0) {
+      enqueNotification({
+        message: 'Die Abfrage ergab 0 Datensätze',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
   }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const apIsFiltered = dataFilterTableIsFiltered({
