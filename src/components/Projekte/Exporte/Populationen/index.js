@@ -246,17 +246,12 @@ const Populationen = () => {
                   persist: true,
                 },
               })
+              let result
               try {
-                const { data } = await client.query({
+                result = await client.query({
                   query: await import('./allVPopKmlnamen').then(
                     (m) => m.default,
                   ),
-                })
-                exportModule({
-                  data: get(data, 'allVPopKmlnamen.nodes', []),
-                  fileName: 'PopulationenNachNamen',
-                  store,
-                  kml: true,
                 })
               } catch (error) {
                 enqueNotification({
@@ -266,8 +261,23 @@ const Populationen = () => {
                   },
                 })
               }
+              const rows = get(result.data, 'allVPopKmlnamen.nodes', [])
+              exportModule({
+                data: rows,
+                fileName: 'PopulationenNachNamen',
+                store,
+                kml: true,
+              })
               removeNotification(notif)
               closeSnackbar(notif)
+              if (rows.length === 0) {
+                enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
             }}
           >
             <div>
@@ -283,16 +293,12 @@ const Populationen = () => {
                   persist: true,
                 },
               })
+              let result
               try {
-                const { data } = await client.query({
+                result = await client.query({
                   query: await import('./allVPopVonapohnestatuses').then(
                     (m) => m.default,
                   ),
-                })
-                exportModule({
-                  data: get(data, 'allVPopVonapohnestatuses.nodes', []),
-                  fileName: 'PopulationenVonApArtenOhneStatus',
-                  store,
                 })
               } catch (error) {
                 enqueNotification({
@@ -302,8 +308,26 @@ const Populationen = () => {
                   },
                 })
               }
+              const rows = get(
+                result.data,
+                'allVPopVonapohnestatuses.nodes',
+                [],
+              )
+              exportModule({
+                data: rows,
+                fileName: 'PopulationenVonApArtenOhneStatus',
+                store,
+              })
               removeNotification(notif)
               closeSnackbar(notif)
+              if (rows.length === 0) {
+                enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
             }}
           >
             Populationen von AP-Arten ohne Status
@@ -317,16 +341,12 @@ const Populationen = () => {
                   persist: true,
                 },
               })
+              let result
               try {
-                const { data } = await client.query({
+                result = await client.query({
                   query: await import('./allVPopOhnekoords').then(
                     (m) => m.default,
                   ),
-                })
-                exportModule({
-                  data: get(data, 'allVPopOhnekoords.nodes', []),
-                  fileName: 'PopulationenOhneKoordinaten',
-                  store,
                 })
               } catch (error) {
                 enqueNotification({
@@ -336,8 +356,22 @@ const Populationen = () => {
                   },
                 })
               }
+              const rows = get(result.data, 'allVPopOhnekoords.nodes', [])
+              exportModule({
+                data: rows,
+                fileName: 'PopulationenOhneKoordinaten',
+                store,
+              })
               removeNotification(notif)
               closeSnackbar(notif)
+              if (rows.length === 0) {
+                enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
             }}
           >
             Populationen ohne Koordinaten
@@ -351,19 +385,12 @@ const Populationen = () => {
                   persist: true,
                 },
               })
+              let result
               try {
-                const { data } = await client.query({
+                result = await client.query({
                   query: await import('./allVPopmassnberAnzmassns').then(
                     (m) => m.default,
                   ),
-                })
-                exportModule({
-                  data: get(data, 'allVPopmassnberAnzmassns.nodes', []),
-                  fileName: 'PopulationenAnzMassnProMassnber',
-                  idKey: 'pop_id',
-                  xKey: 'pop_wgs84lat',
-                  yKey: 'pop_wgs84long',
-                  store,
                 })
               } catch (error) {
                 enqueNotification({
@@ -373,8 +400,29 @@ const Populationen = () => {
                   },
                 })
               }
+              const rows = get(
+                result.data,
+                'allVPopmassnberAnzmassns.nodes',
+                [],
+              )
+              exportModule({
+                data: rows,
+                fileName: 'PopulationenAnzMassnProMassnber',
+                idKey: 'pop_id',
+                xKey: 'pop_wgs84lat',
+                yKey: 'pop_wgs84long',
+                store,
+              })
               removeNotification(notif)
               closeSnackbar(notif)
+              if (rows.length === 0) {
+                enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
             }}
           >
             Populationen mit Massnahmen-Berichten: Anzahl Massnahmen im
@@ -389,16 +437,12 @@ const Populationen = () => {
                   persist: true,
                 },
               })
+              let result
               try {
-                const { data } = await client.query({
+                result = await client.query({
                   query: await import('./allVPopAnzmassns').then(
                     (m) => m.default,
                   ),
-                })
-                exportModule({
-                  data: get(data, 'allVPopAnzmassns.nodes', []),
-                  fileName: 'PopulationenAnzahlMassnahmen',
-                  store,
                 })
               } catch (error) {
                 enqueNotification({
@@ -408,8 +452,22 @@ const Populationen = () => {
                   },
                 })
               }
+              const rows = get(result.data, 'allVPopAnzmassns.nodes', [])
+              exportModule({
+                data: rows,
+                fileName: 'PopulationenAnzahlMassnahmen',
+                store,
+              })
               removeNotification(notif)
               closeSnackbar(notif)
+              if (rows.length === 0) {
+                enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
             }}
           >
             Anzahl Massnahmen pro Population
@@ -423,16 +481,12 @@ const Populationen = () => {
                   persist: true,
                 },
               })
+              let result
               try {
-                const { data } = await client.query({
+                result = await client.query({
                   query: await import('./allVPopAnzkontrs').then(
                     (m) => m.default,
                   ),
-                })
-                exportModule({
-                  data: get(data, 'allVPopAnzkontrs.nodes', []),
-                  fileName: 'PopulationenAnzahlKontrollen',
-                  store,
                 })
               } catch (error) {
                 enqueNotification({
@@ -442,8 +496,22 @@ const Populationen = () => {
                   },
                 })
               }
+              const rows = get(result.data, 'allVPopAnzkontrs.nodes', [])
+              exportModule({
+                data: rows,
+                fileName: 'PopulationenAnzahlKontrollen',
+                store,
+              })
               removeNotification(notif)
               closeSnackbar(notif)
+              if (rows.length === 0) {
+                enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
             }}
           >
             Anzahl Kontrollen pro Population
@@ -457,19 +525,12 @@ const Populationen = () => {
                   persist: true,
                 },
               })
+              let result
               try {
-                const { data } = await client.query({
+                result = await client.query({
                   query: await import('./allVPopPopberundmassnbers').then(
                     (m) => m.default,
                   ),
-                })
-                exportModule({
-                  data: get(data, 'allVPopPopberundmassnbers.nodes', []),
-                  fileName: 'PopulationenPopUndMassnBerichte',
-                  idKey: 'pop_id',
-                  xKey: 'pop_wgs84lat',
-                  yKey: 'pop_wgs84long',
-                  store,
                 })
               } catch (error) {
                 enqueNotification({
@@ -479,8 +540,29 @@ const Populationen = () => {
                   },
                 })
               }
+              const rows = get(
+                result.data,
+                'allVPopPopberundmassnbers.nodes',
+                [],
+              )
+              exportModule({
+                data: rows,
+                fileName: 'PopulationenPopUndMassnBerichte',
+                idKey: 'pop_id',
+                xKey: 'pop_wgs84lat',
+                yKey: 'pop_wgs84long',
+                store,
+              })
               removeNotification(notif)
               closeSnackbar(notif)
+              if (rows.length === 0) {
+                enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
             }}
           >
             Populationen inkl. Populations- und Massnahmen-Berichte
@@ -494,19 +576,12 @@ const Populationen = () => {
                   persist: true,
                 },
               })
+              let result
               try {
-                const { data } = await client.query({
+                result = await client.query({
                   query: await import('./allVPopMitLetzterPopbers').then(
                     (m) => m.default,
                   ),
-                })
-                exportModule({
-                  data: get(data, 'allVPopMitLetzterPopbers.nodes', []),
-                  fileName: 'PopulationenMitLetzemPopBericht',
-                  idKey: 'pop_id',
-                  xKey: 'pop_wgs84lat',
-                  yKey: 'pop_wgs84long',
-                  store,
                 })
               } catch (error) {
                 enqueNotification({
@@ -516,8 +591,29 @@ const Populationen = () => {
                   },
                 })
               }
+              const rows = get(
+                result.data,
+                'allVPopMitLetzterPopbers.nodes',
+                [],
+              )
+              exportModule({
+                data: rows,
+                fileName: 'PopulationenMitLetzemPopBericht',
+                idKey: 'pop_id',
+                xKey: 'pop_wgs84lat',
+                yKey: 'pop_wgs84long',
+                store,
+              })
               removeNotification(notif)
               closeSnackbar(notif)
+              if (rows.length === 0) {
+                enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
             }}
           >
             Populationen mit dem letzten Populations-Bericht
@@ -531,19 +627,12 @@ const Populationen = () => {
                   persist: true,
                 },
               })
+              let result
               try {
-                const { data } = await client.query({
+                result = await client.query({
                   query: await import('./allVPopMitLetzterPopmassnbers').then(
                     (m) => m.default,
                   ),
-                })
-                exportModule({
-                  data: get(data, 'allVPopMitLetzterPopmassnbers.nodes', []),
-                  fileName: 'allVPopMitLetzterPopmassnbers',
-                  idKey: 'pop_id',
-                  xKey: 'pop_wgs84lat',
-                  yKey: 'pop_wgs84long',
-                  store,
                 })
               } catch (error) {
                 enqueNotification({
@@ -553,8 +642,29 @@ const Populationen = () => {
                   },
                 })
               }
+              const rows = get(
+                result.data,
+                'allVPopMitLetzterPopmassnbers.nodes',
+                [],
+              )
+              exportModule({
+                data: rows,
+                fileName: 'allVPopMitLetzterPopmassnbers',
+                idKey: 'pop_id',
+                xKey: 'pop_wgs84lat',
+                yKey: 'pop_wgs84long',
+                store,
+              })
               removeNotification(notif)
               closeSnackbar(notif)
+              if (rows.length === 0) {
+                enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
             }}
           >
             Populationen mit dem letzten Massnahmen-Bericht
@@ -568,17 +678,12 @@ const Populationen = () => {
                   persist: true,
                 },
               })
+              let result
               try {
-                const { data } = await client.query({
+                result = await client.query({
                   query: await import('./allVPopLastCounts').then(
                     (m) => m.default,
                   ),
-                })
-                exportModule({
-                  data: get(data, 'allVPopLastCounts.nodes', []),
-                  fileName: 'PopLetzteZaehlungen',
-                  idKey: 'pop_id',
-                  store,
                 })
               } catch (error) {
                 enqueNotification({
@@ -588,8 +693,23 @@ const Populationen = () => {
                   },
                 })
               }
+              const rows = get(result.data, 'allVPopLastCounts.nodes', [])
+              exportModule({
+                data: rows,
+                fileName: 'PopLetzteZaehlungen',
+                idKey: 'pop_id',
+                store,
+              })
               removeNotification(notif)
               closeSnackbar(notif)
+              if (rows.length === 0) {
+                enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
             }}
           >
             Letzte Zählungen
@@ -603,17 +723,12 @@ const Populationen = () => {
                   persist: true,
                 },
               })
+              let result
               try {
-                const { data } = await client.query({
+                result = await client.query({
                   query: await import('./allVPopLastCountWithMassns').then(
                     (m) => m.default,
                   ),
-                })
-                exportModule({
-                  data: get(data, 'allVPopLastCountWithMassns.nodes', []),
-                  fileName: 'PopLetzteZaehlungenInklMassn',
-                  idKey: 'pop_id',
-                  store,
                 })
               } catch (error) {
                 enqueNotification({
@@ -623,8 +738,27 @@ const Populationen = () => {
                   },
                 })
               }
+              const rows = get(
+                result.data,
+                'allVPopLastCountWithMassns.nodes',
+                [],
+              )
+              exportModule({
+                data: rows,
+                fileName: 'PopLetzteZaehlungenInklMassn',
+                idKey: 'pop_id',
+                store,
+              })
               removeNotification(notif)
               closeSnackbar(notif)
+              if (rows.length === 0) {
+                enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
             }}
           >
             Letzte Zählungen inklusive noch nicht kontrollierter Anpflanzungen
