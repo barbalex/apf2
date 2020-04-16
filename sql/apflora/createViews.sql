@@ -886,39 +886,18 @@ DROP VIEW IF EXISTS apflora.v_ap_anzmassn CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_anzmassn AS
 SELECT
   apflora.ap.id,
-  apflora.ae_taxonomies.artname,
-  apflora.ap_bearbstand_werte.text AS bearbeitung,
-  apflora.ap.start_jahr,
-  apflora.ap_umsetzung_werte.text AS umsetzung,
   count(apflora.tpopmassn.id) AS anzahl_massnahmen
 FROM
-  (((apflora.ae_taxonomies
-  INNER JOIN
-    apflora.ap
-    ON apflora.ae_taxonomies.id = apflora.ap.art_id)
-  LEFT JOIN
-    ((apflora.pop
-    LEFT JOIN
-      apflora.tpop
-      ON apflora.pop.id = apflora.tpop.pop_id)
-    LEFT JOIN
-      apflora.tpopmassn
-      ON apflora.tpop.id = apflora.tpopmassn.tpop_id)
-    ON apflora.ap.id = apflora.pop.ap_id)
-  LEFT JOIN
-    apflora.ap_bearbstand_werte
-    ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
-  LEFT JOIN
-    apflora.ap_umsetzung_werte
-    ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code
+  apflora.ap
+  LEFT JOIN apflora.pop
+    LEFT JOIN apflora.tpop
+      LEFT JOIN apflora.tpopmassn
+      ON apflora.tpop.id = apflora.tpopmassn.tpop_id
+    ON apflora.pop.id = apflora.tpop.pop_id
+  ON apflora.ap.id = apflora.pop.ap_id
 GROUP BY
-  apflora.ap.id,
-  apflora.ae_taxonomies.artname,
-  apflora.ap_bearbstand_werte.text,
-  apflora.ap.start_jahr,
-  apflora.ap_umsetzung_werte.text
-ORDER BY
-  apflora.ae_taxonomies.artname;
+  apflora.ap.id;
+comment on view apflora.v_ap_anzmassn is '@foreignKey (id) references ap (id)'
 
 -- used for export
 DROP VIEW IF EXISTS apflora.v_ap_anzkontr CASCADE;

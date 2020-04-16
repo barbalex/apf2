@@ -183,10 +183,19 @@ const AP = () => {
     })
     try {
       const { data } = await client.query({
-        query: await import('./allVApAnzmassns').then((m) => m.default),
+        query: await import('./queryApAnzMassns').then((m) => m.default),
       })
+      const apAnzMassns = get(data, 'allAps.nodes', []).map((z) => ({
+        id: z.id,
+        artname: get(z, 'aeTaxonomyByArtId.artname') || '',
+        bearbeitung: get(z, 'apBearbstandWerteByBearbeitung.text') || '',
+        start_jahr: z.startJahr,
+        umsetzung: get(z, 'apUmsetzungWerteByUmsetzung.text') || '',
+        anzahl_kontrollen:
+          get(z, 'vApAnzmassnsById.nodes[0].anzahlMassnahmen') || '',
+      }))
       exportModule({
-        data: get(data, 'allVApAnzmassns.nodes', []),
+        data: apAnzMassns,
         fileName: 'ApAnzahlMassnahmen',
         store,
       })
