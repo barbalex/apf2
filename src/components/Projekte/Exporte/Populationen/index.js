@@ -27,7 +27,7 @@ const StyledCardActions = styled(CardActions)`
   height: auto !important;
 `
 const CardActionIconButton = styled(IconButton)`
-  transform: ${props => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
+  transform: ${(props) => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
 `
 const CardActionTitle = styled.div`
   padding-left: 8px;
@@ -97,8 +97,9 @@ const Populationen = () => {
                   persist: true,
                 },
               })
+              let result
               try {
-                const { data } = await client.query({
+                result = await client.query({
                   query: gql`
                     query popForExportQuery($filter: PopFilter) {
                       allPops(
@@ -145,33 +146,6 @@ const Populationen = () => {
                     filter: popGqlFilter,
                   },
                 })
-                const dataToExport = get(data, 'allPops.nodes', []).map(n => ({
-                  apId: get(n, 'apByApId.id') || null,
-                  apArtname:
-                    get(n, 'apByApId.aeTaxonomyByArtId.artname') || null,
-                  apBearbeitung:
-                    get(n, 'apByApId.apBearbstandWerteByBearbeitung.text') ||
-                    null,
-                  apStartJahr: get(n, 'apByApId.startJahr') || null,
-                  apUmsetzung:
-                    get(n, 'apByApId.apUmsetzungWerteByUmsetzung.text') || null,
-                  id: n.id,
-                  nr: n.nr,
-                  name: n.name,
-                  status: get(n, 'popStatusWerteByStatus.text') || null,
-                  bekanntSeit: n.bekanntSeit,
-                  statusUnklar: n.statusUnklar,
-                  statusUnklarBegruendung: n.statusUnklarBegruendung,
-                  x: n.x,
-                  y: n.y,
-                  changed: n.changed,
-                  changedBy: n.changedBy,
-                }))
-                exportModule({
-                  data: dataToExport,
-                  fileName: 'Populationen',
-                  store,
-                })
               } catch (error) {
                 enqueNotification({
                   message: error.message,
@@ -180,8 +154,42 @@ const Populationen = () => {
                   },
                 })
               }
+              const rows = get(result.data, 'allPops.nodes', []).map((n) => ({
+                apId: get(n, 'apByApId.id') || null,
+                apArtname: get(n, 'apByApId.aeTaxonomyByArtId.artname') || null,
+                apBearbeitung:
+                  get(n, 'apByApId.apBearbstandWerteByBearbeitung.text') ||
+                  null,
+                apStartJahr: get(n, 'apByApId.startJahr') || null,
+                apUmsetzung:
+                  get(n, 'apByApId.apUmsetzungWerteByUmsetzung.text') || null,
+                id: n.id,
+                nr: n.nr,
+                name: n.name,
+                status: get(n, 'popStatusWerteByStatus.text') || null,
+                bekanntSeit: n.bekanntSeit,
+                statusUnklar: n.statusUnklar,
+                statusUnklarBegruendung: n.statusUnklarBegruendung,
+                x: n.x,
+                y: n.y,
+                changed: n.changed,
+                changedBy: n.changedBy,
+              }))
+              exportModule({
+                data: rows,
+                fileName: 'Populationen',
+                store,
+              })
               removeNotification(notif)
               closeSnackbar(notif)
+              if (rows.length === 0) {
+                enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
             }}
           >
             {popIsFiltered ? 'Populationen (gefiltert)' : 'Populationen'}
@@ -195,15 +203,10 @@ const Populationen = () => {
                   persist: true,
                 },
               })
+              let result
               try {
-                const { data } = await client.query({
-                  query: await import('./allVPopKmls').then(m => m.default),
-                })
-                exportModule({
-                  data: get(data, 'allVPopKmls.nodes', []),
-                  fileName: 'Populationen',
-                  store,
-                  kml: true,
+                result = await client.query({
+                  query: await import('./allVPopKmls').then((m) => m.default),
                 })
               } catch (error) {
                 enqueNotification({
@@ -213,8 +216,23 @@ const Populationen = () => {
                   },
                 })
               }
+              const rows = get(result.data, 'allVPopKmls.nodes', [])
+              exportModule({
+                data: rows,
+                fileName: 'Populationen',
+                store,
+                kml: true,
+              })
               removeNotification(notif)
               closeSnackbar(notif)
+              if (rows.length === 0) {
+                enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
             }}
           >
             <div>Populationen für Google Earth (beschriftet mit PopNr)</div>
@@ -230,7 +248,9 @@ const Populationen = () => {
               })
               try {
                 const { data } = await client.query({
-                  query: await import('./allVPopKmlnamen').then(m => m.default),
+                  query: await import('./allVPopKmlnamen').then(
+                    (m) => m.default,
+                  ),
                 })
                 exportModule({
                   data: get(data, 'allVPopKmlnamen.nodes', []),
@@ -266,7 +286,7 @@ const Populationen = () => {
               try {
                 const { data } = await client.query({
                   query: await import('./allVPopVonapohnestatuses').then(
-                    m => m.default,
+                    (m) => m.default,
                   ),
                 })
                 exportModule({
@@ -300,7 +320,7 @@ const Populationen = () => {
               try {
                 const { data } = await client.query({
                   query: await import('./allVPopOhnekoords').then(
-                    m => m.default,
+                    (m) => m.default,
                   ),
                 })
                 exportModule({
@@ -334,7 +354,7 @@ const Populationen = () => {
               try {
                 const { data } = await client.query({
                   query: await import('./allVPopmassnberAnzmassns').then(
-                    m => m.default,
+                    (m) => m.default,
                   ),
                 })
                 exportModule({
@@ -372,7 +392,7 @@ const Populationen = () => {
               try {
                 const { data } = await client.query({
                   query: await import('./allVPopAnzmassns').then(
-                    m => m.default,
+                    (m) => m.default,
                   ),
                 })
                 exportModule({
@@ -406,7 +426,7 @@ const Populationen = () => {
               try {
                 const { data } = await client.query({
                   query: await import('./allVPopAnzkontrs').then(
-                    m => m.default,
+                    (m) => m.default,
                   ),
                 })
                 exportModule({
@@ -440,7 +460,7 @@ const Populationen = () => {
               try {
                 const { data } = await client.query({
                   query: await import('./allVPopPopberundmassnbers').then(
-                    m => m.default,
+                    (m) => m.default,
                   ),
                 })
                 exportModule({
@@ -477,7 +497,7 @@ const Populationen = () => {
               try {
                 const { data } = await client.query({
                   query: await import('./allVPopMitLetzterPopbers').then(
-                    m => m.default,
+                    (m) => m.default,
                   ),
                 })
                 exportModule({
@@ -514,7 +534,7 @@ const Populationen = () => {
               try {
                 const { data } = await client.query({
                   query: await import('./allVPopMitLetzterPopmassnbers').then(
-                    m => m.default,
+                    (m) => m.default,
                   ),
                 })
                 exportModule({
@@ -551,7 +571,7 @@ const Populationen = () => {
               try {
                 const { data } = await client.query({
                   query: await import('./allVPopLastCounts').then(
-                    m => m.default,
+                    (m) => m.default,
                   ),
                 })
                 exportModule({
@@ -586,7 +606,7 @@ const Populationen = () => {
               try {
                 const { data } = await client.query({
                   query: await import('./allVPopLastCountWithMassns').then(
-                    m => m.default,
+                    (m) => m.default,
                   ),
                 })
                 exportModule({

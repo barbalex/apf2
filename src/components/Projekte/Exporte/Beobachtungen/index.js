@@ -29,7 +29,7 @@ const StyledCardActions = styled(CardActions)`
   height: auto !important;
 `
 const CardActionIconButton = styled(IconButton)`
-  transform: ${props => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
+  transform: ${(props) => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
 `
 const CardActionTitle = styled.div`
   padding-left: 8px;
@@ -74,14 +74,10 @@ const Beobachtungen = () => {
         persist: true,
       },
     })
+    let result
     try {
-      const { data } = await client.query({
+      result = await client.query({
         query: allVBeobArtChangeds,
-      })
-      exportModule({
-        data: get(data, 'allVBeobArtChangeds.nodes', []),
-        fileName: 'BeobachtungenArtVeraendert',
-        store,
       })
     } catch (error) {
       enqueNotification({
@@ -91,8 +87,22 @@ const Beobachtungen = () => {
         },
       })
     }
+    const rows = get(result.data, 'allVBeobArtChangeds.nodes', [])
+    exportModule({
+      data: rows,
+      fileName: 'BeobachtungenArtVeraendert',
+      store,
+    })
     removeNotification(notif)
     closeSnackbar(notif)
+    if (rows.length === 0) {
+      enqueNotification({
+        message: 'Die Abfrage retournierte 0 Datensätze',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
   }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   return (

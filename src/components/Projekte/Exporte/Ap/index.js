@@ -138,7 +138,7 @@ const AP = () => {
     closeSnackbar(notif)
     if (dataToExport.length === 0) {
       enqueNotification({
-        message: 'Die Abfrage ergab 0 Datensätze',
+        message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',
         },
@@ -192,7 +192,7 @@ const AP = () => {
     closeSnackbar(notif)
     if (apOhnePops.length === 0) {
       enqueNotification({
-        message: 'Die Abfrage ergab 0 Datensätze',
+        message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',
         },
@@ -239,7 +239,7 @@ const AP = () => {
     closeSnackbar(notif)
     if (apAnzMassns.length === 0) {
       enqueNotification({
-        message: 'Die Abfrage ergab 0 Datensätze',
+        message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',
         },
@@ -286,7 +286,7 @@ const AP = () => {
     closeSnackbar(notif)
     if (apAnzKontrs.length === 0) {
       enqueNotification({
-        message: 'Die Abfrage ergab 0 Datensätze',
+        message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',
         },
@@ -325,7 +325,7 @@ const AP = () => {
     closeSnackbar(notif)
     if (apbers.length === 0) {
       enqueNotification({
-        message: 'Die Abfrage ergab 0 Datensätze',
+        message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',
         },
@@ -364,7 +364,7 @@ const AP = () => {
     closeSnackbar(notif)
     if (apApberundmassns.length === 0) {
       enqueNotification({
-        message: 'Die Abfrage ergab 0 Datensätze',
+        message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',
         },
@@ -415,7 +415,7 @@ const AP = () => {
     closeSnackbar(notif)
     if (ziels.length === 0) {
       enqueNotification({
-        message: 'Die Abfrage ergab 0 Datensätze',
+        message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',
         },
@@ -475,7 +475,7 @@ const AP = () => {
     closeSnackbar(notif)
     if (zielbers.length === 0) {
       enqueNotification({
-        message: 'Die Abfrage ergab 0 Datensätze',
+        message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',
         },
@@ -514,7 +514,7 @@ const AP = () => {
     closeSnackbar(notif)
     if (erfkrits.length === 0) {
       enqueNotification({
-        message: 'Die Abfrage ergab 0 Datensätze',
+        message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',
         },
@@ -553,7 +553,7 @@ const AP = () => {
     closeSnackbar(notif)
     if (idealbiotops.length === 0) {
       enqueNotification({
-        message: 'Die Abfrage ergab 0 Datensätze',
+        message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',
         },
@@ -592,7 +592,7 @@ const AP = () => {
     closeSnackbar(notif)
     if (assozarts.length === 0) {
       enqueNotification({
-        message: 'Die Abfrage ergab 0 Datensätze',
+        message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',
         },

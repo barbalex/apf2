@@ -27,7 +27,7 @@ const StyledCardActions = styled(CardActions)`
   height: auto !important;
 `
 const CardActionIconButton = styled(IconButton)`
-  transform: ${props => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
+  transform: ${(props) => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
 `
 const CardActionTitle = styled.div`
   padding-left: 8px;
@@ -102,8 +102,9 @@ const Kontrollen = () => {
                   persist: true,
                 },
               })
+              let result
               try {
-                const { data } = await client.query({
+                result = await client.query({
                   query: gql`
                     query tpopkontrForExportQuery($filter: TpopkontrFilter) {
                       allTpopkontrs(
@@ -262,166 +263,6 @@ const Kontrollen = () => {
                     filter: tpopkontrGqlFilter,
                   },
                 })
-                const dataToExport = get(data, 'allTpopkontrs.nodes', []).map(
-                  n => ({
-                    apId: get(n, 'tpopByTpopId.popByPopId.apByApId.id') || null,
-                    apFamilie:
-                      get(
-                        n,
-                        'tpopByTpopId.popByPopId.apByApId.aeTaxonomyByArtId.familie',
-                      ) || null,
-                    apArtname:
-                      get(
-                        n,
-                        'tpopByTpopId.popByPopId.apByApId.aeTaxonomyByArtId.artname',
-                      ) || null,
-                    apBearbeitung:
-                      get(
-                        n,
-                        'tpopByTpopId.popByPopId.apByApId.apBearbstandWerteByBearbeitung.text',
-                      ) || null,
-                    apStartJahr:
-                      get(n, 'tpopByTpopId.popByPopId.apByApId.startJahr') ||
-                      null,
-                    apUmsetzung:
-                      get(
-                        n,
-                        'tpopByTpopId.popByPopId.apByApId.apUmsetzungWerteByUmsetzung.text',
-                      ) || null,
-                    popId: get(n, 'tpopByTpopId.popByPopId.id') || null,
-                    popNr: get(n, 'tpopByTpopId.popByPopId.nr') || null,
-                    popName: get(n, 'tpopByTpopId.popByPopId.name') || null,
-                    popStatus:
-                      get(
-                        n,
-                        'tpopByTpopId.popByPopId.popStatusWerteByStatus.text',
-                      ) || null,
-                    popBekanntSeit:
-                      get(n, 'tpopByTpopId.popByPopId.bekanntSeit') || null,
-                    popStatusUnklar:
-                      get(n, 'tpopByTpopId.popByPopId.statusUnklar') || null,
-                    popStatusUnklarBegruendung:
-                      get(
-                        n,
-                        'tpopByTpopId.popByPopId.statusUnklarBegruendung',
-                      ) || null,
-                    popX: get(n, 'tpopByTpopId.popByPopId.x') || null,
-                    popY: get(n, 'tpopByTpopId.popByPopId.y') || null,
-                    tpopId: get(n, 'tpopByTpopId.id') || null,
-                    tpopNr: get(n, 'tpopByTpopId.nr') || null,
-                    tpopGemeinde: get(n, 'tpopByTpopId.gemeinde') || null,
-                    tpopFlurname: get(n, 'tpopByTpopId.flurname') || null,
-                    tpopStatus: get(n, 'tpopByTpopId.status') || null,
-                    statusDecodiert:
-                      get(n, 'tpopByTpopId.popStatusWerteByStatus.text') ||
-                      null,
-                    tpopBekanntSeit: get(n, 'tpopByTpopId.bekanntSeit') || null,
-                    tpopStatusUnklar:
-                      get(n, 'tpopByTpopId.statusUnklar') || null,
-                    tpopStatusUnklarGrund:
-                      get(n, 'tpopByTpopId.statusUnklarGrund') || null,
-                    tpopX: get(n, 'tpopByTpopId.x') || null,
-                    tpopY: get(n, 'tpopByTpopId.y') || null,
-                    tpopRadius: get(n, 'tpopByTpopId.radius') || null,
-                    tpopHoehe: get(n, 'tpopByTpopId.hoehe') || null,
-                    tpopExposition: get(n, 'tpopByTpopId.exposition') || null,
-                    tpopKlima: get(n, 'tpopByTpopId.klima') || null,
-                    tpopNeigung: get(n, 'tpopByTpopId.neigung') || null,
-                    tpopBeschreibung:
-                      get(n, 'tpopByTpopId.beschreibung') || null,
-                    tpopKatasterNr: get(n, 'tpopByTpopId.katasterNr') || null,
-                    tpopApberRelevant:
-                      get(n, 'tpopByTpopId.apberRelevant') || null,
-                    tpopApberRelevantGrund:
-                      get(n, 'tpopByTpopId.apberRelevantGrund') || null,
-                    tpopEigentuemer: get(n, 'tpopByTpopId.eigentuemer') || null,
-                    tpopKontakt: get(n, 'tpopByTpopId.kontakt') || null,
-                    tpopNutzungszone:
-                      get(n, 'tpopByTpopId.nutzungszone') || null,
-                    tpopBewirtschafter:
-                      get(n, 'tpopByTpopId.bewirtschafter') || null,
-                    tpopBewirtschaftung:
-                      get(n, 'tpopByTpopId.bewirtschaftung') || null,
-                    tpopEkfrequenz: get(n, 'tpopByTpopId.ekfrequenz') || null,
-                    tpopEkfrequenzAbweichend:
-                      get(n, 'tpopByTpopId.ekfrequenzAbweichend') || null,
-                    tpopEkfKontrolleur:
-                      get(n, 'tpopByTpopId.adresseByEkfKontrolleur.name') ||
-                      null,
-                    id: n.id,
-                    jahr: n.jahr,
-                    datum: n.datum,
-                    typ: get(n, 'tpopkontrTypWerteByTyp.text') || null,
-                    bearbeiter: get(n, 'adresseByBearbeiter.name') || null,
-                    ueberlebensrate: n.ueberlebensrate,
-                    vitalitaet: n.vitalitaet,
-                    entwicklung:
-                      get(n, 'tpopEntwicklungWerteByEntwicklung.text') || null,
-                    ursachen: n.ursachen,
-                    erfolgsbeurteilung: n.erfolgsbeurteilung,
-                    umsetzungAendern: n.umsetzungAendern,
-                    kontrolleAendern: n.kontrolleAendern,
-                    bemerkungen: n.bemerkungen,
-                    lrDelarze: n.lrDelarze,
-                    lrUmgebungDelarze: n.lrUmgebungDelarze,
-                    vegetationstyp: n.vegetationstyp,
-                    konkurrenz: n.konkurrenz,
-                    moosschicht: n.moosschicht,
-                    krautschicht: n.krautschicht,
-                    strauchschicht: n.strauchschicht,
-                    baumschicht: n.baumschicht,
-                    bodenTyp: n.bodenTyp,
-                    bodenKalkgehalt: n.bodenKalkgehalt,
-                    bodenDurchlaessigkeit: n.bodenDurchlaessigkeit,
-                    bodenHumus: n.bodenHumus,
-                    bodenNaehrstoffgehalt: n.bodenNaehrstoffgehalt,
-                    bodenAbtrag: n.bodenAbtrag,
-                    wasserhaushalt: n.wasserhaushalt,
-                    idealbiotopUebereinstimmung:
-                      get(
-                        n,
-                        'tpopkontrIdbiotuebereinstWerteByIdealbiotopUebereinstimmung.text',
-                      ) || null,
-                    handlungsbedarf: n.handlungsbedarf,
-                    flaecheUeberprueft: n.flaecheUeberprueft,
-                    flaeche: n.flaeche,
-                    planVorhanden: n.planVorhanden,
-                    deckungVegetation: n.deckungVegetation,
-                    deckungNackterBoden: n.deckungNackterBoden,
-                    deckungApArt: n.deckungApArt,
-                    jungpflanzenVorhanden: n.jungpflanzenVorhanden,
-                    vegetationshoeheMaximum: n.vegetationshoeheMaximum,
-                    vegetationshoeheMittel: n.vegetationshoeheMittel,
-                    gefaehrdung: n.gefaehrdung,
-                    changed: n.changed,
-                    changedBy: n.changedBy,
-                    apberNichtRelevant: n.apberNichtRelevant,
-                    apberNichtRelevantGrund: n.apberNichtRelevantGrund,
-                    ekfBemerkungen: n.ekfBemerkungen,
-                    zaehlungen: (
-                      get(n, 'tpopkontrzaehlsByTpopkontrId.nodes') || []
-                    )
-                      .map(
-                        n =>
-                          `Einheit: ${get(
-                            n,
-                            'tpopkontrzaehlEinheitWerteByEinheit.text',
-                          ) || '(keine)'}, Methode: ${get(
-                            n,
-                            'tpopkontrzaehlMethodeWerteByMethode.text',
-                          ) || '(keine)'}, Anzahl: ${n.anzahl || '(keine)'}`,
-                      )
-                      .join(' / '),
-                  }),
-                )
-                exportModule({
-                  data: dataToExport,
-                  fileName: 'Kontrollen',
-                  idKey: 'tpop_id',
-                  xKey: 'tpop_wgs84lat',
-                  yKey: 'tpop_wgs84long',
-                  store,
-                })
               } catch (error) {
                 enqueNotification({
                   message: error.message,
@@ -430,8 +271,169 @@ const Kontrollen = () => {
                   },
                 })
               }
+              const rows = get(result.data, 'allTpopkontrs.nodes', []).map(
+                (n) => ({
+                  apId: get(n, 'tpopByTpopId.popByPopId.apByApId.id') || null,
+                  apFamilie:
+                    get(
+                      n,
+                      'tpopByTpopId.popByPopId.apByApId.aeTaxonomyByArtId.familie',
+                    ) || null,
+                  apArtname:
+                    get(
+                      n,
+                      'tpopByTpopId.popByPopId.apByApId.aeTaxonomyByArtId.artname',
+                    ) || null,
+                  apBearbeitung:
+                    get(
+                      n,
+                      'tpopByTpopId.popByPopId.apByApId.apBearbstandWerteByBearbeitung.text',
+                    ) || null,
+                  apStartJahr:
+                    get(n, 'tpopByTpopId.popByPopId.apByApId.startJahr') ||
+                    null,
+                  apUmsetzung:
+                    get(
+                      n,
+                      'tpopByTpopId.popByPopId.apByApId.apUmsetzungWerteByUmsetzung.text',
+                    ) || null,
+                  popId: get(n, 'tpopByTpopId.popByPopId.id') || null,
+                  popNr: get(n, 'tpopByTpopId.popByPopId.nr') || null,
+                  popName: get(n, 'tpopByTpopId.popByPopId.name') || null,
+                  popStatus:
+                    get(
+                      n,
+                      'tpopByTpopId.popByPopId.popStatusWerteByStatus.text',
+                    ) || null,
+                  popBekanntSeit:
+                    get(n, 'tpopByTpopId.popByPopId.bekanntSeit') || null,
+                  popStatusUnklar:
+                    get(n, 'tpopByTpopId.popByPopId.statusUnklar') || null,
+                  popStatusUnklarBegruendung:
+                    get(n, 'tpopByTpopId.popByPopId.statusUnklarBegruendung') ||
+                    null,
+                  popX: get(n, 'tpopByTpopId.popByPopId.x') || null,
+                  popY: get(n, 'tpopByTpopId.popByPopId.y') || null,
+                  tpopId: get(n, 'tpopByTpopId.id') || null,
+                  tpopNr: get(n, 'tpopByTpopId.nr') || null,
+                  tpopGemeinde: get(n, 'tpopByTpopId.gemeinde') || null,
+                  tpopFlurname: get(n, 'tpopByTpopId.flurname') || null,
+                  tpopStatus: get(n, 'tpopByTpopId.status') || null,
+                  statusDecodiert:
+                    get(n, 'tpopByTpopId.popStatusWerteByStatus.text') || null,
+                  tpopBekanntSeit: get(n, 'tpopByTpopId.bekanntSeit') || null,
+                  tpopStatusUnklar: get(n, 'tpopByTpopId.statusUnklar') || null,
+                  tpopStatusUnklarGrund:
+                    get(n, 'tpopByTpopId.statusUnklarGrund') || null,
+                  tpopX: get(n, 'tpopByTpopId.x') || null,
+                  tpopY: get(n, 'tpopByTpopId.y') || null,
+                  tpopRadius: get(n, 'tpopByTpopId.radius') || null,
+                  tpopHoehe: get(n, 'tpopByTpopId.hoehe') || null,
+                  tpopExposition: get(n, 'tpopByTpopId.exposition') || null,
+                  tpopKlima: get(n, 'tpopByTpopId.klima') || null,
+                  tpopNeigung: get(n, 'tpopByTpopId.neigung') || null,
+                  tpopBeschreibung: get(n, 'tpopByTpopId.beschreibung') || null,
+                  tpopKatasterNr: get(n, 'tpopByTpopId.katasterNr') || null,
+                  tpopApberRelevant:
+                    get(n, 'tpopByTpopId.apberRelevant') || null,
+                  tpopApberRelevantGrund:
+                    get(n, 'tpopByTpopId.apberRelevantGrund') || null,
+                  tpopEigentuemer: get(n, 'tpopByTpopId.eigentuemer') || null,
+                  tpopKontakt: get(n, 'tpopByTpopId.kontakt') || null,
+                  tpopNutzungszone: get(n, 'tpopByTpopId.nutzungszone') || null,
+                  tpopBewirtschafter:
+                    get(n, 'tpopByTpopId.bewirtschafter') || null,
+                  tpopBewirtschaftung:
+                    get(n, 'tpopByTpopId.bewirtschaftung') || null,
+                  tpopEkfrequenz: get(n, 'tpopByTpopId.ekfrequenz') || null,
+                  tpopEkfrequenzAbweichend:
+                    get(n, 'tpopByTpopId.ekfrequenzAbweichend') || null,
+                  tpopEkfKontrolleur:
+                    get(n, 'tpopByTpopId.adresseByEkfKontrolleur.name') || null,
+                  id: n.id,
+                  jahr: n.jahr,
+                  datum: n.datum,
+                  typ: get(n, 'tpopkontrTypWerteByTyp.text') || null,
+                  bearbeiter: get(n, 'adresseByBearbeiter.name') || null,
+                  ueberlebensrate: n.ueberlebensrate,
+                  vitalitaet: n.vitalitaet,
+                  entwicklung:
+                    get(n, 'tpopEntwicklungWerteByEntwicklung.text') || null,
+                  ursachen: n.ursachen,
+                  erfolgsbeurteilung: n.erfolgsbeurteilung,
+                  umsetzungAendern: n.umsetzungAendern,
+                  kontrolleAendern: n.kontrolleAendern,
+                  bemerkungen: n.bemerkungen,
+                  lrDelarze: n.lrDelarze,
+                  lrUmgebungDelarze: n.lrUmgebungDelarze,
+                  vegetationstyp: n.vegetationstyp,
+                  konkurrenz: n.konkurrenz,
+                  moosschicht: n.moosschicht,
+                  krautschicht: n.krautschicht,
+                  strauchschicht: n.strauchschicht,
+                  baumschicht: n.baumschicht,
+                  bodenTyp: n.bodenTyp,
+                  bodenKalkgehalt: n.bodenKalkgehalt,
+                  bodenDurchlaessigkeit: n.bodenDurchlaessigkeit,
+                  bodenHumus: n.bodenHumus,
+                  bodenNaehrstoffgehalt: n.bodenNaehrstoffgehalt,
+                  bodenAbtrag: n.bodenAbtrag,
+                  wasserhaushalt: n.wasserhaushalt,
+                  idealbiotopUebereinstimmung:
+                    get(
+                      n,
+                      'tpopkontrIdbiotuebereinstWerteByIdealbiotopUebereinstimmung.text',
+                    ) || null,
+                  handlungsbedarf: n.handlungsbedarf,
+                  flaecheUeberprueft: n.flaecheUeberprueft,
+                  flaeche: n.flaeche,
+                  planVorhanden: n.planVorhanden,
+                  deckungVegetation: n.deckungVegetation,
+                  deckungNackterBoden: n.deckungNackterBoden,
+                  deckungApArt: n.deckungApArt,
+                  jungpflanzenVorhanden: n.jungpflanzenVorhanden,
+                  vegetationshoeheMaximum: n.vegetationshoeheMaximum,
+                  vegetationshoeheMittel: n.vegetationshoeheMittel,
+                  gefaehrdung: n.gefaehrdung,
+                  changed: n.changed,
+                  changedBy: n.changedBy,
+                  apberNichtRelevant: n.apberNichtRelevant,
+                  apberNichtRelevantGrund: n.apberNichtRelevantGrund,
+                  ekfBemerkungen: n.ekfBemerkungen,
+                  zaehlungen: (
+                    get(n, 'tpopkontrzaehlsByTpopkontrId.nodes') || []
+                  )
+                    .map(
+                      (n) =>
+                        `Einheit: ${
+                          get(n, 'tpopkontrzaehlEinheitWerteByEinheit.text') ||
+                          '(keine)'
+                        }, Methode: ${
+                          get(n, 'tpopkontrzaehlMethodeWerteByMethode.text') ||
+                          '(keine)'
+                        }, Anzahl: ${n.anzahl || '(keine)'}`,
+                    )
+                    .join(' / '),
+                }),
+              )
+              exportModule({
+                data: rows,
+                fileName: 'Kontrollen',
+                idKey: 'tpop_id',
+                xKey: 'tpop_wgs84lat',
+                yKey: 'tpop_wgs84long',
+                store,
+              })
               removeNotification(notif)
               closeSnackbar(notif)
+              if (rows.length === 0) {
+                enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
             }}
           >
             {tpopkontrIsFiltered ? 'Kontrollen (gefiltert)' : 'Kontrollen'}
@@ -445,19 +447,12 @@ const Kontrollen = () => {
                   persist: true,
                 },
               })
+              let result
               try {
-                const { data } = await client.query({
+                result = await client.query({
                   query: await import('./allVTpopkontrWebgisbuns').then(
-                    m => m.default,
+                    (m) => m.default,
                   ),
-                })
-                exportModule({
-                  data: get(data, 'allVTpopkontrWebgisbuns.nodes', []),
-                  fileName: 'KontrollenWebGisBun',
-                  idKey: 'TPOPGUID',
-                  xKey: 'KONTR_WGS84LAT',
-                  yKey: 'KONTR_WGS84LONG',
-                  store,
                 })
               } catch (error) {
                 enqueNotification({
@@ -467,8 +462,25 @@ const Kontrollen = () => {
                   },
                 })
               }
+              const rows = get(result.data, 'allVTpopkontrWebgisbuns.nodes', [])
+              exportModule({
+                data: rows,
+                fileName: 'KontrollenWebGisBun',
+                idKey: 'TPOPGUID',
+                xKey: 'KONTR_WGS84LAT',
+                yKey: 'KONTR_WGS84LONG',
+                store,
+              })
               removeNotification(notif)
               closeSnackbar(notif)
+              if (rows.length === 0) {
+                enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
             }}
           >
             Kontrollen für WebGIS BUN
@@ -482,19 +494,12 @@ const Kontrollen = () => {
                   persist: true,
                 },
               })
+              let result
               try {
-                const { data } = await client.query({
+                result = await client.query({
                   query: await import('./allVKontrzaehlAnzproeinheits').then(
-                    m => m.default,
+                    (m) => m.default,
                   ),
-                })
-                exportModule({
-                  data: get(data, 'allVKontrzaehlAnzproeinheits.nodes', []),
-                  fileName: 'KontrollenAnzahlProZaehleinheit',
-                  idKey: 'tpop_id',
-                  xKey: 'tpop_wgs84lat',
-                  yKey: 'tpop_wgs84long',
-                  store,
                 })
               } catch (error) {
                 enqueNotification({
@@ -504,8 +509,29 @@ const Kontrollen = () => {
                   },
                 })
               }
+              const rows = get(
+                result.data,
+                'allVKontrzaehlAnzproeinheits.nodes',
+                [],
+              )
+              exportModule({
+                data: rows,
+                fileName: 'KontrollenAnzahlProZaehleinheit',
+                idKey: 'tpop_id',
+                xKey: 'tpop_wgs84lat',
+                yKey: 'tpop_wgs84long',
+                store,
+              })
               removeNotification(notif)
               closeSnackbar(notif)
+              if (rows.length === 0) {
+                enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
             }}
           >
             Kontrollen: Anzahl pro Zähleinheit
