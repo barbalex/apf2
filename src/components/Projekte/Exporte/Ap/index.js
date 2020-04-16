@@ -553,7 +553,7 @@ const AP = () => {
       })
     }
     exportModule({
-      data: rows,
+      data: sortBy(rows, ['artname', 'beurteilung']),
       fileName: 'Erfolgskriterien',
       store,
     })
