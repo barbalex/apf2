@@ -1682,39 +1682,6 @@ ORDER BY
   apflora.ae_taxonomies.artname;
 
 -- used for export
-DROP VIEW IF EXISTS apflora.v_ap_ohnepop CASCADE;
-CREATE OR REPLACE VIEW apflora.v_ap_ohnepop AS
-SELECT
-  apflora.ap.id,
-  apflora.ae_taxonomies.artname,
-  apflora.ap_bearbstand_werte.text AS bearbeitung,
-  apflora.ap.start_jahr AS start_jahr,
-  apflora.ap_umsetzung_werte.text AS umsetzung,
-  apflora.adresse.name AS bearbeiter,
-  apflora.pop.id AS pop_id
-FROM
-  ((((apflora.ae_taxonomies
-  INNER JOIN
-    apflora.ap
-    ON apflora.ae_taxonomies.id = apflora.ap.art_id)
-  INNER JOIN
-    apflora.ap_bearbstand_werte
-    ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
-  LEFT JOIN
-    apflora.ap_umsetzung_werte
-    ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
-  LEFT JOIN
-    apflora.adresse
-    ON apflora.ap.bearbeiter = apflora.adresse.id)
-  LEFT JOIN
-    apflora.pop
-    ON apflora.ap.id = apflora.pop.ap_id
-WHERE
-  apflora.pop.id IS NULL
-ORDER BY
-  apflora.ae_taxonomies.artname;
-
--- used for export
 DROP VIEW IF EXISTS apflora.v_erfkrit CASCADE;
 CREATE OR REPLACE VIEW apflora.v_erfkrit AS
 SELECT
@@ -5610,3 +5577,4 @@ ORDER BY
 
 DROP VIEW IF EXISTS apflora.v_ziel;
 DROP VIEW IF EXISTS apflora.v_zielber;
+DROP VIEW IF EXISTS apflora.v_ap_ohnepop CASCADE;

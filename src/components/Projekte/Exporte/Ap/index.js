@@ -152,14 +152,10 @@ const AP = () => {
         persist: true,
       },
     })
+    let result
     try {
-      const { data } = await client.query({
-        query: await import('./allVApOhnepops').then((m) => m.default),
-      })
-      exportModule({
-        data: get(data, 'allVApOhnepops.nodes', []),
-        fileName: 'ApOhnePopulationen',
-        store,
+      result = await client.query({
+        query: await import('./queryApOhnepops').then((m) => m.default),
       })
     } catch (error) {
       enqueNotification({
@@ -169,8 +165,30 @@ const AP = () => {
         },
       })
     }
+    const apOhnePops = get(result.data, 'allAps.nodes', [])
+      .filter((z) => get(z, 'popsByApId.totalCount') === 0)
+      .map((z) => ({
+        id: z.id,
+        artname: get(z, 'aeTaxonomyByArtId.artname') || '',
+        bearbeitung: get(z, 'apBearbstandWerteByBearbeitung.text') || '',
+        start_jahr: z.startJahr,
+        umsetzung: get(z, 'apUmsetzungWerteByUmsetzung.text') || '',
+      }))
+    exportModule({
+      data: apOhnePops,
+      fileName: 'ApOhnePopulationen',
+      store,
+    })
     removeNotification(notif)
     closeSnackbar(notif)
+    if (apOhnePops.length === 0) {
+      enqueNotification({
+        message: 'Die Abfrage ergab 0 Datensätze',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
   }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickAnzMassnProAp = useCallback(async () => {
