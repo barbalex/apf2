@@ -212,10 +212,19 @@ const AP = () => {
     })
     try {
       const { data } = await client.query({
-        query: await import('./allVApAnzkontrs').then((m) => m.default),
+        query: await import('./queryApAnzKontrs').then((m) => m.default),
       })
+      const apAnzKontrs = get(data, 'allAps.nodes', []).map((z) => ({
+        id: z.id,
+        artname: get(z, 'aeTaxonomyByArtId.artname') || '',
+        bearbeitung: get(z, 'apBearbstandWerteByBearbeitung.text') || '',
+        start_jahr: z.startJahr,
+        umsetzung: get(z, 'apUmsetzungWerteByUmsetzung.text') || '',
+        anzahl_kontrollen:
+          get(z, 'vApAnzkontrsById.nodes[0].anzahlKontrollen') || '',
+      }))
       exportModule({
-        data: get(data, 'allVApAnzkontrs.nodes', []),
+        data: apAnzKontrs,
         fileName: 'ApAnzahlKontrollen',
         store,
       })
