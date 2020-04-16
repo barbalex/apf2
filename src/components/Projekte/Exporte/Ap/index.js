@@ -305,7 +305,7 @@ const AP = () => {
     let result
     try {
       result = await client.query({
-        query: await import('./allVApbers').then((m) => m.default),
+        query: await import('./queryApbers').then((m) => m.default),
       })
     } catch (error) {
       enqueNotification({
@@ -315,7 +315,31 @@ const AP = () => {
         },
       })
     }
-    const rows = get(result.data, 'allVApbers.nodes', [])
+    const rows = get(result.data, 'allApbers.nodes', []).map((z) => ({
+      id: z.id,
+      ap_id: z.apId,
+      artname: get(z, 'apByApId.aeTaxonomyByArtId.artname') || '',
+      jahr: z.jahr,
+      situation: z.situation,
+      vergleich_vorjahr_gesamtziel: z.vergleichVorjahrGesamtziel,
+      beurteilung: z.beurteilung,
+      beurteilung_decodiert: get(z, 'apErfkritWerteByBeurteilung.text') || '',
+      veraenderung_zum_vorjahr: z.veraenderungZumVorjahr,
+      apber_analyse: z.apberAnalyse,
+      konsequenzen_umsetzung: z.konsequenzenUmsetzung,
+      konsequenzen_erfolgskontrolle: z.konsequenzenErfolgskontrolle,
+      biotope_neue: z.biotopeNeue,
+      biotope_optimieren: z.biotopeOptimieren,
+      massnahmen_optimieren: z.massnahmenOptimieren,
+      wirkung_auf_art: z.wirkungAufArt,
+      changed: z.changed,
+      changed_by: z.changedBy,
+      massnahmen_ap_bearb: z.massnahmenApBearb,
+      massnahmen_planung_vs_ausfuehrung: z.massnahmenPlanungVsAusfuehrung,
+      datum: z.datum,
+      bearbeiter: z.bearbeiter,
+      bearbeiter_decodiert: get(z, 'adresseByBearbeiter.name') || '',
+    }))
     removeNotification(notif)
     closeSnackbar(notif)
     if (rows.length === 0) {
@@ -327,7 +351,7 @@ const AP = () => {
       })
     }
     exportModule({
-      data: rows,
+      data: sortBy(rows, ['artname', 'jahr']),
       fileName: 'Jahresberichte',
       store,
     })
