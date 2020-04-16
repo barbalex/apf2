@@ -368,7 +368,7 @@ const AP = () => {
     let result
     try {
       result = await client.query({
-        query: await import('./allVApApberundmassns').then((m) => m.default),
+        query: await import('./queryApApberUndMassns').then((m) => m.default),
       })
     } catch (error) {
       enqueNotification({
@@ -378,7 +378,23 @@ const AP = () => {
         },
       })
     }
-    const rows = get(result.data, 'allVApApberundmassns.nodes', [])
+    const rows = get(result.data, 'allAps.nodes', []).map((z) => ({
+      ap_id: z.id,
+      artname: get(z, 'aeTaxonomyByArtId.artname') || '',
+      ap_bearbeitung: get(z, 'apBearbstandWerteByBearbeitung.text') || '',
+      ap_start_jahr: z.startJahr,
+      ap_umsetzung: get(z, 'apUmsetzungWerteByUmsetzung.text') || '',
+      ap_bearbeiter: get(z, 'adresseByBearbeiter.name') || '',
+      artwert: get(z, 'aeTaxonomyByArtId.artwert') || '',
+      massn_jahr: get(z, 'vApApberundmassnsById.nodes[0].massnJahr') || '',
+      massn_anzahl: get(z, 'vApApberundmassnsById.nodes[0].massnAnzahl') || '',
+      massn_anzahl_bisher:
+        get(z, 'vApApberundmassnsById.nodes[0].massnAnzahlBisher') || '',
+      bericht_erstellt:
+        get(z, 'vApApberundmassnsById.nodes[0].berichtErstellt') || '',
+      changed: z.changed,
+      changed_by: z.changedBy,
+    }))
     removeNotification(notif)
     closeSnackbar(notif)
     if (rows.length === 0) {
@@ -570,7 +586,7 @@ const AP = () => {
     let result
     try {
       result = await client.query({
-        query: await import('./allVIdealbiotops').then((m) => m.default),
+        query: await import('./queryIdealbiotops').then((m) => m.default),
       })
     } catch (error) {
       enqueNotification({
@@ -580,7 +596,36 @@ const AP = () => {
         },
       })
     }
-    const rows = get(result.data, 'allVIdealbiotops.nodes', [])
+    const rows = get(result.data, 'allIdealbiotops.nodes', []).map((z) => ({
+      ap_id: z.apId,
+      artname: get(z, 'apByApId.aeTaxonomyByArtId.artname') || '',
+      ap_bearbeitung:
+        get(z, 'apByApId.apBearbstandWerteByBearbeitung.text') || '',
+      ap_start_jahr: get(z, 'apByApId.startJahr') || '',
+      ap_umsetzung: get(z, 'apByApId.apUmsetzungWerteByUmsetzung.text') || '',
+      ap_bearbeiter: get(z, 'apByApId.adresseByBearbeiter.name') || '',
+      id: z.id,
+      erstelldatum: z.erstelldatum,
+      hoehenlage: z.hoehenlage,
+      region: z.region,
+      exposition: z.exposition,
+      besonnung: z.besonnung,
+      hangneigung: z.hangneigung,
+      boden_typ: z.bodenTyp,
+      boden_kalkgehalt: z.bodenKalkgehalt,
+      boden_durchlaessigkeit: z.bodenDurchlaessigkeit,
+      boden_humus: z.bodenHumus,
+      boden_naehrstoffgehalt: z.bodenNaehrstoffgehalt,
+      wasserhaushalt: z.wasserhaushalt,
+      konkurrenz: z.konkurrenz,
+      moosschicht: z.moosschicht,
+      krautschicht: z.krautschicht,
+      strauchschicht: z.strauchschicht,
+      baumschicht: z.baumschicht,
+      bemerkungen: z.bemerkungen,
+      changed: z.changed,
+      changed_by: z.changedBy,
+    }))
     removeNotification(notif)
     closeSnackbar(notif)
     if (rows.length === 0) {
@@ -592,7 +637,7 @@ const AP = () => {
       })
     }
     exportModule({
-      data: rows,
+      data: sortBy(rows, 'artname'),
       fileName: 'Idealbiotope',
       store,
     })

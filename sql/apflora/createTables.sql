@@ -516,6 +516,21 @@ COMMENT ON COLUMN apflora.idealbiotop.bemerkungen IS 'Bemerkungen';
 COMMENT ON COLUMN apflora.idealbiotop.changed IS 'Wann wurde der Datensatz zuletzt verändert?';
 COMMENT ON COLUMN apflora.idealbiotop.changed_by IS 'Wer hat den Datensatz zuletzt verändert?';
 
+
+-- TODO: this is developing, not in use yet
+alter table apflora.idealbiotop enable row level security;
+drop policy if exists reader on apflora.idealbiotop;
+create policy reader on apflora.idealbiotop using 
+(
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  or (
+    current_user = 'apflora_artverantwortlich'
+    and ap_id in (
+      select ap_id from apflora.ap_user where user_name = current_user_name()
+    )
+  )
+);
+
 drop table if exists apflora.idealbiotop_file;
 create table apflora.idealbiotop_file (
   id uuid primary key DEFAULT uuid_generate_v1mc(),

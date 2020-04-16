@@ -283,142 +283,126 @@ ORDER BY
   apflora.pop.nr;
 
 -- used for export
-DROP VIEW IF EXISTS apflora.v_ap_apberundmassn CASCADE;
-CREATE OR REPLACE VIEW apflora.v_ap_apberundmassn AS
+drop view if exists apflora.v_ap_apberundmassn;
+create or replace view apflora.v_ap_apberundmassn as
 with massn_jahre as (
-  SELECT
+  select
     jahr
-  FROM
+  from
     apflora.tpopmassn
-  GROUP BY
+  group by
     jahr
-  HAVING
-    jahr BETWEEN 1900 AND 2100
-  ORDER BY
+  having
+    jahr between 1900 and 2100
+  order by
     jahr
 ),
 ap_massn_jahre as (
-  SELECT
+  select
     apflora.ap.id,
     massn_jahre.jahr
-  FROM
+  from
     apflora.ap,
     massn_jahre
-  WHERE
+  where
     apflora.ap.bearbeitung < 4
-  ORDER BY
+  order by
     apflora.ap.id,
     massn_jahre.jahr
 ),
 ap_anzmassnprojahr0 as (
-  SELECT
+  select
     apflora.ap.id,
     apflora.tpopmassn.jahr,
-    count(apflora.tpopmassn.id) AS anz_tpopmassn
-  FROM
+    count(apflora.tpopmassn.id) as anz_tpopmassn
+  from
     apflora.ap
-    INNER JOIN
+    inner join
       apflora.pop
-      INNER JOIN
+      inner join
         apflora.tpop
-        ON apflora.pop.id = apflora.tpop.pop_id
-      INNER JOIN
+        on apflora.pop.id = apflora.tpop.pop_id
+      inner join
         apflora.tpopmassn
-        ON apflora.tpop.id = apflora.tpopmassn.tpop_id
-      ON apflora.ap.id = apflora.pop.ap_id
-  WHERE
-    apflora.ap.bearbeitung BETWEEN 1 AND 3
-    AND apflora.tpop.apber_relevant = true
-    AND apflora.pop.status  <> 300
-  GROUP BY
+        on apflora.tpop.id = apflora.tpopmassn.tpop_id
+      on apflora.ap.id = apflora.pop.ap_id
+  where
+    apflora.ap.bearbeitung between 1 and 3
+    and apflora.tpop.apber_relevant = true
+    and apflora.pop.status  <> 300
+  group by
     apflora.ap.id,
     apflora.tpopmassn.jahr
-  HAVING
-    apflora.tpopmassn.jahr IS NOT NULL
+  having
+    apflora.tpopmassn.jahr is not null
 ),
 ap_anzmassnprojahr as (
-  SELECT
+  select
     ap_massn_jahre.id,
     ap_massn_jahre.jahr,
-    COALESCE(ap_anzmassnprojahr0.anz_tpopmassn, 0) AS anzahl_massnahmen
-  FROM
+    coalesce(ap_anzmassnprojahr0.anz_tpopmassn, 0) as anzahl_massnahmen
+  from
     ap_massn_jahre
-    LEFT JOIN
+    left join
       ap_anzmassnprojahr0
-      ON
+      on
         (ap_massn_jahre.jahr = ap_anzmassnprojahr0.jahr)
-        AND (ap_massn_jahre.id = ap_anzmassnprojahr0.id)
-  ORDER BY
+        and (ap_massn_jahre.id = ap_anzmassnprojahr0.id)
+  order by
     ap_massn_jahre.id,
     ap_massn_jahre.jahr
 ),
 ap_anzmassn_alle_jahre as (
-  SELECT
+  select
     ap_massn_jahre.id,
     ap_massn_jahre.jahr,
-    COALESCE(ap_anzmassnprojahr0.anz_tpopmassn, 0) AS anzahl_massnahmen
-  FROM
+    coalesce(ap_anzmassnprojahr0.anz_tpopmassn, 0) as anzahl_massnahmen
+  from
     ap_massn_jahre
-    LEFT JOIN
+    left join
       ap_anzmassnprojahr0
-      ON
+      on
         (ap_massn_jahre.jahr = ap_anzmassnprojahr0.jahr)
-        AND (ap_massn_jahre.id = ap_anzmassnprojahr0.id)
+        and (ap_massn_jahre.id = ap_anzmassnprojahr0.id)
 ),
-  ap_anzmassnbisjahr as (SELECT
+  ap_anzmassnbisjahr as (select
     ap_massn_jahre.id,
     ap_massn_jahre.jahr,
-    sum(ap_anzmassn_alle_jahre.anzahl_massnahmen) AS anzahl_massnahmen
-  FROM
+    sum(ap_anzmassn_alle_jahre.anzahl_massnahmen) as anzahl_massnahmen
+  from
     ap_massn_jahre
-    INNER JOIN
+    inner join
       ap_anzmassn_alle_jahre
-      ON ap_massn_jahre.id = ap_anzmassn_alle_jahre.id
-  WHERE
+      on ap_massn_jahre.id = ap_anzmassn_alle_jahre.id
+  where
     ap_anzmassn_alle_jahre.jahr <= ap_massn_jahre.jahr
-  GROUP BY
+  group by
     ap_massn_jahre.id,
     ap_massn_jahre.jahr
 )
-SELECT
+select
   apflora.ap.id,
-  apflora.ae_taxonomies.artname,
-  apflora.ap_bearbstand_werte.text AS bearbeitung,
-  apflora.ap.start_jahr,
-  apflora.ap_umsetzung_werte.text AS umsetzung,
-  apflora.adresse.name AS bearbeiter,
-  apflora.ae_taxonomies.artwert,
-  ap_anzmassnprojahr.jahr AS massn_jahr,
-  ap_anzmassnprojahr.anzahl_massnahmen AS massn_anzahl,
-  ap_anzmassnbisjahr.anzahl_massnahmen AS massn_anzahl_bisher,
-  CASE
-    WHEN apflora.apber.jahr > 0
-    THEN 'ja'
-    ELSE 'nein'
-  END AS bericht_erstellt
-FROM
-  apflora.ae_taxonomies
-  INNER JOIN apflora.ap
-    LEFT JOIN apflora.ap_bearbstand_werte
-    ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code
-    LEFT JOIN apflora.ap_umsetzung_werte
-    ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code
-    LEFT JOIN apflora.adresse
-    ON apflora.ap.bearbeiter = apflora.adresse.id
-    INNER JOIN ap_anzmassnprojahr
-      INNER JOIN ap_anzmassnbisjahr
-        LEFT JOIN apflora.apber
-        ON
+  ap_anzmassnprojahr.jahr as massn_jahr,
+  ap_anzmassnprojahr.anzahl_massnahmen as massn_anzahl,
+  ap_anzmassnbisjahr.anzahl_massnahmen as massn_anzahl_bisher,
+  case
+    when apflora.apber.jahr > 0
+    then 'ja'
+    else 'nein'
+  end as bericht_erstellt
+from
+  apflora.ap
+    inner join ap_anzmassnprojahr
+      inner join ap_anzmassnbisjahr
+        left join apflora.apber
+        on
           (ap_anzmassnbisjahr.jahr = apflora.apber.jahr)
-          AND (ap_anzmassnbisjahr.id = apflora.apber.ap_id)
-      ON
+          and (ap_anzmassnbisjahr.id = apflora.apber.ap_id)
+      on
         (ap_anzmassnprojahr.jahr = ap_anzmassnbisjahr.jahr)
-        AND (ap_anzmassnprojahr.id = ap_anzmassnbisjahr.id)
-    ON apflora.ap.id = ap_anzmassnprojahr.id
-  ON apflora.ae_taxonomies.id = apflora.ap.art_id
-ORDER BY
-  apflora.ae_taxonomies.artname,
-  ap_anzmassnprojahr.jahr;
+        and (ap_anzmassnprojahr.id = ap_anzmassnbisjahr.id)
+    on apflora.ap.id = ap_anzmassnprojahr.id;
+comment on view apflora.v_ap_apberundmassn is '@foreignKey (id) references ap (id)'
 
 DROP VIEW IF EXISTS apflora.v_massn_webgisbun CASCADE;
 CREATE OR REPLACE VIEW apflora.v_massn_webgisbun AS
@@ -5349,54 +5333,6 @@ ORDER BY
   apflora.projekt.id,
   apflora.ap.id;
 
--- used in exports
-DROP VIEW IF EXISTS apflora.v_idealbiotop CASCADE;
-CREATE OR REPLACE VIEW apflora.v_idealbiotop AS
-SELECT
-  apflora.ap.id AS ap_id,
-  apflora.ae_taxonomies.artname,
-  apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
-  apflora.ap.start_jahr AS ap_start_jahr,
-  apflora.ap_umsetzung_werte.text AS ap_umsetzung,
-  apflora.adresse.name AS ap_bearbeiter,
-  apflora.ap.changed AS ap_changed,
-  apflora.ap.changed_by AS ap_changed_by,
-  apflora.idealbiotop.erstelldatum,
-  apflora.idealbiotop.hoehenlage,
-  apflora.idealbiotop.region,
-  apflora.idealbiotop.exposition,
-  apflora.idealbiotop.besonnung,
-  apflora.idealbiotop.hangneigung,
-  apflora.idealbiotop.boden_typ,
-  apflora.idealbiotop.boden_kalkgehalt,
-  apflora.idealbiotop.boden_durchlaessigkeit,
-  apflora.idealbiotop.boden_humus,
-  apflora.idealbiotop.boden_naehrstoffgehalt,
-  apflora.idealbiotop.wasserhaushalt,
-  apflora.idealbiotop.konkurrenz,
-  apflora.idealbiotop.moosschicht,
-  apflora.idealbiotop.krautschicht,
-  apflora.idealbiotop.strauchschicht,
-  apflora.idealbiotop.baumschicht,
-  apflora.idealbiotop.bemerkungen,
-  apflora.idealbiotop.changed,
-  apflora.idealbiotop.changed_by
-FROM
-  apflora.idealbiotop
-  RIGHT JOIN apflora.ap
-    LEFT JOIN apflora.ap_bearbstand_werte
-    ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code
-    LEFT JOIN apflora.ap_umsetzung_werte
-    ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code
-    LEFT JOIN apflora.adresse
-    ON apflora.ap.bearbeiter = apflora.adresse.id
-    LEFT JOIN apflora.ae_taxonomies
-    ON apflora.ae_taxonomies.id = apflora.ap.art_id
-  ON apflora.idealbiotop.ap_id = apflora.ap.id
-ORDER BY
-  apflora.ae_taxonomies.artname,
-  apflora.idealbiotop.erstelldatum;
-
 -- original was created here: 2020-04-09_qk_tpop_mit_kontr_keine_zielrelev_einheit.sql
 DROP VIEW IF EXISTS apflora.v_q_tpop_mit_aktuellen_kontrollen_ohne_zielrelevante_einheit CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_tpop_mit_aktuellen_kontrollen_ohne_zielrelevante_einheit AS
@@ -5479,3 +5415,4 @@ DROP VIEW IF EXISTS apflora.v_abper_ziel CASCADE;
 DROP VIEW IF EXISTS apflora.v_apber CASCADE;
 DROP VIEW IF EXISTS apflora.v_assozart CASCADE;
 DROP VIEW IF EXISTS apflora.v_erfkrit CASCADE;
+DROP VIEW IF EXISTS apflora.v_idealbiotop CASCADE;
