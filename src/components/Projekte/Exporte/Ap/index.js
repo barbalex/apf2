@@ -518,7 +518,7 @@ const AP = () => {
     let result
     try {
       result = await client.query({
-        query: await import('./allVErfkrits').then((m) => m.default),
+        query: await import('./queryErfkrits').then((m) => m.default),
       })
     } catch (error) {
       enqueNotification({
@@ -528,7 +528,20 @@ const AP = () => {
         },
       })
     }
-    const rows = get(result.data, 'allVErfkrits.nodes', [])
+    const rows = get(result.data, 'allErfkrits.nodes', []).map((z) => ({
+      ap_id: z.apId,
+      artname: get(z, 'apByApId.aeTaxonomyByArtId.artname') || '',
+      ap_bearbeitung:
+        get(z, 'apByApId.apBearbstandWerteByBearbeitung.text') || '',
+      ap_start_jahr: get(z, 'apByApId.startJahr') || '',
+      ap_umsetzung: get(z, 'apByApId.apUmsetzungWerteByUmsetzung.text') || '',
+      ap_bearbeiter: get(z, 'apByApId.adresseByBearbeiter.name') || '',
+      id: z.id,
+      beurteilung: get(z, 'apErfkritWerteByErfolg.text') || '',
+      kriterien: z.kriterien,
+      changed: z.changed,
+      changed_by: z.changedBy,
+    }))
     removeNotification(notif)
     closeSnackbar(notif)
     if (rows.length === 0) {
@@ -606,7 +619,6 @@ const AP = () => {
         },
       })
     }
-    console.log({ result })
     const rows = get(result.data, 'allAssozarts.nodes', []).map((z) => ({
       ap_id: z.apId,
       artname: get(z, 'apByApId.aeTaxonomyByArtId.artname') || '',

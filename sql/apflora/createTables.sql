@@ -442,6 +442,22 @@ COMMENT ON COLUMN apflora.erfkrit.kriterien IS 'Beschreibung der Kriterien für 
 COMMENT ON COLUMN apflora.erfkrit.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.erfkrit.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
+
+-- TODO: this is developing, not in use yet
+alter table apflora.erfkrit enable row level security;
+drop policy if exists reader on apflora.erfkrit;
+create policy reader on apflora.erfkrit using 
+(
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  or (
+    current_user = 'apflora_artverantwortlich'
+    and ap_id in (
+      select ap_id from apflora.ap_user where user_name = current_user_name()
+    )
+  )
+);
+
+
 DROP TABLE IF EXISTS apflora.gemeinde;
 CREATE TABLE apflora.gemeinde (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
