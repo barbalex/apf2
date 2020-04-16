@@ -1794,60 +1794,6 @@ FROM
 ORDER BY
   apflora.ae_taxonomies.artname;
 
--- used for export
-DROP VIEW IF EXISTS apflora.v_ziel;
-
-
--- used for export
-DROP VIEW IF EXISTS apflora.v_zielber CASCADE;
-CREATE OR REPLACE VIEW apflora.v_zielber AS
-SELECT
-  apflora.ap.id as ap_id,
-  apflora.ae_taxonomies.artname,
-  apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
-  apflora.ap.start_jahr AS ap_start_jahr,
-  apflora.ap_umsetzung_werte.text AS ap_umsetzung,
-  apflora.adresse.name AS ap_bearbeiter,
-  apflora.ziel.id AS ziel_id,
-  apflora.ziel.jahr AS ziel_jahr,
-  ziel_typ_werte.text AS ziel_typ,
-  apflora.ziel.bezeichnung AS ziel_bezeichnung,
-  apflora.zielber.id,
-  apflora.zielber.jahr,
-  apflora.zielber.erreichung,
-  apflora.zielber.bemerkungen,
-  apflora.zielber.changed,
-  apflora.zielber.changed_by
-FROM
-  ((((((apflora.ae_taxonomies
-  RIGHT JOIN
-    apflora.ap
-    ON apflora.ae_taxonomies.id = apflora.ap.art_id)
-  LEFT JOIN
-    apflora.ap_bearbstand_werte
-    ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
-  LEFT JOIN
-    apflora.ap_umsetzung_werte
-    ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
-  LEFT JOIN
-    apflora.adresse
-    ON apflora.ap.bearbeiter = apflora.adresse.id)
-  RIGHT JOIN
-    apflora.ziel
-    ON apflora.ap.id = apflora.ziel.ap_id)
-  LEFT JOIN
-    apflora.ziel_typ_werte
-    ON apflora.ziel.typ = ziel_typ_werte.code)
-  RIGHT JOIN
-    apflora.zielber
-    ON apflora.ziel.id = apflora.zielber.ziel_id
-ORDER BY
-  apflora.ae_taxonomies.artname,
-  apflora.ziel.jahr,
-  ziel_typ_werte.text,
-  apflora.ziel.typ,
-  apflora.zielber.jahr;
-
 DROP VIEW IF EXISTS apflora.v_tpopkontr_webgisbun CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopkontr_webgisbun AS
 SELECT
@@ -5701,3 +5647,8 @@ FROM
 ORDER BY
   apflora.pop.nr,
   apflora.tpop.nr;
+
+
+
+DROP VIEW IF EXISTS apflora.v_ziel;
+DROP VIEW IF EXISTS apflora.v_zielber;

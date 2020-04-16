@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import styled from 'styled-components'
 import get from 'lodash/get'
+import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/react-hooks'
 import { useSnackbar } from 'notistack'
@@ -314,7 +315,7 @@ const AP = () => {
         bezeichnung: z.bezeichnung,
       }))
       exportModule({
-        data: ziels,
+        data: sortBy(ziels, 'artname'),
         fileName: 'ApZiele',
         store,
       })
@@ -340,10 +341,35 @@ const AP = () => {
     })
     try {
       const { data } = await client.query({
-        query: await import('./allVZielbers').then((m) => m.default),
+        query: await import('./queryZielbers').then((m) => m.default),
       })
+      const zielbers = get(data, 'allZielbers.nodes', []).map((z) => ({
+        ap_id: get(z, 'zielByZielId.apByApId.id') || '',
+        artname:
+          get(z, 'zielByZielId.apByApId.aeTaxonomyByArtId.artname') || '',
+        ap_bearbeitung:
+          get(z, 'zielByZielId.apByApId.apBearbstandWerteByBearbeitung.text') ||
+          '',
+        ap_start_jahr: get(z, 'zielByZielId.apByApId.startJahr') || '',
+        ap_umsetzung:
+          get(z, 'zielByZielId.apByApId.apUmsetzungWerteByUmsetzung.text') ||
+          '',
+        ap_bearbeiter:
+          get(z, 'zielByZielId.apByApId.adresseByBearbeiter.name') || '',
+        ziel_id: get(z, 'zielByZielId.id') || '',
+        ziel_jahr: get(z, 'zielByZielId.jahr') || '',
+        ziel_typ: get(z, 'zielByZielId.zielTypWerteByTyp.text') || '',
+        ziel_bezeichnung: get(z, 'zielByZielId.bezeichnung') || '',
+        id: z.id,
+        jahr: z.jahr,
+        erreichung: z.erreichung,
+        bemerkungen: z.bemerkungen,
+        changed: z.changed,
+        changed_by: z.changed_by,
+      }))
+      console.log({ zielbers })
       exportModule({
-        data: get(data, 'allVZielbers.nodes', []),
+        data: sortBy(zielbers, ['artname', 'ziel_jahr', 'ziel_typ', 'jahr']),
         fileName: 'Zielberichte',
         store,
       })
