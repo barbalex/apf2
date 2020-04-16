@@ -394,6 +394,21 @@ COMMENT ON COLUMN apflora.assozart.changed IS 'Wann wurde der Datensatz zuletzt 
 COMMENT ON COLUMN apflora.assozart.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
 alter table apflora.assozart alter column changed_by set default null;
 
+
+-- TODO: this is developing, not in use yet
+alter table apflora.assozart enable row level security;
+drop policy if exists reader on apflora.assozart;
+create policy reader on apflora.assozart using 
+(
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  or (
+    current_user = 'apflora_artverantwortlich'
+    and ap_id in (
+      select ap_id from apflora.ap_user where user_name = current_user_name()
+    )
+  )
+);
+
 DROP TABLE IF EXISTS apflora.tpopbeob;
 
 DROP TABLE IF EXISTS apflora.projekt;
