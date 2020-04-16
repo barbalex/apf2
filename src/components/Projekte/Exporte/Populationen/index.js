@@ -175,21 +175,21 @@ const Populationen = () => {
                 changed: n.changed,
                 changedBy: n.changedBy,
               }))
-              exportModule({
-                data: rows,
-                fileName: 'Populationen',
-                store,
-              })
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
-                enqueNotification({
+                return enqueNotification({
                   message: 'Die Abfrage retournierte 0 Datensätze',
                   options: {
                     variant: 'warning',
                   },
                 })
               }
+              exportModule({
+                data: rows,
+                fileName: 'Populationen',
+                store,
+              })
             }}
           >
             {popIsFiltered ? 'Populationen (gefiltert)' : 'Populationen'}
@@ -217,22 +217,22 @@ const Populationen = () => {
                 })
               }
               const rows = get(result.data, 'allVPopKmls.nodes', [])
-              exportModule({
-                data: rows,
-                fileName: 'Populationen',
-                store,
-                kml: true,
-              })
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
-                enqueNotification({
+                return enqueNotification({
                   message: 'Die Abfrage retournierte 0 Datensätze',
                   options: {
                     variant: 'warning',
                   },
                 })
               }
+              exportModule({
+                data: rows,
+                fileName: 'Populationen',
+                store,
+                kml: true,
+              })
             }}
           >
             <div>Populationen für Google Earth (beschriftet mit PopNr)</div>
@@ -262,22 +262,22 @@ const Populationen = () => {
                 })
               }
               const rows = get(result.data, 'allVPopKmlnamen.nodes', [])
-              exportModule({
-                data: rows,
-                fileName: 'PopulationenNachNamen',
-                store,
-                kml: true,
-              })
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
-                enqueNotification({
+                return enqueNotification({
                   message: 'Die Abfrage retournierte 0 Datensätze',
                   options: {
                     variant: 'warning',
                   },
                 })
               }
+              exportModule({
+                data: rows,
+                fileName: 'PopulationenNachNamen',
+                store,
+                kml: true,
+              })
             }}
           >
             <div>
@@ -313,21 +313,21 @@ const Populationen = () => {
                 'allVPopVonapohnestatuses.nodes',
                 [],
               )
-              exportModule({
-                data: rows,
-                fileName: 'PopulationenVonApArtenOhneStatus',
-                store,
-              })
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
-                enqueNotification({
+                return enqueNotification({
                   message: 'Die Abfrage retournierte 0 Datensätze',
                   options: {
                     variant: 'warning',
                   },
                 })
               }
+              exportModule({
+                data: rows,
+                fileName: 'PopulationenVonApArtenOhneStatus',
+                store,
+              })
             }}
           >
             Populationen von AP-Arten ohne Status
@@ -357,21 +357,21 @@ const Populationen = () => {
                 })
               }
               const rows = get(result.data, 'allVPopOhnekoords.nodes', [])
-              exportModule({
-                data: rows,
-                fileName: 'PopulationenOhneKoordinaten',
-                store,
-              })
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
-                enqueNotification({
+                return enqueNotification({
                   message: 'Die Abfrage retournierte 0 Datensätze',
                   options: {
                     variant: 'warning',
                   },
                 })
               }
+              exportModule({
+                data: rows,
+                fileName: 'PopulationenOhneKoordinaten',
+                store,
+              })
             }}
           >
             Populationen ohne Koordinaten
@@ -405,6 +405,16 @@ const Populationen = () => {
                 'allVPopmassnberAnzmassns.nodes',
                 [],
               )
+              removeNotification(notif)
+              closeSnackbar(notif)
+              if (rows.length === 0) {
+                return enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
               exportModule({
                 data: rows,
                 fileName: 'PopulationenAnzMassnProMassnber',
@@ -413,16 +423,6 @@ const Populationen = () => {
                 yKey: 'pop_wgs84long',
                 store,
               })
-              removeNotification(notif)
-              closeSnackbar(notif)
-              if (rows.length === 0) {
-                enqueNotification({
-                  message: 'Die Abfrage retournierte 0 Datensätze',
-                  options: {
-                    variant: 'warning',
-                  },
-                })
-              }
             }}
           >
             Populationen mit Massnahmen-Berichten: Anzahl Massnahmen im
@@ -453,21 +453,21 @@ const Populationen = () => {
                 })
               }
               const rows = get(result.data, 'allVPopAnzmassns.nodes', [])
-              exportModule({
-                data: rows,
-                fileName: 'PopulationenAnzahlMassnahmen',
-                store,
-              })
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
-                enqueNotification({
+                return enqueNotification({
                   message: 'Die Abfrage retournierte 0 Datensätze',
                   options: {
                     variant: 'warning',
                   },
                 })
               }
+              exportModule({
+                data: rows,
+                fileName: 'PopulationenAnzahlMassnahmen',
+                store,
+              })
             }}
           >
             Anzahl Massnahmen pro Population
@@ -497,21 +497,21 @@ const Populationen = () => {
                 })
               }
               const rows = get(result.data, 'allVPopAnzkontrs.nodes', [])
-              exportModule({
-                data: rows,
-                fileName: 'PopulationenAnzahlKontrollen',
-                store,
-              })
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
-                enqueNotification({
+                return enqueNotification({
                   message: 'Die Abfrage retournierte 0 Datensätze',
                   options: {
                     variant: 'warning',
                   },
                 })
               }
+              exportModule({
+                data: rows,
+                fileName: 'PopulationenAnzahlKontrollen',
+                store,
+              })
             }}
           >
             Anzahl Kontrollen pro Population
@@ -545,6 +545,16 @@ const Populationen = () => {
                 'allVPopPopberundmassnbers.nodes',
                 [],
               )
+              removeNotification(notif)
+              closeSnackbar(notif)
+              if (rows.length === 0) {
+                return enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
               exportModule({
                 data: rows,
                 fileName: 'PopulationenPopUndMassnBerichte',
@@ -553,16 +563,6 @@ const Populationen = () => {
                 yKey: 'pop_wgs84long',
                 store,
               })
-              removeNotification(notif)
-              closeSnackbar(notif)
-              if (rows.length === 0) {
-                enqueNotification({
-                  message: 'Die Abfrage retournierte 0 Datensätze',
-                  options: {
-                    variant: 'warning',
-                  },
-                })
-              }
             }}
           >
             Populationen inkl. Populations- und Massnahmen-Berichte
@@ -596,6 +596,16 @@ const Populationen = () => {
                 'allVPopMitLetzterPopbers.nodes',
                 [],
               )
+              removeNotification(notif)
+              closeSnackbar(notif)
+              if (rows.length === 0) {
+                return enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
               exportModule({
                 data: rows,
                 fileName: 'PopulationenMitLetzemPopBericht',
@@ -604,16 +614,6 @@ const Populationen = () => {
                 yKey: 'pop_wgs84long',
                 store,
               })
-              removeNotification(notif)
-              closeSnackbar(notif)
-              if (rows.length === 0) {
-                enqueNotification({
-                  message: 'Die Abfrage retournierte 0 Datensätze',
-                  options: {
-                    variant: 'warning',
-                  },
-                })
-              }
             }}
           >
             Populationen mit dem letzten Populations-Bericht
@@ -647,6 +647,16 @@ const Populationen = () => {
                 'allVPopMitLetzterPopmassnbers.nodes',
                 [],
               )
+              removeNotification(notif)
+              closeSnackbar(notif)
+              if (rows.length === 0) {
+                return enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
               exportModule({
                 data: rows,
                 fileName: 'allVPopMitLetzterPopmassnbers',
@@ -655,16 +665,6 @@ const Populationen = () => {
                 yKey: 'pop_wgs84long',
                 store,
               })
-              removeNotification(notif)
-              closeSnackbar(notif)
-              if (rows.length === 0) {
-                enqueNotification({
-                  message: 'Die Abfrage retournierte 0 Datensätze',
-                  options: {
-                    variant: 'warning',
-                  },
-                })
-              }
             }}
           >
             Populationen mit dem letzten Massnahmen-Bericht
@@ -694,22 +694,22 @@ const Populationen = () => {
                 })
               }
               const rows = get(result.data, 'allVPopLastCounts.nodes', [])
-              exportModule({
-                data: rows,
-                fileName: 'PopLetzteZaehlungen',
-                idKey: 'pop_id',
-                store,
-              })
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
-                enqueNotification({
+                return enqueNotification({
                   message: 'Die Abfrage retournierte 0 Datensätze',
                   options: {
                     variant: 'warning',
                   },
                 })
               }
+              exportModule({
+                data: rows,
+                fileName: 'PopLetzteZaehlungen',
+                idKey: 'pop_id',
+                store,
+              })
             }}
           >
             Letzte Zählungen
@@ -743,22 +743,22 @@ const Populationen = () => {
                 'allVPopLastCountWithMassns.nodes',
                 [],
               )
-              exportModule({
-                data: rows,
-                fileName: 'PopLetzteZaehlungenInklMassn',
-                idKey: 'pop_id',
-                store,
-              })
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
-                enqueNotification({
+                return enqueNotification({
                   message: 'Die Abfrage retournierte 0 Datensätze',
                   options: {
                     variant: 'warning',
                   },
                 })
               }
+              exportModule({
+                data: rows,
+                fileName: 'PopLetzteZaehlungenInklMassn',
+                idKey: 'pop_id',
+                store,
+              })
             }}
           >
             Letzte Zählungen inklusive noch nicht kontrollierter Anpflanzungen

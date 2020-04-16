@@ -335,6 +335,16 @@ const Massnahmen = () => {
                   changedBy: n.changedBy,
                 }),
               )
+              removeNotification(notif)
+              closeSnackbar(notif)
+              if (rows.length === 0) {
+                return enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
               exportModule({
                 data: rows,
                 fileName: 'Massnahmen',
@@ -343,16 +353,6 @@ const Massnahmen = () => {
                 yKey: 'tpop_wgs84long',
                 store,
               })
-              removeNotification(notif)
-              closeSnackbar(notif)
-              if (rows.length === 0) {
-                enqueNotification({
-                  message: 'Die Abfrage retournierte 0 Datensätze',
-                  options: {
-                    variant: 'warning',
-                  },
-                })
-              }
             }}
           >
             {tpopmassnIsFiltered ? 'Massnahmen (gefiltert)' : 'Massnahmen'}
@@ -382,6 +382,16 @@ const Massnahmen = () => {
                 })
               }
               const rows = get(result.data, 'allVMassnWebgisbuns.nodes', [])
+              removeNotification(notif)
+              closeSnackbar(notif)
+              if (rows.length === 0) {
+                return enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
               exportModule({
                 data: rows,
                 fileName: 'MassnahmenWebGisBun',
@@ -390,16 +400,6 @@ const Massnahmen = () => {
                 yKey: 'TPOP_WGS84LONG',
                 store,
               })
-              removeNotification(notif)
-              closeSnackbar(notif)
-              if (rows.length === 0) {
-                enqueNotification({
-                  message: 'Die Abfrage retournierte 0 Datensätze',
-                  options: {
-                    variant: 'warning',
-                  },
-                })
-              }
             }}
           >
             Massnahmen für WebGIS BUN

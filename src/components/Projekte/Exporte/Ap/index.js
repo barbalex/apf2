@@ -120,7 +120,7 @@ const AP = () => {
         },
       })
     }
-    const dataToExport = get(result.data, 'allAps.nodes', []).map((n) => ({
+    const rows = get(result.data, 'allAps.nodes', []).map((n) => ({
       id: n.id,
       artname: get(n, 'aeTaxonomyByArtId.artname') || null,
       bearbeitung: get(n, 'apBearbstandWerteByBearbeitung.text') || null,
@@ -129,21 +129,21 @@ const AP = () => {
       changed: n.changed,
       changedBy: n.changedBy,
     }))
-    exportModule({
-      data: dataToExport,
-      fileName: 'AP',
-      store,
-    })
     removeNotification(notif)
     closeSnackbar(notif)
-    if (dataToExport.length === 0) {
-      enqueNotification({
+    if (rows.length === 0) {
+      return enqueNotification({
         message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',
         },
       })
     }
+    exportModule({
+      data: rows,
+      fileName: 'AP',
+      store,
+    })
   }, [
     apGqlFilter,
     client,
@@ -174,7 +174,7 @@ const AP = () => {
         },
       })
     }
-    const apOhnePops = get(result.data, 'allAps.nodes', [])
+    const rows = get(result.data, 'allAps.nodes', [])
       .filter((z) => get(z, 'popsByApId.totalCount') === 0)
       .map((z) => ({
         id: z.id,
@@ -183,21 +183,21 @@ const AP = () => {
         start_jahr: z.startJahr,
         umsetzung: get(z, 'apUmsetzungWerteByUmsetzung.text') || '',
       }))
-    exportModule({
-      data: apOhnePops,
-      fileName: 'ApOhnePopulationen',
-      store,
-    })
     removeNotification(notif)
     closeSnackbar(notif)
-    if (apOhnePops.length === 0) {
-      enqueNotification({
+    if (rows.length === 0) {
+      return enqueNotification({
         message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',
         },
       })
     }
+    exportModule({
+      data: rows,
+      fileName: 'ApOhnePopulationen',
+      store,
+    })
   }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickAnzMassnProAp = useCallback(async () => {
@@ -221,7 +221,7 @@ const AP = () => {
         },
       })
     }
-    const apAnzMassns = get(result.data, 'allAps.nodes', []).map((z) => ({
+    const rows = get(result.data, 'allAps.nodes', []).map((z) => ({
       id: z.id,
       artname: get(z, 'aeTaxonomyByArtId.artname') || '',
       bearbeitung: get(z, 'apBearbstandWerteByBearbeitung.text') || '',
@@ -230,21 +230,21 @@ const AP = () => {
       anzahl_kontrollen:
         get(z, 'vApAnzmassnsById.nodes[0].anzahlMassnahmen') || '',
     }))
-    exportModule({
-      data: apAnzMassns,
-      fileName: 'ApAnzahlMassnahmen',
-      store,
-    })
     removeNotification(notif)
     closeSnackbar(notif)
-    if (apAnzMassns.length === 0) {
-      enqueNotification({
+    if (rows.length === 0) {
+      return enqueNotification({
         message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',
         },
       })
     }
+    exportModule({
+      data: rows,
+      fileName: 'ApAnzahlMassnahmen',
+      store,
+    })
   }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickAnzKontrProAp = useCallback(async () => {
@@ -268,7 +268,7 @@ const AP = () => {
         },
       })
     }
-    const apAnzKontrs = get(result.data, 'allAps.nodes', []).map((z) => ({
+    const rows = get(result.data, 'allAps.nodes', []).map((z) => ({
       id: z.id,
       artname: get(z, 'aeTaxonomyByArtId.artname') || '',
       bearbeitung: get(z, 'apBearbstandWerteByBearbeitung.text') || '',
@@ -277,21 +277,21 @@ const AP = () => {
       anzahl_kontrollen:
         get(z, 'vApAnzkontrsById.nodes[0].anzahlKontrollen') || '',
     }))
-    exportModule({
-      data: apAnzKontrs,
-      fileName: 'ApAnzahlKontrollen',
-      store,
-    })
     removeNotification(notif)
     closeSnackbar(notif)
-    if (apAnzKontrs.length === 0) {
-      enqueNotification({
+    if (rows.length === 0) {
+      return enqueNotification({
         message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',
         },
       })
     }
+    exportModule({
+      data: rows,
+      fileName: 'ApAnzahlKontrollen',
+      store,
+    })
   }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickApBer = useCallback(async () => {
@@ -315,22 +315,22 @@ const AP = () => {
         },
       })
     }
-    const apbers = get(result.data, 'allVApbers.nodes', [])
-    exportModule({
-      data: apbers,
-      fileName: 'Jahresberichte',
-      store,
-    })
+    const rows = get(result.data, 'allVApbers.nodes', [])
     removeNotification(notif)
     closeSnackbar(notif)
-    if (apbers.length === 0) {
-      enqueNotification({
+    if (rows.length === 0) {
+      return enqueNotification({
         message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',
         },
       })
     }
+    exportModule({
+      data: rows,
+      fileName: 'Jahresberichte',
+      store,
+    })
   }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickApBerUndMassn = useCallback(async () => {
@@ -354,22 +354,22 @@ const AP = () => {
         },
       })
     }
-    const apApberundmassns = get(result.data, 'allVApApberundmassns.nodes', [])
-    exportModule({
-      data: apApberundmassns,
-      fileName: 'ApJahresberichteUndMassnahmen',
-      store,
-    })
+    const rows = get(result.data, 'allVApApberundmassns.nodes', [])
     removeNotification(notif)
     closeSnackbar(notif)
-    if (apApberundmassns.length === 0) {
-      enqueNotification({
+    if (rows.length === 0) {
+      return enqueNotification({
         message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',
         },
       })
     }
+    exportModule({
+      data: rows,
+      fileName: 'ApJahresberichteUndMassnahmen',
+      store,
+    })
   }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickZiele = useCallback(async () => {
@@ -393,7 +393,7 @@ const AP = () => {
         },
       })
     }
-    const ziels = get(result.data, 'allZiels.nodes', []).map((z) => ({
+    const rows = get(result.data, 'allZiels.nodes', []).map((z) => ({
       ap_id: z.id,
       artname: get(z, 'apByApId.aeTaxonomyByArtId.artname') || '',
       ap_bearbeitung:
@@ -406,21 +406,21 @@ const AP = () => {
       typ: get(z, 'zielTypWerteByTyp.text') || '',
       bezeichnung: z.bezeichnung,
     }))
-    exportModule({
-      data: sortBy(ziels, 'artname'),
-      fileName: 'ApZiele',
-      store,
-    })
     removeNotification(notif)
     closeSnackbar(notif)
-    if (ziels.length === 0) {
-      enqueNotification({
+    if (rows.length === 0) {
+      return enqueNotification({
         message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',
         },
       })
     }
+    exportModule({
+      data: sortBy(rows, 'artname'),
+      fileName: 'ApZiele',
+      store,
+    })
   }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickZielber = useCallback(async () => {
@@ -444,7 +444,7 @@ const AP = () => {
         },
       })
     }
-    const zielbers = get(result.data, 'allZielbers.nodes', []).map((z) => ({
+    const rows = get(result.data, 'allZielbers.nodes', []).map((z) => ({
       ap_id: get(z, 'zielByZielId.apByApId.id') || '',
       artname: get(z, 'zielByZielId.apByApId.aeTaxonomyByArtId.artname') || '',
       ap_bearbeitung:
@@ -466,21 +466,21 @@ const AP = () => {
       changed: z.changed,
       changed_by: z.changed_by,
     }))
-    exportModule({
-      data: sortBy(zielbers, ['artname', 'ziel_jahr', 'ziel_typ', 'jahr']),
-      fileName: 'Zielberichte',
-      store,
-    })
     removeNotification(notif)
     closeSnackbar(notif)
-    if (zielbers.length === 0) {
-      enqueNotification({
+    if (rows.length === 0) {
+      return enqueNotification({
         message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',
         },
       })
     }
+    exportModule({
+      data: sortBy(rows, ['artname', 'ziel_jahr', 'ziel_typ', 'jahr']),
+      fileName: 'Zielberichte',
+      store,
+    })
   }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickErfkrit = useCallback(async () => {
@@ -504,22 +504,22 @@ const AP = () => {
         },
       })
     }
-    const erfkrits = get(result.data, 'allVErfkrits.nodes', [])
-    exportModule({
-      data: erfkrits,
-      fileName: 'Erfolgskriterien',
-      store,
-    })
+    const rows = get(result.data, 'allVErfkrits.nodes', [])
     removeNotification(notif)
     closeSnackbar(notif)
-    if (erfkrits.length === 0) {
-      enqueNotification({
+    if (rows.length === 0) {
+      return enqueNotification({
         message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',
         },
       })
     }
+    exportModule({
+      data: rows,
+      fileName: 'Erfolgskriterien',
+      store,
+    })
   }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickIdealbiotop = useCallback(async () => {
@@ -543,22 +543,22 @@ const AP = () => {
         },
       })
     }
-    const idealbiotops = get(result.data, 'allVIdealbiotops.nodes', [])
-    exportModule({
-      data: idealbiotops,
-      fileName: 'Idealbiotope',
-      store,
-    })
+    const rows = get(result.data, 'allVIdealbiotops.nodes', [])
     removeNotification(notif)
     closeSnackbar(notif)
-    if (idealbiotops.length === 0) {
-      enqueNotification({
+    if (rows.length === 0) {
+      return enqueNotification({
         message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',
         },
       })
     }
+    exportModule({
+      data: rows,
+      fileName: 'Idealbiotope',
+      store,
+    })
   }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const onClickAssozarten = useCallback(async () => {
@@ -582,22 +582,22 @@ const AP = () => {
         },
       })
     }
-    const assozarts = get(result.data, 'allVAssozarts.nodes', [])
-    exportModule({
-      data: assozarts,
-      fileName: 'AssoziierteArten',
-      store,
-    })
+    const rows = get(result.data, 'allVAssozarts.nodes', [])
     removeNotification(notif)
     closeSnackbar(notif)
-    if (assozarts.length === 0) {
-      enqueNotification({
+    if (rows.length === 0) {
+      return enqueNotification({
         message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',
         },
       })
     }
+    exportModule({
+      data: rows,
+      fileName: 'AssoziierteArten',
+      store,
+    })
   }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   const apIsFiltered = dataFilterTableIsFiltered({

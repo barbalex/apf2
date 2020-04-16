@@ -416,6 +416,16 @@ const Kontrollen = () => {
                     .join(' / '),
                 }),
               )
+              removeNotification(notif)
+              closeSnackbar(notif)
+              if (rows.length === 0) {
+                return enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
               exportModule({
                 data: rows,
                 fileName: 'Kontrollen',
@@ -424,16 +434,6 @@ const Kontrollen = () => {
                 yKey: 'tpop_wgs84long',
                 store,
               })
-              removeNotification(notif)
-              closeSnackbar(notif)
-              if (rows.length === 0) {
-                enqueNotification({
-                  message: 'Die Abfrage retournierte 0 Datensätze',
-                  options: {
-                    variant: 'warning',
-                  },
-                })
-              }
             }}
           >
             {tpopkontrIsFiltered ? 'Kontrollen (gefiltert)' : 'Kontrollen'}
@@ -463,6 +463,16 @@ const Kontrollen = () => {
                 })
               }
               const rows = get(result.data, 'allVTpopkontrWebgisbuns.nodes', [])
+              removeNotification(notif)
+              closeSnackbar(notif)
+              if (rows.length === 0) {
+                return enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
               exportModule({
                 data: rows,
                 fileName: 'KontrollenWebGisBun',
@@ -471,16 +481,6 @@ const Kontrollen = () => {
                 yKey: 'KONTR_WGS84LONG',
                 store,
               })
-              removeNotification(notif)
-              closeSnackbar(notif)
-              if (rows.length === 0) {
-                enqueNotification({
-                  message: 'Die Abfrage retournierte 0 Datensätze',
-                  options: {
-                    variant: 'warning',
-                  },
-                })
-              }
             }}
           >
             Kontrollen für WebGIS BUN
@@ -514,6 +514,16 @@ const Kontrollen = () => {
                 'allVKontrzaehlAnzproeinheits.nodes',
                 [],
               )
+              removeNotification(notif)
+              closeSnackbar(notif)
+              if (rows.length === 0) {
+                return enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
               exportModule({
                 data: rows,
                 fileName: 'KontrollenAnzahlProZaehleinheit',
@@ -522,16 +532,6 @@ const Kontrollen = () => {
                 yKey: 'tpop_wgs84long',
                 store,
               })
-              removeNotification(notif)
-              closeSnackbar(notif)
-              if (rows.length === 0) {
-                enqueNotification({
-                  message: 'Die Abfrage retournierte 0 Datensätze',
-                  options: {
-                    variant: 'warning',
-                  },
-                })
-              }
             }}
           >
             Kontrollen: Anzahl pro Zähleinheit

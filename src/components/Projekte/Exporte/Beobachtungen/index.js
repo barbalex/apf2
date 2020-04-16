@@ -88,21 +88,21 @@ const Beobachtungen = () => {
       })
     }
     const rows = get(result.data, 'allVBeobArtChangeds.nodes', [])
-    exportModule({
-      data: rows,
-      fileName: 'BeobachtungenArtVeraendert',
-      store,
-    })
     removeNotification(notif)
     closeSnackbar(notif)
     if (rows.length === 0) {
-      enqueNotification({
+      return enqueNotification({
         message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',
         },
       })
     }
+    exportModule({
+      data: rows,
+      fileName: 'BeobachtungenArtVeraendert',
+      store,
+    })
   }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
   return (

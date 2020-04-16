@@ -29,7 +29,7 @@ const StyledCardActions = styled(CardActions)`
   height: auto !important;
 `
 const CardActionIconButton = styled(IconButton)`
-  transform: ${props => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
+  transform: ${(props) => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
 `
 const CardActionTitle = styled.div`
   padding-left: 8px;
@@ -97,8 +97,9 @@ const Teilpopulationen = ({ treeName }) => {
         persist: true,
       },
     })
+    let result
     try {
-      const { data } = await client.query({
+      result = await client.query({
         query: gql`
           query tpopForExportQuery($filter: TpopFilter) {
             allTpops(
@@ -182,90 +183,97 @@ const Teilpopulationen = ({ treeName }) => {
           filter: tpopGqlFilter,
         },
       })
-      const dataToExport = get(data, 'allTpops.nodes', []).map(n => ({
-        apId: get(n, 'popByPopId.apByApId.id') || null,
-        apFamilie:
-          get(n, 'popByPopId.apByApId.aeTaxonomyByArtId.familie') || null,
-        apArtname:
-          get(n, 'popByPopId.apByApId.aeTaxonomyByArtId.artname') || null,
-        apBearbeitung:
-          get(n, 'popByPopId.apByApId.apBearbstandWerteByBearbeitung.text') ||
-          null,
-        apStartJahr: get(n, 'popByPopId.apByApId.startJahr') || null,
-        apUmsetzung:
-          get(n, 'popByPopId.apByApId.apUmsetzungWerteByUmsetzung.text') ||
-          null,
-        popId: get(n, 'popByPopId.id') || null,
-        popNr: get(n, 'popByPopId.nr') || null,
-        popName: get(n, 'popByPopId.name') || null,
-        popStatus: get(n, 'popByPopId.popStatusWerteByStatus.text') || null,
-        popBekanntSeit: get(n, 'popByPopId.bekanntSeit') || null,
-        popStatusUnklar: get(n, 'popByPopId.statusUnklar') || null,
-        popStatusUnklarBegruendung:
-          get(n, 'popByPopId.statusUnklarBegruendung') || null,
-        popX: get(n, 'popByPopId.x') || null,
-        popY: get(n, 'popByPopId.y') || null,
-        id: n.id,
-        nr: n.nr,
-        gemeinde: n.gemeinde,
-        flurname: n.flurname,
-        status: n.status,
-        statusDecodiert: get(n, 'popStatusWerteByStatus.text') || null,
-        bekanntSeit: n.bekanntSeit,
-        statusUnklar: n.statusUnklar,
-        statusUnklarGrund: n.statusUnklarGrund,
-        x: n.x,
-        y: n.y,
-        radius: n.radius,
-        hoehe: n.hoehe,
-        exposition: n.exposition,
-        klima: n.klima,
-        neigung: n.neigung,
-        beschreibung: n.beschreibung,
-        katasterNr: n.katasterNr,
-        apberRelevant: n.apberRelevant,
-        apberRelevantGrund: n.apberRelevantGrund,
-        eigentuemer: n.eigentuemer,
-        kontakt: n.kontakt,
-        nutzungszone: n.nutzungszone,
-        bewirtschafter: n.bewirtschafter,
-        bewirtschaftung: n.bewirtschaftung,
-        ekfrequenz: n.ekfrequenz,
-        ekfrequenzAbweichend: n.ekfrequenzAbweichend,
-        ekfKontrolleur: get(n, 'adresseByEkfKontrolleur.name') || null,
-        changed: n.changed,
-        changedBy: n.changedBy,
-      }))
-      const enrichedData = dataToExport.map(oWithout => {
-        let o = { ...oWithout }
-        let nachBeginnAp = null
-        if (
-          o.apStartJahr &&
-          o.bekanntSeit &&
-          [200, 201, 202].includes(o.status)
-        ) {
-          if (o.apStartJahr <= o.bekanntSeit) {
-            nachBeginnAp = true
-          } else {
-            nachBeginnAp = false
-          }
-        }
-        o.angesiedeltNachBeginnAp = nachBeginnAp
-        return o
-      })
-      exportModule({
-        data: enrichedData,
-        fileName: 'Teilpopulationen',
-        store,
-      })
     } catch (error) {
       enqueNotification({
         message: error.message,
         options: { variant: 'error' },
       })
     }
+    const rows = get(result.data, 'allTpops.nodes', []).map((n) => ({
+      apId: get(n, 'popByPopId.apByApId.id') || null,
+      apFamilie:
+        get(n, 'popByPopId.apByApId.aeTaxonomyByArtId.familie') || null,
+      apArtname:
+        get(n, 'popByPopId.apByApId.aeTaxonomyByArtId.artname') || null,
+      apBearbeitung:
+        get(n, 'popByPopId.apByApId.apBearbstandWerteByBearbeitung.text') ||
+        null,
+      apStartJahr: get(n, 'popByPopId.apByApId.startJahr') || null,
+      apUmsetzung:
+        get(n, 'popByPopId.apByApId.apUmsetzungWerteByUmsetzung.text') || null,
+      popId: get(n, 'popByPopId.id') || null,
+      popNr: get(n, 'popByPopId.nr') || null,
+      popName: get(n, 'popByPopId.name') || null,
+      popStatus: get(n, 'popByPopId.popStatusWerteByStatus.text') || null,
+      popBekanntSeit: get(n, 'popByPopId.bekanntSeit') || null,
+      popStatusUnklar: get(n, 'popByPopId.statusUnklar') || null,
+      popStatusUnklarBegruendung:
+        get(n, 'popByPopId.statusUnklarBegruendung') || null,
+      popX: get(n, 'popByPopId.x') || null,
+      popY: get(n, 'popByPopId.y') || null,
+      id: n.id,
+      nr: n.nr,
+      gemeinde: n.gemeinde,
+      flurname: n.flurname,
+      status: n.status,
+      statusDecodiert: get(n, 'popStatusWerteByStatus.text') || null,
+      bekanntSeit: n.bekanntSeit,
+      statusUnklar: n.statusUnklar,
+      statusUnklarGrund: n.statusUnklarGrund,
+      x: n.x,
+      y: n.y,
+      radius: n.radius,
+      hoehe: n.hoehe,
+      exposition: n.exposition,
+      klima: n.klima,
+      neigung: n.neigung,
+      beschreibung: n.beschreibung,
+      katasterNr: n.katasterNr,
+      apberRelevant: n.apberRelevant,
+      apberRelevantGrund: n.apberRelevantGrund,
+      eigentuemer: n.eigentuemer,
+      kontakt: n.kontakt,
+      nutzungszone: n.nutzungszone,
+      bewirtschafter: n.bewirtschafter,
+      bewirtschaftung: n.bewirtschaftung,
+      ekfrequenz: n.ekfrequenz,
+      ekfrequenzAbweichend: n.ekfrequenzAbweichend,
+      ekfKontrolleur: get(n, 'adresseByEkfKontrolleur.name') || null,
+      changed: n.changed,
+      changedBy: n.changedBy,
+    }))
+    const enrichedData = rows.map((oWithout) => {
+      let o = { ...oWithout }
+      let nachBeginnAp = null
+      if (
+        o.apStartJahr &&
+        o.bekanntSeit &&
+        [200, 201, 202].includes(o.status)
+      ) {
+        if (o.apStartJahr <= o.bekanntSeit) {
+          nachBeginnAp = true
+        } else {
+          nachBeginnAp = false
+        }
+      }
+      o.angesiedeltNachBeginnAp = nachBeginnAp
+      return o
+    })
     removeNotification(notif)
     closeSnackbar(notif)
+    if (rows.length === 0) {
+      return enqueNotification({
+        message: 'Die Abfrage retournierte 0 Datensätze',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
+    exportModule({
+      data: enrichedData,
+      fileName: 'Teilpopulationen',
+      store,
+    })
   }, [
     client,
     closeSnackbar,
@@ -276,7 +284,7 @@ const Teilpopulationen = ({ treeName }) => {
   ])
 
   const aeTaxonomiesfilter = useCallback(
-    inputValue =>
+    (inputValue) =>
       !!inputValue
         ? {
             artname: { includesInsensitive: inputValue },
@@ -322,19 +330,12 @@ const Teilpopulationen = ({ treeName }) => {
                   persist: true,
                 },
               })
+              let result
               try {
-                const { data } = await client.query({
+                result = await client.query({
                   query: await import('./allVTpopWebgisbuns').then(
-                    m => m.default,
+                    (m) => m.default,
                   ),
-                })
-                exportModule({
-                  data: get(data, 'allVTpopWebgisbuns.nodes', []),
-                  fileName: 'TeilpopulationenWebGisBun',
-                  idKey: 'TPOPID',
-                  xKey: 'TPOP_WGS84LAT',
-                  yKey: 'TPOP_WGS84LONG',
-                  store,
                 })
               } catch (error) {
                 enqueNotification({
@@ -342,8 +343,25 @@ const Teilpopulationen = ({ treeName }) => {
                   options: { variant: 'error' },
                 })
               }
+              const rows = get(result.data, 'allVTpopWebgisbuns.nodes', [])
               removeNotification(notif)
               closeSnackbar(notif)
+              if (rows.length === 0) {
+                return enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
+              exportModule({
+                data: rows,
+                fileName: 'TeilpopulationenWebGisBun',
+                idKey: 'TPOPID',
+                xKey: 'TPOP_WGS84LAT',
+                yKey: 'TPOP_WGS84LONG',
+                store,
+              })
             }}
           >
             Teilpopulationen für WebGIS BUN
@@ -357,15 +375,10 @@ const Teilpopulationen = ({ treeName }) => {
                   persist: true,
                 },
               })
+              let result
               try {
-                const { data } = await client.query({
-                  query: await import('./allVTpopKmls').then(m => m.default),
-                })
-                exportModule({
-                  data: get(data, 'allVTpopKmls.nodes', []),
-                  fileName: 'Teilpopulationen',
-                  store,
-                  kml: true,
+                result = await client.query({
+                  query: await import('./allVTpopKmls').then((m) => m.default),
                 })
               } catch (error) {
                 enqueNotification({
@@ -373,8 +386,23 @@ const Teilpopulationen = ({ treeName }) => {
                   options: { variant: 'error' },
                 })
               }
+              const rows = get(result.data, 'allVTpopKmls.nodes', [])
               removeNotification(notif)
               closeSnackbar(notif)
+              if (rows.length === 0) {
+                return enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
+              exportModule({
+                data: rows,
+                fileName: 'Teilpopulationen',
+                store,
+                kml: true,
+              })
             }}
           >
             <div>Teilpopulationen für Google Earth</div>
@@ -389,17 +417,12 @@ const Teilpopulationen = ({ treeName }) => {
                   persist: true,
                 },
               })
+              let result
               try {
-                const { data } = await client.query({
+                result = await client.query({
                   query: await import('./allVTpopKmlnamen').then(
-                    m => m.default,
+                    (m) => m.default,
                   ),
-                })
-                exportModule({
-                  data: get(data, 'allVTpopKmlnamen.nodes', []),
-                  fileName: 'TeilpopulationenNachNamen',
-                  store,
-                  kml: true,
                 })
               } catch (error) {
                 enqueNotification({
@@ -407,8 +430,23 @@ const Teilpopulationen = ({ treeName }) => {
                   options: { variant: 'error' },
                 })
               }
+              const rows = get(result.data, 'allVTpopKmlnamen.nodes', [])
               removeNotification(notif)
               closeSnackbar(notif)
+              if (rows.length === 0) {
+                return enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
+              exportModule({
+                data: rows,
+                fileName: 'TeilpopulationenNachNamen',
+                store,
+                kml: true,
+              })
             }}
           >
             <div>Teilpopulationen für Google Earth</div>
@@ -423,16 +461,12 @@ const Teilpopulationen = ({ treeName }) => {
                   persist: true,
                 },
               })
+              let result
               try {
-                const { data } = await client.query({
+                result = await client.query({
                   query: await import('./allVTpopOhnebekanntseits').then(
-                    m => m.default,
+                    (m) => m.default,
                   ),
-                })
-                exportModule({
-                  data: get(data, 'allVTpopOhnebekanntseits.nodes', []),
-                  fileName: 'TeilpopulationenVonApArtenOhneBekanntSeit',
-                  store,
                 })
               } catch (error) {
                 enqueNotification({
@@ -440,8 +474,26 @@ const Teilpopulationen = ({ treeName }) => {
                   options: { variant: 'error' },
                 })
               }
+              const rows = get(
+                result.data,
+                'allVTpopOhnebekanntseits.nodes',
+                [],
+              )
               removeNotification(notif)
               closeSnackbar(notif)
+              if (rows.length === 0) {
+                return enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
+              exportModule({
+                data: rows,
+                fileName: 'TeilpopulationenVonApArtenOhneBekanntSeit',
+                store,
+              })
             }}
           >
             <div>Teilpopulationen von AP-Arten</div>
@@ -456,16 +508,12 @@ const Teilpopulationen = ({ treeName }) => {
                   persist: true,
                 },
               })
+              let result
               try {
-                const { data } = await client.query({
+                result = await client.query({
                   query: await import('./allVTpopOhneapberichtrelevants').then(
-                    m => m.default,
+                    (m) => m.default,
                   ),
-                })
-                exportModule({
-                  data: get(data, 'allVTpopOhneapberichtrelevants.nodes', []),
-                  fileName: 'TeilpopulationenOhneApBerichtRelevant',
-                  store,
                 })
               } catch (error) {
                 enqueNotification({
@@ -473,8 +521,26 @@ const Teilpopulationen = ({ treeName }) => {
                   options: { variant: 'error' },
                 })
               }
+              const rows = get(
+                result.data,
+                'allVTpopOhneapberichtrelevants.nodes',
+                [],
+              )
               removeNotification(notif)
               closeSnackbar(notif)
+              if (rows.length === 0) {
+                return enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
+              exportModule({
+                data: rows,
+                fileName: 'TeilpopulationenOhneApBerichtRelevant',
+                store,
+              })
             }}
           >
             <div>Teilpopulationen ohne Eintrag</div>
@@ -489,16 +555,12 @@ const Teilpopulationen = ({ treeName }) => {
                   persist: true,
                 },
               })
+              let result
               try {
-                const { data } = await client.query({
+                result = await client.query({
                   query: await import('./allVTpopAnzmassns').then(
-                    m => m.default,
+                    (m) => m.default,
                   ),
-                })
-                exportModule({
-                  data: get(data, 'allVTpopAnzmassns.nodes', []),
-                  fileName: 'TeilpopulationenAnzahlMassnahmen',
-                  store,
                 })
               } catch (error) {
                 enqueNotification({
@@ -506,8 +568,22 @@ const Teilpopulationen = ({ treeName }) => {
                   options: { variant: 'error' },
                 })
               }
+              const rows = get(result.data, 'allVTpopAnzmassns.nodes', [])
               removeNotification(notif)
               closeSnackbar(notif)
+              if (rows.length === 0) {
+                return enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
+              exportModule({
+                data: rows,
+                fileName: 'TeilpopulationenAnzahlMassnahmen',
+                store,
+              })
             }}
           >
             Anzahl Massnahmen pro Teilpopulation
@@ -521,22 +597,12 @@ const Teilpopulationen = ({ treeName }) => {
                   persist: true,
                 },
               })
+              let result
               try {
-                const { data } = await client.query({
+                result = await client.query({
                   query: await import(
                     './allVTpopErsteUndLetzteKontrolleUndLetzterTpopbers'
-                  ).then(m => m.default),
-                })
-                console.log('Teilpopulationen Export, onClickEwm 1', { data })
-                exportModule({
-                  data: get(
-                    data,
-                    'allVTpopErsteUndLetzteKontrolleUndLetzterTpopbers.nodes',
-                    [],
-                  ),
-                  fileName:
-                    'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht',
-                  store,
+                  ).then((m) => m.default),
                 })
               } catch (error) {
                 console.log('Teilpopulationen Export, onClickEwm', { error })
@@ -545,8 +611,27 @@ const Teilpopulationen = ({ treeName }) => {
                   options: { variant: 'error' },
                 })
               }
+              const rows = get(
+                result.data,
+                'allVTpopErsteUndLetzteKontrolleUndLetzterTpopbers.nodes',
+                [],
+              )
               removeNotification(notif)
               closeSnackbar(notif)
+              if (rows.length === 0) {
+                return enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
+              exportModule({
+                data: rows,
+                fileName:
+                  'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht',
+                store,
+              })
             }}
             disabled={false /*isRemoteHost*/}
             title={
@@ -581,34 +666,19 @@ const Teilpopulationen = ({ treeName }) => {
               valueLabelPath="aeTaxonomyByArtId.artname"
               label={`"Eier legende Wollmilchsau" für einzelne Arten: Art wählen`}
               labelSize={14}
-              saveToDb={async e => {
+              saveToDb={async (e) => {
                 const aeId = e.target.value
                 if (aeId === null) return
                 setEwmMessage(
                   'Export "anzkontrinklletzterundletztertpopber" wird vorbereitet...',
                 )
+                let result
                 try {
-                  const res = await client.query({
+                  result = await client.query({
                     query: await import('./queryApByArtId').then(
-                      m => m.default,
+                      (m) => m.default,
                     ),
                     variables: { aeId },
-                  })
-                  const apId = get(res.data, 'apByArtId.id')
-                  const { data } = await client.query({
-                    query: await import(
-                      './allVTpopErsteUndLetzteKontrolleUndLetzterTpopbersFiltered'
-                    ).then(m => m.default),
-                    variables: { apId },
-                  })
-                  exportModule({
-                    data: get(
-                      data,
-                      'allVTpopErsteUndLetzteKontrolleUndLetzterTpopbers.nodes',
-                      [],
-                    ),
-                    fileName: 'anzkontrinklletzterundletztertpopber',
-                    store,
                   })
                 } catch (error) {
                   enqueNotification({
@@ -616,7 +686,32 @@ const Teilpopulationen = ({ treeName }) => {
                     options: { variant: 'error' },
                   })
                 }
+                const apId = get(result.data, 'apByArtId.id')
+                const { data } = await client.query({
+                  query: await import(
+                    './allVTpopErsteUndLetzteKontrolleUndLetzterTpopbersFiltered'
+                  ).then((m) => m.default),
+                  variables: { apId },
+                })
+                const rows = get(
+                  data,
+                  'allVTpopErsteUndLetzteKontrolleUndLetzterTpopbers.nodes',
+                  [],
+                )
                 setEwmMessage('')
+                if (rows.length === 0) {
+                  return enqueNotification({
+                    message: 'Die Abfrage retournierte 0 Datensätze',
+                    options: {
+                      variant: 'warning',
+                    },
+                  })
+                }
+                exportModule({
+                  data: rows,
+                  fileName: 'anzkontrinklletzterundletztertpopber',
+                  store,
+                })
               }}
               query={queryAeTaxonomies}
               filter={aeTaxonomiesfilter}
@@ -633,19 +728,12 @@ const Teilpopulationen = ({ treeName }) => {
                   persist: true,
                 },
               })
+              let result
               try {
-                const { data } = await client.query({
+                result = await client.query({
                   query: await import('./allVTpopPopberundmassnbers').then(
-                    m => m.default,
+                    (m) => m.default,
                   ),
-                })
-                exportModule({
-                  data: get(data, 'allVTpopPopberundmassnbers.nodes', []),
-                  fileName: 'TeilpopulationenTPopUndMassnBerichte',
-                  idKey: 'tpop_id',
-                  xKey: 'tpop_wgs84lat',
-                  yKey: 'tpop_wgs84long',
-                  store,
                 })
               } catch (error) {
                 enqueNotification({
@@ -653,8 +741,29 @@ const Teilpopulationen = ({ treeName }) => {
                   options: { variant: 'error' },
                 })
               }
+              const rows = get(
+                result.data,
+                'allVTpopPopberundmassnbers.nodes',
+                [],
+              )
               removeNotification(notif)
               closeSnackbar(notif)
+              if (rows.length === 0) {
+                return enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
+              exportModule({
+                data: rows,
+                fileName: 'TeilpopulationenTPopUndMassnBerichte',
+                idKey: 'tpop_id',
+                xKey: 'tpop_wgs84lat',
+                yKey: 'tpop_wgs84long',
+                store,
+              })
             }}
           >
             Teilpopulationen inklusive Teilpopulations- und Massnahmen-Berichten
@@ -668,17 +777,12 @@ const Teilpopulationen = ({ treeName }) => {
                   persist: true,
                 },
               })
+              let result
               try {
-                const { data } = await client.query({
+                result = await client.query({
                   query: await import('./allVTpopLastCounts').then(
-                    m => m.default,
+                    (m) => m.default,
                   ),
-                })
-                exportModule({
-                  data: get(data, 'allVTpopLastCounts.nodes', []),
-                  fileName: 'TPopLetzteZaehlungen',
-                  idKey: 'pop_id',
-                  store,
                 })
               } catch (error) {
                 enqueNotification({
@@ -688,8 +792,23 @@ const Teilpopulationen = ({ treeName }) => {
                   },
                 })
               }
+              const rows = get(result.data, 'allVTpopLastCounts.nodes', [])
               removeNotification(notif)
               closeSnackbar(notif)
+              if (rows.length === 0) {
+                return enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
+              exportModule({
+                data: rows,
+                fileName: 'TPopLetzteZaehlungen',
+                idKey: 'pop_id',
+                store,
+              })
             }}
           >
             Letzte Zählungen
@@ -703,17 +822,12 @@ const Teilpopulationen = ({ treeName }) => {
                   persist: true,
                 },
               })
+              let result
               try {
-                const { data } = await client.query({
+                result = await client.query({
                   query: await import('./allVTpopLastCountWithMassns').then(
-                    m => m.default,
+                    (m) => m.default,
                   ),
-                })
-                exportModule({
-                  data: get(data, 'allVTpopLastCountWithMassns.nodes', []),
-                  fileName: 'TPopLetzteZaehlungenInklMassn',
-                  idKey: 'pop_id',
-                  store,
                 })
               } catch (error) {
                 enqueNotification({
@@ -723,8 +837,27 @@ const Teilpopulationen = ({ treeName }) => {
                   },
                 })
               }
+              const rows = get(
+                result.data,
+                'allVTpopLastCountWithMassns.nodes',
+                [],
+              )
               removeNotification(notif)
               closeSnackbar(notif)
+              if (rows.length === 0) {
+                return enqueNotification({
+                  message: 'Die Abfrage retournierte 0 Datensätze',
+                  options: {
+                    variant: 'warning',
+                  },
+                })
+              }
+              exportModule({
+                data: rows,
+                fileName: 'TPopLetzteZaehlungenInklMassn',
+                idKey: 'pop_id',
+                store,
+              })
             }}
           >
             Letzte Zählungen inklusive noch nicht kontrollierter Anpflanzungen
