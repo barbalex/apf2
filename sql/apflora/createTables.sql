@@ -339,6 +339,22 @@ COMMENT ON COLUMN apflora.apber.changed IS 'Wann wurde der Datensatz zuletzt ge√
 COMMENT ON COLUMN apflora.apber.changed_by IS 'Von wem wurde der Datensatz zuletzt ge√§ndert?';
 alter table apflora.apber alter column changed_by set default null;
 
+
+-- TODO: this is developing, not in use yet
+alter table apflora.apber enable row level security;
+drop policy if exists reader on apflora.apber;
+create policy reader on apflora.apber using 
+(
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  or (
+    current_user = 'apflora_artverantwortlich'
+    and ap_id in (
+      select ap_id from apflora.ap_user where user_name = current_user_name()
+    )
+  )
+);
+
+
 DROP TABLE IF EXISTS apflora.apberuebersicht;
 CREATE TABLE apflora.apberuebersicht (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
