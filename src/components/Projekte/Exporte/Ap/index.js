@@ -412,6 +412,74 @@ const AP = () => {
     })
   }, [enqueNotification, removeNotification, closeSnackbar, client, store])
 
+  const onClickApPopEkPrio = useCallback(async () => {
+    const notif = enqueNotification({
+      message: `Export "ApPriorisierungFuerEk" wird vorbereitet...`,
+      options: {
+        variant: 'info',
+        persist: true,
+      },
+    })
+    let result
+    try {
+      result = await client.query({
+        query: await import('./queryApPopEkPrio').then((m) => m.default),
+      })
+    } catch (error) {
+      enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    const rows = get(result.data, 'allAps.nodes', []).map((z) => ({
+      ap_id: z.id,
+      artname: get(z, 'aeTaxonomyByArtId.artname') || '',
+      ap_bearbeitung: get(z, 'apBearbstandWerteByBearbeitung.text') || '',
+      ap_start_jahr: z.startJahr,
+      ap_umsetzung: get(z, 'apUmsetzungWerteByUmsetzung.text') || '',
+      ap_bearbeiter: get(z, 'adresseByBearbeiter.name') || '',
+      artwert: get(z, 'aeTaxonomyByArtId.artwert') || '',
+      jahr_zuvor: get(z, 'vApPopEkPriosByApId.nodes[0].jahrZuvor') || '',
+      jahr_zuletzt: get(z, 'vApPopEkPriosByApId.nodes[0].jahrZuletzt') || '',
+      anz_pop_urspr_zuvor:
+        get(z, 'vApPopEkPriosByApId.nodes[0].anzPopUrsprZuvor') || '',
+      anz_pop_anges_zuvor:
+        get(z, 'vApPopEkPriosByApId.nodes[0].anzPopAngesZuvor') || '',
+
+      anz_pop_aktuell_zuvor:
+        get(z, 'vApPopEkPriosByApId.nodes[0].anzPopAktuellZuvor') || '',
+      anz_pop_ursp_zuletzt:
+        get(z, 'vApPopEkPriosByApId.nodes[0].anzPopUrsprZuletzt') || '',
+      anz_pop_anges_zuletzt:
+        get(z, 'vApPopEkPriosByApId.nodes[0].anzPopAngesZuletzt') || '',
+      anz_pop_aktuell_zuletzt:
+        get(z, 'vApPopEkPriosByApId.nodes[0].anzPopAktuellZuletzt') || '',
+      diff_pop_urspr: get(z, 'vApPopEkPriosByApId.nodes[0].diffPopUrspr') || '',
+      diff_pop_anges: get(z, 'vApPopEkPriosByApId.nodes[0].diffPopAnges') || '',
+      diff_pop_aktuell:
+        get(z, 'vApPopEkPriosByApId.nodes[0].diffPopAktuell') || '',
+      beurteilung_zuletzt:
+        get(z, 'vApPopEkPriosByApId.nodes[0].beurteilungZuletzt') || '',
+    }))
+    removeNotification(notif)
+    closeSnackbar(notif)
+    if (rows.length === 0) {
+      return enqueNotification({
+        message: 'Die Abfrage retournierte 0 Datensätze',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
+    exportModule({
+      data: rows,
+      fileName: 'ApPriorisierungFuerEk',
+      store,
+    })
+  }, [enqueNotification, removeNotification, closeSnackbar, client, store])
+
   const onClickZiele = useCallback(async () => {
     const notif = enqueNotification({
       message: `Export "ApZiele" wird vorbereitet...`,
@@ -733,6 +801,9 @@ const AP = () => {
           </DownloadCardButton>
           <DownloadCardButton onClick={onClickApBerUndMassn}>
             AP-Berichte und Massnahmen
+          </DownloadCardButton>
+          <DownloadCardButton onClick={onClickApPopEkPrio}>
+            Priorisierung für EK basierend auf Pop-Entwicklung
           </DownloadCardButton>
           <DownloadCardButton onClick={onClickZiele}>Ziele</DownloadCardButton>
           <DownloadCardButton onClick={onClickZielber}>

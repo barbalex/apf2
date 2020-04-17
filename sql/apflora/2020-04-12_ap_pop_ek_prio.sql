@@ -15,65 +15,100 @@ with last_year as (
 count_urspr_last as (
   select
     apflora.pop_history.ap_id,
-    count(apflora.pop_history.*) as anzahl
+    count(apflora.pop_history.id) as anzahl
   from
+    last_year, 
     apflora.pop_history
-    inner join last_year
-    on last_year.year = apflora.pop_history.year
   where
-    apflora.pop_history.status = 100
+    apflora.pop_history.year = last_year.year
+    and apflora.pop_history.status = 100
+    and exists (
+      select * from apflora.tpop_history
+      where
+        apflora.tpop_history.pop_id = apflora.pop_history.id
+        and apflora.tpop_history.year = last_year.year
+        and apflora.tpop_history.apber_relevant = true
+    )
   group by
     apflora.pop_history.ap_id
 ),
 count_anges_last as (
   select
     apflora.pop_history.ap_id,
-    count(apflora.pop_history.*) as anzahl
+    count(apflora.pop_history.id) as anzahl
   from
+    last_year, 
     apflora.pop_history
-    inner join last_year
-    on last_year.year = apflora.pop_history.year
   where
-    apflora.pop_history.status = 200
+    apflora.pop_history.year = last_year.year
+    and apflora.pop_history.status = 200
+    and exists (
+      select * from apflora.tpop_history
+      where
+        apflora.tpop_history.pop_id = apflora.pop_history.id
+        and apflora.tpop_history.year = last_year.year
+        and apflora.tpop_history.apber_relevant = true
+    )
   group by
     apflora.pop_history.ap_id
 ),
 count_urspr_prev as (
   select
     apflora.pop_history.ap_id,
-    count(apflora.pop_history.*) as anzahl
+    count(apflora.pop_history.id) as anzahl
   from
+    last_year, 
     apflora.pop_history
-    inner join previous_year
-    on previous_year.year = apflora.pop_history.year
   where
-    apflora.pop_history.status = 100
+    apflora.pop_history.year = last_year.year
+    and apflora.pop_history.status = 100
+    and exists (
+      select * from apflora.tpop_history
+      where
+        apflora.tpop_history.pop_id = apflora.pop_history.id
+        and apflora.tpop_history.year = last_year.year
+        and apflora.tpop_history.apber_relevant = true
+    )
   group by
     apflora.pop_history.ap_id
 ),
 count_anges_prev as (
   select
     apflora.pop_history.ap_id,
-    count(apflora.pop_history.*) as anzahl
+    count(apflora.pop_history.id) as anzahl
   from
+    last_year, 
     apflora.pop_history
-    inner join previous_year
-    on previous_year.year = apflora.pop_history.year
   where
-    apflora.pop_history.status = 200
+    apflora.pop_history.year = last_year.year
+    and apflora.pop_history.status = 200
+    and exists (
+      select * from apflora.tpop_history
+      where
+        apflora.tpop_history.pop_id = apflora.pop_history.id
+        and apflora.tpop_history.year = last_year.year
+        and apflora.tpop_history.apber_relevant = true
+    )
   group by
     apflora.pop_history.ap_id
 ),
 count_total_prev as (
   select
     apflora.pop_history.ap_id,
-    count(apflora.pop_history.*) as anzahl
+    count(apflora.pop_history.id) as anzahl
   from
+    last_year, 
     apflora.pop_history
-    inner join previous_year
-    on previous_year.year = apflora.pop_history.year
   where
-    apflora.pop_history.status in (100, 200)
+    apflora.pop_history.year = last_year.year
+    and apflora.pop_history.status in (100, 200)
+    and exists (
+      select * from apflora.tpop_history
+      where
+        apflora.tpop_history.pop_id = apflora.pop_history.id
+        and apflora.tpop_history.year = last_year.year
+        and apflora.tpop_history.apber_relevant = true
+    )
   group by
     apflora.pop_history.ap_id
 )
@@ -93,6 +128,8 @@ select
   (coalesce(count_urspr_last.anzahl, 0) + coalesce(count_anges_last.anzahl, 0)) - (coalesce(count_urspr_prev.anzahl, 0) + coalesce(count_anges_prev.anzahl, 0)) as diff_pop_aktuell,
   apflora.ap_erfkrit_werte.text as beurteilung_zuletzt
 from
+  last_year, 
+  previous_year,
   apflora.ap_history
   inner join apflora.ae_taxonomies
   on apflora.ae_taxonomies.id = apflora.ap_history.art_id
@@ -107,10 +144,10 @@ from
   left join count_urspr_prev
   on count_urspr_prev.ap_id = apflora.ap_history.id
   left join count_anges_prev
-  on count_anges_prev.ap_id = apflora.ap_history.id,
-  last_year, 
-  previous_year
+  on count_anges_prev.ap_id = apflora.ap_history.id
 where
-  apflora.ap_history.year = last_year.year
+  apflora.ap_history.bearbeitung < 4
+  and apflora.ap_history.year = last_year.year
+  and (apflora.apber.jahr = last_year.year or apflora.apber.jahr is null)
 order by
   apflora.ae_taxonomies.artname;
