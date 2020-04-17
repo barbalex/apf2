@@ -2030,10 +2030,11 @@ create policy reader on apflora.zielber using
   or (
     current_user = 'apflora_artverantwortlich'
     and ziel_id in (
-      select distinct apflora.ziel.id 
+      select id 
       from apflora.ziel
-      inner join apflora.ap_user
-      on apflora.ap_user.ap_id = apflora.ziel.ap_id and apflora.ap_user.user_name = current_user_name()
+      where ap_id in (
+        select ap_id from apflora.ap_user where user_name = current_user_name()
+      )
     )
   )
 );
@@ -2045,6 +2046,15 @@ CREATE TABLE apflora.evab_typologie (
   "LEBENSRAUM" varchar(100),
   "Alliance" varchar(100)
 );
+
+
+-- TODO: this is developing, not in use yet
+alter table apflora.evab_typologie enable row level security;
+drop policy if exists reader on apflora.evab_typologie;
+create policy reader on apflora.evab_typologie 
+using (true)
+with check (current_user = 'apflora_manager');
+
 
 -- this table can not be used as foreign table
 -- because it needs to be referenced
@@ -2066,6 +2076,15 @@ create index on apflora.ae_taxonomies (id);
 create index on apflora.ae_taxonomies (taxid);
 create index on apflora.ae_taxonomies (artname);
 create index on apflora.ae_taxonomies (tax_art_name);
+
+
+-- TODO: this is developing, not in use yet
+alter table apflora.ae_taxonomies enable row level security;
+drop policy if exists reader on apflora.ae_taxonomies;
+create policy reader on apflora.ae_taxonomies 
+using (true)
+with check (current_user = 'apflora_manager');
+
 
 -- to update data run:
 --truncate apflora.ae_taxonomies;
@@ -2154,7 +2173,8 @@ create policy reader on apflora.beob using
   or (
     current_user = 'apflora_artverantwortlich'
     and art_id in (
-      select distinct art_id from apflora.apart
+      select distinct art_id 
+      from apflora.apart
       where ap_id in (
         select ap_id from apflora.ap_user where user_name = current_user_name()
       )
@@ -2211,6 +2231,22 @@ COMMENT ON COLUMN apflora.apart.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüs
 COMMENT ON COLUMN apflora.apart.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.apart.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
 
+
+-- TODO: this is developing, not in use yet
+alter table apflora.apart enable row level security;
+drop policy if exists reader on apflora.apart;
+create policy reader on apflora.apart using 
+(
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  or (
+    current_user = 'apflora_artverantwortlich'
+    and ap_id in (
+      select ap_id from apflora.ap_user where user_name = current_user_name()
+    )
+  )
+);
+
+
 drop table if exists apflora.ekzaehleinheit;
 create table apflora.ekzaehleinheit(
   id uuid primary key default uuid_generate_v1mc(),
@@ -2236,13 +2272,14 @@ COMMENT ON COLUMN apflora.ekzaehleinheit.zielrelevant IS 'Ob die Zähleinheit zi
 COMMENT ON COLUMN apflora.ekzaehleinheit.sort IS 'Um die Zähleinheiten untereinander zu sortieren';
 COMMENT ON COLUMN apflora.ekzaehleinheit.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ekzaehleinheit.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
+
+
+-- TODO: this is developing, not in use yet
+alter table apflora.ekzaehleinheit enable row level security;
 DROP POLICY IF EXISTS writer ON apflora.ekzaehleinheit;
 CREATE POLICY writer ON apflora.ekzaehleinheit
-  USING (true)
-  WITH CHECK (
-    current_user = 'apflora_manager'
-    OR current_user = 'apflora_artverantwortlich'
-  );
+USING (true)
+WITH CHECK (current_user = 'apflora_manager');
 
   
 drop type if exists ek_type;
@@ -2289,12 +2326,15 @@ COMMENT ON COLUMN apflora.ekfrequenz.sort IS 'Damit EK-Zähleinheiten untereinan
 COMMENT ON COLUMN apflora.ekfrequenz.ek_abrechnungstyp IS 'Fremdschlüssel aus Tabelle ek_abrechnungstyp_werte. Bestimmt, wie Kontrollen abgerechnet werden sollen';
 COMMENT ON COLUMN apflora.ekfrequenz.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ekfrequenz.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
+
+
+-- TODO: this is developing, not in use yet
+alter table apflora.ekfrequenz enable row level security;
 DROP POLICY IF EXISTS writer ON apflora.ekfrequenz;
 CREATE POLICY writer ON apflora.ekfrequenz
-  USING (true)
-  WITH CHECK (
-    current_user = 'apflora_manager'
-  );
+USING (true)
+WITH CHECK (current_user = 'apflora_manager');
+
 
 DROP TABLE IF EXISTS apflora.ek_abrechnungstyp_werte;
 CREATE TABLE apflora.ek_abrechnungstyp_werte (
@@ -2329,28 +2369,47 @@ with check (
 DROP TABLE IF EXISTS apflora.ekplan;
 CREATE TABLE apflora.ekplan (
   id uuid primary key default uuid_generate_v1mc(),
-  tpopkontr_id uuid default null references apflora.tpopkontr (id) on delete cascade on update cascade,
+  tpop_id uuid default null references apflora.tpop (id) on delete cascade on update cascade,
   jahr smallint DEFAULT NULL,
   type ek_type default null,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT NULL
 );
 CREATE INDEX ON apflora.ekplan USING btree (id);
-CREATE INDEX ON apflora.ekplan USING btree (tpopkontr_id);
+CREATE INDEX ON apflora.ekplan USING btree (tpop_id);
 CREATE INDEX ON apflora.ekplan USING btree (jahr);
 CREATE INDEX ON apflora.ekplan USING btree (type);
 COMMENT ON COLUMN apflora.ekplan.id IS 'Primärschlüssel';
-COMMENT ON COLUMN apflora.ekplan.tpopkontr_id IS 'Fremdschlüssel aus der Tabelle tpopkontr';
+COMMENT ON COLUMN apflora.ekplan.tpop_id IS 'Fremdschlüssel aus der Tabelle tpop';
 COMMENT ON COLUMN apflora.ekplan.jahr IS 'Jahr, in dem eine EK geplant ist';
 COMMENT ON COLUMN apflora.ekplan.type IS 'ek oder ekf';
 COMMENT ON COLUMN apflora.ekplan.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ekplan.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-CREATE POLICY writer ON apflora.ekplan
-  USING (true)
-  WITH CHECK (
-    current_user = 'apflora_manager'
-    OR current_user = 'apflora_artverantwortlich'
-  );
+
+
+-- TODO: this is developing, not in use yet
+alter table apflora.ekplan enable row level security;
+drop policy if exists writer on apflora.ekplan;
+create policy writer on apflora.ekplan
+using (true)
+with check (
+  current_user = 'apflora_manager'
+  or (
+    current_user = 'apflora_artverantwortlich'
+    and tpop_id in (
+      select id
+      from apflora.tpop
+      where pop_id in (
+        select id 
+        from apflora.pop
+        where ap_id in (
+          select ap_id from apflora.ap_user where user_name = current_user_name()
+        )
+      )
+    )
+  )
+);
+
 
 drop table if exists apflora.qk;
 create table apflora.qk (
@@ -2363,11 +2422,17 @@ create index on apflora.qk using btree (name);
 create index on apflora.qk using btree (titel);
 create index on apflora.qk using btree (sort);
 comment on column apflora.qk.name is 'Primärschlüssel. Wird auch in Abfragen und createMessageFunctions benutzt';
-CREATE POLICY writer ON apflora.qk
-  USING (true)
-  WITH CHECK (
-    current_user = 'apflora_manager'
-  );
+
+
+-- TODO: this is developing, not in use yet
+alter table apflora.qk enable row level security;
+drop policy if exists reader on apflora.qk;
+create policy reader on apflora.qk
+using (true)
+with check (
+  current_user = 'apflora_manager'
+);
+
 
 drop table if exists apflora.apqk;
 create table apflora.apqk (
@@ -2377,23 +2442,66 @@ create table apflora.apqk (
 );
 create index on apflora.apqk using btree (ap_id);
 create index on apflora.apqk using btree (qk_name);
-CREATE POLICY writer ON apflora.apqk
-  USING (true)
-  WITH CHECK (
-    current_user = 'apflora_manager'
-    OR current_user = 'apflora_artverantwortlich'
-  );
+
+
+-- TODO: this is developing, not in use yet
+alter table apflora.apqk enable row level security;
+drop policy if exists reader on apflora.apqk;
+create policy reader on apflora.apqk 
+using (true)
+with check
+(
+  current_user in ('apflora_manager')
+  or (
+    current_user = 'apflora_artverantwortlich'
+    and ap_id in (
+      select ap_id from apflora.ap_user where user_name = current_user_name()
+    )
+  )
+);
+
 
 -- apflora.ch_gemeinde is imported from:
 -- https://data.geo.admin.ch/ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill/gdb/2056/ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill.zip
 create index on apflora.ch_gemeinde using btree (name);
 comment on table apflora.ch_gemeinde is 'Quelle: https://data.geo.admin.ch/ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill/gdb/2056/ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill.zip'
 
+
+-- TODO: this is developing, not in use yet
+alter table apflora.ch_gemeinde enable row level security;
+drop policy if exists reader on apflora.ch_gemeinde;
+create policy reader on apflora.ch_gemeinde
+using (true)
+with check (
+  current_user = 'apflora_manager'
+);
+
 -- apflora.markierungen was received from topos
 comment on table apflora.markierungen is 'Markierungen, die im Rahmen von apflora gesetzt wurden. Quelle: Topos'
 
+
+-- TODO: this is developing, not in use yet
+alter table apflora.markierungen enable row level security;
+drop policy if exists reader on apflora.markierungen;
+create policy reader on apflora.markierungen
+using (true)
+with check (
+  current_user = 'apflora_manager'
+);
+
 -- apflora.detailplaene was received from topos
 comment on table apflora.detailplaene is 'Detailpläne, die im Rahmen von apflora gesetzt wurden. Quelle: Topos'
+
+
+-- TODO: this is developing, not in use yet
+alter table apflora.detailplaene enable row level security;
+drop policy if exists reader on apflora.detailplaene;
+create policy reader on apflora.detailplaene
+using (true)
+with check (
+  current_user = 'apflora_manager'
+);
+
 
 --truncate apflora.apqk
 --insert into apflora.apqk(ap_id, qk_name)
