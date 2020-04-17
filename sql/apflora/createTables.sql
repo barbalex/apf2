@@ -74,7 +74,7 @@ DROP POLICY IF EXISTS writer ON apflora.adresse;
 CREATE POLICY writer ON apflora.adresse
   USING (true)
   WITH CHECK (
-    current_user = 'apflora_manager'
+    current_user in ('apflora_manager', 'apflora_artverantwortlich')
   );
 
 DROP TABLE IF EXISTS apflora.ap;
@@ -523,6 +523,17 @@ CREATE INDEX ON apflora.projekt USING btree (name);
 COMMENT ON COLUMN apflora.projekt.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.projekt.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
+
+-- TODO: this is developing, not in use yet
+alter table apflora.projekt enable row level security;
+drop policy if exists reader on apflora.projekt;
+create policy reader on apflora.projekt 
+using (true)
+with check (
+  current_user = 'apflora_manager'
+);
+
+
 DROP TABLE IF EXISTS apflora.erfkrit;
 CREATE TABLE apflora.erfkrit (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -565,6 +576,16 @@ CREATE TABLE apflora.gemeinde (
 );
 CREATE INDEX ON apflora.gemeinde USING btree (id);
 CREATE INDEX ON apflora.gemeinde USING btree (name);
+
+
+-- TODO: this is developing, not in use yet
+alter table apflora.gemeinde enable row level security;
+drop policy if exists reader on apflora.gemeinde;
+create policy reader on apflora.gemeinde using 
+(
+  current_user = 'apflora_manager'
+);
+
 
 DROP TABLE IF EXISTS apflora.idealbiotop;
 CREATE TABLE apflora.idealbiotop (
@@ -631,6 +652,7 @@ create policy reader on apflora.idealbiotop using
   )
 );
 
+
 drop table if exists apflora.idealbiotop_file;
 create table apflora.idealbiotop_file (
   id uuid primary key DEFAULT uuid_generate_v1mc(),
@@ -644,6 +666,29 @@ create index on apflora.idealbiotop using btree (id);
 create index on apflora.idealbiotop_file using btree (idealbiotop_id);
 create index on apflora.idealbiotop_file using btree (file_id);
 create index on apflora.idealbiotop_file using btree (file_mime_type);
+
+
+-- TODO: this is developing, not in use yet
+alter table apflora.idealbiotop_file enable row level security;
+drop policy if exists reader on apflora.idealbiotop_file;
+create policy reader on apflora.idealbiotop_file using 
+(
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  or (
+    current_user = 'apflora_artverantwortlich'
+    and id in (
+      select apflora.idealbiotop_file.id
+      from 
+        apflora.idealbiotop_file
+        inner join apflora.idealbiotop
+        on apflora.idealbiotop.id = apflora.idealbiotop_file.idealbiotop_id
+        where apflora.idealbiotop.ap_id in (
+          select ap_id from apflora.ap_user where user_name = current_user_name()
+        )
+    )
+  )
+);
+
 
 DROP TABLE IF EXISTS apflora.pop;
 CREATE TABLE apflora.pop (
@@ -706,6 +751,25 @@ create index on apflora.pop_file using btree (pop_id);
 create index on apflora.pop_file using btree (file_id);
 create index on apflora.pop_file using btree (file_mime_type);
 
+
+-- TODO: this is developing, not in use yet
+alter table apflora.pop_file enable row level security;
+drop policy if exists reader on apflora.pop_file;
+create policy reader on apflora.pop_file using 
+(
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  or (
+    current_user = 'apflora_artverantwortlich'
+    and pop_id in (
+      select id from apflora.pop
+      where ap_id in (
+        select ap_id from apflora.ap_user where user_name = current_user_name()
+      )
+    )
+  )
+);
+
+
 DROP TABLE IF EXISTS apflora.pop_history;
 CREATE TABLE apflora.pop_history (
   year integer not null,
@@ -731,6 +795,22 @@ CREATE INDEX ON apflora.pop_history USING btree (name);
 CREATE INDEX ON apflora.pop_history USING btree (bekannt_seit);
 COMMENT ON COLUMN apflora.pop_history.year IS 'Jahr: pop_history wurde beim Erstellen des Jahresberichts im Februar des Folgejahrs von pop kopiert';
 COMMENT ON COLUMN apflora.pop_history.id IS 'Primärschlüssel der Tabelle "pop"';
+
+
+-- TODO: this is developing, not in use yet
+alter table apflora.pop_history enable row level security;
+drop policy if exists reader on apflora.pop_history;
+create policy reader on apflora.pop_history using 
+(
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  or (
+    current_user = 'apflora_artverantwortlich'
+    and ap_id in (
+      select ap_id from apflora.ap_user where user_name = current_user_name()
+    )
+  )
+);
+
 
 DROP TABLE IF EXISTS apflora.pop_status_werte;
 CREATE TABLE apflora.pop_status_werte (
@@ -790,6 +870,26 @@ CREATE INDEX ON apflora.popber USING btree (pop_id);
 CREATE INDEX ON apflora.popber USING btree (entwicklung);
 CREATE INDEX ON apflora.popber USING btree (jahr);
 
+
+-- TODO: this is developing, not in use yet
+alter table apflora.popber enable row level security;
+drop policy if exists reader on apflora.popber;
+create policy reader on apflora.popber using 
+(
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  or (
+    current_user = 'apflora_artverantwortlich'
+    and pop_id in (
+      select distinct apflora.pop.id 
+      from apflora.pop
+      where ap_id in (
+        select ap_id from apflora.ap_user where user_name = current_user_name()
+      )
+    )
+  )
+);
+
+
 DROP TABLE IF EXISTS apflora.popmassnber;
 CREATE TABLE apflora.popmassnber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -811,6 +911,26 @@ COMMENT ON COLUMN apflora.popmassnber.beurteilung IS 'Wie wird die Wirkung aller
 COMMENT ON COLUMN apflora.popmassnber.bemerkungen IS 'Bemerkungen zur Beurteilung';
 COMMENT ON COLUMN apflora.popmassnber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.popmassnber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+
+
+-- TODO: this is developing, not in use yet
+alter table apflora.popmassnber enable row level security;
+drop policy if exists reader on apflora.popmassnber;
+create policy reader on apflora.popmassnber using 
+(
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  or (
+    current_user = 'apflora_artverantwortlich'
+    and pop_id in (
+      select id 
+      from apflora.pop
+      where ap_id in (
+        select ap_id from apflora.ap_user where user_name = current_user_name()
+      )
+    )
+  )
+);
+
 
 DROP TABLE IF EXISTS apflora.tpop;
 CREATE TABLE apflora.tpop (
@@ -895,10 +1015,11 @@ create policy reader on apflora.tpop using
   or (
     current_user = 'apflora_artverantwortlich'
     and pop_id in (
-      select distinct apflora.pop.id 
+      select id 
       from apflora.pop
-      inner join apflora.ap_user
-      on apflora.ap_user.ap_id = apflora.pop.ap_id and apflora.ap_user.user_name = current_user_name()
+      where ap_id in (
+        select ap_id from apflora.ap_user where user_name = current_user_name()
+      )
     )
   )
 );
@@ -917,6 +1038,30 @@ create index on apflora.tpop using btree (id);
 create index on apflora.tpop_file using btree (tpop_id);
 create index on apflora.tpop_file using btree (file_id);
 create index on apflora.tpop_file using btree (file_mime_type);
+
+
+-- TODO: this is developing, not in use yet
+alter table apflora.tpop_file enable row level security;
+drop policy if exists reader on apflora.tpop_file;
+create policy reader on apflora.tpop_file using 
+(
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  or (
+    current_user = 'apflora_artverantwortlich'
+    and tpop_id in (
+      select id
+      from apflora.tpop
+      where pop_id in (
+        select id 
+        from apflora.pop
+        where ap_id in (
+          select ap_id from apflora.ap_user where user_name = current_user_name()
+        )
+      )
+    )
+  )
+);
+
 
 DROP TABLE IF EXISTS apflora.tpop_history;
 CREATE TABLE apflora.tpop_history (
@@ -963,6 +1108,26 @@ CREATE INDEX ON apflora.tpop_history USING btree (nr);
 CREATE INDEX ON apflora.tpop_history USING btree (flurname);
 COMMENT ON COLUMN apflora.tpop_history.year IS 'Jahr: tpop_history wurde beim Erstellen des Jahresberichts im Februar des Folgejahrs von tpop kopiert';
 COMMENT ON COLUMN apflora.tpop_history.id IS 'Primärschlüssel der Tabelle tpop';
+
+
+-- TODO: this is developing, not in use yet
+alter table apflora.tpop_history enable row level security;
+drop policy if exists reader on apflora.tpop_history;
+create policy reader on apflora.tpop_history using 
+(
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  or (
+    current_user = 'apflora_artverantwortlich'
+    and pop_id in (
+      select id 
+      from apflora.pop_history
+      where ap_id in (
+        select ap_id from apflora.ap_user where user_name = current_user_name()
+      )
+    )
+  )
+);
+
 
 DROP TABLE IF EXISTS apflora.tpop_apberrelevant_grund_werte;
 CREATE TABLE apflora.tpop_apberrelevant_grund_werte (
@@ -1054,6 +1219,30 @@ CREATE INDEX ON apflora.tpopber USING btree (id);
 CREATE INDEX ON apflora.tpopber USING btree (tpop_id);
 CREATE INDEX ON apflora.tpopber USING btree (entwicklung);
 CREATE INDEX ON apflora.tpopber USING btree (jahr);
+
+
+-- TODO: this is developing, not in use yet
+alter table apflora.tpopber enable row level security;
+drop policy if exists reader on apflora.tpopber;
+create policy reader on apflora.tpopber using 
+(
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  or (
+    current_user = 'apflora_artverantwortlich'
+    and tpop_id in (
+      select id
+      from apflora.tpop
+      where pop_id in (
+        select id 
+        from apflora.pop
+        where ap_id in (
+          select ap_id from apflora.ap_user where user_name = current_user_name()
+        )
+      )
+    )
+  )
+);
+
 
 DROP TABLE IF EXISTS apflora.tpopkontr;
 CREATE TABLE apflora.tpopkontr (
@@ -1172,12 +1361,15 @@ create policy reader on apflora.tpopkontr using
   or (
     current_user = 'apflora_artverantwortlich'
     and tpop_id in (
-      select distinct apflora.tpop.id
+      select id
       from apflora.tpop
-      inner join apflora.pop
-        inner join apflora.ap_user
-        on apflora.ap_user.ap_id = apflora.pop.ap_id and apflora.ap_user.user_name = current_user_name()
-      on apflora.pop.id = apflora.tpop.pop_id
+      where pop_id in (
+        select id 
+        from apflora.pop
+        where ap_id in (
+          select ap_id from apflora.ap_user where user_name = current_user_name()
+        )
+      )
     )
   )
 );
@@ -1196,6 +1388,34 @@ create index on apflora.tpopkontr using btree (id);
 create index on apflora.tpopkontr_file using btree (tpopkontr_id);
 create index on apflora.tpopkontr_file using btree (file_id);
 create index on apflora.tpopkontr_file using btree (file_mime_type);
+
+
+-- TODO: this is developing, not in use yet
+alter table apflora.tpopkontr_file enable row level security;
+drop policy if exists reader on apflora.tpopkontr_file;
+create policy reader on apflora.tpopkontr_file using 
+(
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  or (
+    current_user = 'apflora_artverantwortlich'
+    and tpopkontr_id in (
+      select id
+      from apflora.tpopkontr
+      where tpop_id in (
+        select id
+        from apflora.tpop
+        where pop_id in (
+          select id 
+          from apflora.pop
+          where ap_id in (
+            select ap_id from apflora.ap_user where user_name = current_user_name()
+          )
+        )
+      )
+    )
+  )
+);
+
 
 DROP TABLE IF EXISTS apflora.tpopkontr_idbiotuebereinst_werte;
 CREATE TABLE apflora.tpopkontr_idbiotuebereinst_werte (
@@ -1289,6 +1509,34 @@ CREATE INDEX ON apflora.tpopkontrzaehl USING btree (tpopkontr_id);
 CREATE INDEX ON apflora.tpopkontrzaehl USING btree (anzahl);
 CREATE INDEX ON apflora.tpopkontrzaehl USING btree (einheit);
 CREATE INDEX ON apflora.tpopkontrzaehl USING btree (methode);
+
+
+-- TODO: this is developing, not in use yet
+alter table apflora.tpopkontrzaehl enable row level security;
+drop policy if exists reader on apflora.tpopkontrzaehl;
+create policy reader on apflora.tpopkontrzaehl using 
+(
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  or (
+    current_user = 'apflora_artverantwortlich'
+    and tpopkontr_id in (
+      select id
+      from apflora.tpopkontr
+      where tpop_id in (
+        select id
+        from apflora.tpop
+        where pop_id in (
+          select id 
+          from apflora.pop
+          where ap_id in (
+            select ap_id from apflora.ap_user where user_name = current_user_name()
+          )
+        )
+      )
+    )
+  )
+);
+
 
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl_einheit_werte;
 CREATE TABLE apflora.tpopkontrzaehl_einheit_werte (
@@ -1429,12 +1677,15 @@ create policy reader on apflora.tpopmassn using
   or (
     current_user = 'apflora_artverantwortlich'
     and tpop_id in (
-      select distinct apflora.tpop.id
+      select id
       from apflora.tpop
-      inner join apflora.pop
-        inner join apflora.ap_user
-        on apflora.ap_user.ap_id = apflora.pop.ap_id and apflora.ap_user.user_name = current_user_name()
-      on apflora.pop.id = apflora.tpop.pop_id
+      where pop_id in (
+        select id 
+        from apflora.pop
+        where ap_id in (
+          select ap_id from apflora.ap_user where user_name = current_user_name()
+        )
+      )
     )
   )
 );
@@ -1453,6 +1704,34 @@ create index on apflora.tpopmassn using btree (id);
 create index on apflora.tpopmassn_file using btree (tpopmassn_id);
 create index on apflora.tpopmassn_file using btree (file_id);
 create index on apflora.tpopmassn_file using btree (file_mime_type);
+
+
+-- TODO: this is developing, not in use yet
+alter table apflora.tpopmassn_file enable row level security;
+drop policy if exists reader on apflora.tpopmassn_file;
+create policy reader on apflora.tpopmassn_file using 
+(
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  or (
+    current_user = 'apflora_artverantwortlich'
+    and tpopmassn_id in (
+      select id
+      from apflora.tpopmassn
+      where tpop_id in (
+        select id
+        from apflora.tpop
+        where pop_id in (
+          select id 
+          from apflora.pop
+          where ap_id in (
+            select ap_id from apflora.ap_user where user_name = current_user_name()
+          )
+        )
+      )
+    )
+  )
+);
+
 
 DROP TABLE IF EXISTS apflora.tpopmassn_erfbeurt_werte;
 CREATE TABLE apflora.tpopmassn_erfbeurt_werte (
@@ -1552,6 +1831,30 @@ COMMENT ON COLUMN apflora.tpopmassnber.bemerkungen IS 'Bemerkungen zur Beurteilu
 COMMENT ON COLUMN apflora.tpopmassnber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopmassnber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
+
+-- TODO: this is developing, not in use yet
+alter table apflora.tpopmassnber enable row level security;
+drop policy if exists reader on apflora.tpopmassnber;
+create policy reader on apflora.tpopmassnber using 
+(
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  or (
+    current_user = 'apflora_artverantwortlich'
+    and tpop_id in (
+      select id
+      from apflora.tpop
+      where pop_id in (
+        select id 
+        from apflora.pop
+        where ap_id in (
+          select ap_id from apflora.ap_user where user_name = current_user_name()
+        )
+      )
+    )
+  )
+);
+
+
 DROP TABLE IF EXISTS apflora.message CASCADE;
 CREATE TABLE apflora.message (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -1566,6 +1869,17 @@ CREATE INDEX ON apflora.message USING btree (time);
 COMMENT ON COLUMN apflora.message.message IS 'Nachricht an die Benutzer';
 COMMENT ON COLUMN apflora.message.active IS 'false: diese Nachricht wird nicht mehr übermittelt';
 
+
+-- TODO: this is developing, not in use yet
+alter table apflora.message enable row level security;
+drop policy if exists reader on apflora.message;
+create policy reader on apflora.message 
+using (true)
+with check (
+  current_user = 'apflora_manager'
+);
+
+
 DROP TABLE IF EXISTS apflora.currentIssue CASCADE;
 CREATE TABLE apflora.currentIssue (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -1578,6 +1892,17 @@ CREATE INDEX ON apflora.currentIssue USING btree (sort);
 CREATE INDEX ON apflora.currentIssue USING btree (title);
 COMMENT ON COLUMN apflora.currentIssue.issue IS 'Bekannter Fehler';
 
+
+-- TODO: this is developing, not in use yet
+alter table apflora.currentIssue enable row level security;
+drop policy if exists reader on apflora.currentIssue;
+create policy reader on apflora.currentIssue 
+using (true)
+with check (
+  current_user = 'apflora_manager'
+);
+
+
 -- list of read messages per user
 DROP TABLE IF EXISTS apflora.usermessage;
 CREATE TABLE apflora.usermessage (
@@ -1588,6 +1913,17 @@ CREATE TABLE apflora.usermessage (
 CREATE INDEX ON apflora.usermessage USING btree (id);
 CREATE INDEX ON apflora.usermessage USING btree (user_name);
 CREATE INDEX ON apflora.usermessage USING btree (message_id);
+
+
+-- TODO: this is developing, not in use yet
+alter table apflora.usermessage enable row level security;
+drop policy if exists reader on apflora.usermessage;
+create policy reader on apflora.usermessage 
+using (true)
+with check (
+  current_user = 'apflora_manager'
+);
+
 
 DROP TABLE IF EXISTS apflora.ziel;
 CREATE TABLE apflora.ziel (
