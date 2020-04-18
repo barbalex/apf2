@@ -29,7 +29,7 @@ const DetailplaeneLayer = () => {
   const { enqueNotification } = useContext(storeContext)
 
   const { data, error } = useQuery(gql`
-    query karteMatkierungesQuery {
+    query karteDetailplaenesQuery {
       allDetailplaenes {
         nodes {
           id: ogcFid

@@ -39,7 +39,7 @@ const MarkierungenLayer = () => {
   const { enqueNotification } = store
 
   const { data, error } = useQuery(gql`
-    query karteMatkierungesQuery {
+    query karteMarkierungesQuery {
       allMarkierungens {
         nodes {
           id: ogcFid
