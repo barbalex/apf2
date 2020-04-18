@@ -2301,8 +2301,6 @@ create table apflora.apqk (
 create index on apflora.apqk using btree (ap_id);
 create index on apflora.apqk using btree (qk_name);
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.apqk enable row level security;
 drop policy if exists reader on apflora.apqk;
 create policy reader on apflora.apqk 
@@ -2323,30 +2321,26 @@ with check (
 create index on apflora.ch_gemeinde using btree (name);
 comment on table apflora.ch_gemeinde is 'Quelle: https://data.geo.admin.ch/ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill/gdb/2056/ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill.zip'
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.ch_gemeinde enable row level security;
 drop policy if exists reader on apflora.ch_gemeinde;
 create policy reader on apflora.ch_gemeinde
 using (true)
 with check (current_user = 'apflora_manager');
 
+
 -- apflora.markierungen was received from topos
 comment on table apflora.markierungen is 'Markierungen, die im Rahmen von apflora gesetzt wurden. Quelle: Topos'
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.markierungen enable row level security;
 drop policy if exists reader on apflora.markierungen;
 create policy reader on apflora.markierungen
 using (true)
 with check (current_user = 'apflora_manager');
 
+
 -- apflora.detailplaene was received from topos
 comment on table apflora.detailplaene is 'Detailpläne, die im Rahmen von apflora gesetzt wurden. Quelle: Topos'
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.detailplaene enable row level security;
 drop policy if exists reader on apflora.detailplaene;
 create policy reader on apflora.detailplaene
