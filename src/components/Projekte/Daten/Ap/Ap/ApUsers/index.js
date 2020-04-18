@@ -6,17 +6,15 @@ import get from 'lodash/get'
 import styled from 'styled-components'
 
 import ApUser from './ApUser'
+import Label from '../../../../../shared/Label'
 
 const Container = styled.div`
   margin-top: 20px;
-  margin-bottom: 20px;
-`
-const Title = styled.h4`
-  margin-bottom: 5px;
+  margin-bottom: 30px;
 `
 
 const ApUsers = ({ apId }) => {
-  const { data, error, loading } = useQuery(
+  const { data, error, loading, refetch } = useQuery(
     gql`
       query apUsersForApQuery($apId: UUID!) {
         allApUsers(
@@ -43,13 +41,11 @@ const ApUsers = ({ apId }) => {
     },
   )
   const apUsers = data ? get(data, 'allApUsers.nodes', []) : []
-  console.log('ApUsers', { data, apUsers })
 
   if (error) {
     return (
       <Container>
-        <Title>Benutzer mit Zugriff:</Title>
-        {error.message}
+        <Label label={'Benutzer mit Zugriff'} />>{error.message}
       </Container>
     )
   }
@@ -57,7 +53,7 @@ const ApUsers = ({ apId }) => {
   if (loading) {
     return (
       <Container>
-        <Title>Benutzer mit Zugriff:</Title>
+        <Label label={'Benutzer mit Zugriff'} />
         lade Daten...
       </Container>
     )
@@ -65,9 +61,9 @@ const ApUsers = ({ apId }) => {
 
   return (
     <Container>
-      <Title>Benutzer mit Zugriff:</Title>
+      <Label label={'Benutzer mit Zugriff'} />
       {apUsers.map((user) => (
-        <ApUser user={user} />
+        <ApUser key={user.id} user={user} refetch={refetch} />
       ))}
     </Container>
   )
