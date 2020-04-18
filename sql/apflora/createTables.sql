@@ -116,7 +116,7 @@ create policy reader on apflora.ap using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -124,13 +124,17 @@ create policy reader on apflora.ap using
 );
 
 
--- TODO: this is developing, not in use yet
 drop table if exists apflora.ap_user;
 create table apflora.ap_user (
   id uuid primary key default uuid_generate_v1mc(),
   ap_id uuid default null references apflora.ap (id) on delete cascade on update cascade,
-  user_name text default null references apflora.user (name) on delete cascade on update cascade
+  user_name text default null references apflora.user (name) on delete cascade on update cascade,
+  unique (ap_id, user_name)
 );
+CREATE INDEX ON apflora.ap_user USING btree (id);
+CREATE INDEX ON apflora.ap_user USING btree (ap_id);
+CREATE INDEX ON apflora.ap_user USING btree (user_name);
+COMMENT ON table apflora.ap IS 'Hier wird bestimmt, welche Benutzer mit den rollen "apflora_artverantwortlich" oder "apflora_reader" Zugriff auf einen AP erhalten';
 
 
 -- TODO: this is developing, not in use yet
@@ -165,7 +169,7 @@ create policy reader on apflora.ap_file using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and ap_id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -216,7 +220,7 @@ create policy reader on apflora.ap_history using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -431,7 +435,7 @@ create policy reader on apflora.apber using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and ap_id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -468,7 +472,7 @@ alter table apflora.apberuebersicht enable row level security;
 drop policy if exists reader on apflora.apberuebersicht;
 create policy reader on apflora.apberuebersicht 
 using  (
-  current_user in ('apflora_manager', 'apflora_reader', 'apflora_artverantwortlich', 'apflora_art_reader')
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_artverantwortlich', 'apflora_ap_reader')
 )
 with check (
   current_user = 'apflora_manager'
@@ -502,7 +506,7 @@ create policy reader on apflora.assozart using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and ap_id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -561,7 +565,7 @@ create policy reader on apflora.erfkrit using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and ap_id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -644,7 +648,7 @@ create policy reader on apflora.idealbiotop using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and ap_id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -674,7 +678,7 @@ create policy reader on apflora.idealbiotop_file using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and id in (
       select apflora.idealbiotop_file.id
       from 
@@ -728,7 +732,7 @@ create policy reader on apflora.pop using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and ap_id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -758,7 +762,7 @@ create policy reader on apflora.pop_file using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and pop_id in (
       select id from apflora.pop
       where ap_id in (
@@ -803,7 +807,7 @@ create policy reader on apflora.pop_history using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and ap_id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -875,7 +879,7 @@ create policy reader on apflora.popber using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and pop_id in (
       select distinct apflora.pop.id 
       from apflora.pop
@@ -917,7 +921,7 @@ create policy reader on apflora.popmassnber using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and pop_id in (
       select id 
       from apflora.pop
@@ -1010,7 +1014,7 @@ create policy reader on apflora.tpop using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and pop_id in (
       select id 
       from apflora.pop
@@ -1044,7 +1048,7 @@ create policy reader on apflora.tpop_file using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and tpop_id in (
       select id
       from apflora.tpop
@@ -1114,7 +1118,7 @@ create policy reader on apflora.tpop_history using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and pop_id in (
       select id 
       from apflora.pop_history
@@ -1221,7 +1225,7 @@ create policy reader on apflora.tpopber using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and tpop_id in (
       select id
       from apflora.tpop
@@ -1352,7 +1356,7 @@ create policy reader on apflora.tpopkontr using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and tpop_id in (
       select id
       from apflora.tpop
@@ -1390,7 +1394,7 @@ create policy reader on apflora.tpopkontr_file using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and tpopkontr_id in (
       select id
       from apflora.tpopkontr
@@ -1507,7 +1511,7 @@ create policy reader on apflora.tpopkontrzaehl using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and tpopkontr_id in (
       select id
       from apflora.tpopkontr
@@ -1660,7 +1664,7 @@ create policy reader on apflora.tpopmassn using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and tpop_id in (
       select id
       from apflora.tpop
@@ -1698,7 +1702,7 @@ create policy reader on apflora.tpopmassn_file using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and tpopmassn_id in (
       select id
       from apflora.tpopmassn
@@ -1820,7 +1824,7 @@ create policy reader on apflora.tpopmassnber using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and tpop_id in (
       select id
       from apflora.tpop
@@ -1930,7 +1934,7 @@ create policy reader on apflora.ziel using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and ap_id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -2001,7 +2005,7 @@ create policy reader on apflora.zielber using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and ziel_id in (
       select id 
       from apflora.ziel
@@ -2144,7 +2148,7 @@ create policy reader on apflora.beob using
 (
   current_user in ('apflora_manager', 'apflora_reader')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and art_id in (
       select distinct art_id 
       from apflora.apart
@@ -2210,7 +2214,7 @@ create policy reader on apflora.apart using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and ap_id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -2364,7 +2368,7 @@ using (true)
 with check (
   current_user = 'apflora_manager'
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and tpop_id in (
       select id
       from apflora.tpop
@@ -2419,7 +2423,7 @@ using (true)
 with check (
   current_user in ('apflora_manager')
   or (
-    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
+    current_user in ('apflora_artverantwortlich', 'apflora_ap_reader')
     and ap_id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )

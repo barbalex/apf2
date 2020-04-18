@@ -56,7 +56,7 @@ for each row
 execute procedure apflora.encrypt_pass();
 
 GRANT EXECUTE ON FUNCTION apflora.encrypt_pass() TO apflora_reader;
-GRANT EXECUTE ON FUNCTION apflora.encrypt_pass() TO apflora_art_reader;
+GRANT EXECUTE ON FUNCTION apflora.encrypt_pass() TO apflora_ap_reader;
 GRANT EXECUTE ON FUNCTION apflora.encrypt_pass() TO apflora_freiwillig;
 GRANT EXECUTE ON FUNCTION apflora.encrypt_pass() TO authenticator;
 GRANT EXECUTE ON FUNCTION apflora.encrypt_pass() TO anon;

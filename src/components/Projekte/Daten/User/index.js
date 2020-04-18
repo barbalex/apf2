@@ -69,8 +69,8 @@ const roleWerte = [
     label: 'artverantwortlich (sieht und ändert freigegebene Arten)',
   },
   {
-    value: 'apflora_art_reader',
-    label: 'art_reader (sieht freigegebene Arten)',
+    value: 'apflora_ap_reader',
+    label: 'ap_reader (sieht freigegebene Arten)',
   },
   {
     value: 'apflora_manager',
