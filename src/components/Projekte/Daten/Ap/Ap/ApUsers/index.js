@@ -6,11 +6,21 @@ import get from 'lodash/get'
 import styled from 'styled-components'
 
 import ApUser from './ApUser'
+import NewUser from './NewUser'
 import Label from '../../../../../shared/Label'
 
 const Container = styled.div`
   margin-top: 20px;
   margin-bottom: 30px;
+`
+const NewUserContainer = styled.div`
+  margin-bottom: 5px;
+`
+const Info = styled.div`
+  margin-top: 1px;
+  font-style: italic;
+  font-size: 0.8rem;
+  color: rgba(0, 0, 0, 0.54);
 `
 
 const ApUsers = ({ apId }) => {
@@ -61,10 +71,20 @@ const ApUsers = ({ apId }) => {
 
   return (
     <Container>
-      <Label label={'Benutzer mit Zugriff'} />
-      {apUsers.map((user) => (
-        <ApUser key={user.id} user={user} refetch={refetch} />
-      ))}
+      <Label
+        label={
+          'Benutzer (mit Rolle "artverantwortlich" oder "art_reader") mit Zugriff'
+        }
+      />
+      <NewUserContainer>
+        {!!apUsers.length
+          ? apUsers.map((user) => (
+              <ApUser key={user.id} user={user} refetch={refetch} />
+            ))
+          : 'Es wurden noch keine Zugriffe erteilt'}
+        <Info>{`Benutzer mit der Rolle "manager" oder "reader" haben immer Zugriff`}</Info>
+      </NewUserContainer>
+      <NewUser apId={apId} apUsers={apUsers} refetch={refetch} />
     </Container>
   )
 }

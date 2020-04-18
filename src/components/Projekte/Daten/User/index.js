@@ -70,7 +70,7 @@ const roleWerte = [
   },
   {
     value: 'apflora_art_reader',
-    label: 'art-reader (sieht freigegebene Arten)',
+    label: 'art_reader (sieht freigegebene Arten)',
   },
   {
     value: 'apflora_manager',
