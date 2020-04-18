@@ -719,12 +719,10 @@ create index on apflora.pop_file using btree (pop_id);
 create index on apflora.pop_file using btree (file_id);
 create index on apflora.pop_file using btree (file_mime_type);
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.pop_file enable row level security;
 drop policy if exists reader on apflora.pop_file;
-create policy reader on apflora.pop_file using 
-(
+create policy reader on apflora.pop_file 
+using (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer', 'apflora_ap_reader')
@@ -764,12 +762,10 @@ CREATE INDEX ON apflora.pop_history USING btree (bekannt_seit);
 COMMENT ON COLUMN apflora.pop_history.year IS 'Jahr: pop_history wurde beim Erstellen des Jahresberichts im Februar des Folgejahrs von pop kopiert';
 COMMENT ON COLUMN apflora.pop_history.id IS 'Primärschlüssel der Tabelle "pop"';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.pop_history enable row level security;
 drop policy if exists reader on apflora.pop_history;
-create policy reader on apflora.pop_history using 
-(
+create policy reader on apflora.pop_history 
+using (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer', 'apflora_ap_reader')
@@ -806,13 +802,12 @@ COMMENT ON COLUMN apflora.pop_status_werte.historic IS 'Wert wird nur angezeigt,
 COMMENT ON COLUMN apflora.pop_status_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.pop_status_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.pop_status_werte enable row level security;
 drop policy if exists reader on apflora.pop_status_werte;
 create policy reader on apflora.pop_status_werte
 using (true)
 with check (current_user = 'apflora_manager');
+
 
 DROP TABLE IF EXISTS apflora.popber;
 CREATE TABLE apflora.popber (
@@ -836,12 +831,10 @@ CREATE INDEX ON apflora.popber USING btree (pop_id);
 CREATE INDEX ON apflora.popber USING btree (entwicklung);
 CREATE INDEX ON apflora.popber USING btree (jahr);
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.popber enable row level security;
 drop policy if exists reader on apflora.popber;
-create policy reader on apflora.popber using 
-(
+create policy reader on apflora.popber 
+using (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer', 'apflora_ap_reader')
@@ -878,12 +871,10 @@ COMMENT ON COLUMN apflora.popmassnber.bemerkungen IS 'Bemerkungen zur Beurteilun
 COMMENT ON COLUMN apflora.popmassnber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.popmassnber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.popmassnber enable row level security;
 drop policy if exists reader on apflora.popmassnber;
-create policy reader on apflora.popmassnber using 
-(
+create policy reader on apflora.popmassnber 
+using (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer', 'apflora_ap_reader')
@@ -971,12 +962,10 @@ COMMENT ON COLUMN apflora.tpop.ekfrequenz_abweichend IS 'Wer diese TPop freiwill
 COMMENT ON COLUMN apflora.tpop.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpop.changed IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.tpop enable row level security;
 drop policy if exists reader on apflora.tpop;
-create policy reader on apflora.tpop using 
-(
+create policy reader on apflora.tpop 
+using (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer', 'apflora_ap_reader')
@@ -1005,12 +994,10 @@ create index on apflora.tpop_file using btree (tpop_id);
 create index on apflora.tpop_file using btree (file_id);
 create index on apflora.tpop_file using btree (file_mime_type);
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.tpop_file enable row level security;
 drop policy if exists reader on apflora.tpop_file;
-create policy reader on apflora.tpop_file using 
-(
+create policy reader on apflora.tpop_file 
+using (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer', 'apflora_ap_reader')
@@ -1075,12 +1062,10 @@ CREATE INDEX ON apflora.tpop_history USING btree (flurname);
 COMMENT ON COLUMN apflora.tpop_history.year IS 'Jahr: tpop_history wurde beim Erstellen des Jahresberichts im Februar des Folgejahrs von tpop kopiert';
 COMMENT ON COLUMN apflora.tpop_history.id IS 'Primärschlüssel der Tabelle tpop';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.tpop_history enable row level security;
 drop policy if exists reader on apflora.tpop_history;
-create policy reader on apflora.tpop_history using 
-(
+create policy reader on apflora.tpop_history 
+using (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer', 'apflora_ap_reader')
@@ -1119,8 +1104,6 @@ COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.historic IS 'Wert wird 
 COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpop_apberrelevant_grund_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.tpop_apberrelevant_grund_werte enable row level security;
 drop policy if exists reader on apflora.tpop_apberrelevant_grund_werte;
 create policy reader on apflora.tpop_apberrelevant_grund_werte
@@ -1152,8 +1135,6 @@ COMMENT ON COLUMN apflora.tpop_entwicklung_werte.historic IS 'Wert wird nur ange
 COMMENT ON COLUMN apflora.tpop_entwicklung_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpop_entwicklung_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.tpop_entwicklung_werte enable row level security;
 drop policy if exists reader on apflora.tpop_entwicklung_werte;
 create policy reader on apflora.tpop_entwicklung_werte
@@ -1182,12 +1163,10 @@ CREATE INDEX ON apflora.tpopber USING btree (tpop_id);
 CREATE INDEX ON apflora.tpopber USING btree (entwicklung);
 CREATE INDEX ON apflora.tpopber USING btree (jahr);
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.tpopber enable row level security;
 drop policy if exists reader on apflora.tpopber;
-create policy reader on apflora.tpopber using 
-(
+create policy reader on apflora.tpopber 
+using (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer', 'apflora_ap_reader')
@@ -1313,12 +1292,10 @@ COMMENT ON COLUMN apflora.tpopkontr.changed_by IS 'Von wem wurde der Datensatz z
 COMMENT ON COLUMN apflora.tpopkontr.apber_nicht_relevant IS 'Pro Jahr sollte maximal eine Kontrolle AP-Bericht-relevant sein. Dient dazu Kontrollen auszuschliessen';
 COMMENT ON COLUMN apflora.tpopkontr.apber_nicht_relevant_grund IS 'Grund, wieso die Kontrolle vom AP-Bericht ausgeschlossen wurde';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.tpopkontr enable row level security;
 drop policy if exists reader on apflora.tpopkontr;
-create policy reader on apflora.tpopkontr using 
-(
+create policy reader on apflora.tpopkontr 
+using (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer', 'apflora_ap_reader')
@@ -1351,12 +1328,10 @@ create index on apflora.tpopkontr_file using btree (tpopkontr_id);
 create index on apflora.tpopkontr_file using btree (file_id);
 create index on apflora.tpopkontr_file using btree (file_mime_type);
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.tpopkontr_file enable row level security;
 drop policy if exists reader on apflora.tpopkontr_file;
-create policy reader on apflora.tpopkontr_file using 
-(
+create policy reader on apflora.tpopkontr_file 
+using (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer', 'apflora_ap_reader')
@@ -1403,8 +1378,6 @@ COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.historic IS 'Wert wir
 COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.tpopkontr_idbiotuebereinst_werte enable row level security;
 drop policy if exists reader on apflora.tpopkontr_idbiotuebereinst_werte;
 create policy reader on apflora.tpopkontr_idbiotuebereinst_werte
@@ -1436,8 +1409,6 @@ COMMENT ON COLUMN apflora.tpopkontr_typ_werte.historic IS 'Wert wird nur angezei
 COMMENT ON COLUMN apflora.tpopkontr_typ_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontr_typ_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.tpopkontr_typ_werte enable row level security;
 drop policy if exists reader on apflora.tpopkontr_typ_werte;
 create policy reader on apflora.tpopkontr_typ_werte
@@ -1468,12 +1439,10 @@ CREATE INDEX ON apflora.tpopkontrzaehl USING btree (anzahl);
 CREATE INDEX ON apflora.tpopkontrzaehl USING btree (einheit);
 CREATE INDEX ON apflora.tpopkontrzaehl USING btree (methode);
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.tpopkontrzaehl enable row level security;
 drop policy if exists reader on apflora.tpopkontrzaehl;
-create policy reader on apflora.tpopkontrzaehl using 
-(
+create policy reader on apflora.tpopkontrzaehl 
+using (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer', 'apflora_ap_reader')
@@ -1520,8 +1489,6 @@ COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.historic IS 'Wert wird nu
 COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.tpopkontrzaehl_einheit_werte enable row level security;
 drop policy if exists reader on apflora.tpopkontrzaehl_einheit_werte;
 create policy reader on apflora.tpopkontrzaehl_einheit_werte
@@ -1554,8 +1521,6 @@ COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.historic IS 'Wert wird nu
 COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.tpopkontrzaehl_methode_werte enable row level security;
 drop policy if exists reader on apflora.tpopkontrzaehl_methode_werte;
 create policy reader on apflora.tpopkontrzaehl_methode_werte
@@ -1621,12 +1586,10 @@ COMMENT ON COLUMN apflora.tpopmassn.id IS 'GUID der Tabelle "tpopmassn"';
 COMMENT ON COLUMN apflora.tpopmassn.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopmassn.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.tpopmassn enable row level security;
 drop policy if exists reader on apflora.tpopmassn;
-create policy reader on apflora.tpopmassn using 
-(
+create policy reader on apflora.tpopmassn 
+using (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer', 'apflora_ap_reader')
@@ -1659,12 +1622,10 @@ create index on apflora.tpopmassn_file using btree (tpopmassn_id);
 create index on apflora.tpopmassn_file using btree (file_id);
 create index on apflora.tpopmassn_file using btree (file_mime_type);
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.tpopmassn_file enable row level security;
 drop policy if exists reader on apflora.tpopmassn_file;
-create policy reader on apflora.tpopmassn_file using 
-(
+create policy reader on apflora.tpopmassn_file 
+using (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer', 'apflora_ap_reader')
@@ -1712,8 +1673,6 @@ COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.historic IS 'Wert wird nur an
 COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.tpopmassn_erfbeurt_werte enable row level security;
 drop policy if exists reader on apflora.tpopmassn_erfbeurt_werte;
 create policy reader on apflora.tpopmassn_erfbeurt_werte
@@ -1750,8 +1709,6 @@ COMMENT ON COLUMN apflora.tpopmassn_typ_werte.historic IS 'Wert wird nur angezei
 COMMENT ON COLUMN apflora.tpopmassn_typ_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopmassn_typ_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.tpopmassn_typ_werte enable row level security;
 drop policy if exists reader on apflora.tpopmassn_typ_werte;
 create policy reader on apflora.tpopmassn_typ_werte
@@ -1781,12 +1738,10 @@ COMMENT ON COLUMN apflora.tpopmassnber.bemerkungen IS 'Bemerkungen zur Beurteilu
 COMMENT ON COLUMN apflora.tpopmassnber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopmassnber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.tpopmassnber enable row level security;
 drop policy if exists reader on apflora.tpopmassnber;
-create policy reader on apflora.tpopmassnber using 
-(
+create policy reader on apflora.tpopmassnber 
+using (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer', 'apflora_ap_reader')
@@ -1819,8 +1774,6 @@ CREATE INDEX ON apflora.message USING btree (time);
 COMMENT ON COLUMN apflora.message.message IS 'Nachricht an die Benutzer';
 COMMENT ON COLUMN apflora.message.active IS 'false: diese Nachricht wird nicht mehr übermittelt';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.message enable row level security;
 drop policy if exists reader on apflora.message;
 create policy reader on apflora.message 
@@ -1840,8 +1793,6 @@ CREATE INDEX ON apflora.currentIssue USING btree (sort);
 CREATE INDEX ON apflora.currentIssue USING btree (title);
 COMMENT ON COLUMN apflora.currentIssue.issue IS 'Bekannter Fehler';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.currentIssue enable row level security;
 drop policy if exists reader on apflora.currentIssue;
 create policy reader on apflora.currentIssue 
@@ -1860,8 +1811,6 @@ CREATE INDEX ON apflora.usermessage USING btree (id);
 CREATE INDEX ON apflora.usermessage USING btree (user_name);
 CREATE INDEX ON apflora.usermessage USING btree (message_id);
 
-
--- TODO: this is developing, not in use yet
 -- this needs to be written by user when he ok's message
 alter table apflora.usermessage enable row level security;
 drop policy if exists reader on apflora.usermessage;
@@ -1891,12 +1840,10 @@ COMMENT ON COLUMN apflora.ziel.bezeichnung IS 'Textliche Beschreibung des Ziels'
 COMMENT ON COLUMN apflora.ziel.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ziel.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.ziel enable row level security;
 drop policy if exists reader on apflora.ziel;
-create policy reader on apflora.ziel using 
-(
+create policy reader on apflora.ziel 
+using (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer', 'apflora_ap_reader')
@@ -1932,8 +1879,6 @@ COMMENT ON COLUMN apflora.ziel_typ_werte.historic IS 'Wert wird nur angezeigt, w
 COMMENT ON COLUMN apflora.ziel_typ_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ziel_typ_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.ziel_typ_werte enable row level security;
 drop policy if exists reader on apflora.ziel_typ_werte;
 create policy reader on apflora.ziel_typ_werte
@@ -1962,12 +1907,10 @@ COMMENT ON COLUMN apflora.zielber.bemerkungen IS 'Bemerkungen zur Zielerreichung
 COMMENT ON COLUMN apflora.zielber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.zielber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.zielber enable row level security;
 drop policy if exists reader on apflora.zielber;
-create policy reader on apflora.zielber using 
-(
+create policy reader on apflora.zielber 
+using (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer', 'apflora_ap_reader')
@@ -1989,8 +1932,6 @@ CREATE TABLE apflora.evab_typologie (
   "Alliance" varchar(100)
 );
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.evab_typologie enable row level security;
 drop policy if exists reader on apflora.evab_typologie;
 create policy reader on apflora.evab_typologie 
@@ -2019,8 +1960,6 @@ create index on apflora.ae_taxonomies (taxid);
 create index on apflora.ae_taxonomies (artname);
 create index on apflora.ae_taxonomies (tax_art_name);
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.ae_taxonomies enable row level security;
 drop policy if exists reader on apflora.ae_taxonomies;
 create policy reader on apflora.ae_taxonomies 
@@ -2105,12 +2044,10 @@ COMMENT ON COLUMN apflora.beob.bemerkungen IS 'Bemerkungen zur Zuordnung';
 COMMENT ON COLUMN apflora.beob.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.beob.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.beob enable row level security;
 drop policy if exists reader on apflora.beob;
-create policy reader on apflora.beob using 
-(
+create policy reader on apflora.beob 
+using (
   current_user in ('apflora_manager', 'apflora_reader')
   or (
     current_user in ('apflora_ap_writer', 'apflora_ap_reader')
@@ -2143,8 +2080,6 @@ CREATE TABLE apflora.beob_quelle_werte (
 );
 CREATE INDEX ON apflora.beob_quelle_werte USING btree (id);
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.beob_quelle_werte enable row level security;
 drop policy if exists reader on apflora.beob_quelle_werte;
 create policy reader on apflora.beob_quelle_werte
@@ -2152,7 +2087,6 @@ using (true)
 with check (current_user = 'apflora_manager');
 
 
--- create table
 DROP TABLE IF EXISTS apflora.apart;
 CREATE TABLE apflora.apart (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
@@ -2171,12 +2105,10 @@ COMMENT ON COLUMN apflora.apart.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüs
 COMMENT ON COLUMN apflora.apart.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.apart.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.apart enable row level security;
 drop policy if exists reader on apflora.apart;
-create policy reader on apflora.apart using 
-(
+create policy reader on apflora.apart 
+using (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
     current_user in ('apflora_ap_writer', 'apflora_ap_reader')
@@ -2213,8 +2145,6 @@ COMMENT ON COLUMN apflora.ekzaehleinheit.sort IS 'Um die Zähleinheiten unterein
 COMMENT ON COLUMN apflora.ekzaehleinheit.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ekzaehleinheit.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.ekzaehleinheit enable row level security;
 DROP POLICY IF EXISTS writer ON apflora.ekzaehleinheit;
 CREATE POLICY writer ON apflora.ekzaehleinheit
@@ -2267,8 +2197,6 @@ COMMENT ON COLUMN apflora.ekfrequenz.ek_abrechnungstyp IS 'Fremdschlüssel aus T
 COMMENT ON COLUMN apflora.ekfrequenz.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ekfrequenz.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.ekfrequenz enable row level security;
 DROP POLICY IF EXISTS writer ON apflora.ekfrequenz;
 CREATE POLICY writer ON apflora.ekfrequenz
@@ -2295,8 +2223,6 @@ COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.historic IS 'Wert wird nur ang
 COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ek_abrechnungstyp_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.ek_abrechnungstyp_werte enable row level security;
 drop policy if exists reader on apflora.ek_abrechnungstyp_werte;
 create policy reader on apflora.ek_abrechnungstyp_werte
@@ -2324,8 +2250,6 @@ COMMENT ON COLUMN apflora.ekplan.type IS 'ek oder ekf';
 COMMENT ON COLUMN apflora.ekplan.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ekplan.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.ekplan enable row level security;
 drop policy if exists writer on apflora.ekplan;
 create policy writer on apflora.ekplan
@@ -2361,8 +2285,6 @@ create index on apflora.qk using btree (titel);
 create index on apflora.qk using btree (sort);
 comment on column apflora.qk.name is 'Primärschlüssel. Wird auch in Abfragen und createMessageFunctions benutzt';
 
-
--- TODO: this is developing, not in use yet
 alter table apflora.qk enable row level security;
 drop policy if exists reader on apflora.qk;
 create policy reader on apflora.qk
