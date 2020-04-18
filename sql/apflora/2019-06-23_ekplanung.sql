@@ -26,7 +26,7 @@ CREATE POLICY writer ON apflora.ekzaehleinheit
   USING (true)
   WITH CHECK (
     current_user = 'apflora_manager'
-    OR current_user = 'apflora_artverantwortlich'
+    OR current_user = 'apflora_ap_writer'
   );
 -- move data from ekfzaehleinheit to ekzaehleinheit
 insert into apflora.ekzaehleinheit (id, ap_id, zaehleinheit_id, bemerkungen, changed, changed_by)
@@ -192,6 +192,6 @@ CREATE POLICY writer ON apflora.ekplan
   USING (true)
   WITH CHECK (
     current_user = 'apflora_manager'
-    OR current_user = 'apflora_artverantwortlich'
+    OR current_user = 'apflora_ap_writer'
   );
 -- TODO: build form for ekplan

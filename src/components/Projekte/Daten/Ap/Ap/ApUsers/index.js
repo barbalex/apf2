@@ -41,7 +41,7 @@ const ApUsers = ({ apId }) => {
           filter: {
             apId: { equalTo: $apId }
             userByUserName: {
-              role: { in: ["apflora_artverantwortlich", "apflora_ap_reader"] }
+              role: { in: ["apflora_ap_writer", "apflora_ap_reader"] }
             }
           }
         ) {
@@ -92,8 +92,7 @@ const ApUsers = ({ apId }) => {
           <InfoTitle>Zugriff hängt von der Rolle des Benutzers ab:</InfoTitle>
           <InfoList>
             <InfoRow>
-              "artverantwortlich" haben Schreib-Rechte, wenn sie oben
-              aufgelistet sind
+              "ap_writer" haben Schreib-Rechte, wenn sie oben aufgelistet sind
             </InfoRow>
             <InfoRow>
               "ap_reader" haben Lese-Rechte, wenn sie oben aufgelistet sind

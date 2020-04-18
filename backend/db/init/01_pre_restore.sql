@@ -12,7 +12,8 @@ CREATE DATABASE apflora WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE =
 create role apflora_reader;
 create role apflora_ap_reader;
 create role apflora_manager in group apflora_reader;
-create role apflora_artverantwortlich in group apflora_reader;
+create role apflora_ap_writer in group apflora_reader;
+-- TODO: drop role apflora_artverantwortlich;
 create role apflora_freiwillig;
 create role anon;
 create role authenticator with login password '${AUTHENTICATOR_PASSWORD}' noinherit;

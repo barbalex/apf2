@@ -48,7 +48,7 @@ CREATE USER MAPPING
  SERVER ae_server
 OPTIONS (user 'fdw_user', password 'secret');
 CREATE USER MAPPING
-    FOR apflora_artverantwortlich
+    FOR apflora_ap_writer
  SERVER ae_server
 OPTIONS (user 'fdw_user', password 'secret');
 CREATE USER MAPPING

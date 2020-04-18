@@ -97,7 +97,7 @@ const AppbarMore = ({ onClickExporte: passedOnClickExporte, role }) => {
         >
           gelöschte Datensätze wiederherstellen
         </MenuItem>
-        {['apflora_manager', 'apflora_artverantwortlich'].includes(role) && (
+        {['apflora_manager', 'apflora_ap_writer'].includes(role) && (
           <EkfAdresse closeMenu={closeMenu} />
         )}
         <MenuItem

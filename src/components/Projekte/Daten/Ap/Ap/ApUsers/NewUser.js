@@ -16,9 +16,7 @@ const NewUser = ({ apId, apUsers, refetch }) => {
       query benutzerForNewUser {
         allUsers(
           orderBy: NAME_ASC
-          filter: {
-            role: { in: ["apflora_artverantwortlich", "apflora_ap_reader"] }
-          }
+          filter: { role: { in: ["apflora_ap_writer", "apflora_ap_reader"] } }
         ) {
           nodes {
             id
