@@ -116,7 +116,7 @@ create policy reader on apflora.ap using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -165,7 +165,7 @@ create policy reader on apflora.ap_file using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and ap_id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -216,7 +216,7 @@ create policy reader on apflora.ap_history using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -431,7 +431,7 @@ create policy reader on apflora.apber using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and ap_id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -468,7 +468,7 @@ alter table apflora.apberuebersicht enable row level security;
 drop policy if exists reader on apflora.apberuebersicht;
 create policy reader on apflora.apberuebersicht 
 using  (
-  current_user in ('apflora_manager', 'apflora_reader', 'apflora_artverantwortlich')
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_artverantwortlich', 'apflora_art_reader')
 )
 with check (
   current_user = 'apflora_manager'
@@ -502,7 +502,7 @@ create policy reader on apflora.assozart using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and ap_id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -561,7 +561,7 @@ create policy reader on apflora.erfkrit using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and ap_id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -581,10 +581,9 @@ CREATE INDEX ON apflora.gemeinde USING btree (name);
 -- TODO: this is developing, not in use yet
 alter table apflora.gemeinde enable row level security;
 drop policy if exists reader on apflora.gemeinde;
-create policy reader on apflora.gemeinde using 
-(
-  current_user = 'apflora_manager'
-);
+create policy reader on apflora.gemeinde 
+using (true)
+with check (current_user = 'apflora_manager');
 
 
 DROP TABLE IF EXISTS apflora.idealbiotop;
@@ -645,7 +644,7 @@ create policy reader on apflora.idealbiotop using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and ap_id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -675,7 +674,7 @@ create policy reader on apflora.idealbiotop_file using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and id in (
       select apflora.idealbiotop_file.id
       from 
@@ -729,7 +728,7 @@ create policy reader on apflora.pop using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and ap_id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -759,7 +758,7 @@ create policy reader on apflora.pop_file using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and pop_id in (
       select id from apflora.pop
       where ap_id in (
@@ -804,7 +803,7 @@ create policy reader on apflora.pop_history using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and ap_id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -844,9 +843,7 @@ alter table apflora.pop_status_werte enable row level security;
 drop policy if exists reader on apflora.pop_status_werte;
 create policy reader on apflora.pop_status_werte
 using (true)
-with check (
-  current_user = 'apflora_manager'
-);
+with check (current_user = 'apflora_manager');
 
 DROP TABLE IF EXISTS apflora.popber;
 CREATE TABLE apflora.popber (
@@ -878,7 +875,7 @@ create policy reader on apflora.popber using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and pop_id in (
       select distinct apflora.pop.id 
       from apflora.pop
@@ -920,7 +917,7 @@ create policy reader on apflora.popmassnber using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and pop_id in (
       select id 
       from apflora.pop
@@ -1013,7 +1010,7 @@ create policy reader on apflora.tpop using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and pop_id in (
       select id 
       from apflora.pop
@@ -1047,7 +1044,7 @@ create policy reader on apflora.tpop_file using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and tpop_id in (
       select id
       from apflora.tpop
@@ -1117,7 +1114,7 @@ create policy reader on apflora.tpop_history using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and pop_id in (
       select id 
       from apflora.pop_history
@@ -1159,9 +1156,7 @@ alter table apflora.tpop_apberrelevant_grund_werte enable row level security;
 drop policy if exists reader on apflora.tpop_apberrelevant_grund_werte;
 create policy reader on apflora.tpop_apberrelevant_grund_werte
 using (true)
-with check (
-  current_user = 'apflora_manager'
-);
+with check (current_user = 'apflora_manager');
 
 
 DROP TABLE IF EXISTS apflora.tpop_entwicklung_werte;
@@ -1194,9 +1189,7 @@ alter table apflora.tpop_entwicklung_werte enable row level security;
 drop policy if exists reader on apflora.tpop_entwicklung_werte;
 create policy reader on apflora.tpop_entwicklung_werte
 using (true)
-with check (
-  current_user = 'apflora_manager'
-);
+with check (current_user = 'apflora_manager');
 
 
 DROP TABLE IF EXISTS apflora.tpopber;
@@ -1228,7 +1221,7 @@ create policy reader on apflora.tpopber using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and tpop_id in (
       select id
       from apflora.tpop
@@ -1359,7 +1352,7 @@ create policy reader on apflora.tpopkontr using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and tpop_id in (
       select id
       from apflora.tpop
@@ -1397,7 +1390,7 @@ create policy reader on apflora.tpopkontr_file using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and tpopkontr_id in (
       select id
       from apflora.tpopkontr
@@ -1447,9 +1440,7 @@ alter table apflora.tpopkontr_idbiotuebereinst_werte enable row level security;
 drop policy if exists reader on apflora.tpopkontr_idbiotuebereinst_werte;
 create policy reader on apflora.tpopkontr_idbiotuebereinst_werte
 using (true)
-with check (
-  current_user = 'apflora_manager'
-);
+with check (current_user = 'apflora_manager');
 
 
 DROP TABLE IF EXISTS apflora.tpopkontr_typ_werte;
@@ -1482,9 +1473,7 @@ alter table apflora.tpopkontr_typ_werte enable row level security;
 drop policy if exists reader on apflora.tpopkontr_typ_werte;
 create policy reader on apflora.tpopkontr_typ_werte
 using (true)
-with check (
-  current_user = 'apflora_manager'
-);
+with check (current_user = 'apflora_manager');
 
 
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl;
@@ -1518,7 +1507,7 @@ create policy reader on apflora.tpopkontrzaehl using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and tpopkontr_id in (
       select id
       from apflora.tpopkontr
@@ -1568,9 +1557,7 @@ alter table apflora.tpopkontrzaehl_einheit_werte enable row level security;
 drop policy if exists reader on apflora.tpopkontrzaehl_einheit_werte;
 create policy reader on apflora.tpopkontrzaehl_einheit_werte
 using (true)
-with check (
-  current_user = 'apflora_manager'
-);
+with check (current_user = 'apflora_manager');
 
 
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl_methode_werte;
@@ -1604,9 +1591,7 @@ alter table apflora.tpopkontrzaehl_methode_werte enable row level security;
 drop policy if exists reader on apflora.tpopkontrzaehl_methode_werte;
 create policy reader on apflora.tpopkontrzaehl_methode_werte
 using (true)
-with check (
-  current_user = 'apflora_manager'
-);
+with check (current_user = 'apflora_manager');
 
 
 DROP TABLE IF EXISTS apflora.tpopmassn;
@@ -1675,7 +1660,7 @@ create policy reader on apflora.tpopmassn using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and tpop_id in (
       select id
       from apflora.tpop
@@ -1713,7 +1698,7 @@ create policy reader on apflora.tpopmassn_file using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and tpopmassn_id in (
       select id
       from apflora.tpopmassn
@@ -1764,9 +1749,7 @@ alter table apflora.tpopmassn_erfbeurt_werte enable row level security;
 drop policy if exists reader on apflora.tpopmassn_erfbeurt_werte;
 create policy reader on apflora.tpopmassn_erfbeurt_werte
 using (true)
-with check (
-  current_user = 'apflora_manager'
-);
+with check (current_user = 'apflora_manager');
 
 
 DROP TABLE IF EXISTS apflora.tpopmassn_typ_werte;
@@ -1804,9 +1787,7 @@ alter table apflora.tpopmassn_typ_werte enable row level security;
 drop policy if exists reader on apflora.tpopmassn_typ_werte;
 create policy reader on apflora.tpopmassn_typ_werte
 using (true)
-with check (
-  current_user = 'apflora_manager'
-);
+with check (current_user = 'apflora_manager');
 
 
 DROP TABLE IF EXISTS apflora.tpopmassnber;
@@ -1839,7 +1820,7 @@ create policy reader on apflora.tpopmassnber using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and tpop_id in (
       select id
       from apflora.tpop
@@ -1875,9 +1856,7 @@ alter table apflora.message enable row level security;
 drop policy if exists reader on apflora.message;
 create policy reader on apflora.message 
 using (true)
-with check (
-  current_user = 'apflora_manager'
-);
+with check (current_user = 'apflora_manager');
 
 
 DROP TABLE IF EXISTS apflora.currentIssue CASCADE;
@@ -1898,9 +1877,7 @@ alter table apflora.currentIssue enable row level security;
 drop policy if exists reader on apflora.currentIssue;
 create policy reader on apflora.currentIssue 
 using (true)
-with check (
-  current_user = 'apflora_manager'
-);
+with check (current_user = 'apflora_manager');
 
 
 -- list of read messages per user
@@ -1916,13 +1893,11 @@ CREATE INDEX ON apflora.usermessage USING btree (message_id);
 
 
 -- TODO: this is developing, not in use yet
+-- this needs to be written by user when he ok's message
 alter table apflora.usermessage enable row level security;
 drop policy if exists reader on apflora.usermessage;
 create policy reader on apflora.usermessage 
-using (true)
-with check (
-  current_user = 'apflora_manager'
-);
+using (user_name = current_user_name());
 
 
 DROP TABLE IF EXISTS apflora.ziel;
@@ -1955,7 +1930,7 @@ create policy reader on apflora.ziel using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and ap_id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -1994,9 +1969,7 @@ alter table apflora.ziel_typ_werte enable row level security;
 drop policy if exists reader on apflora.ziel_typ_werte;
 create policy reader on apflora.ziel_typ_werte
 using (true)
-with check (
-  current_user = 'apflora_manager'
-);
+with check (current_user = 'apflora_manager');
 
 
 DROP TABLE IF EXISTS apflora.zielber;
@@ -2028,7 +2001,7 @@ create policy reader on apflora.zielber using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and ziel_id in (
       select id 
       from apflora.ziel
@@ -2171,7 +2144,7 @@ create policy reader on apflora.beob using
 (
   current_user in ('apflora_manager', 'apflora_reader')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and art_id in (
       select distinct art_id 
       from apflora.apart
@@ -2207,9 +2180,7 @@ alter table apflora.beob_quelle_werte enable row level security;
 drop policy if exists reader on apflora.beob_quelle_werte;
 create policy reader on apflora.beob_quelle_werte
 using (true)
-with check (
-  current_user = 'apflora_manager'
-);
+with check (current_user = 'apflora_manager');
 
 
 -- create table
@@ -2239,7 +2210,7 @@ create policy reader on apflora.apart using
 (
   current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and ap_id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -2361,9 +2332,7 @@ alter table apflora.ek_abrechnungstyp_werte enable row level security;
 drop policy if exists reader on apflora.ek_abrechnungstyp_werte;
 create policy reader on apflora.ek_abrechnungstyp_werte
 using (true)
-with check (
-  current_user = 'apflora_manager'
-);
+with check (current_user = 'apflora_manager');
 
 
 DROP TABLE IF EXISTS apflora.ekplan;
@@ -2395,7 +2364,7 @@ using (true)
 with check (
   current_user = 'apflora_manager'
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and tpop_id in (
       select id
       from apflora.tpop
@@ -2429,9 +2398,7 @@ alter table apflora.qk enable row level security;
 drop policy if exists reader on apflora.qk;
 create policy reader on apflora.qk
 using (true)
-with check (
-  current_user = 'apflora_manager'
-);
+with check (current_user = 'apflora_manager');
 
 
 drop table if exists apflora.apqk;
@@ -2449,11 +2416,10 @@ alter table apflora.apqk enable row level security;
 drop policy if exists reader on apflora.apqk;
 create policy reader on apflora.apqk 
 using (true)
-with check
-(
+with check (
   current_user in ('apflora_manager')
   or (
-    current_user = 'apflora_artverantwortlich'
+    current_user in ('apflora_artverantwortlich', 'apflora_art_reader')
     and ap_id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -2472,9 +2438,7 @@ alter table apflora.ch_gemeinde enable row level security;
 drop policy if exists reader on apflora.ch_gemeinde;
 create policy reader on apflora.ch_gemeinde
 using (true)
-with check (
-  current_user = 'apflora_manager'
-);
+with check (current_user = 'apflora_manager');
 
 -- apflora.markierungen was received from topos
 comment on table apflora.markierungen is 'Markierungen, die im Rahmen von apflora gesetzt wurden. Quelle: Topos'
@@ -2485,9 +2449,7 @@ alter table apflora.markierungen enable row level security;
 drop policy if exists reader on apflora.markierungen;
 create policy reader on apflora.markierungen
 using (true)
-with check (
-  current_user = 'apflora_manager'
-);
+with check (current_user = 'apflora_manager');
 
 -- apflora.detailplaene was received from topos
 comment on table apflora.detailplaene is 'Detailpläne, die im Rahmen von apflora gesetzt wurden. Quelle: Topos'
@@ -2498,9 +2460,7 @@ alter table apflora.detailplaene enable row level security;
 drop policy if exists reader on apflora.detailplaene;
 create policy reader on apflora.detailplaene
 using (true)
-with check (
-  current_user = 'apflora_manager'
-);
+with check (current_user = 'apflora_manager');
 
 
 --truncate apflora.apqk

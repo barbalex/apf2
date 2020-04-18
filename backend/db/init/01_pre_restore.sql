@@ -10,6 +10,7 @@ CREATE DATABASE apflora WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE =
 --CREATE EXTENSION intarray;
 
 create role apflora_reader;
+create role apflora_art_reader;
 create role apflora_manager in group apflora_reader;
 create role apflora_artverantwortlich in group apflora_reader;
 create role apflora_freiwillig;

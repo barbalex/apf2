@@ -58,19 +58,23 @@ const StyledButton = styled(Button)`
 const roleWerte = [
   {
     value: 'apflora_reader',
-    label: 'reader',
+    label: 'reader (sieht fast alle Daten)',
   },
   {
     value: 'apflora_freiwillig',
-    label: 'freiwillig',
+    label: 'freiwillig (sieht und ändert eigene Kontrollen)',
   },
   {
     value: 'apflora_artverantwortlich',
-    label: 'artverantwortlich',
+    label: 'artverantwortlich (sieht und ändert freigegebene Arten)',
+  },
+  {
+    value: 'apflora_art_reader',
+    label: 'art-reader (sieht freigegebene Arten)',
   },
   {
     value: 'apflora_manager',
-    label: 'manager',
+    label: 'manager (sieht und ändert fast alle Daten)',
   },
 ]
 
@@ -122,8 +126,8 @@ const User = ({ treeName }) => {
   const ekfTpops = get(dataEkfTpops, 'ekfTpops.nodes') || []
   const hasEkfTpops = !!ekfTpops.length
   const ekfTpopsWithoutEkfThisYear = ekfTpops
-    .filter(e => get(e, 'ekfInJahr.totalCount') === 0)
-    .map(e => e.id)
+    .filter((e) => get(e, 'ekfInJahr.totalCount') === 0)
+    .map((e) => e.id)
   const hasEkfTpopsWithoutEkfThisYear = !!ekfTpopsWithoutEkfThisYear.length
 
   useEffect(() => {
@@ -131,7 +135,7 @@ const User = ({ treeName }) => {
   }, [row.id])
 
   const saveToDb = useCallback(
-    async event => {
+    async (event) => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value)
       try {
@@ -164,7 +168,7 @@ const User = ({ treeName }) => {
     },
     [client, row.adresseId, row.email, row.id, row.name, row.pass, row.role],
   )
-  const onBlurPassword = useCallback(event => {
+  const onBlurPassword = useCallback((event) => {
     setPasswordErrorText('')
     const password = event.target.value
     setPassword(password)
@@ -175,7 +179,7 @@ const User = ({ treeName }) => {
     }
   }, [])
   const onBlurPassword2 = useCallback(
-    async event => {
+    async (event) => {
       setPassword2ErrorText('')
       const password2 = event.target.value
       setPassword2(password2)
@@ -250,7 +254,7 @@ const User = ({ treeName }) => {
       }
     }
     if (errors.length) {
-      errors.forEach(error =>
+      errors.forEach((error) =>
         store.enqueNotification({
           message: error.message,
           options: {
@@ -388,7 +392,7 @@ const User = ({ treeName }) => {
                 type={showPass ? 'text' : 'password'}
                 defaultValue={password}
                 onBlur={onBlurPassword}
-                onKeyPress={e => {
+                onKeyPress={(e) => {
                   if (e.key === 'Enter') {
                     onBlurPassword(e)
                   }
@@ -401,7 +405,7 @@ const User = ({ treeName }) => {
                   <InputAdornment position="end">
                     <IconButton
                       onClick={() => setShowPass(!showPass)}
-                      onMouseDown={e => e.preventDefault()}
+                      onMouseDown={(e) => e.preventDefault()}
                       title={showPass ? 'verstecken' : 'anzeigen'}
                     >
                       {showPass ? <VisibilityOff /> : <Visibility />}
@@ -431,7 +435,7 @@ const User = ({ treeName }) => {
                 type={showPass2 ? 'text' : 'password'}
                 defaultValue={password2}
                 onBlur={onBlurPassword2}
-                onKeyPress={e => {
+                onKeyPress={(e) => {
                   if (e.key === 'Enter') {
                     onBlurPassword(e)
                   }
@@ -442,7 +446,7 @@ const User = ({ treeName }) => {
                   <InputAdornment position="end">
                     <IconButton
                       onClick={() => setShowPass2(!showPass2)}
-                      onMouseDown={e => e.preventDefault()}
+                      onMouseDown={(e) => e.preventDefault()}
                       title={showPass2 ? 'verstecken' : 'anzeigen'}
                     >
                       {showPass2 ? <VisibilityOff /> : <Visibility />}
