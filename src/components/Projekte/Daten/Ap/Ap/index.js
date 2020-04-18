@@ -18,6 +18,7 @@ import queryAeTaxonomies from './queryAeTaxonomies'
 import storeContext from '../../../../../storeContext'
 import objectsFindChangedKey from '../../../../../modules/objectsFindChangedKey'
 import objectsEmptyValuesToNull from '../../../../../modules/objectsEmptyValuesToNull'
+import ApUsers from './ApUsers'
 
 const Container = styled.div`
   height: calc(100vh - 64px);
@@ -237,6 +238,7 @@ const ApAp = ({ treeName, id }) => {
               loading={loadingAdresses}
               component={Select}
             />
+            <ApUsers apId={row.id} />
             <Field
               key={`${row.id}ekfBeobachtungszeitpunkt`}
               name="ekfBeobachtungszeitpunkt"
