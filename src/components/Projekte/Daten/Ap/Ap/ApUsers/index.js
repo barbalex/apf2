@@ -10,17 +10,27 @@ import NewUser from './NewUser'
 import Label from '../../../../../shared/Label'
 
 const Container = styled.div`
-  margin-top: 20px;
-  margin-bottom: 30px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  border: 1px rgba(46, 125, 50, 0.4) solid;
+  padding: 0 10px;
 `
 const NewUserContainer = styled.div`
   margin-bottom: 5px;
 `
 const Info = styled.div`
-  margin-top: 1px;
+  margin-top: 7px;
+  margin-bottom: 12px;
   font-style: italic;
   font-size: 0.8rem;
   color: rgba(0, 0, 0, 0.54);
+`
+const InfoTitle = styled.div``
+const InfoList = styled.ul`
+  margin-bottom: 5px;
+`
+const InfoRow = styled.li`
+  margin-bottom: 0;
 `
 
 const ApUsers = ({ apId }) => {
@@ -71,18 +81,30 @@ const ApUsers = ({ apId }) => {
 
   return (
     <Container>
-      <Label
-        label={
-          'Benutzer (mit Rolle "artverantwortlich" oder "art_reader") mit Zugriff'
-        }
-      />
+      <Label label={'Benutzer mit Zugriff'} />
       <NewUserContainer>
         {!!apUsers.length
           ? apUsers.map((user) => (
               <ApUser key={user.id} user={user} refetch={refetch} />
             ))
           : 'Es wurden noch keine Zugriffe erteilt'}
-        <Info>{`Benutzer mit der Rolle "manager" oder "reader" haben immer Zugriff`}</Info>
+        <Info>
+          <InfoTitle>Zugriff hängt von der Rolle des Benutzers ab:</InfoTitle>
+          <InfoList>
+            <InfoRow>
+              "artverantwortlich" haben Schreib-Rechte, wenn sie oben
+              aufgelistet sind
+            </InfoRow>
+            <InfoRow>
+              "art_reader" haben Lese-Rechte, wenn sie oben aufgelistet sind
+            </InfoRow>
+          </InfoList>
+          <InfoTitle>Darüber hinaus haben immer Zugriff:</InfoTitle>
+          <InfoList>
+            <InfoRow>"manager" (Schreib-Rechte)</InfoRow>
+            <InfoRow>"reader" (Lese-Rechte)</InfoRow>
+          </InfoList>
+        </Info>
       </NewUserContainer>
       <NewUser apId={apId} apUsers={apUsers} refetch={refetch} />
     </Container>
