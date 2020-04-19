@@ -100,3 +100,4 @@ group by
 order by
   artname,
   pop_nr;
+comment on view apflora.v_pop_last_count_with_massn is '@foreignKey (pop_id) references pop (id)';
