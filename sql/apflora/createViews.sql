@@ -402,7 +402,7 @@ from
         (ap_anzmassnprojahr.jahr = ap_anzmassnbisjahr.jahr)
         and (ap_anzmassnprojahr.id = ap_anzmassnbisjahr.id)
     on apflora.ap.id = ap_anzmassnprojahr.id;
-comment on view apflora.v_ap_apberundmassn is '@foreignKey (id) references ap (id)'
+comment on view apflora.v_ap_apberundmassn is '@foreignKey (id) references ap (id)';
 
 DROP VIEW IF EXISTS apflora.v_massn_webgisbun CASCADE;
 CREATE OR REPLACE VIEW apflora.v_massn_webgisbun AS
@@ -2871,6 +2871,7 @@ ORDER BY
   apflora.ae_taxonomies.artname,
   apflora.pop.nr,
   apflora.pop.name;
+comment on view apflora.v_pop_kmlnamen is '@foreignKey (id) references pop (id)';
 
 -- used in exports
 DROP VIEW IF EXISTS apflora.v_kontrzaehl_anzproeinheit CASCADE;
@@ -5562,4 +5563,4 @@ where
   and (apflora.apber.jahr = last_year.year or apflora.apber.jahr is null)
 order by
   apflora.ae_taxonomies.artname;
-comment on view apflora.v_ap_pop_ek_prio is '@foreignKey (ap_id) references ap (id)'
+comment on view apflora.v_ap_pop_ek_prio is '@foreignKey (ap_id) references ap (id)';

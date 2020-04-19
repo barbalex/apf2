@@ -250,7 +250,7 @@ const Populationen = () => {
               let result
               try {
                 result = await client.query({
-                  query: await import('./allVPopKmlnamen').then(
+                  query: await import('./queryPopKmlNamen').then(
                     (m) => m.default,
                   ),
                 })
@@ -262,7 +262,15 @@ const Populationen = () => {
                   },
                 })
               }
-              const rows = get(result.data, 'allVPopKmlnamen.nodes', [])
+              const rows = get(result.data, 'allPops.nodes', []).map((z) => ({
+                art: get(z, 'vPopKmlnamenById.nodes[0].art', ''),
+                label: get(z, 'vPopKmlnamenById.nodes[0].label', ''),
+                inhalte: get(z, 'vPopKmlnamenById.nodes[0].inhalte', ''),
+                id: get(z, 'vPopKmlnamenById.nodes[0].id', ''),
+                wgs84Lat: get(z, 'vPopKmlnamenById.nodes[0].wgs84Lat', ''),
+                wgs84Long: get(z, 'vPopKmlnamenById.nodes[0].wgs84Long', ''),
+                url: get(z, 'vPopKmlnamenById.nodes[0].url', ''),
+              }))
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
@@ -274,7 +282,7 @@ const Populationen = () => {
                 })
               }
               exportModule({
-                data: rows,
+                data: sortBy(rows, ['art', 'label']),
                 fileName: 'PopulationenNachNamen',
                 store,
                 kml: true,
