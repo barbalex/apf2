@@ -50,6 +50,7 @@ group by
 order by
   artname,
   pop_nr;
+comment on view apflora.v_pop_last_count is '@foreignKey (pop_id) references pop (id)';
 
 -- used in exports
 DROP VIEW IF EXISTS apflora.v_pop_last_count_with_massn CASCADE;

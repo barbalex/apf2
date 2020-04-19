@@ -786,7 +786,7 @@ const Populationen = () => {
               let result
               try {
                 result = await client.query({
-                  query: await import('./allVPopLastCounts').then(
+                  query: await import('./queryPopLastCounts').then(
                     (m) => m.default,
                   ),
                 })
@@ -798,7 +798,117 @@ const Populationen = () => {
                   },
                 })
               }
-              const rows = get(result.data, 'allVPopLastCounts.nodes', [])
+              const rows = get(result.data, 'allPops.nodes', []).map((z) => ({
+                artname: get(z, 'vPopLastCountsByPopId.nodes[0].artname', ''),
+                ap_id: get(z, 'vPopLastCountsByPopId.nodes[0].apId', ''),
+                pop_id: get(z, 'vPopLastCountsByPopId.nodes[0].popId', ''),
+                pop_nr: get(z, 'vPopLastCountsByPopId.nodes[0].popNr', ''),
+                pop_name: get(z, 'vPopLastCountsByPopId.nodes[0].popName', ''),
+                pop_status: get(
+                  z,
+                  'vPopLastCountsByPopId.nodes[0].popStatus',
+                  '',
+                ),
+                jahre: get(z, 'vPopLastCountsByPopId.nodes[0].jahre', ''),
+                pflanzen: get(z, 'vPopLastCountsByPopId.nodes[0].pflanzen', ''),
+                pflanzen_ohne_jungpflanzen: get(
+                  z,
+                  'vPopLastCountsByPopId.nodes[0].pflanzenOhneJungpflanzen',
+                  '',
+                ),
+                triebe: get(z, 'vPopLastCountsByPopId.nodes[0].triebe', ''),
+                triebe_beweidung: get(
+                  z,
+                  'vPopLastCountsByPopId.nodes[0].triebeBeweidung',
+                  '',
+                ),
+                keimlinge: get(
+                  z,
+                  'vPopLastCountsByPopId.nodes[0].keimlinge',
+                  '',
+                ),
+                rosetten: get(z, 'vPopLastCountsByPopId.nodes[0].rosetten', ''),
+                jungpflanzen: get(
+                  z,
+                  'vPopLastCountsByPopId.nodes[0].jungpflanzen',
+                  '',
+                ),
+                blaetter: get(z, 'vPopLastCountsByPopId.nodes[0].blatter', ''),
+                bluehende_pflanzen: get(
+                  z,
+                  'vPopLastCountsByPopId.nodes[0].bluhendePflanzen',
+                  '',
+                ),
+                bluehende_triebe: get(
+                  z,
+                  'vPopLastCountsByPopId.nodes[0].bluhendeTriebe',
+                  '',
+                ),
+                blueten: get(z, 'vPopLastCountsByPopId.nodes[0].bluten', ''),
+                fertile_pflanzen: get(
+                  z,
+                  'vPopLastCountsByPopId.nodes[0].fertilePflanzen',
+                  '',
+                ),
+                fruchtende_triebe: get(
+                  z,
+                  'vPopLastCountsByPopId.nodes[0].fruchtendeTriebe',
+                  '',
+                ),
+                bluetenstaende: get(
+                  z,
+                  'vPopLastCountsByPopId.nodes[0].blutenstande',
+                  '',
+                ),
+                fruchtstaende: get(
+                  z,
+                  'vPopLastCountsByPopId.nodes[0].fruchtstande',
+                  '',
+                ),
+                gruppen: get(z, 'vPopLastCountsByPopId.nodes[0].gruppen', ''),
+                deckung: get(z, 'vPopLastCountsByPopId.nodes[0].deckung', ''),
+                pflanzen_5m2: get(
+                  z,
+                  'vPopLastCountsByPopId.nodes[0].pflanzen5M2',
+                  '',
+                ),
+                triebe_in_30m2: get(
+                  z,
+                  'vPopLastCountsByPopId.nodes[0].triebeIn30M2',
+                  '',
+                ),
+                triebe_50m2: get(
+                  z,
+                  'vPopLastCountsByPopId.nodes[0].triebe50M2',
+                  '',
+                ),
+                triebe_maehflaeche: get(
+                  z,
+                  'vPopLastCountsByPopId.nodes[0].triebeMahflache',
+                  '',
+                ),
+                flaeche_m2: get(
+                  z,
+                  'vPopLastCountsByPopId.nodes[0].flacheM2',
+                  '',
+                ),
+                pflanzstellen: get(
+                  z,
+                  'vPopLastCountsByPopId.nodes[0].pflanzstellen',
+                  '',
+                ),
+                stellen: get(z, 'vPopLastCountsByPopId.nodes[0].stellen', ''),
+                andere_zaehleinheit: get(
+                  z,
+                  'vPopLastCountsByPopId.nodes[0].andereZaehleinheit',
+                  '',
+                ),
+                art_ist_vorhanden: get(
+                  z,
+                  'vPopLastCountsByPopId.nodes[0].artIstVorhanden',
+                  '',
+                ),
+              }))
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
@@ -810,7 +920,7 @@ const Populationen = () => {
                 })
               }
               exportModule({
-                data: rows,
+                data: sortBy(rows, ['artname', 'pop_nr']),
                 fileName: 'PopLetzteZaehlungen',
                 idKey: 'pop_id',
                 store,
