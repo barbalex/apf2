@@ -803,6 +803,7 @@ GROUP BY
 ORDER BY
   apflora.ae_taxonomies.artname,
   apflora.pop.nr;
+comment on view apflora.v_pop_anzmassn is '@foreignKey (id) references pop (id)';
 
 -- used for export
 DROP VIEW IF EXISTS apflora.v_pop_anzkontr CASCADE;

@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import styled from 'styled-components'
 import get from 'lodash/get'
+import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/react-hooks'
 import { useSnackbar } from 'notistack'
@@ -440,7 +441,7 @@ const Populationen = () => {
               let result
               try {
                 result = await client.query({
-                  query: await import('./allVPopAnzmassns').then(
+                  query: await import('./queryPopAnzMassns').then(
                     (m) => m.default,
                   ),
                 })
@@ -452,7 +453,51 @@ const Populationen = () => {
                   },
                 })
               }
-              const rows = get(result.data, 'allVPopAnzmassns.nodes', [])
+              const rows = get(result.data, 'allPops.nodes', []).map((z) => ({
+                ap_id: get(z, 'vPopAnzmassnsById.nodes[0].apId', ''),
+                artname: get(z, 'vPopAnzmassnsById.nodes[0].artname', ''),
+                ap_bearbeitung: get(
+                  z,
+                  'vPopAnzmassnsById.nodes[0].apBearbeitung',
+                  '',
+                ),
+                ap_start_jahr: get(
+                  z,
+                  'vPopAnzmassnsById.nodes[0].apStartJahr',
+                  '',
+                ),
+                ap_umsetzung: get(
+                  z,
+                  'vPopAnzmassnsById.nodes[0].apUmsetzung',
+                  '',
+                ),
+                id: get(z, 'vPopAnzmassnsById.nodes[0].id', ''),
+                nr: get(z, 'vPopAnzmassnsById.nodes[0].nr', ''),
+                name: get(z, 'vPopAnzmassnsById.nodes[0].name', ''),
+                status: get(z, 'vPopAnzmassnsById.nodes[0].status', ''),
+                bekannt_seit: get(
+                  z,
+                  'vPopAnzmassnsById.nodes[0].bekanntSeit',
+                  '',
+                ),
+                status_unklar: get(
+                  z,
+                  'vPopAnzmassnsById.nodes[0].statusUnklar',
+                  '',
+                ),
+                status_unklar_begruendung: get(
+                  z,
+                  'vPopAnzmassnsById.nodes[0].statusUnklarBegruendung',
+                  '',
+                ),
+                x: get(z, 'vPopAnzmassnsById.nodes[0].x', ''),
+                y: get(z, 'vPopAnzmassnsById.nodes[0].y', ''),
+                anzahl_massnahmen: get(
+                  z,
+                  'vPopAnzmassnsById.nodes[0].anzahlMassnahmen',
+                  '',
+                ),
+              }))
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
@@ -464,7 +509,7 @@ const Populationen = () => {
                 })
               }
               exportModule({
-                data: rows,
+                data: sortBy(rows, ['artname', 'nr']),
                 fileName: 'PopulationenAnzahlMassnahmen',
                 store,
               })
@@ -484,7 +529,7 @@ const Populationen = () => {
               let result
               try {
                 result = await client.query({
-                  query: await import('./allVPopAnzkontrs').then(
+                  query: await import('./queryPopAnzKontrs').then(
                     (m) => m.default,
                   ),
                 })
@@ -496,7 +541,51 @@ const Populationen = () => {
                   },
                 })
               }
-              const rows = get(result.data, 'allVPopAnzkontrs.nodes', [])
+              const rows = get(result.data, 'allPops.nodes', []).map((z) => ({
+                ap_id: get(z, 'vPopAnzkontrsById.nodes[0].apId', ''),
+                artname: get(z, 'vPopAnzkontrsById.nodes[0].artname', ''),
+                ap_bearbeitung: get(
+                  z,
+                  'vPopAnzkontrsById.nodes[0].apBearbeitung',
+                  '',
+                ),
+                ap_start_jahr: get(
+                  z,
+                  'vPopAnzkontrsById.nodes[0].apStartJahr',
+                  '',
+                ),
+                ap_umsetzung: get(
+                  z,
+                  'vPopAnzkontrsById.nodes[0].apUmsetzung',
+                  '',
+                ),
+                id: get(z, 'vPopAnzkontrsById.nodes[0].id', ''),
+                nr: get(z, 'vPopAnzkontrsById.nodes[0].nr', ''),
+                name: get(z, 'vPopAnzkontrsById.nodes[0].name', ''),
+                status: get(z, 'vPopAnzkontrsById.nodes[0].status', ''),
+                bekannt_seit: get(
+                  z,
+                  'vPopAnzkontrsById.nodes[0].bekanntSeit',
+                  '',
+                ),
+                status_unklar: get(
+                  z,
+                  'vPopAnzkontrsById.nodes[0].statusUnklar',
+                  '',
+                ),
+                status_unklar_begruendung: get(
+                  z,
+                  'vPopAnzkontrsById.nodes[0].statusUnklarBegruendung',
+                  '',
+                ),
+                x: get(z, 'vPopAnzkontrsById.nodes[0].x', ''),
+                y: get(z, 'vPopAnzkontrsById.nodes[0].y', ''),
+                anzahl_kontrollen: get(
+                  z,
+                  'vPopAnzkontrsById.nodes[0].anzahlKontrollen',
+                  '',
+                ),
+              }))
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
@@ -508,7 +597,7 @@ const Populationen = () => {
                 })
               }
               exportModule({
-                data: rows,
+                data: sortBy(rows, ['artname', 'nr']),
                 fileName: 'PopulationenAnzahlKontrollen',
                 store,
               })
