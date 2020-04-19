@@ -2831,6 +2831,7 @@ ORDER BY
   apflora.ae_taxonomies.artname,
   apflora.pop.nr,
   apflora.pop.name;
+comment on view apflora.v_pop_kml is '@foreignKey (id) references pop (id)';
 
 -- used in exports
 DROP VIEW IF EXISTS apflora.v_pop_kmlnamen CASCADE;
