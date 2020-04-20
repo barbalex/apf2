@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import styled from 'styled-components'
 import get from 'lodash/get'
+import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/react-hooks'
 import { useSnackbar } from 'notistack'
@@ -558,7 +559,7 @@ const Teilpopulationen = ({ treeName }) => {
               let result
               try {
                 result = await client.query({
-                  query: await import('./allVTpopAnzmassns').then(
+                  query: await import('./queryTpopAnzMassns').then(
                     (m) => m.default,
                   ),
                 })
@@ -568,7 +569,129 @@ const Teilpopulationen = ({ treeName }) => {
                   options: { variant: 'error' },
                 })
               }
-              const rows = get(result.data, 'allVTpopAnzmassns.nodes', [])
+              const rows = get(result.data, 'allTpops.nodes', []).map((n) => ({
+                ap_id: get(n, 'vTpopAnzmassnsById.nodes[0].apId', ''),
+                familie: get(n, 'vTpopAnzmassnsById.nodes[0].familie', ''),
+                artname: get(n, 'vTpopAnzmassnsById.nodes[0].artname', ''),
+                ap_bearbeitung: get(
+                  n,
+                  'vTpopAnzmassnsById.nodes[0].apBearbeitung',
+                  '',
+                ),
+                ap_start_jahr: get(
+                  n,
+                  'vTpopAnzmassnsById.nodes[0].apStartJahr',
+                  '',
+                ),
+                ap_umsetzung: get(
+                  n,
+                  'vTpopAnzmassnsById.nodes[0].apUmsetzung',
+                  '',
+                ),
+                pop_id: get(n, 'vTpopAnzmassnsById.nodes[0].popId', ''),
+                pop_nr: get(n, 'vTpopAnzmassnsById.nodes[0].popNr', ''),
+                pop_name: get(n, 'vTpopAnzmassnsById.nodes[0].popName', ''),
+                pop_status: get(n, 'vTpopAnzmassnsById.nodes[0].popStatus', ''),
+                pop_bekannt_seit: get(
+                  n,
+                  'vTpopAnzmassnsById.nodes[0].popBekanntSeit',
+                  '',
+                ),
+                pop_status_unklar: get(
+                  n,
+                  'vTpopAnzmassnsById.nodes[0].popStatusUnklar',
+                  '',
+                ),
+                pop_status_unklar_begruendung: get(
+                  n,
+                  'vTpopAnzmassnsById.nodes[0].popStatusUnklarBegruendung',
+                  '',
+                ),
+                pop_x: get(n, 'vTpopAnzmassnsById.nodes[0].popX', ''),
+                pop_y: get(n, 'vTpopAnzmassnsById.nodes[0].popY', ''),
+                id: get(n, 'vTpopAnzmassnsById.nodes[0].id', ''),
+                nr: get(n, 'vTpopAnzmassnsById.nodes[0].nr', ''),
+                gemeinde: get(n, 'vTpopAnzmassnsById.nodes[0].gemeinde', ''),
+                flurname: get(n, 'vTpopAnzmassnsById.nodes[0].flurname', ''),
+                status: get(n, 'vTpopAnzmassnsById.nodes[0].status', ''),
+                bekannt_seit: get(
+                  n,
+                  'vTpopAnzmassnsById.nodes[0].bekanntSeit',
+                  '',
+                ),
+                status_unklar: get(
+                  n,
+                  'vTpopAnzmassnsById.nodes[0].statusUnklar',
+                  '',
+                ),
+                status_unklar_grund: get(
+                  n,
+                  'vTpopAnzmassnsById.nodes[0].statusUnklarGrund',
+                  '',
+                ),
+                lv95X: get(n, 'vTpopAnzmassnsById.nodes[0].x', ''),
+                lv95Y: get(n, 'vTpopAnzmassnsById.nodes[0].y', ''),
+                radius: get(n, 'vTpopAnzmassnsById.nodes[0].radius', ''),
+                hoehe: get(n, 'vTpopAnzmassnsById.nodes[0].hoehe', ''),
+                exposition: get(
+                  n,
+                  'vTpopAnzmassnsById.nodes[0].exposition',
+                  '',
+                ),
+                klima: get(n, 'vTpopAnzmassnsById.nodes[0].klima', ''),
+                neigung: get(n, 'vTpopAnzmassnsById.nodes[0].neigung', ''),
+                beschreibung: get(
+                  n,
+                  'vTpopAnzmassnsById.nodes[0].beschreibung',
+                  '',
+                ),
+                kataster_nr: get(
+                  n,
+                  'vTpopAnzmassnsById.nodes[0].katasterNr',
+                  '',
+                ),
+                apber_relevant: get(
+                  n,
+                  'vTpopAnzmassnsById.nodes[0].apberRelevant',
+                  '',
+                ),
+                apber_relevant_grund: get(
+                  n,
+                  'vTpopAnzmassnsById.nodes[0].apberRelevantGrund',
+                  '',
+                ),
+                eigentuemer: get(
+                  n,
+                  'vTpopAnzmassnsById.nodes[0].eigentuemer',
+                  '',
+                ),
+                kontakt: get(n, 'vTpopAnzmassnsById.nodes[0].kontakt', ''),
+                nutzungszone: get(
+                  n,
+                  'vTpopAnzmassnsById.nodes[0].nutzungszone',
+                  '',
+                ),
+                bewirtschafter: get(
+                  n,
+                  'vTpopAnzmassnsById.nodes[0].bewirtschafter',
+                  '',
+                ),
+                ekfrequenz: get(
+                  n,
+                  'vTpopAnzmassnsById.nodes[0].ekfrequenz',
+                  '',
+                ),
+                ekfrequenz_abweichend: get(
+                  n,
+                  'vTpopAnzmassnsById.nodes[0].ekfrequenzAbweichend',
+                  '',
+                ),
+                anzahlMassnahmen: get(
+                  n,
+                  'vTpopAnzmassnsById.nodes[0].anzahlMassnahmen',
+                  '',
+                ),
+              }))
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
@@ -580,7 +703,7 @@ const Teilpopulationen = ({ treeName }) => {
                 })
               }
               exportModule({
-                data: rows,
+                data: sortBy(rows, ['artname', 'pop_nr', 'nr']),
                 fileName: 'TeilpopulationenAnzahlMassnahmen',
                 store,
               })

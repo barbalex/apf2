@@ -746,6 +746,7 @@ ORDER BY
   apflora.ae_taxonomies.artname,
   apflora.pop.nr,
   apflora.tpop.nr;
+comment on view apflora.v_tpop_anzmassn is '@foreignKey (id) references tpop (id)';
 
 -- used for export
 DROP VIEW IF EXISTS apflora.v_pop_anzmassn CASCADE;
