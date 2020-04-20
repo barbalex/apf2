@@ -460,7 +460,7 @@ const Populationen = () => {
               let result
               try {
                 result = await client.query({
-                  query: await import('./allVPopmassnberAnzmassns').then(
+                  query: await import('./queryPopmassnberAnzMassns').then(
                     (m) => m.default,
                   ),
                 })
@@ -472,10 +472,96 @@ const Populationen = () => {
                   },
                 })
               }
-              const rows = get(
-                result.data,
-                'allVPopmassnberAnzmassns.nodes',
-                [],
+              const rows = get(result.data, 'allPopmassnbers.nodes', []).map(
+                (n) => ({
+                  ap_id: get(n, 'vPopmassnberAnzmassnsById.nodes[0]apId', ''),
+                  artname: get(
+                    n,
+                    'vPopmassnberAnzmassnsById.nodes[0]artname',
+                    '',
+                  ),
+                  ap_bearbeitung: get(
+                    n,
+                    'vPopmassnberAnzmassnsById.nodes[0]apBearbeitung',
+                    '',
+                  ),
+                  ap_start_jahr: get(
+                    n,
+                    'vPopmassnberAnzmassnsById.nodes[0]apStartJahr',
+                    '',
+                  ),
+                  ap_umsetzung: get(
+                    n,
+                    'vPopmassnberAnzmassnsById.nodes[0]apUmsetzung',
+                    '',
+                  ),
+                  pop_id: get(n, 'vPopmassnberAnzmassnsById.nodes[0]popId', ''),
+                  pop_nr: get(n, 'vPopmassnberAnzmassnsById.nodes[0]popNr', ''),
+                  pop_name: get(
+                    n,
+                    'vPopmassnberAnzmassnsById.nodes[0]popName',
+                    '',
+                  ),
+                  pop_status: get(
+                    n,
+                    'vPopmassnberAnzmassnsById.nodes[0]popStatus',
+                    '',
+                  ),
+                  pop_bekannt_seit: get(
+                    n,
+                    'vPopmassnberAnzmassnsById.nodes[0]popBekanntSeit',
+                    '',
+                  ),
+                  pop_status_unklar: get(
+                    n,
+                    'vPopmassnberAnzmassnsById.nodes[0]popStatusUnklar',
+                    '',
+                  ),
+                  pop_status_unklar_begruendung: get(
+                    n,
+                    'vPopmassnberAnzmassnsById.nodes[0]popStatusUnklarBegruendung',
+                    '',
+                  ),
+                  pop_x: get(n, 'vPopmassnberAnzmassnsById.nodes[0]popX', ''),
+                  pop_y: get(n, 'vPopmassnberAnzmassnsById.nodes[0]popY', ''),
+                  pop_changed: get(
+                    n,
+                    'vPopmassnberAnzmassnsById.nodes[0]popChanged',
+                    '',
+                  ),
+                  pop_changed_by: get(
+                    n,
+                    'vPopmassnberAnzmassnsById.nodes[0]popChangedBy',
+                    '',
+                  ),
+                  id: get(n, 'vPopmassnberAnzmassnsById.nodes[0]id', ''),
+                  jahr: get(n, 'vPopmassnberAnzmassnsById.nodes[0]jahr', ''),
+                  entwicklung: get(
+                    n,
+                    'vPopmassnberAnzmassnsById.nodes[0]entwicklung',
+                    '',
+                  ),
+                  bemerkungen: get(
+                    n,
+                    'vPopmassnberAnzmassnsById.nodes[0]bemerkungen',
+                    '',
+                  ),
+                  changed: get(
+                    n,
+                    'vPopmassnberAnzmassnsById.nodes[0]changed',
+                    '',
+                  ),
+                  changed_by: get(
+                    n,
+                    'vPopmassnberAnzmassnsById.nodes[0]changedBy',
+                    '',
+                  ),
+                  anzahl_massnahmen: get(
+                    n,
+                    'vPopmassnberAnzmassnsById.nodes[0]anzahlMassnahmen',
+                    '',
+                  ),
+                }),
               )
               removeNotification(notif)
               closeSnackbar(notif)
@@ -487,8 +573,9 @@ const Populationen = () => {
                   },
                 })
               }
+              console.log('Populationen export', { rows, data: result.data })
               exportModule({
-                data: rows,
+                data: sortBy(rows, ['artname', 'pop_nr', 'jahr']),
                 fileName: 'PopulationenAnzMassnProMassnber',
                 idKey: 'pop_id',
                 xKey: 'pop_wgs84lat',

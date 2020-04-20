@@ -284,6 +284,7 @@ FROM
 ORDER BY
   apflora.ae_taxonomies.artname,
   apflora.pop.nr;
+comment on view apflora.v_popmassnber_anzmassn is '@foreignKey (id) references popmassnber (id)';
 
 -- used for export
 drop view if exists apflora.v_ap_apberundmassn;
