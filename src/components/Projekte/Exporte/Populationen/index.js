@@ -313,7 +313,7 @@ const Populationen = () => {
               let result
               try {
                 result = await client.query({
-                  query: await import('./allVPopVonapohnestatuses').then(
+                  query: await import('./queryPopVonApOhneStatus').then(
                     (m) => m.default,
                   ),
                 })
@@ -325,11 +325,25 @@ const Populationen = () => {
                   },
                 })
               }
-              const rows = get(
-                result.data,
-                'allVPopVonapohnestatuses.nodes',
-                [],
-              )
+              const rows = get(result.data, 'allPops.nodes', []).map((z) => ({
+                ap_id: get(z, 'vPopVonapohnestatusesById.nodes[0].apId', ''),
+                artname: get(
+                  z,
+                  'vPopVonapohnestatusesById.nodes[0].artname',
+                  '',
+                ),
+                ap_bearbeitung: get(
+                  z,
+                  'vPopVonapohnestatusesById.nodes[0].apBearbeitung',
+                  '',
+                ),
+                id: get(z, 'vPopVonapohnestatusesById.nodes[0].id', ''),
+                nr: get(z, 'vPopVonapohnestatusesById.nodes[0].nr', ''),
+                name: get(z, 'vPopVonapohnestatusesById.nodes[0].name', ''),
+                status: get(z, 'vPopVonapohnestatusesById.nodes[0].status', ''),
+                lv95X: get(z, 'vPopVonapohnestatusesById.nodes[0].x', ''),
+                lv95Y: get(z, 'vPopVonapohnestatusesById.nodes[0].y', ''),
+              }))
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
@@ -341,7 +355,7 @@ const Populationen = () => {
                 })
               }
               exportModule({
-                data: rows,
+                data: sortBy(rows, ['artname', 'nr']),
                 fileName: 'PopulationenVonApArtenOhneStatus',
                 store,
               })

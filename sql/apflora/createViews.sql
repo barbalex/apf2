@@ -1563,6 +1563,7 @@ WHERE
 ORDER BY
   apflora.ae_taxonomies.artname,
   apflora.pop.nr;
+comment on view apflora.v_pop_vonapohnestatus is '@foreignKey (id) references pop (id)';
 
 -- used for export
 DROP VIEW IF EXISTS apflora.v_tpop_ohnebekanntseit CASCADE;
