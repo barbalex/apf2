@@ -1344,6 +1344,7 @@ order by
   apflora.ae_taxonomies.artname,
   apflora.pop.nr,
   apflora.tpop.nr;
+comment on view apflora.v_tpop_erste_und_letzte_kontrolle_und_letzter_tpopber is '@foreignKey (id) references tpop (id)';
 
 DROP VIEW IF EXISTS apflora.v_tpop_webgisbun CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_webgisbun AS
