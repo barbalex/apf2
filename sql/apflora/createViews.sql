@@ -134,7 +134,7 @@ comment on view apflora.v_pop_mit_letzter_popmassnber is '@foreignKey (pop_id) r
 DROP VIEW IF EXISTS apflora.v_pop_popberundmassnber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_popberundmassnber AS
 with berjahre as (
-  SELECT
+  SELECT distinct
     apflora.pop.id,
     apflora.popber.jahr
   FROM
@@ -142,7 +142,7 @@ with berjahre as (
     INNER JOIN
       apflora.popber
       ON apflora.pop.id = apflora.popber.pop_id
-  UNION DISTINCT SELECT
+  UNION SELECT distinct
     apflora.pop.id,
     apflora.popmassnber.jahr
   FROM
@@ -213,6 +213,7 @@ ORDER BY
   apflora.ae_taxonomies.artname,
   apflora.pop.nr,
   berjahre.jahr;
+comment on view apflora.v_pop_popberundmassnber is '@foreignKey (pop_id) references pop (id)';
 
 -- used for export
 DROP VIEW IF EXISTS apflora.v_popmassnber_anzmassn CASCADE;
