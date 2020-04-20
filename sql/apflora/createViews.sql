@@ -947,6 +947,7 @@ WHERE
 ORDER BY
   apflora.ae_taxonomies.artname,
   apflora.pop.nr;
+comment on view apflora.v_pop_ohnekoord is '@foreignKey (id) references pop (id)'
 
 DROP VIEW IF EXISTS apflora.v_pop_fuergis_write CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_fuergis_write AS

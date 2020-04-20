@@ -361,7 +361,7 @@ const Populationen = () => {
               let result
               try {
                 result = await client.query({
-                  query: await import('./allVPopOhnekoords').then(
+                  query: await import('./queryPopOhneKoords').then(
                     (m) => m.default,
                   ),
                 })
@@ -373,7 +373,48 @@ const Populationen = () => {
                   },
                 })
               }
-              const rows = get(result.data, 'allVPopOhnekoords.nodes', [])
+              const rows = get(result.data, 'allPops.nodes', []).map((z) => ({
+                ap_id: get(z, 'vPopOhnekoordsById.nodes[0].apId', ''),
+                artname: get(z, 'vPopOhnekoordsById.nodes[0].artname', ''),
+                ap_bearbeitung: get(
+                  z,
+                  'vPopOhnekoordsById.nodes[0].apBearbeitung',
+                  '',
+                ),
+                ap_start_jahr: get(
+                  z,
+                  'vPopOhnekoordsById.nodes[0].apStartJahr',
+                  '',
+                ),
+                ap_umsetzung: get(
+                  z,
+                  'vPopOhnekoordsById.nodes[0].apUmsetzung',
+                  '',
+                ),
+                id: get(z, 'vPopOhnekoordsById.nodes[0].id', ''),
+                nr: get(z, 'vPopOhnekoordsById.nodes[0].nr', ''),
+                name: get(z, 'vPopOhnekoordsById.nodes[0].name', ''),
+                status: get(z, 'vPopOhnekoordsById.nodes[0].status', ''),
+                bekannt_seit: get(
+                  z,
+                  'vPopOhnekoordsById.nodes[0].bekanntSeit',
+                  '',
+                ),
+                status_unklar: get(
+                  z,
+                  'vPopOhnekoordsById.nodes[0].statusUnklar',
+                  '',
+                ),
+                status_unklar_begruendung: get(
+                  z,
+                  'vPopOhnekoordsById.nodes[0].statusUnklarBegruendung',
+                  '',
+                ),
+                lv95X: get(z, 'vPopOhnekoordsById.nodes[0].x', ''),
+                lv95Y: get(z, 'vPopOhnekoordsById.nodes[0].y', ''),
+                changed: get(z, 'vPopOhnekoordsById.nodes[0].changed', ''),
+                changed_by: get(z, 'vPopOhnekoordsById.nodes[0].changedBy', ''),
+              }))
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
@@ -385,7 +426,7 @@ const Populationen = () => {
                 })
               }
               exportModule({
-                data: rows,
+                data: sortBy(rows, ['artname', 'nr']),
                 fileName: 'PopulationenOhneKoordinaten',
                 store,
               })
