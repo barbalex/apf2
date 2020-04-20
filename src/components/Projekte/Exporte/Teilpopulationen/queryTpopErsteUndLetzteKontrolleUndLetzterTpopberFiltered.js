@@ -7,7 +7,7 @@ export default gql`
     allTpops(
       filter: {
         vTpopErsteUndLetzteKontrolleUndLetzterTpopbersByIdExist: true
-        apId: { equalTo: $apId }
+        popByPopId: { apId: { equalTo: $apId } }
       }
     ) {
       totalCount

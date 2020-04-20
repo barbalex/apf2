@@ -290,7 +290,7 @@ const Teilpopulationen = ({ treeName }) => {
         ? {
             artname: { includesInsensitive: inputValue },
             // needed to turn this off because the postgraphile addon caused cors issues in production
-            /*apByArtIdExists: true,*/
+            apByArtIdExists: true,
           }
         : { artname: { isNull: false } /*, apByArtIdExists: true*/ },
     [],
@@ -1521,7 +1521,7 @@ const Teilpopulationen = ({ treeName }) => {
               row={{}}
               field="ewm"
               valueLabelPath="aeTaxonomyByArtId.artname"
-              label={`"Eier legende Wollmilchsau" für einzelne Arten: Art wählen`}
+              label={`"Eier legende Wollmilchsau" für einzelne AP's: AP wählen`}
               labelSize={14}
               saveToDb={async (e) => {
                 const aeId = e.target.value
@@ -1546,15 +1546,747 @@ const Teilpopulationen = ({ treeName }) => {
                 const apId = get(result.data, 'apByArtId.id')
                 const { data } = await client.query({
                   query: await import(
-                    './allVTpopErsteUndLetzteKontrolleUndLetzterTpopbersFiltered'
+                    './queryTpopErsteUndLetzteKontrolleUndLetzterTpopberFiltered'
                   ).then((m) => m.default),
                   variables: { apId },
                 })
-                const rows = get(
-                  data,
-                  'allVTpopErsteUndLetzteKontrolleUndLetzterTpopbers.nodes',
-                  [],
-                )
+                const rows = get(data, 'allTpops.nodes', []).map((n) => ({
+                  ap_id: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].apId',
+                    '',
+                  ),
+                  familie: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].familie',
+                    '',
+                  ),
+                  artname: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].artname',
+                    '',
+                  ),
+                  ap_bearbeitung: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].apBearbeitung',
+                    '',
+                  ),
+                  ap_start_jahr: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].apStartJahr',
+                    '',
+                  ),
+                  ap_umsetzung: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].apUmsetzung',
+                    '',
+                  ),
+                  pop_id: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].popId',
+                    '',
+                  ),
+                  pop_nr: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].popNr',
+                    '',
+                  ),
+                  pop_name: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].popName',
+                    '',
+                  ),
+                  pop_status: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].popStatus',
+                    '',
+                  ),
+                  pop_bekannt_seit: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].popBekanntSeit',
+                    '',
+                  ),
+                  pop_status_unklar: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].popStatusUnklar',
+                    '',
+                  ),
+                  pop_status_unklar_begruendung: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].popStatusUnklarBegruendung',
+                    '',
+                  ),
+                  pop_x: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].popX',
+                    '',
+                  ),
+                  pop_y: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].popY',
+                    '',
+                  ),
+                  id: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].id',
+                    '',
+                  ),
+                  nr: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].nr',
+                    '',
+                  ),
+                  gemeinde: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].gemeinde',
+                    '',
+                  ),
+                  flurname: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].flurname',
+                    '',
+                  ),
+                  status: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].status',
+                    '',
+                  ),
+                  bekannt_seit: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].bekanntSeit',
+                    '',
+                  ),
+                  status_unklar: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].statusUnklar',
+                    '',
+                  ),
+                  status_unklar_grund: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].statusUnklarGrund',
+                    '',
+                  ),
+                  lv95X: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].x',
+                    '',
+                  ),
+                  lv95Y: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].y',
+                    '',
+                  ),
+                  radius: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].radius',
+                    '',
+                  ),
+                  hoehe: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].hoehe',
+                    '',
+                  ),
+                  exposition: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].exposition',
+                    '',
+                  ),
+                  klima: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].klima',
+                    '',
+                  ),
+                  neigung: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].neigung',
+                    '',
+                  ),
+                  beschreibung: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].beschreibung',
+                    '',
+                  ),
+                  kataster_nr: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].katasterNr',
+                    '',
+                  ),
+                  apber_relevant: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].apberRelevant',
+                    '',
+                  ),
+                  apber_relevant_grund: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].apberRelevantGrund',
+                    '',
+                  ),
+                  eigentuemer: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].eigentuemer',
+                    '',
+                  ),
+                  kontakt: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].kontakt',
+                    '',
+                  ),
+                  nutzungszone: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].nutzungszone',
+                    '',
+                  ),
+                  bewirtschafter: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].bewirtschafter',
+                    '',
+                  ),
+                  bewirtschaftung: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].bewirtschaftung',
+                    '',
+                  ),
+                  ekfrequenz: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ekfrequenz',
+                    '',
+                  ),
+                  ekfrequenz_abweichend: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ekfrequenzAbweichend',
+                    '',
+                  ),
+                  changed: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].changed',
+                    '',
+                  ),
+                  changed_by: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].changedBy',
+                    '',
+                  ),
+                  anzahl_kontrollen: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].anzahlKontrollen',
+                    '',
+                  ),
+                  erste_kontrolle_id: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleId',
+                    '',
+                  ),
+                  erste_kontrolle_jahr: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleJahr',
+                    '',
+                  ),
+                  erste_kontrolle_datum: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleDatum',
+                    '',
+                  ),
+                  erste_kontrolle_typ: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleTyp',
+                    '',
+                  ),
+                  erste_kontrolle_bearbeiter: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleBearbeiter',
+                    '',
+                  ),
+                  erste_kontrolle_ueberlebensrate: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleUeberlebensrate',
+                    '',
+                  ),
+                  erste_kontrolle_vitalitaet: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleVitalitaet',
+                    '',
+                  ),
+                  erste_kontrolle_entwicklung: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleEntwicklung',
+                    '',
+                  ),
+                  erste_kontrolle_ursachen: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleUrsachen',
+                    '',
+                  ),
+                  erste_kontrolle_erfolgsbeurteilung: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleErfolgsbeurteilung',
+                    '',
+                  ),
+                  erste_kontrolle_umsetzung_aendern: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleUmsetzungAendern',
+                    '',
+                  ),
+                  erste_kontrolle_kontrolle_aendern: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleKontrolleAendern',
+                    '',
+                  ),
+                  erste_kontrolle_bemerkungen: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleBemerkungen',
+                    '',
+                  ),
+                  erste_kontrolle_lr_delarze: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleLrDelarze',
+                    '',
+                  ),
+                  erste_kontrolle_lr_umgebung_delarze: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleLrUmgebungDelarze',
+                    '',
+                  ),
+                  erste_kontrolle_vegetationstyp: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleVegetationstyp',
+                    '',
+                  ),
+                  erste_kontrolle_konkurrenz: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleKonkurrenz',
+                    '',
+                  ),
+                  erste_kontrolle_moosschicht: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleMoosschicht',
+                    '',
+                  ),
+                  erste_kontrolle_krautschicht: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleKrautschicht',
+                    '',
+                  ),
+                  erste_kontrolle_strauchschicht: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleStrauchschicht',
+                    '',
+                  ),
+                  erste_kontrolle_baumschicht: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleBaumschicht',
+                    '',
+                  ),
+                  erste_kontrolle_boden_typ: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleBodenTyp',
+                    '',
+                  ),
+                  erste_kontrolle_boden_kalkgehalt: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleBodenKalkgehalt',
+                    '',
+                  ),
+                  erste_kontrolle_boden_durchlaessigkeit: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleBodenDurchlaessigkeit',
+                    '',
+                  ),
+                  erste_kontrolle_boden_humus: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleBodenHumus',
+                    '',
+                  ),
+                  erste_kontrolle_boden_naehrstoffgehalt: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleBodenNaehrstoffgehalt',
+                    '',
+                  ),
+                  erste_kontrolle_boden_abtrag: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleBodenAbtrag',
+                    '',
+                  ),
+                  erste_kontrolle_wasserhaushalt: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleWasserhaushalt',
+                    '',
+                  ),
+                  erste_kontrolle_idealbiotop_uebereinstimmung: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleIdealbiotopUebereinstimmung',
+                    '',
+                  ),
+                  erste_kontrolle_handlungsbedarf: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleHandlungsbedarf',
+                    '',
+                  ),
+                  erste_kontrolle_flaeche_ueberprueft: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleFlaecheUeberprueft',
+                    '',
+                  ),
+                  erste_kontrolle_flaeche: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleFlaeche',
+                    '',
+                  ),
+                  erste_kontrolle_plan_vorhanden: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrollePlanVorhanden',
+                    '',
+                  ),
+                  erste_kontrolle_deckung_vegetation: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleDeckungVegetation',
+                    '',
+                  ),
+                  erste_kontrolle_deckung_nackter_boden: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleDeckungNackterBoden',
+                    '',
+                  ),
+                  erste_kontrolle_deckung_ap_art: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleDeckungApArt',
+                    '',
+                  ),
+                  erste_kontrolle_jungpflanzen_vorhanden: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleJungpflanzenVorhanden',
+                    '',
+                  ),
+                  erste_kontrolle_vegetationshoehe_maximum: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleVegetationshoeheMaximum',
+                    '',
+                  ),
+                  erste_kontrolle_vegetationshoehe_mittel: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleVegetationshoeheMittel',
+                    '',
+                  ),
+                  erste_kontrolle_gefaehrdung: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleGefaehrdung',
+                    '',
+                  ),
+                  erste_kontrolle_changed: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleChanged',
+                    '',
+                  ),
+                  erste_kontrolle_changed_by: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleChangedBy',
+                    '',
+                  ),
+                  erste_kontrolle_apber_nicht_relevant: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleApberNichtRelevant',
+                    '',
+                  ),
+                  erste_kontrolle_apber_nicht_relevant_grund: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleApberNichtRelevantGrund',
+                    '',
+                  ),
+                  erste_kontrolle_ekf_bemerkungen: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleEkfBemerkungen',
+                    '',
+                  ),
+                  erste_kontrolle_zaehlung_anzahlen: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleZaehlungAnzahlen',
+                    '',
+                  ),
+                  erste_kontrolle_zaehlung_einheiten: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleZaehlungEinheiten',
+                    '',
+                  ),
+                  erste_kontrolle_zaehlung_methoden: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].ersteKontrolleZaehlungMethoden',
+                    '',
+                  ),
+                  letzte_kontrolle_id: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleId',
+                    '',
+                  ),
+                  letzte_kontrolle_jahr: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleJahr',
+                    '',
+                  ),
+                  letzte_kontrolle_datum: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleDatum',
+                    '',
+                  ),
+                  letzte_kontrolle_typ: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleTyp',
+                    '',
+                  ),
+                  letzte_kontrolle_bearbeiter: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleBearbeiter',
+                    '',
+                  ),
+                  letzte_kontrolle_ueberlebensrate: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleUeberlebensrate',
+                    '',
+                  ),
+                  letzte_kontrolle_vitalitaet: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleVitalitaet',
+                    '',
+                  ),
+                  letzte_kontrolle_entwicklung: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleEntwicklung',
+                    '',
+                  ),
+                  letzte_kontrolle_ursachen: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleUrsachen',
+                    '',
+                  ),
+                  letzte_kontrolle_erfolgsbeurteilung: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleErfolgsbeurteilung',
+                    '',
+                  ),
+                  letzte_kontrolle_umsetzung_aendern: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleUmsetzungAendern',
+                    '',
+                  ),
+                  letzte_kontrolle_kontrolle_aendern: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleKontrolleAendern',
+                    '',
+                  ),
+                  letzte_kontrolle_bemerkungen: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleBemerkungen',
+                    '',
+                  ),
+                  letzte_kontrolle_lr_delarze: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleLrDelarze',
+                    '',
+                  ),
+                  letzte_kontrolle_lr_umgebung_delarze: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleLrUmgebungDelarze',
+                    '',
+                  ),
+                  letzte_kontrolle_vegetationstyp: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleVegetationstyp',
+                    '',
+                  ),
+                  letzte_kontrolle_konkurrenz: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleKonkurrenz',
+                    '',
+                  ),
+                  letzte_kontrolle_moosschicht: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleMoosschicht',
+                    '',
+                  ),
+                  letzte_kontrolle_krautschicht: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleKrautschicht',
+                    '',
+                  ),
+                  letzte_kontrolle_strauchschicht: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleStrauchschicht',
+                    '',
+                  ),
+                  letzte_kontrolle_baumschicht: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleBaumschicht',
+                    '',
+                  ),
+                  letzte_kontrolle_boden_typ: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleBodenTyp',
+                    '',
+                  ),
+                  letzte_kontrolle_boden_kalkgehalt: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleBodenKalkgehalt',
+                    '',
+                  ),
+                  letzte_kontrolle_boden_durchlaessigkeit: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleBodenDurchlaessigkeit',
+                    '',
+                  ),
+                  letzte_kontrolle_boden_humus: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleBodenHumus',
+                    '',
+                  ),
+                  letzte_kontrolle_boden_naehrstoffgehalt: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleBodenNaehrstoffgehalt',
+                    '',
+                  ),
+                  letzte_kontrolle_boden_abtrag: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleBodenAbtrag',
+                    '',
+                  ),
+                  letzte_kontrolle_wasserhaushalt: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleWasserhaushalt',
+                    '',
+                  ),
+                  letzte_kontrolle_idealbiotop_uebereinstimmung: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleIdealbiotopUebereinstimmung',
+                    '',
+                  ),
+                  letzte_kontrolle_handlungsbedarf: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleHandlungsbedarf',
+                    '',
+                  ),
+                  letzte_kontrolle_flaeche_ueberprueft: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleFlaecheUeberprueft',
+                    '',
+                  ),
+                  letzte_kontrolle_flaeche: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleFlaeche',
+                    '',
+                  ),
+                  letzte_kontrolle_plan_vorhanden: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrollePlanVorhanden',
+                    '',
+                  ),
+                  letzte_kontrolle_deckung_vegetation: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleDeckungVegetation',
+                    '',
+                  ),
+                  letzte_kontrolle_deckung_nackter_boden: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleDeckungNackterBoden',
+                    '',
+                  ),
+                  letzte_kontrolle_deckung_ap_art: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleDeckungApArt',
+                    '',
+                  ),
+                  letzte_kontrolle_jungpflanzen_vorhanden: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleJungpflanzenVorhanden',
+                    '',
+                  ),
+                  letzte_kontrolle_vegetationshoehe_maximum: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleVegetationshoeheMaximum',
+                    '',
+                  ),
+                  letzte_kontrolle_vegetationshoehe_mittel: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleVegetationshoeheMittel',
+                    '',
+                  ),
+                  letzte_kontrolle_gefaehrdung: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleGefaehrdung',
+                    '',
+                  ),
+                  letzte_kontrolle_changed: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleChanged',
+                    '',
+                  ),
+                  letzte_kontrolle_changed_by: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleChangedBy',
+                    '',
+                  ),
+                  letzte_kontrolle_apber_nicht_relevant: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleApberNichtRelevant',
+                    '',
+                  ),
+                  letzte_kontrolle_apber_nicht_relevant_grund: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleApberNichtRelevantGrund',
+                    '',
+                  ),
+                  letzte_kontrolle_ekf_bemerkungen: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleEkfBemerkungen',
+                    '',
+                  ),
+                  letzte_kontrolle_zaehlung_anzahlen: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleZaehlungAnzahlen',
+                    '',
+                  ),
+                  letzte_kontrolle_zaehlung_einheiten: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleZaehlungEinheiten',
+                    '',
+                  ),
+                  letzte_kontrolle_zaehlung_methoden: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].letzteKontrolleZaehlungMethoden',
+                    '',
+                  ),
+                  tpopber_anz: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].tpopberAnz',
+                    '',
+                  ),
+                  tpopber_id: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].tpopberId',
+                    '',
+                  ),
+                  tpopber_jahr: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].tpopberJahr',
+                    '',
+                  ),
+                  tpopber_entwicklung: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].tpopberEntwicklung',
+                    '',
+                  ),
+                  tpopber_bemerkungen: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].tpopberBemerkungen',
+                    '',
+                  ),
+                  tpopber_changed: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].tpopberChanged',
+                    '',
+                  ),
+                  tpopber_changed_by: get(
+                    n,
+                    'vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById.nodes[0].tpopberChangedBy',
+                    '',
+                  ),
+                }))
                 setEwmMessage('')
                 if (rows.length === 0) {
                   return enqueNotification({
@@ -1565,7 +2297,7 @@ const Teilpopulationen = ({ treeName }) => {
                   })
                 }
                 exportModule({
-                  data: rows,
+                  data: sortBy(rows, ['artname', 'pop_nr', 'nr']),
                   fileName: 'anzkontrinklletzterundletztertpopber',
                   store,
                 })
