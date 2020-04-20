@@ -2745,6 +2745,7 @@ ORDER BY
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
   apflora.tpop.flurname;
+comment on view apflora.v_tpop_kml is '@foreignKey (id) references tpop (id)';
 
 -- used in exports
 DROP VIEW IF EXISTS apflora.v_tpop_kmlnamen CASCADE;
@@ -2805,6 +2806,7 @@ ORDER BY
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
   apflora.tpop.flurname;
+comment on view apflora.v_tpop_kmlnamen is '@foreignKey (id) references tpop (id)';
 
 -- used in exports
 DROP VIEW IF EXISTS apflora.v_pop_kml CASCADE;

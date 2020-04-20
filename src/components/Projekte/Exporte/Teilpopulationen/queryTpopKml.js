@@ -1,11 +1,11 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query popKmlNamenQuery {
-    allPops(filter: { vPopKmlnamenByIdExist: true }) {
+  query tpopKmlQuery {
+    allTpops(filter: { vTpopKmlsByIdExist: true }) {
       nodes {
         id
-        vPopKmlnamenById {
+        vTpopKmlsById {
           nodes {
             art
             label

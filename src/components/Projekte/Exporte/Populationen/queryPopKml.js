@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 
 export default gql`
   query popKmlQuery {
-    allPops {
+    allPops(filter: { vPopKmlsByIdExist: true }) {
       nodes {
         id
         vPopKmlsById {

@@ -379,7 +379,7 @@ const Teilpopulationen = ({ treeName }) => {
               let result
               try {
                 result = await client.query({
-                  query: await import('./allVTpopKmls').then((m) => m.default),
+                  query: await import('./queryTpopKml').then((m) => m.default),
                 })
               } catch (error) {
                 enqueNotification({
@@ -387,7 +387,15 @@ const Teilpopulationen = ({ treeName }) => {
                   options: { variant: 'error' },
                 })
               }
-              const rows = get(result.data, 'allVTpopKmls.nodes', [])
+              const rows = get(result.data, 'allTpops.nodes', []).map((z) => ({
+                art: get(z, 'vTpopKmlsById.nodes[0].art', ''),
+                label: get(z, 'vTpopKmlsById.nodes[0].label', ''),
+                inhalte: get(z, 'vTpopKmlsById.nodes[0].inhalte', ''),
+                id: get(z, 'vTpopKmlsById.nodes[0].id', ''),
+                wgs84Lat: get(z, 'vTpopKmlsById.nodes[0].wgs84Lat', ''),
+                wgs84Long: get(z, 'vTpopKmlsById.nodes[0].wgs84Long', ''),
+                url: get(z, 'vTpopKmlsById.nodes[0].url', ''),
+              }))
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
@@ -399,7 +407,7 @@ const Teilpopulationen = ({ treeName }) => {
                 })
               }
               exportModule({
-                data: rows,
+                data: sortBy(rows, ['art', 'label']),
                 fileName: 'Teilpopulationen',
                 store,
                 kml: true,
@@ -431,7 +439,17 @@ const Teilpopulationen = ({ treeName }) => {
                   options: { variant: 'error' },
                 })
               }
-              const rows = get(result.data, 'allVTpopKmlnamen.nodes', [])
+              const rows = get(result.data, 'allVTpopKmlnamen.nodes', []).map(
+                (z) => ({
+                  art: get(z, 'vTpopKmlsById.nodes[0].art', ''),
+                  label: get(z, 'vTpopKmlsById.nodes[0].label', ''),
+                  inhalte: get(z, 'vTpopKmlsById.nodes[0].inhalte', ''),
+                  id: get(z, 'vTpopKmlsById.nodes[0].id', ''),
+                  wgs84Lat: get(z, 'vTpopKmlsById.nodes[0].wgs84Lat', ''),
+                  wgs84Long: get(z, 'vTpopKmlsById.nodes[0].wgs84Long', ''),
+                  url: get(z, 'vTpopKmlsById.nodes[0].url', ''),
+                }),
+              )
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
