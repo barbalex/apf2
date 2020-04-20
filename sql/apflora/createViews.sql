@@ -128,6 +128,7 @@ ORDER BY
   apflora.ae_taxonomies.artname,
   apflora.pop.nr,
   pop_letztes_massnberjahr.jahr;
+comment on view apflora.v_pop_mit_letzter_popmassnber is '@foreignKey (pop_id) references pop (id)';
 
 -- used for export
 DROP VIEW IF EXISTS apflora.v_pop_popberundmassnber CASCADE;
