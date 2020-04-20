@@ -4811,6 +4811,7 @@ order BY
   tax.artname,
   pop.nr,
   tpop.nr;
+comment on view apflora.v_tpop_last_count is '@foreignKey (tpop_id) references tpop (id)';
 
 -- used by: v_pop_last_count_with_massn
 -- also used in export
@@ -5042,6 +5043,7 @@ order BY
   tax.artname,
   pop.nr,
   tpop.nr;
+comment on view apflora.v_tpop_last_count_with_massn is '@foreignKey (tpop_id) references tpop (id)';
 
 -- used in form ap
 DROP VIEW IF EXISTS apflora.v_ap_ausw_pop_status CASCADE;

@@ -2385,7 +2385,7 @@ const Teilpopulationen = ({ treeName }) => {
               let result
               try {
                 result = await client.query({
-                  query: await import('./allVTpopLastCounts').then(
+                  query: await import('./queryTpopLastCount').then(
                     (m) => m.default,
                   ),
                 })
@@ -2397,7 +2397,150 @@ const Teilpopulationen = ({ treeName }) => {
                   },
                 })
               }
-              const rows = get(result.data, 'allVTpopLastCounts.nodes', [])
+              const rows = get(result.data, 'allTpops.nodes', []).map((z) => ({
+                artname: get(z, 'vTpopLastCountsByTpopId.nodes[0].artname', ''),
+                ap_id: get(z, 'vTpopLastCountsByTpopId.nodes[0].apId', ''),
+                pop_id: get(z, 'vTpopLastCountsByTpopId.nodes[0].popId', ''),
+                pop_nr: get(z, 'vTpopLastCountsByTpopId.nodes[0].popNr', ''),
+                pop_name: get(
+                  z,
+                  'vTpopLastCountsByTpopId.nodes[0].popName',
+                  '',
+                ),
+                pop_status: get(
+                  z,
+                  'vTpopLastCountsByTpopId.nodes[0].popStatus',
+                  '',
+                ),
+                tpop_id: get(z, 'vTpopLastCountsByTpopId.nodes[0].tpopId', ''),
+                tpop_nr: get(z, 'vTpopLastCountsByTpopId.nodes[0].tpopNr', ''),
+                tpop_gemeinde: get(
+                  z,
+                  'vTpopLastCountsByTpopId.nodes[0].tpopGemeinde',
+                  '',
+                ),
+                tpop_flurname: get(
+                  z,
+                  'vTpopLastCountsByTpopId.nodes[0].tpopFlurname',
+                  '',
+                ),
+                tpop_status: get(
+                  z,
+                  'vTpopLastCountsByTpopId.nodes[0].tpopStatus',
+                  '',
+                ),
+                jahr: get(z, 'vTpopLastCountsByTpopId.nodes[0].jahr', ''),
+                pflanzen: get(
+                  z,
+                  'vTpopLastCountsByTpopId.nodes[0].pflanzen',
+                  '',
+                ),
+                pflanzen_ohne_jungpflanzen: get(
+                  z,
+                  'vTpopLastCountsByTpopId.nodes[0].pflanzenOhneJungpflanzen',
+                  '',
+                ),
+                triebe: get(z, 'vTpopLastCountsByTpopId.nodes[0].triebe', ''),
+                triebe_beweidung: get(
+                  z,
+                  'vTpopLastCountsByTpopId.nodes[0].triebeBeweidung',
+                  '',
+                ),
+                keimlinge: get(
+                  z,
+                  'vTpopLastCountsByTpopId.nodes[0].keimlinge',
+                  '',
+                ),
+                rosetten: get(
+                  z,
+                  'vTpopLastCountsByTpopId.nodes[0].rosetten',
+                  '',
+                ),
+                jungpflanzen: get(
+                  z,
+                  'vTpopLastCountsByTpopId.nodes[0].jungpflanzen',
+                  '',
+                ),
+                blaetter: get(
+                  z,
+                  'vTpopLastCountsByTpopId.nodes[0].blatter',
+                  '',
+                ),
+                bluehende_pflanzen: get(
+                  z,
+                  'vTpopLastCountsByTpopId.nodes[0].bluhendePflanzen',
+                  '',
+                ),
+                bluehende_triebe: get(
+                  z,
+                  'vTpopLastCountsByTpopId.nodes[0].bluhendeTriebe',
+                  '',
+                ),
+                blueten: get(z, 'vTpopLastCountsByTpopId.nodes[0].bluten', ''),
+                fertile_pflanzen: get(
+                  z,
+                  'vTpopLastCountsByTpopId.nodes[0].fertilePflanzen',
+                  '',
+                ),
+                fruchtende_triebe: get(
+                  z,
+                  'vTpopLastCountsByTpopId.nodes[0].fruchtendeTriebe',
+                  '',
+                ),
+                bluetenstaende: get(
+                  z,
+                  'vTpopLastCountsByTpopId.nodes[0].blutenstande',
+                  '',
+                ),
+                fruchtstaende: get(
+                  z,
+                  'vTpopLastCountsByTpopId.nodes[0].fruchtstande',
+                  '',
+                ),
+                gruppen: get(z, 'vTpopLastCountsByTpopId.nodes[0].gruppen', ''),
+                deckung: get(z, 'vTpopLastCountsByTpopId.nodes[0].deckung', ''),
+                pflanzen_5m2: get(
+                  z,
+                  'vTpopLastCountsByTpopId.nodes[0].pflanzen5M2',
+                  '',
+                ),
+                triebe_in_30m2: get(
+                  z,
+                  'vTpopLastCountsByTpopId.nodes[0].triebeIn30M2',
+                  '',
+                ),
+                triebe_50m2: get(
+                  z,
+                  'vTpopLastCountsByTpopId.nodes[0].triebe50M2',
+                  '',
+                ),
+                triebe_maehflaeche: get(
+                  z,
+                  'vTpopLastCountsByTpopId.nodes[0].triebeMahflache',
+                  '',
+                ),
+                flaeche_m2: get(
+                  z,
+                  'vTpopLastCountsByTpopId.nodes[0].flacheM2',
+                  '',
+                ),
+                pflanzstellen: get(
+                  z,
+                  'vTpopLastCountsByTpopId.nodes[0].pflanzstellen',
+                  '',
+                ),
+                stellen: get(z, 'vTpopLastCountsByTpopId.nodes[0].stellen', ''),
+                andere_zaehleinheit: get(
+                  z,
+                  'vTpopLastCountsByTpopId.nodes[0].andereZaehleinheit',
+                  '',
+                ),
+                art_ist_vorhanden: get(
+                  z,
+                  'vTpopLastCountsByTpopId.nodes[0].artIstVorhanden',
+                  '',
+                ),
+              }))
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
@@ -2409,7 +2552,7 @@ const Teilpopulationen = ({ treeName }) => {
                 })
               }
               exportModule({
-                data: rows,
+                data: sortBy(rows, ['artname', 'pop_nr', 'tpop_nr', 'jahr']),
                 fileName: 'TPopLetzteZaehlungen',
                 idKey: 'pop_id',
                 store,
