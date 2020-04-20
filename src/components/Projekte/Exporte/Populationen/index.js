@@ -684,7 +684,7 @@ const Populationen = () => {
               let result
               try {
                 result = await client.query({
-                  query: await import('./allVPopMitLetzterPopbers').then(
+                  query: await import('./queryPopMitLetzterPopbers').then(
                     (m) => m.default,
                   ),
                 })
@@ -696,11 +696,106 @@ const Populationen = () => {
                   },
                 })
               }
-              const rows = get(
-                result.data,
-                'allVPopMitLetzterPopbers.nodes',
-                [],
-              )
+              const rows = get(result.data, 'allPops.nodes', []).map((z) => ({
+                ap_id: get(z, 'vPopMitLetzterPopbersByPopId.nodes[0].apId', ''),
+                artname: get(
+                  z,
+                  'vPopMitLetzterPopbersByPopId.nodes[0].artname',
+                  '',
+                ),
+                ap_bearbeitung: get(
+                  z,
+                  'vPopMitLetzterPopbersByPopId.nodes[0].apBearbeitung',
+                  '',
+                ),
+                ap_start_jahr: get(
+                  z,
+                  'vPopMitLetzterPopbersByPopId.nodes[0].apStartJahr',
+                  '',
+                ),
+                ap_umsetzung: get(
+                  z,
+                  'vPopMitLetzterPopbersByPopId.nodes[0].apUmsetzung',
+                  '',
+                ),
+                pop_id: get(
+                  z,
+                  'vPopMitLetzterPopbersByPopId.nodes[0].popId',
+                  '',
+                ),
+                pop_nr: get(
+                  z,
+                  'vPopMitLetzterPopbersByPopId.nodes[0].popNr',
+                  '',
+                ),
+                pop_name: get(
+                  z,
+                  'vPopMitLetzterPopbersByPopId.nodes[0].popName',
+                  '',
+                ),
+                pop_status: get(
+                  z,
+                  'vPopMitLetzterPopbersByPopId.nodes[0].popStatus',
+                  '',
+                ),
+                pop_bekannt_seit: get(
+                  z,
+                  'vPopMitLetzterPopbersByPopId.nodes[0].popBekanntSeit',
+                  '',
+                ),
+                pop_status_unklar: get(
+                  z,
+                  'vPopMitLetzterPopbersByPopId.nodes[0].popStatusUnklar',
+                  '',
+                ),
+                pop_status_unklar_begruendung: get(
+                  z,
+                  'vPopMitLetzterPopbersByPopId.nodes[0].popStatusUnklarBegruendung',
+                  '',
+                ),
+                pop_x: get(z, 'vPopMitLetzterPopbersByPopId.nodes[0].popX', ''),
+                pop_y: get(z, 'vPopMitLetzterPopbersByPopId.nodes[0].popY', ''),
+                pop_changed: get(
+                  z,
+                  'vPopMitLetzterPopbersByPopId.nodes[0].popChanged',
+                  '',
+                ),
+                pop_changed_by: get(
+                  z,
+                  'vPopMitLetzterPopbersByPopId.nodes[0].popChangedBy',
+                  '',
+                ),
+                popber_id: get(
+                  z,
+                  'vPopMitLetzterPopbersByPopId.nodes[0].popberId',
+                  '',
+                ),
+                popber_jahr: get(
+                  z,
+                  'vPopMitLetzterPopbersByPopId.nodes[0].popberJahr',
+                  '',
+                ),
+                popber_entwicklung: get(
+                  z,
+                  'vPopMitLetzterPopbersByPopId.nodes[0].popberEntwicklung',
+                  '',
+                ),
+                popber_bemerkungen: get(
+                  z,
+                  'vPopMitLetzterPopbersByPopId.nodes[0].popberBemerkungen',
+                  '',
+                ),
+                popber_changed: get(
+                  z,
+                  'vPopMitLetzterPopbersByPopId.nodes[0].popberChanged',
+                  '',
+                ),
+                popber_changed_by: get(
+                  z,
+                  'vPopMitLetzterPopbersByPopId.nodes[0].popberChangedBy',
+                  '',
+                ),
+              }))
               removeNotification(notif)
               closeSnackbar(notif)
               if (rows.length === 0) {
@@ -712,7 +807,7 @@ const Populationen = () => {
                 })
               }
               exportModule({
-                data: rows,
+                data: sortBy(rows, ['artname', 'pop_nr']),
                 fileName: 'PopulationenMitLetzemPopBericht',
                 idKey: 'pop_id',
                 xKey: 'pop_wgs84lat',

@@ -62,6 +62,7 @@ ORDER BY
   apflora.ae_taxonomies.artname,
   apflora.pop.nr,
   letzter_popber.jahr;
+comment on view apflora.v_pop_mit_letzter_popber is '@foreignKey (pop_id) references pop (id)';
 
 -- used in export
 DROP VIEW IF EXISTS apflora.v_pop_mit_letzter_popmassnber CASCADE;
