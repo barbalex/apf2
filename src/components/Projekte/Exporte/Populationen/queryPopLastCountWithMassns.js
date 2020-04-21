@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query popLastCountsQuery {
+  query popLastCountsWithMassnQuery {
     allPops(filter: { vPopLastCountWithMassnsByPopIdExist: true }) {
       nodes {
         id
