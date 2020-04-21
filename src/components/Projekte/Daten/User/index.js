@@ -62,15 +62,16 @@ const roleWerte = [
   },
   {
     value: 'apflora_freiwillig',
-    label: 'freiwillig (sieht und ändert eigene Kontrollen)',
+    label:
+      'freiwillig (sieht und ändert eigene Kontrollen und was dafür nötig ist)',
   },
   {
     value: 'apflora_ap_writer',
-    label: 'ap_writer (sieht und ändert freigegebene Arten)',
+    label: `ap_writer (sieht fast alle Daten, ändert freigegebene Aktionspläne)`,
   },
   {
     value: 'apflora_ap_reader',
-    label: 'ap_reader (sieht freigegebene Arten)',
+    label: 'ap_reader (sieht freigegebene Aktionspläne)',
   },
   {
     value: 'apflora_manager',

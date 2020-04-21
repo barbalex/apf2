@@ -112,9 +112,18 @@ alter table apflora.ap enable row level security;
 drop policy if exists reader on apflora.ap;
 create policy reader on apflora.ap 
 using (
-  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  current_user in ('apflora_manager', 'apflora_reader', 'apflora_ap_writer', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_ap_writer', 'apflora_ap_reader')
+    current_user in ('apflora_ap_reader')
+    and id in (
+      select ap_id from apflora.ap_user where user_name = current_user_name()
+    )
+  )
+)
+with check (
+  current_user in ('apflora_manager', 'apflora_freiwillig')
+  or (
+    current_user in ('apflora_ap_writer')
     and id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -159,11 +168,20 @@ create index on apflora.ap_file using btree (file_mime_type);
 
 alter table apflora.ap_file enable row level security;
 drop policy if exists reader on apflora.ap_file;
-create policy reader on apflora.ap_file using 
-(
-  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+create policy reader on apflora.ap_file 
+using (
+  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_ap_writer', 'apflora_ap_reader')
+    current_user in ('apflora_ap_reader')
+    and ap_id in (
+      select ap_id from apflora.ap_user where user_name = current_user_name()
+    )
+  )
+)
+with check (
+  current_user in ('apflora_manager', 'apflora_freiwillig')
+  or (
+    current_user in ('apflora_ap_writer')
     and ap_id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -210,9 +228,18 @@ alter table apflora.ap_history enable row level security;
 drop policy if exists reader on apflora.ap_history;
 create policy reader on apflora.ap_history 
 using (
-  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_ap_writer', 'apflora_ap_reader')
+    current_user in ('apflora_ap_reader')
+    and id in (
+      select ap_id from apflora.ap_user where user_name = current_user_name()
+    )
+  )
+)
+with check (
+  current_user in ('apflora_manager', 'apflora_freiwillig')
+  or (
+    current_user in ('apflora_ap_writer')
     and id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -415,9 +442,18 @@ alter table apflora.apber enable row level security;
 drop policy if exists reader on apflora.apber;
 create policy reader on apflora.apber 
 using (
-  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_ap_writer', 'apflora_ap_reader')
+    current_user in ('apflora_ap_reader')
+    and ap_id in (
+      select ap_id from apflora.ap_user where user_name = current_user_name()
+    )
+  )
+)
+with check (
+  current_user in ('apflora_manager', 'apflora_freiwillig')
+  or (
+    current_user in ('apflora_ap_writer')
     and ap_id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -482,9 +518,18 @@ alter table apflora.assozart enable row level security;
 drop policy if exists reader on apflora.assozart;
 create policy reader on apflora.assozart 
 using (
-  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_ap_writer', 'apflora_ap_reader')
+    current_user in ('apflora_ap_reader')
+    and ap_id in (
+      select ap_id from apflora.ap_user where user_name = current_user_name()
+    )
+  )
+)
+with check (
+  current_user in ('apflora_manager', 'apflora_freiwillig')
+  or (
+    current_user in ('apflora_ap_writer')
     and ap_id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -536,9 +581,18 @@ alter table apflora.erfkrit enable row level security;
 drop policy if exists reader on apflora.erfkrit;
 create policy reader on apflora.erfkrit 
 using (
-  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_ap_writer', 'apflora_ap_reader')
+    current_user in ('apflora_ap_reader')
+    and ap_id in (
+      select ap_id from apflora.ap_user where user_name = current_user_name()
+    )
+  )
+)
+with check (
+  current_user in ('apflora_manager', 'apflora_freiwillig')
+  or (
+    current_user in ('apflora_ap_writer')
     and ap_id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -615,9 +669,18 @@ alter table apflora.idealbiotop enable row level security;
 drop policy if exists reader on apflora.idealbiotop;
 create policy reader on apflora.idealbiotop 
 using (
-  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_ap_writer', 'apflora_ap_reader')
+    current_user in ('apflora_ap_reader')
+    and ap_id in (
+      select ap_id from apflora.ap_user where user_name = current_user_name()
+    )
+  )
+)
+with check (
+  current_user in ('apflora_manager', 'apflora_freiwillig')
+  or (
+    current_user in ('apflora_ap_writer')
     and ap_id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -643,9 +706,25 @@ alter table apflora.idealbiotop_file enable row level security;
 drop policy if exists reader on apflora.idealbiotop_file;
 create policy reader on apflora.idealbiotop_file 
 using (
-  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_ap_writer', 'apflora_ap_reader')
+    current_user in ('apflora_ap_reader')
+    and id in (
+      select apflora.idealbiotop_file.id
+      from 
+        apflora.idealbiotop_file
+        inner join apflora.idealbiotop
+        on apflora.idealbiotop.id = apflora.idealbiotop_file.idealbiotop_id
+        where apflora.idealbiotop.ap_id in (
+          select ap_id from apflora.ap_user where user_name = current_user_name()
+        )
+    )
+  )
+)
+with check (
+  current_user in ('apflora_manager', 'apflora_freiwillig')
+  or (
+    current_user in ('apflora_ap_writer')
     and id in (
       select apflora.idealbiotop_file.id
       from 
@@ -695,9 +774,18 @@ alter table apflora.pop enable row level security;
 drop policy if exists reader on apflora.pop;
 create policy reader on apflora.pop 
 using (
-  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_ap_writer', 'apflora_ap_reader')
+    current_user in ('apflora_ap_reader')
+    and ap_id in (
+      select ap_id from apflora.ap_user where user_name = current_user_name()
+    )
+  )
+)
+with check (
+  current_user in ('apflora_manager', 'apflora_freiwillig')
+  or (
+    current_user in ('apflora_ap_writer')
     and ap_id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -723,9 +811,21 @@ alter table apflora.pop_file enable row level security;
 drop policy if exists reader on apflora.pop_file;
 create policy reader on apflora.pop_file 
 using (
-  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_ap_writer', 'apflora_ap_reader')
+    current_user in ('apflora_ap_reader')
+    and pop_id in (
+      select id from apflora.pop
+      where ap_id in (
+        select ap_id from apflora.ap_user where user_name = current_user_name()
+      )
+    )
+  )
+)
+with check (
+  current_user in ('apflora_manager', 'apflora_freiwillig')
+  or (
+    current_user in ('apflora_ap_writer')
     and pop_id in (
       select id from apflora.pop
       where ap_id in (
@@ -766,9 +866,18 @@ alter table apflora.pop_history enable row level security;
 drop policy if exists reader on apflora.pop_history;
 create policy reader on apflora.pop_history 
 using (
-  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_ap_writer', 'apflora_ap_reader')
+    current_user in ('apflora_ap_reader')
+    and ap_id in (
+      select ap_id from apflora.ap_user where user_name = current_user_name()
+    )
+  )
+)
+with check (
+  current_user in ('apflora_manager', 'apflora_freiwillig')
+  or (
+    current_user in ('apflora_ap_writer')
     and ap_id in (
       select ap_id from apflora.ap_user where user_name = current_user_name()
     )
@@ -835,9 +944,22 @@ alter table apflora.popber enable row level security;
 drop policy if exists reader on apflora.popber;
 create policy reader on apflora.popber 
 using (
-  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_ap_writer', 'apflora_ap_reader')
+    current_user in ('apflora_ap_reader')
+    and pop_id in (
+      select distinct apflora.pop.id 
+      from apflora.pop
+      where ap_id in (
+        select ap_id from apflora.ap_user where user_name = current_user_name()
+      )
+    )
+  )
+)
+with check (
+  current_user in ('apflora_manager', 'apflora_freiwillig')
+  or (
+    current_user in ('apflora_ap_writer')
     and pop_id in (
       select distinct apflora.pop.id 
       from apflora.pop
@@ -875,9 +997,22 @@ alter table apflora.popmassnber enable row level security;
 drop policy if exists reader on apflora.popmassnber;
 create policy reader on apflora.popmassnber 
 using (
-  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_ap_writer', 'apflora_ap_reader')
+    current_user in ('apflora_ap_reader')
+    and pop_id in (
+      select id 
+      from apflora.pop
+      where ap_id in (
+        select ap_id from apflora.ap_user where user_name = current_user_name()
+      )
+    )
+  )
+)
+with check (
+  current_user in ('apflora_manager', 'apflora_freiwillig')
+  or (
+    current_user in ('apflora_ap_writer')
     and pop_id in (
       select id 
       from apflora.pop
@@ -966,9 +1101,22 @@ alter table apflora.tpop enable row level security;
 drop policy if exists reader on apflora.tpop;
 create policy reader on apflora.tpop 
 using (
-  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_ap_writer', 'apflora_ap_reader')
+    current_user in ('apflora_ap_reader')
+    and pop_id in (
+      select id 
+      from apflora.pop
+      where ap_id in (
+        select ap_id from apflora.ap_user where user_name = current_user_name()
+      )
+    )
+  )
+)
+with check (
+  current_user in ('apflora_manager', 'apflora_freiwillig')
+  or (
+    current_user in ('apflora_ap_writer')
     and pop_id in (
       select id 
       from apflora.pop
@@ -998,9 +1146,26 @@ alter table apflora.tpop_file enable row level security;
 drop policy if exists reader on apflora.tpop_file;
 create policy reader on apflora.tpop_file 
 using (
-  current_user in ('apflora_manager', 'apflora_reader', 'apflora_freiwillig')
+  current_user in ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
   or (
-    current_user in ('apflora_ap_writer', 'apflora_ap_reader')
+    current_user in ('apflora_ap_reader')
+    and tpop_id in (
+      select id
+      from apflora.tpop
+      where pop_id in (
+        select id 
+        from apflora.pop
+        where ap_id in (
+          select ap_id from apflora.ap_user where user_name = current_user_name()
+        )
+      )
+    )
+  )
+)
+with check (
+  current_user in ('apflora_manager', 'apflora_freiwillig')
+  or (
+    current_user in ('apflora_ap_writer')
     and tpop_id in (
       select id
       from apflora.tpop
