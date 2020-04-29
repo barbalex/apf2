@@ -170,44 +170,32 @@ const Apber = ({ treeName }) => {
                 <Field
                   name="biotopeNeue"
                   label="A. Grundmengen: Bemerkungen/Folgerungen für nächstes Jahr: neue Biotope"
-                  type="text"
-                  multiLine
-                  component={TextField}
+                  component={MdField}
                 />
                 <Field
                   name="biotopeOptimieren"
                   label="B. Bestandesentwicklung: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Biotope"
-                  type="text"
-                  multiLine
-                  component={TextField}
+                  component={MdField}
                 />
                 <Field
                   name="massnahmenApBearb"
                   label="C. Zwischenbilanz zur Wirkung von Massnahmen: Weitere Aktivitäten der Aktionsplan-Verantwortlichen"
-                  type="text"
-                  multiLine
-                  component={TextField}
+                  component={MdField}
                 />
                 <Field
                   name="massnahmenPlanungVsAusfuehrung"
                   label="C. Zwischenbilanz zur Wirkung von Massnahmen: Vergleich Ausführung/Planung"
-                  type="text"
-                  multiLine
-                  component={TextField}
+                  component={MdField}
                 />
                 <Field
                   name="massnahmenOptimieren"
                   label="C. Zwischenbilanz zur Wirkung von Massnahmen: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Massnahmen"
-                  type="text"
-                  multiLine
-                  component={TextField}
+                  component={MdField}
                 />
                 <Field
                   name="wirkungAufArt"
                   label="D. Einschätzung der Wirkung des AP insgesamt auf die Art: Bemerkungen"
-                  type="text"
-                  multiLine
-                  component={TextField}
+                  component={MdField}
                 />
                 <Field name="datum" label="Datum" component={DateField} />
                 <Field

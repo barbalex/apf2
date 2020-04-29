@@ -75,6 +75,7 @@ const Title1 = styled.h3`
 `
 const TitledLabel = styled.label`
   text-decoration: underline;
+  padding-bottom: 8px;
 `
 const Row = styled.div`
   display: flex;
@@ -326,7 +327,13 @@ const ApberForAp = ({
               <TitledLabel>
                 Bemerkungen / Folgerungen für nächstes Jahr: neue Biotope
               </TitledLabel>
-              <FullWidthField>{get(apber, 'biotopeNeue', '')}</FullWidthField>
+              <FullWidthField>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: mdParser.render(get(apber, 'biotopeNeue', '')),
+                  }}
+                />
+              </FullWidthField>
             </FieldRowFullWidth>
           )}
 
@@ -337,7 +344,13 @@ const ApberForAp = ({
                 Bemerkungen / Folgerungen für nächstes Jahr: Optimierung Biotope
               </TitledLabel>
               <FullWidthField>
-                {get(apber, 'biotopeOptimieren', '')}
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: mdParser.render(
+                      get(apber, 'biotopeOptimieren', ''),
+                    ),
+                  }}
+                />
               </FullWidthField>
             </FieldRowFullWidth>
           )}
@@ -351,7 +364,13 @@ const ApberForAp = ({
             <FieldRowFullWidth>
               <TitledLabel>Vergleich Ausführung/Planung</TitledLabel>
               <FullWidthField>
-                {get(apber, 'massnahmenPlanungVsAusfuehrung', '')}
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: mdParser.render(
+                      get(apber, 'massnahmenPlanungVsAusfuehrung', ''),
+                    ),
+                  }}
+                />
               </FullWidthField>
             </FieldRowFullWidth>
           )}
@@ -362,7 +381,13 @@ const ApberForAp = ({
                 Massnahmen
               </TitledLabel>
               <FullWidthField>
-                {get(apber, 'massnahmenOptimieren', '')}
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: mdParser.render(
+                      get(apber, 'massnahmenOptimieren', ''),
+                    ),
+                  }}
+                />
               </FullWidthField>
             </FieldRowFullWidth>
           )}
@@ -372,7 +397,13 @@ const ApberForAp = ({
                 Weitere Aktivitäten der Aktionsplan-Verantwortlichen
               </TitledLabel>
               <FullWidthField>
-                {get(apber, 'massnahmenApBearb', '')}
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: mdParser.render(
+                      get(apber, 'massnahmenApBearb', ''),
+                    ),
+                  }}
+                />
               </FullWidthField>
             </FieldRowFullWidth>
           )}
