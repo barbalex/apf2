@@ -1,26 +1,51 @@
 ---
 typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/geplant-2020"
-date: "2020-03-27"
+date: "2020-04-29"
 title: "2020 geplant"
 sort: 3
 ---
+<br/>
 
-TODO: diese Liste ist im Aufbau<br/><br/>
+:white_check_mark: In Massnahmen die zielrelevante Einheit zählen
 
-- :white_medium_square: Auswertungen der Aktions-Pläne
-- :white_medium_square: Karte: Massnahmen als WFS-Layer anzeigen
-- :white_medium_square: Karte: Massnahmen nur für  aktuelle TPop-Stati anzeigen
-- :white_medium_square: Überprüfung Zielerreichung: Instrument, um zu prüfen, ob apber-relevante Einheiten gezählt werden
-- :white_check_mark: EKF: Einheiten mit "…davon" sollen erfasst werden können
-- :white_medium_square: EK/EKF: Zählungen: mit Bemerkungsfeld
-- :ballot_box_with_check: Tests einführen
-- :ballot_box_with_check: laufend modern halten
+:white_check_mark: Aktionspläne, Populationen und Teil-Populationen werden ein mal jährlich historisiert. Daten werden rückwirkend bis 2014 aus Sicherungen importiert :rocket:
+
+:white_check_mark: Auswertungen der Aktions-Pläne, grafisch und tabellarisch :rocket:
+
+:white_check_mark: Pro Aktionsplan wird bestimmt, welche Benutzer mit der Rolle "ap_writer" Daten bearbeiten können
+
+:white_check_mark: In Aktionsplänen, Populationen, Teil-Populationen und Massnahmen können Dateien angefügt werden
+
+:white_check_mark: An ausgwählten Orten (vor allem beim AP-Bericht) können Text-Felder mit Markdown formattiert werden
+
+:white_check_mark: Neue EK-Frequenz "nie"
+
+:white_check_mark: Historisierung von Werten in Auswahl-Listen ermöglichen (gewählte werden noch angezeigt, neu können sie aber nicht mehr gewählt werden)
+
+:white_check_mark: Ausgewählte Daten werden als PostGIS-Tabellen gespeichert. Damit sie effinzient benutzt und räumlich ausgewertet werden können. Vorerst sind das: Gemeinden, Markierungen, Detail-Pläne. Später ev. Betreuungs-Gebiete
+
+:white_check_mark: Backend auf Docker portieren :rocket: (sorry, das ist technisch)
+
+:white_medium_square: Karte: Massnahmen als WFS-Layer anzeigen
+
+:white_medium_square: Karte: Massnahmen nur für aktuelle TPop-Stati anzeigen
+
+:white_check_mark: EKF: Einheiten mit "…davon" sollen erfasst werden können
+
+:ballot_box_with_check: Tests einführen
+
+:white_check_mark: laufend modern halten<br/><br/>
+
 
 Symbole:
-* :white_check_mark:: realisiert
-* :ballot_box_with_check:: teilweise realisiert
-* :white_medium_square:: geplant
+
+:white_check_mark:: realisiert
+
+:ballot_box_with_check:: teilweise realisiert
+
+:white_medium_square:: geplant
+
 <br/>
 
 ### Langfristige Vision
