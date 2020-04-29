@@ -434,19 +434,41 @@ const ApberForAp = ({
           {!!apber.apberAnalyse && (
             <FieldRow>
               <FieldLabel>Analyse</FieldLabel>
-              <Field>{get(apber, 'apberAnalyse', '')}</Field>
+              <Field>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: mdParser.render(get(apber, 'apberAnalyse', '')),
+                  }}
+                />
+              </Field>
             </FieldRow>
           )}
           {!!apber.konsequenzenUmsetzung && (
             <FieldRow>
               <FieldLabel>Konsequenzen für die Umsetzung</FieldLabel>
-              <Field>{get(apber, 'konsequenzenUmsetzung', '')}</Field>
+              <Field>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: mdParser.render(
+                      get(apber, 'konsequenzenUmsetzung', ''),
+                    ),
+                  }}
+                />
+              </Field>
             </FieldRow>
           )}
           {!!apber.konsequenzenErfolgskontrolle && (
             <FieldRow>
               <FieldLabel>Konsequenzen für die Erfolgskontrolle</FieldLabel>
-              <Field>{get(apber, 'konsequenzenErfolgskontrolle', '')}</Field>
+              <Field>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: mdParser.render(
+                      get(apber, 'konsequenzenErfolgskontrolle', ''),
+                    ),
+                  }}
+                />
+              </Field>
             </FieldRow>
           )}
           <Row>
