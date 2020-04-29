@@ -7,6 +7,7 @@ import React from 'react'
 import localForage from 'localforage'
 
 import App from './src/App'
+import 'prismjs/themes/prism-solarizedlight.css'
 
 /**
  * Am importing App because
