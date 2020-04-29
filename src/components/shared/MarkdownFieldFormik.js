@@ -15,6 +15,7 @@ const mdParser = new MarkdownIt({ breaks: true })
 
 const Container = styled.div`
   position: relative;
+  margin-bottom: 19px;
   .rc-md-editor {
     min-height: 200px;
     resize: vertical;
