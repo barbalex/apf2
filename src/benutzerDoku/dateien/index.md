@@ -3,7 +3,7 @@ typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/Dateien"
 date: "2019-05-27"
 title: "Dateien anfügen"
-sort: 21
+sort: 22
 ---
 
 Wurde am 27.05.2019 eingeführt.<br/><br/>

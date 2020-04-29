@@ -3,7 +3,7 @@ typ: 'benutzerDoku'
 path: "/Dokumentation/Benutzer/historisierung"
 date: "2020-03-27"
 title: "Historisierung von AP, Pop und TPop"
-sort: 15
+sort: 16
 ---
 
 ## Wunsch

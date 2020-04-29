@@ -9,7 +9,7 @@ sort: 4
 Vorausgesetzt wird ein **moderner Browser**:
 
 * Empfehlenswert ist Google Chrome oder Microsoft Edge (modern) - apflora.ch wird auf Chrome entwickelt.<br/>
-  Meines Wissens funktionieren Ausdrucke nur auf Google Chrome und Microsoft Edge (modern) richtig.<br/>
+  Meines Wissens funktionieren gewisse Ausdrucke nur auf Google Chrome und Microsoft Edge (modern) richtig.<br/>
   Alles Andere sollte prinzipiell auch auf allen anderen modernen Browsern funktionieren.
 * Firefox wird regelmässig produktiv benutzt
 * Safari auf Mac OsX scheint zu funktionieren
