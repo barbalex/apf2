@@ -182,7 +182,7 @@ const Qk = ({ treeName, qkNameQueries, qks }) => {
                           window.matchMedia('(display-mode: standalone)')
                             .matches
                         ) {
-                          window.open(url, '_blank', 'toolbar=no')
+                          return window.open(url, '_blank', 'toolbar=no')
                         }
                         window.open(url)
                       }

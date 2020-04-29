@@ -70,7 +70,7 @@ const Line = ({ treeName, beob }) => {
     }`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
-        window.open(url, '_blank', 'toolbar=no')
+        return window.open(url, '_blank', 'toolbar=no')
       }
       window.open(url)
     }
@@ -92,7 +92,7 @@ const Line = ({ treeName, beob }) => {
     const url = `${appBaseUrl()}Daten/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}`
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
-        window.open(url, '_blank', 'toolbar=no')
+        return window.open(url, '_blank', 'toolbar=no')
       }
       window.open(url)
     }
