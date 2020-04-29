@@ -13035,10 +13035,10 @@ postgraphile-plugin-connection-filter-postgis@1.0.0-alpha.5:
   resolved "https://registry.yarnpkg.com/postgraphile-plugin-connection-filter-postgis/-/postgraphile-plugin-connection-filter-postgis-1.0.0-alpha.5.tgz#1271de26ff440a93ac63f3328d578e7e23035ad6"
   integrity sha512-NfbBp+t9c3tnUwP7bcC8ncm211/Gfo3aJuRz2jMP+TlzwVCh0V6z9DsxQGGIRo/IKH8Z9Mr8Bf9pYuWQPcc5Tw==
 
-postgraphile-plugin-connection-filter@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/postgraphile-plugin-connection-filter/-/postgraphile-plugin-connection-filter-2.0.0.tgz#caec75f8f8913f0a0ef48dcdd393c3e915c5ac3e"
-  integrity sha512-4h1L1c7hyexRVmtWQrHsLvn4Ctm2j4kvn2jY593gfgJMotwEl7/exZ4PDszfgZJW8B4AO4c+HRy3v0TUG3AUpw==
+postgraphile-plugin-connection-filter@1.x:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/postgraphile-plugin-connection-filter/-/postgraphile-plugin-connection-filter-1.1.3.tgz#e33214948f16c0c8331e4f145adfc9860d593d72"
+  integrity sha512-QWn2lDQ3d8M0iiQVZtozIcJmL3b2A3L6DnMD2e8EOOVqxxAy9Kt3b7k4a+bH46rz4Eh6NuDtHWb0PZnxx41kVg==
 
 postgraphile@4.7.0:
   version "4.7.0"

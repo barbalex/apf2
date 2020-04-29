@@ -125,11 +125,11 @@
     "use-debounce": "3.4.2"
   },
   "dependenciesComments": {
-    "nothing": "now"
+    "nothing": "now",
+    "postgraphile-plugin-connection-filter": "wait before updating to v2 until postgraphile-plugin-connection-filter-postgis was updated"
   },
   "peerDependencies": {
-    "react-is": "16.13.1",
-    "postgraphile-plugin-connection-filter": "wait before updating to v2 until postgraphile-plugin-connection-filter-postgis was updated"
+    "react-is": "16.13.1"
   },
   "devDependencies": {
     "@graphile-contrib/pg-order-by-related": "1.0.0-beta.6",
