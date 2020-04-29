@@ -8,6 +8,7 @@ import ErrorBoundary from 'react-error-boundary'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import TextField from '../../../shared/TextFieldFormik'
+import MdField from '../../../shared/MarkdownFieldFormik'
 import Select from '../../../shared/SelectFormik'
 import DateField from '../../../shared/DateFormik'
 import FormTitle from '../../../shared/FormTitle'
@@ -29,7 +30,7 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
   padding: 10px;
   height: 100%;
-  column-width: ${props =>
+  column-width: ${(props) =>
     props.width > 2 * constants.columnWidth
       ? `${constants.columnWidth}px`
       : 'auto'};
@@ -132,9 +133,7 @@ const Apber = ({ treeName }) => {
                 <Field
                   name="vergleichVorjahrGesamtziel"
                   label="Vergleich Vorjahr - Gesamtziel"
-                  type="text"
-                  multiLine
-                  component={TextField}
+                  component={MdField}
                 />
                 <Field
                   name="beurteilung"
@@ -156,23 +155,17 @@ const Apber = ({ treeName }) => {
                 <Field
                   name="apberAnalyse"
                   label="Analyse"
-                  type="text"
-                  multiLine
-                  component={TextField}
+                  component={MdField}
                 />
                 <Field
                   name="konsequenzenUmsetzung"
                   label="Konsequenzen für die Umsetzung"
-                  type="text"
-                  multiLine
-                  component={TextField}
+                  component={MdField}
                 />
                 <Field
                   name="konsequenzenErfolgskontrolle"
                   label="Konsequenzen für die Erfolgskontrolle"
-                  type="text"
-                  multiLine
-                  component={TextField}
+                  component={MdField}
                 />
                 <Field
                   name="biotopeNeue"
