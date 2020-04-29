@@ -14,7 +14,7 @@ export default () => {
   if (!query.tpopTab) query.tpopTab = 'tpop'
   if (!query.tpopmassnTab) query.tpopmassnTab = 'tpopmassn'
   if (!query.apTab) query.apTab = 'ap'
-  if (!query.qkTab) query.apTab = 'qk'
+  if (!query.qkTab) query.qkTab = 'qk'
   if (!query.idealbiotopTab) query.idealbiotopTab = 'idealbiotop'
   /**
    * arrays are converted to strings in url if only one element is contained
