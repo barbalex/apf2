@@ -37,13 +37,13 @@ Erfolgskontrollen sind gleichzeitig wichtig und aufwändig. Im Jahr 2019 wird di
 Durch die Koordinationsstelle. Im Strukturbaum in den Werte-Listen.
 - EK-Abrechnungstypen
 - Zähleinheiten
-![im Strukturbaum](_media/ekplanen_global.png)
+![im Strukturbaum](ekplanen_global.png)
 
 ### Pro Aktionsplan
 Durch Koordinationsstelle und Artverantwortliche.
 - Welche Zähleinheiten sind zielrelevant und sollen daher immer erfasst werden
 - Frequenzen, nach denen in diesem AP kontrolliert werden soll. Inklusive Abrechnungstyp (EK-Frequenzen)
-![im Strukturbaum](_media/ekplanen_ap.png)
+![im Strukturbaum](ekplanen_ap.png)
 
 ### Pro Teilpopulation
 Durch Artverantwortliche.
@@ -60,32 +60,32 @@ Je grösser und höher aufgelöst der Bildschirm, desto übersichtlicher kann ma
 ### AP's wählen
 
 Oben links wählt man, von welchen Aktionsplänen Teil-Populationen angezeigt werden sollen:<br/>
-![Formular](_media/ekplanen_form_2.png)<br/>
+![Formular](ekplanen_form_2.png)<br/>
 
 Sobald ein AP gewählt wurde, erscheinen die zugehörigen Teil-Populationen in der Liste.<br/>
 Rechts davon werden für Jahre Splaten aufgebaut. Beginnend mit dem ersten Jahr nach 1993, in dem in einer der aufgelisteten Teil-Populationen eine Kontrolle stattfand, bis 15 Jahre in die Zukunft.<br/>
 Wurde nach TPop mit Ansiedlungen gefiltert, wird das Jahr, für das gefiltert wird, in jedem Fall dargestellt (auch wenn die aufgelisteten TPop erst später kontrolliert wurden).<br/>
-![Formular](_media/ekplanen_form_1.png)<br/>
+![Formular](ekplanen_form_1.png)<br/>
 
 ### Dargestellte Informationen wählen
 
 Oben rechts wählt man, welche Informationen in den Teil-Populationen angezeigt werden:<br/>
-![Formular](_media/ekplanen_form_3.png)<br/>
+![Formular](ekplanen_form_3.png)<br/>
 
 In den Zeilen für die Teilpopulationen werden in den Jahres-Spalten dargestellt:
-- Grüne Haken symbolisieren ausgeführte Kontrollen ![Kontrolle](_media/ekplanen_haken.png)
-- Direkt rechts des Hakens stellt eine rote Zahl die Anzahl Kontrollen dar, wenn im selben Jahr mehrere Kontrollen stattfanden ![mehrere Kontrollen im selben Jahr](_media/ekplanen_haken_multiple.png)
-- Etwas weiter rechts neben dem Haken stellt eine schwarze Zahl die gemäss zielrelevanter Zähleinheit erfasste Anzahl dar, wenn diese Einheit gezählt wurde ![Zählung](_media/ekplanen_haken_zaehlung.png)
-- Grüne Quadrate symbolisieren geplante Kontrollen ![geplante Kontrolle](_media/ekplanen_plan.png)
-- Fand eine Kontrolle im geplanten Jahr statt, sieht man im grünen Quadrat den grünen Haken ![geplante Kontrolle fand statt](_media/ekplanen_plan_haken.png)
-- Grüne Blitze symbolisieren Ansiedlungen ![Ansiedlung](_media/ekplanen_blitz.png)
-- Direkt rechts des Blitzes erscheint eine rote Zahl, wenn im selben Jahr mehrere Ansiedlungen stattfanden. Sie stellt die Anzahl Ansiedlungen dar ![mehrere Ansiedlungen](_media/ekplanen_blitz_multiple.png)
-- Etwas weiter rechts neben dem Blitz stellt eine schwarze Zahl die Anzahl Planzen und Triebe dar, falls erfasst ![Ansiedlung mit Zählung](_media/ekplanen_blitz_zaehlung.png)
+- Grüne Haken symbolisieren ausgeführte Kontrollen ![Kontrolle](ekplanen_haken.png)
+- Direkt rechts des Hakens stellt eine rote Zahl die Anzahl Kontrollen dar, wenn im selben Jahr mehrere Kontrollen stattfanden ![mehrere Kontrollen im selben Jahr](ekplanen_haken_multiple.png)
+- Etwas weiter rechts neben dem Haken stellt eine schwarze Zahl die gemäss zielrelevanter Zähleinheit erfasste Anzahl dar, wenn diese Einheit gezählt wurde ![Zählung](ekplanen_haken_zaehlung.png)
+- Grüne Quadrate symbolisieren geplante Kontrollen ![geplante Kontrolle](ekplanen_plan.png)
+- Fand eine Kontrolle im geplanten Jahr statt, sieht man im grünen Quadrat den grünen Haken ![geplante Kontrolle fand statt](ekplanen_plan_haken.png)
+- Grüne Blitze symbolisieren Ansiedlungen ![Ansiedlung](ekplanen_blitz.png)
+- Direkt rechts des Blitzes erscheint eine rote Zahl, wenn im selben Jahr mehrere Ansiedlungen stattfanden. Sie stellt die Anzahl Ansiedlungen dar ![mehrere Ansiedlungen](ekplanen_blitz_multiple.png)
+- Etwas weiter rechts neben dem Blitz stellt eine schwarze Zahl die Anzahl Planzen und Triebe dar, falls erfasst ![Ansiedlung mit Zählung](ekplanen_blitz_zaehlung.png)
 
 ### Kontrollen planen
 
 #### Automatisch
-![Automatisch planen](_media/ekplanen_auto.gif)
+![Automatisch planen](ekplanen_auto.gif)
 
 Ändert man die EK-Frequenz:<br/>
 1. Setzt apflora zunächst das Startjahr, beruhend auf der gewählten EK-Frequenz mit:
@@ -100,17 +100,17 @@ In den Zeilen für die Teilpopulationen werden in den Jahres-Spalten dargestellt
 
 #### Manuell
 Wenn man eine Jahres-Zelle (Teilpopulation in Jahr) mit der Linken Maustaste anklickt, erscheint ein Menü. Hier wählt man den entsprechenden Eintrag:
-![Manuell planen](_media/ekplanen_manuell.png)<br/>
+![Manuell planen](ekplanen_manuell.png)<br/>
 
 ### Mehr Informationen
 
 Im gleichen Menü findet man weiterführende Infos zu EK, EKF und Ansiedlungen sowie Links um sie zu öffnen:<br/>
-![Infos zu Ereignissen](_media/ekplanen_infos.png)<br/>
+![Infos zu Ereignissen](ekplanen_infos.png)<br/>
 
 ### Filter setzen
 
 Bei den Feldern "EK-Frequenz" und "EK-Frequenz Startjahr" kann nach Nullwerten gefiltert werden:<br/>
-![Filtern](_media/ekplanen_frequenz_filtern.gif)<br/>
+![Filtern](ekplanen_frequenz_filtern.gif)<br/>
 
 In den Jahres-Spalten kann nach dem Vorhandensein von Kontrollen, EK-Plänen und Ansiedlungen gefiltert werden:<br/>
-![Filtern](_media/ekplan_filtern_jahr.gif)
+![Filtern](ekplan_filtern_jahr.gif)

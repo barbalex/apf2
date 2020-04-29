@@ -29,7 +29,7 @@ Hier gibt es zwei Methoden, die mit einem einzigen Klick ausgelöst werden könn
 - neue Teil-Population in bestehender Population gründen und die Beobachtung der neuen Teil-Population zuordnen.<br/>
   Die gewünschte Population kann aus einer Liste gewählt werden
 
-![im Strukturbaum](_media/beobZuordnen_01.png)<br/>
+![im Strukturbaum](beobZuordnen_01.png)<br/>
 
 ## 2. Verfügbare Beobachtungen
 

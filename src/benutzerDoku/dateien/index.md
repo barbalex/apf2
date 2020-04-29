@@ -14,7 +14,7 @@ Dateien können **in folgenden Formularen** angefügt werden:
 - Freiwilligen-Kontrolle: Im neuen Bereich "Dateien". Er ist nur im Formular sichtbar, wird also nicht gedruckt.
 
 Beispiel Idealbiotop:
-![Datein](_media/files_01.png)<br/>
+![Datein](files_01.png)<br/>
 
 **Zweck**: Idealbiotope und Kontrollen gemäss Vorgaben von Topos dokumentieren. Daher gibt es ein Feld, um die Datei zu beschreiben.<br/><br/>
 
@@ -30,13 +30,13 @@ Beispiel Idealbiotop:
 - Instagram
 
 Hochladen-Dialog:
-![hochladen](_media/file_04_upload.png)<br/>
+![hochladen](file_04_upload.png)<br/>
 
 Meist dürfte es sich um Bilder handeln. Daher gibt es auch eine Möglichkeit, die Bilder inklusive Beschreibung in einer **Gallerie-Ansicht** zu öffnen:
-![Gallerie-Ansicht](_media/files_02_gallery.png)<br/>
+![Gallerie-Ansicht](files_02_gallery.png)<br/>
 
 Ihr könnt Dateien auch **herunterladen**:
-![herunterladen](_media/files_03_herunterladen.png)<br/>
+![herunterladen](files_03_herunterladen.png)<br/>
 
 **Bitte mit Bedacht nutzen**:
 - Möglichst nur hochladen, was nützlich ist 

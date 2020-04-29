@@ -14,9 +14,9 @@ Nach einer BenutzerInnen-Aktion (z.B. Klicken oder Tippen) dauert es mehrere Sek
 
 ## 2. Nicht das Problem
 
-Bis ca. Mitte April 2019 war apflora.ch generell langsam. Dieses Problem sollte behoben sein. :simple_smile:<br/><br/>
+Bis ca. Mitte April 2019 war apflora.ch generell langsam. Dieses Problem sollte behoben sein :simple_smile:<br/><br/>
 
-Die folgenden Vorgänge dauern immer (etwas) länger, weil sie mit sehr vielen Daten arbeiten:
+Die folgenden Vorgänge dauern immer (etwas) länger, weil sie mit sehr vielen Daten arbeiten oder sehr viel rechnen müssen:
 - Im Strukturbaum einen Aktionsplan öffnen, der sehr viele Daten enthält
 - Einen (zweiten) Strukturbaum öffnen
 - In der Karte Daten aller Arten anzeigen
@@ -35,7 +35,7 @@ Umgehungen, bis wir den Fehler behoben haben:
   Das kann bei Web-Apps generell bei Fehlern helfen. Dafür benutzt man die F5-Taste (alle Browser) oder das dafür vorgesehene Symbol (je nach Browser)<br/>
 - Den cache des Browsers leeren. Danach müsst ihr neu anmelden.<br/>
   Anleitungen für: [Chrome](https://superuser.com/a/444881/275664), [Firefox](https://superuser.com/a/733154/275664), [Safari](https://superuser.com/a/1081295/275664)<br/>
-  apflora.ch speichert Daten auf eurer Festplatte. Diese können auch einmal Fehler enthalten. Cache leeren entfernt diese Daten, wonach sie vom Server neu geladen werden<br/>
+  apflora.ch speichert Daten auf eurer Festplatte (damit die App viel schneller läuft). Diese Daten können auch einmal Fehler enthalten. Cache leeren entfernt diese Daten, wonach sie vom Server neu geladen werden<br/>
 - Die lokal installierbare Version von apflora.ch verwenden.<br/>
   Es gibt sie bisher nur für Windows. Anleitung: Den aktuellsten apflora-win32-x64-Ordner von [hier](https://www.dropbox.com/sh/5ar4f0fu5uqvhar/AADJmUo_9pakOnjL_U27EpQMa?dl=0) in den eigenen Benutzer-Ordner oder auf den Desktop kopieren. Dann die darin enthaltene apflora.exe-Datei starten. Ob das etwas bringt, wisst ihr nur, wenn ihr es ausprobiert habt
 

@@ -8,7 +8,7 @@ sort: 14
 
 Am 12.09.2018 wurden Formular-Filter eingeführt.<br/>
 Am 15.03.2019 wurden sie verändert, um die Benutzerfreundlichkeit zu erhöhen.<br/>
-<img src="_media/filterForm.png" title="Filter-Formular" width="600" /><br/>
+<img src="filterForm.png" title="Filter-Formular" width="600" /><br/>
 
 ## In diesen Formularen kann man filtern
 - Aktionsplan
@@ -26,7 +26,7 @@ Filtern kann man im `Strukturbaum` _und_ im `Strukturbaum 2`. Öffnet man den `S
 
 ## Wie öffnet man ein Filter-Formular?
 - Mit der Schaltfläche oben in der Navigationszeile, rechts neben der Daten-Schaltfläche<br/>
-  ![Filter öffnen](_media/filterButton.png)
+  ![Filter öffnen](filterButton.png)
 
 ## Wo wird der Filter angewendet?
 - Im Strukturbaum auf der gefilterten Ebene.<br/>
@@ -39,7 +39,7 @@ Filtern kann man im `Strukturbaum` _und_ im `Strukturbaum 2`. Öffnet man den `S
 Im Formular erscheinen oben zwei Symbole, sobald ein Filter angewendet wird:
 - Mit dem linken Symbol kann man den Filter in der aktiven Ebene entfernen (z.B. Population). Dabei bleiben Filter in anderen Ebenen erhalten (z.B. Aktionsplan)
 - Mit dem rechten Symbol kann man alle angewendeten Filter entfernen<br/>
-![Filter entfernen](_media/filterRemove2.png)
+![Filter entfernen](filterRemove2.png)
 
 ## Welche Möglichkeiten eröffnet mir das?
 
@@ -50,6 +50,6 @@ Eine Möglichkeit: In der Karte nur einen bestimmten Status-Typ von Populationen
 ## Was ist der Unterschied zum Filter-Feld im Strukturbaum?
 
 Im **Strukturbaum-Filter** kann man (nur) nach den Bezeichungen der Strukturbaum-Elemente der gerade aktiven Ebene filtern.<br/>
-![Strukturbaum-Filter](_media/filterTree.png)
+![Strukturbaum-Filter](filterTree.png)
 
 Das ist zwar weniger mächtig, dafür aber einfach und schnell. Daher wird der `Strukturbaum-Filter` beibehalten.
