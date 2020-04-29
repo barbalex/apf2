@@ -10,6 +10,7 @@ import ErrorBoundary from 'react-error-boundary'
 import { MdPrint } from 'react-icons/md'
 import Fab from '@material-ui/core/Fab'
 import { useQuery } from '@apollo/react-hooks'
+import MarkdownIt from 'markdown-it'
 
 import queryMengen from './queryMengen'
 import Ziele from './Ziele'
@@ -19,17 +20,19 @@ import BMengen from './BMengen'
 import CMengen from './CMengen'
 import storeContext from '../../../storeContext'
 
+const mdParser = new MarkdownIt({ breaks: true })
+
 const Container = styled.div`
   /* this part is for when page preview is shown */
   /* Divide single pages with some space and center all pages horizontally */
   /* will be removed in @media print */
-  margin: ${props => (props.issubreport ? '0' : '1cm auto')};
-  margin-left: ${props =>
+  margin: ${(props) => (props.issubreport ? '0' : '1cm auto')};
+  margin-left: ${(props) =>
     props.issubreport ? '-0.75cm !important' : '1cm auto'};
   /* Define a white paper background that sticks out from the darker overall background */
-  background: ${props => (props.issubreport ? 'rgba(0, 0, 0, 0)' : '#fff')};
+  background: ${(props) => (props.issubreport ? 'rgba(0, 0, 0, 0)' : '#fff')};
   /* Show a drop shadow beneath each page */
-  box-shadow: ${props =>
+  box-shadow: ${(props) =>
     props.issubreport ? 'unset' : '0 4px 5px rgba(75, 75, 75, 0.2)'};
 
   /* set dimensions */
@@ -44,7 +47,7 @@ const Container = styled.div`
     width: 21cm;
 
     margin: 0 !important;
-    padding: ${props => (props.issubreport ? '0' : '0.5cm !important')};
+    padding: ${(props) => (props.issubreport ? '0' : '0.5cm !important')};
     /*padding-left: 0 !important;*/
     /* try this */
     page-break-before: always !important;
@@ -152,18 +155,18 @@ const ApberForAp = ({
   const artname = get(apData, 'aeTaxonomyByArtId.artname', '(Art fehlt)')
   const apber = get(apData, 'apbersByApId.nodes[0]', {})
   const apberDatum = get(apber, 'datum')
-  const erfkrit = sortBy(get(apData, 'erfkritsByApId.nodes', []), e =>
+  const erfkrit = sortBy(get(apData, 'erfkritsByApId.nodes', []), (e) =>
     get(e, 'apErfkritWerteByErfolg.sort'),
   )
-  const ziele = sortBy(get(apData, 'zielsByApId.nodes', []), e => [
+  const ziele = sortBy(get(apData, 'zielsByApId.nodes', []), (e) => [
     get(e, 'zielTypWerteByTyp.sort'),
     e.bezeichnung,
   ])
   const pops = get(apData, 'popsByApId.nodes', [])
-  const tpops = flatten(pops.map(p => get(p, 'tpopsByPopId.nodes', [])))
+  const tpops = flatten(pops.map((p) => get(p, 'tpopsByPopId.nodes', [])))
   const massns = sortBy(
-    flatten(tpops.map(t => get(t, 'tpopmassnsByTpopId.nodes', []))),
-    m => [
+    flatten(tpops.map((t) => get(t, 'tpopmassnsByTpopId.nodes', []))),
+    (m) => [
       get(m, 'tpopByTpopId.popByPopId.nr'),
       get(m, 'tpopByTpopId.nr'),
       get(m, 'datum'),
@@ -172,14 +175,14 @@ const ApberForAp = ({
     ],
   )
   const firstMassn = minBy(
-    flatten(tpops.map(t => get(t, 'firstTpopmassn.nodes[0]', []))),
+    flatten(tpops.map((t) => get(t, 'firstTpopmassn.nodes[0]', []))),
     'datum',
   )
   const yearOfFirstMassn = !!firstMassn
     ? format(new Date(firstMassn.datum), 'yyyy')
     : 0
   const firstTpopber = minBy(
-    flatten(tpops.map(t => get(t, 'firstTpopber.nodes[0]', []))),
+    flatten(tpops.map((t) => get(t, 'firstTpopber.nodes[0]', []))),
     'jahr',
   )
   const yearOfFirstTpopber = !!firstTpopber ? firstTpopber.jahr : 0
@@ -202,43 +205,43 @@ const ApberForAp = ({
   const { data, error, loading } = mengenResult
   const a3LPop = get(data, 'apById.a3LPop.totalCount', 0)
   const a3LTpop = sum(
-    get(data, 'apById.a3LTpop.nodes', []).map(p =>
+    get(data, 'apById.a3LTpop.nodes', []).map((p) =>
       get(p, 'tpopsByPopId.totalCount'),
     ),
   )
   const a4LPop = get(data, 'apById.a4LPop.totalCount', 0)
   const a4LTpop = sum(
-    get(data, 'apById.a4LTpop.nodes', []).map(p =>
+    get(data, 'apById.a4LTpop.nodes', []).map((p) =>
       get(p, 'tpopsByPopId.totalCount'),
     ),
   )
   const a5LPop = get(data, 'apById.a5LPop.totalCount', 0)
   const a5LTpop = sum(
-    get(data, 'apById.a5LTpop.nodes', []).map(p =>
+    get(data, 'apById.a5LTpop.nodes', []).map((p) =>
       get(p, 'tpopsByPopId.totalCount'),
     ),
   )
   const a7LPop = get(data, 'apById.a7LPop.totalCount', 0)
   const a7LTpop = sum(
-    get(data, 'apById.a7LTpop.nodes', []).map(p =>
+    get(data, 'apById.a7LTpop.nodes', []).map((p) =>
       get(p, 'tpopsByPopId.totalCount'),
     ),
   )
   const a8LPop = get(data, 'apById.a8LPop.totalCount', 0)
   const a8LTpop = sum(
-    get(data, 'apById.a8LTpop.nodes', []).map(p =>
+    get(data, 'apById.a8LTpop.nodes', []).map((p) =>
       get(p, 'tpopsByPopId.totalCount'),
     ),
   )
   const a9LPop = get(data, 'apById.a9LPop.totalCount', 0)
   const a9LTpop = sum(
-    get(data, 'apById.a9LTpop.nodes', []).map(p =>
+    get(data, 'apById.a9LTpop.nodes', []).map((p) =>
       get(p, 'tpopsByPopId.totalCount'),
     ),
   )
   const a10LPop = get(data, 'apById.a10LPop.totalCount', 0)
   const a10LTpop = sum(
-    get(data, 'apById.a10LTpop.nodes', []).map(p =>
+    get(data, 'apById.a10LTpop.nodes', []).map((p) =>
       get(p, 'tpopsByPopId.totalCount'),
     ),
   )
@@ -383,7 +386,15 @@ const ApberForAp = ({
               <FieldLabel>
                 Vergleich zu Vorjahr - Ausblick auf Gesamtziel
               </FieldLabel>
-              <Field>{get(apber, 'vergleichVorjahrGesamtziel', '')}</Field>
+              <Field>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: mdParser.render(
+                      get(apber, 'vergleichVorjahrGesamtziel', ''),
+                    ),
+                  }}
+                />
+              </Field>
             </FieldRow>
           )}
           {!!ziele.length && <Ziele ziele={ziele} />}
@@ -391,7 +402,7 @@ const ApberForAp = ({
             <FieldRow>
               <FieldLabel>Beurteilungsskala</FieldLabel>
               <Field>
-                {erfkrit.map(e => (
+                {erfkrit.map((e) => (
                   <ErfkritRow key={e.id}>
                     <ErfkritErfolg>{`${get(
                       e,
