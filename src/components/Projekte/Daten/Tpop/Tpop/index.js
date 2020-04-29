@@ -7,6 +7,7 @@ import { Formik, Form, Field } from 'formik'
 
 import TextField from '../../../../shared/TextFieldFormik'
 import TextFieldWithInfo from '../../../../shared/TextFieldWithInfoFormik'
+import MdField from '../../../../shared/MarkdownFieldFormik'
 import Status from '../../../../shared/Status'
 import SelectCreatable from '../../../../shared/SelectCreatableGemeinde'
 import Checkbox2States from '../../../../shared/Checkbox2StatesFormik'
@@ -204,13 +205,7 @@ const Tpop = ({ treeName, showFilter, onSubmit, row, apJahr, refetchTpop }) => {
               type="text"
               component={TextField}
             />
-            <Field
-              name="bemerkungen"
-              label="Bemerkungen"
-              type="text"
-              multiline
-              component={TextField}
-            />
+            <Field name="bemerkungen" label="Bemerkungen" component={MdField} />
           </Form>
         )}
       </Formik>

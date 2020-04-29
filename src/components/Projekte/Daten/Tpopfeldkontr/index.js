@@ -12,6 +12,7 @@ import ErrorBoundary from 'react-error-boundary'
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import Checkbox3States from '../../../shared/Checkbox3StatesFormik'
 import TextField from '../../../shared/TextFieldFormik'
+import MdField from '../../../shared/MarkdownFieldFormik'
 import Select from '../../../shared/SelectFormik'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfoFormik'
 import DateField from '../../../shared/DateFormik'
@@ -398,9 +399,7 @@ const Tpopfeldkontr = ({ treeName, showFilter = false }) => {
                     <Field
                       name="bemerkungen"
                       label="Bemerkungen"
-                      type="text"
-                      component={TextField}
-                      multiLine
+                      component={MdField}
                     />
                     <Field
                       name="apberNichtRelevant"

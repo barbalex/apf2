@@ -11,6 +11,7 @@ import gql from 'graphql-tag'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupFormik'
 import TextField from '../../../shared/TextFieldFormik'
+import MdField from '../../../shared/MarkdownFieldFormik'
 import Select from '../../../shared/SelectFormik'
 import SelectLoadingOptionsTypable from '../../../shared/SelectLoadingOptionsTypableFormik'
 import Checkbox2States from '../../../shared/Checkbox2StatesFormik'
@@ -43,7 +44,7 @@ const LoadingContainer = styled.div`
   height: 100%;
 `
 const FormScrollContainer = styled.div`
-  height: calc(100% - 43px - 48px);
+  height: calc(100vh - 64px - 43px - 48px);
   padding: 10px;
   overflow-y: auto !important;
 `
@@ -285,9 +286,7 @@ const Tpopmassn = ({ treeName, showFilter = false }) => {
                     <Field
                       name="bemerkungen"
                       label="Bemerkungen"
-                      type="text"
-                      component={TextField}
-                      multiLine
+                      component={MdField}
                     />
                     <Field
                       name="planVorhanden"
