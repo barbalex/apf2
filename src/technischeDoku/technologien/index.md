@@ -24,4 +24,4 @@ Die wichtigsten verwendeten Technologien sind:
 - [styled-components](https://github.com/styled-components/styled-components): modular stylen
 - [Cypress](https://www.cypress.io): automatisiert testen
 - Als Datenbank dient [PostgreSQL](//postgresql.org/). Hier ein [Diagramm der Beziehungen](//raw.githubusercontent.com/barbalex/apf2/master/src/etc/beziehungen.png):
-  ![Beziehungs-Diagramm](_media/beziehungen.png)
+  ![Beziehungs-Diagramm](beziehungen.png)

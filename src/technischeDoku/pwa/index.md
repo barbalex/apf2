@@ -13,7 +13,7 @@ apflora.ch ist eine [**Progressive Web App**](https://developers.google.com/web/
 **Was ist der Unterschied zu einer gewöhnlichen Web-App?**
 - Sie können apflora auf Desktop/Startseite platzieren bzw. "installieren". 
   - In Chrome auf PC und Mac öffnen Sie dazu das Menü ganz oben rechts:
-    ![installieren](_media/installieren.png)
+    ![installieren](installieren.png)
     Ab ca. August 2019 sollte sich dafür direkt in der URL-Zeile ein +-Symbol finden.
   - Auf Android werden Sie von Chrome gefragt, ob sie apflora auf dem Startbildschirm platzieren wollen.
 - Danach hat apflora eine eigene Verknüpfung und startet ausserhalb des Browsers in einem eigenen Fenster, ohne URL-Zeile.
