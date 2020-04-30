@@ -43,8 +43,6 @@ const Tpop = ({ treeName, showFilter, onSubmit, row, apJahr, refetchTpop }) => {
     error: errorLists,
   } = useQuery(queryLists)
 
-  console.log('Tpop, row:', row)
-
   return (
     <FormContainer data-width={showFilter ? filterWidth : datenWidth}>
       <Formik
