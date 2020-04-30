@@ -1,3 +1,8 @@
+/**
+ * Diese Mehode um Gemeinden zu ermitteln wird momentan nicht benutz
+ * Stattdessen wird tabelle ch_gemeinden ausgewertet
+ * Diese Methode behalten - könnte künftig nützlich sein
+ */
 import axios from 'axios'
 import get from 'lodash/get'
 

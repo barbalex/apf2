@@ -2,8 +2,9 @@ import React, { useContext } from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery, useApolloClient } from '@apollo/react-hooks'
 import { Formik, Form, Field } from 'formik'
+import gql from 'graphql-tag'
 
 import TextField from '../../../../shared/TextFieldFormik'
 import TextFieldWithInfo from '../../../../shared/TextFieldWithInfoFormik'
@@ -14,7 +15,7 @@ import Checkbox2States from '../../../../shared/Checkbox2StatesFormik'
 import RadioButtonGroupWithInfo from '../../../../shared/RadioButtonGroupWithInfoFormik'
 import TpopAbBerRelevantInfoPopover from '../../TpopAbBerRelevantInfoPopover'
 import queryLists from './queryLists'
-import getGemeindeForKoord from '../../../../../modules/getGemeindeForKoord'
+//import getGemeindeForKoord from '../../../../../modules/getGemeindeForKoord'
 import constants from '../../../../../modules/constants'
 import storeContext from '../../../../../storeContext'
 import Coordinates from '../../../../shared/Coordinates'
@@ -31,7 +32,9 @@ const FormContainer = styled.div`
 
 const Tpop = ({ treeName, showFilter, onSubmit, row, apJahr, refetchTpop }) => {
   const store = useContext(storeContext)
+  const client = useApolloClient()
 
+  const { enqueNotification } = store
   const { datenWidth, filterWidth } = store[treeName]
 
   const {
@@ -39,6 +42,8 @@ const Tpop = ({ treeName, showFilter, onSubmit, row, apJahr, refetchTpop }) => {
     loading: loadingLists,
     error: errorLists,
   } = useQuery(queryLists)
+
+  console.log('Tpop, row:', row)
 
   return (
     <FormContainer data-width={showFilter ? filterWidth : datenWidth}>
@@ -115,11 +120,48 @@ const Tpop = ({ treeName, showFilter, onSubmit, row, apJahr, refetchTpop }) => {
                       gemeinde: 'Es fehlen Koordinaten',
                     })
                   }
-                  const gemeinde = await getGemeindeForKoord({
+                  const geojson = get(row, 'geomPoint.geojson')
+                  if (!geojson) return
+                  const geojsonParsed = JSON.parse(geojson)
+                  if (!geojsonParsed) return
+                  let result
+                  try {
+                    result = await client.query({
+                      // this is a hack
+                      // see: https://github.com/graphile-contrib/postgraphile-plugin-connection-filter-postgis/issues/10
+                      query: gql`
+                        query tpopGemeindeQuery {
+                          allChGemeindes(
+                            filter: {
+                              wkbGeometry: { containsProperly: {type: "${geojsonParsed.type}", coordinates: [${geojsonParsed.coordinates}]} }
+                            }
+                          ) {
+                            nodes {
+                              name
+                            }
+                          }
+                        }
+                      `,
+                    })
+                  } catch (error) {
+                    return enqueNotification({
+                      message: error.message,
+                      options: {
+                        variant: 'error',
+                      },
+                    })
+                  }
+                  const gemeinde = get(
+                    result,
+                    'data.allChGemeindes.nodes[0].name',
+                    '',
+                  )
+                  // keep following method in case table ch_gemeinden is removed again
+                  /*const gemeinde = await getGemeindeForKoord({
                     lv95X: row.lv95X,
                     lv95Y: row.lv95Y,
                     store,
-                  })
+                  })*/
                   if (gemeinde) {
                     const fakeEvent = {
                       target: { value: gemeinde, name: 'gemeinde' },
