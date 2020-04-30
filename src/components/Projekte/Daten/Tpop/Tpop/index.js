@@ -109,7 +109,7 @@ const Tpop = ({ treeName, showFilter, onSubmit, row, apJahr, refetchTpop }) => {
               <Field
                 name="gemeinde"
                 label="Gemeinde"
-                options={get(dataLists, 'allGemeindes.nodes', [])}
+                options={get(dataLists, 'allChGemeindes.nodes', [])}
                 loading={loadingLists}
                 showLocate={!showFilter}
                 onClickLocate={async (setStateValue) => {

@@ -11,7 +11,7 @@ export default gql`
         label: text
       }
     }
-    allGemeindes(orderBy: NAME_ASC) {
+    allChGemeindes(orderBy: NAME_ASC) {
       nodes {
         value: name
         label: name
