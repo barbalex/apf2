@@ -43,7 +43,7 @@
     "exceljs": "3.9.0",
     "file-saver": "2.0.2",
     "formik": "2.1.4",
-    "gatsby": "2.21.1",
+    "gatsby": "2.21.7",
     "gatsby-image": "2.4.0",
     "gatsby-plugin-create-client-paths": "2.3.0",
     "gatsby-plugin-eslint": "2.0.8",
@@ -64,7 +64,7 @@
     "gatsby-remark-numbered-footnotes": "^1.0.1",
     "gatsby-remark-prismjs": "3.5.0",
     "gatsby-source-filesystem": "2.3.0",
-    "gatsby-transformer-remark": "2.8.0",
+    "gatsby-transformer-remark": "2.8.3",
     "gatsby-transformer-sharp": "2.5.0",
     "get-urls": "9.2.0",
     "graphql.macro": "1.4.2",
@@ -128,8 +128,7 @@
     "use-debounce": "3.4.2"
   },
   "dependenciesComments": {
-    "nothing": "now",
-    "postgraphile-plugin-connection-filter": "wait before updating to v2 until postgraphile-plugin-connection-filter-postgis was updated"
+    "nothing": "now"
   },
   "peerDependencies": {
     "react-is": "16.13.1"
@@ -141,8 +140,8 @@
     "copyfiles": "2.2.0",
     "cypress": "4.5.0",
     "postgraphile": "4.7.0",
-    "postgraphile-plugin-connection-filter": "1.x",
-    "postgraphile-plugin-connection-filter-postgis": "1.0.0-alpha.5",
+    "postgraphile-plugin-connection-filter": "2.0.0",
+    "postgraphile-plugin-connection-filter-postgis": "1.0.0-alpha.6",
     "prettier": "2.0.5",
     "source-map-explorer": "2.4.2"
   },
