@@ -1,4 +1,4 @@
-import axios from 'redaxios'
+import axios from 'axios'
 import get from 'lodash/get'
 
 const getGemeindeForKoord = async ({ lv95X, lv95Y, store }) => {
