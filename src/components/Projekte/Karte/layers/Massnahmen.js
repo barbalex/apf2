@@ -4,7 +4,7 @@ import React, { useEffect, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 //import { useLeaflet } from 'react-leaflet'
 import 'leaflet'
-import axios from 'axios'
+import axios from 'redaxios'
 
 import storeContext from '../../../../storeContext'
 
