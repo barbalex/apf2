@@ -600,21 +600,6 @@ with check (
 );
 
 
-DROP TABLE IF EXISTS apflora.gemeinde;
-CREATE TABLE apflora.gemeinde (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  name varchar(50) DEFAULT NULL
-);
-CREATE INDEX ON apflora.gemeinde USING btree (id);
-CREATE INDEX ON apflora.gemeinde USING btree (name);
-
-alter table apflora.gemeinde enable row level security;
-drop policy if exists reader on apflora.gemeinde;
-create policy reader on apflora.gemeinde 
-using (true)
-with check (current_user = 'apflora_manager');
-
-
 DROP TABLE IF EXISTS apflora.idealbiotop;
 CREATE TABLE apflora.idealbiotop (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
