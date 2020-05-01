@@ -54,5 +54,5 @@ export default ({ fileName, data }) => {
         .join('')}
     </Document>
   `
-  fileDownload(kml, `${file}.kml`, 'application/vnd.google-earth.kmz')
+  fileDownload(kml, `${file}.kml`, 'application/vnd.google-earth.kml+xml')
 }
