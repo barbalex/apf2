@@ -4,6 +4,7 @@ import idsInsideFeatureCollection from './idsInsideFeatureCollection'
 import exportXlsx from './exportXlsx'
 import exportCsv from './exportCsv'
 import exportKml from './exportKml'
+// this version is ogc-compatible and can be used for https://map.geo.admin.ch
 //import exportKml from './exportKml_ogc'
 
 export default async ({
