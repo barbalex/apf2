@@ -4,6 +4,7 @@ import idsInsideFeatureCollection from './idsInsideFeatureCollection'
 import exportXlsx from './exportXlsx'
 import exportCsv from './exportCsv'
 import exportKml from './exportKml'
+//import exportKml from './exportKml_ogc'
 
 export default async ({
   data: dataPassed,
@@ -15,7 +16,7 @@ export default async ({
   store,
 }) => {
   const { mapFilter, exportApplyMapFilter, exportFileType } = store
-  let data = dataPassed.map(d => omit(d, ['__typename', 'Symbol(id)']))
+  let data = dataPassed.map((d) => omit(d, ['__typename', 'Symbol(id)']))
   // now we could manipulate the data, for instance apply mapFilter
   const filterFeatures = mapFilter.features
   if (
@@ -33,7 +34,7 @@ export default async ({
       xKey,
       yKey,
     })
-    data = data.filter(d => ids.includes(d[idKey]))
+    data = data.filter((d) => ids.includes(d[idKey]))
   }
   // TODO: filter by dataFilterState
   // 1. add field to choose to filter by dataFilterState
