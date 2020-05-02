@@ -22,7 +22,7 @@ services:
   ss:
     build:
       context: ./ss
-    container_name: v_ss
+    container_name: apf_ss
     restart: always
     env_file:
       - ./.env

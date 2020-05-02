@@ -12,8 +12,7 @@ api.apflora.ch {
 }
 
 ss.apflora.ch {
-  reverse_proxy * {
-    to v_ss:7000
+  reverse_proxy * apf_ss:7000 {
     header_down Access-Control-Allow-Origin *
   }
 }

@@ -35,6 +35,7 @@ import ZhOrtho2015Ir from './layers/ZhOrtho2015Ir'
 import ZhUep from './layers/ZhUep'
 import Detailplaene from './layers/Detailplaene'
 import Massnahmen from './layers/Massnahmen'
+import Betreuungsgebiete from './layers/Betreuungsgebiete'
 import Markierungen from './layers/Markierungen'
 import ZhSvoColor from './layers/ZhSvoColor'
 import ZhPflegeplan from './layers/ZhPflegeplan'
@@ -454,6 +455,7 @@ const Karte = ({ treeName }) => {
       Detailplaene: () => <Detailplaene />,
       Markierungen: () => <Markierungen />,
       Massnahmen: () => <Massnahmen />,
+      Betreuungsgebiete: () => <Betreuungsgebiete />,
       Gemeinden: () => <Gemeinden />,
       ZhSvoColor: () => <ZhSvoColor />,
       ZhSvoGrey: () => <ZhSvoGrey />,

@@ -37,7 +37,7 @@ async function start() {
           h.response(response).code(200)
         })
         .catch((error) => {
-          console.log(error)
+          console.log('Massnahmen, error:', error)
           return h.response(error.message).code(500)
         })
     },

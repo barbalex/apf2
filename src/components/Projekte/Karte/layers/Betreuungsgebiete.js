@@ -8,23 +8,23 @@ import axios from 'axios'
 
 import storeContext from '../../../../storeContext'
 
-const MassnahmenLayer = () => {
+const BetreuungsgebieteLayer = () => {
   const { enqueNotification } = useContext(storeContext)
   //const { map } = useLeaflet()
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    /*const baseUrl = 'https://maps.zh.ch/wfs/FnsAPFloraWFS'
+    const baseUrl = 'https://maps.zh.ch/wfs/OGDZHWFS'
     const params = {
       service: 'WFS',
-      version: '1.0.0',
+      version: '2.0.0',
       request: 'getFeature',
-      typeName: 'ms:massnahmenflaechen',
+      typeName: 'ms:ogd-0428_aln_fns_betreuungsgebiete_f',
       maxFeatures: 3000,
       outputFormat: 'application/json',
     }
     const url = `${baseUrl}${window.L.Util.getParamString(params)}`
-    console.log('Massnahmen, url:', url)
+    console.log('Betreuungsgebiete, url:', url)
     axios({
       method: 'get',
       url,
@@ -34,29 +34,12 @@ const MassnahmenLayer = () => {
       },
     })
       .then((response) => {
-        console.log('Massnahmen, response:', response)
+        console.log('Betreuungsgebiete, response:', response)
         //const layer = new window.L.GeoJSON()
       })
       .catch((error) => {
         enqueNotification({
-          message: `Fehler beim Laden der Massnahmen für die Karte: ${error.message}`,
-          options: {
-            variant: 'error',
-          },
-        })
-        return console.log(error)
-      })*/
-    axios({
-      method: 'get',
-      url: 'https://ss.apflora.ch/karte/massnahmen',
-    })
-      .then((response) => {
-        console.log('Massnahmen, response:', response)
-        //const layer = new window.L.GeoJSON()
-      })
-      .catch((error) => {
-        enqueNotification({
-          message: `Fehler beim Laden der Massnahmen für die Karte: ${error.message}`,
+          message: `Fehler beim Laden der Betreuungsgebiete für die Karte: ${error.message}`,
           options: {
             variant: 'error',
           },
@@ -68,4 +51,4 @@ const MassnahmenLayer = () => {
   return <div style={{ display: 'none' }} />
 }
 
-export default observer(MassnahmenLayer)
+export default observer(BetreuungsgebieteLayer)
