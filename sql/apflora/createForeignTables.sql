@@ -63,3 +63,22 @@ CREATE USER MAPPING
     FOR apflora_freiwillig
  SERVER ae_server
 OPTIONS (user 'fdw_user', password 'secret');
+
+
+-- does not work
+-- because of big installation dependencies...
+-- https://github.com/pramsey/pgsql-ogr-fdw/issues/182
+CREATE EXTENSION ogr_fdw;
+CREATE SERVER ogdzhwfs_server
+  FOREIGN DATA WRAPPER ogr_fdw
+  OPTIONS (
+    datasource 'WFS:https://maps.zh.ch/wfs/OGDZHWFS',
+    format 'WFS' );
+
+CREATE FOREIGN TABLE betreuungsgebiete (
+  bezeichnung text,
+  nr integer,
+  geodb_oid integer
+)
+SERVER "ogdzhwfs_server"
+OPTIONS (layer 'ms:ogd-0428_aln_fns_betreuungsgebiete_f');
