@@ -17,7 +17,7 @@ import MapMouseCoordinates, {
   defaultValue as defaultMapMouseCoordinates,
 } from './MapMouseCoordinates'
 import standardApfloraLayers from '../components/Projekte/Karte/apfloraLayers'
-import standardOverlays from '../components/Projekte/Karte/overlays'
+import { overlays as standardOverlays } from '../components/Projekte/Karte/overlays'
 import initialDataFilterTreeValues from './Tree/DataFilter/initialValues'
 import User, { defaultValue as defaultUser } from './User'
 import Tree, { defaultValue as defaultTree } from './Tree'

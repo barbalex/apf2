@@ -1,7 +1,8 @@
-export default [
+export const overlays = [
   { label: 'Markierungen', value: 'Markierungen' },
   { label: 'Detailpläne', value: 'Detailplaene' },
   { label: 'Massnahmenpläne', value: 'Massnahmen' },
+  { label: 'Betreuungsgebiete', value: 'Betreuungsgebiete' },
   { label: 'ZH Übersichtsplan', value: 'ZhUep' },
   { label: 'Gemeinden', value: 'Gemeinden' },
   { label: 'SVO grau', value: 'ZhSvoGrey' },
