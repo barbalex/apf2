@@ -19,6 +19,17 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
       - sik_data:/sik_data
+  ss:
+    build:
+      context: ./ss
+    container_name: v_ss
+    restart: always
+    env_file:
+      - ./.env
+    expose:
+      - '7000'
+    ports:
+      - '7000:7000'
   graphql:
     container_name: apf_graphql
     restart: unless-stopped

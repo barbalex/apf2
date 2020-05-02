@@ -1,0 +1,14 @@
+{
+  "name": "apf_ss",
+  "version": "1.0.0",
+  "description": "runs queries server side",
+  "author": "me",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@hapi/hapi": "19.1.1",
+    "axios": "0.19.2"
+  }
+}
