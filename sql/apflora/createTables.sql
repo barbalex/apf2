@@ -2689,3 +2689,21 @@ with check (current_user = 'apflora_manager');
 --truncate apflora.apqk
 --insert into apflora.apqk(ap_id, qk_name)
 --select distinct apflora.ap.id, apflora.qk.name from apflora.ap, apflora.qk where apflora.ap.bearbeitung is null
+
+
+drop table if exists apflora.ns_betreuung;
+create table apflora.ns_betreuung (
+  gebiet_nr integer primary key,
+  gebiet_name text,
+  firma text,
+  projektleiter text,
+  telefon text
+);
+create index on apflora.ns_betreuung using btree (gebiet_nr);
+comment on table apflora.ns_betreuung is 'Von der FNS. Um zu das wfs betreuungsgebiete mit den Betreuern zu verknüpfen';
+
+alter table apflora.ns_betreuung enable row level security;
+drop policy if exists reader on apflora.ns_betreuung;
+create policy reader on apflora.ns_betreuung
+using (true)
+with check (current_user = 'apflora_manager');
