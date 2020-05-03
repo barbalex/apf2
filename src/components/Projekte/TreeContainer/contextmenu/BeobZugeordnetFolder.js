@@ -1,8 +1,8 @@
 import React, { useContext, useState, useCallback } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
-import ErrorBoundary from 'react-error-boundary'
 
 import storeContext from '../../../../storeContext'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 // create objects outside render
 const showBeobOnMapData = {
@@ -20,7 +20,7 @@ const BeobZugeordnetFolder = ({ treeName, onClick }) => {
 
   // according to https://github.com/vkbansal/react-contextmenu/issues/65
   // this is how to pass data from ContextMenuTrigger to ContextMenu
-  const onShow = useCallback(event => {
+  const onShow = useCallback((event) => {
     changeId(event.detail.data.nodeId)
   }, [])
 
@@ -28,7 +28,7 @@ const BeobZugeordnetFolder = ({ treeName, onClick }) => {
     <ErrorBoundary>
       <ContextMenu
         id={`${treeName}beobZugeordnetFolder`}
-        collect={props => props}
+        collect={(props) => props}
         onShow={onShow}
       >
         <div className="react-contextmenu-title">Beobachtungen</div>

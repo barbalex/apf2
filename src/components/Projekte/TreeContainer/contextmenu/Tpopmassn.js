@@ -1,10 +1,10 @@
 import React, { useContext, useState, useCallback } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { observer } from 'mobx-react-lite'
-import ErrorBoundary from 'react-error-boundary'
 
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import storeContext from '../../../../storeContext'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 // create objects outside render
 const insertData = {
@@ -36,7 +36,7 @@ const Tpopmassn = ({ treeName, onClick }) => {
   // according to https://github.com/vkbansal/react-contextmenu/issues/65
   // this is how to pass data from ContextMenuTrigger to ContextMenu
   const onShow = useCallback(
-    event => changeLabel(event.detail.data.nodeLabel),
+    (event) => changeLabel(event.detail.data.nodeLabel),
     [],
   )
 
@@ -44,7 +44,7 @@ const Tpopmassn = ({ treeName, onClick }) => {
     <ErrorBoundary>
       <ContextMenu
         id={`${treeName}tpopmassn`}
-        collect={props => props}
+        collect={(props) => props}
         onShow={onShow}
       >
         <div className="react-contextmenu-title">Massnahme</div>

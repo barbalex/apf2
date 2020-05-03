@@ -2,10 +2,10 @@ import React, { useContext } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { observer } from 'mobx-react-lite'
 import styled from 'styled-components'
-import ErrorBoundary from 'react-error-boundary'
 
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 import storeContext from '../../../../storeContext'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const SecondLine = styled.span`
   margin-left: 15px;
