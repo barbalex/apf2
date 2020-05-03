@@ -1,7 +1,10 @@
 export const overlays = [
   { label: 'Markierungen', value: 'Markierungen' },
   { label: 'Detailpläne', value: 'Detailplaene' },
-  { label: 'Massnahmenpläne', value: 'Massnahmen' },
+  {
+    label: 'Massnahmenpläne (funktioniert leider noch nicht)',
+    value: 'Massnahmen',
+  },
   { label: 'Betreuungsgebiete', value: 'Betreuungsgebiete' },
   { label: 'ZH Übersichtsplan', value: 'ZhUep' },
   { label: 'Gemeinden', value: 'Gemeinden' },
