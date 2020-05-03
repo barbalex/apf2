@@ -5,7 +5,7 @@ export const overlays = [
     label: 'Massnahmenpläne (funktioniert leider noch nicht)',
     value: 'Massnahmen',
   },
-  { label: 'Betreuungsgebiete', value: 'Betreuungsgebiete' },
+  { label: 'NS-Gebiete Betreuung', value: 'Betreuungsgebiete' },
   { label: 'ZH Übersichtsplan', value: 'ZhUep' },
   { label: 'Gemeinden', value: 'Gemeinden' },
   { label: 'SVO grau', value: 'ZhSvoGrey' },
