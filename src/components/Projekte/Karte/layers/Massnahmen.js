@@ -1,58 +1,47 @@
 // https://stackoverflow.com/a/25296972/712005
 // also: https://gis.stackexchange.com/a/130553/13491
-import React, { useEffect, useContext } from 'react'
+import React, { useEffect, useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-//import { useLeaflet } from 'react-leaflet'
+import { GeoJSON } from 'react-leaflet'
 import 'leaflet'
 import axios from 'axios'
 
 import storeContext from '../../../../storeContext'
+import popupFromProperties from './popupFromProperties'
+
+const onEachFeature = (feature, layer) => {
+  if (feature.properties) {
+    layer.bindPopup(popupFromProperties(feature.properties))
+  }
+}
+
+// see: https://leafletjs.com/reference-1.6.0.html#path-option
+// need to fill or else popup will only happen when line is clicked
+// when fill is true, need to give stroke an opacity
+const style = () => ({
+  fill: true,
+  fillOpacity: 0.2,
+  color: 'red',
+  weight: 3,
+  opacity: 1,
+})
 
 const MassnahmenLayer = () => {
   const { enqueNotification } = useContext(storeContext)
-  //const { map } = useLeaflet()
+
+  const [data, setData] = useState(null)
 
   useEffect(() => {
-    if (typeof window === 'undefined') return
-    /*const baseUrl = 'https://maps.zh.ch/wfs/FnsAPFloraWFS'
-    const params = {
-      service: 'WFS',
-      version: '1.0.0',
-      request: 'getFeature',
-      typeName: 'ms:massnahmenflaechen',
-      maxFeatures: 3000,
-      outputFormat: 'application/json',
-    }
-    const url = `${baseUrl}${window.L.Util.getParamString(params)}`
-    console.log('Massnahmen, url:', url)
-    axios({
-      method: 'get',
-      url,
-      auth: {
-        username: process.env.GATSBY_MAPS_ZH_CH_USER,
-        password: process.env.GATSBY_MAPS_ZH_CH_SECRET,
-      },
-    })
-      .then((response) => {
-        console.log('Massnahmen, response:', response)
-        //const layer = new window.L.GeoJSON()
-      })
-      .catch((error) => {
-        enqueNotification({
-          message: `Fehler beim Laden der Massnahmen für die Karte: ${error.message}`,
-          options: {
-            variant: 'error',
-          },
-        })
-        return console.log(error)
-      })*/
+    /**
+     * BEWARE: https://maps.zh.ch does not include cors headers
+     * so need to query server side
+     */
     axios({
       method: 'get',
       url: 'https://ss.apflora.ch/karte/massnahmen',
     })
       .then((response) => {
-        console.log('Massnahmen, response:', response)
-        //const layer = new window.L.GeoJSON()
+        setData(response.data.features)
       })
       .catch((error) => {
         enqueNotification({
@@ -65,7 +54,11 @@ const MassnahmenLayer = () => {
       })
   }, [enqueNotification])
 
-  return <div style={{ display: 'none' }} />
+  if (!data) return null
+
+  //console.log('Massnahmen, data:', data)
+
+  return <GeoJSON data={data} style={style} onEachFeature={onEachFeature} />
 }
 
 export default observer(MassnahmenLayer)
