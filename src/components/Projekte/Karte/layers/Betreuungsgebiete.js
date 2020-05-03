@@ -85,16 +85,18 @@ const BetreuungsgebieteLayer = () => {
     if (gbData && nsbData) {
       const totalData = gbData.map((d) => {
         const nsb = nsbNodes.find((n) => n.gebietNr === d.properties.nr) || {}
+        const properties = {
+          ...d.properties,
+          firma: nsb.firma || '',
+          projektleiter: nsb.projektleiter || '',
+          telefon: nsb.telefon || '',
+        }
+        delete properties.geodb_oid
 
         return {
           geometry: d.geometry,
           type: d.type,
-          properties: {
-            ...d.properties,
-            firma: nsb.firma || '',
-            projektleiter: nsb.projektleiter || '',
-            telefon: nsb.telefon || '',
-          },
+          properties,
         }
       })
       setTotalData(totalData)
